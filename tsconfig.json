@@ -2,9 +2,17 @@
 {
   "extends": "@tsconfig/react-native/tsconfig.json",     /* Recommended React Native TSConfig base */
   "compilerOptions": {
-    /* Visit https://aka.ms/tsconfig.json to read more about this file */
-
-    /* Completeness */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "baseUrl": ".",
+    "paths" : {
+      "@app/*": ["./src/*"],
+      "@assets/*": ["./assets/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@images/*": ["./assets/images/*"],
+      "@features/*": ["./src/features/*"],
+      "@screens/*": ["./src/screens/*"],
+      "@entities/*": ["./src/entities/*"],
+      "*": ["*","*.ios","*.android"]
+    },
+     "skipLibCheck": true
   }
 }

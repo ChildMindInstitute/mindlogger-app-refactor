@@ -11,38 +11,11 @@ import {
   HStack,
   Pressable,
   Image,
+  Box,
   Input,
 } from 'native-base';
 
 import StatusBar from './StatusBar';
-
-const Footer = ({ children }) => {
-  return <>{children}</>;
-};
-
-const Right = ({ children }) => {
-  return <>{children}</>;
-};
-
-const Form = ({ children }) => {
-  return <>{children}</>;
-};
-
-// const Input = () => {
-//   return (
-//     <InputBase
-//       variant={'underlined'}
-//       // style={{
-//       //   borderStartWidth: 0,
-//       //   borderEndWidth: 0,
-//       //   borderTopWidth: 0,
-//       //   borderRightWidth: 0,
-//       //   borderBottomWidth: 4,
-//       //   borderColor: 'red',
-//       // }}
-//     />
-//   );
-// };
 
 export {
   StatusBar,
@@ -51,10 +24,7 @@ export {
   Text,
   View,
   Icon,
-  Footer,
-  Right,
   Button,
-  Form,
   KeyboardAvoidingView,
   Flex,
   HStack,
@@ -62,4 +32,5 @@ export {
   Pressable,
   Image,
   Input,
+  Box,
 };

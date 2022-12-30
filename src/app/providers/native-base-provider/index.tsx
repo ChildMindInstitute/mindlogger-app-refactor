@@ -1,3 +1,4 @@
+import { FC, PropsWithChildren } from 'react';
 import { NativeBaseProvider as NativeBaseProviderBase, extendTheme } from 'native-base';
 
 export const colors = {
@@ -14,10 +15,46 @@ export const colors = {
   yellow: '#FFBD32',
 };
 
-const NativeBaseProvider = ({ children }) => {
+const NativeBaseProvider: FC<PropsWithChildren> = ({ children }) => {
   const theme = extendTheme({
+    components: {
+      Input: {
+        variants: {
+          underlined: () => {
+            return {
+              placeholderTextColor: 'rgba(255,255,255,0.6)',
+              color: 'white',
+              borderColor: 'rgba(255,255,255,0.6)',
+              borderBottomWidth: 0.5,
+              _focus: {
+                borderColor: 'white',
+              },
+            };
+          },
+        },
+      },
+      Text: {
+        baseStyle: {
+          color: '#fff',
+        },
+      },
+      Button: {
+        variants: {
+          solid: () => {
+            return {
+              bg: '#fff',
+              my: 7,
+              w: '50%',
+              _text: {
+                color: 'primary.50',
+                fontWeight: 'bold',
+              },
+            };
+          },
+        },
+      },
+    },
     colors: {
-      // Add new color
       primary: {
         50: '#0067A0',
         100: '#C5E4F3',
@@ -30,14 +67,9 @@ const NativeBaseProvider = ({ children }) => {
         800: '#005885',
         900: '#003F5E',
       },
-      // Redefining only one shade, rest of the color will remain same.
       amber: {
         400: '#d97706',
       },
-    },
-    config: {
-      // Changing initialColorMode to 'dark'
-      initialColorMode: 'dark',
     },
   });
 

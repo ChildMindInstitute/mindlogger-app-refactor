@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import LoginScreen from './Login';
+import LoginScreen from './LoginScreen';
+import ForgotPasswordScreen from './ForgotPasswordScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -11,9 +12,10 @@ export const Routing = () => {
         options={{
           headerShown: false,
         }}
-        name="Login"
+        name="LoginScreen"
         component={LoginScreen}
       />
+      <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} />
     </Stack.Navigator>
   );
 };

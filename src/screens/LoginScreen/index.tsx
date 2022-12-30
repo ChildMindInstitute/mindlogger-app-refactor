@@ -1,8 +1,9 @@
 import { FC } from 'react';
 import { Linking, SafeAreaView } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { whiteLogo } from '../../../assets/img';
-import { LoginForm } from '../../features/login';
+import { whiteLogo } from '@images';
+import { LoginForm } from '@features/login';
 import {
   StatusBar,
   KeyboardAvoidingView,
@@ -12,54 +13,19 @@ import {
   VStack,
   HStack,
   Pressable,
-} from '../../shared/ui';
-import { useTranslation } from 'react-i18next';
-
-type Props = {
-  signInSuccessful: () => {};
-  toggleMobileDataAllowed: () => void;
-  skin: {
-    colors: {
-      primary: string;
-    };
-    name: string;
-    logo?: string;
-  };
-  mobileDataAllowed: boolean;
-  fcmToken: string | null;
-  appLanguage: 'fr' | 'en';
-};
+} from '@shared/ui';
 
 const LoginScreen: FC = () => {
-  const mockProps: Props = {
-    appLanguage: 'en',
-    skin: {
-      colors: {
-        primary: 'red',
-      },
-      name: 'MindLogger',
-    },
-  };
-  const { skin } = mockProps;
-
   const { navigate } = useNavigation();
-  const { t, i18n } = useTranslation();
-  const title = skin.name;
-
-  const changeLanguageHandler = () => {
-    i18n.changeLanguage('en');
-  };
+  const { t } = useTranslation();
+  const title = 'MindLogger';
 
   const navigateToSignUp = () => {
     navigate('SignUp');
   };
-  //
-  // const navigateToChangeStudy = () => {
-  //   navigate('ChangeStudy');
-  // };
 
   const navigateToForgorPassword = () => {
-    navigate('ForgotPassword');
+    navigate('ForgotPasswordScreen');
   };
 
   const navigateToAbout = () => {
@@ -67,8 +33,6 @@ const LoginScreen: FC = () => {
   };
 
   const navigateToAppLanguage = () => {
-    changeLanguageHandler();
-
     navigate('AppLanguage');
   };
 
@@ -77,11 +41,7 @@ const LoginScreen: FC = () => {
       <SafeAreaView>
         <StatusBar />
         <VStack h="100%" bg="primary.50">
-          <Center
-            my="auto"
-            // style={[{ backgroundColor: skin.colors.primary }]}
-            // contentContainerStyle={styles.contentContainer}
-          >
+          <Center my="auto">
             <Text fontSize="4xl" mb="2">
               {title}
             </Text>

@@ -1,55 +1,32 @@
-import { View, Button } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import { Text, Input } from '../../../shared/ui';
+import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { VStack, Button, Box } from '@shared/ui';
+import { InputField } from '@shared/ui/form';
+import { loginFormSchema } from '../model';
+
+type FormValues = {
+  email: string;
+  password: string;
+};
 
 const LoginForm = () => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-    },
+  const methods = useForm<FormValues>({
+    resolver: zodResolver(loginFormSchema),
   });
-  const onSubmit = data => console.log(data);
+
+  const { handleSubmit } = methods;
+  const onSubmit: SubmitHandler<FormValues> = data => console.log(data);
 
   return (
-    <View>
-      <Input variant={'underlined'} placeholder="Email" mb={2} />
-      <Controller
-        control={control}
-        rules={{
-          required: true,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            variant={'underlined'}
-            placeholder="Email"
-            mb={2}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-          />
-        )}
-        name="firstName"
-      />
-      {errors.firstName && <Text>This is required.</Text>}
-
-      <Controller
-        control={control}
-        rules={{
-          maxLength: 100,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input variant={'underlined'} onBlur={onBlur} onChangeText={onChange} value={value} />
-        )}
-        name="lastName"
-      />
-
-      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-    </View>
+    <FormProvider {...methods}>
+      <VStack w={'75%'}>
+        <InputField name="email" placeholder="Email address" />
+        <InputField name="password" placeholder="Password" />
+        <Box alignItems={'center'}>
+          <Button onPress={handleSubmit(onSubmit)}>LOGIN</Button>
+        </Box>
+      </VStack>
+    </FormProvider>
   );
 };
 
