@@ -15,15 +15,7 @@ const initializeLocalization = () =>
     },
   });
 
-const setApplicationLanguage = (lang: 'fr' | 'en') => {
-  if (!['en', 'fr'].includes(lang)) {
-    return;
-  }
+// @todo - automatically detect language of the device
 
-  i18n.changeLanguage(lang);
-};
-
-initializeLocalization();
-
-export { setApplicationLanguage, initializeLocalization };
+export { initializeLocalization };
 export default i18n;

@@ -1,8 +1,9 @@
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { VStack, Button, Box } from '@shared/ui';
+
+import { VStack, Button } from '@shared/ui';
 import { InputField } from '@shared/ui/form';
-import { loginFormSchema } from '../model';
+import { LoginFormSchema } from '../model';
 
 type FormValues = {
   email: string;
@@ -11,7 +12,7 @@ type FormValues = {
 
 const LoginForm = () => {
   const methods = useForm<FormValues>({
-    resolver: zodResolver(loginFormSchema),
+    resolver: zodResolver(LoginFormSchema),
   });
 
   const { handleSubmit } = methods;
@@ -20,12 +21,10 @@ const LoginForm = () => {
   return (
     <FormProvider {...methods}>
       <VStack w={'75%'}>
-        <InputField name="email" placeholder="Email address" />
-        <InputField name="password" placeholder="Password" />
-        <Box alignItems={'center'}>
-          <Button onPress={handleSubmit(onSubmit)}>LOGIN</Button>
-        </Box>
+        <InputField mb={2} name="email" placeholder="Email address" />
+        <InputField secureTextEntry name="password" placeholder="Password" />
       </VStack>
+      <Button onPress={handleSubmit(onSubmit)}>LOGIN</Button>
     </FormProvider>
   );
 };

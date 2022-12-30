@@ -1,12 +1,14 @@
-import React from 'react';
-import { Routing } from '@screens';
 import AppProvider from './providers';
 import '@shared/lib/i18n';
+import { initializeLocalization } from '@shared/lib/i18n';
+import Screens from '@screens';
+
+initializeLocalization();
 
 const App = () => {
   return (
     <AppProvider>
-      <Routing />
+      <Screens />
     </AppProvider>
   );
 };

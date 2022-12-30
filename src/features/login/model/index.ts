@@ -1,3 +1,3 @@
-import loginFormSchema from './LoginForm';
+import { LoginFormSchema } from './LoginFormSchema';
 
-export { loginFormSchema };
+export { LoginFormSchema };

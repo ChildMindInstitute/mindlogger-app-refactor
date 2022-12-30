@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { Linking, SafeAreaView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { whiteLogo } from '@images';
 import { LoginForm } from '@features/login';
 import {
   StatusBar,
@@ -13,7 +12,10 @@ import {
   VStack,
   HStack,
   Pressable,
+  // Icon,
 } from '@shared/ui';
+import { whiteLogo } from '@images';
+// import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const LoginScreen: FC = () => {
   const { navigate } = useNavigation();
@@ -21,7 +23,7 @@ const LoginScreen: FC = () => {
   const title = 'MindLogger';
 
   const navigateToSignUp = () => {
-    navigate('SignUp');
+    navigate('SignUpScreen');
   };
 
   const navigateToForgorPassword = () => {
@@ -67,13 +69,7 @@ const LoginScreen: FC = () => {
             </VStack>
             <Image mt={5} alt="CMI logo" size="sm" source={whiteLogo} />
           </Center>
-          {/*<Footer style={styles.footer}>*/}
-          {/*  <Right>*/}
-          {/*    <Pressable onPress={navigateToChangeStudy}>*/}
-          {/*      <Icon type="FontAwesome" name="database" style={styles.whiteIcon} />*/}
-          {/*    </Pressable>*/}
-          {/*  </Right>*/}
-          {/*</Footer>*/}
+          {/*<Pressable onPress={() => {}}>/!*<Icon as={FontAwesome} name="database" />*!/</Pressable>*/}
         </VStack>
       </SafeAreaView>
     </KeyboardAvoidingView>
