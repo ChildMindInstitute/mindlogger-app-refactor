@@ -3,25 +3,20 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { VStack, Button } from '@shared/ui';
 import { InputField } from '@shared/ui/form';
-import { LoginFormSchema } from '../model';
-
-type FormValues = {
-  email: string;
-  password: string;
-};
+import { LoginFormSchema, TLoginForm } from '../model';
 
 const LoginForm = () => {
-  const methods = useForm<FormValues>({
+  const methods = useForm<TLoginForm>({
     resolver: zodResolver(LoginFormSchema),
   });
 
   const { handleSubmit } = methods;
-  const onSubmit: SubmitHandler<FormValues> = data => console.log(data);
+  const onSubmit: SubmitHandler<TLoginForm> = data => console.log(data);
 
   return (
     <FormProvider {...methods}>
       <VStack w={'75%'}>
-        <InputField mb={2} name="email" placeholder="Email address" />
+        <InputField name="email" placeholder="Email address" />
         <InputField secureTextEntry name="password" placeholder="Password" />
       </VStack>
       <Button onPress={handleSubmit(onSubmit)}>LOGIN</Button>
