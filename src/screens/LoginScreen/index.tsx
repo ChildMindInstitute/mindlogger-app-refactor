@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { Linking, SafeAreaView } from 'react-native';
-import { useTranslation } from 'react-i18next';
+
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 import { LoginForm } from '@features/login';
 import {
@@ -16,6 +17,7 @@ import {
   // Icon,
   Flex,
 } from '@shared/ui';
+
 import { whiteLogo } from '@images';
 
 const LoginScreen: FC = () => {

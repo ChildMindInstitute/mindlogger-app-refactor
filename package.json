@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "pods": "cd ios && pod install"
+    "pods": "cd ios && pod install",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.10",
@@ -50,6 +51,9 @@
     "react-test-renderer": "18.1.0",
     "typescript": "^4.8.3"
   },
+  "resolutions": {
+    "react": "18.1.0"
+  },
   "jest": {
     "preset": "react-native",
     "moduleFileExtensions": [
@@ -63,6 +67,7 @@
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [
+      "bash -c tsc --noEmit --skipLibCheck",
       "eslint --fix",
       "prettier --write"
     ]

@@ -9,10 +9,13 @@
       "@shared/*": ["src/shared/*"],
       "@images": ["assets/images/index"],
       "@features/*": ["src/features/*"],
+      "@screens": ["src/screens/index"],
       "@screens/*": ["src/screens/*"],
       "@entities/*": ["src/entities/*"],
       "*": ["*","*.ios","*.android"]
     },
      "skipLibCheck": true
-  }
+  },
+  "include": ["**/*.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }
