@@ -13,7 +13,7 @@ module.exports = {
           '@features': './src/features',
           '@screens': './src/screens',
           '@entities': './src/entities',
-          '@images': './assets/images',
+          '@images': './assets/images/index',
         },
       },
     ],
