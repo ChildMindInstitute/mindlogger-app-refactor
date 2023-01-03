@@ -11,8 +11,21 @@
     "pods": "cd ios && pod install"
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.9.10",
+    "@react-native-community/netinfo": "^9.3.7",
+    "@react-navigation/native": "^6.1.1",
+    "@react-navigation/native-stack": "^6.9.7",
+    "date-fns": "^2.29.3",
+    "i18next": "^22.4.6",
+    "native-base": "^3.4.25",
     "react": "18.1.0",
-    "react-native": "0.70.6"
+    "react-hook-form": "^7.41.0",
+    "react-i18next": "^12.1.1",
+    "react-native": "0.70.6",
+    "react-native-safe-area-context": "3.3.2",
+    "react-native-screens": "^3.18.2",
+    "react-native-svg": "12.1.1",
+    "zod": "^3.20.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -26,6 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "@typescript-eslint/parser": "^5.37.0",
     "babel-jest": "^26.6.3",
+    "babel-plugin-module-resolver": "^4.1.0",
     "eslint": "^7.32.0",
     "husky": "^8.0.0",
     "jest": "^26.6.3",
