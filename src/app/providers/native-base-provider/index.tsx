@@ -41,6 +41,7 @@ const NativeBaseProvider: FC<PropsWithChildren> = ({ children }) => {
       },
     },
     colors: {
+      // @todo add all the colors from legacy codebase
       primary: {
         50: '#0067A0',
       },

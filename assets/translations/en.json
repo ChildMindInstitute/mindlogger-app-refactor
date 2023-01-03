@@ -1,4 +1,8 @@
 {
+  "auth" : {
+    "email": "Email address",
+    "password": "Password"
+  },
   "activity": {
     "incorrect_answer": "Incorrect answer. Please try again",
     "failed": "Failed"

@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Linking, SafeAreaView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+
 import { LoginForm } from '@features/login';
 import {
   StatusBar,
@@ -15,7 +16,6 @@ import {
   // Icon,
 } from '@shared/ui';
 import { whiteLogo } from '@images';
-// import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const LoginScreen: FC = () => {
   const { navigate } = useNavigation();
@@ -48,7 +48,7 @@ const LoginScreen: FC = () => {
               {title}
             </Text>
             <LoginForm onSubmit={() => {}} />
-            <HStack>
+            <HStack mb={2}>
               <Pressable mr={3} onPress={navigateToSignUp}>
                 <Center>{t('login:new_user')}</Center>
               </Pressable>
@@ -56,14 +56,14 @@ const LoginScreen: FC = () => {
                 <Center>{t('login:forgot_password')}</Center>
               </Pressable>
             </HStack>
-            <VStack>
-              <Pressable mt={2} onPress={navigateToAbout}>
+            <VStack space={2}>
+              <Pressable onPress={navigateToAbout}>
                 <Center>{`${t('login:what_is')} ${title}?`}</Center>
               </Pressable>
-              <Pressable mt={2} onPress={navigateToAppLanguage}>
+              <Pressable onPress={navigateToAppLanguage}>
                 <Center>{t('language_screen:change_app_language')}</Center>
               </Pressable>
-              <Pressable mt={2} onPress={() => Linking.openURL('https://mindlogger.org/terms')}>
+              <Pressable onPress={() => Linking.openURL('https://mindlogger.org/terms')}>
                 <Center>{t('Terms of Service')}</Center>
               </Pressable>
             </VStack>

@@ -5,9 +5,9 @@ import { NativeBaseProvider } from './native-base-provider';
 
 const AppProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <NavigationContainer>
-      <NativeBaseProvider>{children}</NativeBaseProvider>
-    </NavigationContainer>
+    <NativeBaseProvider>
+      <NavigationContainer>{children}</NavigationContainer>
+    </NativeBaseProvider>
   );
 };
 

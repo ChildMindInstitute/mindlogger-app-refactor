@@ -1,4 +1,8 @@
 {
+  "auth" : {
+    "email": "Adresse e-mail",
+    "password": "Mot de passe"
+  },
   "activity": {
     "incorrect_answer": "Réponse incorrecte. Veuillez réessayer",
     "failed": "Échoué"
