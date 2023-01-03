@@ -54,4 +54,4 @@ const NativeBaseProvider: FC<PropsWithChildren> = ({ children }) => {
   return <NativeBaseProviderBase theme={theme}>{children}</NativeBaseProviderBase>;
 };
 
-export { NativeBaseProvider };
+export default NativeBaseProvider;
