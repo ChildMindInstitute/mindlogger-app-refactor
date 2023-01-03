@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 
-import { NativeBaseProvider } from './native-base-provider';
+import NativeBaseProvider from './NativeBaseProvider';
 
 const AppProvider: FC<PropsWithChildren> = ({ children }) => {
   return (

@@ -1,5 +1,5 @@
 {
-  "name": "MindloggerMobile",
+  "name": "mindlogger-mobile",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -8,11 +8,13 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "pods": "cd ios && pod install"
+    "pods": "cd ios && pod install",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.10",
     "@react-native-community/netinfo": "^9.3.7",
+    "@react-navigation/bottom-tabs": "^6.5.2",
     "@react-navigation/native": "^6.1.1",
     "@react-navigation/native-stack": "^6.9.7",
     "date-fns": "^2.29.3",
@@ -41,12 +43,16 @@
     "babel-jest": "^26.6.3",
     "babel-plugin-module-resolver": "^4.1.0",
     "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.26.0",
     "husky": "^8.0.0",
     "jest": "^26.6.3",
     "lint-staged": "^13.1.0",
     "metro-react-native-babel-preset": "0.72.3",
     "react-test-renderer": "18.1.0",
     "typescript": "^4.8.3"
+  },
+  "resolutions": {
+    "react": "18.1.0"
   },
   "jest": {
     "preset": "react-native",
@@ -61,6 +67,7 @@
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [
+      "bash -c tsc --noEmit --skipLibCheck",
       "eslint --fix",
       "prettier --write"
     ]

@@ -4,15 +4,18 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths" : {
-      "@app/*": ["./src/*"],
-      "@assets/*": ["./assets/*"],
-      "@shared/*": ["./src/shared/*"],
-      "@images": ["./assets/images/*"],
-      "@features/*": ["./src/features/*"],
-      "@screens/*": ["./src/screens/*"],
-      "@entities/*": ["./src/entities/*"],
+      "@app/*": ["src/*"],
+      "@assets/*": ["assets/*"],
+      "@shared/*": ["src/shared/*"],
+      "@images": ["assets/images/index"],
+      "@features/*": ["src/features/*"],
+      "@screens": ["src/screens/index"],
+      "@screens/*": ["src/screens/*"],
+      "@entities/*": ["src/entities/*"],
       "*": ["*","*.ios","*.android"]
     },
      "skipLibCheck": true
-  }
+  },
+  "include": ["**/*.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }

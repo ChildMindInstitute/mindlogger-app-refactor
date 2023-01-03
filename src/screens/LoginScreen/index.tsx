@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { Linking, SafeAreaView } from 'react-native';
-import { useTranslation } from 'react-i18next';
+
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 import { LoginForm } from '@features/login';
 import {
@@ -16,6 +17,7 @@ import {
   // Icon,
   Flex,
 } from '@shared/ui';
+
 import { whiteLogo } from '@images';
 
 const LoginScreen: FC = () => {
@@ -24,15 +26,15 @@ const LoginScreen: FC = () => {
   const title = 'MindLogger';
 
   const navigateToSignUp = () => {
-    navigate('SignUpScreen');
+    navigate('SignUp');
   };
 
-  const navigateToForgorPassword = () => {
-    navigate('ForgotPasswordScreen');
+  const navigateToForgotPassword = () => {
+    navigate('ForgotPassword');
   };
 
   const navigateToAbout = () => {
-    navigate('About');
+    navigate('AboutApp');
   };
 
   const navigateToAppLanguage = () => {
@@ -49,13 +51,13 @@ const LoginScreen: FC = () => {
               {title}
             </Text>
             <Flex w="75%">
-              <LoginForm onSubmit={() => {}} />
+              <LoginForm />
             </Flex>
             <HStack mb={2}>
               <Pressable mr={3} onPress={navigateToSignUp}>
                 <Center>{t('login:new_user')}</Center>
               </Pressable>
-              <Pressable onPress={navigateToForgorPassword}>
+              <Pressable onPress={navigateToForgotPassword}>
                 <Center>{t('login:forgot_password')}</Center>
               </Pressable>
             </HStack>

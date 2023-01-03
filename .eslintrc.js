@@ -2,7 +2,7 @@ module.exports = {
   root: true,
   extends: '@react-native-community',
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'import'],
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
@@ -11,6 +11,34 @@ module.exports = {
         'no-shadow': 'off',
         'no-undef': 'off',
         'react/react-in-jsx-scope': 'off',
+        'import/order': [
+          'error',
+          {
+            groups: [['external', 'builtin'], 'internal', ['sibling', 'parent'], 'index'],
+            pathGroups: [
+              {
+                pattern: '@(react|react-native)',
+                group: 'external',
+                position: 'before',
+              },
+              {
+                pattern: '@(@app|@shared|@features|@screens|@entities)/**',
+                group: 'internal',
+              },
+              {
+                pattern: '@(@images)',
+                group: 'internal',
+                position: 'after',
+              },
+            ],
+            pathGroupsExcludedImportTypes: ['internal', 'react'],
+            'newlines-between': 'always',
+            alphabetize: {
+              order: 'asc',
+              caseInsensitive: true,
+            },
+          },
+        ],
       },
     },
   ],

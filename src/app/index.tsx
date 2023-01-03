@@ -1,8 +1,8 @@
-import '@shared/lib/i18n';
+import Screens from '@screens';
+
 import { initializeLocalization } from '@shared/lib/i18n';
 
 import AppProvider from './providers';
-import Screens from '@screens';
 
 initializeLocalization();
 
