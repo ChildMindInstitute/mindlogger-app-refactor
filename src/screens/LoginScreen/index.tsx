@@ -49,7 +49,7 @@ const LoginScreen: FC = () => {
               {title}
             </Text>
             <Flex w="75%">
-              <LoginForm onSubmit={() => {}} />
+              <LoginForm />
             </Flex>
             <HStack mb={2}>
               <Pressable mr={3} onPress={navigateToSignUp}>
