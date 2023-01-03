@@ -17,11 +17,13 @@ const LoginForm = () => {
 
   return (
     <FormProvider {...methods}>
-      <VStack w={'75%'}>
+      <VStack>
         <InputField name="email" placeholder={t('auth:email')} />
         <InputField secureTextEntry name="password" placeholder={t('auth:password')} />
       </VStack>
-      <Button onPress={handleSubmit(onSubmit)}>{t('login_form:login')}</Button>
+      <Button alignSelf="center" onPress={handleSubmit(onSubmit)}>
+        {t('login_form:login')}
+      </Button>
     </FormProvider>
   );
 };

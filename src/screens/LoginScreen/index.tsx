@@ -14,6 +14,7 @@ import {
   HStack,
   Pressable,
   // Icon,
+  Flex,
 } from '@shared/ui';
 import { whiteLogo } from '@images';
 
@@ -47,7 +48,9 @@ const LoginScreen: FC = () => {
             <Text fontSize="4xl" mb="2">
               {title}
             </Text>
-            <LoginForm onSubmit={() => {}} />
+            <Flex w="75%">
+              <LoginForm onSubmit={() => {}} />
+            </Flex>
             <HStack mb={2}>
               <Pressable mr={3} onPress={navigateToSignUp}>
                 <Center>{t('login:new_user')}</Center>
