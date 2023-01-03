@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import { Controller, useFormContext, useController } from 'react-hook-form';
+
 import { IInputProps } from 'native-base';
+import { Controller, useFormContext, useController } from 'react-hook-form';
 
 import { Text, Input } from '@shared/ui';
 
@@ -12,7 +13,13 @@ type Props = {
   secureTextEntry?: boolean;
 } & IInputProps;
 
-const InputField: FC<Props> = ({ name, defaultValue = '', size = 'lg', placeholder, ...props }) => {
+const InputField: FC<Props> = ({
+  name,
+  defaultValue = '',
+  size = 'lg',
+  placeholder,
+  ...props
+}) => {
   const { control } = useFormContext();
   const {
     field: { onChange: onFormChange, value, ref, onBlur },
@@ -43,6 +50,7 @@ const InputField: FC<Props> = ({ name, defaultValue = '', size = 'lg', placehold
         )}
         name={name}
       />
+
       {error?.message && <Text color="error.500">{error.message}</Text>}
     </>
   );
