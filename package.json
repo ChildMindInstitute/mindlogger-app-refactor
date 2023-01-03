@@ -13,6 +13,7 @@
   "dependencies": {
     "@hookform/resolvers": "^2.9.10",
     "@react-native-community/netinfo": "^9.3.7",
+    "@react-navigation/bottom-tabs": "^6.5.2",
     "@react-navigation/native": "^6.1.1",
     "@react-navigation/native-stack": "^6.9.7",
     "date-fns": "^2.29.3",

@@ -24,15 +24,15 @@ const LoginScreen: FC = () => {
   const title = 'MindLogger';
 
   const navigateToSignUp = () => {
-    navigate('SignUpScreen');
+    navigate('SignUp');
   };
 
-  const navigateToForgorPassword = () => {
-    navigate('ForgotPasswordScreen');
+  const navigateToForgotPassword = () => {
+    navigate('ForgotPassword');
   };
 
   const navigateToAbout = () => {
-    navigate('About');
+    navigate('AboutApp');
   };
 
   const navigateToAppLanguage = () => {
@@ -55,7 +55,7 @@ const LoginScreen: FC = () => {
               <Pressable mr={3} onPress={navigateToSignUp}>
                 <Center>{t('login:new_user')}</Center>
               </Pressable>
-              <Pressable onPress={navigateToForgorPassword}>
+              <Pressable onPress={navigateToForgotPassword}>
                 <Center>{t('login:forgot_password')}</Center>
               </Pressable>
             </HStack>
