@@ -1,5 +1,9 @@
 import { FC, PropsWithChildren } from 'react';
-import { NativeBaseProvider as NativeBaseProviderBase, extendTheme } from 'native-base';
+
+import {
+  NativeBaseProvider as NativeBaseProviderBase,
+  extendTheme,
+} from 'native-base';
 
 const NativeBaseProvider: FC<PropsWithChildren> = ({ children }) => {
   const theme = extendTheme({
@@ -39,6 +43,20 @@ const NativeBaseProvider: FC<PropsWithChildren> = ({ children }) => {
           },
         },
       },
+
+      Checkbox: {
+        baseStyle: {
+          bg: 'primary.50',
+          borderColor: '#fff',
+          _checked: {
+            borderColor: '#fff',
+            bg: '#fff',
+          },
+          _icon: {
+            color: 'primary.50',
+          },
+        },
+      },
     },
     colors: {
       // @todo add all the colors from legacy codebase
@@ -51,7 +69,9 @@ const NativeBaseProvider: FC<PropsWithChildren> = ({ children }) => {
     },
   });
 
-  return <NativeBaseProviderBase theme={theme}>{children}</NativeBaseProviderBase>;
+  return (
+    <NativeBaseProviderBase theme={theme}>{children}</NativeBaseProviderBase>
+  );
 };
 
 export default NativeBaseProvider;

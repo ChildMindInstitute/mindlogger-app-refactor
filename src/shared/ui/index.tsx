@@ -13,6 +13,7 @@ import {
   Image,
   Box,
   Input,
+  Checkbox,
 } from 'native-base';
 
 import StatusBar from './StatusBar';
@@ -33,4 +34,5 @@ export {
   Image,
   Input,
   Box,
+  Checkbox,
 };
