@@ -1,3 +1,4 @@
+import CheckBoxField from './CheckBoxField';
 import InputField from './InputField';
 
-export { InputField };
+export { InputField, CheckBoxField };
