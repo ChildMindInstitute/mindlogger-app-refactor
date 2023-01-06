@@ -3,7 +3,6 @@ import { Linking, SafeAreaView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { LoginForm } from '@features/login';
 import {
@@ -83,12 +82,6 @@ const LoginScreen: FC = () => {
 
             <Image mt={5} alt="CMI logo" size="sm" source={whiteLogo} />
           </Center>
-
-          <Flex mr={4} mb={6} alignItems="flex-end">
-            <Pressable onPress={navigateToAppLanguage}>
-              <Icon name="database" size={22} color="#fff" />
-            </Pressable>
-          </Flex>
         </VStack>
       </SafeAreaView>
     </KeyboardAvoidingView>
