@@ -3,7 +3,8 @@ import { FC, PropsWithChildren } from 'react';
 import { ICheckboxProps } from 'native-base';
 import { Controller, useFormContext, useController } from 'react-hook-form';
 
-import { Text, Checkbox } from '@shared/ui';
+import { Checkbox } from '@shared/ui';
+import { ErrorMessage } from '@shared/ui/form';
 
 type Props = {
   name: string;
@@ -42,7 +43,7 @@ const CheckBoxField: FC<PropsWithChildren<Props>> = ({
         name={name}
       />
 
-      {error?.message && <Text color="error.500">{error.message}</Text>}
+      <ErrorMessage error={error} />
     </>
   );
 };

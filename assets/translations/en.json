@@ -1,7 +1,9 @@
 {
   "auth" : {
     "email": "Email address",
-    "password": "Password"
+    "password": "Password",
+    "i_agree": "I agree to the",
+    "terms_of_service": "Terms of Service"
   },
   "activity": {
     "incorrect_answer": "Incorrect answer. Please try again",
@@ -170,7 +172,8 @@
     "email_validation_error": "Looks like this email is incomplete",
     "email_placeholder": "Email",
     "display_name_placeholder": "Display name",
-    "password_placeholder": "Password"
+    "password_placeholder": "Password",
+    "please_accept_terms": "Please accept terms of service."
   },
   "geolocation": {
     "get_location": "GET LOCATION",
