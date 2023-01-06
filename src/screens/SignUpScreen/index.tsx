@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { SafeAreaView } from 'react-native';
+import { Keyboard, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
 
 import { SignUpForm } from '@features/sign-up';
 import {
@@ -13,17 +13,19 @@ import {
 const SignUpScreen: FC = () => {
   return (
     <KeyboardAvoidingView>
-      <SafeAreaView>
-        <StatusBar />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SafeAreaView>
+          <StatusBar />
 
-        <VStack h="100%" bg="primary.50">
-          <Center>
-            <Flex w="75%" mt={10}>
-              <SignUpForm />
-            </Flex>
-          </Center>
-        </VStack>
-      </SafeAreaView>
+          <VStack h="100%" bg="primary.50">
+            <Center>
+              <Flex w="75%" mt={10}>
+                <SignUpForm />
+              </Flex>
+            </Center>
+          </VStack>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 };

@@ -1,6 +1,7 @@
 {
   "auth" : {
-    "email": "Email address",
+    "email": "Email",
+    "email_address": "Email address",
     "password": "Password",
     "i_agree": "I agree to the",
     "terms_of_service": "Terms of Service"
@@ -173,7 +174,9 @@
     "email_placeholder": "Email",
     "display_name_placeholder": "Display name",
     "password_placeholder": "Password",
-    "please_accept_terms": "Please accept terms of service."
+    "please_accept_terms": "Please accept terms of service.",
+    "password_at_least_characters": "Password must be at least 6 characters",
+    "email_looks_incomplete": "Looks like this email is incomplete"
   },
   "geolocation": {
     "get_location": "GET LOCATION",

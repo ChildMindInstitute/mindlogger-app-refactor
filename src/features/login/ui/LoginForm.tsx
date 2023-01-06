@@ -19,7 +19,7 @@ const LoginForm = () => {
   return (
     <FormProvider {...methods}>
       <VStack>
-        <InputField name="email" placeholder={t('auth:email')} />
+        <InputField name="email" placeholder={t('auth:email_address')} />
 
         <InputField
           secureTextEntry

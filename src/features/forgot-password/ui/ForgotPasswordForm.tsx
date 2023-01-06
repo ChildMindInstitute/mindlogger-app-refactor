@@ -20,7 +20,7 @@ const ForgotPasswordForm = () => {
   return (
     <FormProvider {...methods}>
       <VStack>
-        <InputField name="email" placeholder={t('auth:email')} />
+        <InputField name="email" placeholder={t('auth:email_address')} />
       </VStack>
 
       <Button alignSelf="center" onPress={handleSubmit(onSubmit)}>
