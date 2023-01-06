@@ -3,7 +3,8 @@ import { FC } from 'react';
 import { IInputProps } from 'native-base';
 import { Controller, useFormContext, useController } from 'react-hook-form';
 
-import { Text, Input } from '@shared/ui';
+import { Input } from '@shared/ui';
+import { ErrorMessage } from '@shared/ui/form';
 
 type Props = {
   name: string;
@@ -51,7 +52,7 @@ const InputField: FC<Props> = ({
         name={name}
       />
 
-      {error?.message && <Text color="error.500">{error.message}</Text>}
+      <ErrorMessage error={error} />
     </>
   );
 };
