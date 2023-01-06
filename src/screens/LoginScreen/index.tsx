@@ -14,7 +14,6 @@ import {
   VStack,
   HStack,
   Pressable,
-  // Icon,
   Flex,
 } from '@shared/ui';
 
@@ -83,8 +82,6 @@ const LoginScreen: FC = () => {
 
             <Image mt={5} alt="CMI logo" size="sm" source={whiteLogo} />
           </Center>
-
-          {/*<Pressable onPress={() => {}}>/!*<Icon as={FontAwesome} name="database" />*!/</Pressable>*/}
         </VStack>
       </SafeAreaView>
     </KeyboardAvoidingView>
