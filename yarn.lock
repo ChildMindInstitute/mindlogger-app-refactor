@@ -8715,6 +8715,11 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
+zod-i18n-map@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/zod-i18n-map/-/zod-i18n-map-2.1.0.tgz#95d12e92e38d26f33b3f2fb4a682bb682f407646"
+  integrity sha512-dEsaj+Z3B/JVainQyH6ROxLg6pgwz1k/80zbASsFrXLdssEVohoiMusf+OEyulypjajEYw2zX9Dp8biI0WNNrw==
+
 zod@^3.20.2:
   version "3.20.2"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.20.2.tgz#068606642c8f51b3333981f91c0a8ab37dfc2807"

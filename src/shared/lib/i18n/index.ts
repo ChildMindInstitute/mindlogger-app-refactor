@@ -1,8 +1,9 @@
+import en from '@assets/translations/en.json';
+import fr from '@assets/translations/fr.json';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-
-import fr from '@assets/translations/fr.json';
-import en from '@assets/translations/en.json';
+import { z } from 'zod';
+import { zodI18nMap } from 'zod-i18n-map';
 
 const initializeLocalization = () =>
   i18n.use(initReactI18next).init({
@@ -14,6 +15,8 @@ const initializeLocalization = () =>
       fr,
     },
   });
+
+z.setErrorMap(zodI18nMap);
 
 // @todo - automatically detect language of the device
 
