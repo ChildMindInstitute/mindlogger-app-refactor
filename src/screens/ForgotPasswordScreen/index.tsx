@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import { ForgotPasswordForm } from '@features/forgot-password';
 import {
@@ -13,17 +13,19 @@ import {
 const LoginScreen: FC = () => {
   return (
     <KeyboardAvoidingView>
-      <SafeAreaView>
-        <StatusBar />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SafeAreaView>
+          <StatusBar />
 
-        <VStack h="100%" bg="primary.50">
-          <Center>
-            <Flex w="75%" mt={10}>
-              <ForgotPasswordForm />
-            </Flex>
-          </Center>
-        </VStack>
-      </SafeAreaView>
+          <VStack h="100%" bg="primary.50">
+            <Center>
+              <Flex w="75%" mt={10}>
+                <ForgotPasswordForm />
+              </Flex>
+            </Center>
+          </VStack>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 };

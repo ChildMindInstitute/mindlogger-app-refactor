@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 
 import { RootStackParamList } from '@shared/lib/navigation';
 
@@ -8,12 +9,25 @@ import SignUpScreen from './SignUpScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const screenOptions = () => {
+  return {
+    headerStyle: {
+      backgroundColor: '#0067A0', // @todo find a way to take this value from native-base (primary.50)
+    },
+    headerTitleStyle: {
+      color: '#fff',
+    },
+    headerShadowVisible: false,
+  };
+};
+
 export default () => {
+  const { t } = useTranslation();
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen
         options={{
-          headerShown: false,
+          title: '',
         }}
         name="Login"
         component={LoginScreen}
@@ -22,7 +36,7 @@ export default () => {
       <Stack.Screen
         name="ForgotPassword"
         options={{
-          title: 'Forgot Password',
+          title: t('login:forgot_password') as string,
         }}
         component={ForgotPasswordScreen}
       />
@@ -30,7 +44,7 @@ export default () => {
       <Stack.Screen
         name="SignUp"
         options={{
-          title: 'New User',
+          title: t('login:new_user') as string,
         }}
         component={SignUpScreen}
       />
