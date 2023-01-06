@@ -1,6 +1,7 @@
 {
   "auth" : {
-    "email": "Adresse e-mail",
+    "email": "Email",
+    "email_address": "Adresse e-mail",
     "password": "Mot de passe",
     "i_agree": "J'accepte les",
     "terms_of_service": "Conditions d'utilisation"
@@ -167,7 +168,9 @@
     "email_placeholder": "E-mail",
     "display_name_placeholder": "Afficher le nom",
     "password_placeholder": "Mot de passe",
-    "please_accept_terms": "Veuillez accepter les conditions d'utilisation."
+    "please_accept_terms": "Veuillez accepter les conditions d'utilisation.",
+    "password_at_least_characters": "Le mot de passe doit être au moins de 6 caractères",
+    "email_looks_incomplete": "Il semble que cet e-mail soit incomplet"
   },
   "geolocation": {
     "get_location": "LOCALISATION",

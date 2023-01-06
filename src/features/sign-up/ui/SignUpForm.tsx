@@ -11,10 +11,14 @@ const SignUpForm = () => {
   const { t } = useTranslation();
   const methods = useForm<TSignUpForm>({
     resolver: zodResolver(SignUpFormSchema),
+    defaultValues: {
+      terms: false,
+    },
   });
 
   const { handleSubmit } = methods;
-  const onSubmit: SubmitHandler<TSignUpForm> = data => console.log(data);
+  const onSubmit: SubmitHandler<TSignUpForm> = data =>
+    console.log('Sign-up data: ', data);
 
   return (
     <FormProvider {...methods}>
