@@ -49,7 +49,7 @@ const InputField: FC<Props> = ({
         name={name}
       />
 
-      <ErrorMessage error={error} />
+      <ErrorMessage mt={8} error={error} />
     </>
   );
 };
