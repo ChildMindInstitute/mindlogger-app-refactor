@@ -1,6 +1,6 @@
 import { FC } from 'react';
+import { TextInputProps } from 'react-native';
 
-import { IInputProps } from 'native-base';
 import { Controller, useFormContext, useController } from 'react-hook-form';
 
 import { Input } from '@shared/ui';
@@ -12,12 +12,11 @@ type Props = {
   defaultValue?: string;
   size?: string;
   secureTextEntry?: boolean;
-} & IInputProps;
+} & TextInputProps;
 
 const InputField: FC<Props> = ({
   name,
   defaultValue = '',
-  size = 'lg',
   placeholder,
   ...props
 }) => {
@@ -37,16 +36,14 @@ const InputField: FC<Props> = ({
         control={control}
         render={() => (
           <Input
-            variant="underlined"
-            mb={2}
-            size={size}
             ref={ref}
             onBlur={onBlur}
             onChangeText={onFormChange}
             value={value}
             placeholder={placeholder}
-            {...props}
             isInvalid={!!error}
+            autoCapitalize="none"
+            {...props}
           />
         )}
         name={name}

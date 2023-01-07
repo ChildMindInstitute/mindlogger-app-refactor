@@ -5,6 +5,12 @@ import { initReactI18next } from 'react-i18next';
 import { z } from 'zod';
 import { zodI18nMap } from 'zod-i18n-map';
 
+declare module 'i18next' {
+  interface CustomTypeOptions {
+    returnNull: false;
+  }
+}
+
 const initializeLocalization = () =>
   i18n.use(initReactI18next).init({
     compatibilityJSON: 'v3',
@@ -14,6 +20,7 @@ const initializeLocalization = () =>
       en,
       fr,
     },
+    returnNull: false,
   });
 
 z.setErrorMap(zodI18nMap);

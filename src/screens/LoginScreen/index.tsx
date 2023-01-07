@@ -1,21 +1,16 @@
 import { FC } from 'react';
-import { Linking, SafeAreaView } from 'react-native';
+import {
+  Linking,
+  StatusBar,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { LoginForm } from '@features/login';
-import {
-  StatusBar,
-  KeyboardAvoidingView,
-  Center,
-  Text,
-  Image,
-  VStack,
-  HStack,
-  Pressable,
-  Flex,
-} from '@shared/ui';
+import { Center, Text, Image, YStack, XStack, Box } from '@shared/ui';
 
 import { whiteLogo } from '@images';
 
@@ -40,51 +35,56 @@ const LoginScreen: FC = () => {
     navigate('AppLanguage');
   };
 
+  const navigateToTerms = () => {
+    Linking.openURL('https://mindlogger.org/terms');
+  };
+
   return (
-    <KeyboardAvoidingView>
-      <SafeAreaView>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Box flex={1} bg="#0067A0">
         <StatusBar />
 
-        <VStack h="100%" bg="primary.50">
-          <Center my="auto">
-            <Text fontSize="4xl" mb="2">
+        <Box flex={1} jc="center">
+          <YStack space={30}>
+            <Text
+              color="white"
+              fontWeight="400"
+              fontSize={40}
+              alignSelf="center">
               {title}
             </Text>
 
-            <Flex w="75%">
-              <LoginForm />
-            </Flex>
+            <LoginForm px="$8" />
 
-            <HStack mb={2}>
-              <Pressable mr={3} onPress={navigateToSignUp}>
-                <Center>{t('login:new_user')}</Center>
-              </Pressable>
+            <Center space>
+              <XStack space>
+                <Text color="white" onPress={navigateToSignUp}>
+                  {t('login:new_user')}
+                </Text>
 
-              <Pressable onPress={navigateToForgotPassword}>
-                <Center>{t('login:forgot_password')}</Center>
-              </Pressable>
-            </HStack>
+                <Text color="white" onPress={navigateToForgotPassword}>
+                  {t('login:forgot_password')}
+                </Text>
+              </XStack>
 
-            <VStack space={2}>
-              <Pressable onPress={navigateToAbout}>
-                <Center>{`${t('login:what_is')} ${title}?`}</Center>
-              </Pressable>
+              <Text color="white" onPress={navigateToAbout}>{`${t(
+                'login:what_is',
+              )} ${title}?`}</Text>
 
-              <Pressable onPress={navigateToAppLanguage}>
-                <Center>{t('language_screen:change_app_language')}</Center>
-              </Pressable>
+              <Text color="white" onPress={navigateToAppLanguage}>
+                {t('language_screen:change_app_language')}
+              </Text>
 
-              <Pressable
-                onPress={() => Linking.openURL('https://mindlogger.org/terms')}>
-                <Center>{t('Terms of Service')}</Center>
-              </Pressable>
-            </VStack>
+              <Text color="white" onPress={navigateToTerms}>
+                {t('Terms of Service')}
+              </Text>
+            </Center>
 
-            <Image mt={5} alt="CMI logo" size="sm" source={whiteLogo} />
-          </Center>
-        </VStack>
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+            <Image alignSelf="center" src={whiteLogo} width={70} height={70} />
+          </YStack>
+        </Box>
+      </Box>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -1,3 +1,5 @@
+process.env.TAMAGUI_TARGET = 'native';
+
 module.exports = {
   presets: ['module:metro-react-native-babel-preset'],
   plugins: [
@@ -15,6 +17,12 @@ module.exports = {
           '@entities': './src/entities',
           '@images': './assets/images/index',
         },
+      },
+    ],
+    [
+      'transform-inline-environment-variables',
+      {
+        include: ['NODE_ENV', 'TAMAGUI_TARGET'],
       },
     ],
   ],
