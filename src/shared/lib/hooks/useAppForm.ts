@@ -1,4 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import {
   useForm,
   UseFormProps,
@@ -6,6 +5,8 @@ import {
   SubmitErrorHandler,
 } from 'react-hook-form';
 import { z } from 'zod';
+
+import { zodResolver } from '../validation';
 
 const useAppForm = <Schema extends z.ZodTypeAny>(
   schema: Schema,

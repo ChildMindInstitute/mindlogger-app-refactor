@@ -16,7 +16,8 @@ const ErrorMessage: FC<PropsWithChildren<Props>> = ({ error, ...props }) => {
     <>
       {error?.message && (
         <Text color="$secondary" fontSize={12} {...props}>
-          {t(error.message)}
+          {/* @ts-ignore */}
+          {t(error.message, error.params)}
         </Text>
       )}
     </>
