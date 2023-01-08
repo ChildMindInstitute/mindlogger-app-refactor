@@ -9,13 +9,13 @@ type Props = {
   error?: FieldError;
 } & TextProps;
 
-const CheckBoxField: FC<PropsWithChildren<Props>> = ({ error, ...props }) => {
+const ErrorMessage: FC<PropsWithChildren<Props>> = ({ error, ...props }) => {
   const { t } = useTranslation();
 
   return (
     <>
       {error?.message && (
-        <Text color="white" fontSize={12} {...props}>
+        <Text color="$secondary" fontSize={12} {...props}>
           {t(error.message)}
         </Text>
       )}
@@ -23,4 +23,4 @@ const CheckBoxField: FC<PropsWithChildren<Props>> = ({ error, ...props }) => {
   );
 };
 
-export default CheckBoxField;
+export default ErrorMessage;

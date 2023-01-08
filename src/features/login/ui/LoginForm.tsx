@@ -35,7 +35,7 @@ const LoginForm: FC<BoxProps> = props => {
         </YStack>
 
         <Button
-          variant="white"
+          variant="light"
           alignSelf="center"
           onPress={handleSubmit(onSubmit)}>
           {t('login_form:login')}

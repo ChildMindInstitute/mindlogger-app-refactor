@@ -1,4 +1,4 @@
-import { TextInput } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 
 import { GetProps, setupReactNative, styled } from '@tamagui/core';
 import { focusableInputHOC } from '@tamagui/focusable';
@@ -11,33 +11,39 @@ export const InputFrame = styled(
   TextInput,
   {
     name: 'Input',
-    outlineWidth: 0,
     focusable: true,
+
+    outlineWidth: 0,
+    minWidth: 0,
     backgroundColor: '$backgroundTransparent',
-    borderColor: '#ffffff99',
-    placeholderTextColor: '#ffffff99',
-    color: '#fff',
-    borderWidth: 0,
-    borderRadius: 0,
-    borderBottomWidth: 0.5,
+    borderBottomWidth: StyleSheet.hairlineWidth * 1.5,
+    underlineColorAndroid: 'transparent',
+
     m: 0,
     px: 12,
     py: 8,
+
     fontSize: 20,
-
     selectionColor: 'black',
-    minWidth: 0,
-
-    focusStyle: {
-      borderColor: 'white',
-    },
 
     variants: {
-      isInvalid: {
-        true: {
-          borderBottomColor: '#e63232',
+      variant: {
+        light: {
+          color: '$secondary',
+          placeholderTextColor: '#ffffff99',
+          borderBottomColor: '#ffffff99',
         },
       },
+
+      isInvalid: {
+        true: {
+          borderBottomColor: '$alert',
+        },
+      },
+    },
+
+    defaultVariants: {
+      variant: 'light',
     },
   },
   {

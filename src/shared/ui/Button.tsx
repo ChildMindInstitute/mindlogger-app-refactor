@@ -8,12 +8,12 @@ setupReactNative({
 export default styled(Button, {
   variants: {
     variant: {
-      white: {
+      light: {
         borderRadius: 4,
         px: 50,
         fontSize: 20,
-        backgroundColor: 'white',
-        textProps: { color: '#0067A0' },
+        backgroundColor: '$secondary',
+        textProps: { color: '$primary' },
       },
     },
   } as const,
