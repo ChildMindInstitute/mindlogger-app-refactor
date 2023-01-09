@@ -6,5 +6,3 @@ const schema = z.object({
 });
 
 export default schema;
-
-export type TLoginForm = z.infer<typeof schema>;

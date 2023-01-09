@@ -1,38 +1,48 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
+import { FC } from 'react';
+
+import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { VStack, Button } from '@shared/ui';
+import { useAppForm } from '@shared/lib';
+import { Button, YStack, Box, BoxProps } from '@shared/ui';
 import { InputField } from '@shared/ui/form';
 
-import { LoginFormSchema, TLoginForm } from '../model';
+import { LoginFormSchema } from '../model';
 
-const LoginForm = () => {
+const LoginForm: FC<BoxProps> = props => {
   const { t } = useTranslation();
-  const methods = useForm<TLoginForm>({
-    resolver: zodResolver(LoginFormSchema),
+  const { form, submit } = useAppForm(LoginFormSchema, {
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    onSubmitSuccess: data => {
+      console.log(data);
+    },
   });
 
-  const { handleSubmit } = methods;
-  const onSubmit: SubmitHandler<TLoginForm> = data => console.log(data);
-
   return (
-    <FormProvider {...methods}>
-      <VStack>
-        <InputField name="email" placeholder={t('auth:email_address')} />
+    <Box {...props}>
+      <FormProvider {...form}>
+        <YStack space={8} mb={40}>
+          <InputField
+            name="email"
+            placeholder={t('login_form:email_placeholder')}
+          />
 
-        <InputField
-          secureTextEntry
-          name="password"
-          placeholder={t('auth:password')}
-        />
-      </VStack>
+          <InputField
+            secureTextEntry
+            name="password"
+            placeholder={t('auth:password')}
+          />
+        </YStack>
 
-      <Button alignSelf="center" onPress={handleSubmit(onSubmit)}>
-        {t('login_form:login')}
-      </Button>
-    </FormProvider>
+        <Button variant="light" alignSelf="center" onPress={submit}>
+          {t('login_form:login')}
+        </Button>
+      </FormProvider>
+    </Box>
   );
 };
 
-export { LoginForm };
+export default LoginForm;

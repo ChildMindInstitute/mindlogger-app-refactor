@@ -41,9 +41,7 @@ const SignUpForm = () => {
             <Text>{t('auth:i_agree')}</Text>
 
             <Pressable onPress={() => {}}>
-              <Text underline ml={1}>
-                {t('auth:terms_of_service')}
-              </Text>
+              <Text ml={1}>{t('auth:terms_of_service')}</Text>
             </Pressable>
           </HStack>
         </CheckBoxField>

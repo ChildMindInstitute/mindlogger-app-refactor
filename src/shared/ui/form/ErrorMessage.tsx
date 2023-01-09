@@ -3,18 +3,25 @@ import { FC, PropsWithChildren } from 'react';
 import type { FieldError } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Text } from '@shared/ui';
+import { Text, TextProps } from '@shared/ui';
 
 type Props = {
   error?: FieldError;
-};
+} & TextProps;
 
-const CheckBoxField: FC<PropsWithChildren<Props>> = ({ error }) => {
+const ErrorMessage: FC<PropsWithChildren<Props>> = ({ error, ...props }) => {
   const { t } = useTranslation();
 
   return (
-    <>{error?.message && <Text color="error.500">{t(error.message)}</Text>}</>
+    <>
+      {error?.message && (
+        <Text color="$secondary" fontSize={12} {...props}>
+          {/* @ts-ignore */}
+          {t(error.message, error.params)}
+        </Text>
+      )}
+    </>
   );
 };
 
-export default CheckBoxField;
+export default ErrorMessage;
