@@ -1,4 +1,4 @@
-export default {
+export const colors = {
   white: '#FFFFFF',
   primary: '#0067A0',
   secondary: '#FFFFFF',
@@ -12,4 +12,4 @@ export default {
   lightBlue: '#dbf2ff',
   darkBlue: 'darkblue',
   yellow: '#FFBD32',
-} as const;
+};

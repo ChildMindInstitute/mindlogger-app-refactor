@@ -3,7 +3,7 @@ import { FC, PropsWithChildren } from 'react';
 import { ICheckboxProps } from 'native-base';
 import { Controller, useFormContext, useController } from 'react-hook-form';
 
-import colors from '@app/shared/lib/constants/colors';
+import { colors } from '@app/shared/lib';
 import { Box, CheckBox, XStack } from '@shared/ui';
 import { ErrorMessage } from '@shared/ui/form';
 

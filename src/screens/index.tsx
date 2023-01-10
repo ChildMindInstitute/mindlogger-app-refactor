@@ -4,7 +4,7 @@ import {
 } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
-import colors from '@app/shared/lib/constants/colors';
+import { colors } from '@app/shared/lib';
 import { RootStackParamList } from '@shared/lib/navigation';
 import { Text, CloseIcon } from '@shared/ui';
 

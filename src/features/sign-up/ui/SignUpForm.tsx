@@ -1,33 +1,31 @@
 import { FC } from 'react';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import colors from '@app/shared/lib/constants/colors';
+import { useAppForm } from '@app/shared/lib';
 import { Button, Text, Box, BoxProps, YStack, XStack } from '@shared/ui';
 import { InputField, CheckBoxField } from '@shared/ui/form';
 
-import { SignUpFormSchema, TSignUpForm } from '../model';
+import { SignUpFormSchema } from '../model';
 
 const SignUpForm: FC<BoxProps> = props => {
   const { t } = useTranslation();
-  const methods = useForm<TSignUpForm>({
-    resolver: zodResolver(SignUpFormSchema),
+
+  const { form, submit } = useAppForm(SignUpFormSchema, {
     defaultValues: {
       terms: false,
       email: '',
       password: '',
     },
+    onSubmitSuccess: data => {
+      console.log('Sign-up data: ', data);
+    },
   });
-
-  const { handleSubmit } = methods;
-  const onSubmit: SubmitHandler<TSignUpForm> = data =>
-    console.log('Sign-up data: ', data);
 
   return (
     <Box {...props}>
-      <FormProvider {...methods}>
+      <FormProvider {...form}>
         <YStack>
           <InputField name="email" placeholder={t('auth:email')} />
 
@@ -45,7 +43,7 @@ const SignUpForm: FC<BoxProps> = props => {
           <YStack mt={26} mb={46}>
             <CheckBoxField value="" name="terms">
               <XStack ml={16}>
-                <Text color="white" fontSize={17} lineHeight={22}>
+                <Text color="$secondary" fontSize={17} lineHeight={22}>
                   {t('auth:i_agree')}
                 </Text>
 
@@ -53,7 +51,7 @@ const SignUpForm: FC<BoxProps> = props => {
                   ml={3}
                   lineHeight={22}
                   fontSize={17}
-                  color={colors.white}
+                  color="$secondary"
                   textDecorationLine="underline">
                   {t('auth:terms_of_service')}
                 </Text>
@@ -62,10 +60,7 @@ const SignUpForm: FC<BoxProps> = props => {
           </YStack>
         </YStack>
 
-        <Button
-          variant="light"
-          alignSelf="center"
-          onPress={handleSubmit(onSubmit)}>
+        <Button variant="light" alignSelf="center" onPress={submit}>
           {t('sign_up_form:sign_up')}
         </Button>
       </FormProvider>
