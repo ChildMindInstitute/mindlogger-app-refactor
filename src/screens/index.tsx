@@ -58,6 +58,10 @@ export default () => {
         name="SignUp"
         options={{
           title: t('login:new_user'),
+          contentStyle: {
+            borderTopColor: colors.grey,
+            borderTopWidth: 1,
+          },
         }}
         component={SignUpScreen}
       />
