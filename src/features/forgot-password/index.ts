@@ -1,3 +1,3 @@
-import { ForgotPasswordForm } from './ui/ForgotPasswordForm';
+import ForgotPasswordForm from './ui/ForgotPasswordForm';
 
 export { ForgotPasswordForm };
