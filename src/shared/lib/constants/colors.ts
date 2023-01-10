@@ -1,4 +1,5 @@
-export default {
+export const colors = {
+  white: '#FFFFFF',
   primary: '#0067A0',
   secondary: '#FFFFFF',
   secondary_50: '#ffffff',
@@ -9,5 +10,6 @@ export default {
   alert: '#e63232',
   blue: '#005fa3',
   lightBlue: '#dbf2ff',
+  darkBlue: 'darkblue',
   yellow: '#FFBD32',
-} as const;
+};

@@ -4,6 +4,7 @@ import {
 } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
+import { colors } from '@app/shared/lib';
 import { RootStackParamList } from '@shared/lib/navigation';
 import { Text, CloseIcon } from '@shared/ui';
 
@@ -20,15 +21,15 @@ type ScreenOptions = {
 const screenOptions = ({ navigation }: ScreenOptions) => {
   return {
     headerStyle: {
-      backgroundColor: '#0067A0', // @todo find a way to take this value from tamagui
+      backgroundColor: colors.primary,
     },
     headerTitleStyle: {
-      color: '#fff',
+      color: colors.white,
     },
     headerShadowVisible: false,
     headerLeft: () => (
-      <Text onPress={navigation.goBack}>
-        <CloseIcon color="#fff" size={22} />
+      <Text onPress={navigation.goBack} mr={24}>
+        <CloseIcon color={colors.white} size={22} />
       </Text>
     ),
   };
@@ -57,6 +58,10 @@ export default () => {
         name="SignUp"
         options={{
           title: t('login:new_user'),
+          contentStyle: {
+            borderTopColor: colors.grey,
+            borderTopWidth: 1,
+          },
         }}
         component={SignUpScreen}
       />

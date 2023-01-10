@@ -1,3 +1,4 @@
+import CheckBox from '@react-native-community/checkbox';
 import { Stack } from '@tamagui/core';
 import type { StackProps, TextProps } from '@tamagui/core';
 import {
@@ -9,7 +10,6 @@ import {
   VStack,
   HStack,
   Pressable,
-  Checkbox,
 } from 'native-base';
 
 import Button from './Button';
@@ -35,7 +35,7 @@ export {
   VStack,
   Pressable,
   Input,
-  Checkbox,
+  CheckBox,
   Stack as Box,
   StackProps as BoxProps,
   TextProps,

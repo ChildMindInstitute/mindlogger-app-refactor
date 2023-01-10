@@ -10,7 +10,7 @@ import {
   tokens as baseTokens,
 } from '@tamagui/theme-base';
 
-import colors from './colors';
+import { colors } from '@app/shared/lib';
 
 const defaultFont = createFont({
   family: 'System',
