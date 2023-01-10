@@ -20,6 +20,7 @@ import StatusBar from './StatusBar';
 export { Image } from '@tamagui/image';
 export { YStack, XStack, ZStack } from '@tamagui/stacks';
 export { Text } from '@tamagui/core';
+export * from './Icons';
 
 export {
   StatusBar,
