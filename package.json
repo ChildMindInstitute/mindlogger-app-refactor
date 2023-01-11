@@ -33,6 +33,7 @@
     "react-hook-form": "^7.41.0",
     "react-i18next": "^12.1.1",
     "react-native": "0.70.6",
+    "react-native-markdown-display": "6.1.6",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "^3.18.2",
     "react-native-svg": "12.1.1",
