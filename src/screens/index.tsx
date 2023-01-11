@@ -8,6 +8,8 @@ import { colors } from '@app/shared/lib';
 import { RootStackParamList } from '@shared/lib/navigation';
 import { Text, CloseIcon } from '@shared/ui';
 
+import packageJson from '../../package.json';
+import AboutScreen from './About';
 import ForgotPasswordScreen from './ForgotPasswordScreen';
 import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
@@ -64,6 +66,20 @@ export default () => {
           },
         }}
         component={SignUpScreen}
+      />
+
+      <Stack.Screen
+        name="AboutApp"
+        options={{
+          title: t('about_app:title_with_version', {
+            version: packageJson.version,
+          }),
+          headerTitleStyle: {
+            fontSize: 16,
+            color: colors.white,
+          },
+        }}
+        component={AboutScreen}
       />
     </Stack.Navigator>
   );

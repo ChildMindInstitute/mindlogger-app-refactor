@@ -10,6 +10,7 @@ import {
   VStack,
   HStack,
   Pressable,
+  ScrollView,
 } from 'native-base';
 
 import Button from './Button';
@@ -39,4 +40,5 @@ export {
   Stack as Box,
   StackProps as BoxProps,
   TextProps,
+  ScrollView,
 };

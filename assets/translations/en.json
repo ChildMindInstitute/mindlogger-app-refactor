@@ -1,5 +1,5 @@
 {
-  "auth" : {
+  "auth": {
     "email": "Email",
     "email_address": "Email address",
     "password": "Password",
@@ -10,12 +10,12 @@
     "incorrect_answer": "Incorrect answer. Please try again",
     "failed": "Failed"
   },
-  "activity_time":{
+  "activity_time": {
     "time_remaining": "Time Remaining"
   },
-  "timed_activity":{
+  "timed_activity": {
     "time_to_complete": "Time to complete",
-    "hours" : "hours"
+    "hours": "hours"
   },
   "activity_summary": {
     "terms_text": "I understand that the information provided by this questionnaire is not intended to replace the advice, diagnosis, or treatment offered by a medical or mental health professional, and that my anonymous responses may be used and shared for general research on children’s mental health.",
@@ -24,8 +24,8 @@
     "save": "Save",
     "summary": "Summary",
     "report_summary": "Report Summary",
-    "not_yet_completed":"Not yet completed",
-    "last_completed":"Last completed",
+    "not_yet_completed": "Not yet completed",
+    "last_completed": "Last completed",
     "unscheduled": "Unscheduled",
     "due": "Due",
     "scheduled_for": "Scheduled for",
@@ -58,13 +58,13 @@
     "applets_title": "Find out more about each of your applets and about the MindLogger platform.",
     "data_title": "Find out more about the MindLogger data collection platform by tapping 'About\nMindLogger' below.",
     "about_mindLogger": "About MindLogger",
-    "icons_title":"NounProject icons were created by Alina Oleynik (survey), beth bolton (book), and\nShakeel (chart)"
+    "icons_title": "NounProject icons were created by Alina Oleynik (survey), beth bolton (book), and\nShakeel (chart)"
   },
   "about_app": {
-    "title_with_version": "What is MindLogger?",
-    "title":"Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
+    "title_with_version": "{{version}} What is MindLogger?",
+    "title": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
     "subtitle": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
-    "mindlogger_about": "### What is MindLogger?\n\nThis app is part of the open source MindLogger data collection and analysis platform designed by the MATTER Lab at the Child Mind Institute (https://matter.childmind.org).\n\n### What can MindLogger do?\n\nMindLogger's feature set is growing, and currently supports a wide variety of input types. Each screen in a MindLogger activity can include any of the following:\n  - Text, picture, and audio\n  - Question followed by image and/or text response options\n  - Slider bar\n  - Text entry\n  - Table entry\n  - Audio record\n  - Photo/video capture\n  - Drawing or tapping\n  - Current geolocation\n  - Simple cognitive task\n  - Delay before response\n  - Timer\n  - Conditional logic to determine where to go next\n\n### Where can I learn more?\n\nPlease visit https://mindlogger.org for more information.\n\nCheers,\nMindLogger Team\nChild Mind Institute"
+    "mindlogger_about": "## \n ### What is MindLogger? \n\n This app is part of the open source MindLogger data collection and analysis platform designed by the MATTER Lab at the Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### What can MindLogger do? \n\n MindLogger's feature set is growing, and currently supports a wide variety of input types. Each screen in a MindLogger activity can include any of the following: \n  - Text, picture, and audio \n  - Question followed by image and/or text response options \n  - Slider bar \n  - Text entry \n  - Table entry \n  - Audio record \n  - Photo/video capture \n  - Drawing or tapping \n  - Current geolocation \n  - Simple cognitive task \n  - Delay before response \n  - Timer \n  - Conditional logic to determine where to go next \n\n #### Where can I learn more? \n Please visit [https://mindlogger.org](https://mindlogger.org) for more information. \n\n ##### Cheers, \n\n ##### MindLogger Team \n\n ##### Child Mind Institute"
   },
   "applet_footer": {
     "surveys": "Surveys",
@@ -83,7 +83,7 @@
     "decline_title": "Decline"
   },
   "applet_list_component": {
-    "about_title":"About MindLogger"
+    "about_title": "About MindLogger"
   },
   "applet_settings": {
     "applet_not_defined": "There isn't an applet defined.",
@@ -97,7 +97,7 @@
     "confirm_text": "Yes, delete it"
   },
   "change_pass_form": {
-    "update":"Update",
+    "update": "Update",
     "cur_pass_placeholder": "Current password",
     "new_pass_placeholder": "New password",
     "error": "Unable to update user details.",
@@ -107,7 +107,7 @@
   "change_study": {
     "reset": "Reset",
     "submit": "Submit",
-    "enter_url_manually":"Enter URL Manually",
+    "enter_url_manually": "Enter URL Manually",
     "scan_qr": "Scan QR",
     "successfully_changed": "Server Url was changed successfully.",
     "successfully_reset": "Server Url was reset successfully.",
@@ -118,9 +118,9 @@
     "no": "No"
   },
   "consent": {
-    "this_app_provides":"This app provides a easy way to collect survey, voice, drawing activities.",
-    "i_understand":"I understand that viewing certain images can be uncomfortable while using this app",
-    "i_will_allow":"I will allow the Child Mind Institute to store data from use of this app on a secure\ncloud server, and to access this information for clinical and research purposes",
+    "this_app_provides": "This app provides a easy way to collect survey, voice, drawing activities.",
+    "i_understand": "I understand that viewing certain images can be uncomfortable while using this app",
+    "i_will_allow": "I will allow the Child Mind Institute to store data from use of this app on a secure\ncloud server, and to access this information for clinical and research purposes",
     "i_premit": "I permit the Child Mind Institute to contact me regarding information gathered from\nthis app for clinical or research purposes.",
     "next": "Next"
   },
@@ -147,14 +147,14 @@
   "logout_warning": {
     "uploads_in_progress": "Uploads in progress",
     "currently_uploading": "You have responses that are currently uploading. If you log out now your responses will be lost.",
-    "sure_logout":"Are you sure that you want to log out?",
+    "sure_logout": "Are you sure that you want to log out?",
     "cancel": "Cancel",
     "logout": "Logout"
   },
   "settings": {
-    "logged_out":"You've logged out.",
+    "logged_out": "You've logged out.",
     "change_pass": "Change Password",
-    "use_cellular_data":"Use Cellular Data",
+    "use_cellular_data": "Use Cellular Data",
     "logout": "Logout",
     "permanently_delete_account": "Permanently Delete Account",
     "user_settings": "User Settings"
@@ -191,21 +191,21 @@
   },
   "audio_recorder": {
     "permission": "You must grant permission to use your microphone to complete this task.",
-    "alert_title":"\"MindLogger\" would like to use your microphone to complete this task.",
+    "alert_title": "\"MindLogger\" would like to use your microphone to complete this task.",
     "alert_message": "These can be configured in Settings.",
     "alert_button_ok": "Open Settings",
     "alert_button_cancel": "Dismiss"
   },
   "record_button": {
     "stop": "STOP",
-    "record":"RECORD",
+    "record": "RECORD",
     "recording": "Recording...",
     "seconds": "seconds",
     "file_saved": "File saved."
   },
   "audio_player": {
     "stop": "STOP",
-    "playing":"PLAYING...",
+    "playing": "PLAYING...",
     "play": "PLAY",
     "done": "DONE"
   },
@@ -217,11 +217,11 @@
     "ok": "OK"
   },
   "table_input": {
-    "short_press_detail":"* A short-press increases the counter",
+    "short_press_detail": "* A short-press increases the counter",
     "long_press_detail": "* A long-press decreases the counter"
   },
   "activity_due_date": {
-    "available_all_day":"Available: All day",
+    "available_all_day": "Available: All day",
     "scheduled_at": "Scheduled At",
     "available": "Available From",
     "to": "To",
@@ -240,7 +240,7 @@
     "no_info": "The authors of this applet have not provided any information!"
   },
   "firebase_messaging": {
-    "alert_title":"\"MindLogger\" would like to send you notifications",
+    "alert_title": "\"MindLogger\" would like to send you notifications",
     "alert_message": "These can be configured in Settings",
     "alert_text": "Open Settings",
     "response_refresh_request": "Response Refresh Request",
@@ -298,7 +298,7 @@
   "timing": {
     "provide_option": "You must provide the \"after\" or \"every\" option",
     "to_be_number": "Expected options.after to be a number",
-    "every_number":"Expected options.every to be a number"
+    "every_number": "Expected options.every to be a number"
   },
   "camera": {
     "choose_photo": "Choose photo",
@@ -320,11 +320,11 @@
     "submit_flow_answers_ex": "button to save your responses and continue to:",
     "close": "Close",
     "resume_activity": "Resume activity",
-    "activity_resume_restart":"Would you like to resume this activity in progress or restart?",
+    "activity_resume_restart": "Would you like to resume this activity in progress or restart?",
     "restart": "Restart",
     "resume": "Resume",
     "in_progress": "In Progress",
-    "unscheduled":"Unscheduled",
+    "unscheduled": "Unscheduled",
     "scheduled": "Scheduled",
     "past_due": "Past Due",
     "available": "Available",
