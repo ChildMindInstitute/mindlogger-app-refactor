@@ -35,7 +35,7 @@ const LoginScreen: FC = () => {
   };
 
   const navigateToAppLanguage = () => {
-    navigate('AppLanguage');
+    navigate('ChangeLanguage');
   };
 
   const navigateToTerms = () => {
