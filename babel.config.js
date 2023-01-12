@@ -25,5 +25,6 @@ module.exports = {
         include: ['NODE_ENV', 'TAMAGUI_TARGET'],
       },
     ],
+    ['@babel/plugin-proposal-export-namespace-from'],
   ],
 };

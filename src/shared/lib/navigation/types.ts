@@ -7,7 +7,6 @@ export type RootStackParamList = {
   SignUp: undefined;
   AboutApp: undefined;
   ChangeLanguage: undefined;
-  AppLanguage: undefined;
   ForgotPassword: undefined;
   Applets: undefined;
   AppletDetails: { appletId: string };
