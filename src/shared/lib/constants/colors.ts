@@ -6,10 +6,12 @@ export const colors = {
   tertiary: '#404040',
   grey: '#808080',
   mediumGrey: '#B6B6B6',
-  lightGrey: '#F0F0F0',
+  lighterGrey: '#F0F0F0',
+  lightGrey: '#00000026',
   alert: '#e63232',
   blue: '#005fa3',
   lightBlue: '#dbf2ff',
   darkBlue: 'darkblue',
   yellow: '#FFBD32',
+  aqua: '#7FF7FF',
 };

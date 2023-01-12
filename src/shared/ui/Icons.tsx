@@ -9,4 +9,8 @@ type IconProps = {
 
 const CloseIcon: FC<IconProps> = props => <AntDesign name="close" {...props} />;
 
-export { CloseIcon };
+const ArrowRightIcon: FC<IconProps> = props => (
+  <AntDesign name="arrowright" {...props} />
+);
+
+export { CloseIcon, ArrowRightIcon };
