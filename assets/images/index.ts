@@ -1,3 +1,4 @@
+const blueLogo = require('./blue_logo.png');
 const whiteLogo = require('./white_logo.png');
 
-export { whiteLogo };
+export { whiteLogo, blueLogo };

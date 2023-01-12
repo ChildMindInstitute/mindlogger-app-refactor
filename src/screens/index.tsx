@@ -4,10 +4,11 @@ import {
 } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib';
+import { AppVersion, colors } from '@app/shared/lib';
 import { RootStackParamList } from '@shared/lib/navigation';
 import { Text, CloseIcon } from '@shared/ui';
 
+import AboutScreen from './AboutScreen';
 import ChangeLanguageScreen from './ChangeLanguageScreen';
 import ForgotPasswordScreen from './ForgotPasswordScreen';
 import LoginScreen from './LoginScreen';
@@ -73,6 +74,20 @@ export default () => {
           title: t('language_screen:app_language'),
         }}
         component={ChangeLanguageScreen}
+      />
+
+      <Stack.Screen
+        name="AboutApp"
+        options={{
+          title: t('about_app:title_with_version', {
+            version: AppVersion,
+          }),
+          headerTitleStyle: {
+            fontSize: 16,
+            color: colors.white,
+          },
+        }}
+        component={AboutScreen}
       />
     </Stack.Navigator>
   );

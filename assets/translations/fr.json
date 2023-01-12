@@ -1,5 +1,5 @@
 {
-  "auth" : {
+  "auth": {
     "email": "Email",
     "email_address": "Adresse e-mail",
     "password": "Mot de passe",
@@ -10,12 +10,12 @@
     "incorrect_answer": "Réponse incorrecte. Veuillez réessayer",
     "failed": "Échoué"
   },
-  "activity_time":{
+  "activity_time": {
     "time_remaining": "Temps restant"
   },
-  "timed_activity":{
+  "timed_activity": {
     "time_to_complete": "Temps pour terminer",
-    "hours" : "les heures"
+    "hours": "les heures"
   },
   "activity_summary": {
     "terms_text": "Je comprends que les informations fournies par ce questionnaire ne sont pas destinées à remplacer les conseils, le diagnostic ou le traitement offerts par un professionnel de la santé médicale ou mentale, et que mes réponses anonymes peuvent être utilisées et partagées pour des recherches sur la santé mentale des enfants.",
@@ -24,8 +24,8 @@
     "save": "Sauvegarder",
     "summary": "Résumé",
     "report_summary": "Résumé du rapport",
-    "not_yet_completed":"Pas encore terminé",
-    "last_completed":"Dernier en date terminé",
+    "not_yet_completed": "Pas encore terminé",
+    "last_completed": "Dernier en date terminé",
     "unscheduled": "Unscheduled",
     "due": "À faire",
     "scheduled_for": "Prévu pour",
@@ -58,13 +58,13 @@
     "applets_title": "En savoir plus sur chacune de vos applets et sur la plateforme MindLogger.",
     "data_title": "Pour en savoir plus sur la plate-forme de collecte de données MindLogger, cliquez sur 'À propos\nde MindLogger' ci-dessous.",
     "about_mindLogger": "À propos de MindLogger",
-    "icons_title":"Les icônes NounProject ont été créées par Alina Oleynik (enquête), Beth Bolton (livre), et\nShakeel (graphique)"
+    "icons_title": "Les icônes NounProject ont été créées par Alina Oleynik (enquête), Beth Bolton (livre), et\nShakeel (graphique)"
   },
   "about_app": {
-    "title_with_version": "Qu'est-ce que MindLogger ?",
-    "title":"Sauf indication contraire, les icônes sont tirées de OpenMoji et Nounproject.",
+    "title_with_version": "{{version}} Qu'est-ce que MindLogger ?",
+    "title": "Sauf indication contraire, les icônes sont tirées de OpenMoji et Nounproject.",
     "subtitle": "Sauf indication contraire, les icônes sont tirées de OpenMoji et Nounproject.",
-    "mindlogger_about": "### Qu'est-ce que MindLogger ?\n\nCette application fait partie de la plateforme open source de collecte et d'analyse de données MindLogger conçue par le MATTER Lab du Child Mind Institute (https://matter.childmind.org).\n### Que peut faire MindLogger ? L'ensemble des fonctionnalités de MindLogger se développe, et prend actuellement en charge une grande variété de types d'entrées. Chaque écran d'une activité de MindLogger peut comprendre l'un des éléments suivants :\n - Texte, image et audio\n - Question suivie d'une option de répose en image et/ou textuelle\n -Curseur\n - Entrée textuelle\n - Saisie sous forme de tableau\n - Enregistrement audio\n - Capture photo/vidéo\n - Dessin ou tapotement\n - Géolocalisation\n - Tâche cognitive simple\n - Délai avant réponse\n - Minuterie\n - Logique conditionnelle pour déterminer la suite\n\n### Où puis-je en apprendre davantage ? \n\nVeuillez consulter le site https://mindlogger.org pour plus d'informations. \n\n Santé, \nMindLogger Team, \n Child Mind Institute"
+    "mindlogger_about": "## \n ### Qu'est-ce que MindLogger ? \n\n Cette application fait partie de la plateforme open source de collecte et d'analyse de données MindLogger conçue par le MATTER Lab du Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### Que peut faire MindLogger ? \n\n  L'ensemble des fonctionnalités de MindLogger se développe, et prend actuellement en charge une grande variété de types d'entrées. Chaque écran d'une activité de MindLogger peut comprendre l'un des éléments suivants : \n - Texte, image et audio \n - Question suivie d'une option de répose en image et/ou textuelle \n -Curseur \n - Entrée textuelle \n - Saisie sous forme de tableau \n - Enregistrement audio \n - Capture photo/vidéo \n - Dessin ou tapotement \n - Géolocalisation \n - Tâche cognitive simple \n - Délai avant réponse \n - Minuterie \n - Logique conditionnelle pour déterminer la suite \n\n #### Où puis-je en apprendre davantage ? \n Veuillez consulter le site [https://mindlogger.org](https://mindlogger.org) pour plus d'informations. \n\n ##### Santé, \n\n ##### MindLogger Team, \n\n ##### Child Mind Institute"
   },
   "applet_footer": {
     "surveys": "Enquêtes",
@@ -83,7 +83,7 @@
     "decline_title": "Refuser"
   },
   "applet_list_component": {
-    "about_title":"À propos de MindLogger"
+    "about_title": "À propos de MindLogger"
   },
   "applet_settings": {
     "applet_not_defined": "Aucune applet n'est définie.",
@@ -97,7 +97,7 @@
     "confirm_text": "Oui, effacer"
   },
   "change_pass_form": {
-    "update":"Mettre à jour",
+    "update": "Mettre à jour",
     "cur_pass_placeholder": "Mot de passe actuel",
     "new_pass_placeholder": "Nouveau mot de passe",
     "error": "Impossible de mettre à jour les données de l'utilisateur.",
@@ -107,7 +107,7 @@
   "change_study": {
     "reset": "Reinitialiser",
     "submit": "Soumettre",
-    "enter_url_manually":"Saisir une URL manuellement",
+    "enter_url_manually": "Saisir une URL manuellement",
     "scan_qr": "Scanner un QR code",
     "successfully_changed": "L'URL du serveur a été modifiée avec succès",
     "successfully_reset": "L'URL du serveur a été réinitialisée avec succès",
@@ -118,9 +118,9 @@
     "no": "Non"
   },
   "consent": {
-    "this_app_provides":"Cette application fournit un moyen simple de collecter des données sous forme de questionnaire, d'enregistrement de la voix ou de dessin",
-    "i_understand":"Je comprends que je risque de voir des images dérangeantes lors de l'utilisation de cette application",
-    "i_will_allow":"J'autorise le Child Mind Institute à stocker les données provenant de l'utilisation de cette application sur un serveu rcloud sécurisé, et à accéder à ces informations à des fins cliniques et de recherche",
+    "this_app_provides": "Cette application fournit un moyen simple de collecter des données sous forme de questionnaire, d'enregistrement de la voix ou de dessin",
+    "i_understand": "Je comprends que je risque de voir des images dérangeantes lors de l'utilisation de cette application",
+    "i_will_allow": "J'autorise le Child Mind Institute à stocker les données provenant de l'utilisation de cette application sur un serveu rcloud sécurisé, et à accéder à ces informations à des fins cliniques et de recherche",
     "i_premit": "J'autorise le Child Mind Institute à me contacter au sujet des informations recueillies à partir de cette application à des fins cliniques ou de recherche.",
     "next": "Suivant"
   },
@@ -147,14 +147,14 @@
   "logout_warning": {
     "uploads_in_progress": "Téléchargements en cours",
     "currently_uploading": "Vous avez des réponses en cours de téléchargement. Si vous vous déconnectez maintenant, vos réponses seront perdues.",
-    "sure_logout":"Êtes-vous sûr de vouloir vous déconnecter ?",
+    "sure_logout": "Êtes-vous sûr de vouloir vous déconnecter ?",
     "cancel": "Annuler",
     "logout": "Logout"
   },
   "settings": {
-    "logged_out":"Vous vous êtes déconnecté.",
+    "logged_out": "Vous vous êtes déconnecté.",
     "change_pass": "Changer le mot de passe",
-    "use_cellular_data":"Utiliser les données mobiles",
+    "use_cellular_data": "Utiliser les données mobiles",
     "logout": "Déconnexion",
     "permanently_delete_account": "Supprimer définitivement mon compte",
     "user_settings": "Paramètres utilisateur"
@@ -185,21 +185,21 @@
   },
   "audio_recorder": {
     "permission": "Vous devez accorder la permission d'utiliser votre microphone pour accomplir cette tâche.",
-    "alert_title":"\"MindLogger\" souhaite utiliser votre microphone pour effectuer cette tâche.",
+    "alert_title": "\"MindLogger\" souhaite utiliser votre microphone pour effectuer cette tâche.",
     "alert_message": "Ceux-ci peuvent être configurés dans les paramètres.",
     "alert_button_ok": "Ouvrir les paramètres",
     "alert_button_cancel": "Rejeter"
   },
   "record_button": {
     "stop": "STOP",
-    "record":"ENREGISTREMENT",
+    "record": "ENREGISTREMENT",
     "recording": "Enregistrement en cours...",
     "seconds": "secondes",
     "file_saved": "Fichier sauvegardé."
   },
   "audio_player": {
     "stop": "STOP",
-    "playing":"LECTURE...",
+    "playing": "LECTURE...",
     "play": "Lecture",
     "done": "Fait"
   },
@@ -211,7 +211,7 @@
     "ok": "OK"
   },
   "table_input": {
-    "short_press_detail":"* Une pression courte augmente le compteur",
+    "short_press_detail": "* Une pression courte augmente le compteur",
     "long_press_detail": "* Une pression longue diminue le compteur"
   },
   "activity_due_date": {
@@ -234,7 +234,7 @@
     "no_info": "Les auteurs de cet applet n'ont fourni aucune information !"
   },
   "firebase_messaging": {
-    "alert_title":"\"MindLogger\" aimerait vous envoyer des notifications",
+    "alert_title": "\"MindLogger\" aimerait vous envoyer des notifications",
     "alert_message": "Ceci peut être configuré dans les paramètres",
     "alert_text": "Ouvrir les paramètres",
     "response_refresh_request": "Demande de réactualisation de la réponse",
@@ -292,10 +292,10 @@
   "timing": {
     "provide_option": "Vous devez fournir l'option \"aprèz\" ou \"tout\".",
     "to_be_number": "Expected options.after to be a number",
-    "every_number":"Expected options.every to be a number"
+    "every_number": "Expected options.every to be a number"
   },
   "camera": {
-    "choose_photo":"Choisir photo",
+    "choose_photo": "Choisir photo",
     "choose_video": "Choisir vidéo",
     "take_a_photo": "Prenez une nouvelle photo, ou choisissez-en une dans votre bibliothèque",
     "take_a_video": "Prenez une nouvelle vidéo, ou choisissez-en une dans votre bibliothèque",
@@ -315,16 +315,16 @@
     "end": "Le temps est écoulé !",
     "thanks": "Merci !",
     "saved_answers": "Réponses sauvegardées !",
-    "submit_flow_answers": "Appuyez sur" ,
+    "submit_flow_answers": "Appuyez sur",
     "submit": "le",
     "submit_flow_answers_ex": "bouton Soumettre pour enregistrer vos réponses et continuer :",
     "close": "Fermer",
     "resume_activity": "Reprendre l'activité",
-    "activity_resume_restart":"Souhaitez-vous reprendre cette activité en cours ou la recommencer ?",
+    "activity_resume_restart": "Souhaitez-vous reprendre cette activité en cours ou la recommencer ?",
     "restart": "Recommencer",
     "resume": "Reprendre",
     "in_progress": "En cours",
-    "unscheduled":"Non programmé",
+    "unscheduled": "Non programmé",
     "scheduled": "Programmé",
     "past_due": "En retard",
     "available": "disponible",

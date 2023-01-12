@@ -1,33 +1,38 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
+import { FC } from 'react';
+
+import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { VStack, Button } from '@shared/ui';
+import { useAppForm } from '@shared/lib';
+import { Button, YStack, Box, BoxProps } from '@shared/ui';
 import { InputField } from '@shared/ui/form';
 
-import { ForgotPasswordFormSchema, TForgotPasswordForm } from '../model';
+import { ForgotPasswordFormSchema } from '../model';
 
-const ForgotPasswordForm = () => {
+const ForgotPasswordForm: FC<BoxProps> = props => {
   const { t } = useTranslation();
-  const methods = useForm<TForgotPasswordForm>({
-    resolver: zodResolver(ForgotPasswordFormSchema),
+  const { form, submit } = useAppForm(ForgotPasswordFormSchema, {
+    defaultValues: {
+      email: '',
+    },
+    onSubmitSuccess: data => {
+      console.log(data);
+    },
   });
 
-  const { handleSubmit } = methods;
-  const onSubmit: SubmitHandler<TForgotPasswordForm> = data =>
-    console.log(data);
-
   return (
-    <FormProvider {...methods}>
-      <VStack>
-        <InputField name="email" placeholder={t('auth:email_address')} />
-      </VStack>
+    <Box {...props}>
+      <FormProvider {...form}>
+        <YStack mb={40}>
+          <InputField name="email" placeholder={t('auth:email_address')} />
+        </YStack>
 
-      <Button alignSelf="center" onPress={handleSubmit(onSubmit)}>
-        {t('forgot_pass_form:reset_pass')}
-      </Button>
-    </FormProvider>
+        <Button variant="light" alignSelf="center" onPress={submit}>
+          {t('forgot_pass_form:reset_pass')}
+        </Button>
+      </FormProvider>
+    </Box>
   );
 };
 
-export { ForgotPasswordForm };
+export default ForgotPasswordForm;
