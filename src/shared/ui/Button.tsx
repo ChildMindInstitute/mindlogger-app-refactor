@@ -10,7 +10,6 @@ export default styled(Button, {
     variant: {
       light: {
         borderRadius: 4,
-        px: 50,
         fontSize: 20,
         backgroundColor: '$secondary',
         textProps: { color: '$primary' },
