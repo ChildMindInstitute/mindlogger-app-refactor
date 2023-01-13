@@ -1,10 +1,11 @@
 import { FC, PropsWithChildren } from 'react';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { QueryClient, onlineManager } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+
+import { AsyncStorage, ONE_HOUR } from '@shared/lib';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,7 +15,7 @@ const queryClient = new QueryClient({
     },
     queries: {
       retry: 2,
-      cacheTime: 1000 * 60 * 24,
+      cacheTime: ONE_HOUR * 24,
     },
   },
 });
@@ -47,8 +48,9 @@ const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
     <PersistQueryClientProvider
       client={queryClient}
       persistOptions={{
-        maxAge: Infinity,
+        maxAge: ONE_HOUR * 24,
         persister: asyncPersist,
+        buster: 'kill-cache',
       }}
       onSuccess={() =>
         queryClient
