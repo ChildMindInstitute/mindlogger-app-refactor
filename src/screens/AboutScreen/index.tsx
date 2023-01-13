@@ -13,7 +13,7 @@ const AboutScreen: FC = () => {
 
   return (
     <Box bg="$secondary">
-      <ScrollView h={'100%'} px={8}>
+      <ScrollView px="$6">
         <MarkdownView
           content={t('about_app:mindlogger_about')}
           markdownStyle={markdownStyle}

@@ -1,7 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { ICheckboxProps } from 'native-base';
 import { Controller, useFormContext, useController } from 'react-hook-form';
 
 import { colors } from '@app/shared/lib';
@@ -10,7 +9,7 @@ import { ErrorMessage } from '@shared/ui/form';
 
 type Props = {
   name: string;
-} & ICheckboxProps;
+};
 
 const CheckBoxField: FC<PropsWithChildren<Props>> = ({ name, children }) => {
   const { control } = useFormContext();
