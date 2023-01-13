@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { ICheckboxProps } from 'native-base';
 import { Controller, useFormContext, useController } from 'react-hook-form';
@@ -32,7 +33,7 @@ const CheckBoxField: FC<PropsWithChildren<Props>> = ({ name, children }) => {
             <XStack minHeight={24}>
               <CheckBox
                 onValueChange={onFormChange}
-                style={{ width: 20, height: 20 }}
+                style={styles.checkbox}
                 tintColors={{
                   true: colors.white,
                   false: isError ? colors.alert : colors.white,
@@ -60,5 +61,12 @@ const CheckBoxField: FC<PropsWithChildren<Props>> = ({ name, children }) => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  checkbox: {
+    width: 20,
+    height: 20,
+  },
+});
 
 export default CheckBoxField;
