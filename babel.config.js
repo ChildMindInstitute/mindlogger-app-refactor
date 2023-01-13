@@ -1,4 +1,5 @@
 process.env.TAMAGUI_TARGET = 'native';
+process.env.VERSION = require('./package.json').version;
 
 module.exports = {
   presets: ['module:metro-react-native-babel-preset'],
@@ -22,7 +23,7 @@ module.exports = {
     [
       'transform-inline-environment-variables',
       {
-        include: ['NODE_ENV', 'TAMAGUI_TARGET'],
+        include: ['NODE_ENV', 'TAMAGUI_TARGET', 'VERSION'],
       },
     ],
     ['@babel/plugin-proposal-export-namespace-from'],
