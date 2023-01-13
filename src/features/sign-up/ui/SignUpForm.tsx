@@ -41,7 +41,7 @@ const SignUpForm: FC<BoxProps> = props => {
           />
 
           <YStack mt={26} mb={46}>
-            <CheckBoxField value="" name="terms">
+            <CheckBoxField name="terms">
               <XStack ml={16}>
                 <Text color="$secondary" fontSize={17} lineHeight={22}>
                   {t('auth:i_agree')}
