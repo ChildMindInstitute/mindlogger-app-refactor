@@ -5,6 +5,7 @@ export const colors = {
   secondary_50: '#ffffff',
   tertiary: '#404040',
   grey: '#808080',
+  darkGrey: '#3b3a3a',
   mediumGrey: '#B6B6B6',
   lighterGrey: '#F0F0F0',
   lightGrey: '#00000026',
