@@ -3,8 +3,7 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { languageModel } from '@entities/language';
-import { colors } from '@shared/lib';
-import { YStack, XStack, BoxProps, Text, ArrowRightIcon } from '@shared/ui';
+import { YStack, BoxProps, RowButton } from '@shared/ui';
 
 type Props = {
   onLanguageChanged: () => void;
@@ -25,19 +24,12 @@ const ChangeLanguageSelector: FC<Props> = props => {
     <YStack {...props}>
       {languagesAvailable.map(locale => {
         return (
-          <XStack
+          <RowButton
             onPress={() => onLanguagePress(locale)}
             key={`${locale}`}
             bg={resolvedLanguage === locale ? '$aqua' : 'transparent'}
-            h={40}
-            px="$2"
-            bbc="$lightGrey"
-            jc={'space-between'}
-            ai={'center'}
-            bbw={1}>
-            <Text>{t(`language_screen:${locale}`)}</Text>
-            <ArrowRightIcon color={colors.mediumGrey} size={15} />
-          </XStack>
+            title={t(`language_screen:${locale}`)}
+          />
         );
       })}
     </YStack>

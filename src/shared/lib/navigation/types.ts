@@ -10,6 +10,7 @@ export type RootStackParamList = {
   ForgotPassword: undefined;
   Applets: undefined;
   AppletDetails: { appletId: string };
+  Settings: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
