@@ -16,6 +16,10 @@ type SignUpRequest = {
   password: string;
 };
 
+type PasswordRecoveryRequest = {
+  email: string;
+};
+
 export type LoginResponse = SuccessfulResponse<{
   accessToken: string;
   user: UserDto;
@@ -30,6 +34,8 @@ export type LogoutResponse = SuccessfulEmptyResponse;
 
 export type SignUpResponse = SuccessfulEmptyResponse;
 
+export type PasswordRecoveryResponse = SuccessfulEmptyResponse;
+
 function IdentityService() {
   return {
     login(request: LoginRequest) {
@@ -40,6 +46,12 @@ function IdentityService() {
     },
     signUp(request: SignUpRequest) {
       return httpService.post<SignUpResponse>('/users', request);
+    },
+    passwordRecover(request: PasswordRecoveryRequest) {
+      return httpService.post<PasswordRecoveryResponse>(
+        '/users/me/password/recover',
+        request,
+      );
     },
   };
 }
