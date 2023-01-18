@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { useLoginMutation } from '@app/entities/identity';
 import { useSignUpMutation } from '@app/entities/identity';
 import { BaseError } from '@app/shared/api';
@@ -12,30 +10,24 @@ type RegistartionData = {
   password: string;
 };
 
-type UseRegistrationResult = {
+type UseRegistrationReturn = {
   isLoading: boolean;
   error?: BaseError | null;
   mutate: (data: RegistartionData) => void;
 };
 
 export const useRegistrationMutation = (
-  onLoginSuccess: () => void,
-): UseRegistrationResult => {
-  const [registrationData, setRegistrationData] = useState<RegistartionData>(
-    {} as RegistartionData,
-  );
-
+  onSuccess: () => void,
+): UseRegistrationReturn => {
   const {
     isLoading: isLoginLoading,
     mutate: login,
     error: loginError,
   } = useLoginMutation({
     onSuccess: response => {
-      IdentityModel.slices.testIdentitySlice.setAuth(
-        response.data.result.accessToken,
-      );
-      if (onLoginSuccess) {
-        onLoginSuccess();
+      IdentityModel.actions.onAuthSuccess(response.data.result.accessToken);
+      if (onSuccess) {
+        onSuccess();
       }
     },
   });
@@ -45,20 +37,14 @@ export const useRegistrationMutation = (
     isSuccess: isSignUpSuccess,
     error: signUpError,
     mutate: signUp,
-  } = useSignUpMutation({
-    onSuccess: () => {
-      login({
-        email: registrationData?.email,
-        password: registrationData?.password,
-      });
-    },
-  });
+  } = useSignUpMutation();
 
-  const result: UseRegistrationResult = {
+  const result: UseRegistrationReturn = {
     isLoading: false,
     mutate: (data: RegistartionData) => {
-      setRegistrationData(data);
-      signUp(data);
+      signUp(data, {
+        onSuccess: () => login({ email: data.email, password: data.password }),
+      });
     },
   };
 

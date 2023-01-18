@@ -24,9 +24,7 @@ const LoginForm: FC<Props> = props => {
     isLoading,
   } = useLoginMutation({
     onSuccess: response => {
-      IdentityModel.slices.testIdentitySlice.setAuth(
-        response.data.result.accessToken,
-      );
+      IdentityModel.actions.onAuthSuccess(response.data.result.accessToken);
       props.onLoginSuccess();
     },
   });

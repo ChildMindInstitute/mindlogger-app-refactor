@@ -1,5 +1,10 @@
 import { FC } from 'react';
-import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+} from 'react-native';
 
 import { colors } from '@shared/lib';
 import { Text, Button } from '@shared/ui';
@@ -29,16 +34,30 @@ const ProgressButton: FC<Props> = ({
       alignSelf="center"
       onPress={onClick}
       style={buttonStyle}
-      px={0}>
-      {isLoading ? (
-        <ActivityIndicator color={colors[spinnerColor]} />
-      ) : (
-        <Text color="$primary" fontSize={20}>
-          {text}
-        </Text>
+      px={0}
+      position="relative">
+      {isLoading && (
+        <ActivityIndicator
+          color={colors[spinnerColor]}
+          style={spinnerStyle.spinner}
+        />
       )}
+
+      <Text color="$primary" fontSize={20} opacity={isLoading ? 0 : 1}>
+        {text}
+      </Text>
     </Button>
   );
 };
+
+const spinnerStyle = StyleSheet.create({
+  spinner: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+  },
+});
 
 export default ProgressButton;
