@@ -3,6 +3,10 @@
   "extends": "@tsconfig/react-native/tsconfig.json", /* Recommended React Native TSConfig base */
   "compilerOptions": {
     "baseUrl": ".",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
     "paths" : {
       "@app/*": ["src/*"],
       "@assets/*": ["assets/*"],

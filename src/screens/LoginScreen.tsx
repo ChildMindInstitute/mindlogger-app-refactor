@@ -42,6 +42,10 @@ const LoginScreen: FC = () => {
     Linking.openURL('https://mindlogger.org/terms');
   };
 
+  const onLoginSuccess = () => {
+    navigate('Applets');
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Box flex={1} bg="$primary">
@@ -57,7 +61,7 @@ const LoginScreen: FC = () => {
               {title}
             </Link>
 
-            <LoginForm px="$8" />
+            <LoginForm px="$8" onLoginSuccess={onLoginSuccess} />
 
             <Center space>
               <XStack space>

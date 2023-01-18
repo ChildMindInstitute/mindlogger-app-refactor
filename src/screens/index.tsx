@@ -9,6 +9,7 @@ import { RootStackParamList } from '@shared/lib/navigation';
 import { Text, CloseIcon } from '@shared/ui';
 
 import AboutScreen from './AboutScreen';
+import AppletsScreen from './AppletsScreen';
 import ChangeLanguageScreen from './ChangeLanguageScreen';
 import ForgotPasswordScreen from './ForgotPasswordScreen';
 import LoginScreen from './LoginScreen';
@@ -88,6 +89,18 @@ export default () => {
           },
         }}
         component={AboutScreen}
+      />
+
+      <Stack.Screen
+        name="Applets"
+        options={{
+          title: 'Applets',
+          headerTitleStyle: {
+            fontSize: 16,
+            color: colors.white,
+          },
+        }}
+        component={AppletsScreen}
       />
     </Stack.Navigator>
   );

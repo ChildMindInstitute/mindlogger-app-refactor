@@ -6,6 +6,7 @@ import Button from './Button';
 import Center from './Center';
 import Input from './Input';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
+import ProgressButton from './ProgressButton';
 import RowButton from './RowButton';
 import ScrollView from './ScrollView';
 import StatusBar from './StatusBar';
@@ -27,4 +28,5 @@ export {
   TextProps,
   ScrollView,
   RowButton,
+  ProgressButton,
 };

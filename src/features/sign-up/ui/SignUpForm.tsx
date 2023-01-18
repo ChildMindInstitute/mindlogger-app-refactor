@@ -1,16 +1,35 @@
+/* eslint-disable react-native/no-inline-styles */
 import { FC } from 'react';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { IdentityModel } from '@app/entities/identity';
 import { useAppForm } from '@app/shared/lib';
-import { Button, Text, Box, BoxProps, YStack, XStack } from '@shared/ui';
-import { InputField, CheckBoxField } from '@shared/ui/form';
+import {
+  Text,
+  Box,
+  BoxProps,
+  YStack,
+  XStack,
+  ProgressButton,
+} from '@shared/ui';
+import { InputField, CheckBoxField, ErrorMessage } from '@shared/ui/form';
 
 import { SignUpFormSchema } from '../model';
 
-const SignUpForm: FC<BoxProps> = props => {
+type Props = BoxProps & {
+  onLoginSuccess: () => void;
+};
+
+const SignUpForm: FC<Props> = props => {
   const { t } = useTranslation();
+
+  const {
+    isLoading,
+    error,
+    mutate: signUp,
+  } = IdentityModel.useRegistrationMutation(props.onLoginSuccess);
 
   const { form, submit } = useAppForm(SignUpFormSchema, {
     defaultValues: {
@@ -19,9 +38,15 @@ const SignUpForm: FC<BoxProps> = props => {
       password: '',
     },
     onSubmitSuccess: data => {
-      console.log('Sign-up data: ', data);
+      signUp({
+        email: data.email,
+        fullName: data.display_name,
+        password: data.password,
+      });
     },
   });
+
+  console.log('error su!', JSON.stringify(error?.evaluatedMessage));
 
   return (
     <Box {...props}>
@@ -39,6 +64,13 @@ const SignUpForm: FC<BoxProps> = props => {
             name="password"
             placeholder={t('auth:password')}
           />
+
+          {error && (
+            <ErrorMessage
+              mt={8}
+              error={{ message: error?.evaluatedMessage! }}
+            />
+          )}
 
           <YStack mt={26} mb={46}>
             <CheckBoxField name="terms">
@@ -60,9 +92,14 @@ const SignUpForm: FC<BoxProps> = props => {
           </YStack>
         </YStack>
 
-        <Button variant="light" alignSelf="center" onPress={submit}>
-          {t('sign_up_form:sign_up')}
-        </Button>
+        <ProgressButton
+          isLoading={isLoading}
+          onClick={submit}
+          text={t('sign_up_form:sign_up')}
+          variant="light"
+          buttonStyle={{ width: 172, alignSelf: 'center' }}
+          spinnerColor="tertiary"
+        />
       </FormProvider>
     </Box>
   );

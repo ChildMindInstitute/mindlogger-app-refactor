@@ -1,23 +1,41 @@
+/* eslint-disable react-native/no-inline-styles */
 import { FC } from 'react';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { IdentityModel, useLoginMutation } from '@app/entities/identity';
 import { useAppForm } from '@shared/lib';
-import { Button, YStack, Box, BoxProps } from '@shared/ui';
-import { InputField } from '@shared/ui/form';
+import { ProgressButton, YStack, Box, BoxProps } from '@shared/ui';
+import { ErrorMessage, InputField } from '@shared/ui/form';
 
 import { LoginFormSchema } from '../model';
 
-const LoginForm: FC<BoxProps> = props => {
+type Props = {
+  onLoginSuccess: () => void;
+} & BoxProps;
+
+const LoginForm: FC<Props> = props => {
   const { t } = useTranslation();
+
+  const {
+    mutate: login,
+    error,
+    isLoading,
+  } = useLoginMutation({
+    onSuccess: response => {
+      IdentityModel.actions.onAuthSuccess(response.data.result.accessToken);
+      props.onLoginSuccess();
+    },
+  });
+
   const { form, submit } = useAppForm(LoginFormSchema, {
     defaultValues: {
       email: '',
       password: '',
     },
     onSubmitSuccess: data => {
-      console.log(data);
+      login(data);
     },
   });
 
@@ -35,11 +53,20 @@ const LoginForm: FC<BoxProps> = props => {
             name="password"
             placeholder={t('auth:password')}
           />
+
+          {error && (
+            <ErrorMessage error={{ message: error.evaluatedMessage! }} />
+          )}
         </YStack>
 
-        <Button variant="light" alignSelf="center" onPress={submit}>
-          {t('login_form:login')}
-        </Button>
+        <ProgressButton
+          isLoading={isLoading}
+          onClick={submit}
+          text={t('login_form:login')}
+          variant="light"
+          buttonStyle={{ width: 160, alignSelf: 'center' }}
+          spinnerColor="tertiary"
+        />
       </FormProvider>
     </Box>
   );

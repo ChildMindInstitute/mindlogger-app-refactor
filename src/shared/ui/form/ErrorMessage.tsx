@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Text, TextProps } from '@shared/ui';
 
 type Props = {
-  error?: FieldError;
+  error?: FieldError | { message: string };
 } & TextProps;
 
 const ErrorMessage: FC<PropsWithChildren<Props>> = ({ error, ...props }) => {
