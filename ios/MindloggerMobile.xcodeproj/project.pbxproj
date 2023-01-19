@@ -8,17 +8,44 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* MindloggerMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MindloggerMobileTests.m */; };
-		0C80B921A6F3F58F76C31292 /* libPods-MindloggerMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-MindloggerMobile.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		1FF4CB701CE51F7E26D57A8E /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E6046B10F458547CC75F77D /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */; };
+		267CD9EC7B1005463F6AF600 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 350505490340E58315C6004E /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */; };
+		2B9BD7608A33C25F0A1AF80F /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AF83D72A6FE359A5E880F5F /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */; };
+		3710F3AC1042A3D0A45C1D34 /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB24139A475E6B03D297C8AD /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a */; };
 		4E30A5932962BE4F0032C2A8 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */; };
 		4E30A5942962BE4F0032C2A8 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */; };
 		4E30A5952962BE4F0032C2A8 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5852962BE4E0032C2A8 /* FontAwesome.ttf */; };
 		4E30A59B2962C3D60032C2A8 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
 		4EBCD5B22971514E00D3C04C /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
-		7699B88040F8A987B510C191 /* libPods-MindloggerMobile-MindloggerMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-MindloggerMobile-MindloggerMobileTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A06F0AA8D839FA54E4D2B85E /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B205B3DBF179F55ECEA5AA0B /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */; };
+		F87E174F29771F200021550E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
+		F87E175029771F200021550E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		F87E175429771F200021550E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
+		F87E175529771F200021550E /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5852962BE4E0032C2A8 /* FontAwesome.ttf */; };
+		F87E175629771F200021550E /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */; };
+		F87E175729771F200021550E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F87E175829771F200021550E /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */; };
+		F87E175929771F200021550E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		F87E176629771F290021550E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
+		F87E176729771F290021550E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		F87E176B29771F290021550E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
+		F87E176C29771F290021550E /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5852962BE4E0032C2A8 /* FontAwesome.ttf */; };
+		F87E176D29771F290021550E /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */; };
+		F87E176E29771F290021550E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F87E176F29771F290021550E /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */; };
+		F87E177029771F290021550E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		F87E177D29771F310021550E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
+		F87E177E29771F310021550E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		F87E178229771F310021550E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
+		F87E178329771F310021550E /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5852962BE4E0032C2A8 /* FontAwesome.ttf */; };
+		F87E178429771F310021550E /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */; };
+		F87E178529771F310021550E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F87E178629771F310021550E /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */; };
+		F87E178729771F310021550E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,7 +68,11 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MindloggerMobile/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MindloggerMobile/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MindloggerMobile/main.m; sourceTree = "<group>"; };
-		19F6CBCC0A4E27FBF8BF4A61 /* libPods-MindloggerMobile-MindloggerMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobile-MindloggerMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AF83D72A6FE359A5E880F5F /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FCD2F4D4676B29CEDFC4B9F /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; sourceTree = "<group>"; };
+		350505490340E58315C6004E /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3556ABB470973B9B96106277 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; sourceTree = "<group>"; };
+		3558C25590E3CA2F496052D4 /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-MindloggerMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobile.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
 		4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
@@ -50,10 +81,25 @@
 		4EBCD5B12971514E00D3C04C /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Foundation.ttf; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-MindloggerMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobile.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-MindloggerMobile-MindloggerMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobile-MindloggerMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5DCACB8F33CDC322A6C60F78 /* libPods-MindloggerMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MindloggerMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-MindloggerMobile-MindloggerMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobile-MindloggerMobileTests.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests.release.xcconfig"; sourceTree = "<group>"; };
+		8E6046B10F458547CC75F77D /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9403F5B351C37C18D808D2FC /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig"; sourceTree = "<group>"; };
+		ADDCD15A57F8BF9C6850656E /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B205B3DBF179F55ECEA5AA0B /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B21ABD081F1F39C9C7EF24FA /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig"; sourceTree = "<group>"; };
+		B2813E7F55455685D27D516B /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig"; sourceTree = "<group>"; };
+		B952B52C88C0383B4D250BE1 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig"; sourceTree = "<group>"; };
+		BB24139A475E6B03D297C8AD /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1357C2AB351C6434F23F1CC /* Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F2305C9117E968D31C2B5114 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig"; sourceTree = "<group>"; };
+		F87E176029771F200021550E /* MindloggerMobileDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F87E176129771F200021550E /* MindloggerMobile dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MindloggerMobile dev-Info.plist"; path = "/Users/amironov/Documents/childmind/mindlogger-app-refactor/mindlogger-app-refactor/ios/MindloggerMobile dev-Info.plist"; sourceTree = "<absolute>"; };
+		F87E177729771F290021550E /* MindloggerMobileQA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileQA.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F87E177829771F290021550E /* MindloggerMobile qa-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MindloggerMobile qa-Info.plist"; path = "/Users/amironov/Documents/childmind/mindlogger-app-refactor/mindlogger-app-refactor/ios/MindloggerMobile qa-Info.plist"; sourceTree = "<absolute>"; };
+		F87E178E29771F310021550E /* MindloggerMobileStaging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileStaging.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F87E178F29771F310021550E /* MindloggerMobile staging-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MindloggerMobile staging-Info.plist"; path = "/Users/amironov/Documents/childmind/mindlogger-app-refactor/mindlogger-app-refactor/ios/MindloggerMobile staging-Info.plist"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,7 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7699B88040F8A987B510C191 /* libPods-MindloggerMobile-MindloggerMobileTests.a in Frameworks */,
+				1FF4CB701CE51F7E26D57A8E /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,7 +115,31 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C80B921A6F3F58F76C31292 /* libPods-MindloggerMobile.a in Frameworks */,
+				A06F0AA8D839FA54E4D2B85E /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E175129771F200021550E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				267CD9EC7B1005463F6AF600 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E176829771F290021550E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3710F3AC1042A3D0A45C1D34 /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E177F29771F310021550E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B9BD7608A33C25F0A1AF80F /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,8 +180,11 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5DCACB8F33CDC322A6C60F78 /* libPods-MindloggerMobile.a */,
-				19F6CBCC0A4E27FBF8BF4A61 /* libPods-MindloggerMobile-MindloggerMobileTests.a */,
+				B205B3DBF179F55ECEA5AA0B /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */,
+				350505490340E58315C6004E /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */,
+				BB24139A475E6B03D297C8AD /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a */,
+				1AF83D72A6FE359A5E880F5F /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */,
+				8E6046B10F458547CC75F77D /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -146,6 +219,9 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				F87E176129771F200021550E /* MindloggerMobile dev-Info.plist */,
+				F87E177829771F290021550E /* MindloggerMobile qa-Info.plist */,
+				F87E178F29771F310021550E /* MindloggerMobile staging-Info.plist */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -157,6 +233,9 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* MindloggerMobile.app */,
 				00E356EE1AD99517003FC87E /* MindloggerMobileTests.xctest */,
+				F87E176029771F200021550E /* MindloggerMobileDev.app */,
+				F87E177729771F290021550E /* MindloggerMobileQA.app */,
+				F87E178E29771F310021550E /* MindloggerMobileStaging.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -168,6 +247,16 @@
 				5709B34CF0A7D63546082F79 /* Pods-MindloggerMobile.release.xcconfig */,
 				5B7EB9410499542E8C5724F5 /* Pods-MindloggerMobile-MindloggerMobileTests.debug.xcconfig */,
 				89C6BE57DB24E9ADA2F236DE /* Pods-MindloggerMobile-MindloggerMobileTests.release.xcconfig */,
+				C1357C2AB351C6434F23F1CC /* Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig */,
+				3558C25590E3CA2F496052D4 /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */,
+				B2813E7F55455685D27D516B /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig */,
+				1FCD2F4D4676B29CEDFC4B9F /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */,
+				3556ABB470973B9B96106277 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */,
+				B952B52C88C0383B4D250BE1 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig */,
+				F2305C9117E968D31C2B5114 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */,
+				9403F5B351C37C18D808D2FC /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */,
+				ADDCD15A57F8BF9C6850656E /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig */,
+				B21ABD081F1F39C9C7EF24FA /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -218,6 +307,72 @@
 			productReference = 13B07F961A680F5B00A75B9A /* MindloggerMobile.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F87E174B29771F200021550E /* MindloggerMobileDev */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F87E175D29771F200021550E /* Build configuration list for PBXNativeTarget "MindloggerMobileDev" */;
+			buildPhases = (
+				F87E174C29771F200021550E /* [CP] Check Pods Manifest.lock */,
+				F87E174D29771F200021550E /* Start Packager */,
+				F87E174E29771F200021550E /* Sources */,
+				F87E175129771F200021550E /* Frameworks */,
+				F87E175329771F200021550E /* Resources */,
+				F87E175A29771F200021550E /* Bundle React Native code and images */,
+				F87E175B29771F200021550E /* [CP] Embed Pods Frameworks */,
+				F87E175C29771F200021550E /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MindloggerMobileDev;
+			productName = MindloggerMobile;
+			productReference = F87E176029771F200021550E /* MindloggerMobileDev.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F87E176229771F290021550E /* MindloggerMobileQA */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F87E177429771F290021550E /* Build configuration list for PBXNativeTarget "MindloggerMobileQA" */;
+			buildPhases = (
+				F87E176329771F290021550E /* [CP] Check Pods Manifest.lock */,
+				F87E176429771F290021550E /* Start Packager */,
+				F87E176529771F290021550E /* Sources */,
+				F87E176829771F290021550E /* Frameworks */,
+				F87E176A29771F290021550E /* Resources */,
+				F87E177129771F290021550E /* Bundle React Native code and images */,
+				F87E177229771F290021550E /* [CP] Embed Pods Frameworks */,
+				F87E177329771F290021550E /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MindloggerMobileQA;
+			productName = MindloggerMobile;
+			productReference = F87E177729771F290021550E /* MindloggerMobileQA.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F87E177929771F310021550E /* MindloggerMobileStaging */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F87E178B29771F310021550E /* Build configuration list for PBXNativeTarget "MindloggerMobileStaging" */;
+			buildPhases = (
+				F87E177A29771F310021550E /* [CP] Check Pods Manifest.lock */,
+				F87E177B29771F310021550E /* Start Packager */,
+				F87E177C29771F310021550E /* Sources */,
+				F87E177F29771F310021550E /* Frameworks */,
+				F87E178129771F310021550E /* Resources */,
+				F87E178829771F310021550E /* Bundle React Native code and images */,
+				F87E178929771F310021550E /* [CP] Embed Pods Frameworks */,
+				F87E178A29771F310021550E /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MindloggerMobileStaging;
+			productName = MindloggerMobile;
+			productReference = F87E178E29771F310021550E /* MindloggerMobileStaging.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -250,6 +405,9 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* MindloggerMobile */,
 				00E356ED1AD99517003FC87E /* MindloggerMobileTests */,
+				F87E174B29771F200021550E /* MindloggerMobileDev */,
+				F87E176229771F290021550E /* MindloggerMobileQA */,
+				F87E177929771F310021550E /* MindloggerMobileStaging */,
 			);
 		};
 /* End PBXProject section */
@@ -273,6 +431,45 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				4E30A5932962BE4F0032C2A8 /* FontAwesome5_Solid.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E175329771F200021550E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F87E175429771F200021550E /* AntDesign.ttf in Resources */,
+				F87E175529771F200021550E /* FontAwesome.ttf in Resources */,
+				F87E175629771F200021550E /* FontAwesome5_Regular.ttf in Resources */,
+				F87E175729771F200021550E /* LaunchScreen.storyboard in Resources */,
+				F87E175829771F200021550E /* FontAwesome5_Solid.ttf in Resources */,
+				F87E175929771F200021550E /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E176A29771F290021550E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F87E176B29771F290021550E /* AntDesign.ttf in Resources */,
+				F87E176C29771F290021550E /* FontAwesome.ttf in Resources */,
+				F87E176D29771F290021550E /* FontAwesome5_Regular.ttf in Resources */,
+				F87E176E29771F290021550E /* LaunchScreen.storyboard in Resources */,
+				F87E176F29771F290021550E /* FontAwesome5_Solid.ttf in Resources */,
+				F87E177029771F290021550E /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E178129771F310021550E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F87E178229771F310021550E /* AntDesign.ttf in Resources */,
+				F87E178329771F310021550E /* FontAwesome.ttf in Resources */,
+				F87E178429771F310021550E /* FontAwesome5_Regular.ttf in Resources */,
+				F87E178529771F310021550E /* LaunchScreen.storyboard in Resources */,
+				F87E178629771F310021550E /* FontAwesome5_Solid.ttf in Resources */,
+				F87E178729771F310021550E /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,15 +498,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
@@ -327,7 +524,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobile-MindloggerMobileTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -349,7 +546,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobile-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobileCommonPods-MindloggerMobile-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -362,15 +559,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
@@ -379,15 +576,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
@@ -396,15 +593,288 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E174C29771F200021550E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E174D29771F200021550E /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E175A29771F200021550E /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		F87E175B29771F200021550E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E175C29771F200021550E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E176329771F290021550E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E176429771F290021550E /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E177129771F290021550E /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		F87E177229771F290021550E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E177329771F290021550E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E177A29771F310021550E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E177B29771F310021550E /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E178829771F310021550E /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		F87E178929771F310021550E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E178A29771F310021550E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -446,6 +916,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F87E174E29771F200021550E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F87E174F29771F200021550E /* AppDelegate.mm in Sources */,
+				F87E175029771F200021550E /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E176529771F290021550E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F87E176629771F290021550E /* AppDelegate.mm in Sources */,
+				F87E176729771F290021550E /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E177C29771F310021550E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F87E177D29771F310021550E /* AppDelegate.mm in Sources */,
+				F87E177E29771F310021550E /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -459,7 +956,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-MindloggerMobile-MindloggerMobileTests.debug.xcconfig */;
+			baseConfigurationReference = ADDCD15A57F8BF9C6850656E /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -486,7 +983,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-MindloggerMobile-MindloggerMobileTests.release.xcconfig */;
+			baseConfigurationReference = B21ABD081F1F39C9C7EF24FA /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -510,13 +1007,14 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-MindloggerMobile.debug.xcconfig */;
+			baseConfigurationReference = C1357C2AB351C6434F23F1CC /* Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MindloggerMobile/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Mindlogger;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -536,12 +1034,13 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-MindloggerMobile.release.xcconfig */;
+			baseConfigurationReference = 3558C25590E3CA2F496052D4 /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = MindloggerMobile/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Mindlogger;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -695,6 +1194,164 @@
 			};
 			name = Release;
 		};
+		F87E175E29771F200021550E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B2813E7F55455685D27D516B /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 34SDR93HU8;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = "MindloggerMobile dev-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger Dev";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		F87E175F29771F200021550E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1FCD2F4D4676B29CEDFC4B9F /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 34SDR93HU8;
+				INFOPLIST_FILE = "MindloggerMobile dev-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger Dev";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		F87E177529771F290021550E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3556ABB470973B9B96106277 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = "MindloggerMobile qa-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger QA";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		F87E177629771F290021550E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B952B52C88C0383B4D250BE1 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = "MindloggerMobile qa-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger QA";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		F87E178C29771F310021550E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F2305C9117E968D31C2B5114 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = "MindloggerMobile staging-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger Staging";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		F87E178D29771F310021550E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9403F5B351C37C18D808D2FC /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = "MindloggerMobile staging-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger Staging";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -721,6 +1378,33 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F87E175D29771F200021550E /* Build configuration list for PBXNativeTarget "MindloggerMobileDev" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F87E175E29771F200021550E /* Debug */,
+				F87E175F29771F200021550E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F87E177429771F290021550E /* Build configuration list for PBXNativeTarget "MindloggerMobileQA" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F87E177529771F290021550E /* Debug */,
+				F87E177629771F290021550E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F87E178B29771F310021550E /* Build configuration list for PBXNativeTarget "MindloggerMobileStaging" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F87E178C29771F310021550E /* Debug */,
+				F87E178D29771F310021550E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

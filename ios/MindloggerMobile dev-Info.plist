@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Mindlogger</string>
+	<string>Mindlogger Dev</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -43,7 +43,6 @@
 		<string>FontAwesome5_Regular.ttf</string>
 		<string>FontAwesome5_Solid.ttf</string>
 		<string>AntDesign.ttf</string>
-		<string>Foundation.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
