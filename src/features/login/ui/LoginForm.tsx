@@ -3,6 +3,7 @@ import { FC } from 'react';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 
 import { IdentityModel, useLoginMutation } from '@app/entities/identity';
 import { useAppForm } from '@shared/lib';
@@ -18,13 +19,17 @@ type Props = {
 const LoginForm: FC<Props> = props => {
   const { t } = useTranslation();
 
+  const dispatch = useDispatch();
+
   const {
     mutate: login,
     error,
     isLoading,
   } = useLoginMutation({
     onSuccess: response => {
-      IdentityModel.actions.onAuthSuccess(response.data.result.accessToken);
+      dispatch(
+        IdentityModel.actions.onAuthSuccess(response.data.result.accessToken),
+      );
       props.onLoginSuccess();
     },
   });

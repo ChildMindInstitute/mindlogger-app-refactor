@@ -1,3 +1,3 @@
-import { testIdentitySlice } from './slice';
+import { identitySlice } from './slice';
 
-export const onAuthSuccess = testIdentitySlice.setAuth;
+export const { onAuthSuccess } = identitySlice.actions;

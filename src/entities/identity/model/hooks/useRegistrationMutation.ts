@@ -1,3 +1,5 @@
+import { useDispatch } from 'react-redux';
+
 import { useLoginMutation } from '@app/entities/identity';
 import { useSignUpMutation } from '@app/entities/identity';
 import { BaseError } from '@app/shared/api';
@@ -19,13 +21,17 @@ type UseRegistrationReturn = {
 export const useRegistrationMutation = (
   onSuccess: () => void,
 ): UseRegistrationReturn => {
+  const dispatch = useDispatch();
+
   const {
     isLoading: isLoginLoading,
     mutate: login,
     error: loginError,
   } = useLoginMutation({
     onSuccess: response => {
-      IdentityModel.actions.onAuthSuccess(response.data.result.accessToken);
+      dispatch(
+        IdentityModel.actions.onAuthSuccess(response.data.result.accessToken),
+      );
       if (onSuccess) {
         onSuccess();
       }
