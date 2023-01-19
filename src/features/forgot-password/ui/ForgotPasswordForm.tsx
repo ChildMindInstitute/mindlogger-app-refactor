@@ -52,7 +52,6 @@ const ForgotPasswordForm: FC<Props> = props => {
           isLoading={isLoading}
           onClick={submit}
           text={t('forgot_pass_form:reset_pass')}
-          variant="light"
           buttonStyle={{ width: 178, alignSelf: 'center' }}
           spinnerColor="tertiary"
         />

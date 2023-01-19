@@ -27,7 +27,7 @@ export const InputFrame = styled(
     selectionColor: 'black',
 
     variants: {
-      variant: {
+      mode: {
         light: {
           color: '$secondary',
           placeholderTextColor: '#ffffff99',
@@ -47,7 +47,7 @@ export const InputFrame = styled(
     },
 
     defaultVariants: {
-      variant: 'light',
+      mode: 'light',
     },
   },
   {

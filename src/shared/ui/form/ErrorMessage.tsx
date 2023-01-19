@@ -7,12 +7,12 @@ import { Text, TextProps } from '@shared/ui';
 
 type Props = {
   error?: FieldError | { message: string };
-  variant?: 'light' | 'dark' | undefined;
+  mode?: 'light' | 'dark' | undefined;
 } & TextProps;
 
 const ErrorMessage: FC<PropsWithChildren<Props>> = ({
   error,
-  variant,
+  mode,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -21,7 +21,7 @@ const ErrorMessage: FC<PropsWithChildren<Props>> = ({
     <>
       {error?.message && (
         <Text
-          color={variant === 'light' ? '$secondary' : '$tertiary'}
+          color={mode === 'light' ? '$secondary' : '$tertiary'}
           fontSize={12}
           {...props}>
           {/* @ts-ignore */}

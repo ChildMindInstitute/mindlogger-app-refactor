@@ -96,7 +96,6 @@ const SignUpForm: FC<Props> = props => {
           isLoading={isLoading}
           onClick={submit}
           text={t('sign_up_form:sign_up')}
-          variant="light"
           buttonStyle={{ width: 172, alignSelf: 'center' }}
           spinnerColor="tertiary"
         />

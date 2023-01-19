@@ -26,21 +26,21 @@ const ChangePasswordForm: FC<BoxProps> = props => {
       <FormProvider {...form}>
         <YStack space={8} mb={40}>
           <InputField
-            variant="dark"
+            mode="dark"
             secureTextEntry
             name="oldPassword"
             placeholder={t('change_pass_form:cur_pass_placeholder')}
           />
 
           <InputField
-            variant="dark"
+            mode="dark"
             secureTextEntry
             name="password"
             placeholder={t('change_pass_form:new_pass_placeholder')}
           />
         </YStack>
 
-        <SubmitButton variant="primary" onPress={submit}>
+        <SubmitButton mode="dark" onPress={submit}>
           {t('change_pass_form:update')}
         </SubmitButton>
       </FormProvider>
