@@ -33,8 +33,12 @@ export const InputFrame = styled(
           placeholderTextColor: '#ffffff99',
           borderBottomColor: '#ffffff99',
         },
+        dark: {
+          color: '$darkGrey',
+          placeholderTextColor: '#3b3a3a',
+          borderBottomColor: '#1e1d1d',
+        },
       },
-
       isInvalid: {
         true: {
           borderBottomColor: '$alert',
