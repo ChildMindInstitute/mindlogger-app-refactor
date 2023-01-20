@@ -12,7 +12,7 @@ type Props = {
   defaultValue?: string;
   size?: string;
   secureTextEntry?: boolean;
-  mode?: 'light' | 'dark' | undefined;
+  mode?: 'dark' | 'light';
 } & TextInputProps;
 
 const InputField: FC<Props> = ({

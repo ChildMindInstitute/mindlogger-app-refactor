@@ -16,7 +16,7 @@ type Props = {
   isLoading: boolean;
   buttonStyle?: StyleProp<ViewStyle>;
   spinnerColor: Color;
-  mode?: 'light' | 'dark' | undefined;
+  mode?: 'dark' | 'light';
   onClick: () => void;
 };
 

@@ -43,7 +43,7 @@ type Props = PropsWithChildren<
   {
     onPress?: () => void;
     disabled?: boolean;
-    mode?: 'dark' | 'light' | undefined;
+    mode?: 'dark' | 'light';
     buttonStyle?: StyleProp<ViewStyle>;
   } & {
     textProps?: TextProps;

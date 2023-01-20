@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { StatusBar, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
-import { ChangePasswordForm } from '@features/change-password/index';
+import { ChangePasswordForm } from '@features/change-password';
 import { Box } from '@shared/ui';
 
-const LoginScreen: FC = () => {
+const ChangePasswordScreen: FC = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Box flex={1} bg="$secondary" pt="$5">
@@ -18,4 +18,4 @@ const LoginScreen: FC = () => {
   );
 };
 
-export default LoginScreen;
+export default ChangePasswordScreen;

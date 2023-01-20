@@ -7,7 +7,7 @@ import { Text, TextProps } from '@shared/ui';
 
 type Props = {
   error?: FieldError | { message: string };
-  mode?: 'light' | 'dark' | undefined;
+  mode?: 'dark' | 'light';
 } & TextProps;
 
 const ErrorMessage: FC<PropsWithChildren<Props>> = ({
