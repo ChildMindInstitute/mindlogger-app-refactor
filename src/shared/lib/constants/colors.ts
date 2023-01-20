@@ -1,5 +1,6 @@
 export const colors = {
   white: '#FFFFFF',
+  whiteTsp: 'rgba(255, 255, 255, 0.8)',
   primary: '#0067A0',
   secondary: '#FFFFFF',
   secondary_50: '#ffffff',
@@ -7,12 +8,15 @@ export const colors = {
   grey: '#808080',
   darkGrey: '#3b3a3a',
   mediumGrey: '#B6B6B6',
-  lighterGrey: '#F0F0F0',
+  lighterGrey: '#e8e8e8',
+  lighterGrey2: '#f7f7f7',
   lightGrey: '#00000026',
   alert: '#e63232',
   blue: '#005fa3',
+  blue2: '#24A3FF',
   lightBlue: '#dbf2ff',
   darkBlue: 'darkblue',
+  lightGreen: '#35FDB5',
   yellow: '#FFBD32',
   aqua: '#7FF7FF',
 };

@@ -16,6 +16,11 @@ export { YStack, XStack, ZStack } from '@tamagui/stacks';
 export { Text } from '@tamagui/core';
 export * from './Icons';
 
+export { default as MarkdownView } from './MarkdownView';
+export { default as AppletRoundLogo } from './AppletRoundLogo';
+export { default as RoundTextNotification } from './RoundTextNotification';
+export { default as LoadListError } from './LoadListError';
+
 export {
   StatusBar,
   Center,
