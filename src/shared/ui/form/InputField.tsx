@@ -12,12 +12,14 @@ type Props = {
   defaultValue?: string;
   size?: string;
   secureTextEntry?: boolean;
+  mode?: 'dark' | 'light';
 } & TextInputProps;
 
 const InputField: FC<Props> = ({
   name,
   defaultValue = '',
   placeholder,
+  mode = 'light',
   ...props
 }) => {
   const { control } = useFormContext();
@@ -41,15 +43,16 @@ const InputField: FC<Props> = ({
             onChangeText={onFormChange}
             value={value}
             placeholder={placeholder}
-            isInvalid={!!error}
             autoCapitalize="none"
             {...props}
+            mode={mode}
+            isInvalid={!!error}
           />
         )}
         name={name}
       />
 
-      <ErrorMessage mt={8} error={error} />
+      <ErrorMessage mode={mode} mt={8} error={error} />
     </>
   );
 };

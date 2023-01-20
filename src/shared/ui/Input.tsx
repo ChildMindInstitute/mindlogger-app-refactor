@@ -27,14 +27,18 @@ export const InputFrame = styled(
     selectionColor: 'black',
 
     variants: {
-      variant: {
+      mode: {
         light: {
           color: '$secondary',
           placeholderTextColor: '#ffffff99',
           borderBottomColor: '#ffffff99',
         },
+        dark: {
+          color: '$darkGrey',
+          placeholderTextColor: '#3b3a3a',
+          borderBottomColor: '#1e1d1d',
+        },
       },
-
       isInvalid: {
         true: {
           borderBottomColor: '$alert',
@@ -43,7 +47,7 @@ export const InputFrame = styled(
     },
 
     defaultVariants: {
-      variant: 'light',
+      mode: 'light',
     },
   },
   {

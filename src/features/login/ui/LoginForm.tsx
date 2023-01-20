@@ -67,7 +67,6 @@ const LoginForm: FC<Props> = props => {
           isLoading={isLoading}
           onClick={submit}
           text={t('login_form:login')}
-          variant="light"
           buttonStyle={{ width: 160, alignSelf: 'center' }}
           spinnerColor="tertiary"
         />

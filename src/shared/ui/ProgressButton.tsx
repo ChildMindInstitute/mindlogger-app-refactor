@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 
 import { colors } from '@shared/lib';
-import { Text, Button } from '@shared/ui';
+import { Text, SubmitButton } from '@shared/ui';
 
 type Color = keyof typeof colors;
 
@@ -16,7 +16,7 @@ type Props = {
   isLoading: boolean;
   buttonStyle?: StyleProp<ViewStyle>;
   spinnerColor: Color;
-  variant: 'light';
+  mode?: 'dark' | 'light';
   onClick: () => void;
 };
 
@@ -26,14 +26,14 @@ const ProgressButton: FC<Props> = ({
   onClick,
   isLoading,
   spinnerColor,
-  variant,
+  mode = 'light',
 }) => {
   return (
-    <Button
-      variant={variant}
+    <SubmitButton
+      mode={mode}
       alignSelf="center"
       onPress={onClick}
-      style={buttonStyle}
+      buttonStyle={buttonStyle}
       px={0}
       position="relative">
       {isLoading && (
@@ -46,7 +46,7 @@ const ProgressButton: FC<Props> = ({
       <Text color="$primary" fontSize={20} opacity={isLoading ? 0 : 1}>
         {text}
       </Text>
-    </Button>
+    </SubmitButton>
   );
 };
 
