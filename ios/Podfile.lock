@@ -306,7 +306,7 @@ PODS:
   - React-jsinspector (0.70.6)
   - React-logger (0.70.6):
     - glog
-  - react-native-flipper (0.176.1):
+  - react-native-flipper (0.177.0):
     - React-Core
   - react-native-mmkv (2.5.1):
     - MMKV (>= 1.2.13)
@@ -605,7 +605,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b4a65947391c658450151275aa406f2b8263178f
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
-  react-native-flipper: 7e4b1c3fe1a2eecbe7304e5ff6b89231b3ec61dc
+  react-native-flipper: ccf9059793e4b36cb4e6e5e54208a5e01acba248
   react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057

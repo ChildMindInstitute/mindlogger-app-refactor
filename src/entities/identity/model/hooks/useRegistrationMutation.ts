@@ -1,6 +1,7 @@
 import { useLoginMutation } from '@app/entities/identity';
 import { useSignUpMutation } from '@app/entities/identity';
 import { BaseError } from '@app/shared/api';
+import { useAppDispatch } from '@app/shared/lib';
 
 import { IdentityModel } from '../..';
 
@@ -19,13 +20,17 @@ type UseRegistrationReturn = {
 export const useRegistrationMutation = (
   onSuccess: () => void,
 ): UseRegistrationReturn => {
+  const dispatch = useAppDispatch();
+
   const {
     isLoading: isLoginLoading,
     mutate: login,
     error: loginError,
   } = useLoginMutation({
     onSuccess: response => {
-      IdentityModel.actions.onAuthSuccess(response.data.result.accessToken);
+      dispatch(
+        IdentityModel.actions.onAuthSuccess(response.data.result.accessToken),
+      );
       if (onSuccess) {
         onSuccess();
       }

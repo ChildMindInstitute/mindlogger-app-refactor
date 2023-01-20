@@ -1,1 +1,2 @@
-export const testSelector = () => 10;
+export const accessTokenSelector = (state: RootState) =>
+  state.identity.accessToken;

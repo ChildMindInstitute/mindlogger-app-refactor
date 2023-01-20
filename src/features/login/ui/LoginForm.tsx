@@ -5,7 +5,7 @@ import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { IdentityModel, useLoginMutation } from '@app/entities/identity';
-import { useAppForm } from '@shared/lib';
+import { useAppDispatch, useAppForm } from '@shared/lib';
 import { ProgressButton, YStack, Box, BoxProps } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
@@ -18,13 +18,17 @@ type Props = {
 const LoginForm: FC<Props> = props => {
   const { t } = useTranslation();
 
+  const dispatch = useAppDispatch();
+
   const {
     mutate: login,
     error,
     isLoading,
   } = useLoginMutation({
     onSuccess: response => {
-      IdentityModel.actions.onAuthSuccess(response.data.result.accessToken);
+      dispatch(
+        IdentityModel.actions.onAuthSuccess(response.data.result.accessToken),
+      );
       props.onLoginSuccess();
     },
   });
