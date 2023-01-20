@@ -6,8 +6,6 @@ import ReactQueryProvider from './ReactQueryProvider';
 import ReduxProvider from './ReduxProvider';
 import TamaguiProvider from './TamaguiProvider';
 
-export { reduxStore } from './ReduxProvider';
-
 const AppProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <ReduxProvider>

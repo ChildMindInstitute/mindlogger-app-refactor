@@ -1,30 +1,6 @@
 import { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 
-// export interface IBaseResponse {
-//   headers?: any | null;
-//   status: number;
-//   statusText?: string;
-// }
-
-// export interface IResponseData<TData> {
-//   isSuccess: boolean;
-//   data: TData;
-//   errors?: string[];
-// }
-
-// export interface IErrorResponseData {
-//   isSuccess: boolean;
-//   errors?: string[];
-// }
-
-// export interface IErrorResponse {
-//   data: IErrorResponseData;
-// }
-
-// export interface IApiError {
-//   response?: IErrorResponse | undefined | null;
-//   message: string;
-// }
+import { Languages } from '../lib';
 
 export type SuccessfulResponse<R> = {
   result: R;
@@ -32,9 +8,23 @@ export type SuccessfulResponse<R> = {
 
 export type SuccessfulEmptyResponse = {};
 
+type ErrorRecord = {
+  message: {
+    [key in Languages]: string;
+  };
+  type: string;
+  path: string[];
+};
+
+type ErrorResponse = {
+  data: { results: ErrorRecord[] };
+  status: number;
+};
+
 export type BaseError = {
   message?: string;
-  response: { data: { messages: string[] } };
+  response: ErrorResponse;
+  code: string;
   evaluatedMessage?: string;
 };
 

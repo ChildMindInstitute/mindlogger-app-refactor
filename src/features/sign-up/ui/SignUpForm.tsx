@@ -4,8 +4,8 @@ import { FC } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { IdentityModel } from '@app/entities/identity';
 import { useAppForm } from '@app/shared/lib';
+import { IdentityModel } from '@entities/identity';
 import {
   Text,
   Box,

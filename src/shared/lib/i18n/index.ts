@@ -27,5 +27,8 @@ z.setErrorMap(zodI18nMap);
 
 // @todo - automatically detect language of the device
 
+export type Languages = 'en' | 'fr';
+export const DefaultLanguage = 'en';
+
 export { initializeLocalization };
 export default i18n;

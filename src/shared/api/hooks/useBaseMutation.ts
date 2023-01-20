@@ -4,6 +4,9 @@ import {
   useMutation,
 } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
+import { useTranslation } from 'react-i18next';
+
+import { DefaultLanguage, Languages } from '@app/shared/lib';
 
 import { BaseError } from '../types';
 
@@ -19,11 +22,23 @@ const useBaseMutation = <TRequest, TResponse>(
     'mutationKey' | 'mutationFn'
   >,
 ) => {
+  const { i18n } = useTranslation();
+
   return useMutation(key, mutationFn, {
     ...options,
     onError: (error: BaseError, variables: TRequest, context: unknown) => {
-      if (error.response?.data?.messages?.length) {
-        error.evaluatedMessage = error.response?.data?.messages[0];
+      const errorRecords = error.response?.data?.results;
+
+      if (errorRecords?.length) {
+        const firstRecord = errorRecords[0];
+
+        const currentLanguage = i18n.language as Languages;
+
+        const message =
+          firstRecord.message[currentLanguage] ??
+          firstRecord.message[DefaultLanguage];
+
+        error.evaluatedMessage = message;
       } else {
         error.evaluatedMessage = error.message;
       }

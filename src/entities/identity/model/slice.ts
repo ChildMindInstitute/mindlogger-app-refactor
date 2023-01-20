@@ -8,7 +8,7 @@ const initialState: InitialState = {
   accessToken: null,
 };
 
-export const identitySlice = createSlice({
+const identitySlice = createSlice({
   name: 'identity',
   initialState,
   reducers: {
@@ -18,4 +18,6 @@ export const identitySlice = createSlice({
   },
 });
 
-export const identityReducer = identitySlice.reducer;
+export const actions = identitySlice.actions;
+
+export const reducer = identitySlice.reducer;
