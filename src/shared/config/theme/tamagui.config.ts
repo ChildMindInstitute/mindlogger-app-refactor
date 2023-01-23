@@ -30,7 +30,7 @@ const main = createTheme({
   color: tokens.color.secondary,
 });
 
-export const appConfig = createTamagui({
+export const uiConfig = createTamagui({
   themes: {
     ...baseThemes,
     main,
@@ -43,7 +43,7 @@ export const appConfig = createTamagui({
   },
 });
 
-export type AppConfig = typeof appConfig;
+export type AppConfig = typeof uiConfig;
 
 declare module '@tamagui/core' {
   interface TamaguiCustomConfig extends AppConfig {}

@@ -1,10 +1,6 @@
 import Screens from '@screens';
 
-import { initializeLocalization } from '@shared/lib/i18n';
-
-import AppProvider from './providers';
-
-initializeLocalization();
+import { AppProvider } from './ui';
 
 const App = () => {
   return (
