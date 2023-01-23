@@ -30,6 +30,15 @@ type UserDto = {
   name: string;
 };
 
+type RefreshTokenRequest = {
+  refreshToken: string;
+};
+
+type RefreshTokenResponse = SuccessfulResponse<{
+  accessToken: string;
+  refreshToken: string;
+}>;
+
 export type LogoutResponse = SuccessfulEmptyResponse;
 
 export type SignUpResponse = SuccessfulEmptyResponse;
@@ -50,6 +59,12 @@ function IdentityService() {
     passwordRecover(request: PasswordRecoveryRequest) {
       return httpService.post<PasswordRecoveryResponse>(
         '/users/me/password/recover',
+        request,
+      );
+    },
+    refreshToken(request: RefreshTokenRequest) {
+      return httpService.post<RefreshTokenResponse>(
+        '/auth/token/refresh',
         request,
       );
     },
