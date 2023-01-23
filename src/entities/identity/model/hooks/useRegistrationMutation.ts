@@ -3,18 +3,12 @@ import { useSignUpMutation } from '@app/entities/identity';
 import { BaseError } from '@app/shared/api';
 import { useAppDispatch } from '@app/shared/lib';
 
-import { IdentityModel } from '../..';
-
-type RegistartionData = {
-  email: string;
-  fullName: string;
-  password: string;
-};
+import { actions, storeTokens } from '../';
 
 type UseRegistrationReturn = {
   isLoading: boolean;
   error?: BaseError | null;
-  mutate: (data: RegistartionData) => void;
+  mutate: ReturnType<typeof useSignUpMutation>['mutate'];
 };
 
 export const useRegistrationMutation = (
@@ -27,10 +21,16 @@ export const useRegistrationMutation = (
     mutate: login,
     error: loginError,
   } = useLoginMutation({
-    onSuccess: response => {
-      dispatch(
-        IdentityModel.actions.onAuthSuccess(response.data.result.accessToken),
-      );
+    onSuccess: (response, { password }) => {
+      const { user, token } = response.data.result;
+
+      dispatch(actions.onAuthSuccess(user));
+
+      storeTokens({
+        ...token,
+        password,
+      });
+
       if (onSuccess) {
         onSuccess();
       }
@@ -42,15 +42,15 @@ export const useRegistrationMutation = (
     isSuccess: isSignUpSuccess,
     error: signUpError,
     mutate: signUp,
-  } = useSignUpMutation();
+  } = useSignUpMutation({
+    onSuccess: (_, data) => {
+      login({ email: data.email, password: data.password });
+    },
+  });
 
   const result: UseRegistrationReturn = {
     isLoading: false,
-    mutate: (data: RegistartionData) => {
-      signUp(data, {
-        onSuccess: () => login({ email: data.email, password: data.password }),
-      });
-    },
+    mutate: signUp,
   };
 
   if (isSignUpSuccess) {

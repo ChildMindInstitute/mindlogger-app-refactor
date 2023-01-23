@@ -7,7 +7,7 @@ type LoginRequest = {
 };
 
 type LogoutRequest = {
-  pk: number;
+  deviceId: number;
 };
 
 type SignUpRequest = {
@@ -21,13 +21,18 @@ type PasswordRecoveryRequest = {
 };
 
 export type LoginResponse = SuccessfulResponse<{
-  accessToken: string;
+  token: {
+    accessToken: string;
+    refreshToken: string;
+    tokenType: string;
+  };
   user: UserDto;
 }>;
 
 type UserDto = {
   id: string;
-  name: string;
+  fullName: string;
+  email: string;
 };
 
 type RefreshTokenRequest = {
@@ -48,10 +53,10 @@ export type PasswordRecoveryResponse = SuccessfulEmptyResponse;
 function IdentityService() {
   return {
     login(request: LoginRequest) {
-      return httpService.post<LoginResponse>('/auth/token', request);
+      return httpService.post<LoginResponse>('/auth/login', request);
     },
     logout(request: LogoutRequest) {
-      return httpService.delete<LogoutResponse>(`/auth/token${request.pk}`);
+      return httpService.post<LogoutResponse>('/auth/logout', request);
     },
     signUp(request: SignUpRequest) {
       return httpService.post<SignUpResponse>('/users', request);
