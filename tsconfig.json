@@ -16,6 +16,7 @@
       "@screens": ["src/screens/index"],
       "@screens/*": ["src/screens/*"],
       "@entities/*": ["src/entities/*"],
+      "@jobs/*": ["src/jobs/*"],
       "*": ["*","*.ios","*.android"]
     },
      "skipLibCheck": true

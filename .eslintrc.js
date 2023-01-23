@@ -29,7 +29,8 @@ module.exports = {
                 position: 'before',
               },
               {
-                pattern: '@(@app|@shared|@features|@screens|@entities)/**',
+                pattern:
+                  '@(@app|@shared|@features|@screens|@entities|@assets|@jobs)/**',
                 group: 'internal',
               },
               {
