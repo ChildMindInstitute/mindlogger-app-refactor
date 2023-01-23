@@ -1,6 +1,6 @@
 import { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 
-import { Languages } from '../lib';
+import { Language } from '../lib';
 
 export type SuccessfulResponse<R> = {
   result: R;
@@ -9,9 +9,7 @@ export type SuccessfulResponse<R> = {
 export type SuccessfulEmptyResponse = {};
 
 type ErrorRecord = {
-  message: {
-    [key in Languages]: string;
-  };
+  message: Record<Language, string>;
   type: string;
   path: string[];
 };

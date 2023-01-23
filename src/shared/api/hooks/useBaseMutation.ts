@@ -6,7 +6,7 @@ import {
 import { AxiosResponse } from 'axios';
 import { useTranslation } from 'react-i18next';
 
-import { DefaultLanguage, Languages } from '@app/shared/lib';
+import { DEFAULT_LANGUAGE, Language } from '@app/shared/lib';
 
 import { BaseError } from '../types';
 
@@ -32,11 +32,11 @@ const useBaseMutation = <TRequest, TResponse>(
       if (errorRecords?.length) {
         const firstRecord = errorRecords[0];
 
-        const currentLanguage = i18n.language as Languages;
+        const currentLanguage = i18n.language as Language;
 
         const message =
           firstRecord.message[currentLanguage] ??
-          firstRecord.message[DefaultLanguage];
+          firstRecord.message[DEFAULT_LANGUAGE];
 
         error.evaluatedMessage = message;
       } else {
