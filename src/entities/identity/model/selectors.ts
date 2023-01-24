@@ -9,6 +9,7 @@ export const selectUser = createSelector(
   identity => identity.user,
 );
 
-export const selectIsAuthenticated = createSelector(selectUser, () =>
-  TokenStorage.getString('accessToken'),
+export const selectIsAuthenticated = createSelector(
+  selectUser,
+  () => !!TokenStorage.getString('accessToken'),
 );
