@@ -1,7 +1,7 @@
 import { AxiosError, AxiosRequestConfig } from 'axios';
 
 import { httpService, IdentityService } from '@shared/api';
-import { createJob, TokenStorage } from '@shared/lib';
+import { createJob, TokenStorage, Emitter } from '@shared/lib';
 
 type RequestConfig = AxiosRequestConfig<any> & {
   retry?: boolean;
@@ -31,6 +31,7 @@ export default createJob(() => {
 
           config.headers.Authorization = `${tokenType} ${data.result.accessToken}`;
         } catch (e) {
+          Emitter.emit('refresh-token-fail');
           Promise.reject(e);
         }
 

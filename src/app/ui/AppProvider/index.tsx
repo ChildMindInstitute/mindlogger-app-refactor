@@ -2,6 +2,7 @@ import { FC, Suspense, PropsWithChildren } from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 
+import CommonEvents from './CommonEvents';
 import ReactQueryProvider from './ReactQueryProvider';
 import ReduxProvider from './ReduxProvider';
 import TamaguiProvider from './TamaguiProvider';
@@ -12,7 +13,9 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
       <ReactQueryProvider>
         <TamaguiProvider>
           <NavigationContainer>
-            <Suspense>{children}</Suspense>
+            <CommonEvents>
+              <Suspense>{children}</Suspense>
+            </CommonEvents>
           </NavigationContainer>
         </TamaguiProvider>
       </ReactQueryProvider>
