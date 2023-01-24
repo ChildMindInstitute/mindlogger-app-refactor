@@ -11,5 +11,5 @@ export const selectUser = createSelector(
 
 export const selectIsAuthenticated = createSelector(
   selectUser,
-  () => !!TokenStorage.getString('accessToken'),
+  user => !!user && !!TokenStorage.getString('accessToken'),
 );
