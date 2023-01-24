@@ -1,10 +1,11 @@
 import Screens from '@screens';
 
-import { initializeLocalization } from '@shared/lib/i18n';
+import localization from '@jobs/localization';
+import { jobRunner } from '@shared/lib';
 
-import AppProvider from './providers';
+import { AppProvider } from './ui';
 
-initializeLocalization();
+jobRunner.runAll([localization]);
 
 const App = () => {
   return (

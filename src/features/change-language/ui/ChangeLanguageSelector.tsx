@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { languageModel } from '@entities/language';
+import { changeLanguage, Language } from '@shared/lib';
 import { YStack, BoxProps, RowButton } from '@shared/ui';
 
 type Props = {
@@ -12,11 +12,13 @@ type Props = {
 const ChangeLanguageSelector: FC<Props> = props => {
   const { onLanguageChanged } = props;
   const { t, i18n } = useTranslation();
-  const languagesAvailable = Object.keys(i18n.services.resourceStore.data);
+  const languagesAvailable = Object.keys(
+    i18n.services.resourceStore.data,
+  ) as Language[];
   const { resolvedLanguage } = i18n;
 
-  const onLanguagePress = async (locale: string) => {
-    await languageModel.actions.changeLanguage(locale);
+  const onLanguagePress = async (locale: Language) => {
+    await changeLanguage(locale);
     onLanguageChanged();
   };
 

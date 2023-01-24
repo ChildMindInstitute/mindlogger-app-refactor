@@ -2,10 +2,10 @@ import { FC, PropsWithChildren } from 'react';
 
 import { TamaguiProvider } from '@tamagui/core';
 
-import { appConfig } from '../theme';
+import { uiConfig } from '@shared/config';
 
 const UIProvider: FC<PropsWithChildren> = ({ children }) => (
-  <TamaguiProvider config={appConfig}>{children}</TamaguiProvider>
+  <TamaguiProvider config={uiConfig}>{children}</TamaguiProvider>
 );
 
 export default UIProvider;

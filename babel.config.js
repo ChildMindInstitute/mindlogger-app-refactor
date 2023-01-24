@@ -16,6 +16,7 @@ module.exports = {
           '@features': './src/features',
           '@screens': './src/screens',
           '@entities': './src/entities',
+          '@jobs': './src/jobs',
           '@images': './assets/images/index',
         },
       },

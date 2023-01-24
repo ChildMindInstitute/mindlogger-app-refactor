@@ -1,6 +1,11 @@
 import { FC, PropsWithChildren } from 'react';
 
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import {
+  AnyAction,
+  combineReducers,
+  configureStore,
+  ThunkAction,
+} from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 
 import { IdentityModel } from '@entities/identity';
@@ -28,6 +33,7 @@ const ReduxProvider: FC<PropsWithChildren> = ({ children }) => (
 declare global {
   type RootState = ReturnType<typeof reduxStore.getState>;
   type AppDispatch = typeof reduxStore.dispatch;
+  type AppThunkAction = ThunkAction<void, RootState, unknown, AnyAction>;
 }
 
 export default ReduxProvider;

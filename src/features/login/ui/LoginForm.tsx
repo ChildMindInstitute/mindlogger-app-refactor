@@ -25,10 +25,16 @@ const LoginForm: FC<Props> = props => {
     error,
     isLoading,
   } = useLoginMutation({
-    onSuccess: response => {
-      dispatch(
-        IdentityModel.actions.onAuthSuccess(response.data.result.accessToken),
-      );
+    onSuccess: (response, { password }) => {
+      const { user, token } = response.data.result;
+
+      dispatch(IdentityModel.actions.onAuthSuccess(user));
+
+      IdentityModel.storeTokens({
+        ...token,
+        password,
+      });
+
       props.onLoginSuccess();
     },
   });
