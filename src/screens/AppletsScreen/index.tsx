@@ -16,7 +16,7 @@ const AppletsScreen: FC = () => {
       <ImageBackground>
         <ScrollView contentContainerStyle={styles.scrollView}>
           <Box flex={1} pt={12} pb={34}>
-            <AppletList flex={1} px={14} mb={10} />
+            <AppletList flex={1} px={14} mb={28} />
 
             <XStack jc="center">
               <TouchableOpacity onPress={() => navigate('AboutApp')}>

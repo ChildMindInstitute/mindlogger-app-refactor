@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { XStack, YStack } from '@tamagui/stacks';
 
-import { ActivityIndicator, Box, BoxProps } from '@app/shared/ui';
+import { ActivityIndicator, BoxProps } from '@app/shared/ui';
 import { LoadListError } from '@app/shared/ui';
 
 import AppletCard from './AppletCard';
@@ -33,11 +33,9 @@ const AppletList: FC<BoxProps> = props => {
   }
 
   return (
-    <YStack {...props}>
+    <YStack {...props} space={18}>
       {applets?.map(x => (
-        <Box mb={18} key={x.id}>
-          <AppletCard applet={x} />
-        </Box>
+        <AppletCard applet={x} key={x.id} />
       ))}
     </YStack>
   );
