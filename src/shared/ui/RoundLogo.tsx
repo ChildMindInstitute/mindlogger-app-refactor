@@ -2,8 +2,8 @@
 import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
+import { CachedImage } from '@georstat/react-native-image-cache';
 import { Text } from '@tamagui/core';
-import { CachedImage } from 'react-native-img-cache';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 
 import { colors } from '../lib';
@@ -35,7 +35,7 @@ const RoundLogo: FC<Props> = ({ imageUri, letter, size = 64 }) => {
     return (
       <CachedImage
         style={getStyles(size).image}
-        source={{ uri: getImageUrl(imageUri) }}
+        source={getImageUrl(imageUri)}
       />
     );
   }

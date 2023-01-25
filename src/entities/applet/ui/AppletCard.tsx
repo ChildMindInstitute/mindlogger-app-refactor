@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { CachedImage } from 'react-native-img-cache';
+import { CachedImage } from '@georstat/react-native-image-cache';
 
 import { IS_IOS } from '@app/shared/lib';
 import {
@@ -27,15 +27,10 @@ const AppletCard: FC<Props> = ({ applet }) => {
 
     if (applet.theme.smallLogo) {
       return (
-        <CachedImage
-          style={styles.smallLogo}
-          source={{ uri: applet.theme.smallLogo }}
-        />
+        <CachedImage style={styles.smallLogo} source={applet.theme.smallLogo} />
       );
     } else if (applet.theme.logo) {
-      return (
-        <CachedImage style={styles.logo} source={{ uri: applet.theme.logo }} />
-      );
+      return <CachedImage style={styles.logo} source={applet.theme.logo} />;
     }
     return null;
   };
