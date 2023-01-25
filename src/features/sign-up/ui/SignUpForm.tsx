@@ -1,19 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import { FC } from 'react';
+import { Linking } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useAppForm } from '@app/shared/lib';
 import { IdentityModel } from '@entities/identity';
-import {
-  Text,
-  Box,
-  BoxProps,
-  YStack,
-  XStack,
-  ProgressButton,
-} from '@shared/ui';
+import { Text, Box, BoxProps, YStack, XStack, SubmitButton } from '@shared/ui';
 import { InputField, CheckBoxField, ErrorMessage } from '@shared/ui/form';
 
 import { SignUpFormSchema } from '../model';
@@ -46,7 +40,9 @@ const SignUpForm: FC<Props> = props => {
     },
   });
 
-  console.log('error su!', JSON.stringify(error?.evaluatedMessage));
+  const navigateToTerms = () => {
+    Linking.openURL('https://mindlogger.org/terms');
+  };
 
   return (
     <Box {...props}>
@@ -67,6 +63,7 @@ const SignUpForm: FC<Props> = props => {
 
           {error && (
             <ErrorMessage
+              mode="light"
               mt={8}
               error={{ message: error?.evaluatedMessage! }}
             />
@@ -84,7 +81,8 @@ const SignUpForm: FC<Props> = props => {
                   lineHeight={22}
                   fontSize={17}
                   color="$secondary"
-                  textDecorationLine="underline">
+                  textDecorationLine="underline"
+                  onPress={navigateToTerms}>
                   {t('auth:terms_of_service')}
                 </Text>
               </XStack>
@@ -92,13 +90,12 @@ const SignUpForm: FC<Props> = props => {
           </YStack>
         </YStack>
 
-        <ProgressButton
+        <SubmitButton
           isLoading={isLoading}
-          onClick={submit}
-          text={t('sign_up_form:sign_up')}
-          buttonStyle={{ width: 172, alignSelf: 'center' }}
-          spinnerColor="tertiary"
-        />
+          onPress={submit}
+          buttonStyle={{ alignSelf: 'center', paddingHorizontal: 56 }}>
+          {t('sign_up_form:sign_up')}
+        </SubmitButton>
       </FormProvider>
     </Box>
   );

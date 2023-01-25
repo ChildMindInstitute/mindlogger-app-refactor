@@ -56,7 +56,7 @@ const CheckBoxField: FC<PropsWithChildren<Props>> = ({ name, children }) => {
         name={name}
       />
 
-      <ErrorMessage error={error} mt={3} />
+      <ErrorMessage mode="light" error={error} mt={3} />
     </>
   );
 };

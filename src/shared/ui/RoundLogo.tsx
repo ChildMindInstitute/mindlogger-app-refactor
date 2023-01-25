@@ -6,8 +6,6 @@ import { Text } from '@tamagui/core';
 import { CachedImage } from 'react-native-img-cache';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 
-import { Applet } from '@entities/applet/lib';
-
 import { colors } from '../lib';
 
 import { Box } from '.';
@@ -19,24 +17,25 @@ declare module 'react-native-svg' {
 }
 
 type Props = {
-  applet: Applet;
+  letter: string;
+  imageUri?: string;
   size?: number;
 };
 
 const getImageUrl = (url: string): string => {
   if (url.endsWith('.svg')) {
-    // todo - remove if unnecessary
+    // todo - remove later if unnecessary
     return url.replace('.svg', '.jpg');
   }
   return url;
 };
 
-const AppletRoundLogo: FC<Props> = ({ applet, size = 64 }) => {
-  if (applet.image) {
+const RoundLogo: FC<Props> = ({ imageUri, letter, size = 64 }) => {
+  if (imageUri) {
     return (
       <CachedImage
         style={getStyles(size).image}
-        source={{ uri: getImageUrl(applet.image) }}
+        source={{ uri: getImageUrl(imageUri) }}
       />
     );
   }
@@ -55,7 +54,7 @@ const AppletRoundLogo: FC<Props> = ({ applet, size = 64 }) => {
       </Svg>
 
       <Text fontSize={size / 2} color="$whiteTsp" fontWeight="700">
-        {applet.name[0].toUpperCase()}
+        {letter}
       </Text>
     </Box>
   );
@@ -71,4 +70,4 @@ const getStyles = (size: number) =>
     },
   });
 
-export default AppletRoundLogo;
+export default RoundLogo;

@@ -5,7 +5,7 @@ import { CachedImage } from 'react-native-img-cache';
 
 import { IS_IOS } from '@app/shared/lib';
 import {
-  AppletRoundLogo,
+  RoundLogo,
   Box,
   RoundTextNotification,
   Text,
@@ -51,19 +51,22 @@ const AppletCard: FC<Props> = ({ applet }) => {
         borderRadius={9}
         backgroundColor="$white">
         <Box mr={14}>
-          <AppletRoundLogo applet={applet} />
+          <RoundLogo
+            imageUri={applet.image}
+            letter={applet.name[0].toUpperCase()}
+          />
         </Box>
 
         <YStack flexGrow={1} flexShrink={1}>
           <XStack jc="space-between">
-            <Box mb={8} maxWidth={applet?.theme?.logo ? '72%' : '100%'}>
-              <Text
-                fontWeight={IS_IOS ? '600' : '700'}
-                fontSize={16}
-                lineHeight={20}>
-                {applet.name}
-              </Text>
-            </Box>
+            <Text
+              mb={8}
+              flex={1}
+              fontWeight={IS_IOS ? '600' : '700'}
+              fontSize={16}
+              lineHeight={20}>
+              {applet.name}
+            </Text>
 
             {renderThemeLogo()}
           </XStack>

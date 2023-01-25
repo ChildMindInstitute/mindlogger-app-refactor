@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { IdentityModel, useLoginMutation } from '@app/entities/identity';
 import { useAppDispatch, useAppForm } from '@shared/lib';
-import { ProgressButton, YStack, Box, BoxProps } from '@shared/ui';
+import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
 import { LoginFormSchema } from '../model';
@@ -65,17 +65,19 @@ const LoginForm: FC<Props> = props => {
           />
 
           {error && (
-            <ErrorMessage error={{ message: error.evaluatedMessage! }} />
+            <ErrorMessage
+              mode="light"
+              error={{ message: error.evaluatedMessage! }}
+            />
           )}
         </YStack>
 
-        <ProgressButton
+        <SubmitButton
           isLoading={isLoading}
-          onClick={submit}
-          text={t('login_form:login')}
-          buttonStyle={{ width: 160, alignSelf: 'center' }}
-          spinnerColor="tertiary"
-        />
+          onPress={submit}
+          buttonStyle={{ width: 160, alignSelf: 'center' }}>
+          {t('login_form:login')}
+        </SubmitButton>
       </FormProvider>
     </Box>
   );

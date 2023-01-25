@@ -1,19 +1,31 @@
 import { FC } from 'react';
-import { ImageBackground, StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 import { AppletList } from '@app/entities/applet';
-import { Box, ScrollView } from '@shared/ui';
+import { Box, ImageBackground, ScrollView, Text, XStack } from '@shared/ui';
 
 const AppletsScreen: FC = () => {
+  const { t } = useTranslation();
+  const { navigate } = useNavigation();
+
   return (
     <Box bg="$secondary" flex={1}>
-      <ImageBackground
-        style={styles.image}
-        source={{
-          uri: 'https://images.unsplash.com/photo-1517483000871-1dbf64a6e1c6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
-        }}>
+      <ImageBackground>
         <ScrollView contentContainerStyle={styles.scrollView}>
-          <AppletList flex={1} px={14} pt={12} pb={20} />
+          <Box flex={1} pt={12} pb={34}>
+            <AppletList flex={1} px={14} mb={10} />
+
+            <XStack jc="center">
+              <TouchableOpacity onPress={() => navigate('AboutApp')}>
+                <Text color="$primary" fontSize={16} fontWeight="700">
+                  {t('applet_list_component:about_title')}
+                </Text>
+              </TouchableOpacity>
+            </XStack>
+          </Box>
         </ScrollView>
       </ImageBackground>
     </Box>
@@ -21,9 +33,6 @@ const AppletsScreen: FC = () => {
 };
 
 const styles = StyleSheet.create({
-  image: {
-    flex: 1,
-  },
   scrollView: {
     flexGrow: 1,
   },

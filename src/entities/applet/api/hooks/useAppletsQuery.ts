@@ -6,7 +6,6 @@ type Options = QueryOptions<typeof appletsService.getApplets>;
 export const useAppletsQuery = (options?: Options) => {
   return useBaseQuery(['applets'], appletsService.getApplets, {
     ...options,
-    cacheTime: 0,
     // todo - add select/map here
   });
 };
