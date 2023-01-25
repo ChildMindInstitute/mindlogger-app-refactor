@@ -1,0 +1,99 @@
+import { FC } from 'react';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+
+import { CachedImage } from '@georstat/react-native-image-cache';
+
+import { IS_IOS } from '@app/shared/lib';
+import {
+  RoundLogo,
+  Box,
+  RoundTextNotification,
+  Text,
+  XStack,
+  YStack,
+} from '@app/shared/ui';
+
+import { Applet } from '../lib';
+
+type Props = {
+  applet: Applet;
+};
+
+const AppletCard: FC<Props> = ({ applet }) => {
+  const renderThemeLogo = () => {
+    if (!applet || !applet.theme) {
+      return null;
+    }
+
+    if (applet.theme.smallLogo) {
+      return (
+        <CachedImage style={styles.smallLogo} source={applet.theme.smallLogo} />
+      );
+    } else if (applet.theme.logo) {
+      return <CachedImage style={styles.logo} source={applet.theme.logo} />;
+    }
+    return null;
+  };
+
+  return (
+    <TouchableOpacity onPress={() => {}}>
+      <XStack
+        position="relative"
+        mx={3}
+        p={12}
+        borderWidth={3}
+        borderColor="$lighterGrey"
+        borderRadius={9}
+        backgroundColor="$white">
+        <Box mr={14}>
+          <RoundLogo
+            imageUri={applet.image}
+            letter={applet.name[0].toUpperCase()}
+          />
+        </Box>
+
+        <YStack flexGrow={1} flexShrink={1}>
+          <XStack jc="space-between">
+            <Text
+              mb={8}
+              flex={1}
+              fontWeight={IS_IOS ? '600' : '700'}
+              fontSize={16}
+              lineHeight={20}>
+              {applet.name}
+            </Text>
+
+            {renderThemeLogo()}
+          </XStack>
+
+          <Text fontSize={14} fontWeight="300" lineHeight={20}>
+            {applet.description}
+          </Text>
+        </YStack>
+
+        {!!applet.numberOverdue && (
+          <Box position="absolute" top={-14} right={-14}>
+            <RoundTextNotification text={applet.numberOverdue.toString()} />
+          </Box>
+        )}
+      </XStack>
+    </TouchableOpacity>
+  );
+};
+
+const styles = StyleSheet.create({
+  smallLogo: {
+    width: 60,
+    height: 30,
+    resizeMode: 'contain',
+    marginTop: -5,
+  },
+  logo: {
+    width: 32,
+    height: 32,
+    resizeMode: 'cover',
+    borderRadius: 32 / 2,
+  },
+});
+
+export default AppletCard;

@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { blueLogo } from '@assets/images';
 import { useTranslation } from 'react-i18next';
 
 import { colors } from '@app/shared/lib';
 import MarkdownView from '@app/shared/ui/MarkdownView';
+import { blueLogo } from '@assets/images';
 import { Box, Text, ScrollView, Image } from '@shared/ui';
 
 const AboutScreen: FC = () => {

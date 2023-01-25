@@ -24,3 +24,7 @@ export const KeyIcon: FC<IconProps> = props => (
 export const UserIcon: FC<IconProps> = props => (
   <FontAwesome name="user-circle" {...props} />
 );
+
+export const UserProfileIcon: FC<IconProps> = props => (
+  <FontAwesome name="user" {...props} />
+);

@@ -1,3 +1,6 @@
+import { TouchableOpacity } from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
@@ -6,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { AppVersion, colors } from '@app/shared/lib';
 import { RootStackParamList } from '@shared/lib/navigation';
-import { Text, CloseIcon } from '@shared/ui';
+import { Text, CloseIcon, UserProfileIcon } from '@shared/ui';
 
 import AboutScreen from './AboutScreen';
 import AppletsScreen from './AppletsScreen';
@@ -40,6 +43,7 @@ const screenOptions = ({ navigation }: ScreenOptions) => {
 
 export default () => {
   const { t } = useTranslation();
+  const navigation = useNavigation();
 
   return (
     <Stack.Navigator screenOptions={screenOptions}>
@@ -95,10 +99,23 @@ export default () => {
         name="Applets"
         options={{
           title: 'Applets',
+          headerStyle: {
+            backgroundColor: colors.lighterGrey2,
+          },
           headerTitleStyle: {
             fontSize: 16,
-            color: colors.white,
+            color: colors.tertiary,
           },
+          headerLeft: () => (
+            <Text onPress={() => navigation.goBack()} mr={24}>
+              <CloseIcon color={colors.tertiary} size={22} />
+            </Text>
+          ),
+          headerRight: () => (
+            <TouchableOpacity onPress={() => {}}>
+              <UserProfileIcon color={colors.tertiary} size={22} />
+            </TouchableOpacity>
+          ),
         }}
         component={AppletsScreen}
       />

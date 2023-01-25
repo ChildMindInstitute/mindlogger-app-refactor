@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { usePasswordRecoveryMutation } from '@app/entities/identity';
 import { useAppForm } from '@shared/lib';
-import { YStack, Box, BoxProps, ProgressButton } from '@shared/ui';
+import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
 import { ForgotPasswordFormSchema } from '../model';
@@ -48,13 +48,12 @@ const ForgotPasswordForm: FC<Props> = props => {
           )}
         </YStack>
 
-        <ProgressButton
+        <SubmitButton
           isLoading={isLoading}
-          onClick={submit}
-          text={t('forgot_pass_form:reset_pass')}
-          buttonStyle={{ width: 178, alignSelf: 'center' }}
-          spinnerColor="tertiary"
-        />
+          onPress={submit}
+          buttonStyle={{ alignSelf: 'center', paddingHorizontal: 24 }}>
+          {t('forgot_pass_form:reset_pass')}
+        </SubmitButton>
       </FormProvider>
     </Box>
   );
