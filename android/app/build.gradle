@@ -84,6 +84,22 @@ project.ext.react = [
 
 apply from: "../../node_modules/react-native/react.gradle"
 
+project.ext.envConfigFiles = [
+    devdebug: ".env.dev",
+    devrelease: ".env.dev",
+
+    qadebug: ".env.qa",
+    qarelease: ".env.qa",
+
+    stagingdebug: ".env.staging",
+    stagingrelease: ".env.staging",
+   
+    productiondebug: ".env.production",
+    productionrelease: ".env.production",
+]
+
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -136,6 +152,8 @@ android {
 
     defaultConfig {
         applicationId "com.mindloggermobile"
+        resValue "string", "app_name", "Mindlogger"
+        resValue "string", "build_config_package", "com.mindloggermobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -221,6 +239,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            matchingFallbacks = ['debug', 'release']
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -229,6 +248,22 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
+    }
+    flavorDimensions "env"
+    productFlavors {
+        dev {
+            resValue "string", "app_name", "Mindlogger Dev"
+            applicationIdSuffix ".dev"
+        }
+        qa {
+            resValue "string", "app_name", "Mindlogger QA"
+            applicationIdSuffix ".qa"
+        }
+        staging {
+            resValue "string", "app_name", "Mindlogger Staging"
+            applicationIdSuffix ".staging"
+        }
+        production {}
     }
 
     // applicationVariants are e.g. debug, release

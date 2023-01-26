@@ -4,7 +4,19 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '12.4'
 install! 'cocoapods', :deterministic_uuids => false
 
-target 'MindloggerMobile' do
+abstract_target 'MindloggerMobileCommonPods' do
+  target 'MindloggerMobileDev' do
+  end
+ 
+  target 'MindloggerMobileQA' do
+  end
+ 
+  target 'MindloggerMobileStaging' do
+  end
+
+  target 'MindloggerMobile' do
+  end
+
   config = use_native_modules!
 
   # Flags change depending on the env values.
