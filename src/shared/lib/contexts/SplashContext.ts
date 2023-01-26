@@ -1,11 +1,11 @@
 import { createContext, useContext } from 'react';
 
-type SlashContext = {
+type SplashContext = {
   setLoadingState: (this: void, value: boolean) => any;
   onModuleInitialized: (module: string) => void;
 };
 
-export const SplashContext = createContext<SlashContext>({
+export const SplashContext = createContext<SplashContext>({
   setLoadingState: () => {},
   onModuleInitialized: () => {},
 });
