@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { AppletList } from '@app/entities/applet';
+import { AppletsRefresh } from '@app/features/applets-refresh';
 import { Box, ImageBackground, ScrollView, Text, XStack } from '@shared/ui';
 
 const AppletsScreen: FC = () => {
@@ -14,7 +15,9 @@ const AppletsScreen: FC = () => {
   return (
     <Box bg="$secondary" flex={1}>
       <ImageBackground>
-        <ScrollView contentContainerStyle={styles.scrollView}>
+        <ScrollView
+          contentContainerStyle={styles.scrollView}
+          refreshControl={<AppletsRefresh />}>
           <Box flex={1} pt={12} pb={34}>
             <AppletList flex={1} px={14} mb={28} />
 

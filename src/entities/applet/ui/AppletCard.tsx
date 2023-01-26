@@ -17,9 +17,10 @@ import { Applet } from '../lib';
 
 type Props = {
   applet: Applet;
+  disabled: boolean;
 };
 
-const AppletCard: FC<Props> = ({ applet }) => {
+const AppletCard: FC<Props> = ({ applet, disabled }) => {
   const renderThemeLogo = () => {
     if (!applet || !applet.theme) {
       return null;
@@ -36,7 +37,7 @@ const AppletCard: FC<Props> = ({ applet }) => {
   };
 
   return (
-    <TouchableOpacity onPress={() => {}}>
+    <TouchableOpacity onPress={() => {}} disabled={disabled}>
       <XStack
         position="relative"
         mx={3}
