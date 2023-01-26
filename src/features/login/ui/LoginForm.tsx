@@ -4,7 +4,8 @@ import { FC } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { IdentityModel, useLoginMutation } from '@app/entities/identity';
+import { IdentityModel, useLoginMutation } from '@entities/identity';
+import { SessionModel } from '@entities/session';
 import { useAppDispatch, useAppForm } from '@shared/lib';
 import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
@@ -26,14 +27,11 @@ const LoginForm: FC<Props> = props => {
     isLoading,
   } = useLoginMutation({
     onSuccess: (response, { password }) => {
-      const { user, token } = response.data.result;
+      const { user, token: session } = response.data.result;
 
       dispatch(IdentityModel.actions.onAuthSuccess(user));
 
-      IdentityModel.storeTokens({
-        ...token,
-        password,
-      });
+      SessionModel.storeSession(session, { encryptWithKey: password });
 
       props.onLoginSuccess();
     },
