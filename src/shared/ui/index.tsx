@@ -7,6 +7,7 @@ import Input from './Input';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
 import RowButton from './RowButton';
 import ScrollView from './ScrollView';
+import Splash from './Splash';
 import StatusBar from './StatusBar';
 import SubmitButton from './SubmitButton';
 
@@ -34,4 +35,5 @@ export {
   ScrollView,
   RowButton,
   SubmitButton,
+  Splash,
 };

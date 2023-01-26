@@ -7,6 +7,7 @@ import { Dirs } from 'react-native-file-access';
 import CommonEvents from './CommonEvents';
 import ReactQueryProvider from './ReactQueryProvider';
 import ReduxProvider from './ReduxProvider';
+import SplashProvider from './SplashProvider';
 import TamaguiProvider from './TamaguiProvider';
 
 CacheManager.config = {
@@ -19,17 +20,19 @@ CacheManager.config = {
 
 const AppProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <ReduxProvider>
-      <ReactQueryProvider>
-        <TamaguiProvider>
-          <NavigationContainer>
-            <CommonEvents>
-              <Suspense>{children}</Suspense>
-            </CommonEvents>
-          </NavigationContainer>
-        </TamaguiProvider>
-      </ReactQueryProvider>
-    </ReduxProvider>
+    <SplashProvider>
+      <ReduxProvider>
+        <ReactQueryProvider>
+          <TamaguiProvider>
+            <NavigationContainer>
+              <CommonEvents>
+                <Suspense>{children}</Suspense>
+              </CommonEvents>
+            </NavigationContainer>
+          </TamaguiProvider>
+        </ReactQueryProvider>
+      </ReduxProvider>
+    </SplashProvider>
   );
 };
 

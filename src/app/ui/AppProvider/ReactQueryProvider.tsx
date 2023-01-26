@@ -1,11 +1,11 @@
-import { FC, PropsWithChildren } from 'react';
+import React, { FC, PropsWithChildren } from 'react';
 
 import NetInfo from '@react-native-community/netinfo';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { QueryClient, onlineManager } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
-import { AsyncStorage, ONE_HOUR } from '@shared/lib';
+import { AsyncStorage, ONE_HOUR, useSplash } from '@shared/lib';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,6 +44,16 @@ if (__DEV__) {
 }
 
 const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { onModuleInitialized } = useSplash();
+
+  const onCacheRestored = () => {
+    queryClient
+      .resumePausedMutations()
+      .then(() => queryClient.invalidateQueries());
+
+    onModuleInitialized('cache');
+  };
+
   return (
     <PersistQueryClientProvider
       client={queryClient}
@@ -52,11 +62,7 @@ const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
         persister: asyncPersist,
         buster: 'kill-cache',
       }}
-      onSuccess={() =>
-        queryClient
-          .resumePausedMutations()
-          .then(() => queryClient.invalidateQueries())
-      }>
+      onSuccess={onCacheRestored}>
       {children}
     </PersistQueryClientProvider>
   );
