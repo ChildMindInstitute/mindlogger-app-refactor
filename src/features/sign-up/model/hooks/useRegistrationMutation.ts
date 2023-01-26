@@ -1,13 +1,14 @@
-import { useLoginMutation } from '@app/entities/identity';
-import { useSignUpMutation } from '@app/entities/identity';
-import { BaseError } from '@app/shared/api';
-import { useAppDispatch } from '@app/shared/lib';
-
-import { actions, storeTokens } from '../';
+import {
+  useLoginMutation,
+  useSignUpMutation,
+  IdentityModel,
+} from '@entities/identity';
+import { SessionModel } from '@entities/session';
+import { useAppDispatch } from '@shared/lib';
 
 type UseRegistrationReturn = {
   isLoading: boolean;
-  error?: BaseError | null;
+  error?: ReturnType<typeof useSignUpMutation>['error'];
   mutate: ReturnType<typeof useSignUpMutation>['mutate'];
 };
 
@@ -22,14 +23,11 @@ export const useRegistrationMutation = (
     error: loginError,
   } = useLoginMutation({
     onSuccess: (response, { password }) => {
-      const { user, token } = response.data.result;
+      const { user, token: session } = response.data.result;
 
-      dispatch(actions.onAuthSuccess(user));
+      dispatch(IdentityModel.actions.onAuthSuccess(user));
 
-      storeTokens({
-        ...token,
-        password,
-      });
+      SessionModel.storeSession(session, { encryptWithKey: password });
 
       if (onSuccess) {
         onSuccess();

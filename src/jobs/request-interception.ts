@@ -1,11 +1,11 @@
+import { SessionModel } from '@entities/session';
 import { httpService } from '@shared/api';
-import { createJob, TokenStorage } from '@shared/lib';
+import { createJob } from '@shared/lib';
 
 export default createJob(() => {
   httpService.interceptors.request.use(
     config => {
-      const accessToken = TokenStorage.getString('accessToken');
-      const tokenType = TokenStorage.getString('tokenType');
+      const { accessToken, tokenType } = SessionModel.getSession();
 
       if (accessToken && tokenType) {
         config.headers.Authorization = `${tokenType} ${accessToken}`;

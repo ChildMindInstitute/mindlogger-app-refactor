@@ -1,3 +1,3 @@
-import { SignUpForm } from './ui/SignUpForm';
-
-export { SignUpForm };
+export * from './ui';
+export * as SignUpModel from './model';
+export * from './validation';

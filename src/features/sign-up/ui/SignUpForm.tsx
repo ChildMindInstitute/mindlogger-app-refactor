@@ -6,11 +6,11 @@ import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useAppForm } from '@app/shared/lib';
-import { IdentityModel } from '@entities/identity';
 import { Text, Box, BoxProps, YStack, XStack, SubmitButton } from '@shared/ui';
 import { InputField, CheckBoxField, ErrorMessage } from '@shared/ui/form';
 
-import { SignUpFormSchema } from '../model';
+import { SignUpModel } from '../';
+import { SignUpFormSchema } from '../validation';
 
 type Props = BoxProps & {
   onLoginSuccess: () => void;
@@ -23,7 +23,7 @@ const SignUpForm: FC<Props> = props => {
     isLoading,
     error,
     mutate: signUp,
-  } = IdentityModel.useRegistrationMutation(props.onLoginSuccess);
+  } = SignUpModel.useRegistrationMutation(props.onLoginSuccess);
 
   const { form, submit } = useAppForm(SignUpFormSchema, {
     defaultValues: {

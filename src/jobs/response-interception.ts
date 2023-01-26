@@ -1,7 +1,8 @@
 import { AxiosError, AxiosRequestConfig } from 'axios';
 
+import { SessionModel } from '@entities/session';
 import { httpService, IdentityService } from '@shared/api';
-import { createJob, TokenStorage, Emitter } from '@shared/lib';
+import { createJob, Emitter } from '@shared/lib';
 
 type RequestConfig = AxiosRequestConfig<any> & {
   retry?: boolean;
@@ -16,8 +17,7 @@ export default createJob(() => {
       if (error.response?.status === 401 && !config?.retry) {
         config.retry = true;
 
-        const refreshToken = TokenStorage.getString('refreshToken');
-        const tokenType = TokenStorage.getString('tokenType');
+        const { refreshToken, tokenType } = SessionModel.getSession();
 
         if (!refreshToken || !tokenType) {
           return Promise.reject(error);
@@ -26,8 +26,10 @@ export default createJob(() => {
         try {
           const { data } = await IdentityService.refreshToken({ refreshToken });
 
-          TokenStorage.set('accessToken', data.result.accessToken);
-          TokenStorage.set('refreshToken', data.result.refreshToken);
+          SessionModel.storeSession({
+            accessToken: data.result.accessToken,
+            refreshToken: data.result.refreshToken,
+          });
 
           config.headers.Authorization = `${tokenType} ${data.result.accessToken}`;
         } catch (e) {
