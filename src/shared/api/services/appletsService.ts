@@ -24,12 +24,20 @@ export type AppletsResponse = {
   applets: AppletDto[];
 };
 
+function wait(milliseconds: number) {
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+
 function appletsService() {
   return {
     getApplets() {
-      return Promise.resolve({
-        data: { applets: mockApplets },
-      } as AxiosResponse<AppletsResponse>);
+      const applets = mockApplets.sort(() => 0.5 - Math.random());
+
+      return wait(2000).then(() =>
+        Promise.resolve({
+          data: { applets },
+        } as AxiosResponse<AppletsResponse>),
+      );
     },
   };
 }

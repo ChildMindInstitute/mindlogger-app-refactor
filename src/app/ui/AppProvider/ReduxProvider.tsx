@@ -8,10 +8,12 @@ import {
 } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 
+import { AppletsRefreshModel } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
 
 const rootReducer = combineReducers({
   identity: IdentityModel.reducer,
+  appletsRefresh: AppletsRefreshModel.reducer,
 });
 
 export const reduxStore = configureStore({
