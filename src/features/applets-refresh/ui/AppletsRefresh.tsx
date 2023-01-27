@@ -1,35 +1,19 @@
-import { FC, useEffect } from 'react';
-import { RefreshControl } from 'react-native';
+import { FC } from 'react';
+import { RefreshControl, RefreshControlProps } from 'react-native';
 
-import { useIsFetching, useQueryClient } from '@tanstack/react-query';
+import { useRefreshQuery } from '@app/shared/lib';
 
-import { useAppDispatch, useAppSelector } from '@app/shared/lib';
-import { AppletsRefreshModel } from '@entities/applet';
+type Props = Omit<RefreshControlProps, 'refreshing' | 'onRefresh'>;
 
-const AppletsRefresh: FC = () => {
-  const client = useQueryClient();
-
-  const dispatch = useAppDispatch();
-
-  const refreshingByPullToRefresh = useAppSelector(
-    AppletsRefreshModel.selectors.selectRefreshingByPullToRefresh,
-  );
-
-  const isFetching = useIsFetching(['applets']) === 1;
-
-  useEffect(() => {
-    if (!isFetching && refreshingByPullToRefresh) {
-      dispatch(AppletsRefreshModel.actions.onPullToRefresh(false));
-    }
-  }, [refreshingByPullToRefresh, isFetching, dispatch]);
+const AppletsRefresh: FC<Props> = props => {
+  const { refresh, isRefreshing } = useRefreshQuery(['applets']);
 
   return (
     <RefreshControl
-      refreshing={isFetching && refreshingByPullToRefresh}
-      onRefresh={() => {
-        dispatch(AppletsRefreshModel.actions.onPullToRefresh(true));
-        client.invalidateQueries(['applets']);
-      }}
+      refreshing={isRefreshing}
+      onRefresh={refresh}
+      // Don't change. See https://github.com/facebook/react-native/issues/32144
+      {...props}
     />
   );
 };

@@ -2,21 +2,15 @@ import { FC } from 'react';
 
 import { XStack, YStack } from '@tamagui/stacks';
 
-import { useAppSelector } from '@app/shared/lib';
-import { ActivityIndicator, BoxProps } from '@app/shared/ui';
+import { Box, BoxProps } from '@app/shared/ui';
 import { LoadListError } from '@app/shared/ui';
 
 import AppletCard from './AppletCard';
 import { useAppletsQuery } from '../api';
 import { Applet } from '../lib';
-import { selectors } from '../model';
 
 const AppletList: FC<BoxProps> = props => {
-  const { isLoading, error, data, isFetching } = useAppletsQuery();
-
-  const refreshingByPullToRefresh = useAppSelector(
-    selectors.selectRefreshingByPullToRefresh,
-  );
+  const { error, data, isFetching } = useAppletsQuery();
 
   const hasError = !!error;
 
@@ -25,10 +19,6 @@ const AppletList: FC<BoxProps> = props => {
       ...dto,
     }),
   );
-
-  if (isLoading || (isFetching && !refreshingByPullToRefresh)) {
-    return <ActivityIndicator flex={1} size="large" />;
-  }
 
   if (hasError) {
     return (
@@ -39,11 +29,13 @@ const AppletList: FC<BoxProps> = props => {
   }
 
   return (
-    <YStack {...props} space={18}>
-      {applets?.map(x => (
-        <AppletCard applet={x} key={x.id} disabled={isFetching} />
-      ))}
-    </YStack>
+    <Box {...props}>
+      <YStack space={18}>
+        {applets?.map(x => (
+          <AppletCard applet={x} key={x.id} disabled={isFetching} />
+        ))}
+      </YStack>
+    </Box>
   );
 };
 

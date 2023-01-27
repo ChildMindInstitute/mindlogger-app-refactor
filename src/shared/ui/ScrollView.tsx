@@ -8,6 +8,7 @@ export default styled(
   ScrollView,
   {
     name: 'ScrollView',
+    scrollEnabled: true,
   },
   {
     isReactNative: true,
