@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://api-dev.cmiml.net/';
+import { API_URL } from '@shared/lib';
 
 const httpService = axios.create({
   baseURL: API_URL,

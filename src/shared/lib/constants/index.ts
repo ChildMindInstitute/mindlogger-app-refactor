@@ -1,5 +1,7 @@
 import { Platform } from 'react-native';
 
+import Config from 'react-native-config';
+
 import { Language } from '../types';
 
 export * from './colors';
@@ -7,8 +9,11 @@ export * from './colors';
 export const IS_IOS = Platform.OS === 'ios';
 export const IS_ANDROID = Platform.OS === 'android';
 
+export const ENV = Config.ENV;
+export const API_URL = Config.API_URL as string;
+
 // @ts-ignore
-export const AppVersion = process.env.VERSION;
+export const APP_VERSION = process.env.VERSION;
 
 export const ONE_MINUTE = 1000 * 60;
 export const ONE_HOUR = ONE_MINUTE * 60;
