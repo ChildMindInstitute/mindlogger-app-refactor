@@ -45,6 +45,7 @@ const AppletCard: FC<Props> = ({ applet, disabled }) => {
         borderWidth={3}
         borderColor="$lighterGrey"
         borderRadius={9}
+        opacity={disabled ? 0.5 : 1}
         backgroundColor="$white">
         <Box mr={14}>
           <RoundLogo
