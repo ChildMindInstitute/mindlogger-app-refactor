@@ -19,6 +19,9 @@
 		4E30A5942962BE4F0032C2A8 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */; };
 		4E30A5952962BE4F0032C2A8 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5852962BE4E0032C2A8 /* FontAwesome.ttf */; };
 		4E30A59B2962C3D60032C2A8 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
+		4E5906BB2987C41300A5D9E5 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
+		4E5906BC2987C41700A5D9E5 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
+		4E5906BD2987C41B00A5D9E5 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
 		4EBCD5B22971514E00D3C04C /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A06F0AA8D839FA54E4D2B85E /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B205B3DBF179F55ECEA5AA0B /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */; };
@@ -438,6 +441,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E5906BB2987C41300A5D9E5 /* Foundation.ttf in Resources */,
 				F87E175429771F200021550E /* AntDesign.ttf in Resources */,
 				F87E175529771F200021550E /* FontAwesome.ttf in Resources */,
 				F87E175629771F200021550E /* FontAwesome5_Regular.ttf in Resources */,
@@ -451,6 +455,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E5906BC2987C41700A5D9E5 /* Foundation.ttf in Resources */,
 				F87E176B29771F290021550E /* AntDesign.ttf in Resources */,
 				F87E176C29771F290021550E /* FontAwesome.ttf in Resources */,
 				F87E176D29771F290021550E /* FontAwesome5_Regular.ttf in Resources */,
@@ -464,6 +469,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E5906BD2987C41B00A5D9E5 /* Foundation.ttf in Resources */,
 				F87E178229771F310021550E /* AntDesign.ttf in Resources */,
 				F87E178329771F310021550E /* FontAwesome.ttf in Resources */,
 				F87E178429771F310021550E /* FontAwesome5_Regular.ttf in Resources */,
