@@ -22,6 +22,7 @@ export { default as RoundTextNotification } from './RoundTextNotification';
 export { default as LoadListError } from './LoadListError';
 export { default as ImageBackground } from './ImageBackground';
 export { default as ActivityIndicator } from './ActivityIndicator';
+export { default as NoListItemsYet } from './NoListItemsYet';
 
 export {
   StatusBar,

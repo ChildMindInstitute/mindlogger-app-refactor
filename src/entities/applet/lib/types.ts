@@ -1,17 +1,12 @@
 export type Applet = {
-  id: string;
+  id: number;
   image?: string;
-  name: string;
+  displayName: string;
   description: string;
   numberOverdue?: number;
 
   theme?: {
     logo?: string;
     smallLogo?: string;
-    backgroundImage?: string;
-    name?: string;
-    primaryColor?: string;
-    secondaryColor?: string;
-    tertiaryColor?: string;
   } | null;
 };
