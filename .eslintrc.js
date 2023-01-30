@@ -10,7 +10,6 @@ module.exports = {
         '@typescript-eslint/no-shadow': ['error'],
         'no-shadow': 'off',
         'no-undef': 'off',
-        indent: ['error', 2],
         'react/react-in-jsx-scope': 'off',
         'react/jsx-newline': [2, { prevent: true, allowMultilines: true }],
         'import/order': [
