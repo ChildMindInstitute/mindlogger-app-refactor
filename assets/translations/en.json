@@ -83,7 +83,8 @@
     "decline_title": "Decline"
   },
   "applet_list_component": {
-    "about_title": "About MindLogger"
+    "about_title": "About MindLogger",
+    "no_applets_yet": "No applets specified yet"
   },
   "applet_settings": {
     "applet_not_defined": "There isn't an applet defined.",

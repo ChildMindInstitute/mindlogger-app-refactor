@@ -50,7 +50,7 @@ const AppletCard: FC<Props> = ({ applet, disabled }) => {
         <Box mr={14}>
           <RoundLogo
             imageUri={applet.image}
-            letter={applet.name[0].toUpperCase()}
+            letter={applet.displayName[0].toUpperCase()}
           />
         </Box>
 
@@ -62,7 +62,7 @@ const AppletCard: FC<Props> = ({ applet, disabled }) => {
               fontWeight={IS_IOS ? '600' : '700'}
               fontSize={16}
               lineHeight={20}>
-              {applet.name}
+              {applet.displayName}
             </Text>
 
             {renderThemeLogo()}
