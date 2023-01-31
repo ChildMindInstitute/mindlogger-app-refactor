@@ -11,16 +11,11 @@ import { BaseError } from '../types';
 
 type QueryKey = [string, Record<string, unknown>?];
 
-const useBaseQuery = <
-  TQueryKey extends QueryKey,
-  TQueryFnData,
-  TError = BaseError,
-  TData = TQueryFnData,
->(
-  key: TQueryKey,
-  queryFn: QueryFunction<TQueryFnData, TQueryKey>,
+const useBaseQuery = <TQueryFnData, TError = BaseError, TData = TQueryFnData>(
+  key: QueryKey,
+  queryFn: QueryFunction<TQueryFnData, QueryKey>,
   options?: Omit<
-    UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+    UseQueryOptions<TQueryFnData, TError, TData, QueryKey>,
     'queryKey' | 'queryFn'
   >,
 ) => {

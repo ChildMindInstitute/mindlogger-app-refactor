@@ -37,12 +37,9 @@ export type QueryOptions<
   TFetchFn extends AnyPromiseFn,
   TData = Awaited<ReturnType<TFetchFn>>,
   TQueryFnData = Awaited<ReturnType<TFetchFn>>,
-  TQueryKey extends QueryKey = FnParams<TFetchFn> extends undefined
-    ? [string]
-    : [string, FnParams<TFetchFn>],
   TError = BaseError,
 > = Omit<
-  UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+  UseQueryOptions<TQueryFnData, TError, TData, QueryKey>,
   'queryKey' | 'queryFn'
 >;
 
