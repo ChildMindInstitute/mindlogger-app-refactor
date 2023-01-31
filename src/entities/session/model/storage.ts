@@ -1,10 +1,8 @@
-import { MMKV } from 'react-native-mmkv';
+import { createSecureStorage } from '@app/shared/lib';
 
 import { Session } from './types';
 
-const storage = new MMKV({
-  id: 'session-storage',
-});
+const storage = createSecureStorage('session-storage');
 
 type Listener = (...args: any[]) => any;
 
@@ -52,10 +50,6 @@ function SessionStorage() {
   return {
     getSession,
     setSession,
-
-    encrypt(key: string) {
-      storage.recrypt(key);
-    },
 
     clearAll() {
       storage.clearAll();

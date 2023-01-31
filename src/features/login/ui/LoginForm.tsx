@@ -26,12 +26,12 @@ const LoginForm: FC<Props> = props => {
     error,
     isLoading,
   } = useLoginMutation({
-    onSuccess: (response, { password }) => {
+    onSuccess: response => {
       const { user, token: session } = response.data.result;
 
       dispatch(IdentityModel.actions.onAuthSuccess(user));
 
-      SessionModel.storeSession(session, { encryptWithKey: password });
+      SessionModel.storeSession(session);
 
       props.onLoginSuccess();
     },

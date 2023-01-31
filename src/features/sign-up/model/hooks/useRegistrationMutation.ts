@@ -22,12 +22,12 @@ export const useRegistrationMutation = (
     mutate: login,
     error: loginError,
   } = useLoginMutation({
-    onSuccess: (response, { password }) => {
+    onSuccess: response => {
       const { user, token: session } = response.data.result;
 
       dispatch(IdentityModel.actions.onAuthSuccess(user));
 
-      SessionModel.storeSession(session, { encryptWithKey: password });
+      SessionModel.storeSession(session);
 
       if (onSuccess) {
         onSuccess();
