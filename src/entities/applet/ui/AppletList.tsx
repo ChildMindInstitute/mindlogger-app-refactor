@@ -32,7 +32,7 @@ const AppletList: FC<BoxProps> = props => {
   if (isSuccess && !applets?.length) {
     return (
       <XStack flex={1} jc="center" ai="center">
-        <NoListItemsYet text="applet_list_component:no_applets_yet" />
+        <NoListItemsYet key="applet_list_component:no_applets_yet" />
       </XStack>
     );
   }
