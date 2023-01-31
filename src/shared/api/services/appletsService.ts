@@ -1,43 +1,28 @@
-import { AxiosResponse } from 'axios';
+import { Language } from '@app/shared/lib';
 
-import { mockApplets } from './mockApplets';
+import httpService from './httpService';
 
 type AppletDto = {
-  id: string;
+  id: number;
   image?: string;
-  name: string;
-  description: string;
+  displayName: string;
+  description: Record<Language, string>;
   numberOverdue?: number;
 
   theme?: {
     logo?: string;
     smallLogo?: string;
-    backgroundImage?: string;
-    name?: string;
-    primaryColor?: string;
-    secondaryColor?: string;
-    tertiaryColor?: string;
   } | null;
 };
 
 export type AppletsResponse = {
-  applets: AppletDto[];
+  results: AppletDto[];
 };
-
-function wait(milliseconds: number) {
-  return new Promise(resolve => setTimeout(resolve, milliseconds));
-}
 
 function appletsService() {
   return {
     getApplets() {
-      const applets = mockApplets.sort(() => 0.5 - Math.random());
-
-      return wait(2000).then(() =>
-        Promise.resolve({
-          data: { applets },
-        } as AxiosResponse<AppletsResponse>),
-      );
+      return httpService.get<AppletsResponse>('/applets');
     },
   };
 }

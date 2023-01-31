@@ -19,4 +19,5 @@ export const colors = {
   lightGreen: '#35FDB5',
   yellow: '#FFBD32',
   aqua: '#7FF7FF',
+  black: '#000',
 };

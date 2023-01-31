@@ -83,7 +83,8 @@
     "decline_title": "Refuser"
   },
   "applet_list_component": {
-    "about_title": "À propos de MindLogger"
+    "about_title": "À propos de MindLogger",
+    "no_applets_yet": "Aucune applet spécifiée pour le moment"
   },
   "applet_settings": {
     "applet_not_defined": "Aucune applet n'est définie.",

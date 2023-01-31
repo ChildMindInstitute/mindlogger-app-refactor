@@ -10,10 +10,10 @@ import ScrollView from './ScrollView';
 import Splash from './Splash';
 import StatusBar from './StatusBar';
 import SubmitButton from './SubmitButton';
+import Text from './Text';
 
 export { Image } from '@tamagui/image';
 export { YStack, XStack, ZStack } from '@tamagui/stacks';
-export { Text } from '@tamagui/core';
 export * from './Icons';
 
 export { default as MarkdownView } from './MarkdownView';
@@ -22,6 +22,7 @@ export { default as RoundTextNotification } from './RoundTextNotification';
 export { default as LoadListError } from './LoadListError';
 export { default as ImageBackground } from './ImageBackground';
 export { default as ActivityIndicator } from './ActivityIndicator';
+export { default as NoListItemsYet } from './NoListItemsYet';
 
 export {
   StatusBar,
@@ -36,4 +37,5 @@ export {
   RowButton,
   SubmitButton,
   Splash,
+  Text,
 };
