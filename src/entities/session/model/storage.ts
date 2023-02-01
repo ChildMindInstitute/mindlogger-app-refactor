@@ -6,31 +6,13 @@ const storage = createSecureStorage('session-storage');
 
 type Listener = (...args: any[]) => any;
 
-const isEqual = (
-  prevSession: Partial<Session>,
-  nextSession: Partial<Session>,
-) => {
-  return (
-    prevSession.accessToken === nextSession.accessToken &&
-    prevSession.refreshToken === nextSession.refreshToken &&
-    prevSession.tokenType === nextSession.tokenType
-  );
-};
-
 function SessionStorage() {
   let listeners: Listener[] = [];
-  let session = {} as Partial<Session>;
 
   function getSession() {
     const sessionKeys = storage.getString('sessionKeys');
 
-    if (sessionKeys) {
-      const newSession = JSON.parse(sessionKeys) as Partial<Session>;
-
-      session = isEqual(session, newSession) ? session : newSession;
-    }
-
-    return session;
+    return (sessionKeys ? JSON.parse(sessionKeys) : {}) as Partial<Session>;
   }
 
   function setSession(value: Partial<Session>) {
