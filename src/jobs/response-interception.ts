@@ -2,7 +2,7 @@ import { AxiosError, AxiosRequestConfig } from 'axios';
 
 import { SessionModel } from '@entities/session';
 import { httpService, IdentityService } from '@shared/api';
-import { createJob, Emitter } from '@shared/lib';
+import { createJob } from '@shared/lib';
 
 type RequestConfig = AxiosRequestConfig<any> & {
   retry?: boolean;
@@ -26,14 +26,12 @@ export default createJob(() => {
         try {
           const { data } = await IdentityService.refreshToken({ refreshToken });
 
-          SessionModel.storeSession({
-            accessToken: data.result.accessToken,
-            refreshToken: data.result.refreshToken,
-          });
+          SessionModel.storeAccessToken(data.result.accessToken);
+          SessionModel.storeRefreshToken(data.result.refreshToken);
 
           config.headers.Authorization = `${tokenType} ${data.result.accessToken}`;
         } catch (e) {
-          Emitter.emit('refresh-token-fail');
+          SessionModel.refreshTokenFailed();
           Promise.reject(e);
         }
 
