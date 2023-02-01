@@ -26,10 +26,8 @@ export default createJob(() => {
         try {
           const { data } = await IdentityService.refreshToken({ refreshToken });
 
-          SessionModel.storeSession({
-            accessToken: data.result.accessToken,
-            refreshToken: data.result.refreshToken,
-          });
+          SessionModel.storeAccessToken(data.result.accessToken);
+          SessionModel.storeRefreshToken(data.result.refreshToken);
 
           config.headers.Authorization = `${tokenType} ${data.result.accessToken}`;
         } catch (e) {
