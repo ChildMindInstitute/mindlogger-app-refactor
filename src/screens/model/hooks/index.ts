@@ -1,1 +1,2 @@
-export { default as useInitialRoute } from './useInitialRoute';
+export { default as useDefaultRoute } from './useDefaultRoute';
+export { default as useInitialRouteNavigation } from './useInitialRouteNavigation';

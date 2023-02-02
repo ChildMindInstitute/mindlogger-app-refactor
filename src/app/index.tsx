@@ -1,4 +1,4 @@
-import Screens from '@screens';
+import { RootNavigator } from '@screens';
 
 import localization from '@jobs/localization';
 import { jobRunner } from '@shared/lib';
@@ -10,7 +10,7 @@ jobRunner.runAll([localization]);
 const App = () => {
   return (
     <AppProvider>
-      <Screens />
+      <RootNavigator />
     </AppProvider>
   );
 };

@@ -25,6 +25,7 @@ export type AppletDetailsParamList = {
 };
 
 export type ScreenRoute = keyof RootStackParamList;
+export type ScreenParams = RootStackParamList[ScreenRoute];
 
 export type AppletDetailsScreenProps<T extends keyof AppletDetailsParamList> =
   CompositeScreenProps<
