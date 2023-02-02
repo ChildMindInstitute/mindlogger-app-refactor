@@ -10,16 +10,20 @@ import { useAppletsQuery } from '../api';
 import { Applet } from '../lib';
 
 const AppletList: FC<BoxProps> = props => {
-  const { error, data, isFetching, isSuccess } = useAppletsQuery();
+  const {
+    error,
+    data: applets,
+    isFetching,
+    isSuccess,
+  } = useAppletsQuery({
+    select: response =>
+      response.data.results.map<Applet>(dto => ({
+        ...dto,
+        description: dto.description.en,
+      })),
+  });
 
   const hasError = !!error;
-
-  const applets: Applet[] | undefined = data?.data?.results?.map<Applet>(
-    dto => ({
-      ...dto,
-      description: dto.description.en, // todo - consider if BE should return translations, move mapping to useAppletsQuery
-    }),
-  );
 
   if (hasError) {
     return (

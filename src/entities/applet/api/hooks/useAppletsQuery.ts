@@ -1,11 +1,11 @@
-import { QueryOptions, useBaseQuery } from '@app/shared/api';
+import { QueryOptions, ReturnAwaited, useBaseQuery } from '@app/shared/api';
 import appletsService from '@app/shared/api/services/appletsService';
 
-type Options = QueryOptions<typeof appletsService.getApplets>;
+type FetchFn = typeof appletsService.getApplets;
+type Options<TData> = QueryOptions<FetchFn, TData>;
 
-export const useAppletsQuery = (options?: Options) => {
-  return useBaseQuery(['applets'], appletsService.getApplets, {
-    ...options,
-    // todo - add select/map here
-  });
+export const useAppletsQuery = <TData = ReturnAwaited<FetchFn>>(
+  options?: Options<TData>,
+) => {
+  return useBaseQuery(['applets'], appletsService.getApplets, options);
 };
