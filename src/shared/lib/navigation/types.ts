@@ -9,6 +9,7 @@ export type RootStackParamList = {
   ChangeLanguage: undefined;
   ForgotPassword: undefined;
   Applets: undefined;
+  ActivityList: undefined;
   AppletDetails: { appletId: string };
   Settings: undefined;
   ChangePassword: undefined;
