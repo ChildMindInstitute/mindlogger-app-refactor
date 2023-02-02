@@ -1,12 +1,15 @@
-import { useSyncExternalStore } from 'react';
+import { useMMKVObject } from 'react-native-mmkv';
 
-import { memoizeSession } from '../../lib';
-import storage from '../storage';
-
-const getSession = memoizeSession(storage.getSession);
+import { sessionService } from '../../lib';
+import { Session } from '../../types';
 
 function useSession() {
-  return useSyncExternalStore(storage.subscribe, getSession);
+  const [session] = useMMKVObject<Session>(
+    'sessionKeys',
+    sessionService.getStorage(),
+  );
+
+  return session;
 }
 
 export default useSession;
