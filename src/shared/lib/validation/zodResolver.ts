@@ -85,7 +85,6 @@ const zodResolver: Resolver = (schema, schemaOptions, resolverOptions = {}) => {
           errors: {},
         };
       } else {
-        console.log(error);
         return {
           values: {},
           errors: toNestError(
