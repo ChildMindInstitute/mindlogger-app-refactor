@@ -3,8 +3,8 @@ import { StyleSheet } from 'react-native';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { RootStackParamList } from '@app/shared/lib';
 import { ActivityGroupList } from '@app/widgets/activity-group';
+import { RootStackParamList } from '@screens/config';
 import { Box, ImageBackground, ScrollView } from '@shared/ui';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ActivityList'>;

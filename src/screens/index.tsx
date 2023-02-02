@@ -1,55 +1,38 @@
 import { TouchableOpacity } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import {
-  createNativeStackNavigator,
-  NativeStackNavigationProp,
-} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
 import { APP_VERSION, colors, ENV } from '@app/shared/lib';
-import { RootStackParamList } from '@shared/lib/navigation';
 import { Text, CloseIcon, UserProfileIcon, HomeIcon } from '@shared/ui';
 
-import AboutScreen from './AboutScreen';
-import ActivityListScreen from './ActivityListScreen';
-import AppletsScreen from './AppletsScreen';
-import ChangeLanguageScreen from './ChangeLanguageScreen';
-import ChangePasswordScreen from './ChangePasswordScreen';
-import ForgotPasswordScreen from './ForgotPasswordScreen';
-import LoginScreen from './LoginScreen';
-import SettingsScreen from './SettingsScreen';
-import SignUpScreen from './SignUpScreen';
+import { getScreenOptions, RootStackParamList } from './config';
+import { useInitialRoute } from './model';
+import {
+  AppletsScreen,
+  ChangeLanguageScreen,
+  ForgotPasswordScreen,
+  LoginScreen,
+  SignUpScreen,
+  AboutScreen,
+  ActivityListScreen,
+  ChangePasswordScreen,
+  SettingsScreen,
+} from './ui';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-
-type ScreenOptions = {
-  navigation: NativeStackNavigationProp<RootStackParamList>;
-};
-
-const screenOptions = ({ navigation }: ScreenOptions) => {
-  return {
-    headerStyle: {
-      backgroundColor: colors.primary,
-    },
-    headerTitleStyle: {
-      color: colors.white,
-    },
-    headerShadowVisible: false,
-    headerLeft: () => (
-      <Text onPress={navigation.goBack} mr={24}>
-        <CloseIcon color={colors.white} size={22} />
-      </Text>
-    ),
-  };
-};
 
 export default () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
+  const initialRoute = useInitialRoute();
+
   return (
-    <Stack.Navigator screenOptions={screenOptions}>
+    <Stack.Navigator
+      screenOptions={getScreenOptions}
+      initialRouteName={initialRoute}>
       <Stack.Screen
         options={{ headerShown: false }}
         name="Login"

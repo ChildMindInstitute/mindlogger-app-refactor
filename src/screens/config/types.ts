@@ -24,6 +24,8 @@ export type AppletDetailsParamList = {
   About: undefined;
 };
 
+export type ScreenRoute = keyof RootStackParamList;
+
 export type AppletDetailsScreenProps<T extends keyof AppletDetailsParamList> =
   CompositeScreenProps<
     BottomTabScreenProps<AppletDetailsParamList, T>,
