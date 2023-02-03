@@ -8,7 +8,6 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { APP_VERSION, colors, ENV } from '@app/shared/lib';
-import SettingsScreen from '@screens/SettingsScreen';
 import { RootStackParamList } from '@shared/lib/navigation';
 import { Text, CloseIcon, UserProfileIcon } from '@shared/ui';
 
@@ -18,6 +17,7 @@ import ChangeLanguageScreen from './ChangeLanguageScreen';
 import ChangePasswordScreen from './ChangePasswordScreen';
 import ForgotPasswordScreen from './ForgotPasswordScreen';
 import LoginScreen from './LoginScreen';
+import SettingsScreen from './SettingsScreen';
 import SignUpScreen from './SignUpScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
