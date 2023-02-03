@@ -40,6 +40,7 @@ const MarkdownView: FC<Props> = ({
     <Markdown
       rules={rules}
       onLinkPress={onLinkPress}
+      mergeStyle
       markdownit={markdownItInstance}
       style={markdownStyle}>
       {content.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2')}

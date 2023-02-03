@@ -1,8 +1,12 @@
 import { StyleSheet } from 'react-native';
 
-import { RenderRules } from 'react-native-markdown-display';
+import {
+  RenderRules,
+  renderRules as defaultRenderRules,
+} from 'react-native-markdown-display';
 
-import { XStack } from '@shared/ui';
+import { colors } from '@shared/lib';
+import { Box, Text } from '@shared/ui';
 
 const localStyles = StyleSheet.create({
   alignLeftContainer: {
@@ -20,29 +24,83 @@ const localStyles = StyleSheet.create({
   underline: {
     textDecorationLine: 'underline',
   },
+  text: {
+    flexDirection: 'row',
+  },
+  markedText: {
+    backgroundColor: 'yellow',
+  },
+  primaryText: {
+    color: colors.primary,
+  },
 });
 
 const markDownRules: RenderRules = {
   'container_hljs-left': (node, children) => {
     return (
-      <XStack key={node.key} style={localStyles.alignLeftContainer}>
+      <Box key={node.key} style={localStyles.alignLeftContainer}>
         {children}
-      </XStack>
+      </Box>
     );
   },
   'container_hljs-center': (node, children) => {
     return (
-      <XStack key={node.key} style={localStyles.alignCenterContainer}>
+      <Box key={node.key} style={localStyles.alignCenterContainer}>
         {children}
-      </XStack>
+      </Box>
     );
   },
   'container_hljs-right': (node, children) => {
     return (
-      <XStack key={node.key} style={localStyles.alignRightContainer}>
+      <Box key={node.key} style={localStyles.alignRightContainer}>
         {children}
-      </XStack>
+      </Box>
     );
+  },
+  text: (node, children, parent, styles, inheritedStyles = {}) => {
+    let additionalStyles = {};
+    let updatedNodeContent = node.content;
+    if (node.content.startsWith('++') && node.content.endsWith('++')) {
+      additionalStyles = localStyles.underline;
+    }
+    if (node.content.startsWith('==') && node.content.endsWith('==')) {
+      updatedNodeContent = node.content.replace(/[=]=/g, '');
+      additionalStyles = localStyles.markedText;
+    }
+    if (node.content?.includes('[blue]')) {
+      additionalStyles = localStyles.primaryText;
+      updatedNodeContent = node.content.replace('[blue]', '');
+    }
+    return (
+      <Text
+        key={node.key}
+        style={[
+          inheritedStyles,
+          styles.text,
+          localStyles.text,
+          { ...additionalStyles },
+        ]}>
+        {updatedNodeContent}
+      </Text>
+    );
+  },
+  paragraph: (node, children, parents, styles) => {
+    let customContainerTagExists = false;
+
+    for (let parent of parents) {
+      const { type } = parent;
+      if (type.includes('container_hljs')) {
+        customContainerTagExists = true;
+        break;
+      }
+    }
+
+    if (customContainerTagExists) {
+      return <Box key={node.key}>{children}</Box>;
+    }
+
+    // @ts-ignore
+    return defaultRenderRules.paragraph(node, children, parents, styles);
   },
 };
 
