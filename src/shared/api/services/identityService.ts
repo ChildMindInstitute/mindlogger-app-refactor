@@ -20,6 +20,11 @@ type PasswordRecoveryRequest = {
   email: string;
 };
 
+type ChangePasswordRequest = {
+  password: string;
+  prev_password: string;
+};
+
 export type LoginResponse = SuccessfulResponse<{
   token: {
     accessToken: string;
@@ -50,6 +55,8 @@ export type SignUpResponse = SuccessfulEmptyResponse;
 
 export type PasswordRecoveryResponse = SuccessfulEmptyResponse;
 
+export type ChangePasswordResponse = SuccessfulEmptyResponse;
+
 function IdentityService() {
   return {
     login(request: LoginRequest) {
@@ -70,6 +77,12 @@ function IdentityService() {
     refreshToken(request: RefreshTokenRequest) {
       return httpService.post<RefreshTokenResponse>(
         '/auth/token/refresh',
+        request,
+      );
+    },
+    changePassword(request: ChangePasswordRequest) {
+      return httpService.put<ChangePasswordResponse>(
+        '/users/me/password',
         request,
       );
     },

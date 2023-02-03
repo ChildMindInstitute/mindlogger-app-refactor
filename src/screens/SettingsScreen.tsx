@@ -16,6 +16,10 @@ const SettingsScreen: FC = () => {
     navigate('ChangeLanguage');
   };
 
+  const navigateToChangePasswordScreen = () => {
+    navigate('ChangePassword');
+  };
+
   return (
     <Box flex={1} bg="$secondary">
       <StatusBar />
@@ -28,7 +32,7 @@ const SettingsScreen: FC = () => {
           </YStack>
 
           <RowButton
-            onPress={navigateToAppLanguage}
+            onPress={navigateToChangePasswordScreen}
             title={t('settings:change_pass')}
           />
 

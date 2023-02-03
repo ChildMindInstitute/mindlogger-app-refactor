@@ -8,12 +8,14 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { APP_VERSION, colors, ENV } from '@app/shared/lib';
+import SettingsScreen from '@screens/SettingsScreen';
 import { RootStackParamList } from '@shared/lib/navigation';
 import { Text, CloseIcon, UserProfileIcon } from '@shared/ui';
 
 import AboutScreen from './AboutScreen';
 import AppletsScreen from './AppletsScreen';
 import ChangeLanguageScreen from './ChangeLanguageScreen';
+import ChangePasswordScreen from './ChangePasswordScreen';
 import ForgotPasswordScreen from './ForgotPasswordScreen';
 import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
@@ -52,6 +54,9 @@ export default () => {
         name="Login"
         component={LoginScreen}
       />
+
+      <Stack.Screen name="Settings" component={SettingsScreen} />
+      <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
 
       <Stack.Screen
         name="ForgotPassword"
