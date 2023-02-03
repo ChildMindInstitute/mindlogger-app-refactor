@@ -14,8 +14,10 @@ import { Text, CloseIcon, UserProfileIcon } from '@shared/ui';
 import AboutScreen from './AboutScreen';
 import AppletsScreen from './AppletsScreen';
 import ChangeLanguageScreen from './ChangeLanguageScreen';
+import ChangePasswordScreen from './ChangePasswordScreen';
 import ForgotPasswordScreen from './ForgotPasswordScreen';
 import LoginScreen from './LoginScreen';
+import SettingsScreen from './SettingsScreen';
 import SignUpScreen from './SignUpScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -52,6 +54,9 @@ export default () => {
         name="Login"
         component={LoginScreen}
       />
+
+      <Stack.Screen name="Settings" component={SettingsScreen} />
+      <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
 
       <Stack.Screen
         name="ForgotPassword"
