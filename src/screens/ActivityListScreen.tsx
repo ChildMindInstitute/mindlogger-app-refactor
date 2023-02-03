@@ -1,31 +1,26 @@
 import { FC } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+import { RootStackParamList } from '@app/shared/lib';
 import { ActivityGroupList } from '@app/widgets/activity-group';
-import { Box, ImageBackground, ScrollView, Text, XStack } from '@shared/ui';
+import { Box, ImageBackground, ScrollView } from '@shared/ui';
 
-const ActivityListScreen: FC = () => {
-  const { t } = useTranslation();
-  const { navigate } = useNavigation();
+type Props = NativeStackScreenProps<RootStackParamList, 'ActivityList'>;
 
+const ActivityListScreen: FC<Props> = props => {
   return (
     <Box bg="$secondary" flex={1}>
       <ImageBackground>
         <ScrollView contentContainerStyle={styles.scrollView}>
-          <Box flex={1} pt={12} pb={34}>
-            <ActivityGroupList flex={1} px={14} mb={28} />
-
-            <XStack jc="center">
-              <TouchableOpacity onPress={() => navigate('AboutApp')}>
-                <Text color="$primary" fontSize={16} fontWeight="700">
-                  {t('applet_list_component:about_title')}
-                </Text>
-              </TouchableOpacity>
-            </XStack>
-          </Box>
+          <ActivityGroupList
+            flex={1}
+            px={14}
+            pt={20}
+            pb={42}
+            appletId={props.route.params.appletId}
+          />
         </ScrollView>
       </ImageBackground>
     </Box>

@@ -24,6 +24,7 @@ for (let i = 0; i < 3; i++) {
   for (let j = 0; j < 5; j++) {
     activities.push({
       id: i * 100 + j,
+      showActivityFlowBadge: true,
       hasEventContext: true,
       isInActivityFlow: true,
       type: ActivityType.NotDefined,

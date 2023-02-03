@@ -26,9 +26,7 @@ const ActivityFlowStep: FC<Props> = props => {
       />
 
       <Text color="$darkGrey" opacity={hasOpacity ? 0.5 : 1}>
-        {`(${
-          activity.activityPositionInFlow! + 1
-        } of ${activity.numberOfActivitiesInFlow!}) ${
+        {`(${activity.activityPositionInFlow!} of ${activity.numberOfActivitiesInFlow!}) ${
           activity.activityFlowName
         }`}
       </Text>

@@ -4,6 +4,7 @@ export type ActivityListItem = {
   description: string;
   image?: string | null;
 
+  showActivityFlowBadge: boolean;
   isInActivityFlow: boolean;
   activityFlowName?: string | null;
   numberOfActivitiesInFlow?: number | null;

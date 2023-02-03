@@ -1,19 +1,57 @@
 import { FC } from 'react';
 
-import { Box, BoxProps, YStack } from '@app/shared/ui';
+import {
+  Box,
+  BoxProps,
+  YStack,
+  ActivityIndicator,
+  XStack,
+  NoListItemsYet,
+  LoadListError,
+} from '@app/shared/ui';
 
 import ActivityGroup from './ActivityGroup';
 import { useActivityGroups } from '../model';
 
-type Props = BoxProps;
+type Props = {
+  appletId: string;
+} & BoxProps;
 
 const ActivityGroupList: FC<Props> = props => {
-  const activityGroups = useActivityGroups();
+  let { groups, isSuccess, isLoading, error } = useActivityGroups(
+    props.appletId,
+  );
+
+  const hasError = !!error;
+
+  if (isLoading) {
+    return (
+      <Box flex={1} justifyContent="center">
+        <ActivityIndicator size="large" />
+      </Box>
+    );
+  }
+
+  if (hasError) {
+    return (
+      <XStack flex={1} jc="center" ai="center">
+        <LoadListError error="widget_error:error_text" />
+      </XStack>
+    );
+  }
+
+  if (isSuccess && !groups?.length) {
+    return (
+      <XStack flex={1} jc="center" ai="center">
+        <NoListItemsYet translationKey="activity_list_component:no_activities_yet" />
+      </XStack>
+    );
+  }
 
   return (
     <Box {...props}>
       <YStack space={12}>
-        {activityGroups.map(g => (
+        {groups?.map(g => (
           <ActivityGroup group={g} key={g.name} />
         ))}
       </YStack>

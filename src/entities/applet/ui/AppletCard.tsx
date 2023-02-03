@@ -41,7 +41,9 @@ const AppletCard: FC<Props> = ({ applet, disabled }) => {
 
   return (
     <TouchableOpacity
-      onPress={() => navigate('ActivityList')}
+      onPress={() =>
+        navigate('ActivityList', { appletId: applet.id.toString() })
+      }
       disabled={disabled}>
       <XStack
         position="relative"

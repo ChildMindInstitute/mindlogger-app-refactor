@@ -88,6 +88,9 @@
     "about_title": "About MindLogger",
     "no_applets_yet": "No applets specified yet"
   },
+  "activity_list_component": {
+    "no_activities_yet": "No activities specified yet"
+  },
   "applet_settings": {
     "applet_not_defined": "There isn't an applet defined.",
     "want_remove": "If you want to remove this applet, but keep your data, click below",
