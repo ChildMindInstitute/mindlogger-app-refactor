@@ -24,34 +24,14 @@ export type ActivityListItem = {
   timeToComplete?: { hours: number; minutes: number } | null;
 };
 
-export type ActivityListGroup = {
-  activities: Array<ActivityListItem>;
-  name: string;
-  type: ActivityGroupType;
-};
-
-export enum ActivityStatus {
+export const enum ActivityStatus {
   NotDefined = 0,
   InProgress = 1,
   Scheduled = 2,
   PastDue = 3,
 }
 
-export enum ActivityGroupType {
-  NotDefined = 0,
-  InProgress = 1,
-  Scheduled = 2,
-  Available = 3,
-}
-
-export const ActivityGroupTypeNames = {
-  [ActivityGroupType.NotDefined]: 'Not Defined',
-  [ActivityGroupType.InProgress]: 'additional:in_progress',
-  [ActivityGroupType.Scheduled]: 'additional:scheduled',
-  [ActivityGroupType.Available]: 'additional:available',
-};
-
-export enum ActivityType {
+export const enum ActivityType {
   NotDefined = 0,
   Flanker = 1,
 }

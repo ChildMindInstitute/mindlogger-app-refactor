@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import { FC } from 'react';
 
 import { styled } from '@tamagui/core';
@@ -28,42 +27,49 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
 
   const isStatusInProgress = activity.status === ActivityStatus.InProgress;
 
+  const hasSceduledAt =
+    isStatusScheduled && activity.hasEventContext && !activity.isTimeoutAllow;
+
+  const hasAvailableFromTo =
+    isStatusScheduled && activity.hasEventContext && activity.isTimeoutAllow;
+
+  const hasAvailableToOnly = isStatusPastDue;
+
+  const hasTimeToComplete =
+    (isStatusScheduled || isStatusPastDue || isStatusInProgress) &&
+    activity.isTimedActivityAllow &&
+    !!activity.timeToComplete;
+
   return (
     <Box {...props}>
-      {isStatusScheduled &&
-        activity.hasEventContext &&
-        !activity.isTimeoutAllow && (
-          <StatusLine>{`${t('activity_due_date:scheduled_at')} ${
-            activity.scheduledAt
-          }`}</StatusLine>
-        )}
+      {hasSceduledAt && (
+        <StatusLine>{`${t('activity_due_date:scheduled_at')} ${
+          activity.scheduledAt
+        }`}</StatusLine>
+      )}
 
-      {isStatusScheduled &&
-        activity.hasEventContext &&
-        activity.isTimeoutAllow && (
-          <StatusLine>
-            {`${t('activity_due_date:available')} ${activity.availableFrom} ${t(
-              'activity_due_date:to',
-            )} ${activity.availableTo}`}
-          </StatusLine>
-        )}
+      {hasAvailableFromTo && (
+        <StatusLine>
+          {`${t('activity_due_date:available')} ${activity.availableFrom} ${t(
+            'activity_due_date:to',
+          )} ${activity.availableTo}`}
+        </StatusLine>
+      )}
 
-      {isStatusPastDue && (
+      {hasAvailableToOnly && (
         <StatusLine>{`${t('activity_due_date:to')} ${
           activity.availableTo
         }`}</StatusLine>
       )}
 
-      {(isStatusScheduled || isStatusPastDue || isStatusInProgress) &&
-        activity.isTimedActivityAllow &&
-        !!activity.timeToComplete && (
-          <StatusLine>
-            {`${t(
-              'timed_activity:time_to_complete_hm',
-              activity.timeToComplete,
-            )}`}
-          </StatusLine>
-        )}
+      {hasTimeToComplete && (
+        <StatusLine>
+          {`${t(
+            'timed_activity:time_to_complete_hm',
+            activity.timeToComplete!,
+          )}`}
+        </StatusLine>
+      )}
     </Box>
   );
 };

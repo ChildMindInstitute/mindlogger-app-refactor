@@ -4,7 +4,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import { ActivityGroupList } from '@app/widgets/activity-list';
+import { ActivityGroupList } from '@app/widgets/activity-group';
 import { Box, ImageBackground, ScrollView, Text, XStack } from '@shared/ui';
 
 const ActivityListScreen: FC = () => {

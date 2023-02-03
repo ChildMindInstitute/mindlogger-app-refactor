@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
-import { ActivityGroup } from '@app/entities/activity';
 import { Box, BoxProps, YStack } from '@app/shared/ui';
 
-import { useActivityGroups } from '../model/hooks/useActivityGroups';
+import ActivityGroup from './ActivityGroup';
+import { useActivityGroups } from '../model';
 
 type Props = BoxProps;
 

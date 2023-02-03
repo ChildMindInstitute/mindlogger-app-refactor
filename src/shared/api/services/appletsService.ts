@@ -16,7 +16,7 @@ type AppletDto = {
 };
 
 export type AppletsResponse = {
-  results: AppletDto[];
+  result: AppletDto[];
 };
 
 function appletsService() {

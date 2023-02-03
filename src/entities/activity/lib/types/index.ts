@@ -1,1 +1,1 @@
-export * from './activityGroup';
+export * from './activityListItem';
