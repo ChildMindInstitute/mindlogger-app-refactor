@@ -3,18 +3,19 @@ import {
   UseQueryOptions,
   useQuery,
 } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import { DEFAULT_LANGUAGE, Language } from '@app/shared/lib';
 
 import { BaseError } from '../types';
 
-const useBaseQuery = <TResponse>(
-  key: string[],
-  queryFn: QueryFunction<AxiosResponse<TResponse, BaseError>>,
+type QueryKey = [string, Record<string, unknown>?];
+
+const useBaseQuery = <TQueryFnData, TError = BaseError, TData = TQueryFnData>(
+  key: QueryKey,
+  queryFn: QueryFunction<TQueryFnData, QueryKey>,
   options?: Omit<
-    UseQueryOptions<AxiosResponse<TResponse, BaseError>, BaseError>,
+    UseQueryOptions<TQueryFnData, TError, TData, QueryKey>,
     'queryKey' | 'queryFn'
   >,
 ) => {
@@ -40,7 +41,7 @@ const useBaseQuery = <TResponse>(
       }
 
       if (options?.onError) {
-        options?.onError(error);
+        options?.onError(error as TError);
       }
     },
   } as typeof options);

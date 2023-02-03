@@ -26,19 +26,32 @@ export type BaseError = {
   evaluatedMessage?: string;
 };
 
-type FuncParams<TFetchReturn extends (...args: any) => any> =
-  Parameters<TFetchReturn>[0];
+type AnyFn = (...args: any) => any;
+type AnyPromiseFn = (...args: any) => Promise<any>;
 
-export type QueryOptions<TFetchReturn extends (...args: any) => any> = Omit<
-  UseQueryOptions<Awaited<ReturnType<TFetchReturn>>, BaseError>,
+type FnParams<TFn extends AnyFn> = Parameters<TFn>[0];
+
+type QueryKey = [string, Record<string, unknown>?];
+
+export type QueryOptions<
+  TFetchFn extends AnyPromiseFn,
+  TData = Awaited<ReturnType<TFetchFn>>,
+  TQueryFnData = Awaited<ReturnType<TFetchFn>>,
+  TError = BaseError,
+> = Omit<
+  UseQueryOptions<TQueryFnData, TError, TData, QueryKey>,
   'queryKey' | 'queryFn'
 >;
 
-export type MutationOptions<TFetchReturn extends (...args: any) => any> = Omit<
+export type ReturnAwaited<TFetchReturn extends AnyPromiseFn> = Awaited<
+  ReturnType<TFetchReturn>
+>;
+
+export type MutationOptions<TFetchFn extends AnyPromiseFn> = Omit<
   UseMutationOptions<
-    Awaited<ReturnType<TFetchReturn>>,
+    Awaited<ReturnType<TFetchFn>>,
     BaseError,
-    FuncParams<TFetchReturn>
+    FnParams<TFetchFn>
   >,
   'queryKey' | 'queryFn'
 >;
