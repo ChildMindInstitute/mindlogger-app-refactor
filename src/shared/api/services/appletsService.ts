@@ -1,4 +1,5 @@
 import { Language } from '@app/shared/lib';
+import { AppletDetailsDto } from '@app/shared/lib/types';
 
 import httpService from './httpService';
 
@@ -16,13 +17,26 @@ type AppletDto = {
 };
 
 export type AppletsResponse = {
-  results: AppletDto[];
+  result: AppletDto[];
+};
+
+type AppletDetailsRequest = {
+  appletId: string;
+};
+
+export type AppletDetailsResponse = {
+  result: AppletDetailsDto;
 };
 
 function appletsService() {
   return {
     getApplets() {
       return httpService.get<AppletsResponse>('/applets');
+    },
+    getAppletDetails(request: AppletDetailsRequest) {
+      return httpService.get<AppletDetailsResponse>(
+        `/applets/${request.appletId}`,
+      );
     },
   };
 }

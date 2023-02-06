@@ -8,13 +8,15 @@
   },
   "activity": {
     "incorrect_answer": "Incorrect answer. Please try again",
-    "failed": "Failed"
+    "failed": "Failed",
+    "flanker_accuracy_warn": "*The timestamps collected for an android are not as accurate as iOS devices."
   },
   "activity_time": {
     "time_remaining": "Time Remaining"
   },
   "timed_activity": {
     "time_to_complete": "Time to complete",
+    "time_to_complete_hm": "Time to complete: {{hours}} hours and {{minutes}} minutes",
     "hours": "hours"
   },
   "activity_summary": {
@@ -85,6 +87,9 @@
   "applet_list_component": {
     "about_title": "About MindLogger",
     "no_applets_yet": "No applets specified yet"
+  },
+  "activity_list_component": {
+    "no_activities_yet": "No activities specified yet"
   },
   "applet_settings": {
     "applet_not_defined": "There isn't an applet defined.",

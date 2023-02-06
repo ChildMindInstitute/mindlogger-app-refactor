@@ -9,9 +9,10 @@ import { useTranslation } from 'react-i18next';
 
 import { APP_VERSION, colors, ENV } from '@app/shared/lib';
 import { RootStackParamList } from '@shared/lib/navigation';
-import { Text, CloseIcon, UserProfileIcon } from '@shared/ui';
+import { Text, CloseIcon, UserProfileIcon, HomeIcon } from '@shared/ui';
 
 import AboutScreen from './AboutScreen';
+import ActivityListScreen from './ActivityListScreen';
 import AppletsScreen from './AppletsScreen';
 import ChangeLanguageScreen from './ChangeLanguageScreen';
 import ChangePasswordScreen from './ChangePasswordScreen';
@@ -123,6 +124,26 @@ export default () => {
           ),
         }}
         component={AppletsScreen}
+      />
+
+      <Stack.Screen
+        name="ActivityList"
+        options={{
+          title: 'Applet 123',
+          headerStyle: {
+            backgroundColor: colors.blue,
+          },
+          headerTitleStyle: {
+            fontSize: 18,
+            color: colors.white,
+          },
+          headerLeft: () => (
+            <Text onPress={() => navigation.goBack()} mr={24}>
+              <HomeIcon color={colors.white} size={32} />
+            </Text>
+          ),
+        }}
+        component={ActivityListScreen}
       />
     </Stack.Navigator>
   );

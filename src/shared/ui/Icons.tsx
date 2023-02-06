@@ -28,3 +28,11 @@ export const UserIcon: FC<IconProps> = props => (
 export const UserProfileIcon: FC<IconProps> = props => (
   <FontAwesome name="user" {...props} />
 );
+
+export const HomeIcon: FC<IconProps> = props => (
+  <FontAwesome name="home" {...props} />
+);
+
+export const ChevronRightIcon: FC<IconProps> = props => (
+  <FontAwesome name="chevron-right" {...props} />
+);
