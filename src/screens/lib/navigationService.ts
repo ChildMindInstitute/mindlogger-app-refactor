@@ -4,7 +4,7 @@ import { InitialRoute } from './types';
 
 const storage = createSecureStorage('navigation-storage');
 
-function SessionService() {
+function NavigationService() {
   return {
     setInitialRoute(route: InitialRoute) {
       storage.set('initialRoute', JSON.stringify(route));
@@ -28,4 +28,4 @@ function SessionService() {
   };
 }
 
-export default SessionService();
+export default NavigationService();
