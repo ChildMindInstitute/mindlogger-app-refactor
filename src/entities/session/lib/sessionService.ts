@@ -1,14 +1,10 @@
-import { createSecureStorage } from '@app/shared/lib';
+import { createSecureStorage } from '@shared/lib';
 
-import { Session } from './types';
+import { Session } from '../types';
 
 const storage = createSecureStorage('session-storage');
 
-type Listener = (...args: any[]) => any;
-
-function SessionStorage() {
-  let listeners: Listener[] = [];
-
+function SessionService() {
   function getSession() {
     const sessionKeys = storage.getString('sessionKeys');
 
@@ -25,26 +21,20 @@ function SessionStorage() {
         ...value,
       }),
     );
-
-    listeners.forEach(listener => listener());
   }
 
   return {
     getSession,
     setSession,
 
-    clearAll() {
+    clearSession() {
       storage.clearAll();
     },
 
-    subscribe(listener: Listener) {
-      listeners.push(listener);
-
-      return () => {
-        listeners = listeners.filter(item => item !== listener);
-      };
+    getStorage() {
+      return storage;
     },
   };
 }
 
-export default SessionStorage();
+export default SessionService();
