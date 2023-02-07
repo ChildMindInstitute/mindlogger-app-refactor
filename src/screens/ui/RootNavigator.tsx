@@ -1,13 +1,15 @@
 import { TouchableOpacity } from 'react-native';
 
+import { useBackHandler } from '@react-native-community/hooks';
 import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
 import { APP_VERSION, colors, ENV } from '@app/shared/lib';
-import { Text, CloseIcon, UserProfileIcon, HomeIcon } from '@shared/ui';
+import { Text, UserProfileIcon, HomeIcon, CloseIcon } from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
+import { onBeforeAppClose } from '../lib';
 import { useDefaultRoute, useInitialRouteNavigation } from '../model';
 import {
   AppletsScreen,
@@ -30,6 +32,12 @@ export default () => {
   const defaultRoute = useDefaultRoute();
 
   useInitialRouteNavigation();
+
+  useBackHandler(() => {
+    onBeforeAppClose();
+
+    return true;
+  });
 
   return (
     <Stack.Navigator

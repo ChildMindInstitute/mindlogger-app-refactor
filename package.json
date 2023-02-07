@@ -31,6 +31,7 @@
     "@georstat/react-native-image-cache": "^2.3.0",
     "@hookform/resolvers": "^2.9.10",
     "@react-native-community/checkbox": "^0.5.14",
+    "@react-native-community/hooks": "^3.0.0",
     "@react-native-community/netinfo": "^9.3.7",
     "@react-navigation/bottom-tabs": "^6.5.4",
     "@react-navigation/native": "^6.1.13",
