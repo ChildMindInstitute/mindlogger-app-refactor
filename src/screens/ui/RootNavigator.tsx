@@ -5,8 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
-import { APP_VERSION, colors, ENV } from '@app/shared/lib';
-import { Text, UserProfileIcon, HomeIcon, CloseIcon } from '@shared/ui';
+import { APP_VERSION, colors, ENV } from '@shared/lib';
+import { Text, UserProfileIcon, HomeIcon } from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
 import { onBeforeAppClose } from '../lib';
@@ -97,7 +97,6 @@ export default () => {
       <Stack.Screen
         name="Applets"
         options={{
-          title: 'Applets',
           headerStyle: {
             backgroundColor: colors.lighterGrey2,
           },
@@ -105,11 +104,6 @@ export default () => {
             fontSize: 16,
             color: colors.tertiary,
           },
-          headerLeft: () => (
-            <Text onPress={() => navigation.navigate('Login')} mr={24}>
-              <CloseIcon color={colors.tertiary} size={22} />
-            </Text>
-          ),
           headerRight: () => (
             <TouchableOpacity onPress={() => {}}>
               <UserProfileIcon color={colors.tertiary} size={22} />
