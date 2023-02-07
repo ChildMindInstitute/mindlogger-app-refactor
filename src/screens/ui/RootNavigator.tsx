@@ -105,7 +105,7 @@ export default () => {
             color: colors.tertiary,
           },
           headerRight: () => (
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <UserProfileIcon color={colors.tertiary} size={22} />
             </TouchableOpacity>
           ),
