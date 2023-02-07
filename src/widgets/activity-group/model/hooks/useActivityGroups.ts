@@ -4,7 +4,7 @@ import {
   ActivityType,
 } from '@app/entities/activity';
 import { useAppletDetailsQuery } from '@app/entities/applet';
-import { AppletDetailsDto } from '@app/shared/lib';
+import { AppletDetailsDto } from '@app/shared/api';
 
 import groupMocks from './mocks';
 import {
@@ -77,25 +77,21 @@ export const useActivityGroups = (
     );
 
     const item: ActivityListItem = {
-      id: flowDto.id,
+      activityId: flowDto.id,
+      eventId: '',
       description: activityDto!.description.en,
       name: activityDto!.name,
       image: flowDto.image,
-      hasEventContext: false,
       isInActivityFlow: true,
-      activityFlowName: flowDto.name,
-      activityPositionInFlow: 1,
-      numberOfActivitiesInFlow: flowDto.items.length,
-      showActivityFlowBadge: true,
-      isTimedActivityAllow: false,
-      isTimeoutAccess: false,
-      isTimeoutAllow: false,
+      isTimerSet: false,
+      isAccessBeforeStartTime: false,
+      isTimeIntervalSet: false,
       status: ActivityStatus.NotDefined,
       type: ActivityType.NotDefined,
       availableFrom: null,
       availableTo: null,
       scheduledAt: null,
-      timeToComplete: null,
+      timeLeftToComplete: null,
     };
 
     activityItems.push(item);
@@ -103,25 +99,21 @@ export const useActivityGroups = (
 
   for (let activityDto of activityDtos) {
     const item: ActivityListItem = {
-      id: activityDto.id,
+      activityId: activityDto.id,
+      eventId: '',
       description: activityDto.description.en,
       name: activityDto.name,
       image: activityDto.image,
-      hasEventContext: false,
       isInActivityFlow: false,
-      activityFlowName: null,
-      activityPositionInFlow: null,
-      numberOfActivitiesInFlow: null,
-      showActivityFlowBadge: false,
-      isTimedActivityAllow: false,
-      isTimeoutAccess: false,
-      isTimeoutAllow: false,
+      isTimerSet: false,
+      isAccessBeforeStartTime: false,
+      isTimeIntervalSet: false,
       status: ActivityStatus.NotDefined,
       type: ActivityType.NotDefined,
       availableFrom: null,
       availableTo: null,
       scheduledAt: null,
-      timeToComplete: null,
+      timeLeftToComplete: null,
     };
 
     activityItems.push(item);

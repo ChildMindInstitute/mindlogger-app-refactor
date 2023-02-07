@@ -13,7 +13,7 @@ const ActivityList: FC<Props> = ({ activities }) => {
   return (
     <YStack space={10}>
       {activities.map(x => (
-        <Box key={x.id}>
+        <Box key={x.eventId}>
           <ActivityCard activity={x} disabled={false} />
         </Box>
       ))}

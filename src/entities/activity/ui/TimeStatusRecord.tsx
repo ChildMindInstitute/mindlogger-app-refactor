@@ -23,50 +23,46 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
 
   const isStatusScheduled = activity.status === ActivityStatus.Scheduled;
 
-  const isStatusPastDue = activity.status === ActivityStatus.PastDue;
+  const isStatusAvailable = activity.status === ActivityStatus.Available;
 
   const isStatusInProgress = activity.status === ActivityStatus.InProgress;
 
-  const hasSceduledAt =
-    isStatusScheduled && activity.hasEventContext && !activity.isTimeoutAllow;
+  const hasScheduledAt = isStatusScheduled && !!activity.scheduledAt; // todo - clarify if we can see activities for future
 
-  const hasAvailableFromTo =
-    isStatusScheduled && activity.hasEventContext && activity.isTimeoutAllow;
+  const hasAvailableFromTo = isStatusScheduled && activity.isTimeIntervalSet;
 
-  const hasAvailableToOnly = isStatusPastDue;
+  const hasAvailableToOnly = isStatusAvailable;
 
   const hasTimeToComplete =
-    (isStatusScheduled || isStatusPastDue || isStatusInProgress) &&
-    activity.isTimedActivityAllow &&
-    !!activity.timeToComplete;
+    isStatusInProgress && activity.isTimerSet && !!activity.timeLeftToComplete;
 
   return (
     <Box {...props}>
-      {hasSceduledAt && (
-        <StatusLine>{`${t('activity_due_date:scheduled_at')} ${
-          activity.scheduledAt
-        }`}</StatusLine>
+      {hasScheduledAt && (
+        <StatusLine>{`${t('activity_due_date:scheduled_at')} ${t(
+          activity.scheduledAt!,
+        )}`}</StatusLine>
       )}
 
       {hasAvailableFromTo && (
         <StatusLine>
-          {`${t('activity_due_date:available')} ${activity.availableFrom} ${t(
-            'activity_due_date:to',
-          )} ${activity.availableTo}`}
+          {`${t('activity_due_date:available')} ${t(
+            activity.availableFrom!,
+          )} ${t('activity_due_date:to')} ${t(activity.availableTo!)}`}
         </StatusLine>
       )}
 
       {hasAvailableToOnly && (
-        <StatusLine>{`${t('activity_due_date:to')} ${
-          activity.availableTo
-        }`}</StatusLine>
+        <StatusLine>{`${t('activity_due_date:to')} ${t(
+          activity.availableTo!,
+        )}`}</StatusLine>
       )}
 
       {hasTimeToComplete && (
         <StatusLine>
           {`${t(
             'timed_activity:time_to_complete_hm',
-            activity.timeToComplete!,
+            activity.timeLeftToComplete!,
           )}`}
         </StatusLine>
       )}

@@ -14,6 +14,9 @@ type Props = BoxProps & {
 const ActivityFlowStep: FC<Props> = props => {
   const { activity, hasOpacity } = props;
 
+  const { activityPositionInFlow, numberOfActivitiesInFlow, activityFlowName } =
+    activity.activityFlowDetails!;
+
   return (
     <XStack {...props}>
       <Image
@@ -26,9 +29,7 @@ const ActivityFlowStep: FC<Props> = props => {
       />
 
       <Text color="$darkGrey" opacity={hasOpacity ? 0.5 : 1}>
-        {`(${activity.activityPositionInFlow!} of ${activity.numberOfActivitiesInFlow!}) ${
-          activity.activityFlowName
-        }`}
+        {`(${activityPositionInFlow!} of ${numberOfActivitiesInFlow!}) ${activityFlowName}`}
       </Text>
     </XStack>
   );

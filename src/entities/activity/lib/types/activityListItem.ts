@@ -1,35 +1,41 @@
+import { HourMinute } from '@app/shared/lib';
+
 export type ActivityListItem = {
-  id: number;
+  activityId: string;
+  eventId: string;
+
   name: string;
   description: string;
   image?: string | null;
 
-  showActivityFlowBadge: boolean;
-  isInActivityFlow: boolean;
-  activityFlowName?: string | null;
-  numberOfActivitiesInFlow?: number | null;
-  activityPositionInFlow?: number | null;
-
   status: ActivityStatus;
+  isAccessBeforeStartTime: boolean;
   type: ActivityType;
 
-  isTimeoutAccess: boolean; // todo - rename
-  isTimeoutAllow: boolean; // todo - rename
-  isTimedActivityAllow: boolean; // todo - rename
-  hasEventContext: boolean;
+  isInActivityFlow: boolean;
+
+  activityFlowDetails?: {
+    showActivityFlowBadge: boolean;
+    activityFlowName: string;
+    numberOfActivitiesInFlow: number;
+    activityPositionInFlow: number;
+  } | null;
+
+  isTimeIntervalSet: boolean;
 
   scheduledAt?: string | null;
   availableFrom?: string | null;
-  availableTo?: string | null; // specific date or to "Midnight"
+  availableTo?: string | null;
 
-  timeToComplete?: { hours: number; minutes: number } | null;
+  isTimerSet: boolean;
+  timeLeftToComplete?: HourMinute | null;
 };
 
 export const enum ActivityStatus {
   NotDefined = 0,
   InProgress = 1,
   Scheduled = 2,
-  PastDue = 3,
+  Available = 3,
 }
 
 export const enum ActivityType {

@@ -26,7 +26,8 @@ const ActivityCard: FC<Props> = ({ activity, disabled }) => {
   const { t } = useTranslation();
 
   const hasOpacity =
-    activity.status === ActivityStatus.Scheduled && !activity.isTimeoutAccess;
+    activity.status === ActivityStatus.Scheduled &&
+    !activity.isAccessBeforeStartTime;
 
   return (
     <TouchableOpacity onPress={() => {}} disabled={disabled}>

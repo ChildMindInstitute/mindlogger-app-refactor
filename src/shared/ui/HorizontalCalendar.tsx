@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { CalendarProvider, ExpandableCalendar } from 'react-native-calendars';
 
-import { format } from '@shared/lib/utils';
+import { format } from '@app/shared/lib';
 import { Text, YStack, Box } from '@shared/ui/index';
 
 const HorizontalCalendar: FC = () => {
