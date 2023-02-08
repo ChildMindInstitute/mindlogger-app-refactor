@@ -1,16 +1,26 @@
-import { FC } from 'react';
+import { FC, useLayoutEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import { AppletList } from '@app/entities/applet';
-import { AppletsRefresh } from '@app/features/applets-refresh';
+import { useAppSelector } from '@app/shared/lib';
+import { AppletList } from '@entities/applet';
+import { IdentityModel } from '@entities/identity';
+import { AppletsRefresh } from '@features/applets-refresh';
 import { Box, ImageBackground, ScrollView, Text, XStack } from '@shared/ui';
 
 const AppletsScreen: FC = () => {
   const { t } = useTranslation();
-  const { navigate } = useNavigation();
+  const { navigate, setOptions } = useNavigation();
+
+  const userFirstName = useAppSelector(IdentityModel.selectors.selectFirstName);
+
+  useLayoutEffect(() => {
+    if (userFirstName) {
+      setOptions({ title: `${t('additional:hi')} ${userFirstName}!` });
+    }
+  }, [t, userFirstName, setOptions]);
 
   return (
     <Box bg="$secondary" flex={1}>

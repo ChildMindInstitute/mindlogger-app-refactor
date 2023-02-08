@@ -24,6 +24,7 @@ export { default as ImageBackground } from './ImageBackground';
 export { default as ActivityIndicator } from './ActivityIndicator';
 export { default as NoListItemsYet } from './NoListItemsYet';
 export { default as HorizontalCalendar } from './HorizontalCalendar';
+export { default as BackButton } from './BackButton';
 
 export {
   StatusBar,

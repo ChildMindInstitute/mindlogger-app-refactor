@@ -1,13 +1,15 @@
 import { TouchableOpacity } from 'react-native';
 
+import { useBackHandler } from '@react-native-community/hooks';
 import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
-import { APP_VERSION, colors, ENV } from '@app/shared/lib';
-import { Text, CloseIcon, UserProfileIcon, HomeIcon } from '@shared/ui';
+import { APP_VERSION, colors, ENV } from '@shared/lib';
+import { Text, UserProfileIcon, HomeIcon } from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
+import { onBeforeAppClose } from '../lib';
 import { useDefaultRoute, useInitialRouteNavigation } from '../model';
 import {
   AppletsScreen,
@@ -30,6 +32,12 @@ export default () => {
   const defaultRoute = useDefaultRoute();
 
   useInitialRouteNavigation();
+
+  useBackHandler(() => {
+    onBeforeAppClose();
+
+    return true;
+  });
 
   return (
     <Stack.Navigator
@@ -89,7 +97,6 @@ export default () => {
       <Stack.Screen
         name="Applets"
         options={{
-          title: 'Applets',
           headerStyle: {
             backgroundColor: colors.lighterGrey2,
           },
@@ -97,13 +104,8 @@ export default () => {
             fontSize: 16,
             color: colors.tertiary,
           },
-          headerLeft: () => (
-            <Text onPress={() => navigation.navigate('Login')} mr={24}>
-              <CloseIcon color={colors.tertiary} size={22} />
-            </Text>
-          ),
           headerRight: () => (
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <UserProfileIcon color={colors.tertiary} size={22} />
             </TouchableOpacity>
           ),
