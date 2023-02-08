@@ -4,13 +4,17 @@ import { StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
+import { IdentityModel } from '@app/entities/identity';
 import { LogoutRowButton } from '@features/logout';
-import { colors } from '@shared/lib';
+import { colors, useAppSelector } from '@shared/lib';
 import { YStack, Box, RowButton, UserIcon, Text } from '@shared/ui';
 
 const SettingsScreen: FC = () => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
+
+  const userName = useAppSelector(IdentityModel.selectors.selectFirstName);
+  const userEmail = useAppSelector(IdentityModel.selectors.selectEmail);
 
   const navigateToAppLanguage = () => {
     navigate('ChangeLanguage');
@@ -28,7 +32,8 @@ const SettingsScreen: FC = () => {
         <YStack>
           <YStack space="$2" my="$4" ai="center">
             <UserIcon color={colors.darkGrey} size={45} />
-            <Text>Username</Text>
+            <Text>{userName}</Text>
+            <Text>{userEmail}</Text>
           </YStack>
 
           <RowButton

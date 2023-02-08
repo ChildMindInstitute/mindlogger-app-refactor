@@ -58,6 +58,10 @@ export default () => {
             name="ForgotPassword"
             options={{
               title: t('login:forgot_password'),
+              contentStyle: {
+                borderTopColor: colors.grey,
+                borderTopWidth: 1,
+              },
             }}
             component={ForgotPasswordScreen}
           />
@@ -119,10 +123,19 @@ export default () => {
             component={ActivityListScreen}
           />
 
-          <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen
+            name="Settings"
+            options={{
+              title: t('settings:user_settings'),
+            }}
+            component={SettingsScreen}
+          />
 
           <Stack.Screen
             name="ChangePassword"
+            options={{
+              title: t('settings:change_pass'),
+            }}
             component={ChangePasswordScreen}
           />
         </>
