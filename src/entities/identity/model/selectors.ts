@@ -9,6 +9,8 @@ export const selectUser = createSelector(
   identity => identity.user,
 );
 
+export const selectEmail = createSelector(selectUser, user => user?.email);
+
 export const selectFirstName = createSelector(selectUser, user => {
   if (!user) {
     return undefined;
