@@ -35,3 +35,4 @@ export function refreshTokenFailed() {
 }
 
 export const getSession = sessionService.getSession;
+export const clearSession = sessionService.clearSession;
