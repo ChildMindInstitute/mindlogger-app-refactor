@@ -10,10 +10,10 @@ import {
   tokens as baseTokens,
 } from '@tamagui/theme-base';
 
-import { colors } from '@app/shared/lib';
+import { colors, IS_IOS } from '@app/shared/lib';
 
 const defaultFont = createFont({
-  family: 'System',
+  family: IS_IOS ? 'Avenir' : 'Roboto',
   size: {},
   lineHeight: {},
   letterSpacing: {},

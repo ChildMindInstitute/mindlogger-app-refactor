@@ -17,6 +17,7 @@ const ChangePasswordScreen: FC = () => {
         <Box flex={1} jc="flex-start">
           <ChangePasswordForm
             px="$8"
+            mt="$2"
             onChangePasswordSuccess={() => navigate('Settings')}
           />
         </Box>
