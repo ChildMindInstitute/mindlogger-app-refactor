@@ -27,7 +27,8 @@ const RowButton: FC<Props> = props => {
       ai="center"
       bbc="$lightGrey"
       bbw={1}
-      {...boxProps}>
+      {...boxProps}
+    >
       <Text>{title}</Text>
       <RightIcon color={colors.mediumGrey} size={15} />
     </XStack>
