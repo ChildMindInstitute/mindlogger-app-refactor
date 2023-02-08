@@ -1,23 +1,25 @@
-import { createStorage } from './createStorage';
+import { MMKV } from 'react-native-mmkv';
 
-const storage = createStorage('async-storage');
+class AsyncStorage {
+  constructor(private storage: MMKV) {}
 
-const AsyncStorage = {
-  getItem: (key: string): Promise<string | null> => {
-    const value = storage.getString(key) ?? null;
+  getItem(key: string): Promise<string | null> {
+    const value = this.storage.getString(key) ?? null;
 
     return Promise.resolve(value);
-  },
-  setItem: (key: string, value: string): Promise<unknown> => {
-    storage.set(key, value);
+  }
+
+  setItem(key: string, value: string): Promise<unknown> {
+    this.storage.set(key, value);
 
     return Promise.resolve();
-  },
-  removeItem: (key: string): Promise<void> => {
-    storage.delete(key);
+  }
+
+  removeItem(key: string): Promise<void> {
+    this.storage.delete(key);
 
     return Promise.resolve();
-  },
-};
+  }
+}
 
 export default AsyncStorage;
