@@ -22,6 +22,7 @@ import {
   ActivityListScreen,
   ChangePasswordScreen,
   SettingsScreen,
+  AppletBottomTabNavigator,
 } from '../ui';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -164,6 +165,8 @@ export default () => {
           component={AboutScreen}
         />
       </Stack.Group>
+
+      <Stack.Screen name="AppletDetails" component={AppletBottomTabNavigator} />
     </Stack.Navigator>
   );
 };

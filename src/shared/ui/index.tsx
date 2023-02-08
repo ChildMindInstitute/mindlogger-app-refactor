@@ -14,7 +14,7 @@ import Text from './Text';
 
 export { Image } from '@tamagui/image';
 export { YStack, XStack, ZStack } from '@tamagui/stacks';
-export * from './Icons';
+export * from './icons';
 
 export { default as MarkdownView } from './MarkdownView';
 export { default as RoundLogo } from './RoundLogo';
