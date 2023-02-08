@@ -1,6 +1,5 @@
 import { FC } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { IdentityModel } from '@app/entities/identity';
@@ -10,13 +9,11 @@ import { RowButton, KeyIcon } from '@shared/ui';
 
 const LogoutRowButton: FC = () => {
   const { t } = useTranslation();
-  const { navigate } = useNavigation();
   const dispatch = useAppDispatch();
 
   const logout = () => {
     dispatch(IdentityModel.actions.logout());
     SessionModel.clearSession();
-    navigate('Login');
   };
 
   return (
