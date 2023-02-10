@@ -37,13 +37,17 @@ class AppTimer extends TimerBase {
   private configureInterval(customDelay: number = this.delay) {
     this.timerId = setTimeout(() => {
       this.callback();
-      const timerTimeDiff = Date.now() - this.startTime!;
-      if (this.duration && timerTimeDiff > this.duration) {
+      if (this.isDurationOver()) {
         this.stop();
         return;
       }
       this.configureInterval();
     }, customDelay);
+  }
+
+  private isDurationOver(): boolean {
+    const timerTimeDiff = Date.now() - this.startTime!;
+    return !!(this.duration && timerTimeDiff > this.duration);
   }
 
   protected onBackground(): void {
@@ -56,8 +60,7 @@ class AppTimer extends TimerBase {
       return;
     }
 
-    const timerTimeDiff = Date.now() - this.startTime!;
-    if (this.duration && timerTimeDiff > this.duration) {
+    if (this.isDurationOver()) {
       this.stop();
     } else {
       const timeworkdiff =
