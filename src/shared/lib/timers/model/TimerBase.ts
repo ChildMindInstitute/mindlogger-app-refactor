@@ -1,32 +1,26 @@
 import { AppState, NativeEventSubscription } from 'react-native';
 
-let backgroundMoveTime: number | null = null;
-
 abstract class TimerBase {
   protected listener?: NativeEventSubscription;
   protected timerId?: number;
-  protected onFinish?: Function;
   protected callback: Function;
+  hasStarted: boolean = false;
 
-  constructor(
-    callback: Function,
-    startImmediately: boolean,
-    onFinish?: Function,
-  ) {
+  constructor(callback: Function, startImmediately: boolean) {
     this.callback = callback;
-    this.onFinish = onFinish;
 
     this.listener = AppState.addEventListener('change', nextAppState => {
       if (
         AppState.currentState.match(/inactive|background/) &&
         nextAppState === 'active'
       ) {
-        if (backgroundMoveTime) {
-          this.execute();
-          backgroundMoveTime = null;
+        if (this.onForeground) {
+          this.onForeground();
         }
       } else {
-        backgroundMoveTime = Date.now();
+        if (this.onBackground) {
+          this.onBackground();
+        }
       }
     });
 
@@ -35,25 +29,17 @@ abstract class TimerBase {
     }
   }
 
-  abstract execute(): void;
-
-  public start() {
-    this.callback();
-    this.execute();
+  protected start(): void {
+    this.hasStarted = true;
   }
 
-  public cancel() {
-    this.stopTimer();
-    if (this.onFinish) {
-      this.onFinish();
-    }
-  }
+  protected onForeground?(): void;
+  protected onBackground?(): void;
 
-  protected stopTimer() {
+  public stop(): void {
+    this.hasStarted = false;
     if (this.timerId) {
-      clearInterval(this.timerId);
       this.removeAppStateListener();
-      backgroundMoveTime = null;
     }
   }
 
