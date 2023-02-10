@@ -1,9 +1,10 @@
-import { ElementType } from 'react';
-
-import { RouteProp } from '@react-navigation/native';
+import {
+  BottomTabScreenProps,
+  BottomTabNavigationOptions,
+} from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { colors } from '@shared/lib';
+import { colors, IS_ANDROID } from '@shared/lib';
 import { DataIcon, SurveyIcon, AboutIcon, Text, CloseIcon } from '@shared/ui';
 
 import { RootStackParamList, AppletDetailsParamList } from './types';
@@ -12,15 +13,7 @@ type ScreenOptions = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
 };
 
-type BottomScreenOptions = {
-  route: RouteProp<AppletDetailsParamList>;
-};
-
-type TabBarLabelProps = {
-  color: string;
-  focused: boolean;
-  children: ElementType;
-};
+type BottomScreenOptions = BottomTabScreenProps<AppletDetailsParamList>;
 
 export const getScreenOptions = ({ navigation }: ScreenOptions) => {
   return {
@@ -39,7 +32,9 @@ export const getScreenOptions = ({ navigation }: ScreenOptions) => {
   };
 };
 
-export const appletDetailsScreenOptions = ({ route }: BottomScreenOptions) => {
+export const getAppletDetailsScreenOptions = ({
+  route,
+}: BottomScreenOptions): BottomTabNavigationOptions => {
   const tabBarIcon = (color: string) => {
     switch (route.name) {
       case 'Activities':
@@ -69,14 +64,15 @@ export const appletDetailsScreenOptions = ({ route }: BottomScreenOptions) => {
       backgroundColor: colors.lightBlue,
       paddingBottom: 20,
       paddingTop: 3,
+      ...(IS_ANDROID ? { height: 65, paddingBottom: 5 } : {}),
     },
-    tabBarLabel: ({ color, focused, children }: TabBarLabelProps) => {
-      return focused ? (
-        <Text color={color} fontWeight="bold" fontSize={11}>
-          {children}
-        </Text>
-      ) : (
-        <Text color={color} fontSize={12}>
+    tabBarLabel: ({ color, focused, children }) => {
+      return (
+        <Text
+          color={color}
+          fontWeight={focused ? 'bold' : 'normal'}
+          fontSize={11}
+        >
           {children}
         </Text>
       );
