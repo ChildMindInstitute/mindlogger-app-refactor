@@ -1,8 +1,8 @@
-import { HourMinute } from '@app/shared/lib';
+import { ActivityId, EventId, HourMinute } from '@app/shared/lib';
 
 export type ActivityListItem = {
-  activityId: string;
-  eventId: string;
+  activityId: ActivityId;
+  eventId: EventId;
 
   name: string;
   description: string;
@@ -23,9 +23,9 @@ export type ActivityListItem = {
 
   isTimeIntervalSet: boolean;
 
-  scheduledAt?: string | null;
-  availableFrom?: string | null;
-  availableTo?: string | null;
+  scheduledAt?: Date | null;
+  availableFrom?: Date | null;
+  availableTo?: Date | null;
 
   isTimerSet: boolean;
   timeLeftToComplete?: HourMinute | null;

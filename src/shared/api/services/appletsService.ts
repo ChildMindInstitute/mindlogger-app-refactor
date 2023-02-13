@@ -1,9 +1,16 @@
-import { Language } from '@app/shared/lib';
+import {
+  ActivityFlowId,
+  ActivityId,
+  AppletId,
+  EntityId,
+  HourMinute,
+  Language,
+} from '@app/shared/lib';
 
 import httpService from './httpService';
 
 export type ActivityRecordDto = {
-  id: string;
+  id: ActivityId;
   name: string;
   description: Record<Language, string>;
   image: string;
@@ -14,18 +21,18 @@ export type ActivityRecordDto = {
 };
 
 export type ActivityFlowRecordDto = {
-  id: string;
+  id: ActivityFlowId;
   name: string;
   image: string;
   description: Record<Language, string>;
   hideBadge: boolean;
   isSingleReport: boolean;
   ordering: boolean;
-  items: Array<{ activityId: string }>;
+  items: Array<{ activityId: ActivityId }>;
 };
 
 export type AppletDetailsDto = {
-  id: string;
+  id: AppletId;
   name?: string;
   image: string;
   displayName: string;
@@ -38,21 +45,21 @@ export type EventAvailabilityDto = {
   availabilityType: number;
   oneTimeCompletion: boolean;
   periodicityType: number;
-  timeFrom: { hours: number; minutes: number } | null;
-  timeTo: { hours: number; minutes: number } | null;
+  timeFrom: HourMinute | null;
+  timeTo: HourMinute | null;
   allowAccessBeforeFromTime: boolean;
   startDate?: string | null;
   endDate?: string | null;
-  selectedDay?: string | null;
+  selectedDate?: string | null;
 };
 
 export type ScheduleEventDto = {
-  activityId: number;
+  entityId: EntityId;
   availability: EventAvailabilityDto;
 };
 
 type AppletDto = {
-  id: number;
+  id: AppletId;
   image?: string;
   displayName: string;
   description: Record<Language, string>;
@@ -69,7 +76,7 @@ export type AppletsResponse = {
 };
 
 type AppletDetailsRequest = {
-  appletId: string;
+  appletId: AppletId;
 };
 
 export type AppletDetailsResponse = {

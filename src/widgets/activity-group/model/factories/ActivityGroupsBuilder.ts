@@ -5,12 +5,14 @@ import {
   ActivityStatus,
   ActivityType,
 } from '@app/entities/activity';
+import { AvailabilityType, EventModel } from '@app/entities/event';
 import {
-  convertToTimeOnNoun,
+  AppletId,
   getMsFromHours,
   getMsFromMinutes,
   HourMinute,
   isTimeInInterval,
+  MIDNIGHT_OF_ANY_DATE,
   MINUTES_IN_HOUR,
   MS_IN_MINUTE,
 } from '@app/shared/lib';
@@ -25,11 +27,22 @@ import {
   ActivityFlow,
   ActivityPipelineType,
   EntityProgress,
-  AppletId,
   ProgressPayload,
   ActivityFlowProgress,
-  AvailabilityType,
 } from '../../lib';
+
+/*
+  progress: EntityProgress:
+
+  If eventActivity is in-progress, then record exists and
+    startAt populated, endAt = null.
+    If eventActivity has been completed and it's not in-progress currently,
+    then startAt populated, endAt also populated and the values means exactly the
+    last progress (eventActivity could have been completed several times).
+    If eventActivity hasn't been ever completed then the record is absend or it's
+    values are both empty.
+
+*/
 
 const createActivityGroupsBuilder = (data: {
   allAppletActivities: Activity[];
@@ -104,7 +117,7 @@ const createActivityGroupsBuilder = (data: {
 
   const getTimeToComplete = (eventActivity: EventActivity): HourMinute => {
     const { event } = eventActivity;
-    const timer = event.timers.timer!;
+    const timer = event.timers!.timer!;
 
     const startedTime = getStartedDateTime(eventActivity);
 
@@ -117,7 +130,7 @@ const createActivityGroupsBuilder = (data: {
       const left: number = activityDuration - alreadyElapsed;
 
       const hours = Math.floor(left / MINUTES_IN_HOUR / MS_IN_MINUTE);
-      const minutes = (left - getMsFromHours(hours)) / MS_IN_MINUTE;
+      const minutes = Math.round((left - getMsFromHours(hours)) / MS_IN_MINUTE);
 
       return { hours, minutes };
     } else {
@@ -151,6 +164,14 @@ const createActivityGroupsBuilder = (data: {
     return item;
   };
 
+  const assignScheduledAt = (eventActivity: EventActivity): boolean => {
+    const date = EventModel.SheduledDateCalculator.calculate(
+      eventActivity.event,
+    );
+    eventActivity.event.scheduledAt = date;
+    return !!date;
+  };
+
   function buildInProgress(
     eventsActivities: Array<EventActivity>,
   ): ActivityListGroup {
@@ -159,13 +180,17 @@ const createActivityGroupsBuilder = (data: {
     const activityItems: Array<ActivityListItem> = [];
 
     for (let eventActivity of filtered) {
+      if (!assignScheduledAt(eventActivity)) {
+        continue;
+      }
+
       const item = createListItem(eventActivity);
 
       item.status = ActivityStatus.InProgress;
 
       const { event } = eventActivity;
-      item.isTimerSet = !!event.timers.timer;
-      item.timeLeftToComplete = event.timers.timer
+      item.isTimerSet = !!event.timers?.timer;
+      item.timeLeftToComplete = item.isTimerSet
         ? getTimeToComplete(eventActivity)
         : null;
 
@@ -195,35 +220,48 @@ const createActivityGroupsBuilder = (data: {
     const activityItems: Array<ActivityListItem> = [];
 
     for (let eventActivity of notInProgress) {
+      if (!assignScheduledAt(eventActivity)) {
+        continue;
+      }
+
       const { event } = eventActivity;
 
-      const typeIsAlwaysAvailable =
+      const isAlwaysAvailable =
         event.availability.availabilityType ===
         AvailabilityType.AlwaysAvailable;
 
+      const isScheduled =
+        event.availability.availabilityType ===
+        AvailabilityType.ScheduledAccess;
+
       const oneTimeCompletion = event.availability.oneTimeCompletion;
 
-      const endAt = getProgressRecord(eventActivity)?.endAt;
+      const progressRecord = getProgressRecord(eventActivity);
+
+      const endAt = progressRecord?.endAt;
 
       const completedToday = !!endAt && isToday(endAt);
 
-      const neverCompleted = !endAt;
+      const neverCompleted = !progressRecord;
 
-      const scheduledToday = isToday(event.scheduledAt);
+      const scheduledToday = isToday(event.scheduledAt!);
 
-      const isCurrentTimeInTimeWindow = isTimeInInterval(
-        { hours: now.getHours(), minutes: now.getMinutes() },
-        event.availability.timeFrom,
-        event.availability.timeTo,
-      );
+      const isCurrentTimeInTimeWindow = isScheduled
+        ? isTimeInInterval(
+            { hours: now.getHours(), minutes: now.getMinutes() },
+            event.availability.timeFrom!,
+            event.availability.timeTo!,
+          )
+        : null;
 
       const conditionForAlwaysAvailable =
-        typeIsAlwaysAvailable &&
+        isAlwaysAvailable &&
         ((oneTimeCompletion && neverCompleted) || !oneTimeCompletion);
 
       const conditionForScheduled =
+        isScheduled &&
         scheduledToday &&
-        now > event.scheduledAt &&
+        now > event.scheduledAt! &&
         isCurrentTimeInTimeWindow &&
         !completedToday;
 
@@ -239,11 +277,16 @@ const createActivityGroupsBuilder = (data: {
 
       const { event } = eventActivity;
 
-      const to = getNow();
-      to.setHours(event.availability.timeTo.hours);
-      to.setMinutes(event.availability.timeTo.minutes);
-
-      item.availableTo = convertToTimeOnNoun(to);
+      if (
+        event.availability.availabilityType === AvailabilityType.ScheduledAccess
+      ) {
+        const to = getNow();
+        to.setHours(event.availability.timeTo!.hours);
+        to.setMinutes(event.availability.timeTo!.minutes);
+        item.availableTo = to;
+      } else {
+        item.availableTo = MIDNIGHT_OF_ANY_DATE;
+      }
 
       activityItems.push(item);
     }
@@ -271,6 +314,10 @@ const createActivityGroupsBuilder = (data: {
     const now = getNow();
 
     for (let eventActivity of notInProgress) {
+      if (!assignScheduledAt(eventActivity)) {
+        continue;
+      }
+
       const { event } = eventActivity;
 
       const typeIsScheduled =
@@ -283,12 +330,12 @@ const createActivityGroupsBuilder = (data: {
 
       const completedToday = !!endAt && isToday(endAt);
 
-      const scheduledToday = isToday(event.scheduledAt);
+      const scheduledToday = isToday(event.scheduledAt!);
 
       if (
         typeIsScheduled &&
         scheduledToday &&
-        now < event.scheduledAt &&
+        now < event.scheduledAt! &&
         !accessBeforeTimeFrom &&
         !completedToday
       ) {
@@ -304,15 +351,15 @@ const createActivityGroupsBuilder = (data: {
       const { event } = eventActivity;
 
       const from = getNow();
-      from.setHours(event.availability.timeFrom.hours);
-      from.setMinutes(event.availability.timeFrom.minutes);
+      from.setHours(event.availability.timeFrom!.hours);
+      from.setMinutes(event.availability.timeFrom!.minutes);
 
       const to = getNow();
-      to.setHours(event.availability.timeTo.hours);
-      to.setMinutes(event.availability.timeTo.minutes);
+      to.setHours(event.availability.timeTo!.hours);
+      to.setMinutes(event.availability.timeTo!.minutes);
 
-      item.availableFrom = convertToTimeOnNoun(from);
-      item.availableTo = convertToTimeOnNoun(to);
+      item.availableFrom = from;
+      item.availableTo = to;
 
       activityItems.push(item);
     }

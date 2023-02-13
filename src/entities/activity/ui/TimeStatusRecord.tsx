@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
+import { convertToTimeOnNoun } from '@app/shared/lib';
 import { Box, BoxProps, Text } from '@app/shared/ui';
 
 import { ActivityListItem, ActivityStatus } from '../lib';
@@ -27,7 +28,7 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
 
   const isStatusInProgress = activity.status === ActivityStatus.InProgress;
 
-  const hasScheduledAt = isStatusScheduled && !!activity.scheduledAt; // todo - clarify if we can see activities for future
+  const hasScheduledAt = isStatusScheduled && !!activity.scheduledAt;
 
   const hasAvailableFromTo = isStatusScheduled && activity.isTimeIntervalSet;
 
@@ -36,24 +37,33 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
   const hasTimeToComplete =
     isStatusInProgress && activity.isTimerSet && !!activity.timeLeftToComplete;
 
+  const convert = (date: Date): string => {
+    const convertResult = convertToTimeOnNoun(date);
+    if (convertResult.translationKey) {
+      return t(convertResult.translationKey);
+    } else {
+      return convertResult.formattedDate!;
+    }
+  };
+
   return (
     <Box {...props}>
       {hasScheduledAt && (
-        <StatusLine>{`${t('activity_due_date:scheduled_at')} ${t(
+        <StatusLine>{`${t('activity_due_date:scheduled_at')} ${convert(
           activity.scheduledAt!,
         )}`}</StatusLine>
       )}
 
       {hasAvailableFromTo && (
         <StatusLine>
-          {`${t('activity_due_date:available')} ${t(
+          {`${t('activity_due_date:available')} ${convert(
             activity.availableFrom!,
-          )} ${t('activity_due_date:to')} ${t(activity.availableTo!)}`}
+          )} ${t('activity_due_date:to')} ${convert(activity.availableTo!)}`}
         </StatusLine>
       )}
 
       {hasAvailableToOnly && (
-        <StatusLine>{`${t('activity_due_date:to')} ${t(
+        <StatusLine>{`${t('activity_due_date:to')} ${convert(
           activity.availableTo!,
         )}`}</StatusLine>
       )}

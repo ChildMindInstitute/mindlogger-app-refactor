@@ -1,22 +1,14 @@
 import { ActivityType } from '@app/entities/activity';
-import { HourMinute } from '@app/shared/lib';
+import { ScheduleEvent } from '@app/entities/event';
+import {
+  ActivityFlowId,
+  ActivityId,
+  AppletId,
+  EntityId,
+  EventId,
+} from '@app/shared/lib';
 
 import { ActivityListGroup } from './activityGroup';
-
-export const enum AvailabilityType {
-  NotDefined = 0,
-  AlwaysAvailable = 1,
-  ScheduledAccess = 2,
-}
-
-export const enum PeriodicityType {
-  NotDefined = 0,
-  Once = 1,
-  Daily = 2,
-  Weekly = 3,
-  Weekdays = 4,
-  Monthly = 5,
-}
 
 export const enum ActivityPipelineType {
   NotDefined = 0,
@@ -24,21 +16,11 @@ export const enum ActivityPipelineType {
   Flow,
 }
 
-export type AppletId = string;
-
-export type ActivityId = string;
-
-export type ActivityFlowId = string;
-
-export type EntityId = ActivityId | ActivityFlowId;
-
-export type EventId = string;
-
 export type Entity = {
   id: EntityId;
   name: string;
   description: string;
-  image: string;
+  image: string | null;
 };
 
 export type Activity = Entity & {
@@ -54,37 +36,9 @@ export type ActivityFlow = Entity & {
 
 export type ActivityOrFlow = Activity | ActivityFlow;
 
-export type EventAvailability = {
-  availabilityType: AvailabilityType;
-  oneTimeCompletion: boolean;
-  periodicityType: PeriodicityType;
-  timeFrom: HourMinute;
-  timeTo: HourMinute;
-  allowAccessBeforeFromTime: boolean;
-  startDate?: string | null;
-  endDate?: string | null;
-  selectedDay?: string | null;
-};
-
-export type ScheduleEvent = {
-  id: EventId;
-  activityId: number;
-  availability: EventAvailability;
-  scheduledAt: Date;
-  timers: {
-    timer: HourMinute | null;
-    idleTimer: HourMinute | null;
-  };
-};
-
 export type EventActivity = {
   activity: ActivityOrFlow;
   event: ScheduleEvent;
-};
-
-export type EventActivityKey = {
-  entityId: number;
-  eventId: number;
 };
 
 export type ActivityFlowProgress = {
@@ -106,7 +60,7 @@ export type ProgressPayload = ActivityOrFlowProgress & {
 export type EntityProgress = {
   [appletId in AppletId]: {
     [entityId in ActivityId | ActivityFlowId]: {
-      [eventId in EventId]?: ProgressPayload;
+      [eventId in EventId]?: ProgressPayload | null;
     };
   };
 };

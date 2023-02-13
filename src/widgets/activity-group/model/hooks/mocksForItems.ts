@@ -38,8 +38,8 @@ for (let i = 0; i < 3; i++) {
       isAccessBeforeStartTime: true,
       isTimeIntervalSet: true,
       status: ActivityStatus.Scheduled,
-      availableFrom: '17:00',
-      availableTo: 'Midnight',
+      availableFrom: new Date(),
+      availableTo: new Date(),
       scheduledAt: null,
       timeLeftToComplete: null,
     });

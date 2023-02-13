@@ -21,16 +21,27 @@ export const format = (date: Date | number, formatStr: string) => {
   });
 };
 
-export const convertToTimeOnNoun = (date: Date) => {
+type TimeOrNoun = {
+  formattedDate?: string | null;
+  translationKey?: string | null;
+};
+
+export const convertToTimeOnNoun = (date: Date): TimeOrNoun => {
   if (date.getHours() === 12 && date.getMinutes() === 0) {
-    return 'applet_list_component:noon';
+    return { translationKey: 'applet_list_component:noon' };
   } else if (
     (date.getHours() === 23 && date.getMinutes() === 59) ||
     (date.getHours() === 0 && date.getMinutes() === 0)
   ) {
-    return 'applet_list_component:midnight';
+    return { translationKey: 'applet_list_component:midnight' };
   } else {
-    return format(date, 'h:mm A');
+    return {
+      formattedDate: date.toLocaleString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      }),
+    };
   }
 };
 
