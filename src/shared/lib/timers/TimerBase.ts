@@ -3,11 +3,11 @@ import { AppState, NativeEventSubscription } from 'react-native';
 abstract class TimerBase {
   protected listener?: NativeEventSubscription;
   protected timerId?: number;
-  protected callback: Function;
+  protected onDurationPass: Function;
   hasStarted: boolean = false;
 
-  constructor(callback: Function, startImmediately: boolean) {
-    this.callback = callback;
+  constructor(onDurationPass: Function, startImmediately: boolean) {
+    this.onDurationPass = onDurationPass;
 
     this.listener = AppState.addEventListener('change', nextAppState => {
       if (

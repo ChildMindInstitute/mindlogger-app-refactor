@@ -9,12 +9,12 @@ class AppTimer extends TimerBase {
 
   constructor(
     delay: number,
-    callback: Function,
+    onDurationPass: Function,
     startImmediately: boolean,
     onFinish?: Function,
     duration?: number,
   ) {
-    super(callback, startImmediately);
+    super(onDurationPass, startImmediately);
     this.delay = delay;
     this.duration = duration;
     this.onFinish = onFinish;
@@ -22,7 +22,7 @@ class AppTimer extends TimerBase {
 
   start(): void {
     this.startTime = Date.now();
-    this.callback();
+    this.onDurationPass();
     this.configureInterval();
   }
 
@@ -36,7 +36,7 @@ class AppTimer extends TimerBase {
 
   private configureInterval(customDelay: number = this.delay) {
     this.timerId = setTimeout(() => {
-      this.callback();
+      this.onDurationPass();
       if (this.isDurationOver()) {
         this.stop();
         return;

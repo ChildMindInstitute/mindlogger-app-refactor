@@ -1,5 +1,5 @@
 import TimerBase from './TimerBase';
-import { ONE_MINUTE } from '../../constants';
+import { ONE_MINUTE } from '../constants';
 
 class AppClockTimer extends TimerBase {
   onFinish?: Function;
@@ -17,13 +17,13 @@ class AppClockTimer extends TimerBase {
   }
 
   start(): void {
-    this.callback();
+    this.onDurationPass();
     this.setTimer();
   }
 
   setTimer() {
     this.timerId = setTimeout(() => {
-      this.callback();
+      this.onDurationPass();
       this.setTimer();
     }, this.getTimeToNextFullMinute(Date.now()));
   }

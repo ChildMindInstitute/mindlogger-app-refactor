@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 
-import { AppClockTimer } from '../model';
+import { AppClockTimer } from '../';
 
-type TAppClockTimerConfig = {
+type AppClockTimerConfig = {
   onMinutePass: () => void;
   onFinish?: () => void;
   startImmediately: boolean;
 };
 
-const useAppClockTimer = (appClockTimerConfig: TAppClockTimerConfig) => {
+const useAppClockTimer = (appClockTimerConfig: AppClockTimerConfig) => {
   const { startImmediately, onMinutePass, onFinish } = appClockTimerConfig;
   return useMemo(
     () => new AppClockTimer(onMinutePass, startImmediately, onFinish),
