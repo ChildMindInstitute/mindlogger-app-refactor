@@ -9,7 +9,6 @@ export type ActivityListItem = {
   image?: string | null;
 
   status: ActivityStatus;
-  isAccessBeforeStartTime: boolean;
   type: ActivityType;
 
   isInActivityFlow: boolean;
@@ -21,9 +20,7 @@ export type ActivityListItem = {
     activityPositionInFlow: number;
   } | null;
 
-  isTimeIntervalSet: boolean;
-
-  scheduledAt?: Date | null;
+  scheduledAt?: Date | null; //todo - discuss with BA
   availableFrom?: Date | null;
   availableTo?: Date | null;
 

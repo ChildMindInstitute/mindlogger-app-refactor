@@ -1,8 +1,9 @@
-import { Parse, Day, ScheduleInput } from 'dayspan';
+import { differenceInMonths, startOfDay, subMonths } from 'date-fns';
+import { Parse, Day } from 'dayspan';
 
 import { AvailabilityType, PeriodicityType, ScheduleEvent } from '../../lib';
 
-type EventParseInput = ScheduleInput<any>;
+type EventParseInput = Parameters<typeof Parse.schedule>[0];
 
 const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
   let { availability, selectedDate } = event;
@@ -19,8 +20,6 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
     selectedDayOfWeek = selectedDate.getDay();
   }
 
-  let parseInput: EventParseInput = {};
-
   const alwaysAvailable =
     availability.availabilityType === AvailabilityType.AlwaysAvailable;
 
@@ -29,38 +28,54 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
 
   const now = new Date();
 
+  const setTime = (target: Date) => {
+    if (availability.timeFrom) {
+      target.setHours(availability.timeFrom.hours);
+      target.setMinutes(availability.timeFrom.minutes);
+    }
+  };
+
   if (
     alwaysAvailable ||
     (scheduled && availability.periodicityType === PeriodicityType.Once)
   ) {
     const result = new Date(selectedYear!, selectedMonth!, selectedDay!);
-
-    if (availability.timeFrom) {
-      result.setHours(availability.timeFrom.hours);
-      result.setMinutes(availability.timeFrom.minutes);
-    }
+    setTime(result);
     return result;
-  } else if (
-    scheduled &&
-    availability.periodicityType === PeriodicityType.Weekly
-  ) {
+  }
+
+  if (availability.periodicityType === PeriodicityType.Monthly) {
+    const today = startOfDay(now);
+
+    let date = new Date(selectedDate!);
+
+    const diff = differenceInMonths(date, today);
+    let check = subMonths(date, diff);
+
+    if (check > today) {
+      date = subMonths(date, diff + 1);
+    } else {
+      date = check;
+    }
+    if (date < availability.startDate! || date > availability.endDate!) {
+      return null;
+    }
+    setTime(date);
+
+    return date;
+  }
+
+  let parseInput: EventParseInput = {};
+
+  if (availability.periodicityType === PeriodicityType.Weekly) {
     parseInput.dayOfWeek = [selectedDayOfWeek!];
-  } else if (
-    scheduled &&
-    availability.periodicityType === PeriodicityType.Weekdays
-  ) {
+  } else if (availability.periodicityType === PeriodicityType.Weekdays) {
     parseInput.dayOfWeek = [1, 2, 3, 4, 5];
-  } else if (
-    scheduled &&
-    availability.periodicityType === PeriodicityType.Monthly
-  ) {
-    parseInput.dayOfMonth = [selectedDay!];
   }
 
   if (availability.startDate) {
     parseInput.start = availability.startDate.getTime();
   }
-
   if (availability.endDate) {
     parseInput.end = availability.endDate.getTime();
   }
@@ -105,8 +120,6 @@ export const SheduledDateCalculator = {
 
     const result = calculateScheduledAt(event);
     cache.set(key, result);
-
-    console.log('calculateScheduledAt', result?.toString());
 
     return result;
   },

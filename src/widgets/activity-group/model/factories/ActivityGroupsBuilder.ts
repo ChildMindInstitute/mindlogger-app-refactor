@@ -5,7 +5,7 @@ import {
   ActivityStatus,
   ActivityType,
 } from '@app/entities/activity';
-import { AvailabilityType, EventModel } from '@app/entities/event';
+import { AvailabilityType } from '@app/entities/event';
 import {
   AppletId,
   getMsFromHours,
@@ -34,22 +34,29 @@ import {
 /*
   progress: EntityProgress:
 
+  Only a single record per activityId-EventId, not more!, or record may null (for a new pair).
+  If we'll need history then seaprated data structure should be added.
+
   If eventActivity is in-progress, then record exists and
-    startAt populated, endAt = null.
-    If eventActivity has been completed and it's not in-progress currently,
-    then startAt populated, endAt also populated and the values means exactly the
-    last progress (eventActivity could have been completed several times).
-    If eventActivity hasn't been ever completed then the record is absend or it's
-    values are both empty.
+  startAt populated, endAt = null.
+  If eventActivity has been completed and it's not in-progress currently,
+  then startAt populated, endAt also populated and the values means exactly the
+  last progress (eventActivity could have been completed several times).
+  If eventActivity hasn't been ever completed then the record is absend or it's
+  values are both empty.
 
 */
 
-const createActivityGroupsBuilder = (data: {
+type ActivityGroupsBuilderInput = {
   allAppletActivities: Activity[];
   progress: EntityProgress;
   appletId: AppletId;
-}): ActivityGroupsBuilder => {
-  const { progress, appletId, allAppletActivities: activities } = data;
+};
+
+const createActivityGroupsBuilder = (
+  inputData: ActivityGroupsBuilderInput,
+): ActivityGroupsBuilder => {
+  const { progress, appletId, allAppletActivities: activities } = inputData;
 
   const getNow = () => new Date();
 
@@ -90,29 +97,30 @@ const createActivityGroupsBuilder = (data: {
 
     const isInProgress = isEventActivityInProgress(activityEvent);
 
+    let activity: Activity, position: number;
+
     if (isInProgress) {
       const progressRecord = getProgressRecord(
         activityEvent,
       ) as ActivityFlowProgress;
 
-      const activity = activities.find(
+      activity = activities.find(
         x => x.id === progressRecord.currentActivityId,
       )!;
-      const position =
+      position =
         activityFlow.items.findIndex(x => x.activityId === activity.id) + 1;
-      item.activityFlowDetails.activityPositionInFlow = position;
-      item.name = activity.name;
-      item.description = activity.description;
-      item.type = activity.type;
     } else {
-      const activity = data.allAppletActivities.find(
+      activity = activities.find(
         x => x.id === activityFlow.items[0].activityId,
       )!;
-      item.activityFlowDetails.activityPositionInFlow = 1;
-      item.name = activity.name;
-      item.description = activity.description;
-      item.type = activity.type;
+      position = 1;
     }
+
+    item.activityFlowDetails.activityPositionInFlow = position;
+    item.name = activity.name;
+    item.description = activity.description;
+    item.type = activity.type;
+    item.image = activity.image;
   };
 
   const getTimeToComplete = (eventActivity: EventActivity): HourMinute => {
@@ -129,7 +137,7 @@ const createActivityGroupsBuilder = (data: {
     if (alreadyElapsed < activityDuration) {
       const left: number = activityDuration - alreadyElapsed;
 
-      const hours = Math.floor(left / MINUTES_IN_HOUR / MS_IN_MINUTE);
+      const hours = Math.floor(left / MS_IN_MINUTE / MINUTES_IN_HOUR);
       const minutes = Math.round((left - getMsFromHours(hours)) / MS_IN_MINUTE);
 
       return { hours, minutes };
@@ -149,10 +157,8 @@ const createActivityGroupsBuilder = (data: {
       name: isFlow ? '' : activity.name,
       description: isFlow ? '' : activity.description,
       type: isFlow ? ActivityType.NotDefined : (activity as Activity).type,
-      image: activity.image,
+      image: isFlow ? null : activity.image,
       status: ActivityStatus.NotDefined,
-      isAccessBeforeStartTime: false,
-      isTimeIntervalSet: true,
       isTimerSet: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
@@ -164,14 +170,6 @@ const createActivityGroupsBuilder = (data: {
     return item;
   };
 
-  const assignScheduledAt = (eventActivity: EventActivity): boolean => {
-    const date = EventModel.SheduledDateCalculator.calculate(
-      eventActivity.event,
-    );
-    eventActivity.event.scheduledAt = date;
-    return !!date;
-  };
-
   function buildInProgress(
     eventsActivities: Array<EventActivity>,
   ): ActivityListGroup {
@@ -180,10 +178,6 @@ const createActivityGroupsBuilder = (data: {
     const activityItems: Array<ActivityListItem> = [];
 
     for (let eventActivity of filtered) {
-      if (!assignScheduledAt(eventActivity)) {
-        continue;
-      }
-
       const item = createListItem(eventActivity);
 
       item.status = ActivityStatus.InProgress;
@@ -220,10 +214,6 @@ const createActivityGroupsBuilder = (data: {
     const activityItems: Array<ActivityListItem> = [];
 
     for (let eventActivity of notInProgress) {
-      if (!assignScheduledAt(eventActivity)) {
-        continue;
-      }
-
       const { event } = eventActivity;
 
       const isAlwaysAvailable =
@@ -314,10 +304,6 @@ const createActivityGroupsBuilder = (data: {
     const now = getNow();
 
     for (let eventActivity of notInProgress) {
-      if (!assignScheduledAt(eventActivity)) {
-        continue;
-      }
-
       const { event } = eventActivity;
 
       const typeIsScheduled =

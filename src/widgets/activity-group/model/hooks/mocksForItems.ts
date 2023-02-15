@@ -35,8 +35,6 @@ for (let i = 0; i < 3; i++) {
         'Description of item A Description of item B i i i i i i i Description of item Description of item Description of item ' +
         j,
       isTimerSet: true,
-      isAccessBeforeStartTime: true,
-      isTimeIntervalSet: true,
       status: ActivityStatus.Scheduled,
       availableFrom: new Date(),
       availableTo: new Date(),

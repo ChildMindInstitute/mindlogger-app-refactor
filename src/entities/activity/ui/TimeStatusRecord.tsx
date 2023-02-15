@@ -30,7 +30,7 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
 
   const hasScheduledAt = isStatusScheduled && !!activity.scheduledAt;
 
-  const hasAvailableFromTo = isStatusScheduled && activity.isTimeIntervalSet;
+  const hasAvailableFromTo = isStatusScheduled;
 
   const hasAvailableToOnly = isStatusAvailable;
 

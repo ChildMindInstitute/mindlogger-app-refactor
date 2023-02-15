@@ -25,9 +25,7 @@ type Props = {
 const ActivityCard: FC<Props> = ({ activity, disabled }) => {
   const { t } = useTranslation();
 
-  const isDisabled =
-    activity.status === ActivityStatus.Scheduled &&
-    !activity.isAccessBeforeStartTime;
+  const isDisabled = activity.status === ActivityStatus.Scheduled;
 
   return (
     <TouchableOpacity onPress={() => {}} disabled={disabled || isDisabled}>
