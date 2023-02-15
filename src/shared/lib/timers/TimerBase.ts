@@ -7,7 +7,6 @@ abstract class TimerBase {
 
   constructor(startImmediately: boolean) {
     this.listener = AppState.addEventListener('change', nextAppState => {
-      console.log(nextAppState);
       if (nextAppState === 'active') {
         if (this.onForeground) {
           this.onForeground();
