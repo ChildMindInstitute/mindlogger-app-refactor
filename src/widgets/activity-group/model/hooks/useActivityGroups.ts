@@ -7,7 +7,7 @@ import {
   eventActivities as eventActivityMocks,
 } from './mocksForEntities';
 import { ActivityListGroup } from '../../lib';
-import createActivityGroupsBuilder from '../factories/ActivityGroupsBuilder';
+import { createActivityGroupsBuilder } from '../factories/ActivityGroupsBuilder';
 
 type UseActivityGroupsReturn = {
   isLoading: boolean;

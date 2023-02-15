@@ -25,10 +25,10 @@ type Props = {
 const ActivityCard: FC<Props> = ({ activity, disabled }) => {
   const { t } = useTranslation();
 
-  const isDisabled = activity.status === ActivityStatus.Scheduled;
+  const isDisabled = disabled || activity.status === ActivityStatus.Scheduled;
 
   return (
-    <TouchableOpacity onPress={() => {}} disabled={disabled || isDisabled}>
+    <TouchableOpacity onPress={() => {}} disabled={isDisabled}>
       <XStack
         mx={3}
         p={14}

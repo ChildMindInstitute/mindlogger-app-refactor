@@ -1,23 +1,70 @@
-import { differenceInMonths, startOfDay, subMonths } from 'date-fns';
+import { differenceInMonths, isEqual, startOfDay, subMonths } from 'date-fns';
 import { Parse, Day } from 'dayspan';
 
-import { AvailabilityType, PeriodicityType, ScheduleEvent } from '../../lib';
+import {
+  AvailabilityType,
+  EventAvailability,
+  PeriodicityType,
+  ScheduleEvent,
+} from '../../lib';
 
 type EventParseInput = Parameters<typeof Parse.schedule>[0];
+
+const setTime = (target: Date, availability: EventAvailability) => {
+  if (availability.timeFrom) {
+    target.setHours(availability.timeFrom.hours);
+    target.setMinutes(availability.timeFrom.minutes);
+  }
+};
+
+const calculateForMonthly = (
+  selectedDate: Date,
+  availability: EventAvailability,
+): Date | null => {
+  const today = startOfDay(new Date());
+
+  let date = new Date(selectedDate!);
+
+  const diff = differenceInMonths(date, today);
+  let check = subMonths(date, diff);
+
+  if (check > today) {
+    date = subMonths(date, diff + 1);
+  } else {
+    date = check;
+  }
+  if (date < availability.startDate! || date > availability.endDate!) {
+    return null;
+  }
+  setTime(date, availability);
+
+  return date;
+};
+
+const calculateForSpecificDay = (
+  specificDay: Date,
+  availability: EventAvailability,
+): Date | null => {
+  if (specificDay > startOfDay(new Date())) {
+    return null;
+  }
+
+  const selectedYear = specificDay.getFullYear();
+  const selectedMonth = specificDay.getMonth();
+  const selectedDay = specificDay.getDate();
+
+  const result = new Date(selectedYear!, selectedMonth!, selectedDay!);
+  setTime(result, availability);
+  return result;
+};
 
 const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
   let { availability, selectedDate } = event;
 
-  let selectedMonth: number | null;
-  let selectedDay: number | null;
-  let selectedDayOfWeek: number | null;
-  let selectedYear: number | null;
+  const now = new Date();
 
-  if (selectedDate) {
-    selectedYear = selectedDate.getFullYear();
-    selectedMonth = selectedDate.getMonth();
-    selectedDay = selectedDate.getDate();
-    selectedDayOfWeek = selectedDate.getDay();
+  if (selectedDate && !isEqual(selectedDate, startOfDay(selectedDate))) {
+    throw new Error('[SheduledDateCalculator]: selectedDate contains time set');
   }
 
   const alwaysAvailable =
@@ -26,49 +73,25 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
   const scheduled =
     availability.availabilityType === AvailabilityType.ScheduledAccess;
 
-  const now = new Date();
-
-  const setTime = (target: Date) => {
-    if (availability.timeFrom) {
-      target.setHours(availability.timeFrom.hours);
-      target.setMinutes(availability.timeFrom.minutes);
-    }
-  };
-
   if (
     alwaysAvailable ||
     (scheduled && availability.periodicityType === PeriodicityType.Once)
   ) {
-    const result = new Date(selectedYear!, selectedMonth!, selectedDay!);
-    setTime(result);
-    return result;
+    return calculateForSpecificDay(
+      alwaysAvailable ? now : selectedDate!,
+      availability,
+    );
   }
 
   if (availability.periodicityType === PeriodicityType.Monthly) {
-    const today = startOfDay(now);
-
-    let date = new Date(selectedDate!);
-
-    const diff = differenceInMonths(date, today);
-    let check = subMonths(date, diff);
-
-    if (check > today) {
-      date = subMonths(date, diff + 1);
-    } else {
-      date = check;
-    }
-    if (date < availability.startDate! || date > availability.endDate!) {
-      return null;
-    }
-    setTime(date);
-
-    return date;
+    return calculateForMonthly(selectedDate!, availability);
   }
 
   let parseInput: EventParseInput = {};
 
   if (availability.periodicityType === PeriodicityType.Weekly) {
-    parseInput.dayOfWeek = [selectedDayOfWeek!];
+    const dayOfWeek = selectedDate!.getDay();
+    parseInput.dayOfWeek = [dayOfWeek];
   } else if (availability.periodicityType === PeriodicityType.Weekdays) {
     parseInput.dayOfWeek = [1, 2, 3, 4, 5];
   }

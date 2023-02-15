@@ -8,8 +8,6 @@ import {
   EventId,
 } from '@app/shared/lib';
 
-import { ActivityListGroup } from './activityGroup';
-
 export const enum ActivityPipelineType {
   NotDefined = 0,
   Regular,
@@ -63,12 +61,4 @@ export type EntityProgress = {
       [eventId in EventId]?: ProgressPayload | null;
     };
   };
-};
-
-export type ActivityGroupsBuilder = {
-  buildInProgress: (
-    eventsActivities: Array<EventActivity>,
-  ) => ActivityListGroup;
-  buildAvailable: (eventsActivities: Array<EventActivity>) => ActivityListGroup;
-  buildScheduled: (eventsActivities: Array<EventActivity>) => ActivityListGroup;
 };

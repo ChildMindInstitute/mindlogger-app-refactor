@@ -12,14 +12,13 @@ import {
   getMsFromMinutes,
   HourMinute,
   isTimeInInterval,
-  MIDNIGHT_OF_ANY_DATE,
+  MIDNIGHT_DATE,
   MINUTES_IN_HOUR,
   MS_IN_MINUTE,
 } from '@app/shared/lib';
 
 import {
   EventActivity,
-  ActivityGroupsBuilder,
   ActivityGroupType,
   ActivityGroupTypeNames,
   ActivityListGroup,
@@ -31,60 +30,56 @@ import {
   ActivityFlowProgress,
 } from '../../lib';
 
-/*
-  progress: EntityProgress:
+export interface IActivityGroupsBuilder {
+  buildInProgress: (
+    eventsActivities: Array<EventActivity>,
+  ) => ActivityListGroup;
+  buildAvailable: (eventsActivities: Array<EventActivity>) => ActivityListGroup;
+  buildScheduled: (eventsActivities: Array<EventActivity>) => ActivityListGroup;
+}
 
-  Only a single record per activityId-EventId, not more!, or record may null (for a new pair).
-  If we'll need history then seaprated data structure should be added.
+class ActivityGroupsBuilder implements IActivityGroupsBuilder {
+  private progress: EntityProgress;
 
-  If eventActivity is in-progress, then record exists and
-  startAt populated, endAt = null.
-  If eventActivity has been completed and it's not in-progress currently,
-  then startAt populated, endAt also populated and the values means exactly the
-  last progress (eventActivity could have been completed several times).
-  If eventActivity hasn't been ever completed then the record is absend or it's
-  values are both empty.
+  private appletId: AppletId;
 
-*/
+  private activities: Activity[];
 
-type ActivityGroupsBuilderInput = {
-  allAppletActivities: Activity[];
-  progress: EntityProgress;
-  appletId: AppletId;
-};
+  constructor(inputParams: ActivityGroupsBuilderInput) {
+    this.progress = inputParams.progress;
+    this.activities = inputParams.allAppletActivities;
+    this.appletId = inputParams.appletId;
+  }
 
-const createActivityGroupsBuilder = (
-  inputData: ActivityGroupsBuilderInput,
-): ActivityGroupsBuilder => {
-  const { progress, appletId, allAppletActivities: activities } = inputData;
+  private getNow = () => new Date();
 
-  const getNow = () => new Date();
+  private getProgressRecord(
+    eventActivity: EventActivity,
+  ): ProgressPayload | null {
+    const record =
+      this.progress[this.appletId][eventActivity.activity.id][
+        eventActivity.event.id
+      ];
+    return record ?? null;
+  }
 
-  const isEventActivityInProgress = (eventActivity: EventActivity): boolean => {
-    const record = getProgressRecord(eventActivity);
+  private isInProgress(eventActivity: EventActivity): boolean {
+    const record = this.getProgressRecord(eventActivity);
     if (!record) {
       return false;
     }
     return !!record.startAt && !record.endAt;
-  };
+  }
 
-  const getProgressRecord = (
-    eventActivity: EventActivity,
-  ): ProgressPayload | null => {
-    const record =
-      progress[appletId][eventActivity.activity.id][eventActivity.event.id];
-    return record ?? null;
-  };
-
-  const getStartedDateTime = (eventActivity: EventActivity): Date => {
-    const record = getProgressRecord(eventActivity)!;
+  private getStartedDateTime(eventActivity: EventActivity): Date {
+    const record = this.getProgressRecord(eventActivity)!;
     return record.startAt!;
-  };
+  }
 
-  const populateActivityFlowFields = (
+  private populateActivityFlowFields(
     item: ActivityListItem,
     activityEvent: EventActivity,
-  ) => {
+  ) {
     const activityFlow = activityEvent.activity as ActivityFlow;
 
     item.isInActivityFlow = true;
@@ -95,22 +90,22 @@ const createActivityGroupsBuilder = (
       activityPositionInFlow: 0,
     };
 
-    const isInProgress = isEventActivityInProgress(activityEvent);
+    const isInProgress = this.isInProgress(activityEvent);
 
     let activity: Activity, position: number;
 
     if (isInProgress) {
-      const progressRecord = getProgressRecord(
+      const progressRecord = this.getProgressRecord(
         activityEvent,
       ) as ActivityFlowProgress;
 
-      activity = activities.find(
+      activity = this.activities.find(
         x => x.id === progressRecord.currentActivityId,
       )!;
       position =
         activityFlow.items.findIndex(x => x.activityId === activity.id) + 1;
     } else {
-      activity = activities.find(
+      activity = this.activities.find(
         x => x.id === activityFlow.items[0].activityId,
       )!;
       position = 1;
@@ -121,13 +116,13 @@ const createActivityGroupsBuilder = (
     item.description = activity.description;
     item.type = activity.type;
     item.image = activity.image;
-  };
+  }
 
-  const getTimeToComplete = (eventActivity: EventActivity): HourMinute => {
+  private getTimeToComplete(eventActivity: EventActivity): HourMinute {
     const { event } = eventActivity;
     const timer = event.timers!.timer!;
 
-    const startedTime = getStartedDateTime(eventActivity);
+    const startedTime = this.getStartedDateTime(eventActivity);
 
     const activityDuration: number =
       getMsFromHours(timer.hours) + getMsFromMinutes(timer.minutes);
@@ -144,9 +139,9 @@ const createActivityGroupsBuilder = (
     } else {
       return { hours: 0, minutes: 0 };
     }
-  };
+  }
 
-  const createListItem = (eventActivity: EventActivity) => {
+  private createListItem(eventActivity: EventActivity) {
     const { activity, event } = eventActivity;
     const { pipelineType } = eventActivity.activity;
     const isFlow = pipelineType === ActivityPipelineType.Flow;
@@ -165,27 +160,31 @@ const createActivityGroupsBuilder = (
     };
 
     if (isFlow) {
-      populateActivityFlowFields(item, eventActivity);
+      this.populateActivityFlowFields(item, eventActivity);
     }
     return item;
-  };
+  }
 
-  function buildInProgress(
+  /*
+  Public methods
+  */
+
+  public buildInProgress(
     eventsActivities: Array<EventActivity>,
   ): ActivityListGroup {
-    const filtered = eventsActivities.filter(x => isEventActivityInProgress(x));
+    const filtered = eventsActivities.filter(x => this.isInProgress(x));
 
     const activityItems: Array<ActivityListItem> = [];
 
     for (let eventActivity of filtered) {
-      const item = createListItem(eventActivity);
+      const item = this.createListItem(eventActivity);
 
       item.status = ActivityStatus.InProgress;
 
       const { event } = eventActivity;
       item.isTimerSet = !!event.timers?.timer;
       item.timeLeftToComplete = item.isTimerSet
-        ? getTimeToComplete(eventActivity)
+        ? this.getTimeToComplete(eventActivity)
         : null;
 
       activityItems.push(item);
@@ -200,14 +199,12 @@ const createActivityGroupsBuilder = (
     return result;
   }
 
-  function buildAvailable(
+  public buildAvailable(
     eventsActivities: Array<EventActivity>,
   ): ActivityListGroup {
-    const notInProgress = eventsActivities.filter(
-      x => !isEventActivityInProgress(x),
-    );
+    const notInProgress = eventsActivities.filter(x => !this.isInProgress(x));
 
-    const now = getNow();
+    const now = this.getNow();
 
     const filtered: Array<EventActivity> = [];
 
@@ -226,7 +223,7 @@ const createActivityGroupsBuilder = (
 
       const oneTimeCompletion = event.availability.oneTimeCompletion;
 
-      const progressRecord = getProgressRecord(eventActivity);
+      const progressRecord = this.getProgressRecord(eventActivity);
 
       const endAt = progressRecord?.endAt;
 
@@ -261,7 +258,7 @@ const createActivityGroupsBuilder = (
     }
 
     for (let eventActivity of filtered) {
-      const item = createListItem(eventActivity);
+      const item = this.createListItem(eventActivity);
 
       item.status = ActivityStatus.Available;
 
@@ -270,12 +267,12 @@ const createActivityGroupsBuilder = (
       if (
         event.availability.availabilityType === AvailabilityType.ScheduledAccess
       ) {
-        const to = getNow();
+        const to = this.getNow();
         to.setHours(event.availability.timeTo!.hours);
         to.setMinutes(event.availability.timeTo!.minutes);
         item.availableTo = to;
       } else {
-        item.availableTo = MIDNIGHT_OF_ANY_DATE;
+        item.availableTo = MIDNIGHT_DATE;
       }
 
       activityItems.push(item);
@@ -290,18 +287,16 @@ const createActivityGroupsBuilder = (
     return result;
   }
 
-  function buildScheduled(
+  public buildScheduled(
     eventsActivities: Array<EventActivity>,
   ): ActivityListGroup {
-    const notInProgress = eventsActivities.filter(
-      x => !isEventActivityInProgress(x),
-    );
+    const notInProgress = eventsActivities.filter(x => !this.isInProgress(x));
 
     const activityItems: Array<ActivityListItem> = [];
 
     const filtered: Array<EventActivity> = [];
 
-    const now = getNow();
+    const now = this.getNow();
 
     for (let eventActivity of notInProgress) {
       const { event } = eventActivity;
@@ -312,7 +307,7 @@ const createActivityGroupsBuilder = (
 
       const accessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime;
 
-      const endAt = getProgressRecord(eventActivity)?.endAt;
+      const endAt = this.getProgressRecord(eventActivity)?.endAt;
 
       const completedToday = !!endAt && isToday(endAt);
 
@@ -330,17 +325,17 @@ const createActivityGroupsBuilder = (
     }
 
     for (let eventActivity of filtered) {
-      const item = createListItem(eventActivity);
+      const item = this.createListItem(eventActivity);
 
       item.status = ActivityStatus.Scheduled;
 
       const { event } = eventActivity;
 
-      const from = getNow();
+      const from = this.getNow();
       from.setHours(event.availability.timeFrom!.hours);
       from.setMinutes(event.availability.timeFrom!.minutes);
 
-      const to = getNow();
+      const to = this.getNow();
       to.setHours(event.availability.timeTo!.hours);
       to.setMinutes(event.availability.timeTo!.minutes);
 
@@ -358,12 +353,16 @@ const createActivityGroupsBuilder = (
 
     return result;
   }
+}
 
-  return {
-    buildInProgress,
-    buildAvailable,
-    buildScheduled,
-  };
+type ActivityGroupsBuilderInput = {
+  allAppletActivities: Activity[];
+  progress: EntityProgress;
+  appletId: AppletId;
 };
 
-export default createActivityGroupsBuilder;
+export const createActivityGroupsBuilder = (
+  inputData: ActivityGroupsBuilderInput,
+): ActivityGroupsBuilder => {
+  return new ActivityGroupsBuilder(inputData);
+};
