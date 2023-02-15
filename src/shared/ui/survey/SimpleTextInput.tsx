@@ -6,34 +6,28 @@ import { useTranslation } from 'react-i18next';
 import { colors } from '@shared/lib';
 import { Input } from '@shared/ui';
 
-type ValueType = '' | 'http://www.w3.org/2001/XMLSchema#integer';
-
-type Config = {
-  isOptionalText: boolean;
-  maxLength: number;
-  removeBackOption: boolean;
-  valueType: ValueType;
-};
-
 type Props = {
-  valueType?: ValueType;
-  config: Config;
+  config: {
+    maxLength: number;
+    valueType: '' | 'http://www.w3.org/2001/XMLSchema#integer';
+  };
   onChange: (text: string) => void;
 } & TextInputProps;
 
 const SimpleTextInput: FC<Props> = ({
-  value = '',
+  value: initialValue = '',
   onChange,
-  valueType = '',
   config,
 }) => {
   const { t } = useTranslation();
-  const [inputValue, setInputValue] = useState(value);
+  const [value, setValue] = useState(initialValue);
 
   const onChangeText = (text: string) => {
-    setInputValue(text);
+    setValue(text);
     onChange(text);
   };
+
+  const { maxLength = 50, valueType = '' } = config;
 
   const keyboardType = valueType?.includes('integer') ? 'numeric' : 'default';
 
@@ -43,8 +37,8 @@ const SimpleTextInput: FC<Props> = ({
       placeholderTextColor={colors.mediumGrey}
       onChangeText={onChangeText}
       keyboardType={keyboardType}
-      maxLength={Number(config?.maxLength || 50)}
-      value={inputValue}
+      maxLength={Number(maxLength)}
+      value={value}
       autoCorrect={false}
       multiline={false}
       mode="survey"
