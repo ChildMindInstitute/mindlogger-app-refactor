@@ -57,7 +57,8 @@ const LoginScreen: FC = () => {
               color="$secondary"
               fontWeight="400"
               fontSize={40}
-              alignSelf="center">
+              alignSelf="center"
+            >
               {title}
             </Link>
 
