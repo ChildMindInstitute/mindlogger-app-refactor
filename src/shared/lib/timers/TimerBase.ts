@@ -3,22 +3,24 @@ import { AppState, NativeEventSubscription } from 'react-native';
 abstract class TimerBase {
   protected listener?: NativeEventSubscription;
   protected timerId?: number;
-  protected onDurationPass: Function;
   hasStarted: boolean = false;
 
-  constructor(onDurationPass: Function, startImmediately: boolean) {
-    this.onDurationPass = onDurationPass;
-
+  constructor(startImmediately: boolean) {
     this.listener = AppState.addEventListener('change', nextAppState => {
+      console.log(nextAppState);
       if (
-        AppState.currentState.match(/inactive|background/) &&
+        // AppState.currentState.match(/inactive|background/) &&
         nextAppState === 'active'
       ) {
         if (this.onForeground) {
+          console.log('onFore');
           this.onForeground();
         }
       } else {
         if (this.onBackground) {
+          console.log(this.hasStarted, 'started');
+
+          console.log('onBack');
           this.onBackground();
         }
       }
@@ -32,6 +34,8 @@ abstract class TimerBase {
   protected start(): void {
     this.hasStarted = true;
   }
+
+  abstract setTimer(duration?: number): void;
 
   protected onForeground?(): void;
   protected onBackground?(): void;

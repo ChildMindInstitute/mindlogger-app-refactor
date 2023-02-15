@@ -1,48 +1,31 @@
 import TimerBase from './TimerBase';
 
 class AppTimer extends TimerBase {
-  private delay: number;
-  private duration?: number;
-  private backgroundTimeStart?: number;
+  private duration: number;
   private startTime?: number;
-  private onFinish?: Function;
+  private onFinish: Function;
 
-  constructor(
-    delay: number,
-    onDurationPass: Function,
-    startImmediately: boolean,
-    onFinish?: Function,
-    duration?: number,
-  ) {
-    super(onDurationPass, startImmediately);
-    this.delay = delay;
+  constructor(onFinish: Function, startImmediately: boolean, duration: number) {
+    super(startImmediately);
     this.duration = duration;
     this.onFinish = onFinish;
   }
 
   start(): void {
+    super.start();
     this.startTime = Date.now();
-    this.onDurationPass();
-    this.configureInterval();
+    this.setTimer();
   }
 
   stop() {
     super.stop();
-    clearInterval(this.timerId);
-    if (this.onFinish) {
-      this.onFinish();
-    }
+    clearTimeout(this.timerId);
   }
 
-  private configureInterval(customDelay: number = this.delay) {
+  setTimer(duration = this.duration) {
     this.timerId = setTimeout(() => {
-      this.onDurationPass();
-      if (this.isDurationOver()) {
-        this.stop();
-        return;
-      }
-      this.configureInterval();
-    }, customDelay);
+      this.onFinish();
+    }, duration);
   }
 
   private isDurationOver(): boolean {
@@ -50,27 +33,28 @@ class AppTimer extends TimerBase {
     return !!(this.duration && timerTimeDiff > this.duration);
   }
 
+  private geTimeLeftAterBackground() {
+    return this.duration - (Date.now() - this.startTime!);
+  }
+
   protected onBackground(): void {
-    clearInterval(this.timerId);
-    this.backgroundTimeStart = Date.now();
+    clearTimeout(this.timerId);
   }
 
   protected onForeground(): void {
-    if ((!this.backgroundTimeStart && !this.startTime) || !this.hasStarted) {
+    if (!this.startTime || !this.hasStarted) {
       return;
     }
 
     if (this.isDurationOver()) {
+      console.log('DurationOver');
+
       this.stop();
     } else {
-      const timeworkdiff =
-        this.duration! -
-        (Date.now() - this.startTime! - this.backgroundTimeStart!);
-      const newDelay = timeworkdiff % this.delay;
+      const timeLeft = this.geTimeLeftAterBackground();
+      console.log(timeLeft);
 
-      this.configureInterval(newDelay);
-
-      this.backgroundTimeStart = undefined;
+      this.setTimer(timeLeft);
     }
   }
 }

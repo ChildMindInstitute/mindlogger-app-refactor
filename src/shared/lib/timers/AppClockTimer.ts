@@ -2,14 +2,11 @@ import TimerBase from './TimerBase';
 import { ONE_MINUTE } from '../constants';
 
 class AppClockTimer extends TimerBase {
-  onFinish?: Function;
-  constructor(
-    onMinutePass: () => void,
-    startImmediately: boolean,
-    onFinish?: Function,
-  ) {
-    super(onMinutePass, startImmediately);
-    this.onFinish = onFinish;
+  onMinutePass: () => void;
+
+  constructor(onMinutePass: () => void, startImmediately: boolean) {
+    super(startImmediately);
+    this.onMinutePass = onMinutePass;
   }
 
   private getTimeToNextFullMinute(date: number): number {
@@ -17,13 +14,12 @@ class AppClockTimer extends TimerBase {
   }
 
   start(): void {
-    this.onDurationPass();
     this.setTimer();
   }
 
   setTimer() {
     this.timerId = setTimeout(() => {
-      this.onDurationPass();
+      this.onMinutePass();
       this.setTimer();
     }, this.getTimeToNextFullMinute(Date.now()));
   }
@@ -31,9 +27,6 @@ class AppClockTimer extends TimerBase {
   stop() {
     super.stop();
     clearTimeout(this.timerId);
-    if (this.onFinish) {
-      this.onFinish();
-    }
   }
 
   protected onForeground(): void {

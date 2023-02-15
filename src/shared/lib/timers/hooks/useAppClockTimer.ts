@@ -4,15 +4,14 @@ import { AppClockTimer } from '../';
 
 type AppClockTimerConfig = {
   onMinutePass: () => void;
-  onFinish?: () => void;
   startImmediately: boolean;
 };
 
 const useAppClockTimer = (appClockTimerConfig: AppClockTimerConfig) => {
-  const { startImmediately, onMinutePass, onFinish } = appClockTimerConfig;
+  const { startImmediately, onMinutePass } = appClockTimerConfig;
   return useMemo(
-    () => new AppClockTimer(onMinutePass, startImmediately, onFinish),
-    [onFinish, onMinutePass, startImmediately],
+    () => new AppClockTimer(onMinutePass, startImmediately),
+    [onMinutePass, startImmediately],
   );
 };
 
