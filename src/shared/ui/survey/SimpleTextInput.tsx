@@ -7,18 +7,23 @@ import { colors } from '@shared/lib';
 import { Input } from '@shared/ui';
 
 type Props = {
-  config: {
-    maxLength: number;
-    valueType: '' | 'http://www.w3.org/2001/XMLSchema#integer';
-  };
   onChange: (text: string) => void;
+  initialValue?: string;
+  config: {
+    // @todo make sure backend will return this type after refactoring
+    maxLength?: string;
+    isNumeric: boolean;
+  };
 } & TextInputProps;
 
 const SimpleTextInput: FC<Props> = ({
-  value: initialValue = '',
+  initialValue = '',
   onChange,
   config,
+  ...props
 }) => {
+  const { maxLength = 50, isNumeric } = config;
+
   const { t } = useTranslation();
   const [value, setValue] = useState(initialValue);
 
@@ -27,21 +32,18 @@ const SimpleTextInput: FC<Props> = ({
     onChange(text);
   };
 
-  const { maxLength = 50, valueType = '' } = config;
-
-  const keyboardType = valueType?.includes('integer') ? 'numeric' : 'default';
-
   return (
     <Input
       placeholder={t('text_entry:type_placeholder')}
       placeholderTextColor={colors.mediumGrey}
       onChangeText={onChangeText}
-      keyboardType={keyboardType}
       maxLength={Number(maxLength)}
       value={value}
       autoCorrect={false}
       multiline={false}
       mode="survey"
+      keyboardType={isNumeric ? 'numeric' : 'default'}
+      {...props}
     />
   );
 };
