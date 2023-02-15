@@ -8,19 +8,12 @@ abstract class TimerBase {
   constructor(startImmediately: boolean) {
     this.listener = AppState.addEventListener('change', nextAppState => {
       console.log(nextAppState);
-      if (
-        // AppState.currentState.match(/inactive|background/) &&
-        nextAppState === 'active'
-      ) {
+      if (nextAppState === 'active') {
         if (this.onForeground) {
-          console.log('onFore');
           this.onForeground();
         }
       } else {
         if (this.onBackground) {
-          console.log(this.hasStarted, 'started');
-
-          console.log('onBack');
           this.onBackground();
         }
       }
@@ -42,9 +35,7 @@ abstract class TimerBase {
 
   public stop(): void {
     this.hasStarted = false;
-    if (this.timerId) {
-      this.removeAppStateListener();
-    }
+    this.removeAppStateListener();
   }
 
   protected removeAppStateListener() {

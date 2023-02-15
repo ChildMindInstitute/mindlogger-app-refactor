@@ -3,9 +3,13 @@ import TimerBase from './TimerBase';
 class AppTimer extends TimerBase {
   private duration: number;
   private startTime?: number;
-  private onFinish: Function;
+  private onFinish: (...args: any[]) => unknown;
 
-  constructor(onFinish: Function, startImmediately: boolean, duration: number) {
+  constructor(
+    onFinish: (...args: any[]) => unknown,
+    startImmediately: boolean,
+    duration: number,
+  ) {
     super(startImmediately);
     this.duration = duration;
     this.onFinish = onFinish;
@@ -28,12 +32,12 @@ class AppTimer extends TimerBase {
     }, duration);
   }
 
-  private isDurationOver(): boolean {
+  private hasTimePassed(): boolean {
     const timerTimeDiff = Date.now() - this.startTime!;
     return !!(this.duration && timerTimeDiff > this.duration);
   }
 
-  private geTimeLeftAterBackground() {
+  private getTimeLeftAterBackground() {
     return this.duration - (Date.now() - this.startTime!);
   }
 
@@ -46,13 +50,10 @@ class AppTimer extends TimerBase {
       return;
     }
 
-    if (this.isDurationOver()) {
-      console.log('DurationOver');
-
+    if (this.hasTimePassed()) {
       this.stop();
     } else {
-      const timeLeft = this.geTimeLeftAterBackground();
-      console.log(timeLeft);
+      const timeLeft = this.getTimeLeftAterBackground();
 
       this.setTimer(timeLeft);
     }

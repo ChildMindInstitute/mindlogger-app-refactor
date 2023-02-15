@@ -2,9 +2,12 @@ import TimerBase from './TimerBase';
 import { ONE_MINUTE } from '../constants';
 
 class AppClockTimer extends TimerBase {
-  onMinutePass: () => void;
+  onMinutePass: (...args: any[]) => unknown;
 
-  constructor(onMinutePass: () => void, startImmediately: boolean) {
+  constructor(
+    onMinutePass: (...args: any[]) => unknown,
+    startImmediately: boolean,
+  ) {
     super(startImmediately);
     this.onMinutePass = onMinutePass;
   }
@@ -29,8 +32,9 @@ class AppClockTimer extends TimerBase {
     clearTimeout(this.timerId);
   }
 
-  protected onForeground(): void {
+  onForeground(): void {
     if (this.hasStarted) {
+      clearTimeout(this.timerId);
       this.setTimer();
     }
   }

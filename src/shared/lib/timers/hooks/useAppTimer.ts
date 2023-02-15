@@ -4,7 +4,7 @@ import { AppTimer } from '../';
 
 type AppTimerConfig = {
   duration: number;
-  onFinish: Function;
+  onFinish: (...args: any[]) => unknown;
   startImmediately: boolean;
 };
 

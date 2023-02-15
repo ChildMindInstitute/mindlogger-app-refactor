@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { AppClockTimer } from '../';
 
 type AppClockTimerConfig = {
-  onMinutePass: () => void;
+  onMinutePass: (...args: any[]) => unknown;
   startImmediately: boolean;
 };
 
