@@ -41,7 +41,8 @@ const HorizontalCalendar: FC = () => {
                   br={45}
                   ai="center"
                   jc="center"
-                  bg={bg}>
+                  bg={bg}
+                >
                   <Text mb="$1" fontSize={10} color={color}>
                     {weekDayName}
                   </Text>

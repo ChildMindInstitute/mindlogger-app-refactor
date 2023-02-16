@@ -27,7 +27,8 @@ const AppletsScreen: FC = () => {
       <ImageBackground>
         <ScrollView
           contentContainerStyle={styles.scrollView}
-          refreshControl={<AppletsRefresh />}>
+          refreshControl={<AppletsRefresh />}
+        >
           <Box flex={1} pt={12} pb={34}>
             <AppletList flex={1} px={14} mb={28} />
 
