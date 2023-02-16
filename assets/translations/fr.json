@@ -86,7 +86,9 @@
   },
   "applet_list_component": {
     "about_title": "À propos de MindLogger",
-    "no_applets_yet": "Aucune applet spécifiée pour le moment"
+    "no_applets_yet": "Aucune applet spécifiée pour le moment",
+    "noon": "Midi",
+    "midnight": "Minuit"
   },
   "activity_list_component": {
     "no_activities_yet": "Aucune activité spécifiée pour le moment"

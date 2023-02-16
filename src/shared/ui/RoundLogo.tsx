@@ -18,7 +18,7 @@ declare module 'react-native-svg' {
 
 type Props = {
   letter?: string;
-  imageUri?: string;
+  imageUri?: string | null;
   imageStyle?: ImageStyle;
   size?: number;
 };

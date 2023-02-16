@@ -5,6 +5,7 @@ import Config from 'react-native-config';
 import { Language } from '../types';
 
 export * from './colors';
+export * from './dateTime';
 
 export const IS_IOS = Platform.OS === 'ios';
 export const IS_ANDROID = Platform.OS === 'android';

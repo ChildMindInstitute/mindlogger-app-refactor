@@ -42,7 +42,8 @@ const MarkdownView: FC<Props> = ({
       onLinkPress={onLinkPress}
       mergeStyle
       markdownit={markdownItInstance}
-      style={markdownStyle}>
+      style={markdownStyle}
+    >
       {content.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2')}
     </Markdown>
   );

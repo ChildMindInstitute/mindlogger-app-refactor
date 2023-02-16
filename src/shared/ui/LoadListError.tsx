@@ -27,7 +27,8 @@ const LoadListError: FC<PropsWithChildren<Props>> = ({
         <Text
           color={mode === 'light' ? '$secondary' : '$tertiary'}
           fontSize={14}
-          {...props}>
+          {...props}
+        >
           {/* @ts-ignore */}
           {error.key ? t(error.key, error.params ?? {}) : t(error)}
         </Text>

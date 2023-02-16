@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { CalendarProvider, ExpandableCalendar } from 'react-native-calendars';
 
-import { format } from '@shared/lib/utils';
+import { format } from '@app/shared/lib';
 import { Text, YStack, Box } from '@shared/ui/index';
 
 const HorizontalCalendar: FC = () => {
@@ -41,7 +41,8 @@ const HorizontalCalendar: FC = () => {
                   br={45}
                   ai="center"
                   jc="center"
-                  bg={bg}>
+                  bg={bg}
+                >
                   <Text mb="$1" fontSize={10} color={color}>
                     {weekDayName}
                   </Text>

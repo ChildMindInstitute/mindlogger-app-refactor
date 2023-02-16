@@ -25,11 +25,10 @@ type Props = {
 const ActivityCard: FC<Props> = ({ activity, disabled }) => {
   const { t } = useTranslation();
 
-  const hasOpacity =
-    activity.status === ActivityStatus.Scheduled && !activity.isTimeoutAccess;
+  const isDisabled = disabled || activity.status === ActivityStatus.Scheduled;
 
   return (
-    <TouchableOpacity onPress={() => {}} disabled={disabled}>
+    <TouchableOpacity onPress={() => {}} disabled={isDisabled}>
       <XStack
         mx={3}
         p={14}
@@ -37,7 +36,8 @@ const ActivityCard: FC<Props> = ({ activity, disabled }) => {
         borderColor="$lighterGrey"
         borderRadius={9}
         opacity={disabled ? 0.5 : 1}
-        backgroundColor="$white">
+        backgroundColor="$white"
+      >
         {!!activity.image && (
           <Box mr={14} alignSelf="center">
             <RoundLogo imageUri={activity.image} />
@@ -47,7 +47,7 @@ const ActivityCard: FC<Props> = ({ activity, disabled }) => {
         <YStack flexGrow={1} flexShrink={1}>
           {activity.isInActivityFlow && (
             <ActivityFlowStep
-              hasOpacity={hasOpacity}
+              hasOpacity={isDisabled}
               activity={activity}
               mb={7}
             />
@@ -55,11 +55,11 @@ const ActivityCard: FC<Props> = ({ activity, disabled }) => {
 
           <Text
             mb={8}
-            flex={1}
             fontWeight={IS_IOS ? '600' : '700'}
             fontSize={16}
             lineHeight={20}
-            opacity={hasOpacity ? 0.5 : 1}>
+            opacity={isDisabled ? 0.5 : 1}
+          >
             {activity.name}
           </Text>
 
@@ -67,7 +67,8 @@ const ActivityCard: FC<Props> = ({ activity, disabled }) => {
             fontSize={14}
             fontWeight="300"
             lineHeight={20}
-            opacity={hasOpacity ? 0.5 : 1}>
+            opacity={isDisabled ? 0.5 : 1}
+          >
             {activity.description}
           </Text>
 

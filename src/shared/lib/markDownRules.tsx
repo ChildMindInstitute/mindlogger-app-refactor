@@ -79,7 +79,8 @@ const markDownRules: RenderRules = {
           styles.text,
           localStyles.text,
           { ...additionalStyles },
-        ]}>
+        ]}
+      >
         {updatedNodeContent}
       </Text>
     );

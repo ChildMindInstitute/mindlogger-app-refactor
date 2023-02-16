@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
+import { convertToTimeOnNoun } from '@app/shared/lib';
 import { Box, BoxProps, Text } from '@app/shared/ui';
 
 import { ActivityListItem, ActivityStatus } from '../lib';
@@ -23,50 +24,55 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
 
   const isStatusScheduled = activity.status === ActivityStatus.Scheduled;
 
-  const isStatusPastDue = activity.status === ActivityStatus.PastDue;
+  const isStatusAvailable = activity.status === ActivityStatus.Available;
 
   const isStatusInProgress = activity.status === ActivityStatus.InProgress;
 
-  const hasSceduledAt =
-    isStatusScheduled && activity.hasEventContext && !activity.isTimeoutAllow;
+  const hasScheduledAt = isStatusScheduled && !!activity.scheduledAt;
 
-  const hasAvailableFromTo =
-    isStatusScheduled && activity.hasEventContext && activity.isTimeoutAllow;
+  const hasAvailableFromTo = isStatusScheduled;
 
-  const hasAvailableToOnly = isStatusPastDue;
+  const hasAvailableToOnly = isStatusAvailable;
 
   const hasTimeToComplete =
-    (isStatusScheduled || isStatusPastDue || isStatusInProgress) &&
-    activity.isTimedActivityAllow &&
-    !!activity.timeToComplete;
+    isStatusInProgress && activity.isTimerSet && !!activity.timeLeftToComplete;
+
+  const convert = (date: Date): string => {
+    const convertResult = convertToTimeOnNoun(date);
+    if (convertResult.translationKey) {
+      return t(convertResult.translationKey);
+    } else {
+      return convertResult.formattedDate!;
+    }
+  };
 
   return (
     <Box {...props}>
-      {hasSceduledAt && (
-        <StatusLine>{`${t('activity_due_date:scheduled_at')} ${
-          activity.scheduledAt
-        }`}</StatusLine>
+      {hasScheduledAt && (
+        <StatusLine>{`${t('activity_due_date:scheduled_at')} ${convert(
+          activity.scheduledAt!,
+        )}`}</StatusLine>
       )}
 
       {hasAvailableFromTo && (
         <StatusLine>
-          {`${t('activity_due_date:available')} ${activity.availableFrom} ${t(
-            'activity_due_date:to',
-          )} ${activity.availableTo}`}
+          {`${t('activity_due_date:available')} ${convert(
+            activity.availableFrom!,
+          )} ${t('activity_due_date:to')} ${convert(activity.availableTo!)}`}
         </StatusLine>
       )}
 
       {hasAvailableToOnly && (
-        <StatusLine>{`${t('activity_due_date:to')} ${
-          activity.availableTo
-        }`}</StatusLine>
+        <StatusLine>{`${t('activity_due_date:to')} ${convert(
+          activity.availableTo!,
+        )}`}</StatusLine>
       )}
 
       {hasTimeToComplete && (
         <StatusLine>
           {`${t(
             'timed_activity:time_to_complete_hm',
-            activity.timeToComplete!,
+            activity.timeLeftToComplete!,
           )}`}
         </StatusLine>
       )}

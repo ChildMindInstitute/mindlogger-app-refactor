@@ -51,9 +51,11 @@ const ActivityGroupList: FC<Props> = props => {
   return (
     <Box {...props}>
       <YStack space={12}>
-        {groups?.map(g => (
-          <ActivityGroup group={g} key={g.name} />
-        ))}
+        {groups
+          ?.filter(g => g.activities.length)
+          .map(g => (
+            <ActivityGroup group={g} key={g.name} />
+          ))}
       </YStack>
     </Box>
   );

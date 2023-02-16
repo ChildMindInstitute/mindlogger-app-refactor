@@ -1,6 +1,6 @@
 export type Applet = {
-  id: number;
-  image?: string;
+  id: string;
+  image?: string | null;
   displayName: string;
   description: string;
   numberOverdue?: number;

@@ -64,7 +64,8 @@ const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
         persister: asyncPersist,
         buster: 'kill-cache',
       }}
-      onSuccess={onCacheRestored}>
+      onSuccess={onCacheRestored}
+    >
       {children}
     </PersistQueryClientProvider>
   );
