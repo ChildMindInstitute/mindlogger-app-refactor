@@ -1,7 +1,5 @@
-import { AppletId } from '@app/shared/lib';
-
 export type Applet = {
-  id: AppletId;
+  id: string;
   image?: string | null;
   displayName: string;
   description: string;

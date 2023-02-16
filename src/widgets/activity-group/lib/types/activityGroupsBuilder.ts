@@ -1,12 +1,5 @@
 import { ActivityType } from '@app/entities/activity';
 import { ScheduleEvent } from '@app/entities/event';
-import {
-  ActivityFlowId,
-  ActivityId,
-  AppletId,
-  EntityId,
-  EventId,
-} from '@app/shared/lib';
 
 export const enum ActivityPipelineType {
   NotDefined = 0,
@@ -15,7 +8,7 @@ export const enum ActivityPipelineType {
 }
 
 export type Entity = {
-  id: EntityId;
+  id: string;
   name: string;
   description: string;
   image: string | null;
@@ -28,7 +21,7 @@ export type Activity = Entity & {
 
 export type ActivityFlow = Entity & {
   hideBadge: boolean;
-  items: Array<{ activityId: ActivityId }>;
+  items: Array<{ activityId: string }>;
   pipelineType: ActivityPipelineType.Flow;
 };
 
@@ -41,7 +34,7 @@ export type EventActivity = {
 
 export type ActivityFlowProgress = {
   type: ActivityPipelineType.Flow;
-  currentActivityId: ActivityId;
+  currentActivityId: string;
 };
 
 export type ActivityProgress = {
@@ -56,9 +49,9 @@ export type ProgressPayload = ActivityOrFlowProgress & {
 };
 
 export type EntityProgress = {
-  [appletId in AppletId]: {
-    [entityId in ActivityId | ActivityFlowId]: {
-      [eventId in EventId]?: ProgressPayload | null;
+  [appletId in string]: {
+    [entityId in string]: {
+      [eventId in string]?: ProgressPayload | null;
     };
   };
 };

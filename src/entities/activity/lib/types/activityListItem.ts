@@ -1,8 +1,8 @@
-import { ActivityId, EventId, HourMinute } from '@app/shared/lib';
+import { HourMinute } from '@app/shared/lib';
 
 export type ActivityListItem = {
-  activityId: ActivityId;
-  eventId: EventId;
+  activityId: string;
+  eventId: string;
 
   name: string;
   description: string;

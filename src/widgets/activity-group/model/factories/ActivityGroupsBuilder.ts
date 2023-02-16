@@ -7,7 +7,6 @@ import {
 } from '@app/entities/activity';
 import { AvailabilityType } from '@app/entities/event';
 import {
-  AppletId,
   getMsFromHours,
   getMsFromMinutes,
   HourMinute,
@@ -41,7 +40,7 @@ export interface IActivityGroupsBuilder {
 class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   private progress: EntityProgress;
 
-  private appletId: AppletId;
+  private appletId: string;
 
   private activities: Activity[];
 
@@ -358,7 +357,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 type ActivityGroupsBuilderInput = {
   allAppletActivities: Activity[];
   progress: EntityProgress;
-  appletId: AppletId;
+  appletId: string;
 };
 
 export const createActivityGroupsBuilder = (

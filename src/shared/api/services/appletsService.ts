@@ -1,16 +1,9 @@
-import {
-  ActivityFlowId,
-  ActivityId,
-  AppletId,
-  EntityId,
-  HourMinute,
-  Language,
-} from '@app/shared/lib';
+import { HourMinute, Language } from '@app/shared/lib';
 
 import httpService from './httpService';
 
 export type ActivityRecordDto = {
-  id: ActivityId;
+  id: string;
   name: string;
   description: Record<Language, string>;
   image: string;
@@ -21,18 +14,18 @@ export type ActivityRecordDto = {
 };
 
 export type ActivityFlowRecordDto = {
-  id: ActivityFlowId;
+  id: string;
   name: string;
   image: string;
   description: Record<Language, string>;
   hideBadge: boolean;
   isSingleReport: boolean;
   ordering: boolean;
-  items: Array<{ activityId: ActivityId }>;
+  items: Array<{ activityId: string }>;
 };
 
 export type AppletDetailsDto = {
-  id: AppletId;
+  id: string;
   name?: string;
   image: string;
   displayName: string;
@@ -54,12 +47,12 @@ export type EventAvailabilityDto = {
 };
 
 export type ScheduleEventDto = {
-  entityId: EntityId;
+  entityId: string;
   availability: EventAvailabilityDto;
 };
 
 type AppletDto = {
-  id: AppletId;
+  id: string;
   image?: string;
   displayName: string;
   description: Record<Language, string>;
@@ -76,7 +69,7 @@ export type AppletsResponse = {
 };
 
 type AppletDetailsRequest = {
-  appletId: AppletId;
+  appletId: string;
 };
 
 export type AppletDetailsResponse = {

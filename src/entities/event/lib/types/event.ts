@@ -1,4 +1,4 @@
-import { EventId, HourMinute } from '@app/shared/lib';
+import { HourMinute } from '@app/shared/lib';
 
 export const enum AvailabilityType {
   NotDefined = 0,
@@ -27,7 +27,7 @@ export type EventAvailability = {
 };
 
 export type ScheduleEvent = {
-  id: EventId;
+  id: string;
   activityId: string;
   availability: EventAvailability;
   scheduledAt: Date | null;
