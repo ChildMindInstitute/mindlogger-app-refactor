@@ -1,4 +1,4 @@
-package com.mindloggermobile;
+package lab.childmindinstitute.data;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

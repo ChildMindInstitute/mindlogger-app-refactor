@@ -1,4 +1,4 @@
-package com.mindloggermobile.newarchitecture;
+package lab.childmindinstitute.data.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.mindloggermobile.BuildConfig;
-import com.mindloggermobile.newarchitecture.components.MainComponentsRegistry;
-import com.mindloggermobile.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import lab.childmindinstitute.data.BuildConfig;
+import lab.childmindinstitute.data.newarchitecture.components.MainComponentsRegistry;
+import lab.childmindinstitute.data.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
