@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +25,8 @@ const LoginForm: FC<Props> = props => {
     mutate: login,
     error,
     isLoading,
+    isError,
+    reset,
   } = useLoginMutation({
     onSuccess: response => {
       const { user, token: session } = response.data.result;
@@ -46,6 +48,16 @@ const LoginForm: FC<Props> = props => {
       login(data);
     },
   });
+
+  useEffect(() => {
+    const passwordChangeListener = form.watch((_, { name }) => {
+      if (name === 'password' && isError) {
+        reset();
+      }
+    });
+
+    return () => passwordChangeListener.unsubscribe();
+  }, [form, isError, reset]);
 
   return (
     <Box {...props}>
@@ -73,6 +85,7 @@ const LoginForm: FC<Props> = props => {
         <SubmitButton
           isLoading={isLoading}
           onPress={submit}
+          disabled={isError}
           buttonStyle={{ alignSelf: 'center' }}
         >
           {t('login_form:login')}
