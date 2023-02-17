@@ -17,7 +17,7 @@ const AppletList: FC<BoxProps> = props => {
     isSuccess,
   } = useAppletsQuery({
     select: response =>
-      response.data.results.map<Applet>(dto => ({
+      response.data.result.map<Applet>(dto => ({
         ...dto,
         description: dto.description.en,
       })),

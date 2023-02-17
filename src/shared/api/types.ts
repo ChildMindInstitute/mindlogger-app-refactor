@@ -15,7 +15,7 @@ type ErrorRecord = {
 };
 
 type ErrorResponse = {
-  data: { results: ErrorRecord[] };
+  data: { result: ErrorRecord[] };
   status: number;
 };
 

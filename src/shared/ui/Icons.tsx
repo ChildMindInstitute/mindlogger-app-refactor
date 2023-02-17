@@ -14,7 +14,7 @@ export const CloseIcon: FC<IconProps> = props => (
 );
 
 export const ArrowRightIcon: FC<IconProps> = props => (
-  <AntDesign name="arrowright" {...props} />
+  <AntDesign name="right" {...props} />
 );
 
 export const KeyIcon: FC<IconProps> = props => (
@@ -27,4 +27,12 @@ export const UserIcon: FC<IconProps> = props => (
 
 export const UserProfileIcon: FC<IconProps> = props => (
   <FontAwesome name="user" {...props} />
+);
+
+export const HomeIcon: FC<IconProps> = props => (
+  <FontAwesome name="home" {...props} />
+);
+
+export const ChevronRightIcon: FC<IconProps> = props => (
+  <FontAwesome name="chevron-right" {...props} />
 );

@@ -1,13 +1,13 @@
 import { Emitter, throwError } from '@app/shared/lib';
 
-import storage from './storage';
-import { Session } from './types';
+import { sessionService } from '../lib';
+import { Session } from '../types';
 import { SessionScheme } from '../validation';
 
 export function storeSession(session: Session) {
   try {
     SessionScheme.parse(session);
-    storage.setSession(session);
+    sessionService.setSession(session);
   } catch (e: any) {
     throwError('[storeSession]: Invalid session object has been provided');
     throwError(e);
@@ -19,7 +19,7 @@ export function storeAccessToken(accessToken: string) {
     throwError('[storeAccessToken]: No access token has been provided');
   }
 
-  storage.setSession({ accessToken });
+  sessionService.setSession({ accessToken });
 }
 
 export function storeRefreshToken(refreshToken: string) {
@@ -27,11 +27,12 @@ export function storeRefreshToken(refreshToken: string) {
     throwError('[storeRefreshToken]: No refresh token has been provided');
   }
 
-  storage.setSession({ refreshToken });
+  sessionService.setSession({ refreshToken });
 }
 
 export function refreshTokenFailed() {
   Emitter.emit('refresh-token-fail');
 }
 
-export const getSession = storage.getSession;
+export const getSession = sessionService.getSession;
+export const clearSession = sessionService.clearSession;

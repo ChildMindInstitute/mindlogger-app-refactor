@@ -73,7 +73,8 @@ const LoginForm: FC<Props> = props => {
         <SubmitButton
           isLoading={isLoading}
           onPress={submit}
-          buttonStyle={{ width: 160, alignSelf: 'center' }}>
+          buttonStyle={{ alignSelf: 'center' }}
+        >
           {t('login_form:login')}
         </SubmitButton>
       </FormProvider>

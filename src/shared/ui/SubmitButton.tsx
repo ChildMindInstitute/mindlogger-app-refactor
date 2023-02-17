@@ -66,14 +66,16 @@ const SubmitButton: FC<Props> = ({
   return (
     <TouchableOpacity
       onPress={!disabled ? onPress : undefined}
-      disabled={disabled || isLoading}>
+      disabled={disabled || isLoading}
+    >
       <Button
         style={buttonStyle}
         flexDirection="row"
         justifyContent="center"
         disabled={disabled}
         mode={mode}
-        {...stylesProps}>
+        {...stylesProps}
+      >
         <ButtonText mode={mode} {...textProps} opacity={isLoading ? 0 : 1}>
           {children}
         </ButtonText>

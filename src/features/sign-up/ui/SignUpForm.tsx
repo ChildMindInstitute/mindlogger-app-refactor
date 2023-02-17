@@ -82,7 +82,8 @@ const SignUpForm: FC<Props> = props => {
                   fontSize={17}
                   color="$secondary"
                   textDecorationLine="underline"
-                  onPress={navigateToTerms}>
+                  onPress={navigateToTerms}
+                >
                   {t('auth:terms_of_service')}
                 </Text>
               </XStack>
@@ -93,7 +94,8 @@ const SignUpForm: FC<Props> = props => {
         <SubmitButton
           isLoading={isLoading}
           onPress={submit}
-          buttonStyle={{ alignSelf: 'center', paddingHorizontal: 56 }}>
+          buttonStyle={{ alignSelf: 'center', paddingHorizontal: 56 }}
+        >
           {t('sign_up_form:sign_up')}
         </SubmitButton>
       </FormProvider>

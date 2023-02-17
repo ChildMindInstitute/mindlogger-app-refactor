@@ -7,15 +7,27 @@ import {
   ThunkAction,
 } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import { persistReducer, persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import { IdentityModel } from '@entities/identity';
+import { createAsyncStorage, useSplash } from '@shared/lib';
+
+const storage = createAsyncStorage('redux-storage');
+
+export const persistConfig = {
+  key: 'root',
+  storage: storage,
+};
 
 const rootReducer = combineReducers({
   identity: IdentityModel.reducer,
 });
 
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 export const reduxStore = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   middleware: getDefaultMiddleware => {
     const middlewares = getDefaultMiddleware({ serializableCheck: false });
     if (__DEV__) {
@@ -26,9 +38,23 @@ export const reduxStore = configureStore({
   },
 });
 
-const ReduxProvider: FC<PropsWithChildren> = ({ children }) => (
-  <Provider store={reduxStore}>{children}</Provider>
-);
+const persistor = persistStore(reduxStore);
+
+const ReduxProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { onModuleInitialized } = useSplash();
+
+  const onBeforeLift = () => {
+    onModuleInitialized('state');
+  };
+
+  return (
+    <Provider store={reduxStore}>
+      <PersistGate persistor={persistor} onBeforeLift={onBeforeLift}>
+        {children}
+      </PersistGate>
+    </Provider>
+  );
+};
 
 declare global {
   type RootState = ReturnType<typeof reduxStore.getState>;

@@ -1,1 +1,1 @@
-export * from './sessionCache';
+export { default as sessionService } from './sessionService';

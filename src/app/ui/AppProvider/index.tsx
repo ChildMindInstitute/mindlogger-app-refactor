@@ -1,10 +1,10 @@
 import { FC, Suspense, PropsWithChildren } from 'react';
 
 import { CacheManager } from '@georstat/react-native-image-cache';
-import { NavigationContainer } from '@react-navigation/native';
 import { Dirs } from 'react-native-file-access';
 
 import CommonEvents from './CommonEvents';
+import NavigationProvider from './NavigationProvider';
 import ReactQueryProvider from './ReactQueryProvider';
 import ReduxProvider from './ReduxProvider';
 import SplashProvider from './SplashProvider';
@@ -24,11 +24,11 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
       <ReduxProvider>
         <ReactQueryProvider>
           <TamaguiProvider>
-            <NavigationContainer>
+            <NavigationProvider>
               <CommonEvents>
                 <Suspense>{children}</Suspense>
               </CommonEvents>
-            </NavigationContainer>
+            </NavigationProvider>
           </TamaguiProvider>
         </ReactQueryProvider>
       </ReduxProvider>
