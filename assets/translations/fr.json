@@ -454,5 +454,13 @@
       "map": "map",
       "set": "ensemble"
     }
+  },
+  "cognitive": {
+    "incorrect_start_point": "Mauvais point de départ!",
+    "incorrect_line": "Ligne incorrecte!",
+    "finished_continue": "Fini. Cliquez sur Terminé pour continuer.",
+    "finished_complete": "Fini. Cliquer sur Suivant pour terminer.",
+    "begin": "Commencer",
+    "end": "Fin"
   }
 }

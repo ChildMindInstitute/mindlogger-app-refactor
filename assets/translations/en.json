@@ -346,5 +346,13 @@
   "prize": {
     "lack_tokens_title": "Try again",
     "lack_tokens_subtitle": "You don't have enough tokens.\nPlease select another prize"
+  },
+  "cognitive": {
+    "incorrect_start_point": "Incorrect start point!",
+    "incorrect_line": "Incorrect line!",
+    "finished_continue": "Finished. Click Done to continue.",
+    "finished_complete": "Finished. Click next to complete.",
+    "begin": "Begin",
+    "end": "End"
   }
 }
