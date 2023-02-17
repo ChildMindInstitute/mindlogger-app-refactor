@@ -4,6 +4,10 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Foundation from 'react-native-vector-icons/Foundation';
 
+export { default as AboutIcon } from './About';
+export { default as DataIcon } from './Data';
+export { default as SurveyIcon } from './Survey';
+
 type IconProps = {
   color: string;
   size: number;
