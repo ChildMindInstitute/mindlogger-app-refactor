@@ -14,6 +14,8 @@ import Text from './Text';
 
 export { Image } from '@tamagui/image';
 export { YStack, XStack, ZStack } from '@tamagui/stacks';
+export { Label } from '@tamagui/label';
+export { RadioGroup } from '@tamagui/radio-group';
 export * from './Icons';
 
 export { default as MarkdownView } from './MarkdownView';
