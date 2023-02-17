@@ -35,7 +35,7 @@ export const InputFrame = styled(
         },
         dark: {
           color: '$darkGrey',
-          placeholderTextColor: '#3b3a3a',
+          placeholderTextColor: '$lighterGrey',
           borderBottomColor: '#1e1d1d',
         },
       },

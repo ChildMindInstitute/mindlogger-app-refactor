@@ -5,7 +5,7 @@ import { Splash } from '@shared/ui';
 
 function SplashProvider({ children }: PropsWithChildren<unknown>) {
   const [isLoading, setIsLoading] = useState(true);
-  const moduleWaitList = useRef(['cache']);
+  const moduleWaitList = useRef(['cache', 'state']);
 
   const contextValue = useMemo(
     () => ({

@@ -27,7 +27,7 @@ const useBaseMutation = <TRequest, TResponse>(
   return useMutation(key, mutationFn, {
     ...options,
     onError: (error: BaseError, variables: TRequest, context: unknown) => {
-      const errorRecords = error.response?.data?.results;
+      const errorRecords = error.response?.data?.result;
 
       if (errorRecords?.length) {
         const firstRecord = errorRecords[0];

@@ -1,9 +1,9 @@
 import { FC, PropsWithChildren } from 'react';
 
-import { IdentityModel } from '@entities/identity';
+import { SessionModel } from '@entities/session';
 
 const CommonEvents: FC<PropsWithChildren> = ({ children }) => {
-  IdentityModel.useOnRefreshTokenFail(() => {
+  SessionModel.useOnRefreshTokenFail(() => {
     // call logout feature here
   });
 

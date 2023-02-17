@@ -23,7 +23,8 @@ const ErrorMessage: FC<PropsWithChildren<Props>> = ({
         <Text
           color={mode === 'light' ? '$secondary' : '$tertiary'}
           fontSize={12}
-          {...props}>
+          {...props}
+        >
           {/* @ts-ignore */}
           {t(error.message, error.params)}
         </Text>

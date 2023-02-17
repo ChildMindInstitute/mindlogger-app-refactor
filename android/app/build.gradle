@@ -151,9 +151,9 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.mindloggermobile"
+        applicationId "lab.childmindinstitute.data"
         resValue "string", "app_name", "Mindlogger"
-        resValue "string", "build_config_package", "com.mindloggermobile"
+        resValue "string", "build_config_package", "lab.childmindinstitute.data"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

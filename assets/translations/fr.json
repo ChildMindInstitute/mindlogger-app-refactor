@@ -8,13 +8,15 @@
   },
   "activity": {
     "incorrect_answer": "Réponse incorrecte. Veuillez réessayer",
-    "failed": "Échoué"
+    "failed": "Échoué",
+    "flanker_accuracy_warn": "*Les horodatages collectés pour un Android ne sont pas aussi précis que les appareils iOS."
   },
   "activity_time": {
     "time_remaining": "Temps restant"
   },
   "timed_activity": {
     "time_to_complete": "Temps pour terminer",
+    "time_to_complete_hm": "Temps pour terminer: {{hours}} heures et {{minutes}} minutes",
     "hours": "les heures"
   },
   "activity_summary": {
@@ -84,7 +86,12 @@
   },
   "applet_list_component": {
     "about_title": "À propos de MindLogger",
-    "no_applets_yet": "Aucune applet spécifiée pour le moment"
+    "no_applets_yet": "Aucune applet spécifiée pour le moment",
+    "noon": "Midi",
+    "midnight": "Minuit"
+  },
+  "activity_list_component": {
+    "no_activities_yet": "Aucune activité spécifiée pour le moment"
   },
   "applet_settings": {
     "applet_not_defined": "Aucune applet n'est définie.",

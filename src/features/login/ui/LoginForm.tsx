@@ -26,12 +26,12 @@ const LoginForm: FC<Props> = props => {
     error,
     isLoading,
   } = useLoginMutation({
-    onSuccess: (response, { password }) => {
+    onSuccess: response => {
       const { user, token: session } = response.data.result;
 
       dispatch(IdentityModel.actions.onAuthSuccess(user));
 
-      SessionModel.storeSession(session, { encryptWithKey: password });
+      SessionModel.storeSession(session);
 
       props.onLoginSuccess();
     },
@@ -73,7 +73,8 @@ const LoginForm: FC<Props> = props => {
         <SubmitButton
           isLoading={isLoading}
           onPress={submit}
-          buttonStyle={{ width: 160, alignSelf: 'center' }}>
+          buttonStyle={{ alignSelf: 'center' }}
+        >
           {t('login_form:login')}
         </SubmitButton>
       </FormProvider>

@@ -13,7 +13,8 @@ const RoundTextNotification: FC<Props> = ({ text }: Props) => (
     ai="center"
     jc="center"
     backgroundColor="$alert"
-    br={10}>
+    br={10}
+  >
     <Text fontSize={11} fontWeight="700" color="$secondary">
       {text}
     </Text>

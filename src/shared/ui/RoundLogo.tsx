@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { FC } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ImageStyle } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { Text } from '@tamagui/core';
@@ -17,8 +17,9 @@ declare module 'react-native-svg' {
 }
 
 type Props = {
-  letter: string;
-  imageUri?: string;
+  letter?: string;
+  imageUri?: string | null;
+  imageStyle?: ImageStyle;
   size?: number;
 };
 
@@ -30,14 +31,18 @@ const getImageUrl = (url: string): string => {
   return url;
 };
 
-const RoundLogo: FC<Props> = ({ imageUri, letter, size = 64 }) => {
+const RoundLogo: FC<Props> = ({ imageUri, imageStyle, letter, size = 64 }) => {
   if (imageUri) {
     return (
       <CachedImage
-        style={getStyles(size).image}
+        style={[getStyles(size).image, imageStyle]}
         source={getImageUrl(imageUri)}
       />
     );
+  }
+
+  if (!letter) {
+    return <Box />;
   }
 
   return (
