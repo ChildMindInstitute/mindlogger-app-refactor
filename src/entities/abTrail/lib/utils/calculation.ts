@@ -1,0 +1,76 @@
+import { SkPath } from '@shopify/react-native-skia';
+
+import { Point, TestScreenPayload } from '../types';
+
+export const transformCoordinates = (
+  original: TestScreenPayload,
+  width: number,
+): TestScreenPayload => {
+  const multiplier = width / 100;
+
+  const transformed: TestScreenPayload = {
+    config: {
+      fontSize: original.config.fontSize * multiplier,
+      fontSizeBeginEnd: original.config.fontSizeBeginEnd
+        ? original.config.fontSizeBeginEnd * multiplier
+        : null,
+      beginWordLength: original.config.beginWordLength
+        ? original.config.beginWordLength * multiplier
+        : null,
+      endWordLength: original.config.endWordLength
+        ? original.config.endWordLength * multiplier
+        : null,
+      radius: original.config.radius * multiplier,
+    },
+    nodes: original.nodes.map(x => ({
+      cx: x.cx * multiplier,
+      cy: x.cy * multiplier,
+      label: x.label,
+      orderIndex: x.orderIndex,
+    })),
+  };
+  return transformed;
+};
+
+export const getDistance = (from: Point, to: Point): number => {
+  return Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2));
+};
+
+export const getEquidistantPoint = (errorPath: SkPath): Point | null => {
+  const points: Point[] = [];
+
+  const totalPoints = errorPath.countPoints();
+
+  for (let i = 0; i < totalPoints; i++) {
+    const point = errorPath.getPoint(i);
+    points.push({ x: point.x, y: point.y });
+  }
+
+  if (points.length < 3) {
+    return null;
+  }
+
+  const startPoint = points[0];
+  const endPoint = points[points.length - 1];
+
+  const MaxDistanceDiff = 10000;
+
+  let bestDistanceDiff = MaxDistanceDiff;
+  let foundIndex = 0;
+
+  for (let i = 1; i < points.length - 1; i++) {
+    const currentPoint = points[i];
+
+    const distanceToStart = getDistance(startPoint, currentPoint);
+    const distanceToEnd = getDistance(endPoint, currentPoint);
+
+    const currentDistanceDiff = Math.abs(distanceToStart - distanceToEnd);
+
+    if (currentDistanceDiff < bestDistanceDiff) {
+      bestDistanceDiff = currentDistanceDiff;
+      foundIndex = i;
+    }
+  }
+
+  return points[foundIndex];
+};
