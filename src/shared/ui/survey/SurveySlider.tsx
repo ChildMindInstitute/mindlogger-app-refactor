@@ -4,7 +4,8 @@ import { Box, XStack, YStack, Text, Image, Slider } from '@shared/ui';
 
 const THUMB_SIZE = 22;
 
-type Props = {
+type OldProps = {
+  //@todo make sure backend will update config to new keys described below (type Config)
   config: {
     minValue: string;
     maxValue: string;
@@ -16,13 +17,40 @@ type Props = {
     minValueImg: string;
     maxValueImg: string;
   };
-  value?: number;
+  initialValue?: number;
   onChange: (value: number) => void;
   onPress?: () => void;
   onRelease?: () => void;
 };
 
-const SurveySlider: FC<Props> = ({ config, ...props }) => {
+// type Config = {
+//   leftTitle: string; // was minValue
+//   rightTitle: string; // was maxValue
+//   showTitles: boolean; // was textAnchors
+//   leftImageUrl: string; // was minValueImg
+//   rightImageUrl: string; // was maxValueImg
+//   showTickMarks: boolean; // was tickMark
+//   showTickLabels: boolean; // was tickLabel
+//   isContinuousSlider: boolean; // was continousSlider
+//   items: [
+//     {
+//       name: string;
+//       value: string | number;
+//       score: number;
+//       isVisible: boolean;
+//     },
+//   ];
+//   // was itemList: [
+//   //   {
+//   //     name: { en: string | number };
+//   //     value: string | number;
+//   //     score: number;
+//   //     isVis: boolean;
+//   //   },
+//   // ]
+// };
+
+const SurveySlider: FC<OldProps> = ({ config, ...props }) => {
   const {
     minValue,
     maxValue,

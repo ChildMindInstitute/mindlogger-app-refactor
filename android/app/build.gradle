@@ -93,7 +93,7 @@ project.ext.envConfigFiles = [
 
     stagingdebug: ".env.staging",
     stagingrelease: ".env.staging",
-   
+
     productiondebug: ".env.production",
     productionrelease: ".env.production",
 ]
@@ -353,7 +353,8 @@ project.ext.vectoricons = [
         'FontAwesome5_Regular.ttf',
         'FontAwesome5_Solid.ttf',
         'AntDesign.ttf',
-        'Foundation.ttf'
+        'Foundation.ttf',
+        'Entypo.ttf'
     ]
 ]
 
