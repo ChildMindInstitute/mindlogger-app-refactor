@@ -33,6 +33,7 @@ export { default as ListSeparator } from './ListSeparator';
 export * from './ViewSlider';
 export { default as ProgressBar } from './ProgressBar';
 export { default as Stepper } from './Stepper';
+export { default as Slider } from './Slider';
 
 export {
   StatusBar,
