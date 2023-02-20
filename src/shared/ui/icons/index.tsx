@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Foundation from 'react-native-vector-icons/Foundation';
 
@@ -34,7 +35,7 @@ export const UserProfileIcon: FC<IconProps> = props => (
 );
 
 export const HomeIcon: FC<IconProps> = props => (
-  <FontAwesome name="home" {...props} />
+  <Entypo name="home" {...props} />
 );
 
 export const ChevronRightIcon: FC<IconProps> = props => (
