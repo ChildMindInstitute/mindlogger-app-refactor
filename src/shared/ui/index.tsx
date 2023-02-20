@@ -26,6 +26,7 @@ export { default as ActivityIndicator } from './ActivityIndicator';
 export { default as NoListItemsYet } from './NoListItemsYet';
 export { default as HorizontalCalendar } from './HorizontalCalendar';
 export { default as BackButton } from './BackButton';
+export { default as Slider } from './Slider';
 
 export {
   StatusBar,
