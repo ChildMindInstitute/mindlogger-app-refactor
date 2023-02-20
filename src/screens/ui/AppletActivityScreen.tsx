@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { HorizontalCalendar } from '@shared/ui';
 import { YStack, ImageBackground } from '@shared/ui';
 
-const AppletsDetailsScreen: FC = () => {
+const AppletActivityScreen: FC = () => {
   return (
     <YStack jc="flex-start" flex={1}>
       <ImageBackground>
@@ -13,4 +13,4 @@ const AppletsDetailsScreen: FC = () => {
   );
 };
 
-export default AppletsDetailsScreen;
+export default AppletActivityScreen;

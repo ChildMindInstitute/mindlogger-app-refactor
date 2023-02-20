@@ -3,6 +3,8 @@ import { StyleSheet, TextInput } from 'react-native';
 import { GetProps, setupReactNative, styled } from '@tamagui/core';
 import { focusableInputHOC } from '@tamagui/focusable';
 
+import { IS_IOS } from '@shared/lib';
+
 setupReactNative({
   TextInput,
 });
@@ -37,6 +39,18 @@ export const InputFrame = styled(
           color: '$darkGrey',
           placeholderTextColor: '$lighterGrey',
           borderBottomColor: '#1e1d1d',
+        },
+        survey: {
+          height: 36,
+          minHeight: IS_IOS ? 28 : 45,
+          borderBottomWidth: 1,
+          borderBottomColor: '$mediumGrey',
+          color: '$black',
+          fontSize: 18,
+          focusStyle: {
+            borderBottomColor: '$darkGrey',
+            maxHeight: 100,
+          },
         },
       },
       isInvalid: {

@@ -1,4 +1,4 @@
-package com.mindloggermobile.newarchitecture.components;
+package lab.childmindinstitute.data.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

@@ -10,15 +10,9 @@ import { colors } from '../lib';
 
 import { Box } from '.';
 
-declare module 'react-native-svg' {
-  interface LinearGradientProps {
-    children: JSX.Element | JSX.Element[];
-  }
-}
-
 type Props = {
   letter?: string;
-  imageUri?: string;
+  imageUri?: string | null;
   imageStyle?: ImageStyle;
   size?: number;
 };

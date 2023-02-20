@@ -11,7 +11,8 @@ const NavigationProvider: FC<PropsWithChildren> = ({ children }) => {
           // @react-navigation's poor type inference
           state as NavigationState<RootStackParamList>,
         )
-      }>
+      }
+    >
       {children}
     </NavigationContainer>
   );

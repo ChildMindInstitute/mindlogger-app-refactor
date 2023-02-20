@@ -44,7 +44,8 @@ const AppletCard: FC<Props> = ({ applet, disabled }) => {
       onPress={() =>
         navigate('ActivityList', { appletId: applet.id.toString() })
       }
-      disabled={disabled}>
+      disabled={disabled}
+    >
       <XStack
         position="relative"
         mx={3}
@@ -53,7 +54,8 @@ const AppletCard: FC<Props> = ({ applet, disabled }) => {
         borderColor="$lighterGrey"
         borderRadius={9}
         opacity={disabled ? 0.5 : 1}
-        backgroundColor="$white">
+        backgroundColor="$white"
+      >
         <Box mr={14}>
           <RoundLogo
             imageUri={applet.image}
@@ -68,7 +70,8 @@ const AppletCard: FC<Props> = ({ applet, disabled }) => {
               flex={1}
               fontWeight={IS_IOS ? '600' : '700'}
               fontSize={16}
-              lineHeight={20}>
+              lineHeight={20}
+            >
               {applet.displayName}
             </Text>
 
