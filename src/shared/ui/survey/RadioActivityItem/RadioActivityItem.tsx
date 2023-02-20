@@ -1,25 +1,39 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
+import { shuffle } from '@app/shared/lib';
 import { YStack, RadioGroup, Input } from '@shared/ui';
 
 import RadioItem from './RadioItem';
 import RadioOption from './types';
 
 type RadioActivityItemProps = {
-  options: Array<RadioOption>;
+  config: {
+    isOptionOrderRandomized: boolean;
+    options: Array<RadioOption>;
+  };
+
   onResponseSet: (...args: any[]) => unknown;
-  isOptionOrderRandomized: boolean;
 };
 
 const RadioActivityItem: FC<RadioActivityItemProps> = ({
-  options,
+  config,
   onResponseSet,
 }) => {
+  const { options, isOptionOrderRandomized } = config;
+
+  const optionsList = useMemo(() => {
+    if (isOptionOrderRandomized) {
+      return shuffle(options);
+    }
+
+    return options;
+  }, [isOptionOrderRandomized, options]);
+
   return (
     <YStack>
       <RadioGroup name="form">
         <YStack w={300} ai="center" space="$2">
-          {options.map(option => (
+          {optionsList.map(option => (
             <RadioItem option={option} />
           ))}
         </YStack>
