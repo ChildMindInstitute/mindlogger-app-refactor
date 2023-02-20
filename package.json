@@ -50,6 +50,7 @@
     "@tamagui/stacks": "^1.5.21",
     "@tamagui/text": "^1.5.21",
     "@tamagui/theme-base": "^1.5.21",
+    "@tamagui/slider": "^1.5.21",
     "@tanstack/query-async-storage-persister": "^4.20.9",
     "@tanstack/react-query": "^4.20.9",
     "@tanstack/react-query-persist-client": "^4.20.9",
