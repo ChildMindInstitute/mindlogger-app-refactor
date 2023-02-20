@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { IdentityModel, useLoginMutation } from '@entities/identity';
 import { SessionModel } from '@entities/session';
-import { useAppDispatch, useAppForm } from '@shared/lib';
+import { useAppDispatch, useAppForm, useFormChanges } from '@shared/lib';
 import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
@@ -25,7 +25,6 @@ const LoginForm: FC<Props> = props => {
     mutate: login,
     error,
     isLoading,
-    isError,
     reset,
   } = useLoginMutation({
     onSuccess: response => {
@@ -49,15 +48,11 @@ const LoginForm: FC<Props> = props => {
     },
   });
 
-  useEffect(() => {
-    const passwordChangeListener = form.watch((_, { name }) => {
-      if (name === 'password' && isError) {
-        reset();
-      }
-    });
-
-    return () => passwordChangeListener.unsubscribe();
-  }, [form, isError, reset]);
+  useFormChanges({
+    form,
+    onInputChange: () => reset(),
+    watchInputs: ['password'],
+  });
 
   return (
     <Box {...props}>
@@ -85,7 +80,6 @@ const LoginForm: FC<Props> = props => {
         <SubmitButton
           isLoading={isLoading}
           onPress={submit}
-          disabled={isError}
           buttonStyle={{ alignSelf: 'center' }}
         >
           {t('login_form:login')}
