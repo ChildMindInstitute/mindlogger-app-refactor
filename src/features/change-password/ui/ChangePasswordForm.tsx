@@ -4,7 +4,7 @@ import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useChangePasswordMutation } from '@app/entities/identity';
-import { useAppForm } from '@shared/lib';
+import { useAppForm, useFormChanges } from '@shared/lib';
 import { SubmitButton, YStack, Box, BoxProps } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
@@ -21,6 +21,7 @@ const ChangePasswordForm: FC<Props> = props => {
     mutate: changePassword,
     error,
     isLoading,
+    reset,
   } = useChangePasswordMutation({
     onSuccess: () => {
       props.onChangePasswordSuccess();
@@ -36,6 +37,8 @@ const ChangePasswordForm: FC<Props> = props => {
       changePassword(data);
     },
   });
+
+  useFormChanges({ form, onInputChange: () => reset() });
 
   return (
     <Box {...props}>

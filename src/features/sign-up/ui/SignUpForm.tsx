@@ -5,7 +5,7 @@ import { Linking } from 'react-native';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { useAppForm } from '@app/shared/lib';
+import { useAppForm, useFormChanges } from '@app/shared/lib';
 import { Text, Box, BoxProps, YStack, XStack, SubmitButton } from '@shared/ui';
 import { InputField, CheckBoxField, ErrorMessage } from '@shared/ui/form';
 
@@ -22,6 +22,7 @@ const SignUpForm: FC<Props> = props => {
   const {
     isLoading,
     error,
+    reset,
     mutate: signUp,
   } = SignUpModel.useRegistrationMutation(props.onLoginSuccess);
 
@@ -38,6 +39,12 @@ const SignUpForm: FC<Props> = props => {
         password: data.password,
       });
     },
+  });
+
+  useFormChanges({
+    form,
+    watchInputs: ['password'],
+    onInputChange: () => reset(),
   });
 
   const navigateToTerms = () => {
