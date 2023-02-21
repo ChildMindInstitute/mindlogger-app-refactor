@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SessionModel } from '@app/entities/session';
 import { APP_VERSION, colors, ENV } from '@shared/lib';
-import { Text, UserProfileIcon, HomeIcon } from '@shared/ui';
+import { UserProfileIcon, HomeIcon, BackButton } from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
 import { onBeforeAppClose } from '../lib';
@@ -19,7 +19,6 @@ import {
   LoginScreen,
   SignUpScreen,
   AboutScreen,
-  ActivityListScreen,
   ChangePasswordScreen,
   SettingsScreen,
   AppletBottomTabNavigator,
@@ -105,26 +104,6 @@ export default () => {
           />
 
           <Stack.Screen
-            name="ActivityList"
-            options={{
-              title: 'Applet 123',
-              headerStyle: {
-                backgroundColor: colors.blue,
-              },
-              headerTitleStyle: {
-                fontSize: 18,
-                color: colors.white,
-              },
-              headerLeft: () => (
-                <Text onPress={() => navigation.goBack()} mr={24}>
-                  <HomeIcon color={colors.white} size={32} />
-                </Text>
-              ),
-            }}
-            component={ActivityListScreen}
-          />
-
-          <Stack.Screen
             name="Settings"
             options={{
               title: t('settings:user_settings'),
@@ -166,7 +145,17 @@ export default () => {
         />
       </Stack.Group>
 
-      <Stack.Screen name="AppletDetails" component={AppletBottomTabNavigator} />
+      <Stack.Screen
+        name="AppletDetails"
+        component={AppletBottomTabNavigator}
+        options={{
+          headerLeft: () => (
+            <BackButton fallbackRoute="Applets">
+              <HomeIcon color={colors.white} size={32} />
+            </BackButton>
+          ),
+        }}
+      />
     </Stack.Navigator>
   );
 };

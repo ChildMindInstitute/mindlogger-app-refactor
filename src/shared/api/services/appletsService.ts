@@ -29,7 +29,7 @@ export type AppletDetailsDto = {
   name?: string;
   image: string;
   displayName: string;
-  description: Record<Language, string>;
+  description: string;
   activities: ActivityRecordDto[];
   activityFlows: ActivityFlowRecordDto[];
 };
@@ -55,7 +55,7 @@ type AppletDto = {
   id: string;
   image?: string;
   displayName: string;
-  description: Record<Language, string>;
+  description: string;
   numberOverdue?: number;
 
   theme?: {

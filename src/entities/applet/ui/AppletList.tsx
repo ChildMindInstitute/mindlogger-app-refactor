@@ -7,20 +7,19 @@ import { LoadListError } from '@app/shared/ui';
 
 import AppletCard from './AppletCard';
 import { useAppletsQuery } from '../api';
-import { Applet } from '../lib';
 
-const AppletList: FC<BoxProps> = props => {
+type Props = {
+  onAppletPress: (appletId: string) => void;
+} & BoxProps;
+
+const AppletList: FC<Props> = ({ onAppletPress, ...styledProps }) => {
   const {
     error,
     data: applets,
     isFetching,
     isSuccess,
   } = useAppletsQuery({
-    select: response =>
-      response.data.result.map<Applet>(dto => ({
-        ...dto,
-        description: dto.description.en,
-      })),
+    select: response => response.data.result,
   });
 
   const hasError = !!error;
@@ -42,10 +41,15 @@ const AppletList: FC<BoxProps> = props => {
   }
 
   return (
-    <Box {...props}>
+    <Box {...styledProps}>
       <YStack space={18}>
         {applets?.map(x => (
-          <AppletCard applet={x} key={x.id} disabled={isFetching} />
+          <AppletCard
+            applet={x}
+            key={x.id}
+            disabled={isFetching}
+            onPress={() => onAppletPress(x.id)}
+          />
         ))}
       </YStack>
     </Box>
