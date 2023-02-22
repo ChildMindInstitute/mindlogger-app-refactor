@@ -25,16 +25,6 @@ export const useActivityGroups = (
     select: data => data.data.result,
   });
 
-  // const allAppletActivities = useMemo(() => {
-  //   if (!appletDetails) {
-  //     return [];
-  //   }
-
-  //   const { activities } = appletDetails;
-
-  //   return activities.map(mapActivityFromDto);
-  // }, [appletDetails]);
-
   const builder = useMemo(
     () =>
       createActivityGroupsBuilder({
