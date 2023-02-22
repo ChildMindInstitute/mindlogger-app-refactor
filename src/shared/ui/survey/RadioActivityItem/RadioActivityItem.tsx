@@ -1,8 +1,8 @@
 import { FC, useMemo, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList } from 'react-native';
 
-import { colors, shuffle } from '@shared/lib';
-import { YStack, RadioGroup, Input } from '@shared/ui';
+import { shuffle } from '@shared/lib';
+import { YStack, RadioGroup, Input, ListSparator } from '@shared/ui';
 
 import RadioItem from './RadioItem';
 import RadioOption from './types';
@@ -48,15 +48,7 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
         <FlatList
           data={optionsList}
           bounces={false}
-          ItemSeparatorComponent={() => (
-            <View
-              style={{
-                width: '100%',
-                height: 1,
-                backgroundColor: colors.lightGrey,
-              }}
-            />
-          )}
+          ItemSeparatorComponent={() => <ListSparator />}
           renderItem={({ item }) => <RadioItem option={item} />}
         />
       </RadioGroup>

@@ -4,7 +4,6 @@ import {
   StatusBar,
   Keyboard,
   TouchableWithoutFeedback,
-  Button,
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -73,8 +72,6 @@ const LoginScreen: FC = () => {
                   {t('login:forgot_password')}
                 </Link>
               </XStack>
-
-              <Button title="Hhh" onPress={() => navigate('Radio')} />
 
               <Link onPress={navigateToAbout}>{`${t(
                 'login:what_is',
