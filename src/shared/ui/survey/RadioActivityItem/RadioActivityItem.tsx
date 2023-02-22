@@ -1,5 +1,7 @@
-import { FC, useMemo, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { FlatList } from 'react-native';
+
+import { useTranslation } from 'react-i18next';
 
 import { shuffle } from '@shared/lib';
 import { YStack, RadioGroup, Input, ListSparator } from '@shared/ui';
@@ -23,6 +25,8 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
 }) => {
   const { options, isOptionOrderRandomized } = config;
   const [radioGroupValue, setRadioGroupValue] = useState('');
+  const [optionalValue, setOoptionalValue] = useState('');
+  const { t } = useTranslation();
 
   const optionsList = useMemo(() => {
     if (isOptionOrderRandomized) {
@@ -33,10 +37,13 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
   }, [isOptionOrderRandomized, options]);
 
   const handleRadioGroupValueChange = (value: string) => {
-    console.log(value);
-
     setRadioGroupValue(value);
+    onResponseSet(value);
   };
+
+  const handleOptionalInputChange = (text: string) => setOoptionalValue(text);
+
+  const onSubmitEditing = () => onResponseSet(optionalValue);
 
   return (
     <YStack>
@@ -53,7 +60,14 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
         />
       </RadioGroup>
 
-      {config.isOptionalText && <Input onSubmitEditing={onResponseSet} />}
+      {config.isOptionalText && (
+        <Input
+          value={optionalValue}
+          placeholder={t('optional_text:enter_text')}
+          onChangeText={handleOptionalInputChange}
+          onSubmitEditing={onSubmitEditing}
+        />
+      )}
     </YStack>
   );
 };

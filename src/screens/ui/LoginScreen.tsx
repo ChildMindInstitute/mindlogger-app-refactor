@@ -10,10 +10,64 @@ import { useNavigation } from '@react-navigation/native';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
+import RadioActivityItem from '@app/shared/ui/survey/RadioActivityItem/RadioActivityItem';
+import RadioOption from '@app/shared/ui/survey/RadioActivityItem/types';
 import { LoginForm } from '@features/login';
 import { Center, Text, Image, YStack, XStack, Box } from '@shared/ui';
 
 import { whiteLogo } from '@images';
+
+type Config = {
+  isOptionOrderRandomized: boolean;
+  options: Array<RadioOption>;
+  isOptionalText: boolean;
+};
+
+const config: Config = {
+  isOptionOrderRandomized: true,
+  options: [
+    {
+      name: { en: 'No' },
+      value: '1',
+      color: '',
+      isVisible: true,
+      description: 'Hello',
+      image:
+        'https://i.discogs.com/J4bH_-A4UcQHFSUBDyyqXbTzr7XWM8S0NfNoYgwXAiI/rs:fit/g:sm/q:90/h:400/w:400/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTE0MDAz/MTctMTMzNTcxNzQ3/Ni5wbmc.jpeg',
+    },
+    {
+      name: { en: 'Option 1' },
+      value: '2',
+      color: '',
+      description: '',
+      isVisible: true,
+      image:
+        'https://i.discogs.com/J4bH_-A4UcQHFSUBDyyqXbTzr7XWM8S0NfNoYgwXAiI/rs:fit/g:sm/q:90/h:400/w:400/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTE0MDAz/MTctMTMzNTcxNzQ3/Ni5wbmc.jpeg',
+    },
+    {
+      name: { en: 'No' },
+      value: '5',
+      color: '',
+      isVisible: true,
+      description: '',
+    },
+    {
+      name: { en: 'Option 1' },
+      value: '6',
+      description: '',
+      color: '',
+      isVisible: true,
+    },
+    {
+      name: { en: 'Option 2' },
+      value: '7',
+      color: '',
+      isVisible: true,
+      description: 'Test op 2',
+    },
+  ],
+  isOptionalText: true,
+};
 
 const Link = styled(Text, { color: '$secondary' });
 
@@ -86,6 +140,10 @@ const LoginScreen: FC = () => {
 
             <Image alignSelf="center" src={whiteLogo} width={70} height={70} />
           </YStack>
+        </Box>
+
+        <Box>
+          <RadioActivityItem config={config} onResponseSet={() => {}} />
         </Box>
       </Box>
     </TouchableWithoutFeedback>

@@ -1,44 +1,23 @@
-import React, { FC, useState } from 'react';
-import { StyleSheet } from 'react-native';
-
-import { styled } from '@tamagui/core';
-
-import { Text, RNETooltip } from '@shared/ui';
+import React, { FC } from 'react';
 
 import { colors } from '../lib';
-
-const tooltipStyles = StyleSheet.create({
-  tooltipTextContainer: {
-    width: '70%',
-  },
-});
+import { Text, Popover } from '../ui';
 
 type TooltipProps = {
   children: React.ReactNode;
   tooltipText: string;
 };
 
-const TooltipText = styled(Text, {
-  fontSize: 18,
-});
-
-const Tooltip: FC<TooltipProps> = ({ children, tooltipText }) => {
-  const [isTooltipShown, setTooltipShown] = useState(false);
-
+const Tooltip1: FC<TooltipProps> = ({ children, tooltipText }) => {
   return (
-    <RNETooltip
-      visible={isTooltipShown}
-      onOpen={() => setTooltipShown(true)}
-      onClose={() => setTooltipShown(false)}
-      backgroundColor={colors.lighterGrey3}
-      height={60}
-      containerStyle={tooltipStyles.tooltipTextContainer}
-      pointerColor={colors.lighterGrey3}
-      popover={<TooltipText>{tooltipText}</TooltipText>}
-    >
-      {children}
-    </RNETooltip>
+    <Popover placement="bottom" size="$4">
+      <Popover.Trigger>{children}</Popover.Trigger>
+
+      <Popover.Content width="$19" backgroundColor={colors.lighterGrey3}>
+        <Text fontSize={18}>{tooltipText}</Text>
+      </Popover.Content>
+    </Popover>
   );
 };
 
-export default Tooltip;
+export default Tooltip1;
