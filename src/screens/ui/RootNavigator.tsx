@@ -5,7 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
-import { SessionModel } from '@app/entities/session';
+import { SessionModel } from '@entities/session';
+import { LogoutModel } from '@features/logout';
 import { APP_VERSION, colors, ENV } from '@shared/lib';
 import { UserProfileIcon, HomeIcon, BackButton } from '@shared/ui';
 
@@ -32,6 +33,7 @@ export default () => {
 
   const hasSession = SessionModel.useHasSession();
   const defaultRoute = useDefaultRoute();
+  const logout = LogoutModel.useLogout();
 
   useInitialRouteNavigation();
 
@@ -39,6 +41,10 @@ export default () => {
     onBeforeAppClose();
 
     return true;
+  });
+
+  SessionModel.useOnRefreshTokenFail(() => {
+    logout();
   });
 
   return (
