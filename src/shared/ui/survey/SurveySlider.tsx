@@ -1,69 +1,24 @@
 import { FC } from 'react';
 
+import { SliderProps } from '@shared/lib';
 import { Box, XStack, YStack, Text, Image, Slider } from '@shared/ui';
 
 const THUMB_SIZE = 22;
 
-type OldProps = {
-  //@todo make sure backend will update config to new keys described below (type Config)
-  config: {
-    minValue: string;
-    maxValue: string;
-    itemList: [{ value: number | string }];
-    textAnchors: boolean;
-    tickMark: boolean;
-    tickLabel: boolean;
-    continousSlider: boolean;
-    minValueImg: string;
-    maxValueImg: string;
-  };
-  initialValue?: number;
-  onChange: (value: number) => void;
-  onPress?: () => void;
-  onRelease?: () => void;
-};
-
-// type Config = {
-//   leftTitle: string; // was minValue
-//   rightTitle: string; // was maxValue
-//   showTitles: boolean; // was textAnchors
-//   leftImageUrl: string; // was minValueImg
-//   rightImageUrl: string; // was maxValueImg
-//   showTickMarks: boolean; // was tickMark
-//   showTickLabels: boolean; // was tickLabel
-//   isContinuousSlider: boolean; // was continousSlider
-//   items: [
-//     {
-//       name: string;
-//       value: string | number;
-//       score: number;
-//       isVisible: boolean;
-//     },
-//   ];
-//   // was itemList: [
-//   //   {
-//   //     name: { en: string | number };
-//   //     value: string | number;
-//   //     score: number;
-//   //     isVis: boolean;
-//   //   },
-//   // ]
-// };
-
-const SurveySlider: FC<OldProps> = ({ config, ...props }) => {
+const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
   const {
     minValue,
     maxValue,
     itemList,
-    textAnchors,
-    tickMark,
-    tickLabel,
-    continousSlider,
+    textAnchors = true,
+    tickMark = true,
+    tickLabel = true,
+    continousSlider = false,
     minValueImg,
     maxValueImg,
   } = config;
 
-  const { onChange, onRelease, onPress } = props;
+  const { onChange, onRelease, onPress, initialValue = 0 } = props;
 
   const onValueChange = (arrayOfValues: number[]) => {
     const [firstElement] = itemList;
@@ -73,9 +28,14 @@ const SurveySlider: FC<OldProps> = ({ config, ...props }) => {
     onChange(roundedValue);
   };
 
+  const initialIndex = itemList.findIndex(
+    ({ value }) => value === initialValue,
+  );
+
   return (
     <YStack>
       <Slider
+        defaultValue={[initialIndex !== -1 ? initialIndex : -100]}
         onResponderRelease={onRelease}
         onResponderStart={onPress}
         onValueChange={onValueChange}
