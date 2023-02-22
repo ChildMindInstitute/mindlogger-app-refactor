@@ -37,7 +37,7 @@ const RadioItem: FC<RadioLabelProps> = ({
   }
 
   return (
-    <XStack width="100%" paddingVertical={5} alignItems="center">
+    <XStack alignItems="center">
       <RadioTooltipContainer>
         {description && (
           <Tooltip tooltipText={description}>

@@ -4,7 +4,7 @@ import { FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { shuffle } from '@shared/lib';
-import { YStack, RadioGroup, Input, ListSparator } from '@shared/ui';
+import { YStack, RadioGroup, Input, ListSeparator, Box } from '@shared/ui';
 
 import RadioItem from './RadioItem';
 import RadioOption from './types';
@@ -16,16 +16,16 @@ type RadioActivityItemProps = {
     isOptionalText: boolean;
   };
 
-  onResponseSet: (...args: any[]) => unknown;
+  onChange: (value: string) => void;
 };
 
 const RadioActivityItem: FC<RadioActivityItemProps> = ({
   config,
-  onResponseSet,
+  onChange,
 }) => {
   const { options, isOptionOrderRandomized } = config;
   const [radioGroupValue, setRadioGroupValue] = useState('');
-  const [optionalValue, setOoptionalValue] = useState('');
+  const [optionalValue, setOptionalValue] = useState('');
   const { t } = useTranslation();
 
   const optionsList = useMemo(() => {
@@ -38,12 +38,10 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
 
   const handleRadioGroupValueChange = (value: string) => {
     setRadioGroupValue(value);
-    onResponseSet(value);
+    onChange(value);
   };
 
-  const handleOptionalInputChange = (text: string) => setOoptionalValue(text);
-
-  const onSubmitEditing = () => onResponseSet(optionalValue);
+  const onSubmitEditing = () => onChange(optionalValue);
 
   return (
     <YStack>
@@ -55,8 +53,12 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
         <FlatList
           data={optionsList}
           bounces={false}
-          ItemSeparatorComponent={() => <ListSparator />}
-          renderItem={({ item }) => <RadioItem option={item} />}
+          ItemSeparatorComponent={() => <ListSeparator />}
+          renderItem={({ item }) => (
+            <Box paddingVertical={5}>
+              <RadioItem option={item} />
+            </Box>
+          )}
         />
       </RadioGroup>
 
@@ -64,7 +66,7 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
         <Input
           value={optionalValue}
           placeholder={t('optional_text:enter_text')}
-          onChangeText={handleOptionalInputChange}
+          onChangeText={setOptionalValue}
           onSubmitEditing={onSubmitEditing}
         />
       )}
