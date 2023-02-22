@@ -12,10 +12,7 @@ const useFormChanges = (config: UseFormChangesConfig) => {
   useEffect(() => {
     const { onInputChange, form, watchInputs } = config;
     const inputChangeListener = form.watch((_, { name }) => {
-      if (!watchInputs) {
-        onInputChange();
-      }
-      if (name && watchInputs?.includes(name)) {
+      if (!watchInputs || (name && watchInputs?.includes(name))) {
         onInputChange();
       }
     });
