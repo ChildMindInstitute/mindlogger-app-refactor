@@ -1,7 +1,8 @@
-import { format as formatBase } from 'date-fns';
+import { format as formatBase, subDays } from 'date-fns';
 import { enGB, fr } from 'date-fns/locale';
 import i18n from 'i18next';
 
+import { range } from './common';
 import { MINUTES_IN_HOUR, MS_IN_MINUTE } from '../constants';
 import { HourMinute, type Language } from '../types';
 
@@ -70,3 +71,11 @@ export const isTimeInInterval = (
     !isSourceTimeBigger(timeToCheck, intervalTo)
   );
 };
+
+export function getLast7Dates() {
+  const now = new Date();
+
+  return range(7)
+    .map(i => subDays(now, i))
+    .reverse();
+}

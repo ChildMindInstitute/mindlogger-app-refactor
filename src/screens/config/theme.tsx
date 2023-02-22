@@ -37,7 +37,7 @@ export const getAppletDetailsScreenOptions = ({
 }: BottomScreenOptions): BottomTabNavigationOptions => {
   const tabBarIcon = (color: string) => {
     switch (route.name) {
-      case 'Activities':
+      case 'ActivityList':
         return <SurveyIcon color={color} size={40} />;
       case 'Data':
         return <DataIcon color={color} size={40} />;
