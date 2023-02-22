@@ -1,11 +1,12 @@
-import { HourMinute, Language } from '@app/shared/lib';
+import { HourMinute } from '@app/shared/lib';
 
 import httpService from './httpService';
+import { SuccessfulResponse } from '../types';
 
 export type ActivityRecordDto = {
   id: string;
   name: string;
-  description: Record<Language, string>;
+  description: string;
   image: string;
   isReviewable: boolean;
   isSkippable: boolean;
@@ -17,7 +18,7 @@ export type ActivityFlowRecordDto = {
   id: string;
   name: string;
   image: string;
-  description: Record<Language, string>;
+  description: string;
   hideBadge: boolean;
   isSingleReport: boolean;
   ordering: boolean;
@@ -72,9 +73,7 @@ type AppletDetailsRequest = {
   appletId: string;
 };
 
-export type AppletDetailsResponse = {
-  result: AppletDetailsDto;
-};
+export type AppletDetailsResponse = SuccessfulResponse<AppletDetailsDto>;
 
 function appletsService() {
   return {
