@@ -40,3 +40,7 @@ export const HomeIcon: FC<IconProps> = props => (
 export const ChevronRightIcon: FC<IconProps> = props => (
   <FontAwesome name="chevron-right" {...props} />
 );
+
+export const QuestionTooltipIcon: FC<IconProps> = props => (
+  <FontAwesome name="question-circle-o" {...props} />
+);

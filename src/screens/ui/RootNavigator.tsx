@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
 import { SessionModel } from '@app/entities/session';
+import { RadioPage } from '@app/shared/ui/survey/RadioActivityItem/page';
 import { APP_VERSION, colors, ENV } from '@shared/lib';
 import { Text, UserProfileIcon, HomeIcon } from '@shared/ui';
 
@@ -53,6 +54,12 @@ export default () => {
             options={{ headerShown: false }}
             name="Login"
             component={LoginScreen}
+          />
+
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Radio"
+            component={RadioPage}
           />
 
           <Stack.Screen

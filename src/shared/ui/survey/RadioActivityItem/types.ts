@@ -3,12 +3,12 @@ type RadioOptionName = {
 };
 
 type RadioOption = {
-  value: string;
+  value: string | number;
   name: RadioOptionName;
-  color: string;
+  color?: string;
   isVisible: boolean;
   description: string;
-  image: string;
+  image?: string;
 };
 
 export default RadioOption;

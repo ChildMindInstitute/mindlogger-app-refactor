@@ -1,6 +1,7 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
+import { FlatList, View } from 'react-native';
 
-import { shuffle } from '@app/shared/lib';
+import { colors, shuffle } from '@shared/lib';
 import { YStack, RadioGroup, Input } from '@shared/ui';
 
 import RadioItem from './RadioItem';
@@ -10,6 +11,7 @@ type RadioActivityItemProps = {
   config: {
     isOptionOrderRandomized: boolean;
     options: Array<RadioOption>;
+    isOptionalText: boolean;
   };
 
   onResponseSet: (...args: any[]) => unknown;
@@ -20,6 +22,7 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
   onResponseSet,
 }) => {
   const { options, isOptionOrderRandomized } = config;
+  const [radioGroupValue, setRadioGroupValue] = useState('');
 
   const optionsList = useMemo(() => {
     if (isOptionOrderRandomized) {
@@ -29,17 +32,36 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
     return options;
   }, [isOptionOrderRandomized, options]);
 
+  const handleRadioGroupValueChange = (value: string) => {
+    console.log(value);
+
+    setRadioGroupValue(value);
+  };
+
   return (
     <YStack>
-      <RadioGroup name="form">
-        <YStack w={300} ai="center" space="$2">
-          {optionsList.map(option => (
-            <RadioItem option={option} />
-          ))}
-        </YStack>
+      <RadioGroup
+        value={radioGroupValue}
+        onValueChange={handleRadioGroupValueChange}
+        name="radio"
+      >
+        <FlatList
+          data={optionsList}
+          bounces={false}
+          ItemSeparatorComponent={() => (
+            <View
+              style={{
+                width: '100%',
+                height: 1,
+                backgroundColor: colors.lightGrey,
+              }}
+            />
+          )}
+          renderItem={({ item }) => <RadioItem option={item} />}
+        />
       </RadioGroup>
 
-      <Input onSubmitEditing={onResponseSet} />
+      {config.isOptionalText && <Input onSubmitEditing={onResponseSet} />}
     </YStack>
   );
 };
