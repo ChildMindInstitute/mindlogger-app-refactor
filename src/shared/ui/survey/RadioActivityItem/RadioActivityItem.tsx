@@ -36,7 +36,7 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
     return options;
   }, [isOptionOrderRandomized, options]);
 
-  const handleRadioGroupValueChange = (value: string) => {
+  const onValueChange = (value: string) => {
     setRadioGroupValue(value);
     onChange(value);
   };
@@ -47,7 +47,7 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
     <YStack>
       <RadioGroup
         value={radioGroupValue}
-        onValueChange={handleRadioGroupValueChange}
+        onValueChange={onValueChange}
         name="radio"
       >
         <FlatList
