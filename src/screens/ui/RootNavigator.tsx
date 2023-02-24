@@ -5,9 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
-import { SessionModel } from '@app/entities/session';
+import { SessionModel } from '@entities/session';
+import { LogoutModel } from '@features/logout';
 import { APP_VERSION, colors, ENV } from '@shared/lib';
-import { Text, UserProfileIcon, HomeIcon } from '@shared/ui';
+import { UserProfileIcon, HomeIcon, BackButton } from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
 import { onBeforeAppClose } from '../lib';
@@ -19,9 +20,9 @@ import {
   LoginScreen,
   SignUpScreen,
   AboutScreen,
-  ActivityListScreen,
   ChangePasswordScreen,
   SettingsScreen,
+  AppletBottomTabNavigator,
 } from '../ui';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -32,6 +33,7 @@ export default () => {
 
   const hasSession = SessionModel.useHasSession();
   const defaultRoute = useDefaultRoute();
+  const logout = LogoutModel.useLogout();
 
   useInitialRouteNavigation();
 
@@ -39,6 +41,10 @@ export default () => {
     onBeforeAppClose();
 
     return true;
+  });
+
+  SessionModel.useOnRefreshTokenFail(() => {
+    logout();
   });
 
   return (
@@ -104,26 +110,6 @@ export default () => {
           />
 
           <Stack.Screen
-            name="ActivityList"
-            options={{
-              title: 'Applet 123',
-              headerStyle: {
-                backgroundColor: colors.blue,
-              },
-              headerTitleStyle: {
-                fontSize: 18,
-                color: colors.white,
-              },
-              headerLeft: () => (
-                <Text onPress={() => navigation.goBack()} mr={24}>
-                  <HomeIcon color={colors.white} size={32} />
-                </Text>
-              ),
-            }}
-            component={ActivityListScreen}
-          />
-
-          <Stack.Screen
             name="Settings"
             options={{
               title: t('settings:user_settings'),
@@ -164,6 +150,18 @@ export default () => {
           component={AboutScreen}
         />
       </Stack.Group>
+
+      <Stack.Screen
+        name="AppletDetails"
+        component={AppletBottomTabNavigator}
+        options={{
+          headerLeft: () => (
+            <BackButton fallbackRoute="Applets">
+              <HomeIcon color={colors.white} size={32} />
+            </BackButton>
+          ),
+        }}
+      />
     </Stack.Navigator>
   );
 };

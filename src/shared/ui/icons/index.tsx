@@ -4,6 +4,10 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Foundation from 'react-native-vector-icons/Foundation';
 
+export { default as AboutIcon } from './About';
+export { default as DataIcon } from './Data';
+export { default as SurveyIcon } from './Survey';
+
 type IconProps = {
   color: string;
   size: number;
@@ -35,4 +39,8 @@ export const HomeIcon: FC<IconProps> = props => (
 
 export const ChevronRightIcon: FC<IconProps> = props => (
   <FontAwesome name="chevron-right" {...props} />
+);
+
+export const QuestionTooltipIcon: FC<IconProps> = props => (
+  <FontAwesome name="question-circle-o" {...props} />
 );

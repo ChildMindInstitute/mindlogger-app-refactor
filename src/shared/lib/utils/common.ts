@@ -15,3 +15,7 @@ export function wait(milliseconds: number) {
 export const shuffle = <T>(array: Array<T>) => {
   return array.sort(() => 0.5 - Math.random());
 };
+
+export function range(n: number): number[] {
+  return [...Array(n).keys()];
+}

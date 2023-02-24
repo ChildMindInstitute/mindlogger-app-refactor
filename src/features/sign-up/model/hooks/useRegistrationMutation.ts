@@ -10,6 +10,7 @@ type UseRegistrationReturn = {
   isLoading: boolean;
   error?: ReturnType<typeof useSignUpMutation>['error'];
   mutate: ReturnType<typeof useSignUpMutation>['mutate'];
+  reset: ReturnType<typeof useSignUpMutation>['reset'];
 };
 
 export const useRegistrationMutation = (
@@ -36,6 +37,7 @@ export const useRegistrationMutation = (
   });
 
   const {
+    reset,
     isLoading: isSignUpLoading,
     isSuccess: isSignUpSuccess,
     error: signUpError,
@@ -47,6 +49,7 @@ export const useRegistrationMutation = (
   });
 
   const result: UseRegistrationReturn = {
+    reset,
     isLoading: false,
     mutate: signUp,
   };

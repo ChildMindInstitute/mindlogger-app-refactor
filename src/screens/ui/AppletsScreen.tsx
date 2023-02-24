@@ -30,7 +30,14 @@ const AppletsScreen: FC = () => {
           refreshControl={<AppletsRefresh />}
         >
           <Box flex={1} pt={12} pb={34}>
-            <AppletList flex={1} px={14} mb={28} />
+            <AppletList
+              flex={1}
+              px={14}
+              mb={28}
+              onAppletPress={({ id, displayName }) =>
+                navigate('AppletDetails', { appletId: id, title: displayName })
+              }
+            />
 
             <XStack jc="center">
               <TouchableOpacity onPress={() => navigate('AboutApp')}>

@@ -107,13 +107,14 @@ export const eventActivities: EventActivity[] = [
       id: 'eid2',
       scheduledAt: null,
       selectedDate: new Date(2024, 5, 15, 0, 0, 0),
-      timers: {
-        timer: {
-          hours: 11,
-          minutes: 10,
-        },
-        idleTimer: null,
-      },
+      timers: null,
+      // timers: {
+      //   timer: {
+      //     hours: 11,
+      //     minutes: 10,
+      //   },
+      //   idleTimer: null,
+      // },
     },
   },
 ];

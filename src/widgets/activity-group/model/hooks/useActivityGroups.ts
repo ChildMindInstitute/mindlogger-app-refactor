@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { useAppletDetailsQuery } from '@app/entities/applet';
 import { EventModel } from '@app/entities/event';
 
@@ -19,13 +21,19 @@ type UseActivityGroupsReturn = {
 export const useActivityGroups = (
   appletId: string,
 ): UseActivityGroupsReturn => {
-  const {} = useAppletDetailsQuery(appletId);
-
-  const builder = createActivityGroupsBuilder({
-    allAppletActivities: allActivityMocks,
-    appletId: 'apid1',
-    progress: progressMocks,
+  const {} = useAppletDetailsQuery(appletId, {
+    select: data => data.data.result,
   });
+
+  const builder = useMemo(
+    () =>
+      createActivityGroupsBuilder({
+        allAppletActivities: allActivityMocks,
+        appletId: 'apid1',
+        progress: progressMocks,
+      }),
+    [],
+  );
 
   const calculator = EventModel.SheduledDateCalculator;
 

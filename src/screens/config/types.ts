@@ -9,8 +9,7 @@ export type RootStackParamList = {
   ChangeLanguage: undefined;
   ForgotPassword: undefined;
   Applets: undefined;
-  ActivityList: { appletId: string };
-  AppletDetails: { appletId: string };
+  AppletDetails: { appletId: string; title: string };
   Settings: undefined;
   ChangePassword: undefined;
 };
@@ -19,9 +18,9 @@ export type RootStackScreenProps<T extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, T>;
 
 export type AppletDetailsParamList = {
-  Activities: undefined;
-  Data: undefined;
-  About: undefined;
+  ActivityList: { appletId: string };
+  Data: { appletId: string };
+  About: { appletId: string };
 };
 
 export type ScreenRoute = keyof RootStackParamList;

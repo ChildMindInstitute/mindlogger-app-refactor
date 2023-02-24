@@ -14,7 +14,10 @@ import Text from './Text';
 
 export { Image } from '@tamagui/image';
 export { YStack, XStack, ZStack } from '@tamagui/stacks';
-export * from './Icons';
+export { RadioGroup } from '@tamagui/radio-group';
+export { Popover } from '@tamagui/popover';
+export * from './icons';
+export * from './survey';
 
 export { default as MarkdownView } from './MarkdownView';
 export { default as RoundLogo } from './RoundLogo';
@@ -25,6 +28,8 @@ export { default as ActivityIndicator } from './ActivityIndicator';
 export { default as NoListItemsYet } from './NoListItemsYet';
 export { default as HorizontalCalendar } from './HorizontalCalendar';
 export { default as BackButton } from './BackButton';
+export { default as Tooltip } from './Tooltip';
+export { default as ListSeparator } from './ListSeparator';
 
 export {
   StatusBar,
