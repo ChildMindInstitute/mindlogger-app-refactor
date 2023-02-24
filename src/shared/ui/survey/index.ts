@@ -4,3 +4,4 @@ export { StackedRadiosItem } from './StackedRadiosItem';
 export { StackedCheckBoxItem } from './StackedCheckboxItem';
 export { default as SurveySlider } from './SurveySlider';
 export { default as StackedSlider } from './StackedSlider';
+export * from './Slider';
