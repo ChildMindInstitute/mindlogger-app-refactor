@@ -34,8 +34,8 @@ const AppletsScreen: FC = () => {
               flex={1}
               px={14}
               mb={28}
-              onAppletPress={appletId =>
-                navigate('AppletDetails', { appletId })
+              onAppletPress={({ id, displayName }) =>
+                navigate('AppletDetails', { appletId: id, title: displayName })
               }
             />
 

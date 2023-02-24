@@ -1,3 +1,5 @@
+import { useLayoutEffect } from 'react';
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
@@ -13,8 +15,16 @@ type Props = NativeStackScreenProps<RootStackParamList, 'AppletDetails'>;
 
 const Tab = createBottomTabNavigator<AppletDetailsParamList>();
 
-const AppletBottomTabNavigator = ({ route }: Props) => {
+const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
   const { t } = useTranslation();
+
+  const { title } = route.params;
+
+  useLayoutEffect(() => {
+    if (title) {
+      navigation.setOptions({ title });
+    }
+  }, [title, navigation]);
 
   return (
     <Tab.Navigator screenOptions={getAppletDetailsScreenOptions}>

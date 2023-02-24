@@ -8,8 +8,13 @@ import { LoadListError } from '@app/shared/ui';
 import AppletCard from './AppletCard';
 import { useAppletsQuery } from '../api';
 
+type SelectedApplet = {
+  id: string;
+  displayName: string;
+};
+
 type Props = {
-  onAppletPress: (appletId: string) => void;
+  onAppletPress: (applet: SelectedApplet) => void;
 } & BoxProps;
 
 const AppletList: FC<Props> = ({ onAppletPress, ...styledProps }) => {
@@ -48,7 +53,9 @@ const AppletList: FC<Props> = ({ onAppletPress, ...styledProps }) => {
             applet={x}
             key={x.id}
             disabled={isFetching}
-            onPress={() => onAppletPress(x.id)}
+            onPress={() =>
+              onAppletPress({ id: x.id, displayName: x.displayName })
+            }
           />
         ))}
       </YStack>
