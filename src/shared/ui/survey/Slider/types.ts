@@ -1,7 +1,7 @@
 type Config = {
   minValue: string;
   maxValue: string;
-  itemList: [{ value: number | string }];
+  itemList: { value: number | string }[];
   minValueImg: string;
   maxValueImg: string;
 };

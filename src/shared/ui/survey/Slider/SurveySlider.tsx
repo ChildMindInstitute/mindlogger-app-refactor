@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
-import { SliderProps } from '@shared/lib';
 import { Box, XStack, YStack, Text, Image, Slider } from '@shared/ui';
+
+import { SliderProps } from './types';
 
 const THUMB_SIZE = 22;
 

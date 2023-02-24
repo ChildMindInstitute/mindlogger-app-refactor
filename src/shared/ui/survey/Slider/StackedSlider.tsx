@@ -1,7 +1,8 @@
 import { FC, useState } from 'react';
 
-import { StackedSliderProps } from '@shared/lib';
 import { YStack, Text, SurveySlider } from '@shared/ui';
+
+import { StackedSliderProps } from './types';
 
 const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
   const { onChange, onRelease, onPress, initialValues } = props;
