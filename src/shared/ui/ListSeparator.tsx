@@ -1,10 +1,8 @@
-import { styled } from '@tamagui/core';
+import { styled, Stack } from '@tamagui/core';
 
 import { colors } from '../lib';
 
-import { Box } from '.';
-
-const ListSeparator = styled(Box, {
+const ListSeparator = styled(Stack, {
   width: '100%',
   height: 1,
   backgroundColor: colors.lightGrey,
