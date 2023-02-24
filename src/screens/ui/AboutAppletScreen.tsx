@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import rules from '@shared/lib/markDownRules';
 import { MarkdownView } from '@shared/ui';
-import { YStack, ScrollView, ImageBackground, Box } from '@shared/ui';
+import { YStack, ScrollView, Box } from '@shared/ui';
 
 const AboutAppletScreen: FC = () => {
   const mockContent =
@@ -18,13 +18,11 @@ const AboutAppletScreen: FC = () => {
 
   return (
     <YStack jc="flex-start" flex={1}>
-      <ImageBackground>
-        <ScrollView px="$5" pt="$2">
-          <Box flex={1} mb="$3">
-            <MarkdownView content={content} rules={rules} />
-          </Box>
-        </ScrollView>
-      </ImageBackground>
+      <ScrollView px="$5" pt="$2">
+        <Box flex={1} mb="$3">
+          <MarkdownView content={content} rules={rules} />
+        </Box>
+      </ScrollView>
     </YStack>
   );
 };
