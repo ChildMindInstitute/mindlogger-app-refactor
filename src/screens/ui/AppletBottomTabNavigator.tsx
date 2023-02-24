@@ -4,6 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
+import { ImageBackground } from '@app/shared/ui';
+
 import {
   AppletDetailsParamList,
   getAppletDetailsScreenOptions,
@@ -27,34 +29,39 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
   }, [title, navigation]);
 
   return (
-    <Tab.Navigator screenOptions={getAppletDetailsScreenOptions}>
-      <Tab.Screen
-        name="ActivityList"
-        options={{
-          title: t('applet_footer:activities'),
-        }}
-        component={ActivityListScreen}
-        initialParams={route.params}
-      />
+    <ImageBackground>
+      <Tab.Navigator
+        screenOptions={getAppletDetailsScreenOptions}
+        initialRouteName="ActivityList"
+      >
+        <Tab.Screen
+          name="ActivityList"
+          options={{
+            title: t('applet_footer:activities'),
+          }}
+          component={ActivityListScreen}
+          initialParams={route.params}
+        />
 
-      <Tab.Screen
-        name="Data"
-        options={{
-          title: t('applet_footer:data'),
-        }}
-        component={AboutAppletScreen}
-        initialParams={route.params}
-      />
+        <Tab.Screen
+          name="Data"
+          options={{
+            title: t('applet_footer:data'),
+          }}
+          component={AboutAppletScreen}
+          initialParams={route.params}
+        />
 
-      <Tab.Screen
-        name="About"
-        options={{
-          title: t('applet_footer:about'),
-        }}
-        component={AboutAppletScreen}
-        initialParams={route.params}
-      />
-    </Tab.Navigator>
+        <Tab.Screen
+          name="About"
+          options={{
+            title: t('applet_footer:about'),
+          }}
+          component={AboutAppletScreen}
+          initialParams={route.params}
+        />
+      </Tab.Navigator>
+    </ImageBackground>
   );
 };
 
