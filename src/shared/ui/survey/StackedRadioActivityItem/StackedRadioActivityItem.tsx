@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { FlatList } from 'react-native';
 
 import { styled } from '@tamagui/core';
@@ -20,7 +20,7 @@ const mock = {
   isOptionalText: true,
   itemList: [
     {
-      description: 'Tooltip',
+      description: '',
       image: '',
       name: {
         en: 'Item 1',
@@ -65,7 +65,7 @@ const mock = {
   multipleChoice: false,
   options: [
     {
-      description: '',
+      description: 'Hello',
       image: '',
       name: {
         en: 'Option 1',
@@ -117,7 +117,7 @@ const StackedRadioAxisListItem: FC<{ option?: StackedRadioListItemValue }> = ({
     <StackedRadioAxisListItemContainer>
       {option && (
         <Tooltip tooltipText={option.description}>
-          <StackedRadioAxisListItemText>
+          <StackedRadioAxisListItemText hasToolTip={!!option?.description}>
             {option.name.en}
           </StackedRadioAxisListItemText>
         </Tooltip>
@@ -144,23 +144,31 @@ const StackedRadioHeader: FC<StackedRadioHeaderProps> = ({ options }) => {
 
 type StackedRadioListItemProps = {
   options: StackedRadioListItemValue[];
-  value?: string;
   item: StackedRadioListItemValue;
+  index: number;
+  onValueChange: (option: string, itemIndex: number) => void;
 };
 
 const StackedRadioListItem: FC<StackedRadioListItemProps> = ({
   item,
+  index,
   options,
-  value,
+  onValueChange,
 }) => {
+  const onSelectionChange = (value: string) => {
+    onValueChange(value, index);
+  };
+
   return (
-    <RadioGroup value={value}>
+    <RadioGroup onValueChange={onSelectionChange}>
       <XStack>
         <StackedRadioAxisListItem option={item} />
 
         {options.map(option => (
           <StackedRadioAxisListItemContainer>
-            <RadioGroup.Item value={option.name.en} />
+            <RadioGroup.Item borderColor={colors.blue} value={option.name.en}>
+              <RadioGroup.Indicator backgroundColor={colors.blue} />
+            </RadioGroup.Item>
           </StackedRadioAxisListItemContainer>
         ))}
       </XStack>
@@ -169,13 +177,25 @@ const StackedRadioListItem: FC<StackedRadioListItemProps> = ({
 };
 
 const StackedRadioActivityItem = () => {
+  const [response, setResponse] = useState<string[]>([]);
+  const onRowValueChange = (option: string, itemIndex: number) => {
+    const updatedResponse: string[] = [...response];
+    updatedResponse[itemIndex] = option;
+
+    setResponse(updatedResponse);
+  };
   return (
     <FlatList
       data={mock.itemList}
       ItemSeparatorComponent={ListSeparator}
       ListHeaderComponent={() => <StackedRadioHeader options={mock.options} />}
-      renderItem={({ item }) => (
-        <StackedRadioListItem item={item} options={mock.options} />
+      renderItem={({ item, index }) => (
+        <StackedRadioListItem
+          item={item}
+          index={index}
+          onValueChange={onRowValueChange}
+          options={mock.options}
+        />
       )}
     />
   );
