@@ -1,10 +1,10 @@
-type RadioOptionName = {
+type OptionName = {
   en: string;
 };
 
 type RadioOption = {
   value: string | number;
-  name: RadioOptionName;
+  name: OptionName;
   color?: string;
   isVisible: boolean;
   description: string;
