@@ -10,7 +10,6 @@ import { useNavigation } from '@react-navigation/native';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
-import { StackedRadioActivityItem } from '@app/shared/ui/survey/StackedRadioActivityItem';
 import { LoginForm } from '@features/login';
 import {
   Center,
@@ -102,10 +101,6 @@ const LoginScreen: FC = () => {
               />
             </YStack>
           </Box>
-        </Box>
-
-        <Box>
-          <StackedRadioActivityItem />
         </Box>
       </ScrollView>
     </TouchableWithoutFeedback>

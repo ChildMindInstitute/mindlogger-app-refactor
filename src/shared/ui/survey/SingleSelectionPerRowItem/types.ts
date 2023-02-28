@@ -1,4 +1,4 @@
-export type StackedRadioListItemValue = {
+export type SingleSelectionPerRowItemValue = {
   description: string;
   image: string;
   name: {
@@ -6,12 +6,12 @@ export type StackedRadioListItemValue = {
   };
 };
 
-export type StackedConfigType = {
+export type SingleSelectionPerRowConfigType = {
   isOptionalText: boolean;
   multipleChoice: boolean;
   removeBackOption: boolean;
   responseAlert: boolean;
   scoring: boolean;
-  itemList: Array<StackedRadioListItemValue>;
-  options: Array<StackedRadioListItemValue>;
+  itemList: Array<SingleSelectionPerRowItemValue>;
+  options: Array<SingleSelectionPerRowItemValue>;
 };
