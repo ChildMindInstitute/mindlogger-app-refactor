@@ -3,18 +3,6 @@ export type Point = {
   y: number;
 };
 
-export type LogPoint = {
-  x: number;
-  y: number;
-  start: string;
-  end: string;
-  time: number;
-  valid: boolean | null;
-  actual: string | null;
-};
-
-export type LogLine = { points: Array<LogPoint> };
-
 export const enum MessageType {
   NotDefined = 0,
   IncorrectStartPoint = 1,
@@ -28,3 +16,25 @@ export const MessageTypeStrings = {
   [MessageType.IncorrectLine]: 'Incorrect line!',
   [MessageType.Completed]: '',
 };
+
+export type LogPoint = {
+  x: number;
+  y: number;
+  start: string;
+  end: string;
+  time: number;
+  valid: boolean | null;
+  actual: string | null;
+};
+
+export type LogLine = { points: Array<LogPoint> };
+
+export type OnResultLog = {
+  lines: LogLine[];
+  currentIndex: number;
+};
+
+export type AbTestResponse = {
+  width: number;
+  startTime: number;
+} & OnResultLog;

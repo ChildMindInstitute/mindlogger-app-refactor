@@ -1,14 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 
 import { Box, BoxProps, Text, XStack } from '@app/shared/ui';
 
 import AbShapes from './AbShapes';
-import {
-  DeviceType,
-  TestIndexes,
-  TestScreenPayload,
-  TutorialRecord,
-} from '../lib';
+import { DeviceType, TestIndex } from '../lib';
 import { transformCoordinates } from '../lib/utils';
 import {
   MobileTests,
@@ -18,8 +13,8 @@ import {
 } from '../model';
 
 type Props = {
-  testIndex: TestIndexes | null;
-  tutorialStepIndex: number | null;
+  testIndex: TestIndex;
+  tutorialStepIndex: number;
   deviceType: DeviceType;
 } & BoxProps;
 
@@ -29,38 +24,26 @@ const ContentPadding = 5;
 const AbTutorial: FC<Props> = props => {
   const { testIndex, tutorialStepIndex, deviceType } = props;
 
-  const [testData, setTestData] = useState<TestScreenPayload | null>(null);
-
-  const [shapesData, setShapesData] = useState<TestScreenPayload | null>(null);
-
-  const [tutorialRecord, setTutorialRecord] = useState<TutorialRecord | null>(
-    null,
-  );
-
   const [width, setWidth] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (testIndex === null || tutorialStepIndex === null) {
-      return;
+  const { shapesData, tutorialRecord } = useMemo(() => {
+    if (!width) {
+      return {};
     }
     const tests = deviceType === 'Phone' ? MobileTests : TabletTests;
+
+    const transformed = transformCoordinates(
+      tests[testIndex],
+      width - ContentPadding * 2,
+    );
+
     const tutorials =
       deviceType === 'Phone' ? MobileTutorials : TabletTutorials;
 
-    setTestData(tests[testIndex]);
-    setTutorialRecord(tutorials[testIndex][tutorialStepIndex]);
-  }, [testIndex, tutorialStepIndex, deviceType]);
+    const textLine = tutorials[testIndex][tutorialStepIndex];
 
-  useEffect(() => {
-    if (!testData || !width) {
-      return;
-    }
-    const transformed = transformCoordinates(
-      testData,
-      width - ContentPadding * 2,
-    );
-    setShapesData(transformed);
-  }, [testData, width]);
+    return { shapesData: transformed, tutorialRecord: textLine };
+  }, [width, deviceType, testIndex, tutorialStepIndex]);
 
   return (
     <Box

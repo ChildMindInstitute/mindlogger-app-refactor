@@ -5,17 +5,13 @@ export type TutorialRecord = {
 
 export type DeviceType = 'Phone' | 'Tablet';
 
-export type TestIndexes = 0 | 1 | 2 | 3;
+export type TestIndex = 0 | 1 | 2 | 3;
 
 export type TutorialPayload = Array<TutorialRecord>;
 
-export type DeviceTutorials = {
-  [testNumber in TestIndexes]: TutorialPayload;
-};
+export type DeviceTutorials = Record<TestIndex, TutorialPayload>;
 
-export type Tutorials = {
-  [deviceType in DeviceType]: DeviceTutorials;
-};
+export type Tutorials = Record<DeviceType, DeviceTutorials>;
 
 export type TestNode = {
   orderIndex: number;
@@ -39,10 +35,6 @@ export type TestScreenPayload = {
   nodes: TestNodes;
 };
 
-export type DeviceTests = {
-  [testNumber in TestIndexes]: TestScreenPayload;
-};
+export type DeviceTests = Record<TestIndex, TestScreenPayload>;
 
-export type Tests = {
-  [deviceType in DeviceType]: DeviceTests;
-};
+export type Tests = Record<DeviceType, DeviceTests>;
