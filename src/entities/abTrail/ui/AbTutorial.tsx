@@ -45,6 +45,17 @@ const AbTutorial: FC<Props> = props => {
     return { shapesData: transformed, tutorialRecord: textLine };
   }, [width, deviceType, testIndex, tutorialStepIndex]);
 
+  const getOrderIndexByLabel = (): number | null => {
+    if (!tutorialRecord || !shapesData) {
+      return null;
+    }
+    return (
+      shapesData.nodes.find(
+        x => x.label === tutorialRecord.nodeLabel?.toString(),
+      )?.orderIndex ?? null
+    );
+  };
+
   return (
     <Box
       onLayout={x =>
@@ -69,7 +80,7 @@ const AbTutorial: FC<Props> = props => {
             {shapesData && (
               <AbShapes
                 testData={shapesData}
-                greenRoundOrder={tutorialRecord?.nodeLabel ?? null}
+                greenRoundOrder={getOrderIndexByLabel()}
                 deviceType={deviceType}
               />
             )}
