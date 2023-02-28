@@ -36,6 +36,8 @@ export const getDistance = (from: Point, to: Point): number => {
   return Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2));
 };
 
+const MaxDistanceDiff = 10000;
+
 export const getEquidistantPoint = (errorPath: SkPath): Point | null => {
   const points: Point[] = [];
 
@@ -52,8 +54,6 @@ export const getEquidistantPoint = (errorPath: SkPath): Point | null => {
 
   const startPoint = points[0];
   const endPoint = points[points.length - 1];
-
-  const MaxDistanceDiff = 10000;
 
   let bestDistanceDiff = MaxDistanceDiff;
   let foundIndex = 0;

@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import {
@@ -20,6 +20,7 @@ import {
   LogLine,
   LogPoint,
   MessageType,
+  OnResultLog,
   Point,
   TestNode,
   TestScreenPayload,
@@ -34,28 +35,20 @@ paint.setStyle(PaintStyle.Stroke);
 const ErrorLineTimeout = 1000;
 const FlareGreenPointTimeout = 1000;
 
-type ResultLog = {
-  lines: LogLine[];
-  currentIndex: number;
-};
-
 type Props = {
   testData: TestScreenPayload;
   deviceType: DeviceType;
   readonly: boolean;
-  onLogResult: (data: ResultLog) => void;
+  width: number;
+  onLogResult: (data: OnResultLog) => void;
   onMessage: (message: MessageType) => void;
   onComplete: () => void;
 } & BoxProps;
 
 const AbCanvas: FC<Props> = props => {
-  const [canvasData, setCanvasData] = useState<TestScreenPayload | null>(null);
-
   const [errorPath, setErrorPath] = useState<SkPath | null>(null);
 
   const [paths, setPaths] = useState<Array<SkPath>>([]);
-
-  const [width, setWidth] = useState<number | null>(null);
 
   const [flareGreenPointIndex, setFlareGreenPointIndex] = useState<{
     index: number;
@@ -69,16 +62,20 @@ const AbCanvas: FC<Props> = props => {
 
   const logLines = useRef<LogLine[]>([]).current;
 
-  const { testData, deviceType, onLogResult, onMessage, onComplete, readonly } =
-    props;
+  const {
+    testData,
+    deviceType,
+    onLogResult,
+    onMessage,
+    onComplete,
+    width,
+    readonly,
+  } = props;
 
-  useEffect(() => {
-    if (!testData || !width) {
-      return;
-    }
-    const transformed = transformCoordinates(testData, width);
-    setCanvasData(transformed);
-  }, [testData, width]);
+  const canvasData = useMemo(
+    () => (width ? transformCoordinates(testData, width) : null),
+    [width, testData],
+  );
 
   useEffect(() => {
     if (!errorPath) {
@@ -354,12 +351,7 @@ const AbCanvas: FC<Props> = props => {
   );
 
   return (
-    <Box
-      {...props}
-      borderWidth={1}
-      borderColor="$lightGrey2"
-      onLayout={x => setWidth(x.nativeEvent.layout.width)}
-    >
+    <Box {...props} borderWidth={1} borderColor="$lightGrey2">
       <SkiaView onDraw={onDraw} style={styles.skiaView} />
 
       {canvasData && (

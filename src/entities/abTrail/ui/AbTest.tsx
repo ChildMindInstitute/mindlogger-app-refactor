@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -7,18 +7,20 @@ import { Box, BoxProps, Text, XStack } from '@app/shared/ui';
 
 import AbCanvas from './AbCanvas';
 import {
+  AbTestResponse,
   DeviceTests,
   DeviceType,
   MessageType,
   MessageTypeStrings,
-  TestIndexes,
+  TestIndex,
   TestScreenPayload,
 } from '../lib';
 import { MobileTests, TabletTests } from '../model';
 
 type Props = {
-  testIndex: TestIndexes | null;
+  testIndex: TestIndex | null;
   deviceType: DeviceType;
+  onResponse: (response: AbTestResponse) => void;
 } & BoxProps;
 
 const ShapesRectPadding = 15;
@@ -28,19 +30,15 @@ const MessageTimeout = 2000;
 const AbTest: FC<Props> = props => {
   const { t } = useTranslation();
 
-  const { testIndex, deviceType } = props;
+  const { testIndex, deviceType, onResponse } = props;
 
   const [width, setWidth] = useState<number | null>(null);
 
   const [message, setMessage] = useState<MessageType | null>(null);
 
-  const [startTime, setStartTime] = useState<number | null>(null);
+  const startTime = useMemo<number>(() => new Date().getTime(), []);
 
   const [completed, setCompleted] = useState(false);
-
-  useEffect(() => {
-    setStartTime(new Date().getTime());
-  }, []);
 
   useEffect(() => {
     if (message === MessageType.Completed) {
@@ -118,7 +116,7 @@ const AbTest: FC<Props> = props => {
             width={width}
             height={width}
             onLogResult={logData =>
-              console.log('logData: ', { ...logData, width, startTime })
+              onResponse({ ...logData, width, startTime })
             }
             onMessage={msg => setMessage(msg)}
             onComplete={() => setCompleted(true)}
