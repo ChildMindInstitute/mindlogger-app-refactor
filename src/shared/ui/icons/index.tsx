@@ -17,6 +17,10 @@ export const CloseIcon: FC<IconProps> = props => (
   <AntDesign name="close" {...props} />
 );
 
+export const CrossIcon: FC<IconProps> = props => (
+  <FontAwesome name="close" {...props} />
+);
+
 export const ArrowRightIcon: FC<IconProps> = props => (
   <AntDesign name="right" {...props} />
 );
@@ -43,4 +47,16 @@ export const ChevronRightIcon: FC<IconProps> = props => (
 
 export const QuestionTooltipIcon: FC<IconProps> = props => (
   <FontAwesome name="question-circle-o" {...props} />
+);
+
+export const LeftArrowIcon: FC<IconProps> = props => (
+  <FontAwesome name="arrow-left" {...props} />
+);
+
+export const RightArrowIcon: FC<IconProps> = props => (
+  <FontAwesome name="arrow-right" {...props} />
+);
+
+export const RestartIcon: FC<IconProps> = props => (
+  <FontAwesome name="refresh" {...props} />
 );
