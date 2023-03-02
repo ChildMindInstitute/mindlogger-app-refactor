@@ -1,12 +1,13 @@
 export type Item = {
-  name: { en: string };
+  name: string;
   value: number;
   color: string;
-  isVis: boolean;
+  isVisible: boolean;
   description: string;
   image?: string;
+  score?: number;
 };
-//
+
 // type RefactoredConfig = {
 //   multipleChoice: boolean;
 //   scoring: boolean;

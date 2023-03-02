@@ -1,10 +1,16 @@
+import { colors } from '@shared/lib/constants';
+
 export const invertColor = (hex: string) => {
+  const RED_RATIO = 299;
+  const GREEN_RATIO = 587;
+  const BLUE_RATIO = 114;
   const hexColor = hex.replace('#', '');
-  const r = parseInt(hexColor.substring(0, 2), 16);
-  const g = parseInt(hexColor.substring(2, 4), 16);
-  const b = parseInt(hexColor.substring(4, 6), 16);
-  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-  return yiq >= 128 ? '#333333' : 'white';
+  const red = parseInt(hexColor.substring(0, 2), 16);
+  const green = parseInt(hexColor.substring(2, 4), 16);
+  const blue = parseInt(hexColor.substring(4, 6), 16);
+  const YIQColorSpaceValue =
+    (red * RED_RATIO + green * GREEN_RATIO + blue * BLUE_RATIO) / 1000;
+  return YIQColorSpaceValue >= 128 ? colors.darkerGrey : colors.white;
 };
 
-export const handleReplaceBehaviourResponse = (string: string) => string; // @todo complete this function
+export const replaceTextWithScreenVariables = (string: string) => string; // @todo complete this function

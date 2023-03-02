@@ -6,10 +6,10 @@ import { Box, ScrollView } from '@shared/ui';
 import CheckBoxItem from './CheckBox.item';
 import { Item } from './types';
 
-type CheckBoxProps = {
+type Props = {
   // @todo make sure backend will update config to new keys described below (type RefactoredConfig in ./types)
   config: {
-    itemList: Item[];
+    items: Item[];
     minValue: number;
     maxValue: number;
     colorPalette: boolean;
@@ -19,24 +19,11 @@ type CheckBoxProps = {
   values: number[];
 };
 
-const CheckBoxActivityItem: FC<CheckBoxProps> = ({
-  config,
-  onChange,
-  values = [],
-}) => {
+const CheckBoxActivityItem: FC<Props> = ({ config, onChange, values }) => {
   const { minValue, maxValue } = config;
   const hasSingleItem = maxValue === 1 && minValue === 1;
 
-  const { itemList, randomizeOptions } = config;
-
-  const items = useMemo(() => {
-    const filteredItems = itemList.filter(({ isVis }) => !isVis);
-    if (randomizeOptions) {
-      return shuffle(filteredItems);
-    }
-
-    return filteredItems;
-  }, [randomizeOptions, itemList]);
+  const { items, randomizeOptions } = config;
 
   const onItemValueChanged = (checkedItemValue: number) => {
     if (hasSingleItem) {
@@ -49,11 +36,20 @@ const CheckBoxActivityItem: FC<CheckBoxProps> = ({
     }
   };
 
+  const mutatedItems = useMemo(() => {
+    const filteredItems = items.filter(({ isVisible }) => isVisible);
+    if (randomizeOptions) {
+      return shuffle(filteredItems);
+    }
+
+    return filteredItems;
+  }, [randomizeOptions, items]);
+
   return (
     <ScrollView>
-      {items.map((item, index) => {
+      {mutatedItems.map(item => {
         return (
-          <Box key={`checkbox-${index}`}>
+          <Box key={`checkbox-${item.value}`}>
             <CheckBoxItem
               {...item}
               colorPalette={config.colorPalette}
