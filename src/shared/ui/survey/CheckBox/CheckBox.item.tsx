@@ -2,7 +2,7 @@ import { FC, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { colors } from '@shared/lib';
-import { invertColor, handleReplaceBehaviourResponse } from '@shared/lib/utils';
+import { invertColor, replaceTextWithScreenVariables } from '@shared/lib/utils';
 import {
   Image,
   Text,
@@ -14,13 +14,13 @@ import {
 
 import { Item } from './types';
 
-type CheckBoxItemProps = {
+type Props = {
   colorPalette: boolean;
   onChange: (itemValue: number) => void;
   checked: boolean;
 } & Item;
 
-const CheckBoxItem: FC<CheckBoxItemProps> = ({
+const CheckBoxItem: FC<Props> = ({
   colorPalette,
   onChange,
   checked,
@@ -34,25 +34,26 @@ const CheckBoxItem: FC<CheckBoxItemProps> = ({
     colorPalette && color ? invertColor(color) : colors.primary;
 
   const tooltipText = useMemo(
-    () => handleReplaceBehaviourResponse(description),
+    () => replaceTextWithScreenVariables(description),
     [description],
   );
+
   return (
     <XStack
-      ai="center"
-      onPress={() => onChange(value)}
-      jc="space-between"
+      minHeight="$7"
       py="$3"
       px="$5"
       my="$1"
-      br={7}
+      ai="center"
+      jc="space-between"
       bg={colorPalette ? color : 'none'}
-      minHeight="$7"
+      br={7}
       bbw={colorPalette ? 0 : 1}
       bbc={colors.lighterGrey}
+      onPress={() => onChange(value)}
     >
       <XStack flex={1} ai="center">
-        {description && (
+        {!!description && (
           <Tooltip tooltipText={tooltipText}>
             <QuestionTooltipIcon color={colors.grey} size={25} />
           </Tooltip>
@@ -74,7 +75,7 @@ const CheckBoxItem: FC<CheckBoxItemProps> = ({
           color={colorPalette && color ? invertedColor : colors.darkerGrey}
           fontSize={17}
         >
-          {useMemo(() => handleReplaceBehaviourResponse(name.en), [name.en])}
+          {useMemo(() => replaceTextWithScreenVariables(name), [name])}
         </Text>
       </XStack>
 
