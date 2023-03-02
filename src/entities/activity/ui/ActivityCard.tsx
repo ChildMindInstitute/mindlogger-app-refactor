@@ -20,15 +20,16 @@ import { ActivityListItem, ActivityStatus, ActivityType } from '../lib';
 type Props = {
   activity: ActivityListItem;
   disabled: boolean;
+  onPress?: (...args: any[]) => void;
 };
 
-const ActivityCard: FC<Props> = ({ activity, disabled }) => {
+const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
   const { t } = useTranslation();
 
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled;
 
   return (
-    <TouchableOpacity onPress={() => {}} disabled={isDisabled}>
+    <TouchableOpacity onPress={onPress} disabled={isDisabled}>
       <XStack
         mx={3}
         p={14}

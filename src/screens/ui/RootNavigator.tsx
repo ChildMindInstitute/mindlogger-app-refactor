@@ -23,6 +23,7 @@ import {
   ChangePasswordScreen,
   SettingsScreen,
   AppletBottomTabNavigator,
+  InProgressActivityScreen,
 } from '../ui';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -160,6 +161,14 @@ export default () => {
               <HomeIcon color={colors.white} size={32} />
             </BackButton>
           ),
+        }}
+      />
+
+      <Stack.Screen
+        name="InProgressActivity"
+        component={InProgressActivityScreen}
+        options={{
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

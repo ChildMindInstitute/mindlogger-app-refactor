@@ -7,14 +7,19 @@ import { ActivityListItem } from '../lib';
 
 type Props = {
   activities: ActivityListItem[];
+  onCardPress?: (activity: ActivityListItem) => void;
 };
 
-const ActivityList: FC<Props> = ({ activities }) => {
+const ActivityList: FC<Props> = ({ activities, onCardPress }) => {
   return (
     <YStack space={10}>
       {activities.map(x => (
         <Box key={x.eventId}>
-          <ActivityCard activity={x} disabled={false} />
+          <ActivityCard
+            activity={x}
+            disabled={false}
+            onPress={() => onCardPress?.(x)}
+          />
         </Box>
       ))}
     </YStack>
