@@ -1,7 +1,8 @@
-import { FC, useState } from 'react';
+import { FC, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { colors } from '@shared/lib';
+import { invertColor, handleReplaceBehaviourResponse } from '@shared/lib/utils';
 import {
   Image,
   Text,
@@ -12,57 +13,47 @@ import {
 } from '@shared/ui';
 
 import { Item } from './types';
-import { invertColor } from './utils';
-
-const handleReplaceBehaviourResponse = (string: string) => string;
 
 type CheckBoxItemProps = {
-  item: Item;
   colorPalette: boolean;
   onChange: (itemValue: number) => void;
-  isSingleItem: boolean;
-  initialValue: boolean;
-};
+  checked: boolean;
+} & Item;
 
 const CheckBoxItem: FC<CheckBoxItemProps> = ({
-  item,
   colorPalette,
   onChange,
-  isSingleItem,
-  initialValue,
+  checked,
+  description,
+  image,
+  color,
+  value,
+  name,
 }) => {
-  const { description, image } = item;
-  const [checked, setChecked] = useState<boolean>(initialValue);
-
   const invertedColor =
-    colorPalette && item.color ? invertColor(item.color) : colors.primary;
+    colorPalette && color ? invertColor(color) : colors.primary;
 
-  const onPress = () => {
-    onChange(item.value);
-    if (isSingleItem) {
-      setChecked(true);
-    } else {
-      setChecked(!checked);
-    }
-  };
-
+  const tooltipText = useMemo(
+    () => handleReplaceBehaviourResponse(description),
+    [description],
+  );
   return (
     <XStack
       ai="center"
-      onPress={onPress}
+      onPress={() => onChange(value)}
       jc="space-between"
       py="$3"
       px="$5"
       my="$1"
       br={7}
-      bg={colorPalette ? item.color : 'none'}
+      bg={colorPalette ? color : 'none'}
       minHeight="$7"
       bbw={colorPalette ? 0 : 1}
       bbc={colors.lighterGrey}
     >
       <XStack flex={1} ai="center">
         {description && (
-          <Tooltip tooltipText={handleReplaceBehaviourResponse(description)}>
+          <Tooltip tooltipText={tooltipText}>
             <QuestionTooltipIcon color={colors.grey} size={25} />
           </Tooltip>
         )}
@@ -80,10 +71,10 @@ const CheckBoxItem: FC<CheckBoxItemProps> = ({
         <Text
           ml="$4"
           maxWidth="70%"
-          color={colorPalette && item.color ? invertedColor : colors.darkerGrey}
+          color={colorPalette && color ? invertedColor : colors.darkerGrey}
           fontSize={17}
         >
-          {handleReplaceBehaviourResponse(item.name.en)}
+          {useMemo(() => handleReplaceBehaviourResponse(name.en), [name.en])}
         </Text>
       </XStack>
 
@@ -93,7 +84,7 @@ const CheckBoxItem: FC<CheckBoxItemProps> = ({
           true: colors.grey,
           false: colors.grey,
         }}
-        onCheckColor={item.color || colors.white}
+        onCheckColor={color || colors.white}
         onFillColor={invertedColor}
         onTintColor={invertedColor}
         tintColor={invertedColor}
