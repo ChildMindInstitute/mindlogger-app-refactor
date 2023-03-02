@@ -18,6 +18,7 @@ module.exports = {
           '@entities': './src/entities',
           '@jobs': './src/jobs',
           '@images': './assets/images/index',
+          '@widgets': './src/widgets',
         },
       },
     ],
