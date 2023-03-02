@@ -1,1 +1,1 @@
-export { default as CheckBoxActivityItem } from './CheckBoxActivityItem';
+export { default as CheckBoxActivityItem } from './CheckBoxActivity.item';

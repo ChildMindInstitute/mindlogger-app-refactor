@@ -1,9 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useMemo } from 'react';
 
 import { shuffle } from '@shared/lib';
 import { Box, ScrollView } from '@shared/ui';
 
-import CheckBoxItem from './CheckBoxItem';
+import CheckBoxItem from './CheckBox.item';
 import { Item } from './types';
 
 type CheckBoxProps = {
@@ -16,55 +16,49 @@ type CheckBoxProps = {
     randomizeOptions: boolean;
   };
   onChange: (arrayOfValues: number[]) => void;
-  initialValues?: number[];
+  values: number[];
 };
 
 const CheckBoxActivityItem: FC<CheckBoxProps> = ({
   config,
   onChange,
-  initialValues = [],
+  values = [],
 }) => {
-  const [items, setItems] = useState<Item[]>([]);
-  const [answer, setAnswer] = useState<number[]>(initialValues);
   const { minValue, maxValue } = config;
   const hasSingleItem = maxValue === 1 && minValue === 1;
 
-  useEffect(() => {
-    const { itemList, randomizeOptions } = config;
+  const { itemList, randomizeOptions } = config;
+
+  const items = useMemo(() => {
     const filteredItems = itemList.filter(({ isVis }) => !isVis);
     if (randomizeOptions) {
-      setItems(shuffle(filteredItems));
-    } else {
-      setItems(filteredItems);
+      return shuffle(filteredItems);
     }
-  }, [config]);
 
-  useEffect(() => {
-    onChange(answer);
-  }, [answer, onChange]);
+    return filteredItems;
+  }, [randomizeOptions, itemList]);
 
   const onItemValueChanged = (checkedItemValue: number) => {
     if (hasSingleItem) {
-      setAnswer([checkedItemValue]);
-    } else if (answer.includes(checkedItemValue)) {
-      const answerFiltered = answer.filter(val => val !== checkedItemValue);
-      setAnswer(answerFiltered);
+      onChange([checkedItemValue]);
+    } else if (values.includes(checkedItemValue)) {
+      const filteredValues = values.filter(val => val !== checkedItemValue);
+      onChange(filteredValues);
     } else {
-      setAnswer([...answer, checkedItemValue]);
+      onChange([...values, checkedItemValue]);
     }
   };
 
   return (
-    <ScrollView my={20}>
+    <ScrollView>
       {items.map((item, index) => {
         return (
           <Box key={`checkbox-${index}`}>
             <CheckBoxItem
-              item={item}
+              {...item}
               colorPalette={config.colorPalette}
               onChange={onItemValueChanged}
-              isSingleItem={hasSingleItem}
-              initialValue={answer.includes(index)}
+              checked={values.includes(item.value)}
             />
           </Box>
         );

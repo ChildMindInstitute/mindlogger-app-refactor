@@ -6,3 +6,5 @@ export const invertColor = (hex: string) => {
   const yiq = (r * 299 + g * 587 + b * 114) / 1000;
   return yiq >= 128 ? '#333333' : 'white';
 };
+
+export const handleReplaceBehaviourResponse = (string: string) => string; // @todo complete this function
