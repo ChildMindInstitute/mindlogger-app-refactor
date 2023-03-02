@@ -1,17 +1,9 @@
-export type SingleSelectionPerRowItemValue = {
-  description: string;
-  image: string;
-  name: {
-    en: string;
-  };
+import { StackedRowItemValue } from '../StackedItemsGrid/types';
+
+type SelectionPerRowConfigType = {
+  scoring?: boolean;
+  itemList: Array<StackedRowItemValue>;
+  options: Array<StackedRowItemValue>;
 };
 
-export type SingleSelectionPerRowConfigType = {
-  isOptionalText: boolean;
-  multipleChoice: boolean;
-  removeBackOption: boolean;
-  responseAlert: boolean;
-  scoring: boolean;
-  itemList: Array<SingleSelectionPerRowItemValue>;
-  options: Array<SingleSelectionPerRowItemValue>;
-};
+export default SelectionPerRowConfigType;
