@@ -1,16 +1,21 @@
 type Config = {
-  minValue: string;
-  maxValue: string;
-  itemList: { value: number | string }[];
-  minValueImg: string;
-  maxValueImg: string;
+  leftTitle: string;
+  rightTitle: string;
+  items: {
+    name: string;
+    value: string | number;
+    score: number;
+    isVisible: boolean;
+  }[];
+  leftImageUrl: string;
+  rightImageUrl: string;
 };
 
 type SliderConfig = Config & {
-  textAnchors?: boolean;
-  tickMark?: boolean;
-  tickLabel?: boolean;
-  continousSlider?: boolean;
+  showTitles?: boolean;
+  showTickMarks?: boolean;
+  showTickLabels?: boolean;
+  isContinuousSlider?: boolean;
 };
 
 export type SliderProps = {
