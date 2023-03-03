@@ -24,7 +24,7 @@ const StackedRadios: FC<Props> = ({ value = [], onChange, config }) => {
       items={config.itemList}
       onRowValueChange={onRowValueChange}
       renderCell={option => (
-        <RadioGroup.Item borderColor={colors.blue} value={option.name.en}>
+        <RadioGroup.Item borderColor={colors.blue} value={option.name}>
           <RadioGroup.Indicator backgroundColor={colors.blue} />
         </RadioGroup.Item>
       )}

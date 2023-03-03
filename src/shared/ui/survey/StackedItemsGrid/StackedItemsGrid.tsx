@@ -51,7 +51,7 @@ const AxisListItem: FC<{
               textDecorationLine={option.description ? 'underline' : 'none'}
               hasTooltip={!!option.description}
             >
-              {option.name.en}
+              {option.name}
             </AxisListItemText>
 
             {option.image && (
@@ -117,8 +117,8 @@ const RowListItem: FC<RowListItemProps> = ({
         <AxisListItem maxWidth="25%" option={item} />
 
         {options.map((option, optionIndex) => (
-          <AxisListItemContainer key={optionIndex + optionIndex}>
-            {renderCell(option, optionIndex)}
+          <AxisListItemContainer key={option.name + optionIndex}>
+            {renderCell(option, index)}
           </AxisListItemContainer>
         ))}
       </XStack>
@@ -133,7 +133,7 @@ type StackedItemsGridProps = {
     option: StackedRowItemValue,
     optionIndex: number,
   ) => ReactElement;
-  onRowValueChange: (option: string, itemIndex: number) => void;
+  onRowValueChange?: (option: string, itemIndex: number) => void;
 };
 
 const StackedItemsGrid: FC<StackedItemsGridProps> = ({
@@ -142,8 +142,11 @@ const StackedItemsGrid: FC<StackedItemsGridProps> = ({
   options,
   onRowValueChange,
 }) => {
-  const onValueChange = (option: string, itemIndex: number) =>
-    onRowValueChange(option, itemIndex);
+  const onValueChange = (option: string, itemIndex: number) => {
+    if (onRowValueChange) {
+      onRowValueChange(option, itemIndex);
+    }
+  };
 
   return (
     <FlatList
