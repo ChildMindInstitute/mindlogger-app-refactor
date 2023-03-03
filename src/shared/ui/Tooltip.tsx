@@ -13,9 +13,11 @@ const Tooltip1: FC<TooltipProps> = ({ children, tooltipText }) => {
     <Popover placement="bottom" size="$4">
       <Popover.Trigger>{children}</Popover.Trigger>
 
-      <Popover.Content width="$19" backgroundColor={colors.lighterGrey3}>
-        <Text fontSize={18}>{tooltipText}</Text>
-      </Popover.Content>
+      {tooltipText && (
+        <Popover.Content width="$19" backgroundColor={colors.lighterGrey3}>
+          <Text fontSize={18}>{tooltipText}</Text>
+        </Popover.Content>
+      )}
     </Popover>
   );
 };
