@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 import {
   RenderRules,
@@ -6,7 +6,7 @@ import {
 } from 'react-native-markdown-display';
 
 import { colors } from '@shared/lib';
-import { Box, Text } from '@shared/ui';
+import { Box, Text, Image } from '@shared/ui';
 
 const localStyles = StyleSheet.create({
   alignLeftContainer: {
@@ -32,6 +32,47 @@ const localStyles = StyleSheet.create({
   },
   primaryText: {
     color: colors.primary,
+  },
+});
+
+export const activityMarkDownStyles = StyleSheet.create({
+  heading1: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    marginBottom: 18,
+  },
+  heading2: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 18,
+  },
+  heading3: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 18,
+  },
+  heading4: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 18,
+  },
+  heading5: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 18,
+  },
+  heading6: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 18,
+  },
+  paragraph: {
+    alignSelf: 'center',
+    fontSize: 22,
+    fontWeight: '300',
+  },
+  text: {
+    flexDirection: 'row',
   },
 });
 
@@ -83,6 +124,18 @@ const markDownRules: RenderRules = {
       >
         {updatedNodeContent}
       </Text>
+    );
+  },
+  image: node => {
+    const { width: viewPortWidth } = Dimensions.get('window');
+    return (
+      <Image
+        key={node.key}
+        resizeMode="contain"
+        height={200}
+        width={viewPortWidth - 100}
+        src={node.attributes.src}
+      />
     );
   },
   paragraph: (node, children, parents, styles) => {
