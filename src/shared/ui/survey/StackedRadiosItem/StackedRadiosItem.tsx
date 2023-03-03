@@ -6,17 +6,13 @@ import SelectionPerRowConfigType from './types';
 import { RadioGroup } from '../..';
 import { StackedItemsGrid } from '../StackedItemsGrid';
 
-type SingleSelectionPerRowItemProps = {
+type Props = {
   value: string[];
   onChange: (value: string[] | string) => unknown;
   config: SelectionPerRowConfigType;
 };
 
-const SingleSelectionPerRowItem: FC<SingleSelectionPerRowItemProps> = ({
-  value = [],
-  onChange,
-  config,
-}) => {
+const StackedRadios: FC<Props> = ({ value = [], onChange, config }) => {
   const onRowValueChange = (option: string, itemIndex: number) => {
     value[itemIndex] = option;
 
@@ -37,4 +33,4 @@ const SingleSelectionPerRowItem: FC<SingleSelectionPerRowItemProps> = ({
   );
 };
 
-export default SingleSelectionPerRowItem;
+export default StackedRadios;
