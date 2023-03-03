@@ -8,7 +8,7 @@ import { StackedRowItemValue } from '../StackedItemsGrid/types';
 
 type Props = {
   value: Array<string[]>;
-  onChange: (value: Array<string[]>) => unknown;
+  onChange: (value: Array<string[]>) => void;
   config: StackedCheckboxConfig;
 };
 
@@ -18,12 +18,12 @@ const StackedCheckboxItem: FC<Props> = ({ value = [], onChange, config }) => {
       value[itemIndex] = [];
     }
 
-    if (value[itemIndex].includes(option.name.en)) {
+    if (value[itemIndex].includes(option.name)) {
       value[itemIndex] = value[itemIndex].filter(
-        valueItem => valueItem !== option.name.en,
+        valueItem => valueItem !== option.name,
       );
     } else {
-      value[itemIndex].push(option.name.en);
+      value[itemIndex].push(option.name);
     }
 
     onChange(value);

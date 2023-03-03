@@ -53,14 +53,14 @@ const RadioItem: FC<RadioLabelProps> = ({
       </Box>
 
       <RadioTextContainer>
-        <Text fontSize={18}>{name.en}</Text>
+        <Text fontSize={18}>{name}</Text>
       </RadioTextContainer>
 
       <Box>
         <RadioGroup.Item
           borderColor={colors.blue}
           borderWidth={3}
-          id={name.en}
+          id={name}
           value={String(value)}
         >
           <RadioGroup.Indicator backgroundColor={colors.blue} />

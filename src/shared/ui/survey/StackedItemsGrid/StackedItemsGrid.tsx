@@ -51,7 +51,7 @@ const AxisListItem: FC<{
               textDecorationLine={option.description ? 'underline' : 'none'}
               hasTooltip={!!option.description}
             >
-              {option.name.en}
+              {option.name}
             </AxisListItemText>
 
             {option.image && (
@@ -117,7 +117,7 @@ const RowListItem: FC<RowListItemProps> = ({
         <AxisListItem maxWidth="25%" option={item} />
 
         {options.map((option, optionIndex) => (
-          <AxisListItemContainer key={option.name.en + optionIndex}>
+          <AxisListItemContainer key={option.name + optionIndex}>
             {renderCell(option, index)}
           </AxisListItemContainer>
         ))}
