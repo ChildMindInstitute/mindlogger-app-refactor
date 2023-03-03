@@ -21,7 +21,6 @@ type Props = {
   content: string;
   markdownStyle?: StyleSheet.NamedStyles<any>;
   rules?: RenderRules;
-  onLinkPress?: (url: string) => boolean;
 };
 
 declare module 'react-native-markdown-display' {
@@ -30,16 +29,10 @@ declare module 'react-native-markdown-display' {
   }
 }
 
-const MarkdownView: FC<Props> = ({
-  content,
-  markdownStyle,
-  rules,
-  onLinkPress,
-}) => {
+const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
   return (
     <Markdown
       rules={rules}
-      onLinkPress={onLinkPress}
       mergeStyle
       markdownit={markdownItInstance}
       style={markdownStyle}

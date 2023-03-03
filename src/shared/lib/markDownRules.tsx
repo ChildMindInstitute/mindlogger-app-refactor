@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
+import { format } from 'date-fns';
 import {
   RenderRules,
   renderRules as defaultRenderRules,
@@ -112,6 +113,12 @@ const markDownRules: RenderRules = {
       additionalStyles = localStyles.primaryText;
       updatedNodeContent = node.content.replace('[blue]', '');
     }
+
+    const todayDate = format(new Date(), 'MM/dd/yyyy');
+    updatedNodeContent = updatedNodeContent
+      .replace(/<([^‘]*[a-zA-Z]+[^‘]*)>/gi, '')
+      .replace(/\[\[sys.date]]/i, todayDate);
+
     return (
       <Text
         key={node.key}
@@ -122,7 +129,7 @@ const markDownRules: RenderRules = {
           { ...additionalStyles },
         ]}
       >
-        {updatedNodeContent}
+        {checkNodeContent(updatedNodeContent)}
       </Text>
     );
   },
@@ -156,6 +163,51 @@ const markDownRules: RenderRules = {
     // @ts-ignore
     return defaultRenderRules.paragraph(node, children, parents, styles);
   },
+};
+
+const checkSuperscript = (content: string) => {
+  if (content.indexOf('^') > -1 && content.indexOf('^^') === -1) {
+    return content.split('^').map((text, index) => {
+      if (index % 2 !== 0 && text.length) {
+        return (
+          <Text fontSize={13} lineHeight={18}>
+            {text}
+          </Text>
+        );
+      }
+      return checkSubscript(text);
+    });
+  }
+  return content;
+};
+
+const checkSubscript = (
+  content: string,
+): (JSX.Element | (JSX.Element | any[] | string)[] | string)[] | string => {
+  if (content.indexOf('~') > -1 && content.indexOf('~~') === -1) {
+    return content.split('~').map((text, index) => {
+      if (index % 2 !== 0 && text.length) {
+        return (
+          <Text fontSize={13} lineHeight={18} textAlignVertical="bottom">
+            {text}
+          </Text>
+        );
+      }
+      return checkSuperscript(text);
+    });
+  }
+  return content;
+};
+
+const checkNodeContent = (content: string) => {
+  if (content.indexOf('^') > -1 && content.indexOf('^^') === -1) {
+    return checkSuperscript(content);
+  }
+  if (content.indexOf('~') > -1 && content.indexOf('~~') === -1) {
+    return checkSubscript(content);
+  }
+
+  return content;
 };
 
 export default markDownRules;
