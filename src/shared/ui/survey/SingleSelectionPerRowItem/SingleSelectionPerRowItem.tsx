@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 import { colors } from '@app/shared/lib';
 
@@ -17,14 +17,10 @@ const SingleSelectionPerRowItem: FC<SingleSelectionPerRowItemProps> = ({
   onChange,
   config,
 }) => {
-  const [response, setResponse] = useState<string[]>(value);
   const onRowValueChange = (option: string, itemIndex: number) => {
-    const updatedResponse: string[] = [...response];
-    updatedResponse[itemIndex] = option;
+    value[itemIndex] = option;
 
-    onChange(updatedResponse);
-
-    setResponse(updatedResponse);
+    onChange(value);
   };
 
   return (
