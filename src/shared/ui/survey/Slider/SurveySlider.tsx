@@ -8,30 +8,28 @@ const THUMB_SIZE = 22;
 
 const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
   const {
-    minValue,
-    maxValue,
-    itemList,
-    textAnchors = true,
-    tickMark = true,
-    tickLabel = true,
-    continousSlider = false,
-    minValueImg,
-    maxValueImg,
+    leftTitle,
+    rightTitle,
+    items,
+    showTitles = true,
+    showTickMarks = true,
+    showTickLabels = true,
+    isContinuousSlider = false,
+    leftImageUrl,
+    rightImageUrl,
   } = config;
 
   const { onChange, onRelease, onPress, initialValue = 0 } = props;
 
   const onValueChange = (arrayOfValues: number[]) => {
-    const [firstElement] = itemList;
+    const [firstElement] = items;
     const [value] = arrayOfValues;
     const numericValue = value + Number(firstElement.value);
     const roundedValue = Math.round(numericValue * 100) / 100;
     onChange(roundedValue);
   };
 
-  const initialIndex = itemList.findIndex(
-    ({ value }) => value === initialValue,
-  );
+  const initialIndex = items.findIndex(({ value }) => value === initialValue);
 
   return (
     <YStack>
@@ -41,16 +39,16 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
         onResponderStart={onPress}
         onValueChange={onValueChange}
         size={THUMB_SIZE}
-        max={itemList.length - 1}
-        step={continousSlider ? 0.01 : 1}
+        max={items.length - 1}
+        step={isContinuousSlider ? 0.01 : 1}
       />
 
       <XStack jc="space-between" mt={9}>
-        {itemList.map(({ value }) => {
+        {items.map(({ value }) => {
           return (
             <Box key={`tick-${value}`} w={THUMB_SIZE} ai="center">
-              {tickMark && <Box w={1} bg="$black" h={8} />}
-              {tickLabel && <Text mt="$1">{value}</Text>}
+              {showTickMarks && <Box w={1} bg="$black" h={8} />}
+              {showTickLabels && <Text mt="$1">{value}</Text>}
             </Box>
           );
         })}
@@ -58,34 +56,34 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
 
       <XStack mt="$2" jc="space-between">
         <YStack maxWidth="30%" ai="center">
-          {minValueImg && (
+          {leftImageUrl && (
             <Image
               width={45}
               height={45}
               resizeMode="contain"
-              src={minValueImg}
+              src={leftImageUrl}
             />
           )}
 
-          {textAnchors && minValue ? (
-            <Text textAlign="center">{minValue}</Text>
+          {showTitles && leftTitle ? (
+            <Text textAlign="center">{leftTitle}</Text>
           ) : null}
         </YStack>
 
         <YStack maxWidth="30%" ml="auto" ai="center">
-          {maxValueImg && (
+          {rightImageUrl && (
             <XStack jc="center">
               <Image
                 width={45}
                 height={45}
                 resizeMode="contain"
-                src={maxValueImg}
+                src={rightImageUrl}
               />
             </XStack>
           )}
 
-          {textAnchors && maxValue ? (
-            <Text textAlign="center">{maxValue}</Text>
+          {showTitles && rightTitle ? (
+            <Text textAlign="center">{rightTitle}</Text>
           ) : null}
         </YStack>
       </XStack>
