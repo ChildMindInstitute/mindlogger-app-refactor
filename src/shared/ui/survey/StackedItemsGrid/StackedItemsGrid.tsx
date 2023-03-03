@@ -69,11 +69,11 @@ const AxisListItem: FC<{
   );
 };
 
-type SingleSelectionPerRowHeaderProps = {
+type RowHeaderProps = {
   options: StackedRowItemValue[];
 };
 
-const RowHeader: FC<SingleSelectionPerRowHeaderProps> = ({ options }) => {
+const RowHeader: FC<RowHeaderProps> = ({ options }) => {
   return (
     <YStack>
       <XStack>
