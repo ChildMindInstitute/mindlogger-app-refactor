@@ -52,17 +52,13 @@ export type ScheduleEventDto = {
   availability: EventAvailabilityDto;
 };
 
-type AppletDto = {
+export type AppletDto = {
   id: string;
-  image?: string;
+  image: string | null;
   displayName: string;
   description: string;
   numberOverdue?: number;
-
-  theme?: {
-    logo?: string;
-    smallLogo?: string;
-  } | null;
+  themeId: string | null;
 };
 
 export type AppletsResponse = {
