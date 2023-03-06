@@ -58,12 +58,13 @@ const AbTutorial: FC<Props> = props => {
 
   return (
     <Box
+      flex={1}
       onLayout={x =>
         setWidth(x.nativeEvent.layout.width - ShapesRectPadding * 2)
       }
     >
       {!!tutorialRecord && (
-        <Text alignSelf="center" mx={ShapesRectPadding} mb={24} fontSize={15}>
+        <Text alignSelf="center" h={70} mx={ShapesRectPadding} fontSize={15}>
           {tutorialRecord.text}
         </Text>
       )}

@@ -28,10 +28,13 @@ export type ActivityFlowRecordDto = {
 export type AppletDetailsDto = {
   id: string;
   name: string;
-  image: string | null;
   displayName: string;
+  version: string;
   description: string;
-  themeId: string | null;
+  about: string;
+  image: string | null;
+  watermark: string | null;
+  themeId: number | null;
   activities: ActivityRecordDto[];
   activityFlows: ActivityFlowRecordDto[];
 };

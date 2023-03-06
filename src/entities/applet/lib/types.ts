@@ -18,3 +18,32 @@ export type AppletTheme = {
 };
 
 export type AppletThemes = Record<string, AppletTheme | undefined>;
+
+type Activity = {
+  id: string;
+  name: string;
+  description: string;
+};
+
+type ActivityFlow = {
+  id: string;
+  name: string;
+  description: string;
+  activityIds: string[];
+};
+
+export type AppletDetails<
+  TActivity extends Activity = Activity,
+  TActivityFlow extends ActivityFlow = ActivityFlow,
+> = {
+  id: string;
+  displayName: string;
+  version: string;
+  description: string;
+  about: string;
+  image: string;
+  watermark: string;
+  themeId: number;
+  activities: TActivity[];
+  activityFlows: TActivityFlow[];
+};

@@ -26,6 +26,9 @@ type Props = PropsWithChildren<{
 
   onBeforeNext?: (step: number) => number;
   onBeforeBack?: (step: number) => number;
+
+  onStartReached?: () => void;
+  onEndReached?: () => void;
 }>;
 
 function Stepper({
@@ -38,6 +41,9 @@ function Stepper({
 
   onBeforeNext,
   onBeforeBack,
+
+  onStartReached,
+  onEndReached,
 
   children,
 }: Props) {
@@ -56,29 +62,41 @@ function Stepper({
   const onUndoRef = useRef(onUndo);
   onUndoRef.current = onUndo;
 
+  const onStartReachedRef = useRef(onStartReached);
+  onStartReachedRef.current = onStartReached;
+
+  const onEndReachedRef = useRef(onEndReached);
+  onEndReachedRef.current = onEndReached;
+
   const viewSliderRef = useRef<ViewSliderRef>(null);
 
   const [step, setStep] = useState(startFrom ?? 0);
 
   const next = useCallback(() => {
-    const stepShift = onBeforeNextRef.current?.(step) || 1;
+    const stepShift = onBeforeNextRef.current?.(step) ?? 1;
+    const nextStep = step + stepShift;
 
     const moved = viewSliderRef.current?.next(stepShift);
 
     if (moved) {
-      setStep(prevStep => prevStep + stepShift);
-      onNextRef.current?.(step + stepShift);
+      setStep(nextStep);
+      onNextRef.current?.(nextStep);
+    } else if (nextStep >= stepsCount) {
+      onEndReachedRef.current?.();
     }
-  }, [step]);
+  }, [step, stepsCount]);
 
   const back = useCallback(() => {
-    const stepShift = onBeforeBackRef.current?.(step) || 1;
+    const stepShift = onBeforeBackRef.current?.(step) ?? 1;
+    const nextStep = step - stepShift;
 
     const moved = viewSliderRef.current?.back(stepShift);
 
     if (moved) {
-      setStep(prevStep => prevStep - stepShift);
-      onBackRef.current?.(step - stepShift);
+      setStep(nextStep);
+      onBackRef.current?.(nextStep);
+    } else {
+      onStartReachedRef.current?.();
     }
   }, [step]);
 

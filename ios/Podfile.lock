@@ -306,11 +306,11 @@ PODS:
   - React-jsinspector (0.70.6)
   - React-logger (0.70.6):
     - glog
-  - react-native-config (1.4.12):
-    - react-native-config/App (= 1.4.12)
-  - react-native-config/App (1.4.12):
+  - react-native-config (1.5.0):
+    - react-native-config/App (= 1.5.0)
+  - react-native-config/App (1.5.0):
     - React-Core
-  - react-native-file-access (2.5.2):
+  - react-native-file-access (2.5.3):
     - React-Core
     - ZIPFoundation (= 0.9.11)
   - react-native-flipper (0.163.0):
@@ -322,32 +322,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
-  - react-native-skia (0.1.175):
-    - React
-    - React-callinvoker
-    - React-Core
-    - react-native-skia/Api (= 0.1.175)
-    - react-native-skia/Jsi (= 0.1.175)
-    - react-native-skia/RNSkia (= 0.1.175)
-    - react-native-skia/SkiaHeaders (= 0.1.175)
-    - react-native-skia/Utils (= 0.1.175)
-  - react-native-skia/Api (0.1.175):
-    - React
-    - React-callinvoker
-    - React-Core
-  - react-native-skia/Jsi (0.1.175):
-    - React
-    - React-callinvoker
-    - React-Core
-  - react-native-skia/RNSkia (0.1.175):
-    - React
-    - React-callinvoker
-    - React-Core
-  - react-native-skia/SkiaHeaders (0.1.175):
-    - React
-    - React-callinvoker
-    - React-Core
-  - react-native-skia/Utils (0.1.175):
+  - react-native-skia (0.1.176):
     - React
     - React-callinvoker
     - React-Core
@@ -682,13 +657,13 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b4a65947391c658450151275aa406f2b8263178f
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
-  react-native-config: 5e3e0c7798522b1a0d7641f7ffa5363044e16397
-  react-native-file-access: 2105d76b5d584d11db6f5d587b6af98ef9ff8080
+  react-native-config: 5330c8258265c1e5fdb8c009d2cabd6badd96727
+  react-native-file-access: e2617a7300406307be44267b36d196c78d6b2a96
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
-  react-native-skia: 51f4a6586c362814f677df4ac4226f13c634bcfa
+  react-native-skia: 8a4e90b1cf38e709491ead1ef1198b298e512640
   React-perflogger: 8c79399b0500a30ee8152d0f9f11beae7fc36595
   React-RCTActionSheet: 7316773acabb374642b926c19aef1c115df5c466
   React-RCTAnimation: 5341e288375451297057391227f691d9b2326c3d

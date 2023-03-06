@@ -3,14 +3,14 @@ import { FC } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { ActivityStepper } from '@features/pass-survey';
 import { RootStackParamList } from '@screens/config';
 import { colors } from '@shared/lib';
 import { BackButton, Box, CrossIcon, StatusBar } from '@shared/ui';
-import { ActivityStepper } from '@widgets/activity-stepper';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'InProgressActivity'>;
 
-const InProgressActivityScreen: FC<Props> = () => {
+const InProgressActivityScreen: FC<Props> = ({ navigation }) => {
   const { bottom } = useSafeAreaInsets();
 
   return (
@@ -22,7 +22,10 @@ const InProgressActivityScreen: FC<Props> = () => {
       </BackButton>
 
       <Box flex={1}>
-        <ActivityStepper />
+        <ActivityStepper
+          onClose={() => navigation.goBack()}
+          onFinish={() => navigation.goBack()}
+        />
       </Box>
     </Box>
   );
