@@ -19,7 +19,10 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
   };
 
   const onSliderPress = () => {
-    if (!arrayOfStackedValues.some(value => value === null) && onPress) {
+    const userInteractedWithAllSliders = !arrayOfStackedValues.some(
+      value => value === null,
+    );
+    if (userInteractedWithAllSliders && onPress) {
       onPress();
     }
   };
