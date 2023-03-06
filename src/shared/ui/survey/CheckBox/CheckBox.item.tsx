@@ -38,6 +38,11 @@ const CheckBoxItem: FC<Props> = ({
     [description],
   );
 
+  const memoizedName = useMemo(
+    () => replaceTextWithScreenVariables(name),
+    [name],
+  );
+
   return (
     <XStack
       minHeight="$7"
@@ -75,7 +80,7 @@ const CheckBoxItem: FC<Props> = ({
           color={colorPalette && color ? invertedColor : colors.darkerGrey}
           fontSize={17}
         >
-          {useMemo(() => replaceTextWithScreenVariables(name), [name])}
+          {memoizedName}
         </Text>
       </XStack>
 
