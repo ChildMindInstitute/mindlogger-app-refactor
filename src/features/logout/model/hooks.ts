@@ -1,3 +1,4 @@
+import { CacheManager } from '@georstat/react-native-image-cache';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { IdentityModel } from '@entities/identity';
@@ -13,6 +14,7 @@ export function useLogout() {
     SessionModel.clearSession();
 
     queryClient.clear();
+    CacheManager.clearCache();
   };
 
   return logout;

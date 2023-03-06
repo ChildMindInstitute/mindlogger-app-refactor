@@ -14,6 +14,7 @@ import {
 } from '@app/shared/ui';
 
 import { Applet } from '../lib';
+import { useAppletThemes } from '../model';
 
 type Props = {
   applet: Applet;
@@ -22,18 +23,15 @@ type Props = {
 };
 
 const AppletCard: FC<Props> = ({ applet, disabled, onPress }) => {
+  const themes = useAppletThemes();
+
+  const theme = applet.themeId ? themes[applet.themeId] : null;
+
   const renderThemeLogo = () => {
-    if (!applet || !applet.theme) {
-      return null;
+    if (theme?.logo) {
+      return <CachedImage style={styles.smallLogo} source={theme.logo} />;
     }
 
-    if (applet.theme.smallLogo) {
-      return (
-        <CachedImage style={styles.smallLogo} source={applet.theme.smallLogo} />
-      );
-    } else if (applet.theme.logo) {
-      return <CachedImage style={styles.logo} source={applet.theme.logo} />;
-    }
     return null;
   };
 
