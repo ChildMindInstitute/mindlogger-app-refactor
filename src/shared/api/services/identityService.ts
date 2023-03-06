@@ -12,7 +12,8 @@ type LogoutRequest = {
 
 type SignUpRequest = {
   email: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   password: string;
 };
 
@@ -36,7 +37,8 @@ export type LoginResponse = SuccessfulResponse<{
 
 type UserDto = {
   id: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
 };
 
