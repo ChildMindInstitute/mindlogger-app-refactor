@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
+import { CachedImage } from '@georstat/react-native-image-cache';
 import { format } from 'date-fns';
 import {
   RenderRules,
@@ -7,7 +8,9 @@ import {
 } from 'react-native-markdown-display';
 
 import { colors } from '@shared/lib';
-import { Box, Text, Image } from '@shared/ui';
+import { Box, Text } from '@shared/ui';
+
+const { width: viewPortWidth } = Dimensions.get('window');
 
 const localStyles = StyleSheet.create({
   alignLeftContainer: {
@@ -33,6 +36,10 @@ const localStyles = StyleSheet.create({
   },
   primaryText: {
     color: colors.primary,
+  },
+  image: {
+    height: 200,
+    width: viewPortWidth - 100,
   },
 });
 
@@ -134,15 +141,15 @@ const markDownRules: RenderRules = {
     );
   },
   image: node => {
-    const { width: viewPortWidth } = Dimensions.get('window');
     return (
-      <Image
-        key={node.key}
-        resizeMode="contain"
-        height={200}
-        width={viewPortWidth - 100}
-        src={node.attributes.src}
-      />
+      <>
+        <CachedImage
+          key={node.key}
+          resizeMode="contain"
+          style={localStyles.image}
+          source={node.attributes.src}
+        />
+      </>
     );
   },
   paragraph: (node, children, parents, styles) => {
