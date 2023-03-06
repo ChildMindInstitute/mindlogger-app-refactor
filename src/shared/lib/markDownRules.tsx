@@ -136,7 +136,7 @@ const markDownRules: RenderRules = {
           { ...additionalStyles },
         ]}
       >
-        {checkNodeContent(updatedNodeContent)}
+        {parseNodeContent(updatedNodeContent)}
       </Text>
     );
   },
@@ -172,49 +172,31 @@ const markDownRules: RenderRules = {
   },
 };
 
-const checkSuperscript = (content: string) => {
-  if (content.indexOf('^') > -1 && content.indexOf('^^') === -1) {
-    return content.split('^').map((text, index) => {
-      if (index % 2 !== 0 && text.length) {
-        return (
-          <Text fontSize={13} lineHeight={18}>
-            {text}
-          </Text>
-        );
-      }
-      return checkSubscript(text);
-    });
-  }
-  return content;
+const styleVariables = (content: string) => {
+  const regex = /(\^\S+?\^)|(~\S+?~)/g;
+  const tildaRegex = /~\S+?~/g;
+  const strings = content.split(regex).filter(Boolean);
+
+  return strings.map((text, index) => {
+    const isTildaVariable = tildaRegex.test(text);
+
+    return !regex.test(text) ? (
+      text
+    ) : (
+      <Text
+        fontSize={13}
+        lineHeight={18}
+        textAlignVertical={isTildaVariable ? 'bottom' : undefined}
+        key={`subscript-${index}`}
+      >
+        {text.replace(/[~^]/g, '')}
+      </Text>
+    );
+  });
 };
 
-const checkSubscript = (
-  content: string,
-): (JSX.Element | (JSX.Element | any[] | string)[] | string)[] | string => {
-  if (content.indexOf('~') > -1 && content.indexOf('~~') === -1) {
-    return content.split('~').map((text, index) => {
-      if (index % 2 !== 0 && text.length) {
-        return (
-          <Text fontSize={13} lineHeight={18} textAlignVertical="bottom">
-            {text}
-          </Text>
-        );
-      }
-      return checkSuperscript(text);
-    });
-  }
-  return content;
-};
-
-const checkNodeContent = (content: string) => {
-  if (content.indexOf('^') > -1 && content.indexOf('^^') === -1) {
-    return checkSuperscript(content);
-  }
-  if (content.indexOf('~') > -1 && content.indexOf('~~') === -1) {
-    return checkSubscript(content);
-  }
-
-  return content;
+const parseNodeContent = (content: string) => {
+  return styleVariables(content);
 };
 
 export default markDownRules;
