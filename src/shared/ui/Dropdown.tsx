@@ -5,7 +5,7 @@ import { Select } from '.';
 type DropdownProps = {
   placeholder: string;
   items: Array<number | string>;
-  value: number | string;
+  value?: number | string;
   onValueChange: (value: number | string) => void;
 };
 

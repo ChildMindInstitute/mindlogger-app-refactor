@@ -31,6 +31,7 @@ export { default as HorizontalCalendar } from './HorizontalCalendar';
 export { default as BackButton } from './BackButton';
 export { default as Tooltip } from './Tooltip';
 export { default as ListSeparator } from './ListSeparator';
+export { default as Dropdown } from './Dropdown';
 export * from './ViewSlider';
 export { default as ProgressBar } from './ProgressBar';
 export { default as Stepper } from './Stepper';
