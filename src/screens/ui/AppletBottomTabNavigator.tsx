@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
 import { ImageBackground } from '@app/shared/ui';
+import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 
 import {
   AppletDetailsParamList,
@@ -20,7 +21,17 @@ const Tab = createBottomTabNavigator<AppletDetailsParamList>();
 const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
   const { t } = useTranslation();
 
-  const { title } = route.params;
+  const { title, appletId } = route.params;
+
+  const { data: applet } = useAppletDetailsQuery(appletId, {
+    select: o => o.data.result,
+  });
+
+  const useAppletThemes = AppletModel.useAppletThemes();
+
+  const appletTheme = applet?.themeId
+    ? useAppletThemes[applet?.themeId]
+    : undefined;
 
   useLayoutEffect(() => {
     if (title) {
@@ -28,10 +39,23 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
     }
   }, [title, navigation]);
 
+  useLayoutEffect(() => {
+    if (appletTheme) {
+      navigation.setOptions({
+        headerStyle: {
+          backgroundColor: appletTheme.primaryColor,
+        },
+      });
+    }
+  }, [appletTheme, navigation]);
+
   return (
-    <ImageBackground>
+    <ImageBackground
+      uri={appletTheme?.backgroundImage}
+      bg={appletTheme?.primaryColor}
+    >
       <Tab.Navigator
-        screenOptions={getAppletDetailsScreenOptions}
+        screenOptions={getAppletDetailsScreenOptions(appletTheme)}
         initialRouteName="ActivityList"
       >
         <Tab.Screen
