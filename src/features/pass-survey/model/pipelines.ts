@@ -3,7 +3,7 @@ import { DeviceType, TestIndex } from '@entities/abTrail';
 import { PipelineItem } from '../lib';
 
 export const getAbTrailsPipeline = (deviceType: DeviceType): PipelineItem[] => {
-  const getTutorialPipelineItems = (testIndex: TestIndex): PipelineItem => {
+  const getTutorialPipelineItem = (testIndex: TestIndex): PipelineItem => {
     return {
       type: 'Tutorial',
       payload: {
@@ -31,16 +31,16 @@ export const getAbTrailsPipeline = (deviceType: DeviceType): PipelineItem[] => {
   };
 
   return [
-    getTutorialPipelineItems(0),
+    getTutorialPipelineItem(0),
     getTestPipelineItem(0),
 
-    getTutorialPipelineItems(1),
+    getTutorialPipelineItem(1),
     getTestPipelineItem(1),
 
-    getTutorialPipelineItems(2),
+    getTutorialPipelineItem(2),
     getTestPipelineItem(2),
 
-    getTutorialPipelineItems(3),
+    getTutorialPipelineItem(3),
     getTestPipelineItem(3),
   ];
 };
