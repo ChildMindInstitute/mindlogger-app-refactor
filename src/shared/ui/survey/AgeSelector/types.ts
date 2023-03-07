@@ -1,6 +1,6 @@
-type AgeSelectorConfigType = {
+type AgeSelectorConfig = {
   maxAge: number;
   minAge: number;
 };
 
-export default AgeSelectorConfigType;
+export default AgeSelectorConfig;

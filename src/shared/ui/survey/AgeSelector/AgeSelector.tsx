@@ -2,17 +2,17 @@ import { FC, useMemo } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import AgeSelectorConfigType from './types';
+import AgeSelectorConfig from './types';
 import Dropdown from '../../Dropdown';
 
-type DropdownOnChangeValue = {
+type SelectedAgeValue = {
   value: string | number;
 };
 
 type Props = {
-  config: AgeSelectorConfigType;
+  config: AgeSelectorConfig;
   value?: string | number;
-  onChange: (value: DropdownOnChangeValue) => void;
+  onChange: (value: SelectedAgeValue) => void;
 };
 
 const AgeSelector: FC<Props> = ({ config, value, onChange }) => {
