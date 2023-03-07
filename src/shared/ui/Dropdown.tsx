@@ -1,12 +1,17 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { DropdownElement } from '.';
 
+export type LabeledValue<TValue extends string | number = string> = {
+  label: string;
+  value: TValue;
+};
+
 type DropdownProps = {
   placeholder: string;
-  items: Array<number | string>;
-  value?: number | string;
+  items: LabeledValue[];
+  value?: LabeledValue;
   onValueChange: (value: number | string) => void;
 };
 
@@ -16,13 +21,6 @@ const Dropdown: FC<DropdownProps> = ({
   onValueChange,
   items,
 }) => {
-  const mappedItems = useMemo(
-    () => items.map(item => ({ label: item, value: item })),
-    [items],
-  );
-
-  const mappedValue = useMemo(() => ({ label: value, value }), [value]);
-
   const onChange = (item: {
     label: string | number;
     value: string | number;
@@ -38,8 +36,8 @@ const Dropdown: FC<DropdownProps> = ({
       selectedTextStyle={styles.centerAlignedText}
       placeholderStyle={styles.centerAlignedText}
       itemTextStyle={styles.centerAlignedText}
-      value={mappedValue}
-      data={mappedItems}
+      value={value}
+      data={items}
       labelField="label"
       valueField="value"
       onChange={onChange}

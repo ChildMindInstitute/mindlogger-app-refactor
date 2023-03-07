@@ -20,11 +20,15 @@ const AgeSelector: FC<Props> = ({ config, value, onChange }) => {
 
   const ageRange = useMemo(
     () =>
-      Array.from(
-        { length: config.maxAge - config.minAge + 1 },
-        (_, index) => index + config.minAge,
-      ),
+      Array.from({ length: config.maxAge - config.minAge + 1 }, (_, index) =>
+        String(index + config.minAge),
+      ).map(item => ({ label: String(item), value: item })),
     [config],
+  );
+
+  const mappedValue = useMemo(
+    () => ({ label: String(value), value: String(value) }),
+    [value],
   );
 
   const onValueChange = (selection: string | number) => {
@@ -36,7 +40,7 @@ const AgeSelector: FC<Props> = ({ config, value, onChange }) => {
       onValueChange={onValueChange}
       placeholder={t('select:select_one')}
       items={ageRange}
-      value={value}
+      value={mappedValue}
     />
   );
 };
