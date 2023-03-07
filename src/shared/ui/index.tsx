@@ -16,7 +16,7 @@ export { Image } from '@tamagui/image';
 export { YStack, XStack, ZStack } from '@tamagui/stacks';
 export { RadioGroup } from '@tamagui/radio-group';
 export { Popover } from '@tamagui/popover';
-export { Select } from '@tamagui/select';
+export { Dropdown as DropdownElement } from 'react-native-element-dropdown';
 export * from './icons';
 export * from './survey';
 

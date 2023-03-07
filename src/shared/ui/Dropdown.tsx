@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
+import { StyleSheet } from 'react-native';
 
-import { Select } from '.';
+import { DropdownElement } from '.';
 
 type DropdownProps = {
   placeholder: string;
@@ -15,21 +16,44 @@ const Dropdown: FC<DropdownProps> = ({
   onValueChange,
   items,
 }) => {
-  return (
-    <Select value={String(value)} onValueChange={onValueChange}>
-      <Select.Trigger>
-        <Select.Value placeholder={placeholder} />
-      </Select.Trigger>
+  const mappedItems = useMemo(
+    () => items.map(item => ({ label: item, value: item })),
+    [items],
+  );
 
-      <Select.Content>
-        {items?.map((item, index) => (
-          <Select.Item index={index} key={item} value={String(value)}>
-            <Select.ItemText>{item}</Select.ItemText>
-          </Select.Item>
-        ))}
-      </Select.Content>
-    </Select>
+  const mappedValue = useMemo(() => ({ label: value, value }), [value]);
+
+  const onChange = (item: {
+    label: string | number;
+    value: string | number;
+  }) => {
+    onValueChange(item.value);
+  };
+
+  return (
+    <DropdownElement
+      maxHeight={300}
+      placeholder={placeholder}
+      iconStyle={styles.iconStyle}
+      selectedTextStyle={styles.centerAlignedText}
+      placeholderStyle={styles.centerAlignedText}
+      itemTextStyle={styles.centerAlignedText}
+      value={mappedValue}
+      data={mappedItems}
+      labelField="label"
+      valueField="value"
+      onChange={onChange}
+    />
   );
 };
+
+const styles = StyleSheet.create({
+  centerAlignedText: {
+    textAlign: 'center',
+  },
+  iconStyle: {
+    display: 'none',
+  },
+});
 
 export default Dropdown;
