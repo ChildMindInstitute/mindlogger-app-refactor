@@ -6,12 +6,12 @@ import AgeSelectorConfig from './types';
 import Dropdown from '../../Dropdown';
 
 type SelectedAgeValue = {
-  value: string | number;
+  value: string;
 };
 
 type Props = {
   config: AgeSelectorConfig;
-  value?: number;
+  value?: string;
   onChange: (value: SelectedAgeValue) => void;
 };
 
@@ -23,7 +23,7 @@ const AgeSelector: FC<Props> = ({ config, value, onChange }) => {
       Array.from(
         { length: config.maxAge - config.minAge + 1 },
         (_, index) => index + config.minAge,
-      ).map(item => ({ label: String(item), value: item })),
+      ).map(item => ({ label: String(item), value: String(item) })),
     [config],
   );
 
@@ -32,7 +32,7 @@ const AgeSelector: FC<Props> = ({ config, value, onChange }) => {
     [value],
   );
 
-  const onValueChange = (selection: string | number) => {
+  const onValueChange = (selection: string) => {
     onChange({ value: selection });
   };
 

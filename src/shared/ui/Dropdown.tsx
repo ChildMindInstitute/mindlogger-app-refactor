@@ -2,25 +2,20 @@ import { StyleSheet } from 'react-native';
 
 import { DropdownElement } from '.';
 
-export type LabeledValue<TValue extends string | number> = {
+export type LabeledValue = {
   label: string;
-  value: TValue;
+  value: string;
 };
 
-type DropdownProps<TValue extends string | number> = {
+type DropdownProps = {
   placeholder: string;
-  items: LabeledValue<TValue>[];
-  value?: LabeledValue<TValue>;
-  onValueChange: (value: TValue) => void;
+  items: LabeledValue[];
+  value?: LabeledValue;
+  onValueChange: (value: string) => void;
 };
 
-function Dropdown<TValue extends string | number>({
-  placeholder,
-  value,
-  onValueChange,
-  items,
-}: DropdownProps<TValue>) {
-  const onChange = (item: LabeledValue<TValue>) => {
+function Dropdown({ placeholder, value, onValueChange, items }: DropdownProps) {
+  const onChange = (item: LabeledValue) => {
     onValueChange(item.value);
   };
 
