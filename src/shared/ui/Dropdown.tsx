@@ -1,30 +1,26 @@
-import { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { DropdownElement } from '.';
 
-export type LabeledValue<TValue extends string | number = string> = {
+export type LabeledValue<TValue extends string | number> = {
   label: string;
   value: TValue;
 };
 
-type DropdownProps = {
+type DropdownProps<TValue extends string | number> = {
   placeholder: string;
-  items: LabeledValue[];
-  value?: LabeledValue;
-  onValueChange: (value: number | string) => void;
+  items: LabeledValue<TValue>[];
+  value?: LabeledValue<TValue>;
+  onValueChange: (value: TValue) => void;
 };
 
-const Dropdown: FC<DropdownProps> = ({
+function Dropdown<TValue extends string | number>({
   placeholder,
-  value = '',
+  value,
   onValueChange,
   items,
-}) => {
-  const onChange = (item: {
-    label: string | number;
-    value: string | number;
-  }) => {
+}: DropdownProps<TValue>) {
+  const onChange = (item: LabeledValue<TValue>) => {
     onValueChange(item.value);
   };
 
@@ -43,7 +39,7 @@ const Dropdown: FC<DropdownProps> = ({
       onChange={onChange}
     />
   );
-};
+}
 
 const styles = StyleSheet.create({
   centerAlignedText: {
