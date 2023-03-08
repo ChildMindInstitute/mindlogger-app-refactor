@@ -28,6 +28,8 @@ function ActivityStepper({ onClose, onFinish }: Props) {
     isTutorial || currentPipelineItem.isSkippable || !!tempState[currentStep];
   const canMoveBack = currentPipelineItem.isAbleToMoveToPrevious;
   const canReset = currentPipelineItem.canBeReset;
+  const showTopNavigation = currentPipelineItem.hasTopNavigation;
+  const showBottomNavigation = !showTopNavigation;
 
   const onNext = (nextStep: number) => {
     setCurrentStep(nextStep);
@@ -67,6 +69,14 @@ function ActivityStepper({ onClose, onFinish }: Props) {
         onStartReached={onClose}
         onEndReached={onFinish}
       >
+        {showTopNavigation && (
+          <Stepper.NavigationPanel position="absolute" mx={16}>
+            {canMoveBack && <Stepper.BackButton isIcon />}
+            {canReset && <Stepper.UndoButton isIcon />}
+            {canMoveNext && <Stepper.NextButton isIcon />}
+          </Stepper.NavigationPanel>
+        )}
+
         <Stepper.ViewList
           renderItem={({ index }) => {
             const pipelineItem = mockPipelineItems[index];
@@ -97,16 +107,18 @@ function ActivityStepper({ onClose, onFinish }: Props) {
 
         <Stepper.Progress />
 
-        <Stepper.NavigationPanel mt={16} minHeight={24}>
-          {canMoveBack && <Stepper.BackButton>Return</Stepper.BackButton>}
-          {canReset && <Stepper.UndoButton>Undo</Stepper.UndoButton>}
+        {showBottomNavigation && (
+          <Stepper.NavigationPanel mt={16} minHeight={24}>
+            {canMoveBack && <Stepper.BackButton>Return</Stepper.BackButton>}
+            {canReset && <Stepper.UndoButton>Undo</Stepper.UndoButton>}
 
-          {canMoveNext && (
-            <Stepper.NextButton>
-              {isLastStep ? 'Done' : 'Next'}
-            </Stepper.NextButton>
-          )}
-        </Stepper.NavigationPanel>
+            {canMoveNext && (
+              <Stepper.NextButton>
+                {isLastStep ? 'Done' : 'Next'}
+              </Stepper.NextButton>
+            )}
+          </Stepper.NavigationPanel>
+        )}
       </Stepper>
     </Box>
   );
