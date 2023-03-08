@@ -1,10 +1,4 @@
-import {
-  PropsWithChildren,
-  useMemo,
-  useRef,
-  useState,
-  useCallback,
-} from 'react';
+import { PropsWithChildren, useMemo, useRef, useCallback } from 'react';
 
 import { ViewSliderRef } from '@app/shared/ui';
 
@@ -70,39 +64,41 @@ function Stepper({
 
   const viewSliderRef = useRef<ViewSliderRef>(null);
 
-  const [step, setStep] = useState(startFrom ?? 0);
+  const stepRef = useRef(startFrom ?? 0);
 
   const next = useCallback(() => {
+    const step = stepRef.current;
     const stepShift = onBeforeNextRef.current?.(step) ?? 1;
     const nextStep = step + stepShift;
 
     const moved = viewSliderRef.current?.next(stepShift);
 
     if (moved) {
-      setStep(nextStep);
+      stepRef.current = nextStep;
       onNextRef.current?.(nextStep);
     } else if (nextStep >= stepsCount) {
       onEndReachedRef.current?.();
     }
-  }, [step, stepsCount]);
+  }, [stepsCount]);
 
   const back = useCallback(() => {
+    const step = stepRef.current;
     const stepShift = onBeforeBackRef.current?.(step) ?? 1;
     const nextStep = step - stepShift;
 
     const moved = viewSliderRef.current?.back(stepShift);
 
     if (moved) {
-      setStep(nextStep);
+      stepRef.current = nextStep;
       onBackRef.current?.(nextStep);
     } else {
       onStartReachedRef.current?.();
     }
-  }, [step]);
+  }, []);
 
   const undo = useCallback(() => {
-    onUndoRef.current?.(step);
-  }, [step]);
+    onUndoRef.current?.(stepRef.current);
+  }, []);
 
   const handlersContext = useMemo(
     () => ({
@@ -115,10 +111,10 @@ function Stepper({
 
   const valuesContext = useMemo(
     () => ({
-      currentStep: step,
+      getCurrentStep: () => stepRef.current,
       stepsCount,
     }),
-    [step, stepsCount],
+    [stepsCount],
   );
 
   return (

@@ -5,9 +5,9 @@ import { ProgressBar } from '@shared/ui';
 import { ValuesContext } from './contexts';
 
 function Progress() {
-  const { currentStep, stepsCount } = useContext(ValuesContext);
+  const { getCurrentStep, stepsCount } = useContext(ValuesContext);
 
-  const progress = (currentStep + 1) / stepsCount;
+  const progress = (getCurrentStep() + 1) / stepsCount;
 
   return <ProgressBar progress={progress} />;
 }

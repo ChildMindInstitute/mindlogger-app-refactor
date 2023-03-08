@@ -13,13 +13,13 @@ type Props = {
 };
 
 function ViewList({ renderItem }: Props) {
-  const { currentStep, stepsCount } = useContext(ValuesContext);
+  const { getCurrentStep, stepsCount } = useContext(ValuesContext);
   const ref = useContext(RefContext);
 
   return (
     <ViewSlider
       viewCount={stepsCount}
-      startFrom={currentStep}
+      startFrom={getCurrentStep()}
       ref={ref}
       renderView={item => renderItem(item)}
     />
