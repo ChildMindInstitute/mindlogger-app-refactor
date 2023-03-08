@@ -2,8 +2,6 @@ import {
   forwardRef,
   useImperativeHandle,
   PropsWithChildren,
-  Children,
-  isValidElement,
   useCallback,
   useMemo,
   useState,
@@ -16,10 +14,16 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
+  FadeIn,
+  FadeOut,
 } from 'react-native-reanimated';
 
+import { range } from '../lib';
+
 type Props = PropsWithChildren<{
+  viewCount: number;
   startFrom: number;
+  renderView: (item: { index: number }) => JSX.Element;
 }>;
 
 export type ViewSliderRef = {
@@ -28,11 +32,8 @@ export type ViewSliderRef = {
 };
 
 export const ViewSlider = forwardRef<ViewSliderRef, Props>(
-  ({ startFrom = 0, children }, ref) => {
-    const slides = useMemo(
-      () => Children.toArray(children).filter(isValidElement),
-      [children],
-    );
+  ({ viewCount, startFrom = 0, renderView }, ref) => {
+    const views = useMemo(() => range(viewCount), [viewCount]);
     const [width, setWidth] = useState(0);
     const [deletedSlideIndex, setDeletedSlideIndex] = useState<number | null>(
       null,
@@ -49,7 +50,7 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
     const next = useCallback(
       (shift: number = 1) => {
         const currentIndex = Math.abs(offsetIndex.value);
-        const canMove = currentIndex + shift < slides.length;
+        const canMove = shift > 0 && currentIndex + shift < views.length;
 
         if (canMove) {
           offsetIndex.value = offsetIndex.value - shift;
@@ -58,13 +59,13 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
 
         return canMove;
       },
-      [offsetIndex, slides.length],
+      [offsetIndex, views.length],
     );
 
     const back = useCallback(
       (shift: number = 1) => {
         const currentIndex = Math.abs(offsetIndex.value);
-        const canMove = offsetIndex.value < 0;
+        const canMove = shift > 0 && offsetIndex.value < 0;
 
         if (canMove) {
           offsetIndex.value = offsetIndex.value + shift;
@@ -102,13 +103,21 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
         style={[styles.box, animatedStyles]}
         onLayout={o => setWidth(o.nativeEvent.layout.width)}
       >
-        {slides.map((child, i) => {
-          const isCurrent = Math.abs(offsetIndex.value) === i;
-          const isDeleted = deletedSlideIndex === i;
+        {views.map(index => {
+          const isCurrent = Math.abs(offsetIndex.value) === index;
+          const isDeleted = deletedSlideIndex === index;
 
           return (
-            <XStack key={i} w={width}>
-              {isCurrent || isDeleted ? child : null}
+            <XStack key={index} w={width}>
+              {isCurrent || isDeleted ? (
+                <Animated.View
+                  entering={FadeIn.duration(600)}
+                  exiting={FadeOut.duration(200)}
+                  style={styles.slide}
+                >
+                  {renderView({ index })}
+                </Animated.View>
+              ) : null}
             </XStack>
           );
         })}
@@ -121,5 +130,8 @@ const styles = StyleSheet.create({
   box: {
     flex: 1,
     flexDirection: 'row',
+  },
+  slide: {
+    flex: 1,
   },
 });

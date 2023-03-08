@@ -7,7 +7,8 @@ export { default as SignUpScreen } from './SignUpScreen';
 export { default as AboutScreen } from './AboutScreen';
 export { default as SettingsScreen } from './SettingsScreen';
 export { default as ActivityListScreen } from './ActivityListScreen';
-export { default as AppletBottomTabNavigator } from './AppletBottomTabNavigator';
 export { default as AboutAppletScreen } from './AboutAppletScreen';
+export { default as InProgressActivityScreen } from './InProgressActivityScreen';
 
+export { default as AppletBottomTabNavigator } from './AppletBottomTabNavigator';
 export { default as RootNavigator } from './RootNavigator';

@@ -9,7 +9,7 @@ type Handlers = {
 };
 
 type Values = {
-  currentStep: number;
+  getCurrentStep: () => number;
   stepsCount: number;
 };
 
