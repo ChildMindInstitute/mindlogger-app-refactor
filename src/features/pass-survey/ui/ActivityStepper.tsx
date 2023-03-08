@@ -29,14 +29,14 @@ function ActivityStepper({ onClose, onFinish }: Props) {
   const canMoveBack = currentPipelineItem.isAbleToMoveToPrevious;
   const canReset = currentPipelineItem.canBeReset;
 
-  const onNext = () => {
-    setCurrentStep(currentStep + 1);
+  const onNext = (nextStep: number) => {
+    setCurrentStep(nextStep);
   };
-  const onBack = () => {
-    setCurrentStep(currentStep - 1);
+  const onBack = (nextStep: number) => {
+    setCurrentStep(nextStep);
   };
 
-  const onBeforeNext = () => {
+  const onBeforeNext = (): number => {
     if (isTutorial) {
       const moved = tutorialViewerRef.current?.next();
 
@@ -45,7 +45,7 @@ function ActivityStepper({ onClose, onFinish }: Props) {
 
     return 1;
   };
-  const onBeforeBack = () => {
+  const onBeforeBack = (): number => {
     if (isTutorial) {
       const moved = tutorialViewerRef.current?.back();
 
