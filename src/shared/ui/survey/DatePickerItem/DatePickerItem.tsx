@@ -10,8 +10,8 @@ import { colors } from '@app/shared/lib';
 import { XStack, Text, ChevronRightIcon } from '../..';
 
 type Props = {
-  onChange: (value: Date) => void;
-  value: Date;
+  onChange: (value: string) => void;
+  value: string;
 };
 
 const DatePickerButton = styled(Button, {
@@ -31,8 +31,8 @@ const DatePickerItem: FC<Props> = ({ value = new Date(), onChange }) => {
     setDatePickerVisible(false);
   };
 
-  const handleConfirm = (date: Date) => {
-    onChange(date); // @todo add correct date format after backend implementation
+  const confirm = (date: Date) => {
+    onChange(date.toString()); // @todo add correct date format after backend implementation
     hideDatePicker();
   };
 
@@ -43,15 +43,15 @@ const DatePickerItem: FC<Props> = ({ value = new Date(), onChange }) => {
         iconAfter={<ChevronRightIcon color={colors.grey} size={15} />}
       >
         <XStack flex={1}>
-          <Text>{format(value, 'MMMM d, yyyy')}</Text>
+          <Text>{format(new Date(value), 'MMMM d, yyyy')}</Text>
         </XStack>
       </DatePickerButton>
 
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
-        date={value}
+        date={new Date(value)}
         mode="date"
-        onConfirm={handleConfirm}
+        onConfirm={confirm}
         onCancel={hideDatePicker}
       />
     </>
