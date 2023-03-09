@@ -9,6 +9,7 @@ export { default as SettingsScreen } from './SettingsScreen';
 export { default as ActivityListScreen } from './ActivityListScreen';
 export { default as AboutAppletScreen } from './AboutAppletScreen';
 export { default as InProgressActivityScreen } from './InProgressActivityScreen';
+export { default as ActivityPassedScreen } from './ActivityPassedScreen';
 
 export { default as AppletBottomTabNavigator } from './AppletBottomTabNavigator';
 export { default as RootNavigator } from './RootNavigator';

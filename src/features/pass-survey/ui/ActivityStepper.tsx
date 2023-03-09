@@ -9,6 +9,10 @@ import { getAbTrailsPipeline } from '../model';
 const mockPipelineItems = getAbTrailsPipeline('Phone');
 
 type Props = {
+  appletId: string;
+  activityId: string;
+  eventId: string;
+
   onClose: () => void;
   onFinish: () => void;
 };
