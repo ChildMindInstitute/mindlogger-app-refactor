@@ -6,10 +6,11 @@ import {
   RenderRules,
   renderRules as defaultRenderRules,
 } from 'react-native-markdown-display';
+// @ts-ignore
+import * as mime from 'react-native-mime-types';
 
 import { colors } from '@shared/lib';
-import { Box, Text } from '@shared/ui';
-
+import { Box, Text, AudioPlayer } from '@shared/ui';
 const { width: viewPortWidth } = Dimensions.get('window');
 
 const localStyles = StyleSheet.create({
@@ -141,15 +142,21 @@ const markDownRules: RenderRules = {
     );
   },
   image: node => {
+    const src = node?.attributes?.src;
+    const mimeType = mime.lookup(src);
+    if (!mimeType) {
+      return null;
+    }
+    if (mimeType.startsWith('audio/')) {
+      return <AudioPlayer uri={src} title={node.content} key={node.key} />;
+    }
     return (
-      <>
-        <CachedImage
-          key={node.key}
-          resizeMode="contain"
-          style={localStyles.image}
-          source={node.attributes.src}
-        />
-      </>
+      <CachedImage
+        key={node.key}
+        resizeMode="contain"
+        style={localStyles.image}
+        source={node.attributes.src}
+      />
     );
   },
   paragraph: (node, children, parents, styles) => {
@@ -183,14 +190,11 @@ const styleVariables = (content: string) => {
     return !regex.test(text) ? (
       text
     ) : (
-      <Text
-        fontSize={13}
-        lineHeight={18}
-        textAlignVertical={isTildaVariable ? 'bottom' : undefined}
-        key={`subscript-${index}`}
-      >
-        {text.replace(/[~^]/g, '')}
-      </Text>
+      <Box h={28} key={`subscript-${index}`}>
+        <Text fontSize={13} mt={isTildaVariable ? 14 : 0}>
+          {text.replace(/[~^]/g, '')}
+        </Text>
+      </Box>
     );
   });
 };

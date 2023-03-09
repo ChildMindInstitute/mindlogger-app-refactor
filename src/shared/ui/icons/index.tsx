@@ -61,3 +61,11 @@ export const RightArrowIcon: FC<IconProps> = props => (
 export const RestartIcon: FC<IconProps> = props => (
   <FontAwesome name="refresh" {...props} />
 );
+
+export const PlayIcon: FC<IconProps> = props => (
+  <Entypo name="controller-play" {...props} />
+);
+
+export const PauseIcon: FC<IconProps> = props => (
+  <Foundation name="pause" {...props} />
+);
