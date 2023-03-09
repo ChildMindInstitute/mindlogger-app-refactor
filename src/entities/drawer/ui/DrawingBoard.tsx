@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useRef, useState, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import {
@@ -36,34 +36,28 @@ paint.setStrokeWidth(1);
 paint.setStyle(PaintStyle.Stroke);
 
 type Props = {
-  initialLines: Array<DrawLine> | null;
+  initialLines: Array<DrawLine>;
   onStarted: () => void;
   onResult: (result: DrawResult) => void;
   width: number;
 };
 
 const DrawingBoard: FC<Props> = props => {
+  const { initialLines, onResult, onStarted, width } = props;
+
   const currentPathRef = useRef<SkPath | null>();
 
   const canvasRef = useRef<SkCanvas>();
 
-  const logLines = useRef<Array<DrawLine>>([]).current;
+  const initialLogLines = useMemo(() => {
+    return transformByWidth(initialLines, width);
+  }, []);
 
-  const [paths, setPaths] = useState<Array<SkPath>>([]);
+  const logLines = useRef<Array<DrawLine>>(initialLogLines).current;
 
-  const { initialLines, onResult, onStarted, width } = props;
-
-  useEffect(() => {
-    if (!width || !initialLines || !initialLines.length) {
-      return;
-    }
-
-    const transformedLines = transformByWidth(initialLines, width);
-    logLines.push(...transformedLines);
-
-    const skPaths: SkPath[] = convertToSkPaths(transformedLines);
-    setPaths(skPaths);
-  }, [width, initialLines]);
+  const [paths, setPaths] = useState<Array<SkPath>>(() => {
+    return convertToSkPaths(initialLogLines);
+  });
 
   const getCurrentPath = (): SkPath => currentPathRef.current!;
 

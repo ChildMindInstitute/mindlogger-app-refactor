@@ -8,7 +8,7 @@ import { DrawLine, DrawResult } from '../lib';
 const RectPadding = 15;
 
 type Props = {
-  initialLines: Array<DrawLine> | null;
+  initialLines: Array<DrawLine>;
   instruction: string | null;
   imageUrl: string | null;
   backgroundImageUrl: string | null;
