@@ -1,15 +1,4 @@
-export type Applet = {
-  id: string;
-  image?: string | null;
-  displayName: string;
-  description: string;
-  numberOverdue?: number;
-  themeId: string | null;
-};
-
 export type AppletTheme = {
-  id: string;
-  name: string;
   logo: string;
   backgroundImage: string;
   primaryColor: string;
@@ -17,7 +6,14 @@ export type AppletTheme = {
   tertiaryColor: string;
 };
 
-export type AppletThemes = Record<string, AppletTheme | undefined>;
+export type Applet = {
+  id: string;
+  image: string | null;
+  displayName: string;
+  description: string;
+  numberOverdue?: number;
+  theme: AppletTheme | null;
+};
 
 type Activity = {
   id: string;
@@ -41,9 +37,9 @@ export type AppletDetails<
   version: string;
   description: string;
   about: string;
-  image: string;
-  watermark: string;
-  themeId: number;
+  image: string | null;
+  watermark: string | null;
+  theme: AppletTheme | null;
   activities: TActivity[];
   activityFlows: TActivityFlow[];
 };

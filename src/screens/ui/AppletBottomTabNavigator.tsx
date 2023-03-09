@@ -5,7 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
 import { ImageBackground } from '@app/shared/ui';
-import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
+import { useAppletDetailsQuery } from '@entities/applet';
 
 import {
   AppletDetailsParamList,
@@ -27,11 +27,7 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
     select: o => o.data.result,
   });
 
-  const useAppletThemes = AppletModel.useAppletThemes();
-
-  const appletTheme = applet?.themeId
-    ? useAppletThemes[applet?.themeId]
-    : undefined;
+  const appletTheme = applet?.theme ?? null;
 
   useLayoutEffect(() => {
     if (title) {

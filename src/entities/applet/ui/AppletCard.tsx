@@ -14,7 +14,6 @@ import {
 } from '@app/shared/ui';
 
 import { Applet } from '../lib';
-import { useAppletThemes } from '../model';
 
 type Props = {
   applet: Applet;
@@ -23,9 +22,7 @@ type Props = {
 };
 
 const AppletCard: FC<Props> = ({ applet, disabled, onPress }) => {
-  const themes = useAppletThemes();
-
-  const theme = applet.themeId ? themes[applet.themeId] : null;
+  const theme = applet.theme;
 
   const renderThemeLogo = () => {
     if (theme?.logo) {
