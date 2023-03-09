@@ -16,18 +16,17 @@ import { Item } from './types';
 
 type Props = {
   colorPalette: boolean;
-  onChange: (itemValue: number) => void;
-  checked: boolean;
-} & Item;
+  onChange: () => void;
+  value: boolean;
+} & Omit<Item, 'value'>;
 
 const CheckBoxItem: FC<Props> = ({
+  value,
   colorPalette,
   onChange,
-  checked,
   description,
   image,
   color,
-  value,
   name,
 }) => {
   const invertedColor =
@@ -55,7 +54,7 @@ const CheckBoxItem: FC<Props> = ({
       br={7}
       bbw={colorPalette ? 0 : 1}
       bbc={colors.lighterGrey}
-      onPress={() => onChange(value)}
+      onPress={onChange}
     >
       <XStack flex={1} ai="center">
         {!!description && (
@@ -99,7 +98,7 @@ const CheckBoxItem: FC<Props> = ({
         tintColor={invertedColor}
         onAnimationType="fade"
         offAnimationType="fade"
-        value={checked}
+        value={value}
         disabled={true}
       />
     </XStack>

@@ -53,8 +53,8 @@ const CheckBoxActivityItem: FC<Props> = ({ config, onChange, values }) => {
             <CheckBoxItem
               {...item}
               colorPalette={config.colorPalette}
-              onChange={onItemValueChanged}
-              checked={values.includes(item.value)}
+              onChange={() => onItemValueChanged(item.value)}
+              value={values.includes(item.value)}
             />
           </Box>
         );
