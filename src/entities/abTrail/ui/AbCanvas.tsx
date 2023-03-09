@@ -118,9 +118,9 @@ const AbCanvas: FC<Props> = props => {
     }
   };
 
-  const isOverNode = (pointToCheck: Point, roundIndexToCheck: number) => {
+  const isOverNode = (pointToCheck: Point, nodeIndexToCheck: number) => {
     const node = findNodeByPoint(pointToCheck);
-    return !!node && node.orderIndex === roundIndexToCheck;
+    return !!node && node.orderIndex === nodeIndexToCheck;
   };
 
   const isOverCurrent = (point: Point) => {
