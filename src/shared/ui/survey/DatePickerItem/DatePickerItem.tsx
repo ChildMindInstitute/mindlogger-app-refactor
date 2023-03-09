@@ -7,11 +7,10 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { colors } from '@app/shared/lib';
 
-import { XStack, Text } from '../..';
-import { ChevronRightIcon } from '../../icons';
+import { XStack, Text, ChevronRightIcon } from '../..';
 
 type Props = {
-  onChange: (value: string) => void;
+  onChange: (value: Date) => void;
   value: Date;
 };
 
@@ -33,7 +32,7 @@ const DatePickerItem: FC<Props> = ({ value = new Date(), onChange }) => {
   };
 
   const handleConfirm = (date: Date) => {
-    onChange(date.toString()); // @todo add correct date format after backend implementation
+    onChange(date); // @todo add correct date format after backend implementation
     hideDatePicker();
   };
 
@@ -44,7 +43,7 @@ const DatePickerItem: FC<Props> = ({ value = new Date(), onChange }) => {
         iconAfter={<ChevronRightIcon color={colors.grey} size={15} />}
       >
         <XStack flex={1}>
-          <Text>{format(new Date(value), 'MMMM d, yyyy')}</Text>
+          <Text>{format(value, 'MMMM d, yyyy')}</Text>
         </XStack>
       </DatePickerButton>
 

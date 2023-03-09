@@ -56,7 +56,6 @@
     "@tanstack/query-async-storage-persister": "^4.20.9",
     "@tanstack/react-query": "^4.20.9",
     "@tanstack/react-query-persist-client": "^4.20.9",
-    "add": "^2.0.6",
     "axios": "^1.2.3",
     "date-fns": "^2.29.3",
     "dayspan": "^1.1.0",
@@ -81,7 +80,6 @@
     "react-native-vector-icons": "^9.2.0",
     "react-redux": "^8.0.5",
     "redux-persist": "^6.0.0",
-    "yarn": "^1.22.19",
     "zod": "^3.20.2",
     "zod-i18n-map": "^2.1.0"
   },
