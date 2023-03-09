@@ -66,17 +66,17 @@ const CheckBoxItem: FC<Props> = ({
 
         {image ? (
           <Image
+            width="15%"
+            height={64}
             ml={description ? 5 : 0}
             src={image}
             resizeMode="contain"
-            width="15%"
-            height={64}
           />
         ) : null}
 
         <Text
-          ml="$4"
           maxWidth="70%"
+          ml="$4"
           color={colorPalette && color ? invertedColor : colors.darkerGrey}
           fontSize={17}
         >
@@ -86,6 +86,9 @@ const CheckBoxItem: FC<Props> = ({
 
       <CheckBox
         style={styles.checkbox}
+        lineWidth={2}
+        animationDuration={0.2}
+        boxType="square"
         tintColors={{
           true: colors.grey,
           false: colors.grey,
@@ -94,11 +97,8 @@ const CheckBoxItem: FC<Props> = ({
         onFillColor={invertedColor}
         onTintColor={invertedColor}
         tintColor={invertedColor}
-        boxType="square"
-        lineWidth={2}
         onAnimationType="fade"
         offAnimationType="fade"
-        animationDuration={0.2}
         value={checked}
         disabled={true}
       />
