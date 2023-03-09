@@ -1,4 +1,4 @@
-import { FC, useState, useCallback } from 'react';
+import { FC, useState, useCallback, useRef, useEffect } from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
 import { useFocusEffect } from '@react-navigation/native';
@@ -11,20 +11,25 @@ type Props = {
   title?: string;
 };
 
-const audioRecorderPlayer = new AudioRecorderPlayer();
-
 const AudioPlayer: FC<Props> = ({ uri, title }) => {
+  const audioRecorderPlayer = useRef(new AudioRecorderPlayer());
   const [playing, setPlaying] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
-      return () => {
-        setPlaying(false);
-        audioRecorderPlayer.stopPlayer();
-        audioRecorderPlayer.removePlayBackListener();
-      };
+      return destroy;
     }, []),
   );
+
+  useEffect(() => {
+    return destroy;
+  }, []);
+
+  const destroy = () => {
+    setPlaying(false);
+    audioRecorderPlayer.current.stopPlayer();
+    audioRecorderPlayer.current.removePlayBackListener();
+  };
 
   const togglePlay = async () => {
     if (playing) {
@@ -37,8 +42,8 @@ const AudioPlayer: FC<Props> = ({ uri, title }) => {
   const play = async () => {
     setPlaying(true);
 
-    await audioRecorderPlayer.startPlayer(uri);
-    audioRecorderPlayer.addPlayBackListener(data => {
+    await audioRecorderPlayer.current.startPlayer(uri);
+    audioRecorderPlayer.current.addPlayBackListener(data => {
       if (data.currentPosition === data.duration) {
         setPlaying(false);
       }
@@ -48,7 +53,7 @@ const AudioPlayer: FC<Props> = ({ uri, title }) => {
   const pause = async () => {
     setPlaying(false);
 
-    await audioRecorderPlayer.pausePlayer();
+    await audioRecorderPlayer.current.pausePlayer();
   };
 
   return (
