@@ -351,8 +351,8 @@
   "cognitive": {
     "incorrect_start_point": "Incorrect start point!",
     "incorrect_line": "Incorrect line!",
-    "finished_continue": "Finished. Click Done to continue.",
-    "finished_complete": "Finished. Click next to complete.",
+    "finished_continue": "Finished. Click next to continue.",
+    "finished_complete": "Finished. Click Done to complete.",
     "begin": "Begin",
     "end": "End"
   }
