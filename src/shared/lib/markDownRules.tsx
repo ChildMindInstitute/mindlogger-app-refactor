@@ -9,10 +9,10 @@ import {
 } from 'react-native-markdown-display';
 // @ts-ignore
 import * as mime from 'react-native-mime-types';
-import WebView from 'react-native-webview';
 
 import { colors } from '@shared/lib';
-import { Box, Text, AudioPlayer, VideoPlayer } from '@shared/ui';
+import { Box, Text, AudioPlayer, VideoPlayer, YoutubeVideo } from '@shared/ui';
+
 const { width: viewPortWidth } = Dimensions.get('window');
 
 const localStyles = StyleSheet.create({
@@ -161,7 +161,7 @@ const htmlBlockStyles = `
 
 const onHtmlBlockLinkPress = (request: { url: string }) => {
   if (request.url !== 'about:blank') {
-    Linking.openURL(request.url).then();
+    Linking.openURL(request.url);
     return false;
   }
   return true;
@@ -228,27 +228,17 @@ const markDownRules: RenderRules = {
     const src = node.attributes?.src;
     const mimeType = mime.lookup(src) || '';
 
-    if (mimeType.startsWith('audio/')) {
-      return <AudioPlayer uri={src} title={node.content} key={node.key} />;
-    } else if (mimeType.startsWith('video/') || src?.includes('.quicktime')) {
-      return <VideoPlayer uri={src} key={node.key} />;
-    } else if (src?.includes('youtu')) {
-      const videoId = src.split('.be/')?.[1];
-      const uri = src?.includes('watch?')
-        ? src
-        : `https://www.youtube.com/embed/${videoId}`;
+    const isAudio = mimeType.startsWith('audio/');
+    const isVideo =
+      mimeType.startsWith('video/') || src?.includes('.quicktime');
+    const isYoutubeVideo = src?.includes('youtu');
 
-      return (
-        <WebView
-          width="100%"
-          height={250}
-          key={node.key}
-          mediaPlaybackRequiresUserAction
-          source={{
-            uri,
-          }}
-        />
-      );
+    if (isAudio) {
+      return <AudioPlayer uri={src} title={node.content} key={node.key} />;
+    } else if (isVideo) {
+      return <VideoPlayer uri={src} key={node.key} />;
+    } else if (isYoutubeVideo) {
+      return <YoutubeVideo key={node.key} src={src} />;
     }
 
     return (
