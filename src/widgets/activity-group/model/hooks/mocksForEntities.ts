@@ -1,15 +1,10 @@
 import { ActivityType } from '@app/entities/activity';
+import { ActivityPipelineType, EntitiesInProgress } from '@app/entities/applet';
 import { AvailabilityType, PeriodicityType } from '@app/entities/event';
 
-import {
-  Activity,
-  ActivityFlow,
-  ActivityPipelineType,
-  EntityProgress,
-  EventActivity,
-} from '../../lib';
+import { Activity, ActivityFlow, EventActivity } from '../../lib';
 
-export const progress: EntityProgress = {
+export const progress: EntitiesInProgress = {
   apid1: {
     aid1: {
       eid1: {
@@ -23,6 +18,7 @@ export const progress: EntityProgress = {
         currentActivityId: 'aid2',
         startAt: new Date(2023, 1, 12, 14, 16, 17),
         type: ActivityPipelineType.Flow,
+        endAt: null,
       },
     },
   },

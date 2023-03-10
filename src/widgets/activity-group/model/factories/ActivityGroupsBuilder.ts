@@ -4,8 +4,14 @@ import {
   ActivityListItem,
   ActivityStatus,
   ActivityType,
-} from '@app/entities/activity';
-import { AvailabilityType } from '@app/entities/event';
+} from '@entities/activity';
+import {
+  ActivityFlowProgress,
+  ActivityPipelineType,
+  EntitiesInProgress,
+  ProgressPayload,
+} from '@entities/applet';
+import { AvailabilityType } from '@entities/event';
 import {
   getMsFromHours,
   getMsFromMinutes,
@@ -14,7 +20,7 @@ import {
   MIDNIGHT_DATE,
   MINUTES_IN_HOUR,
   MS_IN_MINUTE,
-} from '@app/shared/lib';
+} from '@shared/lib';
 
 import {
   EventActivity,
@@ -23,10 +29,6 @@ import {
   ActivityListGroup,
   Activity,
   ActivityFlow,
-  ActivityPipelineType,
-  EntityProgress,
-  ProgressPayload,
-  ActivityFlowProgress,
 } from '../../lib';
 
 export interface IActivityGroupsBuilder {
@@ -38,7 +40,7 @@ export interface IActivityGroupsBuilder {
 }
 
 class ActivityGroupsBuilder implements IActivityGroupsBuilder {
-  private progress: EntityProgress;
+  private progress: EntitiesInProgress;
 
   private appletId: string;
 
@@ -56,7 +58,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     eventActivity: EventActivity,
   ): ProgressPayload | null {
     const record =
-      this.progress[this.appletId][eventActivity.activity.id][
+      this.progress[this.appletId]?.[eventActivity.activity.id]?.[
         eventActivity.event.id
       ];
     return record ?? null;
@@ -356,7 +358,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
 type ActivityGroupsBuilderInput = {
   allAppletActivities: Activity[];
-  progress: EntityProgress;
+  progress: EntitiesInProgress;
   appletId: string;
 };
 

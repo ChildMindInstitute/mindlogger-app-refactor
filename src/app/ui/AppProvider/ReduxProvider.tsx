@@ -7,7 +7,7 @@ import {
   ThunkAction,
 } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import { persistReducer, persistStore } from 'redux-persist';
+import { persistReducer, persistStore, createTransform } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import { IdentityModel } from '@entities/identity';
@@ -15,9 +15,22 @@ import { createAsyncStorage, useSplash } from '@shared/lib';
 
 const storage = createAsyncStorage('redux-storage');
 
+const DateKeys = ['startAt', 'endAt'];
+const DateTransform = createTransform(
+  inboundState => inboundState,
+  (outboundState: any, key) => {
+    if (DateKeys.includes(key.toString())) {
+      return { ...outboundState, [key]: new Date(outboundState[key]) };
+    } else {
+      return outboundState;
+    }
+  },
+);
+
 export const persistConfig = {
   key: 'root',
   storage: storage,
+  transforms: [DateTransform],
 };
 
 const rootReducer = combineReducers({

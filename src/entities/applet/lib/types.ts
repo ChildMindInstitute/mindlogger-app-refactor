@@ -15,13 +15,13 @@ export type Applet = {
   theme: AppletTheme | null;
 };
 
-type Activity = {
+export type Activity = {
   id: string;
   name: string;
   description: string;
 };
 
-type ActivityFlow = {
+export type ActivityFlow = {
   id: string;
   name: string;
   description: string;
@@ -42,4 +42,33 @@ export type AppletDetails<
   theme: AppletTheme | null;
   activities: TActivity[];
   activityFlows: TActivityFlow[];
+};
+
+export const enum ActivityPipelineType {
+  NotDefined = 0,
+  Regular,
+  Flow,
+}
+export type ActivityFlowProgress = {
+  type: ActivityPipelineType.Flow;
+  currentActivityId: string;
+};
+
+export type ActivityProgress = {
+  type: ActivityPipelineType.Regular;
+};
+
+export type ActivityOrFlowProgress = ActivityFlowProgress | ActivityProgress;
+
+export type ProgressPayload = ActivityOrFlowProgress & {
+  startAt: Date;
+  endAt: Date | null;
+};
+
+export type EntitiesInProgress = {
+  [appletId in string]: {
+    [entityId in string]: {
+      [eventId in string]: ProgressPayload;
+    };
+  };
 };
