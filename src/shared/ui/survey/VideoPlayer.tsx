@@ -5,6 +5,18 @@ import { default as VideoPlayerBase } from 'react-native-video-player';
 
 import { Center } from '@shared/ui';
 
+const baseStyles = {
+  height: 250,
+  width: '100%',
+  backgroundColor: '#000',
+};
+
+const customStyles = {
+  video: baseStyles,
+  wrapper: baseStyles,
+  thumbnail: baseStyles,
+};
+
 type Props = {
   uri: string;
   resizeMode?: 'cover' | 'contain';
@@ -28,12 +40,6 @@ const VideoPlayer: FC<Props> = ({
     return destroy;
   }, []);
 
-  useEffect(() => {
-    if (!autoPlay) {
-      playerRef.current?.pause();
-    }
-  }, [autoPlay, playerRef]);
-
   const destroy = () => {
     playerRef.current?.stop();
   };
@@ -45,21 +51,13 @@ const VideoPlayer: FC<Props> = ({
         video={{
           uri,
         }}
-        autoplay
+        autoplay={autoPlay}
         resizeMode={resizeMode}
         showDuration
         disableFullscreen
         pauseOnPress
-        customStyles={{
-          video: {
-            height: 250,
-            width: '100%',
-          },
-          wrapper: {
-            height: 250,
-            width: '100%',
-          },
-        }}
+        customStyles={customStyles}
+        thumbnail={{ uri }}
       />
     </Center>
   );
