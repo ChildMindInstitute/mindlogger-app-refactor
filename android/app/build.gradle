@@ -354,7 +354,8 @@ project.ext.vectoricons = [
         'FontAwesome5_Solid.ttf',
         'AntDesign.ttf',
         'Foundation.ttf',
-        'Entypo.ttf'
+        'Entypo.ttf',
+        'MaterialIcons.ttf'
     ]
 ]
 

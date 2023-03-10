@@ -58,12 +58,6 @@ const AudioPlayer: FC<Props> = ({ uri, title }) => {
 
   return (
     <XStack ai="center">
-      {title && (
-        <Text maxWidth="90%" fontSize={20} fontWeight="500">
-          {title}
-        </Text>
-      )}
-
       <TouchableOpacity onPress={togglePlay} style={styles.iconWrapper}>
         {playing ? (
           <PauseIcon size={30} color="black" />
@@ -71,6 +65,12 @@ const AudioPlayer: FC<Props> = ({ uri, title }) => {
           <PlayIcon size={30} color="black" />
         )}
       </TouchableOpacity>
+
+      {title && (
+        <Text maxWidth="90%" fontSize={20} fontWeight="500">
+          {title}
+        </Text>
+      )}
     </XStack>
   );
 };
