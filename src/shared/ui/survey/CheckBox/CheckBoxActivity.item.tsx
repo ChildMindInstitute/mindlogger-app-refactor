@@ -15,7 +15,7 @@ type Props = {
     colorPalette: boolean;
     randomizeOptions: boolean;
   };
-  onChange: (arrayOfValues: number[]) => void;
+  onChange: (values: number[]) => void;
   values: number[];
 };
 
