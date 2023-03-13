@@ -22,7 +22,7 @@ export type ActivityFlow = Entity & {
 
 export type ActivityOrFlow = Activity | ActivityFlow;
 
-export type EventActivity = {
-  activity: ActivityOrFlow;
+export type EventEntity = {
+  entity: ActivityOrFlow;
   event: ScheduleEvent;
 };

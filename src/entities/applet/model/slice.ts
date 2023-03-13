@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import {
+  ActivityFlowProgress,
   ActivityPipelineType,
   EntitiesInProgress,
   ProgressPayload,
@@ -12,9 +13,15 @@ type InProgressActivity = {
   eventId: string;
 };
 
+type InProgressEntity = {
+  appletId: string;
+  entityId: string;
+  eventId: string;
+};
+
 type InProgressFlow = {
   appletId: string;
-  activityFlowId: string;
+  flowId: string;
   activityId: string;
   eventId: string;
 };
@@ -45,19 +52,9 @@ const slice = createSlice({
         state.inProgress[appletId][activityId] ?? {};
       state.inProgress[appletId][activityId][eventId] = activityEvent;
     },
-    activityCompleted: (state, action: PayloadAction<InProgressActivity>) => {
-      const { appletId, activityId, eventId } = action.payload;
-
-      state.inProgress[appletId][activityId][eventId].endAt = new Date();
-    },
-    activityAnswersSent: (state, action: PayloadAction<InProgressActivity>) => {
-      const { appletId, activityId, eventId } = action.payload;
-
-      delete state.inProgress[appletId][activityId][eventId];
-    },
 
     flowStarted: (state, action: PayloadAction<InProgressFlow>) => {
-      const { appletId, activityId, activityFlowId, eventId } = action.payload;
+      const { appletId, activityId, flowId, eventId } = action.payload;
 
       const flowEvent: ProgressPayload = {
         type: ActivityPipelineType.Flow,
@@ -67,20 +64,30 @@ const slice = createSlice({
       };
 
       state.inProgress[appletId] = state.inProgress[appletId] ?? {};
-      state.inProgress[appletId][activityFlowId] =
-        state.inProgress[appletId][activityFlowId] ?? {};
+      state.inProgress[appletId][flowId] =
+        state.inProgress[appletId][flowId] ?? {};
 
-      state.inProgress[appletId][activityId][eventId] = flowEvent;
+      state.inProgress[appletId][flowId][eventId] = flowEvent;
     },
-    flowCompleted: (state, action: PayloadAction<InProgressFlow>) => {
-      const { appletId, activityFlowId, eventId } = action.payload;
+    flowUpdated: (state, action: PayloadAction<InProgressFlow>) => {
+      const { appletId, activityId, flowId, eventId } = action.payload;
 
-      state.inProgress[appletId][activityFlowId][eventId].endAt = new Date();
+      const event = state.inProgress[appletId][flowId][
+        eventId
+      ] as ActivityFlowProgress;
+
+      event.currentActivityId = activityId;
     },
-    flowAnswersSent: (state, action: PayloadAction<InProgressFlow>) => {
-      const { appletId, activityFlowId, eventId } = action.payload;
 
-      delete state.inProgress[appletId][activityFlowId][eventId];
+    entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {
+      const { appletId, entityId, eventId } = action.payload;
+
+      state.inProgress[appletId][entityId][eventId].endAt = new Date();
+    },
+    entityAnswersSent: (state, action: PayloadAction<InProgressEntity>) => {
+      const { appletId, entityId, eventId } = action.payload;
+
+      delete state.inProgress[appletId][entityId][eventId];
     },
   },
 });

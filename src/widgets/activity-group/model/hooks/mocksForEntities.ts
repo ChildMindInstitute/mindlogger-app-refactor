@@ -2,7 +2,7 @@ import { ActivityType } from '@app/entities/activity';
 import { ActivityPipelineType, EntitiesInProgress } from '@app/entities/applet';
 import { AvailabilityType, PeriodicityType } from '@app/entities/event';
 
-import { Activity, ActivityFlow, EventActivity } from '../../lib';
+import { Activity, ActivityFlow, EventEntity } from '../../lib';
 
 export const progress: EntitiesInProgress = {
   apid1: {
@@ -59,9 +59,9 @@ const activityFlow1: ActivityFlow = {
 
 export const allAppletActivities: Activity[] = [activity1, activity2];
 
-export const eventActivities: EventActivity[] = [
+export const eventActivities: EventEntity[] = [
   {
-    activity: activity1,
+    entity: activity1,
     event: {
       activityId: 'aid1',
       availability: {
@@ -87,7 +87,7 @@ export const eventActivities: EventActivity[] = [
     },
   },
   {
-    activity: activityFlow1,
+    entity: activityFlow1,
     event: {
       activityId: 'afid1',
       availability: {

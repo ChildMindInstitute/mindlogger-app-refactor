@@ -65,10 +65,7 @@ export type ProgressPayload = ActivityOrFlowProgress & {
   endAt: Date | null;
 };
 
-export type EntitiesInProgress = {
-  [appletId in string]: {
-    [entityId in string]: {
-      [eventId in string]: ProgressPayload;
-    };
-  };
-};
+type EntityEvents = Record<string, ProgressPayload>;
+type AppletInProgressEntities = Record<string, EntityEvents>;
+
+export type EntitiesInProgress = Record<string, AppletInProgressEntities>;

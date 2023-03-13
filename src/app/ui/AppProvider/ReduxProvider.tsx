@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import { persistReducer, persistStore, createTransform } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 
+import { AppletModel } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
 import { createAsyncStorage, useSplash } from '@shared/lib';
 
@@ -35,9 +36,13 @@ export const persistConfig = {
 
 const rootReducer = combineReducers({
   identity: IdentityModel.reducer,
+  applets: AppletModel.reducer,
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(
+  persistConfig,
+  rootReducer,
+) as typeof rootReducer;
 
 export const reduxStore = configureStore({
   reducer: persistedReducer,

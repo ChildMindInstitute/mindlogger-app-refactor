@@ -25,6 +25,7 @@ for (let i = 0; i < 3; i++) {
     activities.push({
       activityId: (i * 100 + j).toString(),
       eventId: '',
+      flowId: '',
       activityFlowDetails: null,
       isInActivityFlow: true,
       type: ActivityType.NotDefined,
