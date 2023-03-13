@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 
 import Config from 'react-native-config';
+import { PERMISSIONS } from 'react-native-permissions';
 
 import { Language } from '../types';
 
@@ -21,3 +22,8 @@ export const ONE_MINUTE = 1000 * 60;
 export const ONE_HOUR = ONE_MINUTE * 60;
 
 export const DEFAULT_LANGUAGE: Language = 'en';
+
+export const LOCATION_PERMISSIONS = Platform.select({
+  android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+  ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+});

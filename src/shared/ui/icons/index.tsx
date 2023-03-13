@@ -61,3 +61,7 @@ export const RightArrowIcon: FC<IconProps> = props => (
 export const RestartIcon: FC<IconProps> = props => (
   <FontAwesome name="refresh" {...props} />
 );
+
+export const GeolocationIcon: FC<IconProps> = props => (
+  <FontAwesome name="map-marker" {...props} />
+);
