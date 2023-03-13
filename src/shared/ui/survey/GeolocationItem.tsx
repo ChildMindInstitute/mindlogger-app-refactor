@@ -1,4 +1,4 @@
-import { useEffect, useMemo, FC } from 'react';
+import { useEffect, FC } from 'react';
 import { useState } from 'react';
 
 import NativeGeolocation from '@react-native-community/geolocation';
@@ -7,9 +7,12 @@ import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 import Permissions, { RESULTS } from 'react-native-permissions';
 
-import { IS_ANDROID, LOCATION_PERMISSIONS } from '@app/shared/lib';
-
-import { Center, GeolocationIcon, Text } from '../..';
+import {
+  getLocationPermissions,
+  IS_ANDROID,
+  LOCATION_PERMISSIONS,
+} from '@app/shared/lib';
+import { Center, GeolocationIcon, Text } from '@app/shared/ui';
 
 const GeolocationButton = styled(Button, {
   backgroundColor: '$blue',
@@ -33,20 +36,14 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
   const { t } = useTranslation();
   const [coordinates, setCoordinates] = useState<Coordinates | null>(value);
   const [errorMessage, setErrorMessage] = useState('');
-  const [locationPermissionResult, setLocationPermissionResult] =
-    useState('undetermined');
-  useEffect(() => {
-    Permissions.check(LOCATION_PERMISSIONS!).then(setLocationPermissionResult);
-  }, []);
-  const descriptionText = useMemo(
-    () =>
-      IS_ANDROID
-        ? t('geolocation:must_enable_location_subtitle')
-        : t('geolocation:must_enable_location'),
-    [t],
-  );
+  const [locationPermission, setLocationPermission] =
+    useState<string>('undetermined');
 
-  const getCurrentPosition = () => {
+  const descriptionText = IS_ANDROID
+    ? t('geolocation:must_enable_location_subtitle')
+    : t('geolocation:must_enable_location');
+
+  const fetchCurrentPosition = () => {
     NativeGeolocation.getCurrentPosition(
       successResult => {
         const coordinatesResult = {
@@ -57,29 +54,23 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
         onChange(coordinatesResult);
       },
       () => {
-        setLocationPermissionResult('denied');
+        setErrorMessage(t('geolocation:service_not_available'));
         setCoordinates(null);
       },
     );
   };
 
-  const isLocationPermissionDeniedMissing = useMemo(
-    () =>
-      locationPermissionResult === RESULTS.DENIED ||
-      locationPermissionResult === RESULTS.BLOCKED,
-    [locationPermissionResult],
-  );
+  const isPermissionDenied =
+    locationPermission === RESULTS.DENIED ||
+    locationPermission === RESULTS.BLOCKED;
 
-  const onButtonPress = async () => {
+  const handleGetGeolocation = async () => {
     setErrorMessage(''); // @todo: change to toast alert when it will be available
 
     try {
-      const permissionsResponse = await Permissions.request(
-        LOCATION_PERMISSIONS!,
-      );
-
+      const permissionsResponse = await getLocationPermissions();
       if (permissionsResponse === RESULTS.GRANTED) {
-        getCurrentPosition();
+        fetchCurrentPosition();
       } else {
         setErrorMessage(t('geolocation:service_not_available')); // @todo: change to toast alert it will be available
       }
@@ -88,16 +79,20 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
     }
   };
 
+  useEffect(() => {
+    Permissions.check(LOCATION_PERMISSIONS!).then(setLocationPermission);
+  }, []);
+
   return (
     <Center>
       <GeolocationButton
-        onPress={onButtonPress}
+        onPress={handleGetGeolocation}
         iconAfter={<GeolocationIcon color="white" size={20} />}
       >
         {t('geolocation:get_location')}
       </GeolocationButton>
 
-      {Boolean(coordinates) && (
+      {coordinates && (
         <Text mt={10} textAlign="center">
           {t('geolocation:location_saved')}
         </Text>
@@ -109,9 +104,7 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
         </Text>
       )}
 
-      {isLocationPermissionDeniedMissing && (
-        <Text mt={10}>{descriptionText}</Text>
-      )}
+      {isPermissionDenied && <Text mt={10}>{descriptionText}</Text>}
     </Center>
   );
 };
