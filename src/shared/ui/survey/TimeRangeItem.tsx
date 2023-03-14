@@ -33,7 +33,7 @@ const TimeRangeItem: FC<Props> = ({
         dateDisplayFormat="h:mm a"
         value={formatTime(value.from)}
         mode="time"
-        iconAfter={<BedIcon color={colors.black} size={15} />}
+        iconAfter={<BedIcon color={colors.grey2} size={15} />}
       />
 
       <DateTimePicker
@@ -42,7 +42,7 @@ const TimeRangeItem: FC<Props> = ({
         mode="time"
         dateDisplayFormat="h:mm a"
         value={formatTime(value.to)}
-        iconAfter={<AlarmIcon color={colors.black} size={15} />}
+        iconAfter={<AlarmIcon color={colors.grey2} size={15} />}
       />
     </YStack>
   );

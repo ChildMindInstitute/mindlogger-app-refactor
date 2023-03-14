@@ -47,7 +47,11 @@ const DateTimePicker: FC<Props> = ({
 
   return (
     <>
-      {label && <Text>{label}</Text>}
+      {label && (
+        <Text color="$lightGrey" mb={8}>
+          {label}
+        </Text>
+      )}
 
       <DatePickerButton onPress={showDatePicker} iconAfter={iconAfter}>
         <XStack flex={1}>
