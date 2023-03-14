@@ -9,9 +9,11 @@ type Props = {
 };
 
 const DatePickerItem: FC<Props> = ({ value, onChange }) => {
+  const onChangeDate = (date: Date) => onChange(date.toString());
+
   return (
     <DateTimePicker
-      onChange={onChange}
+      onChange={onChangeDate}
       value={new Date(value)}
       iconAfter={<ChevronRightIcon color={colors.grey} size={15} />}
     />

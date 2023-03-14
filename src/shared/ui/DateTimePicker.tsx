@@ -8,7 +8,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { XStack, Text } from '.';
 
 type Props = {
-  onChange: (value: string) => void;
+  onChange: (value: Date) => void;
   value: Date;
   iconAfter: JSX.Element;
   label?: string;
@@ -41,7 +41,7 @@ const DateTimePicker: FC<Props> = ({
   };
 
   const confirm = (date: Date) => {
-    onChange(date.toString()); // @todo add correct date format after backend implementation
+    onChange(date); // @todo add correct date format after backend implementation
     hideDatePicker();
   };
 

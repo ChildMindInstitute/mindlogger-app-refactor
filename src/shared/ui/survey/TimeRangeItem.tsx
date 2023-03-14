@@ -37,10 +37,10 @@ const TimeRangeItem: FC<Props> = ({
       />
 
       <DateTimePicker
-        onChange={onToChangeTime}
         label="To"
-        mode="time"
+        onChange={onToChangeTime}
         dateDisplayFormat="h:mm a"
+        mode="time"
         value={formatTime(value.to)}
         iconAfter={<AlarmIcon color={colors.grey2} size={15} />}
       />
