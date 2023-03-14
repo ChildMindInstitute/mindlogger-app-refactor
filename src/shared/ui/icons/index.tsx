@@ -69,3 +69,11 @@ export const PlayIcon: FC<IconProps> = props => (
 export const PauseIcon: FC<IconProps> = props => (
   <Foundation name="pause" {...props} />
 );
+
+export const BedIcon: FC<IconProps> = props => (
+  <FontAwesome name="bed" {...props} />
+);
+
+export const AlarmIcon: FC<IconProps> = props => (
+  <FontAwesome name="clock-o" {...props} />
+);

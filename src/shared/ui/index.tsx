@@ -36,6 +36,7 @@ export * from './ViewSlider';
 export { default as ProgressBar } from './ProgressBar';
 export { default as Stepper } from './Stepper';
 export { default as Slider } from './Slider';
+export { default as DateTimePicker } from './DateTimePicker';
 
 export {
   StatusBar,
