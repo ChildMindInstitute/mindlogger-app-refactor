@@ -5,3 +5,7 @@ export * from './storages';
 export * from './types';
 export * from './services';
 export * from './contexts';
+export {
+  default as markdownRules,
+  activityMarkDownStyles,
+} from './markDownRules';
