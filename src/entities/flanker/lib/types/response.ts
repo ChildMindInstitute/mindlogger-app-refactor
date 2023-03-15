@@ -1,3 +1,4 @@
+// we cannot avoid _ format here as it's web-view contract
 export type FlankerWebViewLogRecord = {
   button_pressed: string;
   correct: boolean;
@@ -11,15 +12,23 @@ export type FlankerWebViewLogRecord = {
   trial_index: number;
 };
 
+/*
+  Discuss with BE if we can avoid such names in dto:
+  button_pressed
+  response_touch_timestamp
+  start_time
+  start_timestamp
+  trial_index
+*/
 export type FlankerLogRecord = {
-  button_pressed: string;
+  buttonPressed: string;
   correct: boolean;
   duration: number;
   offset: number;
   question: string;
-  response_touch_timestamp: number | null;
-  start_time: number;
-  start_timestamp: number;
+  responseTouchTimestamp: number | null;
+  startTime: number;
+  startTimestamp: number;
   tag: string;
-  trial_index: number;
+  trialIndex: number;
 };

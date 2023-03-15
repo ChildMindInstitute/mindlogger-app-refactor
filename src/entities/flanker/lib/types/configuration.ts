@@ -10,9 +10,9 @@ export type FlankerConfiguration = {
   minimumAccuracy?: number;
   sampleSize: number;
   samplingMethod: SamplingMethod;
-  showFeedback: boolean;
-  showFixation: boolean;
-  showResults: boolean;
+  showFeedback: boolean; // ensure it's boolean in dto
+  showFixation: boolean; // ensure it's boolean in dto
+  showResults: boolean; // ensure it's boolean in dto
   trialDuration: number;
   isLastPractice?: boolean; // dto lastPractice?
   isLastTest?: boolean; //dto lastTest?
@@ -23,10 +23,10 @@ export type SamplingMethod = 'randomize-order' | 'fixed-order';
 
 type BlockType = 'test' | 'practice';
 
-type TrialId = string;
+type StimulusConfigId = string;
 
 export type StimulusConfiguration = {
-  id: TrialId;
+  id: StimulusConfigId;
   image: StringOrNull;
   text: string; // dto - name?
   value: number | null;
@@ -35,7 +35,7 @@ export type StimulusConfiguration = {
 
 export type BlockConfiguration = {
   name: string;
-  order: Array<TrialId>;
+  order: Array<StimulusConfigId>;
 };
 
 export type ButtonConfiguration = {
@@ -61,8 +61,8 @@ export type FlankerWebViewConfiguration = {
   restartText: Array<string>;
 };
 
-export type TestScreen = {
-  id: TrialId;
+export type StimulusScreen = {
+  id: StimulusConfigId;
   correctChoice: number;
   stimulus: { en: string };
   weight: number;
@@ -73,7 +73,7 @@ export type TestChoice = {
   name: { en: string };
 };
 
-export type TestTrial = TestScreen & {
+export type TestTrial = StimulusScreen & {
   choices: Array<TestChoice>;
 };
 

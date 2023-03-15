@@ -6,9 +6,10 @@ import {
   FlankerConfiguration,
   FlankerWebViewConfiguration,
   SamplingMethod,
+  StimulusConfiguration,
   StringOrNull,
   TestChoice,
-  TestScreen,
+  StimulusScreen,
   TestTrial,
 } from '../types';
 
@@ -47,24 +48,26 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
   };
 
   const getScreens = (
-    configuration: FlankerConfiguration,
+    stimulusTrials: StimulusConfiguration[],
     isWebView: boolean,
-  ): Array<TestScreen> => {
-    return configuration.stimulusTrials.map<TestScreen>(trial => ({
-      id: trial.id,
+  ): Array<StimulusScreen> => {
+    return stimulusTrials.map<StimulusScreen>(stimulusConfig => ({
+      id: stimulusConfig.id,
       stimulus: {
         en: !isWebView
-          ? getImageForIOSNative(trial.image, trial.text)
-          : getImageForWebView(trial.image, trial.text),
+          ? getImageForIOSNative(stimulusConfig.image, stimulusConfig.text)
+          : getImageForWebView(stimulusConfig.image, stimulusConfig.text),
       },
-      correctChoice: trial.value === null ? -1 : trial.value,
+      correctChoice: stimulusConfig.value === null ? -1 : stimulusConfig.value,
       weight:
-        trial.weight === null || trial.weight === undefined ? 1 : trial.weight,
+        stimulusConfig.weight === null || stimulusConfig.weight === undefined
+          ? 1
+          : stimulusConfig.weight,
     }));
   };
 
   const getTestTrials = (
-    screens: Array<TestScreen>,
+    screens: Array<StimulusScreen>,
     blocks: Array<BlockConfiguration>,
     buttons: Array<ButtonConfiguration>,
     samplingMethod: SamplingMethod,
@@ -87,12 +90,12 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
           ? shuffle([...block.order])
           : block.order;
 
-      for (const item of order) {
-        const screen = screens.find(s => s.id === item);
+      for (const stimulusId of order) {
+        const screen = screens.find(s => s.id === stimulusId);
         if (screen) {
           trials.push({
             ...screen,
-            choices: choices,
+            choices,
           });
         }
       }
@@ -103,8 +106,10 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
 
   const parseToWebViewString = (
     testConfiguration: FlankerWebViewConfiguration,
+    redirectLogs: boolean = false,
   ): string => {
-    const injectConfig = `
+    const injectConfig = redirectLogs
+      ? `
     try {
       const consoleLog = (type, log) => window.ReactNativeWebView.postMessage(JSON.stringify({'type': 'Console', 'data': {'type': type, 'log': log}}));
       console = {
@@ -118,6 +123,10 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
 
     window.CONFIG = ${JSON.stringify(testConfiguration)};
     start();
+  `
+      : `
+    window.CONFIG = ${JSON.stringify(testConfiguration)};
+    start();
   `;
     return injectConfig;
   };
@@ -125,19 +134,24 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
   const buildForNativeIOS = () => {};
 
   const buildForWebView = (configuration: FlankerConfiguration) => {
+    const isWebView = true;
+
     const fixation: string = getImageForWebView(
       configuration.fixationScreen.image,
       configuration.fixationScreen.value,
     );
 
-    const screens: TestScreen[] = getScreens(configuration, true);
+    const screens: StimulusScreen[] = getScreens(
+      configuration.stimulusTrials,
+      isWebView,
+    );
 
     const testTrials: TestTrial[] = getTestTrials(
       screens,
       configuration.blocks,
       configuration.buttons,
       configuration.samplingMethod,
-      true,
+      isWebView,
     );
 
     const continueText = [
@@ -154,9 +168,9 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
       trials: testTrials,
       fixationDuration: configuration.fixationDuration,
       fixation,
-      showFixation: configuration.showFixation !== false && fixation.length > 0,
-      showFeedback: configuration.showFeedback !== false,
-      showResults: configuration.showResults !== false,
+      showFixation: configuration.showFixation && fixation.length > 0,
+      showFeedback: configuration.showFeedback,
+      showResults: configuration.showResults,
       trialDuration: configuration.trialDuration || 1500,
       samplingMethod: 'fixed-order',
       samplingSize: configuration.sampleSize,

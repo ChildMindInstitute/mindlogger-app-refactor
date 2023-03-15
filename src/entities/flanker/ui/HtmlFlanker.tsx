@@ -13,7 +13,11 @@ import {
   FlankerLogRecord,
   FlankerWebViewLogRecord,
 } from '../lib/types';
-import { ConfigurationBuilder, parseResponse } from '../lib/utils';
+import {
+  ConfigurationBuilder,
+  getScreensNumberPerTrial,
+  parseResponse,
+} from '../lib/utils';
 
 const htmlAsset = require('./visual-stimulus-response.html');
 
@@ -43,18 +47,6 @@ const HtmlFlanker: FC<Props> = props => {
     }
     webView.current.injectJavaScript(parsedConfiguration);
   }, [isLoaded]);
-
-  const getScreensNumberPerTrial = (): number => {
-    let result = 0;
-
-    if (configuration.showFeedback) {
-      result++;
-    }
-    if (configuration.showFixation) {
-      result++;
-    }
-    return result;
-  };
 
   const source = Platform.select({
     ios: htmlAsset,
@@ -92,7 +84,9 @@ const HtmlFlanker: FC<Props> = props => {
             .map(x =>
               parseResponse({
                 isWebView: true,
-                numberOfScreensPerTrial: getScreensNumberPerTrial(),
+                numberOfScreensPerTrial: getScreensNumberPerTrial(
+                  props.configuration,
+                ),
                 record: x,
               }),
             );
