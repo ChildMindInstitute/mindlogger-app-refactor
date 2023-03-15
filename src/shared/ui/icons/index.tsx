@@ -77,3 +77,7 @@ export const BedIcon: FC<IconProps> = props => (
 export const AlarmIcon: FC<IconProps> = props => (
   <FontAwesome name="clock-o" {...props} />
 );
+
+export const GeolocationIcon: FC<IconProps> = props => (
+  <FontAwesome name="map-marker" {...props} />
+);
