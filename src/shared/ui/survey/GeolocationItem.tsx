@@ -1,18 +1,14 @@
-import { useEffect, FC } from 'react';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 
 import NativeGeolocation from '@react-native-community/geolocation';
 import { Button } from '@tamagui/button';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
-import Permissions, { RESULTS } from 'react-native-permissions';
+import { RESULTS } from 'react-native-permissions';
 
-import {
-  getLocationPermissions,
-  IS_ANDROID,
-  LOCATION_PERMISSIONS,
-} from '@app/shared/lib';
+import { getLocationPermissions, IS_ANDROID } from '@app/shared/lib';
 import { Center, GeolocationIcon, Text } from '@app/shared/ui';
+import { useLocationPermissions } from '@shared/lib';
 
 const GeolocationButton = styled(Button, {
   backgroundColor: '$blue',
@@ -36,8 +32,7 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
   const { t } = useTranslation();
   const [coordinates, setCoordinates] = useState<Coordinates | null>(value);
   const [errorMessage, setErrorMessage] = useState('');
-  const [locationPermission, setLocationPermission] =
-    useState<string>('undetermined');
+  const locationPermission = useLocationPermissions();
 
   const descriptionText = IS_ANDROID
     ? t('geolocation:must_enable_location_subtitle')
@@ -78,10 +73,6 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
       setErrorMessage(t('geolocation:service_not_available')); // @todo: change to toast alert it will be available
     }
   };
-
-  useEffect(() => {
-    Permissions.check(LOCATION_PERMISSIONS!).then(setLocationPermission);
-  }, []);
 
   return (
     <Center>
