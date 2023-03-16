@@ -1,15 +1,35 @@
-export type ActivityItem = {
+export type ActivityItemType = 'AbTest' | 'Splash';
+
+type AbTestConfig = {
+  device: 'Phone' | 'Tablet';
+};
+
+export type ActivityItemConfig = AbTestConfig | null;
+
+type ActivityItemBase = {
   id: number;
-  inputType: string;
-  config: {};
+  inputType: ActivityItemType;
+  config: ActivityItemConfig;
   timer: number;
   isSkippable: true;
   hasAlert: true;
   hasScore: true;
   isAbleToMoveToPrevious: true;
   hasTextResponse: true;
-  ordering: number;
+  order: number;
 };
+
+interface AbTestActivityItem extends ActivityItemBase {
+  inputType: 'AbTest';
+  config: AbTestConfig;
+}
+
+interface SplashActivityItem extends ActivityItemBase {
+  inputType: 'Splash';
+  config: null;
+}
+
+export type ActivityItem = AbTestActivityItem | SplashActivityItem;
 
 export type ActivityDetails = {
   id: string;

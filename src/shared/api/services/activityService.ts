@@ -3,22 +3,19 @@ import { SuccessfulResponse } from '../types';
 
 type ActivityItemDto = {
   id: number;
-  question: string;
-  responseType: string;
-  answers: {};
-  colorPalette: string;
+  inputType: string;
+  config: {};
   timer: number;
   hasTokenValue: true;
   isSkippable: true;
   hasAlert: true;
   hasScore: true;
-  isRandom: true;
   isAbleToMoveToPrevious: true;
   hasTextResponse: true;
-  ordering: number;
+  order: number;
 };
 
-type ActivityDto = {
+export type ActivityDto = {
   id: string;
   name: string;
   description: string;
@@ -34,7 +31,7 @@ type ActivityDto = {
 
 type ActivityResponse = SuccessfulResponse<ActivityDto>;
 
-function appletsService() {
+function activityService() {
   return {
     getById(id: string) {
       return httpService.get<ActivityResponse>(`/activities/${id}`);
@@ -42,4 +39,4 @@ function appletsService() {
   };
 }
 
-export default appletsService();
+export const ActivityService = activityService();
