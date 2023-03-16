@@ -10,6 +10,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "pods": "cd ios && pod install",
     "prepare": "husky install",
+    "postinstall": "react-native setup-ios-permissions",
     "start:reset-cache": "watchman watch-del-all && react-native start --reset-cache",
     "android:dev": "react-native run-android --variant=devdebug --appIdSuffix=dev",
     "android:dev-release": "react-native run-android --variant=devrelease --appIdSuffix=dev",
@@ -33,6 +34,7 @@
     "@hookform/resolvers": "^2.9.10",
     "@react-native-community/checkbox": "^0.5.14",
     "@react-native-community/datetimepicker": "^6.7.5",
+    "@react-native-community/geolocation": "^3.0.5",
     "@react-native-community/hooks": "^3.0.0",
     "@react-native-community/netinfo": "^9.3.7",
     "@react-navigation/bottom-tabs": "^6.5.4",
@@ -75,6 +77,7 @@
     "react-native-mime-types": "^2.3.0",
     "react-native-mmkv": "2.5.1",
     "react-native-modal-datetime-picker": "^14.0.1",
+    "react-native-permissions": "^3.7.3",
     "react-native-progress": "^5.0.0",
     "react-native-reanimated": "^2.14.4",
     "react-native-safe-area-context": "3.3.2",
@@ -140,5 +143,8 @@
       "eslint --fix",
       "prettier --write"
     ]
-  }
+  },
+  "reactNativePermissionsIOS": [
+    "LocationWhenInUse"
+  ]
 }
