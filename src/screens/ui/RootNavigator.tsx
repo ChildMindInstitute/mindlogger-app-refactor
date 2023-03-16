@@ -125,6 +125,26 @@ export default () => {
             }}
             component={ChangePasswordScreen}
           />
+
+          <Stack.Screen
+            name="AppletDetails"
+            component={AppletBottomTabNavigator}
+            options={{
+              headerLeft: () => (
+                <BackButton fallbackRoute="Applets">
+                  <HomeIcon color={colors.white} size={32} />
+                </BackButton>
+              ),
+            }}
+          />
+
+          <Stack.Screen
+            name="InProgressActivity"
+            component={InProgressActivityScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
         </>
       )}
 
@@ -151,26 +171,6 @@ export default () => {
           component={AboutScreen}
         />
       </Stack.Group>
-
-      <Stack.Screen
-        name="AppletDetails"
-        component={AppletBottomTabNavigator}
-        options={{
-          headerLeft: () => (
-            <BackButton fallbackRoute="Applets">
-              <HomeIcon color={colors.white} size={32} />
-            </BackButton>
-          ),
-        }}
-      />
-
-      <Stack.Screen
-        name="InProgressActivity"
-        component={InProgressActivityScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
     </Stack.Navigator>
   );
 };
