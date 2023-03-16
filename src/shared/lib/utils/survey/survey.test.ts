@@ -1,4 +1,4 @@
-import { MarkdownVariableReplacer } from './survey';
+import { MarkdownVariableReplacer } from './markdownVariableReplacer';
 
 describe('MarkdownVariableReplacer', () => {
   const activityItems = [
@@ -69,8 +69,8 @@ describe('MarkdownVariableReplacer', () => {
     My favorite color is Green and my hobbies are Reading,Gardening. 
     My height is 170 cm and I am free from 10:00 - 12:00 .`;
     // @ts-ignore
-    const instance = new MarkdownVariableReplacer(md, activityItems, answers);
-    const result = instance.process();
+    const instance = new MarkdownVariableReplacer(activityItems, answers);
+    const result = instance.process(md);
     expect(result).toEqual(expected);
   });
 
@@ -83,12 +83,12 @@ describe('MarkdownVariableReplacer', () => {
     My height is [[height]] cm and I am free from [[timeRange]].`;
 
     // @ts-ignore
-    const instance = new MarkdownVariableReplacer(markdown, activityItems, [
+    const instance = new MarkdownVariableReplacer(activityItems, [
       'Alice',
       null,
       { year: 1998, month: 3, day: 14 },
     ]);
-    const result = instance.process();
+    const result = instance.process(markdown);
     expect(result).toEqual(expected);
   });
   const inputType = 'checkbox';
@@ -102,8 +102,8 @@ describe('MarkdownVariableReplacer', () => {
     const ans = [['reading', 'swimming']];
     const markdown = `My hobbies are [[${variableName}]]`;
     // @ts-ignore
-    const instance = new MarkdownVariableReplacer(markdown, items, ans);
-    const result = instance.process();
+    const instance = new MarkdownVariableReplacer(items, ans);
+    const result = instance.process(markdown);
     const expected = 'My hobbies are reading';
     expect(result).toBe(expected);
   });
