@@ -1,5 +1,7 @@
 import { useRef } from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { ActivityIndicator, Box, Center, Stepper, XStack } from '@shared/ui';
 
 import ActivityItem from './ActivityItem';
@@ -22,6 +24,8 @@ function ActivityStepper({
   onClose,
   onFinish,
 }: Props) {
+  const { t } = useTranslation();
+
   const {
     activityState,
     setStep: setCurrentStep,
@@ -51,6 +55,7 @@ function ActivityStepper({
   const onNext = (nextStep: number) => {
     setCurrentStep(nextStep);
   };
+
   const onBack = (nextStep: number) => {
     setCurrentStep(nextStep);
   };
@@ -64,6 +69,7 @@ function ActivityStepper({
 
     return 1;
   };
+
   const onBeforeBack = (): number => {
     if (isTutorialStep) {
       const moved = tutorialViewerRef.current?.back();
@@ -134,12 +140,25 @@ function ActivityStepper({
 
         {showBottomNavigation && (
           <Stepper.NavigationPanel mt={16} minHeight={24}>
-            {canMoveBack && <Stepper.BackButton>Return</Stepper.BackButton>}
-            {canReset && <Stepper.UndoButton>Undo</Stepper.UndoButton>}
+            {canMoveBack && (
+              <Stepper.BackButton>
+                {t('activity_navigation:back')}
+              </Stepper.BackButton>
+            )}
+
+            {canReset && (
+              <Stepper.UndoButton>
+                {t('activity_navigation:undo')}
+              </Stepper.UndoButton>
+            )}
 
             {canMoveNext && (
               <Stepper.NextButton>
-                {isLastStep ? 'Done' : 'Next'}
+                {t(
+                  isLastStep
+                    ? 'activity_navigation:done'
+                    : 'activity_navigation:next',
+                )}
               </Stepper.NextButton>
             )}
           </Stepper.NavigationPanel>
