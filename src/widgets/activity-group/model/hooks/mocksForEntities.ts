@@ -67,7 +67,7 @@ export const eventActivities: EventEntity[] = [
       availability: {
         allowAccessBeforeFromTime: false,
         availabilityType: AvailabilityType.ScheduledAccess,
-        endDate: new Date(2023, 1, 15, 23, 59, 0),
+        endDate: new Date(2023, 3, 16, 0, 0, 0),
         oneTimeCompletion: true,
         periodicityType: PeriodicityType.Monthly,
         startDate: new Date(2023, 1, 14, 0, 0, 0),
@@ -76,7 +76,7 @@ export const eventActivities: EventEntity[] = [
       },
       id: 'eid1',
       scheduledAt: null,
-      selectedDate: new Date(2024, 5, 15, 0, 0, 0),
+      selectedDate: new Date(2023, 2, 16, 0, 0, 0),
       timers: {
         timer: {
           hours: 11,
@@ -93,7 +93,7 @@ export const eventActivities: EventEntity[] = [
       availability: {
         allowAccessBeforeFromTime: false,
         availabilityType: AvailabilityType.ScheduledAccess,
-        endDate: new Date(2023, 1, 15, 23, 59, 0),
+        endDate: new Date(2023, 3, 16, 0, 0, 0),
         oneTimeCompletion: true,
         periodicityType: PeriodicityType.Monthly,
         startDate: new Date(2023, 1, 14, 0, 0, 0),
@@ -102,7 +102,7 @@ export const eventActivities: EventEntity[] = [
       },
       id: 'eid2',
       scheduledAt: null,
-      selectedDate: new Date(2024, 5, 15, 0, 0, 0),
+      selectedDate: new Date(2023, 2, 16, 0, 0, 0),
       timers: null,
       // timers: {
       //   timer: {
