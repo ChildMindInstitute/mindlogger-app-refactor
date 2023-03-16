@@ -49,7 +49,7 @@ function useActivityState({
   activityId,
   eventId,
 }: UseActivityPipelineArgs) {
-  const { activityStorage, changeActivityStorage } = useActivityStorage({
+  const { activityStorage, updateActivityStorage } = useActivityStorage({
     appletId,
     activityId,
     eventId,
@@ -60,6 +60,7 @@ function useActivityState({
     select: r => r.data.result,
   });
 
+  // @todo remove once integration is done
   if (!activity) {
     activity = mockActivity;
   }
@@ -70,8 +71,14 @@ function useActivityState({
     [activity],
   );
 
-  if (!activityStorage && pipeline.length) {
-    changeActivityStorage({
+  const shouldCreateStorage = !activityStorage && pipeline.length;
+
+  if (shouldCreateStorage) {
+    createActivityStorage();
+  }
+
+  function createActivityStorage() {
+    updateActivityStorage({
       step: 0,
       items: pipeline,
       answers: {},
@@ -83,7 +90,7 @@ function useActivityState({
       return;
     }
 
-    changeActivityStorage({
+    updateActivityStorage({
       ...activityStorage,
       step,
     });
@@ -94,7 +101,7 @@ function useActivityState({
       return;
     }
 
-    changeActivityStorage({
+    updateActivityStorage({
       ...activityStorage,
       answers: {
         ...activityStorage.answers,
@@ -113,7 +120,7 @@ function useActivityState({
     delete answers[step];
 
     if (activityStorage) {
-      changeActivityStorage({
+      updateActivityStorage({
         ...activityStorage,
         answers,
       });

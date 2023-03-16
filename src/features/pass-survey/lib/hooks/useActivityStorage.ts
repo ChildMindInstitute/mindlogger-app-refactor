@@ -23,7 +23,7 @@ export function useActivityStorage({
 
   const key = `${appletId}-${activityId}-${eventId}`;
 
-  const [activityStorage, changeActivityStorage] = useMMKVObject<ActivityState>(
+  const [activityStorage, updateActivityStorage] = useMMKVObject<ActivityState>(
     key,
     storage,
   );
@@ -34,7 +34,7 @@ export function useActivityStorage({
 
   return {
     activityStorage,
-    changeActivityStorage,
+    updateActivityStorage,
     clearActivityStorage,
   };
 }
