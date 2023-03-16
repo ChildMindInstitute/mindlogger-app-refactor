@@ -8,3 +8,4 @@ export { default as YoutubeVideo } from './YoutubeVideo';
 export * from './Slider';
 export * from './CheckBox';
 export { default as GeolocationItem } from './GeolocationItem';
+export { default as AudioStimulusItem } from './AudioStimulusItem';

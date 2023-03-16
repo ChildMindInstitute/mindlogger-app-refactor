@@ -70,6 +70,18 @@ export const PauseIcon: FC<IconProps> = props => (
   <Foundation name="pause" {...props} />
 );
 
+export const StopIcon: FC<IconProps> = props => (
+  <FontAwesome name="stop" {...props} />
+);
+
+export const SpeakerIcon: FC<IconProps> = props => (
+  <FontAwesome name="volume-up" {...props} />
+);
+
+export const CheckIcon: FC<IconProps> = props => (
+  <FontAwesome name="check" {...props} />
+);
+
 export const BedIcon: FC<IconProps> = props => (
   <FontAwesome name="bed" {...props} />
 );
