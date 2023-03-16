@@ -1,31 +1,5 @@
 import { format } from 'date-fns';
 
-import { colors } from '@shared/lib/constants';
-
-export const invertColor = (hex: string) => {
-  const RED_RATIO = 299;
-  const GREEN_RATIO = 587;
-  const BLUE_RATIO = 114;
-  const hexColor = hex.replace('#', '');
-  const red = parseInt(hexColor.substring(0, 2), 16);
-  const green = parseInt(hexColor.substring(2, 4), 16);
-  const blue = parseInt(hexColor.substring(4, 6), 16);
-  const yiqColorSpaceValue =
-    (red * RED_RATIO + green * GREEN_RATIO + blue * BLUE_RATIO) / 1000;
-  return yiqColorSpaceValue >= 128 ? colors.darkerGrey : colors.white;
-};
-
-export const replaceTextWithScreenVariables = (markdown: string): string => {
-  const activityItems: ActivityItems = []; //@todo get these from some storage?
-  const answers: Answer[] = [];
-  const replacer = new MarkdownVariableReplacer(
-    markdown,
-    activityItems,
-    answers,
-  );
-  return replacer.process();
-};
-
 type TimeRangeAnswer = {
   from: {
     hour: number;
@@ -78,7 +52,7 @@ type CheckBoxInput = {
   answer: string[];
 };
 
-type Answer = DateAnswer | TimeRangeAnswer | string | string[] | number;
+export type Answer = DateAnswer | TimeRangeAnswer | string | string[] | number;
 
 type InputAnswer =
   | DateInput
@@ -89,7 +63,7 @@ type InputAnswer =
   | AgeSelectorInput
   | SliderInput;
 
-type ActivityItems = {
+export type ActivityItems = {
   variableName: string;
   inputType: InputAnswer['inputType'];
   valueConstraints: {
@@ -98,16 +72,10 @@ type ActivityItems = {
 }[];
 
 export class MarkdownVariableReplacer {
-  private markdown = '';
   private readonly activityItems: ActivityItems;
   private readonly answers;
 
-  constructor(
-    markdown: string,
-    activityItems: ActivityItems,
-    answers: Answer[],
-  ) {
-    this.markdown = markdown;
+  constructor(activityItems: ActivityItems, answers: Answer[]) {
     this.activityItems = activityItems;
     this.answers = answers;
   }
@@ -122,9 +90,13 @@ export class MarkdownVariableReplacer {
     return matches;
   };
 
-  private updateMarkdown = (variableName: string, replaceValue: string) => {
+  private updateMarkdown = (
+    variableName: string,
+    replaceValue: string,
+    markdown: string,
+  ) => {
     const reg = new RegExp(`\\[\\[${variableName}\\]\\]`, 'gi');
-    this.markdown = this.markdown.replace(reg, replaceValue);
+    return markdown.replace(reg, replaceValue);
   };
 
   private formatTime = (
@@ -145,23 +117,23 @@ export class MarkdownVariableReplacer {
     return format(new Date(year, month, day), 'y-MM-dd');
   };
 
-  public process = () => {
-    const variableNames = this.extractVariables(this.markdown);
+  public process = (markdown: string) => {
+    const variableNames = this.extractVariables(markdown);
 
     if (!this.answers?.length || !variableNames?.length) {
-      return this.markdown;
+      return markdown;
     }
 
     try {
       variableNames.forEach(variableName => {
         const updated = this.getReplaceValue(variableName);
-        this.updateMarkdown(variableName, updated);
+        markdown = this.updateMarkdown(variableName, updated, markdown);
       });
     } catch (error) {
       console.warn(error);
     }
 
-    return this.markdown;
+    return markdown;
   };
 
   private escapeSpecialChars = (value: number | string) => {
