@@ -6,7 +6,7 @@ import {
   ActivityType,
 } from '@entities/activity';
 import {
-  ActivityFlowProgress,
+  FlowProgress,
   ActivityPipelineType,
   EntitiesInProgress,
   ProgressPayload,
@@ -96,7 +96,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     if (isInProgress) {
       const progressRecord = this.getProgressRecord(
         activityEvent,
-      ) as ActivityFlowProgress;
+      ) as FlowProgress;
 
       activity = this.activities.find(
         x => x.id === progressRecord.currentActivityId,

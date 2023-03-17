@@ -49,7 +49,7 @@ export const enum ActivityPipelineType {
   Regular,
   Flow,
 }
-export type ActivityFlowProgress = {
+export type FlowProgress = {
   type: ActivityPipelineType.Flow;
   currentActivityId: string;
 };
@@ -58,9 +58,9 @@ export type ActivityProgress = {
   type: ActivityPipelineType.Regular;
 };
 
-export type ActivityOrFlowProgress = ActivityFlowProgress | ActivityProgress;
+export type EntityProgress = FlowProgress | ActivityProgress;
 
-export type ProgressPayload = ActivityOrFlowProgress & {
+export type ProgressPayload = EntityProgress & {
   startAt: Date;
   endAt: Date | null;
 };

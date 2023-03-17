@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import {
-  ActivityFlowProgress,
+  FlowProgress,
   ActivityPipelineType,
   EntitiesInProgress,
   ProgressPayload,
@@ -69,12 +69,11 @@ const slice = createSlice({
 
       state.inProgress[appletId][flowId][eventId] = flowEvent;
     },
+
     flowUpdated: (state, action: PayloadAction<InProgressFlow>) => {
       const { appletId, activityId, flowId, eventId } = action.payload;
 
-      const event = state.inProgress[appletId][flowId][
-        eventId
-      ] as ActivityFlowProgress;
+      const event = state.inProgress[appletId][flowId][eventId] as FlowProgress;
 
       event.currentActivityId = activityId;
     },
@@ -84,6 +83,7 @@ const slice = createSlice({
 
       state.inProgress[appletId][entityId][eventId].endAt = new Date();
     },
+
     entityAnswersSent: (state, action: PayloadAction<InProgressEntity>) => {
       const { appletId, entityId, eventId } = action.payload;
 
