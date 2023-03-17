@@ -1,8 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-native/no-inline-styles */
-
-import { FC, useEffect, useMemo, useRef, useState } from 'react';
-import { Platform } from 'react-native';
+import { FC, useMemo, useRef } from 'react';
+import { Platform, StyleSheet } from 'react-native';
 
 import WebView from 'react-native-webview';
 
@@ -28,25 +25,18 @@ type Props = {
 };
 
 const HtmlFlanker: FC<Props> = props => {
-  const [isLoaded, setIsLoaded] = useState(false);
-
   const webView = useRef<any>();
 
-  const { configuration, parsedConfiguration } = useMemo(() => {
-    const builtConfig = ConfigurationBuilder.buildForWebView(
-      props.configuration,
-    );
-    const parsedConfig =
-      ConfigurationBuilder.parseToWebViewConfigString(builtConfig);
-    return { configuration: builtConfig, parsedConfiguration: parsedConfig };
-  }, []);
+  const configuration = useMemo(() => {
+    return ConfigurationBuilder.buildForWebView(props.configuration);
+  }, [props.configuration]);
 
-  useEffect(() => {
-    if (!isLoaded) {
-      return;
+  const parsedConfiguration = useMemo(() => {
+    if (!configuration) {
+      return null;
     }
-    webView.current.injectJavaScript(parsedConfiguration);
-  }, [isLoaded]);
+    return ConfigurationBuilder.parseToWebViewConfigString(configuration);
+  }, [configuration]);
 
   const source = Platform.select({
     ios: htmlAsset,
@@ -55,17 +45,18 @@ const HtmlFlanker: FC<Props> = props => {
     },
   });
 
+  const scriptToInject = `preloadButtonImages(${JSON.stringify(
+    configuration.buttons,
+  )}); \n ${parsedConfiguration}`;
+
   return (
     <Box flex={1}>
       <WebView
         ref={ref => (webView.current = ref)}
-        style={{ flex: 1, height: '100%' }}
-        onLoad={() => setIsLoaded(true)}
+        style={styles.webView}
         source={source}
         originWhitelist={['*']}
-        injectedJavaScript={`preloadButtonImages(${JSON.stringify(
-          configuration.buttons,
-        )})`}
+        injectedJavaScript={scriptToInject}
         onMessage={(e: any) => {
           const dataString = e.nativeEvent.data;
           const parsed = JSON.parse(dataString);
@@ -99,3 +90,10 @@ const HtmlFlanker: FC<Props> = props => {
 };
 
 export default HtmlFlanker;
+
+const styles = StyleSheet.create({
+  webView: {
+    flex: 1,
+    height: '100%',
+  },
+});
