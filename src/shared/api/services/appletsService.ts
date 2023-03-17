@@ -27,10 +27,14 @@ export type ActivityFlowRecordDto = {
 
 export type AppletDetailsDto = {
   id: string;
-  name?: string;
-  image: string;
+  name: string;
   displayName: string;
+  version: string;
   description: string;
+  about: string;
+  image: string | null;
+  watermark: string | null;
+  themeId: number | null;
   activities: ActivityRecordDto[];
   activityFlows: ActivityFlowRecordDto[];
 };
@@ -52,17 +56,13 @@ export type ScheduleEventDto = {
   availability: EventAvailabilityDto;
 };
 
-type AppletDto = {
+export type AppletDto = {
   id: string;
-  image?: string;
+  image: string | null;
   displayName: string;
   description: string;
   numberOverdue?: number;
-
-  theme?: {
-    logo?: string;
-    smallLogo?: string;
-  } | null;
+  themeId: string | null;
 };
 
 export type AppletsResponse = {

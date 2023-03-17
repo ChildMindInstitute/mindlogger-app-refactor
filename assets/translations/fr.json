@@ -174,7 +174,8 @@
     "username_validation_error": "Le nom d'utilisateur doit comporter au moins 4 caractères, commencer par une lettre et ne peut contenir que des lettres, des chiffres, des tirets et des points.",
     "email_validation_error": "Il semble que cet e-mail soit incomplet",
     "email_placeholder": "E-mail",
-    "display_name_placeholder": "Afficher le nom",
+    "first_name": "Prénom",
+    "last_name": "Nom",
     "password_placeholder": "Mot de passe",
     "please_accept_terms": "Veuillez accepter les conditions d'utilisation.",
     "password_at_least_characters": "Le mot de passe doit être au moins de 6 caractères",
@@ -454,5 +455,13 @@
       "map": "map",
       "set": "ensemble"
     }
+  },
+  "cognitive": {
+    "incorrect_start_point": "Mauvais point de départ!",
+    "incorrect_line": "Ligne incorrecte!",
+    "finished_continue": "Fini. Cliquez sur Terminé pour continuer.",
+    "finished_complete": "Fini. Cliquer sur Suivant pour terminer.",
+    "begin": "Commencer",
+    "end": "Fin"
   }
 }

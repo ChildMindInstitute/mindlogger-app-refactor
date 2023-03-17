@@ -4,6 +4,7 @@ import {
 } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+import { AppletTheme } from '@app/entities/applet';
 import { colors, IS_ANDROID } from '@shared/lib';
 import { DataIcon, SurveyIcon, AboutIcon, Text, CloseIcon } from '@shared/ui';
 
@@ -32,52 +33,46 @@ export const getScreenOptions = ({ navigation }: ScreenOptions) => {
   };
 };
 
-export const getAppletDetailsScreenOptions = ({
-  route,
-}: BottomScreenOptions): BottomTabNavigationOptions => {
-  const tabBarIcon = (color: string) => {
-    switch (route.name) {
-      case 'ActivityList':
-        return <SurveyIcon color={color} size={40} />;
-      case 'Data':
-        return <DataIcon color={color} size={40} />;
-      case 'About':
-        return <AboutIcon color={color} size={40} />;
-      default:
-        break;
-    }
-  };
+export const getAppletDetailsScreenOptions = (appletTheme?: AppletTheme) => {
+  return ({ route }: BottomScreenOptions): BottomTabNavigationOptions => {
+    const tabBarIcon = (color: string) => {
+      switch (route.name) {
+        case 'ActivityList':
+          return <SurveyIcon color={color} size={40} />;
+        case 'Data':
+          return <DataIcon color={color} size={40} />;
+        case 'About':
+          return <AboutIcon color={color} size={40} />;
+        default:
+          break;
+      }
+    };
 
-  const applet = {
-    // mockApplet
-    theme: {
-      primaryColor: colors.primary,
-    },
-  };
-  const tabBarActiveTintColor = applet?.theme?.primaryColor || colors.primary;
-  const tabBarInactiveTintColor = colors.darkerGrey3;
+    const tabBarActiveTintColor = appletTheme?.primaryColor || colors.primary;
+    const tabBarInactiveTintColor = colors.darkerGrey3;
 
-  return {
-    headerShown: false,
-    tabBarIcon: ({ color }: { color: string }) => tabBarIcon(color),
-    tabBarStyle: {
-      backgroundColor: colors.lightBlue,
-      paddingBottom: 20,
-      paddingTop: 3,
-      ...(IS_ANDROID ? { height: 65, paddingBottom: 5 } : {}),
-    },
-    tabBarLabel: ({ color, focused, children }) => {
-      return (
-        <Text
-          color={color}
-          fontWeight={focused ? 'bold' : 'normal'}
-          fontSize={11}
-        >
-          {children}
-        </Text>
-      );
-    },
-    tabBarActiveTintColor,
-    tabBarInactiveTintColor,
+    return {
+      headerShown: false,
+      tabBarIcon: ({ color }: { color: string }) => tabBarIcon(color),
+      tabBarStyle: {
+        backgroundColor: colors.lightBlue,
+        paddingBottom: 20,
+        paddingTop: 3,
+        ...(IS_ANDROID ? { height: 65, paddingBottom: 5 } : {}),
+      },
+      tabBarLabel: ({ color, focused, children }) => {
+        return (
+          <Text
+            color={color}
+            fontWeight={focused ? 'bold' : 'normal'}
+            fontSize={11}
+          >
+            {children}
+          </Text>
+        );
+      },
+      tabBarActiveTintColor,
+      tabBarInactiveTintColor,
+    };
   };
 };

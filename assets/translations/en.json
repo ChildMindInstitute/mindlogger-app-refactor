@@ -180,7 +180,8 @@
     "username_validation_error": "Username must be at least 4 characters, start with a letter, and may only contain letters, numbers, dashes, and dots.",
     "email_validation_error": "Looks like this email is incomplete",
     "email_placeholder": "Email",
-    "display_name_placeholder": "Display name",
+    "first_name": "First Name",
+    "last_name": "Last Name",
     "password_placeholder": "Password",
     "please_accept_terms": "Please accept terms of service.",
     "password_at_least_characters": "Password must be at least 6 characters",
@@ -346,5 +347,13 @@
   "prize": {
     "lack_tokens_title": "Try again",
     "lack_tokens_subtitle": "You don't have enough tokens.\nPlease select another prize"
+  },
+  "cognitive": {
+    "incorrect_start_point": "Incorrect start point!",
+    "incorrect_line": "Incorrect line!",
+    "finished_continue": "Finished. Click Done to continue.",
+    "finished_complete": "Finished. Click next to complete.",
+    "begin": "Begin",
+    "end": "End"
   }
 }

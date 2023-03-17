@@ -29,7 +29,7 @@ module.exports = {
               },
               {
                 pattern:
-                  '@(@app|@shared|@features|@screens|@entities|@assets|@jobs)/**',
+                  '@(@app|@shared|@features|@screens|@entities|@assets|@jobs|@widgets)/**',
                 group: 'internal',
               },
               {

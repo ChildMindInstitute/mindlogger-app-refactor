@@ -1,10 +1,6 @@
-type RadioOptionName = {
-  en: string;
-};
-
 type RadioOption = {
   value: string | number;
-  name: RadioOptionName;
+  name: string;
   color?: string;
   isVisible: boolean;
   description: string;

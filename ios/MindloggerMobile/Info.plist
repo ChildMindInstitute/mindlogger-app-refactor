@@ -38,7 +38,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>MindLogger would like to use your location when you are using the app</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>FontAwesome.ttf</string>
@@ -46,6 +46,8 @@
 		<string>FontAwesome5_Solid.ttf</string>
 		<string>AntDesign.ttf</string>
 		<string>Foundation.ttf</string>
+		<string>Entypo.ttf</string>
+		<string>MaterialIcons.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

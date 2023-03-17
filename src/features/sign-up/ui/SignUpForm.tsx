@@ -33,11 +33,7 @@ const SignUpForm: FC<Props> = props => {
       password: '',
     },
     onSubmitSuccess: data => {
-      signUp({
-        email: data.email,
-        fullName: data.display_name,
-        password: data.password,
-      });
+      signUp(data);
     },
   });
 
@@ -58,8 +54,13 @@ const SignUpForm: FC<Props> = props => {
           <InputField name="email" placeholder={t('auth:email')} />
 
           <InputField
-            name="display_name"
-            placeholder={t('sign_up_form:display_name_placeholder')}
+            name="firstName"
+            placeholder={t('sign_up_form:first_name')}
+          />
+
+          <InputField
+            name="lastName"
+            placeholder={t('sign_up_form:last_name')}
           />
 
           <InputField

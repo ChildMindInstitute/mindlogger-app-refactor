@@ -29,6 +29,7 @@ export default createJob(() => {
           SessionModel.storeAccessToken(data.result.accessToken);
           SessionModel.storeRefreshToken(data.result.refreshToken);
 
+          // @ts-ignore
           config.headers.Authorization = `${tokenType} ${data.result.accessToken}`;
         } catch (e) {
           SessionModel.refreshTokenFailed();
