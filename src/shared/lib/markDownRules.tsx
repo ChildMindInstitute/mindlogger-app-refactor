@@ -10,8 +10,9 @@ import {
 // @ts-ignore
 import * as mime from 'react-native-mime-types';
 
-import { colors } from '@shared/lib';
 import { Box, Text, AudioPlayer, VideoPlayer, YoutubeVideo } from '@shared/ui';
+
+import { colors } from './constants';
 
 const { width: viewPortWidth } = Dimensions.get('window');
 
