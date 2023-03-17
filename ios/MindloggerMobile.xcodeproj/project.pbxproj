@@ -8,11 +8,33 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* MindloggerMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MindloggerMobileTests.m */; };
+		01D339DF29C2E672003935D9 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
+		01D339E129C2E8B6003935D9 /* FlankerSandboxViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339E029C2E8B6003935D9 /* FlankerSandboxViewManager.swift */; };
+		01D339E329C2F014003935D9 /* FlankerSandboxViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D339E229C2F014003935D9 /* FlankerSandboxViewManager.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		1FF4CB701CE51F7E26D57A8E /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E6046B10F458547CC75F77D /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */; };
 		267CD9EC7B1005463F6AF600 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 350505490340E58315C6004E /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */; };
+		288FAA9A29C882AB0089AB98 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
+		288FAA9B29C882AC0089AB98 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
+		288FAA9C29C882B00089AB98 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
+		288FAB2A29C88A590089AB98 /* ParameterGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1929C88A580089AB98 /* ParameterGameManager.swift */; };
+		288FAB2B29C88A590089AB98 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */; };
+		288FAB2C29C88A590089AB98 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1B29C88A580089AB98 /* GameManager.swift */; };
+		288FAB2D29C88A590089AB98 /* FlankerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1C29C88A580089AB98 /* FlankerModel.swift */; };
+		288FAB2E29C88A590089AB98 /* ResultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1D29C88A580089AB98 /* ResultManager.swift */; };
+		288FAB2F29C88A590089AB98 /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */; };
+		288FAB3029C88A590089AB98 /* ParameterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1F29C88A590089AB98 /* ParameterModel.swift */; };
+		288FAB3129C88A590089AB98 /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2029C88A590089AB98 /* CustomText.swift */; };
+		288FAB3229C88A590089AB98 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2129C88A590089AB98 /* CustomButton.swift */; };
+		288FAB3329C88A590089AB98 /* FlankerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2229C88A590089AB98 /* FlankerView.swift */; };
+		288FAB3429C88A590089AB98 /* FlankerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2329C88A590089AB98 /* FlankerViewManager.m */; };
+		288FAB3529C88A590089AB98 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2429C88A590089AB98 /* ImageLoader.swift */; };
+		288FAB3629C88A590089AB98 /* UITextFild+Extesion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */; };
+		288FAB3729C88A590089AB98 /* FlankerViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2629C88A590089AB98 /* FlankerViewManager.swift */; };
+		288FAB3829C88A590089AB98 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */; };
+		288FAB3929C88A590089AB98 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2929C88A590089AB98 /* ResultView.swift */; };
 		2B9BD7608A33C25F0A1AF80F /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AF83D72A6FE359A5E880F5F /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */; };
 		3710F3AC1042A3D0A45C1D34 /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB24139A475E6B03D297C8AD /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a */; };
 		4E2C2E9229A3826900BAEF10 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C2E9129A3826900BAEF10 /* Entypo.ttf */; };
@@ -73,6 +95,10 @@
 		00E356EE1AD99517003FC87E /* MindloggerMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MindloggerMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* MindloggerMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MindloggerMobileTests.m; sourceTree = "<group>"; };
+		01D339DD29C2E672003935D9 /* MindloggerMobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MindloggerMobile-Bridging-Header.h"; sourceTree = "<group>"; };
+		01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlankerSandboxView.swift; sourceTree = "<group>"; usesTabs = 0; };
+		01D339E029C2E8B6003935D9 /* FlankerSandboxViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlankerSandboxViewManager.swift; sourceTree = "<group>"; };
+		01D339E229C2F014003935D9 /* FlankerSandboxViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlankerSandboxViewManager.m; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* MindloggerMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = MindloggerMobile/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = MindloggerMobile/AppDelegate.mm; sourceTree = "<group>"; };
@@ -81,6 +107,23 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MindloggerMobile/main.m; sourceTree = "<group>"; };
 		1AF83D72A6FE359A5E880F5F /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FCD2F4D4676B29CEDFC4B9F /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; sourceTree = "<group>"; };
+		288FAB1929C88A580089AB98 /* ParameterGameManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterGameManager.swift; sourceTree = "<group>"; };
+		288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		288FAB1B29C88A580089AB98 /* GameManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
+		288FAB1C29C88A580089AB98 /* FlankerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlankerModel.swift; sourceTree = "<group>"; };
+		288FAB1D29C88A580089AB98 /* ResultManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultManager.swift; sourceTree = "<group>"; };
+		288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
+		288FAB1F29C88A590089AB98 /* ParameterModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterModel.swift; sourceTree = "<group>"; };
+		288FAB2029C88A590089AB98 /* CustomText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomText.swift; sourceTree = "<group>"; };
+		288FAB2129C88A590089AB98 /* CustomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
+		288FAB2229C88A590089AB98 /* FlankerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlankerView.swift; sourceTree = "<group>"; };
+		288FAB2329C88A590089AB98 /* FlankerViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlankerViewManager.m; sourceTree = "<group>"; };
+		288FAB2429C88A590089AB98 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextFild+Extesion.swift"; sourceTree = "<group>"; };
+		288FAB2629C88A590089AB98 /* FlankerViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlankerViewManager.swift; sourceTree = "<group>"; };
+		288FAB2729C88A590089AB98 /* MindloggerMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MindloggerMobile-Bridging-Header.h"; sourceTree = "<group>"; };
+		288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
+		288FAB2929C88A590089AB98 /* ResultView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		350505490340E58315C6004E /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3556ABB470973B9B96106277 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; sourceTree = "<group>"; };
 		3558C25590E3CA2F496052D4 /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; sourceTree = "<group>"; };
@@ -176,17 +219,54 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		01D339DC29C2E635003935D9 /* FlankerSandboxView */ = {
+			isa = PBXGroup;
+			children = (
+				01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */,
+				01D339E029C2E8B6003935D9 /* FlankerSandboxViewManager.swift */,
+				01D339DD29C2E672003935D9 /* MindloggerMobile-Bridging-Header.h */,
+				01D339E229C2F014003935D9 /* FlankerSandboxViewManager.m */,
+			);
+			path = FlankerSandboxView;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* MindloggerMobile */ = {
 			isa = PBXGroup;
 			children = (
+				288FAB1829C88A250089AB98 /* FlankerNativeComponents */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				01D339DC29C2E635003935D9 /* FlankerSandboxView */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = MindloggerMobile;
+			sourceTree = "<group>";
+		};
+		288FAB1829C88A250089AB98 /* FlankerNativeComponents */ = {
+			isa = PBXGroup;
+			children = (
+				288FAB2129C88A590089AB98 /* CustomButton.swift */,
+				288FAB2029C88A590089AB98 /* CustomText.swift */,
+				288FAB1C29C88A580089AB98 /* FlankerModel.swift */,
+				288FAB2229C88A590089AB98 /* FlankerView.swift */,
+				288FAB2329C88A590089AB98 /* FlankerViewManager.m */,
+				288FAB2629C88A590089AB98 /* FlankerViewManager.swift */,
+				288FAB1B29C88A580089AB98 /* GameManager.swift */,
+				288FAB2429C88A590089AB98 /* ImageLoader.swift */,
+				288FAB2729C88A590089AB98 /* MindloggerMobile-Bridging-Header.h */,
+				288FAB1929C88A580089AB98 /* ParameterGameManager.swift */,
+				288FAB1F29C88A590089AB98 /* ParameterModel.swift */,
+				288FAB1D29C88A580089AB98 /* ResultManager.swift */,
+				288FAB2929C88A590089AB98 /* ResultView.swift */,
+				288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */,
+				288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */,
+				288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */,
+				288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */,
+			);
+			path = FlankerNativeComponents;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -401,7 +481,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1410;
 					};
 				};
 			};
@@ -937,8 +1017,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				288FAB3129C88A590089AB98 /* CustomText.swift in Sources */,
+				288FAB2B29C88A590089AB98 /* UIColor+Extension.swift in Sources */,
+				288FAB3029C88A590089AB98 /* ParameterModel.swift in Sources */,
+				288FAB2F29C88A590089AB98 /* TimeInterval+Extension.swift in Sources */,
+				288FAB3229C88A590089AB98 /* CustomButton.swift in Sources */,
+				288FAB3929C88A590089AB98 /* ResultView.swift in Sources */,
+				288FAB3729C88A590089AB98 /* FlankerViewManager.swift in Sources */,
+				288FAB2C29C88A590089AB98 /* GameManager.swift in Sources */,
+				01D339E329C2F014003935D9 /* FlankerSandboxViewManager.m in Sources */,
+				288FAB3329C88A590089AB98 /* FlankerView.swift in Sources */,
+				288FAB3429C88A590089AB98 /* FlankerViewManager.m in Sources */,
+				288FAB3829C88A590089AB98 /* UIImageView+Extensions.swift in Sources */,
+				288FAB2A29C88A590089AB98 /* ParameterGameManager.swift in Sources */,
+				288FAB3629C88A590089AB98 /* UITextFild+Extesion.swift in Sources */,
+				288FAB2E29C88A590089AB98 /* ResultManager.swift in Sources */,
+				288FAB3529C88A590089AB98 /* ImageLoader.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				288FAB2D29C88A590089AB98 /* FlankerModel.swift in Sources */,
+				01D339E129C2E8B6003935D9 /* FlankerSandboxViewManager.swift in Sources */,
+				01D339DF29C2E672003935D9 /* FlankerSandboxView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -948,6 +1047,7 @@
 			files = (
 				F87E174F29771F200021550E /* AppDelegate.mm in Sources */,
 				F87E175029771F200021550E /* main.m in Sources */,
+				288FAA9A29C882AB0089AB98 /* FlankerSandboxView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -957,6 +1057,7 @@
 			files = (
 				F87E176629771F290021550E /* AppDelegate.mm in Sources */,
 				F87E176729771F290021550E /* main.m in Sources */,
+				288FAA9B29C882AC0089AB98 /* FlankerSandboxView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -966,6 +1067,7 @@
 			files = (
 				F87E177D29771F310021550E /* AppDelegate.mm in Sources */,
 				F87E177E29771F310021550E /* main.m in Sources */,
+				288FAA9C29C882B00089AB98 /* FlankerSandboxView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -984,6 +1086,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = ADDCD15A57F8BF9C6850656E /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1011,6 +1114,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B21ABD081F1F39C9C7EF24FA /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = MindloggerMobileTests/Info.plist;
@@ -1053,6 +1157,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data;
 				PRODUCT_NAME = MindloggerMobile;
+				SWIFT_OBJC_BRIDGING_HEADER = "FlankerSandboxView/MindloggerMobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1080,6 +1185,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data;
 				PRODUCT_NAME = MindloggerMobile;
+				SWIFT_OBJC_BRIDGING_HEADER = "FlankerSandboxView/MindloggerMobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

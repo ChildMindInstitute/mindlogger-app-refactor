@@ -11,6 +11,7 @@ import {
   TestChoice,
   StimulusScreen,
   TestTrial,
+  FlankerNativeIOSConfiguration,
 } from '../types';
 
 type ConfigurationBuilder = {
@@ -18,7 +19,9 @@ type ConfigurationBuilder = {
     configuration: FlankerConfiguration,
   ) => FlankerWebViewConfiguration;
 
-  buildForNativeIOS: (configuration: FlankerConfiguration) => void;
+  buildForNativeIOS: (
+    configuration: FlankerConfiguration,
+  ) => FlankerNativeIOSConfiguration;
 
   parseToWebViewConfigString: (
     testConfiguration: FlankerWebViewConfiguration,
@@ -131,15 +134,19 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
     return injectConfig;
   };
 
-  const buildForNativeIOS = () => {};
-
-  const buildForWebView = (configuration: FlankerConfiguration) => {
-    const isWebView = true;
-
-    const fixation: string = getImageForWebView(
-      configuration.fixationScreen.image,
-      configuration.fixationScreen.value,
-    );
+  const build = (
+    configuration: FlankerConfiguration,
+    isWebView: boolean,
+  ): FlankerNativeIOSConfiguration | FlankerWebViewConfiguration => {
+    const fixation: string = isWebView
+      ? getImageForWebView(
+          configuration.fixationScreen.image,
+          configuration.fixationScreen.value,
+        )
+      : getImageForIOSNative(
+          configuration.fixationScreen.image,
+          configuration.fixationScreen.value,
+        );
 
     const screens: StimulusScreen[] = getScreens(
       configuration.stimulusTrials,
@@ -164,29 +171,40 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
       'Press the button below to end current block and restart.',
     ];
 
-    const result: FlankerWebViewConfiguration = {
-      trials: testTrials,
-      fixationDuration: configuration.fixationDuration,
-      fixation,
-      showFixation: configuration.showFixation && fixation.length > 0,
-      showFeedback: configuration.showFeedback,
-      showResults: configuration.showResults,
-      trialDuration: configuration.trialDuration || 1500,
-      samplingMethod: 'fixed-order',
-      samplingSize: configuration.sampleSize,
-      buttonLabel:
-        (!configuration.isLastTest && configuration.nextButton) || 'Finish',
-      minimumAccuracy: configuration.minimumAccuracy || 0,
-      continueText,
-      restartText: configuration.isLastPractice ? continueText : restartText,
-      buttons: configuration.buttons.map(x => ({
-        image: x.image,
-        name: { en: x.text },
-        value: x.value,
-      })),
-    };
+    const result: FlankerNativeIOSConfiguration | FlankerWebViewConfiguration =
+      {
+        trials: testTrials,
+        fixationDuration: configuration.fixationDuration,
+        fixation,
+        showFixation: configuration.showFixation && fixation.length > 0,
+        showFeedback: configuration.showFeedback,
+        showResults: configuration.showResults,
+        trialDuration: configuration.trialDuration || 1500,
+        samplingMethod: 'fixed-order',
+        samplingSize: configuration.sampleSize,
+        buttonLabel:
+          (!configuration.isLastTest && configuration.nextButton) || 'Finish',
+        minimumAccuracy: configuration.minimumAccuracy || 0,
+        continueText,
+        restartText: configuration.isLastPractice ? continueText : restartText,
+        buttons: configuration.buttons.map(x => ({
+          image: x.image,
+          name: { en: x.text },
+          value: x.value,
+        })),
+      };
 
     return result;
+  };
+
+  const buildForNativeIOS = (
+    configuration: FlankerConfiguration,
+  ): FlankerNativeIOSConfiguration => {
+    return build(configuration, false);
+  };
+
+  const buildForWebView = (configuration: FlankerConfiguration) => {
+    return build(configuration, true);
   };
 
   return {

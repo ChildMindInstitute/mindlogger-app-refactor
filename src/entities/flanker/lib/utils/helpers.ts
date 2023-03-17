@@ -6,7 +6,7 @@ import {
 
 export const parseResponse = (data: {
   record: FlankerWebViewLogRecord;
-  numberOfScreensPerTrial: number;
+  numberOfScreensPerTrial?: number;
   isWebView: boolean;
 }): FlankerLogRecord => {
   const { record, numberOfScreensPerTrial, isWebView } = data;
@@ -14,7 +14,7 @@ export const parseResponse = (data: {
   const parseResponseResult: FlankerLogRecord = {
     trialIndex: !isWebView
       ? record.trial_index
-      : Math.ceil((record.trial_index + 1) / numberOfScreensPerTrial),
+      : Math.ceil((record.trial_index + 1) / numberOfScreensPerTrial!),
     duration: record.rt,
     question: record.stimulus,
     buttonPressed: record.button_pressed,
