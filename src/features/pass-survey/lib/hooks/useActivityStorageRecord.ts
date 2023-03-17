@@ -14,7 +14,7 @@ export type ActivityState = {
   answers: Record<string, any>;
 };
 
-export function useActivityStorage({
+export function useActivityStorageRecord({
   appletId,
   activityId,
   eventId,
@@ -23,18 +23,16 @@ export function useActivityStorage({
 
   const key = `${appletId}-${activityId}-${eventId}`;
 
-  const [activityStorage, updateActivityStorage] = useMMKVObject<ActivityState>(
-    key,
-    storage,
-  );
+  const [activityStorageRecord, upsertActivityStorageRecord] =
+    useMMKVObject<ActivityState>(key, storage);
 
   function clearActivityStorage() {
     storage.delete(key);
   }
 
   return {
-    activityStorage,
-    updateActivityStorage,
+    activityStorageRecord,
+    upsertActivityStorageRecord,
     clearActivityStorage,
   };
 }

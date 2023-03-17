@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { ActivityDto } from '@app/shared/api';
 import { ActivityModel, useActivityDetailsQuery } from '@entities/activity';
 
-import { useActivityStorage } from '../../lib';
+import { useActivityStorageRecord } from '../../lib';
 import { buildPipeline } from '../pipelineBuilder';
 
 type UseActivityPipelineArgs = {
@@ -49,14 +49,15 @@ function useActivityState({
   activityId,
   eventId,
 }: UseActivityPipelineArgs) {
-  const { activityStorage, updateActivityStorage } = useActivityStorage({
-    appletId,
-    activityId,
-    eventId,
-  });
+  const { activityStorageRecord, upsertActivityStorageRecord } =
+    useActivityStorageRecord({
+      appletId,
+      activityId,
+      eventId,
+    });
 
   let { data: activity } = useActivityDetailsQuery(activityId, {
-    enabled: !activityStorage,
+    enabled: !activityStorageRecord,
     select: r => r.data.result,
   });
 
@@ -71,14 +72,14 @@ function useActivityState({
     [activity],
   );
 
-  const shouldCreateStorage = !activityStorage && pipeline.length;
+  const shouldCreateStorage = !activityStorageRecord && pipeline.length;
 
   if (shouldCreateStorage) {
     createActivityStorage();
   }
 
   function createActivityStorage() {
-    updateActivityStorage({
+    upsertActivityStorageRecord({
       step: 0,
       items: pipeline,
       answers: {},
@@ -86,48 +87,48 @@ function useActivityState({
   }
 
   function setStep(step: number) {
-    if (!activityStorage) {
+    if (!activityStorageRecord) {
       return;
     }
 
-    updateActivityStorage({
-      ...activityStorage,
+    upsertActivityStorageRecord({
+      ...activityStorageRecord,
       step,
     });
   }
 
   function setAnswer(step: number, answer: any) {
-    if (!activityStorage) {
+    if (!activityStorageRecord) {
       return;
     }
 
-    updateActivityStorage({
-      ...activityStorage,
+    upsertActivityStorageRecord({
+      ...activityStorageRecord,
       answers: {
-        ...activityStorage.answers,
+        ...activityStorageRecord.answers,
         [step]: answer,
       },
     });
   }
 
   function removeAnswer(step: number) {
-    if (!activityStorage) {
+    if (!activityStorageRecord) {
       return;
     }
 
-    const answers = { ...activityStorage.answers };
+    const answers = { ...activityStorageRecord.answers };
 
     delete answers[step];
 
-    if (activityStorage) {
-      updateActivityStorage({
-        ...activityStorage,
+    if (activityStorageRecord) {
+      upsertActivityStorageRecord({
+        ...activityStorageRecord,
         answers,
       });
     }
   }
 
-  return { activityState: activityStorage, setStep, setAnswer, removeAnswer };
+  return { activityStorageRecord, setStep, setAnswer, removeAnswer };
 }
 
 export default useActivityState;

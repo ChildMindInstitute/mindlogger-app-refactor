@@ -27,7 +27,7 @@ function ActivityStepper({
   const { t } = useTranslation();
 
   const {
-    activityState,
+    activityStorageRecord,
     setStep: setCurrentStep,
     setAnswer,
   } = useActivityState({
@@ -46,9 +46,9 @@ function ActivityStepper({
 
     showTopNavigation,
     showBottomNavigation,
-  } = useActivityStepper(activityState);
+  } = useActivityStepper(activityStorageRecord);
 
-  const currentStep = activityState?.step ?? 0;
+  const currentStep = activityStorageRecord?.step ?? 0;
 
   const tutorialViewerRef = useRef<TutorialViewerRef>(null);
 
@@ -80,7 +80,7 @@ function ActivityStepper({
     return 1;
   };
 
-  if (!activityState) {
+  if (!activityStorageRecord) {
     return (
       <Center flex={1}>
         <ActivityIndicator size="large" color="$secondary" />
@@ -91,8 +91,8 @@ function ActivityStepper({
   return (
     <Box flex={1}>
       <Stepper
-        stepsCount={activityState.items.length}
-        startFrom={activityState.step}
+        stepsCount={activityStorageRecord.items.length}
+        startFrom={activityStorageRecord.step}
         onNext={onNext}
         onBack={onBack}
         onBeforeNext={onBeforeNext}
@@ -110,7 +110,7 @@ function ActivityStepper({
 
         <Stepper.ViewList
           renderItem={({ index }) => {
-            const pipelineItem = activityState.items[index];
+            const pipelineItem = activityStorageRecord.items[index];
 
             return (
               <XStack flex={1} key={index} alignItems="center">

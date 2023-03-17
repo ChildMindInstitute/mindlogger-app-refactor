@@ -1,1 +1,1 @@
-export * from './useActivityStorage';
+export * from './useActivityStorageRecord';
