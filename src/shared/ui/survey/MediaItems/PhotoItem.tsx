@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
 import {
-  Callback,
   ImagePickerResponse,
   launchCamera,
   launchImageLibrary,
@@ -22,7 +21,7 @@ import MediaInput from './MediaInput';
 import MediaValue from './types';
 
 type Props = {
-  onChange: (value: MediaValue) => void | Callback;
+  onChange: (value: MediaValue) => void;
   value?: MediaValue;
 };
 
@@ -30,10 +29,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
   const { isCameraAccessGranted } = useCameraPermissions();
   const { isGalleryAccessGranted } = useGalleryPermissions();
 
-  const handlePickImage = (
-    response: ImagePickerResponse,
-    isFromLibrary: boolean,
-  ) => {
+  const pickImage = (response: ImagePickerResponse, isFromLibrary: boolean) => {
     const { assets } = response;
 
     if (assets?.length) {
@@ -53,7 +49,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
   const onShowImageGallery = async () => {
     if (isGalleryAccessGranted) {
       launchImageLibrary(GALLERY_PHOTO_OPTIONS, response =>
-        handlePickImage(response, true),
+        pickImage(response, true),
       );
     } else {
       await requestGalleryPermissions();
@@ -62,9 +58,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
 
   const onOpenPhotoCamera = async () => {
     if (isCameraAccessGranted) {
-      launchCamera(PHOTO_TAKE_OPTIONS, response =>
-        handlePickImage(response, false),
-      );
+      launchCamera(PHOTO_TAKE_OPTIONS, response => pickImage(response, false));
     } else {
       await requestCameraPermissions();
     }
