@@ -4,8 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
-import { ImageBackground } from '@app/shared/ui';
-import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
+import { ActivityIndicator, Center, ImageBackground } from '@app/shared/ui';
+import { useAppletDetailsQuery } from '@entities/applet';
 
 import {
   AppletDetailsParamList,
@@ -27,11 +27,7 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
     select: o => o.data.result,
   });
 
-  const useAppletThemes = AppletModel.useAppletThemes();
-
-  const appletTheme = applet?.themeId
-    ? useAppletThemes[applet?.themeId]
-    : undefined;
+  const appletTheme = applet?.theme ?? null;
 
   useLayoutEffect(() => {
     if (title) {
@@ -52,7 +48,12 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
   return (
     <ImageBackground
       uri={appletTheme?.backgroundImage}
-      bg={appletTheme?.primaryColor}
+      bg={appletTheme?.primaryColor ?? '$white'}
+      loader={
+        <Center position="absolute" width="100%" height="100%">
+          <ActivityIndicator size="large" color="$secondary" />
+        </Center>
+      }
     >
       <Tab.Navigator
         screenOptions={getAppletDetailsScreenOptions(appletTheme)}

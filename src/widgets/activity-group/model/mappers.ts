@@ -1,7 +1,8 @@
 import { ActivityType } from '@entities/activity';
+import { ActivityPipelineType } from '@entities/applet';
 import { ActivityFlowRecordDto, ActivityRecordDto } from '@shared/api';
 
-import { Activity, ActivityFlow, ActivityPipelineType } from '../lib';
+import { Activity, ActivityFlow } from '../lib';
 
 export function mapActivityFromDto(activity: ActivityRecordDto): Activity {
   return {

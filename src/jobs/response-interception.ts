@@ -1,10 +1,10 @@
-import { AxiosError, AxiosRequestConfig } from 'axios';
+import { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 import { SessionModel } from '@entities/session';
 import { httpService, IdentityService } from '@shared/api';
 import { createJob } from '@shared/lib';
 
-type RequestConfig = AxiosRequestConfig<any> & {
+type RequestConfig = InternalAxiosRequestConfig<any> & {
   retry?: boolean;
 };
 

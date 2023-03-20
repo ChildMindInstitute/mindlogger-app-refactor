@@ -4,8 +4,14 @@ import {
   ActivityListItem,
   ActivityStatus,
   ActivityType,
-} from '@app/entities/activity';
-import { AvailabilityType } from '@app/entities/event';
+} from '@entities/activity';
+import {
+  FlowProgress,
+  ActivityPipelineType,
+  EntitiesInProgress,
+  ProgressPayload,
+} from '@entities/applet';
+import { AvailabilityType } from '@entities/event';
 import {
   getMsFromHours,
   getMsFromMinutes,
@@ -14,31 +20,25 @@ import {
   MIDNIGHT_DATE,
   MINUTES_IN_HOUR,
   MS_IN_MINUTE,
-} from '@app/shared/lib';
+} from '@shared/lib';
 
 import {
-  EventActivity,
+  EventEntity,
   ActivityGroupType,
   ActivityGroupTypeNames,
   ActivityListGroup,
   Activity,
   ActivityFlow,
-  ActivityPipelineType,
-  EntityProgress,
-  ProgressPayload,
-  ActivityFlowProgress,
 } from '../../lib';
 
 export interface IActivityGroupsBuilder {
-  buildInProgress: (
-    eventsActivities: Array<EventActivity>,
-  ) => ActivityListGroup;
-  buildAvailable: (eventsActivities: Array<EventActivity>) => ActivityListGroup;
-  buildScheduled: (eventsActivities: Array<EventActivity>) => ActivityListGroup;
+  buildInProgress: (eventsActivities: Array<EventEntity>) => ActivityListGroup;
+  buildAvailable: (eventsActivities: Array<EventEntity>) => ActivityListGroup;
+  buildScheduled: (eventsActivities: Array<EventEntity>) => ActivityListGroup;
 }
 
 class ActivityGroupsBuilder implements IActivityGroupsBuilder {
-  private progress: EntityProgress;
+  private progress: EntitiesInProgress;
 
   private appletId: string;
 
@@ -53,16 +53,16 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   private getNow = () => new Date();
 
   private getProgressRecord(
-    eventActivity: EventActivity,
+    eventActivity: EventEntity,
   ): ProgressPayload | null {
     const record =
-      this.progress[this.appletId][eventActivity.activity.id][
+      this.progress[this.appletId]?.[eventActivity.entity.id]?.[
         eventActivity.event.id
       ];
     return record ?? null;
   }
 
-  private isInProgress(eventActivity: EventActivity): boolean {
+  private isInProgress(eventActivity: EventEntity): boolean {
     const record = this.getProgressRecord(eventActivity);
     if (!record) {
       return false;
@@ -70,16 +70,16 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     return !!record.startAt && !record.endAt;
   }
 
-  private getStartedDateTime(eventActivity: EventActivity): Date {
+  private getStartedDateTime(eventActivity: EventEntity): Date {
     const record = this.getProgressRecord(eventActivity)!;
     return record.startAt!;
   }
 
   private populateActivityFlowFields(
     item: ActivityListItem,
-    activityEvent: EventActivity,
+    activityEvent: EventEntity,
   ) {
-    const activityFlow = activityEvent.activity as ActivityFlow;
+    const activityFlow = activityEvent.entity as ActivityFlow;
 
     item.isInActivityFlow = true;
     item.activityFlowDetails = {
@@ -96,7 +96,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     if (isInProgress) {
       const progressRecord = this.getProgressRecord(
         activityEvent,
-      ) as ActivityFlowProgress;
+      ) as FlowProgress;
 
       activity = this.activities.find(
         x => x.id === progressRecord.currentActivityId,
@@ -110,6 +110,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       position = 1;
     }
 
+    item.activityId = activity.id;
     item.activityFlowDetails.activityPositionInFlow = position;
     item.name = activity.name;
     item.description = activity.description;
@@ -117,7 +118,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     item.image = activity.image;
   }
 
-  private getTimeToComplete(eventActivity: EventActivity): HourMinute {
+  private getTimeToComplete(eventActivity: EventEntity): HourMinute {
     const { event } = eventActivity;
     const timer = event.timers!.timer!;
 
@@ -140,18 +141,19 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     }
   }
 
-  private createListItem(eventActivity: EventActivity) {
-    const { activity, event } = eventActivity;
-    const { pipelineType } = eventActivity.activity;
+  private createListItem(eventActivity: EventEntity) {
+    const { entity, event } = eventActivity;
+    const { pipelineType } = eventActivity.entity;
     const isFlow = pipelineType === ActivityPipelineType.Flow;
 
     const item: ActivityListItem = {
-      activityId: activity.id,
+      activityId: isFlow ? '' : entity.id,
+      flowId: isFlow ? entity.id : null,
       eventId: event.id,
-      name: isFlow ? '' : activity.name,
-      description: isFlow ? '' : activity.description,
-      type: isFlow ? ActivityType.NotDefined : (activity as Activity).type,
-      image: isFlow ? null : activity.image,
+      name: isFlow ? '' : entity.name,
+      description: isFlow ? '' : entity.description,
+      type: isFlow ? ActivityType.NotDefined : (entity as Activity).type,
+      image: isFlow ? null : entity.image,
       status: ActivityStatus.NotDefined,
       isTimerSet: false,
       timeLeftToComplete: null,
@@ -169,7 +171,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   */
 
   public buildInProgress(
-    eventsActivities: Array<EventActivity>,
+    eventsActivities: Array<EventEntity>,
   ): ActivityListGroup {
     const filtered = eventsActivities.filter(x => this.isInProgress(x));
 
@@ -199,13 +201,13 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 
   public buildAvailable(
-    eventsActivities: Array<EventActivity>,
+    eventsActivities: Array<EventEntity>,
   ): ActivityListGroup {
     const notInProgress = eventsActivities.filter(x => !this.isInProgress(x));
 
     const now = this.getNow();
 
-    const filtered: Array<EventActivity> = [];
+    const filtered: Array<EventEntity> = [];
 
     const activityItems: Array<ActivityListItem> = [];
 
@@ -287,13 +289,13 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 
   public buildScheduled(
-    eventsActivities: Array<EventActivity>,
+    eventsActivities: Array<EventEntity>,
   ): ActivityListGroup {
     const notInProgress = eventsActivities.filter(x => !this.isInProgress(x));
 
     const activityItems: Array<ActivityListItem> = [];
 
-    const filtered: Array<EventActivity> = [];
+    const filtered: Array<EventEntity> = [];
 
     const now = this.getNow();
 
@@ -356,7 +358,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
 type ActivityGroupsBuilderInput = {
   allAppletActivities: Activity[];
-  progress: EntityProgress;
+  progress: EntitiesInProgress;
   appletId: string;
 };
 

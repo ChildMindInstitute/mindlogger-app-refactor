@@ -10,6 +10,7 @@ import {
   AbTestResponse,
   DeviceTests,
   DeviceType,
+  LogLine,
   MessageType,
   MessageTypeStrings,
   TestIndex,
@@ -20,7 +21,8 @@ import { MobileTests, TabletTests } from '../model';
 type Props = {
   testIndex: TestIndex | null;
   deviceType: DeviceType;
-  onResponse: (response: AbTestResponse) => void;
+  onResponse?: (response: AbTestResponse) => void;
+  onComplete: (logLines: LogLine[]) => void;
 } & BoxProps;
 
 const ShapesRectPadding = 15;
@@ -30,7 +32,7 @@ const MessageTimeout = 2000;
 const AbTest: FC<Props> = props => {
   const { t } = useTranslation();
 
-  const { testIndex, deviceType, onResponse } = props;
+  const { testIndex, deviceType, onResponse, onComplete } = props;
 
   const [width, setWidth] = useState<number | null>(null);
 
@@ -89,6 +91,11 @@ const AbTest: FC<Props> = props => {
     return ' ';
   };
 
+  const complete = (logLines: LogLine[]) => {
+    setCompleted(true);
+    onComplete(logLines);
+  };
+
   const testData = getTestData();
 
   return (
@@ -117,10 +124,10 @@ const AbTest: FC<Props> = props => {
             width={width}
             height={width}
             onLogResult={logData =>
-              onResponse({ ...logData, width, startTime })
+              onResponse?.({ ...logData, width, startTime })
             }
             onMessage={msg => setMessage(msg)}
-            onComplete={() => setCompleted(true)}
+            onComplete={complete}
             readonly={completed}
           />
         </XStack>

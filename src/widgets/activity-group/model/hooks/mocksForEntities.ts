@@ -1,15 +1,10 @@
 import { ActivityType } from '@app/entities/activity';
+import { ActivityPipelineType, EntitiesInProgress } from '@app/entities/applet';
 import { AvailabilityType, PeriodicityType } from '@app/entities/event';
 
-import {
-  Activity,
-  ActivityFlow,
-  ActivityPipelineType,
-  EntityProgress,
-  EventActivity,
-} from '../../lib';
+import { Activity, ActivityFlow, EventEntity } from '../../lib';
 
-export const progress: EntityProgress = {
+export const progress: EntitiesInProgress = {
   apid1: {
     aid1: {
       eid1: {
@@ -23,6 +18,7 @@ export const progress: EntityProgress = {
         currentActivityId: 'aid2',
         startAt: new Date(2023, 1, 12, 14, 16, 17),
         type: ActivityPipelineType.Flow,
+        endAt: null,
       },
     },
   },
@@ -63,15 +59,15 @@ const activityFlow1: ActivityFlow = {
 
 export const allAppletActivities: Activity[] = [activity1, activity2];
 
-export const eventActivities: EventActivity[] = [
+export const eventActivities: EventEntity[] = [
   {
-    activity: activity1,
+    entity: activity1,
     event: {
       activityId: 'aid1',
       availability: {
         allowAccessBeforeFromTime: false,
         availabilityType: AvailabilityType.ScheduledAccess,
-        endDate: new Date(2023, 1, 15, 23, 59, 0),
+        endDate: new Date(2023, 3, 16, 0, 0, 0),
         oneTimeCompletion: true,
         periodicityType: PeriodicityType.Monthly,
         startDate: new Date(2023, 1, 14, 0, 0, 0),
@@ -80,7 +76,7 @@ export const eventActivities: EventActivity[] = [
       },
       id: 'eid1',
       scheduledAt: null,
-      selectedDate: new Date(2024, 5, 15, 0, 0, 0),
+      selectedDate: new Date(2023, 2, 16, 0, 0, 0),
       timers: {
         timer: {
           hours: 11,
@@ -91,13 +87,13 @@ export const eventActivities: EventActivity[] = [
     },
   },
   {
-    activity: activityFlow1,
+    entity: activityFlow1,
     event: {
       activityId: 'afid1',
       availability: {
         allowAccessBeforeFromTime: false,
         availabilityType: AvailabilityType.ScheduledAccess,
-        endDate: new Date(2023, 1, 15, 23, 59, 0),
+        endDate: new Date(2023, 3, 16, 0, 0, 0),
         oneTimeCompletion: true,
         periodicityType: PeriodicityType.Monthly,
         startDate: new Date(2023, 1, 14, 0, 0, 0),
@@ -106,7 +102,7 @@ export const eventActivities: EventActivity[] = [
       },
       id: 'eid2',
       scheduledAt: null,
-      selectedDate: new Date(2024, 5, 15, 0, 0, 0),
+      selectedDate: new Date(2023, 2, 16, 0, 0, 0),
       timers: null,
       // timers: {
       //   timer: {

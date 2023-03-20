@@ -1,4 +1,4 @@
-import { AbTestResponse, DeviceType, TestIndex } from '@entities/abTrail';
+import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
 
 import { Tutorial } from './tutorial';
 
@@ -35,6 +35,8 @@ interface TutorialPipelineItem extends PipelineItemBase {
   type: 'Tutorial';
   payload: Tutorial;
 }
+
+type AbTestResponse = LogLine[];
 
 export type PipelineItemResponse = AbTestResponse;
 

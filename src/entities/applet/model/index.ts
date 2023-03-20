@@ -1,2 +1,3 @@
-export * from './mappers';
+export * from './slice';
 export * from './hooks';
+export * as selectors from './selectors';

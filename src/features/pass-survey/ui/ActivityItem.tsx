@@ -10,7 +10,7 @@ type Props = {
 function ActivityItem({ pipelineItem, onResponse }: Props) {
   switch (pipelineItem.type) {
     case 'AbTest':
-      return <AbTest {...pipelineItem.payload} onResponse={onResponse} />;
+      return <AbTest {...pipelineItem.payload} onComplete={onResponse} />;
 
     default:
       return <></>;

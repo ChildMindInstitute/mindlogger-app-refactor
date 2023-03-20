@@ -42,7 +42,7 @@ type Props = {
   width: number;
   onLogResult: (data: OnResultLog) => void;
   onMessage: (message: MessageType) => void;
-  onComplete: () => void;
+  onComplete: (logLines: LogLine[]) => void;
 } & BoxProps;
 
 const AbCanvas: FC<Props> = props => {
@@ -277,7 +277,7 @@ const AbCanvas: FC<Props> = props => {
         currentIndex: getCurrentIndex() + 1,
       });
       onMessage(MessageType.Completed);
-      onComplete();
+      onComplete(logLines);
       return;
     }
 

@@ -1,45 +1,67 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
-import { Box, Stepper, XStack } from '@shared/ui';
+import { useTranslation } from 'react-i18next';
+
+import { ActivityIndicator, Box, Center, Stepper, XStack } from '@shared/ui';
 
 import ActivityItem from './ActivityItem';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
-import { getAbTrailsPipeline } from '../model';
-
-const mockPipelineItems = getAbTrailsPipeline('Phone');
+import { useActivityState, useActivityStepper } from '../model';
 
 type Props = {
+  appletId: string;
+  activityId: string;
+  eventId: string;
+
   onClose: () => void;
   onFinish: () => void;
 };
 
-function ActivityStepper({ onClose, onFinish }: Props) {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [tempState, setTempState] = useState<Record<string, unknown>>({});
+function ActivityStepper({
+  appletId,
+  activityId,
+  eventId,
+  onClose,
+  onFinish,
+}: Props) {
+  const { t } = useTranslation();
 
-  const currentPipelineItem = mockPipelineItems[currentStep];
+  const {
+    activityStorageRecord,
+    setStep: setCurrentStep,
+    setAnswer,
+  } = useActivityState({
+    appletId,
+    activityId,
+    eventId,
+  });
+
+  const {
+    isLastStep,
+    isTutorialStep,
+
+    canMoveNext,
+    canMoveBack,
+    canReset,
+
+    showTopNavigation,
+    showBottomNavigation,
+  } = useActivityStepper(activityStorageRecord);
+
+  const currentStep = activityStorageRecord?.step ?? 0;
 
   const tutorialViewerRef = useRef<TutorialViewerRef>(null);
-
-  const isTutorial = currentPipelineItem.type === 'Tutorial';
-  const isLastStep = currentStep === mockPipelineItems.length - 1;
-
-  const canMoveNext =
-    isTutorial || currentPipelineItem.isSkippable || !!tempState[currentStep];
-  const canMoveBack = currentPipelineItem.isAbleToMoveToPrevious;
-  const canReset = currentPipelineItem.canBeReset;
-  const showTopNavigation = currentPipelineItem.hasTopNavigation;
-  const showBottomNavigation = !showTopNavigation;
 
   const onNext = (nextStep: number) => {
     setCurrentStep(nextStep);
   };
+
   const onBack = (nextStep: number) => {
     setCurrentStep(nextStep);
   };
 
   const onBeforeNext = (): number => {
-    if (isTutorial) {
+    if (isTutorialStep) {
       const moved = tutorialViewerRef.current?.next();
 
       return moved ? 0 : 1;
@@ -47,8 +69,9 @@ function ActivityStepper({ onClose, onFinish }: Props) {
 
     return 1;
   };
+
   const onBeforeBack = (): number => {
-    if (isTutorial) {
+    if (isTutorialStep) {
       const moved = tutorialViewerRef.current?.back();
 
       return moved ? 0 : 1;
@@ -57,11 +80,19 @@ function ActivityStepper({ onClose, onFinish }: Props) {
     return 1;
   };
 
+  if (!activityStorageRecord) {
+    return (
+      <Center flex={1}>
+        <ActivityIndicator size="large" color="$secondary" />
+      </Center>
+    );
+  }
+
   return (
     <Box flex={1}>
       <Stepper
-        stepsCount={mockPipelineItems.length}
-        startFrom={0}
+        stepsCount={activityStorageRecord.items.length}
+        startFrom={activityStorageRecord.step}
         onNext={onNext}
         onBack={onBack}
         onBeforeNext={onBeforeNext}
@@ -79,7 +110,7 @@ function ActivityStepper({ onClose, onFinish }: Props) {
 
         <Stepper.ViewList
           renderItem={({ index }) => {
-            const pipelineItem = mockPipelineItems[index];
+            const pipelineItem = activityStorageRecord.items[index];
 
             return (
               <XStack flex={1} key={index} alignItems="center">
@@ -93,9 +124,9 @@ function ActivityStepper({ onClose, onFinish }: Props) {
 
                   {pipelineItem.type !== 'Tutorial' && (
                     <ActivityItem
-                      pipelineItem={mockPipelineItems[index]}
+                      pipelineItem={pipelineItem}
                       onResponse={response => {
-                        setTempState(prev => ({ ...prev, [index]: response }));
+                        setAnswer(currentStep, response);
                       }}
                     />
                   )}
@@ -109,12 +140,25 @@ function ActivityStepper({ onClose, onFinish }: Props) {
 
         {showBottomNavigation && (
           <Stepper.NavigationPanel mt={16} minHeight={24}>
-            {canMoveBack && <Stepper.BackButton>Return</Stepper.BackButton>}
-            {canReset && <Stepper.UndoButton>Undo</Stepper.UndoButton>}
+            {canMoveBack && (
+              <Stepper.BackButton>
+                {t('activity_navigation:back')}
+              </Stepper.BackButton>
+            )}
+
+            {canReset && (
+              <Stepper.UndoButton>
+                {t('activity_navigation:undo')}
+              </Stepper.UndoButton>
+            )}
 
             {canMoveNext && (
               <Stepper.NextButton>
-                {isLastStep ? 'Done' : 'Next'}
+                {t(
+                  isLastStep
+                    ? 'activity_navigation:done'
+                    : 'activity_navigation:next',
+                )}
               </Stepper.NextButton>
             )}
           </Stepper.NavigationPanel>

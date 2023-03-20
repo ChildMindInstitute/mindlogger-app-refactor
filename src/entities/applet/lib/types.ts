@@ -1,15 +1,4 @@
-export type Applet = {
-  id: string;
-  image?: string | null;
-  displayName: string;
-  description: string;
-  numberOverdue?: number;
-  themeId: string | null;
-};
-
 export type AppletTheme = {
-  id: string;
-  name: string;
   logo: string;
   backgroundImage: string;
   primaryColor: string;
@@ -17,15 +6,22 @@ export type AppletTheme = {
   tertiaryColor: string;
 };
 
-export type AppletThemes = Record<string, AppletTheme | undefined>;
+export type Applet = {
+  id: string;
+  image: string | null;
+  displayName: string;
+  description: string;
+  numberOverdue?: number;
+  theme: AppletTheme | null;
+};
 
-type Activity = {
+export type Activity = {
   id: string;
   name: string;
   description: string;
 };
 
-type ActivityFlow = {
+export type ActivityFlow = {
   id: string;
   name: string;
   description: string;
@@ -41,9 +37,35 @@ export type AppletDetails<
   version: string;
   description: string;
   about: string;
-  image: string;
-  watermark: string;
-  themeId: number;
+  image: string | null;
+  watermark: string | null;
+  theme: AppletTheme | null;
   activities: TActivity[];
   activityFlows: TActivityFlow[];
 };
+
+export const enum ActivityPipelineType {
+  NotDefined = 0,
+  Regular,
+  Flow,
+}
+export type FlowProgress = {
+  type: ActivityPipelineType.Flow;
+  currentActivityId: string;
+};
+
+export type ActivityProgress = {
+  type: ActivityPipelineType.Regular;
+};
+
+export type EntityProgress = FlowProgress | ActivityProgress;
+
+export type ProgressPayload = EntityProgress & {
+  startAt: Date;
+  endAt: Date | null;
+};
+
+type EntityEvents = Record<string, ProgressPayload>;
+type AppletInProgressEntities = Record<string, EntityEvents>;
+
+export type EntitiesInProgress = Record<string, AppletInProgressEntities>;

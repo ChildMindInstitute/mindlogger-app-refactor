@@ -7,7 +7,7 @@ import {
 type Options = MutationOptions<typeof IdentityService.changePassword>;
 
 export const useChangePasswordMutation = (options?: Options) => {
-  return useBaseMutation(['change-password'], IdentityService.changePassword, {
+  return useBaseMutation(IdentityService.changePassword, {
     ...options,
     cacheTime: 0,
   });
