@@ -44,7 +44,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>MindLogger would like to use your location when you are using the app</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>MindLogger would like to use your microphone (for videos)</string>
+	<string>MindLogger would like to use your microphone</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>FontAwesome.ttf</string>

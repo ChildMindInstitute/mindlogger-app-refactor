@@ -1,6 +1,6 @@
 type MediaValue = {
   uri?: string;
-  filename?: string;
+  fileName?: string;
   size?: number;
   type?: string;
   fromLibrary: boolean;

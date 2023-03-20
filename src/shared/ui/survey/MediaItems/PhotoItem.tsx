@@ -40,7 +40,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
       const imageItem = assets[0];
       const photo = {
         uri: imageItem.uri,
-        filename: imageItem.fileName,
+        fileName: imageItem.fileName,
         size: imageItem.fileSize,
         type: imageItem.type,
         fromLibrary: isFromLibrary,
