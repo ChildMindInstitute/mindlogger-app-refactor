@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 import {
   ImagePickerResponse,
@@ -28,7 +28,6 @@ type Props = {
 const PhotoItem: FC<Props> = ({ onChange, value }) => {
   const { isCameraAccessGranted } = useCameraPermissions();
   const { isGalleryAccessGranted } = useGalleryPermissions();
-  const [pickedPhoto, setPickedPhoto] = useState(value);
 
   const pickImage = (response: ImagePickerResponse, isFromLibrary: boolean) => {
     const { assets } = response;
@@ -43,7 +42,6 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
         fromLibrary: isFromLibrary,
       };
 
-      setPickedPhoto(photo);
       onChange(photo);
     }
   };
@@ -72,8 +70,8 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
       onShowMediaLibrary={onShowImageGallery}
       mode="photo"
     >
-      {pickedPhoto ? (
-        <Image height="100%" width="100%" src={{ uri: pickedPhoto.uri }} />
+      {value ? (
+        <Image height="100%" width="100%" src={{ uri: value.uri }} />
       ) : (
         <PhotoIcon color={colors.red} size={50} />
       )}
