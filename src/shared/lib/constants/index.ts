@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 
 import Config from 'react-native-config';
+import { ImageLibraryOptions } from 'react-native-image-picker';
 import { PERMISSIONS } from 'react-native-permissions';
 
 import { Language } from '../types';
@@ -27,3 +28,36 @@ export const LOCATION_PERMISSIONS = Platform.select({
   android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
   ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
 });
+
+export const CAMERA_PERMISSIONS = Platform.select({
+  android: PERMISSIONS.ANDROID.CAMERA,
+  ios: PERMISSIONS.IOS.CAMERA,
+});
+
+export const GALLERY_ANDROID_PERMISSIONS = [
+  PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
+  PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+];
+
+export const GALLERY_IOS_PERMISSIONS = PERMISSIONS.IOS.PHOTO_LIBRARY;
+
+export const GALLERY_PHOTO_OPTIONS: ImageLibraryOptions = {
+  mediaType: 'photo',
+  quality: 0.8,
+  maxWidth: 800,
+  maxHeight: 800,
+  selectionLimit: 1,
+};
+
+export const VIDEO_RECORD_OPTIONS = {
+  mediaType: 'video',
+  videoQuality: 'high',
+  durationLimit: 60,
+};
+
+export const PHOTO_TAKE_OPTIONS: ImageLibraryOptions = {
+  mediaType: 'photo',
+  maxWidth: 800,
+  maxHeight: 800,
+  quality: 0.9,
+};

@@ -317,6 +317,8 @@ PODS:
     - React-Core
   - react-native-geolocation (3.0.5):
     - React-Core
+  - react-native-image-picker (5.3.1):
+    - React-Core
   - react-native-mmkv (2.5.1):
     - MMKV (>= 1.2.13)
     - React-Core
@@ -499,6 +501,7 @@ DEPENDENCIES:
   - react-native-file-access (from `../node_modules/react-native-file-access`)
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -599,6 +602,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-flipper"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-mmkv:
     :path: "../node_modules/react-native-mmkv"
   react-native-netinfo:
@@ -694,6 +699,7 @@ SPEC CHECKSUMS:
   react-native-file-access: e2617a7300406307be44267b36d196c78d6b2a96
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-geolocation: 7383cbe9fa75b168bbbe40b566070fd0b44d30d6
+  react-native-image-picker: ec9b713e248760bfa0f879f0715391de4651a7cb
   react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
@@ -715,7 +721,7 @@ SPEC CHECKSUMS:
   RNAudioRecorderPlayer: 6638283925b46808310c9fdf803ebabc3abdbadc
   RNCCheckbox: 38989bbd3d7d536adf24ba26c6b3e6cefe0bea6f
   RNDateTimePicker: 65e1d202799460b286ff5e741d8baf54695e8abd
-  RNPermissions: 0ccd560bdae3b0dc20724a4fd9ee0f272ae7306c
+  RNPermissions: 4f5e03e3272fdc6fcee6e571dfdcbad128aadffe
   RNReanimated: 6668b0587bebd4b15dd849b99e5a9c70fc12ed95
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNSVG: d7d7bc8229af3842c9cfc3a723c815a52cdd1105

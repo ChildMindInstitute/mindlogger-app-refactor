@@ -37,8 +37,14 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>MindLogger would like to use your camera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+  	<string>MindLogger would like access to your photo gallery</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>MindLogger would like to use your location when you are using the app</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>MindLogger would like to use your microphone (for videos)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>FontAwesome.ttf</string>
