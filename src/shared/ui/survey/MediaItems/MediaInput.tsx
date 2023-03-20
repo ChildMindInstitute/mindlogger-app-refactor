@@ -6,12 +6,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Center } from '@shared/ui';
 
-import MediaValue from './types';
-
 type Props = {
   children: ReactNode;
   mode: 'photo' | 'video';
-  value?: MediaValue;
   onShowMediaLibrary: () => void;
   onOpenCamera: () => void;
 };
@@ -28,7 +25,6 @@ const UploadButton = styled(Center, {
 const MediaInput: FC<Props> = ({
   children,
   mode,
-  value,
   onOpenCamera,
   onShowMediaLibrary,
 }) => {
@@ -49,7 +45,7 @@ const MediaInput: FC<Props> = ({
 
   return (
     <TouchableOpacity onPress={onUploadPress}>
-      <UploadButton>{!value && children}</UploadButton>
+      <UploadButton>{children}</UploadButton>
     </TouchableOpacity>
   );
 };

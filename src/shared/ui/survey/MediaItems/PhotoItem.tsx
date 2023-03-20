@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import {
   ImagePickerResponse,
@@ -15,7 +15,7 @@ import {
   useCameraPermissions,
   useGalleryPermissions,
 } from '@shared/lib';
-import { PhotoIcon } from '@shared/ui';
+import { PhotoIcon, Image } from '@shared/ui';
 
 import MediaInput from './MediaInput';
 import MediaValue from './types';
@@ -28,6 +28,7 @@ type Props = {
 const PhotoItem: FC<Props> = ({ onChange, value }) => {
   const { isCameraAccessGranted } = useCameraPermissions();
   const { isGalleryAccessGranted } = useGalleryPermissions();
+  const [pickedPhoto, setPickedPhoto] = useState(value);
 
   const pickImage = (response: ImagePickerResponse, isFromLibrary: boolean) => {
     const { assets } = response;
@@ -35,13 +36,14 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
     if (assets?.length) {
       const imageItem = assets[0];
       const photo = {
-        uri: imageItem.uri,
-        fileName: imageItem.fileName,
-        size: imageItem.fileSize,
-        type: imageItem.type,
+        uri: imageItem.uri || '',
+        fileName: imageItem.fileName || '',
+        size: imageItem.fileSize || 0,
+        type: imageItem.type || '',
         fromLibrary: isFromLibrary,
       };
 
+      setPickedPhoto(photo);
       onChange(photo);
     }
   };
@@ -68,10 +70,13 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
     <MediaInput
       onOpenCamera={onOpenPhotoCamera}
       onShowMediaLibrary={onShowImageGallery}
-      value={value}
       mode="photo"
     >
-      <PhotoIcon color={colors.red} size={50} />
+      {pickedPhoto ? (
+        <Image height="100%" width="100%" src={{ uri: pickedPhoto.uri }} />
+      ) : (
+        <PhotoIcon color={colors.red} size={50} />
+      )}
     </MediaInput>
   );
 };
