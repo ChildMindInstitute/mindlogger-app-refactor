@@ -1,6 +1,11 @@
 import { FC } from 'react';
 
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import {
+  Callback,
+  ImagePickerResponse,
+  launchCamera,
+  launchImageLibrary,
+} from 'react-native-image-picker';
 
 import {
   colors,
@@ -17,7 +22,7 @@ import MediaInput from './MediaInput';
 import MediaValue from './types';
 
 type Props = {
-  onChange: (value: MediaValue) => void;
+  onChange: (value: MediaValue) => void | Callback;
   value?: MediaValue;
 };
 
@@ -25,13 +30,31 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
   const { isCameraAccessGranted } = useCameraPermissions();
   const { isGalleryAccessGranted } = useGalleryPermissions();
 
-  const handlePickImage = (response: any) => {
-    onChange(response);
+  const handlePickImage = (
+    response: ImagePickerResponse,
+    isFromLibrary: boolean,
+  ) => {
+    const { assets } = response;
+
+    if (assets?.length) {
+      const imageItem = assets[0];
+      const photo = {
+        uri: imageItem.uri,
+        filename: imageItem.fileName,
+        size: imageItem.fileSize,
+        type: imageItem.type,
+        fromLibrary: isFromLibrary,
+      };
+
+      onChange(photo);
+    }
   };
 
   const onShowImageGallery = async () => {
     if (isGalleryAccessGranted) {
-      launchImageLibrary(GALLERY_PHOTO_OPTIONS, handlePickImage);
+      launchImageLibrary(GALLERY_PHOTO_OPTIONS, response =>
+        handlePickImage(response, true),
+      );
     } else {
       await requestGalleryPermissions();
     }
@@ -39,7 +62,9 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
 
   const onOpenPhotoCamera = async () => {
     if (isCameraAccessGranted) {
-      launchCamera(PHOTO_TAKE_OPTIONS, handlePickImage);
+      launchCamera(PHOTO_TAKE_OPTIONS, response =>
+        handlePickImage(response, false),
+      );
     } else {
       await requestCameraPermissions();
     }

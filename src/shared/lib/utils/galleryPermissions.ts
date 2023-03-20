@@ -41,7 +41,7 @@ const requestGalleryIOSPermissions = async () => {
 export const checkGalleryPermissions = () =>
   IS_ANDROID ? checkGalleryAndroidPermissions() : checkGalleryIOSPermissions();
 
-export const requestGalleryPermissions = async () =>
+export const requestGalleryPermissions = () =>
   IS_ANDROID
-    ? await requestGalleryAndroidPermissions()
-    : await requestGalleryIOSPermissions();
+    ? requestGalleryAndroidPermissions()
+    : requestGalleryIOSPermissions();
