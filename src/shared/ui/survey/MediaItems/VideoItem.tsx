@@ -29,7 +29,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
   const { isCameraAccessGranted } = useCameraPermissions();
   const { isGalleryAccessGranted } = useGalleryPermissions();
 
-  const pickImage = (response: ImagePickerResponse, isFromLibrary: boolean) => {
+  const pickVideo = (response: ImagePickerResponse, isFromLibrary: boolean) => {
     const { assets } = response;
 
     if (assets?.length) {
@@ -50,7 +50,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
     if (isGalleryAccessGranted) {
       const response = await launchImageLibrary(GALLERY_VIDEO_OPTIONS);
 
-      pickImage(response, true);
+      pickVideo(response, true);
     } else {
       await requestGalleryPermissions();
     }
@@ -60,7 +60,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
     if (isCameraAccessGranted) {
       const response = await launchCamera(VIDEO_RECORD_OPTIONS);
 
-      pickImage(response, false);
+      pickVideo(response, false);
     } else {
       await requestCameraPermissions();
     }
