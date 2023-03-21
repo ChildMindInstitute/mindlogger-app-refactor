@@ -197,9 +197,8 @@
     "alert_title": "\"MindLogger\" souhaite utiliser votre microphone pour effectuer cette tâche.",
     "alert_message": "Ceux-ci peuvent être configurés dans les paramètres.",
     "alert_button_ok": "Ouvrir les paramètres",
-    "alert_button_cancel": "Rejeter"
-  },
-  "record_button": {
+    "alert_button_cancel": "Rejeter",
+    "record_error": "Une erreur s'est produite lors de l'initialisation de l'enregistreur.",
     "stop": "STOP",
     "record": "ENREGISTREMENT",
     "recording": "Enregistrement en cours...",
