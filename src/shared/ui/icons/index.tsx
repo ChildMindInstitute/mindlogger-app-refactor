@@ -97,3 +97,7 @@ export const GeolocationIcon: FC<IconProps> = props => (
 export const PhotoIcon: FC<IconProps> = props => (
   <Entypo name="camera" {...props} />
 );
+
+export const VideoIcon: FC<IconProps> = props => (
+  <Entypo name="video-camera" {...props} />
+);

@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 
 import Config from 'react-native-config';
-import { ImageLibraryOptions } from 'react-native-image-picker';
+import { CameraOptions, ImageLibraryOptions } from 'react-native-image-picker';
 import { PERMISSIONS } from 'react-native-permissions';
 
 import { Language } from '../types';
@@ -49,10 +49,20 @@ export const GALLERY_PHOTO_OPTIONS: ImageLibraryOptions = {
   selectionLimit: 1,
 };
 
-export const VIDEO_RECORD_OPTIONS = {
+export const GALLERY_VIDEO_OPTIONS: ImageLibraryOptions = {
   mediaType: 'video',
   videoQuality: 'high',
+  quality: 0.9,
+  maxWidth: 800,
+  maxHeight: 800,
+};
+
+export const VIDEO_RECORD_OPTIONS: CameraOptions = {
+  mediaType: 'video',
+  cameraType: 'back',
+  videoQuality: 'high',
   durationLimit: 60,
+  quality: 0.9,
 };
 
 export const PHOTO_TAKE_OPTIONS: ImageLibraryOptions = {
