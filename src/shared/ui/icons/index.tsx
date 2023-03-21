@@ -101,3 +101,7 @@ export const PhotoIcon: FC<IconProps> = props => (
 export const VideoIcon: FC<IconProps> = props => (
   <Entypo name="video-camera" {...props} />
 );
+
+export const MicrophoneIcon: FC<IconProps> = props => (
+  <FontAwesome name="microphone" {...props} />
+);

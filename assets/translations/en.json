@@ -203,9 +203,8 @@
     "alert_title": "\"MindLogger\" would like to use your microphone to complete this task.",
     "alert_message": "These can be configured in Settings.",
     "alert_button_ok": "Open Settings",
-    "alert_button_cancel": "Dismiss"
-  },
-  "record_button": {
+    "alert_button_cancel": "Dismiss",
+    "record_error": "There was an error initiating recorder.",
     "stop": "STOP",
     "record": "RECORD",
     "recording": "Recording...",

@@ -71,3 +71,8 @@ export const PHOTO_TAKE_OPTIONS: ImageLibraryOptions = {
   maxHeight: 800,
   quality: 0.9,
 };
+
+export const MICROPHONE_PERMISSIONS = Platform.select({
+  android: PERMISSIONS.ANDROID.RECORD_AUDIO,
+  ios: PERMISSIONS.IOS.MICROPHONE,
+});
