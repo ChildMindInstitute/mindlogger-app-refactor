@@ -37,14 +37,6 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>MindLogger would like to use your camera</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-  	<string>MindLogger would like access to your photo gallery</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>MindLogger would like to use your location when you are using the app</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>MindLogger would like to use your microphone</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>FontAwesome.ttf</string>
@@ -73,5 +65,15 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>$(PRODUCT_NAME) would like to use your microphone.</string>
+    <key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to use your camera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+  	<string>$(PRODUCT_NAME) would like access to your photo gallery</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to use your location when you are using the app</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to use your location when you are using the app</string>
 </dict>
 </plist>
