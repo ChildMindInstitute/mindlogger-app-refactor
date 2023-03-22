@@ -9,3 +9,4 @@ export {
   default as markdownRules,
   activityMarkDownStyles,
 } from './markDownRules';
+export * from './alerts';

@@ -19,16 +19,3 @@ export const shuffle = <T>(array: Array<T>) => {
 export function range(n: number): number[] {
   return [...Array(n).keys()];
 }
-
-export function randomString(length: number) {
-  const dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  const dictLen = dict.length;
-  let counter = 0;
-
-  while (counter < length) {
-    result += dict.charAt(Math.floor(Math.random() * dictLen));
-    counter++;
-  }
-  return result;
-}

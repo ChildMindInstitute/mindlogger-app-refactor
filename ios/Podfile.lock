@@ -317,6 +317,8 @@ PODS:
     - React-Core
   - react-native-geolocation (3.0.5):
     - React-Core
+  - react-native-get-random-values (1.8.0):
+    - React-Core
   - react-native-image-picker (5.3.1):
     - React-Core
   - react-native-mmkv (2.5.1):
@@ -503,6 +505,7 @@ DEPENDENCIES:
   - react-native-file-access (from `../node_modules/react-native-file-access`)
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+  - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
@@ -605,6 +608,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-flipper"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
+  react-native-get-random-values:
+    :path: "../node_modules/react-native-get-random-values"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-mmkv:
@@ -704,6 +709,7 @@ SPEC CHECKSUMS:
   react-native-file-access: e2617a7300406307be44267b36d196c78d6b2a96
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-geolocation: 7383cbe9fa75b168bbbe40b566070fd0b44d30d6
+  react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-image-picker: ec9b713e248760bfa0f879f0715391de4651a7cb
   react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
