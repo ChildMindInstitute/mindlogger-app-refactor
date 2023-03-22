@@ -161,8 +161,8 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish }) => {
     <>
       {errorDescription.length ? <Text mb={7}>{errorDescription}</Text> : null}
 
-      <TouchableOpacity onPress={isRecording ? stop : record}>
-        <XStack ai="center">
+      <XStack ai="center">
+        <TouchableOpacity onPress={isRecording ? stop : record}>
           <XStack
             h={50}
             w={150}
@@ -178,16 +178,16 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish }) => {
 
             {renderIcon()}
           </XStack>
+        </TouchableOpacity>
 
-          <YStack>
-            <Text>{getInfoText()}</Text>
+        <YStack>
+          <Text>{getInfoText()}</Text>
 
-            {isRecording && (
-              <Text>{`${secondsElapsed} ${t('audio_recorder:seconds')}`}</Text>
-            )}
-          </YStack>
-        </XStack>
-      </TouchableOpacity>
+          {isRecording && (
+            <Text>{`${secondsElapsed} ${t('audio_recorder:seconds')}`}</Text>
+          )}
+        </YStack>
+      </XStack>
     </>
   );
 };
