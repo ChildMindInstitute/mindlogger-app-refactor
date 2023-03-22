@@ -3,16 +3,21 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 
 import { colors } from '../lib';
 
-import { BoxProps, Center, Text } from '.';
+import { ActivityIndicator, BoxProps, Center, Text } from '.';
 
 type Props = PropsWithChildren<{
   onPress: () => void;
+  isLoading?: boolean;
 }> &
   BoxProps;
 
-function Button({ onPress, children, ...styledProps }: Props) {
+function Button({ onPress, isLoading, children, ...styledProps }: Props) {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.touchable}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={styles.touchable}
+      disabled={isLoading}
+    >
       <Center
         py={8}
         bg={colors.blue2}
@@ -20,9 +25,18 @@ function Button({ onPress, children, ...styledProps }: Props) {
         w="100%"
         {...styledProps}
       >
-        <Text color="$white" fontWeight="bold" fontSize={20}>
+        <Text
+          color="$white"
+          fontWeight="bold"
+          fontSize={17}
+          opacity={isLoading ? 0 : 1}
+        >
           {children}
         </Text>
+
+        {isLoading && (
+          <ActivityIndicator position="absolute" t={0} b={0} l={0} r={0} />
+        )}
       </Center>
     </TouchableOpacity>
   );

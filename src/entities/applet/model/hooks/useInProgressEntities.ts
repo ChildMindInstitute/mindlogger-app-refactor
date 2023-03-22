@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from '@shared/lib';
 
-import { actions } from '..';
 import { onBeforeStartingActivity } from '../../lib';
 import { selectInProgressApplets } from '../selectors';
+import { actions } from '../slice';
 
 function useInProgressEntities(appletId: string) {
   const dispatch = useAppDispatch();
@@ -11,7 +11,7 @@ function useInProgressEntities(appletId: string) {
   const selectEntityEvent = (entityId: string, eventId: string) =>
     inProgressApplets[appletId]?.[entityId]?.[eventId];
 
-  function restartActivity(activityId: string, eventId: string) {
+  function activityStarted(activityId: string, eventId: string) {
     dispatch(
       actions.activityStarted({
         appletId,
@@ -21,7 +21,7 @@ function useInProgressEntities(appletId: string) {
     );
   }
 
-  function restartFlow(flowId: string, activityId: string, eventId: string) {
+  function flowStarted(flowId: string, activityId: string, eventId: string) {
     dispatch(
       actions.flowStarted({
         appletId,
@@ -38,10 +38,14 @@ function useInProgressEntities(appletId: string) {
 
       if (event) {
         onBeforeStartingActivity({
-          onRestart: () => restartActivity(activityId, eventId),
+          onRestart: () => {
+            activityStarted(activityId, eventId);
+            resolve(event);
+          },
           onResume: () => resolve(event),
         });
       } else {
+        activityStarted(activityId, eventId);
         resolve(event);
       }
     });
@@ -53,10 +57,14 @@ function useInProgressEntities(appletId: string) {
 
       if (event) {
         onBeforeStartingActivity({
-          onRestart: () => restartFlow(flowId, activityId, eventId),
+          onRestart: () => {
+            flowStarted(flowId, activityId, eventId);
+            resolve(event);
+          },
           onResume: () => resolve(event),
         });
       } else {
+        flowStarted(flowId, activityId, eventId);
         resolve(event);
       }
     });

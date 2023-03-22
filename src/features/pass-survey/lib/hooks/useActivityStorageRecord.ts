@@ -12,6 +12,7 @@ export type ActivityState = {
   step: number;
   items: PipelineItem[];
   answers: Record<string, any>;
+  appletVersion: string;
 };
 
 export function useActivityStorageRecord({
@@ -26,13 +27,13 @@ export function useActivityStorageRecord({
   const [activityStorageRecord, upsertActivityStorageRecord] =
     useMMKVObject<ActivityState>(key, storage);
 
-  function clearActivityStorage() {
+  function clearActivityStorageRecord() {
     storage.delete(key);
   }
 
   return {
     activityStorageRecord,
     upsertActivityStorageRecord,
-    clearActivityStorage,
+    clearActivityStorageRecord,
   };
 }

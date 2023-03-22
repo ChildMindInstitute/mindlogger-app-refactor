@@ -21,23 +21,16 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
   const { startFlow, startActivity } =
     AppletModel.useInProgressEntities(appletId);
 
-  function openActivitySurvey(activityId: string, eventId: string) {
-    navigate('InProgressActivity', {
-      appletId,
-      activityId,
-      eventId,
-    });
-  }
-
-  function openFlowOfSurveys(
-    flowId: string,
+  function navigateSurvey(
     activityId: string,
     eventId: string,
+    flowId?: string,
   ) {
     navigate('InProgressActivity', {
       appletId,
       activityId,
       eventId,
+      flowId,
     });
   }
 
@@ -48,11 +41,11 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
   }: ActivityListItem) => {
     if (flowId) {
       startFlow(flowId, activityId, eventId).then(() => {
-        openFlowOfSurveys(flowId, activityId, eventId);
+        navigateSurvey(activityId, eventId, flowId);
       });
     } else {
       startActivity(activityId, eventId).then(() => {
-        openActivitySurvey(activityId, eventId);
+        navigateSurvey(activityId, eventId);
       });
     }
   };

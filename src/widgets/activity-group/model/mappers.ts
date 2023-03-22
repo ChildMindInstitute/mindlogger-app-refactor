@@ -17,6 +17,8 @@ export function mapActivityFlowFromDto(
 ): ActivityFlow {
   return {
     ...activity,
+    items: activity.activityIds.map(activityId => ({ activityId })),
+    image: null,
     pipelineType: ActivityPipelineType.Flow,
   };
 }
