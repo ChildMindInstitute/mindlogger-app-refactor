@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class CustomButton: UIButton {
   var closureDate: ((CFTimeInterval) -> Void)? = nil

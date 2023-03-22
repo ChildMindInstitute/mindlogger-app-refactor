@@ -8,6 +8,54 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* MindloggerMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MindloggerMobileTests.m */; };
+		014B5A6929CAFAF600882214 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2129C88A590089AB98 /* CustomButton.swift */; };
+		014B5A6A29CAFAF600882214 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2129C88A590089AB98 /* CustomButton.swift */; };
+		014B5A6B29CAFAF700882214 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2129C88A590089AB98 /* CustomButton.swift */; };
+		014B5A6C29CAFB1000882214 /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2029C88A590089AB98 /* CustomText.swift */; };
+		014B5A6D29CAFB1100882214 /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2029C88A590089AB98 /* CustomText.swift */; };
+		014B5A6E29CAFB1100882214 /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2029C88A590089AB98 /* CustomText.swift */; };
+		014B5A6F29CAFB4E00882214 /* FlankerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2229C88A590089AB98 /* FlankerView.swift */; };
+		014B5A7029CAFB4E00882214 /* FlankerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2229C88A590089AB98 /* FlankerView.swift */; };
+		014B5A7129CAFB4F00882214 /* FlankerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2229C88A590089AB98 /* FlankerView.swift */; };
+		014B5A7229CAFB5300882214 /* FlankerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2329C88A590089AB98 /* FlankerViewManager.m */; };
+		014B5A7329CAFB5300882214 /* FlankerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2329C88A590089AB98 /* FlankerViewManager.m */; };
+		014B5A7429CAFB5400882214 /* FlankerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2329C88A590089AB98 /* FlankerViewManager.m */; };
+		014B5A7529CAFB5700882214 /* FlankerViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2629C88A590089AB98 /* FlankerViewManager.swift */; };
+		014B5A7629CAFB5800882214 /* FlankerViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2629C88A590089AB98 /* FlankerViewManager.swift */; };
+		014B5A7729CAFB5800882214 /* FlankerViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2629C88A590089AB98 /* FlankerViewManager.swift */; };
+		014B5A7829CAFB5B00882214 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1B29C88A580089AB98 /* GameManager.swift */; };
+		014B5A7929CAFB5B00882214 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1B29C88A580089AB98 /* GameManager.swift */; };
+		014B5A7A29CAFB5C00882214 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1B29C88A580089AB98 /* GameManager.swift */; };
+		014B5A7B29CAFB6000882214 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2429C88A590089AB98 /* ImageLoader.swift */; };
+		014B5A7C29CAFB6100882214 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2429C88A590089AB98 /* ImageLoader.swift */; };
+		014B5A7D29CAFB6100882214 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2429C88A590089AB98 /* ImageLoader.swift */; };
+		014B5A7E29CAFB6600882214 /* ParameterGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1929C88A580089AB98 /* ParameterGameManager.swift */; };
+		014B5A7F29CAFB6600882214 /* ParameterGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1929C88A580089AB98 /* ParameterGameManager.swift */; };
+		014B5A8029CAFB6600882214 /* ParameterGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1929C88A580089AB98 /* ParameterGameManager.swift */; };
+		014B5A8129CAFB6A00882214 /* ParameterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1F29C88A590089AB98 /* ParameterModel.swift */; };
+		014B5A8229CAFB6A00882214 /* ParameterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1F29C88A590089AB98 /* ParameterModel.swift */; };
+		014B5A8329CAFB6B00882214 /* ParameterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1F29C88A590089AB98 /* ParameterModel.swift */; };
+		014B5A8429CAFB6D00882214 /* ResultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1D29C88A580089AB98 /* ResultManager.swift */; };
+		014B5A8529CAFB6F00882214 /* ResultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1D29C88A580089AB98 /* ResultManager.swift */; };
+		014B5A8629CAFB6F00882214 /* ResultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1D29C88A580089AB98 /* ResultManager.swift */; };
+		014B5A8729CAFB7200882214 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2929C88A590089AB98 /* ResultView.swift */; };
+		014B5A8829CAFB7200882214 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2929C88A590089AB98 /* ResultView.swift */; };
+		014B5A8929CAFB7300882214 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2929C88A590089AB98 /* ResultView.swift */; };
+		014B5A8A29CAFB7600882214 /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */; };
+		014B5A8B29CAFB7600882214 /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */; };
+		014B5A8C29CAFB7700882214 /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */; };
+		014B5A8D29CAFB7A00882214 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */; };
+		014B5A8E29CAFB7A00882214 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */; };
+		014B5A8F29CAFB7B00882214 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */; };
+		014B5A9029CAFB7E00882214 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */; };
+		014B5A9129CAFB7E00882214 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */; };
+		014B5A9229CAFB7F00882214 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */; };
+		014B5A9329CAFB8200882214 /* UITextFild+Extesion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */; };
+		014B5A9429CAFB8300882214 /* UITextFild+Extesion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */; };
+		014B5A9529CAFB8300882214 /* UITextFild+Extesion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */; };
+		014B5A9629CAFBB000882214 /* FlankerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1C29C88A580089AB98 /* FlankerModel.swift */; };
+		014B5A9729CAFBB100882214 /* FlankerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1C29C88A580089AB98 /* FlankerModel.swift */; };
+		014B5A9829CAFBB200882214 /* FlankerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1C29C88A580089AB98 /* FlankerModel.swift */; };
 		01D339DF29C2E672003935D9 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
 		01D339E129C2E8B6003935D9 /* FlankerSandboxViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339E029C2E8B6003935D9 /* FlankerSandboxViewManager.swift */; };
 		01D339E329C2F014003935D9 /* FlankerSandboxViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D339E229C2F014003935D9 /* FlankerSandboxViewManager.m */; };
@@ -1045,9 +1093,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				014B5A7429CAFB5400882214 /* FlankerViewManager.m in Sources */,
+				014B5A8329CAFB6B00882214 /* ParameterModel.swift in Sources */,
+				014B5A8C29CAFB7700882214 /* TimeInterval+Extension.swift in Sources */,
+				014B5A7A29CAFB5C00882214 /* GameManager.swift in Sources */,
+				014B5A9229CAFB7F00882214 /* UIImageView+Extensions.swift in Sources */,
+				014B5A7D29CAFB6100882214 /* ImageLoader.swift in Sources */,
+				014B5A6B29CAFAF700882214 /* CustomButton.swift in Sources */,
+				014B5A9829CAFBB200882214 /* FlankerModel.swift in Sources */,
+				014B5A8929CAFB7300882214 /* ResultView.swift in Sources */,
+				014B5A8F29CAFB7B00882214 /* UIColor+Extension.swift in Sources */,
 				F87E174F29771F200021550E /* AppDelegate.mm in Sources */,
+				014B5A9529CAFB8300882214 /* UITextFild+Extesion.swift in Sources */,
+				014B5A8029CAFB6600882214 /* ParameterGameManager.swift in Sources */,
 				F87E175029771F200021550E /* main.m in Sources */,
+				014B5A7729CAFB5800882214 /* FlankerViewManager.swift in Sources */,
 				288FAA9A29C882AB0089AB98 /* FlankerSandboxView.swift in Sources */,
+				014B5A7129CAFB4F00882214 /* FlankerView.swift in Sources */,
+				014B5A8529CAFB6F00882214 /* ResultManager.swift in Sources */,
+				014B5A6E29CAFB1100882214 /* CustomText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1055,9 +1119,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				014B5A7329CAFB5300882214 /* FlankerViewManager.m in Sources */,
+				014B5A8229CAFB6A00882214 /* ParameterModel.swift in Sources */,
+				014B5A8B29CAFB7600882214 /* TimeInterval+Extension.swift in Sources */,
+				014B5A7929CAFB5B00882214 /* GameManager.swift in Sources */,
+				014B5A9129CAFB7E00882214 /* UIImageView+Extensions.swift in Sources */,
+				014B5A7C29CAFB6100882214 /* ImageLoader.swift in Sources */,
+				014B5A6A29CAFAF600882214 /* CustomButton.swift in Sources */,
+				014B5A9729CAFBB100882214 /* FlankerModel.swift in Sources */,
+				014B5A8829CAFB7200882214 /* ResultView.swift in Sources */,
+				014B5A8E29CAFB7A00882214 /* UIColor+Extension.swift in Sources */,
 				F87E176629771F290021550E /* AppDelegate.mm in Sources */,
+				014B5A9429CAFB8300882214 /* UITextFild+Extesion.swift in Sources */,
+				014B5A7F29CAFB6600882214 /* ParameterGameManager.swift in Sources */,
 				F87E176729771F290021550E /* main.m in Sources */,
+				014B5A7629CAFB5800882214 /* FlankerViewManager.swift in Sources */,
 				288FAA9B29C882AC0089AB98 /* FlankerSandboxView.swift in Sources */,
+				014B5A7029CAFB4E00882214 /* FlankerView.swift in Sources */,
+				014B5A8629CAFB6F00882214 /* ResultManager.swift in Sources */,
+				014B5A6D29CAFB1100882214 /* CustomText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1065,9 +1145,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				014B5A7229CAFB5300882214 /* FlankerViewManager.m in Sources */,
+				014B5A8129CAFB6A00882214 /* ParameterModel.swift in Sources */,
+				014B5A8A29CAFB7600882214 /* TimeInterval+Extension.swift in Sources */,
+				014B5A7829CAFB5B00882214 /* GameManager.swift in Sources */,
+				014B5A9029CAFB7E00882214 /* UIImageView+Extensions.swift in Sources */,
+				014B5A7B29CAFB6000882214 /* ImageLoader.swift in Sources */,
+				014B5A6929CAFAF600882214 /* CustomButton.swift in Sources */,
+				014B5A9629CAFBB000882214 /* FlankerModel.swift in Sources */,
+				014B5A8729CAFB7200882214 /* ResultView.swift in Sources */,
+				014B5A8D29CAFB7A00882214 /* UIColor+Extension.swift in Sources */,
 				F87E177D29771F310021550E /* AppDelegate.mm in Sources */,
+				014B5A9329CAFB8200882214 /* UITextFild+Extesion.swift in Sources */,
+				014B5A7E29CAFB6600882214 /* ParameterGameManager.swift in Sources */,
 				F87E177E29771F310021550E /* main.m in Sources */,
+				014B5A7529CAFB5700882214 /* FlankerViewManager.swift in Sources */,
 				288FAA9C29C882B00089AB98 /* FlankerSandboxView.swift in Sources */,
+				014B5A6F29CAFB4E00882214 /* FlankerView.swift in Sources */,
+				014B5A8429CAFB6D00882214 /* ResultManager.swift in Sources */,
+				014B5A6C29CAFB1000882214 /* CustomText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

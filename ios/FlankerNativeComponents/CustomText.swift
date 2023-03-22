@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class CustomText: UILabel {
   var closureDate: ((CFTimeInterval) -> Void)? = nil

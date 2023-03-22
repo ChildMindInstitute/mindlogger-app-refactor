@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Foundation
+import React
 
 class FlankerView: UIView {
   static let shared = FlankerView()

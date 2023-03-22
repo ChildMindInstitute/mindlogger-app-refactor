@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum ButtonType {
   case ok

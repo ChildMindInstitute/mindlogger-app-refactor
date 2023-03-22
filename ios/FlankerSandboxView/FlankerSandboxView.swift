@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import React
 
 @objc(FlankerSandboxView)
 class FlankerSandboxView: UIView {

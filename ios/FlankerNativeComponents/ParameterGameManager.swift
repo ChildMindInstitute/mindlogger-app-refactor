@@ -7,7 +7,8 @@
 //
 
 import Foundation
-
+import UIKit
+ 
 class ParameterGameManager {
   static let shared = ParameterGameManager()
   private var allParameters: ParameterModel?
