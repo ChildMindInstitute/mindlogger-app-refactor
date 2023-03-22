@@ -1,22 +1,21 @@
 import { useState, useRef, useEffect, useCallback, useMemo, FC } from 'react';
-import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Alert } from 'react-native';
 
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import AudioRecorderPlayer, {
   AudioSet,
 } from 'react-native-audio-recorder-player';
-import Permissions, { RESULTS, openSettings } from 'react-native-permissions';
+import Permissions, { RESULTS } from 'react-native-permissions';
 import RNFetchBlob from 'rn-fetch-blob';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
+import { getMicrophonePermissions, IS_ANDROID } from '@app/shared/lib';
 import {
-  getMicrophonePermissions,
-  IS_ANDROID,
-  randomString,
-} from '@app/shared/lib';
-import { useMicrophonePermissions } from '@shared/lib';
+  useMicrophonePermissions,
+  handleMicrophoneBlockedPermissions,
+} from '@shared/lib';
 import { StopIcon, MicrophoneIcon, XStack, Text, YStack } from '@shared/ui';
 
 const audioSetConfig: AudioSet = {
@@ -42,48 +41,23 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish }) => {
   const [errorDescription, setErrorDescription] = useState('');
   const permissionNotGranted = microphonePermission !== RESULTS.GRANTED;
 
-  const filePath = useMemo(
-    () =>
-      IS_ANDROID
-        ? `${androidCacheDir}/${randomString(20)}.mp4`
-        : `${randomString(20)}.m4a`,
-    [],
-  );
+  const filePath = useMemo(() => {
+    const randomString = uuidv4();
+    return IS_ANDROID
+      ? `${androidCacheDir}/${randomString}.mp4`
+      : `${randomString}.m4a`;
+  }, []);
 
   const checkMicrophonePermission = async () => {
     if (permissionNotGranted) {
       const result = await getMicrophonePermissions();
+
       if (result === Permissions.RESULTS.BLOCKED) {
-        return await handleBlockedPermissions();
+        return await handleMicrophoneBlockedPermissions();
       }
     }
     return true;
   };
-
-  const handleBlockedPermissions = async () =>
-    new Promise(resolve => {
-      Alert.alert(
-        t('audio_recorder:alert_title'),
-        t('audio_recorder:alert_message'),
-        [
-          {
-            text: t('audio_recorder:alert_button_cancel'),
-            onPress: () => {
-              resolve(false);
-            },
-            style: 'cancel',
-          },
-          {
-            text: t('audio_recorder:alert_button_ok'),
-            onPress: async () => {
-              await openSettings();
-              resolve(false);
-            },
-            style: 'default',
-          },
-        ],
-      );
-    });
 
   const destroy = () => {
     audioRecorderPlayer.current.stopRecorder();
@@ -104,6 +78,7 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish }) => {
           const elapsedSeconds = Math.floor(currentPosition / 1000);
           setSecondsElapsed(elapsedSeconds);
           setIsRecording(true);
+
           if (maxLength <= elapsedSeconds) {
             stop();
           }
