@@ -2,8 +2,8 @@ import { ActivityStepper } from '@app/features/pass-survey';
 import { colors } from '@app/shared/lib';
 import { BackButton, Box, CrossIcon } from '@app/shared/ui';
 
-import FinishItem from './FinishItem';
-import IntermediateItem from './IntermediateItem';
+import Finish from './Finish';
+import Intermediate from './Intermediate';
 import { FlowPipelineItem } from '../model';
 
 type Props = {
@@ -12,7 +12,13 @@ type Props = {
   onComplete: () => void;
 } & FlowPipelineItem;
 
-function SurveyItem({ type, payload, onBack, onClose, onComplete }: Props) {
+function FlowSurveySwitch({
+  type,
+  payload,
+  onBack,
+  onClose,
+  onComplete,
+}: Props) {
   switch (type) {
     case 'Stepper': {
       return (
@@ -32,14 +38,14 @@ function SurveyItem({ type, payload, onBack, onClose, onComplete }: Props) {
 
     case 'Intermediate': {
       return (
-        <IntermediateItem {...payload} onClose={onBack} onFinish={onComplete} />
+        <Intermediate {...payload} onClose={onBack} onFinish={onComplete} />
       );
     }
 
     case 'Finish': {
-      return <FinishItem {...payload} onClose={onClose} />;
+      return <Finish {...payload} onClose={onClose} />;
     }
   }
 }
 
-export default SurveyItem;
+export default FlowSurveySwitch;

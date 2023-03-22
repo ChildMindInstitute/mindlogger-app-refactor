@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -18,8 +18,6 @@ type Props = {
 };
 
 function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
-  const shouldSendAnswers = useRef(true);
-
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -34,11 +32,7 @@ function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
     mutate: sendAnswers,
     isLoading: isSendingAnswers,
     isSuccess: successfullySentAnswers,
-  } = useActivityAnswersMutation({
-    onSuccess: () => {
-      cleanup();
-    },
-  });
+  } = useActivityAnswersMutation();
 
   function completeActivity() {
     if (!activityStorageRecord) {
@@ -60,25 +54,14 @@ function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
       version: activityStorageRecord.appletVersion,
       answers: activityStorageRecord.answers as any,
     });
-  }
-
-  function cleanup() {
-    dispatch(
-      AppletModel.actions.entityAnswersSent({
-        appletId,
-        eventId,
-        entityId: flowId ? flowId : activityId,
-      }),
-    );
 
     clearActivityStorageRecord();
   }
 
-  if (shouldSendAnswers.current) {
-    shouldSendAnswers.current = false;
-
-    setImmediate(completeActivity);
-  }
+  useEffect(() => {
+    completeActivity();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <ImageBackground>

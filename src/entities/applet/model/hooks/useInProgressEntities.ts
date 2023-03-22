@@ -36,7 +36,7 @@ function useInProgressEntities(appletId: string) {
     return new Promise(resolve => {
       const event = selectEntityEvent(activityId, eventId);
 
-      if (event) {
+      if (event && !event.endAt) {
         onBeforeStartingActivity({
           onRestart: () => {
             activityStarted(activityId, eventId);
@@ -55,7 +55,7 @@ function useInProgressEntities(appletId: string) {
     return new Promise(resolve => {
       const event = selectEntityEvent(flowId, eventId);
 
-      if (event) {
+      if (event && !event.endAt) {
         onBeforeStartingActivity({
           onRestart: () => {
             flowStarted(flowId, activityId, eventId);

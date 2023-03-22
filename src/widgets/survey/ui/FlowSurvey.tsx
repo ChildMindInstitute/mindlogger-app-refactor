@@ -1,4 +1,4 @@
-import SurveyItem from './SurveyItem';
+import FlowElementSwitch from './FlowElementSwitch';
 import { useFlowState } from '../model';
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
   onClose: () => void;
 };
 
-function Survey({ appletId, activityId, eventId, onClose, flowId }: Props) {
+function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
   const { next, back, step, pipeline } = useFlowState({
     appletId,
     activityId,
@@ -30,7 +30,7 @@ function Survey({ appletId, activityId, eventId, onClose, flowId }: Props) {
   }
 
   return (
-    <SurveyItem
+    <FlowElementSwitch
       {...currentPipelineItem}
       onClose={onClose}
       onBack={back}
@@ -39,4 +39,4 @@ function Survey({ appletId, activityId, eventId, onClose, flowId }: Props) {
   );
 }
 
-export default Survey;
+export default FlowSurvey;

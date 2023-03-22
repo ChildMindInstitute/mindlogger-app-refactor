@@ -46,7 +46,7 @@ type BuildPipelineArgs = {
   fromActivityId: string;
 };
 
-export function buildPipeline({
+export function buildMultipleActivitiesPipeline({
   appletId,
   eventId,
   flowId,
@@ -101,7 +101,7 @@ type BuildSinglePipelineArgs = {
   activityId: string;
 };
 
-export function buildSinglePipeline({
+export function buildSingleActivityPipeline({
   appletId,
   eventId,
   activityId,

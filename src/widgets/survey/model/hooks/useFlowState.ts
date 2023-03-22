@@ -2,7 +2,10 @@ import { useMemo, useState } from 'react';
 
 import { useAppletDetailsQuery } from '@app/entities/applet';
 
-import { buildPipeline, buildSinglePipeline } from '../pipelineBuilder';
+import {
+  buildMultipleActivitiesPipeline,
+  buildSingleActivityPipeline,
+} from '../pipelineBuilder';
 
 export type UseFlowStateArgs = {
   appletId: string;
@@ -29,7 +32,7 @@ export function useFlowState({
     }
 
     if (!flowId) {
-      return buildSinglePipeline({ appletId, eventId, activityId });
+      return buildSingleActivityPipeline({ appletId, eventId, activityId });
     }
 
     let activityIds = applet.activityFlows.find(
@@ -42,7 +45,7 @@ export function useFlowState({
     }
 
     return activityIds
-      ? buildPipeline({
+      ? buildMultipleActivitiesPipeline({
           fromActivityId: activityId,
           activityIds,
           appletId,

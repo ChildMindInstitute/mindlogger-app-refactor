@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { Survey } from '@app/widgets/survey';
+import { FlowSurvey } from '@app/widgets/survey';
 import { RootStackParamList } from '@screens/config';
 import { Box, StatusBar } from '@shared/ui';
 
@@ -15,7 +15,7 @@ const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
     <Box flex={1} backgroundColor="white">
       <StatusBar hidden />
 
-      <Survey
+      <FlowSurvey
         appletId={appletId}
         activityId={activityId}
         eventId={eventId}
