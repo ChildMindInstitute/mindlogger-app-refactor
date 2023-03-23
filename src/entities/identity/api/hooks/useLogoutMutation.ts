@@ -7,7 +7,7 @@ import {
 type Options = MutationOptions<typeof IdentityService.logout>;
 
 export const useLogoutMutation = (options?: Options) => {
-  return useBaseMutation(['logout'], IdentityService.logout, {
+  return useBaseMutation(IdentityService.logout, {
     ...options,
     cacheTime: 0,
   });

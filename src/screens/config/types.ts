@@ -12,7 +12,13 @@ export type RootStackParamList = {
   AppletDetails: { appletId: string; title: string };
   Settings: undefined;
   ChangePassword: undefined;
-  InProgressActivity: { appletId: string; activityId: string; eventId: string };
+  InProgressActivity: {
+    appletId: string;
+    activityId: string;
+    eventId: string;
+    flowId?: string;
+  };
+  ActivityPassedScreen: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

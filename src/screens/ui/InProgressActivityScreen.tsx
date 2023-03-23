@@ -1,32 +1,27 @@
 import { FC } from 'react';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { ActivityStepper } from '@features/pass-survey';
+import { FlowSurvey } from '@app/widgets/survey';
 import { RootStackParamList } from '@screens/config';
-import { colors } from '@shared/lib';
-import { BackButton, Box, CrossIcon, StatusBar } from '@shared/ui';
+import { Box, StatusBar } from '@shared/ui';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'InProgressActivity'>;
 
-const InProgressActivityScreen: FC<Props> = ({ navigation }) => {
-  const { bottom } = useSafeAreaInsets();
+const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
+  const { appletId, activityId, eventId, flowId } = route.params;
 
   return (
-    <Box flex={1} backgroundColor="white" pb={bottom}>
+    <Box flex={1} backgroundColor="white">
       <StatusBar hidden />
 
-      <BackButton alignSelf="flex-end" mr={16} mt={10} mb={4}>
-        <CrossIcon color={colors.tertiary} size={30} />
-      </BackButton>
-
-      <Box flex={1}>
-        <ActivityStepper
-          onClose={() => navigation.goBack()}
-          onFinish={() => navigation.goBack()}
-        />
-      </Box>
+      <FlowSurvey
+        appletId={appletId}
+        activityId={activityId}
+        eventId={eventId}
+        flowId={flowId}
+        onClose={() => navigation.goBack()}
+      />
     </Box>
   );
 };

@@ -10,19 +10,28 @@ export type ActivityRecordDto = {
   image: string;
   isReviewable: boolean;
   isSkippable: boolean;
-  ordering: boolean;
+  ordering: number;
   splashScreen: string;
 };
 
 export type ActivityFlowRecordDto = {
   id: string;
   name: string;
-  image: string;
   description: string;
   hideBadge: boolean;
   isSingleReport: boolean;
-  ordering: boolean;
-  items: Array<{ activityId: string }>;
+  ordering: number;
+  activityIds: string[];
+};
+
+export type ThemeDto = {
+  id: string;
+  name: string;
+  logo: string;
+  backgroundImage: string;
+  primaryColor: string;
+  secondaryColor: string;
+  tertiaryColor: string;
 };
 
 export type AppletDetailsDto = {
@@ -34,7 +43,7 @@ export type AppletDetailsDto = {
   about: string;
   image: string | null;
   watermark: string | null;
-  themeId: number | null;
+  theme: ThemeDto | null;
   activities: ActivityRecordDto[];
   activityFlows: ActivityFlowRecordDto[];
 };
@@ -62,7 +71,7 @@ export type AppletDto = {
   displayName: string;
   description: string;
   numberOverdue?: number;
-  themeId: string | null;
+  theme: ThemeDto | null;
 };
 
 export type AppletsResponse = {

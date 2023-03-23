@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, useLayoutEffect, useState } from 'react';
+import React, { FC, PropsWithChildren, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
@@ -10,6 +10,7 @@ import ActivityIndicator from './ActivityIndicator';
 
 type Props = {
   uri?: string;
+  loader?: JSX.Element;
 } & XStackProps;
 
 const DEFAULT_IMAGE =
@@ -21,6 +22,7 @@ const AnimatedView = styled(Animated.View, {
 
 const ImageBackground: FC<PropsWithChildren<Props>> = ({
   children,
+  loader,
   uri = DEFAULT_IMAGE,
   ...styledProps
 }) => {
@@ -31,10 +33,6 @@ const ImageBackground: FC<PropsWithChildren<Props>> = ({
   const onError = () => {
     setSource(DEFAULT_IMAGE);
   };
-
-  useLayoutEffect(() => {
-    setSource(uri);
-  }, [uri]);
 
   return (
     <XStack flex={1} bg="$white" {...styledProps}>
@@ -50,8 +48,10 @@ const ImageBackground: FC<PropsWithChildren<Props>> = ({
         onError={onError}
       />
 
+      {loader && isLoading && loader}
+
       {!isLoading && (
-        <AnimatedView entering={FadeIn.duration(500)}>{children}</AnimatedView>
+        <AnimatedView entering={FadeIn.duration(300)}>{children}</AnimatedView>
       )}
     </XStack>
   );

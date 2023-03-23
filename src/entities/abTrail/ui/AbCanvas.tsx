@@ -42,7 +42,7 @@ type Props = {
   width: number;
   onLogResult: (data: OnResultLog) => void;
   onMessage: (message: MessageType) => void;
-  onComplete: () => void;
+  onComplete: (logLines: LogLine[]) => void;
 } & BoxProps;
 
 const AbCanvas: FC<Props> = props => {
@@ -118,9 +118,9 @@ const AbCanvas: FC<Props> = props => {
     }
   };
 
-  const isOverNode = (pointToCheck: Point, roundIndexToCheck: number) => {
+  const isOverNode = (pointToCheck: Point, nodeIndexToCheck: number) => {
     const node = findNodeByPoint(pointToCheck);
-    return !!node && node.orderIndex === roundIndexToCheck;
+    return !!node && node.orderIndex === nodeIndexToCheck;
   };
 
   const isOverCurrent = (point: Point) => {
@@ -277,7 +277,7 @@ const AbCanvas: FC<Props> = props => {
         currentIndex: getCurrentIndex() + 1,
       });
       onMessage(MessageType.Completed);
-      onComplete();
+      onComplete(logLines);
       return;
     }
 

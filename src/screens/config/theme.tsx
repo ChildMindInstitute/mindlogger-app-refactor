@@ -33,7 +33,9 @@ export const getScreenOptions = ({ navigation }: ScreenOptions) => {
   };
 };
 
-export const getAppletDetailsScreenOptions = (appletTheme?: AppletTheme) => {
+export const getAppletDetailsScreenOptions = (
+  appletTheme: AppletTheme | null,
+) => {
   return ({ route }: BottomScreenOptions): BottomTabNavigationOptions => {
     const tabBarIcon = (color: string) => {
       switch (route.name) {

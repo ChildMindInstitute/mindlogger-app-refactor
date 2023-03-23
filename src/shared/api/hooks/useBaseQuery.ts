@@ -41,10 +41,10 @@ const useBaseQuery = <TQueryFnData, TError = BaseError, TData = TQueryFnData>(
       }
 
       if (options?.onError) {
-        options?.onError(error as TError);
+        options?.onError(error as unknown as TError);
       }
     },
-  } as typeof options);
+  } as unknown as typeof options);
 };
 
 export default useBaseQuery;

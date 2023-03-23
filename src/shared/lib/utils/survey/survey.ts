@@ -1,5 +1,11 @@
 import { colors } from '@shared/lib/constants';
 
+import {
+  MarkdownVariableReplacer,
+  Answer,
+  ActivityItems,
+} from './markdownVariableReplacer';
+
 export const invertColor = (hex: string) => {
   const RED_RATIO = 299;
   const GREEN_RATIO = 587;
@@ -13,4 +19,9 @@ export const invertColor = (hex: string) => {
   return yiqColorSpaceValue >= 128 ? colors.darkerGrey : colors.white;
 };
 
-export const replaceTextWithScreenVariables = (string: string) => string; // @todo complete this function
+export const replaceTextWithScreenVariables = (markdown: string): string => {
+  const activityItems: ActivityItems = []; //@todo get these from some storage?
+  const answers: Answer[] = [];
+  const replacer = new MarkdownVariableReplacer(activityItems, answers);
+  return replacer.process(markdown);
+};

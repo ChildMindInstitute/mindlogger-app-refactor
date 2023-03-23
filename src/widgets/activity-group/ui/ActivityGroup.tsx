@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { ActivityList, ActivityListItem } from '@entities/activity';
+import { AppletModel } from '@entities/applet';
 import { Box, BoxProps, Text } from '@shared/ui';
 
 import { ActivityListGroup } from '../lib';
@@ -17,12 +18,36 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
   const { t } = useTranslation();
   const { navigate } = useNavigation();
 
-  const navigateActivity = (activity: ActivityListItem) => {
+  const { startFlow, startActivity } =
+    AppletModel.useInProgressEntities(appletId);
+
+  function navigateSurvey(
+    activityId: string,
+    eventId: string,
+    flowId?: string,
+  ) {
     navigate('InProgressActivity', {
       appletId,
-      activityId: activity.activityId,
-      eventId: activity.eventId,
+      activityId,
+      eventId,
+      flowId,
     });
+  }
+
+  const startActivityOrFlow = ({
+    activityId,
+    eventId,
+    flowId,
+  }: ActivityListItem) => {
+    if (flowId) {
+      startFlow(flowId, activityId, eventId).then(() => {
+        navigateSurvey(activityId, eventId, flowId);
+      });
+    } else {
+      startActivity(activityId, eventId).then(() => {
+        navigateSurvey(activityId, eventId);
+      });
+    }
   };
 
   return (
@@ -37,7 +62,7 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
 
       <ActivityList
         activities={group.activities}
-        onCardPress={navigateActivity}
+        onCardPress={startActivityOrFlow}
       />
     </Box>
   );

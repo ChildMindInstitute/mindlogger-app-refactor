@@ -7,12 +7,8 @@ import {
 type Options = MutationOptions<typeof IdentityService.passwordRecover>;
 
 export const usePasswordRecoveryMutation = (options?: Options) => {
-  return useBaseMutation(
-    ['password-recovery'],
-    IdentityService.passwordRecover,
-    {
-      ...options,
-      cacheTime: 0,
-    },
-  );
+  return useBaseMutation(IdentityService.passwordRecover, {
+    ...options,
+    cacheTime: 0,
+  });
 };

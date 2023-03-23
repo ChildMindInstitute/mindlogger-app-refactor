@@ -11,7 +11,6 @@ import { DEFAULT_LANGUAGE, Language } from '@app/shared/lib';
 import { BaseError } from '../types';
 
 const useBaseMutation = <TRequest, TResponse>(
-  key: string[],
   mutationFn: MutationFunction<AxiosResponse<TResponse, BaseError>, TRequest>,
   options?: Omit<
     UseMutationOptions<
@@ -19,12 +18,12 @@ const useBaseMutation = <TRequest, TResponse>(
       BaseError,
       TRequest
     >,
-    'mutationKey' | 'mutationFn'
+    'mutationFn'
   >,
 ) => {
   const { i18n } = useTranslation();
 
-  return useMutation(key, mutationFn, {
+  return useMutation(mutationFn, {
     ...options,
     onError: (error: BaseError, variables: TRequest, context: unknown) => {
       const errorRecords = error.response?.data?.result;

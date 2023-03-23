@@ -7,7 +7,7 @@ import {
 type Options = MutationOptions<typeof IdentityService.signUp>;
 
 export const useSignUpMutation = (options?: Options) => {
-  return useBaseMutation(['login'], IdentityService.signUp, {
+  return useBaseMutation(IdentityService.signUp, {
     ...options,
     cacheTime: 0,
   });
