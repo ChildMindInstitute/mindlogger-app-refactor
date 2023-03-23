@@ -1,10 +1,16 @@
-export type ActivityItemType = 'AbTest' | 'Splash';
+export type ActivityItemType = 'AbTest' | 'DrawingTest' | 'Splash';
 
 type AbTestConfig = {
   device: 'Phone' | 'Tablet';
 };
 
-export type ActivityItemConfig = AbTestConfig | null;
+type DrawingTestTestConfig = {
+  instruction: string | null;
+  imageUrl: string | null;
+  backgroundImageUrl: string | null;
+};
+
+export type ActivityItemConfig = AbTestConfig | DrawingTestTestConfig | null;
 
 type ActivityItemBase = {
   id: number;
@@ -29,7 +35,15 @@ interface SplashActivityItem extends ActivityItemBase {
   config: null;
 }
 
-export type ActivityItem = AbTestActivityItem | SplashActivityItem;
+interface DrawingTestTestActivityItem extends ActivityItemBase {
+  inputType: 'DrawingTest';
+  config: DrawingTestTestConfig;
+}
+
+export type ActivityItem =
+  | AbTestActivityItem
+  | SplashActivityItem
+  | DrawingTestTestActivityItem;
 
 export type ActivityDetails = {
   id: string;

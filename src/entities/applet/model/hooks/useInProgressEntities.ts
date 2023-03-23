@@ -41,6 +41,8 @@ function useInProgressEntities(appletId: string) {
           onRestart: () => restartActivity(activityId, eventId),
           onResume: () => resolve(event),
         });
+      } else {
+        resolve(event);
       }
     });
   }

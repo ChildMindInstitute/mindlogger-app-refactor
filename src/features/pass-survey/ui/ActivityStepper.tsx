@@ -111,6 +111,7 @@ function ActivityStepper({
         <Stepper.ViewList
           renderItem={({ index }) => {
             const pipelineItem = activityStorageRecord.items[index];
+            const value = activityStorageRecord.answers[index];
 
             return (
               <XStack flex={1} key={index} alignItems="center">
@@ -124,6 +125,7 @@ function ActivityStepper({
 
                   {pipelineItem.type !== 'Tutorial' && (
                     <ActivityItem
+                      value={value}
                       pipelineItem={pipelineItem}
                       onResponse={response => {
                         setAnswer(currentStep, response);

@@ -28,9 +28,11 @@ const mockActivity: ActivityDto = {
   items: [
     {
       id: 100,
-      inputType: 'AbTest',
+      inputType: 'DrawingTest',
       config: {
-        device: 'Phone',
+        instruction: 'Test instruction',
+        imageUrl: null,
+        backgroundImageUrl: null,
       },
       timer: 0,
       hasTokenValue: true,
