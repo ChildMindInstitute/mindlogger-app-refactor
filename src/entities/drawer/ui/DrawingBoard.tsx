@@ -143,7 +143,7 @@ const DrawingBoard: FC<Props> = props => {
     const svgString = ResponseSerializer.process(transformedLines);
 
     const result: DrawResult = {
-      lines: logLines,
+      lines: transformedLines,
       svgString,
       width: width!,
     };

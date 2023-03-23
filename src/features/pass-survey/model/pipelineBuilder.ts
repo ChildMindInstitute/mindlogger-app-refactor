@@ -22,6 +22,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
           return {
             type: item.inputType,
             payload: item.config,
+            question: item.question,
           };
         }
       }

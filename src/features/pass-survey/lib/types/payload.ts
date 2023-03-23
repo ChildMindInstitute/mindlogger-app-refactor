@@ -30,6 +30,7 @@ type PipelineItemBase = {
   isAbleToMoveToPrevious?: boolean;
   canBeReset?: boolean;
   hasTopNavigation?: boolean;
+  question?: string;
 };
 
 interface AbTestPipelineItem extends PipelineItemBase {

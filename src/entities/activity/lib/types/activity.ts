@@ -23,6 +23,7 @@ type ActivityItemBase = {
   isAbleToMoveToPrevious: true;
   hasTextResponse: true;
   order: number;
+  question?: string;
 };
 
 interface AbTestActivityItem extends ActivityItemBase {

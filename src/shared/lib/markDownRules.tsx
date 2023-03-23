@@ -82,7 +82,7 @@ export const activityMarkDownStyles = StyleSheet.create({
   },
   paragraph: {
     alignSelf: 'center',
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: '300',
   },
   text: {
