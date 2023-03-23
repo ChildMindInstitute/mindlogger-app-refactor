@@ -1,8 +1,9 @@
+import { DrawResult } from '@app/entities/drawer';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
 
 import { Tutorial } from './tutorial';
 
-export type ActivityItemType = 'AbTest' | 'Tutorial' | 'Splash';
+export type ActivityItemType = 'AbTest' | 'DrawingTest' | 'Tutorial' | 'Splash';
 
 type AbTestPayload = {
   testIndex: TestIndex;
@@ -10,7 +11,17 @@ type AbTestPayload = {
 };
 type SplashPayload = null;
 
-type PipelinePayload = AbTestPayload | SplashPayload | Tutorial;
+type DrawingPayload = {
+  instruction: string | null;
+  imageUrl: string | null;
+  backgroundImageUrl: string | null;
+};
+
+type PipelinePayload =
+  | AbTestPayload
+  | SplashPayload
+  | Tutorial
+  | DrawingPayload;
 
 type PipelineItemBase = {
   type: ActivityItemType;
@@ -19,6 +30,7 @@ type PipelineItemBase = {
   isAbleToMoveToPrevious?: boolean;
   canBeReset?: boolean;
   hasTopNavigation?: boolean;
+  question?: string;
 };
 
 interface AbTestPipelineItem extends PipelineItemBase {
@@ -36,11 +48,19 @@ interface TutorialPipelineItem extends PipelineItemBase {
   payload: Tutorial;
 }
 
+interface DrawingTestPipelineItem extends PipelineItemBase {
+  type: 'DrawingTest';
+  payload: DrawingPayload;
+}
+
 type AbTestResponse = LogLine[];
 
-export type PipelineItemResponse = AbTestResponse;
+type DrawingTestResponse = DrawResult;
+
+export type PipelineItemResponse = AbTestResponse | DrawingTestResponse;
 
 export type PipelineItem =
   | AbTestPipelineItem
   | SplashPipelineItem
-  | TutorialPipelineItem;
+  | TutorialPipelineItem
+  | DrawingTestPipelineItem;

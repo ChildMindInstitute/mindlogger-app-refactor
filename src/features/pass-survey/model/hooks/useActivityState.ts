@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-import { ActivityDto } from '@app/shared/api';
 import { ActivityModel, useActivityDetailsQuery } from '@entities/activity';
 
+import { DrawingTestActivity } from './mockActivities';
 import { useActivityStorageRecord } from '../../lib';
 import { buildPipeline } from '../pipelineBuilder';
 
@@ -10,38 +10,6 @@ type UseActivityPipelineArgs = {
   appletId: string;
   activityId: string;
   eventId: string;
-};
-
-const mockActivity: ActivityDto = {
-  id: 'aid1',
-  name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
-  image:
-    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: '',
-  showAllAtOnce: false,
-  isSkippable: false,
-  isReviewable: false,
-  responseIsEditable: false,
-  ordering: 0,
-  items: [
-    {
-      id: 100,
-      inputType: 'AbTest',
-      config: {
-        device: 'Phone',
-      },
-      timer: 0,
-      hasTokenValue: true,
-      isSkippable: true,
-      hasAlert: true,
-      hasScore: true,
-      isAbleToMoveToPrevious: true,
-      hasTextResponse: true,
-      order: 0,
-    },
-  ],
 };
 
 function useActivityState({
@@ -63,7 +31,7 @@ function useActivityState({
 
   // @todo remove once integration is done
   if (!activity) {
-    activity = mockActivity;
+    activity = DrawingTestActivity.grid;
   }
 
   const pipeline = useMemo(

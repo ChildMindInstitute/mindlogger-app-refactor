@@ -13,6 +13,7 @@ type ActivityItemDto = {
   isAbleToMoveToPrevious: true;
   hasTextResponse: true;
   order: number;
+  question?: string;
 };
 
 export type ActivityDto = {

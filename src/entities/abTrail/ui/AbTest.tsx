@@ -101,6 +101,7 @@ const AbTest: FC<Props> = props => {
   return (
     <Box
       flex={1}
+      justifyContent="center"
       onLayout={x =>
         setWidth(x.nativeEvent.layout.width - ShapesRectPadding * 2)
       }

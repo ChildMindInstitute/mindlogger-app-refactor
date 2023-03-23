@@ -17,6 +17,14 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             payload: null,
           };
         }
+
+        case 'DrawingTest': {
+          return {
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+          };
+        }
       }
     })
     .reduce<PipelineItem[]>((items, item) => {

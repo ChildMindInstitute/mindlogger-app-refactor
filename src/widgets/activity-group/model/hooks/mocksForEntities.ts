@@ -69,7 +69,7 @@ export const eventActivities: EventEntity[] = [
         availabilityType: AvailabilityType.ScheduledAccess,
         endDate: new Date(2023, 3, 16, 0, 0, 0),
         oneTimeCompletion: true,
-        periodicityType: PeriodicityType.Monthly,
+        periodicityType: PeriodicityType.Daily,
         startDate: new Date(2023, 1, 14, 0, 0, 0),
         timeFrom: { hours: 8, minutes: 0 },
         timeTo: { hours: 22, minutes: 59 },
