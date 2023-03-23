@@ -49,14 +49,14 @@ function useActivityState({
     [activity],
   );
 
-  const shouldCreateStorage =
+  const shouldCreateStorageRecord =
     !activityStorageRecord && pipeline.length && appletVersion;
 
-  if (shouldCreateStorage) {
-    createActivityStorage();
+  if (shouldCreateStorageRecord) {
+    createStorageRecord();
   }
 
-  function createActivityStorage() {
+  function createStorageRecord() {
     upsertActivityStorageRecord({
       step: 0,
       items: pipeline,

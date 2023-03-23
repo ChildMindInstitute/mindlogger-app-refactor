@@ -2,15 +2,15 @@ type FlowPipelineType = 'Stepper' | 'Intermediate' | 'Finish';
 
 type FlowPipelineItemBase = {
   type: FlowPipelineType;
+};
+
+interface StepperPipelineItem extends FlowPipelineItemBase {
+  type: 'Stepper';
   payload: {
     appletId: string;
     activityId: string;
     eventId: string;
   };
-};
-
-interface StepperPipelineItem extends FlowPipelineItemBase {
-  type: 'Stepper';
 }
 
 interface IntermediatePipelineItem extends FlowPipelineItemBase {
@@ -46,7 +46,7 @@ type BuildPipelineArgs = {
   fromActivityId: string;
 };
 
-export function buildMultipleActivitiesPipeline({
+export function buildActivityFlowPipeline({
   appletId,
   eventId,
   flowId,

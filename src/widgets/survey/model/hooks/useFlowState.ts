@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { useAppletDetailsQuery } from '@app/entities/applet';
 
 import {
-  buildMultipleActivitiesPipeline,
+  buildActivityFlowPipeline,
   buildSingleActivityPipeline,
 } from '../pipelineBuilder';
 
@@ -31,28 +31,28 @@ export function useFlowState({
       return [];
     }
 
-    if (!flowId) {
+    const isActivityFlow = !!flowId;
+
+    if (!isActivityFlow) {
       return buildSingleActivityPipeline({ appletId, eventId, activityId });
+    } else {
+      let activityIds = applet.activityFlows.find(
+        flow => flow.id === flowId,
+      )?.activityIds;
+
+      // @todo remove it when the integration is done
+      if (!activityIds) {
+        activityIds = ['aid2', 'aid1'];
+      }
+
+      return buildActivityFlowPipeline({
+        fromActivityId: activityId,
+        activityIds,
+        appletId,
+        eventId,
+        flowId,
+      });
     }
-
-    let activityIds = applet.activityFlows.find(
-      flow => flow.id === flowId,
-    )?.activityIds;
-
-    // @todo remove it when the integration is done
-    if (!activityIds) {
-      activityIds = ['aid2', 'aid1'];
-    }
-
-    return activityIds
-      ? buildMultipleActivitiesPipeline({
-          fromActivityId: activityId,
-          activityIds,
-          appletId,
-          eventId,
-          flowId,
-        })
-      : [];
   }, [activityId, applet, appletId, eventId, flowId]);
 
   function next() {

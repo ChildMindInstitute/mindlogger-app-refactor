@@ -17,7 +17,7 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
     flowId,
   });
 
-  const currentPipelineItem = pipeline[step];
+  const flowPipelineItem = pipeline[step];
 
   function complete() {
     const isLast = step === pipeline.length - 1;
@@ -31,7 +31,7 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
 
   return (
     <FlowElementSwitch
-      {...currentPipelineItem}
+      {...flowPipelineItem}
       onClose={onClose}
       onBack={back}
       onComplete={complete}

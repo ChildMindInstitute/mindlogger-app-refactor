@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { useMMKV, useMMKVObject } from 'react-native-mmkv';
 
 import { PipelineItem } from '../types';
@@ -27,9 +29,9 @@ export function useActivityStorageRecord({
   const [activityStorageRecord, upsertActivityStorageRecord] =
     useMMKVObject<ActivityState>(key, storage);
 
-  function clearActivityStorageRecord() {
+  const clearActivityStorageRecord = useCallback(() => {
     storage.delete(key);
-  }
+  }, [key, storage]);
 
   return {
     activityStorageRecord,
