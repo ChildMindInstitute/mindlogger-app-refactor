@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@shared/lib';
 
-import { onBeforeStartingActivity } from '../../lib';
+import { onBeforeStartingActivity, ProgressPayload } from '../../lib';
 import { selectInProgressApplets } from '../selectors';
 import { actions } from '../slice';
 
@@ -10,6 +10,8 @@ function useInProgressEntities(appletId: string) {
 
   const selectEntityEvent = (entityId: string, eventId: string) =>
     inProgressApplets[appletId]?.[entityId]?.[eventId];
+
+  const isEventInProgress = (event: ProgressPayload) => event && !event.endAt;
 
   function activityStarted(activityId: string, eventId: string) {
     dispatch(
@@ -36,7 +38,7 @@ function useInProgressEntities(appletId: string) {
     return new Promise(resolve => {
       const event = selectEntityEvent(activityId, eventId);
 
-      if (event && !event.endAt) {
+      if (isEventInProgress(event)) {
         onBeforeStartingActivity({
           onRestart: () => {
             activityStarted(activityId, eventId);
@@ -55,7 +57,7 @@ function useInProgressEntities(appletId: string) {
     return new Promise(resolve => {
       const event = selectEntityEvent(flowId, eventId);
 
-      if (event && !event.endAt) {
+      if (isEventInProgress(event)) {
         onBeforeStartingActivity({
           onRestart: () => {
             flowStarted(flowId, activityId, eventId);
