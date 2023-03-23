@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ActivityIndicator, Box, Center, Stepper, XStack } from '@shared/ui';
 
@@ -25,6 +26,8 @@ function ActivityStepper({
   onFinish,
 }: Props) {
   const { t } = useTranslation();
+
+  const { bottom } = useSafeAreaInsets();
 
   const {
     activityStorageRecord,
@@ -89,7 +92,7 @@ function ActivityStepper({
   }
 
   return (
-    <Box flex={1}>
+    <Box flex={1} pb={bottom}>
       <Stepper
         stepsCount={activityStorageRecord.items.length}
         startFrom={activityStorageRecord.step}

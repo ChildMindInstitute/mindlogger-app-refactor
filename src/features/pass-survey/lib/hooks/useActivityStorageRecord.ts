@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { useMMKV, useMMKVObject } from 'react-native-mmkv';
 
 import { PipelineItem } from '../types';
@@ -12,6 +14,7 @@ export type ActivityState = {
   step: number;
   items: PipelineItem[];
   answers: Record<string, any>;
+  appletVersion: string;
 };
 
 export function useActivityStorageRecord({
@@ -26,13 +29,13 @@ export function useActivityStorageRecord({
   const [activityStorageRecord, upsertActivityStorageRecord] =
     useMMKVObject<ActivityState>(key, storage);
 
-  function clearActivityStorage() {
+  const clearActivityStorageRecord = useCallback(() => {
     storage.delete(key);
-  }
+  }, [key, storage]);
 
   return {
     activityStorageRecord,
     upsertActivityStorageRecord,
-    clearActivityStorage,
+    clearActivityStorageRecord,
   };
 }

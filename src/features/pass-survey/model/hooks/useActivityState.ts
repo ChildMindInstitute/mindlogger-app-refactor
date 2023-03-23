@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { useAppletDetailsQuery } from '@app/entities/applet';
 import { ActivityModel, useActivityDetailsQuery } from '@entities/activity';
 
 import { DrawingTestActivity } from './mockActivities';
@@ -17,12 +18,20 @@ function useActivityState({
   activityId,
   eventId,
 }: UseActivityPipelineArgs) {
-  const { activityStorageRecord, upsertActivityStorageRecord } =
-    useActivityStorageRecord({
-      appletId,
-      activityId,
-      eventId,
-    });
+  const {
+    activityStorageRecord,
+    upsertActivityStorageRecord,
+    clearActivityStorageRecord,
+  } = useActivityStorageRecord({
+    appletId,
+    activityId,
+    eventId,
+  });
+
+  const { data: appletVersion = '' } = useAppletDetailsQuery(appletId, {
+    enabled: !activityStorageRecord,
+    select: r => r.data.result.version,
+  });
 
   let { data: activity } = useActivityDetailsQuery(activityId, {
     enabled: !activityStorageRecord,
@@ -40,17 +49,19 @@ function useActivityState({
     [activity],
   );
 
-  const shouldCreateStorage = !activityStorageRecord && pipeline.length;
+  const shouldCreateStorageRecord =
+    !activityStorageRecord && pipeline.length && appletVersion;
 
-  if (shouldCreateStorage) {
-    createActivityStorage();
+  if (shouldCreateStorageRecord) {
+    createStorageRecord();
   }
 
-  function createActivityStorage() {
+  function createStorageRecord() {
     upsertActivityStorageRecord({
       step: 0,
       items: pipeline,
       answers: {},
+      appletVersion,
     });
   }
 
@@ -96,7 +107,13 @@ function useActivityState({
     }
   }
 
-  return { activityStorageRecord, setStep, setAnswer, removeAnswer };
+  return {
+    activityStorageRecord,
+    setStep,
+    setAnswer,
+    removeAnswer,
+    clearActivityStorageRecord,
+  };
 }
 
 export default useActivityState;
