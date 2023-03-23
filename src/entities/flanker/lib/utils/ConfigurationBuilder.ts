@@ -203,7 +203,9 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
     return build(configuration, false);
   };
 
-  const buildForWebView = (configuration: FlankerConfiguration) => {
+  const buildForWebView = (
+    configuration: FlankerConfiguration,
+  ): FlankerWebViewConfiguration => {
     return build(configuration, true);
   };
 

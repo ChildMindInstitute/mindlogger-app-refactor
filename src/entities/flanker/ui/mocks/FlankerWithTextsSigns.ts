@@ -20,24 +20,24 @@ export const FlankerWithTextsSigns: FlankerConfiguration = {
       value: 0,
       image: '',
     },
-    // {
-    //   text: '>>>>>',
-    //   id: 'right-con',
-    //   value: 1,
-    //   image: '',
-    // },
-    // {
-    //   text: '--<--',
-    //   id: 'left-neut',
-    //   value: 0,
-    //   image: '',
-    // },
-    // {
-    //   text: '-->--',
-    //   id: 'right-neut',
-    //   value: 1,
-    //   image: '',
-    // },
+    {
+      text: '>>>>>',
+      id: 'right-con',
+      value: 1,
+      image: '',
+    },
+    {
+      text: '--<--',
+      id: 'left-neut',
+      value: 0,
+      image: '',
+    },
+    {
+      text: '-->--',
+      id: 'right-neut',
+      value: 1,
+      image: '',
+    },
   ],
   blocks: [
     {
@@ -51,50 +51,50 @@ export const FlankerWithTextsSigns: FlankerConfiguration = {
         'right-neut',
       ],
     },
-    // {
-    //   name: 'Block 2',
-    //   order: [
-    //     'left-con',
-    //     'right-con',
-    //     'left-inc',
-    //     'right-inc',
-    //     'left-neut',
-    //     'right-neut',
-    //   ],
-    // },
-    // {
-    //   name: 'Block 3',
-    //   order: [
-    //     'left-con',
-    //     'right-con',
-    //     'left-inc',
-    //     'right-inc',
-    //     'left-neut',
-    //     'right-neut',
-    //   ],
-    // },
-    // {
-    //   name: 'Block 4',
-    //   order: [
-    //     'left-con',
-    //     'right-con',
-    //     'left-inc',
-    //     'right-inc',
-    //     'left-neut',
-    //     'right-neut',
-    //   ],
-    // },
-    // {
-    //   name: 'Block 5',
-    //   order: [
-    //     'left-con',
-    //     'right-con',
-    //     'left-inc',
-    //     'right-inc',
-    //     'left-neut',
-    //     'right-neut',
-    //   ],
-    // },
+    {
+      name: 'Block 2',
+      order: [
+        'left-con',
+        'right-con',
+        'left-inc',
+        'right-inc',
+        'left-neut',
+        'right-neut',
+      ],
+    },
+    {
+      name: 'Block 3',
+      order: [
+        'left-con',
+        'right-con',
+        'left-inc',
+        'right-inc',
+        'left-neut',
+        'right-neut',
+      ],
+    },
+    {
+      name: 'Block 4',
+      order: [
+        'left-con',
+        'right-con',
+        'left-inc',
+        'right-inc',
+        'left-neut',
+        'right-neut',
+      ],
+    },
+    {
+      name: 'Block 5',
+      order: [
+        'left-con',
+        'right-con',
+        'left-inc',
+        'right-inc',
+        'left-neut',
+        'right-neut',
+      ],
+    },
   ],
   buttons: [
     { text: '<', value: 0, image: '' },
