@@ -32,7 +32,11 @@ function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
     mutate: sendAnswers,
     isLoading: isSendingAnswers,
     isSuccess: successfullySentAnswers,
+    isPaused: isOffline,
   } = useActivityAnswersMutation();
+
+  const finishedLoading = isOffline || successfullySentAnswers;
+  const isLoading = !isOffline && isSendingAnswers;
 
   function completeActivity() {
     if (!activityStorageRecord) {
@@ -66,7 +70,7 @@ function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
   return (
     <ImageBackground>
       <Center flex={1} mx={16}>
-        {successfullySentAnswers && (
+        {finishedLoading && (
           <>
             <Center mb={20}>
               <Text fontSize={24} fontWeight="bold">
@@ -80,7 +84,7 @@ function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
           </>
         )}
 
-        {isSendingAnswers && <Text fontSize={22}>Please Wait ...</Text>}
+        {isLoading && <Text fontSize={22}>Please Wait ...</Text>}
       </Center>
     </ImageBackground>
   );

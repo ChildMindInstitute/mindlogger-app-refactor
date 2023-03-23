@@ -1,3 +1,5 @@
+import { useCallback, useEffect } from 'react';
+
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
@@ -39,7 +41,7 @@ const ActivityBox = styled(Center, {
   borderColor: '$grey',
 });
 
-function IntermediateItem({
+function Intermediate({
   flowId,
   appletId,
   activityId,
@@ -69,16 +71,19 @@ function IntermediateItem({
       eventId,
     });
 
-  const { mutate: sendAnswers, isLoading: isSendingAnswers } =
-    useActivityAnswersMutation({
-      onSuccess: () => {
-        clearActivityStorageRecord();
-        changeActivity();
-        onFinish();
-      },
-    });
+  const {
+    mutate: sendAnswers,
+    isLoading: isSendingAnswers,
+    isPaused: isOffline,
+  } = useActivityAnswersMutation({
+    onSuccess: () => {
+      clearActivityStorageRecord();
+      changeActivity();
+      onFinish();
+    },
+  });
 
-  function changeActivity() {
+  const changeActivity = useCallback(() => {
     if (!activityFlow) {
       return;
     }
@@ -93,7 +98,7 @@ function IntermediateItem({
         eventId,
       }),
     );
-  }
+  }, [activityFlow, appletId, dispatch, eventId, flowId, passedActivities]);
 
   function completeActivity() {
     if (!activityStorageRecord) {
@@ -108,6 +113,14 @@ function IntermediateItem({
       answers: activityStorageRecord.answers as any,
     });
   }
+
+  useEffect(() => {
+    if (isOffline) {
+      clearActivityStorageRecord();
+      changeActivity();
+      onFinish();
+    }
+  }, [changeActivity, clearActivityStorageRecord, isOffline, onFinish]);
 
   return (
     <YStack flex={1} mx={40} jc="center" bg="$white">
@@ -156,4 +169,4 @@ function IntermediateItem({
   );
 }
 
-export default IntermediateItem;
+export default Intermediate;
