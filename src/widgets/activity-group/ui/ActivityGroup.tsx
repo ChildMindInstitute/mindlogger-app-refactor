@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
+import { clearActivityStorageRecord } from '@app/features/pass-survey';
 import { ActivityList, ActivityListItem } from '@entities/activity';
 import { AppletModel } from '@entities/applet';
 import { Box, BoxProps, Text } from '@shared/ui';
@@ -40,11 +41,19 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
     flowId,
   }: ActivityListItem) => {
     if (flowId) {
-      startFlow(flowId, activityId, eventId).then(() => {
+      startFlow(flowId, activityId, eventId).then(startedFromScratch => {
+        if (startedFromScratch) {
+          clearActivityStorageRecord.byEventId(eventId);
+        }
+
         navigateSurvey(activityId, eventId, flowId);
       });
     } else {
-      startActivity(activityId, eventId).then(() => {
+      startActivity(activityId, eventId).then(startedFromScratch => {
+        if (startedFromScratch) {
+          clearActivityStorageRecord.byEventId(eventId);
+        }
+
         navigateSurvey(activityId, eventId);
       });
     }

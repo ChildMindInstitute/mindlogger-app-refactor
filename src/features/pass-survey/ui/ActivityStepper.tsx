@@ -7,7 +7,11 @@ import { ActivityIndicator, Box, Center, Stepper, XStack } from '@shared/ui';
 
 import ActivityItem from './ActivityItem';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
-import { useActivityState, useActivityStepper } from '../model';
+import {
+  useActivityRecordInitialization,
+  useActivityState,
+  useActivityStepper,
+} from '../model';
 
 type Props = {
   appletId: string;
@@ -28,6 +32,12 @@ function ActivityStepper({
   const { t } = useTranslation();
 
   const { bottom } = useSafeAreaInsets();
+
+  useActivityRecordInitialization({
+    appletId,
+    activityId,
+    eventId,
+  });
 
   const {
     activityStorageRecord,
