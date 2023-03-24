@@ -71,7 +71,7 @@ export const FlankerWithStFxImages: FlankerConfiguration = {
   fixationScreen: {
     value: 'gfx100s_sample_01_thum.jpeg',
     image:
-      'https://mindlogger-applet-contents.s3.amazonaws.com/image/3Q8dXGtKc129sWcdSmQwW4.jpeg',
+      'https://mindlogger-applet-contents.s3.amazonaws.com/image/6H1puzFNm6s6JxMMd2Xhry.png',
   },
   isLastTest: false,
   blockType: 'test',
