@@ -35,39 +35,39 @@ function useInProgressEntities(appletId: string) {
   }
 
   function startActivity(activityId: string, eventId: string) {
-    return new Promise(resolve => {
+    return new Promise<boolean>(resolve => {
       const event = selectEntityEvent(activityId, eventId);
 
       if (isEventInProgress(event)) {
         onBeforeStartingActivity({
           onRestart: () => {
             activityStarted(activityId, eventId);
-            resolve(event);
+            resolve(true);
           },
-          onResume: () => resolve(event),
+          onResume: () => resolve(false),
         });
       } else {
         activityStarted(activityId, eventId);
-        resolve(event);
+        resolve(false);
       }
     });
   }
 
   function startFlow(flowId: string, activityId: string, eventId: string) {
-    return new Promise(resolve => {
+    return new Promise<boolean>(resolve => {
       const event = selectEntityEvent(flowId, eventId);
 
       if (isEventInProgress(event)) {
         onBeforeStartingActivity({
           onRestart: () => {
             flowStarted(flowId, activityId, eventId);
-            resolve(event);
+            resolve(true);
           },
-          onResume: () => resolve(event),
+          onResume: () => resolve(false),
         });
       } else {
         flowStarted(flowId, activityId, eventId);
-        resolve(event);
+        resolve(false);
       }
     });
   }

@@ -56,13 +56,23 @@ function Intermediate({
     select: r => r.data.result.activityFlows.find(o => o.id === flowId),
   });
 
+  let { data: allActivities } = useAppletDetailsQuery(appletId, {
+    select: r => r.data.result.activities,
+  });
+
   if (!activityFlow) {
     activityFlow = mockActivityFlow;
   }
 
   const totalActivities = activityFlow.activityIds.length;
-  const passedActivities =
-    activityFlow.activityIds.findIndex(id => id === activityId) + 1;
+
+  const currentActivityIndex = activityFlow.activityIds.findIndex(
+    id => id === activityId,
+  );
+
+  const nextActivityIndex = currentActivityIndex + 1;
+
+  const nextActivity = allActivities?.[nextActivityIndex];
 
   const { activityStorageRecord, clearActivityStorageRecord } =
     PassSurveyModel.useActivityState({
@@ -84,21 +94,19 @@ function Intermediate({
   });
 
   const changeActivity = useCallback(() => {
-    if (!activityFlow) {
+    if (!nextActivity) {
       return;
     }
-
-    const nextActivityId = activityFlow.activityIds[passedActivities];
 
     dispatch(
       AppletModel.actions.flowUpdated({
         appletId,
         flowId,
-        activityId: nextActivityId,
+        activityId: nextActivity.id,
         eventId,
       }),
     );
-  }, [activityFlow, appletId, dispatch, eventId, flowId, passedActivities]);
+  }, [appletId, dispatch, eventId, flowId, nextActivity]);
 
   function completeActivity() {
     if (!activityStorageRecord) {
@@ -133,14 +141,14 @@ function Intermediate({
 
         <ActivityBox>
           <Text fontWeight="bold" mb={10} fontSize={16}>
-            Activity 3
+            {nextActivity?.name ?? 'Activity 2'}
           </Text>
 
           <XStack>
             <Image src={badge} width={18} height={18} opacity={0.6} r={4} />
 
             <Text fontSize={14} color="$grey">
-              {passedActivities} of {totalActivities} {activityFlow.name}
+              {nextActivityIndex + 1} of {totalActivities} {activityFlow.name}
             </Text>
           </XStack>
         </ActivityBox>

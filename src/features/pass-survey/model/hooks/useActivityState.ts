@@ -1,11 +1,4 @@
-import { useMemo } from 'react';
-
-import { useAppletDetailsQuery } from '@app/entities/applet';
-import { ActivityModel, useActivityDetailsQuery } from '@entities/activity';
-
-import { DrawingTestActivity } from './mockActivities';
 import { useActivityStorageRecord } from '../../lib';
-import { buildPipeline } from '../pipelineBuilder';
 
 type UseActivityPipelineArgs = {
   appletId: string;
@@ -27,43 +20,6 @@ function useActivityState({
     activityId,
     eventId,
   });
-
-  const { data: appletVersion = '' } = useAppletDetailsQuery(appletId, {
-    enabled: !activityStorageRecord,
-    select: r => r.data.result.version,
-  });
-
-  let { data: activity } = useActivityDetailsQuery(activityId, {
-    enabled: !activityStorageRecord,
-    select: r => r.data.result,
-  });
-
-  // @todo remove once integration is done
-  if (!activity) {
-    activity = DrawingTestActivity.grid;
-  }
-
-  const pipeline = useMemo(
-    () =>
-      activity ? buildPipeline(ActivityModel.mapToActivity(activity)) : [],
-    [activity],
-  );
-
-  const shouldCreateStorageRecord =
-    !activityStorageRecord && pipeline.length && appletVersion;
-
-  if (shouldCreateStorageRecord) {
-    createStorageRecord();
-  }
-
-  function createStorageRecord() {
-    upsertActivityStorageRecord({
-      step: 0,
-      items: pipeline,
-      answers: {},
-      appletVersion,
-    });
-  }
 
   function setStep(step: number) {
     if (!activityStorageRecord) {

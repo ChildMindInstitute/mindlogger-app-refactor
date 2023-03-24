@@ -1,9 +1,15 @@
 import { DrawResult } from '@app/entities/drawer';
+import { FlankerLogRecord, FlankerConfiguration } from '@app/entities/flanker';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
 
 import { Tutorial } from './tutorial';
 
-export type ActivityItemType = 'AbTest' | 'DrawingTest' | 'Tutorial' | 'Splash';
+export type ActivityItemType =
+  | 'AbTest'
+  | 'DrawingTest'
+  | 'Tutorial'
+  | 'Splash'
+  | 'Flanker';
 
 type AbTestPayload = {
   testIndex: TestIndex;
@@ -16,12 +22,14 @@ type DrawingPayload = {
   imageUrl: string | null;
   backgroundImageUrl: string | null;
 };
+type FlankerPayload = FlankerConfiguration;
 
 type PipelinePayload =
   | AbTestPayload
   | SplashPayload
   | Tutorial
-  | DrawingPayload;
+  | DrawingPayload
+  | FlankerPayload;
 
 type PipelineItemBase = {
   type: ActivityItemType;
@@ -53,14 +61,25 @@ interface DrawingTestPipelineItem extends PipelineItemBase {
   payload: DrawingPayload;
 }
 
+interface FlankerPipelineItem extends PipelineItemBase {
+  type: 'Flanker';
+  payload: FlankerConfiguration;
+}
+
 type AbTestResponse = LogLine[];
 
 type DrawingTestResponse = DrawResult;
 
-export type PipelineItemResponse = AbTestResponse | DrawingTestResponse;
+type FlankerResponse = Array<FlankerLogRecord>;
+
+export type PipelineItemResponse =
+  | AbTestResponse
+  | FlankerResponse
+  | DrawingTestResponse;
 
 export type PipelineItem =
   | AbTestPipelineItem
   | SplashPipelineItem
   | TutorialPipelineItem
-  | DrawingTestPipelineItem;
+  | DrawingTestPipelineItem
+  | FlankerPipelineItem;

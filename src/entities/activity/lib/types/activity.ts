@@ -1,4 +1,4 @@
-export type ActivityItemType = 'AbTest' | 'DrawingTest' | 'Splash';
+export type ActivityItemType = 'AbTest' | 'DrawingTest' | 'Splash' | 'Flanker';
 
 type AbTestConfig = {
   device: 'Phone' | 'Tablet';
@@ -41,10 +41,16 @@ interface DrawingTestTestActivityItem extends ActivityItemBase {
   config: DrawingTestTestConfig;
 }
 
+interface FlakerActivityItem extends ActivityItemBase {
+  inputType: 'Flanker';
+  config: any;
+}
+
 export type ActivityItem =
   | AbTestActivityItem
   | SplashActivityItem
-  | DrawingTestTestActivityItem;
+  | DrawingTestTestActivityItem
+  | FlakerActivityItem;
 
 export type ActivityDetails = {
   id: string;

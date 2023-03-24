@@ -1,3 +1,8 @@
+import {
+  FlankerWithImageOnButton,
+  FlankerWithStFxImages,
+  FlankerWithTextsSigns,
+} from '@app/entities/flanker';
 import { ActivityDto } from '@app/shared/api';
 
 const testMessage1 =
@@ -76,9 +81,26 @@ const vortex: ActivityDto = {
   ],
 };
 
+const allDrawing: ActivityDto = {
+  id: 'aid1',
+  name: 'Activity number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  ordering: 0,
+  items: [...grid.items, ...vortex.items],
+};
+
 export const DrawingTestActivity = {
   grid,
   vortex,
+  all: allDrawing,
 };
 
 export const AbTestActivity: ActivityDto = {
@@ -111,4 +133,137 @@ export const AbTestActivity: ActivityDto = {
       order: 0,
     },
   ],
+};
+
+const FlankerWithImageActivity: ActivityDto = {
+  id: 'aid1',
+  name: 'Activity number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  ordering: 0,
+  items: [
+    {
+      id: 100,
+      inputType: 'Flanker',
+      config: FlankerWithImageOnButton,
+      timer: 0,
+      hasTokenValue: true,
+      isSkippable: true,
+      hasAlert: true,
+      hasScore: true,
+      isAbleToMoveToPrevious: true,
+      hasTextResponse: true,
+      order: 0,
+    },
+  ],
+};
+
+const FlankerWithStSFxActivity: ActivityDto = {
+  id: 'aid1',
+  name: 'Activity number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  ordering: 0,
+  items: [
+    {
+      id: 100,
+      inputType: 'Flanker',
+      config: FlankerWithStFxImages,
+      timer: 0,
+      hasTokenValue: true,
+      isSkippable: true,
+      hasAlert: true,
+      hasScore: true,
+      isAbleToMoveToPrevious: true,
+      hasTextResponse: true,
+      order: 0,
+    },
+  ],
+};
+
+const FlankerWithTextSignsActivity: ActivityDto = {
+  id: 'aid1',
+  name: 'Activity number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  ordering: 0,
+  items: [
+    {
+      id: 100,
+      inputType: 'Flanker',
+      config: FlankerWithTextsSigns,
+      timer: 0,
+      hasTokenValue: true,
+      isSkippable: true,
+      hasAlert: true,
+      hasScore: true,
+      isAbleToMoveToPrevious: true,
+      hasTextResponse: true,
+      order: 0,
+    },
+  ],
+};
+
+const FlankerAllTypesActivity: ActivityDto = {
+  id: 'aid1',
+  name: 'Activity number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  ordering: 0,
+  items: [
+    ...FlankerWithTextSignsActivity.items,
+    ...FlankerWithImageActivity.items,
+    ...FlankerWithTextSignsActivity.items,
+  ],
+};
+
+export const FlankerActivity = {
+  withImage: FlankerWithImageActivity,
+  withStSFx: FlankerWithStSFxActivity,
+  withTextSings: FlankerWithTextSignsActivity,
+  all: FlankerAllTypesActivity,
+};
+
+const TestActivities = [
+  FlankerActivity.withImage,
+  FlankerActivity.withStSFx,
+  FlankerActivity.withTextSings,
+  DrawingTestActivity.grid,
+  DrawingTestActivity.vortex,
+  AbTestActivity,
+];
+
+export const getRandomTestActivity = () => {
+  const maxIndex = TestActivities.length - 1;
+  const randomId = +Math.random().toFixed(0) % maxIndex;
+
+  return TestActivities[randomId];
 };

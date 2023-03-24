@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { Box, MarkdownMessage, ScrollView } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
+import { HtmlFlanker } from '@entities/flanker';
 
 import { PipelineItem, PipelineItemResponse } from '../lib';
 
@@ -45,9 +46,18 @@ function ActivityItem({ value, pipelineItem, onResponse }: Props) {
       );
       break;
 
+    case 'Flanker':
+      item = (
+        <HtmlFlanker
+          configuration={pipelineItem.payload}
+          onResult={onResponse}
+          onComplete={() => console.log('onComplete')}
+        />
+      );
+      break;
+
     default: {
       item = <></>;
-      break;
     }
   }
 

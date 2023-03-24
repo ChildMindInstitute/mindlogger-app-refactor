@@ -20,6 +20,10 @@ class AsyncStorage {
 
     return Promise.resolve();
   }
+
+  clearAll() {
+    this.storage.clearAll();
+  }
 }
 
 export default AsyncStorage;

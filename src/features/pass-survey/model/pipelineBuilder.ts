@@ -25,6 +25,13 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             question: item.question,
           };
         }
+
+        case 'Flanker': {
+          return {
+            type: item.inputType,
+            payload: item.config,
+          };
+        }
       }
     })
     .reduce<PipelineItem[]>((items, item) => {
