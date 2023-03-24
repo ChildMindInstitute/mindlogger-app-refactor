@@ -1,45 +1,39 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 
-import { useRoute } from '@react-navigation/native';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 import { useAppletDetailsQuery } from '@app/entities/applet';
 import rules from '@shared/lib/markDownRules';
 import { MarkdownView } from '@shared/ui';
 import { YStack, ScrollView, Box } from '@shared/ui';
 
-type RouteProps = {
-  key: string;
-  name: string;
-  params: {
-    appletId: string;
-  };
-};
+import { AppletDetailsParamList } from '../config';
 
-const AboutAppletScreen: FC = () => {
+type Props = BottomTabScreenProps<AppletDetailsParamList, 'About' | 'Data'>; // @todo 'Data' to be removed after separate DataScreen implementation
+
+const AboutAppletScreen: FC<Props> = ({ route }) => {
+  let content;
   const {
     params: { appletId },
-  } = useRoute<RouteProps>();
+  } = route;
 
   const { data: appletAbout } = useAppletDetailsQuery(appletId, {
     select: r => r.data.result?.about,
   });
 
-  const aboutText = useMemo(() => {
-    if (!appletAbout || appletAbout.startsWith('404:')) {
-      return (
-        '# ¯\\\\_(ツ)_/¯ ' +
-        '\n # \n The authors of this applet have not provided any information!'
-      );
-    }
-
-    return appletAbout;
-  }, [appletAbout]);
+  if (!appletAbout || appletAbout.startsWith('404:')) {
+    content =
+      '# ¯\\\\_(ツ)_/¯ ' +
+      '\n # \n The authors of this applet have not provided any information!';
+  } else {
+    content = appletAbout;
+  }
 
   return (
     <YStack jc="flex-start" flex={1}>
       <ScrollView px="$5" pt="$2">
         <Box flex={1} mb="$3">
-          <MarkdownView content={aboutText} rules={rules} />
+          <MarkdownView content={content} rules={rules} />
         </Box>
       </ScrollView>
     </YStack>
