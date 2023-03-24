@@ -120,7 +120,7 @@ export const useActivityGroups = (
   const groupScheduled = builder!.buildScheduled(entityEvents);
 
   return {
-    groups: [groupAvailable, groupInProgress, groupScheduled],
+    groups: [groupInProgress, groupAvailable, groupScheduled],
     isSuccess: true,
     isLoading: false,
     error: null,

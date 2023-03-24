@@ -83,7 +83,7 @@ export function getLast7Dates() {
 export const buildDateFromDto = (
   dto: string | null | undefined,
 ): Date | null => {
-  if (dto === null || dto === undefined) {
+  if (!dto) {
     return null;
   }
   const result = new Date(`${dto}T00:00`);

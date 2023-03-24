@@ -33,10 +33,12 @@ const calculateForMonthly = (
   } else {
     date = check;
   }
-  if (
+
+  const isBeyondOfDateBorders =
     (availability.startDate && date < availability.startDate) ||
-    (availability.endDate && date > availability.endDate)
-  ) {
+    (availability.endDate && date > availability.endDate);
+
+  if (isBeyondOfDateBorders) {
     return null;
   }
   setTime(date, availability);
