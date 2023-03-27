@@ -354,5 +354,10 @@
     "finished_complete": "Finished. Click Done to complete.",
     "begin": "Begin",
     "end": "End"
+  },
+  "open_source": {
+    "title":"Open Source Software used",
+    "show_license": "Show License",
+    "homepage": "Homepage"
   }
 }

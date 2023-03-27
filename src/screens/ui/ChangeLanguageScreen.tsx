@@ -14,7 +14,7 @@ const ChangeLanguageScreen: FC = () => {
   };
 
   return (
-    <Box flex={1}>
+    <Box flex={1} bg="$white">
       <StatusBar />
 
       <Box flex={1}>
