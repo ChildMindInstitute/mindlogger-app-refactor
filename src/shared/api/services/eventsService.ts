@@ -1,3 +1,4 @@
+import { NotificationTriggerType } from '@app/abstract/lib/types';
 import { HourMinute } from '@app/shared/lib';
 
 import httpService from './httpService';
@@ -13,11 +14,29 @@ export type EventAvailabilityDto = {
   endDate?: string | null;
 };
 
+export type ReminderSettingDto = {
+  activityIncomplete: number;
+  reminderTime: HourMinute;
+};
+
+export type NotificationsSectionDto = {
+  notifications: NotificationSettingDto[];
+  reminder: ReminderSettingDto | null;
+};
+
+export type NotificationSettingDto = {
+  triggerType: NotificationTriggerType;
+  from: HourMinute | null;
+  to: HourMinute | null;
+  at: HourMinute | null;
+};
+
 export type ScheduleEventDto = {
   id: string;
   entityId: string;
   availabilityType: string;
   availability: EventAvailabilityDto;
+  notificationSettings: NotificationsSectionDto;
   selectedDate?: string | null;
   timers: {
     timer: HourMinute | null;

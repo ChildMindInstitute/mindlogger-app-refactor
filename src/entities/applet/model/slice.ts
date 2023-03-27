@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import {
-  FlowProgress,
   ActivityPipelineType,
   EntitiesInProgress,
+  FlowProgress,
   ProgressPayload,
-} from '../lib';
+} from '@app/abstract/lib/types';
 
 type InProgressActivity = {
   appletId: string;

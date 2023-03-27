@@ -1,7 +1,5 @@
-import {
-  ActivityPipelineType,
-  useAppletDetailsQuery,
-} from '@app/entities/applet';
+import { ActivityPipelineType } from '@app/abstract/lib/types';
+import { useAppletDetailsQuery } from '@app/entities/applet';
 import { selectInProgressApplets } from '@app/entities/applet/model/selectors';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
 import { useEventsQuery } from '@app/entities/event/api/hooks/useEventsQuery';
