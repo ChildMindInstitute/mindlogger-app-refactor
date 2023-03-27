@@ -1,24 +1,25 @@
 import { HourMinute } from '@app/shared/lib';
 
 export const enum AvailabilityType {
-  NotDefined = 0,
-  AlwaysAvailable = 1,
-  ScheduledAccess = 2,
+  NotDefined = 'NotDefined',
+  AlwaysAvailable = 'AlwaysAvailable',
+  ScheduledAccess = 'ScheduledAccess',
 }
 
 export const enum PeriodicityType {
-  NotDefined = 0,
-  Once = 1,
-  Daily = 2,
-  Weekly = 3,
-  Weekdays = 4,
-  Monthly = 5,
+  NotDefined = 'NotDefined',
+  Always = 'ALWAYS',
+  Once = 'ONCE',
+  Daily = 'DAILY',
+  Weekly = 'WEEKLY',
+  Weekdays = 'WEEKDAYS',
+  Monthly = 'MONTHLY',
 }
 
 export type EventAvailability = {
   availabilityType: AvailabilityType;
   oneTimeCompletion: boolean;
-  periodicityType: PeriodicityType | null;
+  periodicityType: PeriodicityType;
   timeFrom: HourMinute | null;
   timeTo: HourMinute | null;
   allowAccessBeforeFromTime: boolean;
@@ -28,12 +29,12 @@ export type EventAvailability = {
 
 export type ScheduleEvent = {
   id: string;
-  activityId: string;
+  entityId: string;
   availability: EventAvailability;
-  scheduledAt: Date | null;
   timers: {
     timer: HourMinute | null;
     idleTimer: HourMinute | null;
-  } | null;
+  };
   selectedDate: Date | null;
+  scheduledAt: Date | null;
 };

@@ -16,7 +16,7 @@ export type Activity = Entity & {
 
 export type ActivityFlow = Entity & {
   hideBadge: boolean;
-  items: Array<{ activityId: string }>;
+  activityIds: Array<string>;
   pipelineType: ActivityPipelineType.Flow;
 };
 

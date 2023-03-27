@@ -18,20 +18,19 @@ export type Applet = {
 export type Activity = {
   id: string;
   name: string;
+  image: string | null;
   description: string;
 };
 
 export type ActivityFlow = {
   id: string;
   name: string;
+  image: string | null;
   description: string;
   activityIds: string[];
 };
 
-export type AppletDetails<
-  TActivity extends Activity = Activity,
-  TActivityFlow extends ActivityFlow = ActivityFlow,
-> = {
+export type AppletDetails = {
   id: string;
   displayName: string;
   version: string;
@@ -40,8 +39,8 @@ export type AppletDetails<
   image: string | null;
   watermark: string | null;
   theme: AppletTheme | null;
-  activities: TActivity[];
-  activityFlows: TActivityFlow[];
+  activities: Activity[];
+  activityFlows: ActivityFlow[];
 };
 
 export const enum ActivityPipelineType {

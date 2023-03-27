@@ -2,7 +2,7 @@ import { ActivityType } from '@app/entities/activity';
 import { ActivityPipelineType, EntitiesInProgress } from '@app/entities/applet';
 import { AvailabilityType, PeriodicityType } from '@app/entities/event';
 
-import { Activity, ActivityFlow, EventEntity } from '../../lib';
+import { Activity, ActivityFlow, EventEntity } from '../../../lib';
 
 export const progress: EntitiesInProgress = {
   apid1: {
@@ -54,7 +54,7 @@ const activityFlow1: ActivityFlow = {
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   hideBadge: false,
-  items: [{ activityId: 'aid1' }, { activityId: 'aid2' }],
+  activityIds: ['aid1', 'aid2'],
 };
 
 export const allAppletActivities: Activity[] = [activity1, activity2];
@@ -63,7 +63,7 @@ export const eventActivities: EventEntity[] = [
   {
     entity: activity1,
     event: {
-      activityId: 'aid1',
+      entityId: 'aid1',
       availability: {
         allowAccessBeforeFromTime: false,
         availabilityType: AvailabilityType.ScheduledAccess,
@@ -89,7 +89,7 @@ export const eventActivities: EventEntity[] = [
   {
     entity: activityFlow1,
     event: {
-      activityId: 'afid1',
+      entityId: 'afid1',
       availability: {
         allowAccessBeforeFromTime: false,
         availabilityType: AvailabilityType.ScheduledAccess,
@@ -103,14 +103,7 @@ export const eventActivities: EventEntity[] = [
       id: 'eid2',
       scheduledAt: null,
       selectedDate: new Date(2023, 2, 16, 0, 0, 0),
-      timers: null,
-      // timers: {
-      //   timer: {
-      //     hours: 11,
-      //     minutes: 10,
-      //   },
-      //   idleTimer: null,
-      // },
+      timers: { idleTimer: null, timer: null },
     },
   },
 ];

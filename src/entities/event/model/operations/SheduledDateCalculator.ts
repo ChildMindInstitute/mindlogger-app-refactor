@@ -33,7 +33,12 @@ const calculateForMonthly = (
   } else {
     date = check;
   }
-  if (date < availability.startDate! || date > availability.endDate!) {
+
+  const isBeyondOfDateBorders =
+    (availability.startDate && date < availability.startDate) ||
+    (availability.endDate && date > availability.endDate);
+
+  if (isBeyondOfDateBorders) {
     return null;
   }
   setTime(date, availability);
@@ -45,7 +50,9 @@ const calculateForSpecificDay = (
   specificDay: Date,
   availability: EventAvailability,
 ): Date | null => {
-  if (specificDay > startOfDay(new Date())) {
+  const today = startOfDay(new Date());
+
+  if (specificDay < today) {
     return null;
   }
 
@@ -64,7 +71,9 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
   const now = new Date();
 
   if (selectedDate && !isEqual(selectedDate, startOfDay(selectedDate))) {
-    throw new Error('[SheduledDateCalculator]: selectedDate contains time set');
+    throw new Error(
+      '[ScheduledDateCalculator]: selectedDate contains time set',
+    );
   }
 
   const alwaysAvailable =
@@ -78,7 +87,7 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
     (scheduled && availability.periodicityType === PeriodicityType.Once)
   ) {
     return calculateForSpecificDay(
-      alwaysAvailable ? now : selectedDate!,
+      alwaysAvailable ? startOfDay(now) : selectedDate!,
       availability,
     );
   }
@@ -128,7 +137,7 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
 
 const cache = new Map();
 
-export const SheduledDateCalculator = {
+export const ScheduledDateCalculator = {
   calculate: (event: ScheduleEvent): Date | null => {
     const today = new Date().toDateString();
 

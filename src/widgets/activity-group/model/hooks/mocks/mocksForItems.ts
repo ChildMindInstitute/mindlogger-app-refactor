@@ -8,7 +8,7 @@ import {
   ActivityGroupType,
   ActivityGroupTypeNames,
   ActivityListGroup,
-} from '../../lib';
+} from '../../../lib';
 
 let groupMocks: ActivityListGroup[] = [];
 

@@ -1,5 +1,3 @@
-import { HourMinute } from '@app/shared/lib';
-
 import httpService from './httpService';
 import { SuccessfulResponse } from '../types';
 
@@ -7,9 +5,11 @@ export type ActivityRecordDto = {
   id: string;
   name: string;
   description: string;
-  image: string;
+  image: string | null;
   isReviewable: boolean;
   isSkippable: boolean;
+  showAllAtOnce: boolean;
+  responseIsEditable: boolean;
   ordering: number;
   splashScreen: string;
 };
@@ -17,11 +17,12 @@ export type ActivityRecordDto = {
 export type ActivityFlowRecordDto = {
   id: string;
   name: string;
+  image: string | null;
   description: string;
   hideBadge: boolean;
   isSingleReport: boolean;
   ordering: number;
-  activityIds: string[];
+  activityIds: Array<string>;
 };
 
 export type ThemeDto = {
@@ -46,23 +47,6 @@ export type AppletDetailsDto = {
   theme: ThemeDto | null;
   activities: ActivityRecordDto[];
   activityFlows: ActivityFlowRecordDto[];
-};
-
-export type EventAvailabilityDto = {
-  availabilityType: number;
-  oneTimeCompletion: boolean;
-  periodicityType: number;
-  timeFrom: HourMinute | null;
-  timeTo: HourMinute | null;
-  allowAccessBeforeFromTime: boolean;
-  startDate?: string | null;
-  endDate?: string | null;
-  selectedDate?: string | null;
-};
-
-export type ScheduleEventDto = {
-  entityId: string;
-  availability: EventAvailabilityDto;
 };
 
 export type AppletDto = {
