@@ -5,6 +5,7 @@ import { YStack } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 import { WebView } from 'react-native-webview';
 
+import { devLicenses, backendLicenses, licenses } from '@assets/licenses';
 import { colors } from '@shared/lib';
 import { Box, Text, XStack, ScrollView, CloseIcon } from '@shared/ui';
 
@@ -16,84 +17,18 @@ type License = {
   title: string;
 };
 
-type Licenses = {
-  [key: string]: License;
-};
-
-const licenses: Licenses = {
-  '@react-native-community/hooks': {
-    homePageUrl: 'https://github.com/react-native-community/hooks',
-    licenseType: 'isc',
-    licenseUrl:
-      'https://raw.githubusercontent.com/react-native-community/hooks/main/LICENSE',
-    version: '^3.0.0',
-    title: 'React Native Hooks',
-  },
-  'react-native': {
-    homePageUrl: 'https://github.com/facebook/react-native',
-    licenseType: 'MIT, CC-BY-4.0 licenses found',
-    licenseUrl:
-      'https://raw.githubusercontent.com/facebook/react-native/main/LICENSE-docs',
-    version: '0.70.6',
-    title: 'React Native',
-  },
-  'react-native-autoheight-webview': {
-    homePageUrl: 'https://github.com/iou90/react-native-autoheight-webview',
-    licenseType: 'ISC',
-    licenseUrl:
-      'https://raw.githubusercontent.com/iou90/react-native-autoheight-webview/master/LICENSE',
-    version: '^1.6.5',
-    title: 'react-native-autoheight-webview',
-  },
-  'react-native-mmkv': {
-    homePageUrl: 'https://github.com/mrousavy/react-native-mmkv',
-    licenseType: 'MIT AND BSD-3-Clause',
-    licenseUrl:
-      'https://raw.githubusercontent.com/mrousavy/react-native-mmkv/master/LICENSE',
-    version: '2.5.1',
-    title: 'React native MMKV',
-  },
-  'react-native-video-player': {
-    homePageUrl: 'https://github.com/cornedor/react-native-video-player',
-    licenseType: 'ISC',
-    licenseUrl:
-      'https://raw.githubusercontent.com/cornedor/react-native-video-player/master/LICENSE',
-    version: '^0.14.0',
-    title: 'React Native Video Player',
-  },
-};
-
-const devLicenses: Licenses = {
-  '@typescript-eslint/parser': {
-    homePageUrl: 'https://github.com/typescript-eslint/typescript-eslint',
-    licenseType: 'BSD-2-Clause',
-    licenseUrl:
-      'https://raw.githubusercontent.com/typescript-eslint/typescript-eslint/main/LICENSE',
-    version: '^5.37.0',
-    title: '@typescript-eslint/parser',
-  },
-  typescript: {
-    homePageUrl: 'https://www.typescriptlang.org/',
-    licenseType: 'Apache-2.0',
-    licenseUrl:
-      'https://raw.githubusercontent.com/microsoft/TypeScript/main/LICENSE.txt',
-    version: '^4.8.3',
-    title: 'Typescript',
-  },
-};
-
 const htmlStyles = `
-<style>
-  pre {
-   word-wrap: break-word;
-   white-space: pre-wrap;
-   font-size: 45px;
-   font-family: initial;
-  }
-   body {
-     background-color: white;
-   }
-</style>`;
+    <style>
+      pre {
+       word-wrap: break-word;
+       white-space: pre-wrap;
+       font-size: 45px;
+       font-family: initial;
+      }
+       body {
+         background-color: white;
+       }
+    </style>`;
 
 const OpenSourceUsed: FC = () => {
   const { t } = useTranslation();
@@ -104,12 +39,12 @@ const OpenSourceUsed: FC = () => {
     const response = await fetch(licenseUrlLocal);
     const text = await response.text();
     const html = `
-<html>
-  ${htmlStyles}
-  <pre>
-    ${text}
-  </pre>
-</html>`;
+      <html>
+        ${htmlStyles}
+        <pre>
+          ${text}
+        </pre>
+      </html>`;
 
     setLicenseHTML(html);
     setModalVisible(true);
@@ -142,14 +77,18 @@ const OpenSourceUsed: FC = () => {
   );
 
   return (
-    <ScrollView flex={1} bg="$white" p={15}>
+    <ScrollView bg="$white" flex={1} p={15}>
       <Box flex={1}>
-        {Object.values({ ...licenses, ...devLicenses }).map((license, key) => {
+        {Object.values({
+          ...licenses,
+          ...devLicenses,
+          ...backendLicenses,
+        }).map((license, key) => {
           return <LicenseItem key={key} license={license} />;
         })}
       </Box>
 
-      <Modal animationType="fade" transparent visible={modalVisible}>
+      <Modal transparent animationType="fade" visible={modalVisible}>
         <Box style={styles.modal}>
           <YStack style={styles.modalContainer}>
             <Box onPress={() => setModalVisible(false)} ai="flex-end" m="$2">
