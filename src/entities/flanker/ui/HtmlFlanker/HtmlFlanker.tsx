@@ -9,12 +9,12 @@ import {
   FlankerConfiguration,
   FlankerLogRecord,
   FlankerWebViewLogRecord,
-} from '../lib/types';
+} from '../../lib/types';
 import {
   ConfigurationBuilder,
   getScreensNumberPerTrial,
   parseResponse,
-} from '../lib/utils';
+} from '../../lib/utils';
 
 const htmlAsset = require('./visual-stimulus-response.html');
 

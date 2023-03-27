@@ -82,3 +82,5 @@ type TestButtons = {
   image: StringOrNull;
   value: number;
 };
+
+export type FlankerNativeIOSConfiguration = FlankerWebViewConfiguration;
