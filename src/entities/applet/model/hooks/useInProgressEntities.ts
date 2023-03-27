@@ -1,6 +1,7 @@
+import { ProgressPayload } from '@app/abstract/lib/types';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
 
-import { onBeforeStartingActivity, ProgressPayload } from '../../lib';
+import { onBeforeStartingActivity } from '../../lib';
 import { selectInProgressApplets } from '../selectors';
 import { actions } from '../slice';
 

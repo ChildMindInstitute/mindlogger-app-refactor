@@ -1,7 +1,8 @@
+import { AvailabilityType, PeriodicityType } from '@app/abstract/lib/types';
 import { ScheduleEventDto } from '@app/shared/api/services/eventsService';
 import { buildDateFromDto } from '@app/shared/lib';
 
-import { AvailabilityType, PeriodicityType, ScheduleEvent } from '../lib';
+import { ScheduleEvent } from '../lib';
 
 export function mapEventsFromDto(
   eventsDto: ScheduleEventDto[],
@@ -25,6 +26,10 @@ export function mapEventsFromDto(
         oneTimeCompletion: x.availability.oneTimeCompletion,
         timeFrom: x.availability.timeFrom,
         timeTo: x.availability.timeTo,
+      },
+      notificationSettings: {
+        notifications: [],
+        reminder: null,
       },
     };
   });

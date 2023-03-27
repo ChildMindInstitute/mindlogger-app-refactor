@@ -1,17 +1,17 @@
 import { isToday } from 'date-fns';
 
 import {
+  ActivityPipelineType,
+  AvailabilityType,
+  EntitiesInProgress,
+  FlowProgress,
+  ProgressPayload,
+} from '@app/abstract/lib/types';
+import {
   ActivityListItem,
   ActivityStatus,
   ActivityType,
 } from '@entities/activity';
-import {
-  FlowProgress,
-  ActivityPipelineType,
-  EntitiesInProgress,
-  ProgressPayload,
-} from '@entities/applet';
-import { AvailabilityType } from '@entities/event';
 import {
   getMsFromHours,
   getMsFromMinutes,

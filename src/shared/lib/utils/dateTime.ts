@@ -47,6 +47,14 @@ export const convertToTimeOnNoun = (date: Date): TimeOrNoun => {
   }
 };
 
+export const getDiff = (from: HourMinute, to: HourMinute): number => {
+  return (
+    getMsFromHours(to.hours) +
+    getMsFromMinutes(to.minutes) -
+    (getMsFromHours(from.hours) + getMsFromMinutes(from.minutes))
+  );
+};
+
 export const isSourceTimeBigger = (
   timeSource: HourMinute,
   timeTarget: HourMinute,

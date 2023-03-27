@@ -1,6 +1,10 @@
+import {
+  ActivityPipelineType,
+  AvailabilityType,
+  EntitiesInProgress,
+  PeriodicityType,
+} from '@app/abstract/lib/types';
 import { ActivityType } from '@app/entities/activity';
-import { ActivityPipelineType, EntitiesInProgress } from '@app/entities/applet';
-import { AvailabilityType, PeriodicityType } from '@app/entities/event';
 
 import { Activity, ActivityFlow, EventEntity } from '../../../lib';
 
@@ -84,6 +88,7 @@ export const eventActivities: EventEntity[] = [
         },
         idleTimer: null,
       },
+      notificationSettings: { notifications: [] },
     },
   },
   {
@@ -104,6 +109,7 @@ export const eventActivities: EventEntity[] = [
       scheduledAt: null,
       selectedDate: new Date(2023, 2, 16, 0, 0, 0),
       timers: { idleTimer: null, timer: null },
+      notificationSettings: { notifications: [] },
     },
   },
 ];
