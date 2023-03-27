@@ -19,6 +19,7 @@ export type RootStackParamList = {
     flowId?: string;
   };
   ActivityPassedScreen: undefined;
+  OpenSourceUsed: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

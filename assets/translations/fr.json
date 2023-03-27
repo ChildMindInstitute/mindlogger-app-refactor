@@ -462,5 +462,10 @@
     "finished_complete": "Fini. Cliquer sur Terminé pour terminer.",
     "begin": "Commencer",
     "end": "Fin"
+  },
+  "open_source": {
+    "title":"Logiciel Open Source utilisé",
+    "show_license": "Afficher la licence",
+    "homepage": "Page d'accueil"
   }
 }
