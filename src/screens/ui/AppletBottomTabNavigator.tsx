@@ -12,7 +12,7 @@ import {
   getAppletDetailsScreenOptions,
   RootStackParamList,
 } from '../config';
-import { ActivityListScreen, AboutAppletScreen } from '../ui';
+import { ActivityListScreen, AboutAppletScreen, AppletDataScreen } from '../ui';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AppletDetails'>;
 
@@ -73,7 +73,7 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
           options={{
             title: t('applet_footer:data'),
           }}
-          component={AboutAppletScreen}
+          component={AppletDataScreen}
           initialParams={route.params}
         />
 
