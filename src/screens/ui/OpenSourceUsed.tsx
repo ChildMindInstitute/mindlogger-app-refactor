@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { WebView } from 'react-native-webview';
 
 import { devLicenses, backendLicenses, licenses } from '@assets/licenses';
-import { colors } from '@shared/lib';
+import { colors, generateLicenseHTML } from '@shared/lib';
 import { Box, Text, XStack, ScrollView, CloseIcon } from '@shared/ui';
 
 type License = {
@@ -17,18 +17,13 @@ type License = {
   title: string;
 };
 
-const htmlStyles = `
-    <style>
-      pre {
-       word-wrap: break-word;
-       white-space: pre-wrap;
-       font-size: 45px;
-       font-family: initial;
-      }
-       body {
-         background-color: white;
-       }
-    </style>`;
+const arrayOfLicenses = Object.values({
+  ...licenses,
+  ...devLicenses,
+  ...backendLicenses,
+});
+
+const generateHtmlFromUrl = generateLicenseHTML();
 
 const OpenSourceUsed: FC = () => {
   const { t } = useTranslation();
@@ -36,15 +31,7 @@ const OpenSourceUsed: FC = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const showLicense = async (licenseUrlLocal: string) => {
-    const response = await fetch(licenseUrlLocal);
-    const text = await response.text();
-    const html = `
-      <html>
-        ${htmlStyles}
-        <pre>
-          ${text}
-        </pre>
-      </html>`;
+    const html = await generateHtmlFromUrl(licenseUrlLocal);
 
     setLicenseHTML(html);
     setModalVisible(true);
@@ -79,11 +66,7 @@ const OpenSourceUsed: FC = () => {
   return (
     <ScrollView bg="$white" flex={1} p={15}>
       <Box flex={1}>
-        {Object.values({
-          ...licenses,
-          ...devLicenses,
-          ...backendLicenses,
-        }).map((license, key) => {
+        {arrayOfLicenses.map((license, key) => {
           return <LicenseItem key={key} license={license} />;
         })}
       </Box>
