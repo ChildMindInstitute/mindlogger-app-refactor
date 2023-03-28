@@ -27,21 +27,26 @@ const grid: ActivityDto = {
   items: [
     {
       id: 100,
-      inputType: 'DrawingTest',
-      config: {
-        imageUrl: null,
-        backgroundImageUrl:
-          'https://mindlogger-applet-contents.s3.amazonaws.com/image/9qPz3D1kyzwD2pAAHpP5Hv.jpeg',
-      },
-      timer: 0,
-      hasTokenValue: true,
-      isSkippable: true,
-      hasAlert: true,
-      hasScore: true,
-      isAbleToMoveToPrevious: true,
-      hasTextResponse: true,
+      name: 'test name',
       question: testMessage2,
       order: 0,
+      responseType: 'drawing',
+      config: {
+        removeUndoButton: false,
+        navigationToTop: false,
+        timer: null,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: true,
+        skippableItem: false,
+      },
+      responseValues: {
+        drawingExample: '',
+        drawingBackground:
+          'https://mindlogger-applet-contents.s3.amazonaws.com/image/9qPz3D1kyzwD2pAAHpP5Hv.jpeg',
+      },
     },
   ],
 };
@@ -62,21 +67,26 @@ const vortex: ActivityDto = {
   items: [
     {
       id: 100,
-      inputType: 'DrawingTest',
-      config: {
-        imageUrl: null,
-        backgroundImageUrl:
-          'https://mindlogger-applet-contents.s3.amazonaws.com/image/w93voaqZA7ZGoZryorBvQc.jpeg',
-      },
-      timer: 0,
-      hasTokenValue: true,
-      isSkippable: true,
-      hasAlert: true,
-      hasScore: true,
-      isAbleToMoveToPrevious: true,
-      hasTextResponse: true,
+      name: 'test name',
       question: testMessage1,
       order: 0,
+      responseType: 'drawing',
+      config: {
+        removeUndoButton: false,
+        navigationToTop: false,
+        timer: null,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: true,
+        skippableItem: false,
+      },
+      responseValues: {
+        drawingExample: '',
+        drawingBackground:
+          'https://mindlogger-applet-contents.s3.amazonaws.com/image/w93voaqZA7ZGoZryorBvQc.jpeg',
+      },
     },
   ],
 };
@@ -119,17 +129,15 @@ export const AbTestActivity: ActivityDto = {
   items: [
     {
       id: 100,
-      inputType: 'AbTest',
+      name: 'A/B Test',
+      responseType: 'abTest',
       config: {
+        timer: null,
+      },
+      responseValues: {
         device: 'Phone',
       },
-      timer: 0,
-      hasTokenValue: true,
-      isSkippable: true,
-      hasAlert: true,
-      hasScore: true,
-      isAbleToMoveToPrevious: true,
-      hasTextResponse: true,
+      question: '',
       order: 0,
     },
   ],
@@ -151,15 +159,11 @@ const FlankerWithImageActivity: ActivityDto = {
   items: [
     {
       id: 100,
-      inputType: 'Flanker',
+      name: 'Flanker',
+      question: '',
+      responseType: 'flanker',
       config: FlankerWithImageOnButton,
-      timer: 0,
-      hasTokenValue: true,
-      isSkippable: true,
-      hasAlert: true,
-      hasScore: true,
-      isAbleToMoveToPrevious: true,
-      hasTextResponse: true,
+      responseValues: {},
       order: 0,
     },
   ],
@@ -181,15 +185,11 @@ const FlankerWithStSFxActivity: ActivityDto = {
   items: [
     {
       id: 100,
-      inputType: 'Flanker',
+      name: 'Flanker',
+      question: '',
+      responseType: 'flanker',
       config: FlankerWithStFxImages,
-      timer: 0,
-      hasTokenValue: true,
-      isSkippable: true,
-      hasAlert: true,
-      hasScore: true,
-      isAbleToMoveToPrevious: true,
-      hasTextResponse: true,
+      responseValues: {},
       order: 0,
     },
   ],
@@ -211,15 +211,11 @@ const FlankerWithTextSignsActivity: ActivityDto = {
   items: [
     {
       id: 100,
-      inputType: 'Flanker',
+      name: 'Flanker',
+      question: '',
+      responseType: 'flanker',
       config: FlankerWithTextsSigns,
-      timer: 0,
-      hasTokenValue: true,
-      isSkippable: true,
-      hasAlert: true,
-      hasScore: true,
-      isAbleToMoveToPrevious: true,
-      hasTextResponse: true,
+      responseValues: {},
       order: 0,
     },
   ],

@@ -12,8 +12,8 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
     ...dto,
     items: dto.items.map(item => ({
       ...item,
-      inputType: item.inputType as ActivityItemType,
-      config: item.config as ActivityItemConfig,
-    })) as ActivityItem[],
+      inputType: item.responseType as unknown as ActivityItemType,
+      config: item.config as unknown as ActivityItemConfig,
+    })) as unknown as ActivityItem[],
   };
 }
