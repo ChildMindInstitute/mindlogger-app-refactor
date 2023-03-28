@@ -9,7 +9,7 @@ import { YStack, ScrollView, Box } from '@shared/ui';
 
 import { AppletDetailsParamList } from '../config';
 
-type Props = BottomTabScreenProps<AppletDetailsParamList, 'About' | 'Data'>; // @todo 'Data' to be removed after separate DataScreen implementation
+type Props = BottomTabScreenProps<AppletDetailsParamList, 'About'>;
 
 const AboutAppletScreen: FC<Props> = ({ route }) => {
   let content;
