@@ -23,7 +23,6 @@ export const mapActivityFlowsFromDto = (
     description: dto.description,
     hideBadge: dto.hideBadge,
     id: dto.id,
-    image: dto.image,
     name: dto.name,
     pipelineType: ActivityPipelineType.Flow,
   }));

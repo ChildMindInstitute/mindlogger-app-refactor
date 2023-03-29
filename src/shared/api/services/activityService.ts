@@ -1,27 +1,13 @@
+import { ActivityItemDto } from './ActivityItemDto';
 import httpService from './httpService';
 import { SuccessfulResponse } from '../types';
-
-type ActivityItemDto = {
-  id: number;
-  inputType: string;
-  config: {};
-  timer: number;
-  hasTokenValue: true;
-  isSkippable: true;
-  hasAlert: true;
-  hasScore: true;
-  isAbleToMoveToPrevious: true;
-  hasTextResponse: true;
-  order: number;
-  question?: string;
-};
 
 export type ActivityDto = {
   id: string;
   name: string;
   description: string;
-  splashScreen: string;
-  image: string;
+  splashScreen: string | null;
+  image: string | null;
   showAllAtOnce: boolean;
   isSkippable: boolean;
   isReviewable: boolean;

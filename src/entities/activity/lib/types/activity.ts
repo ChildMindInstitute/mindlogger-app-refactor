@@ -56,8 +56,8 @@ export type ActivityDetails = {
   id: string;
   name: string;
   description: string;
-  splashScreen: string;
-  image: string;
+  splashScreen: string | null;
+  image: string | null;
   showAllAtOnce: boolean;
   isSkippable: boolean;
   isReviewable: boolean;

@@ -11,13 +11,12 @@ export type ActivityRecordDto = {
   showAllAtOnce: boolean;
   responseIsEditable: boolean;
   ordering: number;
-  splashScreen: string;
+  splashScreen: string | null;
 };
 
 export type ActivityFlowRecordDto = {
   id: string;
   name: string;
-  image: string | null;
   description: string;
   hideBadge: boolean;
   isSingleReport: boolean;
@@ -37,7 +36,6 @@ export type ThemeDto = {
 
 export type AppletDetailsDto = {
   id: string;
-  name: string;
   displayName: string;
   version: string;
   description: string;
@@ -54,13 +52,13 @@ export type AppletDto = {
   image: string | null;
   displayName: string;
   description: string;
-  numberOverdue?: number;
   theme: ThemeDto | null;
+  version: string;
+  about: string;
+  watermark: string | null;
 };
 
-export type AppletsResponse = {
-  result: AppletDto[];
-};
+export type AppletsResponse = SuccessfulResponse<AppletDto[]>;
 
 type AppletDetailsRequest = {
   appletId: string;

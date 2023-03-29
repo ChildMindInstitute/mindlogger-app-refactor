@@ -6,7 +6,7 @@ export type Entity = {
   id: string;
   name: string;
   description: string;
-  image: string | null;
+  image?: string | null;
 };
 
 export type Activity = Entity & {
