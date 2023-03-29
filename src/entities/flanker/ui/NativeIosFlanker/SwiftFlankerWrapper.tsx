@@ -6,7 +6,11 @@ type Props = {
   style: StyleProp<ViewStyle>;
 };
 
-const RNFlankerView = requireNativeComponent('FlankerView');
+type NativeFlankerProps = Props & {
+  onEndGame: (e: any) => void;
+};
+
+const RNFlankerView = requireNativeComponent<NativeFlankerProps>('FlankerView');
 
 const FlankerViewWrapper: React.FC<Props> = props => {
   const _onEndGame = (event: any) => {

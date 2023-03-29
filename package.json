@@ -84,7 +84,7 @@
     "react-native-reanimated": "^2.14.4",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "^3.20.0",
-    "react-native-svg": "^12.1.1",
+    "react-native-svg": "^13.8.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-video": "^5.2.1",
     "react-native-video-player": "^0.14.0",
@@ -93,6 +93,7 @@
     "redux-persist": "^6.0.0",
     "rn-fetch-blob": "^0.12.0",
     "uuid": "^9.0.0",
+    "victory-native": "^36.6.8",
     "zod": "^3.20.2",
     "zod-i18n-map": "^2.1.0"
   },
