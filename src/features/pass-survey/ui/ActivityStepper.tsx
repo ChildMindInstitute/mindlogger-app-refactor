@@ -43,6 +43,7 @@ function ActivityStepper({
     activityStorageRecord,
     setStep: setCurrentStep,
     setAnswer,
+    removeAnswer,
   } = useActivityState({
     appletId,
     activityId,
@@ -93,6 +94,10 @@ function ActivityStepper({
     return 1;
   };
 
+  const onUndo = () => {
+    removeAnswer(currentStep);
+  };
+
   if (!activityStorageRecord) {
     return (
       <Center flex={1}>
@@ -112,9 +117,10 @@ function ActivityStepper({
         onBeforeBack={onBeforeBack}
         onStartReached={onClose}
         onEndReached={onFinish}
+        onUndo={onUndo}
       >
         {showTopNavigation && (
-          <Stepper.NavigationPanel position="absolute" mx={16}>
+          <Stepper.NavigationPanel mx={16}>
             {canMoveBack && <Stepper.BackButton isIcon />}
             {canReset && <Stepper.UndoButton isIcon />}
             {canMoveNext && <Stepper.NextButton isIcon />}

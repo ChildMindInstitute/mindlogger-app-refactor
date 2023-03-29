@@ -1,4 +1,4 @@
-type ResponseType =
+export type ResponseType =
   | 'text'
   | 'singleSelect'
   | 'multiSelect'
@@ -290,7 +290,7 @@ type ResponseValues =
   | FlankerResponseValues;
 
 type ActivityItemDtoBase = {
-  id: number;
+  id: string;
   name: string;
   config: Config;
   question: string;
@@ -299,125 +299,125 @@ type ActivityItemDtoBase = {
   order: number;
 };
 
-interface TextActivityItemDto extends ActivityItemDtoBase {
+export interface TextItemDto extends ActivityItemDtoBase {
   responseType: 'text';
   config: TextConfig;
   responseValues: TextResponseValues;
 }
 
-interface SingleSelectionItemDto extends ActivityItemDtoBase {
+export interface SingleSelectionItemDto extends ActivityItemDtoBase {
   responseType: 'singleSelect';
   config: SingleSelectionConfig;
   responseValues: SingleSelectionResponseValues;
 }
 
-interface MultiSelectionItemDto extends ActivityItemDtoBase {
+export interface MultiSelectionItemDto extends ActivityItemDtoBase {
   responseType: 'multiSelect';
   config: MultiSelectionConfig;
   responseValues: MultiSelectionResponseValues;
 }
 
-interface MessageSelectionItemDto extends ActivityItemDtoBase {
+export interface MessageItemDto extends ActivityItemDtoBase {
   responseType: 'message';
   config: MessageConfig;
   responseValues: MessageResponseValues;
 }
 
-interface SliderSelectionItemDto extends ActivityItemDtoBase {
+export interface SliderSelectionItemDto extends ActivityItemDtoBase {
   responseType: 'slider';
   config: SliderConfig;
   responseValues: SliderResponseValue;
 }
 
-interface NumberSelectionItemDto extends ActivityItemDtoBase {
+export interface NumberSelectionItemDto extends ActivityItemDtoBase {
   responseType: 'numberSelect';
   config: NumberSelectionConfig;
   responseValues: NumberSelectionResponseValues;
 }
 
-interface TimeRangeItemDto extends ActivityItemDtoBase {
+export interface TimeRangeItemDto extends ActivityItemDtoBase {
   responseType: 'timeRange';
   config: TimeRangeConfig;
   responseValues: TimerRangeResponseValues;
 }
 
-interface GeolocationItemDto extends ActivityItemDtoBase {
+export interface GeolocationItemDto extends ActivityItemDtoBase {
   responseType: 'geolocation';
   config: GeolocationConfig;
   responseValues: GeolocationResponseValues;
 }
 
-interface DrawingItemDto extends ActivityItemDtoBase {
+export interface DrawingItemDto extends ActivityItemDtoBase {
   responseType: 'drawing';
   config: DrawingConfig;
   responseValues: DrawingResponseValues;
 }
 
-interface PhotoItemDto extends ActivityItemDtoBase {
+export interface PhotoItemDto extends ActivityItemDtoBase {
   responseType: 'photo';
   config: PhotoConfig;
   responseValues: PhotoResponseValues;
 }
 
-interface VideoItemDto extends ActivityItemDtoBase {
+export interface VideoItemDto extends ActivityItemDtoBase {
   responseType: 'video';
   config: VideoConfig;
   responseValues: VideoResponseValues;
 }
 
-interface DateItemDto extends ActivityItemDtoBase {
+export interface DateItemDto extends ActivityItemDtoBase {
   responseType: 'date';
   config: DateConfig;
   responseValues: DateResponseValues;
 }
 
-interface SliderRowsItemDto extends ActivityItemDtoBase {
+export interface SliderRowsItemDto extends ActivityItemDtoBase {
   responseType: 'sliderRows';
   config: SliderRowsConfig;
   responseValues: SliderRowsResponseValues;
 }
 
-interface SingleSelectionRowsItemDto extends ActivityItemDtoBase {
+export interface SingleSelectionRowsItemDto extends ActivityItemDtoBase {
   responseType: 'singleSelectRows';
   config: SingleSelectionRowsConfig;
   responseValues: SingleSelectionRowsResponseValues;
 }
 
-interface MultiSelectionRowsItemDto extends ActivityItemDtoBase {
+export interface MultiSelectionRowsItemDto extends ActivityItemDtoBase {
   responseType: 'multiSelectRows';
   config: MultiSelectionRowsConfig;
   responseValues: MultiSelectionRowsResponseValues;
 }
 
-interface AudioItemDto extends ActivityItemDtoBase {
+export interface AudioItemDto extends ActivityItemDtoBase {
   responseType: 'audio';
   config: AudioConfig;
   responseValues: AudioResponseValues;
 }
 
-interface AudioPlayerItemDto extends ActivityItemDtoBase {
+export interface AudioPlayerItemDto extends ActivityItemDtoBase {
   responseType: 'audioPlayer';
   config: AudioPlayerConfig;
   responseValues: AudioPlayerResponseValues;
 }
 
-interface AbTestItemDto extends ActivityItemDtoBase {
+export interface AbTestItemDto extends ActivityItemDtoBase {
   responseType: 'abTest';
   config: AbTestConfig;
   responseValues: AbTestResponseValues;
 }
 
-interface FlankerItemDto extends ActivityItemDtoBase {
+export interface FlankerItemDto extends ActivityItemDtoBase {
   responseType: 'flanker';
   config: FlankerConfig;
   responseValues: FlankerResponseValues;
 }
 
 export type ActivityItemDto =
-  | TextActivityItemDto
+  | TextItemDto
   | SingleSelectionItemDto
   | MultiSelectionItemDto
-  | MessageSelectionItemDto
+  | MessageItemDto
   | SliderSelectionItemDto
   | NumberSelectionItemDto
   | TimeRangeItemDto
