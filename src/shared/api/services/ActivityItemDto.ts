@@ -47,11 +47,13 @@ type SingleSelectionConfig = ButtonsConfig &
 
 type SingleSelectionResponseValues = {
   options: Array<{
+    id: string;
     text: string;
-    image: string;
-    score: string;
-    tooltip: string;
-    isHidden: string;
+    image: string | null;
+    score: number | null;
+    tooltip: string | null;
+    color: string | null;
+    isHidden: boolean;
   }>;
 };
 
@@ -67,11 +69,13 @@ type MultiSelectionConfig = ButtonsConfig &
 
 type MultiSelectionResponseValues = {
   options: Array<{
+    id: string;
     text: string;
-    image: string;
-    score: string;
-    tooltip: string;
-    isHidden: string;
+    image: string | null;
+    score: number | null;
+    tooltip: string | null;
+    color: string | null;
+    isHidden: boolean;
   }>;
 };
 
@@ -79,9 +83,9 @@ type TextConfig = ButtonsConfig & {
   maxResponseLength: number;
   correctAnswerRequired: boolean;
   correctAnswer: string;
-  numericalResponseRequired: string;
-  responseDataIdentifier: string;
-  responseRequired: string;
+  numericalResponseRequired: boolean;
+  responseDataIdentifier: boolean;
+  responseRequired: boolean;
 };
 
 type TextResponseValues = null;
@@ -96,15 +100,17 @@ type SingleSelectionRowsConfig = ButtonsConfig &
 
 type SingleSelectionRowsResponseValues = {
   rows: Array<{
+    id: string;
     rowName: string;
-    rowImage: string;
-    tooltip: string;
+    rowImage: string | null;
+    tooltip: string | null;
 
     options: Array<{
+      id: string;
       text: string;
-      image: string;
-      score: number;
-      tooltip: string;
+      image: string | null;
+      score: number | null;
+      tooltip: string | null;
     }>;
   }>;
 };
@@ -118,15 +124,17 @@ type MultiSelectionRowsConfig = ButtonsConfig &
 
 type MultiSelectionRowsResponseValues = {
   rows: Array<{
+    id: string;
     rowName: string;
-    rowImage: string;
-    tooltip: string;
+    rowImage: string | null;
+    tooltip: string | null;
 
     options: Array<{
+      id: string;
       text: string;
-      image: string;
-      score: 0;
-      tooltip: string;
+      image: string | null;
+      score: number | null;
+      tooltip: string | null;
     }>;
   }>;
 };
@@ -161,8 +169,8 @@ type SliderConfig = ButtonsConfig &
   };
 
 type SliderResponseValue = {
-  minLabel: string;
-  maxLabel: string;
+  minLabel: string | null;
+  maxLabel: string | null;
   minValue: number;
   maxValue: number;
   minImage: string | null;
@@ -192,8 +200,8 @@ type DrawingConfig = ButtonsConfig &
   };
 
 type DrawingResponseValues = {
-  drawingExample: string;
-  drawingBackground: string;
+  drawingExample: string | null;
+  drawingBackground: string | null;
 };
 
 type PhotoConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig;
@@ -215,13 +223,14 @@ type SliderRowsConfig = ButtonsConfig &
   };
 
 type SliderRowsResponseValues = Array<{
+  id: string;
   label: string;
-  minLabel: string;
-  maxLabel: string;
+  minLabel: string | null;
+  maxLabel: string | null;
   minValue: number;
   maxValue: number;
-  minImage: string;
-  maxImage: string;
+  minImage: string | null;
+  maxImage: string | null;
 }>;
 
 // @todo Change when the BE integration is done
