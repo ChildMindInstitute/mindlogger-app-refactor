@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 import { format } from 'date-fns';
 import {
@@ -11,7 +11,10 @@ import {
 import { colors, getCurrentWeekDates } from '@app/shared/lib';
 import { Box } from '@shared/ui';
 
-import LineChartItem from './types';
+type LineChartItem = {
+  date: string;
+  value: number;
+};
 
 const daysOfWeekNumber = [0, 1, 2, 3, 4, 5, 6];
 const dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -27,14 +30,14 @@ const LineChart: FC<Props> = ({ data }) => {
   const generateYAxisDots = () =>
     Array.from(Array(6).keys()).map(item => ({ dot: 1, value: item * 2 }));
 
-  const mappedData = () => {
+  const mappedData = useMemo(() => {
     const dateFormat = 'yyyy dd MM';
     const currentWeekDates = getCurrentWeekDates(dateFormat);
 
     const formattedDataDate = () =>
       data.map(dataItem => ({
         ...dataItem,
-        date: format(new Date(dataItem.date), 'yyyy dd MM'),
+        date: format(new Date(dataItem.date), dateFormat),
       }));
 
     return currentWeekDates.map(currentWeekDate => {
@@ -46,9 +49,7 @@ const LineChart: FC<Props> = ({ data }) => {
           )?.value || null,
       };
     });
-  };
-
-  console.log(mappedData());
+  }, [data]);
 
   return (
     <Box>
@@ -90,14 +91,14 @@ const LineChart: FC<Props> = ({ data }) => {
 
         <VictoryLine
           style={{ data: { stroke: colors.primary } }}
-          data={mappedData()}
+          data={mappedData}
           x="date"
           y="value"
         />
 
         <VictoryScatter
           style={{ data: { fill: colors.primary } }}
-          data={mappedData()}
+          data={mappedData}
           x="date"
           y="value"
           size={5}
