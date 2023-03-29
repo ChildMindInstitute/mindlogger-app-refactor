@@ -5,7 +5,6 @@ type AbTestConfig = {
 };
 
 type DrawingTestTestConfig = {
-  instruction: string | null;
   imageUrl: string | null;
   backgroundImageUrl: string | null;
 };

@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 
-import { Box, BoxProps, Image, Text, XStack } from '@app/shared/ui';
+import { Box, BoxProps, Image, XStack } from '@app/shared/ui';
 
 import DrawingBoard from './DrawingBoard';
 import { DrawLine, DrawResult } from '../lib';
@@ -8,8 +8,7 @@ import { DrawLine, DrawResult } from '../lib';
 const RectPadding = 15;
 
 type Props = {
-  initialLines: Array<DrawLine>;
-  instruction: string | null;
+  value: Array<DrawLine>;
   imageUrl: string | null;
   backgroundImageUrl: string | null;
   onStarted: () => void;
@@ -19,20 +18,17 @@ type Props = {
 const DrawingTest: FC<Props> = props => {
   const [width, setWidth] = useState<number | null>(null);
 
-  const {
-    initialLines,
-    backgroundImageUrl,
-    imageUrl,
-    instruction,
-    onStarted,
-    onResult,
-  } = props;
+  const { value, backgroundImageUrl, imageUrl, onStarted, onResult } = props;
 
   return (
     <Box
       {...props}
       onLayout={x => {
-        setWidth(x.nativeEvent.layout.width - RectPadding * 2);
+        const containerWidth = x.nativeEvent.layout.width - RectPadding * 2;
+
+        if (containerWidth > 0) {
+          setWidth(containerWidth);
+        }
       }}
     >
       {!!imageUrl && (
@@ -62,18 +58,12 @@ const DrawingTest: FC<Props> = props => {
           )}
 
           <DrawingBoard
-            initialLines={initialLines}
+            value={value}
             onResult={onResult}
             onStarted={onStarted}
             width={width}
           />
         </XStack>
-      )}
-
-      {!!instruction && (
-        <Text mt={20} p={RectPadding} pt={0}>
-          {instruction}
-        </Text>
       )}
     </Box>
   );

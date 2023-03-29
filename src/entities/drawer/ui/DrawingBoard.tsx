@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useRef, useState, useMemo } from 'react';
+import React, { useRef, useMemo, FC, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import {
@@ -36,46 +35,35 @@ paint.setStrokeWidth(1);
 paint.setStyle(PaintStyle.Stroke);
 
 type Props = {
-  initialLines: Array<DrawLine>;
+  value: Array<DrawLine>;
   onStarted: () => void;
   onResult: (result: DrawResult) => void;
   width: number;
 };
 
 const DrawingBoard: FC<Props> = props => {
-  const { initialLines, onResult, onStarted, width } = props;
+  const { value, onResult, onStarted, width } = props;
 
   const currentPathRef = useRef<SkPath | null>();
 
   const canvasRef = useRef<SkCanvas>();
 
-  const initialLogLines = useMemo(() => {
-    return transformByWidth(initialLines, width);
-  }, []);
+  const normalizedLines = useMemo(() => {
+    return transformByWidth(value, width);
+  }, [value, width]);
 
-  const logLines = useRef<Array<DrawLine>>(initialLogLines).current;
+  const logLinesRef = useRef<Array<DrawLine>>(normalizedLines);
 
-  const [paths, setPaths] = useState<Array<SkPath>>(() => {
-    return convertToSkPaths(initialLogLines);
-  });
+  const paths = useMemo(
+    () => convertToSkPaths(normalizedLines),
+    [normalizedLines],
+  );
 
   const getCurrentPath = (): SkPath => currentPathRef.current!;
-
-  const keepPathInState = () => {
-    const path = getCurrentPath();
-    if (path) {
-      setPaths(list => [...list, path]);
-    }
-  };
 
   const resetCurrentPath = () => {
     currentPathRef.current = null;
     canvasRef.current?.clear(Skia.Color('transparent'));
-    reRender();
-  };
-
-  const reRender = () => {
-    setPaths(x => [...x]);
   };
 
   const reCreatePath = (point: Point) => {
@@ -89,7 +77,7 @@ const DrawingBoard: FC<Props> = props => {
   };
 
   const addLogLine = ({ x, y }: Point): void => {
-    logLines.push({
+    logLinesRef.current.push({
       startTime: getNow(),
       points: [{ time: getNow(), x, y }],
     });
@@ -100,10 +88,11 @@ const DrawingBoard: FC<Props> = props => {
   };
 
   const getLastLogLine = (): DrawLine | null => {
-    if (!logLines.length) {
+    if (!logLinesRef.current.length) {
       return null;
     }
-    return logLines[logLines.length - 1];
+
+    return logLinesRef.current[logLinesRef.current.length - 1];
   };
 
   const onTouchStart = (touchInfo: TouchInfo) => {
@@ -138,17 +127,16 @@ const DrawingBoard: FC<Props> = props => {
       return;
     }
 
-    const transformedLines = transformBack(logLines, width!);
+    const transformedLines = transformBack(logLinesRef.current, width);
 
     const svgString = ResponseSerializer.process(transformedLines);
 
     const result: DrawResult = {
       lines: transformedLines,
       svgString,
-      width: width!,
+      width,
     };
 
-    keepPathInState();
     resetCurrentPath();
     onResult(result);
   };
@@ -176,6 +164,12 @@ const DrawingBoard: FC<Props> = props => {
     },
     [width],
   );
+
+  useEffect(() => {
+    if (value.length === 0) {
+      logLinesRef.current = [];
+    }
+  }, [value.length]);
 
   return (
     <Box

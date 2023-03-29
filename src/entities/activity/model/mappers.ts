@@ -28,7 +28,6 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
     id: dto.id,
     inputType: 'DrawingTest',
     config: {
-      instruction: null,
       imageUrl: dto.responseValues.drawingExample,
       backgroundImageUrl: dto.responseValues.drawingBackground,
     },

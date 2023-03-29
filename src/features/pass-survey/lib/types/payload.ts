@@ -18,7 +18,6 @@ type AbTestPayload = {
 type SplashPayload = null;
 
 type DrawingPayload = {
-  instruction: string | null;
   imageUrl: string | null;
   backgroundImageUrl: string | null;
 };

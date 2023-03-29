@@ -38,7 +38,7 @@ function ActivityItem({ value, pipelineItem, onResponse }: Props) {
           <DrawingTest
             flex={1}
             {...pipelineItem.payload}
-            initialLines={value?.lines ?? []}
+            value={value?.lines ?? []}
             onStarted={() => console.log('onStarted')}
             onResult={onResponse}
           />
