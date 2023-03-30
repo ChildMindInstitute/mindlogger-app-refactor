@@ -2,6 +2,8 @@ import { ActivityItemDto } from './ActivityItemDto';
 import httpService from './httpService';
 import { SuccessfulResponse } from '../types';
 
+export * from './ActivityItemDto';
+
 export type ActivityDto = {
   id: string;
   name: string;

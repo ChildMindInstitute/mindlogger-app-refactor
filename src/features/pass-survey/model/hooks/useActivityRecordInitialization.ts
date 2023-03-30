@@ -36,9 +36,7 @@ function useActivityRecordCreator({
   });
 
   // @todo remove once integration is done
-  if (!activity) {
-    activity = DrawingTestActivity.all;
-  }
+  activity = DrawingTestActivity.all;
 
   const pipeline = useMemo(
     () =>

@@ -26,14 +26,14 @@ const grid: ActivityDto = {
   ordering: 0,
   items: [
     {
-      id: 100,
+      id: '101',
       name: 'test name',
       question: testMessage2,
       order: 0,
       responseType: 'drawing',
       config: {
         removeUndoButton: false,
-        navigationToTop: false,
+        navigationToTop: true,
         timer: null,
         additionalResponseOption: {
           textInputOption: false,
@@ -66,7 +66,7 @@ const vortex: ActivityDto = {
   ordering: 0,
   items: [
     {
-      id: 100,
+      id: '102',
       name: 'test name',
       question: testMessage1,
       order: 0,
@@ -128,7 +128,7 @@ export const AbTestActivity: ActivityDto = {
   ordering: 0,
   items: [
     {
-      id: 100,
+      id: '103',
       name: 'A/B Test',
       responseType: 'abTest',
       config: {
@@ -158,7 +158,7 @@ const FlankerWithImageActivity: ActivityDto = {
   ordering: 0,
   items: [
     {
-      id: 100,
+      id: '100',
       name: 'Flanker',
       question: '',
       responseType: 'flanker',
@@ -184,7 +184,7 @@ const FlankerWithStSFxActivity: ActivityDto = {
   ordering: 0,
   items: [
     {
-      id: 100,
+      id: '100',
       name: 'Flanker',
       question: '',
       responseType: 'flanker',
@@ -210,7 +210,7 @@ const FlankerWithTextSignsActivity: ActivityDto = {
   ordering: 0,
   items: [
     {
-      id: 100,
+      id: '100',
       name: 'Flanker',
       question: '',
       responseType: 'flanker',

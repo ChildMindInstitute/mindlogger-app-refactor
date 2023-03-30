@@ -1,4 +1,4 @@
-type ResponseType =
+export type ResponseType =
   | 'text'
   | 'singleSelect'
   | 'multiSelect'
@@ -19,25 +19,25 @@ type ResponseType =
   | 'flanker'
   | 'abTest';
 
-type ButtonsConfig = {
+type ButtonsConfiguration = {
   removeBackButton: boolean;
   skippableItem: boolean;
 };
 
-type TimerConfig = {
+type TimerConfiguration = {
   timer: number | null;
 };
 
-type AdditionalResponseConfig = {
+type AdditionalResponseConfiguration = {
   additionalResponseOption: {
     textInputOption: boolean;
     textInputRequired: boolean;
   };
 };
 
-type SingleSelectionConfig = ButtonsConfig &
-  AdditionalResponseConfig &
-  TimerConfig & {
+type SingleSelectionConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration & {
     randomizeOptions: boolean;
     addScores: boolean;
     setAlerts: boolean;
@@ -45,7 +45,7 @@ type SingleSelectionConfig = ButtonsConfig &
     setPalette: boolean;
   };
 
-type SingleSelectionResponseValues = {
+type SingleSelectionAnswerSettings = {
   options: Array<{
     id: string;
     text: string;
@@ -57,9 +57,9 @@ type SingleSelectionResponseValues = {
   }>;
 };
 
-type MultiSelectionConfig = ButtonsConfig &
-  AdditionalResponseConfig &
-  TimeRangeConfig & {
+type MultiSelectionConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimeRangeConfiguration & {
     randomizeOptions: boolean;
     addScores: boolean;
     setAlerts: boolean;
@@ -67,7 +67,7 @@ type MultiSelectionConfig = ButtonsConfig &
     setPalette: boolean;
   };
 
-type MultiSelectionResponseValues = {
+type MultiSelectionAnswerSettings = {
   options: Array<{
     id: string;
     text: string;
@@ -79,7 +79,7 @@ type MultiSelectionResponseValues = {
   }>;
 };
 
-type TextConfig = ButtonsConfig & {
+type TextConfiguration = ButtonsConfiguration & {
   maxResponseLength: number;
   correctAnswerRequired: boolean;
   correctAnswer: string;
@@ -88,17 +88,17 @@ type TextConfig = ButtonsConfig & {
   responseRequired: boolean;
 };
 
-type TextResponseValues = null;
+type TextAnswerSettings = null;
 
-type SingleSelectionRowsConfig = ButtonsConfig &
-  TimerConfig & {
+type SingleSelectionRowsConfiguration = ButtonsConfiguration &
+  TimerConfiguration & {
     randomizeOptions: boolean;
     addScores: boolean;
     setAlerts: boolean;
     addTooltip: boolean;
   };
 
-type SingleSelectionRowsResponseValues = {
+type SingleSelectionRowsAnswerSettings = {
   rows: Array<{
     id: string;
     rowName: string;
@@ -115,14 +115,14 @@ type SingleSelectionRowsResponseValues = {
   }>;
 };
 
-type MultiSelectionRowsConfig = ButtonsConfig &
-  TimerConfig & {
+type MultiSelectionRowsConfiguration = ButtonsConfiguration &
+  TimerConfiguration & {
     addScores: boolean;
     setAlerts: boolean;
     addTooltip: boolean;
   };
 
-type MultiSelectionRowsResponseValues = {
+type MultiSelectionRowsAnswerSettings = {
   rows: Array<{
     id: string;
     rowName: string;
@@ -139,28 +139,31 @@ type MultiSelectionRowsResponseValues = {
   }>;
 };
 
-type AudioConfig = ButtonsConfig & TimerConfig & AdditionalResponseConfig;
+type AudioConfiguration = ButtonsConfiguration &
+  TimerConfiguration &
+  AdditionalResponseConfiguration;
 
-type AudioResponseValues = {
+type AudioAnswerSettings = {
   maxDuration: number;
 };
 
-type AudioPlayerConfig = ButtonsConfig &
-  AdditionalResponseConfig & {
+type AudioPlayerConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration & {
     playOnce: boolean;
   };
 
-type AudioPlayerResponseValues = {
+type AudioPlayerAnswerSettings = {
   file: string;
 };
 
-type MessageConfig = Omit<ButtonsConfig, 'skippableItem'> & TimerConfig;
+type MessageConfiguration = Omit<ButtonsConfiguration, 'skippableItem'> &
+  TimerConfiguration;
 
-type MessageResponseValues = null;
+type MessageAnswerSettings = null;
 
-type SliderConfig = ButtonsConfig &
-  TimerConfig &
-  AdditionalResponseConfig & {
+type SliderConfiguration = ButtonsConfiguration &
+  TimerConfiguration &
+  AdditionalResponseConfiguration & {
     addScores: boolean;
     setAlerts: boolean;
     showTickMarks: boolean;
@@ -168,7 +171,7 @@ type SliderConfig = ButtonsConfig &
     continuousSlider: boolean;
   };
 
-type SliderResponseValue = {
+type SliderAnswerSettings = {
   minLabel: string | null;
   maxLabel: string | null;
   minValue: number;
@@ -177,52 +180,63 @@ type SliderResponseValue = {
   maxImage: string | null;
 };
 
-type NumberSelectionConfig = ButtonsConfig & AdditionalResponseConfig;
+type NumberSelectionConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration;
 
-type NumberSelectionResponseValues = {
+type NumberSelectionAnswerSettings = {
   minValue: number;
   maxValue: number;
 };
 
-type TimeRangeConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig;
+type TimeRangeConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
 
-type TimerRangeResponseValues = null;
+type TimerRangeAnswerSettings = null;
 
-type GeolocationConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig;
+type GeolocationConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
 
-type GeolocationResponseValues = null;
+type GeolocationAnswerSettings = null;
 
-type DrawingConfig = ButtonsConfig &
-  AdditionalResponseConfig &
-  TimerConfig & {
+type DrawingConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration & {
     removeUndoButton: boolean;
     navigationToTop: boolean;
   };
 
-type DrawingResponseValues = {
+type DrawingAnswerSettings = {
   drawingExample: string | null;
   drawingBackground: string | null;
 };
 
-type PhotoConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig;
+type PhotoConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
 
-type PhotoResponseValues = null;
+type PhotoAnswerSettings = null;
 
-type VideoConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig;
+type VideoConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
 
-type VideoResponseValues = null;
+type VideoAnswerSettings = null;
 
-type DateConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig;
+type DateConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
 
-type DateResponseValues = null;
+type DateAnswerSettings = null;
 
-type SliderRowsConfig = ButtonsConfig &
-  TimerConfig & {
+type SliderRowsConfiguration = ButtonsConfiguration &
+  TimerConfiguration & {
     addScores: boolean;
     setAlerts: boolean;
   };
 
-type SliderRowsResponseValues = Array<{
+type SliderRowsAnswerSettings = Array<{
   id: string;
   label: string;
   minLabel: string | null;
@@ -234,190 +248,190 @@ type SliderRowsResponseValues = Array<{
 }>;
 
 // @todo Change when the BE integration is done
-type AbTestConfig = TimerConfig;
+type AbTestConfiguration = TimerConfiguration;
 
 // @todo Change when the BE integration is done
-type AbTestResponseValues = {
+type AbTestAnswerSettings = {
   device: 'Phone' | 'Tablet';
 };
 
 // @todo Change when the BE integration is done
-type FlankerConfig = any;
+type FlankerConfiguration = any;
 
 // @todo Change when the BE integration is done
-type FlankerResponseValues = any;
+type FlankerAnswerSettings = any;
 
-type Config =
-  | TextConfig
-  | SingleSelectionRowsConfig
-  | MultiSelectionRowsConfig
-  | AudioConfig
-  | AudioPlayerConfig
-  | MessageConfig
-  | SliderConfig
-  | NumberSelectionConfig
-  | TimeRangeConfig
-  | GeolocationConfig
-  | DrawingConfig
-  | PhotoConfig
-  | VideoConfig
-  | DateConfig
-  | SliderRowsConfig
-  | SingleSelectionConfig
-  | MultiSelectionConfig
-  | AbTestConfig
-  | FlankerConfig;
+type Configuration =
+  | TextConfiguration
+  | SingleSelectionRowsConfiguration
+  | MultiSelectionRowsConfiguration
+  | AudioConfiguration
+  | AudioPlayerConfiguration
+  | MessageConfiguration
+  | SliderConfiguration
+  | NumberSelectionConfiguration
+  | TimeRangeConfiguration
+  | GeolocationConfiguration
+  | DrawingConfiguration
+  | PhotoConfiguration
+  | VideoConfiguration
+  | DateConfiguration
+  | SliderRowsConfiguration
+  | SingleSelectionConfiguration
+  | MultiSelectionConfiguration
+  | AbTestConfiguration
+  | FlankerConfiguration;
 
-type ResponseValues =
-  | TextResponseValues
-  | SingleSelectionRowsResponseValues
-  | MultiSelectionRowsResponseValues
-  | AudioResponseValues
-  | AudioPlayerResponseValues
-  | MessageResponseValues
-  | SliderResponseValue
-  | NumberSelectionResponseValues
-  | TimerRangeResponseValues
-  | GeolocationResponseValues
-  | DrawingResponseValues
-  | PhotoResponseValues
-  | VideoResponseValues
-  | DateResponseValues
-  | SliderRowsResponseValues
-  | SingleSelectionResponseValues
-  | MultiSelectionResponseValues
-  | AbTestResponseValues
-  | FlankerResponseValues;
+type AnswerSettings =
+  | TextAnswerSettings
+  | SingleSelectionRowsAnswerSettings
+  | MultiSelectionRowsAnswerSettings
+  | AudioAnswerSettings
+  | AudioPlayerAnswerSettings
+  | MessageAnswerSettings
+  | SliderAnswerSettings
+  | NumberSelectionAnswerSettings
+  | TimerRangeAnswerSettings
+  | GeolocationAnswerSettings
+  | DrawingAnswerSettings
+  | PhotoAnswerSettings
+  | VideoAnswerSettings
+  | DateAnswerSettings
+  | SliderRowsAnswerSettings
+  | SingleSelectionAnswerSettings
+  | MultiSelectionAnswerSettings
+  | AbTestAnswerSettings
+  | FlankerAnswerSettings;
 
 type ActivityItemDtoBase = {
-  id: number;
+  id: string;
   name: string;
-  config: Config;
+  config: Configuration;
   question: string;
   responseType: ResponseType;
-  responseValues: ResponseValues;
+  responseValues: AnswerSettings;
   order: number;
 };
 
-interface TextActivityItemDto extends ActivityItemDtoBase {
+export interface TextItemDto extends ActivityItemDtoBase {
   responseType: 'text';
-  config: TextConfig;
-  responseValues: TextResponseValues;
+  config: TextConfiguration;
+  responseValues: TextAnswerSettings;
 }
 
-interface SingleSelectionItemDto extends ActivityItemDtoBase {
+export interface SingleSelectionItemDto extends ActivityItemDtoBase {
   responseType: 'singleSelect';
-  config: SingleSelectionConfig;
-  responseValues: SingleSelectionResponseValues;
+  config: SingleSelectionConfiguration;
+  responseValues: SingleSelectionAnswerSettings;
 }
 
-interface MultiSelectionItemDto extends ActivityItemDtoBase {
+export interface MultiSelectionItemDto extends ActivityItemDtoBase {
   responseType: 'multiSelect';
-  config: MultiSelectionConfig;
-  responseValues: MultiSelectionResponseValues;
+  config: MultiSelectionConfiguration;
+  responseValues: MultiSelectionAnswerSettings;
 }
 
-interface MessageSelectionItemDto extends ActivityItemDtoBase {
+export interface MessageItemDto extends ActivityItemDtoBase {
   responseType: 'message';
-  config: MessageConfig;
-  responseValues: MessageResponseValues;
+  config: MessageConfiguration;
+  responseValues: MessageAnswerSettings;
 }
 
-interface SliderSelectionItemDto extends ActivityItemDtoBase {
+export interface SliderSelectionItemDto extends ActivityItemDtoBase {
   responseType: 'slider';
-  config: SliderConfig;
-  responseValues: SliderResponseValue;
+  config: SliderConfiguration;
+  responseValues: SliderAnswerSettings;
 }
 
-interface NumberSelectionItemDto extends ActivityItemDtoBase {
+export interface NumberSelectionItemDto extends ActivityItemDtoBase {
   responseType: 'numberSelect';
-  config: NumberSelectionConfig;
-  responseValues: NumberSelectionResponseValues;
+  config: NumberSelectionConfiguration;
+  responseValues: NumberSelectionAnswerSettings;
 }
 
-interface TimeRangeItemDto extends ActivityItemDtoBase {
+export interface TimeRangeItemDto extends ActivityItemDtoBase {
   responseType: 'timeRange';
-  config: TimeRangeConfig;
-  responseValues: TimerRangeResponseValues;
+  config: TimeRangeConfiguration;
+  responseValues: TimerRangeAnswerSettings;
 }
 
-interface GeolocationItemDto extends ActivityItemDtoBase {
+export interface GeolocationItemDto extends ActivityItemDtoBase {
   responseType: 'geolocation';
-  config: GeolocationConfig;
-  responseValues: GeolocationResponseValues;
+  config: GeolocationConfiguration;
+  responseValues: GeolocationAnswerSettings;
 }
 
-interface DrawingItemDto extends ActivityItemDtoBase {
+export interface DrawingItemDto extends ActivityItemDtoBase {
   responseType: 'drawing';
-  config: DrawingConfig;
-  responseValues: DrawingResponseValues;
+  config: DrawingConfiguration;
+  responseValues: DrawingAnswerSettings;
 }
 
-interface PhotoItemDto extends ActivityItemDtoBase {
+export interface PhotoItemDto extends ActivityItemDtoBase {
   responseType: 'photo';
-  config: PhotoConfig;
-  responseValues: PhotoResponseValues;
+  config: PhotoConfiguration;
+  responseValues: PhotoAnswerSettings;
 }
 
-interface VideoItemDto extends ActivityItemDtoBase {
+export interface VideoItemDto extends ActivityItemDtoBase {
   responseType: 'video';
-  config: VideoConfig;
-  responseValues: VideoResponseValues;
+  config: VideoConfiguration;
+  responseValues: VideoAnswerSettings;
 }
 
-interface DateItemDto extends ActivityItemDtoBase {
+export interface DateItemDto extends ActivityItemDtoBase {
   responseType: 'date';
-  config: DateConfig;
-  responseValues: DateResponseValues;
+  config: DateConfiguration;
+  responseValues: DateAnswerSettings;
 }
 
-interface SliderRowsItemDto extends ActivityItemDtoBase {
+export interface SliderRowsItemDto extends ActivityItemDtoBase {
   responseType: 'sliderRows';
-  config: SliderRowsConfig;
-  responseValues: SliderRowsResponseValues;
+  config: SliderRowsConfiguration;
+  responseValues: SliderRowsAnswerSettings;
 }
 
-interface SingleSelectionRowsItemDto extends ActivityItemDtoBase {
+export interface SingleSelectionRowsItemDto extends ActivityItemDtoBase {
   responseType: 'singleSelectRows';
-  config: SingleSelectionRowsConfig;
-  responseValues: SingleSelectionRowsResponseValues;
+  config: SingleSelectionRowsConfiguration;
+  responseValues: SingleSelectionRowsAnswerSettings;
 }
 
-interface MultiSelectionRowsItemDto extends ActivityItemDtoBase {
+export interface MultiSelectionRowsItemDto extends ActivityItemDtoBase {
   responseType: 'multiSelectRows';
-  config: MultiSelectionRowsConfig;
-  responseValues: MultiSelectionRowsResponseValues;
+  config: MultiSelectionRowsConfiguration;
+  responseValues: MultiSelectionRowsAnswerSettings;
 }
 
-interface AudioItemDto extends ActivityItemDtoBase {
+export interface AudioItemDto extends ActivityItemDtoBase {
   responseType: 'audio';
-  config: AudioConfig;
-  responseValues: AudioResponseValues;
+  config: AudioConfiguration;
+  responseValues: AudioAnswerSettings;
 }
 
-interface AudioPlayerItemDto extends ActivityItemDtoBase {
+export interface AudioPlayerItemDto extends ActivityItemDtoBase {
   responseType: 'audioPlayer';
-  config: AudioPlayerConfig;
-  responseValues: AudioPlayerResponseValues;
+  config: AudioPlayerConfiguration;
+  responseValues: AudioPlayerAnswerSettings;
 }
 
-interface AbTestItemDto extends ActivityItemDtoBase {
+export interface AbTestItemDto extends ActivityItemDtoBase {
   responseType: 'abTest';
-  config: AbTestConfig;
-  responseValues: AbTestResponseValues;
+  config: AbTestConfiguration;
+  responseValues: AbTestAnswerSettings;
 }
 
-interface FlankerItemDto extends ActivityItemDtoBase {
+export interface FlankerItemDto extends ActivityItemDtoBase {
   responseType: 'flanker';
-  config: FlankerConfig;
-  responseValues: FlankerResponseValues;
+  config: FlankerConfiguration;
+  responseValues: FlankerAnswerSettings;
 }
 
 export type ActivityItemDto =
-  | TextActivityItemDto
+  | TextItemDto
   | SingleSelectionItemDto
   | MultiSelectionItemDto
-  | MessageSelectionItemDto
+  | MessageItemDto
   | SliderSelectionItemDto
   | NumberSelectionItemDto
   | TimeRangeItemDto

@@ -22,21 +22,17 @@ export const transformByWidth = (
   return result;
 };
 
-export const transformBack = (lines: DrawLine[], width: number): DrawLine[] => {
+export const transformBack = (line: DrawLine, width: number): DrawLine => {
   const multiplier = width / 100;
-  const result: DrawLine[] = [];
 
-  for (let line of lines) {
-    result.push({
-      startTime: line.startTime,
-      points: line.points.map(p => ({
-        time: p.time,
-        x: p.x / multiplier,
-        y: p.y / multiplier,
-      })),
-    });
-  }
-  return result;
+  return {
+    startTime: line.startTime,
+    points: line.points.map(p => ({
+      time: p.time,
+      x: p.x / multiplier,
+      y: p.y / multiplier,
+    })),
+  };
 };
 
 export const convertToSkPaths = (lines: DrawLine[]): SkPath[] => {

@@ -5,7 +5,6 @@ type AbTestConfig = {
 };
 
 type DrawingTestTestConfig = {
-  instruction: string | null;
   imageUrl: string | null;
   backgroundImageUrl: string | null;
 };
@@ -13,17 +12,19 @@ type DrawingTestTestConfig = {
 export type ActivityItemConfig = AbTestConfig | DrawingTestTestConfig | null;
 
 type ActivityItemBase = {
-  id: number;
+  id: string;
   inputType: ActivityItemType;
   config: ActivityItemConfig;
-  timer: number;
-  isSkippable: true;
-  hasAlert: true;
-  hasScore: true;
-  isAbleToMoveToPrevious: true;
-  hasTextResponse: true;
+  timer: number | null;
+  isSkippable: boolean;
+  hasAlert: boolean;
+  hasScore: boolean;
+  isAbleToMoveToPrevious: boolean;
+  hasTextResponse: boolean;
+  canBeReset: boolean;
+  hasTopNavigation: boolean;
   order: number;
-  question?: string;
+  question: string;
 };
 
 interface AbTestActivityItem extends ActivityItemBase {
@@ -62,6 +63,6 @@ export type ActivityDetails = {
   isSkippable: boolean;
   isReviewable: boolean;
   responseIsEditable: boolean;
-  ordering: number;
+  order: number;
   items: ActivityItem[];
 };
