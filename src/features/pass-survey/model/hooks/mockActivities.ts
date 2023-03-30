@@ -241,6 +241,40 @@ const FlankerAllTypesActivity: ActivityDto = {
   ],
 };
 
+export const TextActivity: ActivityDto = {
+  id: 'aid1',
+  name: 'Activity number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  ordering: 0,
+  items: [
+    {
+      id: '104',
+      name: 'Text input',
+      question: '',
+      responseType: 'text',
+      config: {
+        maxResponseLength: 20,
+        correctAnswerRequired: false,
+        correctAnswer: 'Hello',
+        numericalResponseRequired: false,
+        responseDataIdentifier: false,
+        removeBackButton: false,
+        skippableItem: false,
+      },
+      responseValues: null,
+      order: 0,
+    },
+  ],
+};
+
 export const FlankerActivity = {
   withImage: FlankerWithImageActivity,
   withStSFx: FlankerWithStSFxActivity,

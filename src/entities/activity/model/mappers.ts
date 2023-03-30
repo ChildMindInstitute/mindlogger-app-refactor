@@ -105,7 +105,30 @@ function mapToStackedSlider(dto: SliderRowsItemDto): ActivityItem {
 }
 
 function mapToTextInput(dto: TextItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'TextInput',
+    config: {
+      maxLength: dto.config.maxResponseLength,
+      isNumeric: dto.config.numericalResponseRequired,
+      shouldIdentifyResponse: dto.config.responseDataIdentifier,
+    },
+    timer: null,
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveToPrevious: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    ...(dto.config.correctAnswerRequired && {
+      validationOptions: {
+        correctAnswer: dto.config.correctAnswer,
+      },
+    }),
+  };
 }
 
 function mapToTimeRange(dto: TimeRangeItemDto): ActivityItem {

@@ -1,4 +1,5 @@
-import { ActivityState } from '../../lib';
+import { ActivityState, onIncorrectAnswerGiven } from '../../lib';
+import AnswerValidator from '../AnswerValidator';
 
 function useActivityStepper(state: ActivityState | undefined) {
   const step = state?.step ?? 0;
@@ -17,6 +18,18 @@ function useActivityStepper(state: ActivityState | undefined) {
   const showTopNavigation = currentPipelineItem?.hasTopNavigation;
   const showBottomNavigation = !showTopNavigation;
 
+  const answerValidator = AnswerValidator(state);
+
+  function isValid() {
+    const valid = answerValidator.isValid();
+
+    if (!valid) {
+      onIncorrectAnswerGiven();
+    }
+
+    return valid;
+  }
+
   return {
     isTutorialStep,
     isLastStep,
@@ -27,6 +40,8 @@ function useActivityStepper(state: ActivityState | undefined) {
 
     showTopNavigation,
     showBottomNavigation,
+
+    isValid,
   };
 }
 

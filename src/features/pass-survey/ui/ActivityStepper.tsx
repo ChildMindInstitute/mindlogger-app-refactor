@@ -60,6 +60,8 @@ function ActivityStepper({
 
     showTopNavigation,
     showBottomNavigation,
+
+    isValid,
   } = useActivityStepper(activityStorageRecord);
 
   const currentStep = activityStorageRecord?.step ?? 0;
@@ -75,6 +77,10 @@ function ActivityStepper({
   };
 
   const onBeforeNext = (): number => {
+    if (!isValid()) {
+      return 0;
+    }
+
     if (isTutorialStep) {
       const moved = tutorialViewerRef.current?.next();
 

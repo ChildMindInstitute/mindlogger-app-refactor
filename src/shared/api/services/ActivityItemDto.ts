@@ -85,7 +85,6 @@ type TextConfiguration = ButtonsConfiguration & {
   correctAnswer: string;
   numericalResponseRequired: boolean;
   responseDataIdentifier: boolean;
-  responseRequired: boolean;
 };
 
 type TextAnswerSettings = null;
