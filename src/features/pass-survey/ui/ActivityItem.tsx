@@ -1,12 +1,18 @@
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { Box, MarkdownMessage, ScrollView } from '@app/shared/ui';
+import {
+  Box,
+  MarkdownMessage,
+  ScrollView,
+  SimpleTextInput,
+} from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker } from '@entities/flanker';
 
 import { PipelineItem, PipelineItemResponse } from '../lib';
+import { TextResponseMapper } from '../model/responseMappers';
 
 type Props = {
   value: any;
@@ -53,6 +59,22 @@ function ActivityItem({ value, pipelineItem, onResponse }: Props) {
           onResult={onResponse}
           onComplete={() => console.log('onComplete')}
         />
+      );
+      break;
+
+    case 'TextInput':
+      item = (
+        <Box flex={1} justifyContent="center" mx={16}>
+          <SimpleTextInput
+            value={value?.text}
+            config={pipelineItem.payload}
+            onChange={text => {
+              const responseMapper = TextResponseMapper(pipelineItem);
+
+              onResponse(responseMapper.toResponse(text));
+            }}
+          />
+        </Box>
       );
       break;
 

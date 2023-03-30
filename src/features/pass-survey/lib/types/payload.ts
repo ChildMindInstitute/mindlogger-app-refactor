@@ -9,7 +9,8 @@ export type ActivityItemType =
   | 'DrawingTest'
   | 'Tutorial'
   | 'Splash'
-  | 'Flanker';
+  | 'Flanker'
+  | 'TextInput';
 
 type AbTestPayload = {
   testIndex: TestIndex;
@@ -23,12 +24,19 @@ type DrawingPayload = {
 };
 type FlankerPayload = FlankerConfiguration;
 
+type TextInputPayload = {
+  maxLength: number;
+  isNumeric: boolean;
+  shouldIdentifyResponse: boolean;
+};
+
 type PipelinePayload =
   | AbTestPayload
   | SplashPayload
   | Tutorial
   | DrawingPayload
-  | FlankerPayload;
+  | FlankerPayload
+  | TextInputPayload;
 
 type PipelineItemBase = {
   type: ActivityItemType;
@@ -38,6 +46,9 @@ type PipelineItemBase = {
   canBeReset?: boolean;
   hasTopNavigation?: boolean;
   question?: string;
+  validationOptions?: {
+    correctAnswer?: string;
+  };
 };
 
 interface AbTestPipelineItem extends PipelineItemBase {
@@ -65,20 +76,34 @@ interface FlankerPipelineItem extends PipelineItemBase {
   payload: FlankerConfiguration;
 }
 
+export interface TextInputPipelineItem extends PipelineItemBase {
+  type: 'TextInput';
+  payload: TextInputPayload;
+}
+
 type AbTestResponse = LogLine[];
 
 type DrawingTestResponse = DrawResult;
 
 type FlankerResponse = Array<FlankerLogRecord>;
 
+type TextInputResponse =
+  | {
+      text: string;
+      shouldIdentifyResponse: boolean;
+    }
+  | undefined;
+
 export type PipelineItemResponse =
   | AbTestResponse
   | FlankerResponse
-  | DrawingTestResponse;
+  | DrawingTestResponse
+  | TextInputResponse;
 
 export type PipelineItem =
   | AbTestPipelineItem
   | SplashPipelineItem
   | TutorialPipelineItem
   | DrawingTestPipelineItem
-  | FlankerPipelineItem;
+  | FlankerPipelineItem
+  | TextInputPipelineItem;
