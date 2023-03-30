@@ -1,11 +1,11 @@
 import { FC, useMemo } from 'react';
 
 import { format } from 'date-fns';
-import { VictoryAxis, VictoryGroup, VictoryScatter } from 'victory-native';
+import { VictoryAxis, VictoryChart, VictoryScatter } from 'victory-native';
 
 import { colors, getCurrentWeekDates } from '@shared/lib';
 
-import { Box, Text } from '../..';
+import { Box } from '../..';
 
 type TimelineChartOption = {
   name: string;
@@ -77,49 +77,44 @@ const TimelineChart: FC<Props> = ({ data, options }) => {
   return (
     <Box>
       {mappedData.map(option => (
-        <>
-          <Box>
-            <Text>{option.optionName}</Text>
-          </Box>
+        <VictoryChart key={option.optionName} height={60}>
+          <VictoryScatter
+            style={{ data: { fill: colors.lighterGrey } }}
+            data={generateXAxisDots()}
+            x="dot"
+            y="value"
+            domain={[0, 6]}
+            size={5}
+          />
 
-          <VictoryGroup key={option.optionName} height={60}>
-            <VictoryScatter
-              data={option.timelines.map((timeline, i) => {
-                console.log(option.optionName, timeline);
+          <VictoryAxis
+            tickValues={daysOfWeekNumber}
+            style={{
+              axis: { stroke: colors.lighterGrey, fill: colors.lightGrey2 },
+              axisLabel: { fill: colors.lighterGrey },
+              tickLabels: { fill: colors.grey },
+            }}
+            tickCount={7}
+            tickFormat={(_, index) => {
+              return dayNames[index];
+            }}
+          />
 
-                return {
-                  y: 0,
-                  x: timeline.value !== null ? i : null,
-                };
-              })}
-              x="x"
-              y="y"
-              size={5}
-              style={{ data: { fill: colors.primary } }}
-            />
+          <VictoryScatter
+            data={option.timelines.map((timeline, i) => {
+              console.log(option.optionName, timeline);
 
-            <VictoryScatter
-              style={{ data: { fill: colors.lightGrey2 } }}
-              data={generateXAxisDots()}
-              x="dot"
-              y="value"
-              domain={[0, 6]}
-              size={5}
-            />
-
-            <VictoryAxis
-              tickValues={daysOfWeekNumber}
-              style={{
-                axis: { stroke: colors.lightGrey2, fill: colors.lightGrey2 },
-                axisLabel: { fill: colors.lightGrey2 },
-              }}
-              tickCount={7}
-              tickFormat={(_, index) => {
-                return dayNames[index];
-              }}
-            />
-          </VictoryGroup>
-        </>
+              return {
+                y: 0,
+                x: timeline.value !== null ? i : null,
+              };
+            })}
+            x="x"
+            y="y"
+            size={5}
+            style={{ data: { fill: colors.primary } }}
+          />
+        </VictoryChart>
       ))}
     </Box>
   );
