@@ -42,29 +42,3 @@ export type AppletDetails = {
   activities: Activity[];
   activityFlows: ActivityFlow[];
 };
-
-export const enum ActivityPipelineType {
-  NotDefined = 0,
-  Regular,
-  Flow,
-}
-export type FlowProgress = {
-  type: ActivityPipelineType.Flow;
-  currentActivityId: string;
-};
-
-export type ActivityProgress = {
-  type: ActivityPipelineType.Regular;
-};
-
-export type EntityProgress = FlowProgress | ActivityProgress;
-
-export type ProgressPayload = EntityProgress & {
-  startAt: Date;
-  endAt: Date | null;
-};
-
-type EntityEvents = Record<string, ProgressPayload>;
-type AppletInProgressEntities = Record<string, EntityEvents>;
-
-export type EntitiesInProgress = Record<string, AppletInProgressEntities>;

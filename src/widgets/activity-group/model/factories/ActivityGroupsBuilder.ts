@@ -1,17 +1,17 @@
 import { isToday } from 'date-fns';
 
 import {
+  ActivityPipelineType,
+  AvailabilityType,
+  FlowProgress,
+  Progress,
+  ProgressPayload,
+} from '@app/abstract/lib';
+import {
   ActivityListItem,
   ActivityStatus,
   ActivityType,
 } from '@entities/activity';
-import {
-  FlowProgress,
-  ActivityPipelineType,
-  EntitiesInProgress,
-  ProgressPayload,
-} from '@entities/applet';
-import { AvailabilityType } from '@entities/event';
 import {
   getMsFromHours,
   getMsFromMinutes,
@@ -38,7 +38,7 @@ export interface IActivityGroupsBuilder {
 }
 
 class ActivityGroupsBuilder implements IActivityGroupsBuilder {
-  private progress: EntitiesInProgress;
+  private progress: Progress;
 
   private appletId: string;
 
@@ -370,7 +370,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
 type ActivityGroupsBuilderInput = {
   allAppletActivities: Activity[];
-  progress: EntitiesInProgress;
+  progress: Progress;
   appletId: string;
 };
 

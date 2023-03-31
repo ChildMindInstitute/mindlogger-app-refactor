@@ -1,20 +1,21 @@
+import {
+  AvailabilityType,
+  NotificationTriggerType,
+  PeriodicityType,
+} from '@app/abstract/lib';
 import { HourMinute } from '@app/shared/lib';
 
-export const enum AvailabilityType {
-  NotDefined = 'NotDefined',
-  AlwaysAvailable = 'AlwaysAvailable',
-  ScheduledAccess = 'ScheduledAccess',
-}
+type NotificationSettings = {
+  notifications: EventNotification[];
+  reminder?: null | { activityIncomplete: number; reminderTime: HourMinute };
+};
 
-export const enum PeriodicityType {
-  NotDefined = 'NotDefined',
-  Always = 'ALWAYS',
-  Once = 'ONCE',
-  Daily = 'DAILY',
-  Weekly = 'WEEKLY',
-  Weekdays = 'WEEKDAYS',
-  Monthly = 'MONTHLY',
-}
+export type EventNotification = {
+  triggerType: NotificationTriggerType;
+  From?: HourMinute | null;
+  To?: HourMinute | null;
+  At?: HourMinute | null;
+};
 
 export type EventAvailability = {
   availabilityType: AvailabilityType;
@@ -35,6 +36,7 @@ export type ScheduleEvent = {
     timer: HourMinute | null;
     idleTimer: HourMinute | null;
   };
+  notificationSettings: NotificationSettings;
   selectedDate: Date | null;
   scheduledAt: Date | null;
 };

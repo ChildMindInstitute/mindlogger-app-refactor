@@ -1,6 +1,7 @@
+import { StoreProgressPayload } from '@app/abstract/lib';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
 
-import { onBeforeStartingActivity, ProgressPayload } from '../../lib';
+import { onBeforeStartingActivity } from '../../lib';
 import { selectInProgressApplets } from '../selectors';
 import { actions } from '../slice';
 
@@ -11,7 +12,8 @@ function useInProgressEntities(appletId: string) {
   const selectEntityEvent = (entityId: string, eventId: string) =>
     inProgressApplets[appletId]?.[entityId]?.[eventId];
 
-  const isEventInProgress = (event: ProgressPayload) => event && !event.endAt;
+  const isEventInProgress = (event: StoreProgressPayload) =>
+    event && !event.endAt;
 
   function activityStarted(activityId: string, eventId: string) {
     dispatch(

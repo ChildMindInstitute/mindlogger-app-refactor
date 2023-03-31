@@ -1,5 +1,5 @@
+import { ActivityPipelineType } from '@app/abstract/lib';
 import { ActivityType } from '@entities/activity';
-import { ActivityPipelineType } from '@entities/applet';
 import { ScheduleEvent } from '@entities/event';
 
 export type Entity = {

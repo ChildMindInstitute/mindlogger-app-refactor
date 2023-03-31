@@ -1,7 +1,6 @@
-import {
-  ActivityPipelineType,
-  useAppletDetailsQuery,
-} from '@app/entities/applet';
+import { convertProgress } from '@app/abstract/lib';
+import { ActivityPipelineType } from '@app/abstract/lib';
+import { useAppletDetailsQuery } from '@app/entities/applet';
 import { selectInProgressApplets } from '@app/entities/applet/model/selectors';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
 import { useEventsQuery } from '@app/entities/event/api/hooks/useEventsQuery';
@@ -94,7 +93,7 @@ export const useActivityGroups = (
   const builder = createActivityGroupsBuilder({
     allAppletActivities: activities,
     appletId: appletId,
-    progress: entitiesProgress,
+    progress: convertProgress(entitiesProgress),
   });
 
   let entityEvents = events.map<EventEntity>(event => ({
