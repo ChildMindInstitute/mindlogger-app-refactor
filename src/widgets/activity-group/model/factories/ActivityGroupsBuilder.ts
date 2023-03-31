@@ -3,8 +3,8 @@ import { isToday } from 'date-fns';
 import {
   ActivityPipelineType,
   AvailabilityType,
-  EntitiesInProgress,
   FlowProgress,
+  Progress,
   ProgressPayload,
 } from '@app/abstract/lib/types';
 import {
@@ -38,7 +38,7 @@ export interface IActivityGroupsBuilder {
 }
 
 class ActivityGroupsBuilder implements IActivityGroupsBuilder {
-  private progress: EntitiesInProgress;
+  private progress: Progress;
 
   private appletId: string;
 
@@ -370,7 +370,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
 type ActivityGroupsBuilderInput = {
   allAppletActivities: Activity[];
-  progress: EntitiesInProgress;
+  progress: Progress;
   appletId: string;
 };
 

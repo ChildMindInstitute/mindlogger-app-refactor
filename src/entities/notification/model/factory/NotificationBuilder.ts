@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import {
   ActivityPipelineType,
-  EntitiesInProgress,
+  Progress,
   NotificationTriggerType,
   PeriodicityType,
   ProgressPayload,
@@ -42,7 +42,7 @@ interface INotificationBuilder {
 class NotificationBuilder implements INotificationBuilder {
   private now: Date;
 
-  private progress: EntitiesInProgress;
+  private progress: Progress;
 
   private appletId: string;
 
