@@ -8,7 +8,6 @@ type Config = {
 };
 
 type SliderConfig = Config & {
-  showTitles: boolean | null;
   showTickMarks: boolean | null;
   showTickLabels: boolean | null;
   isContinuousSlider: boolean | null;

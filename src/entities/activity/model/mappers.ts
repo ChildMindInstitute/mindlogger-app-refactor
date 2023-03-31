@@ -106,7 +106,6 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
       leftImageUrl: dto.responseValues.minImage,
       rightImageUrl: dto.responseValues.maxImage,
       showTickMarks: dto.config.showTickMarks,
-      showTitles: dto.config.showTickMarks,
       showTickLabels: dto.config.showTickLabels,
       isContinuousSlider: dto.config.continuousSlider,
       minValue: dto.responseValues.minValue,

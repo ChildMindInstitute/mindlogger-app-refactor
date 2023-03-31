@@ -28,7 +28,6 @@ type SliderConfig = {
   maxValue: number;
   leftImageUrl: string | null;
   rightImageUrl: string | null;
-  showTitles: boolean | null;
   showTickMarks: boolean | null;
   showTickLabels: boolean | null;
   isContinuousSlider: boolean | null;
