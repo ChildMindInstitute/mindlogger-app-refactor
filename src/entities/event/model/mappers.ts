@@ -1,4 +1,4 @@
-import { AvailabilityType, PeriodicityType } from '@app/abstract/lib/types';
+import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
 import { ScheduleEventDto } from '@app/shared/api/services/eventsService';
 import { buildDateFromDto } from '@app/shared/lib';
 

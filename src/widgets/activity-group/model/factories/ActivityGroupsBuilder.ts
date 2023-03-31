@@ -6,7 +6,7 @@ import {
   FlowProgress,
   Progress,
   ProgressPayload,
-} from '@app/abstract/lib/types';
+} from '@app/abstract/lib';
 import {
   ActivityListItem,
   ActivityStatus,

@@ -5,7 +5,7 @@ import {
   StoreProgress,
   FlowProgress,
   StoreProgressPayload,
-} from '@app/abstract/lib/types';
+} from '@app/abstract/lib';
 
 type InProgressActivity = {
   appletId: string;

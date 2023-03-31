@@ -1,4 +1,4 @@
-import { ActivityPipelineType } from '@app/abstract/lib/types';
+import { ActivityPipelineType } from '@app/abstract/lib';
 import { ActivityType } from '@app/entities/activity';
 import { ActivityFlowRecordDto, ActivityRecordDto } from '@app/shared/api';
 

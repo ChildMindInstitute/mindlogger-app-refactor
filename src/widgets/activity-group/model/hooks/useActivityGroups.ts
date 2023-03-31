@@ -1,5 +1,5 @@
 import { convertProgress } from '@app/abstract/lib';
-import { ActivityPipelineType } from '@app/abstract/lib/types';
+import { ActivityPipelineType } from '@app/abstract/lib';
 import { useAppletDetailsQuery } from '@app/entities/applet';
 import { selectInProgressApplets } from '@app/entities/applet/model/selectors';
 import { EventModel, ScheduleEvent } from '@app/entities/event';

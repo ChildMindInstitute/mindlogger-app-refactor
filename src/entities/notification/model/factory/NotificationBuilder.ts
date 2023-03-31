@@ -15,7 +15,7 @@ import {
   NotificationTriggerType,
   PeriodicityType,
   ProgressPayload,
-} from '@app/abstract/lib/types';
+} from '@app/abstract/lib';
 import { getDiff, HourMinute } from '@app/shared/lib';
 
 import {
