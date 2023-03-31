@@ -11,15 +11,10 @@ import {
 } from '@shared/lib';
 
 import { Box } from '../..';
-import { ChartItem } from '../types';
+import { ChartAxisDot, ChartItem } from '../types';
 
 type TimelineChartOption = {
   name: string;
-  value: number;
-};
-
-type ChartAxisDot = {
-  dot: number;
   value: number;
 };
 
@@ -35,28 +30,35 @@ type Props = {
   data: Array<ChartItem>;
 };
 
+const getScatterDots = (chartDataItem: TimelineChartData) => {
+  return chartDataItem.timelines.map((timeline, i) => {
+    return {
+      y: 0,
+      x: timeline.value !== null ? i : null,
+    };
+  });
+};
+
 const TimelineChart: FC<Props> = ({ data, options }) => {
   const dateFormat = 'yyyy dd MM';
 
   const generateXAxisDots = (): Array<ChartAxisDot> =>
     Array.from(Array(7).keys()).map(item => ({ dot: item, value: 0 }));
 
-  const getFormattedDateData: () => Array<{ date: string; value: number }> =
-    useCallback(
-      () =>
-        data.map(dataItem => ({
-          ...dataItem,
-          date: format(dataItem.date, dateFormat),
-        })),
-      [data],
-    );
+  const formattedDataDates: Array<{ date: string; value: number }> = useMemo(
+    () =>
+      data.map(dataItem => ({
+        ...dataItem,
+        date: format(dataItem.date, dateFormat),
+      })),
+    [data],
+  );
 
   const getValueForChartItem: (
     option: TimelineChartOption,
     currentWeekDate: Date,
   ) => number | null = useCallback(
     (option: TimelineChartOption, currentWeekDate: Date) => {
-      const formattedDataDates = getFormattedDateData();
       const chartItem = formattedDataDates.find(newDateItem => {
         return (
           newDateItem.date === format(currentWeekDate, dateFormat) &&
@@ -66,7 +68,7 @@ const TimelineChart: FC<Props> = ({ data, options }) => {
 
       return !isNaN(Number(chartItem?.value)) ? chartItem!.value : null;
     },
-    [getFormattedDateData],
+    [formattedDataDates],
   );
 
   const getTimelineItems: (option: TimelineChartOption) => Array<Timeline> =
@@ -92,15 +94,6 @@ const TimelineChart: FC<Props> = ({ data, options }) => {
       };
     });
   }, [getTimelineItems, options]);
-
-  const getScatterDots = (chartDataItem: TimelineChartData) => {
-    return chartDataItem.timelines.map((timeline, i) => {
-      return {
-        y: 0,
-        x: timeline.value !== null ? i : null,
-      };
-    });
-  };
 
   return (
     <Box>
