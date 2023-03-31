@@ -275,6 +275,52 @@ export const TextActivity: ActivityDto = {
   ],
 };
 
+export const SliderTestActivity: ActivityDto = {
+  id: 'aid1',
+  name: 'Slider Activity',
+  description: 'Slider Activity Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  ordering: 0,
+  items: [
+    {
+      responseValues: {
+        minValue: 0,
+        maxValue: 10,
+        minImage: 'https://static.thenounproject.com/png/1825711-200.png',
+        maxImage:
+          'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
+        minLabel: 'Minimum label',
+        maxLabel: 'Maximum label',
+      },
+      id: '105',
+      config: {
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: true,
+        skippableItem: false,
+        timer: null,
+        showTickMarks: true,
+        showTickLabels: true,
+        continuousSlider: true,
+        addScores: false,
+        setAlerts: false,
+      },
+      responseType: 'slider',
+      name: 'slidename',
+      question: 'Choose some number',
+      order: 0,
+    },
+  ],
+};
+
 export const FlankerActivity = {
   withImage: FlankerWithImageActivity,
   withStSFx: FlankerWithStSFxActivity,
@@ -289,6 +335,7 @@ const TestActivities = [
   DrawingTestActivity.grid,
   DrawingTestActivity.vortex,
   AbTestActivity,
+  SliderTestActivity,
 ];
 
 export const getRandomTestActivity = () => {

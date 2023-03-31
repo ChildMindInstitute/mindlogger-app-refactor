@@ -97,7 +97,32 @@ function mapToStackedRadio(dto: SingleSelectionRowsItemDto): ActivityItem {
 }
 
 function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Slider',
+    config: {
+      leftTitle: dto.responseValues.minLabel,
+      rightTitle: dto.responseValues.maxLabel,
+      leftImageUrl: dto.responseValues.minImage,
+      rightImageUrl: dto.responseValues.maxImage,
+      showTickMarks: dto.config.showTickMarks,
+      showTitles: dto.config.showTickMarks,
+      showTickLabels: dto.config.showTickLabels,
+      isContinuousSlider: dto.config.continuousSlider,
+      minValue: dto.responseValues.minValue,
+      maxValue: dto.responseValues.maxValue,
+    },
+    timer: dto.config.timer,
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveToPrevious: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+  };
 }
 
 function mapToStackedSlider(dto: SliderRowsItemDto): ActivityItem {

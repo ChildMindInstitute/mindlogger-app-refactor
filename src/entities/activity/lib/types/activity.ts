@@ -3,7 +3,8 @@ export type ActivityItemType =
   | 'DrawingTest'
   | 'Splash'
   | 'Flanker'
-  | 'TextInput';
+  | 'TextInput'
+  | 'Slider';
 
 type AbTestConfig = {
   device: 'Phone' | 'Tablet';
@@ -20,10 +21,24 @@ type TextInputConfig = {
   shouldIdentifyResponse: boolean;
 };
 
+type SliderConfig = {
+  leftTitle: string | null;
+  rightTitle: string | null;
+  minValue: number;
+  maxValue: number;
+  leftImageUrl: string | null;
+  rightImageUrl: string | null;
+  showTitles: boolean | null;
+  showTickMarks: boolean | null;
+  showTickLabels: boolean | null;
+  isContinuousSlider: boolean | null;
+};
+
 export type ActivityItemConfig =
   | AbTestConfig
   | DrawingTestTestConfig
   | TextInputConfig
+  | SliderConfig
   | null;
 
 type ActivityItemBase = {
@@ -60,7 +75,7 @@ interface DrawingTestTestActivityItem extends ActivityItemBase {
   config: DrawingTestTestConfig;
 }
 
-interface FlakerActivityItem extends ActivityItemBase {
+interface FlankerActivityItem extends ActivityItemBase {
   inputType: 'Flanker';
   config: any;
 }
@@ -70,12 +85,18 @@ interface TextInputActivityItem extends ActivityItemBase {
   config: TextInputConfig;
 }
 
+interface SliderActivityItem extends ActivityItemBase {
+  inputType: 'Slider';
+  config: SliderConfig;
+}
+
 export type ActivityItem =
   | AbTestActivityItem
   | SplashActivityItem
   | DrawingTestTestActivityItem
-  | FlakerActivityItem
-  | TextInputActivityItem;
+  | TextInputActivityItem
+  | FlankerActivityItem
+  | SliderActivityItem;
 
 export type ActivityDetails = {
   id: string;
