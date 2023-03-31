@@ -16,7 +16,12 @@ import {
 } from '@app/shared/lib';
 import { Box } from '@shared/ui';
 
-import { ChartItem } from '../types';
+import { ChartAxisDot, ChartItem } from '../types';
+
+type LineChartDataItem = {
+  date: string;
+  value: number | null;
+};
 
 type Props = {
   data: Array<ChartItem>;
@@ -25,13 +30,13 @@ type Props = {
 const LineChart: FC<Props> = ({ data }) => {
   const dateFormat = 'yyyy dd MM';
 
-  const generateXAxisDots = () =>
+  const generateXAxisDots = (): Array<ChartAxisDot> =>
     Array.from(Array(8).keys()).map(item => ({ dot: item, value: 0 }));
 
-  const generateYAxisDots = () =>
+  const generateYAxisDots = (): Array<ChartAxisDot> =>
     Array.from(Array(6).keys()).map(item => ({ dot: 1, value: item * 2 }));
 
-  const formattedDataDate = useMemo(
+  const formattedDataDate: Array<{ date: string; value: number }> = useMemo(
     () =>
       data.map(dataItem => ({
         ...dataItem,
@@ -40,12 +45,12 @@ const LineChart: FC<Props> = ({ data }) => {
     [data],
   );
 
-  const mappedData = useMemo(() => {
+  const lineChartData: Array<LineChartDataItem> = useMemo(() => {
     const currentWeekDates = getCurrentWeekDates();
 
     return currentWeekDates.map(currentWeekDate => {
       return {
-        date: currentWeekDate,
+        date: format(currentWeekDate, dateFormat),
         value:
           formattedDataDate.find(
             newDateItem =>
@@ -75,6 +80,13 @@ const LineChart: FC<Props> = ({ data }) => {
         />
 
         <VictoryAxis
+          style={{ axis: { stroke: colors.lightGrey } }}
+          dependentAxis
+          tickFormat={() => null}
+          domain={{ y: [0, 10] }}
+        />
+
+        <VictoryAxis
           tickValues={DAYS_OF_WEEK_NUMBERS}
           style={{
             axis: { stroke: colors.lighterGrey, fill: colors.lightGrey2 },
@@ -87,23 +99,16 @@ const LineChart: FC<Props> = ({ data }) => {
           }}
         />
 
-        <VictoryAxis
-          style={{ axis: { stroke: colors.lightGrey } }}
-          dependentAxis
-          tickFormat={() => null}
-          domain={{ y: [0, 10] }}
-        />
-
         <VictoryLine
           style={{ data: { stroke: colors.primary } }}
-          data={mappedData}
+          data={lineChartData}
           x="date"
           y="value"
         />
 
         <VictoryScatter
           style={{ data: { fill: colors.primary } }}
-          data={mappedData}
+          data={lineChartData}
           x="date"
           y="value"
           size={5}
