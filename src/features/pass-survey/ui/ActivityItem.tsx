@@ -10,6 +10,7 @@ import {
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker } from '@entities/flanker';
+import { SurveySlider } from '@shared/ui';
 
 import { PipelineItem, PipelineItemResponse } from '../lib';
 import { TextResponseMapper } from '../model/responseMappers';
@@ -73,6 +74,20 @@ function ActivityItem({ value, pipelineItem, onResponse }: Props) {
 
               onResponse(responseMapper.toResponse(text));
             }}
+          />
+        </Box>
+      );
+      break;
+
+    case 'Slider':
+      item = (
+        <Box flex={1} jc="center" mx="$5">
+          <SurveySlider
+            config={pipelineItem.payload}
+            onChange={() => console.log('changed')}
+            onPress={() => console.log('pressed')}
+            onRelease={() => console.log('released')}
+            initialValue={value}
           />
         </Box>
       );
