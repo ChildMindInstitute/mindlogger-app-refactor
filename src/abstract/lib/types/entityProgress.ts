@@ -15,9 +15,9 @@ export type ActivityProgress = {
 
 export type EntityProgress = FlowProgress | ActivityProgress;
 
-export type ProgressPayload = EntityProgress & {
-  startAt: Date;
-  endAt: Date | null;
+export type StoreProgressPayload = EntityProgress & {
+  startAt: number;
+  endAt: number | null;
 };
 
 type EventId = string;
@@ -26,8 +26,19 @@ type EntityId = string;
 
 type AppletId = string;
 
-type EntityEvents = Record<EventId, ProgressPayload>;
+export type StoreEventsProgress = Record<EventId, StoreProgressPayload>;
 
-type AppletInProgressEntities = Record<EntityId, EntityEvents>;
+export type StoreEntitiesProgress = Record<EntityId, StoreEventsProgress>;
 
-export type EntitiesInProgress = Record<AppletId, AppletInProgressEntities>;
+export type StoreProgress = Record<AppletId, StoreEntitiesProgress>;
+
+export type ProgressPayload = EntityProgress & {
+  startAt: Date;
+  endAt: Date | null;
+};
+
+type EventsProgress = Record<EventId, ProgressPayload>;
+
+type EntitiesProgress = Record<EntityId, EventsProgress>;
+
+export type Progress = Record<AppletId, EntitiesProgress>;

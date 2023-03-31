@@ -1,7 +1,7 @@
 import {
   ActivityPipelineType,
   AvailabilityType,
-  EntitiesInProgress,
+  Progress,
   NotificationTriggerType,
   PeriodicityType,
 } from '@app/abstract/lib/types';
@@ -99,7 +99,7 @@ export type NotificationBuilderInput = {
   appletId: string;
   appletName: string;
   eventEntities: EventEntity[];
-  progress: EntitiesInProgress;
+  progress: Progress;
 };
 
 export type EventNotificationDescribers = {

@@ -1,14 +1,14 @@
 import {
   ActivityPipelineType,
   AvailabilityType,
-  EntitiesInProgress,
+  Progress,
   PeriodicityType,
 } from '@app/abstract/lib/types';
 import { ActivityType } from '@app/entities/activity';
 
 import { Activity, ActivityFlow, EventEntity } from '../../../lib';
 
-export const progress: EntitiesInProgress = {
+export const progress: Progress = {
   apid1: {
     aid1: {
       eid1: {
