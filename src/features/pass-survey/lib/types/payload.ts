@@ -10,7 +10,8 @@ export type ActivityItemType =
   | 'Tutorial'
   | 'Splash'
   | 'Flanker'
-  | 'TextInput';
+  | 'TextInput'
+  | 'Slider';
 
 type AbTestPayload = {
   testIndex: TestIndex;
@@ -22,6 +23,20 @@ type DrawingPayload = {
   imageUrl: string | null;
   backgroundImageUrl: string | null;
 };
+
+type SliderPayload = {
+  leftTitle: string | null;
+  rightTitle: string | null;
+  minValue: number;
+  maxValue: number;
+  leftImageUrl: string | null;
+  rightImageUrl: string | null;
+  showTitles: boolean | null;
+  showTickMarks: boolean | null;
+  showTickLabels: boolean | null;
+  isContinuousSlider: boolean | null;
+};
+
 type FlankerPayload = FlankerConfiguration;
 
 type TextInputPayload = {
@@ -36,7 +51,8 @@ type PipelinePayload =
   | Tutorial
   | DrawingPayload
   | FlankerPayload
-  | TextInputPayload;
+  | TextInputPayload
+  | SliderPayload;
 
 type PipelineItemBase = {
   type: ActivityItemType;
@@ -71,6 +87,11 @@ interface DrawingTestPipelineItem extends PipelineItemBase {
   payload: DrawingPayload;
 }
 
+interface SliderPipelineItem extends PipelineItemBase {
+  type: 'Slider';
+  payload: SliderPayload;
+}
+
 interface FlankerPipelineItem extends PipelineItemBase {
   type: 'Flanker';
   payload: FlankerConfiguration;
@@ -94,11 +115,14 @@ type TextInputResponse =
     }
   | undefined;
 
+type SliderResponse = number | null;
+
 export type PipelineItemResponse =
   | AbTestResponse
   | FlankerResponse
   | DrawingTestResponse
-  | TextInputResponse;
+  | TextInputResponse
+  | SliderResponse;
 
 export type PipelineItem =
   | AbTestPipelineItem
@@ -106,4 +130,5 @@ export type PipelineItem =
   | TutorialPipelineItem
   | DrawingTestPipelineItem
   | FlankerPipelineItem
-  | TextInputPipelineItem;
+  | TextInputPipelineItem
+  | SliderPipelineItem;

@@ -51,6 +51,13 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             validationOptions: item.validationOptions,
           } satisfies PipelineItem;
         }
+
+        case 'Slider': {
+          return {
+            type: item.inputType,
+            payload: item.config,
+          };
+        }
       }
     })
     .reduce<PipelineItem[]>((items, item) => {
