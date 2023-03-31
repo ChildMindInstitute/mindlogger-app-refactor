@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import i18n from 'i18next';
 
 import { type Language } from '../types';
@@ -21,12 +20,12 @@ export function range(n: number): number[] {
   return [...Array(n).keys()];
 }
 
-export function getCurrentWeekDates(formatString: string) {
+export function getCurrentWeekDates(): Array<Date> {
   return Array.from(Array(7).keys()).map(idx => {
     const date = new Date();
     date.setDate(date.getDate() - date.getDay() + (idx + 1));
 
-    return formatString ? format(date, formatString) : date;
+    return date;
   });
 }
 

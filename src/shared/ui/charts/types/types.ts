@@ -1,4 +1,4 @@
 export type ChartItem = {
-  date: string;
+  date: Date;
   value: number;
 };
