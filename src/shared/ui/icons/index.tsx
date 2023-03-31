@@ -105,3 +105,7 @@ export const VideoIcon: FC<IconProps> = props => (
 export const MicrophoneIcon: FC<IconProps> = props => (
   <FontAwesome name="microphone" {...props} />
 );
+
+export const ChevronDownIcon: FC<IconProps> = props => (
+  <FontAwesome name="chevron-down" {...props} />
+);

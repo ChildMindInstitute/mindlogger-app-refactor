@@ -12,10 +12,17 @@ type UseActivityStorageArgs = {
   eventId: string;
 };
 
+export type Answer = {
+  answer: any;
+  additionalAnswer?: string;
+};
+
+type Answers = Record<string, Answer>;
+
 export type ActivityState = {
   step: number;
   items: PipelineItem[];
-  answers: Record<string, any>;
+  answers: Answers;
   appletVersion: string;
 };
 

@@ -46,6 +46,23 @@ function useActivityState({
     });
   }
 
+  function setAdditionalAnswer(step: number, answer: string) {
+    if (!activityStorageRecord) {
+      return;
+    }
+
+    upsertActivityStorageRecord({
+      ...activityStorageRecord,
+      answers: {
+        ...activityStorageRecord.answers,
+        [step]: {
+          answer: activityStorageRecord.answers[step]?.answer,
+          additionalAnswer: answer,
+        },
+      },
+    });
+  }
+
   function removeAnswer(step: number) {
     if (!activityStorageRecord) {
       return;
@@ -68,6 +85,7 @@ function useActivityState({
     setStep,
     setAnswer,
     removeAnswer,
+    setAdditionalAnswer,
     clearActivityStorageRecord,
   };
 }

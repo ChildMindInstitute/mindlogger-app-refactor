@@ -44,6 +44,7 @@ function ActivityStepper({
     setStep: setCurrentStep,
     setAnswer,
     removeAnswer,
+    setAdditionalAnswer,
   } = useActivityState({
     appletId,
     activityId,
@@ -154,6 +155,9 @@ function ActivityStepper({
                       pipelineItem={pipelineItem}
                       onResponse={response => {
                         setAnswer(currentStep, response);
+                      }}
+                      onAdditionalResponse={response => {
+                        setAdditionalAnswer(currentStep, response);
                       }}
                     />
                   )}
