@@ -23,32 +23,37 @@ type Props = {
 };
 
 const LineChart: FC<Props> = ({ data }) => {
+  const dateFormat = 'yyyy dd MM';
+
   const generateXAxisDots = () =>
     Array.from(Array(8).keys()).map(item => ({ dot: item, value: 0 }));
 
   const generateYAxisDots = () =>
     Array.from(Array(6).keys()).map(item => ({ dot: 1, value: item * 2 }));
 
-  const mappedData = useMemo(() => {
-    const dateFormat = 'yyyy dd MM';
-    const currentWeekDates = getCurrentWeekDates(dateFormat);
-
-    const formattedDataDate = () =>
+  const formattedDataDate = useMemo(
+    () =>
       data.map(dataItem => ({
         ...dataItem,
-        date: format(new Date(dataItem.date), dateFormat),
-      }));
+        date: format(dataItem.date, dateFormat),
+      })),
+    [data],
+  );
+
+  const mappedData = useMemo(() => {
+    const currentWeekDates = getCurrentWeekDates();
 
     return currentWeekDates.map(currentWeekDate => {
       return {
         date: currentWeekDate,
         value:
-          formattedDataDate().find(
-            newDateItem => newDateItem.date === currentWeekDate,
+          formattedDataDate.find(
+            newDateItem =>
+              newDateItem.date === format(currentWeekDate, dateFormat),
           )?.value || null,
       };
     });
-  }, [data]);
+  }, [formattedDataDate]);
 
   return (
     <Box>
