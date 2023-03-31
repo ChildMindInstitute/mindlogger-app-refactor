@@ -8,14 +8,16 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
     .map(item => {
       switch (item.inputType) {
         case 'AbTest': {
-          return getAbTrailsPipeline(item.config.device);
+          return getAbTrailsPipeline(
+            item.config.device,
+          ) satisfies PipelineItem[];
         }
 
         case 'Splash': {
           return {
             type: item.inputType,
             payload: null,
-          };
+          } satisfies PipelineItem;
         }
 
         case 'DrawingTest': {
@@ -27,14 +29,27 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
-          };
+          } satisfies PipelineItem;
         }
 
         case 'Flanker': {
           return {
             type: item.inputType,
             payload: item.config,
-          };
+          } satisfies PipelineItem;
+        }
+
+        case 'TextInput': {
+          return {
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            validationOptions: item.validationOptions,
+          } satisfies PipelineItem;
         }
       }
     })

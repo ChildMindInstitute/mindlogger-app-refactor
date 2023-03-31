@@ -1,4 +1,9 @@
-export type ActivityItemType = 'AbTest' | 'DrawingTest' | 'Splash' | 'Flanker';
+export type ActivityItemType =
+  | 'AbTest'
+  | 'DrawingTest'
+  | 'Splash'
+  | 'Flanker'
+  | 'TextInput';
 
 type AbTestConfig = {
   device: 'Phone' | 'Tablet';
@@ -9,7 +14,17 @@ type DrawingTestTestConfig = {
   backgroundImageUrl: string | null;
 };
 
-export type ActivityItemConfig = AbTestConfig | DrawingTestTestConfig | null;
+type TextInputConfig = {
+  maxLength: number;
+  isNumeric: boolean;
+  shouldIdentifyResponse: boolean;
+};
+
+export type ActivityItemConfig =
+  | AbTestConfig
+  | DrawingTestTestConfig
+  | TextInputConfig
+  | null;
 
 type ActivityItemBase = {
   id: string;
@@ -25,6 +40,9 @@ type ActivityItemBase = {
   hasTopNavigation: boolean;
   order: number;
   question: string;
+  validationOptions?: {
+    correctAnswer?: string;
+  };
 };
 
 interface AbTestActivityItem extends ActivityItemBase {
@@ -47,11 +65,17 @@ interface FlakerActivityItem extends ActivityItemBase {
   config: any;
 }
 
+interface TextInputActivityItem extends ActivityItemBase {
+  inputType: 'TextInput';
+  config: TextInputConfig;
+}
+
 export type ActivityItem =
   | AbTestActivityItem
   | SplashActivityItem
   | DrawingTestTestActivityItem
-  | FlakerActivityItem;
+  | FlakerActivityItem
+  | TextInputActivityItem;
 
 export type ActivityDetails = {
   id: string;
