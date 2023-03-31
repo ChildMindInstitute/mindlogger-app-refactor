@@ -8,19 +8,18 @@ import {
   VictoryScatter,
 } from 'victory-native';
 
-import { colors, getCurrentWeekDates } from '@app/shared/lib';
+import {
+  colors,
+  DAYS_OF_WEEK_NUMBERS,
+  DAYS_OF_WEEK_SHORT_NAMES,
+  getCurrentWeekDates,
+} from '@app/shared/lib';
 import { Box } from '@shared/ui';
 
-type LineChartItem = {
-  date: string;
-  value: number;
-};
-
-const daysOfWeekNumber = [0, 1, 2, 3, 4, 5, 6];
-const dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+import { ChartItem } from '../types';
 
 type Props = {
-  data: Array<LineChartItem>;
+  data: Array<ChartItem>;
 };
 
 const LineChart: FC<Props> = ({ data }) => {
@@ -71,14 +70,15 @@ const LineChart: FC<Props> = ({ data }) => {
         />
 
         <VictoryAxis
-          tickValues={daysOfWeekNumber}
+          tickValues={DAYS_OF_WEEK_NUMBERS}
           style={{
-            axis: { stroke: colors.lightGrey },
-            axisLabel: { color: colors.lightGrey },
+            axis: { stroke: colors.lighterGrey, fill: colors.lightGrey2 },
+            axisLabel: { fill: colors.lighterGrey },
+            tickLabels: { fill: colors.grey },
           }}
           tickCount={7}
           tickFormat={(_, index) => {
-            return dayNames[index];
+            return DAYS_OF_WEEK_SHORT_NAMES[index];
           }}
         />
 

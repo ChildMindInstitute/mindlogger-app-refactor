@@ -3,27 +3,30 @@ import { FC, useMemo } from 'react';
 import { format } from 'date-fns';
 import { VictoryAxis, VictoryChart, VictoryScatter } from 'victory-native';
 
-import { colors, getCurrentWeekDates } from '@shared/lib';
+import {
+  colors,
+  DAYS_OF_WEEK_NUMBERS,
+  DAYS_OF_WEEK_SHORT_NAMES,
+  getCurrentWeekDates,
+} from '@shared/lib';
 
 import { Box } from '../..';
+import { ChartItem } from '../types';
 
 type TimelineChartOption = {
   name: string;
   value: number;
 };
 
-type TimelineChartItem = {
-  date: string;
-  value: number;
+type ChartRowItem = {
+  optionName: string;
+  timelines: Array<{ date: string; value?: number | null }>;
 };
 
 type Props = {
   options: Array<TimelineChartOption>;
-  data: Array<TimelineChartItem>;
+  data: Array<ChartItem>;
 };
-
-const daysOfWeekNumber = [0, 1, 2, 3, 4, 5, 6];
-const dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
 const TimelineChart: FC<Props> = ({ data, options }) => {
   const generateXAxisDots = () =>
@@ -41,15 +44,16 @@ const TimelineChart: FC<Props> = ({ data, options }) => {
 
     const formattedDates = formattedDataDate();
 
-    const getValue = (o: TimelineChartOption, currentWeekDate: string) => {
+    const getValue = (option: TimelineChartOption, currentWeekDate: string) => {
       return formattedDates.find(newDateItem => {
         return (
-          newDateItem.date === currentWeekDate && newDateItem.value === o.value
+          newDateItem.date === currentWeekDate &&
+          newDateItem.value === option.value
         );
       })?.value;
     };
 
-    const singleTimelineItems = (option: TimelineChartOption) => {
+    const getTimelineItems = (option: TimelineChartOption) => {
       return currentWeekDates.map(currentWeekDate => {
         return {
           date: currentWeekDate,
@@ -60,19 +64,24 @@ const TimelineChart: FC<Props> = ({ data, options }) => {
       });
     };
 
-    const res = options.map(option => {
+    const res: Array<ChartRowItem> = options.map(option => {
       return {
         optionName: option.name,
-        timelines: singleTimelineItems(option),
+        timelines: getTimelineItems(option),
       };
     });
 
-    console.log(res[0].optionName, res[0].timelines);
-    console.log(res[1].optionName, res[1].timelines);
-    console.log(res[2].optionName, res[2].timelines);
-
     return res;
   }, [data, options]);
+
+  const getScatterDots = (option: ChartRowItem) => {
+    return option.timelines.map((timeline, i) => {
+      return {
+        y: 0,
+        x: timeline.value !== null ? i : null,
+      };
+    });
+  };
 
   return (
     <Box>
@@ -88,7 +97,7 @@ const TimelineChart: FC<Props> = ({ data, options }) => {
           />
 
           <VictoryAxis
-            tickValues={daysOfWeekNumber}
+            tickValues={DAYS_OF_WEEK_NUMBERS}
             style={{
               axis: { stroke: colors.lighterGrey, fill: colors.lightGrey2 },
               axisLabel: { fill: colors.lighterGrey },
@@ -96,19 +105,12 @@ const TimelineChart: FC<Props> = ({ data, options }) => {
             }}
             tickCount={7}
             tickFormat={(_, index) => {
-              return dayNames[index];
+              return DAYS_OF_WEEK_SHORT_NAMES[index];
             }}
           />
 
           <VictoryScatter
-            data={option.timelines.map((timeline, i) => {
-              console.log(option.optionName, timeline);
-
-              return {
-                y: 0,
-                x: timeline.value !== null ? i : null,
-              };
-            })}
+            data={getScatterDots(option)}
             x="x"
             y="y"
             size={5}

@@ -76,3 +76,6 @@ export const MICROPHONE_PERMISSIONS = Platform.select({
   android: PERMISSIONS.ANDROID.RECORD_AUDIO,
   ios: PERMISSIONS.IOS.MICROPHONE,
 });
+
+export const DAYS_OF_WEEK_NUMBERS = [0, 1, 2, 3, 4, 5, 6];
+export const DAYS_OF_WEEK_SHORT_NAMES = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
