@@ -31,6 +31,7 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
     <YStack>
       {config.map((sliderConfig, index) => {
         const { sliderLabel } = sliderConfig;
+
         return (
           <YStack key={`slider-${index}`}>
             <Text fontSize={12} my="$3">
@@ -38,6 +39,8 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
             </Text>
 
             <SurveySlider
+              // @ts-ignore
+              // @todo
               config={sliderConfig}
               onChange={value => onSliderValueChange(value, index)}
               onRelease={onRelease}

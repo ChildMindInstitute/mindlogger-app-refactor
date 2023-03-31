@@ -12,7 +12,6 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
     rightTitle,
     minValue,
     maxValue,
-    showTitles = true,
     showTickMarks = true,
     showTickLabels = true,
     isContinuousSlider = false,
@@ -65,9 +64,7 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
             />
           )}
 
-          {showTitles && leftTitle ? (
-            <Text textAlign="center">{leftTitle}</Text>
-          ) : null}
+          {leftTitle ? <Text textAlign="center">{leftTitle}</Text> : null}
         </YStack>
 
         <YStack maxWidth="30%" ml="auto" ai="center">
@@ -82,9 +79,7 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
             </XStack>
           )}
 
-          {showTitles && rightTitle ? (
-            <Text textAlign="center">{rightTitle}</Text>
-          ) : null}
+          {rightTitle ? <Text textAlign="center">{rightTitle}</Text> : null}
         </YStack>
       </XStack>
     </YStack>
