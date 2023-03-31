@@ -81,7 +81,29 @@ function mapToStackedCheckboxes(dto: MultiSelectionRowsItemDto): ActivityItem {
 }
 
 function mapToNumberSelect(dto: NumberSelectionItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'NumberSelect',
+    config: {
+      min: dto.responseValues.minValue,
+      max: dto.responseValues.maxValue,
+    },
+    timer: null,
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    isAbleToMoveToPrevious: !dto.config.removeBackButton,
+    hasAlert: false,
+    hasScore: false,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    ...(dto.config.additionalResponseOption.textInputOption && {
+      additionalText: {
+        required: dto.config.additionalResponseOption.textInputRequired,
+      },
+    }),
+  };
 }
 
 function mapToPhoto(dto: PhotoItemDto): ActivityItem {

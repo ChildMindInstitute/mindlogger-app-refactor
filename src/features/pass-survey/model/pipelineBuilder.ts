@@ -58,6 +58,19 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             payload: item.config,
           };
         }
+
+        case 'NumberSelect': {
+          return {
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            additionalText: item.additionalText,
+          } satisfies PipelineItem;
+        }
       }
     })
     .reduce<PipelineItem[]>((items, item) => {

@@ -11,7 +11,8 @@ export type ActivityItemType =
   | 'Splash'
   | 'Flanker'
   | 'TextInput'
-  | 'Slider';
+  | 'Slider'
+  | 'NumberSelect';
 
 type AbTestPayload = {
   testIndex: TestIndex;
@@ -44,6 +45,11 @@ type TextInputPayload = {
   shouldIdentifyResponse: boolean;
 };
 
+type NumberSelectPayload = {
+  max: number;
+  min: number;
+};
+
 type PipelinePayload =
   | AbTestPayload
   | SplashPayload
@@ -51,7 +57,8 @@ type PipelinePayload =
   | DrawingPayload
   | FlankerPayload
   | TextInputPayload
-  | SliderPayload;
+  | SliderPayload
+  | NumberSelectPayload;
 
 type PipelineItemBase = {
   type: ActivityItemType;
@@ -63,6 +70,9 @@ type PipelineItemBase = {
   question?: string;
   validationOptions?: {
     correctAnswer?: string;
+  };
+  additionalText?: {
+    required: boolean;
   };
 };
 
@@ -101,6 +111,11 @@ export interface TextInputPipelineItem extends PipelineItemBase {
   payload: TextInputPayload;
 }
 
+interface NumberSelectPipelineItem extends PipelineItemBase {
+  type: 'NumberSelect';
+  payload: NumberSelectPayload;
+}
+
 type AbTestResponse = LogLine[];
 
 type DrawingTestResponse = DrawResult;
@@ -116,12 +131,15 @@ type TextInputResponse =
 
 type SliderResponse = number | null;
 
+type NumberSelectResponse = string;
+
 export type PipelineItemResponse =
   | AbTestResponse
   | FlankerResponse
   | DrawingTestResponse
   | TextInputResponse
-  | SliderResponse;
+  | SliderResponse
+  | NumberSelectResponse;
 
 export type PipelineItem =
   | AbTestPipelineItem
@@ -130,4 +148,5 @@ export type PipelineItem =
   | DrawingTestPipelineItem
   | FlankerPipelineItem
   | TextInputPipelineItem
-  | SliderPipelineItem;
+  | SliderPipelineItem
+  | NumberSelectPipelineItem;

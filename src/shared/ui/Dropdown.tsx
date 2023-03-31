@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native';
 
-import { DropdownElement } from '.';
+import SelectDropdown from 'react-native-select-dropdown';
+
+import { colors } from '../lib';
 
 export type LabeledValue = {
   label: string;
@@ -20,28 +22,37 @@ function Dropdown({ placeholder, value, onValueChange, items }: DropdownProps) {
   };
 
   return (
-    <DropdownElement
-      maxHeight={300}
-      placeholder={placeholder}
-      iconStyle={styles.iconStyle}
-      selectedTextStyle={styles.centerAlignedText}
-      placeholderStyle={styles.centerAlignedText}
-      itemTextStyle={styles.centerAlignedText}
-      value={value}
+    <SelectDropdown
       data={items}
-      labelField="label"
-      valueField="value"
-      onChange={onChange}
+      dropdownStyle={styles.dropdown}
+      buttonStyle={styles.button}
+      defaultButtonText={placeholder}
+      defaultValue={value ? value.value : placeholder}
+      onSelect={onChange}
+      buttonTextAfterSelection={() => (value ? value.value : placeholder)}
+      rowTextForSelection={item => item.label}
     />
   );
 }
 
 const styles = StyleSheet.create({
-  centerAlignedText: {
-    textAlign: 'center',
+  dropdown: {
+    backgroundColor: 'white',
+    borderBottomWidth: 1.5,
+    borderBottomColor: colors.lightGrey,
+    color: 'white',
   },
-  iconStyle: {
-    display: 'none',
+  button: {
+    fontSize: 13,
+    width: '100%',
+    backgroundColor: 'transparent',
+    borderBottomWidth: 1.5,
+    borderBottomColor: colors.grey,
+    color: colors.grey,
+  },
+  label: {
+    fontSize: 13,
+    color: colors.grey,
   },
 });
 

@@ -321,6 +321,41 @@ export const SliderTestActivity: ActivityDto = {
   ],
 };
 
+export const NumberSelectActivity: ActivityDto = {
+  id: 'aid1',
+  name: 'Number Selection Activity',
+  description: 'Number Selection Activity Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  ordering: 0,
+  items: [
+    {
+      id: '105',
+      name: 'Number select',
+      question: 'What',
+      responseType: 'numberSelect',
+      config: {
+        removeBackButton: false,
+        skippableItem: false,
+        additionalResponseOption: {
+          textInputOption: true,
+          textInputRequired: true,
+        },
+      },
+      responseValues: {
+        maxValue: 50,
+        minValue: 20,
+      },
+      order: 0,
+    },
+  ],
+};
+
 export const FlankerActivity = {
   withImage: FlankerWithImageActivity,
   withStSFx: FlankerWithStSFxActivity,

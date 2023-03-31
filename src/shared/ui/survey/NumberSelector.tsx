@@ -2,27 +2,27 @@ import { FC, useMemo } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import AgeSelectorConfig from './types';
-import Dropdown from '../../Dropdown';
+import Dropdown from '../Dropdown';
 
-type SelectedAgeValue = {
-  value: string;
+type NumberSelectorConfig = {
+  max: number;
+  min: number;
 };
 
 type Props = {
-  config: AgeSelectorConfig;
-  value?: string;
-  onChange: (value: SelectedAgeValue) => void;
+  config: NumberSelectorConfig;
+  value: string;
+  onChange: (value: string) => void;
 };
 
-const AgeSelector: FC<Props> = ({ config, value, onChange }) => {
+const NumberSelector: FC<Props> = ({ config, value, onChange }) => {
   const { t } = useTranslation();
 
   const ageRange = useMemo(
     () =>
       Array.from(
-        { length: config.maxAge - config.minAge + 1 },
-        (_, index) => index + config.minAge,
+        { length: config.max - config.min + 1 },
+        (_, index) => index + config.min,
       ).map(item => ({ label: String(item), value: String(item) })),
     [config],
   );
@@ -32,13 +32,9 @@ const AgeSelector: FC<Props> = ({ config, value, onChange }) => {
     [value],
   );
 
-  const onValueChange = (selection: string) => {
-    onChange({ value: selection });
-  };
-
   return (
     <Dropdown
-      onValueChange={onValueChange}
+      onValueChange={onChange}
       placeholder={t('select:select_one')}
       items={ageRange}
       value={mappedValue}
@@ -46,4 +42,4 @@ const AgeSelector: FC<Props> = ({ config, value, onChange }) => {
   );
 };
 
-export default AgeSelector;
+export default NumberSelector;
