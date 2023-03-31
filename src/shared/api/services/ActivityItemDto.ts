@@ -167,7 +167,6 @@ type SliderConfiguration = ButtonsConfiguration &
     setAlerts: boolean;
     showTickMarks: boolean;
     showTickLabels: boolean;
-    showTitles: boolean;
     continuousSlider: boolean;
   };
 
