@@ -1,4 +1,4 @@
-import { NotificationTriggerType } from '@app/abstract/lib/types';
+import { NotificationTriggerType } from '@app/abstract/lib';
 import { HourMinute } from '@app/shared/lib';
 
 import httpService from './httpService';

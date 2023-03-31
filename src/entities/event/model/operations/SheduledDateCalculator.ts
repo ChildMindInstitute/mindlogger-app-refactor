@@ -1,7 +1,7 @@
 import { differenceInMonths, isEqual, startOfDay, subMonths } from 'date-fns';
 import { Parse, Day } from 'dayspan';
 
-import { AvailabilityType, PeriodicityType } from '@app/abstract/lib/types';
+import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
 
 import { EventAvailability, ScheduleEvent } from '../../lib';
 

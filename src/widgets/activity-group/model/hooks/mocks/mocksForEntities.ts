@@ -3,7 +3,7 @@ import {
   AvailabilityType,
   Progress,
   PeriodicityType,
-} from '@app/abstract/lib/types';
+} from '@app/abstract/lib';
 import { ActivityType } from '@app/entities/activity';
 
 import { Activity, ActivityFlow, EventEntity } from '../../../lib';

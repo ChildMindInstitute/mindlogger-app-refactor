@@ -1,4 +1,4 @@
-import { ActivityPipelineType } from '@app/abstract/lib/types';
+import { ActivityPipelineType } from '@app/abstract/lib';
 import { ActivityType } from '@entities/activity';
 import { ScheduleEvent } from '@entities/event';
 

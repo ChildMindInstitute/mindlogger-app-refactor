@@ -1,4 +1,4 @@
-import { StoreProgressPayload } from '@app/abstract/lib/types';
+import { StoreProgressPayload } from '@app/abstract/lib';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
 
 import { onBeforeStartingActivity } from '../../lib';
