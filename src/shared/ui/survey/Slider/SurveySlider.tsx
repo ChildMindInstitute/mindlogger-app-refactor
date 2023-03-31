@@ -18,7 +18,7 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
     leftImageUrl,
     rightImageUrl,
   } = config;
-  const { onChange, onRelease, onPress, initialValue = 0 } = props;
+  const { onChange, onRelease, onPress, initialValue = minValue } = props;
 
   const onValueChange = (arrayOfValues: number[]) => {
     const [value] = arrayOfValues;
@@ -26,8 +26,10 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
     onChange(roundedValue);
   };
 
-  const length = maxValue - minValue;
-  const items = new Array(length).fill(1);
+  const items = [];
+  for (let i = minValue; i <= maxValue; i++) {
+    items.push(i);
+  }
 
   return (
     <YStack>
@@ -37,17 +39,17 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
         onResponderStart={onPress}
         onValueChange={onValueChange}
         size={THUMB_SIZE}
-        max={maxValue - 1}
+        max={maxValue}
         min={minValue}
         step={isContinuousSlider ? 0.01 : 1}
       />
 
       <XStack jc="space-between" mt={9}>
-        {items.map((value, index) => {
+        {items.map(value => {
           return (
-            <Box key={`tick-${index}`} w={THUMB_SIZE} ai="center">
+            <Box key={`tick-${value}`} w={THUMB_SIZE} ai="center">
               {showTickMarks && <Box w={1} bg="$black" h={8} />}
-              {showTickLabels && <Text mt="$1">{minValue + index}</Text>}
+              {showTickLabels && <Text mt="$1">{value}</Text>}
             </Box>
           );
         })}
