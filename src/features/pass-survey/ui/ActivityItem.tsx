@@ -108,10 +108,10 @@ function ActivityItem({
         <Box flex={1} jc="center" mx="$5">
           <SurveySlider
             config={pipelineItem.payload}
-            onChange={onResponse}
+            onChange={() => console.log('changed')}
             onPress={() => console.log('pressed')}
             onRelease={() => console.log('released')}
-            initialValue={value?.answer}
+            initialValue={value}
           />
         </Box>
       );
@@ -127,7 +127,6 @@ function ActivityItem({
           />
         </Box>
       );
-      break;
 
     default: {
       item = <></>;
