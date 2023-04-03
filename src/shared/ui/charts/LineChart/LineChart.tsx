@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 
-import { format } from 'date-fns';
+import { format, isEqual } from 'date-fns';
 import {
   VictoryAxis,
   VictoryChart,
@@ -43,11 +43,8 @@ const LineChart: FC<Props> = ({ data }) => {
       return {
         date: format(currentWeekDate, dateFormat),
         value:
-          data.find(
-            newDateItem =>
-              format(newDateItem.date, dateFormat) ===
-              format(currentWeekDate, dateFormat),
-          )?.value || null,
+          data.find(dataItem => isEqual(dataItem.date, currentWeekDate))
+            ?.value || null,
       };
     });
   }, [data]);
