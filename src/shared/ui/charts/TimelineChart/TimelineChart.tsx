@@ -42,33 +42,25 @@ const getScatterDots = (chartDataItem: TimelineChartData) => {
 const TimelineChart: FC<Props> = ({ data, options }) => {
   const dateFormat = 'yyyy dd MM';
 
-  const generateXAxisDots = (): Array<ChartAxisDot> =>
+  const getXAxisDots = (): Array<ChartAxisDot> =>
     Array.from(Array(7).keys()).map(item => ({ dot: item, value: 0 }));
-
-  const formattedDataDates: Array<{ date: string; value: number }> = useMemo(
-    () =>
-      data.map(dataItem => ({
-        ...dataItem,
-        date: format(dataItem.date, dateFormat),
-      })),
-    [data],
-  );
 
   const getValueForChartItem: (
     option: TimelineChartOption,
     currentWeekDate: Date,
   ) => number | null = useCallback(
     (option: TimelineChartOption, currentWeekDate: Date) => {
-      const chartItem = formattedDataDates.find(newDateItem => {
+      const chartItem = data.find(dateItem => {
         return (
-          newDateItem.date === format(currentWeekDate, dateFormat) &&
-          newDateItem.value === option.value
+          format(dateItem.date, dateFormat) ===
+            format(currentWeekDate, dateFormat) &&
+          dateItem.value === option.value
         );
       });
 
       return !isNaN(Number(chartItem?.value)) ? chartItem!.value : null;
     },
-    [formattedDataDates],
+    [data],
   );
 
   const getTimelineItems: (option: TimelineChartOption) => Array<Timeline> =
@@ -101,7 +93,7 @@ const TimelineChart: FC<Props> = ({ data, options }) => {
         <VictoryChart key={option.optionName} height={60}>
           <VictoryScatter
             style={{ data: { fill: colors.lighterGrey } }}
-            data={generateXAxisDots()}
+            data={getXAxisDots()}
             x="dot"
             y="value"
             domain={[0, 6]}

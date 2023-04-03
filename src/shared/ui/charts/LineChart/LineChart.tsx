@@ -30,20 +30,11 @@ type Props = {
 const LineChart: FC<Props> = ({ data }) => {
   const dateFormat = 'yyyy dd MM';
 
-  const generateXAxisDots = (): Array<ChartAxisDot> =>
+  const getXAxisDots = (): Array<ChartAxisDot> =>
     Array.from(Array(8).keys()).map(item => ({ dot: item, value: 0 }));
 
-  const generateYAxisDots = (): Array<ChartAxisDot> =>
+  const getYAxisDots = (): Array<ChartAxisDot> =>
     Array.from(Array(6).keys()).map(item => ({ dot: 1, value: item * 2 }));
-
-  const formattedDataDate: Array<{ date: string; value: number }> = useMemo(
-    () =>
-      data.map(dataItem => ({
-        ...dataItem,
-        date: format(dataItem.date, dateFormat),
-      })),
-    [data],
-  );
 
   const lineChartData: Array<LineChartDataItem> = useMemo(() => {
     const currentWeekDates = getCurrentWeekDates();
@@ -52,20 +43,21 @@ const LineChart: FC<Props> = ({ data }) => {
       return {
         date: format(currentWeekDate, dateFormat),
         value:
-          formattedDataDate.find(
+          data.find(
             newDateItem =>
-              newDateItem.date === format(currentWeekDate, dateFormat),
+              format(newDateItem.date, dateFormat) ===
+              format(currentWeekDate, dateFormat),
           )?.value || null,
       };
     });
-  }, [formattedDataDate]);
+  }, [data]);
 
   return (
     <Box>
       <VictoryChart>
         <VictoryScatter
           style={{ data: { fill: colors.lightGrey2 } }}
-          data={generateXAxisDots()}
+          data={getXAxisDots()}
           x="dot"
           y="value"
           size={5}
@@ -73,7 +65,7 @@ const LineChart: FC<Props> = ({ data }) => {
 
         <VictoryScatter
           style={{ data: { fill: colors.lightGrey2 } }}
-          data={generateYAxisDots()}
+          data={getYAxisDots()}
           x="dot"
           y="value"
           size={5}
