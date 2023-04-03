@@ -84,7 +84,7 @@ function ActivityItem({ value, pipelineItem, onResponse }: Props) {
         <Box flex={1} jc="center" mx="$5">
           <SurveySlider
             config={pipelineItem.payload}
-            onChange={() => console.log('changed')}
+            onChange={onResponse}
             onPress={() => console.log('pressed')}
             onRelease={() => console.log('released')}
             initialValue={value}

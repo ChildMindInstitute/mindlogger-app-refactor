@@ -26,10 +26,10 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
     onChange(roundedValue);
   };
 
-  const items = [];
-  for (let i = minValue; i <= maxValue; i++) {
-    items.push(i);
-  }
+  const items = Array.from(
+    { length: maxValue - minValue + 1 },
+    (_, index) => index + minValue,
+  );
 
   return (
     <YStack>
