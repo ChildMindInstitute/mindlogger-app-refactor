@@ -21,7 +21,7 @@ export type SliderProps = {
   onRelease?: () => void;
 };
 
-type StackedSliderConfig = (Config & { sliderLabel: string })[];
+type StackedSliderConfig = (SliderConfig & { label: string; id: string })[];
 
 export type StackedSliderProps = {
   config: StackedSliderConfig;
