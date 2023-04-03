@@ -29,6 +29,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
+            additionalText: item.additionalText,
           } satisfies PipelineItem;
         }
 

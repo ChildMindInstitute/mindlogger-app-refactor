@@ -41,7 +41,10 @@ function useActivityState({
       ...activityStorageRecord,
       answers: {
         ...activityStorageRecord.answers,
-        [step]: answer,
+        [step]: {
+          ...activityStorageRecord.answers?.[step],
+          answer,
+        },
       },
     });
   }
@@ -56,7 +59,7 @@ function useActivityState({
       answers: {
         ...activityStorageRecord.answers,
         [step]: {
-          answer: activityStorageRecord.answers[step]?.answer,
+          ...activityStorageRecord.answers?.[step],
           additionalAnswer: answer,
         },
       },

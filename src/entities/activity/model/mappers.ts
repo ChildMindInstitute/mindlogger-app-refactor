@@ -41,6 +41,11 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: !dto.config.removeUndoButton,
     hasTopNavigation: dto.config.navigationToTop,
+    ...(dto.config.additionalResponseOption.textInputOption && {
+      additionalText: {
+        required: dto.config.additionalResponseOption.textInputRequired,
+      },
+    }),
   };
 }
 
