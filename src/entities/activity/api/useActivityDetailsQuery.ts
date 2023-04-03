@@ -11,6 +11,9 @@ export const useActivityDetailsQuery = <TData = ReturnAwaited<FetchFn>>(
   return useBaseQuery(
     ['activities', { activityId }],
     () => ActivityService.getById(activityId),
-    options,
+    {
+      ...options,
+      enabled: false,
+    },
   );
 };

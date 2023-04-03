@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import { RefreshControl, RefreshControlProps } from 'react-native';
 
-import { useRefreshQuery } from '@app/shared/lib';
+import useRefresh from '@app/shared/lib/hooks/useRefresh';
 
 type Props = Omit<RefreshControlProps, 'refreshing' | 'onRefresh'>;
 
 const AppletsRefresh: FC<Props> = props => {
-  const { refresh, isRefreshing } = useRefreshQuery(['applets']);
+  const { refresh, isRefreshing } = useRefresh();
 
   return (
     <RefreshControl

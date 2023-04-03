@@ -1,7 +1,10 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { XStack, YStack } from '@tamagui/stacks';
+import { useIsMutating, useQueryClient } from '@tanstack/react-query';
 
+import { useCacheHasData } from '@app/shared/lib/hooks/useCacheHasData';
+import { useRefreshMutation } from '@app/shared/lib/hooks/useRefreshMutation';
 import { Box, BoxProps, NoListItemsYet } from '@app/shared/ui';
 import { LoadListError } from '@app/shared/ui';
 
@@ -18,16 +21,44 @@ type Props = {
 } & BoxProps;
 
 const AppletList: FC<Props> = ({ onAppletPress, ...styledProps }) => {
-  const {
-    error,
-    data: applets,
-    isFetching,
-    isSuccess,
-  } = useAppletsQuery({
+  const { error: getAppletsError, data: applets } = useAppletsQuery({
     select: response => response.data.result,
   });
 
-  const hasError = !!error;
+  const { mutate: refresh } = useRefreshMutation();
+
+  const { check: checkIfCacheHasData } = useCacheHasData();
+
+  const [refreshError, setRefreshError] = useState<string | null>(null);
+
+  const isRefreshing = useIsMutating(['refresh']);
+
+  const hasError = !!refreshError || !!getAppletsError;
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.getMutationCache().subscribe(event => {
+      const key = event.mutation?.options.mutationKey?.[0];
+
+      if (key === 'refresh') {
+        setRefreshError(
+          event.mutation!.state.status === 'error'
+            ? event.mutation!.state.error
+            : null,
+        );
+      }
+    });
+  }, [queryClient]);
+
+  useEffect(() => {
+    const cacheHasData = checkIfCacheHasData();
+
+    if (!cacheHasData) {
+      refresh();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (hasError) {
     return (
@@ -37,7 +68,7 @@ const AppletList: FC<Props> = ({ onAppletPress, ...styledProps }) => {
     );
   }
 
-  if (isSuccess && !applets?.length) {
+  if (!isRefreshing && !applets?.length) {
     return (
       <XStack flex={1} jc="center" ai="center">
         <NoListItemsYet translationKey="applet_list_component:no_applets_yet" />
@@ -52,7 +83,7 @@ const AppletList: FC<Props> = ({ onAppletPress, ...styledProps }) => {
           <AppletCard
             applet={x}
             key={x.id}
-            disabled={isFetching}
+            disabled={!!isRefreshing}
             onPress={() =>
               onAppletPress({ id: x.id, displayName: x.displayName })
             }

@@ -11,6 +11,9 @@ export const useAppletDetailsQuery = <TData = ReturnAwaited<FetchFn>>(
   return useBaseQuery(
     ['applets', { appletId }],
     () => appletsService.getAppletDetails({ appletId }),
-    options,
+    {
+      ...options,
+      enabled: false,
+    },
   );
 };

@@ -1,3 +1,5 @@
+import { ImageUrl } from '@app/shared/lib';
+
 export type ResponseType =
   | 'text'
   | 'singleSelect'
@@ -49,7 +51,7 @@ type SingleSelectionAnswerSettings = {
   options: Array<{
     id: string;
     text: string;
-    image: string | null;
+    image: ImageUrl | null;
     score: number | null;
     tooltip: string | null;
     color: string | null;
@@ -71,7 +73,7 @@ type MultiSelectionAnswerSettings = {
   options: Array<{
     id: string;
     text: string;
-    image: string | null;
+    image: ImageUrl | null;
     score: number | null;
     tooltip: string | null;
     color: string | null;
@@ -101,13 +103,13 @@ type SingleSelectionRowsAnswerSettings = {
   rows: Array<{
     id: string;
     rowName: string;
-    rowImage: string | null;
+    rowImage: ImageUrl | null;
     tooltip: string | null;
 
     options: Array<{
       id: string;
       text: string;
-      image: string | null;
+      image: ImageUrl | null;
       score: number | null;
       tooltip: string | null;
     }>;
@@ -125,13 +127,13 @@ type MultiSelectionRowsAnswerSettings = {
   rows: Array<{
     id: string;
     rowName: string;
-    rowImage: string | null;
+    rowImage: ImageUrl | null;
     tooltip: string | null;
 
     options: Array<{
       id: string;
       text: string;
-      image: string | null;
+      image: ImageUrl | null;
       score: number | null;
       tooltip: string | null;
     }>;
@@ -175,8 +177,8 @@ type SliderAnswerSettings = {
   maxLabel: string | null;
   minValue: number;
   maxValue: number;
-  minImage: string | null;
-  maxImage: string | null;
+  minImage: ImageUrl | null;
+  maxImage: ImageUrl | null;
 };
 
 type NumberSelectionConfiguration = ButtonsConfiguration &
@@ -242,8 +244,8 @@ type SliderRowsAnswerSettings = Array<{
   maxLabel: string | null;
   minValue: number;
   maxValue: number;
-  minImage: string | null;
-  maxImage: string | null;
+  minImage: ImageUrl | null;
+  maxImage: ImageUrl | null;
 }>;
 
 // @todo Change when the BE integration is done

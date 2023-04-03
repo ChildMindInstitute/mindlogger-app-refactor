@@ -57,7 +57,23 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
 }
 
 function mapToAbTest(dto: AbTestItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'AbTest',
+    config: {
+      device: dto.responseValues.device,
+    },
+    timer: dto.config.timer,
+    order: dto.order,
+    question: dto.question,
+    isSkippable: false,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveToPrevious: false,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+  };
 }
 
 function mapToAudio(dto: AudioItemDto): ActivityItem {

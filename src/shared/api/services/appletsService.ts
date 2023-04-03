@@ -1,3 +1,5 @@
+import { ImageUrl } from '@app/shared/lib';
+
 import httpService from './httpService';
 import { SuccessfulResponse } from '../types';
 
@@ -5,13 +7,13 @@ export type ActivityRecordDto = {
   id: string;
   name: string;
   description: string;
-  image: string | null;
+  image: ImageUrl | null;
   isReviewable: boolean;
   isSkippable: boolean;
   showAllAtOnce: boolean;
   responseIsEditable: boolean;
   ordering: number;
-  splashScreen: string | null;
+  splashScreen: ImageUrl | null;
 };
 
 export type ActivityFlowRecordDto = {
@@ -27,8 +29,8 @@ export type ActivityFlowRecordDto = {
 export type ThemeDto = {
   id: string;
   name: string;
-  logo: string;
-  backgroundImage: string;
+  logo: ImageUrl;
+  backgroundImage: ImageUrl;
   primaryColor: string;
   secondaryColor: string;
   tertiaryColor: string;
@@ -40,8 +42,8 @@ export type AppletDetailsDto = {
   version: string;
   description: string;
   about: string;
-  image: string | null;
-  watermark: string | null;
+  image: ImageUrl | null;
+  watermark: ImageUrl | null;
   theme: ThemeDto | null;
   activities: ActivityRecordDto[];
   activityFlows: ActivityFlowRecordDto[];
@@ -49,13 +51,13 @@ export type AppletDetailsDto = {
 
 export type AppletDto = {
   id: string;
-  image: string | null;
+  image: ImageUrl | null;
   displayName: string;
   description: string;
   theme: ThemeDto | null;
   version: string;
   about: string;
-  watermark: string | null;
+  watermark: ImageUrl | null;
 };
 
 export type AppletsResponse = SuccessfulResponse<AppletDto[]>;

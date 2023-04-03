@@ -12,7 +12,7 @@
       "@assets/*": ["assets/*"],
       "@shared/*": ["src/shared/*"],
       "@images": ["assets/images/index"],
-      "@features/*": ["src/features/*"],
+      "@features/*": ["src/features/*"], 
       "@screens": ["src/screens/index"],
       "@screens/*": ["src/screens/*"],
       "@entities/*": ["src/entities/*"],
