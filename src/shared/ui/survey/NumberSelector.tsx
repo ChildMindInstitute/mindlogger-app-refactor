@@ -18,7 +18,7 @@ type Props = {
 const NumberSelector: FC<Props> = ({ config, value, onChange }) => {
   const { t } = useTranslation();
 
-  const ageRange = useMemo(
+  const numberRange = useMemo(
     () =>
       Array.from(
         { length: config.max - config.min + 1 },
@@ -36,7 +36,7 @@ const NumberSelector: FC<Props> = ({ config, value, onChange }) => {
     <Dropdown
       onValueChange={onChange}
       placeholder={t('select:select_one')}
-      items={ageRange}
+      items={numberRange}
       value={mappedValue}
     />
   );
