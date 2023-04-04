@@ -19,9 +19,20 @@ import {
   TextItemDto,
   TimeRangeItemDto,
   VideoItemDto,
+  AdditionalResponseConfiguration,
 } from '@app/shared/api';
 
 import { ActivityDetails, ActivityItem } from '../lib';
+
+function mapAdditionalText(configuration: AdditionalResponseConfiguration) {
+  return configuration.additionalResponseOption.textInputOption
+    ? {
+        additionalText: {
+          required: configuration.additionalResponseOption.textInputRequired,
+        },
+      }
+    : null;
+}
 
 function mapToDrawing(dto: DrawingItemDto): ActivityItem {
   return {
@@ -41,11 +52,7 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: !dto.config.removeUndoButton,
     hasTopNavigation: dto.config.navigationToTop,
-    ...(dto.config.additionalResponseOption.textInputOption && {
-      additionalText: {
-        required: dto.config.additionalResponseOption.textInputRequired,
-      },
-    }),
+    ...mapAdditionalText(dto.config),
   };
 }
 
@@ -103,11 +110,7 @@ function mapToNumberSelect(dto: NumberSelectionItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: false,
     hasTopNavigation: false,
-    ...(dto.config.additionalResponseOption.textInputOption && {
-      additionalText: {
-        required: dto.config.additionalResponseOption.textInputRequired,
-      },
-    }),
+    ...mapAdditionalText(dto.config),
   };
 }
 
