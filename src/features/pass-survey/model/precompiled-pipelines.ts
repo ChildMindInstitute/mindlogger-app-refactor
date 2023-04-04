@@ -2,7 +2,10 @@ import { DeviceType, TestIndex } from '@entities/abTrail';
 
 import { PipelineItem } from '../lib';
 
-export const getAbTrailsPipeline = (deviceType: DeviceType): PipelineItem[] => {
+export const getAbTrailsPipeline = (
+  deviceType: DeviceType,
+  id: string,
+): PipelineItem[] => {
   const getTutorialPipelineItem = (testIndex: TestIndex): PipelineItem => {
     return {
       type: 'Tutorial',
@@ -19,6 +22,7 @@ export const getAbTrailsPipeline = (deviceType: DeviceType): PipelineItem[] => {
 
   const getTestPipelineItem = (testIndex: TestIndex): PipelineItem => {
     return {
+      id,
       type: 'AbTest',
       payload: {
         testIndex,

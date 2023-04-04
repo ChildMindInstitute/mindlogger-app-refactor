@@ -8,6 +8,8 @@ import { PassSurveyModel } from '@app/features/pass-survey';
 import { useAppDispatch } from '@app/shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
+import { mapAnswersToDto } from '../model/mappers';
+
 type Props = {
   appletId: string;
   activityId: string;
@@ -52,11 +54,14 @@ function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
     );
 
     sendAnswers({
-      flowId,
+      flowId: flowId ? flowId : null,
       appletId,
       activityId,
       version: activityStorageRecord.appletVersion,
-      answers: activityStorageRecord.answers as any,
+      answers: mapAnswersToDto(
+        activityStorageRecord.items,
+        activityStorageRecord.answers,
+      ),
     });
 
     clearActivityStorageRecord();

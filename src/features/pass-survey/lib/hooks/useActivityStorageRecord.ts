@@ -4,7 +4,7 @@ import { useMMKVObject } from 'react-native-mmkv';
 
 import { createSecureStorage } from '@app/shared/lib';
 
-import { PipelineItem } from '../types';
+import { PipelineItem, PipelineItemAnswer } from '../types';
 
 type UseActivityStorageArgs = {
   appletId: string;
@@ -12,12 +12,9 @@ type UseActivityStorageArgs = {
   eventId: string;
 };
 
-export type Answer = {
-  answer: any;
-  additionalAnswer?: string;
-};
+export type Answer = PipelineItemAnswer['value'];
 
-type Answers = Record<string, Answer>;
+export type Answers = Record<string, Answer>;
 
 export type ActivityState = {
   step: number;

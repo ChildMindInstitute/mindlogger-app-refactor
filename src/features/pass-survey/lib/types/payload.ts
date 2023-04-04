@@ -20,6 +20,7 @@ type AbTestPayload = {
   testIndex: TestIndex;
   deviceType: DeviceType;
 };
+
 type SplashPayload = { imageUrl: string };
 
 type DrawingPayload = {
@@ -97,6 +98,7 @@ type PipelinePayload =
   | CheckboxPayload;
 
 type PipelineItemBase = {
+  id?: string;
   type: ActivityItemType;
   payload: PipelinePayload;
   isSkippable?: boolean;
@@ -112,32 +114,32 @@ type PipelineItemBase = {
   };
 };
 
-interface AbTestPipelineItem extends PipelineItemBase {
+export interface AbTestPipelineItem extends PipelineItemBase {
   type: 'AbTest';
   payload: AbTestPayload;
 }
 
-interface SplashPipelineItem extends PipelineItemBase {
+export interface SplashPipelineItem extends PipelineItemBase {
   type: 'Splash';
   payload: SplashPayload;
 }
 
-interface TutorialPipelineItem extends PipelineItemBase {
+export interface TutorialPipelineItem extends PipelineItemBase {
   type: 'Tutorial';
   payload: Tutorial;
 }
 
-interface DrawingTestPipelineItem extends PipelineItemBase {
+export interface DrawingTestPipelineItem extends PipelineItemBase {
   type: 'DrawingTest';
   payload: DrawingPayload;
 }
 
-interface SliderPipelineItem extends PipelineItemBase {
+export interface SliderPipelineItem extends PipelineItemBase {
   type: 'Slider';
   payload: SliderPayload;
 }
 
-interface FlankerPipelineItem extends PipelineItemBase {
+export interface FlankerPipelineItem extends PipelineItemBase {
   type: 'Flanker';
   payload: FlankerConfiguration;
 }
@@ -147,41 +149,36 @@ export interface TextInputPipelineItem extends PipelineItemBase {
   payload: TextInputPayload;
 }
 
-interface NumberSelectPipelineItem extends PipelineItemBase {
+export interface NumberSelectPipelineItem extends PipelineItemBase {
   type: 'NumberSelect';
   payload: NumberSelectPayload;
 }
 
-interface CheckboxPipelineItem extends PipelineItemBase {
+export interface CheckboxPipelineItem extends PipelineItemBase {
   type: 'Checkbox';
   payload: CheckboxPayload;
 }
 
-interface RadioPipelineItem extends PipelineItemBase {
+export interface RadioPipelineItem extends PipelineItemBase {
   type: 'Radio';
   payload: RadioPayload;
 }
 
-type AbTestResponse = LogLine[];
+export type AbTestResponse = LogLine[];
 
-type DrawingTestResponse = DrawResult;
+export type DrawingTestResponse = DrawResult;
 
-type FlankerResponse = Array<FlankerLogRecord>;
+export type FlankerResponse = Array<FlankerLogRecord>;
 
-type TextInputResponse =
-  | {
-      text: string;
-      shouldIdentifyResponse: boolean;
-    }
-  | undefined;
+export type TextInputResponse = string;
 
-type SliderResponse = number | null;
+export type SliderResponse = number | null;
 
-type NumberSelectResponse = string;
+export type NumberSelectResponse = string;
 
-type CheckboxResponse = string[] | null;
+export type CheckboxResponse = string[] | null;
 
-type RadioResponse = string | null;
+export type RadioResponse = string | null;
 
 export type PipelineItemResponse =
   | AbTestResponse
