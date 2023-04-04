@@ -50,8 +50,10 @@ const TimelineChart: FC<Props> = ({ data, options }) => {
     (option: TimelineChartOption, currentWeekDate: Date) => {
       const chartItem = data.find(dateItem => {
         return (
-          isEqual(dateItem.date, currentWeekDate) &&
-          dateItem.value === option.value
+          isEqual(
+            dateItem.date.setHours(0, 0, 0, 0),
+            currentWeekDate.setHours(0, 0, 0, 0),
+          ) && dateItem.value === option.value
         );
       });
 

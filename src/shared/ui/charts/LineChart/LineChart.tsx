@@ -43,8 +43,12 @@ const LineChart: FC<Props> = ({ data }) => {
       return {
         date: format(currentWeekDate, dateFormat),
         value:
-          data.find(dataItem => isEqual(dataItem.date, currentWeekDate))
-            ?.value || null,
+          data.find(dataItem =>
+            isEqual(
+              dataItem.date.setHours(0, 0, 0, 0),
+              currentWeekDate.setHours(0, 0, 0, 0),
+            ),
+          )?.value || null,
       };
     });
   }, [data]);
