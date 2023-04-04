@@ -16,6 +16,7 @@ import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker } from '@entities/flanker';
 import { SurveySlider } from '@shared/ui';
+import { CheckBoxActivityItem } from '@shared/ui';
 
 import AdditionalText from './AdditionalText';
 import { Answer, PipelineItem, PipelineItemResponse } from '../lib';
@@ -105,13 +106,13 @@ function ActivityItem({
 
     case 'Slider':
       item = (
-        <Box flex={1} jc="center" mx="$5">
+        <Box flex={1} jc="center" mx={16}>
           <SurveySlider
             config={pipelineItem.payload}
-            onChange={() => console.log('changed')}
+            onChange={onResponse}
             onPress={() => console.log('pressed')}
             onRelease={() => console.log('released')}
-            initialValue={value}
+            initialValue={value?.answer}
           />
         </Box>
       );
@@ -127,6 +128,19 @@ function ActivityItem({
           />
         </Box>
       );
+      break;
+
+    case 'Checkbox':
+      item = (
+        <Box flex={1} jc="center" mx={16} my="$3">
+          <CheckBoxActivityItem
+            config={pipelineItem.payload}
+            onChange={onResponse}
+            values={value?.answer || []}
+          />
+        </Box>
+      );
+      break;
 
     default: {
       item = <></>;

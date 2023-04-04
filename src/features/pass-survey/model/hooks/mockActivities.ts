@@ -356,6 +356,74 @@ export const NumberSelectActivity: ActivityDto = {
   ],
 };
 
+export const CheckboxTestActivity: ActivityDto = {
+  id: 'aid1',
+  name: 'Slider Activity',
+  description: 'Slider Activity Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  ordering: 0,
+  items: [
+    {
+      id: '108',
+      name: 'checkboxname',
+      question: 'Choose checkboxes',
+      responseType: 'multiSelect',
+      order: 0,
+      responseValues: {
+        options: [
+          {
+            id: 'checkbox-id-0',
+            text: 'Some text',
+            image: null,
+            score: null,
+            tooltip: 'this is some tooltip',
+            color: '#C800FF',
+            isHidden: false,
+          },
+          {
+            id: 'checkbox-id-1',
+            text: 'Some text',
+            image: null,
+            score: null,
+            tooltip: '',
+            color: '#000000',
+            isHidden: false,
+          },
+          {
+            id: 'checkbox-id-two',
+            text: 'Some text',
+            image: 'https://cdn-icons-png.flaticon.com/512/1287/1287087.png',
+            score: null,
+            tooltip: null,
+            color: '#F8FF00',
+            isHidden: false,
+          },
+        ],
+      },
+      config: {
+        randomizeOptions: true,
+        setAlerts: false,
+        addTooltip: true,
+        setPalette: true,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: true,
+        skippableItem: false,
+        timer: null,
+        addScores: false,
+      },
+    },
+  ],
+};
+
 export const FlankerActivity = {
   withImage: FlankerWithImageActivity,
   withStSFx: FlankerWithStSFxActivity,
@@ -371,6 +439,7 @@ const TestActivities = [
   DrawingTestActivity.vortex,
   AbTestActivity,
   SliderTestActivity,
+  CheckboxTestActivity,
 ];
 
 export const getRandomTestActivity = () => {
