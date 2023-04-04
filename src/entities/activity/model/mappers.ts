@@ -105,6 +105,7 @@ function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: false,
     hasTopNavigation: false,
+    ...mapAdditionalText(dto.config),
   };
 }
 
@@ -171,6 +172,7 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: false,
     hasTopNavigation: false,
+    ...mapAdditionalText(dto.config),
   };
 }
 
