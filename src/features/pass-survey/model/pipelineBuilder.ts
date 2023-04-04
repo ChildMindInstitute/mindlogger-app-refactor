@@ -57,6 +57,25 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
           return {
             type: item.inputType,
             payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            validationOptions: item.validationOptions,
+          };
+        }
+
+        case 'Checkbox': {
+          return {
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            validationOptions: item.validationOptions,
           };
         }
 

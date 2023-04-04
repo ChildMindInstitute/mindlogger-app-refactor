@@ -85,7 +85,27 @@ function mapToMessage(dto: MessageItemDto): ActivityItem {
 }
 
 function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Checkbox',
+    config: {
+      randomizeOptions: dto.config.randomizeOptions,
+      setAlerts: dto.config.setAlerts,
+      addTooltip: dto.config.addTooltip,
+      setPalette: dto.config.setPalette,
+      options: dto.responseValues.options,
+    },
+    timer: dto.config.timer,
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveToPrevious: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+  };
 }
 
 function mapToStackedCheckboxes(dto: MultiSelectionRowsItemDto): ActivityItem {

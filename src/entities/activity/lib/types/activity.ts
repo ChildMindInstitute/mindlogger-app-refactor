@@ -5,7 +5,8 @@ export type ActivityItemType =
   | 'Flanker'
   | 'TextInput'
   | 'NumberSelect'
-  | 'Slider';
+  | 'Slider'
+  | 'Checkbox';
 
 type AbTestConfig = {
   device: 'Phone' | 'Tablet';
@@ -39,12 +40,29 @@ type NumberSelectConfig = {
   min: number;
 };
 
+type CheckboxConfig = {
+  randomizeOptions: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  setPalette: boolean;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    score: number | null;
+    tooltip: string | null;
+    color: string | null;
+    isHidden: boolean;
+  }>;
+};
+
 export type ActivityItemConfig =
   | AbTestConfig
   | DrawingTestTestConfig
   | TextInputConfig
   | NumberSelectConfig
   | SliderConfig
+  | CheckboxConfig
   | null;
 
 type ActivityItemBase = {
@@ -104,6 +122,11 @@ interface NumberSelectActivityItem extends ActivityItemBase {
   config: NumberSelectConfig;
 }
 
+interface CheckboxActivityItem extends ActivityItemBase {
+  inputType: 'Checkbox';
+  config: CheckboxConfig;
+}
+
 export type ActivityItem =
   | AbTestActivityItem
   | SplashActivityItem
@@ -111,7 +134,8 @@ export type ActivityItem =
   | TextInputActivityItem
   | FlankerActivityItem
   | NumberSelectActivityItem
-  | SliderActivityItem;
+  | SliderActivityItem
+  | CheckboxActivityItem;
 
 export type ActivityDetails = {
   id: string;

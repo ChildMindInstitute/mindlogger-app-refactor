@@ -15,31 +15,33 @@ import {
 import { Item } from './types';
 
 type Props = {
-  colorPalette: boolean;
+  setPalette: boolean;
+  tooltipAvailable: boolean;
   onChange: () => void;
   value: boolean;
 } & Omit<Item, 'value'>;
 
 const CheckBoxItem: FC<Props> = ({
   value,
-  colorPalette,
+  setPalette,
+  tooltipAvailable,
   onChange,
-  description,
+  tooltip,
   image,
   color,
-  name,
+  text,
 }) => {
   const invertedColor =
-    colorPalette && color ? invertColor(color) : colors.primary;
+    setPalette && color ? invertColor(color) : colors.primary;
 
   const tooltipText = useMemo(
-    () => replaceTextWithScreenVariables(description),
-    [description],
+    () => replaceTextWithScreenVariables(tooltip || ''),
+    [tooltip],
   );
 
   const memoizedName = useMemo(
-    () => replaceTextWithScreenVariables(name),
-    [name],
+    () => replaceTextWithScreenVariables(text),
+    [text],
   );
 
   return (
@@ -50,16 +52,16 @@ const CheckBoxItem: FC<Props> = ({
       my="$1"
       ai="center"
       jc="space-between"
-      bg={colorPalette ? color : 'none'}
+      bg={setPalette ? color : 'none'}
       br={7}
-      bbw={colorPalette ? 0 : 1}
+      bbw={setPalette ? 0 : 1}
       bbc={colors.lighterGrey}
       onPress={onChange}
     >
       <XStack flex={1} ai="center">
-        {!!description && (
+        {!!tooltip && tooltipAvailable && (
           <Tooltip tooltipText={tooltipText}>
-            <QuestionTooltipIcon color={colors.grey} size={25} />
+            <QuestionTooltipIcon color={invertedColor} size={25} />
           </Tooltip>
         )}
 
@@ -67,7 +69,7 @@ const CheckBoxItem: FC<Props> = ({
           <Image
             width="15%"
             height={64}
-            ml={description ? 5 : 0}
+            ml={tooltip ? 5 : 0}
             src={image}
             resizeMode="contain"
           />
@@ -76,7 +78,7 @@ const CheckBoxItem: FC<Props> = ({
         <Text
           maxWidth="70%"
           ml="$4"
-          color={colorPalette && color ? invertedColor : colors.darkerGrey}
+          color={setPalette && color ? invertedColor : colors.darkerGrey}
           fontSize={17}
         >
           {memoizedName}
@@ -89,8 +91,8 @@ const CheckBoxItem: FC<Props> = ({
         animationDuration={0.2}
         boxType="square"
         tintColors={{
-          true: colors.grey,
-          false: colors.grey,
+          true: invertedColor,
+          false: invertedColor,
         }}
         onCheckColor={color || colors.white}
         onFillColor={invertedColor}

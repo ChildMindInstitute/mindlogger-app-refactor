@@ -7,25 +7,22 @@ import CheckBoxItem from './CheckBox.item';
 import { Item } from './types';
 
 type Props = {
-  // @todo make sure backend will update config to new keys described below (type RefactoredConfig in ./types)
   config: {
-    items: Item[];
-    minValue: number;
-    maxValue: number;
-    colorPalette: boolean;
+    options: Item[];
     randomizeOptions: boolean;
+    addTooltip: boolean;
+    setPalette: boolean;
+    setAlerts: boolean;
   };
-  onChange: (values: number[]) => void;
-  values: number[];
+  onChange: (values: string[]) => void;
+  values: string[];
 };
 
 const CheckBoxActivityItem: FC<Props> = ({ config, onChange, values }) => {
-  const { minValue, maxValue } = config;
-  const hasSingleItem = maxValue === 1 && minValue === 1;
+  const { options, randomizeOptions, addTooltip, setPalette } = config;
+  const hasSingleItem = options.length === 1;
 
-  const { items, randomizeOptions } = config;
-
-  const onItemValueChanged = (checkedItemValue: number) => {
+  const onItemValueChanged = (checkedItemValue: string) => {
     if (hasSingleItem) {
       onChange([checkedItemValue]);
     } else if (values.includes(checkedItemValue)) {
@@ -37,24 +34,26 @@ const CheckBoxActivityItem: FC<Props> = ({ config, onChange, values }) => {
   };
 
   const mutatedItems = useMemo(() => {
-    const filteredItems = items.filter(({ isVisible }) => isVisible);
+    const filteredItems = options.filter(({ isHidden }) => !isHidden);
     if (randomizeOptions) {
       return shuffle(filteredItems);
     }
 
     return filteredItems;
-  }, [randomizeOptions, items]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [randomizeOptions]);
 
   return (
     <ScrollView>
       {mutatedItems.map(item => {
         return (
-          <Box key={`checkbox-${item.value}`}>
+          <Box key={`checkbox-${item.id}`}>
             <CheckBoxItem
               {...item}
-              colorPalette={config.colorPalette}
-              onChange={() => onItemValueChanged(item.value)}
-              value={values.includes(item.value)}
+              tooltipAvailable={addTooltip}
+              setPalette={setPalette}
+              onChange={() => onItemValueChanged(item.id)}
+              value={values.includes(item.id)}
             />
           </Box>
         );
