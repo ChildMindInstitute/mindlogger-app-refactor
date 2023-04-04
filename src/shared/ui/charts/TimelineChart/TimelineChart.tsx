@@ -1,9 +1,9 @@
 import { FC, useCallback, useMemo } from 'react';
 
-import { isEqual } from 'date-fns';
 import { VictoryAxis, VictoryChart, VictoryScatter } from 'victory-native';
 
 import {
+  areDatesEqual,
   colors,
   DAYS_OF_WEEK_NUMBERS,
   DAYS_OF_WEEK_SHORT_NAMES,
@@ -44,9 +44,6 @@ const TimelineChart: FC<Props> = ({ data, options }) => {
   const getXAxisDots = (): Array<ChartAxisDot> =>
     range(7).map(item => ({ dot: item, value: 0 }));
 
-  const isDateEqual = (dateLeft: Date, dateRight: Date): boolean =>
-    isEqual(dateLeft.setHours(0, 0, 0, 0), dateRight.setHours(0, 0, 0, 0));
-
   const getValueForChartItem: (
     option: TimelineChartOption,
     currentWeekDate: Date,
@@ -54,7 +51,7 @@ const TimelineChart: FC<Props> = ({ data, options }) => {
     (option: TimelineChartOption, currentWeekDate: Date) => {
       const chartItem = data.find(dateItem => {
         return (
-          isDateEqual(dateItem.date, currentWeekDate) &&
+          areDatesEqual(dateItem.date, currentWeekDate) &&
           dateItem.value === option.value
         );
       });

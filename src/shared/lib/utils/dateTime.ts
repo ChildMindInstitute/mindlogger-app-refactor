@@ -1,4 +1,4 @@
-import { format as formatBase, subDays } from 'date-fns';
+import { format as formatBase, isEqual, subDays } from 'date-fns';
 import { enGB, fr } from 'date-fns/locale';
 import i18n from 'i18next';
 
@@ -102,3 +102,6 @@ export const buildDateFromDto = (
 
   return result;
 };
+
+export const areDatesEqual = (dateLeft: Date, dateRight: Date): boolean =>
+  isEqual(dateLeft.setHours(0, 0, 0, 0), dateRight.setHours(0, 0, 0, 0));
