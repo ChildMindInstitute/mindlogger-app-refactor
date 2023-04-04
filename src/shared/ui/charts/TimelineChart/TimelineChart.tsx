@@ -1,13 +1,14 @@
 import { FC, useCallback, useMemo } from 'react';
 
-import { isEqual } from 'date-fns';
 import { VictoryAxis, VictoryChart, VictoryScatter } from 'victory-native';
 
 import {
+  areDatesEqual,
   colors,
   DAYS_OF_WEEK_NUMBERS,
   DAYS_OF_WEEK_SHORT_NAMES,
   getCurrentWeekDates,
+  range,
 } from '@shared/lib';
 
 import { Box } from '../..';
@@ -41,7 +42,7 @@ const getScatterDots = (chartDataItem: TimelineChartData) => {
 
 const TimelineChart: FC<Props> = ({ data, options }) => {
   const getXAxisDots = (): Array<ChartAxisDot> =>
-    Array.from(Array(7).keys()).map(item => ({ dot: item, value: 0 }));
+    range(7).map(item => ({ dot: item, value: 0 }));
 
   const getValueForChartItem: (
     option: TimelineChartOption,
@@ -50,7 +51,7 @@ const TimelineChart: FC<Props> = ({ data, options }) => {
     (option: TimelineChartOption, currentWeekDate: Date) => {
       const chartItem = data.find(dateItem => {
         return (
-          isEqual(dateItem.date, currentWeekDate) &&
+          areDatesEqual(dateItem.date, currentWeekDate) &&
           dateItem.value === option.value
         );
       });

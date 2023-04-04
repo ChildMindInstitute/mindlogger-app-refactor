@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 
-import { format, isEqual } from 'date-fns';
+import { format } from 'date-fns';
 import {
   VictoryAxis,
   VictoryChart,
@@ -9,11 +9,13 @@ import {
 } from 'victory-native';
 
 import {
+  areDatesEqual,
   colors,
   DAYS_OF_WEEK_NUMBERS,
   DAYS_OF_WEEK_SHORT_NAMES,
   getCurrentWeekDates,
-} from '@app/shared/lib';
+  range,
+} from '@shared/lib';
 import { Box } from '@shared/ui';
 
 import { ChartAxisDot, ChartItem } from '../types';
@@ -31,10 +33,10 @@ const LineChart: FC<Props> = ({ data }) => {
   const dateFormat = 'yyyy dd MM';
 
   const getXAxisDots = (): Array<ChartAxisDot> =>
-    Array.from(Array(8).keys()).map(item => ({ dot: item, value: 0 }));
+    range(8).map(item => ({ dot: item, value: 0 }));
 
   const getYAxisDots = (): Array<ChartAxisDot> =>
-    Array.from(Array(6).keys()).map(item => ({ dot: 1, value: item * 2 }));
+    range(6).map(item => ({ dot: 1, value: item * 2 }));
 
   const lineChartData: Array<LineChartDataItem> = useMemo(() => {
     const currentWeekDates = getCurrentWeekDates();
@@ -43,7 +45,7 @@ const LineChart: FC<Props> = ({ data }) => {
       return {
         date: format(currentWeekDate, dateFormat),
         value:
-          data.find(dataItem => isEqual(dataItem.date, currentWeekDate))
+          data.find(dataItem => areDatesEqual(dataItem.date, currentWeekDate))
             ?.value || null,
       };
     });
