@@ -8,6 +8,7 @@ import {
   DAYS_OF_WEEK_NUMBERS,
   DAYS_OF_WEEK_SHORT_NAMES,
   getCurrentWeekDates,
+  range,
 } from '@shared/lib';
 
 import { Box } from '../..';
@@ -41,7 +42,10 @@ const getScatterDots = (chartDataItem: TimelineChartData) => {
 
 const TimelineChart: FC<Props> = ({ data, options }) => {
   const getXAxisDots = (): Array<ChartAxisDot> =>
-    Array.from(Array(7).keys()).map(item => ({ dot: item, value: 0 }));
+    range(7).map(item => ({ dot: item, value: 0 }));
+
+  const isDateEqual = (dateLeft: Date, dateRight: Date): boolean =>
+    isEqual(dateLeft.setHours(0, 0, 0, 0), dateRight.setHours(0, 0, 0, 0));
 
   const getValueForChartItem: (
     option: TimelineChartOption,
@@ -50,10 +54,8 @@ const TimelineChart: FC<Props> = ({ data, options }) => {
     (option: TimelineChartOption, currentWeekDate: Date) => {
       const chartItem = data.find(dateItem => {
         return (
-          isEqual(
-            dateItem.date.setHours(0, 0, 0, 0),
-            currentWeekDate.setHours(0, 0, 0, 0),
-          ) && dateItem.value === option.value
+          isDateEqual(dateItem.date, currentWeekDate) &&
+          dateItem.value === option.value
         );
       });
 

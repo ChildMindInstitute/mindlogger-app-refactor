@@ -13,6 +13,7 @@ import {
   DAYS_OF_WEEK_NUMBERS,
   DAYS_OF_WEEK_SHORT_NAMES,
   getCurrentWeekDates,
+  range,
 } from '@shared/lib';
 
 import { ChartAxisDot, ChartItem } from '../types';
@@ -29,7 +30,10 @@ type Props = {
 const BarChart: FC<Props> = ({ data }) => {
   const dateFormat = 'yyyy dd MM';
   const getXAxisDots = (): Array<ChartAxisDot> =>
-    Array.from(Array(8).keys()).map(item => ({ dot: item + 1, value: 0 }));
+    range(8).map(item => ({ dot: item + 1, value: 0 }));
+
+  const isDateEqual = (dateLeft: Date, dateRight: Date): boolean =>
+    isEqual(dateLeft.setHours(0, 0, 0, 0), dateRight.setHours(0, 0, 0, 0));
 
   const barChartData: Array<BarChartDataItem> = useMemo(() => {
     const currentWeekDates = getCurrentWeekDates();
@@ -38,12 +42,8 @@ const BarChart: FC<Props> = ({ data }) => {
       return {
         date: format(currentWeekDate, dateFormat),
         value:
-          data.find(dataItem =>
-            isEqual(
-              dataItem.date.setHours(0, 0, 0, 0),
-              currentWeekDate.setHours(0, 0, 0, 0),
-            ),
-          )?.value || null,
+          data.find(dataItem => isDateEqual(dataItem.date, currentWeekDate))
+            ?.value || null,
       };
     });
   }, [data]);
