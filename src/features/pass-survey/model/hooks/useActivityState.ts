@@ -41,7 +41,27 @@ function useActivityState({
       ...activityStorageRecord,
       answers: {
         ...activityStorageRecord.answers,
-        [step]: answer,
+        [step]: {
+          ...activityStorageRecord.answers?.[step],
+          answer,
+        },
+      },
+    });
+  }
+
+  function setAdditionalAnswer(step: number, answer: string) {
+    if (!activityStorageRecord) {
+      return;
+    }
+
+    upsertActivityStorageRecord({
+      ...activityStorageRecord,
+      answers: {
+        ...activityStorageRecord.answers,
+        [step]: {
+          ...activityStorageRecord.answers?.[step],
+          additionalAnswer: answer,
+        },
       },
     });
   }
@@ -68,6 +88,7 @@ function useActivityState({
     setStep,
     setAnswer,
     removeAnswer,
+    setAdditionalAnswer,
     clearActivityStorageRecord,
   };
 }

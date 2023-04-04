@@ -28,7 +28,7 @@ type TimerConfiguration = {
   timer: number | null;
 };
 
-type AdditionalResponseConfiguration = {
+export type AdditionalResponseConfiguration = {
   additionalResponseOption: {
     textInputOption: boolean;
     textInputRequired: boolean;

@@ -4,6 +4,7 @@ export type ActivityItemType =
   | 'Splash'
   | 'Flanker'
   | 'TextInput'
+  | 'NumberSelect'
   | 'Slider';
 
 type AbTestConfig = {
@@ -33,10 +34,16 @@ type SliderConfig = {
   isContinuousSlider: boolean | null;
 };
 
+type NumberSelectConfig = {
+  max: number;
+  min: number;
+};
+
 export type ActivityItemConfig =
   | AbTestConfig
   | DrawingTestTestConfig
   | TextInputConfig
+  | NumberSelectConfig
   | SliderConfig
   | null;
 
@@ -56,6 +63,9 @@ type ActivityItemBase = {
   question: string;
   validationOptions?: {
     correctAnswer?: string;
+  };
+  additionalText?: {
+    required: boolean;
   };
 };
 
@@ -89,12 +99,18 @@ interface SliderActivityItem extends ActivityItemBase {
   config: SliderConfig;
 }
 
+interface NumberSelectActivityItem extends ActivityItemBase {
+  inputType: 'NumberSelect';
+  config: NumberSelectConfig;
+}
+
 export type ActivityItem =
   | AbTestActivityItem
   | SplashActivityItem
   | DrawingTestTestActivityItem
   | TextInputActivityItem
   | FlankerActivityItem
+  | NumberSelectActivityItem
   | SliderActivityItem;
 
 export type ActivityDetails = {

@@ -19,9 +19,20 @@ import {
   TextItemDto,
   TimeRangeItemDto,
   VideoItemDto,
+  AdditionalResponseConfiguration,
 } from '@app/shared/api';
 
 import { ActivityDetails, ActivityItem } from '../lib';
+
+function mapAdditionalText(configuration: AdditionalResponseConfiguration) {
+  return configuration.additionalResponseOption.textInputOption
+    ? {
+        additionalText: {
+          required: configuration.additionalResponseOption.textInputRequired,
+        },
+      }
+    : null;
+}
 
 function mapToDrawing(dto: DrawingItemDto): ActivityItem {
   return {
@@ -41,6 +52,7 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: !dto.config.removeUndoButton,
     hasTopNavigation: dto.config.navigationToTop,
+    ...mapAdditionalText(dto.config),
   };
 }
 
@@ -81,7 +93,25 @@ function mapToStackedCheckboxes(dto: MultiSelectionRowsItemDto): ActivityItem {
 }
 
 function mapToNumberSelect(dto: NumberSelectionItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'NumberSelect',
+    config: {
+      min: dto.responseValues.minValue,
+      max: dto.responseValues.maxValue,
+    },
+    timer: null,
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    isAbleToMoveToPrevious: !dto.config.removeBackButton,
+    hasAlert: false,
+    hasScore: false,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToPhoto(dto: PhotoItemDto): ActivityItem {
