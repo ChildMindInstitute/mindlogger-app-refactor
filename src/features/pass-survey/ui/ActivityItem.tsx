@@ -22,7 +22,7 @@ import { Answer, PipelineItem, PipelineItemResponse } from '../lib';
 import { TextResponseMapper } from '../model/responseMappers';
 
 type Props = {
-  value: Answer | undefined;
+  value?: Answer;
   pipelineItem: PipelineItem;
   onResponse: (response: PipelineItemResponse) => void;
   onAdditionalResponse: (response: string) => void;
