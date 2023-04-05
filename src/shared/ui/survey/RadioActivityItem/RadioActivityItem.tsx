@@ -1,8 +1,7 @@
 import React, { FC, useMemo, useState } from 'react';
-import { FlatList } from 'react-native';
 
 import { shuffle } from '@shared/lib';
-import { YStack, RadioGroup, ListSeparator, Box } from '@shared/ui';
+import { YStack, RadioGroup, Box } from '@shared/ui';
 
 import RadioItem from './RadioItem';
 import RadioOption from './types';
@@ -47,20 +46,19 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
         onValueChange={onValueChange}
         name="radio"
       >
-        <FlatList
-          data={optionsList}
-          bounces={false}
-          ItemSeparatorComponent={() => <ListSeparator />}
-          renderItem={({ item }) => (
-            <Box paddingVertical={5}>
-              <RadioItem
-                option={item}
-                addTooltip={addTooltip}
-                setPalette={setPalette}
-              />
-            </Box>
-          )}
-        />
+        {optionsList.map(option => (
+          <Box
+            paddingVertical={5}
+            key={option.id}
+            onPress={() => onValueChange(option.id)}
+          >
+            <RadioItem
+              option={option}
+              addTooltip={addTooltip}
+              setPalette={setPalette}
+            />
+          </Box>
+        ))}
       </RadioGroup>
     </YStack>
   );
