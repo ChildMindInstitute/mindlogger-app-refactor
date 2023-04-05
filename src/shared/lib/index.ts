@@ -10,3 +10,4 @@ export {
   activityMarkDownStyles,
 } from './markDownRules';
 export * from './alerts';
+export * from './permissions';

@@ -2,7 +2,5 @@ import Permissions from 'react-native-permissions';
 
 import { MICROPHONE_PERMISSIONS } from '../constants';
 
-const getMicrophonePermissions = async () =>
+export const getMicrophonePermissions = async () =>
   await Permissions.request(MICROPHONE_PERMISSIONS!);
-
-export default getMicrophonePermissions;
