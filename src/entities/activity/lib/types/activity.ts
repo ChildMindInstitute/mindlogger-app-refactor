@@ -6,6 +6,7 @@ export type ActivityItemType =
   | 'TextInput'
   | 'NumberSelect'
   | 'Slider'
+  | 'Radio'
   | 'Checkbox';
 
 type AbTestConfig = {
@@ -56,6 +57,22 @@ type CheckboxConfig = {
   }>;
 };
 
+type RadioConfig = {
+  randomizeOptions: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  setPalette: boolean;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    score: number | null;
+    tooltip: string | null;
+    color: string | null;
+    isHidden: boolean;
+  }>;
+};
+
 export type ActivityItemConfig =
   | AbTestConfig
   | DrawingTestTestConfig
@@ -63,6 +80,7 @@ export type ActivityItemConfig =
   | NumberSelectConfig
   | SliderConfig
   | CheckboxConfig
+  | RadioConfig
   | null;
 
 type ActivityItemBase = {
@@ -126,6 +144,10 @@ interface CheckboxActivityItem extends ActivityItemBase {
   inputType: 'Checkbox';
   config: CheckboxConfig;
 }
+interface RadioActivityItem extends ActivityItemBase {
+  inputType: 'Radio';
+  config: RadioConfig;
+}
 
 export type ActivityItem =
   | AbTestActivityItem
@@ -135,7 +157,8 @@ export type ActivityItem =
   | FlankerActivityItem
   | NumberSelectActivityItem
   | SliderActivityItem
-  | CheckboxActivityItem;
+  | CheckboxActivityItem
+  | RadioActivityItem;
 
 export type ActivityDetails = {
   id: string;

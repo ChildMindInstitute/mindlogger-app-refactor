@@ -15,8 +15,11 @@ import {
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker } from '@entities/flanker';
-import { SurveySlider } from '@shared/ui';
-import { CheckBoxActivityItem } from '@shared/ui';
+import {
+  RadioActivityItem,
+  SurveySlider,
+  CheckBoxActivityItem,
+} from '@shared/ui';
 
 import AdditionalText from './AdditionalText';
 import { Answer, PipelineItem, PipelineItemResponse } from '../lib';
@@ -137,6 +140,18 @@ function ActivityItem({
             config={pipelineItem.payload}
             onChange={onResponse}
             values={value?.answer || []}
+          />
+        </Box>
+      );
+      break;
+
+    case 'Radio':
+      item = (
+        <Box flex={1} jc="center" mx="$5">
+          <RadioActivityItem
+            config={pipelineItem.payload}
+            onChange={onResponse}
+            initialValue={value?.answer}
           />
         </Box>
       );

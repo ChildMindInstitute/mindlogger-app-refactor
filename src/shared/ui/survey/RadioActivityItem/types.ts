@@ -1,10 +1,11 @@
 type RadioOption = {
-  value: string | number;
-  name: string;
-  color?: string;
-  isVisible: boolean;
-  description: string;
-  image?: string;
+  id: string;
+  text: string;
+  image: string | null;
+  score: number | null;
+  tooltip: string | null;
+  color: string | null;
+  isHidden: boolean;
 };
 
 export default RadioOption;

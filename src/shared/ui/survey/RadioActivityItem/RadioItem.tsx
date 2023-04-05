@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { styled } from '@tamagui/core';
 
-import { colors } from '@shared/lib';
+import { colors, invertColor } from '@shared/lib';
 import {
   XStack,
   RadioGroup,
@@ -17,11 +17,13 @@ import RadioOption from './types';
 
 type RadioLabelProps = {
   option: RadioOption;
+  addTooltip: boolean;
+  setPalette: boolean;
 };
 
 const RadioTooltipContainer = styled(Box, {
   marginRight: 10,
-  width: 36,
+  width: '8%',
 });
 
 const RadioTextContainer = styled(Box, {
@@ -30,40 +32,71 @@ const RadioTextContainer = styled(Box, {
 });
 
 const RadioItem: FC<RadioLabelProps> = ({
-  option: { isVisible, name, value, image, description },
+  option: { isHidden, id, text, color, image, tooltip },
+  addTooltip,
+  setPalette,
 }) => {
-  if (!isVisible) {
+  if (isHidden) {
     return null;
   }
 
+  const hasColor = color && setPalette;
+  const invertedColor = hasColor
+    ? invertColor(color as string)
+    : colors.primary;
+  const invertedTextColor = hasColor
+    ? invertColor(color as string)
+    : colors.black;
+
   return (
-    <XStack alignItems="center">
+    <XStack
+      minHeight={64}
+      bg={setPalette ? color : 'none'}
+      px="$3"
+      py="$3"
+      jc="center"
+      ai="center"
+      ac="center"
+      borderRadius={7}
+    >
       <RadioTooltipContainer>
-        {description && (
-          <Tooltip tooltipText={description}>
-            <QuestionTooltipIcon color={colors.grey} size={36} />
+        {addTooltip && tooltip && (
+          <Tooltip tooltipText={tooltip}>
+            <QuestionTooltipIcon
+              color={hasColor ? invertedColor : colors.grey}
+              size={22}
+            />
           </Tooltip>
         )}
       </RadioTooltipContainer>
 
-      <Box height={64} width="20%">
-        {image && (
-          <Image src={image} width="100%" height="100%" resizeMode="contain" />
-        )}
-      </Box>
+      {image && (
+        <Box width="10%">
+          <Image
+            width="100%"
+            height={40}
+            resizeMode="contain"
+            my="auto"
+            src={image}
+          />
+        </Box>
+      )}
 
-      <RadioTextContainer>
-        <Text fontSize={18}>{name}</Text>
+      <RadioTextContainer w="50%" px="2%">
+        <Text fontSize={18} color={invertedTextColor}>
+          {text}
+        </Text>
       </RadioTextContainer>
 
       <Box>
         <RadioGroup.Item
-          borderColor={colors.blue}
+          borderColor={invertedColor}
           borderWidth={3}
-          id={name}
-          value={String(value)}
+          bg={setPalette && color ? color : '#fff'}
+          id={text}
+          value={id}
         >
-          <RadioGroup.Indicator backgroundColor={colors.blue} />
+          <RadioGroup.Indicator bg={invertedColor} />
         </RadioGroup.Item>
       </Box>
     </XStack>

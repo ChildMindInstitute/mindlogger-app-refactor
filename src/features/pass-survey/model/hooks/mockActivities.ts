@@ -424,6 +424,121 @@ export const CheckboxTestActivity: ActivityDto = {
   ],
 };
 
+export const RadioTestActivity: ActivityDto = {
+  id: 'aid1',
+  name: 'Radio Activity',
+  description: 'Radio Activity Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  ordering: 0,
+  items: [
+    {
+      responseValues: {
+        options: [
+          {
+            id: '1',
+            text: 'First radio pink with tooltip',
+            image: null,
+            score: null,
+            tooltip: ' Tooltip text',
+            color: '#C800FF',
+            isHidden: false,
+          },
+          {
+            id: '2',
+            text: 'Second radio black',
+            image: null,
+            score: null,
+            tooltip: null,
+            color: '#000000',
+            isHidden: false,
+          },
+          {
+            id: '3',
+            text: 'Third radio yellow',
+            image: null,
+            score: null,
+            tooltip: null,
+            color: '#F8FF00',
+            isHidden: false,
+          },
+          {
+            id: '4',
+            text: 'Fourth radio red',
+            image: null,
+            score: null,
+            tooltip: null,
+            color: '#FF0000',
+            isHidden: false,
+          },
+          {
+            id: '5',
+            text: 'Fifth radio green',
+            image: null,
+            score: null,
+            tooltip: null,
+            color: '#00FF00',
+            isHidden: false,
+          },
+          {
+            id: '6',
+            text: 'Sixth radio gray',
+            image:
+              'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
+            score: null,
+            tooltip: null,
+            color: '#EEEEEE',
+            isHidden: false,
+          },
+          {
+            id: '7',
+            text: 'Seventh radio no color',
+            image:
+              'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
+            score: null,
+            tooltip: null,
+            color: null,
+            isHidden: false,
+          },
+          {
+            id: '8',
+            text: 'Hidden radio',
+            image: null,
+            score: null,
+            tooltip: null,
+            color: null,
+            isHidden: true,
+          },
+        ],
+      },
+      id: '108',
+      config: {
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: true,
+        skippableItem: false,
+        timer: null,
+        addScores: false,
+        setAlerts: false,
+        randomizeOptions: true,
+        addTooltip: true,
+        setPalette: true,
+      },
+      responseType: 'singleSelect',
+      name: 'radioName',
+      question: 'Choose some number radio item',
+      order: 0,
+    },
+  ],
+};
+
 export const FlankerActivity = {
   withImage: FlankerWithImageActivity,
   withStSFx: FlankerWithStSFxActivity,

@@ -11,6 +11,7 @@ export type ActivityItemType =
   | 'Splash'
   | 'Flanker'
   | 'TextInput'
+  | 'Radio'
   | 'Slider'
   | 'NumberSelect'
   | 'Checkbox';
@@ -19,6 +20,7 @@ type AbTestPayload = {
   testIndex: TestIndex;
   deviceType: DeviceType;
 };
+
 type SplashPayload = null;
 
 type DrawingPayload = {
@@ -36,6 +38,22 @@ type SliderPayload = {
   showTickMarks: boolean | null;
   showTickLabels: boolean | null;
   isContinuousSlider: boolean | null;
+};
+
+type RadioPayload = {
+  randomizeOptions: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  setPalette: boolean;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    score: number | null;
+    tooltip: string | null;
+    color: string | null;
+    isHidden: boolean;
+  }>;
 };
 
 type CheckboxPayload = {
@@ -74,6 +92,7 @@ type PipelinePayload =
   | DrawingPayload
   | FlankerPayload
   | TextInputPayload
+  | RadioPayload
   | SliderPayload
   | NumberSelectPayload
   | CheckboxPayload;
@@ -139,6 +158,11 @@ interface CheckboxPipelineItem extends PipelineItemBase {
   payload: CheckboxPayload;
 }
 
+interface RadioPipelineItem extends PipelineItemBase {
+  type: 'Radio';
+  payload: RadioPayload;
+}
+
 type AbTestResponse = LogLine[];
 
 type DrawingTestResponse = DrawResult;
@@ -158,6 +182,8 @@ type NumberSelectResponse = string;
 
 type CheckboxResponse = string[] | null;
 
+type RadioResponse = string | null;
+
 export type PipelineItemResponse =
   | AbTestResponse
   | FlankerResponse
@@ -165,7 +191,8 @@ export type PipelineItemResponse =
   | TextInputResponse
   | SliderResponse
   | NumberSelectResponse
-  | CheckboxResponse;
+  | CheckboxResponse
+  | RadioResponse;
 
 export type PipelineItem =
   | AbTestPipelineItem
@@ -176,4 +203,5 @@ export type PipelineItem =
   | TextInputPipelineItem
   | SliderPipelineItem
   | NumberSelectPipelineItem
-  | CheckboxPipelineItem;
+  | CheckboxPipelineItem
+  | RadioPipelineItem;
