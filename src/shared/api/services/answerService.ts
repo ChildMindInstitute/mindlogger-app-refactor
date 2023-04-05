@@ -17,6 +17,7 @@ type ActivityAnswersRequest = {
   version: string;
   flowId: string | null;
   activityId: string;
+  createdAt: number;
   answers: Array<AnswerDto>;
 };
 

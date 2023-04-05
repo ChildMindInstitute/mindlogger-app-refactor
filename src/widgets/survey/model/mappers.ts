@@ -10,13 +10,11 @@ export function mapAnswersToDto(
   pipeline: PipelineItem[],
   answers: Answers,
 ): Array<AnswerDto> {
-  const filteredPipeline = pipeline.filter(item => item.id);
-
   return Object.entries(answers)
     .filter(([_, answer]) => answer.answer)
     .map(([step, answer]) => {
       const dto: AnswerDto = {
-        activityItemId: filteredPipeline[Number(step)]?.id!,
+        activityItemId: pipeline[Number(step)]?.id!,
         answer: {
           value: answer.answer as any, //TODO: fix when all types of answers DTOs are done
         },
