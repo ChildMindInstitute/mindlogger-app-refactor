@@ -17,7 +17,7 @@ const ActivityCardContainer = styled(Center, {
 });
 
 const ActivityAnalyticsCard: FC<Props> = ({ activity }) => {
-  const isResponseDataAvailable = false;
+  const isResponseDataAvailable = false; // @todo remove when activity answers api will be available
   const { t } = useTranslation();
 
   return (
