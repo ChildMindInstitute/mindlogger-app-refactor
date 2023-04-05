@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { FlatList } from 'react-native';
 
-import { Activity } from '@app/entities/applet';
+import { Activity } from '@entities/applet';
 
 import ActivityDataCard from './ActivityAnalyticsCard';
 
