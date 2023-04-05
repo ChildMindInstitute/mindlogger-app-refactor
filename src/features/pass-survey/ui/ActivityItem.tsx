@@ -11,6 +11,7 @@ import {
   NumberSelector,
   ScrollButton,
   SimpleTextInput,
+  SplashItem,
 } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
@@ -59,6 +60,14 @@ function ActivityItem({
   }
 
   switch (pipelineItem.type) {
+    case 'Splash':
+      item = (
+        <Box flex={1} onPressIn={stopScrolling} onPressOut={releaseScrolling}>
+          <SplashItem config={pipelineItem.payload} />
+        </Box>
+      );
+      break;
+
     case 'AbTest':
       item = (
         <Box flex={1} onPressIn={stopScrolling} onPressOut={releaseScrolling}>

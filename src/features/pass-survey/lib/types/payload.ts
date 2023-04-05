@@ -20,8 +20,7 @@ type AbTestPayload = {
   testIndex: TestIndex;
   deviceType: DeviceType;
 };
-
-type SplashPayload = null;
+type SplashPayload = { imageUrl: string };
 
 type DrawingPayload = {
   imageUrl: string | null;
@@ -120,7 +119,7 @@ interface AbTestPipelineItem extends PipelineItemBase {
 
 interface SplashPipelineItem extends PipelineItemBase {
   type: 'Splash';
-  payload: null;
+  payload: SplashPayload;
 }
 
 interface TutorialPipelineItem extends PipelineItemBase {

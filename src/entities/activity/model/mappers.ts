@@ -235,8 +235,28 @@ function mapToVideo(dto: VideoItemDto): ActivityItem {
   return dto as any;
 }
 
-export function mapToActivity(dto: ActivityDto): ActivityDetails {
+function mapToSplash(splashScreen: string): ActivityItem {
   return {
+    id: 'Splash',
+    inputType: 'Splash',
+    timer: null,
+    config: {
+      imageUrl: splashScreen,
+    },
+    order: 0,
+    question: '',
+    isSkippable: true,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveToPrevious: false,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+  };
+}
+
+export function mapToActivity(dto: ActivityDto): ActivityDetails {
+  const activity = {
     ...dto,
     id: dto.id,
     name: dto.name,
@@ -291,4 +311,10 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
       }
     }),
   };
+
+  if (dto.splashScreen) {
+    activity.items = [mapToSplash(dto.splashScreen), ...activity.items];
+  }
+
+  return activity;
 }

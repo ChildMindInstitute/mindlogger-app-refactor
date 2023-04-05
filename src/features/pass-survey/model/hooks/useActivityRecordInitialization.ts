@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useActivityDetailsQuery, ActivityModel } from '@app/entities/activity';
 import { useAppletDetailsQuery } from '@app/entities/applet';
 
-import { CheckboxTestActivity } from './mockActivities';
+import { TextActivity } from './mockActivities';
 import { useActivityStorageRecord } from '../../lib';
 import { buildPipeline } from '../pipelineBuilder';
 
@@ -36,7 +36,7 @@ function useActivityRecordCreator({
   });
 
   // @todo remove once integration is done
-  activity = CheckboxTestActivity;
+  activity = TextActivity;
 
   const pipeline = useMemo(
     () =>
