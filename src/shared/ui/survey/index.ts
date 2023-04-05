@@ -12,3 +12,4 @@ export { default as GeolocationItem } from './GeolocationItem';
 export { default as AudioStimulusItem } from './AudioStimulusItem';
 export { default as MarkdownMessage } from './MarkdownMessage';
 export { default as AudioRecorderItem } from './AudioRecorderItem';
+export { default as SplashItem } from './SplashItem';

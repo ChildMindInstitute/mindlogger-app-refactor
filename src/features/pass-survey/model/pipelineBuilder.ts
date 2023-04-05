@@ -16,7 +16,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
         case 'Splash': {
           return {
             type: item.inputType,
-            payload: null,
+            payload: item.config,
           } satisfies PipelineItem;
         }
 

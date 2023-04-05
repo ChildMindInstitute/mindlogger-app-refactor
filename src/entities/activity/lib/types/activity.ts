@@ -41,6 +41,10 @@ type NumberSelectConfig = {
   min: number;
 };
 
+type SplashConfig = {
+  imageUrl: string;
+};
+
 type CheckboxConfig = {
   randomizeOptions: boolean;
   setAlerts: boolean;
@@ -81,6 +85,7 @@ export type ActivityItemConfig =
   | SliderConfig
   | CheckboxConfig
   | RadioConfig
+  | SplashConfig
   | null;
 
 type ActivityItemBase = {
@@ -112,7 +117,7 @@ interface AbTestActivityItem extends ActivityItemBase {
 
 interface SplashActivityItem extends ActivityItemBase {
   inputType: 'Splash';
-  config: null;
+  config: SplashConfig;
 }
 
 interface DrawingTestTestActivityItem extends ActivityItemBase {
