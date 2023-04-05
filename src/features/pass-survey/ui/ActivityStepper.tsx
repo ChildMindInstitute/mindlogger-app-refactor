@@ -52,6 +52,7 @@ function ActivityStepper({
   });
 
   const {
+    isFirstStep,
     isLastStep,
     isTutorialStep,
 
@@ -150,7 +151,11 @@ function ActivityStepper({
                   )}
 
                   {pipelineItem.type !== 'Tutorial' && (
+                    // @ts-ignore
+                    // TODO
+                    // pipelineItem.type cannot be accepted as a valid type for some reason.
                     <ActivityItem
+                      type={pipelineItem.type}
                       value={value}
                       pipelineItem={pipelineItem}
                       onResponse={response => {
@@ -173,7 +178,11 @@ function ActivityStepper({
           <Stepper.NavigationPanel mt={16} minHeight={24}>
             {canMoveBack && (
               <Stepper.BackButton>
-                {t('activity_navigation:back')}
+                {t(
+                  isFirstStep
+                    ? 'activity_navigation:return'
+                    : 'activity_navigation:back',
+                )}
               </Stepper.BackButton>
             )}
 

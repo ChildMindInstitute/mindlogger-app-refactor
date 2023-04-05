@@ -10,6 +10,8 @@ import { useAppDispatch } from '@app/shared/lib';
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
+import { mapAnswersToDto } from '../model/mappers';
+
 type Props = {
   appletId: string;
   activityId: string;
@@ -118,7 +120,10 @@ function Intermediate({
       appletId,
       activityId,
       version: activityStorageRecord.appletVersion,
-      answers: activityStorageRecord.answers as any,
+      answers: mapAnswersToDto(
+        activityStorageRecord.items,
+        activityStorageRecord.answers,
+      ),
     });
   }
 

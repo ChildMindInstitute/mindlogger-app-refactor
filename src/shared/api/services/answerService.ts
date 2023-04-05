@@ -3,19 +3,21 @@ import { AxiosResponse } from 'axios';
 // import httpService from './httpService';
 import { SuccessfulEmptyResponse } from '../types';
 
-type AnswerDto = {
+export type AnswerDto = {
   activityItemId: string;
   answer: {
-    value: any;
+    value: string | number | Array<string>;
+    additionalText?: string;
+    shouldIdentifyResponse?: boolean;
   };
 };
 
 type ActivityAnswersRequest = {
   appletId: string;
   version: string;
+  flowId: string | null;
   activityId: string;
-  flowId?: string;
-  answers: AnswerDto[];
+  answers: Array<AnswerDto>;
 };
 
 type ActivityAnswersResponse = SuccessfulEmptyResponse;
@@ -40,4 +42,4 @@ function answerService() {
   };
 }
 
-export default answerService();
+export const AnswerService = answerService();

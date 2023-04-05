@@ -6,7 +6,7 @@ import { colors } from '@app/shared/lib';
 import { Input } from '@app/shared/ui';
 
 type Props = {
-  value: string | undefined;
+  value?: string;
   onChange: (value: string) => void;
   required: boolean;
 };

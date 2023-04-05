@@ -10,6 +10,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
         case 'AbTest': {
           return getAbTrailsPipeline(
             item.config.device,
+            item.id,
           ) satisfies PipelineItem[];
         }
 
@@ -22,6 +23,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
 
         case 'DrawingTest': {
           return {
+            id: item.id,
             type: item.inputType,
             payload: item.config,
             question: item.question,
@@ -35,6 +37,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
 
         case 'Flanker': {
           return {
+            id: item.id,
             type: item.inputType,
             payload: item.config,
           } satisfies PipelineItem;
@@ -42,6 +45,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
 
         case 'TextInput': {
           return {
+            id: item.id,
             type: item.inputType,
             payload: item.config,
             question: item.question,
@@ -99,6 +103,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
 
         case 'NumberSelect': {
           return {
+            id: item.id,
             type: item.inputType,
             payload: item.config,
             question: item.question,

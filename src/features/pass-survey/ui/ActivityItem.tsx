@@ -23,17 +23,20 @@ import {
 } from '@shared/ui';
 
 import AdditionalText from './AdditionalText';
-import { Answer, PipelineItem, PipelineItemResponse } from '../lib';
-import { TextResponseMapper } from '../model/responseMappers';
+import {
+  PipelineItemAnswer,
+  ActivityItem as ActivityItemProps,
+  PipelineItemResponse,
+} from '../lib';
 
-type Props = {
-  value?: Answer;
-  pipelineItem: PipelineItem;
-  onResponse: (response: PipelineItemResponse) => void;
-  onAdditionalResponse: (response: string) => void;
-};
+type Props = ActivityItemProps &
+  PipelineItemAnswer & {
+    onResponse: (response: PipelineItemResponse) => void;
+    onAdditionalResponse: (response: string) => void;
+  };
 
 function ActivityItem({
+  type,
   value,
   pipelineItem,
   onResponse,
@@ -59,7 +62,7 @@ function ActivityItem({
     setShowScrollButton(false);
   }
 
-  switch (pipelineItem.type) {
+  switch (type) {
     case 'Splash':
       item = (
         <Box flex={1} onPressIn={stopScrolling} onPressOut={releaseScrolling}>
@@ -104,13 +107,9 @@ function ActivityItem({
       item = (
         <Box flex={1} justifyContent="center" mx={16}>
           <SimpleTextInput
-            value={value?.answer?.text}
+            value={value?.answer ?? ''}
             config={pipelineItem.payload}
-            onChange={text => {
-              const responseMapper = TextResponseMapper(pipelineItem);
-
-              onResponse(responseMapper.toResponse(text));
-            }}
+            onChange={onResponse}
           />
         </Box>
       );
@@ -124,7 +123,7 @@ function ActivityItem({
             onChange={onResponse}
             onPress={() => console.log('pressed')}
             onRelease={() => console.log('released')}
-            initialValue={value?.answer}
+            initialValue={value?.answer ?? undefined}
           />
         </Box>
       );
@@ -134,7 +133,7 @@ function ActivityItem({
       item = (
         <Box flex={1} justifyContent="center" mx={16}>
           <NumberSelector
-            value={value?.answer}
+            value={value?.answer ?? ''}
             config={pipelineItem.payload}
             onChange={onResponse}
           />
@@ -160,7 +159,7 @@ function ActivityItem({
           <RadioActivityItem
             config={pipelineItem.payload}
             onChange={onResponse}
-            initialValue={value?.answer}
+            initialValue={value?.answer ?? null}
           />
         </Box>
       );
@@ -178,52 +177,55 @@ function ActivityItem({
   }, [height, windowHeight]);
 
   return (
-    <KeyboardAvoidingView
+    <Box
       flex={1}
-      behavior={IS_IOS ? 'padding' : 'height'}
-      onLayout={e => setHeight(e.nativeEvent.layout.height)}
+      onLayout={e => {
+        setHeight(e.nativeEvent.layout.height);
+      }}
     >
-      <Box flex={1}>
-        <KeyboardAwareScrollView
-          innerRef={ref => {
-            scrollViewRef.current = ref as unknown as KeyboardAwareScrollView;
-          }}
-          contentContainerStyle={styles.scrollView}
-          onContentSizeChange={(_, contentHeight) => setHeight(contentHeight)}
-          scrollEnabled={scrollEnabled}
-          extraScrollHeight={10}
-        >
-          {question && (
-            <Box mx={16} mb={20}>
-              <MarkdownMessage content={question} />
-            </Box>
-          )}
-
-          <Box flex={1}>
-            {item}
-
-            {pipelineItem.additionalText && (
-              <Box mt={30} mb="30%" justifyContent="center" mx={16}>
-                <AdditionalText
-                  value={value?.additionalAnswer}
-                  onChange={onAdditionalResponse}
-                  required={pipelineItem.additionalText.required}
-                />
+      <KeyboardAvoidingView flex={1} behavior={IS_IOS ? 'padding' : 'height'}>
+        <Box flex={1}>
+          <KeyboardAwareScrollView
+            innerRef={ref => {
+              scrollViewRef.current = ref as unknown as KeyboardAwareScrollView;
+            }}
+            contentContainerStyle={styles.scrollView}
+            onContentSizeChange={(_, contentHeight) => setHeight(contentHeight)}
+            scrollEnabled={scrollEnabled}
+            extraScrollHeight={10}
+          >
+            {question && (
+              <Box mx={16} mb={20}>
+                <MarkdownMessage content={question} />
               </Box>
             )}
-          </Box>
-        </KeyboardAwareScrollView>
-      </Box>
 
-      {showScrollButton && (
-        <ScrollButton
-          onPress={scrollToEnd}
-          position="absolute"
-          bottom={7}
-          alignSelf="center"
-        />
-      )}
-    </KeyboardAvoidingView>
+            <Box flex={1}>
+              {item}
+
+              {pipelineItem.additionalText && (
+                <Box mt={30} mb="30%" justifyContent="center" mx={16}>
+                  <AdditionalText
+                    value={value?.additionalAnswer}
+                    onChange={onAdditionalResponse}
+                    required={pipelineItem.additionalText.required}
+                  />
+                </Box>
+              )}
+            </Box>
+          </KeyboardAwareScrollView>
+        </Box>
+
+        {showScrollButton && (
+          <ScrollButton
+            onPress={scrollToEnd}
+            position="absolute"
+            bottom={7}
+            alignSelf="center"
+          />
+        )}
+      </KeyboardAvoidingView>
+    </Box>
   );
 }
 
