@@ -264,7 +264,7 @@ function mapToSplash(splashScreen: string): ActivityItem {
     isSkippable: true,
     hasAlert: false,
     hasScore: false,
-    isAbleToMoveToPrevious: false,
+    isAbleToMoveToPrevious: true,
     hasTextResponse: false,
     canBeReset: false,
     hasTopNavigation: false,

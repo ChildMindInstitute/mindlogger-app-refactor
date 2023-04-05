@@ -20,7 +20,6 @@ function useActivityStepper(state: ActivityState | undefined) {
 
   const canMoveNext =
     isTutorialStep ||
-    currentPipelineItem?.type === 'Splash' ||
     currentPipelineItem?.isSkippable ||
     (hasAnswer && (!additionalAnswerRequired || hasAdditionalAnswer));
   const canMoveBack = currentPipelineItem?.isAbleToMoveToPrevious;

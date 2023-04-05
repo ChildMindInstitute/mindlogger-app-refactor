@@ -298,7 +298,7 @@ export const SliderTestActivity: ActivityDto = {
         minLabel: 'Minimum label',
         maxLabel: 'Maximum label',
       },
-      id: '105',
+      id: '101231',
       config: {
         additionalResponseOption: {
           textInputOption: false,
@@ -309,7 +309,7 @@ export const SliderTestActivity: ActivityDto = {
         timer: null,
         showTickMarks: true,
         showTickLabels: true,
-        continuousSlider: true,
+        continuousSlider: false,
         addScores: false,
         setAlerts: false,
       },
@@ -370,7 +370,7 @@ export const CheckboxTestActivity: ActivityDto = {
   ordering: 0,
   items: [
     {
-      id: '108',
+      id: '2345',
       name: 'checkboxname',
       question: 'Choose checkboxes',
       responseType: 'multiSelect',
@@ -536,6 +536,27 @@ export const RadioTestActivity: ActivityDto = {
       question: 'Choose some number radio item',
       order: 0,
     },
+  ],
+};
+
+export const DemoActivity: ActivityDto = {
+  id: 'aid1',
+  name: 'Radio Activity',
+  description: 'Radio Activity Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  ordering: 0,
+  items: [
+    ...TextActivity.items,
+    ...RadioTestActivity.items,
+    ...CheckboxTestActivity.items,
+    ...SliderTestActivity.items,
   ],
 };
 

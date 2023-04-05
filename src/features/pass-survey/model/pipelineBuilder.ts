@@ -18,6 +18,9 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
           return {
             type: item.inputType,
             payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
           } satisfies PipelineItem;
         }
 
@@ -89,6 +92,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
 
         case 'Checkbox': {
           return {
+            id: item.id,
             type: item.inputType,
             payload: item.config,
             question: item.question,
