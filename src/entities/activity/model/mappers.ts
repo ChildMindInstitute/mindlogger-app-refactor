@@ -140,7 +140,27 @@ function mapToPhoto(dto: PhotoItemDto): ActivityItem {
 }
 
 function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Radio',
+    config: {
+      randomizeOptions: dto.config.randomizeOptions,
+      setAlerts: dto.config.setAlerts,
+      addTooltip: dto.config.addTooltip,
+      setPalette: dto.config.setPalette,
+      options: dto.responseValues.options,
+    },
+    timer: dto.config.timer,
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveToPrevious: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+  };
 }
 
 function mapToStackedRadio(dto: SingleSelectionRowsItemDto): ActivityItem {

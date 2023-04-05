@@ -55,6 +55,22 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
 
         case 'Slider': {
           return {
+            id: item.id,
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            validationOptions: item.validationOptions,
+            additionalText: item.additionalText,
+          };
+        }
+
+        case 'Radio': {
+          return {
+            id: item.id,
             type: item.inputType,
             payload: item.config,
             question: item.question,
