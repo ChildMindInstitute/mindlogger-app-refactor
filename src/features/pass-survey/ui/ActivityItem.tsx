@@ -159,7 +159,7 @@ function ActivityItem({
           <RadioActivityItem
             config={pipelineItem.payload}
             onChange={onResponse}
-            initialValue={value?.answer ?? null}
+            initialValue={value?.answer}
           />
         </Box>
       );

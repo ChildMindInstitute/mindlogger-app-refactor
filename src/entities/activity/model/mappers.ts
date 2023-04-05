@@ -119,7 +119,7 @@ function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
     hasScore: false,
     isAbleToMoveToPrevious: !dto.config.removeBackButton,
     hasTextResponse: false,
-    canBeReset: false,
+    canBeReset: true,
     hasTopNavigation: false,
     ...mapAdditionalText(dto.config),
   };
@@ -145,7 +145,7 @@ function mapToNumberSelect(dto: NumberSelectionItemDto): ActivityItem {
     hasAlert: false,
     hasScore: false,
     hasTextResponse: false,
-    canBeReset: false,
+    canBeReset: true,
     hasTopNavigation: false,
     ...mapAdditionalText(dto.config),
   };
@@ -174,7 +174,7 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
     hasScore: false,
     isAbleToMoveToPrevious: !dto.config.removeBackButton,
     hasTextResponse: false,
-    canBeReset: false,
+    canBeReset: true,
     hasTopNavigation: false,
   };
 }
@@ -206,7 +206,7 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
     hasScore: false,
     isAbleToMoveToPrevious: !dto.config.removeBackButton,
     hasTextResponse: false,
-    canBeReset: false,
+    canBeReset: true,
     hasTopNavigation: false,
     ...mapAdditionalText(dto.config),
   };

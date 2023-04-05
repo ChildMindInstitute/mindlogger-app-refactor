@@ -178,7 +178,7 @@ export type NumberSelectResponse = string;
 
 export type CheckboxResponse = string[] | null;
 
-export type RadioResponse = string | null;
+export type RadioResponse = string;
 
 export type PipelineItemResponse =
   | AbTestResponse
