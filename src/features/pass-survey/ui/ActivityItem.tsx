@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
 import { StyleSheet, useWindowDimensions } from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -13,6 +13,7 @@ import {
   SimpleTextInput,
   SplashItem,
 } from '@app/shared/ui';
+import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker } from '@entities/flanker';
@@ -45,6 +46,8 @@ function ActivityItem({
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const [showScrollButton, setShowScrollButton] = useState(false);
 
+  const { next } = useContext(HandlersContext);
+
   const windowHeight = useWindowDimensions().height;
 
   const scrollViewRef = useRef<KeyboardAwareScrollView>();
@@ -60,6 +63,10 @@ function ActivityItem({
   function scrollToEnd() {
     scrollViewRef.current?.scrollToEnd();
     setShowScrollButton(false);
+  }
+
+  function moveToNextItem() {
+    setImmediate(next);
   }
 
   switch (type) {
@@ -158,7 +165,10 @@ function ActivityItem({
         <Box mx="$6">
           <RadioActivityItem
             config={pipelineItem.payload}
-            onChange={onResponse}
+            onChange={radioValue => {
+              onResponse(radioValue);
+              moveToNextItem();
+            }}
             initialValue={value?.answer}
           />
         </Box>
