@@ -94,7 +94,7 @@ const CheckBoxItem: FC<Props> = ({
           true: invertedColor,
           false: invertedColor,
         }}
-        onCheckColor={color || colors.white}
+        onCheckColor={setPalette && color ? color : colors.white}
         onFillColor={invertedColor}
         onTintColor={invertedColor}
         tintColor={invertedColor}
