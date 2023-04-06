@@ -60,7 +60,7 @@ const CheckBoxItem: FC<Props> = ({
     >
       <XStack flex={1} ai="center">
         {!!tooltip && tooltipAvailable && (
-          <Tooltip tooltipText={tooltipText}>
+          <Tooltip markdown={tooltipText}>
             <QuestionTooltipIcon color={invertedColor} size={25} />
           </Tooltip>
         )}

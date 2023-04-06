@@ -45,7 +45,7 @@ const AxisListItem: FC<{
   return (
     <AxisListItemContainer maxWidth={maxWidth}>
       {option && (
-        <Tooltip tooltipText={option.description}>
+        <Tooltip markdown={option.description}>
           <Center>
             <AxisListItemText
               textDecorationLine={option.description ? 'underline' : 'none'}

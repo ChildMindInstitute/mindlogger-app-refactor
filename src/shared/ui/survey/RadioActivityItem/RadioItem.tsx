@@ -61,7 +61,7 @@ const RadioItem: FC<RadioLabelProps> = ({
     >
       <RadioTooltipContainer>
         {addTooltip && tooltip && (
-          <Tooltip tooltipText={tooltip}>
+          <Tooltip markdown={tooltip}>
             <QuestionTooltipIcon
               color={hasColor ? invertedColor : colors.grey}
               size={22}
