@@ -60,16 +60,16 @@ const RadioItem: FC<RadioLabelProps> = ({
       ac="center"
       borderRadius={7}
     >
-      <RadioTooltipContainer>
-        {addTooltip && tooltip && (
+      {addTooltip && tooltip && (
+        <RadioTooltipContainer>
           <Tooltip markdown={tooltip}>
             <QuestionTooltipIcon
               color={hasColor ? invertedColor : colors.grey}
               size={22}
             />
           </Tooltip>
-        )}
-      </RadioTooltipContainer>
+        </RadioTooltipContainer>
+      )}
 
       <Box height={64} width="20%">
         {image && (

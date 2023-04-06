@@ -176,6 +176,7 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: true,
     hasTopNavigation: false,
+    ...mapAdditionalText(dto.config),
   };
 }
 
