@@ -18,16 +18,21 @@ const CustomSliderTrack = styled(SliderBase.Track, {
 });
 
 const Slider: FC<SliderProps> = props => {
+  const value = props.value?.[0];
+  const showThumb = value !== undefined;
+
   return (
     <SliderBase {...props}>
       <CustomSliderTrack />
 
-      <SliderBase.Thumb
-        index={0}
-        bg="$primary"
-        borderColor="$primary"
-        circular
-      />
+      {showThumb && (
+        <SliderBase.Thumb
+          index={0}
+          bg="$primary"
+          borderColor="$primary"
+          circular
+        />
+      )}
     </SliderBase>
   );
 };
