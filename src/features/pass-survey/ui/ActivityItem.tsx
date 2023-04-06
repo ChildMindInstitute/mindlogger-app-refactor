@@ -204,7 +204,7 @@ function ActivityItem({
               {item}
 
               {pipelineItem.additionalText && (
-                <Box mt={30} mb="30%" justifyContent="center" mx={16}>
+                <Box mt={30} justifyContent="center" mx={16}>
                   <AdditionalText
                     value={value?.additionalAnswer}
                     onChange={onAdditionalResponse}
