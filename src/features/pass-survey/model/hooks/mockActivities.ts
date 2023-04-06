@@ -258,7 +258,7 @@ export const TextActivity: ActivityDto = {
     {
       id: '104',
       name: 'Text input',
-      question: '',
+      question: 'Type some text',
       responseType: 'text',
       config: {
         maxResponseLength: 20,

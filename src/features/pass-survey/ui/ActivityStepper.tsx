@@ -1,8 +1,11 @@
 import { useRef } from 'react';
+import { StyleSheet } from 'react-native';
 
+import { CachedImage } from '@georstat/react-native-image-cache';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useAppletDetailsQuery } from '@app/entities/applet';
 import { ActivityIndicator, Box, Center, Stepper, XStack } from '@shared/ui';
 
 import ActivityItem from './ActivityItem';
@@ -60,11 +63,16 @@ function ActivityStepper({
     canMoveBack,
     canReset,
 
+    showWatermark,
     showTopNavigation,
     showBottomNavigation,
 
     isValid,
   } = useActivityStepper(activityStorageRecord);
+
+  const { data: watermark } = useAppletDetailsQuery(appletId, {
+    select: r => r.data.result.watermark,
+  });
 
   const currentStep = activityStorageRecord?.step ?? 0;
 
@@ -127,6 +135,10 @@ function ActivityStepper({
         onEndReached={onFinish}
         onUndo={onUndo}
       >
+        {showWatermark && watermark && (
+          <CachedImage source={watermark} style={styles.watermark} />
+        )}
+
         {showTopNavigation && (
           <Stepper.NavigationPanel mx={16}>
             {canMoveBack && <Stepper.BackButton isIcon />}
@@ -207,5 +219,17 @@ function ActivityStepper({
     </Box>
   );
 }
+
+const styles = StyleSheet.create({
+  watermark: {
+    height: 65,
+    width: 65,
+    position: 'absolute',
+    top: 0,
+    left: 15,
+    resizeMode: 'contain',
+    zIndex: 1,
+  },
+});
 
 export default ActivityStepper;

@@ -26,6 +26,8 @@ function useActivityStepper(state: ActivityState | undefined) {
   const canReset = currentPipelineItem?.canBeReset && hasAnswer;
   const showTopNavigation = currentPipelineItem?.hasTopNavigation;
   const showBottomNavigation = !showTopNavigation;
+  const showWatermark =
+    currentPipelineItem?.type !== 'Splash' && !showTopNavigation;
 
   const answerValidator = AnswerValidator(state);
 
@@ -48,6 +50,7 @@ function useActivityStepper(state: ActivityState | undefined) {
     canMoveBack,
     canReset,
 
+    showWatermark,
     showTopNavigation,
     showBottomNavigation,
 
