@@ -48,9 +48,9 @@ class RefreshService {
   ];
 
   private async resetAllQueries() {
-    await this.queryClient.resetQueries(['applets']);
-    await this.queryClient.resetQueries(['events']);
-    await this.queryClient.resetQueries(['activities']);
+    await this.queryClient.removeQueries(['applets']);
+    await this.queryClient.removeQueries(['events']);
+    await this.queryClient.removeQueries(['activities']);
   }
 
   private isUrlValid = (url: string): boolean => {
