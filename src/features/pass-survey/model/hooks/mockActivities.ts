@@ -539,27 +539,6 @@ export const RadioTestActivity: ActivityDto = {
   ],
 };
 
-export const DemoActivity: ActivityDto = {
-  id: 'aid1',
-  name: 'Radio Activity',
-  description: 'Radio Activity Description',
-  image:
-    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen:
-    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
-  showAllAtOnce: false,
-  isSkippable: false,
-  isReviewable: false,
-  responseIsEditable: false,
-  ordering: 0,
-  items: [
-    ...TextActivity.items,
-    ...RadioTestActivity.items,
-    ...CheckboxTestActivity.items,
-    ...SliderTestActivity.items,
-  ],
-};
-
 export const AllTextsActivity: ActivityDto = {
   id: 'aid1',
   name: 'Radio Activity',
@@ -1111,6 +1090,131 @@ export const AllRadioActivity: ActivityDto = {
       question: 'Choose some number radio item',
       order: 2,
     },
+  ],
+};
+
+export const AllSliderActivity: ActivityDto = {
+  id: 'aid1',
+  name: 'Slider Activity',
+  description: 'Slider Activity Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  ordering: 0,
+  items: [
+    {
+      responseValues: {
+        minValue: 0,
+        maxValue: 10,
+        minImage: 'https://static.thenounproject.com/png/1825711-200.png',
+        maxImage:
+          'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
+        minLabel: 'Minimum label',
+        maxLabel: 'Maximum label',
+      },
+      id: '345',
+      config: {
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: false,
+        skippableItem: false,
+        timer: null,
+        showTickMarks: true,
+        showTickLabels: true,
+        continuousSlider: false,
+        addScores: false,
+        setAlerts: false,
+      },
+      responseType: 'slider',
+      name: 'slidename',
+      question: 'Choose some number',
+      order: 0,
+    },
+    {
+      responseValues: {
+        minValue: 1,
+        maxValue: 10,
+        minImage: null,
+        maxImage: null,
+        minLabel: 'Sad',
+        maxLabel: 'Happy',
+      },
+      id: '345',
+      config: {
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: false,
+        skippableItem: true,
+        timer: null,
+        showTickMarks: false,
+        showTickLabels: true,
+        continuousSlider: false,
+        addScores: false,
+        setAlerts: false,
+      },
+      responseType: 'slider',
+      name: 'sliderActivityItem',
+      question: 'On a scale of 1 to 10, how happy are you?',
+      order: 1,
+    },
+    {
+      responseValues: {
+        minValue: 1,
+        maxValue: 100,
+        minImage: null,
+        maxImage: null,
+        minLabel: null,
+        maxLabel: null,
+      },
+      id: '345',
+      config: {
+        additionalResponseOption: {
+          textInputOption: true,
+          textInputRequired: false,
+        },
+        removeBackButton: false,
+        skippableItem: true,
+        timer: null,
+        showTickMarks: false,
+        showTickLabels: false,
+        continuousSlider: true,
+        addScores: false,
+        setAlerts: false,
+      },
+      responseType: 'slider',
+      name: 'sliderActivityItem',
+      question: 'Choose any',
+      order: 0,
+    },
+  ],
+};
+
+export const DemoActivity: ActivityDto = {
+  id: 'aid1',
+  name: 'Radio Activity',
+  description: 'Radio Activity Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  ordering: 0,
+  items: [
+    ...AllTextsActivity.items,
+    ...AllCheckboxesActivity.items,
+    ...AllRadioActivity.items,
+    ...AllSliderActivity.items,
   ],
 };
 
