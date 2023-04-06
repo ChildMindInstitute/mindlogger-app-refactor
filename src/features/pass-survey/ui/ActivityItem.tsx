@@ -105,7 +105,7 @@ function ActivityItem({
 
     case 'TextInput':
       item = (
-        <Box flex={1} justifyContent="center" mx={16}>
+        <Box mx={16}>
           <SimpleTextInput
             value={value?.answer ?? ''}
             config={pipelineItem.payload}
@@ -117,7 +117,7 @@ function ActivityItem({
 
     case 'Slider':
       item = (
-        <Box flex={1} jc="center" mx={16}>
+        <Box mx={16}>
           <SurveySlider
             config={pipelineItem.payload}
             onChange={onResponse}
@@ -143,7 +143,7 @@ function ActivityItem({
 
     case 'Checkbox':
       item = (
-        <Box flex={1} jc="center" mx={16} my="$3">
+        <Box mx="$6">
           <CheckBoxActivityItem
             config={pipelineItem.payload}
             onChange={onResponse}
@@ -155,7 +155,7 @@ function ActivityItem({
 
     case 'Radio':
       item = (
-        <Box flex={1} jc="center" mx="$5">
+        <Box mx="$6">
           <RadioActivityItem
             config={pipelineItem.payload}
             onChange={onResponse}
@@ -194,13 +194,13 @@ function ActivityItem({
             scrollEnabled={scrollEnabled}
             extraScrollHeight={10}
           >
-            {question && (
-              <Box mx={16} mb={20}>
-                <MarkdownMessage content={question} />
-              </Box>
-            )}
+            <Box flex={1} justifyContent="center">
+              {question && (
+                <Box mx={16} mb={20} alignItems="center">
+                  <MarkdownMessage content={question} />
+                </Box>
+              )}
 
-            <Box flex={1}>
               {item}
 
               {pipelineItem.additionalText && (

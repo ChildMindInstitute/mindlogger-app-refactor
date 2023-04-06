@@ -51,7 +51,7 @@ const RadioItem: FC<RadioLabelProps> = ({
 
   return (
     <XStack
-      minHeight={64}
+      minHeight="$7"
       bg={setPalette ? color : 'none'}
       px="$3"
       py="$3"
