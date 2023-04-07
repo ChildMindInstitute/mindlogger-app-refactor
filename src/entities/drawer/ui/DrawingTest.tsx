@@ -1,6 +1,9 @@
+/* eslint-disable react-native/no-inline-styles */
 import { FC, useState } from 'react';
 
-import { Box, BoxProps, Image, XStack } from '@app/shared/ui';
+import { CachedImage } from '@georstat/react-native-image-cache';
+
+import { Box, BoxProps, XStack } from '@app/shared/ui';
 
 import DrawingBoard from './DrawingBoard';
 import { DrawLine, DrawResult } from '../lib';
@@ -33,13 +36,15 @@ const DrawingTest: FC<Props> = props => {
     >
       {!!imageUrl && (
         <XStack jc="center">
-          <Image
-            src={imageUrl}
-            width={300}
-            height={300}
-            p={20}
-            pb={0}
-            mb={20}
+          <CachedImage
+            source={imageUrl}
+            style={{
+              width: 300,
+              height: 300,
+              padding: 20,
+              paddingBottom: 0,
+              marginBottom: 20,
+            }}
             resizeMode="contain"
           />
         </XStack>
@@ -48,11 +53,9 @@ const DrawingTest: FC<Props> = props => {
       {!!width && (
         <XStack jc="center">
           {!!backgroundImageUrl && (
-            <Image
-              src={backgroundImageUrl}
-              position="absolute"
-              width={width}
-              height={width}
+            <CachedImage
+              source={backgroundImageUrl}
+              style={{ position: 'absolute', width, height: width }}
               resizeMode="contain"
             />
           )}

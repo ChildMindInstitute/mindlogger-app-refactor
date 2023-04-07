@@ -11,6 +11,9 @@ export const useEventsQuery = <TData = ReturnAwaited<FetchFn>>(
   return useBaseQuery(
     ['events', { appletId }],
     () => eventsService.getEvents({ appletId }),
-    options,
+    {
+      ...options,
+      enabled: false,
+    },
   );
 };

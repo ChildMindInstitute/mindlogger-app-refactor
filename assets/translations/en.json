@@ -86,7 +86,7 @@
   },
   "applet_list_component": {
     "about_title": "About MindLogger",
-    "no_applets_yet": "You have no applets",
+    "no_applets_yet": "You have no applets.",
     "noon": "Noon",
     "midnight": "Midnight"
   },
@@ -356,7 +356,7 @@
     "end": "End"
   },
   "open_source": {
-    "title":"Open Source Software used",
+    "title": "Open Source Software used",
     "show_license": "Show License",
     "homepage": "Homepage"
   }

@@ -1,13 +1,22 @@
 import { StoreProgressPayload } from '@app/abstract/lib';
 import { useAppDispatch, useAppSelector } from '@shared/lib';
 
+import { useAppletDetailsQuery } from '../../api';
 import { onBeforeStartingActivity } from '../../lib';
+import { mapActivityFlowsFromDto } from '../mappers';
 import { selectInProgressApplets } from '../selectors';
 import { actions } from '../slice';
 
 function useInProgressEntities(appletId: string) {
   const dispatch = useAppDispatch();
+
   const inProgressApplets = useAppSelector(selectInProgressApplets);
+
+  const { data: activityFlows } = useAppletDetailsQuery(appletId, {
+    select: response => {
+      return mapActivityFlowsFromDto(response.data.result.activityFlows);
+    },
+  });
 
   const selectEntityEvent = (entityId: string, eventId: string) =>
     inProgressApplets[appletId]?.[entityId]?.[eventId];
@@ -55,20 +64,27 @@ function useInProgressEntities(appletId: string) {
     });
   }
 
-  function startFlow(flowId: string, activityId: string, eventId: string) {
+  function startFlow(
+    flowId: string,
+    currentActivityId: string,
+    eventId: string,
+  ) {
     return new Promise<boolean>(resolve => {
       const event = selectEntityEvent(flowId, eventId);
 
       if (isEventInProgress(event)) {
         onBeforeStartingActivity({
           onRestart: () => {
-            flowStarted(flowId, activityId, eventId);
+            const flow = activityFlows!.find(x => x.id === flowId);
+            const firstActivityId = flow!.activityIds[0];
+
+            flowStarted(flowId, firstActivityId, eventId);
             resolve(true);
           },
           onResume: () => resolve(false),
         });
       } else {
-        flowStarted(flowId, activityId, eventId);
+        flowStarted(flowId, currentActivityId, eventId);
         resolve(false);
       }
     });

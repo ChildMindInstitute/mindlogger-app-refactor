@@ -1,32 +1,53 @@
-/*import { ActivityType } from '@app/entities/activity';
 import {
   ActivityFlowRecordDto,
   ActivityRecordDto,
   AppletDetailsDto,
   ThemeDto,
-} from '@shared/api';
+} from '@app/shared/api';
 
-import { Activity, ActivityPipelineType } from '../lib';
+import { Activity, ActivityFlow, AppletDetails, AppletTheme } from '../lib';
 
-export function mapActivityFromDto(activity: ActivityRecordDto): Activity {
-  return {
-    ...activity,
-    type: ActivityType.NotDefined,
-    pipelineType: ActivityPipelineType.Regular,
-  };
+export function mapThemeFromDto(dto: ThemeDto | null): AppletTheme | null {
+  return dto === null
+    ? null
+    : {
+        backgroundImage: dto.backgroundImage,
+        logo: dto.logo,
+        primaryColor: dto.primaryColor,
+        secondaryColor: dto.secondaryColor,
+        tertiaryColor: dto.tertiaryColor,
+      };
 }
 
 export function mapActivityFlowFromDto(
-  activity: ActivityFlowRecordDto,
+  dto: ActivityFlowRecordDto,
 ): ActivityFlow {
   return {
-    ...activity,
-    pipelineType: ActivityPipelineType.Flow,
+    activityIds: dto.activityIds,
+    description: dto.description,
+    id: dto.id,
+    image: null,
+    name: dto.name,
   };
 }
 
-export function mapThemeFromDto(theme: ThemeDto | null): AppletTheme | null {
-  return theme === null ? null : { ...theme };
+export function mapActivityFlowsFromDto(
+  dtos: ActivityFlowRecordDto[],
+): ActivityFlow[] {
+  return dtos.map(x => mapActivityFlowFromDto(x));
+}
+
+export function mapActivityFromDto(dto: ActivityRecordDto): Activity {
+  return {
+    description: dto.description,
+    id: dto.id,
+    image: dto.image,
+    name: dto.name,
+  };
+}
+
+export function mapActivitiesFromDto(dtos: ActivityRecordDto[]): Activity[] {
+  return dtos.map(x => mapActivityFromDto(x));
 }
 
 export function mapAppletDetailsFromDto(
@@ -40,9 +61,8 @@ export function mapAppletDetailsFromDto(
     image: detailsDto.image,
     version: detailsDto.version,
     watermark: detailsDto.watermark,
-    activities: detailsDto.activities.map(x => mapActivityFromDto(x)),
-    activityFlows: detailsDto.activityFlows.map(x => mapActivityFlowFromDto(x)),
+    activities: mapActivitiesFromDto(detailsDto.activities),
+    activityFlows: mapActivityFlowsFromDto(detailsDto.activityFlows),
     theme: mapThemeFromDto(detailsDto.theme),
   };
-}*/
-export const mock = null;
+}

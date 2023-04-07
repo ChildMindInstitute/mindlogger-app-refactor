@@ -1,10 +1,12 @@
+/* eslint-disable react-native/no-inline-styles */
 import { FC, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
+
+import { CachedImage } from '@georstat/react-native-image-cache';
 
 import { colors } from '@shared/lib';
 import { invertColor, replaceTextWithScreenVariables } from '@shared/lib/utils';
 import {
-  Image,
   Text,
   XStack,
   QuestionTooltipIcon,
@@ -66,11 +68,13 @@ const CheckBoxItem: FC<Props> = ({
         )}
 
         {image ? (
-          <Image
-            width="15%"
-            height={64}
-            ml={tooltip ? 5 : 0}
-            src={image}
+          <CachedImage
+            style={{
+              width: '15%',
+              height: 64,
+              marginLeft: tooltip ? 5 : 0,
+            }}
+            source={image}
             resizeMode="contain"
           />
         ) : null}

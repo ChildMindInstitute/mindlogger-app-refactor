@@ -1,6 +1,7 @@
 import { FC, ReactElement } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 
+import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 
 import { StackedRowItemValue } from './types';
@@ -10,7 +11,6 @@ import {
   XStack,
   Center,
   Text,
-  Image,
   Tooltip,
   RadioGroup,
 } from '../..';
@@ -55,11 +55,10 @@ const AxisListItem: FC<{
             </AxisListItemText>
 
             {option.image && (
-              <Image
-                height={32}
-                width={32}
+              <CachedImage
+                style={styles.image}
                 resizeMode="contain"
-                src={option.image}
+                source={option.image}
               />
             )}
           </Center>
@@ -167,3 +166,10 @@ const StackedItemsGrid: FC<StackedItemsGridProps> = ({
 };
 
 export default StackedItemsGrid;
+
+const styles = StyleSheet.create({
+  image: {
+    height: 32,
+    width: 32,
+  },
+});

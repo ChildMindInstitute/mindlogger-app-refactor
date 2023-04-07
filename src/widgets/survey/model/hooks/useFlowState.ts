@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 
 import { useAppletDetailsQuery } from '@app/entities/applet';
+import { mapAppletDetailsFromDto } from '@app/entities/applet/model';
 
 import {
   buildActivityFlowPipeline,
@@ -23,7 +24,7 @@ export function useFlowState({
   const [step, setStep] = useState(0);
 
   const { data: applet } = useAppletDetailsQuery(appletId, {
-    select: r => r.data.result,
+    select: response => mapAppletDetailsFromDto(response.data.result),
   });
 
   const pipeline = useMemo(() => {
@@ -36,18 +37,13 @@ export function useFlowState({
     if (!isActivityFlow) {
       return buildSingleActivityPipeline({ appletId, eventId, activityId });
     } else {
-      let activityIds = applet.activityFlows.find(
+      const activityIds = applet.activityFlows.find(
         flow => flow.id === flowId,
       )?.activityIds;
 
-      // @todo remove it when the integration is done
-      if (!activityIds) {
-        activityIds = ['aid2', 'aid1'];
-      }
-
       return buildActivityFlowPipeline({
         fromActivityId: activityId,
-        activityIds,
+        activityIds: activityIds!,
         appletId,
         eventId,
         flowId,

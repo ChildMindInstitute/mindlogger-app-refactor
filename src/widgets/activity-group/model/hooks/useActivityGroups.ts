@@ -1,5 +1,4 @@
 import { convertProgress } from '@app/abstract/lib';
-import { ActivityPipelineType } from '@app/abstract/lib';
 import { useAppletDetailsQuery } from '@app/entities/applet';
 import { selectInProgressApplets } from '@app/entities/applet/model/selectors';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
@@ -107,10 +106,6 @@ export const useActivityGroups = (
     const date = calculator.calculate(eventActivity.event);
     eventActivity.event.scheduledAt = date;
   }
-
-  entityEvents = entityEvents.filter(
-    x => x.entity.pipelineType === ActivityPipelineType.Regular,
-  ); // todo - remove after BE fix
 
   entityEvents = entityEvents.filter(x => x.event.scheduledAt);
 

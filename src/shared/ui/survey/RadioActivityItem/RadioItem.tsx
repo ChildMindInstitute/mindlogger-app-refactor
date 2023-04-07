@@ -1,5 +1,7 @@
 import { FC } from 'react';
+import { StyleSheet } from 'react-native';
 
+import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 
 import { colors, invertColor } from '@shared/lib';
@@ -8,7 +10,6 @@ import {
   RadioGroup,
   Text,
   Box,
-  Image,
   QuestionTooltipIcon,
   Tooltip,
 } from '@shared/ui';
@@ -70,14 +71,22 @@ const RadioItem: FC<RadioLabelProps> = ({
         )}
       </RadioTooltipContainer>
 
+      <Box height={64} width="20%">
+        {image && (
+          <CachedImage
+            source={image}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        )}
+      </Box>
+
       {image && (
         <Box width="10%">
-          <Image
-            width="100%"
-            height={40}
+          <CachedImage
             resizeMode="contain"
-            my="auto"
-            src={image}
+            style={styles.image}
+            source={image}
           />
         </Box>
       )}
@@ -104,3 +113,12 @@ const RadioItem: FC<RadioLabelProps> = ({
 };
 
 export default RadioItem;
+
+const styles = StyleSheet.create({
+  image: {
+    width: '100%',
+    height: 40,
+    marginTop: 'auto',
+    marginBottom: 'auto',
+  },
+});

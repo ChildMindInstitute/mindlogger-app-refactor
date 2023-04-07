@@ -1,6 +1,9 @@
 import { FC } from 'react';
+import { StyleSheet } from 'react-native';
 
-import { Box, XStack, YStack, Text, Image, Slider } from '@shared/ui';
+import { CachedImage } from '@georstat/react-native-image-cache';
+
+import { Box, XStack, YStack, Text, Slider } from '@shared/ui';
 
 import { SliderProps } from './types';
 
@@ -58,11 +61,10 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
       <XStack mt="$2" jc="space-between">
         <YStack maxWidth="30%" ai="center">
           {leftImageUrl && (
-            <Image
-              width={45}
-              height={45}
+            <CachedImage
+              style={styles.imageLeft}
               resizeMode="contain"
-              src={leftImageUrl}
+              source={leftImageUrl}
             />
           )}
 
@@ -72,11 +74,10 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
         <YStack maxWidth="30%" ml="auto" ai="center">
           {rightImageUrl && (
             <XStack jc="center">
-              <Image
-                width={45}
-                height={45}
+              <CachedImage
+                style={styles.imageRight}
                 resizeMode="contain"
-                src={rightImageUrl}
+                source={rightImageUrl}
               />
             </XStack>
           )}
@@ -89,3 +90,14 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
 };
 
 export default SurveySlider;
+
+const styles = StyleSheet.create({
+  imageLeft: {
+    width: 45,
+    height: 45,
+  },
+  imageRight: {
+    width: 45,
+    height: 45,
+  },
+});
