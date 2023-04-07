@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
+import Popover from 'react-native-popover-view';
+
 import { activityMarkDownStyles } from '@shared/lib';
 
 import { colors } from '../lib';
-import { Popover, MarkdownView, ScrollView } from '../ui';
+import { MarkdownView, ScrollView, YStack } from '../ui';
 
 type TooltipProps = {
   children: React.ReactNode;
@@ -17,29 +19,29 @@ const Tooltip: FC<TooltipProps> = ({ children, markdown }) => {
   }
 
   return (
-    <Popover placement="bottom" size="$4">
-      <Popover.Trigger>{children}</Popover.Trigger>
-
-      <Popover.Content
-        width="$19"
-        backgroundColor={colors.lighterGrey3}
-        ml={10}
-      >
-        <ScrollView flex={1} maxHeight={300}>
-          <MarkdownView
-            content={markdown}
-            markdownStyle={{
-              ...activityMarkDownStyles,
-              text: styles.markdownText,
-            }}
-          />
-        </ScrollView>
-      </Popover.Content>
+    <Popover popoverStyle={styles.popover} from={<YStack>{children}</YStack>}>
+      <ScrollView flex={1} maxHeight={300}>
+        <MarkdownView
+          content={markdown}
+          markdownStyle={{
+            ...activityMarkDownStyles,
+            text: styles.markdownText,
+          }}
+        />
+      </ScrollView>
     </Popover>
   );
 };
 
 const styles = StyleSheet.create({
+  popover: {
+    borderRadius: 10,
+    backgroundColor: colors.lighterGrey3,
+    width: 250,
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+  },
   markdownText: {
     color: '#000',
   },

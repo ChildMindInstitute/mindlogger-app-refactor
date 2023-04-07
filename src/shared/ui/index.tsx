@@ -15,7 +15,6 @@ import Text from './Text';
 export { Image } from '@tamagui/image';
 export { YStack, XStack, ZStack } from '@tamagui/stacks';
 export { RadioGroup } from '@tamagui/radio-group';
-export { Popover } from '@tamagui/popover';
 export * from './icons';
 export * from './survey';
 
