@@ -5,12 +5,16 @@ import { useTranslation } from 'react-i18next';
 
 import { useActivityAnswersMutation } from '@app/entities/activity';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
+import {
+  mapActivitiesFromDto,
+  mapActivityFlowFromDto,
+} from '@app/entities/applet/model';
 import { PassSurveyModel } from '@app/features/pass-survey';
 import { useAppDispatch } from '@app/shared/lib';
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
-import { mapAnswersToDto } from '../model/mappers';
+import { mapAnswersToDto } from '../model';
 
 type Props = {
   appletId: string;
@@ -20,19 +24,6 @@ type Props = {
 
   onClose: () => void;
   onFinish: () => void;
-};
-
-const mockActivityFlow = {
-  id: 'afid1',
-  name: 'Activity Flow number 1',
-  description:
-    'Activity Flow description number 1 Activity description 1 number 1 Activity description number 1',
-  image:
-    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  hideBadge: false,
-  ordering: 0,
-  isSingleReport: false,
-  activityIds: ['aid2', 'aid1'],
 };
 
 const ActivityBox = styled(Center, {
@@ -55,26 +46,25 @@ function Intermediate({
   const dispatch = useAppDispatch();
 
   let { data: activityFlow } = useAppletDetailsQuery(appletId, {
-    select: r => r.data.result.activityFlows.find(o => o.id === flowId),
+    select: response =>
+      mapActivityFlowFromDto(
+        response.data.result.activityFlows.find(o => o.id === flowId)!,
+      ),
   });
 
   let { data: allActivities } = useAppletDetailsQuery(appletId, {
-    select: r => r.data.result.activities,
+    select: r => mapActivitiesFromDto(r.data.result.activities),
   });
 
-  if (!activityFlow) {
-    activityFlow = mockActivityFlow;
-  }
+  const totalActivities = activityFlow!.activityIds.length;
 
-  const totalActivities = activityFlow.activityIds.length;
-
-  const currentActivityIndex = activityFlow.activityIds.findIndex(
+  const currentActivityIndex = activityFlow!.activityIds.findIndex(
     id => id === activityId,
   );
 
-  const nextActivityIndex = currentActivityIndex + 1;
+  const nextActivityId = activityFlow!.activityIds[currentActivityIndex + 1];
 
-  const nextActivity = allActivities?.[nextActivityIndex];
+  const nextActivity = allActivities?.find(x => x.id === nextActivityId);
 
   const { activityStorageRecord, clearActivityStorageRecord } =
     PassSurveyModel.useActivityState({
@@ -153,7 +143,8 @@ function Intermediate({
             <Image src={badge} width={18} height={18} opacity={0.6} r={4} />
 
             <Text fontSize={14} color="$grey">
-              {nextActivityIndex + 1} of {totalActivities} {activityFlow.name}
+              {currentActivityIndex + 2} of {totalActivities}
+              {activityFlow!.name}
             </Text>
           </XStack>
         </ActivityBox>

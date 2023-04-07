@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
+import { mapThemeFromDto } from '@app/entities/applet/model';
 import { ActivityIndicator, Center, ImageBackground } from '@app/shared/ui';
 import { useAppletDetailsQuery } from '@entities/applet';
 
@@ -23,11 +24,9 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
 
   const { title, appletId } = route.params;
 
-  const { data: applet } = useAppletDetailsQuery(appletId, {
-    select: o => o.data.result,
+  const { data: appletTheme } = useAppletDetailsQuery(appletId, {
+    select: o => mapThemeFromDto(o.data.result.theme),
   });
-
-  const appletTheme = applet?.theme ?? null;
 
   useLayoutEffect(() => {
     if (title) {
@@ -56,7 +55,7 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
       }
     >
       <Tab.Navigator
-        screenOptions={getAppletDetailsScreenOptions(appletTheme)}
+        screenOptions={getAppletDetailsScreenOptions(appletTheme ?? null)}
         initialRouteName="ActivityList"
       >
         <Tab.Screen
