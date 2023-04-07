@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet';
+import { IS_ANDROID } from '@app/shared/lib';
 import { ActivityIndicator, Box, Center, Stepper, XStack } from '@shared/ui';
 
 import ActivityItem from './ActivityItem';
@@ -194,7 +195,11 @@ function ActivityStepper({
         <Stepper.Progress />
 
         {showBottomNavigation && (
-          <Stepper.NavigationPanel mt={16} minHeight={24}>
+          <Stepper.NavigationPanel
+            mt={16}
+            minHeight={24}
+            mb={IS_ANDROID ? 16 : 0}
+          >
             {canMoveBack && (
               <Stepper.BackButton>
                 {t(
