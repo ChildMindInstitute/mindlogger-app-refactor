@@ -21,6 +21,7 @@ function useActivityStepper(state: ActivityState | undefined) {
     answers[step]?.additionalAnswer != null &&
     answers[step]?.additionalAnswer !== '';
 
+  const canSkip = !!currentPipelineItem?.isSkippable && !hasAnswer;
   const canMoveNext =
     isTutorialStep ||
     currentPipelineItem?.isSkippable ||
@@ -49,6 +50,7 @@ function useActivityStepper(state: ActivityState | undefined) {
     isFirstStep,
     isLastStep,
 
+    canSkip,
     canMoveNext,
     canMoveBack,
     canReset,

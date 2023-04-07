@@ -59,6 +59,7 @@ function ActivityStepper({
     isLastStep,
     isTutorialStep,
 
+    canSkip,
     canMoveNext,
     canMoveBack,
     canReset,
@@ -75,6 +76,12 @@ function ActivityStepper({
   });
 
   const currentStep = activityStorageRecord?.step ?? 0;
+
+  const nextButtonText = isLastStep
+    ? 'activity_navigation:done'
+    : canSkip
+    ? 'activity_navigation:skip'
+    : 'activity_navigation:next';
 
   const tutorialViewerRef = useRef<TutorialViewerRef>(null);
 
@@ -205,13 +212,7 @@ function ActivityStepper({
             )}
 
             {canMoveNext && (
-              <Stepper.NextButton>
-                {t(
-                  isLastStep
-                    ? 'activity_navigation:done'
-                    : 'activity_navigation:next',
-                )}
-              </Stepper.NextButton>
+              <Stepper.NextButton>{t(nextButtonText)}</Stepper.NextButton>
             )}
           </Stepper.NavigationPanel>
         )}
