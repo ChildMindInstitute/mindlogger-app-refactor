@@ -556,7 +556,9 @@ export const AllTextsActivity: ActivityDto = {
     {
       id: '12319758',
       name: 'Text input',
-      question: 'Type "Hello!"',
+      question: `## Welcome to the demo session!
+      We'll start with the text fields.
+      Type "Hello!"`,
       responseType: 'text',
       config: {
         maxResponseLength: 20,
@@ -573,7 +575,7 @@ export const AllTextsActivity: ActivityDto = {
     {
       id: '346',
       name: 'Text input',
-      question: 'Type no more than 10 symbols',
+      question: 'Type no more than 10 symbols. Can skip',
       responseType: 'text',
       config: {
         maxResponseLength: 10,
@@ -590,7 +592,7 @@ export const AllTextsActivity: ActivityDto = {
     {
       id: '346',
       name: 'Text input',
-      question: 'Type a number',
+      question: 'Type a number. Back button removed',
       responseType: 'text',
       config: {
         maxResponseLength: 10,
@@ -624,35 +626,37 @@ export const AllCheckboxesActivity: ActivityDto = {
     {
       id: '346574',
       name: 'checkboxname',
-      question: 'These are colored randomized checkboxes',
+      question:
+        'These are colored randomized checkboxes. Some of them have a tooltip',
       responseType: 'multiSelect',
       order: 0,
       responseValues: {
         options: [
           {
-            id: 'checkbox-id-0',
-            text: 'Some text',
-            image: null,
-            score: null,
-            tooltip: 'This is a tooltip',
-            color: '#C800FF',
-            isHidden: false,
-          },
-          {
             id: 'checkbox-id-1',
             text: 'Some text',
             image: null,
             score: null,
-            tooltip: 'This is a tooltip',
+            tooltip: 'This is a **tooltip**',
+            color: '#C800FF',
+            isHidden: false,
+          },
+          {
+            id: 'checkbox-id-2',
+            text: 'Some text',
+            image: null,
+            score: null,
+            tooltip: 'This is a *tooltip*',
             color: '#000000',
             isHidden: false,
           },
           {
-            id: 'checkbox-id-two',
+            id: 'checkbox-id-3',
             text: 'Some text',
             image: 'https://cdn-icons-png.flaticon.com/512/1287/1287087.png',
             score: null,
-            tooltip: 'This is a tooltip',
+            tooltip:
+              'This is a ~~tooltip~~! A long long loooong loooooooooooong text',
             color: '#F8FF00',
             isHidden: false,
           },
@@ -676,35 +680,39 @@ export const AllCheckboxesActivity: ActivityDto = {
     {
       id: '12495124',
       name: 'checkboxname',
-      question: 'These are checkboxes',
+      question: 'These are simple checkboxes. Can skip. Cannot move back.',
       responseType: 'multiSelect',
       order: 0,
       responseValues: {
         options: [
           {
-            id: 'checkbox-id-0',
+            id: 'checkbox-id-4',
             text: 'Some text',
             image: null,
             score: null,
-            tooltip: 'this is some tooltip',
+            tooltip: 'This is a **tooltip**',
             color: '#C800FF',
             isHidden: false,
           },
           {
-            id: 'checkbox-id-1',
+            id: 'checkbox-id-5',
             text: 'Some text',
             image: null,
             score: null,
-            tooltip: '',
+            tooltip: 'This is a *tooltip*',
             color: '#000000',
             isHidden: false,
           },
           {
-            id: 'checkbox-id-two',
+            id: 'checkbox-id-6',
             text: 'Some text',
             image: 'https://cdn-icons-png.flaticon.com/512/1287/1287087.png',
             score: null,
-            tooltip: null,
+            tooltip: `
+            - 1. one
+            - 2. two
+            - 3. three
+            `,
             color: '#F8FF00',
             isHidden: false,
           },
@@ -719,7 +727,7 @@ export const AllCheckboxesActivity: ActivityDto = {
           textInputOption: false,
           textInputRequired: false,
         },
-        removeBackButton: false,
+        removeBackButton: true,
         skippableItem: true,
         timer: null,
         addScores: false,
@@ -728,22 +736,22 @@ export const AllCheckboxesActivity: ActivityDto = {
     {
       id: '12495124',
       name: 'checkboxname',
-      question: 'These are checkboxes',
+      question: 'Pick any and give a required text response.',
       responseType: 'multiSelect',
       order: 0,
       responseValues: {
         options: [
           {
-            id: 'checkbox-id-0',
+            id: 'checkbox-id-07',
             text: 'Some text',
             image: null,
             score: null,
-            tooltip: 'this is some tooltip',
+            tooltip: 'This is a tooltip',
             color: '#C800FF',
             isHidden: false,
           },
           {
-            id: 'checkbox-id-1',
+            id: 'checkbox-id-8',
             text: 'Some text',
             image: null,
             score: null,
@@ -752,7 +760,7 @@ export const AllCheckboxesActivity: ActivityDto = {
             isHidden: false,
           },
           {
-            id: 'checkbox-id-two',
+            id: 'checkbox-id-9',
             text: 'Some text',
             image: 'https://cdn-icons-png.flaticon.com/512/1287/1287087.png',
             score: null,
@@ -801,7 +809,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'First radio pink with tooltip',
             image: null,
             score: null,
-            tooltip: ' Tooltip text',
+            tooltip: 'This is a ++tooltip++',
             color: '#C800FF',
             isHidden: false,
           },
@@ -810,7 +818,13 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Second radio black',
             image: null,
             score: null,
-            tooltip: null,
+            tooltip: `
+            Which kind of music do you like?
+            - Pop
+            - Classic
+            - Dance/Electronic
+            - Rock
+            `,
             color: '#000000',
             isHidden: false,
           },
@@ -819,7 +833,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Third radio yellow',
             image: null,
             score: null,
-            tooltip: null,
+            tooltip: 'This this a ~tooltip in a subscript~',
             color: '#F8FF00',
             isHidden: false,
           },
@@ -828,7 +842,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Fourth radio red',
             image: null,
             score: null,
-            tooltip: null,
+            tooltip: 'This this a ^tooltip in a superscript^',
             color: '#FF0000',
             isHidden: false,
           },
@@ -837,7 +851,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Fifth radio green',
             image: null,
             score: null,
-            tooltip: null,
+            tooltip: 'This is a ==highlighted tooltip==',
             color: '#00FF00',
             isHidden: false,
           },
@@ -847,7 +861,8 @@ export const AllRadioActivity: ActivityDto = {
             image:
               'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
             score: null,
-            tooltip: null,
+            tooltip: `This is a cat:
+            ![Cat](https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg)`,
             color: '#EEEEEE',
             isHidden: false,
           },
@@ -857,7 +872,7 @@ export const AllRadioActivity: ActivityDto = {
             image:
               'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
             score: null,
-            tooltip: null,
+            tooltip: 'This is a link: [All about cats](https://cats.com)',
             color: null,
             isHidden: false,
           },
@@ -889,7 +904,7 @@ export const AllRadioActivity: ActivityDto = {
       },
       responseType: 'singleSelect',
       name: 'radioName',
-      question: 'Choose some number radio item',
+      question: 'These are colored randomized checkboxes. Tooltips',
       order: 0,
     },
     {
@@ -897,16 +912,16 @@ export const AllRadioActivity: ActivityDto = {
         options: [
           {
             id: '1',
-            text: 'First radio pink with tooltip',
+            text: 'First radio button',
             image: null,
             score: null,
-            tooltip: ' Tooltip text',
+            tooltip: 'Tooltip text',
             color: '#C800FF',
             isHidden: false,
           },
           {
             id: '2',
-            text: 'Second radio black',
+            text: 'Second radio button',
             image: null,
             score: null,
             tooltip: null,
@@ -915,7 +930,7 @@ export const AllRadioActivity: ActivityDto = {
           },
           {
             id: '3',
-            text: 'Third radio yellow',
+            text: 'Third radio button',
             image: null,
             score: null,
             tooltip: null,
@@ -924,7 +939,7 @@ export const AllRadioActivity: ActivityDto = {
           },
           {
             id: '4',
-            text: 'Fourth radio red',
+            text: 'Fourth radio button',
             image: null,
             score: null,
             tooltip: null,
@@ -933,7 +948,7 @@ export const AllRadioActivity: ActivityDto = {
           },
           {
             id: '5',
-            text: 'Fifth radio green',
+            text: 'Fifth radio button',
             image: null,
             score: null,
             tooltip: null,
@@ -942,7 +957,7 @@ export const AllRadioActivity: ActivityDto = {
           },
           {
             id: '6',
-            text: 'Sixth radio gray',
+            text: 'Sixth radio button',
             image:
               'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
             score: null,
@@ -952,7 +967,7 @@ export const AllRadioActivity: ActivityDto = {
           },
           {
             id: '7',
-            text: 'Seventh radio no color',
+            text: 'Seventh radio button',
             image:
               'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
             score: null,
@@ -974,109 +989,10 @@ export const AllRadioActivity: ActivityDto = {
       id: '85670',
       config: {
         additionalResponseOption: {
-          textInputOption: false,
-          textInputRequired: false,
-        },
-        removeBackButton: false,
-        skippableItem: false,
-        timer: null,
-        addScores: false,
-        setAlerts: false,
-        randomizeOptions: false,
-        addTooltip: false,
-        setPalette: false,
-      },
-      responseType: 'singleSelect',
-      name: 'radioName',
-      question: 'Choose some number radio item',
-      order: 1,
-    },
-    {
-      responseValues: {
-        options: [
-          {
-            id: '1',
-            text: 'First radio pink with tooltip',
-            image: null,
-            score: null,
-            tooltip: ' Tooltip text',
-            color: '#C800FF',
-            isHidden: false,
-          },
-          {
-            id: '2',
-            text: 'Second radio black',
-            image: null,
-            score: null,
-            tooltip: null,
-            color: '#000000',
-            isHidden: false,
-          },
-          {
-            id: '3',
-            text: 'Third radio yellow',
-            image: null,
-            score: null,
-            tooltip: null,
-            color: '#F8FF00',
-            isHidden: false,
-          },
-          {
-            id: '4',
-            text: 'Fourth radio red',
-            image: null,
-            score: null,
-            tooltip: null,
-            color: '#FF0000',
-            isHidden: false,
-          },
-          {
-            id: '5',
-            text: 'Fifth radio green',
-            image: null,
-            score: null,
-            tooltip: null,
-            color: '#00FF00',
-            isHidden: false,
-          },
-          {
-            id: '6',
-            text: 'Sixth radio gray',
-            image:
-              'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
-            score: null,
-            tooltip: null,
-            color: '#EEEEEE',
-            isHidden: false,
-          },
-          {
-            id: '7',
-            text: 'Seventh radio no color',
-            image:
-              'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
-            score: null,
-            tooltip: null,
-            color: null,
-            isHidden: false,
-          },
-          {
-            id: '8',
-            text: 'Hidden radio',
-            image: null,
-            score: null,
-            tooltip: null,
-            color: null,
-            isHidden: true,
-          },
-        ],
-      },
-      id: '3456',
-      config: {
-        additionalResponseOption: {
           textInputOption: true,
           textInputRequired: false,
         },
-        removeBackButton: false,
+        removeBackButton: true,
         skippableItem: false,
         timer: null,
         addScores: false,
@@ -1087,8 +1003,9 @@ export const AllRadioActivity: ActivityDto = {
       },
       responseType: 'singleSelect',
       name: 'radioName',
-      question: 'Choose some number radio item',
-      order: 2,
+      question:
+        'These are simple single select. Cannot move back. Has optional text field',
+      order: 1,
     },
   ],
 };
@@ -1122,7 +1039,7 @@ export const AllSliderActivity: ActivityDto = {
           textInputOption: false,
           textInputRequired: false,
         },
-        removeBackButton: false,
+        removeBackButton: true,
         skippableItem: false,
         timer: null,
         showTickMarks: true,
@@ -1133,7 +1050,7 @@ export const AllSliderActivity: ActivityDto = {
       },
       responseType: 'slider',
       name: 'slidename',
-      question: 'Choose some number',
+      question: 'Choose a number. Cannot move back',
       order: 0,
     },
     {
@@ -1162,7 +1079,7 @@ export const AllSliderActivity: ActivityDto = {
       },
       responseType: 'slider',
       name: 'sliderActivityItem',
-      question: 'On a scale of 1 to 10, how happy are you?',
+      question: 'On a scale of 1 to 10, how happy are you?. You can skip',
       order: 1,
     },
     {
@@ -1171,8 +1088,8 @@ export const AllSliderActivity: ActivityDto = {
         maxValue: 100,
         minImage: null,
         maxImage: null,
-        minLabel: null,
-        maxLabel: null,
+        minLabel: 'Start',
+        maxLabel: 'End',
       },
       id: '345',
       config: {
@@ -1191,7 +1108,7 @@ export const AllSliderActivity: ActivityDto = {
       },
       responseType: 'slider',
       name: 'sliderActivityItem',
-      question: 'Choose any',
+      question: 'Choose any. And give an optional text response.',
       order: 0,
     },
   ],
