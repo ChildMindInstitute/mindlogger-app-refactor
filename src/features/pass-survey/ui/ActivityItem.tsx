@@ -36,6 +36,8 @@ type Props = ActivityItemProps &
     onAdditionalResponse: (response: string) => void;
   };
 
+const NavigationPanelHeight = 60;
+
 function ActivityItem({
   type,
   value,
@@ -181,7 +183,7 @@ function ActivityItem({
   }
 
   useLayoutEffect(() => {
-    if (height > windowHeight) {
+    if (height > windowHeight - NavigationPanelHeight) {
       setShowScrollButton(true);
     }
   }, [height, windowHeight]);
@@ -202,7 +204,11 @@ function ActivityItem({
             contentContainerStyle={styles.scrollView}
             onContentSizeChange={(_, contentHeight) => setHeight(contentHeight)}
             scrollEnabled={scrollEnabled}
-            extraScrollHeight={10}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            keyboardOpeningTime={0}
+            contentInset={{ top: 0, bottom: 60 }}
+            enableOnAndroid
           >
             <Box flex={1} justifyContent="center">
               {question && (
@@ -214,7 +220,7 @@ function ActivityItem({
               {item}
 
               {pipelineItem.additionalText && (
-                <Box mt={30} justifyContent="center" mx={16}>
+                <Box justifyContent="center" mt={30} mx={16}>
                   <AdditionalText
                     value={value?.additionalAnswer}
                     onChange={onAdditionalResponse}
