@@ -556,9 +556,8 @@ export const AllTextsActivity: ActivityDto = {
     {
       id: '12319758',
       name: 'Text input',
-      question: `## Welcome to the demo session!
-      We'll start with the text fields.
-      Type "Hello!"`,
+      question:
+        '## Welcome to the demo session!\nWe\'ll start with the text fields.\nType "Hello!"',
       responseType: 'text',
       config: {
         maxResponseLength: 20,
@@ -708,11 +707,7 @@ export const AllCheckboxesActivity: ActivityDto = {
             text: 'Some text',
             image: 'https://cdn-icons-png.flaticon.com/512/1287/1287087.png',
             score: null,
-            tooltip: `
-            - 1. one
-            - 2. two
-            - 3. three
-            `,
+            tooltip: '- 1. one\n- 2. two\n- 3. three\n',
             color: '#F8FF00',
             isHidden: false,
           },
@@ -818,13 +813,8 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Second radio black',
             image: null,
             score: null,
-            tooltip: `
-            Which kind of music do you like?
-            - Pop
-            - Classic
-            - Dance/Electronic
-            - Rock
-            `,
+            tooltip:
+              'Which kind of music do you like?\n- Pop\n- Classic\n- Dance/Electronic\n- Rock\n',
             color: '#000000',
             isHidden: false,
           },
@@ -904,7 +894,7 @@ export const AllRadioActivity: ActivityDto = {
       },
       responseType: 'singleSelect',
       name: 'radioName',
-      question: 'These are colored randomized checkboxes. Tooltips',
+      question: 'These are colored randomized radios. Tooltips',
       order: 0,
     },
     {
@@ -990,7 +980,7 @@ export const AllRadioActivity: ActivityDto = {
       config: {
         additionalResponseOption: {
           textInputOption: true,
-          textInputRequired: false,
+          textInputRequired: true,
         },
         removeBackButton: true,
         skippableItem: false,
@@ -1004,7 +994,7 @@ export const AllRadioActivity: ActivityDto = {
       responseType: 'singleSelect',
       name: 'radioName',
       question:
-        'These are simple single select. Cannot move back. Has optional text field',
+        'These are simple single select. Cannot move back. Has required text field',
       order: 1,
     },
   ],
@@ -1085,7 +1075,7 @@ export const AllSliderActivity: ActivityDto = {
     {
       responseValues: {
         minValue: 1,
-        maxValue: 100,
+        maxValue: 5,
         minImage: null,
         maxImage: null,
         minLabel: 'Start',
@@ -1100,7 +1090,7 @@ export const AllSliderActivity: ActivityDto = {
         removeBackButton: false,
         skippableItem: true,
         timer: null,
-        showTickMarks: false,
+        showTickMarks: true,
         showTickLabels: false,
         continuousSlider: true,
         addScores: false,
