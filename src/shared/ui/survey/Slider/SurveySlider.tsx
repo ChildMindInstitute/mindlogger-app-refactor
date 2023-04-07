@@ -37,7 +37,7 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
   return (
     <YStack>
       <Slider
-        value={initialValue ? [initialValue] : undefined}
+        value={initialValue != null ? [initialValue] : undefined}
         onResponderRelease={onRelease}
         onResponderStart={onPress}
         onValueChange={onValueChange}
