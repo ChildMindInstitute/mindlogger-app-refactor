@@ -39,6 +39,13 @@ export const licenses = {
     version: '^0.14.0',
     title: 'React Native Video Player',
   },
+  '@notifee/react-native': {
+    homePageUrl: 'https://notifee.app',
+    licenseType: 'Apache-2.0 license',
+    licenseUrl: 'https://github.com/invertase/notifee/blob/main/LICENSE',
+    version: '^7.6.1',
+    title: 'Notifee',
+  },
 };
 
 export const devLicenses = {
