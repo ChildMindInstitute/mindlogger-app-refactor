@@ -72,7 +72,7 @@ const CheckBoxItem: FC<Props> = ({
             style={{
               width: '15%',
               height: 64,
-              marginLeft: tooltip ? 5 : 0,
+              marginLeft: tooltip ? 12 : 0,
             }}
             source={image}
             resizeMode="contain"
