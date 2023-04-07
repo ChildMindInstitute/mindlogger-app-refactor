@@ -111,7 +111,7 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
             <XStack key={index} w={width}>
               {isCurrent || isDeleted ? (
                 <Animated.View
-                  entering={FadeIn.duration(600)}
+                  entering={FadeIn.duration(200)}
                   exiting={FadeOut.duration(200)}
                   style={styles.slide}
                 >
