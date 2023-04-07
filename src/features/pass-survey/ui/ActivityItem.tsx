@@ -68,7 +68,9 @@ function ActivityItem({
   }
 
   function moveToNextItem() {
-    setImmediate(next);
+    if (!pipelineItem.additionalText?.required) {
+      setImmediate(next);
+    }
   }
 
   switch (type) {
