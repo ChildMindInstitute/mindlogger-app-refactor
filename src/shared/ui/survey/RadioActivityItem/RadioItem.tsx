@@ -1,10 +1,14 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 
-import { colors, invertColor } from '@shared/lib';
+import {
+  colors,
+  invertColor,
+  replaceTextWithScreenVariables,
+} from '@shared/lib';
 import {
   XStack,
   RadioGroup,
@@ -37,6 +41,16 @@ const RadioItem: FC<RadioLabelProps> = ({
   addTooltip,
   setPalette,
 }) => {
+  const tooltipText = useMemo(
+    () => replaceTextWithScreenVariables(tooltip || ''),
+    [tooltip],
+  );
+
+  const memoizedName = useMemo(
+    () => replaceTextWithScreenVariables(text),
+    [text],
+  );
+
   if (isHidden) {
     return null;
   }
@@ -62,7 +76,7 @@ const RadioItem: FC<RadioLabelProps> = ({
     >
       {addTooltip && tooltip && (
         <RadioTooltipContainer>
-          <Tooltip markdown={tooltip}>
+          <Tooltip markdown={tooltipText}>
             <QuestionTooltipIcon
               color={hasColor ? invertedColor : colors.grey}
               size={22}
@@ -93,7 +107,7 @@ const RadioItem: FC<RadioLabelProps> = ({
 
       <RadioTextContainer w="50%" px="2%">
         <Text fontSize={18} color={invertedTextColor}>
-          {text}
+          {memoizedName}
         </Text>
       </RadioTextContainer>
 

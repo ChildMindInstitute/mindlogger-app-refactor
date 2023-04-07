@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import Popover from 'react-native-popover-view';
 
-import { activityMarkDownStyles } from '@shared/lib';
+import { activityMarkDownStyles, markdownRules } from '@shared/lib';
 
 import { colors } from '../lib';
 import { MarkdownView, ScrollView, YStack } from '../ui';
@@ -19,10 +19,14 @@ const Tooltip: FC<TooltipProps> = ({ children, markdown }) => {
   }
 
   return (
-    <Popover popoverStyle={styles.popover} from={<YStack>{children}</YStack>}>
+    <Popover
+      popoverStyle={styles.popover}
+      from={<YStack hitSlop={40}>{children}</YStack>}
+    >
       <ScrollView flex={1} maxHeight={300}>
         <MarkdownView
           content={markdown}
+          rules={markdownRules}
           markdownStyle={{
             ...activityMarkDownStyles,
             text: styles.markdownText,

@@ -22,11 +22,7 @@ const Slider: FC<SliderProps> = props => {
   const showThumb = value != null;
 
   return (
-    <SliderBase
-      {...props}
-      hitSlop={{ bottom: 50, left: 0, right: 0, top: 50 }}
-      bg="red"
-    >
+    <SliderBase {...props} hitSlop={{ bottom: 50, left: 0, right: 0, top: 50 }}>
       <CustomSliderTrack />
 
       {showThumb && (
