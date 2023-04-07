@@ -9,6 +9,7 @@ function useActivityStepper(state: ActivityState | undefined) {
   const currentPipelineItem = state?.items[step];
 
   const isTutorialStep = currentPipelineItem?.type === 'Tutorial';
+  const isSplashStep = currentPipelineItem?.type === 'Splash';
   const isFirstStep = step === 0;
   const isLastStep = items && step === items.length - 1;
 
@@ -21,7 +22,8 @@ function useActivityStepper(state: ActivityState | undefined) {
     answers[step]?.additionalAnswer != null &&
     answers[step]?.additionalAnswer !== '';
 
-  const canSkip = !!currentPipelineItem?.isSkippable && !hasAnswer;
+  const canSkip =
+    !!currentPipelineItem?.isSkippable && !hasAnswer && !isSplashStep;
   const canMoveNext =
     isTutorialStep ||
     currentPipelineItem?.isSkippable ||
