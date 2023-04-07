@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useRefreshMutation } from './useRefreshMutation';
+import useRefreshMutation from './useRefreshMutation';
 
 function useRefresh() {
   const { isLoading: isRefreshLoading, mutate: refresh } = useRefreshMutation();

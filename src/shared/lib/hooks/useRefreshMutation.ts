@@ -199,7 +199,7 @@ class RefreshService {
   }
 }
 
-export const useRefreshMutation = () => {
+const useRefreshMutation = () => {
   const queryClient = useQueryClient();
 
   const refreshService = useMemo(
@@ -211,3 +211,5 @@ export const useRefreshMutation = () => {
     networkMode: 'always',
   });
 };
+
+export default useRefreshMutation;

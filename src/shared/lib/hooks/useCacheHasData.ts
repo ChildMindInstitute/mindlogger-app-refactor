@@ -16,15 +16,14 @@ const getDataFromQuery = <TResponse>(
   return data[0][1].data;
 };
 
-export const useCacheHasData = () => {
+const useCacheHasData = () => {
   const queryClient = useQueryClient();
   return {
-    check: (): boolean => {
-      const response = getDataFromQuery<AppletsResponse>(
-        ['applets'],
-        queryClient,
-      );
+    check: (key: QueryKey = ['applets']): boolean => {
+      const response = getDataFromQuery<AppletsResponse>(key, queryClient);
       return !!response?.result.length;
     },
   };
 };
+
+export default useCacheHasData;

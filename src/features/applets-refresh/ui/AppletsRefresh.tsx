@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { RefreshControl, RefreshControlProps } from 'react-native';
 
-import useRefresh from '@app/shared/lib/hooks/useRefresh';
+import { useRefresh } from '@app/shared/lib';
 
 type Props = Omit<RefreshControlProps, 'refreshing' | 'onRefresh'>;
 
