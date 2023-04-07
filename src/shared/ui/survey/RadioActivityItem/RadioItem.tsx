@@ -85,15 +85,15 @@ const RadioItem: FC<RadioLabelProps> = ({
         </RadioTooltipContainer>
       )}
 
-      <Box height={64} width="20%">
-        {image && (
+      {image && (
+        <Box height={64} width="20%">
           <CachedImage
             source={image}
             style={styles.image}
             resizeMode="contain"
           />
-        )}
-      </Box>
+        </Box>
+      )}
 
       {image && (
         <Box width="10%">
