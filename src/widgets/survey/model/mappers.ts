@@ -11,7 +11,7 @@ export function mapAnswersToDto(
   answers: Answers,
 ): Array<AnswerDto> {
   return Object.entries(answers)
-    .filter(([_, answer]) => answer.answer)
+    .filter(([_, answer]) => answer.answer != null)
     .map(([step, answer]) => {
       const dto: AnswerDto = {
         activityItemId: pipeline[Number(step)]?.id!,
