@@ -21,11 +21,10 @@ const TimerContainer = styled(Box, {
 
 type Props = {
   onFinish: () => void;
-  onStop: () => void;
   duration: number;
 };
 
-const Timer: FC<Props> = ({ onFinish, duration = 2000 }) => {
+const Timer: FC<Props> = ({ onFinish, duration }) => {
   const progress = useSharedValue(0);
 
   useEffect(() => {
@@ -36,7 +35,6 @@ const Timer: FC<Props> = ({ onFinish, duration = 2000 }) => {
         easing: Easing.linear,
       },
       isFinished => {
-        console.log('res', isFinished);
         if (isFinished) {
           runOnJS(onFinish)();
         }

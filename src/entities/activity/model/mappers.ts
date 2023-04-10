@@ -63,7 +63,7 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
     config: {
       device: dto.responseValues.device,
     },
-    timer: dto.config.timer,
+    timer: dto.timer,
     order: dto.order,
     question: dto.question,
     isSkippable: false,
