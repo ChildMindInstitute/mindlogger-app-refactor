@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useActivityDetailsQuery, ActivityModel } from '@app/entities/activity';
 import { useAppletDetailsQuery } from '@app/entities/applet';
 
-// import { TextActivity } from './mockActivities';
 import { useActivityStorageRecord } from '../../lib';
 import { buildPipeline } from '../pipelineBuilder';
 
@@ -32,15 +31,16 @@ function useActivityRecordCreator({
 
   let { data: activity } = useActivityDetailsQuery(activityId, {
     enabled: !activityStorageRecord,
-    select: r => r.data.result,
+    select: response => {
+      return ActivityModel.mapToActivity(response.data.result);
+    },
   });
 
   // @todo remove once integration is done
   // activity = TextActivity;
 
   const pipeline = useMemo(
-    () =>
-      activity ? buildPipeline(ActivityModel.mapToActivity(activity)) : [],
+    () => (activity ? buildPipeline(activity) : []),
     [activity],
   );
 

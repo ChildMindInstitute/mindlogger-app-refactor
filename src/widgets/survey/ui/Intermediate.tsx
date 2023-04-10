@@ -143,7 +143,7 @@ function Intermediate({
             <Image src={badge} width={18} height={18} opacity={0.6} r={4} />
 
             <Text fontSize={14} color="$grey">
-              {currentActivityIndex + 2} of {totalActivities}
+              {currentActivityIndex + 2} of {totalActivities}{' '}
               {activityFlow!.name}
             </Text>
           </XStack>
