@@ -13,6 +13,7 @@ import { ActivityIndicator, Box, Center, Stepper, XStack } from '@shared/ui';
 
 import ActivityItem from './ActivityItem';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
+import { useTextVariablesReplacer } from '../lib';
 import {
   useActivityRecordInitialization,
   useActivityState,
@@ -50,7 +51,6 @@ function ActivityStepper({
     activityId,
     eventId,
   });
-
   const {
     activityStorageRecord,
     setStep: setCurrentStep,
@@ -61,6 +61,11 @@ function ActivityStepper({
     appletId,
     activityId,
     eventId,
+  });
+
+  const { replaceTextVariables } = useTextVariablesReplacer({
+    items: activityStorageRecord?.items,
+    answers: activityStorageRecord?.answers,
   });
 
   const {
@@ -97,7 +102,7 @@ function ActivityStepper({
     ? 'activity_navigation:skip'
     : 'activity_navigation:next';
 
-  const tutorialViewerRef = useRef<TutorialViewerRef>(null);
+  const tutorialViewerRef = useRef<TutorialViewerRef | null>(null);
 
   const showTimeLeft = !!timer;
 
@@ -226,6 +231,7 @@ function ActivityStepper({
                       onAdditionalResponse={response => {
                         setAdditionalAnswer(currentStep, response);
                       }}
+                      textVariableReplacer={replaceTextVariables}
                     />
                   )}
                 </>

@@ -112,6 +112,7 @@ type PipelineItemBase = {
   additionalText?: {
     required: boolean;
   };
+  variableName?: string;
 };
 
 export interface AbTestPipelineItem extends PipelineItemBase {

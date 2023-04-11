@@ -4,11 +4,7 @@ import { StyleSheet } from 'react-native';
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 
-import {
-  colors,
-  invertColor,
-  replaceTextWithScreenVariables,
-} from '@shared/lib';
+import { colors, invertColor } from '@shared/lib';
 import {
   XStack,
   RadioGroup,
@@ -24,6 +20,7 @@ type RadioLabelProps = {
   option: RadioOption;
   addTooltip: boolean;
   setPalette: boolean;
+  textReplacer: (markdown: string) => string;
 };
 
 const RadioTooltipContainer = styled(Box, {
@@ -40,13 +37,13 @@ const RadioItem: FC<RadioLabelProps> = ({
   option: { isHidden, id, text, color, image, tooltip },
   addTooltip,
   setPalette,
+  textReplacer,
 }) => {
+  const name = useMemo(() => textReplacer(text), [textReplacer, text]);
   const tooltipText = useMemo(
-    () => replaceTextWithScreenVariables(tooltip || ''),
-    [tooltip],
+    () => textReplacer(tooltip ?? ''),
+    [textReplacer, tooltip],
   );
-
-  const name = useMemo(() => replaceTextWithScreenVariables(text), [text]);
 
   if (isHidden) {
     return null;
