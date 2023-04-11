@@ -335,12 +335,6 @@ const styleVariables = (content: string) => {
       );
     }
 
-    if (underlineRegex.test(text)) {
-      return (
-        <Text textDecorationLine="underline">{text.replace(/[++^]/g, '')}</Text>
-      );
-    }
-
     if (superscriptRegex.test(text)) {
       return (
         <Box h={28} key={`subscript-${index}`}>
