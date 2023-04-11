@@ -16,9 +16,15 @@ type Props = {
   };
   onChange: (values: string[] | null) => void;
   values: string[];
+  textReplacer: (markdown: string) => string;
 };
 
-const CheckBoxActivityItem: FC<Props> = ({ config, onChange, values }) => {
+const CheckBoxActivityItem: FC<Props> = ({
+  config,
+  onChange,
+  values,
+  textReplacer,
+}) => {
   const { options, randomizeOptions, addTooltip, setPalette } = config;
 
   const onItemValueChanged = (checkedItemValue: string) => {
@@ -57,6 +63,7 @@ const CheckBoxActivityItem: FC<Props> = ({ config, onChange, values }) => {
               setPalette={setPalette}
               onChange={() => onItemValueChanged(item.id)}
               value={values.includes(item.id)}
+              textReplacer={textReplacer}
             />
           </Box>
         );

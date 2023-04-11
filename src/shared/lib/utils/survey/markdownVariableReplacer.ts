@@ -1,5 +1,11 @@
 import { format } from 'date-fns';
 
+import { Answers } from '@features/pass-survey/lib/hooks';
+import { PipelineItem } from '@features/pass-survey/lib/types';
+import { PipelineItemResponse } from '@features/pass-survey/lib/types';
+
+// @todo test this with other input types, finish timeRange and date types
+
 type TimeRangeAnswer = {
   from: {
     hour: number;
@@ -11,71 +17,19 @@ type TimeRangeAnswer = {
   };
 };
 
-type TimeRangeInput = {
-  inputType: 'timeRange';
-  answer: TimeRangeAnswer;
-};
-
 type DateAnswer = {
   year: number;
   month: number;
   day: number;
 };
 
-type DateInput = {
-  inputType: 'date';
-  answer: DateAnswer;
-};
-
-type TextInput = {
-  inputType: 'text';
-  answer: string;
-};
-
-type RadioInput = {
-  inputType: 'radio';
-  answer: number;
-};
-
-type AgeSelectorInput = {
-  inputType: 'ageSelector';
-  answer: number;
-};
-
-type SliderInput = {
-  inputType: 'slider';
-  answer: number;
-};
-
-type CheckBoxInput = {
-  inputType: 'checkbox';
-  answer: string[];
-};
-
-export type Answer = DateAnswer | TimeRangeAnswer | string | string[] | number;
-
-type InputAnswer =
-  | DateInput
-  | TimeRangeInput
-  | TextInput
-  | RadioInput
-  | CheckBoxInput
-  | AgeSelectorInput
-  | SliderInput;
-
-export type ActivityItems = {
-  variableName: string;
-  inputType: InputAnswer['inputType'];
-  valueConstraints: {
-    itemList: { name: string; value: string | number }[];
-  };
-}[];
+type ActivityItems = PipelineItem[];
 
 export class MarkdownVariableReplacer {
   private readonly activityItems: ActivityItems;
-  private readonly answers;
+  private readonly answers: Answers;
 
-  constructor(activityItems: ActivityItems, answers: Answer[]) {
+  constructor(activityItems: ActivityItems, answers: Answers) {
     this.activityItems = activityItems;
     this.answers = answers;
   }
@@ -119,8 +73,7 @@ export class MarkdownVariableReplacer {
 
   public process = (markdown: string) => {
     const variableNames = this.extractVariables(markdown);
-
-    if (!this.answers?.length || !variableNames?.length) {
+    if (!Object.values(this.answers)?.length || !variableNames?.length) {
       return markdown;
     }
 
@@ -136,8 +89,8 @@ export class MarkdownVariableReplacer {
     return markdown;
   };
 
-  private escapeSpecialChars = (value: number | string) => {
-    return value.toString().replace(/(?=[$&])/g, '\\');
+  private escapeSpecialChars = (value: PipelineItemResponse) => {
+    return value!.toString().replace(/(?=[$&])/g, '\\');
   };
 
   private getReplaceValue = (variableName: string) => {
@@ -152,42 +105,40 @@ export class MarkdownVariableReplacer {
 
     const activityItem = this.activityItems[foundIndex];
     let updated = '';
-    const inputAnswer: InputAnswer = <InputAnswer>{
-      inputType: activityItem.inputType,
-      answer: this.answers[foundIndex],
-    };
-    const itemList = activityItem?.valueConstraints?.itemList;
+    const answer = this.answers[foundIndex].answer as string;
 
-    switch (inputAnswer.inputType) {
-      case 'slider':
-      case 'ageSelector':
-      case 'text':
-        updated = this.escapeSpecialChars(inputAnswer.answer);
+    switch (activityItem.type) {
+      case 'Slider':
+      case 'NumberSelect':
+      case 'TextInput':
+        updated = this.escapeSpecialChars(answer);
         break;
-      case 'radio':
-        const filteredItem = itemList.find(
-          ({ value }) => value === inputAnswer.answer,
+      case 'Radio':
+        const filteredItem = activityItem.payload.options.find(
+          ({ id }) => id === answer,
         );
         if (filteredItem) {
-          updated = filteredItem.name;
+          updated = filteredItem.text;
         }
         break;
-      case 'checkbox':
-        const filteredItems = itemList
-          .filter(({ value }) => inputAnswer.answer?.includes(value as string))
-          .map(({ name }) => name);
+      case 'Checkbox':
+        const filteredItems = activityItem.payload.options
+          .filter(({ id }) => answer.includes(id))
+          .map(({ text }) => text);
+
         if (filteredItems) {
           updated = filteredItems.toString();
         }
         break;
-      case 'timeRange':
-        updated = `${this.formatTime(
-          inputAnswer.answer?.from,
-        )} - ${this.formatTime(inputAnswer.answer?.to)}`;
-        break;
-      case 'date':
-        updated = this.formatDate(inputAnswer.answer);
-        break;
+      // @todo
+      // case 'timeRange':
+      //   updated = `${this.formatTime(
+      //     answer?.from,
+      //   )} - ${this.formatTime(answer?.to)}`;
+      //   break;
+      // case 'date':
+      //   updated = this.formatDate(answer);
+      //   break;
     }
     return updated;
   };

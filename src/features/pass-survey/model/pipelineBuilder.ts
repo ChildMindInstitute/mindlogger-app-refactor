@@ -57,6 +57,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
+            variableName: item.variableName,
           } satisfies PipelineItem;
         }
 
@@ -72,6 +73,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
             additionalText: item.additionalText,
+            variableName: item.variableName,
           };
         }
 
@@ -87,6 +89,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
             additionalText: item.additionalText,
+            variableName: item.variableName,
           };
         }
 
@@ -102,6 +105,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
             additionalText: item.additionalText,
+            variableName: item.variableName,
           };
         }
 
@@ -116,6 +120,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
             additionalText: item.additionalText,
+            variableName: item.variableName,
           } satisfies PipelineItem;
         }
       }

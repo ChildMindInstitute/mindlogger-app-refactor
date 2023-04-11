@@ -15,12 +15,14 @@ type RadioActivityItemProps = {
   };
   onChange: (value: string) => void;
   initialValue?: string;
+  textReplacer: (markdown: string) => string;
 };
 
 const RadioActivityItem: FC<RadioActivityItemProps> = ({
   config,
   onChange,
   initialValue,
+  textReplacer,
 }) => {
   const { options, randomizeOptions, addTooltip, setPalette } = config;
 
@@ -50,6 +52,7 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
               option={option}
               addTooltip={addTooltip}
               setPalette={setPalette}
+              textReplacer={textReplacer}
             />
           </Box>
         ))}

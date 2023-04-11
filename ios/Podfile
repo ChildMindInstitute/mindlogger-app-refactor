@@ -7,10 +7,10 @@ install! 'cocoapods', :deterministic_uuids => false
 abstract_target 'MindloggerMobileCommonPods' do
   target 'MindloggerMobileDev' do
   end
- 
+
   target 'MindloggerMobileQA' do
   end
- 
+
   target 'MindloggerMobileStaging' do
   end
 
@@ -51,5 +51,11 @@ abstract_target 'MindloggerMobileCommonPods' do
       :mac_catalyst_enabled => false
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
+        # this fixes react-codegen Xcode 14.3 issue
+      end
+    end
   end
 end

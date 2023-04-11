@@ -108,6 +108,7 @@ type ActivityItemBase = {
   additionalText?: {
     required: boolean;
   };
+  variableName?: string;
 };
 
 interface AbTestActivityItem extends ActivityItemBase {

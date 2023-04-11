@@ -36,6 +36,7 @@ type Props = ActivityItemProps &
     entityStartedAt: number;
     onResponse: (response: PipelineItemResponse) => void;
     onAdditionalResponse: (response: string) => void;
+    textVariableReplacer: (markdown: string) => string;
   };
 
 const NavigationPanelHeight = 60;
@@ -46,6 +47,7 @@ function ActivityItem({
   pipelineItem,
   onResponse,
   onAdditionalResponse,
+  textVariableReplacer,
 }: Props) {
   const [scrollEnabled, setScrollEnabled] = useState(true);
 
@@ -162,6 +164,7 @@ function ActivityItem({
             config={pipelineItem.payload}
             onChange={onResponse}
             values={value?.answer || []}
+            textReplacer={textVariableReplacer}
           />
         </Box>
       );
@@ -177,6 +180,7 @@ function ActivityItem({
               moveToNextItem();
             }}
             initialValue={value?.answer}
+            textReplacer={textVariableReplacer}
           />
         </Box>
       );

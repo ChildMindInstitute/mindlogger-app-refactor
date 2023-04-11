@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 import { CachedImage } from '@georstat/react-native-image-cache';
 
 import { colors } from '@shared/lib';
-import { invertColor, replaceTextWithScreenVariables } from '@shared/lib/utils';
+import { invertColor } from '@shared/lib/utils';
 import {
   Text,
   XStack,
@@ -21,6 +21,7 @@ type Props = {
   tooltipAvailable: boolean;
   onChange: () => void;
   value: boolean;
+  textReplacer: (markdown: string) => string;
 } & Omit<Item, 'value'>;
 
 const CheckBoxItem: FC<Props> = ({
@@ -32,16 +33,17 @@ const CheckBoxItem: FC<Props> = ({
   image,
   color,
   text,
+  textReplacer,
 }) => {
   const invertedColor =
     setPalette && color ? invertColor(color) : colors.primary;
 
   const tooltipText = useMemo(
-    () => replaceTextWithScreenVariables(tooltip || ''),
-    [tooltip],
+    () => textReplacer(tooltip || ''),
+    [textReplacer, tooltip],
   );
 
-  const name = useMemo(() => replaceTextWithScreenVariables(text), [text]);
+  const name = useMemo(() => textReplacer(text), [textReplacer, text]);
 
   return (
     <XStack
