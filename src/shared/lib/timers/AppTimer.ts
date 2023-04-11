@@ -26,6 +26,11 @@ class AppTimer extends TimerBase {
     clearTimeout(this.timerId);
   }
 
+  restart() {
+    this.stop();
+    this.start();
+  }
+
   setTimer(duration = this.duration) {
     this.timerId = setTimeout(() => {
       this.onFinish();
@@ -37,7 +42,7 @@ class AppTimer extends TimerBase {
     return !!(this.duration && timerTimeDiff > this.duration);
   }
 
-  private getTimeLeftAterBackground() {
+  private getTimeLeftAfterBackground() {
     return this.duration - (Date.now() - this.startTime!);
   }
 
@@ -53,7 +58,7 @@ class AppTimer extends TimerBase {
     if (this.hasTimePassed()) {
       this.stop();
     } else {
-      const timeLeft = this.getTimeLeftAterBackground();
+      const timeLeft = this.getTimeLeftAfterBackground();
 
       this.setTimer(timeLeft);
     }

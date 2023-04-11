@@ -1,3 +1,4 @@
+import { ScheduleEvent } from '@app/entities/event';
 import { ActivityStepper } from '@app/features/pass-survey';
 import { colors } from '@app/shared/lib';
 import { BackButton, Box, CrossIcon } from '@app/shared/ui';
@@ -10,11 +11,13 @@ type Props = {
   onClose: () => void;
   onBack: () => void;
   onComplete: () => void;
+  event: ScheduleEvent;
 } & FlowPipelineItem;
 
-function FlowSurveySwitch({
+function FlowElementSwitch({
   type,
   payload,
+  event,
   onBack,
   onClose,
   onComplete,
@@ -29,6 +32,7 @@ function FlowSurveySwitch({
 
           <ActivityStepper
             {...payload}
+            idleTimer={event.timers.idleTimer}
             onClose={onClose}
             onFinish={onComplete}
           />
@@ -48,4 +52,4 @@ function FlowSurveySwitch({
   }
 }
 
-export default FlowSurveySwitch;
+export default FlowElementSwitch;

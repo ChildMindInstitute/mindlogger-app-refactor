@@ -7,30 +7,31 @@ import { ScheduleEvent } from '../lib';
 export function mapEventsFromDto(
   eventsDto: ScheduleEventDto[],
 ): ScheduleEvent[] {
-  return eventsDto.map<ScheduleEvent>(x => {
-    return {
-      id: x.id,
-      entityId: x.entityId,
-      selectedDate: buildDateFromDto(x.selectedDate),
-      timers: {
-        idleTimer: x.timers.idleTimer,
-        timer: x.timers.timer,
-      },
-      scheduledAt: null,
-      availability: {
-        allowAccessBeforeFromTime: x.availability.allowAccessBeforeFromTime,
-        availabilityType: x.availabilityType as AvailabilityType,
-        periodicityType: x.availability.periodicityType as PeriodicityType,
-        startDate: buildDateFromDto(x.availability.startDate),
-        endDate: buildDateFromDto(x.availability.endDate),
-        oneTimeCompletion: x.availability.oneTimeCompletion,
-        timeFrom: x.availability.timeFrom,
-        timeTo: x.availability.timeTo,
-      },
-      notificationSettings: {
-        notifications: [],
-        reminder: null,
-      },
-    };
-  });
+  return eventsDto.map<ScheduleEvent>(x => mapEventFromDto(x));
+}
+export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
+  return {
+    id: dto.id,
+    entityId: dto.entityId,
+    selectedDate: buildDateFromDto(dto.selectedDate),
+    timers: {
+      idleTimer: { hours: 0, minutes: 1 }, // dto.timers.idleTimer,
+      timer: dto.timers.timer,
+    },
+    scheduledAt: null,
+    availability: {
+      allowAccessBeforeFromTime: dto.availability.allowAccessBeforeFromTime,
+      availabilityType: dto.availabilityType as AvailabilityType,
+      periodicityType: dto.availability.periodicityType as PeriodicityType,
+      startDate: buildDateFromDto(dto.availability.startDate),
+      endDate: buildDateFromDto(dto.availability.endDate),
+      oneTimeCompletion: dto.availability.oneTimeCompletion,
+      timeFrom: dto.availability.timeFrom,
+      timeTo: dto.availability.timeTo,
+    },
+    notificationSettings: {
+      notifications: [],
+      reminder: null,
+    },
+  };
 }
