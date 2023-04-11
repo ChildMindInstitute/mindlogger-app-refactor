@@ -96,7 +96,7 @@ type ActivityItemBase = {
   isSkippable: boolean;
   hasAlert: boolean;
   hasScore: boolean;
-  isAbleToMoveToPrevious: boolean;
+  isAbleToMoveBack: boolean;
   hasTextResponse: boolean;
   canBeReset: boolean;
   hasTopNavigation: boolean;

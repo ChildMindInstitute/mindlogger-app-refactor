@@ -102,7 +102,7 @@ type PipelineItemBase = {
   type: ActivityItemType;
   payload: PipelinePayload;
   isSkippable?: boolean;
-  isAbleToMoveToPrevious?: boolean;
+  isAbleToMoveBack?: boolean;
   canBeReset?: boolean;
   hasTopNavigation?: boolean;
   question?: string;

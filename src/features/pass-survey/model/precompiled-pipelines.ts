@@ -16,7 +16,7 @@ export const getAbTrailsPipeline = (
       },
       canBeReset: false,
       isSkippable: false,
-      isAbleToMoveToPrevious: false,
+      isAbleToMoveBack: false,
     };
   };
 
@@ -30,7 +30,7 @@ export const getAbTrailsPipeline = (
       },
       canBeReset: false,
       isSkippable: false,
-      isAbleToMoveToPrevious: false,
+      isAbleToMoveBack: false,
     };
   };
 
