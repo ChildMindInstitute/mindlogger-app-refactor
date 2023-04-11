@@ -40,7 +40,7 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
   return (
     <YStack>
       <RadioGroup
-        value={initialValue ?? ''}
+        value={initialValue ?? undefined}
         onValueChange={onValueChange}
         name="radio"
       >

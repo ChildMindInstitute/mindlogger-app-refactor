@@ -46,10 +46,7 @@ const RadioItem: FC<RadioLabelProps> = ({
     [tooltip],
   );
 
-  const memoizedName = useMemo(
-    () => replaceTextWithScreenVariables(text),
-    [text],
-  );
+  const name = useMemo(() => replaceTextWithScreenVariables(text), [text]);
 
   if (isHidden) {
     return null;
@@ -107,7 +104,7 @@ const RadioItem: FC<RadioLabelProps> = ({
 
       <RadioTextContainer w="50%" px="2%">
         <Text fontSize={18} color={invertedTextColor}>
-          {memoizedName}
+          {name}
         </Text>
       </RadioTextContainer>
 

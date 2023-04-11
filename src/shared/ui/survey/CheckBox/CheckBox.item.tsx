@@ -41,10 +41,7 @@ const CheckBoxItem: FC<Props> = ({
     [tooltip],
   );
 
-  const memoizedName = useMemo(
-    () => replaceTextWithScreenVariables(text),
-    [text],
-  );
+  const name = useMemo(() => replaceTextWithScreenVariables(text), [text]);
 
   return (
     <XStack
@@ -85,7 +82,7 @@ const CheckBoxItem: FC<Props> = ({
           color={setPalette && color ? invertedColor : colors.darkerGrey}
           fontSize={17}
         >
-          {memoizedName}
+          {name}
         </Text>
       </XStack>
 
