@@ -1,8 +1,11 @@
-import { useEventsQuery } from '@app/entities/event/api/hooks/useEventsQuery';
-import { mapEventFromDto } from '@app/entities/event/model/mappers';
+import { StoreProgressPayload } from '@app/abstract/lib';
+import { useInProgressRecord } from '@app/entities/applet/model';
+import { ScheduleEvent } from '@app/entities/event';
+import { useEventQuery } from '@app/entities/event/api';
 
 import FlowElementSwitch from './FlowElementSwitch';
-import { useFlowState } from '../model';
+import { FinishReason, useFlowState } from '../model';
+import useTimer from '../model/hooks/useTimer';
 
 type Props = {
   appletId: string;
@@ -13,21 +16,35 @@ type Props = {
 };
 
 function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
-  const { next, back, step, pipeline } = useFlowState({
-    appletId,
-    activityId,
-    eventId,
-    flowId,
-  });
+  const { next, back, step, completeByTimer, isTimerElapsed, pipeline } =
+    useFlowState({
+      appletId,
+      activityId,
+      eventId,
+      flowId,
+    });
 
-  const { data: event } = useEventsQuery(appletId, {
-    select: response => {
-      const dto = response.data.result.events.find(x => x.id === eventId);
-      return mapEventFromDto(dto!);
-    },
+  const event: ScheduleEvent = useEventQuery(appletId, eventId);
+
+  const progressRecord: StoreProgressPayload = useInProgressRecord({
+    appletId,
+    entityId: flowId ?? activityId,
+    eventId,
+  })!;
+
+  useTimer({
+    entityStartedAt: progressRecord.startAt,
+    onFinish: completeByTimer,
+    timerHourMinute: event.timers.timer,
   });
 
   const flowPipelineItem = pipeline[step];
+
+  let finishReason: FinishReason | null = null;
+
+  if (flowPipelineItem.type === 'Finish') {
+    finishReason = isTimerElapsed ? 'time-is-up' : 'regular';
+  }
 
   function complete() {
     const isLast = step === pipeline.length - 1;
@@ -42,6 +59,7 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
   return (
     <FlowElementSwitch
       {...flowPipelineItem}
+      finishReason={finishReason}
       event={event!}
       onClose={onClose}
       onBack={back}

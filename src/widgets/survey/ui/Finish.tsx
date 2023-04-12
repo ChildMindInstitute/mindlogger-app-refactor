@@ -8,6 +8,7 @@ import { PassSurveyModel } from '@app/features/pass-survey';
 import { useAppDispatch } from '@app/shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
+import { FinishReason } from '../model';
 import { mapAnswersToDto } from '../model/mappers';
 
 type Props = {
@@ -15,11 +16,19 @@ type Props = {
   activityId: string;
   eventId: string;
   flowId?: string;
+  finishReason: FinishReason;
 
   onClose: () => void;
 };
 
-function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
+function FinishItem({
+  flowId,
+  appletId,
+  activityId,
+  eventId,
+  finishReason,
+  onClose,
+}: Props) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -80,7 +89,8 @@ function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
           <>
             <Center mb={20}>
               <Text fontSize={24} fontWeight="bold">
-                {t('additional:thanks')}
+                {finishReason === 'regular' && t('additional:thanks')}
+                {finishReason === 'time-is-up' && t('additional:time-end')}
               </Text>
 
               <Text fontSize={16}>{t('additional:saved_answers')}</Text>

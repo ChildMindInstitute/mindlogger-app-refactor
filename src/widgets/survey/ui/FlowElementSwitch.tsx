@@ -5,13 +5,14 @@ import { BackButton, Box, CrossIcon } from '@app/shared/ui';
 
 import Finish from './Finish';
 import Intermediate from './Intermediate';
-import { FlowPipelineItem } from '../model';
+import { FinishReason, FlowPipelineItem } from '../model';
 
 type Props = {
   onClose: () => void;
   onBack: () => void;
   onComplete: () => void;
   event: ScheduleEvent;
+  finishReason: FinishReason | null;
 } & FlowPipelineItem;
 
 function FlowElementSwitch({
@@ -21,6 +22,7 @@ function FlowElementSwitch({
   onBack,
   onClose,
   onComplete,
+  finishReason,
 }: Props) {
   switch (type) {
     case 'Stepper': {
@@ -47,7 +49,9 @@ function FlowElementSwitch({
     }
 
     case 'Finish': {
-      return <Finish {...payload} onClose={onClose} />;
+      return (
+        <Finish {...payload} finishReason={finishReason!} onClose={onClose} />
+      );
     }
   }
 }

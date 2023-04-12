@@ -4,7 +4,7 @@ import eventsService from '@app/shared/api/services/eventsService';
 type FetchFn = typeof eventsService.getEvents;
 type Options<TData> = QueryOptions<FetchFn, TData>;
 
-export const useEventsQuery = <TData = ReturnAwaited<FetchFn>>(
+const useEventsQuery = <TData = ReturnAwaited<FetchFn>>(
   appletId: string,
   options?: Options<TData>,
 ) => {
@@ -17,3 +17,5 @@ export const useEventsQuery = <TData = ReturnAwaited<FetchFn>>(
     },
   );
 };
+
+export default useEventsQuery;

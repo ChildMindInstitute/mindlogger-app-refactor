@@ -56,6 +56,7 @@ class AppTimer extends TimerBase {
     }
 
     if (this.hasTimePassed()) {
+      this.onFinish();
       this.stop();
     } else {
       const timeLeft = this.getTimeLeftAfterBackground();

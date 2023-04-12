@@ -56,7 +56,7 @@ const useIdleTimer = (input: UseIdleTimerInput): UseIdleTimerResult => {
 
   return {
     onAction,
-    onClose,
+    onClose, // todo - remove ?
   };
 };
 
