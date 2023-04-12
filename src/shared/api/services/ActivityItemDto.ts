@@ -27,7 +27,7 @@ type ButtonsConfiguration = {
 };
 
 type TimerConfiguration = {
-  timer?: number | null;
+  timer: number | null;
 };
 
 export type AdditionalResponseConfiguration = {
@@ -312,7 +312,7 @@ type ActivityItemDtoBase = {
   responseType: ResponseType;
   responseValues: AnswerSettings;
   order: number;
-  timer?: number;
+  timer: number | null;
 };
 
 export interface TextItemDto extends ActivityItemDtoBase {

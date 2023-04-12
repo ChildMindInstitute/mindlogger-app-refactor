@@ -30,6 +30,7 @@ const grid: ActivityDto = {
       name: 'test name',
       question: testMessage2,
       order: 0,
+      timer: null,
       responseType: 'drawing',
       config: {
         removeUndoButton: false,
@@ -71,6 +72,7 @@ const vortex: ActivityDto = {
       question: testMessage1,
       order: 0,
       responseType: 'drawing',
+      timer: null,
       config: {
         removeUndoButton: false,
         navigationToTop: false,
@@ -131,6 +133,7 @@ export const AbTestActivity: ActivityDto = {
       id: '103',
       name: 'A/B Test',
       responseType: 'abTest',
+      timer: null,
       config: {
         timer: null,
       },
@@ -160,6 +163,7 @@ const FlankerWithImageActivity: ActivityDto = {
     {
       id: '100',
       name: 'Flanker',
+      timer: null,
       question: '',
       responseType: 'flanker',
       config: FlankerWithImageOnButton,
@@ -186,6 +190,7 @@ const FlankerWithStSFxActivity: ActivityDto = {
     {
       id: '100',
       name: 'Flanker',
+      timer: null,
       question: '',
       responseType: 'flanker',
       config: FlankerWithStFxImages,
@@ -217,6 +222,7 @@ const FlankerWithTextSignsActivity: ActivityDto = {
       config: FlankerWithTextsSigns,
       responseValues: {},
       order: 0,
+      timer: null,
     },
   ],
 };
@@ -259,6 +265,7 @@ export const TextActivity: ActivityDto = {
       id: '104',
       name: 'Text input',
       question: '',
+      timer: null,
       responseType: 'text',
       config: {
         maxResponseLength: 20,
@@ -299,6 +306,7 @@ export const SliderTestActivity: ActivityDto = {
         maxLabel: 'Maximum label',
       },
       id: '105',
+      timer: null,
       config: {
         additionalResponseOption: {
           textInputOption: false,

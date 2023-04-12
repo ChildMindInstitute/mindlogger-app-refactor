@@ -21,6 +21,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             question: item.question,
             isSkippable: item.isSkippable,
             isAbleToMoveBack: item.isAbleToMoveBack,
+            timer: item.timer,
           } satisfies PipelineItem;
         }
 
@@ -44,6 +45,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             id: item.id,
             type: item.inputType,
             payload: item.config,
+            timer: item.timer,
           } satisfies PipelineItem;
         }
 
