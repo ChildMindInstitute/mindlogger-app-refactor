@@ -109,6 +109,7 @@ function Intermediate({
       flowId,
       appletId,
       activityId,
+      createdAt: Date.now(),
       version: activityStorageRecord.appletVersion,
       answers: mapAnswersToDto(
         activityStorageRecord.items,

@@ -57,6 +57,7 @@ function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
       flowId: flowId ? flowId : null,
       appletId,
       activityId,
+      createdAt: Date.now(),
       version: activityStorageRecord.appletVersion,
       answers: mapAnswersToDto(
         activityStorageRecord.items,

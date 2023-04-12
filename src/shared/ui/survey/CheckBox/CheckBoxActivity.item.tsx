@@ -14,22 +14,25 @@ type Props = {
     setPalette: boolean;
     setAlerts: boolean;
   };
-  onChange: (values: string[]) => void;
+  onChange: (values: string[] | null) => void;
   values: string[];
 };
 
 const CheckBoxActivityItem: FC<Props> = ({ config, onChange, values }) => {
   const { options, randomizeOptions, addTooltip, setPalette } = config;
-  const hasSingleItem = options.length === 1;
 
   const onItemValueChanged = (checkedItemValue: string) => {
-    if (hasSingleItem) {
-      onChange([checkedItemValue]);
-    } else if (values.includes(checkedItemValue)) {
+    const hasCheckedValue = values.includes(checkedItemValue);
+
+    if (hasCheckedValue) {
       const filteredValues = values.filter(val => val !== checkedItemValue);
-      onChange(filteredValues);
+      const value = filteredValues.length ? filteredValues : null;
+
+      onChange(value);
     } else {
-      onChange([...values, checkedItemValue]);
+      const value = [...values, checkedItemValue];
+
+      onChange(value);
     }
   };
 

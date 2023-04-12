@@ -1,8 +1,7 @@
-import React, { FC, useMemo, useState } from 'react';
-import { FlatList } from 'react-native';
+import React, { FC, useMemo } from 'react';
 
 import { shuffle } from '@shared/lib';
-import { YStack, RadioGroup, ListSeparator, Box } from '@shared/ui';
+import { YStack, RadioGroup, Box } from '@shared/ui';
 
 import RadioItem from './RadioItem';
 import RadioOption from './types';
@@ -15,7 +14,7 @@ type RadioActivityItemProps = {
     randomizeOptions: boolean;
   };
   onChange: (value: string) => void;
-  initialValue: string | null;
+  initialValue?: string;
 };
 
 const RadioActivityItem: FC<RadioActivityItemProps> = ({
@@ -24,7 +23,6 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
   initialValue,
 }) => {
   const { options, randomizeOptions, addTooltip, setPalette } = config;
-  const [radioGroupValue, setRadioGroupValue] = useState(initialValue || '');
 
   const optionsList = useMemo(() => {
     if (randomizeOptions) {
@@ -36,31 +34,25 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
   }, [randomizeOptions]);
 
   const onValueChange = (value: string) => {
-    setRadioGroupValue(value);
     onChange(value);
   };
 
   return (
     <YStack>
       <RadioGroup
-        value={radioGroupValue}
+        value={initialValue ?? undefined}
         onValueChange={onValueChange}
         name="radio"
       >
-        <FlatList
-          data={optionsList}
-          bounces={false}
-          ItemSeparatorComponent={() => <ListSeparator />}
-          renderItem={({ item }) => (
-            <Box paddingVertical={5}>
-              <RadioItem
-                option={item}
-                addTooltip={addTooltip}
-                setPalette={setPalette}
-              />
-            </Box>
-          )}
-        />
+        {optionsList.map(option => (
+          <Box my="$1" key={option.id} onPress={() => onValueChange(option.id)}>
+            <RadioItem
+              option={option}
+              addTooltip={addTooltip}
+              setPalette={setPalette}
+            />
+          </Box>
+        ))}
       </RadioGroup>
     </YStack>
   );

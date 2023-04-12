@@ -21,7 +21,7 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
     leftImageUrl,
     rightImageUrl,
   } = config;
-  const { onChange, onRelease, onPress, initialValue = minValue } = props;
+  const { onChange, onRelease, onPress, initialValue } = props;
 
   const onValueChange = (arrayOfValues: number[]) => {
     const [value] = arrayOfValues;
@@ -37,7 +37,7 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
   return (
     <YStack>
       <Slider
-        defaultValue={[initialValue]}
+        value={initialValue != null ? [initialValue] : undefined}
         onResponderRelease={onRelease}
         onResponderStart={onPress}
         onValueChange={onValueChange}

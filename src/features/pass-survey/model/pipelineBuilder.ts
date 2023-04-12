@@ -18,6 +18,9 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
           return {
             type: item.inputType,
             payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
           } satisfies PipelineItem;
         }
 
@@ -28,7 +31,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             payload: item.config,
             question: item.question,
             isSkippable: item.isSkippable,
-            isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
+            isAbleToMoveBack: item.isAbleToMoveBack,
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
             additionalText: item.additionalText,
@@ -50,7 +53,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             payload: item.config,
             question: item.question,
             isSkippable: item.isSkippable,
-            isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
+            isAbleToMoveBack: item.isAbleToMoveBack,
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
@@ -64,7 +67,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             payload: item.config,
             question: item.question,
             isSkippable: item.isSkippable,
-            isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
+            isAbleToMoveBack: item.isAbleToMoveBack,
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
@@ -79,7 +82,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             payload: item.config,
             question: item.question,
             isSkippable: item.isSkippable,
-            isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
+            isAbleToMoveBack: item.isAbleToMoveBack,
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
@@ -89,11 +92,12 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
 
         case 'Checkbox': {
           return {
+            id: item.id,
             type: item.inputType,
             payload: item.config,
             question: item.question,
             isSkippable: item.isSkippable,
-            isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
+            isAbleToMoveBack: item.isAbleToMoveBack,
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
@@ -108,7 +112,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             payload: item.config,
             question: item.question,
             isSkippable: item.isSkippable,
-            isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
+            isAbleToMoveBack: item.isAbleToMoveBack,
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
             additionalText: item.additionalText,

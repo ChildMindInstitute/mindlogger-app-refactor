@@ -9,24 +9,30 @@ function useActivityStepper(state: ActivityState | undefined) {
   const currentPipelineItem = state?.items[step];
 
   const isTutorialStep = currentPipelineItem?.type === 'Tutorial';
+  const isSplashStep = currentPipelineItem?.type === 'Splash';
   const isFirstStep = step === 0;
   const isLastStep = items && step === items.length - 1;
 
   const additionalAnswerRequired =
     currentPipelineItem?.additionalText?.required;
 
-  const hasAnswer = !!answers[step]?.answer;
-  const hasAdditionalAnswer = !!answers[step]?.additionalAnswer;
+  const hasAnswer =
+    answers[step]?.answer != null && answers[step]?.answer !== '';
+  const hasAdditionalAnswer =
+    answers[step]?.additionalAnswer != null &&
+    answers[step]?.additionalAnswer !== '';
 
+  const canSkip =
+    !!currentPipelineItem?.isSkippable && !hasAnswer && !isSplashStep;
   const canMoveNext =
     isTutorialStep ||
-    currentPipelineItem?.type === 'Splash' ||
     currentPipelineItem?.isSkippable ||
     (hasAnswer && (!additionalAnswerRequired || hasAdditionalAnswer));
-  const canMoveBack = currentPipelineItem?.isAbleToMoveToPrevious;
+  const canMoveBack = currentPipelineItem?.isAbleToMoveBack;
   const canReset = currentPipelineItem?.canBeReset && hasAnswer;
   const showTopNavigation = currentPipelineItem?.hasTopNavigation;
   const showBottomNavigation = !showTopNavigation;
+  const showWatermark = !isSplashStep && !showTopNavigation;
 
   const answerValidator = AnswerValidator(state);
 
@@ -45,10 +51,12 @@ function useActivityStepper(state: ActivityState | undefined) {
     isFirstStep,
     isLastStep,
 
+    canSkip,
     canMoveNext,
     canMoveBack,
     canReset,
 
+    showWatermark,
     showTopNavigation,
     showBottomNavigation,
 

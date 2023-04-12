@@ -102,7 +102,7 @@ type PipelineItemBase = {
   type: ActivityItemType;
   payload: PipelinePayload;
   isSkippable?: boolean;
-  isAbleToMoveToPrevious?: boolean;
+  isAbleToMoveBack?: boolean;
   canBeReset?: boolean;
   hasTopNavigation?: boolean;
   question?: string;
@@ -178,7 +178,7 @@ export type NumberSelectResponse = string;
 
 export type CheckboxResponse = string[] | null;
 
-export type RadioResponse = string | null;
+export type RadioResponse = string;
 
 export type PipelineItemResponse =
   | AbTestResponse

@@ -12,7 +12,7 @@ function AnswerValidator(activityState: ActivityState | undefined) {
 
       const { correctAnswer } = currentPipelineItem.validationOptions;
 
-      return correctAnswer === currentAnswer;
+      return correctAnswer === currentAnswer?.answer;
     },
   };
 }

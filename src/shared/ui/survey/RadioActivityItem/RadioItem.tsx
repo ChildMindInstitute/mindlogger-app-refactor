@@ -1,10 +1,14 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 
-import { colors, invertColor } from '@shared/lib';
+import {
+  colors,
+  invertColor,
+  replaceTextWithScreenVariables,
+} from '@shared/lib';
 import {
   XStack,
   RadioGroup,
@@ -37,6 +41,13 @@ const RadioItem: FC<RadioLabelProps> = ({
   addTooltip,
   setPalette,
 }) => {
+  const tooltipText = useMemo(
+    () => replaceTextWithScreenVariables(tooltip || ''),
+    [tooltip],
+  );
+
+  const name = useMemo(() => replaceTextWithScreenVariables(text), [text]);
+
   if (isHidden) {
     return null;
   }
@@ -51,7 +62,7 @@ const RadioItem: FC<RadioLabelProps> = ({
 
   return (
     <XStack
-      minHeight={64}
+      minHeight="$7"
       bg={setPalette ? color : 'none'}
       px="$3"
       py="$3"
@@ -60,26 +71,26 @@ const RadioItem: FC<RadioLabelProps> = ({
       ac="center"
       borderRadius={7}
     >
-      <RadioTooltipContainer>
-        {addTooltip && tooltip && (
-          <Tooltip markdown={tooltip}>
+      {addTooltip && tooltip && (
+        <RadioTooltipContainer>
+          <Tooltip markdown={tooltipText}>
             <QuestionTooltipIcon
               color={hasColor ? invertedColor : colors.grey}
               size={22}
             />
           </Tooltip>
-        )}
-      </RadioTooltipContainer>
+        </RadioTooltipContainer>
+      )}
 
-      <Box height={64} width="20%">
-        {image && (
+      {image && (
+        <Box height={64} width="20%">
           <CachedImage
             source={image}
             style={styles.image}
             resizeMode="contain"
           />
-        )}
-      </Box>
+        </Box>
+      )}
 
       {image && (
         <Box width="10%">
@@ -93,7 +104,7 @@ const RadioItem: FC<RadioLabelProps> = ({
 
       <RadioTextContainer w="50%" px="2%">
         <Text fontSize={18} color={invertedTextColor}>
-          {text}
+          {name}
         </Text>
       </RadioTextContainer>
 

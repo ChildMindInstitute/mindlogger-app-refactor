@@ -316,22 +316,44 @@ const markDownRules: RenderRules = {
 };
 
 const styleVariables = (content: string) => {
-  const regex = /(\^\S+?\^)|(~\S+?~)/g;
-  const tildaRegex = /~\S+?~/g;
+  const regex = /(\^.+?\^)|(~.+?~)|(==.+?==)|(\+\+.+?\+\+)/g;
+  const highlightRegex = /[=]=.+?==/g;
+  const underlineRegex = /\+\+.+?\+\+/g;
+  const superscriptRegex = /\^.+?\^/g;
+  const subscriptRegex = /~.+?~/g;
+
   const strings = content.split(regex).filter(Boolean);
 
   return strings.map((text, index) => {
-    const isTildaVariable = tildaRegex.test(text);
+    if (highlightRegex.test(text)) {
+      return <Text backgroundColor="yellow">{text.replace(/[==^]/g, '')}</Text>;
+    }
 
-    return !regex.test(text) ? (
-      text
-    ) : (
-      <Box h={28} key={`subscript-${index}`}>
-        <Text fontSize={13} mt={isTildaVariable ? 14 : 0}>
-          {text.replace(/[~^]/g, '')}
-        </Text>
-      </Box>
-    );
+    if (underlineRegex.test(text)) {
+      return (
+        <Text textDecorationLine="underline">{text.replace(/[++^]/g, '')}</Text>
+      );
+    }
+
+    if (superscriptRegex.test(text)) {
+      return (
+        <Box h={28} key={`subscript-${index}`}>
+          <Text fontSize={13}>{text.replace(/\^/g, '')}</Text>
+        </Box>
+      );
+    }
+
+    if (subscriptRegex.test(text)) {
+      return (
+        <Box h={28} key={`subscript-${index}`}>
+          <Text fontSize={13} mt={14}>
+            {text.replace(/[~]/g, '')}
+          </Text>
+        </Box>
+      );
+    }
+
+    return text;
   });
 };
 
