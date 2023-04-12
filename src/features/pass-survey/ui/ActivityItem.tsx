@@ -232,13 +232,13 @@ function ActivityItem({
             contentInset={{ top: 0, bottom: 60 }}
             enableOnAndroid
           >
-            {question && (
-              <Box mx={16} mb={20}>
-                <MarkdownMessage content={question} />
-              </Box>
-            )}
+            <Box flex={1} justifyContent="center">
+              {question && (
+                <Box mx={16} mb={20}>
+                  <MarkdownMessage content={question} />
+                </Box>
+              )}
 
-            <Box flex={1}>
               {pipelineItem.timer && (
                 <Timer
                   progressDone={activityStorageRecord?.timer?.progress || 0}
