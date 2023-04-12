@@ -3,7 +3,7 @@ import { enGB, fr } from 'date-fns/locale';
 import i18n from 'i18next';
 
 import { range } from './common';
-import { MINUTES_IN_HOUR, MS_IN_MINUTE } from '../constants';
+import { MINUTES_IN_HOUR, MS_IN_MINUTE, MS_IN_SECOND } from '../constants';
 import { HourMinute, type Language } from '../types';
 
 const dateFnsLocales = { fr, en: enGB };
@@ -14,6 +14,10 @@ export const getMsFromHours = (hours: number): number => {
 
 export const getMsFromMinutes = (minutes: number): number => {
   return minutes * MS_IN_MINUTE;
+};
+
+export const getMsFromSeconds = (seconds: number): number => {
+  return seconds * MS_IN_SECOND;
 };
 
 export const format = (date: Date | number, formatStr: string) => {

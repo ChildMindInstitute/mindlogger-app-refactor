@@ -21,6 +21,7 @@ import {
   VideoItemDto,
   AdditionalResponseConfiguration,
 } from '@app/shared/api';
+import { getMsFromSeconds } from '@app/shared/lib';
 
 import { ActivityDetails, ActivityItem } from '../lib';
 
@@ -42,7 +43,7 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
       imageUrl: dto.responseValues.drawingExample,
       backgroundImageUrl: dto.responseValues.drawingBackground,
     },
-    timer: dto.timer,
+    timer: dto.timer && getMsFromSeconds(dto.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: dto.config.skippableItem,
@@ -63,7 +64,7 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
     config: {
       device: dto.responseValues.device,
     },
-    timer: dto.timer,
+    timer: dto.timer && getMsFromSeconds(dto.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: false,
@@ -111,7 +112,7 @@ function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
       setPalette: dto.config.setPalette,
       options: dto.responseValues.options,
     },
-    timer: dto.timer,
+    timer: dto.timer && getMsFromSeconds(dto.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: dto.config.skippableItem,
@@ -165,7 +166,7 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
       setPalette: dto.config.setPalette,
       options: dto.responseValues.options,
     },
-    timer: dto.timer,
+    timer: dto.timer && getMsFromSeconds(dto.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: dto.config.skippableItem,
@@ -198,7 +199,7 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
       minValue: dto.responseValues.minValue,
       maxValue: dto.responseValues.maxValue,
     },
-    timer: dto.timer,
+    timer: dto.timer && getMsFromSeconds(dto.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: dto.config.skippableItem,
@@ -225,7 +226,7 @@ function mapToTextInput(dto: TextItemDto): ActivityItem {
       isNumeric: dto.config.numericalResponseRequired,
       shouldIdentifyResponse: dto.config.responseDataIdentifier,
     },
-    timer: dto.timer,
+    timer: dto.timer && getMsFromSeconds(dto.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: dto.config.skippableItem,
