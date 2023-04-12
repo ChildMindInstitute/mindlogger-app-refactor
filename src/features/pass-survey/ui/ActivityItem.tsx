@@ -24,11 +24,14 @@ import {
 } from '@shared/ui';
 
 import AdditionalText from './AdditionalText';
+import Timer from './Timer';
 import {
   PipelineItemAnswer,
   ActivityItem as ActivityItemProps,
   PipelineItemResponse,
+  ActivityItemIdentityContext,
 } from '../lib';
+import { useActivityState } from '../model';
 
 type Props = ActivityItemProps &
   PipelineItemAnswer & {
@@ -54,6 +57,16 @@ function ActivityItem({
   const [showScrollButton, setShowScrollButton] = useState(false);
 
   const { next } = useContext(HandlersContext);
+
+  const { appletId, activityId, eventId } = useContext(
+    ActivityItemIdentityContext,
+  );
+
+  const { activityStorageRecord } = useActivityState({
+    appletId,
+    activityId,
+    eventId,
+  });
 
   const windowHeight = useWindowDimensions().height;
 
@@ -219,11 +232,19 @@ function ActivityItem({
             contentInset={{ top: 0, bottom: 60 }}
             enableOnAndroid
           >
-            <Box flex={1} justifyContent="center">
-              {question && (
-                <Box mx={16} mb={20} alignItems="center">
-                  <MarkdownMessage content={question} />
-                </Box>
+            {question && (
+              <Box mx={16} mb={20}>
+                <MarkdownMessage content={question} />
+              </Box>
+            )}
+
+            <Box flex={1}>
+              {pipelineItem.timer && (
+                <Timer
+                  progressDone={activityStorageRecord?.timer?.progress || 0}
+                  duration={pipelineItem.timer}
+                  onFinish={next}
+                />
               )}
 
               {item}

@@ -16,11 +16,17 @@ export type Answer = PipelineItemAnswer['value'];
 
 export type Answers = Record<string, Answer>;
 
+type Timer = {
+  progress: number;
+  timerId: number;
+};
+
 export type ActivityState = {
   step: number;
   items: PipelineItem[];
   answers: Answers;
   appletVersion: string;
+  timer?: Timer;
 };
 
 const storage = createSecureStorage('activity_progress-storage');

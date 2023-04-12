@@ -37,7 +37,6 @@ export { default as Slider } from './Slider';
 export { default as Button } from './Button';
 export { default as DateTimePicker } from './DateTimePicker';
 export { default as ScrollButton } from './ScrollButton';
-export { default as Timer } from './Stepper/TimerIndicator';
 
 export {
   StatusBar,

@@ -83,6 +83,37 @@ function useActivityState({
     }
   }
 
+  function setTimer(timerId: number, progress: number) {
+    if (!activityStorageRecord) {
+      return;
+    }
+
+    upsertActivityStorageRecord({
+      ...activityStorageRecord,
+
+      timer: {
+        timerId,
+        progress,
+      },
+    });
+  }
+
+  function removeTimer() {
+    if (!activityStorageRecord) {
+      return;
+    }
+
+    if (activityStorageRecord.timer?.timerId) {
+      clearInterval(activityStorageRecord.timer?.timerId);
+    }
+
+    delete activityStorageRecord.timer;
+
+    upsertActivityStorageRecord({
+      ...activityStorageRecord,
+    });
+  }
+
   return {
     activityStorageRecord,
     setStep,
@@ -90,6 +121,8 @@ function useActivityState({
     removeAnswer,
     setAdditionalAnswer,
     clearActivityStorageRecord,
+    setTimer,
+    removeTimer,
   };
 }
 
