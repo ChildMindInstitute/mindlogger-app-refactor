@@ -117,7 +117,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     item.image = activity.image;
   }
 
-  private getTimeToComplete(eventActivity: EventEntity): HourMinute {
+  private getTimeToComplete(eventActivity: EventEntity): HourMinute | null {
     const { event } = eventActivity;
     const timer = event.timers!.timer!;
 
@@ -136,7 +136,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
       return { hours, minutes };
     } else {
-      return { hours: 0, minutes: 0 };
+      return null;
     }
   }
 
@@ -155,6 +155,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       image: isFlow ? null : entity.image,
       status: ActivityStatus.NotDefined,
       isTimerSet: false,
+      isTimerElapsed: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
     };
@@ -182,10 +183,17 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       item.status = ActivityStatus.InProgress;
 
       const { event } = eventActivity;
+
       item.isTimerSet = !!event.timers?.timer;
-      item.timeLeftToComplete = item.isTimerSet
-        ? this.getTimeToComplete(eventActivity)
-        : null;
+
+      if (item.isTimerSet) {
+        const timeLeft = this.getTimeToComplete(eventActivity);
+        item.timeLeftToComplete = timeLeft;
+
+        if (timeLeft === null) {
+          item.isTimerElapsed = true;
+        }
+      }
 
       activityItems.push(item);
     }

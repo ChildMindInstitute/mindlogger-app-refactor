@@ -3,7 +3,7 @@ import { StyleSheet, useWindowDimensions } from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { IS_IOS } from '@app/shared/lib';
+import { HourMinute, IS_IOS } from '@app/shared/lib';
 import {
   Box,
   KeyboardAvoidingView,
@@ -32,6 +32,8 @@ import {
 
 type Props = ActivityItemProps &
   PipelineItemAnswer & {
+    timerSettings: HourMinute | null;
+    entityStartedAt: number;
     onResponse: (response: PipelineItemResponse) => void;
     onAdditionalResponse: (response: string) => void;
   };
@@ -46,6 +48,7 @@ function ActivityItem({
   onAdditionalResponse,
 }: Props) {
   const [scrollEnabled, setScrollEnabled] = useState(true);
+
   const [showScrollButton, setShowScrollButton] = useState(false);
 
   const { next } = useContext(HandlersContext);

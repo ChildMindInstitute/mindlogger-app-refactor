@@ -22,6 +22,7 @@ export function useFlowState({
   flowId,
 }: UseFlowStateArgs) {
   const [step, setStep] = useState(0);
+
   const [isTimerElapsed, setIsTimerElapsed] = useState(false);
 
   const { data: applet } = useAppletDetailsQuery(appletId, {

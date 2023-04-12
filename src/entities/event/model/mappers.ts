@@ -16,7 +16,7 @@ export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
     selectedDate: buildDateFromDto(dto.selectedDate),
     timers: {
       idleTimer: dto.timers.idleTimer,
-      timer: { hours: 0, minutes: 1 }, // dto.timers.timer,  todo
+      timer: dto.timers.timer,
     },
     scheduledAt: null,
     availability: {

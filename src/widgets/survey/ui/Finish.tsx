@@ -46,14 +46,12 @@ function FinishItem({
     isPaused: isOffline,
   } = useActivityAnswersMutation();
 
-  const finishedLoading = isOffline || successfullySentAnswers;
+  const finished =
+    isOffline || successfullySentAnswers || finishReason === 'time-is-up';
+
   const isLoading = !isOffline && isSendingAnswers;
 
   function completeActivity() {
-    if (!activityStorageRecord) {
-      return;
-    }
-
     dispatch(
       AppletModel.actions.entityCompleted({
         appletId,
@@ -61,6 +59,10 @@ function FinishItem({
         entityId: flowId ? flowId : activityId,
       }),
     );
+
+    if (!activityStorageRecord) {
+      return;
+    }
 
     sendAnswers({
       flowId: flowId ? flowId : null,
@@ -85,7 +87,7 @@ function FinishItem({
   return (
     <ImageBackground>
       <Center flex={1} mx={16}>
-        {finishedLoading && (
+        {finished && (
           <>
             <Center mb={20}>
               <Text fontSize={24} fontWeight="bold">

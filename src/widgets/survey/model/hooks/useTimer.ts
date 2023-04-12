@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useRef } from 'react';
 
 import { HourMinute, getMsFromHours, getMsFromMinutes } from '@app/shared/lib';
-import { AppTimer } from '@app/shared/lib/timers';
+import { AppTimer } from '@app/shared/lib';
 
 type UseTimerInput = {
   onFinish: () => void;
@@ -13,40 +13,42 @@ type UseTimerInput = {
 const useTimer = (input: UseTimerInput) => {
   const { onFinish, entityStartedAt, timerHourMinute } = input;
 
-  const duration = timerHourMinute
+  const durationBySettings = timerHourMinute
     ? getMsFromHours(timerHourMinute.hours) +
       getMsFromMinutes(timerHourMinute.minutes)
     : 0;
 
-  const timerLogicIsUsed = duration > 0;
+  const timerLogicIsUsed = durationBySettings > 0;
 
-  const timerRef = useRef<AppTimer | null>(null);
+  const finishRef = useRef(onFinish);
+
+  finishRef.current = onFinish;
 
   useEffect(() => {
     if (!timerLogicIsUsed) {
-      return () => {};
+      return;
     }
 
-    const alreadyElapsed: boolean = Date.now() - entityStartedAt > duration;
+    const alreadyElapsed: number = Date.now() - entityStartedAt;
 
-    if (alreadyElapsed) {
+    const noTimeLeft: boolean = alreadyElapsed > durationBySettings;
+
+    if (noTimeLeft) {
       onFinish();
-      return () => {};
+      return;
     }
 
-    timerRef.current = new AppTimer(onElapsed, false, duration);
+    const durationLeft = durationBySettings - alreadyElapsed;
 
-    timerRef.current!.start();
+    const timer = new AppTimer(() => finishRef.current(), false, durationLeft);
+
+    timer.start();
 
     return () => {
-      timerRef.current!.stop();
+      timer.stop();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const onElapsed = () => {
-    onFinish();
-  };
 };
 
 export default useTimer;

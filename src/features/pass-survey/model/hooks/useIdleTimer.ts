@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useRef } from 'react';
 
 import { HourMinute, getMsFromHours, getMsFromMinutes } from '@app/shared/lib';
-import { AppTimer } from '@app/shared/lib/timers';
+import { AppTimer } from '@app/shared/lib';
 
 type UseIdleTimerInput = {
   onFinish: () => void;
@@ -10,8 +10,7 @@ type UseIdleTimerInput = {
 };
 
 type UseIdleTimerResult = {
-  onAction: () => void;
-  onClose: () => void;
+  restart: () => void;
 };
 
 const useIdleTimer = (input: UseIdleTimerInput): UseIdleTimerResult => {
@@ -46,17 +45,12 @@ const useIdleTimer = (input: UseIdleTimerInput): UseIdleTimerResult => {
     onFinish();
   };
 
-  const onClose = () => {
-    timer?.stop();
-  };
-
-  const onAction = () => {
+  const restart = () => {
     timer?.restart();
   };
 
   return {
-    onAction,
-    onClose, // todo - remove ?
+    restart,
   };
 };
 

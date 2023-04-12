@@ -32,8 +32,10 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
     eventId,
   })!;
 
+  const entityStartedAt = progressRecord.startAt;
+
   useTimer({
-    entityStartedAt: progressRecord.startAt,
+    entityStartedAt,
     onFinish: completeByTimer,
     timerHourMinute: event.timers.timer,
   });
@@ -61,6 +63,7 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
       {...flowPipelineItem}
       finishReason={finishReason}
       event={event!}
+      entityStartedAt={entityStartedAt}
       onClose={onClose}
       onBack={back}
       onComplete={complete}

@@ -13,6 +13,7 @@ type Props = {
   onComplete: () => void;
   event: ScheduleEvent;
   finishReason: FinishReason | null;
+  entityStartedAt: number;
 } & FlowPipelineItem;
 
 function FlowElementSwitch({
@@ -23,6 +24,7 @@ function FlowElementSwitch({
   onClose,
   onComplete,
   finishReason,
+  entityStartedAt,
 }: Props) {
   switch (type) {
     case 'Stepper': {
@@ -35,6 +37,8 @@ function FlowElementSwitch({
           <ActivityStepper
             {...payload}
             idleTimer={event.timers.idleTimer}
+            timer={event.timers.timer}
+            entityStartedAt={entityStartedAt}
             onClose={onClose}
             onFinish={onComplete}
           />
