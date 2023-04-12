@@ -312,7 +312,7 @@ type ActivityItemDtoBase = {
   responseType: ResponseType;
   responseValues: AnswerSettings;
   order: number;
-  timer?: number | null;
+  timer?: number;
 };
 
 export interface TextItemDto extends ActivityItemDtoBase {
