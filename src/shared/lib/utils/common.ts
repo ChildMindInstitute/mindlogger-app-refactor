@@ -57,3 +57,30 @@ export const generateLicenseHTML = () => {
     return html;
   };
 };
+
+export function splitArray<TListItem>(
+  array: TListItem[],
+  leftArraySize: number,
+): [TListItem[], TListItem[]] {
+  const rightArray = [...array];
+
+  const leftArray = rightArray.splice(0, leftArraySize);
+
+  return [leftArray, rightArray];
+}
+
+export const Mutex = () => {
+  let busy = false;
+
+  return {
+    setBusy: function () {
+      busy = true;
+    },
+    release: function () {
+      busy = false;
+    },
+    isBusy: function () {
+      return busy;
+    },
+  };
+};

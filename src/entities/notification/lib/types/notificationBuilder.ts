@@ -87,7 +87,7 @@ export type NotificationDescriber = {
   eventId: string;
   type: NotificationType;
   entityName: string;
-  scheduledAt: Date;
+  scheduledAt: number;
   scheduledAtString: string;
   notificationHeader: string;
   notificationBody: string;

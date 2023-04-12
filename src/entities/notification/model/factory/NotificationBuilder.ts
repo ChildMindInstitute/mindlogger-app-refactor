@@ -118,7 +118,7 @@ class NotificationBuilder implements INotificationBuilder {
   }
 
   private markIfNotificationOutdated(notification: NotificationDescriber) {
-    if (notification.scheduledAt < this.now) {
+    if (notification.scheduledAt < this.now.valueOf()) {
       notification.isActive = false;
       notification.inactiveReason = InactiveReason.Outdated;
     }
@@ -280,7 +280,7 @@ class NotificationBuilder implements INotificationBuilder {
       type: type,
       notificationHeader: name,
       notificationBody: description,
-      scheduledAt: triggerAt,
+      scheduledAt: triggerAt.valueOf(),
       scheduledAtString: triggerAt.toString(),
       isActive: true,
     };
@@ -362,7 +362,7 @@ class NotificationBuilder implements INotificationBuilder {
 
     const triggerDay = startOfDay(triggerAt);
 
-    if (isEqual(completeDay, triggerDay) && triggerAt > completedAt) {
+    if (isEqual(completeDay, triggerDay) && triggerAt > completedAt.valueOf()) {
       notification.isActive = false;
       notification.inactiveReason = InactiveReason.ActivityCompleted;
     }
