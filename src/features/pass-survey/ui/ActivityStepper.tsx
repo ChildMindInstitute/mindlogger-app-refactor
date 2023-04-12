@@ -9,7 +9,14 @@ import { useAppletDetailsQuery } from '@app/entities/applet';
 import { HourMinute } from '@app/shared/lib';
 import { IS_ANDROID } from '@app/shared/lib';
 import TimeRemaining from '@app/shared/ui/TimeRemaining';
-import { ActivityIndicator, Box, Center, Stepper, XStack } from '@shared/ui';
+import {
+  ActivityIndicator,
+  Box,
+  Center,
+  Stepper,
+  Timer,
+  XStack,
+} from '@shared/ui';
 
 import ActivityItem from './ActivityItem';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
@@ -208,6 +215,23 @@ function ActivityStepper({
                 onTouchStart={() => restartIdleTimer()}
               >
                 <>
+                  {pipelineItem.timer && (
+                    <Timer
+                      onFinish={() => {
+                        if (
+                          activityStorageRecord.step <
+                          activityStorageRecord.items.length
+                        ) {
+                          onNext(activityStorageRecord.step + 1);
+                        } else {
+                          onFinish();
+                        }
+                      }}
+                      onStop={() => {}}
+                      duration={pipelineItem.timer}
+                    />
+                  )}
+
                   {pipelineItem.type === 'Tutorial' && (
                     <TutorialViewerItem
                       {...pipelineItem.payload}

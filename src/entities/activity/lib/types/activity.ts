@@ -93,7 +93,7 @@ type ActivityItemBase = {
   name?: string;
   inputType: ActivityItemType;
   config: ActivityItemConfig;
-  timer: number | null;
+  timer?: number | null;
   isSkippable: boolean;
   hasAlert: boolean;
   hasScore: boolean;
