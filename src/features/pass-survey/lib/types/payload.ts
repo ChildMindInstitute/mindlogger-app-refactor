@@ -99,6 +99,7 @@ type PipelinePayload =
 
 type PipelineItemBase = {
   id?: string;
+  name?: string;
   type: ActivityItemType;
   payload: PipelinePayload;
   isSkippable?: boolean;
@@ -112,7 +113,6 @@ type PipelineItemBase = {
   additionalText?: {
     required: boolean;
   };
-  variableName?: string;
 };
 
 export interface AbTestPipelineItem extends PipelineItemBase {
