@@ -293,7 +293,7 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
     isSkippable: dto.isSkippable,
     isReviewable: dto.isReviewable,
     responseIsEditable: dto.responseIsEditable,
-    order: dto.ordering,
+    order: dto.order,
     items: dto.items.map(item => {
       switch (item.responseType) {
         case 'abTest':

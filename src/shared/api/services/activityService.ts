@@ -19,7 +19,7 @@ export type ActivityDto = {
   isSkippable: boolean;
   isReviewable: boolean;
   responseIsEditable: boolean;
-  ordering: number;
+  order: number;
   items: ActivityItemDto[];
 };
 

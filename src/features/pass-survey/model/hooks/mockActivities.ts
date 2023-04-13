@@ -23,7 +23,7 @@ const grid: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '101',
@@ -64,7 +64,7 @@ const vortex: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '102',
@@ -105,7 +105,7 @@ const allDrawing: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [...grid.items, ...vortex.items],
 };
 
@@ -127,7 +127,7 @@ export const AbTestActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '103',
@@ -158,7 +158,7 @@ const FlankerWithImageActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '100',
@@ -185,7 +185,7 @@ const FlankerWithStSFxActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '100',
@@ -212,7 +212,7 @@ const FlankerWithTextSignsActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '100',
@@ -239,7 +239,7 @@ const FlankerAllTypesActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     ...FlankerWithTextSignsActivity.items,
     ...FlankerWithImageActivity.items,
@@ -259,7 +259,7 @@ export const TextActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '104',
@@ -329,7 +329,7 @@ export const SliderTestActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       responseValues: {
@@ -376,7 +376,7 @@ export const NumberSelectActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '105',
@@ -412,7 +412,7 @@ export const CheckboxTestActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '2345',
@@ -481,7 +481,7 @@ export const RadioTestActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       responseValues: {
@@ -598,7 +598,7 @@ export const AllTextsActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '12319758',
@@ -670,7 +670,7 @@ export const AllCheckboxesActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '346574',
@@ -847,7 +847,7 @@ export const AllRadioActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       timer: null,
@@ -1066,7 +1066,7 @@ export const AllSliderActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       responseValues: {
@@ -1174,7 +1174,7 @@ export const DemoActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     ...AllTextsActivity.items,
     ...AllCheckboxesActivity.items,

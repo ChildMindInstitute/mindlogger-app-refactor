@@ -23,7 +23,7 @@ const grid: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '101',
@@ -64,7 +64,7 @@ const vortex: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '102',
@@ -105,7 +105,7 @@ const allDrawing: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [...grid.items, ...vortex.items],
 };
 
@@ -127,7 +127,7 @@ export const AbTestActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '103',
@@ -158,7 +158,7 @@ const FlankerWithImageActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '100',
@@ -185,7 +185,7 @@ const FlankerWithStSFxActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '100',
@@ -212,7 +212,7 @@ const FlankerWithTextSignsActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '100',
@@ -239,7 +239,7 @@ const FlankerAllTypesActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     ...FlankerWithTextSignsActivity.items,
     ...FlankerWithImageActivity.items,
@@ -259,7 +259,7 @@ export const TextActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '104',
@@ -293,7 +293,7 @@ export const SliderTestActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       responseValues: {

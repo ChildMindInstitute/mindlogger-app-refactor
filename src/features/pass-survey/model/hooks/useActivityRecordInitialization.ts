@@ -32,6 +32,7 @@ function useActivityRecordCreator({
   let { data: activity } = useActivityDetailsQuery(activityId, {
     enabled: !activityStorageRecord,
     select: response => {
+      console.log(response.data.result.items);
       return ActivityModel.mapToActivity(response.data.result);
     },
   });
