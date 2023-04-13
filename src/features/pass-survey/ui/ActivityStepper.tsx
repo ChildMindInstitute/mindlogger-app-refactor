@@ -57,6 +57,7 @@ function ActivityStepper({
     setAnswer,
     removeAnswer,
     setAdditionalAnswer,
+    removeTimer,
   } = useActivityState({
     appletId,
     activityId,
@@ -107,11 +108,13 @@ function ActivityStepper({
   const showTimeLeft = !!timer;
 
   const onNext = (nextStep: number) => {
+    removeTimer(currentStep);
     setCurrentStep(nextStep);
     restartIdleTimer();
   };
 
   const onBack = (nextStep: number) => {
+    removeTimer(currentStep);
     setCurrentStep(nextStep);
     restartIdleTimer();
   };

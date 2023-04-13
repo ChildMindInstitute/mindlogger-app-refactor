@@ -29,9 +29,7 @@ import {
   PipelineItemAnswer,
   ActivityItem as ActivityItemProps,
   PipelineItemResponse,
-  ActivityIdentityContext,
 } from '../lib';
-import { useActivityState } from '../model';
 
 type Props = ActivityItemProps &
   PipelineItemAnswer & {
@@ -57,14 +55,6 @@ function ActivityItem({
   const [showScrollButton, setShowScrollButton] = useState(false);
 
   const { next } = useContext(HandlersContext);
-
-  const { appletId, activityId, eventId } = useContext(ActivityIdentityContext);
-
-  const { activityStorageRecord } = useActivityState({
-    appletId,
-    activityId,
-    eventId,
-  });
 
   const windowHeight = useWindowDimensions().height;
 
@@ -238,11 +228,7 @@ function ActivityItem({
               )}
 
               {pipelineItem.timer && (
-                <Timer
-                  progressDone={activityStorageRecord?.timer?.progress || 0}
-                  duration={pipelineItem.timer}
-                  onTimeIsUp={next}
-                />
+                <Timer duration={pipelineItem.timer} onTimeIsUp={next} />
               )}
 
               {item}

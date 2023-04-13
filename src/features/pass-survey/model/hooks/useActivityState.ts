@@ -83,7 +83,7 @@ function useActivityState({
     }
   }
 
-  function setTimer(progress: number) {
+  function setTimer(step: number, progress: number) {
     if (!activityStorageRecord) {
       return;
     }
@@ -91,18 +91,18 @@ function useActivityState({
     upsertActivityStorageRecord({
       ...activityStorageRecord,
 
-      timer: {
-        progress,
+      timers: {
+        [step]: progress,
       },
     });
   }
 
-  function removeTimer() {
-    if (!activityStorageRecord) {
+  function removeTimer(step: number) {
+    if (!activityStorageRecord?.timers) {
       return;
     }
 
-    delete activityStorageRecord.timer;
+    delete activityStorageRecord.timers[step];
 
     upsertActivityStorageRecord({
       ...activityStorageRecord,

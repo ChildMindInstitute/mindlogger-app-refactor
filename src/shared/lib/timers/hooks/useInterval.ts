@@ -12,6 +12,8 @@ const useInterval = (
   const start = useCallback(() => {
     const onIntervalIsUp = () => callbacksRef.current.onIntervalPass();
 
+    onIntervalIsUp();
+
     intervalRef.current = setInterval(onIntervalIsUp, interval);
   }, [interval]);
 
