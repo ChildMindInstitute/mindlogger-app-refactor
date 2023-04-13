@@ -1,40 +1,45 @@
 import { FC } from 'react';
+import { StyleSheet } from 'react-native';
 
-import { styled } from '@tamagui/core';
-import { Slider as SliderBase, SliderProps } from '@tamagui/slider';
+import {
+  Slider as SliderBase,
+  SliderProps,
+} from '@miblanchard/react-native-slider';
 
-const CustomSliderTrack = styled(SliderBase.Track, {
-  height: 4,
-  backgroundColor: '$lightGrey',
-  elevation: 4,
-  shadowColor: '#000',
-  shadowOffset: {
-    width: 0,
-    height: 2,
-  },
-  shadowOpacity: 0.2,
-  shadowRadius: 10,
-  borderRadius: 2,
-});
+import { colors } from '@shared/lib/constants';
 
-const Slider: FC<SliderProps> = props => {
-  const value = props.value?.[0];
-  const showThumb = value != null;
+type Props = SliderProps & { size: number; initialValue?: number };
+
+const Slider: FC<Props> = props => {
+  const { size, initialValue } = props;
+  const opacity = initialValue ? 1 : 0;
 
   return (
-    <SliderBase {...props} hitSlop={{ bottom: 50, left: 0, right: 0, top: 50 }}>
-      <CustomSliderTrack />
-
-      {showThumb && (
-        <SliderBase.Thumb
-          index={0}
-          bg="$primary"
-          borderColor="$primary"
-          circular
-        />
-      )}
-    </SliderBase>
+    <SliderBase
+      thumbTintColor={colors.primary}
+      thumbStyle={{
+        height: size,
+        width: size,
+        borderRadius: size,
+        opacity: opacity,
+      }}
+      minimumTrackStyle={styles.minimumTrackStyle}
+      maximumTrackTintColor={colors.lightGrey}
+      minimumTrackTintColor={colors.lightGrey}
+      thumbTouchSize={{
+        width: size,
+        height: size,
+      }}
+      {...props}
+      value={initialValue}
+    />
   );
 };
+
+const styles = StyleSheet.create({
+  minimumTrackStyle: {
+    opacity: 0,
+  },
+});
 
 export default Slider;

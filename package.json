@@ -32,6 +32,7 @@
   "dependencies": {
     "@georstat/react-native-image-cache": "^2.3.0",
     "@hookform/resolvers": "^2.9.10",
+    "@miblanchard/react-native-slider": "^2.3.1",
     "@notifee/react-native": "^7.6.1",
     "@react-native-community/checkbox": "^0.5.14",
     "@react-native-community/datetimepicker": "^6.7.5",
@@ -52,7 +53,6 @@
     "@tamagui/portal": "^1.11.1",
     "@tamagui/radio-group": "^1.11.1",
     "@tamagui/shorthands": "^1.11.1",
-    "@tamagui/slider": "^1.11.1",
     "@tamagui/stacks": "^1.11.1",
     "@tamagui/text": "^1.11.1",
     "@tamagui/theme-base": "^1.11.1",
