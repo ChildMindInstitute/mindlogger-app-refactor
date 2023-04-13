@@ -62,4 +62,4 @@ function eventsService() {
   };
 }
 
-export default eventsService();
+export const EventsService = eventsService();

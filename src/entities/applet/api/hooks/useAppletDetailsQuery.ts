@@ -1,7 +1,7 @@
 import { QueryOptions, ReturnAwaited, useBaseQuery } from '@app/shared/api';
-import appletsService from '@app/shared/api/services/appletsService';
+import { AppletsService } from '@app/shared/api';
 
-type FetchFn = typeof appletsService.getAppletDetails;
+type FetchFn = typeof AppletsService.getAppletDetails;
 type Options<TData> = QueryOptions<FetchFn, TData>;
 
 export const useAppletDetailsQuery = <TData = ReturnAwaited<FetchFn>>(
@@ -10,7 +10,7 @@ export const useAppletDetailsQuery = <TData = ReturnAwaited<FetchFn>>(
 ) => {
   return useBaseQuery(
     ['applets', { appletId }],
-    () => appletsService.getAppletDetails({ appletId }),
+    () => AppletsService.getAppletDetails({ appletId }),
     {
       ...options,
       enabled: false,
