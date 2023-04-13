@@ -266,7 +266,7 @@ export const TextActivity: ActivityDto = {
       name: 'Text input',
       question: 'Type some text',
       responseType: 'text',
-      timer: 4000,
+      timer: 60,
       config: {
         maxResponseLength: 10,
         correctAnswerRequired: false,
@@ -284,7 +284,7 @@ export const TextActivity: ActivityDto = {
       name: 'Text input 2',
       question: '',
       responseType: 'text',
-      timer: 5000,
+      timer: 5,
       config: {
         maxResponseLength: 20,
         correctAnswerRequired: false,
@@ -302,7 +302,7 @@ export const TextActivity: ActivityDto = {
       name: 'Text input 6',
       question: '',
       responseType: 'text',
-      timer: 5000,
+      timer: 5,
       config: {
         maxResponseLength: 20,
         correctAnswerRequired: false,
