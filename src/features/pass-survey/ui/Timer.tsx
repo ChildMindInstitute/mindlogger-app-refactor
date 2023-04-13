@@ -61,8 +61,6 @@ const AnimatedCircle: FC<AnimatedSvgCircleProps> = ({ progress }) => {
   );
 };
 
-// @todo: check rerender
-
 const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
   const { appletId, activityId, eventId } = useContext(ActivityIdentityContext);
 
@@ -86,24 +84,14 @@ const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
   const progress = useSharedValue(progressDone);
 
   const { start: startInterval, stop: stopInterval } = useInterval(() => {
-    if (activityStorageRecord?.step) {
-      setTimer(activityStorageRecord.step, progress.value);
-    }
+    setTimer(activityStorageRecord!.step, progress.value);
   }, ONE_SECOND);
-
-  useEffect(() => {
-    startInterval();
-
-    return () => stopInterval();
-  }, [startInterval, stopInterval]);
 
   useAppTimer({
     onFinish: () => {
       stopInterval();
 
-      if (activityStorageRecord?.step) {
-        removeTimer(activityStorageRecord.step);
-      }
+      removeTimer(activityStorageRecord!.step);
 
       onTimeIsUp();
     },
@@ -116,6 +104,12 @@ const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
       easing: Easing.linear,
     });
   }, [progress, duration]);
+
+  useEffect(() => {
+    startInterval();
+
+    return () => stopInterval();
+  }, [startInterval, stopInterval]);
 
   return (
     <TimerContainer>
