@@ -37,14 +37,15 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
   return (
     <YStack>
       <Slider
-        value={initialValue != null ? [initialValue] : undefined}
-        onResponderRelease={onRelease}
-        onResponderStart={onPress}
+        animationType="spring"
+        initialValue={initialValue}
+        onSlidingComplete={onRelease}
+        onSlidingStart={onPress}
         onValueChange={onValueChange}
-        size={THUMB_SIZE}
-        max={maxValue}
-        min={minValue}
+        maximumValue={maxValue}
+        minimumValue={minValue}
         step={isContinuousSlider ? 0.01 : 1}
+        size={THUMB_SIZE}
       />
 
       <XStack jc="space-between" mt={9}>
