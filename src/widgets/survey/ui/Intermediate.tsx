@@ -10,7 +10,7 @@ import {
   mapActivityFlowFromDto,
 } from '@app/entities/applet/model';
 import { PassSurveyModel } from '@app/features/pass-survey';
-import { useAppDispatch } from '@app/shared/lib';
+import { getUnixTimestamp, useAppDispatch } from '@app/shared/lib';
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
@@ -109,7 +109,7 @@ function Intermediate({
       flowId,
       appletId,
       activityId,
-      createdAt: Date.now(),
+      createdAt: getUnixTimestamp(Date.now()),
       version: activityStorageRecord.appletVersion,
       answers: mapAnswersToDto(
         activityStorageRecord.items,

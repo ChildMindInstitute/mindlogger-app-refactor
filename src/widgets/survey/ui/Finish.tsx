@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useActivityAnswersMutation } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import { PassSurveyModel } from '@app/features/pass-survey';
-import { useAppDispatch } from '@app/shared/lib';
+import { getUnixTimestamp, useAppDispatch } from '@app/shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
 import { FinishReason } from '../model';
@@ -68,7 +68,7 @@ function FinishItem({
       flowId: flowId ? flowId : null,
       appletId,
       activityId,
-      createdAt: Date.now(),
+      createdAt: getUnixTimestamp(Date.now()),
       version: activityStorageRecord.appletVersion,
       answers: mapAnswersToDto(
         activityStorageRecord.items,
