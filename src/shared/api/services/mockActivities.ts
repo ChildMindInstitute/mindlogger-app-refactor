@@ -24,6 +24,7 @@ const grid: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '101',
@@ -32,6 +33,7 @@ const grid: ActivityDto = {
       order: 0,
       timer: null,
       responseType: 'drawing',
+      isHidden: false,
       config: {
         removeUndoButton: false,
         navigationToTop: true,
@@ -65,6 +67,7 @@ const vortex: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '102',
@@ -73,6 +76,7 @@ const vortex: ActivityDto = {
       order: 0,
       responseType: 'drawing',
       timer: null,
+      isHidden: false,
       config: {
         removeUndoButton: false,
         navigationToTop: false,
@@ -106,6 +110,7 @@ const allDrawing: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [...grid.items, ...vortex.items],
 };
 
@@ -128,12 +133,14 @@ export const AbTestActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '103',
       name: 'A/B Test',
       responseType: 'abTest',
       timer: null,
+      isHidden: false,
       config: {
         timer: null,
       },
@@ -159,6 +166,7 @@ const FlankerWithImageActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '100',
@@ -169,6 +177,7 @@ const FlankerWithImageActivity: ActivityDto = {
       config: FlankerWithImageOnButton,
       responseValues: {},
       order: 0,
+      isHidden: false,
     },
   ],
 };
@@ -186,6 +195,7 @@ const FlankerWithStSFxActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '100',
@@ -196,6 +206,7 @@ const FlankerWithStSFxActivity: ActivityDto = {
       config: FlankerWithStFxImages,
       responseValues: {},
       order: 0,
+      isHidden: false,
     },
   ],
 };
@@ -213,6 +224,7 @@ const FlankerWithTextSignsActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '100',
@@ -223,6 +235,7 @@ const FlankerWithTextSignsActivity: ActivityDto = {
       responseValues: {},
       order: 0,
       timer: null,
+      isHidden: false,
     },
   ],
 };
@@ -240,6 +253,7 @@ const FlankerAllTypesActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     ...FlankerWithTextSignsActivity.items,
     ...FlankerWithImageActivity.items,
@@ -260,6 +274,7 @@ export const TextActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '104',
@@ -277,6 +292,7 @@ export const TextActivity: ActivityDto = {
         skippableItem: false,
       },
       responseValues: null,
+      isHidden: false,
       order: 0,
     },
   ],
@@ -293,6 +309,7 @@ export const SliderTestActivity: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   responseIsEditable: false,
+  isHidden: false,
   order: 0,
   items: [
     {
@@ -324,6 +341,7 @@ export const SliderTestActivity: ActivityDto = {
       responseType: 'slider',
       name: 'slidename',
       question: 'Choose some number',
+      isHidden: false,
       order: 0,
     },
   ],

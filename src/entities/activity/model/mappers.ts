@@ -20,6 +20,7 @@ import {
   TimeRangeItemDto,
   VideoItemDto,
   AdditionalResponseConfiguration,
+  ActivityItemDto,
 } from '@app/shared/api';
 import { getMsFromSeconds } from '@app/shared/lib';
 
@@ -289,12 +290,13 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
     description: dto.description,
     splashScreen: dto.splashScreen,
     image: dto.image,
+    isHidden: dto.isHidden,
     showAllAtOnce: dto.showAllAtOnce,
     isSkippable: dto.isSkippable,
     isReviewable: dto.isReviewable,
     responseIsEditable: dto.responseIsEditable,
     order: dto.order,
-    items: dto.items.map(item => {
+    items: filterHiddenActivityItems(dto.items).map(item => {
       switch (item.responseType) {
         case 'abTest':
           return mapToAbTest(item);
@@ -343,4 +345,8 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
   }
 
   return activity;
+}
+
+function filterHiddenActivityItems(items: ActivityItemDto[]) {
+  return items.filter(item => !item.isHidden);
 }

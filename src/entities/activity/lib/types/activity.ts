@@ -177,5 +177,6 @@ export type ActivityDetails = {
   isReviewable: boolean;
   responseIsEditable: boolean;
   order: number;
+  isHidden: boolean;
   items: ActivityItem[];
 };

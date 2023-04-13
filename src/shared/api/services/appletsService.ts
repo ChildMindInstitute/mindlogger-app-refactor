@@ -11,6 +11,7 @@ export type ActivityRecordDto = {
   isReviewable: boolean;
   isSkippable: boolean;
   showAllAtOnce: boolean;
+  isHidden: boolean;
   responseIsEditable: boolean;
   order: number;
   splashScreen: ImageUrl | null;

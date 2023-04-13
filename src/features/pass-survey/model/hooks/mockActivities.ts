@@ -24,12 +24,14 @@ const grid: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '101',
       name: 'test name',
       question: testMessage2,
       order: 0,
+      isHidden: false,
       responseType: 'drawing',
       timer: null,
       config: {
@@ -65,12 +67,14 @@ const vortex: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '102',
       name: 'test name',
       question: testMessage1,
       order: 0,
+      isHidden: false,
       responseType: 'drawing',
       timer: null,
       config: {
@@ -106,6 +110,7 @@ const allDrawing: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [...grid.items, ...vortex.items],
 };
 
@@ -128,6 +133,7 @@ export const AbTestActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '103',
@@ -142,6 +148,7 @@ export const AbTestActivity: ActivityDto = {
       },
       question: '',
       order: 0,
+      isHidden: false,
     },
   ],
 };
@@ -159,6 +166,7 @@ const FlankerWithImageActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '100',
@@ -169,6 +177,7 @@ const FlankerWithImageActivity: ActivityDto = {
       config: FlankerWithImageOnButton,
       responseValues: {},
       order: 0,
+      isHidden: false,
     },
   ],
 };
@@ -186,6 +195,7 @@ const FlankerWithStSFxActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '100',
@@ -196,6 +206,7 @@ const FlankerWithStSFxActivity: ActivityDto = {
       config: FlankerWithStFxImages,
       responseValues: {},
       order: 0,
+      isHidden: false,
     },
   ],
 };
@@ -213,6 +224,7 @@ const FlankerWithTextSignsActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '100',
@@ -223,6 +235,7 @@ const FlankerWithTextSignsActivity: ActivityDto = {
       config: FlankerWithTextsSigns,
       responseValues: {},
       order: 0,
+      isHidden: false,
     },
   ],
 };
@@ -240,6 +253,7 @@ const FlankerAllTypesActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     ...FlankerWithTextSignsActivity.items,
     ...FlankerWithImageActivity.items,
@@ -260,6 +274,7 @@ export const TextActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '104',
@@ -278,6 +293,7 @@ export const TextActivity: ActivityDto = {
       },
       responseValues: null,
       order: 0,
+      isHidden: false,
     },
     {
       id: '105',
@@ -330,6 +346,7 @@ export const SliderTestActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       responseValues: {
@@ -361,6 +378,7 @@ export const SliderTestActivity: ActivityDto = {
       name: 'slidename',
       question: 'Choose some number',
       order: 0,
+      isHidden: false,
     },
   ],
 };
@@ -377,6 +395,7 @@ export const NumberSelectActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '105',
@@ -397,6 +416,7 @@ export const NumberSelectActivity: ActivityDto = {
         minValue: 20,
       },
       order: 0,
+      isHidden: false,
     },
   ],
 };
@@ -413,6 +433,7 @@ export const CheckboxTestActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '2345',
@@ -421,6 +442,7 @@ export const CheckboxTestActivity: ActivityDto = {
       responseType: 'multiSelect',
       timer: null,
       order: 0,
+      isHidden: false,
       responseValues: {
         options: [
           {
@@ -482,6 +504,7 @@ export const RadioTestActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       responseValues: {
@@ -582,6 +605,7 @@ export const RadioTestActivity: ActivityDto = {
       name: 'radioName',
       question: 'Choose some number radio item',
       order: 0,
+      isHidden: false,
     },
   ],
 };
@@ -599,6 +623,7 @@ export const AllTextsActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '12319758',
@@ -618,6 +643,7 @@ export const AllTextsActivity: ActivityDto = {
       },
       responseValues: null,
       order: 0,
+      isHidden: false,
     },
     {
       id: '346',
@@ -636,6 +662,7 @@ export const AllTextsActivity: ActivityDto = {
       },
       responseValues: null,
       order: 1,
+      isHidden: false,
     },
     {
       id: '346',
@@ -654,6 +681,7 @@ export const AllTextsActivity: ActivityDto = {
       },
       responseValues: null,
       order: 1,
+      isHidden: false,
     },
   ],
 };
@@ -671,6 +699,7 @@ export const AllCheckboxesActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       id: '346574',
@@ -680,6 +709,7 @@ export const AllCheckboxesActivity: ActivityDto = {
       responseType: 'multiSelect',
       timer: null,
       order: 0,
+      isHidden: false,
       responseValues: {
         options: [
           {
@@ -734,6 +764,7 @@ export const AllCheckboxesActivity: ActivityDto = {
       question: 'These are simple checkboxes. Can skip. Cannot move back.',
       responseType: 'multiSelect',
       order: 0,
+      isHidden: false,
       responseValues: {
         options: [
           {
@@ -787,6 +818,7 @@ export const AllCheckboxesActivity: ActivityDto = {
       responseType: 'multiSelect',
       timer: null,
       order: 0,
+      isHidden: false,
       responseValues: {
         options: [
           {
@@ -848,6 +880,7 @@ export const AllRadioActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       timer: null,
@@ -950,6 +983,7 @@ export const AllRadioActivity: ActivityDto = {
       name: 'radioName',
       question: 'These are colored randomized radios. Tooltips',
       order: 0,
+      isHidden: false,
     },
     {
       responseValues: {
@@ -1051,6 +1085,7 @@ export const AllRadioActivity: ActivityDto = {
       question:
         'These are simple single select. Cannot move back. Has required text field',
       order: 1,
+      isHidden: false,
     },
   ],
 };
@@ -1067,6 +1102,7 @@ export const AllSliderActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     {
       responseValues: {
@@ -1098,6 +1134,7 @@ export const AllSliderActivity: ActivityDto = {
       name: 'slidename',
       question: 'Choose a number. Cannot move back',
       order: 0,
+      isHidden: false,
     },
     {
       responseValues: {
@@ -1128,6 +1165,7 @@ export const AllSliderActivity: ActivityDto = {
       name: 'sliderActivityItem',
       question: 'On a scale of 1 to 10, how happy are you?. You can skip',
       order: 1,
+      isHidden: false,
     },
     {
       responseValues: {
@@ -1158,6 +1196,7 @@ export const AllSliderActivity: ActivityDto = {
       name: 'sliderActivityItem',
       question: 'Choose any. And give an optional text response.',
       order: 0,
+      isHidden: false,
     },
   ],
 };
@@ -1175,6 +1214,7 @@ export const DemoActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  isHidden: false,
   items: [
     ...AllTextsActivity.items,
     ...AllCheckboxesActivity.items,

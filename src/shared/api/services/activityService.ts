@@ -18,6 +18,7 @@ export type ActivityDto = {
   showAllAtOnce: boolean;
   isSkippable: boolean;
   isReviewable: boolean;
+  isHidden: boolean;
   responseIsEditable: boolean;
   order: number;
   items: ActivityItemDto[];
