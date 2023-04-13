@@ -21,9 +21,17 @@ import {
   VideoItemDto,
   AdditionalResponseConfiguration,
 } from '@app/shared/api';
+import { getMsFromSeconds } from '@app/shared/lib';
 
-import mapTimerValue from './timerMapper';
 import { ActivityDetails, ActivityItem } from '../lib';
+
+function mapTimerValue(dtoTimer: number | null) {
+  if (dtoTimer) {
+    return getMsFromSeconds(dtoTimer);
+  }
+
+  return null;
+}
 
 function mapAdditionalText(configuration: AdditionalResponseConfiguration) {
   return configuration.additionalResponseOption.textInputOption
