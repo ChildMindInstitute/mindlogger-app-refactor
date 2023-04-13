@@ -10,9 +10,13 @@ class AppTimer extends TimerBase {
     startImmediately: boolean,
     duration: number,
   ) {
-    super(startImmediately);
+    super();
     this.duration = duration;
     this.onFinish = onFinish;
+
+    if (startImmediately) {
+      this.start();
+    }
   }
 
   start(): void {

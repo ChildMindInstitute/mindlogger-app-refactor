@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { FC, useContext, useEffect, useMemo } from 'react';
+import { FC, memo, useContext, useEffect, useMemo } from 'react';
 
 import { styled } from '@tamagui/core';
 import { Easing, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -62,6 +61,8 @@ const AnimatedCircle: FC<AnimatedSvgCircleProps> = ({ progress }) => {
   );
 };
 
+// @todo: check rerender
+
 const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
   const { appletId, activityId, eventId } = useContext(ActivityIdentityContext);
 
@@ -84,8 +85,22 @@ const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
 
   const progress = useSharedValue(progressDone);
 
-  const timer = useAppTimer({
+  const { start: startInterval, stop: stopInterval } = useInterval(() => {
+    if (activityStorageRecord?.step) {
+      setTimer(activityStorageRecord.step, progress.value);
+    }
+  }, ONE_SECOND);
+
+  useEffect(() => {
+    startInterval();
+
+    return () => stopInterval();
+  }, [startInterval, stopInterval]);
+
+  useAppTimer({
     onFinish: () => {
+      stopInterval();
+
       if (activityStorageRecord?.step) {
         removeTimer(activityStorageRecord.step);
       }
@@ -93,24 +108,7 @@ const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
       onTimeIsUp();
     },
     duration: duration - duration * progress.value,
-    startImmediately: false,
   });
-
-  const intervalTimer = useInterval(() => {
-    if (activityStorageRecord?.step) {
-      setTimer(activityStorageRecord.step, progress.value);
-    }
-  }, ONE_SECOND);
-
-  useEffect(() => {
-    timer.start();
-    intervalTimer.start();
-
-    return () => {
-      intervalTimer.stop();
-      timer.stop();
-    };
-  }, []);
 
   useEffect(() => {
     progress.value = withTiming(1, {
@@ -137,4 +135,4 @@ const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
   );
 };
 
-export default Timer;
+export default memo(Timer);
