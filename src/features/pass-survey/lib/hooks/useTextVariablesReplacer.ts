@@ -1,6 +1,5 @@
-import { MarkdownVariableReplacer } from '@shared/lib/utils/survey';
-
 import { Answers } from './useActivityStorageRecord';
+import { MarkdownVariableReplacer } from '../markdownVariableReplacer';
 import { PipelineItem } from '../types';
 
 const useTextVariablesReplacer = ({

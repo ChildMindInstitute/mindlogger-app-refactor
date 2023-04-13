@@ -49,6 +49,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
         case 'TextInput': {
           return {
             id: item.id,
+            name: item.name,
             type: item.inputType,
             payload: item.config,
             question: item.question,
@@ -57,13 +58,13 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
-            variableName: item.variableName,
           } satisfies PipelineItem;
         }
 
         case 'Slider': {
           return {
             id: item.id,
+            name: item.name,
             type: item.inputType,
             payload: item.config,
             question: item.question,
@@ -73,13 +74,13 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
             additionalText: item.additionalText,
-            variableName: item.variableName,
           };
         }
 
         case 'Radio': {
           return {
             id: item.id,
+            name: item.name,
             type: item.inputType,
             payload: item.config,
             question: item.question,
@@ -89,13 +90,13 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
             additionalText: item.additionalText,
-            variableName: item.variableName,
           };
         }
 
         case 'Checkbox': {
           return {
             id: item.id,
+            name: item.name,
             type: item.inputType,
             payload: item.config,
             question: item.question,
@@ -105,13 +106,13 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
             additionalText: item.additionalText,
-            variableName: item.variableName,
           };
         }
 
         case 'NumberSelect': {
           return {
             id: item.id,
+            name: item.name,
             type: item.inputType,
             payload: item.config,
             question: item.question,
@@ -120,7 +121,6 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
             additionalText: item.additionalText,
-            variableName: item.variableName,
           } satisfies PipelineItem;
         }
       }

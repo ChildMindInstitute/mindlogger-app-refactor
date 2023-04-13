@@ -1,8 +1,7 @@
 import { format } from 'date-fns';
 
-import { Answers } from '@features/pass-survey/lib/hooks';
-import { PipelineItem } from '@features/pass-survey/lib/types';
-import { PipelineItemResponse } from '@features/pass-survey/lib/types';
+import { Answers } from './hooks';
+import { PipelineItem, PipelineItemResponse } from './types';
 
 // @todo test this with other input types, finish timeRange and date types
 
@@ -23,13 +22,11 @@ type DateAnswer = {
   day: number;
 };
 
-type ActivityItems = PipelineItem[];
-
 export class MarkdownVariableReplacer {
-  private readonly activityItems: ActivityItems;
+  private readonly activityItems: PipelineItem[];
   private readonly answers: Answers;
 
-  constructor(activityItems: ActivityItems, answers: Answers) {
+  constructor(activityItems: PipelineItem[], answers: Answers) {
     this.activityItems = activityItems;
     this.answers = answers;
   }
@@ -95,7 +92,7 @@ export class MarkdownVariableReplacer {
 
   private getReplaceValue = (variableName: string) => {
     const foundIndex = this.activityItems.findIndex(
-      item => item.variableName === variableName,
+      item => item.name === variableName,
     );
     const answerNotFound = foundIndex < 0 || !this.answers[foundIndex];
 

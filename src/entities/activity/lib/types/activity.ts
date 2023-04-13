@@ -90,6 +90,7 @@ export type ActivityItemConfig =
 
 type ActivityItemBase = {
   id: string;
+  name?: string;
   inputType: ActivityItemType;
   config: ActivityItemConfig;
   timer: number | null;
@@ -108,7 +109,6 @@ type ActivityItemBase = {
   additionalText?: {
     required: boolean;
   };
-  variableName?: string;
 };
 
 interface AbTestActivityItem extends ActivityItemBase {

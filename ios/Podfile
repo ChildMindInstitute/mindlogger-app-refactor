@@ -54,6 +54,7 @@ abstract_target 'MindloggerMobileCommonPods' do
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
+        # @todo get rid when (https://github.com/facebook/react-native/issues/36690) fixed
         # this fixes react-codegen Xcode 14.3 issue
       end
     end
