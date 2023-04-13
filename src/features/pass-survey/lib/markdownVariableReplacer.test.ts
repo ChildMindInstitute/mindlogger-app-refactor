@@ -1,6 +1,6 @@
-import { Answers } from '@features/pass-survey/lib/hooks';
-import { MarkdownVariableReplacer } from '@features/pass-survey/lib/markdownVariableReplacer';
-import { PipelineItem } from '@features/pass-survey/lib/types';
+import { Answers } from './hooks';
+import { MarkdownVariableReplacer } from './markdownVariableReplacer';
+import { PipelineItem } from './types';
 
 describe('MarkdownVariableReplacer', () => {
   it('should return the same markdown string when no variables are present', () => {
