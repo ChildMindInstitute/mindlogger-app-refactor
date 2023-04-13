@@ -9,10 +9,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Circle, Svg } from 'react-native-svg';
 
-import { useAppSecondTimer } from '@app/shared/lib';
+import { ONE_SECOND, useAppTimer, useInterval } from '@app/shared/lib';
 import { Box } from '@shared/ui';
 
-import { ActivityItemIdentityContext } from '../lib';
+import { ActivityIdentityContext } from '../lib';
 import { useActivityState } from '../model';
 
 const AnimatedSvgCircle = Animated.createAnimatedComponent(Circle);
@@ -23,7 +23,7 @@ type AnimatedSvgCircleProps = {
 };
 
 type TimerProps = {
-  onFinish: () => void;
+  onTimeIsUp: () => void;
   duration: number;
   progressDone: number;
 };
@@ -58,12 +58,10 @@ const AnimatedCircle: FC<AnimatedSvgCircleProps> = ({ progress }) => {
   );
 };
 
-const Timer: FC<TimerProps> = ({ onFinish, duration, progressDone }) => {
-  const { appletId, activityId, eventId } = useContext(
-    ActivityItemIdentityContext,
-  );
+const Timer: FC<TimerProps> = ({ onTimeIsUp, duration, progressDone }) => {
+  const { appletId, activityId, eventId } = useContext(ActivityIdentityContext);
 
-  const { removeTimer, setTimer } = useActivityState({
+  const { removeTimer, setTimer, activityStorageRecord } = useActivityState({
     appletId,
     activityId,
     eventId,
@@ -71,21 +69,30 @@ const Timer: FC<TimerProps> = ({ onFinish, duration, progressDone }) => {
 
   const progress = useSharedValue(progressDone);
 
-  const timer = useAppSecondTimer({
+  const timer = useAppTimer({
     onFinish: () => {
-      removeTimer();
-      onFinish();
-    },
-    onSecondPass: (timerId: number) => {
-      setTimer(timerId, progress.value);
+      if (activityStorageRecord?.step) {
+        removeTimer();
+      }
+
+      onTimeIsUp();
     },
     duration: duration - duration * progress.value,
+    startImmediately: false,
   });
+
+  const intervalTimer = useInterval(() => {
+    setTimer(progress.value);
+  }, ONE_SECOND);
 
   useEffect(() => {
     timer.start();
+    intervalTimer.start();
 
-    return () => timer.stop();
+    return () => {
+      intervalTimer.stop();
+      timer.stop();
+    };
   }, []);
 
   useEffect(() => {

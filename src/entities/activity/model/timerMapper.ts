@@ -5,7 +5,7 @@ const mapTimerValue = (dtoTimer: number | null) => {
     return getMsFromSeconds(dtoTimer);
   }
 
-  return dtoTimer;
+  return null;
 };
 
 export default mapTimerValue;

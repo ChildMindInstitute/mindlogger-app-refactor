@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 
 import { AppTimer } from '../';
 
@@ -10,10 +10,15 @@ type AppTimerConfig = {
 
 const useAppTimer = (appTimerConfig: AppTimerConfig) => {
   const { duration, onFinish, startImmediately } = appTimerConfig;
-  return useMemo(
-    () => new AppTimer(onFinish, startImmediately, duration),
-    [duration, onFinish, startImmediately],
-  );
+  const callbacksRef = useRef({ onFinish });
+
+  callbacksRef.current = { onFinish };
+
+  return useMemo(() => {
+    const onTimeIsUp = () => callbacksRef.current.onFinish();
+
+    return new AppTimer(onTimeIsUp, startImmediately, duration);
+  }, [duration, startImmediately]);
 };
 
 export default useAppTimer;

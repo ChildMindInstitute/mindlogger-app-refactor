@@ -29,7 +29,7 @@ import {
   PipelineItemAnswer,
   ActivityItem as ActivityItemProps,
   PipelineItemResponse,
-  ActivityItemIdentityContext,
+  ActivityIdentityContext,
 } from '../lib';
 import { useActivityState } from '../model';
 
@@ -58,9 +58,7 @@ function ActivityItem({
 
   const { next } = useContext(HandlersContext);
 
-  const { appletId, activityId, eventId } = useContext(
-    ActivityItemIdentityContext,
-  );
+  const { appletId, activityId, eventId } = useContext(ActivityIdentityContext);
 
   const { activityStorageRecord } = useActivityState({
     appletId,
@@ -243,7 +241,7 @@ function ActivityItem({
                 <Timer
                   progressDone={activityStorageRecord?.timer?.progress || 0}
                   duration={pipelineItem.timer}
-                  onFinish={next}
+                  onTimeIsUp={next}
                 />
               )}
 

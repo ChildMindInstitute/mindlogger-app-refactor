@@ -18,7 +18,6 @@ export type Answers = Record<string, Answer>;
 
 type Timer = {
   progress: number;
-  timerId: number;
 };
 
 export type ActivityState = {

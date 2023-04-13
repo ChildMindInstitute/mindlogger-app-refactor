@@ -83,7 +83,7 @@ function useActivityState({
     }
   }
 
-  function setTimer(timerId: number, progress: number) {
+  function setTimer(progress: number) {
     if (!activityStorageRecord) {
       return;
     }
@@ -92,7 +92,6 @@ function useActivityState({
       ...activityStorageRecord,
 
       timer: {
-        timerId,
         progress,
       },
     });
@@ -101,10 +100,6 @@ function useActivityState({
   function removeTimer() {
     if (!activityStorageRecord) {
       return;
-    }
-
-    if (activityStorageRecord.timer?.timerId) {
-      clearInterval(activityStorageRecord.timer?.timerId);
     }
 
     delete activityStorageRecord.timer;
