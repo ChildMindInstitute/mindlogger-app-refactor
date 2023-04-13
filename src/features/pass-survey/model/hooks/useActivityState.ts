@@ -92,6 +92,7 @@ function useActivityState({
       ...activityStorageRecord,
 
       timers: {
+        ...activityStorageRecord.timers,
         [step]: progress,
       },
     });

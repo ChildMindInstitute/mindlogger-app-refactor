@@ -9,7 +9,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Circle, Svg } from 'react-native-svg';
 
-import { ONE_SECOND, useAppTimer, useInterval } from '@app/shared/lib';
+import {
+  ONE_SECOND,
+  isEmptyObject,
+  useAppTimer,
+  useInterval,
+} from '@app/shared/lib';
 import { Box } from '@shared/ui';
 
 import { ActivityIdentityContext } from '../lib';
@@ -69,9 +74,9 @@ const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
   const progressDone = useMemo(() => {
     if (
       activityStorageRecord?.timers &&
-      Object.keys(activityStorageRecord?.timers).length
+      isEmptyObject(activityStorageRecord?.timers)
     ) {
-      return activityStorageRecord?.timers[activityStorageRecord.step];
+      return activityStorageRecord.timers[activityStorageRecord.step] ?? 0;
     }
 
     return 0;
