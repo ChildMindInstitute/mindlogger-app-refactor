@@ -1,11 +1,9 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 
 import { XStack, YStack } from '@tamagui/stacks';
 import { useIsMutating } from '@tanstack/react-query';
 
 import { useOnMutationCacheChange } from '@app/shared/api';
-import { useCacheHasData } from '@app/shared/lib';
-import { useRefreshMutation } from '@app/shared/lib';
 import { Box, BoxProps, NoListItemsYet } from '@app/shared/ui';
 import { LoadListError } from '@app/shared/ui';
 
@@ -26,24 +24,11 @@ const AppletList: FC<Props> = ({ onAppletPress, ...styledProps }) => {
     select: response => response.data.result,
   });
 
-  const { mutate: refresh } = useRefreshMutation();
-
-  const { check: checkIfCacheHasData } = useCacheHasData();
-
   const isRefreshing = useIsMutating(['refresh']);
 
   const refreshError = useOnMutationCacheChange();
 
   const hasError = !!refreshError || !!getAppletsError;
-
-  useEffect(() => {
-    const cacheHasData = checkIfCacheHasData();
-
-    if (!cacheHasData) {
-      refresh();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   if (hasError) {
     return (

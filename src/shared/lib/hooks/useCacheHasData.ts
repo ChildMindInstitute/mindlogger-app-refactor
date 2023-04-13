@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { QueryClient, QueryKey, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 
@@ -18,12 +20,17 @@ const getDataFromQuery = <TResponse>(
 
 const useCacheHasData = () => {
   const queryClient = useQueryClient();
-  return {
-    check: (key: QueryKey = ['applets']): boolean => {
-      const response = getDataFromQuery<AppletsResponse>(key, queryClient);
-      return !!response?.result.length;
-    },
-  };
+
+  return useMemo(
+    () => ({
+      check: (key: QueryKey = ['applets']): boolean => {
+        const response = getDataFromQuery<AppletsResponse>(key, queryClient);
+
+        return !!response?.result.length;
+      },
+    }),
+    [queryClient],
+  );
 };
 
 export default useCacheHasData;

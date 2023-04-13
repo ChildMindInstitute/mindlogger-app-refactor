@@ -9,18 +9,18 @@ import {
 } from '@tanstack/react-query';
 
 import { ActivityDto, ActivityService } from '@app/shared/api';
-import appletsService, {
+import {
+  EventsService,
+  AppletsService,
   ActivityRecordDto,
   AppletDto,
-} from '@app/shared/api/services/appletsService';
-import eventsService from '@app/shared/api/services/eventsService';
-
+} from '@app/shared/api';
+import { ImageUrl } from '@app/shared/lib';
 import {
   collectActivityDetailsImageUrls,
   collectAppletDetailsImageUrls,
   collectAppletRecordImageUrls,
-} from '../services/collectImageUrls';
-import { ImageUrl } from '../types';
+} from '@app/shared/lib/services/collectImageUrls';
 
 type AppletActivity = {
   appletId: string;
@@ -102,7 +102,7 @@ class RefreshService {
 
     const appletDetailsKey = this.getAppletDetailsKey(appletId);
 
-    const appletDetailsResponse = await appletsService.getAppletDetails({
+    const appletDetailsResponse = await AppletsService.getAppletDetails({
       appletId,
     });
 
@@ -117,7 +117,7 @@ class RefreshService {
 
     this.cacheImages(imageUrls);
 
-    const eventsResponse = await eventsService.getEvents({ appletId });
+    const eventsResponse = await EventsService.getEvents({ appletId });
 
     const eventsKey = this.getEventsKey(appletId);
 
@@ -151,7 +151,7 @@ class RefreshService {
   private async refreshAllApplets() {
     await this.resetAllQueries();
 
-    const appletsResponse = await appletsService.getApplets();
+    const appletsResponse = await AppletsService.getApplets();
 
     this.queryClient.setQueryData(this.getAppletsKey(), appletsResponse);
 
@@ -199,7 +199,7 @@ class RefreshService {
   }
 }
 
-const useRefreshMutation = () => {
+const useRefreshMutation = (onSuccess: () => void) => {
   const queryClient = useQueryClient();
 
   const refreshService = useMemo(
@@ -207,8 +207,14 @@ const useRefreshMutation = () => {
     [queryClient],
   );
 
-  return useMutation(['refresh'], refreshService.refresh.bind(refreshService), {
+  const refresh = useMemo(
+    () => refreshService.refresh.bind(refreshService),
+    [refreshService],
+  );
+
+  return useMutation(['refresh'], refresh, {
     networkMode: 'always',
+    onSuccess,
   });
 };
 
