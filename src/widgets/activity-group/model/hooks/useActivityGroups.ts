@@ -2,7 +2,7 @@ import { convertProgress } from '@app/abstract/lib';
 import { useAppletDetailsQuery } from '@app/entities/applet';
 import { selectInProgressApplets } from '@app/entities/applet/model/selectors';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
-import { useEventsQuery } from '@app/entities/event/api/hooks/useEventsQuery';
+import { useEventsQuery } from '@app/entities/event/api';
 import { mapEventsFromDto } from '@app/entities/event/model/mappers';
 import { AppletDetailsDto } from '@app/shared/api';
 import { useAppSelector } from '@app/shared/lib';

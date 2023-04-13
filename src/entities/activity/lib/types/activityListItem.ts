@@ -26,6 +26,7 @@ export type ActivityListItem = {
   availableTo?: Date | null;
 
   isTimerSet: boolean;
+  isTimerElapsed: boolean;
   timeLeftToComplete?: HourMinute | null;
 };
 

@@ -6,7 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet';
+import { HourMinute } from '@app/shared/lib';
 import { IS_ANDROID } from '@app/shared/lib';
+import TimeRemaining from '@app/shared/ui/TimeRemaining';
 import { ActivityIndicator, Box, Center, Stepper, XStack } from '@shared/ui';
 
 import ActivityItem from './ActivityItem';
@@ -15,13 +17,16 @@ import {
   useActivityRecordInitialization,
   useActivityState,
   useActivityStepper,
+  useIdleTimer,
 } from '../model';
 
 type Props = {
   appletId: string;
   activityId: string;
   eventId: string;
-
+  idleTimer: HourMinute | null;
+  entityStartedAt: number;
+  timer: HourMinute | null;
   onClose: () => void;
   onFinish: () => void;
 };
@@ -30,6 +35,9 @@ function ActivityStepper({
   appletId,
   activityId,
   eventId,
+  idleTimer,
+  timer,
+  entityStartedAt,
   onClose,
   onFinish,
 }: Props) {
@@ -72,6 +80,11 @@ function ActivityStepper({
     isValid,
   } = useActivityStepper(activityStorageRecord);
 
+  const { restart: restartIdleTimer } = useIdleTimer({
+    onFinish,
+    hourMinute: idleTimer,
+  });
+
   const { data: watermark } = useAppletDetailsQuery(appletId, {
     select: r => r.data.result.watermark,
   });
@@ -86,12 +99,16 @@ function ActivityStepper({
 
   const tutorialViewerRef = useRef<TutorialViewerRef>(null);
 
+  const showTimeLeft = !!timer;
+
   const onNext = (nextStep: number) => {
     setCurrentStep(nextStep);
+    restartIdleTimer();
   };
 
   const onBack = (nextStep: number) => {
     setCurrentStep(nextStep);
+    restartIdleTimer();
   };
 
   const onBeforeNext = (): number => {
@@ -102,6 +119,8 @@ function ActivityStepper({
     if (isTutorialStep) {
       const moved = tutorialViewerRef.current?.next();
 
+      !moved && restartIdleTimer();
+
       return moved ? 0 : 1;
     }
 
@@ -111,6 +130,8 @@ function ActivityStepper({
   const onBeforeBack = (): number => {
     if (isTutorialStep) {
       const moved = tutorialViewerRef.current?.back();
+
+      !moved && restartIdleTimer();
 
       return moved ? 0 : 1;
     }
@@ -141,10 +162,24 @@ function ActivityStepper({
         onBeforeBack={onBeforeBack}
         onStartReached={onClose}
         onEndReached={onFinish}
-        onUndo={onUndo}
+        onUndo={() => {
+          onUndo();
+          restartIdleTimer();
+        }}
       >
         {showWatermark && watermark && (
           <CachedImage source={watermark} style={styles.watermark} />
+        )}
+
+        {showTimeLeft && (
+          <TimeRemaining
+            position="absolute"
+            top={10}
+            left={5}
+            zIndex={1}
+            entityStartedAt={entityStartedAt}
+            timerSettings={timer}
+          />
         )}
 
         {showTopNavigation && (
@@ -161,7 +196,12 @@ function ActivityStepper({
             const value = activityStorageRecord.answers[index];
 
             return (
-              <XStack flex={1} key={index} alignItems="center">
+              <XStack
+                flex={1}
+                key={index}
+                alignItems="center"
+                onTouchStart={() => restartIdleTimer()}
+              >
                 <>
                   {pipelineItem.type === 'Tutorial' && (
                     <TutorialViewerItem
@@ -178,6 +218,8 @@ function ActivityStepper({
                       type={pipelineItem.type}
                       value={value}
                       pipelineItem={pipelineItem}
+                      timerSettings={timer}
+                      entityStartedAt={entityStartedAt}
                       onResponse={response => {
                         setAnswer(currentStep, response);
                       }}

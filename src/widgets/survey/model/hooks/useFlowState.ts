@@ -23,6 +23,8 @@ export function useFlowState({
 }: UseFlowStateArgs) {
   const [step, setStep] = useState(0);
 
+  const [isTimerElapsed, setIsTimerElapsed] = useState(false);
+
   const { data: applet } = useAppletDetailsQuery(appletId, {
     select: response => mapAppletDetailsFromDto(response.data.result),
   });
@@ -51,7 +53,12 @@ export function useFlowState({
     }
   }, [activityId, applet, appletId, eventId, flowId]);
 
+  const isLastStep = step === pipeline.length - 1;
+
   function next() {
+    if (isLastStep) {
+      return;
+    }
     setStep(step + 1);
   }
 
@@ -63,10 +70,20 @@ export function useFlowState({
     }
   }
 
+  function completeByTimer() {
+    if (isLastStep) {
+      return;
+    }
+    setStep(pipeline.length - 1);
+    setIsTimerElapsed(true);
+  }
+
   return {
     step,
     next,
     back,
+    completeByTimer,
+    isTimerElapsed,
     pipeline,
   };
 }

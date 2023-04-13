@@ -8,6 +8,7 @@ import { PassSurveyModel } from '@app/features/pass-survey';
 import { useAppDispatch } from '@app/shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
+import { FinishReason } from '../model';
 import { mapAnswersToDto } from '../model/mappers';
 
 type Props = {
@@ -15,11 +16,19 @@ type Props = {
   activityId: string;
   eventId: string;
   flowId?: string;
+  finishReason: FinishReason;
 
   onClose: () => void;
 };
 
-function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
+function FinishItem({
+  flowId,
+  appletId,
+  activityId,
+  eventId,
+  finishReason,
+  onClose,
+}: Props) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -37,14 +46,12 @@ function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
     isPaused: isOffline,
   } = useActivityAnswersMutation();
 
-  const finishedLoading = isOffline || successfullySentAnswers;
+  const finished =
+    isOffline || successfullySentAnswers || finishReason === 'time-is-up';
+
   const isLoading = !isOffline && isSendingAnswers;
 
   function completeActivity() {
-    if (!activityStorageRecord) {
-      return;
-    }
-
     dispatch(
       AppletModel.actions.entityCompleted({
         appletId,
@@ -52,6 +59,10 @@ function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
         entityId: flowId ? flowId : activityId,
       }),
     );
+
+    if (!activityStorageRecord) {
+      return;
+    }
 
     sendAnswers({
       flowId: flowId ? flowId : null,
@@ -76,11 +87,12 @@ function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
   return (
     <ImageBackground>
       <Center flex={1} mx={16}>
-        {finishedLoading && (
+        {finished && (
           <>
             <Center mb={20}>
               <Text fontSize={24} fontWeight="bold">
-                {t('additional:thanks')}
+                {finishReason === 'regular' && t('additional:thanks')}
+                {finishReason === 'time-is-up' && t('additional:time-end')}
               </Text>
 
               <Text fontSize={16}>{t('additional:saved_answers')}</Text>

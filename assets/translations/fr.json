@@ -320,7 +320,8 @@
     "fr": "Français"
   },
   "additional": {
-    "end": "Le temps est écoulé !",
+    "time-end": "Le temps est écoulé !",
+    "time-end-tap": "Le temps s'est écoulé. Appuyez pour terminer",
     "thanks": "Merci !",
     "saved_answers": "Réponses sauvegardées !",
     "submit_flow_answers": "Appuyez sur",
@@ -464,7 +465,7 @@
     "end": "Fin"
   },
   "open_source": {
-    "title":"Logiciel Open Source utilisé",
+    "title": "Logiciel Open Source utilisé",
     "show_license": "Afficher la licence",
     "homepage": "Page d'accueil"
   }

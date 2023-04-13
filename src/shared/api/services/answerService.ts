@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+
 import httpService from './httpService';
 import { SuccessfulEmptyResponse } from '../types';
 
@@ -21,9 +23,18 @@ type ActivityAnswersRequest = {
 
 type ActivityAnswersResponse = SuccessfulEmptyResponse;
 
+type FakeResponse = AxiosResponse<ActivityAnswersResponse>;
+
+const mockActivity = true;
+
 function answerService() {
   return {
     sendActivityAnswers(request: ActivityAnswersRequest) {
+      if (mockActivity) {
+        const response: FakeResponse = {} as FakeResponse;
+        return Promise.resolve(response);
+      }
+
       return httpService.post<ActivityAnswersResponse>('/answers', request);
     },
   };
