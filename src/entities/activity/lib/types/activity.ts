@@ -101,6 +101,7 @@ type ActivityItemBase = {
   hasTextResponse: boolean;
   canBeReset: boolean;
   hasTopNavigation: boolean;
+  isHidden: boolean;
   order: number;
   question: string;
   validationOptions?: {

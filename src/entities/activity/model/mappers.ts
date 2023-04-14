@@ -20,7 +20,6 @@ import {
   TimeRangeItemDto,
   VideoItemDto,
   AdditionalResponseConfiguration,
-  ActivityItemDto,
 } from '@app/shared/api';
 import { getMsFromSeconds } from '@app/shared/lib';
 
@@ -62,6 +61,7 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: !dto.config.removeUndoButton,
     hasTopNavigation: dto.config.navigationToTop,
+    isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
   };
 }
@@ -83,6 +83,7 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: false,
     hasTopNavigation: false,
+    isHidden: dto.isHidden,
   };
 }
 
@@ -131,6 +132,7 @@ function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: true,
     hasTopNavigation: false,
+    isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
   };
 }
@@ -157,6 +159,7 @@ function mapToNumberSelect(dto: NumberSelectionItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: true,
     hasTopNavigation: false,
+    isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
   };
 }
@@ -186,6 +189,7 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: true,
     hasTopNavigation: false,
+    isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
   };
 }
@@ -219,6 +223,7 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: true,
     hasTopNavigation: false,
+    isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
   };
 }
@@ -246,6 +251,7 @@ function mapToTextInput(dto: TextItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: true,
     hasTopNavigation: false,
+    isHidden: dto.isHidden,
     ...(dto.config.correctAnswerRequired && {
       validationOptions: {
         correctAnswer: dto.config.correctAnswer,
@@ -279,6 +285,7 @@ function mapToSplash(splashScreen: string): ActivityItem {
     hasTextResponse: false,
     canBeReset: false,
     hasTopNavigation: false,
+    isHidden: false,
   };
 }
 
@@ -296,7 +303,7 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
     isReviewable: dto.isReviewable,
     responseIsEditable: dto.responseIsEditable,
     order: dto.order,
-    items: filterHiddenActivityItems(dto.items).map(item => {
+    items: dto.items.map(item => {
       switch (item.responseType) {
         case 'abTest':
           return mapToAbTest(item);
@@ -345,8 +352,4 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
   }
 
   return activity;
-}
-
-function filterHiddenActivityItems(items: ActivityItemDto[]) {
-  return items.filter(item => !item.isHidden);
 }

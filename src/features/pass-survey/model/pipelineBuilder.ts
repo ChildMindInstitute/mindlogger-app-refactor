@@ -1,10 +1,10 @@
-import { ActivityDetails } from '@app/entities/activity';
+import { ActivityDetails, ActivityItem } from '@app/entities/activity';
 
 import { getAbTrailsPipeline } from './precompiled-pipelines';
 import { PipelineItem } from '../lib';
 
 export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
-  const pipeline: PipelineItem[] = activity.items
+  const pipeline: PipelineItem[] = filterHiddenItems(activity.items)
     .map(item => {
       switch (item.inputType) {
         case 'AbTest': {
@@ -138,4 +138,8 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
     }, []);
 
   return pipeline;
+}
+
+function filterHiddenItems(items: ActivityItem[]) {
+  return items.filter(item => !item.isHidden);
 }
