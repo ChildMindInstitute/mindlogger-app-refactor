@@ -106,14 +106,14 @@ function ActivityStepper({
 
   const onNext = (nextStep: number) => {
     removeTimer(currentStep);
-    setCurrentStep(nextStep);
     restartIdleTimer();
+    setCurrentStep(nextStep);
   };
 
   const onBack = (nextStep: number) => {
     removeTimer(currentStep);
-    setCurrentStep(nextStep);
     restartIdleTimer();
+    setCurrentStep(nextStep);
   };
 
   const onBeforeNext = (): number => {
