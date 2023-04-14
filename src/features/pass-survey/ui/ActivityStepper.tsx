@@ -7,7 +7,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet';
 import { HourMinute } from '@app/shared/lib';
-import { IS_ANDROID } from '@app/shared/lib';
 import TimeRemaining from '@app/shared/ui/TimeRemaining';
 import { ActivityIndicator, Box, Center, Stepper, XStack } from '@shared/ui';
 
@@ -241,11 +240,7 @@ function ActivityStepper({
         <Stepper.Progress />
 
         {showBottomNavigation && (
-          <Stepper.NavigationPanel
-            mt={16}
-            minHeight={24}
-            mb={IS_ANDROID ? 16 : 0}
-          >
+          <Stepper.NavigationPanel mt={16} minHeight={24} mb={bottom ? 0 : 16}>
             {canMoveBack && (
               <Stepper.BackButton>
                 {t(
