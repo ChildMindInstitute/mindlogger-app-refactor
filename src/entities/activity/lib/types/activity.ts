@@ -101,6 +101,7 @@ type ActivityItemBase = {
   hasTextResponse: boolean;
   canBeReset: boolean;
   hasTopNavigation: boolean;
+  isHidden: boolean;
   order: number;
   question: string;
   validationOptions?: {
@@ -177,5 +178,6 @@ export type ActivityDetails = {
   isReviewable: boolean;
   responseIsEditable: boolean;
   order: number;
+  isHidden: boolean;
   items: ActivityItem[];
 };

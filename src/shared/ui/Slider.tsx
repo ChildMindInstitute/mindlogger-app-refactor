@@ -5,14 +5,21 @@ import {
   Slider as SliderBase,
   SliderProps,
 } from '@miblanchard/react-native-slider';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { colors } from '@shared/lib/constants';
 
 type Props = SliderProps & { size: number; initialValue?: number };
 
+const CHANGE_VALUE_DELAY = 100;
+
 const Slider: FC<Props> = props => {
   const { size, initialValue } = props;
   const opacity = initialValue ? 1 : 0;
+
+  const debouncedOnValueChange = useDebouncedCallback(value => {
+    props.onValueChange?.(value);
+  }, CHANGE_VALUE_DELAY);
 
   return (
     <SliderBase
@@ -32,6 +39,7 @@ const Slider: FC<Props> = props => {
       }}
       {...props}
       value={initialValue}
+      onValueChange={debouncedOnValueChange}
     />
   );
 };

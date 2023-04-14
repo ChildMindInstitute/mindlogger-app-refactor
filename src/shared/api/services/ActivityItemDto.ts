@@ -311,6 +311,7 @@ type ActivityItemDtoBase = {
   question: string;
   responseType: ResponseType;
   responseValues: AnswerSettings;
+  isHidden: boolean;
   order: number;
   timer: number | null;
 };

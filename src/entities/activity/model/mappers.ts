@@ -61,6 +61,7 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: !dto.config.removeUndoButton,
     hasTopNavigation: dto.config.navigationToTop,
+    isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
   };
 }
@@ -82,6 +83,7 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: false,
     hasTopNavigation: false,
+    isHidden: dto.isHidden,
   };
 }
 
@@ -130,6 +132,7 @@ function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: true,
     hasTopNavigation: false,
+    isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
   };
 }
@@ -156,6 +159,7 @@ function mapToNumberSelect(dto: NumberSelectionItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: true,
     hasTopNavigation: false,
+    isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
   };
 }
@@ -185,6 +189,7 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: true,
     hasTopNavigation: false,
+    isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
   };
 }
@@ -218,6 +223,7 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: true,
     hasTopNavigation: false,
+    isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
   };
 }
@@ -245,6 +251,7 @@ function mapToTextInput(dto: TextItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: true,
     hasTopNavigation: false,
+    isHidden: dto.isHidden,
     ...(dto.config.correctAnswerRequired && {
       validationOptions: {
         correctAnswer: dto.config.correctAnswer,
@@ -278,6 +285,7 @@ function mapToSplash(splashScreen: string): ActivityItem {
     hasTextResponse: false,
     canBeReset: false,
     hasTopNavigation: false,
+    isHidden: false,
   };
 }
 
@@ -289,11 +297,12 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
     description: dto.description,
     splashScreen: dto.splashScreen,
     image: dto.image,
+    isHidden: dto.isHidden,
     showAllAtOnce: dto.showAllAtOnce,
     isSkippable: dto.isSkippable,
     isReviewable: dto.isReviewable,
     responseIsEditable: dto.responseIsEditable,
-    order: dto.ordering,
+    order: dto.order,
     items: dto.items.map(item => {
       switch (item.responseType) {
         case 'abTest':

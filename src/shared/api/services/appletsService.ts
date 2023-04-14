@@ -11,8 +11,9 @@ export type ActivityRecordDto = {
   isReviewable: boolean;
   isSkippable: boolean;
   showAllAtOnce: boolean;
+  isHidden: boolean;
   responseIsEditable: boolean;
-  ordering: number;
+  order: number;
   splashScreen: ImageUrl | null;
 };
 
@@ -22,7 +23,7 @@ export type ActivityFlowRecordDto = {
   description: string;
   hideBadge: boolean;
   isSingleReport: boolean;
-  ordering: number;
+  order: number;
   activityIds: Array<string>;
 };
 
