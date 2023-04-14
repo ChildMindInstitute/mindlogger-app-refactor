@@ -109,7 +109,7 @@ function mapToGeolocation(dto: GeolocationItemDto): ActivityItem {
     inputType: 'Geolocation',
     timer: dto.config.timer,
     order: dto.order,
-    config: dto.config,
+    config: null,
     question: dto.question,
     isSkippable: dto.config.skippableItem,
     hasAlert: false,

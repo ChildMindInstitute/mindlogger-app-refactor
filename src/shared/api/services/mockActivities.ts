@@ -319,8 +319,6 @@ export const GeolocationActivity: ActivityDto = {
       responseType: 'geolocation',
       config: {
         timer: null,
-        imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png',
         removeBackButton: false,
         skippableItem: false,
         additionalResponseOption: {

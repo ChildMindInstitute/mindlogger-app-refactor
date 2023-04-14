@@ -87,9 +87,7 @@ type NumberSelectPayload = {
   min: number;
 };
 
-type GeolocationPayload = {
-  imageUrl: string | null;
-};
+type GeolocationPayload = null;
 
 type PipelinePayload =
   | AbTestPayload

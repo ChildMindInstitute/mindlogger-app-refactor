@@ -197,9 +197,7 @@ type TimerRangeAnswerSettings = null;
 
 type GeolocationConfiguration = ButtonsConfiguration &
   AdditionalResponseConfiguration &
-  TimerConfiguration & {
-    imageUrl: string | null;
-  };
+  TimerConfiguration;
 
 type GeolocationAnswerSettings = null;
 

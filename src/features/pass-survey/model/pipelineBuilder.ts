@@ -139,7 +139,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             id: item.id,
             name: item.name,
             type: item.inputType,
-            payload: item.config,
+            payload: null,
             question: item.question,
             isSkippable: item.isSkippable,
             isAbleToMoveBack: item.isAbleToMoveBack,

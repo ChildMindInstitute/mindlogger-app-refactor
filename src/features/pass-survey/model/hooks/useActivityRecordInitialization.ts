@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo } from 'react';
 
 import { useActivityDetailsQuery, ActivityModel } from '@app/entities/activity';
 import { useAppletDetailsQuery } from '@app/entities/applet';
-import { GeolocationActivity } from '@app/shared/api/services/mockActivities';
 
 import { useActivityStorageRecord } from '../../lib';
 import { buildPipeline } from '../pipelineBuilder';
@@ -38,7 +37,7 @@ function useActivityRecordCreator({
   });
 
   // @todo remove once integration is done
-  activity = ActivityModel.mapToActivity(GeolocationActivity);
+  // activity = ActivityModel.mapToActivity(TextActivity);
 
   const pipeline = useMemo(
     () => (activity ? buildPipeline(activity) : []),

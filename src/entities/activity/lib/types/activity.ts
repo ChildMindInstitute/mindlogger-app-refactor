@@ -78,10 +78,6 @@ type RadioConfig = {
   }>;
 };
 
-type GeolocationConfig = {
-  imageUrl: string | null;
-};
-
 export type ActivityItemConfig =
   | AbTestConfig
   | DrawingTestTestConfig
@@ -91,7 +87,6 @@ export type ActivityItemConfig =
   | CheckboxConfig
   | RadioConfig
   | SplashConfig
-  | GeolocationConfig
   | null;
 
 type ActivityItemBase = {
@@ -163,7 +158,7 @@ interface RadioActivityItem extends ActivityItemBase {
 }
 interface GeolocationActivityItem extends ActivityItemBase {
   inputType: 'Geolocation';
-  config: GeolocationConfig;
+  config: null;
 }
 
 export type ActivityItem =

@@ -192,7 +192,6 @@ function ActivityItem({
       item = (
         <Box mx="$6">
           <GeolocationItem
-            config={pipelineItem.payload}
             onChange={geolocationValue => {
               onResponse(geolocationValue);
             }}

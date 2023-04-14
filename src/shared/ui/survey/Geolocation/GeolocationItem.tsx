@@ -1,7 +1,5 @@
 import { FC, useState } from 'react';
-import { StyleSheet } from 'react-native';
 
-import { CachedImage } from '@georstat/react-native-image-cache';
 import NativeGeolocation from '@react-native-community/geolocation';
 import { Button } from '@tamagui/button';
 import { styled } from '@tamagui/core';
@@ -25,13 +23,9 @@ const GeolocationButton = styled(Button, {
 type Props = {
   onChange: (value: Coordinates) => void;
   value?: Coordinates;
-  config: {
-    imageUrl: string | null;
-  };
 };
 
-const GeolocationItem: FC<Props> = ({ onChange, value = null, config }) => {
-  const { imageUrl } = config;
+const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
   const { t } = useTranslation();
   const [coordinates, setCoordinates] = useState<Coordinates | null>(value);
   const [errorMessage, setErrorMessage] = useState('');
@@ -99,26 +93,8 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null, config }) => {
       )}
 
       {isPermissionDenied && <Text mt={10}>{descriptionText}</Text>}
-
-      {imageUrl && (
-        <CachedImage
-          source={imageUrl}
-          style={styles.image}
-          resizeMode="contain"
-        />
-      )}
     </Center>
   );
 };
-
-const styles = StyleSheet.create({
-  image: {
-    width: 300,
-    height: 300,
-    padding: 20,
-    paddingBottom: 0,
-    marginBottom: 20,
-  },
-});
 
 export default GeolocationItem;
