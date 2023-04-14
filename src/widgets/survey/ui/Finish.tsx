@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { useActivityAnswersMutation } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import { PassSurveyModel } from '@app/features/pass-survey';
-import { getUnixTimestamp, useAppDispatch } from '@app/shared/lib';
+import {
+  getUnixTimestamp,
+  onApiRequestError,
+  useAppDispatch,
+} from '@app/shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
 import { FinishReason } from '../model';
@@ -44,7 +48,13 @@ function FinishItem({
     isLoading: isSendingAnswers,
     isSuccess: successfullySentAnswers,
     isPaused: isOffline,
-  } = useActivityAnswersMutation();
+  } = useActivityAnswersMutation({
+    onError: error => {
+      if (error.evaluatedMessage) {
+        onApiRequestError(error.evaluatedMessage);
+      }
+    },
+  });
 
   const finished =
     isOffline || successfullySentAnswers || finishReason === 'time-is-up';

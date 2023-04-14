@@ -25,7 +25,7 @@ type ActivityAnswersResponse = SuccessfulEmptyResponse;
 
 type FakeResponse = AxiosResponse<ActivityAnswersResponse>;
 
-const mockActivity = true;
+const mockActivity = false;
 
 function answerService() {
   return {
