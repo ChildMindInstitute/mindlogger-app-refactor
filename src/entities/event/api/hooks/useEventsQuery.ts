@@ -1,7 +1,7 @@
 import { QueryOptions, ReturnAwaited, useBaseQuery } from '@app/shared/api';
-import eventsService from '@app/shared/api/services/eventsService';
+import { EventsService } from '@app/shared/api';
 
-type FetchFn = typeof eventsService.getEvents;
+type FetchFn = typeof EventsService.getEvents;
 type Options<TData> = QueryOptions<FetchFn, TData>;
 
 const useEventsQuery = <TData = ReturnAwaited<FetchFn>>(
@@ -10,7 +10,7 @@ const useEventsQuery = <TData = ReturnAwaited<FetchFn>>(
 ) => {
   return useBaseQuery(
     ['events', { appletId }],
-    () => eventsService.getEvents({ appletId }),
+    () => EventsService.getEvents({ appletId }),
     {
       ...options,
       enabled: false,

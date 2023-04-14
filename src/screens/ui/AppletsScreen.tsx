@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@app/shared/lib';
 import { AppletList } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
-import { AppletsRefresh } from '@features/applets-refresh';
+import { AppletsRefresh, AppletsRefreshModel } from '@features/applets-refresh';
 import { Box, ImageBackground, ScrollView, Text, XStack } from '@shared/ui';
 
 const AppletsScreen: FC = () => {
@@ -21,6 +21,8 @@ const AppletsScreen: FC = () => {
       setOptions({ title: `${t('additional:hi')} ${userFirstName}!` });
     }
   }, [t, userFirstName, setOptions]);
+
+  AppletsRefreshModel.useAutomaticRefreshOnMount(() => {});
 
   return (
     <Box bg="$secondary" flex={1}>

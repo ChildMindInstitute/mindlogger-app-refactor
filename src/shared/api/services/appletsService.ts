@@ -81,4 +81,4 @@ function appletsService() {
   };
 }
 
-export default appletsService();
+export const AppletsService = appletsService();
