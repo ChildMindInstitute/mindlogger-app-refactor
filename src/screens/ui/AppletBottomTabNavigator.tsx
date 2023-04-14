@@ -3,6 +3,7 @@ import { useLayoutEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { mapThemeFromDto } from '@app/entities/applet/model';
 import { ActivityIndicator, Center, ImageBackground } from '@app/shared/ui';
@@ -44,6 +45,8 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
     }
   }, [appletTheme, navigation]);
 
+  const { bottom } = useSafeAreaInsets();
+
   return (
     <ImageBackground
       uri={appletTheme?.backgroundImage}
@@ -55,7 +58,10 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
       }
     >
       <Tab.Navigator
-        screenOptions={getAppletDetailsScreenOptions(appletTheme ?? null)}
+        screenOptions={getAppletDetailsScreenOptions(
+          appletTheme ?? null,
+          bottom,
+        )}
         initialRouteName="ActivityList"
       >
         <Tab.Screen
