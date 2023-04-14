@@ -6,6 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { IS_IOS } from '@app/shared/lib';
 import {
   Box,
+  GeolocationItem,
   KeyboardAvoidingView,
   MarkdownMessage,
   NumberSelector,
@@ -48,6 +49,8 @@ function ActivityItem({
   onAdditionalResponse,
   textVariableReplacer,
 }: Props) {
+  console.log('piplineItem in ActivityItem', pipelineItem);
+
   const [scrollEnabled, setScrollEnabled] = useState(true);
 
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -180,6 +183,20 @@ function ActivityItem({
             }}
             initialValue={value?.answer}
             textReplacer={textVariableReplacer}
+          />
+        </Box>
+      );
+      break;
+
+    case 'Geolocation':
+      item = (
+        <Box mx="$6">
+          <GeolocationItem
+            config={pipelineItem.payload}
+            onChange={geolocationValue => {
+              onResponse(geolocationValue);
+            }}
+            value={value?.answer}
           />
         </Box>
       );

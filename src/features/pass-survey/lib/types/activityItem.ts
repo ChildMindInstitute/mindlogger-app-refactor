@@ -4,6 +4,7 @@ import {
   CheckboxPipelineItem,
   DrawingTestPipelineItem,
   FlankerPipelineItem,
+  GeolocationPipelineItem,
   NumberSelectPipelineItem,
   PipelineItem,
   RadioPipelineItem,
@@ -62,6 +63,11 @@ interface RadioActivityItem extends ActivityItemBase {
   pipelineItem: RadioPipelineItem;
 }
 
+interface GeolocationActivityItem extends ActivityItemBase {
+  type: 'Geolocation';
+  pipelineItem: GeolocationPipelineItem;
+}
+
 export type ActivityItem =
   | TextInputActivityItem
   | AbTestActivityItem
@@ -71,4 +77,5 @@ export type ActivityItem =
   | NumberSelectActivityItem
   | CheckboxActivityItem
   | RadioActivityItem
-  | SplashActivityItem;
+  | SplashActivityItem
+  | GeolocationActivityItem;

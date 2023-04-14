@@ -104,7 +104,22 @@ function mapToFlanker(dto: FlankerItemDto): ActivityItem {
 }
 
 function mapToGeolocation(dto: GeolocationItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Geolocation',
+    timer: dto.config.timer,
+    order: dto.order,
+    config: dto.config,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToMessage(dto: MessageItemDto): ActivityItem {

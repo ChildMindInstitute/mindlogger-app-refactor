@@ -1,3 +1,5 @@
+import { Coordinates } from '@app/shared/ui';
+
 import {
   PipelineItemResponse,
   ActivityItemType,
@@ -91,6 +93,14 @@ interface RadioPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
+interface GeolocationPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Geolocation';
+  value: {
+    answer?: Coordinates;
+    additionalAnswer?: string;
+  };
+}
+
 export type PipelineItemAnswer =
   | SplashPipelineAnswer
   | TextInputPipelineAnswer
@@ -100,4 +110,5 @@ export type PipelineItemAnswer =
   | NumberSelectPipelineAnswer
   | SliderPipelineAnswer
   | RadioPipelineAnswer
-  | CheckboxPipelineAnswer;
+  | CheckboxPipelineAnswer
+  | GeolocationPipelineAnswer;
