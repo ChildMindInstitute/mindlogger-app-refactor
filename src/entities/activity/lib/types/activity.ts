@@ -1,29 +1,115 @@
-export type ActivityItemType = 'AbTest' | 'DrawingTest' | 'Splash';
+export type ActivityItemType =
+  | 'AbTest'
+  | 'DrawingTest'
+  | 'Splash'
+  | 'Flanker'
+  | 'TextInput'
+  | 'NumberSelect'
+  | 'Slider'
+  | 'Radio'
+  | 'Checkbox';
 
 type AbTestConfig = {
   device: 'Phone' | 'Tablet';
 };
 
 type DrawingTestTestConfig = {
-  instruction: string | null;
   imageUrl: string | null;
   backgroundImageUrl: string | null;
 };
 
-export type ActivityItemConfig = AbTestConfig | DrawingTestTestConfig | null;
+type TextInputConfig = {
+  maxLength: number;
+  isNumeric: boolean;
+  shouldIdentifyResponse: boolean;
+};
+
+type SliderConfig = {
+  leftTitle: string | null;
+  rightTitle: string | null;
+  minValue: number;
+  maxValue: number;
+  leftImageUrl: string | null;
+  rightImageUrl: string | null;
+  showTickMarks: boolean | null;
+  showTickLabels: boolean | null;
+  isContinuousSlider: boolean | null;
+};
+
+type NumberSelectConfig = {
+  max: number;
+  min: number;
+};
+
+type SplashConfig = {
+  imageUrl: string;
+};
+
+type CheckboxConfig = {
+  randomizeOptions: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  setPalette: boolean;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    score: number | null;
+    tooltip: string | null;
+    color: string | null;
+    isHidden: boolean;
+  }>;
+};
+
+type RadioConfig = {
+  randomizeOptions: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  setPalette: boolean;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    score: number | null;
+    tooltip: string | null;
+    color: string | null;
+    isHidden: boolean;
+  }>;
+};
+
+export type ActivityItemConfig =
+  | AbTestConfig
+  | DrawingTestTestConfig
+  | TextInputConfig
+  | NumberSelectConfig
+  | SliderConfig
+  | CheckboxConfig
+  | RadioConfig
+  | SplashConfig
+  | null;
 
 type ActivityItemBase = {
-  id: number;
+  id: string;
+  name?: string;
   inputType: ActivityItemType;
   config: ActivityItemConfig;
-  timer: number;
-  isSkippable: true;
-  hasAlert: true;
-  hasScore: true;
-  isAbleToMoveToPrevious: true;
-  hasTextResponse: true;
+  timer: number | null;
+  isSkippable: boolean;
+  hasAlert: boolean;
+  hasScore: boolean;
+  isAbleToMoveBack: boolean;
+  hasTextResponse: boolean;
+  canBeReset: boolean;
+  hasTopNavigation: boolean;
+  isHidden: boolean;
   order: number;
-  question?: string;
+  question: string;
+  validationOptions?: {
+    correctAnswer?: string;
+  };
+  additionalText?: {
+    required: boolean;
+  };
 };
 
 interface AbTestActivityItem extends ActivityItemBase {
@@ -33,7 +119,7 @@ interface AbTestActivityItem extends ActivityItemBase {
 
 interface SplashActivityItem extends ActivityItemBase {
   inputType: 'Splash';
-  config: null;
+  config: SplashConfig;
 }
 
 interface DrawingTestTestActivityItem extends ActivityItemBase {
@@ -41,21 +127,57 @@ interface DrawingTestTestActivityItem extends ActivityItemBase {
   config: DrawingTestTestConfig;
 }
 
+interface FlankerActivityItem extends ActivityItemBase {
+  inputType: 'Flanker';
+  config: any;
+}
+
+interface TextInputActivityItem extends ActivityItemBase {
+  inputType: 'TextInput';
+  config: TextInputConfig;
+}
+
+interface SliderActivityItem extends ActivityItemBase {
+  inputType: 'Slider';
+  config: SliderConfig;
+}
+
+interface NumberSelectActivityItem extends ActivityItemBase {
+  inputType: 'NumberSelect';
+  config: NumberSelectConfig;
+}
+
+interface CheckboxActivityItem extends ActivityItemBase {
+  inputType: 'Checkbox';
+  config: CheckboxConfig;
+}
+interface RadioActivityItem extends ActivityItemBase {
+  inputType: 'Radio';
+  config: RadioConfig;
+}
+
 export type ActivityItem =
   | AbTestActivityItem
   | SplashActivityItem
-  | DrawingTestTestActivityItem;
+  | DrawingTestTestActivityItem
+  | TextInputActivityItem
+  | FlankerActivityItem
+  | NumberSelectActivityItem
+  | SliderActivityItem
+  | CheckboxActivityItem
+  | RadioActivityItem;
 
 export type ActivityDetails = {
   id: string;
   name: string;
   description: string;
-  splashScreen: string;
-  image: string;
+  splashScreen: string | null;
+  image: string | null;
   showAllAtOnce: boolean;
   isSkippable: boolean;
   isReviewable: boolean;
   responseIsEditable: boolean;
-  ordering: number;
+  order: number;
+  isHidden: boolean;
   items: ActivityItem[];
 };

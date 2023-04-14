@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import {
-  FlowProgress,
   ActivityPipelineType,
-  EntitiesInProgress,
-  ProgressPayload,
-} from '../lib';
+  StoreProgress,
+  FlowProgress,
+  StoreProgressPayload,
+} from '@app/abstract/lib';
 
 type InProgressActivity = {
   appletId: string;
@@ -27,7 +27,7 @@ type InProgressFlow = {
 };
 
 type InitialState = {
-  inProgress: EntitiesInProgress;
+  inProgress: StoreProgress;
 };
 
 const initialState: InitialState = {
@@ -41,9 +41,9 @@ const slice = createSlice({
     activityStarted: (state, action: PayloadAction<InProgressActivity>) => {
       const { appletId, activityId, eventId } = action.payload;
 
-      const activityEvent: ProgressPayload = {
+      const activityEvent: StoreProgressPayload = {
         type: ActivityPipelineType.Regular,
-        startAt: new Date(),
+        startAt: new Date().getTime(),
         endAt: null,
       };
 
@@ -56,10 +56,10 @@ const slice = createSlice({
     flowStarted: (state, action: PayloadAction<InProgressFlow>) => {
       const { appletId, activityId, flowId, eventId } = action.payload;
 
-      const flowEvent: ProgressPayload = {
+      const flowEvent: StoreProgressPayload = {
         type: ActivityPipelineType.Flow,
         currentActivityId: activityId,
-        startAt: new Date(),
+        startAt: new Date().getTime(),
         endAt: null,
       };
 
@@ -81,7 +81,8 @@ const slice = createSlice({
     entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {
       const { appletId, entityId, eventId } = action.payload;
 
-      state.inProgress[appletId][entityId][eventId].endAt = new Date();
+      state.inProgress[appletId][entityId][eventId].endAt =
+        new Date().getTime();
     },
 
     entityAnswersSent: (state, action: PayloadAction<InProgressEntity>) => {

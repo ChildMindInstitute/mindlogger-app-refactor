@@ -15,8 +15,6 @@ import Text from './Text';
 export { Image } from '@tamagui/image';
 export { YStack, XStack, ZStack } from '@tamagui/stacks';
 export { RadioGroup } from '@tamagui/radio-group';
-export { Popover } from '@tamagui/popover';
-export { Dropdown as DropdownElement } from 'react-native-element-dropdown';
 export * from './icons';
 export * from './survey';
 
@@ -34,10 +32,11 @@ export { default as ListSeparator } from './ListSeparator';
 export { default as Dropdown } from './Dropdown';
 export * from './ViewSlider';
 export { default as ProgressBar } from './ProgressBar';
-export { default as Stepper } from './Stepper';
+export * from './Stepper';
 export { default as Slider } from './Slider';
 export { default as Button } from './Button';
 export { default as DateTimePicker } from './DateTimePicker';
+export { default as ScrollButton } from './ScrollButton';
 
 export {
   StatusBar,

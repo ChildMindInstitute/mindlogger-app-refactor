@@ -7,54 +7,63 @@ import CheckBoxItem from './CheckBox.item';
 import { Item } from './types';
 
 type Props = {
-  // @todo make sure backend will update config to new keys described below (type RefactoredConfig in ./types)
   config: {
-    items: Item[];
-    minValue: number;
-    maxValue: number;
-    colorPalette: boolean;
+    options: Item[];
     randomizeOptions: boolean;
+    addTooltip: boolean;
+    setPalette: boolean;
+    setAlerts: boolean;
   };
-  onChange: (values: number[]) => void;
-  values: number[];
+  onChange: (values: string[] | null) => void;
+  values: string[];
+  textReplacer: (markdown: string) => string;
 };
 
-const CheckBoxActivityItem: FC<Props> = ({ config, onChange, values }) => {
-  const { minValue, maxValue } = config;
-  const hasSingleItem = maxValue === 1 && minValue === 1;
+const CheckBoxActivityItem: FC<Props> = ({
+  config,
+  onChange,
+  values,
+  textReplacer,
+}) => {
+  const { options, randomizeOptions, addTooltip, setPalette } = config;
 
-  const { items, randomizeOptions } = config;
+  const onItemValueChanged = (checkedItemValue: string) => {
+    const hasCheckedValue = values.includes(checkedItemValue);
 
-  const onItemValueChanged = (checkedItemValue: number) => {
-    if (hasSingleItem) {
-      onChange([checkedItemValue]);
-    } else if (values.includes(checkedItemValue)) {
+    if (hasCheckedValue) {
       const filteredValues = values.filter(val => val !== checkedItemValue);
-      onChange(filteredValues);
+      const value = filteredValues.length ? filteredValues : null;
+
+      onChange(value);
     } else {
-      onChange([...values, checkedItemValue]);
+      const value = [...values, checkedItemValue];
+
+      onChange(value);
     }
   };
 
   const mutatedItems = useMemo(() => {
-    const filteredItems = items.filter(({ isVisible }) => isVisible);
+    const filteredItems = options.filter(({ isHidden }) => !isHidden);
     if (randomizeOptions) {
       return shuffle(filteredItems);
     }
 
     return filteredItems;
-  }, [randomizeOptions, items]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [randomizeOptions]);
 
   return (
     <ScrollView>
       {mutatedItems.map(item => {
         return (
-          <Box key={`checkbox-${item.value}`}>
+          <Box key={`checkbox-${item.id}`}>
             <CheckBoxItem
               {...item}
-              colorPalette={config.colorPalette}
-              onChange={() => onItemValueChanged(item.value)}
-              value={values.includes(item.value)}
+              tooltipAvailable={addTooltip}
+              setPalette={setPalette}
+              onChange={() => onItemValueChanged(item.id)}
+              value={values.includes(item.id)}
+              textReplacer={textReplacer}
             />
           </Box>
         );

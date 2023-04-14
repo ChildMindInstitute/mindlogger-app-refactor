@@ -1,41 +1,47 @@
+import { AxiosResponse } from 'axios';
+
+import { ImageUrl } from '@app/shared/lib';
+
+import { ActivityItemDto } from './ActivityItemDto';
 import httpService from './httpService';
+import { getTestActivity } from './mockActivities';
 import { SuccessfulResponse } from '../types';
 
-type ActivityItemDto = {
-  id: number;
-  inputType: string;
-  config: {};
-  timer: number;
-  hasTokenValue: true;
-  isSkippable: true;
-  hasAlert: true;
-  hasScore: true;
-  isAbleToMoveToPrevious: true;
-  hasTextResponse: true;
-  order: number;
-  question?: string;
-};
+export * from './ActivityItemDto';
 
 export type ActivityDto = {
   id: string;
   name: string;
   description: string;
-  splashScreen: string;
-  image: string;
+  splashScreen: ImageUrl | null;
+  image: ImageUrl | null;
   showAllAtOnce: boolean;
   isSkippable: boolean;
   isReviewable: boolean;
+  isHidden: boolean;
   responseIsEditable: boolean;
-  ordering: number;
+  order: number;
   items: ActivityItemDto[];
 };
 
 type ActivityResponse = SuccessfulResponse<ActivityDto>;
 
+const mockActivity = false;
+
+type FakeResponse = AxiosResponse<ActivityResponse>;
+
 function activityService() {
   return {
-    getById(id: string) {
-      return httpService.get<ActivityResponse>(`/activities/${id}`);
+    async getById(id: string) {
+      if (mockActivity) {
+        const response: FakeResponse = {
+          status: 200,
+          data: { result: getTestActivity() },
+        } as FakeResponse;
+        return Promise.resolve(response);
+      } else {
+        return httpService.get<ActivityResponse>(`/activities/${id}`);
+      }
     },
   };
 }

@@ -1,6 +1,7 @@
 import { FC, Suspense, PropsWithChildren } from 'react';
 
 import { CacheManager } from '@georstat/react-native-image-cache';
+import { PortalProvider } from '@tamagui/portal';
 import { Dirs } from 'react-native-file-access';
 
 import NavigationProvider from './NavigationProvider';
@@ -24,7 +25,9 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
         <ReactQueryProvider>
           <TamaguiProvider>
             <NavigationProvider>
-              <Suspense>{children}</Suspense>
+              <PortalProvider>
+                <Suspense>{children}</Suspense>
+              </PortalProvider>
             </NavigationProvider>
           </TamaguiProvider>
         </ReactQueryProvider>

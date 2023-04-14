@@ -1,1 +1,3 @@
-export { default as HtmlFlanker } from './HtmlFlanker';
+export * from './HtmlFlanker';
+export * from './NativeIosFlanker';
+export * from './mocks';

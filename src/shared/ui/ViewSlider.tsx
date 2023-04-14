@@ -5,7 +5,6 @@ import {
   useCallback,
   useMemo,
   useState,
-  useEffect,
 } from 'react';
 import { StyleSheet } from 'react-native';
 
@@ -35,9 +34,6 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
   ({ viewCount, startFrom = 0, renderView }, ref) => {
     const views = useMemo(() => range(viewCount), [viewCount]);
     const [width, setWidth] = useState(0);
-    const [deletedSlideIndex, setDeletedSlideIndex] = useState<number | null>(
-      null,
-    );
 
     const offsetIndex = useSharedValue(0 - startFrom);
 
@@ -54,7 +50,6 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
 
         if (canMove) {
           offsetIndex.value = offsetIndex.value - shift;
-          setDeletedSlideIndex(currentIndex);
         }
 
         return canMove;
@@ -64,12 +59,10 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
 
     const back = useCallback(
       (shift: number = 1) => {
-        const currentIndex = Math.abs(offsetIndex.value);
         const canMove = shift > 0 && offsetIndex.value < 0;
 
         if (canMove) {
           offsetIndex.value = offsetIndex.value + shift;
-          setDeletedSlideIndex(currentIndex);
         }
 
         return canMove;
@@ -88,16 +81,6 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
       [back, next],
     );
 
-    useEffect(() => {
-      const timerId = setTimeout(() => {
-        setDeletedSlideIndex(null);
-      }, 500);
-
-      return () => {
-        clearTimeout(timerId);
-      };
-    }, [deletedSlideIndex]);
-
     return (
       <Animated.View
         style={[styles.box, animatedStyles]}
@@ -105,13 +88,12 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
       >
         {views.map(index => {
           const isCurrent = Math.abs(offsetIndex.value) === index;
-          const isDeleted = deletedSlideIndex === index;
 
           return (
             <XStack key={index} w={width}>
-              {isCurrent || isDeleted ? (
+              {isCurrent ? (
                 <Animated.View
-                  entering={FadeIn.duration(600)}
+                  entering={FadeIn.duration(200)}
                   exiting={FadeOut.duration(200)}
                   style={styles.slide}
                 >

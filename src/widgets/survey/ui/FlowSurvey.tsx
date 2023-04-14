@@ -1,5 +1,11 @@
+import { StoreProgressPayload } from '@app/abstract/lib';
+import { useInProgressRecord } from '@app/entities/applet/model';
+import { ScheduleEvent } from '@app/entities/event';
+import { useEventQuery } from '@app/entities/event/api';
+
 import FlowElementSwitch from './FlowElementSwitch';
-import { useFlowState } from '../model';
+import { FinishReason, useFlowState } from '../model';
+import useTimer from '../model/hooks/useTimer';
 
 type Props = {
   appletId: string;
@@ -10,14 +16,37 @@ type Props = {
 };
 
 function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
-  const { next, back, step, pipeline } = useFlowState({
+  const { next, back, step, completeByTimer, isTimerElapsed, pipeline } =
+    useFlowState({
+      appletId,
+      activityId,
+      eventId,
+      flowId,
+    });
+
+  const event: ScheduleEvent = useEventQuery(appletId, eventId);
+
+  const progressRecord: StoreProgressPayload = useInProgressRecord({
     appletId,
-    activityId,
+    entityId: flowId ?? activityId,
     eventId,
-    flowId,
+  })!;
+
+  const entityStartedAt = progressRecord.startAt;
+
+  useTimer({
+    entityStartedAt,
+    onFinish: completeByTimer,
+    timerHourMinute: event.timers.timer,
   });
 
   const flowPipelineItem = pipeline[step];
+
+  let finishReason: FinishReason | null = null;
+
+  if (flowPipelineItem.type === 'Finish') {
+    finishReason = isTimerElapsed ? 'time-is-up' : 'regular';
+  }
 
   function complete() {
     const isLast = step === pipeline.length - 1;
@@ -32,6 +61,9 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
   return (
     <FlowElementSwitch
       {...flowPipelineItem}
+      finishReason={finishReason}
+      event={event!}
+      entityStartedAt={entityStartedAt}
       onClose={onClose}
       onBack={back}
       onComplete={complete}

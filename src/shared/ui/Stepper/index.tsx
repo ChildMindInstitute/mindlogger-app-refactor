@@ -10,6 +10,8 @@ import Progress from './Progress';
 import UndoButton from './UndoButton';
 import ViewList from './ViewList';
 
+export * from './contexts';
+
 type Props = PropsWithChildren<{
   startFrom: number;
   stepsCount: number;
@@ -25,7 +27,7 @@ type Props = PropsWithChildren<{
   onEndReached?: () => void;
 }>;
 
-function Stepper({
+export function Stepper({
   startFrom,
   stepsCount,
 
@@ -135,5 +137,3 @@ Stepper.NavigationPanel = NavigationPanel;
 Stepper.BackButton = BackButton;
 Stepper.NextButton = NextButton;
 Stepper.UndoButton = UndoButton;
-
-export default Stepper;

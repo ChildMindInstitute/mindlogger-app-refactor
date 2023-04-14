@@ -1,14 +1,15 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
+import { StyleSheet } from 'react-native';
 
+import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 
-import { colors } from '@shared/lib';
+import { colors, invertColor } from '@shared/lib';
 import {
   XStack,
   RadioGroup,
   Text,
   Box,
-  Image,
   QuestionTooltipIcon,
   Tooltip,
 } from '@shared/ui';
@@ -17,11 +18,14 @@ import RadioOption from './types';
 
 type RadioLabelProps = {
   option: RadioOption;
+  addTooltip: boolean;
+  setPalette: boolean;
+  textReplacer: (markdown: string) => string;
 };
 
 const RadioTooltipContainer = styled(Box, {
   marginRight: 10,
-  width: 36,
+  width: '8%',
 });
 
 const RadioTextContainer = styled(Box, {
@@ -30,40 +34,86 @@ const RadioTextContainer = styled(Box, {
 });
 
 const RadioItem: FC<RadioLabelProps> = ({
-  option: { isVisible, name, value, image, description },
+  option: { isHidden, id, text, color, image, tooltip },
+  addTooltip,
+  setPalette,
+  textReplacer,
 }) => {
-  if (!isVisible) {
+  const name = useMemo(() => textReplacer(text), [textReplacer, text]);
+  const tooltipText = useMemo(
+    () => textReplacer(tooltip ?? ''),
+    [textReplacer, tooltip],
+  );
+
+  if (isHidden) {
     return null;
   }
 
+  const hasColor = color && setPalette;
+  const invertedColor = hasColor
+    ? invertColor(color as string)
+    : colors.primary;
+  const invertedTextColor = hasColor
+    ? invertColor(color as string)
+    : colors.black;
+
   return (
-    <XStack alignItems="center">
-      <RadioTooltipContainer>
-        {description && (
-          <Tooltip tooltipText={description}>
-            <QuestionTooltipIcon color={colors.grey} size={36} />
+    <XStack
+      minHeight="$7"
+      bg={setPalette ? color : 'none'}
+      px="$3"
+      py="$3"
+      jc="center"
+      ai="center"
+      ac="center"
+      borderRadius={7}
+    >
+      {addTooltip && tooltip && (
+        <RadioTooltipContainer>
+          <Tooltip markdown={tooltipText}>
+            <QuestionTooltipIcon
+              color={hasColor ? invertedColor : colors.grey}
+              size={22}
+            />
           </Tooltip>
-        )}
-      </RadioTooltipContainer>
+        </RadioTooltipContainer>
+      )}
 
-      <Box height={64} width="20%">
-        {image && (
-          <Image src={image} width="100%" height="100%" resizeMode="contain" />
-        )}
-      </Box>
+      {image && (
+        <Box height={64} width="20%">
+          <CachedImage
+            source={image}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        </Box>
+      )}
 
-      <RadioTextContainer>
-        <Text fontSize={18}>{name}</Text>
+      {image && (
+        <Box width="10%">
+          <CachedImage
+            resizeMode="contain"
+            style={styles.image}
+            source={image}
+          />
+        </Box>
+      )}
+
+      <RadioTextContainer w="50%" px="2%">
+        <Text fontSize={18} color={invertedTextColor}>
+          {name}
+        </Text>
       </RadioTextContainer>
 
       <Box>
         <RadioGroup.Item
-          borderColor={colors.blue}
+          borderColor={invertedColor}
           borderWidth={3}
-          id={name}
-          value={String(value)}
+          bg={setPalette && color ? color : '#fff'}
+          id={text}
+          value={id}
         >
-          <RadioGroup.Indicator backgroundColor={colors.blue} />
+          <RadioGroup.Indicator bg={invertedColor} />
         </RadioGroup.Item>
       </Box>
     </XStack>
@@ -71,3 +121,12 @@ const RadioItem: FC<RadioLabelProps> = ({
 };
 
 export default RadioItem;
+
+const styles = StyleSheet.create({
+  image: {
+    width: '100%',
+    height: 40,
+    marginTop: 'auto',
+    marginBottom: 'auto',
+  },
+});

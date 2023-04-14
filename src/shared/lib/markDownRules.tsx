@@ -10,8 +10,9 @@ import {
 // @ts-ignore
 import * as mime from 'react-native-mime-types';
 
-import { colors } from '@shared/lib';
 import { Box, Text, AudioPlayer, VideoPlayer, YoutubeVideo } from '@shared/ui';
+
+import { colors } from './constants';
 
 const { width: viewPortWidth } = Dimensions.get('window');
 
@@ -46,6 +47,10 @@ const localStyles = StyleSheet.create({
   },
   htmlWebView: {
     width: '100%',
+  },
+  listItemText: {
+    fontSize: 13,
+    fontWeight: '500',
   },
 });
 
@@ -87,6 +92,14 @@ export const activityMarkDownStyles = StyleSheet.create({
   },
   text: {
     flexDirection: 'row',
+  },
+  blockquote: {
+    backgroundColor: colors.lighterGrey2,
+    borderLeftWidth: 4,
+    borderLeftColor: colors.mediumGrey,
+    paddingVertical: 0,
+    paddingHorizontal: 5,
+    marginLeft: 3,
   },
 });
 
@@ -209,6 +222,14 @@ const markDownRules: RenderRules = {
     updatedNodeContent = updatedNodeContent
       .replace(/<([^‘]*[a-zA-Z]+[^‘]*)>/gi, '')
       .replace(/\[\[sys.date]]/i, todayDate);
+    const [, , wrapperParent] = parent;
+
+    if (wrapperParent?.type === 'list_item') {
+      inheritedStyles = {
+        ...inheritedStyles,
+        ...localStyles.listItemText,
+      };
+    }
 
     return (
       <Text
@@ -282,25 +303,57 @@ const markDownRules: RenderRules = {
       />
     );
   },
+  list_item: (node, children, parents, styles) => {
+    return (
+      <Box key={node.key} my={-10}>
+        {
+          // @ts-ignore
+          defaultRenderRules.list_item(node, children, parents, styles)
+        }
+      </Box>
+    );
+  },
 };
 
 const styleVariables = (content: string) => {
-  const regex = /(\^\S+?\^)|(~\S+?~)/g;
-  const tildaRegex = /~\S+?~/g;
+  const regex = /(\^.+?\^)|(~.+?~)|(==.+?==)|(\+\+.+?\+\+)/g;
+  const highlightRegex = /[=]=.+?==/g;
+  const underlineRegex = /\+\+.+?\+\+/g;
+  const superscriptRegex = /\^.+?\^/g;
+  const subscriptRegex = /~.+?~/g;
+
   const strings = content.split(regex).filter(Boolean);
 
   return strings.map((text, index) => {
-    const isTildaVariable = tildaRegex.test(text);
+    if (highlightRegex.test(text)) {
+      return <Text backgroundColor="yellow">{text.replace(/[==^]/g, '')}</Text>;
+    }
 
-    return !regex.test(text) ? (
-      text
-    ) : (
-      <Box h={28} key={`subscript-${index}`}>
-        <Text fontSize={13} mt={isTildaVariable ? 14 : 0}>
-          {text.replace(/[~^]/g, '')}
-        </Text>
-      </Box>
-    );
+    if (underlineRegex.test(text)) {
+      return (
+        <Text textDecorationLine="underline">{text.replace(/[++^]/g, '')}</Text>
+      );
+    }
+
+    if (superscriptRegex.test(text)) {
+      return (
+        <Box h={28} key={`subscript-${index}`}>
+          <Text fontSize={13}>{text.replace(/\^/g, '')}</Text>
+        </Box>
+      );
+    }
+
+    if (subscriptRegex.test(text)) {
+      return (
+        <Box h={28} key={`subscript-${index}`}>
+          <Text fontSize={13} mt={14}>
+            {text.replace(/[~]/g, '')}
+          </Text>
+        </Box>
+      );
+    }
+
+    return text;
   });
 };
 

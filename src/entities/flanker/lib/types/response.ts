@@ -12,6 +12,8 @@ export type FlankerWebViewLogRecord = {
   trial_index: number;
 };
 
+export type FlankerNativeIosLogRecord = FlankerWebViewLogRecord;
+
 /*
   Discuss with BE if we can avoid such names in dto:
   button_pressed

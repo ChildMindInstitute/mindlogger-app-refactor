@@ -86,7 +86,7 @@
   },
   "applet_list_component": {
     "about_title": "About MindLogger",
-    "no_applets_yet": "You have no applets",
+    "no_applets_yet": "You have no applets.",
     "noon": "Noon",
     "midnight": "Midnight"
   },
@@ -203,9 +203,8 @@
     "alert_title": "\"MindLogger\" would like to use your microphone to complete this task.",
     "alert_message": "These can be configured in Settings.",
     "alert_button_ok": "Open Settings",
-    "alert_button_cancel": "Dismiss"
-  },
-  "record_button": {
+    "alert_button_cancel": "Dismiss",
+    "record_error": "There was an error initiating recorder.",
     "stop": "STOP",
     "record": "RECORD",
     "recording": "Recording...",
@@ -321,7 +320,8 @@
     "type_placeholder": "Please type text"
   },
   "additional": {
-    "end": "Time is up!",
+    "time-end": "Time is up!",
+    "time-end-tap": "Time is up. Tap to complete",
     "thanks": "Thanks!",
     "saved_answers": "We've saved your answers!",
     "submit_flow_answers": "Tap the",
@@ -355,5 +355,10 @@
     "finished_complete": "Finished. Click Done to complete.",
     "begin": "Begin",
     "end": "End"
+  },
+  "open_source": {
+    "title": "Open Source Software used",
+    "show_license": "Show License",
+    "homepage": "Homepage"
   }
 }

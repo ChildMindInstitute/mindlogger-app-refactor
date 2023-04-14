@@ -5,10 +5,20 @@ import { useTranslation } from 'react-i18next';
 
 import { useActivityAnswersMutation } from '@app/entities/activity';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
+import {
+  mapActivitiesFromDto,
+  mapActivityFlowFromDto,
+} from '@app/entities/applet/model';
 import { PassSurveyModel } from '@app/features/pass-survey';
-import { useAppDispatch } from '@app/shared/lib';
+import {
+  getUnixTimestamp,
+  onApiRequestError,
+  useAppDispatch,
+} from '@app/shared/lib';
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
+
+import { mapAnswersToDto } from '../model';
 
 type Props = {
   appletId: string;
@@ -18,19 +28,6 @@ type Props = {
 
   onClose: () => void;
   onFinish: () => void;
-};
-
-const mockActivityFlow = {
-  id: 'afid1',
-  name: 'Activity Flow number 1',
-  description:
-    'Activity Flow description number 1 Activity description 1 number 1 Activity description number 1',
-  image:
-    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  hideBadge: false,
-  ordering: 0,
-  isSingleReport: false,
-  activityIds: ['aid2', 'aid1'],
 };
 
 const ActivityBox = styled(Center, {
@@ -53,16 +50,25 @@ function Intermediate({
   const dispatch = useAppDispatch();
 
   let { data: activityFlow } = useAppletDetailsQuery(appletId, {
-    select: r => r.data.result.activityFlows.find(o => o.id === flowId),
+    select: response =>
+      mapActivityFlowFromDto(
+        response.data.result.activityFlows.find(o => o.id === flowId)!,
+      ),
   });
 
-  if (!activityFlow) {
-    activityFlow = mockActivityFlow;
-  }
+  let { data: allActivities } = useAppletDetailsQuery(appletId, {
+    select: r => mapActivitiesFromDto(r.data.result.activities),
+  });
 
-  const totalActivities = activityFlow.activityIds.length;
-  const passedActivities =
-    activityFlow.activityIds.findIndex(id => id === activityId) + 1;
+  const totalActivities = activityFlow!.activityIds.length;
+
+  const currentActivityIndex = activityFlow!.activityIds.findIndex(
+    id => id === activityId,
+  );
+
+  const nextActivityId = activityFlow!.activityIds[currentActivityIndex + 1];
+
+  const nextActivity = allActivities?.find(x => x.id === nextActivityId);
 
   const { activityStorageRecord, clearActivityStorageRecord } =
     PassSurveyModel.useActivityState({
@@ -81,24 +87,27 @@ function Intermediate({
       changeActivity();
       onFinish();
     },
+    onError: error => {
+      if (error.evaluatedMessage) {
+        onApiRequestError(error.evaluatedMessage);
+      }
+    },
   });
 
   const changeActivity = useCallback(() => {
-    if (!activityFlow) {
+    if (!nextActivity) {
       return;
     }
-
-    const nextActivityId = activityFlow.activityIds[passedActivities];
 
     dispatch(
       AppletModel.actions.flowUpdated({
         appletId,
         flowId,
-        activityId: nextActivityId,
+        activityId: nextActivity.id,
         eventId,
       }),
     );
-  }, [activityFlow, appletId, dispatch, eventId, flowId, passedActivities]);
+  }, [appletId, dispatch, eventId, flowId, nextActivity]);
 
   function completeActivity() {
     if (!activityStorageRecord) {
@@ -109,8 +118,12 @@ function Intermediate({
       flowId,
       appletId,
       activityId,
+      createdAt: getUnixTimestamp(Date.now()),
       version: activityStorageRecord.appletVersion,
-      answers: activityStorageRecord.answers as any,
+      answers: mapAnswersToDto(
+        activityStorageRecord.items,
+        activityStorageRecord.answers,
+      ),
     });
   }
 
@@ -133,14 +146,15 @@ function Intermediate({
 
         <ActivityBox>
           <Text fontWeight="bold" mb={10} fontSize={16}>
-            Activity 3
+            {nextActivity?.name ?? 'Activity 2'}
           </Text>
 
           <XStack>
             <Image src={badge} width={18} height={18} opacity={0.6} r={4} />
 
             <Text fontSize={14} color="$grey">
-              {passedActivities} of {totalActivities} {activityFlow.name}
+              {currentActivityIndex + 2} of {totalActivities}{' '}
+              {activityFlow!.name}
             </Text>
           </XStack>
         </ActivityBox>

@@ -1,10 +1,12 @@
+/* eslint-disable react-native/no-inline-styles */
 import { FC, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
+import { CachedImage } from '@georstat/react-native-image-cache';
+
 import { colors } from '@shared/lib';
-import { invertColor, replaceTextWithScreenVariables } from '@shared/lib/utils';
+import { invertColor } from '@shared/lib/utils';
 import {
-  Image,
   Text,
   XStack,
   QuestionTooltipIcon,
@@ -15,32 +17,33 @@ import {
 import { Item } from './types';
 
 type Props = {
-  colorPalette: boolean;
+  setPalette: boolean;
+  tooltipAvailable: boolean;
   onChange: () => void;
   value: boolean;
+  textReplacer: (markdown: string) => string;
 } & Omit<Item, 'value'>;
 
 const CheckBoxItem: FC<Props> = ({
   value,
-  colorPalette,
+  setPalette,
+  tooltipAvailable,
   onChange,
-  description,
+  tooltip,
   image,
   color,
-  name,
+  text,
+  textReplacer,
 }) => {
   const invertedColor =
-    colorPalette && color ? invertColor(color) : colors.primary;
+    setPalette && color ? invertColor(color) : colors.primary;
 
   const tooltipText = useMemo(
-    () => replaceTextWithScreenVariables(description),
-    [description],
+    () => textReplacer(tooltip || ''),
+    [textReplacer, tooltip],
   );
 
-  const memoizedName = useMemo(
-    () => replaceTextWithScreenVariables(name),
-    [name],
-  );
+  const name = useMemo(() => textReplacer(text), [textReplacer, text]);
 
   return (
     <XStack
@@ -50,25 +53,27 @@ const CheckBoxItem: FC<Props> = ({
       my="$1"
       ai="center"
       jc="space-between"
-      bg={colorPalette ? color : 'none'}
+      bg={setPalette ? color : 'none'}
       br={7}
-      bbw={colorPalette ? 0 : 1}
+      bbw={setPalette ? 0 : 1}
       bbc={colors.lighterGrey}
       onPress={onChange}
     >
       <XStack flex={1} ai="center">
-        {!!description && (
-          <Tooltip tooltipText={tooltipText}>
-            <QuestionTooltipIcon color={colors.grey} size={25} />
+        {!!tooltip && tooltipAvailable && (
+          <Tooltip markdown={tooltipText}>
+            <QuestionTooltipIcon color={invertedColor} size={25} />
           </Tooltip>
         )}
 
         {image ? (
-          <Image
-            width="15%"
-            height={64}
-            ml={description ? 5 : 0}
-            src={image}
+          <CachedImage
+            style={{
+              width: '15%',
+              height: 64,
+              marginLeft: tooltip ? 12 : 0,
+            }}
+            source={image}
             resizeMode="contain"
           />
         ) : null}
@@ -76,10 +81,10 @@ const CheckBoxItem: FC<Props> = ({
         <Text
           maxWidth="70%"
           ml="$4"
-          color={colorPalette && color ? invertedColor : colors.darkerGrey}
+          color={setPalette && color ? invertedColor : colors.darkerGrey}
           fontSize={17}
         >
-          {memoizedName}
+          {name}
         </Text>
       </XStack>
 
@@ -89,10 +94,10 @@ const CheckBoxItem: FC<Props> = ({
         animationDuration={0.2}
         boxType="square"
         tintColors={{
-          true: colors.grey,
-          false: colors.grey,
+          true: invertedColor,
+          false: invertedColor,
         }}
-        onCheckColor={color || colors.white}
+        onCheckColor={setPalette && color ? color : colors.white}
         onFillColor={invertedColor}
         onTintColor={invertedColor}
         tintColor={invertedColor}

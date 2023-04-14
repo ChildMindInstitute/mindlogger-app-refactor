@@ -1,6 +1,9 @@
+/* eslint-disable react-native/no-inline-styles */
 import { FC, useState } from 'react';
 
-import { Box, BoxProps, Image, Text, XStack } from '@app/shared/ui';
+import { CachedImage } from '@georstat/react-native-image-cache';
+
+import { Box, BoxProps, XStack } from '@app/shared/ui';
 
 import DrawingBoard from './DrawingBoard';
 import { DrawLine, DrawResult } from '../lib';
@@ -8,8 +11,7 @@ import { DrawLine, DrawResult } from '../lib';
 const RectPadding = 15;
 
 type Props = {
-  initialLines: Array<DrawLine>;
-  instruction: string | null;
+  value: Array<DrawLine>;
   imageUrl: string | null;
   backgroundImageUrl: string | null;
   onStarted: () => void;
@@ -19,31 +21,30 @@ type Props = {
 const DrawingTest: FC<Props> = props => {
   const [width, setWidth] = useState<number | null>(null);
 
-  const {
-    initialLines,
-    backgroundImageUrl,
-    imageUrl,
-    instruction,
-    onStarted,
-    onResult,
-  } = props;
+  const { value, backgroundImageUrl, imageUrl, onStarted, onResult } = props;
 
   return (
     <Box
       {...props}
       onLayout={x => {
-        setWidth(x.nativeEvent.layout.width - RectPadding * 2);
+        const containerWidth = x.nativeEvent.layout.width - RectPadding * 2;
+
+        if (containerWidth > 0) {
+          setWidth(containerWidth);
+        }
       }}
     >
       {!!imageUrl && (
         <XStack jc="center">
-          <Image
-            src={imageUrl}
-            width={300}
-            height={300}
-            p={20}
-            pb={0}
-            mb={20}
+          <CachedImage
+            source={imageUrl}
+            style={{
+              width: 300,
+              height: 300,
+              padding: 20,
+              paddingBottom: 0,
+              marginBottom: 20,
+            }}
             resizeMode="contain"
           />
         </XStack>
@@ -52,28 +53,20 @@ const DrawingTest: FC<Props> = props => {
       {!!width && (
         <XStack jc="center">
           {!!backgroundImageUrl && (
-            <Image
-              src={backgroundImageUrl}
-              position="absolute"
-              width={width}
-              height={width}
+            <CachedImage
+              source={backgroundImageUrl}
+              style={{ position: 'absolute', width, height: width }}
               resizeMode="contain"
             />
           )}
 
           <DrawingBoard
-            initialLines={initialLines}
+            value={value}
             onResult={onResult}
             onStarted={onStarted}
             width={width}
           />
         </XStack>
-      )}
-
-      {!!instruction && (
-        <Text mt={20} p={RectPadding} pt={0}>
-          {instruction}
-        </Text>
       )}
     </Box>
   );

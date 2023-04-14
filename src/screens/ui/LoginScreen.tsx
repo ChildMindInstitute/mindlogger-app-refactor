@@ -42,6 +42,10 @@ const LoginScreen: FC = () => {
     Linking.openURL('https://mindlogger.org/terms');
   };
 
+  const navigateToOpenSource = () => {
+    navigate('OpenSourceUsed');
+  };
+
   const onLoginSuccess = () => {
     navigate('Applets');
   };
@@ -81,7 +85,13 @@ const LoginScreen: FC = () => {
                 {t('language_screen:change_app_language')}
               </Link>
 
-              <Link onPress={navigateToTerms}>{t('Terms of Service')}</Link>
+              <Link onPress={navigateToTerms}>
+                {t('auth:terms_of_service')}
+              </Link>
+
+              <Link onPress={navigateToOpenSource}>
+                {t('open_source:title')}
+              </Link>
             </Center>
 
             <Image alignSelf="center" src={whiteLogo} width={70} height={70} />

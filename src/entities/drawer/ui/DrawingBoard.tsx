@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useRef, useState, useMemo } from 'react';
+import React, { useRef, useMemo, FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import {
@@ -36,46 +35,36 @@ paint.setStrokeWidth(1);
 paint.setStyle(PaintStyle.Stroke);
 
 type Props = {
-  initialLines: Array<DrawLine>;
+  value: Array<DrawLine>;
   onStarted: () => void;
   onResult: (result: DrawResult) => void;
   width: number;
 };
 
 const DrawingBoard: FC<Props> = props => {
-  const { initialLines, onResult, onStarted, width } = props;
+  const { value, onResult, onStarted, width } = props;
 
   const currentPathRef = useRef<SkPath | null>();
 
   const canvasRef = useRef<SkCanvas>();
 
-  const initialLogLines = useMemo(() => {
-    return transformByWidth(initialLines, width);
-  }, []);
+  const normalizedLines = useMemo(() => {
+    return transformByWidth(value, width);
+  }, [value, width]);
 
-  const logLines = useRef<Array<DrawLine>>(initialLogLines).current;
+  const currentLogLineRef = useRef<DrawLine | null>(null);
 
-  const [paths, setPaths] = useState<Array<SkPath>>(() => {
-    return convertToSkPaths(initialLogLines);
-  });
+  const paths = useMemo(
+    () => convertToSkPaths(normalizedLines),
+    [normalizedLines],
+  );
 
   const getCurrentPath = (): SkPath => currentPathRef.current!;
 
-  const keepPathInState = () => {
-    const path = getCurrentPath();
-    if (path) {
-      setPaths(list => [...list, path]);
-    }
-  };
-
   const resetCurrentPath = () => {
     currentPathRef.current = null;
+    currentLogLineRef.current = null;
     canvasRef.current?.clear(Skia.Color('transparent'));
-    reRender();
-  };
-
-  const reRender = () => {
-    setPaths(x => [...x]);
   };
 
   const reCreatePath = (point: Point) => {
@@ -88,22 +77,19 @@ const DrawingBoard: FC<Props> = props => {
     return { ...point, time: getNow() };
   };
 
-  const addLogLine = ({ x, y }: Point): void => {
-    logLines.push({
+  const createLogLine = ({ x, y }: Point): void => {
+    currentLogLineRef.current = {
       startTime: getNow(),
       points: [{ time: getNow(), x, y }],
-    });
+    };
   };
 
   const addLogPoint = (point: DrawPoint) => {
-    getLastLogLine()!.points.push(point);
+    getLogLine()!.points.push(point);
   };
 
-  const getLastLogLine = (): DrawLine | null => {
-    if (!logLines.length) {
-      return null;
-    }
-    return logLines[logLines.length - 1];
+  const getLogLine = (): DrawLine | null => {
+    return currentLogLineRef.current;
   };
 
   const onTouchStart = (touchInfo: TouchInfo) => {
@@ -113,7 +99,7 @@ const DrawingBoard: FC<Props> = props => {
 
     const point: Point = { x: touchInfo.x, y: touchInfo.y };
 
-    addLogLine(point);
+    createLogLine(point);
     reCreatePath(point);
     drawPath();
     onStarted();
@@ -134,23 +120,24 @@ const DrawingBoard: FC<Props> = props => {
   };
 
   const onTouchEnd = () => {
-    if (!getCurrentPath()) {
+    if (!getCurrentPath() || !currentLogLineRef.current) {
       return;
     }
 
-    const transformedLines = transformBack(logLines, width!);
+    const transformedLine = transformBack(currentLogLineRef.current, width);
 
-    const svgString = ResponseSerializer.process(transformedLines);
+    const lines = [...value, transformedLine];
+
+    const svgString = ResponseSerializer.process(lines);
 
     const result: DrawResult = {
-      lines: transformedLines,
+      lines,
       svgString,
-      width: width!,
+      width,
     };
 
-    keepPathInState();
-    resetCurrentPath();
     onResult(result);
+    resetCurrentPath();
   };
 
   const drawPath = () => {
@@ -166,7 +153,7 @@ const DrawingBoard: FC<Props> = props => {
       onActive: onTouchProgress,
       onEnd: onTouchEnd,
     },
-    [width],
+    [width, value],
   );
 
   const onDraw = useDrawCallback(
@@ -174,7 +161,7 @@ const DrawingBoard: FC<Props> = props => {
       canvasRef.current = canvas;
       touchHandler(info.touches);
     },
-    [width],
+    [width, touchHandler],
   );
 
   return (

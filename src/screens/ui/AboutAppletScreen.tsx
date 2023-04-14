@@ -1,19 +1,32 @@
 import { FC } from 'react';
 
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+
+import { useAppletDetailsQuery } from '@app/entities/applet';
 import rules from '@shared/lib/markDownRules';
 import { MarkdownView } from '@shared/ui';
 import { YStack, ScrollView, Box } from '@shared/ui';
 
-const AboutAppletScreen: FC = () => {
-  const mockContent =
-    "## \n ### Applet Description \n\n This applet is part of the open source MindLogger data collection and analysis platform designed by the MATTER Lab at the Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### What can MindLogger do? \n\n MindLogger's feature set is growing, and currently supports a wide variety of input types. Each screen in a MindLogger activity can include any of the following: \n  - Text, picture, and audio \n\n #### Where can I learn more? \n Please visit [https://mindlogger.org](https://mindlogger.org) for more information. \n\n ##### Cheers, \n\n ##### MindLogger Team \n\n ##### Child Mind Institute";
+import { AppletDetailsParamList } from '../config';
 
-  let content = mockContent;
+type Props = BottomTabScreenProps<AppletDetailsParamList, 'About'>;
 
-  if (content.startsWith('404:')) {
+const AboutAppletScreen: FC<Props> = ({ route }) => {
+  let content;
+  const {
+    params: { appletId },
+  } = route;
+
+  const { data: appletAbout } = useAppletDetailsQuery(appletId, {
+    select: r => r.data.result?.about,
+  });
+
+  if (!appletAbout || appletAbout.startsWith('404:')) {
     content =
       '# ¯\\\\_(ツ)_/¯ ' +
       '\n # \n The authors of this applet have not provided any information!';
+  } else {
+    content = appletAbout;
   }
 
   return (

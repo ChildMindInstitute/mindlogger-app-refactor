@@ -1,75 +1,62 @@
-import React, { FC, useMemo, useState } from 'react';
-import { FlatList } from 'react-native';
-
-import { useTranslation } from 'react-i18next';
+import React, { FC, useMemo } from 'react';
 
 import { shuffle } from '@shared/lib';
-import { YStack, RadioGroup, Input, ListSeparator, Box } from '@shared/ui';
+import { YStack, RadioGroup, Box } from '@shared/ui';
 
 import RadioItem from './RadioItem';
 import RadioOption from './types';
 
 type RadioActivityItemProps = {
   config: {
-    isOptionOrderRandomized: boolean;
     options: Array<RadioOption>;
-    isOptionalText: boolean;
+    setPalette: boolean;
+    addTooltip: boolean;
+    randomizeOptions: boolean;
   };
-
   onChange: (value: string) => void;
+  initialValue?: string;
+  textReplacer: (markdown: string) => string;
 };
 
 const RadioActivityItem: FC<RadioActivityItemProps> = ({
   config,
   onChange,
+  initialValue,
+  textReplacer,
 }) => {
-  const { options, isOptionOrderRandomized } = config;
-  const [radioGroupValue, setRadioGroupValue] = useState('');
-  const [optionalValue, setOptionalValue] = useState('');
-  const { t } = useTranslation();
+  const { options, randomizeOptions, addTooltip, setPalette } = config;
 
   const optionsList = useMemo(() => {
-    if (isOptionOrderRandomized) {
+    if (randomizeOptions) {
       return shuffle(options);
     }
 
     return options;
-  }, [isOptionOrderRandomized, options]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [randomizeOptions]);
 
   const onValueChange = (value: string) => {
-    setRadioGroupValue(value);
     onChange(value);
   };
-
-  const onSubmitEditing = () => onChange(optionalValue);
 
   return (
     <YStack>
       <RadioGroup
-        value={radioGroupValue}
+        value={initialValue ?? undefined}
         onValueChange={onValueChange}
         name="radio"
       >
-        <FlatList
-          data={optionsList}
-          bounces={false}
-          ItemSeparatorComponent={() => <ListSeparator />}
-          renderItem={({ item }) => (
-            <Box paddingVertical={5}>
-              <RadioItem option={item} />
-            </Box>
-          )}
-        />
+        {optionsList.map(option => (
+          <Box my="$1" key={option.id} onPress={() => onValueChange(option.id)}>
+            <RadioItem
+              option={option}
+              addTooltip={addTooltip}
+              setPalette={setPalette}
+              textReplacer={textReplacer}
+            />
+          </Box>
+        ))}
       </RadioGroup>
-
-      {config.isOptionalText && (
-        <Input
-          value={optionalValue}
-          placeholder={t('optional_text:enter_text')}
-          onChangeText={setOptionalValue}
-          onSubmitEditing={onSubmitEditing}
-        />
-      )}
     </YStack>
   );
 };

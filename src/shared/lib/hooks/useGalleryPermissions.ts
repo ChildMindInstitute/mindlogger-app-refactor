@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { RESULTS } from 'react-native-permissions';
 
-import { checkGalleryPermissions } from '../utils';
+import { checkGalleryPermissions } from '../permissions';
 
 const useGalleryPermissions = () => {
   const [galleryPermission, setGalleryPermission] = useState<string>(

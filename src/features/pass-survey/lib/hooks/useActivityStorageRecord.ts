@@ -1,8 +1,10 @@
 import { useCallback } from 'react';
 
-import { useMMKV, useMMKVObject } from 'react-native-mmkv';
+import { useMMKVObject } from 'react-native-mmkv';
 
-import { PipelineItem } from '../types';
+import { createSecureStorage } from '@app/shared/lib';
+
+import { PipelineItem, PipelineItemAnswer } from '../types';
 
 type UseActivityStorageArgs = {
   appletId: string;
@@ -10,20 +12,27 @@ type UseActivityStorageArgs = {
   eventId: string;
 };
 
+export type Answer = PipelineItemAnswer['value'];
+
+export type Answers = Record<string, Answer>;
+
+type Timers = Record<string, number>;
+
 export type ActivityState = {
   step: number;
   items: PipelineItem[];
-  answers: Record<string, any>;
+  answers: Answers;
   appletVersion: string;
+  timers: Timers;
 };
+
+const storage = createSecureStorage('activity_progress-storage');
 
 export function useActivityStorageRecord({
   appletId,
   activityId,
   eventId,
 }: UseActivityStorageArgs) {
-  const storage = useMMKV({ id: 'activity_progress-storage' });
-
   const key = `${appletId}-${activityId}-${eventId}`;
 
   const [activityStorageRecord, upsertActivityStorageRecord] =
@@ -31,7 +40,7 @@ export function useActivityStorageRecord({
 
   const clearActivityStorageRecord = useCallback(() => {
     storage.delete(key);
-  }, [key, storage]);
+  }, [key]);
 
   return {
     activityStorageRecord,

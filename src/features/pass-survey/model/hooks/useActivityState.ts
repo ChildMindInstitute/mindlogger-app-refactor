@@ -1,11 +1,4 @@
-import { useMemo } from 'react';
-
-import { useAppletDetailsQuery } from '@app/entities/applet';
-import { ActivityModel, useActivityDetailsQuery } from '@entities/activity';
-
-import { DrawingTestActivity } from './mockActivities';
 import { useActivityStorageRecord } from '../../lib';
-import { buildPipeline } from '../pipelineBuilder';
 
 type UseActivityPipelineArgs = {
   appletId: string;
@@ -28,43 +21,6 @@ function useActivityState({
     eventId,
   });
 
-  const { data: appletVersion = '' } = useAppletDetailsQuery(appletId, {
-    enabled: !activityStorageRecord,
-    select: r => r.data.result.version,
-  });
-
-  let { data: activity } = useActivityDetailsQuery(activityId, {
-    enabled: !activityStorageRecord,
-    select: r => r.data.result,
-  });
-
-  // @todo remove once integration is done
-  if (!activity) {
-    activity = DrawingTestActivity.grid;
-  }
-
-  const pipeline = useMemo(
-    () =>
-      activity ? buildPipeline(ActivityModel.mapToActivity(activity)) : [],
-    [activity],
-  );
-
-  const shouldCreateStorageRecord =
-    !activityStorageRecord && pipeline.length && appletVersion;
-
-  if (shouldCreateStorageRecord) {
-    createStorageRecord();
-  }
-
-  function createStorageRecord() {
-    upsertActivityStorageRecord({
-      step: 0,
-      items: pipeline,
-      answers: {},
-      appletVersion,
-    });
-  }
-
   function setStep(step: number) {
     if (!activityStorageRecord) {
       return;
@@ -85,7 +41,27 @@ function useActivityState({
       ...activityStorageRecord,
       answers: {
         ...activityStorageRecord.answers,
-        [step]: answer,
+        [step]: {
+          ...activityStorageRecord.answers?.[step],
+          answer,
+        },
+      },
+    });
+  }
+
+  function setAdditionalAnswer(step: number, answer: string) {
+    if (!activityStorageRecord) {
+      return;
+    }
+
+    upsertActivityStorageRecord({
+      ...activityStorageRecord,
+      answers: {
+        ...activityStorageRecord.answers,
+        [step]: {
+          ...activityStorageRecord.answers?.[step],
+          additionalAnswer: answer,
+        },
       },
     });
   }
@@ -107,12 +83,42 @@ function useActivityState({
     }
   }
 
+  function setTimer(step: number, progress: number) {
+    if (!activityStorageRecord) {
+      return;
+    }
+
+    upsertActivityStorageRecord({
+      ...activityStorageRecord,
+
+      timers: {
+        ...activityStorageRecord.timers,
+        [step]: progress,
+      },
+    });
+  }
+
+  function removeTimer(step: number) {
+    if (!activityStorageRecord?.timers) {
+      return;
+    }
+
+    delete activityStorageRecord.timers[step];
+
+    upsertActivityStorageRecord({
+      ...activityStorageRecord,
+    });
+  }
+
   return {
     activityStorageRecord,
     setStep,
     setAnswer,
     removeAnswer,
+    setAdditionalAnswer,
     clearActivityStorageRecord,
+    setTimer,
+    removeTimer,
   };
 }
 

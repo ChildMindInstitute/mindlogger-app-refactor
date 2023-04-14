@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { TextInputProps } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
@@ -8,27 +8,19 @@ import { Input } from '@shared/ui';
 
 type Props = {
   onChange: (text: string) => void;
-  initialValue?: string;
+  value: string;
   config: {
-    // @todo make sure backend will return this type after refactoring
-    maxLength?: string;
+    maxLength: number;
     isNumeric: boolean;
   };
-} & TextInputProps;
+} & Omit<TextInputProps, 'value' | 'onChange'>;
 
-const SimpleTextInput: FC<Props> = ({
-  initialValue = '',
-  onChange,
-  config,
-  ...props
-}) => {
+const SimpleTextInput: FC<Props> = ({ value, onChange, config, ...props }) => {
   const { maxLength = 50, isNumeric } = config;
 
   const { t } = useTranslation();
-  const [value, setValue] = useState(initialValue);
 
   const onChangeText = (text: string) => {
-    setValue(text);
     onChange(text);
   };
 

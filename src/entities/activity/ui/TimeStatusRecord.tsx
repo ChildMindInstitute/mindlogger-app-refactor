@@ -37,6 +37,12 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
   const hasTimeToComplete =
     isStatusInProgress && activity.isTimerSet && !!activity.timeLeftToComplete;
 
+  const hasTimerElapsed =
+    isStatusInProgress &&
+    activity.isTimerSet &&
+    !activity.timeLeftToComplete &&
+    activity.isTimerElapsed;
+
   const convert = (date: Date): string => {
     const convertResult = convertToTimeOnNoun(date);
     if (convertResult.translationKey) {
@@ -75,6 +81,10 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
             activity.timeLeftToComplete!,
           )}`}
         </StatusLine>
+      )}
+
+      {hasTimerElapsed && (
+        <StatusLine>{t('additional:time-end-tap')}</StatusLine>
       )}
     </Box>
   );

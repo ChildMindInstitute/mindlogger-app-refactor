@@ -1,6 +1,9 @@
 import { FC } from 'react';
+import { StyleSheet } from 'react-native';
 
-import { Box, XStack, YStack, Text, Image, Slider } from '@shared/ui';
+import { CachedImage } from '@georstat/react-native-image-cache';
+
+import { Box, XStack, YStack, Text, Slider } from '@shared/ui';
 
 import { SliderProps } from './types';
 
@@ -10,41 +13,43 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
   const {
     leftTitle,
     rightTitle,
-    items,
-    showTitles = true,
+    minValue,
+    maxValue,
     showTickMarks = true,
     showTickLabels = true,
     isContinuousSlider = false,
     leftImageUrl,
     rightImageUrl,
   } = config;
-
-  const { onChange, onRelease, onPress, initialValue = 0 } = props;
+  const { onChange, onRelease, onPress, initialValue } = props;
 
   const onValueChange = (arrayOfValues: number[]) => {
-    const [firstElement] = items;
     const [value] = arrayOfValues;
-    const numericValue = value + Number(firstElement.value);
-    const roundedValue = Math.round(numericValue * 100) / 100;
+    const roundedValue = Math.round(value * 100) / 100;
     onChange(roundedValue);
   };
 
-  const initialIndex = items.findIndex(({ value }) => value === initialValue);
+  const items = Array.from(
+    { length: maxValue - minValue + 1 },
+    (_, index) => index + minValue,
+  );
 
   return (
     <YStack>
       <Slider
-        defaultValue={[initialIndex !== -1 ? initialIndex : -100]}
-        onResponderRelease={onRelease}
-        onResponderStart={onPress}
+        animationType="spring"
+        initialValue={initialValue}
+        onSlidingComplete={onRelease}
+        onSlidingStart={onPress}
         onValueChange={onValueChange}
-        size={THUMB_SIZE}
-        max={items.length - 1}
+        maximumValue={maxValue}
+        minimumValue={minValue}
         step={isContinuousSlider ? 0.01 : 1}
+        size={THUMB_SIZE}
       />
 
       <XStack jc="space-between" mt={9}>
-        {items.map(({ value }) => {
+        {items.map(value => {
           return (
             <Box key={`tick-${value}`} w={THUMB_SIZE} ai="center">
               {showTickMarks && <Box w={1} bg="$black" h={8} />}
@@ -57,34 +62,28 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
       <XStack mt="$2" jc="space-between">
         <YStack maxWidth="30%" ai="center">
           {leftImageUrl && (
-            <Image
-              width={45}
-              height={45}
+            <CachedImage
+              style={styles.imageLeft}
               resizeMode="contain"
-              src={leftImageUrl}
+              source={leftImageUrl}
             />
           )}
 
-          {showTitles && leftTitle ? (
-            <Text textAlign="center">{leftTitle}</Text>
-          ) : null}
+          {leftTitle ? <Text textAlign="center">{leftTitle}</Text> : null}
         </YStack>
 
         <YStack maxWidth="30%" ml="auto" ai="center">
           {rightImageUrl && (
             <XStack jc="center">
-              <Image
-                width={45}
-                height={45}
+              <CachedImage
+                style={styles.imageRight}
                 resizeMode="contain"
-                src={rightImageUrl}
+                source={rightImageUrl}
               />
             </XStack>
           )}
 
-          {showTitles && rightTitle ? (
-            <Text textAlign="center">{rightTitle}</Text>
-          ) : null}
+          {rightTitle ? <Text textAlign="center">{rightTitle}</Text> : null}
         </YStack>
       </XStack>
     </YStack>
@@ -92,3 +91,14 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
 };
 
 export default SurveySlider;
+
+const styles = StyleSheet.create({
+  imageLeft: {
+    width: 45,
+    height: 45,
+  },
+  imageRight: {
+    width: 45,
+    height: 45,
+  },
+});

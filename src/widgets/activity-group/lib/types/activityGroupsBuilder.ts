@@ -1,12 +1,12 @@
+import { ActivityPipelineType } from '@app/abstract/lib';
 import { ActivityType } from '@entities/activity';
-import { ActivityPipelineType } from '@entities/applet';
 import { ScheduleEvent } from '@entities/event';
 
 export type Entity = {
   id: string;
   name: string;
   description: string;
-  image: string | null;
+  image?: string | null;
 };
 
 export type Activity = Entity & {
@@ -16,7 +16,7 @@ export type Activity = Entity & {
 
 export type ActivityFlow = Entity & {
   hideBadge: boolean;
-  items: Array<{ activityId: string }>;
+  activityIds: Array<string>;
   pipelineType: ActivityPipelineType.Flow;
 };
 

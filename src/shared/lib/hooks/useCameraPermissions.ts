@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { RESULTS } from 'react-native-permissions';
 
-import { checkCameraPermissions } from '../utils';
+import { checkCameraPermissions } from '../permissions';
 
 const useCameraPermissions = () => {
   const [cameraPermission, setCameraPermission] = useState<string>(

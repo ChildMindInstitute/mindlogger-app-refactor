@@ -17,7 +17,8 @@ const queryClient = new QueryClient({
     },
     queries: {
       retry: 2,
-      cacheTime: ONE_HOUR * 24,
+      cacheTime: Infinity,
+      staleTime: Infinity,
     },
   },
 });

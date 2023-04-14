@@ -23,6 +23,8 @@ interface IntermediatePipelineItem extends FlowPipelineItemBase {
   };
 }
 
+export type FinishReason = 'time-is-up' | 'regular';
+
 interface FinishPipelineItem extends FlowPipelineItemBase {
   type: 'Finish';
   payload: {

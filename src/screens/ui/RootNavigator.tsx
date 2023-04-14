@@ -24,6 +24,7 @@ import {
   SettingsScreen,
   AppletBottomTabNavigator,
   InProgressActivityScreen,
+  OpenSourceUsed,
 } from '../ui';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -59,6 +60,14 @@ export default () => {
             options={{ headerShown: false }}
             name="Login"
             component={LoginScreen}
+          />
+
+          <Stack.Screen
+            name="OpenSourceUsed"
+            options={{
+              title: t('open_source:title'),
+            }}
+            component={OpenSourceUsed}
           />
 
           <Stack.Screen
