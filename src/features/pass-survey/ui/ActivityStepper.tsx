@@ -22,9 +22,6 @@ import {
 } from '../model';
 
 type Props = {
-  appletId: string;
-  activityId: string;
-  eventId: string;
   idleTimer: HourMinute | null;
   entityStartedAt: number;
   timer: HourMinute | null;
@@ -226,8 +223,6 @@ function ActivityStepper({
                       type={pipelineItem.type}
                       value={value}
                       pipelineItem={pipelineItem}
-                      timerSettings={timer}
-                      entityStartedAt={entityStartedAt}
                       onResponse={response => {
                         setAnswer(currentStep, response);
                       }}

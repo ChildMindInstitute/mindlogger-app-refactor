@@ -39,7 +39,6 @@ function FlowElementSwitch({
             </BackButton>
 
             <ActivityStepper
-              {...payload}
               idleTimer={event.timers.idleTimer}
               timer={event.timers.timer}
               entityStartedAt={entityStartedAt}

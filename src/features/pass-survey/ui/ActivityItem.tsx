@@ -3,7 +3,7 @@ import { StyleSheet, useWindowDimensions } from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { HourMinute, IS_IOS } from '@app/shared/lib';
+import { IS_IOS } from '@app/shared/lib';
 import {
   Box,
   KeyboardAvoidingView,
@@ -33,8 +33,6 @@ import {
 
 type Props = ActivityItemProps &
   PipelineItemAnswer & {
-    timerSettings: HourMinute | null;
-    entityStartedAt: number;
     onResponse: (response: PipelineItemResponse) => void;
     onAdditionalResponse: (response: string) => void;
     textVariableReplacer: (markdown: string) => string;
