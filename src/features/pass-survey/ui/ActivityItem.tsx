@@ -3,7 +3,7 @@ import { StyleSheet, useWindowDimensions } from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { HourMinute, IS_IOS } from '@app/shared/lib';
+import { IS_IOS } from '@app/shared/lib';
 import {
   Box,
   KeyboardAvoidingView,
@@ -24,6 +24,7 @@ import {
 } from '@shared/ui';
 
 import AdditionalText from './AdditionalText';
+import Timer from './Timer';
 import {
   PipelineItemAnswer,
   ActivityItem as ActivityItemProps,
@@ -32,8 +33,6 @@ import {
 
 type Props = ActivityItemProps &
   PipelineItemAnswer & {
-    timerSettings: HourMinute | null;
-    entityStartedAt: number;
     onResponse: (response: PipelineItemResponse) => void;
     onAdditionalResponse: (response: string) => void;
     textVariableReplacer: (markdown: string) => string;
@@ -221,9 +220,13 @@ function ActivityItem({
           >
             <Box flex={1} justifyContent="center">
               {question && (
-                <Box mx={16} mb={20} alignItems="center">
+                <Box mx={16} mb={20}>
                   <MarkdownMessage content={question} />
                 </Box>
+              )}
+
+              {pipelineItem.timer && (
+                <Timer duration={pipelineItem.timer} onTimeIsUp={next} />
               )}
 
               {item}

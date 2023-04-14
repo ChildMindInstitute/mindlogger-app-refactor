@@ -5,7 +5,7 @@ abstract class TimerBase {
   protected timerId?: number;
   hasStarted: boolean = false;
 
-  constructor(startImmediately: boolean) {
+  constructor() {
     this.listener = AppState.addEventListener('change', nextAppState => {
       if (nextAppState === 'active') {
         if (this.onForeground) {
@@ -17,10 +17,6 @@ abstract class TimerBase {
         }
       }
     });
-
-    if (startImmediately) {
-      this.start();
-    }
   }
 
   protected start(): void {

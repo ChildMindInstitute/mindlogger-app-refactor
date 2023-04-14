@@ -8,8 +8,12 @@ class AppClockTimer extends TimerBase {
     onMinutePass: (...args: any[]) => unknown,
     startImmediately: boolean,
   ) {
-    super(startImmediately);
+    super();
     this.onMinutePass = onMinutePass;
+
+    if (startImmediately) {
+      this.start();
+    }
   }
 
   private getTimeToNextFullMinute(date: number): number {

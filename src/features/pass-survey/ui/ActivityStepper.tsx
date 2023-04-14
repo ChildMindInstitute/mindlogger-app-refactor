@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
@@ -13,7 +13,7 @@ import { ActivityIndicator, Box, Center, Stepper, XStack } from '@shared/ui';
 
 import ActivityItem from './ActivityItem';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
-import { useTextVariablesReplacer } from '../lib';
+import { ActivityIdentityContext, useTextVariablesReplacer } from '../lib';
 import {
   useActivityRecordInitialization,
   useActivityState,
@@ -22,9 +22,6 @@ import {
 } from '../model';
 
 type Props = {
-  appletId: string;
-  activityId: string;
-  eventId: string;
   idleTimer: HourMinute | null;
   entityStartedAt: number;
   timer: HourMinute | null;
@@ -33,9 +30,6 @@ type Props = {
 };
 
 function ActivityStepper({
-  appletId,
-  activityId,
-  eventId,
   idleTimer,
   timer,
   entityStartedAt,
@@ -46,17 +40,21 @@ function ActivityStepper({
 
   const { bottom } = useSafeAreaInsets();
 
+  const { appletId, activityId, eventId } = useContext(ActivityIdentityContext);
+
   useActivityRecordInitialization({
     appletId,
     activityId,
     eventId,
   });
+
   const {
     activityStorageRecord,
     setStep: setCurrentStep,
     setAnswer,
     removeAnswer,
     setAdditionalAnswer,
+    removeTimer,
   } = useActivityState({
     appletId,
     activityId,
@@ -107,13 +105,15 @@ function ActivityStepper({
   const showTimeLeft = !!timer;
 
   const onNext = (nextStep: number) => {
-    setCurrentStep(nextStep);
+    removeTimer(currentStep);
     restartIdleTimer();
+    setCurrentStep(nextStep);
   };
 
   const onBack = (nextStep: number) => {
-    setCurrentStep(nextStep);
+    removeTimer(currentStep);
     restartIdleTimer();
+    setCurrentStep(nextStep);
   };
 
   const onBeforeNext = (): number => {
@@ -223,8 +223,6 @@ function ActivityStepper({
                       type={pipelineItem.type}
                       value={value}
                       pipelineItem={pipelineItem}
-                      timerSettings={timer}
-                      entityStartedAt={entityStartedAt}
                       onResponse={response => {
                         setAnswer(currentStep, response);
                       }}

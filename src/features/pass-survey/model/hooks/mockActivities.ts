@@ -31,6 +31,7 @@ const grid: ActivityDto = {
       question: testMessage2,
       order: 0,
       responseType: 'drawing',
+      timer: null,
       config: {
         removeUndoButton: false,
         navigationToTop: true,
@@ -71,6 +72,7 @@ const vortex: ActivityDto = {
       question: testMessage1,
       order: 0,
       responseType: 'drawing',
+      timer: null,
       config: {
         removeUndoButton: false,
         navigationToTop: false,
@@ -131,6 +133,7 @@ export const AbTestActivity: ActivityDto = {
       id: '103',
       name: 'A/B Test',
       responseType: 'abTest',
+      timer: null,
       config: {
         timer: null,
       },
@@ -162,6 +165,7 @@ const FlankerWithImageActivity: ActivityDto = {
       name: 'Flanker',
       question: '',
       responseType: 'flanker',
+      timer: null,
       config: FlankerWithImageOnButton,
       responseValues: {},
       order: 0,
@@ -188,6 +192,7 @@ const FlankerWithStSFxActivity: ActivityDto = {
       name: 'Flanker',
       question: '',
       responseType: 'flanker',
+      timer: null,
       config: FlankerWithStFxImages,
       responseValues: {},
       order: 0,
@@ -214,6 +219,7 @@ const FlankerWithTextSignsActivity: ActivityDto = {
       name: 'Flanker',
       question: '',
       responseType: 'flanker',
+      timer: null,
       config: FlankerWithTextsSigns,
       responseValues: {},
       order: 0,
@@ -260,6 +266,7 @@ export const TextActivity: ActivityDto = {
       name: 'Text input',
       question: 'Type some text',
       responseType: 'text',
+      timer: 60,
       config: {
         maxResponseLength: 10,
         correctAnswerRequired: false,
@@ -271,6 +278,42 @@ export const TextActivity: ActivityDto = {
       },
       responseValues: null,
       order: 0,
+    },
+    {
+      id: '105',
+      name: 'Text input 2',
+      question: '',
+      responseType: 'text',
+      timer: 5,
+      config: {
+        maxResponseLength: 20,
+        correctAnswerRequired: false,
+        correctAnswer: 'Hello',
+        numericalResponseRequired: false,
+        responseDataIdentifier: false,
+        removeBackButton: false,
+        skippableItem: false,
+      },
+      responseValues: null,
+      order: 1,
+    },
+    {
+      id: '106',
+      name: 'Text input 6',
+      question: '',
+      responseType: 'text',
+      timer: 5,
+      config: {
+        maxResponseLength: 20,
+        correctAnswerRequired: false,
+        correctAnswer: 'Hello',
+        numericalResponseRequired: false,
+        responseDataIdentifier: false,
+        removeBackButton: false,
+        skippableItem: false,
+      },
+      responseValues: null,
+      order: 2,
     },
   ],
 };
@@ -299,6 +342,7 @@ export const SliderTestActivity: ActivityDto = {
         maxLabel: 'Maximum label',
       },
       id: '101231',
+      timer: null,
       config: {
         additionalResponseOption: {
           textInputOption: false,
@@ -338,6 +382,7 @@ export const NumberSelectActivity: ActivityDto = {
       id: '105',
       name: 'Number select',
       question: 'What',
+      timer: null,
       responseType: 'numberSelect',
       config: {
         removeBackButton: false,
@@ -374,6 +419,7 @@ export const CheckboxTestActivity: ActivityDto = {
       name: 'checkboxname',
       question: 'Choose checkboxes',
       responseType: 'multiSelect',
+      timer: null,
       order: 0,
       responseValues: {
         options: [
@@ -516,6 +562,7 @@ export const RadioTestActivity: ActivityDto = {
           },
         ],
       },
+      timer: null,
       id: '108',
       config: {
         additionalResponseOption: {
@@ -556,6 +603,7 @@ export const AllTextsActivity: ActivityDto = {
     {
       id: '12319758',
       name: 'Text input',
+      timer: null,
       question:
         '## Welcome to the demo session!\nWe\'ll start with the text fields.\nType "Hello!"',
       responseType: 'text',
@@ -576,6 +624,7 @@ export const AllTextsActivity: ActivityDto = {
       name: 'Text input',
       question: 'Type no more than 10 symbols. Can skip',
       responseType: 'text',
+      timer: null,
       config: {
         maxResponseLength: 10,
         correctAnswerRequired: false,
@@ -593,6 +642,7 @@ export const AllTextsActivity: ActivityDto = {
       name: 'Text input',
       question: 'Type a number. Back button removed',
       responseType: 'text',
+      timer: null,
       config: {
         maxResponseLength: 10,
         correctAnswerRequired: false,
@@ -628,6 +678,7 @@ export const AllCheckboxesActivity: ActivityDto = {
       question:
         'These are colored randomized checkboxes. Some of them have a tooltip',
       responseType: 'multiSelect',
+      timer: null,
       order: 0,
       responseValues: {
         options: [
@@ -679,6 +730,7 @@ export const AllCheckboxesActivity: ActivityDto = {
     {
       id: '12495124',
       name: 'checkboxname',
+      timer: null,
       question: 'These are simple checkboxes. Can skip. Cannot move back.',
       responseType: 'multiSelect',
       order: 0,
@@ -733,6 +785,7 @@ export const AllCheckboxesActivity: ActivityDto = {
       name: 'checkboxname',
       question: 'Pick any and give a required text response.',
       responseType: 'multiSelect',
+      timer: null,
       order: 0,
       responseValues: {
         options: [
@@ -797,6 +850,7 @@ export const AllRadioActivity: ActivityDto = {
   ordering: 0,
   items: [
     {
+      timer: null,
       responseValues: {
         options: [
           {
@@ -993,6 +1047,7 @@ export const AllRadioActivity: ActivityDto = {
       },
       responseType: 'singleSelect',
       name: 'radioName',
+      timer: null,
       question:
         'These are simple single select. Cannot move back. Has required text field',
       order: 1,
@@ -1024,6 +1079,7 @@ export const AllSliderActivity: ActivityDto = {
         maxLabel: 'Maximum label',
       },
       id: '345',
+      timer: null,
       config: {
         additionalResponseOption: {
           textInputOption: false,
@@ -1053,6 +1109,7 @@ export const AllSliderActivity: ActivityDto = {
         maxLabel: 'Happy',
       },
       id: '345',
+      timer: null,
       config: {
         additionalResponseOption: {
           textInputOption: false,
@@ -1096,6 +1153,7 @@ export const AllSliderActivity: ActivityDto = {
         addScores: false,
         setAlerts: false,
       },
+      timer: null,
       responseType: 'slider',
       name: 'sliderActivityItem',
       question: 'Choose any. And give an optional text response.',

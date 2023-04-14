@@ -1,5 +1,8 @@
 import { ScheduleEvent } from '@app/entities/event';
-import { ActivityStepper } from '@app/features/pass-survey';
+import {
+  ActivityIdentityContext,
+  ActivityStepper,
+} from '@app/features/pass-survey';
 import { colors } from '@app/shared/lib';
 import { BackButton, Box, CrossIcon } from '@app/shared/ui';
 
@@ -29,20 +32,21 @@ function FlowElementSwitch({
   switch (type) {
     case 'Stepper': {
       return (
-        <Box flex={1}>
-          <BackButton alignSelf="flex-end" mr={16} mt={10} mb={4}>
-            <CrossIcon color={colors.tertiary} size={30} />
-          </BackButton>
+        <ActivityIdentityContext.Provider value={payload}>
+          <Box flex={1}>
+            <BackButton alignSelf="flex-end" mr={16} mt={10} mb={4}>
+              <CrossIcon color={colors.tertiary} size={30} />
+            </BackButton>
 
-          <ActivityStepper
-            {...payload}
-            idleTimer={event.timers.idleTimer}
-            timer={event.timers.timer}
-            entityStartedAt={entityStartedAt}
-            onClose={onClose}
-            onFinish={onComplete}
-          />
-        </Box>
+            <ActivityStepper
+              idleTimer={event.timers.idleTimer}
+              timer={event.timers.timer}
+              entityStartedAt={entityStartedAt}
+              onClose={onClose}
+              onFinish={onComplete}
+            />
+          </Box>
+        </ActivityIdentityContext.Provider>
       );
     }
 

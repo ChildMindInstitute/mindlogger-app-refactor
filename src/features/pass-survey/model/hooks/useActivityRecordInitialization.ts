@@ -53,6 +53,7 @@ function useActivityRecordCreator({
       items: pipeline,
       answers: {},
       appletVersion,
+      timers: {},
     });
   }, [appletVersion, pipeline, upsertActivityStorageRecord]);
 

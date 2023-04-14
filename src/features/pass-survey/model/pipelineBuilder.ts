@@ -21,6 +21,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             question: item.question,
             isSkippable: item.isSkippable,
             isAbleToMoveBack: item.isAbleToMoveBack,
+            timer: item.timer,
           } satisfies PipelineItem;
         }
 
@@ -35,6 +36,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
             additionalText: item.additionalText,
+            timer: item.timer,
           } satisfies PipelineItem;
         }
 
@@ -43,6 +45,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             id: item.id,
             type: item.inputType,
             payload: item.config,
+            timer: item.timer,
           } satisfies PipelineItem;
         }
 
@@ -58,6 +61,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
+            timer: item.timer,
           } satisfies PipelineItem;
         }
 
@@ -74,6 +78,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
             additionalText: item.additionalText,
+            timer: item.timer,
           };
         }
 
@@ -90,6 +95,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
             additionalText: item.additionalText,
+            timer: item.timer,
           };
         }
 
@@ -106,6 +112,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             hasTopNavigation: item.hasTopNavigation,
             validationOptions: item.validationOptions,
             additionalText: item.additionalText,
+            timer: item.timer,
           };
         }
 
@@ -121,6 +128,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             canBeReset: item.canBeReset,
             hasTopNavigation: item.hasTopNavigation,
             additionalText: item.additionalText,
+            timer: item.timer,
           } satisfies PipelineItem;
         }
       }

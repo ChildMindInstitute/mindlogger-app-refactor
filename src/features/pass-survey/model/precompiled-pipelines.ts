@@ -14,6 +14,7 @@ export const getAbTrailsPipeline = (
         testIndex,
         deviceType,
       },
+      timer: null,
       canBeReset: false,
       isSkippable: false,
       isAbleToMoveBack: false,
@@ -29,6 +30,7 @@ export const getAbTrailsPipeline = (
         deviceType,
       },
       canBeReset: false,
+      timer: null,
       isSkippable: false,
       isAbleToMoveBack: false,
     };

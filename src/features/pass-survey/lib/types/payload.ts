@@ -107,6 +107,7 @@ type PipelineItemBase = {
   canBeReset?: boolean;
   hasTopNavigation?: boolean;
   question?: string;
+  timer: number | null;
   validationOptions?: {
     correctAnswer?: string;
   };

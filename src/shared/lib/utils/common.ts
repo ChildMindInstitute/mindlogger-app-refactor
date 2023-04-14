@@ -20,6 +20,10 @@ export function range(n: number): number[] {
   return [...Array(n).keys()];
 }
 
+export const isEmptyObject = (object: any) => {
+  return Object.keys(object).length;
+};
+
 export function getCurrentWeekDates(): Array<Date> {
   return Array.from(Array(7).keys()).map(idx => {
     const date = new Date();
