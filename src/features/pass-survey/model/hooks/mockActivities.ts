@@ -301,6 +301,7 @@ export const TextActivity: ActivityDto = {
       question: '',
       responseType: 'text',
       timer: 5,
+      isHidden: false,
       config: {
         maxResponseLength: 20,
         correctAnswerRequired: false,
@@ -319,6 +320,7 @@ export const TextActivity: ActivityDto = {
       question: '',
       responseType: 'text',
       timer: 5,
+      isHidden: false,
       config: {
         maxResponseLength: 20,
         correctAnswerRequired: false,
