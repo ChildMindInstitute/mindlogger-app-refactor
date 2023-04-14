@@ -1,6 +1,5 @@
 import { convertProgress } from '@app/abstract/lib';
-import { useAppletDetailsQuery } from '@app/entities/applet';
-import { selectInProgressApplets } from '@app/entities/applet/model/selectors';
+import { AppletModel, useAppletDetailsQuery } from '@app/entities/applet';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
 import { useEventsQuery } from '@app/entities/event/api';
 import { mapEventsFromDto } from '@app/entities/event/model/mappers';
@@ -11,7 +10,7 @@ import {
   Activity,
   ActivityFlow,
   ActivityListGroup,
-  ActivityOrFlow,
+  Entity,
   EventEntity,
 } from '../../lib';
 import { createActivityGroupsBuilder } from '../factories/ActivityGroupsBuilder';
@@ -29,13 +28,14 @@ type UseActivityGroupsReturn = {
 const buildIdToEntityMap = (
   activities: Activity[],
   activityFlows: ActivityFlow[],
-): Record<string, ActivityOrFlow> => {
-  return [...activities, ...activityFlows].reduce<
-    Record<string, ActivityOrFlow>
-  >((acc, current) => {
-    acc[current.id] = current;
-    return acc;
-  }, {});
+): Record<string, Entity> => {
+  return [...activities, ...activityFlows].reduce<Record<string, Entity>>(
+    (acc, current) => {
+      acc[current.id] = current;
+      return acc;
+    },
+    {},
+  );
 };
 
 export const useActivityGroups = (
@@ -65,7 +65,9 @@ export const useActivityGroups = (
     },
   });
 
-  const entitiesProgress = useAppSelector(selectInProgressApplets);
+  const entitiesProgress = useAppSelector(
+    AppletModel.selectors.selectInProgressApplets,
+  );
 
   if (isLoadingApplets || isLoadingEvents) {
     return {

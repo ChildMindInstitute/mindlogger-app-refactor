@@ -11,6 +11,7 @@ import {
   MS_IN_SECOND,
   getMsFromHours,
   getMsFromMinutes,
+  getTwoDigits,
 } from '../lib';
 
 type Props = {
@@ -62,9 +63,9 @@ const TimeRemaining: FC<Props> = (props: Props) => {
 
     return (
       t('activity_time:time_remaining') +
-      `: ${hours.toString().padStart(2, '0')}:${minutes
-        .toString()
-        .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+      `: ${getTwoDigits(hours)}:${getTwoDigits(minutes)}:${getTwoDigits(
+        seconds,
+      )}`
     );
   };
 

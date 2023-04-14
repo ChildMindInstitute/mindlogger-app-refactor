@@ -24,6 +24,7 @@ export type ActivityFlowRecordDto = {
   hideBadge: boolean;
   isSingleReport: boolean;
   order: number;
+  isHidden: boolean;
   activityIds: Array<string>;
 };
 

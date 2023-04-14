@@ -52,6 +52,8 @@ class NotificationBuilder implements INotificationBuilder {
 
   private _weekDays: Date[] | null;
 
+  private keepDebugData: boolean;
+
   constructor(inputData: NotificationBuilderInput) {
     this.now = new Date();
     this.progress = inputData.progress;
@@ -59,6 +61,7 @@ class NotificationBuilder implements INotificationBuilder {
     this.appletName = inputData.appletName;
     this.eventEntities = inputData.eventEntities;
     this._weekDays = null;
+    this.keepDebugData = false;
   }
 
   private get currentDay(): Date {
@@ -461,6 +464,9 @@ class NotificationBuilder implements INotificationBuilder {
     };
 
     if (!event.scheduledAt) {
+      console.warn(
+        `[NotificationBuilder.processEvent] event.scheduledAt has undefined value, event: ${event.id}`,
+      );
       return eventResult;
     }
 
@@ -578,6 +584,18 @@ class NotificationBuilder implements INotificationBuilder {
       this.markAllAsInactiveDueToEntityHidden(eventResult.notifications);
     }
 
+    if (this.keepDebugData) {
+      for (let notification of eventResult.notifications) {
+        notification.toString_Debug = JSON.stringify(notification, null, 2);
+        notification.scheduledEvent_Debug = event;
+        notification.scheduledEventString_Debug = JSON.stringify(
+          event,
+          null,
+          2,
+        );
+      }
+    }
+
     return eventResult;
   }
 
@@ -587,11 +605,18 @@ class NotificationBuilder implements INotificationBuilder {
     const eventNotificationsResult: Array<EventNotificationDescribers> = [];
 
     for (let eventEntity of this.eventEntities) {
-      const eventNotifications = this.processEvent(
-        eventEntity.event,
-        eventEntity.entity,
-      );
-      eventNotificationsResult.push(eventNotifications);
+      try {
+        const eventNotifications = this.processEvent(
+          eventEntity.event,
+          eventEntity.entity,
+        );
+        eventNotificationsResult.push(eventNotifications);
+      } catch (error: any) {
+        console.error(
+          `[NotificationBuilder.build] Error occurred during process event: "${eventEntity.event.id}", entity: "${eventEntity.entity?.name}" :\n\n` +
+            error.toString(),
+        );
+      }
     }
 
     const result: AppletNotificationDescribers = {
