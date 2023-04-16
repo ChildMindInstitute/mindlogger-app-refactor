@@ -10,6 +10,7 @@ export type ActivityItemType =
   | 'Geolocation'
   | 'TimeRange'
   | 'Photo'
+  | 'Video'
   | 'Checkbox';
 
 type AbTestConfig = {
@@ -82,6 +83,8 @@ type RadioConfig = {
 
 type PhotoConfig = null;
 
+type VideoConfig = null;
+
 export type ActivityItemConfig =
   | AbTestConfig
   | DrawingTestTestConfig
@@ -92,6 +95,7 @@ export type ActivityItemConfig =
   | RadioConfig
   | SplashConfig
   | PhotoConfig
+  | VideoConfig
   | null;
 
 type ActivityItemBase = {
@@ -177,6 +181,11 @@ interface PhotoActivityItem extends ActivityItemBase {
   config: PhotoConfig;
 }
 
+interface VideoActivityItem extends ActivityItemBase {
+  inputType: 'Video';
+  config: VideoConfig;
+}
+
 export type ActivityItem =
   | AbTestActivityItem
   | SplashActivityItem
@@ -189,7 +198,8 @@ export type ActivityItem =
   | GeolocationActivityItem
   | TimeRangeActivityItem
   | RadioActivityItem
-  | PhotoActivityItem;
+  | PhotoActivityItem
+  | VideoActivityItem;
 
 export type ActivityDetails = {
   id: string;

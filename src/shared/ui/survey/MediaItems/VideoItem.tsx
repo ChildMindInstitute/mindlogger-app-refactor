@@ -46,23 +46,39 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
     }
   };
 
+  const selectVideo = async () => {
+    const response = await launchImageLibrary(GALLERY_VIDEO_OPTIONS);
+
+    pickVideo(response, true);
+  };
+
+  const recordVideo = async () => {
+    const response = await launchCamera(VIDEO_RECORD_OPTIONS);
+
+    pickVideo(response, false);
+  };
+
   const onShowVideoGallery = async () => {
     if (isGalleryAccessGranted) {
-      const response = await launchImageLibrary(GALLERY_VIDEO_OPTIONS);
-
-      pickVideo(response, true);
+      selectVideo();
     } else {
-      await requestGalleryPermissions();
+      const permissionStatus = await requestGalleryPermissions();
+
+      if (permissionStatus === 'granted') {
+        selectVideo();
+      }
     }
   };
 
   const onOpenVideoCamera = async () => {
     if (isCameraAccessGranted) {
-      const response = await launchCamera(VIDEO_RECORD_OPTIONS);
-
-      pickVideo(response, false);
+      recordVideo();
     } else {
-      await requestCameraPermissions();
+      const permissionStatus = await requestCameraPermissions();
+
+      if (permissionStatus === 'granted') {
+        recordVideo();
+      }
     }
   };
   return (

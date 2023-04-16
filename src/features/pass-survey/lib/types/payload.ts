@@ -18,7 +18,8 @@ export type ActivityItemType =
   | 'NumberSelect'
   | 'Checkbox'
   | 'Geolocation'
-  | 'Photo';
+  | 'Photo'
+  | 'Video';
 
 type AbTestPayload = {
   testIndex: TestIndex;
@@ -94,6 +95,8 @@ type NumberSelectPayload = {
 type GeolocationPayload = null;
 
 type PhotoPayload = null;
+
+type VideoPayload = null;
 
 type PipelinePayload =
   | AbTestPayload
@@ -192,6 +195,11 @@ export interface PhotoPipelineItem extends PipelineItemBase {
   payload: PhotoPayload;
 }
 
+export interface VideoPipelineItem extends PipelineItemBase {
+  type: 'Video';
+  payload: VideoPayload;
+}
+
 export type AbTestResponse = LogLine[];
 
 export type DrawingTestResponse = DrawResult;
@@ -213,6 +221,14 @@ export type TimeRangeResponse = { from: string; to: string };
 export type RadioResponse = string;
 
 export type PhotoResponse = {
+  uri: string;
+  fileName: string;
+  size: number;
+  type: string;
+  fromLibrary: boolean;
+};
+
+export type VideoResponse = {
   uri: string;
   fileName: string;
   size: number;
@@ -246,4 +262,5 @@ export type PipelineItem =
   | TimeRangePipelineItem
   | GeolocationPipelineItem
   | PhotoPipelineItem
+  | VideoPipelineItem
   | RadioPipelineItem;

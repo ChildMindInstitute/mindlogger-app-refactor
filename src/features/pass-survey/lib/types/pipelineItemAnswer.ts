@@ -13,6 +13,7 @@ import {
   TimeRangeResponse,
   RadioResponse,
   PhotoResponse,
+  VideoResponse,
 } from './payload';
 
 type PipelineItemAnswerBase = {
@@ -118,6 +119,14 @@ interface PhotoPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
+interface VideoPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Video';
+  value: {
+    answer?: VideoResponse;
+    additionalAnswer?: string;
+  };
+}
+
 export type PipelineItemAnswer =
   | SplashPipelineAnswer
   | TextInputPipelineAnswer
@@ -130,4 +139,5 @@ export type PipelineItemAnswer =
   | TimeRangePipelineAnswer
   | GeolocationPipelineAnswer
   | PhotoPipelineAnswer
+  | VideoPipelineAnswer
   | CheckboxPipelineAnswer;

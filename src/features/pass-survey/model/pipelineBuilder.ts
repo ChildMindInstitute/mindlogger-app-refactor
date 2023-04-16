@@ -180,6 +180,22 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             timer: item.timer,
           } satisfies PipelineItem;
         }
+
+        case 'Video': {
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            additionalText: item.additionalText,
+            timer: item.timer,
+          } satisfies PipelineItem;
+        }
       }
     })
     .reduce<PipelineItem[]>((items, item) => {

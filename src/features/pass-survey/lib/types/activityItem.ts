@@ -13,6 +13,7 @@ import {
   SliderPipelineItem,
   SplashPipelineItem,
   TextInputPipelineItem,
+  VideoPipelineItem,
 } from './payload';
 
 type ActivityItemBase = {
@@ -78,6 +79,11 @@ interface PhotoActivityItem extends ActivityItemBase {
   pipelineItem: PhotoPipelineItem;
 }
 
+interface VideoActivityItem extends ActivityItemBase {
+  type: 'Video';
+  pipelineItem: VideoPipelineItem;
+}
+
 export type ActivityItem =
   | TextInputActivityItem
   | AbTestActivityItem
@@ -88,6 +94,7 @@ export type ActivityItem =
   | CheckboxActivityItem
   | TimeRangeActivityItem
   | RadioActivityItem
-  | SplashActivityItem
   | GeolocationActivityItem
-  | PhotoActivityItem;
+  | PhotoActivityItem
+  | VideoActivityItem
+  | SplashActivityItem;

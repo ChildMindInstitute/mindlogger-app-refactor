@@ -14,6 +14,7 @@ import {
   SimpleTextInput,
   SplashItem,
   PhotoItem,
+  VideoItem,
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
@@ -208,6 +209,14 @@ function ActivityItem({
       item = (
         <Box mx="$6">
           <PhotoItem onChange={onResponse} value={value?.answer} />
+        </Box>
+      );
+      break;
+
+    case 'Video':
+      item = (
+        <Box mx="$6">
+          <VideoItem onChange={onResponse} value={value?.answer} />
         </Box>
       );
       break;
