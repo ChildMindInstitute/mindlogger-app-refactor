@@ -12,6 +12,7 @@ import {
   CheckboxResponse,
   TimeRangeResponse,
   RadioResponse,
+  PhotoResponse,
 } from './payload';
 
 type PipelineItemAnswerBase = {
@@ -109,6 +110,13 @@ interface GeolocationPipelineAnswer extends PipelineItemAnswerBase {
     additionalAnswer?: string;
   };
 }
+interface PhotoPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Photo';
+  value: {
+    answer?: PhotoResponse;
+    additionalAnswer?: string;
+  };
+}
 
 export type PipelineItemAnswer =
   | SplashPipelineAnswer
@@ -121,4 +129,5 @@ export type PipelineItemAnswer =
   | RadioPipelineAnswer
   | TimeRangePipelineAnswer
   | GeolocationPipelineAnswer
+  | PhotoPipelineAnswer
   | CheckboxPipelineAnswer;

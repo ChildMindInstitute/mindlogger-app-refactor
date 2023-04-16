@@ -13,6 +13,7 @@ import {
   ScrollButton,
   SimpleTextInput,
   SplashItem,
+  PhotoItem,
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
@@ -199,6 +200,14 @@ function ActivityItem({
       item = (
         <Box mx="$6">
           <GeolocationItem onChange={onResponse} value={value?.answer} />
+        </Box>
+      );
+      break;
+
+    case 'Photo':
+      item = (
+        <Box mx="$6">
+          <PhotoItem onChange={onResponse} value={value?.answer} />
         </Box>
       );
       break;

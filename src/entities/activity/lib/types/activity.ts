@@ -9,6 +9,7 @@ export type ActivityItemType =
   | 'Radio'
   | 'Geolocation'
   | 'TimeRange'
+  | 'Photo'
   | 'Checkbox';
 
 type AbTestConfig = {
@@ -79,6 +80,8 @@ type RadioConfig = {
   }>;
 };
 
+type PhotoConfig = null;
+
 export type ActivityItemConfig =
   | AbTestConfig
   | DrawingTestTestConfig
@@ -88,6 +91,7 @@ export type ActivityItemConfig =
   | CheckboxConfig
   | RadioConfig
   | SplashConfig
+  | PhotoConfig
   | null;
 
 type ActivityItemBase = {
@@ -168,6 +172,11 @@ interface GeolocationActivityItem extends ActivityItemBase {
   config: null;
 }
 
+interface PhotoActivityItem extends ActivityItemBase {
+  inputType: 'Photo';
+  config: PhotoConfig;
+}
+
 export type ActivityItem =
   | AbTestActivityItem
   | SplashActivityItem
@@ -179,7 +188,8 @@ export type ActivityItem =
   | CheckboxActivityItem
   | GeolocationActivityItem
   | TimeRangeActivityItem
-  | RadioActivityItem;
+  | RadioActivityItem
+  | PhotoActivityItem;
 
 export type ActivityDetails = {
   id: string;

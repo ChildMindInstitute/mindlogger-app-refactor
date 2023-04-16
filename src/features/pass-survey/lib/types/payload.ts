@@ -17,7 +17,8 @@ export type ActivityItemType =
   | 'Slider'
   | 'NumberSelect'
   | 'Checkbox'
-  | 'Geolocation';
+  | 'Geolocation'
+  | 'Photo';
 
 type AbTestPayload = {
   testIndex: TestIndex;
@@ -92,6 +93,8 @@ type NumberSelectPayload = {
 
 type GeolocationPayload = null;
 
+type PhotoPayload = null;
+
 type PipelinePayload =
   | AbTestPayload
   | SplashPayload
@@ -104,7 +107,8 @@ type PipelinePayload =
   | SliderPayload
   | NumberSelectPayload
   | CheckboxPayload
-  | GeolocationPayload;
+  | GeolocationPayload
+  | PhotoPayload;
 
 type PipelineItemBase = {
   id?: string;
@@ -183,6 +187,10 @@ export interface TimeRangePipelineItem extends PipelineItemBase {
   type: 'TimeRange';
   payload: TimeRangePayload;
 }
+export interface PhotoPipelineItem extends PipelineItemBase {
+  type: 'Photo';
+  payload: PhotoPayload;
+}
 
 export type AbTestResponse = LogLine[];
 
@@ -204,6 +212,14 @@ export type TimeRangeResponse = { from: string; to: string };
 
 export type RadioResponse = string;
 
+export type PhotoResponse = {
+  uri: string;
+  fileName: string;
+  size: number;
+  type: string;
+  fromLibrary: boolean;
+};
+
 export type PipelineItemResponse =
   | AbTestResponse
   | FlankerResponse
@@ -214,6 +230,7 @@ export type PipelineItemResponse =
   | CheckboxResponse
   | TimeRangeResponse
   | GeolocationResponse
+  | PhotoResponse
   | RadioResponse;
 
 export type PipelineItem =
@@ -228,4 +245,5 @@ export type PipelineItem =
   | CheckboxPipelineItem
   | TimeRangePipelineItem
   | GeolocationPipelineItem
+  | PhotoPipelineItem
   | RadioPipelineItem;

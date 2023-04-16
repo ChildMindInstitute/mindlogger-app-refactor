@@ -46,21 +46,39 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
     }
   };
 
+  const selectImage = async () => {
+    const response = await launchImageLibrary(GALLERY_PHOTO_OPTIONS);
+
+    pickImage(response, true);
+  };
+
+  const takePhoto = async () => {
+    const response = await launchCamera(PHOTO_TAKE_OPTIONS);
+
+    pickImage(response, false);
+  };
+
   const onShowImageGallery = async () => {
     if (isGalleryAccessGranted) {
-      launchImageLibrary(GALLERY_PHOTO_OPTIONS, response =>
-        pickImage(response, true),
-      );
+      selectImage();
     } else {
-      await requestGalleryPermissions();
+      const permissionStatus = await requestGalleryPermissions();
+
+      if (permissionStatus === 'granted') {
+        selectImage();
+      }
     }
   };
 
   const onOpenPhotoCamera = async () => {
     if (isCameraAccessGranted) {
-      launchCamera(PHOTO_TAKE_OPTIONS, response => pickImage(response, false));
+      takePhoto();
     } else {
-      await requestCameraPermissions();
+      const permissionStatus = await requestCameraPermissions();
+
+      if (permissionStatus === 'granted') {
+        takePhoto();
+      }
     }
   };
 

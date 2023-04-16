@@ -7,6 +7,7 @@ export { default as VideoPlayer } from './VideoPlayer';
 export { default as YoutubeVideo } from './YoutubeVideo';
 export * from './Slider';
 export * from './CheckBox';
+export * from './MediaItems';
 export { default as NumberSelector } from './NumberSelector';
 export * from './Geolocation';
 export { default as AudioStimulusItem } from './AudioStimulusItem';

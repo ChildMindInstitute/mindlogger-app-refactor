@@ -6,6 +6,7 @@ import {
   FlankerPipelineItem,
   GeolocationPipelineItem,
   NumberSelectPipelineItem,
+  PhotoPipelineItem,
   PipelineItem,
   TimeRangePipelineItem,
   RadioPipelineItem,
@@ -72,6 +73,10 @@ interface GeolocationActivityItem extends ActivityItemBase {
   type: 'Geolocation';
   pipelineItem: GeolocationPipelineItem;
 }
+interface PhotoActivityItem extends ActivityItemBase {
+  type: 'Photo';
+  pipelineItem: PhotoPipelineItem;
+}
 
 export type ActivityItem =
   | TextInputActivityItem
@@ -84,4 +89,5 @@ export type ActivityItem =
   | TimeRangeActivityItem
   | RadioActivityItem
   | SplashActivityItem
-  | GeolocationActivityItem;
+  | GeolocationActivityItem
+  | PhotoActivityItem;
