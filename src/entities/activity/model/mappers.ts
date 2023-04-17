@@ -111,6 +111,7 @@ function mapToGeolocation(dto: GeolocationItemDto): ActivityItem {
     order: dto.order,
     config: null,
     question: dto.question,
+    isHidden: dto.isHidden,
     isSkippable: dto.config.skippableItem,
     hasAlert: false,
     hasScore: false,

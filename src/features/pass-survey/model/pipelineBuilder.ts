@@ -141,6 +141,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             type: item.inputType,
             payload: null,
             question: item.question,
+            timer: item.timer,
             isSkippable: item.isSkippable,
             isAbleToMoveBack: item.isAbleToMoveBack,
             canBeReset: item.canBeReset,

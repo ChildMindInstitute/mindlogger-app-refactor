@@ -308,15 +308,18 @@ export const GeolocationActivity: ActivityDto = {
   splashScreen: '',
   showAllAtOnce: false,
   isSkippable: false,
+  isHidden: false,
   isReviewable: false,
   responseIsEditable: false,
-  ordering: 0,
+  order: 0,
   items: [
     {
       id: '104',
       name: 'Geolocation',
       question: '',
       responseType: 'geolocation',
+      timer: null,
+      isHidden: false,
       config: {
         timer: null,
         removeBackButton: false,

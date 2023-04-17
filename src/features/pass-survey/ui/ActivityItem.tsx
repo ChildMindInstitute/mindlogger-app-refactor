@@ -49,8 +49,6 @@ function ActivityItem({
   onAdditionalResponse,
   textVariableReplacer,
 }: Props) {
-  console.log('piplineItem in ActivityItem', pipelineItem);
-
   const [scrollEnabled, setScrollEnabled] = useState(true);
 
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -191,12 +189,7 @@ function ActivityItem({
     case 'Geolocation':
       item = (
         <Box mx="$6">
-          <GeolocationItem
-            onChange={geolocationValue => {
-              onResponse(geolocationValue);
-            }}
-            value={value?.answer}
-          />
+          <GeolocationItem onChange={onResponse} value={value?.answer} />
         </Box>
       );
       break;

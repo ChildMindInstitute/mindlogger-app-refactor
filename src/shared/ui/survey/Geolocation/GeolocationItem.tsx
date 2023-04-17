@@ -27,7 +27,6 @@ type Props = {
 
 const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
   const { t } = useTranslation();
-  const [coordinates, setCoordinates] = useState<Coordinates | null>(value);
   const [errorMessage, setErrorMessage] = useState('');
   const locationPermission = useLocationPermissions();
 
@@ -42,12 +41,10 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
           latitude: successResult.coords.latitude,
           longitude: successResult.coords.longitude,
         };
-        setCoordinates(coordinatesResult);
         onChange(coordinatesResult);
       },
       () => {
         setErrorMessage(t('geolocation:service_not_available'));
-        setCoordinates(null);
       },
     );
   };
@@ -80,7 +77,7 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
         {t('geolocation:get_location')}
       </GeolocationButton>
 
-      {coordinates && (
+      {value && (
         <Text mt={10} textAlign="center">
           {t('geolocation:location_saved')}
         </Text>
