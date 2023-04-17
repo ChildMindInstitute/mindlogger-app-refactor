@@ -7,6 +7,7 @@ import {
   GeolocationPipelineItem,
   NumberSelectPipelineItem,
   PipelineItem,
+  TimeRangePipelineItem,
   RadioPipelineItem,
   SliderPipelineItem,
   SplashPipelineItem,
@@ -57,6 +58,10 @@ interface CheckboxActivityItem extends ActivityItemBase {
   type: 'Checkbox';
   pipelineItem: CheckboxPipelineItem;
 }
+interface TimeRangeActivityItem extends ActivityItemBase {
+  type: 'TimeRange';
+  pipelineItem: TimeRangePipelineItem;
+}
 
 interface RadioActivityItem extends ActivityItemBase {
   type: 'Radio';
@@ -76,6 +81,7 @@ export type ActivityItem =
   | SliderActivityItem
   | NumberSelectActivityItem
   | CheckboxActivityItem
+  | TimeRangeActivityItem
   | RadioActivityItem
   | SplashActivityItem
   | GeolocationActivityItem;

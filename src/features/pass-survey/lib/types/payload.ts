@@ -12,6 +12,7 @@ export type ActivityItemType =
   | 'Splash'
   | 'Flanker'
   | 'TextInput'
+  | 'TimeRange'
   | 'Radio'
   | 'Slider'
   | 'NumberSelect'
@@ -41,6 +42,8 @@ type SliderPayload = {
   showTickLabels: boolean | null;
   isContinuousSlider: boolean | null;
 };
+
+type TimeRangePayload = null;
 
 type RadioPayload = {
   randomizeOptions: boolean;
@@ -97,6 +100,7 @@ type PipelinePayload =
   | FlankerPayload
   | TextInputPayload
   | RadioPayload
+  | TimeRangePayload
   | SliderPayload
   | NumberSelectPayload
   | CheckboxPayload
@@ -175,6 +179,10 @@ export interface GeolocationPipelineItem extends PipelineItemBase {
   type: 'Geolocation';
   payload: GeolocationPayload;
 }
+export interface TimeRangePipelineItem extends PipelineItemBase {
+  type: 'TimeRange';
+  payload: TimeRangePayload;
+}
 
 export type AbTestResponse = LogLine[];
 
@@ -192,6 +200,8 @@ export type NumberSelectResponse = string;
 
 export type CheckboxResponse = string[] | null;
 
+export type TimeRangeResponse = { from: string; to: string };
+
 export type RadioResponse = string;
 
 export type PipelineItemResponse =
@@ -202,8 +212,9 @@ export type PipelineItemResponse =
   | SliderResponse
   | NumberSelectResponse
   | CheckboxResponse
-  | RadioResponse
-  | GeolocationResponse;
+  | TimeRangeResponse
+  | GeolocationResponse
+  | RadioResponse;
 
 export type PipelineItem =
   | AbTestPipelineItem
@@ -215,5 +226,6 @@ export type PipelineItem =
   | SliderPipelineItem
   | NumberSelectPipelineItem
   | CheckboxPipelineItem
-  | RadioPipelineItem
-  | GeolocationPipelineItem;
+  | TimeRangePipelineItem
+  | GeolocationPipelineItem
+  | RadioPipelineItem;

@@ -277,7 +277,23 @@ function mapToTextInput(dto: TextItemDto): ActivityItem {
 }
 
 function mapToTimeRange(dto: TimeRangeItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'TimeRange',
+    config: null,
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToVideo(dto: VideoItemDto): ActivityItem {

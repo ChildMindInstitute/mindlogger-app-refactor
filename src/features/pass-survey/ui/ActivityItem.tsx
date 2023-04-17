@@ -22,6 +22,7 @@ import {
   RadioActivityItem,
   SurveySlider,
   CheckBoxActivityItem,
+  TimeRangeItem,
 } from '@shared/ui';
 
 import AdditionalText from './AdditionalText';
@@ -166,6 +167,14 @@ function ActivityItem({
             values={value?.answer || []}
             textReplacer={textVariableReplacer}
           />
+        </Box>
+      );
+      break;
+
+    case 'TimeRange':
+      item = (
+        <Box mx="$6">
+          <TimeRangeItem onChange={onResponse} value={value?.answer} />
         </Box>
       );
       break;
