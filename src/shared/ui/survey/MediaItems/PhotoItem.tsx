@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import {
   ImagePickerResponse,
   launchCamera,
@@ -9,6 +10,7 @@ import {
 import {
   colors,
   GALLERY_PHOTO_OPTIONS,
+  handleBlockedPermissions,
   PHOTO_TAKE_OPTIONS,
   requestCameraPermissions,
   requestGalleryPermissions,
@@ -26,6 +28,7 @@ type Props = {
 };
 
 const PhotoItem: FC<Props> = ({ onChange, value }) => {
+  const { t } = useTranslation();
   const { isCameraAccessGranted } = useCameraPermissions();
   const { isGalleryAccessGranted } = useGalleryPermissions();
 
@@ -66,7 +69,14 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
 
       if (permissionStatus === 'granted') {
         selectImage();
+
+        return;
       }
+
+      await handleBlockedPermissions(
+        '"MindLogger" would like to use your gallery to complete this task', // @todo add specific translations for photo camera
+        t('audio_recorder:alert_message'),
+      );
     }
   };
 
@@ -78,7 +88,14 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
 
       if (permissionStatus === 'granted') {
         takePhoto();
+
+        return;
       }
+
+      await handleBlockedPermissions(
+        '"MindLogger" would like to use your camera to complete this task', // @todo add specific translations for photo camera
+        t('audio_recorder:alert_message'),
+      );
     }
   };
 

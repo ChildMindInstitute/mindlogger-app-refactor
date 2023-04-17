@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import {
   ImagePickerResponse,
   launchCamera,
@@ -9,6 +10,7 @@ import {
 import {
   colors,
   GALLERY_VIDEO_OPTIONS,
+  handleBlockedPermissions,
   requestCameraPermissions,
   requestGalleryPermissions,
   useCameraPermissions,
@@ -28,6 +30,7 @@ type Props = {
 const VideoItem: FC<Props> = ({ value, onChange }) => {
   const { isCameraAccessGranted } = useCameraPermissions();
   const { isGalleryAccessGranted } = useGalleryPermissions();
+  const { t } = useTranslation();
 
   const pickVideo = (response: ImagePickerResponse, isFromLibrary: boolean) => {
     const { assets } = response;
@@ -66,7 +69,14 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
 
       if (permissionStatus === 'granted') {
         selectVideo();
+
+        return;
       }
+
+      await handleBlockedPermissions(
+        '"MindLogger" would like to use your gallery to complete this task', // @todo add specific translations for photo camera
+        t('audio_recorder:alert_message'),
+      );
     }
   };
 
@@ -78,7 +88,14 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
 
       if (permissionStatus === 'granted') {
         recordVideo();
+
+        return;
       }
+
+      await handleBlockedPermissions(
+        '"MindLogger" would like to use your camera to complete this task', // @todo add specific translations for photo camera
+        t('audio_recorder:alert_message'),
+      );
     }
   };
   return (
