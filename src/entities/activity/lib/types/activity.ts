@@ -7,7 +7,8 @@ export type ActivityItemType =
   | 'NumberSelect'
   | 'Slider'
   | 'Radio'
-  | 'Checkbox';
+  | 'Checkbox'
+  | 'Geolocation';
 
 type AbTestConfig = {
   device: 'Phone' | 'Tablet';
@@ -155,6 +156,10 @@ interface RadioActivityItem extends ActivityItemBase {
   inputType: 'Radio';
   config: RadioConfig;
 }
+interface GeolocationActivityItem extends ActivityItemBase {
+  inputType: 'Geolocation';
+  config: null;
+}
 
 export type ActivityItem =
   | AbTestActivityItem
@@ -165,7 +170,8 @@ export type ActivityItem =
   | NumberSelectActivityItem
   | SliderActivityItem
   | CheckboxActivityItem
-  | RadioActivityItem;
+  | RadioActivityItem
+  | GeolocationActivityItem;
 
 export type ActivityDetails = {
   id: string;

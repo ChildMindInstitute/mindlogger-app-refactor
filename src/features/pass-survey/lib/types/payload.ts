@@ -1,5 +1,6 @@
 import { DrawResult } from '@app/entities/drawer';
 import { FlankerLogRecord, FlankerConfiguration } from '@app/entities/flanker';
+import { Coordinates } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
 
 import { Tutorial } from './tutorial';
@@ -14,7 +15,8 @@ export type ActivityItemType =
   | 'Radio'
   | 'Slider'
   | 'NumberSelect'
-  | 'Checkbox';
+  | 'Checkbox'
+  | 'Geolocation';
 
 type AbTestPayload = {
   testIndex: TestIndex;
@@ -85,6 +87,8 @@ type NumberSelectPayload = {
   min: number;
 };
 
+type GeolocationPayload = null;
+
 type PipelinePayload =
   | AbTestPayload
   | SplashPayload
@@ -95,7 +99,8 @@ type PipelinePayload =
   | RadioPayload
   | SliderPayload
   | NumberSelectPayload
-  | CheckboxPayload;
+  | CheckboxPayload
+  | GeolocationPayload;
 
 type PipelineItemBase = {
   id?: string;
@@ -166,6 +171,11 @@ export interface RadioPipelineItem extends PipelineItemBase {
   payload: RadioPayload;
 }
 
+export interface GeolocationPipelineItem extends PipelineItemBase {
+  type: 'Geolocation';
+  payload: GeolocationPayload;
+}
+
 export type AbTestResponse = LogLine[];
 
 export type DrawingTestResponse = DrawResult;
@@ -173,6 +183,8 @@ export type DrawingTestResponse = DrawResult;
 export type FlankerResponse = Array<FlankerLogRecord>;
 
 export type TextInputResponse = string;
+
+export type GeolocationResponse = Coordinates;
 
 export type SliderResponse = number | null;
 
@@ -190,7 +202,8 @@ export type PipelineItemResponse =
   | SliderResponse
   | NumberSelectResponse
   | CheckboxResponse
-  | RadioResponse;
+  | RadioResponse
+  | GeolocationResponse;
 
 export type PipelineItem =
   | AbTestPipelineItem
@@ -202,4 +215,5 @@ export type PipelineItem =
   | SliderPipelineItem
   | NumberSelectPipelineItem
   | CheckboxPipelineItem
-  | RadioPipelineItem;
+  | RadioPipelineItem
+  | GeolocationPipelineItem;

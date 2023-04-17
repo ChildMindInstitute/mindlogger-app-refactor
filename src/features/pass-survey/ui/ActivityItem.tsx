@@ -6,6 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { IS_IOS } from '@app/shared/lib';
 import {
   Box,
+  GeolocationItem,
   KeyboardAvoidingView,
   MarkdownMessage,
   NumberSelector,
@@ -181,6 +182,14 @@ function ActivityItem({
             initialValue={value?.answer}
             textReplacer={textVariableReplacer}
           />
+        </Box>
+      );
+      break;
+
+    case 'Geolocation':
+      item = (
+        <Box mx="$6">
+          <GeolocationItem onChange={onResponse} value={value?.answer} />
         </Box>
       );
       break;

@@ -131,6 +131,24 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             timer: item.timer,
           } satisfies PipelineItem;
         }
+
+        case 'Geolocation': {
+          console.log('item.', item);
+
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: null,
+            question: item.question,
+            timer: item.timer,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            additionalText: item.additionalText,
+          } satisfies PipelineItem;
+        }
       }
     })
     .reduce<PipelineItem[]>((items, item) => {
