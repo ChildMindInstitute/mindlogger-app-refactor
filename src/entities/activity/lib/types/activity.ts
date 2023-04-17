@@ -7,8 +7,9 @@ export type ActivityItemType =
   | 'NumberSelect'
   | 'Slider'
   | 'Radio'
-  | 'Checkbox'
-  | 'Geolocation';
+  | 'Geolocation'
+  | 'TimeRange'
+  | 'Checkbox';
 
 type AbTestConfig = {
   device: 'Phone' | 'Tablet';
@@ -152,6 +153,12 @@ interface CheckboxActivityItem extends ActivityItemBase {
   inputType: 'Checkbox';
   config: CheckboxConfig;
 }
+
+interface TimeRangeActivityItem extends ActivityItemBase {
+  inputType: 'TimeRange';
+  config: null;
+}
+
 interface RadioActivityItem extends ActivityItemBase {
   inputType: 'Radio';
   config: RadioConfig;
@@ -170,8 +177,9 @@ export type ActivityItem =
   | NumberSelectActivityItem
   | SliderActivityItem
   | CheckboxActivityItem
-  | RadioActivityItem
-  | GeolocationActivityItem;
+  | GeolocationActivityItem
+  | TimeRangeActivityItem
+  | RadioActivityItem;
 
 export type ActivityDetails = {
   id: string;
