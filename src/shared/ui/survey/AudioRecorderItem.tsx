@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getMicrophonePermissions, IS_ANDROID } from '@app/shared/lib';
 import {
   useMicrophonePermissions,
-  handleMicrophoneBlockedPermissions,
+  handleBlockedPermissions,
 } from '@shared/lib';
 import { StopIcon, MicrophoneIcon, XStack, Text, YStack } from '@shared/ui';
 
@@ -53,7 +53,10 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish }) => {
       const result = await getMicrophonePermissions();
 
       if (result === Permissions.RESULTS.BLOCKED) {
-        return await handleMicrophoneBlockedPermissions();
+        return await handleBlockedPermissions(
+          t('audio_recorder:alert_title'),
+          t('audio_recorder:alert_message'),
+        );
       }
     }
     return true;

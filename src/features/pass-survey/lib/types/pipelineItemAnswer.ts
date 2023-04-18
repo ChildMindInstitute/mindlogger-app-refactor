@@ -12,6 +12,8 @@ import {
   CheckboxResponse,
   TimeRangeResponse,
   RadioResponse,
+  PhotoResponse,
+  VideoResponse,
 } from './payload';
 
 type PipelineItemAnswerBase = {
@@ -109,6 +111,21 @@ interface GeolocationPipelineAnswer extends PipelineItemAnswerBase {
     additionalAnswer?: string;
   };
 }
+interface PhotoPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Photo';
+  value: {
+    answer?: PhotoResponse;
+    additionalAnswer?: string;
+  };
+}
+
+interface VideoPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Video';
+  value: {
+    answer?: VideoResponse;
+    additionalAnswer?: string;
+  };
+}
 
 export type PipelineItemAnswer =
   | SplashPipelineAnswer
@@ -121,4 +138,6 @@ export type PipelineItemAnswer =
   | RadioPipelineAnswer
   | TimeRangePipelineAnswer
   | GeolocationPipelineAnswer
+  | PhotoPipelineAnswer
+  | VideoPipelineAnswer
   | CheckboxPipelineAnswer;

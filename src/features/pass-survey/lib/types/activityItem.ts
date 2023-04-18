@@ -6,12 +6,14 @@ import {
   FlankerPipelineItem,
   GeolocationPipelineItem,
   NumberSelectPipelineItem,
+  PhotoPipelineItem,
   PipelineItem,
   TimeRangePipelineItem,
   RadioPipelineItem,
   SliderPipelineItem,
   SplashPipelineItem,
   TextInputPipelineItem,
+  VideoPipelineItem,
 } from './payload';
 
 type ActivityItemBase = {
@@ -72,6 +74,15 @@ interface GeolocationActivityItem extends ActivityItemBase {
   type: 'Geolocation';
   pipelineItem: GeolocationPipelineItem;
 }
+interface PhotoActivityItem extends ActivityItemBase {
+  type: 'Photo';
+  pipelineItem: PhotoPipelineItem;
+}
+
+interface VideoActivityItem extends ActivityItemBase {
+  type: 'Video';
+  pipelineItem: VideoPipelineItem;
+}
 
 export type ActivityItem =
   | TextInputActivityItem
@@ -83,5 +94,7 @@ export type ActivityItem =
   | CheckboxActivityItem
   | TimeRangeActivityItem
   | RadioActivityItem
-  | SplashActivityItem
-  | GeolocationActivityItem;
+  | GeolocationActivityItem
+  | PhotoActivityItem
+  | VideoActivityItem
+  | SplashActivityItem;

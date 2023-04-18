@@ -181,7 +181,23 @@ function mapToNumberSelect(dto: NumberSelectionItemDto): ActivityItem {
 }
 
 function mapToPhoto(dto: PhotoItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Photo',
+    config: null,
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
@@ -297,7 +313,23 @@ function mapToTimeRange(dto: TimeRangeItemDto): ActivityItem {
 }
 
 function mapToVideo(dto: VideoItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Video',
+    config: null,
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToSplash(splashScreen: string): ActivityItem {

@@ -1203,6 +1203,97 @@ export const AllSliderActivity: ActivityDto = {
   ],
 };
 
+export const PhotoActivityDto: ActivityDto = {
+  id: '123123',
+  name: 'Radio Activity',
+  description: 'Radio Activity Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  order: 0,
+  isHidden: false,
+  items: [
+    {
+      id: '23465',
+      name: 'test name',
+      question: 'hello',
+      order: 0,
+      isHidden: false,
+      responseType: 'photo',
+      timer: null,
+      config: {
+        timer: null,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: true,
+        skippableItem: false,
+      },
+      responseValues: null,
+    },
+  ],
+};
+
+export const VideoActivityDto: ActivityDto = {
+  id: '123123',
+  name: 'Video Activity',
+  description: 'Radio Activity Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  order: 0,
+  isHidden: false,
+  items: [
+    {
+      id: '23465',
+      name: 'test name',
+      question: 'hello',
+      order: 0,
+      isHidden: false,
+      responseType: 'video',
+      timer: null,
+      config: {
+        timer: null,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: true,
+        skippableItem: false,
+      },
+      responseValues: null,
+    },
+  ],
+};
+
+export const AllMediaActivity: ActivityDto = {
+  id: '123123',
+  name: 'All Media Activity',
+  description: 'Radio Activity Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  order: 0,
+  isHidden: false,
+  items: [...PhotoActivityDto.items, ...VideoActivityDto.items],
+};
+
 export const DemoActivity: ActivityDto = {
   id: 'aid1',
   name: 'Radio Activity',
