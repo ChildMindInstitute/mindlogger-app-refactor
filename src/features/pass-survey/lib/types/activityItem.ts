@@ -8,6 +8,7 @@ import {
   NumberSelectPipelineItem,
   PhotoPipelineItem,
   PipelineItem,
+  AudioPlayerPipelineItem,
   TimeRangePipelineItem,
   RadioPipelineItem,
   SliderPipelineItem,
@@ -60,6 +61,11 @@ interface CheckboxActivityItem extends ActivityItemBase {
   type: 'Checkbox';
   pipelineItem: CheckboxPipelineItem;
 }
+interface AudioPlayerActivityItem extends ActivityItemBase {
+  type: 'AudioPlayer';
+  pipelineItem: AudioPlayerPipelineItem;
+}
+
 interface TimeRangeActivityItem extends ActivityItemBase {
   type: 'TimeRange';
   pipelineItem: TimeRangePipelineItem;
@@ -92,6 +98,7 @@ export type ActivityItem =
   | SliderActivityItem
   | NumberSelectActivityItem
   | CheckboxActivityItem
+  | AudioPlayerActivityItem
   | TimeRangeActivityItem
   | RadioActivityItem
   | GeolocationActivityItem
