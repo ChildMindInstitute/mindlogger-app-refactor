@@ -15,7 +15,13 @@ import {
   ActivityRecordDto,
   AppletDto,
 } from '@app/shared/api';
-import { ImageUrl } from '@app/shared/lib';
+import {
+  ImageUrl,
+  getActivityDetailsKey,
+  getAppletDetailsKey,
+  getAppletsKey,
+  getEventsKey,
+} from '@app/shared/lib';
 import {
   collectActivityDetailsImageUrls,
   collectAppletDetailsImageUrls,
@@ -35,17 +41,6 @@ class RefreshService {
     this.queryClient = queryClient;
     this.showWrongUrlLogs = false;
   }
-
-  private getAppletsKey = () => ['applets'];
-
-  private getAppletDetailsKey = (appletId: string) => ['applets', { appletId }];
-
-  private getEventsKey = (appletId: string) => ['events', { appletId }];
-
-  private getActivityDetailsKey = (activityId: string) => [
-    'activities',
-    { activityId },
-  ];
 
   private async resetAllQueries() {
     await this.queryClient.removeQueries(['applets']);
@@ -81,7 +76,7 @@ class RefreshService {
     try {
       const activityResponse = await ActivityService.getById(activityId);
 
-      const activityKey = this.getActivityDetailsKey(activityId);
+      const activityKey = getActivityDetailsKey(activityId);
 
       this.queryClient.setQueryData(activityKey, activityResponse);
 
@@ -100,7 +95,7 @@ class RefreshService {
   ): Promise<AppletActivity[]> {
     const appletId = appletDto.id;
 
-    const appletDetailsKey = this.getAppletDetailsKey(appletId);
+    const appletDetailsKey = getAppletDetailsKey(appletId);
 
     const appletDetailsResponse = await AppletsService.getAppletDetails({
       appletId,
@@ -119,7 +114,7 @@ class RefreshService {
 
     const eventsResponse = await EventsService.getEvents({ appletId });
 
-    const eventsKey = this.getEventsKey(appletId);
+    const eventsKey = getEventsKey(appletId);
 
     this.queryClient.setQueryData(eventsKey, eventsResponse);
 
@@ -153,7 +148,7 @@ class RefreshService {
 
     const appletsResponse = await AppletsService.getApplets();
 
-    this.queryClient.setQueryData(this.getAppletsKey(), appletsResponse);
+    this.queryClient.setQueryData(getAppletsKey(), appletsResponse);
 
     const appletDtos: AppletDto[] = appletsResponse.data.result;
 

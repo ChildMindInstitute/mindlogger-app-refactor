@@ -2,8 +2,12 @@ import { differenceInMonths, isEqual, startOfDay, subMonths } from 'date-fns';
 import { Parse, Day } from 'dayspan';
 
 import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
+import { getTwoDigits } from '@app/shared/lib';
 
-import { EventAvailability, ScheduleEvent } from '../../lib';
+import {
+  EventAvailability,
+  ScheduleEvent,
+} from '../../lib/types/scheduledDateCalculator';
 
 type EventParseInput = Parameters<typeof Parse.schedule>[0];
 
@@ -112,8 +116,10 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
   if (availability.timeFrom) {
     parseInput.times = [
       availability.timeFrom.minutes === 0
-        ? `${availability.timeFrom.hours}`
-        : `${availability.timeFrom.hours}:${availability.timeFrom.minutes}`,
+        ? `${getTwoDigits(availability.timeFrom.hours)}`
+        : `${getTwoDigits(availability.timeFrom.hours)}:${getTwoDigits(
+            availability.timeFrom.minutes,
+          )}`,
     ];
   }
 

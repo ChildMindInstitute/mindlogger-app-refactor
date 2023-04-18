@@ -88,3 +88,7 @@ export const Mutex = () => {
     },
   };
 };
+
+export const getTwoDigits = (val: number) => {
+  return val.toString().padStart(2, '0');
+};
