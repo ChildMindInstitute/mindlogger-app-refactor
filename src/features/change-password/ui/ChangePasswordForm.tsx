@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useToast } from 'react-native-toast-notifications';
 
 import { useChangePasswordMutation } from '@app/entities/identity';
 import { useAppForm, useFormChanges } from '@shared/lib';
@@ -16,6 +17,7 @@ type Props = BoxProps & {
 
 const ChangePasswordForm: FC<Props> = props => {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const {
     mutate: changePassword,
@@ -25,6 +27,7 @@ const ChangePasswordForm: FC<Props> = props => {
   } = useChangePasswordMutation({
     onSuccess: () => {
       props.onChangePasswordSuccess();
+      toast.show('Password updated'); // @todo add correct translations
     },
   });
 

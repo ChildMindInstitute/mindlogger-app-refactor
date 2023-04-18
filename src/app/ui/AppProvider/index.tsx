@@ -9,6 +9,7 @@ import ReactQueryProvider from './ReactQueryProvider';
 import ReduxProvider from './ReduxProvider';
 import SplashProvider from './SplashProvider';
 import TamaguiProvider from './TamaguiProvider';
+import ToastProvider from './ToastProvider';
 
 CacheManager.config = {
   baseDir: `${Dirs.CacheDir}/images_cache/`,
@@ -26,7 +27,9 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
           <TamaguiProvider>
             <NavigationProvider>
               <PortalProvider>
-                <Suspense>{children}</Suspense>
+                <ToastProvider>
+                  <Suspense>{children}</Suspense>
+                </ToastProvider>
               </PortalProvider>
             </NavigationProvider>
           </TamaguiProvider>
