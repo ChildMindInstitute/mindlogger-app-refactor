@@ -95,10 +95,12 @@ export const useActivityGroups = (
     progress: convertProgress(entitiesProgress),
   });
 
-  let entityEvents = events.map<EventEntity>(event => ({
-    entity: idToEntity[event.entityId],
-    event,
-  }));
+  let entityEvents = events
+    .map<EventEntity>(event => ({
+      entity: idToEntity[event.entityId],
+      event,
+    }))
+    .filter(entityEvent => !!entityEvent.entity);
 
   const calculator = EventModel.ScheduledDateCalculator;
 
