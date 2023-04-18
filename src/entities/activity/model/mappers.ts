@@ -92,7 +92,26 @@ function mapToAudio(dto: AudioItemDto): ActivityItem {
 }
 
 function mapToAudioPlayer(dto: AudioPlayerItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'AudioPlayer',
+    config: {
+      file: dto.responseValues.file,
+      playOnce: dto.config.playOnce,
+    },
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToDate(dto: DateItemDto): ActivityItem {

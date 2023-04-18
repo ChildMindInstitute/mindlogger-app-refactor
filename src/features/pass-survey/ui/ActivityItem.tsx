@@ -25,6 +25,7 @@ import {
   SurveySlider,
   CheckBoxActivityItem,
   TimeRangeItem,
+  AudioStimulusItem,
 } from '@shared/ui';
 
 import AdditionalText from './AdditionalText';
@@ -168,6 +169,18 @@ function ActivityItem({
             onChange={onResponse}
             values={value?.answer || []}
             textReplacer={textVariableReplacer}
+          />
+        </Box>
+      );
+      break;
+
+    case 'AudioPlayer':
+      item = (
+        <Box mx="$6">
+          <AudioStimulusItem
+            onChange={onResponse}
+            value={value?.answer || false}
+            config={pipelineItem.payload}
           />
         </Box>
       );
