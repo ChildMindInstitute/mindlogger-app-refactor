@@ -104,7 +104,23 @@ function mapToFlanker(dto: FlankerItemDto): ActivityItem {
 }
 
 function mapToGeolocation(dto: GeolocationItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Geolocation',
+    timer: dto.config.timer,
+    order: dto.order,
+    config: null,
+    question: dto.question,
+    isHidden: dto.isHidden,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToMessage(dto: MessageItemDto): ActivityItem {
@@ -165,7 +181,23 @@ function mapToNumberSelect(dto: NumberSelectionItemDto): ActivityItem {
 }
 
 function mapToPhoto(dto: PhotoItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Photo',
+    config: null,
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
@@ -261,11 +293,43 @@ function mapToTextInput(dto: TextItemDto): ActivityItem {
 }
 
 function mapToTimeRange(dto: TimeRangeItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'TimeRange',
+    config: null,
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToVideo(dto: VideoItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Video',
+    config: null,
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToSplash(splashScreen: string): ActivityItem {

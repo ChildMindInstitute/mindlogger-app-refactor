@@ -14,7 +14,7 @@
     "start:reset-cache": "watchman watch-del-all && react-native start --reset-cache",
     "android:dev": "react-native run-android --variant=devdebug --appIdSuffix=dev",
     "android:dev-release": "react-native run-android --variant=devrelease --appIdSuffix=dev",
-    "android:qa": "react-native run-android --variant=qaqebug --appIdSuffix=qa",
+    "android:qa": "react-native run-android --variant=qadebug --appIdSuffix=qa",
     "android:qa-release": "react-native run-android --variant=qarelease --appIdSuffix=qa",
     "android:staging": "react-native run-android --variant=stagingdebug --appIdSuffix=staging",
     "android:staging-release": "react-native run-android --variant=stagingrelease --appIdSuffix=staging",

@@ -7,6 +7,10 @@ export type ActivityItemType =
   | 'NumberSelect'
   | 'Slider'
   | 'Radio'
+  | 'Geolocation'
+  | 'TimeRange'
+  | 'Photo'
+  | 'Video'
   | 'Checkbox';
 
 type AbTestConfig = {
@@ -77,6 +81,10 @@ type RadioConfig = {
   }>;
 };
 
+type PhotoConfig = null;
+
+type VideoConfig = null;
+
 export type ActivityItemConfig =
   | AbTestConfig
   | DrawingTestTestConfig
@@ -86,6 +94,8 @@ export type ActivityItemConfig =
   | CheckboxConfig
   | RadioConfig
   | SplashConfig
+  | PhotoConfig
+  | VideoConfig
   | null;
 
 type ActivityItemBase = {
@@ -151,9 +161,29 @@ interface CheckboxActivityItem extends ActivityItemBase {
   inputType: 'Checkbox';
   config: CheckboxConfig;
 }
+
+interface TimeRangeActivityItem extends ActivityItemBase {
+  inputType: 'TimeRange';
+  config: null;
+}
+
 interface RadioActivityItem extends ActivityItemBase {
   inputType: 'Radio';
   config: RadioConfig;
+}
+interface GeolocationActivityItem extends ActivityItemBase {
+  inputType: 'Geolocation';
+  config: null;
+}
+
+interface PhotoActivityItem extends ActivityItemBase {
+  inputType: 'Photo';
+  config: PhotoConfig;
+}
+
+interface VideoActivityItem extends ActivityItemBase {
+  inputType: 'Video';
+  config: VideoConfig;
 }
 
 export type ActivityItem =
@@ -165,7 +195,11 @@ export type ActivityItem =
   | NumberSelectActivityItem
   | SliderActivityItem
   | CheckboxActivityItem
-  | RadioActivityItem;
+  | GeolocationActivityItem
+  | TimeRangeActivityItem
+  | RadioActivityItem
+  | PhotoActivityItem
+  | VideoActivityItem;
 
 export type ActivityDetails = {
   id: string;

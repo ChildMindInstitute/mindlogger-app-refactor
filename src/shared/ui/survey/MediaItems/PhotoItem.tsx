@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import {
   ImagePickerResponse,
   launchCamera,
@@ -9,6 +10,7 @@ import {
 import {
   colors,
   GALLERY_PHOTO_OPTIONS,
+  handleBlockedPermissions,
   PHOTO_TAKE_OPTIONS,
   requestCameraPermissions,
   requestGalleryPermissions,
@@ -26,6 +28,7 @@ type Props = {
 };
 
 const PhotoItem: FC<Props> = ({ onChange, value }) => {
+  const { t } = useTranslation();
   const { isCameraAccessGranted } = useCameraPermissions();
   const { isGalleryAccessGranted } = useGalleryPermissions();
 
@@ -46,21 +49,49 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
     }
   };
 
+  const selectImage = async () => {
+    const response = await launchImageLibrary(GALLERY_PHOTO_OPTIONS);
+
+    pickImage(response, true);
+  };
+
+  const takePhoto = async () => {
+    const response = await launchCamera(PHOTO_TAKE_OPTIONS);
+
+    pickImage(response, false);
+  };
+
   const onShowImageGallery = async () => {
     if (isGalleryAccessGranted) {
-      launchImageLibrary(GALLERY_PHOTO_OPTIONS, response =>
-        pickImage(response, true),
-      );
+      selectImage();
     } else {
-      await requestGalleryPermissions();
+      const permissionStatus = await requestGalleryPermissions();
+
+      if (permissionStatus === 'granted') {
+        selectImage();
+      } else {
+        await handleBlockedPermissions(
+          '"MindLogger" would like to use your gallery to complete this task', // @todo add specific translations for photo camera
+          t('media:alert_message'),
+        );
+      }
     }
   };
 
   const onOpenPhotoCamera = async () => {
     if (isCameraAccessGranted) {
-      launchCamera(PHOTO_TAKE_OPTIONS, response => pickImage(response, false));
+      takePhoto();
     } else {
-      await requestCameraPermissions();
+      const permissionStatus = await requestCameraPermissions();
+
+      if (permissionStatus === 'granted') {
+        takePhoto();
+      } else {
+        await handleBlockedPermissions(
+          '"MindLogger" would like to use your camera to complete this task', // @todo add specific translations for photo camera
+          t('media:alert_message'),
+        );
+      }
     }
   };
 

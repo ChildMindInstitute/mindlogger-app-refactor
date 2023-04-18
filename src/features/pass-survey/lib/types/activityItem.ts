@@ -4,12 +4,16 @@ import {
   CheckboxPipelineItem,
   DrawingTestPipelineItem,
   FlankerPipelineItem,
+  GeolocationPipelineItem,
   NumberSelectPipelineItem,
+  PhotoPipelineItem,
   PipelineItem,
+  TimeRangePipelineItem,
   RadioPipelineItem,
   SliderPipelineItem,
   SplashPipelineItem,
   TextInputPipelineItem,
+  VideoPipelineItem,
 } from './payload';
 
 type ActivityItemBase = {
@@ -56,10 +60,28 @@ interface CheckboxActivityItem extends ActivityItemBase {
   type: 'Checkbox';
   pipelineItem: CheckboxPipelineItem;
 }
+interface TimeRangeActivityItem extends ActivityItemBase {
+  type: 'TimeRange';
+  pipelineItem: TimeRangePipelineItem;
+}
 
 interface RadioActivityItem extends ActivityItemBase {
   type: 'Radio';
   pipelineItem: RadioPipelineItem;
+}
+
+interface GeolocationActivityItem extends ActivityItemBase {
+  type: 'Geolocation';
+  pipelineItem: GeolocationPipelineItem;
+}
+interface PhotoActivityItem extends ActivityItemBase {
+  type: 'Photo';
+  pipelineItem: PhotoPipelineItem;
+}
+
+interface VideoActivityItem extends ActivityItemBase {
+  type: 'Video';
+  pipelineItem: VideoPipelineItem;
 }
 
 export type ActivityItem =
@@ -70,5 +92,9 @@ export type ActivityItem =
   | SliderActivityItem
   | NumberSelectActivityItem
   | CheckboxActivityItem
+  | TimeRangeActivityItem
   | RadioActivityItem
+  | GeolocationActivityItem
+  | PhotoActivityItem
+  | VideoActivityItem
   | SplashActivityItem;

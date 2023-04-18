@@ -298,6 +298,43 @@ export const TextActivity: ActivityDto = {
   ],
 };
 
+export const GeolocationActivity: ActivityDto = {
+  id: 'aid1',
+  name: 'Activity number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isHidden: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  order: 0,
+  items: [
+    {
+      id: '104',
+      name: 'Geolocation',
+      question: '',
+      responseType: 'geolocation',
+      timer: null,
+      isHidden: false,
+      config: {
+        timer: null,
+        removeBackButton: false,
+        skippableItem: false,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+      },
+      responseValues: null,
+      order: 0,
+    },
+  ],
+};
+
 export const SliderTestActivity: ActivityDto = {
   id: 'aid1',
   name: 'Slider Activity',

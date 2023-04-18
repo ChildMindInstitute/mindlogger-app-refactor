@@ -1,5 +1,6 @@
 import { DrawResult } from '@app/entities/drawer';
 import { FlankerLogRecord, FlankerConfiguration } from '@app/entities/flanker';
+import { Coordinates } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
 
 import { Tutorial } from './tutorial';
@@ -11,10 +12,14 @@ export type ActivityItemType =
   | 'Splash'
   | 'Flanker'
   | 'TextInput'
+  | 'TimeRange'
   | 'Radio'
   | 'Slider'
   | 'NumberSelect'
-  | 'Checkbox';
+  | 'Checkbox'
+  | 'Geolocation'
+  | 'Photo'
+  | 'Video';
 
 type AbTestPayload = {
   testIndex: TestIndex;
@@ -39,6 +44,8 @@ type SliderPayload = {
   showTickLabels: boolean | null;
   isContinuousSlider: boolean | null;
 };
+
+type TimeRangePayload = null;
 
 type RadioPayload = {
   randomizeOptions: boolean;
@@ -85,6 +92,12 @@ type NumberSelectPayload = {
   min: number;
 };
 
+type GeolocationPayload = null;
+
+type PhotoPayload = null;
+
+type VideoPayload = null;
+
 type PipelinePayload =
   | AbTestPayload
   | SplashPayload
@@ -93,9 +106,12 @@ type PipelinePayload =
   | FlankerPayload
   | TextInputPayload
   | RadioPayload
+  | TimeRangePayload
   | SliderPayload
   | NumberSelectPayload
-  | CheckboxPayload;
+  | CheckboxPayload
+  | GeolocationPayload
+  | PhotoPayload;
 
 type PipelineItemBase = {
   id?: string;
@@ -166,6 +182,24 @@ export interface RadioPipelineItem extends PipelineItemBase {
   payload: RadioPayload;
 }
 
+export interface GeolocationPipelineItem extends PipelineItemBase {
+  type: 'Geolocation';
+  payload: GeolocationPayload;
+}
+export interface TimeRangePipelineItem extends PipelineItemBase {
+  type: 'TimeRange';
+  payload: TimeRangePayload;
+}
+export interface PhotoPipelineItem extends PipelineItemBase {
+  type: 'Photo';
+  payload: PhotoPayload;
+}
+
+export interface VideoPipelineItem extends PipelineItemBase {
+  type: 'Video';
+  payload: VideoPayload;
+}
+
 export type AbTestResponse = LogLine[];
 
 export type DrawingTestResponse = DrawResult;
@@ -174,13 +208,33 @@ export type FlankerResponse = Array<FlankerLogRecord>;
 
 export type TextInputResponse = string;
 
+export type GeolocationResponse = Coordinates;
+
 export type SliderResponse = number | null;
 
 export type NumberSelectResponse = string;
 
 export type CheckboxResponse = string[] | null;
 
+export type TimeRangeResponse = { from: string; to: string };
+
 export type RadioResponse = string;
+
+export type PhotoResponse = {
+  uri: string;
+  fileName: string;
+  size: number;
+  type: string;
+  fromLibrary: boolean;
+};
+
+export type VideoResponse = {
+  uri: string;
+  fileName: string;
+  size: number;
+  type: string;
+  fromLibrary: boolean;
+};
 
 export type PipelineItemResponse =
   | AbTestResponse
@@ -190,6 +244,9 @@ export type PipelineItemResponse =
   | SliderResponse
   | NumberSelectResponse
   | CheckboxResponse
+  | TimeRangeResponse
+  | GeolocationResponse
+  | PhotoResponse
   | RadioResponse;
 
 export type PipelineItem =
@@ -202,4 +259,8 @@ export type PipelineItem =
   | SliderPipelineItem
   | NumberSelectPipelineItem
   | CheckboxPipelineItem
+  | TimeRangePipelineItem
+  | GeolocationPipelineItem
+  | PhotoPipelineItem
+  | VideoPipelineItem
   | RadioPipelineItem;

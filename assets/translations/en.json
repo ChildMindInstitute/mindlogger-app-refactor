@@ -198,12 +198,17 @@
     "select_one": "Select one",
     "no_items": "No items"
   },
+  "permissions": {
+    "alert_button_cancel": "Dismiss",
+    "alert_button_ok": "Open Settings"
+  },
+  "media": {
+    "alert_message": "These can be configured in Settings"
+  },
   "audio_recorder": {
     "permission": "You must grant permission to use your microphone to complete this task.",
     "alert_title": "\"MindLogger\" would like to use your microphone to complete this task.",
     "alert_message": "These can be configured in Settings.",
-    "alert_button_ok": "Open Settings",
-    "alert_button_cancel": "Dismiss",
     "record_error": "There was an error initiating recorder.",
     "stop": "STOP",
     "record": "RECORD",

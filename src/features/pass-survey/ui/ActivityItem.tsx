@@ -6,12 +6,15 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { IS_IOS } from '@app/shared/lib';
 import {
   Box,
+  GeolocationItem,
   KeyboardAvoidingView,
   MarkdownMessage,
   NumberSelector,
   ScrollButton,
   SimpleTextInput,
   SplashItem,
+  PhotoItem,
+  VideoItem,
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
@@ -21,6 +24,7 @@ import {
   RadioActivityItem,
   SurveySlider,
   CheckBoxActivityItem,
+  TimeRangeItem,
 } from '@shared/ui';
 
 import AdditionalText from './AdditionalText';
@@ -169,6 +173,14 @@ function ActivityItem({
       );
       break;
 
+    case 'TimeRange':
+      item = (
+        <Box mx="$6">
+          <TimeRangeItem onChange={onResponse} value={value?.answer} />
+        </Box>
+      );
+      break;
+
     case 'Radio':
       item = (
         <Box mx="$6">
@@ -181,6 +193,30 @@ function ActivityItem({
             initialValue={value?.answer}
             textReplacer={textVariableReplacer}
           />
+        </Box>
+      );
+      break;
+
+    case 'Geolocation':
+      item = (
+        <Box mx="$6">
+          <GeolocationItem onChange={onResponse} value={value?.answer} />
+        </Box>
+      );
+      break;
+
+    case 'Photo':
+      item = (
+        <Box mx="$6">
+          <PhotoItem onChange={onResponse} value={value?.answer} />
+        </Box>
+      );
+      break;
+
+    case 'Video':
+      item = (
+        <Box mx="$6">
+          <VideoItem onChange={onResponse} value={value?.answer} />
         </Box>
       );
       break;

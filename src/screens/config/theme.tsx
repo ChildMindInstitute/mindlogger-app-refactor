@@ -35,6 +35,7 @@ export const getScreenOptions = ({ navigation }: ScreenOptions) => {
 
 export const getAppletDetailsScreenOptions = (
   appletTheme: AppletTheme | null,
+  bottomInset: number,
 ) => {
   return ({ route }: BottomScreenOptions): BottomTabNavigationOptions => {
     const tabBarIcon = (color: string) => {
@@ -58,9 +59,11 @@ export const getAppletDetailsScreenOptions = (
       tabBarIcon: ({ color }: { color: string }) => tabBarIcon(color),
       tabBarStyle: {
         backgroundColor: colors.lightBlue,
-        paddingBottom: 20,
         paddingTop: 3,
-        ...(IS_ANDROID ? { height: 65, paddingBottom: 5 } : {}),
+        ...(IS_ANDROID ? { paddingBottom: 5 } : {}),
+        ...(bottomInset
+          ? { height: 85, paddingBottom: 20 }
+          : { height: 65, paddingBottom: 0 }),
       },
       tabBarLabel: ({ color, focused, children }) => {
         return (

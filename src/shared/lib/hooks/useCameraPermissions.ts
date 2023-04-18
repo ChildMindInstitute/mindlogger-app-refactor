@@ -12,7 +12,6 @@ const useCameraPermissions = () => {
   useEffect(() => {
     checkCameraPermissions().then(setCameraPermission);
   }, []);
-
   return { isCameraAccessGranted: cameraPermission === RESULTS.GRANTED };
 };
 

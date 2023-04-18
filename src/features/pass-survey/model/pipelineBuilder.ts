@@ -82,6 +82,23 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
           };
         }
 
+        case 'TimeRange': {
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            validationOptions: item.validationOptions,
+            additionalText: item.additionalText,
+            timer: item.timer,
+          };
+        }
+
         case 'Radio': {
           return {
             id: item.id,
@@ -117,6 +134,54 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
         }
 
         case 'NumberSelect': {
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            additionalText: item.additionalText,
+            timer: item.timer,
+          } satisfies PipelineItem;
+        }
+
+        case 'Geolocation': {
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: null,
+            question: item.question,
+            timer: item.timer,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            additionalText: item.additionalText,
+          } satisfies PipelineItem;
+        }
+
+        case 'Photo': {
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            additionalText: item.additionalText,
+            timer: item.timer,
+          } satisfies PipelineItem;
+        }
+
+        case 'Video': {
           return {
             id: item.id,
             name: item.name,

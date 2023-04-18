@@ -1,3 +1,5 @@
+import { Coordinates } from '@app/shared/ui';
+
 import {
   PipelineItemResponse,
   ActivityItemType,
@@ -8,7 +10,10 @@ import {
   SliderResponse,
   NumberSelectResponse,
   CheckboxResponse,
+  TimeRangeResponse,
   RadioResponse,
+  PhotoResponse,
+  VideoResponse,
 } from './payload';
 
 type PipelineItemAnswerBase = {
@@ -83,10 +88,41 @@ interface CheckboxPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
+interface TimeRangePipelineAnswer extends PipelineItemAnswerBase {
+  type: 'TimeRange';
+  value: {
+    answer?: TimeRangeResponse;
+    additionalAnswer?: string;
+  };
+}
+
 interface RadioPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Radio';
   value: {
     answer?: RadioResponse;
+    additionalAnswer?: string;
+  };
+}
+
+interface GeolocationPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Geolocation';
+  value: {
+    answer?: Coordinates;
+    additionalAnswer?: string;
+  };
+}
+interface PhotoPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Photo';
+  value: {
+    answer?: PhotoResponse;
+    additionalAnswer?: string;
+  };
+}
+
+interface VideoPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Video';
+  value: {
+    answer?: VideoResponse;
     additionalAnswer?: string;
   };
 }
@@ -100,4 +136,8 @@ export type PipelineItemAnswer =
   | NumberSelectPipelineAnswer
   | SliderPipelineAnswer
   | RadioPipelineAnswer
+  | TimeRangePipelineAnswer
+  | GeolocationPipelineAnswer
+  | PhotoPipelineAnswer
+  | VideoPipelineAnswer
   | CheckboxPipelineAnswer;
