@@ -100,6 +100,7 @@ export const useActivityGroups = (
       entity: idToEntity[event.entityId],
       event,
     }))
+    // @todo - remove after fix on BE
     .filter(entityEvent => !!entityEvent.entity);
 
   const calculator = EventModel.ScheduledDateCalculator;
