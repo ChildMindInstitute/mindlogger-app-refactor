@@ -10,6 +10,7 @@ export const mapActivitiesFromDto = (dtos: ActivityRecordDto[]): Activity[] => {
     id: dto.id,
     image: dto.image,
     name: dto.name,
+    isHidden: dto.isHidden,
     pipelineType: ActivityPipelineType.Regular,
     type: ActivityType.NotDefined,
   }));
@@ -24,6 +25,7 @@ export const mapActivityFlowsFromDto = (
     hideBadge: dto.hideBadge,
     id: dto.id,
     name: dto.name,
+    isHidden: dto.isHidden,
     pipelineType: ActivityPipelineType.Flow,
   }));
 };

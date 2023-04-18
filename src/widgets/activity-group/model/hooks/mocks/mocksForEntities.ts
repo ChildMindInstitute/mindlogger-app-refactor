@@ -37,6 +37,7 @@ const activity1: Activity = {
   type: ActivityType.NotDefined,
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  isHidden: false,
 };
 
 const activity2: Activity = {
@@ -47,6 +48,7 @@ const activity2: Activity = {
   pipelineType: ActivityPipelineType.Regular,
   type: ActivityType.NotDefined,
   image: null,
+  isHidden: false,
 };
 
 const activityFlow1: ActivityFlow = {
@@ -59,6 +61,7 @@ const activityFlow1: ActivityFlow = {
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   hideBadge: false,
   activityIds: ['aid1', 'aid2'],
+  isHidden: false,
 };
 
 export const allAppletActivities: Activity[] = [activity1, activity2];

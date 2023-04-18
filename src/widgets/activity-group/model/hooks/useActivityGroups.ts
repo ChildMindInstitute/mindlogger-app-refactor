@@ -114,6 +114,8 @@ export const useActivityGroups = (
 
   entityEvents = entityEvents.filter(x => x.event.scheduledAt);
 
+  entityEvents = entityEvents.filter(x => !x.entity.isHidden);
+
   const groupAvailable = builder!.buildAvailable(entityEvents);
   const groupInProgress = builder!.buildInProgress(entityEvents);
   const groupScheduled = builder!.buildScheduled(entityEvents);
