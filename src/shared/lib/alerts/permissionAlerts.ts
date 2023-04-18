@@ -12,14 +12,14 @@ export const handleBlockedPermissions = async (
 
     Alert.alert(title, subtitle, [
       {
-        text: t('audio_recorder:alert_button_cancel'),
+        text: t('permissions:alert_button_cancel'),
         onPress: () => {
           resolve(false);
         },
         style: 'cancel',
       },
       {
-        text: t('audio_recorder:alert_button_ok'),
+        text: t('permissions:alert_button_ok'),
         onPress: async () => {
           await openSettings();
           resolve(false);

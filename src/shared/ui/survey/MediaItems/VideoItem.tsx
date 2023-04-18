@@ -69,14 +69,12 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
 
       if (permissionStatus === 'granted') {
         selectVideo();
-
-        return;
+      } else {
+        await handleBlockedPermissions(
+          '"MindLogger" would like to use your gallery to complete this task', // @todo add specific translations for photo camera
+          t('media:alert_message'),
+        );
       }
-
-      await handleBlockedPermissions(
-        '"MindLogger" would like to use your gallery to complete this task', // @todo add specific translations for photo camera
-        t('audio_recorder:alert_message'),
-      );
     }
   };
 
@@ -88,14 +86,12 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
 
       if (permissionStatus === 'granted') {
         recordVideo();
-
-        return;
+      } else {
+        await handleBlockedPermissions(
+          '"MindLogger" would like to use your camera to complete this task', // @todo add specific translations for photo camera
+          t('media:alert_message'),
+        );
       }
-
-      await handleBlockedPermissions(
-        '"MindLogger" would like to use your camera to complete this task', // @todo add specific translations for photo camera
-        t('audio_recorder:alert_message'),
-      );
     }
   };
   return (
