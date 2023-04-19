@@ -21,6 +21,7 @@ import {
   mapActivityFlowsFromDto,
   mapEventsFromDto,
 } from './mappers';
+import NotificationManager from './NotificationManager';
 import {
   Activity,
   ActivityFlow,
@@ -59,6 +60,8 @@ const createNotificationRefreshService = (): NotificationRefreshService => {
       id: x.id,
       name: x.displayName,
     }));
+
+    const allNotificationDescribers: NotificationDescriber[] = [];
 
     for (let applet of applets) {
       const detailsResponse = getDataFromQuery<AppletDetailsResponse>(
@@ -117,8 +120,12 @@ const createNotificationRefreshService = (): NotificationRefreshService => {
       console.log('appletNotifications', appletNotifications);
       console.log('filteredAppletNotifications', filteredAppletNotifications);
       console.log('filteredNotificationsArray', filteredNotificationsArray);
+
+      allNotificationDescribers.push(...filteredNotificationsArray);
     }
     console.info('[NotificationRefreshService.refresh] completed');
+
+    NotificationManager.scheduleNotifications(allNotificationDescribers);
   };
 
   const result: NotificationRefreshService = {

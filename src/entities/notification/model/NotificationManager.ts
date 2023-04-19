@@ -32,7 +32,7 @@ function NotificationManager() {
 
     NotificationQueue.set(notificationsToQueue);
 
-    const triggerNotifications = mapToTriggerNotifications(
+    const triggerNotifications = await mapToTriggerNotifications(
       notificationsToSchedule,
     );
 

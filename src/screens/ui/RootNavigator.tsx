@@ -7,7 +7,13 @@ import { useTranslation } from 'react-i18next';
 
 import { SessionModel } from '@entities/session';
 import { LogoutModel } from '@features/logout';
-import { APP_VERSION, colors, ENV, IS_ANDROID } from '@shared/lib';
+import {
+  APP_VERSION,
+  colors,
+  ENV,
+  useNotificationPermissions,
+  IS_ANDROID,
+} from '@shared/lib';
 import { UserProfileIcon, HomeIcon, BackButton, Text, Box } from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
@@ -38,6 +44,7 @@ export default () => {
   const { forceLogout } = LogoutModel.useLogout();
 
   useInitialRouteNavigation();
+  useNotificationPermissions();
 
   useBackHandler(() => {
     onBeforeAppClose();
