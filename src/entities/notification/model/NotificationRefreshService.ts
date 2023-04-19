@@ -47,6 +47,12 @@ const createNotificationRefreshService = (): NotificationRefreshService => {
   };
 
   const refresh = (queryClient: QueryClient, storeProgress: StoreProgress) => {
+    if (NotificationManager.mutex.isBusy()) {
+      return;
+    }
+
+    NotificationManager.mutex.setBusy();
+
     const appletsResponse = getDataFromQuery<AppletsResponse>(
       getAppletsKey(),
       queryClient,
@@ -121,7 +127,11 @@ const createNotificationRefreshService = (): NotificationRefreshService => {
       allNotificationDescribers,
     );
 
-    NotificationManager.scheduleNotifications(sortedNotificationDescribers);
+    NotificationManager.scheduleNotifications(
+      sortedNotificationDescribers,
+    ).then(() => {
+      NotificationManager.mutex.release();
+    });
   };
 
   const result: NotificationRefreshService = {

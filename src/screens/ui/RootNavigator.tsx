@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
 import { SessionModel } from '@entities/session';
+import { EnterForegroundModel } from '@features/enter-foreground';
 import { LogoutModel } from '@features/logout';
 import {
   APP_VERSION,
@@ -45,6 +46,8 @@ export default () => {
 
   useInitialRouteNavigation();
   useNotificationPermissions();
+
+  EnterForegroundModel.useRestackNotifications();
 
   useBackHandler(() => {
     onBeforeAppClose();
