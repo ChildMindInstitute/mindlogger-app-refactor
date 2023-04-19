@@ -37,7 +37,7 @@ export const InputFrame = styled(
         },
         dark: {
           color: '$darkGrey',
-          placeholderTextColor: '$lighterGrey',
+          placeholderTextColor: IS_IOS ? '$lightGrey' : '$grey',
           borderBottomColor: '#1e1d1d',
         },
         survey: {
