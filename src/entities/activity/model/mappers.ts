@@ -88,7 +88,25 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
 }
 
 function mapToAudio(dto: AudioItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Audio',
+    config: {
+      maxDuration: dto.responseValues.maxDuration,
+    },
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToAudioPlayer(dto: AudioPlayerItemDto): ActivityItem {
