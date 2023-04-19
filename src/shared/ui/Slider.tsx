@@ -14,8 +14,8 @@ type Props = SliderProps & { size: number; initialValue?: number };
 const CHANGE_VALUE_DELAY = 100;
 
 const Slider: FC<Props> = props => {
-  const { size, initialValue } = props;
-  const opacity = initialValue ? 1 : 0;
+  const { size, initialValue = undefined } = props;
+  const opacity = initialValue !== undefined ? 1 : 0;
 
   const debouncedOnValueChange = useDebouncedCallback(value => {
     props.onValueChange?.(value);
