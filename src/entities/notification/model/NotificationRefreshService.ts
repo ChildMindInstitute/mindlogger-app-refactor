@@ -30,8 +30,8 @@ import {
   EventEntity,
   NotificationDescriber,
   ScheduleEvent,
-  filterAppletNotifications,
   filterNotifications,
+  sortNotificationDescribers,
 } from '../lib';
 
 type NotificationRefreshService = {
@@ -111,21 +111,17 @@ const createNotificationRefreshService = (): NotificationRefreshService => {
 
       const appletNotifications: AppletNotificationDescribers = builder.build();
 
-      const filteredAppletNotifications: AppletNotificationDescribers =
-        filterAppletNotifications(appletNotifications);
-
       const filteredNotificationsArray: NotificationDescriber[] =
         filterNotifications(appletNotifications);
 
-      console.log('appletNotifications', appletNotifications);
-      console.log('filteredAppletNotifications', filteredAppletNotifications);
-      console.log('filteredNotificationsArray', filteredNotificationsArray);
-
       allNotificationDescribers.push(...filteredNotificationsArray);
     }
-    console.info('[NotificationRefreshService.refresh] completed');
 
-    NotificationManager.scheduleNotifications(allNotificationDescribers);
+    const sortedNotificationDescribers = sortNotificationDescribers(
+      allNotificationDescribers,
+    );
+
+    NotificationManager.scheduleNotifications(sortedNotificationDescribers);
   };
 
   const result: NotificationRefreshService = {

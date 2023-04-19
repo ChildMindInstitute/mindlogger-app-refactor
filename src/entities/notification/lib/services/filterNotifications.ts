@@ -17,9 +17,17 @@ export const filterNotifications = (
     }
   }
 
-  result = result.sort((a, b) => a.scheduledAt - b.scheduledAt);
-
   return result;
+};
+
+export const sortNotificationDescribers = (
+  notificationDescribers: NotificationDescriber[],
+) => {
+  const notificationDescribersCopy = [...notificationDescribers];
+
+  notificationDescribersCopy.sort((a, b) => a.scheduledAt - b.scheduledAt);
+
+  return notificationDescribersCopy;
 };
 
 export const filterAppletNotifications = (
