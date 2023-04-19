@@ -284,6 +284,7 @@ export const TextActivity: ActivityDto = {
       responseType: 'text',
       config: {
         maxResponseLength: 20,
+        timer: null,
         correctAnswerRequired: false,
         correctAnswer: 'Hello',
         numericalResponseRequired: false,
