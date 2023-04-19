@@ -10,6 +10,7 @@ import {
   SliderResponse,
   NumberSelectResponse,
   CheckboxResponse,
+  AudioResponse,
   AudioPlayerResponse,
   TimeRangeResponse,
   RadioResponse,
@@ -89,6 +90,13 @@ interface CheckboxPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
+interface AudioPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Audio';
+  value: {
+    answer?: AudioResponse;
+    additionalAnswer?: string;
+  };
+}
 interface AudioPlayerPipelineAnswer extends PipelineItemAnswerBase {
   type: 'AudioPlayer';
   value: {
@@ -145,6 +153,7 @@ export type PipelineItemAnswer =
   | NumberSelectPipelineAnswer
   | SliderPipelineAnswer
   | RadioPipelineAnswer
+  | AudioPipelineAnswer
   | AudioPlayerPipelineAnswer
   | TimeRangePipelineAnswer
   | GeolocationPipelineAnswer

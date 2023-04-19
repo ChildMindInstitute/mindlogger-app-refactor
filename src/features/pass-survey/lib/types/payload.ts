@@ -13,6 +13,7 @@ export type ActivityItemType =
   | 'Flanker'
   | 'TextInput'
   | 'TimeRange'
+  | 'Audio'
   | 'AudioPlayer'
   | 'Radio'
   | 'Slider'
@@ -44,6 +45,10 @@ type SliderPayload = {
   showTickMarks: boolean | null;
   showTickLabels: boolean | null;
   isContinuousSlider: boolean | null;
+};
+
+type AudioPayload = {
+  maxDuration: number;
 };
 
 type AudioPlayerPayload = {
@@ -113,6 +118,7 @@ type PipelinePayload =
   | TextInputPayload
   | RadioPayload
   | TimeRangePayload
+  | AudioPayload
   | AudioPlayerPayload
   | SliderPayload
   | NumberSelectPayload
@@ -193,6 +199,10 @@ export interface GeolocationPipelineItem extends PipelineItemBase {
   type: 'Geolocation';
   payload: GeolocationPayload;
 }
+export interface AudioPipelineItem extends PipelineItemBase {
+  type: 'Audio';
+  payload: AudioPayload;
+}
 export interface AudioPlayerPipelineItem extends PipelineItemBase {
   type: 'AudioPlayer';
   payload: AudioPlayerPayload;
@@ -227,6 +237,10 @@ export type NumberSelectResponse = string;
 
 export type CheckboxResponse = string[] | null;
 
+export type AudioResponse = {
+  filePath: string;
+};
+
 export type AudioPlayerResponse = boolean;
 
 export type TimeRangeResponse = {
@@ -260,6 +274,7 @@ export type PipelineItemResponse =
   | SliderResponse
   | NumberSelectResponse
   | CheckboxResponse
+  | AudioResponse
   | AudioPlayerResponse
   | TimeRangeResponse
   | GeolocationResponse
@@ -276,6 +291,7 @@ export type PipelineItem =
   | SliderPipelineItem
   | NumberSelectPipelineItem
   | CheckboxPipelineItem
+  | AudioPipelineItem
   | AudioPlayerPipelineItem
   | TimeRangePipelineItem
   | GeolocationPipelineItem
