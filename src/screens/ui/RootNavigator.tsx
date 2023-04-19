@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SessionModel } from '@entities/session';
 import { LogoutModel } from '@features/logout';
-import { APP_VERSION, colors, ENV } from '@shared/lib';
+import { APP_VERSION, colors, ENV, IS_ANDROID } from '@shared/lib';
 import { UserProfileIcon, HomeIcon, BackButton } from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
@@ -140,7 +140,7 @@ export default () => {
             component={AppletBottomTabNavigator}
             options={{
               headerLeft: () => (
-                <BackButton fallbackRoute="Applets">
+                <BackButton mr={IS_ANDROID && 15} fallbackRoute="Applets">
                   <HomeIcon color={colors.white} size={32} />
                 </BackButton>
               ),
