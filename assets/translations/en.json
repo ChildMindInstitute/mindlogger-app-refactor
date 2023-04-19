@@ -110,7 +110,8 @@
     "new_pass_placeholder": "New password",
     "error": "Unable to update user details.",
     "submission_error": "The current password you entered was incorrect.",
-    "change_pass": "Change Password"
+    "change_pass": "Change Password",
+    "password_at_least_characters":"Password must be at least 6 characters"
   },
   "change_study": {
     "reset": "Reset",
