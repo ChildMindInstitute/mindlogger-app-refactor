@@ -115,6 +115,7 @@ export default () => {
                   <UserProfileIcon color={colors.tertiary} size={22} />
                 </TouchableOpacity>
               ),
+              headerLeft: () => null,
             }}
             component={AppletsScreen}
           />

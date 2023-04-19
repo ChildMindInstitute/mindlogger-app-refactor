@@ -234,7 +234,17 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
     })
     .reduce<PipelineItem[]>((items, item) => {
       return Array.isArray(item) ? [...items, ...item] : [...items, item];
-    }, []);
+    }, [])
+    .map((item, index) => {
+      return {
+        ...item,
+        isAbleToMoveBack:
+          !activity.responseIsEditable && index !== 0
+            ? false
+            : item.isAbleToMoveBack,
+        isSkippable: activity.isSkippable || item.isSkippable,
+      };
+    });
 
   return pipeline;
 }
