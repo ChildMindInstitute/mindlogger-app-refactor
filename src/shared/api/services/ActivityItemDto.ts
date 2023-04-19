@@ -81,13 +81,14 @@ type MultiSelectionAnswerSettings = {
   }>;
 };
 
-type TextConfiguration = ButtonsConfiguration & {
-  maxResponseLength: number;
-  correctAnswerRequired: boolean;
-  correctAnswer: string;
-  numericalResponseRequired: boolean;
-  responseDataIdentifier: boolean;
-};
+type TextConfiguration = ButtonsConfiguration &
+  TimerConfiguration & {
+    maxResponseLength: number;
+    correctAnswerRequired: boolean;
+    correctAnswer: string;
+    numericalResponseRequired: boolean;
+    responseDataIdentifier: boolean;
+  };
 
 type TextAnswerSettings = null;
 

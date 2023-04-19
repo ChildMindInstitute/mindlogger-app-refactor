@@ -286,6 +286,7 @@ export const TextActivity: ActivityDto = {
         maxResponseLength: 10,
         correctAnswerRequired: false,
         correctAnswer: '',
+        timer: null,
         numericalResponseRequired: false,
         responseDataIdentifier: false,
         removeBackButton: false,
@@ -304,6 +305,7 @@ export const TextActivity: ActivityDto = {
       isHidden: false,
       config: {
         maxResponseLength: 20,
+        timer: null,
         correctAnswerRequired: false,
         correctAnswer: 'Hello',
         numericalResponseRequired: false,
@@ -322,6 +324,7 @@ export const TextActivity: ActivityDto = {
       timer: 5,
       isHidden: false,
       config: {
+        timer: null,
         maxResponseLength: 20,
         correctAnswerRequired: false,
         correctAnswer: 'Hello',
@@ -635,6 +638,7 @@ export const AllTextsActivity: ActivityDto = {
         '## Welcome to the demo session!\nWe\'ll start with the text fields.\nType "Hello!"',
       responseType: 'text',
       config: {
+        timer: null,
         maxResponseLength: 20,
         correctAnswerRequired: true,
         correctAnswer: 'Hello!',
@@ -655,6 +659,7 @@ export const AllTextsActivity: ActivityDto = {
       timer: null,
       config: {
         maxResponseLength: 10,
+        timer: null,
         correctAnswerRequired: false,
         correctAnswer: '',
         numericalResponseRequired: false,
@@ -675,6 +680,7 @@ export const AllTextsActivity: ActivityDto = {
       config: {
         maxResponseLength: 10,
         correctAnswerRequired: false,
+        timer: null,
         correctAnswer: '',
         numericalResponseRequired: true,
         responseDataIdentifier: false,
