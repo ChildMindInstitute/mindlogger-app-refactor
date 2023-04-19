@@ -8,7 +8,7 @@ import { useLogout } from '../model';
 
 const LogoutRowButton: FC = () => {
   const { t } = useTranslation();
-  const logout = useLogout();
+  const { logout } = useLogout();
 
   return (
     <RowButton

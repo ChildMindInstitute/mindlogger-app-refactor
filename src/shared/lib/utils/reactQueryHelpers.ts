@@ -14,6 +14,13 @@ export const getDataFromQuery = <TResponse>(
   return data[0][1].data;
 };
 
+export const hasPendingMutations = (queryClient: QueryClient): boolean => {
+  return !!queryClient
+    .getMutationCache()
+    .getAll()
+    .some(x => x.state.status === 'loading' || x.state.status === 'idle');
+};
+
 export const getAppletsKey = () => ['applets'];
 
 export const getAppletDetailsKey = (appletId: string) => [

@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
 import { CacheManager } from '@georstat/react-native-image-cache';
-import NetInfo from '@react-native-community/netinfo';
 import {
   QueryClient,
   useMutation,
@@ -21,6 +20,7 @@ import {
   getAppletDetailsKey,
   getAppletsKey,
   getEventsKey,
+  isAppOnline,
 } from '@app/shared/lib';
 import {
   collectActivityDetailsImageUrls,
@@ -170,12 +170,7 @@ class RefreshService {
 
   public async refresh() {
     try {
-      const networkState = await NetInfo.fetch();
-
-      const isOnline =
-        networkState.isConnected != null &&
-        networkState.isConnected &&
-        Boolean(networkState.isInternetReachable);
+      const isOnline = await isAppOnline();
 
       if (!isOnline) {
         console.warn(
