@@ -110,7 +110,8 @@
     "new_pass_placeholder": "Nouveau mot de passe",
     "error": "Impossible de mettre à jour les données de l'utilisateur.",
     "submission_error": "Le mot de passe actuel que vous avez saisi était incorrect.",
-    "change_pass": "Changer le mot de passe"
+    "change_pass": "Changer le mot de passe",
+    "password_at_least_characters": "Le mot de passe doit être au moins de 6 caractères"
   },
   "change_study": {
     "reset": "Reinitialiser",
