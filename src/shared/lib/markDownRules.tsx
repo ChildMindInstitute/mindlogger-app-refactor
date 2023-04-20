@@ -101,6 +101,9 @@ export const activityMarkDownStyles = StyleSheet.create({
     paddingHorizontal: 5,
     marginLeft: 3,
   },
+  fence: {
+    color: '#000',
+  },
 });
 
 const htmlBlockStyles = `
@@ -300,6 +303,7 @@ const markDownRules: RenderRules = {
         scalesPageToFit={false}
         viewportContent="width=device-width, user-scalable=no"
         onShouldStartLoadWithRequest={onHtmlBlockLinkPress}
+        androidLayerType="software"
       />
     );
   },
