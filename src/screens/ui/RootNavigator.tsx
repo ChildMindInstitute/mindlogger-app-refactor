@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { SessionModel } from '@entities/session';
 import { LogoutModel } from '@features/logout';
 import { APP_VERSION, colors, ENV, IS_ANDROID } from '@shared/lib';
-import { UserProfileIcon, HomeIcon, BackButton } from '@shared/ui';
+import { UserProfileIcon, HomeIcon, BackButton, Text, Box } from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
 import { onBeforeAppClose } from '../lib';
@@ -139,13 +139,28 @@ export default () => {
           <Stack.Screen
             name="AppletDetails"
             component={AppletBottomTabNavigator}
-            options={{
+            options={({ route }) => ({
+              headerBackVisible: false,
+              headerTitle: IS_ANDROID
+                ? () => (
+                    <Box flex={1} mr={20}>
+                      <Text
+                        color={colors.white}
+                        fontSize={18}
+                        fontWeight="700"
+                        numberOfLines={1}
+                      >
+                        {route.params.title}
+                      </Text>
+                    </Box>
+                  )
+                : undefined,
               headerLeft: () => (
                 <BackButton mr={IS_ANDROID && 15} fallbackRoute="Applets">
                   <HomeIcon color={colors.white} size={32} />
                 </BackButton>
               ),
-            }}
+            })}
           />
 
           <Stack.Screen
