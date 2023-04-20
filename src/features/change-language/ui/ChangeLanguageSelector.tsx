@@ -6,7 +6,7 @@ import { changeLanguage, Language } from '@shared/lib';
 import { YStack, BoxProps, RowButton } from '@shared/ui';
 
 type Props = {
-  onLanguageChanged: () => void;
+  onLanguageChanged?: () => void;
 } & BoxProps;
 
 const ChangeLanguageSelector: FC<Props> = props => {
@@ -19,7 +19,7 @@ const ChangeLanguageSelector: FC<Props> = props => {
 
   const onLanguagePress = async (locale: Language) => {
     await changeLanguage(locale);
-    onLanguageChanged();
+    onLanguageChanged && onLanguageChanged();
   };
 
   return (
