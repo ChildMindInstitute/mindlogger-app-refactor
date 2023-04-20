@@ -11,11 +11,13 @@ export type EntityBase = {
 
 export type Activity = EntityBase & {
   type: ActivityType;
+  isHidden: boolean;
   pipelineType: ActivityPipelineType.Regular;
 };
 
 export type ActivityFlow = EntityBase & {
   hideBadge: boolean;
+  isHidden: boolean;
   activityIds: Array<string>;
   pipelineType: ActivityPipelineType.Flow;
 };

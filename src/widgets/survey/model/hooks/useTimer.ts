@@ -34,7 +34,7 @@ const useTimer = (input: UseTimerInput) => {
     const noTimeLeft: boolean = alreadyElapsed > durationBySettings;
 
     if (noTimeLeft) {
-      onFinish();
+      finishRef.current();
       return;
     }
 

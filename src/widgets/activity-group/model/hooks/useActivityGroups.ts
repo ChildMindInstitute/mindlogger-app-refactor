@@ -6,6 +6,7 @@ import { mapEventsFromDto } from '@app/entities/event/model/mappers';
 import { AppletDetailsDto } from '@app/shared/api';
 import { useAppSelector } from '@app/shared/lib';
 
+import useTimer from './useTimer';
 import {
   Activity,
   ActivityFlow,
@@ -41,6 +42,8 @@ const buildIdToEntityMap = (
 export const useActivityGroups = (
   appletId: string,
 ): UseActivityGroupsReturn => {
+  useTimer();
+
   const {
     isLoading: isLoadingApplets,
     error: errorDueToApplets,
@@ -113,6 +116,8 @@ export const useActivityGroups = (
   }
 
   entityEvents = entityEvents.filter(x => x.event.scheduledAt);
+
+  entityEvents = entityEvents.filter(x => !x.entity.isHidden);
 
   const groupAvailable = builder!.buildAvailable(entityEvents);
   const groupInProgress = builder!.buildInProgress(entityEvents);

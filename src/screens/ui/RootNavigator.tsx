@@ -35,7 +35,7 @@ export default () => {
 
   const hasSession = SessionModel.useHasSession();
   const defaultRoute = useDefaultRoute();
-  const logout = LogoutModel.useLogout();
+  const { forceLogout } = LogoutModel.useLogout();
 
   useInitialRouteNavigation();
 
@@ -46,7 +46,7 @@ export default () => {
   });
 
   SessionModel.useOnRefreshTokenFail(() => {
-    logout();
+    forceLogout();
   });
 
   return (
