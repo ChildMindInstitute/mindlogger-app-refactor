@@ -236,12 +236,14 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
       return Array.isArray(item) ? [...items, ...item] : [...items, item];
     }, [])
     .map(item => {
+      const isAbleToMoveBack =
+        activity.responseIsEditable && item.isAbleToMoveBack;
+      const isSkippable = activity.isSkippable || item.isSkippable;
+
       return {
         ...item,
-        isAbleToMoveBack: !activity.responseIsEditable
-          ? false
-          : item.isAbleToMoveBack,
-        isSkippable: activity.isSkippable || item.isSkippable,
+        isAbleToMoveBack: isAbleToMoveBack,
+        isSkippable: isSkippable,
       };
     });
 

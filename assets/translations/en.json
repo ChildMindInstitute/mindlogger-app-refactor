@@ -188,7 +188,8 @@
     "password_placeholder": "Password",
     "please_accept_terms": "Please accept terms of service.",
     "password_at_least_characters": "Password must be at least 6 characters",
-    "email_looks_incomplete": "Looks like this email is incomplete"
+    "email_looks_incomplete": "Looks like this email is incomplete",
+    "password_no_spaces": "Password should not contain blank spaces"
   },
   "geolocation": {
     "get_location": "GET LOCATION",
