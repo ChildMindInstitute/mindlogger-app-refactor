@@ -17,8 +17,7 @@ const useTimer = () => {
     return () => {
       timer.stop();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [onTick]);
 };
 
 export default useTimer;
