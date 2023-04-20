@@ -7,6 +7,7 @@ export const colors = {
   tertiary: '#404040',
   grey: '#808080',
   grey2: '#a0a0a0',
+  grey3: '#bbb',
   greyTsp: 'rgba(0,0,0,0.8)',
   darkGrey: '#3b3a3a',
   darkGrey2: '#6b6a6a',
