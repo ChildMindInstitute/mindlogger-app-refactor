@@ -1,4 +1,4 @@
-import notifee, { TimeUnit, TriggerType } from '@notifee/react-native';
+import notifee, { RepeatFrequency, TriggerType } from '@notifee/react-native';
 
 import { IS_ANDROID } from '@app/shared/lib';
 
@@ -59,14 +59,9 @@ function NotificationScheduler() {
         },
       },
       trigger: {
-        type: TriggerType.INTERVAL,
-        interval: 1,
-        // @ts-ignore
+        type: TriggerType.TIMESTAMP,
+        repeatFrequency: RepeatFrequency.HOURLY,
         timestamp: fireDate,
-        timeUnit: TimeUnit.HOURS,
-        alarmManager: {
-          allowWhileIdle: true,
-        },
       },
     };
 
