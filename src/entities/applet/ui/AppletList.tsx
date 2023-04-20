@@ -9,6 +9,7 @@ import { LoadListError } from '@app/shared/ui';
 
 import AppletCard from './AppletCard';
 import { useAppletsQuery } from '../api';
+import { mapApplets } from '../model';
 
 type SelectedApplet = {
   id: string;
@@ -21,7 +22,7 @@ type Props = {
 
 const AppletList: FC<Props> = ({ onAppletPress, ...styledProps }) => {
   const { error: getAppletsError, data: applets } = useAppletsQuery({
-    select: response => response.data.result,
+    select: response => mapApplets(response.data.result),
   });
 
   const isRefreshing = useIsMutating(['refresh']);

@@ -26,9 +26,9 @@ export type NotificationsSectionDto = {
 
 export type NotificationSettingDto = {
   triggerType: NotificationTriggerType;
-  from: HourMinute | null;
-  to: HourMinute | null;
-  at: HourMinute | null;
+  fromTime: HourMinute | null;
+  toTime: HourMinute | null;
+  atTime: HourMinute | null;
 };
 
 export type ScheduleEventDto = {
@@ -36,7 +36,7 @@ export type ScheduleEventDto = {
   entityId: string;
   availabilityType: string;
   availability: EventAvailabilityDto;
-  notificationSettings: NotificationsSectionDto;
+  notificationSettings: NotificationsSectionDto | null;
   selectedDate?: string | null;
   timers: {
     timer: HourMinute | null;

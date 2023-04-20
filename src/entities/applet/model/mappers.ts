@@ -2,10 +2,17 @@ import {
   ActivityFlowRecordDto,
   ActivityRecordDto,
   AppletDetailsDto,
+  AppletDto,
   ThemeDto,
 } from '@app/shared/api';
 
-import { Activity, ActivityFlow, AppletDetails, AppletTheme } from '../lib';
+import {
+  Activity,
+  ActivityFlow,
+  Applet,
+  AppletDetails,
+  AppletTheme,
+} from '../lib';
 
 export function mapThemeFromDto(dto: ThemeDto | null): AppletTheme | null {
   return dto === null
@@ -65,4 +72,15 @@ export function mapAppletDetailsFromDto(
     activityFlows: mapActivityFlowsFromDto(detailsDto.activityFlows),
     theme: mapThemeFromDto(detailsDto.theme),
   };
+}
+
+export function mapApplets(dto: AppletDto[]): Applet[] {
+  return dto.map(x => ({
+    description: x.description,
+    displayName: x.displayName,
+    id: x.id,
+    image: x.image,
+    theme: x.theme,
+    numberOverdue: 0,
+  }));
 }

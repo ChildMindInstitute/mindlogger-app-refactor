@@ -104,12 +104,32 @@ describe('MarkdownVariableReplacer', () => {
             ],
           },
         },
+        {
+          id: '3',
+          name: 'name3',
+          type: 'TimeRange',
+          // @ts-ignore
+          payload: {},
+        },
       ];
       answers = {
         0: { answer: 'John Doe' },
         1: { answer: ['1', '3'] },
+        2: {
+          answer: {
+            from: 'Tue Apr 18 2023 13:55:02 GMT+0400',
+            to: 'Tue Apr 18 2023 15:04:02 GMT+0400',
+          },
+        },
       };
       replacer = new MarkdownVariableReplacer(activityItems, answers);
+    });
+
+    it('should replace timeRange variable with selected time', () => {
+      const markdown = 'Hello [[name1]], you selected [[name3]] time.';
+      const expectedOutput = 'Hello John Doe, you selected 13:55 - 15:04 time.';
+      const processedMarkdown = replacer.process(markdown);
+      expect(processedMarkdown).toEqual(expectedOutput);
     });
 
     it('should replace checkbox variable with selected options', () => {

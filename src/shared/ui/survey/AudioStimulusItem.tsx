@@ -15,16 +15,19 @@ import {
 
 type Props = {
   config: {
-    stimulus: string;
-    allowReplay: boolean;
+    file: string;
+    playOnce: boolean;
   };
   value: boolean;
   onChange: (value: boolean) => void;
 };
 
 const AudioStimulusItem: FC<Props> = ({ config, onChange: onFinish }) => {
+  const { file: uri, playOnce } = config;
+  const replayIsAllowed = !playOnce;
+
   const { t } = useTranslation();
-  const { stimulus: uri, allowReplay: replayIsAllowed } = config;
+
   const { isPlaying, playbackCount, play, pause } = useAudioPlayer();
 
   const renderIcon = () => {

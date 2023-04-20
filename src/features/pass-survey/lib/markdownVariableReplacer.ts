@@ -3,17 +3,11 @@ import { format } from 'date-fns';
 import { Answers } from './hooks';
 import { PipelineItem, PipelineItemResponse } from './types';
 
-// @todo test this with other input types, finish timeRange and date types
+// @todo test this with other input types, finish date type
 
 type TimeRangeAnswer = {
-  from: {
-    hour: number;
-    minute: number;
-  };
-  to: {
-    hour: number;
-    minute: number;
-  };
+  from: Date;
+  to: Date;
 };
 
 type DateAnswer = {
@@ -51,13 +45,15 @@ export class MarkdownVariableReplacer {
   };
 
   private formatTime = (
-    timeObject: TimeRangeAnswer['to'] | undefined,
+    dateString: TimeRangeAnswer['to'] | undefined,
   ): string => {
-    if (!timeObject) {
+    if (!dateString) {
       return '';
     }
-    const { hour, minute } = timeObject;
-    return format(new Date(0, 0, 0, hour, minute), 'HH:mm');
+
+    const parseIsoDate = new Date(dateString);
+
+    return format(parseIsoDate, 'HH:mm');
   };
 
   private formatDate = (dateObject: undefined | DateAnswer): string => {
@@ -102,7 +98,9 @@ export class MarkdownVariableReplacer {
 
     const activityItem = this.activityItems[foundIndex];
     let updated = '';
-    const answer = this.answers[foundIndex].answer as string;
+
+    const answer = // @ts-ignore
+      this.answers[foundIndex].answer as PipelineItemResponse['answer'];
 
     switch (activityItem.type) {
       case 'Slider':
@@ -127,12 +125,12 @@ export class MarkdownVariableReplacer {
           updated = filteredItems.toString();
         }
         break;
+      case 'TimeRange':
+        updated = `${this.formatTime(answer?.from)} - ${this.formatTime(
+          answer?.to,
+        )}`;
+        break;
       // @todo
-      // case 'timeRange':
-      //   updated = `${this.formatTime(
-      //     answer?.from,
-      //   )} - ${this.formatTime(answer?.to)}`;
-      //   break;
       // case 'date':
       //   updated = this.formatDate(answer);
       //   break;

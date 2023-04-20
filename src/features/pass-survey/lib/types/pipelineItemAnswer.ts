@@ -10,6 +10,8 @@ import {
   SliderResponse,
   NumberSelectResponse,
   CheckboxResponse,
+  AudioResponse,
+  AudioPlayerResponse,
   TimeRangeResponse,
   RadioResponse,
   PhotoResponse,
@@ -88,6 +90,21 @@ interface CheckboxPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
+interface AudioPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Audio';
+  value: {
+    answer?: AudioResponse;
+    additionalAnswer?: string;
+  };
+}
+interface AudioPlayerPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'AudioPlayer';
+  value: {
+    answer?: AudioPlayerResponse;
+    additionalAnswer?: string;
+  };
+}
+
 interface TimeRangePipelineAnswer extends PipelineItemAnswerBase {
   type: 'TimeRange';
   value: {
@@ -136,6 +153,8 @@ export type PipelineItemAnswer =
   | NumberSelectPipelineAnswer
   | SliderPipelineAnswer
   | RadioPipelineAnswer
+  | AudioPipelineAnswer
+  | AudioPlayerPipelineAnswer
   | TimeRangePipelineAnswer
   | GeolocationPipelineAnswer
   | PhotoPipelineAnswer

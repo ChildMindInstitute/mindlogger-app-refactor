@@ -23,30 +23,42 @@ const audioSetConfig: AudioSet = {
 };
 const androidCacheDir = RNFetchBlob.fs.dirs.CacheDir;
 
-type Props = {
-  config: {
-    maxLength?: number;
-  };
-  onChange: (path: string) => void;
+type Response = {
+  filePath: string;
 };
 
-const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish }) => {
+type Props = {
+  config: {
+    maxDuration?: number;
+  };
+  value?: Response;
+  onChange: ({ filePath }: Response) => void;
+};
+
+const AudioRecorderItem: FC<Props> = ({
+  config,
+  onChange: onFinish,
+  value: initialValue,
+}) => {
   const audioRecorderPlayer = useRef(new AudioRecorderPlayer());
   const { t } = useTranslation();
-  const { maxLength = Infinity } = config;
+  const { maxDuration = Infinity } = config;
   const microphonePermission = useMicrophonePermissions();
   const [isRecording, setIsRecording] = useState(false);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
-  const [fileSaved, setFileSaved] = useState(false);
+  const [fileSaved, setFileSaved] = useState(!!initialValue);
   const [errorDescription, setErrorDescription] = useState('');
   const permissionNotGranted = microphonePermission !== RESULTS.GRANTED;
 
   const filePath = useMemo(() => {
+    if (initialValue?.filePath) {
+      return initialValue.filePath;
+    }
     const randomString = uuidv4();
     return IS_ANDROID
       ? `${androidCacheDir}/${randomString}.mp4`
       : `${randomString}.m4a`;
-  }, []);
+  }, [initialValue]);
 
   const checkMicrophonePermission = async () => {
     if (permissionNotGranted) {
@@ -82,7 +94,7 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish }) => {
           setSecondsElapsed(elapsedSeconds);
           setIsRecording(true);
 
-          if (maxLength <= elapsedSeconds) {
+          if (maxDuration <= elapsedSeconds) {
             stop();
           }
         },
@@ -98,7 +110,10 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish }) => {
     audioRecorderPlayer.current.removeRecordBackListener();
     setIsRecording(false);
     setFileSaved(true);
-    onFinish(fullPath);
+    const response = {
+      filePath: fullPath,
+    };
+    onFinish(response);
   };
 
   const renderIcon = () => {

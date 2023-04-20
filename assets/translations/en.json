@@ -110,7 +110,8 @@
     "new_pass_placeholder": "New password",
     "error": "Unable to update user details.",
     "submission_error": "The current password you entered was incorrect.",
-    "change_pass": "Change Password"
+    "change_pass": "Change Password",
+    "password_at_least_characters": "Password must be at least 6 characters"
   },
   "change_study": {
     "reset": "Reset",
@@ -153,8 +154,10 @@
     "password": "Password"
   },
   "logout_warning": {
+    "warning": "Logout Warning",
     "uploads_in_progress": "Uploads in progress",
     "currently_uploading": "You have responses that are currently uploading. If you log out now your responses will be lost.",
+    "not_uploaded": "You have not uploaded responses. If you log out now these responses will be lost.",
     "sure_logout": "Are you sure that you want to log out?",
     "cancel": "Cancel",
     "logout": "Logout"
@@ -185,7 +188,8 @@
     "password_placeholder": "Password",
     "please_accept_terms": "Please accept terms of service.",
     "password_at_least_characters": "Password must be at least 6 characters",
-    "email_looks_incomplete": "Looks like this email is incomplete"
+    "email_looks_incomplete": "Looks like this email is incomplete",
+    "password_no_spaces": "Password should not contain blank spaces"
   },
   "geolocation": {
     "get_location": "GET LOCATION",

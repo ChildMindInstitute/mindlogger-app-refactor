@@ -2,27 +2,29 @@ import { ActivityPipelineType } from '@app/abstract/lib';
 import { ActivityType } from '@entities/activity';
 import { ScheduleEvent } from '@entities/event';
 
-export type Entity = {
+export type EntityBase = {
   id: string;
   name: string;
   description: string;
   image?: string | null;
 };
 
-export type Activity = Entity & {
+export type Activity = EntityBase & {
   type: ActivityType;
+  isHidden: boolean;
   pipelineType: ActivityPipelineType.Regular;
 };
 
-export type ActivityFlow = Entity & {
+export type ActivityFlow = EntityBase & {
   hideBadge: boolean;
+  isHidden: boolean;
   activityIds: Array<string>;
   pipelineType: ActivityPipelineType.Flow;
 };
 
-export type ActivityOrFlow = Activity | ActivityFlow;
+export type Entity = Activity | ActivityFlow;
 
 export type EventEntity = {
-  entity: ActivityOrFlow;
+  entity: Entity;
   event: ScheduleEvent;
 };

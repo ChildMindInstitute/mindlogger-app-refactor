@@ -51,7 +51,7 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
       imageUrl: dto.responseValues.drawingExample,
       backgroundImageUrl: dto.responseValues.drawingBackground,
     },
-    timer: mapTimerValue(dto.timer),
+    timer: mapTimerValue(dto.config.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: dto.config.skippableItem,
@@ -73,7 +73,7 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
     config: {
       device: dto.responseValues.device,
     },
-    timer: mapTimerValue(dto.timer),
+    timer: mapTimerValue(dto.config.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: false,
@@ -88,11 +88,48 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
 }
 
 function mapToAudio(dto: AudioItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Audio',
+    config: {
+      maxDuration: dto.responseValues.maxDuration,
+    },
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToAudioPlayer(dto: AudioPlayerItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'AudioPlayer',
+    config: {
+      file: dto.responseValues.file,
+      playOnce: dto.config.playOnce,
+    },
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToDate(dto: DateItemDto): ActivityItem {
@@ -138,7 +175,7 @@ function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
       setPalette: dto.config.setPalette,
       options: dto.responseValues.options,
     },
-    timer: mapTimerValue(dto.timer),
+    timer: mapTimerValue(dto.config.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: dto.config.skippableItem,
@@ -185,7 +222,7 @@ function mapToPhoto(dto: PhotoItemDto): ActivityItem {
     id: dto.id,
     inputType: 'Photo',
     config: null,
-    timer: mapTimerValue(dto.timer),
+    timer: mapTimerValue(dto.config.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: dto.config.skippableItem,
@@ -211,7 +248,7 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
       setPalette: dto.config.setPalette,
       options: dto.responseValues.options,
     },
-    timer: mapTimerValue(dto.timer),
+    timer: mapTimerValue(dto.config.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: dto.config.skippableItem,
@@ -245,7 +282,7 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
       minValue: dto.responseValues.minValue,
       maxValue: dto.responseValues.maxValue,
     },
-    timer: mapTimerValue(dto.timer),
+    timer: mapTimerValue(dto.config.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: dto.config.skippableItem,
@@ -273,7 +310,7 @@ function mapToTextInput(dto: TextItemDto): ActivityItem {
       isNumeric: dto.config.numericalResponseRequired,
       shouldIdentifyResponse: dto.config.responseDataIdentifier,
     },
-    timer: mapTimerValue(dto.timer),
+    timer: mapTimerValue(dto.config.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: dto.config.skippableItem,
@@ -297,7 +334,7 @@ function mapToTimeRange(dto: TimeRangeItemDto): ActivityItem {
     id: dto.id,
     inputType: 'TimeRange',
     config: null,
-    timer: mapTimerValue(dto.timer),
+    timer: mapTimerValue(dto.config.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: dto.config.skippableItem,
@@ -317,7 +354,7 @@ function mapToVideo(dto: VideoItemDto): ActivityItem {
     id: dto.id,
     inputType: 'Video',
     config: null,
-    timer: mapTimerValue(dto.timer),
+    timer: mapTimerValue(dto.config.timer),
     order: dto.order,
     question: dto.question,
     isSkippable: dto.config.skippableItem,

@@ -110,7 +110,8 @@
     "new_pass_placeholder": "Nouveau mot de passe",
     "error": "Impossible de mettre à jour les données de l'utilisateur.",
     "submission_error": "Le mot de passe actuel que vous avez saisi était incorrect.",
-    "change_pass": "Changer le mot de passe"
+    "change_pass": "Changer le mot de passe",
+    "password_at_least_characters": "Le mot de passe doit être au moins de 6 caractères"
   },
   "change_study": {
     "reset": "Reinitialiser",
@@ -153,8 +154,10 @@
     "password": "Mot de passe"
   },
   "logout_warning": {
+    "warning": "Avertissement de déconnexion",
     "uploads_in_progress": "Téléchargements en cours",
     "currently_uploading": "Vous avez des réponses en cours de téléchargement. Si vous vous déconnectez maintenant, vos réponses seront perdues.",
+    "not_uploaded": "Vous n'avez pas téléchargé de réponses. Si vous vous déconnectez maintenant, ces réponses seront perdues.",
     "sure_logout": "Êtes-vous sûr de vouloir vous déconnecter ?",
     "cancel": "Annuler",
     "logout": "Logout"
@@ -179,7 +182,8 @@
     "password_placeholder": "Mot de passe",
     "please_accept_terms": "Veuillez accepter les conditions d'utilisation.",
     "password_at_least_characters": "Le mot de passe doit être au moins de 6 caractères",
-    "email_looks_incomplete": "Il semble que cet e-mail soit incomplet"
+    "email_looks_incomplete": "Il semble que cet e-mail soit incomplet",
+    "password_no_spaces": "Le mot de passe ne doit pas contenir d'espaces vides"
   },
   "geolocation": {
     "get_location": "LOCALISATION",

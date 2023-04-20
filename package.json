@@ -88,6 +88,7 @@
     "react-native-screens": "^3.20.0",
     "react-native-select-dropdown": "^3.3.2",
     "react-native-svg": "^13.8.0",
+    "react-native-toast-notifications": "^3.3.1",
     "react-native-vector-icons": "^9.2.0",
     "react-native-video": "^5.2.1",
     "react-native-video-player": "^0.14.0",

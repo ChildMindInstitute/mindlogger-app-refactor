@@ -25,6 +25,8 @@ import {
   SurveySlider,
   CheckBoxActivityItem,
   TimeRangeItem,
+  AudioRecorderItem,
+  AudioStimulusItem,
 } from '@shared/ui';
 
 import AdditionalText from './AdditionalText';
@@ -173,6 +175,30 @@ function ActivityItem({
       );
       break;
 
+    case 'Audio':
+      item = (
+        <Box mx="$6">
+          <AudioRecorderItem
+            onChange={onResponse}
+            value={value?.answer}
+            config={pipelineItem.payload}
+          />
+        </Box>
+      );
+      break;
+
+    case 'AudioPlayer':
+      item = (
+        <Box mx="$6">
+          <AudioStimulusItem
+            onChange={onResponse}
+            value={value?.answer || false}
+            config={pipelineItem.payload}
+          />
+        </Box>
+      );
+      break;
+
     case 'TimeRange':
       item = (
         <Box mx="$6">
@@ -257,7 +283,7 @@ function ActivityItem({
             <Box flex={1} justifyContent="center">
               {question && (
                 <Box mx={16} mb={20}>
-                  <MarkdownMessage content={question} />
+                  <MarkdownMessage centerContent content={question} />
                 </Box>
               )}
 

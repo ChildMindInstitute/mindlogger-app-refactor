@@ -28,6 +28,8 @@ export type EventAvailability = {
   availabilityType: AvailabilityType;
   oneTimeCompletion: boolean;
   periodicityType: PeriodicityType;
+  timeFrom: HourMinute | null;
+  timeTo: HourMinute | null;
   startDate: Date | null;
   endDate: Date | null;
 };
@@ -78,6 +80,12 @@ export const enum InactiveReason {
   OneTimeCompletion = 'OneTimeCompletion',
 }
 
+type NotificationDescriberDebugPayload = {
+  scheduledEvent_Debug?: ScheduleEvent;
+  scheduledEventString_Debug?: string;
+  toString_Debug?: string;
+};
+
 export type NotificationDescriber = {
   notificationId: string;
   shortId: string;
@@ -93,7 +101,7 @@ export type NotificationDescriber = {
   notificationBody: string;
   isActive: boolean;
   inactiveReason?: InactiveReason;
-};
+} & NotificationDescriberDebugPayload;
 
 export type NotificationBuilderInput = {
   appletId: string;
