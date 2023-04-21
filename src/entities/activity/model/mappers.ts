@@ -161,7 +161,22 @@ function mapToGeolocation(dto: GeolocationItemDto): ActivityItem {
 }
 
 function mapToMessage(dto: MessageItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Message',
+    config: null,
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: false,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+  };
 }
 
 function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {

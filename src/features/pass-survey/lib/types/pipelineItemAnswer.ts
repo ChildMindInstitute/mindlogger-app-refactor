@@ -97,6 +97,15 @@ interface AudioPipelineAnswer extends PipelineItemAnswerBase {
     additionalAnswer?: string;
   };
 }
+
+interface MessagePipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Message';
+  value: {
+    answer: null;
+    additionalAnswer?: string;
+  };
+}
+
 interface AudioPlayerPipelineAnswer extends PipelineItemAnswerBase {
   type: 'AudioPlayer';
   value: {
@@ -154,6 +163,7 @@ export type PipelineItemAnswer =
   | SliderPipelineAnswer
   | RadioPipelineAnswer
   | AudioPipelineAnswer
+  | MessagePipelineAnswer
   | AudioPlayerPipelineAnswer
   | TimeRangePipelineAnswer
   | GeolocationPipelineAnswer
