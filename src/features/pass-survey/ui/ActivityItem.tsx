@@ -1,9 +1,13 @@
-import { useContext, useLayoutEffect, useRef, useState } from 'react';
-import { StyleSheet, useWindowDimensions } from 'react-native';
+import { useContext, useEffect, useRef, useState } from 'react';
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StyleSheet,
+} from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { IS_IOS } from '@app/shared/lib';
+import { IS_ANDROID, IS_IOS } from '@app/shared/lib';
 import {
   Box,
   GeolocationItem,
@@ -44,7 +48,9 @@ type Props = ActivityItemProps &
     textVariableReplacer: (markdown: string) => string;
   };
 
-const NavigationPanelHeight = 60;
+const ContentInsetVertical = IS_ANDROID ? 0 : 60;
+
+const ScrollButtonRefreshTimeout = 300;
 
 function ActivityItem({
   type,
@@ -60,11 +66,18 @@ function ActivityItem({
 
   const { next } = useContext(HandlersContext);
 
-  const windowHeight = useWindowDimensions().height;
-
   const scrollViewRef = useRef<KeyboardAwareScrollView>();
 
-  const [height, setHeight] = useState(0);
+  const [containerHeight, setContainerHeight] = useState<number | null>(null);
+
+  const [scrollContentHeight, setScrollContentHeight] = useState<number | null>(
+    null,
+  );
+
+  const [endOfContentAchievedOnce, setEndOfContentAchievedOnce] =
+    useState(false);
+
+  const scrollButtonTimeoutId = useRef<number | undefined>(undefined);
 
   let item: JSX.Element | null;
   const question = pipelineItem.question;
@@ -256,17 +269,40 @@ function ActivityItem({
     }
   }
 
-  useLayoutEffect(() => {
-    if (height > windowHeight - NavigationPanelHeight) {
-      setShowScrollButton(true);
+  useEffect(() => {
+    if (!containerHeight || !scrollContentHeight) {
+      return;
     }
-  }, [height, windowHeight]);
+
+    if (scrollContentHeight > containerHeight && !endOfContentAchievedOnce) {
+      scrollButtonTimeoutId.current = setTimeout(() => {
+        setShowScrollButton(true);
+      }, ScrollButtonRefreshTimeout);
+    } else {
+      clearTimeout(scrollButtonTimeoutId.current);
+      scrollButtonTimeoutId.current = undefined;
+
+      setShowScrollButton(false);
+    }
+  }, [containerHeight, scrollContentHeight, endOfContentAchievedOnce]);
+
+  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+
+    const achieved =
+      Math.round(layoutMeasurement.height + contentOffset.y) >=
+      Math.round(contentSize.height + ContentInsetVertical);
+
+    if (!endOfContentAchievedOnce && achieved) {
+      setEndOfContentAchievedOnce(achieved);
+    }
+  };
 
   return (
     <Box
       flex={1}
       onLayout={e => {
-        setHeight(e.nativeEvent.layout.height);
+        setContainerHeight(e.nativeEvent.layout.height);
       }}
     >
       <KeyboardAvoidingView flex={1} behavior={IS_IOS ? 'padding' : 'height'}>
@@ -276,13 +312,17 @@ function ActivityItem({
               scrollViewRef.current = ref as unknown as KeyboardAwareScrollView;
             }}
             contentContainerStyle={styles.scrollView}
-            onContentSizeChange={(_, contentHeight) => setHeight(contentHeight)}
+            onContentSizeChange={(_, contentHeight) => {
+              setScrollContentHeight(contentHeight);
+            }}
             scrollEnabled={scrollEnabled}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             keyboardOpeningTime={0}
-            contentInset={{ top: 0, bottom: 60 }}
+            contentInset={{ top: 0, bottom: ContentInsetVertical }}
             enableOnAndroid
+            onScroll={onScroll}
+            scrollEventThrottle={50}
           >
             <Box flex={1} justifyContent="center">
               {question && (
