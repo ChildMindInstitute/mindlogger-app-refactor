@@ -1,80 +1,74 @@
-import { HourMinute, Language } from '@app/shared/lib';
+import { ImageUrl } from '@app/shared/lib';
 
 import httpService from './httpService';
+import { SuccessfulResponse } from '../types';
 
 export type ActivityRecordDto = {
   id: string;
   name: string;
-  description: Record<Language, string>;
-  image: string;
+  description: string;
+  image: ImageUrl | null;
   isReviewable: boolean;
   isSkippable: boolean;
-  ordering: boolean;
-  splashScreen: string;
+  showAllAtOnce: boolean;
+  isHidden: boolean;
+  responseIsEditable: boolean;
+  order: number;
+  splashScreen: ImageUrl | null;
 };
 
 export type ActivityFlowRecordDto = {
   id: string;
   name: string;
-  image: string;
-  description: Record<Language, string>;
+  description: string;
   hideBadge: boolean;
   isSingleReport: boolean;
-  ordering: boolean;
-  items: Array<{ activityId: string }>;
+  order: number;
+  isHidden: boolean;
+  activityIds: Array<string>;
+};
+
+export type ThemeDto = {
+  id: string;
+  name: string;
+  logo: ImageUrl;
+  backgroundImage: ImageUrl;
+  primaryColor: string;
+  secondaryColor: string;
+  tertiaryColor: string;
 };
 
 export type AppletDetailsDto = {
   id: string;
-  name?: string;
-  image: string;
   displayName: string;
-  description: Record<Language, string>;
+  version: string;
+  description: string;
+  about: string;
+  image: ImageUrl | null;
+  watermark: ImageUrl | null;
+  theme: ThemeDto | null;
   activities: ActivityRecordDto[];
   activityFlows: ActivityFlowRecordDto[];
 };
 
-export type EventAvailabilityDto = {
-  availabilityType: number;
-  oneTimeCompletion: boolean;
-  periodicityType: number;
-  timeFrom: HourMinute | null;
-  timeTo: HourMinute | null;
-  allowAccessBeforeFromTime: boolean;
-  startDate?: string | null;
-  endDate?: string | null;
-  selectedDate?: string | null;
-};
-
-export type ScheduleEventDto = {
-  entityId: string;
-  availability: EventAvailabilityDto;
-};
-
-type AppletDto = {
+export type AppletDto = {
   id: string;
-  image?: string;
+  image: ImageUrl | null;
   displayName: string;
-  description: Record<Language, string>;
-  numberOverdue?: number;
-
-  theme?: {
-    logo?: string;
-    smallLogo?: string;
-  } | null;
+  description: string;
+  theme: ThemeDto | null;
+  version: string;
+  about: string;
+  watermark: ImageUrl | null;
 };
 
-export type AppletsResponse = {
-  result: AppletDto[];
-};
+export type AppletsResponse = SuccessfulResponse<AppletDto[]>;
 
 type AppletDetailsRequest = {
   appletId: string;
 };
 
-export type AppletDetailsResponse = {
-  result: AppletDetailsDto;
-};
+export type AppletDetailsResponse = SuccessfulResponse<AppletDetailsDto>;
 
 function appletsService() {
   return {
@@ -89,4 +83,4 @@ function appletsService() {
   };
 }
 
-export default appletsService();
+export const AppletsService = appletsService();

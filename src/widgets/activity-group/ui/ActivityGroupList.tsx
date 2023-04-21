@@ -1,4 +1,6 @@
-import { FC } from 'react';
+import { FC, useCallback, useState } from 'react';
+
+import { useFocusEffect } from '@react-navigation/native';
 
 import {
   Box,
@@ -21,8 +23,23 @@ const ActivityGroupList: FC<Props> = props => {
   let { groups, isSuccess, isLoading, error } = useActivityGroups(
     props.appletId,
   );
+  const [shouldShowList, setShouldShowList] = useState(true);
 
   const hasError = !!error;
+
+  useFocusEffect(
+    useCallback(() => {
+      setShouldShowList(true);
+
+      return () => {
+        setTimeout(() => setShouldShowList(false), 300);
+      };
+    }, []),
+  );
+
+  if (!shouldShowList) {
+    return null;
+  }
 
   if (isLoading) {
     return (
@@ -54,7 +71,7 @@ const ActivityGroupList: FC<Props> = props => {
         {groups
           ?.filter(g => g.activities.length)
           .map(g => (
-            <ActivityGroup group={g} key={g.name} />
+            <ActivityGroup group={g} key={g.name} appletId={props.appletId} />
           ))}
       </YStack>
     </Box>

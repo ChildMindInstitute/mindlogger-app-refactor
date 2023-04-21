@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type User = {
   id: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
 };
 
@@ -27,16 +28,8 @@ const identitySlice = createSlice({
   },
 });
 
-function logout(): AppThunkAction {
-  return dispatch => {
-    // TODO: Add messaging().deleteToken() when the integration with Firebase is done.
-    dispatch(actions.onLogout);
-  };
-}
-
 export const actions = {
   ...identitySlice.actions,
-  logout,
 };
 
 export const reducer = identitySlice.reducer;

@@ -2,6 +2,7 @@ import { HourMinute } from '@app/shared/lib';
 
 export type ActivityListItem = {
   activityId: string;
+  flowId: string | null;
   eventId: string;
 
   name: string;
@@ -25,6 +26,7 @@ export type ActivityListItem = {
   availableTo?: Date | null;
 
   isTimerSet: boolean;
+  isTimerElapsed: boolean;
   timeLeftToComplete?: HourMinute | null;
 };
 

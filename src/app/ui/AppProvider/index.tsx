@@ -1,14 +1,15 @@
 import { FC, Suspense, PropsWithChildren } from 'react';
 
 import { CacheManager } from '@georstat/react-native-image-cache';
+import { PortalProvider } from '@tamagui/portal';
 import { Dirs } from 'react-native-file-access';
 
-import CommonEvents from './CommonEvents';
 import NavigationProvider from './NavigationProvider';
 import ReactQueryProvider from './ReactQueryProvider';
 import ReduxProvider from './ReduxProvider';
 import SplashProvider from './SplashProvider';
 import TamaguiProvider from './TamaguiProvider';
+import ToastProvider from './ToastProvider';
 
 CacheManager.config = {
   baseDir: `${Dirs.CacheDir}/images_cache/`,
@@ -25,9 +26,11 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
         <ReactQueryProvider>
           <TamaguiProvider>
             <NavigationProvider>
-              <CommonEvents>
-                <Suspense>{children}</Suspense>
-              </CommonEvents>
+              <PortalProvider>
+                <ToastProvider>
+                  <Suspense>{children}</Suspense>
+                </ToastProvider>
+              </PortalProvider>
             </NavigationProvider>
           </TamaguiProvider>
         </ReactQueryProvider>

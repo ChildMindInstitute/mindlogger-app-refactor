@@ -1,57 +1,30 @@
-import { ActivityType } from '@app/entities/activity';
-import { ScheduleEvent } from '@app/entities/event';
+import { ActivityPipelineType } from '@app/abstract/lib';
+import { ActivityType } from '@entities/activity';
+import { ScheduleEvent } from '@entities/event';
 
-export const enum ActivityPipelineType {
-  NotDefined = 0,
-  Regular,
-  Flow,
-}
-
-export type Entity = {
+export type EntityBase = {
   id: string;
   name: string;
   description: string;
-  image: string | null;
+  image?: string | null;
 };
 
-export type Activity = Entity & {
+export type Activity = EntityBase & {
   type: ActivityType;
+  isHidden: boolean;
   pipelineType: ActivityPipelineType.Regular;
 };
 
-export type ActivityFlow = Entity & {
+export type ActivityFlow = EntityBase & {
   hideBadge: boolean;
-  items: Array<{ activityId: string }>;
+  isHidden: boolean;
+  activityIds: Array<string>;
   pipelineType: ActivityPipelineType.Flow;
 };
 
-export type ActivityOrFlow = Activity | ActivityFlow;
+export type Entity = Activity | ActivityFlow;
 
-export type EventActivity = {
-  activity: ActivityOrFlow;
+export type EventEntity = {
+  entity: Entity;
   event: ScheduleEvent;
-};
-
-export type ActivityFlowProgress = {
-  type: ActivityPipelineType.Flow;
-  currentActivityId: string;
-};
-
-export type ActivityProgress = {
-  type: ActivityPipelineType.Regular;
-};
-
-export type ActivityOrFlowProgress = ActivityFlowProgress | ActivityProgress;
-
-export type ProgressPayload = ActivityOrFlowProgress & {
-  startAt?: Date;
-  endAt?: Date | null;
-};
-
-export type EntityProgress = {
-  [appletId in string]: {
-    [entityId in string]: {
-      [eventId in string]?: ProgressPayload | null;
-    };
-  };
 };

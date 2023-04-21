@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { TextInputProps } from 'react-native';
+import { ColorValue, TextInputProps } from 'react-native';
 
 import { Controller, useFormContext, useController } from 'react-hook-form';
 
@@ -12,6 +12,7 @@ type Props = {
   defaultValue?: string;
   size?: string;
   secureTextEntry?: boolean;
+  backgroundColor?: ColorValue | undefined;
   mode?: 'dark' | 'light';
 } & TextInputProps;
 
@@ -20,6 +21,7 @@ const InputField: FC<Props> = ({
   defaultValue = '',
   placeholder,
   mode = 'light',
+  backgroundColor,
   ...props
 }) => {
   const { control } = useFormContext();
@@ -44,8 +46,9 @@ const InputField: FC<Props> = ({
             value={value}
             placeholder={placeholder}
             autoCapitalize="none"
-            {...props}
             mode={mode}
+            backgroundColor={backgroundColor}
+            {...props}
             isInvalid={!!error}
           />
         )}

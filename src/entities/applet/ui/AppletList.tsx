@@ -1,29 +1,35 @@
 import { FC } from 'react';
 
 import { XStack, YStack } from '@tamagui/stacks';
+import { useIsMutating } from '@tanstack/react-query';
 
+import { useOnMutationCacheChange } from '@app/shared/api';
 import { Box, BoxProps, NoListItemsYet } from '@app/shared/ui';
 import { LoadListError } from '@app/shared/ui';
 
 import AppletCard from './AppletCard';
 import { useAppletsQuery } from '../api';
-import { Applet } from '../lib';
+import { mapApplets } from '../model';
 
-const AppletList: FC<BoxProps> = props => {
-  const {
-    error,
-    data: applets,
-    isFetching,
-    isSuccess,
-  } = useAppletsQuery({
-    select: response =>
-      response.data.result.map<Applet>(dto => ({
-        ...dto,
-        description: dto.description.en,
-      })),
+type SelectedApplet = {
+  id: string;
+  displayName: string;
+};
+
+type Props = {
+  onAppletPress: (applet: SelectedApplet) => void;
+} & BoxProps;
+
+const AppletList: FC<Props> = ({ onAppletPress, ...styledProps }) => {
+  const { error: getAppletsError, data: applets } = useAppletsQuery({
+    select: response => mapApplets(response.data.result),
   });
 
-  const hasError = !!error;
+  const isRefreshing = useIsMutating(['refresh']);
+
+  const refreshError = useOnMutationCacheChange();
+
+  const hasError = !!refreshError || !!getAppletsError;
 
   if (hasError) {
     return (
@@ -33,7 +39,7 @@ const AppletList: FC<BoxProps> = props => {
     );
   }
 
-  if (isSuccess && !applets?.length) {
+  if (!isRefreshing && !applets?.length) {
     return (
       <XStack flex={1} jc="center" ai="center">
         <NoListItemsYet translationKey="applet_list_component:no_applets_yet" />
@@ -42,10 +48,17 @@ const AppletList: FC<BoxProps> = props => {
   }
 
   return (
-    <Box {...props}>
+    <Box {...styledProps}>
       <YStack space={18}>
         {applets?.map(x => (
-          <AppletCard applet={x} key={x.id} disabled={isFetching} />
+          <AppletCard
+            applet={x}
+            key={x.id}
+            disabled={!!isRefreshing}
+            onPress={() =>
+              onAppletPress({ id: x.id, displayName: x.displayName })
+            }
+          />
         ))}
       </YStack>
     </Box>

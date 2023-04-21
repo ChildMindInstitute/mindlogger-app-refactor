@@ -1,0 +1,28 @@
+import { PropsWithChildren, useContext } from 'react';
+import { TouchableOpacity } from 'react-native';
+
+import { colors } from '@shared/lib';
+import { LeftArrowIcon } from '@shared/ui';
+
+import ActionButton from './ActionButton';
+import { HandlersContext } from './contexts';
+
+type Props = PropsWithChildren<{
+  isIcon?: boolean;
+}>;
+
+function BackButton({ children, isIcon }: Props) {
+  const { back } = useContext(HandlersContext);
+
+  if (isIcon) {
+    return (
+      <TouchableOpacity onPress={back}>
+        <LeftArrowIcon color={colors.tertiary} size={30} />
+      </TouchableOpacity>
+    );
+  }
+
+  return <ActionButton onPress={back}>{children}</ActionButton>;
+}
+
+export default BackButton;

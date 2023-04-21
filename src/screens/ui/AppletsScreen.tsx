@@ -2,12 +2,15 @@ import { FC, useLayoutEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
+import { StoreProgress } from '@app/abstract/lib';
+import { NotificationModel } from '@app/entities/notification';
 import { useAppSelector } from '@app/shared/lib';
-import { AppletList } from '@entities/applet';
+import { AppletList, AppletModel } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
-import { AppletsRefresh } from '@features/applets-refresh';
+import { AppletsRefresh, AppletsRefreshModel } from '@features/applets-refresh';
 import { Box, ImageBackground, ScrollView, Text, XStack } from '@shared/ui';
 
 const AppletsScreen: FC = () => {
@@ -22,6 +25,19 @@ const AppletsScreen: FC = () => {
     }
   }, [t, userFirstName, setOptions]);
 
+  const queryClient = useQueryClient();
+
+  const storeProgress: StoreProgress = useAppSelector(
+    AppletModel.selectors.selectInProgressApplets,
+  );
+
+  AppletsRefreshModel.useAutomaticRefreshOnMount(() => {
+    NotificationModel.NotificationRefreshService.refresh(
+      queryClient,
+      storeProgress,
+    );
+  });
+
   return (
     <Box bg="$secondary" flex={1}>
       <ImageBackground>
@@ -30,7 +46,14 @@ const AppletsScreen: FC = () => {
           refreshControl={<AppletsRefresh />}
         >
           <Box flex={1} pt={12} pb={34}>
-            <AppletList flex={1} px={14} mb={28} />
+            <AppletList
+              flex={1}
+              px={14}
+              mb={28}
+              onAppletPress={({ id, displayName }) =>
+                navigate('AppletDetails', { appletId: id, title: displayName })
+              }
+            />
 
             <XStack jc="center">
               <TouchableOpacity onPress={() => navigate('AboutApp')}>

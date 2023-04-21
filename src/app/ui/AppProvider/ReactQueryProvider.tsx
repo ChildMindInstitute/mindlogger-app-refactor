@@ -5,9 +5,9 @@ import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persi
 import { QueryClient, onlineManager } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
-import { createAsyncStorage, ONE_HOUR, useSplash } from '@shared/lib';
+import { createSecureAsyncStorage, ONE_HOUR, useSplash } from '@shared/lib';
 
-const storage = createAsyncStorage('cache-storage');
+const storage = createSecureAsyncStorage('cache-storage');
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,7 +17,8 @@ const queryClient = new QueryClient({
     },
     queries: {
       retry: 2,
-      cacheTime: ONE_HOUR * 24,
+      cacheTime: Infinity,
+      staleTime: Infinity,
     },
   },
 });

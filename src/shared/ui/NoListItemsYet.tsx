@@ -15,7 +15,7 @@ const NoListItemsYet: FC<PropsWithChildren<Props>> = ({
   const { t } = useTranslation();
 
   return (
-    <Text color="$tertiary" fontSize={14} {...props}>
+    <Text color="$tertiary" fontSize={14} textAlign="center" {...props}>
       {t(translationKey)}
     </Text>
   );

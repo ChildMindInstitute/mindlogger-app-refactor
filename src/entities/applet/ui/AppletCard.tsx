@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
-import { useNavigation } from '@react-navigation/native';
 
 import { IS_IOS } from '@app/shared/lib';
 import {
@@ -19,33 +18,22 @@ import { Applet } from '../lib';
 type Props = {
   applet: Applet;
   disabled: boolean;
+  onPress?: (...args: any[]) => void;
 };
 
-const AppletCard: FC<Props> = ({ applet, disabled }) => {
-  const { navigate } = useNavigation();
+const AppletCard: FC<Props> = ({ applet, disabled, onPress }) => {
+  const theme = applet.theme;
 
   const renderThemeLogo = () => {
-    if (!applet || !applet.theme) {
-      return null;
+    if (theme?.logo) {
+      return <CachedImage style={styles.smallLogo} source={theme.logo} />;
     }
 
-    if (applet.theme.smallLogo) {
-      return (
-        <CachedImage style={styles.smallLogo} source={applet.theme.smallLogo} />
-      );
-    } else if (applet.theme.logo) {
-      return <CachedImage style={styles.logo} source={applet.theme.logo} />;
-    }
     return null;
   };
 
   return (
-    <TouchableOpacity
-      onPress={() =>
-        navigate('ActivityList', { appletId: applet.id.toString() })
-      }
-      disabled={disabled}
-    >
+    <TouchableOpacity onPress={onPress} disabled={disabled}>
       <XStack
         position="relative"
         mx={3}

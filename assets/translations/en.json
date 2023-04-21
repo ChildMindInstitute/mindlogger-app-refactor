@@ -63,7 +63,7 @@
     "icons_title": "NounProject icons were created by Alina Oleynik (survey), beth bolton (book), and\nShakeel (chart)"
   },
   "about_app": {
-    "title_with_version": "{{version}} What is MindLogger?",
+    "title_with_version": "What is MindLogger? v.{{version}}",
     "title": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
     "subtitle": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
     "mindlogger_about": "## \n ### What is MindLogger? \n\n This app is part of the open source MindLogger data collection and analysis platform designed by the MATTER Lab at the Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### What can MindLogger do? \n\n MindLogger's feature set is growing, and currently supports a wide variety of input types. Each screen in a MindLogger activity can include any of the following: \n  - Text, picture, and audio \n  - Question followed by image and/or text response options \n  - Slider bar \n  - Text entry \n  - Table entry \n  - Audio record \n  - Photo/video capture \n  - Drawing or tapping \n  - Current geolocation \n  - Simple cognitive task \n  - Delay before response \n  - Timer \n  - Conditional logic to determine where to go next \n\n #### Where can I learn more? \n Please visit [https://mindlogger.org](https://mindlogger.org) for more information. \n\n ##### Cheers, \n\n ##### MindLogger Team \n\n ##### Child Mind Institute"
@@ -86,7 +86,7 @@
   },
   "applet_list_component": {
     "about_title": "About MindLogger",
-    "no_applets_yet": "No applets specified yet",
+    "no_applets_yet": "You have no applets.",
     "noon": "Noon",
     "midnight": "Midnight"
   },
@@ -110,7 +110,8 @@
     "new_pass_placeholder": "New password",
     "error": "Unable to update user details.",
     "submission_error": "The current password you entered was incorrect.",
-    "change_pass": "Change Password"
+    "change_pass": "Change Password",
+    "password_at_least_characters": "Password must be at least 6 characters"
   },
   "change_study": {
     "reset": "Reset",
@@ -153,8 +154,10 @@
     "password": "Password"
   },
   "logout_warning": {
+    "warning": "Logout Warning",
     "uploads_in_progress": "Uploads in progress",
     "currently_uploading": "You have responses that are currently uploading. If you log out now your responses will be lost.",
+    "not_uploaded": "You have not uploaded responses. If you log out now these responses will be lost.",
     "sure_logout": "Are you sure that you want to log out?",
     "cancel": "Cancel",
     "logout": "Logout"
@@ -180,11 +183,13 @@
     "username_validation_error": "Username must be at least 4 characters, start with a letter, and may only contain letters, numbers, dashes, and dots.",
     "email_validation_error": "Looks like this email is incomplete",
     "email_placeholder": "Email",
-    "display_name_placeholder": "Display name",
+    "first_name": "First Name",
+    "last_name": "Last Name",
     "password_placeholder": "Password",
     "please_accept_terms": "Please accept terms of service.",
     "password_at_least_characters": "Password must be at least 6 characters",
-    "email_looks_incomplete": "Looks like this email is incomplete"
+    "email_looks_incomplete": "Looks like this email is incomplete",
+    "password_no_spaces": "Password should not contain blank spaces"
   },
   "geolocation": {
     "get_location": "GET LOCATION",
@@ -197,14 +202,18 @@
     "select_one": "Select one",
     "no_items": "No items"
   },
+  "permissions": {
+    "alert_button_cancel": "Dismiss",
+    "alert_button_ok": "Open Settings"
+  },
+  "media": {
+    "alert_message": "These can be configured in Settings"
+  },
   "audio_recorder": {
     "permission": "You must grant permission to use your microphone to complete this task.",
     "alert_title": "\"MindLogger\" would like to use your microphone to complete this task.",
     "alert_message": "These can be configured in Settings.",
-    "alert_button_ok": "Open Settings",
-    "alert_button_cancel": "Dismiss"
-  },
-  "record_button": {
+    "record_error": "There was an error initiating recorder.",
     "stop": "STOP",
     "record": "RECORD",
     "recording": "Recording...",
@@ -320,7 +329,8 @@
     "type_placeholder": "Please type text"
   },
   "additional": {
-    "end": "Time is up!",
+    "time-end": "Time is up!",
+    "time-end-tap": "Time is up. Tap to complete",
     "thanks": "Thanks!",
     "saved_answers": "We've saved your answers!",
     "submit_flow_answers": "Tap the",
@@ -346,5 +356,18 @@
   "prize": {
     "lack_tokens_title": "Try again",
     "lack_tokens_subtitle": "You don't have enough tokens.\nPlease select another prize"
+  },
+  "cognitive": {
+    "incorrect_start_point": "Incorrect start point!",
+    "incorrect_line": "Incorrect line!",
+    "finished_continue": "Finished. Click next to continue.",
+    "finished_complete": "Finished. Click Done to complete.",
+    "begin": "Begin",
+    "end": "End"
+  },
+  "open_source": {
+    "title": "Open Source Software used",
+    "show_license": "Show License",
+    "homepage": "Homepage"
   }
 }

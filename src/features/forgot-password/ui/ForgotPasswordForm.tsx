@@ -3,9 +3,10 @@ import { FC } from 'react';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useToast } from 'react-native-toast-notifications';
 
 import { usePasswordRecoveryMutation } from '@app/entities/identity';
-import { useAppForm } from '@shared/lib';
+import { useAppForm, useFormChanges } from '@shared/lib';
 import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
@@ -17,14 +18,17 @@ type Props = BoxProps & {
 
 const ForgotPasswordForm: FC<Props> = props => {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const {
     mutate: recover,
     error,
     isLoading,
+    reset,
   } = usePasswordRecoveryMutation({
     onSuccess: () => {
       props.onRecoverySuccess();
+      toast.show(t('forgot_pass_form:email_sent'));
     },
   });
 
@@ -36,6 +40,8 @@ const ForgotPasswordForm: FC<Props> = props => {
       recover({ email: data.email });
     },
   });
+
+  useFormChanges({ form, onInputChange: () => reset() });
 
   return (
     <Box {...props}>

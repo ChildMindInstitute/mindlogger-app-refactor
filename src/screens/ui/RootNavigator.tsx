@@ -5,9 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
-import { SessionModel } from '@app/entities/session';
-import { APP_VERSION, colors, ENV } from '@shared/lib';
-import { Text, UserProfileIcon, HomeIcon } from '@shared/ui';
+import { SessionModel } from '@entities/session';
+import { LogoutModel } from '@features/logout';
+import { APP_VERSION, colors, ENV, IS_ANDROID } from '@shared/lib';
+import { UserProfileIcon, HomeIcon, BackButton, Text, Box } from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
 import { onBeforeAppClose } from '../lib';
@@ -19,9 +20,11 @@ import {
   LoginScreen,
   SignUpScreen,
   AboutScreen,
-  ActivityListScreen,
   ChangePasswordScreen,
   SettingsScreen,
+  AppletBottomTabNavigator,
+  InProgressActivityScreen,
+  OpenSourceUsed,
 } from '../ui';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -32,6 +35,7 @@ export default () => {
 
   const hasSession = SessionModel.useHasSession();
   const defaultRoute = useDefaultRoute();
+  const { forceLogout } = LogoutModel.useLogout();
 
   useInitialRouteNavigation();
 
@@ -39,6 +43,10 @@ export default () => {
     onBeforeAppClose();
 
     return true;
+  });
+
+  SessionModel.useOnRefreshTokenFail(() => {
+    forceLogout();
   });
 
   return (
@@ -52,6 +60,14 @@ export default () => {
             options={{ headerShown: false }}
             name="Login"
             component={LoginScreen}
+          />
+
+          <Stack.Screen
+            name="OpenSourceUsed"
+            options={{
+              title: t('open_source:title'),
+            }}
+            component={OpenSourceUsed}
           />
 
           <Stack.Screen
@@ -99,28 +115,9 @@ export default () => {
                   <UserProfileIcon color={colors.tertiary} size={22} />
                 </TouchableOpacity>
               ),
+              headerLeft: () => null,
             }}
             component={AppletsScreen}
-          />
-
-          <Stack.Screen
-            name="ActivityList"
-            options={{
-              title: 'Applet 123',
-              headerStyle: {
-                backgroundColor: colors.blue,
-              },
-              headerTitleStyle: {
-                fontSize: 18,
-                color: colors.white,
-              },
-              headerLeft: () => (
-                <Text onPress={() => navigation.goBack()} mr={24}>
-                  <HomeIcon color={colors.white} size={32} />
-                </Text>
-              ),
-            }}
-            component={ActivityListScreen}
           />
 
           <Stack.Screen
@@ -137,6 +134,41 @@ export default () => {
               title: t('settings:change_pass'),
             }}
             component={ChangePasswordScreen}
+          />
+
+          <Stack.Screen
+            name="AppletDetails"
+            component={AppletBottomTabNavigator}
+            options={({ route }) => ({
+              headerBackVisible: false,
+              headerTitle: IS_ANDROID
+                ? () => (
+                    <Box flex={1} mr={20}>
+                      <Text
+                        color={colors.white}
+                        fontSize={18}
+                        fontWeight="700"
+                        numberOfLines={1}
+                      >
+                        {route.params.title}
+                      </Text>
+                    </Box>
+                  )
+                : undefined,
+              headerLeft: () => (
+                <BackButton mr={IS_ANDROID && 15} fallbackRoute="Applets">
+                  <HomeIcon color={colors.white} size={32} />
+                </BackButton>
+              ),
+            })}
+          />
+
+          <Stack.Screen
+            name="InProgressActivity"
+            component={InProgressActivityScreen}
+            options={{
+              headerShown: false,
+            }}
           />
         </>
       )}

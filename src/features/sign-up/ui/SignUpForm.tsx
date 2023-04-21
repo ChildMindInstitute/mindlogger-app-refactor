@@ -5,7 +5,7 @@ import { Linking } from 'react-native';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { useAppForm } from '@app/shared/lib';
+import { useAppForm, useFormChanges } from '@app/shared/lib';
 import { Text, Box, BoxProps, YStack, XStack, SubmitButton } from '@shared/ui';
 import { InputField, CheckBoxField, ErrorMessage } from '@shared/ui/form';
 
@@ -22,6 +22,7 @@ const SignUpForm: FC<Props> = props => {
   const {
     isLoading,
     error,
+    reset,
     mutate: signUp,
   } = SignUpModel.useRegistrationMutation(props.onLoginSuccess);
 
@@ -32,12 +33,14 @@ const SignUpForm: FC<Props> = props => {
       password: '',
     },
     onSubmitSuccess: data => {
-      signUp({
-        email: data.email,
-        fullName: data.display_name,
-        password: data.password,
-      });
+      signUp(data);
     },
+  });
+
+  useFormChanges({
+    form,
+    watchInputs: ['password'],
+    onInputChange: () => reset(),
   });
 
   const navigateToTerms = () => {
@@ -51,8 +54,13 @@ const SignUpForm: FC<Props> = props => {
           <InputField name="email" placeholder={t('auth:email')} />
 
           <InputField
-            name="display_name"
-            placeholder={t('sign_up_form:display_name_placeholder')}
+            name="firstName"
+            placeholder={t('sign_up_form:first_name')}
+          />
+
+          <InputField
+            name="lastName"
+            placeholder={t('sign_up_form:last_name')}
           />
 
           <InputField

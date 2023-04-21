@@ -1,3 +1,4 @@
+import { createAnimations } from '@tamagui/animations-react-native';
 import {
   createFont,
   createTokens,
@@ -30,6 +31,23 @@ const main = createTheme({
   color: tokens.color.secondary,
 });
 
+const animations = createAnimations({
+  fast: {
+    damping: 20,
+    mass: 1.2,
+    stiffness: 250,
+  },
+  medium: {
+    damping: 10,
+    mass: 0.9,
+    stiffness: 100,
+  },
+  slow: {
+    damping: 20,
+    stiffness: 60,
+  },
+});
+
 export const uiConfig = createTamagui({
   themes: {
     ...baseThemes,
@@ -41,6 +59,7 @@ export const uiConfig = createTamagui({
     body: defaultFont,
     title: defaultFont,
   },
+  animations,
 });
 
 export type AppConfig = typeof uiConfig;
