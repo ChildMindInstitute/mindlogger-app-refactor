@@ -66,7 +66,7 @@ function ActivityItem({
 
   const [height, setHeight] = useState(0);
 
-  let item: JSX.Element;
+  let item: JSX.Element | null;
   const question = pipelineItem.question;
 
   const stopScrolling = () => setScrollEnabled(false);
@@ -185,6 +185,10 @@ function ActivityItem({
           />
         </Box>
       );
+      break;
+
+    case 'Message':
+      item = null;
       break;
 
     case 'AudioPlayer':
