@@ -57,10 +57,6 @@ class RefreshService {
     for (let url of urls) {
       try {
         if (!this.isUrlValid(url)) {
-          this.showWrongUrlLogs &&
-            console.warn(
-              '[RefreshService.cacheImages] Ignored: wrong image url: ' + url,
-            );
           continue;
         }
         CacheManager.prefetch(url);
@@ -156,9 +152,6 @@ class RefreshService {
     for (let appletDto of appletDtos) {
       try {
         await this.refreshApplet(appletDto);
-        console.info(
-          `[RefreshService.refreshAllApplets]: Applet "${appletDto.displayName}" refreshed successfully`,
-        );
       } catch {
         console.error(
           `[RefreshService.refreshAllApplets]: Got an error during refreshing Applet "${appletDto.displayName}"`,
