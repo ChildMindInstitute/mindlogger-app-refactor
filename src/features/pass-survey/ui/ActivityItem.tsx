@@ -1,20 +1,15 @@
-import { useContext, useLayoutEffect, useRef, useState } from 'react';
-import { StyleSheet, useWindowDimensions } from 'react-native';
+import { useContext, useState } from 'react';
 
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
-import { IS_IOS } from '@app/shared/lib';
 import {
   Box,
   GeolocationItem,
-  KeyboardAvoidingView,
   MarkdownMessage,
   NumberSelector,
-  ScrollButton,
   SimpleTextInput,
   SplashItem,
   PhotoItem,
   VideoItem,
+  ScrollableContent,
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
@@ -44,8 +39,6 @@ type Props = ActivityItemProps &
     textVariableReplacer: (markdown: string) => string;
   };
 
-const NavigationPanelHeight = 60;
-
 function ActivityItem({
   type,
   value,
@@ -56,26 +49,14 @@ function ActivityItem({
 }: Props) {
   const [scrollEnabled, setScrollEnabled] = useState(true);
 
-  const [showScrollButton, setShowScrollButton] = useState(false);
-
   const { next } = useContext(HandlersContext);
-
-  const windowHeight = useWindowDimensions().height;
-
-  const scrollViewRef = useRef<KeyboardAwareScrollView>();
-
-  const [height, setHeight] = useState(0);
 
   let item: JSX.Element | null;
   const question = pipelineItem.question;
 
   const stopScrolling = () => setScrollEnabled(false);
-  const releaseScrolling = () => setScrollEnabled(true);
 
-  function scrollToEnd() {
-    scrollViewRef.current?.scrollToEnd();
-    setShowScrollButton(false);
-  }
+  const releaseScrolling = () => setScrollEnabled(true);
 
   function moveToNextItem() {
     if (!pipelineItem.additionalText?.required) {
@@ -256,77 +237,33 @@ function ActivityItem({
     }
   }
 
-  useLayoutEffect(() => {
-    if (height > windowHeight - NavigationPanelHeight) {
-      setShowScrollButton(true);
-    }
-  }, [height, windowHeight]);
-
   return (
-    <Box
-      flex={1}
-      onLayout={e => {
-        setHeight(e.nativeEvent.layout.height);
-      }}
-    >
-      <KeyboardAvoidingView flex={1} behavior={IS_IOS ? 'padding' : 'height'}>
-        <Box flex={1}>
-          <KeyboardAwareScrollView
-            innerRef={ref => {
-              scrollViewRef.current = ref as unknown as KeyboardAwareScrollView;
-            }}
-            contentContainerStyle={styles.scrollView}
-            onContentSizeChange={(_, contentHeight) => setHeight(contentHeight)}
-            scrollEnabled={scrollEnabled}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            keyboardOpeningTime={0}
-            contentInset={{ top: 0, bottom: 60 }}
-            enableOnAndroid
-          >
-            <Box flex={1} justifyContent="center">
-              {question && (
-                <Box mx={16} mb={20}>
-                  <MarkdownMessage centerContent content={question} />
-                </Box>
-              )}
-
-              {pipelineItem.timer && (
-                <Timer duration={pipelineItem.timer} onTimeIsUp={next} />
-              )}
-
-              {item}
-
-              {pipelineItem.additionalText && (
-                <Box justifyContent="center" mt={30} mx={16}>
-                  <AdditionalText
-                    value={value?.additionalAnswer}
-                    onChange={onAdditionalResponse}
-                    required={pipelineItem.additionalText.required}
-                  />
-                </Box>
-              )}
-            </Box>
-          </KeyboardAwareScrollView>
-        </Box>
-
-        {showScrollButton && (
-          <ScrollButton
-            onPress={scrollToEnd}
-            position="absolute"
-            bottom={7}
-            alignSelf="center"
-          />
+    <ScrollableContent scrollEnabled={scrollEnabled}>
+      <Box flex={1} justifyContent="center">
+        {question && (
+          <Box mx={16} mb={20}>
+            <MarkdownMessage centerContent content={question} />
+          </Box>
         )}
-      </KeyboardAvoidingView>
-    </Box>
+
+        {pipelineItem.timer && (
+          <Timer duration={pipelineItem.timer} onTimeIsUp={next} />
+        )}
+
+        {item}
+
+        {pipelineItem.additionalText && (
+          <Box justifyContent="center" mt={30} mx={16}>
+            <AdditionalText
+              value={value?.additionalAnswer}
+              onChange={onAdditionalResponse}
+              required={pipelineItem.additionalText.required}
+            />
+          </Box>
+        )}
+      </Box>
+    </ScrollableContent>
   );
 }
-
-const styles = StyleSheet.create({
-  scrollView: {
-    flexGrow: 1,
-  },
-});
 
 export default ActivityItem;
