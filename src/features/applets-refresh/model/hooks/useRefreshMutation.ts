@@ -21,6 +21,7 @@ import {
   getAppletsKey,
   getEventsKey,
   isAppOnline,
+  onNetworkUnavailable,
 } from '@app/shared/lib';
 import {
   collectActivityDetailsImageUrls,
@@ -173,15 +174,11 @@ class RefreshService {
       const isOnline = await isAppOnline();
 
       if (!isOnline) {
-        console.warn(
-          '[RefreshService.refresh]: Device is not connected to Internet',
-        );
+        onNetworkUnavailable();
         return;
       }
 
       await this.refreshAllApplets();
-
-      console.info('[RefreshService.refresh]: Applets refresh completed');
     } catch (err) {
       console.error(err);
       throw new Error('Applets refreshed with errors');
