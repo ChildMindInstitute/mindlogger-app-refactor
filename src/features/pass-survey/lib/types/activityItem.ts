@@ -9,6 +9,7 @@ import {
   PhotoPipelineItem,
   PipelineItem,
   AudioPipelineItem,
+  MessagePipelineItem,
   AudioPlayerPipelineItem,
   TimeRangePipelineItem,
   RadioPipelineItem,
@@ -68,6 +69,11 @@ interface AudioActivityItem extends ActivityItemBase {
   pipelineItem: AudioPipelineItem;
 }
 
+interface MessageActivityItem extends ActivityItemBase {
+  type: 'Message';
+  pipelineItem: MessagePipelineItem;
+}
+
 interface AudioPlayerActivityItem extends ActivityItemBase {
   type: 'AudioPlayer';
   pipelineItem: AudioPlayerPipelineItem;
@@ -106,6 +112,7 @@ export type ActivityItem =
   | NumberSelectActivityItem
   | CheckboxActivityItem
   | AudioActivityItem
+  | MessageActivityItem
   | AudioPlayerActivityItem
   | TimeRangeActivityItem
   | RadioActivityItem
