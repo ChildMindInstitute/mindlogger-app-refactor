@@ -6,7 +6,12 @@ import { useTranslation } from 'react-i18next';
 
 import { IdentityModel, useLoginMutation } from '@entities/identity';
 import { SessionModel } from '@entities/session';
-import { useAppDispatch, useAppForm, useFormChanges } from '@shared/lib';
+import {
+  executeIfOnline,
+  useAppDispatch,
+  useAppForm,
+  useFormChanges,
+} from '@shared/lib';
 import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
@@ -44,7 +49,7 @@ const LoginForm: FC<Props> = props => {
       password: '',
     },
     onSubmitSuccess: data => {
-      login(data);
+      executeIfOnline(() => login(data));
     },
   });
 

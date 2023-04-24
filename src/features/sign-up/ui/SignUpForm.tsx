@@ -5,7 +5,7 @@ import { Linking } from 'react-native';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { useAppForm, useFormChanges } from '@app/shared/lib';
+import { executeIfOnline, useAppForm, useFormChanges } from '@app/shared/lib';
 import { Text, Box, BoxProps, YStack, XStack, SubmitButton } from '@shared/ui';
 import { InputField, CheckBoxField, ErrorMessage } from '@shared/ui/form';
 
@@ -33,7 +33,7 @@ const SignUpForm: FC<Props> = props => {
       password: '',
     },
     onSubmitSuccess: data => {
-      signUp(data);
+      executeIfOnline(() => signUp(data));
     },
   });
 

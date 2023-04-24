@@ -21,6 +21,7 @@ import {
   getAppletsKey,
   getEventsKey,
   isAppOnline,
+  onNetworkUnavailable,
 } from '@app/shared/lib';
 import {
   collectActivityDetailsImageUrls,
@@ -56,10 +57,6 @@ class RefreshService {
     for (let url of urls) {
       try {
         if (!this.isUrlValid(url)) {
-          this.showWrongUrlLogs &&
-            console.warn(
-              '[RefreshService.cacheImages] Ignored: wrong image url: ' + url,
-            );
           continue;
         }
         CacheManager.prefetch(url);
@@ -155,9 +152,6 @@ class RefreshService {
     for (let appletDto of appletDtos) {
       try {
         await this.refreshApplet(appletDto);
-        console.info(
-          `[RefreshService.refreshAllApplets]: Applet "${appletDto.displayName}" refreshed successfully`,
-        );
       } catch {
         console.error(
           `[RefreshService.refreshAllApplets]: Got an error during refreshing Applet "${appletDto.displayName}"`,
@@ -173,15 +167,11 @@ class RefreshService {
       const isOnline = await isAppOnline();
 
       if (!isOnline) {
-        console.warn(
-          '[RefreshService.refresh]: Device is not connected to Internet',
-        );
+        onNetworkUnavailable();
         return;
       }
 
       await this.refreshAllApplets();
-
-      console.info('[RefreshService.refresh]: Applets refresh completed');
     } catch (err) {
       console.error(err);
       throw new Error('Applets refreshed with errors');
