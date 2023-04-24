@@ -10,6 +10,7 @@ export type ActivityItemType =
   | 'Geolocation'
   | 'TimeRange'
   | 'AudioPlayer'
+  | 'Message'
   | 'Audio'
   | 'Photo'
   | 'Video'
@@ -67,6 +68,8 @@ type CheckboxConfig = {
   }>;
 };
 
+type MessageConfig = null;
+
 type AudioConfig = {
   maxDuration: number;
 };
@@ -103,6 +106,7 @@ export type ActivityItemConfig =
   | NumberSelectConfig
   | SliderConfig
   | CheckboxConfig
+  | MessageConfig
   | AudioConfig
   | AudioPlayerConfig
   | RadioConfig
@@ -179,6 +183,10 @@ interface AudioActivityItem extends ActivityItemBase {
   inputType: 'Audio';
   config: AudioConfig;
 }
+interface MessageActivityItem extends ActivityItemBase {
+  inputType: 'Message';
+  config: MessageConfig;
+}
 interface AudioPlayerActivityItem extends ActivityItemBase {
   inputType: 'AudioPlayer';
   config: AudioPlayerConfig;
@@ -219,6 +227,7 @@ export type ActivityItem =
   | CheckboxActivityItem
   | GeolocationActivityItem
   | AudioActivityItem
+  | MessageActivityItem
   | AudioPlayerActivityItem
   | TimeRangeActivityItem
   | RadioActivityItem

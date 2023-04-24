@@ -14,6 +14,7 @@ export type ActivityItemType =
   | 'TextInput'
   | 'TimeRange'
   | 'Audio'
+  | 'Message'
   | 'AudioPlayer'
   | 'Radio'
   | 'Slider'
@@ -50,6 +51,8 @@ type SliderPayload = {
 type AudioPayload = {
   maxDuration: number;
 };
+
+type MessagePayload = null;
 
 type AudioPlayerPayload = {
   file: string;
@@ -119,6 +122,7 @@ type PipelinePayload =
   | RadioPayload
   | TimeRangePayload
   | AudioPayload
+  | MessagePayload
   | AudioPlayerPayload
   | SliderPayload
   | NumberSelectPayload
@@ -202,6 +206,10 @@ export interface GeolocationPipelineItem extends PipelineItemBase {
 export interface AudioPipelineItem extends PipelineItemBase {
   type: 'Audio';
   payload: AudioPayload;
+}
+export interface MessagePipelineItem extends PipelineItemBase {
+  type: 'Message';
+  payload: MessagePayload;
 }
 export interface AudioPlayerPipelineItem extends PipelineItemBase {
   type: 'AudioPlayer';
@@ -292,6 +300,7 @@ export type PipelineItem =
   | NumberSelectPipelineItem
   | CheckboxPipelineItem
   | AudioPipelineItem
+  | MessagePipelineItem
   | AudioPlayerPipelineItem
   | TimeRangePipelineItem
   | GeolocationPipelineItem

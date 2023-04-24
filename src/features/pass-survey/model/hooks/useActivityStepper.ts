@@ -9,6 +9,7 @@ function useActivityStepper(state: ActivityState | undefined) {
   const currentPipelineItem = state?.items[step];
 
   const isTutorialStep = currentPipelineItem?.type === 'Tutorial';
+  const isMessageStep = currentPipelineItem?.type === 'Message';
   const isSplashStep = currentPipelineItem?.type === 'Splash';
   const isFirstStep = step === 0;
   const isLastStep = items && step === items.length - 1;
@@ -26,6 +27,7 @@ function useActivityStepper(state: ActivityState | undefined) {
     !!currentPipelineItem?.isSkippable && !hasAnswer && !isSplashStep;
   const canMoveNext =
     isTutorialStep ||
+    isMessageStep ||
     currentPipelineItem?.isSkippable ||
     (hasAnswer && (!additionalAnswerRequired || hasAdditionalAnswer));
   const canMoveBack = currentPipelineItem?.isAbleToMoveBack;

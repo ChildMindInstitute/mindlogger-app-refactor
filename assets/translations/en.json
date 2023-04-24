@@ -146,7 +146,8 @@
     "new_user": "New User",
     "forgot_password": "Forgot Password",
     "what_is": "What is",
-    "login_error": "Login failed."
+    "login_error": "Login failed.",
+    "password_at_least_characters": "Password must be at least 6 characters"
   },
   "login_form": {
     "login": "LOGIN",

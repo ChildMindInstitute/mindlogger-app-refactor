@@ -116,6 +116,17 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
           };
         }
 
+        case 'Message': {
+          return {
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            timer: item.timer,
+          };
+        }
+
         case 'TimeRange': {
           return {
             id: item.id,
