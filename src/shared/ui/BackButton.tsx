@@ -36,9 +36,9 @@ function BackButton<TRouteName extends keyof RootParamList>(
   };
 
   return (
-    <TouchableOpacity onPress={back}>
-      <Box {...styledProps}>{children}</Box>
-    </TouchableOpacity>
+    <Box {...styledProps}>
+      <TouchableOpacity onPress={back}>{children}</TouchableOpacity>
+    </Box>
   );
 }
 
