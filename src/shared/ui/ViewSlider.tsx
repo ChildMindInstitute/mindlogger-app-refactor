@@ -4,24 +4,25 @@ import {
   PropsWithChildren,
   useCallback,
   useMemo,
-  useState,
+  useRef,
 } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { XStack } from '@tamagui/stacks';
 import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
   FadeIn,
-  FadeOut,
+  SlideInLeft,
+  SlideInRight,
+  SlideOutRight,
+  SlideOutLeft,
+  EntryExitAnimationFunction,
+  useSharedValue,
 } from 'react-native-reanimated';
 
 import { range } from '../lib';
 
 type Props = PropsWithChildren<{
   viewCount: number;
-  startFrom: number;
+  step: number;
   renderView: (item: { index: number }) => JSX.Element;
 }>;
 
@@ -30,45 +31,78 @@ export type ViewSliderRef = {
   back: (step?: number) => void;
 };
 
+type Direction = 'left' | 'right' | 'not-specified';
+
+const SlideInLeftAnimation = new SlideInLeft().duration(300).build();
+const SlideInRightAnimation = new SlideInRight().duration(300).build();
+const SlideOutLeftAnimation = new SlideOutLeft().duration(300).build();
+const SlideOutRightAnimation = new SlideOutRight().duration(300).build();
+const FadeInAnimation = new FadeIn().build();
+
 export const ViewSlider = forwardRef<ViewSliderRef, Props>(
-  ({ viewCount, startFrom = 0, renderView }, ref) => {
+  ({ viewCount, step = 0, renderView }, ref) => {
     const views = useMemo(() => range(viewCount), [viewCount]);
-    const [width, setWidth] = useState(0);
 
-    const offsetIndex = useSharedValue(0 - startFrom);
+    const currentIndexRef = useRef<number>(step);
 
-    const animatedStyles = useAnimatedStyle(() => {
-      return {
-        transform: [{ translateX: withTiming(offsetIndex.value * width) }],
-      };
-    });
+    const enteringDirection = useSharedValue<Direction>('not-specified');
+    const exitingDirection = useSharedValue<Direction>('not-specified');
 
     const next = useCallback(
       (shift: number = 1) => {
-        const currentIndex = Math.abs(offsetIndex.value);
+        const currentIndex = currentIndexRef.current;
         const canMove = shift > 0 && currentIndex + shift < views.length;
 
         if (canMove) {
-          offsetIndex.value = offsetIndex.value - shift;
+          currentIndexRef.current = currentIndex + shift;
+          enteringDirection.value = 'right';
+          exitingDirection.value = 'left';
         }
 
         return canMove;
       },
-      [offsetIndex, views.length],
+      [enteringDirection, exitingDirection, views.length],
     );
 
     const back = useCallback(
       (shift: number = 1) => {
-        const canMove = shift > 0 && offsetIndex.value < 0;
+        const currentIndex = currentIndexRef.current;
+        const canMove = shift > 0 && currentIndex - shift >= 0;
 
         if (canMove) {
-          offsetIndex.value = offsetIndex.value + shift;
+          currentIndexRef.current = currentIndex - shift;
+          enteringDirection.value = 'left';
+          exitingDirection.value = 'right';
         }
 
         return canMove;
       },
-      [offsetIndex],
+      [enteringDirection, exitingDirection],
     );
+
+    const EnteringAnimation: EntryExitAnimationFunction = (values: any) => {
+      'worklet';
+
+      if (enteringDirection.value === 'not-specified') {
+        return FadeInAnimation(values);
+      }
+
+      return enteringDirection.value === 'right'
+        ? SlideInRightAnimation(values)
+        : SlideInLeftAnimation(values);
+    };
+
+    const ExitingAnimation: EntryExitAnimationFunction = (values: any) => {
+      'worklet';
+
+      if (exitingDirection.value === 'not-specified') {
+        return FadeInAnimation(values);
+      }
+
+      return exitingDirection.value === 'left'
+        ? SlideOutLeftAnimation(values)
+        : SlideOutRightAnimation(values);
+    };
 
     useImperativeHandle(
       ref,
@@ -83,26 +117,12 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
 
     return (
       <Animated.View
-        style={[styles.box, animatedStyles]}
-        onLayout={o => setWidth(o.nativeEvent.layout.width)}
+        style={styles.box}
+        key={step}
+        entering={EnteringAnimation}
+        exiting={ExitingAnimation}
       >
-        {views.map(index => {
-          const isCurrent = Math.abs(offsetIndex.value) === index;
-
-          return (
-            <XStack key={index} w={width}>
-              {isCurrent ? (
-                <Animated.View
-                  entering={FadeIn.duration(200)}
-                  exiting={FadeOut.duration(200)}
-                  style={styles.slide}
-                >
-                  {renderView({ index })}
-                </Animated.View>
-              ) : null}
-            </XStack>
-          );
-        })}
+        {renderView({ index: step })}
       </Animated.View>
     );
   },
@@ -111,7 +131,6 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
 const styles = StyleSheet.create({
   box: {
     flex: 1,
-    flexDirection: 'row',
   },
   slide: {
     flex: 1,
