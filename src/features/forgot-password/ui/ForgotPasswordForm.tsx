@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useToast } from 'react-native-toast-notifications';
 
 import { usePasswordRecoveryMutation } from '@app/entities/identity';
-import { useAppForm, useFormChanges } from '@shared/lib';
+import { executeIfOnline, useAppForm, useFormChanges } from '@shared/lib';
 import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
@@ -37,7 +37,7 @@ const ForgotPasswordForm: FC<Props> = props => {
       email: '',
     },
     onSubmitSuccess: data => {
-      recover({ email: data.email });
+      executeIfOnline(() => recover({ email: data.email }));
     },
   });
 

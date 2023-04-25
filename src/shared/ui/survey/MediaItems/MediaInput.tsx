@@ -4,7 +4,7 @@ import { Alert, TouchableOpacity } from 'react-native';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
-import { Center } from '@shared/ui';
+import Center from '../../Center';
 
 type Props = {
   children: ReactNode;
