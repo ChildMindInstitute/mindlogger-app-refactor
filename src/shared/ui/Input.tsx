@@ -41,8 +41,6 @@ export const InputFrame = styled(
           borderBottomColor: '#1e1d1d',
         },
         survey: {
-          height: 36,
-          minHeight: IS_IOS ? 28 : 45,
           borderBottomWidth: 1,
           borderBottomColor: '$mediumGrey',
           color: '$black',

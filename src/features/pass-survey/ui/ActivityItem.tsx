@@ -107,7 +107,7 @@ function ActivityItem({
 
     case 'TextInput':
       item = (
-        <Box mx={16}>
+        <Box mx={16} mb={16}>
           <SimpleTextInput
             value={value?.answer ?? ''}
             config={pipelineItem.payload}
@@ -253,7 +253,7 @@ function ActivityItem({
         {item}
 
         {pipelineItem.additionalText && (
-          <Box justifyContent="center" mt={30} mx={16}>
+          <Box justifyContent="center" mt={30} mb={16} mx={16}>
             <AdditionalText
               value={value?.additionalAnswer}
               onChange={onAdditionalResponse}

@@ -19,7 +19,7 @@ function ViewList({ renderItem }: Props) {
   return (
     <ViewSlider
       viewCount={stepsCount}
-      startFrom={getCurrentStep()}
+      step={getCurrentStep()}
       ref={ref}
       renderView={item => renderItem(item)}
     />
