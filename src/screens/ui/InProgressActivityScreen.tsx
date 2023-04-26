@@ -13,7 +13,7 @@ const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
 
   return (
     <Box flex={1} backgroundColor="white">
-      <StatusBar hidden />
+      <StatusBar />
 
       <FlowSurvey
         appletId={appletId}

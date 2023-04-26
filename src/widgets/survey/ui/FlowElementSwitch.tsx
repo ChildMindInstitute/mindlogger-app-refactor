@@ -34,7 +34,7 @@ function FlowElementSwitch({
       return (
         <ActivityIdentityContext.Provider value={payload}>
           <Box flex={1}>
-            <BackButton alignSelf="flex-end" mr={16} mt={10} mb={4}>
+            <BackButton alignSelf="flex-end" mr={16} mt={35} mb={4}>
               <CrossIcon color={colors.tertiary} size={30} />
             </BackButton>
 
