@@ -12,7 +12,7 @@ import {
 } from '@app/shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
-import { FinishReason } from '../model';
+import { FinishReason, useFlowState } from '../model';
 import { mapAnswersToDto } from '../model/mappers';
 
 type Props = {
@@ -20,19 +20,11 @@ type Props = {
   activityId: string;
   eventId: string;
   flowId?: string;
-  finishReason: FinishReason;
 
   onClose: () => void;
 };
 
-function FinishItem({
-  flowId,
-  appletId,
-  activityId,
-  eventId,
-  finishReason,
-  onClose,
-}: Props) {
+function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -43,6 +35,12 @@ function FinishItem({
       eventId,
     });
 
+  const { isTimerElapsed } = useFlowState({
+    appletId,
+    eventId,
+    flowId,
+  });
+
   const {
     mutate: sendAnswers,
     isLoading: isSendingAnswers,
@@ -50,11 +48,13 @@ function FinishItem({
     isPaused: isOffline,
   } = useActivityAnswersMutation({
     onError: error => {
-      if (error.evaluatedMessage) {
+      if (error.response.status !== 401 && error.evaluatedMessage) {
         onApiRequestError(error.evaluatedMessage);
       }
     },
   });
+
+  let finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';
 
   const finished =
     isOffline || successfullySentAnswers || finishReason === 'time-is-up';

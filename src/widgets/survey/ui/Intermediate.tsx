@@ -18,6 +18,7 @@ import {
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
+import { useFlowStorageRecord } from '../lib';
 import { mapAnswersToDto } from '../model';
 
 type Props = {
@@ -60,13 +61,23 @@ function Intermediate({
     select: r => mapActivitiesFromDto(r.data.result.activities),
   });
 
+  const { flowStorageRecord } = useFlowStorageRecord({
+    appletId,
+    eventId,
+    flowId,
+  });
+
+  const { step, pipeline } = flowStorageRecord!;
+
+  const nextFlowItem = pipeline[step + 1];
+
+  const steppersPassed = pipeline
+    .slice(0, step)
+    .filter(o => o.type === 'Stepper').length;
+
   const totalActivities = activityFlow!.activityIds.length;
 
-  const currentActivityIndex = activityFlow!.activityIds.findIndex(
-    id => id === activityId,
-  );
-
-  const nextActivityId = activityFlow!.activityIds[currentActivityIndex + 1];
+  const nextActivityId = nextFlowItem.payload.activityId;
 
   const nextActivity = allActivities?.find(x => x.id === nextActivityId);
 
@@ -88,7 +99,7 @@ function Intermediate({
       onFinish();
     },
     onError: error => {
-      if (error.evaluatedMessage) {
+      if (error.response.status !== 401 && error.evaluatedMessage) {
         onApiRequestError(error.evaluatedMessage);
       }
     },
@@ -146,15 +157,14 @@ function Intermediate({
 
         <ActivityBox>
           <Text fontWeight="bold" mb={10} fontSize={16}>
-            {nextActivity?.name ?? 'Activity 2'}
+            {nextActivity?.name ?? 'Activity'}
           </Text>
 
           <XStack>
             <Image src={badge} width={18} height={18} opacity={0.6} r={4} />
 
             <Text fontSize={14} color="$grey">
-              {currentActivityIndex + 2} of {totalActivities}{' '}
-              {activityFlow!.name}
+              {steppersPassed + 1} of {totalActivities} {activityFlow!.name}
             </Text>
           </XStack>
         </ActivityBox>

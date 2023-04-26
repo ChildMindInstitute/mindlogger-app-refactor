@@ -4,18 +4,17 @@ import {
   ActivityStepper,
 } from '@app/features/pass-survey';
 import { colors } from '@app/shared/lib';
-import { BackButton, Box, CrossIcon } from '@app/shared/ui';
+import { BackButton, CrossIcon, Box } from '@app/shared/ui';
 
 import Finish from './Finish';
 import Intermediate from './Intermediate';
-import { FinishReason, FlowPipelineItem } from '../model';
+import { FlowPipelineItem } from '../model';
 
 type Props = {
   onClose: () => void;
   onBack: () => void;
   onComplete: () => void;
   event: ScheduleEvent;
-  finishReason: FinishReason | null;
   entityStartedAt: number;
 } & FlowPipelineItem;
 
@@ -26,7 +25,6 @@ function FlowElementSwitch({
   onBack,
   onClose,
   onComplete,
-  finishReason,
   entityStartedAt,
 }: Props) {
   switch (type) {
@@ -57,9 +55,7 @@ function FlowElementSwitch({
     }
 
     case 'Finish': {
-      return (
-        <Finish {...payload} finishReason={finishReason!} onClose={onClose} />
-      );
+      return <Finish {...payload} onClose={onClose} />;
     }
   }
 }
