@@ -36,9 +36,6 @@ function useActivityRecordCreator({
     },
   });
 
-  // @todo remove once integration is done
-  // activity = TextActivity;
-
   const pipeline = useMemo(
     () => (activity ? buildPipeline(activity) : []),
     [activity],
