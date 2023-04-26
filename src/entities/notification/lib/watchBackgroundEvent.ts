@@ -1,6 +1,10 @@
 import notifee, { EventType } from '@notifee/react-native';
 
-import { NotificationEventCallbacks, NotificationEventHandlers } from './types';
+import {
+  LocalEventDetail,
+  NotificationEventCallbacks,
+  NotificationEventHandlers,
+} from './types';
 
 export type WatchBackgroundEventArgs = Partial<NotificationEventCallbacks>;
 
@@ -22,6 +26,6 @@ export function watchBackgroundEvent(callbacks: WatchBackgroundEventArgs) {
   notifee.onBackgroundEvent(async event => {
     const { detail } = event;
 
-    EventCallbacks[event.type]?.(detail);
+    EventCallbacks[event.type]?.(detail as LocalEventDetail);
   });
 }

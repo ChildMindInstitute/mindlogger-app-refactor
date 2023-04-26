@@ -72,6 +72,22 @@ function NotificationScheduler() {
     return notifee.cancelAllNotifications();
   }
 
+  async function cancelNotDisplayedNotifications() {
+    const displayNotificationIds = (
+      await notifee.getDisplayedNotifications()
+    ).map(n => n.notification.id);
+
+    const allNotificationIds = (await getAllScheduledNotifications()).map(
+      n => n.notification.id as string,
+    );
+
+    const notificationIds = allNotificationIds.filter(
+      id => !displayNotificationIds.includes(id),
+    );
+
+    notifee.cancelTriggerNotifications(notificationIds);
+  }
+
   function cancelNotification(notificationId: string) {
     return notifee.cancelNotification(notificationId);
   }
@@ -85,6 +101,7 @@ function NotificationScheduler() {
 
     cancelNotification,
     cancelAllNotifications,
+    cancelNotDisplayedNotifications,
   };
 }
 

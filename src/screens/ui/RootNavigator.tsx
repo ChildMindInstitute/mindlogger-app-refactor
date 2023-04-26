@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
+import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SessionModel } from '@entities/session';
 import { EnterForegroundModel } from '@features/enter-foreground';
 import { LogoutModel } from '@features/logout';
@@ -58,6 +59,8 @@ export default () => {
   SessionModel.useOnRefreshTokenFail(() => {
     forceLogout();
   });
+
+  TapOnNotificationModel.useOnNotificationTap();
 
   return (
     <Stack.Navigator

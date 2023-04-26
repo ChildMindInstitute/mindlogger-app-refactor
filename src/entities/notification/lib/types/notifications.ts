@@ -1,11 +1,12 @@
 import {
   EventDetail,
   EventType,
+  InitialNotification,
   Notification,
   TriggerNotification,
 } from '@notifee/react-native';
 
-type NotificationEventCallback = (eventDetail: EventDetail) => void;
+type NotificationEventCallback = (eventDetail: LocalEventDetail) => void;
 
 export type NotificationEventCallbacks = {
   onDismissed: NotificationEventCallback;
@@ -25,6 +26,10 @@ export type NotificationEventHandlers = Record<
   NotificationEventCallback
 >;
 
+export type LocalNotificationType =
+  | 'schedule-event-alert'
+  | 'request-to-reschedule-due-to-limit';
+
 export type LocalEventNotification = Notification & {
   data: {
     shortId?: string;
@@ -40,5 +45,13 @@ export type LocalEventNotification = Notification & {
 };
 
 export type LocalEventTriggerNotification = TriggerNotification & {
+  notification: LocalEventNotification;
+};
+
+export type LocalEventDetail = EventDetail & {
+  notification: LocalEventNotification;
+};
+
+export type LocalInitialNotification = InitialNotification & {
   notification: LocalEventNotification;
 };

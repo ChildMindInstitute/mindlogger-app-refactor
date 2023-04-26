@@ -2,6 +2,7 @@ import { CacheManager } from '@georstat/react-native-image-cache';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { onBeforeLogout } from '@app/entities/identity/lib/alerts';
+import { NotificationModel } from '@app/entities/notification';
 import { IdentityService } from '@app/shared/api';
 import { IdentityModel } from '@entities/identity';
 import { SessionModel } from '@entities/session';
@@ -27,6 +28,8 @@ export function useLogout() {
     IdentityService.logout({
       deviceId: 123, // todo - provide real fcm token
     });
+
+    NotificationModel.NotificationManager.clearScheduledNotifications();
   };
 
   const logout = async () => {

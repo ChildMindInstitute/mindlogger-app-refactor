@@ -8,9 +8,9 @@ import {
   NotificationEventHandlers,
 } from '../types';
 
-export type UseForegroundEventArgs = Partial<NotificationEventCallbacks>;
+export type UseBackgroundEventArgs = Partial<NotificationEventCallbacks>;
 
-export function useForegroundEvent({
+export function useBackgroundEvents({
   onDismissed,
   onPress,
   onActionPress,
@@ -21,8 +21,8 @@ export function useForegroundEvent({
   onTriggerNotificationCreated,
   onFGAlreadyExists,
   onUnknown,
-}: UseForegroundEventArgs) {
-  const callbackRefs = useRef<UseForegroundEventArgs>({
+}: UseBackgroundEventArgs) {
+  const callbackRefs = useRef<UseBackgroundEventArgs>({
     onDismissed,
     onPress,
     onActionPress,
@@ -64,7 +64,7 @@ export function useForegroundEvent({
       [EventType.FG_ALREADY_EXIST]: callbackRefs.current.onFGAlreadyExists,
     };
 
-    return notifee.onForegroundEvent(event => {
+    return notifee.onBackgroundEvent(async event => {
       const type = event.type;
 
       EventCallbacks[type]?.(event.detail as LocalEventDetail);
