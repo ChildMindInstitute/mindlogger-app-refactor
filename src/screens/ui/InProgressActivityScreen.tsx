@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { FlowSurvey } from '@app/widgets/survey';
 import { RootStackParamList } from '@screens/config';
-import { Box, StatusBar } from '@shared/ui';
+import { Box } from '@shared/ui';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'InProgressActivity'>;
 
@@ -13,8 +13,6 @@ const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
 
   return (
     <Box flex={1} backgroundColor="white">
-      <StatusBar />
-
       <FlowSurvey
         appletId={appletId}
         activityId={activityId}
