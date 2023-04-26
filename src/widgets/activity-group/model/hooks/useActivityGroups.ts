@@ -1,4 +1,4 @@
-import { convertProgress } from '@app/abstract/lib';
+import { ActivityPipelineType, convertProgress } from '@app/abstract/lib';
 import { AppletModel, useAppletDetailsQuery } from '@app/entities/applet';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
 import { useEventsQuery } from '@app/entities/event/api';
@@ -37,6 +37,20 @@ const buildIdToEntityMap = (
     },
     {},
   );
+};
+
+const sort = (eventEntities: EventEntity[]) => {
+  let flows = eventEntities.filter(
+    x => x.entity.pipelineType === ActivityPipelineType.Flow,
+  );
+  let activities = eventEntities.filter(
+    x => x.entity.pipelineType === ActivityPipelineType.Regular,
+  );
+
+  flows = flows.sort((a, b) => a.entity.order - b.entity.order);
+  activities = activities.sort((a, b) => a.entity.order - b.entity.order);
+
+  return [...flows, ...activities];
 };
 
 export const useActivityGroups = (
@@ -118,6 +132,8 @@ export const useActivityGroups = (
   entityEvents = entityEvents.filter(x => x.event.scheduledAt);
 
   entityEvents = entityEvents.filter(x => !x.entity.isHidden);
+
+  entityEvents = sort(entityEvents);
 
   const groupAvailable = builder!.buildAvailable(entityEvents);
   const groupInProgress = builder!.buildInProgress(entityEvents);

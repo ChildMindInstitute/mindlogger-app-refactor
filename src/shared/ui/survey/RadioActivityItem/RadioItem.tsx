@@ -80,16 +80,6 @@ const RadioItem: FC<RadioLabelProps> = ({
       )}
 
       {image && (
-        <Box height={64} width="20%">
-          <CachedImage
-            source={image}
-            style={styles.image}
-            resizeMode="contain"
-          />
-        </Box>
-      )}
-
-      {image && (
         <Box width="10%">
           <CachedImage
             resizeMode="contain"
