@@ -23,6 +23,7 @@ export const progress: Progress = {
         startAt: new Date(2023, 1, 12, 14, 16, 17),
         type: ActivityPipelineType.Flow,
         endAt: null,
+        pipelineActivityOrder: 0,
       },
     },
   },

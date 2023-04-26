@@ -71,7 +71,7 @@ function Intermediate({
 
   const nextFlowItem = pipeline[step + 1];
 
-  const steppersPassed = pipeline
+  const activitiesPassed = pipeline
     .slice(0, step)
     .filter(o => o.type === 'Stepper').length;
 
@@ -116,9 +116,10 @@ function Intermediate({
         flowId,
         activityId: nextActivity.id,
         eventId,
+        pipelineActivityOrder: activitiesPassed,
       }),
     );
-  }, [appletId, dispatch, eventId, flowId, nextActivity]);
+  }, [appletId, dispatch, eventId, flowId, nextActivity, activitiesPassed]);
 
   function completeActivity() {
     if (!activityStorageRecord) {
@@ -164,7 +165,7 @@ function Intermediate({
             <Image src={badge} width={18} height={18} opacity={0.6} r={4} />
 
             <Text fontSize={14} color="$grey">
-              {steppersPassed + 1} of {totalActivities} {activityFlow!.name}
+              {activitiesPassed + 1} of {totalActivities} {activityFlow!.name}
             </Text>
           </XStack>
         </ActivityBox>
