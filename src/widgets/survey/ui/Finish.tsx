@@ -20,11 +20,19 @@ type Props = {
   activityId: string;
   eventId: string;
   flowId?: string;
+  order: number;
 
   onClose: () => void;
 };
 
-function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
+function FinishItem({
+  flowId,
+  appletId,
+  activityId,
+  eventId,
+  order,
+  onClose,
+}: Props) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -33,6 +41,7 @@ function FinishItem({ flowId, appletId, activityId, eventId, onClose }: Props) {
       appletId,
       activityId,
       eventId,
+      order,
     });
 
   const { isTimerElapsed } = useFlowState({

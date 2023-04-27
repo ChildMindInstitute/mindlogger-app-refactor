@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { ScheduleEvent } from '@app/entities/event';
 import {
   ActivityIdentityContext,
@@ -16,6 +18,7 @@ type Props = {
   onComplete: () => void;
   event: ScheduleEvent;
   entityStartedAt: number;
+  pipelineActivityOrder: number;
 } & FlowPipelineItem;
 
 function FlowElementSwitch({
@@ -26,11 +29,20 @@ function FlowElementSwitch({
   onClose,
   onComplete,
   entityStartedAt,
+  pipelineActivityOrder,
 }: Props) {
+  const context = useMemo(
+    () => ({
+      ...payload,
+      order: pipelineActivityOrder,
+    }),
+    [payload, pipelineActivityOrder],
+  );
+
   switch (type) {
     case 'Stepper': {
       return (
-        <ActivityIdentityContext.Provider value={payload}>
+        <ActivityIdentityContext.Provider value={context}>
           <Box flex={1}>
             <BackButton alignSelf="flex-end" mr={16} mt={10} mb={4}>
               <CrossIcon color={colors.tertiary} size={30} />
@@ -50,12 +62,19 @@ function FlowElementSwitch({
 
     case 'Intermediate': {
       return (
-        <Intermediate {...payload} onClose={onBack} onFinish={onComplete} />
+        <Intermediate
+          {...payload}
+          order={pipelineActivityOrder}
+          onClose={onBack}
+          onFinish={onComplete}
+        />
       );
     }
 
     case 'Finish': {
-      return <Finish {...payload} onClose={onClose} />;
+      return (
+        <Finish {...payload} order={pipelineActivityOrder} onClose={onClose} />
+      );
     }
   }
 }

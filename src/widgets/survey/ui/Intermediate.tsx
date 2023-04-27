@@ -26,6 +26,7 @@ type Props = {
   activityId: string;
   eventId: string;
   flowId: string;
+  order: number;
 
   onClose: () => void;
   onFinish: () => void;
@@ -44,6 +45,7 @@ function Intermediate({
   appletId,
   activityId,
   eventId,
+  order,
   onClose,
   onFinish,
 }: Props) {
@@ -86,6 +88,7 @@ function Intermediate({
       appletId,
       activityId,
       eventId,
+      order,
     });
 
   const {

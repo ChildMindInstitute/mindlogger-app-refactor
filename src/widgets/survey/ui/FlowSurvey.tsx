@@ -1,10 +1,14 @@
-import { StoreProgressPayload } from '@app/abstract/lib';
+import { ActivityPipelineType, StoreProgressPayload } from '@app/abstract/lib';
 import { useInProgressRecord } from '@app/entities/applet/model';
 import { ScheduleEvent } from '@app/entities/event';
 import { useEventQuery } from '@app/entities/event/api';
 
 import FlowElementSwitch from './FlowElementSwitch';
-import { useFlowRecordInitialization, useFlowState } from '../model';
+import {
+  useActivityRecordsInitialization,
+  useFlowRecordInitialization,
+  useFlowState,
+} from '../model';
 import useTimer from '../model/hooks/useTimer';
 
 type Props = {
@@ -38,6 +42,10 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
   })!;
 
   const entityStartedAt = progressRecord.startAt;
+  const pipelineActivityOrder =
+    progressRecord.type === ActivityPipelineType.Flow
+      ? progressRecord.pipelineActivityOrder
+      : 0;
 
   useTimer({
     entityStartedAt,
@@ -69,9 +77,17 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
     flowId,
   });
 
+  useActivityRecordsInitialization({
+    appletId,
+    activityId,
+    eventId,
+    flowId,
+  });
+
   return (
     <FlowElementSwitch
       {...flowPipelineItem}
+      pipelineActivityOrder={pipelineActivityOrder}
       event={event!}
       entityStartedAt={entityStartedAt}
       onClose={closeFlow}

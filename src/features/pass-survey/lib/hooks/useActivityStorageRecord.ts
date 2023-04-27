@@ -10,6 +10,7 @@ type UseActivityStorageArgs = {
   appletId: string;
   activityId: string;
   eventId: string;
+  order: number;
 };
 
 export type Answer = PipelineItemAnswer['value'];
@@ -32,8 +33,9 @@ export function useActivityStorageRecord({
   appletId,
   activityId,
   eventId,
+  order,
 }: UseActivityStorageArgs) {
-  const key = `${appletId}-${activityId}-${eventId}`;
+  const key = `${appletId}-${activityId}-${eventId}-${order}`;
 
   const [activityStorageRecord, upsertActivityStorageRecord] =
     useMMKVObject<ActivityState>(key, storage);

@@ -20,12 +20,7 @@ import {
 import ActivityItem from './ActivityItem';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
 import { ActivityIdentityContext, useTextVariablesReplacer } from '../lib';
-import {
-  useActivityRecordInitialization,
-  useActivityState,
-  useActivityStepper,
-  useIdleTimer,
-} from '../model';
+import { useActivityState, useActivityStepper, useIdleTimer } from '../model';
 
 type Props = {
   idleTimer: HourMinute | null;
@@ -46,13 +41,9 @@ function ActivityStepper({
 
   const { bottom } = useSafeAreaInsets();
 
-  const { appletId, activityId, eventId } = useContext(ActivityIdentityContext);
-
-  useActivityRecordInitialization({
-    appletId,
-    activityId,
-    eventId,
-  });
+  const { appletId, activityId, eventId, order } = useContext(
+    ActivityIdentityContext,
+  );
 
   const {
     activityStorageRecord,
@@ -65,6 +56,7 @@ function ActivityStepper({
     appletId,
     activityId,
     eventId,
+    order,
   });
 
   const { replaceTextVariables } = useTextVariablesReplacer({

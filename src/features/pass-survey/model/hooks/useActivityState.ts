@@ -4,12 +4,14 @@ type UseActivityPipelineArgs = {
   appletId: string;
   activityId: string;
   eventId: string;
+  order: number;
 };
 
 function useActivityState({
   appletId,
   activityId,
   eventId,
+  order,
 }: UseActivityPipelineArgs) {
   const {
     activityStorageRecord,
@@ -19,6 +21,7 @@ function useActivityState({
     appletId,
     activityId,
     eventId,
+    order,
   });
 
   function setStep(step: number) {
