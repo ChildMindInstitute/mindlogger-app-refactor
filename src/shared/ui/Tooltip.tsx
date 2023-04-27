@@ -10,11 +10,14 @@ import { MarkdownView, ScrollView, YStack } from '../ui';
 
 type TooltipProps = {
   children: React.ReactNode;
-  markdown?: string;
+  markdown?: string | null;
 };
 
 const Tooltip: FC<TooltipProps> = ({ children, markdown }) => {
   if (!markdown) {
+    if (children) {
+      return <YStack hitSlop={40}>{children}</YStack>;
+    }
     return null;
   }
 
