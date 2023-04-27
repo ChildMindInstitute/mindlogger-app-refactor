@@ -26,6 +26,7 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
     step,
     completeByTimer,
     pipeline,
+    isTimerElapsed,
     clearFlowStorageRecord,
   } = useFlowState({
     appletId,
@@ -90,6 +91,7 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
       pipelineActivityOrder={pipelineActivityOrder}
       event={event!}
       entityStartedAt={entityStartedAt}
+      isTimerElapsed={isTimerElapsed}
       onClose={closeFlow}
       onBack={back}
       onComplete={complete}

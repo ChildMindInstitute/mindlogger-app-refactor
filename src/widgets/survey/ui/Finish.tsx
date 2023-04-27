@@ -12,7 +12,7 @@ import {
 } from '@app/shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
-import { FinishReason, useFlowState } from '../model';
+import { FinishReason } from '../model';
 import { mapAnswersToDto } from '../model/mappers';
 
 type Props = {
@@ -21,6 +21,7 @@ type Props = {
   eventId: string;
   flowId?: string;
   order: number;
+  isTimerElapsed: boolean;
 
   onClose: () => void;
 };
@@ -31,6 +32,7 @@ function FinishItem({
   activityId,
   eventId,
   order,
+  isTimerElapsed,
   onClose,
 }: Props) {
   const { t } = useTranslation();
@@ -43,12 +45,6 @@ function FinishItem({
       eventId,
       order,
     });
-
-  const { isTimerElapsed } = useFlowState({
-    appletId,
-    eventId,
-    flowId,
-  });
 
   const {
     mutate: sendAnswers,

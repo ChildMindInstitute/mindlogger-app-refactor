@@ -17,6 +17,7 @@ type Props = {
   onBack: () => void;
   onComplete: () => void;
   event: ScheduleEvent;
+  isTimerElapsed: boolean;
   entityStartedAt: number;
   pipelineActivityOrder: number;
 } & FlowPipelineItem;
@@ -28,6 +29,7 @@ function FlowElementSwitch({
   onBack,
   onClose,
   onComplete,
+  isTimerElapsed,
   entityStartedAt,
   pipelineActivityOrder,
 }: Props) {
@@ -73,7 +75,12 @@ function FlowElementSwitch({
 
     case 'Finish': {
       return (
-        <Finish {...payload} order={pipelineActivityOrder} onClose={onClose} />
+        <Finish
+          {...payload}
+          isTimerElapsed={isTimerElapsed}
+          order={pipelineActivityOrder}
+          onClose={onClose}
+        />
       );
     }
   }
