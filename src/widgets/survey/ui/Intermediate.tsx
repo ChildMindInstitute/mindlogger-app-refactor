@@ -18,6 +18,7 @@ import {
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
+import { useFlowStorageRecord } from '../lib';
 import { mapAnswersToDto } from '../model';
 
 type Props = {
@@ -25,6 +26,7 @@ type Props = {
   activityId: string;
   eventId: string;
   flowId: string;
+  order: number;
 
   onClose: () => void;
   onFinish: () => void;
@@ -43,12 +45,16 @@ function Intermediate({
   appletId,
   activityId,
   eventId,
+  order,
   onClose,
   onFinish,
 }: Props) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
+  // TODO: The usage of useAppletDetailsQuery here should be removed in the future
+  // because we should rely on the flow pipeline instead.
+  // https://github.com/ChildMindInstitute/mindlogger-app-refactor/pull/172#discussion_r1178961244
   let { data: activityFlow } = useAppletDetailsQuery(appletId, {
     select: response =>
       mapActivityFlowFromDto(
@@ -60,13 +66,23 @@ function Intermediate({
     select: r => mapActivitiesFromDto(r.data.result.activities),
   });
 
+  const { flowStorageRecord } = useFlowStorageRecord({
+    appletId,
+    eventId,
+    flowId,
+  });
+
+  const { step, pipeline } = flowStorageRecord!;
+
+  const nextFlowItem = pipeline[step + 1];
+
+  const activitiesPassed = pipeline
+    .slice(0, step)
+    .filter(o => o.type === 'Stepper').length;
+
   const totalActivities = activityFlow!.activityIds.length;
 
-  const currentActivityIndex = activityFlow!.activityIds.findIndex(
-    id => id === activityId,
-  );
-
-  const nextActivityId = activityFlow!.activityIds[currentActivityIndex + 1];
+  const nextActivityId = nextFlowItem.payload.activityId;
 
   const nextActivity = allActivities?.find(x => x.id === nextActivityId);
 
@@ -75,6 +91,7 @@ function Intermediate({
       appletId,
       activityId,
       eventId,
+      order,
     });
 
   const {
@@ -88,7 +105,7 @@ function Intermediate({
       onFinish();
     },
     onError: error => {
-      if (error.evaluatedMessage) {
+      if (error.response.status !== 401 && error.evaluatedMessage) {
         onApiRequestError(error.evaluatedMessage);
       }
     },
@@ -105,9 +122,10 @@ function Intermediate({
         flowId,
         activityId: nextActivity.id,
         eventId,
+        pipelineActivityOrder: activitiesPassed,
       }),
     );
-  }, [appletId, dispatch, eventId, flowId, nextActivity]);
+  }, [appletId, dispatch, eventId, flowId, nextActivity, activitiesPassed]);
 
   function completeActivity() {
     if (!activityStorageRecord) {
@@ -146,15 +164,14 @@ function Intermediate({
 
         <ActivityBox>
           <Text fontWeight="bold" mb={10} fontSize={16}>
-            {nextActivity?.name ?? 'Activity 2'}
+            {nextActivity?.name ?? 'Activity'}
           </Text>
 
           <XStack>
             <Image src={badge} width={18} height={18} opacity={0.6} r={4} />
 
             <Text fontSize={14} color="$grey">
-              {currentActivityIndex + 2} of {totalActivities}{' '}
-              {activityFlow!.name}
+              {activitiesPassed + 1} of {totalActivities} {activityFlow!.name}
             </Text>
           </XStack>
         </ActivityBox>
@@ -174,6 +191,7 @@ function Intermediate({
             fontSize={17}
             fontWeight="bold"
             onPress={onClose}
+            disabled={isSendingAnswers}
           >
             {t('activity_navigation:back')}
           </Text>

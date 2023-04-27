@@ -1,16 +1,15 @@
 import { FC } from 'react';
 
 import { activityMarkDownStyles, markdownRules } from '@shared/lib';
-import { MarkdownView, Box } from '@shared/ui';
+import { MarkdownView, Box, BoxProps } from '@shared/ui';
 
 type Props = {
   content: string;
-  centerContent?: boolean;
-};
+} & BoxProps;
 
-const MarkdownMessage: FC<Props> = ({ content, centerContent }) => {
+const MarkdownMessage: FC<Props> = ({ content, ...styledProps }) => {
   return (
-    <Box alignItems={centerContent ? 'center' : 'stretch'}>
+    <Box {...styledProps}>
       <MarkdownView
         content={content}
         rules={markdownRules}

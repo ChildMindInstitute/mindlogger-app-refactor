@@ -1,10 +1,14 @@
-import { StoreProgressPayload } from '@app/abstract/lib';
+import { ActivityPipelineType, StoreProgressPayload } from '@app/abstract/lib';
 import { useInProgressRecord } from '@app/entities/applet/model';
 import { ScheduleEvent } from '@app/entities/event';
 import { useEventQuery } from '@app/entities/event/api';
 
 import FlowElementSwitch from './FlowElementSwitch';
-import { FinishReason, useFlowState } from '../model';
+import {
+  useActivityRecordsInitialization,
+  useFlowRecordInitialization,
+  useFlowState,
+} from '../model';
 import useTimer from '../model/hooks/useTimer';
 
 type Props = {
@@ -16,13 +20,19 @@ type Props = {
 };
 
 function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
-  const { next, back, step, completeByTimer, isTimerElapsed, pipeline } =
-    useFlowState({
-      appletId,
-      activityId,
-      eventId,
-      flowId,
-    });
+  const {
+    next,
+    back,
+    step,
+    completeByTimer,
+    pipeline,
+    isTimerElapsed,
+    clearFlowStorageRecord,
+  } = useFlowState({
+    appletId,
+    eventId,
+    flowId,
+  });
 
   const event: ScheduleEvent = useEventQuery(appletId, eventId);
 
@@ -33,6 +43,10 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
   })!;
 
   const entityStartedAt = progressRecord.startAt;
+  const pipelineActivityOrder =
+    progressRecord.type === ActivityPipelineType.Flow
+      ? progressRecord.pipelineActivityOrder
+      : 0;
 
   useTimer({
     entityStartedAt,
@@ -42,29 +56,43 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
 
   const flowPipelineItem = pipeline[step];
 
-  let finishReason: FinishReason | null = null;
-
-  if (flowPipelineItem.type === 'Finish') {
-    finishReason = isTimerElapsed ? 'time-is-up' : 'regular';
+  function closeFlow() {
+    clearFlowStorageRecord();
+    onClose();
   }
 
   function complete() {
     const isLast = step === pipeline.length - 1;
 
     if (isLast) {
-      onClose();
+      closeFlow();
     } else {
       next();
     }
   }
 
+  useFlowRecordInitialization({
+    appletId,
+    activityId,
+    eventId,
+    flowId,
+  });
+
+  useActivityRecordsInitialization({
+    appletId,
+    activityId,
+    eventId,
+    flowId,
+  });
+
   return (
     <FlowElementSwitch
       {...flowPipelineItem}
-      finishReason={finishReason}
+      pipelineActivityOrder={pipelineActivityOrder}
       event={event!}
       entityStartedAt={entityStartedAt}
-      onClose={onClose}
+      isTimerElapsed={isTimerElapsed}
+      onClose={closeFlow}
       onBack={back}
       onComplete={complete}
     />

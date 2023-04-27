@@ -1,22 +1,25 @@
+import { useMemo } from 'react';
+
 import { ScheduleEvent } from '@app/entities/event';
 import {
   ActivityIdentityContext,
   ActivityStepper,
 } from '@app/features/pass-survey';
 import { colors } from '@app/shared/lib';
-import { BackButton, Box, CrossIcon } from '@app/shared/ui';
+import { BackButton, CrossIcon, Box } from '@app/shared/ui';
 
 import Finish from './Finish';
 import Intermediate from './Intermediate';
-import { FinishReason, FlowPipelineItem } from '../model';
+import { FlowPipelineItem } from '../model';
 
 type Props = {
   onClose: () => void;
   onBack: () => void;
   onComplete: () => void;
   event: ScheduleEvent;
-  finishReason: FinishReason | null;
+  isTimerElapsed: boolean;
   entityStartedAt: number;
+  pipelineActivityOrder: number;
 } & FlowPipelineItem;
 
 function FlowElementSwitch({
@@ -26,13 +29,22 @@ function FlowElementSwitch({
   onBack,
   onClose,
   onComplete,
-  finishReason,
+  isTimerElapsed,
   entityStartedAt,
+  pipelineActivityOrder,
 }: Props) {
+  const context = useMemo(
+    () => ({
+      ...payload,
+      order: pipelineActivityOrder,
+    }),
+    [payload, pipelineActivityOrder],
+  );
+
   switch (type) {
     case 'Stepper': {
       return (
-        <ActivityIdentityContext.Provider value={payload}>
+        <ActivityIdentityContext.Provider value={context}>
           <Box flex={1}>
             <BackButton alignSelf="flex-end" mr={16} mt={10} mb={4}>
               <CrossIcon color={colors.tertiary} size={30} />
@@ -52,13 +64,23 @@ function FlowElementSwitch({
 
     case 'Intermediate': {
       return (
-        <Intermediate {...payload} onClose={onBack} onFinish={onComplete} />
+        <Intermediate
+          {...payload}
+          order={pipelineActivityOrder}
+          onClose={onBack}
+          onFinish={onComplete}
+        />
       );
     }
 
     case 'Finish': {
       return (
-        <Finish {...payload} finishReason={finishReason!} onClose={onClose} />
+        <Finish
+          {...payload}
+          isTimerElapsed={isTimerElapsed}
+          order={pipelineActivityOrder}
+          onClose={onClose}
+        />
       );
     }
   }

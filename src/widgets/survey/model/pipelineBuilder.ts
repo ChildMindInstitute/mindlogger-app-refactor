@@ -45,25 +45,21 @@ type BuildPipelineArgs = {
   eventId: string;
   activityIds: string[];
   flowId: string;
-  fromActivityId: string;
+  startFrom: number;
 };
 
 export function buildActivityFlowPipeline({
   appletId,
   eventId,
   flowId,
-  fromActivityId,
   activityIds,
+  startFrom,
 }: BuildPipelineArgs): FlowPipelineItem[] {
   const pipeline: FlowPipelineItem[] = [];
 
-  const startFrom = activityIds.findIndex(id => id === fromActivityId);
-
-  const slicedActivityIds = activityIds.slice(startFrom);
-
-  for (let i = 0; i < slicedActivityIds.length; i++) {
-    const activityId = slicedActivityIds[i];
-    const isNotLast = i !== slicedActivityIds.length - 1;
+  for (let i = 0; i < activityIds.length; i++) {
+    const activityId = activityIds[i];
+    const isNotLast = i !== activityIds.length - 1;
     const payload = {
       activityId,
       appletId,
@@ -94,7 +90,7 @@ export function buildActivityFlowPipeline({
     }
   }
 
-  return pipeline;
+  return pipeline.slice(startFrom);
 }
 
 type BuildSinglePipelineArgs = {
