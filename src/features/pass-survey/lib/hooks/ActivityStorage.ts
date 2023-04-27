@@ -3,7 +3,7 @@ import { createSecureStorage, createStorage } from '@app/shared/lib';
 export const activityStorage = createSecureStorage('activity_progress-storage');
 export const flowStorage = createStorage('flow_progress-storage');
 
-export const clearActivityStorageRecord = {
+export const clearStorageRecords = {
   byEventId: (eventId: string) => {
     const activityRecordKeys = activityStorage
       .getAllKeys()
