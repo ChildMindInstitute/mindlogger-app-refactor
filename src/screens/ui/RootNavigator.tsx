@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
+import { NotificationModel } from '@app/entities/notification';
 import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SessionModel } from '@entities/session';
 import { EnterForegroundModel } from '@features/enter-foreground';
@@ -64,7 +65,7 @@ export default () => {
   TapOnNotificationModel.useOnNotificationTap();
 
   useBackgroundTask(() => {
-    console.log('task');
+    NotificationModel.topUpNotifications();
   });
 
   return (
