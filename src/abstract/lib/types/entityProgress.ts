@@ -7,6 +7,7 @@ export const enum ActivityPipelineType {
 export type FlowProgress = {
   type: ActivityPipelineType.Flow;
   currentActivityId: string;
+  pipelineActivityOrder: number;
 };
 
 export type ActivityProgress = {

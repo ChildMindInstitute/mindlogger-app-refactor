@@ -101,7 +101,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       activity = this.activities.find(
         x => x.id === progressRecord.currentActivityId,
       )!;
-      position = activityFlow.activityIds.findIndex(x => x === activity.id) + 1;
+      position = progressRecord.pipelineActivityOrder + 1;
     } else {
       activity = this.activities.find(
         x => x.id === activityFlow.activityIds[0],

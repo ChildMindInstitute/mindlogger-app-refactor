@@ -24,6 +24,7 @@ type InProgressFlow = {
   flowId: string;
   activityId: string;
   eventId: string;
+  pipelineActivityOrder: number;
 };
 
 type InitialState = {
@@ -54,13 +55,15 @@ const slice = createSlice({
     },
 
     flowStarted: (state, action: PayloadAction<InProgressFlow>) => {
-      const { appletId, activityId, flowId, eventId } = action.payload;
+      const { appletId, activityId, flowId, eventId, pipelineActivityOrder } =
+        action.payload;
 
       const flowEvent: StoreProgressPayload = {
         type: ActivityPipelineType.Flow,
         currentActivityId: activityId,
         startAt: new Date().getTime(),
         endAt: null,
+        pipelineActivityOrder,
       };
 
       state.inProgress[appletId] = state.inProgress[appletId] ?? {};
@@ -71,11 +74,13 @@ const slice = createSlice({
     },
 
     flowUpdated: (state, action: PayloadAction<InProgressFlow>) => {
-      const { appletId, activityId, flowId, eventId } = action.payload;
+      const { appletId, activityId, flowId, eventId, pipelineActivityOrder } =
+        action.payload;
 
       const event = state.inProgress[appletId][flowId][eventId] as FlowProgress;
 
       event.currentActivityId = activityId;
+      event.pipelineActivityOrder = pipelineActivityOrder;
     },
 
     entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {

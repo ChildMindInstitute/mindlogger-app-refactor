@@ -62,12 +62,15 @@ const AnimatedCircle: FC<AnimatedSvgCircleProps> = ({ progress }) => {
 };
 
 const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
-  const { appletId, activityId, eventId } = useContext(ActivityIdentityContext);
+  const { appletId, activityId, eventId, order } = useContext(
+    ActivityIdentityContext,
+  );
 
   const { removeTimer, setTimer, activityStorageRecord } = useActivityState({
     appletId,
     activityId,
     eventId,
+    order,
   });
 
   const progressDone = useMemo(() => {
