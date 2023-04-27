@@ -52,6 +52,9 @@ function Intermediate({
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
+  // TODO: The usage of useAppletDetailsQuery here should be removed in the future
+  // because we should rely on the flow pipeline instead.
+  // https://github.com/ChildMindInstitute/mindlogger-app-refactor/pull/172#discussion_r1178961244
   let { data: activityFlow } = useAppletDetailsQuery(appletId, {
     select: response =>
       mapActivityFlowFromDto(
