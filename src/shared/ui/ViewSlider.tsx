@@ -16,6 +16,7 @@ import Animated, {
   SlideOutLeft,
   EntryExitAnimationFunction,
   useSharedValue,
+  FadeOut,
 } from 'react-native-reanimated';
 
 import { range } from '../lib';
@@ -38,6 +39,7 @@ const SlideInRightAnimation = new SlideInRight().duration(300).build();
 const SlideOutLeftAnimation = new SlideOutLeft().duration(300).build();
 const SlideOutRightAnimation = new SlideOutRight().duration(300).build();
 const FadeInAnimation = new FadeIn().build();
+const FadeOutAnimation = new FadeOut().build();
 
 export const ViewSlider = forwardRef<ViewSliderRef, Props>(
   ({ viewCount, step = 0, renderView }, ref) => {
@@ -48,6 +50,8 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
     const enteringDirection = useSharedValue<Direction>('not-specified');
     const exitingDirection = useSharedValue<Direction>('not-specified');
 
+    const isLast = step === views.length - 1;
+
     const next = useCallback(
       (shift: number = 1) => {
         const currentIndex = currentIndexRef.current;
@@ -57,6 +61,9 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
           currentIndexRef.current = currentIndex + shift;
           enteringDirection.value = 'right';
           exitingDirection.value = 'left';
+        } else {
+          enteringDirection.value = 'not-specified';
+          exitingDirection.value = 'not-specified';
         }
 
         return canMove;
@@ -96,7 +103,7 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
       'worklet';
 
       if (exitingDirection.value === 'not-specified') {
-        return FadeInAnimation(values);
+        return FadeOutAnimation(values);
       }
 
       return exitingDirection.value === 'left'
@@ -120,7 +127,7 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
         style={styles.box}
         key={step}
         entering={EnteringAnimation}
-        exiting={ExitingAnimation}
+        exiting={isLast ? undefined : ExitingAnimation}
       >
         {renderView({ index: step })}
       </Animated.View>

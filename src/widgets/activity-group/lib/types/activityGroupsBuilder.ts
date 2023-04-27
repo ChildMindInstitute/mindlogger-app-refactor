@@ -7,17 +7,17 @@ export type EntityBase = {
   name: string;
   description: string;
   image?: string | null;
+  isHidden: boolean;
+  order: number;
 };
 
 export type Activity = EntityBase & {
   type: ActivityType;
-  isHidden: boolean;
   pipelineType: ActivityPipelineType.Regular;
 };
 
 export type ActivityFlow = EntityBase & {
   hideBadge: boolean;
-  isHidden: boolean;
   activityIds: Array<string>;
   pipelineType: ActivityPipelineType.Flow;
 };

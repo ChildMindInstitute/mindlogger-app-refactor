@@ -46,13 +46,14 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
         )}
 
         <YStack flexGrow={1} flexShrink={1}>
-          {activity.isInActivityFlow && (
-            <ActivityFlowStep
-              hasOpacity={isDisabled}
-              activity={activity}
-              mb={7}
-            />
-          )}
+          {activity.isInActivityFlow &&
+            activity.activityFlowDetails!.showActivityFlowBadge && (
+              <ActivityFlowStep
+                hasOpacity={isDisabled}
+                activity={activity}
+                mb={7}
+              />
+            )}
 
           <Text
             mb={8}

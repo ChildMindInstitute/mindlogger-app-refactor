@@ -24,7 +24,7 @@ export type ActivityDto = {
   items: ActivityItemDto[];
 };
 
-type ActivityResponse = SuccessfulResponse<ActivityDto>;
+export type ActivityResponse = SuccessfulResponse<ActivityDto>;
 
 const mockActivity = false;
 

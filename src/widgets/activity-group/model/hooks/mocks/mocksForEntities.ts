@@ -23,6 +23,7 @@ export const progress: Progress = {
         startAt: new Date(2023, 1, 12, 14, 16, 17),
         type: ActivityPipelineType.Flow,
         endAt: null,
+        pipelineActivityOrder: 0,
       },
     },
   },
@@ -38,6 +39,7 @@ const activity1: Activity = {
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   isHidden: false,
+  order: 1,
 };
 
 const activity2: Activity = {
@@ -49,6 +51,7 @@ const activity2: Activity = {
   type: ActivityType.NotDefined,
   image: null,
   isHidden: false,
+  order: 1,
 };
 
 const activityFlow1: ActivityFlow = {
@@ -62,6 +65,7 @@ const activityFlow1: ActivityFlow = {
   hideBadge: false,
   activityIds: ['aid1', 'aid2'],
   isHidden: false,
+  order: 1,
 };
 
 export const allAppletActivities: Activity[] = [activity1, activity2];

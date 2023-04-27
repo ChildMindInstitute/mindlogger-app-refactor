@@ -8,17 +8,19 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppletDetailsQuery } from '@app/entities/applet';
 import { HourMinute } from '@app/shared/lib';
 import TimeRemaining from '@app/shared/ui/TimeRemaining';
-import { ActivityIndicator, Box, Center, Stepper, XStack } from '@shared/ui';
+import {
+  ActivityIndicator,
+  Box,
+  Center,
+  StatusBar,
+  Stepper,
+  XStack,
+} from '@shared/ui';
 
 import ActivityItem from './ActivityItem';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
 import { ActivityIdentityContext, useTextVariablesReplacer } from '../lib';
-import {
-  useActivityRecordInitialization,
-  useActivityState,
-  useActivityStepper,
-  useIdleTimer,
-} from '../model';
+import { useActivityState, useActivityStepper, useIdleTimer } from '../model';
 
 type Props = {
   idleTimer: HourMinute | null;
@@ -39,13 +41,9 @@ function ActivityStepper({
 
   const { bottom } = useSafeAreaInsets();
 
-  const { appletId, activityId, eventId } = useContext(ActivityIdentityContext);
-
-  useActivityRecordInitialization({
-    appletId,
-    activityId,
-    eventId,
-  });
+  const { appletId, activityId, eventId, order } = useContext(
+    ActivityIdentityContext,
+  );
 
   const {
     activityStorageRecord,
@@ -58,6 +56,7 @@ function ActivityStepper({
     appletId,
     activityId,
     eventId,
+    order,
   });
 
   const { replaceTextVariables } = useTextVariablesReplacer({
@@ -157,6 +156,8 @@ function ActivityStepper({
 
   return (
     <Box flex={1} pb={bottom}>
+      <StatusBar hidden />
+
       <Stepper
         stepsCount={activityStorageRecord.items.length}
         startFrom={activityStorageRecord.step}

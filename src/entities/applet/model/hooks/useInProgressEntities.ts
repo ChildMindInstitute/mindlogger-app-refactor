@@ -34,13 +34,19 @@ function useInProgressEntities(appletId: string) {
     );
   }
 
-  function flowStarted(flowId: string, activityId: string, eventId: string) {
+  function flowStarted(
+    flowId: string,
+    activityId: string,
+    eventId: string,
+    pipelineActivityOrder: number,
+  ) {
     dispatch(
       actions.flowStarted({
         appletId,
         flowId,
         activityId,
         eventId,
+        pipelineActivityOrder,
       }),
     );
   }
@@ -78,13 +84,13 @@ function useInProgressEntities(appletId: string) {
             const flow = activityFlows!.find(x => x.id === flowId);
             const firstActivityId = flow!.activityIds[0];
 
-            flowStarted(flowId, firstActivityId, eventId);
+            flowStarted(flowId, firstActivityId, eventId, 0);
             resolve(true);
           },
           onResume: () => resolve(false),
         });
       } else {
-        flowStarted(flowId, currentActivityId, eventId);
+        flowStarted(flowId, currentActivityId, eventId, 0);
         resolve(false);
       }
     });

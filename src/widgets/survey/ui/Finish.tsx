@@ -20,7 +20,8 @@ type Props = {
   activityId: string;
   eventId: string;
   flowId?: string;
-  finishReason: FinishReason;
+  order: number;
+  isTimerElapsed: boolean;
 
   onClose: () => void;
 };
@@ -30,7 +31,8 @@ function FinishItem({
   appletId,
   activityId,
   eventId,
-  finishReason,
+  order,
+  isTimerElapsed,
   onClose,
 }: Props) {
   const { t } = useTranslation();
@@ -41,6 +43,7 @@ function FinishItem({
       appletId,
       activityId,
       eventId,
+      order,
     });
 
   const {
@@ -50,11 +53,13 @@ function FinishItem({
     isPaused: isOffline,
   } = useActivityAnswersMutation({
     onError: error => {
-      if (error.evaluatedMessage) {
+      if (error.response.status !== 401 && error.evaluatedMessage) {
         onApiRequestError(error.evaluatedMessage);
       }
     },
   });
+
+  let finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';
 
   const finished =
     isOffline || successfullySentAnswers || finishReason === 'time-is-up';
