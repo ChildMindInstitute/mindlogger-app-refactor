@@ -38,7 +38,7 @@ export function useActivityRecordsInitialization({
 
   useEffect(() => {
     if (!isFlow) {
-      Initializer.initialize({ activityId, eventId });
+      Initializer.initializeActivity({ activityId, eventId });
     }
   }, [Initializer, activityId, eventId, isFlow]);
 }

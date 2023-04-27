@@ -42,7 +42,11 @@ export function ActivityRecordInitializer({
 
   const applet = AppletModel.mapAppletDetailsFromDto(appletResponse.result);
 
-  const initialize = ({ activityId, eventId, order = 0 }: InitializeArgs) => {
+  const initializeActivity = ({
+    activityId,
+    eventId,
+    order = 0,
+  }: InitializeArgs) => {
     const activityResponse = getDataFromQuery<ActivityResponse>(
       getActivityDetailsKey(activityId),
       queryClient,
@@ -75,7 +79,7 @@ export function ActivityRecordInitializer({
     }
 
     flow.activityIds.forEach((activityId, order) => {
-      initialize({
+      initializeActivity({
         activityId,
         eventId,
         order,
@@ -84,7 +88,7 @@ export function ActivityRecordInitializer({
   };
 
   return {
-    initialize,
+    initializeActivity,
     initializeFlow,
   };
 }
