@@ -123,6 +123,7 @@ type MultiSelectionRowsConfiguration = ButtonsConfiguration &
     addScores: boolean;
     setAlerts: boolean;
     addTooltip: boolean;
+    randomizeOptions: boolean;
   };
 
 type MultiSelectionRowsAnswerSettings = {
@@ -131,14 +132,22 @@ type MultiSelectionRowsAnswerSettings = {
     rowName: string;
     rowImage: ImageUrl | null;
     tooltip: string | null;
-
-    options: Array<{
-      id: string;
-      text: string;
-      image: ImageUrl | null;
-      score: number | null;
-      tooltip: string | null;
-    }>;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: ImageUrl | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    row_id: string;
+    options: [
+      {
+        option_id: string;
+        score: number;
+        alert: string;
+      },
+    ];
   }>;
 };
 

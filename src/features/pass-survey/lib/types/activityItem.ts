@@ -10,6 +10,7 @@ import {
   PipelineItem,
   AudioPipelineItem,
   MessagePipelineItem,
+  StackedCheckboxPipelineItem,
   AudioPlayerPipelineItem,
   TimeRangePipelineItem,
   RadioPipelineItem,
@@ -76,6 +77,11 @@ interface MessageActivityItem extends ActivityItemBase {
   pipelineItem: MessagePipelineItem;
 }
 
+interface StackedCheckboxActivityItem extends ActivityItemBase {
+  type: 'StackedCheckbox';
+  pipelineItem: StackedCheckboxPipelineItem;
+}
+
 interface AudioPlayerActivityItem extends ActivityItemBase {
   type: 'AudioPlayer';
   pipelineItem: AudioPlayerPipelineItem;
@@ -124,6 +130,7 @@ export type ActivityItem =
   | CheckboxActivityItem
   | AudioActivityItem
   | MessageActivityItem
+  | StackedCheckboxActivityItem
   | AudioPlayerActivityItem
   | TimeRangeActivityItem
   | RadioActivityItem

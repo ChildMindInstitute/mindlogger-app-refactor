@@ -17,6 +17,7 @@ export type ActivityItemType =
   | 'Audio'
   | 'Message'
   | 'AudioPlayer'
+  | 'StackedCheckbox'
   | 'Radio'
   | 'Slider'
   | 'NumberSelect'
@@ -60,6 +61,35 @@ type MessagePayload = null;
 type AudioPlayerPayload = {
   file: string;
   playOnce: boolean;
+};
+
+type StackedCheckboxPayload = {
+  randomizeOptions: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  rows: Array<{
+    id: string;
+    rowName: string;
+    rowImage: string | null;
+    tooltip: string | null;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    row_id: string;
+    options: [
+      {
+        option_id: string;
+        score: number;
+        alert: string;
+      },
+    ];
+  }>;
 };
 
 type TimeRangePayload = null;
@@ -130,6 +160,7 @@ type PipelinePayload =
   | TimeRangePayload
   | AudioPayload
   | MessagePayload
+  | StackedCheckboxPayload
   | AudioPlayerPayload
   | SliderPayload
   | NumberSelectPayload
@@ -224,6 +255,10 @@ export interface AudioPlayerPipelineItem extends PipelineItemBase {
   type: 'AudioPlayer';
   payload: AudioPlayerPayload;
 }
+export interface StackedCheckboxPipelineItem extends PipelineItemBase {
+  type: 'StackedCheckbox';
+  payload: StackedCheckboxPayload;
+}
 export interface TimeRangePipelineItem extends PipelineItemBase {
   type: 'TimeRange';
   payload: TimeRangePayload;
@@ -280,6 +315,8 @@ export type RadioResponse = string;
 
 export type TimeResponse = HourMinute;
 
+export type StackedCheckboxResponse = string[][] | null;
+
 export type PhotoResponse = {
   uri: string;
   fileName: string;
@@ -304,6 +341,7 @@ export type PipelineItemResponse =
   | SliderResponse
   | NumberSelectResponse
   | CheckboxResponse
+  | StackedCheckboxResponse
   | AudioResponse
   | AudioPlayerResponse
   | TimeRangeResponse
@@ -323,6 +361,7 @@ export type PipelineItem =
   | SliderPipelineItem
   | NumberSelectPipelineItem
   | CheckboxPipelineItem
+  | StackedCheckboxPipelineItem
   | AudioPipelineItem
   | MessagePipelineItem
   | AudioPlayerPipelineItem

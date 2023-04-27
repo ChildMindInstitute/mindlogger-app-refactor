@@ -243,7 +243,30 @@ function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
 }
 
 function mapToStackedCheckboxes(dto: MultiSelectionRowsItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'StackedCheckbox',
+    config: {
+      randomizeOptions: dto.config.randomizeOptions,
+      setAlerts: dto.config.setAlerts,
+      addTooltip: dto.config.addTooltip,
+      addScores: dto.config.addScores,
+      rows: dto.responseValues.rows,
+      options: dto.responseValues.options,
+      dataMatrix: dto.responseValues.dataMatrix,
+    },
+    timer: mapTimerValue(dto.config.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+  };
 }
 
 function mapToNumberSelect(dto: NumberSelectionItemDto): ActivityItem {

@@ -178,6 +178,23 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
           };
         }
 
+        case 'StackedCheckbox': {
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            validationOptions: item.validationOptions,
+            additionalText: item.additionalText,
+            timer: item.timer,
+          };
+        }
+
         case 'NumberSelect': {
           return {
             id: item.id,
