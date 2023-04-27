@@ -28,11 +28,17 @@ export function useActivityRecordsInitialization({
     [appletId, queryClient],
   );
 
+  const isFlow = !!flowId;
+
   useEffect(() => {
-    if (flowId) {
+    if (isFlow) {
       Initializer.initializeFlow({ flowId, eventId });
-    } else {
+    }
+  }, [Initializer, eventId, flowId, isFlow]);
+
+  useEffect(() => {
+    if (!isFlow) {
       Initializer.initialize({ activityId, eventId });
     }
-  }, [Initializer, activityId, eventId, flowId]);
+  }, [Initializer, activityId, eventId, isFlow]);
 }
