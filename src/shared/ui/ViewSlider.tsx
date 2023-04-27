@@ -50,6 +50,8 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
     const enteringDirection = useSharedValue<Direction>('not-specified');
     const exitingDirection = useSharedValue<Direction>('not-specified');
 
+    const isLast = step === views.length - 1;
+
     const next = useCallback(
       (shift: number = 1) => {
         const currentIndex = currentIndexRef.current;
@@ -60,6 +62,7 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
           enteringDirection.value = 'right';
           exitingDirection.value = 'left';
         } else {
+          enteringDirection.value = 'not-specified';
           exitingDirection.value = 'not-specified';
         }
 
@@ -124,7 +127,7 @@ export const ViewSlider = forwardRef<ViewSliderRef, Props>(
         style={styles.box}
         key={step}
         entering={EnteringAnimation}
-        exiting={ExitingAnimation}
+        exiting={isLast ? undefined : ExitingAnimation}
       >
         {renderView({ index: step })}
       </Animated.View>
