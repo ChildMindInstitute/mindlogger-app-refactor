@@ -1,19 +1,17 @@
 import { FC, ReactElement } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 
-import { StackedRowItemValue } from './types';
-import {
-  ListSeparator,
-  YStack,
-  XStack,
-  Center,
-  Text,
-  Tooltip,
-  RadioGroup,
-} from '../..';
+import { ListSeparator, YStack, XStack, Center, Text, Tooltip } from '../..';
+
+export type StackedRowItemValue = {
+  id: string;
+  description: string;
+  image: string;
+  name: string;
+};
 
 const AxisListItemContainer = styled(Center, {
   minHeight: 80,
@@ -23,19 +21,9 @@ const AxisListItemContainer = styled(Center, {
 
 const AxisListItemText = styled(Text, {
   name: 'SingleSelectionPerRowAxisListItemText',
-  fontSize: 16,
-
-  variants: {
-    hasTooltip: {
-      true: {
-        color: '$blue',
-      },
-    },
-  },
-
-  defaultVariants: {
-    hasTooltip: false,
-  },
+  fontSize: 12,
+  variants: { hasTooltip: { true: { color: '$blue' } } },
+  defaultVariants: { hasTooltip: false },
 });
 
 const AxisListItem: FC<{
@@ -68,9 +56,7 @@ const AxisListItem: FC<{
   );
 };
 
-type RowHeaderProps = {
-  options: StackedRowItemValue[];
-};
+type RowHeaderProps = { options: StackedRowItemValue[] };
 
 const RowHeader: FC<RowHeaderProps> = ({ options }) => {
   return (
@@ -79,7 +65,9 @@ const RowHeader: FC<RowHeaderProps> = ({ options }) => {
         <AxisListItem maxWidth="25%" />
 
         {options.map((option, optionIndex) => (
-          <AxisListItem key={optionIndex + optionIndex} option={option} />
+          <YStack flex={1}>
+            <AxisListItem key={optionIndex + optionIndex} option={option} />
+          </YStack>
         ))}
       </XStack>
 
@@ -91,81 +79,56 @@ const RowHeader: FC<RowHeaderProps> = ({ options }) => {
 type RowListItemProps = {
   options: StackedRowItemValue[];
   item: StackedRowItemValue;
-  index: number;
-  onValueChange: (option: string, itemIndex: number) => void;
-  renderCell: (
-    option: StackedRowItemValue,
-    optionIndex: number,
-  ) => ReactElement;
+  renderCell: (option: StackedRowItemValue) => ReactElement;
 };
 
-const RowListItem: FC<RowListItemProps> = ({
-  item,
-  index,
-  options,
-  onValueChange,
-  renderCell,
-}) => {
-  const onSelectionChange = (value: string) => {
-    onValueChange(value, index);
-  };
-
+const RowListItem: FC<RowListItemProps> = ({ item, options, renderCell }) => {
   return (
-    <RadioGroup onValueChange={onSelectionChange}>
+    <YStack>
       <XStack>
         <AxisListItem maxWidth="25%" option={item} />
 
-        {options.map((option, optionIndex) => (
-          <AxisListItemContainer key={option.name + optionIndex}>
-            {renderCell(option, index)}
+        {options.map(option => (
+          <AxisListItemContainer key={option.id}>
+            {renderCell(option)}
           </AxisListItemContainer>
         ))}
       </XStack>
-    </RadioGroup>
+
+      <ListSeparator />
+    </YStack>
   );
 };
 
 type StackedItemsGridProps = {
-  items: any[];
-  options: any[];
+  items: StackedRowItemValue[];
+  options: StackedRowItemValue[];
   renderCell: (
-    option: StackedRowItemValue,
     optionIndex: number,
+    option: StackedRowItemValue,
   ) => ReactElement;
-  onRowValueChange?: (option: string, itemIndex: number) => void;
 };
 
-const StackedItemsGrid: FC<StackedItemsGridProps> = ({
+export const StackedItemsGrid: FC<StackedItemsGridProps> = ({
   items = [],
   renderCell,
   options,
-  onRowValueChange,
 }) => {
-  const onValueChange = (option: string, itemIndex: number) => {
-    if (onRowValueChange) {
-      onRowValueChange(option, itemIndex);
-    }
-  };
-
   return (
-    <FlatList
-      data={items}
-      ItemSeparatorComponent={ListSeparator}
-      renderItem={({ item, index }) => (
+    <YStack>
+      <RowHeader options={options} />
+
+      {items.map((item, index) => (
         <RowListItem
+          key={item.id}
           options={options}
           item={item}
-          index={index}
-          onValueChange={onValueChange}
-          renderCell={renderCell}
+          renderCell={renderCell.bind(null, index)}
         />
-      )}
-      ListHeaderComponent={() => <RowHeader options={options} />}
-    />
+      ))}
+    </YStack>
   );
 };
-
-export default StackedItemsGrid;
 
 const styles = StyleSheet.create({
   image: {

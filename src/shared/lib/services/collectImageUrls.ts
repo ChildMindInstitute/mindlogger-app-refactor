@@ -88,9 +88,9 @@ export const collectActivityDetailsImageUrls = (activity: ActivityDto) => {
       case 'multiSelectRows': {
         for (let row of item.responseValues.rows) {
           row.rowImage && result.push(row.rowImage);
-          for (let option of row.options) {
-            option.image && result.push(option.image);
-          }
+        }
+        for (let option of item.responseValues.options) {
+          option.image && result.push(option.image);
         }
         break;
       }

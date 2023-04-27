@@ -1,46 +1,66 @@
 import { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
-import StackedCheckboxConfig from './types';
-import { CheckBox } from '../..';
-import { StackedItemsGrid } from '../StackedItemsGrid';
-import { StackedRowItemValue } from '../StackedItemsGrid/types';
+import { colors, range } from '@app/shared/lib';
 
-type Props = {
-  value: Array<string[]>;
-  onChange: (value: Array<string[]>) => void;
-  config: StackedCheckboxConfig;
+import { CheckBox, YStack } from '../..';
+import { StackedItemsGrid, StackedRowItemValue } from '../StackedItemsGrid';
+
+type StackedCheckboxConfig = {
+  rows: Array<StackedRowItemValue>;
+  options: Array<StackedRowItemValue>;
 };
 
-const StackedCheckboxItem: FC<Props> = ({ value = [], onChange, config }) => {
-  const onValueChange = (option: StackedRowItemValue, itemIndex: number) => {
-    if (!value[itemIndex]?.length) {
-      value[itemIndex] = [];
-    }
-
-    if (value[itemIndex].includes(option.name)) {
-      value[itemIndex] = value[itemIndex].filter(
-        valueItem => valueItem !== option.name,
-      );
+type Props = {
+  value: string[][] | null;
+  onChange: (value: string[][] | null) => void;
+  config: StackedCheckboxConfig;
+};
+const StackedCheckboxItem: FC<Props> = ({ value, onChange, config }) => {
+  if (value == null) {
+    value = [];
+  }
+  const onValueChange = (option: StackedRowItemValue, rowIndex: number) => {
+    let newValue = range(config.options.length).map((_, i) => value![i] ?? []);
+    const row = newValue[rowIndex];
+    if (row.includes(option.id)) {
+      newValue[rowIndex] = row.filter(id => id !== option.id);
     } else {
-      value[itemIndex].push(option.name);
+      newValue[rowIndex].push(option.id);
     }
+    const isEmpty = newValue.every(r => !r.length);
 
-    onChange(value);
+    onChange(isEmpty ? null : newValue);
   };
-
+  console.log(config.rows, config.options);
   return (
-    <StackedItemsGrid
-      items={config.itemList}
-      options={config.options}
-      renderCell={(option, index) => (
-        <CheckBox
-          style={styles.checkbox}
-          onChange={() => onValueChange(option, index)}
-          boxType="square"
-        />
-      )}
-    />
+    <>
+      <StackedItemsGrid
+        items={config.rows}
+        options={config.options}
+        renderCell={(index, option) => {
+          return (
+            <YStack onPress={() => onValueChange(option, index)}>
+              <CheckBox
+                style={styles.checkbox}
+                lineWidth={2}
+                animationDuration={0.2}
+                boxType="square"
+                tintColors={{ true: colors.primary, false: colors.primary }}
+                onCheckColor={colors.white}
+                onFillColor={colors.primary}
+                onTintColor={colors.primary}
+                tintColor={colors.primary}
+                onAnimationType="bounce"
+                offAnimationType="bounce"
+                value={!!value![index]?.includes(option.id)}
+                disabled
+              />
+            </YStack>
+          );
+        }}
+      />
+    </>
   );
 };
 
@@ -50,5 +70,4 @@ const styles = StyleSheet.create({
     width: 20,
   },
 });
-
 export default StackedCheckboxItem;

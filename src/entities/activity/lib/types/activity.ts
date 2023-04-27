@@ -10,6 +10,7 @@ export type ActivityItemType =
   | 'Geolocation'
   | 'TimeRange'
   | 'AudioPlayer'
+  | 'StackedCheckbox'
   | 'Message'
   | 'Audio'
   | 'Photo'
@@ -81,6 +82,35 @@ type AudioPlayerConfig = {
   playOnce: boolean;
 };
 
+type StackedCheckboxConfig = {
+  randomizeOptions: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  rows: Array<{
+    id: string;
+    rowName: string;
+    rowImage: string | null;
+    tooltip: string | null;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    row_id: string;
+    options: [
+      {
+        option_id: string;
+        score: number;
+        alert: string;
+      },
+    ];
+  }>;
+};
+
 type RadioConfig = {
   randomizeOptions: boolean;
   setAlerts: boolean;
@@ -113,6 +143,7 @@ export type ActivityItemConfig =
   | MessageConfig
   | AudioConfig
   | AudioPlayerConfig
+  | StackedCheckboxConfig
   | RadioConfig
   | SplashConfig
   | PhotoConfig
@@ -197,6 +228,11 @@ interface AudioPlayerActivityItem extends ActivityItemBase {
   config: AudioPlayerConfig;
 }
 
+interface StackedCheckboxActivityItem extends ActivityItemBase {
+  inputType: 'StackedCheckbox';
+  config: StackedCheckboxConfig;
+}
+
 interface TimeRangeActivityItem extends ActivityItemBase {
   inputType: 'TimeRange';
   config: null;
@@ -244,6 +280,7 @@ export type ActivityItem =
   | AudioActivityItem
   | MessageActivityItem
   | AudioPlayerActivityItem
+  | StackedCheckboxActivityItem
   | TimeRangeActivityItem
   | RadioActivityItem
   | DateActivityItem
