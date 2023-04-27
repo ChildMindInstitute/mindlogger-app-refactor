@@ -4,24 +4,28 @@ import { StyleSheet } from 'react-native';
 import { colors, range } from '@app/shared/lib';
 
 import { CheckBox, YStack } from '../..';
-import { StackedItemsGrid, StackedRowItemValue } from '../StackedItemsGrid';
+import {
+  StackedItemsGrid,
+  type StackedRowItemValue,
+  type Item,
+} from '../StackedItemsGrid';
 
 type StackedCheckboxConfig = {
-  rows: Array<StackedRowItemValue>;
-  options: Array<StackedRowItemValue>;
+  rows: Array<Item>;
+  options: Array<Item>;
 };
 
 type Props = {
-  value: string[][] | null;
+  values: string[][] | null;
   onChange: (value: string[][] | null) => void;
   config: StackedCheckboxConfig;
 };
-const StackedCheckboxItem: FC<Props> = ({ value, onChange, config }) => {
-  if (value == null) {
-    value = [];
+const StackedCheckboxItem: FC<Props> = ({ values, onChange, config }) => {
+  if (values == null) {
+    values = [];
   }
   const onValueChange = (option: StackedRowItemValue, rowIndex: number) => {
-    let newValue = range(config.options.length).map((_, i) => value![i] ?? []);
+    let newValue = range(config.options.length).map((_, i) => values![i] ?? []);
     const row = newValue[rowIndex];
     if (row.includes(option.id)) {
       newValue[rowIndex] = row.filter(id => id !== option.id);
@@ -32,7 +36,7 @@ const StackedCheckboxItem: FC<Props> = ({ value, onChange, config }) => {
 
     onChange(isEmpty ? null : newValue);
   };
-  console.log(config.rows, config.options);
+
   return (
     <>
       <StackedItemsGrid
@@ -53,7 +57,7 @@ const StackedCheckboxItem: FC<Props> = ({ value, onChange, config }) => {
                 tintColor={colors.primary}
                 onAnimationType="bounce"
                 offAnimationType="bounce"
-                value={!!value![index]?.includes(option.id)}
+                value={!!values![index]?.includes(option.id)}
                 disabled
               />
             </YStack>

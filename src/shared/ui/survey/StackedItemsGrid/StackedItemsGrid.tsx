@@ -4,14 +4,8 @@ import { StyleSheet } from 'react-native';
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 
+import { type StackedRowItemValue } from './types';
 import { ListSeparator, YStack, XStack, Center, Text, Tooltip } from '../..';
-
-export type StackedRowItemValue = {
-  id: string;
-  description: string;
-  image: string;
-  name: string;
-};
 
 const AxisListItemContainer = styled(Center, {
   minHeight: 80,
@@ -30,23 +24,26 @@ const AxisListItem: FC<{
   option?: StackedRowItemValue;
   maxWidth?: string | number;
 }> = ({ option, maxWidth }) => {
+  const title = option?.text || option?.rowName;
+  const imageUrl = option?.image || option?.rowImage;
+
   return (
     <AxisListItemContainer maxWidth={maxWidth}>
       {option && (
-        <Tooltip markdown={option.description}>
+        <Tooltip markdown={option.tooltip}>
           <Center>
             <AxisListItemText
-              textDecorationLine={option.description ? 'underline' : 'none'}
-              hasTooltip={!!option.description}
+              textDecorationLine={option.tooltip ? 'underline' : 'none'}
+              hasTooltip={!!option.tooltip}
             >
-              {option.name}
+              {title}
             </AxisListItemText>
 
-            {option.image && (
+            {imageUrl && (
               <CachedImage
                 style={styles.image}
                 resizeMode="contain"
-                source={option.image}
+                source={imageUrl}
               />
             )}
           </Center>
@@ -109,7 +106,7 @@ type StackedItemsGridProps = {
   ) => ReactElement;
 };
 
-export const StackedItemsGrid: FC<StackedItemsGridProps> = ({
+const StackedItemsGrid: FC<StackedItemsGridProps> = ({
   items = [],
   renderCell,
   options,
@@ -134,5 +131,8 @@ const styles = StyleSheet.create({
   image: {
     height: 32,
     width: 32,
+    marginTop: 2,
   },
 });
+
+export default StackedItemsGrid;
