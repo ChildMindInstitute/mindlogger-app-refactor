@@ -3,6 +3,7 @@ import { LogBox } from 'react-native';
 import { RootNavigator } from '@screens';
 
 import localization from '@jobs/localization';
+import setBackgroundTask from '@jobs/set-background-task';
 import { jobRunner } from '@shared/lib';
 
 import { AppProvider } from './ui';
@@ -14,7 +15,7 @@ if (hideIosSimulatorErrorWarningBadges) {
   LogBox.ignoreAllLogs();
 }
 
-jobRunner.runAll([localization]);
+jobRunner.runAll([localization, setBackgroundTask]);
 
 const App = () => {
   return (

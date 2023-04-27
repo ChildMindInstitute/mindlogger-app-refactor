@@ -15,6 +15,7 @@ import {
   ENV,
   useNotificationPermissions,
   IS_ANDROID,
+  useBackgroundTask,
 } from '@shared/lib';
 import { UserProfileIcon, HomeIcon, BackButton, Text, Box } from '@shared/ui';
 
@@ -61,6 +62,10 @@ export default () => {
   });
 
   TapOnNotificationModel.useOnNotificationTap();
+
+  useBackgroundTask(() => {
+    console.log('task');
+  });
 
   return (
     <Stack.Navigator
