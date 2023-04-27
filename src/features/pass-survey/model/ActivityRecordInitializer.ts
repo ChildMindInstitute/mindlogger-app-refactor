@@ -81,10 +81,6 @@ export function ActivityRecordInitializer({
         order,
       });
     });
-
-    storage.getAllKeys().forEach(k => {
-      console.log(k, JSON.parse(storage.getString(k) ?? ''));
-    });
   };
 
   return {
