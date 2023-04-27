@@ -188,6 +188,7 @@ function Intermediate({
             fontSize={17}
             fontWeight="bold"
             onPress={onClose}
+            disabled={isSendingAnswers}
           >
             {t('activity_navigation:back')}
           </Text>
