@@ -242,7 +242,10 @@ function ActivityItem({
       <Box flex={1} justifyContent="center">
         {question && (
           <Box mx={16} mb={20}>
-            <MarkdownMessage centerContent content={question} />
+            <MarkdownMessage
+              centerContent
+              content={textVariableReplacer(question)}
+            />
           </Box>
         )}
 
