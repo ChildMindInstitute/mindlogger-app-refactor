@@ -8,6 +8,7 @@ export { default as useMicrophonePermissions } from './useMicrophonePermissions'
 export { default as useNotificationPermissions } from './useNotificationPermissions';
 export { default as useCacheHasData } from './useCacheHasData';
 export { default as useOnForeground } from './useOnForeground';
+export { default as useAlarmPermissions } from './useAlarmPermissions';
 export { default as useBackgroundTask } from './useBackgroundTask';
 
 export * from './redux';

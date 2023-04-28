@@ -205,7 +205,9 @@
   },
   "permissions": {
     "alert_button_cancel": "Dismiss",
-    "alert_button_ok": "Open Settings"
+    "alert_button_ok": "Open Settings",
+    "alarm_permission_warning": "Alarm permissions request",
+    "alarm_permission_disabled": "Please turn on the alarm permissions on your device to receive the MindLogger reminders on schedule. Please be aware that the application will be closed automatically once you turn on the alarm permissions. To proceed, you will need to re-login to the application."
   },
   "media": {
     "alert_message": "These can be configured in Settings"
