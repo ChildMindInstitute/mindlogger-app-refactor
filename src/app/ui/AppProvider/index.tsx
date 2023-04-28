@@ -4,6 +4,8 @@ import { CacheManager } from '@georstat/react-native-image-cache';
 import { PortalProvider } from '@tamagui/portal';
 import { Dirs } from 'react-native-file-access';
 
+import { LocalizationProvider } from '@app/entities/localization';
+
 import NavigationProvider from './NavigationProvider';
 import ReactQueryProvider from './ReactQueryProvider';
 import ReduxProvider from './ReduxProvider';
@@ -24,15 +26,17 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     <SplashProvider>
       <ReduxProvider>
         <ReactQueryProvider>
-          <TamaguiProvider>
-            <NavigationProvider>
-              <PortalProvider>
-                <ToastProvider>
-                  <Suspense>{children}</Suspense>
-                </ToastProvider>
-              </PortalProvider>
-            </NavigationProvider>
-          </TamaguiProvider>
+          <LocalizationProvider>
+            <TamaguiProvider>
+              <NavigationProvider>
+                <PortalProvider>
+                  <ToastProvider>
+                    <Suspense>{children}</Suspense>
+                  </ToastProvider>
+                </PortalProvider>
+              </NavigationProvider>
+            </TamaguiProvider>
+          </LocalizationProvider>
         </ReactQueryProvider>
       </ReduxProvider>
     </SplashProvider>
