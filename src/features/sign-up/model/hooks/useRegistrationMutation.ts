@@ -1,3 +1,4 @@
+import { UserEmailRecord } from '@app/entities/identity/lib';
 import {
   useLoginMutation,
   useSignUpMutation,
@@ -27,6 +28,8 @@ export const useRegistrationMutation = (
       const { user, token: session } = response.data.result;
 
       dispatch(IdentityModel.actions.onAuthSuccess(user));
+
+      UserEmailRecord.set(user.email);
 
       SessionModel.storeSession(session);
 

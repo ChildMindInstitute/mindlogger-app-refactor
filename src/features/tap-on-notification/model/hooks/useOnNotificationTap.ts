@@ -12,6 +12,7 @@ import {
   useForegroundEvent,
   useOnInitialAndroidNotification,
 } from '@app/entities/notification';
+import { LogTrigger } from '@app/shared/api';
 import { useAppSelector } from '@app/shared/lib';
 
 export function useOnNotificationTap() {
@@ -33,6 +34,7 @@ export function useOnNotificationTap() {
       NotificationModel.NotificationRefreshService.refresh(
         queryClient,
         storeProgress,
+        LogTrigger.LimitReachedNotification,
       );
     },
     'schedule-event-alert': eventDetail => {
