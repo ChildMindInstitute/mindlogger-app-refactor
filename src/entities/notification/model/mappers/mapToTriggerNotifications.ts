@@ -1,4 +1,8 @@
-import notifee, { AndroidStyle, TriggerType } from '@notifee/react-native';
+import notifee, {
+  AndroidStyle,
+  TriggerType,
+  AndroidImportance,
+} from '@notifee/react-native';
 
 import { colors } from '@shared/lib';
 
@@ -53,6 +57,7 @@ export async function mapToTriggerNotifications(
         },
         smallIcon: 'ic_notification',
         color: colors.primary,
+        importance: AndroidImportance.HIGH,
       },
     },
     trigger: {
