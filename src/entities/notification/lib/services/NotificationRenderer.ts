@@ -1,6 +1,9 @@
 import { Platform } from 'react-native';
 
-import notifee, { Notification } from '@notifee/react-native';
+import notifee, {
+  AndroidImportance,
+  Notification,
+} from '@notifee/react-native';
 
 import { ANDROID_DEFAULT_CHANNEL_ID } from '../constants';
 
@@ -21,6 +24,7 @@ function NotificationRenderer() {
           pressAction: {
             id: 'default',
           },
+          importance: AndroidImportance.HIGH,
         },
       });
     } catch (error) {
