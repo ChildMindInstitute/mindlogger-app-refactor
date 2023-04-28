@@ -46,7 +46,10 @@ const createNotificationRefreshService = (): NotificationRefreshService => {
     }, {});
   };
 
-  const refresh = (queryClient: QueryClient, storeProgress: StoreProgress) => {
+  const refresh = async (
+    queryClient: QueryClient,
+    storeProgress: StoreProgress,
+  ) => {
     if (NotificationManager.mutex.isBusy()) {
       return;
     }
@@ -127,12 +130,17 @@ const createNotificationRefreshService = (): NotificationRefreshService => {
       allNotificationDescribers,
     );
 
-    NotificationManager.scheduleNotifications(
-      sortedNotificationDescribers,
-    ).then(() => {
-      NotificationManager.mutex.release();
+    try {
+      await NotificationManager.scheduleNotifications(
+        sortedNotificationDescribers,
+      );
+
       console.info('Notifications rescheduled');
-    });
+    } catch (error) {
+      console.log('Notifications rescheduling failed', error);
+    } finally {
+      NotificationManager.mutex.release();
+    }
   };
 
   const result: NotificationRefreshService = {
