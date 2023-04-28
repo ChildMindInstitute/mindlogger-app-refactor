@@ -1,21 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import {
-  NotificationPermissionStatus,
-  getNotificationPermissions,
-} from '../permissions';
+import { onNotificationPermissionsDisabled } from '../alerts';
+import { getNotificationPermissions } from '../permissions';
 
 const useNotificationPermissions = () => {
-  const [notificationPermissions, setNotificationPermissions] =
-    useState<NotificationPermissionStatus>('NOT_DETERMINED');
-
   useEffect(() => {
     getNotificationPermissions().then(permissionStatus => {
-      setNotificationPermissions(permissionStatus);
+      if (permissionStatus !== 'AUTHORIZED') {
+        onNotificationPermissionsDisabled();
+      }
     });
   }, []);
-
-  return notificationPermissions;
 };
 
 export default useNotificationPermissions;
