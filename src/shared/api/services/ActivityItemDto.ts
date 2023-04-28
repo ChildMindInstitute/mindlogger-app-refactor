@@ -107,14 +107,22 @@ type SingleSelectionRowsAnswerSettings = {
     rowName: string;
     rowImage: ImageUrl | null;
     tooltip: string | null;
-
-    options: Array<{
-      id: string;
-      text: string;
-      image: ImageUrl | null;
-      score: number | null;
-      tooltip: string | null;
-    }>;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: ImageUrl | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    rowId: string;
+    options: [
+      {
+        optionId: string;
+        score: number;
+        alert: string;
+      },
+    ];
   }>;
 };
 

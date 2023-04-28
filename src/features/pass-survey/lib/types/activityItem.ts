@@ -20,6 +20,7 @@ import {
   VideoPipelineItem,
   DatePipelineItem,
   TimePipelineItem,
+  StackedRadioPipelineItem,
 } from './payload';
 
 type ActivityItemBase = {
@@ -82,6 +83,11 @@ interface StackedCheckboxActivityItem extends ActivityItemBase {
   pipelineItem: StackedCheckboxPipelineItem;
 }
 
+interface StackedRadioActivityItem extends ActivityItemBase {
+  type: 'StackedRadio';
+  pipelineItem: StackedRadioPipelineItem;
+}
+
 interface AudioPlayerActivityItem extends ActivityItemBase {
   type: 'AudioPlayer';
   pipelineItem: AudioPlayerPipelineItem;
@@ -131,6 +137,7 @@ export type ActivityItem =
   | AudioActivityItem
   | MessageActivityItem
   | StackedCheckboxActivityItem
+  | StackedRadioActivityItem
   | AudioPlayerActivityItem
   | TimeRangeActivityItem
   | RadioActivityItem

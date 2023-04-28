@@ -19,6 +19,7 @@ import {
   VideoResponse,
   DateResponse,
   TimeResponse,
+  StackedRadioResponse,
 } from './payload';
 
 type PipelineItemAnswerBase = {
@@ -117,6 +118,14 @@ interface StackedCheckboxPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
+interface StackedRadioPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'StackedRadio';
+  value: {
+    answer?: StackedRadioResponse; // @todo check with BE
+    additionalAnswer?: string;
+  };
+}
+
 interface AudioPlayerPipelineAnswer extends PipelineItemAnswerBase {
   type: 'AudioPlayer';
   value: {
@@ -192,6 +201,7 @@ export type PipelineItemAnswer =
   | AudioPipelineAnswer
   | MessagePipelineAnswer
   | StackedCheckboxPipelineAnswer
+  | StackedRadioPipelineAnswer
   | AudioPlayerPipelineAnswer
   | TimeRangePipelineAnswer
   | GeolocationPipelineAnswer
