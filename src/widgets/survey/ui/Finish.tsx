@@ -1,14 +1,18 @@
 import { useEffect } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
+import { StoreProgress } from '@app/abstract/lib';
 import { useActivityAnswersMutation } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
+import { NotificationModel } from '@app/entities/notification';
 import { PassSurveyModel } from '@app/features/pass-survey';
 import {
   getUnixTimestamp,
   onApiRequestError,
   useAppDispatch,
+  useAppSelector,
 } from '@app/shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
@@ -36,7 +40,14 @@ function FinishItem({
   onClose,
 }: Props) {
   const { t } = useTranslation();
+
   const dispatch = useAppDispatch();
+
+  const queryClient = useQueryClient();
+
+  const storeProgress: StoreProgress = useAppSelector(
+    AppletModel.selectors.selectInProgressApplets,
+  );
 
   const { activityStorageRecord, clearActivityStorageRecord } =
     PassSurveyModel.useActivityState({
@@ -99,6 +110,16 @@ function FinishItem({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const onCloseEntity = () => {
+    console.log('storeProgress!', JSON.stringify(storeProgress, null, 2));
+
+    NotificationModel.NotificationRefreshService.refresh(
+      queryClient,
+      storeProgress,
+    );
+    onClose();
+  };
+
   return (
     <ImageBackground>
       <Center flex={1} mx={16}>
@@ -113,7 +134,7 @@ function FinishItem({
               <Text fontSize={16}>{t('additional:saved_answers')}</Text>
             </Center>
 
-            <Button onPress={onClose}>{t('additional:close')}</Button>
+            <Button onPress={onCloseEntity}>{t('additional:close')}</Button>
           </>
         )}
 

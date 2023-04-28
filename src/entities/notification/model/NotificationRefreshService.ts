@@ -131,6 +131,7 @@ const createNotificationRefreshService = (): NotificationRefreshService => {
       sortedNotificationDescribers,
     ).then(() => {
       NotificationManager.mutex.release();
+      console.info('Notifications rescheduled');
     });
   };
 
