@@ -26,6 +26,11 @@ export type NotificationEventHandlers = Record<
   NotificationEventCallback
 >;
 
+export type NotificationEventHandlersFunctions = Record<
+  EventType,
+  () => NotificationEventCallback | undefined
+>;
+
 export type LocalNotificationType =
   | 'schedule-event-alert'
   | 'request-to-reschedule-due-to-limit';
