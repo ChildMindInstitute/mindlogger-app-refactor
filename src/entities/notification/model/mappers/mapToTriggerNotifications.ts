@@ -1,6 +1,9 @@
-import { TriggerType } from '@notifee/react-native';
+import notifee, { AndroidStyle, TriggerType } from '@notifee/react-native';
+
+import { colors } from '@shared/lib';
 
 import {
+  ANDROID_DEFAULT_CHANNEL_ID,
   LocalEventTriggerNotification,
   NotificationDescriber,
 } from '../../lib';
@@ -19,20 +22,37 @@ function mapIdentifiers(notification: NotificationDescriber) {
   };
 }
 
-export function mapToTriggerNotifications(
+export async function mapToTriggerNotifications(
   notifications: NotificationDescriber[],
-): LocalEventTriggerNotification[] {
+): Promise<LocalEventTriggerNotification[]> {
+  const channelId = await notifee.createChannel({
+    id: ANDROID_DEFAULT_CHANNEL_ID,
+    name: 'Default Channel',
+  });
+
   return notifications.map(notification => ({
     notification: {
+      id: notification.notificationId,
       title: notification.notificationHeader,
       body: notification.notificationBody,
-      notificationId: notification.notificationId,
       data: {
         scheduledAt: notification.scheduledAt,
         scheduledAtString: notification.scheduledAtString,
         isLocal: 'true',
         type: 'schedule-event-alert',
         ...mapIdentifiers(notification),
+      },
+      android: {
+        channelId,
+        pressAction: {
+          id: 'default',
+        },
+        style: {
+          type: AndroidStyle.BIGTEXT,
+          text: notification.notificationBody ?? '',
+        },
+        smallIcon: 'ic_notification',
+        color: colors.primary,
       },
     },
     trigger: {

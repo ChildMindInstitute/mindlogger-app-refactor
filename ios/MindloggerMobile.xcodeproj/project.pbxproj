@@ -103,6 +103,14 @@
 		4EBCD5B22971514E00D3C04C /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A06F0AA8D839FA54E4D2B85E /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B205B3DBF179F55ECEA5AA0B /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */; };
+		F83E654F29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */; };
+		F83E655029FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */; };
+		F83E655129FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */; };
+		F83E655229FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */; };
+		F83E655429FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
+		F83E655529FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
+		F83E655629FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
+		F83E655729FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
 		F87E174F29771F200021550E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		F87E175029771F200021550E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		F87E175429771F200021550E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
@@ -198,6 +206,8 @@
 		C1357C2AB351C6434F23F1CC /* Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F2305C9117E968D31C2B5114 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig"; sourceTree = "<group>"; };
+		F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RNBackgroundFetch+AppDelegate.m"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; };
+		F83E655329FA845400D57006 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		F87E176029771F200021550E /* MindloggerMobileDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F87E176129771F200021550E /* MindloggerMobile dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MindloggerMobile dev-Info.plist"; path = "/Users/amironov/Documents/childmind/mindlogger-app-refactor/mindlogger-app-refactor/ios/MindloggerMobile dev-Info.plist"; sourceTree = "<absolute>"; };
 		F87E177729771F290021550E /* MindloggerMobileQA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileQA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -281,6 +291,7 @@
 		13B07FAE1A68108700A75B9A /* MindloggerMobile */ = {
 			isa = PBXGroup;
 			children = (
+				F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */,
 				288FAB1829C88A250089AB98 /* FlankerNativeComponents */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -289,6 +300,7 @@
 				01D339DC29C2E635003935D9 /* FlankerSandboxView */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				F83E655329FA845400D57006 /* Settings.bundle */,
 			);
 			name = MindloggerMobile;
 			sourceTree = "<group>";
@@ -569,6 +581,7 @@
 			files = (
 				4E30A59B2962C3D60032C2A8 /* AntDesign.ttf in Resources */,
 				4EBCD5B22971514E00D3C04C /* Foundation.ttf in Resources */,
+				F83E655429FA845400D57006 /* Settings.bundle in Resources */,
 				4E30A5952962BE4F0032C2A8 /* FontAwesome.ttf in Resources */,
 				4E30A5942962BE4F0032C2A8 /* FontAwesome5_Regular.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
@@ -585,6 +598,7 @@
 			files = (
 				4E5906BB2987C41300A5D9E5 /* Foundation.ttf in Resources */,
 				F87E175429771F200021550E /* AntDesign.ttf in Resources */,
+				F83E655529FA845400D57006 /* Settings.bundle in Resources */,
 				F87E175529771F200021550E /* FontAwesome.ttf in Resources */,
 				F87E175629771F200021550E /* FontAwesome5_Regular.ttf in Resources */,
 				F87E175729771F200021550E /* LaunchScreen.storyboard in Resources */,
@@ -601,6 +615,7 @@
 			files = (
 				4E5906BC2987C41700A5D9E5 /* Foundation.ttf in Resources */,
 				F87E176B29771F290021550E /* AntDesign.ttf in Resources */,
+				F83E655629FA845400D57006 /* Settings.bundle in Resources */,
 				F87E176C29771F290021550E /* FontAwesome.ttf in Resources */,
 				F87E176D29771F290021550E /* FontAwesome5_Regular.ttf in Resources */,
 				F87E176E29771F290021550E /* LaunchScreen.storyboard in Resources */,
@@ -617,6 +632,7 @@
 			files = (
 				4E5906BD2987C41B00A5D9E5 /* Foundation.ttf in Resources */,
 				F87E178229771F310021550E /* AntDesign.ttf in Resources */,
+				F83E655729FA845400D57006 /* Settings.bundle in Resources */,
 				F87E178329771F310021550E /* FontAwesome.ttf in Resources */,
 				F87E178429771F310021550E /* FontAwesome5_Regular.ttf in Resources */,
 				F87E178529771F310021550E /* LaunchScreen.storyboard in Resources */,
@@ -1066,6 +1082,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				288FAB3129C88A590089AB98 /* CustomText.swift in Sources */,
+				F83E654F29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */,
 				288FAB2B29C88A590089AB98 /* UIColor+Extension.swift in Sources */,
 				288FAB3029C88A590089AB98 /* ParameterModel.swift in Sources */,
 				288FAB2F29C88A590089AB98 /* TimeInterval+Extension.swift in Sources */,
@@ -1096,6 +1113,7 @@
 				014B5A7429CAFB5400882214 /* FlankerViewManager.m in Sources */,
 				014B5A8329CAFB6B00882214 /* ParameterModel.swift in Sources */,
 				014B5A8C29CAFB7700882214 /* TimeInterval+Extension.swift in Sources */,
+				F83E655029FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */,
 				014B5A7A29CAFB5C00882214 /* GameManager.swift in Sources */,
 				014B5A9229CAFB7F00882214 /* UIImageView+Extensions.swift in Sources */,
 				014B5A7D29CAFB6100882214 /* ImageLoader.swift in Sources */,
@@ -1122,6 +1140,7 @@
 				014B5A7329CAFB5300882214 /* FlankerViewManager.m in Sources */,
 				014B5A8229CAFB6A00882214 /* ParameterModel.swift in Sources */,
 				014B5A8B29CAFB7600882214 /* TimeInterval+Extension.swift in Sources */,
+				F83E655129FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */,
 				014B5A7929CAFB5B00882214 /* GameManager.swift in Sources */,
 				014B5A9129CAFB7E00882214 /* UIImageView+Extensions.swift in Sources */,
 				014B5A7C29CAFB6100882214 /* ImageLoader.swift in Sources */,
@@ -1148,6 +1167,7 @@
 				014B5A7229CAFB5300882214 /* FlankerViewManager.m in Sources */,
 				014B5A8129CAFB6A00882214 /* ParameterModel.swift in Sources */,
 				014B5A8A29CAFB7600882214 /* TimeInterval+Extension.swift in Sources */,
+				F83E655229FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */,
 				014B5A7829CAFB5B00882214 /* GameManager.swift in Sources */,
 				014B5A9029CAFB7E00882214 /* UIImageView+Extensions.swift in Sources */,
 				014B5A7B29CAFB6000882214 /* ImageLoader.swift in Sources */,

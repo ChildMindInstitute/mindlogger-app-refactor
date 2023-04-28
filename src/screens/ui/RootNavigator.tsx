@@ -5,9 +5,20 @@ import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 
+import { NotificationModel } from '@app/entities/notification';
+import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SessionModel } from '@entities/session';
+import { EnterForegroundModel } from '@features/enter-foreground';
 import { LogoutModel } from '@features/logout';
-import { APP_VERSION, colors, ENV, IS_ANDROID } from '@shared/lib';
+import {
+  APP_VERSION,
+  colors,
+  ENV,
+  useNotificationPermissions,
+  IS_ANDROID,
+  useAlarmPermissions,
+  useBackgroundTask,
+} from '@shared/lib';
 import { UserProfileIcon, HomeIcon, BackButton, Text, Box } from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
@@ -38,6 +49,10 @@ export default () => {
   const { forceLogout } = LogoutModel.useLogout();
 
   useInitialRouteNavigation();
+  useNotificationPermissions();
+  useAlarmPermissions();
+
+  EnterForegroundModel.useRestackNotifications();
 
   useBackHandler(() => {
     onBeforeAppClose();
@@ -47,6 +62,12 @@ export default () => {
 
   SessionModel.useOnRefreshTokenFail(() => {
     forceLogout();
+  });
+
+  TapOnNotificationModel.useOnNotificationTap();
+
+  useBackgroundTask(() => {
+    return NotificationModel.topUpNotifications();
   });
 
   return (

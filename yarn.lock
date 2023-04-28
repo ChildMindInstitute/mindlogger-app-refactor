@@ -7121,6 +7121,11 @@ react-native-autoheight-webview@^1.6.5:
     deprecated-react-native-prop-types "^2.3.0"
     prop-types "^15.7.2"
 
+react-native-background-fetch@^4.1.9:
+  version "4.1.9"
+  resolved "https://registry.yarnpkg.com/react-native-background-fetch/-/react-native-background-fetch-4.1.9.tgz#10ebff9ca45a8868f1a72b2aa6cea40d499ece6e"
+  integrity sha512-sk4MCXRhGghBXu9ReabuT8U0WRzjsMt2i/nqCwR9eHi0hux+4kUh5ubpLKLByw5G8WifUv1sp6qsA7uvQERrrQ==
+
 react-native-codegen@^0.70.6:
   version "0.70.6"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.70.6.tgz#2ce17d1faad02ad4562345f8ee7cbe6397eda5cb"
