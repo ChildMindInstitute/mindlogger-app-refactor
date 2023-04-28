@@ -137,6 +137,14 @@ interface GeolocationPipelineAnswer extends PipelineItemAnswerBase {
     additionalAnswer?: string;
   };
 }
+
+interface DatePipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Date';
+  value: {
+    answer?: string;
+    additionalAnswer?: string;
+  };
+}
 interface PhotoPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Photo';
   value: {
@@ -169,4 +177,5 @@ export type PipelineItemAnswer =
   | GeolocationPipelineAnswer
   | PhotoPipelineAnswer
   | VideoPipelineAnswer
-  | CheckboxPipelineAnswer;
+  | CheckboxPipelineAnswer
+  | DatePipelineAnswer;

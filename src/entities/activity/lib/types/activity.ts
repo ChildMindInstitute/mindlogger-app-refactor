@@ -14,7 +14,8 @@ export type ActivityItemType =
   | 'Audio'
   | 'Photo'
   | 'Video'
-  | 'Checkbox';
+  | 'Checkbox'
+  | 'Date';
 
 type AbTestConfig = {
   device: 'Phone' | 'Tablet';
@@ -206,6 +207,11 @@ interface GeolocationActivityItem extends ActivityItemBase {
   config: null;
 }
 
+interface DateActivityItem extends ActivityItemBase {
+  inputType: 'Date';
+  config: null;
+}
+
 interface PhotoActivityItem extends ActivityItemBase {
   inputType: 'Photo';
   config: PhotoConfig;
@@ -231,6 +237,7 @@ export type ActivityItem =
   | AudioPlayerActivityItem
   | TimeRangeActivityItem
   | RadioActivityItem
+  | DateActivityItem
   | PhotoActivityItem
   | VideoActivityItem;
 

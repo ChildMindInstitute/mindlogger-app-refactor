@@ -17,6 +17,7 @@ import {
   SplashPipelineItem,
   TextInputPipelineItem,
   VideoPipelineItem,
+  DatePipelineItem,
 } from './payload';
 
 type ActivityItemBase = {
@@ -103,6 +104,11 @@ interface VideoActivityItem extends ActivityItemBase {
   pipelineItem: VideoPipelineItem;
 }
 
+interface DateActivityItem extends ActivityItemBase {
+  type: 'Date';
+  pipelineItem: DatePipelineItem;
+}
+
 export type ActivityItem =
   | TextInputActivityItem
   | AbTestActivityItem
@@ -119,4 +125,5 @@ export type ActivityItem =
   | GeolocationActivityItem
   | PhotoActivityItem
   | VideoActivityItem
-  | SplashActivityItem;
+  | SplashActivityItem
+  | DateActivityItem;
