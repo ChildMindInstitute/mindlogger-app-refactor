@@ -202,7 +202,7 @@
     "alert_button_ok": "Ouvrir les paramètres",
     "alert_button_cancel": "Rejeter",
     "alarm_permission_warning": "Demande d'autorisation d'alarme",
-    "alarm_permission_disabled": "Veuillez activer les autorisations d'alarme sur votre appareil pour recevoir les rappels MindLogger à temps. Veuillez noter que l'application sera fermée automatiquement lorsque vous activerez les autorisations d'alarme. Pour continuer, vous devrez vous reconnecter à l'application."
+    "alarm_permission_disabled": "Veuillez activer les autorisations d'alarme sur votre appareil pour recevoir les rappels MindLogger à temps. Veuillez noter que l'application sera fermée automatiquement lorsque vous activerez les autorisations d'alarme."
   },
   "audio_recorder": {
     "permission": "Vous devez accorder la permission d'utiliser votre microphone pour accomplir cette tâche.",
