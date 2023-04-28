@@ -2,7 +2,7 @@ import { FC, ReactElement } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
-import { styled } from '@tamagui/core';
+import { styled, TextProps } from '@tamagui/core';
 
 import { type StackedRowItemValue } from './types';
 import { ListSeparator, YStack, XStack, Center, Text, Tooltip } from '../..';
@@ -13,12 +13,20 @@ const AxisListItemContainer = styled(Center, {
   padding: 5,
 });
 
-const AxisListItemText = styled(Text, {
-  name: 'SingleSelectionPerRowAxisListItemText',
-  fontSize: 12,
-  variants: { hasTooltip: { true: { color: '$blue' } } },
-  defaultVariants: { hasTooltip: false },
-});
+const AxisListItemText: FC<TextProps & { hasTooltip?: boolean }> = styled(
+  Text,
+  {
+    name: 'SingleSelectionPerRowAxisListItemText',
+    fontSize: 12,
+    variants: {
+      hasTooltip: {
+        true: { color: '$blue', textDecorationLine: 'underline' },
+        false: { color: '$black' },
+      },
+    },
+    defaultVariants: { hasTooltip: false },
+  },
+);
 
 const AxisListItem: FC<{
   option?: StackedRowItemValue;
@@ -30,24 +38,23 @@ const AxisListItem: FC<{
   return (
     <AxisListItemContainer maxWidth={maxWidth}>
       {option && (
-        <Tooltip markdown={option.tooltip}>
-          <Center>
-            <AxisListItemText
-              textDecorationLine={option.tooltip ? 'underline' : 'none'}
-              hasTooltip={!!option.tooltip}
-            >
-              {title}
-            </AxisListItemText>
+        <Center>
+          {option.tooltip ? (
+            <Tooltip markdown={option.tooltip}>
+              <AxisListItemText hasTooltip>{title}</AxisListItemText>
+            </Tooltip>
+          ) : (
+            <AxisListItemText>{title}</AxisListItemText>
+          )}
 
-            {imageUrl && (
-              <CachedImage
-                style={styles.image}
-                resizeMode="contain"
-                source={imageUrl}
-              />
-            )}
-          </Center>
-        </Tooltip>
+          {imageUrl && (
+            <CachedImage
+              style={styles.image}
+              resizeMode="contain"
+              source={imageUrl}
+            />
+          )}
+        </Center>
       )}
     </AxisListItemContainer>
   );
