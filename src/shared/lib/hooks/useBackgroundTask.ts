@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { BackgroundWorker, BackgroundTaskOptions } from '../services';
 
 function useBackgroundTask(
-  callback: () => void,
+  callback: () => Promise<unknown>,
   options?: BackgroundTaskOptions,
 ) {
   const callbackRef = useRef(callback);
@@ -13,7 +13,7 @@ function useBackgroundTask(
 
   useEffect(() => {
     const task = () => {
-      callbackRef.current();
+      return callbackRef.current();
     };
 
     BackgroundWorker.setTask(task, optionsRef.current);

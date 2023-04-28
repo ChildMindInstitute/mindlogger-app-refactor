@@ -7,7 +7,10 @@ export type BackgroundTaskOptions = {
 };
 
 function BackgroundWorkerBuilder() {
-  function setTask(callback: () => void, options: BackgroundTaskOptions = {}) {
+  function setTask(
+    callback: () => Promise<unknown>,
+    options: BackgroundTaskOptions = {},
+  ) {
     const { intervalInMinutes } = options;
 
     function onTimeout(taskId: string) {

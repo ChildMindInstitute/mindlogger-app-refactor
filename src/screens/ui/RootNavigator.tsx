@@ -67,7 +67,7 @@ export default () => {
   TapOnNotificationModel.useOnNotificationTap();
 
   useBackgroundTask(() => {
-    NotificationModel.topUpNotifications();
+    return NotificationModel.topUpNotifications();
   });
 
   return (
