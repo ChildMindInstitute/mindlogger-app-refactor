@@ -32,7 +32,7 @@ function NotificationManager() {
 
     NotificationQueue.set(notificationsToQueue);
 
-    const triggerNotifications = mapToTriggerNotifications(
+    const triggerNotifications = await mapToTriggerNotifications(
       notificationsToSchedule,
     );
 
@@ -60,7 +60,7 @@ function NotificationManager() {
   }
 
   async function scheduleNotifications(notifications: NotificationDescriber[]) {
-    await NotificationScheduler.cancelAllNotifications();
+    await NotificationScheduler.cancelNotDisplayedNotifications();
     await restackNotifications(notifications, MAX_SCHEDULED_NOTIFICATIONS_SIZE);
   }
 

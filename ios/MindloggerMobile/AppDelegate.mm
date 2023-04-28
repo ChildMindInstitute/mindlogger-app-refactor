@@ -6,6 +6,8 @@
 
 #import <React/RCTAppSetupUtils.h>
 
+#import <TSBackgroundFetch/TSBackgroundFetch.h>
+
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
 #import <React/RCTCxxBridgeDelegate.h>
@@ -53,6 +55,9 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  
+  [[TSBackgroundFetch sharedInstance] didFinishLaunching];
+
   return YES;
 }
 

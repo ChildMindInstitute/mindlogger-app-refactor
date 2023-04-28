@@ -71,6 +71,7 @@
     "react-native": "0.70.6",
     "react-native-audio-recorder-player": "^3.5.3",
     "react-native-autoheight-webview": "^1.6.5",
+    "react-native-background-fetch": "^4.1.9",
     "react-native-config": "^1.4.12",
     "react-native-file-access": "^2.5.2",
     "react-native-get-random-values": "^1.8.0",

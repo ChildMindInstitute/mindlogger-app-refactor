@@ -409,6 +409,8 @@ PODS:
     - React-Core
   - RNAudioRecorderPlayer (3.5.3):
     - React-Core
+  - RNBackgroundFetch (4.1.9):
+    - React-Core
   - RNCCheckbox (0.5.14):
     - BEMCheckBox (~> 1.4)
     - React-Core
@@ -532,6 +534,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNAudioRecorderPlayer (from `../node_modules/react-native-audio-recorder-player`)
+  - RNBackgroundFetch (from `../node_modules/react-native-background-fetch`)
   - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
@@ -658,6 +661,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/rn-fetch-blob"
   RNAudioRecorderPlayer:
     :path: "../node_modules/react-native-audio-recorder-player"
+  RNBackgroundFetch:
+    :path: "../node_modules/react-native-background-fetch"
   RNCCheckbox:
     :path: "../node_modules/@react-native-community/checkbox"
   RNDateTimePicker:
@@ -739,6 +744,7 @@ SPEC CHECKSUMS:
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAudioRecorderPlayer: 6638283925b46808310c9fdf803ebabc3abdbadc
+  RNBackgroundFetch: 642777e4e76435773c149d565a043d66f1781237
   RNCCheckbox: 38989bbd3d7d536adf24ba26c6b3e6cefe0bea6f
   RNDateTimePicker: 65e1d202799460b286ff5e741d8baf54695e8abd
   RNNotifee: bdc064c29f4d558046f51f0c3ae02bab4fd3cd85
