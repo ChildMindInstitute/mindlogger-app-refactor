@@ -51,7 +51,7 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
   useTimer({
     entityStartedAt,
     onFinish: completeByTimer,
-    timerHourMinute: event.timers.timer,
+    timerHourMinute: event.timers?.timer,
   });
 
   const flowPipelineItem = pipeline[step];

@@ -3,9 +3,8 @@ import { FC } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import { clearStorageRecords } from '@app/features/pass-survey';
 import { ActivityList, ActivityListItem } from '@entities/activity';
-import { AppletModel } from '@entities/applet';
+import { AppletModel, clearStorageRecords } from '@entities/applet';
 import { Box, BoxProps, Text } from '@shared/ui';
 
 import { ActivityListGroup } from '../lib';
