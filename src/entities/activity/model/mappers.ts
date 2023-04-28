@@ -13,7 +13,7 @@ import {
   NumberSelectionItemDto,
   PhotoItemDto,
   SingleSelectionItemDto,
-  SingleSelectionRowsItemDto,
+  // SingleSelectionRowsItemDto,
   SliderSelectionItemDto,
   SliderRowsItemDto,
   TextItemDto,
@@ -21,6 +21,7 @@ import {
   VideoItemDto,
   AdditionalResponseConfiguration,
   TimeItemDto,
+  SingleSelectionRowsItemDto,
 } from '@app/shared/api';
 import { getMsFromSeconds } from '@app/shared/lib';
 
@@ -339,7 +340,30 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
 }
 
 function mapToStackedRadio(dto: SingleSelectionRowsItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'StackedRadio',
+    config: {
+      randomizeOptions: dto.config.randomizeOptions,
+      setAlerts: dto.config.setAlerts,
+      addTooltip: dto.config.addTooltip,
+      addScores: dto.config.addScores,
+      rows: dto.responseValues.rows,
+      options: dto.responseValues.options,
+      dataMatrix: dto.responseValues.dataMatrix,
+    },
+    timer: mapTimerValue(dto.config.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+  };
 }
 
 function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
