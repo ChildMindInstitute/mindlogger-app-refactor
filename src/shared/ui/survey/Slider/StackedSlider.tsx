@@ -1,27 +1,21 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 import { YStack, Text, SurveySlider } from '@shared/ui';
 
 import { StackedSliderProps } from './types';
 
 const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
-  const { onChange, onRelease, onPress, initialValues } = props;
-
-  const [arrayOfStackedValues, setArrayOfStackedValues] = useState(
-    initialValues || new Array(config.length).fill(null),
-  );
+  const { sliderRowItems } = config;
+  const { onChange, onRelease, onPress, values } = props;
+  const userInteractedWithAllSliders = values.length === sliderRowItems.length;
 
   const onSliderValueChange = (value: number, index: number) => {
-    const clonedValues = [...arrayOfStackedValues];
+    const clonedValues = [...values];
     clonedValues[index] = value;
-    setArrayOfStackedValues(clonedValues);
     onChange(clonedValues);
   };
 
   const onSliderPress = () => {
-    const userInteractedWithAllSliders = !arrayOfStackedValues.some(
-      value => value === null,
-    );
     if (userInteractedWithAllSliders && onPress) {
       onPress();
     }
@@ -29,20 +23,20 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
 
   return (
     <YStack>
-      {config.map((sliderConfig, index) => {
-        const { label } = sliderConfig;
+      {sliderRowItems.map((sliderConfig, index) => {
+        const { id, label, ...singleSliderProps } = sliderConfig;
 
         return (
-          <YStack key={`slider-${index}`}>
+          <YStack key={`slider-${id}`}>
             <Text fontSize={12} my="$3">
               {label}
             </Text>
 
             <SurveySlider
-              config={sliderConfig}
+              config={singleSliderProps}
               onChange={value => onSliderValueChange(value, index)}
               onRelease={onRelease}
-              initialValue={arrayOfStackedValues[index]}
+              initialValue={values[index] || undefined}
               onPress={onSliderPress}
             />
           </YStack>

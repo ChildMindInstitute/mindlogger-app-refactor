@@ -12,6 +12,7 @@ export type ActivityItemType =
   | 'AudioPlayer'
   | 'StackedCheckbox'
   | 'StackedRadio'
+  | 'StackedSlider'
   | 'Message'
   | 'Audio'
   | 'Photo'
@@ -141,6 +142,21 @@ type StackedRadioConfig = {
   }>;
 };
 
+type StackedSliderConfig = {
+  addScores: boolean;
+  setAlerts: boolean;
+  sliderRowItems: {
+    id: string;
+    label: string;
+    leftTitle: string | null;
+    rightTitle: string | null;
+    minValue: number;
+    maxValue: number;
+    leftImageUrl: string | null;
+    rightImageUrl: string | null;
+  }[];
+};
+
 type RadioConfig = {
   randomizeOptions: boolean;
   setAlerts: boolean;
@@ -174,6 +190,7 @@ export type ActivityItemConfig =
   | AudioConfig
   | AudioPlayerConfig
   | StackedCheckboxConfig
+  | StackedSliderConfig
   | RadioConfig
   | SplashConfig
   | PhotoConfig
@@ -268,6 +285,11 @@ interface StackedRadioActivityItem extends ActivityItemBase {
   config: StackedRadioConfig;
 }
 
+interface StackedSliderActivityItem extends ActivityItemBase {
+  inputType: 'StackedSlider';
+  config: StackedSliderConfig;
+}
+
 interface TimeRangeActivityItem extends ActivityItemBase {
   inputType: 'TimeRange';
   config: null;
@@ -315,6 +337,7 @@ export type ActivityItem =
   | AudioActivityItem
   | MessageActivityItem
   | AudioPlayerActivityItem
+  | StackedSliderActivityItem
   | StackedCheckboxActivityItem
   | StackedRadioActivityItem
   | TimeRangeActivityItem

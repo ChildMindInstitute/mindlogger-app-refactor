@@ -374,11 +374,11 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
       rightTitle: dto.responseValues.maxLabel,
       leftImageUrl: dto.responseValues.minImage,
       rightImageUrl: dto.responseValues.maxImage,
+      minValue: dto.responseValues.minValue,
+      maxValue: dto.responseValues.maxValue,
       showTickMarks: dto.config.showTickMarks,
       showTickLabels: dto.config.showTickLabels,
       isContinuousSlider: dto.config.continuousSlider,
-      minValue: dto.responseValues.minValue,
-      maxValue: dto.responseValues.maxValue,
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -396,7 +396,32 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
 }
 
 function mapToStackedSlider(dto: SliderRowsItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'StackedSlider',
+    config: {
+      setAlerts: dto.config.setAlerts,
+      addScores: dto.config.addScores,
+      sliderRowItems: dto.responseValues.map(item => ({
+        ...item,
+        leftTitle: item.minLabel,
+        rightTitle: item.maxLabel,
+        leftImageUrl: item.minImage,
+        rightImageUrl: item.maxImage,
+      })),
+    },
+    timer: mapTimerValue(dto.config.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+  };
 }
 
 function mapToTextInput(dto: TextItemDto): ActivityItem {
