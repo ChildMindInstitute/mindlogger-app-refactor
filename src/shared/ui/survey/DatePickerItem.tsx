@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 
 import { colors } from '@app/shared/lib';
-import { ChevronRightIcon, DateTimePicker } from '@shared/ui';
+import { RightArrowIcon, DateTimePicker } from '@shared/ui';
 
 type Props = {
   onChange: (value: string) => void;
@@ -20,7 +20,7 @@ const DatePickerItem: FC<Props> = ({ value, onChange }) => {
     <DateTimePicker
       onChange={onChangeDate}
       value={valueAsDate}
-      iconAfter={<ChevronRightIcon color={colors.grey} size={15} />}
+      iconAfter={<RightArrowIcon color={colors.lightGrey2} size={15} />}
     />
   );
 };
