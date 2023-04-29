@@ -14,6 +14,7 @@ import {
   TimePickerItem,
   StackedCheckBoxItem,
   StackedRadiosItem,
+  StackedSlider,
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
@@ -142,6 +143,18 @@ function ActivityItem({
             value={value?.answer ?? ''}
             config={pipelineItem.payload}
             onChange={onResponse}
+          />
+        </Box>
+      );
+      break;
+
+    case 'StackedSlider':
+      item = (
+        <Box mx="$6">
+          <StackedSlider
+            config={pipelineItem.payload}
+            onChange={onResponse}
+            values={value?.answer || []}
           />
         </Box>
       );

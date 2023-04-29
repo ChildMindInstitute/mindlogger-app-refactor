@@ -17,6 +17,7 @@ export type ActivityItemType =
   | 'Audio'
   | 'Message'
   | 'AudioPlayer'
+  | 'StackedSlider'
   | 'StackedCheckbox'
   | 'StackedRadio'
   | 'Radio'
@@ -122,6 +123,21 @@ type StackedRadioPayload = {
   }>;
 };
 
+type StackedSliderPayload = {
+  addScores: boolean;
+  setAlerts: boolean;
+  sliderRowItems: {
+    id: string;
+    label: string;
+    leftTitle: string | null;
+    rightTitle: string | null;
+    minValue: number;
+    maxValue: number;
+    leftImageUrl: string | null;
+    rightImageUrl: string | null;
+  }[];
+};
+
 type TimeRangePayload = null;
 
 type TimePayload = null;
@@ -190,6 +206,7 @@ type PipelinePayload =
   | TimeRangePayload
   | AudioPayload
   | MessagePayload
+  | StackedSliderPayload
   | StackedCheckboxPayload
   | StackedRadioPayload
   | AudioPlayerPayload
@@ -295,6 +312,12 @@ export interface StackedRadioPipelineItem extends PipelineItemBase {
   type: 'StackedRadio';
   payload: StackedRadioPayload;
 }
+
+export interface StackedSliderPipelineItem extends PipelineItemBase {
+  type: 'StackedSlider';
+  payload: StackedSliderPayload;
+}
+
 export interface TimeRangePipelineItem extends PipelineItemBase {
   type: 'TimeRange';
   payload: TimeRangePayload;
@@ -358,7 +381,12 @@ export type StackedCheckboxResponse =
     }[]
   | null;
 
-export type StackedRadioResponse = Array<{ rowId: string; optionId: string }>;
+export type StackedRadioResponse = Array<{
+  rowId: string;
+  optionId: string;
+}>;
+
+export type StackedSliderResponse = number[] | null;
 
 export type PhotoResponse = {
   uri: string;
@@ -385,6 +413,7 @@ export type PipelineItemResponse =
   | NumberSelectResponse
   | CheckboxResponse
   | StackedRadioResponse
+  | StackedSliderResponse
   | StackedCheckboxResponse
   | AudioResponse
   | AudioPlayerResponse
@@ -405,6 +434,7 @@ export type PipelineItem =
   | SliderPipelineItem
   | NumberSelectPipelineItem
   | CheckboxPipelineItem
+  | StackedSliderPipelineItem
   | StackedCheckboxPipelineItem
   | StackedRadioPipelineItem
   | AudioPipelineItem

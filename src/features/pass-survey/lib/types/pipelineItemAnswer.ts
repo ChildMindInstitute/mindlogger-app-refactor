@@ -11,6 +11,7 @@ import {
   NumberSelectResponse,
   CheckboxResponse,
   AudioResponse,
+  StackedSliderResponse,
   StackedCheckboxResponse,
   AudioPlayerResponse,
   TimeRangeResponse,
@@ -110,6 +111,14 @@ interface MessagePipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
+interface StackedSliderPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'StackedSlider';
+  value: {
+    answer?: StackedSliderResponse;
+    additionalAnswer?: string;
+  };
+}
+
 interface StackedCheckboxPipelineAnswer extends PipelineItemAnswerBase {
   type: 'StackedCheckbox';
   value: {
@@ -200,6 +209,7 @@ export type PipelineItemAnswer =
   | RadioPipelineAnswer
   | AudioPipelineAnswer
   | MessagePipelineAnswer
+  | StackedSliderPipelineAnswer
   | StackedCheckboxPipelineAnswer
   | StackedRadioPipelineAnswer
   | AudioPlayerPipelineAnswer
