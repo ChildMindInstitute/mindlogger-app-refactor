@@ -152,7 +152,8 @@ function ActivityItem({
           <StackedCheckBoxItem
             config={pipelineItem.payload}
             onChange={onResponse}
-            values={value?.answer || []}
+            values={value?.answer || null}
+            textReplacer={textVariableReplacer}
           />
         </Box>
       );

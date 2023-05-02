@@ -1,7 +1,7 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { colors, range } from '@app/shared/lib';
+import { colors } from '@shared/lib';
 
 import { CheckBox, YStack } from '../..';
 import {
@@ -15,36 +15,99 @@ type StackedCheckboxConfig = {
   options: Array<Item>;
 };
 
-type Props = {
-  values: string[][] | null;
-  onChange: (value: string[][] | null) => void;
-  config: StackedCheckboxConfig;
-};
-const StackedCheckboxItem: FC<Props> = ({ values, onChange, config }) => {
-  if (values == null) {
-    values = [];
-  }
-  const onValueChange = (option: StackedRowItemValue, rowIndex: number) => {
-    let newValue = range(config.options.length).map((_, i) => values![i] ?? []);
-    const row = newValue[rowIndex];
-    if (row.includes(option.id)) {
-      newValue[rowIndex] = row.filter(id => id !== option.id);
-    } else {
-      newValue[rowIndex].push(option.id);
-    }
-    const isEmpty = newValue.every(r => !r.length);
+type Values = {
+  rowId: string;
+  optionIds: string[];
+}[];
 
-    onChange(isEmpty ? null : newValue);
+type Props = {
+  values: Values | null;
+  onChange: (value: Values | null) => void;
+  config: StackedCheckboxConfig;
+  textReplacer: (markdown: string) => string;
+};
+
+const StackedCheckboxItem: FC<Props> = ({
+  values,
+  onChange,
+  config,
+  textReplacer,
+}) => {
+  const { options, rows } = config;
+
+  const memoizedOptions = useMemo(() => {
+    return options.map(option => {
+      return {
+        ...option,
+        tooltip: textReplacer(option.tooltip || ''),
+      };
+    });
+  }, [options, textReplacer]);
+
+  const memoizedRows = useMemo(() => {
+    return rows.map(row => {
+      return {
+        ...row,
+        tooltip: textReplacer(row.tooltip || ''),
+      };
+    });
+  }, [rows, textReplacer]);
+
+  const onValueChange = (option: StackedRowItemValue, row: Item) => {
+    const rowId = row.id;
+    const optionId = option.id;
+    const rowInitialValue = {
+      rowId,
+      optionIds: [optionId],
+    };
+
+    if (!values) {
+      const value = [rowInitialValue];
+
+      onChange(value);
+    } else {
+      const clonedValues = [...values];
+      let foundRow = false;
+
+      for (let key in clonedValues) {
+        const currentRow = clonedValues[key];
+        if (currentRow.rowId === rowId) {
+          foundRow = true;
+          if (currentRow.optionIds.includes(optionId)) {
+            currentRow.optionIds = currentRow.optionIds.filter(
+              id => id !== optionId,
+            );
+          } else {
+            currentRow.optionIds.push(optionId);
+          }
+        }
+      }
+      if (!foundRow) {
+        clonedValues.push(rowInitialValue);
+      }
+
+      const isEmpty = !clonedValues.some(
+        ({ optionIds }) => optionIds.length > 0,
+      );
+
+      onChange(isEmpty ? null : clonedValues);
+    }
   };
 
   return (
     <>
       <StackedItemsGrid
-        items={config.rows}
-        options={config.options}
+        items={memoizedRows}
+        options={memoizedOptions}
         renderCell={(index, option) => {
+          const row = memoizedRows[index];
+          const isChecked = values?.some(
+            ({ optionIds, rowId }) =>
+              optionIds?.includes(option.id) && rowId === row.id,
+          );
+
           return (
-            <YStack onPress={() => onValueChange(option, index)}>
+            <YStack onPress={() => onValueChange(option, row)}>
               <CheckBox
                 style={styles.checkbox}
                 lineWidth={2}
@@ -57,7 +120,7 @@ const StackedCheckboxItem: FC<Props> = ({ values, onChange, config }) => {
                 tintColor={colors.primary}
                 onAnimationType="bounce"
                 offAnimationType="bounce"
-                value={!!values![index]?.includes(option.id)}
+                value={isChecked}
                 disabled
               />
             </YStack>

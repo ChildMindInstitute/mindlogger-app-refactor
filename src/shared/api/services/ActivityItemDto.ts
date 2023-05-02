@@ -140,10 +140,10 @@ type MultiSelectionRowsAnswerSettings = {
     tooltip: string | null;
   }>;
   dataMatrix: Array<{
-    row_id: string;
+    rowId: string;
     options: [
       {
-        option_id: string;
+        optionId: string;
         score: number;
         alert: string;
       },
