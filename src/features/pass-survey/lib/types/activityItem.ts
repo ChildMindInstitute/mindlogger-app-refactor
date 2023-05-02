@@ -18,6 +18,7 @@ import {
   TextInputPipelineItem,
   VideoPipelineItem,
   DatePipelineItem,
+  TimePipelineItem,
 } from './payload';
 
 type ActivityItemBase = {
@@ -108,6 +109,10 @@ interface DateActivityItem extends ActivityItemBase {
   type: 'Date';
   pipelineItem: DatePipelineItem;
 }
+interface TimeActivityItem extends ActivityItemBase {
+  type: 'Time';
+  pipelineItem: TimePipelineItem;
+}
 
 export type ActivityItem =
   | TextInputActivityItem
@@ -126,4 +131,5 @@ export type ActivityItem =
   | PhotoActivityItem
   | VideoActivityItem
   | SplashActivityItem
-  | DateActivityItem;
+  | DateActivityItem
+  | TimeActivityItem;

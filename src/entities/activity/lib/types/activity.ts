@@ -15,7 +15,8 @@ export type ActivityItemType =
   | 'Photo'
   | 'Video'
   | 'Checkbox'
-  | 'Date';
+  | 'Date'
+  | 'Time';
 
 type AbTestConfig = {
   device: 'Phone' | 'Tablet';
@@ -100,6 +101,8 @@ type PhotoConfig = null;
 
 type VideoConfig = null;
 
+type TimeConfig = null;
+
 export type ActivityItemConfig =
   | AbTestConfig
   | DrawingTestTestConfig
@@ -114,6 +117,7 @@ export type ActivityItemConfig =
   | SplashConfig
   | PhotoConfig
   | VideoConfig
+  | TimeConfig
   | null;
 
 type ActivityItemBase = {
@@ -222,6 +226,11 @@ interface VideoActivityItem extends ActivityItemBase {
   config: VideoConfig;
 }
 
+interface TimeActivityItem extends ActivityItemBase {
+  inputType: 'Time';
+  config: TimeConfig;
+}
+
 export type ActivityItem =
   | AbTestActivityItem
   | SplashActivityItem
@@ -239,6 +248,7 @@ export type ActivityItem =
   | RadioActivityItem
   | DateActivityItem
   | PhotoActivityItem
+  | TimeActivityItem
   | VideoActivityItem;
 
 export type ActivityDetails = {

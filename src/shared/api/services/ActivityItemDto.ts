@@ -19,7 +19,8 @@ export type ResponseType =
   | 'audio'
   | 'audioPlayer'
   | 'flanker'
-  | 'abTest';
+  | 'abTest'
+  | 'time';
 
 type ButtonsConfiguration = {
   removeBackButton: boolean;
@@ -230,7 +231,13 @@ type DateConfiguration = ButtonsConfiguration &
   AdditionalResponseConfiguration &
   TimerConfiguration;
 
+type TimeConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
+
 type DateAnswerSettings = null;
+
+type TimeAnswerSettings = null;
 
 type SliderRowsConfiguration = ButtonsConfiguration &
   TimerConfiguration & {
@@ -278,6 +285,7 @@ type Configuration =
   | PhotoConfiguration
   | VideoConfiguration
   | DateConfiguration
+  | TimeConfiguration
   | SliderRowsConfiguration
   | SingleSelectionConfiguration
   | MultiSelectionConfiguration
@@ -389,6 +397,12 @@ export interface DateItemDto extends ActivityItemDtoBase {
   responseValues: DateAnswerSettings;
 }
 
+export interface TimeItemDto extends ActivityItemDtoBase {
+  responseType: 'time';
+  config: TimeConfiguration;
+  responseValues: TimeAnswerSettings;
+}
+
 export interface SliderRowsItemDto extends ActivityItemDtoBase {
   responseType: 'sliderRows';
   config: SliderRowsConfiguration;
@@ -450,4 +464,5 @@ export type ActivityItemDto =
   | AudioItemDto
   | AudioPlayerItemDto
   | AbTestItemDto
-  | FlankerItemDto;
+  | FlankerItemDto
+  | TimeItemDto;
