@@ -10,9 +10,9 @@ import {
   PhotoItem,
   VideoItem,
   ScrollableContent,
+  DatePickerItem,
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
-import DatePickerItem from '@app/shared/ui/survey/DatePickerItem';
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker } from '@entities/flanker';
