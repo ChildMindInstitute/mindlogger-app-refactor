@@ -81,10 +81,10 @@ type StackedCheckboxPayload = {
     tooltip: string | null;
   }>;
   dataMatrix: Array<{
-    row_id: string;
+    rowId: string;
     options: [
       {
-        option_id: string;
+        optionId: string;
         score: number;
         alert: string;
       },
@@ -315,7 +315,12 @@ export type RadioResponse = string;
 
 export type TimeResponse = HourMinute;
 
-export type StackedCheckboxResponse = string[][] | null;
+export type StackedCheckboxResponse =
+  | {
+      rowId: string;
+      optionIds: string[];
+    }[]
+  | null;
 
 export type PhotoResponse = {
   uri: string;
