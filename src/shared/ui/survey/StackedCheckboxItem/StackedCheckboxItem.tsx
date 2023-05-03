@@ -54,43 +54,39 @@ const StackedCheckboxItem: FC<Props> = ({
   }, [rows, textReplacer]);
 
   const onValueChange = (option: StackedRowItemValue, row: Item) => {
-    const rowId = row.id;
+    const currentRowId = row.id;
     const optionId = option.id;
-    const rowInitialValue = {
-      rowId,
-      optionIds: [optionId],
-    };
 
     if (!values) {
-      const value = [rowInitialValue];
+      const newValues = [
+        {
+          rowId: currentRowId,
+          optionIds: [optionId],
+        },
+      ];
 
-      onChange(value);
+      onChange(newValues);
     } else {
-      const clonedValues = [...values];
-      let foundRow = false;
+      const currentRow = values.find(({ rowId }) => rowId === currentRowId);
+      const currentOptionIds = currentRow?.optionIds ?? [];
+      let newOptionIds = [...currentOptionIds];
 
-      for (let key in clonedValues) {
-        const currentRow = clonedValues[key];
-        if (currentRow.rowId === rowId) {
-          foundRow = true;
-          if (currentRow.optionIds.includes(optionId)) {
-            currentRow.optionIds = currentRow.optionIds.filter(
-              id => id !== optionId,
-            );
-          } else {
-            currentRow.optionIds.push(optionId);
-          }
-        }
-      }
-      if (!foundRow) {
-        clonedValues.push(rowInitialValue);
+      if (currentOptionIds.includes(optionId)) {
+        newOptionIds = currentOptionIds.filter(id => id !== optionId);
+      } else {
+        newOptionIds = [...newOptionIds, optionId];
       }
 
-      const isEmpty = !clonedValues.some(
-        ({ optionIds }) => optionIds.length > 0,
-      );
+      const newValues = [
+        ...values.filter(({ rowId }) => rowId !== currentRowId),
+        {
+          rowId: currentRowId,
+          optionIds: newOptionIds,
+        },
+      ];
+      const isEmpty = !newValues.some(({ optionIds }) => optionIds.length > 0);
 
-      onChange(isEmpty ? null : clonedValues);
+      onChange(isEmpty ? null : newValues);
     }
   };
 
