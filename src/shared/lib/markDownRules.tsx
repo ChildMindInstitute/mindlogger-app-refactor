@@ -20,14 +20,20 @@ const localStyles = StyleSheet.create({
   alignLeftContainer: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+    width: viewPortWidth - 20,
+    textAlign: 'left',
   },
   alignRightContainer: {
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
+    width: viewPortWidth - 20,
+    textAlign: 'right',
   },
   alignCenterContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    width: viewPortWidth - 20,
+    textAlign: 'center',
   },
   underline: {
     textDecorationLine: 'underline',
