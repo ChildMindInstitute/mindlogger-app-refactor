@@ -16,6 +16,7 @@ import {
   RadioResponse,
   PhotoResponse,
   VideoResponse,
+  DateResponse,
 } from './payload';
 
 type PipelineItemAnswerBase = {
@@ -141,7 +142,7 @@ interface GeolocationPipelineAnswer extends PipelineItemAnswerBase {
 interface DatePipelineAnswer extends PipelineItemAnswerBase {
   type: 'Date';
   value: {
-    answer?: string;
+    answer?: DateResponse;
     additionalAnswer?: string;
   };
 }
