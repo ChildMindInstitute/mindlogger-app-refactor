@@ -1,5 +1,6 @@
 import { DrawResult } from '@app/entities/drawer';
 import { FlankerLogRecord, FlankerConfiguration } from '@app/entities/flanker';
+import { HourMinute } from '@app/shared/lib';
 import { Coordinates } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
 
@@ -277,7 +278,7 @@ export type TimeRangeResponse = {
 
 export type RadioResponse = string;
 
-export type TimeResponse = string;
+export type TimeResponse = HourMinute;
 
 export type PhotoResponse = {
   uri: string;
