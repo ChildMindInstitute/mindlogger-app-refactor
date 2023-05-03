@@ -166,7 +166,7 @@ function ActivityItem({
           <StackedRadiosItem
             config={pipelineItem.payload}
             onChange={onResponse}
-            value={value?.answer || {}}
+            value={value?.answer || []}
           />
         </Box>
       );
