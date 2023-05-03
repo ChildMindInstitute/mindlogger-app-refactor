@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { StoreProgress } from '@app/abstract/lib';
-import { ActivityListItem } from '@app/entities/activity';
 import { AppletModel, clearStorageRecords } from '@app/entities/applet';
 import {
   LocalEventDetail,
@@ -15,15 +14,17 @@ import {
 } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
 import { useAppSelector } from '@app/shared/lib';
-import {
-  ActivityGroupType,
-  ActivityListGroup,
-} from '@app/widgets/activity-group';
-import { ActivityGroupsBuildManager } from '@app/widgets/activity-group/model/services';
 
-import { onActivityNotFound, onScheduledToday } from '../../lib';
+type Input = {
+  checkAvailability: (
+    appletId: string,
+    activityId: string | null,
+    flowId: string | null,
+    eventId: string,
+  ) => boolean;
+};
 
-export function useOnNotificationTap() {
+export function useOnNotificationTap({ checkAvailability }: Input) {
   const queryClient = useQueryClient();
 
   const { navigate } = useNavigation();
@@ -71,64 +72,6 @@ export function useOnNotificationTap() {
       flowId,
     });
   }
-
-  const checkAvailability = (
-    appletId: string,
-    activityId: string | null,
-    flowId: string | null,
-    eventId: string,
-  ) => {
-    const groupsResult = ActivityGroupsBuildManager.process(
-      appletId,
-      storeProgress,
-      queryClient,
-    );
-
-    const groupInProgress: ActivityListGroup = groupsResult.groups.find(
-      x => x.type === ActivityGroupType.InProgress,
-    )!;
-
-    const groupAvailable: ActivityListGroup = groupsResult.groups.find(
-      x => x.type === ActivityGroupType.Available,
-    )!;
-
-    const groupScheduled: ActivityListGroup = groupsResult.groups.find(
-      x => x.type === ActivityGroupType.Scheduled,
-    )!;
-
-    if (
-      [...groupAvailable.activities, ...groupInProgress.activities].some(
-        x =>
-          x.eventId === eventId &&
-          ((flowId && flowId === x.flowId) ||
-            (!flowId && activityId === x.activityId)),
-      )
-    ) {
-      return true;
-    }
-
-    const scheduled: ActivityListItem | undefined =
-      groupScheduled.activities.find(
-        x =>
-          x.eventId === eventId &&
-          ((flowId && flowId === x.flowId) ||
-            (!flowId && activityId === x.activityId)),
-      );
-
-    if (scheduled) {
-      onScheduledToday(
-        flowId
-          ? scheduled.activityFlowDetails!.activityFlowName
-          : scheduled.name,
-        scheduled.availableFrom!,
-      );
-      return false;
-    }
-
-    onActivityNotFound();
-
-    return false;
-  };
 
   const startActivityOrFlow = (
     appletId: string,

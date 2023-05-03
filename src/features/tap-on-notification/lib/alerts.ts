@@ -18,7 +18,7 @@ export function onScheduledToday(name: string, timeFrom: Date) {
   const from = format(timeFrom, 'HH:mm');
 
   Alert.alert(
-    i18n.t('firebase_messaging:today'),
+    '',
     `${i18n.t('firebase_messaging:not_able_to_start')}, ‘${name}’ ${i18n.t(
       'firebase_messaging:is',
     )} ` +
