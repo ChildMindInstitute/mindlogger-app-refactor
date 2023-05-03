@@ -133,7 +133,23 @@ function mapToAudioPlayer(dto: AudioPlayerItemDto): ActivityItem {
 }
 
 function mapToDate(dto: DateItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Date',
+    timer: dto.config.timer,
+    order: dto.order,
+    config: null,
+    question: dto.question,
+    isHidden: dto.isHidden,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToFlanker(dto: FlankerItemDto): ActivityItem {

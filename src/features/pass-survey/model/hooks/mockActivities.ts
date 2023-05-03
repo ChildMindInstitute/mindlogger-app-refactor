@@ -1283,6 +1283,43 @@ export const VideoActivityDto: ActivityDto = {
   ],
 };
 
+export const DateActivityDto: ActivityDto = {
+  id: '123123',
+  name: 'Date Activity',
+  description: 'Radio Activity Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  order: 0,
+  isHidden: false,
+  items: [
+    {
+      id: '23465',
+      name: 'test name',
+      question: 'hello',
+      order: 0,
+      isHidden: false,
+      responseType: 'date',
+      timer: null,
+      config: {
+        timer: null,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: true,
+        skippableItem: false,
+      },
+      responseValues: null,
+    },
+  ],
+};
+
 export const AllMediaActivity: ActivityDto = {
   id: '123123',
   name: 'All Media Activity',

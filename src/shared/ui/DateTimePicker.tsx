@@ -20,6 +20,7 @@ const DatePickerButton = styled(Button, {
   borderBottomColor: '$lightGrey',
   borderBottomWidth: 1,
   borderRadius: 0,
+  backgroundColor: '$white',
 });
 
 const DateTimePicker: FC<Props> = ({
