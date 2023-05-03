@@ -1286,7 +1286,7 @@ export const VideoActivityDto: ActivityDto = {
 export const DateActivityDto: ActivityDto = {
   id: '123123',
   name: 'Date Activity',
-  description: 'Radio Activity Description',
+  description: 'Time Description',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen:
@@ -1300,11 +1300,48 @@ export const DateActivityDto: ActivityDto = {
   items: [
     {
       id: '23465',
-      name: 'test name',
+      name: 'Date activity item',
       question: 'hello',
       order: 0,
       isHidden: false,
-      responseType: 'date',
+      responseType: 'time',
+      timer: null,
+      config: {
+        timer: null,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: true,
+        skippableItem: false,
+      },
+      responseValues: null,
+    },
+  ],
+};
+
+export const TimeActivityDto: ActivityDto = {
+  id: '123123',
+  name: 'Time Activity',
+  description: 'Time Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  order: 0,
+  isHidden: false,
+  items: [
+    {
+      id: '23465',
+      name: 'Time activity item',
+      question: 'hello',
+      order: 0,
+      isHidden: false,
+      responseType: 'time',
       timer: null,
       config: {
         timer: null,

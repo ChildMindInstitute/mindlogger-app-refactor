@@ -20,6 +20,7 @@ import {
   TimeRangeItemDto,
   VideoItemDto,
   AdditionalResponseConfiguration,
+  TimeItemDto,
 } from '@app/shared/api';
 import { getMsFromSeconds } from '@app/shared/lib';
 
@@ -148,6 +149,26 @@ function mapToDate(dto: DateItemDto): ActivityItem {
     hasTextResponse: false,
     canBeReset: true,
     hasTopNavigation: false,
+    ...mapAdditionalText(dto.config),
+  };
+}
+
+function mapToTime(dto: TimeItemDto): ActivityItem {
+  return {
+    id: dto.id,
+    inputType: 'Time',
+    config: null,
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
   };
 }
@@ -475,6 +496,8 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
           return mapToVideo(item);
         case 'drawing':
           return mapToDrawing(item);
+        case 'time':
+          return mapToTime(item);
       }
     }),
   };

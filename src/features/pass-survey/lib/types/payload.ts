@@ -1,5 +1,6 @@
 import { DrawResult } from '@app/entities/drawer';
 import { FlankerLogRecord, FlankerConfiguration } from '@app/entities/flanker';
+import { HourMinute } from '@app/shared/lib';
 import { Coordinates } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
 
@@ -23,7 +24,8 @@ export type ActivityItemType =
   | 'Geolocation'
   | 'Photo'
   | 'Video'
-  | 'Date';
+  | 'Date'
+  | 'Time';
 
 type AbTestPayload = {
   testIndex: TestIndex;
@@ -61,6 +63,8 @@ type AudioPlayerPayload = {
 };
 
 type TimeRangePayload = null;
+
+type TimePayload = null;
 
 type RadioPayload = {
   randomizeOptions: boolean;
@@ -132,7 +136,8 @@ type PipelinePayload =
   | CheckboxPayload
   | GeolocationPayload
   | PhotoPayload
-  | DatePayload;
+  | DatePayload
+  | TimePayload;
 
 type PipelineItemBase = {
   id?: string;
@@ -237,6 +242,10 @@ export interface DatePipelineItem extends PipelineItemBase {
   type: 'Date';
   payload: DatePayload;
 }
+export interface TimePipelineItem extends PipelineItemBase {
+  type: 'Time';
+  payload: TimePayload;
+}
 
 export type AbTestResponse = LogLine[];
 
@@ -269,6 +278,8 @@ export type TimeRangeResponse = {
 
 export type RadioResponse = string;
 
+export type TimeResponse = HourMinute;
+
 export type PhotoResponse = {
   uri: string;
   fileName: string;
@@ -299,7 +310,8 @@ export type PipelineItemResponse =
   | GeolocationResponse
   | PhotoResponse
   | DateResponse
-  | RadioResponse;
+  | RadioResponse
+  | TimeResponse;
 
 export type PipelineItem =
   | AbTestPipelineItem
@@ -319,4 +331,5 @@ export type PipelineItem =
   | PhotoPipelineItem
   | VideoPipelineItem
   | RadioPipelineItem
-  | DatePipelineItem;
+  | DatePipelineItem
+  | TimePipelineItem;

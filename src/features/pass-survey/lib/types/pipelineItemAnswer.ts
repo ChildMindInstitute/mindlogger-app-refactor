@@ -17,6 +17,7 @@ import {
   PhotoResponse,
   VideoResponse,
   DateResponse,
+  TimeResponse,
 } from './payload';
 
 type PipelineItemAnswerBase = {
@@ -162,6 +163,14 @@ interface VideoPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
+interface TimePipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Time';
+  value: {
+    answer?: TimeResponse;
+    additionalAnswer?: string;
+  };
+}
+
 export type PipelineItemAnswer =
   | SplashPipelineAnswer
   | TextInputPipelineAnswer
@@ -178,5 +187,6 @@ export type PipelineItemAnswer =
   | GeolocationPipelineAnswer
   | PhotoPipelineAnswer
   | VideoPipelineAnswer
-  | CheckboxPipelineAnswer
-  | DatePipelineAnswer;
+  | DatePipelineAnswer
+  | TimePipelineAnswer
+  | CheckboxPipelineAnswer;
