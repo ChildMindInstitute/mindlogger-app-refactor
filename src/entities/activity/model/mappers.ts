@@ -25,6 +25,7 @@ import {
 import { getMsFromSeconds } from '@app/shared/lib';
 
 import { ActivityDetails, ActivityItem } from '../lib';
+import { FlankerSettings } from '../lib/types/flanker';
 
 function mapTimerValue(dtoTimer: number | null) {
   if (dtoTimer) {
@@ -87,6 +88,54 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
     canBeReset: false,
     hasTopNavigation: false,
     isHidden: dto.isHidden,
+  };
+}
+
+function mapToFlanker(itemDto: FlankerItemDto): ActivityItem {
+  const dto = itemDto.responseValues;
+
+  const settings: FlankerSettings = {
+    general: {
+      buttons: [...dto.general.buttons],
+      fixation: dto.general.fixation ? { ...dto.general.fixation } : null,
+      instruction: dto.general.instruction,
+      stimulusTrials: [...dto.general.stimulusTrials],
+    },
+    practice: {
+      blocks: [...dto.practice.blocks],
+      instruction: dto.practice.instruction,
+      randomizeOrder: dto.practice.randomizeOrder,
+      showFeedback: dto.practice.showFeedback,
+      showSummary: dto.practice.showSummary,
+      stimulusDuration: dto.practice.stimulusDuration,
+      threshold: dto.practice.threshold,
+    },
+    test: {
+      blocks: [...dto.test.blocks],
+      instruction: dto.test.instruction,
+      randomizeOrder: dto.test.randomizeOrder,
+      showFeedback: dto.test.showFeedback,
+      showSummary: dto.test.showSummary,
+      stimulusDuration: dto.test.stimulusDuration,
+    },
+  };
+
+  return {
+    canBeReset: false,
+    hasAlert: false,
+    hasScore: false,
+    hasTextResponse: false,
+    hasTopNavigation: false,
+    id: itemDto.id,
+    inputType: 'Flanker',
+    isHidden: false,
+    isAbleToMoveBack: false,
+    order: itemDto.order,
+    isSkippable: false,
+    name: itemDto.name,
+    timer: null,
+    question: itemDto.question,
+    config: settings,
   };
 }
 
@@ -177,10 +226,6 @@ function mapToTime(dto: TimeItemDto): ActivityItem {
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
   };
-}
-
-function mapToFlanker(dto: FlankerItemDto): ActivityItem {
-  return dto as any;
 }
 
 function mapToGeolocation(dto: GeolocationItemDto): ActivityItem {

@@ -336,9 +336,11 @@
     "type_placeholder": "Please type text"
   },
   "additional": {
+    "server-error": "Server error occurred",
     "time-end": "Time is up!",
     "time-end-tap": "Time is up. Tap to complete",
     "thanks": "Thanks!",
+    "sorry": "Sorry",
     "saved_answers": "We've saved your answers!",
     "submit_flow_answers": "Tap the",
     "submit": "Submit",

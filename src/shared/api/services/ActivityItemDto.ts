@@ -1,5 +1,7 @@
 import { ImageUrl } from '@app/shared/lib';
 
+import { FlankerSettingsDto } from './FlankerSettingsDto';
+
 export type ResponseType =
   | 'text'
   | 'singleSelect'
@@ -283,11 +285,9 @@ type AbTestAnswerSettings = {
   device: 'Phone' | 'Tablet';
 };
 
-// @todo Change when the BE integration is done
-type FlankerConfiguration = any;
+type FlankerConfiguration = null;
 
-// @todo Change when the BE integration is done
-type FlankerAnswerSettings = any;
+export type FlankerAnswerSettings = FlankerSettingsDto;
 
 type Configuration =
   | TextConfiguration

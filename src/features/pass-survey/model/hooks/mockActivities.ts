@@ -1,9 +1,9 @@
-import {
-  FlankerWithImageOnButton,
-  FlankerWithStFxImages,
-  FlankerWithTextsSigns,
-} from '@app/entities/flanker';
-import { ActivityDto } from '@app/shared/api';
+// import {
+//   FlankerWithImageOnButton,
+//   FlankerWithStFxImages,
+//   FlankerWithTextsSigns,
+// } from '@app/entities/flanker';
+import { ActivityDto, FlankerAnswerSettings } from '@app/shared/api';
 
 const testMessage1 =
   'Start by placing the point of the pen at the center of the spiral (S), and trace out along the dashed blue line to the end of the sprial (E).  Try to stay on the dashed blue line while tracing. You will do this five times.';
@@ -174,8 +174,8 @@ const FlankerWithImageActivity: ActivityDto = {
       question: '',
       responseType: 'flanker',
       timer: null,
-      config: FlankerWithImageOnButton,
-      responseValues: {},
+      config: null,
+      responseValues: {} as FlankerAnswerSettings,
       order: 0,
       isHidden: false,
     },
@@ -203,8 +203,8 @@ const FlankerWithStSFxActivity: ActivityDto = {
       question: '',
       responseType: 'flanker',
       timer: null,
-      config: FlankerWithStFxImages,
-      responseValues: {},
+      config: null,
+      responseValues: {} as FlankerAnswerSettings,
       order: 0,
       isHidden: false,
     },
@@ -232,10 +232,12 @@ const FlankerWithTextSignsActivity: ActivityDto = {
       question: '',
       responseType: 'flanker',
       timer: null,
-      config: FlankerWithTextsSigns,
-      responseValues: {},
+      //config: FlankerWithTextsSigns,
+      //responseValues: {},
       order: 0,
       isHidden: false,
+      config: null,
+      responseValues: {} as FlankerAnswerSettings,
     },
   ],
 };

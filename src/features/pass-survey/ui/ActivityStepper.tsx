@@ -19,8 +19,13 @@ import {
 
 import ActivityItem from './ActivityItem';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
-import { ActivityIdentityContext, useTextVariablesReplacer } from '../lib';
+import {
+  ActivityIdentityContext,
+  FlankerResponse,
+  useTextVariablesReplacer,
+} from '../lib';
 import { useActivityState, useActivityStepper, useIdleTimer } from '../model';
+import { evaluateFlankerNextStep } from '../model/flankerNextStepEvaluator';
 
 type Props = {
   idleTimer: HourMinute | null;
@@ -125,6 +130,20 @@ function ActivityStepper({
       !moved && restartIdleTimer();
 
       return moved ? 0 : 1;
+    }
+
+    const currentItem = activityStorageRecord!.items[currentStep];
+
+    if (currentItem.type === 'Flanker') {
+      const stepAnswers = activityStorageRecord?.answers[currentStep];
+
+      const nextStepIndex = evaluateFlankerNextStep(
+        (stepAnswers?.answer as FlankerResponse) ?? null,
+        currentStep,
+        activityStorageRecord!.items,
+      );
+
+      return nextStepIndex === null ? 1 : nextStepIndex - currentStep;
     }
 
     return 1;
