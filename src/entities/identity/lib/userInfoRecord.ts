@@ -1,20 +1,20 @@
 import { createSecureStorage } from '@app/shared/lib';
 
-const storage = createSecureStorage('user-email');
+const storage = createSecureStorage('user-info');
 
-const storageKey = 'email';
+const emailKey = 'email';
 
-function UserEmailRecord() {
+function UserInfoRecord() {
   function get(): string | undefined {
-    return storage.getString(storageKey);
+    return storage.getString(emailKey);
   }
 
   function set(email: string) {
-    storage.set(storageKey, email);
+    storage.set(emailKey, email);
   }
 
   function clear() {
-    return storage.delete(storageKey);
+    return storage.delete(emailKey);
   }
 
   return {
@@ -24,4 +24,4 @@ function UserEmailRecord() {
   };
 }
 
-export default UserEmailRecord();
+export default UserInfoRecord();

@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { UserEmailRecord } from '@app/entities/identity/lib';
+import { UserInfoRecord } from '@app/entities/identity/lib';
 import { IdentityModel, useLoginMutation } from '@entities/identity';
 import { SessionModel } from '@entities/session';
 import {
@@ -38,7 +38,7 @@ const LoginForm: FC<Props> = props => {
 
       dispatch(IdentityModel.actions.onAuthSuccess(user));
 
-      UserEmailRecord.set(user.email);
+      UserInfoRecord.set(user.email);
 
       SessionModel.storeSession(session);
 

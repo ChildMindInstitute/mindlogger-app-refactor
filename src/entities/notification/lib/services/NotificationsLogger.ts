@@ -1,4 +1,4 @@
-import { UserEmailRecord } from '@app/entities/identity/lib';
+import { UserInfoRecord } from '@app/entities/identity/lib';
 import {
   LogAction,
   LogTrigger,
@@ -28,7 +28,7 @@ function NotificationsLogger() {
     const scheduled: LocalEventTriggerNotification[] =
       await NotificationScheduler.getAllScheduledNotifications();
 
-    const email = UserEmailRecord.get();
+    const email = UserInfoRecord.get();
 
     const notificationDescriptions =
       !payload.notificationDescriptions ||

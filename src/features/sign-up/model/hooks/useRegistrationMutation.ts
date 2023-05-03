@@ -1,4 +1,4 @@
-import { UserEmailRecord } from '@app/entities/identity/lib';
+import { UserInfoRecord } from '@app/entities/identity/lib';
 import {
   useLoginMutation,
   useSignUpMutation,
@@ -29,7 +29,7 @@ export const useRegistrationMutation = (
 
       dispatch(IdentityModel.actions.onAuthSuccess(user));
 
-      UserEmailRecord.set(user.email);
+      UserInfoRecord.set(user.email);
 
       SessionModel.storeSession(session);
 
