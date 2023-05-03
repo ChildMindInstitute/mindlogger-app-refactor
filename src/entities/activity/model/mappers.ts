@@ -13,7 +13,6 @@ import {
   NumberSelectionItemDto,
   PhotoItemDto,
   SingleSelectionItemDto,
-  // SingleSelectionRowsItemDto,
   SliderSelectionItemDto,
   SliderRowsItemDto,
   TextItemDto,
