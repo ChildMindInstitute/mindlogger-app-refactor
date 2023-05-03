@@ -358,7 +358,7 @@ export type StackedCheckboxResponse =
     }[]
   | null;
 
-export type StackedRadioResponse = Record<string, string>; // @todo check with backend
+export type StackedRadioResponse = Array<{ rowId: string; optionId: string }>;
 
 export type PhotoResponse = {
   uri: string;
