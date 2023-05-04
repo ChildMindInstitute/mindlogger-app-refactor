@@ -112,3 +112,6 @@ export const areDatesEqual = (dateLeft: Date, dateRight: Date): boolean =>
 
 export const getUnixTimestamp = (date: Date | number): number =>
   getUnixTime(date);
+
+export const getMidnightDateInMs = (date: Date = new Date()): number =>
+  date.setHours(0, 0, 0, 0);

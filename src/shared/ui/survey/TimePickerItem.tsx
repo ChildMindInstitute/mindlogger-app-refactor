@@ -4,22 +4,29 @@ import {
   HourMinute,
   colors,
   getMsFromHours,
+  getMidnightDateInMs,
   getMsFromMinutes,
 } from '@shared/lib';
 import { AlarmIcon, DateTimePicker } from '@shared/ui';
 
 type Props = {
-  onChange: (value: string) => void;
+  onChange: (value: HourMinute) => void;
   value?: HourMinute;
 };
 
 const TimePickerItem: FC<Props> = ({ value, onChange }) => {
-  const onChangeDate = (date: Date) => onChange(date.toString());
+  const onChangeDate = (date: Date) =>
+    onChange({
+      minutes: date.getMinutes(),
+      hours: date.getHours(),
+    });
 
   const timeInMs = useMemo(
     () =>
       value
-        ? getMsFromHours(value.hours) + getMsFromMinutes(value.minutes)
+        ? getMidnightDateInMs() +
+          getMsFromHours(value.hours) +
+          getMsFromMinutes(value.minutes)
         : Date.now(),
     [value],
   );
