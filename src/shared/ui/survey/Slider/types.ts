@@ -30,10 +30,15 @@ type StackedSliderConfig = {
   setAlerts: boolean;
 };
 
+type Answer = {
+  rowId: string;
+  value: number;
+};
+
 export type StackedSliderProps = {
   config: StackedSliderConfig;
-  values: number[];
-  onChange: (arrayOfValues: number[]) => void;
+  values: Answer[] | null;
+  onChange: (arrayOfValues: Answer[]) => void;
   onPress?: () => void;
   onRelease?: () => void;
 };

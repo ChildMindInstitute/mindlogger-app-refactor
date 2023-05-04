@@ -374,19 +374,20 @@ export type RadioResponse = string;
 
 export type TimeResponse = HourMinute;
 
-export type StackedCheckboxResponse =
-  | {
-      rowId: string;
-      optionIds: string[];
-    }[]
-  | null;
+export type StackedCheckboxResponse = {
+  rowId: string;
+  optionIds: string[];
+}[];
 
 export type StackedRadioResponse = Array<{
   rowId: string;
   optionId: string;
 }>;
 
-export type StackedSliderResponse = number[] | null;
+export type StackedSliderResponse = Array<{
+  rowId: string;
+  value: number;
+}>;
 
 export type PhotoResponse = {
   uri: string;
