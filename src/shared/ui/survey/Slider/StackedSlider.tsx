@@ -7,15 +7,21 @@ import { StackedSliderProps } from './types';
 const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
   const { sliderRowItems } = config;
   const { onChange, onRelease, onPress, values } = props;
-  const userInteractedWithAllSliders = values.length === sliderRowItems.length;
 
-  const onSliderValueChange = (value: number, index: number) => {
-    const clonedValues = [...values];
-    clonedValues[index] = value;
+  const onSliderValueChange = (value: number, rowId: string) => {
+    const clonedValues = values?.filter(row => row.rowId !== rowId) ?? [];
+    clonedValues.push({
+      rowId,
+      value,
+    });
+
     onChange(clonedValues);
   };
 
   const onSliderPress = () => {
+    const userInteractedWithAllSliders =
+      values?.length === sliderRowItems.length;
+
     if (userInteractedWithAllSliders && onPress) {
       onPress();
     }
@@ -23,20 +29,23 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
 
   return (
     <YStack>
-      {sliderRowItems.map((sliderConfig, index) => {
-        const { id, label, ...singleSliderProps } = sliderConfig;
+      {sliderRowItems.map(sliderConfig => {
+        const { id: currentRowId, label, ...singleSliderProps } = sliderConfig;
+        const rowValue = values?.find(
+          ({ rowId }) => currentRowId === rowId,
+        )?.value;
 
         return (
-          <YStack key={`slider-${id}`}>
+          <YStack key={`slider-${currentRowId}`}>
             <Text fontSize={12} my="$3">
               {label}
             </Text>
 
             <SurveySlider
               config={singleSliderProps}
-              onChange={value => onSliderValueChange(value, index)}
+              onChange={value => onSliderValueChange(value, currentRowId)}
               onRelease={onRelease}
-              initialValue={values[index] || undefined}
+              initialValue={rowValue}
               onPress={onSliderPress}
             />
           </YStack>

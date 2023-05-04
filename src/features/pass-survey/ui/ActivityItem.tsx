@@ -154,7 +154,9 @@ function ActivityItem({
           <StackedSlider
             config={pipelineItem.payload}
             onChange={onResponse}
-            values={value?.answer || []}
+            values={value?.answer || null}
+            onPress={() => console.log('pressed')}
+            onRelease={() => console.log('released')}
           />
         </Box>
       );
