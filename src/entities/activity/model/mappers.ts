@@ -13,13 +13,14 @@ import {
   NumberSelectionItemDto,
   PhotoItemDto,
   SingleSelectionItemDto,
-  SingleSelectionRowsItemDto,
   SliderSelectionItemDto,
   SliderRowsItemDto,
   TextItemDto,
   TimeRangeItemDto,
   VideoItemDto,
   AdditionalResponseConfiguration,
+  TimeItemDto,
+  SingleSelectionRowsItemDto,
 } from '@app/shared/api';
 import { getMsFromSeconds } from '@app/shared/lib';
 
@@ -133,7 +134,43 @@ function mapToAudioPlayer(dto: AudioPlayerItemDto): ActivityItem {
 }
 
 function mapToDate(dto: DateItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'Date',
+    timer: dto.config.timer,
+    order: dto.order,
+    config: null,
+    question: dto.question,
+    isHidden: dto.isHidden,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    ...mapAdditionalText(dto.config),
+  };
+}
+
+function mapToTime(dto: TimeItemDto): ActivityItem {
+  return {
+    id: dto.id,
+    inputType: 'Time',
+    config: null,
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+    ...mapAdditionalText(dto.config),
+  };
 }
 
 function mapToFlanker(dto: FlankerItemDto): ActivityItem {
@@ -206,7 +243,30 @@ function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
 }
 
 function mapToStackedCheckboxes(dto: MultiSelectionRowsItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'StackedCheckbox',
+    config: {
+      randomizeOptions: dto.config.randomizeOptions,
+      setAlerts: dto.config.setAlerts,
+      addTooltip: dto.config.addTooltip,
+      addScores: dto.config.addScores,
+      rows: dto.responseValues.rows,
+      options: dto.responseValues.options,
+      dataMatrix: dto.responseValues.dataMatrix,
+    },
+    timer: mapTimerValue(dto.config.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+  };
 }
 
 function mapToNumberSelect(dto: NumberSelectionItemDto): ActivityItem {
@@ -279,7 +339,30 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
 }
 
 function mapToStackedRadio(dto: SingleSelectionRowsItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    inputType: 'StackedRadio',
+    config: {
+      randomizeOptions: dto.config.randomizeOptions,
+      setAlerts: dto.config.setAlerts,
+      addTooltip: dto.config.addTooltip,
+      addScores: dto.config.addScores,
+      rows: dto.responseValues.rows,
+      options: dto.responseValues.options,
+      dataMatrix: dto.responseValues.dataMatrix,
+    },
+    timer: mapTimerValue(dto.config.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+  };
 }
 
 function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
@@ -459,6 +542,8 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
           return mapToVideo(item);
         case 'drawing':
           return mapToDrawing(item);
+        case 'time':
+          return mapToTime(item);
       }
     }),
   };

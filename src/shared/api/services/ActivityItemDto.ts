@@ -19,7 +19,8 @@ export type ResponseType =
   | 'audio'
   | 'audioPlayer'
   | 'flanker'
-  | 'abTest';
+  | 'abTest'
+  | 'time';
 
 type ButtonsConfiguration = {
   removeBackButton: boolean;
@@ -106,14 +107,22 @@ type SingleSelectionRowsAnswerSettings = {
     rowName: string;
     rowImage: ImageUrl | null;
     tooltip: string | null;
-
-    options: Array<{
-      id: string;
-      text: string;
-      image: ImageUrl | null;
-      score: number | null;
-      tooltip: string | null;
-    }>;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: ImageUrl | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    rowId: string;
+    options: [
+      {
+        optionId: string;
+        score: number;
+        alert: string;
+      },
+    ];
   }>;
 };
 
@@ -122,6 +131,7 @@ type MultiSelectionRowsConfiguration = ButtonsConfiguration &
     addScores: boolean;
     setAlerts: boolean;
     addTooltip: boolean;
+    randomizeOptions: boolean;
   };
 
 type MultiSelectionRowsAnswerSettings = {
@@ -130,14 +140,22 @@ type MultiSelectionRowsAnswerSettings = {
     rowName: string;
     rowImage: ImageUrl | null;
     tooltip: string | null;
-
-    options: Array<{
-      id: string;
-      text: string;
-      image: ImageUrl | null;
-      score: number | null;
-      tooltip: string | null;
-    }>;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: ImageUrl | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    rowId: string;
+    options: [
+      {
+        optionId: string;
+        score: number;
+        alert: string;
+      },
+    ];
   }>;
 };
 
@@ -230,7 +248,13 @@ type DateConfiguration = ButtonsConfiguration &
   AdditionalResponseConfiguration &
   TimerConfiguration;
 
+type TimeConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
+
 type DateAnswerSettings = null;
+
+type TimeAnswerSettings = null;
 
 type SliderRowsConfiguration = ButtonsConfiguration &
   TimerConfiguration & {
@@ -278,6 +302,7 @@ type Configuration =
   | PhotoConfiguration
   | VideoConfiguration
   | DateConfiguration
+  | TimeConfiguration
   | SliderRowsConfiguration
   | SingleSelectionConfiguration
   | MultiSelectionConfiguration
@@ -389,6 +414,12 @@ export interface DateItemDto extends ActivityItemDtoBase {
   responseValues: DateAnswerSettings;
 }
 
+export interface TimeItemDto extends ActivityItemDtoBase {
+  responseType: 'time';
+  config: TimeConfiguration;
+  responseValues: TimeAnswerSettings;
+}
+
 export interface SliderRowsItemDto extends ActivityItemDtoBase {
   responseType: 'sliderRows';
   config: SliderRowsConfiguration;
@@ -450,4 +481,5 @@ export type ActivityItemDto =
   | AudioItemDto
   | AudioPlayerItemDto
   | AbTestItemDto
-  | FlankerItemDto;
+  | FlankerItemDto
+  | TimeItemDto;

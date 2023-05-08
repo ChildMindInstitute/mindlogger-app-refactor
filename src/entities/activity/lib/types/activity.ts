@@ -10,11 +10,15 @@ export type ActivityItemType =
   | 'Geolocation'
   | 'TimeRange'
   | 'AudioPlayer'
+  | 'StackedCheckbox'
+  | 'StackedRadio'
   | 'Message'
   | 'Audio'
   | 'Photo'
   | 'Video'
-  | 'Checkbox';
+  | 'Checkbox'
+  | 'Date'
+  | 'Time';
 
 type AbTestConfig = {
   device: 'Phone' | 'Tablet';
@@ -79,6 +83,64 @@ type AudioPlayerConfig = {
   playOnce: boolean;
 };
 
+type StackedCheckboxConfig = {
+  randomizeOptions: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  rows: Array<{
+    id: string;
+    rowName: string;
+    rowImage: string | null;
+    tooltip: string | null;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    rowId: string;
+    options: [
+      {
+        optionId: string;
+        score: number;
+        alert: string;
+      },
+    ];
+  }>;
+};
+
+type StackedRadioConfig = {
+  randomizeOptions: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  rows: Array<{
+    id: string;
+    rowName: string;
+    rowImage: string | null;
+    tooltip: string | null;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    rowId: string;
+    options: [
+      {
+        optionId: string;
+        score: number;
+        alert: string;
+      },
+    ];
+  }>;
+};
+
 type RadioConfig = {
   randomizeOptions: boolean;
   setAlerts: boolean;
@@ -99,6 +161,8 @@ type PhotoConfig = null;
 
 type VideoConfig = null;
 
+type TimeConfig = null;
+
 export type ActivityItemConfig =
   | AbTestConfig
   | DrawingTestTestConfig
@@ -109,10 +173,12 @@ export type ActivityItemConfig =
   | MessageConfig
   | AudioConfig
   | AudioPlayerConfig
+  | StackedCheckboxConfig
   | RadioConfig
   | SplashConfig
   | PhotoConfig
   | VideoConfig
+  | TimeConfig
   | null;
 
 type ActivityItemBase = {
@@ -192,6 +258,16 @@ interface AudioPlayerActivityItem extends ActivityItemBase {
   config: AudioPlayerConfig;
 }
 
+interface StackedCheckboxActivityItem extends ActivityItemBase {
+  inputType: 'StackedCheckbox';
+  config: StackedCheckboxConfig;
+}
+
+interface StackedRadioActivityItem extends ActivityItemBase {
+  inputType: 'StackedRadio';
+  config: StackedRadioConfig;
+}
+
 interface TimeRangeActivityItem extends ActivityItemBase {
   inputType: 'TimeRange';
   config: null;
@@ -206,6 +282,11 @@ interface GeolocationActivityItem extends ActivityItemBase {
   config: null;
 }
 
+interface DateActivityItem extends ActivityItemBase {
+  inputType: 'Date';
+  config: null;
+}
+
 interface PhotoActivityItem extends ActivityItemBase {
   inputType: 'Photo';
   config: PhotoConfig;
@@ -214,6 +295,11 @@ interface PhotoActivityItem extends ActivityItemBase {
 interface VideoActivityItem extends ActivityItemBase {
   inputType: 'Video';
   config: VideoConfig;
+}
+
+interface TimeActivityItem extends ActivityItemBase {
+  inputType: 'Time';
+  config: TimeConfig;
 }
 
 export type ActivityItem =
@@ -229,9 +315,13 @@ export type ActivityItem =
   | AudioActivityItem
   | MessageActivityItem
   | AudioPlayerActivityItem
+  | StackedCheckboxActivityItem
+  | StackedRadioActivityItem
   | TimeRangeActivityItem
   | RadioActivityItem
+  | DateActivityItem
   | PhotoActivityItem
+  | TimeActivityItem
   | VideoActivityItem;
 
 export type ActivityDetails = {

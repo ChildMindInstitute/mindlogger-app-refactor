@@ -1,5 +1,6 @@
 import { DrawResult } from '@app/entities/drawer';
 import { FlankerLogRecord, FlankerConfiguration } from '@app/entities/flanker';
+import { HourMinute } from '@app/shared/lib';
 import { Coordinates } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
 
@@ -16,13 +17,17 @@ export type ActivityItemType =
   | 'Audio'
   | 'Message'
   | 'AudioPlayer'
+  | 'StackedCheckbox'
+  | 'StackedRadio'
   | 'Radio'
   | 'Slider'
   | 'NumberSelect'
   | 'Checkbox'
   | 'Geolocation'
   | 'Photo'
-  | 'Video';
+  | 'Video'
+  | 'Date'
+  | 'Time';
 
 type AbTestPayload = {
   testIndex: TestIndex;
@@ -59,7 +64,67 @@ type AudioPlayerPayload = {
   playOnce: boolean;
 };
 
+type StackedCheckboxPayload = {
+  randomizeOptions: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  rows: Array<{
+    id: string;
+    rowName: string;
+    rowImage: string | null;
+    tooltip: string | null;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    rowId: string;
+    options: [
+      {
+        optionId: string;
+        score: number;
+        alert: string;
+      },
+    ];
+  }>;
+};
+
+type StackedRadioPayload = {
+  randomizeOptions: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  rows: Array<{
+    id: string;
+    rowName: string;
+    rowImage: string | null;
+    tooltip: string | null;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    rowId: string;
+    options: [
+      {
+        optionId: string;
+        score: number;
+        alert: string;
+      },
+    ];
+  }>;
+};
+
 type TimeRangePayload = null;
+
+type TimePayload = null;
 
 type RadioPayload = {
   randomizeOptions: boolean;
@@ -108,6 +173,8 @@ type NumberSelectPayload = {
 
 type GeolocationPayload = null;
 
+type DatePayload = null;
+
 type PhotoPayload = null;
 
 type VideoPayload = null;
@@ -123,12 +190,16 @@ type PipelinePayload =
   | TimeRangePayload
   | AudioPayload
   | MessagePayload
+  | StackedCheckboxPayload
+  | StackedRadioPayload
   | AudioPlayerPayload
   | SliderPayload
   | NumberSelectPayload
   | CheckboxPayload
   | GeolocationPayload
-  | PhotoPayload;
+  | PhotoPayload
+  | DatePayload
+  | TimePayload;
 
 type PipelineItemBase = {
   id?: string;
@@ -215,6 +286,15 @@ export interface AudioPlayerPipelineItem extends PipelineItemBase {
   type: 'AudioPlayer';
   payload: AudioPlayerPayload;
 }
+export interface StackedCheckboxPipelineItem extends PipelineItemBase {
+  type: 'StackedCheckbox';
+  payload: StackedCheckboxPayload;
+}
+
+export interface StackedRadioPipelineItem extends PipelineItemBase {
+  type: 'StackedRadio';
+  payload: StackedRadioPayload;
+}
 export interface TimeRangePipelineItem extends PipelineItemBase {
   type: 'TimeRange';
   payload: TimeRangePayload;
@@ -227,6 +307,15 @@ export interface PhotoPipelineItem extends PipelineItemBase {
 export interface VideoPipelineItem extends PipelineItemBase {
   type: 'Video';
   payload: VideoPayload;
+}
+
+export interface DatePipelineItem extends PipelineItemBase {
+  type: 'Date';
+  payload: DatePayload;
+}
+export interface TimePipelineItem extends PipelineItemBase {
+  type: 'Time';
+  payload: TimePayload;
 }
 
 export type AbTestResponse = LogLine[];
@@ -245,6 +334,8 @@ export type NumberSelectResponse = string;
 
 export type CheckboxResponse = string[] | null;
 
+export type DateResponse = string | null;
+
 export type AudioResponse = {
   filePath: string;
 };
@@ -257,6 +348,17 @@ export type TimeRangeResponse = {
 };
 
 export type RadioResponse = string;
+
+export type TimeResponse = HourMinute;
+
+export type StackedCheckboxResponse =
+  | {
+      rowId: string;
+      optionIds: string[];
+    }[]
+  | null;
+
+export type StackedRadioResponse = Array<{ rowId: string; optionId: string }>;
 
 export type PhotoResponse = {
   uri: string;
@@ -282,12 +384,16 @@ export type PipelineItemResponse =
   | SliderResponse
   | NumberSelectResponse
   | CheckboxResponse
+  | StackedRadioResponse
+  | StackedCheckboxResponse
   | AudioResponse
   | AudioPlayerResponse
   | TimeRangeResponse
   | GeolocationResponse
   | PhotoResponse
-  | RadioResponse;
+  | DateResponse
+  | RadioResponse
+  | TimeResponse;
 
 export type PipelineItem =
   | AbTestPipelineItem
@@ -299,6 +405,8 @@ export type PipelineItem =
   | SliderPipelineItem
   | NumberSelectPipelineItem
   | CheckboxPipelineItem
+  | StackedCheckboxPipelineItem
+  | StackedRadioPipelineItem
   | AudioPipelineItem
   | MessagePipelineItem
   | AudioPlayerPipelineItem
@@ -306,4 +414,6 @@ export type PipelineItem =
   | GeolocationPipelineItem
   | PhotoPipelineItem
   | VideoPipelineItem
-  | RadioPipelineItem;
+  | RadioPipelineItem
+  | DatePipelineItem
+  | TimePipelineItem;

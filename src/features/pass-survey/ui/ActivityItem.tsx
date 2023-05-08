@@ -10,6 +10,10 @@ import {
   PhotoItem,
   VideoItem,
   ScrollableContent,
+  DatePickerItem,
+  TimePickerItem,
+  StackedCheckBoxItem,
+  StackedRadiosItem,
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
@@ -143,6 +147,31 @@ function ActivityItem({
       );
       break;
 
+    case 'StackedCheckbox':
+      item = (
+        <Box mx="$6">
+          <StackedCheckBoxItem
+            config={pipelineItem.payload}
+            onChange={onResponse}
+            values={value?.answer || null}
+            textReplacer={textVariableReplacer}
+          />
+        </Box>
+      );
+      break;
+
+    case 'StackedRadio':
+      item = (
+        <Box mx="$6">
+          <StackedRadiosItem
+            config={pipelineItem.payload}
+            onChange={onResponse}
+            value={value?.answer || []}
+          />
+        </Box>
+      );
+      break;
+
     case 'Checkbox':
       item = (
         <Box mx="$6">
@@ -192,6 +221,14 @@ function ActivityItem({
       );
       break;
 
+    case 'Date':
+      item = (
+        <Box mx="$6">
+          <DatePickerItem onChange={onResponse} value={value?.answer} />
+        </Box>
+      );
+      break;
+
     case 'Radio':
       item = (
         <Box mx="$6">
@@ -228,6 +265,14 @@ function ActivityItem({
       item = (
         <Box mx="$6">
           <VideoItem onChange={onResponse} value={value?.answer} />
+        </Box>
+      );
+      break;
+
+    case 'Time':
+      item = (
+        <Box mx="$6">
+          <TimePickerItem onChange={onResponse} value={value?.answer} />
         </Box>
       );
       break;

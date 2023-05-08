@@ -10,6 +10,7 @@ import {
   PipelineItem,
   AudioPipelineItem,
   MessagePipelineItem,
+  StackedCheckboxPipelineItem,
   AudioPlayerPipelineItem,
   TimeRangePipelineItem,
   RadioPipelineItem,
@@ -17,6 +18,9 @@ import {
   SplashPipelineItem,
   TextInputPipelineItem,
   VideoPipelineItem,
+  DatePipelineItem,
+  TimePipelineItem,
+  StackedRadioPipelineItem,
 } from './payload';
 
 type ActivityItemBase = {
@@ -74,6 +78,16 @@ interface MessageActivityItem extends ActivityItemBase {
   pipelineItem: MessagePipelineItem;
 }
 
+interface StackedCheckboxActivityItem extends ActivityItemBase {
+  type: 'StackedCheckbox';
+  pipelineItem: StackedCheckboxPipelineItem;
+}
+
+interface StackedRadioActivityItem extends ActivityItemBase {
+  type: 'StackedRadio';
+  pipelineItem: StackedRadioPipelineItem;
+}
+
 interface AudioPlayerActivityItem extends ActivityItemBase {
   type: 'AudioPlayer';
   pipelineItem: AudioPlayerPipelineItem;
@@ -103,6 +117,15 @@ interface VideoActivityItem extends ActivityItemBase {
   pipelineItem: VideoPipelineItem;
 }
 
+interface DateActivityItem extends ActivityItemBase {
+  type: 'Date';
+  pipelineItem: DatePipelineItem;
+}
+interface TimeActivityItem extends ActivityItemBase {
+  type: 'Time';
+  pipelineItem: TimePipelineItem;
+}
+
 export type ActivityItem =
   | TextInputActivityItem
   | AbTestActivityItem
@@ -113,10 +136,14 @@ export type ActivityItem =
   | CheckboxActivityItem
   | AudioActivityItem
   | MessageActivityItem
+  | StackedCheckboxActivityItem
+  | StackedRadioActivityItem
   | AudioPlayerActivityItem
   | TimeRangeActivityItem
   | RadioActivityItem
   | GeolocationActivityItem
   | PhotoActivityItem
   | VideoActivityItem
-  | SplashActivityItem;
+  | SplashActivityItem
+  | DateActivityItem
+  | TimeActivityItem;
