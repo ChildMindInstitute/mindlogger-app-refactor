@@ -145,7 +145,7 @@ type StackedRadioConfig = {
 type StackedSliderConfig = {
   addScores: boolean;
   setAlerts: boolean;
-  sliderRowItems: {
+  rows: {
     id: string;
     label: string;
     leftTitle: string | null;

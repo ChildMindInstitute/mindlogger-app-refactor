@@ -22,7 +22,7 @@ export type SliderProps = {
 };
 
 type StackedSliderConfig = {
-  sliderRowItems: (Config & {
+  rows: (Config & {
     label: string;
     id: string;
   })[];
