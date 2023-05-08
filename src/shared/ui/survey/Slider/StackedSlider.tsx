@@ -5,7 +5,7 @@ import { YStack, Text, SurveySlider } from '@shared/ui';
 import { StackedSliderProps } from './types';
 
 const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
-  const { sliderRowItems } = config;
+  const { rows } = config;
   const { onChange, onRelease, onPress, values } = props;
 
   const onSliderValueChange = (value: number, rowId: string) => {
@@ -19,8 +19,7 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
   };
 
   const onSliderPress = () => {
-    const userInteractedWithAllSliders =
-      values?.length === sliderRowItems.length;
+    const userInteractedWithAllSliders = values?.length === rows.length;
 
     if (userInteractedWithAllSliders && onPress) {
       onPress();
@@ -29,7 +28,7 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
 
   return (
     <YStack>
-      {sliderRowItems.map(sliderConfig => {
+      {rows.map(sliderConfig => {
         const { id: currentRowId, label, ...singleSliderProps } = sliderConfig;
         const rowValue = values?.find(
           ({ rowId }) => currentRowId === rowId,

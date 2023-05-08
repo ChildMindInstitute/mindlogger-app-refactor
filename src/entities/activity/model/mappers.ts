@@ -402,7 +402,7 @@ function mapToStackedSlider(dto: SliderRowsItemDto): ActivityItem {
     config: {
       setAlerts: dto.config.setAlerts,
       addScores: dto.config.addScores,
-      sliderRowItems: dto.responseValues.map(item => ({
+      rows: dto.responseValues.map(item => ({
         ...item,
         leftTitle: item.minLabel,
         rightTitle: item.maxLabel,
