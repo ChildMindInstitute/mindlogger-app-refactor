@@ -1,8 +1,4 @@
-import notifee, {
-  AndroidStyle,
-  TriggerType,
-  AndroidImportance,
-} from '@notifee/react-native';
+import notifee, { TriggerType, AndroidImportance } from '@notifee/react-native';
 
 import { colors } from '@shared/lib';
 
@@ -50,10 +46,6 @@ export async function mapToTriggerNotifications(
         channelId,
         pressAction: {
           id: 'default',
-        },
-        style: {
-          type: AndroidStyle.BIGTEXT,
-          text: notification.notificationBody ?? '',
         },
         smallIcon: 'ic_notification',
         color: colors.primary,
