@@ -4,3 +4,4 @@ export * from './activityService';
 export * from './answerService';
 export * from './appletsService';
 export * from './eventsService';
+export * from './notificationService';

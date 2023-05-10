@@ -1,5 +1,8 @@
 import { AppState } from 'react-native';
 
+import { LogAction, LogTrigger } from '@app/shared/api';
+
+import NotificationsLogger from '../../lib/services/NotificationsLogger';
 import NotificationManager from '../NotificationManager';
 
 export async function topUpNotifications() {
@@ -21,10 +24,10 @@ export async function topUpNotifications() {
 
     await NotificationManager.topUpNotificationsFromQueue();
 
-    // TODO Uncomment and modify when debug api endpoint is integrated
-    // await debugScheduledNotifications({
-    //   actionType: 'backgroundAddition-AppService-componentDidMount',
-    // });
+    NotificationsLogger.log({
+      trigger: LogTrigger.RunBackgroundProcess,
+      action: LogAction.ReStack,
+    });
   } finally {
     NotificationManager.mutex.release();
   }

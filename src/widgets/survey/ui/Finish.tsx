@@ -8,6 +8,7 @@ import { useActivityAnswersMutation } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
 import { PassSurveyModel } from '@app/features/pass-survey';
+import { LogTrigger } from '@app/shared/api';
 import {
   getUnixTimestamp,
   onApiRequestError,
@@ -111,11 +112,10 @@ function FinishItem({
   }, []);
 
   const onCloseEntity = () => {
-    console.log('storeProgress!', JSON.stringify(storeProgress, null, 2));
-
     NotificationModel.NotificationRefreshService.refresh(
       queryClient,
       storeProgress,
+      LogTrigger.EntityCompleted,
     );
     onClose();
   };

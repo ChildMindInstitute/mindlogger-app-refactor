@@ -464,9 +464,6 @@ class NotificationBuilder implements INotificationBuilder {
     };
 
     if (!event.scheduledAt) {
-      console.warn(
-        `[NotificationBuilder.processEvent] event.scheduledAt has undefined value, event: ${event.id}`,
-      );
       return eventResult;
     }
 

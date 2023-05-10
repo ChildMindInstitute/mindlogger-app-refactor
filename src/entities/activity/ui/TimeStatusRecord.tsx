@@ -28,8 +28,6 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
 
   const isStatusInProgress = activity.status === ActivityStatus.InProgress;
 
-  const hasScheduledAt = isStatusScheduled && !!activity.scheduledAt;
-
   const hasAvailableFromTo = isStatusScheduled;
 
   const hasAvailableToOnly = isStatusAvailable;
@@ -54,12 +52,6 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
 
   return (
     <Box {...props}>
-      {hasScheduledAt && (
-        <StatusLine>{`${t('activity_due_date:scheduled_at')} ${convert(
-          activity.scheduledAt!,
-        )}`}</StatusLine>
-      )}
-
       {hasAvailableFromTo && (
         <StatusLine>
           {`${t('activity_due_date:available')} ${convert(

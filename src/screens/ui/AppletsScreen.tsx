@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
 import { NotificationModel } from '@app/entities/notification';
+import { LogTrigger } from '@app/shared/api';
 import { useAppSelector } from '@app/shared/lib';
 import { AppletList, AppletModel } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
@@ -35,6 +36,7 @@ const AppletsScreen: FC = () => {
     NotificationModel.NotificationRefreshService.refresh(
       queryClient,
       storeProgress,
+      LogTrigger.FirstAppRun,
     );
   });
 

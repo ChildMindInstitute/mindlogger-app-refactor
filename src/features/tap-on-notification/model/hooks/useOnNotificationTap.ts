@@ -12,9 +12,19 @@ import {
   useForegroundEvent,
   useOnInitialAndroidNotification,
 } from '@app/entities/notification';
+import { LogTrigger } from '@app/shared/api';
 import { useAppSelector } from '@app/shared/lib';
 
-export function useOnNotificationTap() {
+type Input = {
+  checkAvailability: (
+    appletId: string,
+    activityId: string | null,
+    flowId: string | null,
+    eventId: string,
+  ) => boolean;
+};
+
+export function useOnNotificationTap({ checkAvailability }: Input) {
   const queryClient = useQueryClient();
 
   const { navigate } = useNavigation();
@@ -33,6 +43,7 @@ export function useOnNotificationTap() {
       NotificationModel.NotificationRefreshService.refresh(
         queryClient,
         storeProgress,
+        LogTrigger.LimitReachedNotification,
       );
     },
     'schedule-event-alert': eventDetail => {
@@ -68,6 +79,10 @@ export function useOnNotificationTap() {
     flowId: string | null,
     eventId: string,
   ) => {
+    if (!checkAvailability(appletId, activityId, flowId, eventId)) {
+      return;
+    }
+
     if (flowId) {
       startFlow(appletId, flowId, eventId).then(
         ({ startedFromActivity, startedFromScratch }) => {
