@@ -20,6 +20,7 @@ import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker } from '@entities/flanker';
+import { IS_ANDROID } from '@shared/lib';
 import {
   RadioActivityItem,
   SurveySlider,
@@ -88,7 +89,11 @@ function ActivityItem({
 
     case 'DrawingTest':
       item = (
-        <Box flex={1} onPressIn={stopScrolling} onPressOut={releaseScrolling}>
+        <Box
+          flex={1}
+          onPressIn={IS_ANDROID ? null : stopScrolling}
+          onPressOut={IS_ANDROID ? null : releaseScrolling}
+        >
           <DrawingTest
             flex={1}
             {...pipelineItem.payload}
