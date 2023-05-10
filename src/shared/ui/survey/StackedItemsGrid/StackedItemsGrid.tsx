@@ -5,7 +5,15 @@ import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled, TextProps } from '@tamagui/core';
 
 import { type StackedRowItemValue } from './types';
-import { ListSeparator, YStack, XStack, Center, Text, Tooltip } from '../..';
+import {
+  ListSeparator,
+  YStack,
+  XStack,
+  Center,
+  Text,
+  Tooltip,
+  RadioGroup,
+} from '../..';
 
 const AxisListItemContainer = styled(Center, {
   minHeight: 80,
@@ -88,19 +96,21 @@ type RowListItemProps = {
 
 const RowListItem: FC<RowListItemProps> = ({ item, options, renderCell }) => {
   return (
-    <YStack>
-      <XStack>
-        <AxisListItem maxWidth="25%" option={item} />
+    <RadioGroup>
+      <YStack>
+        <XStack>
+          <AxisListItem maxWidth="25%" option={item} />
 
-        {options.map(option => (
-          <AxisListItemContainer key={option.id}>
-            {renderCell(option)}
-          </AxisListItemContainer>
-        ))}
-      </XStack>
+          {options.map(option => (
+            <AxisListItemContainer key={option.id}>
+              {renderCell(option)}
+            </AxisListItemContainer>
+          ))}
+        </XStack>
 
-      <ListSeparator />
-    </YStack>
+        <ListSeparator />
+      </YStack>
+    </RadioGroup>
   );
 };
 
