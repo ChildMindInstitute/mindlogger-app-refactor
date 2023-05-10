@@ -33,7 +33,7 @@ import {
   ScheduleEvent,
 } from '../../lib/types';
 
-const NumberOfDaysForSchedule = 7;
+const NumberOfDaysForSchedule = 14;
 const DaysInWeek = 7;
 
 interface INotificationBuilder {
@@ -530,9 +530,6 @@ class NotificationBuilder implements INotificationBuilder {
       periodStartDay &&
       periodStartDay > lastScheduleDay
     ) {
-      return eventResult;
-    }
-    if (!eventNotifications.length) {
       return eventResult;
     }
 
