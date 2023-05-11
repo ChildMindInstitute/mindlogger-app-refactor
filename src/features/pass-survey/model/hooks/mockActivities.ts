@@ -232,8 +232,6 @@ const FlankerWithTextSignsActivity: ActivityDto = {
       question: '',
       responseType: 'flanker',
       timer: null,
-      //config: FlankerWithTextsSigns,
-      //responseValues: {},
       order: 0,
       isHidden: false,
       config: null,

@@ -88,8 +88,6 @@ export const buildFlankerPipeline = (
     }
   }
 
-  console.log('buildFlankerPipeline!!', result);
-
   return result;
 };
 

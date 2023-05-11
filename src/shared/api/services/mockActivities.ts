@@ -1,8 +1,3 @@
-// import {
-//   FlankerWithImageOnButton,
-//   FlankerWithStFxImages,
-//   FlankerWithTextsSigns,
-// } from '@app/entities/flanker';
 import { ActivityDto, FlankerAnswerSettings } from '@app/shared/api';
 
 import { flankerWithStFxImages } from './mocks/FlankerWithStFxImages';
