@@ -1,11 +1,13 @@
 import { FC } from 'react';
 
+import { format } from 'date-fns';
+
 import { colors } from '@app/shared/lib';
 import { YStack, DateTimePicker, AlarmIcon, BedIcon } from '@shared/ui';
 
 type TimeRangeValue = {
-  from: string;
-  to: string;
+  endTime: string;
+  startTime: string;
 };
 
 type Props = {
@@ -14,16 +16,19 @@ type Props = {
 };
 
 const TimeRangeItem: FC<Props> = ({
-  value = { from: new Date().toString(), to: new Date().toString() },
+  value = { startTime: new Date().toString(), endTime: new Date().toString() },
   onChange,
 }) => {
-  const formatTime = (dateString: string) => new Date(dateString);
+  const transformTimeIntoDateObject = (dateString: string) =>
+    new Date(dateString);
 
-  const onFromChangeTime = (time: any) =>
-    onChange({ ...value, from: time.toString() });
+  const formatTime = (time: Date) => format(time, 'HH:MM');
 
-  const onToChangeTime = (time: any) =>
-    onChange({ ...value, to: time.toString() });
+  const onFromChangeTime = (time: Date) =>
+    onChange({ ...value, startTime: formatTime(time) });
+
+  const onToChangeTime = (time: Date) =>
+    onChange({ ...value, endTime: formatTime(time) });
 
   return (
     <YStack>
@@ -31,7 +36,7 @@ const TimeRangeItem: FC<Props> = ({
         label="From"
         onChange={onFromChangeTime}
         dateDisplayFormat="h:mm a"
-        value={formatTime(value.from)}
+        value={transformTimeIntoDateObject(value.startTime)}
         mode="time"
         iconAfter={<BedIcon color={colors.grey2} size={15} />}
       />
@@ -41,7 +46,7 @@ const TimeRangeItem: FC<Props> = ({
         onChange={onToChangeTime}
         dateDisplayFormat="h:mm a"
         mode="time"
-        value={formatTime(value.to)}
+        value={transformTimeIntoDateObject(value.endTime)}
         iconAfter={<AlarmIcon color={colors.grey2} size={15} />}
       />
     </YStack>
