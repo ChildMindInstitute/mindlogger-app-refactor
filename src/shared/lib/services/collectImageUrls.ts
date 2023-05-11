@@ -70,7 +70,7 @@ export const collectActivityDetailsImageUrls = (activity: ActivityDto) => {
         break;
       }
       case 'sliderRows': {
-        for (let responseValue of item.responseValues) {
+        for (let responseValue of item.responseValues.rows) {
           responseValue.minImage && result.push(responseValue.minImage);
           responseValue.maxImage && result.push(responseValue.maxImage);
         }
