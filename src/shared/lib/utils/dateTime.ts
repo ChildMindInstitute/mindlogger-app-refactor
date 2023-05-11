@@ -59,17 +59,6 @@ export const getDiff = (from: HourMinute, to: HourMinute): number => {
   );
 };
 
-export const isSourceBigger = (
-  timeSource: HourMinute,
-  timeTarget: HourMinute,
-) => {
-  const sourceInMinutes =
-    timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
-  const targetInMinutes =
-    timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
-  return sourceInMinutes > targetInMinutes;
-};
-
 export const isSourceLess = (
   timeSource: HourMinute,
   timeTarget: HourMinute,
@@ -90,17 +79,6 @@ export const isSourceBiggerOrEqual = (
   const targetInMinutes =
     timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
   return sourceInMinutes >= targetInMinutes;
-};
-
-export const isSourceLessOrEqual = (
-  timeSource: HourMinute,
-  timeTarget: HourMinute,
-) => {
-  const sourceInMinutes =
-    timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
-  const targetInMinutes =
-    timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
-  return sourceInMinutes <= targetInMinutes;
 };
 
 export const isTimeInInterval = (

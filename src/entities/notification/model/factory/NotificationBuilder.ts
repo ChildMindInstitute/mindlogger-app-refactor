@@ -468,8 +468,6 @@ class NotificationBuilder implements INotificationBuilder {
       return eventResult;
     }
 
-    const scheduledAt = event.scheduledAt;
-
     const scheduledDay = startOfDay(event.scheduledAt);
 
     const firstScheduleDay = this.currentDay;
@@ -559,7 +557,7 @@ class NotificationBuilder implements INotificationBuilder {
         periodEndDay,
         periodicity,
         aWeekAgoDay,
-        scheduledAt,
+        scheduledDay,
       );
 
       for (let day of days) {
