@@ -33,7 +33,7 @@ import {
   ScheduleEvent,
 } from '../../lib/types';
 
-const NumberOfDaysForSchedule = 7;
+const NumberOfDaysForSchedule = 14;
 const DaysInWeek = 7;
 
 interface INotificationBuilder {
@@ -468,8 +468,6 @@ class NotificationBuilder implements INotificationBuilder {
       return eventResult;
     }
 
-    const scheduledAt = event.scheduledAt;
-
     const scheduledDay = startOfDay(event.scheduledAt);
 
     const firstScheduleDay = this.currentDay;
@@ -532,9 +530,6 @@ class NotificationBuilder implements INotificationBuilder {
     ) {
       return eventResult;
     }
-    if (!eventNotifications.length) {
-      return eventResult;
-    }
 
     if (!isPeriodicitySet) {
       const notifications = this.processNotificationsSection(
@@ -562,7 +557,7 @@ class NotificationBuilder implements INotificationBuilder {
         periodEndDay,
         periodicity,
         aWeekAgoDay,
-        scheduledAt,
+        scheduledDay,
       );
 
       for (let day of days) {
