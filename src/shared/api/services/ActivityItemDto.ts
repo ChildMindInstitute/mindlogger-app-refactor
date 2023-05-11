@@ -262,16 +262,18 @@ type SliderRowsConfiguration = ButtonsConfiguration &
     setAlerts: boolean;
   };
 
-type SliderRowsAnswerSettings = Array<{
-  id: string;
-  label: string;
-  minLabel: string | null;
-  maxLabel: string | null;
-  minValue: number;
-  maxValue: number;
-  minImage: ImageUrl | null;
-  maxImage: ImageUrl | null;
-}>;
+type SliderRowsAnswerSettings = {
+  rows: Array<{
+    id: string;
+    label: string;
+    minLabel: string | null;
+    maxLabel: string | null;
+    minValue: number;
+    maxValue: number;
+    minImage: ImageUrl | null;
+    maxImage: ImageUrl | null;
+  }>;
+};
 
 // @todo Change when the BE integration is done
 type AbTestConfiguration = TimerConfiguration;
