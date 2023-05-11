@@ -271,6 +271,9 @@
     "is": "est",
     "scheduled_to_start_at": "devrait commencer à"
   },
+  "local_notifications": {
+    "complete_activity": "Veuillez effectuer cette activité."
+  },
   "join_demo_applets": {
     "healthy_brain_network": "Healthy Brain Network: EMA",
     "cognitive_tasks": "Tâches cognitives",

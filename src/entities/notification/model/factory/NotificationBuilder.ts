@@ -7,6 +7,7 @@ import {
   subMonths,
   subWeeks,
 } from 'date-fns';
+import i18next from 'i18next';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
@@ -489,7 +490,9 @@ class NotificationBuilder implements INotificationBuilder {
 
     const entityName = entity.name;
 
-    const entityDescription = entity.description;
+    const notificationDescription = i18next.t(
+      'local_notifications:complete_activity',
+    );
 
     const isEntityHidden = !entity.isVisible;
 
@@ -544,7 +547,7 @@ class NotificationBuilder implements INotificationBuilder {
         activityId,
         activityFlowId,
         entityName,
-        entityDescription,
+        notificationDescription,
         eventId,
       );
       this.markNotificationsDueToOneTimeCompletionSetting(
@@ -573,7 +576,7 @@ class NotificationBuilder implements INotificationBuilder {
           activityId,
           activityFlowId,
           entityName,
-          entityDescription,
+          notificationDescription,
           eventId,
         );
         eventResult.notifications.push(...notifications);
