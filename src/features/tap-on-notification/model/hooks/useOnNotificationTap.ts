@@ -24,10 +24,12 @@ type Input = {
   ) => boolean;
 };
 
+const GoBackDuration = 1000;
+
 export function useOnNotificationTap({ checkAvailability }: Input) {
   const queryClient = useQueryClient();
 
-  const { navigate } = useNavigation();
+  const navigator = useNavigation();
 
   const storeProgress: StoreProgress = useAppSelector(
     AppletModel.selectors.selectInProgressApplets,
@@ -50,13 +52,34 @@ export function useOnNotificationTap({ checkAvailability }: Input) {
       const { appletId, activityId, activityFlowId, eventId } =
         eventDetail.notification.data;
 
-      startActivityOrFlow(
-        appletId!,
-        activityId ?? null,
-        activityFlowId ?? null,
-        eventId!,
+      const executing = isActivityExecuting();
+
+      if (executing) {
+        navigator.goBack();
+      }
+
+      setTimeout(
+        () => {
+          startActivityOrFlow(
+            appletId!,
+            activityId ?? null,
+            activityFlowId ?? null,
+            eventId!,
+          );
+        },
+        executing ? GoBackDuration : 0,
       );
     },
+  };
+
+  const isActivityExecuting = (): boolean => {
+    const navigationState = navigator.getState();
+    if (!navigationState) {
+      return false;
+    }
+    const length = navigationState.routes.length;
+    const lastRoute = navigationState.routes[length - 1];
+    return lastRoute.name === 'InProgressActivity';
   };
 
   function navigateSurvey(
@@ -65,7 +88,7 @@ export function useOnNotificationTap({ checkAvailability }: Input) {
     eventId: string,
     flowId?: string,
   ) {
-    navigate('InProgressActivity', {
+    navigator.navigate('InProgressActivity', {
       appletId,
       activityId,
       eventId,
