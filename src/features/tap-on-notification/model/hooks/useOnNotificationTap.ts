@@ -26,6 +26,18 @@ type Input = {
 
 const GoBackDuration = 1000;
 
+/*
+https://mindlogger.atlassian.net/browse/M2-1810
+We don't know the exact reason yet.
+The bug is fluent.
+I've observed console.log exactly at the line before Alert.show, but the alert hasn't been shown!.
+Probably this is because of notification re-schedule at the same moment, and all notifications deleted via notify api
+and as a result - the current notification-tap thread and all the related threads (created by promises) - canceled, just supposition.
+Sometimes I've observed the Alert right after 10-20 seconds, probably because of reload of bundle or because I switched the app from background to foreground
+(like modals sometimes hidden and shown on Windows OS if to click alt+tab) - not sure here.
+*/
+const WorkaroundDuration = 100;
+
 export function useOnNotificationTap({ checkAvailability }: Input) {
   const queryClient = useQueryClient();
 
@@ -67,7 +79,7 @@ export function useOnNotificationTap({ checkAvailability }: Input) {
             eventId!,
           );
         },
-        executing ? GoBackDuration : 0,
+        executing ? GoBackDuration : WorkaroundDuration,
       );
     },
   };
