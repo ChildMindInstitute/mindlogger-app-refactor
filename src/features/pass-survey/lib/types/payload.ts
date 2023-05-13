@@ -1,5 +1,8 @@
 import { DrawResult } from '@app/entities/drawer';
-import { FlankerLogRecord, FlankerConfiguration } from '@app/entities/flanker';
+import {
+  FlankerConfiguration,
+  FlankerGameResponse,
+} from '@app/entities/flanker';
 import { HourMinute } from '@app/shared/lib';
 import { Coordinates } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
@@ -174,7 +177,7 @@ type CheckboxPayload = {
   }>;
 };
 
-type FlankerPayload = FlankerConfiguration;
+export type FlankerPayload = FlankerConfiguration;
 
 type TextInputPayload = {
   maxLength: number;
@@ -345,7 +348,7 @@ export type AbTestResponse = LogLine[];
 
 export type DrawingTestResponse = DrawResult;
 
-export type FlankerResponse = Array<FlankerLogRecord>;
+export type FlankerResponse = FlankerGameResponse;
 
 export type TextInputResponse = string;
 

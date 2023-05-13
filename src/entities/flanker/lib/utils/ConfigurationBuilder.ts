@@ -182,8 +182,7 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
         trialDuration: configuration.trialDuration || 1500,
         samplingMethod: 'fixed-order',
         samplingSize: configuration.sampleSize,
-        buttonLabel:
-          (!configuration.isLastTest && configuration.nextButton) || 'Finish',
+        buttonLabel: configuration.nextButton,
         minimumAccuracy: configuration.minimumAccuracy || 0,
         continueText,
         restartText: configuration.isLastPractice ? continueText : restartText,

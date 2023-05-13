@@ -1,3 +1,5 @@
+import { FlankerSettings } from './flanker';
+
 export type ActivityItemType =
   | 'AbTest'
   | 'DrawingTest'
@@ -196,6 +198,7 @@ export type ActivityItemConfig =
   | PhotoConfig
   | VideoConfig
   | TimeConfig
+  | FlankerSettings
   | null;
 
 type ActivityItemBase = {
@@ -239,7 +242,7 @@ interface DrawingTestTestActivityItem extends ActivityItemBase {
 
 interface FlankerActivityItem extends ActivityItemBase {
   inputType: 'Flanker';
-  config: any;
+  config: FlankerSettings;
 }
 
 interface TextInputActivityItem extends ActivityItemBase {

@@ -1,7 +1,7 @@
 export type StringOrNull = string | null;
 
 export type FlankerConfiguration = {
-  stimulusTrials: Array<StimulusConfiguration>; // dto - trials?
+  stimulusTrials: Array<StimulusConfiguration>;
   blocks: Array<BlockConfiguration>;
   buttons: Array<ButtonConfiguration>;
   nextButton: string;
@@ -10,25 +10,26 @@ export type FlankerConfiguration = {
   minimumAccuracy?: number;
   sampleSize: number;
   samplingMethod: SamplingMethod;
-  showFeedback: boolean; // ensure it's boolean in dto
-  showFixation: boolean; // ensure it's boolean in dto
-  showResults: boolean; // ensure it's boolean in dto
+  showFeedback: boolean;
+  showFixation: boolean;
+  showResults: boolean;
   trialDuration: number;
-  isLastPractice?: boolean; // dto lastPractice?
-  isLastTest?: boolean; //dto lastTest?
+  isLastPractice: boolean;
+  isFirstPractice: boolean;
+  isLastTest: boolean;
   blockType: BlockType;
 };
 
 export type SamplingMethod = 'randomize-order' | 'fixed-order';
 
-type BlockType = 'test' | 'practice';
+export type BlockType = 'test' | 'practice';
 
 type StimulusConfigId = string;
 
 export type StimulusConfiguration = {
   id: StimulusConfigId;
   image: StringOrNull;
-  text: string; // dto - name?
+  text: string;
   value: number | null;
   weight?: number | null;
 };
@@ -39,7 +40,7 @@ export type BlockConfiguration = {
 };
 
 export type ButtonConfiguration = {
-  text: string; //dto name?
+  text: string;
   image: StringOrNull;
   value: number;
 };

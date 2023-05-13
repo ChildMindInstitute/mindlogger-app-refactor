@@ -19,7 +19,7 @@ import {
 import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
-import { HtmlFlanker } from '@entities/flanker';
+import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
 import { IS_ANDROID } from '@shared/lib';
 import {
   RadioActivityItem,
@@ -106,11 +106,21 @@ function ActivityItem({
       break;
 
     case 'Flanker':
-      item = (
+      item = IS_ANDROID ? (
         <HtmlFlanker
           configuration={pipelineItem.payload}
-          onResult={onResponse}
-          onComplete={() => console.log('onComplete')}
+          onResult={data => {
+            onResponse(data);
+            moveToNextItem();
+          }}
+        />
+      ) : (
+        <NativeIosFlanker
+          configuration={pipelineItem.payload}
+          onResult={data => {
+            onResponse(data);
+            moveToNextItem();
+          }}
         />
       );
       break;

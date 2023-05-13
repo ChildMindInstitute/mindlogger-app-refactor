@@ -7,7 +7,7 @@ import { Box } from '@app/shared/ui';
 
 import {
   FlankerConfiguration,
-  FlankerLogRecord,
+  FlankerGameResponse,
   FlankerWebViewLogRecord,
 } from '../../lib/types';
 import {
@@ -20,8 +20,7 @@ const htmlAsset = require('./visual-stimulus-response.html');
 
 type Props = {
   configuration: FlankerConfiguration;
-  onResult: (data: Array<FlankerLogRecord>) => void;
-  onComplete: () => void;
+  onResult: (data: FlankerGameResponse) => void;
 };
 
 const HtmlFlanker: FC<Props> = props => {
@@ -81,8 +80,10 @@ const HtmlFlanker: FC<Props> = props => {
                 record: x,
               }),
             );
-          props.onResult(result);
-          props.onComplete();
+          props.onResult({
+            records: result,
+            gameType: props.configuration.blockType,
+          });
         }}
       />
     </Box>

@@ -6,17 +6,14 @@ import { Box } from '@app/shared/ui';
 import SwiftFlankerWrapper from './SwiftFlankerWrapper';
 import {
   FlankerConfiguration,
-  FlankerLogRecord,
+  FlankerGameResponse,
   FlankerNativeIosLogRecord,
 } from '../../lib/types';
 import { ConfigurationBuilder, parseResponse } from '../../lib/utils';
 
 type Props = {
   configuration: FlankerConfiguration;
-  isFirstGame: boolean;
-  isLastGame: boolean;
-  onResult: (data: Array<FlankerLogRecord>) => void;
-  onComplete: () => void;
+  onResult: (data: FlankerGameResponse) => void;
 };
 
 const NativeIosFlanker: FC<Props> = props => {
@@ -41,11 +38,11 @@ const NativeIosFlanker: FC<Props> = props => {
     setTimeout(() => {
       NativeModules.FlankerViewManager.setGameParameters(configString);
       NativeModules.FlankerViewManager.startGame(
-        props.isFirstGame,
-        props.isLastGame,
+        props.configuration.isFirstPractice,
+        props.configuration.isLastTest,
       );
     }, 600);
-  }, [configuration, props.isFirstGame, props.isLastGame]);
+  }, [configuration, props.configuration]);
 
   return (
     <Box flex={1}>
@@ -72,8 +69,10 @@ const NativeIosFlanker: FC<Props> = props => {
             }),
           );
 
-          props.onResult(result);
-          props.onComplete();
+          props.onResult({
+            gameType: props.configuration.blockType,
+            records: result,
+          });
         }}
       />
     </Box>
