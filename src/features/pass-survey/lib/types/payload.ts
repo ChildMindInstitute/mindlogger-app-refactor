@@ -360,7 +360,9 @@ export type CheckboxResponse = string[] | null;
 export type DateResponse = string | null;
 
 export type AudioResponse = {
-  filePath: string;
+  uri: string;
+  type: string;
+  fileName: string;
 };
 
 export type AudioPlayerResponse = boolean;

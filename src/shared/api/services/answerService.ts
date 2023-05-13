@@ -6,7 +6,7 @@ import { SuccessfulEmptyResponse } from '../types';
 export type AnswerDto = {
   activityItemId: string;
   answer: {
-    value: string | number | Array<string>;
+    value: string | number | Array<string> | any;
     additionalText?: string;
     shouldIdentifyResponse?: boolean;
   };
