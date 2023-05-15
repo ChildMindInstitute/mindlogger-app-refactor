@@ -382,10 +382,10 @@ export type StackedCheckboxResponse = {
   optionIds: string[];
 }[];
 
-export type StackedRadioResponse = Array<{
+export type StackedRadioResponse = {
   rowId: string;
   optionId: string;
-}>;
+}[];
 
 export type StackedSliderResponse = Array<{
   rowId: string;
