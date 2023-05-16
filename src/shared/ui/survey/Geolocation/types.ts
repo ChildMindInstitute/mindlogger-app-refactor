@@ -1,4 +1,4 @@
 export type Coordinates = {
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
 };

@@ -153,7 +153,7 @@ function ActivityItem({
 
     case 'NumberSelect':
       item = (
-        <Box flex={1} justifyContent="center" mx={16}>
+        <Box justifyContent="center" mx={16}>
           <NumberSelector
             value={value?.answer ?? ''}
             config={pipelineItem.payload}
@@ -325,8 +325,10 @@ function ActivityItem({
           </Box>
         )}
 
-        {!!pipelineItem.timer && (
+        {pipelineItem.timer ? (
           <Timer duration={pipelineItem.timer} onTimeIsUp={next} />
+        ) : (
+          <></>
         )}
 
         {item}

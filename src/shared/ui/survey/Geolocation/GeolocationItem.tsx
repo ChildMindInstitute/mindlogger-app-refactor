@@ -38,8 +38,8 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
     NativeGeolocation.getCurrentPosition(
       successResult => {
         const coordinatesResult = {
-          latitude: successResult.coords.latitude,
-          longitude: successResult.coords.longitude,
+          latitude: String(successResult.coords.latitude),
+          longitude: String(successResult.coords.longitude),
         };
         onChange(coordinatesResult);
       },
