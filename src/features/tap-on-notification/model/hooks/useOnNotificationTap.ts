@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { StoreProgress } from '@app/abstract/lib';
+import { EntityPath, EntityType, StoreProgress } from '@app/abstract/lib';
 import { AppletModel, clearStorageRecords } from '@app/entities/applet';
 import {
   LocalEventDetail,
@@ -16,12 +16,7 @@ import { LogTrigger } from '@app/shared/api';
 import { useAppSelector } from '@app/shared/lib';
 
 type Input = {
-  checkAvailability: (
-    appletId: string,
-    activityId: string | null,
-    flowId: string | null,
-    eventId: string,
-  ) => boolean;
+  checkAvailability: (identifiers: EntityPath) => boolean;
 };
 
 const GoBackDuration = 1000;
@@ -64,6 +59,10 @@ export function useOnNotificationTap({ checkAvailability }: Input) {
       const { appletId, activityId, activityFlowId, eventId } =
         eventDetail.notification.data;
 
+      const entityId: string = (activityId ?? activityFlowId)!;
+
+      const entityType: EntityType = activityFlowId ? 'flow' : 'regular';
+
       const executing = isActivityExecuting();
 
       if (executing) {
@@ -72,12 +71,7 @@ export function useOnNotificationTap({ checkAvailability }: Input) {
 
       setTimeout(
         () => {
-          startActivityOrFlow(
-            appletId!,
-            activityId ?? null,
-            activityFlowId ?? null,
-            eventId!,
-          );
+          startEntity(appletId!, entityId, entityType, eventId!);
         },
         executing ? GoBackDuration : WorkaroundDuration,
       );
@@ -94,47 +88,45 @@ export function useOnNotificationTap({ checkAvailability }: Input) {
     return lastRoute.name === 'InProgressActivity';
   };
 
-  function navigateSurvey(
-    appletId: string,
-    activityId: string,
-    eventId: string,
-    flowId?: string,
-  ) {
+  function navigateSurvey({
+    appletId,
+    eventId,
+    entityId,
+    entityType,
+  }: EntityPath) {
     navigator.navigate('InProgressActivity', {
       appletId,
-      activityId,
       eventId,
-      flowId,
+      entityId,
+      entityType,
     });
   }
 
-  const startActivityOrFlow = (
+  const startEntity = (
     appletId: string,
-    activityId: string | null,
-    flowId: string | null,
+    entityId: string,
+    entityType: EntityType,
     eventId: string,
   ) => {
-    if (!checkAvailability(appletId, activityId, flowId, eventId)) {
+    if (!checkAvailability({ appletId, eventId, entityId, entityType })) {
       return;
     }
 
-    if (flowId) {
-      startFlow(appletId, flowId, eventId).then(
-        ({ startedFromActivity, startedFromScratch }) => {
-          if (startedFromScratch) {
-            clearStorageRecords.byEventId(eventId);
-          }
-
-          navigateSurvey(appletId, startedFromActivity, eventId, flowId);
-        },
-      );
-    } else {
-      startActivity(appletId, activityId!, eventId).then(startedFromScratch => {
+    if (entityType === 'flow') {
+      startFlow(appletId, entityId, eventId).then(({ startedFromScratch }) => {
         if (startedFromScratch) {
           clearStorageRecords.byEventId(eventId);
         }
 
-        navigateSurvey(appletId, activityId!, eventId);
+        navigateSurvey({ appletId, eventId, entityId, entityType });
+      });
+    } else {
+      startActivity(appletId, entityId, eventId).then(startedFromScratch => {
+        if (startedFromScratch) {
+          clearStorageRecords.byEventId(eventId);
+        }
+
+        navigateSurvey({ appletId, eventId, entityId, entityType });
       });
     }
   };

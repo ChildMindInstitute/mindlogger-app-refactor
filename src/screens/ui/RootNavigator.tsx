@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { StoreProgress } from '@app/abstract/lib';
+import { EntityPath, StoreProgress } from '@app/abstract/lib';
 import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
 import { TapOnNotificationModel } from '@app/features/tap-on-notification';
@@ -76,9 +76,14 @@ export default () => {
   });
 
   TapOnNotificationModel.useOnNotificationTap({
-    checkAvailability: (appletId, activityId, flowId, eventId) => {
+    checkAvailability: ({
+      appletId,
+      eventId,
+      entityId,
+      entityType,
+    }: EntityPath) => {
       return checkEntityAvailability({
-        identifiers: { appletId, activityId, flowId, eventId },
+        identifiers: { appletId, eventId, entityId, entityType },
         queryClient,
         storeProgress,
       });

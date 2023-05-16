@@ -66,20 +66,20 @@ function useStartEntity() {
     activityId: string,
     eventId: string,
   ) {
-    return new Promise<boolean>(resolve => {
+    return new Promise<{ startedFromScratch: boolean }>(resolve => {
       const progressRecord = getProgress(appletId, activityId, eventId);
 
       if (isInProgress(progressRecord)) {
         onBeforeStartingActivity({
           onRestart: () => {
             activityStarted(appletId, activityId, eventId);
-            resolve(true);
+            resolve({ startedFromScratch: true });
           },
-          onResume: () => resolve(false),
+          onResume: () => resolve({ startedFromScratch: false }),
         });
       } else {
         activityStarted(appletId, activityId, eventId);
-        resolve(false);
+        resolve({ startedFromScratch: true });
       }
     });
   }
@@ -103,10 +103,7 @@ function useStartEntity() {
       eventId,
     ) as FlowProgress;
 
-    const resumeActivityId = progressRecord?.currentActivityId;
-
     return new Promise<{
-      startedFromActivity: string;
       startedFromScratch: boolean;
     }>(resolve => {
       if (isInProgress(progressRecord as StoreProgressPayload)) {
@@ -114,20 +111,17 @@ function useStartEntity() {
           onRestart: () => {
             flowStarted(appletId, flowId, firstActivityId, eventId, 0);
             resolve({
-              startedFromActivity: firstActivityId,
               startedFromScratch: true,
             });
           },
           onResume: () =>
             resolve({
-              startedFromActivity: resumeActivityId,
               startedFromScratch: false,
             }),
         });
       } else {
         flowStarted(appletId, flowId, firstActivityId, eventId, 0);
         resolve({
-          startedFromActivity: firstActivityId,
           startedFromScratch: true,
         });
       }

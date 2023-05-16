@@ -1,4 +1,8 @@
-import { ActivityPipelineType, StoreProgressPayload } from '@app/abstract/lib';
+import {
+  ActivityPipelineType,
+  EntityPath,
+  StoreProgressPayload,
+} from '@app/abstract/lib';
 import { useInProgressRecord } from '@app/entities/applet/model';
 import { ScheduleEvent } from '@app/entities/event';
 import { useEventQuery } from '@app/entities/event/api';
@@ -12,14 +16,16 @@ import {
 import useTimer from '../model/hooks/useTimer';
 
 type Props = {
-  appletId: string;
-  eventId: string;
-  flowId?: string;
-  activityId: string;
   onClose: () => void;
-};
+} & EntityPath;
 
-function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
+function FlowSurvey({
+  appletId,
+  entityId,
+  entityType,
+  eventId,
+  onClose,
+}: Props) {
   const {
     next,
     back,
@@ -31,14 +37,14 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
   } = useFlowState({
     appletId,
     eventId,
-    flowId,
+    flowId: entityType === 'flow' ? entityId : undefined,
   });
 
   const event: ScheduleEvent = useEventQuery(appletId, eventId);
 
   const progressRecord: StoreProgressPayload = useInProgressRecord({
     appletId,
-    entityId: flowId ?? activityId,
+    entityId,
     eventId,
   })!;
 
@@ -73,16 +79,16 @@ function FlowSurvey({ appletId, activityId, eventId, onClose, flowId }: Props) {
 
   useFlowRecordInitialization({
     appletId,
-    activityId,
     eventId,
-    flowId,
+    entityId,
+    entityType,
   });
 
   useActivityRecordsInitialization({
     appletId,
-    activityId,
     eventId,
-    flowId,
+    entityId,
+    entityType,
   });
 
   return (

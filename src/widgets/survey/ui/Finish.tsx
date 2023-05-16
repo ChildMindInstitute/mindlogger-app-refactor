@@ -74,8 +74,7 @@ function FinishItem({
 
   let finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';
 
-  const finishedSuccessfully =
-    isOffline || successfullySentAnswers || finishReason === 'time-is-up';
+  const finishedSuccessfully = isOffline || successfullySentAnswers;
 
   const finishedWithSendingError = !isOffline && sentAnswersWithError;
 
