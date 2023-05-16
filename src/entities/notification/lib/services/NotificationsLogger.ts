@@ -22,6 +22,10 @@ type LogPayload = {
 };
 
 function NotificationsLogger() {
+  const showInConsoleAsJsonString: boolean = false;
+
+  const showInConsoleAsObjects: boolean = false;
+
   const logInternal = async (payload: LogPayload) => {
     const queued: NotificationDescriber[] = NotificationQueue.get();
 
@@ -52,6 +56,18 @@ function NotificationsLogger() {
       notificationInQueue: JSON.stringify(notificationsInQueue, null, 2),
       scheduledNotifications: JSON.stringify(scheduledNotifications, null, 2),
     };
+
+    if (showInConsoleAsJsonString) {
+      console.log('notificationDescriptions', request.notificationDescriptions);
+      console.log('notificationInQueue', request.notificationInQueue);
+      console.log('scheduledNotifications', request.scheduledNotifications);
+    }
+
+    if (showInConsoleAsObjects) {
+      console.log('notificationDescriptions', notificationDescriptions);
+      console.log('notificationsInQueue', notificationsInQueue);
+      console.log('scheduledNotifications', scheduledNotifications);
+    }
 
     await NotificationService.sendNotificationLogs(request);
   };
