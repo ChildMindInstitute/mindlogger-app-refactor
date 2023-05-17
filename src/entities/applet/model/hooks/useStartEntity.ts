@@ -65,11 +65,17 @@ function useStartEntity() {
     appletId: string,
     activityId: string,
     eventId: string,
+    isTimerElapsed: boolean = false,
   ) {
     return new Promise<{ startedFromScratch: boolean }>(resolve => {
       const progressRecord = getProgress(appletId, activityId, eventId);
 
       if (isInProgress(progressRecord)) {
+        if (isTimerElapsed) {
+          resolve({ startedFromScratch: false });
+          return;
+        }
+
         onBeforeStartingActivity({
           onRestart: () => {
             activityStarted(appletId, activityId, eventId);
@@ -84,7 +90,12 @@ function useStartEntity() {
     });
   }
 
-  function startFlow(appletId: string, flowId: string, eventId: string) {
+  function startFlow(
+    appletId: string,
+    flowId: string,
+    eventId: string,
+    isTimerElapsed: boolean = false,
+  ) {
     const detailsResponse: AppletDetailsResponse =
       getDataFromQuery<AppletDetailsResponse>(
         getAppletDetailsKey(appletId),
@@ -107,6 +118,13 @@ function useStartEntity() {
       startedFromScratch: boolean;
     }>(resolve => {
       if (isInProgress(progressRecord as StoreProgressPayload)) {
+        if (isTimerElapsed) {
+          resolve({
+            startedFromScratch: false,
+          });
+          return;
+        }
+
         onBeforeStartingActivity({
           onRestart: () => {
             flowStarted(appletId, flowId, firstActivityId, eventId, 0);

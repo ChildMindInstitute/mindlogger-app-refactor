@@ -38,9 +38,10 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
     activityId,
     eventId,
     flowId,
+    isTimerElapsed,
   }: ActivityListItem) => {
     if (flowId) {
-      startFlow(appletId, flowId, eventId).then(result => {
+      startFlow(appletId, flowId, eventId, isTimerElapsed).then(result => {
         if (result.startedFromScratch) {
           clearStorageRecords.byEventId(eventId);
         }
@@ -48,13 +49,15 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
         navigateSurvey(flowId, 'flow', eventId);
       });
     } else {
-      startActivity(appletId, activityId, eventId).then(result => {
-        if (result.startedFromScratch) {
-          clearStorageRecords.byEventId(eventId);
-        }
+      startActivity(appletId, activityId, eventId, isTimerElapsed).then(
+        result => {
+          if (result.startedFromScratch) {
+            clearStorageRecords.byEventId(eventId);
+          }
 
-        navigateSurvey(activityId, 'regular', eventId);
-      });
+          navigateSurvey(activityId, 'regular', eventId);
+        },
+      );
     }
   };
 
