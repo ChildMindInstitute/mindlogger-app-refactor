@@ -61,7 +61,6 @@ function FinishItem({
   const {
     mutate: sendAnswers,
     isLoading: isSendingAnswers,
-    isSuccess: successfullySentAnswers,
     isError: sentAnswersWithError,
     isPaused: isOffline,
   } = useActivityAnswersMutation({
@@ -73,10 +72,6 @@ function FinishItem({
   });
 
   let finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';
-
-  const finishedSuccessfully = isOffline || successfullySentAnswers;
-
-  const finishedWithSendingError = !isOffline && sentAnswersWithError;
 
   const isLoading = !isOffline && isSendingAnswers;
 
@@ -93,17 +88,22 @@ function FinishItem({
       return;
     }
 
-    sendAnswers({
-      flowId: flowId ? flowId : null,
-      appletId,
-      activityId,
-      createdAt: getUnixTimestamp(Date.now()),
-      version: activityStorageRecord.appletVersion,
-      answers: mapAnswersToDto(
-        activityStorageRecord.items,
-        activityStorageRecord.answers,
-      ),
-    });
+    const hasAnswers = !!Object.keys(activityStorageRecord.answers).length;
+
+    if (hasAnswers) {
+      // if do not check - getting http 500
+      sendAnswers({
+        flowId: flowId ? flowId : null,
+        appletId,
+        activityId,
+        createdAt: getUnixTimestamp(Date.now()),
+        version: activityStorageRecord.appletVersion,
+        answers: mapAnswersToDto(
+          activityStorageRecord.items,
+          activityStorageRecord.answers,
+        ),
+      });
+    }
 
     clearActivityStorageRecord();
   }
@@ -125,29 +125,28 @@ function FinishItem({
   return (
     <ImageBackground>
       <Center flex={1} mx={16}>
-        {finishedSuccessfully && (
+        {!isLoading && (
           <>
             <Center mb={20}>
               <Text fontSize={24} fontWeight="bold">
-                {finishReason === 'regular' && t('additional:thanks')}
+                {finishReason === 'regular' &&
+                  !sentAnswersWithError &&
+                  t('additional:thanks')}
+
+                {finishReason === 'regular' &&
+                  sentAnswersWithError &&
+                  t('additional:sorry')}
+
                 {finishReason === 'time-is-up' && t('additional:time-end')}
               </Text>
 
-              <Text fontSize={16}>{t('additional:saved_answers')}</Text>
-            </Center>
+              {!sentAnswersWithError && (
+                <Text fontSize={16}>{t('additional:saved_answers')}</Text>
+              )}
 
-            <Button onPress={onCloseEntity}>{t('additional:close')}</Button>
-          </>
-        )}
-
-        {!finishedSuccessfully && finishedWithSendingError && (
-          <>
-            <Center mb={20}>
-              <Text fontSize={24} fontWeight="bold">
-                {finishReason === 'regular' && t('additional:sorry')}
-              </Text>
-
-              <Text fontSize={16}>{t('additional:server-error')}</Text>
+              {sentAnswersWithError && (
+                <Text fontSize={16}>{t('additional:server-error')}</Text>
+              )}
             </Center>
 
             <Button onPress={onCloseEntity}>{t('additional:close')}</Button>

@@ -10,6 +10,7 @@ interface StepperPipelineItem extends FlowPipelineItemBase {
     appletId: string;
     activityId: string;
     eventId: string;
+    order: number;
   };
 }
 
@@ -20,6 +21,7 @@ interface IntermediatePipelineItem extends FlowPipelineItemBase {
     activityId: string;
     eventId: string;
     flowId: string;
+    order: number;
   };
 }
 
@@ -32,6 +34,7 @@ interface FinishPipelineItem extends FlowPipelineItemBase {
     activityId: string;
     eventId: string;
     flowId?: string;
+    order: number;
   };
 }
 
@@ -64,6 +67,7 @@ export function buildActivityFlowPipeline({
       activityId,
       appletId,
       eventId,
+      order: i,
     };
 
     pipeline.push({
@@ -111,6 +115,7 @@ export function buildSingleActivityPipeline({
         appletId,
         eventId,
         activityId,
+        order: 0,
       },
     },
     {
@@ -119,6 +124,7 @@ export function buildSingleActivityPipeline({
         appletId,
         eventId,
         activityId,
+        order: 0,
       },
     },
   ];

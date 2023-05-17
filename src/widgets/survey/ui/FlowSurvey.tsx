@@ -1,8 +1,4 @@
-import {
-  ActivityPipelineType,
-  EntityPath,
-  StoreProgressPayload,
-} from '@app/abstract/lib';
+import { EntityPath, StoreProgressPayload } from '@app/abstract/lib';
 import { useInProgressRecord } from '@app/entities/applet/model';
 import { ScheduleEvent } from '@app/entities/event';
 import { useEventQuery } from '@app/entities/event/api';
@@ -49,10 +45,6 @@ function FlowSurvey({
   })!;
 
   const entityStartedAt = progressRecord.startAt;
-  const pipelineActivityOrder =
-    progressRecord.type === ActivityPipelineType.Flow
-      ? progressRecord.pipelineActivityOrder
-      : 0;
 
   useTimer({
     entityStartedAt,
@@ -94,7 +86,6 @@ function FlowSurvey({
   return (
     <FlowElementSwitch
       {...flowPipelineItem}
-      pipelineActivityOrder={pipelineActivityOrder}
       event={event!}
       entityStartedAt={entityStartedAt}
       isTimerElapsed={isTimerElapsed}
