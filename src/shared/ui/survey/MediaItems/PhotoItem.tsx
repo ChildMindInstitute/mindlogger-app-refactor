@@ -65,9 +65,9 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
     if (isGalleryAccessGranted) {
       selectImage();
     } else {
-      const permissionStatus = await requestGalleryPermissions();
+      const isPermissionAllowed = await requestGalleryPermissions();
 
-      if (permissionStatus === 'granted') {
+      if (isPermissionAllowed) {
         selectImage();
       } else {
         await handleBlockedPermissions(
@@ -82,9 +82,9 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
     if (isCameraAccessGranted) {
       takePhoto();
     } else {
-      const permissionStatus = await requestCameraPermissions();
+      const isPermissionAllowed = await requestCameraPermissions();
 
-      if (permissionStatus === 'granted') {
+      if (isPermissionAllowed) {
         takePhoto();
       } else {
         await handleBlockedPermissions(
