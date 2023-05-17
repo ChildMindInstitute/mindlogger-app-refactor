@@ -1,5 +1,7 @@
 import { ImageUrl } from '@app/shared/lib';
 
+import { FlankerSettingsDto } from './FlankerSettingsDto';
+
 export type ResponseType =
   | 'text'
   | 'singleSelect'
@@ -262,16 +264,18 @@ type SliderRowsConfiguration = ButtonsConfiguration &
     setAlerts: boolean;
   };
 
-type SliderRowsAnswerSettings = Array<{
-  id: string;
-  label: string;
-  minLabel: string | null;
-  maxLabel: string | null;
-  minValue: number;
-  maxValue: number;
-  minImage: ImageUrl | null;
-  maxImage: ImageUrl | null;
-}>;
+type SliderRowsAnswerSettings = {
+  rows: Array<{
+    id: string;
+    label: string;
+    minLabel: string | null;
+    maxLabel: string | null;
+    minValue: number;
+    maxValue: number;
+    minImage: ImageUrl | null;
+    maxImage: ImageUrl | null;
+  }>;
+};
 
 // @todo Change when the BE integration is done
 type AbTestConfiguration = TimerConfiguration;
@@ -281,11 +285,9 @@ type AbTestAnswerSettings = {
   device: 'Phone' | 'Tablet';
 };
 
-// @todo Change when the BE integration is done
-type FlankerConfiguration = any;
+type FlankerConfiguration = null;
 
-// @todo Change when the BE integration is done
-type FlankerAnswerSettings = any;
+export type FlankerAnswerSettings = FlankerSettingsDto;
 
 type Configuration =
   | TextConfiguration

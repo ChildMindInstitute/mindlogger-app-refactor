@@ -39,7 +39,6 @@ for (let i = 0; i < 3; i++) {
       status: ActivityStatus.Scheduled,
       availableFrom: new Date(),
       availableTo: new Date(),
-      scheduledAt: null,
       timeLeftToComplete: null,
       isTimerElapsed: false,
     });

@@ -1,5 +1,8 @@
 import { DrawResult } from '@app/entities/drawer';
-import { FlankerLogRecord, FlankerConfiguration } from '@app/entities/flanker';
+import {
+  FlankerConfiguration,
+  FlankerGameResponse,
+} from '@app/entities/flanker';
 import { HourMinute } from '@app/shared/lib';
 import { Coordinates } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
@@ -17,6 +20,7 @@ export type ActivityItemType =
   | 'Audio'
   | 'Message'
   | 'AudioPlayer'
+  | 'StackedSlider'
   | 'StackedCheckbox'
   | 'StackedRadio'
   | 'Radio'
@@ -122,6 +126,21 @@ type StackedRadioPayload = {
   }>;
 };
 
+type StackedSliderPayload = {
+  addScores: boolean;
+  setAlerts: boolean;
+  rows: {
+    id: string;
+    label: string;
+    leftTitle: string | null;
+    rightTitle: string | null;
+    minValue: number;
+    maxValue: number;
+    leftImageUrl: string | null;
+    rightImageUrl: string | null;
+  }[];
+};
+
 type TimeRangePayload = null;
 
 type TimePayload = null;
@@ -158,7 +177,7 @@ type CheckboxPayload = {
   }>;
 };
 
-type FlankerPayload = FlankerConfiguration;
+export type FlankerPayload = FlankerConfiguration;
 
 type TextInputPayload = {
   maxLength: number;
@@ -190,6 +209,7 @@ type PipelinePayload =
   | TimeRangePayload
   | AudioPayload
   | MessagePayload
+  | StackedSliderPayload
   | StackedCheckboxPayload
   | StackedRadioPayload
   | AudioPlayerPayload
@@ -295,6 +315,12 @@ export interface StackedRadioPipelineItem extends PipelineItemBase {
   type: 'StackedRadio';
   payload: StackedRadioPayload;
 }
+
+export interface StackedSliderPipelineItem extends PipelineItemBase {
+  type: 'StackedSlider';
+  payload: StackedSliderPayload;
+}
+
 export interface TimeRangePipelineItem extends PipelineItemBase {
   type: 'TimeRange';
   payload: TimeRangePayload;
@@ -322,7 +348,7 @@ export type AbTestResponse = LogLine[];
 
 export type DrawingTestResponse = DrawResult;
 
-export type FlankerResponse = Array<FlankerLogRecord>;
+export type FlankerResponse = FlankerGameResponse;
 
 export type TextInputResponse = string;
 
@@ -351,14 +377,20 @@ export type RadioResponse = string;
 
 export type TimeResponse = HourMinute;
 
-export type StackedCheckboxResponse =
-  | {
-      rowId: string;
-      optionIds: string[];
-    }[]
-  | null;
+export type StackedCheckboxResponse = {
+  rowId: string;
+  optionIds: string[];
+}[];
 
-export type StackedRadioResponse = Array<{ rowId: string; optionId: string }>;
+export type StackedRadioResponse = Array<{
+  rowId: string;
+  optionId: string;
+}>;
+
+export type StackedSliderResponse = Array<{
+  rowId: string;
+  value: number;
+}>;
 
 export type PhotoResponse = {
   uri: string;
@@ -385,6 +417,7 @@ export type PipelineItemResponse =
   | NumberSelectResponse
   | CheckboxResponse
   | StackedRadioResponse
+  | StackedSliderResponse
   | StackedCheckboxResponse
   | AudioResponse
   | AudioPlayerResponse
@@ -405,6 +438,7 @@ export type PipelineItem =
   | SliderPipelineItem
   | NumberSelectPipelineItem
   | CheckboxPipelineItem
+  | StackedSliderPipelineItem
   | StackedCheckboxPipelineItem
   | StackedRadioPipelineItem
   | AudioPipelineItem

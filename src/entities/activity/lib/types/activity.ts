@@ -1,3 +1,5 @@
+import { FlankerSettings } from './flanker';
+
 export type ActivityItemType =
   | 'AbTest'
   | 'DrawingTest'
@@ -12,6 +14,7 @@ export type ActivityItemType =
   | 'AudioPlayer'
   | 'StackedCheckbox'
   | 'StackedRadio'
+  | 'StackedSlider'
   | 'Message'
   | 'Audio'
   | 'Photo'
@@ -141,6 +144,21 @@ type StackedRadioConfig = {
   }>;
 };
 
+type StackedSliderConfig = {
+  addScores: boolean;
+  setAlerts: boolean;
+  rows: {
+    id: string;
+    label: string;
+    leftTitle: string | null;
+    rightTitle: string | null;
+    minValue: number;
+    maxValue: number;
+    leftImageUrl: string | null;
+    rightImageUrl: string | null;
+  }[];
+};
+
 type RadioConfig = {
   randomizeOptions: boolean;
   setAlerts: boolean;
@@ -174,11 +192,13 @@ export type ActivityItemConfig =
   | AudioConfig
   | AudioPlayerConfig
   | StackedCheckboxConfig
+  | StackedSliderConfig
   | RadioConfig
   | SplashConfig
   | PhotoConfig
   | VideoConfig
   | TimeConfig
+  | FlankerSettings
   | null;
 
 type ActivityItemBase = {
@@ -222,7 +242,7 @@ interface DrawingTestTestActivityItem extends ActivityItemBase {
 
 interface FlankerActivityItem extends ActivityItemBase {
   inputType: 'Flanker';
-  config: any;
+  config: FlankerSettings;
 }
 
 interface TextInputActivityItem extends ActivityItemBase {
@@ -266,6 +286,11 @@ interface StackedCheckboxActivityItem extends ActivityItemBase {
 interface StackedRadioActivityItem extends ActivityItemBase {
   inputType: 'StackedRadio';
   config: StackedRadioConfig;
+}
+
+interface StackedSliderActivityItem extends ActivityItemBase {
+  inputType: 'StackedSlider';
+  config: StackedSliderConfig;
 }
 
 interface TimeRangeActivityItem extends ActivityItemBase {
@@ -315,6 +340,7 @@ export type ActivityItem =
   | AudioActivityItem
   | MessageActivityItem
   | AudioPlayerActivityItem
+  | StackedSliderActivityItem
   | StackedCheckboxActivityItem
   | StackedRadioActivityItem
   | TimeRangeActivityItem

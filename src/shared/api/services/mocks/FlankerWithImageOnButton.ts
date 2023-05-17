@@ -1,6 +1,6 @@
-import { FlankerConfiguration } from '../../lib/types';
+// todo - remove after api integration and qa testing
 
-export const FlankerWithImageOnButton: FlankerConfiguration = {
+export const FlankerWithImageOnButton: any = {
   stimulusTrials: [
     {
       text: '2.jpg',
@@ -121,4 +121,6 @@ export const FlankerWithImageOnButton: FlankerConfiguration = {
   minimumAccuracy: 100,
   blockType: 'practice',
   isLastPractice: false,
+  isFirstPractice: false,
+  isLastTest: false,
 };

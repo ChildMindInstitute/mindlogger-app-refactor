@@ -25,14 +25,15 @@ export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
       oneTimeCompletion: dto.availability.oneTimeCompletion,
     },
     notificationSettings: {
-      notifications: dto.notificationSettings
-        ? dto.notificationSettings.notifications.map(x => ({
-            at: x.atTime,
-            from: x.fromTime,
-            to: x.toTime,
-            triggerType: x.triggerType,
-          }))
-        : [],
+      notifications:
+        dto.notificationSettings && dto.notificationSettings.notifications
+          ? dto.notificationSettings.notifications.map(x => ({
+              at: x.atTime,
+              from: x.fromTime,
+              to: x.toTime,
+              triggerType: x.triggerType,
+            }))
+          : [],
       reminder: !dto.notificationSettings?.reminder
         ? null
         : {

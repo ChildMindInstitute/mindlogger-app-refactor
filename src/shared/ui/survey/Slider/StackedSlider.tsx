@@ -1,27 +1,26 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 import { YStack, Text, SurveySlider } from '@shared/ui';
 
 import { StackedSliderProps } from './types';
 
 const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
-  const { onChange, onRelease, onPress, initialValues } = props;
+  const { rows } = config;
+  const { onChange, onRelease, onPress, values } = props;
 
-  const [arrayOfStackedValues, setArrayOfStackedValues] = useState(
-    initialValues || new Array(config.length).fill(null),
-  );
+  const onSliderValueChange = (value: number, rowId: string) => {
+    const clonedValues = values?.filter(row => row.rowId !== rowId) ?? [];
+    clonedValues.push({
+      rowId,
+      value,
+    });
 
-  const onSliderValueChange = (value: number, index: number) => {
-    const clonedValues = [...arrayOfStackedValues];
-    clonedValues[index] = value;
-    setArrayOfStackedValues(clonedValues);
     onChange(clonedValues);
   };
 
   const onSliderPress = () => {
-    const userInteractedWithAllSliders = !arrayOfStackedValues.some(
-      value => value === null,
-    );
+    const userInteractedWithAllSliders = values?.length === rows.length;
+
     if (userInteractedWithAllSliders && onPress) {
       onPress();
     }
@@ -29,20 +28,23 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
 
   return (
     <YStack>
-      {config.map((sliderConfig, index) => {
-        const { label } = sliderConfig;
+      {rows.map(sliderConfig => {
+        const { id: currentRowId, label, ...singleSliderProps } = sliderConfig;
+        const rowValue = values?.find(
+          ({ rowId }) => currentRowId === rowId,
+        )?.value;
 
         return (
-          <YStack key={`slider-${index}`}>
+          <YStack key={`slider-${currentRowId}`}>
             <Text fontSize={12} my="$3">
               {label}
             </Text>
 
             <SurveySlider
-              config={sliderConfig}
-              onChange={value => onSliderValueChange(value, index)}
+              config={singleSliderProps}
+              onChange={value => onSliderValueChange(value, currentRowId)}
               onRelease={onRelease}
-              initialValue={arrayOfStackedValues[index]}
+              initialValue={rowValue}
               onPress={onSliderPress}
             />
           </YStack>

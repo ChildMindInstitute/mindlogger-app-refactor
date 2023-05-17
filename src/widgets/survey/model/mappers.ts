@@ -10,7 +10,7 @@ export function mapAnswersToDto(
   pipeline: PipelineItem[],
   answers: Answers,
 ): Array<AnswerDto> {
-  return Object.entries(answers)
+  const result = Object.entries(answers)
     .filter(([_, answer]) => answer.answer != null)
     .map(([step, answer]) => {
       const dto: AnswerDto = {
@@ -33,4 +33,6 @@ export function mapAnswersToDto(
 
       return dto;
     });
+
+  return result;
 }

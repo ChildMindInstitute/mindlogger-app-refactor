@@ -1,4 +1,6 @@
-// we cannot avoid _ format here as it's web-view contract
+import { BlockType } from './configuration';
+
+// we cannot avoid "_" here, because it's web-view, ios-swift-components contracts
 export type FlankerWebViewLogRecord = {
   button_pressed: string;
   correct: boolean;
@@ -14,14 +16,11 @@ export type FlankerWebViewLogRecord = {
 
 export type FlankerNativeIosLogRecord = FlankerWebViewLogRecord;
 
-/*
-  Discuss with BE if we can avoid such names in dto:
-  button_pressed
-  response_touch_timestamp
-  start_time
-  start_timestamp
-  trial_index
-*/
+export type FlankerGameResponse = {
+  records: Array<FlankerLogRecord>;
+  gameType: BlockType;
+};
+
 export type FlankerLogRecord = {
   buttonPressed: string;
   correct: boolean;

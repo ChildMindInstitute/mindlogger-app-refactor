@@ -25,6 +25,7 @@ import {
 import { getMsFromSeconds } from '@app/shared/lib';
 
 import { ActivityDetails, ActivityItem } from '../lib';
+import { FlankerSettings } from '../lib/types/flanker';
 
 function mapTimerValue(dtoTimer: number | null) {
   if (dtoTimer) {
@@ -47,6 +48,7 @@ function mapAdditionalText(configuration: AdditionalResponseConfiguration) {
 function mapToDrawing(dto: DrawingItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'DrawingTest',
     config: {
       imageUrl: dto.responseValues.drawingExample,
@@ -70,6 +72,7 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
 function mapToAbTest(dto: AbTestItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'AbTest',
     config: {
       device: dto.responseValues.device,
@@ -88,9 +91,58 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
   };
 }
 
+function mapToFlanker(itemDto: FlankerItemDto): ActivityItem {
+  const dto = itemDto.responseValues;
+
+  const settings: FlankerSettings = {
+    general: {
+      buttons: [...dto.general.buttons],
+      fixation: dto.general.fixation ? { ...dto.general.fixation } : null,
+      instruction: dto.general.instruction,
+      stimulusTrials: [...dto.general.stimulusTrials],
+    },
+    practice: {
+      blocks: [...dto.practice.blocks],
+      instruction: dto.practice.instruction,
+      randomizeOrder: dto.practice.randomizeOrder,
+      showFeedback: dto.practice.showFeedback,
+      showSummary: dto.practice.showSummary,
+      stimulusDuration: dto.practice.stimulusDuration,
+      threshold: dto.practice.threshold,
+    },
+    test: {
+      blocks: [...dto.test.blocks],
+      instruction: dto.test.instruction,
+      randomizeOrder: dto.test.randomizeOrder,
+      showFeedback: dto.test.showFeedback,
+      showSummary: dto.test.showSummary,
+      stimulusDuration: dto.test.stimulusDuration,
+    },
+  };
+
+  return {
+    canBeReset: false,
+    hasAlert: false,
+    hasScore: false,
+    hasTextResponse: false,
+    hasTopNavigation: false,
+    id: itemDto.id,
+    inputType: 'Flanker',
+    isHidden: false,
+    isAbleToMoveBack: false,
+    order: itemDto.order,
+    isSkippable: false,
+    name: itemDto.name,
+    timer: null,
+    question: itemDto.question,
+    config: settings,
+  };
+}
+
 function mapToAudio(dto: AudioItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'Audio',
     config: {
       maxDuration: dto.responseValues.maxDuration,
@@ -113,6 +165,7 @@ function mapToAudio(dto: AudioItemDto): ActivityItem {
 function mapToAudioPlayer(dto: AudioPlayerItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'AudioPlayer',
     config: {
       file: dto.responseValues.file,
@@ -136,6 +189,7 @@ function mapToAudioPlayer(dto: AudioPlayerItemDto): ActivityItem {
 function mapToDate(dto: DateItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'Date',
     timer: dto.config.timer,
     order: dto.order,
@@ -156,6 +210,7 @@ function mapToDate(dto: DateItemDto): ActivityItem {
 function mapToTime(dto: TimeItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'Time',
     config: null,
     timer: mapTimerValue(dto.timer),
@@ -173,13 +228,10 @@ function mapToTime(dto: TimeItemDto): ActivityItem {
   };
 }
 
-function mapToFlanker(dto: FlankerItemDto): ActivityItem {
-  return dto as any;
-}
-
 function mapToGeolocation(dto: GeolocationItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'Geolocation',
     timer: dto.config.timer,
     order: dto.order,
@@ -200,6 +252,7 @@ function mapToGeolocation(dto: GeolocationItemDto): ActivityItem {
 function mapToMessage(dto: MessageItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'Message',
     config: null,
     timer: mapTimerValue(dto.timer),
@@ -219,6 +272,7 @@ function mapToMessage(dto: MessageItemDto): ActivityItem {
 function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'Checkbox',
     config: {
       randomizeOptions: dto.config.randomizeOptions,
@@ -245,6 +299,7 @@ function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
 function mapToStackedCheckboxes(dto: MultiSelectionRowsItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'StackedCheckbox',
     config: {
       randomizeOptions: dto.config.randomizeOptions,
@@ -272,6 +327,7 @@ function mapToStackedCheckboxes(dto: MultiSelectionRowsItemDto): ActivityItem {
 function mapToNumberSelect(dto: NumberSelectionItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'NumberSelect',
     config: {
       min: dto.responseValues.minValue,
@@ -295,6 +351,7 @@ function mapToNumberSelect(dto: NumberSelectionItemDto): ActivityItem {
 function mapToPhoto(dto: PhotoItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'Photo',
     config: null,
     timer: mapTimerValue(dto.config.timer),
@@ -315,6 +372,7 @@ function mapToPhoto(dto: PhotoItemDto): ActivityItem {
 function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'Radio',
     config: {
       randomizeOptions: dto.config.randomizeOptions,
@@ -341,6 +399,7 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
 function mapToStackedRadio(dto: SingleSelectionRowsItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'StackedRadio',
     config: {
       randomizeOptions: dto.config.randomizeOptions,
@@ -368,17 +427,18 @@ function mapToStackedRadio(dto: SingleSelectionRowsItemDto): ActivityItem {
 function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'Slider',
     config: {
       leftTitle: dto.responseValues.minLabel,
       rightTitle: dto.responseValues.maxLabel,
       leftImageUrl: dto.responseValues.minImage,
       rightImageUrl: dto.responseValues.maxImage,
+      minValue: dto.responseValues.minValue,
+      maxValue: dto.responseValues.maxValue,
       showTickMarks: dto.config.showTickMarks,
       showTickLabels: dto.config.showTickLabels,
       isContinuousSlider: dto.config.continuousSlider,
-      minValue: dto.responseValues.minValue,
-      maxValue: dto.responseValues.maxValue,
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -396,12 +456,39 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
 }
 
 function mapToStackedSlider(dto: SliderRowsItemDto): ActivityItem {
-  return dto as any;
+  return {
+    id: dto.id,
+    name: dto.name,
+    inputType: 'StackedSlider',
+    config: {
+      setAlerts: dto.config.setAlerts,
+      addScores: dto.config.addScores,
+      rows: dto.responseValues.rows.map(item => ({
+        ...item,
+        leftTitle: item.minLabel,
+        rightTitle: item.maxLabel,
+        leftImageUrl: item.minImage,
+        rightImageUrl: item.maxImage,
+      })),
+    },
+    timer: mapTimerValue(dto.config.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+  };
 }
 
 function mapToTextInput(dto: TextItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'TextInput',
     config: {
       maxLength: dto.config.maxResponseLength,
@@ -430,6 +517,7 @@ function mapToTextInput(dto: TextItemDto): ActivityItem {
 function mapToTimeRange(dto: TimeRangeItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'TimeRange',
     config: null,
     timer: mapTimerValue(dto.config.timer),
@@ -450,6 +538,7 @@ function mapToTimeRange(dto: TimeRangeItemDto): ActivityItem {
 function mapToVideo(dto: VideoItemDto): ActivityItem {
   return {
     id: dto.id,
+    name: dto.name,
     inputType: 'Video',
     config: null,
     timer: mapTimerValue(dto.config.timer),

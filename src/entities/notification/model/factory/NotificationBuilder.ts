@@ -7,6 +7,7 @@ import {
   subMonths,
   subWeeks,
 } from 'date-fns';
+import i18next from 'i18next';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
@@ -32,7 +33,7 @@ import {
   ScheduleEvent,
 } from '../../lib/types';
 
-const NumberOfDaysForSchedule = 7;
+const NumberOfDaysForSchedule = 14;
 const DaysInWeek = 7;
 
 interface INotificationBuilder {
@@ -464,13 +465,8 @@ class NotificationBuilder implements INotificationBuilder {
     };
 
     if (!event.scheduledAt) {
-      console.warn(
-        `[NotificationBuilder.processEvent] event.scheduledAt has undefined value, event: ${event.id}`,
-      );
       return eventResult;
     }
-
-    const scheduledAt = event.scheduledAt;
 
     const scheduledDay = startOfDay(event.scheduledAt);
 
@@ -489,7 +485,9 @@ class NotificationBuilder implements INotificationBuilder {
 
     const entityName = entity.name;
 
-    const entityDescription = entity.description;
+    const notificationDescription = i18next.t(
+      'local_notifications:complete_activity',
+    );
 
     const isEntityHidden = !entity.isVisible;
 
@@ -532,9 +530,6 @@ class NotificationBuilder implements INotificationBuilder {
     ) {
       return eventResult;
     }
-    if (!eventNotifications.length) {
-      return eventResult;
-    }
 
     if (!isPeriodicitySet) {
       const notifications = this.processNotificationsSection(
@@ -544,7 +539,7 @@ class NotificationBuilder implements INotificationBuilder {
         activityId,
         activityFlowId,
         entityName,
-        entityDescription,
+        notificationDescription,
         eventId,
       );
       this.markNotificationsDueToOneTimeCompletionSetting(
@@ -562,7 +557,7 @@ class NotificationBuilder implements INotificationBuilder {
         periodEndDay,
         periodicity,
         aWeekAgoDay,
-        scheduledAt,
+        scheduledDay,
       );
 
       for (let day of days) {
@@ -573,7 +568,7 @@ class NotificationBuilder implements INotificationBuilder {
           activityId,
           activityFlowId,
           entityName,
-          entityDescription,
+          notificationDescription,
           eventId,
         );
         eventResult.notifications.push(...notifications);

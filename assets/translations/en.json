@@ -268,16 +268,20 @@
     "refresh_request_text": "Your managers will initiate the refresh shortly.",
     "applet_not_found_1": "Applet was not found",
     "applet_not_found_2": "There is no applet for given id.",
-    "activity_not_found": "Activity was not found', 'There is no activity for given id.",
+    "activity_not_found": "Activity was not found.\nThere is no activity for given id.",
     "already_completed": "You have already completed",
     "activity_was_due_at": "This activity was due at",
     "if_progress_was_made_on_the": "If progress was made on the",
     "it_was_saved_but_it_can_no_longer_be_taken": "it was saved but it can no longer be taken",
     "today": "today.",
+    "today2": "Scheduled today",
     "activity_not_ready": "Activity not ready",
     "not_able_to_start": "You’re not able to start activity yet",
     "is": "is",
     "scheduled_to_start_at": "scheduled to start at"
+  },
+  "local_notifications": {
+    "complete_activity": "Please complete this activity."
   },
   "join_demo_applets": {
     "healthy_brain_network": "Healthy Brain Network: EMA",
@@ -332,9 +336,11 @@
     "type_placeholder": "Please type text"
   },
   "additional": {
+    "server-error": "Server error occurred",
     "time-end": "Time is up!",
     "time-end-tap": "Time is up. Tap to complete",
     "thanks": "Thanks!",
+    "sorry": "Sorry",
     "saved_answers": "We've saved your answers!",
     "submit_flow_answers": "Tap the",
     "submit": "Submit",

@@ -14,11 +14,13 @@ import {
   TimePickerItem,
   StackedCheckBoxItem,
   StackedRadiosItem,
+  StackedSlider,
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
-import { HtmlFlanker } from '@entities/flanker';
+import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
+import { IS_ANDROID } from '@shared/lib';
 import {
   RadioActivityItem,
   SurveySlider,
@@ -87,7 +89,11 @@ function ActivityItem({
 
     case 'DrawingTest':
       item = (
-        <Box flex={1} onPressIn={stopScrolling} onPressOut={releaseScrolling}>
+        <Box
+          flex={1}
+          onPressIn={IS_ANDROID ? null : stopScrolling}
+          onPressOut={IS_ANDROID ? null : releaseScrolling}
+        >
           <DrawingTest
             flex={1}
             {...pipelineItem.payload}
@@ -100,11 +106,21 @@ function ActivityItem({
       break;
 
     case 'Flanker':
-      item = (
+      item = IS_ANDROID ? (
         <HtmlFlanker
           configuration={pipelineItem.payload}
-          onResult={onResponse}
-          onComplete={() => console.log('onComplete')}
+          onResult={data => {
+            onResponse(data);
+            moveToNextItem();
+          }}
+        />
+      ) : (
+        <NativeIosFlanker
+          configuration={pipelineItem.payload}
+          onResult={data => {
+            onResponse(data);
+            moveToNextItem();
+          }}
         />
       );
       break;
@@ -142,6 +158,20 @@ function ActivityItem({
             value={value?.answer ?? ''}
             config={pipelineItem.payload}
             onChange={onResponse}
+          />
+        </Box>
+      );
+      break;
+
+    case 'StackedSlider':
+      item = (
+        <Box mx="$6">
+          <StackedSlider
+            config={pipelineItem.payload}
+            onChange={onResponse}
+            values={value?.answer || null}
+            onPress={() => console.log('pressed')}
+            onRelease={() => console.log('released')}
           />
         </Box>
       );

@@ -1,5 +1,6 @@
 import { ActivityDetails, ActivityItem } from '@app/entities/activity';
 
+import { buildFlankerPipeline } from './flankerPipelineBuilder';
 import { getAbTrailsPipeline } from './precompiled-pipelines';
 import { PipelineItem } from '../lib';
 
@@ -41,12 +42,10 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
         }
 
         case 'Flanker': {
-          return {
-            id: item.id,
-            type: item.inputType,
-            payload: item.config,
-            timer: item.timer,
-          } satisfies PipelineItem;
+          return buildFlankerPipeline(
+            item.config,
+            item.id,
+          ) satisfies PipelineItem[];
         }
 
         case 'TextInput': {
@@ -162,6 +161,23 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
         }
 
         case 'Checkbox': {
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            validationOptions: item.validationOptions,
+            additionalText: item.additionalText,
+            timer: item.timer,
+          };
+        }
+
+        case 'StackedSlider': {
           return {
             id: item.id,
             name: item.name,

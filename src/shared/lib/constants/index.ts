@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 
 import Config from 'react-native-config';
+import { isTablet } from 'react-native-device-info';
 import { CameraOptions, ImageLibraryOptions } from 'react-native-image-picker';
 import { PERMISSIONS } from 'react-native-permissions';
 
@@ -13,6 +14,8 @@ export const IS_IOS = Platform.OS === 'ios';
 export const IS_ANDROID = Platform.OS === 'android';
 export const IS_ANDROID_12_OR_HIGHER =
   IS_ANDROID && (Platform.Version as number) >= 31;
+
+export const IS_TABLET = isTablet();
 
 export const ENV = Config.ENV;
 export const API_URL = Config.API_URL as string;
