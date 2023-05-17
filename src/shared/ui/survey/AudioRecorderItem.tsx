@@ -114,8 +114,8 @@ const AudioRecorderItem: FC<Props> = ({
     setFileSaved(true);
     const response = {
       uri: fullPath,
-      type: 'audio/m4a',
-      fileName: `${uuidv4()}.m4a`,
+      type: `audio/${IS_ANDROID ? 'm4a' : 'mp4'}`,
+      fileName: `${uuidv4()}.${IS_ANDROID ? 'm4a' : 'mp4'}`,
     };
     onFinish(response);
   };
