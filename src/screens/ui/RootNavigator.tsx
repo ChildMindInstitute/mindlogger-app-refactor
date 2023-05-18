@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { EntityPath, StoreProgress } from '@app/abstract/lib';
 import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
+import { MediaLookupService } from '@app/features/offline-checks';
 import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SessionModel } from '@entities/session';
 import { EnterForegroundModel } from '@features/enter-foreground';
@@ -88,6 +89,7 @@ export default () => {
         storeProgress,
       });
     },
+    lookupMedia: MediaLookupService.lookup,
   });
 
   useBackgroundTask(() => {

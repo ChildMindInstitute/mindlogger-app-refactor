@@ -1,7 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { EntityPath, EntityType, StoreProgress } from '@app/abstract/lib';
+import {
+  EntityPath,
+  EntityType,
+  LookupMediaInput,
+  StoreProgress,
+} from '@app/abstract/lib';
 import { AppletModel, clearStorageRecords } from '@app/entities/applet';
 import {
   LocalEventDetail,
@@ -17,6 +22,7 @@ import { useAppSelector } from '@app/shared/lib';
 
 type Input = {
   checkAvailability: (identifiers: EntityPath) => boolean;
+  lookupMedia: (input: LookupMediaInput) => boolean;
 };
 
 const GoBackDuration = 1000;
@@ -33,7 +39,10 @@ Sometimes I've observed the Alert right after 10-20 seconds, probably because of
 */
 const WorkaroundDuration = 100;
 
-export function useOnNotificationTap({ checkAvailability }: Input) {
+export function useOnNotificationTap({
+  checkAvailability,
+  lookupMedia,
+}: Input) {
   const queryClient = useQueryClient();
 
   const navigator = useNavigation();
@@ -42,7 +51,9 @@ export function useOnNotificationTap({ checkAvailability }: Input) {
     AppletModel.selectors.selectInProgressApplets,
   );
 
-  const { startFlow, startActivity } = AppletModel.useStartEntity();
+  const { startFlow, startActivity } = AppletModel.useStartEntity({
+    lookupMedia,
+  });
 
   const actions: Record<
     LocalNotificationType,
@@ -113,16 +124,26 @@ export function useOnNotificationTap({ checkAvailability }: Input) {
     }
 
     if (entityType === 'flow') {
-      startFlow(appletId, entityId, eventId).then(({ startedFromScratch }) => {
-        if (startedFromScratch) {
-          clearStorageRecords.byEventId(eventId);
-        }
+      startFlow(appletId, entityId, eventId).then(
+        ({ startedFromScratch, cannotBeStartedDueToMediaFound }) => {
+          if (cannotBeStartedDueToMediaFound) {
+            return;
+          }
 
-        navigateSurvey({ appletId, eventId, entityId, entityType });
-      });
+          if (startedFromScratch) {
+            clearStorageRecords.byEventId(eventId);
+          }
+
+          navigateSurvey({ appletId, eventId, entityId, entityType });
+        },
+      );
     } else {
       startActivity(appletId, entityId, eventId).then(
-        ({ startedFromScratch }) => {
+        ({ startedFromScratch, cannotBeStartedDueToMediaFound }) => {
+          if (cannotBeStartedDueToMediaFound) {
+            return;
+          }
+
           if (startedFromScratch) {
             clearStorageRecords.byEventId(eventId);
           }

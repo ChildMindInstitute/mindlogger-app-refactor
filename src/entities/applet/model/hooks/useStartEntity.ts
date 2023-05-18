@@ -1,19 +1,33 @@
 import { useQueryClient } from '@tanstack/react-query';
 
-import { FlowProgress, StoreProgressPayload } from '@app/abstract/lib';
+import {
+  FlowProgress,
+  LookupMediaInput,
+  StoreProgressPayload,
+} from '@app/abstract/lib';
 import { ActivityFlowRecordDto, AppletDetailsResponse } from '@app/shared/api';
 import {
   getAppletDetailsKey,
   getDataFromQuery,
+  isAppOnline,
   useAppDispatch,
   useAppSelector,
 } from '@shared/lib';
 
-import { onBeforeStartingActivity } from '../../lib';
+import { onBeforeStartingActivity, onMediaReferencesFound } from '../../lib';
 import { selectInProgressApplets } from '../selectors';
 import { actions } from '../slice';
 
-function useStartEntity() {
+type StartResult = {
+  startedFromScratch?: boolean;
+  cannotBeStartedDueToMediaFound?: boolean;
+};
+
+type UseStartEntityInput = {
+  lookupMedia: (input: LookupMediaInput) => boolean;
+};
+
+function useStartEntity({ lookupMedia }: UseStartEntityInput) {
   const dispatch = useAppDispatch();
 
   const allProgresses = useAppSelector(selectInProgressApplets);
@@ -61,13 +75,29 @@ function useStartEntity() {
     );
   }
 
-  function startActivity(
+  async function startActivity(
     appletId: string,
     activityId: string,
     eventId: string,
     isTimerElapsed: boolean = false,
-  ) {
-    return new Promise<{ startedFromScratch: boolean }>(resolve => {
+  ): Promise<StartResult> {
+    const isOnline = await isAppOnline();
+
+    return new Promise<StartResult>(resolve => {
+      if (
+        !isOnline &&
+        lookupMedia({
+          appletId,
+          entityId: activityId,
+          entityType: 'regular',
+          queryClient,
+        })
+      ) {
+        onMediaReferencesFound();
+        resolve({ cannotBeStartedDueToMediaFound: true });
+        return;
+      }
+
       const progressRecord = getProgress(appletId, activityId, eventId);
 
       if (isInProgress(progressRecord)) {
@@ -90,12 +120,12 @@ function useStartEntity() {
     });
   }
 
-  function startFlow(
+  async function startFlow(
     appletId: string,
     flowId: string,
     eventId: string,
     isTimerElapsed: boolean = false,
-  ) {
+  ): Promise<StartResult> {
     const detailsResponse: AppletDetailsResponse =
       getDataFromQuery<AppletDetailsResponse>(
         getAppletDetailsKey(appletId),
@@ -114,9 +144,23 @@ function useStartEntity() {
       eventId,
     ) as FlowProgress;
 
-    return new Promise<{
-      startedFromScratch: boolean;
-    }>(resolve => {
+    const isOnline = await isAppOnline();
+
+    return new Promise<StartResult>(resolve => {
+      if (
+        !isOnline &&
+        lookupMedia({
+          appletId,
+          entityId: flowId,
+          entityType: 'flow',
+          queryClient,
+        })
+      ) {
+        onMediaReferencesFound();
+        resolve({ cannotBeStartedDueToMediaFound: true });
+        return;
+      }
+
       if (isInProgress(progressRecord as StoreProgressPayload)) {
         if (isTimerElapsed) {
           resolve({
