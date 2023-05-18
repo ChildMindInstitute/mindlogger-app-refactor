@@ -121,13 +121,15 @@ export function useOnNotificationTap({ checkAvailability }: Input) {
         navigateSurvey({ appletId, eventId, entityId, entityType });
       });
     } else {
-      startActivity(appletId, entityId, eventId).then(startedFromScratch => {
-        if (startedFromScratch) {
-          clearStorageRecords.byEventId(eventId);
-        }
+      startActivity(appletId, entityId, eventId).then(
+        ({ startedFromScratch }) => {
+          if (startedFromScratch) {
+            clearStorageRecords.byEventId(eventId);
+          }
 
-        navigateSurvey({ appletId, eventId, entityId, entityType });
-      });
+          navigateSurvey({ appletId, eventId, entityId, entityType });
+        },
+      );
     }
   };
 
