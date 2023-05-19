@@ -20,10 +20,10 @@ type Props = {
   mode: 'photo' | 'video';
   onShowMediaLibrary: () => void;
   onOpenCamera: () => void;
-  iconComponent: JSX.Element;
+  uploadIcon: JSX.Element;
 };
 
-const UploadButton = styled(Center, {
+const ContentWrapper = styled(Center, {
   width: '100%',
   height: 360,
   borderColor: '$red',
@@ -37,7 +37,7 @@ const MediaInput: FC<Props> = ({
   mode,
   onOpenCamera,
   onShowMediaLibrary,
-  iconComponent,
+  uploadIcon,
 }) => {
   const { t } = useTranslation();
 
@@ -55,13 +55,13 @@ const MediaInput: FC<Props> = ({
   };
 
   return (
-    <UploadButton>
+    <ContentWrapper>
       {children || (
         <TouchableOpacity onPress={onUploadPress} style={styles.touchable}>
-          <Box>{iconComponent}</Box>
+          <Box>{uploadIcon}</Box>
         </TouchableOpacity>
       )}
-    </UploadButton>
+    </ContentWrapper>
   );
 };
 
