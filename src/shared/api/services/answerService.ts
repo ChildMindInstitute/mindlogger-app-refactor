@@ -8,6 +8,14 @@ export type AnswerDto = {
   answer: string;
 };
 
+export type AnswerObjectDto = Omit<AnswerDto, 'answer'> & {
+  answer: {
+    value: string | number | Array<string>;
+    additionalText?: string;
+    shouldIdentifyResponse?: boolean;
+  };
+};
+
 type ActivityAnswersRequest = {
   appletId: string;
   version: string;

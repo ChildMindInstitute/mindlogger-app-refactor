@@ -1,7 +1,8 @@
 import { Buffer } from 'buffer';
-import Crypto from 'react-native-quick-crypto';
 
 import { IV_LENGTH } from '@shared/lib';
+
+import { crypto } from './crypto';
 
 type GetPrivateKeyProps = { userId: string; email: string; password: string };
 type GetPublicKeyProps = {
@@ -26,10 +27,12 @@ class Encryption {
     email,
     password,
   }: GetPrivateKeyProps): number[] => {
-    const key1 = Crypto.createHash('sha512')
+    const key1 = crypto
+      .createHash('sha512')
       .update(password + email)
       .digest();
-    const key2 = Crypto.createHash('sha512')
+    const key2 = crypto
+      .createHash('sha512')
       .update(userId + email)
       .digest();
 
@@ -41,7 +44,7 @@ class Encryption {
     appletBase,
     privateKey,
   }: GetPublicKeyProps): number[] => {
-    const key = Crypto.createDiffieHellman(
+    const key = crypto.createDiffieHellman(
       Buffer.from(appletPrime),
       Buffer.from(appletBase),
     );
@@ -57,7 +60,7 @@ class Encryption {
     appletPrime,
     appletBase,
   }: GetAESKeyProps): number[] => {
-    const key = Crypto.createDiffieHellman(
+    const key = crypto.createDiffieHellman(
       Buffer.from(appletPrime),
       Buffer.from(appletBase),
     );
@@ -65,12 +68,12 @@ class Encryption {
 
     const secretKey = key.computeSecret(Buffer.from(appletPublicKey));
 
-    return Array.from(Crypto.createHash('sha256').update(secretKey).digest());
+    return Array.from(crypto.createHash('sha256').update(secretKey).digest());
   };
 
   public encryptData = ({ text, key }: EncryptDataProps): string => {
-    const iv: Buffer = Crypto.randomBytes(Number(IV_LENGTH));
-    const cipher = Crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
+    const iv: Buffer = crypto.randomBytes(Number(IV_LENGTH));
+    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
     let encrypted: Buffer = cipher.update(text);
     encrypted = Buffer.concat([encrypted, cipher.final()]);
     return `${iv.toString('hex')}:${encrypted.toString('hex')}`;
@@ -80,7 +83,7 @@ class Encryption {
     const textParts = text.split(':');
     const iv = Buffer.from(textParts.shift()!, 'hex');
     const encryptedText = Buffer.from(textParts.join(':'), 'hex');
-    const decipher = Crypto.createDecipheriv(
+    const decipher = crypto.createDecipheriv(
       'aes-256-cbc',
       Buffer.from(key),
       iv,

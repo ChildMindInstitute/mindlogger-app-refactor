@@ -1,5 +1,5 @@
 import { Answers, PipelineItem } from '@app/features/pass-survey';
-import { AnswerDto } from '@app/shared/api';
+import { AnswerObjectDto } from '@app/shared/api';
 
 export default function isObject<TObj>(obj: TObj) {
   var type = typeof obj;
@@ -9,11 +9,11 @@ export default function isObject<TObj>(obj: TObj) {
 export function mapAnswersToDto(
   pipeline: PipelineItem[],
   answers: Answers,
-): Array<AnswerDto> {
+): Array<AnswerObjectDto> {
   const result = Object.entries(answers)
     .filter(([_, answer]) => answer.answer != null)
     .map(([step, answer]) => {
-      const dto: AnswerDto = {
+      const dto: AnswerObjectDto = {
         activityItemId: pipeline[Number(step)]?.id!,
         answer: {
           value: answer.answer as any, //TODO: fix when all types of answers DTOs are done

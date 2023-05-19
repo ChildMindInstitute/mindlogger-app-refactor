@@ -138,6 +138,8 @@ function Intermediate({
       activityId,
       createdAt: getUnixTimestamp(Date.now()),
       version: activityStorageRecord.appletVersion,
+      // @ts-ignore
+      // @todo do we need to encrypt also these answers?
       answers: mapAnswersToDto(
         activityStorageRecord.items,
         activityStorageRecord.answers,
