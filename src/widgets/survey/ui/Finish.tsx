@@ -46,7 +46,7 @@ function FinishItem({
   const { t } = useTranslation();
   const { encryptAnswers } = useEncryptAnswers();
 
-  const { data: appletEncryption } = useAppletDetailsQuery(appletId, {
+  const { data: appletEncryption = null } = useAppletDetailsQuery(appletId, {
     select: r => r.data.result.encryption,
   });
 

@@ -43,9 +43,9 @@ const LoginForm: FC<Props> = props => {
         password: variables.password,
       };
       const userPrivateKey = generateUserPrivateKey(userParams);
+
       UserPrivateKeyRecord.set(userPrivateKey);
-      console.log(UserPrivateKeyRecord.get());
-      console.log(userParams);
+
       const { user, token: session } = response.data.result;
 
       dispatch(IdentityModel.actions.onAuthSuccess(user));
