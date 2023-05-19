@@ -10,5 +10,6 @@ export { default as useCacheHasData } from './useCacheHasData';
 export { default as useOnForeground } from './useOnForeground';
 export { default as useAlarmPermissions } from './useAlarmPermissions';
 export { default as useBackgroundTask } from './useBackgroundTask';
+export { default as useEncryption } from './useEncryption';
 
 export * from './redux';

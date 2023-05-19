@@ -6,11 +6,13 @@ import { useTranslation } from 'react-i18next';
 
 import { UserInfoRecord } from '@app/entities/identity/lib';
 import { IdentityModel, useLoginMutation } from '@entities/identity';
+import { UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
 import {
   executeIfOnline,
   useAppDispatch,
   useAppForm,
+  useEncryption,
   useFormChanges,
 } from '@shared/lib';
 import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
@@ -26,6 +28,7 @@ const LoginForm: FC<Props> = props => {
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
+  const { generateUserPrivateKey } = useEncryption();
 
   const {
     mutate: login,
@@ -33,7 +36,16 @@ const LoginForm: FC<Props> = props => {
     isLoading,
     reset,
   } = useLoginMutation({
-    onSuccess: response => {
+    onSuccess: (response, variables) => {
+      const userParams = {
+        userId: response.data.result.user.id,
+        email: response.data.result.user.email,
+        password: variables.password,
+      };
+      const userPrivateKey = generateUserPrivateKey(userParams);
+      UserPrivateKeyRecord.set(userPrivateKey);
+      console.log(UserPrivateKeyRecord.get());
+      console.log(userParams);
       const { user, token: session } = response.data.result;
 
       dispatch(IdentityModel.actions.onAuthSuccess(user));

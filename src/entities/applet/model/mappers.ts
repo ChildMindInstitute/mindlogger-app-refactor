@@ -71,6 +71,7 @@ export function mapAppletDetailsFromDto(
     activities: mapActivitiesFromDto(detailsDto.activities),
     activityFlows: mapActivityFlowsFromDto(detailsDto.activityFlows),
     theme: mapThemeFromDto(detailsDto.theme),
+    encryption: detailsDto.encryption,
   };
 }
 

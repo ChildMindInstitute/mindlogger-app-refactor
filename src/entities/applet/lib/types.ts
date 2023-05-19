@@ -1,3 +1,5 @@
+import { AppletEncryptionDTO } from '@shared/api';
+
 export type AppletTheme = {
   logo: string;
   backgroundImage: string;
@@ -41,4 +43,5 @@ export type AppletDetails = {
   theme: AppletTheme | null;
   activities: Activity[];
   activityFlows: ActivityFlow[];
+  encryption: AppletEncryptionDTO | null;
 };
