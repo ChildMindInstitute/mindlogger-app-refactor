@@ -19,6 +19,7 @@ export const IS_TABLET = isTablet();
 
 export const ENV = Config.ENV;
 export const API_URL = Config.API_URL as string;
+
 export const STORE_ENCRYPTION_KEY = Config.STORE_ENCRYPTION_KEY;
 
 // @ts-ignore
@@ -87,3 +88,5 @@ export const MICROPHONE_PERMISSIONS = Platform.select({
 
 export const DAYS_OF_WEEK_NUMBERS = [0, 1, 2, 3, 4, 5, 6];
 export const DAYS_OF_WEEK_SHORT_NAMES = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+export const IV_LENGTH = 16;

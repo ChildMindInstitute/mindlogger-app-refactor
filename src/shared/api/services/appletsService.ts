@@ -38,6 +38,13 @@ export type ThemeDto = {
   tertiaryColor: string;
 };
 
+export type AppletEncryptionDTO = {
+  accountId: string;
+  base: string;
+  prime: string;
+  publicKey: string;
+};
+
 export type AppletDetailsDto = {
   id: string;
   displayName: string;
@@ -49,6 +56,7 @@ export type AppletDetailsDto = {
   theme: ThemeDto | null;
   activities: ActivityRecordDto[];
   activityFlows: ActivityFlowRecordDto[];
+  encryption: AppletEncryptionDTO | null;
 };
 
 export type AppletDto = {
