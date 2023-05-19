@@ -99,12 +99,9 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
       onOpenCamera={onOpenVideoCamera}
       onShowMediaLibrary={onShowVideoGallery}
       mode="video"
+      uploadIcon={<VideoIcon color={colors.red} size={50} />}
     >
-      {value ? (
-        <VideoPlayer uri={value.uri} />
-      ) : (
-        <VideoIcon color={colors.red} size={50} />
-      )}
+      {value && <VideoPlayer uri={value.uri} />}
     </MediaInput>
   );
 };
