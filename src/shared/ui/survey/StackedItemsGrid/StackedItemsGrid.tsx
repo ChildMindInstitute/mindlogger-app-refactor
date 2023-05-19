@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import React, { FC, PropsWithChildren, ReactElement } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
@@ -96,27 +96,37 @@ type RowListItemProps = {
 
 const RowListItem: FC<RowListItemProps> = ({ item, options, renderCell }) => {
   return (
-    <RadioGroup>
-      <YStack>
-        <XStack>
-          <AxisListItem maxWidth="25%" option={item} />
+    <YStack>
+      <XStack>
+        <AxisListItem maxWidth="25%" option={item} />
 
-          {options.map(option => (
-            <AxisListItemContainer key={option.id}>
-              {renderCell(option)}
-            </AxisListItemContainer>
-          ))}
-        </XStack>
+        {options.map(option => (
+          <AxisListItemContainer key={option.id}>
+            {renderCell(option)}
+          </AxisListItemContainer>
+        ))}
+      </XStack>
 
-        <ListSeparator />
-      </YStack>
-    </RadioGroup>
+      <ListSeparator />
+    </YStack>
   );
 };
+
+type ConditionalWrapperProps = PropsWithChildren<{
+  condition: boolean | undefined;
+  wrapper: FC<any>;
+}>;
+
+const ConditionalWrapper: FC<ConditionalWrapperProps> = ({
+  condition,
+  wrapper,
+  children,
+}) => (condition ? wrapper(children) : <>{children}</>);
 
 type StackedItemsGridProps = {
   items: StackedRowItemValue[];
   options: StackedRowItemValue[];
+  values?: Array<{ rowId: string; optionId: string }> | null;
   renderCell: (
     optionIndex: number,
     option: StackedRowItemValue,
@@ -127,18 +137,35 @@ const StackedItemsGrid: FC<StackedItemsGridProps> = ({
   items = [],
   renderCell,
   options,
+  values,
 }) => {
+  const getRadioValue = (stackedItem: StackedRowItemValue) => {
+    if (!values) {
+      return '';
+    }
+
+    const rowSelection = values?.find(v => v.rowId === stackedItem.id);
+
+    return rowSelection?.optionId || '';
+  };
   return (
     <YStack>
       <RowHeader options={options} />
 
       {items.map((item, index) => (
-        <RowListItem
+        <ConditionalWrapper
           key={item.id}
-          options={options}
-          item={item}
-          renderCell={renderCell.bind(null, index)}
-        />
+          condition={!!values}
+          wrapper={children => (
+            <RadioGroup value={getRadioValue(item)}>{children}</RadioGroup>
+          )}
+        >
+          <RowListItem
+            options={options}
+            item={item}
+            renderCell={renderCell.bind(null, index)}
+          />
+        </ConditionalWrapper>
       ))}
     </YStack>
   );
