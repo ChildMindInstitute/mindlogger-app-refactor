@@ -268,7 +268,7 @@
     "refresh_request_text": "Your managers will initiate the refresh shortly.",
     "applet_not_found_1": "Applet was not found",
     "applet_not_found_2": "There is no applet for given id.",
-    "activity_not_found": "Activity was not found.\nThere is no activity for given id.",
+    "activity_not_found": "This activity is not available now.",
     "already_completed": "You have already completed",
     "activity_was_due_at": "This activity was due at",
     "if_progress_was_made_on_the": "If progress was made on the",
