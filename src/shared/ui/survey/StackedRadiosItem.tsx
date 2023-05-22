@@ -35,6 +35,7 @@ const StackedRadios: FC<Props> = ({ value, onChange, config }) => {
   return (
     <StackedItemsGrid
       items={config.rows}
+      values={value}
       renderCell={(index, option) => (
         <RadioGroup.Item
           onPress={() => onRowValueChange(option, index)}
