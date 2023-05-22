@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, ReactElement } from 'react';
+import React, { FC, ReactElement } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
@@ -112,17 +112,6 @@ const RowListItem: FC<RowListItemProps> = ({ item, options, renderCell }) => {
   );
 };
 
-type ConditionalWrapperProps = PropsWithChildren<{
-  condition: boolean | undefined;
-  wrapper: FC<any>;
-}>;
-
-const ConditionalWrapper: FC<ConditionalWrapperProps> = ({
-  condition,
-  wrapper,
-  children,
-}) => (condition ? wrapper(children) : <>{children}</>);
-
 type StackedItemsGridProps = {
   items: StackedRowItemValue[];
   options: StackedRowItemValue[];
@@ -148,24 +137,19 @@ const StackedItemsGrid: FC<StackedItemsGridProps> = ({
 
     return rowSelection?.optionId || '';
   };
+
   return (
     <YStack>
       <RowHeader options={options} />
 
       {items.map((item, index) => (
-        <ConditionalWrapper
-          key={item.id}
-          condition={!!values}
-          wrapper={children => (
-            <RadioGroup value={getRadioValue(item)}>{children}</RadioGroup>
-          )}
-        >
+        <RadioGroup value={getRadioValue(item)}>
           <RowListItem
             options={options}
             item={item}
             renderCell={renderCell.bind(null, index)}
           />
-        </ConditionalWrapper>
+        </RadioGroup>
       ))}
     </YStack>
   );
