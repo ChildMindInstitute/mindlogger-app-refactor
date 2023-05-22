@@ -89,7 +89,7 @@ export default () => {
         storeProgress,
       });
     },
-    lookupMedia: MediaLookupService.lookup,
+    hasMediaReferences: MediaLookupService.lookup,
   });
 
   useBackgroundTask(() => {

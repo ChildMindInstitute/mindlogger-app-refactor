@@ -24,10 +24,10 @@ type StartResult = {
 };
 
 type UseStartEntityInput = {
-  lookupMedia: (input: LookupMediaInput) => boolean;
+  hasMediaReferences: (input: LookupMediaInput) => boolean;
 };
 
-function useStartEntity({ lookupMedia }: UseStartEntityInput) {
+function useStartEntity({ hasMediaReferences }: UseStartEntityInput) {
   const dispatch = useAppDispatch();
 
   const allProgresses = useAppSelector(selectInProgressApplets);
@@ -86,7 +86,7 @@ function useStartEntity({ lookupMedia }: UseStartEntityInput) {
     return new Promise<StartResult>(resolve => {
       if (
         !isOnline &&
-        lookupMedia({
+        hasMediaReferences({
           appletId,
           entityId: activityId,
           entityType: 'regular',
@@ -149,7 +149,7 @@ function useStartEntity({ lookupMedia }: UseStartEntityInput) {
     return new Promise<StartResult>(resolve => {
       if (
         !isOnline &&
-        lookupMedia({
+        hasMediaReferences({
           appletId,
           entityId: flowId,
           entityType: 'flow',

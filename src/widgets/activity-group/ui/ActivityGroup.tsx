@@ -21,7 +21,7 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
   const { navigate } = useNavigation();
 
   const { startFlow, startActivity } = AppletModel.useStartEntity({
-    lookupMedia: MediaLookupService.lookup,
+    hasMediaReferences: MediaLookupService.lookup,
   });
 
   function navigateSurvey(

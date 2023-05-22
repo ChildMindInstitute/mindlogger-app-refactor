@@ -22,7 +22,7 @@ import { useAppSelector } from '@app/shared/lib';
 
 type Input = {
   checkAvailability: (identifiers: EntityPath) => boolean;
-  lookupMedia: (input: LookupMediaInput) => boolean;
+  hasMediaReferences: (input: LookupMediaInput) => boolean;
 };
 
 const GoBackDuration = 1000;
@@ -41,7 +41,7 @@ const WorkaroundDuration = 100;
 
 export function useOnNotificationTap({
   checkAvailability,
-  lookupMedia,
+  hasMediaReferences,
 }: Input) {
   const queryClient = useQueryClient();
 
@@ -52,7 +52,7 @@ export function useOnNotificationTap({
   );
 
   const { startFlow, startActivity } = AppletModel.useStartEntity({
-    lookupMedia,
+    hasMediaReferences,
   });
 
   const actions: Record<
