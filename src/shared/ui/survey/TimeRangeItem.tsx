@@ -20,7 +20,7 @@ type Props = {
 };
 
 const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
-  const transformIntoDate = (hourMinute: HourMinute): Date => {
+  const transformToDate = (hourMinute: HourMinute): Date => {
     const msTime =
       getMidnightDateInMs() +
       getMsFromHours(hourMinute.hours) +
@@ -29,31 +29,31 @@ const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
     return new Date(msTime);
   };
 
-  const transformIntoHourMinute = (time: Date): HourMinute => ({
+  const transformToHourMinute = (time: Date): HourMinute => ({
     minutes: time.getMinutes(),
     hours: time.getHours(),
   });
 
   const startTimeAsDate = useMemo(
-    () => (value?.startTime ? transformIntoDate(value.startTime) : new Date()),
+    () => (value?.startTime ? transformToDate(value.startTime) : new Date()),
     [value],
   );
 
   const endTimeAsDate = useMemo(
-    () => (value?.endTime ? transformIntoDate(value.endTime) : new Date()),
+    () => (value?.endTime ? transformToDate(value.endTime) : new Date()),
     [value],
   );
 
   const onChangeStartTime = (time: Date) =>
     onChange({
-      endTime: transformIntoHourMinute(endTimeAsDate),
-      startTime: transformIntoHourMinute(time),
+      endTime: transformToHourMinute(endTimeAsDate),
+      startTime: transformToHourMinute(time),
     });
 
   const onChangeEndTime = (time: Date) =>
     onChange({
-      startTime: transformIntoHourMinute(startTimeAsDate),
-      endTime: transformIntoHourMinute(time),
+      startTime: transformToHourMinute(startTimeAsDate),
+      endTime: transformToHourMinute(time),
     });
 
   return (
