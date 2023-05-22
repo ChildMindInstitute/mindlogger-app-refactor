@@ -369,8 +369,8 @@ export type AudioResponse = {
 export type AudioPlayerResponse = boolean;
 
 export type TimeRangeResponse = {
-  from: string;
-  to: string;
+  startTime: HourMinute;
+  endTime: HourMinute;
 };
 
 export type RadioResponse = string;
