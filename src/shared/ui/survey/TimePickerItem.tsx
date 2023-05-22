@@ -35,6 +35,7 @@ const TimePickerItem: FC<Props> = ({ value, onChange }) => {
     <DateTimePicker
       onChange={onChangeDate}
       value={new Date(timeInMs)}
+      dateDisplayFormat="hh:mm aa"
       mode="time"
       iconAfter={<AlarmIcon color={colors.lightGrey} size={15} />}
     />

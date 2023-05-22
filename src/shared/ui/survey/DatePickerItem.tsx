@@ -6,7 +6,7 @@ import { colors } from '@app/shared/lib';
 import { RightArrowIcon, DateTimePicker } from '@shared/ui';
 
 type Props = {
-  onChange: (value: string | null) => void;
+  onChange: (value: string) => void;
   value?: string | null;
 };
 
