@@ -61,12 +61,12 @@ export const checkEntityAvailability = ({
     );
 
   if (scheduled) {
-    onScheduledToday(
+    const entityName =
       entityType === 'flow'
         ? scheduled.activityFlowDetails!.activityFlowName
-        : scheduled.name,
-      scheduled.availableFrom!,
-    );
+        : scheduled.name;
+
+    onScheduledToday(entityName, scheduled.availableFrom!);
     return false;
   }
 

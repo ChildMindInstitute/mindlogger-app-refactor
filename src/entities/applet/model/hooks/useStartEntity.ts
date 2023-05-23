@@ -83,8 +83,8 @@ function useStartEntity({ hasMediaReferences }: UseStartEntityInput) {
   ): Promise<StartResult> {
     const isOnline = await isAppOnline();
 
-    return new Promise<StartResult>(resolve => {
-      if (
+    const shouldBreakDueToMediaReferences = (): boolean => {
+      return (
         !isOnline &&
         hasMediaReferences({
           appletId,
@@ -92,7 +92,11 @@ function useStartEntity({ hasMediaReferences }: UseStartEntityInput) {
           entityType: 'regular',
           queryClient,
         })
-      ) {
+      );
+    };
+
+    return new Promise<StartResult>(resolve => {
+      if (shouldBreakDueToMediaReferences()) {
         onMediaReferencesFound();
         resolve({ cannotBeStartedDueToMediaFound: true });
         return;
@@ -126,28 +130,10 @@ function useStartEntity({ hasMediaReferences }: UseStartEntityInput) {
     eventId: string,
     isTimerElapsed: boolean = false,
   ): Promise<StartResult> {
-    const detailsResponse: AppletDetailsResponse =
-      getDataFromQuery<AppletDetailsResponse>(
-        getAppletDetailsKey(appletId),
-        queryClient,
-      )!;
-
-    const activityFlowDtos: ActivityFlowRecordDto[] =
-      detailsResponse.result.activityFlows;
-
-    const flow = activityFlowDtos!.find(x => x.id === flowId);
-    const firstActivityId = flow!.activityIds[0];
-
-    const progressRecord = getProgress(
-      appletId,
-      flowId,
-      eventId,
-    ) as FlowProgress;
-
     const isOnline = await isAppOnline();
 
-    return new Promise<StartResult>(resolve => {
-      if (
+    const shouldBreakDueToMediaReferences = (): boolean => {
+      return (
         !isOnline &&
         hasMediaReferences({
           appletId,
@@ -155,11 +141,37 @@ function useStartEntity({ hasMediaReferences }: UseStartEntityInput) {
           entityType: 'flow',
           queryClient,
         })
-      ) {
+      );
+    };
+
+    const getFirstActivityIfInTheFlow = () => {
+      const detailsResponse: AppletDetailsResponse =
+        getDataFromQuery<AppletDetailsResponse>(
+          getAppletDetailsKey(appletId),
+          queryClient,
+        )!;
+
+      const activityFlowDtos: ActivityFlowRecordDto[] =
+        detailsResponse.result.activityFlows;
+
+      const flow = activityFlowDtos!.find(x => x.id === flowId);
+      return flow!.activityIds[0];
+    };
+
+    const progressRecord = getProgress(
+      appletId,
+      flowId,
+      eventId,
+    ) as FlowProgress;
+
+    return new Promise<StartResult>(resolve => {
+      if (shouldBreakDueToMediaReferences()) {
         onMediaReferencesFound();
         resolve({ cannotBeStartedDueToMediaFound: true });
         return;
       }
+
+      const firstActivityId = getFirstActivityIfInTheFlow();
 
       if (isInProgress(progressRecord as StoreProgressPayload)) {
         if (isTimerElapsed) {

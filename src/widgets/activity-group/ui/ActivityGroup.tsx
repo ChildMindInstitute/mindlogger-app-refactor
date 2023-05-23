@@ -4,8 +4,11 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { EntityType } from '@app/abstract/lib';
-import { MediaLookupService } from '@app/features/offline-checks';
-import { ActivityList, ActivityListItem } from '@entities/activity';
+import {
+  ActivityList,
+  ActivityListItem,
+  ActivityModel,
+} from '@entities/activity';
 import { AppletModel, clearStorageRecords } from '@entities/applet';
 import { Box, BoxProps, Text } from '@shared/ui';
 
@@ -21,7 +24,7 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
   const { navigate } = useNavigation();
 
   const { startFlow, startActivity } = AppletModel.useStartEntity({
-    hasMediaReferences: MediaLookupService.lookup,
+    hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
   });
 
   function navigateSurvey(

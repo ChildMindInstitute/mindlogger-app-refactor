@@ -17,16 +17,11 @@ const createMediaLookupService = () => {
   };
 
   const lookupInActivity = (activity: ActivityDetails): boolean => {
-    for (let item of activity.items) {
-      if (lookupInMarkdown(item.question)) {
-        return true;
-      }
-
-      if (item.inputType === 'AudioPlayer') {
-        return true;
-      }
-    }
-    return false;
+    return activity.items.some(item => {
+      return (
+        lookupInMarkdown(item.question) || item.inputType === 'AudioPlayer'
+      );
+    });
   };
 
   const lookup = ({
@@ -70,17 +65,13 @@ const createMediaLookupService = () => {
       }
     }
 
-    for (let activity of activitiesToLookup) {
-      if (lookupInActivity(activity)) {
-        return true;
-      }
-    }
-
-    return false;
+    return activitiesToLookup.some(activity => {
+      return lookupInActivity(activity);
+    });
   };
 
   return {
-    lookup,
+    hasMediaReferences: lookup,
   };
 };
 
