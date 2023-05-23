@@ -12,8 +12,8 @@ type GetPublicKeyProps = {
 };
 
 type GetAESKeyProps = {
-  userPrivateKey: number[];
-  appletPublicKey: number[];
+  privateKey: number[];
+  publicKey: number[];
   appletPrime: number[];
   appletBase: number[];
 };
@@ -21,22 +21,24 @@ type GetAESKeyProps = {
 type EncryptDataProps = { text: string; key: number[] };
 type DecryptDataProps = { text: string; key: string };
 
-class Encryption {
+class EncryptionManager {
   public getPrivateKey = ({
     userId,
     email,
     password,
   }: GetPrivateKeyProps): number[] => {
-    const key1 = crypto
+    const leftPart = crypto
       .createHash('sha512')
       .update(password + email)
       .digest();
-    const key2 = crypto
+    const rightPart = crypto
       .createHash('sha512')
       .update(userId + email)
       .digest();
 
-    return Array.from(Buffer.concat([Buffer.from(key1), Buffer.from(key2)]));
+    return Array.from(
+      Buffer.concat([Buffer.from(leftPart), Buffer.from(rightPart)]),
+    );
   };
 
   public getPublicKey = ({
@@ -55,8 +57,8 @@ class Encryption {
   };
 
   public getAESKey = ({
-    userPrivateKey,
-    appletPublicKey,
+    privateKey,
+    publicKey,
     appletPrime,
     appletBase,
   }: GetAESKeyProps): number[] => {
@@ -64,9 +66,9 @@ class Encryption {
       Buffer.from(appletPrime),
       Buffer.from(appletBase),
     );
-    key.setPrivateKey(Buffer.from(userPrivateKey));
+    key.setPrivateKey(Buffer.from(privateKey));
 
-    const secretKey = key.computeSecret(Buffer.from(appletPublicKey));
+    const secretKey = key.computeSecret(Buffer.from(publicKey));
 
     return Array.from(crypto.createHash('sha256').update(secretKey).digest());
   };
@@ -107,4 +109,4 @@ class Encryption {
   };
 }
 
-export const encryption = new Encryption();
+export const encryption = new EncryptionManager();

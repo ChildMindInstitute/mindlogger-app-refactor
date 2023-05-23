@@ -35,14 +35,14 @@ describe('Encryption', () => {
 
   describe('getAESKey', () => {
     it('should return a valid AES key', () => {
-      const userPrivateKey = [1, 2, 3];
-      const appletPublicKey = [4, 5, 6];
+      const privateKey = [1, 2, 3];
+      const publicKey = [4, 5, 6];
       const appletPrime = [7, 8, 9];
       const appletBase = [10, 11, 12];
 
       const aesKey = encryption.getAESKey({
-        userPrivateKey,
-        appletPublicKey,
+        privateKey,
+        publicKey,
         appletPrime,
         appletBase,
       });

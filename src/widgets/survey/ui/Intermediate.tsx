@@ -3,7 +3,10 @@ import { useCallback, useEffect } from 'react';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
-import { useActivityAnswersMutation } from '@app/entities/activity';
+import {
+  useActivityAnswersMutation,
+  useEncryptAnswers,
+} from '@app/entities/activity';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 import {
   mapActivitiesFromDto,
@@ -51,6 +54,7 @@ function Intermediate({
 }: Props) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { encryptAnswers } = useEncryptAnswers();
 
   // TODO: The usage of useAppletDetailsQuery here should be removed in the future
   // because we should rely on the flow pipeline instead.
@@ -65,6 +69,13 @@ function Intermediate({
   let { data: allActivities } = useAppletDetailsQuery(appletId, {
     select: r => mapActivitiesFromDto(r.data.result.activities),
   });
+
+  const { data: applet } = useAppletDetailsQuery(appletId, {
+    select: response =>
+      AppletModel.mapAppletDetailsFromDto(response.data.result),
+  });
+
+  const appletEncryption = applet?.encryption || null;
 
   const { flowStorageRecord } = useFlowStorageRecord({
     appletId,
@@ -132,18 +143,22 @@ function Intermediate({
       return;
     }
 
+    const answers = mapAnswersToDto(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
+
+    const encryptedAnswers = encryptAnswers(appletEncryption, {
+      answers,
+    });
+
     sendAnswers({
       flowId,
       appletId,
       activityId,
       createdAt: getUnixTimestamp(Date.now()),
       version: activityStorageRecord.appletVersion,
-      // @ts-ignore
-      // @todo do we need to encrypt also these answers?
-      answers: mapAnswersToDto(
-        activityStorageRecord.items,
-        activityStorageRecord.answers,
-      ),
+      answers: encryptedAnswers,
     });
   }
 
