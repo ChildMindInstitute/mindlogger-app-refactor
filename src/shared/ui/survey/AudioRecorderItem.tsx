@@ -24,7 +24,9 @@ const audioSetConfig: AudioSet = {
 const androidCacheDir = RNFetchBlob.fs.dirs.CacheDir;
 
 type Response = {
-  filePath: string;
+  uri: string;
+  fileName: string;
+  type: string;
 };
 
 type Props = {
@@ -32,7 +34,7 @@ type Props = {
     maxDuration?: number;
   };
   value?: Response;
-  onChange: ({ filePath }: Response) => void;
+  onChange: (response: Response) => void;
 };
 
 const AudioRecorderItem: FC<Props> = ({
@@ -51,8 +53,8 @@ const AudioRecorderItem: FC<Props> = ({
   const permissionNotGranted = microphonePermission !== RESULTS.GRANTED;
 
   const filePath = useMemo(() => {
-    if (initialValue?.filePath) {
-      return initialValue.filePath;
+    if (initialValue?.uri) {
+      return initialValue.uri;
     }
     const randomString = uuidv4();
     return IS_ANDROID
@@ -111,7 +113,9 @@ const AudioRecorderItem: FC<Props> = ({
     setIsRecording(false);
     setFileSaved(true);
     const response = {
-      filePath: fullPath,
+      uri: fullPath,
+      type: `audio/${IS_ANDROID ? 'm4a' : 'mp4'}`,
+      fileName: `${uuidv4()}.${IS_ANDROID ? 'm4a' : 'mp4'}`,
     };
     onFinish(response);
   };
