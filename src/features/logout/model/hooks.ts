@@ -5,6 +5,7 @@ import { onBeforeLogout } from '@app/entities/identity/lib/alerts';
 import { NotificationModel } from '@app/entities/notification';
 import { IdentityService } from '@app/shared/api';
 import { IdentityModel } from '@entities/identity';
+import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
 import {
   createSecureStorage,
@@ -44,6 +45,8 @@ export function useLogout() {
     });
 
     NotificationModel.NotificationManager.clearScheduledNotifications();
+    UserInfoRecord.clear();
+    UserPrivateKeyRecord.clear();
   };
 
   const logout = async () => {

@@ -46,9 +46,12 @@ function FinishItem({
   const { t } = useTranslation();
   const { encryptAnswers } = useEncryptAnswers();
 
-  const { data: appletEncryption = null } = useAppletDetailsQuery(appletId, {
-    select: r => r.data.result.encryption,
+  const { data: applet } = useAppletDetailsQuery(appletId, {
+    select: response =>
+      AppletModel.mapAppletDetailsFromDto(response.data.result),
   });
+
+  const appletEncryption = applet?.encryption || null;
 
   const dispatch = useAppDispatch();
 

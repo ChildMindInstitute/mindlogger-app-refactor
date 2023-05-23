@@ -1,3 +1,3 @@
-const crypto = require('../../../../crypto');
+const crypto = require('../../../../crypto/crypto');
 
 export { crypto };

@@ -1,6 +1,12 @@
 import { useCallback } from 'react';
 
+import { type AppletEncryptionDTO } from '@shared/api';
+
 import { encryption } from '../encryption';
+
+type InputProps = AppletEncryptionDTO & {
+  privateKey: number[];
+};
 
 type GenerateUserPrivateKeyParams = {
   userId: string;
@@ -8,27 +14,11 @@ type GenerateUserPrivateKeyParams = {
   password: string;
 };
 
-type GenerateUserPublicKeyParams = {
-  privateKey: number[];
-  appletPrime: number[];
-  appletBase: number[];
-};
-
 type GenerateAesKeyProps = {
-  userPrivateKey: number[];
-  appletPublicKey: number[];
+  privateKey: number[];
+  publicKey: number[];
   appletPrime: number[];
   appletBase: number[];
-};
-
-type EncryptDataByKeyProps = {
-  text: string;
-  key: number[];
-};
-
-type DecryptDataByKeyProps = {
-  text: string;
-  key: string;
 };
 
 const useEncryption = () => {
@@ -39,31 +29,31 @@ const useEncryption = () => {
     [],
   );
 
-  const generateUserPublicKey = useCallback(
-    (params: GenerateUserPublicKeyParams) => {
-      return encryption.getPublicKey(params);
-    },
-    [],
-  );
-
   const generateAesKey = useCallback((params: GenerateAesKeyProps) => {
     return encryption.getAESKey(params);
   }, []);
 
-  const encryptDataByKey = useCallback((props: EncryptDataByKeyProps) => {
-    return encryption.encryptData(props);
-  }, []);
+  const createEncryptionService = (params: InputProps) => {
+    const aesKey = generateAesKey({
+      appletPrime: JSON.parse(params.prime),
+      appletBase: JSON.parse(params.base),
+      publicKey: JSON.parse(params.publicKey),
+      privateKey: params.privateKey,
+    });
 
-  const decryptDataByKey = useCallback((props: DecryptDataByKeyProps) => {
-    return encryption.decryptData(props);
-  }, []);
+    const encrypt = (json: string) => {
+      return encryption.encryptData({
+        text: json,
+        key: aesKey,
+      });
+    };
+
+    return { encrypt };
+  };
 
   return {
-    generateAesKey,
-    encryptDataByKey,
-    decryptDataByKey,
+    createEncryptionService,
     generateUserPrivateKey,
-    generateUserPublicKey,
   };
 };
 

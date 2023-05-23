@@ -3,12 +3,13 @@ import { AxiosResponse } from 'axios';
 import httpService from './httpService';
 import { SuccessfulEmptyResponse } from '../types';
 
-export type AnswerDto = {
+export type EncryptedAnswerDto = {
   activityItemId: string;
   answer: string;
 };
 
-export type AnswerObjectDto = Omit<AnswerDto, 'answer'> & {
+export type AnswerDto = {
+  activityItemId: string;
   answer: {
     value: string | number | Array<string>;
     additionalText?: string;
@@ -22,7 +23,7 @@ type ActivityAnswersRequest = {
   flowId: string | null;
   activityId: string;
   createdAt: number;
-  answers: Array<AnswerDto>;
+  answers: Array<EncryptedAnswerDto>;
 };
 
 type ActivityAnswersResponse = SuccessfulEmptyResponse;

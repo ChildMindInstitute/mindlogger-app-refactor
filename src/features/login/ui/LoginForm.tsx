@@ -4,9 +4,8 @@ import { FC } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { UserInfoRecord } from '@app/entities/identity/lib';
 import { IdentityModel, useLoginMutation } from '@entities/identity';
-import { UserPrivateKeyRecord } from '@entities/identity/lib';
+import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
 import {
   executeIfOnline,

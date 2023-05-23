@@ -1,30 +1,26 @@
 import { useCallback } from 'react';
 
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
-import {
-  // AnswerTypesPayload,
-  AppletEncryptionDTO,
-} from '@shared/api';
+import { AnswerDto, AppletEncryptionDTO } from '@shared/api';
 import { useEncryption } from '@shared/lib';
 
 type AnswerPayload = {
-  answers: Array<any>; //AnswerTypesPayload
+  answers: Array<AnswerDto>;
 };
 
-type EncryptAnswerReturn = {
+type Response = {
   activityItemId: string;
   answer: string;
 };
 
 export const useEncryptAnswers = () => {
-  const { generateAesKey, encryptDataByKey, generateUserPublicKey } =
-    useEncryption();
+  const { createEncryptionService } = useEncryption();
 
   const encryptAnswers = useCallback(
     (
       encryptionParams: AppletEncryptionDTO | null,
       answerPayload: AnswerPayload,
-    ): EncryptAnswerReturn[] => {
+    ): Response[] => {
       if (!encryptionParams) {
         throw new Error('Encryption params is undefined');
       }
@@ -35,23 +31,15 @@ export const useEncryptAnswers = () => {
         throw new Error('User private key is undefined');
       }
 
-      // Need this public key for the future, when BE will be ready
-      const userPublicKey = generateUserPublicKey({
+      const encryptionService = createEncryptionService({
+        ...encryptionParams,
         privateKey: userPrivateKey,
-        appletPrime: JSON.parse(encryptionParams.prime),
-        appletBase: JSON.parse(encryptionParams.base),
-      });
-
-      const key = generateAesKey({
-        userPrivateKey,
-        appletPublicKey: JSON.parse(encryptionParams.publicKey),
-        appletPrime: JSON.parse(encryptionParams.prime),
-        appletBase: JSON.parse(encryptionParams.base),
       });
 
       return answerPayload.answers.map(answerItem => {
-        const answerJSON = JSON.stringify(answerItem.answer);
-        const encryptedAnswer = encryptDataByKey({ text: answerJSON, key });
+        const encryptedAnswer = encryptionService.encrypt(
+          JSON.stringify(answerItem.answer),
+        );
 
         return {
           ...answerItem,
@@ -59,7 +47,7 @@ export const useEncryptAnswers = () => {
         };
       });
     },
-    [encryptDataByKey, generateAesKey, generateUserPublicKey],
+    [createEncryptionService],
   );
 
   return {
