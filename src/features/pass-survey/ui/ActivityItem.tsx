@@ -315,10 +315,8 @@ function ActivityItem({
           </Box>
         )}
 
-        {pipelineItem.timer ? (
+        {pipelineItem.timer && (
           <Timer duration={pipelineItem.timer} onTimeIsUp={next} />
-        ) : (
-          <></>
         )}
 
         {item}

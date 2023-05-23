@@ -1,3 +1,5 @@
+import { FileSystem } from 'react-native-file-access';
+
 import {
   useBaseMutation,
   AnswerService,
@@ -20,20 +22,29 @@ const sendAnswers = async (body: Arguments) => {
   for (const itemAnswer of body.answers) {
     const { value: answerValue } = itemAnswer.answer;
 
-    if (answerValue?.uri && isFileUrl(answerValue.uri)) {
-      const uploadResult = await FileService.upload(answerValue);
+    const fileExists =
+      answerValue?.uri &&
+      isFileUrl(answerValue.uri) &&
+      (await FileSystem.exists(answerValue.uri));
 
-      if (uploadResult?.data.result.url) {
-        const { url } = uploadResult.data.result;
+    if (fileExists) {
+      try {
+        const uploadResult = await FileService.upload(answerValue);
 
-        itemAnswer.answer.value = url;
-      } else {
-        const answers = body.answers.filter(
-          answer => answer.activityItemId !== itemAnswer.activityItemId,
-        );
+        const url = uploadResult?.data.result.url;
 
-        body.answers = answers;
+        if (url) {
+          itemAnswer.answer.value = url;
+        }
+      } catch (error) {
+        console.error(error);
       }
+    } else {
+      const answers = body.answers.filter(
+        answer => answer.activityItemId !== itemAnswer.activityItemId,
+      );
+
+      body.answers = answers;
     }
   }
 
