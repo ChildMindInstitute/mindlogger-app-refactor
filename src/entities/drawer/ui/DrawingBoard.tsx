@@ -15,7 +15,11 @@ import {
   Path,
 } from '@shopify/react-native-skia';
 
-import { colors } from '@app/shared/lib';
+import {
+  colors,
+  useShouldRestoreSkiaViewState,
+  useUndoClicked,
+} from '@app/shared/lib';
 import { Box } from '@app/shared/ui';
 
 import {
@@ -43,6 +47,13 @@ type Props = {
 
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, onStarted, width } = props;
+
+  const isEmpty = !value.length;
+
+  const { undoClicked, resetUndoClicked } = useUndoClicked(isEmpty);
+
+  const { shouldRestore, updateShouldRestore } =
+    useShouldRestoreSkiaViewState();
 
   const currentPathRef = useRef<SkPath | null>();
 
@@ -93,9 +104,7 @@ const DrawingBoard: FC<Props> = props => {
   };
 
   const onTouchStart = (touchInfo: TouchInfo) => {
-    if (currentPathRef.current) {
-      return;
-    }
+    resetCurrentPath();
 
     const point: Point = { x: touchInfo.x, y: touchInfo.y };
 
@@ -137,7 +146,6 @@ const DrawingBoard: FC<Props> = props => {
     };
 
     onResult(result);
-    resetCurrentPath();
   };
 
   const drawPath = () => {
@@ -160,9 +168,24 @@ const DrawingBoard: FC<Props> = props => {
     (canvas, info) => {
       canvasRef.current = canvas;
       touchHandler(info.touches);
+
+      if (undoClicked()) {
+        resetCurrentPath();
+        resetUndoClicked();
+        return;
+      }
+
+      if (shouldRestore()) {
+        drawPath();
+        updateShouldRestore();
+      }
     },
     [width, touchHandler],
   );
+
+  const SkiaViewMemoized = useMemo(() => {
+    return <SkiaView onDraw={onDraw} style={styles.skiaView} />;
+  }, [onDraw]);
 
   return (
     <Box
@@ -172,7 +195,7 @@ const DrawingBoard: FC<Props> = props => {
       borderWidth={1}
       borderColor="$lightGrey2"
     >
-      <SkiaView onDraw={onDraw} style={styles.skiaView} />
+      {SkiaViewMemoized}
 
       <View style={styles.canvasView} pointerEvents="none">
         <Canvas style={styles.canvas}>
