@@ -21,10 +21,11 @@ import {
   AdditionalResponseConfiguration,
   TimeItemDto,
   SingleSelectionRowsItemDto,
+  ConditionalLogicDto,
 } from '@app/shared/api';
 import { getMsFromSeconds } from '@app/shared/lib';
 
-import { ActivityDetails, ActivityItem } from '../lib';
+import { ActivityDetails, ActivityItem, ConditionalLogic } from '../lib';
 import { FlankerSettings } from '../lib/types/flanker';
 
 function mapTimerValue(dtoTimer: number | null) {
@@ -42,6 +43,24 @@ function mapAdditionalText(configuration: AdditionalResponseConfiguration) {
           required: configuration.additionalResponseOption.textInputRequired,
         },
       }
+    : null;
+}
+
+function mapConditionalLogic(
+  dtos?: ConditionalLogicDto[],
+): ConditionalLogic[] | null {
+  return dtos
+    ? dtos.map(dto => {
+        return {
+          match: dto.match,
+          conditions: dto.conditions.map(condition => {
+            return {
+              ...condition,
+              activityItemName: condition.itemName,
+            };
+          }),
+        };
+      })
     : null;
 }
 
@@ -293,6 +312,7 @@ function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -393,6 +413,7 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -452,6 +473,7 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
