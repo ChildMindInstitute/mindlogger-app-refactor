@@ -5,6 +5,7 @@ import {
   AnswerService,
   MutationOptions,
   FileService,
+  AnswerDto,
 } from '@app/shared/api';
 
 type Options = MutationOptions<typeof AnswerService.sendActivityAnswers>;
@@ -17,6 +18,14 @@ const isFileUrl = (value: string) => {
 
   return localFileRegex.test(value);
 };
+
+const filterAnswers = (
+  answers: AnswerDto[],
+  answerFilter: AnswerDto,
+): AnswerDto[] =>
+  answers.filter(
+    answer => answer.activityItemId !== answerFilter.activityItemId,
+  );
 
 const sendAnswers = async (body: Arguments) => {
   for (const itemAnswer of body.answers) {
@@ -37,12 +46,14 @@ const sendAnswers = async (body: Arguments) => {
           itemAnswer.answer.value = url;
         }
       } catch (error) {
+        const answers = filterAnswers(body.answers, itemAnswer);
+
+        body.answers = answers;
+
         console.error(error);
       }
     } else {
-      const answers = body.answers.filter(
-        answer => answer.activityItemId !== itemAnswer.activityItemId,
-      );
+      const answers = filterAnswers(body.answers, itemAnswer);
 
       body.answers = answers;
     }
