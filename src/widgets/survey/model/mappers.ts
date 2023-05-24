@@ -9,30 +9,38 @@ export default function isObject<TObj>(obj: TObj) {
 export function mapAnswersToDto(
   pipeline: PipelineItem[],
   answers: Answers,
+  flowId: string | null,
 ): Array<AnswerDto> {
-  const result = Object.entries(answers)
-    .filter(([_, answer]) => answer.answer != null)
-    .map(([step, answer]) => {
-      const dto: AnswerDto = {
-        activityItemId: pipeline[Number(step)]?.id!,
-        answer: {
-          value: answer.answer as any, //TODO: fix when all types of answers DTOs are done
-        },
-      };
+  const filteredAnswers = Object.entries(answers).filter(([_, answer]) => {
+    return answer.answer != null;
+  });
+  const activityItemIds = filteredAnswers.map(([step]) => {
+    return pipeline[Number(step)]?.id!;
+  });
 
-      const pipelineItem = pipeline[+step];
+  const result = filteredAnswers.map(([step, answer]) => {
+    const dto: AnswerDto = {
+      activityId: pipeline[Number(step)]?.id!,
+      flowId: flowId,
+      itemIds: activityItemIds,
+      answer: {
+        value: answer.answer as any, //TODO: fix when all types of answers DTOs are done
+      },
+    };
 
-      if (answer.additionalAnswer) {
-        dto.answer.additionalText = answer.additionalAnswer;
-      }
+    const pipelineItem = pipeline[+step];
 
-      if (pipelineItem.type === 'TextInput') {
-        dto.answer.shouldIdentifyResponse =
-          pipelineItem.payload.shouldIdentifyResponse;
-      }
+    if (answer.additionalAnswer) {
+      dto.answer.additionalText = answer.additionalAnswer;
+    }
 
-      return dto;
-    });
+    if (pipelineItem.type === 'TextInput') {
+      dto.answer.shouldIdentifyResponse =
+        pipelineItem.payload.shouldIdentifyResponse;
+    }
+
+    return dto;
+  });
 
   return result;
 }

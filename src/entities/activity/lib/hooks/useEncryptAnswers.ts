@@ -2,16 +2,14 @@ import { useCallback } from 'react';
 
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
 import { AnswerDto, AppletEncryptionDTO } from '@shared/api';
+import { EncryptedAnswerDto } from '@shared/api';
 import { useEncryption } from '@shared/lib';
 
 type AnswerPayload = {
   answers: Array<AnswerDto>;
 };
 
-type Response = {
-  activityItemId: string;
-  answer: string;
-};
+type Response = EncryptedAnswerDto;
 
 export const useEncryptAnswers = () => {
   const { createEncryptionService } = useEncryption();
