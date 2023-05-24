@@ -1,9 +1,11 @@
 import { QueryClient } from '@tanstack/react-query';
+import { isToday } from 'date-fns';
 
 import { EntityPath, StoreProgress } from '@app/abstract/lib';
 import { ActivityListItem } from '@app/entities/activity';
 import {
-  onActivityNotFound,
+  onActivityNotAvailable,
+  onCompletedToday,
   onScheduledToday,
 } from '@app/features/tap-on-notification/lib';
 import {
@@ -13,12 +15,14 @@ import {
 } from '@app/widgets/activity-group';
 
 type Input = {
+  entityName: string;
   identifiers: EntityPath;
   storeProgress: StoreProgress;
   queryClient: QueryClient;
 };
 
 export const checkEntityAvailability = ({
+  entityName,
   identifiers: { appletId, entityId, entityType, eventId },
   storeProgress,
   queryClient,
@@ -61,16 +65,19 @@ export const checkEntityAvailability = ({
     );
 
   if (scheduled) {
-    const entityName =
-      entityType === 'flow'
-        ? scheduled.activityFlowDetails!.activityFlowName
-        : scheduled.name;
-
     onScheduledToday(entityName, scheduled.availableFrom!);
     return false;
   }
 
-  onActivityNotFound();
+  const record = storeProgress[appletId]?.[entityId]?.[eventId];
+
+  const completedToday = record && record.endAt && isToday(record.endAt);
+
+  if (completedToday) {
+    onCompletedToday(entityName);
+  } else {
+    onActivityNotAvailable();
+  }
 
   return false;
 };

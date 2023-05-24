@@ -77,13 +77,12 @@ export default () => {
   });
 
   TapOnNotificationModel.useOnNotificationTap({
-    checkAvailability: ({
-      appletId,
-      eventId,
-      entityId,
-      entityType,
-    }: EntityPath) => {
+    checkAvailability: (
+      entityName: string,
+      { appletId, eventId, entityId, entityType }: EntityPath,
+    ) => {
       return checkEntityAvailability({
+        entityName,
         identifiers: { appletId, eventId, entityId, entityType },
         queryClient,
         storeProgress,
