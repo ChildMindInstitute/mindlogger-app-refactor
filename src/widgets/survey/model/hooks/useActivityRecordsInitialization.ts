@@ -2,20 +2,21 @@ import { useEffect, useMemo } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
+import { EntityType } from '@app/abstract/lib';
 import { PassSurveyModel } from '@app/features/pass-survey';
 
 type UseActivityRecordsInitializationArgs = {
   appletId: string;
-  activityId: string;
   eventId: string;
-  flowId?: string;
+  entityId: string;
+  entityType: EntityType;
 };
 
 export function useActivityRecordsInitialization({
   appletId,
-  activityId,
   eventId,
-  flowId,
+  entityId,
+  entityType,
 }: UseActivityRecordsInitializationArgs) {
   const queryClient = useQueryClient();
 
@@ -28,17 +29,17 @@ export function useActivityRecordsInitialization({
     [appletId, queryClient],
   );
 
-  const isFlow = !!flowId;
+  const isFlow = entityType === 'flow';
 
   useEffect(() => {
     if (isFlow) {
-      Initializer.initializeFlow({ flowId, eventId });
+      Initializer.initializeFlow({ flowId: entityId, eventId });
     }
-  }, [Initializer, eventId, flowId, isFlow]);
+  }, [Initializer, eventId, isFlow, entityId]);
 
   useEffect(() => {
     if (!isFlow) {
-      Initializer.initializeActivity({ activityId, eventId });
+      Initializer.initializeActivity({ activityId: entityId, eventId });
     }
-  }, [Initializer, activityId, eventId, isFlow]);
+  }, [Initializer, eventId, isFlow, entityId]);
 }

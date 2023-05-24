@@ -1,9 +1,11 @@
 import { QueryClient } from '@tanstack/react-query';
+import { isToday } from 'date-fns';
 
-import { StoreProgress } from '@app/abstract/lib';
+import { EntityPath, StoreProgress } from '@app/abstract/lib';
 import { ActivityListItem } from '@app/entities/activity';
 import {
-  onActivityNotFound,
+  onActivityNotAvailable,
+  onCompletedToday,
   onScheduledToday,
 } from '@app/features/tap-on-notification/lib';
 import {
@@ -13,18 +15,15 @@ import {
 } from '@app/widgets/activity-group';
 
 type Input = {
-  identifiers: {
-    appletId: string;
-    activityId: string | null;
-    flowId: string | null;
-    eventId: string;
-  };
+  entityName: string;
+  identifiers: EntityPath;
   storeProgress: StoreProgress;
   queryClient: QueryClient;
 };
 
 export const checkEntityAvailability = ({
-  identifiers: { appletId, activityId, flowId, eventId },
+  entityName,
+  identifiers: { appletId, entityId, entityType, eventId },
   storeProgress,
   queryClient,
 }: Input) => {
@@ -50,8 +49,8 @@ export const checkEntityAvailability = ({
     [...groupAvailable.activities, ...groupInProgress.activities].some(
       x =>
         x.eventId === eventId &&
-        ((flowId && flowId === x.flowId) ||
-          (!flowId && activityId === x.activityId)),
+        ((entityType === 'flow' && entityId === x.flowId) ||
+          (entityType === 'regular' && entityId === x.activityId)),
     )
   ) {
     return true;
@@ -61,19 +60,24 @@ export const checkEntityAvailability = ({
     groupScheduled.activities.find(
       x =>
         x.eventId === eventId &&
-        ((flowId && flowId === x.flowId) ||
-          (!flowId && activityId === x.activityId)),
+        ((entityType === 'flow' && entityId === x.flowId) ||
+          (entityType === 'regular' && entityId === x.activityId)),
     );
 
   if (scheduled) {
-    onScheduledToday(
-      flowId ? scheduled.activityFlowDetails!.activityFlowName : scheduled.name,
-      scheduled.availableFrom!,
-    );
+    onScheduledToday(entityName, scheduled.availableFrom!);
     return false;
   }
 
-  onActivityNotFound();
+  const record = storeProgress[appletId]?.[entityId]?.[eventId];
+
+  const completedToday = record && record.endAt && isToday(record.endAt);
+
+  if (completedToday) {
+    onCompletedToday(entityName);
+  } else {
+    onActivityNotAvailable();
+  }
 
   return false;
 };

@@ -6,7 +6,17 @@ import { NotificationModel } from '@app/entities/notification';
 import { IdentityService } from '@app/shared/api';
 import { IdentityModel } from '@entities/identity';
 import { SessionModel } from '@entities/session';
-import { hasPendingMutations, isAppOnline, useAppDispatch } from '@shared/lib';
+import {
+  createSecureStorage,
+  createStorage,
+  hasPendingMutations,
+  isAppOnline,
+  useAppDispatch,
+} from '@shared/lib';
+
+const activitiesStorage = createSecureStorage('activity_progress-storage');
+
+const flowsStorage = createStorage('flow_progress-storage');
 
 export function useLogout() {
   const dispatch = useAppDispatch();
@@ -18,6 +28,10 @@ export function useLogout() {
     SessionModel.clearSession();
 
     CacheManager.clearCache();
+
+    activitiesStorage.clearAll();
+
+    flowsStorage.clearAll();
 
     await queryClient.removeQueries(['applets']);
     await queryClient.removeQueries(['events']);

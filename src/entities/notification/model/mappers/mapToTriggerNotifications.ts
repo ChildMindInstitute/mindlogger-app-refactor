@@ -41,6 +41,7 @@ export async function mapToTriggerNotifications(
         isLocal: 'true',
         type: 'schedule-event-alert',
         ...mapIdentifiers(notification),
+        entityName: notification.entityName,
       },
       android: {
         channelId,

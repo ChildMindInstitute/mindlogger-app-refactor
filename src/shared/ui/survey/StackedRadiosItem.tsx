@@ -15,35 +15,45 @@ type StackedRadioConfig = {
 };
 
 type Props = {
-  value: Array<{ rowId: string; optionId: string }> | null;
+  values: Array<{ rowId: string; optionId: string }>;
   onChange: (value: Array<{ rowId: string; optionId: string }>) => unknown;
   config: StackedRadioConfig;
 };
 
-const StackedRadios: FC<Props> = ({ value, onChange, config }) => {
+const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
   const onRowValueChange = (option: StackedRowItemValue, itemIndex: number) => {
-    const newValue = value ? [...value] : [];
-    const { id: rowId } = config.rows[itemIndex];
-    newValue.push({
-      rowId,
+    const { id: currentRowId } = config.rows[itemIndex];
+    const newValues = values.filter(({ rowId }) => rowId !== currentRowId);
+
+    newValues.push({
+      rowId: currentRowId,
       optionId: option.id,
     });
 
-    onChange(newValue);
+    onChange(newValues);
   };
 
   return (
     <StackedItemsGrid
       items={config.rows}
-      renderCell={(index, option) => (
-        <RadioGroup.Item
-          onPress={() => onRowValueChange(option, index)}
-          borderColor={colors.blue}
-          value={option.id}
-        >
-          <RadioGroup.Indicator backgroundColor={colors.blue} />
-        </RadioGroup.Item>
-      )}
+      renderCell={(index, option) => {
+        const { id: currentRowId } = config.rows[index];
+        const currentValue = values.find(({ rowId }) => {
+          return rowId === currentRowId;
+        });
+
+        return (
+          <RadioGroup value={currentValue?.optionId ?? ''}>
+            <RadioGroup.Item
+              onPress={() => onRowValueChange(option, index)}
+              borderColor={colors.blue}
+              value={option.id}
+            >
+              <RadioGroup.Indicator backgroundColor={colors.blue} />
+            </RadioGroup.Item>
+          </RadioGroup>
+        );
+      }}
       options={config.options}
     />
   );

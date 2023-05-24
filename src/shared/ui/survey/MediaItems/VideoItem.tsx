@@ -65,9 +65,9 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
     if (isGalleryAccessGranted) {
       selectVideo();
     } else {
-      const permissionStatus = await requestGalleryPermissions();
+      const isPermissionAllowed = await requestGalleryPermissions();
 
-      if (permissionStatus === 'granted') {
+      if (isPermissionAllowed) {
         selectVideo();
       } else {
         await handleBlockedPermissions(
@@ -82,9 +82,9 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
     if (isCameraAccessGranted) {
       recordVideo();
     } else {
-      const permissionStatus = await requestCameraPermissions();
+      const isPermissionAllowed = await requestCameraPermissions();
 
-      if (permissionStatus === 'granted') {
+      if (isPermissionAllowed) {
         recordVideo();
       } else {
         await handleBlockedPermissions(
@@ -99,12 +99,9 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
       onOpenCamera={onOpenVideoCamera}
       onShowMediaLibrary={onShowVideoGallery}
       mode="video"
+      uploadIcon={<VideoIcon color={colors.red} size={50} />}
     >
-      {value ? (
-        <VideoPlayer uri={value.uri} />
-      ) : (
-        <VideoIcon color={colors.red} size={50} />
-      )}
+      {value && <VideoPlayer uri={value.uri} />}
     </MediaInput>
   );
 };

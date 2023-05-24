@@ -363,14 +363,16 @@ export type CheckboxResponse = string[] | null;
 export type DateResponse = string | null;
 
 export type AudioResponse = {
-  filePath: string;
+  uri: string;
+  type: string;
+  fileName: string;
 };
 
 export type AudioPlayerResponse = boolean;
 
 export type TimeRangeResponse = {
-  from: string;
-  to: string;
+  startTime: HourMinute;
+  endTime: HourMinute;
 };
 
 export type RadioResponse = string;
@@ -382,10 +384,10 @@ export type StackedCheckboxResponse = {
   optionIds: string[];
 }[];
 
-export type StackedRadioResponse = Array<{
+export type StackedRadioResponse = {
   rowId: string;
   optionId: string;
-}>;
+}[];
 
 export type StackedSliderResponse = Array<{
   rowId: string;

@@ -10,8 +10,12 @@ export function onAppletNotFound() {
   );
 }
 
-export function onActivityNotFound() {
+export function onActivityNotAvailable() {
   Alert.alert(i18n.t('firebase_messaging:activity_not_found'));
+}
+
+export function onCompletedToday(name: string) {
+  Alert.alert(`${i18n.t('firebase_messaging:already_completed')} '${name}'`);
 }
 
 export function onScheduledToday(name: string, timeFrom: Date) {

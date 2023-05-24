@@ -1,11 +1,17 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
-import { colors } from '@app/shared/lib';
+import {
+  HourMinute,
+  colors,
+  getMidnightDateInMs,
+  getMsFromHours,
+  getMsFromMinutes,
+} from '@app/shared/lib';
 import { YStack, DateTimePicker, AlarmIcon, BedIcon } from '@shared/ui';
 
 type TimeRangeValue = {
-  from: string;
-  to: string;
+  endTime: HourMinute;
+  startTime: HourMinute;
 };
 
 type Props = {
@@ -13,35 +19,60 @@ type Props = {
   onChange: (value: TimeRangeValue) => void;
 };
 
-const TimeRangeItem: FC<Props> = ({
-  value = { from: new Date().toString(), to: new Date().toString() },
-  onChange,
-}) => {
-  const formatTime = (dateString: string) => new Date(dateString);
+const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
+  const transformToDate = (hourMinute: HourMinute): Date => {
+    const msTime =
+      getMidnightDateInMs() +
+      getMsFromHours(hourMinute.hours) +
+      getMsFromMinutes(hourMinute.minutes);
 
-  const onFromChangeTime = (time: any) =>
-    onChange({ ...value, from: time.toString() });
+    return new Date(msTime);
+  };
 
-  const onToChangeTime = (time: any) =>
-    onChange({ ...value, to: time.toString() });
+  const transformToHourMinute = (time: Date): HourMinute => ({
+    minutes: time.getMinutes(),
+    hours: time.getHours(),
+  });
+
+  const startTimeAsDate = useMemo(
+    () => (value?.startTime ? transformToDate(value.startTime) : new Date()),
+    [value],
+  );
+
+  const endTimeAsDate = useMemo(
+    () => (value?.endTime ? transformToDate(value.endTime) : new Date()),
+    [value],
+  );
+
+  const onChangeStartTime = (time: Date) =>
+    onChange({
+      endTime: transformToHourMinute(endTimeAsDate),
+      startTime: transformToHourMinute(time),
+    });
+
+  const onChangeEndTime = (time: Date) =>
+    onChange({
+      startTime: transformToHourMinute(startTimeAsDate),
+      endTime: transformToHourMinute(time),
+    });
 
   return (
     <YStack>
       <DateTimePicker
         label="From"
-        onChange={onFromChangeTime}
+        onChange={onChangeStartTime}
         dateDisplayFormat="h:mm a"
-        value={formatTime(value.from)}
+        value={startTimeAsDate}
         mode="time"
         iconAfter={<BedIcon color={colors.grey2} size={15} />}
       />
 
       <DateTimePicker
         label="To"
-        onChange={onToChangeTime}
+        onChange={onChangeEndTime}
         dateDisplayFormat="h:mm a"
         mode="time"
-        value={formatTime(value.to)}
+        value={endTimeAsDate}
         iconAfter={<AlarmIcon color={colors.grey2} size={15} />}
       />
     </YStack>

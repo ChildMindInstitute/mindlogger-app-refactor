@@ -44,6 +44,7 @@ export type LocalEventNotification = Notification & {
     activityId?: string;
     activityFlowId?: string;
     eventId?: string;
+    entityName?: string;
     isLocal: 'true' | 'false';
     type: 'schedule-event-alert' | 'request-to-reschedule-due-to-limit';
   };

@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { ActivityModel } from '@app/entities/activity';
+import { ActivityDetails, ActivityModel } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import { ActivityResponse, AppletDetailsResponse } from '@app/shared/api';
 import {
@@ -52,7 +52,9 @@ export function ActivityRecordInitializer({
       queryClient,
     )!;
 
-    const activity = ActivityModel.mapToActivity(activityResponse.result);
+    const activity: ActivityDetails = ActivityModel.mapToActivity(
+      activityResponse.result,
+    );
 
     const state: ActivityState = {
       step: 0,

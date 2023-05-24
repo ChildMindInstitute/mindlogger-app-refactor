@@ -31,7 +31,7 @@ export const checkCameraPermissions = async () =>
   IS_ANDROID ? checkCameraAndroidPermissions() : checkCameraIOSPermissions();
 
 const requestCameraIOSPermissions = async () => {
-  return Permissions.request(CAMERA_PERMISSIONS!);
+  return (await Permissions.request(CAMERA_PERMISSIONS!)) === RESULTS.GRANTED;
 };
 
 const requestCameraAndroidPermissions = async () => {
