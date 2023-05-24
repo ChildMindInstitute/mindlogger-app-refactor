@@ -11,7 +11,7 @@ export { default as useOnForeground } from './useOnForeground';
 export { default as useAlarmPermissions } from './useAlarmPermissions';
 export { default as useBackgroundTask } from './useBackgroundTask';
 export { default as usePrevious } from './usePrevious';
-export { default as useRender } from './useRender';
+export { default as useForceUpdate } from './useForceUpdate';
 export { default as useUndoClicked } from './useUndoClicked';
 export { default as useShouldRestoreSkiaViewState } from './useShouldRestoreSkiaViewState';
 

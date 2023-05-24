@@ -183,10 +183,6 @@ const DrawingBoard: FC<Props> = props => {
     [width, touchHandler],
   );
 
-  const SkiaViewMemoized = useMemo(() => {
-    return <SkiaView onDraw={onDraw} style={styles.skiaView} />;
-  }, [onDraw]);
-
   return (
     <Box
       width={width}
@@ -195,7 +191,7 @@ const DrawingBoard: FC<Props> = props => {
       borderWidth={1}
       borderColor="$lightGrey2"
     >
-      {SkiaViewMemoized}
+      <SkiaView onDraw={onDraw} style={styles.skiaView} />
 
       <View style={styles.canvasView} pointerEvents="none">
         <Canvas style={styles.canvas}>

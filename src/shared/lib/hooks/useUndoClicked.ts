@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
+import useRender from './useForceUpdate';
 import usePrevious from './usePrevious';
-import useRender from './useRender';
 
 type Result = {
   undoClicked: () => boolean;
