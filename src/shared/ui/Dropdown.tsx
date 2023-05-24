@@ -26,7 +26,7 @@ function Dropdown({ placeholder, value, onValueChange, items }: DropdownProps) {
       data={items}
       dropdownStyle={styles.dropdown}
       buttonStyle={styles.button}
-      defaultButtonText={placeholder}
+      defaultButtonText={value ? value.value : placeholder}
       defaultValue={value ? value.value : placeholder}
       onSelect={onChange}
       buttonTextAfterSelection={() => (value ? value.value : placeholder)}
