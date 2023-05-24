@@ -21,7 +21,7 @@ import { LogTrigger } from '@app/shared/api';
 import { useAppSelector } from '@app/shared/lib';
 
 type Input = {
-  checkAvailability: (identifiers: EntityPath) => boolean;
+  checkAvailability: (entityName: string, identifiers: EntityPath) => boolean;
   hasMediaReferences: (input: LookupMediaInput) => boolean;
 };
 
@@ -67,7 +67,7 @@ export function useOnNotificationTap({
       );
     },
     'schedule-event-alert': eventDetail => {
-      const { appletId, activityId, activityFlowId, eventId } =
+      const { appletId, activityId, activityFlowId, eventId, entityName } =
         eventDetail.notification.data;
 
       const entityId: string = (activityId ?? activityFlowId)!;
@@ -82,7 +82,7 @@ export function useOnNotificationTap({
 
       setTimeout(
         () => {
-          startEntity(appletId!, entityId, entityType, eventId!);
+          startEntity(appletId!, entityId, entityType, eventId!, entityName!);
         },
         executing ? GoBackDuration : WorkaroundDuration,
       );
@@ -118,8 +118,16 @@ export function useOnNotificationTap({
     entityId: string,
     entityType: EntityType,
     eventId: string,
+    entityName: string,
   ) => {
-    if (!checkAvailability({ appletId, eventId, entityId, entityType })) {
+    if (
+      !checkAvailability(entityName, {
+        appletId,
+        eventId,
+        entityId,
+        entityType,
+      })
+    ) {
       return;
     }
 
