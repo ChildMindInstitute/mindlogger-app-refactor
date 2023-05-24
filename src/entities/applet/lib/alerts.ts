@@ -27,3 +27,10 @@ export function onBeforeStartingActivity({
     { cancelable: false },
   );
 }
+
+export function onMediaReferencesFound() {
+  Alert.alert(
+    i18n.t('media:media_found_title'),
+    i18n.t('media:media_found_body'),
+  );
+}

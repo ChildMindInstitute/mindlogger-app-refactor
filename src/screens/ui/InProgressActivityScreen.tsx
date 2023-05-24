@@ -9,15 +9,15 @@ import { Box } from '@shared/ui';
 type Props = NativeStackScreenProps<RootStackParamList, 'InProgressActivity'>;
 
 const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
-  const { appletId, activityId, eventId, flowId } = route.params;
+  const { appletId, eventId, entityId, entityType } = route.params;
 
   return (
     <Box flex={1} backgroundColor="white">
       <FlowSurvey
         appletId={appletId}
-        activityId={activityId}
+        entityId={entityId}
+        entityType={entityType}
         eventId={eventId}
-        flowId={flowId}
         onClose={() => navigation.goBack()}
       />
     </Box>

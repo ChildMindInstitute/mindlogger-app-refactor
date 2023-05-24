@@ -189,6 +189,15 @@ class NotificationBuilder implements INotificationBuilder {
 
     const dayTo = this.getDayTo(lastScheduleDay, periodEndDay);
 
+    if (periodicity === PeriodicityType.Always) {
+      let day = new Date(dayFrom);
+
+      while (day <= dayTo) {
+        eventDays.push(day);
+        day = addDays(day, 1);
+      }
+    }
+
     if (periodicity === PeriodicityType.Daily) {
       let day = new Date(dayFrom);
 
@@ -514,10 +523,14 @@ class NotificationBuilder implements INotificationBuilder {
     const aWeekAgoDay = addDays(this.currentDay, -7);
 
     const isPeriodicitySet =
-      periodicity !== PeriodicityType.Always &&
-      periodicity !== PeriodicityType.Once;
+      periodicity === PeriodicityType.Daily ||
+      periodicity === PeriodicityType.Weekly ||
+      periodicity === PeriodicityType.Weekdays ||
+      periodicity === PeriodicityType.Monthly;
 
-    if (!isPeriodicitySet && scheduledDay < aWeekAgoDay) {
+    const isOnceEvent = periodicity === PeriodicityType.Once;
+
+    if (isOnceEvent && scheduledDay < aWeekAgoDay) {
       return eventResult;
     }
     if (isPeriodicitySet && periodEndDay && periodEndDay < this.currentDay) {
@@ -531,7 +544,7 @@ class NotificationBuilder implements INotificationBuilder {
       return eventResult;
     }
 
-    if (!isPeriodicitySet) {
+    if (isOnceEvent) {
       const notifications = this.processNotificationsSection(
         scheduledDay,
         eventNotifications,

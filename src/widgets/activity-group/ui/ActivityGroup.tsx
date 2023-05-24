@@ -3,7 +3,12 @@ import { FC } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import { ActivityList, ActivityListItem } from '@entities/activity';
+import { EntityType } from '@app/abstract/lib';
+import {
+  ActivityList,
+  ActivityListItem,
+  ActivityModel,
+} from '@entities/activity';
 import { AppletModel, clearStorageRecords } from '@entities/applet';
 import { Box, BoxProps, Text } from '@shared/ui';
 
@@ -18,19 +23,20 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
   const { t } = useTranslation();
   const { navigate } = useNavigation();
 
-  const { startFlow, startActivity } =
-    AppletModel.useInProgressEntities(appletId);
+  const { startFlow, startActivity } = AppletModel.useStartEntity({
+    hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
+  });
 
   function navigateSurvey(
-    activityId: string,
+    entityId: string,
+    entityType: EntityType,
     eventId: string,
-    flowId?: string,
   ) {
     navigate('InProgressActivity', {
       appletId,
-      activityId,
+      entityId,
+      entityType,
       eventId,
-      flowId,
     });
   }
 
@@ -38,23 +44,34 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
     activityId,
     eventId,
     flowId,
+    isTimerElapsed,
   }: ActivityListItem) => {
     if (flowId) {
-      startFlow(flowId, activityId, eventId).then(startedFromScratch => {
-        if (startedFromScratch) {
+      startFlow(appletId, flowId, eventId, isTimerElapsed).then(result => {
+        if (result.cannotBeStartedDueToMediaFound) {
+          return;
+        }
+
+        if (result.startedFromScratch) {
           clearStorageRecords.byEventId(eventId);
         }
 
-        navigateSurvey(activityId, eventId, flowId);
+        navigateSurvey(flowId, 'flow', eventId);
       });
     } else {
-      startActivity(activityId, eventId).then(startedFromScratch => {
-        if (startedFromScratch) {
-          clearStorageRecords.byEventId(eventId);
-        }
+      startActivity(appletId, activityId, eventId, isTimerElapsed).then(
+        result => {
+          if (result.cannotBeStartedDueToMediaFound) {
+            return;
+          }
 
-        navigateSurvey(activityId, eventId);
-      });
+          if (result.startedFromScratch) {
+            clearStorageRecords.byEventId(eventId);
+          }
+
+          navigateSurvey(activityId, 'regular', eventId);
+        },
+      );
     }
   };
 
