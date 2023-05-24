@@ -4,12 +4,16 @@ import httpService from './httpService';
 import { SuccessfulEmptyResponse } from '../types';
 
 export type EncryptedAnswerDto = {
-  activityItemId: string;
+  flowId: string | null;
+  activityId: string;
   answer: string;
+  itemIds: (string | undefined)[];
 };
 
 export type AnswerDto = {
-  activityItemId: string;
+  activityId: string;
+  flowId: string | null;
+  itemIds: (string | undefined)[];
   answer: {
     value: string | number | Array<string>;
     additionalText?: string;
@@ -20,8 +24,6 @@ export type AnswerDto = {
 type ActivityAnswersRequest = {
   appletId: string;
   version: string;
-  flowId: string | null;
-  activityId: string;
   createdAt: number;
   answers: Array<EncryptedAnswerDto>;
 };

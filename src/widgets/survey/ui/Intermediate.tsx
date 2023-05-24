@@ -146,6 +146,7 @@ function Intermediate({
     const answers = mapAnswersToDto(
       activityStorageRecord.items,
       activityStorageRecord.answers,
+      flowId ?? null,
     );
 
     const encryptedAnswers = encryptAnswers(appletEncryption, {
@@ -153,9 +154,7 @@ function Intermediate({
     });
 
     sendAnswers({
-      flowId,
       appletId,
-      activityId,
       createdAt: getUnixTimestamp(Date.now()),
       version: activityStorageRecord.appletVersion,
       answers: encryptedAnswers,

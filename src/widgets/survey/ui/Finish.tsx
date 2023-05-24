@@ -101,6 +101,7 @@ function FinishItem({
 
     const hasAnswers = !!Object.keys(activityStorageRecord.answers).length;
 
+
     if (hasAnswers) {
       const answers = mapAnswersToDto(
         activityStorageRecord.items,
@@ -120,6 +121,14 @@ function FinishItem({
         answers: encryptedAnswers,
       });
     }
+=======
+    sendAnswers({
+      appletId,
+      createdAt: getUnixTimestamp(Date.now()),
+      version: activityStorageRecord.appletVersion,
+      answers: encryptedAnswers,
+    });
+>>>>>>> 05d37b7 (Updated answers object when sending to backend)
 
     clearActivityStorageRecord();
   }
