@@ -26,6 +26,7 @@ type Props = {
 const ContentWrapper = styled(Center, {
   width: '100%',
   height: 360,
+  marginBottom: 15,
   borderColor: '$red',
   borderWidth: 4,
   backgroundColor: '$lightRed',
