@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 import {
@@ -27,6 +28,13 @@ type Props = {
   onChange: (value: MediaValue) => void;
   value?: MediaValue;
 };
+
+const styles = StyleSheet.create({
+  mediaContainer: {
+    height: '100%',
+    borderRadius: 10,
+  },
+});
 
 const VideoItem: FC<Props> = ({ value, onChange }) => {
   const { isCameraAccessGranted } = useCameraPermissions();
@@ -102,7 +110,15 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
       mode="video"
       uploadIcon={<VideoIcon color={colors.red} size={50} />}
     >
-      {value && <VideoPlayer uri={value.uri} />}
+      {value && (
+        <VideoPlayer
+          wrapperStyle={styles.mediaContainer}
+          videoStyle={styles.mediaContainer}
+          thumbnailStyle={styles.mediaContainer}
+          uri={value.uri}
+          resizeMode="contain"
+        />
+      )}
     </MediaInput>
   );
 };
