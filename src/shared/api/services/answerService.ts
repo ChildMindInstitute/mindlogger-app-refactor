@@ -27,7 +27,7 @@ type ActivityAnswersRequest = {
   appletId: string;
   version: string;
   createdAt: number;
-  answers: AnswerDto[] | EncryptedAnswerDto[];
+  answers: EncryptedAnswerDto[];
   publicKey?: string;
   appletEncryption?: AppletEncryptionDTO | null;
 };

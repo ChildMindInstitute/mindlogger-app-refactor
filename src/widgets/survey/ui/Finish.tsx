@@ -91,6 +91,10 @@ function FinishItem({
       }),
     );
 
+    if (!appletEncryption) {
+      throw new Error('Encryption params is undefined');
+    }
+
     if (!activityStorageRecord) {
       return;
     }
@@ -98,19 +102,23 @@ function FinishItem({
     const hasAnswers = !!Object.keys(activityStorageRecord.answers).length;
 
     if (hasAnswers) {
+      // if not checked, getting http 500
       const answers = mapAnswersToDto(
         activityStorageRecord.items,
         activityStorageRecord.answers,
         flowId ?? null,
       );
 
-      sendAnswers({
-        appletId,
-        createdAt: getUnixTimestamp(Date.now()),
-        version: activityStorageRecord.appletVersion,
-        answers: answers,
-        appletEncryption,
-      });
+      setTimeout(() => {
+        // the timeout is set up, because the encryption process blocks loading the cached background image
+        sendAnswers({
+          appletId,
+          createdAt: getUnixTimestamp(Date.now()),
+          version: activityStorageRecord.appletVersion,
+          answers: answers,
+          appletEncryption,
+        });
+      }, 100);
     }
 
     clearActivityStorageRecord();

@@ -7,8 +7,8 @@ import { crypto } from './crypto';
 type GetPrivateKeyProps = { userId: string; email: string; password: string };
 type GetPublicKeyProps = {
   privateKey: number[];
-  appletPrime: number[];
-  appletBase: number[];
+  appletPrime: string;
+  appletBase: string;
 };
 
 type GetAESKeyProps = {
