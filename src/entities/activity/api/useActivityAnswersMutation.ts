@@ -6,13 +6,20 @@ import {
   MutationOptions,
   FileService,
   AnswerDto,
+  AppletEncryptionDTO,
 } from '@app/shared/api';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
 import { encryption } from '@shared/lib';
 
-type Options = MutationOptions<typeof AnswerService.sendActivityAnswers>;
+type SendAnswersInput = {
+  appletId: string;
+  version: string;
+  createdAt: number;
+  answers: AnswerDto[];
+  appletEncryption: AppletEncryptionDTO;
+};
 
-type Arguments = Parameters<typeof AnswerService.sendActivityAnswers>[0];
+type Options = MutationOptions<typeof sendAnswers>;
 
 const isFileUrl = (value: string) => {
   const localFileRegex =
@@ -27,7 +34,7 @@ const filterAnswers = (
 ): AnswerDto[] =>
   answers.filter(answer => answer.activityId !== answerFilter.activityId);
 
-const uploadAnswerMediaFiles = async (body: Arguments) => {
+const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
   for (const itemAnswer of body.answers) {
     const { value: answerValue } = itemAnswer.answer;
 
@@ -62,10 +69,7 @@ const uploadAnswerMediaFiles = async (body: Arguments) => {
   return body;
 };
 
-const encryptAnswers = (data: Arguments) => {
-  if (!data?.appletEncryption) {
-    throw new Error('Encryption params is undefined');
-  }
+const encryptAnswers = (data: SendAnswersInput) => {
   const { appletEncryption } = data;
   const userPrivateKey = UserPrivateKeyRecord.get();
 
@@ -101,10 +105,10 @@ const encryptAnswers = (data: Arguments) => {
   };
   return encryptedData;
 };
-const sendAnswers = async (body: Arguments) => {
+const sendAnswers = async (body: SendAnswersInput) => {
   const data = await uploadAnswerMediaFiles(body);
   const encryptedData = encryptAnswers(data);
-  // @ts-ignore
+
   return AnswerService.sendActivityAnswers(encryptedData);
 };
 
