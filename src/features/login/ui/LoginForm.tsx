@@ -11,9 +11,9 @@ import {
   executeIfOnline,
   useAppDispatch,
   useAppForm,
-  useEncryption,
   useFormChanges,
 } from '@shared/lib';
+import { encryption } from '@shared/lib';
 import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
@@ -27,7 +27,6 @@ const LoginForm: FC<Props> = props => {
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
-  const { generateUserPrivateKey } = useEncryption();
 
   const {
     mutate: login,
@@ -41,7 +40,7 @@ const LoginForm: FC<Props> = props => {
         email: response.data.result.user.email,
         password: variables.password,
       };
-      const userPrivateKey = generateUserPrivateKey(userParams);
+      const userPrivateKey = encryption.getPrivateKey(userParams);
 
       UserPrivateKeyRecord.set(userPrivateKey);
 

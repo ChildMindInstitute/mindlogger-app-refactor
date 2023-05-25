@@ -18,10 +18,35 @@ type GetAESKeyProps = {
   appletBase: number[];
 };
 
+type InputProps = {
+  prime: string;
+  publicKey: string;
+  base: string;
+  privateKey: number[];
+};
+
 type EncryptDataProps = { text: string; key: number[] };
 type DecryptDataProps = { text: string; key: string };
 
 class EncryptionManager {
+  public createEncryptionService = (params: InputProps) => {
+    const aesKey = this.getAESKey({
+      appletPrime: JSON.parse(params.prime),
+      appletBase: JSON.parse(params.base),
+      publicKey: JSON.parse(params.publicKey),
+      privateKey: params.privateKey,
+    });
+
+    const encrypt = (json: string) => {
+      return this.encryptData({
+        text: json,
+        key: aesKey,
+      });
+    };
+
+    return { encrypt };
+  };
+
   public getPrivateKey = ({
     userId,
     email,

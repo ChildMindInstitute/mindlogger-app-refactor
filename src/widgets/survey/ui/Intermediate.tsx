@@ -3,10 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
-import {
-  useActivityAnswersMutation,
-  useEncryptAnswers,
-} from '@app/entities/activity';
+import { useActivityAnswersMutation } from '@app/entities/activity';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 import {
   mapActivitiesFromDto,
@@ -54,7 +51,6 @@ function Intermediate({
 }: Props) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { encryptAnswers } = useEncryptAnswers();
 
   // TODO: The usage of useAppletDetailsQuery here should be removed in the future
   // because we should rely on the flow pipeline instead.
@@ -149,15 +145,12 @@ function Intermediate({
       flowId ?? null,
     );
 
-    const encryptedAnswers = encryptAnswers(appletEncryption, {
-      answers,
-    });
-
     sendAnswers({
       appletId,
       createdAt: getUnixTimestamp(Date.now()),
       version: activityStorageRecord.appletVersion,
-      answers: encryptedAnswers,
+      answers: answers,
+      appletEncryption,
     });
   }
 

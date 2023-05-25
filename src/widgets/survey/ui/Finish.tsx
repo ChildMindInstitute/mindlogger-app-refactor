@@ -4,10 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
-import {
-  useActivityAnswersMutation,
-  useEncryptAnswers,
-} from '@entities/activity';
+import { useActivityAnswersMutation } from '@entities/activity';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
 import { PassSurveyModel } from '@features/pass-survey';
@@ -44,7 +41,6 @@ function FinishItem({
   onClose,
 }: Props) {
   const { t } = useTranslation();
-  const { encryptAnswers } = useEncryptAnswers();
 
   const { data: applet } = useAppletDetailsQuery(appletId, {
     select: response =>
@@ -101,34 +97,21 @@ function FinishItem({
 
     const hasAnswers = !!Object.keys(activityStorageRecord.answers).length;
 
-
     if (hasAnswers) {
       const answers = mapAnswersToDto(
         activityStorageRecord.items,
         activityStorageRecord.answers,
+        flowId ?? null,
       );
 
-      const encryptedAnswers = encryptAnswers(appletEncryption, {
-        answers,
-      });
-
       sendAnswers({
-        flowId: flowId ? flowId : null,
         appletId,
-        activityId,
         createdAt: getUnixTimestamp(Date.now()),
         version: activityStorageRecord.appletVersion,
-        answers: encryptedAnswers,
+        answers: answers,
+        appletEncryption,
       });
     }
-=======
-    sendAnswers({
-      appletId,
-      createdAt: getUnixTimestamp(Date.now()),
-      version: activityStorageRecord.appletVersion,
-      answers: encryptedAnswers,
-    });
->>>>>>> 05d37b7 (Updated answers object when sending to backend)
 
     clearActivityStorageRecord();
   }

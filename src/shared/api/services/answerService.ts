@@ -1,13 +1,15 @@
 import { AxiosResponse } from 'axios';
 
+import { AppletEncryptionDTO } from '@shared/api';
+
 import httpService from './httpService';
 import { SuccessfulEmptyResponse } from '../types';
 
 export type EncryptedAnswerDto = {
-  flowId: string | null;
   activityId: string;
-  answer: string;
   itemIds: (string | undefined)[];
+  flowId: string | null;
+  answer: string;
 };
 
 export type AnswerDto = {
@@ -15,7 +17,7 @@ export type AnswerDto = {
   flowId: string | null;
   itemIds: (string | undefined)[];
   answer: {
-    value: string | number | Array<string>;
+    value: string | number | Array<string> | any;
     additionalText?: string;
     shouldIdentifyResponse?: boolean;
   };
@@ -25,7 +27,9 @@ type ActivityAnswersRequest = {
   appletId: string;
   version: string;
   createdAt: number;
-  answers: Array<EncryptedAnswerDto>;
+  answers: AnswerDto[] | EncryptedAnswerDto[];
+  publicKey?: string;
+  appletEncryption?: AppletEncryptionDTO | null;
 };
 
 type ActivityAnswersResponse = SuccessfulEmptyResponse;
