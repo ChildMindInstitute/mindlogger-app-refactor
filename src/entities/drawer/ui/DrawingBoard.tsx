@@ -4,7 +4,6 @@ import { StyleSheet, View } from 'react-native';
 import {
   Skia,
   SkiaView,
-  SkPath,
   TouchInfo,
   PaintStyle,
   useTouchHandler,
@@ -13,6 +12,7 @@ import {
   Canvas,
   Group,
   Path,
+  SkPath,
 } from '@shopify/react-native-skia';
 
 import {
@@ -31,6 +31,8 @@ import {
   transformBack,
   ResponseSerializer,
   DrawResult,
+  CachedBezierItem,
+  getBezierArray,
 } from '../lib';
 
 const paint = Skia.Paint();
@@ -55,9 +57,11 @@ const DrawingBoard: FC<Props> = props => {
   const { shouldRestore, updateShouldRestore } =
     useShouldRestoreSkiaViewState();
 
-  const currentPathRef = useRef<SkPath | null>();
-
   const canvasRef = useRef<SkCanvas>();
+
+  const bezierCurrentCache = useRef<Array<CachedBezierItem>>([]).current;
+
+  const pathsCache = useRef<Array<SkPath>>([]).current;
 
   const normalizedLines = useMemo(() => {
     return transformByWidth(value, width);
@@ -65,21 +69,21 @@ const DrawingBoard: FC<Props> = props => {
 
   const currentLogLineRef = useRef<DrawLine | null>(null);
 
-  const paths = useMemo(
-    () => convertToSkPaths(normalizedLines),
-    [normalizedLines],
-  );
+  const paths = useMemo(() => {
+    if (!normalizedLines.length) {
+      pathsCache.splice(0, pathsCache.length);
+    }
 
-  const getCurrentPath = (): SkPath => currentPathRef.current!;
+    const newPaths = convertToSkPaths(normalizedLines, pathsCache.length);
 
-  const resetCurrentPath = () => {
-    currentPathRef.current = null;
+    pathsCache.push(...newPaths);
+
+    return [...pathsCache];
+  }, [normalizedLines, pathsCache]);
+
+  const resetCurrentLine = () => {
     currentLogLineRef.current = null;
     canvasRef.current?.clear(Skia.Color('transparent'));
-  };
-
-  const reCreatePath = (point: Point) => {
-    currentPathRef.current = Skia.Path.Make().moveTo(point.x, point.y);
   };
 
   const getNow = (): number => new Date().getTime();
@@ -104,32 +108,26 @@ const DrawingBoard: FC<Props> = props => {
   };
 
   const onTouchStart = (touchInfo: TouchInfo) => {
-    resetCurrentPath();
+    bezierCurrentCache.splice(0, bezierCurrentCache.length);
+
+    resetCurrentLine();
 
     const point: Point = { x: touchInfo.x, y: touchInfo.y };
 
     createLogLine(point);
-    reCreatePath(point);
     drawPath();
     onStarted();
   };
 
   const onTouchProgress = (touchInfo: TouchInfo) => {
-    const currentPath = getCurrentPath();
-
-    if (!currentPath) {
-      return;
-    }
-
     const point: Point = { x: touchInfo.x, y: touchInfo.y };
 
-    currentPath.lineTo(point.x, point.y);
     addLogPoint(createLogPoint(point));
     drawPath();
   };
 
   const onTouchEnd = () => {
-    if (!getCurrentPath() || !currentLogLineRef.current) {
+    if (!currentLogLineRef.current) {
       return;
     }
 
@@ -149,10 +147,21 @@ const DrawingBoard: FC<Props> = props => {
   };
 
   const drawPath = () => {
-    if (!currentPathRef.current) {
+    const originalPoints = getLogLine()?.points;
+    if (!originalPoints) {
       return;
     }
-    canvasRef.current?.drawPath(currentPathRef.current, paint.copy());
+
+    const bezierPoints = getBezierArray(originalPoints, bezierCurrentCache);
+
+    const path = Skia.Path.Make().moveTo(bezierPoints[0].x, bezierPoints[0].y);
+
+    for (let i = 1; i < bezierPoints.length; i++) {
+      const point = bezierPoints[i];
+      path.lineTo(point.x, point.y);
+    }
+
+    canvasRef.current?.drawPath(path, paint.copy());
   };
 
   const touchHandler = useTouchHandler(
@@ -167,10 +176,11 @@ const DrawingBoard: FC<Props> = props => {
   const onDraw = useDrawCallback(
     (canvas, info) => {
       canvasRef.current = canvas;
+
       touchHandler(info.touches);
 
       if (undoClicked()) {
-        resetCurrentPath();
+        resetCurrentLine();
         resetUndoClicked();
         return;
       }
@@ -195,13 +205,13 @@ const DrawingBoard: FC<Props> = props => {
 
       <View style={styles.canvasView} pointerEvents="none">
         <Canvas style={styles.canvas}>
-          {!!paths && (
-            <Group>
-              {paths.map((path, i) => (
+          <Group>
+            {paths.map((path, i) => (
+              <Group>
                 <Path key={i} path={path} strokeWidth={1} style="stroke" />
-              ))}
-            </Group>
-          )}
+              </Group>
+            ))}
+          </Group>
         </Canvas>
       </View>
     </Box>
