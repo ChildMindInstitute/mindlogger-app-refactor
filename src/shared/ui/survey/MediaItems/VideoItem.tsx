@@ -11,6 +11,7 @@ import {
   colors,
   GALLERY_VIDEO_OPTIONS,
   handleBlockedPermissions,
+  IS_ANDROID_11_OR_HIGHER,
   requestCameraPermissions,
   requestGalleryPermissions,
   useCameraPermissions,
@@ -62,7 +63,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
   };
 
   const onShowVideoGallery = async () => {
-    if (isGalleryAccessGranted) {
+    if (isGalleryAccessGranted || IS_ANDROID_11_OR_HIGHER) {
       selectVideo();
     } else {
       const isPermissionAllowed = await requestGalleryPermissions();
@@ -79,7 +80,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
   };
 
   const onOpenVideoCamera = async () => {
-    if (isCameraAccessGranted) {
+    if (isCameraAccessGranted || IS_ANDROID_11_OR_HIGHER) {
       recordVideo();
     } else {
       const isPermissionAllowed = await requestCameraPermissions();
