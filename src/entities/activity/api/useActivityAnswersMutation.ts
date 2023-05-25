@@ -40,9 +40,8 @@ const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
 
     const isMediaItem = answerValue?.uri && isFileUrl(answerValue.uri);
 
-    const localFileExists = await FileSystem.exists(answerValue.uri);
-
     if (isMediaItem) {
+      const localFileExists = await FileSystem.exists(answerValue.uri);
       if (localFileExists) {
         try {
           const uploadResult = await FileService.upload(answerValue);
