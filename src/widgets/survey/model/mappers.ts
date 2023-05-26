@@ -31,7 +31,7 @@ export function mapAnswersToDto(
         return convertToSliderAnswer(answer);
 
       case 'NumberSelect':
-        return null;
+        return convertToNumberSelectAnswer(answer);
 
       default:
         return null;
@@ -62,6 +62,13 @@ function convertToSliderAnswer(answer: Answer) {
 }
 
 function convertToCheckboxAnswer(answer: Answer) {
+  return {
+    value: answer.answer,
+    text: answer.additionalAnswer ?? null,
+  };
+}
+
+function convertToNumberSelectAnswer(answer: Answer) {
   return {
     value: answer.answer,
     text: answer.additionalAnswer ?? null,
