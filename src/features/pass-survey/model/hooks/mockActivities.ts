@@ -50,6 +50,7 @@ const grid: ActivityDto = {
         drawingBackground:
           'https://mindlogger-applet-contents.s3.amazonaws.com/image/9qPz3D1kyzwD2pAAHpP5Hv.jpeg',
       },
+      conditionalLogic: null,
     },
   ],
 };
@@ -93,6 +94,7 @@ const vortex: ActivityDto = {
         drawingBackground:
           'https://mindlogger-applet-contents.s3.amazonaws.com/image/w93voaqZA7ZGoZryorBvQc.jpeg',
       },
+      conditionalLogic: null,
     },
   ],
 };
@@ -149,6 +151,7 @@ export const AbTestActivity: ActivityDto = {
       question: '',
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -178,6 +181,7 @@ const FlankerWithImageActivity: ActivityDto = {
       responseValues: {} as FlankerAnswerSettings,
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -207,6 +211,7 @@ const FlankerWithStSFxActivity: ActivityDto = {
       responseValues: {} as FlankerAnswerSettings,
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -236,6 +241,7 @@ const FlankerWithTextSignsActivity: ActivityDto = {
       isHidden: false,
       config: null,
       responseValues: {} as FlankerAnswerSettings,
+      conditionalLogic: null,
     },
   ],
 };
@@ -295,6 +301,7 @@ export const TextActivity: ActivityDto = {
       responseValues: null,
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
     {
       id: '105',
@@ -315,6 +322,7 @@ export const TextActivity: ActivityDto = {
       },
       responseValues: null,
       order: 1,
+      conditionalLogic: null,
     },
     {
       id: '106',
@@ -335,6 +343,7 @@ export const TextActivity: ActivityDto = {
       },
       responseValues: null,
       order: 2,
+      conditionalLogic: null,
     },
   ],
 };
@@ -384,6 +393,7 @@ export const SliderTestActivity: ActivityDto = {
       question: 'Choose some number',
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -422,6 +432,7 @@ export const NumberSelectActivity: ActivityDto = {
       },
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -493,6 +504,7 @@ export const CheckboxTestActivity: ActivityDto = {
         timer: null,
         addScores: false,
       },
+      conditionalLogic: null,
     },
   ],
 };
@@ -611,6 +623,7 @@ export const RadioTestActivity: ActivityDto = {
       question: 'Choose some number radio item',
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -650,6 +663,7 @@ export const AllTextsActivity: ActivityDto = {
       responseValues: null,
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
     {
       id: '346',
@@ -670,6 +684,7 @@ export const AllTextsActivity: ActivityDto = {
       responseValues: null,
       order: 1,
       isHidden: false,
+      conditionalLogic: null,
     },
     {
       id: '346',
@@ -690,6 +705,7 @@ export const AllTextsActivity: ActivityDto = {
       responseValues: null,
       order: 1,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -764,6 +780,7 @@ export const AllCheckboxesActivity: ActivityDto = {
         timer: null,
         addScores: false,
       },
+      conditionalLogic: null,
     },
     {
       id: '12495124',
@@ -804,6 +821,7 @@ export const AllCheckboxesActivity: ActivityDto = {
           },
         ],
       },
+      conditionalLogic: null,
       config: {
         randomizeOptions: false,
         setAlerts: false,
@@ -872,6 +890,7 @@ export const AllCheckboxesActivity: ActivityDto = {
         timer: null,
         addScores: false,
       },
+      conditionalLogic: null,
     },
   ],
 };
@@ -992,6 +1011,7 @@ export const AllRadioActivity: ActivityDto = {
       question: 'These are colored randomized radios. Tooltips',
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
     {
       responseValues: {
@@ -1094,6 +1114,7 @@ export const AllRadioActivity: ActivityDto = {
         'These are simple single select. Cannot move back. Has required text field',
       order: 1,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -1143,6 +1164,7 @@ export const AllSliderActivity: ActivityDto = {
       question: 'Choose a number. Cannot move back',
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
     {
       responseValues: {
@@ -1174,6 +1196,7 @@ export const AllSliderActivity: ActivityDto = {
       question: 'On a scale of 1 to 10, how happy are you?. You can skip',
       order: 1,
       isHidden: false,
+      conditionalLogic: null,
     },
     {
       responseValues: {
@@ -1205,6 +1228,7 @@ export const AllSliderActivity: ActivityDto = {
       question: 'Choose any. And give an optional text response.',
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -1242,6 +1266,7 @@ export const PhotoActivityDto: ActivityDto = {
         skippableItem: false,
       },
       responseValues: null,
+      conditionalLogic: null,
     },
   ],
 };
@@ -1279,6 +1304,7 @@ export const VideoActivityDto: ActivityDto = {
         skippableItem: false,
       },
       responseValues: null,
+      conditionalLogic: null,
     },
   ],
 };
@@ -1316,6 +1342,7 @@ export const DateActivityDto: ActivityDto = {
         skippableItem: false,
       },
       responseValues: null,
+      conditionalLogic: null,
     },
   ],
 };
@@ -1353,6 +1380,7 @@ export const TimeActivityDto: ActivityDto = {
         skippableItem: false,
       },
       responseValues: null,
+      conditionalLogic: null,
     },
   ],
 };
