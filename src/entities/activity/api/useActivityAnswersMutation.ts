@@ -17,7 +17,7 @@ type SendAnswersInput = {
   createdAt: number;
   answers: AnswerDto[];
   appletEncryption: AppletEncryptionDTO;
-  itemIds: any[];
+  itemIds: string[];
   flowId: string | null;
   activityId: string;
 };
