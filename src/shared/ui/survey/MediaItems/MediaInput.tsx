@@ -1,5 +1,10 @@
 import { ReactNode, FC } from 'react';
-import { Alert, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  Alert,
+  TouchableOpacity,
+  StyleSheet,
+  useWindowDimensions,
+} from 'react-native';
 
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +30,6 @@ type Props = {
 
 const ContentWrapper = styled(Center, {
   width: '100%',
-  height: 360,
   marginBottom: 15,
   borderColor: '$red',
   borderWidth: 4,
@@ -41,6 +45,7 @@ const MediaInput: FC<Props> = ({
   uploadIcon,
 }) => {
   const { t } = useTranslation();
+  const { width: windowWidth } = useWindowDimensions();
 
   const onUploadPress = () => {
     Alert.alert(t(`camera:choose_${mode}`), t(`camera:take_a_${mode}`), [
@@ -56,7 +61,7 @@ const MediaInput: FC<Props> = ({
   };
 
   return (
-    <ContentWrapper>
+    <ContentWrapper height={windowWidth * 0.85}>
       {children || (
         <TouchableOpacity onPress={onUploadPress} style={styles.touchable}>
           <Box>{uploadIcon}</Box>

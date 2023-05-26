@@ -7,7 +7,7 @@ import { default as VideoPlayerBase } from 'react-native-video-player';
 import { Center } from '@shared/ui';
 
 const styles = StyleSheet.create({
-  base: { height: 250, width: '100%', backgroundColor: '#000' },
+  base: { width: '100%', height: '100%', backgroundColor: '#000' },
 });
 
 type Props = {
