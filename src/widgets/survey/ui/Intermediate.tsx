@@ -147,22 +147,28 @@ function Intermediate({
 
     if (hasAnswers) {
       // if not checked, getting http 500
+
       const answers = mapAnswersToDto(
         activityStorageRecord.items,
         activityStorageRecord.answers,
-        flowId ?? null,
       );
 
-      setTimeout(() => {
-        // the timeout is set up, because the encryption process blocks loading the cached background image
-        sendAnswers({
-          appletId,
-          createdAt: getUnixTimestamp(Date.now()),
-          version: activityStorageRecord.appletVersion,
-          answers: answers,
-          appletEncryption,
-        });
-      }, 100);
+      const itemIds = Object.entries(activityStorageRecord.answers).map(
+        ([_step]) => {
+          return activityStorageRecord.items[Number(_step)]?.id!;
+        },
+      );
+
+      sendAnswers({
+        appletId,
+        createdAt: getUnixTimestamp(Date.now()),
+        version: activityStorageRecord.appletVersion,
+        answers: answers,
+        itemIds,
+        appletEncryption,
+        flowId: flowId ?? null,
+        activityId: activityId,
+      });
     }
   }
 

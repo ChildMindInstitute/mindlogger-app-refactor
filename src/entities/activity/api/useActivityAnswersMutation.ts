@@ -17,6 +17,9 @@ type SendAnswersInput = {
   createdAt: number;
   answers: AnswerDto[];
   appletEncryption: AppletEncryptionDTO;
+  itemIds: any[];
+  flowId: string | null;
+  activityId: string;
 };
 
 type Options = MutationOptions<typeof sendAnswers>;
@@ -36,7 +39,11 @@ const filterAnswers = (
 
 const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
   for (const itemAnswer of body.answers) {
-    const { value: answerValue } = itemAnswer.answer;
+    if (!itemAnswer) {
+      continue;
+    }
+
+    const { value: answerValue } = itemAnswer;
 
     const isMediaItem = answerValue?.uri && isFileUrl(answerValue.uri);
 
@@ -49,7 +56,7 @@ const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
           const url = uploadResult?.data.result.url;
 
           if (url) {
-            itemAnswer.answer.value = url;
+            itemAnswer.value = url;
           }
         } catch (error) {
           const answers = filterAnswers(body.answers, itemAnswer);
@@ -81,26 +88,28 @@ const encryptAnswers = (data: SendAnswersInput) => {
     privateKey: userPrivateKey,
   });
 
-  const encryptedAnswers = data.answers.map(answerItem => {
-    const encryptedAnswer = encrypt(JSON.stringify(answerItem.answer));
-
-    return {
-      ...answerItem,
-      answer: encryptedAnswer,
-    };
-  });
+  const encryptedAnswers = encrypt(JSON.stringify(data.answers));
 
   const userPublicKey = encryption.getPublicKey({
     privateKey: userPrivateKey,
-    appletPrime: appletEncryption.prime,
-    appletBase: appletEncryption.base,
+    appletPrime: JSON.parse(appletEncryption.prime),
+    appletBase: JSON.parse(appletEncryption.base),
   });
 
   const encryptedData = {
-    ...data,
+    appletId: data.appletId,
+    version: data.version,
     appletEncryption: undefined,
-    answers: encryptedAnswers,
-    publicKey: JSON.stringify(userPublicKey),
+    answers: [
+      {
+        answer: encryptedAnswers,
+        activityId: data.activityId,
+        flowId: data.flowId,
+        itemIds: data.itemIds,
+      },
+    ],
+    userPublicKey: JSON.stringify(userPublicKey),
+    createdAt: data.createdAt,
   };
   return encryptedData;
 };

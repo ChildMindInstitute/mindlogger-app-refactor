@@ -7,28 +7,24 @@ import { SuccessfulEmptyResponse } from '../types';
 
 export type EncryptedAnswerDto = {
   activityId: string;
-  itemIds: (string | undefined)[];
+  itemIds: string[];
   flowId: string | null;
   answer: string;
 };
 
-export type AnswerDto = {
-  activityId: string;
-  flowId: string | null;
-  itemIds: (string | undefined)[];
-  answer: {
-    value: string | number | Array<string> | any;
-    additionalText?: string;
-    shouldIdentifyResponse?: boolean;
-  };
-};
+export type AnswerDto =
+  | string
+  | number
+  | { value: any; text: string }
+  | Array<string>
+  | any;
 
 type ActivityAnswersRequest = {
   appletId: string;
   version: string;
   createdAt: number;
   answers: EncryptedAnswerDto[];
-  publicKey?: string;
+  userPublicKey?: string;
   appletEncryption?: AppletEncryptionDTO | null;
 };
 
