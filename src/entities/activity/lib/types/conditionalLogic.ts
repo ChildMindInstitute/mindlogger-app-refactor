@@ -1,4 +1,4 @@
-type Match = 'ANY' | 'ALL';
+type Match = 'any' | 'all';
 
 export type ConditionalLogic = {
   match: Match;

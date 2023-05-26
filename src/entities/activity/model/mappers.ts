@@ -25,7 +25,7 @@ import {
 } from '@app/shared/api';
 import { getMsFromSeconds } from '@app/shared/lib';
 
-import { ActivityDetails, ActivityItem, ConditionalLogic } from '../lib';
+import { ActivityDetails, ActivityItem } from '../lib';
 import { FlankerSettings } from '../lib/types/flanker';
 
 function mapTimerValue(dtoTimer: number | null) {
@@ -46,12 +46,10 @@ function mapAdditionalText(configuration: AdditionalResponseConfiguration) {
     : null;
 }
 
-function mapConditionalLogic(
-  dtos?: ConditionalLogicDto[],
-): ConditionalLogic[] | null {
-  return dtos
-    ? dtos.map(dto => {
-        return {
+function mapConditionalLogic(dto: ConditionalLogicDto | null) {
+  return dto
+    ? {
+        conditionalLogic: {
           match: dto.match,
           conditions: dto.conditions.map(condition => {
             return {
@@ -59,8 +57,8 @@ function mapConditionalLogic(
               activityItemName: condition.itemName,
             };
           }),
-        };
-      })
+        },
+      }
     : null;
 }
 
@@ -533,6 +531,7 @@ function mapToTextInput(dto: TextItemDto): ActivityItem {
         correctAnswer: dto.config.correctAnswer,
       },
     }),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 

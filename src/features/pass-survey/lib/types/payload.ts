@@ -239,7 +239,7 @@ type PipelineItemBase = {
   additionalText?: {
     required: boolean;
   };
-  conditionalLogics?: ConditionalLogic[];
+  conditionalLogic?: ConditionalLogic;
 };
 
 export interface AbTestPipelineItem extends PipelineItemBase {

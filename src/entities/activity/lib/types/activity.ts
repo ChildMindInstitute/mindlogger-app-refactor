@@ -224,7 +224,7 @@ type ActivityItemBase = {
   additionalText?: {
     required: boolean;
   };
-  conditionalLogics?: ConditionalLogic[];
+  conditionalLogic?: ConditionalLogic;
 };
 
 interface AbTestActivityItem extends ActivityItemBase {

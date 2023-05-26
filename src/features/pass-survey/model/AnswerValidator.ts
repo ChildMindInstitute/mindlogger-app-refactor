@@ -32,6 +32,16 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
       return answer > min && answer < max;
     },
 
+    isOutsideOfValues(min: number, max: number) {
+      if (!currentAnswer?.answer) {
+        return false;
+      }
+
+      const answer = currentAnswer.answer as number;
+
+      return answer < min || answer > max;
+    },
+
     isEqualToValue(value: any) {
       if (!currentAnswer?.answer) {
         return false;

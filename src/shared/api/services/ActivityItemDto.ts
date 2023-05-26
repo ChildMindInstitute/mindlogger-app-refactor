@@ -24,7 +24,7 @@ export type ResponseType =
   | 'abTest'
   | 'time';
 
-type Match = 'ANY' | 'ALL';
+type Match = 'any' | 'all';
 
 export type ConditionalLogicDto = {
   match: Match;
@@ -443,7 +443,7 @@ type ActivityItemDtoBase = {
   isHidden: boolean;
   order: number;
   timer: number | null;
-  conditionalLogic?: Array<ConditionalLogicDto>;
+  conditionalLogic: ConditionalLogicDto | null;
 };
 
 export interface TextItemDto extends ActivityItemDtoBase {
