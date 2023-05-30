@@ -98,6 +98,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
 
   return (
     <MediaInput
+      hasValue={!!value}
       onOpenCamera={onOpenPhotoCamera}
       onShowMediaLibrary={onShowImageGallery}
       mode="photo"

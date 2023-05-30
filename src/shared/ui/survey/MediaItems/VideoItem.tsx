@@ -105,6 +105,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
   };
   return (
     <MediaInput
+      hasValue={!!value}
       onOpenCamera={onOpenVideoCamera}
       onShowMediaLibrary={onShowVideoGallery}
       mode="video"
