@@ -52,7 +52,7 @@ const localStyles = StyleSheet.create({
     width: viewPortWidth - 100,
   },
   htmlWebView: {
-    width: '100%',
+    width: Dimensions.get('window').width,
   },
   listItemText: {
     fontSize: 13,
@@ -299,6 +299,8 @@ const markDownRules: RenderRules = {
     return defaultRenderRules.paragraph(node, children, parents, styles);
   },
   html_block: node => {
+    console.log(node.content);
+
     return (
       <AutoHeightWebView
         key={node.key}
