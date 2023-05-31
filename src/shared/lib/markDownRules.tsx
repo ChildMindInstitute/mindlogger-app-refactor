@@ -299,8 +299,6 @@ const markDownRules: RenderRules = {
     return defaultRenderRules.paragraph(node, children, parents, styles);
   },
   html_block: node => {
-    console.log(node.content);
-
     return (
       <AutoHeightWebView
         key={node.key}
