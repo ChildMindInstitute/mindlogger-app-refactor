@@ -48,6 +48,7 @@ const grid: ActivityDto = {
         drawingBackground:
           'https://mindlogger-applet-contents.s3.amazonaws.com/image/9qPz3D1kyzwD2pAAHpP5Hv.jpeg',
       },
+      conditionalLogic: null,
     },
   ],
 };
@@ -91,6 +92,7 @@ const vortex: ActivityDto = {
         drawingBackground:
           'https://mindlogger-applet-contents.s3.amazonaws.com/image/w93voaqZA7ZGoZryorBvQc.jpeg',
       },
+      conditionalLogic: null,
     },
   ],
 };
@@ -147,6 +149,7 @@ export const AbTestActivity: ActivityDto = {
       },
       question: '',
       order: 0,
+      conditionalLogic: null,
     },
   ],
 };
@@ -176,6 +179,7 @@ const FlankerWithImageActivity: ActivityDto = {
       responseValues: flankerWithStFxImages,
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -205,6 +209,7 @@ const FlankerWithStSFxActivity: ActivityDto = {
       responseValues: {} as FlankerAnswerSettings,
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -234,6 +239,7 @@ const FlankerWithTextSignsActivity: ActivityDto = {
       order: 0,
       timer: null,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -293,6 +299,7 @@ export const TextActivity: ActivityDto = {
       responseValues: null,
       isHidden: false,
       order: 0,
+      conditionalLogic: null,
     },
   ],
 };
@@ -330,6 +337,7 @@ export const GeolocationActivity: ActivityDto = {
       },
       responseValues: null,
       order: 0,
+      conditionalLogic: null,
     },
   ],
 };
@@ -379,6 +387,7 @@ export const SliderTestActivity: ActivityDto = {
       question: 'Choose some number',
       isHidden: false,
       order: 0,
+      conditionalLogic: null,
     },
   ],
 };

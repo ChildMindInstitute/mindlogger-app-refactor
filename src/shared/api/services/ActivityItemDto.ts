@@ -24,6 +24,107 @@ export type ResponseType =
   | 'abTest'
   | 'time';
 
+type Match = 'any' | 'all';
+
+export type ConditionalLogicDto = {
+  match: Match;
+  conditions: Array<ConditionDto>;
+};
+
+type ConditionDto =
+  | IncludesOptionConditionDto
+  | NotIncludesOptionConditionDto
+  | EqualToOptionConditionDto
+  | NotEqualToOptionConditionDto
+  | GreaterThanConditionDto
+  | LessThanConditionDto
+  | EqualConditionDto
+  | NotEqualConditionDto
+  | BetweenConditionDto
+  | OutsideOfConditionDto;
+
+type IncludesOptionConditionDto = {
+  itemName: string;
+  type: 'INCLUDES_OPTION';
+  payload: {
+    optionId: string;
+  };
+};
+
+type NotIncludesOptionConditionDto = {
+  itemName: string;
+  type: 'NOT_INCLUDES_OPTION';
+  payload: {
+    optionId: string;
+  };
+};
+
+type EqualToOptionConditionDto = {
+  itemName: string;
+  type: 'EQUAL_TO_OPTION';
+  payload: {
+    optionId: string;
+  };
+};
+
+type NotEqualToOptionConditionDto = {
+  itemName: string;
+  type: 'NOT_EQUAL_TO_OPTION';
+  payload: {
+    optionId: string;
+  };
+};
+
+type GreaterThanConditionDto = {
+  itemName: string;
+  type: 'GREATER_THAN';
+  payload: {
+    value: number;
+  };
+};
+
+type LessThanConditionDto = {
+  itemName: string;
+  type: 'LESS_THAN';
+  payload: {
+    value: number;
+  };
+};
+
+type EqualConditionDto = {
+  itemName: string;
+  type: 'EQUAL';
+  payload: {
+    value: number;
+  };
+};
+
+type NotEqualConditionDto = {
+  itemName: string;
+  type: 'NOT_EQUAL';
+  payload: {
+    value: number;
+  };
+};
+
+type BetweenConditionDto = {
+  itemName: string;
+  type: 'BETWEEN';
+  payload: {
+    minValue: number;
+    maxValue: number;
+  };
+};
+
+type OutsideOfConditionDto = {
+  itemName: string;
+  type: 'OUTSIDE_OF';
+  payload: {
+    minValue: number;
+    maxValue: number;
+  };
+};
+
 type ButtonsConfiguration = {
   removeBackButton: boolean;
   skippableItem: boolean;
@@ -342,6 +443,7 @@ type ActivityItemDtoBase = {
   isHidden: boolean;
   order: number;
   timer: number | null;
+  conditionalLogic: ConditionalLogicDto | null;
 };
 
 export interface TextItemDto extends ActivityItemDtoBase {

@@ -1,3 +1,4 @@
+import { ConditionalLogic } from '@app/entities/activity';
 import { DrawResult } from '@app/entities/drawer';
 import {
   FlankerConfiguration,
@@ -238,6 +239,7 @@ type PipelineItemBase = {
   additionalText?: {
     required: boolean;
   };
+  conditionalLogic?: ConditionalLogic;
 };
 
 export interface AbTestPipelineItem extends PipelineItemBase {
