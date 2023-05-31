@@ -62,6 +62,10 @@ function useActivityStepper(state: ActivityState | undefined) {
         break;
       }
 
+      if (nextStep < 0) {
+        break;
+      }
+
       const isItemVisible = visibilityChecker.isItemVisible(nextStep);
 
       if (isItemVisible) {
