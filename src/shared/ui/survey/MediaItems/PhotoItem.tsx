@@ -11,6 +11,7 @@ import {
   colors,
   GALLERY_PHOTO_OPTIONS,
   handleBlockedPermissions,
+  IS_ANDROID_11_OR_HIGHER,
   PHOTO_TAKE_OPTIONS,
   requestCameraPermissions,
   requestGalleryPermissions,
@@ -62,7 +63,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
   };
 
   const onShowImageGallery = async () => {
-    if (isGalleryAccessGranted) {
+    if (isGalleryAccessGranted || IS_ANDROID_11_OR_HIGHER) {
       selectImage();
     } else {
       const isPermissionAllowed = await requestGalleryPermissions();
@@ -79,7 +80,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
   };
 
   const onOpenPhotoCamera = async () => {
-    if (isCameraAccessGranted) {
+    if (isCameraAccessGranted || IS_ANDROID_11_OR_HIGHER) {
       takePhoto();
     } else {
       const isPermissionAllowed = await requestCameraPermissions();

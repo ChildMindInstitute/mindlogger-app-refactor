@@ -12,3 +12,4 @@ export {
 export * from './alerts';
 export * from './permissions';
 export * from './timers';
+export * from './encryption';

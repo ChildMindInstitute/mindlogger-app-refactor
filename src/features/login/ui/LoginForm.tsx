@@ -4,8 +4,8 @@ import { FC } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { UserInfoRecord } from '@app/entities/identity/lib';
 import { IdentityModel, useLoginMutation } from '@entities/identity';
+import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
 import {
   executeIfOnline,
@@ -13,6 +13,7 @@ import {
   useAppForm,
   useFormChanges,
 } from '@shared/lib';
+import { encryption } from '@shared/lib';
 import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
@@ -33,7 +34,16 @@ const LoginForm: FC<Props> = props => {
     isLoading,
     reset,
   } = useLoginMutation({
-    onSuccess: response => {
+    onSuccess: (response, variables) => {
+      const userParams = {
+        userId: response.data.result.user.id,
+        email: response.data.result.user.email,
+        password: variables.password,
+      };
+      const userPrivateKey = encryption.getPrivateKey(userParams);
+
+      UserPrivateKeyRecord.set(userPrivateKey);
+
       const { user, token: session } = response.data.result;
 
       dispatch(IdentityModel.actions.onAuthSuccess(user));

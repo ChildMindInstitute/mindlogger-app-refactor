@@ -4,17 +4,17 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
-import { useActivityAnswersMutation } from '@app/entities/activity';
-import { AppletModel } from '@app/entities/applet';
-import { NotificationModel } from '@app/entities/notification';
-import { PassSurveyModel } from '@app/features/pass-survey';
-import { LogTrigger } from '@app/shared/api';
+import { useActivityAnswersMutation } from '@entities/activity';
+import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
+import { NotificationModel } from '@entities/notification';
+import { PassSurveyModel } from '@features/pass-survey';
+import { LogTrigger } from '@shared/api';
 import {
   getUnixTimestamp,
   onApiRequestError,
   useAppDispatch,
   useAppSelector,
-} from '@app/shared/lib';
+} from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
 import { FinishReason } from '../model';
@@ -41,6 +41,13 @@ function FinishItem({
   onClose,
 }: Props) {
   const { t } = useTranslation();
+
+  const { data: applet } = useAppletDetailsQuery(appletId, {
+    select: response =>
+      AppletModel.mapAppletDetailsFromDto(response.data.result),
+  });
+
+  const appletEncryption = applet?.encryption || null;
 
   const dispatch = useAppDispatch();
 
@@ -84,6 +91,10 @@ function FinishItem({
       }),
     );
 
+    if (!appletEncryption) {
+      throw new Error('Encryption params is undefined');
+    }
+
     if (!activityStorageRecord) {
       return;
     }
@@ -91,17 +102,28 @@ function FinishItem({
     const hasAnswers = !!Object.keys(activityStorageRecord.answers).length;
 
     if (hasAnswers) {
-      // if do not check - getting http 500
+      // if not checked, getting http 500
+
+      const answers = mapAnswersToDto(
+        activityStorageRecord.items,
+        activityStorageRecord.answers,
+      );
+
+      const itemIds = Object.entries(activityStorageRecord.answers).map(
+        ([step]) => {
+          return activityStorageRecord.items[Number(step)]?.id!;
+        },
+      );
+
       sendAnswers({
-        flowId: flowId ? flowId : null,
         appletId,
-        activityId,
         createdAt: getUnixTimestamp(Date.now()),
         version: activityStorageRecord.appletVersion,
-        answers: mapAnswersToDto(
-          activityStorageRecord.items,
-          activityStorageRecord.answers,
-        ),
+        answers: answers,
+        itemIds,
+        appletEncryption,
+        flowId: flowId ?? null,
+        activityId: activityId,
       });
     }
 

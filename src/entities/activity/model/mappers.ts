@@ -21,6 +21,7 @@ import {
   AdditionalResponseConfiguration,
   TimeItemDto,
   SingleSelectionRowsItemDto,
+  ConditionalLogicDto,
 } from '@app/shared/api';
 import { getMsFromSeconds } from '@app/shared/lib';
 
@@ -40,6 +41,22 @@ function mapAdditionalText(configuration: AdditionalResponseConfiguration) {
     ? {
         additionalText: {
           required: configuration.additionalResponseOption.textInputRequired,
+        },
+      }
+    : null;
+}
+
+function mapConditionalLogic(dto: ConditionalLogicDto | null) {
+  return dto
+    ? {
+        conditionalLogic: {
+          match: dto.match,
+          conditions: dto.conditions.map(condition => {
+            return {
+              ...condition,
+              activityItemName: condition.itemName,
+            };
+          }),
         },
       }
     : null;
@@ -293,6 +310,7 @@ function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -393,6 +411,7 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -452,6 +471,7 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -511,6 +531,7 @@ function mapToTextInput(dto: TextItemDto): ActivityItem {
         correctAnswer: dto.config.correctAnswer,
       },
     }),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 

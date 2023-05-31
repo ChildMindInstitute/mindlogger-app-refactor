@@ -84,6 +84,7 @@ function ActivityStepper({
     showBottomNavigation,
 
     isValid,
+    getNextStepShift,
   } = useActivityStepper(activityStorageRecord);
 
   const { restart: restartIdleTimer } = useIdleTimer({
@@ -146,7 +147,7 @@ function ActivityStepper({
       return nextStepIndex === null ? 1 : nextStepIndex - currentStep;
     }
 
-    return 1;
+    return getNextStepShift('forwards');
   };
 
   const onBeforeBack = (): number => {
@@ -158,7 +159,7 @@ function ActivityStepper({
       return moved ? 0 : 1;
     }
 
-    return 1;
+    return getNextStepShift('backwards');
   };
 
   const onUndo = () => {

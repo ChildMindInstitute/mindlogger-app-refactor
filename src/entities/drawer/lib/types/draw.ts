@@ -17,3 +17,10 @@ export type DrawResult = {
   svgString: string;
   width: number;
 };
+
+export type CachedBezierItem = {
+  original: Point;
+  middleInCurve: Point;
+  curveResult: Point[];
+  curveToInterpolate: Point[];
+};

@@ -1,3 +1,4 @@
+import { ConditionalLogic } from './conditionalLogic';
 import { FlankerSettings } from './flanker';
 
 export type ActivityItemType =
@@ -223,6 +224,7 @@ type ActivityItemBase = {
   additionalText?: {
     required: boolean;
   };
+  conditionalLogic?: ConditionalLogic;
 };
 
 interface AbTestActivityItem extends ActivityItemBase {
