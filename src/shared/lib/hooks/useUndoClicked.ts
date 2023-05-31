@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import useRender from './useForceUpdate';
+import useForceUpdate from './useForceUpdate';
 import usePrevious from './usePrevious';
 
 type Result = {
@@ -13,7 +13,7 @@ const useUndoClicked = (isCurrentValueEmpty: boolean): Result => {
 
   const undoClickedRef = useRef(false);
 
-  const reRender = useRender();
+  const reRender = useForceUpdate();
 
   undoClickedRef.current =
     isCurrentValueEmpty && isPreviousValueEmpty === false;
