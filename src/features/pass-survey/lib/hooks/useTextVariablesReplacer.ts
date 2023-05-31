@@ -18,7 +18,7 @@ const useTextVariablesReplacer = ({
   const completedEntities = useSelector(
     AppletModel.selectors.selectCompletedEntities,
   );
-  const lastResponseTime = completedEntities[activityId];
+  const lastResponseTime = completedEntities?.[activityId];
   const replaceTextVariables = (text: string) => {
     if (items && answers) {
       const replacer = new MarkdownVariableReplacer(

@@ -56,7 +56,6 @@ export class MarkdownVariableReplacer {
   };
 
   private formatTime = (time: Time | undefined): string => {
-    console.log(time);
     if (!time || !time.hours) {
       return '';
     }
@@ -73,15 +72,15 @@ export class MarkdownVariableReplacer {
 
   private parseBasicSystemVariables = (markdown: string) => {
     return markdown
-      .replaceAll(/\[Now\]/gi, format(this.now, 'h:mm aa') + ' today (now)')
-      .replaceAll(/\[Nickname\]/gi, this.nickName)
-      .replaceAll(/\[sys.date\]/gi, format(this.now, 'MM/dd/y'));
+      .replaceAll(/\[Now]/gi, format(this.now, 'h:mm aa') + ' today (now)')
+      .replaceAll(/\[Nickname]/gi, this.nickName)
+      .replaceAll(/\[sys.date]/gi, format(this.now, 'MM/dd/y'));
   };
 
   private cleanUpUnusedResponseVariables = (markdown: string) => {
     return markdown
-      .replaceAll(/\[Time_Elapsed_Activity_Last_Completed\]/gi, '')
-      .replaceAll(/\[Time_Activity_Last_Completed\]/gi, '');
+      .replaceAll(/\[Time_Elapsed_Activity_Last_Completed]/gi, '')
+      .replaceAll(/\[Time_Activity_Last_Completed]/gi, '');
   };
 
   public parseSystemVariables = (markdown: string) => {
@@ -90,26 +89,23 @@ export class MarkdownVariableReplacer {
       return this.parseBasicSystemVariables(cleanedUpMarkdown);
     }
 
-    const markdownSplit = markdown?.split('\n');
-    markdownSplit.forEach((element, index) => {
-      if (element?.includes('[Time_Activity_Last_Completed] to [Now]')) {
-        markdownSplit[index] = `[blue]${markdownSplit[index]}`;
-        markdown = markdownSplit.join('\n');
-      }
-    });
+    markdown = markdown.replaceAll(
+      /\[Time_Activity_Last_Completed] to \[Now]/gi,
+      '[blue][Time_Activity_Last_Completed] to [Now]',
+    );
 
-    return this.parseBasicSystemVariables(markdownSplit.join('\n'))
+    return this.parseBasicSystemVariables(markdown)
       .replaceAll(
-        /\[Time_Elapsed_Activity_Last_Completed\]/gi,
-        this.formatTimeElapsed(),
+        /\[Time_Elapsed_Activity_Last_Completed]/gi,
+        this.getTimeElapsed(),
       )
       .replaceAll(
-        /\[Time_Activity_Last_Completed\]/gi,
-        this.formatLastResponseTime(),
+        /\[Time_Activity_Last_Completed]/gi,
+        this.getLastResponseTime(),
       );
   };
 
-  private formatTimeElapsed = () => {
+  private getTimeElapsed = () => {
     const interval = intervalToDuration({
       start: this.lastResponseTime!,
       end: this.now,
@@ -132,7 +128,7 @@ export class MarkdownVariableReplacer {
     return formattedString;
   };
 
-  private formatLastResponseTime = () => {
+  private getLastResponseTime = () => {
     if (isSameDay(this.now, this.lastResponseTime!)) {
       return `${format(this.lastResponseTime!, 'hh:mm aa')} today`;
     } else if (isSameDay(addDays(this.lastResponseTime!, 1), this.now)) {
