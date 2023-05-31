@@ -67,6 +67,7 @@ function ActivityStepper({
   const { replaceTextVariables } = useTextVariablesReplacer({
     items: activityStorageRecord?.items,
     answers: activityStorageRecord?.answers,
+    activityId,
   });
 
   const {

@@ -5,6 +5,7 @@ import {
   StoreProgress,
   FlowProgress,
   StoreProgressPayload,
+  CompletedEntities,
 } from '@app/abstract/lib';
 
 type InProgressActivity = {
@@ -29,10 +30,12 @@ type InProgressFlow = {
 
 type InitialState = {
   inProgress: StoreProgress;
+  completedEntities: CompletedEntities;
 };
 
 const initialState: InitialState = {
   inProgress: {},
+  completedEntities: {},
 };
 
 const slice = createSlice({
@@ -88,6 +91,7 @@ const slice = createSlice({
 
       state.inProgress[appletId][entityId][eventId].endAt =
         new Date().getTime();
+      state.completedEntities[entityId] = new Date().getTime();
     },
 
     entityAnswersSent: (state, action: PayloadAction<InProgressEntity>) => {
