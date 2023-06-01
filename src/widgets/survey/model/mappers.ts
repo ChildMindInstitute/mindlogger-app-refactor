@@ -49,6 +49,9 @@ export function mapAnswersToDto(
       case 'TimeRange':
         return convertToTimeRange(answer);
 
+      case 'Geolocation':
+        return convertToGeolocation(answer);
+
       default:
         return null;
     }
@@ -118,6 +121,15 @@ function convertToTimeRange(answer: Answer) {
 
   return {
     value: answerDto,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
+  };
+}
+
+function convertToGeolocation(answer: Answer) {
+  return {
+    value: answer.answer,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
