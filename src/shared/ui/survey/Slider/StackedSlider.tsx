@@ -15,6 +15,8 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
       value,
     });
 
+    console.log(clonedValues);
+
     onChange(clonedValues);
   };
 
