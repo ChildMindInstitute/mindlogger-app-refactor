@@ -1,10 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 
-import {
-  FlowProgress,
-  LookupMediaInput,
-  StoreProgressPayload,
-} from '@app/abstract/lib';
+import { LookupMediaInput, StoreProgressPayload } from '@app/abstract/lib';
+import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
 import { ActivityFlowRecordDto, AppletDetailsResponse } from '@app/shared/api';
 import {
   getAppletDetailsKey,
@@ -25,9 +22,13 @@ type StartResult = {
 
 type UseStartEntityInput = {
   hasMediaReferences: (input: LookupMediaInput) => boolean;
+  cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
 };
 
-function useStartEntity({ hasMediaReferences }: UseStartEntityInput) {
+function useStartEntity({
+  hasMediaReferences,
+  cleanUpMediaFiles,
+}: UseStartEntityInput) {
   const dispatch = useAppDispatch();
 
   const allProgresses = useAppSelector(selectInProgressApplets);
@@ -102,9 +103,11 @@ function useStartEntity({ hasMediaReferences }: UseStartEntityInput) {
         return;
       }
 
-      const progressRecord = getProgress(appletId, activityId, eventId);
+      const isActivityInProgress = isInProgress(
+        getProgress(appletId, activityId, eventId),
+      );
 
-      if (isInProgress(progressRecord)) {
+      if (isActivityInProgress) {
         if (isTimerElapsed) {
           resolve({ startedFromScratch: false });
           return;
@@ -112,6 +115,8 @@ function useStartEntity({ hasMediaReferences }: UseStartEntityInput) {
 
         onBeforeStartingActivity({
           onRestart: () => {
+            cleanUpMediaFiles({ activityId, appletId, eventId, order: 0 });
+
             activityStarted(appletId, activityId, eventId);
             resolve({ startedFromScratch: true });
           },
@@ -144,7 +149,7 @@ function useStartEntity({ hasMediaReferences }: UseStartEntityInput) {
       );
     };
 
-    const getFirstActivityIfInTheFlow = () => {
+    const getFlowActivities = (): string[] => {
       const detailsResponse: AppletDetailsResponse =
         getDataFromQuery<AppletDetailsResponse>(
           getAppletDetailsKey(appletId),
@@ -153,16 +158,14 @@ function useStartEntity({ hasMediaReferences }: UseStartEntityInput) {
 
       const activityFlowDtos: ActivityFlowRecordDto[] =
         detailsResponse.result.activityFlows;
+      const flow = activityFlowDtos!.find(x => x.id === flowId)!;
 
-      const flow = activityFlowDtos!.find(x => x.id === flowId);
-      return flow!.activityIds[0];
+      return flow.activityIds;
     };
 
-    const progressRecord = getProgress(
-      appletId,
-      flowId,
-      eventId,
-    ) as FlowProgress;
+    const flowActivities: string[] = getFlowActivities();
+
+    const firstActivityId: string = flowActivities[0];
 
     return new Promise<StartResult>(resolve => {
       if (shouldBreakDueToMediaReferences()) {
@@ -171,9 +174,11 @@ function useStartEntity({ hasMediaReferences }: UseStartEntityInput) {
         return;
       }
 
-      const firstActivityId = getFirstActivityIfInTheFlow();
+      const isFlowInProgress = isInProgress(
+        getProgress(appletId, flowId, eventId),
+      );
 
-      if (isInProgress(progressRecord as StoreProgressPayload)) {
+      if (isFlowInProgress) {
         if (isTimerElapsed) {
           resolve({
             startedFromScratch: false,
@@ -183,6 +188,15 @@ function useStartEntity({ hasMediaReferences }: UseStartEntityInput) {
 
         onBeforeStartingActivity({
           onRestart: () => {
+            for (let i = 0; i < flowActivities.length; i++) {
+              cleanUpMediaFiles({
+                activityId: flowActivities[i],
+                appletId,
+                eventId,
+                order: i,
+              });
+            }
+
             flowStarted(appletId, flowId, firstActivityId, eventId, 0);
             resolve({
               startedFromScratch: true,
