@@ -81,7 +81,9 @@ const AudioRecorderItem: FC<Props> = ({
 
       try {
         await RNFetchBlob.fs.unlink(pathToRemove);
-      } catch (e) {}
+      } catch (error) {
+        console.warn(error);
+      }
     }
   };
 
