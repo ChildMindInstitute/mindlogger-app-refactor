@@ -73,18 +73,25 @@ const AudioRecorderItem: FC<Props> = ({
     audioRecorderPlayer.current.removeRecordBackListener();
   };
 
+  const unlinkOldRecordingFile = async () => {
+    if (lastFilePath) {
+      const pathToRemove = IS_ANDROID
+        ? lastFilePath.replace('file://', '')
+        : lastFilePath;
+
+      try {
+        await RNFetchBlob.fs.unlink(pathToRemove);
+      } catch (e) {}
+    }
+  };
+
   const generateNewFilePath = async () => {
     const randomString = uuidv4();
     const newFilePath = IS_ANDROID
       ? `${androidCacheDir}/${randomString}.mp4`
       : `${randomString}.m4a`;
 
-    if (lastFilePath) {
-      try {
-        await RNFetchBlob.fs.unlink(lastFilePath.replace('file://', ''));
-        await RNFetchBlob.fs.unlink(lastFilePath);
-      } catch (e) {}
-    }
+    await unlinkOldRecordingFile();
 
     setLastFilePath(newFilePath);
     return newFilePath;
