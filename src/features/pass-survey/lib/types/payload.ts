@@ -6,6 +6,7 @@ import {
 } from '@app/entities/flanker';
 import { HourMinute } from '@app/shared/lib';
 import { Coordinates } from '@app/shared/ui';
+import { StackedRowItemValue } from '@app/shared/ui/survey/StackedItemsGrid';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
 
 import { Tutorial } from './tutorial';
@@ -386,10 +387,11 @@ export type StackedCheckboxResponse = {
   optionIds: string[];
 }[];
 
-export type StackedRadioResponse = {
-  rowId: string;
-  optionId: string;
-}[];
+export type StackedRadioResponse = Array<
+  StackedRowItemValue & {
+    rowId: string;
+  }
+>;
 
 export type StackedSliderResponse = Array<{
   rowId: string;

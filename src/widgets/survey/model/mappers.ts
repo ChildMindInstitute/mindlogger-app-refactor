@@ -2,6 +2,7 @@ import {
   Answers,
   PipelineItem,
   PipelineItemAnswer,
+  StackedRadioResponse,
 } from '@app/features/pass-survey';
 import { AnswerDto } from '@app/shared/api';
 import {
@@ -51,6 +52,9 @@ export function mapAnswersToDto(
 
       case 'Geolocation':
         return convertToGeolocation(answer);
+
+      case 'StackedRadio':
+        convertToStackedRadio(answer);
 
       default:
         return null;
@@ -130,6 +134,20 @@ function convertToTimeRange(answer: Answer) {
 function convertToGeolocation(answer: Answer) {
   return {
     value: answer.answer,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
+  };
+}
+
+function convertToStackedRadio(answer: Answer) {
+  const answers = answer.answer as StackedRadioResponse;
+  const answerDto = answers.map(
+    answerItem => (answerItem ? answerItem.id : null), // @todo check with BE
+  ) as string[];
+
+  return {
+    value: answerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
