@@ -1,4 +1,5 @@
 [codespell]
 skip = .git,*.pdf,*.svg,en.json,fr.json,yarn.lock,*.html
-#
+# ignore a URL which codespell manages to suggest to fix
+ignore-regex = (www.archiliste.fr/sites.*|\\nWe)
 # ignore-words-list =
