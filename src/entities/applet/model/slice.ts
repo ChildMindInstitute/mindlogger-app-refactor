@@ -91,7 +91,10 @@ const slice = createSlice({
 
       state.inProgress[appletId][entityId][eventId].endAt =
         new Date().getTime();
-      state.completedEntities[entityId] = new Date().getTime();
+
+      const completedEntities = state.completedEntities ?? {};
+
+      completedEntities[entityId] = new Date().getTime();
     },
 
     entityAnswersSent: (state, action: PayloadAction<InProgressEntity>) => {
