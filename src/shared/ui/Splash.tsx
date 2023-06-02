@@ -52,7 +52,7 @@ const SplashScreen = ({ isAppReady }: { isAppReady: boolean }) => {
 
   return (
     <Animated.View
-      collapsable={false}
+      collapsible={false}
       style={[style.container, { opacity: containerOpacity }]}
     >
       <ActivityIndicator size="large" color={colors.secondary} />

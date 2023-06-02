@@ -141,8 +141,8 @@ export const mockApplets = [
       secondaryColor: '#FFFFFF',
       tertiaryColor: '#404040',
     },
-    name: 'Config reprots v13',
-    description: 'Config reprots v13',
+    name: 'Config reports v13',
+    description: 'Config reports v13',
     id: 'applet/62d6a07c154fa8025db46763',
   },
   {
