@@ -72,10 +72,8 @@ function ActivityStepper({
 
   const {
     isFirstStep,
-    isLastStep,
     isTutorialStep,
 
-    canSkip,
     canMoveNext,
     canMoveBack,
     canReset,
@@ -86,6 +84,7 @@ function ActivityStepper({
 
     isValid,
     getNextStepShift,
+    getNextButtonText,
   } = useActivityStepper(activityStorageRecord);
 
   const { restart: restartIdleTimer } = useIdleTimer({
@@ -99,11 +98,7 @@ function ActivityStepper({
 
   const currentStep = activityStorageRecord?.step ?? 0;
 
-  const nextButtonText = isLastStep
-    ? 'activity_navigation:done'
-    : canSkip
-    ? 'activity_navigation:skip'
-    : 'activity_navigation:next';
+  const nextButtonText = getNextButtonText();
 
   const tutorialViewerRef = useRef<TutorialViewerRef | null>(null);
 
