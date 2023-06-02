@@ -393,10 +393,7 @@ export type StackedRadioResponse = Array<
   }
 >;
 
-export type StackedSliderResponse = Array<{
-  rowId: string;
-  value: number;
-}>;
+export type StackedSliderResponse = Array<number>;
 
 export type PhotoResponse = {
   uri: string;

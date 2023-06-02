@@ -8,14 +8,22 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
   const { rows } = config;
   const { onChange, onRelease, onPress, values } = props;
 
-  const onSliderValueChange = (value: number, rowId: string) => {
-    const clonedValues = values?.filter(row => row.rowId !== rowId) ?? [];
-    clonedValues.push({
-      rowId,
-      value,
-    });
+  const onSliderValueChange = (
+    value: number,
+    rowId: string,
+    rowIndex: number,
+  ) => {
+    let answers: number[] = [];
 
-    onChange(clonedValues);
+    if (!values) {
+      answers.length = rows.length;
+    } else {
+      answers = [...values];
+    }
+
+    answers[rowIndex] = value;
+
+    onChange(answers);
   };
 
   const onSliderPress = () => {
@@ -28,11 +36,9 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
 
   return (
     <YStack>
-      {rows.map(sliderConfig => {
+      {rows.map((sliderConfig, rowIndex) => {
         const { id: currentRowId, label, ...singleSliderProps } = sliderConfig;
-        const rowValue = values?.find(
-          ({ rowId }) => currentRowId === rowId,
-        )?.value;
+        const rowValue = values ? values[rowIndex] : 0;
 
         return (
           <YStack key={`slider-${currentRowId}`}>
@@ -42,7 +48,9 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
 
             <SurveySlider
               config={singleSliderProps}
-              onChange={value => onSliderValueChange(value, currentRowId)}
+              onChange={value =>
+                onSliderValueChange(value, currentRowId, rowIndex)
+              }
               onRelease={onRelease}
               initialValue={rowValue}
               onPress={onSliderPress}

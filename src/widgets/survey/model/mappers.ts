@@ -60,7 +60,10 @@ export function mapAnswersToDto(
         return convertToStackedRadioAnswer(answer);
 
       case 'StackedCheckbox':
-        return convertToTackedCheckboxAnswer(answer);
+        return convertToStackedCheckboxAnswer(answer);
+
+      case 'StackedSlider':
+        return convertToStackedSliderAnswer(answer);
 
       default:
         return null;
@@ -160,7 +163,7 @@ function convertToStackedRadioAnswer(answer: Answer) {
   };
 }
 
-function convertToTackedCheckboxAnswer(answer: Answer) {
+function convertToStackedCheckboxAnswer(answer: Answer) {
   const answers = answer.answer as StackedRadioAnswerValue;
 
   const answersDto = answers.map(answerRow => {
@@ -173,6 +176,20 @@ function convertToTackedCheckboxAnswer(answer: Answer) {
 
   return {
     value: answersDto,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
+  };
+}
+
+function convertToStackedSliderAnswer(answer: Answer) {
+  const answers = answer.answer as number[];
+  const answerDto = answers.map(
+    answerItem => answerItem || null, // @todo check with BE
+  ) as number[];
+
+  return {
+    value: answerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),

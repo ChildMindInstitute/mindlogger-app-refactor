@@ -29,7 +29,6 @@ const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
     const { id: currentRowId } = config.rows[itemIndex];
 
     values.length = config.rows.length;
-
     values[itemIndex] = { rowId: currentRowId, ...option };
 
     onChange(values);
