@@ -10,6 +10,7 @@ import {
   HourMinute,
   convertToDayMonthYear,
 } from '@app/shared/lib';
+import { Item } from '@app/shared/ui/survey/CheckBox/types';
 
 type Answer = PipelineItemAnswer['value'];
 
@@ -17,6 +18,8 @@ type TimeRange = {
   endTime: HourMinute;
   startTime: HourMinute;
 };
+
+type StackedRadioAnswerValue = Array<Array<Item>>; // @Todo
 
 export function mapAnswersToDto(
   pipeline: PipelineItem[],
@@ -42,19 +45,22 @@ export function mapAnswersToDto(
         return convertToSliderAnswer(answer);
 
       case 'Date':
-        return convertToDateAnswer(answer);
+        return convertToDateAnswerAnswer(answer);
 
       case 'NumberSelect':
         return convertToNumberSelectAnswer(answer);
 
       case 'TimeRange':
-        return convertToTimeRange(answer);
+        return convertToTimeRangeAnswer(answer);
 
       case 'Geolocation':
-        return convertToGeolocation(answer);
+        return convertToGeolocationAnswer(answer);
 
       case 'StackedRadio':
-        convertToStackedRadio(answer);
+        return convertToStackedRadioAnswer(answer);
+
+      case 'StackedCheckbox':
+        return convertToTackedCheckboxAnswer(answer);
 
       default:
         return null;
@@ -98,7 +104,7 @@ function convertToNumberSelectAnswer(answer: Answer) {
   };
 }
 
-function convertToDateAnswer(answer: Answer) {
+function convertToDateAnswerAnswer(answer: Answer) {
   const date = new Date(answer.answer as string);
 
   return {
@@ -109,7 +115,7 @@ function convertToDateAnswer(answer: Answer) {
   };
 }
 
-function convertToTimeRange(answer: Answer) {
+function convertToTimeRangeAnswer(answer: Answer) {
   const timeRangeItem = answer.answer as TimeRange;
   const { startTime, endTime } = timeRangeItem;
   const answerDto = {
@@ -131,7 +137,7 @@ function convertToTimeRange(answer: Answer) {
   };
 }
 
-function convertToGeolocation(answer: Answer) {
+function convertToGeolocationAnswer(answer: Answer) {
   return {
     value: answer.answer,
     ...(answer.additionalAnswer && {
@@ -140,7 +146,7 @@ function convertToGeolocation(answer: Answer) {
   };
 }
 
-function convertToStackedRadio(answer: Answer) {
+function convertToStackedRadioAnswer(answer: Answer) {
   const answers = answer.answer as StackedRadioResponse;
   const answerDto = answers.map(
     answerItem => (answerItem ? answerItem.id : null), // @todo check with BE
@@ -148,6 +154,25 @@ function convertToStackedRadio(answer: Answer) {
 
   return {
     value: answerDto,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
+  };
+}
+
+function convertToTackedCheckboxAnswer(answer: Answer) {
+  const answers = answer.answer as StackedRadioAnswerValue;
+
+  const answersDto = answers.map(answerRow => {
+    if (answerRow) {
+      return answerRow.map(answerItem => (answerItem ? answerItem.id : null));
+    }
+
+    return null;
+  });
+
+  return {
+    value: answersDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),

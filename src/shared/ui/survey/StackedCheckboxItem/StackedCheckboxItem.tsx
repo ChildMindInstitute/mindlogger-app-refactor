@@ -15,10 +15,7 @@ type StackedCheckboxConfig = {
   options: Array<Item>;
 };
 
-type Values = {
-  rowId: string;
-  optionIds: string[];
-}[];
+type Values = Array<Array<Item>>;
 
 type Props = {
   values: Values | null;
@@ -53,41 +50,30 @@ const StackedCheckboxItem: FC<Props> = ({
     });
   }, [rows, textReplacer]);
 
-  const onValueChange = (option: StackedRowItemValue, row: Item) => {
-    const currentRowId = row.id;
-    const optionId = option.id;
-
-    if (!values) {
-      const newValues = [
-        {
-          rowId: currentRowId,
-          optionIds: [optionId],
-        },
-      ];
-
-      onChange(newValues);
-    } else {
-      const currentRow = values.find(({ rowId }) => rowId === currentRowId);
-      const currentOptionIds = currentRow?.optionIds ?? [];
-      let newOptionIds = [...currentOptionIds];
-
-      if (currentOptionIds.includes(optionId)) {
-        newOptionIds = currentOptionIds.filter(id => id !== optionId);
-      } else {
-        newOptionIds = [...newOptionIds, optionId];
-      }
-
-      const newValues = [
-        ...values.filter(({ rowId }) => rowId !== currentRowId),
-        {
-          rowId: currentRowId,
-          optionIds: newOptionIds,
-        },
-      ];
-      const isEmpty = !newValues.some(({ optionIds }) => optionIds.length > 0);
-
-      onChange(isEmpty ? null : newValues);
+  const isValueSelected = (value: Item, rowIndex: number) => {
+    if (!values || !values[rowIndex]?.length) {
+      return false;
     }
+
+    const selectedValue = values[rowIndex].find(item => item.id === value.id);
+
+    return !!selectedValue;
+  };
+
+  const onValueChange = (option: StackedRowItemValue, rowIndex: number) => {
+    let newValues: Values = [];
+    if (!values) {
+      newValues.length = config.rows.length;
+      newValues[rowIndex] = [option];
+    } else {
+      newValues = [...values];
+
+      newValues[rowIndex] = isValueSelected(option, rowIndex)
+        ? [...newValues[rowIndex].filter(value => value.id !== option.id)]
+        : [...(newValues[rowIndex] ? newValues[rowIndex] : []), option];
+    }
+
+    onChange(newValues);
   };
 
   return (
@@ -96,14 +82,8 @@ const StackedCheckboxItem: FC<Props> = ({
         items={memoizedRows}
         options={memoizedOptions}
         renderCell={(index, option) => {
-          const row = memoizedRows[index];
-          const isChecked = values?.some(
-            ({ optionIds, rowId }) =>
-              optionIds?.includes(option.id) && rowId === row.id,
-          );
-
           return (
-            <YStack onPress={() => onValueChange(option, row)}>
+            <YStack onPress={() => onValueChange(option, index)}>
               <CheckBox
                 style={styles.checkbox}
                 lineWidth={2}
@@ -116,7 +96,7 @@ const StackedCheckboxItem: FC<Props> = ({
                 tintColor={colors.primary}
                 onAnimationType="bounce"
                 offAnimationType="bounce"
-                value={isChecked}
+                value={isValueSelected(option, index)}
                 disabled
               />
             </YStack>
