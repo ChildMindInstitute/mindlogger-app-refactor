@@ -24,7 +24,7 @@ import {
   VideoAnswerDto,
 } from '@app/shared/api';
 import { HourMinute, convertToDayMonthYear } from '@app/shared/lib';
-import { Item } from '@app/shared/ui/survey/CheckBox/types';
+import { Item } from '@app/shared/ui';
 
 type Answer = PipelineItemAnswer['value'];
 
