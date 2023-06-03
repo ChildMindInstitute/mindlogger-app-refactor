@@ -1,9 +1,73 @@
 import { AxiosResponse } from 'axios';
 
+import { DayMonthYear, HourMinute } from '@app/shared/lib';
+import MediaValue from '@app/shared/ui/survey/MediaItems/types';
 import { AppletEncryptionDTO } from '@shared/api';
 
 import httpService from './httpService';
 import { SuccessfulEmptyResponse } from '../types';
+
+export type TextAnswerDto = string;
+
+export type SliderAnswerDto = number;
+
+export type NumberSelectAnswerDto = string;
+
+export type StackedSliderAnswerDto = Array<number>;
+
+export type CheckboxAnswerDto = string[];
+
+export type StackedCheckboxAnswerDto = Array<Array<string>>;
+
+export type RadioAnswerDto = string;
+
+export type StackedRadioAnswerDto = Array<string>;
+
+export type AudioAnswerDto = MediaValue;
+
+export type AudioPlayerAnswerDto = boolean;
+
+export type PhotoAnswerDto = MediaValue;
+
+export type VideoAnswerDto = MediaValue;
+
+export type TimeRangeAnswerDto = {
+  from: { hour: number; minute: number };
+  to: { hour: number; minute: number };
+};
+
+export type TimeAnswerDto = HourMinute;
+
+export type DateAnswerDto = DayMonthYear;
+
+export type GeolocationAnswerDto = {
+  latitude: number;
+  longitude: number;
+};
+
+export type AnswerValueDto =
+  | TextAnswerDto
+  | SliderAnswerDto
+  | NumberSelectAnswerDto
+  | StackedSliderAnswerDto
+  | StackedCheckboxAnswerDto
+  | StackedRadioAnswerDto
+  | RadioAnswerDto
+  | CheckboxAnswerDto
+  | AudioAnswerDto
+  | AudioPlayerAnswerDto
+  | PhotoAnswerDto
+  | VideoAnswerDto
+  | TimeRangeAnswerDto
+  | TimeAnswerDto
+  | DateAnswerDto
+  | GeolocationAnswerDto
+  | null;
+
+export type AnswerDto = {
+  value: AnswerValueDto;
+  text?: string;
+} | null;
 
 export type EncryptedAnswerDto = {
   activityId: string;
@@ -11,13 +75,6 @@ export type EncryptedAnswerDto = {
   flowId: string | null;
   answer: string;
 };
-
-export type AnswerDto =
-  | string
-  | number
-  | { value: any; text: string }
-  | Array<string>
-  | any;
 
 type ActivityAnswersRequest = {
   appletId: string;

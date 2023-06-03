@@ -8,6 +8,7 @@ import {
   AnswerDto,
   AppletEncryptionDTO,
 } from '@app/shared/api';
+import MediaValue from '@app/shared/ui/survey/MediaItems/types';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
 import { encryption } from '@shared/lib';
 
@@ -35,7 +36,10 @@ const filterAnswers = (
   answers: AnswerDto[],
   answerFilter: AnswerDto,
 ): AnswerDto[] =>
-  answers.filter(answer => answer.activityId !== answerFilter.activityId);
+  answers.filter(
+    answer =>
+      JSON.stringify(answer?.value) !== JSON.stringify(answerFilter?.value),
+  );
 
 const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
   for (const itemAnswer of body.answers) {
@@ -45,13 +49,15 @@ const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
 
     const { value: answerValue } = itemAnswer;
 
-    const isMediaItem = answerValue?.uri && isFileUrl(answerValue.uri);
+    const mediaAnswer = answerValue as MediaValue;
+
+    const isMediaItem = mediaAnswer?.uri && isFileUrl(mediaAnswer.uri);
 
     if (isMediaItem) {
-      const localFileExists = await FileSystem.exists(answerValue.uri);
+      const localFileExists = await FileSystem.exists(mediaAnswer.uri);
       if (localFileExists) {
         try {
-          const uploadResult = await FileService.upload(answerValue);
+          const uploadResult = await FileService.upload(mediaAnswer);
 
           const url = uploadResult?.data.result.url;
 

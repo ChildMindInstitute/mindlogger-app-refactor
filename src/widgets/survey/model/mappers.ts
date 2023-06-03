@@ -4,12 +4,26 @@ import {
   PipelineItemAnswer,
   StackedRadioResponse,
 } from '@app/features/pass-survey';
-import { AnswerDto } from '@app/shared/api';
 import {
-  DayMonthYear,
-  HourMinute,
-  convertToDayMonthYear,
-} from '@app/shared/lib';
+  AnswerDto,
+  AudioAnswerDto,
+  AudioPlayerAnswerDto,
+  CheckboxAnswerDto,
+  DateAnswerDto,
+  GeolocationAnswerDto,
+  NumberSelectAnswerDto,
+  PhotoAnswerDto,
+  RadioAnswerDto,
+  SliderAnswerDto,
+  StackedCheckboxAnswerDto,
+  StackedRadioAnswerDto,
+  StackedSliderAnswerDto,
+  TextAnswerDto,
+  TimeAnswerDto,
+  TimeRangeAnswerDto,
+  VideoAnswerDto,
+} from '@app/shared/api';
+import { HourMinute, convertToDayMonthYear } from '@app/shared/lib';
 import { Item } from '@app/shared/ui/survey/CheckBox/types';
 
 type Answer = PipelineItemAnswer['value'];
@@ -19,7 +33,7 @@ type TimeRange = {
   startTime: HourMinute;
 };
 
-type StackedRadioAnswerValue = Array<Array<Item>>; // @Todo
+type StackedRadioAnswerValue = Array<Array<Item>>;
 
 export function mapAnswersToDto(
   pipeline: PipelineItem[],
@@ -50,6 +64,9 @@ export function mapAnswersToDto(
       case 'NumberSelect':
         return convertToNumberSelectAnswer(answer);
 
+      case 'Time':
+        return convertToTimeAnswer(answer);
+
       case 'TimeRange':
         return convertToTimeRangeAnswer(answer);
 
@@ -65,6 +82,18 @@ export function mapAnswersToDto(
       case 'StackedSlider':
         return convertToStackedSliderAnswer(answer);
 
+      case 'Video':
+        return convertToVideoAnswer(answer);
+
+      case 'Photo':
+        return convertToPhotoAnswer(answer);
+
+      case 'Audio':
+        return convertToAudioAnswer(answer);
+
+      case 'AudioPlayer':
+        return convertToAudioPlayerAnswer(answer);
+
       default:
         return null;
     }
@@ -73,52 +102,69 @@ export function mapAnswersToDto(
   return result;
 }
 
-function convertToTextAnswer(answer: Answer) {
+function convertToTextAnswer(answer: Answer): AnswerDto {
   return {
-    value: answer.answer,
+    value: answer.answer as TextAnswerDto,
   };
 }
 
-function convertToSingleSelectAnswer(answer: Answer) {
+function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
   return {
-    value: answer.answer,
-    text: answer.additionalAnswer ?? null,
-  };
-}
-
-function convertToSliderAnswer(answer: Answer) {
-  return {
-    value: answer.answer,
-    text: answer.additionalAnswer ?? null,
-  };
-}
-
-function convertToCheckboxAnswer(answer: Answer) {
-  return {
-    value: answer.answer,
-    text: answer.additionalAnswer ?? null,
-  };
-}
-
-function convertToNumberSelectAnswer(answer: Answer) {
-  return {
-    value: answer.answer,
-    text: answer.additionalAnswer ?? null,
-  };
-}
-
-function convertToDateAnswerAnswer(answer: Answer) {
-  const date = new Date(answer.answer as string);
-
-  return {
-    value: convertToDayMonthYear(date) as DayMonthYear,
+    value: answer.answer as RadioAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
   };
 }
 
-function convertToTimeRangeAnswer(answer: Answer) {
+function convertToSliderAnswer(answer: Answer): AnswerDto {
+  return {
+    value: answer.answer as SliderAnswerDto,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
+  };
+}
+
+function convertToCheckboxAnswer(answer: Answer): AnswerDto {
+  return {
+    value: answer.answer as CheckboxAnswerDto,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
+  };
+}
+
+function convertToNumberSelectAnswer(answer: Answer): AnswerDto {
+  return {
+    value: answer.answer as NumberSelectAnswerDto,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
+  };
+}
+
+function convertToTimeAnswer(answer: Answer): AnswerDto {
+  return {
+    value: answer.answer as TimeAnswerDto,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
+  };
+}
+
+function convertToDateAnswerAnswer(answer: Answer): AnswerDto {
+  const date = new Date(answer.answer as string);
+
+  return {
+    value: convertToDayMonthYear(date) as DateAnswerDto,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
+  };
+}
+
+function convertToTimeRangeAnswer(answer: Answer): AnswerDto {
   const timeRangeItem = answer.answer as TimeRange;
   const { startTime, endTime } = timeRangeItem;
   const answerDto = {
@@ -133,37 +179,37 @@ function convertToTimeRangeAnswer(answer: Answer) {
   };
 
   return {
-    value: answerDto,
+    value: answerDto as TimeRangeAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
   };
 }
 
-function convertToGeolocationAnswer(answer: Answer) {
+function convertToGeolocationAnswer(answer: Answer): AnswerDto {
   return {
-    value: answer.answer,
+    value: answer.answer as GeolocationAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
   };
 }
 
-function convertToStackedRadioAnswer(answer: Answer) {
+function convertToStackedRadioAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as StackedRadioResponse;
   const answerDto = answers.map(
     answerItem => (answerItem ? answerItem.id : null), // @todo check with BE
   ) as string[];
 
   return {
-    value: answerDto,
+    value: answerDto as StackedRadioAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
   };
 }
 
-function convertToStackedCheckboxAnswer(answer: Answer) {
+function convertToStackedCheckboxAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as StackedRadioAnswerValue;
 
   const answersDto = answers.map(answerRow => {
@@ -175,21 +221,57 @@ function convertToStackedCheckboxAnswer(answer: Answer) {
   });
 
   return {
-    value: answersDto,
+    value: answersDto as StackedCheckboxAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
   };
 }
 
-function convertToStackedSliderAnswer(answer: Answer) {
+function convertToStackedSliderAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as number[];
   const answerDto = answers.map(
     answerItem => answerItem || null, // @todo check with BE
   ) as number[];
 
   return {
-    value: answerDto,
+    value: answerDto as StackedSliderAnswerDto,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
+  };
+}
+
+function convertToVideoAnswer(answer: Answer): AnswerDto {
+  return {
+    value: answer.answer as VideoAnswerDto,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
+  };
+}
+
+function convertToPhotoAnswer(answer: Answer): AnswerDto {
+  return {
+    value: answer.answer as PhotoAnswerDto,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
+  };
+}
+
+function convertToAudioAnswer(answer: Answer): AnswerDto {
+  return {
+    value: answer.answer as AudioAnswerDto,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
+  };
+}
+
+function convertToAudioPlayerAnswer(answer: Answer): AnswerDto {
+  return {
+    value: answer.answer as AudioPlayerAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),

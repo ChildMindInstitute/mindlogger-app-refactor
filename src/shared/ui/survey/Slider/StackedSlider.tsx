@@ -8,11 +8,7 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
   const { rows } = config;
   const { onChange, onRelease, onPress, values } = props;
 
-  const onSliderValueChange = (
-    value: number,
-    rowId: string,
-    rowIndex: number,
-  ) => {
+  const onSliderValueChange = (value: number, rowIndex: number) => {
     let answers: number[] = [];
 
     if (!values) {
@@ -48,9 +44,7 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
 
             <SurveySlider
               config={singleSliderProps}
-              onChange={value =>
-                onSliderValueChange(value, currentRowId, rowIndex)
-              }
+              onChange={value => onSliderValueChange(value, rowIndex)}
               onRelease={onRelease}
               initialValue={rowValue}
               onPress={onSliderPress}
