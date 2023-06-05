@@ -20,37 +20,30 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+type Props = BoxProps & {
   children: ReactNode;
   mode: 'photo' | 'video';
-  hasValue: boolean;
   onShowMediaLibrary: () => void;
   onOpenCamera: () => void;
   uploadIcon: JSX.Element;
 };
 
-const ContentWrapper: FC<BoxProps & { hasValue?: boolean }> = styled(Center, {
+const ContentWrapper: FC<BoxProps> = styled(Center, {
   width: '100%',
   marginBottom: 15,
 
   borderWidth: 4,
   backgroundColor: '$lightRed',
   borderRadius: 15,
-  variants: {
-    hasValue: {
-      true: { borderColor: '$green' },
-      false: { borderColor: '$red' },
-    },
-  },
 });
 
 const MediaInput: FC<Props> = ({
   children,
   mode,
-  hasValue,
   onOpenCamera,
   onShowMediaLibrary,
   uploadIcon,
+  borderColor,
 }) => {
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowDimensions();
@@ -69,7 +62,7 @@ const MediaInput: FC<Props> = ({
   };
 
   return (
-    <ContentWrapper hasValue={hasValue} height={windowWidth * 0.85}>
+    <ContentWrapper borderColor={borderColor} height={windowWidth * 0.85}>
       {children || (
         <TouchableOpacity onPress={onUploadPress} style={styles.touchable}>
           <Box>{uploadIcon}</Box>
