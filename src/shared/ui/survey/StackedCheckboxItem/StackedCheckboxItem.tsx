@@ -7,15 +7,15 @@ import { CheckBox, YStack } from '../..';
 import {
   StackedItemsGrid,
   type StackedRowItemValue,
-  type Item,
+  type StackedItem,
 } from '../StackedItemsGrid';
 
 type StackedCheckboxConfig = {
-  rows: Array<Item>;
-  options: Array<Item>;
+  rows: Array<StackedItem>;
+  options: Array<StackedItem>;
 };
 
-type Values = Array<Array<Item>>;
+type Values = Array<Array<StackedItem>>;
 
 type Props = {
   values: Values | null;
@@ -50,7 +50,7 @@ const StackedCheckboxItem: FC<Props> = ({
     });
   }, [rows, textReplacer]);
 
-  const isValueSelected = (value: Item, rowIndex: number) => {
+  const isValueSelected = (value: StackedItem, rowIndex: number) => {
     if (!values || !values[rowIndex]?.length) {
       return false;
     }
@@ -69,7 +69,7 @@ const StackedCheckboxItem: FC<Props> = ({
       newValues = [...values];
 
       newValues[rowIndex] = isValueSelected(option, rowIndex)
-        ? [...newValues[rowIndex].filter(value => value.id !== option.id)]
+        ? newValues[rowIndex].filter(value => value.id !== option.id)
         : [...(newValues[rowIndex] ? newValues[rowIndex] : []), option];
     }
 

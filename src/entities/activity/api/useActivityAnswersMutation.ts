@@ -8,7 +8,7 @@ import {
   AnswerDto,
   AppletEncryptionDTO,
 } from '@app/shared/api';
-import MediaValue from '@app/shared/ui/survey/MediaItems/types';
+import { MediaValue } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
 import { encryption } from '@shared/lib';
 
@@ -32,14 +32,15 @@ const isFileUrl = (value: string) => {
   return localFileRegex.test(value);
 };
 
-const filterAnswers = (
+const filterMediaAnswers = (
   answers: AnswerDto[],
   answerFilter: AnswerDto,
 ): AnswerDto[] =>
-  answers.filter(
-    answer =>
-      JSON.stringify(answer?.value) !== JSON.stringify(answerFilter?.value),
-  );
+  answers.filter(answer => {
+    const mediaAnswer = answer?.value as MediaValue;
+    const mediaFilter = answerFilter?.value as MediaValue;
+    mediaAnswer.uri !== mediaFilter.uri;
+  });
 
 const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
   for (const itemAnswer of body.answers) {
@@ -65,14 +66,14 @@ const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
             itemAnswer.value = url;
           }
         } catch (error) {
-          const answers = filterAnswers(body.answers, itemAnswer);
+          const answers = filterMediaAnswers(body.answers, itemAnswer);
 
           body.answers = answers;
 
           console.error(error);
         }
       } else {
-        const answers = filterAnswers(body.answers, itemAnswer);
+        const answers = filterMediaAnswers(body.answers, itemAnswer);
 
         body.answers = answers;
       }

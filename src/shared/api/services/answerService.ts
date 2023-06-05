@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 
 import { DayMonthYear, HourMinute } from '@app/shared/lib';
-import MediaValue from '@app/shared/ui/survey/MediaItems/types';
+import { MediaValue } from '@app/shared/ui';
 import { AppletEncryptionDTO } from '@shared/api';
 
 import httpService from './httpService';

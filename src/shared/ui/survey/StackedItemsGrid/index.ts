@@ -1,2 +1,2 @@
 export { default as StackedItemsGrid } from './StackedItemsGrid';
-export * from './types';
+export { type StackedRowItemValue, type Item as StackedItem } from './types';

@@ -3,15 +3,15 @@ import { FC } from 'react';
 import { colors } from '@app/shared/lib';
 
 import {
-  Item,
+  StackedItem,
   StackedItemsGrid,
   StackedRowItemValue,
 } from './StackedItemsGrid';
 import { RadioGroup } from '../';
 
 type StackedRadioConfig = {
-  rows: Array<Item>;
-  options: Array<Item>;
+  rows: Array<StackedItem>;
+  options: Array<StackedItem>;
 };
 
 type StackedRadioAnswerValue = StackedRowItemValue & {
@@ -27,11 +27,12 @@ type Props = {
 const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
   const onRowValueChange = (option: StackedRowItemValue, itemIndex: number) => {
     const { id: currentRowId } = config.rows[itemIndex];
+    const newValue = [...values];
 
-    values.length = config.rows.length;
-    values[itemIndex] = { rowId: currentRowId, ...option };
+    newValue.length = config.rows.length;
+    newValue[itemIndex] = { rowId: currentRowId, ...option };
 
-    onChange(values);
+    onChange(newValue);
   };
 
   return (

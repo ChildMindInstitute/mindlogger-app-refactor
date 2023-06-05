@@ -5,11 +5,7 @@ import {
   FlankerGameResponse,
 } from '@app/entities/flanker';
 import { HourMinute } from '@app/shared/lib';
-import { Coordinates } from '@app/shared/ui';
-import {
-  StackedRowItemValue,
-  Item,
-} from '@app/shared/ui/survey/StackedItemsGrid';
+import { Coordinates, StackedItem, StackedRowItemValue } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
 
 import { Tutorial } from './tutorial';
@@ -385,7 +381,7 @@ export type RadioResponse = string;
 
 export type TimeResponse = HourMinute;
 
-export type StackedCheckboxResponse = Array<Array<Item>> | null;
+export type StackedCheckboxResponse = Array<Array<StackedItem>> | null;
 
 export type StackedRadioResponse = Array<
   StackedRowItemValue & {
