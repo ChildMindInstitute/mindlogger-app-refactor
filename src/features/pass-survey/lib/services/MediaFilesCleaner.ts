@@ -1,6 +1,6 @@
 import { FileSystem } from 'react-native-file-access';
 
-import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
+import { ActivityRecordKeyParams } from '@app/abstract/lib';
 import { createSecureStorage } from '@app/shared/lib';
 
 import { ActivityState } from '../hooks';

@@ -2,12 +2,12 @@ import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 
 import {
+  ActivityRecordKeyParams,
   EntityPath,
   EntityType,
   LookupMediaInput,
   StoreProgress,
 } from '@app/abstract/lib';
-import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
 import { AppletModel, clearStorageRecords } from '@app/entities/applet';
 import {
   LocalEventDetail,

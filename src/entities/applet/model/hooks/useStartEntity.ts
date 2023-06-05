@@ -1,7 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query';
 
-import { LookupMediaInput, StoreProgressPayload } from '@app/abstract/lib';
-import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
+import {
+  ActivityRecordKeyParams,
+  LookupMediaInput,
+  StoreProgressPayload,
+} from '@app/abstract/lib';
 import { ActivityFlowRecordDto, AppletDetailsResponse } from '@app/shared/api';
 import {
   getAppletDetailsKey,
