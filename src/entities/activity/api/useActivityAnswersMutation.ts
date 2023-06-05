@@ -8,6 +8,7 @@ import {
   AnswerDto,
   AppletEncryptionDTO,
 } from '@app/shared/api';
+import { MediaValue } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
 import { encryption } from '@shared/lib';
 
@@ -31,11 +32,15 @@ const isFileUrl = (value: string) => {
   return localFileRegex.test(value);
 };
 
-const filterAnswers = (
+const filterMediaAnswers = (
   answers: AnswerDto[],
   answerFilter: AnswerDto,
 ): AnswerDto[] =>
-  answers.filter(answer => answer.activityId !== answerFilter.activityId);
+  answers.filter(answer => {
+    const mediaAnswer = answer?.value as MediaValue;
+    const mediaFilter = answerFilter?.value as MediaValue;
+    mediaAnswer.uri !== mediaFilter.uri;
+  });
 
 const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
   for (const itemAnswer of body.answers) {
@@ -45,13 +50,15 @@ const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
 
     const { value: answerValue } = itemAnswer;
 
-    const isMediaItem = answerValue?.uri && isFileUrl(answerValue.uri);
+    const mediaAnswer = answerValue as MediaValue;
+
+    const isMediaItem = mediaAnswer?.uri && isFileUrl(mediaAnswer.uri);
 
     if (isMediaItem) {
-      const localFileExists = await FileSystem.exists(answerValue.uri);
+      const localFileExists = await FileSystem.exists(mediaAnswer.uri);
       if (localFileExists) {
         try {
-          const uploadResult = await FileService.upload(answerValue);
+          const uploadResult = await FileService.upload(mediaAnswer);
 
           const url = uploadResult?.data.result.url;
 
@@ -59,14 +66,14 @@ const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
             itemAnswer.value = url;
           }
         } catch (error) {
-          const answers = filterAnswers(body.answers, itemAnswer);
+          const answers = filterMediaAnswers(body.answers, itemAnswer);
 
           body.answers = answers;
 
           console.error(error);
         }
       } else {
-        const answers = filterAnswers(body.answers, itemAnswer);
+        const answers = filterMediaAnswers(body.answers, itemAnswer);
 
         body.answers = answers;
       }

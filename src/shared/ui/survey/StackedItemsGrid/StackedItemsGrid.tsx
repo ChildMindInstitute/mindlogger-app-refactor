@@ -77,7 +77,7 @@ const RowHeader: FC<RowHeaderProps> = ({ options }) => {
         <AxisListItem maxWidth="25%" />
 
         {options.map((option, optionIndex) => (
-          <YStack flex={1}>
+          <YStack key={option.id} flex={1}>
             <AxisListItem key={optionIndex + optionIndex} option={option} />
           </YStack>
         ))}
@@ -143,7 +143,7 @@ const StackedItemsGrid: FC<StackedItemsGridProps> = ({
       <RowHeader options={options} />
 
       {items.map((item, index) => (
-        <RadioGroup value={getRadioValue(item)}>
+        <RadioGroup key={`StackGrid_${item.id}`} value={getRadioValue(item)}>
           <RowListItem
             options={options}
             item={item}

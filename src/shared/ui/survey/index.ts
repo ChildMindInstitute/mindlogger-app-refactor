@@ -17,3 +17,4 @@ export { default as SplashItem } from './SplashItem';
 export { default as TimeRangeItem } from './TimeRangeItem';
 export { default as DatePickerItem } from './DatePickerItem';
 export { default as TimePickerItem } from './TimePickerItem';
+export * from './StackedItemsGrid';

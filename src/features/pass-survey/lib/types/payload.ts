@@ -5,7 +5,7 @@ import {
   FlankerGameResponse,
 } from '@app/entities/flanker';
 import { HourMinute } from '@app/shared/lib';
-import { Coordinates } from '@app/shared/ui';
+import { Coordinates, StackedItem, StackedRowItemValue } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
 
 import { Tutorial } from './tutorial';
@@ -381,20 +381,15 @@ export type RadioResponse = string;
 
 export type TimeResponse = HourMinute;
 
-export type StackedCheckboxResponse = {
-  rowId: string;
-  optionIds: string[];
-}[];
+export type StackedCheckboxResponse = Array<Array<StackedItem>> | null;
 
-export type StackedRadioResponse = {
-  rowId: string;
-  optionId: string;
-}[];
+export type StackedRadioResponse = Array<
+  StackedRowItemValue & {
+    rowId: string;
+  }
+>;
 
-export type StackedSliderResponse = Array<{
-  rowId: string;
-  value: number;
-}>;
+export type StackedSliderResponse = Array<number>;
 
 export type PhotoResponse = {
   uri: string;

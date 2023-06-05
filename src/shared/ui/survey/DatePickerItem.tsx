@@ -12,7 +12,7 @@ type Props = {
 
 const DatePickerItem: FC<Props> = ({ value, onChange }) => {
   const onChangeDate = (date: Date) => {
-    const formattedDate = format(date, 'yyyy-mm-dd');
+    const formattedDate = format(date, 'yyyy-MM-dd');
 
     onChange(formattedDate);
   };
