@@ -197,8 +197,8 @@ function convertToGeolocationAnswer(answer: Answer): AnswerDto {
 
 function convertToStackedRadioAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as StackedRadioResponse;
-  const answerDto = answers.map(
-    answerItem => (answerItem ? answerItem.id : null), // @todo check with BE
+  const answerDto = answers.map(answerItem =>
+    answerItem ? answerItem.text : null,
   ) as string[];
 
   return {
@@ -214,7 +214,7 @@ function convertToStackedCheckboxAnswer(answer: Answer): AnswerDto {
 
   const answersDto = answers.map(answerRow => {
     if (answerRow) {
-      return answerRow.map(answerItem => (answerItem ? answerItem.id : null));
+      return answerRow.map(answerItem => (answerItem ? answerItem.text : null));
     }
 
     return null;
