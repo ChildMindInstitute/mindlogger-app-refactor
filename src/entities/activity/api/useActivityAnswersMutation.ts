@@ -112,7 +112,7 @@ const encryptAnswers = (data: SendAnswersInput) => {
         activityId: data.activityId,
         flowId: data.flowId,
         itemIds: data.itemIds,
-        userActions: encryptedUserActions,
+        events: encryptedUserActions,
       },
     ],
     userPublicKey: JSON.stringify(userPublicKey),

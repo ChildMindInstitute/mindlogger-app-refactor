@@ -75,7 +75,7 @@ export type EncryptedAnswerDto = {
   itemIds: string[];
   flowId: string | null;
   answer: string;
-  userActions: string;
+  events: string;
 };
 
 export type UserActionDto = {
