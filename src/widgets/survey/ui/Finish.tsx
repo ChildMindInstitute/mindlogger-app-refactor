@@ -8,7 +8,7 @@ import { EventModel } from '@app/entities/event';
 import { useActivityAnswersMutation } from '@entities/activity';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
-import { PassSurveyModel } from '@features/pass-survey';
+import { PassSurveyModel, MediaFilesCleaner } from '@features/pass-survey';
 import { LogTrigger } from '@shared/api';
 import {
   getUnixTimestamp,
@@ -86,6 +86,10 @@ function FinishItem({
       if (error.response.status !== 401 && error.evaluatedMessage) {
         onApiRequestError(error.evaluatedMessage);
       }
+    },
+    onSuccess: () => {
+      !isOffline &&
+        MediaFilesCleaner.cleanUp({ appletId, activityId, eventId, order });
     },
   });
 
