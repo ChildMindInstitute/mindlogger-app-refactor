@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { EntityType } from '@app/abstract/lib';
+import { MediaFilesCleaner } from '@app/features/pass-survey/lib/services';
 import {
   ActivityList,
   ActivityListItem,
@@ -25,6 +26,7 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
 
   const { startFlow, startActivity } = AppletModel.useStartEntity({
     hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
+    cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
   });
 
   function navigateSurvey(
