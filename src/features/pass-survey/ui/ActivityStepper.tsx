@@ -52,6 +52,8 @@ function ActivityStepper({
 
   const {
     activityStorageRecord,
+    userActionCreator,
+    trackUserAction,
     setStep: setCurrentStep,
     setAnswer,
     removeAnswer,
@@ -160,6 +162,12 @@ function ActivityStepper({
 
   const onUndo = () => {
     removeAnswer(currentStep);
+    restartIdleTimer();
+  };
+
+  const onEndReached = () => {
+    trackUserAction(userActionCreator.done());
+    onFinish();
   };
 
   if (!activityStorageRecord) {
@@ -182,11 +190,8 @@ function ActivityStepper({
         onBeforeNext={onBeforeNext}
         onBeforeBack={onBeforeBack}
         onStartReached={onClose}
-        onEndReached={onFinish}
-        onUndo={() => {
-          onUndo();
-          restartIdleTimer();
-        }}
+        onEndReached={onEndReached}
+        onUndo={onUndo}
       >
         {showWatermark && watermark && (
           <CachedImage source={watermark} style={styles.watermark} />

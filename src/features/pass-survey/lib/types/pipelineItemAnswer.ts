@@ -23,8 +23,8 @@ import {
   StackedRadioResponse,
 } from './payload';
 
-type PipelineItemAnswerBase = {
-  type: Exclude<ActivityItemType, 'Tutorial'>;
+export type PipelineItemAnswerBase = {
+  type: ActivityItemType;
   value: {
     answer?: PipelineItemResponse;
     additionalAnswer?: string;

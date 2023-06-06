@@ -46,7 +46,6 @@ export type GeolocationAnswerDto = {
 };
 
 export type AnswerValueDto =
-  | TextAnswerDto
   | SliderAnswerDto
   | NumberSelectAnswerDto
   | StackedSliderAnswerDto
@@ -64,16 +63,27 @@ export type AnswerValueDto =
   | GeolocationAnswerDto
   | null;
 
-export type AnswerDto = {
-  value: AnswerValueDto;
-  text?: string;
-} | null;
+export type AnswerDto =
+  | TextAnswerDto
+  | {
+      value: AnswerValueDto;
+      text?: string;
+    }
+  | null;
 
 export type EncryptedAnswerDto = {
   activityId: string;
   itemIds: string[];
   flowId: string | null;
   answer: string;
+  userActions: string;
+};
+
+export type UserActionDto = {
+  type: 'SET_ANSWER' | 'PREV' | 'NEXT' | 'DONE' | 'UNDO';
+  screen: string;
+  time: number;
+  response?: AnswerDto;
 };
 
 type ActivityAnswersRequest = {
