@@ -57,9 +57,7 @@ export function mapAnswersToDto(
 }
 
 function convertToTextAnswer(answer: Answer): AnswerDto {
-  return {
-    value: answer.answer as TextAnswerDto,
-  };
+  return answer.answer as TextAnswerDto;
 }
 
 function convertToSingleSelectAnswer(answer: Answer): AnswerDto {

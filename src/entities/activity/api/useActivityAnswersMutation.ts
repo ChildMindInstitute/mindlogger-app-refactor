@@ -42,7 +42,7 @@ const filterMediaAnswers = (
 
 const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
   for (const itemAnswer of body.answers) {
-    if (!isPlainObject(itemAnswer) || Array.isArray(itemAnswer)) {
+    if (!isPlainObject(itemAnswer)) {
       continue;
     }
 

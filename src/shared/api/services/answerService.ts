@@ -63,13 +63,12 @@ export type AnswerValueDto =
   | GeolocationAnswerDto
   | null;
 
-export type AnswerDto =
-  | TextAnswerDto
-  | {
-      value: AnswerValueDto;
-      text?: string;
-    }
-  | null;
+export type ObjectAnswerDto = {
+  value: AnswerValueDto;
+  text?: string;
+};
+
+export type AnswerDto = TextAnswerDto | ObjectAnswerDto | null;
 
 export type EncryptedAnswerDto = {
   activityId: string;
