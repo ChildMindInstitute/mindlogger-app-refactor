@@ -10,7 +10,7 @@ import {
 } from '@app/shared/api';
 import { MediaValue } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
-import { encryption } from '@shared/lib';
+import { encryption, wait } from '@shared/lib';
 
 type SendAnswersInput = {
   appletId: string;
@@ -121,6 +121,9 @@ const encryptAnswers = (data: SendAnswersInput) => {
   return encryptedData;
 };
 const sendAnswers = async (body: SendAnswersInput) => {
+  // This delay is for postponing encryption operation which blocks the UI thread
+  await wait(100);
+
   const data = await uploadAnswerMediaFiles(body);
   const encryptedData = encryptAnswers(data);
 

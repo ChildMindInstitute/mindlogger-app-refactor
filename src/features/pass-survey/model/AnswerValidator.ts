@@ -23,7 +23,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     isBetweenValues(min: number, max: number) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 
@@ -33,7 +33,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     isOutsideOfValues(min: number, max: number) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 
@@ -43,7 +43,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     isEqualToValue(value: any) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 
@@ -53,7 +53,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     isEqualToOption(optionId: string) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 
@@ -61,7 +61,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     isGreaterThen(value: number) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 
@@ -71,7 +71,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     isLessThen(value: number) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 
@@ -81,7 +81,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     includesOption(optionId: string) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 

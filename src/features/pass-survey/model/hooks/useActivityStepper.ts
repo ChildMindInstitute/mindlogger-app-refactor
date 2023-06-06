@@ -78,6 +78,20 @@ function useActivityStepper(state: ActivityState | undefined) {
     return shift;
   }
 
+  function getNextButtonText() {
+    const shift = getNextStepShift('forwards');
+
+    if (shift >= items.length) {
+      return 'activity_navigation:done';
+    }
+
+    return isLastStep
+      ? 'activity_navigation:done'
+      : canSkip
+      ? 'activity_navigation:skip'
+      : 'activity_navigation:next';
+  }
+
   return {
     isTutorialStep,
     isFirstStep,
@@ -94,6 +108,7 @@ function useActivityStepper(state: ActivityState | undefined) {
 
     isValid,
     getNextStepShift,
+    getNextButtonText,
   };
 }
 
