@@ -5,8 +5,14 @@ import {
   FlankerGameResponse,
 } from '@app/entities/flanker';
 import { HourMinute } from '@app/shared/lib';
-import { Coordinates, StackedItem, StackedRowItemValue } from '@app/shared/ui';
+import {
+  Coordinates,
+  Item,
+  StackedItem,
+  StackedRowItemValue,
+} from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
+import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
 
 import { Tutorial } from './tutorial';
 
@@ -159,6 +165,7 @@ type RadioPayload = {
     tooltip: string | null;
     color: string | null;
     isHidden: boolean;
+    value: number;
   }>;
 };
 
@@ -175,6 +182,7 @@ type CheckboxPayload = {
     tooltip: string | null;
     color: string | null;
     isHidden: boolean;
+    value: number;
   }>;
 };
 
@@ -360,7 +368,7 @@ export type SliderResponse = number | null;
 
 export type NumberSelectResponse = string;
 
-export type CheckboxResponse = string[] | null;
+export type CheckboxResponse = Item[] | null;
 
 export type DateResponse = string | null;
 
@@ -377,7 +385,7 @@ export type TimeRangeResponse = {
   endTime: HourMinute;
 };
 
-export type RadioResponse = string;
+export type RadioResponse = RadioOption;
 
 export type TimeResponse = HourMinute;
 

@@ -1,3 +1,5 @@
+import { Item } from '@app/shared/ui';
+
 import { Answers, PipelineItem } from '../lib';
 
 type AnswerValidatorArgs = {
@@ -85,9 +87,9 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
         return false;
       }
 
-      const answer = currentAnswer.answer as string[];
+      const answer = currentAnswer.answer as Item[];
 
-      return answer.includes(optionId);
+      return answer.find(answerItem => answerItem.id === optionId);
     },
   };
 }

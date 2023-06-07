@@ -25,6 +25,7 @@ import {
 } from '@app/shared/api';
 import { HourMinute, convertToDayMonthYear } from '@app/shared/lib';
 import { Item } from '@app/shared/ui';
+import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem';
 
 type Answer = PipelineItemAnswer['value'];
 
@@ -109,8 +110,10 @@ function convertToTextAnswer(answer: Answer): AnswerDto {
 }
 
 function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
+  const radioValue = answer.answer as RadioOption;
+
   return {
-    value: answer.answer as RadioAnswerDto,
+    value: { value: radioValue.value } as RadioAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
@@ -119,7 +122,7 @@ function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
 
 function convertToSliderAnswer(answer: Answer): AnswerDto {
   return {
-    value: answer.answer as SliderAnswerDto,
+    value: { value: answer.answer } as SliderAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
@@ -127,8 +130,11 @@ function convertToSliderAnswer(answer: Answer): AnswerDto {
 }
 
 function convertToCheckboxAnswer(answer: Answer): AnswerDto {
+  const checkboxAnswers = answer.answer as Item[];
+  const answerDto = checkboxAnswers.map(checkboxAnswer => checkboxAnswer.value);
+
   return {
-    value: answer.answer as CheckboxAnswerDto,
+    value: { value: answerDto } as CheckboxAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),

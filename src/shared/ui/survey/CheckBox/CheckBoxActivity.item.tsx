@@ -14,8 +14,8 @@ type Props = {
     setPalette: boolean;
     setAlerts: boolean;
   };
-  onChange: (values: string[] | null) => void;
-  values: string[];
+  onChange: (values: Item[] | null) => void;
+  values: Item[];
   textReplacer: (markdown: string) => string;
 };
 
@@ -27,16 +27,20 @@ const CheckBoxActivityItem: FC<Props> = ({
 }) => {
   const { options, randomizeOptions, addTooltip, setPalette } = config;
 
+  const findById = (id: string): Item | undefined => {
+    return values.find(val => val.id === id);
+  };
+
   const onItemValueChanged = (checkedItemValue: string) => {
-    const hasCheckedValue = values.includes(checkedItemValue);
+    const hasCheckedValue = findById(checkedItemValue);
 
     if (hasCheckedValue) {
-      const filteredValues = values.filter(val => val !== checkedItemValue);
+      const filteredValues = values.filter(val => val.id !== checkedItemValue);
       const value = filteredValues.length ? filteredValues : null;
 
       onChange(value);
     } else {
-      const value = [...values, checkedItemValue];
+      const value = [...values, findById(checkedItemValue)!];
 
       onChange(value);
     }
@@ -62,7 +66,7 @@ const CheckBoxActivityItem: FC<Props> = ({
               tooltipAvailable={addTooltip}
               setPalette={setPalette}
               onChange={() => onItemValueChanged(item.id)}
-              value={values.includes(item.id)}
+              value={!!findById(item.id)}
               textReplacer={textReplacer}
             />
           </Box>
