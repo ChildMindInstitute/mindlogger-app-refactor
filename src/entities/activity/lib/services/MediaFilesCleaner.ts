@@ -28,8 +28,6 @@ const createMediaFilesCleaner = (): Result => {
 
     const entityRecord = JSON.parse(storageActivityState) as EntityRecord;
 
-    console.log(entityRecord);
-
     const urlsToProcess: string[] = [];
 
     for (let recordId in entityRecord.answers) {
