@@ -5,10 +5,13 @@ import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
 import { EventModel } from '@app/entities/event';
-import { useActivityAnswersMutation } from '@entities/activity';
+import {
+  MediaFilesCleaner,
+  useActivityAnswersMutation,
+} from '@entities/activity';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
-import { PassSurveyModel, MediaFilesCleaner } from '@features/pass-survey';
+import { PassSurveyModel } from '@features/pass-survey';
 import { LogTrigger } from '@shared/api';
 import {
   getUnixTimestamp,

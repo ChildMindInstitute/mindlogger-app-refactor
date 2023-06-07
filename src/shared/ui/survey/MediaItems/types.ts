@@ -1,4 +1,4 @@
-type MediaValue = {
+export type MediaValue = {
   uri: string;
   fileName: string;
   size: number;
@@ -6,4 +6,8 @@ type MediaValue = {
   fromLibrary: boolean;
 };
 
-export default MediaValue;
+export type MediaFile = {
+  uri: string;
+  type: string;
+  fileName: string;
+};

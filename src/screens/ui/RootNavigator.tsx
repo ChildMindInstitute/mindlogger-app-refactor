@@ -8,9 +8,9 @@ import { useTranslation } from 'react-i18next';
 
 import { EntityPath, StoreProgress } from '@app/abstract/lib';
 import { ActivityModel } from '@app/entities/activity';
+import { MediaFilesCleaner } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
-import { MediaFilesCleaner } from '@app/features/pass-survey/lib/services';
 import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SessionModel } from '@entities/session';
 import { EnterForegroundModel } from '@features/enter-foreground';

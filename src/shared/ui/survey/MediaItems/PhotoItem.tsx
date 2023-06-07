@@ -21,7 +21,7 @@ import {
 import { PhotoIcon, Image } from '@shared/ui';
 
 import MediaInput from './MediaInput';
-import MediaValue from './types';
+import { MediaValue } from './types';
 
 type Props = {
   onChange: (value: MediaValue) => void;

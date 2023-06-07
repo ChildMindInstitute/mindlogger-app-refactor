@@ -2,9 +2,11 @@ import { FileSystem } from 'react-native-file-access';
 
 import { ActivityRecordKeyParams } from '@app/abstract/lib';
 import { createSecureStorage } from '@app/shared/lib';
+import { MediaFile } from '@app/shared/ui';
 
-import { ActivityState } from '../hooks';
-import { AudioResponse, PhotoResponse, VideoResponse } from '../types';
+type EntityRecord = {
+  answers: Record<string, MediaFile | undefined>;
+};
 
 export const activityStorage = createSecureStorage('activity_progress-storage');
 
@@ -24,37 +26,17 @@ const createMediaFilesCleaner = (): Result => {
       return;
     }
 
-    const activityState = JSON.parse(storageActivityState) as ActivityState;
+    const entityRecord = JSON.parse(storageActivityState) as EntityRecord;
+
+    console.log(entityRecord);
 
     const urlsToProcess: string[] = [];
 
-    for (let i = 0; i < activityState.items.length; i++) {
-      let item = activityState.items[i];
+    for (let recordId in entityRecord.answers) {
+      const record = entityRecord.answers[recordId];
 
-      switch (item.type) {
-        case 'Photo': {
-          const answer = activityState.answers[i]?.answer as PhotoResponse;
-
-          if (answer?.uri) {
-            urlsToProcess.push(answer.uri);
-          }
-          break;
-        }
-        case 'Video': {
-          const answer = activityState.answers[i]?.answer as VideoResponse;
-
-          if (answer?.uri) {
-            urlsToProcess.push(answer.uri);
-          }
-          break;
-        }
-        case 'Audio': {
-          const answer = activityState.answers[i]?.answer as AudioResponse;
-
-          if (answer?.uri) {
-            urlsToProcess.push(answer.uri);
-          }
-        }
+      if (record?.uri) {
+        urlsToProcess.push(record.uri);
       }
     }
 

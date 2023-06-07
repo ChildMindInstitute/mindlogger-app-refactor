@@ -1,5 +1,5 @@
-import { MediaFilesCleaner } from '@app/features/pass-survey/lib/services';
 import { createSecureStorage, createStorage } from '@app/shared/lib';
+import { MediaFilesCleaner } from '@entities/activity/lib/services';
 
 const activitiesStorage = createSecureStorage('activity_progress-storage');
 
