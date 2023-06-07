@@ -65,6 +65,7 @@ const slice = createSlice({
         type: ActivityPipelineType.Flow,
         currentActivityId: activityId,
         startAt: new Date().getTime(),
+        lastActivityStartAt: new Date().getTime(),
         endAt: null,
         pipelineActivityOrder,
       };
@@ -84,6 +85,7 @@ const slice = createSlice({
 
       event.currentActivityId = activityId;
       event.pipelineActivityOrder = pipelineActivityOrder;
+      event.lastActivityStartAt = new Date().getTime();
     },
 
     entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {

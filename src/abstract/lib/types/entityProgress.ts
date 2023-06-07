@@ -8,6 +8,7 @@ export type FlowProgress = {
   type: ActivityPipelineType.Flow;
   currentActivityId: string;
   pipelineActivityOrder: number;
+  lastActivityStartAt: number | null;
 };
 
 export type ActivityProgress = {

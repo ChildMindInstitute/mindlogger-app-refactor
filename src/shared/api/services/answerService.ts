@@ -2,7 +2,6 @@ import { AxiosResponse } from 'axios';
 
 import { DayMonthYear, HourMinute } from '@app/shared/lib';
 import { MediaValue } from '@app/shared/ui';
-import { AppletEncryptionDTO } from '@shared/api';
 
 import httpService from './httpService';
 import { SuccessfulEmptyResponse } from '../types';
@@ -71,11 +70,13 @@ export type ObjectAnswerDto = {
 export type AnswerDto = TextAnswerDto | ObjectAnswerDto | null;
 
 export type EncryptedAnswerDto = {
-  activityId: string;
   itemIds: string[];
-  flowId: string | null;
   answer: string;
   events: string;
+  scheduledTime?: number;
+  startTime: number;
+  endTime: number;
+  userPublicKey: string;
 };
 
 export type UserActionDto = {
@@ -87,11 +88,11 @@ export type UserActionDto = {
 
 export type ActivityAnswersRequest = {
   appletId: string;
+  activityId: string;
+  flowId: string | null;
   version: string;
   createdAt: number;
-  answers: EncryptedAnswerDto[];
-  userPublicKey?: string;
-  appletEncryption?: AppletEncryptionDTO | null;
+  answer: EncryptedAnswerDto;
 };
 
 type ActivityAnswersResponse = SuccessfulEmptyResponse;

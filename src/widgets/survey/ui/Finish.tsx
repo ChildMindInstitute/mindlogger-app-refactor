@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
+import { EventModel } from '@app/entities/event';
 import { useActivityAnswersMutation } from '@entities/activity';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
@@ -17,7 +18,7 @@ import {
 } from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
-import { FinishReason } from '../model';
+import { FinishReason, getActivityStartAt, getScheduledDate } from '../model';
 import { mapAnswersToDto, mapUserActionsToDto } from '../model/mappers';
 
 type Props = {
@@ -46,6 +47,10 @@ function FinishItem({
     select: response =>
       AppletModel.mapAppletDetailsFromDto(response.data.result),
   });
+
+  const entityId = flowId ? flowId : activityId;
+
+  const scheduledEvent = EventModel.useScheduledEvent({ appletId, eventId });
 
   const appletEncryption = applet?.encryption || null;
 
@@ -117,6 +122,10 @@ function FinishItem({
         },
       );
 
+      const entityEvent = storeProgress[appletId][entityId][eventId];
+
+      const scheduledDate = getScheduledDate(scheduledEvent!);
+
       sendAnswers({
         appletId,
         createdAt: getUnixTimestamp(Date.now()),
@@ -127,6 +136,11 @@ function FinishItem({
         appletEncryption,
         flowId: flowId ?? null,
         activityId: activityId,
+        startTime: getUnixTimestamp(getActivityStartAt(entityEvent)!),
+        endTime: getUnixTimestamp(Date.now()),
+        ...(scheduledDate && {
+          scheduledTime: getUnixTimestamp(scheduledDate),
+        }),
       });
     }
 

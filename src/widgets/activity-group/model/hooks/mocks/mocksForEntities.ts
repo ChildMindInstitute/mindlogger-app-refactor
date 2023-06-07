@@ -24,6 +24,7 @@ export const progress: Progress = {
         type: ActivityPipelineType.Flow,
         endAt: null,
         pipelineActivityOrder: 0,
+        lastActivityStartAt: null,
       },
     },
   },

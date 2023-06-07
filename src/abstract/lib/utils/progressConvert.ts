@@ -32,6 +32,7 @@ export const convertProgress = (storeProgress: StoreProgress): Progress => {
           endAt: !storePayload.endAt ? null : new Date(storePayload.endAt),
           startAt: new Date(storePayload.startAt),
           type: storePayload.type,
+          lastActivityStartAt: null,
           pipelineActivityOrder: (storePayload as FlowProgress)
             .pipelineActivityOrder,
         };

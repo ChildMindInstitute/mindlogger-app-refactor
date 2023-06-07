@@ -3,23 +3,31 @@ import { useCallback, useEffect } from 'react';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
+import { StoreProgress } from '@app/abstract/lib';
 import { useActivityAnswersMutation } from '@app/entities/activity';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 import {
   mapActivitiesFromDto,
   mapActivityFlowFromDto,
 } from '@app/entities/applet/model';
+import { EventModel } from '@app/entities/event';
 import { PassSurveyModel } from '@app/features/pass-survey';
 import {
   getUnixTimestamp,
   onApiRequestError,
   useAppDispatch,
+  useAppSelector,
 } from '@app/shared/lib';
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
 import { useFlowStorageRecord } from '../lib';
-import { mapAnswersToDto, mapUserActionsToDto } from '../model';
+import {
+  getActivityStartAt,
+  getScheduledDate,
+  mapAnswersToDto,
+  mapUserActionsToDto,
+} from '../model';
 
 type Props = {
   appletId: string;
@@ -79,6 +87,10 @@ function Intermediate({
     flowId,
   });
 
+  const storeProgress: StoreProgress = useAppSelector(
+    AppletModel.selectors.selectInProgressApplets,
+  );
+
   const { step, pipeline } = flowStorageRecord!;
 
   const nextFlowItem = pipeline[step + 1];
@@ -92,6 +104,10 @@ function Intermediate({
   const nextActivityId = nextFlowItem.payload.activityId;
 
   const nextActivity = allActivities?.find(x => x.id === nextActivityId);
+
+  const entityId = flowId ? flowId : activityId;
+
+  const scheduledEvent = EventModel.useScheduledEvent({ appletId, eventId });
 
   const { activityStorageRecord, clearActivityStorageRecord } =
     PassSurveyModel.useActivityState({
@@ -161,6 +177,10 @@ function Intermediate({
         },
       );
 
+      const entityEvent = storeProgress[appletId][entityId][eventId];
+
+      const scheduledDate = getScheduledDate(scheduledEvent!);
+
       sendAnswers({
         appletId,
         createdAt: getUnixTimestamp(Date.now()),
@@ -171,6 +191,12 @@ function Intermediate({
         appletEncryption,
         flowId: flowId ?? null,
         activityId: activityId,
+        scheduledTime: scheduledDate,
+        startTime: getUnixTimestamp(getActivityStartAt(entityEvent)!),
+        endTime: getUnixTimestamp(Date.now()),
+        ...(scheduledDate && {
+          scheduledTime: getUnixTimestamp(scheduledDate),
+        }),
       });
     }
   }
