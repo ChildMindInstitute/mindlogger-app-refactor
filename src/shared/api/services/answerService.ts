@@ -9,17 +9,17 @@ import { SuccessfulEmptyResponse } from '../types';
 
 export type TextAnswerDto = string;
 
-export type SliderAnswerDto = { value: number };
+export type SliderAnswerDto = number;
 
 export type NumberSelectAnswerDto = string;
 
 export type StackedSliderAnswerDto = Array<number>;
 
-export type CheckboxAnswerDto = { value: number[] };
+export type CheckboxAnswerDto = number[];
 
 export type StackedCheckboxAnswerDto = Array<Array<string>>;
 
-export type RadioAnswerDto = { value: number };
+export type RadioAnswerDto = number;
 
 export type StackedRadioAnswerDto = Array<string>;
 

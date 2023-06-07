@@ -113,7 +113,7 @@ function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
   const radioValue = answer.answer as RadioOption;
 
   return {
-    value: { value: radioValue.value } as RadioAnswerDto,
+    value: radioValue.value as RadioAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
@@ -122,7 +122,7 @@ function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
 
 function convertToSliderAnswer(answer: Answer): AnswerDto {
   return {
-    value: { value: answer.answer } as SliderAnswerDto,
+    value: answer.answer as SliderAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
@@ -134,7 +134,7 @@ function convertToCheckboxAnswer(answer: Answer): AnswerDto {
   const answerDto = checkboxAnswers.map(checkboxAnswer => checkboxAnswer.value);
 
   return {
-    value: { value: answerDto } as CheckboxAnswerDto,
+    value: answerDto as CheckboxAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
