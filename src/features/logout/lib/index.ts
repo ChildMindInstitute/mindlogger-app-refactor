@@ -1,1 +1,1 @@
-export * from './clearInternalStorage';
+export * from './clearEntityRecordStorages';

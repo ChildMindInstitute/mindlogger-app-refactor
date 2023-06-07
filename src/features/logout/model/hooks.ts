@@ -9,7 +9,7 @@ import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
 import { hasPendingMutations, isAppOnline, useAppDispatch } from '@shared/lib';
 
-import { clearInternalStorage } from '../lib';
+import { clearEntityRecordStorages } from '../lib';
 
 export function useLogout() {
   const dispatch = useAppDispatch();
@@ -22,7 +22,7 @@ export function useLogout() {
 
     CacheManager.clearCache();
 
-    clearInternalStorage();
+    clearEntityRecordStorages();
 
     await queryClient.removeQueries(['applets']);
     await queryClient.removeQueries(['events']);

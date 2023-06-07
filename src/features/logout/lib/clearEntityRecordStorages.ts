@@ -5,7 +5,7 @@ const activitiesStorage = createSecureStorage('activity_progress-storage');
 
 const flowsStorage = createStorage('flow_progress-storage');
 
-export const clearInternalStorage = async () => {
+export const clearEntityRecordStorages = async () => {
   activitiesStorage.getAllKeys().forEach(activityKey => {
     MediaFilesCleaner.cleanUpByStorageKey(activityKey);
   });
