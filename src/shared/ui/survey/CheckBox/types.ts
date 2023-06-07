@@ -8,4 +8,5 @@ export type Item = {
   tooltip: string | null;
   image: ImageUrl | null;
   score: number | null;
+  value: number;
 };

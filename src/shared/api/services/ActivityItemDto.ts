@@ -160,6 +160,7 @@ type SingleSelectionAnswerSettings = {
     tooltip: string | null;
     color: string | null;
     isHidden: boolean;
+    value: number;
   }>;
 };
 
@@ -182,6 +183,7 @@ type MultiSelectionAnswerSettings = {
     tooltip: string | null;
     color: string | null;
     isHidden: boolean;
+    value: number;
   }>;
 };
 

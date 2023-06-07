@@ -13,8 +13,8 @@ type RadioActivityItemProps = {
     addTooltip: boolean;
     randomizeOptions: boolean;
   };
-  onChange: (value: string) => void;
-  initialValue?: string;
+  onChange: (value: RadioOption) => void;
+  initialValue?: RadioOption;
   textReplacer: (markdown: string) => string;
 };
 
@@ -36,13 +36,15 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
   }, [randomizeOptions]);
 
   const onValueChange = (value: string) => {
-    onChange(value);
+    const selectedOption = options.find(option => option.id === value);
+
+    onChange(selectedOption!);
   };
 
   return (
     <YStack>
       <RadioGroup
-        value={initialValue ?? ''}
+        value={initialValue?.id ?? ''}
         onValueChange={onValueChange}
         name="radio"
       >

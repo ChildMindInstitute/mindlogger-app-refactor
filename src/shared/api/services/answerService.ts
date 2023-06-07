@@ -15,11 +15,11 @@ export type NumberSelectAnswerDto = string;
 
 export type StackedSliderAnswerDto = Array<number>;
 
-export type CheckboxAnswerDto = string[];
+export type CheckboxAnswerDto = number[];
 
 export type StackedCheckboxAnswerDto = Array<Array<string>>;
 
-export type RadioAnswerDto = string;
+export type RadioAnswerDto = number;
 
 export type StackedRadioAnswerDto = Array<string>;
 

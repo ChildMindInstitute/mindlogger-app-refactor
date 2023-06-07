@@ -25,6 +25,7 @@ import {
 } from '@app/shared/api';
 import { HourMinute, convertToDayMonthYear } from '@app/shared/lib';
 import { Item } from '@app/shared/ui';
+import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem';
 
 type Answer = PipelineItemAnswer['value'];
 
@@ -109,8 +110,10 @@ function convertToTextAnswer(answer: Answer): AnswerDto {
 }
 
 function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
+  const radioValue = answer.answer as RadioOption;
+
   return {
-    value: answer.answer as RadioAnswerDto,
+    value: radioValue.value as RadioAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
@@ -127,8 +130,11 @@ function convertToSliderAnswer(answer: Answer): AnswerDto {
 }
 
 function convertToCheckboxAnswer(answer: Answer): AnswerDto {
+  const checkboxAnswers = answer.answer as Item[];
+  const answerDto = checkboxAnswers.map(checkboxAnswer => checkboxAnswer.value);
+
   return {
-    value: answer.answer as CheckboxAnswerDto,
+    value: answerDto as CheckboxAnswerDto,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
@@ -197,8 +203,8 @@ function convertToGeolocationAnswer(answer: Answer): AnswerDto {
 
 function convertToStackedRadioAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as StackedRadioResponse;
-  const answerDto = answers.map(
-    answerItem => (answerItem ? answerItem.id : null), // @todo check with BE
+  const answerDto = answers.map(answerItem =>
+    answerItem ? answerItem.text : null,
   ) as string[];
 
   return {
@@ -214,7 +220,7 @@ function convertToStackedCheckboxAnswer(answer: Answer): AnswerDto {
 
   const answersDto = answers.map(answerRow => {
     if (answerRow) {
-      return answerRow.map(answerItem => (answerItem ? answerItem.id : null));
+      return answerRow.map(answerItem => (answerItem ? answerItem.text : null));
     }
 
     return null;
