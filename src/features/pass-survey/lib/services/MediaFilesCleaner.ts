@@ -10,17 +10,11 @@ export const activityStorage = createSecureStorage('activity_progress-storage');
 
 type Result = {
   cleanUp: (keyParams: ActivityRecordKeyParams) => void;
+  cleanUpByStorageKey: (key: string) => void;
 };
 
 const createMediaFilesCleaner = (): Result => {
-  const cleanUp = async ({
-    appletId,
-    activityId,
-    eventId,
-    order,
-  }: ActivityRecordKeyParams) => {
-    const key = `${appletId}-${activityId}-${eventId}-${order}`;
-
+  const cleanUpByStorageKey = async (key: string) => {
     const storageActivityState = activityStorage.getString(key);
 
     if (!storageActivityState) {
@@ -82,8 +76,20 @@ const createMediaFilesCleaner = (): Result => {
     console.info('[MediaFilesCleaner.cleanUp]: completed');
   };
 
+  const cleanUp = async ({
+    appletId,
+    activityId,
+    eventId,
+    order,
+  }: ActivityRecordKeyParams) => {
+    const key = `${appletId}-${activityId}-${eventId}-${order}`;
+
+    return cleanUpByStorageKey(key);
+  };
+
   return {
     cleanUp,
+    cleanUpByStorageKey,
   };
 };
 
