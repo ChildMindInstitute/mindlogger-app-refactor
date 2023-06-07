@@ -1,5 +1,5 @@
 import { createSecureStorage, createStorage } from '@app/shared/lib';
-import { MediaFilesCleaner } from '@entities/activity/lib/services';
+import { MediaFilesCleaner } from '@entities/activity';
 
 const activitiesStorage = createSecureStorage('activity_progress-storage');
 
