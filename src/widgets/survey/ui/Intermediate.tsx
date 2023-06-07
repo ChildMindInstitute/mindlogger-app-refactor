@@ -26,6 +26,7 @@ import {
   getActivityStartAt,
   getGroupKey,
   getScheduledDate,
+  getUserIdentifier,
   mapAnswersToDto,
   mapUserActionsToDto,
 } from '../model';
@@ -184,6 +185,13 @@ function Intermediate({
 
       const groupKey = getGroupKey(entityEvent);
 
+      const userIdentifier = getUserIdentifier(
+        activityStorageRecord.items,
+        activityStorageRecord.answers,
+      );
+
+      const scheduledTime = scheduledDate && getUnixTimestamp(scheduledDate);
+
       sendAnswers({
         appletId,
         createdAt: getUnixTimestamp(Date.now()),
@@ -195,12 +203,10 @@ function Intermediate({
         flowId: flowId ?? null,
         activityId: activityId,
         groupKey,
-        scheduledTime: scheduledDate,
+        userIdentifier,
         startTime: getUnixTimestamp(getActivityStartAt(entityEvent)!),
         endTime: getUnixTimestamp(Date.now()),
-        ...(scheduledDate && {
-          scheduledTime: getUnixTimestamp(scheduledDate),
-        }),
+        scheduledTime,
       });
     }
   }

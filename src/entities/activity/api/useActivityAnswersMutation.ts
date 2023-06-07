@@ -29,6 +29,7 @@ type SendAnswersInput = {
   scheduledTime?: number;
   startTime: number;
   endTime: number;
+  userIdentifier?: string;
 };
 
 type Options = MutationOptions<typeof sendAnswers>;
@@ -106,6 +107,8 @@ const encryptAnswers = (data: SendAnswersInput) => {
 
   const encryptedUserActions = encrypt(JSON.stringify(data.userActions));
 
+  const identifier = data.userIdentifier && encrypt(data.userIdentifier);
+
   const userPublicKey = encryption.getPublicKey({
     privateKey: userPrivateKey,
     appletPrime: JSON.parse(appletEncryption.prime),
@@ -126,6 +129,7 @@ const encryptAnswers = (data: SendAnswersInput) => {
       endTime: data.endTime,
       scheduledTime: data.scheduledTime,
       userPublicKey: JSON.stringify(userPublicKey),
+      identifier,
     },
     createdAt: data.createdAt,
   };

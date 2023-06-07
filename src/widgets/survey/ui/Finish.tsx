@@ -23,6 +23,7 @@ import {
   getActivityStartAt,
   getGroupKey,
   getScheduledDate,
+  getUserIdentifier,
 } from '../model';
 import { mapAnswersToDto, mapUserActionsToDto } from '../model/mappers';
 
@@ -119,6 +120,11 @@ function FinishItem({
         activityStorageRecord.answers,
       );
 
+      const userIdentifier = getUserIdentifier(
+        activityStorageRecord.items,
+        activityStorageRecord.answers,
+      );
+
       const userActions = mapUserActionsToDto(activityStorageRecord.actions);
 
       const itemIds = Object.entries(activityStorageRecord.answers).map(
@@ -133,6 +139,8 @@ function FinishItem({
 
       const groupKey = getGroupKey(entityEvent);
 
+      const scheduledTime = scheduledDate && getUnixTimestamp(scheduledDate);
+
       sendAnswers({
         appletId,
         createdAt: getUnixTimestamp(Date.now()),
@@ -144,11 +152,10 @@ function FinishItem({
         flowId: flowId ?? null,
         activityId: activityId,
         groupKey,
+        userIdentifier,
         startTime: getUnixTimestamp(getActivityStartAt(entityEvent)!),
         endTime: getUnixTimestamp(Date.now()),
-        ...(scheduledDate && {
-          scheduledTime: getUnixTimestamp(scheduledDate),
-        }),
+        scheduledTime,
       });
     }
 

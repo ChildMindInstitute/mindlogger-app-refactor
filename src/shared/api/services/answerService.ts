@@ -77,6 +77,7 @@ export type EncryptedAnswerDto = {
   startTime: number;
   endTime: number;
   userPublicKey: string;
+  identifier?: string;
 };
 
 export type UserActionDto = {
