@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   ActivityPipelineType,
   AvailabilityType,
@@ -17,4 +19,10 @@ export const getActivityStartAt = (entityEvent: StoreProgressPayload) => {
   return entityEvent.type === ActivityPipelineType.Regular
     ? entityEvent.startAt
     : entityEvent.lastActivityStartAt;
+};
+
+export const getGroupKey = (entityEvent: StoreProgressPayload) => {
+  return entityEvent.type === ActivityPipelineType.Flow
+    ? entityEvent.groupKey
+    : uuidv4();
 };

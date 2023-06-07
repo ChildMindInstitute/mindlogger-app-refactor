@@ -92,6 +92,7 @@ export type ActivityAnswersRequest = {
   flowId: string | null;
   version: string;
   createdAt: number;
+  submitId: string;
   answer: EncryptedAnswerDto;
 };
 

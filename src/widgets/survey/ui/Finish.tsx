@@ -18,7 +18,12 @@ import {
 } from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
-import { FinishReason, getActivityStartAt, getScheduledDate } from '../model';
+import {
+  FinishReason,
+  getActivityStartAt,
+  getGroupKey,
+  getScheduledDate,
+} from '../model';
 import { mapAnswersToDto, mapUserActionsToDto } from '../model/mappers';
 
 type Props = {
@@ -126,6 +131,8 @@ function FinishItem({
 
       const scheduledDate = getScheduledDate(scheduledEvent!);
 
+      const groupKey = getGroupKey(entityEvent);
+
       sendAnswers({
         appletId,
         createdAt: getUnixTimestamp(Date.now()),
@@ -136,6 +143,7 @@ function FinishItem({
         appletEncryption,
         flowId: flowId ?? null,
         activityId: activityId,
+        groupKey,
         startTime: getUnixTimestamp(getActivityStartAt(entityEvent)!),
         endTime: getUnixTimestamp(Date.now()),
         ...(scheduledDate && {

@@ -24,6 +24,7 @@ type SendAnswersInput = {
   itemIds: string[];
   flowId: string | null;
   activityId: string;
+  groupKey: string;
   userActions: UserActionDto[];
   scheduledTime?: number;
   startTime: number;
@@ -115,6 +116,7 @@ const encryptAnswers = (data: SendAnswersInput) => {
     appletId: data.appletId,
     version: data.version,
     flowId: data.flowId,
+    submitId: data.groupKey,
     activityId: data.activityId,
     answer: {
       answer: encryptedAnswers,

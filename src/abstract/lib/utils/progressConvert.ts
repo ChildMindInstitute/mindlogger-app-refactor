@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   FlowProgress,
   Progress,
@@ -33,6 +35,7 @@ export const convertProgress = (storeProgress: StoreProgress): Progress => {
           startAt: new Date(storePayload.startAt),
           type: storePayload.type,
           lastActivityStartAt: null,
+          groupKey: uuidv4(),
           pipelineActivityOrder: (storePayload as FlowProgress)
             .pipelineActivityOrder,
         };

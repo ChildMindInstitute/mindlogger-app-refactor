@@ -24,6 +24,7 @@ import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 import { useFlowStorageRecord } from '../lib';
 import {
   getActivityStartAt,
+  getGroupKey,
   getScheduledDate,
   mapAnswersToDto,
   mapUserActionsToDto,
@@ -181,6 +182,8 @@ function Intermediate({
 
       const scheduledDate = getScheduledDate(scheduledEvent!);
 
+      const groupKey = getGroupKey(entityEvent);
+
       sendAnswers({
         appletId,
         createdAt: getUnixTimestamp(Date.now()),
@@ -191,6 +194,7 @@ function Intermediate({
         appletEncryption,
         flowId: flowId ?? null,
         activityId: activityId,
+        groupKey,
         scheduledTime: scheduledDate,
         startTime: getUnixTimestamp(getActivityStartAt(entityEvent)!),
         endTime: getUnixTimestamp(Date.now()),

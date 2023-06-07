@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   ActivityPipelineType,
@@ -67,6 +68,7 @@ const slice = createSlice({
         startAt: new Date().getTime(),
         lastActivityStartAt: new Date().getTime(),
         endAt: null,
+        groupKey: uuidv4(),
         pipelineActivityOrder,
       };
 
