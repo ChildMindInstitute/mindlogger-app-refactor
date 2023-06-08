@@ -6,7 +6,12 @@ import { QueryClient, onlineManager } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
 import { sendAnswers } from '@app/entities/activity';
-import { createSecureAsyncStorage, ONE_HOUR, useSplash } from '@shared/lib';
+import {
+  createSecureAsyncStorage,
+  isAppOnline,
+  ONE_HOUR,
+  useSplash,
+} from '@shared/lib';
 
 const storage = createSecureAsyncStorage('cache-storage');
 
@@ -24,6 +29,10 @@ const queryClient = new QueryClient({
   },
 });
 
+queryClient.setMutationDefaults(['send_answers'], {
+  mutationFn: sendAnswers,
+});
+
 const asyncPersist = createAsyncStoragePersister({
   key: 'OFFLINE_CACHE',
   storage,
@@ -37,7 +46,13 @@ onlineManager.setEventListener(setOnline => {
       state.isConnected &&
       Boolean(state.isInternetReachable);
 
+    const mutations = queryClient.getMutationCache().getAll();
+
     setOnline(status);
+
+    if (mutations.length && status) {
+      queryClient.resumePausedMutations();
+    }
   });
 });
 
@@ -51,19 +66,12 @@ const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
   const { onModuleInitialized } = useSplash();
 
   const onCacheRestored = () => {
-    queryClient.setMutationDefaults(['send_answers'], {
-      mutationFn: sendAnswers,
-      onMutate: async () => {
-        const optimisticMutation = true;
-
-        return { optimisticMutation };
-      },
-      retry: 0,
+    isAppOnline().then(isOnline => {
+      if (isOnline) {
+        onlineManager.setOnline(true);
+        queryClient.resumePausedMutations();
+      }
     });
-
-    queryClient
-      .resumePausedMutations()
-      .then(() => queryClient.invalidateQueries());
 
     onModuleInitialized('cache');
   };
