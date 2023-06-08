@@ -1,7 +1,8 @@
+import { useMutation } from '@tanstack/react-query';
 import { FileSystem } from 'react-native-file-access';
 
 import {
-  useBaseMutation,
+  // useBaseMutation,
   AnswerService,
   MutationOptions,
   FileService,
@@ -120,7 +121,7 @@ const encryptAnswers = (data: SendAnswersInput) => {
   };
   return encryptedData;
 };
-const sendAnswers = async (body: SendAnswersInput) => {
+export const sendAnswers = async (body: SendAnswersInput) => {
   // This delay is for postponing encryption operation which blocks the UI thread
   await wait(100);
 
@@ -131,5 +132,9 @@ const sendAnswers = async (body: SendAnswersInput) => {
 };
 
 export const useActivityAnswersMutation = (options?: Options) => {
-  return useBaseMutation(sendAnswers, options);
+  return useMutation({ mutationKey: ['send_answers'], ...options });
+  // return useBaseMutation(sendAnswers, {
+  //   mutationKey: ['send_answers'],
+  //   ...options,
+  // });
 };
