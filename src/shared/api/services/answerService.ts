@@ -85,7 +85,7 @@ export type UserActionDto = {
   response?: AnswerDto;
 };
 
-type ActivityAnswersRequest = {
+export type ActivityAnswersRequest = {
   appletId: string;
   version: string;
   createdAt: number;

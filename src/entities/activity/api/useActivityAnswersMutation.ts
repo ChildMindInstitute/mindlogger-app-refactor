@@ -9,6 +9,7 @@ import {
   AnswerDto,
   AppletEncryptionDTO,
   UserActionDto,
+  ActivityAnswersRequest,
 } from '@app/shared/api';
 import { MediaValue } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
@@ -41,7 +42,9 @@ const filterMediaAnswers = (
 ): AnswerDto[] => answers.filter(answer => answer !== answerFilter);
 
 const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
-  for (const itemAnswer of body.answers) {
+  const itemsAnswers = [...body.answers];
+
+  for (const itemAnswer of itemsAnswers) {
     if (!isPlainObject(itemAnswer)) {
       continue;
     }
@@ -77,6 +80,7 @@ const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
       }
     }
   }
+
   return body;
 };
 
@@ -103,7 +107,7 @@ const encryptAnswers = (data: SendAnswersInput) => {
     appletBase: JSON.parse(appletEncryption.base),
   });
 
-  const encryptedData = {
+  const encryptedData: ActivityAnswersRequest = {
     appletId: data.appletId,
     version: data.version,
     answers: [
@@ -118,6 +122,7 @@ const encryptAnswers = (data: SendAnswersInput) => {
     userPublicKey: JSON.stringify(userPublicKey),
     createdAt: data.createdAt,
   };
+
   return encryptedData;
 };
 export const sendAnswers = async (body: SendAnswersInput) => {
