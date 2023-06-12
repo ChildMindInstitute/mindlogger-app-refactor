@@ -91,8 +91,7 @@ function FinishItem({
       }
     },
     onSuccess: () => {
-      !isOffline &&
-        MediaFilesCleaner.cleanUp({ appletId, activityId, eventId, order });
+      MediaFilesCleaner.cleanUp({ appletId, activityId, eventId, order });
     },
   });
 
