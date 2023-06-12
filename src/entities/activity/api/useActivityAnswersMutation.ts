@@ -45,6 +45,7 @@ const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
   const itemsAnswers = [...body.answers];
 
   for (const itemAnswer of itemsAnswers) {
+    // Item answer is either string or object.
     if (!isPlainObject(itemAnswer)) {
       continue;
     }
