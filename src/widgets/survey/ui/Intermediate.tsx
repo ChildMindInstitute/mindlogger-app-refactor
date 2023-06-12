@@ -19,7 +19,7 @@ import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
 import { useFlowStorageRecord } from '../lib';
-import { mapAnswersToDto } from '../model';
+import { mapAnswersToDto, mapUserActionsToDto } from '../model';
 
 type Props = {
   appletId: string;
@@ -153,6 +153,8 @@ function Intermediate({
         activityStorageRecord.answers,
       );
 
+      const userActions = mapUserActionsToDto(activityStorageRecord.actions);
+
       const itemIds = Object.entries(activityStorageRecord.answers).map(
         ([_step]) => {
           return activityStorageRecord.items[Number(_step)]?.id!;
@@ -164,6 +166,7 @@ function Intermediate({
         createdAt: getUnixTimestamp(Date.now()),
         version: activityStorageRecord.appletVersion,
         answers: answers,
+        userActions,
         itemIds,
         appletEncryption,
         flowId: flowId ?? null,

@@ -1,8 +1,10 @@
 import {
+  ActivityItemType,
   Answers,
   PipelineItem,
   PipelineItemAnswer,
   StackedRadioResponse,
+  UserAction,
 } from '@app/features/pass-survey';
 import {
   AnswerDto,
@@ -22,6 +24,7 @@ import {
   TimeAnswerDto,
   TimeRangeAnswerDto,
   VideoAnswerDto,
+  UserActionDto,
 } from '@app/shared/api';
 import { HourMinute, convertToDayMonthYear } from '@app/shared/lib';
 import { Item } from '@app/shared/ui';
@@ -46,67 +49,15 @@ export function mapAnswersToDto(
 
   const result = filteredAnswers.map(([step, answer]) => {
     const pipelineItem = pipeline[+step];
-    switch (pipelineItem.type) {
-      case 'TextInput':
-        return convertToTextAnswer(answer);
 
-      case 'Radio':
-        return convertToSingleSelectAnswer(answer);
-
-      case 'Checkbox':
-        return convertToCheckboxAnswer(answer);
-
-      case 'Slider':
-        return convertToSliderAnswer(answer);
-
-      case 'Date':
-        return convertToDateAnswerAnswer(answer);
-
-      case 'NumberSelect':
-        return convertToNumberSelectAnswer(answer);
-
-      case 'Time':
-        return convertToTimeAnswer(answer);
-
-      case 'TimeRange':
-        return convertToTimeRangeAnswer(answer);
-
-      case 'Geolocation':
-        return convertToGeolocationAnswer(answer);
-
-      case 'StackedRadio':
-        return convertToStackedRadioAnswer(answer);
-
-      case 'StackedCheckbox':
-        return convertToStackedCheckboxAnswer(answer);
-
-      case 'StackedSlider':
-        return convertToStackedSliderAnswer(answer);
-
-      case 'Video':
-        return convertToVideoAnswer(answer);
-
-      case 'Photo':
-        return convertToPhotoAnswer(answer);
-
-      case 'Audio':
-        return convertToAudioAnswer(answer);
-
-      case 'AudioPlayer':
-        return convertToAudioPlayerAnswer(answer);
-
-      default:
-        return null;
-    }
+    return convertToAnswerDto(pipelineItem.type, answer);
   });
 
   return result;
 }
 
 function convertToTextAnswer(answer: Answer): AnswerDto {
-  return {
-    value: answer.answer as TextAnswerDto,
-  };
+  return answer.answer as TextAnswerDto;
 }
 
 function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
@@ -282,4 +233,75 @@ function convertToAudioPlayerAnswer(answer: Answer): AnswerDto {
       text: answer.additionalAnswer,
     }),
   };
+}
+
+function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
+  switch (type) {
+    case 'TextInput':
+      return convertToTextAnswer(answer);
+
+    case 'Radio':
+      return convertToSingleSelectAnswer(answer);
+
+    case 'Checkbox':
+      return convertToCheckboxAnswer(answer);
+
+    case 'Slider':
+      return convertToSliderAnswer(answer);
+
+    case 'Date':
+      return convertToDateAnswerAnswer(answer);
+
+    case 'NumberSelect':
+      return convertToNumberSelectAnswer(answer);
+
+    case 'Time':
+      return convertToTimeAnswer(answer);
+
+    case 'TimeRange':
+      return convertToTimeRangeAnswer(answer);
+
+    case 'Geolocation':
+      return convertToGeolocationAnswer(answer);
+
+    case 'StackedRadio':
+      return convertToStackedRadioAnswer(answer);
+
+    case 'StackedCheckbox':
+      return convertToStackedCheckboxAnswer(answer);
+
+    case 'StackedSlider':
+      return convertToStackedSliderAnswer(answer);
+
+    case 'Video':
+      return convertToVideoAnswer(answer);
+
+    case 'Photo':
+      return convertToPhotoAnswer(answer);
+
+    case 'Audio':
+      return convertToAudioAnswer(answer);
+
+    case 'AudioPlayer':
+      return convertToAudioPlayerAnswer(answer);
+
+    default:
+      return null;
+  }
+}
+
+export function mapUserActionsToDto(actions: UserAction[]): UserActionDto[] {
+  return actions.map(action => {
+    return {
+      type: action.type,
+      screen: `${action.payload.activityId}/${action.payload.activityItemId}`,
+      time: action.payload.date,
+      ...(action.type === 'SET_ANSWER' && {
+        response: convertToAnswerDto(
+          action.payload.answer.type,
+          action.payload.answer.value,
+        ),
+      }),
+    };
+  });
 }

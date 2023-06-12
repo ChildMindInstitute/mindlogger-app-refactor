@@ -1,4 +1,9 @@
-import { useActivityStorageRecord } from '../../lib';
+import useUserActionManager from './useUserActionManager';
+import {
+  PipelineItemResponse,
+  UserAction,
+  useActivityStorageRecord,
+} from '../../lib';
 
 type UseActivityPipelineArgs = {
   appletId: string;
@@ -24,18 +29,34 @@ function useActivityState({
     order,
   });
 
+  const {
+    userActionCreator,
+    addUserAction,
+    updateUserActionsWithAdditionalAnswer,
+    updateUserActionsWithAnswer,
+  } = useUserActionManager({
+    activityId,
+    activityState: activityStorageRecord,
+  });
+
   function setStep(step: number) {
     if (!activityStorageRecord) {
       return;
     }
 
+    const previousStep = activityStorageRecord.step;
+
+    const action =
+      previousStep < step ? userActionCreator.next() : userActionCreator.back();
+
     upsertActivityStorageRecord({
       ...activityStorageRecord,
       step,
+      actions: addUserAction(action),
     });
   }
 
-  function setAnswer(step: number, answer: any) {
+  function setAnswer(step: number, answer: PipelineItemResponse) {
     if (!activityStorageRecord) {
       return;
     }
@@ -49,6 +70,7 @@ function useActivityState({
           answer,
         },
       },
+      actions: updateUserActionsWithAnswer(answer),
     });
   }
 
@@ -66,6 +88,7 @@ function useActivityState({
           additionalAnswer: answer,
         },
       },
+      actions: updateUserActionsWithAdditionalAnswer(step, answer),
     });
   }
 
@@ -78,10 +101,13 @@ function useActivityState({
 
     delete answers[step];
 
+    const action = userActionCreator.undo();
+
     if (activityStorageRecord) {
       upsertActivityStorageRecord({
         ...activityStorageRecord,
         answers,
+        actions: addUserAction(action),
       });
     }
   }
@@ -113,8 +139,16 @@ function useActivityState({
     });
   }
 
+  function trackUserAction(action: UserAction) {
+    upsertActivityStorageRecord({
+      ...activityStorageRecord!,
+      actions: addUserAction(action),
+    });
+  }
+
   return {
     activityStorageRecord,
+    userActionCreator,
     setStep,
     setAnswer,
     removeAnswer,
@@ -122,6 +156,7 @@ function useActivityState({
     clearActivityStorageRecord,
     setTimer,
     removeTimer,
+    trackUserAction,
   };
 }
 

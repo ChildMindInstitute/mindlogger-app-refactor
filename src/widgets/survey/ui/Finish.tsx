@@ -18,7 +18,7 @@ import {
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
 import { FinishReason } from '../model';
-import { mapAnswersToDto } from '../model/mappers';
+import { mapAnswersToDto, mapUserActionsToDto } from '../model/mappers';
 
 type Props = {
   appletId: string;
@@ -109,6 +109,8 @@ function FinishItem({
         activityStorageRecord.answers,
       );
 
+      const userActions = mapUserActionsToDto(activityStorageRecord.actions);
+
       const itemIds = Object.entries(activityStorageRecord.answers).map(
         ([step]) => {
           return activityStorageRecord.items[Number(step)]?.id!;
@@ -120,6 +122,7 @@ function FinishItem({
         createdAt: getUnixTimestamp(Date.now()),
         version: activityStorageRecord.appletVersion,
         answers: answers,
+        userActions,
         itemIds,
         appletEncryption,
         flowId: flowId ?? null,

@@ -1,3 +1,4 @@
+import { isPlainObject } from '@reduxjs/toolkit';
 import { useMutation } from '@tanstack/react-query';
 import { FileSystem } from 'react-native-file-access';
 
@@ -7,6 +8,8 @@ import {
   FileService,
   AnswerDto,
   AppletEncryptionDTO,
+  UserActionDto,
+  ActivityAnswersRequest,
 } from '@app/shared/api';
 import { MediaValue } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
@@ -21,6 +24,7 @@ type SendAnswersInput = {
   itemIds: string[];
   flowId: string | null;
   activityId: string;
+  userActions: UserActionDto[];
 };
 
 type Options = MutationOptions<typeof sendAnswers>;
@@ -35,16 +39,14 @@ const isFileUrl = (value: string) => {
 const filterMediaAnswers = (
   answers: AnswerDto[],
   answerFilter: AnswerDto,
-): AnswerDto[] =>
-  answers.filter(answer => {
-    const mediaAnswer = answer?.value as MediaValue;
-    const mediaFilter = answerFilter?.value as MediaValue;
-    mediaAnswer.uri !== mediaFilter.uri;
-  });
+): AnswerDto[] => answers.filter(answer => answer !== answerFilter);
 
 const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
-  for (const itemAnswer of body.answers) {
-    if (!itemAnswer) {
+  const itemsAnswers = [...body.answers];
+
+  for (const itemAnswer of itemsAnswers) {
+    // Item answer is either string or object.
+    if (!isPlainObject(itemAnswer)) {
       continue;
     }
 
@@ -79,6 +81,7 @@ const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
       }
     }
   }
+
   return body;
 };
 
@@ -97,27 +100,30 @@ const encryptAnswers = (data: SendAnswersInput) => {
 
   const encryptedAnswers = encrypt(JSON.stringify(data.answers));
 
+  const encryptedUserActions = encrypt(JSON.stringify(data.userActions));
+
   const userPublicKey = encryption.getPublicKey({
     privateKey: userPrivateKey,
     appletPrime: JSON.parse(appletEncryption.prime),
     appletBase: JSON.parse(appletEncryption.base),
   });
 
-  const encryptedData = {
+  const encryptedData: ActivityAnswersRequest = {
     appletId: data.appletId,
     version: data.version,
-    appletEncryption: undefined,
     answers: [
       {
         answer: encryptedAnswers,
         activityId: data.activityId,
         flowId: data.flowId,
         itemIds: data.itemIds,
+        events: encryptedUserActions,
       },
     ],
     userPublicKey: JSON.stringify(userPublicKey),
     createdAt: data.createdAt,
   };
+
   return encryptedData;
 };
 export const sendAnswers = async (body: SendAnswersInput) => {
