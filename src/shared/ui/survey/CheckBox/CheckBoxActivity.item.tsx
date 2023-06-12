@@ -19,6 +19,10 @@ type Props = {
   textReplacer: (markdown: string) => string;
 };
 
+const findById = (items: Item[], id: string): Item | undefined => {
+  return items.find(val => val.id === id);
+};
+
 const CheckBoxActivityItem: FC<Props> = ({
   config,
   onChange,
@@ -27,20 +31,16 @@ const CheckBoxActivityItem: FC<Props> = ({
 }) => {
   const { options, randomizeOptions, addTooltip, setPalette } = config;
 
-  const findById = (id: string): Item | undefined => {
-    return values.find(val => val.id === id);
-  };
-
   const onItemValueChanged = (checkedItemValue: string) => {
-    const hasCheckedValue = findById(checkedItemValue);
+    const checkedValue = findById(values, checkedItemValue);
 
-    if (hasCheckedValue) {
+    if (checkedValue != null) {
       const filteredValues = values.filter(val => val.id !== checkedItemValue);
       const value = filteredValues.length ? filteredValues : null;
 
       onChange(value);
     } else {
-      const value = [...values, findById(checkedItemValue)!];
+      const value = [...values, findById(config.options, checkedItemValue)!];
 
       onChange(value);
     }
@@ -66,7 +66,7 @@ const CheckBoxActivityItem: FC<Props> = ({
               tooltipAvailable={addTooltip}
               setPalette={setPalette}
               onChange={() => onItemValueChanged(item.id)}
-              value={!!findById(item.id)}
+              value={!!findById(values, item.id)}
               textReplacer={textReplacer}
             />
           </Box>
