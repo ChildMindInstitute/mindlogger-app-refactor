@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import { FileSystem } from 'react-native-file-access';
 
 import {
-  // useBaseMutation,
   AnswerService,
   MutationOptions,
   FileService,
@@ -133,8 +132,4 @@ export const sendAnswers = async (body: SendAnswersInput) => {
 
 export const useActivityAnswersMutation = (options?: Options) => {
   return useMutation({ mutationKey: ['send_answers'], ...options });
-  // return useBaseMutation(sendAnswers, {
-  //   mutationKey: ['send_answers'],
-  //   ...options,
-  // });
 };
