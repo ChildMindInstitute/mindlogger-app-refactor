@@ -16,15 +16,15 @@ export const getScheduledDate = (event: ScheduleEvent) => {
   }
 };
 
-export const getActivityStartAt = (entityEvent: StoreProgressPayload) => {
-  return entityEvent.type === ActivityPipelineType.Regular
-    ? entityEvent.startAt
-    : entityEvent.lastActivityStartAt;
+export const getActivityStartAt = (progressRecord: StoreProgressPayload) => {
+  return progressRecord.type === ActivityPipelineType.Regular
+    ? progressRecord.startAt
+    : progressRecord.lastActivityStartAt;
 };
 
-export const getGroupKey = (entityEvent: StoreProgressPayload) => {
-  return entityEvent.type === ActivityPipelineType.Flow
-    ? entityEvent.groupKey
+export const getExecutionGroupKey = (progressRecord: StoreProgressPayload) => {
+  return progressRecord.type === ActivityPipelineType.Flow
+    ? progressRecord.executionGroupKey
     : uuidv4();
 };
 

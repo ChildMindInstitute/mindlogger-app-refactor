@@ -25,7 +25,7 @@ export const progress: Progress = {
         endAt: null,
         pipelineActivityOrder: 0,
         lastActivityStartAt: null,
-        groupKey: 'test-test',
+        executionGroupKey: 'test-test',
       },
     },
   },

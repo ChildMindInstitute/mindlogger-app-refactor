@@ -24,7 +24,7 @@ import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 import { useFlowStorageRecord } from '../lib';
 import {
   getActivityStartAt,
-  getGroupKey,
+  getExecutionGroupKey,
   getScheduledDate,
   getUserIdentifier,
   mapAnswersToDto,
@@ -179,11 +179,11 @@ function Intermediate({
         },
       );
 
-      const entityEvent = storeProgress[appletId][entityId][eventId];
+      const progressRecord = storeProgress[appletId][entityId][eventId];
 
       const scheduledDate = getScheduledDate(scheduledEvent!);
 
-      const groupKey = getGroupKey(entityEvent);
+      const executionGroupKey = getExecutionGroupKey(progressRecord);
 
       const userIdentifier = getUserIdentifier(
         activityStorageRecord.items,
@@ -202,9 +202,9 @@ function Intermediate({
         appletEncryption,
         flowId: flowId ?? null,
         activityId: activityId,
-        groupKey,
+        executionGroupKey,
         userIdentifier,
-        startTime: getUnixTimestamp(getActivityStartAt(entityEvent)!),
+        startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
         endTime: getUnixTimestamp(Date.now()),
         scheduledTime,
       });

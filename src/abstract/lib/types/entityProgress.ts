@@ -9,7 +9,7 @@ export type FlowProgress = {
   currentActivityId: string;
   pipelineActivityOrder: number;
   lastActivityStartAt: number | null;
-  groupKey: string;
+  executionGroupKey: string;
 };
 
 export type ActivityProgress = {

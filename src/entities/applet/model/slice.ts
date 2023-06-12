@@ -68,7 +68,7 @@ const slice = createSlice({
         startAt: new Date().getTime(),
         lastActivityStartAt: new Date().getTime(),
         endAt: null,
-        groupKey: uuidv4(),
+        executionGroupKey: uuidv4(),
         pipelineActivityOrder,
       };
 

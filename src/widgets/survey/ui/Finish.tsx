@@ -21,7 +21,7 @@ import { Center, ImageBackground, Text, Button } from '@shared/ui';
 import {
   FinishReason,
   getActivityStartAt,
-  getGroupKey,
+  getExecutionGroupKey,
   getScheduledDate,
   getUserIdentifier,
 } from '../model';
@@ -133,11 +133,11 @@ function FinishItem({
         },
       );
 
-      const entityEvent = storeProgress[appletId][entityId][eventId];
+      const progressRecord = storeProgress[appletId][entityId][eventId];
 
       const scheduledDate = getScheduledDate(scheduledEvent!);
 
-      const groupKey = getGroupKey(entityEvent);
+      const executionGroupKey = getExecutionGroupKey(progressRecord);
 
       const scheduledTime = scheduledDate && getUnixTimestamp(scheduledDate);
 
@@ -151,9 +151,9 @@ function FinishItem({
         appletEncryption,
         flowId: flowId ?? null,
         activityId: activityId,
-        groupKey,
+        executionGroupKey,
         userIdentifier,
-        startTime: getUnixTimestamp(getActivityStartAt(entityEvent)!),
+        startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
         endTime: getUnixTimestamp(Date.now()),
         scheduledTime,
       });
