@@ -3,23 +3,33 @@ import { useCallback, useEffect } from 'react';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
+import { StoreProgress } from '@app/abstract/lib';
 import { useActivityAnswersMutation } from '@app/entities/activity';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 import {
   mapActivitiesFromDto,
   mapActivityFlowFromDto,
 } from '@app/entities/applet/model';
+import { EventModel } from '@app/entities/event';
 import { PassSurveyModel } from '@app/features/pass-survey';
 import {
   getUnixTimestamp,
   onApiRequestError,
   useAppDispatch,
+  useAppSelector,
 } from '@app/shared/lib';
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
 import { useFlowStorageRecord } from '../lib';
-import { mapAnswersToDto, mapUserActionsToDto } from '../model';
+import {
+  getActivityStartAt,
+  getExecutionGroupKey,
+  getScheduledDate,
+  getUserIdentifier,
+  mapAnswersToDto,
+  mapUserActionsToDto,
+} from '../model';
 
 type Props = {
   appletId: string;
@@ -79,6 +89,10 @@ function Intermediate({
     flowId,
   });
 
+  const storeProgress: StoreProgress = useAppSelector(
+    AppletModel.selectors.selectInProgressApplets,
+  );
+
   const { step, pipeline } = flowStorageRecord!;
 
   const nextFlowItem = pipeline[step + 1];
@@ -92,6 +106,10 @@ function Intermediate({
   const nextActivityId = nextFlowItem.payload.activityId;
 
   const nextActivity = allActivities?.find(x => x.id === nextActivityId);
+
+  const entityId = flowId ? flowId : activityId;
+
+  const scheduledEvent = EventModel.useScheduledEvent({ appletId, eventId });
 
   const { activityStorageRecord, clearActivityStorageRecord } =
     PassSurveyModel.useActivityState({
@@ -161,6 +179,19 @@ function Intermediate({
         },
       );
 
+      const progressRecord = storeProgress[appletId][entityId][eventId];
+
+      const scheduledDate = getScheduledDate(scheduledEvent!);
+
+      const executionGroupKey = getExecutionGroupKey(progressRecord);
+
+      const userIdentifier = getUserIdentifier(
+        activityStorageRecord.items,
+        activityStorageRecord.answers,
+      );
+
+      const scheduledTime = scheduledDate && getUnixTimestamp(scheduledDate);
+
       sendAnswers({
         appletId,
         createdAt: getUnixTimestamp(Date.now()),
@@ -171,6 +202,11 @@ function Intermediate({
         appletEncryption,
         flowId: flowId ?? null,
         activityId: activityId,
+        executionGroupKey,
+        userIdentifier,
+        startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
+        endTime: getUnixTimestamp(Date.now()),
+        scheduledTime,
       });
     }
   }

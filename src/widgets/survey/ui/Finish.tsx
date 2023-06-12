@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
+import { EventModel } from '@app/entities/event';
 import { useActivityAnswersMutation } from '@entities/activity';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
@@ -17,7 +18,13 @@ import {
 } from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
-import { FinishReason } from '../model';
+import {
+  FinishReason,
+  getActivityStartAt,
+  getExecutionGroupKey,
+  getScheduledDate,
+  getUserIdentifier,
+} from '../model';
 import { mapAnswersToDto, mapUserActionsToDto } from '../model/mappers';
 
 type Props = {
@@ -46,6 +53,10 @@ function FinishItem({
     select: response =>
       AppletModel.mapAppletDetailsFromDto(response.data.result),
   });
+
+  const entityId = flowId ? flowId : activityId;
+
+  const scheduledEvent = EventModel.useScheduledEvent({ appletId, eventId });
 
   const appletEncryption = applet?.encryption || null;
 
@@ -109,6 +120,11 @@ function FinishItem({
         activityStorageRecord.answers,
       );
 
+      const userIdentifier = getUserIdentifier(
+        activityStorageRecord.items,
+        activityStorageRecord.answers,
+      );
+
       const userActions = mapUserActionsToDto(activityStorageRecord.actions);
 
       const itemIds = Object.entries(activityStorageRecord.answers).map(
@@ -116,6 +132,14 @@ function FinishItem({
           return activityStorageRecord.items[Number(step)]?.id!;
         },
       );
+
+      const progressRecord = storeProgress[appletId][entityId][eventId];
+
+      const scheduledDate = getScheduledDate(scheduledEvent!);
+
+      const executionGroupKey = getExecutionGroupKey(progressRecord);
+
+      const scheduledTime = scheduledDate && getUnixTimestamp(scheduledDate);
 
       sendAnswers({
         appletId,
@@ -127,6 +151,11 @@ function FinishItem({
         appletEncryption,
         flowId: flowId ?? null,
         activityId: activityId,
+        executionGroupKey,
+        userIdentifier,
+        startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
+        endTime: getUnixTimestamp(Date.now()),
+        scheduledTime,
       });
     }
 

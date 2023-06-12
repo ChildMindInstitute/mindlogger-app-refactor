@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   ActivityPipelineType,
@@ -65,7 +66,9 @@ const slice = createSlice({
         type: ActivityPipelineType.Flow,
         currentActivityId: activityId,
         startAt: new Date().getTime(),
+        lastActivityStartAt: new Date().getTime(),
         endAt: null,
+        executionGroupKey: uuidv4(),
         pipelineActivityOrder,
       };
 
@@ -84,6 +87,7 @@ const slice = createSlice({
 
       event.currentActivityId = activityId;
       event.pipelineActivityOrder = pipelineActivityOrder;
+      event.lastActivityStartAt = new Date().getTime();
     },
 
     entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {
