@@ -161,54 +161,48 @@ function Intermediate({
       throw new Error('Encryption params is undefined');
     }
 
-    const hasAnswers = !!Object.keys(activityStorageRecord.answers).length;
+    const answers = mapAnswersToDto(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
 
-    if (hasAnswers) {
-      // if not checked, getting http 500
+    const userActions = mapUserActionsToDto(activityStorageRecord.actions);
 
-      const answers = mapAnswersToDto(
-        activityStorageRecord.items,
-        activityStorageRecord.answers,
-      );
+    const itemIds = Object.entries(activityStorageRecord.answers).map(
+      ([_step]) => {
+        return activityStorageRecord.items[Number(_step)]?.id!;
+      },
+    );
 
-      const userActions = mapUserActionsToDto(activityStorageRecord.actions);
+    const progressRecord = storeProgress[appletId][entityId][eventId];
 
-      const itemIds = Object.entries(activityStorageRecord.answers).map(
-        ([_step]) => {
-          return activityStorageRecord.items[Number(_step)]?.id!;
-        },
-      );
+    const scheduledDate = getScheduledDate(scheduledEvent!);
 
-      const progressRecord = storeProgress[appletId][entityId][eventId];
+    const executionGroupKey = getExecutionGroupKey(progressRecord);
 
-      const scheduledDate = getScheduledDate(scheduledEvent!);
+    const userIdentifier = getUserIdentifier(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
 
-      const executionGroupKey = getExecutionGroupKey(progressRecord);
+    const scheduledTime = scheduledDate && getUnixTimestamp(scheduledDate);
 
-      const userIdentifier = getUserIdentifier(
-        activityStorageRecord.items,
-        activityStorageRecord.answers,
-      );
-
-      const scheduledTime = scheduledDate && getUnixTimestamp(scheduledDate);
-
-      sendAnswers({
-        appletId,
-        createdAt: getUnixTimestamp(Date.now()),
-        version: activityStorageRecord.appletVersion,
-        answers: answers,
-        userActions,
-        itemIds,
-        appletEncryption,
-        flowId: flowId ?? null,
-        activityId: activityId,
-        executionGroupKey,
-        userIdentifier,
-        startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
-        endTime: getUnixTimestamp(Date.now()),
-        scheduledTime,
-      });
-    }
+    sendAnswers({
+      appletId,
+      createdAt: getUnixTimestamp(Date.now()),
+      version: activityStorageRecord.appletVersion,
+      answers: answers,
+      userActions,
+      itemIds,
+      appletEncryption,
+      flowId: flowId ?? null,
+      activityId: activityId,
+      executionGroupKey,
+      userIdentifier,
+      startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
+      endTime: getUnixTimestamp(Date.now()),
+      scheduledTime,
+    });
   }
 
   useEffect(() => {
