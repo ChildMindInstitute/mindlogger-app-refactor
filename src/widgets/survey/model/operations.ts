@@ -40,3 +40,9 @@ export const getUserIdentifier = (
     return answers[itemWithIdentifierStep]?.answer as string;
   }
 };
+
+export const getItemIds = (pipeline: PipelineItem[], answers: Answers) => {
+  return Object.keys(answers).map(step => {
+    return pipeline[Number(step)].id!;
+  });
+};

@@ -25,6 +25,7 @@ import { useFlowStorageRecord } from '../lib';
 import {
   getActivityStartAt,
   getExecutionGroupKey,
+  getItemIds,
   getScheduledDate,
   getUserIdentifier,
   mapAnswersToDto,
@@ -168,10 +169,9 @@ function Intermediate({
 
     const userActions = mapUserActionsToDto(activityStorageRecord.actions);
 
-    const itemIds = Object.entries(activityStorageRecord.answers).map(
-      ([_step]) => {
-        return activityStorageRecord.items[Number(_step)]?.id!;
-      },
+    const itemIds = getItemIds(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
     );
 
     const progressRecord = storeProgress[appletId][entityId][eventId];

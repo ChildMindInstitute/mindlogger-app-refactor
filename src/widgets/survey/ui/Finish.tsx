@@ -22,6 +22,7 @@ import {
   FinishReason,
   getActivityStartAt,
   getExecutionGroupKey,
+  getItemIds,
   getScheduledDate,
   getUserIdentifier,
 } from '../model';
@@ -122,11 +123,12 @@ function FinishItem({
 
     const userActions = mapUserActionsToDto(activityStorageRecord.actions);
 
-    const itemIds = Object.entries(activityStorageRecord.answers).map(
-      ([step]) => {
-        return activityStorageRecord.items[Number(step)]?.id!;
-      },
+    const itemIds = getItemIds(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
     );
+
+    console.log('itemIds', itemIds);
 
     const progressRecord = storeProgress[appletId][entityId][eventId];
 
