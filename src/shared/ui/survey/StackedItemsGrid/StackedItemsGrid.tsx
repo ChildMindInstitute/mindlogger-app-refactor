@@ -4,16 +4,11 @@ import { StyleSheet } from 'react-native';
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled, TextProps } from '@tamagui/core';
 
+import { ListSeparator, YStack, XStack, Tooltip, RadioGroup } from '@shared/ui';
+
 import { type StackedRowItemValue } from './types';
-import {
-  ListSeparator,
-  YStack,
-  XStack,
-  Center,
-  Text,
-  Tooltip,
-  RadioGroup,
-} from '../..';
+import Center from '../../Center';
+import Text from '../../Text';
 
 const AxisListItemContainer = styled(Center, {
   minHeight: 80,

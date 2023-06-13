@@ -9,7 +9,9 @@ import {
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
-import { Center, Box, BoxProps } from '@shared/ui';
+import { Box, BoxProps } from '@shared/ui';
+
+import Center from '../../Center';
 
 const styles = StyleSheet.create({
   touchable: {
