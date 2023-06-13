@@ -19,7 +19,7 @@ export const getScheduledDate = (event: ScheduleEvent) => {
 export const getActivityStartAt = (progressRecord: StoreProgressPayload) => {
   return progressRecord.type === ActivityPipelineType.Regular
     ? progressRecord.startAt
-    : progressRecord.lastActivityStartAt;
+    : progressRecord.currentActivityStartAt;
 };
 
 export const getExecutionGroupKey = (progressRecord: StoreProgressPayload) => {
