@@ -19,7 +19,7 @@ export const getScheduledDate = (event: ScheduleEvent) => {
 export const getActivityStartAt = (progressRecord: StoreProgressPayload) => {
   return progressRecord.type === ActivityPipelineType.Regular
     ? progressRecord.startAt
-    : progressRecord.lastActivityStartAt;
+    : progressRecord.currentActivityStartAt;
 };
 
 export const getExecutionGroupKey = (progressRecord: StoreProgressPayload) => {
@@ -39,4 +39,10 @@ export const getUserIdentifier = (
   if (itemWithIdentifierStep > -1) {
     return answers[itemWithIdentifierStep]?.answer as string;
   }
+};
+
+export const getItemIds = (pipeline: PipelineItem[], answers: Answers) => {
+  return Object.keys(answers).map(step => {
+    return pipeline[Number(step)].id!;
+  });
 };

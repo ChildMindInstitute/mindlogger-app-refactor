@@ -59,7 +59,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
         return false;
       }
 
-      return currentAnswer.answer === optionId;
+      return (currentAnswer.answer as Item).id === optionId;
     },
 
     isGreaterThen(value: number) {

@@ -39,21 +39,23 @@ type TimeRange = {
 
 type StackedRadioAnswerValue = Array<Array<Item>>;
 
-export function mapAnswersToDto(
-  pipeline: PipelineItem[],
-  answers: Answers,
-): Array<AnswerDto> {
-  const filteredAnswers = Object.entries(answers).filter(([_, answer]) => {
-    return answer.answer != null;
+export function mapAnswersToDto(pipeline: PipelineItem[], answers: Answers) {
+  const answerDtos: Array<AnswerDto> = [];
+
+  pipeline.forEach((pipelineItem, step) => {
+    const canHaveAnswer =
+      pipelineItem.type !== 'Tutorial' && pipelineItem.type !== 'Splash';
+
+    if (canHaveAnswer) {
+      const answer = answers[step] ?? null;
+      const dto =
+        answer === null ? null : convertToAnswerDto(pipelineItem.type, answer);
+
+      answerDtos.push(dto);
+    }
   });
 
-  const result = filteredAnswers.map(([step, answer]) => {
-    const pipelineItem = pipeline[+step];
-
-    return convertToAnswerDto(pipelineItem.type, answer);
-  });
-
-  return result;
+  return answerDtos;
 }
 
 function convertToTextAnswer(answer: Answer): AnswerDto {

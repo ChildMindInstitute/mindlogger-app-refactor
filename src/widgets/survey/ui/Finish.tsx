@@ -22,6 +22,7 @@ import {
   FinishReason,
   getActivityStartAt,
   getExecutionGroupKey,
+  getItemIds,
   getScheduledDate,
   getUserIdentifier,
 } from '../model';
@@ -110,54 +111,47 @@ function FinishItem({
       return;
     }
 
-    const hasAnswers = !!Object.keys(activityStorageRecord.answers).length;
+    const answers = mapAnswersToDto(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
 
-    if (hasAnswers) {
-      // if not checked, getting http 500
+    const userIdentifier = getUserIdentifier(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
 
-      const answers = mapAnswersToDto(
-        activityStorageRecord.items,
-        activityStorageRecord.answers,
-      );
+    const userActions = mapUserActionsToDto(activityStorageRecord.actions);
 
-      const userIdentifier = getUserIdentifier(
-        activityStorageRecord.items,
-        activityStorageRecord.answers,
-      );
+    const itemIds = getItemIds(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
 
-      const userActions = mapUserActionsToDto(activityStorageRecord.actions);
+    const progressRecord = storeProgress[appletId][entityId][eventId];
 
-      const itemIds = Object.entries(activityStorageRecord.answers).map(
-        ([step]) => {
-          return activityStorageRecord.items[Number(step)]?.id!;
-        },
-      );
+    const scheduledDate = getScheduledDate(scheduledEvent!);
 
-      const progressRecord = storeProgress[appletId][entityId][eventId];
+    const executionGroupKey = getExecutionGroupKey(progressRecord);
 
-      const scheduledDate = getScheduledDate(scheduledEvent!);
+    const scheduledTime = scheduledDate && getUnixTimestamp(scheduledDate);
 
-      const executionGroupKey = getExecutionGroupKey(progressRecord);
-
-      const scheduledTime = scheduledDate && getUnixTimestamp(scheduledDate);
-
-      sendAnswers({
-        appletId,
-        createdAt: getUnixTimestamp(Date.now()),
-        version: activityStorageRecord.appletVersion,
-        answers: answers,
-        userActions,
-        itemIds,
-        appletEncryption,
-        flowId: flowId ?? null,
-        activityId: activityId,
-        executionGroupKey,
-        userIdentifier,
-        startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
-        endTime: getUnixTimestamp(Date.now()),
-        scheduledTime,
-      });
-    }
+    sendAnswers({
+      appletId,
+      createdAt: getUnixTimestamp(Date.now()),
+      version: activityStorageRecord.appletVersion,
+      answers: answers,
+      userActions,
+      itemIds,
+      appletEncryption,
+      flowId: flowId ?? null,
+      activityId: activityId,
+      executionGroupKey,
+      userIdentifier,
+      startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
+      endTime: getUnixTimestamp(Date.now()),
+      scheduledTime,
+    });
 
     clearActivityStorageRecord();
   }
