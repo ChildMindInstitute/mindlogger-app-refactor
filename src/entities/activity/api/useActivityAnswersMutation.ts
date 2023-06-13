@@ -1,15 +1,19 @@
+import { isPlainObject } from '@reduxjs/toolkit';
+import { useMutation } from '@tanstack/react-query';
 import { FileSystem } from 'react-native-file-access';
 
 import {
-  useBaseMutation,
   AnswerService,
   MutationOptions,
   FileService,
   AnswerDto,
   AppletEncryptionDTO,
+  UserActionDto,
+  ActivityAnswersRequest,
 } from '@app/shared/api';
+import { MediaValue } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
-import { encryption } from '@shared/lib';
+import { encryption, wait } from '@shared/lib';
 
 type SendAnswersInput = {
   appletId: string;
@@ -20,6 +24,12 @@ type SendAnswersInput = {
   itemIds: string[];
   flowId: string | null;
   activityId: string;
+  executionGroupKey: string;
+  userActions: UserActionDto[];
+  scheduledTime?: number;
+  startTime: number;
+  endTime: number;
+  userIdentifier?: string;
 };
 
 type Options = MutationOptions<typeof sendAnswers>;
@@ -31,27 +41,31 @@ const isFileUrl = (value: string) => {
   return localFileRegex.test(value);
 };
 
-const filterAnswers = (
+const filterMediaAnswers = (
   answers: AnswerDto[],
   answerFilter: AnswerDto,
-): AnswerDto[] =>
-  answers.filter(answer => answer.activityId !== answerFilter.activityId);
+): AnswerDto[] => answers.filter(answer => answer !== answerFilter);
 
 const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
-  for (const itemAnswer of body.answers) {
-    if (!itemAnswer) {
+  const itemsAnswers = [...body.answers];
+
+  for (const itemAnswer of itemsAnswers) {
+    // Item answer is either string or object.
+    if (!isPlainObject(itemAnswer)) {
       continue;
     }
 
     const { value: answerValue } = itemAnswer;
 
-    const isMediaItem = answerValue?.uri && isFileUrl(answerValue.uri);
+    const mediaAnswer = answerValue as MediaValue;
+
+    const isMediaItem = mediaAnswer?.uri && isFileUrl(mediaAnswer.uri);
 
     if (isMediaItem) {
-      const localFileExists = await FileSystem.exists(answerValue.uri);
+      const localFileExists = await FileSystem.exists(mediaAnswer.uri);
       if (localFileExists) {
         try {
-          const uploadResult = await FileService.upload(answerValue);
+          const uploadResult = await FileService.upload(mediaAnswer);
 
           const url = uploadResult?.data.result.url;
 
@@ -59,19 +73,20 @@ const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
             itemAnswer.value = url;
           }
         } catch (error) {
-          const answers = filterAnswers(body.answers, itemAnswer);
+          const answers = filterMediaAnswers(body.answers, itemAnswer);
 
           body.answers = answers;
 
           console.error(error);
         }
       } else {
-        const answers = filterAnswers(body.answers, itemAnswer);
+        const answers = filterMediaAnswers(body.answers, itemAnswer);
 
         body.answers = answers;
       }
     }
   }
+
   return body;
 };
 
@@ -90,30 +105,41 @@ const encryptAnswers = (data: SendAnswersInput) => {
 
   const encryptedAnswers = encrypt(JSON.stringify(data.answers));
 
+  const encryptedUserActions = encrypt(JSON.stringify(data.userActions));
+
+  const identifier = data.userIdentifier && encrypt(data.userIdentifier);
+
   const userPublicKey = encryption.getPublicKey({
     privateKey: userPrivateKey,
     appletPrime: JSON.parse(appletEncryption.prime),
     appletBase: JSON.parse(appletEncryption.base),
   });
 
-  const encryptedData = {
+  const encryptedData: ActivityAnswersRequest = {
     appletId: data.appletId,
     version: data.version,
-    appletEncryption: undefined,
-    answers: [
-      {
-        answer: encryptedAnswers,
-        activityId: data.activityId,
-        flowId: data.flowId,
-        itemIds: data.itemIds,
-      },
-    ],
-    userPublicKey: JSON.stringify(userPublicKey),
+    flowId: data.flowId,
+    submitId: data.executionGroupKey,
+    activityId: data.activityId,
+    answer: {
+      answer: encryptedAnswers,
+      itemIds: data.itemIds,
+      events: encryptedUserActions,
+      startTime: data.startTime,
+      endTime: data.endTime,
+      scheduledTime: data.scheduledTime,
+      userPublicKey: JSON.stringify(userPublicKey),
+      identifier,
+    },
     createdAt: data.createdAt,
   };
+
   return encryptedData;
 };
-const sendAnswers = async (body: SendAnswersInput) => {
+export const sendAnswers = async (body: SendAnswersInput) => {
+  // This delay is for postponing encryption operation which blocks the UI thread
+  await wait(100);
+
   const data = await uploadAnswerMediaFiles(body);
   const encryptedData = encryptAnswers(data);
 
@@ -121,5 +147,5 @@ const sendAnswers = async (body: SendAnswersInput) => {
 };
 
 export const useActivityAnswersMutation = (options?: Options) => {
-  return useBaseMutation(sendAnswers, options);
+  return useMutation({ mutationKey: ['send_answers'], ...options });
 };

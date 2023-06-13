@@ -14,9 +14,13 @@ type Props = {
     setPalette: boolean;
     setAlerts: boolean;
   };
-  onChange: (values: string[] | null) => void;
-  values: string[];
+  onChange: (values: Item[] | null) => void;
+  values: Item[];
   textReplacer: (markdown: string) => string;
+};
+
+const findById = (items: Item[], id: string): Item | undefined => {
+  return items.find(val => val.id === id);
 };
 
 const CheckBoxActivityItem: FC<Props> = ({
@@ -28,15 +32,15 @@ const CheckBoxActivityItem: FC<Props> = ({
   const { options, randomizeOptions, addTooltip, setPalette } = config;
 
   const onItemValueChanged = (checkedItemValue: string) => {
-    const hasCheckedValue = values.includes(checkedItemValue);
+    const checkedValue = findById(values, checkedItemValue);
 
-    if (hasCheckedValue) {
-      const filteredValues = values.filter(val => val !== checkedItemValue);
+    if (checkedValue != null) {
+      const filteredValues = values.filter(val => val.id !== checkedItemValue);
       const value = filteredValues.length ? filteredValues : null;
 
       onChange(value);
     } else {
-      const value = [...values, checkedItemValue];
+      const value = [...values, findById(config.options, checkedItemValue)!];
 
       onChange(value);
     }
@@ -62,7 +66,7 @@ const CheckBoxActivityItem: FC<Props> = ({
               tooltipAvailable={addTooltip}
               setPalette={setPalette}
               onChange={() => onItemValueChanged(item.id)}
-              value={values.includes(item.id)}
+              value={!!findById(values, item.id)}
               textReplacer={textReplacer}
             />
           </Box>

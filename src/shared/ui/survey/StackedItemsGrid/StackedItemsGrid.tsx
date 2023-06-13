@@ -4,16 +4,11 @@ import { StyleSheet } from 'react-native';
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled, TextProps } from '@tamagui/core';
 
+import { ListSeparator, YStack, XStack, Tooltip, RadioGroup } from '@shared/ui';
+
 import { type StackedRowItemValue } from './types';
-import {
-  ListSeparator,
-  YStack,
-  XStack,
-  Center,
-  Text,
-  Tooltip,
-  RadioGroup,
-} from '../..';
+import Center from '../../Center';
+import Text from '../../Text';
 
 const AxisListItemContainer = styled(Center, {
   minHeight: 80,
@@ -77,7 +72,7 @@ const RowHeader: FC<RowHeaderProps> = ({ options }) => {
         <AxisListItem maxWidth="25%" />
 
         {options.map((option, optionIndex) => (
-          <YStack flex={1}>
+          <YStack key={option.id} flex={1}>
             <AxisListItem key={optionIndex + optionIndex} option={option} />
           </YStack>
         ))}
@@ -143,7 +138,7 @@ const StackedItemsGrid: FC<StackedItemsGridProps> = ({
       <RowHeader options={options} />
 
       {items.map((item, index) => (
-        <RadioGroup value={getRadioValue(item)}>
+        <RadioGroup key={`StackGrid_${item.id}`} value={getRadioValue(item)}>
           <RowListItem
             options={options}
             item={item}

@@ -122,6 +122,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
 
         case 'Message': {
           return {
+            id: item.id,
             type: item.inputType,
             payload: item.config,
             question: item.question,

@@ -3,34 +3,36 @@ import { FC } from 'react';
 import { colors } from '@app/shared/lib';
 
 import {
-  Item,
+  StackedItem,
   StackedItemsGrid,
   StackedRowItemValue,
 } from './StackedItemsGrid';
 import { RadioGroup } from '../';
 
 type StackedRadioConfig = {
-  rows: Array<Item>;
-  options: Array<Item>;
+  rows: Array<StackedItem>;
+  options: Array<StackedItem>;
+};
+
+type StackedRadioAnswerValue = StackedRowItemValue & {
+  rowId: string;
 };
 
 type Props = {
-  values: Array<{ rowId: string; optionId: string }>;
-  onChange: (value: Array<{ rowId: string; optionId: string }>) => unknown;
+  values: Array<StackedRadioAnswerValue>;
+  onChange: (value: Array<StackedRadioAnswerValue>) => unknown;
   config: StackedRadioConfig;
 };
 
 const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
   const onRowValueChange = (option: StackedRowItemValue, itemIndex: number) => {
     const { id: currentRowId } = config.rows[itemIndex];
-    const newValues = values.filter(({ rowId }) => rowId !== currentRowId);
+    const newValue = [...values];
 
-    newValues.push({
-      rowId: currentRowId,
-      optionId: option.id,
-    });
+    newValue.length = config.rows.length;
+    newValue[itemIndex] = { rowId: currentRowId, ...option };
 
-    onChange(newValues);
+    onChange(newValue);
   };
 
   return (
@@ -38,12 +40,15 @@ const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
       items={config.rows}
       renderCell={(index, option) => {
         const { id: currentRowId } = config.rows[index];
-        const currentValue = values.find(({ rowId }) => {
-          return rowId === currentRowId;
+        const currentValue = values.find(value => {
+          return value?.rowId === currentRowId;
         });
 
         return (
-          <RadioGroup value={currentValue?.optionId ?? ''}>
+          <RadioGroup
+            key={option.id + currentRowId}
+            value={currentValue?.id ?? ''}
+          >
             <RadioGroup.Item
               onPress={() => onRowValueChange(option, index)}
               borderColor={colors.blue}

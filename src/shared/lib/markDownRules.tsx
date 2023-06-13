@@ -52,7 +52,7 @@ const localStyles = StyleSheet.create({
     width: viewPortWidth - 100,
   },
   htmlWebView: {
-    width: '100%',
+    width: Dimensions.get('window').width,
   },
   listItemText: {
     fontSize: 13,

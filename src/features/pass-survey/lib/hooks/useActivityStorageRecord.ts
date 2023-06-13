@@ -4,7 +4,7 @@ import { useMMKVObject } from 'react-native-mmkv';
 
 import { createSecureStorage } from '@app/shared/lib';
 
-import { PipelineItem, PipelineItemAnswer } from '../types';
+import { PipelineItem, PipelineItemAnswer, UserAction } from '../types';
 
 type UseActivityStorageArgs = {
   appletId: string;
@@ -25,6 +25,7 @@ export type ActivityState = {
   answers: Answers;
   appletVersion: string;
   timers: Timers;
+  actions: UserAction[];
 };
 
 const storage = createSecureStorage('activity_progress-storage');

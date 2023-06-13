@@ -6,3 +6,8 @@ export const selectInProgressApplets = createSelector(
   selectApplets,
   applet => applet.inProgress,
 );
+
+export const selectCompletedEntities = createSelector(
+  selectApplets,
+  applet => applet.completedEntities,
+);

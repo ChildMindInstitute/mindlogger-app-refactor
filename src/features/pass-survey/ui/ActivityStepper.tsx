@@ -52,6 +52,8 @@ function ActivityStepper({
 
   const {
     activityStorageRecord,
+    userActionCreator,
+    trackUserAction,
     setStep: setCurrentStep,
     setAnswer,
     removeAnswer,
@@ -67,14 +69,13 @@ function ActivityStepper({
   const { replaceTextVariables } = useTextVariablesReplacer({
     items: activityStorageRecord?.items,
     answers: activityStorageRecord?.answers,
+    activityId,
   });
 
   const {
     isFirstStep,
-    isLastStep,
     isTutorialStep,
 
-    canSkip,
     canMoveNext,
     canMoveBack,
     canReset,
@@ -85,6 +86,7 @@ function ActivityStepper({
 
     isValid,
     getNextStepShift,
+    getNextButtonText,
   } = useActivityStepper(activityStorageRecord);
 
   const { restart: restartIdleTimer } = useIdleTimer({
@@ -98,11 +100,7 @@ function ActivityStepper({
 
   const currentStep = activityStorageRecord?.step ?? 0;
 
-  const nextButtonText = isLastStep
-    ? 'activity_navigation:done'
-    : canSkip
-    ? 'activity_navigation:skip'
-    : 'activity_navigation:next';
+  const nextButtonText = getNextButtonText();
 
   const tutorialViewerRef = useRef<TutorialViewerRef | null>(null);
 
@@ -164,6 +162,12 @@ function ActivityStepper({
 
   const onUndo = () => {
     removeAnswer(currentStep);
+    restartIdleTimer();
+  };
+
+  const onEndReached = () => {
+    trackUserAction(userActionCreator.done());
+    onFinish();
   };
 
   if (!activityStorageRecord) {
@@ -186,11 +190,8 @@ function ActivityStepper({
         onBeforeNext={onBeforeNext}
         onBeforeBack={onBeforeBack}
         onStartReached={onClose}
-        onEndReached={onFinish}
-        onUndo={() => {
-          onUndo();
-          restartIdleTimer();
-        }}
+        onEndReached={onEndReached}
+        onUndo={onUndo}
       >
         {showWatermark && watermark && (
           <CachedImage source={watermark} style={styles.watermark} />

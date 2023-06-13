@@ -4,7 +4,7 @@ import i18n from 'i18next';
 
 import { range } from './common';
 import { MINUTES_IN_HOUR, MS_IN_MINUTE, MS_IN_SECOND } from '../constants';
-import { HourMinute, type Language } from '../types';
+import { HourMinute, DayMonthYear, type Language } from '../types';
 
 const dateFnsLocales = { fr, en: enGB };
 
@@ -123,3 +123,9 @@ export const getUnixTimestamp = (date: Date | number): number =>
 
 export const getMidnightDateInMs = (date: Date = new Date()): number =>
   date.setHours(0, 0, 0, 0);
+
+export const convertToDayMonthYear = (date: Date): DayMonthYear => ({
+  day: date.getDate(),
+  month: date.getMonth() + 1,
+  year: date.getFullYear(),
+});

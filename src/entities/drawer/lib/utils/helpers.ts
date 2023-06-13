@@ -70,16 +70,6 @@ export const getChunkedPointsAsStrings = (lines: DrawLine[]) => {
     const { points } = line;
     let { length } = points;
 
-    if (length === 1) {
-      const point = points[0];
-
-      points.push({
-        ...point,
-        x: point.x + 1.5,
-        y: point.y + 1.5,
-      });
-      length += 1;
-    }
     for (let index = 0; index < length; index += chunkSize) {
       const myChunk = line.points.slice(index, index + chunkSize + 1);
 

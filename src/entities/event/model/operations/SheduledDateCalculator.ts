@@ -41,9 +41,10 @@ const calculateForMonthly = (
     date = check;
   }
 
+  const aMonthAgo = subMonths(today, 1);
+
   const isBeyondOfDateBorders =
-    (availability.startDate && date < availability.startDate) ||
-    (availability.endDate && date > availability.endDate);
+    date < aMonthAgo || (!!availability.endDate && date > availability.endDate);
 
   if (isBeyondOfDateBorders) {
     return null;

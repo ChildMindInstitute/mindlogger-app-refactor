@@ -9,7 +9,9 @@ import {
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
-import { Center, Box } from '@shared/ui';
+import { Box, BoxProps } from '@shared/ui';
+
+import Center from '../../Center';
 
 const styles = StyleSheet.create({
   touchable: {
@@ -20,7 +22,7 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+type Props = BoxProps & {
   children: ReactNode;
   mode: 'photo' | 'video';
   onShowMediaLibrary: () => void;
@@ -28,10 +30,10 @@ type Props = {
   uploadIcon: JSX.Element;
 };
 
-const ContentWrapper = styled(Center, {
+const ContentWrapper: FC<BoxProps> = styled(Center, {
   width: '100%',
   marginBottom: 15,
-  borderColor: '$red',
+
   borderWidth: 4,
   backgroundColor: '$lightRed',
   borderRadius: 15,
@@ -43,6 +45,7 @@ const MediaInput: FC<Props> = ({
   onOpenCamera,
   onShowMediaLibrary,
   uploadIcon,
+  borderColor,
 }) => {
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowDimensions();
@@ -61,7 +64,7 @@ const MediaInput: FC<Props> = ({
   };
 
   return (
-    <ContentWrapper height={windowWidth * 0.85}>
+    <ContentWrapper borderColor={borderColor} height={windowWidth * 0.85}>
       {children || (
         <TouchableOpacity onPress={onUploadPress} style={styles.touchable}>
           <Box>{uploadIcon}</Box>

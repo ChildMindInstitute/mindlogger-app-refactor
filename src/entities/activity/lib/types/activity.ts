@@ -73,6 +73,7 @@ type CheckboxConfig = {
     tooltip: string | null;
     color: string | null;
     isHidden: boolean;
+    value: number;
   }>;
 };
 
@@ -173,6 +174,7 @@ type RadioConfig = {
     tooltip: string | null;
     color: string | null;
     isHidden: boolean;
+    value: number;
   }>;
 };
 

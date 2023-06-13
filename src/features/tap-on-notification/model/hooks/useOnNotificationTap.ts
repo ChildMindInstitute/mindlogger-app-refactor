@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 
 import {
+  ActivityRecordKeyParams,
   EntityPath,
   EntityType,
   LookupMediaInput,
@@ -23,6 +24,7 @@ import { useAppSelector } from '@app/shared/lib';
 type Input = {
   checkAvailability: (entityName: string, identifiers: EntityPath) => boolean;
   hasMediaReferences: (input: LookupMediaInput) => boolean;
+  cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
 };
 
 const GoBackDuration = 1000;
@@ -42,6 +44,7 @@ const WorkaroundDuration = 100;
 export function useOnNotificationTap({
   checkAvailability,
   hasMediaReferences,
+  cleanUpMediaFiles,
 }: Input) {
   const queryClient = useQueryClient();
 
@@ -53,6 +56,7 @@ export function useOnNotificationTap({
 
   const { startFlow, startActivity } = AppletModel.useStartEntity({
     hasMediaReferences,
+    cleanUpMediaFiles,
   });
 
   const actions: Record<

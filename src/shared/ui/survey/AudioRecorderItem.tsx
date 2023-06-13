@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useMemo, FC } from 'react';
+import { useState, useRef, useEffect, useCallback, FC } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { useFocusEffect } from '@react-navigation/native';
@@ -50,17 +50,9 @@ const AudioRecorderItem: FC<Props> = ({
   const [secondsElapsed, setSecondsElapsed] = useState(0);
   const [fileSaved, setFileSaved] = useState(!!initialValue);
   const [errorDescription, setErrorDescription] = useState('');
-  const permissionNotGranted = microphonePermission !== RESULTS.GRANTED;
+  const [lastFilePath, setLastFilePath] = useState<string | null>(null);
 
-  const filePath = useMemo(() => {
-    if (initialValue?.uri) {
-      return initialValue.uri;
-    }
-    const randomString = uuidv4();
-    return IS_ANDROID
-      ? `${androidCacheDir}/${randomString}.mp4`
-      : `${randomString}.m4a`;
-  }, [initialValue]);
+  const permissionNotGranted = microphonePermission !== RESULTS.GRANTED;
 
   const checkMicrophonePermission = async () => {
     if (permissionNotGranted) {
@@ -81,7 +73,34 @@ const AudioRecorderItem: FC<Props> = ({
     audioRecorderPlayer.current.removeRecordBackListener();
   };
 
+  const unlinkOldRecordingFile = async () => {
+    if (lastFilePath) {
+      const pathToRemove = IS_ANDROID
+        ? lastFilePath.replace('file://', '')
+        : lastFilePath;
+
+      try {
+        await RNFetchBlob.fs.unlink(pathToRemove);
+      } catch (error) {
+        console.warn(error);
+      }
+    }
+  };
+
+  const generateNewFilePath = async () => {
+    const randomString = uuidv4();
+    const newFilePath = IS_ANDROID
+      ? `${androidCacheDir}/${randomString}.mp4`
+      : `${randomString}.m4a`;
+
+    await unlinkOldRecordingFile();
+
+    setLastFilePath(newFilePath);
+    return newFilePath;
+  };
+
   const record = async () => {
+    const newFilePath = await generateNewFilePath();
     const canRecord = await checkMicrophonePermission();
 
     if (!canRecord) {
@@ -89,7 +108,10 @@ const AudioRecorderItem: FC<Props> = ({
     }
 
     try {
-      await audioRecorderPlayer.current.startRecorder(filePath, audioSetConfig);
+      await audioRecorderPlayer.current.startRecorder(
+        newFilePath,
+        audioSetConfig,
+      );
       audioRecorderPlayer.current.addRecordBackListener(
         ({ currentPosition }) => {
           const elapsedSeconds = Math.floor(currentPosition / 1000);

@@ -98,6 +98,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
 
   return (
     <MediaInput
+      borderColor={value ? '$green' : '$red'}
       onOpenCamera={onOpenPhotoCamera}
       onShowMediaLibrary={onShowImageGallery}
       mode="photo"

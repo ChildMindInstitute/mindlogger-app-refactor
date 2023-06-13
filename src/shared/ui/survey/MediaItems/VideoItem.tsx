@@ -105,6 +105,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
   };
   return (
     <MediaInput
+      borderColor={value ? '$green' : '$red'}
       onOpenCamera={onOpenVideoCamera}
       onShowMediaLibrary={onShowVideoGallery}
       mode="video"

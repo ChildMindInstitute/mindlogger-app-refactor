@@ -1,3 +1,5 @@
+import { Item } from '@app/shared/ui';
+
 import { Answers, PipelineItem } from '../lib';
 
 type AnswerValidatorArgs = {
@@ -23,7 +25,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     isBetweenValues(min: number, max: number) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 
@@ -33,7 +35,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     isOutsideOfValues(min: number, max: number) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 
@@ -43,7 +45,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     isEqualToValue(value: any) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 
@@ -53,15 +55,15 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     isEqualToOption(optionId: string) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 
-      return currentAnswer.answer === optionId;
+      return (currentAnswer.answer as Item).id === optionId;
     },
 
     isGreaterThen(value: number) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 
@@ -71,7 +73,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     isLessThen(value: number) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 
@@ -81,13 +83,13 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     includesOption(optionId: string) {
-      if (!currentAnswer?.answer) {
+      if (currentAnswer?.answer == null) {
         return false;
       }
 
-      const answer = currentAnswer.answer as string[];
+      const answer = currentAnswer.answer as Item[];
 
-      return answer.includes(optionId);
+      return answer.find(answerItem => answerItem.id === optionId);
     },
   };
 }
