@@ -128,8 +128,6 @@ function FinishItem({
       activityStorageRecord.answers,
     );
 
-    console.log('itemIds', itemIds);
-
     const progressRecord = storeProgress[appletId][entityId][eventId];
 
     const scheduledDate = getScheduledDate(scheduledEvent!);
