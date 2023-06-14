@@ -4,10 +4,7 @@ import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
-import {
-  MediaFilesCleaner,
-  useActivityAnswersMutation,
-} from '@app/entities/activity';
+import { useActivityAnswersMutation } from '@app/entities/activity';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 import {
   mapActivitiesFromDto,
@@ -128,7 +125,6 @@ function Intermediate({
     isPaused: isOffline,
   } = useActivityAnswersMutation({
     onSuccess: () => {
-      MediaFilesCleaner.cleanUp({ appletId, activityId, eventId, order });
       clearActivityStorageRecord();
       changeActivity();
       onFinish();

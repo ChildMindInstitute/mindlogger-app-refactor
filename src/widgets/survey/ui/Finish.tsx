@@ -5,10 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
 import { EventModel } from '@app/entities/event';
-import {
-  MediaFilesCleaner,
-  useActivityAnswersMutation,
-} from '@entities/activity';
+import { useActivityAnswersMutation } from '@entities/activity';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
 import { PassSurveyModel } from '@features/pass-survey';
@@ -89,9 +86,6 @@ function FinishItem({
       if (error.response.status !== 401 && error.evaluatedMessage) {
         onApiRequestError(error.evaluatedMessage);
       }
-    },
-    onSuccess: () => {
-      MediaFilesCleaner.cleanUp({ appletId, activityId, eventId, order });
     },
   });
 

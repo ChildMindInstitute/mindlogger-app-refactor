@@ -1,8 +1,9 @@
 import { FileSystem } from 'react-native-file-access';
 
 import { ActivityRecordKeyParams } from '@app/abstract/lib';
+import { AnswerDto, ObjectAnswerDto } from '@app/shared/api';
 import { createSecureStorage } from '@app/shared/lib';
-import { MediaFile } from '@app/shared/ui';
+import { MediaFile, MediaValue } from '@app/shared/ui';
 
 type EntityRecord = {
   answers: Record<string, MediaFile | undefined>;
@@ -13,6 +14,7 @@ export const activityStorage = createSecureStorage('activity_progress-storage');
 type Result = {
   cleanUp: (keyParams: ActivityRecordKeyParams) => void;
   cleanUpByStorageKey: (key: string) => void;
+  cleanUpAnswerList: (answers: AnswerDto[]) => void;
 };
 
 const createMediaFilesCleaner = (): Result => {
@@ -67,9 +69,34 @@ const createMediaFilesCleaner = (): Result => {
     return cleanUpByStorageKey(key);
   };
 
+  const cleanUpAnswerList = async (answers: AnswerDto[]) => {
+    try {
+      answers.forEach(async answer => {
+        const { value: answerValue } = answer as ObjectAnswerDto;
+
+        const mediaValue = answerValue as MediaValue;
+
+        if (mediaValue?.uri) {
+          const fileExists = await FileSystem.exists(mediaValue.uri);
+
+          if (fileExists) {
+            await FileSystem.unlink(mediaValue.uri);
+
+            console.info('[MediaFilesCleaner.cleanUp]: completed');
+          }
+        }
+      });
+    } catch (error) {
+      console.warn(
+        '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',
+      );
+    }
+  };
+
   return {
     cleanUp,
     cleanUpByStorageKey,
+    cleanUpAnswerList,
   };
 };
 
