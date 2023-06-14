@@ -3,7 +3,7 @@ import { GestureResponderEvent } from 'react-native';
 
 import { YStack, Text } from '@shared/ui';
 
-import styles from './StabilityTracker.styles';
+import styles from './StabilityTrackerItem.styles';
 
 type Props = {
   isMoving: boolean;

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { Rect } from 'react-native-svg';
 
-import { colors } from './StabilityTracker.styles';
+import { colors } from './StabilityTrackerItem.styles';
 
 type Props = {
   boundWasHit: boolean;

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { YStack, Text } from '@shared/ui';
 
-import styles from './StabilityTracker.styles';
+import styles from './StabilityTrackerItem.styles';
 
 type Props = {
   score: number;

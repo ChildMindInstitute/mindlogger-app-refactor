@@ -1,7 +1,7 @@
 import { TestIndex, DeviceType } from '@entities/abTrail';
-import { TestIndex as GyroscopeTestIndex } from '@entities/gyroscope';
+import { TestIndex as StabilityTrackerTestIndex } from '@entities/stabilityTracker';
 
-export type TutorialType = 'AbTrails' | 'Gyroscope';
+export type TutorialType = 'AbTrails' | 'StabilityTracker';
 
 type AbTutorialPayload = {
   testIndex: TestIndex;
@@ -12,12 +12,12 @@ type ABTutorial = {
   type: 'AbTrails';
 } & AbTutorialPayload;
 
-type GyroscopeTutorialPayload = {
-  testIndex: GyroscopeTestIndex;
+type StabilityTrackerTutorialPayload = {
+  testIndex: StabilityTrackerTestIndex;
 };
 
-type GyroscopeTutorial = {
-  type: 'Gyroscope';
-} & GyroscopeTutorialPayload;
+type StabilityTrackerTutorial = {
+  type: 'StabilityTracker';
+} & StabilityTrackerTutorialPayload;
 
-export type Tutorial = ABTutorial | GyroscopeTutorial;
+export type Tutorial = ABTutorial | StabilityTrackerTutorial;

@@ -10,7 +10,7 @@ type Props = {
   tutorialStepIndex: number;
 } & BoxProps;
 
-const GyroscopeTutorial: FC<Props> = props => {
+const StabilityTrackerTutorial: FC<Props> = props => {
   const { testIndex, tutorialStepIndex } = props;
 
   const tutorialRecord = MobileTutorials[testIndex][tutorialStepIndex];
@@ -24,4 +24,4 @@ const GyroscopeTutorial: FC<Props> = props => {
   );
 };
 
-export default GyroscopeTutorial;
+export default StabilityTrackerTutorial;

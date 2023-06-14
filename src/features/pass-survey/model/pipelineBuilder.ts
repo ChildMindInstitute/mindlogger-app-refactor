@@ -2,7 +2,7 @@ import { ActivityDetails, ActivityItem } from '@app/entities/activity';
 
 import {
   getAbTrailsPipeline,
-  getGyroscopePipeline,
+  getStabilityTrackerPipeline,
 } from './precompiled-pipelines';
 import { PipelineItem } from '../lib';
 
@@ -17,8 +17,8 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
           ) satisfies PipelineItem[];
         }
 
-        case 'Gyroscope': {
-          return getGyroscopePipeline(
+        case 'StabilityTracker': {
+          return getStabilityTrackerPipeline(
             item.config,
             item.id,
           ) satisfies PipelineItem[];

@@ -5,7 +5,7 @@ import {
   ActivityItemType,
   TextInputResponse,
   AbTestResponse,
-  GyroscopeResponse,
+  StabilityTrackerResponse,
   DrawingTestResponse,
   FlankerResponse,
   SliderResponse,
@@ -56,10 +56,10 @@ interface AbTestPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface GyroscopePipelineAnswer extends PipelineItemAnswerBase {
-  type: 'Gyroscope';
+interface StabilityTrackerPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'StabilityTracker';
   value: {
-    answer?: GyroscopeResponse;
+    answer?: StabilityTrackerResponse;
     additionalAnswer?: string;
   };
 }
@@ -211,7 +211,7 @@ export type PipelineItemAnswer =
   | SplashPipelineAnswer
   | TextInputPipelineAnswer
   | AbTestPipelineAnswer
-  | GyroscopePipelineAnswer
+  | StabilityTrackerPipelineAnswer
   | DrawingTestPipelineAnswer
   | FlankerPipelineAnswer
   | NumberSelectPipelineAnswer

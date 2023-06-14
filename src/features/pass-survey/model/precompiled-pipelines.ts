@@ -1,6 +1,6 @@
 import { DeviceType, TestIndex } from '@entities/abTrail';
-import { GyroscopeConfig } from '@entities/activity';
-import { TestIndex as GyroscopeTestIndex } from '@entities/gyroscope';
+import { StabilityTrackerConfig } from '@entities/activity';
+import { TestIndex as StabilityTrackerTestIndex } from '@entities/stabilityTracker';
 
 import { PipelineItem } from '../lib';
 
@@ -53,17 +53,17 @@ export const getAbTrailsPipeline = (
   ];
 };
 
-export const getGyroscopePipeline = (
-  config: GyroscopeConfig,
+export const getStabilityTrackerPipeline = (
+  config: StabilityTrackerConfig,
   id: string,
 ): PipelineItem[] => {
   const getTutorialPipelineItem = (
-    testIndex: GyroscopeTestIndex,
+    testIndex: StabilityTrackerTestIndex,
   ): PipelineItem => {
     return {
       type: 'Tutorial',
       payload: {
-        type: 'Gyroscope',
+        type: 'StabilityTracker',
         testIndex,
       },
       timer: null,
@@ -73,10 +73,12 @@ export const getGyroscopePipeline = (
     };
   };
 
-  const getTestPipelineItem = (testIndex: GyroscopeTestIndex): PipelineItem => {
+  const getTestPipelineItem = (
+    testIndex: StabilityTrackerTestIndex,
+  ): PipelineItem => {
     return {
       id,
-      type: 'Gyroscope',
+      type: 'StabilityTracker',
       payload: {
         ...config,
         testIndex: testIndex,

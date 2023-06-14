@@ -4,7 +4,7 @@ import { ConditionalLogic } from './conditionalLogic';
 
 export type ActivityItemType =
   | 'AbTest'
-  | 'Gyroscope'
+  | 'StabilityTracker'
   | 'DrawingTest'
   | 'Splash'
   | 'Flanker'
@@ -30,7 +30,7 @@ type AbTestConfig = {
   device: 'Phone' | 'Tablet';
 };
 
-export type GyroscopeConfig = {
+export type StabilityTrackerConfig = {
   lambdaSlope: number;
   durationInMinutes: number;
   numberOfTrials: number;
@@ -195,7 +195,7 @@ type TimeConfig = null;
 
 export type ActivityItemConfig =
   | AbTestConfig
-  | GyroscopeConfig
+  | StabilityTrackerConfig
   | DrawingTestTestConfig
   | TextInputConfig
   | NumberSelectConfig
@@ -244,9 +244,9 @@ interface AbTestActivityItem extends ActivityItemBase {
   config: AbTestConfig;
 }
 
-interface GyroscopeActivityItem extends ActivityItemBase {
-  inputType: 'Gyroscope';
-  config: GyroscopeConfig;
+interface StabilityTrackerActivityItem extends ActivityItemBase {
+  inputType: 'StabilityTracker';
+  config: StabilityTrackerConfig;
 }
 
 interface SplashActivityItem extends ActivityItemBase {
@@ -348,7 +348,7 @@ interface TimeActivityItem extends ActivityItemBase {
 
 export type ActivityItem =
   | AbTestActivityItem
-  | GyroscopeActivityItem
+  | StabilityTrackerActivityItem
   | SplashActivityItem
   | DrawingTestTestActivityItem
   | TextInputActivityItem

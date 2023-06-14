@@ -4,7 +4,7 @@ export type TutorialPayload = Array<string>;
 
 export type DeviceTutorials = Record<TestIndex, TutorialPayload>;
 
-export type GyroscopeResponse = {
+export type StabilityTrackerResponse = {
   score: number;
 };
 

@@ -8,7 +8,7 @@ import {
   ActivityDto,
   DrawingItemDto,
   AbTestItemDto,
-  GyroscopeItemDto,
+  StabilityTrackerItemDto,
   AudioItemDto,
   AudioPlayerItemDto,
   DateItemDto,
@@ -114,11 +114,11 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
   };
 }
 
-function mapToGyroscope(dto: GyroscopeItemDto): ActivityItem {
+function mapToStabilityTracker(dto: StabilityTrackerItemDto): ActivityItem {
   return {
     id: dto.id,
     name: dto.name,
-    inputType: 'Gyroscope',
+    inputType: 'StabilityTracker',
     config: {
       lambdaSlope: dto.responseValues.lambdaSlope,
       durationInMinutes: dto.responseValues.durationInMinutes,
@@ -643,8 +643,8 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
       switch (item.responseType) {
         case 'abTest':
           return mapToAbTest(item);
-        case 'gyroscope':
-          return mapToGyroscope(item);
+        case 'stabilityTracker':
+          return mapToStabilityTracker(item);
         case 'audio':
           return mapToAudio(item);
         case 'audioPlayer':

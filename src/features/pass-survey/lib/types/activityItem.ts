@@ -1,6 +1,6 @@
 import {
   AbTestPipelineItem,
-  GyroscopePipelineItem,
+  StabilityTrackerPipelineItem,
   ActivityItemType,
   CheckboxPipelineItem,
   DrawingTestPipelineItem,
@@ -45,9 +45,9 @@ interface AbTestActivityItem extends ActivityItemBase {
   pipelineItem: AbTestPipelineItem;
 }
 
-interface GyroscopeActivityItem extends ActivityItemBase {
-  type: 'Gyroscope';
-  pipelineItem: GyroscopePipelineItem;
+interface StabilityTrackerActivityItem extends ActivityItemBase {
+  type: 'StabilityTracker';
+  pipelineItem: StabilityTrackerPipelineItem;
 }
 
 interface DrawingTestActivityItem extends ActivityItemBase {
@@ -140,7 +140,7 @@ interface TimeActivityItem extends ActivityItemBase {
 export type ActivityItem =
   | TextInputActivityItem
   | AbTestActivityItem
-  | GyroscopeActivityItem
+  | StabilityTrackerActivityItem
   | DrawingTestActivityItem
   | FlankerActivityItem
   | SliderActivityItem

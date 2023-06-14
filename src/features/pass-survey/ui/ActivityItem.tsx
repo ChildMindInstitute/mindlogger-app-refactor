@@ -20,7 +20,7 @@ import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
-import { Gyroscope } from '@entities/gyroscope';
+import { StabilityTracker } from '@entities/stabilityTracker';
 import { IS_ANDROID } from '@shared/lib';
 import {
   RadioActivityItem,
@@ -88,10 +88,10 @@ function ActivityItem({
       );
       break;
 
-    case 'Gyroscope':
+    case 'StabilityTracker':
       item = (
         <Box flex={1}>
-          <Gyroscope
+          <StabilityTracker
             testIndex={pipelineItem.payload.testIndex}
             config={pipelineItem.payload}
             onComplete={response => {
@@ -328,7 +328,7 @@ function ActivityItem({
   }
 
   const isScrollEnabled =
-    pipelineItem?.type === 'Gyroscope' ? false : scrollEnabled;
+    pipelineItem?.type === 'StabilityTracker' ? false : scrollEnabled;
 
   return (
     <ScrollableContent scrollEnabled={isScrollEnabled}>

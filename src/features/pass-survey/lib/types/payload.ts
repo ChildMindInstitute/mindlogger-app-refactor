@@ -11,9 +11,9 @@ import {
 } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
 import {
-  GyroscopeResponse as GyroscopeBaseResponse,
-  TestIndex as GyroscopeTestIndex,
-} from '@entities/gyroscope';
+  StabilityTrackerResponse as StabilityTrackerBaseResponse,
+  TestIndex as StabilityTrackerTestIndex,
+} from '@entities/stabilityTracker';
 import { MediaFile } from '@shared/ui';
 import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
 
@@ -21,7 +21,7 @@ import { Tutorial } from './tutorial';
 
 export type ActivityItemType =
   | 'AbTest'
-  | 'Gyroscope'
+  | 'StabilityTracker'
   | 'DrawingTest'
   | 'Tutorial'
   | 'Splash'
@@ -49,8 +49,8 @@ type AbTestPayload = {
   deviceType: DeviceType;
 };
 
-type GyroscopePayload = {
-  testIndex: GyroscopeTestIndex;
+type StabilityTrackerPayload = {
+  testIndex: StabilityTrackerTestIndex;
   phase: 'trial' | 'focus-phase';
   lambdaSlope: number;
   durationInMinutes: number;
@@ -222,7 +222,7 @@ type VideoPayload = null;
 
 type PipelinePayload =
   | AbTestPayload
-  | GyroscopePayload
+  | StabilityTrackerPayload
   | SplashPayload
   | Tutorial
   | DrawingPayload
@@ -268,9 +268,9 @@ export interface AbTestPipelineItem extends PipelineItemBase {
   type: 'AbTest';
   payload: AbTestPayload;
 }
-export interface GyroscopePipelineItem extends PipelineItemBase {
-  type: 'Gyroscope';
-  payload: GyroscopePayload;
+export interface StabilityTrackerPipelineItem extends PipelineItemBase {
+  type: 'StabilityTracker';
+  payload: StabilityTrackerPayload;
 }
 
 export interface SplashPipelineItem extends PipelineItemBase {
@@ -374,7 +374,7 @@ export interface TimePipelineItem extends PipelineItemBase {
 
 export type AbTestResponse = LogLine[];
 
-export type GyroscopeResponse = GyroscopeBaseResponse;
+export type StabilityTrackerResponse = StabilityTrackerBaseResponse;
 
 export type DrawingTestResponse = DrawResult;
 
@@ -427,7 +427,7 @@ export type VideoResponse = MediaFile & {
 
 export type PipelineItemResponse =
   | AbTestResponse
-  | GyroscopeResponse
+  | StabilityTrackerResponse
   | FlankerResponse
   | DrawingTestResponse
   | TextInputResponse
@@ -448,7 +448,7 @@ export type PipelineItemResponse =
 
 export type PipelineItem =
   | AbTestPipelineItem
-  | GyroscopePipelineItem
+  | StabilityTrackerPipelineItem
   | SplashPipelineItem
   | TutorialPipelineItem
   | DrawingTestPipelineItem

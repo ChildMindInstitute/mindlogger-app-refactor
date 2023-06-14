@@ -22,7 +22,7 @@ export type ResponseType =
   | 'audioPlayer'
   | 'flanker'
   | 'abTest'
-  | 'gyroscope'
+  | 'stabilityTracker'
   | 'time';
 
 type Match = 'any' | 'all';
@@ -384,7 +384,7 @@ type SliderRowsAnswerSettings = {
 // @todo Change when the BE integration is done
 type AbTestConfiguration = TimerConfiguration;
 
-type GyroscopeConfiguration = TimerConfiguration;
+type StabilityTrackerConfiguration = TimerConfiguration;
 
 // @todo Change when the BE integration is done
 type AbTestAnswerSettings = {
@@ -393,7 +393,7 @@ type AbTestAnswerSettings = {
 
 export type FlankerConfiguration = FlankerItemSettingsDto;
 
-type GyroscopeAnswerSettings = {
+type StabilityTrackerAnswerSettings = {
   lambdaSlope: number;
   durationInMinutes: number;
   numberOfTrials: number;
@@ -422,7 +422,7 @@ type Configuration =
   | SingleSelectionConfiguration
   | MultiSelectionConfiguration
   | AbTestConfiguration
-  | GyroscopeConfiguration
+  | StabilityTrackerConfiguration
   | FlankerConfiguration;
 
 type AnswerSettings =
@@ -444,7 +444,7 @@ type AnswerSettings =
   | SingleSelectionAnswerSettings
   | MultiSelectionAnswerSettings
   | AbTestAnswerSettings
-  | GyroscopeAnswerSettings
+  | StabilityTrackerAnswerSettings
   | FlankerAnswerSettings;
 
 type ActivityItemDtoBase = {
@@ -574,10 +574,10 @@ export interface AbTestItemDto extends ActivityItemDtoBase {
   responseValues: AbTestAnswerSettings;
 }
 
-export interface GyroscopeItemDto extends ActivityItemDtoBase {
-  responseType: 'gyroscope';
-  config: GyroscopeConfiguration;
-  responseValues: GyroscopeAnswerSettings;
+export interface StabilityTrackerItemDto extends ActivityItemDtoBase {
+  responseType: 'stabilityTracker';
+  config: StabilityTrackerConfiguration;
+  responseValues: StabilityTrackerAnswerSettings;
 }
 
 export interface FlankerItemDto extends ActivityItemDtoBase {
@@ -605,6 +605,6 @@ export type ActivityItemDto =
   | AudioItemDto
   | AudioPlayerItemDto
   | AbTestItemDto
-  | GyroscopeItemDto
+  | StabilityTrackerItemDto
   | FlankerItemDto
   | TimeItemDto;

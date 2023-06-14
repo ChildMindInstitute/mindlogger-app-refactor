@@ -1,9 +1,9 @@
 import { forwardRef, useImperativeHandle, useState } from 'react';
 
-import GyroscopeTutorial from './GyroscopeTutorial';
+import StabilityTrackerTutorial from './StabilityTrackerTutorial';
 import { MobileTutorials } from '../model';
 
-export type GyroscopeTutorialViewerProps = {
+export type StabilityTrackerTutorialViewerProps = {
   testIndex: 0 | 1;
 };
 
@@ -12,9 +12,9 @@ export type ViewerRef = {
   back: (step?: number) => boolean;
 };
 
-export const GyroscopeTutorialViewer = forwardRef<
+export const StabilityTrackerTutorialViewer = forwardRef<
   ViewerRef,
-  GyroscopeTutorialViewerProps
+  StabilityTrackerTutorialViewerProps
 >(({ testIndex }, ref) => {
   const [step, setStep] = useState(0);
   const stepsCount = MobileTutorials[testIndex].length as number;
@@ -50,5 +50,7 @@ export const GyroscopeTutorialViewer = forwardRef<
     [step, stepsCount],
   );
 
-  return <GyroscopeTutorial testIndex={testIndex} tutorialStepIndex={step} />;
+  return (
+    <StabilityTrackerTutorial testIndex={testIndex} tutorialStepIndex={step} />
+  );
 });
