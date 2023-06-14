@@ -141,13 +141,11 @@ export const sendAnswers = async (body: SendAnswersInput) => {
 
   const encryptedData = encryptAnswers(data);
 
-  const result = await AnswerService.sendActivityAnswers(encryptedData);
+  return AnswerService.sendActivityAnswers(encryptedData).then(result => {
+    MediaFilesCleaner.cleanUpByAnswers(body.answers);
 
-  if (result.status === 201 || result.status === 200) {
-    MediaFilesCleaner.cleanUpAnswerList(body.answers);
-  }
-
-  return result;
+    return result;
+  });
 };
 
 export const useActivityAnswersMutation = (options?: Options) => {

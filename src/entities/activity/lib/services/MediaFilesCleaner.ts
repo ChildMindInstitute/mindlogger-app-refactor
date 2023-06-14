@@ -14,7 +14,7 @@ export const activityStorage = createSecureStorage('activity_progress-storage');
 type Result = {
   cleanUp: (keyParams: ActivityRecordKeyParams) => void;
   cleanUpByStorageKey: (key: string) => void;
-  cleanUpAnswerList: (answers: AnswerDto[]) => void;
+  cleanUpByAnswers: (answers: AnswerDto[]) => void;
 };
 
 const createMediaFilesCleaner = (): Result => {
@@ -69,7 +69,7 @@ const createMediaFilesCleaner = (): Result => {
     return cleanUpByStorageKey(key);
   };
 
-  const cleanUpAnswerList = async (answers: AnswerDto[]) => {
+  const cleanUpByAnswers = async (answers: AnswerDto[]) => {
     try {
       answers.forEach(async answer => {
         const { value: answerValue } = answer as ObjectAnswerDto;
@@ -89,6 +89,7 @@ const createMediaFilesCleaner = (): Result => {
     } catch (error) {
       console.warn(
         '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',
+        error,
       );
     }
   };
@@ -96,7 +97,7 @@ const createMediaFilesCleaner = (): Result => {
   return {
     cleanUp,
     cleanUpByStorageKey,
-    cleanUpAnswerList,
+    cleanUpByAnswers,
   };
 };
 
