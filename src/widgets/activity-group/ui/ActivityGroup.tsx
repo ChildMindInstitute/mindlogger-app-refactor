@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { EntityType } from '@app/abstract/lib';
-import { MediaFilesCleaner } from '@app/features/pass-survey/lib/services';
+import { MediaFilesCleaner } from '@app/entities/activity';
 import {
   ActivityList,
   ActivityListItem,

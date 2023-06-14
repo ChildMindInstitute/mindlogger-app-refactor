@@ -15,6 +15,8 @@ import { MediaValue } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
 import { encryption, wait } from '@shared/lib';
 
+import { MediaFilesCleaner } from '../lib';
+
 type SendAnswersInput = {
   appletId: string;
   version: string;
@@ -41,17 +43,16 @@ const isFileUrl = (value: string) => {
   return localFileRegex.test(value);
 };
 
-const filterMediaAnswers = (
-  answers: AnswerDto[],
-  answerFilter: AnswerDto,
-): AnswerDto[] => answers.filter(answer => answer !== answerFilter);
-
 const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
   const itemsAnswers = [...body.answers];
+
+  const updatedAnswers = [];
 
   for (const itemAnswer of itemsAnswers) {
     // Item answer is either string or object.
     if (!isPlainObject(itemAnswer)) {
+      updatedAnswers.push(itemAnswer);
+
       continue;
     }
 
@@ -70,24 +71,20 @@ const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
           const url = uploadResult?.data.result.url;
 
           if (url) {
-            itemAnswer.value = url;
+            updatedAnswers.push({ value: url });
           }
         } catch (error) {
-          const answers = filterMediaAnswers(body.answers, itemAnswer);
-
-          body.answers = answers;
-
           console.error(error);
         }
-      } else {
-        const answers = filterMediaAnswers(body.answers, itemAnswer);
-
-        body.answers = answers;
       }
+    } else {
+      updatedAnswers.push(itemAnswer);
     }
   }
 
-  return body;
+  const updatedBody = { ...body, answers: updatedAnswers };
+
+  return updatedBody;
 };
 
 const encryptAnswers = (data: SendAnswersInput) => {
@@ -141,9 +138,14 @@ export const sendAnswers = async (body: SendAnswersInput) => {
   await wait(100);
 
   const data = await uploadAnswerMediaFiles(body);
+
   const encryptedData = encryptAnswers(data);
 
-  return AnswerService.sendActivityAnswers(encryptedData);
+  return AnswerService.sendActivityAnswers(encryptedData).then(result => {
+    MediaFilesCleaner.cleanUpByAnswers(body.answers);
+
+    return result;
+  });
 };
 
 export const useActivityAnswersMutation = (options?: Options) => {

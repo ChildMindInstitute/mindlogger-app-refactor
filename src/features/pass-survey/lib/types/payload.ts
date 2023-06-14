@@ -12,6 +12,7 @@ import {
   StackedRowItemValue,
 } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
+import { MediaFile } from '@shared/ui';
 import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
 
 import { Tutorial } from './tutorial';
@@ -372,11 +373,7 @@ export type CheckboxResponse = Item[] | null;
 
 export type DateResponse = string | null;
 
-export type AudioResponse = {
-  uri: string;
-  type: string;
-  fileName: string;
-};
+export type AudioResponse = MediaFile;
 
 export type AudioPlayerResponse = boolean;
 
@@ -399,19 +396,13 @@ export type StackedRadioResponse = Array<
 
 export type StackedSliderResponse = Array<number>;
 
-export type PhotoResponse = {
-  uri: string;
-  fileName: string;
+export type PhotoResponse = MediaFile & {
   size: number;
-  type: string;
   fromLibrary: boolean;
 };
 
-export type VideoResponse = {
-  uri: string;
-  fileName: string;
+export type VideoResponse = MediaFile & {
   size: number;
-  type: string;
   fromLibrary: boolean;
 };
 
