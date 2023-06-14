@@ -10,6 +10,10 @@ import {
   StackedRowItemValue,
 } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
+import {
+  GyroscopeResponse as GyroscopeBaseResponse,
+  TestIndex as GyroscopeTestIndex,
+} from '@entities/gyroscope';
 import { MediaFile } from '@shared/ui';
 import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
 
@@ -17,6 +21,7 @@ import { Tutorial } from './tutorial';
 
 export type ActivityItemType =
   | 'AbTest'
+  | 'Gyroscope'
   | 'DrawingTest'
   | 'Tutorial'
   | 'Splash'
@@ -42,6 +47,15 @@ export type ActivityItemType =
 type AbTestPayload = {
   testIndex: TestIndex;
   deviceType: DeviceType;
+};
+
+type GyroscopePayload = {
+  testIndex: GyroscopeTestIndex;
+  phase: 'trial' | 'focus-phase';
+  lambdaSlope: number;
+  durationInMinutes: number;
+  numberOfTrials: number;
+  userInputType: 'gyroscope' | 'touch';
 };
 
 type SplashPayload = { imageUrl: string };
@@ -208,6 +222,7 @@ type VideoPayload = null;
 
 type PipelinePayload =
   | AbTestPayload
+  | GyroscopePayload
   | SplashPayload
   | Tutorial
   | DrawingPayload
@@ -252,6 +267,10 @@ type PipelineItemBase = {
 export interface AbTestPipelineItem extends PipelineItemBase {
   type: 'AbTest';
   payload: AbTestPayload;
+}
+export interface GyroscopePipelineItem extends PipelineItemBase {
+  type: 'Gyroscope';
+  payload: GyroscopePayload;
 }
 
 export interface SplashPipelineItem extends PipelineItemBase {
@@ -355,6 +374,8 @@ export interface TimePipelineItem extends PipelineItemBase {
 
 export type AbTestResponse = LogLine[];
 
+export type GyroscopeResponse = GyroscopeBaseResponse;
+
 export type DrawingTestResponse = DrawResult;
 
 export type FlankerResponse = FlankerGameResponse;
@@ -406,6 +427,7 @@ export type VideoResponse = MediaFile & {
 
 export type PipelineItemResponse =
   | AbTestResponse
+  | GyroscopeResponse
   | FlankerResponse
   | DrawingTestResponse
   | TextInputResponse
@@ -426,6 +448,7 @@ export type PipelineItemResponse =
 
 export type PipelineItem =
   | AbTestPipelineItem
+  | GyroscopePipelineItem
   | SplashPipelineItem
   | TutorialPipelineItem
   | DrawingTestPipelineItem

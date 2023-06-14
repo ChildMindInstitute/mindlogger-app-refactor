@@ -26,7 +26,7 @@ export type ActivityDto = {
 
 export type ActivityResponse = SuccessfulResponse<ActivityDto>;
 
-const mockActivity = false;
+const mockActivity = true;
 
 type FakeResponse = AxiosResponse<ActivityResponse>;
 

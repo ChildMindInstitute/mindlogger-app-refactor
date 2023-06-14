@@ -8,6 +8,7 @@ import {
   ActivityDto,
   DrawingItemDto,
   AbTestItemDto,
+  GyroscopeItemDto,
   AudioItemDto,
   AudioPlayerItemDto,
   DateItemDto,
@@ -108,6 +109,31 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
     isAbleToMoveBack: false,
     hasTextResponse: false,
     canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+  };
+}
+
+function mapToGyroscope(dto: GyroscopeItemDto): ActivityItem {
+  return {
+    id: dto.id,
+    name: dto.name,
+    inputType: 'Gyroscope',
+    config: {
+      lambdaSlope: dto.responseValues.lambdaSlope,
+      durationInMinutes: dto.responseValues.durationInMinutes,
+      numberOfTrials: dto.responseValues.numberOfTrials,
+      userInputType: dto.responseValues.userInputType,
+    },
+    timer: mapTimerValue(dto.config.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: false,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: true,
+    hasTextResponse: false,
+    canBeReset: true,
     hasTopNavigation: false,
     isHidden: dto.isHidden,
   };
@@ -617,6 +643,8 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
       switch (item.responseType) {
         case 'abTest':
           return mapToAbTest(item);
+        case 'gyroscope':
+          return mapToGyroscope(item);
         case 'audio':
           return mapToAudio(item);
         case 'audioPlayer':

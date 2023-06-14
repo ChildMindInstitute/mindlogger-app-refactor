@@ -5,6 +5,7 @@ import {
   ActivityItemType,
   TextInputResponse,
   AbTestResponse,
+  GyroscopeResponse,
   DrawingTestResponse,
   FlankerResponse,
   SliderResponse,
@@ -51,6 +52,14 @@ interface AbTestPipelineAnswer extends PipelineItemAnswerBase {
   type: 'AbTest';
   value: {
     answer?: AbTestResponse;
+    additionalAnswer?: string;
+  };
+}
+
+interface GyroscopePipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Gyroscope';
+  value: {
+    answer?: GyroscopeResponse;
     additionalAnswer?: string;
   };
 }
@@ -202,6 +211,7 @@ export type PipelineItemAnswer =
   | SplashPipelineAnswer
   | TextInputPipelineAnswer
   | AbTestPipelineAnswer
+  | GyroscopePipelineAnswer
   | DrawingTestPipelineAnswer
   | FlankerPipelineAnswer
   | NumberSelectPipelineAnswer

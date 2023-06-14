@@ -1,6 +1,10 @@
 import { forwardRef } from 'react';
 
 import { AbTutorialViewer, AbTutorialViewerProps } from '@entities/abTrail';
+import {
+  GyroscopeTutorialViewer,
+  GyroscopeTutorialViewerProps,
+} from '@entities/gyroscope';
 
 type AbTutorialProps = {
   type: 'AbTrails';
@@ -8,9 +12,9 @@ type AbTutorialProps = {
 
 type GyroscopeProps = {
   type: 'Gyroscope';
-} & {};
+} & GyroscopeTutorialViewerProps;
 
-type Props = AbTutorialProps | GyroscopeProps;
+type Props = GyroscopeProps | AbTutorialProps;
 
 export type TutorialViewerRef = {
   next: () => boolean;
@@ -22,6 +26,9 @@ const TutorialViewerItem = forwardRef<TutorialViewerRef, Props>(
     switch (props.type) {
       case 'AbTrails':
         return <AbTutorialViewer ref={ref} {...props} />;
+
+      case 'Gyroscope':
+        return <GyroscopeTutorialViewer ref={ref} {...props} />;
 
       default:
         return <></>;

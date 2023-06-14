@@ -1,6 +1,9 @@
 import { ActivityDetails, ActivityItem } from '@app/entities/activity';
 
-import { getAbTrailsPipeline } from './precompiled-pipelines';
+import {
+  getAbTrailsPipeline,
+  getGyroscopePipeline,
+} from './precompiled-pipelines';
 import { PipelineItem } from '../lib';
 
 export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
@@ -10,6 +13,13 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
         case 'AbTest': {
           return getAbTrailsPipeline(
             item.config.device,
+            item.id,
+          ) satisfies PipelineItem[];
+        }
+
+        case 'Gyroscope': {
+          return getGyroscopePipeline(
+            item.config,
             item.id,
           ) satisfies PipelineItem[];
         }

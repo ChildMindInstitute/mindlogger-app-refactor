@@ -22,6 +22,7 @@ export type ResponseType =
   | 'audioPlayer'
   | 'flanker'
   | 'abTest'
+  | 'gyroscope'
   | 'time';
 
 type Match = 'any' | 'all';
@@ -383,12 +384,21 @@ type SliderRowsAnswerSettings = {
 // @todo Change when the BE integration is done
 type AbTestConfiguration = TimerConfiguration;
 
+type GyroscopeConfiguration = TimerConfiguration;
+
 // @todo Change when the BE integration is done
 type AbTestAnswerSettings = {
   device: 'Phone' | 'Tablet';
 };
 
 export type FlankerConfiguration = FlankerItemSettingsDto;
+
+type GyroscopeAnswerSettings = {
+  lambdaSlope: number;
+  durationInMinutes: number;
+  numberOfTrials: number;
+  userInputType: 'gyroscope' | 'touch';
+};
 
 export type FlankerAnswerSettings = null;
 
@@ -412,6 +422,7 @@ type Configuration =
   | SingleSelectionConfiguration
   | MultiSelectionConfiguration
   | AbTestConfiguration
+  | GyroscopeConfiguration
   | FlankerConfiguration;
 
 type AnswerSettings =
@@ -433,6 +444,7 @@ type AnswerSettings =
   | SingleSelectionAnswerSettings
   | MultiSelectionAnswerSettings
   | AbTestAnswerSettings
+  | GyroscopeAnswerSettings
   | FlankerAnswerSettings;
 
 type ActivityItemDtoBase = {
@@ -562,6 +574,12 @@ export interface AbTestItemDto extends ActivityItemDtoBase {
   responseValues: AbTestAnswerSettings;
 }
 
+export interface GyroscopeItemDto extends ActivityItemDtoBase {
+  responseType: 'gyroscope';
+  config: GyroscopeConfiguration;
+  responseValues: GyroscopeAnswerSettings;
+}
+
 export interface FlankerItemDto extends ActivityItemDtoBase {
   responseType: 'flanker';
   config: FlankerConfiguration;
@@ -587,5 +605,6 @@ export type ActivityItemDto =
   | AudioItemDto
   | AudioPlayerItemDto
   | AbTestItemDto
+  | GyroscopeItemDto
   | FlankerItemDto
   | TimeItemDto;

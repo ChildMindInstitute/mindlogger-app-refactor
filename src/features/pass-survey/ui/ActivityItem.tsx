@@ -20,6 +20,7 @@ import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
+import { Gyroscope } from '@entities/gyroscope';
 import { IS_ANDROID } from '@shared/lib';
 import {
   RadioActivityItem,
@@ -83,6 +84,21 @@ function ActivityItem({
       item = (
         <Box flex={1} onPressIn={stopScrolling} onPressOut={releaseScrolling}>
           <AbTest {...pipelineItem.payload} onComplete={onResponse} />
+        </Box>
+      );
+      break;
+
+    case 'Gyroscope':
+      item = (
+        <Box flex={1}>
+          <Gyroscope
+            testIndex={pipelineItem.payload.testIndex}
+            config={pipelineItem.payload}
+            onComplete={response => {
+              onResponse(response);
+              moveToNextItem();
+            }}
+          />
         </Box>
       );
       break;
@@ -311,8 +327,11 @@ function ActivityItem({
     }
   }
 
+  const isScrollEnabled =
+    pipelineItem?.type === 'Gyroscope' ? false : scrollEnabled;
+
   return (
-    <ScrollableContent scrollEnabled={scrollEnabled}>
+    <ScrollableContent scrollEnabled={isScrollEnabled}>
       <Box flex={1} justifyContent="center">
         {question && (
           <Box mx={16} mb={20}>
