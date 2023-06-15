@@ -21,12 +21,12 @@ import {
   MAX_RADIUS,
   PLAYGROUND_WIDTH,
   center,
-  panelRadius,
-  pointRadius,
+  PANEL_RADIUS,
+  POINT_RADIUS,
   OUTER_CIRCLE_RADIUS,
   INNER_CIRCLE_RADIUS,
-  blockWidth,
-  blockHeight,
+  BLOCK_WIDTH,
+  BLOCK_HEIGHT,
   CENTER_COORDINATES,
   TARGET_POSITION,
 } from '@entities/stabilityTracker/lib/constants';
@@ -123,9 +123,9 @@ const StabilityTrackerItemScreen = (props: Props) => {
     userPosition.current[1] = Math.max(0, userPosition.current[1]);
     userPosition.current[1] = Math.min(
       userPosition.current[1],
-      PLAYGROUND_WIDTH - blockHeight * 2 + OUTER_CIRCLE_RADIUS * 2,
+      PLAYGROUND_WIDTH - BLOCK_HEIGHT * 2 + OUTER_CIRCLE_RADIUS * 2,
     );
-    userPosition.current[1] += blockHeight - OUTER_CIRCLE_RADIUS;
+    userPosition.current[1] += BLOCK_HEIGHT - OUTER_CIRCLE_RADIUS;
   };
 
   const onUserStartedMoving = (event: GestureResponderEvent) => {
@@ -242,8 +242,8 @@ const StabilityTrackerItemScreen = (props: Props) => {
   const updateLambdaValue = (deltaTime: number) => {
     const inBounds = isInBounds(
       circlePosition.current[1],
-      blockHeight,
-      PLAYGROUND_WIDTH - blockHeight,
+      BLOCK_HEIGHT,
+      PLAYGROUND_WIDTH - BLOCK_HEIGHT,
     );
 
     if (!inBounds) {
@@ -310,7 +310,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
             const y =
               center +
               (((IS_IOS ? 1 : -1) * (roll - baseOri.current)) / MAX_RADIUS) *
-                panelRadius;
+                PANEL_RADIUS;
 
             userPosition.current = [center, y];
             rolla = roll;
@@ -345,9 +345,9 @@ const StabilityTrackerItemScreen = (props: Props) => {
       <YStack>
         <Svg width={PLAYGROUND_WIDTH} height={PLAYGROUND_WIDTH}>
           <PlayGround
-            blockWidth={blockWidth}
+            BLOCK_WIDTH={BLOCK_WIDTH}
             availableWidth={PLAYGROUND_WIDTH}
-            blockHeight={blockHeight}
+            BLOCK_HEIGHT={BLOCK_HEIGHT}
             outerCircleRadius={OUTER_CIRCLE_RADIUS}
             center={center}
             boundWasHit={boundWasHit.current}
@@ -388,7 +388,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
           <Circle
             cx={TARGET_POSITION[0]}
             cy={TARGET_POSITION[1]}
-            r={pointRadius}
+            r={POINT_RADIUS}
             fill={colors.targetPointColor}
             id="targetPoint"
           />
@@ -396,7 +396,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
 
         <ControlBar
           availableWidth={PLAYGROUND_WIDTH}
-          blockHeight={blockHeight}
+          BLOCK_HEIGHT={BLOCK_HEIGHT}
           outerCircleRadius={OUTER_CIRCLE_RADIUS}
           isMoving={isMoving}
           showControlBar={showControlBar.current}

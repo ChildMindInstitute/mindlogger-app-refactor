@@ -6,8 +6,7 @@ const tutorialMobileFirst: TutorialPayload = [
  If the disc is moving to the right, swipe left of control bar to bring it back to the center.
  If the disc is moving to the left, swipe right of control bar to bring the disc back to center.
  Do not let the disc touch the walls to the far left or right of the screen.
- There will be two phases to this task, a Challenge Phase, and a Focus Phase.
-![Research_-_Science_for_Change.jpg](https://mindlogger-applet-contents.s3.amazonaws.com/images/urBwX2L8R2E4RFFaME2LJg.jpeg)`,
+ There will be two phases to this task, a Challenge Phase, and a Focus Phase.`,
   `This is the Challenge Phase.
  There will be 3 trials.
  Each trial will begin at an easy level, but it will become more difficult to keep the disc at the center of the screen.

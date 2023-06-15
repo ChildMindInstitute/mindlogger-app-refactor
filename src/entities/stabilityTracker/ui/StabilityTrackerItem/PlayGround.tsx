@@ -3,39 +3,27 @@ import React, { FC } from 'react';
 import { Rect } from 'react-native-svg';
 
 import { colors } from './StabilityTrackerItem.styles';
+import {
+  BOUND_HIT_ANIMATION_DURATION,
+  PLAYGROUND_WIDTH,
+  CENTER,
+  OUTER_CIRCLE_RADIUS,
+  BLOCK_WIDTH,
+  BLOCK_HEIGHT,
+} from '../../lib';
 
 type Props = {
   boundWasHit: boolean;
   boundHitAnimationDuration: number;
-  boundHitAnimationDurationFromConfig: number;
-
-  availableWidth: number;
-  blockHeight: number;
-  outerCircleRadius: number;
-  blockWidth: number;
-  center: number;
 };
 
 const PlayGround: FC<Props> = props => {
-  const {
-    boundWasHit,
-    boundHitAnimationDuration,
-    boundHitAnimationDurationFromConfig,
-
-    availableWidth,
-    blockHeight,
-    outerCircleRadius,
-    center,
-    blockWidth,
-  } = props;
+  const { boundWasHit, boundHitAnimationDuration } = props;
 
   const getBackgroundColorBasedOnTimeline = (defaultColor: string) => {
     if (boundWasHit) {
       const timeProgress =
-        (boundHitAnimationDuration /
-          boundHitAnimationDurationFromConfig /
-          1000) *
-        4;
+        (boundHitAnimationDuration / BOUND_HIT_ANIMATION_DURATION / 1000) * 4;
       const mixRate = [
         timeProgress - Math.floor(timeProgress),
         Math.floor(timeProgress) + 1 - timeProgress,
@@ -60,8 +48,8 @@ const PlayGround: FC<Props> = props => {
       <Rect
         x={0}
         y={0}
-        width={availableWidth}
-        height={availableWidth}
+        width={PLAYGROUND_WIDTH}
+        height={PLAYGROUND_WIDTH}
         fill={colors.playGroundBackground}
         id="playGroundWrapper"
       />
@@ -69,36 +57,36 @@ const PlayGround: FC<Props> = props => {
       <Rect
         y={0}
         x={-5}
-        height={blockHeight - outerCircleRadius}
-        width={availableWidth + 10}
+        height={BLOCK_HEIGHT - OUTER_CIRCLE_RADIUS}
+        width={PLAYGROUND_WIDTH + 10}
         strokeWidth={0}
         fill={getBackgroundColorBasedOnTimeline('white')}
         id="playGroundTopBorder"
       />
 
       <Rect
-        y={availableWidth - blockHeight + outerCircleRadius}
+        y={PLAYGROUND_WIDTH - BLOCK_HEIGHT + OUTER_CIRCLE_RADIUS}
         x={-5}
-        height={blockHeight - outerCircleRadius}
-        width={availableWidth + 10}
+        height={BLOCK_HEIGHT - OUTER_CIRCLE_RADIUS}
+        width={PLAYGROUND_WIDTH + 10}
         fill={getBackgroundColorBasedOnTimeline('white')}
         id="playGroundBottomBorder"
       />
 
       <Rect
         y={0}
-        x={center - blockWidth / 2}
-        height={blockHeight - outerCircleRadius}
-        width={blockWidth}
+        x={CENTER - BLOCK_WIDTH / 2}
+        height={BLOCK_HEIGHT - OUTER_CIRCLE_RADIUS}
+        width={BLOCK_WIDTH}
         fill={getBackgroundColorBasedOnTimeline('green')}
         id="playGroundTopGreenElement"
       />
 
       <Rect
-        y={availableWidth - blockHeight + outerCircleRadius}
-        x={center - blockWidth / 2}
-        height={blockHeight - outerCircleRadius}
-        width={blockWidth}
+        y={PLAYGROUND_WIDTH - BLOCK_HEIGHT + OUTER_CIRCLE_RADIUS}
+        x={CENTER - BLOCK_WIDTH / 2}
+        height={BLOCK_HEIGHT - OUTER_CIRCLE_RADIUS}
+        width={BLOCK_WIDTH}
         fill={getBackgroundColorBasedOnTimeline('green')}
         id="playGroundBottomGreenElement"
       />

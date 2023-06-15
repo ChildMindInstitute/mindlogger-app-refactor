@@ -3,26 +3,25 @@ import { GestureResponderEvent } from 'react-native';
 
 import Svg, { Circle } from 'react-native-svg';
 
-import {
-  TASK_LOOP_RATE,
-  INITIAL_LAMBDA,
-  BOUND_HIT_ANIMATION_DURATION,
-  PLAYGROUND_WIDTH,
-  center,
-  pointRadius,
-  OUTER_CIRCLE_RADIUS,
-  INNER_CIRCLE_RADIUS,
-  blockWidth,
-  blockHeight,
-  CENTER_COORDINATES,
-  TARGET_POSITION,
-} from '@entities/stabilityTracker/lib/constants';
 import { YStack } from '@shared/ui';
 
 import ControlBar from './ControlBar';
 import PlayGround from './PlayGround';
 import Score from './Score';
 import styles, { colors } from './StabilityTrackerItem.styles';
+import {
+  TASK_LOOP_RATE,
+  INITIAL_LAMBDA,
+  BOUND_HIT_ANIMATION_DURATION,
+  PLAYGROUND_WIDTH,
+  CENTER,
+  POINT_RADIUS,
+  OUTER_CIRCLE_RADIUS,
+  INNER_CIRCLE_RADIUS,
+  BLOCK_HEIGHT,
+  CENTER_COORDINATES,
+  TARGET_POSITION,
+} from '../../lib';
 import { useAnimation } from '../../lib/hooks';
 import {
   TargetInCircleStatus,
@@ -73,7 +72,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
     config.durationInMinutes,
     TASK_LOOP_RATE,
     1,
-    center,
+    CENTER,
   );
 
   const IS_TOUCH = useMemo(
@@ -84,14 +83,14 @@ const StabilityTrackerItemScreen = (props: Props) => {
 
   // we are using refs instead of state , because useAnimation hook is much faster, than react can (or needs) to be rerendered
 
-  const [isMoving, setMoving] = useState(false);
-  const [score, setScore] = useState<number>(0);
+  const [isRunning, setIsRunning] = useState(false);
+  const score = useRef(0);
   const numberOfTrials = useRef(0);
   const userPosition = useRef<Coordinate>(CENTER_COORDINATES);
   const circlePosition = useRef<Coordinate>(CENTER_COORDINATES);
   // following useState is needed to force react rerender
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [tick, setTickNumber] = useState<number>(0);
+  const [deltaNumber, setDeltaTime] = useState<number>(0);
   const boundWasHit = useRef(false);
   const lambdaSlope = useRef(config.lambdaSlope);
   const boundHitAnimationDuration = useRef(0);
@@ -107,9 +106,9 @@ const StabilityTrackerItemScreen = (props: Props) => {
     userPosition.current[1] = Math.max(0, userPosition.current[1]);
     userPosition.current[1] = Math.min(
       userPosition.current[1],
-      PLAYGROUND_WIDTH - blockHeight * 2 + OUTER_CIRCLE_RADIUS * 2,
+      PLAYGROUND_WIDTH - BLOCK_HEIGHT * 2 + OUTER_CIRCLE_RADIUS * 2,
     );
-    userPosition.current[1] += blockHeight - OUTER_CIRCLE_RADIUS;
+    userPosition.current[1] += BLOCK_HEIGHT - OUTER_CIRCLE_RADIUS;
   };
 
   const onUserStartedMoving = (event: GestureResponderEvent) => {
@@ -120,10 +119,10 @@ const StabilityTrackerItemScreen = (props: Props) => {
 
   const onUserStoppedMoving = (event: GestureResponderEvent) => {
     if (IS_TOUCH) {
-      if (isMoving) {
+      if (isRunning) {
         updateUserPosition(
           event.nativeEvent.locationX,
-          center + event.nativeEvent.locationY - startPosition.current,
+          CENTER + event.nativeEvent.locationY - startPosition.current,
         );
       } else {
         updateUserPosition(
@@ -133,7 +132,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
       }
       startPosition.current = 0;
     }
-    setMoving(true);
+    setIsRunning(true);
 
     showControlBar.current = false;
   };
@@ -142,13 +141,13 @@ const StabilityTrackerItemScreen = (props: Props) => {
     if (IS_TOUCH && !showControlBar.current) {
       updateUserPosition(
         event.nativeEvent.locationX,
-        center + event.nativeEvent.locationY - startPosition.current,
+        CENTER + event.nativeEvent.locationY - startPosition.current,
       );
     }
   };
 
   const finishResponse = () => {
-    setMoving(false);
+    setIsRunning(false);
     boundWasHit.current = false;
     numberOfTrials.current = 0;
     lambdaValue.current = INITIAL_LAMBDA;
@@ -156,13 +155,14 @@ const StabilityTrackerItemScreen = (props: Props) => {
     lambdaSlope.current = config?.lambdaSlope;
     boundWasHit.current = false;
     onComplete({
-      score,
+      score: score.current,
     });
-    setScore(0);
+
+    score.current = 0;
   };
 
   const restartTrial = () => {
-    setScore(prevScore => (prevScore * 3) / 4);
+    score.current = (score.current * 3) / 4;
     lambdaValue.current = lambdaValue.current / 2;
     circlePosition.current = CENTER_COORDINATES;
 
@@ -187,7 +187,8 @@ const StabilityTrackerItemScreen = (props: Props) => {
       OUTER_CIRCLE_RADIUS,
     );
     const scoreChange = getScoreChange(bonusMultiplier, deltaTime);
-    setScore(prevScore => prevScore + scoreChange);
+
+    score.current = score.current + scoreChange;
   };
 
   const updateCirclePosition = (timeElapsed: number, deltaTime: number) => {
@@ -195,26 +196,26 @@ const StabilityTrackerItemScreen = (props: Props) => {
       circlePosition.current,
       userPosition.current,
       lambdaValue.current,
-      center,
+      CENTER,
     );
     const newCirclePositionY =
       (delta[1] * deltaTime) / 1000 + circlePosition.current[1];
 
-    circlePosition.current = [center, newCirclePositionY];
+    circlePosition.current = [CENTER, newCirclePositionY];
   };
 
   const updateLambdaValue = (deltaTime: number) => {
     const inBounds = isInBounds(
       circlePosition.current[1],
-      blockHeight,
-      PLAYGROUND_WIDTH - blockHeight,
+      BLOCK_HEIGHT,
+      PLAYGROUND_WIDTH - BLOCK_HEIGHT,
     );
 
     if (!inBounds) {
       boundHitAnimationDuration.current = 0;
       boundWasHit.current = true;
       showControlBar.current = true;
-      userPosition.current = [center, center];
+      userPosition.current = [CENTER, CENTER];
     } else {
       if (!IS_TRIAL) {
         return;
@@ -257,10 +258,10 @@ const StabilityTrackerItemScreen = (props: Props) => {
       updateLambdaValue(deltaTime);
       updateScore(deltaTime);
     }
-    setTickNumber(tickNumber);
+    setDeltaTime(deltaTime);
   };
 
-  useAnimation(animationCallback, isMoving);
+  useAnimation(animationCallback, isRunning);
 
   const targetInCircleStatus = getDiskStatus(
     circlePosition.current,
@@ -271,18 +272,12 @@ const StabilityTrackerItemScreen = (props: Props) => {
 
   return (
     <YStack style={styles.container}>
-      <Score score={score} />
+      <Score score={score.current} />
 
       <YStack>
         <Svg width={PLAYGROUND_WIDTH} height={PLAYGROUND_WIDTH}>
           <PlayGround
-            blockWidth={blockWidth}
-            availableWidth={PLAYGROUND_WIDTH}
-            blockHeight={blockHeight}
-            outerCircleRadius={OUTER_CIRCLE_RADIUS}
-            center={center}
             boundWasHit={boundWasHit.current}
-            boundHitAnimationDurationFromConfig={BOUND_HIT_ANIMATION_DURATION}
             boundHitAnimationDuration={boundHitAnimationDuration.current}
           />
 
@@ -319,17 +314,14 @@ const StabilityTrackerItemScreen = (props: Props) => {
           <Circle
             cx={TARGET_POSITION[0]}
             cy={TARGET_POSITION[1]}
-            r={pointRadius}
+            r={POINT_RADIUS}
             fill={colors.targetPointColor}
             id="targetPoint"
           />
         </Svg>
 
         <ControlBar
-          availableWidth={PLAYGROUND_WIDTH}
-          blockHeight={blockHeight}
-          outerCircleRadius={OUTER_CIRCLE_RADIUS}
-          isMoving={isMoving}
+          isTestRunning={isRunning}
           showControlBar={showControlBar.current}
           onStartTouch={onUserStartedMoving}
           onMove={onUserMove}

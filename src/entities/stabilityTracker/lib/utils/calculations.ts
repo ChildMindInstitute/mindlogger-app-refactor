@@ -7,6 +7,7 @@ export const generateTargetTrajectory = (
 ) => {
   const durationSecs = durationMins * 60 + padInSeconds;
   const numPoints = Math.ceil(durationSecs / refreshDur);
+
   return Array(numPoints).fill([centerPoint, centerPoint]);
 };
 
@@ -39,13 +40,13 @@ export const getNewLambda = (
   lambdaSlope: number,
   maxLambda: number,
 ) => {
-  const LV = currentLambda + (currentTs / 1000) * lambdaSlope;
+  const lambdaValue = currentLambda + (currentTs / 1000) * lambdaSlope;
 
-  if (maxLambda > 0 && LV >= maxLambda) {
+  if (maxLambda > 0 && lambdaValue >= maxLambda) {
     return maxLambda;
   }
 
-  return LV;
+  return lambdaValue;
 };
 
 export const isInBounds = (value: number, start: number, end: number) => {

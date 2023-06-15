@@ -54,7 +54,9 @@ function ActivityItem({
   onAdditionalResponse,
   textVariableReplacer,
 }: Props) {
-  const [scrollEnabled, setScrollEnabled] = useState(true);
+  const [scrollEnabled, setScrollEnabled] = useState(
+    type !== 'StabilityTracker',
+  );
 
   const { next } = useContext(HandlersContext);
 
@@ -327,11 +329,8 @@ function ActivityItem({
     }
   }
 
-  const isScrollEnabled =
-    pipelineItem?.type === 'StabilityTracker' ? false : scrollEnabled;
-
   return (
-    <ScrollableContent scrollEnabled={isScrollEnabled}>
+    <ScrollableContent scrollEnabled={scrollEnabled}>
       <Box flex={1} justifyContent="center">
         {question && (
           <Box mx={16} mb={20}>

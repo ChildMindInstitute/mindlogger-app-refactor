@@ -4,25 +4,19 @@ import { GestureResponderEvent } from 'react-native';
 import { YStack, Text } from '@shared/ui';
 
 import styles from './StabilityTrackerItem.styles';
+import { PLAYGROUND_WIDTH, OUTER_CIRCLE_RADIUS, BLOCK_HEIGHT } from '../../lib';
 
 type Props = {
-  isMoving: boolean;
+  isTestRunning: boolean;
   showControlBar: boolean;
   onStartTouch: (event: GestureResponderEvent) => void;
   onReleaseTouch: (event: GestureResponderEvent) => void;
   onMove: (event: GestureResponderEvent) => void;
-
-  availableWidth: number;
-  blockHeight: number;
-  outerCircleRadius: number;
 };
 
 const ControlBar: FC<Props> = props => {
   const {
-    availableWidth,
-    blockHeight,
-    outerCircleRadius,
-    isMoving,
+    isTestRunning,
     onStartTouch,
     onReleaseTouch,
     onMove,
@@ -33,8 +27,8 @@ const ControlBar: FC<Props> = props => {
     <YStack
       style={[
         {
-          height: availableWidth - blockHeight * 2 + outerCircleRadius * 2,
-          top: blockHeight - outerCircleRadius,
+          height: PLAYGROUND_WIDTH - BLOCK_HEIGHT * 2 + OUTER_CIRCLE_RADIUS * 2,
+          top: BLOCK_HEIGHT - OUTER_CIRCLE_RADIUS,
         },
         styles.controlBarWrapper,
       ]}
@@ -44,16 +38,16 @@ const ControlBar: FC<Props> = props => {
           justifyContent="center"
           alignItems="center"
           style={{
-            width: availableWidth,
-            height: availableWidth / 10,
+            width: PLAYGROUND_WIDTH,
+            height: PLAYGROUND_WIDTH / 10,
             transform: [
               { rotate: '90deg' },
-              { translateY: availableWidth / 2 - availableWidth / 20 },
-              { translateX: availableWidth / 2 - availableWidth / 12 },
+              { translateY: PLAYGROUND_WIDTH / 2 - PLAYGROUND_WIDTH / 20 },
+              { translateX: PLAYGROUND_WIDTH / 2 - PLAYGROUND_WIDTH / 12 },
             ],
           }}
         >
-          <Text>Tap here to {isMoving ? 'restart' : 'start'}</Text>
+          <Text>Tap here to {isTestRunning ? 'restart' : 'start'}</Text>
         </YStack>
       )}
 
