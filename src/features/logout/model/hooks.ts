@@ -7,17 +7,9 @@ import { IdentityService } from '@app/shared/api';
 import { IdentityModel } from '@entities/identity';
 import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
-import {
-  createSecureStorage,
-  createStorage,
-  hasPendingMutations,
-  isAppOnline,
-  useAppDispatch,
-} from '@shared/lib';
+import { hasPendingMutations, isAppOnline, useAppDispatch } from '@shared/lib';
 
-const activitiesStorage = createSecureStorage('activity_progress-storage');
-
-const flowsStorage = createStorage('flow_progress-storage');
+import { clearEntityRecordStorages } from '../lib';
 
 export function useLogout() {
   const dispatch = useAppDispatch();
@@ -30,9 +22,7 @@ export function useLogout() {
 
     CacheManager.clearCache();
 
-    activitiesStorage.clearAll();
-
-    flowsStorage.clearAll();
+    clearEntityRecordStorages();
 
     await queryClient.removeQueries(['applets']);
     await queryClient.removeQueries(['events']);

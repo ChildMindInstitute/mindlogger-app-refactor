@@ -1,5 +1,7 @@
 import { format, intervalToDuration, isSameDay, addDays } from 'date-fns';
 
+import { Item } from '@app/shared/ui';
+
 import { Answers } from './hooks';
 import { PipelineItem, PipelineItemResponse } from './types';
 
@@ -180,19 +182,20 @@ export class MarkdownVariableReplacer {
         break;
       case 'Radio':
         const filteredItem = activityItem.payload.options.find(
-          ({ id }) => id === answer,
+          ({ id }) => id === answer.id,
         );
         if (filteredItem) {
           updated = filteredItem.text;
         }
         break;
       case 'Checkbox':
+        const selectedIds = answer.map((o: Item) => o.id);
         const filteredItems = activityItem.payload.options
-          .filter(({ id }) => answer.includes(id))
+          .filter(({ id }) => selectedIds.includes(id))
           .map(({ text }) => text);
 
         if (filteredItems) {
-          updated = filteredItems.toString();
+          updated = filteredItems.join(', ');
         }
         break;
       case 'TimeRange':

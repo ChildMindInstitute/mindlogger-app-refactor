@@ -42,8 +42,8 @@ const DateTimePicker: FC<Props> = ({
   };
 
   const confirm = (date: Date) => {
-    onChange(date); // @todo add correct date format after backend implementation
     hideDatePicker();
+    onChange(date);
   };
 
   return (
