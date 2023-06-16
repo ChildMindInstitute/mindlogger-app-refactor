@@ -6,7 +6,7 @@ import { createSecureStorage } from '@app/shared/lib';
 import { MediaFile, MediaValue } from '@app/shared/ui';
 
 type EntityRecord = {
-  answers: Record<string, MediaFile | undefined>;
+  answers: Record<string, { answer: MediaFile } | undefined>;
 };
 
 export const activityStorage = createSecureStorage('activity_progress-storage');
@@ -33,7 +33,7 @@ const createMediaFilesCleaner = (): Result => {
     const urlsToProcess: string[] = [];
 
     for (let recordId in entityRecord.answers) {
-      const record = entityRecord.answers[recordId];
+      const record = entityRecord.answers[recordId]?.answer;
 
       if (record?.uri) {
         urlsToProcess.push(record.uri);

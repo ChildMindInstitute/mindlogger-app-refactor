@@ -71,7 +71,7 @@ export const VIDEO_RECORD_OPTIONS: CameraOptions = {
   videoQuality: 'high',
   durationLimit: 60,
   quality: 0.9,
-  saveToPhotos: true,
+  saveToPhotos: false,
 };
 
 export const PHOTO_TAKE_OPTIONS: CameraOptions = {
@@ -79,7 +79,7 @@ export const PHOTO_TAKE_OPTIONS: CameraOptions = {
   maxWidth: 800,
   maxHeight: 800,
   quality: 0.9,
-  saveToPhotos: true,
+  saveToPhotos: false,
 };
 
 export const MICROPHONE_PERMISSIONS = Platform.select({
