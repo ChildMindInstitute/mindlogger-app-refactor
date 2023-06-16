@@ -4,16 +4,18 @@ import {
   GALLERY_ANDROID_PERMISSIONS,
   GALLERY_IOS_PERMISSIONS,
   IS_ANDROID,
+  IS_ANDROID_13_OR_HIGHER,
 } from '../constants';
 
 const checkGalleryAndroidPermissions = async (): Promise<string> => {
   const statuses = await Permissions.checkMultiple(GALLERY_ANDROID_PERMISSIONS);
 
   if (
-    statuses[PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE] ===
+    (statuses[PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE] ===
       Permissions.RESULTS.GRANTED &&
-    statuses[PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE] ===
-      Permissions.RESULTS.GRANTED
+      statuses[PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE] ===
+        Permissions.RESULTS.GRANTED) ||
+    IS_ANDROID_13_OR_HIGHER
   ) {
     return RESULTS.GRANTED;
   }
