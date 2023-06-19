@@ -10,9 +10,7 @@ const useMicrophonePermissions = () => {
 
   useEffect(() => {
     checkMicrophonePermissions().then(isGranted =>
-      setMicrophonePermission(
-        isGranted ? RESULTS.GRANTED : RESULTS.UNAVAILABLE,
-      ),
+      setMicrophonePermission(isGranted ? RESULTS.GRANTED : RESULTS.DENIED),
     );
   }, []);
 
