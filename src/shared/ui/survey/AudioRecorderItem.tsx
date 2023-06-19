@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import AudioRecorderPlayer, {
   AudioSet,
 } from 'react-native-audio-recorder-player';
-import Permissions, { RESULTS } from 'react-native-permissions';
+import { FileSystem } from 'react-native-file-access';
+import { RESULTS } from 'react-native-permissions';
 import RNFetchBlob from 'rn-fetch-blob';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
@@ -56,9 +57,9 @@ const AudioRecorderItem: FC<Props> = ({
 
   const checkMicrophonePermission = async () => {
     if (permissionNotGranted) {
-      const result = await getMicrophonePermissions();
+      const isGranted = await getMicrophonePermissions();
 
-      if (result === Permissions.RESULTS.BLOCKED) {
+      if (!isGranted) {
         return await handleBlockedPermissions(
           t('audio_recorder:alert_title'),
           t('audio_recorder:alert_message'),
@@ -74,13 +75,10 @@ const AudioRecorderItem: FC<Props> = ({
   };
 
   const unlinkOldRecordingFile = async () => {
-    if (lastFilePath) {
-      const pathToRemove = IS_ANDROID
-        ? lastFilePath.replace('file://', '')
-        : lastFilePath;
-
+    const isUrlValid = lastFilePath && FileSystem.exists(lastFilePath);
+    if (isUrlValid) {
       try {
-        await RNFetchBlob.fs.unlink(pathToRemove);
+        await FileSystem.unlink(lastFilePath);
       } catch (error) {
         console.warn(error);
       }
@@ -123,7 +121,7 @@ const AudioRecorderItem: FC<Props> = ({
           }
         },
       );
-    } catch (e) {
+    } catch {
       setErrorDescription(t('audio_recorder:record_error'));
       destroy();
     }
