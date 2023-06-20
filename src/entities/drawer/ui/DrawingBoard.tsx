@@ -45,10 +45,11 @@ type Props = {
   onStarted: () => void;
   onResult: (result: DrawResult) => void;
   width: number;
+  isDrawingActive: boolean;
 };
 
 const DrawingBoard: FC<Props> = props => {
-  const { value, onResult, onStarted, width } = props;
+  const { value, onResult, onStarted, width, isDrawingActive } = props;
 
   const isEmpty = !value.length;
 
@@ -200,6 +201,7 @@ const DrawingBoard: FC<Props> = props => {
       zIndex={1}
       borderWidth={1}
       borderColor="$lightGrey2"
+      disabled={!isDrawingActive}
     >
       <SkiaView onDraw={onDraw} style={styles.skiaView} />
 
