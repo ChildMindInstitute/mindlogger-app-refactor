@@ -7163,10 +7163,10 @@ react-native-fit-image@^1.5.5:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-flipper@0.163.0:
-  version "0.163.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.163.0.tgz#3ede9fed252555d0ac3c6212e7ed6e5af3c85604"
-  integrity sha512-RG0yMlEMe/fYqaoUkhvW2HrqBuRYtq1K3me9y52RBFwPWooZTmUlWjIWGKT9VYVS9T2GGrUV9tpBA8pY9g7CSg==
+react-native-flipper@0.198.0:
+  version "0.198.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.198.0.tgz#657c49dd844f53b0b59e522e9b13316da8cfcb9e"
+  integrity sha512-rsvXtyg+n6S+N6u+WKaWWaJqeW4q313B0Ov5JNvRGsFxUEJO24el1LWCRIGkXI/sXn2T5M6mFpfFspkxYP82DQ==
 
 react-native-get-random-values@^1.8.0:
   version "1.8.0"
@@ -7337,10 +7337,10 @@ react-native-webview@^11.26.1:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
 
-react-native@0.70.6:
-  version "0.70.6"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.70.6.tgz#d692f8b51baffc28e1a8bc5190cdb779de937aa8"
-  integrity sha512-xtQdImPHnwgraEx3HIZFOF+D1hJ9bC5mfpIdUGoMHRws6OmvHAjmFpO6qfdnaQ29vwbmZRq7yf14sbury74R/w==
+react-native@0.70.10:
+  version "0.70.10"
+  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.70.10.tgz#fb4b05930c523dbfb3a6d606db14881fd7a310d6"
+  integrity sha512-RkhrISLgWooMjbXvH7ohWCYdxxvV0xcGiEFcnEWkMy2y320QyA3evDcCExLv5Es2PnJKt6FiQKzGqrfh/T1H1A==
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
     "@react-native-community/cli" "9.3.2"
