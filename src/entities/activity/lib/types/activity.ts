@@ -35,6 +35,7 @@ export type StabilityTrackerConfig = {
   durationInMinutes: number;
   numberOfTrials: number;
   userInputType: 'gyroscope' | 'touch';
+  phase: 'trial' | 'focus-phase';
 };
 
 type DrawingTestTestConfig = {

@@ -1,9 +1,6 @@
 import { ActivityDetails, ActivityItem } from '@app/entities/activity';
 
-import {
-  getAbTrailsPipeline,
-  getStabilityTrackerPipeline,
-} from './precompiled-pipelines';
+import { getAbTrailsPipeline } from './precompiled-pipelines';
 import { PipelineItem } from '../lib';
 
 export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
@@ -18,10 +15,20 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
         }
 
         case 'StabilityTracker': {
-          return getStabilityTrackerPipeline(
-            item.config,
-            item.id,
-          ) satisfies PipelineItem[];
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            validationOptions: item.validationOptions,
+            timer: item.timer,
+            conditionalLogic: item.conditionalLogic,
+          } satisfies PipelineItem;
         }
 
         case 'Splash': {

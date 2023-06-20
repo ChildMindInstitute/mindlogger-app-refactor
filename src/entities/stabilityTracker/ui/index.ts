@@ -1,2 +1,1 @@
-export { default as StabilityTracker } from './StabilityTracker';
-export * from './StabilityTrackerTutorialViewer';
+export { default as StabilityTracker } from './StabilityTrackerItem';

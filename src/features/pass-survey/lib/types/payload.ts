@@ -10,10 +10,7 @@ import {
   StackedRowItemValue,
 } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
-import {
-  StabilityTrackerResponse as StabilityTrackerBaseResponse,
-  TestIndex as StabilityTrackerTestIndex,
-} from '@entities/stabilityTracker';
+import { StabilityTrackerResponse as StabilityTrackerBaseResponse } from '@entities/stabilityTracker';
 import { MediaFile } from '@shared/ui';
 import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
 
@@ -50,7 +47,6 @@ type AbTestPayload = {
 };
 
 type StabilityTrackerPayload = {
-  testIndex: StabilityTrackerTestIndex;
   phase: 'trial' | 'focus-phase';
   lambdaSlope: number;
   durationInMinutes: number;

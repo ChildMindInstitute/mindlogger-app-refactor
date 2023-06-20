@@ -124,6 +124,7 @@ function mapToStabilityTracker(dto: StabilityTrackerItemDto): ActivityItem {
       durationInMinutes: dto.responseValues.durationInMinutes,
       numberOfTrials: dto.responseValues.numberOfTrials,
       userInputType: dto.responseValues.userInputType,
+      phase: dto.responseValues.phase,
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,

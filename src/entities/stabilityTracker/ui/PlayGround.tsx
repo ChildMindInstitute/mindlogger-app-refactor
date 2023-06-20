@@ -10,7 +10,7 @@ import {
   OUTER_CIRCLE_RADIUS,
   BLOCK_WIDTH,
   BLOCK_HEIGHT,
-} from '../../lib';
+} from '../lib';
 
 type Props = {
   boundWasHit: boolean;

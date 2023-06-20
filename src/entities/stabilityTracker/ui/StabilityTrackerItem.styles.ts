@@ -31,9 +31,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     transform: [{ rotate: '90deg' }],
   },
-  controlBarText: {
-    textAlign: 'center',
-  },
   score: {
     flex: 1,
     textAlign: 'left',
@@ -45,11 +42,6 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'left',
     transform: [{ rotate: '90deg' }],
-  },
-  stimToCenter: {
-    marginTop: 10,
-    textAlign: 'right',
-    transform: [{ translateY: 80 }, { rotate: '90deg' }],
   },
   controlBarWrapper: {
     position: 'absolute',

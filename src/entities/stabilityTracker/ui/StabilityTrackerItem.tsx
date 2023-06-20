@@ -1,48 +1,35 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-  useCallback,
-} from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { GestureResponderEvent } from 'react-native';
 
-import {
-  gyroscope,
-  setUpdateIntervalForType,
-  SensorTypes,
-} from 'react-native-sensors';
 import Svg, { Circle } from 'react-native-svg';
 
-import {
-  TASK_LOOP_RATE,
-  INITIAL_LAMBDA,
-  BOUND_HIT_ANIMATION_DURATION,
-  MAX_RADIUS,
-  PLAYGROUND_WIDTH,
-  center,
-  PANEL_RADIUS,
-  POINT_RADIUS,
-  OUTER_CIRCLE_RADIUS,
-  INNER_CIRCLE_RADIUS,
-  BLOCK_WIDTH,
-  BLOCK_HEIGHT,
-  CENTER_COORDINATES,
-  TARGET_POSITION,
-} from '@entities/stabilityTracker/lib/constants';
-import { IS_IOS } from '@shared/lib';
 import { YStack } from '@shared/ui';
 
 import ControlBar from './ControlBar';
 import PlayGround from './PlayGround';
 import Score from './Score';
 import styles, { colors } from './StabilityTrackerItem.styles';
-import { useAnimationFrame } from '../../lib/hooks';
+import {
+  TASK_LOOP_RATE,
+  INITIAL_LAMBDA,
+  BOUND_HIT_ANIMATION_DURATION,
+  PLAYGROUND_WIDTH,
+  CENTER,
+  POINT_RADIUS,
+  OUTER_CIRCLE_RADIUS,
+  INNER_CIRCLE_RADIUS,
+  BLOCK_HEIGHT,
+  CENTER_COORDINATES,
+  TARGET_POSITION,
+  PANEL_RADIUS,
+} from '../lib';
+import { useAnimation } from '../lib/hooks';
 import {
   TargetInCircleStatus,
   Coordinate,
   StabilityTrackerResponse,
-} from '../../lib/types';
+  Response,
+} from '../lib/types';
 import {
   generateTargetTrajectory,
   computeDxDt,
@@ -52,36 +39,32 @@ import {
   computeDistance,
   getBonusMultiplier,
   isInBounds,
-} from '../../lib/utils';
+} from '../lib/utils';
 
 type Props = {
   config: {
-    lambdaSlope: number,
-    durationInMinutes: number,
-    numberOfTrials: number,
-    userInputType: 'gyroscope' | 'touch',
-    phase: 'focus-phase' | 'trial',
-  },
-  onChange: () => void,
-  appletId: string,
-  maxLambda: number,
-  onComplete: (response: StabilityTrackerResponse) => void,
+    lambdaSlope: number;
+    durationInMinutes: number;
+    numberOfTrials: number;
+    userInputType: 'gyroscope' | 'touch';
+    phase: 'focus-phase' | 'trial';
+  };
+  onComplete: (response: StabilityTrackerResponse) => void;
+  onMaxLambdaChange: (contextKey: string, contextValue: unknown) => void;
+  maxLambda: unknown | number;
 };
-
-setUpdateIntervalForType(SensorTypes.gyroscope, TASK_LOOP_RATE * 500);
 
 const StabilityTrackerItemScreen = (props: Props) => {
   const {
-    onChange,
     config: initialConfig,
-    maxLambda, // comes from redux in legacy
-    // appletId,
     onComplete,
+    onMaxLambdaChange,
+    maxLambda,
   } = props;
 
   const config = {
-    lambdaSlope: initialConfig?.lambdaSlope || 190.0,
-    durationInMinutes: initialConfig?.durationInMinutes || 1, //5,
+    lambdaSlope: initialConfig?.lambdaSlope || 20.0,
+    durationInMinutes: initialConfig?.durationInMinutes || 1,
     numberOfTrials: initialConfig?.numberOfTrials || 2,
     phase: initialConfig?.phase ?? 'trial',
   };
@@ -90,32 +73,35 @@ const StabilityTrackerItemScreen = (props: Props) => {
     config.durationInMinutes,
     TASK_LOOP_RATE,
     1,
-    center,
+    CENTER,
   );
 
-  const [isMoving, setMoving] = useState(false);
-  // const [tickNumber, setTickNumber] = useState(0);
-  const [userInputType, setUserInputType] = useState(
-    initialConfig?.userInputType ?? 'touch',
+  const IS_TOUCH = useMemo(
+    () => initialConfig?.userInputType === 'touch',
+    [initialConfig?.userInputType],
   );
-  const [score, setScore] = useState < number > 0;
+  const IS_TRIAL = config.phase === 'trial';
+
+  // we are using refs instead of state , because useAnimation hook is much faster, than react can (or needs) to be rerendered
+
+  const [isRunning, setIsRunning] = useState(false);
+  const score = useRef(0);
   const numberOfTrials = useRef(0);
-  const userPosition = useRef < Coordinate > CENTER_COORDINATES;
-  const circlePosition = useRef < Coordinate > CENTER_COORDINATES;
-  const [tick, setTickNumber] = useState < number > 0;
+  const userPosition = useRef<Coordinate>(CENTER_COORDINATES);
+  const circlePosition = useRef<Coordinate>(CENTER_COORDINATES);
+  // following useState is needed to force react rerender
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [deltaNumber, setDeltaTime] = useState<number>(0);
   const boundWasHit = useRef(false);
   const lambdaSlope = useRef(config.lambdaSlope);
   const boundHitAnimationDuration = useRef(0);
-  const responses = useRef([]);
   const showControlBar = useRef(true);
-  const gyroListener = useRef();
-  const baseOri = useRef();
   const lambdaValue = useRef(INITIAL_LAMBDA);
   const startPosition = useRef(0);
-  const IS_TOUCH = useMemo(() => userInputType === 'touch', [userInputType]);
-  const IS_TRIAL = config.phase === 'trial';
+  const responses = useRef<Response[]>([]);
 
-  const lambdaLimit = IS_TRIAL ? 0 : maxLambda * 0.3;
+  // @ts-ignore \\ maxLambda is number
+  const lambdaLimit = IS_TRIAL ? 0 : 0.3 * maxLambda;
 
   const updateUserPosition = (x: number, y: number) => {
     userPosition.current = [x, y];
@@ -136,10 +122,10 @@ const StabilityTrackerItemScreen = (props: Props) => {
 
   const onUserStoppedMoving = (event: GestureResponderEvent) => {
     if (IS_TOUCH) {
-      if (isMoving) {
+      if (isRunning) {
         updateUserPosition(
           event.nativeEvent.locationX,
-          center + event.nativeEvent.locationY - startPosition.current,
+          CENTER + event.nativeEvent.locationY - startPosition.current,
         );
       } else {
         updateUserPosition(
@@ -149,7 +135,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
       }
       startPosition.current = 0;
     }
-    setMoving(true);
+    setIsRunning(true);
 
     showControlBar.current = false;
   };
@@ -158,59 +144,50 @@ const StabilityTrackerItemScreen = (props: Props) => {
     if (IS_TOUCH && !showControlBar.current) {
       updateUserPosition(
         event.nativeEvent.locationX,
-        center + event.nativeEvent.locationY - startPosition.current,
+        CENTER + event.nativeEvent.locationY - startPosition.current,
       );
     }
   };
 
   const finishResponse = () => {
-    onComplete(['atata']);
+    let latestMaxLambda = 0;
 
-    setMoving(false);
-    return;
-    alert('finishing response');
+    responses.current.map((response: Response) => {
+      latestMaxLambda = Math.max(response.lambda, latestMaxLambda);
+    });
+
+    setIsRunning(false);
+
     boundWasHit.current = false;
-    setNumberOfTrials(0);
-    setScore(0);
+    numberOfTrials.current = 0;
     lambdaValue.current = INITIAL_LAMBDA;
     circlePosition.current = CENTER_COORDINATES;
     lambdaSlope.current = config?.lambdaSlope;
-    return;
-    return;
-
     boundWasHit.current = false;
 
-    let maxLambda = 0;
-    for (const response of responses.current) {
-      if (maxLambda < response.lambda) {
-        maxLambda = response.lambda;
-      }
-    }
+    onComplete({
+      score: score.current,
+      responses: responses.current,
+    });
 
-    onChange(
-      {
-        maxLambda,
-        value: [...responses.current],
-        phaseType: config.phase,
-      },
-      true,
-    );
-
-    // reset values
+    onMaxLambdaChange('maxLambda', latestMaxLambda);
+    score.current = 0;
   };
 
   const restartTrial = () => {
-    setScore((score * 3) / 4);
+    score.current = (score.current * 3) / 4;
     lambdaValue.current = lambdaValue.current / 2;
     circlePosition.current = CENTER_COORDINATES;
 
     numberOfTrials.current += 1;
 
-    if (IS_TRIAL) {
-      lambdaSlope.current = (lambdaSlope.current * 95) / 100;
+    if (!IS_TRIAL) {
+      return;
     }
-    console.log(numberOfTrials.current, 'numbaaa', IS_TRIAL, 'iz');
-    if (numberOfTrials.current >= config.numberOfTrials && IS_TRIAL) {
+
+    lambdaSlope.current = (lambdaSlope.current * 95) / 100;
+
+    if (numberOfTrials.current >= config.numberOfTrials) {
       finishResponse();
     }
   };
@@ -223,7 +200,8 @@ const StabilityTrackerItemScreen = (props: Props) => {
       OUTER_CIRCLE_RADIUS,
     );
     const scoreChange = getScoreChange(bonusMultiplier, deltaTime);
-    setScore(prevScore => prevScore + scoreChange);
+
+    score.current = score.current + scoreChange;
   };
 
   const updateCirclePosition = (timeElapsed: number, deltaTime: number) => {
@@ -231,12 +209,13 @@ const StabilityTrackerItemScreen = (props: Props) => {
       circlePosition.current,
       userPosition.current,
       lambdaValue.current,
-      center,
+      CENTER,
     );
+
     const newCirclePositionY =
       (delta[1] * deltaTime) / 1000 + circlePosition.current[1];
 
-    circlePosition.current = [center, newCirclePositionY];
+    circlePosition.current = [CENTER, newCirclePositionY];
   };
 
   const updateLambdaValue = (deltaTime: number) => {
@@ -250,7 +229,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
       boundHitAnimationDuration.current = 0;
       boundWasHit.current = true;
       showControlBar.current = true;
-      userPosition.current = [center, center];
+      userPosition.current = [CENTER, CENTER];
     } else {
       lambdaValue.current = getNewLambda(
         lambdaValue.current,
@@ -290,46 +269,25 @@ const StabilityTrackerItemScreen = (props: Props) => {
       updateLambdaValue(deltaTime);
       updateScore(deltaTime);
     }
-    setTickNumber(tickNumber);
+    setDeltaTime(deltaTime);
+    saveResponses();
   };
 
-  useAnimationFrame(animationCallback, isMoving);
-
-  useEffect(() => {
-    if (IS_TOUCH) {
-      return gyroListener?.current?.unsubscribe;
-    }
-    let rolla = 0;
-    if (isMoving) {
-      gyroListener.current = gyroscope.subscribe(
-        ({ x: roll }) => {
-          if (!baseOri.current) {
-            rolla = roll;
-            baseOri.current = roll;
-          } else {
-            const y =
-              center +
-              (((IS_IOS ? 1 : -1) * (roll - baseOri.current)) / MAX_RADIUS) *
-                PANEL_RADIUS;
-
-            userPosition.current = [center, y];
-            rolla = roll;
-          }
-        },
-        e => {
-          alert(e.toString());
-          console.warn(e, 'Error initiating gyroscope');
-          setUserInputType('touch');
-        },
-      );
-    } else {
-      gyroListener?.current?.unsubscribe();
-    }
-
-    return () => {
-      gyroListener?.current?.unsubscribe();
+  const saveResponses = () => {
+    const response = {
+      timestamp: new Date().getTime(),
+      stimPos: [circlePosition.current[1] / PANEL_RADIUS - 1],
+      userPos: [userPosition.current[1] / PANEL_RADIUS - 1],
+      targetPos: [0],
+      lambda: lambdaValue.current,
+      score: score.current,
+      lambdaSlope: lambdaSlope.current,
     };
-  }, [isMoving]);
+
+    responses.current.push(response);
+  };
+
+  useAnimation(animationCallback, isRunning);
 
   const targetInCircleStatus = getDiskStatus(
     circlePosition.current,
@@ -339,19 +297,13 @@ const StabilityTrackerItemScreen = (props: Props) => {
   );
 
   return (
-    <YStack style={styles.container}>
-      <Score score={score} />
+    <YStack shouldRasterizeIOS style={styles.container}>
+      <Score score={score.current} />
 
       <YStack>
         <Svg width={PLAYGROUND_WIDTH} height={PLAYGROUND_WIDTH}>
           <PlayGround
-            BLOCK_WIDTH={BLOCK_WIDTH}
-            availableWidth={PLAYGROUND_WIDTH}
-            BLOCK_HEIGHT={BLOCK_HEIGHT}
-            outerCircleRadius={OUTER_CIRCLE_RADIUS}
-            center={center}
             boundWasHit={boundWasHit.current}
-            boundHitAnimationDurationFromConfig={BOUND_HIT_ANIMATION_DURATION}
             boundHitAnimationDuration={boundHitAnimationDuration.current}
           />
 
@@ -395,10 +347,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
         </Svg>
 
         <ControlBar
-          availableWidth={PLAYGROUND_WIDTH}
-          BLOCK_HEIGHT={BLOCK_HEIGHT}
-          outerCircleRadius={OUTER_CIRCLE_RADIUS}
-          isMoving={isMoving}
+          isTestRunning={isRunning}
           showControlBar={showControlBar.current}
           onStartTouch={onUserStartedMoving}
           onMove={onUserMove}
@@ -409,4 +358,4 @@ const StabilityTrackerItemScreen = (props: Props) => {
   );
 };
 
-export default StabilityTrackerScreen;
+export default StabilityTrackerItemScreen;

@@ -44,6 +44,8 @@ type Props = ActivityItemProps &
     onResponse: (response: PipelineItemResponse) => void;
     onAdditionalResponse: (response: string) => void;
     textVariableReplacer: (markdown: string) => string;
+    onContextChange: (contextKey: string, contextValue: unknown) => void;
+    context: Record<string, unknown>;
   };
 
 function ActivityItem({
@@ -53,6 +55,8 @@ function ActivityItem({
   onResponse,
   onAdditionalResponse,
   textVariableReplacer,
+  onContextChange,
+  context,
 }: Props) {
   const [scrollEnabled, setScrollEnabled] = useState(
     type !== 'StabilityTracker',
@@ -94,12 +98,13 @@ function ActivityItem({
       item = (
         <Box flex={1}>
           <StabilityTracker
-            testIndex={pipelineItem.payload.testIndex}
             config={pipelineItem.payload}
             onComplete={response => {
               onResponse(response);
               moveToNextItem();
             }}
+            onMaxLambdaChange={onContextChange}
+            maxLambda={context?.maxLambda}
           />
         </Box>
       );

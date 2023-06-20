@@ -1,6 +1,4 @@
 import { DeviceType, TestIndex } from '@entities/abTrail';
-import { StabilityTrackerConfig } from '@entities/activity';
-import { TestIndex as StabilityTrackerTestIndex } from '@entities/stabilityTracker';
 
 import { PipelineItem } from '../lib';
 
@@ -50,52 +48,5 @@ export const getAbTrailsPipeline = (
 
     getTutorialPipelineItem(3),
     getTestPipelineItem(3),
-  ];
-};
-
-export const getStabilityTrackerPipeline = (
-  config: StabilityTrackerConfig,
-  id: string,
-): PipelineItem[] => {
-  const getTutorialPipelineItem = (
-    testIndex: StabilityTrackerTestIndex,
-  ): PipelineItem => {
-    return {
-      type: 'Tutorial',
-      payload: {
-        type: 'StabilityTracker',
-        testIndex,
-      },
-      timer: null,
-      canBeReset: false,
-      isSkippable: false,
-      isAbleToMoveBack: false,
-    };
-  };
-
-  const getTestPipelineItem = (
-    testIndex: StabilityTrackerTestIndex,
-  ): PipelineItem => {
-    return {
-      id,
-      type: 'StabilityTracker',
-      payload: {
-        ...config,
-        testIndex: testIndex,
-        phase: testIndex === 0 ? 'trial' : 'focus-phase',
-      },
-      canBeReset: false,
-      timer: null,
-      isSkippable: false,
-      isAbleToMoveBack: false,
-    };
-  };
-
-  return [
-    getTutorialPipelineItem(0),
-    getTestPipelineItem(0),
-
-    getTutorialPipelineItem(1),
-    getTestPipelineItem(1),
   ];
 };

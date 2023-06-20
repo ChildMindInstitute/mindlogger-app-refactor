@@ -4,7 +4,7 @@ import { GestureResponderEvent } from 'react-native';
 import { YStack, Text } from '@shared/ui';
 
 import styles from './StabilityTrackerItem.styles';
-import { PLAYGROUND_WIDTH, OUTER_CIRCLE_RADIUS, BLOCK_HEIGHT } from '../../lib';
+import { PLAYGROUND_WIDTH, OUTER_CIRCLE_RADIUS, BLOCK_HEIGHT } from '../lib';
 
 type Props = {
   isTestRunning: boolean;

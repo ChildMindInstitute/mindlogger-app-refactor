@@ -26,6 +26,7 @@ export type ActivityState = {
   appletVersion: string;
   timers: Timers;
   actions: UserAction[];
+  context: Record<string, unknown>;
 };
 
 const storage = createSecureStorage('activity_progress-storage');

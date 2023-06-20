@@ -398,6 +398,7 @@ type StabilityTrackerAnswerSettings = {
   durationInMinutes: number;
   numberOfTrials: number;
   userInputType: 'gyroscope' | 'touch';
+  phase: 'trial' | 'focus-phase';
 };
 
 export type FlankerAnswerSettings = null;

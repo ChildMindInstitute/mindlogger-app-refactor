@@ -1,11 +1,17 @@
-export type TestIndex = 0 | 1;
-
-export type TutorialPayload = Array<string>;
-
-export type DeviceTutorials = Record<TestIndex, TutorialPayload>;
+export type Response = {
+  timestamp: number;
+  stimPos: number[];
+  userPos: number[];
+  targetPos: number[];
+  lambda: number;
+  score: number;
+  lambdaSlope: number;
+};
 
 export type StabilityTrackerResponse = {
   score: number;
+  // maxLambda: number;
+  responses: Response[];
 };
 
 export enum TargetInCircleStatus {
