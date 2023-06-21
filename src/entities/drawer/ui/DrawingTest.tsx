@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { FC, useContext, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
@@ -25,11 +25,12 @@ type Props = {
   onStarted: () => void;
   onResult: (result: DrawResult) => void;
   onToggleDrawing: () => void;
+  toggleScroll: (isScrollEnabled: boolean) => void;
 } & BoxProps;
 
 const DrawingTest: FC<Props> = props => {
   const [width, setWidth] = useState<number | null>(null);
-  const { scrollToEnd } = useContext(ActivityScrollContext);
+  const { scrollToEnd, isAreaScrollable } = useContext(ActivityScrollContext);
 
   const {
     value,
@@ -39,6 +40,7 @@ const DrawingTest: FC<Props> = props => {
     outputFileName,
     onToggleDrawing,
     isDrawingActive,
+    toggleScroll,
   } = props;
 
   const getFilePath = () => {
@@ -71,11 +73,19 @@ const DrawingTest: FC<Props> = props => {
     props.onResult(result);
   };
 
+  const toggleScrollRef = useRef(toggleScroll);
+
+  toggleScrollRef.current = toggleScroll;
+
   const handleToggle = () => {
     !isDrawingActive && scrollToEnd();
 
     onToggleDrawing();
   };
+
+  useEffect(() => {
+    toggleScrollRef.current(isAreaScrollable);
+  }, [isAreaScrollable]);
 
   return (
     <Box
@@ -104,15 +114,17 @@ const DrawingTest: FC<Props> = props => {
         </XStack>
       )}
 
-      <TouchableOpacity onPress={handleToggle}>
-        <Center mb={16}>
-          <Text color={isDrawingActive ? '$red' : '$primary'} fontSize={18}>
-            {isDrawingActive
-              ? 'Tap here to stop drawing' // @todo stop drawing
-              : 'Tap here to start drawing'}
-          </Text>
-        </Center>
-      </TouchableOpacity>
+      {isAreaScrollable && (
+        <TouchableOpacity onPress={handleToggle}>
+          <Center mb={16}>
+            <Text color={isDrawingActive ? '$red' : '$primary'} fontSize={18}>
+              {isDrawingActive
+                ? 'Tap here to stop drawing' // @todo stop drawing
+                : 'Tap here to start drawing'}
+            </Text>
+          </Center>
+        </TouchableOpacity>
+      )}
 
       {!!width && (
         <XStack jc="center">

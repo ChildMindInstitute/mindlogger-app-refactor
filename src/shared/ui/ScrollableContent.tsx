@@ -10,6 +10,7 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   StyleSheet,
+  useWindowDimensions,
 } from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -26,6 +27,7 @@ const PaddingToBottom = 40;
 
 const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
   const [containerHeight, setContainerHeight] = useState<number | null>(null);
+  const { height: windowHeight } = useWindowDimensions();
 
   const [scrollContentHeight, setScrollContentHeight] = useState<number | null>(
     null,
@@ -62,7 +64,14 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
     setEndOfContentReachedOnce(true);
   }
 
-  const context = useMemo(() => ({ scrollToEnd }), []);
+  const isAreaScrollable = useMemo(() => {
+    return !!(scrollContentHeight && scrollContentHeight >= windowHeight);
+  }, [scrollContentHeight, windowHeight]);
+
+  const context = useMemo(
+    () => ({ scrollToEnd, isAreaScrollable }),
+    [isAreaScrollable],
+  );
 
   useEffect(() => {
     if (!containerHeight || !debouncedScrollContentHeight) {

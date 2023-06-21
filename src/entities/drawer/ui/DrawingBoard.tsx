@@ -176,6 +176,10 @@ const DrawingBoard: FC<Props> = props => {
 
   const onDraw = useDrawCallback(
     (canvas, info) => {
+      if (!isDrawingActive) {
+        return;
+      }
+
       canvasRef.current = canvas;
 
       touchHandler(info.touches);
@@ -191,7 +195,7 @@ const DrawingBoard: FC<Props> = props => {
         updateShouldRestore();
       }
     },
-    [width, touchHandler],
+    [width, touchHandler, isDrawingActive],
   );
 
   return (
@@ -201,7 +205,6 @@ const DrawingBoard: FC<Props> = props => {
       zIndex={1}
       borderWidth={1}
       borderColor="$lightGrey2"
-      disabled={!isDrawingActive}
     >
       <SkiaView onDraw={onDraw} style={styles.skiaView} />
 
