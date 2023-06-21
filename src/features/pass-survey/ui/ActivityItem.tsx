@@ -104,7 +104,7 @@ function ActivityItem({
               moveToNextItem();
             }}
             onMaxLambdaChange={onContextChange}
-            maxLambda={context?.maxLambda}
+            maxLambda={context?.maxLambda as number}
           />
         </Box>
       );

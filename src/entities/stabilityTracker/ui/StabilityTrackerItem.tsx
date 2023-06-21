@@ -1,8 +1,9 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef } from 'react';
 import { GestureResponderEvent } from 'react-native';
 
 import Svg, { Circle } from 'react-native-svg';
 
+import { useForceUpdate } from '@shared/lib';
 import { YStack } from '@shared/ui';
 
 import ControlBar from './ControlBar';
@@ -51,7 +52,7 @@ type Props = {
   };
   onComplete: (response: StabilityTrackerResponse) => void;
   onMaxLambdaChange: (contextKey: string, contextValue: unknown) => void;
-  maxLambda: unknown | number;
+  maxLambda?: number;
 };
 
 const StabilityTrackerItemScreen = (props: Props) => {
@@ -59,7 +60,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
     config: initialConfig,
     onComplete,
     onMaxLambdaChange,
-    maxLambda,
+    maxLambda = 0,
   } = props;
 
   const config = {
@@ -76,22 +77,18 @@ const StabilityTrackerItemScreen = (props: Props) => {
     CENTER,
   );
 
-  const IS_TOUCH = useMemo(
-    () => initialConfig?.userInputType === 'touch',
-    [initialConfig?.userInputType],
-  );
+  const IS_TOUCH = initialConfig?.userInputType === 'touch';
   const IS_TRIAL = config.phase === 'trial';
 
   // we are using refs instead of state , because useAnimation hook is much faster, than react can (or needs) to be rerendered
 
   const [isRunning, setIsRunning] = useState(false);
+  const reRender = useForceUpdate();
+
   const score = useRef(0);
   const numberOfTrials = useRef(0);
   const userPosition = useRef<Coordinate>(CENTER_COORDINATES);
   const circlePosition = useRef<Coordinate>(CENTER_COORDINATES);
-  // following useState is needed to force react rerender
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [deltaNumber, setDeltaTime] = useState<number>(0);
   const boundWasHit = useRef(false);
   const lambdaSlope = useRef(config.lambdaSlope);
   const boundHitAnimationDuration = useRef(0);
@@ -100,7 +97,6 @@ const StabilityTrackerItemScreen = (props: Props) => {
   const startPosition = useRef(0);
   const responses = useRef<Response[]>([]);
 
-  // @ts-ignore \\ maxLambda is number
   const lambdaLimit = IS_TRIAL ? 0 : 0.3 * maxLambda;
 
   const updateUserPosition = (x: number, y: number) => {
@@ -152,7 +148,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
   const finishResponse = () => {
     let latestMaxLambda = 0;
 
-    responses.current.map((response: Response) => {
+    responses.current.forEach((response: Response) => {
       latestMaxLambda = Math.max(response.lambda, latestMaxLambda);
     });
 
@@ -269,16 +265,16 @@ const StabilityTrackerItemScreen = (props: Props) => {
       updateLambdaValue(deltaTime);
       updateScore(deltaTime);
     }
-    setDeltaTime(deltaTime);
+    reRender();
     saveResponses();
   };
 
   const saveResponses = () => {
     const response = {
       timestamp: new Date().getTime(),
-      stimPos: [circlePosition.current[1] / PANEL_RADIUS - 1],
-      userPos: [userPosition.current[1] / PANEL_RADIUS - 1],
-      targetPos: [0],
+      circlePosition: [circlePosition.current[1] / PANEL_RADIUS - 1],
+      userPosition: [userPosition.current[1] / PANEL_RADIUS - 1],
+      targetPosition: [0],
       lambda: lambdaValue.current,
       score: score.current,
       lambdaSlope: lambdaSlope.current,

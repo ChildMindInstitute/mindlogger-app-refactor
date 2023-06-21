@@ -1,4 +1,5 @@
 import { TargetInCircleStatus, Coordinate, BonusMultiplier } from '../types';
+
 export const generateTargetTrajectory = (
   durationMins: number,
   refreshDur = 0.033,
@@ -19,28 +20,28 @@ export const computeDistance = (p1: Coordinate, p2: Coordinate) => {
 };
 
 export const computeDxDt = (
-  stimPos: Coordinate,
-  userPos: Coordinate,
-  lambdaVal: number,
+  circlePosition: Coordinate,
+  userPosition: Coordinate,
+  lambdaValue: number,
   center: number,
 ) => {
   const changeRate = [0, 0];
-  const deltaX = stimPos[0] - center + (userPos[0] - center);
-  const deltaY = stimPos[1] - center + (userPos[1] - center);
+  const deltaX = circlePosition[0] - center + (userPosition[0] - center);
+  const deltaY = circlePosition[1] - center + (userPosition[1] - center);
 
-  changeRate[0] = lambdaVal * deltaX;
-  changeRate[1] = lambdaVal * deltaY;
+  changeRate[0] = lambdaValue * deltaX;
+  changeRate[1] = lambdaValue * deltaY;
 
   return changeRate;
 };
 
 export const getNewLambda = (
   currentLambda: number,
-  currentTs: number,
+  deltaTime: number,
   lambdaSlope: number,
   maxLambda: number,
 ) => {
-  const lambdaValue = currentLambda + (currentTs / 1000) * lambdaSlope;
+  const lambdaValue = currentLambda + (deltaTime / 1000) * lambdaSlope;
 
   if (maxLambda > 0 && lambdaValue >= maxLambda) {
     return maxLambda;

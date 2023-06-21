@@ -1,8 +1,8 @@
 export type Response = {
   timestamp: number;
-  stimPos: number[];
-  userPos: number[];
-  targetPos: number[];
+  circlePosition: number[];
+  userPosition: number[];
+  targetPosition: number[];
   lambda: number;
   score: number;
   lambdaSlope: number;
@@ -10,7 +10,6 @@ export type Response = {
 
 export type StabilityTrackerResponse = {
   score: number;
-  // maxLambda: number;
   responses: Response[];
 };
 
