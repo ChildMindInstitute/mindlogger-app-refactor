@@ -7163,10 +7163,10 @@ react-native-fit-image@^1.5.5:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-flipper@0.198.0:
-  version "0.198.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.198.0.tgz#657c49dd844f53b0b59e522e9b13316da8cfcb9e"
-  integrity sha512-rsvXtyg+n6S+N6u+WKaWWaJqeW4q313B0Ov5JNvRGsFxUEJO24el1LWCRIGkXI/sXn2T5M6mFpfFspkxYP82DQ==
+react-native-flipper@0.182.0:
+  version "0.182.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.182.0.tgz#7a2a5569715a9e571019e84ee2de4f72f4c5a4db"
+  integrity sha512-AoLVduVWluY99XDPznn05sXRyrE1OeEkc4aQCxDKgQYfCdf82aNOH+hwGO/CKcGEiC3T9oBzeOofqwo+Og4eWA==
 
 react-native-get-random-values@^1.8.0:
   version "1.8.0"
