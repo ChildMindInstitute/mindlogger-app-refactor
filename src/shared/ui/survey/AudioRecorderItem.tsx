@@ -101,8 +101,6 @@ const AudioRecorderItem: FC<Props> = ({
     const newFilePath = await generateNewFilePath();
     const canRecord = await checkMicrophonePermission();
 
-    console.log(canRecord);
-
     if (!canRecord) {
       return;
     }
