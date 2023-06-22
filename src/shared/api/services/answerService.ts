@@ -30,6 +30,21 @@ export type PhotoAnswerDto = MediaValue;
 
 export type VideoAnswerDto = MediaValue;
 
+export type FlankerAnswerRecordDto = {
+  button_pressed: string;
+  correct: boolean | undefined;
+  duration: number;
+  offset: number;
+  question: string;
+  response_touch_timestamp: number | null;
+  start_time: number;
+  start_timestamp: number;
+  tag: string;
+  trial_index: number;
+};
+
+export type FlankerAnswerDto = Array<FlankerAnswerRecordDto>;
+
 export type TimeRangeAnswerDto = {
   from: { hour: number; minute: number };
   to: { hour: number; minute: number };
@@ -60,6 +75,7 @@ export type AnswerValueDto =
   | TimeAnswerDto
   | DateAnswerDto
   | GeolocationAnswerDto
+  | FlankerAnswerDto
   | null;
 
 export type ObjectAnswerDto = {
