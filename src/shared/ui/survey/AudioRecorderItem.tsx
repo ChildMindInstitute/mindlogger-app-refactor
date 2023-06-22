@@ -106,10 +106,6 @@ const AudioRecorderItem: FC<Props> = ({
     }
 
     try {
-      await audioRecorderPlayer.current.startRecorder(
-        newFilePath,
-        audioSetConfig,
-      );
       audioRecorderPlayer.current.addRecordBackListener(
         ({ currentPosition }) => {
           const elapsedSeconds = Math.floor(currentPosition / 1000);
@@ -121,9 +117,15 @@ const AudioRecorderItem: FC<Props> = ({
           }
         },
       );
-    } catch {
+
+      await audioRecorderPlayer.current.startRecorder(
+        newFilePath,
+        audioSetConfig,
+      );
+    } catch (e) {
       setErrorDescription(t('audio_recorder:record_error'));
       destroy();
+      console.error(e);
     }
   };
 
