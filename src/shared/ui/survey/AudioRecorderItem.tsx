@@ -75,10 +75,12 @@ const AudioRecorderItem: FC<Props> = ({
   };
 
   const unlinkOldRecordingFile = async () => {
-    const isUrlValid = lastFilePath && FileSystem.exists(lastFilePath);
+    const isUrlValid = Boolean(
+      lastFilePath && (await FileSystem.exists(lastFilePath)),
+    );
     if (isUrlValid) {
       try {
-        await FileSystem.unlink(lastFilePath);
+        await FileSystem.unlink(lastFilePath!);
       } catch (error) {
         console.warn(error);
       }
@@ -106,6 +108,10 @@ const AudioRecorderItem: FC<Props> = ({
     }
 
     try {
+      await audioRecorderPlayer.current.startRecorder(
+        newFilePath,
+        audioSetConfig,
+      );
       audioRecorderPlayer.current.addRecordBackListener(
         ({ currentPosition }) => {
           const elapsedSeconds = Math.floor(currentPosition / 1000);
@@ -117,11 +123,6 @@ const AudioRecorderItem: FC<Props> = ({
           }
         },
       );
-
-      await audioRecorderPlayer.current.startRecorder(
-        newFilePath,
-        audioSetConfig,
-      );
     } catch (e) {
       setErrorDescription(t('audio_recorder:record_error'));
       destroy();
@@ -130,16 +131,27 @@ const AudioRecorderItem: FC<Props> = ({
   };
 
   const stop = async () => {
-    const fullPath = await audioRecorderPlayer.current.stopRecorder();
-    audioRecorderPlayer.current.removeRecordBackListener();
-    setIsRecording(false);
-    setFileSaved(true);
-    const response = {
-      uri: fullPath,
-      type: `audio/${IS_ANDROID ? 'm4a' : 'mp4'}`,
-      fileName: `${uuidv4()}.${IS_ANDROID ? 'm4a' : 'mp4'}`,
-    };
-    onFinish(response);
+    try {
+      const fullPath = await audioRecorderPlayer.current.stopRecorder();
+      audioRecorderPlayer.current.removeRecordBackListener();
+
+      setIsRecording(false);
+      setFileSaved(true);
+
+      const name = fullPath
+        ? fullPath.replace(/^(?:[^\/]*\/)*/, '').split('.')[0]
+        : uuidv4();
+
+      const response = {
+        uri: fullPath,
+        type: `audio/${IS_ANDROID ? 'm4a' : 'mp4'}`,
+        fileName: `${name}.${IS_ANDROID ? 'm4a' : 'mp4'}`,
+      };
+
+      onFinish(response);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const renderIcon = () => {
