@@ -1,18 +1,16 @@
-import { useState, useRef, useEffect, useCallback, FC } from 'react';
+import { useState, useRef, useEffect, FC } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import AudioRecorderPlayer, {
   AudioSet,
 } from 'react-native-audio-recorder-player';
 import { FileSystem } from 'react-native-file-access';
-import { RESULTS } from 'react-native-permissions';
 import RNFetchBlob from 'rn-fetch-blob';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
-import { getMicrophonePermissions, IS_ANDROID } from '@app/shared/lib';
+import { IS_ANDROID, requestMicrophonePermissions } from '@app/shared/lib';
 import {
   useMicrophonePermissions,
   handleBlockedPermissions,
@@ -44,30 +42,15 @@ const AudioRecorderItem: FC<Props> = ({
   value: initialValue,
 }) => {
   const audioRecorderPlayer = useRef(new AudioRecorderPlayer());
+  audioRecorderPlayer.current.setSubscriptionDuration(0.1);
   const { t } = useTranslation();
   const { maxDuration = Infinity } = config;
-  const microphonePermission = useMicrophonePermissions();
+  const { isMicrophoneAccessGranted } = useMicrophonePermissions();
   const [isRecording, setIsRecording] = useState(false);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
   const [fileSaved, setFileSaved] = useState(!!initialValue);
   const [errorDescription, setErrorDescription] = useState('');
   const [lastFilePath, setLastFilePath] = useState<string | null>(null);
-
-  const permissionNotGranted = microphonePermission !== RESULTS.GRANTED;
-
-  const checkMicrophonePermission = async () => {
-    if (permissionNotGranted) {
-      const isGranted = await getMicrophonePermissions();
-
-      if (!isGranted) {
-        return await handleBlockedPermissions(
-          t('audio_recorder:alert_title'),
-          t('audio_recorder:alert_message'),
-        );
-      }
-    }
-    return true;
-  };
 
   const destroy = () => {
     audioRecorderPlayer.current.stopRecorder();
@@ -75,10 +58,12 @@ const AudioRecorderItem: FC<Props> = ({
   };
 
   const unlinkOldRecordingFile = async () => {
-    const isUrlValid = lastFilePath && FileSystem.exists(lastFilePath);
+    const isUrlValid = Boolean(
+      lastFilePath && (await FileSystem.exists(lastFilePath)),
+    );
     if (isUrlValid) {
       try {
-        await FileSystem.unlink(lastFilePath);
+        await FileSystem.unlink(lastFilePath!);
       } catch (error) {
         console.warn(error);
       }
@@ -98,14 +83,14 @@ const AudioRecorderItem: FC<Props> = ({
   };
 
   const record = async () => {
-    const newFilePath = await generateNewFilePath();
-    const canRecord = await checkMicrophonePermission();
-
-    if (!canRecord) {
-      return;
-    }
-
     try {
+      const newFilePath = await generateNewFilePath();
+
+      await audioRecorderPlayer.current.startRecorder(
+        newFilePath,
+        audioSetConfig,
+      );
+
       audioRecorderPlayer.current.addRecordBackListener(
         ({ currentPosition }) => {
           const elapsedSeconds = Math.floor(currentPosition / 1000);
@@ -117,11 +102,6 @@ const AudioRecorderItem: FC<Props> = ({
           }
         },
       );
-
-      await audioRecorderPlayer.current.startRecorder(
-        newFilePath,
-        audioSetConfig,
-      );
     } catch (e) {
       setErrorDescription(t('audio_recorder:record_error'));
       destroy();
@@ -129,17 +109,44 @@ const AudioRecorderItem: FC<Props> = ({
     }
   };
 
+  const startRecord = async () => {
+    if (isMicrophoneAccessGranted) {
+      await record();
+    } else {
+      const isPermissionAllowed = await requestMicrophonePermissions();
+
+      if (isPermissionAllowed) {
+        await record();
+      } else {
+        await handleBlockedPermissions(
+          t('audio_recorder:alert_title'),
+          t('audio_recorder:alert_message'),
+        );
+      }
+    }
+  };
+
   const stop = async () => {
-    const fullPath = await audioRecorderPlayer.current.stopRecorder();
-    audioRecorderPlayer.current.removeRecordBackListener();
-    setIsRecording(false);
-    setFileSaved(true);
-    const response = {
-      uri: fullPath,
-      type: `audio/${IS_ANDROID ? 'm4a' : 'mp4'}`,
-      fileName: `${uuidv4()}.${IS_ANDROID ? 'm4a' : 'mp4'}`,
-    };
-    onFinish(response);
+    try {
+      const fullPath = await audioRecorderPlayer.current.stopRecorder();
+
+      setIsRecording(false);
+      setFileSaved(true);
+
+      const name = fullPath
+        ? fullPath.replace(/^(?:[^\/]*\/)*/, '').split('.')[0]
+        : uuidv4();
+
+      const response = {
+        uri: fullPath,
+        type: `audio/${IS_ANDROID ? 'm4a' : 'mp4'}`,
+        fileName: `${name}.${IS_ANDROID ? 'm4a' : 'mp4'}`,
+      };
+
+      onFinish(response);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const renderIcon = () => {
@@ -170,18 +177,12 @@ const AudioRecorderItem: FC<Props> = ({
     return destroy;
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      return destroy;
-    }, []),
-  );
-
   return (
     <>
       {errorDescription.length ? <Text mb={7}>{errorDescription}</Text> : null}
 
       <XStack ai="center">
-        <TouchableOpacity onPress={isRecording ? stop : record}>
+        <TouchableOpacity onPress={isRecording ? stop : startRecord}>
           <XStack
             h={50}
             w={150}
