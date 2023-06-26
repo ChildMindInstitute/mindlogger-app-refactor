@@ -45,11 +45,10 @@ type Props = {
   onStarted: () => void;
   onResult: (result: DrawResult) => void;
   width: number;
-  isDrawingActive: boolean;
 };
 
 const DrawingBoard: FC<Props> = props => {
-  const { value, onResult, onStarted, width, isDrawingActive } = props;
+  const { value, onResult, onStarted, width } = props;
 
   const isEmpty = !value.length;
 
@@ -176,10 +175,6 @@ const DrawingBoard: FC<Props> = props => {
 
   const onDraw = useDrawCallback(
     (canvas, info) => {
-      if (!isDrawingActive) {
-        return;
-      }
-
       canvasRef.current = canvas;
 
       touchHandler(info.touches);
@@ -195,7 +190,7 @@ const DrawingBoard: FC<Props> = props => {
         updateShouldRestore();
       }
     },
-    [width, touchHandler, isDrawingActive],
+    [width, touchHandler],
   );
 
   return (
