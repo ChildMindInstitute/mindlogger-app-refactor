@@ -19,7 +19,6 @@ type Props = {
   backgroundImageUrl: string | null;
   onStarted: () => void;
   onResult: (result: DrawResult) => void;
-  onToggleDrawing: () => void;
   toggleScroll: (isScrollEnabled: boolean) => void;
 } & BoxProps;
 
@@ -33,7 +32,6 @@ const DrawingTest: FC<Props> = props => {
     imageUrl,
     onStarted,
     onResult,
-    onToggleDrawing,
     isDrawingActive,
     toggleScroll,
   } = props;
@@ -45,7 +43,7 @@ const DrawingTest: FC<Props> = props => {
   const handleToggle = () => {
     !isDrawingActive && scrollToEnd();
 
-    onToggleDrawing();
+    toggleScrollRef.current(false);
   };
 
   useEffect(() => {
@@ -84,7 +82,7 @@ const DrawingTest: FC<Props> = props => {
           <Center mb={16}>
             <Text color={isDrawingActive ? '$red' : '$primary'} fontSize={18}>
               {isDrawingActive
-                ? 'Tap here to stop drawing' // @todo stop drawing
+                ? 'Tap here to stop drawing' // @todo add translations after confirmation
                 : 'Tap here to start drawing'}
             </Text>
           </Center>
