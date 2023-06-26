@@ -89,13 +89,15 @@ function ActivityItem({
 
     case 'DrawingTest':
       item = (
-        <Box flex={1} mb={16}>
+        <Box
+          flex={1}
+          onPressIn={IS_ANDROID ? null : stopScrolling}
+          onPressOut={IS_ANDROID ? null : releaseScrolling}
+        >
           <DrawingTest
             flex={1}
             {...pipelineItem.payload}
-            toggleScroll={setScrollEnabled}
             value={value?.answer?.lines ?? []}
-            isDrawingActive={!scrollEnabled}
             onStarted={() => console.log('onStarted')}
             onResult={onResponse}
           />
