@@ -1,22 +1,13 @@
-import {
-  FC,
-  PropsWithChildren,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { FC, PropsWithChildren, useEffect, useRef, useState } from 'react';
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   StyleSheet,
-  useWindowDimensions,
 } from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDebounce } from 'use-debounce';
 
-import { ActivityScrollContext } from '@app/features/pass-survey';
 import { Box, ScrollButton } from '@app/shared/ui';
 
 type Props = {
@@ -27,7 +18,6 @@ const PaddingToBottom = 40;
 
 const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
   const [containerHeight, setContainerHeight] = useState<number | null>(null);
-  const { height: windowHeight } = useWindowDimensions();
 
   const [scrollContentHeight, setScrollContentHeight] = useState<number | null>(
     null,
@@ -64,15 +54,6 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
     setEndOfContentReachedOnce(true);
   }
 
-  const isAreaScrollable = useMemo(() => {
-    return !!(scrollContentHeight && scrollContentHeight >= windowHeight);
-  }, [scrollContentHeight, windowHeight]);
-
-  const context = useMemo(
-    () => ({ scrollToEnd, isAreaScrollable }),
-    [isAreaScrollable],
-  );
-
   useEffect(() => {
     if (!containerHeight || !debouncedScrollContentHeight) {
       return;
@@ -84,43 +65,41 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
   }, [containerHeight, debouncedScrollContentHeight]);
 
   return (
-    <ActivityScrollContext.Provider value={context}>
-      <Box
-        flex={1}
-        onLayout={e => {
-          setContainerHeight(e.nativeEvent.layout.height);
-        }}
-      >
-        <Box flex={1}>
-          <KeyboardAwareScrollView
-            innerRef={ref => {
-              scrollViewRef.current = ref as unknown as KeyboardAwareScrollView;
-            }}
-            contentContainerStyle={styles.scrollView}
-            onContentSizeChange={(_, contentHeight) => {
-              setScrollContentHeight(contentHeight);
-            }}
-            scrollEnabled={scrollEnabled}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            keyboardOpeningTime={0}
-            scrollEventThrottle={300}
-            onScroll={onScroll}
-          >
-            {children}
-          </KeyboardAwareScrollView>
-        </Box>
-
-        {showScrollButton && (
-          <ScrollButton
-            onPress={scrollToEnd}
-            position="absolute"
-            bottom={7}
-            alignSelf="center"
-          />
-        )}
+    <Box
+      flex={1}
+      onLayout={e => {
+        setContainerHeight(e.nativeEvent.layout.height);
+      }}
+    >
+      <Box flex={1}>
+        <KeyboardAwareScrollView
+          innerRef={ref => {
+            scrollViewRef.current = ref as unknown as KeyboardAwareScrollView;
+          }}
+          contentContainerStyle={styles.scrollView}
+          onContentSizeChange={(_, contentHeight) => {
+            setScrollContentHeight(contentHeight);
+          }}
+          scrollEnabled={scrollEnabled}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          keyboardOpeningTime={0}
+          scrollEventThrottle={300}
+          onScroll={onScroll}
+        >
+          {children}
+        </KeyboardAwareScrollView>
       </Box>
-    </ActivityScrollContext.Provider>
+
+      {showScrollButton && (
+        <ScrollButton
+          onPress={scrollToEnd}
+          position="absolute"
+          bottom={7}
+          alignSelf="center"
+        />
+      )}
+    </Box>
   );
 };
 
