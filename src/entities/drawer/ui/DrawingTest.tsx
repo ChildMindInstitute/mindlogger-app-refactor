@@ -46,8 +46,16 @@ const DrawingTest: FC<Props> = props => {
     toggleScrollRef.current(false);
   };
 
+  const enableScroll = () => toggleScrollRef.current(true);
+
+  const disableScroll = () => toggleScrollRef.current(false);
+
   useEffect(() => {
-    toggleScrollRef.current(isAreaScrollable);
+    if (isAreaScrollable) {
+      enableScroll();
+    } else {
+      disableScroll();
+    }
   }, [isAreaScrollable]);
 
   return (
