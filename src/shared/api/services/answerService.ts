@@ -1,7 +1,8 @@
 import { AxiosResponse } from 'axios';
 
+import { Point } from '@app/abstract/lib';
 import { DayMonthYear, HourMinute } from '@app/shared/lib';
-import { MediaValue } from '@app/shared/ui';
+import { MediaFile, MediaValue } from '@app/shared/ui';
 
 import httpService from './httpService';
 import { SuccessfulEmptyResponse } from '../types';
@@ -45,6 +46,19 @@ export type FlankerAnswerRecordDto = {
 
 export type FlankerAnswerDto = Array<FlankerAnswerRecordDto>;
 
+export type DrawerPointDto = Point & { time: number };
+
+export type DrawerLineDto = {
+  points: Array<DrawerPointDto>;
+  startTime: number;
+};
+
+export type DrawerAnswerDto = {
+  lines: Array<DrawerLineDto>;
+  svgString: string;
+  width: number;
+} & MediaFile;
+
 export type TimeRangeAnswerDto = {
   from: { hour: number; minute: number };
   to: { hour: number; minute: number };
@@ -76,6 +90,7 @@ export type AnswerValueDto =
   | DateAnswerDto
   | GeolocationAnswerDto
   | FlankerAnswerDto
+  | DrawerAnswerDto
   | null;
 
 export type ObjectAnswerDto = {

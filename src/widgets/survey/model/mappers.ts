@@ -1,6 +1,7 @@
 import {
   ActivityItemType,
   Answers,
+  DrawingTestResponse,
   FlankerResponse,
   PipelineItem,
   PipelineItemAnswer,
@@ -28,6 +29,8 @@ import {
   UserActionDto,
   FlankerAnswerRecordDto,
   ObjectAnswerDto,
+  DrawerAnswerDto,
+  DrawerLineDto,
 } from '@app/shared/api';
 import { HourMinute, convertToDayMonthYear } from '@app/shared/lib';
 import { Item } from '@app/shared/ui';
@@ -309,6 +312,26 @@ function convertToFlankerAnswer(answer: Answer): AnswerDto {
   };
 }
 
+function convertToDrawerAnswer(answer: Answer): AnswerDto {
+  const drawerResponse = answer.answer as DrawingTestResponse;
+
+  const dto: DrawerAnswerDto = {
+    svgString: drawerResponse.svgString,
+    width: drawerResponse.width,
+    fileName: drawerResponse.fileName,
+    type: drawerResponse.type,
+    uri: drawerResponse.uri,
+    lines: drawerResponse.lines.map<DrawerLineDto>(x => ({
+      startTime: x.startTime,
+      points: x.points,
+    })),
+  };
+
+  return {
+    value: dto,
+  };
+}
+
 function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
   switch (type) {
     case 'TextInput':
@@ -361,6 +384,9 @@ function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
 
     case 'Flanker':
       return convertToFlankerAnswer(answer);
+
+    case 'DrawingTest':
+      return convertToDrawerAnswer(answer);
 
     default:
       return null;

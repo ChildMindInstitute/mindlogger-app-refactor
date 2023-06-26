@@ -1,6 +1,8 @@
 import { SkPath } from '@shopify/react-native-skia';
 
-import { Point, TestScreenPayload } from '../types';
+import { Point } from '@app/abstract/lib';
+
+import { TestScreenPayload } from '../types';
 
 export const transformCoordinates = (
   original: TestScreenPayload,

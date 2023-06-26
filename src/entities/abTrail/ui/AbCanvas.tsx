@@ -12,6 +12,7 @@ import {
   SkCanvas,
 } from '@shopify/react-native-skia';
 
+import { Point } from '@app/abstract/lib';
 import { Box, BoxProps } from '@app/shared/ui';
 
 import AbShapes from './AbShapes';
@@ -21,7 +22,6 @@ import {
   LogPoint,
   MessageType,
   OnResultLog,
-  Point,
   TestNode,
   TestScreenPayload,
 } from '../lib';
