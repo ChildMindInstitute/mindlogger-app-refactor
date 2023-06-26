@@ -93,9 +93,6 @@ function ActivityItem({
           <DrawingTest
             flex={1}
             {...pipelineItem.payload}
-            onToggleDrawing={() => {
-              setScrollEnabled(!scrollEnabled);
-            }}
             toggleScroll={setScrollEnabled}
             value={value?.answer?.lines ?? []}
             isDrawingActive={!scrollEnabled}
