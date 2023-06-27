@@ -1,8 +1,14 @@
-import { differenceInMonths, isEqual, startOfDay, subMonths } from 'date-fns';
+import {
+  addDays,
+  differenceInMonths,
+  isEqual,
+  startOfDay,
+  subMinutes,
+  subMonths,
+} from 'date-fns';
 import { Parse, Day } from 'dayspan';
 
 import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
-import { getTwoDigits } from '@app/shared/lib';
 
 import {
   EventAvailability,
@@ -35,9 +41,10 @@ const calculateForMonthly = (
     date = check;
   }
 
+  const aMonthAgo = subMonths(today, 1);
+
   const isBeyondOfDateBorders =
-    (availability.startDate && date < availability.startDate) ||
-    (availability.endDate && date > availability.endDate);
+    date < aMonthAgo || (!!availability.endDate && date > availability.endDate);
 
   if (isBeyondOfDateBorders) {
     return null;
@@ -83,14 +90,12 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
   const scheduled =
     availability.availabilityType === AvailabilityType.ScheduledAccess;
 
-  if (
-    alwaysAvailable ||
-    (scheduled && availability.periodicityType === PeriodicityType.Once)
-  ) {
-    return calculateForSpecificDay(
-      alwaysAvailable ? startOfDay(now) : selectedDate!,
-      availability,
-    );
+  if (alwaysAvailable) {
+    return calculateForSpecificDay(startOfDay(now), availability);
+  }
+
+  if (scheduled && availability.periodicityType === PeriodicityType.Once) {
+    return calculateForSpecificDay(selectedDate!, availability);
   }
 
   if (availability.periodicityType === PeriodicityType.Monthly) {
@@ -110,17 +115,9 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
     parseInput.start = availability.startDate.getTime();
   }
   if (availability.endDate) {
-    parseInput.end = availability.endDate.getTime();
-  }
-
-  if (availability.timeFrom) {
-    parseInput.times = [
-      availability.timeFrom.minutes === 0
-        ? `${getTwoDigits(availability.timeFrom.hours)}`
-        : `${getTwoDigits(availability.timeFrom.hours)}:${getTwoDigits(
-            availability.timeFrom.minutes,
-          )}`,
-    ];
+    let endOfDay = addDays(availability.endDate, 1);
+    endOfDay = subMinutes(endOfDay, 1);
+    parseInput.end = endOfDay.getTime();
   }
 
   const parsedSchedule = Parse.schedule(parseInput!);
@@ -129,13 +126,17 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
 
   const futureSchedule = parsedSchedule.forecast(fromDate!, true, 1, 0, true);
 
-  const result = futureSchedule.first();
+  const calculated = futureSchedule.first();
 
-  if (!result) {
+  if (!calculated) {
     return null;
   }
 
-  return result[0].start.date;
+  const result = calculated[0].start.date;
+
+  setTime(result, availability);
+
+  return result;
 };
 
 const cache = new Map();

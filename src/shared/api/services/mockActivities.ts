@@ -1,9 +1,7 @@
-import {
-  FlankerWithImageOnButton,
-  FlankerWithStFxImages,
-  FlankerWithTextsSigns,
-} from '@app/entities/flanker';
-import { ActivityDto } from '@app/shared/api';
+import { ActivityDto, FlankerAnswerSettings } from '@app/shared/api';
+
+import { flankerWithStFxImages } from './mocks/FlankerWithStFxImages';
+import { flankerSettingsTextSignsDto } from './mocks/FlankerWithTextsSigns';
 
 const testMessage1 =
   'Start by placing the point of the pen at the center of the spiral (S), and trace out along the dashed blue line to the end of the sprial (E).  Try to stay on the dashed blue line while tracing. You will do this five times.';
@@ -50,6 +48,7 @@ const grid: ActivityDto = {
         drawingBackground:
           'https://mindlogger-applet-contents.s3.amazonaws.com/image/9qPz3D1kyzwD2pAAHpP5Hv.jpeg',
       },
+      conditionalLogic: null,
     },
   ],
 };
@@ -93,6 +92,7 @@ const vortex: ActivityDto = {
         drawingBackground:
           'https://mindlogger-applet-contents.s3.amazonaws.com/image/w93voaqZA7ZGoZryorBvQc.jpeg',
       },
+      conditionalLogic: null,
     },
   ],
 };
@@ -149,6 +149,7 @@ export const AbTestActivity: ActivityDto = {
       },
       question: '',
       order: 0,
+      conditionalLogic: null,
     },
   ],
 };
@@ -174,10 +175,11 @@ const FlankerWithImageActivity: ActivityDto = {
       timer: null,
       question: '',
       responseType: 'flanker',
-      config: FlankerWithImageOnButton,
-      responseValues: {},
+      config: null,
+      responseValues: flankerWithStFxImages,
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -203,10 +205,11 @@ const FlankerWithStSFxActivity: ActivityDto = {
       timer: null,
       question: '',
       responseType: 'flanker',
-      config: FlankerWithStFxImages,
-      responseValues: {},
+      config: null,
+      responseValues: {} as FlankerAnswerSettings,
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -231,11 +234,12 @@ const FlankerWithTextSignsActivity: ActivityDto = {
       name: 'Flanker',
       question: '',
       responseType: 'flanker',
-      config: FlankerWithTextsSigns,
-      responseValues: {},
+      config: null,
+      responseValues: flankerSettingsTextSignsDto,
       order: 0,
       timer: null,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -295,6 +299,7 @@ export const TextActivity: ActivityDto = {
       responseValues: null,
       isHidden: false,
       order: 0,
+      conditionalLogic: null,
     },
   ],
 };
@@ -332,6 +337,7 @@ export const GeolocationActivity: ActivityDto = {
       },
       responseValues: null,
       order: 0,
+      conditionalLogic: null,
     },
   ],
 };
@@ -381,6 +387,7 @@ export const SliderTestActivity: ActivityDto = {
       question: 'Choose some number',
       isHidden: false,
       order: 0,
+      conditionalLogic: null,
     },
   ],
 };
@@ -393,11 +400,13 @@ export const FlankerActivity = {
 };
 
 const TestActivities = [
-  grid,
-  vortex,
-  AbTestActivity,
-  TextActivity,
-  SliderTestActivity,
+  // grid,
+  // vortex,
+  // AbTestActivity,
+  // TextActivity,
+  // SliderTestActivity,
+  FlankerWithTextSignsActivity,
+  //FlankerWithImageActivity
 ];
 
 let index = 0;

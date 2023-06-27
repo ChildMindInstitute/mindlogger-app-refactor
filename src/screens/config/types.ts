@@ -2,6 +2,8 @@ import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { CompositeScreenProps } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+import { EntityPath } from '@app/abstract/lib';
+
 export type RootStackParamList = {
   Login: undefined;
   SignUp: undefined;
@@ -12,12 +14,7 @@ export type RootStackParamList = {
   AppletDetails: { appletId: string; title: string };
   Settings: undefined;
   ChangePassword: undefined;
-  InProgressActivity: {
-    appletId: string;
-    activityId: string;
-    eventId: string;
-    flowId?: string;
-  };
+  InProgressActivity: EntityPath;
   ActivityPassedScreen: undefined;
   OpenSourceUsed: undefined;
 };

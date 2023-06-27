@@ -37,7 +37,7 @@ const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
       markdownit={markdownItInstance}
       style={markdownStyle}
     >
-      {content.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2')}
+      {content.replace(/\n/g, '\n\n')}
     </Markdown>
   );
 };

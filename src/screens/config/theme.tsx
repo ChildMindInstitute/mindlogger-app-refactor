@@ -5,7 +5,7 @@ import {
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { AppletTheme } from '@app/entities/applet';
-import { colors, IS_ANDROID } from '@shared/lib';
+import { colors, IS_ANDROID, IS_TABLET } from '@shared/lib';
 import { DataIcon, SurveyIcon, AboutIcon, Text, CloseIcon } from '@shared/ui';
 
 import { RootStackParamList, AppletDetailsParamList } from './types';
@@ -56,6 +56,15 @@ export const getAppletDetailsScreenOptions = (
 
     return {
       headerShown: false,
+      ...(IS_TABLET
+        ? {
+            tabBarItemStyle: {
+              flexDirection: 'column',
+              alignItems: 'center',
+              paddingVertical: IS_ANDROID ? 10 : 5,
+            },
+          }
+        : {}),
       tabBarIcon: ({ color }: { color: string }) => tabBarIcon(color),
       tabBarStyle: {
         backgroundColor: colors.lightBlue,

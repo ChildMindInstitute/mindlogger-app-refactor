@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react';
 
-import Permissions from 'react-native-permissions';
+import { RESULTS } from 'react-native-permissions';
 
-import { MICROPHONE_PERMISSIONS } from '../constants';
+import { checkMicrophonePermissions } from '../permissions';
 
 const useMicrophonePermissions = () => {
-  const [microphonePermission, setMicrophonePermission] =
-    useState<string>('undetermined');
+  const [microphonePermission, setMicrophonePermission] = useState<string>(
+    RESULTS.UNAVAILABLE,
+  );
 
   useEffect(() => {
-    Permissions.check(MICROPHONE_PERMISSIONS!).then(setMicrophonePermission);
+    checkMicrophonePermissions().then(setMicrophonePermission);
   }, []);
 
-  return microphonePermission;
+  return {
+    isMicrophoneAccessGranted: microphonePermission === RESULTS.GRANTED,
+  };
 };
 
 export default useMicrophonePermissions;

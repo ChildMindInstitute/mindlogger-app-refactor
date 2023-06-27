@@ -1,7 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { StoreProgress } from '@app/abstract/lib';
+import {
+  ActivityRecordKeyParams,
+  EntityPath,
+  EntityType,
+  LookupMediaInput,
+  StoreProgress,
+} from '@app/abstract/lib';
 import { AppletModel, clearStorageRecords } from '@app/entities/applet';
 import {
   LocalEventDetail,
@@ -12,18 +18,46 @@ import {
   useForegroundEvent,
   useOnInitialAndroidNotification,
 } from '@app/entities/notification';
+import { LogTrigger } from '@app/shared/api';
 import { useAppSelector } from '@app/shared/lib';
 
-export function useOnNotificationTap() {
+type Input = {
+  checkAvailability: (entityName: string, identifiers: EntityPath) => boolean;
+  hasMediaReferences: (input: LookupMediaInput) => boolean;
+  cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
+};
+
+const GoBackDuration = 1000;
+
+/*
+https://mindlogger.atlassian.net/browse/M2-1810
+We don't know the exact reason yet.
+The bug is fluent.
+I've observed console.log exactly at the line before Alert.show, but the alert hasn't been shown!.
+Probably this is because of notification re-schedule at the same moment, and all notifications deleted via notify api
+and as a result - the current notification-tap thread and all the related threads (created by promises) - canceled, just supposition.
+Sometimes I've observed the Alert right after 10-20 seconds, probably because of reload of bundle or because I switched the app from background to foreground
+(like modals sometimes hidden and shown on Windows OS if to click alt+tab) - not sure here.
+*/
+const WorkaroundDuration = 100;
+
+export function useOnNotificationTap({
+  checkAvailability,
+  hasMediaReferences,
+  cleanUpMediaFiles,
+}: Input) {
   const queryClient = useQueryClient();
 
-  const { navigate } = useNavigation();
+  const navigator = useNavigation();
 
   const storeProgress: StoreProgress = useAppSelector(
     AppletModel.selectors.selectInProgressApplets,
   );
 
-  const { startFlow, startActivity } = AppletModel.useStartEntity();
+  const { startFlow, startActivity } = AppletModel.useStartEntity({
+    hasMediaReferences,
+    cleanUpMediaFiles,
+  });
 
   const actions: Record<
     LocalNotificationType,
@@ -33,59 +67,102 @@ export function useOnNotificationTap() {
       NotificationModel.NotificationRefreshService.refresh(
         queryClient,
         storeProgress,
+        LogTrigger.LimitReachedNotification,
       );
     },
     'schedule-event-alert': eventDetail => {
-      const { appletId, activityId, activityFlowId, eventId } =
+      const { appletId, activityId, activityFlowId, eventId, entityName } =
         eventDetail.notification.data;
 
-      startActivityOrFlow(
-        appletId!,
-        activityId ?? null,
-        activityFlowId ?? null,
-        eventId!,
+      const entityId: string = (activityId ?? activityFlowId)!;
+
+      const entityType: EntityType = activityFlowId ? 'flow' : 'regular';
+
+      const executing = isActivityExecuting();
+
+      if (executing) {
+        navigator.goBack();
+      }
+
+      setTimeout(
+        () => {
+          startEntity(appletId!, entityId, entityType, eventId!, entityName!);
+        },
+        executing ? GoBackDuration : WorkaroundDuration,
       );
     },
   };
 
-  function navigateSurvey(
-    appletId: string,
-    activityId: string,
-    eventId: string,
-    flowId?: string,
-  ) {
-    navigate('InProgressActivity', {
+  const isActivityExecuting = (): boolean => {
+    const navigationState = navigator.getState();
+    if (!navigationState) {
+      return false;
+    }
+    const length = navigationState.routes.length;
+    const lastRoute = navigationState.routes[length - 1];
+    return lastRoute.name === 'InProgressActivity';
+  };
+
+  function navigateSurvey({
+    appletId,
+    eventId,
+    entityId,
+    entityType,
+  }: EntityPath) {
+    navigator.navigate('InProgressActivity', {
       appletId,
-      activityId,
       eventId,
-      flowId,
+      entityId,
+      entityType,
     });
   }
 
-  const startActivityOrFlow = (
+  const startEntity = (
     appletId: string,
-    activityId: string | null,
-    flowId: string | null,
+    entityId: string,
+    entityType: EntityType,
     eventId: string,
+    entityName: string,
   ) => {
-    if (flowId) {
-      startFlow(appletId, flowId, eventId).then(
-        ({ startedFromActivity, startedFromScratch }) => {
+    if (
+      !checkAvailability(entityName, {
+        appletId,
+        eventId,
+        entityId,
+        entityType,
+      })
+    ) {
+      return;
+    }
+
+    if (entityType === 'flow') {
+      startFlow(appletId, entityId, eventId).then(
+        ({ startedFromScratch, cannotBeStartedDueToMediaFound }) => {
+          if (cannotBeStartedDueToMediaFound) {
+            return;
+          }
+
           if (startedFromScratch) {
             clearStorageRecords.byEventId(eventId);
           }
 
-          navigateSurvey(appletId, startedFromActivity, eventId, flowId);
+          navigateSurvey({ appletId, eventId, entityId, entityType });
         },
       );
     } else {
-      startActivity(appletId, activityId!, eventId).then(startedFromScratch => {
-        if (startedFromScratch) {
-          clearStorageRecords.byEventId(eventId);
-        }
+      startActivity(appletId, entityId, eventId).then(
+        ({ startedFromScratch, cannotBeStartedDueToMediaFound }) => {
+          if (cannotBeStartedDueToMediaFound) {
+            return;
+          }
 
-        navigateSurvey(appletId, activityId!, eventId);
-      });
+          if (startedFromScratch) {
+            clearStorageRecords.byEventId(eventId);
+          }
+
+          navigateSurvey({ appletId, eventId, entityId, entityType });
+        },
+      );
     }
   };
 

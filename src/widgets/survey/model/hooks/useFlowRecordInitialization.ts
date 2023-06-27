@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 
+import { EntityType } from '@app/abstract/lib';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 
 import { useFlowStorageRecord } from '../../lib';
@@ -11,20 +12,20 @@ import {
 type UseActivityRecordCreatorArgs = {
   appletId: string;
   eventId: string;
-  activityId: string;
-  flowId?: string;
+  entityId: string;
+  entityType: EntityType;
 };
 
 export function useFlowRecordInitialization({
   appletId,
   eventId,
-  activityId,
-  flowId,
+  entityId,
+  entityType,
 }: UseActivityRecordCreatorArgs) {
   const { flowStorageRecord, upsertFlowStorageRecord } = useFlowStorageRecord({
     appletId,
     eventId,
-    flowId,
+    flowId: entityType === 'flow' ? entityId : undefined,
   });
 
   const initializedRef = useRef(!!flowStorageRecord);
@@ -41,24 +42,28 @@ export function useFlowRecordInitialization({
       return [];
     }
 
-    const isActivityFlow = !!flowId;
+    const isActivityFlow = entityType === 'flow';
 
     if (!isActivityFlow) {
-      return buildSingleActivityPipeline({ appletId, eventId, activityId });
+      return buildSingleActivityPipeline({
+        appletId,
+        eventId,
+        activityId: entityId,
+      });
     } else {
       const activityIds = applet.activityFlows.find(
-        flow => flow.id === flowId,
+        flow => flow.id === entityId,
       )?.activityIds;
 
       return buildActivityFlowPipeline({
         activityIds: activityIds!,
         appletId,
         eventId,
-        flowId,
+        flowId: entityId,
         startFrom: step,
       });
     }
-  }, [activityId, applet, appletId, eventId, flowId, step]);
+  }, [applet, appletId, eventId, step, entityId, entityType]);
 
   const canCreateStorageRecord =
     !initializedRef.current && applet && !flowStorageRecord;

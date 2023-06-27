@@ -3,8 +3,13 @@ import { TouchableOpacity } from 'react-native';
 import { useBackHandler } from '@react-native-community/hooks';
 import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
+import { EntityPath, StoreProgress } from '@app/abstract/lib';
+import { ActivityModel } from '@app/entities/activity';
+import { MediaFilesCleaner } from '@app/entities/activity';
+import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
 import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SessionModel } from '@entities/session';
@@ -18,12 +23,14 @@ import {
   IS_ANDROID,
   useAlarmPermissions,
   useBackgroundTask,
+  useAppSelector,
 } from '@shared/lib';
 import { UserProfileIcon, HomeIcon, BackButton, Text, Box } from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
 import { onBeforeAppClose } from '../lib';
 import { useDefaultRoute, useInitialRouteNavigation } from '../model';
+import { checkEntityAvailability } from '../model/checkEntityAvailability';
 import {
   AppletsScreen,
   ChangeLanguageScreen,
@@ -48,6 +55,12 @@ export default () => {
   const defaultRoute = useDefaultRoute();
   const { forceLogout } = LogoutModel.useLogout();
 
+  const queryClient = useQueryClient();
+
+  const storeProgress: StoreProgress = useAppSelector(
+    AppletModel.selectors.selectInProgressApplets,
+  );
+
   useInitialRouteNavigation();
   useNotificationPermissions();
   useAlarmPermissions();
@@ -64,7 +77,21 @@ export default () => {
     forceLogout();
   });
 
-  TapOnNotificationModel.useOnNotificationTap();
+  TapOnNotificationModel.useOnNotificationTap({
+    checkAvailability: (
+      entityName: string,
+      { appletId, eventId, entityId, entityType }: EntityPath,
+    ) => {
+      return checkEntityAvailability({
+        entityName,
+        identifiers: { appletId, eventId, entityId, entityType },
+        queryClient,
+        storeProgress,
+      });
+    },
+    hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
+    cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
+  });
 
   useBackgroundTask(() => {
     return NotificationModel.topUpNotifications();

@@ -10,11 +10,17 @@ import {
   PhotoItem,
   VideoItem,
   ScrollableContent,
+  DatePickerItem,
+  TimePickerItem,
+  StackedCheckBoxItem,
+  StackedRadiosItem,
+  StackedSlider,
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
-import { HtmlFlanker } from '@entities/flanker';
+import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
+import { IS_ANDROID } from '@shared/lib';
 import {
   RadioActivityItem,
   SurveySlider,
@@ -83,7 +89,11 @@ function ActivityItem({
 
     case 'DrawingTest':
       item = (
-        <Box flex={1} onPressIn={stopScrolling} onPressOut={releaseScrolling}>
+        <Box
+          flex={1}
+          onPressIn={IS_ANDROID ? null : stopScrolling}
+          onPressOut={IS_ANDROID ? null : releaseScrolling}
+        >
           <DrawingTest
             flex={1}
             {...pipelineItem.payload}
@@ -96,11 +106,21 @@ function ActivityItem({
       break;
 
     case 'Flanker':
-      item = (
+      item = IS_ANDROID ? (
         <HtmlFlanker
           configuration={pipelineItem.payload}
-          onResult={onResponse}
-          onComplete={() => console.log('onComplete')}
+          onResult={data => {
+            onResponse(data);
+            moveToNextItem();
+          }}
+        />
+      ) : (
+        <NativeIosFlanker
+          configuration={pipelineItem.payload}
+          onResult={data => {
+            onResponse(data);
+            moveToNextItem();
+          }}
         />
       );
       break;
@@ -133,11 +153,50 @@ function ActivityItem({
 
     case 'NumberSelect':
       item = (
-        <Box flex={1} justifyContent="center" mx={16}>
+        <Box justifyContent="center" mx={16}>
           <NumberSelector
             value={value?.answer ?? ''}
             config={pipelineItem.payload}
             onChange={onResponse}
+          />
+        </Box>
+      );
+      break;
+
+    case 'StackedSlider':
+      item = (
+        <Box mx="$6">
+          <StackedSlider
+            config={pipelineItem.payload}
+            onChange={onResponse}
+            values={value?.answer || null}
+            onPress={() => console.log('pressed')}
+            onRelease={() => console.log('released')}
+          />
+        </Box>
+      );
+      break;
+
+    case 'StackedCheckbox':
+      item = (
+        <Box mx="$6">
+          <StackedCheckBoxItem
+            config={pipelineItem.payload}
+            onChange={onResponse}
+            values={value?.answer || null}
+            textReplacer={textVariableReplacer}
+          />
+        </Box>
+      );
+      break;
+
+    case 'StackedRadio':
+      item = (
+        <Box mx="$6">
+          <StackedRadiosItem
+            config={pipelineItem.payload}
+            onChange={onResponse}
+            values={value?.answer || []}
           />
         </Box>
       );
@@ -192,6 +251,14 @@ function ActivityItem({
       );
       break;
 
+    case 'Date':
+      item = (
+        <Box mx="$6">
+          <DatePickerItem onChange={onResponse} value={value?.answer} />
+        </Box>
+      );
+      break;
+
     case 'Radio':
       item = (
         <Box mx="$6">
@@ -232,6 +299,14 @@ function ActivityItem({
       );
       break;
 
+    case 'Time':
+      item = (
+        <Box mx="$6">
+          <TimePickerItem onChange={onResponse} value={value?.answer} />
+        </Box>
+      );
+      break;
+
     default: {
       item = <></>;
     }
@@ -250,7 +325,7 @@ function ActivityItem({
           </Box>
         )}
 
-        {pipelineItem.timer && (
+        {!!pipelineItem.timer && (
           <Timer duration={pipelineItem.timer} onTimeIsUp={next} />
         )}
 

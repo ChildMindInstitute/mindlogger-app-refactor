@@ -1,3 +1,1 @@
-import ChangeLanguageSelector from './ui/ChangeLanguageSelector';
-
-export { ChangeLanguageSelector };
+export * from './ui';

@@ -70,7 +70,7 @@ export const collectActivityDetailsImageUrls = (activity: ActivityDto) => {
         break;
       }
       case 'sliderRows': {
-        for (let responseValue of item.responseValues) {
+        for (let responseValue of item.responseValues.rows) {
           responseValue.minImage && result.push(responseValue.minImage);
           responseValue.maxImage && result.push(responseValue.maxImage);
         }
@@ -79,18 +79,18 @@ export const collectActivityDetailsImageUrls = (activity: ActivityDto) => {
       case 'singleSelectRows': {
         for (let row of item.responseValues.rows) {
           row.rowImage && result.push(row.rowImage);
-          for (let option of row.options) {
-            option.image && result.push(option.image);
-          }
+        }
+        for (let option of item.responseValues.options) {
+          option.image && result.push(option.image);
         }
         break;
       }
       case 'multiSelectRows': {
         for (let row of item.responseValues.rows) {
           row.rowImage && result.push(row.rowImage);
-          for (let option of row.options) {
-            option.image && result.push(option.image);
-          }
+        }
+        for (let option of item.responseValues.options) {
+          option.image && result.push(option.image);
         }
         break;
       }

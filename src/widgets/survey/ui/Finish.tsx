@@ -4,20 +4,29 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
-import { useActivityAnswersMutation } from '@app/entities/activity';
-import { AppletModel } from '@app/entities/applet';
-import { NotificationModel } from '@app/entities/notification';
-import { PassSurveyModel } from '@app/features/pass-survey';
+import { EventModel } from '@app/entities/event';
+import { useActivityAnswersMutation } from '@entities/activity';
+import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
+import { NotificationModel } from '@entities/notification';
+import { PassSurveyModel } from '@features/pass-survey';
+import { LogTrigger } from '@shared/api';
 import {
   getUnixTimestamp,
   onApiRequestError,
   useAppDispatch,
   useAppSelector,
-} from '@app/shared/lib';
+} from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
-import { FinishReason } from '../model';
-import { mapAnswersToDto } from '../model/mappers';
+import {
+  FinishReason,
+  getActivityStartAt,
+  getExecutionGroupKey,
+  getItemIds,
+  getScheduledDate,
+  getUserIdentifier,
+} from '../model';
+import { mapAnswersToDto, mapUserActionsToDto } from '../model/mappers';
 
 type Props = {
   appletId: string;
@@ -41,6 +50,17 @@ function FinishItem({
 }: Props) {
   const { t } = useTranslation();
 
+  const { data: applet } = useAppletDetailsQuery(appletId, {
+    select: response =>
+      AppletModel.mapAppletDetailsFromDto(response.data.result),
+  });
+
+  const entityId = flowId ? flowId : activityId;
+
+  const scheduledEvent = EventModel.useScheduledEvent({ appletId, eventId });
+
+  const appletEncryption = applet?.encryption || null;
+
   const dispatch = useAppDispatch();
 
   const queryClient = useQueryClient();
@@ -60,7 +80,7 @@ function FinishItem({
   const {
     mutate: sendAnswers,
     isLoading: isSendingAnswers,
-    isSuccess: successfullySentAnswers,
+    isError: sentAnswersWithError,
     isPaused: isOffline,
   } = useActivityAnswersMutation({
     onError: error => {
@@ -71,9 +91,6 @@ function FinishItem({
   });
 
   let finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';
-
-  const finished =
-    isOffline || successfullySentAnswers || finishReason === 'time-is-up';
 
   const isLoading = !isOffline && isSendingAnswers;
 
@@ -86,20 +103,54 @@ function FinishItem({
       }),
     );
 
+    if (!appletEncryption) {
+      throw new Error('Encryption params is undefined');
+    }
+
     if (!activityStorageRecord) {
       return;
     }
 
+    const answers = mapAnswersToDto(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
+
+    const userIdentifier = getUserIdentifier(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
+
+    const userActions = mapUserActionsToDto(activityStorageRecord.actions);
+
+    const itemIds = getItemIds(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
+
+    const progressRecord = storeProgress[appletId][entityId][eventId];
+
+    const scheduledDate = getScheduledDate(scheduledEvent!);
+
+    const executionGroupKey = getExecutionGroupKey(progressRecord);
+
+    const scheduledTime = scheduledDate && getUnixTimestamp(scheduledDate);
+
     sendAnswers({
-      flowId: flowId ? flowId : null,
       appletId,
-      activityId,
       createdAt: getUnixTimestamp(Date.now()),
       version: activityStorageRecord.appletVersion,
-      answers: mapAnswersToDto(
-        activityStorageRecord.items,
-        activityStorageRecord.answers,
-      ),
+      answers: answers,
+      userActions,
+      itemIds,
+      appletEncryption,
+      flowId: flowId ?? null,
+      activityId: activityId,
+      executionGroupKey,
+      userIdentifier,
+      startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
+      endTime: getUnixTimestamp(Date.now()),
+      scheduledTime,
     });
 
     clearActivityStorageRecord();
@@ -111,11 +162,10 @@ function FinishItem({
   }, []);
 
   const onCloseEntity = () => {
-    console.log('storeProgress!', JSON.stringify(storeProgress, null, 2));
-
     NotificationModel.NotificationRefreshService.refresh(
       queryClient,
       storeProgress,
+      LogTrigger.EntityCompleted,
     );
     onClose();
   };
@@ -123,15 +173,28 @@ function FinishItem({
   return (
     <ImageBackground>
       <Center flex={1} mx={16}>
-        {finished && (
+        {!isLoading && (
           <>
             <Center mb={20}>
               <Text fontSize={24} fontWeight="bold">
-                {finishReason === 'regular' && t('additional:thanks')}
+                {finishReason === 'regular' &&
+                  !sentAnswersWithError &&
+                  t('additional:thanks')}
+
+                {finishReason === 'regular' &&
+                  sentAnswersWithError &&
+                  t('additional:sorry')}
+
                 {finishReason === 'time-is-up' && t('additional:time-end')}
               </Text>
 
-              <Text fontSize={16}>{t('additional:saved_answers')}</Text>
+              {!sentAnswersWithError && (
+                <Text fontSize={16}>{t('additional:saved_answers')}</Text>
+              )}
+
+              {sentAnswersWithError && (
+                <Text fontSize={16}>{t('additional:server-error')}</Text>
+              )}
             </Center>
 
             <Button onPress={onCloseEntity}>{t('additional:close')}</Button>

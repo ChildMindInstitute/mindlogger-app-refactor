@@ -7,6 +7,7 @@ import {
   subMonths,
   subWeeks,
 } from 'date-fns';
+import i18next from 'i18next';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
@@ -32,7 +33,7 @@ import {
   ScheduleEvent,
 } from '../../lib/types';
 
-const NumberOfDaysForSchedule = 7;
+const NumberOfDaysForSchedule = 14;
 const DaysInWeek = 7;
 
 interface INotificationBuilder {
@@ -187,6 +188,15 @@ class NotificationBuilder implements INotificationBuilder {
     const dayFrom = this.getDayFrom(firstScheduleDay, periodStartDay);
 
     const dayTo = this.getDayTo(lastScheduleDay, periodEndDay);
+
+    if (periodicity === PeriodicityType.Always) {
+      let day = new Date(dayFrom);
+
+      while (day <= dayTo) {
+        eventDays.push(day);
+        day = addDays(day, 1);
+      }
+    }
 
     if (periodicity === PeriodicityType.Daily) {
       let day = new Date(dayFrom);
@@ -464,13 +474,8 @@ class NotificationBuilder implements INotificationBuilder {
     };
 
     if (!event.scheduledAt) {
-      console.warn(
-        `[NotificationBuilder.processEvent] event.scheduledAt has undefined value, event: ${event.id}`,
-      );
       return eventResult;
     }
-
-    const scheduledAt = event.scheduledAt;
 
     const scheduledDay = startOfDay(event.scheduledAt);
 
@@ -489,7 +494,9 @@ class NotificationBuilder implements INotificationBuilder {
 
     const entityName = entity.name;
 
-    const entityDescription = entity.description;
+    const notificationDescription = i18next.t(
+      'local_notifications:complete_activity',
+    );
 
     const isEntityHidden = !entity.isVisible;
 
@@ -516,10 +523,14 @@ class NotificationBuilder implements INotificationBuilder {
     const aWeekAgoDay = addDays(this.currentDay, -7);
 
     const isPeriodicitySet =
-      periodicity !== PeriodicityType.Always &&
-      periodicity !== PeriodicityType.Once;
+      periodicity === PeriodicityType.Daily ||
+      periodicity === PeriodicityType.Weekly ||
+      periodicity === PeriodicityType.Weekdays ||
+      periodicity === PeriodicityType.Monthly;
 
-    if (!isPeriodicitySet && scheduledDay < aWeekAgoDay) {
+    const isOnceEvent = periodicity === PeriodicityType.Once;
+
+    if (isOnceEvent && scheduledDay < aWeekAgoDay) {
       return eventResult;
     }
     if (isPeriodicitySet && periodEndDay && periodEndDay < this.currentDay) {
@@ -532,11 +543,8 @@ class NotificationBuilder implements INotificationBuilder {
     ) {
       return eventResult;
     }
-    if (!eventNotifications.length) {
-      return eventResult;
-    }
 
-    if (!isPeriodicitySet) {
+    if (isOnceEvent) {
       const notifications = this.processNotificationsSection(
         scheduledDay,
         eventNotifications,
@@ -544,7 +552,7 @@ class NotificationBuilder implements INotificationBuilder {
         activityId,
         activityFlowId,
         entityName,
-        entityDescription,
+        notificationDescription,
         eventId,
       );
       this.markNotificationsDueToOneTimeCompletionSetting(
@@ -562,7 +570,7 @@ class NotificationBuilder implements INotificationBuilder {
         periodEndDay,
         periodicity,
         aWeekAgoDay,
-        scheduledAt,
+        scheduledDay,
       );
 
       for (let day of days) {
@@ -573,7 +581,7 @@ class NotificationBuilder implements INotificationBuilder {
           activityId,
           activityFlowId,
           entityName,
-          entityDescription,
+          notificationDescription,
           eventId,
         );
         eventResult.notifications.push(...notifications);

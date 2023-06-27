@@ -8,6 +8,7 @@ type RadioOption = {
   tooltip: string | null;
   color: string | null;
   isHidden: boolean;
+  value: number;
 };
 
 export default RadioOption;

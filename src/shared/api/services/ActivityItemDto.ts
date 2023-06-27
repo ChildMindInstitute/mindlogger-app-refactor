@@ -1,5 +1,7 @@
 import { ImageUrl } from '@app/shared/lib';
 
+import { FlankerSettingsDto } from './FlankerSettingsDto';
+
 export type ResponseType =
   | 'text'
   | 'singleSelect'
@@ -19,7 +21,109 @@ export type ResponseType =
   | 'audio'
   | 'audioPlayer'
   | 'flanker'
-  | 'abTest';
+  | 'abTest'
+  | 'time';
+
+type Match = 'any' | 'all';
+
+export type ConditionalLogicDto = {
+  match: Match;
+  conditions: Array<ConditionDto>;
+};
+
+type ConditionDto =
+  | IncludesOptionConditionDto
+  | NotIncludesOptionConditionDto
+  | EqualToOptionConditionDto
+  | NotEqualToOptionConditionDto
+  | GreaterThanConditionDto
+  | LessThanConditionDto
+  | EqualConditionDto
+  | NotEqualConditionDto
+  | BetweenConditionDto
+  | OutsideOfConditionDto;
+
+type IncludesOptionConditionDto = {
+  itemName: string;
+  type: 'INCLUDES_OPTION';
+  payload: {
+    optionId: string;
+  };
+};
+
+type NotIncludesOptionConditionDto = {
+  itemName: string;
+  type: 'NOT_INCLUDES_OPTION';
+  payload: {
+    optionId: string;
+  };
+};
+
+type EqualToOptionConditionDto = {
+  itemName: string;
+  type: 'EQUAL_TO_OPTION';
+  payload: {
+    optionId: string;
+  };
+};
+
+type NotEqualToOptionConditionDto = {
+  itemName: string;
+  type: 'NOT_EQUAL_TO_OPTION';
+  payload: {
+    optionId: string;
+  };
+};
+
+type GreaterThanConditionDto = {
+  itemName: string;
+  type: 'GREATER_THAN';
+  payload: {
+    value: number;
+  };
+};
+
+type LessThanConditionDto = {
+  itemName: string;
+  type: 'LESS_THAN';
+  payload: {
+    value: number;
+  };
+};
+
+type EqualConditionDto = {
+  itemName: string;
+  type: 'EQUAL';
+  payload: {
+    value: number;
+  };
+};
+
+type NotEqualConditionDto = {
+  itemName: string;
+  type: 'NOT_EQUAL';
+  payload: {
+    value: number;
+  };
+};
+
+type BetweenConditionDto = {
+  itemName: string;
+  type: 'BETWEEN';
+  payload: {
+    minValue: number;
+    maxValue: number;
+  };
+};
+
+type OutsideOfConditionDto = {
+  itemName: string;
+  type: 'OUTSIDE_OF';
+  payload: {
+    minValue: number;
+    maxValue: number;
+  };
+};
 
 type ButtonsConfiguration = {
   removeBackButton: boolean;
@@ -56,6 +160,7 @@ type SingleSelectionAnswerSettings = {
     tooltip: string | null;
     color: string | null;
     isHidden: boolean;
+    value: number;
   }>;
 };
 
@@ -78,6 +183,7 @@ type MultiSelectionAnswerSettings = {
     tooltip: string | null;
     color: string | null;
     isHidden: boolean;
+    value: number;
   }>;
 };
 
@@ -106,14 +212,22 @@ type SingleSelectionRowsAnswerSettings = {
     rowName: string;
     rowImage: ImageUrl | null;
     tooltip: string | null;
-
-    options: Array<{
-      id: string;
-      text: string;
-      image: ImageUrl | null;
-      score: number | null;
-      tooltip: string | null;
-    }>;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: ImageUrl | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    rowId: string;
+    options: [
+      {
+        optionId: string;
+        score: number;
+        alert: string;
+      },
+    ];
   }>;
 };
 
@@ -122,6 +236,7 @@ type MultiSelectionRowsConfiguration = ButtonsConfiguration &
     addScores: boolean;
     setAlerts: boolean;
     addTooltip: boolean;
+    randomizeOptions: boolean;
   };
 
 type MultiSelectionRowsAnswerSettings = {
@@ -130,14 +245,22 @@ type MultiSelectionRowsAnswerSettings = {
     rowName: string;
     rowImage: ImageUrl | null;
     tooltip: string | null;
-
-    options: Array<{
-      id: string;
-      text: string;
-      image: ImageUrl | null;
-      score: number | null;
-      tooltip: string | null;
-    }>;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: ImageUrl | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    rowId: string;
+    options: [
+      {
+        optionId: string;
+        score: number;
+        alert: string;
+      },
+    ];
   }>;
 };
 
@@ -230,7 +353,13 @@ type DateConfiguration = ButtonsConfiguration &
   AdditionalResponseConfiguration &
   TimerConfiguration;
 
+type TimeConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
+
 type DateAnswerSettings = null;
+
+type TimeAnswerSettings = null;
 
 type SliderRowsConfiguration = ButtonsConfiguration &
   TimerConfiguration & {
@@ -238,16 +367,18 @@ type SliderRowsConfiguration = ButtonsConfiguration &
     setAlerts: boolean;
   };
 
-type SliderRowsAnswerSettings = Array<{
-  id: string;
-  label: string;
-  minLabel: string | null;
-  maxLabel: string | null;
-  minValue: number;
-  maxValue: number;
-  minImage: ImageUrl | null;
-  maxImage: ImageUrl | null;
-}>;
+type SliderRowsAnswerSettings = {
+  rows: Array<{
+    id: string;
+    label: string;
+    minLabel: string | null;
+    maxLabel: string | null;
+    minValue: number;
+    maxValue: number;
+    minImage: ImageUrl | null;
+    maxImage: ImageUrl | null;
+  }>;
+};
 
 // @todo Change when the BE integration is done
 type AbTestConfiguration = TimerConfiguration;
@@ -257,11 +388,9 @@ type AbTestAnswerSettings = {
   device: 'Phone' | 'Tablet';
 };
 
-// @todo Change when the BE integration is done
-type FlankerConfiguration = any;
+type FlankerConfiguration = null;
 
-// @todo Change when the BE integration is done
-type FlankerAnswerSettings = any;
+export type FlankerAnswerSettings = FlankerSettingsDto;
 
 type Configuration =
   | TextConfiguration
@@ -278,6 +407,7 @@ type Configuration =
   | PhotoConfiguration
   | VideoConfiguration
   | DateConfiguration
+  | TimeConfiguration
   | SliderRowsConfiguration
   | SingleSelectionConfiguration
   | MultiSelectionConfiguration
@@ -315,6 +445,7 @@ type ActivityItemDtoBase = {
   isHidden: boolean;
   order: number;
   timer: number | null;
+  conditionalLogic: ConditionalLogicDto | null;
 };
 
 export interface TextItemDto extends ActivityItemDtoBase {
@@ -389,6 +520,12 @@ export interface DateItemDto extends ActivityItemDtoBase {
   responseValues: DateAnswerSettings;
 }
 
+export interface TimeItemDto extends ActivityItemDtoBase {
+  responseType: 'time';
+  config: TimeConfiguration;
+  responseValues: TimeAnswerSettings;
+}
+
 export interface SliderRowsItemDto extends ActivityItemDtoBase {
   responseType: 'sliderRows';
   config: SliderRowsConfiguration;
@@ -450,4 +587,5 @@ export type ActivityItemDto =
   | AudioItemDto
   | AudioPlayerItemDto
   | AbTestItemDto
-  | FlankerItemDto;
+  | FlankerItemDto
+  | TimeItemDto;

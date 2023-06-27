@@ -1,19 +1,37 @@
 import { useQueryClient } from '@tanstack/react-query';
 
-import { FlowProgress, StoreProgressPayload } from '@app/abstract/lib';
+import {
+  ActivityRecordKeyParams,
+  LookupMediaInput,
+  StoreProgressPayload,
+} from '@app/abstract/lib';
 import { ActivityFlowRecordDto, AppletDetailsResponse } from '@app/shared/api';
 import {
   getAppletDetailsKey,
   getDataFromQuery,
+  isAppOnline,
   useAppDispatch,
   useAppSelector,
 } from '@shared/lib';
 
-import { onBeforeStartingActivity } from '../../lib';
+import { onBeforeStartingActivity, onMediaReferencesFound } from '../../lib';
 import { selectInProgressApplets } from '../selectors';
 import { actions } from '../slice';
 
-function useStartEntity() {
+type StartResult = {
+  startedFromScratch?: boolean;
+  cannotBeStartedDueToMediaFound?: boolean;
+};
+
+type UseStartEntityInput = {
+  hasMediaReferences: (input: LookupMediaInput) => boolean;
+  cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
+};
+
+function useStartEntity({
+  hasMediaReferences,
+  cleanUpMediaFiles,
+}: UseStartEntityInput) {
   const dispatch = useAppDispatch();
 
   const allProgresses = useAppSelector(selectInProgressApplets);
@@ -61,73 +79,140 @@ function useStartEntity() {
     );
   }
 
-  function startActivity(
+  async function startActivity(
     appletId: string,
     activityId: string,
     eventId: string,
-  ) {
-    return new Promise<boolean>(resolve => {
-      const progressRecord = getProgress(appletId, activityId, eventId);
+    isTimerElapsed: boolean = false,
+  ): Promise<StartResult> {
+    const isOnline = await isAppOnline();
 
-      if (isInProgress(progressRecord)) {
+    const shouldBreakDueToMediaReferences = (): boolean => {
+      return (
+        !isOnline &&
+        hasMediaReferences({
+          appletId,
+          entityId: activityId,
+          entityType: 'regular',
+          queryClient,
+        })
+      );
+    };
+
+    return new Promise<StartResult>(resolve => {
+      if (shouldBreakDueToMediaReferences()) {
+        onMediaReferencesFound();
+        resolve({ cannotBeStartedDueToMediaFound: true });
+        return;
+      }
+
+      const isActivityInProgress = isInProgress(
+        getProgress(appletId, activityId, eventId),
+      );
+
+      if (isActivityInProgress) {
+        if (isTimerElapsed) {
+          resolve({ startedFromScratch: false });
+          return;
+        }
+
         onBeforeStartingActivity({
           onRestart: () => {
+            cleanUpMediaFiles({ activityId, appletId, eventId, order: 0 });
+
             activityStarted(appletId, activityId, eventId);
-            resolve(true);
+            resolve({ startedFromScratch: true });
           },
-          onResume: () => resolve(false),
+          onResume: () => resolve({ startedFromScratch: false }),
         });
       } else {
         activityStarted(appletId, activityId, eventId);
-        resolve(false);
+        resolve({ startedFromScratch: true });
       }
     });
   }
 
-  function startFlow(appletId: string, flowId: string, eventId: string) {
-    const detailsResponse: AppletDetailsResponse =
-      getDataFromQuery<AppletDetailsResponse>(
-        getAppletDetailsKey(appletId),
-        queryClient,
-      )!;
+  async function startFlow(
+    appletId: string,
+    flowId: string,
+    eventId: string,
+    isTimerElapsed: boolean = false,
+  ): Promise<StartResult> {
+    const isOnline = await isAppOnline();
 
-    const activityFlowDtos: ActivityFlowRecordDto[] =
-      detailsResponse.result.activityFlows;
+    const shouldBreakDueToMediaReferences = (): boolean => {
+      return (
+        !isOnline &&
+        hasMediaReferences({
+          appletId,
+          entityId: flowId,
+          entityType: 'flow',
+          queryClient,
+        })
+      );
+    };
 
-    const flow = activityFlowDtos!.find(x => x.id === flowId);
-    const firstActivityId = flow!.activityIds[0];
+    const getFlowActivities = (): string[] => {
+      const detailsResponse: AppletDetailsResponse =
+        getDataFromQuery<AppletDetailsResponse>(
+          getAppletDetailsKey(appletId),
+          queryClient,
+        )!;
 
-    const progressRecord = getProgress(
-      appletId,
-      flowId,
-      eventId,
-    ) as FlowProgress;
+      const activityFlowDtos: ActivityFlowRecordDto[] =
+        detailsResponse.result.activityFlows;
+      const flow = activityFlowDtos!.find(x => x.id === flowId)!;
 
-    const resumeActivityId = progressRecord?.currentActivityId;
+      return flow.activityIds;
+    };
 
-    return new Promise<{
-      startedFromActivity: string;
-      startedFromScratch: boolean;
-    }>(resolve => {
-      if (isInProgress(progressRecord as StoreProgressPayload)) {
+    const flowActivities: string[] = getFlowActivities();
+
+    const firstActivityId: string = flowActivities[0];
+
+    return new Promise<StartResult>(resolve => {
+      if (shouldBreakDueToMediaReferences()) {
+        onMediaReferencesFound();
+        resolve({ cannotBeStartedDueToMediaFound: true });
+        return;
+      }
+
+      const isFlowInProgress = isInProgress(
+        getProgress(appletId, flowId, eventId),
+      );
+
+      if (isFlowInProgress) {
+        if (isTimerElapsed) {
+          resolve({
+            startedFromScratch: false,
+          });
+          return;
+        }
+
         onBeforeStartingActivity({
           onRestart: () => {
+            for (let i = 0; i < flowActivities.length; i++) {
+              cleanUpMediaFiles({
+                activityId: flowActivities[i],
+                appletId,
+                eventId,
+                order: i,
+              });
+            }
+
             flowStarted(appletId, flowId, firstActivityId, eventId, 0);
             resolve({
-              startedFromActivity: firstActivityId,
               startedFromScratch: true,
             });
           },
           onResume: () =>
             resolve({
-              startedFromActivity: resumeActivityId,
               startedFromScratch: false,
             }),
         });
       } else {
         flowStarted(appletId, flowId, firstActivityId, eventId, 0);
         resolve({
-          startedFromActivity: firstActivityId,
           startedFromScratch: true,
         });
       }

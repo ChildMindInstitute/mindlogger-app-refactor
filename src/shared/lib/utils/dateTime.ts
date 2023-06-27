@@ -4,7 +4,7 @@ import i18n from 'i18next';
 
 import { range } from './common';
 import { MINUTES_IN_HOUR, MS_IN_MINUTE, MS_IN_SECOND } from '../constants';
-import { HourMinute, type Language } from '../types';
+import { HourMinute, DayMonthYear, type Language } from '../types';
 
 const dateFnsLocales = { fr, en: enGB };
 
@@ -59,18 +59,26 @@ export const getDiff = (from: HourMinute, to: HourMinute): number => {
   );
 };
 
-export const isSourceTimeBigger = (
+export const isSourceLess = (
   timeSource: HourMinute,
   timeTarget: HourMinute,
 ) => {
-  const minutesElapsedFromStartOfDayForSource =
+  const sourceInMinutes =
     timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
-  const minutesElapsedFromStartOfDayForTarget =
+  const targetInMinutes =
     timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
-  return (
-    minutesElapsedFromStartOfDayForSource >
-    minutesElapsedFromStartOfDayForTarget
-  );
+  return sourceInMinutes < targetInMinutes;
+};
+
+export const isSourceBiggerOrEqual = (
+  timeSource: HourMinute,
+  timeTarget: HourMinute,
+) => {
+  const sourceInMinutes =
+    timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
+  const targetInMinutes =
+    timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
+  return sourceInMinutes >= targetInMinutes;
 };
 
 export const isTimeInInterval = (
@@ -79,8 +87,8 @@ export const isTimeInInterval = (
   intervalTo: HourMinute,
 ) => {
   return (
-    isSourceTimeBigger(timeToCheck, intervalFrom) &&
-    !isSourceTimeBigger(timeToCheck, intervalTo)
+    isSourceBiggerOrEqual(timeToCheck, intervalFrom) &&
+    isSourceLess(timeToCheck, intervalTo)
   );
 };
 
@@ -112,3 +120,12 @@ export const areDatesEqual = (dateLeft: Date, dateRight: Date): boolean =>
 
 export const getUnixTimestamp = (date: Date | number): number =>
   getUnixTime(date);
+
+export const getMidnightDateInMs = (date: Date = new Date()): number =>
+  date.setHours(0, 0, 0, 0);
+
+export const convertToDayMonthYear = (date: Date): DayMonthYear => ({
+  day: date.getDate(),
+  month: date.getMonth() + 1,
+  year: date.getFullYear(),
+});

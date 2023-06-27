@@ -1,5 +1,6 @@
 import { ActivityState, onIncorrectAnswerGiven } from '../../lib';
 import AnswerValidator from '../AnswerValidator';
+import PipelineVisibilityChecker from '../PipelineVisibilityChecker';
 
 function useActivityStepper(state: ActivityState | undefined) {
   const step = state?.step ?? 0;
@@ -38,6 +39,8 @@ function useActivityStepper(state: ActivityState | undefined) {
 
   const answerValidator = AnswerValidator(state);
 
+  const visibilityChecker = PipelineVisibilityChecker(items, answers);
+
   function isValid() {
     const valid = answerValidator.isValid();
 
@@ -46,6 +49,47 @@ function useActivityStepper(state: ActivityState | undefined) {
     }
 
     return valid;
+  }
+
+  function getNextStepShift(direction: 'forwards' | 'backwards') {
+    let shift = 1;
+
+    while (true) {
+      let nextStep = direction === 'forwards' ? step + shift : step - shift;
+
+      if (nextStep > items.length - 1) {
+        shift = items.length;
+        break;
+      }
+
+      if (nextStep < 0) {
+        break;
+      }
+
+      const isItemVisible = visibilityChecker.isItemVisible(nextStep);
+
+      if (isItemVisible) {
+        break;
+      } else {
+        shift++;
+      }
+    }
+
+    return shift;
+  }
+
+  function getNextButtonText() {
+    const shift = getNextStepShift('forwards');
+
+    if (shift >= items.length) {
+      return 'activity_navigation:done';
+    }
+
+    return isLastStep
+      ? 'activity_navigation:done'
+      : canSkip
+      ? 'activity_navigation:skip'
+      : 'activity_navigation:next';
   }
 
   return {
@@ -63,6 +107,8 @@ function useActivityStepper(state: ActivityState | undefined) {
     showBottomNavigation,
 
     isValid,
+    getNextStepShift,
+    getNextButtonText,
   };
 }
 

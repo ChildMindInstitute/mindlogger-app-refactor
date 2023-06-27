@@ -5,8 +5,11 @@ import { onBeforeLogout } from '@app/entities/identity/lib/alerts';
 import { NotificationModel } from '@app/entities/notification';
 import { IdentityService } from '@app/shared/api';
 import { IdentityModel } from '@entities/identity';
+import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
 import { hasPendingMutations, isAppOnline, useAppDispatch } from '@shared/lib';
+
+import { clearEntityRecordStorages } from '../lib';
 
 export function useLogout() {
   const dispatch = useAppDispatch();
@@ -19,6 +22,8 @@ export function useLogout() {
 
     CacheManager.clearCache();
 
+    clearEntityRecordStorages();
+
     await queryClient.removeQueries(['applets']);
     await queryClient.removeQueries(['events']);
     await queryClient.removeQueries(['activities']);
@@ -30,6 +35,8 @@ export function useLogout() {
     });
 
     NotificationModel.NotificationManager.clearScheduledNotifications();
+    UserInfoRecord.clear();
+    UserPrivateKeyRecord.clear();
   };
 
   const logout = async () => {

@@ -1,7 +1,19 @@
+import { ConditionalLogic } from '@app/entities/activity';
 import { DrawResult } from '@app/entities/drawer';
-import { FlankerLogRecord, FlankerConfiguration } from '@app/entities/flanker';
-import { Coordinates } from '@app/shared/ui';
+import {
+  FlankerConfiguration,
+  FlankerGameResponse,
+} from '@app/entities/flanker';
+import { HourMinute } from '@app/shared/lib';
+import {
+  Coordinates,
+  Item,
+  StackedItem,
+  StackedRowItemValue,
+} from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
+import { MediaFile } from '@shared/ui';
+import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
 
 import { Tutorial } from './tutorial';
 
@@ -16,13 +28,18 @@ export type ActivityItemType =
   | 'Audio'
   | 'Message'
   | 'AudioPlayer'
+  | 'StackedSlider'
+  | 'StackedCheckbox'
+  | 'StackedRadio'
   | 'Radio'
   | 'Slider'
   | 'NumberSelect'
   | 'Checkbox'
   | 'Geolocation'
   | 'Photo'
-  | 'Video';
+  | 'Video'
+  | 'Date'
+  | 'Time';
 
 type AbTestPayload = {
   testIndex: TestIndex;
@@ -59,7 +76,82 @@ type AudioPlayerPayload = {
   playOnce: boolean;
 };
 
+type StackedCheckboxPayload = {
+  randomizeOptions: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  rows: Array<{
+    id: string;
+    rowName: string;
+    rowImage: string | null;
+    tooltip: string | null;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    rowId: string;
+    options: [
+      {
+        optionId: string;
+        score: number;
+        alert: string;
+      },
+    ];
+  }>;
+};
+
+type StackedRadioPayload = {
+  randomizeOptions: boolean;
+  addScores: boolean;
+  setAlerts: boolean;
+  addTooltip: boolean;
+  rows: Array<{
+    id: string;
+    rowName: string;
+    rowImage: string | null;
+    tooltip: string | null;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: Array<{
+    rowId: string;
+    options: [
+      {
+        optionId: string;
+        score: number;
+        alert: string;
+      },
+    ];
+  }>;
+};
+
+type StackedSliderPayload = {
+  addScores: boolean;
+  setAlerts: boolean;
+  rows: {
+    id: string;
+    label: string;
+    leftTitle: string | null;
+    rightTitle: string | null;
+    minValue: number;
+    maxValue: number;
+    leftImageUrl: string | null;
+    rightImageUrl: string | null;
+  }[];
+};
+
 type TimeRangePayload = null;
+
+type TimePayload = null;
 
 type RadioPayload = {
   randomizeOptions: boolean;
@@ -74,6 +166,7 @@ type RadioPayload = {
     tooltip: string | null;
     color: string | null;
     isHidden: boolean;
+    value: number;
   }>;
 };
 
@@ -90,10 +183,11 @@ type CheckboxPayload = {
     tooltip: string | null;
     color: string | null;
     isHidden: boolean;
+    value: number;
   }>;
 };
 
-type FlankerPayload = FlankerConfiguration;
+export type FlankerPayload = FlankerConfiguration;
 
 type TextInputPayload = {
   maxLength: number;
@@ -107,6 +201,8 @@ type NumberSelectPayload = {
 };
 
 type GeolocationPayload = null;
+
+type DatePayload = null;
 
 type PhotoPayload = null;
 
@@ -123,12 +219,17 @@ type PipelinePayload =
   | TimeRangePayload
   | AudioPayload
   | MessagePayload
+  | StackedSliderPayload
+  | StackedCheckboxPayload
+  | StackedRadioPayload
   | AudioPlayerPayload
   | SliderPayload
   | NumberSelectPayload
   | CheckboxPayload
   | GeolocationPayload
-  | PhotoPayload;
+  | PhotoPayload
+  | DatePayload
+  | TimePayload;
 
 type PipelineItemBase = {
   id?: string;
@@ -147,6 +248,7 @@ type PipelineItemBase = {
   additionalText?: {
     required: boolean;
   };
+  conditionalLogic?: ConditionalLogic;
 };
 
 export interface AbTestPipelineItem extends PipelineItemBase {
@@ -215,6 +317,21 @@ export interface AudioPlayerPipelineItem extends PipelineItemBase {
   type: 'AudioPlayer';
   payload: AudioPlayerPayload;
 }
+export interface StackedCheckboxPipelineItem extends PipelineItemBase {
+  type: 'StackedCheckbox';
+  payload: StackedCheckboxPayload;
+}
+
+export interface StackedRadioPipelineItem extends PipelineItemBase {
+  type: 'StackedRadio';
+  payload: StackedRadioPayload;
+}
+
+export interface StackedSliderPipelineItem extends PipelineItemBase {
+  type: 'StackedSlider';
+  payload: StackedSliderPayload;
+}
+
 export interface TimeRangePipelineItem extends PipelineItemBase {
   type: 'TimeRange';
   payload: TimeRangePayload;
@@ -229,11 +346,20 @@ export interface VideoPipelineItem extends PipelineItemBase {
   payload: VideoPayload;
 }
 
+export interface DatePipelineItem extends PipelineItemBase {
+  type: 'Date';
+  payload: DatePayload;
+}
+export interface TimePipelineItem extends PipelineItemBase {
+  type: 'Time';
+  payload: TimePayload;
+}
+
 export type AbTestResponse = LogLine[];
 
 export type DrawingTestResponse = DrawResult;
 
-export type FlankerResponse = Array<FlankerLogRecord>;
+export type FlankerResponse = FlankerGameResponse;
 
 export type TextInputResponse = string;
 
@@ -243,34 +369,40 @@ export type SliderResponse = number | null;
 
 export type NumberSelectResponse = string;
 
-export type CheckboxResponse = string[] | null;
+export type CheckboxResponse = Item[] | null;
 
-export type AudioResponse = {
-  filePath: string;
-};
+export type DateResponse = string | null;
+
+export type AudioResponse = MediaFile;
 
 export type AudioPlayerResponse = boolean;
 
 export type TimeRangeResponse = {
-  from: string;
-  to: string;
+  startTime: HourMinute;
+  endTime: HourMinute;
 };
 
-export type RadioResponse = string;
+export type RadioResponse = RadioOption;
 
-export type PhotoResponse = {
-  uri: string;
-  fileName: string;
+export type TimeResponse = HourMinute;
+
+export type StackedCheckboxResponse = Array<Array<StackedItem>> | null;
+
+export type StackedRadioResponse = Array<
+  StackedRowItemValue & {
+    rowId: string;
+  }
+>;
+
+export type StackedSliderResponse = Array<number>;
+
+export type PhotoResponse = MediaFile & {
   size: number;
-  type: string;
   fromLibrary: boolean;
 };
 
-export type VideoResponse = {
-  uri: string;
-  fileName: string;
+export type VideoResponse = MediaFile & {
   size: number;
-  type: string;
   fromLibrary: boolean;
 };
 
@@ -282,12 +414,17 @@ export type PipelineItemResponse =
   | SliderResponse
   | NumberSelectResponse
   | CheckboxResponse
+  | StackedRadioResponse
+  | StackedSliderResponse
+  | StackedCheckboxResponse
   | AudioResponse
   | AudioPlayerResponse
   | TimeRangeResponse
   | GeolocationResponse
   | PhotoResponse
-  | RadioResponse;
+  | DateResponse
+  | RadioResponse
+  | TimeResponse;
 
 export type PipelineItem =
   | AbTestPipelineItem
@@ -299,6 +436,9 @@ export type PipelineItem =
   | SliderPipelineItem
   | NumberSelectPipelineItem
   | CheckboxPipelineItem
+  | StackedSliderPipelineItem
+  | StackedCheckboxPipelineItem
+  | StackedRadioPipelineItem
   | AudioPipelineItem
   | MessagePipelineItem
   | AudioPlayerPipelineItem
@@ -306,4 +446,6 @@ export type PipelineItem =
   | GeolocationPipelineItem
   | PhotoPipelineItem
   | VideoPipelineItem
-  | RadioPipelineItem;
+  | RadioPipelineItem
+  | DatePipelineItem
+  | TimePipelineItem;

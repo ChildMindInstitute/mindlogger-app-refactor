@@ -1,46 +1,109 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
-import StackedCheckboxConfig from './types';
-import { CheckBox } from '../..';
-import { StackedItemsGrid } from '../StackedItemsGrid';
-import { StackedRowItemValue } from '../StackedItemsGrid/types';
+import { colors } from '@shared/lib';
 
-type Props = {
-  value: Array<string[]>;
-  onChange: (value: Array<string[]>) => void;
-  config: StackedCheckboxConfig;
+import { CheckBox, YStack } from '../..';
+import {
+  StackedItemsGrid,
+  type StackedRowItemValue,
+  type StackedItem,
+} from '../StackedItemsGrid';
+
+type StackedCheckboxConfig = {
+  rows: Array<StackedItem>;
+  options: Array<StackedItem>;
 };
 
-const StackedCheckboxItem: FC<Props> = ({ value = [], onChange, config }) => {
-  const onValueChange = (option: StackedRowItemValue, itemIndex: number) => {
-    if (!value[itemIndex]?.length) {
-      value[itemIndex] = [];
+type Values = Array<Array<StackedItem>>;
+
+type Props = {
+  values: Values | null;
+  onChange: (value: Values | null) => void;
+  config: StackedCheckboxConfig;
+  textReplacer: (markdown: string) => string;
+};
+
+const StackedCheckboxItem: FC<Props> = ({
+  values,
+  onChange,
+  config,
+  textReplacer,
+}) => {
+  const { options, rows } = config;
+
+  const memoizedOptions = useMemo(() => {
+    return options.map(option => {
+      return {
+        ...option,
+        tooltip: textReplacer(option.tooltip || ''),
+      };
+    });
+  }, [options, textReplacer]);
+
+  const memoizedRows = useMemo(() => {
+    return rows.map(row => {
+      return {
+        ...row,
+        tooltip: textReplacer(row.tooltip || ''),
+      };
+    });
+  }, [rows, textReplacer]);
+
+  const isValueSelected = (value: StackedItem, rowIndex: number) => {
+    if (!values || !values[rowIndex]?.length) {
+      return false;
     }
 
-    if (value[itemIndex].includes(option.name)) {
-      value[itemIndex] = value[itemIndex].filter(
-        valueItem => valueItem !== option.name,
-      );
+    const selectedValue = values[rowIndex].find(item => item.id === value.id);
+
+    return !!selectedValue;
+  };
+
+  const onValueChange = (option: StackedRowItemValue, rowIndex: number) => {
+    let newValues: Values = [];
+    if (!values) {
+      newValues.length = config.rows.length;
+      newValues[rowIndex] = [option];
     } else {
-      value[itemIndex].push(option.name);
+      newValues = [...values];
+
+      newValues[rowIndex] = isValueSelected(option, rowIndex)
+        ? newValues[rowIndex].filter(value => value.id !== option.id)
+        : [...(newValues[rowIndex] ? newValues[rowIndex] : []), option];
     }
 
-    onChange(value);
+    onChange(newValues);
   };
 
   return (
-    <StackedItemsGrid
-      items={config.itemList}
-      options={config.options}
-      renderCell={(option, index) => (
-        <CheckBox
-          style={styles.checkbox}
-          onChange={() => onValueChange(option, index)}
-          boxType="square"
-        />
-      )}
-    />
+    <>
+      <StackedItemsGrid
+        items={memoizedRows}
+        options={memoizedOptions}
+        renderCell={(index, option) => {
+          return (
+            <YStack onPress={() => onValueChange(option, index)}>
+              <CheckBox
+                style={styles.checkbox}
+                lineWidth={2}
+                animationDuration={0.2}
+                boxType="square"
+                tintColors={{ true: colors.primary, false: colors.primary }}
+                onCheckColor={colors.white}
+                onFillColor={colors.primary}
+                onTintColor={colors.primary}
+                tintColor={colors.primary}
+                onAnimationType="bounce"
+                offAnimationType="bounce"
+                value={isValueSelected(option, index)}
+                disabled
+              />
+            </YStack>
+          );
+        }}
+      />
+    </>
   );
 };
 
@@ -50,5 +113,4 @@ const styles = StyleSheet.create({
     width: 20,
   },
 });
-
 export default StackedCheckboxItem;

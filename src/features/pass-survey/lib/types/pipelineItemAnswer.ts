@@ -11,15 +11,20 @@ import {
   NumberSelectResponse,
   CheckboxResponse,
   AudioResponse,
+  StackedSliderResponse,
+  StackedCheckboxResponse,
   AudioPlayerResponse,
   TimeRangeResponse,
   RadioResponse,
   PhotoResponse,
   VideoResponse,
+  DateResponse,
+  TimeResponse,
+  StackedRadioResponse,
 } from './payload';
 
-type PipelineItemAnswerBase = {
-  type: Exclude<ActivityItemType, 'Tutorial'>;
+export type PipelineItemAnswerBase = {
+  type: ActivityItemType;
   value: {
     answer?: PipelineItemResponse;
     additionalAnswer?: string;
@@ -106,6 +111,30 @@ interface MessagePipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
+interface StackedSliderPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'StackedSlider';
+  value: {
+    answer?: StackedSliderResponse;
+    additionalAnswer?: string;
+  };
+}
+
+interface StackedCheckboxPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'StackedCheckbox';
+  value: {
+    answer?: StackedCheckboxResponse;
+    additionalAnswer?: string;
+  };
+}
+
+interface StackedRadioPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'StackedRadio';
+  value: {
+    answer?: StackedRadioResponse; // @todo check with BE
+    additionalAnswer?: string;
+  };
+}
+
 interface AudioPlayerPipelineAnswer extends PipelineItemAnswerBase {
   type: 'AudioPlayer';
   value: {
@@ -137,6 +166,14 @@ interface GeolocationPipelineAnswer extends PipelineItemAnswerBase {
     additionalAnswer?: string;
   };
 }
+
+interface DatePipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Date';
+  value: {
+    answer?: DateResponse;
+    additionalAnswer?: string;
+  };
+}
 interface PhotoPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Photo';
   value: {
@@ -153,6 +190,14 @@ interface VideoPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
+interface TimePipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Time';
+  value: {
+    answer?: TimeResponse;
+    additionalAnswer?: string;
+  };
+}
+
 export type PipelineItemAnswer =
   | SplashPipelineAnswer
   | TextInputPipelineAnswer
@@ -164,9 +209,14 @@ export type PipelineItemAnswer =
   | RadioPipelineAnswer
   | AudioPipelineAnswer
   | MessagePipelineAnswer
+  | StackedSliderPipelineAnswer
+  | StackedCheckboxPipelineAnswer
+  | StackedRadioPipelineAnswer
   | AudioPlayerPipelineAnswer
   | TimeRangePipelineAnswer
   | GeolocationPipelineAnswer
   | PhotoPipelineAnswer
   | VideoPipelineAnswer
+  | DatePipelineAnswer
+  | TimePipelineAnswer
   | CheckboxPipelineAnswer;

@@ -8,6 +8,8 @@ export type FlowProgress = {
   type: ActivityPipelineType.Flow;
   currentActivityId: string;
   pipelineActivityOrder: number;
+  currentActivityStartAt: number | null;
+  executionGroupKey: string;
 };
 
 export type ActivityProgress = {
@@ -37,6 +39,8 @@ export type ProgressPayload = EntityProgress & {
   startAt: Date;
   endAt: Date | null;
 };
+
+export type CompletedEntities = Record<EntityId, number>;
 
 type EventsProgress = Record<EventId, ProgressPayload>;
 

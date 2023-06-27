@@ -1,6 +1,7 @@
 import { Skia, SkPath } from '@shopify/react-native-skia';
 
-import { DrawLine } from '../types';
+import { getBezierArray } from './bezier';
+import { DrawLine, Point } from '../types';
 
 export const transformByWidth = (
   lines: DrawLine[],
@@ -35,18 +36,24 @@ export const transformBack = (line: DrawLine, width: number): DrawLine => {
   };
 };
 
-export const convertToSkPaths = (lines: DrawLine[]): SkPath[] => {
+export const convertToSkPaths = (
+  lines: DrawLine[],
+  startFrom: number,
+): SkPath[] => {
   const skPaths: SkPath[] = [];
 
-  for (let line of lines) {
+  for (let line of lines.slice(startFrom)) {
     if (!line.points.length) {
       continue;
     }
-    const { x, y } = line.points[0];
+
+    const curvePoints: Point[] = getBezierArray(line.points, []);
+
+    const { x, y } = curvePoints[0];
 
     const path = Skia.Path.Make().moveTo(x, y);
 
-    for (let point of line.points.slice(1)) {
+    for (let point of curvePoints.slice(1)) {
       path.lineTo(point.x, point.y);
     }
     skPaths.push(path);
@@ -63,16 +70,6 @@ export const getChunkedPointsAsStrings = (lines: DrawLine[]) => {
     const { points } = line;
     let { length } = points;
 
-    if (length === 1) {
-      const point = points[0];
-
-      points.push({
-        ...point,
-        x: point.x + 1.5,
-        y: point.y + 1.5,
-      });
-      length += 1;
-    }
     for (let index = 0; index < length; index += chunkSize) {
       const myChunk = line.points.slice(index, index + chunkSize + 1);
 

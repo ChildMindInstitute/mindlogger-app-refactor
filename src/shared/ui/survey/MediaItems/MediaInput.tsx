@@ -1,22 +1,39 @@
 import { ReactNode, FC } from 'react';
-import { Alert, TouchableOpacity } from 'react-native';
+import {
+  Alert,
+  TouchableOpacity,
+  StyleSheet,
+  useWindowDimensions,
+} from 'react-native';
 
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
+import { Box, BoxProps } from '@shared/ui';
+
 import Center from '../../Center';
 
-type Props = {
+const styles = StyleSheet.create({
+  touchable: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+type Props = BoxProps & {
   children: ReactNode;
   mode: 'photo' | 'video';
   onShowMediaLibrary: () => void;
   onOpenCamera: () => void;
+  uploadIcon: JSX.Element;
 };
 
-const UploadButton = styled(Center, {
+const ContentWrapper: FC<BoxProps> = styled(Center, {
   width: '100%',
-  height: 360,
-  borderColor: '$red',
+  marginBottom: 15,
+
   borderWidth: 4,
   backgroundColor: '$lightRed',
   borderRadius: 15,
@@ -27,8 +44,11 @@ const MediaInput: FC<Props> = ({
   mode,
   onOpenCamera,
   onShowMediaLibrary,
+  uploadIcon,
+  borderColor,
 }) => {
   const { t } = useTranslation();
+  const { width: windowWidth } = useWindowDimensions();
 
   const onUploadPress = () => {
     Alert.alert(t(`camera:choose_${mode}`), t(`camera:take_a_${mode}`), [
@@ -44,9 +64,13 @@ const MediaInput: FC<Props> = ({
   };
 
   return (
-    <TouchableOpacity onPress={onUploadPress}>
-      <UploadButton>{children}</UploadButton>
-    </TouchableOpacity>
+    <ContentWrapper borderColor={borderColor} height={windowWidth * 0.85}>
+      {children || (
+        <TouchableOpacity onPress={onUploadPress} style={styles.touchable}>
+          <Box>{uploadIcon}</Box>
+        </TouchableOpacity>
+      )}
+    </ContentWrapper>
   );
 };
 

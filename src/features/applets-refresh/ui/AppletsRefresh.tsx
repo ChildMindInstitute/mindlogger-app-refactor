@@ -6,6 +6,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { StoreProgress } from '@app/abstract/lib';
 import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
+import { LogTrigger } from '@app/shared/api';
 import { useAppSelector } from '@app/shared/lib';
 
 import { useRefresh } from '../model';
@@ -23,6 +24,7 @@ const AppletsRefresh: FC<Props> = props => {
     NotificationModel.NotificationRefreshService.refresh(
       queryClient,
       storeProgress,
+      LogTrigger.PullToRefresh,
     );
   });
 

@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 import {
@@ -20,12 +21,19 @@ import {
 import { VideoIcon, VideoPlayer } from '@shared/ui';
 
 import MediaInput from './MediaInput';
-import MediaValue from './types';
+import { MediaValue } from './types';
 
 type Props = {
   onChange: (value: MediaValue) => void;
   value?: MediaValue;
 };
+
+const styles = StyleSheet.create({
+  mediaContainer: {
+    height: '100%',
+    borderRadius: 10,
+  },
+});
 
 const VideoItem: FC<Props> = ({ value, onChange }) => {
   const { isCameraAccessGranted } = useCameraPermissions();
@@ -65,9 +73,9 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
     if (isGalleryAccessGranted) {
       selectVideo();
     } else {
-      const permissionStatus = await requestGalleryPermissions();
+      const isPermissionAllowed = await requestGalleryPermissions();
 
-      if (permissionStatus === 'granted') {
+      if (isPermissionAllowed) {
         selectVideo();
       } else {
         await handleBlockedPermissions(
@@ -82,9 +90,9 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
     if (isCameraAccessGranted) {
       recordVideo();
     } else {
-      const permissionStatus = await requestCameraPermissions();
+      const isPermissionAllowed = await requestCameraPermissions();
 
-      if (permissionStatus === 'granted') {
+      if (isPermissionAllowed) {
         recordVideo();
       } else {
         await handleBlockedPermissions(
@@ -96,14 +104,20 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
   };
   return (
     <MediaInput
+      borderColor={value ? '$green' : '$red'}
       onOpenCamera={onOpenVideoCamera}
       onShowMediaLibrary={onShowVideoGallery}
       mode="video"
+      uploadIcon={<VideoIcon color={colors.red} size={50} />}
     >
-      {value ? (
-        <VideoPlayer uri={value.uri} />
-      ) : (
-        <VideoIcon color={colors.red} size={50} />
+      {value && (
+        <VideoPlayer
+          wrapperStyle={styles.mediaContainer}
+          videoStyle={styles.mediaContainer}
+          thumbnailStyle={styles.mediaContainer}
+          uri={value.uri}
+          resizeMode="contain"
+        />
       )}
     </MediaInput>
   );

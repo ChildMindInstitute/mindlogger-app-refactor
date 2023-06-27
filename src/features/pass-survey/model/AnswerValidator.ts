@@ -1,8 +1,17 @@
-import { ActivityState } from '../lib';
+import { Item } from '@app/shared/ui';
 
-function AnswerValidator(activityState: ActivityState | undefined) {
-  const currentPipelineItem = activityState?.items?.[activityState.step];
-  const currentAnswer = activityState?.answers?.[activityState.step];
+import { Answers, PipelineItem } from '../lib';
+
+type AnswerValidatorArgs = {
+  items: PipelineItem[];
+  answers: Answers;
+  step: number;
+};
+
+function AnswerValidator(params?: AnswerValidatorArgs) {
+  const { items, answers, step = 0 } = params ?? {};
+  const currentPipelineItem = items?.[step];
+  const currentAnswer = answers?.[step];
 
   return {
     isValid() {
@@ -13,6 +22,74 @@ function AnswerValidator(activityState: ActivityState | undefined) {
       const { correctAnswer } = currentPipelineItem.validationOptions;
 
       return correctAnswer === currentAnswer?.answer;
+    },
+
+    isBetweenValues(min: number, max: number) {
+      if (currentAnswer?.answer == null) {
+        return false;
+      }
+
+      const answer = currentAnswer.answer as number;
+
+      return answer > min && answer < max;
+    },
+
+    isOutsideOfValues(min: number, max: number) {
+      if (currentAnswer?.answer == null) {
+        return false;
+      }
+
+      const answer = currentAnswer.answer as number;
+
+      return answer < min || answer > max;
+    },
+
+    isEqualToValue(value: any) {
+      if (currentAnswer?.answer == null) {
+        return false;
+      }
+
+      const answer = currentAnswer.answer as number;
+
+      return answer === value;
+    },
+
+    isEqualToOption(optionId: string) {
+      if (currentAnswer?.answer == null) {
+        return false;
+      }
+
+      return (currentAnswer.answer as Item).id === optionId;
+    },
+
+    isGreaterThen(value: number) {
+      if (currentAnswer?.answer == null) {
+        return false;
+      }
+
+      const answer = currentAnswer.answer as number;
+
+      return answer > value;
+    },
+
+    isLessThen(value: number) {
+      if (currentAnswer?.answer == null) {
+        return false;
+      }
+
+      const answer = currentAnswer.answer as number;
+
+      return answer < value;
+    },
+
+    includesOption(optionId: string) {
+      if (currentAnswer?.answer == null) {
+        return false;
+      }
+
+      const answer = currentAnswer.answer as Item[];
+
+      return answer.find(answerItem => answerItem.id === optionId);
     },
   };
 }

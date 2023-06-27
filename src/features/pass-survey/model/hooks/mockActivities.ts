@@ -1,9 +1,9 @@
-import {
-  FlankerWithImageOnButton,
-  FlankerWithStFxImages,
-  FlankerWithTextsSigns,
-} from '@app/entities/flanker';
-import { ActivityDto } from '@app/shared/api';
+// import {
+//   FlankerWithImageOnButton,
+//   FlankerWithStFxImages,
+//   FlankerWithTextsSigns,
+// } from '@app/entities/flanker';
+import { ActivityDto, FlankerAnswerSettings } from '@app/shared/api';
 
 const testMessage1 =
   'Start by placing the point of the pen at the center of the spiral (S), and trace out along the dashed blue line to the end of the sprial (E).  Try to stay on the dashed blue line while tracing. You will do this five times.';
@@ -50,6 +50,7 @@ const grid: ActivityDto = {
         drawingBackground:
           'https://mindlogger-applet-contents.s3.amazonaws.com/image/9qPz3D1kyzwD2pAAHpP5Hv.jpeg',
       },
+      conditionalLogic: null,
     },
   ],
 };
@@ -93,6 +94,7 @@ const vortex: ActivityDto = {
         drawingBackground:
           'https://mindlogger-applet-contents.s3.amazonaws.com/image/w93voaqZA7ZGoZryorBvQc.jpeg',
       },
+      conditionalLogic: null,
     },
   ],
 };
@@ -149,6 +151,7 @@ export const AbTestActivity: ActivityDto = {
       question: '',
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -174,10 +177,11 @@ const FlankerWithImageActivity: ActivityDto = {
       question: '',
       responseType: 'flanker',
       timer: null,
-      config: FlankerWithImageOnButton,
-      responseValues: {},
+      config: null,
+      responseValues: {} as FlankerAnswerSettings,
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -203,10 +207,11 @@ const FlankerWithStSFxActivity: ActivityDto = {
       question: '',
       responseType: 'flanker',
       timer: null,
-      config: FlankerWithStFxImages,
-      responseValues: {},
+      config: null,
+      responseValues: {} as FlankerAnswerSettings,
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -232,10 +237,11 @@ const FlankerWithTextSignsActivity: ActivityDto = {
       question: '',
       responseType: 'flanker',
       timer: null,
-      config: FlankerWithTextsSigns,
-      responseValues: {},
       order: 0,
       isHidden: false,
+      config: null,
+      responseValues: {} as FlankerAnswerSettings,
+      conditionalLogic: null,
     },
   ],
 };
@@ -295,6 +301,7 @@ export const TextActivity: ActivityDto = {
       responseValues: null,
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
     {
       id: '105',
@@ -315,6 +322,7 @@ export const TextActivity: ActivityDto = {
       },
       responseValues: null,
       order: 1,
+      conditionalLogic: null,
     },
     {
       id: '106',
@@ -335,6 +343,7 @@ export const TextActivity: ActivityDto = {
       },
       responseValues: null,
       order: 2,
+      conditionalLogic: null,
     },
   ],
 };
@@ -384,6 +393,7 @@ export const SliderTestActivity: ActivityDto = {
       question: 'Choose some number',
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -422,6 +432,7 @@ export const NumberSelectActivity: ActivityDto = {
       },
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -455,6 +466,7 @@ export const CheckboxTestActivity: ActivityDto = {
             text: 'Some text',
             image: null,
             score: null,
+            value: 1,
             tooltip: 'this is some tooltip',
             color: '#C800FF',
             isHidden: false,
@@ -464,6 +476,7 @@ export const CheckboxTestActivity: ActivityDto = {
             text: 'Some text',
             image: null,
             score: null,
+            value: 1,
             tooltip: '',
             color: '#000000',
             isHidden: false,
@@ -473,6 +486,7 @@ export const CheckboxTestActivity: ActivityDto = {
             text: 'Some text',
             image: 'https://cdn-icons-png.flaticon.com/512/1287/1287087.png',
             score: null,
+            value: 1,
             tooltip: null,
             color: '#F8FF00',
             isHidden: false,
@@ -493,6 +507,7 @@ export const CheckboxTestActivity: ActivityDto = {
         timer: null,
         addScores: false,
       },
+      conditionalLogic: null,
     },
   ],
 };
@@ -519,6 +534,7 @@ export const RadioTestActivity: ActivityDto = {
             text: 'First radio pink with tooltip',
             image: null,
             score: null,
+            value: 1,
             tooltip: ' Tooltip text',
             color: '#C800FF',
             isHidden: false,
@@ -528,6 +544,7 @@ export const RadioTestActivity: ActivityDto = {
             text: 'Second radio black',
             image: null,
             score: null,
+            value: 1,
             tooltip: null,
             color: '#000000',
             isHidden: false,
@@ -537,6 +554,7 @@ export const RadioTestActivity: ActivityDto = {
             text: 'Third radio yellow',
             image: null,
             score: null,
+            value: 1,
             tooltip: null,
             color: '#F8FF00',
             isHidden: false,
@@ -546,6 +564,7 @@ export const RadioTestActivity: ActivityDto = {
             text: 'Fourth radio red',
             image: null,
             score: null,
+            value: 1,
             tooltip: null,
             color: '#FF0000',
             isHidden: false,
@@ -555,6 +574,7 @@ export const RadioTestActivity: ActivityDto = {
             text: 'Fifth radio green',
             image: null,
             score: null,
+            value: 1,
             tooltip: null,
             color: '#00FF00',
             isHidden: false,
@@ -565,6 +585,7 @@ export const RadioTestActivity: ActivityDto = {
             image:
               'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
             score: null,
+            value: 1,
             tooltip: null,
             color: '#EEEEEE',
             isHidden: false,
@@ -575,6 +596,7 @@ export const RadioTestActivity: ActivityDto = {
             image:
               'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
             score: null,
+            value: 1,
             tooltip: null,
             color: null,
             isHidden: false,
@@ -584,6 +606,7 @@ export const RadioTestActivity: ActivityDto = {
             text: 'Hidden radio',
             image: null,
             score: null,
+            value: 1,
             tooltip: null,
             color: null,
             isHidden: true,
@@ -611,6 +634,7 @@ export const RadioTestActivity: ActivityDto = {
       question: 'Choose some number radio item',
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -650,6 +674,7 @@ export const AllTextsActivity: ActivityDto = {
       responseValues: null,
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
     {
       id: '346',
@@ -670,6 +695,7 @@ export const AllTextsActivity: ActivityDto = {
       responseValues: null,
       order: 1,
       isHidden: false,
+      conditionalLogic: null,
     },
     {
       id: '346',
@@ -690,6 +716,7 @@ export const AllTextsActivity: ActivityDto = {
       responseValues: null,
       order: 1,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -725,6 +752,7 @@ export const AllCheckboxesActivity: ActivityDto = {
             text: 'Some text',
             image: null,
             score: null,
+            value: 1,
             tooltip: 'This is a **tooltip**',
             color: '#C800FF',
             isHidden: false,
@@ -734,6 +762,7 @@ export const AllCheckboxesActivity: ActivityDto = {
             text: 'Some text',
             image: null,
             score: null,
+            value: 1,
             tooltip: 'This is a *tooltip*',
             color: '#000000',
             isHidden: false,
@@ -743,6 +772,7 @@ export const AllCheckboxesActivity: ActivityDto = {
             text: 'Some text',
             image: 'https://cdn-icons-png.flaticon.com/512/1287/1287087.png',
             score: null,
+            value: 1,
             tooltip:
               'This is a ~~tooltip~~! A long long loooong loooooooooooong text',
             color: '#F8FF00',
@@ -764,6 +794,7 @@ export const AllCheckboxesActivity: ActivityDto = {
         timer: null,
         addScores: false,
       },
+      conditionalLogic: null,
     },
     {
       id: '12495124',
@@ -780,6 +811,7 @@ export const AllCheckboxesActivity: ActivityDto = {
             text: 'Some text',
             image: null,
             score: null,
+            value: 1,
             tooltip: 'This is a **tooltip**',
             color: '#C800FF',
             isHidden: false,
@@ -789,6 +821,7 @@ export const AllCheckboxesActivity: ActivityDto = {
             text: 'Some text',
             image: null,
             score: null,
+            value: 1,
             tooltip: 'This is a *tooltip*',
             color: '#000000',
             isHidden: false,
@@ -798,12 +831,14 @@ export const AllCheckboxesActivity: ActivityDto = {
             text: 'Some text',
             image: 'https://cdn-icons-png.flaticon.com/512/1287/1287087.png',
             score: null,
+            value: 1,
             tooltip: '- 1. one\n- 2. two\n- 3. three\n',
             color: '#F8FF00',
             isHidden: false,
           },
         ],
       },
+      conditionalLogic: null,
       config: {
         randomizeOptions: false,
         setAlerts: false,
@@ -834,6 +869,7 @@ export const AllCheckboxesActivity: ActivityDto = {
             text: 'Some text',
             image: null,
             score: null,
+            value: 1,
             tooltip: 'This is a tooltip',
             color: '#C800FF',
             isHidden: false,
@@ -843,6 +879,7 @@ export const AllCheckboxesActivity: ActivityDto = {
             text: 'Some text',
             image: null,
             score: null,
+            value: 1,
             tooltip: '',
             color: '#000000',
             isHidden: false,
@@ -852,6 +889,7 @@ export const AllCheckboxesActivity: ActivityDto = {
             text: 'Some text',
             image: 'https://cdn-icons-png.flaticon.com/512/1287/1287087.png',
             score: null,
+            value: 1,
             tooltip: null,
             color: '#F8FF00',
             isHidden: false,
@@ -872,6 +910,7 @@ export const AllCheckboxesActivity: ActivityDto = {
         timer: null,
         addScores: false,
       },
+      conditionalLogic: null,
     },
   ],
 };
@@ -899,6 +938,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'First radio pink with tooltip',
             image: null,
             score: null,
+            value: 1,
             tooltip: 'This is a ++tooltip++',
             color: '#C800FF',
             isHidden: false,
@@ -908,6 +948,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Second radio black',
             image: null,
             score: null,
+            value: 1,
             tooltip:
               'Which kind of music do you like?\n- Pop\n- Classic\n- Dance/Electronic\n- Rock\n',
             color: '#000000',
@@ -918,6 +959,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Third radio yellow',
             image: null,
             score: null,
+            value: 1,
             tooltip: 'This this a ~tooltip in a subscript~',
             color: '#F8FF00',
             isHidden: false,
@@ -927,6 +969,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Fourth radio red',
             image: null,
             score: null,
+            value: 1,
             tooltip: 'This this a ^tooltip in a superscript^',
             color: '#FF0000',
             isHidden: false,
@@ -936,6 +979,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Fifth radio green',
             image: null,
             score: null,
+            value: 1,
             tooltip: 'This is a ==highlighted tooltip==',
             color: '#00FF00',
             isHidden: false,
@@ -946,6 +990,7 @@ export const AllRadioActivity: ActivityDto = {
             image:
               'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
             score: null,
+            value: 1,
             tooltip: `This is a cat:
             ![Cat](https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg)`,
             color: '#EEEEEE',
@@ -957,6 +1002,7 @@ export const AllRadioActivity: ActivityDto = {
             image:
               'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
             score: null,
+            value: 1,
             tooltip: 'This is a link: [All about cats](https://cats.com)',
             color: null,
             isHidden: false,
@@ -966,6 +1012,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Hidden radio',
             image: null,
             score: null,
+            value: 1,
             tooltip: null,
             color: null,
             isHidden: true,
@@ -992,6 +1039,7 @@ export const AllRadioActivity: ActivityDto = {
       question: 'These are colored randomized radios. Tooltips',
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
     {
       responseValues: {
@@ -1001,6 +1049,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'First radio button',
             image: null,
             score: null,
+            value: 1,
             tooltip: 'Tooltip text',
             color: '#C800FF',
             isHidden: false,
@@ -1010,6 +1059,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Second radio button',
             image: null,
             score: null,
+            value: 1,
             tooltip: null,
             color: '#000000',
             isHidden: false,
@@ -1018,6 +1068,7 @@ export const AllRadioActivity: ActivityDto = {
             id: '3',
             text: 'Third radio button',
             image: null,
+            value: 1,
             score: null,
             tooltip: null,
             color: '#F8FF00',
@@ -1028,6 +1079,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Fourth radio button',
             image: null,
             score: null,
+            value: 1,
             tooltip: null,
             color: '#FF0000',
             isHidden: false,
@@ -1037,6 +1089,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Fifth radio button',
             image: null,
             score: null,
+            value: 1,
             tooltip: null,
             color: '#00FF00',
             isHidden: false,
@@ -1047,6 +1100,7 @@ export const AllRadioActivity: ActivityDto = {
             image:
               'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
             score: null,
+            value: 1,
             tooltip: null,
             color: '#EEEEEE',
             isHidden: false,
@@ -1057,6 +1111,7 @@ export const AllRadioActivity: ActivityDto = {
             image:
               'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
             score: null,
+            value: 1,
             tooltip: null,
             color: null,
             isHidden: false,
@@ -1066,6 +1121,7 @@ export const AllRadioActivity: ActivityDto = {
             text: 'Hidden radio',
             image: null,
             score: null,
+            value: 1,
             tooltip: null,
             color: null,
             isHidden: true,
@@ -1094,6 +1150,7 @@ export const AllRadioActivity: ActivityDto = {
         'These are simple single select. Cannot move back. Has required text field',
       order: 1,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -1143,6 +1200,7 @@ export const AllSliderActivity: ActivityDto = {
       question: 'Choose a number. Cannot move back',
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
     {
       responseValues: {
@@ -1174,6 +1232,7 @@ export const AllSliderActivity: ActivityDto = {
       question: 'On a scale of 1 to 10, how happy are you?. You can skip',
       order: 1,
       isHidden: false,
+      conditionalLogic: null,
     },
     {
       responseValues: {
@@ -1205,6 +1264,7 @@ export const AllSliderActivity: ActivityDto = {
       question: 'Choose any. And give an optional text response.',
       order: 0,
       isHidden: false,
+      conditionalLogic: null,
     },
   ],
 };
@@ -1242,6 +1302,7 @@ export const PhotoActivityDto: ActivityDto = {
         skippableItem: false,
       },
       responseValues: null,
+      conditionalLogic: null,
     },
   ],
 };
@@ -1279,6 +1340,83 @@ export const VideoActivityDto: ActivityDto = {
         skippableItem: false,
       },
       responseValues: null,
+      conditionalLogic: null,
+    },
+  ],
+};
+
+export const DateActivityDto: ActivityDto = {
+  id: '123123',
+  name: 'Date Activity',
+  description: 'Time Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  order: 0,
+  isHidden: false,
+  items: [
+    {
+      id: '23465',
+      name: 'Date activity item',
+      question: 'hello',
+      order: 0,
+      isHidden: false,
+      responseType: 'time',
+      timer: null,
+      config: {
+        timer: null,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: true,
+        skippableItem: false,
+      },
+      responseValues: null,
+      conditionalLogic: null,
+    },
+  ],
+};
+
+export const TimeActivityDto: ActivityDto = {
+  id: '123123',
+  name: 'Time Activity',
+  description: 'Time Description',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  order: 0,
+  isHidden: false,
+  items: [
+    {
+      id: '23465',
+      name: 'Time activity item',
+      question: 'hello',
+      order: 0,
+      isHidden: false,
+      responseType: 'time',
+      timer: null,
+      config: {
+        timer: null,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: true,
+        skippableItem: false,
+      },
+      responseValues: null,
+      conditionalLogic: null,
     },
   ],
 };

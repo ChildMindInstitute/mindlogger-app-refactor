@@ -19,7 +19,6 @@ type Props = {
   event: ScheduleEvent;
   isTimerElapsed: boolean;
   entityStartedAt: number;
-  pipelineActivityOrder: number;
 } & FlowPipelineItem;
 
 function FlowElementSwitch({
@@ -31,14 +30,12 @@ function FlowElementSwitch({
   onComplete,
   isTimerElapsed,
   entityStartedAt,
-  pipelineActivityOrder,
 }: Props) {
   const context = useMemo(
     () => ({
       ...payload,
-      order: pipelineActivityOrder,
     }),
-    [payload, pipelineActivityOrder],
+    [payload],
   );
 
   switch (type) {
@@ -64,12 +61,7 @@ function FlowElementSwitch({
 
     case 'Intermediate': {
       return (
-        <Intermediate
-          {...payload}
-          order={pipelineActivityOrder}
-          onClose={onBack}
-          onFinish={onComplete}
-        />
+        <Intermediate {...payload} onClose={onBack} onFinish={onComplete} />
       );
     }
 
@@ -78,7 +70,6 @@ function FlowElementSwitch({
         <Finish
           {...payload}
           isTimerElapsed={isTimerElapsed}
-          order={pipelineActivityOrder}
           onClose={onClose}
         />
       );

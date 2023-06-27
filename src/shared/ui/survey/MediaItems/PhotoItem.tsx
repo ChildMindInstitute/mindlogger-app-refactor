@@ -20,7 +20,7 @@ import {
 import { PhotoIcon, Image } from '@shared/ui';
 
 import MediaInput from './MediaInput';
-import MediaValue from './types';
+import { MediaValue } from './types';
 
 type Props = {
   onChange: (value: MediaValue) => void;
@@ -65,9 +65,9 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
     if (isGalleryAccessGranted) {
       selectImage();
     } else {
-      const permissionStatus = await requestGalleryPermissions();
+      const isPermissionAllowed = await requestGalleryPermissions();
 
-      if (permissionStatus === 'granted') {
+      if (isPermissionAllowed) {
         selectImage();
       } else {
         await handleBlockedPermissions(
@@ -82,9 +82,9 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
     if (isCameraAccessGranted) {
       takePhoto();
     } else {
-      const permissionStatus = await requestCameraPermissions();
+      const isPermissionAllowed = await requestCameraPermissions();
 
-      if (permissionStatus === 'granted') {
+      if (isPermissionAllowed) {
         takePhoto();
       } else {
         await handleBlockedPermissions(
@@ -97,15 +97,13 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
 
   return (
     <MediaInput
+      borderColor={value ? '$green' : '$red'}
       onOpenCamera={onOpenPhotoCamera}
       onShowMediaLibrary={onShowImageGallery}
       mode="photo"
+      uploadIcon={<PhotoIcon color={colors.red} size={50} />}
     >
-      {value ? (
-        <Image height="100%" width="100%" src={{ uri: value.uri }} />
-      ) : (
-        <PhotoIcon color={colors.red} size={50} />
-      )}
+      {value && <Image height="100%" width="100%" src={{ uri: value.uri }} />}
     </MediaInput>
   );
 };

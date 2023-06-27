@@ -8,9 +8,9 @@ type Config = {
 };
 
 type SliderConfig = Config & {
-  showTickMarks: boolean | null;
-  showTickLabels: boolean | null;
-  isContinuousSlider: boolean | null;
+  showTickMarks?: boolean | null;
+  showTickLabels?: boolean | null;
+  isContinuousSlider?: boolean | null;
 };
 
 export type SliderProps = {
@@ -21,11 +21,18 @@ export type SliderProps = {
   onRelease?: () => void;
 };
 
-type StackedSliderConfig = (SliderConfig & { label: string; id: string })[];
+type StackedSliderConfig = {
+  rows: (Config & {
+    label: string;
+    id: string;
+  })[];
+  addScores: boolean;
+  setAlerts: boolean;
+};
 
 export type StackedSliderProps = {
   config: StackedSliderConfig;
-  initialValues?: (number | null)[];
+  values: number[] | null;
   onChange: (arrayOfValues: number[]) => void;
   onPress?: () => void;
   onRelease?: () => void;

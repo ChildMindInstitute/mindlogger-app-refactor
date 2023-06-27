@@ -1,21 +1,32 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
+
+import { format } from 'date-fns';
 
 import { colors } from '@app/shared/lib';
-import { ChevronRightIcon, DateTimePicker } from '@shared/ui';
+import { RightArrowIcon, DateTimePicker } from '@shared/ui';
 
 type Props = {
   onChange: (value: string) => void;
-  value: string;
+  value?: string | null;
 };
 
 const DatePickerItem: FC<Props> = ({ value, onChange }) => {
-  const onChangeDate = (date: Date) => onChange(date.toString());
+  const onChangeDate = (date: Date) => {
+    const formattedDate = format(date, 'yyyy-MM-dd');
+
+    onChange(formattedDate);
+  };
+
+  const valueAsDate = useMemo(
+    () => (value ? new Date(value) : new Date()),
+    [value],
+  );
 
   return (
     <DateTimePicker
       onChange={onChangeDate}
-      value={new Date(value)}
-      iconAfter={<ChevronRightIcon color={colors.grey} size={15} />}
+      value={valueAsDate}
+      iconAfter={<RightArrowIcon color={colors.lightGrey2} size={15} />}
     />
   );
 };

@@ -21,7 +21,6 @@ export type ActivityListItem = {
     activityPositionInFlow: number;
   } | null;
 
-  scheduledAt?: Date | null; //todo - discuss with BA
   availableFrom?: Date | null;
   availableTo?: Date | null;
 

@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 
 import Config from 'react-native-config';
+import { getSystemVersion, isTablet } from 'react-native-device-info';
 import { CameraOptions, ImageLibraryOptions } from 'react-native-image-picker';
 import { PERMISSIONS } from 'react-native-permissions';
 
@@ -13,9 +14,13 @@ export const IS_IOS = Platform.OS === 'ios';
 export const IS_ANDROID = Platform.OS === 'android';
 export const IS_ANDROID_12_OR_HIGHER =
   IS_ANDROID && (Platform.Version as number) >= 31;
+export const IS_ANDROID_13_OR_HIGHER = IS_ANDROID && +getSystemVersion() >= 13;
+
+export const IS_TABLET = isTablet();
 
 export const ENV = Config.ENV;
 export const API_URL = Config.API_URL as string;
+
 export const STORE_ENCRYPTION_KEY = Config.STORE_ENCRYPTION_KEY;
 
 // @ts-ignore
@@ -66,7 +71,7 @@ export const VIDEO_RECORD_OPTIONS: CameraOptions = {
   videoQuality: 'high',
   durationLimit: 60,
   quality: 0.9,
-  saveToPhotos: true,
+  saveToPhotos: false,
 };
 
 export const PHOTO_TAKE_OPTIONS: CameraOptions = {
@@ -74,7 +79,7 @@ export const PHOTO_TAKE_OPTIONS: CameraOptions = {
   maxWidth: 800,
   maxHeight: 800,
   quality: 0.9,
-  saveToPhotos: true,
+  saveToPhotos: false,
 };
 
 export const MICROPHONE_PERMISSIONS = Platform.select({
@@ -84,3 +89,5 @@ export const MICROPHONE_PERMISSIONS = Platform.select({
 
 export const DAYS_OF_WEEK_NUMBERS = [0, 1, 2, 3, 4, 5, 6];
 export const DAYS_OF_WEEK_SHORT_NAMES = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+export const IV_LENGTH = 16;
