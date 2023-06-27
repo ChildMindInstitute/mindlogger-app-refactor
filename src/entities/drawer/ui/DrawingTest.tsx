@@ -43,7 +43,7 @@ const DrawingTest: FC<Props> = props => {
   const handleToggle = () => {
     !isDrawingActive && scrollToEnd();
 
-    toggleScrollRef.current(false);
+    toggleScrollRef.current(isDrawingActive);
   };
 
   const enableScroll = () => toggleScrollRef.current(true);
