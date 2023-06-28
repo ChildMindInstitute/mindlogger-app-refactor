@@ -41,6 +41,7 @@ function fileService() {
         return response;
       } catch (error) {
         console.error('error', JSON.stringify(error));
+        throw error;
       }
     },
   };
