@@ -1,4 +1,4 @@
-import { FlankerConfiguration } from '@app/entities/flanker';
+import { FlankerItemSettings } from '@app/abstract/lib';
 
 import { FlankerPayload, FlankerResponse, PipelineItem } from '../lib';
 
@@ -13,7 +13,7 @@ export const evaluateFlankerNextStep = (
 
   const currentItem: PipelineItem = items[currentIndex];
 
-  const itemConfiguration: FlankerConfiguration =
+  const itemConfiguration: FlankerItemSettings =
     currentItem.payload as FlankerPayload;
 
   if (itemConfiguration.blockType === 'test') {
@@ -51,7 +51,7 @@ export const evaluateFlankerNextStep = (
 
   if (correctCount * 100 >= totalCount * minimumAccuracy) {
     const lastPracticeIndex = items.findIndex(
-      x => !!x.payload && (x.payload as FlankerConfiguration).isLastPractice,
+      x => !!x.payload && (x.payload as FlankerItemSettings).isLastPractice,
     );
     return lastPracticeIndex + 1;
   }

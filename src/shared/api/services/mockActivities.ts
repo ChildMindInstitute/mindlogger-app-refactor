@@ -1,7 +1,4 @@
-import { ActivityDto, FlankerAnswerSettings } from '@app/shared/api';
-
-import { flankerWithStFxImages } from './mocks/FlankerWithStFxImages';
-import { flankerSettingsTextSignsDto } from './mocks/FlankerWithTextsSigns';
+import { ActivityDto } from '@app/shared/api';
 
 const testMessage1 =
   'Start by placing the point of the pen at the center of the spiral (S), and trace out along the dashed blue line to the end of the sprial (E).  Try to stay on the dashed blue line while tracing. You will do this five times.';
@@ -154,117 +151,6 @@ export const AbTestActivity: ActivityDto = {
   ],
 };
 
-const FlankerWithImageActivity: ActivityDto = {
-  id: 'aid1',
-  name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
-  image:
-    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: '',
-  showAllAtOnce: false,
-  isSkippable: false,
-  isReviewable: false,
-  responseIsEditable: false,
-  order: 0,
-  isHidden: false,
-  items: [
-    {
-      id: '100',
-      name: 'Flanker',
-      timer: null,
-      question: '',
-      responseType: 'flanker',
-      config: null,
-      responseValues: flankerWithStFxImages,
-      order: 0,
-      isHidden: false,
-      conditionalLogic: null,
-    },
-  ],
-};
-
-const FlankerWithStSFxActivity: ActivityDto = {
-  id: 'aid1',
-  name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
-  image:
-    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: '',
-  showAllAtOnce: false,
-  isSkippable: false,
-  isReviewable: false,
-  responseIsEditable: false,
-  order: 0,
-  isHidden: false,
-  items: [
-    {
-      id: '100',
-      name: 'Flanker',
-      timer: null,
-      question: '',
-      responseType: 'flanker',
-      config: null,
-      responseValues: {} as FlankerAnswerSettings,
-      order: 0,
-      isHidden: false,
-      conditionalLogic: null,
-    },
-  ],
-};
-
-const FlankerWithTextSignsActivity: ActivityDto = {
-  id: 'aid1',
-  name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
-  image:
-    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: '',
-  showAllAtOnce: false,
-  isSkippable: false,
-  isReviewable: false,
-  responseIsEditable: false,
-  order: 0,
-  isHidden: false,
-  items: [
-    {
-      id: '100',
-      name: 'Flanker',
-      question: '',
-      responseType: 'flanker',
-      config: null,
-      responseValues: flankerSettingsTextSignsDto,
-      order: 0,
-      timer: null,
-      isHidden: false,
-      conditionalLogic: null,
-    },
-  ],
-};
-
-const FlankerAllTypesActivity: ActivityDto = {
-  id: 'aid1',
-  name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
-  image:
-    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: '',
-  showAllAtOnce: false,
-  isSkippable: false,
-  isReviewable: false,
-  responseIsEditable: false,
-  order: 0,
-  isHidden: false,
-  items: [
-    ...FlankerWithTextSignsActivity.items,
-    ...FlankerWithImageActivity.items,
-    ...FlankerWithTextSignsActivity.items,
-  ],
-};
-
 export const TextActivity: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
@@ -392,20 +278,13 @@ export const SliderTestActivity: ActivityDto = {
   ],
 };
 
-export const FlankerActivity = {
-  withImage: FlankerWithImageActivity,
-  withStSFx: FlankerWithStSFxActivity,
-  withTextSings: FlankerWithTextSignsActivity,
-  all: FlankerAllTypesActivity,
-};
-
 const TestActivities = [
   // grid,
   // vortex,
   // AbTestActivity,
   // TextActivity,
-  // SliderTestActivity,
-  FlankerWithTextSignsActivity,
+  SliderTestActivity,
+  //FlankerWithTextSignsActivity,
   //FlankerWithImageActivity
 ];
 

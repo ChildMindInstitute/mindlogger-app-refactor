@@ -1,8 +1,6 @@
-import {
-  FlankerConfiguration,
-  FlankerLogRecord,
-  FlankerWebViewLogRecord,
-} from '../types';
+import { FlankerItemSettings } from '@app/abstract/lib';
+
+import { FlankerLogRecord, FlankerWebViewLogRecord } from '../types';
 
 export const parseResponse = (data: {
   record: FlankerWebViewLogRecord;
@@ -34,7 +32,7 @@ export const parseResponse = (data: {
 };
 
 export const getScreensNumberPerTrial = (
-  configuration: FlankerConfiguration,
+  configuration: FlankerItemSettings,
 ): number => {
   let result = 0;
 

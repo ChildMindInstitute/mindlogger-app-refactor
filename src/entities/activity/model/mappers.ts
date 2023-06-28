@@ -1,4 +1,10 @@
 import {
+  BlockConfiguration,
+  ButtonConfiguration,
+  FlankerItemSettings,
+  StimulusConfiguration,
+} from '@app/abstract/lib';
+import {
   ActivityDto,
   DrawingItemDto,
   AbTestItemDto,
@@ -26,7 +32,6 @@ import {
 import { getMsFromSeconds } from '@app/shared/lib';
 
 import { ActivityDetails, ActivityItem } from '../lib';
-import { FlankerSettings } from '../lib/types/flanker';
 
 function mapTimerValue(dtoTimer: number | null) {
   if (dtoTimer) {
@@ -109,32 +114,28 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
 }
 
 function mapToFlanker(itemDto: FlankerItemDto): ActivityItem {
-  const dto = itemDto.responseValues;
+  const dto = itemDto.config;
 
-  const settings: FlankerSettings = {
-    general: {
-      buttons: [...dto.general.buttons],
-      fixation: dto.general.fixation ? { ...dto.general.fixation } : null,
-      instruction: dto.general.instruction,
-      stimulusTrials: [...dto.general.stimulusTrials],
-    },
-    practice: {
-      blocks: [...dto.practice.blocks],
-      instruction: dto.practice.instruction,
-      randomizeOrder: dto.practice.randomizeOrder,
-      showFeedback: dto.practice.showFeedback,
-      showSummary: dto.practice.showSummary,
-      stimulusDuration: dto.practice.stimulusDuration,
-      threshold: dto.practice.threshold,
-    },
-    test: {
-      blocks: [...dto.test.blocks],
-      instruction: dto.test.instruction,
-      randomizeOrder: dto.test.randomizeOrder,
-      showFeedback: dto.test.showFeedback,
-      showSummary: dto.test.showSummary,
-      stimulusDuration: dto.test.stimulusDuration,
-    },
+  const settings: FlankerItemSettings = {
+    blocks: dto.blocks.map<BlockConfiguration>(x => ({ ...x })),
+    buttons: dto.buttons.map<ButtonConfiguration>(x => ({ ...x })),
+    stimulusTrials: dto.stimulusTrials.map<StimulusConfiguration>(x => ({
+      ...x,
+    })),
+    blockType: dto.blockType,
+    fixationDuration: dto.fixationDuration,
+    fixationScreen: dto.fixationScreen,
+    isFirstPractice: dto.isFirstPractice,
+    isLastPractice: dto.isLastPractice,
+    isLastTest: dto.isLastTest,
+    nextButton: dto.nextButton,
+    sampleSize: dto.sampleSize,
+    samplingMethod: dto.samplingMethod,
+    showFeedback: dto.showFeedback,
+    showFixation: dto.showFixation,
+    showResults: dto.showResults,
+    trialDuration: dto.trialDuration,
+    minimumAccuracy: dto.minimumAccuracy,
   };
 
   return {
