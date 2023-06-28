@@ -141,7 +141,7 @@ const DrawingBoard: FC<Props> = props => {
       lines,
       svgString,
       width,
-    };
+    } as DrawResult;
 
     onResult(result);
   };
@@ -207,8 +207,8 @@ const DrawingBoard: FC<Props> = props => {
         <Canvas style={styles.canvas}>
           <Group>
             {paths.map((path, i) => (
-              <Group>
-                <Path key={i} path={path} strokeWidth={1} style="stroke" />
+              <Group key={i}>
+                <Path path={path} strokeWidth={1} style="stroke" />
               </Group>
             ))}
           </Group>

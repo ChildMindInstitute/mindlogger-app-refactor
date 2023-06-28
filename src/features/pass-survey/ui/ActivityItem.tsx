@@ -100,6 +100,7 @@ function ActivityItem({
             value={value?.answer?.lines ?? []}
             onStarted={() => console.log('onStarted')}
             onResult={onResponse}
+            outputFileName={pipelineItem.id!}
           />
         </Box>
       );

@@ -12,11 +12,12 @@ import {
 } from '@shopify/react-native-skia';
 import { useTranslation } from 'react-i18next';
 
+import { Point } from '@app/abstract/lib';
 import { robotoMediumFont } from '@assets/fonts';
 import { robotoFont } from '@assets/fonts';
 import { colors } from '@shared/lib';
 
-import { DeviceType, Point, TestScreenPayload } from '../lib';
+import { DeviceType, TestScreenPayload } from '../lib';
 import { getEquidistantPoint } from '../lib/utils';
 
 const FontCrossSize = 20;

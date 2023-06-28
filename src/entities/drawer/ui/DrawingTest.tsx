@@ -2,6 +2,8 @@
 import { FC, useState } from 'react';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
+import { FileSystem } from 'react-native-file-access';
+import RNFetchBlob from 'rn-fetch-blob';
 
 import { Box, BoxProps, XStack } from '@app/shared/ui';
 
@@ -10,8 +12,11 @@ import { DrawLine, DrawResult } from '../lib';
 
 const RectPadding = 15;
 
+const filesCacheDir = RNFetchBlob.fs.dirs.CacheDir;
+
 type Props = {
   value: Array<DrawLine>;
+  outputFileName: string;
   imageUrl: string | null;
   backgroundImageUrl: string | null;
   onStarted: () => void;
@@ -21,7 +26,38 @@ type Props = {
 const DrawingTest: FC<Props> = props => {
   const [width, setWidth] = useState<number | null>(null);
 
-  const { value, backgroundImageUrl, imageUrl, onStarted, onResult } = props;
+  const { value, backgroundImageUrl, imageUrl, onStarted, outputFileName } =
+    props;
+
+  const getFilePath = () => {
+    return `file://${filesCacheDir}/${outputFileName}.svg`;
+  };
+
+  const onResult = async (result: DrawResult) => {
+    const path = getFilePath();
+
+    try {
+      const fileExists = await FileSystem.exists(path);
+
+      if (fileExists) {
+        await FileSystem.unlink(path);
+      }
+
+      await FileSystem.writeFile(path, result.svgString);
+    } catch (error) {
+      console.warn(
+        '[DrawingTest.onResult]: Error occurred while write file\n\n',
+        error,
+      );
+      return;
+    }
+
+    result.fileName = `${outputFileName}.svg`;
+    result.type = 'image/svg';
+    result.uri = path;
+
+    props.onResult(result);
+  };
 
   return (
     <Box

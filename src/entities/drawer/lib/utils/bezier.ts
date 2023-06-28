@@ -73,6 +73,7 @@ export const getBezierArray = (
       { x: point.x + 1, y: point.y + 1 },
     ];
   }
+
   if (originalPoints.length === 2) {
     return [...originalPoints];
   }
@@ -100,6 +101,7 @@ export const getBezierArray = (
     const shouldInterpolate = i > 1;
 
     const currentPoints = curve.slice(1, MiddlePointIndex);
+
     const nextPointsToInterpolate = curve.slice(MiddlePointIndex + 1, -1);
 
     if (!shouldInterpolate) {
@@ -113,6 +115,7 @@ export const getBezierArray = (
     }
 
     const previousCachedData = cachedBezierPoints[i - 1];
+
     const interpolatedCurvePoints: Point[] = [];
 
     for (let j = 0; j < currentPoints.length; j++) {
@@ -125,6 +128,7 @@ export const getBezierArray = (
       };
       interpolatedCurvePoints.push(interpolatedPoint);
     }
+
     cachedBezierPoints.push({
       original: current,
       middleInCurve: curve[MiddlePointIndex],
