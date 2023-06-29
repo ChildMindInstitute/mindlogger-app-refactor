@@ -1,4 +1,4 @@
-import { BlockType } from './configuration';
+export type BlockType = 'test' | 'practice';
 
 // we cannot avoid "_" here, because it's web-view, ios-swift-components contracts
 export type FlankerWebViewLogRecord = {

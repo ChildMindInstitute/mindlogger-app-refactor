@@ -1,5 +1,6 @@
+import { FlankerItemSettings } from '@app/abstract/lib';
+
 import { ConditionalLogic } from './conditionalLogic';
-import { FlankerSettings } from './flanker';
 
 export type ActivityItemType =
   | 'AbTest'
@@ -201,7 +202,7 @@ export type ActivityItemConfig =
   | PhotoConfig
   | VideoConfig
   | TimeConfig
-  | FlankerSettings
+  | FlankerItemSettings
   | null;
 
 type ActivityItemBase = {
@@ -246,7 +247,7 @@ interface DrawingTestTestActivityItem extends ActivityItemBase {
 
 interface FlankerActivityItem extends ActivityItemBase {
   inputType: 'Flanker';
-  config: FlankerSettings;
+  config: FlankerItemSettings;
 }
 
 interface TextInputActivityItem extends ActivityItemBase {

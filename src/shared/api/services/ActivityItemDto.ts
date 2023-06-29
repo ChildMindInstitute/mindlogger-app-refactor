@@ -1,6 +1,6 @@
 import { ImageUrl } from '@app/shared/lib';
 
-import { FlankerSettingsDto } from './FlankerSettingsDto';
+import { FlankerItemSettingsDto } from './FlankerSettingsDto';
 
 export type ResponseType =
   | 'text'
@@ -388,9 +388,9 @@ type AbTestAnswerSettings = {
   device: 'Phone' | 'Tablet';
 };
 
-type FlankerConfiguration = null;
+export type FlankerConfiguration = FlankerItemSettingsDto;
 
-export type FlankerAnswerSettings = FlankerSettingsDto;
+export type FlankerAnswerSettings = null;
 
 type Configuration =
   | TextConfiguration

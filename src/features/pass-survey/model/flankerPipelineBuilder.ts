@@ -1,11 +1,4 @@
-import { FlankerSettings } from '@app/entities/activity';
-import {
-  BlockConfiguration,
-  ButtonConfiguration,
-  FlankerConfiguration,
-  StimulusConfiguration,
-} from '@app/entities/flanker';
-
+/*
 import { PipelineItem } from '../lib';
 
 const PracticesCount = 3;
@@ -194,3 +187,4 @@ const buildTest = (
 
   return result;
 };
+*/
