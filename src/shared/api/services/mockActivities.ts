@@ -315,15 +315,13 @@ export const StabilityTrackerActivity: ActivityDto = {
       timer: null,
       isHidden: false,
       config: {
-        timer: null,
-      },
-      responseValues: {
         lambdaSlope: 20.0,
         durationMinutes: 5,
         trialsNumber: 3,
         userInputType: 'gyroscope',
         phase: 'practice',
       },
+      responseValues: null,
       question: '',
       order: 0,
       conditionalLogic: null,
@@ -350,15 +348,13 @@ export const StabilityTrackerActivity: ActivityDto = {
       timer: null,
       isHidden: false,
       config: {
-        timer: null,
-      },
-      responseValues: {
         lambdaSlope: 20.0,
         durationMinutes: 5,
         trialsNumber: 0,
         userInputType: 'gyroscope',
         phase: 'test',
       },
+      responseValues: null,
       question: '',
       order: 0,
       conditionalLogic: null,

@@ -384,8 +384,6 @@ type SliderRowsAnswerSettings = {
 // @todo Change when the BE integration is done
 type AbTestConfiguration = TimerConfiguration;
 
-type StabilityTrackerConfiguration = TimerConfiguration;
-
 // @todo Change when the BE integration is done
 type AbTestAnswerSettings = {
   device: 'Phone' | 'Tablet';
@@ -393,7 +391,9 @@ type AbTestAnswerSettings = {
 
 export type FlankerConfiguration = FlankerItemSettingsDto;
 
-type StabilityTrackerAnswerSettings = {
+type StabilityTrackerAnswerSettings = null;
+
+type StabilityTrackerConfiguration = {
   lambdaSlope: number;
   durationMinutes: number;
   trialsNumber: number;
