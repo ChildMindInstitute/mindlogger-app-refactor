@@ -12,12 +12,11 @@ import {
 } from '@shopify/react-native-skia';
 import { useTranslation } from 'react-i18next';
 
-import { Point } from '@app/abstract/lib';
+import { AbTestPayload, Point } from '@app/abstract/lib';
 import { robotoMediumFont } from '@assets/fonts';
 import { robotoFont } from '@assets/fonts';
 import { colors } from '@shared/lib';
 
-import { DeviceType, TestScreenPayload } from '../lib';
 import { getEquidistantPoint } from '../lib/utils';
 
 const FontCrossSize = 20;
@@ -25,19 +24,18 @@ const FontCrossSize = 20;
 const CrossOffsetX = -5;
 
 type Props = {
-  testData: TestScreenPayload;
+  testData: AbTestPayload;
   paths?: SkPath[];
   errorPath?: SkPath | null;
   greenRoundOrder?: number | string | null;
-  deviceType: DeviceType;
 };
 
 const AbShapes: FC<Props> = props => {
-  const { nodes, config } = props.testData;
-  const { paths, greenRoundOrder, deviceType, errorPath } = props;
+  const { nodes, config, deviceType } = props.testData;
+  const { paths, greenRoundOrder, errorPath } = props;
 
   const fontBeginEndSize =
-    deviceType === 'Phone' ? config.fontSize / 1.4 : config.fontSizeBeginEnd!;
+    deviceType === 'mobile' ? config.fontSize / 1.4 : config.fontSizeBeginEnd!;
 
   const first = nodes[0];
 
@@ -73,7 +71,7 @@ const AbShapes: FC<Props> = props => {
       x: config.radius - config.beginWordLength! / 2,
       y: -10,
     };
-    return deviceType === 'Phone' ? beginOffsetMobile : beginOffsetTablet;
+    return deviceType === 'mobile' ? beginOffsetMobile : beginOffsetTablet;
   };
 
   const getEndOffset = (): Point => {
@@ -85,7 +83,7 @@ const AbShapes: FC<Props> = props => {
       x: config.radius - config.endWordLength! / 2,
       y: -11,
     };
-    return deviceType === 'Phone' ? endOffsetMobile : endOffsetTablet;
+    return deviceType === 'mobile' ? endOffsetMobile : endOffsetTablet;
   };
 
   const labelOffset = getLabelOffset();

@@ -3,11 +3,12 @@ import {
   ButtonConfiguration,
   FlankerItemSettings,
   StimulusConfiguration,
+  TestNode,
+  TutorialRecord,
 } from '@app/abstract/lib';
 import {
   ActivityDto,
   DrawingItemDto,
-  AbTestItemDto,
   StabilityTrackerItemDto,
   AudioItemDto,
   AudioPlayerItemDto,
@@ -29,6 +30,7 @@ import {
   TimeItemDto,
   SingleSelectionRowsItemDto,
   ConditionalLogicDto,
+  ABTrailsItemDto,
 } from '@app/shared/api';
 import { getMsFromSeconds } from '@app/shared/lib';
 
@@ -92,15 +94,36 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
   };
 }
 
-function mapToAbTest(dto: AbTestItemDto): ActivityItem {
+function mapToAbTest(dto: ABTrailsItemDto): ActivityItem {
+  const config = dto.config;
+
+  const nodesSettingsDto = (config.mobileNodes ?? config.tabletNodes)!;
+
+  const nodes = nodesSettingsDto.nodes;
+
+  const tutorials = (config.mobileTutorials ?? config.tabletTutorials)!;
+
   return {
     id: dto.id,
     name: dto.name,
-    inputType: 'AbTest',
+    inputType: 'AbTrails',
     config: {
-      device: dto.responseValues.device,
+      config: {
+        fontSize: nodesSettingsDto.fontSize,
+        radius: nodesSettingsDto.radius,
+        beginWordLength: nodesSettingsDto.beginWordLength,
+        endWordLength: nodesSettingsDto.endWordLength,
+        fontSizeBeginEnd: nodesSettingsDto.fontSizeBeginEnd,
+      },
+      deviceType: config.deviceType,
+      nodes: nodes.map<TestNode>(x => ({
+        ...x,
+      })),
+      tutorials: tutorials.tutorials.map<TutorialRecord>(x => ({
+        ...x,
+      })),
     },
-    timer: mapTimerValue(dto.config.timer),
+    timer: null,
     order: dto.order,
     question: dto.question,
     isSkippable: false,
@@ -642,7 +665,14 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
     order: dto.order,
     items: dto.items.map(item => {
       switch (item.responseType) {
-        case 'abTest':
+        case 'ABTrailsMobileFirst':
+        case 'ABTrailsMobileSecond':
+        case 'ABTrailsMobileThird':
+        case 'ABTrailsMobileFourth':
+        case 'ABTrailsTabletFirst':
+        case 'ABTrailsTabletSecond':
+        case 'ABTrailsTabletThird':
+        case 'ABTrailsTabletFourth':
           return mapToAbTest(item);
         case 'stabilityTracker':
           return mapToStabilityTracker(item);

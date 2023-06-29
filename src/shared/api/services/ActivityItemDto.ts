@@ -1,5 +1,6 @@
 import { ImageUrl } from '@app/shared/lib';
 
+import { AbTrailsItemSettingsDto } from './AbTrailsSettingsDtos';
 import { FlankerItemSettingsDto } from './FlankerSettingsDto';
 
 export type ResponseType =
@@ -23,7 +24,15 @@ export type ResponseType =
   | 'flanker'
   | 'abTest'
   | 'stabilityTracker'
-  | 'time';
+  | 'time'
+  | 'ABTrailsMobileFirst'
+  | 'ABTrailsMobileSecond'
+  | 'ABTrailsMobileThird'
+  | 'ABTrailsMobileFourth'
+  | 'ABTrailsTabletFirst'
+  | 'ABTrailsTabletSecond'
+  | 'ABTrailsTabletThird'
+  | 'ABTrailsTabletFourth';
 
 type Match = 'any' | 'all';
 
@@ -403,6 +412,10 @@ type StabilityTrackerConfiguration = {
 
 export type FlankerAnswerSettings = null;
 
+export type AbTrailsConfiguration = AbTrailsItemSettingsDto;
+
+export type AbTrailsAnswerSettings = null;
+
 type Configuration =
   | TextConfiguration
   | SingleSelectionRowsConfiguration
@@ -424,7 +437,8 @@ type Configuration =
   | MultiSelectionConfiguration
   | AbTestConfiguration
   | StabilityTrackerConfiguration
-  | FlankerConfiguration;
+  | FlankerConfiguration
+  | AbTrailsConfiguration;
 
 type AnswerSettings =
   | TextAnswerSettings
@@ -446,7 +460,8 @@ type AnswerSettings =
   | MultiSelectionAnswerSettings
   | AbTestAnswerSettings
   | StabilityTrackerAnswerSettings
-  | FlankerAnswerSettings;
+  | FlankerAnswerSettings
+  | AbTrailsAnswerSettings;
 
 type ActivityItemDtoBase = {
   id: string;
@@ -569,12 +584,6 @@ export interface AudioPlayerItemDto extends ActivityItemDtoBase {
   responseValues: AudioPlayerAnswerSettings;
 }
 
-export interface AbTestItemDto extends ActivityItemDtoBase {
-  responseType: 'abTest';
-  config: AbTestConfiguration;
-  responseValues: AbTestAnswerSettings;
-}
-
 export interface StabilityTrackerItemDto extends ActivityItemDtoBase {
   responseType: 'stabilityTracker';
   config: StabilityTrackerConfiguration;
@@ -585,6 +594,64 @@ export interface FlankerItemDto extends ActivityItemDtoBase {
   responseType: 'flanker';
   config: FlankerConfiguration;
   responseValues: FlankerAnswerSettings;
+}
+
+export type ABTrailsItemDto =
+  | ABTrailsMobileFirstItemDto
+  | ABTrailsMobileSecondItemDto
+  | ABTrailsMobileThirdItemDto
+  | ABTrailsMobileFourthItemDto
+  | ABTrailsTabletFirstItemDto
+  | ABTrailsTabletSecondItemDto
+  | ABTrailsTabletThirdItemDto
+  | ABTrailsTabletFourthItemDto;
+
+export interface ABTrailsMobileFirstItemDto extends ActivityItemDtoBase {
+  responseType: 'ABTrailsMobileFirst';
+  config: AbTrailsConfiguration;
+  responseValues: AbTrailsAnswerSettings;
+}
+
+export interface ABTrailsMobileSecondItemDto extends ActivityItemDtoBase {
+  responseType: 'ABTrailsMobileSecond';
+  config: AbTrailsConfiguration;
+  responseValues: AbTrailsAnswerSettings;
+}
+
+export interface ABTrailsMobileThirdItemDto extends ActivityItemDtoBase {
+  responseType: 'ABTrailsMobileThird';
+  config: AbTrailsConfiguration;
+  responseValues: AbTrailsAnswerSettings;
+}
+
+export interface ABTrailsMobileFourthItemDto extends ActivityItemDtoBase {
+  responseType: 'ABTrailsMobileFourth';
+  config: AbTrailsConfiguration;
+  responseValues: AbTrailsAnswerSettings;
+}
+
+export interface ABTrailsTabletFirstItemDto extends ActivityItemDtoBase {
+  responseType: 'ABTrailsTabletFirst';
+  config: AbTrailsConfiguration;
+  responseValues: AbTrailsAnswerSettings;
+}
+
+export interface ABTrailsTabletSecondItemDto extends ActivityItemDtoBase {
+  responseType: 'ABTrailsTabletSecond';
+  config: AbTrailsConfiguration;
+  responseValues: AbTrailsAnswerSettings;
+}
+
+export interface ABTrailsTabletThirdItemDto extends ActivityItemDtoBase {
+  responseType: 'ABTrailsTabletThird';
+  config: AbTrailsConfiguration;
+  responseValues: AbTrailsAnswerSettings;
+}
+
+export interface ABTrailsTabletFourthItemDto extends ActivityItemDtoBase {
+  responseType: 'ABTrailsTabletFourth';
+  config: AbTrailsConfiguration;
+  responseValues: AbTrailsAnswerSettings;
 }
 
 export type ActivityItemDto =
@@ -605,7 +672,7 @@ export type ActivityItemDto =
   | MultiSelectionRowsItemDto
   | AudioItemDto
   | AudioPlayerItemDto
-  | AbTestItemDto
+  | ABTrailsItemDto
   | StabilityTrackerItemDto
   | FlankerItemDto
   | TimeItemDto;

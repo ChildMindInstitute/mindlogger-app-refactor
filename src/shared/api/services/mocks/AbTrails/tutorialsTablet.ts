@@ -1,4 +1,4 @@
-import { DeviceTutorials, TutorialPayload } from '../../lib';
+import { DeviceTutorials, TutorialPayload } from './types';
 
 const tutorialTabletFirst: TutorialPayload = [
   { text: 'There are numbers in circles on this screen.' },

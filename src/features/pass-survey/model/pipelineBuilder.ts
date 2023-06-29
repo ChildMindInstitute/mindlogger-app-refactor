@@ -5,12 +5,13 @@ import { PipelineItem } from '../lib';
 
 export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
   const pipeline: PipelineItem[] = filterHiddenItems(activity.items)
-    .map(item => {
+    .map((item, index) => {
       switch (item.inputType) {
-        case 'AbTest': {
+        case 'AbTrails': {
           return getAbTrailsPipeline(
-            item.config.device,
             item.id,
+            item.config,
+            activity.items.length - 1 === index,
           ) satisfies PipelineItem[];
         }
 

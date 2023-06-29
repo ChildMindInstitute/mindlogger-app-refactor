@@ -2,25 +2,20 @@ import { FC, useEffect, useMemo, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
+import { AbTestPayload } from '@app/abstract/lib';
 import { colors } from '@app/shared/lib';
 import { Box, BoxProps, Text, XStack } from '@app/shared/ui';
 
 import AbCanvas from './AbCanvas';
 import {
   AbTestResponse,
-  DeviceTests,
-  DeviceType,
   LogLine,
   MessageType,
   MessageTypeStrings,
-  TestIndex,
-  TestScreenPayload,
 } from '../lib';
-import { MobileTests, TabletTests } from '../model';
 
 type Props = {
-  testIndex: TestIndex | null;
-  deviceType: DeviceType;
+  testData: AbTestPayload;
   onResponse?: (response: AbTestResponse) => void;
   onComplete: (logLines: LogLine[]) => void;
 } & BoxProps;
@@ -32,7 +27,7 @@ const MessageTimeout = 2000;
 const AbTest: FC<Props> = props => {
   const { t } = useTranslation();
 
-  const { testIndex, deviceType, onResponse, onComplete } = props;
+  const { testData, onResponse, onComplete } = props;
 
   const [width, setWidth] = useState<number | null>(null);
 
@@ -41,6 +36,8 @@ const AbTest: FC<Props> = props => {
   const startTime = useMemo<number>(() => new Date().getTime(), []);
 
   const [completed, setCompleted] = useState(false);
+
+  const isLastTest = testData.isLast;
 
   useEffect(() => {
     if (message === MessageType.Completed) {
@@ -55,18 +52,6 @@ const AbTest: FC<Props> = props => {
     };
   }, [message]);
 
-  const getTests = (): DeviceTests => {
-    return deviceType === 'Phone' ? MobileTests : TabletTests;
-  };
-
-  const getTestData = (): TestScreenPayload | null => {
-    if (testIndex !== null) {
-      return getTests()[testIndex];
-    } else {
-      return null;
-    }
-  };
-
   const isMessageError = (): boolean => {
     return (
       message === MessageType.IncorrectLine ||
@@ -75,10 +60,6 @@ const AbTest: FC<Props> = props => {
   };
 
   const getDisplayMessage = () => {
-    const tests = getTests();
-
-    const isLastTest = Object.keys(tests).length === Number(testIndex) + 1;
-
     if (message === MessageType.Completed && isLastTest) {
       return t('cognitive:finished_complete');
     }
@@ -95,8 +76,6 @@ const AbTest: FC<Props> = props => {
     setCompleted(true);
     onComplete(logLines);
   };
-
-  const testData = getTestData();
 
   return (
     <Box
@@ -121,7 +100,6 @@ const AbTest: FC<Props> = props => {
         <XStack jc="center">
           <AbCanvas
             testData={testData}
-            deviceType={deviceType}
             width={width}
             height={width}
             onLogResult={logData =>

@@ -12,19 +12,11 @@ import {
   SkCanvas,
 } from '@shopify/react-native-skia';
 
-import { Point } from '@app/abstract/lib';
+import { AbTestPayload, Point, TestNode } from '@app/abstract/lib';
 import { Box, BoxProps } from '@app/shared/ui';
 
 import AbShapes from './AbShapes';
-import {
-  DeviceType,
-  LogLine,
-  LogPoint,
-  MessageType,
-  OnResultLog,
-  TestNode,
-  TestScreenPayload,
-} from '../lib';
+import { LogLine, LogPoint, MessageType, OnResultLog } from '../lib';
 import { getDistance, transformCoordinates } from '../lib/utils';
 
 const paint = Skia.Paint();
@@ -36,8 +28,7 @@ const ErrorLineTimeout = 1000;
 const FlareGreenPointTimeout = 1000;
 
 type Props = {
-  testData: TestScreenPayload;
-  deviceType: DeviceType;
+  testData: AbTestPayload;
   readonly: boolean;
   width: number;
   onLogResult: (data: OnResultLog) => void;
@@ -62,15 +53,8 @@ const AbCanvas: FC<Props> = props => {
 
   const logLines = useRef<LogLine[]>([]).current;
 
-  const {
-    testData,
-    deviceType,
-    onLogResult,
-    onMessage,
-    onComplete,
-    width,
-    readonly,
-  } = props;
+  const { testData, onLogResult, onMessage, onComplete, width, readonly } =
+    props;
 
   const canvasData = useMemo(
     () => (width ? transformCoordinates(testData, width) : null),
@@ -358,7 +342,6 @@ const AbCanvas: FC<Props> = props => {
         <AbShapes
           paths={paths}
           testData={canvasData}
-          deviceType={deviceType}
           greenRoundOrder={getGreenPointIndex()}
           errorPath={errorPath}
         />

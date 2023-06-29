@@ -1,13 +1,10 @@
 import { forwardRef, useImperativeHandle, useState } from 'react';
 
-import AbTutorial from './AbTutorial';
-import { DeviceType, TestIndex } from '../lib';
-import { MobileTutorials, TabletTutorials } from '../model';
+import { AbTutorialPayload } from '@app/abstract/lib';
 
-export type AbTutorialViewerProps = {
-  testIndex: TestIndex;
-  deviceType: DeviceType;
-};
+import AbTutorial from './AbTutorial';
+
+export type AbTutorialViewerProps = AbTutorialPayload;
 
 export type ViewerRef = {
   next: (step?: number) => boolean;
@@ -15,11 +12,10 @@ export type ViewerRef = {
 };
 
 export const AbTutorialViewer = forwardRef<ViewerRef, AbTutorialViewerProps>(
-  ({ testIndex, deviceType }, ref) => {
+  (props, ref) => {
     const [step, setStep] = useState(0);
-    const tutorials =
-      deviceType === 'Phone' ? MobileTutorials : TabletTutorials;
-    const stepsCount = tutorials[testIndex].length;
+
+    const stepsCount = props.tutorials.length;
 
     useImperativeHandle(
       ref,
@@ -52,12 +48,6 @@ export const AbTutorialViewer = forwardRef<ViewerRef, AbTutorialViewerProps>(
       [step, stepsCount],
     );
 
-    return (
-      <AbTutorial
-        testIndex={testIndex}
-        deviceType={deviceType}
-        tutorialStepIndex={step}
-      />
-    );
+    return <AbTutorial tutorialPayload={props} tutorialStepIndex={step} />;
   },
 );
