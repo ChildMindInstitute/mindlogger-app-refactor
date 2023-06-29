@@ -1,6 +1,6 @@
 import { Item } from '@app/shared/ui';
 
-import { Answers, PipelineItem } from '../lib';
+import { Answers, PipelineItem, RadioResponse } from '../lib';
 
 type AnswerValidatorArgs = {
   items: PipelineItem[];
@@ -59,7 +59,9 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
         return false;
       }
 
-      return currentAnswer.answer === optionValue;
+      const answer = currentAnswer.answer as RadioResponse;
+
+      return String(answer.value) === optionValue;
     },
 
     isGreaterThen(value: number) {
