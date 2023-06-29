@@ -1,11 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
-import { FC, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { TouchableOpacity } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { FileSystem } from 'react-native-file-access';
 import RNFetchBlob from 'rn-fetch-blob';
 
-import { Box, BoxProps, XStack } from '@app/shared/ui';
+import { ActivityScrollContext } from '@app/features/pass-survey';
+import { Box, BoxProps, Center, Text, XStack } from '@app/shared/ui';
 
 import DrawingBoard from './DrawingBoard';
 import { DrawLine, DrawResult } from '../lib';
@@ -18,16 +20,26 @@ type Props = {
   value: Array<DrawLine>;
   outputFileName: string;
   imageUrl: string | null;
+  isDrawingActive: boolean;
   backgroundImageUrl: string | null;
   onStarted: () => void;
   onResult: (result: DrawResult) => void;
+  toggleScroll: (isScrollEnabled: boolean) => void;
 } & BoxProps;
 
 const DrawingTest: FC<Props> = props => {
   const [width, setWidth] = useState<number | null>(null);
+  const { scrollToEnd, isAreaScrollable } = useContext(ActivityScrollContext);
 
-  const { value, backgroundImageUrl, imageUrl, onStarted, outputFileName } =
-    props;
+  const {
+    value,
+    backgroundImageUrl,
+    imageUrl,
+    onStarted,
+    outputFileName,
+    isDrawingActive,
+    toggleScroll,
+  } = props;
 
   const getFilePath = () => {
     return `file://${filesCacheDir}/${outputFileName}.svg`;
@@ -59,6 +71,28 @@ const DrawingTest: FC<Props> = props => {
     props.onResult(result);
   };
 
+  const toggleScrollRef = useRef(toggleScroll);
+
+  toggleScrollRef.current = toggleScroll;
+
+  const handleToggle = () => {
+    !isDrawingActive && scrollToEnd();
+
+    toggleScrollRef.current(isDrawingActive);
+  };
+
+  const enableScroll = () => toggleScrollRef.current(true);
+
+  const disableScroll = () => toggleScrollRef.current(false);
+
+  useEffect(() => {
+    if (isAreaScrollable) {
+      enableScroll();
+    } else {
+      disableScroll();
+    }
+  }, [isAreaScrollable]);
+
   return (
     <Box
       {...props}
@@ -86,6 +120,18 @@ const DrawingTest: FC<Props> = props => {
         </XStack>
       )}
 
+      {isAreaScrollable && (
+        <TouchableOpacity onPress={handleToggle}>
+          <Center mb={16}>
+            <Text color={isDrawingActive ? '$red' : '$primary'} fontSize={18}>
+              {isDrawingActive
+                ? 'Tap here to stop drawing' // @todo add translations after confirmation
+                : 'Tap here to start drawing'}
+            </Text>
+          </Center>
+        </TouchableOpacity>
+      )}
+
       {!!width && (
         <XStack jc="center">
           {!!backgroundImageUrl && (
@@ -98,6 +144,7 @@ const DrawingTest: FC<Props> = props => {
 
           <DrawingBoard
             value={value}
+            isDrawingActive={isDrawingActive}
             onResult={onResult}
             onStarted={onStarted}
             width={width}
