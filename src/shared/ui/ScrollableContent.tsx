@@ -96,7 +96,7 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
             onContentSizeChange={(_, contentHeight) => {
               setScrollContentHeight(contentHeight);
             }}
-            scrollEnabled={scrollEnabled}
+            scrollEnabled={isAreaScrollable && scrollEnabled}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             keyboardOpeningTime={0}
