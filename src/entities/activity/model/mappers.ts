@@ -121,8 +121,8 @@ function mapToStabilityTracker(dto: StabilityTrackerItemDto): ActivityItem {
     inputType: 'StabilityTracker',
     config: {
       lambdaSlope: dto.responseValues.lambdaSlope,
-      durationInMinutes: dto.responseValues.durationInMinutes,
-      numberOfTrials: dto.responseValues.numberOfTrials,
+      durationMinutes: dto.responseValues.durationMinutes,
+      trialsNumber: dto.responseValues.trialsNumber,
       userInputType: dto.responseValues.userInputType,
       phase: dto.responseValues.phase,
     },

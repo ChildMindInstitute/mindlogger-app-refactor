@@ -32,10 +32,10 @@ type AbTestConfig = {
 
 export type StabilityTrackerConfig = {
   lambdaSlope: number;
-  durationInMinutes: number;
-  numberOfTrials: number;
+  durationMinutes: number;
+  trialsNumber: number;
   userInputType: 'gyroscope' | 'touch';
-  phase: 'trial' | 'focus-phase';
+  phase: 'practice' | 'test';
 };
 
 type DrawingTestTestConfig = {

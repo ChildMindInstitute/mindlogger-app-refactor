@@ -47,10 +47,10 @@ type AbTestPayload = {
 };
 
 type StabilityTrackerPayload = {
-  phase: 'trial' | 'focus-phase';
+  phase: 'practice' | 'test';
   lambdaSlope: number;
-  durationInMinutes: number;
-  numberOfTrials: number;
+  durationMinutes: number;
+  trialsNumber: number;
   userInputType: 'gyroscope' | 'touch';
 };
 

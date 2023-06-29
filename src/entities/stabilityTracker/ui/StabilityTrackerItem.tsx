@@ -56,10 +56,10 @@ import {
 type Props = {
   config: {
     lambdaSlope: number;
-    durationInMinutes: number;
-    numberOfTrials: number;
+    durationMinutes: number;
+    trialsNumber: number;
     userInputType: 'gyroscope' | 'touch';
-    phase: 'focus-phase' | 'trial';
+    phase: 'test' | 'practice';
   };
   onComplete: (response: StabilityTrackerResponse) => void;
   onMaxLambdaChange: (contextKey: string, contextValue: unknown) => void;
@@ -79,18 +79,18 @@ const StabilityTrackerItemScreen = (props: Props) => {
 
   const config = {
     lambdaSlope: initialConfig?.lambdaSlope || 20.0,
-    durationInMinutes: initialConfig?.durationInMinutes || 1,
-    numberOfTrials: initialConfig?.numberOfTrials || 2,
-    phase: initialConfig?.phase ?? 'trial',
+    durationMinutes: initialConfig?.durationMinutes || 1,
+    trialsNumber: initialConfig?.trialsNumber || 2,
+    phase: initialConfig?.phase ?? 'practice',
   };
 
   const targetPoints = generateTargetTrajectory(
-    config.durationInMinutes,
+    config.durationMinutes,
     TASK_LOOP_RATE,
     1,
     CENTER,
   );
-  const IS_TRIAL = config.phase === 'trial';
+  const IS_TRIAL = config.phase === 'practice';
 
   // we are using refs instead of state , because useAnimation hook is much faster, than react can (or needs) to be rerendered
   const [isRunning, setIsRunning] = useState(false);
@@ -99,7 +99,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
   );
 
   const score = useRef(0);
-  const numberOfTrials = useRef(0);
+  const trialsNumber = useRef(0);
   const userPosition = useRef<Coordinate>(CENTER_COORDINATES);
   const circlePosition = useRef<Coordinate>(CENTER_COORDINATES);
   const boundWasHit = useRef(false);
@@ -214,7 +214,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
     setIsRunning(false);
 
     boundWasHit.current = false;
-    numberOfTrials.current = 0;
+    trialsNumber.current = 0;
     lambdaValue.current = INITIAL_LAMBDA;
     circlePosition.current = CENTER_COORDINATES;
     lambdaSlope.current = config?.lambdaSlope;
@@ -234,7 +234,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
     lambdaValue.current = lambdaValue.current / 2;
     circlePosition.current = CENTER_COORDINATES;
 
-    numberOfTrials.current += 1;
+    trialsNumber.current += 1;
 
     if (!IS_TRIAL) {
       return;
@@ -242,7 +242,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
 
     lambdaSlope.current = (lambdaSlope.current * 95) / 100;
 
-    if (numberOfTrials.current >= config.numberOfTrials) {
+    if (trialsNumber.current >= config.trialsNumber) {
       finishResponse();
     }
   };
@@ -301,7 +301,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
     deltaTime: number,
   ) => {
     if (
-      timeElapsed >= config.durationInMinutes * 60 * 1000 ||
+      timeElapsed >= config.durationMinutes * 60 * 1000 ||
       tickNumber >= targetPoints.length
     ) {
       finishResponse();
