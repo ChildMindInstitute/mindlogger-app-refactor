@@ -278,14 +278,103 @@ export const SliderTestActivity: ActivityDto = {
   ],
 };
 
+export const StabilityTrackerActivity: ActivityDto = {
+  id: 'aid01',
+  name: 'Activity number 01',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  order: 0,
+  isHidden: false,
+  items: [
+    {
+      id: '103011',
+      name: 'MarkdownMessage',
+      responseType: 'message',
+      timer: null,
+      isHidden: false,
+      config: {
+        removeBackButton: false,
+        timer: null,
+      },
+      responseValues: null,
+      question: 'The following will be the Challenge(trial) phase.',
+      order: 0,
+      conditionalLogic: null,
+    },
+    {
+      id: '10301',
+      name: 'Gyro',
+      responseType: 'stabilityTracker',
+      timer: null,
+      isHidden: false,
+      config: {
+        timer: null,
+      },
+      responseValues: {
+        lambdaSlope: 20.0,
+        durationInMinutes: 5,
+        numberOfTrials: 3,
+        userInputType: 'gyroscope',
+        phase: 'trial',
+      },
+      question: '',
+      order: 0,
+      conditionalLogic: null,
+    },
+    {
+      id: '1030111',
+      name: 'MarkdownMessage',
+      responseType: 'message',
+      timer: null,
+      isHidden: false,
+      config: {
+        removeBackButton: false,
+        timer: null,
+      },
+      responseValues: null,
+      question: 'The following will be the Focus phase.',
+      order: 0,
+      conditionalLogic: null,
+    },
+    {
+      id: '10301',
+      name: 'Gyro',
+      responseType: 'stabilityTracker',
+      timer: null,
+      isHidden: false,
+      config: {
+        timer: null,
+      },
+      responseValues: {
+        lambdaSlope: 20.0,
+        durationInMinutes: 5,
+        numberOfTrials: 0,
+        userInputType: 'gyroscope',
+        phase: 'focus-phase',
+      },
+      question: '',
+      order: 0,
+      conditionalLogic: null,
+    },
+  ],
+};
+
 const TestActivities = [
   // grid,
   // vortex,
   // AbTestActivity,
   // TextActivity,
-  SliderTestActivity,
+  // SliderTestActivity,
   //FlankerWithTextSignsActivity,
   //FlankerWithImageActivity
+  StabilityTrackerActivity,
 ];
 
 let index = 0;
