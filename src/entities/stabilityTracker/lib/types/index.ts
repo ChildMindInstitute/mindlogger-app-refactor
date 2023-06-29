@@ -22,3 +22,7 @@ export enum TargetInCircleStatus {
 export type Coordinate = [number, number];
 
 export type BonusMultiplier = 0 | 1 | 2;
+
+export type OrientationSubscription = {
+  unsubscribe: () => void;
+};

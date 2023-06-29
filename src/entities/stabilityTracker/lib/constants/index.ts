@@ -1,5 +1,7 @@
 import { Dimensions } from 'react-native';
 
+import { IS_IOS } from '@shared/lib';
+
 import { type Coordinate } from '../types';
 
 const { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT } =
@@ -24,3 +26,5 @@ export const BLOCK_HEIGHT = PLAYGROUND_WIDTH / 6 / 2;
 export const BLOCK_WIDTH = PLAYGROUND_WIDTH / 3;
 export const CENTER_COORDINATES: Coordinate = [CENTER, CENTER];
 export const TARGET_POSITION: Coordinate = CENTER_COORDINATES;
+
+export const SENSORS_DATA_MULTIPLIER = IS_IOS ? 1 : -1;

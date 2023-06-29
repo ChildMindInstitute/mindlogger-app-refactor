@@ -1,7 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import { GestureResponderEvent } from 'react-native';
 
+import { orientation } from 'react-native-sensors';
 import Svg, { Circle } from 'react-native-svg';
+import { useToast } from 'react-native-toast-notifications';
 
 import { useForceUpdate } from '@shared/lib';
 import { YStack } from '@shared/ui';
@@ -23,6 +31,8 @@ import {
   CENTER_COORDINATES,
   TARGET_POSITION,
   PANEL_RADIUS,
+  MAX_RADIUS,
+  SENSORS_DATA_MULTIPLIER,
 } from '../lib';
 import { useAnimation } from '../lib/hooks';
 import {
@@ -30,6 +40,7 @@ import {
   Coordinate,
   StabilityTrackerResponse,
   Response,
+  OrientationSubscription,
 } from '../lib/types';
 import {
   generateTargetTrajectory,
@@ -56,6 +67,9 @@ type Props = {
 };
 
 const StabilityTrackerItemScreen = (props: Props) => {
+  const toast = useToast();
+  const reRender = useForceUpdate();
+
   const {
     config: initialConfig,
     onComplete,
@@ -76,14 +90,13 @@ const StabilityTrackerItemScreen = (props: Props) => {
     1,
     CENTER,
   );
-
-  const IS_TOUCH = initialConfig?.userInputType === 'touch';
   const IS_TRIAL = config.phase === 'trial';
 
   // we are using refs instead of state , because useAnimation hook is much faster, than react can (or needs) to be rerendered
-
   const [isRunning, setIsRunning] = useState(false);
-  const reRender = useForceUpdate();
+  const [userInputType, setUserInputType] = useState<'touch' | 'gyroscope'>(
+    initialConfig?.userInputType,
+  );
 
   const score = useRef(0);
   const numberOfTrials = useRef(0);
@@ -96,8 +109,54 @@ const StabilityTrackerItemScreen = (props: Props) => {
   const lambdaValue = useRef(INITIAL_LAMBDA);
   const startPosition = useRef(0);
   const responses = useRef<Response[]>([]);
+  const orientationSubscription = useRef<OrientationSubscription>();
+  const initialOrientation = useRef<number>();
 
   const lambdaLimit = IS_TRIAL ? 0 : 0.3 * maxLambda;
+
+  const IS_TOUCH = useMemo(() => {
+    return userInputType === 'touch';
+  }, [userInputType]);
+
+  const handleGyroscopeError = useCallback(
+    (error: Error) => {
+      toast.show(error.toString());
+      setUserInputType('touch');
+      updateUserPosition(CENTER, CENTER + 1);
+    },
+    [setUserInputType, toast],
+  );
+
+  useEffect(() => {
+    if (IS_TOUCH) {
+      return;
+    }
+
+    if (isRunning) {
+      orientationSubscription.current = orientation.subscribe({
+        next: ({ pitch }) => {
+          if (!initialOrientation.current) {
+            initialOrientation.current = pitch;
+          } else {
+            const newPositionY =
+              CENTER +
+              ((SENSORS_DATA_MULTIPLIER *
+                (pitch - initialOrientation.current)) /
+                MAX_RADIUS) *
+                PANEL_RADIUS;
+
+            updateUserPosition(CENTER, newPositionY);
+          }
+        },
+        error: handleGyroscopeError,
+      });
+    } else {
+      orientationSubscription?.current?.unsubscribe();
+    }
+    return () => {
+      orientationSubscription?.current?.unsubscribe();
+    };
+  }, [handleGyroscopeError, isRunning, IS_TOUCH]);
 
   const updateUserPosition = (x: number, y: number) => {
     userPosition.current = [x, y];
