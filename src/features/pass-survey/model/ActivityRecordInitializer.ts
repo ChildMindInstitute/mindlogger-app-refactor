@@ -70,6 +70,17 @@ export function ActivityRecordInitializer({
 
     if (!storage.contains(key)) {
       storage.set(key, JSON.stringify(state));
+    } else {
+      initializeAbTrailsStep(key);
+    }
+  };
+
+  const initializeAbTrailsStep = (key: string) => {
+    const state = JSON.parse(storage.getString(key)!) as ActivityState;
+
+    if (state.items[state.step].type === 'AbTest') {
+      state.step -= 1; // go back to tutorial
+      storage.set(key, JSON.stringify(state));
     }
   };
 
