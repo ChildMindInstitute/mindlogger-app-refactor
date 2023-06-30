@@ -60,7 +60,9 @@ function PipelineVisibilityChecker(pipeline: PipelineItem[], answers: Answers) {
           return answerValidator.includesOption(condition.payload.optionValue);
 
         case 'NOT_INCLUDES_OPTION':
-          return !answerValidator.includesOption(condition.payload.optionValue);
+          return answerValidator.notIncludesOption(
+            condition.payload.optionValue,
+          );
 
         default:
           return true;
