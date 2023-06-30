@@ -111,10 +111,6 @@
 		F83E655529FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
 		F83E655629FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
 		F83E655729FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
-		F83ED97A2A40549C00DD5C3F /* hermes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F83ED9792A40549C00DD5C3F /* hermes.xcframework */; };
-		F83ED97B2A405C7800DD5C3F /* hermes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F83ED9792A40549C00DD5C3F /* hermes.xcframework */; };
-		F83ED97C2A405C7F00DD5C3F /* hermes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F83ED9792A40549C00DD5C3F /* hermes.xcframework */; };
-		F83ED97D2A405C8C00DD5C3F /* hermes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F83ED9792A40549C00DD5C3F /* hermes.xcframework */; };
 		F87E174F29771F200021550E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		F87E175029771F200021550E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		F87E175429771F200021550E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
@@ -234,7 +230,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F83ED97D2A405C8C00DD5C3F /* hermes.xcframework in Frameworks */,
 				A06F0AA8D839FA54E4D2B85E /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -243,7 +238,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F83ED97A2A40549C00DD5C3F /* hermes.xcframework in Frameworks */,
 				267CD9EC7B1005463F6AF600 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -252,7 +246,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F83ED97B2A405C7800DD5C3F /* hermes.xcframework in Frameworks */,
 				3710F3AC1042A3D0A45C1D34 /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -261,7 +254,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F83ED97C2A405C7F00DD5C3F /* hermes.xcframework in Frameworks */,
 				2B9BD7608A33C25F0A1AF80F /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
