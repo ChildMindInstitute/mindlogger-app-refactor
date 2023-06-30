@@ -89,7 +89,7 @@ function ActivityItem({
     case 'AbTest':
       item = (
         <Box flex={1} onPressIn={stopScrolling} onPressOut={releaseScrolling}>
-          <AbTest testData={pipelineItem.payload} onComplete={onResponse} />
+          <AbTest testData={pipelineItem.payload} onResponse={onResponse} />
         </Box>
       );
       break;

@@ -1,4 +1,5 @@
 import {
+  AbTestResponse,
   ActivityItemType,
   Answers,
   DrawingTestResponse,
@@ -33,6 +34,9 @@ import {
   DrawerAnswerDto,
   DrawerLineDto,
   StabilityTrackerAnswerDto,
+  AbTestAnswerDto,
+  AbLogLineDto,
+  AbLogPointDto,
 } from '@app/shared/api';
 import { HourMinute, convertToDayMonthYear } from '@app/shared/lib';
 import { Item } from '@app/shared/ui';
@@ -47,7 +51,10 @@ type TimeRange = {
 
 type StackedRadioAnswerValue = Array<Array<Item>>;
 
-export function mapAnswersToDto(pipeline: PipelineItem[], answers: Answers) {
+export function mapAnswersToDto(
+  pipeline: PipelineItem[],
+  answers: Answers,
+): AnswerDto[] {
   if (pipeline.some(x => x.type === 'Flanker')) {
     return mapFlankerAnswersToDto(pipeline, answers);
   }
@@ -73,7 +80,10 @@ export function mapAnswersToDto(pipeline: PipelineItem[], answers: Answers) {
   return answerDtos;
 }
 
-const mapFlankerAnswersToDto = (pipeline: PipelineItem[], answers: Answers) => {
+const mapFlankerAnswersToDto = (
+  pipeline: PipelineItem[],
+  answers: Answers,
+): AnswerDto[] => {
   const practiceSteps = pipeline
     .map((x, index) =>
       x.type === 'Flanker' && x.payload.blockType === 'practice' ? index : null,
@@ -366,6 +376,27 @@ function convertToStabilityTrackerAnswer(answer: Answer): AnswerDto {
   };
 }
 
+function convertToAbTestAnswer(answer: Answer): AnswerDto {
+  const abResponse = answer.answer as AbTestResponse;
+
+  const dto: AbTestAnswerDto = {
+    currentIndex: abResponse.currentIndex,
+    startTime: abResponse.startTime,
+    width: abResponse.width,
+    updated: abResponse.updated,
+    lines: abResponse.lines.map<AbLogLineDto>(x => ({
+      points: x.points.map<AbLogPointDto>(p => ({
+        ...p,
+        actual: p.actual ?? undefined,
+      })),
+    })),
+  };
+
+  return {
+    value: dto,
+  };
+}
+
 function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
   switch (type) {
     case 'TextInput':
@@ -424,6 +455,10 @@ function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
 
     case 'StabilityTracker':
       return convertToStabilityTrackerAnswer(answer);
+
+    case 'AbTest': {
+      return convertToAbTestAnswer(answer);
+    }
 
     default:
       return null;

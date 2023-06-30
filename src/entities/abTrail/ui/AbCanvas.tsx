@@ -33,7 +33,7 @@ type Props = {
   width: number;
   onLogResult: (data: OnResultLog) => void;
   onMessage: (message: MessageType) => void;
-  onComplete: (logLines: LogLine[]) => void;
+  onComplete: () => void;
 } & BoxProps;
 
 const AbCanvas: FC<Props> = props => {
@@ -53,7 +53,7 @@ const AbCanvas: FC<Props> = props => {
 
   const logLines = useRef<LogLine[]>([]).current;
 
-  const { testData, onLogResult, onMessage, onComplete, width, readonly } =
+  const { testData, onLogResult, onComplete, onMessage, width, readonly } =
     props;
 
   const canvasData = useMemo(
@@ -261,7 +261,7 @@ const AbCanvas: FC<Props> = props => {
         currentIndex: getCurrentIndex() + 1,
       });
       onMessage(MessageType.Completed);
-      onComplete(logLines);
+      onComplete();
       return;
     }
 

@@ -7,17 +7,11 @@ import { colors } from '@app/shared/lib';
 import { Box, BoxProps, Text, XStack } from '@app/shared/ui';
 
 import AbCanvas from './AbCanvas';
-import {
-  AbTestResponse,
-  LogLine,
-  MessageType,
-  MessageTypeStrings,
-} from '../lib';
+import { AbTestResult, MessageType, MessageTypeStrings } from '../lib';
 
 type Props = {
   testData: AbTestPayload;
-  onResponse?: (response: AbTestResponse) => void;
-  onComplete: (logLines: LogLine[]) => void;
+  onResponse?: (response: AbTestResult) => void;
 } & BoxProps;
 
 const ShapesRectPadding = 15;
@@ -27,7 +21,7 @@ const MessageTimeout = 2000;
 const AbTest: FC<Props> = props => {
   const { t } = useTranslation();
 
-  const { testData, onResponse, onComplete } = props;
+  const { testData, onResponse } = props;
 
   const [width, setWidth] = useState<number | null>(null);
 
@@ -72,9 +66,8 @@ const AbTest: FC<Props> = props => {
     return ' ';
   };
 
-  const complete = (logLines: LogLine[]) => {
+  const complete = () => {
     setCompleted(true);
-    onComplete(logLines);
   };
 
   return (
@@ -103,7 +96,7 @@ const AbTest: FC<Props> = props => {
             width={width}
             height={width}
             onLogResult={logData =>
-              onResponse?.({ ...logData, width, startTime })
+              onResponse?.({ ...logData, width, startTime, updated: true })
             }
             onMessage={msg => setMessage(msg)}
             onComplete={complete}
