@@ -95,6 +95,18 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
         answerItem => String(answerItem.value) === optionValue,
       );
     },
+
+    notIncludesOption(optionValue: string) {
+      if (currentAnswer?.answer == null) {
+        return false;
+      }
+
+      const answer = currentAnswer.answer as Item[];
+
+      return !answer.find(
+        answerItem => String(answerItem.value) === optionValue,
+      );
+    },
   };
 }
 

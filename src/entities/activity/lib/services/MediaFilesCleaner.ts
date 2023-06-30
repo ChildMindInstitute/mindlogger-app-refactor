@@ -71,7 +71,7 @@ const createMediaFilesCleaner = (): Result => {
 
   const cleanUpByAnswers = async (answers: AnswerDto[]) => {
     try {
-      answers.forEach(async answer => {
+      answers.filter(Boolean).forEach(async answer => {
         const { value: answerValue } = answer as ObjectAnswerDto;
 
         const mediaValue = answerValue as MediaValue;
