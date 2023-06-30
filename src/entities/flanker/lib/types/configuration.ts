@@ -1,49 +1,8 @@
-export type StringOrNull = string | null;
-
-export type FlankerConfiguration = {
-  stimulusTrials: Array<StimulusConfiguration>;
-  blocks: Array<BlockConfiguration>;
-  buttons: Array<ButtonConfiguration>;
-  nextButton: string;
-  fixationDuration: number;
-  fixationScreen: { value: string; image: string };
-  minimumAccuracy?: number;
-  sampleSize: number;
-  samplingMethod: SamplingMethod;
-  showFeedback: boolean;
-  showFixation: boolean;
-  showResults: boolean;
-  trialDuration: number;
-  isLastPractice: boolean;
-  isFirstPractice: boolean;
-  isLastTest: boolean;
-  blockType: BlockType;
-};
-
-export type SamplingMethod = 'randomize-order' | 'fixed-order';
-
-export type BlockType = 'test' | 'practice';
-
-type StimulusConfigId = string;
-
-export type StimulusConfiguration = {
-  id: StimulusConfigId;
-  image: StringOrNull;
-  text: string;
-  value: number | null;
-  weight?: number | null;
-};
-
-export type BlockConfiguration = {
-  name: string;
-  order: Array<StimulusConfigId>;
-};
-
-export type ButtonConfiguration = {
-  text: string;
-  image: StringOrNull;
-  value: number;
-};
+import {
+  SamplingMethod,
+  StimulusConfigId,
+  StringOrNull,
+} from '@app/abstract/lib';
 
 export type FlankerWebViewConfiguration = {
   trials: Array<TestTrial>;

@@ -11,7 +11,7 @@ import {
   UserActionDto,
   ActivityAnswersRequest,
 } from '@app/shared/api';
-import { MediaValue } from '@app/shared/ui';
+import { MediaFile } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
 import { encryption, wait } from '@shared/lib';
 
@@ -38,7 +38,7 @@ type Options = MutationOptions<typeof sendAnswers>;
 
 const isFileUrl = (value: string) => {
   const localFileRegex =
-    /^(file:\/\/|\/).*\/[^\/]+?\.(jpg|jpeg|png|gif|mp4|m4a|mov|MOV)$/;
+    /^(file:\/\/|\/).*\/[^\/]+?\.(jpg|jpeg|png|gif|mp4|m4a|mov|MOV|svg)$/;
 
   return localFileRegex.test(value);
 };
@@ -58,20 +58,30 @@ const uploadAnswerMediaFiles = async (body: SendAnswersInput) => {
 
     const { value: answerValue } = itemAnswer;
 
-    const mediaAnswer = answerValue as MediaValue;
+    const mediaAnswer = answerValue as MediaFile;
 
     const isMediaItem = mediaAnswer?.uri && isFileUrl(mediaAnswer.uri);
 
     if (isMediaItem) {
       const localFileExists = await FileSystem.exists(mediaAnswer.uri);
+
       if (localFileExists) {
         try {
-          const uploadResult = await FileService.upload(mediaAnswer);
+          const uploadResult = await FileService.upload({
+            fileName: mediaAnswer.fileName,
+            type: mediaAnswer.type,
+            uri: mediaAnswer.uri,
+          });
 
           const url = uploadResult?.data.result.url;
 
-          if (url) {
+          const isSvg = mediaAnswer.type === 'image/svg';
+
+          if (url && !isSvg) {
             updatedAnswers.push({ value: url });
+          } else if (url) {
+            (itemAnswer.value as MediaFile).uri = url;
+            updatedAnswers.push(itemAnswer);
           }
         } catch (error) {
           console.error(error);

@@ -45,10 +45,11 @@ type Props = {
   onStarted: () => void;
   onResult: (result: DrawResult) => void;
   width: number;
+  isDrawingActive: boolean;
 };
 
 const DrawingBoard: FC<Props> = props => {
-  const { value, onResult, onStarted, width } = props;
+  const { value, onResult, onStarted, width, isDrawingActive } = props;
 
   const isEmpty = !value.length;
 
@@ -141,7 +142,7 @@ const DrawingBoard: FC<Props> = props => {
       lines,
       svgString,
       width,
-    };
+    } as DrawResult;
 
     onResult(result);
   };
@@ -175,6 +176,10 @@ const DrawingBoard: FC<Props> = props => {
 
   const onDraw = useDrawCallback(
     (canvas, info) => {
+      if (!isDrawingActive) {
+        return;
+      }
+
       canvasRef.current = canvas;
 
       touchHandler(info.touches);
@@ -190,7 +195,7 @@ const DrawingBoard: FC<Props> = props => {
         updateShouldRestore();
       }
     },
-    [width, touchHandler],
+    [width, touchHandler, isDrawingActive],
   );
 
   return (
@@ -207,8 +212,8 @@ const DrawingBoard: FC<Props> = props => {
         <Canvas style={styles.canvas}>
           <Group>
             {paths.map((path, i) => (
-              <Group>
-                <Path key={i} path={path} strokeWidth={1} style="stroke" />
+              <Group key={i}>
+                <Path path={path} strokeWidth={1} style="stroke" />
               </Group>
             ))}
           </Group>

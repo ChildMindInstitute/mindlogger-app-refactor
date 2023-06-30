@@ -1,9 +1,7 @@
+import { FlankerItemSettings } from '@app/abstract/lib';
 import { ConditionalLogic } from '@app/entities/activity';
 import { DrawResult } from '@app/entities/drawer';
-import {
-  FlankerConfiguration,
-  FlankerGameResponse,
-} from '@app/entities/flanker';
+import { FlankerGameResponse } from '@app/entities/flanker';
 import { HourMinute } from '@app/shared/lib';
 import {
   Coordinates,
@@ -187,7 +185,7 @@ type CheckboxPayload = {
   }>;
 };
 
-export type FlankerPayload = FlankerConfiguration;
+export type FlankerPayload = FlankerItemSettings;
 
 type TextInputPayload = {
   maxLength: number;
@@ -278,7 +276,7 @@ export interface SliderPipelineItem extends PipelineItemBase {
 
 export interface FlankerPipelineItem extends PipelineItemBase {
   type: 'Flanker';
-  payload: FlankerConfiguration;
+  payload: FlankerPayload;
 }
 
 export interface TextInputPipelineItem extends PipelineItemBase {

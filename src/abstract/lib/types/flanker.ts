@@ -1,11 +1,15 @@
-import { BlockType, SamplingMethod } from '@app/abstract/lib';
+import { StringOrNull } from './primitive';
 
-export type StringOrNull = string | null;
+export type SamplingMethod = 'randomize-order' | 'fixed-order';
 
-export type FlankerItemSettingsDto = {
-  stimulusTrials: Array<StimulusConfigurationDto>;
-  blocks: Array<BlockConfigurationDto>;
-  buttons: Array<ButtonConfigurationDto>;
+export type BlockType = 'test' | 'practice';
+
+export type StimulusConfigId = string;
+
+export type FlankerItemSettings = {
+  stimulusTrials: Array<StimulusConfiguration>;
+  blocks: Array<BlockConfiguration>;
+  buttons: Array<ButtonConfiguration>;
   nextButton: string;
   fixationDuration: number;
   fixationScreen: { value: string; image: string };
@@ -22,9 +26,7 @@ export type FlankerItemSettingsDto = {
   blockType: BlockType;
 };
 
-type StimulusConfigId = string;
-
-export type StimulusConfigurationDto = {
+export type StimulusConfiguration = {
   id: StimulusConfigId;
   image: StringOrNull;
   text: string;
@@ -32,12 +34,12 @@ export type StimulusConfigurationDto = {
   weight?: number | null;
 };
 
-export type BlockConfigurationDto = {
+export type BlockConfiguration = {
   name: string;
   order: Array<StimulusConfigId>;
 };
 
-export type ButtonConfigurationDto = {
+export type ButtonConfiguration = {
   text: string;
   image: StringOrNull;
   value: number;

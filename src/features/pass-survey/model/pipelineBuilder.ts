@@ -1,6 +1,5 @@
 import { ActivityDetails, ActivityItem } from '@app/entities/activity';
 
-import { buildFlankerPipeline } from './flankerPipelineBuilder';
 import { getAbTrailsPipeline } from './precompiled-pipelines';
 import { PipelineItem } from '../lib';
 
@@ -43,10 +42,12 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
         }
 
         case 'Flanker': {
-          return buildFlankerPipeline(
-            item.config,
-            item.id,
-          ) satisfies PipelineItem[];
+          return {
+            id: item.id,
+            type: item.inputType,
+            payload: item.config,
+            timer: null,
+          } satisfies PipelineItem;
         }
 
         case 'TextInput': {

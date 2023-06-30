@@ -1,18 +1,18 @@
 import { FC, useEffect, useMemo, useRef } from 'react';
 import { NativeModules, StyleSheet } from 'react-native';
 
+import { FlankerItemSettings } from '@app/abstract/lib';
 import { Box } from '@app/shared/ui';
 
 import SwiftFlankerWrapper from './SwiftFlankerWrapper';
 import {
-  FlankerConfiguration,
   FlankerGameResponse,
   FlankerNativeIosLogRecord,
 } from '../../lib/types';
 import { ConfigurationBuilder, parseResponse } from '../../lib/utils';
 
 type Props = {
-  configuration: FlankerConfiguration;
+  configuration: FlankerItemSettings;
   onResult: (data: FlankerGameResponse) => void;
 };
 

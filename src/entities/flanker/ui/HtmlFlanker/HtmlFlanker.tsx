@@ -3,13 +3,10 @@ import { Platform, StyleSheet } from 'react-native';
 
 import WebView from 'react-native-webview';
 
+import { FlankerItemSettings } from '@app/abstract/lib';
 import { Box } from '@app/shared/ui';
 
-import {
-  FlankerConfiguration,
-  FlankerGameResponse,
-  FlankerWebViewLogRecord,
-} from '../../lib/types';
+import { FlankerGameResponse, FlankerWebViewLogRecord } from '../../lib/types';
 import {
   ConfigurationBuilder,
   getScreensNumberPerTrial,
@@ -19,7 +16,7 @@ import {
 const htmlAsset = require('./visual-stimulus-response.html');
 
 type Props = {
-  configuration: FlankerConfiguration;
+  configuration: FlankerItemSettings;
   onResult: (data: FlankerGameResponse) => void;
 };
 

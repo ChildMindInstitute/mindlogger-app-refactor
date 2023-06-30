@@ -1,8 +1,3 @@
-export type Point = {
-  x: number;
-  y: number;
-};
-
 export const enum MessageType {
   NotDefined = 0,
   IncorrectStartPoint = 1,

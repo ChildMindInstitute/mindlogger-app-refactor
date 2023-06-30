@@ -1,13 +1,15 @@
-import { shuffle } from '@app/shared/lib';
-
 import {
   BlockConfiguration,
   ButtonConfiguration,
-  FlankerConfiguration,
-  FlankerWebViewConfiguration,
+  FlankerItemSettings,
   SamplingMethod,
   StimulusConfiguration,
   StringOrNull,
+} from '@app/abstract/lib';
+import { shuffle } from '@app/shared/lib';
+
+import {
+  FlankerWebViewConfiguration,
   TestChoice,
   StimulusScreen,
   TestTrial,
@@ -16,11 +18,11 @@ import {
 
 type ConfigurationBuilder = {
   buildForWebView: (
-    configuration: FlankerConfiguration,
+    configuration: FlankerItemSettings,
   ) => FlankerWebViewConfiguration;
 
   buildForNativeIOS: (
-    configuration: FlankerConfiguration,
+    configuration: FlankerItemSettings,
   ) => FlankerNativeIOSConfiguration;
 
   parseToWebViewConfigString: (
@@ -135,7 +137,7 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
   };
 
   const build = (
-    configuration: FlankerConfiguration,
+    configuration: FlankerItemSettings,
     isWebView: boolean,
   ): FlankerNativeIOSConfiguration | FlankerWebViewConfiguration => {
     const fixation: string = isWebView
@@ -197,13 +199,13 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
   };
 
   const buildForNativeIOS = (
-    configuration: FlankerConfiguration,
+    configuration: FlankerItemSettings,
   ): FlankerNativeIOSConfiguration => {
     return build(configuration, false);
   };
 
   const buildForWebView = (
-    configuration: FlankerConfiguration,
+    configuration: FlankerItemSettings,
   ): FlankerWebViewConfiguration => {
     return build(configuration, true);
   };

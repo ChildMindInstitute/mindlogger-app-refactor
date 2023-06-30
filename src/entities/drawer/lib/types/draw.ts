@@ -1,3 +1,5 @@
+import { MediaFile } from '@app/shared/ui';
+
 export type Point = {
   x: number;
   y: number;
@@ -16,7 +18,7 @@ export type DrawResult = {
   lines: DrawLine[];
   svgString: string;
   width: number;
-};
+} & MediaFile;
 
 export type CachedBezierItem = {
   original: Point;

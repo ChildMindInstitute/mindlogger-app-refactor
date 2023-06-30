@@ -1,6 +1,8 @@
 import {
   ActivityItemType,
   Answers,
+  DrawingTestResponse,
+  FlankerResponse,
   PipelineItem,
   PipelineItemAnswer,
   StackedRadioResponse,
@@ -25,6 +27,10 @@ import {
   TimeRangeAnswerDto,
   VideoAnswerDto,
   UserActionDto,
+  FlankerAnswerRecordDto,
+  ObjectAnswerDto,
+  DrawerAnswerDto,
+  DrawerLineDto,
 } from '@app/shared/api';
 import { HourMinute, convertToDayMonthYear } from '@app/shared/lib';
 import { Item } from '@app/shared/ui';
@@ -40,6 +46,10 @@ type TimeRange = {
 type StackedRadioAnswerValue = Array<Array<Item>>;
 
 export function mapAnswersToDto(pipeline: PipelineItem[], answers: Answers) {
+  if (pipeline.some(x => x.type === 'Flanker')) {
+    return mapFlankerAnswersToDto(pipeline, answers);
+  }
+
   const answerDtos: Array<AnswerDto> = [];
 
   pipeline.forEach((pipelineItem, step) => {
@@ -57,6 +67,50 @@ export function mapAnswersToDto(pipeline: PipelineItem[], answers: Answers) {
 
   return answerDtos;
 }
+
+const mapFlankerAnswersToDto = (pipeline: PipelineItem[], answers: Answers) => {
+  const practiceSteps = pipeline
+    .map((x, index) =>
+      x.type === 'Flanker' && x.payload.blockType === 'practice' ? index : null,
+    )
+    .filter(x => x !== null)
+    .map(x => x!);
+
+  const firstPracticeAnswer = answers[practiceSteps[0]];
+
+  const firstAnswerDto: AnswerDto = convertToAnswerDto(
+    'Flanker',
+    firstPracticeAnswer,
+  );
+
+  const restOfAnswerDtos = practiceSteps
+    .filter(x => x !== practiceSteps[0])
+    .filter(x => !!answers[x])
+    .map(x => convertToAnswerDto('Flanker', answers[x]));
+
+  for (let practiceAnswerDto of restOfAnswerDtos) {
+    const records = (practiceAnswerDto as ObjectAnswerDto)
+      .value as Array<FlankerAnswerRecordDto>;
+
+    const firstItemRecords = (firstAnswerDto as ObjectAnswerDto)
+      .value as Array<FlankerAnswerRecordDto>;
+
+    firstItemRecords.push(...records);
+  }
+
+  return pipeline.map<AnswerDto | null>((pipelineItem, step) => {
+    if (step === practiceSteps[0]) {
+      return firstAnswerDto;
+    } else if (practiceSteps.includes(step)) {
+      return null;
+    }
+
+    const answer = answers[step] ?? null;
+    return answer === null
+      ? null
+      : convertToAnswerDto(pipelineItem.type, answer);
+  });
+};
 
 function convertToTextAnswer(answer: Answer): AnswerDto {
   return answer.answer as TextAnswerDto;
@@ -237,6 +291,47 @@ function convertToAudioPlayerAnswer(answer: Answer): AnswerDto {
   };
 }
 
+function convertToFlankerAnswer(answer: Answer): AnswerDto {
+  const gameResponse = answer.answer as FlankerResponse;
+
+  const recordDtos = gameResponse.records.map<FlankerAnswerRecordDto>(x => ({
+    button_pressed: x.buttonPressed,
+    correct: x.correct,
+    duration: x.duration,
+    offset: x.offset,
+    question: x.question,
+    response_touch_timestamp: x.responseTouchTimestamp,
+    start_time: x.startTime,
+    start_timestamp: x.startTimestamp,
+    tag: x.tag,
+    trial_index: x.trialIndex,
+  }));
+
+  return {
+    value: recordDtos,
+  };
+}
+
+function convertToDrawerAnswer(answer: Answer): AnswerDto {
+  const drawerResponse = answer.answer as DrawingTestResponse;
+
+  const dto: DrawerAnswerDto = {
+    svgString: drawerResponse.svgString,
+    width: drawerResponse.width,
+    fileName: drawerResponse.fileName,
+    type: drawerResponse.type,
+    uri: drawerResponse.uri,
+    lines: drawerResponse.lines.map<DrawerLineDto>(x => ({
+      startTime: x.startTime,
+      points: x.points,
+    })),
+  };
+
+  return {
+    value: dto,
+  };
+}
+
 function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
   switch (type) {
     case 'TextInput':
@@ -286,6 +381,12 @@ function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
 
     case 'AudioPlayer':
       return convertToAudioPlayerAnswer(answer);
+
+    case 'Flanker':
+      return convertToFlankerAnswer(answer);
+
+    case 'DrawingTest':
+      return convertToDrawerAnswer(answer);
 
     default:
       return null;
