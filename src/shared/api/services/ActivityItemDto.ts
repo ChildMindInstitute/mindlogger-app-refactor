@@ -47,7 +47,7 @@ type IncludesOptionConditionDto = {
   itemName: string;
   type: 'INCLUDES_OPTION';
   payload: {
-    optionId: string;
+    optionValue: string;
   };
 };
 
@@ -55,7 +55,7 @@ type NotIncludesOptionConditionDto = {
   itemName: string;
   type: 'NOT_INCLUDES_OPTION';
   payload: {
-    optionId: string;
+    optionValue: string;
   };
 };
 
@@ -63,7 +63,7 @@ type EqualToOptionConditionDto = {
   itemName: string;
   type: 'EQUAL_TO_OPTION';
   payload: {
-    optionId: string;
+    optionValue: string;
   };
 };
 
@@ -71,7 +71,7 @@ type NotEqualToOptionConditionDto = {
   itemName: string;
   type: 'NOT_EQUAL_TO_OPTION';
   payload: {
-    optionId: string;
+    optionValue: string;
   };
 };
 

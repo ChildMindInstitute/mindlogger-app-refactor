@@ -21,7 +21,7 @@ type IncludesOptionCondition = {
   activityItemName: string;
   type: 'INCLUDES_OPTION';
   payload: {
-    optionId: string;
+    optionValue: string;
   };
 };
 
@@ -29,7 +29,7 @@ type NotIncludesOptionCondition = {
   activityItemName: string;
   type: 'NOT_INCLUDES_OPTION';
   payload: {
-    optionId: string;
+    optionValue: string;
   };
 };
 
@@ -37,7 +37,7 @@ type EqualToOptionCondition = {
   activityItemName: string;
   type: 'EQUAL_TO_OPTION';
   payload: {
-    optionId: string;
+    optionValue: string;
   };
 };
 
@@ -45,7 +45,7 @@ type NotEqualToOptionCondition = {
   activityItemName: string;
   type: 'NOT_EQUAL_TO_OPTION';
   payload: {
-    optionId: string;
+    optionValue: string;
   };
 };
 
