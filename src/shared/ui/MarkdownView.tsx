@@ -42,8 +42,4 @@ const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
   );
 };
 
-function areEqual(prevProps: Props, nextProps: Props) {
-  return nextProps.content !== prevProps.content;
-}
-
-export default React.memo(MarkdownView, areEqual);
+export default MarkdownView; // @todo was the memo a good idea?

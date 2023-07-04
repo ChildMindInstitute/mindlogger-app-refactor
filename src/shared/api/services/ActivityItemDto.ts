@@ -22,6 +22,7 @@ export type ResponseType =
   | 'audioPlayer'
   | 'flanker'
   | 'abTest'
+  | 'stabilityTracker'
   | 'time';
 
 type Match = 'any' | 'all';
@@ -390,6 +391,16 @@ type AbTestAnswerSettings = {
 
 export type FlankerConfiguration = FlankerItemSettingsDto;
 
+type StabilityTrackerAnswerSettings = null;
+
+type StabilityTrackerConfiguration = {
+  lambdaSlope: number;
+  durationMinutes: number;
+  trialsNumber: number;
+  userInputType: 'gyroscope' | 'touch';
+  phase: 'practice' | 'test';
+};
+
 export type FlankerAnswerSettings = null;
 
 type Configuration =
@@ -412,6 +423,7 @@ type Configuration =
   | SingleSelectionConfiguration
   | MultiSelectionConfiguration
   | AbTestConfiguration
+  | StabilityTrackerConfiguration
   | FlankerConfiguration;
 
 type AnswerSettings =
@@ -433,6 +445,7 @@ type AnswerSettings =
   | SingleSelectionAnswerSettings
   | MultiSelectionAnswerSettings
   | AbTestAnswerSettings
+  | StabilityTrackerAnswerSettings
   | FlankerAnswerSettings;
 
 type ActivityItemDtoBase = {
@@ -562,6 +575,12 @@ export interface AbTestItemDto extends ActivityItemDtoBase {
   responseValues: AbTestAnswerSettings;
 }
 
+export interface StabilityTrackerItemDto extends ActivityItemDtoBase {
+  responseType: 'stabilityTracker';
+  config: StabilityTrackerConfiguration;
+  responseValues: StabilityTrackerAnswerSettings;
+}
+
 export interface FlankerItemDto extends ActivityItemDtoBase {
   responseType: 'flanker';
   config: FlankerConfiguration;
@@ -587,5 +606,6 @@ export type ActivityItemDto =
   | AudioItemDto
   | AudioPlayerItemDto
   | AbTestItemDto
+  | StabilityTrackerItemDto
   | FlankerItemDto
   | TimeItemDto;

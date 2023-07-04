@@ -8,6 +8,7 @@ import {
   ActivityDto,
   DrawingItemDto,
   AbTestItemDto,
+  StabilityTrackerItemDto,
   AudioItemDto,
   AudioPlayerItemDto,
   DateItemDto,
@@ -108,6 +109,32 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
     isAbleToMoveBack: false,
     hasTextResponse: false,
     canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+  };
+}
+
+function mapToStabilityTracker(dto: StabilityTrackerItemDto): ActivityItem {
+  return {
+    id: dto.id,
+    name: dto.name,
+    inputType: 'StabilityTracker',
+    config: {
+      lambdaSlope: dto.config.lambdaSlope,
+      durationMinutes: dto.config.durationMinutes,
+      trialsNumber: dto.config.trialsNumber,
+      userInputType: dto.config.userInputType,
+      phase: dto.config.phase,
+    },
+    timer: null,
+    order: dto.order,
+    question: dto.question,
+    isSkippable: false,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: true,
+    hasTextResponse: false,
+    canBeReset: true,
     hasTopNavigation: false,
     isHidden: dto.isHidden,
   };
@@ -617,6 +644,8 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
       switch (item.responseType) {
         case 'abTest':
           return mapToAbTest(item);
+        case 'stabilityTracker':
+          return mapToStabilityTracker(item);
         case 'audio':
           return mapToAudio(item);
         case 'audioPlayer':

@@ -10,6 +10,7 @@ import {
   StackedRowItemValue,
 } from '@app/shared/ui';
 import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
+import { StabilityTrackerResponse as StabilityTrackerBaseResponse } from '@entities/stabilityTracker';
 import { MediaFile } from '@shared/ui';
 import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
 
@@ -17,6 +18,7 @@ import { Tutorial } from './tutorial';
 
 export type ActivityItemType =
   | 'AbTest'
+  | 'StabilityTracker'
   | 'DrawingTest'
   | 'Tutorial'
   | 'Splash'
@@ -42,6 +44,14 @@ export type ActivityItemType =
 type AbTestPayload = {
   testIndex: TestIndex;
   deviceType: DeviceType;
+};
+
+type StabilityTrackerPayload = {
+  phase: 'practice' | 'test';
+  lambdaSlope: number;
+  durationMinutes: number;
+  trialsNumber: number;
+  userInputType: 'gyroscope' | 'touch';
 };
 
 type SplashPayload = { imageUrl: string };
@@ -208,6 +218,7 @@ type VideoPayload = null;
 
 type PipelinePayload =
   | AbTestPayload
+  | StabilityTrackerPayload
   | SplashPayload
   | Tutorial
   | DrawingPayload
@@ -252,6 +263,10 @@ type PipelineItemBase = {
 export interface AbTestPipelineItem extends PipelineItemBase {
   type: 'AbTest';
   payload: AbTestPayload;
+}
+export interface StabilityTrackerPipelineItem extends PipelineItemBase {
+  type: 'StabilityTracker';
+  payload: StabilityTrackerPayload;
 }
 
 export interface SplashPipelineItem extends PipelineItemBase {
@@ -355,6 +370,8 @@ export interface TimePipelineItem extends PipelineItemBase {
 
 export type AbTestResponse = LogLine[];
 
+export type StabilityTrackerResponse = StabilityTrackerBaseResponse;
+
 export type DrawingTestResponse = DrawResult;
 
 export type FlankerResponse = FlankerGameResponse;
@@ -406,6 +423,7 @@ export type VideoResponse = MediaFile & {
 
 export type PipelineItemResponse =
   | AbTestResponse
+  | StabilityTrackerResponse
   | FlankerResponse
   | DrawingTestResponse
   | TextInputResponse
@@ -426,6 +444,7 @@ export type PipelineItemResponse =
 
 export type PipelineItem =
   | AbTestPipelineItem
+  | StabilityTrackerPipelineItem
   | SplashPipelineItem
   | TutorialPipelineItem
   | DrawingTestPipelineItem

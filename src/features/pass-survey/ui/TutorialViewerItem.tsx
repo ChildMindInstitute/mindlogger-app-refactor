@@ -6,11 +6,7 @@ type AbTutorialProps = {
   type: 'AbTrails';
 } & AbTutorialViewerProps;
 
-type GyroscopeProps = {
-  type: 'Gyroscope';
-} & {};
-
-type Props = AbTutorialProps | GyroscopeProps;
+type Props = AbTutorialProps;
 
 export type TutorialViewerRef = {
   next: () => boolean;

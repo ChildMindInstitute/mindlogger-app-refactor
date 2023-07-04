@@ -74,6 +74,20 @@ function useActivityState({
     });
   }
 
+  function setContext(contextKey: string, contextValue: unknown) {
+    if (!activityStorageRecord) {
+      return;
+    }
+
+    upsertActivityStorageRecord({
+      ...activityStorageRecord,
+      context: {
+        ...activityStorageRecord.context,
+        [contextKey]: contextValue,
+      },
+    });
+  }
+
   function setAdditionalAnswer(step: number, answer: string) {
     if (!activityStorageRecord) {
       return;
@@ -157,6 +171,7 @@ function useActivityState({
     setTimer,
     removeTimer,
     trackUserAction,
+    setContext,
   };
 }
 

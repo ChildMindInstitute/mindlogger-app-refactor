@@ -20,6 +20,7 @@ import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
+import { StabilityTracker } from '@entities/stabilityTracker';
 import { IS_ANDROID } from '@shared/lib';
 import {
   RadioActivityItem,
@@ -43,6 +44,8 @@ type Props = ActivityItemProps &
     onResponse: (response: PipelineItemResponse) => void;
     onAdditionalResponse: (response: string) => void;
     textVariableReplacer: (markdown: string) => string;
+    onContextChange: (contextKey: string, contextValue: unknown) => void;
+    context: Record<string, unknown>;
   };
 
 function ActivityItem({
@@ -52,8 +55,12 @@ function ActivityItem({
   onResponse,
   onAdditionalResponse,
   textVariableReplacer,
+  onContextChange,
+  context,
 }: Props) {
-  const [scrollEnabled, setScrollEnabled] = useState(true);
+  const [scrollEnabled, setScrollEnabled] = useState(
+    type !== 'StabilityTracker',
+  );
 
   const { next } = useContext(HandlersContext);
 
@@ -83,6 +90,22 @@ function ActivityItem({
       item = (
         <Box flex={1} onPressIn={stopScrolling} onPressOut={releaseScrolling}>
           <AbTest {...pipelineItem.payload} onComplete={onResponse} />
+        </Box>
+      );
+      break;
+
+    case 'StabilityTracker':
+      item = (
+        <Box flex={1}>
+          <StabilityTracker
+            config={pipelineItem.payload}
+            onComplete={response => {
+              onResponse(response);
+              moveToNextItem();
+            }}
+            onMaxLambdaChange={onContextChange}
+            maxLambda={context?.maxLambda as number}
+          />
         </Box>
       );
       break;
