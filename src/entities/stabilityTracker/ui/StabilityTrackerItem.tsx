@@ -221,8 +221,9 @@ const StabilityTrackerItemScreen = (props: Props) => {
     boundWasHit.current = false;
 
     onComplete({
-      score: score.current,
-      responses: responses.current,
+      maxLambda: latestMaxLambda,
+      value: responses.current,
+      phaseType: config.phase,
     });
 
     onMaxLambdaChange('maxLambda', latestMaxLambda);

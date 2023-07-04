@@ -73,6 +73,20 @@ export type GeolocationAnswerDto = {
   longitude: number;
 };
 
+export type StabilityTrackerAnswerDto = {
+  value: {
+    timestamp: number;
+    stimPos: number[];
+    userPos: number[];
+    targetPos: number[];
+    lambda: number;
+    score: number;
+    lambdaSlope: number;
+  }[];
+  maxLambda: number;
+  phaseType: 'challenge-phase' | 'focus-phase';
+};
+
 export type AnswerValueDto =
   | SliderAnswerDto
   | NumberSelectAnswerDto
@@ -89,6 +103,7 @@ export type AnswerValueDto =
   | TimeAnswerDto
   | DateAnswerDto
   | GeolocationAnswerDto
+  | StabilityTrackerAnswerDto
   | FlankerAnswerDto
   | DrawerAnswerDto
   | null;

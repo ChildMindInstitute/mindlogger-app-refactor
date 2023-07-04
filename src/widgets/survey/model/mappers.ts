@@ -7,6 +7,7 @@ import {
   PipelineItemAnswer,
   StackedRadioResponse,
   UserAction,
+  StabilityTrackerResponse,
 } from '@app/features/pass-survey';
 import {
   AnswerDto,
@@ -31,6 +32,7 @@ import {
   ObjectAnswerDto,
   DrawerAnswerDto,
   DrawerLineDto,
+  StabilityTrackerAnswerDto,
 } from '@app/shared/api';
 import { HourMinute, convertToDayMonthYear } from '@app/shared/lib';
 import { Item } from '@app/shared/ui';
@@ -337,6 +339,33 @@ function convertToDrawerAnswer(answer: Answer): AnswerDto {
   };
 }
 
+function convertToStabilityTrackerAnswer(answer: Answer): AnswerDto {
+  const stabilityTrackerResponse = answer.answer as StabilityTrackerResponse;
+
+  const values = stabilityTrackerResponse.value.map(x => ({
+    timestamp: x.timestamp,
+    stimPos: x.circlePosition,
+    targetPos: x.targetPosition,
+    userPos: x.userPosition,
+    score: x.score,
+    lambda: x.lambda,
+    lambdaSlope: x.lambdaSlope,
+  }));
+
+  const dto: StabilityTrackerAnswerDto = {
+    value: values,
+    maxLambda: stabilityTrackerResponse.maxLambda,
+    phaseType:
+      stabilityTrackerResponse.phaseType === 'test'
+        ? 'challenge-phase'
+        : 'focus-phase',
+  };
+
+  return {
+    value: dto,
+  };
+}
+
 function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
   switch (type) {
     case 'TextInput':
@@ -392,6 +421,9 @@ function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
 
     case 'DrawingTest':
       return convertToDrawerAnswer(answer);
+
+    case 'StabilityTracker':
+      return convertToStabilityTrackerAnswer(answer);
 
     default:
       return null;

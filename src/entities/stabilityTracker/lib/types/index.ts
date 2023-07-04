@@ -9,8 +9,9 @@ export type Response = {
 };
 
 export type StabilityTrackerResponse = {
-  score: number;
-  responses: Response[];
+  maxLambda: number;
+  value: Response[];
+  phaseType: 'test' | 'practice';
 };
 
 export enum TargetInCircleStatus {
