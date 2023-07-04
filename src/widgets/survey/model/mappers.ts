@@ -58,8 +58,11 @@ export function mapAnswersToDto(pipeline: PipelineItem[], answers: Answers) {
 
     if (canHaveAnswer) {
       const answer = answers[step] ?? null;
+
       const dto =
-        answer === null ? null : convertToAnswerDto(pipelineItem.type, answer);
+        answer === null || answer?.answer === null
+          ? null
+          : convertToAnswerDto(pipelineItem.type, answer);
 
       answerDtos.push(dto);
     }
@@ -138,7 +141,9 @@ function convertToSliderAnswer(answer: Answer): AnswerDto {
 
 function convertToCheckboxAnswer(answer: Answer): AnswerDto {
   const checkboxAnswers = answer.answer as Item[];
-  const answerDto = checkboxAnswers.map(checkboxAnswer => checkboxAnswer.value);
+  const answerDto = checkboxAnswers?.map(
+    checkboxAnswer => checkboxAnswer.value,
+  );
 
   return {
     value: answerDto as CheckboxAnswerDto,
