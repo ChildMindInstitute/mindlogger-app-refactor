@@ -220,13 +220,14 @@ const StabilityTrackerItemScreen = (props: Props) => {
     lambdaSlope.current = config?.lambdaSlope;
     boundWasHit.current = false;
 
+    onMaxLambdaChange('maxLambda', latestMaxLambda);
+
     onComplete({
       maxLambda: latestMaxLambda,
       value: responses.current,
       phaseType: config.phase,
     });
 
-    onMaxLambdaChange('maxLambda', latestMaxLambda);
     score.current = 0;
   };
 
