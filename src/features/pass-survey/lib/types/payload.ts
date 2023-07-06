@@ -365,6 +365,8 @@ export interface TimePipelineItem extends PipelineItemBase {
 
 export type StabilityTrackerResponse = StabilityTrackerBaseResponse;
 
+export type AbTestResponse = AbTestResult;
+
 export type DrawingTestResponse = DrawResult;
 
 export type FlankerResponse = FlankerGameResponse;
