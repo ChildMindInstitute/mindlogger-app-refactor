@@ -250,7 +250,7 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
-    flavorDimensions "default", "env"
+    flavorDimensions "env"
     productFlavors {
         dev {
             resValue "string", "app_name", "Mindlogger Dev"
