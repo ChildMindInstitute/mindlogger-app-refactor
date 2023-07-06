@@ -4,7 +4,7 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 import {
   ActivityAnalyticsList,
-  useAppletAnalytics,
+  useAppletAnalyticsQuery,
 } from '@app/entities/applet';
 import { Box, HorizontalCalendar } from '@app/shared/ui';
 import { AppletDetailsParamList } from '@screens/config';
@@ -16,7 +16,7 @@ const AppletDataScreen: FC<Props> = ({ route }) => {
     params: { appletId },
   } = route;
 
-  const { data: appletAnalytics } = useAppletAnalytics(appletId, {
+  const { data: appletAnalytics } = useAppletAnalyticsQuery(appletId, {
     select: response => response?.data.result,
   });
 

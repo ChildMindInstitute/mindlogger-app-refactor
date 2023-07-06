@@ -1,17 +1,25 @@
 import {
   ActivityFlowRecordDto,
   ActivityRecordDto,
+  ActivityResponsesDto,
+  AnalyticsResponseType,
+  AppletAnalyticsDto,
   AppletDetailsDto,
   AppletDto,
+  ItemResponsesDto,
+  ResponseAnalyticsDto,
   ThemeDto,
 } from '@app/shared/api';
 
 import {
   Activity,
   ActivityFlow,
+  ActivityResponses,
   Applet,
+  AppletAnalytics,
   AppletDetails,
   AppletTheme,
+  ItemResponses,
 } from '../lib';
 
 export function mapThemeFromDto(dto: ThemeDto | null): AppletTheme | null {
@@ -84,4 +92,46 @@ export function mapApplets(dto: AppletDto[]): Applet[] {
     theme: x.theme,
     numberOverdue: 0,
   }));
+}
+
+export function mapAnalyticsData(
+  type: AnalyticsResponseType,
+  data: ResponseAnalyticsDto,
+) {
+  switch (type) {
+    case 'multiSelect':
+    case 'singleSelect':
+    case 'slider':
+      return data.map(d => ({ date: new Date(d.date), value: d.value }));
+  }
+}
+
+export function mapItemResponses(
+  dtos: Array<ItemResponsesDto>,
+): Array<ItemResponses> {
+  return dtos.map(r => ({
+    name: r.name,
+    type: r.type,
+    responseConfig: r.responseConfig,
+    data: mapAnalyticsData(r.type, r.data),
+  }));
+}
+
+export function mapActivitiesResponses(
+  dtos?: Array<ActivityResponsesDto>,
+): Array<ActivityResponses> | null {
+  return !dtos
+    ? null
+    : dtos.map(r => ({
+        id: r.id,
+        name: r.name,
+        responses: mapItemResponses(r.responses),
+      }));
+}
+
+export function mapAppletAnalytics(dto: AppletAnalyticsDto): AppletAnalytics {
+  return {
+    id: dto.appletId,
+    activitiesResponses: mapActivitiesResponses(dto.activitiesResponses),
+  };
 }

@@ -2,10 +2,7 @@ import { FC, useCallback, useMemo } from 'react';
 
 import { VictoryAxis, VictoryChart, VictoryScatter } from 'victory-native';
 
-import {
-  ResponseConfig,
-  SelectionsResponseConfig,
-} from '@app/shared/api/services/AppletAnalyticsDto';
+import { ResponseConfig, SelectionsResponseConfig } from '@shared/api';
 import {
   areDatesEqual,
   colors,

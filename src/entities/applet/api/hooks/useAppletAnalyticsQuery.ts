@@ -4,7 +4,7 @@ import { AppletAnalyticsService } from '@app/shared/api/services/appletAnalytics
 type FetchFn = typeof AppletAnalyticsService.getActivityAnalytics;
 type Options<TData> = QueryOptions<FetchFn, TData>;
 
-export const useAppletAnalytics = <TData = ReturnAwaited<FetchFn>>(
+export const useAppletAnalyticsQuery = <TData = ReturnAwaited<FetchFn>>(
   appletId: string,
   options?: Options<TData>,
 ) => {

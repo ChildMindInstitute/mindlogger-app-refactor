@@ -50,19 +50,17 @@ export type AppletDetails = {
   encryption: AppletEncryptionDTO | null;
 };
 
-export type AnalyticsChartItem = {
+export type AnalyticsItemValue = {
   date: Date;
   value: number;
 };
 
-export type ResponseAnalyticsDto = Array<AnalyticsChartItem>;
-
-export type ResponseAnalytics = {};
+export type ResponseAnalyticsValue = Array<AnalyticsItemValue>;
 
 export type ItemResponses = {
   name: string;
   type: AnalyticsResponseType;
-  data: ResponseAnalytics;
+  data: ResponseAnalyticsValue;
   responseConfig: ResponseConfig;
 };
 
@@ -74,5 +72,5 @@ export type ActivityResponses = {
 
 export type AppletAnalytics = {
   id: string;
-  activitiesResponses?: Array<ActivityResponses>;
+  activitiesResponses: Array<ActivityResponses> | null;
 };

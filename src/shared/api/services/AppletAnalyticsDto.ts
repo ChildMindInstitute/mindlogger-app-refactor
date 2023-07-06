@@ -1,11 +1,11 @@
 export type AnalyticsResponseType = 'singleSelect' | 'multiSelect' | 'slider';
 
-export type ChartItemDto = {
+export type AnalyticsItemValue = {
   date: string;
   value: number;
 };
 
-export type ResponseAnalyticsDto = Array<ChartItemDto>;
+export type ResponseAnalyticsDto = Array<AnalyticsItemValue>;
 
 export type SelectionsResponseConfig = {
   options: Array<{ name: string; value: number }>;

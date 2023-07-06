@@ -18,8 +18,8 @@ type ActivityAnalyticsRequest = {
 
 function appletAnalyticsService() {
   return {
+    // eslint-disable-next-line
     async getActivityAnalytics(request: ActivityAnalyticsRequest) {
-      console.info('[Analytics]: requested for ', request.appletId);
       if (mockAnalytics) {
         const response: FakeResponse = {
           status: 200,
