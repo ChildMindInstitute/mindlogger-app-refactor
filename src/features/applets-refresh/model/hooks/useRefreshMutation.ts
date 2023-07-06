@@ -167,7 +167,7 @@ class RefreshService {
       const isOnline = await isAppOnline();
 
       if (!isOnline) {
-        setTimeout(onNetworkUnavailable, 300);
+        onNetworkUnavailable();
         return;
       }
 
