@@ -1,13 +1,13 @@
 import { FC } from 'react';
 
 import { styled } from '@tamagui/core';
-import { useTranslation } from 'react-i18next';
 
-import { Activity } from '@entities/applet';
-import { Center, Text } from '@shared/ui';
+import { AnalyticsChart } from '@app/features/analytics-chart';
+import { ActivityResponsesDto } from '@shared/api';
+import { Box, Center, Text } from '@shared/ui';
 
 type Props = {
-  activity: Activity;
+  responseData: ActivityResponsesDto;
 };
 
 const ActivityCardContainer = styled(Center, {
@@ -16,23 +16,21 @@ const ActivityCardContainer = styled(Center, {
   backgroundColor: '$white',
 });
 
-const ActivityAnalyticsCard: FC<Props> = ({ activity }) => {
-  const isResponseDataAvailable = false; // @todo remove when activity answers api will be available
-  const { t } = useTranslation();
-
+const ActivityAnalyticsCard: FC<Props> = ({ responseData }) => {
   return (
     <ActivityCardContainer>
-      <Text fontSize={30}>{activity.name}</Text>
+      <Text fontSize={30}>{responseData.name}</Text>
 
-      <Text color="$tertiary" fontWeight="500" fontSize={15}>
-        {activity.description}
-      </Text>
-
-      {!isResponseDataAvailable && (
-        <Text p={20} fontWeight="400">
-          {t('applet_data:title')}
-        </Text>
-      )}
+      {responseData.responses?.map(response => (
+        <Box pt={10} pb={10}>
+          <AnalyticsChart
+            title={response.name}
+            responseType={response.type}
+            responseConfig={response.responseConfig}
+            data={response.data}
+          />
+        </Box>
+      ))}
     </ActivityCardContainer>
   );
 };
