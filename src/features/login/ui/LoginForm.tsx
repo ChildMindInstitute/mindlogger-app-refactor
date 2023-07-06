@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { SystemRecord } from '@app/shared/lib/records';
 import { IdentityModel, useLoginMutation } from '@entities/identity';
 import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
@@ -48,7 +49,7 @@ const LoginForm: FC<Props> = props => {
 
       dispatch(IdentityModel.actions.onAuthSuccess(user));
 
-      UserInfoRecord.set(user.email);
+      UserInfoRecord.setEmail(user.email);
 
       SessionModel.storeSession(session);
 
@@ -62,7 +63,12 @@ const LoginForm: FC<Props> = props => {
       password: '',
     },
     onSubmitSuccess: data => {
-      executeIfOnline(() => login(data));
+      executeIfOnline(() => {
+        login({
+          ...data,
+          deviceId: SystemRecord.getDeviceId(),
+        });
+      });
     },
   });
 
