@@ -2,15 +2,32 @@ import { FC } from 'react';
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
+import {
+  ActivityAnalyticsList,
+  useAppletAnalyticsQuery,
+} from '@app/entities/applet';
+import { mapAppletAnalytics } from '@app/entities/applet/model';
 import { Box, HorizontalCalendar } from '@app/shared/ui';
 import { AppletDetailsParamList } from '@screens/config';
 
 type Props = BottomTabScreenProps<AppletDetailsParamList, 'Data'>;
 
-const AppletDataScreen: FC<Props> = () => {
+const AppletDataScreen: FC<Props> = ({ route }) => {
+  const {
+    params: { appletId },
+  } = route;
+
+  const { data: appletAnalytics } = useAppletAnalyticsQuery(appletId, {
+    select: response => mapAppletAnalytics(response?.data.result),
+  });
+
   return (
-    <Box flex={1}>
+    <Box flexGrow={1}>
       <HorizontalCalendar mt={8} />
+
+      <ActivityAnalyticsList
+        activitiesResponses={appletAnalytics?.activitiesResponses ?? []}
+      />
     </Box>
   );
 };
