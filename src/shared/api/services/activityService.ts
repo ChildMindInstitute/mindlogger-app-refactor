@@ -43,11 +43,6 @@ function activityService() {
         const response = await httpService.get<ActivityResponse>(
           `/activities/${id}`,
         );
-        console.log(
-          'response!',
-          response.data.result.name,
-          response.data.result,
-        );
         return response;
       }
     },
