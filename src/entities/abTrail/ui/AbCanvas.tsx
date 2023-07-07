@@ -279,10 +279,6 @@ const AbCanvas: FC<Props> = props => {
       setErrorPath(currentPath);
       resetCurrentPath();
       setFlareGreenPointIndex({ index: getCurrentIndex() });
-      onLogResult({
-        lines: logLines,
-        currentIndex: getCurrentIndex(),
-      });
       onMessage(MessageType.IncorrectLine);
     }
   };
@@ -303,11 +299,6 @@ const AbCanvas: FC<Props> = props => {
     }
 
     markLastLogPoints({ valid: false, actual: node?.label ?? 'none' });
-
-    onLogResult({
-      lines: logLines,
-      currentIndex: getCurrentIndex(),
-    });
   };
 
   const drawPath = () => {
