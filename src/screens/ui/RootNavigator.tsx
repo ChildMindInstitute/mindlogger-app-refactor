@@ -12,6 +12,7 @@ import { MediaFilesCleaner } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
 import { TapOnNotificationModel } from '@app/features/tap-on-notification';
+import { SystemRecord } from '@app/shared/lib/records';
 import { SessionModel } from '@entities/session';
 import { EnterForegroundModel } from '@features/enter-foreground';
 import { LogoutModel } from '@features/logout';
@@ -24,6 +25,7 @@ import {
   useAlarmPermissions,
   useBackgroundTask,
   useAppSelector,
+  useFirebaseSetup,
 } from '@shared/lib';
 import { UserProfileIcon, HomeIcon, BackButton, Text, Box } from '@shared/ui';
 
@@ -64,6 +66,9 @@ export default () => {
   useInitialRouteNavigation();
   useNotificationPermissions();
   useAlarmPermissions();
+  useFirebaseSetup({
+    onFCMTokenCreated: fcmToken => SystemRecord.setDeviceId(fcmToken),
+  });
 
   EnterForegroundModel.useRestackNotifications();
 

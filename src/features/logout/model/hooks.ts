@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { onBeforeLogout } from '@app/entities/identity/lib/alerts';
 import { NotificationModel } from '@app/entities/notification';
 import { IdentityService } from '@app/shared/api';
+import { SystemRecord } from '@app/shared/lib/records';
 import { IdentityModel } from '@entities/identity';
 import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
@@ -18,11 +19,14 @@ export function useLogout() {
   const processLogout = async () => {
     dispatch(IdentityModel.actions.onLogout());
 
-    SessionModel.clearSession();
-
     CacheManager.clearCache();
 
     clearEntityRecordStorages();
+
+    NotificationModel.NotificationManager.clearScheduledNotifications();
+
+    UserInfoRecord.clear();
+    UserPrivateKeyRecord.clear();
 
     await queryClient.removeQueries(['applets']);
     await queryClient.removeQueries(['events']);
@@ -30,13 +34,15 @@ export function useLogout() {
 
     queryClient.clear();
 
-    IdentityService.logout({
-      deviceId: 123, // todo - provide real fcm token
-    });
+    try {
+      await IdentityService.logout({
+        deviceId: SystemRecord.getDeviceId()!,
+      });
+    } catch (error) {
+      console.log('Logout operation failed:', error);
+    }
 
-    NotificationModel.NotificationManager.clearScheduledNotifications();
-    UserInfoRecord.clear();
-    UserPrivateKeyRecord.clear();
+    SessionModel.clearSession();
   };
 
   const logout = async () => {

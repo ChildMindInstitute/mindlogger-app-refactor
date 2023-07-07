@@ -32,7 +32,7 @@ function NotificationsLogger() {
     const scheduled: LocalEventTriggerNotification[] =
       await NotificationScheduler.getAllScheduledNotifications();
 
-    const email = UserInfoRecord.get();
+    const email = UserInfoRecord.getEmail();
 
     const notificationDescriptions =
       !payload.notificationDescriptions ||

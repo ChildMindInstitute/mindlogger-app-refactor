@@ -1,4 +1,5 @@
 import { UserInfoRecord } from '@app/entities/identity/lib';
+import { SystemRecord } from '@app/shared/lib/records';
 import {
   useLoginMutation,
   useSignUpMutation,
@@ -29,7 +30,7 @@ export const useRegistrationMutation = (
 
       dispatch(IdentityModel.actions.onAuthSuccess(user));
 
-      UserInfoRecord.set(user.email);
+      UserInfoRecord.setEmail(user.email);
 
       SessionModel.storeSession(session);
 
@@ -47,7 +48,11 @@ export const useRegistrationMutation = (
     mutate: signUp,
   } = useSignUpMutation({
     onSuccess: (_, data) => {
-      login({ email: data.email, password: data.password });
+      login({
+        email: data.email,
+        password: data.password,
+        deviceId: SystemRecord.getDeviceId(),
+      });
     },
   });
 
