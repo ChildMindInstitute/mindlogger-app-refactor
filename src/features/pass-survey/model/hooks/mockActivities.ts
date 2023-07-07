@@ -116,7 +116,7 @@ export const DrawingTestActivity = {
   vortex,
   all: allDrawing,
 };
-
+/*
 export const AbTestActivity: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
@@ -149,7 +149,7 @@ export const AbTestActivity: ActivityDto = {
       conditionalLogic: null,
     },
   ],
-};
+};*/
 
 const FlankerWithImageActivity: ActivityDto = {
   id: 'aid1',
@@ -1468,7 +1468,7 @@ const TestActivities = [
   FlankerActivity.withTextSings,
   DrawingTestActivity.grid,
   DrawingTestActivity.vortex,
-  AbTestActivity,
+  // AbTestActivity,
   SliderTestActivity,
   CheckboxTestActivity,
 ];

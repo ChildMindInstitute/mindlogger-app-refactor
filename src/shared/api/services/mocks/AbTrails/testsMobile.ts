@@ -1,4 +1,4 @@
-import { DeviceTests, TestScreenPayload } from '../../lib';
+import { DeviceTests, TestScreenPayload } from './types';
 
 const mobileTestFirst: TestScreenPayload = {
   config: {

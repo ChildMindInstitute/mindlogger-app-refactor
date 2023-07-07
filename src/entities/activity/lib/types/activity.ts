@@ -1,10 +1,10 @@
-import { FlankerItemSettings } from '@app/abstract/lib';
+import { AbPayload, FlankerItemSettings } from '@app/abstract/lib';
 
 import { ConditionalLogic } from './conditionalLogic';
 
 export type ActivityItemType =
-  | 'AbTest'
   | 'StabilityTracker'
+  | 'AbTrails'
   | 'DrawingTest'
   | 'Splash'
   | 'Flanker'
@@ -25,10 +25,6 @@ export type ActivityItemType =
   | 'Checkbox'
   | 'Date'
   | 'Time';
-
-type AbTestConfig = {
-  device: 'Phone' | 'Tablet';
-};
 
 export type StabilityTrackerConfig = {
   lambdaSlope: number;
@@ -194,8 +190,10 @@ type VideoConfig = null;
 
 type TimeConfig = null;
 
+type AbTrailsConfig = AbPayload;
+
 export type ActivityItemConfig =
-  | AbTestConfig
+  | AbTrailsConfig
   | StabilityTrackerConfig
   | DrawingTestTestConfig
   | TextInputConfig
@@ -241,8 +239,8 @@ type ActivityItemBase = {
 };
 
 interface AbTestActivityItem extends ActivityItemBase {
-  inputType: 'AbTest';
-  config: AbTestConfig;
+  inputType: 'AbTrails';
+  config: AbTrailsConfig;
 }
 
 interface StabilityTrackerActivityItem extends ActivityItemBase {

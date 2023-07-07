@@ -59,6 +59,26 @@ export type DrawerAnswerDto = {
   width: number;
 } & MediaFile;
 
+export type AbLogPointDto = {
+  x: number;
+  y: number;
+  start: string;
+  end: string;
+  time: number;
+  valid: boolean | null;
+  actual: string | undefined;
+};
+
+export type AbLogLineDto = { points: Array<AbLogPointDto> };
+
+export type AbTestAnswerDto = {
+  width: number;
+  startTime: number;
+  updated: true;
+  lines: AbLogLineDto[];
+  currentIndex: number;
+};
+
 export type TimeRangeAnswerDto = {
   from: { hour: number; minute: number };
   to: { hour: number; minute: number };
@@ -106,6 +126,7 @@ export type AnswerValueDto =
   | StabilityTrackerAnswerDto
   | FlankerAnswerDto
   | DrawerAnswerDto
+  | AbTestAnswerDto
   | null;
 
 export type ObjectAnswerDto = {

@@ -58,9 +58,9 @@ function ActivityItem({
   onContextChange,
   context,
 }: Props) {
-  const [scrollEnabled, setScrollEnabled] = useState(
-    type !== 'StabilityTracker',
-  );
+  const initialScrollEnabled = type !== 'StabilityTracker' && type !== 'AbTest';
+
+  const [scrollEnabled, setScrollEnabled] = useState(initialScrollEnabled);
 
   const { next } = useContext(HandlersContext);
 
@@ -88,8 +88,8 @@ function ActivityItem({
 
     case 'AbTest':
       item = (
-        <Box flex={1} onPressIn={stopScrolling} onPressOut={releaseScrolling}>
-          <AbTest {...pipelineItem.payload} onComplete={onResponse} />
+        <Box flex={1}>
+          <AbTest testData={pipelineItem.payload} onResponse={onResponse} />
         </Box>
       );
       break;

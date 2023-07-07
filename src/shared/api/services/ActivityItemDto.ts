@@ -1,5 +1,6 @@
 import { ImageUrl } from '@app/shared/lib';
 
+import { AbTrailsItemSettingsDto } from './AbTrailsSettingsDtos';
 import { FlankerItemSettingsDto } from './FlankerSettingsDto';
 
 export type ResponseType =
@@ -21,9 +22,9 @@ export type ResponseType =
   | 'audio'
   | 'audioPlayer'
   | 'flanker'
-  | 'abTest'
   | 'stabilityTracker'
-  | 'time';
+  | 'time'
+  | 'ABTrails';
 
 type Match = 'any' | 'all';
 
@@ -403,6 +404,10 @@ type StabilityTrackerConfiguration = {
 
 export type FlankerAnswerSettings = null;
 
+export type AbTrailsConfiguration = AbTrailsItemSettingsDto;
+
+export type AbTrailsAnswerSettings = null;
+
 type Configuration =
   | TextConfiguration
   | SingleSelectionRowsConfiguration
@@ -424,7 +429,8 @@ type Configuration =
   | MultiSelectionConfiguration
   | AbTestConfiguration
   | StabilityTrackerConfiguration
-  | FlankerConfiguration;
+  | FlankerConfiguration
+  | AbTrailsConfiguration;
 
 type AnswerSettings =
   | TextAnswerSettings
@@ -446,7 +452,8 @@ type AnswerSettings =
   | MultiSelectionAnswerSettings
   | AbTestAnswerSettings
   | StabilityTrackerAnswerSettings
-  | FlankerAnswerSettings;
+  | FlankerAnswerSettings
+  | AbTrailsAnswerSettings;
 
 type ActivityItemDtoBase = {
   id: string;
@@ -569,12 +576,6 @@ export interface AudioPlayerItemDto extends ActivityItemDtoBase {
   responseValues: AudioPlayerAnswerSettings;
 }
 
-export interface AbTestItemDto extends ActivityItemDtoBase {
-  responseType: 'abTest';
-  config: AbTestConfiguration;
-  responseValues: AbTestAnswerSettings;
-}
-
 export interface StabilityTrackerItemDto extends ActivityItemDtoBase {
   responseType: 'stabilityTracker';
   config: StabilityTrackerConfiguration;
@@ -585,6 +586,12 @@ export interface FlankerItemDto extends ActivityItemDtoBase {
   responseType: 'flanker';
   config: FlankerConfiguration;
   responseValues: FlankerAnswerSettings;
+}
+
+export interface ABTrailsItemDto extends ActivityItemDtoBase {
+  responseType: 'ABTrails';
+  config: AbTrailsConfiguration;
+  responseValues: AbTrailsAnswerSettings;
 }
 
 export type ActivityItemDto =
@@ -605,7 +612,7 @@ export type ActivityItemDto =
   | MultiSelectionRowsItemDto
   | AudioItemDto
   | AudioPlayerItemDto
-  | AbTestItemDto
+  | ABTrailsItemDto
   | StabilityTrackerItemDto
   | FlankerItemDto
   | TimeItemDto;

@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 import { AbTutorialViewer, AbTutorialViewerProps } from '@entities/abTrail';
 
 type AbTutorialProps = {
-  type: 'AbTrails';
+  type: 'AbTutorial';
 } & AbTutorialViewerProps;
 
 type Props = AbTutorialProps;
@@ -16,7 +16,7 @@ export type TutorialViewerRef = {
 const TutorialViewerItem = forwardRef<TutorialViewerRef, Props>(
   (props: Props, ref) => {
     switch (props.type) {
-      case 'AbTrails':
+      case 'AbTutorial':
         return <AbTutorialViewer ref={ref} {...props} />;
 
       default:

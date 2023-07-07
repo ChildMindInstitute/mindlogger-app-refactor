@@ -1,28 +1,21 @@
 import { FC, useMemo, useState } from 'react';
 
+import { AbTutorialPayload } from '@app/abstract/lib';
 import { Box, BoxProps, Text, XStack } from '@app/shared/ui';
 
 import AbShapes from './AbShapes';
-import { DeviceType, TestIndex } from '../lib';
 import { transformCoordinates } from '../lib/utils';
-import {
-  MobileTests,
-  MobileTutorials,
-  TabletTests,
-  TabletTutorials,
-} from '../model';
 
 type Props = {
-  testIndex: TestIndex;
+  tutorialPayload: AbTutorialPayload;
   tutorialStepIndex: number;
-  deviceType: DeviceType;
 } & BoxProps;
 
 const ShapesRectPadding = 15;
 const ContentPadding = 5;
 
 const AbTutorial: FC<Props> = props => {
-  const { testIndex, tutorialStepIndex, deviceType } = props;
+  const { tutorialStepIndex, tutorialPayload } = props;
 
   const [width, setWidth] = useState<number | null>(null);
 
@@ -30,20 +23,16 @@ const AbTutorial: FC<Props> = props => {
     if (!width) {
       return {};
     }
-    const tests = deviceType === 'Phone' ? MobileTests : TabletTests;
+    const test = tutorialPayload.test;
 
-    const transformed = transformCoordinates(
-      tests[testIndex],
-      width - ContentPadding * 2,
-    );
+    const transformed = transformCoordinates(test, width - ContentPadding * 2);
 
-    const tutorials =
-      deviceType === 'Phone' ? MobileTutorials : TabletTutorials;
+    const tutorials = tutorialPayload.tutorials;
 
-    const textLine = tutorials[testIndex][tutorialStepIndex];
+    const textLine = tutorials[tutorialStepIndex];
 
     return { shapesData: transformed, tutorialRecord: textLine };
-  }, [width, deviceType, testIndex, tutorialStepIndex]);
+  }, [width, tutorialPayload, tutorialStepIndex]);
 
   const getOrderIndexByLabel = (): number | null => {
     if (!tutorialRecord || !shapesData) {
@@ -82,7 +71,6 @@ const AbTutorial: FC<Props> = props => {
               <AbShapes
                 testData={shapesData}
                 greenRoundOrder={getOrderIndexByLabel()}
-                deviceType={deviceType}
               />
             )}
           </Box>

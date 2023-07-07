@@ -116,7 +116,7 @@ export const DrawingTestActivity = {
   vortex,
   all: allDrawing,
 };
-
+/*
 export const AbTestActivity: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
@@ -149,7 +149,7 @@ export const AbTestActivity: ActivityDto = {
       conditionalLogic: null,
     },
   ],
-};
+};*/
 
 export const TextActivity: ActivityDto = {
   id: 'aid1',

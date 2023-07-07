@@ -1,4 +1,4 @@
-import { FlankerItemSettings } from '@app/abstract/lib';
+import { AbTestPayload, FlankerItemSettings } from '@app/abstract/lib';
 import { ConditionalLogic } from '@app/entities/activity';
 import { DrawResult } from '@app/entities/drawer';
 import { FlankerGameResponse } from '@app/entities/flanker';
@@ -9,7 +9,7 @@ import {
   StackedItem,
   StackedRowItemValue,
 } from '@app/shared/ui';
-import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
+import { AbTestResult } from '@entities/abTrail';
 import { StabilityTrackerResponse as StabilityTrackerBaseResponse } from '@entities/stabilityTracker';
 import { MediaFile } from '@shared/ui';
 import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
@@ -40,11 +40,6 @@ export type ActivityItemType =
   | 'Video'
   | 'Date'
   | 'Time';
-
-type AbTestPayload = {
-  testIndex: TestIndex;
-  deviceType: DeviceType;
-};
 
 type StabilityTrackerPayload = {
   phase: 'practice' | 'test';
@@ -368,9 +363,9 @@ export interface TimePipelineItem extends PipelineItemBase {
   payload: TimePayload;
 }
 
-export type AbTestResponse = LogLine[];
-
 export type StabilityTrackerResponse = StabilityTrackerBaseResponse;
+
+export type AbTestResponse = AbTestResult;
 
 export type DrawingTestResponse = DrawResult;
 

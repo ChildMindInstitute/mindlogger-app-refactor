@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -31,13 +31,13 @@ export function useActivityRecordsInitialization({
 
   const isFlow = entityType === 'flow';
 
-  useEffect(() => {
+  useMemo(() => {
     if (isFlow) {
       Initializer.initializeFlow({ flowId: entityId, eventId });
     }
   }, [Initializer, eventId, isFlow, entityId]);
 
-  useEffect(() => {
+  useMemo(() => {
     if (!isFlow) {
       Initializer.initializeActivity({ activityId: entityId, eventId });
     }
