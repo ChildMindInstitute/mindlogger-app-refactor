@@ -22,17 +22,9 @@ export type ResponseType =
   | 'audio'
   | 'audioPlayer'
   | 'flanker'
-  | 'abTest'
   | 'stabilityTracker'
   | 'time'
-  | 'ABTrailsMobileFirst'
-  | 'ABTrailsMobileSecond'
-  | 'ABTrailsMobileThird'
-  | 'ABTrailsMobileFourth'
-  | 'ABTrailsTabletFirst'
-  | 'ABTrailsTabletSecond'
-  | 'ABTrailsTabletThird'
-  | 'ABTrailsTabletFourth';
+  | 'ABTrails';
 
 type Match = 'any' | 'all';
 
@@ -596,60 +588,8 @@ export interface FlankerItemDto extends ActivityItemDtoBase {
   responseValues: FlankerAnswerSettings;
 }
 
-export type ABTrailsItemDto =
-  | ABTrailsMobileFirstItemDto
-  | ABTrailsMobileSecondItemDto
-  | ABTrailsMobileThirdItemDto
-  | ABTrailsMobileFourthItemDto
-  | ABTrailsTabletFirstItemDto
-  | ABTrailsTabletSecondItemDto
-  | ABTrailsTabletThirdItemDto
-  | ABTrailsTabletFourthItemDto;
-
-export interface ABTrailsMobileFirstItemDto extends ActivityItemDtoBase {
-  responseType: 'ABTrailsMobileFirst';
-  config: AbTrailsConfiguration;
-  responseValues: AbTrailsAnswerSettings;
-}
-
-export interface ABTrailsMobileSecondItemDto extends ActivityItemDtoBase {
-  responseType: 'ABTrailsMobileSecond';
-  config: AbTrailsConfiguration;
-  responseValues: AbTrailsAnswerSettings;
-}
-
-export interface ABTrailsMobileThirdItemDto extends ActivityItemDtoBase {
-  responseType: 'ABTrailsMobileThird';
-  config: AbTrailsConfiguration;
-  responseValues: AbTrailsAnswerSettings;
-}
-
-export interface ABTrailsMobileFourthItemDto extends ActivityItemDtoBase {
-  responseType: 'ABTrailsMobileFourth';
-  config: AbTrailsConfiguration;
-  responseValues: AbTrailsAnswerSettings;
-}
-
-export interface ABTrailsTabletFirstItemDto extends ActivityItemDtoBase {
-  responseType: 'ABTrailsTabletFirst';
-  config: AbTrailsConfiguration;
-  responseValues: AbTrailsAnswerSettings;
-}
-
-export interface ABTrailsTabletSecondItemDto extends ActivityItemDtoBase {
-  responseType: 'ABTrailsTabletSecond';
-  config: AbTrailsConfiguration;
-  responseValues: AbTrailsAnswerSettings;
-}
-
-export interface ABTrailsTabletThirdItemDto extends ActivityItemDtoBase {
-  responseType: 'ABTrailsTabletThird';
-  config: AbTrailsConfiguration;
-  responseValues: AbTrailsAnswerSettings;
-}
-
-export interface ABTrailsTabletFourthItemDto extends ActivityItemDtoBase {
-  responseType: 'ABTrailsTabletFourth';
+export interface ABTrailsItemDto extends ActivityItemDtoBase {
+  responseType: 'ABTrails';
   config: AbTrailsConfiguration;
   responseValues: AbTrailsAnswerSettings;
 }

@@ -97,11 +97,11 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
 function mapToAbTest(dto: ABTrailsItemDto): ActivityItem {
   const config = dto.config;
 
-  const nodesSettingsDto = (config.mobileNodes ?? config.tabletNodes)!;
+  const nodesSettingsDto = config.nodes;
 
   const nodes = nodesSettingsDto.nodes;
 
-  const tutorials = (config.mobileTutorials ?? config.tabletTutorials)!;
+  const tutorials = config.tutorials;
 
   return {
     id: dto.id,
@@ -665,14 +665,7 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
     order: dto.order,
     items: dto.items.map(item => {
       switch (item.responseType) {
-        case 'ABTrailsMobileFirst':
-        case 'ABTrailsMobileSecond':
-        case 'ABTrailsMobileThird':
-        case 'ABTrailsMobileFourth':
-        case 'ABTrailsTabletFirst':
-        case 'ABTrailsTabletSecond':
-        case 'ABTrailsTabletThird':
-        case 'ABTrailsTabletFourth':
+        case 'ABTrails':
           return mapToAbTest(item);
         case 'stabilityTracker':
           return mapToStabilityTracker(item);

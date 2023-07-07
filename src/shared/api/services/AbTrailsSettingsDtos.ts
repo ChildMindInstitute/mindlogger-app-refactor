@@ -1,9 +1,7 @@
 export type AbTrailsItemSettingsDto = {
   deviceType: 'mobile' | 'tablet';
-  tabletNodes?: NodesSettingsDto;
-  tabletTutorials?: TutorialSettingsDto;
-  mobileNodes?: NodesSettingsDto;
-  mobileTutorials?: TutorialSettingsDto;
+  nodes: NodesSettingsDto;
+  tutorials: TutorialSettingsDto;
 };
 
 type NodesSettingsDto = {
