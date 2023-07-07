@@ -56,6 +56,14 @@ export const appletAnalyticsMock: AppletAnalyticsDto = {
           },
           data: [
             {
+              date: '2023-07-04T14:55:16.920Z',
+              value: 1,
+            },
+            {
+              date: '2023-07-04T14:55:16.920Z',
+              value: 2,
+            },
+            {
               date: '2023-07-05T14:55:16.920Z',
               value: 3,
             },

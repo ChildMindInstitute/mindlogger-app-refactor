@@ -2,12 +2,12 @@ import { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { Box, ScrollView } from '@app/shared/ui';
-import { ActivityResponsesDto } from '@shared/api';
 
 import ActivityDataCard from './ActivityAnalyticsCard';
+import { ActivityResponses } from '../lib';
 
 type Props = {
-  activitiesResponses: Array<ActivityResponsesDto>;
+  activitiesResponses: Array<ActivityResponses>;
 };
 
 const ActivityAnalyticsList: FC<Props> = ({ activitiesResponses }) => {

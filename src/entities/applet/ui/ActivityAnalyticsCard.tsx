@@ -3,11 +3,12 @@ import { FC } from 'react';
 import { styled } from '@tamagui/core';
 
 import { AnalyticsChart } from '@app/features/analytics-chart';
-import { ActivityResponsesDto } from '@shared/api';
 import { Box, Center, Text } from '@shared/ui';
 
+import { ActivityResponses } from '../lib';
+
 type Props = {
-  responseData: ActivityResponsesDto;
+  responseData: ActivityResponses;
 };
 
 const ActivityCardContainer = styled(Center, {

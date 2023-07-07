@@ -2,18 +2,15 @@ import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
+import { ResponseAnalyticsValue } from '@app/entities/applet';
 import { Box, Text } from '@app/shared/ui';
 import { LineChart, TimelineChart } from '@app/shared/ui/charts';
-import {
-  AnalyticsResponseType,
-  ResponseAnalyticsDto,
-  ResponseConfig,
-} from '@shared/api';
+import { AnalyticsResponseType, ResponseConfig } from '@shared/api';
 
 type Props = {
   responseType: AnalyticsResponseType;
   responseConfig: ResponseConfig;
-  data: ResponseAnalyticsDto;
+  data: ResponseAnalyticsValue;
   title: string;
 };
 
@@ -29,20 +26,8 @@ const AnalyticsChart: FC<Props> = ({
 
   switch (responseType) {
     case 'singleSelect':
-      chart = (
-        <TimelineChart
-          config={responseConfig}
-          data={data.map(x => ({ ...x, date: new Date(x.date) }))}
-        />
-      );
-      break;
     case 'multiSelect':
-      chart = (
-        <TimelineChart
-          config={responseConfig}
-          data={data.map(x => ({ ...x, date: new Date(x.date) }))}
-        />
-      );
+      chart = <TimelineChart config={responseConfig} data={data} />;
       break;
     case 'slider':
       chart = (

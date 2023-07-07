@@ -129,7 +129,13 @@ export function mapActivitiesResponses(
       }));
 }
 
-export function mapAppletAnalytics(dto: AppletAnalyticsDto): AppletAnalytics {
+export function mapAppletAnalytics(
+  dto?: AppletAnalyticsDto,
+): AppletAnalytics | null {
+  if (!dto) {
+    return null;
+  }
+
   return {
     id: dto.appletId,
     activitiesResponses: mapActivitiesResponses(dto.activitiesResponses),

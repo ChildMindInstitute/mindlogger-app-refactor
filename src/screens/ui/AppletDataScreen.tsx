@@ -6,6 +6,7 @@ import {
   ActivityAnalyticsList,
   useAppletAnalyticsQuery,
 } from '@app/entities/applet';
+import { mapAppletAnalytics } from '@app/entities/applet/model';
 import { Box, HorizontalCalendar } from '@app/shared/ui';
 import { AppletDetailsParamList } from '@screens/config';
 
@@ -17,7 +18,7 @@ const AppletDataScreen: FC<Props> = ({ route }) => {
   } = route;
 
   const { data: appletAnalytics } = useAppletAnalyticsQuery(appletId, {
-    select: response => response?.data.result,
+    select: response => mapAppletAnalytics(response?.data.result),
   });
 
   return (
