@@ -6,33 +6,13 @@ import {
   AnswerService,
   MutationOptions,
   FileService,
-  AnswerDto,
-  AppletEncryptionDTO,
-  UserActionDto,
   ActivityAnswersRequest,
 } from '@app/shared/api';
 import { MediaFile } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
 import { encryption, wait } from '@shared/lib';
 
-import { MediaFilesCleaner } from '../lib';
-
-type SendAnswersInput = {
-  appletId: string;
-  version: string;
-  createdAt: number;
-  answers: AnswerDto[];
-  appletEncryption: AppletEncryptionDTO;
-  itemIds: string[];
-  flowId: string | null;
-  activityId: string;
-  executionGroupKey: string;
-  userActions: UserActionDto[];
-  scheduledTime?: number;
-  startTime: number;
-  endTime: number;
-  userIdentifier?: string;
-};
+import { MediaFilesCleaner, SendAnswersInput } from '../lib';
 
 type Options = MutationOptions<typeof sendAnswers>;
 
