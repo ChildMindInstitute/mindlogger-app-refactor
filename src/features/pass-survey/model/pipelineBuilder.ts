@@ -4,6 +4,10 @@ import { getAbTrailsPipeline } from './precompiled-pipelines';
 import { PipelineItem } from '../lib';
 
 export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
+  const alignMessagesToLeft = activity.items.some(
+    x => x.inputType === 'Flanker',
+  );
+
   const pipeline: PipelineItem[] = filterHiddenItems(activity.items)
     .map((item, index) => {
       switch (item.inputType) {
@@ -143,7 +147,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
           return {
             id: item.id,
             type: item.inputType,
-            payload: item.config,
+            payload: { alignToLeft: alignMessagesToLeft },
             question: item.question,
             isSkippable: item.isSkippable,
             isAbleToMoveBack: item.isAbleToMoveBack,

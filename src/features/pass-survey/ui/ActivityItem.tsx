@@ -67,6 +67,8 @@ function ActivityItem({
   let item: JSX.Element | null;
   const question = pipelineItem.question;
 
+  let alignMessageToLeft = false;
+
   const stopScrolling = () => setScrollEnabled(false);
 
   const releaseScrolling = () => setScrollEnabled(true);
@@ -249,9 +251,11 @@ function ActivityItem({
       );
       break;
 
-    case 'Message':
+    case 'Message': {
       item = null;
+      alignMessageToLeft = pipelineItem.payload.alignToLeft;
       break;
+    }
 
     case 'AudioPlayer':
       item = (
@@ -341,7 +345,7 @@ function ActivityItem({
           <Box mx={16} mb={20}>
             <MarkdownMessage
               flex={1}
-              alignItems="center"
+              alignItems={alignMessageToLeft ? undefined : 'center'}
               content={textVariableReplacer(question)}
             />
           </Box>
