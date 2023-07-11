@@ -21,7 +21,7 @@ export function range(n: number): number[] {
 }
 
 export const isEmptyObject = (object: any) => {
-  return Object.keys(object).length;
+  return !!Object.keys(object).length;
 };
 
 export function getCurrentWeekDates(): Array<Date> {

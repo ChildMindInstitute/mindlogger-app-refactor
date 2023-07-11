@@ -12,8 +12,8 @@ import { AppletModel, clearStorageRecords } from '@app/entities/applet';
 import {
   LocalEventDetail,
   LocalInitialNotification,
-  LocalNotificationType,
   NotificationModel,
+  PushNotificationType,
   useBackgroundEvents,
   useForegroundEvent,
   useOnInitialAndroidNotification,
@@ -60,7 +60,7 @@ export function useOnNotificationTap({
   });
 
   const actions: Record<
-    LocalNotificationType,
+    PushNotificationType,
     (eventDetail: LocalEventDetail) => void
   > = {
     'request-to-reschedule-due-to-limit': () => {
@@ -90,6 +90,18 @@ export function useOnNotificationTap({
         },
         executing ? GoBackDuration : WorkaroundDuration,
       );
+    },
+    'response-data-alert': function (): void {
+      throw new Error('Function not implemented.');
+    },
+    'applet-update-alert': function (): void {
+      throw new Error('Function not implemented.');
+    },
+    'applet-delete-alert': function (): void {
+      throw new Error('Function not implemented.');
+    },
+    'schedule-updated': function (): void {
+      throw new Error('Function not implemented.');
     },
   };
 
