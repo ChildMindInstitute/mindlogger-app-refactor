@@ -7291,6 +7291,13 @@ react-native-select-dropdown@^3.3.2:
   resolved "https://registry.yarnpkg.com/react-native-select-dropdown/-/react-native-select-dropdown-3.3.2.tgz#f874bc48f7633b914c202782bbbf988a8b5863a2"
   integrity sha512-2rsPgAzeZ4Pdsf/kCuwYyzmLd5OO+cT3yZ0gAvVZ9C+5xkchiY7iE9u5M5F0DCgMqmwJjBBsiBEvULJ/Eaxpng==
 
+react-native-sensors@^7.3.6:
+  version "7.3.6"
+  resolved "https://registry.yarnpkg.com/react-native-sensors/-/react-native-sensors-7.3.6.tgz#147dea0d33227e46d3c2b34802b6945f5ce56dc6"
+  integrity sha512-h3ispHU6BqhVsMMBIMfJWdwoqHNoSae1wv2RNl2hVOoV1rbFuSbQluQsuZirva6uRDaZVeVwaE5th3HIf+9ykQ==
+  dependencies:
+    rxjs ">= 6"
+
 react-native-svg@^13.8.0:
   version "13.8.0"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-13.8.0.tgz#b6a22cf77f8098f910490a13aeb160a37e182f97"
@@ -7723,6 +7730,13 @@ run-parallel@^1.1.9:
   integrity sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==
   dependencies:
     queue-microtask "^1.2.2"
+
+"rxjs@>= 6":
+  version "7.8.1"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.1.tgz#6f6f3d99ea8044291efd92e7c7fcf562c4057543"
+  integrity sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==
+  dependencies:
+    tslib "^2.1.0"
 
 rxjs@^7.8.0:
   version "7.8.0"

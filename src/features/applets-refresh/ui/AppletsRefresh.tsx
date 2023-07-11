@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { RefreshControl, RefreshControlProps } from 'react-native';
 
 import { useQueryClient } from '@tanstack/react-query';
@@ -15,7 +15,6 @@ type Props = Omit<RefreshControlProps, 'refreshing' | 'onRefresh'>;
 
 const AppletsRefresh: FC<Props> = props => {
   const queryClient = useQueryClient();
-  const [appletsRefreshing, setAppletsRefreshing] = useState(false);
 
   const storeProgress: StoreProgress = useAppSelector(
     AppletModel.selectors.selectInProgressApplets,
@@ -29,14 +28,11 @@ const AppletsRefresh: FC<Props> = props => {
     );
   });
 
-  useEffect(() => {
-    setAppletsRefreshing(isRefreshing);
-  }, [isRefreshing]);
-
   return (
     <RefreshControl
-      refreshing={appletsRefreshing}
+      refreshing={isRefreshing}
       onRefresh={refresh}
+      tintColor="black"
       // Don't change. See https://github.com/facebook/react-native/issues/32144
       {...props}
     />
