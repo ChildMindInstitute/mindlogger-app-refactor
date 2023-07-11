@@ -114,7 +114,7 @@ function ActivityItem({
 
     case 'DrawingTest':
       item = (
-        <Box flex={1} mb={16}>
+        <Box flex={1} mb="$6">
           <DrawingTest
             flex={1}
             {...pipelineItem.payload}
@@ -177,7 +177,7 @@ function ActivityItem({
 
     case 'NumberSelect':
       item = (
-        <Box justifyContent="center" mx={16}>
+        <Box justifyContent="center" mb="$6" mx={16}>
           <NumberSelector
             value={value?.answer ?? ''}
             config={pipelineItem.payload}
@@ -241,7 +241,7 @@ function ActivityItem({
 
     case 'Audio':
       item = (
-        <Box mx="$6">
+        <Box mx="$6" mb="$6">
           <AudioRecorderItem
             onChange={onResponse}
             value={value?.answer}
@@ -279,7 +279,7 @@ function ActivityItem({
 
     case 'Date':
       item = (
-        <Box mx="$6">
+        <Box mx="$6" mb="$6">
           <DatePickerItem onChange={onResponse} value={value?.answer} />
         </Box>
       );
