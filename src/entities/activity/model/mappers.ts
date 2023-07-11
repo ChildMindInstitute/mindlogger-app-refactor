@@ -173,8 +173,11 @@ function mapToFlanker(itemDto: FlankerItemDto): ActivityItem {
       ...x,
     })),
     blockType: dto.blockType,
-    fixationDuration: dto.fixationDuration,
-    fixationScreen: dto.fixationScreen,
+    fixationDuration: dto.fixationDuration ?? 0,
+    fixationScreen: dto.fixationScreen ?? {
+      image: '',
+      value: '',
+    },
     isFirstPractice: dto.isFirstPractice,
     isLastPractice: dto.isLastPractice,
     isLastTest: dto.isLastTest,

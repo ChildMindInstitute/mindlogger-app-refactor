@@ -72,7 +72,9 @@ type AudioPayload = {
   maxDuration: number;
 };
 
-type MessagePayload = null;
+type MessagePayload = {
+  alignToLeft: boolean;
+};
 
 type AudioPlayerPayload = {
   file: string;
