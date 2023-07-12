@@ -32,6 +32,7 @@ const AppletsRefresh: FC<Props> = props => {
     <RefreshControl
       refreshing={isRefreshing}
       onRefresh={refresh}
+      tintColor="black"
       // Don't change. See https://github.com/facebook/react-native/issues/32144
       {...props}
     />
