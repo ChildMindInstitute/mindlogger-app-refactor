@@ -17,13 +17,13 @@ export type SendAnswersInput = {
   userIdentifier?: string;
 };
 
-export type CheckFileResult = {
+export type CheckFileUploadResult = {
   fileId: string;
-  exists: boolean;
+  uploaded: boolean;
   remoteUrl: string | null;
 };
 
-export type CheckFilesResults = Array<CheckFileResult>;
+export type CheckFilesUploadResults = Array<CheckFileUploadResult>;
 
 export type CheckAnswersInput = {
   appletId: string;
