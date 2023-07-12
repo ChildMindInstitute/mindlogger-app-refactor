@@ -4,6 +4,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
+import { useRetryUpload } from '@app/entities/activity/lib';
+import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { EventModel } from '@app/entities/event';
 import { useActivityAnswersMutation } from '@entities/activity';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
@@ -83,16 +85,34 @@ function FinishItem({
     isError: sentAnswersWithError,
     isPaused: isOffline,
   } = useActivityAnswersMutation({
-    onError: error => {
-      if (error.response.status !== 401 && error.evaluatedMessage) {
-        onApiRequestError(error.evaluatedMessage);
+    onError: (error, variables) => {
+      pushInQueue(variables);
+
+      if (error.response?.status === 401) {
+        onApiRequestError('Unauthorized');
+        return;
       }
+      openRetryAlert();
     },
+  });
+
+  const {
+    isLoading: isQueueUploading,
+    process: processQueue,
+    push: pushInQueue,
+  } = useQueueProcessing();
+
+  const {
+    isAlertOpened: isRetryAlertOpened,
+    openAlert: openRetryAlert,
+    isPostponed: isQueueUploadPostponed,
+  } = useRetryUpload({
+    retryUpload: processQueue,
   });
 
   let finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';
 
-  const isLoading = !isOffline && isSendingAnswers;
+  const isLoading = !isOffline && (isSendingAnswers || isQueueUploading);
 
   function completeActivity() {
     dispatch(
@@ -170,38 +190,71 @@ function FinishItem({
     onClose();
   };
 
+  if (isRetryAlertOpened) {
+    return <ImageBackground />;
+  }
+
+  if (isQueueUploadPostponed) {
+    return (
+      <ImageBackground>
+        <Center flex={1} mx={16}>
+          <Text fontSize={24} fontWeight="bold">
+            {finishReason === 'regular' && t('additional:thanks')}
+            {finishReason === 'time-is-up' && t('additional:time-end')}
+          </Text>
+
+          <Text fontSize={16}>{t('additional:saved_answers')}</Text>
+          <Button onPress={onCloseEntity}>{t('additional:close')}</Button>
+        </Center>
+      </ImageBackground>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <ImageBackground>
+        <Center flex={1} mx={16}>
+          {isLoading && <Text fontSize={22}>Please Wait ...</Text>}
+        </Center>
+      </ImageBackground>
+    );
+  }
+
+  if (sentAnswersWithError) {
+    // 401
+    return (
+      <ImageBackground>
+        <Center flex={1} mx={16}>
+          <Center mb={20}>
+            <Text fontSize={24} fontWeight="bold">
+              {finishReason === 'regular' && t('additional:sorry')}
+              {finishReason === 'time-is-up' && t('additional:time-end')}
+            </Text>
+
+            <Text fontSize={16}>{t('additional:server-error')}</Text>
+          </Center>
+
+          <Button onPress={onCloseEntity}>{t('additional:close')}</Button>
+        </Center>
+      </ImageBackground>
+    );
+  }
+
+  // success (incl. after retry)
+
   return (
     <ImageBackground>
       <Center flex={1} mx={16}>
-        {!isLoading && (
-          <>
-            <Center mb={20}>
-              <Text fontSize={24} fontWeight="bold">
-                {finishReason === 'regular' &&
-                  !sentAnswersWithError &&
-                  t('additional:thanks')}
+        <Center mb={20}>
+          <Text fontSize={24} fontWeight="bold">
+            {finishReason === 'regular' && t('additional:thanks')}
+            {finishReason === 'time-is-up' && t('additional:time-end')}
+          </Text>
 
-                {finishReason === 'regular' &&
-                  sentAnswersWithError &&
-                  t('additional:sorry')}
+          <Text fontSize={16}>{t('additional:saved_answers')}</Text>
+        </Center>
 
-                {finishReason === 'time-is-up' && t('additional:time-end')}
-              </Text>
-
-              {!sentAnswersWithError && (
-                <Text fontSize={16}>{t('additional:saved_answers')}</Text>
-              )}
-
-              {sentAnswersWithError && (
-                <Text fontSize={16}>{t('additional:server-error')}</Text>
-              )}
-            </Center>
-
-            <Button onPress={onCloseEntity}>{t('additional:close')}</Button>
-          </>
-        )}
-
-        {isLoading && <Text fontSize={22}>Please Wait ...</Text>}
+        <Button onPress={onCloseEntity}>{t('additional:close')}</Button>
       </Center>
     </ImageBackground>
   );

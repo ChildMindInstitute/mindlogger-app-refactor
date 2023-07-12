@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 const useForceUpdate = () => {
   const [, setFlag] = useState(false);
 
-  const forceRender = () => {
+  const forceRender = useCallback(() => {
     setFlag(x => !x);
-  };
+  }, []);
 
   return forceRender;
 };
