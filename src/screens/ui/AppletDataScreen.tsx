@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
+import { UploadRetryBanner } from '@app/entities/activity';
 import {
   ActivityAnalyticsList,
   useAppletAnalyticsQuery,
@@ -23,6 +24,7 @@ const AppletDataScreen: FC<Props> = ({ route }) => {
 
   return (
     <Box flexGrow={1}>
+      <UploadRetryBanner />
       <HorizontalCalendar mt={8} />
 
       <ActivityAnalyticsList

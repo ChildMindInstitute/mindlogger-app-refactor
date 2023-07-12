@@ -352,6 +352,8 @@
     "activity_resume_restart": "Would you like to resume this activity in progress or restart?",
     "restart": "Restart",
     "resume": "Resume",
+    "retry": "Retry",
+    "later": "Later",
     "in_progress": "In Progress",
     "unscheduled": "Unscheduled",
     "scheduled": "Scheduled",

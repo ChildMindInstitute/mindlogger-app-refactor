@@ -9,17 +9,21 @@ import {
 } from '@app/shared/api';
 import { MediaFile } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
-import { encryption, wait } from '@shared/lib';
+import { encryption } from '@shared/lib';
 
 import MediaFilesCleaner from './MediaFilesCleaner';
 import {
   CheckAnswersInput,
-  CheckFileResult,
-  CheckFilesResults,
+  CheckFileUploadResult,
+  CheckFilesUploadResults,
   SendAnswersInput,
 } from '../types';
 
-class UploadAnswersService {
+export interface IAnswersUploadService {
+  sendAnswers(body: SendAnswersInput): void;
+}
+
+class AnswersUploadService implements IAnswersUploadService {
   private createdAt: number | null;
 
   constructor() {
@@ -35,10 +39,11 @@ class UploadAnswersService {
 
   private async checkIfFilesUploaded(
     fileIds: string[],
-  ): Promise<CheckFilesResults> {
+    fakeResult: boolean = false,
+  ): Promise<CheckFilesUploadResults> {
     return fileIds.map(x => ({
       // todo
-      exists: false,
+      uploaded: fakeResult,
       fileId: x,
       remoteUrl: null,
     }));
@@ -46,15 +51,16 @@ class UploadAnswersService {
 
   private async checkIfAnswersUploaded(
     checkInput: CheckAnswersInput,
+    fakeResult: boolean = false,
   ): Promise<boolean> {
     console.log(checkInput);
-    return false; // todo
+    return fakeResult; // todo
   }
 
   private getUploadRecord(
-    results: CheckFilesResults,
+    results: CheckFilesUploadResults,
     fileId: string,
-  ): CheckFileResult {
+  ): CheckFileUploadResult {
     return results.find(x => x.fileId === fileId)!;
   }
 
@@ -84,13 +90,13 @@ class UploadAnswersService {
   private async uploadAnswerMediaFiles(body: SendAnswersInput) {
     const fileIds = this.collectFileIds(body.answers);
 
-    let uploadedResult: CheckFilesResults;
+    let uploadResults: CheckFilesUploadResults;
 
     try {
-      uploadedResult = await this.checkIfFilesUploaded(fileIds);
+      uploadResults = await this.checkIfFilesUploaded(fileIds);
     } catch (error) {
       throw new Error(
-        '[uploadAnswerMediaFiles.checkIfFilesUploaded]: Error occurred on 1st files check api call\n\n' +
+        '[UploadAnswersService.uploadAnswerMediaFiles]: Error occurred on 1st files upload check\n\n' +
           error!.toString(),
       );
     }
@@ -115,19 +121,25 @@ class UploadAnswersService {
 
       if (!localFileExists) {
         throw new Error(
-          '[uploadAnswerMediaFiles.FileSystem.exists]: local file does not exist',
+          '[UploadAnswersService.uploadAnswerMediaFiles]: Local file does not exist',
         );
       }
 
       const uploadRecord = this.getUploadRecord(
-        uploadedResult,
+        uploadResults,
         this.getFileId(mediaAnswer),
       );
+
+      if (!uploadRecord) {
+        throw new Error(
+          '[UploadAnswersService.uploadAnswerMediaFiles]: uploadRecord does not exist',
+        );
+      }
 
       try {
         let remoteUrl;
 
-        if (!uploadRecord.exists) {
+        if (!uploadRecord.uploaded) {
           const uploadResult = await FileService.upload({
             fileName: mediaAnswer.fileName,
             type: mediaAnswer.type,
@@ -144,12 +156,14 @@ class UploadAnswersService {
         if (remoteUrl && !isSvg) {
           updatedAnswers.push({ value: remoteUrl });
         } else if (remoteUrl) {
-          mediaAnswer.uri = remoteUrl;
-          updatedAnswers.push(itemAnswer);
+          updatedAnswers.push({
+            ...(itemAnswer as ObjectAnswerDto),
+            uri: remoteUrl,
+          });
         }
       } catch (error) {
         console.warn(
-          '[uploadAnswerMediaFiles.FileService.upload]: error occurred',
+          '[UploadAnswersService.uploadAnswerMediaFiles]: Error occurred while file uploading',
           error!.toString(),
         );
         throw error;
@@ -157,7 +171,7 @@ class UploadAnswersService {
     }
 
     try {
-      uploadedResult = await this.checkIfFilesUploaded(fileIds);
+      uploadResults = await this.checkIfFilesUploaded(fileIds, true);
     } catch (error) {
       throw new Error(
         '[uploadAnswerMediaFiles.checkIfFilesUploaded]: Error occurred on 2nd files check api call\n\n' +
@@ -165,7 +179,7 @@ class UploadAnswersService {
       );
     }
 
-    if (uploadedResult.some(x => !x.exists)) {
+    if (uploadResults.some(x => !x.uploaded)) {
       throw new Error(
         '[uploadAnswerMediaFiles.uploadedResult.some]: Error occurred on final upload results check',
       );
@@ -174,6 +188,70 @@ class UploadAnswersService {
     const updatedBody = { ...body, answers: updatedAnswers };
 
     return updatedBody;
+  }
+
+  private async uploadAnswers(
+    encryptedData: ActivityAnswersRequest,
+    body: SendAnswersInput,
+  ) {
+    if (body.itemIds.length !== body.answers.length) {
+      throw new Error(
+        "[UploadAnswersService.uploadAnswers]: Items' length doesn't equal to answers' length ",
+      );
+    }
+
+    let uploaded: boolean;
+
+    try {
+      uploaded = await this.checkIfAnswersUploaded({
+        activityId: body.activityId,
+        appletId: body.appletId,
+        flowId: body.flowId,
+        createdAt: body.createdAt,
+      });
+    } catch (error) {
+      console.warn(
+        '[UploadAnswersService.uploadAnswers]: Error occurred while 1st check if answers uploaded\n\n',
+        error!.toString(),
+      );
+      throw error;
+    }
+
+    if (uploaded) {
+      return;
+    }
+
+    try {
+      await AnswerService.sendActivityAnswers(encryptedData);
+    } catch (error) {
+      console.warn(
+        '[UploadAnswersService.uploadAnswers]: Error occurred while sending answers\n\n',
+        error!.toString(),
+      );
+      throw error;
+    }
+
+    try {
+      uploaded = await this.checkIfAnswersUploaded(
+        {
+          activityId: body.activityId,
+          appletId: body.appletId,
+          flowId: body.flowId,
+          createdAt: body.createdAt,
+        },
+        true,
+      );
+    } catch (error) {
+      console.warn(
+        '[UploadAnswersService.uploadAnswers]: Error occurred while 2nd check if answers uploaded\n\n',
+        error!.toString(),
+      );
+      throw error;
+    }
+
+    if (!uploaded) {
+      throw new Error('[uploadAnswers] Answers were not uploaded');
+    }
   }
 
   private encryptAnswers(data: SendAnswersInput): ActivityAnswersRequest {
@@ -223,65 +301,7 @@ class UploadAnswersService {
     return encryptedData;
   }
 
-  private async uploadAnswers(
-    encryptedData: ActivityAnswersRequest,
-    body: SendAnswersInput,
-  ) {
-    let uploaded;
-
-    try {
-      uploaded = await this.checkIfAnswersUploaded({
-        activityId: body.activityId,
-        appletId: body.appletId,
-        createdAt: body.createdAt,
-        flowId: body.flowId,
-      });
-    } catch (error) {
-      console.warn(
-        '[uploadAnswers.checkIfAnswersUploaded]: Error occurred\n\n',
-        error!.toString(),
-      );
-      throw error;
-    }
-
-    if (uploaded) {
-      return;
-    }
-
-    try {
-      await AnswerService.sendActivityAnswers(encryptedData);
-    } catch (error) {
-      console.warn(
-        '[uploadAnswers.AnswerService.sendActivityAnswers]: Error occurred\n\n',
-        error!.toString(),
-      );
-      throw error;
-    }
-
-    try {
-      uploaded = await this.checkIfAnswersUploaded({
-        activityId: body.activityId,
-        appletId: body.appletId,
-        createdAt: body.createdAt,
-        flowId: body.flowId,
-      });
-    } catch (error) {
-      console.warn(
-        '[uploadAnswers.checkIfAnswersUploaded]: Error occurred on 2nd check\n\n',
-        error!.toString(),
-      );
-      throw error;
-    }
-
-    if (!uploaded) {
-      throw new Error('[uploadAnswers] Answers were not uploaded');
-    }
-  }
-
   public async sendAnswers(body: SendAnswersInput) {
-    // This delay is for postponing encryption operation which blocks the UI thread
-    await wait(100);
-
     this.createdAt = body.createdAt;
 
     const data = await this.uploadAnswerMediaFiles(body);
@@ -294,4 +314,4 @@ class UploadAnswersService {
   }
 }
 
-export default new UploadAnswersService();
+export default new AnswersUploadService();

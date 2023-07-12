@@ -4,7 +4,11 @@ import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
-import { useActivityAnswersMutation } from '@app/entities/activity';
+import {
+  useActivityAnswersMutation,
+  useRetryUpload,
+} from '@app/entities/activity';
+import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 import {
   mapActivitiesFromDto,
@@ -130,12 +134,30 @@ function Intermediate({
       changeActivity();
       onFinish();
     },
-    onError: error => {
-      if (error.response.status !== 401 && error.evaluatedMessage) {
+    onError: (error, variables) => {
+      pushInQueue(variables);
+
+      if (error.response?.status !== 401 && error.evaluatedMessage) {
         onApiRequestError(error.evaluatedMessage);
       }
+      openRetryAlert();
     },
   });
+
+  const {
+    isLoading: isQueueUploading,
+    process: processQueue,
+    push: pushInQueue,
+  } = useQueueProcessing();
+
+  const { isAlertOpened: isRetryAlertOpened, openAlert: openRetryAlert } =
+    useRetryUpload({
+      retryUpload: processQueue,
+      postpone: () => {
+        changeActivity();
+        onFinish();
+      },
+    });
 
   const changeActivity = useCallback(() => {
     if (!nextActivity) {
@@ -238,7 +260,9 @@ function Intermediate({
           <Button
             bg="$blue"
             onPress={completeActivity}
-            isLoading={isSendingAnswers}
+            isLoading={
+              isSendingAnswers || isQueueUploading || isRetryAlertOpened
+            }
           >
             {t('change_study:submit')}
           </Button>
@@ -249,7 +273,9 @@ function Intermediate({
             fontSize={17}
             fontWeight="bold"
             onPress={onClose}
-            disabled={isSendingAnswers}
+            disabled={
+              isSendingAnswers || isQueueUploading || isRetryAlertOpened
+            }
           >
             {t('activity_navigation:back')}
           </Text>
