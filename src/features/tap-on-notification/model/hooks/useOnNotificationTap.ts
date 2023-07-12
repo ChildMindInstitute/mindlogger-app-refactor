@@ -54,6 +54,10 @@ export function useOnNotificationTap({
     AppletModel.selectors.selectInProgressApplets,
   );
 
+  const { mutateAsync: refresh } = AppletModel.useRefreshMutation(() => {
+    navigator.navigate('Applets');
+  });
+
   const { startFlow, startActivity } = AppletModel.useStartEntity({
     hasMediaReferences,
     cleanUpMediaFiles,
@@ -91,17 +95,33 @@ export function useOnNotificationTap({
         executing ? GoBackDuration : WorkaroundDuration,
       );
     },
-    'response-data-alert': function (): void {
-      throw new Error('Function not implemented.');
+    'response-data-alert': () => {},
+    'applet-update-alert': () => {
+      refresh().then(() => {
+        NotificationModel.NotificationRefreshService.refresh(
+          queryClient,
+          storeProgress,
+          LogTrigger.ScheduleUpdated,
+        );
+      });
     },
-    'applet-update-alert': function (): void {
-      throw new Error('Function not implemented.');
+    'applet-delete-alert': () => {
+      refresh().then(() => {
+        NotificationModel.NotificationRefreshService.refresh(
+          queryClient,
+          storeProgress,
+          LogTrigger.AppletRemoved,
+        );
+      });
     },
-    'applet-delete-alert': function (): void {
-      throw new Error('Function not implemented.');
-    },
-    'schedule-updated': function (): void {
-      throw new Error('Function not implemented.');
+    'schedule-updated': () => {
+      refresh().then(() => {
+        NotificationModel.NotificationRefreshService.refresh(
+          queryClient,
+          storeProgress,
+          LogTrigger.AppletUpdated,
+        );
+      });
     },
   };
 

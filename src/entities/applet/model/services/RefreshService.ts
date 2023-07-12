@@ -1,11 +1,5 @@
-import { useMemo } from 'react';
-
 import { CacheManager } from '@georstat/react-native-image-cache';
-import {
-  QueryClient,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/react-query';
 
 import { ActivityDto, ActivityService } from '@app/shared/api';
 import {
@@ -27,7 +21,7 @@ import {
   collectActivityDetailsImageUrls,
   collectAppletDetailsImageUrls,
   collectAppletRecordImageUrls,
-} from '@app/shared/lib/services/collectImageUrls';
+} from '@app/shared/lib';
 
 type AppletActivity = {
   appletId: string;
@@ -178,23 +172,4 @@ class RefreshService {
   }
 }
 
-const useRefreshMutation = (onSuccess: () => void) => {
-  const queryClient = useQueryClient();
-
-  const refreshService = useMemo(
-    () => new RefreshService(queryClient),
-    [queryClient],
-  );
-
-  const refresh = useMemo(
-    () => refreshService.refresh.bind(refreshService),
-    [refreshService],
-  );
-
-  return useMutation(['refresh'], refresh, {
-    networkMode: 'always',
-    onSuccess,
-  });
-};
-
-export default useRefreshMutation;
+export default RefreshService;
