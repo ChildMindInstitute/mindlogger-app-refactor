@@ -15,7 +15,9 @@ const AboutScreen: FC = () => {
     <Box bg="$secondary">
       <ScrollView px="$6">
         <MarkdownView
-          content={t('about_app:mindlogger_about')}
+          content={t('about_app:mindlogger_about', {
+            credits_link: 'https://mindlogger.org',
+          })}
           markdownStyle={markdownStyle}
         />
 

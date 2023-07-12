@@ -1,4 +1,5 @@
 import {
+  AbTestResponse,
   ActivityItemType,
   Answers,
   DrawingTestResponse,
@@ -7,6 +8,7 @@ import {
   PipelineItemAnswer,
   StackedRadioResponse,
   UserAction,
+  StabilityTrackerResponse,
 } from '@app/features/pass-survey';
 import {
   AnswerDto,
@@ -31,6 +33,10 @@ import {
   ObjectAnswerDto,
   DrawerAnswerDto,
   DrawerLineDto,
+  StabilityTrackerAnswerDto,
+  AbTestAnswerDto,
+  AbLogLineDto,
+  AbLogPointDto,
 } from '@app/shared/api';
 import { HourMinute, convertToDayMonthYear } from '@app/shared/lib';
 import { Item } from '@app/shared/ui';
@@ -45,7 +51,10 @@ type TimeRange = {
 
 type StackedRadioAnswerValue = Array<Array<Item>>;
 
-export function mapAnswersToDto(pipeline: PipelineItem[], answers: Answers) {
+export function mapAnswersToDto(
+  pipeline: PipelineItem[],
+  answers: Answers,
+): AnswerDto[] {
   if (pipeline.some(x => x.type === 'Flanker')) {
     return mapFlankerAnswersToDto(pipeline, answers);
   }
@@ -58,8 +67,11 @@ export function mapAnswersToDto(pipeline: PipelineItem[], answers: Answers) {
 
     if (canHaveAnswer) {
       const answer = answers[step] ?? null;
+
       const dto =
-        answer === null ? null : convertToAnswerDto(pipelineItem.type, answer);
+        answer === null || answer?.answer === null
+          ? null
+          : convertToAnswerDto(pipelineItem.type, answer);
 
       answerDtos.push(dto);
     }
@@ -68,7 +80,10 @@ export function mapAnswersToDto(pipeline: PipelineItem[], answers: Answers) {
   return answerDtos;
 }
 
-const mapFlankerAnswersToDto = (pipeline: PipelineItem[], answers: Answers) => {
+const mapFlankerAnswersToDto = (
+  pipeline: PipelineItem[],
+  answers: Answers,
+): AnswerDto[] => {
   const practiceSteps = pipeline
     .map((x, index) =>
       x.type === 'Flanker' && x.payload.blockType === 'practice' ? index : null,
@@ -138,7 +153,9 @@ function convertToSliderAnswer(answer: Answer): AnswerDto {
 
 function convertToCheckboxAnswer(answer: Answer): AnswerDto {
   const checkboxAnswers = answer.answer as Item[];
-  const answerDto = checkboxAnswers.map(checkboxAnswer => checkboxAnswer.value);
+  const answerDto = checkboxAnswers?.map(
+    checkboxAnswer => checkboxAnswer.value,
+  );
 
   return {
     value: answerDto as CheckboxAnswerDto,
@@ -332,6 +349,54 @@ function convertToDrawerAnswer(answer: Answer): AnswerDto {
   };
 }
 
+function convertToStabilityTrackerAnswer(answer: Answer): AnswerDto {
+  const stabilityTrackerResponse = answer.answer as StabilityTrackerResponse;
+
+  const values = stabilityTrackerResponse.value.map(x => ({
+    timestamp: x.timestamp,
+    stimPos: x.circlePosition,
+    targetPos: x.targetPosition,
+    userPos: x.userPosition,
+    score: x.score,
+    lambda: x.lambda,
+    lambdaSlope: x.lambdaSlope,
+  }));
+
+  const dto: StabilityTrackerAnswerDto = {
+    value: values,
+    maxLambda: stabilityTrackerResponse.maxLambda,
+    phaseType:
+      stabilityTrackerResponse.phaseType === 'test'
+        ? 'challenge-phase'
+        : 'focus-phase',
+  };
+
+  return {
+    value: dto,
+  };
+}
+
+function convertToAbTestAnswer(answer: Answer): AnswerDto {
+  const abResponse = answer.answer as AbTestResponse;
+
+  const dto: AbTestAnswerDto = {
+    currentIndex: abResponse.currentIndex,
+    startTime: abResponse.startTime,
+    width: abResponse.width,
+    updated: abResponse.updated,
+    lines: abResponse.lines.map<AbLogLineDto>(x => ({
+      points: x.points.map<AbLogPointDto>(p => ({
+        ...p,
+        actual: p.actual ?? undefined,
+      })),
+    })),
+  };
+
+  return {
+    value: dto,
+  };
+}
+
 function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
   switch (type) {
     case 'TextInput':
@@ -387,6 +452,13 @@ function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
 
     case 'DrawingTest':
       return convertToDrawerAnswer(answer);
+
+    case 'StabilityTracker':
+      return convertToStabilityTrackerAnswer(answer);
+
+    case 'AbTest': {
+      return convertToAbTestAnswer(answer);
+    }
 
     default:
       return null;

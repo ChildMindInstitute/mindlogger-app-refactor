@@ -1,7 +1,7 @@
 import { ActivityDto } from '@app/shared/api';
 
 const testMessage1 =
-  'Start by placing the point of the pen at the center of the spiral (S), and trace out along the dashed blue line to the end of the sprial (E).  Try to stay on the dashed blue line while tracing. You will do this five times.';
+  'Start by placing the point of the pen at the center of the spiral (S), and trace out along the dashed blue line to the end of the sprial (E).  Try to stay on the dashed blue line while tracing. You will do this five times.';
 
 const testMessage2 =
   'Write the entire alphabet in order using lower-case (small) letters. Write each letter in one of the boxes below. If you make a mistake, just keep going. Make sure you print and do not use cursive handwriting. Work as quickly as you can without making mistakes. Remember to print in lower-case, not capital letters. Press the “Next” button as soon as you finish.';
@@ -116,7 +116,7 @@ export const DrawingTestActivity = {
   vortex,
   all: allDrawing,
 };
-
+/*
 export const AbTestActivity: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
@@ -149,7 +149,7 @@ export const AbTestActivity: ActivityDto = {
       conditionalLogic: null,
     },
   ],
-};
+};*/
 
 export const TextActivity: ActivityDto = {
   id: 'aid1',
@@ -278,14 +278,99 @@ export const SliderTestActivity: ActivityDto = {
   ],
 };
 
+export const StabilityTrackerActivity: ActivityDto = {
+  id: 'aid01',
+  name: 'Activity number 01',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  order: 0,
+  isHidden: false,
+  items: [
+    {
+      id: '103011',
+      name: 'MarkdownMessage',
+      responseType: 'message',
+      timer: null,
+      isHidden: false,
+      config: {
+        removeBackButton: false,
+        timer: null,
+      },
+      responseValues: null,
+      question: 'The following will be the Challenge(trial) phase.',
+      order: 0,
+      conditionalLogic: null,
+    },
+    {
+      id: '10301',
+      name: 'Gyro',
+      responseType: 'stabilityTracker',
+      timer: null,
+      isHidden: false,
+      config: {
+        lambdaSlope: 20.0,
+        durationMinutes: 5,
+        trialsNumber: 3,
+        userInputType: 'gyroscope',
+        phase: 'practice',
+      },
+      responseValues: null,
+      question: '',
+      order: 0,
+      conditionalLogic: null,
+    },
+    {
+      id: '1030111',
+      name: 'MarkdownMessage',
+      responseType: 'message',
+      timer: null,
+      isHidden: false,
+      config: {
+        removeBackButton: false,
+        timer: null,
+      },
+      responseValues: null,
+      question: 'The following will be the Focus phase.',
+      order: 0,
+      conditionalLogic: null,
+    },
+    {
+      id: '10301',
+      name: 'Gyro',
+      responseType: 'stabilityTracker',
+      timer: null,
+      isHidden: false,
+      config: {
+        lambdaSlope: 20.0,
+        durationMinutes: 5,
+        trialsNumber: 0,
+        userInputType: 'gyroscope',
+        phase: 'test',
+      },
+      responseValues: null,
+      question: '',
+      order: 0,
+      conditionalLogic: null,
+    },
+  ],
+};
+
 const TestActivities = [
   // grid,
   // vortex,
   // AbTestActivity,
   // TextActivity,
-  SliderTestActivity,
+  // SliderTestActivity,
   //FlankerWithTextSignsActivity,
   //FlankerWithImageActivity
+  StabilityTrackerActivity,
 ];
 
 let index = 0;

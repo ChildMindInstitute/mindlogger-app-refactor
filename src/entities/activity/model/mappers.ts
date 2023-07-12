@@ -3,11 +3,13 @@ import {
   ButtonConfiguration,
   FlankerItemSettings,
   StimulusConfiguration,
+  TestNode,
+  TutorialRecord,
 } from '@app/abstract/lib';
 import {
   ActivityDto,
   DrawingItemDto,
-  AbTestItemDto,
+  StabilityTrackerItemDto,
   AudioItemDto,
   AudioPlayerItemDto,
   DateItemDto,
@@ -28,6 +30,7 @@ import {
   TimeItemDto,
   SingleSelectionRowsItemDto,
   ConditionalLogicDto,
+  ABTrailsItemDto,
 } from '@app/shared/api';
 import { getMsFromSeconds } from '@app/shared/lib';
 
@@ -91,15 +94,36 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
   };
 }
 
-function mapToAbTest(dto: AbTestItemDto): ActivityItem {
+function mapToAbTest(dto: ABTrailsItemDto): ActivityItem {
+  const config = dto.config;
+
+  const nodesSettingsDto = config.nodes;
+
+  const nodes = nodesSettingsDto.nodes;
+
+  const tutorials = config.tutorials;
+
   return {
     id: dto.id,
     name: dto.name,
-    inputType: 'AbTest',
+    inputType: 'AbTrails',
     config: {
-      device: dto.responseValues.device,
+      config: {
+        fontSize: nodesSettingsDto.fontSize,
+        radius: nodesSettingsDto.radius,
+        beginWordLength: nodesSettingsDto.beginWordLength,
+        endWordLength: nodesSettingsDto.endWordLength,
+        fontSizeBeginEnd: nodesSettingsDto.fontSizeBeginEnd,
+      },
+      deviceType: config.deviceType,
+      nodes: nodes.map<TestNode>(x => ({
+        ...x,
+      })),
+      tutorials: tutorials.tutorials.map<TutorialRecord>(x => ({
+        ...x,
+      })),
     },
-    timer: mapTimerValue(dto.config.timer),
+    timer: null,
     order: dto.order,
     question: dto.question,
     isSkippable: false,
@@ -108,6 +132,32 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
     isAbleToMoveBack: false,
     hasTextResponse: false,
     canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+  };
+}
+
+function mapToStabilityTracker(dto: StabilityTrackerItemDto): ActivityItem {
+  return {
+    id: dto.id,
+    name: dto.name,
+    inputType: 'StabilityTracker',
+    config: {
+      lambdaSlope: dto.config.lambdaSlope,
+      durationMinutes: dto.config.durationMinutes,
+      trialsNumber: dto.config.trialsNumber,
+      userInputType: dto.config.userInputType,
+      phase: dto.config.phase,
+    },
+    timer: null,
+    order: dto.order,
+    question: dto.question,
+    isSkippable: false,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: true,
+    hasTextResponse: false,
+    canBeReset: true,
     hasTopNavigation: false,
     isHidden: dto.isHidden,
   };
@@ -123,8 +173,11 @@ function mapToFlanker(itemDto: FlankerItemDto): ActivityItem {
       ...x,
     })),
     blockType: dto.blockType,
-    fixationDuration: dto.fixationDuration,
-    fixationScreen: dto.fixationScreen,
+    fixationDuration: dto.fixationDuration ?? 0,
+    fixationScreen: dto.fixationScreen ?? {
+      image: '',
+      value: '',
+    },
     isFirstPractice: dto.isFirstPractice,
     isLastPractice: dto.isLastPractice,
     isLastTest: dto.isLastTest,
@@ -615,8 +668,10 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
     order: dto.order,
     items: dto.items.map(item => {
       switch (item.responseType) {
-        case 'abTest':
+        case 'ABTrails':
           return mapToAbTest(item);
+        case 'stabilityTracker':
+          return mapToStabilityTracker(item);
         case 'audio':
           return mapToAudio(item);
         case 'audioPlayer':

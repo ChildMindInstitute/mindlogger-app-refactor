@@ -2,6 +2,7 @@ import { FC, useCallback, useMemo } from 'react';
 
 import { VictoryAxis, VictoryChart, VictoryScatter } from 'victory-native';
 
+import { ResponseConfig, SelectionsResponseConfig } from '@shared/api';
 import {
   areDatesEqual,
   colors,
@@ -27,7 +28,7 @@ type TimelineChartData = {
 };
 
 type Props = {
-  options: Array<TimelineChartOption>;
+  config: ResponseConfig;
   data: Array<ChartItem>;
 };
 
@@ -40,7 +41,9 @@ const getScatterDots = (chartDataItem: TimelineChartData) => {
   });
 };
 
-const TimelineChart: FC<Props> = ({ data, options }) => {
+const TimelineChart: FC<Props> = ({ data, config }) => {
+  const { options } = config as SelectionsResponseConfig;
+
   const getXAxisDots = (): Array<ChartAxisDot> =>
     range(7).map(item => ({ dot: item, value: 0 }));
 

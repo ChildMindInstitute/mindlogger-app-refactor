@@ -59,6 +59,26 @@ export type DrawerAnswerDto = {
   width: number;
 } & MediaFile;
 
+export type AbLogPointDto = {
+  x: number;
+  y: number;
+  start: string;
+  end: string;
+  time: number;
+  valid: boolean | null;
+  actual: string | undefined;
+};
+
+export type AbLogLineDto = { points: Array<AbLogPointDto> };
+
+export type AbTestAnswerDto = {
+  width: number;
+  startTime: number;
+  updated: true;
+  lines: AbLogLineDto[];
+  currentIndex: number;
+};
+
 export type TimeRangeAnswerDto = {
   from: { hour: number; minute: number };
   to: { hour: number; minute: number };
@@ -71,6 +91,20 @@ export type DateAnswerDto = DayMonthYear;
 export type GeolocationAnswerDto = {
   latitude: number;
   longitude: number;
+};
+
+export type StabilityTrackerAnswerDto = {
+  value: {
+    timestamp: number;
+    stimPos: number[];
+    userPos: number[];
+    targetPos: number[];
+    lambda: number;
+    score: number;
+    lambdaSlope: number;
+  }[];
+  maxLambda: number;
+  phaseType: 'challenge-phase' | 'focus-phase';
 };
 
 export type AnswerValueDto =
@@ -89,8 +123,10 @@ export type AnswerValueDto =
   | TimeAnswerDto
   | DateAnswerDto
   | GeolocationAnswerDto
+  | StabilityTrackerAnswerDto
   | FlankerAnswerDto
   | DrawerAnswerDto
+  | AbTestAnswerDto
   | null;
 
 export type ObjectAnswerDto = {

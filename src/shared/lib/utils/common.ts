@@ -33,35 +33,6 @@ export function getCurrentWeekDates(): Array<Date> {
   });
 }
 
-export const generateLicenseHTML = () => {
-  const htmlStyles = `
-    <style>
-      pre {
-       word-wrap: break-word;
-       white-space: pre-wrap;
-       font-size: 45px;
-       font-family: initial;
-      }
-       body {
-         background-color: white;
-       }
-    </style>`;
-
-  return async (licenseUrlLocal: string) => {
-    const response = await fetch(licenseUrlLocal);
-    const text = await response.text();
-    const html = `
-      <html>
-        ${htmlStyles}
-        <pre>
-          ${text}
-        </pre>
-      </html>`;
-
-    return html;
-  };
-};
-
 export function splitArray<TListItem>(
   array: TListItem[],
   leftArraySize: number,

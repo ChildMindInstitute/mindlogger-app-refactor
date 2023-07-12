@@ -59,6 +59,7 @@ function ActivityStepper({
     removeAnswer,
     setAdditionalAnswer,
     removeTimer,
+    setContext,
   } = useActivityState({
     appletId,
     activityId,
@@ -251,6 +252,8 @@ function ActivityStepper({
                         setAdditionalAnswer(currentStep, response);
                       }}
                       textVariableReplacer={replaceTextVariables}
+                      onContextChange={setContext}
+                      context={activityStorageRecord?.context}
                     />
                   )}
                 </>

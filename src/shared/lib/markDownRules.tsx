@@ -307,9 +307,11 @@ const markDownRules: RenderRules = {
         source={{ html: node.content }}
         scrollEnabled={false}
         scalesPageToFit={false}
+        allowsProtectedMedia
+        mixedContentMode="always"
         viewportContent="width=device-width, user-scalable=no"
         onShouldStartLoadWithRequest={onHtmlBlockLinkPress}
-        androidLayerType="software"
+        androidLayerType="hardware"
       />
     );
   },

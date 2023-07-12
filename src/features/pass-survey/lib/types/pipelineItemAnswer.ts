@@ -5,6 +5,7 @@ import {
   ActivityItemType,
   TextInputResponse,
   AbTestResponse,
+  StabilityTrackerResponse,
   DrawingTestResponse,
   FlankerResponse,
   SliderResponse,
@@ -51,6 +52,14 @@ interface AbTestPipelineAnswer extends PipelineItemAnswerBase {
   type: 'AbTest';
   value: {
     answer?: AbTestResponse;
+    additionalAnswer?: string;
+  };
+}
+
+interface StabilityTrackerPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'StabilityTracker';
+  value: {
+    answer?: StabilityTrackerResponse;
     additionalAnswer?: string;
   };
 }
@@ -202,6 +211,7 @@ export type PipelineItemAnswer =
   | SplashPipelineAnswer
   | TextInputPipelineAnswer
   | AbTestPipelineAnswer
+  | StabilityTrackerPipelineAnswer
   | DrawingTestPipelineAnswer
   | FlankerPipelineAnswer
   | NumberSelectPipelineAnswer

@@ -167,8 +167,7 @@ class RefreshService {
       const isOnline = await isAppOnline();
 
       if (!isOnline) {
-        setTimeout(onNetworkUnavailable, 300);
-        return;
+        return onNetworkUnavailable();
       }
 
       await this.refreshAllApplets();

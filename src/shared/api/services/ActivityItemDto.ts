@@ -1,5 +1,6 @@
 import { ImageUrl } from '@app/shared/lib';
 
+import { AbTrailsItemSettingsDto } from './AbTrailsSettingsDtos';
 import { FlankerItemSettingsDto } from './FlankerSettingsDto';
 
 export type ResponseType =
@@ -21,8 +22,9 @@ export type ResponseType =
   | 'audio'
   | 'audioPlayer'
   | 'flanker'
-  | 'abTest'
-  | 'time';
+  | 'stabilityTracker'
+  | 'time'
+  | 'ABTrails';
 
 type Match = 'any' | 'all';
 
@@ -390,7 +392,21 @@ type AbTestAnswerSettings = {
 
 export type FlankerConfiguration = FlankerItemSettingsDto;
 
+type StabilityTrackerAnswerSettings = null;
+
+type StabilityTrackerConfiguration = {
+  lambdaSlope: number;
+  durationMinutes: number;
+  trialsNumber: number;
+  userInputType: 'gyroscope' | 'touch';
+  phase: 'practice' | 'test';
+};
+
 export type FlankerAnswerSettings = null;
+
+export type AbTrailsConfiguration = AbTrailsItemSettingsDto;
+
+export type AbTrailsAnswerSettings = null;
 
 type Configuration =
   | TextConfiguration
@@ -412,7 +428,9 @@ type Configuration =
   | SingleSelectionConfiguration
   | MultiSelectionConfiguration
   | AbTestConfiguration
-  | FlankerConfiguration;
+  | StabilityTrackerConfiguration
+  | FlankerConfiguration
+  | AbTrailsConfiguration;
 
 type AnswerSettings =
   | TextAnswerSettings
@@ -433,7 +451,9 @@ type AnswerSettings =
   | SingleSelectionAnswerSettings
   | MultiSelectionAnswerSettings
   | AbTestAnswerSettings
-  | FlankerAnswerSettings;
+  | StabilityTrackerAnswerSettings
+  | FlankerAnswerSettings
+  | AbTrailsAnswerSettings;
 
 type ActivityItemDtoBase = {
   id: string;
@@ -556,16 +576,22 @@ export interface AudioPlayerItemDto extends ActivityItemDtoBase {
   responseValues: AudioPlayerAnswerSettings;
 }
 
-export interface AbTestItemDto extends ActivityItemDtoBase {
-  responseType: 'abTest';
-  config: AbTestConfiguration;
-  responseValues: AbTestAnswerSettings;
+export interface StabilityTrackerItemDto extends ActivityItemDtoBase {
+  responseType: 'stabilityTracker';
+  config: StabilityTrackerConfiguration;
+  responseValues: StabilityTrackerAnswerSettings;
 }
 
 export interface FlankerItemDto extends ActivityItemDtoBase {
   responseType: 'flanker';
   config: FlankerConfiguration;
   responseValues: FlankerAnswerSettings;
+}
+
+export interface ABTrailsItemDto extends ActivityItemDtoBase {
+  responseType: 'ABTrails';
+  config: AbTrailsConfiguration;
+  responseValues: AbTrailsAnswerSettings;
 }
 
 export type ActivityItemDto =
@@ -586,6 +612,7 @@ export type ActivityItemDto =
   | MultiSelectionRowsItemDto
   | AudioItemDto
   | AudioPlayerItemDto
-  | AbTestItemDto
+  | ABTrailsItemDto
+  | StabilityTrackerItemDto
   | FlankerItemDto
   | TimeItemDto;

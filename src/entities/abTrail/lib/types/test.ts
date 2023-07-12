@@ -29,7 +29,8 @@ export type OnResultLog = {
   currentIndex: number;
 };
 
-export type AbTestResponse = {
+export type AbTestResult = {
   width: number;
   startTime: number;
+  updated: true;
 } & OnResultLog;

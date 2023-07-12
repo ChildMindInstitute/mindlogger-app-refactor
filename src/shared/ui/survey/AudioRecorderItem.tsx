@@ -48,7 +48,6 @@ const AudioRecorderItem: FC<Props> = ({
   const { isMicrophoneAccessGranted } = useMicrophonePermissions();
   const [isRecording, setIsRecording] = useState(false);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
-  const [fileSaved, setFileSaved] = useState(!!initialValue);
   const [errorDescription, setErrorDescription] = useState('');
   const [lastFilePath, setLastFilePath] = useState<string | null>(null);
 
@@ -131,7 +130,6 @@ const AudioRecorderItem: FC<Props> = ({
       const fullPath = await audioRecorderPlayer.current.stopRecorder();
 
       setIsRecording(false);
-      setFileSaved(true);
 
       const name = fullPath
         ? fullPath.replace(/^(?:[^\/]*\/)*/, '').split('.')[0]
@@ -168,7 +166,7 @@ const AudioRecorderItem: FC<Props> = ({
   const getInfoText = () => {
     if (isRecording) {
       return t('audio_recorder:recording');
-    } else if (fileSaved) {
+    } else if (initialValue) {
       return t('audio_recorder:file_saved');
     }
   };

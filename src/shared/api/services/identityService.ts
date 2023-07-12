@@ -4,10 +4,11 @@ import { SuccessfulEmptyResponse, SuccessfulResponse } from '../types';
 type LoginRequest = {
   email: string;
   password: string;
+  deviceId?: string;
 };
 
 type LogoutRequest = {
-  deviceId: number;
+  deviceId: string;
 };
 
 type SignUpRequest = {

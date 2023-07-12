@@ -1,18 +1,21 @@
-import { DeviceType, TestIndex } from '@entities/abTrail';
+import { AbPayload, AbTestPayload } from '@app/abstract/lib';
 
 import { PipelineItem } from '../lib';
 
 export const getAbTrailsPipeline = (
-  deviceType: DeviceType,
   id: string,
+  abPayload: AbPayload,
+  isLast: boolean,
 ): PipelineItem[] => {
-  const getTutorialPipelineItem = (testIndex: TestIndex): PipelineItem => {
+  const getTutorialPipelineItem = (
+    testPayload: AbTestPayload,
+  ): PipelineItem => {
     return {
       type: 'Tutorial',
       payload: {
-        type: 'AbTrails',
-        testIndex,
-        deviceType,
+        type: 'AbTutorial',
+        tutorials: abPayload.tutorials,
+        test: testPayload,
       },
       timer: null,
       canBeReset: false,
@@ -21,13 +24,15 @@ export const getAbTrailsPipeline = (
     };
   };
 
-  const getTestPipelineItem = (testIndex: TestIndex): PipelineItem => {
+  const getTestPipelineItem = (): PipelineItem => {
     return {
       id,
       type: 'AbTest',
       payload: {
-        testIndex,
-        deviceType,
+        config: abPayload.config,
+        nodes: abPayload.nodes,
+        deviceType: abPayload.deviceType,
+        isLast,
       },
       canBeReset: false,
       timer: null,
@@ -36,17 +41,11 @@ export const getAbTrailsPipeline = (
     };
   };
 
-  return [
-    getTutorialPipelineItem(0),
-    getTestPipelineItem(0),
+  const testItem = getTestPipelineItem();
 
-    getTutorialPipelineItem(1),
-    getTestPipelineItem(1),
+  const tutorialItem = getTutorialPipelineItem(
+    testItem.payload as AbTestPayload,
+  );
 
-    getTutorialPipelineItem(2),
-    getTestPipelineItem(2),
-
-    getTutorialPipelineItem(3),
-    getTestPipelineItem(3),
-  ];
+  return [tutorialItem, testItem];
 };

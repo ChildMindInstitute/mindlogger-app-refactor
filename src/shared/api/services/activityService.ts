@@ -40,7 +40,10 @@ function activityService() {
         } as FakeResponse;
         return Promise.resolve(response);
       } else {
-        return httpService.get<ActivityResponse>(`/activities/${id}`);
+        const response = await httpService.get<ActivityResponse>(
+          `/activities/${id}`,
+        );
+        return response;
       }
     },
   };

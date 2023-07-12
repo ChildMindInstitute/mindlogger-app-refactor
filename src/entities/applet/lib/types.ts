@@ -1,4 +1,8 @@
-import { AppletEncryptionDTO } from '@shared/api';
+import {
+  AnalyticsResponseType,
+  AppletEncryptionDTO,
+  ResponseConfig,
+} from '@shared/api';
 
 export type AppletTheme = {
   logo: string;
@@ -44,4 +48,29 @@ export type AppletDetails = {
   activities: Activity[];
   activityFlows: ActivityFlow[];
   encryption: AppletEncryptionDTO | null;
+};
+
+export type AnalyticsItemValue = {
+  date: Date;
+  value: number;
+};
+
+export type ResponseAnalyticsValue = Array<AnalyticsItemValue>;
+
+export type ItemResponses = {
+  name: string;
+  type: AnalyticsResponseType;
+  data: ResponseAnalyticsValue;
+  responseConfig: ResponseConfig;
+};
+
+export type ActivityResponses = {
+  id: string;
+  name: string;
+  responses: Array<ItemResponses>;
+};
+
+export type AppletAnalytics = {
+  id: string;
+  activitiesResponses: Array<ActivityResponses> | null;
 };
