@@ -15,7 +15,6 @@ async function onMessageReceived(notification: RemoteNotification) {
       ) as RemoteNotificationPayload;
 
       NotificationRenderer.displayNotification({
-        id: notification.messageId,
         title: payload.title,
         body: payload.body,
         data: payload.data,

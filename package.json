@@ -33,7 +33,7 @@
     "@georstat/react-native-image-cache": "^2.3.0",
     "@hookform/resolvers": "^2.9.10",
     "@miblanchard/react-native-slider": "^2.3.1",
-    "@notifee/react-native": "^7.6.1",
+    "@notifee/react-native": "^7.8.0",
     "@react-native-community/checkbox": "^0.5.14",
     "@react-native-community/datetimepicker": "^6.7.5",
     "@react-native-community/geolocation": "^3.0.5",

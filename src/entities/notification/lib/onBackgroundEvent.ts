@@ -8,7 +8,7 @@ import {
 
 export type WatchBackgroundEventArgs = Partial<NotificationEventCallbacks>;
 
-export function watchBackgroundEvent(callbacks: WatchBackgroundEventArgs) {
+export function onBackgroundEvent(callbacks: WatchBackgroundEventArgs) {
   const EventCallbacks: Partial<NotificationEventHandlers> = {
     [EventType.DISMISSED]: callbacks.onDismissed,
     [EventType.PRESS]: callbacks.onPress,
@@ -23,7 +23,11 @@ export function watchBackgroundEvent(callbacks: WatchBackgroundEventArgs) {
     [EventType.FG_ALREADY_EXIST]: callbacks.onFGAlreadyExists,
   };
 
+  console.log('onBackgroundEvent registered');
+
   notifee.onBackgroundEvent(async event => {
+    console.log('onBackgroundEvent!!!!!!', event);
+
     const { detail } = event;
 
     EventCallbacks[event.type]?.(detail as LocalEventDetail);
