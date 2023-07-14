@@ -15,7 +15,7 @@ import {
   NotificationModel,
   PushNotificationType,
   useBackgroundEvents,
-  useForegroundEvent,
+  useForegroundEvents,
   useOnInitialAndroidNotification,
 } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
@@ -198,7 +198,7 @@ export function useOnNotificationTap({
     }
   };
 
-  useForegroundEvent({
+  useForegroundEvents({
     onPress: (eventDetail: LocalEventDetail) => {
       const action = actions[eventDetail.notification.data.type];
 

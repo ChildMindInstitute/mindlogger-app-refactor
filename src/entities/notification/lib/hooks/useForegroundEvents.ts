@@ -10,7 +10,7 @@ import {
 
 export type UseForegroundEventArgs = Partial<NotificationEventCallbacks>;
 
-export function useForegroundEvent({
+export function useForegroundEvents({
   onDismissed,
   onPress,
   onActionPress,
