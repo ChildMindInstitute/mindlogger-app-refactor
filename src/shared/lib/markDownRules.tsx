@@ -311,7 +311,7 @@ const markDownRules: RenderRules = {
         mixedContentMode="always"
         viewportContent="width=device-width, user-scalable=no"
         onShouldStartLoadWithRequest={onHtmlBlockLinkPress}
-        androidLayerType="hardware"
+        androidLayerType="none"
       />
     );
   },
