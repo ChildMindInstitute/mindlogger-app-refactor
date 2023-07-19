@@ -27,8 +27,6 @@ import {
   DrawLine,
   DrawPoint,
   Point,
-  transformByWidth,
-  transformBack,
   ResponseSerializer,
   DrawResult,
   CachedBezierItem,
@@ -64,23 +62,23 @@ const DrawingBoard: FC<Props> = props => {
 
   const pathsCache = useRef<Array<SkPath>>([]).current;
 
-  const normalizedLines = useMemo(() => {
-    return transformByWidth(value, width);
-  }, [value, width]);
+  const currentLines = useMemo(() => {
+    return [...value];
+  }, [value]);
 
   const currentLogLineRef = useRef<DrawLine | null>(null);
 
   const paths = useMemo(() => {
-    if (!normalizedLines.length) {
+    if (!currentLines.length) {
       pathsCache.splice(0, pathsCache.length);
     }
 
-    const newPaths = convertToSkPaths(normalizedLines, pathsCache.length);
+    const newPaths = convertToSkPaths(currentLines, pathsCache.length);
 
     pathsCache.push(...newPaths);
 
     return [...pathsCache];
-  }, [normalizedLines, pathsCache]);
+  }, [currentLines, pathsCache]);
 
   const resetCurrentLine = () => {
     currentLogLineRef.current = null;
@@ -132,11 +130,11 @@ const DrawingBoard: FC<Props> = props => {
       return;
     }
 
-    const transformedLine = transformBack(currentLogLineRef.current, width);
+    const newLine = { ...currentLogLineRef.current };
 
-    const lines = [...value, transformedLine];
+    const lines = [...value, newLine];
 
-    const svgString = ResponseSerializer.process(lines);
+    const svgString = ResponseSerializer.process(lines, width);
 
     const result: DrawResult = {
       lines,
