@@ -8,7 +8,7 @@ import {
 
 export type WatchBackgroundEventArgs = Partial<NotificationEventCallbacks>;
 
-export function watchBackgroundEvent(callbacks: WatchBackgroundEventArgs) {
+export function onBackgroundEvent(callbacks: WatchBackgroundEventArgs) {
   const EventCallbacks: Partial<NotificationEventHandlers> = {
     [EventType.DISMISSED]: callbacks.onDismissed,
     [EventType.PRESS]: callbacks.onPress,

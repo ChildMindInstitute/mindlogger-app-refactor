@@ -66,7 +66,9 @@ export default () => {
   useNotificationPermissions();
   useAlarmPermissions();
   useFirebaseSetup({
-    onFCMTokenCreated: fcmToken => SystemRecord.setDeviceId(fcmToken),
+    onFCMTokenCreated: fcmToken => {
+      SystemRecord.setDeviceId(fcmToken);
+    },
   });
 
   EnterForegroundModel.useRestackNotifications();

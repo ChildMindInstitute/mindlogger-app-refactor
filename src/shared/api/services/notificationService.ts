@@ -9,6 +9,9 @@ export const enum LogTrigger {
   PullToRefresh = 'PullToRefresh',
   GoToForeground = 'GoToForeground',
   LimitReachedNotification = 'LimitReachedNotification',
+  ScheduleUpdated = 'ScheduleUpdated',
+  AppletRemoved = 'AppletRemoved',
+  AppletUpdated = 'AppletUpdated',
 }
 
 export const enum LogAction {

@@ -12,10 +12,10 @@ import { AppletModel, clearStorageRecords } from '@app/entities/applet';
 import {
   LocalEventDetail,
   LocalInitialNotification,
-  LocalNotificationType,
   NotificationModel,
+  PushNotificationType,
   useBackgroundEvents,
-  useForegroundEvent,
+  useForegroundEvents,
   useOnInitialAndroidNotification,
 } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
@@ -54,13 +54,15 @@ export function useOnNotificationTap({
     AppletModel.selectors.selectInProgressApplets,
   );
 
+  const { mutateAsync: refresh } = AppletModel.useRefreshMutation();
+
   const { startFlow, startActivity } = AppletModel.useStartEntity({
     hasMediaReferences,
     cleanUpMediaFiles,
   });
 
   const actions: Record<
-    LocalNotificationType,
+    PushNotificationType,
     (eventDetail: LocalEventDetail) => void
   > = {
     'request-to-reschedule-due-to-limit': () => {
@@ -90,6 +92,41 @@ export function useOnNotificationTap({
         },
         executing ? GoBackDuration : WorkaroundDuration,
       );
+    },
+    'response-data-alert': () => {},
+    'applet-update-alert': () => {
+      navigator.navigate('Applets');
+
+      refresh().then(() => {
+        NotificationModel.NotificationRefreshService.refresh(
+          queryClient,
+
+          storeProgress,
+          LogTrigger.ScheduleUpdated,
+        );
+      });
+    },
+    'applet-delete-alert': () => {
+      navigator.navigate('Applets');
+
+      refresh().then(() => {
+        NotificationModel.NotificationRefreshService.refresh(
+          queryClient,
+          storeProgress,
+          LogTrigger.AppletRemoved,
+        );
+      });
+    },
+    'schedule-updated': () => {
+      navigator.navigate('Applets');
+
+      refresh().then(() => {
+        NotificationModel.NotificationRefreshService.refresh(
+          queryClient,
+          storeProgress,
+          LogTrigger.AppletUpdated,
+        );
+      });
     },
   };
 
@@ -166,7 +203,7 @@ export function useOnNotificationTap({
     }
   };
 
-  useForegroundEvent({
+  useForegroundEvents({
     onPress: (eventDetail: LocalEventDetail) => {
       const action = actions[eventDetail.notification.data.type];
 
