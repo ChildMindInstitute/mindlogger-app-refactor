@@ -54,9 +54,7 @@ export function useOnNotificationTap({
     AppletModel.selectors.selectInProgressApplets,
   );
 
-  const { mutateAsync: refresh } = AppletModel.useRefreshMutation(() => {
-    navigator.navigate('Applets');
-  });
+  const { mutateAsync: refresh } = AppletModel.useRefreshMutation();
 
   const { startFlow, startActivity } = AppletModel.useStartEntity({
     hasMediaReferences,
@@ -97,15 +95,20 @@ export function useOnNotificationTap({
     },
     'response-data-alert': () => {},
     'applet-update-alert': () => {
+      navigator.navigate('Applets');
+
       refresh().then(() => {
         NotificationModel.NotificationRefreshService.refresh(
           queryClient,
+
           storeProgress,
           LogTrigger.ScheduleUpdated,
         );
       });
     },
     'applet-delete-alert': () => {
+      navigator.navigate('Applets');
+
       refresh().then(() => {
         NotificationModel.NotificationRefreshService.refresh(
           queryClient,
@@ -115,6 +118,8 @@ export function useOnNotificationTap({
       });
     },
     'schedule-updated': () => {
+      navigator.navigate('Applets');
+
       refresh().then(() => {
         NotificationModel.NotificationRefreshService.refresh(
           queryClient,

@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { RefreshService } from '../services';
 
-const useRefreshMutation = (onSuccess: () => void) => {
+const useRefreshMutation = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
 
   const refreshService = useMemo(
