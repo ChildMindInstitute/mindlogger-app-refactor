@@ -107,16 +107,21 @@ function ActivityStepper({
 
   const showTimeLeft = !!timer;
 
-  const onNext = (nextStep: number) => {
+  const onNext = (nextStep: number, isForced: boolean) => {
     removeTimer(currentStep);
     restartIdleTimer();
     setCurrentStep(nextStep);
+
+    if (!isForced) {
+      trackUserAction(userActionCreator.next());
+    }
   };
 
   const onBack = (nextStep: number) => {
     removeTimer(currentStep);
     restartIdleTimer();
     setCurrentStep(nextStep);
+    trackUserAction(userActionCreator.back());
   };
 
   const onBeforeNext = (): number => {

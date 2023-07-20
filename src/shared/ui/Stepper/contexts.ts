@@ -3,7 +3,7 @@ import { createContext, Ref } from 'react';
 import { ViewSliderRef } from '@shared/ui';
 
 type Handlers = {
-  next: () => void;
+  next: (isForced: boolean) => void;
   back: () => void;
   undo: () => void;
 };

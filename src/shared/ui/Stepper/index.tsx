@@ -16,7 +16,7 @@ type Props = PropsWithChildren<{
   startFrom: number;
   stepsCount: number;
 
-  onNext?: (step: number) => void;
+  onNext?: (step: number, isForced: boolean) => void;
   onBack?: (step: number) => void;
   onUndo?: (step: number) => void;
 
@@ -68,20 +68,23 @@ export function Stepper({
 
   const stepRef = useRef(startFrom ?? 0);
 
-  const next = useCallback(() => {
-    const step = stepRef.current;
-    const stepShift = onBeforeNextRef.current?.(step) ?? 1;
-    const nextStep = step + stepShift;
+  const next = useCallback(
+    (isForced: boolean) => {
+      const step = stepRef.current;
+      const stepShift = onBeforeNextRef.current?.(step) ?? 1;
+      const nextStep = step + stepShift;
 
-    const moved = viewSliderRef.current?.next(stepShift);
+      const moved = viewSliderRef.current?.next(stepShift);
 
-    if (moved) {
-      stepRef.current = nextStep;
-      onNextRef.current?.(nextStep);
-    } else if (nextStep >= stepsCount) {
-      onEndReachedRef.current?.();
-    }
-  }, [stepsCount]);
+      if (moved) {
+        stepRef.current = nextStep;
+        onNextRef.current?.(nextStep, isForced);
+      } else if (nextStep >= stepsCount) {
+        onEndReachedRef.current?.();
+      }
+    },
+    [stepsCount],
+  );
 
   const back = useCallback(() => {
     const step = stepRef.current;
