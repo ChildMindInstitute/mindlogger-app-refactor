@@ -1,59 +1,19 @@
-import { useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { useIsMutating, useQueryClient } from '@tanstack/react-query';
-
-import { useForceUpdate } from '@app/shared/lib';
 import { Box, Button, Text } from '@app/shared/ui';
 
-//import { QueueProcessingService } from '../lib';
 import useQueueProcessing from '../lib/hooks/useQueueProcessing';
 
 const UploadRetryBanner = () => {
-  const reRender = useForceUpdate();
+  const { isLoading, hasItemsInQueue, process } = useQueueProcessing();
 
-  const onQueueChange = useCallback(() => {
-    reRender();
-  }, [reRender]);
-
-  useEffect(() => {
-    // QueueProcessingService.addListener(onQueueChange);
-    // return () => QueueProcessingService.removeListener(onQueueChange);
-  }, [onQueueChange]);
-
-  const { process: processQueue, isLoading: isQueueProcessing } =
-    useQueueProcessing();
-
-  const totalLoadingMutations = useIsMutating({
-    mutationKey: ['send_answers'],
-  });
-
-  const client = useQueryClient();
-
-  const cache = client.getMutationCache();
-
-  const totalActiveMutations = cache
-    .getAll()
-    .filter(x => x.options.mutationKey?.includes('send_answers'))
-    .filter(
-      x => x.state.status !== 'success' && x.state.status !== 'error',
-    ).length;
-
-  const queueLength = 0; // QueueProcessingService.getQueueLength();
-
-  console.log(
-    'queueLength, totalMutations, totalLoadingMutations',
-    queueLength,
-    totalActiveMutations,
-    totalLoadingMutations,
-    //cache.getAll(),
-  );
+  const { t } = useTranslation();
 
   const onRetry = () => {
-    cache.resumePausedMutations();
-    processQueue();
+    process();
   };
 
-  if (!queueLength && !totalActiveMutations) {
+  if (!hasItemsInQueue) {
     return <></>;
   }
 
@@ -61,18 +21,18 @@ const UploadRetryBanner = () => {
     <Box h={50} px={18} bw={1} boc="$grey" bc="$alertLight">
       <Box jc="space-between" ai="center" flexDirection="row" flex={1}>
         <Text flex={1} fos={15}>
-          Data not sent (keep app open while we try)
+          {t('additional:data_not_sent')}
         </Text>
 
         <Box pl={10}>
           <Button
             bg="transparent"
             spinnerColor="black"
-            isLoading={isQueueProcessing || totalLoadingMutations > 0}
+            isLoading={isLoading}
             onPress={onRetry}
           >
             <Text fos={16} fontWeight="700">
-              Retry
+              {t('additional:retry')}
             </Text>
           </Button>
         </Box>
