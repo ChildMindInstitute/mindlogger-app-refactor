@@ -6,12 +6,7 @@ import { QueryClient, onlineManager } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
 import { sendAnswers } from '@app/entities/activity';
-import {
-  createSecureAsyncStorage,
-  isAppOnline,
-  ONE_HOUR,
-  useSplash,
-} from '@shared/lib';
+import { createSecureAsyncStorage, isAppOnline, useSplash } from '@shared/lib';
 
 const storage = createSecureAsyncStorage('cache-storage');
 
@@ -80,7 +75,7 @@ const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
     <PersistQueryClientProvider
       client={queryClient}
       persistOptions={{
-        maxAge: ONE_HOUR * 24,
+        maxAge: Infinity,
         persister: asyncPersist,
         buster: 'kill-cache',
       }}

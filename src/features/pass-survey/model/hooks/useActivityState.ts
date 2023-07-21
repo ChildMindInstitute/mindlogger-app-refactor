@@ -22,6 +22,7 @@ function useActivityState({
     activityStorageRecord,
     upsertActivityStorageRecord,
     clearActivityStorageRecord,
+    getCurrentActivityStorageRecord,
   } = useActivityStorageRecord({
     appletId,
     activityId,
@@ -44,15 +45,9 @@ function useActivityState({
       return;
     }
 
-    const previousStep = activityStorageRecord.step;
-
-    const action =
-      previousStep < step ? userActionCreator.next() : userActionCreator.back();
-
     upsertActivityStorageRecord({
       ...activityStorageRecord,
       step,
-      actions: addUserAction(action),
     });
   }
 
@@ -155,7 +150,7 @@ function useActivityState({
 
   function trackUserAction(action: UserAction) {
     upsertActivityStorageRecord({
-      ...activityStorageRecord!,
+      ...getCurrentActivityStorageRecord()!,
       actions: addUserAction(action),
     });
   }

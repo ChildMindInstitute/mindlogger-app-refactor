@@ -1,4 +1,4 @@
-import { PropsWithChildren, useContext } from 'react';
+import { PropsWithChildren, useCallback, useContext } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { colors } from '@shared/lib';
@@ -14,15 +14,19 @@ type Props = PropsWithChildren<{
 function NextButton({ children, isIcon }: Props) {
   const { next } = useContext(HandlersContext);
 
+  const onPressNext = useCallback(() => {
+    next(false);
+  }, [next]);
+
   if (isIcon) {
     return (
-      <TouchableOpacity onPress={next}>
+      <TouchableOpacity onPress={onPressNext}>
         <RightArrowIcon color={colors.tertiary} size={30} />
       </TouchableOpacity>
     );
   }
 
-  return <ActionButton onPress={next}>{children}</ActionButton>;
+  return <ActionButton onPress={onPressNext}>{children}</ActionButton>;
 }
 
 export default NextButton;

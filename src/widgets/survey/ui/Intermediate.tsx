@@ -185,8 +185,6 @@ function Intermediate({
       activityStorageRecord.answers,
     );
 
-    const scheduledTime = scheduledDate && getUnixTimestamp(scheduledDate);
-
     sendAnswers({
       appletId,
       createdAt: getUnixTimestamp(Date.now()),
@@ -199,9 +197,9 @@ function Intermediate({
       activityId: activityId,
       executionGroupKey,
       userIdentifier,
-      startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
-      endTime: getUnixTimestamp(Date.now()),
-      scheduledTime,
+      startTime: getActivityStartAt(progressRecord)!,
+      endTime: Date.now(),
+      scheduledTime: scheduledDate,
     });
   }
 

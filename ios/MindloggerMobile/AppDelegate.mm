@@ -9,6 +9,8 @@
 
 #import <TSBackgroundFetch/TSBackgroundFetch.h>
 
+#import "RNFBMessagingModule.h"
+
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
 #import <React/RCTCxxBridgeDelegate.h>
@@ -48,8 +50,8 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   bridge.surfacePresenter = _bridgeAdapter.surfacePresenter;
 #endif
 
-  NSDictionary *initProps = [self prepareInitialProps];
-  UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"MindloggerMobile", initProps);
+  NSDictionary *appProperties = [RNFBMessagingModule addCustomPropsToUserProps:nil withLaunchOptions:launchOptions];
+  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"MindloggerMobile" initialProperties:appProperties];
 
   rootView.backgroundColor = [UIColor colorWithRed: 0.00 green: 0.40 blue: 0.63 alpha: 1.00];
 

@@ -37,7 +37,7 @@ const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
       markdownit={markdownItInstance}
       style={markdownStyle}
     >
-      {content.replace(/\n/g, '\n\n')}
+      {content}
     </Markdown>
   );
 };
