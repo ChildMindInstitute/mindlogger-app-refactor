@@ -62,23 +62,19 @@ const DrawingBoard: FC<Props> = props => {
 
   const pathsCache = useRef<Array<SkPath>>([]).current;
 
-  const currentLines = useMemo(() => {
-    return [...value];
-  }, [value]);
-
   const currentLogLineRef = useRef<DrawLine | null>(null);
 
   const paths = useMemo(() => {
-    if (!currentLines.length) {
+    if (!value.length) {
       pathsCache.splice(0, pathsCache.length);
     }
 
-    const newPaths = convertToSkPaths(currentLines, pathsCache.length);
+    const newPaths = convertToSkPaths([...value], pathsCache.length);
 
     pathsCache.push(...newPaths);
 
     return [...pathsCache];
-  }, [currentLines, pathsCache]);
+  }, [value, pathsCache]);
 
   const resetCurrentLine = () => {
     currentLogLineRef.current = null;
