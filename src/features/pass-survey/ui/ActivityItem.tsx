@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 
 import {
   Box,
@@ -73,9 +73,13 @@ function ActivityItem({
 
   const releaseScrolling = () => setScrollEnabled(true);
 
+  const onTimeIsUp = useCallback(() => {
+    next(true);
+  }, [next]);
+
   function moveToNextItem() {
     if (!pipelineItem.additionalText?.required) {
-      setImmediate(next);
+      setImmediate(() => next(true));
     }
   }
 
@@ -351,7 +355,7 @@ function ActivityItem({
         )}
 
         {!!pipelineItem.timer && (
-          <Timer duration={pipelineItem.timer} onTimeIsUp={next} />
+          <Timer duration={pipelineItem.timer} onTimeIsUp={onTimeIsUp} />
         )}
 
         {item}
