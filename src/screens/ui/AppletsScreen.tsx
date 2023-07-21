@@ -1,6 +1,7 @@
-import { FC, useLayoutEffect } from 'react';
+import { FC, useEffect, useLayoutEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
+import crashlytics from '@react-native-firebase/crashlytics';
 import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +20,11 @@ const AppletsScreen: FC = () => {
   const { navigate, setOptions } = useNavigation();
 
   const userFirstName = useAppSelector(IdentityModel.selectors.selectFirstName);
+
+  useEffect(() => {
+    crashlytics().crash();
+    crashlytics().log('Hello');
+  }, []);
 
   useLayoutEffect(() => {
     if (userFirstName) {
