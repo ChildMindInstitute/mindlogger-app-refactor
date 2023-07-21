@@ -5,11 +5,6 @@ import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persi
 import { QueryClient, onlineManager } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
-import {
-  QueueProcessingService,
-  SendAnswersInput,
-  sendAnswers,
-} from '@app/entities/activity';
 import { createSecureAsyncStorage, isAppOnline, useSplash } from '@shared/lib';
 
 const storage = createSecureAsyncStorage('cache-storage');
@@ -25,19 +20,6 @@ const queryClient = new QueryClient({
       cacheTime: Infinity,
       staleTime: Infinity,
     },
-  },
-});
-
-queryClient.setMutationDefaults(['send_answers'], {
-  mutationFn: sendAnswers,
-  retry: 2,
-  retryDelay: 2000,
-  onError: (error: any, variables: SendAnswersInput) => {
-    console.warn(
-      '[setMutationDefaults]: Error occurred while sending answers\n\n',
-      error,
-    );
-    QueueProcessingService.push(variables);
   },
 });
 

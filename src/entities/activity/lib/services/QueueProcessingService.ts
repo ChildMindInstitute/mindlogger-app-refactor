@@ -4,6 +4,8 @@ import AnswersQueueService, {
 import AnswersUploadService, {
   IAnswersUploadService,
 } from './AnswersUploadService';
+import { UploadObservable } from '../observables';
+import { IUpdateUploadObservable } from '../observables/uploadObservable';
 import { SendAnswersInput } from '../types';
 
 class QueueProcessingService {
@@ -11,43 +13,24 @@ class QueueProcessingService {
 
   private uploadService: IAnswersUploadService;
 
-  private onChange: () => void;
+  private uploadStatusObservable: IUpdateUploadObservable;
 
-  private queueChangeListeners: Array<() => void>;
+  constructor(
+    updateObservable: IUpdateUploadObservable,
+    queueService: IAnswersQueueService,
+  ) {
+    this.uploadStatusObservable = updateObservable;
 
-  constructor() {
-    this.onChange = () => {
-      for (let l of this.queueChangeListeners) {
-        l();
-      }
-    };
-
-    this.queueChangeListeners = [];
-
-    this.queueService = new AnswersQueueService(this.onChange);
+    this.queueService = queueService;
 
     this.uploadService = AnswersUploadService;
-  }
-
-  public addListener(listener: () => void) {
-    this.queueChangeListeners.push(listener);
-  }
-
-  public removeListener(listener: () => void) {
-    this.queueChangeListeners = this.queueChangeListeners.filter(
-      x => x === listener,
-    );
-  }
-
-  public getQueueLength(): number {
-    return this.queueService.getLength();
   }
 
   public push(input: SendAnswersInput) {
     this.queueService.enqueue({ input });
   }
 
-  public async process(): Promise<boolean> {
+  private async processInternal(): Promise<boolean> {
     const queueLength = this.queueService.getLength();
 
     for (let i = 0; i < queueLength; i++) {
@@ -75,6 +58,25 @@ class QueueProcessingService {
 
     return this.queueService.getLength() === 0;
   }
+
+  public async process(): Promise<boolean> {
+    try {
+      this.uploadStatusObservable.isLoading = true;
+
+      const success = await this.processInternal();
+
+      this.uploadStatusObservable.isError = !success;
+      return success;
+    } catch {
+      this.uploadStatusObservable.isError = true;
+    } finally {
+      this.uploadStatusObservable.isLoading = false;
+    }
+    return false;
+  }
 }
 
-export default new QueueProcessingService();
+export default new QueueProcessingService(
+  UploadObservable,
+  AnswersQueueService,
+);

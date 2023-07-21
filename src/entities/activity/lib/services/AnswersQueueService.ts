@@ -1,5 +1,7 @@
 import { createSecureStorage } from '@app/shared/lib';
 
+import { ChangeQueueObservable } from '../observables';
+import { IChangeQueueObservable } from '../observables/changeQueueObservable';
 import { SendAnswersInput } from '../types';
 
 type UploadItem = {
@@ -20,8 +22,10 @@ const storage = createSecureStorage('upload_queue-storage');
 const StartKey = '1';
 
 class AnswersQueueService implements IAnswersQueueService {
-  constructor(onChange: () => void) {
-    const listener = storage.addOnValueChangedListener(onChange);
+  constructor(changeObservable: IChangeQueueObservable) {
+    const listener = storage.addOnValueChangedListener(() => {
+      changeObservable.notify(this.getLength() > 0);
+    });
     this.removeListener = listener.remove;
   }
 
@@ -99,4 +103,4 @@ class AnswersQueueService implements IAnswersQueueService {
   }
 }
 
-export default AnswersQueueService;
+export default new AnswersQueueService(ChangeQueueObservable);

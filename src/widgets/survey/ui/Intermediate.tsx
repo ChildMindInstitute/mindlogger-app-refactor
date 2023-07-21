@@ -1,13 +1,10 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
-import {
-  useActivityAnswersMutation,
-  useRetryUpload,
-} from '@app/entities/activity';
+import { useRetryUpload } from '@app/entities/activity';
 import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 import {
@@ -18,7 +15,7 @@ import { EventModel } from '@app/entities/event';
 import { PassSurveyModel } from '@app/features/pass-survey';
 import {
   getUnixTimestamp,
-  onApiRequestError,
+  isAppOnline,
   useAppDispatch,
   useAppSelector,
 } from '@app/shared/lib';
@@ -125,27 +122,7 @@ function Intermediate({
     });
 
   const {
-    mutate: sendAnswers,
-    isLoading: isSendingAnswers,
-    isPaused: isOffline,
-  } = useActivityAnswersMutation({
-    onSuccess: () => {
-      clearActivityStorageRecord();
-      changeActivity();
-      onFinish();
-    },
-    onError: (error, variables) => {
-      pushInQueue(variables);
-
-      if (error.response?.status !== 401 && error.evaluatedMessage) {
-        onApiRequestError(error.evaluatedMessage);
-      }
-      openRetryAlert();
-    },
-  });
-
-  const {
-    isLoading: isQueueUploading,
+    isLoading: isUploading,
     process: processQueue,
     push: pushInQueue,
   } = useQueueProcessing();
@@ -175,7 +152,7 @@ function Intermediate({
     );
   }, [appletId, dispatch, eventId, flowId, nextActivity, activitiesPassed]);
 
-  function completeActivity() {
+  async function completeActivity() {
     if (!activityStorageRecord) {
       return;
     }
@@ -207,7 +184,7 @@ function Intermediate({
       activityStorageRecord.answers,
     );
 
-    sendAnswers({
+    pushInQueue({
       appletId,
       createdAt: getUnixTimestamp(Date.now()),
       version: activityStorageRecord.appletVersion,
@@ -223,15 +200,23 @@ function Intermediate({
       endTime: Date.now(),
       scheduledTime: scheduledDate,
     });
-  }
 
-  useEffect(() => {
-    if (isOffline) {
-      clearActivityStorageRecord();
+    clearActivityStorageRecord();
+
+    const online = await isAppOnline();
+
+    if (!online) {
       changeActivity();
       onFinish();
+      return;
     }
-  }, [changeActivity, clearActivityStorageRecord, isOffline, onFinish]);
+
+    try {
+      await processQueue();
+    } catch {
+      openRetryAlert();
+    }
+  }
 
   return (
     <YStack flex={1} mx={40} jc="center" bg="$white">
@@ -260,9 +245,7 @@ function Intermediate({
           <Button
             bg="$blue"
             onPress={completeActivity}
-            isLoading={
-              isSendingAnswers || isQueueUploading || isRetryAlertOpened
-            }
+            isLoading={isUploading || isRetryAlertOpened}
           >
             {t('change_study:submit')}
           </Button>
@@ -273,9 +256,7 @@ function Intermediate({
             fontSize={17}
             fontWeight="bold"
             onPress={onClose}
-            disabled={
-              isSendingAnswers || isQueueUploading || isRetryAlertOpened
-            }
+            disabled={isUploading || isRetryAlertOpened}
           >
             {t('activity_navigation:back')}
           </Text>
