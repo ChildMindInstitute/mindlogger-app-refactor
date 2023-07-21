@@ -5,7 +5,7 @@ import { useIsMutating, useQueryClient } from '@tanstack/react-query';
 import { useForceUpdate } from '@app/shared/lib';
 import { Box, Button, Text } from '@app/shared/ui';
 
-import { QueueProcessingService } from '../lib';
+//import { QueueProcessingService } from '../lib';
 import useQueueProcessing from '../lib/hooks/useQueueProcessing';
 
 const UploadRetryBanner = () => {
@@ -16,8 +16,8 @@ const UploadRetryBanner = () => {
   }, [reRender]);
 
   useEffect(() => {
-    QueueProcessingService.addListener(onQueueChange);
-    return () => QueueProcessingService.removeListener(onQueueChange);
+    // QueueProcessingService.addListener(onQueueChange);
+    // return () => QueueProcessingService.removeListener(onQueueChange);
   }, [onQueueChange]);
 
   const { process: processQueue, isLoading: isQueueProcessing } =
@@ -38,7 +38,7 @@ const UploadRetryBanner = () => {
       x => x.state.status !== 'success' && x.state.status !== 'error',
     ).length;
 
-  const queueLength = QueueProcessingService.getQueueLength();
+  const queueLength = 0; // QueueProcessingService.getQueueLength();
 
   console.log(
     'queueLength, totalMutations, totalLoadingMutations',

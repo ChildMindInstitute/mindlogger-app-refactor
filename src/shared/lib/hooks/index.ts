@@ -15,5 +15,6 @@ export { default as useForceUpdate } from './useForceUpdate';
 export { default as useUndoClicked } from './useUndoClicked';
 export { default as useShouldRestoreSkiaViewState } from './useShouldRestoreSkiaViewState';
 export { default as useFirebaseSetup } from './useFirebaseSetup';
+export { default as useIsOnline } from './useIsOnline';
 
 export * from './redux';

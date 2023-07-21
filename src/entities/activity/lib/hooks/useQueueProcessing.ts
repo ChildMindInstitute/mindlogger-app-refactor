@@ -1,44 +1,53 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 
+import { useForceUpdate } from '@app/shared/lib';
+
+import { ChangeQueueObservable, UploadObservable } from '../observables';
 import { QueueProcessingService } from '../services';
+import AnswersQueueService from '../services/AnswersQueueService';
 import { SendAnswersInput } from '../types';
 
 type Result = {
   process(): Promise<boolean>;
   push(input: SendAnswersInput): void;
+  hasItemsInQueue: boolean;
   isLoading: boolean;
   isError: boolean;
 };
 
 const useQueueProcessing = (): Result => {
-  const [isLoading, setIsLoading] = useState(false);
+  const update = useForceUpdate();
 
-  const [isError, setIsError] = useState(false);
+  useEffect(() => {
+    const onChangeUploadState = () => {
+      update();
+    };
 
-  const process = async () => {
-    setIsLoading(true);
-    setIsError(false);
+    const onChangeQueue = () => {
+      update();
+    };
 
-    try {
-      const success = await QueueProcessingService.process();
+    UploadObservable.addObserver(onChangeUploadState);
 
-      setIsError(!success);
+    ChangeQueueObservable.addObserver(onChangeQueue);
 
-      return success;
-    } catch {
-      setIsError(true);
+    return () => {
+      UploadObservable.removeObserver(onChangeUploadState);
 
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
+      ChangeQueueObservable.removeObserver(onChangeQueue);
+    };
+  }, [update]);
+
+  const process = () => {
+    return QueueProcessingService.process();
   };
 
   return {
-    isError,
-    isLoading,
     process,
     push: QueueProcessingService.push.bind(QueueProcessingService),
+    isError: UploadObservable.isError,
+    isLoading: UploadObservable.isLoading,
+    hasItemsInQueue: AnswersQueueService.getLength() > 0,
   };
 };
 
