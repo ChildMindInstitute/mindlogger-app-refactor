@@ -5,6 +5,7 @@ import { showUploadErrorAlert } from '../alerts';
 type Input = {
   retryUpload: () => Promise<boolean>;
   postpone?: () => void;
+  success?: () => void;
 };
 
 type Result = {
@@ -13,7 +14,11 @@ type Result = {
   openAlert: () => void;
 };
 
-export const useRetryUpload = ({ retryUpload, postpone }: Input): Result => {
+export const useRetryUpload = ({
+  retryUpload,
+  postpone,
+  success,
+}: Input): Result => {
   const [isAlertOpened, setIsAlertOpened] = useState(false);
 
   const [isPostponed, setIsPostponed] = useState(false);
@@ -24,12 +29,14 @@ export const useRetryUpload = ({ retryUpload, postpone }: Input): Result => {
     showUploadErrorAlert({
       onRetry: async () => {
         try {
+          setIsAlertOpened(false);
+
           const retryResult = await retryUpload();
 
           if (!retryResult) {
             openAlert();
-          } else {
-            setIsAlertOpened(false);
+          } else if (success) {
+            success();
           }
         } catch {
           openAlert();

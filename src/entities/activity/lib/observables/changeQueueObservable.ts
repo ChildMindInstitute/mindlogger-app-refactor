@@ -1,8 +1,8 @@
-export interface IChangeQueueObservable {
+export interface IChangeQueueNotify {
   notify: (hasItems: boolean) => void;
 }
 
-class ChangeQueueObservable implements IChangeQueueObservable {
+class ChangeQueueObservable implements IChangeQueueNotify {
   private _observers: Array<(hasItems: boolean) => void>;
 
   constructor() {
@@ -18,7 +18,7 @@ class ChangeQueueObservable implements IChangeQueueObservable {
   }
 
   public removeObserver(observer: () => void) {
-    this._observers = this._observers.filter(o => o === observer);
+    this._observers = this._observers.filter(o => o !== observer);
   }
 }
 

@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native';
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { FileSystem } from 'react-native-file-access';
 import RNFetchBlob from 'rn-fetch-blob';
+import { v4 as uuidv4 } from 'uuid';
 
 import { ActivityScrollContext } from '@app/features/pass-survey';
 import { Box, BoxProps, Center, Text, XStack } from '@app/shared/ui';
@@ -17,8 +18,7 @@ const RectPadding = 15;
 const filesCacheDir = RNFetchBlob.fs.dirs.CacheDir;
 
 type Props = {
-  value: Array<DrawLine>;
-  outputFileName: string;
+  value: { lines: DrawLine[]; fileName: string | null };
   imageUrl: string | null;
   isDrawingActive: boolean;
   backgroundImageUrl: string | null;
@@ -36,25 +36,32 @@ const DrawingTest: FC<Props> = props => {
     backgroundImageUrl,
     imageUrl,
     onStarted,
-    outputFileName,
     isDrawingActive,
     toggleScroll,
   } = props;
 
-  const getFilePath = () => {
-    return `file://${filesCacheDir}/${outputFileName}.svg`;
+  const getFilePath = (fileName: string) => {
+    return `file://${filesCacheDir}/${fileName}`;
   };
 
   const onResult = async (result: DrawResult) => {
-    const path = getFilePath();
+    let fileName = value.fileName;
 
-    try {
+    if (fileName?.length) {
+      const path = getFilePath(fileName);
+
       const fileExists = await FileSystem.exists(path);
 
       if (fileExists) {
         await FileSystem.unlink(path);
       }
+    } else {
+      fileName = `${uuidv4()}.svg`;
+    }
 
+    const path = getFilePath(fileName);
+
+    try {
       await FileSystem.writeFile(path, result.svgString);
     } catch (error) {
       console.warn(
@@ -64,7 +71,7 @@ const DrawingTest: FC<Props> = props => {
       return;
     }
 
-    result.fileName = `${outputFileName}.svg`;
+    result.fileName = fileName;
     result.type = 'image/svg';
     result.uri = path;
 
@@ -143,7 +150,7 @@ const DrawingTest: FC<Props> = props => {
           )}
 
           <DrawingBoard
-            value={value}
+            value={value.lines}
             isDrawingActive={isDrawingActive}
             onResult={onResult}
             onStarted={onStarted}

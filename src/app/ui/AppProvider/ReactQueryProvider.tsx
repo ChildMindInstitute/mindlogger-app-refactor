@@ -13,7 +13,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     mutations: {
       cacheTime: Infinity,
-      retry: 2,
+      retry: 0,
     },
     queries: {
       retry: 2,

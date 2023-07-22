@@ -2,15 +2,15 @@ import { Alert } from 'react-native';
 
 import i18n from 'i18next';
 
-type onUploadErrorArgs = {
+type Input = {
   onRetry: () => void;
   onLater: () => void;
 };
 
-export function showUploadErrorAlert({ onRetry, onLater }: onUploadErrorArgs) {
+export function showUploadErrorAlert({ onRetry, onLater }: Input) {
   Alert.alert(
-    i18n.t('Queue upload error'),
-    i18n.t('Would you like to retry?'),
+    i18n.t('additional:upload_error'),
+    i18n.t('additional:want_to_retry'),
     [
       {
         text: i18n.t('additional:retry'),

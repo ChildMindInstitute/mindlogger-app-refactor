@@ -366,7 +366,9 @@
     "hi": "Bonjour",
     "enter_old_password": "Veuillez saisir votre ancien mot de passe",
     "enter_new_password": "Veuillez saisir un nouveau mot de passe",
-    "data_not_sent": "Données non envoyées (garder l'application ouverte pendant que nous essayons)"
+    "data_not_sent": "Données non envoyées (garder l'application ouverte pendant que nous essayons)",
+    "upload_error": "Erreur de téléchargement de la file d'attente",
+    "want_to_retry": "Souhaitez-vous réessayer ?"
   },
   "zod": {
     "errors": {

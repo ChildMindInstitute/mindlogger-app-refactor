@@ -4,6 +4,7 @@ import {
   ActivityAnswersRequest,
   AnswerDto,
   AnswerService,
+  DrawerAnswerDto,
   FileService,
   ObjectAnswerDto,
 } from '@app/shared/api';
@@ -87,7 +88,57 @@ class AnswersUploadService implements IAnswersUploadService {
     return result;
   }
 
-  private async uploadAnswerMediaFiles(body: SendAnswersInput) {
+  private async uploadFilesForAnswer(
+    mediaAnswer: MediaFile,
+    uploadResults: CheckFilesUploadResults,
+  ): Promise<string> {
+    const localFileExists = await FileSystem.exists(mediaAnswer.uri);
+
+    if (!localFileExists) {
+      throw new Error(
+        '[UploadAnswersService.uploadFilesForAnswer]: Local file does not exist',
+      );
+    }
+
+    const uploadRecord = this.getUploadRecord(
+      uploadResults,
+      this.getFileId(mediaAnswer),
+    );
+
+    if (!uploadRecord) {
+      throw new Error(
+        '[UploadAnswersService.uploadFilesForAnswer]: uploadRecord does not exist',
+      );
+    }
+
+    try {
+      let remoteUrl;
+
+      if (!uploadRecord.uploaded) {
+        const uploadResult = await FileService.upload({
+          fileName: mediaAnswer.fileName,
+          type: mediaAnswer.type,
+          uri: mediaAnswer.uri,
+        });
+
+        remoteUrl = uploadResult.data.result.url;
+      } else {
+        remoteUrl = uploadRecord.remoteUrl;
+      }
+
+      return remoteUrl!;
+    } catch (error) {
+      console.warn(
+        '[UploadAnswersService.uploadFilesForAnswer]: Error occurred while file uploading',
+        error!.toString(),
+      );
+      throw error;
+    }
+  }
+
+  private async uploadAllMediaFiles(
+    body: SendAnswersInput,
+  ): Promise<SendAnswersInput> {
     const fileIds = this.collectFileIds(body.answers);
 
     let uploadResults: CheckFilesUploadResults;
@@ -96,7 +147,7 @@ class AnswersUploadService implements IAnswersUploadService {
       uploadResults = await this.checkIfFilesUploaded(fileIds);
     } catch (error) {
       throw new Error(
-        '[UploadAnswersService.uploadAnswerMediaFiles]: Error occurred on 1st files upload check\n\n' +
+        '[UploadAnswersService.uploadAllMediaFiles]: Error occurred on 1st files upload check\n\n' +
           error!.toString(),
       );
     }
@@ -117,56 +168,26 @@ class AnswersUploadService implements IAnswersUploadService {
         continue;
       }
 
-      const localFileExists = await FileSystem.exists(mediaAnswer.uri);
-
-      if (!localFileExists) {
-        throw new Error(
-          '[UploadAnswersService.uploadAnswerMediaFiles]: Local file does not exist',
-        );
-      }
-
-      const uploadRecord = this.getUploadRecord(
+      const remoteUrl = await this.uploadFilesForAnswer(
+        mediaAnswer,
         uploadResults,
-        this.getFileId(mediaAnswer),
       );
 
-      if (!uploadRecord) {
-        throw new Error(
-          '[UploadAnswersService.uploadAnswerMediaFiles]: uploadRecord does not exist',
-        );
-      }
+      const isSvg = mediaAnswer.type === 'image/svg';
 
-      try {
-        let remoteUrl;
+      if (remoteUrl && !isSvg) {
+        updatedAnswers.push({ value: remoteUrl });
+      } else if (remoteUrl) {
+        const svgAnswer = itemAnswer as ObjectAnswerDto;
 
-        if (!uploadRecord.uploaded) {
-          const uploadResult = await FileService.upload({
-            fileName: mediaAnswer.fileName,
-            type: mediaAnswer.type,
-            uri: mediaAnswer.uri,
-          });
+        const svgValue = svgAnswer.value as DrawerAnswerDto;
 
-          remoteUrl = uploadResult?.data.result.url;
-        } else {
-          remoteUrl = uploadRecord.remoteUrl;
-        }
+        const copy: ObjectAnswerDto = {
+          text: svgAnswer.text,
+          value: { ...svgValue, uri: remoteUrl },
+        };
 
-        const isSvg = mediaAnswer.type === 'image/svg';
-
-        if (remoteUrl && !isSvg) {
-          updatedAnswers.push({ value: remoteUrl });
-        } else if (remoteUrl) {
-          updatedAnswers.push({
-            ...(itemAnswer as ObjectAnswerDto),
-            uri: remoteUrl,
-          });
-        }
-      } catch (error) {
-        console.warn(
-          '[UploadAnswersService.uploadAnswerMediaFiles]: Error occurred while file uploading',
-          error!.toString(),
-        );
-        throw error;
+        updatedAnswers.push(copy);
       }
     }
 
@@ -174,14 +195,14 @@ class AnswersUploadService implements IAnswersUploadService {
       uploadResults = await this.checkIfFilesUploaded(fileIds, true);
     } catch (error) {
       throw new Error(
-        '[uploadAnswerMediaFiles.checkIfFilesUploaded]: Error occurred on 2nd files check api call\n\n' +
+        '[uploadAnswerMediaFiles.uploadAllMediaFiles]: Error occurred on 2nd files upload check\n\n' +
           error!.toString(),
       );
     }
 
     if (uploadResults.some(x => !x.uploaded)) {
       throw new Error(
-        '[uploadAnswerMediaFiles.uploadedResult.some]: Error occurred on final upload results check',
+        '[uploadAnswerMediaFiles.uploadAllMediaFiles]: Error occurred on final upload results check',
       );
     }
 
@@ -190,24 +211,15 @@ class AnswersUploadService implements IAnswersUploadService {
     return updatedBody;
   }
 
-  private async uploadAnswers(
-    encryptedData: ActivityAnswersRequest,
-    body: SendAnswersInput,
-  ) {
-    if (body.itemIds.length !== body.answers.length) {
-      throw new Error(
-        "[UploadAnswersService.uploadAnswers]: Items' length doesn't equal to answers' length ",
-      );
-    }
-
+  private async uploadAnswers(encryptedData: ActivityAnswersRequest) {
     let uploaded: boolean;
 
     try {
       uploaded = await this.checkIfAnswersUploaded({
-        activityId: body.activityId,
-        appletId: body.appletId,
-        flowId: body.flowId,
-        createdAt: body.createdAt,
+        activityId: encryptedData.activityId,
+        appletId: encryptedData.appletId,
+        flowId: encryptedData.flowId,
+        createdAt: encryptedData.createdAt,
       });
     } catch (error) {
       console.warn(
@@ -234,10 +246,10 @@ class AnswersUploadService implements IAnswersUploadService {
     try {
       uploaded = await this.checkIfAnswersUploaded(
         {
-          activityId: body.activityId,
-          appletId: body.appletId,
-          flowId: body.flowId,
-          createdAt: body.createdAt,
+          activityId: encryptedData.activityId,
+          appletId: encryptedData.appletId,
+          flowId: encryptedData.flowId,
+          createdAt: encryptedData.createdAt,
         },
         true,
       );
@@ -250,7 +262,9 @@ class AnswersUploadService implements IAnswersUploadService {
     }
 
     if (!uploaded) {
-      throw new Error('[uploadAnswers] Answers were not uploaded');
+      throw new Error(
+        '[UploadAnswersService.uploadAnswers] Answers were not uploaded',
+      );
     }
   }
 
@@ -304,11 +318,17 @@ class AnswersUploadService implements IAnswersUploadService {
   public async sendAnswers(body: SendAnswersInput) {
     this.createdAt = body.createdAt;
 
-    const data = await this.uploadAnswerMediaFiles(body);
+    const modifiedBody = await this.uploadAllMediaFiles(body);
 
-    const encryptedData = this.encryptAnswers(data);
+    if (modifiedBody.itemIds.length !== modifiedBody.answers.length) {
+      throw new Error(
+        "[UploadAnswersService.sendAnswers]: Items' length doesn't equal to answers' length ",
+      );
+    }
 
-    await this.uploadAnswers(encryptedData, body);
+    const encryptedData = this.encryptAnswers(modifiedBody);
+
+    await this.uploadAnswers(encryptedData);
 
     MediaFilesCleaner.cleanUpByAnswers(body.answers);
   }

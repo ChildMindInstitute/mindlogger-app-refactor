@@ -1,7 +1,7 @@
 import { createSecureStorage } from '@app/shared/lib';
 
 import { ChangeQueueObservable } from '../observables';
-import { IChangeQueueObservable } from '../observables/changeQueueObservable';
+import { IChangeQueueNotify } from '../observables/changeQueueObservable';
 import { SendAnswersInput } from '../types';
 
 type UploadItem = {
@@ -13,7 +13,6 @@ export interface IAnswersQueueService {
   enqueue: (item: UploadItem) => void;
   dequeue: () => void;
   swap: () => void;
-  removeListener: () => void;
   getLength: () => number;
 }
 
@@ -22,14 +21,11 @@ const storage = createSecureStorage('upload_queue-storage');
 const StartKey = '1';
 
 class AnswersQueueService implements IAnswersQueueService {
-  constructor(changeObservable: IChangeQueueObservable) {
-    const listener = storage.addOnValueChangedListener(() => {
+  constructor(changeObservable: IChangeQueueNotify) {
+    storage.addOnValueChangedListener(() => {
       changeObservable.notify(this.getLength() > 0);
     });
-    this.removeListener = listener.remove;
   }
-
-  public removeListener: () => void;
 
   private getKeys(): number[] {
     return storage.getAllKeys().map(x => Number(x));

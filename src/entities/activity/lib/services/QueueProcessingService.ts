@@ -1,3 +1,5 @@
+import { IMutex, Mutex, wait } from '@app/shared/lib';
+
 import AnswersQueueService, {
   IAnswersQueueService,
 } from './AnswersQueueService';
@@ -5,7 +7,7 @@ import AnswersUploadService, {
   IAnswersUploadService,
 } from './AnswersUploadService';
 import { UploadObservable } from '../observables';
-import { IUpdateUploadObservable } from '../observables/uploadObservable';
+import { IUploadObservableSetters } from '../observables/uploadObservable';
 import { SendAnswersInput } from '../types';
 
 class QueueProcessingService {
@@ -13,10 +15,12 @@ class QueueProcessingService {
 
   private uploadService: IAnswersUploadService;
 
-  private uploadStatusObservable: IUpdateUploadObservable;
+  private uploadStatusObservable: IUploadObservableSetters;
+
+  private mutex: IMutex;
 
   constructor(
-    updateObservable: IUpdateUploadObservable,
+    updateObservable: IUploadObservableSetters,
     queueService: IAnswersQueueService,
   ) {
     this.uploadStatusObservable = updateObservable;
@@ -24,6 +28,8 @@ class QueueProcessingService {
     this.queueService = queueService;
 
     this.uploadService = AnswersUploadService;
+
+    this.mutex = Mutex();
   }
 
   public push(input: SendAnswersInput) {
@@ -41,7 +47,11 @@ class QueueProcessingService {
       }
 
       try {
-        await this.uploadService.sendAnswers(uploadItem?.input);
+        console.info(
+          `[QueueProcessingService:process]: Processing activity "${uploadItem.input.debug_activityName}", which completed at ${uploadItem.input.debug_completedAt}`,
+        );
+
+        await this.uploadService.sendAnswers(uploadItem.input);
 
         this.queueService.dequeue();
 
@@ -60,8 +70,17 @@ class QueueProcessingService {
   }
 
   public async process(): Promise<boolean> {
+    if (this.mutex.isBusy()) {
+      return false;
+    }
+
     try {
+      this.mutex.setBusy();
+
       this.uploadStatusObservable.isLoading = true;
+      this.uploadStatusObservable.isError = false;
+
+      await wait(100);
 
       const success = await this.processInternal();
 
@@ -70,6 +89,7 @@ class QueueProcessingService {
     } catch {
       this.uploadStatusObservable.isError = true;
     } finally {
+      this.mutex.release();
       this.uploadStatusObservable.isLoading = false;
     }
     return false;

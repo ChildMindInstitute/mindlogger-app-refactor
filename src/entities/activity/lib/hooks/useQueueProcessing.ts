@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useForceUpdate } from '@app/shared/lib';
 
@@ -13,10 +13,13 @@ type Result = {
   hasItemsInQueue: boolean;
   isLoading: boolean;
   isError: boolean;
+  isCompleted: boolean;
 };
 
 const useQueueProcessing = (): Result => {
   const update = useForceUpdate();
+
+  const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
     const onChangeUploadState = () => {
@@ -38,16 +41,24 @@ const useQueueProcessing = (): Result => {
     };
   }, [update]);
 
-  const process = () => {
-    return QueueProcessingService.process();
+  const process = async () => {
+    setIsCompleted(false);
+
+    const success = await QueueProcessingService.process();
+
+    if (success) {
+      setIsCompleted(true);
+    }
+    return success;
   };
 
   return {
     process,
     push: QueueProcessingService.push.bind(QueueProcessingService),
-    isError: UploadObservable.isError,
-    isLoading: UploadObservable.isLoading,
     hasItemsInQueue: AnswersQueueService.getLength() > 0,
+    isLoading: UploadObservable.isLoading,
+    isError: UploadObservable.isError,
+    isCompleted,
   };
 };
 

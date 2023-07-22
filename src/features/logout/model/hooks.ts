@@ -1,6 +1,7 @@
 import { CacheManager } from '@georstat/react-native-image-cache';
 import { useQueryClient } from '@tanstack/react-query';
 
+import AnswersQueueService from '@app/entities/activity/lib/services/AnswersQueueService';
 import { onBeforeLogout } from '@app/entities/identity/lib/alerts';
 import { NotificationModel } from '@app/entities/notification';
 import { IdentityService } from '@app/shared/api';
@@ -10,7 +11,7 @@ import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
 import { hasPendingMutations, isAppOnline, useAppDispatch } from '@shared/lib';
 
-import { clearEntityRecordStorages } from '../lib';
+import { clearEntityRecordStorages, clearUploadQueueStorage } from '../lib';
 
 export function useLogout() {
   const dispatch = useAppDispatch();
@@ -22,6 +23,8 @@ export function useLogout() {
     CacheManager.clearCache();
 
     clearEntityRecordStorages();
+
+    clearUploadQueueStorage();
 
     NotificationModel.NotificationManager.clearScheduledNotifications();
 
@@ -48,7 +51,7 @@ export function useLogout() {
   const logout = async () => {
     const isOnline = await isAppOnline();
 
-    if (hasPendingMutations(queryClient)) {
+    if (hasPendingMutations(queryClient) || AnswersQueueService.getLength()) {
       onBeforeLogout({
         isOnline,
         onCancel: null,

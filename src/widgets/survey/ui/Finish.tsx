@@ -14,6 +14,7 @@ import { LogTrigger } from '@shared/api';
 import {
   getUnixTimestamp,
   isAppOnline,
+  useActivityInfo,
   useAppDispatch,
   useAppSelector,
 } from '@shared/lib';
@@ -79,15 +80,20 @@ function FinishItem({
     });
 
   const {
-    isLoading: isUploading,
+    isCompleted,
     process: processQueue,
     push: pushInQueue,
   } = useQueueProcessing();
 
-  const { isAlertOpened: isRetryAlertOpened, openAlert: openRetryAlert } =
-    useRetryUpload({
-      retryUpload: processQueue,
-    });
+  const { getName: getActivityName } = useActivityInfo();
+
+  const {
+    isAlertOpened: isRetryAlertOpened,
+    openAlert: openRetryAlert,
+    isPostponed,
+  } = useRetryUpload({
+    retryUpload: processQueue,
+  });
 
   let finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';
 
@@ -143,9 +149,11 @@ function FinishItem({
       activityId: activityId,
       executionGroupKey,
       userIdentifier,
-      startTime: getActivityStartAt(progressRecord)!,
-      endTime: Date.now(),
+      startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
+      endTime: getUnixTimestamp(Date.now()),
       scheduledTime: scheduledDate,
+      debug_activityName: getActivityName(activityId),
+      debug_completedAt: new Date().toString(),
     });
 
     clearActivityStorageRecord();
@@ -156,9 +164,9 @@ function FinishItem({
       return;
     }
 
-    try {
-      await processQueue();
-    } catch {
+    const success = await processQueue();
+
+    if (!success) {
       openRetryAlert();
     }
   }
@@ -177,7 +185,11 @@ function FinishItem({
     onClose();
   };
 
-  if (isUploading) {
+  if (isRetryAlertOpened) {
+    return <ImageBackground />;
+  }
+
+  if (!isCompleted && !isPostponed) {
     return (
       <ImageBackground>
         <Center flex={1} mx={16}>
@@ -185,10 +197,6 @@ function FinishItem({
         </Center>
       </ImageBackground>
     );
-  }
-
-  if (isRetryAlertOpened) {
-    return <ImageBackground />;
   }
 
   return (
@@ -199,7 +207,10 @@ function FinishItem({
           {finishReason === 'time-is-up' && t('additional:time-end')}
         </Text>
 
-        <Text fontSize={16}>{t('additional:saved_answers')}</Text>
+        <Text fontSize={16} mb={20}>
+          {t('additional:saved_answers')}
+        </Text>
+
         <Button onPress={onCloseEntity}>{t('additional:close')}</Button>
       </Center>
     </ImageBackground>
