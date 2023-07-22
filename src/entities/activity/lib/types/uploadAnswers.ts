@@ -15,6 +15,8 @@ export type SendAnswersInput = {
   startTime: number;
   endTime: number;
   userIdentifier?: string;
+  debug_activityName?: string;
+  debug_completedAt?: string;
 };
 
 export type CheckFileUploadResult = {

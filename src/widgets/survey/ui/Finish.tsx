@@ -14,6 +14,7 @@ import { LogTrigger } from '@shared/api';
 import {
   getUnixTimestamp,
   isAppOnline,
+  useActivityInfo,
   useAppDispatch,
   useAppSelector,
 } from '@shared/lib';
@@ -84,6 +85,8 @@ function FinishItem({
     push: pushInQueue,
   } = useQueueProcessing();
 
+  const { getName: getActivityName } = useActivityInfo();
+
   const { isAlertOpened: isRetryAlertOpened, openAlert: openRetryAlert } =
     useRetryUpload({
       retryUpload: processQueue,
@@ -148,6 +151,8 @@ function FinishItem({
       startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
       endTime: getUnixTimestamp(Date.now()),
       scheduledTime,
+      debug_activityName: getActivityName(activityId),
+      debug_completedAt: new Date().toString(),
     });
 
     clearActivityStorageRecord();
@@ -158,9 +163,9 @@ function FinishItem({
       return;
     }
 
-    try {
-      await processQueue();
-    } catch {
+    const success = await processQueue();
+
+    if (!success) {
       openRetryAlert();
     }
   }
@@ -201,7 +206,10 @@ function FinishItem({
           {finishReason === 'time-is-up' && t('additional:time-end')}
         </Text>
 
-        <Text fontSize={16}>{t('additional:saved_answers')}</Text>
+        <Text fontSize={16} mb={20}>
+          {t('additional:saved_answers')}
+        </Text>
+
         <Button onPress={onCloseEntity}>{t('additional:close')}</Button>
       </Center>
     </ImageBackground>

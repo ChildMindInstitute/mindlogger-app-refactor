@@ -16,6 +16,7 @@ import { PassSurveyModel } from '@app/features/pass-survey';
 import {
   getUnixTimestamp,
   isAppOnline,
+  useActivityInfo,
   useAppDispatch,
   useAppSelector,
 } from '@app/shared/lib';
@@ -136,6 +137,8 @@ function Intermediate({
       },
     });
 
+  const { getName: getActivityName } = useActivityInfo();
+
   const changeActivity = useCallback(() => {
     if (!nextActivity) {
       return;
@@ -201,6 +204,8 @@ function Intermediate({
       startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
       endTime: getUnixTimestamp(Date.now()),
       scheduledTime,
+      debug_activityName: getActivityName(activityId),
+      debug_completedAt: new Date().toString(),
     });
 
     clearActivityStorageRecord();
@@ -213,9 +218,9 @@ function Intermediate({
       return;
     }
 
-    try {
-      await processQueue();
-    } catch {
+    const success = await processQueue();
+
+    if (!success) {
       openRetryAlert();
     }
   }

@@ -1,9 +1,9 @@
-export interface IUpdateUploadObservable {
+export interface IUploadObservableSetters {
   set isLoading(value: boolean);
   set isError(value: boolean);
 }
 
-class UploadObservable implements IUpdateUploadObservable {
+class UploadObservable implements IUploadObservableSetters {
   private _isLoading: boolean;
 
   private _isError: boolean;
@@ -43,7 +43,7 @@ class UploadObservable implements IUpdateUploadObservable {
   }
 
   public removeObserver(observer: () => void) {
-    this._observers = this._observers.filter(o => o === observer);
+    this._observers = this._observers.filter(o => o !== observer);
   }
 }
 

@@ -38,12 +38,8 @@ const useQueueProcessing = (): Result => {
     };
   }, [update]);
 
-  const process = () => {
-    return QueueProcessingService.process();
-  };
-
   return {
-    process,
+    process: QueueProcessingService.process.bind(QueueProcessingService),
     push: QueueProcessingService.push.bind(QueueProcessingService),
     isError: UploadObservable.isError,
     isLoading: UploadObservable.isLoading,

@@ -119,11 +119,13 @@ function ActivityItem({
             flex={1}
             {...pipelineItem.payload}
             toggleScroll={setScrollEnabled}
-            value={value?.answer?.lines ?? []}
+            value={{
+              fileName: value?.answer?.fileName ?? null,
+              lines: value?.answer?.lines ?? [],
+            }}
             isDrawingActive={!scrollEnabled}
             onStarted={() => console.log('onStarted')}
             onResult={onResponse}
-            outputFileName={pipelineItem.id!}
           />
         </Box>
       );

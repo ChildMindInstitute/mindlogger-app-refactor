@@ -44,7 +44,13 @@ export function splitArray<TListItem>(
   return [leftArray, rightArray];
 }
 
-export const Mutex = () => {
+export interface IMutex {
+  setBusy: () => void;
+  release: () => void;
+  isBusy: () => boolean;
+}
+
+export const Mutex = (): IMutex => {
   let busy = false;
 
   return {

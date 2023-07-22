@@ -24,6 +24,7 @@ export const useRetryUpload = ({ retryUpload, postpone }: Input): Result => {
     showUploadErrorAlert({
       onRetry: async () => {
         try {
+          setIsAlertOpened(false);
           const retryResult = await retryUpload();
 
           if (!retryResult) {
