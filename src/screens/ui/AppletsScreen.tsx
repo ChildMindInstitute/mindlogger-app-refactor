@@ -1,7 +1,6 @@
 import { FC, useLayoutEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import crashlytics from '@react-native-firebase/crashlytics';
 import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -59,7 +58,7 @@ const AppletsScreen: FC = () => {
             />
 
             <XStack jc="center">
-              <TouchableOpacity onPress={() => crashlytics().crash()}>
+              <TouchableOpacity onPress={() => navigate('AboutApp')}>
                 <Text color="$primary" fontSize={16} fontWeight="700">
                   {t('applet_list_component:about_title')}
                 </Text>
