@@ -6,6 +6,7 @@ import {
   AnswerService,
   FileService,
   ObjectAnswerDto,
+  UserActionDto,
 } from '@app/shared/api';
 import { MediaFile } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
@@ -296,6 +297,7 @@ class AnswersUploadService implements IAnswersUploadService {
         identifier,
       },
       createdAt: data.createdAt,
+      client: data.client,
     };
 
     return encryptedData;
@@ -304,14 +306,72 @@ class AnswersUploadService implements IAnswersUploadService {
   public async sendAnswers(body: SendAnswersInput) {
     this.createdAt = body.createdAt;
 
-    const data = await this.uploadAnswerMediaFiles(body);
+    const modifiedBody = await this.uploadAnswerMediaFiles(body);
 
-    const encryptedData = this.encryptAnswers(data);
+    const updatedUserActions = this.mapUserActionsMediaFilesToDto(
+      body.answers,
+      modifiedBody,
+    );
+
+    modifiedBody.userActions = updatedUserActions;
+
+    const encryptedData = this.encryptAnswers(modifiedBody);
 
     await this.uploadAnswers(encryptedData, body);
 
     MediaFilesCleaner.cleanUpByAnswers(body.answers);
   }
-}
 
+  private mapUserActionsMediaFilesToDto(
+    originalAnswers: AnswerDto[],
+    modifiedBody: SendAnswersInput,
+  ) {
+    const userActions = modifiedBody.userActions;
+    const updatedAnswers = modifiedBody.answers;
+
+    const updatedUserActions = userActions.map((userAction: UserActionDto) => {
+      const response = userAction?.response as ObjectAnswerDto;
+      const userActionValue = response?.value as MediaFile;
+      const originalAnswerIndex = originalAnswers.findIndex(answer => {
+        const currentAnswerValue = (answer as ObjectAnswerDto)
+          ?.value as MediaFile;
+        return currentAnswerValue?.uri === userActionValue?.uri;
+      });
+
+      if (
+        userAction.type !== 'SET_ANSWER' ||
+        !userActionValue?.uri ||
+        originalAnswerIndex === -1
+      ) {
+        return userAction;
+      }
+
+      return {
+        ...userAction,
+        response: {
+          value: (updatedAnswers[originalAnswerIndex] as ObjectAnswerDto).value,
+        },
+      };
+    });
+
+    const userActionsWithoutEmptyFiles = updatedUserActions.map(
+      (userAction: UserActionDto) => {
+        const response = userAction?.response as ObjectAnswerDto;
+        const userActionValue = response?.value as MediaFile;
+
+        if (userActionValue?.uri) {
+          return {
+            ...userAction,
+            response: {
+              value: 'File not uploaded',
+            },
+          };
+        }
+        return userAction;
+      },
+    );
+
+    return userActionsWithoutEmptyFiles;
+  }
+}
 export default new AnswersUploadService();

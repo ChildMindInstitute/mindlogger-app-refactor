@@ -1,11 +1,6 @@
-import { Dimensions } from 'react-native';
-
-import { IS_IOS } from '@shared/lib';
+import { IS_IOS, VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from '@shared/lib';
 
 import { type Coordinate } from '../types';
-
-const { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT } =
-  Dimensions.get('window');
 
 export const PLAYGROUND_WIDTH = Math.min(
   VIEWPORT_WIDTH - 10,

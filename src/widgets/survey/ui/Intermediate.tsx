@@ -23,6 +23,7 @@ import {
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
+import { getMetaClientInformation } from '../lib';
 import { useFlowStorageRecord } from '../lib';
 import {
   getActivityStartAt,
@@ -206,6 +207,7 @@ function Intermediate({
       scheduledTime,
       debug_activityName: getActivityName(activityId),
       debug_completedAt: new Date().toString(),
+      client: getMetaClientInformation(),
     });
 
     clearActivityStorageRecord();
