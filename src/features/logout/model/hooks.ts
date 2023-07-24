@@ -17,6 +17,16 @@ export function useLogout() {
   const queryClient = useQueryClient();
 
   const processLogout = async () => {
+    try {
+      IdentityService.logout({
+        deviceId: SystemRecord.getDeviceId()!,
+      });
+    } catch (error) {
+      console.log('Logout operation failed:', error);
+    }
+
+    SessionModel.clearSession();
+
     dispatch(IdentityModel.actions.onLogout());
 
     CacheManager.clearCache();
@@ -33,16 +43,6 @@ export function useLogout() {
     await queryClient.removeQueries(['activities']);
 
     queryClient.clear();
-
-    try {
-      await IdentityService.logout({
-        deviceId: SystemRecord.getDeviceId()!,
-      });
-    } catch (error) {
-      console.log('Logout operation failed:', error);
-    }
-
-    SessionModel.clearSession();
   };
 
   const logout = async () => {
