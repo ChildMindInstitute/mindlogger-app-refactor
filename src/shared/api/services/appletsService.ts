@@ -81,7 +81,9 @@ export type AppletDetailsResponse = SuccessfulResponse<AppletDetailsDto>;
 function appletsService() {
   return {
     getApplets() {
-      return httpService.get<AppletsResponse>('/applets');
+      return httpService.get<AppletsResponse>('/applets', {
+        params: { roles: 'respondent' },
+      });
     },
     getAppletDetails(request: AppletDetailsRequest) {
       return httpService.get<AppletDetailsResponse>(
