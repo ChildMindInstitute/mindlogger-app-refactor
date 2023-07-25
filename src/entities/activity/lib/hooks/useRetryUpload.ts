@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { showUploadErrorAlert } from '../alerts';
+import { UploadObservable } from '../observables';
 
 type Input = {
   retryUpload: () => Promise<boolean>;
@@ -10,7 +11,6 @@ type Input = {
 
 type Result = {
   isAlertOpened: boolean;
-  isPostponed: boolean;
   openAlert: () => void;
 };
 
@@ -20,8 +20,6 @@ export const useRetryUpload = ({
   success,
 }: Input): Result => {
   const [isAlertOpened, setIsAlertOpened] = useState(false);
-
-  const [isPostponed, setIsPostponed] = useState(false);
 
   const openAlert = async () => {
     setIsAlertOpened(true);
@@ -44,7 +42,8 @@ export const useRetryUpload = ({
       },
       onLater: () => {
         setIsAlertOpened(false);
-        setIsPostponed(true);
+
+        UploadObservable.isPostponed = true;
 
         if (postpone) {
           postpone();
@@ -55,7 +54,6 @@ export const useRetryUpload = ({
 
   return {
     isAlertOpened,
-    isPostponed,
     openAlert,
   };
 };

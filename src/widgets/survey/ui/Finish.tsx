@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
-import { useRetryUpload } from '@app/entities/activity/lib';
+import { UploadObservable, useRetryUpload } from '@app/entities/activity/lib';
 import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { EventModel } from '@app/entities/event';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
@@ -13,7 +13,6 @@ import { PassSurveyModel } from '@features/pass-survey';
 import { LogTrigger } from '@shared/api';
 import {
   getUnixTimestamp,
-  isAppOnline,
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
@@ -81,19 +80,17 @@ function FinishItem({
 
   const {
     isCompleted,
+    isPostponed,
     process: processQueue,
     push: pushInQueue,
   } = useQueueProcessing();
 
   const { getName: getActivityName } = useActivityInfo();
 
-  const {
-    isAlertOpened: isRetryAlertOpened,
-    openAlert: openRetryAlert,
-    isPostponed,
-  } = useRetryUpload({
-    retryUpload: processQueue,
-  });
+  const { isAlertOpened: isRetryAlertOpened, openAlert: openRetryAlert } =
+    useRetryUpload({
+      retryUpload: processQueue,
+    });
 
   let finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';
 
@@ -158,12 +155,6 @@ function FinishItem({
 
     clearActivityStorageRecord();
 
-    const online = await isAppOnline();
-
-    if (!online) {
-      return;
-    }
-
     const success = await processQueue();
 
     if (!success) {
@@ -172,7 +163,10 @@ function FinishItem({
   }
 
   useEffect(() => {
-    completeActivity();
+    UploadObservable.reset();
+    setTimeout(() => {
+      completeActivity();
+    }, 50);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

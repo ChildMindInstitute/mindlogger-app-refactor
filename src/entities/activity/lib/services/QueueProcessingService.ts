@@ -1,4 +1,4 @@
-import { IMutex, Mutex, wait } from '@app/shared/lib';
+import { IMutex, Mutex, isAppOnline, wait } from '@app/shared/lib';
 
 import AnswersQueueService, {
   IAnswersQueueService,
@@ -78,13 +78,24 @@ class QueueProcessingService {
       this.mutex.setBusy();
 
       this.uploadStatusObservable.isLoading = true;
+      this.uploadStatusObservable.isCompleted = false;
+      this.uploadStatusObservable.isPostponed = false;
       this.uploadStatusObservable.isError = false;
 
       await wait(100);
 
+      const online = await isAppOnline();
+
+      if (!online) {
+        this.uploadStatusObservable.isPostponed = true;
+        return true;
+      }
+
       const success = await this.processInternal();
 
       this.uploadStatusObservable.isError = !success;
+      this.uploadStatusObservable.isCompleted = success;
+
       return success;
     } catch {
       this.uploadStatusObservable.isError = true;

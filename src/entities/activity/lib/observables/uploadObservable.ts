@@ -1,6 +1,9 @@
 export interface IUploadObservableSetters {
   set isLoading(value: boolean);
   set isError(value: boolean);
+  set isPostponed(value: boolean);
+  set isCompleted(value: boolean);
+  reset(): void;
 }
 
 class UploadObservable implements IUploadObservableSetters {
@@ -8,11 +11,17 @@ class UploadObservable implements IUploadObservableSetters {
 
   private _isError: boolean;
 
+  private _isCompleted: boolean;
+
+  private _isPostponed: boolean;
+
   private _observers: Array<() => void>;
 
   constructor() {
     this._isLoading = false;
     this._isError = false;
+    this._isCompleted = false;
+    this._isPostponed = false;
     this._observers = [];
   }
 
@@ -36,6 +45,31 @@ class UploadObservable implements IUploadObservableSetters {
   public set isError(value: boolean) {
     this._isError = value;
     this.notify();
+  }
+
+  public get isCompleted() {
+    return this._isCompleted;
+  }
+
+  public set isCompleted(value: boolean) {
+    this._isCompleted = value;
+    this.notify();
+  }
+
+  public get isPostponed() {
+    return this._isPostponed;
+  }
+
+  public set isPostponed(value: boolean) {
+    this._isPostponed = value;
+    this.notify();
+  }
+
+  public reset() {
+    this.isCompleted = false;
+    this.isError = false;
+    this.isPostponed = false;
+    this.isLoading = false;
   }
 
   public addObserver(observer: () => void) {

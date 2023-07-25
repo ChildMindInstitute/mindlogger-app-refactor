@@ -1,10 +1,11 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
 import { useRetryUpload } from '@app/entities/activity';
+import { UploadObservable } from '@app/entities/activity/lib';
 import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 import {
@@ -15,7 +16,6 @@ import { EventModel } from '@app/entities/event';
 import { PassSurveyModel } from '@app/features/pass-survey';
 import {
   getUnixTimestamp,
-  isAppOnline,
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
@@ -123,23 +123,24 @@ function Intermediate({
     });
 
   const {
-    isLoading: isUploading,
+    isCompleted,
+    isPostponed,
+    isLoading,
     process: processQueue,
     push: pushInQueue,
   } = useQueueProcessing();
 
-  const { isAlertOpened: isRetryAlertOpened, openAlert: openRetryAlert } =
-    useRetryUpload({
-      retryUpload: processQueue,
-      postpone: () => {
-        changeActivity();
-        onFinish();
-      },
-      success: () => {
-        changeActivity();
-        onFinish();
-      },
-    });
+  const { openAlert: openRetryAlert } = useRetryUpload({
+    retryUpload: processQueue,
+    postpone: () => {
+      changeActivity();
+      onFinish();
+    },
+    success: () => {
+      changeActivity();
+      onFinish();
+    },
+  });
 
   const { getName: getActivityName } = useActivityInfo();
 
@@ -212,14 +213,6 @@ function Intermediate({
 
     clearActivityStorageRecord();
 
-    const online = await isAppOnline();
-
-    if (!online) {
-      changeActivity();
-      onFinish();
-      return;
-    }
-
     const success = await processQueue();
 
     if (!success) {
@@ -229,6 +222,10 @@ function Intermediate({
       onFinish();
     }
   }
+
+  useEffect(() => {
+    UploadObservable.reset();
+  }, []);
 
   return (
     <YStack flex={1} mx={40} jc="center" bg="$white">
@@ -257,7 +254,7 @@ function Intermediate({
           <Button
             bg="$blue"
             onPress={completeActivity}
-            isLoading={isUploading || isRetryAlertOpened}
+            isLoading={isLoading && !isCompleted && !isPostponed}
           >
             {t('change_study:submit')}
           </Button>
@@ -268,7 +265,7 @@ function Intermediate({
             fontSize={17}
             fontWeight="bold"
             onPress={onClose}
-            disabled={isUploading || isRetryAlertOpened}
+            disabled={isLoading && !isCompleted && !isPostponed}
           >
             {t('activity_navigation:back')}
           </Text>
