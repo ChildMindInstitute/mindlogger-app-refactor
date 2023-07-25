@@ -130,7 +130,7 @@ export type AnswerValueDto =
   | null;
 
 export type ObjectAnswerDto = {
-  value: AnswerValueDto;
+  value?: AnswerValueDto;
   text?: string;
 };
 

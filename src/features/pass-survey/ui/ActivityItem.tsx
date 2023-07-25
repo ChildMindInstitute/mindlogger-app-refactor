@@ -348,6 +348,7 @@ function ActivityItem({
         {question && (
           <Box mx={16} mb={20}>
             <MarkdownMessage
+              flex={1}
               alignItems={alignMessageToLeft ? undefined : 'center'}
               content={textVariableReplacer(question)}
             />
