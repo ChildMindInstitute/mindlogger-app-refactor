@@ -357,7 +357,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
     <YStack shouldRasterizeIOS style={styles.container}>
       <Score score={score.current} />
 
-      <YStack>
+      <YStack flex={1}>
         <Svg width={PLAYGROUND_WIDTH} height={PLAYGROUND_WIDTH}>
           <PlayGround
             boundWasHit={boundWasHit.current}

@@ -25,23 +25,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 10,
     paddingHorizontal: 10,
-  },
-  times: {
     flex: 1,
-    textAlign: 'left',
-    transform: [{ rotate: '90deg' }],
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   score: {
     flex: 1,
-    textAlign: 'left',
+    textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 20,
     transform: [{ rotate: '90deg' }, { translateX: 15 }],
-  },
-  lambda: {
-    flex: 1,
-    textAlign: 'left',
-    transform: [{ rotate: '90deg' }],
   },
   controlBarWrapper: {
     position: 'absolute',
