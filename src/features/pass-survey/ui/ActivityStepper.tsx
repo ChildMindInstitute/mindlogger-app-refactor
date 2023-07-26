@@ -171,8 +171,10 @@ function ActivityStepper({
     restartIdleTimer();
   };
 
-  const onEndReached = () => {
-    trackUserAction(userActionCreator.done());
+  const onEndReached = (isForced: boolean) => {
+    if (!isForced) {
+      trackUserAction(userActionCreator.done());
+    }
     onFinish();
   };
 
