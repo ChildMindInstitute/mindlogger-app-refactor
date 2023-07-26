@@ -163,6 +163,7 @@ type SingleSelectionAnswerSettings = {
     color: string | null;
     isHidden: boolean;
     value: number;
+    alert: string | null;
   }>;
 };
 
@@ -179,6 +180,7 @@ type MultiSelectionConfiguration = ButtonsConfiguration &
 type MultiSelectionAnswerSettings = {
   options: Array<{
     id: string;
+    alert: string | null;
     text: string;
     image: ImageUrl | null;
     score: number | null;
@@ -227,7 +229,7 @@ type SingleSelectionRowsAnswerSettings = {
       {
         optionId: string;
         score: number;
-        alert: string;
+        alert: string | null;
       },
     ];
   }>;
@@ -260,7 +262,7 @@ type MultiSelectionRowsAnswerSettings = {
       {
         optionId: string;
         score: number;
-        alert: string;
+        alert: string | null;
       },
     ];
   }>;
@@ -305,6 +307,12 @@ type SliderAnswerSettings = {
   maxValue: number;
   minImage: ImageUrl | null;
   maxImage: ImageUrl | null;
+  alerts: Array<{
+    value: number;
+    minValue: number;
+    maxValue: number;
+    alert: string;
+  }> | null;
 };
 
 type NumberSelectionConfiguration = ButtonsConfiguration &
@@ -379,6 +387,12 @@ type SliderRowsAnswerSettings = {
     maxValue: number;
     minImage: ImageUrl | null;
     maxImage: ImageUrl | null;
+    alerts: Array<{
+      alert: string;
+      maxValue: number | null;
+      minValue: number | null;
+      value: number;
+    }>;
   }>;
 };
 

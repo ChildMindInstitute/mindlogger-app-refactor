@@ -4,7 +4,12 @@ import { useMMKVObject } from 'react-native-mmkv';
 
 import { createSecureStorage } from '@app/shared/lib';
 
-import { PipelineItem, PipelineItemAnswer, UserAction } from '../types';
+import {
+  ActivityAlerts,
+  PipelineItem,
+  PipelineItemAnswer,
+  UserAction,
+} from '../types';
 
 type UseActivityStorageArgs = {
   appletId: string;
@@ -27,6 +32,7 @@ export type ActivityState = {
   timers: Timers;
   actions: UserAction[];
   context: Record<string, unknown>;
+  alerts: ActivityAlerts;
 };
 
 const storage = createSecureStorage('activity_progress-storage');
@@ -41,6 +47,8 @@ export function useActivityStorageRecord({
 
   const [activityStorageRecord, upsertActivityStorageRecord] =
     useMMKVObject<ActivityState>(key, storage);
+
+  console.log(activityStorageRecord?.items[0]);
 
   const clearActivityStorageRecord = useCallback(() => {
     storage.delete(key);

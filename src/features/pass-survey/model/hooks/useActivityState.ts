@@ -36,6 +36,7 @@ function useActivityState({
     updateUserActionsWithAdditionalAnswer,
     updateUserActionsWithAnswer,
   } = useUserActionManager({
+    // useActivityAlertsManager
     activityId,
     activityState: activityStorageRecord,
   });
@@ -56,6 +57,8 @@ function useActivityState({
       return;
     }
 
+    console.log('answer', answer);
+
     upsertActivityStorageRecord({
       ...activityStorageRecord,
       answers: {
@@ -66,6 +69,7 @@ function useActivityState({
         },
       },
       actions: updateUserActionsWithAnswer(answer),
+      // alerts: updateAlerts(answer)
     });
   }
 
