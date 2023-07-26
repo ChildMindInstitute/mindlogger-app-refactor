@@ -15,7 +15,6 @@ import {
 import { EventModel } from '@app/entities/event';
 import { PassSurveyModel } from '@app/features/pass-survey';
 import {
-  getUnixTimestamp,
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
@@ -194,7 +193,7 @@ function Intermediate({
 
     pushInQueue({
       appletId,
-      createdAt: getUnixTimestamp(Date.now()),
+      createdAt: Date.now(),
       version: activityStorageRecord.appletVersion,
       answers: answers,
       userActions,
@@ -204,8 +203,8 @@ function Intermediate({
       activityId: activityId,
       executionGroupKey,
       userIdentifier,
-      startTime: getUnixTimestamp(getActivityStartAt(progressRecord)!),
-      endTime: getUnixTimestamp(Date.now()),
+      startTime: getActivityStartAt(progressRecord)!,
+      endTime: Date.now(),
       scheduledTime: scheduledDate,
       debug_activityName: getActivityName(activityId),
       debug_completedAt: new Date().toString(),

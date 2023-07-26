@@ -11,12 +11,7 @@ import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
 import { PassSurveyModel } from '@features/pass-survey';
 import { LogTrigger } from '@shared/api';
-import {
-  getUnixTimestamp,
-  useActivityInfo,
-  useAppDispatch,
-  useAppSelector,
-} from '@shared/lib';
+import { useActivityInfo, useAppDispatch, useAppSelector } from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
 import {
@@ -136,7 +131,7 @@ function FinishItem({
 
     pushInQueue({
       appletId,
-      createdAt: getUnixTimestamp(Date.now()),
+      createdAt: Date.now(),
       version: activityStorageRecord.appletVersion,
       answers: answers,
       userActions,
