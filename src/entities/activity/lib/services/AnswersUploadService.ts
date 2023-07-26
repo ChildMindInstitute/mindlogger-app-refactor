@@ -309,6 +309,7 @@ class AnswersUploadService implements IAnswersUploadService {
         identifier,
       },
       createdAt: data.createdAt,
+      client: data.client,
     };
 
     return encryptedData;

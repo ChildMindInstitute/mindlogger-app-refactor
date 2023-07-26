@@ -19,6 +19,7 @@ import {
 } from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
+import { getMetaClientInformation } from '../lib';
 import {
   FinishReason,
   getActivityStartAt,
@@ -151,6 +152,7 @@ function FinishItem({
       scheduledTime: scheduledDate,
       debug_activityName: getActivityName(activityId),
       debug_completedAt: new Date().toString(),
+      client: getMetaClientInformation(),
     });
 
     clearActivityStorageRecord();
