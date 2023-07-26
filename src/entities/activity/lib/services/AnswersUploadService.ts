@@ -7,6 +7,7 @@ import {
   DrawerAnswerDto,
   FileService,
   ObjectAnswerDto,
+  UserActionDto,
 } from '@app/shared/api';
 import { MediaFile } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
@@ -54,7 +55,6 @@ class AnswersUploadService implements IAnswersUploadService {
     checkInput: CheckAnswersInput,
     fakeResult: boolean = false,
   ): Promise<boolean> {
-    console.log(checkInput);
     return fakeResult; // todo
   }
 
@@ -315,10 +315,77 @@ class AnswersUploadService implements IAnswersUploadService {
     return encryptedData;
   }
 
+  private assignRemoteUrlsToUserActions(
+    originalAnswers: AnswerDto[],
+    modifiedBody: SendAnswersInput,
+  ) {
+    const userActions = modifiedBody.userActions;
+    const updatedAnswers = modifiedBody.answers;
+
+    const processUserActions = () =>
+      userActions.map((userAction: UserActionDto) => {
+        const response = userAction?.response as ObjectAnswerDto;
+        const userActionValue = response?.value as MediaFile;
+        const isSvg = userActionValue?.type === 'image/svg';
+
+        if (userAction.type !== 'SET_ANSWER' || !userActionValue?.uri) {
+          return userAction;
+        }
+
+        const originalAnswerIndex = originalAnswers.findIndex(answer => {
+          const currentAnswerValue = (answer as ObjectAnswerDto)
+            ?.value as MediaFile;
+
+          return currentAnswerValue?.uri === userActionValue.uri;
+        });
+
+        if (originalAnswerIndex === -1) {
+          return {
+            ...userAction,
+            response: {
+              value: null,
+            },
+          };
+        }
+
+        if (isSvg) {
+          return {
+            ...userAction,
+            response: updatedAnswers[originalAnswerIndex],
+          };
+        }
+
+        return {
+          ...userAction,
+          response: {
+            value: (updatedAnswers[originalAnswerIndex] as ObjectAnswerDto)
+              .value,
+          },
+        };
+      });
+
+    try {
+      return processUserActions();
+    } catch (error) {
+      console.warn(
+        '[UploadAnswersService.assignRemoteUrlsToUserActions]: Error occurred while mapping user actions media files',
+        error!.toString(),
+      );
+      throw error;
+    }
+  }
+
   public async sendAnswers(body: SendAnswersInput) {
     this.createdAt = body.createdAt;
 
     const modifiedBody = await this.uploadAllMediaFiles(body);
+
+    const updatedUserActions = this.assignRemoteUrlsToUserActions(
+      body.answers,
+      modifiedBody,
+    );
+
+    modifiedBody.userActions = updatedUserActions;
 
     if (modifiedBody.itemIds.length !== modifiedBody.answers.length) {
       throw new Error(
