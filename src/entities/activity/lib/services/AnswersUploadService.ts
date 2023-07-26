@@ -7,6 +7,7 @@ import {
   DrawerAnswerDto,
   FileService,
   ObjectAnswerDto,
+  UserActionDto,
 } from '@app/shared/api';
 import { MediaFile } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
@@ -319,6 +320,13 @@ class AnswersUploadService implements IAnswersUploadService {
 
     const modifiedBody = await this.uploadAllMediaFiles(body);
 
+    const updatedUserActions = this.mapUserActionsMediaFilesToDto(
+      body.answers,
+      modifiedBody,
+    );
+
+    modifiedBody.userActions = updatedUserActions;
+
     if (modifiedBody.itemIds.length !== modifiedBody.answers.length) {
       throw new Error(
         "[UploadAnswersService.sendAnswers]: Items' length doesn't equal to answers' length ",
@@ -330,6 +338,68 @@ class AnswersUploadService implements IAnswersUploadService {
     await this.uploadAnswers(encryptedData);
 
     MediaFilesCleaner.cleanUpByAnswers(body.answers);
+  }
+  private mapUserActionsMediaFilesToDto(
+    originalAnswers: AnswerDto[],
+    modifiedBody: SendAnswersInput,
+  ) {
+    const userActions = modifiedBody.userActions;
+    const updatedAnswers = modifiedBody.answers;
+
+    const updatedUserActions = userActions.map((userAction: UserActionDto) => {
+      const response = userAction?.response as ObjectAnswerDto;
+      const userActionValue = response?.value as MediaFile;
+      const isSvg = userActionValue?.type === 'image/svg';
+
+      if (userAction.type !== 'SET_ANSWER' || !userActionValue?.uri) {
+        return userAction;
+      }
+
+      const originalAnswerIndex = originalAnswers.findIndex(answer => {
+        const currentAnswerValue = (answer as ObjectAnswerDto)
+          ?.value as MediaFile;
+        return currentAnswerValue?.uri === userActionValue.uri;
+      });
+
+      if (originalAnswerIndex === -1) {
+        return userAction;
+      }
+
+      if (isSvg) {
+        return {
+          ...userAction,
+          response: updatedAnswers[originalAnswerIndex],
+        };
+      }
+
+      return {
+        ...userAction,
+        response: {
+          value: (updatedAnswers[originalAnswerIndex] as ObjectAnswerDto).value,
+        },
+      };
+    });
+
+    const userActionsWithoutEmptyFiles = updatedUserActions.map(
+      (userAction: UserActionDto) => {
+        const response = userAction?.response as ObjectAnswerDto;
+        const userActionValue = response?.value as MediaFile;
+        const isSvg = userActionValue?.type === 'image/svg';
+
+        if (userActionValue?.uri && !isSvg) {
+          return {
+            ...userAction,
+            response: {
+              value: 'File not uploaded',
+            },
+          };
+        }
+
+        return userAction;
+      },
+    );
+
+    return userActionsWithoutEmptyFiles;
   }
 }
 
