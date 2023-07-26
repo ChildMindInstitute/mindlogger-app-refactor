@@ -390,7 +390,7 @@ class AnswersUploadService implements IAnswersUploadService {
           return {
             ...userAction,
             response: {
-              value: 'File not uploaded',
+              value: null,
             },
           };
         }
