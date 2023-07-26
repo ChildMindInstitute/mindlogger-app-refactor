@@ -15,7 +15,6 @@ import {
   AudioAnswerDto,
   AudioPlayerAnswerDto,
   CheckboxAnswerDto,
-  DateAnswerDto,
   GeolocationAnswerDto,
   NumberSelectAnswerDto,
   PhotoAnswerDto,
@@ -26,7 +25,6 @@ import {
   StackedSliderAnswerDto,
   TextAnswerDto,
   TimeAnswerDto,
-  TimeRangeAnswerDto,
   VideoAnswerDto,
   UserActionDto,
   FlankerAnswerRecordDto,
@@ -135,7 +133,9 @@ function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
   const radioValue = answer.answer as RadioOption;
 
   return {
-    value: radioValue.value as RadioAnswerDto,
+    ...(radioValue && {
+      value: radioValue.value as RadioAnswerDto,
+    }),
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
@@ -158,7 +158,9 @@ function convertToCheckboxAnswer(answer: Answer): AnswerDto {
   );
 
   return {
-    value: answerDto as CheckboxAnswerDto,
+    ...(answerDto && {
+      value: answerDto as CheckboxAnswerDto,
+    }),
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
@@ -184,10 +186,10 @@ function convertToTimeAnswer(answer: Answer): AnswerDto {
 }
 
 function convertToDateAnswerAnswer(answer: Answer): AnswerDto {
-  const date = new Date(answer.answer as string);
-
   return {
-    value: convertToDayMonthYear(date) as DateAnswerDto,
+    ...(answer.answer && {
+      value: convertToDayMonthYear(new Date(answer.answer as string)),
+    }),
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
@@ -196,20 +198,21 @@ function convertToDateAnswerAnswer(answer: Answer): AnswerDto {
 
 function convertToTimeRangeAnswer(answer: Answer): AnswerDto {
   const timeRangeItem = answer.answer as TimeRange;
-  const { startTime, endTime } = timeRangeItem;
-  const answerDto = {
-    from: {
-      hour: startTime.hours,
-      minute: startTime.minutes,
-    },
-    to: {
-      hour: endTime.hours,
-      minute: endTime.minutes,
-    },
-  };
+  const { startTime, endTime } = timeRangeItem ?? {};
 
   return {
-    value: answerDto as TimeRangeAnswerDto,
+    ...(timeRangeItem && {
+      value: {
+        from: {
+          hour: startTime.hours,
+          minute: startTime.minutes,
+        },
+        to: {
+          hour: endTime.hours,
+          minute: endTime.minutes,
+        },
+      },
+    }),
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
@@ -227,12 +230,14 @@ function convertToGeolocationAnswer(answer: Answer): AnswerDto {
 
 function convertToStackedRadioAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as StackedRadioResponse;
-  const answerDto = answers.map(answerItem =>
+  const answerDto = answers?.map(answerItem =>
     answerItem ? answerItem.text : null,
   ) as string[];
 
   return {
-    value: answerDto as StackedRadioAnswerDto,
+    ...(answerDto && {
+      value: answerDto as StackedRadioAnswerDto,
+    }),
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
@@ -242,7 +247,7 @@ function convertToStackedRadioAnswer(answer: Answer): AnswerDto {
 function convertToStackedCheckboxAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as StackedRadioAnswerValue;
 
-  const answersDto = answers.map(answerRow => {
+  const answersDto = answers?.map(answerRow => {
     if (answerRow) {
       return answerRow.map(answerItem => (answerItem ? answerItem.text : null));
     }
@@ -251,7 +256,9 @@ function convertToStackedCheckboxAnswer(answer: Answer): AnswerDto {
   });
 
   return {
-    value: answersDto as StackedCheckboxAnswerDto,
+    ...(answersDto && {
+      value: answersDto as StackedCheckboxAnswerDto,
+    }),
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
@@ -260,12 +267,14 @@ function convertToStackedCheckboxAnswer(answer: Answer): AnswerDto {
 
 function convertToStackedSliderAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as number[];
-  const answerDto = answers.map(
+  const answerDto = answers?.map(
     answerItem => answerItem || null, // @todo check with BE
   ) as number[];
 
   return {
-    value: answerDto as StackedSliderAnswerDto,
+    ...(answerDto && {
+      value: answerDto as StackedSliderAnswerDto,
+    }),
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),

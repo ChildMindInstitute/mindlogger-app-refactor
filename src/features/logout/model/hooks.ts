@@ -1,6 +1,7 @@
 import { CacheManager } from '@georstat/react-native-image-cache';
 import { useQueryClient } from '@tanstack/react-query';
 
+import AnswersQueueService from '@app/entities/activity/lib/services/AnswersQueueService';
 import { onBeforeLogout } from '@app/entities/identity/lib/alerts';
 import { NotificationModel } from '@app/entities/notification';
 import { IdentityService } from '@app/shared/api';
@@ -10,18 +11,30 @@ import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
 import { hasPendingMutations, isAppOnline, useAppDispatch } from '@shared/lib';
 
-import { clearEntityRecordStorages } from '../lib';
+import { clearEntityRecordStorages, clearUploadQueueStorage } from '../lib';
 
 export function useLogout() {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   const processLogout = async () => {
+    try {
+      IdentityService.logout({
+        deviceId: SystemRecord.getDeviceId()!,
+      });
+    } catch (error) {
+      console.log('Logout operation failed:', error);
+    }
+
+    SessionModel.clearSession();
+
     dispatch(IdentityModel.actions.onLogout());
 
     CacheManager.clearCache();
 
     clearEntityRecordStorages();
+
+    clearUploadQueueStorage();
 
     NotificationModel.NotificationManager.clearScheduledNotifications();
 
@@ -33,22 +46,12 @@ export function useLogout() {
     await queryClient.removeQueries(['activities']);
 
     queryClient.clear();
-
-    try {
-      await IdentityService.logout({
-        deviceId: SystemRecord.getDeviceId()!,
-      });
-    } catch (error) {
-      console.log('Logout operation failed:', error);
-    }
-
-    SessionModel.clearSession();
   };
 
   const logout = async () => {
     const isOnline = await isAppOnline();
 
-    if (hasPendingMutations(queryClient)) {
+    if (hasPendingMutations(queryClient) || AnswersQueueService.getLength()) {
       onBeforeLogout({
         isOnline,
         onCancel: null,

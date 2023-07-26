@@ -130,7 +130,7 @@ export type AnswerValueDto =
   | null;
 
 export type ObjectAnswerDto = {
-  value: AnswerValueDto;
+  value?: AnswerValueDto;
   text?: string;
 };
 
@@ -162,6 +162,12 @@ export type ActivityAnswersRequest = {
   createdAt: number;
   submitId: string;
   answer: EncryptedAnswerDto;
+  client: {
+    appId: string;
+    appVersion: string;
+    width: number;
+    height: number;
+  };
 };
 
 type ActivityAnswersResponse = SuccessfulEmptyResponse;

@@ -20,6 +20,7 @@ export const colors = {
   lightGrey: '#00000026',
   lightGrey2: '#00000032',
   alert: '#e63232',
+  alertLight: '#FFCCCC',
   blue: '#005fa3',
   blue2: '#24A3FF',
   lightBlue: '#dbf2ff',

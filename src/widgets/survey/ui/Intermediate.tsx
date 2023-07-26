@@ -4,7 +4,9 @@ import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
-import { useActivityAnswersMutation } from '@app/entities/activity';
+import { useRetryUpload } from '@app/entities/activity';
+import { UploadObservable } from '@app/entities/activity/lib';
+import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 import {
   mapActivitiesFromDto,
@@ -13,14 +15,14 @@ import {
 import { EventModel } from '@app/entities/event';
 import { PassSurveyModel } from '@app/features/pass-survey';
 import {
-  getUnixTimestamp,
-  onApiRequestError,
+  useActivityInfo,
   useAppDispatch,
   useAppSelector,
 } from '@app/shared/lib';
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
+import { getClientInformation } from '../lib';
 import { useFlowStorageRecord } from '../lib';
 import {
   getActivityStartAt,
@@ -121,21 +123,26 @@ function Intermediate({
     });
 
   const {
-    mutate: sendAnswers,
-    isLoading: isSendingAnswers,
-    isPaused: isOffline,
-  } = useActivityAnswersMutation({
-    onSuccess: () => {
-      clearActivityStorageRecord();
+    isCompleted,
+    isPostponed,
+    isLoading,
+    process: processQueue,
+    push: pushInQueue,
+  } = useQueueProcessing();
+
+  const { openAlert: openRetryAlert } = useRetryUpload({
+    retryUpload: processQueue,
+    onPostpone: () => {
       changeActivity();
       onFinish();
     },
-    onError: error => {
-      if (error.response.status !== 401 && error.evaluatedMessage) {
-        onApiRequestError(error.evaluatedMessage);
-      }
+    onSuccess: () => {
+      changeActivity();
+      onFinish();
     },
   });
+
+  const { getName: getActivityName } = useActivityInfo();
 
   const changeActivity = useCallback(() => {
     if (!nextActivity) {
@@ -153,7 +160,7 @@ function Intermediate({
     );
   }, [appletId, dispatch, eventId, flowId, nextActivity, activitiesPassed]);
 
-  function completeActivity() {
+  async function completeActivity() {
     if (!activityStorageRecord) {
       return;
     }
@@ -185,9 +192,9 @@ function Intermediate({
       activityStorageRecord.answers,
     );
 
-    sendAnswers({
+    pushInQueue({
       appletId,
-      createdAt: getUnixTimestamp(Date.now()),
+      createdAt: Date.now(),
       version: activityStorageRecord.appletVersion,
       answers: answers,
       userActions,
@@ -200,16 +207,26 @@ function Intermediate({
       startTime: getActivityStartAt(progressRecord)!,
       endTime: Date.now(),
       scheduledTime: scheduledDate,
+      debug_activityName: getActivityName(activityId),
+      debug_completedAt: new Date().toString(),
+      client: getClientInformation(),
     });
-  }
 
-  useEffect(() => {
-    if (isOffline) {
-      clearActivityStorageRecord();
+    clearActivityStorageRecord();
+
+    const success = await processQueue();
+
+    if (!success) {
+      openRetryAlert();
+    } else {
       changeActivity();
       onFinish();
     }
-  }, [changeActivity, clearActivityStorageRecord, isOffline, onFinish]);
+  }
+
+  useEffect(() => {
+    UploadObservable.reset();
+  }, []);
 
   return (
     <YStack flex={1} mx={40} jc="center" bg="$white">
@@ -238,7 +255,7 @@ function Intermediate({
           <Button
             bg="$blue"
             onPress={completeActivity}
-            isLoading={isSendingAnswers}
+            isLoading={isLoading && !isCompleted && !isPostponed}
           >
             {t('change_study:submit')}
           </Button>
@@ -249,7 +266,7 @@ function Intermediate({
             fontSize={17}
             fontWeight="bold"
             onPress={onClose}
-            disabled={isSendingAnswers}
+            disabled={isLoading && !isCompleted && !isPostponed}
           >
             {t('activity_navigation:back')}
           </Text>

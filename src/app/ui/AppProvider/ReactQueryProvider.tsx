@@ -5,7 +5,6 @@ import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persi
 import { QueryClient, onlineManager } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
-import { sendAnswers } from '@app/entities/activity';
 import { createSecureAsyncStorage, isAppOnline, useSplash } from '@shared/lib';
 
 const storage = createSecureAsyncStorage('cache-storage');
@@ -22,10 +21,6 @@ const queryClient = new QueryClient({
       staleTime: Infinity,
     },
   },
-});
-
-queryClient.setMutationDefaults(['send_answers'], {
-  mutationFn: sendAnswers,
 });
 
 const asyncPersist = createAsyncStoragePersister({

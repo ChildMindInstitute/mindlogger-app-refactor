@@ -4,20 +4,17 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
+import { UploadObservable, useRetryUpload } from '@app/entities/activity/lib';
+import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { EventModel } from '@app/entities/event';
-import { useActivityAnswersMutation } from '@entities/activity';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
 import { PassSurveyModel } from '@features/pass-survey';
 import { LogTrigger } from '@shared/api';
-import {
-  getUnixTimestamp,
-  onApiRequestError,
-  useAppDispatch,
-  useAppSelector,
-} from '@shared/lib';
+import { useActivityInfo, useAppDispatch, useAppSelector } from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
+import { getClientInformation } from '../lib';
 import {
   FinishReason,
   getActivityStartAt,
@@ -78,23 +75,22 @@ function FinishItem({
     });
 
   const {
-    mutate: sendAnswers,
-    isLoading: isSendingAnswers,
-    isError: sentAnswersWithError,
-    isPaused: isOffline,
-  } = useActivityAnswersMutation({
-    onError: error => {
-      if (error.response.status !== 401 && error.evaluatedMessage) {
-        onApiRequestError(error.evaluatedMessage);
-      }
-    },
-  });
+    isCompleted,
+    isPostponed,
+    process: processQueue,
+    push: pushInQueue,
+  } = useQueueProcessing();
+
+  const { getName: getActivityName } = useActivityInfo();
+
+  const { isAlertOpened: isRetryAlertOpened, openAlert: openRetryAlert } =
+    useRetryUpload({
+      retryUpload: processQueue,
+    });
 
   let finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';
 
-  const isLoading = !isOffline && isSendingAnswers;
-
-  function completeActivity() {
+  async function completeActivity() {
     dispatch(
       AppletModel.actions.entityCompleted({
         appletId,
@@ -134,9 +130,9 @@ function FinishItem({
 
     const executionGroupKey = getExecutionGroupKey(progressRecord);
 
-    sendAnswers({
+    pushInQueue({
       appletId,
-      createdAt: getUnixTimestamp(Date.now()),
+      createdAt: Date.now(),
       version: activityStorageRecord.appletVersion,
       answers: answers,
       userActions,
@@ -149,13 +145,25 @@ function FinishItem({
       startTime: getActivityStartAt(progressRecord)!,
       endTime: Date.now(),
       scheduledTime: scheduledDate,
+      debug_activityName: getActivityName(activityId),
+      debug_completedAt: new Date().toString(),
+      client: getClientInformation(),
     });
 
     clearActivityStorageRecord();
+
+    const success = await processQueue();
+
+    if (!success) {
+      openRetryAlert();
+    }
   }
 
   useEffect(() => {
-    completeActivity();
+    UploadObservable.reset();
+    setTimeout(() => {
+      completeActivity();
+    }, 50);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -168,38 +176,33 @@ function FinishItem({
     onClose();
   };
 
+  if (isRetryAlertOpened) {
+    return <ImageBackground />;
+  }
+
+  if (!isCompleted && !isPostponed) {
+    return (
+      <ImageBackground>
+        <Center flex={1} mx={16}>
+          <Text fontSize={22}>Please Wait ...</Text>
+        </Center>
+      </ImageBackground>
+    );
+  }
+
   return (
     <ImageBackground>
       <Center flex={1} mx={16}>
-        {!isLoading && (
-          <>
-            <Center mb={20}>
-              <Text fontSize={24} fontWeight="bold">
-                {finishReason === 'regular' &&
-                  !sentAnswersWithError &&
-                  t('additional:thanks')}
+        <Text fontSize={24} fontWeight="bold">
+          {finishReason === 'regular' && t('additional:thanks')}
+          {finishReason === 'time-is-up' && t('additional:time-end')}
+        </Text>
 
-                {finishReason === 'regular' &&
-                  sentAnswersWithError &&
-                  t('additional:sorry')}
+        <Text fontSize={16} mb={20}>
+          {t('additional:saved_answers')}
+        </Text>
 
-                {finishReason === 'time-is-up' && t('additional:time-end')}
-              </Text>
-
-              {!sentAnswersWithError && (
-                <Text fontSize={16}>{t('additional:saved_answers')}</Text>
-              )}
-
-              {sentAnswersWithError && (
-                <Text fontSize={16}>{t('additional:server-error')}</Text>
-              )}
-            </Center>
-
-            <Button onPress={onCloseEntity}>{t('additional:close')}</Button>
-          </>
-        )}
-
-        {isLoading && <Text fontSize={22}>Please Wait ...</Text>}
+        <Button onPress={onCloseEntity}>{t('additional:close')}</Button>
       </Center>
     </ImageBackground>
   );

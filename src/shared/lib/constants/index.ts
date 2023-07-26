@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Platform, Dimensions } from 'react-native';
 
 import Config from 'react-native-config';
 import { getSystemVersion, isTablet } from 'react-native-device-info';
@@ -6,6 +6,9 @@ import { CameraOptions, ImageLibraryOptions } from 'react-native-image-picker';
 import { PERMISSIONS } from 'react-native-permissions';
 
 import { Language } from '../types';
+
+const { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT } =
+  Dimensions.get('window');
 
 export * from './colors';
 export * from './dateTime';
@@ -26,6 +29,7 @@ export const STORE_ENCRYPTION_KEY = Config.STORE_ENCRYPTION_KEY;
 // @ts-ignore
 export const APP_VERSION = process.env.VERSION;
 
+export const META_APP_NAME = 'mindlogger-mobile';
 export const ONE_SECOND = 1000;
 export const ONE_MINUTE = ONE_SECOND * 60;
 export const ONE_HOUR = ONE_MINUTE * 60;
@@ -55,6 +59,7 @@ export const GALLERY_PHOTO_OPTIONS: ImageLibraryOptions = {
   maxWidth: 800,
   maxHeight: 800,
   selectionLimit: 1,
+  presentationStyle: 'fullScreen',
 };
 
 export const GALLERY_VIDEO_OPTIONS: ImageLibraryOptions = {
@@ -63,6 +68,7 @@ export const GALLERY_VIDEO_OPTIONS: ImageLibraryOptions = {
   quality: 0.9,
   maxWidth: 800,
   maxHeight: 800,
+  presentationStyle: 'fullScreen',
 };
 
 export const VIDEO_RECORD_OPTIONS: CameraOptions = {
@@ -72,6 +78,7 @@ export const VIDEO_RECORD_OPTIONS: CameraOptions = {
   durationLimit: 60,
   quality: 0.9,
   saveToPhotos: false,
+  presentationStyle: 'fullScreen',
 };
 
 export const PHOTO_TAKE_OPTIONS: CameraOptions = {
@@ -80,6 +87,7 @@ export const PHOTO_TAKE_OPTIONS: CameraOptions = {
   maxHeight: 800,
   quality: 0.9,
   saveToPhotos: false,
+  presentationStyle: 'fullScreen',
 };
 
 export const MICROPHONE_PERMISSIONS = Platform.select({
@@ -91,3 +99,5 @@ export const DAYS_OF_WEEK_NUMBERS = [0, 1, 2, 3, 4, 5, 6];
 export const DAYS_OF_WEEK_SHORT_NAMES = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
 export const IV_LENGTH = 16;
+
+export { VIEWPORT_WIDTH, VIEWPORT_HEIGHT };

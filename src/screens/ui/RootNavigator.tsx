@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { useBackHandler } from '@react-native-community/hooks';
@@ -7,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { EntityPath, StoreProgress } from '@app/abstract/lib';
-import { ActivityModel } from '@app/entities/activity';
+import { ActivityModel, QueueProcessingService } from '@app/entities/activity';
 import { MediaFilesCleaner } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
@@ -26,6 +27,7 @@ import {
   useBackgroundTask,
   useAppSelector,
   useFirebaseSetup,
+  useOnlineEstablished,
 } from '@shared/lib';
 import { UserProfileIcon, HomeIcon, BackButton, Text, Box } from '@shared/ui';
 
@@ -102,6 +104,12 @@ export default () => {
   useBackgroundTask(() => {
     return NotificationModel.topUpNotifications();
   });
+
+  const processQueue = useCallback(() => {
+    QueueProcessingService.process();
+  }, []);
+
+  useOnlineEstablished(processQueue);
 
   return (
     <Stack.Navigator

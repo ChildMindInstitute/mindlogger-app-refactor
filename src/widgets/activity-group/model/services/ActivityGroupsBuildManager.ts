@@ -66,6 +66,13 @@ const createActivityGroupsBuildManager = () => {
       queryClient,
     )!;
 
+    if (!appletResponse) {
+      console.warn(
+        '[ActivityGroupsBuildManager.process]: appletResponse not found',
+      );
+      return { groups: [] };
+    }
+
     const activities: Activity[] = mapActivitiesFromDto(
       appletResponse.result.activities,
     );
@@ -78,6 +85,13 @@ const createActivityGroupsBuildManager = () => {
       getEventsKey(appletId),
       queryClient,
     )!;
+
+    if (!eventsResponse) {
+      console.warn(
+        '[ActivityGroupsBuildManager.process]: eventsResponse not found',
+      );
+      return { groups: [] };
+    }
 
     const events: ScheduleEvent[] = mapEventsFromDto(
       eventsResponse.result.events,
