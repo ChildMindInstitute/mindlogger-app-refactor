@@ -5,8 +5,8 @@ import { UploadObservable } from '../observables';
 
 type Input = {
   retryUpload: () => Promise<boolean>;
-  postpone?: () => void;
-  success?: () => void;
+  onPostpone?: () => void;
+  onSuccess?: () => void;
 };
 
 type Result = {
@@ -16,8 +16,8 @@ type Result = {
 
 export const useRetryUpload = ({
   retryUpload,
-  postpone,
-  success,
+  onPostpone: postpone,
+  onSuccess: success,
 }: Input): Result => {
   const [isAlertOpened, setIsAlertOpened] = useState(false);
 

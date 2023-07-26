@@ -1,3 +1,5 @@
+import { CommonObservable } from '@app/shared/lib';
+
 export interface IUploadObservableSetters {
   set isLoading(value: boolean);
   set isError(value: boolean);
@@ -6,7 +8,10 @@ export interface IUploadObservableSetters {
   reset(): void;
 }
 
-class UploadObservable implements IUploadObservableSetters {
+class UploadObservable
+  extends CommonObservable
+  implements IUploadObservableSetters
+{
   private _isLoading: boolean;
 
   private _isError: boolean;
@@ -15,18 +20,13 @@ class UploadObservable implements IUploadObservableSetters {
 
   private _isPostponed: boolean;
 
-  private _observers: Array<() => void>;
-
   constructor() {
+    super();
+
     this._isLoading = false;
     this._isError = false;
     this._isCompleted = false;
     this._isPostponed = false;
-    this._observers = [];
-  }
-
-  private notify() {
-    this._observers.forEach(o => o());
   }
 
   public get isLoading() {
@@ -70,14 +70,6 @@ class UploadObservable implements IUploadObservableSetters {
     this.isError = false;
     this.isPostponed = false;
     this.isLoading = false;
-  }
-
-  public addObserver(observer: () => void) {
-    this._observers.push(observer);
-  }
-
-  public removeObserver(observer: () => void) {
-    this._observers = this._observers.filter(o => o !== observer);
   }
 }
 

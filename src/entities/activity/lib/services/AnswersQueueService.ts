@@ -23,7 +23,7 @@ const StartKey = '1';
 class AnswersQueueService implements IAnswersQueueService {
   constructor(changeObservable: IChangeQueueNotify) {
     storage.addOnValueChangedListener(() => {
-      changeObservable.notify(this.getLength() > 0);
+      changeObservable.notify();
     });
   }
 
@@ -82,16 +82,12 @@ class AnswersQueueService implements IAnswersQueueService {
       return;
     }
 
-    const firstItem = JSON.parse(
-      storage.getString(String(firstKey))!,
-    ) as UploadItem;
+    const firstItem: string = storage.getString(String(firstKey))!;
 
-    const lastItem = JSON.parse(
-      storage.getString(String(lastKey))!,
-    ) as UploadItem;
+    const lastItem: string = storage.getString(String(lastKey))!;
 
-    storage.set(String(firstKey), JSON.stringify(lastItem));
-    storage.set(String(lastKey), JSON.stringify(firstItem));
+    storage.set(String(firstKey), lastItem);
+    storage.set(String(lastKey), firstItem);
   }
 
   public getLength(): number {

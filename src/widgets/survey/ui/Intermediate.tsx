@@ -132,11 +132,11 @@ function Intermediate({
 
   const { openAlert: openRetryAlert } = useRetryUpload({
     retryUpload: processQueue,
-    postpone: () => {
+    onPostpone: () => {
       changeActivity();
       onFinish();
     },
-    success: () => {
+    onSuccess: () => {
       changeActivity();
       onFinish();
     },

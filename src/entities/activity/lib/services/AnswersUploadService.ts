@@ -81,7 +81,6 @@ class AnswersUploadService implements IAnswersUploadService {
 
       if (isMediaItem) {
         result.push(this.getFileId(mediaAnswer));
-        continue;
       }
     }
 

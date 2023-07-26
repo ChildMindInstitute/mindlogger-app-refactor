@@ -1,24 +1,15 @@
+import { CommonObservable } from '@app/shared/lib';
+
 export interface IChangeQueueNotify {
-  notify: (hasItems: boolean) => void;
+  notify: () => void;
 }
 
-class ChangeQueueObservable implements IChangeQueueNotify {
-  private _observers: Array<(hasItems: boolean) => void>;
-
+class ChangeQueueObservable
+  extends CommonObservable
+  implements IChangeQueueNotify
+{
   constructor() {
-    this._observers = [];
-  }
-
-  public notify(hasItems: boolean) {
-    this._observers.forEach(o => o(hasItems));
-  }
-
-  public addObserver(observer: () => void) {
-    this._observers.push(observer);
-  }
-
-  public removeObserver(observer: () => void) {
-    this._observers = this._observers.filter(o => o !== observer);
+    super();
   }
 }
 
