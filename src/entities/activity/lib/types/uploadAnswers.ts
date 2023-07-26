@@ -17,6 +17,12 @@ export type SendAnswersInput = {
   userIdentifier?: string;
   debug_activityName?: string;
   debug_completedAt?: string;
+  client: {
+    appId: string;
+    appVersion: string;
+    width: number;
+    height: number;
+  };
 };
 
 export type CheckFileUploadResult = {
