@@ -24,7 +24,7 @@ type Props = PropsWithChildren<{
   onBeforeBack?: (step: number) => number;
 
   onStartReached?: () => void;
-  onEndReached?: () => void;
+  onEndReached?: (isForced: boolean) => void;
 }>;
 
 export function Stepper({
@@ -80,7 +80,7 @@ export function Stepper({
         stepRef.current = nextStep;
         onNextRef.current?.(nextStep, isForced);
       } else if (nextStep >= stepsCount) {
-        onEndReachedRef.current?.();
+        onEndReachedRef.current?.(isForced);
       }
     },
     [stepsCount],
