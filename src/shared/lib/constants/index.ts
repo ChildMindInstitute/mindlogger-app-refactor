@@ -55,6 +55,7 @@ export const GALLERY_PHOTO_OPTIONS: ImageLibraryOptions = {
   maxWidth: 800,
   maxHeight: 800,
   selectionLimit: 1,
+  presentationStyle: 'fullScreen',
 };
 
 export const GALLERY_VIDEO_OPTIONS: ImageLibraryOptions = {
@@ -63,6 +64,7 @@ export const GALLERY_VIDEO_OPTIONS: ImageLibraryOptions = {
   quality: 0.9,
   maxWidth: 800,
   maxHeight: 800,
+  presentationStyle: 'fullScreen',
 };
 
 export const VIDEO_RECORD_OPTIONS: CameraOptions = {
@@ -72,6 +74,7 @@ export const VIDEO_RECORD_OPTIONS: CameraOptions = {
   durationLimit: 60,
   quality: 0.9,
   saveToPhotos: false,
+  presentationStyle: 'fullScreen',
 };
 
 export const PHOTO_TAKE_OPTIONS: CameraOptions = {
@@ -80,6 +83,7 @@ export const PHOTO_TAKE_OPTIONS: CameraOptions = {
   maxHeight: 800,
   quality: 0.9,
   saveToPhotos: false,
+  presentationStyle: 'fullScreen',
 };
 
 export const MICROPHONE_PERMISSIONS = Platform.select({
