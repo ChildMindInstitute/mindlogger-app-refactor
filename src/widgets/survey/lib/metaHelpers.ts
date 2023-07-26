@@ -5,11 +5,11 @@ import {
   VIEWPORT_WIDTH,
 } from '@shared/lib';
 
-const getMetaClientInformation = () => ({
+const getClientInformation = () => ({
   appId: META_APP_NAME,
   appVersion: APP_VERSION,
   width: VIEWPORT_WIDTH,
   height: VIEWPORT_HEIGHT,
 });
 
-export { getMetaClientInformation };
+export { getClientInformation };
