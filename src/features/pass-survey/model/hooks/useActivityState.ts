@@ -1,3 +1,4 @@
+import useActivityAlertsManager from './useActivityAletrsManager';
 import useUserActionManager from './useUserActionManager';
 import {
   PipelineItemResponse,
@@ -41,6 +42,10 @@ function useActivityState({
     activityState: activityStorageRecord,
   });
 
+  const { updateAlerts } = useActivityAlertsManager({
+    activityState: activityStorageRecord,
+  });
+
   function setStep(step: number) {
     if (!activityStorageRecord) {
       return;
@@ -57,7 +62,7 @@ function useActivityState({
       return;
     }
 
-    console.log('answer', answer);
+    updateAlerts(answer);
 
     upsertActivityStorageRecord({
       ...activityStorageRecord,

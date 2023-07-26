@@ -23,7 +23,11 @@ import {
   getScheduledDate,
   getUserIdentifier,
 } from '../model';
-import { mapAnswersToDto, mapUserActionsToDto } from '../model/mappers';
+import {
+  mapAnswersToAlerts,
+  mapAnswersToDto,
+  mapUserActionsToDto,
+} from '../model/mappers';
 
 type Props = {
   appletId: string;
@@ -106,6 +110,13 @@ function FinishItem({
     if (!activityStorageRecord) {
       return;
     }
+
+    const alerts = mapAnswersToAlerts(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
+
+    console.log(alerts);
 
     const answers = mapAnswersToDto(
       activityStorageRecord.items,

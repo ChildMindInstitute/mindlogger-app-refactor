@@ -493,3 +493,9 @@ export function mapUserActionsToDto(actions: UserAction[]): UserActionDto[] {
     };
   });
 }
+
+export function mapAnswersToAlerts(pipeline: PipelineItem[], answers: Answers) {
+  console.log(pipeline, answers);
+
+  return 'hello';
+}
