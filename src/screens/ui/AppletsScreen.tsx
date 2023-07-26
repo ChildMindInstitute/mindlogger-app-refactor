@@ -6,6 +6,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
+import { UploadRetryBanner } from '@app/entities/activity';
 import { NotificationModel } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
 import { useAppSelector } from '@app/shared/lib';
@@ -42,6 +43,8 @@ const AppletsScreen: FC = () => {
 
   return (
     <Box bg="$secondary" flex={1}>
+      <UploadRetryBanner />
+
       <ImageBackground>
         <ScrollView
           contentContainerStyle={styles.scrollView}

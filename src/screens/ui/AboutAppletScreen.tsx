@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
+import { UploadRetryBanner } from '@app/entities/activity';
 import { useAppletDetailsQuery } from '@app/entities/applet';
 import rules from '@shared/lib/markDownRules';
 import { MarkdownView } from '@shared/ui';
@@ -31,6 +32,8 @@ const AboutAppletScreen: FC<Props> = ({ route }) => {
 
   return (
     <YStack jc="flex-start" flex={1}>
+      <UploadRetryBanner />
+
       <ScrollView px="$5" pt="$2">
         <Box flex={1} mb="$3">
           <MarkdownView content={content} rules={rules} />

@@ -352,6 +352,8 @@
     "activity_resume_restart": "Would you like to resume this activity in progress or restart?",
     "restart": "Restart",
     "resume": "Resume",
+    "retry": "Retry",
+    "later": "Later",
     "in_progress": "In Progress",
     "unscheduled": "Unscheduled",
     "scheduled": "Scheduled",
@@ -362,7 +364,10 @@
     "yes_delete": "Yes, delete it",
     "hi": "Hi",
     "enter_old_password": "Please enter your old password",
-    "enter_new_password": "Please enter a new password"
+    "enter_new_password": "Please enter a new password",
+    "data_not_sent": "Data not sent (keep app open while we try)",
+    "upload_error": "Queue upload error",
+    "want_to_retry": "Would you like to retry?"
   },
   "prize": {
     "lack_tokens_title": "Try again",
