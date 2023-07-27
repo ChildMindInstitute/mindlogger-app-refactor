@@ -36,7 +36,6 @@ function useActivityState({
     updateUserActionsWithAdditionalAnswer,
     updateUserActionsWithAnswer,
   } = useUserActionManager({
-    // useActivityAlertsManager
     activityId,
     activityState: activityStorageRecord,
   });
@@ -67,7 +66,6 @@ function useActivityState({
         },
       },
       actions: updateUserActionsWithAnswer(answer),
-      // alerts: updateAlerts(answer)
     });
   }
 
