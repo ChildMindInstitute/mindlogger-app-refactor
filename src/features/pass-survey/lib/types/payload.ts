@@ -167,8 +167,6 @@ type StackedSliderPayload = {
     alerts: Array<{
       id: string;
       value: number;
-      minValue: number | null;
-      maxValue: number | null;
       message: string;
     }> | null;
   }[];

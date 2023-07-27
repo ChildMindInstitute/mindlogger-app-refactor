@@ -18,6 +18,8 @@ import {
   StackedCheckboxResponse,
   SliderPipelineItem,
   SliderResponse,
+  StackedSliderPipelineItem,
+  StackedSliderResponse,
 } from '@app/features/pass-survey';
 import {
   AnswerDto,
@@ -529,6 +531,9 @@ export function mapAnswersToAlerts(
 
         case 'Slider':
           return convertSliderAlerts(pipelineItem, answers[step]);
+
+        case 'StackedSlider':
+          return convertStackedSliderAlerts(pipelineItem, answers[step]);
       }
     })
     .filter(Boolean);
@@ -676,6 +681,35 @@ function convertSliderAlerts(
       }
     })
     .filter(Boolean);
+
+  return alerts as Alert[];
+}
+
+function convertStackedSliderAlerts(
+  pipelineItem: PipelineItem,
+  answer: Answer,
+) {
+  const sliderItem = pipelineItem as StackedSliderPipelineItem;
+  const sliderAnswer = answer.answer as StackedSliderResponse;
+
+  if (!sliderAnswer) {
+    return null;
+  }
+
+  const alerts: Alert[] = [];
+
+  sliderItem.payload.rows.forEach((row, rowIndex) => {
+    if (row.alerts) {
+      row.alerts.forEach(alert => {
+        if (alert.value === sliderAnswer[rowIndex]) {
+          alerts.push({
+            activityItemId: sliderItem.id!,
+            message: alert.message,
+          });
+        }
+      });
+    }
+  });
 
   return alerts as Alert[];
 }
