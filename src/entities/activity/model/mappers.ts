@@ -6,6 +6,7 @@ import {
   TestNode,
   TutorialRecord,
 } from '@app/abstract/lib';
+import { DataMatrix, DataMatrixOptions } from '@app/features/pass-survey';
 import {
   ActivityDto,
   DrawingItemDto,
@@ -32,8 +33,14 @@ import {
   ConditionalLogicDto,
   ABTrailsItemDto,
 } from '@app/shared/api';
-import { ImageUrl, getMsFromSeconds } from '@app/shared/lib';
+import { getMsFromSeconds } from '@app/shared/lib';
 
+import {
+  DataMatrixDto,
+  OptionsDto,
+  RowsDto,
+  SliderAlertsDto,
+} from '../api/types';
 import { ActivityDetails, ActivityItem } from '../lib';
 
 function mapTimerValue(dtoTimer: number | null) {
@@ -716,18 +723,6 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
   return activity;
 }
 
-type OptionsDto = {
-  id: string;
-  text: string;
-  image: string | null;
-  score: number | null;
-  tooltip: string | null;
-  color: string | null;
-  isHidden: boolean;
-  value: number;
-  alert: string | null;
-}[];
-
 function mapToRadioAlerts(options: OptionsDto) {
   return options.map(option => ({
     id: option.id,
@@ -746,33 +741,6 @@ function mapToRadioAlerts(options: OptionsDto) {
   }));
 }
 
-type DataMatrixDto = Array<{
-  rowId: string;
-  options: [
-    {
-      optionId: string;
-      score: number;
-      alert: string | null;
-    },
-  ];
-}>;
-
-type DataMatrix = Array<{
-  rowId: string;
-  options: DataMatrixOptions;
-}>;
-
-type DataMatrixOptions = [
-  {
-    optionId: string;
-    score: number;
-    alert: {
-      id: string;
-      message: string;
-    } | null;
-  },
-];
-
 function mapToStackedRadioDataMatrix(dataMatrix: DataMatrixDto): DataMatrix {
   return dataMatrix.map(matrix => ({
     rowId: matrix.rowId,
@@ -787,13 +755,6 @@ function mapToStackedRadioDataMatrix(dataMatrix: DataMatrixDto): DataMatrix {
     })) as DataMatrixOptions,
   }));
 }
-
-type SliderAlertsDto = Array<{
-  value: number;
-  minValue: number;
-  maxValue: number;
-  alert: string;
-}> | null;
 
 function mapToSliderAlerts(alerts: SliderAlertsDto) {
   return (
@@ -838,23 +799,6 @@ function mapToStackedCheckboxAlerts(dataMatrix: DataMatrixDto) {
     })) as DataMatrixOptions,
   }));
 }
-
-type RowsDto = Array<{
-  id: string;
-  label: string;
-  minLabel: string | null;
-  maxLabel: string | null;
-  minValue: number;
-  maxValue: number;
-  minImage: ImageUrl | null;
-  maxImage: ImageUrl | null;
-  alerts: Array<{
-    alert: string;
-    maxValue: number | null;
-    minValue: number | null;
-    value: number;
-  }>;
-}>;
 
 function mapToStackedSliderAlerts(rows: RowsDto) {
   return rows.map(row => ({

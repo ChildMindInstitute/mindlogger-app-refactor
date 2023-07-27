@@ -41,6 +41,19 @@ export type ActivityItemType =
   | 'Date'
   | 'Time';
 
+export type DataMatrix = Array<{
+  rowId: string;
+  options: DataMatrixOptions;
+}>;
+
+export type DataMatrixOptions = Array<{
+  optionId: string;
+  score: number;
+  alert: {
+    message: string;
+  } | null;
+}>;
+
 type StabilityTrackerPayload = {
   phase: 'practice' | 'test';
   lambdaSlope: number;
@@ -104,18 +117,7 @@ type StackedCheckboxPayload = {
     image: string | null;
     tooltip: string | null;
   }>;
-  dataMatrix: Array<{
-    rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: {
-          message: string;
-        } | null;
-      },
-    ];
-  }>;
+  dataMatrix: DataMatrix;
 };
 
 type StackedRadioPayload = {
@@ -135,18 +137,7 @@ type StackedRadioPayload = {
     image: string | null;
     tooltip: string | null;
   }>;
-  dataMatrix: Array<{
-    rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: {
-          message: string;
-        } | null;
-      },
-    ];
-  }>;
+  dataMatrix: DataMatrix;
 };
 
 type StackedSliderPayload = {

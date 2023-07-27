@@ -122,15 +122,13 @@ type StackedCheckboxConfig = {
   }>;
   dataMatrix: Array<{
     rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: {
-          message: string;
-        } | null;
-      },
-    ];
+    options: Array<{
+      optionId: string;
+      score: number;
+      alert: {
+        message: string;
+      } | null;
+    }>;
   }>;
 };
 
@@ -153,15 +151,13 @@ type StackedRadioConfig = {
   }>;
   dataMatrix: Array<{
     rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: {
-          message: string;
-        } | null;
-      },
-    ];
+    options: Array<{
+      optionId: string;
+      score: number;
+      alert: {
+        message: string;
+      } | null;
+    }>;
   }>;
 };
 

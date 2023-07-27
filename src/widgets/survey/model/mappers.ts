@@ -46,6 +46,7 @@ import {
   AbTestAnswerDto,
   AbLogLineDto,
   AbLogPointDto,
+  AnswerAlertsDto,
 } from '@app/shared/api';
 import { HourMinute, convertToDayMonthYear } from '@app/shared/lib';
 import { Item } from '@app/shared/ui';
@@ -513,39 +514,52 @@ export function mapUserActionsToDto(actions: UserAction[]): UserActionDto[] {
 export function mapAnswersToAlerts(
   pipelineItems: PipelineItem[],
   answers: Answers,
-): Alert[] {
-  const alerts = pipelineItems
-    .flatMap((pipelineItem, step) => {
-      switch (pipelineItem.type) {
-        case 'Radio':
-          return convertRadioAlerts(pipelineItem, answers[step]);
+): AnswerAlertsDto {
+  const alerts = pipelineItems.flatMap((pipelineItem, step) => {
+    const canHaveAnswer =
+      pipelineItem.type !== 'Tutorial' && pipelineItem.type !== 'Splash';
 
-        case 'Checkbox':
-          return convertCheckboxAlerts(pipelineItem, answers[step]);
+    if (canHaveAnswer) {
+      const answer = answers[step] ?? null;
 
-        case 'StackedRadio':
-          return convertStackedRadioAlerts(pipelineItem, answers[step]);
+      return answer === null || answer?.answer === null
+        ? null
+        : convertAnswersToAlerts(pipelineItem, answer);
+    }
+  });
 
-        case 'StackedCheckbox':
-          return convertStackedCheckboxAlerts(pipelineItem, answers[step]);
+  return alerts as AnswerAlertsDto;
+}
 
-        case 'Slider':
-          return convertSliderAlerts(pipelineItem, answers[step]);
+export function convertAnswersToAlerts(
+  pipelineItem: PipelineItem,
+  answer: Answer,
+) {
+  switch (pipelineItem.type) {
+    case 'Radio':
+      return convertRadioAlerts(pipelineItem, answer);
 
-        case 'StackedSlider':
-          return convertStackedSliderAlerts(pipelineItem, answers[step]);
-      }
-    })
-    .filter(Boolean);
+    case 'Checkbox':
+      return convertCheckboxAlerts(pipelineItem, answer);
 
-  return alerts as Alert[];
+    case 'StackedRadio':
+      return convertStackedRadioAlerts(pipelineItem, answer);
+
+    case 'StackedCheckbox':
+      return convertStackedCheckboxAlerts(pipelineItem, answer);
+
+    case 'Slider':
+      return convertSliderAlerts(pipelineItem, answer);
+
+    case 'StackedSlider':
+      return convertStackedSliderAlerts(pipelineItem, answer);
+  }
 }
 
 function convertRadioAlerts(
-  pipelineItem: PipelineItem,
+  radioItem: RadioPipelineItem,
   answer: Answer,
 ): Alert[] {
-  const radioItem = pipelineItem as RadioPipelineItem;
   const alerts = [];
 
   const radioAnswer = answer.answer as RadioResponse;
@@ -555,7 +569,7 @@ function convertRadioAlerts(
   );
   if (alertOption?.alert) {
     alerts.push({
-      activityItemId: pipelineItem.id!,
+      activityItemId: radioItem.id!,
       message: alertOption.alert!.message,
     });
   }
@@ -564,10 +578,9 @@ function convertRadioAlerts(
 }
 
 function convertCheckboxAlerts(
-  pipelineItem: PipelineItem,
+  checkboxItem: CheckboxPipelineItem,
   answer: Answer,
 ): Alert[] {
-  const checkboxItem = pipelineItem as CheckboxPipelineItem;
   const checkboxAnswers = answer.answer as CheckboxResponse;
   const alertOptions = checkboxItem.payload.options.filter(o => {
     const checkboxAnswerAlert = checkboxAnswers?.find(checkboxAnswer => {
@@ -581,7 +594,7 @@ function convertCheckboxAlerts(
     .filter(alertOption => !!alertOption.alert)
     .map(alertOption => {
       return {
-        activityItemId: pipelineItem.id!,
+        activityItemId: checkboxItem.id!,
         message: alertOption.alert!.message,
       };
     });
@@ -590,10 +603,9 @@ function convertCheckboxAlerts(
 }
 
 function convertStackedRadioAlerts(
-  pipelineItem: PipelineItem,
+  stackedRadioItem: StackedRadioPipelineItem,
   answer: Answer,
 ): Alert[] {
-  const stackedRadioItem = pipelineItem as StackedRadioPipelineItem;
   const stackedRadioAnswer = answer.answer as StackedRadioResponse;
 
   const alerts: Alert[] = [];
@@ -607,7 +619,7 @@ function convertStackedRadioAlerts(
         ) {
           matrix.options[i].alert &&
             alerts.push({
-              activityItemId: pipelineItem.id!,
+              activityItemId: stackedRadioItem.id!,
               message: matrix.options[i].alert!.message,
             });
         }
@@ -619,10 +631,9 @@ function convertStackedRadioAlerts(
 }
 
 function convertStackedCheckboxAlerts(
-  pipelineItem: PipelineItem,
+  stackedCheckboxItem: StackedCheckboxPipelineItem,
   answer: Answer,
 ): Alert[] | null {
-  const stackedCheckboxItem = pipelineItem as StackedCheckboxPipelineItem;
   const stackedCheckboxAnswer = answer.answer as StackedCheckboxResponse;
 
   if (!stackedCheckboxAnswer) {
@@ -642,7 +653,7 @@ function convertStackedCheckboxAlerts(
           ) {
             matrix.options[i].alert &&
               alerts.push({
-                activityItemId: pipelineItem.id!,
+                activityItemId: stackedCheckboxItem.id!,
                 message: matrix.options[i].alert!.message,
               });
           }
@@ -655,10 +666,9 @@ function convertStackedCheckboxAlerts(
 }
 
 function convertSliderAlerts(
-  pipelineItem: PipelineItem,
+  sliderItem: SliderPipelineItem,
   answer: Answer,
 ): Alert[] | null {
-  const sliderItem = pipelineItem as SliderPipelineItem;
   const sliderAnswer = answer.answer as SliderResponse;
 
   if (!sliderItem.payload.alerts || !sliderAnswer) {
@@ -684,10 +694,9 @@ function convertSliderAlerts(
 }
 
 function convertStackedSliderAlerts(
-  pipelineItem: PipelineItem,
+  sliderItem: StackedSliderPipelineItem,
   answer: Answer,
 ) {
-  const sliderItem = pipelineItem as StackedSliderPipelineItem;
   const sliderAnswer = answer.answer as StackedSliderResponse;
 
   if (!sliderAnswer) {
