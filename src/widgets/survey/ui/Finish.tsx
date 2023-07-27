@@ -116,8 +116,6 @@ function FinishItem({
       activityStorageRecord.answers,
     );
 
-    console.log(alerts);
-
     const answers = mapAnswersToDto(
       activityStorageRecord.items,
       activityStorageRecord.answers,
@@ -156,6 +154,7 @@ function FinishItem({
       debug_activityName: getActivityName(activityId),
       debug_completedAt: new Date().toString(),
       client: getClientInformation(),
+      alerts,
     });
 
     clearActivityStorageRecord();

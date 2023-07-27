@@ -213,6 +213,10 @@ type CheckboxPayload = {
     color: string | null;
     isHidden: boolean;
     value: number;
+    alert: {
+      id: string;
+      message: string;
+    } | null;
   }>;
 };
 

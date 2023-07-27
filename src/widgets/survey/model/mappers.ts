@@ -9,6 +9,11 @@ import {
   StackedRadioResponse,
   UserAction,
   StabilityTrackerResponse,
+  RadioPipelineItem,
+  RadioResponse,
+  CheckboxPipelineItem,
+  CheckboxResponse,
+  StackedRadioPipelineItem,
 } from '@app/features/pass-survey';
 import {
   AnswerDto,
@@ -47,6 +52,11 @@ type Answer = PipelineItemAnswer['value'];
 type TimeRange = {
   endTime: HourMinute;
   startTime: HourMinute;
+};
+
+type Alert = {
+  activityItemId: string;
+  message: string;
 };
 
 type StackedRadioAnswerValue = Array<Array<Item>>;
@@ -494,8 +504,108 @@ export function mapUserActionsToDto(actions: UserAction[]): UserActionDto[] {
   });
 }
 
-export function mapAnswersToAlerts(pipeline: PipelineItem[], answers: Answers) {
-  console.log(pipeline, answers);
+export function mapAnswersToAlerts(
+  pipelineItems: PipelineItem[],
+  answers: Answers,
+): Alert[] {
+  const alerts = pipelineItems
+    .flatMap((pipelineItem, step) => {
+      switch (pipelineItem.type) {
+        case 'Radio':
+          return convertRadioAlerts(pipelineItem, answers[step]);
 
-  return 'hello';
+        case 'Checkbox':
+          return convertCheckboxAlerts(pipelineItem, answers[step]);
+
+        case 'StackedRadio':
+          return convertStackedRadioAlerts(pipelineItem, answers[step]);
+      }
+    })
+    .filter(Boolean);
+
+  console.log(alerts);
+
+  return alerts as Alert[]; // todo refactor
+}
+
+function convertRadioAlerts(
+  pipelineItem: PipelineItem,
+  answer: Answer,
+): Alert[] {
+  const radioItem = pipelineItem as RadioPipelineItem;
+  const alerts = [];
+
+  const radioAnswer = answer.answer as RadioResponse;
+
+  const alertOption = radioItem.payload.options.find(
+    o => o.alert && o.value === radioAnswer.value,
+  );
+  if (alertOption?.alert) {
+    alerts.push({
+      activityItemId: pipelineItem.id!,
+      message: alertOption.alert!.message,
+    });
+  }
+
+  return alerts;
+}
+
+function convertCheckboxAlerts(
+  pipelineItem: PipelineItem,
+  answer: Answer,
+): Alert[] {
+  const checkboxItem = pipelineItem as CheckboxPipelineItem;
+  const checkboxAnswers = answer.answer as CheckboxResponse;
+  const alertOptions = checkboxItem.payload.options.filter(o => {
+    const checkboxAnswerAlert = checkboxAnswers?.find(checkboxAnswer => {
+      return checkboxAnswer.value === o.value;
+    });
+
+    return checkboxAnswerAlert && o.alert;
+  });
+
+  const alerts = alertOptions
+    .filter(alertOption => !!alertOption.alert)
+    .map(alertOption => {
+      return {
+        activityItemId: pipelineItem.id!,
+        message: alertOption.alert!.message,
+      };
+    });
+
+  return alerts;
+}
+
+function convertStackedRadioAlerts(
+  pipelineItem: PipelineItem,
+  answer: Answer,
+): Alert[] {
+  const stackedRadioItem = pipelineItem as StackedRadioPipelineItem;
+  const stackedRadioAnswer = answer.answer as StackedRadioResponse;
+
+  console.log('==>', stackedRadioAnswer);
+  console.log('==>', stackedRadioItem.payload.dataMatrix[0].options);
+
+  const alerts: Alert[] = [];
+
+  stackedRadioItem.payload.dataMatrix.forEach(matrix => {
+    for (let i = 0; i < matrix.options.length; i++) {
+      for (let j = 0; j < stackedRadioAnswer.length; j++) {
+        console.log('1', matrix.options[i].optionId);
+
+        if (
+          stackedRadioAnswer[j].rowId === matrix.rowId &&
+          stackedRadioAnswer[j].id === matrix.options[i].optionId!
+        ) {
+          matrix.options[i].alert &&
+            alerts.push({
+              activityItemId: pipelineItem.id!,
+              message: matrix.options[i].alert!.message,
+            });
+        }
+      }
+    }
+  });
+
+  return alerts;
 }

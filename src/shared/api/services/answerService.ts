@@ -136,6 +136,13 @@ export type ObjectAnswerDto = {
 
 export type AnswerDto = TextAnswerDto | ObjectAnswerDto | null;
 
+export type AnswerAlertsDto =
+  | {
+      activityItemId: string;
+      message: string;
+    }[]
+  | null;
+
 export type EncryptedAnswerDto = {
   itemIds: string[];
   answer: string;
