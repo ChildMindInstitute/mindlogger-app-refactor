@@ -30,6 +30,7 @@ import {
   getItemIds,
   getScheduledDate,
   getUserIdentifier,
+  mapAnswersToAlerts,
   mapAnswersToDto,
   mapUserActionsToDto,
 } from '../model';
@@ -169,6 +170,11 @@ function Intermediate({
       throw new Error('Encryption params is undefined');
     }
 
+    const alerts = mapAnswersToAlerts(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
+
     const answers = mapAnswersToDto(
       activityStorageRecord.items,
       activityStorageRecord.answers,
@@ -207,6 +213,7 @@ function Intermediate({
       debug_activityName: getActivityName(activityId),
       debug_completedAt: new Date().toString(),
       client: getClientInformation(),
+      alerts,
     });
 
     clearActivityStorageRecord();

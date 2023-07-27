@@ -41,6 +41,19 @@ export type ActivityItemType =
   | 'Date'
   | 'Time';
 
+export type DataMatrix = Array<{
+  rowId: string;
+  options: DataMatrixOptions;
+}>;
+
+export type DataMatrixOptions = Array<{
+  optionId: string;
+  score: number;
+  alert: {
+    message: string;
+  } | null;
+}>;
+
 type StabilityTrackerPayload = {
   phase: 'practice' | 'test';
   lambdaSlope: number;
@@ -66,6 +79,12 @@ type SliderPayload = {
   showTickMarks: boolean | null;
   showTickLabels: boolean | null;
   isContinuousSlider: boolean | null;
+  alerts: Array<{
+    value: number;
+    minValue: number;
+    maxValue: number;
+    message: string;
+  }> | null;
 };
 
 type AudioPayload = {
@@ -98,16 +117,7 @@ type StackedCheckboxPayload = {
     image: string | null;
     tooltip: string | null;
   }>;
-  dataMatrix: Array<{
-    rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: string;
-      },
-    ];
-  }>;
+  dataMatrix: DataMatrix;
 };
 
 type StackedRadioPayload = {
@@ -127,16 +137,7 @@ type StackedRadioPayload = {
     image: string | null;
     tooltip: string | null;
   }>;
-  dataMatrix: Array<{
-    rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: string;
-      },
-    ];
-  }>;
+  dataMatrix: DataMatrix;
 };
 
 type StackedSliderPayload = {
@@ -151,6 +152,10 @@ type StackedSliderPayload = {
     maxValue: number;
     leftImageUrl: string | null;
     rightImageUrl: string | null;
+    alerts: Array<{
+      value: number;
+      message: string;
+    }> | null;
   }[];
 };
 
@@ -172,6 +177,9 @@ type RadioPayload = {
     color: string | null;
     isHidden: boolean;
     value: number;
+    alert: {
+      message: string;
+    } | null;
   }>;
 };
 
@@ -189,6 +197,9 @@ type CheckboxPayload = {
     color: string | null;
     isHidden: boolean;
     value: number;
+    alert: {
+      message: string;
+    } | null;
   }>;
 };
 
