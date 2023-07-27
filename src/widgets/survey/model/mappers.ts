@@ -605,7 +605,7 @@ function convertStackedRadioAlerts(
     row.options.forEach(option => {
       stackedRadioAnswer.forEach(itemAnswer => {
         if (
-          itemAnswer.rowId === row.rowId &&
+          itemAnswer?.rowId === row.rowId &&
           itemAnswer.id === option.optionId!
         ) {
           option.alert &&
@@ -634,7 +634,7 @@ function convertStackedCheckboxAlerts(
   const alerts: AnswerAlertsDto = [];
 
   stackedCheckboxItem.payload.dataMatrix.forEach((row, rowIndex) => {
-    if (stackedCheckboxAnswer[rowIndex].length) {
+    if (stackedCheckboxAnswer[rowIndex]?.length) {
       row.options.forEach(option => {
         stackedCheckboxAnswer[rowIndex].forEach(itemAnswer => {
           if (
