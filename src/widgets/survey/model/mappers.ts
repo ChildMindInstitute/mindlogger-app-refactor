@@ -40,6 +40,8 @@ import { HourMinute, convertToDayMonthYear } from '@app/shared/lib';
 import { Item } from '@app/shared/ui';
 import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem';
 
+import { canItemHaveAnswer } from './operations';
+
 type Answer = PipelineItemAnswer['value'];
 
 type TimeRange = {
@@ -60,8 +62,7 @@ export function mapAnswersToDto(
   const answerDtos: Array<AnswerDto> = [];
 
   pipeline.forEach((pipelineItem, step) => {
-    const canHaveAnswer =
-      pipelineItem.type !== 'Tutorial' && pipelineItem.type !== 'Splash';
+    const canHaveAnswer = canItemHaveAnswer(pipelineItem);
 
     if (canHaveAnswer) {
       const answer = answers[step] ?? null;

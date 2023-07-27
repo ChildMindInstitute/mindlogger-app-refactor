@@ -73,7 +73,7 @@ class AnswersUploadService implements IAnswersUploadService {
     const result: string[] = [];
 
     for (const itemAnswer of answers) {
-      const { value: answerValue } = itemAnswer as ObjectAnswerDto;
+      const answerValue = (itemAnswer as ObjectAnswerDto)?.value;
 
       const mediaAnswer = answerValue as MediaFile;
 
@@ -156,7 +156,9 @@ class AnswersUploadService implements IAnswersUploadService {
     const updatedAnswers = [];
 
     for (const itemAnswer of itemsAnswers) {
-      const { value: answerValue, text } = itemAnswer;
+      const answerValue = (itemAnswer as ObjectAnswerDto)?.value;
+
+      const text = (itemAnswer as ObjectAnswerDto)?.text;
 
       const mediaAnswer = answerValue as MediaFile;
 
