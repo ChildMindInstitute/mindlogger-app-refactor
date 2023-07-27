@@ -338,7 +338,7 @@ function convertToFlankerAnswer(answer: Answer): AnswerDto {
   };
 }
 
-function convertToDrawerAnswer(answer: Answer): AnswerDto {
+function convertToDrawingAnswer(answer: Answer): AnswerDto {
   const drawerResponse = answer.answer as DrawingTestResponse;
 
   const dto: DrawerAnswerDto = {
@@ -355,6 +355,9 @@ function convertToDrawerAnswer(answer: Answer): AnswerDto {
 
   return {
     value: dto,
+    ...(answer.additionalAnswer && {
+      text: answer.additionalAnswer,
+    }),
   };
 }
 
@@ -460,7 +463,7 @@ function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
       return convertToFlankerAnswer(answer);
 
     case 'DrawingTest':
-      return convertToDrawerAnswer(answer);
+      return convertToDrawingAnswer(answer);
 
     case 'StabilityTracker':
       return convertToStabilityTrackerAnswer(answer);
