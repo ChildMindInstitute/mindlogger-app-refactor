@@ -176,10 +176,7 @@ function Intermediate({
 
     const userActions = mapUserActionsToDto(activityStorageRecord.actions);
 
-    const itemIds = getItemIds(
-      activityStorageRecord.items,
-      activityStorageRecord.answers,
-    );
+    const itemIds = getItemIds(activityStorageRecord.items);
 
     const progressRecord = storeProgress[appletId][entityId][eventId];
 

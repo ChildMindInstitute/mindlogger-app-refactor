@@ -41,8 +41,18 @@ export const getUserIdentifier = (
   }
 };
 
-export const getItemIds = (pipeline: PipelineItem[], answers: Answers) => {
-  return Object.keys(answers).map(step => {
-    return pipeline[Number(step)].id!;
-  });
+export const getItemIds = (pipeline: PipelineItem[]): string[] => {
+  return pipeline.reduce(
+    (accumulator: string[], current: PipelineItem, step: number) => {
+      if (canItemHaveAnswer(current)) {
+        accumulator.push(pipeline[Number(step)].id!);
+      }
+      return accumulator;
+    },
+    [],
+  );
+};
+
+export const canItemHaveAnswer = (pipelineItem: PipelineItem): boolean => {
+  return pipelineItem.type !== 'Tutorial' && pipelineItem.type !== 'Splash';
 };
