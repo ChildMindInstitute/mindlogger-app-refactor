@@ -61,11 +61,6 @@ type TimeRange = {
   startTime: HourMinute;
 };
 
-type Alert = {
-  activityItemId: string;
-  message: string;
-};
-
 type StackedRadioAnswerValue = Array<Array<Item>>;
 
 export function mapAnswersToDto(
@@ -514,19 +509,19 @@ export function mapUserActionsToDto(actions: UserAction[]): UserActionDto[] {
 export function mapAnswersToAlerts(
   pipelineItems: PipelineItem[],
   answers: Answers,
-): AnswerAlertsDto {
-  const alerts = pipelineItems.flatMap((pipelineItem, step) => {
-    const canHaveAnswer =
-      pipelineItem.type !== 'Tutorial' && pipelineItem.type !== 'Splash';
+) {
+  const alerts = pipelineItems
+    .flatMap((pipelineItem, step) => {
+      const canHaveAnswer =
+        pipelineItem.type !== 'Tutorial' && pipelineItem.type !== 'Splash';
 
-    if (canHaveAnswer) {
-      const answer = answers[step] ?? null;
+      if (canHaveAnswer && answers[step]) {
+        const answer = answers[step];
 
-      return answer === null || answer?.answer === null
-        ? null
-        : convertAnswersToAlerts(pipelineItem, answer);
-    }
-  });
+        return convertAnswersToAlerts(pipelineItem, answer);
+      }
+    })
+    .filter(Boolean);
 
   return alerts as AnswerAlertsDto;
 }
@@ -556,23 +551,19 @@ export function convertAnswersToAlerts(
   }
 }
 
-function convertRadioAlerts(
-  radioItem: RadioPipelineItem,
-  answer: Answer,
-): Alert[] {
-  const alerts = [];
+function convertRadioAlerts(radioItem: RadioPipelineItem, answer: Answer) {
+  const alerts: AnswerAlertsDto = [];
 
   const radioAnswer = answer.answer as RadioResponse;
 
   const alertOption = radioItem.payload.options.find(
     o => o.alert && o.value === radioAnswer.value,
   );
-  if (alertOption?.alert) {
-    alerts.push({
-      activityItemId: radioItem.id!,
-      message: alertOption.alert!.message,
-    });
-  }
+
+  alerts.push({
+    activityItemId: radioItem.id!,
+    message: alertOption!.alert!.message,
+  });
 
   return alerts;
 }
@@ -580,7 +571,7 @@ function convertRadioAlerts(
 function convertCheckboxAlerts(
   checkboxItem: CheckboxPipelineItem,
   answer: Answer,
-): Alert[] {
+) {
   const checkboxAnswers = answer.answer as CheckboxResponse;
   const alertOptions = checkboxItem.payload.options.filter(o => {
     const checkboxAnswerAlert = checkboxAnswers?.find(checkboxAnswer => {
@@ -605,26 +596,26 @@ function convertCheckboxAlerts(
 function convertStackedRadioAlerts(
   stackedRadioItem: StackedRadioPipelineItem,
   answer: Answer,
-): Alert[] {
+) {
   const stackedRadioAnswer = answer.answer as StackedRadioResponse;
 
-  const alerts: Alert[] = [];
+  const alerts: AnswerAlertsDto = [];
 
-  stackedRadioItem.payload.dataMatrix.forEach(matrix => {
-    for (let i = 0; i < matrix.options.length; i++) {
-      for (let j = 0; j < stackedRadioAnswer.length; j++) {
+  stackedRadioItem.payload.dataMatrix.forEach(row => {
+    row.options.forEach(option => {
+      stackedRadioAnswer.forEach(itemAnswer => {
         if (
-          stackedRadioAnswer[j].rowId === matrix.rowId &&
-          stackedRadioAnswer[j].id === matrix.options[i].optionId!
+          itemAnswer.rowId === row.rowId &&
+          itemAnswer.id === option.optionId!
         ) {
-          matrix.options[i].alert &&
+          option.alert &&
             alerts.push({
               activityItemId: stackedRadioItem.id!,
-              message: matrix.options[i].alert!.message,
+              message: option.alert!.message,
             });
         }
-      }
-    }
+      });
+    });
   });
 
   return alerts;
@@ -633,64 +624,59 @@ function convertStackedRadioAlerts(
 function convertStackedCheckboxAlerts(
   stackedCheckboxItem: StackedCheckboxPipelineItem,
   answer: Answer,
-): Alert[] | null {
+) {
   const stackedCheckboxAnswer = answer.answer as StackedCheckboxResponse;
 
   if (!stackedCheckboxAnswer) {
-    return null;
+    return [];
   }
 
-  const alerts: Alert[] = [];
+  const alerts: AnswerAlertsDto = [];
 
-  stackedCheckboxItem.payload.dataMatrix.forEach((matrix, rowIndex) => {
+  stackedCheckboxItem.payload.dataMatrix.forEach((row, rowIndex) => {
     if (stackedCheckboxAnswer[rowIndex].length) {
-      for (let i = 0; i < matrix.options.length; i++) {
-        for (let j = 0; j < stackedCheckboxAnswer[rowIndex].length; j++) {
+      row.options.forEach(option => {
+        stackedCheckboxAnswer[rowIndex].forEach(itemAnswer => {
           if (
             stackedCheckboxAnswer[rowIndex] &&
-            stackedCheckboxAnswer[rowIndex][j].id ===
-              matrix.options[i].optionId!
+            itemAnswer.id === option.optionId!
           ) {
-            matrix.options[i].alert &&
+            option.alert &&
               alerts.push({
                 activityItemId: stackedCheckboxItem.id!,
-                message: matrix.options[i].alert!.message,
+                message: option.alert!.message,
               });
           }
-        }
-      }
+        });
+      });
     }
   });
 
   return alerts;
 }
 
-function convertSliderAlerts(
-  sliderItem: SliderPipelineItem,
-  answer: Answer,
-): Alert[] | null {
+function convertSliderAlerts(sliderItem: SliderPipelineItem, answer: Answer) {
   const sliderAnswer = answer.answer as SliderResponse;
 
   if (!sliderItem.payload.alerts || !sliderAnswer) {
-    return null;
+    return [];
   }
 
-  const alerts = sliderItem.payload.alerts
-    .map(alert => {
-      if (
-        alert.value === sliderAnswer ||
-        sliderAnswer >= alert.minValue ||
-        sliderAnswer <= alert.maxValue
-      ) {
-        return {
-          activityItemId: sliderItem.id!,
-          message: alert.message,
-        };
-      }
-    })
-    .filter(Boolean);
+  const alerts: AnswerAlertsDto = [];
 
-  return alerts as Alert[];
+  sliderItem.payload.alerts.forEach(alert => {
+    if (
+      alert.value === sliderAnswer ||
+      (sliderAnswer >= alert.minValue && sliderAnswer <= alert.maxValue)
+    ) {
+      alerts.push({
+        activityItemId: sliderItem.id!,
+        message: alert.message,
+      });
+    }
+  });
+
+  return alerts;
 }
 
 function convertStackedSliderAlerts(
@@ -700,10 +686,10 @@ function convertStackedSliderAlerts(
   const sliderAnswer = answer.answer as StackedSliderResponse;
 
   if (!sliderAnswer) {
-    return null;
+    return [];
   }
 
-  const alerts: Alert[] = [];
+  const alerts: AnswerAlertsDto = [];
 
   sliderItem.payload.rows.forEach((row, rowIndex) => {
     if (row.alerts) {
@@ -718,5 +704,5 @@ function convertStackedSliderAlerts(
     }
   });
 
-  return alerts as Alert[];
+  return alerts;
 }

@@ -6,7 +6,6 @@ import {
   TestNode,
   TutorialRecord,
 } from '@app/abstract/lib';
-import { DataMatrix, DataMatrixOptions } from '@app/features/pass-survey';
 import {
   ActivityDto,
   DrawingItemDto,
@@ -32,15 +31,13 @@ import {
   SingleSelectionRowsItemDto,
   ConditionalLogicDto,
   ABTrailsItemDto,
+  DataMatrixDto,
+  OptionsDto,
+  SliderRowsDto,
+  SliderAlertsDto,
 } from '@app/shared/api';
 import { getMsFromSeconds } from '@app/shared/lib';
 
-import {
-  DataMatrixDto,
-  OptionsDto,
-  RowsDto,
-  SliderAlertsDto,
-} from '../api/types';
 import { ActivityDetails, ActivityItem } from '../lib';
 
 function mapTimerValue(dtoTimer: number | null) {
@@ -741,7 +738,7 @@ function mapToRadioAlerts(options: OptionsDto) {
   }));
 }
 
-function mapToStackedRadioDataMatrix(dataMatrix: DataMatrixDto): DataMatrix {
+function mapToStackedRadioDataMatrix(dataMatrix: DataMatrixDto) {
   return dataMatrix.map(matrix => ({
     rowId: matrix.rowId,
     options: matrix.options.map(option => ({
@@ -752,7 +749,7 @@ function mapToStackedRadioDataMatrix(dataMatrix: DataMatrixDto): DataMatrix {
             message: option.alert,
           }
         : null,
-    })) as DataMatrixOptions,
+    })),
   }));
 }
 
@@ -796,11 +793,11 @@ function mapToStackedCheckboxAlerts(dataMatrix: DataMatrixDto) {
             message: option.alert,
           }
         : null,
-    })) as DataMatrixOptions,
+    })),
   }));
 }
 
-function mapToStackedSliderAlerts(rows: RowsDto) {
+function mapToStackedSliderAlerts(rows: SliderRowsDto) {
   return rows.map(row => ({
     leftTitle: row.minLabel,
     rightTitle: row.maxLabel,
