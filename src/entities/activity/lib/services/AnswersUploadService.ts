@@ -73,7 +73,7 @@ class AnswersUploadService implements IAnswersUploadService {
     const result: string[] = [];
 
     for (const itemAnswer of answers) {
-      const { value: answerValue } = itemAnswer as ObjectAnswerDto;
+      const answerValue = (itemAnswer as ObjectAnswerDto)?.value;
 
       const mediaAnswer = answerValue as MediaFile;
 
@@ -151,12 +151,14 @@ class AnswersUploadService implements IAnswersUploadService {
       );
     }
 
-    const itemsAnswers = [...body.answers];
+    const itemsAnswers = [...body.answers] as ObjectAnswerDto[];
 
     const updatedAnswers = [];
 
     for (const itemAnswer of itemsAnswers) {
-      const { value: answerValue } = itemAnswer as ObjectAnswerDto;
+      const answerValue = (itemAnswer as ObjectAnswerDto)?.value;
+
+      const text = (itemAnswer as ObjectAnswerDto)?.text;
 
       const mediaAnswer = answerValue as MediaFile;
 
@@ -175,14 +177,12 @@ class AnswersUploadService implements IAnswersUploadService {
       const isSvg = mediaAnswer.type === 'image/svg';
 
       if (remoteUrl && !isSvg) {
-        updatedAnswers.push({ value: remoteUrl });
+        updatedAnswers.push({ value: remoteUrl, text });
       } else if (remoteUrl) {
-        const svgAnswer = itemAnswer as ObjectAnswerDto;
-
-        const svgValue = svgAnswer.value as DrawerAnswerDto;
+        const svgValue = itemAnswer.value as DrawerAnswerDto;
 
         const copy: ObjectAnswerDto = {
-          text: svgAnswer.text,
+          text,
           value: { ...svgValue, uri: remoteUrl },
         };
 

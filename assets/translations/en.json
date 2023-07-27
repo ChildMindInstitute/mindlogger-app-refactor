@@ -366,8 +366,8 @@
     "enter_old_password": "Please enter your old password",
     "enter_new_password": "Please enter a new password",
     "data_not_sent": "Data not sent (keep app open while we try)",
-    "upload_error": "Queue upload error",
-    "want_to_retry": "Would you like to retry?"
+    "upload_error": "Upload Error",
+    "want_to_retry": "Your Internet may be unstable. We weren't able to send your data."
   },
   "prize": {
     "lack_tokens_title": "Try again",

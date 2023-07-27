@@ -354,7 +354,7 @@
     "restart": "Recommencer",
     "resume": "Reprendre",
     "retry": "Recommencez",
-    "later": "plus tard",
+    "later": "Plus tard",
     "in_progress": "En cours",
     "unscheduled": "Non programmé",
     "scheduled": "Programmé",
@@ -367,8 +367,8 @@
     "enter_old_password": "Veuillez saisir votre ancien mot de passe",
     "enter_new_password": "Veuillez saisir un nouveau mot de passe",
     "data_not_sent": "Données non envoyées (garder l'application ouverte pendant que nous essayons)",
-    "upload_error": "Erreur de téléchargement de la file d'attente",
-    "want_to_retry": "Souhaitez-vous réessayer ?"
+    "upload_error": "Erreur de téléversement",
+    "want_to_retry": "Votre Internet peut être instable. Nous n'avons pas pu envoyer vos données."
   },
   "zod": {
     "errors": {
