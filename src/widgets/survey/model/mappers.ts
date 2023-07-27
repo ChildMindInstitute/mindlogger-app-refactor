@@ -16,6 +16,8 @@ import {
   StackedRadioPipelineItem,
   StackedCheckboxPipelineItem,
   StackedCheckboxResponse,
+  SliderPipelineItem,
+  SliderResponse,
 } from '@app/features/pass-survey';
 import {
   AnswerDto,
@@ -524,9 +526,14 @@ export function mapAnswersToAlerts(
 
         case 'StackedCheckbox':
           return convertStackedCheckboxAlerts(pipelineItem, answers[step]);
+
+        case 'Slider':
+          return convertSliderAlerts(pipelineItem, answers[step]);
       }
     })
     .filter(Boolean);
+
+  console.log('--->', alerts);
 
   return alerts as Alert[]; // todo refactor
 }
@@ -641,7 +648,34 @@ function convertStackedCheckboxAlerts(
     }
   });
 
-  console.log('checkbox', alerts);
-
   return alerts;
+}
+
+function convertSliderAlerts(
+  pipelineItem: PipelineItem,
+  answer: Answer,
+): Alert[] | null {
+  const sliderItem = pipelineItem as SliderPipelineItem;
+  const sliderAnswer = answer.answer as SliderResponse;
+
+  if (!sliderItem.payload.alerts || !sliderAnswer) {
+    return null;
+  }
+
+  const alerts = sliderItem.payload.alerts
+    .map(alert => {
+      if (
+        alert.value === sliderAnswer ||
+        sliderAnswer >= alert.minValue ||
+        sliderAnswer <= alert.maxValue
+      ) {
+        return {
+          activityItemId: sliderItem.id!,
+          message: alert.message,
+        };
+      }
+    })
+    .filter(Boolean);
+
+  return alerts as Alert[];
 }
