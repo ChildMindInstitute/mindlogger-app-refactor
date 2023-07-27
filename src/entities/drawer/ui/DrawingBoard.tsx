@@ -133,6 +133,7 @@ const DrawingBoard: FC<Props> = props => {
     const point: Point = { x: touchInfo.x, y: touchInfo.y };
 
     if (isEqualToLastPoint(point)) {
+      drawPath();
       return;
     }
 
