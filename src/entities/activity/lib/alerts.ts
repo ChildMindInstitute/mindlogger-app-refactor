@@ -9,7 +9,7 @@ type Input = {
 
 export function showUploadErrorAlert({ onRetry, onLater }: Input) {
   Alert.alert(
-    i18n.t('additional:upload_error'),
+    '',
     i18n.t('additional:want_to_retry'),
     [
       {
