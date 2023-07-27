@@ -162,6 +162,13 @@ export type DataMatrixDto = Array<{
   }>;
 }>;
 
+export type SliderAlertsDto = Array<{
+  value: number;
+  minValue: number;
+  maxValue: number;
+  alert: string;
+}> | null;
+
 export type SliderRowsDto = Array<{
   id: string;
   label: string;
@@ -171,20 +178,8 @@ export type SliderRowsDto = Array<{
   maxValue: number;
   minImage: ImageUrl | null;
   maxImage: ImageUrl | null;
-  alerts: Array<{
-    alert: string;
-    maxValue: number | null;
-    minValue: number | null;
-    value: number;
-  }>;
+  alerts: SliderAlertsDto;
 }>;
-
-export type SliderAlertsDto = Array<{
-  value: number;
-  minValue: number;
-  maxValue: number;
-  alert: string;
-}> | null;
 
 export type OptionsDto = Array<{
   id: string;
