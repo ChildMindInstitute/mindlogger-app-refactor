@@ -175,6 +175,7 @@ export type ActivityAnswersRequest = {
     width: number;
     height: number;
   };
+  alerts: AnswerAlertsDto;
 };
 
 type ActivityAnswersResponse = SuccessfulEmptyResponse;
