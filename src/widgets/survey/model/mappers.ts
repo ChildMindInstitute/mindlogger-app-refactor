@@ -14,6 +14,8 @@ import {
   CheckboxPipelineItem,
   CheckboxResponse,
   StackedRadioPipelineItem,
+  StackedCheckboxPipelineItem,
+  StackedCheckboxResponse,
 } from '@app/features/pass-survey';
 import {
   AnswerDto,
@@ -519,11 +521,12 @@ export function mapAnswersToAlerts(
 
         case 'StackedRadio':
           return convertStackedRadioAlerts(pipelineItem, answers[step]);
+
+        case 'StackedCheckbox':
+          return convertStackedCheckboxAlerts(pipelineItem, answers[step]);
       }
     })
     .filter(Boolean);
-
-  console.log(alerts);
 
   return alerts as Alert[]; // todo refactor
 }
@@ -583,16 +586,11 @@ function convertStackedRadioAlerts(
   const stackedRadioItem = pipelineItem as StackedRadioPipelineItem;
   const stackedRadioAnswer = answer.answer as StackedRadioResponse;
 
-  console.log('==>', stackedRadioAnswer);
-  console.log('==>', stackedRadioItem.payload.dataMatrix[0].options);
-
   const alerts: Alert[] = [];
 
   stackedRadioItem.payload.dataMatrix.forEach(matrix => {
     for (let i = 0; i < matrix.options.length; i++) {
       for (let j = 0; j < stackedRadioAnswer.length; j++) {
-        console.log('1', matrix.options[i].optionId);
-
         if (
           stackedRadioAnswer[j].rowId === matrix.rowId &&
           stackedRadioAnswer[j].id === matrix.options[i].optionId!
@@ -606,6 +604,44 @@ function convertStackedRadioAlerts(
       }
     }
   });
+
+  return alerts;
+}
+
+function convertStackedCheckboxAlerts(
+  pipelineItem: PipelineItem,
+  answer: Answer,
+): Alert[] | null {
+  const stackedCheckboxItem = pipelineItem as StackedCheckboxPipelineItem;
+  const stackedCheckboxAnswer = answer.answer as StackedCheckboxResponse;
+
+  if (!stackedCheckboxAnswer) {
+    return null;
+  }
+
+  const alerts: Alert[] = [];
+
+  stackedCheckboxItem.payload.dataMatrix.forEach((matrix, rowIndex) => {
+    if (stackedCheckboxAnswer[rowIndex].length) {
+      for (let i = 0; i < matrix.options.length; i++) {
+        for (let j = 0; j < stackedCheckboxAnswer[rowIndex].length; j++) {
+          if (
+            stackedCheckboxAnswer[rowIndex] &&
+            stackedCheckboxAnswer[rowIndex][j].id ===
+              matrix.options[i].optionId!
+          ) {
+            matrix.options[i].alert &&
+              alerts.push({
+                activityItemId: pipelineItem.id!,
+                message: matrix.options[i].alert!.message,
+              });
+          }
+        }
+      }
+    }
+  });
+
+  console.log('checkbox', alerts);
 
   return alerts;
 }
