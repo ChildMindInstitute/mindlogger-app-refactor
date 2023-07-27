@@ -47,35 +47,40 @@ const DrawingTest: FC<Props> = props => {
   const onResult = async (result: DrawResult) => {
     let fileName = value.fileName;
 
-    if (fileName?.length) {
-      const path = getFilePath(fileName);
-
-      const fileExists = await FileSystem.exists(path);
-
-      if (fileExists) {
-        await FileSystem.unlink(path);
-      }
-    } else {
+    if (!fileName?.length) {
       fileName = `${uuidv4()}.svg`;
     }
 
     const path = getFilePath(fileName);
-
-    try {
-      await FileSystem.writeFile(path, result.svgString);
-    } catch (error) {
-      console.warn(
-        '[DrawingTest.onResult]: Error occurred while write file\n\n',
-        error,
-      );
-      return;
-    }
 
     result.fileName = fileName;
     result.type = 'image/svg';
     result.uri = path;
 
     props.onResult(result);
+
+    setTimeout(() => {
+      // not to affect render
+      writeFile(path, result.svgString);
+    }, 500);
+  };
+
+  const writeFile = async (path: string, svg: string) => {
+    try {
+      const fileExists = await FileSystem.exists(path);
+
+      if (fileExists) {
+        await FileSystem.unlink(path);
+      }
+
+      await FileSystem.writeFile(path, svg);
+    } catch (error) {
+      console.warn(
+        '[DrawingTest.onResult]: Error occurred while delete or write file\n\n',
+        error,
+      );
+      return;
+    }
   };
 
   const toggleScrollRef = useRef(toggleScroll);

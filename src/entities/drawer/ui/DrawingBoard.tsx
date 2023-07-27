@@ -98,6 +98,21 @@ const DrawingBoard: FC<Props> = props => {
     getLogLine()!.points.push(point);
   };
 
+  const isEqualToLastPoint = (point: Point): boolean => {
+    const line = getLogLine()!;
+
+    if (!line.points.length) {
+      return false;
+    }
+
+    const lastPoint: DrawPoint = line.points.slice(-1)[0];
+
+    return (
+      Math.round(point.x) === Math.round(lastPoint.x) &&
+      Math.round(point.y) === Math.round(lastPoint.y)
+    );
+  };
+
   const getLogLine = (): DrawLine | null => {
     return currentLogLineRef.current;
   };
@@ -116,6 +131,11 @@ const DrawingBoard: FC<Props> = props => {
 
   const onTouchProgress = (touchInfo: TouchInfo) => {
     const point: Point = { x: touchInfo.x, y: touchInfo.y };
+
+    if (isEqualToLastPoint(point)) {
+      drawPath();
+      return;
+    }
 
     addLogPoint(createLogPoint(point));
     drawPath();
