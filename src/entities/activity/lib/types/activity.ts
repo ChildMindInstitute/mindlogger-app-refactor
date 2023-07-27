@@ -56,7 +56,6 @@ type SliderConfig = {
   showTickLabels: boolean | null;
   isContinuousSlider: boolean | null;
   alerts: Array<{
-    id: string;
     value: number;
     minValue: number;
     maxValue: number;
@@ -88,7 +87,6 @@ type CheckboxConfig = {
     isHidden: boolean;
     value: number;
     alert: {
-      id: string;
       message: string;
     } | null;
   }>;
@@ -129,7 +127,6 @@ type StackedCheckboxConfig = {
         optionId: string;
         score: number;
         alert: {
-          id: string;
           message: string;
         } | null;
       },
@@ -161,7 +158,6 @@ type StackedRadioConfig = {
         optionId: string;
         score: number;
         alert: {
-          id: string;
           message: string;
         } | null;
       },
@@ -182,10 +178,7 @@ type StackedSliderConfig = {
     leftImageUrl: string | null;
     rightImageUrl: string | null;
     alerts: Array<{
-      id: string;
       value: number;
-      minValue: number | null;
-      maxValue: number | null;
       message: string;
     }> | null;
   }[];
@@ -206,7 +199,6 @@ type RadioConfig = {
     isHidden: boolean;
     value: number;
     alert: {
-      id: string;
       message: string;
     } | null;
   }>;

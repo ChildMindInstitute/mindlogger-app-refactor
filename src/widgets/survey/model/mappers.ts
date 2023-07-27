@@ -538,9 +538,7 @@ export function mapAnswersToAlerts(
     })
     .filter(Boolean);
 
-  console.log('--->', alerts);
-
-  return alerts as Alert[]; // todo refactor
+  return alerts as Alert[];
 }
 
 function convertRadioAlerts(

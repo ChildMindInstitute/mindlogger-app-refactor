@@ -511,7 +511,7 @@ PODS:
   - RNFBApp (18.1.0):
     - Firebase/CoreOnly (= 10.11.0)
     - React-Core
-  - RNFBCrashlytics (18.3.0):
+  - RNFBCrashlytics (18.1.0):
     - Firebase/Crashlytics (= 10.11.0)
     - FirebaseCoreExtension (= 10.11.0)
     - React-Core
@@ -903,7 +903,7 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 65e1d202799460b286ff5e741d8baf54695e8abd
   RNDeviceInfo: 475a4c447168d0ad4c807e48ef5e0963a0f4eb1b
   RNFBApp: fdbde65110240cd843e644270e974e9b455b0fc1
-  RNFBCrashlytics: 3e5f92109133ddf638868009f83b3171a31922ae
+  RNFBCrashlytics: b69333e28f4c100dbbf69be885f80288b75c8f13
   RNFBMessaging: 3aca7a5b3b1f79a9ee75026662ea57693436a338
   RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
   RNPermissions: 4f5e03e3272fdc6fcee6e571dfdcbad128aadffe
@@ -918,4 +918,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: f7f9667917958c96e2cbd87a83bee9718d8baad2
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.11.3

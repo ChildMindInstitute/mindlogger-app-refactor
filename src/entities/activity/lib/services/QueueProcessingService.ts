@@ -47,15 +47,15 @@ class QueueProcessingService {
       }
 
       try {
-        // console.info(
-        //   `[QueueProcessingService:process]: Processing activity "${uploadItem.input.debug_activityName}", which completed at ${uploadItem.input.debug_completedAt}`,
-        // );
+        console.info(
+          `[QueueProcessingService:process]: Processing activity "${uploadItem.input.debug_activityName}", which completed at ${uploadItem.input.debug_completedAt}`,
+        );
 
         await this.uploadService.sendAnswers(uploadItem.input);
 
         this.queueService.dequeue();
 
-        // console.info('[QueueProcessingService:process] Queue item processed');
+        console.info('[QueueProcessingService:process] Queue item processed');
       } catch (error) {
         this.queueService.swap();
 

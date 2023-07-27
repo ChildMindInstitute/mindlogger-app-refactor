@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import {
   BlockConfiguration,
   ButtonConfiguration,
@@ -742,7 +740,6 @@ function mapToRadioAlerts(options: OptionsDto) {
     value: option.value,
     alert: option.alert
       ? {
-          id: uuidv4(),
           message: option.alert,
         }
       : null,
@@ -784,7 +781,6 @@ function mapToStackedRadioDataMatrix(dataMatrix: DataMatrixDto): DataMatrix {
       score: option.score,
       alert: option.alert
         ? {
-            id: uuidv4(),
             message: option.alert,
           }
         : null,
@@ -802,7 +798,6 @@ type SliderAlertsDto = Array<{
 function mapToSliderAlerts(alerts: SliderAlertsDto) {
   return (
     alerts?.map(alert => ({
-      id: uuidv4(),
       value: alert.value,
       minValue: alert.minValue,
       maxValue: alert.maxValue,
@@ -823,7 +818,6 @@ function mapToCheckboxOptions(options: OptionsDto) {
     value: option.value,
     alert: option.alert
       ? {
-          id: uuidv4(),
           message: option.alert,
         }
       : null,
@@ -838,7 +832,6 @@ function mapToStackedCheckboxAlerts(dataMatrix: DataMatrixDto) {
       score: option.score,
       alert: option.alert
         ? {
-            id: uuidv4(),
             message: option.alert,
           }
         : null,
@@ -875,10 +868,7 @@ function mapToStackedSliderAlerts(rows: RowsDto) {
     label: row.label,
     alerts:
       row.alerts?.map(alert => ({
-        id: uuidv4(),
         value: alert.value,
-        minValue: alert.minValue,
-        maxValue: alert.maxValue,
         message: alert.alert,
       })) ?? null,
   }));
