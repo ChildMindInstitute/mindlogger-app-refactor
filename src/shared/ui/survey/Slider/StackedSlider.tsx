@@ -34,7 +34,7 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
     <YStack>
       {rows.map((sliderConfig, rowIndex) => {
         const { id: currentRowId, label, ...singleSliderProps } = sliderConfig;
-        const rowValue = values ? values[rowIndex] : 0;
+        const rowValue = values ? values[rowIndex] : null;
 
         return (
           <YStack key={`slider-${currentRowId}`}>
