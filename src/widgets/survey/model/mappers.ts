@@ -560,10 +560,12 @@ function convertRadioAlerts(radioItem: RadioPipelineItem, answer: Answer) {
     o => o.alert && o.value === radioAnswer.value,
   );
 
-  alerts.push({
-    activityItemId: radioItem.id!,
-    message: alertOption!.alert!.message,
-  });
+  if (alertOption) {
+    alerts.push({
+      activityItemId: radioItem.id!,
+      message: alertOption!.alert!.message,
+    });
+  }
 
   return alerts;
 }
