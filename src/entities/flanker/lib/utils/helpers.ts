@@ -34,7 +34,7 @@ export const parseResponse = (data: {
 export const getScreensNumberPerTrial = (
   configuration: FlankerItemSettings,
 ): number => {
-  let result = 0;
+  let result = 1;
 
   if (configuration.showFeedback) {
     result++;
