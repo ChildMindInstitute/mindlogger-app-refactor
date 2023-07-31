@@ -251,6 +251,7 @@ export const SliderTestActivity: ActivityDto = {
           'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
         minLabel: 'Minimum label',
         maxLabel: 'Maximum label',
+        alerts: null,
       },
       id: '105',
       timer: null,

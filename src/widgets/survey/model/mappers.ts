@@ -9,6 +9,17 @@ import {
   StackedRadioResponse,
   UserAction,
   StabilityTrackerResponse,
+  RadioPipelineItem,
+  RadioResponse,
+  CheckboxPipelineItem,
+  CheckboxResponse,
+  StackedRadioPipelineItem,
+  StackedCheckboxPipelineItem,
+  StackedCheckboxResponse,
+  SliderPipelineItem,
+  SliderResponse,
+  StackedSliderPipelineItem,
+  StackedSliderResponse,
 } from '@app/features/pass-survey';
 import {
   AnswerDto,
@@ -35,6 +46,7 @@ import {
   AbTestAnswerDto,
   AbLogLineDto,
   AbLogPointDto,
+  AnswerAlertsDto,
 } from '@app/shared/api';
 import { HourMinute, convertToDayMonthYear } from '@app/shared/lib';
 import { Item } from '@app/shared/ui';
@@ -492,4 +504,207 @@ export function mapUserActionsToDto(actions: UserAction[]): UserActionDto[] {
       }),
     };
   });
+}
+
+export function mapAnswersToAlerts(
+  pipelineItems: PipelineItem[],
+  answers: Answers,
+) {
+  const alerts = pipelineItems
+    .flatMap((pipelineItem, step) => {
+      const canHaveAnswer =
+        pipelineItem.type !== 'Tutorial' && pipelineItem.type !== 'Splash';
+
+      if (canHaveAnswer && answers[step]) {
+        const answer = answers[step];
+
+        return convertAnswersToAlerts(pipelineItem, answer);
+      }
+    })
+    .filter(Boolean);
+
+  return alerts as AnswerAlertsDto;
+}
+
+export function convertAnswersToAlerts(
+  pipelineItem: PipelineItem,
+  answer: Answer,
+) {
+  switch (pipelineItem.type) {
+    case 'Radio':
+      return convertRadioAlerts(pipelineItem, answer);
+
+    case 'Checkbox':
+      return convertCheckboxAlerts(pipelineItem, answer);
+
+    case 'StackedRadio':
+      return convertStackedRadioAlerts(pipelineItem, answer);
+
+    case 'StackedCheckbox':
+      return convertStackedCheckboxAlerts(pipelineItem, answer);
+
+    case 'Slider':
+      return convertSliderAlerts(pipelineItem, answer);
+
+    case 'StackedSlider':
+      return convertStackedSliderAlerts(pipelineItem, answer);
+  }
+}
+
+function convertRadioAlerts(radioItem: RadioPipelineItem, answer: Answer) {
+  const alerts: AnswerAlertsDto = [];
+
+  const radioAnswer = answer.answer as RadioResponse;
+
+  const alertOption = radioItem.payload.options.find(
+    o => o.alert && o.value === radioAnswer.value,
+  );
+
+  if (alertOption) {
+    alerts.push({
+      activityItemId: radioItem.id!,
+      message: alertOption!.alert!.message,
+    });
+  }
+
+  return alerts;
+}
+
+function convertCheckboxAlerts(
+  checkboxItem: CheckboxPipelineItem,
+  answer: Answer,
+) {
+  const checkboxAnswers = answer.answer as CheckboxResponse;
+  const alertOptions = checkboxItem.payload.options.filter(o => {
+    const checkboxAnswerAlert = checkboxAnswers?.find(checkboxAnswer => {
+      return checkboxAnswer.value === o.value;
+    });
+
+    return checkboxAnswerAlert && o.alert;
+  });
+
+  const alerts = alertOptions
+    .filter(alertOption => !!alertOption.alert)
+    .map(alertOption => {
+      return {
+        activityItemId: checkboxItem.id!,
+        message: alertOption.alert!.message,
+      };
+    });
+
+  return alerts;
+}
+
+function convertStackedRadioAlerts(
+  stackedRadioItem: StackedRadioPipelineItem,
+  answer: Answer,
+) {
+  const stackedRadioAnswer = answer.answer as StackedRadioResponse;
+
+  const alerts: AnswerAlertsDto = [];
+
+  stackedRadioItem.payload.dataMatrix.forEach(row => {
+    row.options.forEach(option => {
+      stackedRadioAnswer.forEach(itemAnswer => {
+        if (
+          itemAnswer?.rowId === row.rowId &&
+          itemAnswer.id === option.optionId!
+        ) {
+          option.alert &&
+            alerts.push({
+              activityItemId: stackedRadioItem.id!,
+              message: option.alert!.message,
+            });
+        }
+      });
+    });
+  });
+
+  return alerts;
+}
+
+function convertStackedCheckboxAlerts(
+  stackedCheckboxItem: StackedCheckboxPipelineItem,
+  answer: Answer,
+) {
+  const stackedCheckboxAnswer = answer.answer as StackedCheckboxResponse;
+
+  if (!stackedCheckboxAnswer) {
+    return [];
+  }
+
+  const alerts: AnswerAlertsDto = [];
+
+  stackedCheckboxItem.payload.dataMatrix.forEach((row, rowIndex) => {
+    if (stackedCheckboxAnswer[rowIndex]?.length) {
+      row.options.forEach(option => {
+        stackedCheckboxAnswer[rowIndex].forEach(itemAnswer => {
+          if (
+            stackedCheckboxAnswer[rowIndex] &&
+            itemAnswer.id === option.optionId!
+          ) {
+            option.alert &&
+              alerts.push({
+                activityItemId: stackedCheckboxItem.id!,
+                message: option.alert!.message,
+              });
+          }
+        });
+      });
+    }
+  });
+
+  return alerts;
+}
+
+function convertSliderAlerts(sliderItem: SliderPipelineItem, answer: Answer) {
+  const sliderAnswer = answer.answer as SliderResponse;
+
+  if (!sliderItem.payload.alerts || !sliderAnswer) {
+    return [];
+  }
+
+  const alerts: AnswerAlertsDto = [];
+
+  sliderItem.payload.alerts.forEach(alert => {
+    if (
+      alert.value === sliderAnswer ||
+      (sliderAnswer >= alert.minValue && sliderAnswer <= alert.maxValue)
+    ) {
+      alerts.push({
+        activityItemId: sliderItem.id!,
+        message: alert.message,
+      });
+    }
+  });
+
+  return alerts;
+}
+
+function convertStackedSliderAlerts(
+  sliderItem: StackedSliderPipelineItem,
+  answer: Answer,
+) {
+  const sliderAnswer = answer.answer as StackedSliderResponse;
+
+  if (!sliderAnswer) {
+    return [];
+  }
+
+  const alerts: AnswerAlertsDto = [];
+
+  sliderItem.payload.rows.forEach((row, rowIndex) => {
+    if (row.alerts) {
+      row.alerts.forEach(alert => {
+        if (alert.value === sliderAnswer[rowIndex]) {
+          alerts.push({
+            activityItemId: sliderItem.id!,
+            message: alert.message,
+          });
+        }
+      });
+    }
+  });
+
+  return alerts;
 }

@@ -55,6 +55,12 @@ type SliderConfig = {
   showTickMarks: boolean | null;
   showTickLabels: boolean | null;
   isContinuousSlider: boolean | null;
+  alerts: Array<{
+    value: number;
+    minValue: number;
+    maxValue: number;
+    message: string;
+  }> | null;
 };
 
 type NumberSelectConfig = {
@@ -80,6 +86,9 @@ type CheckboxConfig = {
     color: string | null;
     isHidden: boolean;
     value: number;
+    alert: {
+      message: string;
+    } | null;
   }>;
 };
 
@@ -113,13 +122,13 @@ type StackedCheckboxConfig = {
   }>;
   dataMatrix: Array<{
     rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: string;
-      },
-    ];
+    options: Array<{
+      optionId: string;
+      score: number;
+      alert: {
+        message: string;
+      } | null;
+    }>;
   }>;
 };
 
@@ -142,13 +151,13 @@ type StackedRadioConfig = {
   }>;
   dataMatrix: Array<{
     rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: string;
-      },
-    ];
+    options: Array<{
+      optionId: string;
+      score: number;
+      alert: {
+        message: string;
+      } | null;
+    }>;
   }>;
 };
 
@@ -164,6 +173,10 @@ type StackedSliderConfig = {
     maxValue: number;
     leftImageUrl: string | null;
     rightImageUrl: string | null;
+    alerts: Array<{
+      value: number;
+      message: string;
+    }> | null;
   }[];
 };
 
@@ -181,6 +194,9 @@ type RadioConfig = {
     color: string | null;
     isHidden: boolean;
     value: number;
+    alert: {
+      message: string;
+    } | null;
   }>;
 };
 

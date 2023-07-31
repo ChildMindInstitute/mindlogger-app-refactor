@@ -23,7 +23,11 @@ import {
   getScheduledDate,
   getUserIdentifier,
 } from '../model';
-import { mapAnswersToDto, mapUserActionsToDto } from '../model/mappers';
+import {
+  mapAnswersToAlerts,
+  mapAnswersToDto,
+  mapUserActionsToDto,
+} from '../model/mappers';
 
 type Props = {
   appletId: string;
@@ -107,6 +111,11 @@ function FinishItem({
       return;
     }
 
+    const alerts = mapAnswersToAlerts(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
+
     const answers = mapAnswersToDto(
       activityStorageRecord.items,
       activityStorageRecord.answers,
@@ -145,6 +154,7 @@ function FinishItem({
       debug_activityName: getActivityName(activityId),
       debug_completedAt: new Date().toString(),
       client: getClientInformation(),
+      alerts,
     });
 
     clearActivityStorageRecord();

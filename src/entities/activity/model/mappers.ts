@@ -31,6 +31,10 @@ import {
   SingleSelectionRowsItemDto,
   ConditionalLogicDto,
   ABTrailsItemDto,
+  DataMatrixDto,
+  OptionsDto,
+  SliderRowsDto,
+  SliderAlertsDto,
 } from '@app/shared/api';
 import { getMsFromSeconds } from '@app/shared/lib';
 
@@ -350,7 +354,7 @@ function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
       setAlerts: dto.config.setAlerts,
       addTooltip: dto.config.addTooltip,
       setPalette: dto.config.setPalette,
-      options: dto.responseValues.options,
+      options: mapToCheckboxOptions(dto.responseValues.options),
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -380,7 +384,7 @@ function mapToStackedCheckboxes(dto: MultiSelectionRowsItemDto): ActivityItem {
       addScores: dto.config.addScores,
       rows: dto.responseValues.rows,
       options: dto.responseValues.options,
-      dataMatrix: dto.responseValues.dataMatrix,
+      dataMatrix: mapToStackedCheckboxAlerts(dto.responseValues.dataMatrix),
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -451,7 +455,7 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
       setAlerts: dto.config.setAlerts,
       addTooltip: dto.config.addTooltip,
       setPalette: dto.config.setPalette,
-      options: dto.responseValues.options,
+      options: mapToRadioAlerts(dto.responseValues.options),
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -481,7 +485,7 @@ function mapToStackedRadio(dto: SingleSelectionRowsItemDto): ActivityItem {
       addScores: dto.config.addScores,
       rows: dto.responseValues.rows,
       options: dto.responseValues.options,
-      dataMatrix: dto.responseValues.dataMatrix,
+      dataMatrix: mapToStackedRadioDataMatrix(dto.responseValues.dataMatrix),
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -512,6 +516,7 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
       showTickMarks: dto.config.showTickMarks,
       showTickLabels: dto.config.showTickLabels,
       isContinuousSlider: dto.config.continuousSlider,
+      alerts: mapToSliderAlerts(dto.responseValues.alerts),
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -537,13 +542,7 @@ function mapToStackedSlider(dto: SliderRowsItemDto): ActivityItem {
     config: {
       setAlerts: dto.config.setAlerts,
       addScores: dto.config.addScores,
-      rows: dto.responseValues.rows.map(item => ({
-        ...item,
-        leftTitle: item.minLabel,
-        rightTitle: item.maxLabel,
-        leftImageUrl: item.minImage,
-        rightImageUrl: item.maxImage,
-      })),
+      rows: mapToStackedSliderAlerts(dto.responseValues.rows),
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -719,4 +718,99 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
   }
 
   return activity;
+}
+
+function mapToRadioAlerts(options: OptionsDto) {
+  return options.map(option => ({
+    id: option.id,
+    text: option.text,
+    image: option.image,
+    score: option.score,
+    tooltip: option.tooltip,
+    color: option.color,
+    isHidden: option.isHidden,
+    value: option.value,
+    alert: option.alert
+      ? {
+          message: option.alert,
+        }
+      : null,
+  }));
+}
+
+function mapToStackedRadioDataMatrix(dataMatrix: DataMatrixDto) {
+  return dataMatrix.map(matrix => ({
+    rowId: matrix.rowId,
+    options: matrix.options.map(option => ({
+      optionId: option.optionId,
+      score: option.score,
+      alert: option.alert
+        ? {
+            message: option.alert,
+          }
+        : null,
+    })),
+  }));
+}
+
+function mapToSliderAlerts(alerts: SliderAlertsDto) {
+  return (
+    alerts?.map(alert => ({
+      value: alert.value,
+      minValue: alert.minValue,
+      maxValue: alert.maxValue,
+      message: alert.alert,
+    })) ?? null
+  );
+}
+
+function mapToCheckboxOptions(options: OptionsDto) {
+  return options.map(option => ({
+    id: option.id,
+    text: option.text,
+    image: option.image,
+    score: option.score,
+    tooltip: option.tooltip,
+    color: option.color,
+    isHidden: option.isHidden,
+    value: option.value,
+    alert: option.alert
+      ? {
+          message: option.alert,
+        }
+      : null,
+  }));
+}
+
+function mapToStackedCheckboxAlerts(dataMatrix: DataMatrixDto) {
+  return dataMatrix.map(matrix => ({
+    rowId: matrix.rowId,
+    options: matrix.options.map(option => ({
+      optionId: option.optionId,
+      score: option.score,
+      alert: option.alert
+        ? {
+            message: option.alert,
+          }
+        : null,
+    })),
+  }));
+}
+
+function mapToStackedSliderAlerts(rows: SliderRowsDto) {
+  return rows.map(row => ({
+    leftTitle: row.minLabel,
+    rightTitle: row.maxLabel,
+    leftImageUrl: row.minImage,
+    rightImageUrl: row.maxImage,
+    minValue: row.minValue,
+    maxValue: row.maxValue,
+    id: row.id,
+    label: row.label,
+    alerts:
+      row.alerts?.map(alert => ({
+        value: alert.value,
+        message: alert.alert,
+      })) ?? null,
+  }));
 }
