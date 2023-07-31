@@ -15,7 +15,7 @@ type SliderConfig = Config & {
 
 export type SliderProps = {
   config: SliderConfig;
-  initialValue?: number;
+  initialValue: number | null;
   onChange: (value: number) => void;
   onPress?: () => void;
   onRelease?: () => void;

@@ -175,7 +175,7 @@ function ActivityItem({
             onChange={onResponse}
             onPress={() => console.log('pressed')}
             onRelease={() => console.log('released')}
-            initialValue={value?.answer ?? undefined}
+            initialValue={value?.answer ?? null}
           />
         </Box>
       );
