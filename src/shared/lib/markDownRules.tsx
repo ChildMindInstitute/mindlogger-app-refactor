@@ -134,6 +134,12 @@ export const activityMarkDownStyles = StyleSheet.create({
   },
 });
 
+const videoStyles = {
+  height: 250,
+  width: '100%',
+  backgroundColor: '#000',
+};
+
 const htmlBlockStyles = `
   * {
     font-size: 22px;
@@ -288,7 +294,15 @@ const markDownRules: RenderRules = {
     if (isAudio) {
       return <AudioPlayer uri={src} title={node.content} key={node.key} />;
     } else if (isVideo) {
-      return <VideoPlayer uri={src} key={node.key} />;
+      return (
+        <VideoPlayer
+          uri={src}
+          key={node.key}
+          thumbnailStyle={videoStyles}
+          videoStyle={videoStyles}
+          wrapperStyle={videoStyles}
+        />
+      );
     } else if (isYoutubeVideo) {
       return <YoutubeVideo key={node.key} src={src} />;
     }
@@ -333,7 +347,7 @@ const markDownRules: RenderRules = {
         mixedContentMode="always"
         viewportContent="width=device-width, user-scalable=no"
         onShouldStartLoadWithRequest={onHtmlBlockLinkPress}
-        androidLayerType="none"
+        androidLayerType="hardware"
       />
     );
   },
