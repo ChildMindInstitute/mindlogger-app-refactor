@@ -233,6 +233,15 @@ const markDownRules: RenderRules = {
       </Box>
     );
   },
+  table: (node, children) => {
+    const { width: screenWidth } = Dimensions.get('screen');
+
+    return (
+      <Box key={node.key} width={screenWidth - 32}>
+        {children}
+      </Box>
+    );
+  },
   text: (node, children, parent, styles, inheritedStyles = {}) => {
     let additionalStyles = {};
     let updatedNodeContent = node.content;
