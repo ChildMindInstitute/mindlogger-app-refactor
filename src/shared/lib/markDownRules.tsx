@@ -15,6 +15,7 @@ import { Box, Text, AudioPlayer, VideoPlayer, YoutubeVideo } from '@shared/ui';
 import { colors } from './constants';
 
 const { width: viewPortWidth } = Dimensions.get('window');
+const PADDING_X = 32;
 
 const localStyles = StyleSheet.create({
   alignLeftContainer: {
@@ -229,6 +230,13 @@ const markDownRules: RenderRules = {
   'container_hljs-right': (node, children) => {
     return (
       <Box key={node.key} style={localStyles.alignRightContainer}>
+        {children}
+      </Box>
+    );
+  },
+  table: (node, children) => {
+    return (
+      <Box key={node.key} width={viewPortWidth - PADDING_X}>
         {children}
       </Box>
     );
