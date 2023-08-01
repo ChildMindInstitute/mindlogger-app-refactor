@@ -15,6 +15,7 @@ import { Box, Text, AudioPlayer, VideoPlayer, YoutubeVideo } from '@shared/ui';
 import { colors } from './constants';
 
 const { width: viewPortWidth } = Dimensions.get('window');
+const PADDING_X = 32;
 
 const localStyles = StyleSheet.create({
   alignLeftContainer: {
@@ -234,10 +235,8 @@ const markDownRules: RenderRules = {
     );
   },
   table: (node, children) => {
-    const { width: screenWidth } = Dimensions.get('screen');
-
     return (
-      <Box key={node.key} width={screenWidth - 32}>
+      <Box key={node.key} width={viewPortWidth - PADDING_X}>
         {children}
       </Box>
     );
