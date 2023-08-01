@@ -739,20 +739,20 @@ function mapToRadioAlerts(options: OptionsDto) {
 }
 
 function mapToStackedRadioDataMatrix(dataMatrix: DataMatrixDto) {
-  return dataMatrix?.length
-    ? dataMatrix.map(matrix => ({
-        rowId: matrix.rowId,
-        options: matrix.options.map(option => ({
-          optionId: option.optionId,
-          score: option.score,
-          alert: option.alert
-            ? {
-                message: option.alert,
-              }
-            : null,
-        })),
-      }))
-    : [];
+  return (
+    dataMatrix?.map(matrix => ({
+      rowId: matrix.rowId,
+      options: matrix.options.map(option => ({
+        optionId: option.optionId,
+        score: option.score,
+        alert: option.alert
+          ? {
+              message: option.alert,
+            }
+          : null,
+      })),
+    })) ?? []
+  );
 }
 
 function mapToSliderAlerts(alerts: SliderAlertsDto) {
@@ -785,20 +785,20 @@ function mapToCheckboxOptions(options: OptionsDto) {
 }
 
 function mapToStackedCheckboxAlerts(dataMatrix: DataMatrixDto) {
-  return dataMatrix?.length
-    ? dataMatrix.map(matrix => ({
-        rowId: matrix.rowId,
-        options: matrix.options.map(option => ({
-          optionId: option.optionId,
-          score: option.score,
-          alert: option.alert
-            ? {
-                message: option.alert,
-              }
-            : null,
-        })),
-      }))
-    : [];
+  return (
+    dataMatrix?.map(matrix => ({
+      rowId: matrix.rowId,
+      options: matrix.options.map(option => ({
+        optionId: option.optionId,
+        score: option.score,
+        alert: option.alert
+          ? {
+              message: option.alert,
+            }
+          : null,
+      })),
+    })) ?? []
+  );
 }
 
 function mapToStackedSliderAlerts(rows: SliderRowsDto) {
