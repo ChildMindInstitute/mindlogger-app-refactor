@@ -89,7 +89,7 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
         </Text>
       )}
 
-      {isPermissionDenied && <Text mt={10}>{descriptionText}</Text>}
+      {isPermissionDenied && !value && <Text mt={10}>{descriptionText}</Text>}
     </Center>
   );
 };
