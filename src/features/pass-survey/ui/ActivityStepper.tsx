@@ -132,6 +132,8 @@ function ActivityStepper({
     if (isTutorialStep) {
       const moved = tutorialViewerRef.current?.next();
 
+      moved && trackUserAction(userActionCreator.next());
+
       !moved && restartIdleTimer();
 
       return moved ? 0 : 1;

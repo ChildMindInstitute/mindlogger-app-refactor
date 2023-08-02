@@ -25,7 +25,8 @@ function useUserActionManager({ activityId, activityState }: Args) {
 
   const updateUserAction = (action: UserAction) => {
     return activityState!.actions.map(o => {
-      return o.payload.activityItemId === action.payload.activityItemId
+      return o.payload.activityItemId === action.payload.activityItemId &&
+        o.type === action.type
         ? action
         : o;
     });
@@ -43,6 +44,7 @@ function useUserActionManager({ activityId, activityState }: Args) {
     const shouldUpdateLastAction =
       lastUserAction &&
       lastUserAction?.payload?.activityItemId === currentPipelineItem.id &&
+      lastUserAction.type === 'SET_ANSWER' &&
       ITEMS_TO_UPDATE_USER_ACTION.includes(currentPipelineItem.type);
 
     const action = userActionCreator.setAnswer({
@@ -69,6 +71,7 @@ function useUserActionManager({ activityId, activityState }: Args) {
 
     const shouldUpdateLastAction =
       lastUserAction &&
+      lastUserAction.type === 'SET_ANSWER' &&
       lastUserAction?.payload?.activityItemId === currentPipelineItem.id;
 
     const action = userActionCreator.setAnswer({
