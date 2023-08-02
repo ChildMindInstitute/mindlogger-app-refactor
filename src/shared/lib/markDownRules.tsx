@@ -294,6 +294,21 @@ const markDownRules: RenderRules = {
   tr: (node, children) => {
     return <XStack key={node.key}>{children}</XStack>;
   },
+  code_inline: node => {
+    return (
+      <Box
+        p={2}
+        key={node.key}
+        mb={-2}
+        backgroundColor="$lighterGrey3"
+        alignSelf="center"
+      >
+        <Text fontFamily="Menlo" color="$red">
+          {node.content}
+        </Text>
+      </Box>
+    );
+  },
   text: (node, children, parent, styles, inheritedStyles = {}) => {
     let additionalStyles = {};
     let updatedNodeContent = node.content;
