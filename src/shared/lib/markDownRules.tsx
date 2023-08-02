@@ -266,7 +266,9 @@ const markDownRules: RenderRules = {
         py={14}
         flex={1}
       >
-        {children}
+        {children.map(child => (
+          <Text textAlign="center">{child}</Text>
+        ))}
       </Box>
     );
   },
@@ -282,7 +284,9 @@ const markDownRules: RenderRules = {
         flex={1}
       >
         {children.map(child => (
-          <Text fontWeight="700">{child}</Text>
+          <Text textAlign="center" fontWeight="700">
+            {child}
+          </Text>
         ))}
       </Box>
     );
