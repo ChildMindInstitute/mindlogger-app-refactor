@@ -1,18 +1,39 @@
 import { ActivityDetails, ActivityItem } from '@app/entities/activity';
 
-import { buildFlankerPipeline } from './flankerPipelineBuilder';
 import { getAbTrailsPipeline } from './precompiled-pipelines';
 import { PipelineItem } from '../lib';
 
 export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
+  const alignMessagesToLeft = activity.items.some(
+    x => x.inputType === 'Flanker',
+  );
+
   const pipeline: PipelineItem[] = filterHiddenItems(activity.items)
-    .map(item => {
+    .map((item, index) => {
       switch (item.inputType) {
-        case 'AbTest': {
+        case 'AbTrails': {
           return getAbTrailsPipeline(
-            item.config.device,
             item.id,
+            item.config,
+            activity.items.length - 1 === index,
           ) satisfies PipelineItem[];
+        }
+
+        case 'StabilityTracker': {
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            validationOptions: item.validationOptions,
+            timer: item.timer,
+            conditionalLogic: item.conditionalLogic,
+          } satisfies PipelineItem;
         }
 
         case 'Splash': {
@@ -43,10 +64,12 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
         }
 
         case 'Flanker': {
-          return buildFlankerPipeline(
-            item.config,
-            item.id,
-          ) satisfies PipelineItem[];
+          return {
+            id: item.id,
+            type: item.inputType,
+            payload: item.config,
+            timer: null,
+          } satisfies PipelineItem;
         }
 
         case 'TextInput': {
@@ -124,7 +147,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
           return {
             id: item.id,
             type: item.inputType,
-            payload: item.config,
+            payload: { alignToLeft: alignMessagesToLeft },
             question: item.question,
             isSkippable: item.isSkippable,
             isAbleToMoveBack: item.isAbleToMoveBack,

@@ -5,6 +5,7 @@ import {
   Notification,
   TriggerNotification,
 } from '@notifee/react-native';
+import { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 
 type NotificationEventCallback = (eventDetail: LocalEventDetail) => void;
 
@@ -31,11 +32,21 @@ export type NotificationEventHandlersFunctions = Record<
   () => NotificationEventCallback | undefined
 >;
 
-export type LocalNotificationType =
+type LocalNotificationType =
   | 'schedule-event-alert'
   | 'request-to-reschedule-due-to-limit';
 
-export type LocalEventNotification = Notification & {
+type RemoteNotificationType =
+  | 'response-data-alert'
+  | 'applet-update-alert'
+  | 'applet-delete-alert'
+  | 'schedule-updated';
+
+export type PushNotificationType =
+  | LocalNotificationType
+  | RemoteNotificationType;
+
+export type EventPushNotification = Notification & {
   data: {
     shortId?: string;
     scheduledAt: number;
@@ -46,18 +57,29 @@ export type LocalEventNotification = Notification & {
     eventId?: string;
     entityName?: string;
     isLocal: 'true' | 'false';
-    type: 'schedule-event-alert' | 'request-to-reschedule-due-to-limit';
+    type: PushNotificationType;
   };
 };
 
 export type LocalEventTriggerNotification = TriggerNotification & {
-  notification: LocalEventNotification;
+  notification: EventPushNotification;
 };
 
 export type LocalEventDetail = EventDetail & {
-  notification: LocalEventNotification;
+  notification: EventPushNotification;
 };
 
 export type LocalInitialNotification = InitialNotification & {
-  notification: LocalEventNotification;
+  notification: EventPushNotification;
+};
+
+export type RemoteNotification = FirebaseMessagingTypes.RemoteMessage;
+
+export type RemoteNotificationPayload = {
+  title: string;
+  body: string;
+  data: {
+    appletId: string;
+    type: RemoteNotificationType;
+  };
 };

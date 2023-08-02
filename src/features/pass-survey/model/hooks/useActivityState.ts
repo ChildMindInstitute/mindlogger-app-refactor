@@ -22,6 +22,7 @@ function useActivityState({
     activityStorageRecord,
     upsertActivityStorageRecord,
     clearActivityStorageRecord,
+    getCurrentActivityStorageRecord,
   } = useActivityStorageRecord({
     appletId,
     activityId,
@@ -44,15 +45,9 @@ function useActivityState({
       return;
     }
 
-    const previousStep = activityStorageRecord.step;
-
-    const action =
-      previousStep < step ? userActionCreator.next() : userActionCreator.back();
-
     upsertActivityStorageRecord({
       ...activityStorageRecord,
       step,
-      actions: addUserAction(action),
     });
   }
 
@@ -71,6 +66,20 @@ function useActivityState({
         },
       },
       actions: updateUserActionsWithAnswer(answer),
+    });
+  }
+
+  function setContext(contextKey: string, contextValue: unknown) {
+    if (!activityStorageRecord) {
+      return;
+    }
+
+    upsertActivityStorageRecord({
+      ...activityStorageRecord,
+      context: {
+        ...activityStorageRecord.context,
+        [contextKey]: contextValue,
+      },
     });
   }
 
@@ -141,7 +150,7 @@ function useActivityState({
 
   function trackUserAction(action: UserAction) {
     upsertActivityStorageRecord({
-      ...activityStorageRecord!,
+      ...getCurrentActivityStorageRecord()!,
       actions: addUserAction(action),
     });
   }
@@ -157,6 +166,7 @@ function useActivityState({
     setTimer,
     removeTimer,
     trackUserAction,
+    setContext,
   };
 }
 

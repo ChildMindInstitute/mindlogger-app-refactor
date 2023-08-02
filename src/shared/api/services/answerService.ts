@@ -1,7 +1,8 @@
 import { AxiosResponse } from 'axios';
 
+import { Point } from '@app/abstract/lib';
 import { DayMonthYear, HourMinute } from '@app/shared/lib';
-import { MediaValue } from '@app/shared/ui';
+import { MediaFile, MediaValue } from '@app/shared/ui';
 
 import httpService from './httpService';
 import { SuccessfulEmptyResponse } from '../types';
@@ -30,6 +31,54 @@ export type PhotoAnswerDto = MediaValue;
 
 export type VideoAnswerDto = MediaValue;
 
+export type FlankerAnswerRecordDto = {
+  button_pressed: string;
+  correct: boolean | undefined;
+  duration: number;
+  offset: number;
+  question: string;
+  response_touch_timestamp: number | null;
+  start_time: number;
+  start_timestamp: number;
+  tag: string;
+  trial_index: number;
+};
+
+export type FlankerAnswerDto = Array<FlankerAnswerRecordDto>;
+
+export type DrawerPointDto = Point & { time: number };
+
+export type DrawerLineDto = {
+  points: Array<DrawerPointDto>;
+  startTime: number;
+};
+
+export type DrawerAnswerDto = {
+  lines: Array<DrawerLineDto>;
+  svgString: string;
+  width: number;
+} & MediaFile;
+
+export type AbLogPointDto = {
+  x: number;
+  y: number;
+  start: string;
+  end: string;
+  time: number;
+  valid: boolean | null;
+  actual: string | undefined;
+};
+
+export type AbLogLineDto = { points: Array<AbLogPointDto> };
+
+export type AbTestAnswerDto = {
+  width: number;
+  startTime: number;
+  updated: true;
+  lines: AbLogLineDto[];
+  currentIndex: number;
+};
+
 export type TimeRangeAnswerDto = {
   from: { hour: number; minute: number };
   to: { hour: number; minute: number };
@@ -42,6 +91,20 @@ export type DateAnswerDto = DayMonthYear;
 export type GeolocationAnswerDto = {
   latitude: number;
   longitude: number;
+};
+
+export type StabilityTrackerAnswerDto = {
+  value: {
+    timestamp: number;
+    stimPos: number[];
+    userPos: number[];
+    targetPos: number[];
+    lambda: number;
+    score: number;
+    lambdaSlope: number;
+  }[];
+  maxLambda: number;
+  phaseType: 'challenge-phase' | 'focus-phase';
 };
 
 export type AnswerValueDto =
@@ -60,14 +123,25 @@ export type AnswerValueDto =
   | TimeAnswerDto
   | DateAnswerDto
   | GeolocationAnswerDto
+  | StabilityTrackerAnswerDto
+  | FlankerAnswerDto
+  | DrawerAnswerDto
+  | AbTestAnswerDto
   | null;
 
 export type ObjectAnswerDto = {
-  value: AnswerValueDto;
+  value?: AnswerValueDto;
   text?: string;
 };
 
 export type AnswerDto = TextAnswerDto | ObjectAnswerDto | null;
+
+export type AnswerAlertDto = {
+  activityItemId: string;
+  message: string;
+};
+
+export type AnswerAlertsDto = Array<AnswerAlertDto>;
 
 export type EncryptedAnswerDto = {
   itemIds: string[];
@@ -95,6 +169,13 @@ export type ActivityAnswersRequest = {
   createdAt: number;
   submitId: string;
   answer: EncryptedAnswerDto;
+  client: {
+    appId: string;
+    appVersion: string;
+    width: number;
+    height: number;
+  };
+  alerts: AnswerAlertsDto;
 };
 
 type ActivityAnswersResponse = SuccessfulEmptyResponse;

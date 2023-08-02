@@ -1,8 +1,3 @@
-export type Point = {
-  x: number;
-  y: number;
-};
-
 export const enum MessageType {
   NotDefined = 0,
   IncorrectStartPoint = 1,
@@ -34,7 +29,8 @@ export type OnResultLog = {
   currentIndex: number;
 };
 
-export type AbTestResponse = {
+export type AbTestResult = {
   width: number;
   startTime: number;
+  updated: true;
 } & OnResultLog;

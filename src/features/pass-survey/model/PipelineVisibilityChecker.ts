@@ -43,10 +43,12 @@ function PipelineVisibilityChecker(pipeline: PipelineItem[], answers: Answers) {
           return !answerValidator.isEqualToValue(condition.payload.value);
 
         case 'EQUAL_TO_OPTION':
-          return answerValidator.isEqualToOption(condition.payload.optionId);
+          return answerValidator.isEqualToOption(condition.payload.optionValue);
 
         case 'NOT_EQUAL_TO_OPTION':
-          return !answerValidator.isEqualToOption(condition.payload.optionId);
+          return !answerValidator.isEqualToOption(
+            condition.payload.optionValue,
+          );
 
         case 'GREATER_THAN':
           return answerValidator.isGreaterThen(condition.payload.value);
@@ -55,10 +57,12 @@ function PipelineVisibilityChecker(pipeline: PipelineItem[], answers: Answers) {
           return answerValidator.isLessThen(condition.payload.value);
 
         case 'INCLUDES_OPTION':
-          return answerValidator.includesOption(condition.payload.optionId);
+          return answerValidator.includesOption(condition.payload.optionValue);
 
         case 'NOT_INCLUDES_OPTION':
-          return !answerValidator.includesOption(condition.payload.optionId);
+          return answerValidator.notIncludesOption(
+            condition.payload.optionValue,
+          );
 
         default:
           return true;

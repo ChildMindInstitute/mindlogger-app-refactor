@@ -1,6 +1,6 @@
 import { Item } from '@app/shared/ui';
 
-import { Answers, PipelineItem } from '../lib';
+import { Answers, PipelineItem, RadioResponse } from '../lib';
 
 type AnswerValidatorArgs = {
   items: PipelineItem[];
@@ -54,12 +54,14 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
       return answer === value;
     },
 
-    isEqualToOption(optionId: string) {
+    isEqualToOption(optionValue: string) {
       if (currentAnswer?.answer == null) {
         return false;
       }
 
-      return (currentAnswer.answer as Item).id === optionId;
+      const answer = currentAnswer.answer as RadioResponse;
+
+      return String(answer.value) === optionValue;
     },
 
     isGreaterThen(value: number) {
@@ -82,14 +84,28 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
       return answer < value;
     },
 
-    includesOption(optionId: string) {
+    includesOption(optionValue: string) {
       if (currentAnswer?.answer == null) {
         return false;
       }
 
       const answer = currentAnswer.answer as Item[];
 
-      return answer.find(answerItem => answerItem.id === optionId);
+      return answer.find(
+        answerItem => String(answerItem.value) === optionValue,
+      );
+    },
+
+    notIncludesOption(optionValue: string) {
+      if (currentAnswer?.answer == null) {
+        return false;
+      }
+
+      const answer = currentAnswer.answer as Item[];
+
+      return !answer.find(
+        answerItem => String(answerItem.value) === optionValue,
+      );
     },
   };
 }

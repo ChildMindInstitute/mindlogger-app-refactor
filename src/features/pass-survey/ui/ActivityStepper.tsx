@@ -59,6 +59,7 @@ function ActivityStepper({
     removeAnswer,
     setAdditionalAnswer,
     removeTimer,
+    setContext,
   } = useActivityState({
     appletId,
     activityId,
@@ -106,16 +107,21 @@ function ActivityStepper({
 
   const showTimeLeft = !!timer;
 
-  const onNext = (nextStep: number) => {
+  const onNext = (nextStep: number, isForced: boolean) => {
     removeTimer(currentStep);
     restartIdleTimer();
     setCurrentStep(nextStep);
+
+    if (!isForced) {
+      trackUserAction(userActionCreator.next());
+    }
   };
 
   const onBack = (nextStep: number) => {
     removeTimer(currentStep);
     restartIdleTimer();
     setCurrentStep(nextStep);
+    trackUserAction(userActionCreator.back());
   };
 
   const onBeforeNext = (): number => {
@@ -165,8 +171,10 @@ function ActivityStepper({
     restartIdleTimer();
   };
 
-  const onEndReached = () => {
-    trackUserAction(userActionCreator.done());
+  const onEndReached = (isForced: boolean) => {
+    if (!isForced) {
+      trackUserAction(userActionCreator.done());
+    }
     onFinish();
   };
 
@@ -251,6 +259,8 @@ function ActivityStepper({
                         setAdditionalAnswer(currentStep, response);
                       }}
                       textVariableReplacer={replaceTextVariables}
+                      onContextChange={setContext}
+                      context={activityStorageRecord?.context}
                     />
                   )}
                 </>

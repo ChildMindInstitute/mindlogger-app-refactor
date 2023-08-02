@@ -27,8 +27,6 @@ import {
   DrawLine,
   DrawPoint,
   Point,
-  transformByWidth,
-  transformBack,
   ResponseSerializer,
   DrawResult,
   CachedBezierItem,
@@ -45,10 +43,11 @@ type Props = {
   onStarted: () => void;
   onResult: (result: DrawResult) => void;
   width: number;
+  isDrawingActive: boolean;
 };
 
 const DrawingBoard: FC<Props> = props => {
-  const { value, onResult, onStarted, width } = props;
+  const { value, onResult, onStarted, width, isDrawingActive } = props;
 
   const isEmpty = !value.length;
 
@@ -63,23 +62,19 @@ const DrawingBoard: FC<Props> = props => {
 
   const pathsCache = useRef<Array<SkPath>>([]).current;
 
-  const normalizedLines = useMemo(() => {
-    return transformByWidth(value, width);
-  }, [value, width]);
-
   const currentLogLineRef = useRef<DrawLine | null>(null);
 
   const paths = useMemo(() => {
-    if (!normalizedLines.length) {
+    if (!value.length) {
       pathsCache.splice(0, pathsCache.length);
     }
 
-    const newPaths = convertToSkPaths(normalizedLines, pathsCache.length);
+    const newPaths = convertToSkPaths([...value], pathsCache.length);
 
     pathsCache.push(...newPaths);
 
     return [...pathsCache];
-  }, [normalizedLines, pathsCache]);
+  }, [value, pathsCache]);
 
   const resetCurrentLine = () => {
     currentLogLineRef.current = null;
@@ -103,6 +98,21 @@ const DrawingBoard: FC<Props> = props => {
     getLogLine()!.points.push(point);
   };
 
+  const isEqualToLastPoint = (point: Point): boolean => {
+    const line = getLogLine()!;
+
+    if (!line.points.length) {
+      return false;
+    }
+
+    const lastPoint: DrawPoint = line.points.slice(-1)[0];
+
+    return (
+      Math.round(point.x) === Math.round(lastPoint.x) &&
+      Math.round(point.y) === Math.round(lastPoint.y)
+    );
+  };
+
   const getLogLine = (): DrawLine | null => {
     return currentLogLineRef.current;
   };
@@ -122,6 +132,11 @@ const DrawingBoard: FC<Props> = props => {
   const onTouchProgress = (touchInfo: TouchInfo) => {
     const point: Point = { x: touchInfo.x, y: touchInfo.y };
 
+    if (isEqualToLastPoint(point)) {
+      drawPath();
+      return;
+    }
+
     addLogPoint(createLogPoint(point));
     drawPath();
   };
@@ -131,17 +146,17 @@ const DrawingBoard: FC<Props> = props => {
       return;
     }
 
-    const transformedLine = transformBack(currentLogLineRef.current, width);
+    const newLine = { ...currentLogLineRef.current };
 
-    const lines = [...value, transformedLine];
+    const lines = [...value, newLine];
 
-    const svgString = ResponseSerializer.process(lines);
+    const svgString = ResponseSerializer.process(lines, width);
 
     const result: DrawResult = {
       lines,
       svgString,
       width,
-    };
+    } as DrawResult;
 
     onResult(result);
   };
@@ -175,6 +190,10 @@ const DrawingBoard: FC<Props> = props => {
 
   const onDraw = useDrawCallback(
     (canvas, info) => {
+      if (!isDrawingActive) {
+        return;
+      }
+
       canvasRef.current = canvas;
 
       touchHandler(info.touches);
@@ -190,7 +209,7 @@ const DrawingBoard: FC<Props> = props => {
         updateShouldRestore();
       }
     },
-    [width, touchHandler],
+    [width, touchHandler, isDrawingActive],
   );
 
   return (
@@ -207,8 +226,8 @@ const DrawingBoard: FC<Props> = props => {
         <Canvas style={styles.canvas}>
           <Group>
             {paths.map((path, i) => (
-              <Group>
-                <Path key={i} path={path} strokeWidth={1} style="stroke" />
+              <Group key={i}>
+                <Path path={path} strokeWidth={1} style="stroke" />
               </Group>
             ))}
           </Group>

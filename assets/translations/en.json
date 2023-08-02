@@ -66,7 +66,7 @@
     "title_with_version": "What is MindLogger? v.{{version}}",
     "title": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
     "subtitle": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
-    "mindlogger_about": "## \n ### What is MindLogger? \n\n This app is part of the open source MindLogger data collection and analysis platform designed by the MATTER Lab at the Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### What can MindLogger do? \n\n MindLogger's feature set is growing, and currently supports a wide variety of input types. Each screen in a MindLogger activity can include any of the following: \n  - Text, picture, and audio \n  - Question followed by image and/or text response options \n  - Slider bar \n  - Text entry \n  - Table entry \n  - Audio record \n  - Photo/video capture \n  - Drawing or tapping \n  - Current geolocation \n  - Simple cognitive task \n  - Delay before response \n  - Timer \n  - Conditional logic to determine where to go next \n\n #### Where can I learn more? \n Please visit [https://mindlogger.org](https://mindlogger.org) for more information. \n\n ##### Cheers, \n\n ##### MindLogger Team \n\n ##### Child Mind Institute"
+    "mindlogger_about": "## \n ### What is MindLogger? \n\n This app is part of the open source MindLogger data collection and analysis platform designed by the MATTER Lab at the Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### What can MindLogger do? \n\n MindLogger's feature set is growing, and currently supports a wide variety of input types. Each screen in a MindLogger activity can include any of the following: \n  - Text, picture, and audio \n  - Question followed by image and/or text response options \n  - Slider bar \n  - Text entry \n  - Table entry \n  - Audio record \n  - Photo/video capture \n  - Drawing or tapping \n  - Current geolocation \n  - Simple cognitive task \n  - Delay before response \n  - Timer \n  - Conditional logic to determine where to go next \n\n #### Where can I learn more? \n Please visit [https://mindlogger.org](https://mindlogger.org) for more information.  \n ## [Credits]({{credits_link}}) \n\n ##### Cheers, \n\n ##### MindLogger Team \n\n ##### Child Mind Institute"
   },
   "applet_footer": {
     "surveys": "Surveys",
@@ -352,6 +352,8 @@
     "activity_resume_restart": "Would you like to resume this activity in progress or restart?",
     "restart": "Restart",
     "resume": "Resume",
+    "retry": "Retry",
+    "later": "Later",
     "in_progress": "In Progress",
     "unscheduled": "Unscheduled",
     "scheduled": "Scheduled",
@@ -362,7 +364,10 @@
     "yes_delete": "Yes, delete it",
     "hi": "Hi",
     "enter_old_password": "Please enter your old password",
-    "enter_new_password": "Please enter a new password"
+    "enter_new_password": "Please enter a new password",
+    "data_not_sent": "Data not sent (keep app open while we try)",
+    "upload_error": "Upload Error",
+    "want_to_retry": "Your Internet may be unstable. We weren't able to send your data."
   },
   "prize": {
     "lack_tokens_title": "Try again",
@@ -375,10 +380,5 @@
     "finished_complete": "Finished. Click Done to complete.",
     "begin": "Begin",
     "end": "End"
-  },
-  "open_source": {
-    "title": "Open Source Software used",
-    "show_license": "Show License",
-    "homepage": "Homepage"
   }
 }

@@ -1,26 +1,31 @@
 import { FC } from 'react';
-import { FlatList } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { Activity } from '@entities/applet';
+import { Box, ScrollView } from '@app/shared/ui';
 
 import ActivityDataCard from './ActivityAnalyticsCard';
+import { ActivityResponses } from '../lib';
 
 type Props = {
-  activities: Array<Activity>;
+  activitiesResponses: Array<ActivityResponses>;
 };
 
-const ActivityAnalyticsList: FC<Props> = ({ activities }) => {
-  const keyExtractor = (item: Activity) => item.id;
-
+const ActivityAnalyticsList: FC<Props> = ({ activitiesResponses }) => {
   return (
-    <FlatList
-      data={activities}
-      keyExtractor={keyExtractor}
-      renderItem={({ item }) => {
-        return <ActivityDataCard activity={item} />;
-      }}
-    />
+    <Box flex={1}>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        {activitiesResponses.map(response => (
+          <ActivityDataCard key={response.id} responseData={response} />
+        ))}
+      </ScrollView>
+    </Box>
   );
 };
+
+const styles = StyleSheet.create({
+  scrollView: {
+    flexGrow: 1,
+  },
+});
 
 export default ActivityAnalyticsList;

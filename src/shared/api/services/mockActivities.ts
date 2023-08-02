@@ -1,10 +1,7 @@
-import { ActivityDto, FlankerAnswerSettings } from '@app/shared/api';
-
-import { flankerWithStFxImages } from './mocks/FlankerWithStFxImages';
-import { flankerSettingsTextSignsDto } from './mocks/FlankerWithTextsSigns';
+import { ActivityDto } from '@app/shared/api';
 
 const testMessage1 =
-  'Start by placing the point of the pen at the center of the spiral (S), and trace out along the dashed blue line to the end of the sprial (E).  Try to stay on the dashed blue line while tracing. You will do this five times.';
+  'Start by placing the point of the pen at the center of the spiral (S), and trace out along the dashed blue line to the end of the sprial (E).  Try to stay on the dashed blue line while tracing. You will do this five times.';
 
 const testMessage2 =
   'Write the entire alphabet in order using lower-case (small) letters. Write each letter in one of the boxes below. If you make a mistake, just keep going. Make sure you print and do not use cursive handwriting. Work as quickly as you can without making mistakes. Remember to print in lower-case, not capital letters. Press the “Next” button as soon as you finish.';
@@ -119,7 +116,7 @@ export const DrawingTestActivity = {
   vortex,
   all: allDrawing,
 };
-
+/*
 export const AbTestActivity: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
@@ -152,118 +149,7 @@ export const AbTestActivity: ActivityDto = {
       conditionalLogic: null,
     },
   ],
-};
-
-const FlankerWithImageActivity: ActivityDto = {
-  id: 'aid1',
-  name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
-  image:
-    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: '',
-  showAllAtOnce: false,
-  isSkippable: false,
-  isReviewable: false,
-  responseIsEditable: false,
-  order: 0,
-  isHidden: false,
-  items: [
-    {
-      id: '100',
-      name: 'Flanker',
-      timer: null,
-      question: '',
-      responseType: 'flanker',
-      config: null,
-      responseValues: flankerWithStFxImages,
-      order: 0,
-      isHidden: false,
-      conditionalLogic: null,
-    },
-  ],
-};
-
-const FlankerWithStSFxActivity: ActivityDto = {
-  id: 'aid1',
-  name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
-  image:
-    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: '',
-  showAllAtOnce: false,
-  isSkippable: false,
-  isReviewable: false,
-  responseIsEditable: false,
-  order: 0,
-  isHidden: false,
-  items: [
-    {
-      id: '100',
-      name: 'Flanker',
-      timer: null,
-      question: '',
-      responseType: 'flanker',
-      config: null,
-      responseValues: {} as FlankerAnswerSettings,
-      order: 0,
-      isHidden: false,
-      conditionalLogic: null,
-    },
-  ],
-};
-
-const FlankerWithTextSignsActivity: ActivityDto = {
-  id: 'aid1',
-  name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
-  image:
-    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: '',
-  showAllAtOnce: false,
-  isSkippable: false,
-  isReviewable: false,
-  responseIsEditable: false,
-  order: 0,
-  isHidden: false,
-  items: [
-    {
-      id: '100',
-      name: 'Flanker',
-      question: '',
-      responseType: 'flanker',
-      config: null,
-      responseValues: flankerSettingsTextSignsDto,
-      order: 0,
-      timer: null,
-      isHidden: false,
-      conditionalLogic: null,
-    },
-  ],
-};
-
-const FlankerAllTypesActivity: ActivityDto = {
-  id: 'aid1',
-  name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
-  image:
-    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: '',
-  showAllAtOnce: false,
-  isSkippable: false,
-  isReviewable: false,
-  responseIsEditable: false,
-  order: 0,
-  isHidden: false,
-  items: [
-    ...FlankerWithTextSignsActivity.items,
-    ...FlankerWithImageActivity.items,
-    ...FlankerWithTextSignsActivity.items,
-  ],
-};
+};*/
 
 export const TextActivity: ActivityDto = {
   id: 'aid1',
@@ -365,6 +251,7 @@ export const SliderTestActivity: ActivityDto = {
           'https://www.shutterstock.com/image-vector/tachometer-speedometer-indicator-icon-performance-260nw-296770265.jpg',
         minLabel: 'Minimum label',
         maxLabel: 'Maximum label',
+        alerts: null,
       },
       id: '105',
       timer: null,
@@ -392,11 +279,88 @@ export const SliderTestActivity: ActivityDto = {
   ],
 };
 
-export const FlankerActivity = {
-  withImage: FlankerWithImageActivity,
-  withStSFx: FlankerWithStSFxActivity,
-  withTextSings: FlankerWithTextSignsActivity,
-  all: FlankerAllTypesActivity,
+export const StabilityTrackerActivity: ActivityDto = {
+  id: 'aid01',
+  name: 'Activity number 01',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  image:
+    'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
+  splashScreen: '',
+  showAllAtOnce: false,
+  isSkippable: false,
+  isReviewable: false,
+  responseIsEditable: false,
+  order: 0,
+  isHidden: false,
+  items: [
+    {
+      id: '103011',
+      name: 'MarkdownMessage',
+      responseType: 'message',
+      timer: null,
+      isHidden: false,
+      config: {
+        removeBackButton: false,
+        timer: null,
+      },
+      responseValues: null,
+      question: 'The following will be the Challenge(trial) phase.',
+      order: 0,
+      conditionalLogic: null,
+    },
+    {
+      id: '10301',
+      name: 'Gyro',
+      responseType: 'stabilityTracker',
+      timer: null,
+      isHidden: false,
+      config: {
+        lambdaSlope: 20.0,
+        durationMinutes: 5,
+        trialsNumber: 3,
+        userInputType: 'gyroscope',
+        phase: 'practice',
+      },
+      responseValues: null,
+      question: '',
+      order: 0,
+      conditionalLogic: null,
+    },
+    {
+      id: '1030111',
+      name: 'MarkdownMessage',
+      responseType: 'message',
+      timer: null,
+      isHidden: false,
+      config: {
+        removeBackButton: false,
+        timer: null,
+      },
+      responseValues: null,
+      question: 'The following will be the Focus phase.',
+      order: 0,
+      conditionalLogic: null,
+    },
+    {
+      id: '10301',
+      name: 'Gyro',
+      responseType: 'stabilityTracker',
+      timer: null,
+      isHidden: false,
+      config: {
+        lambdaSlope: 20.0,
+        durationMinutes: 5,
+        trialsNumber: 0,
+        userInputType: 'gyroscope',
+        phase: 'test',
+      },
+      responseValues: null,
+      question: '',
+      order: 0,
+      conditionalLogic: null,
+    },
+  ],
 };
 
 const TestActivities = [
@@ -405,8 +369,9 @@ const TestActivities = [
   // AbTestActivity,
   // TextActivity,
   // SliderTestActivity,
-  FlankerWithTextSignsActivity,
+  //FlankerWithTextSignsActivity,
   //FlankerWithImageActivity
+  StabilityTrackerActivity,
 ];
 
 let index = 0;

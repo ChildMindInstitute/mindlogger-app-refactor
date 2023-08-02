@@ -1,7 +1,15 @@
 import {
+  BlockConfiguration,
+  ButtonConfiguration,
+  FlankerItemSettings,
+  StimulusConfiguration,
+  TestNode,
+  TutorialRecord,
+} from '@app/abstract/lib';
+import {
   ActivityDto,
   DrawingItemDto,
-  AbTestItemDto,
+  StabilityTrackerItemDto,
   AudioItemDto,
   AudioPlayerItemDto,
   DateItemDto,
@@ -22,11 +30,15 @@ import {
   TimeItemDto,
   SingleSelectionRowsItemDto,
   ConditionalLogicDto,
+  ABTrailsItemDto,
+  DataMatrixDto,
+  OptionsDto,
+  SliderRowsDto,
+  SliderAlertsDto,
 } from '@app/shared/api';
 import { getMsFromSeconds } from '@app/shared/lib';
 
 import { ActivityDetails, ActivityItem } from '../lib';
-import { FlankerSettings } from '../lib/types/flanker';
 
 function mapTimerValue(dtoTimer: number | null) {
   if (dtoTimer) {
@@ -86,15 +98,36 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
   };
 }
 
-function mapToAbTest(dto: AbTestItemDto): ActivityItem {
+function mapToAbTest(dto: ABTrailsItemDto): ActivityItem {
+  const config = dto.config;
+
+  const nodesSettingsDto = config.nodes;
+
+  const nodes = nodesSettingsDto.nodes;
+
+  const tutorials = config.tutorials;
+
   return {
     id: dto.id,
     name: dto.name,
-    inputType: 'AbTest',
+    inputType: 'AbTrails',
     config: {
-      device: dto.responseValues.device,
+      config: {
+        fontSize: nodesSettingsDto.fontSize,
+        radius: nodesSettingsDto.radius,
+        beginWordLength: nodesSettingsDto.beginWordLength,
+        endWordLength: nodesSettingsDto.endWordLength,
+        fontSizeBeginEnd: nodesSettingsDto.fontSizeBeginEnd,
+      },
+      deviceType: config.deviceType,
+      nodes: nodes.map<TestNode>(x => ({
+        ...x,
+      })),
+      tutorials: tutorials.tutorials.map<TutorialRecord>(x => ({
+        ...x,
+      })),
     },
-    timer: mapTimerValue(dto.config.timer),
+    timer: null,
     order: dto.order,
     question: dto.question,
     isSkippable: false,
@@ -108,33 +141,58 @@ function mapToAbTest(dto: AbTestItemDto): ActivityItem {
   };
 }
 
-function mapToFlanker(itemDto: FlankerItemDto): ActivityItem {
-  const dto = itemDto.responseValues;
+function mapToStabilityTracker(dto: StabilityTrackerItemDto): ActivityItem {
+  return {
+    id: dto.id,
+    name: dto.name,
+    inputType: 'StabilityTracker',
+    config: {
+      lambdaSlope: dto.config.lambdaSlope,
+      durationMinutes: dto.config.durationMinutes,
+      trialsNumber: dto.config.trialsNumber,
+      userInputType: dto.config.userInputType,
+      phase: dto.config.phase,
+    },
+    timer: null,
+    order: dto.order,
+    question: dto.question,
+    isSkippable: false,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: true,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+  };
+}
 
-  const settings: FlankerSettings = {
-    general: {
-      buttons: [...dto.general.buttons],
-      fixation: dto.general.fixation ? { ...dto.general.fixation } : null,
-      instruction: dto.general.instruction,
-      stimulusTrials: [...dto.general.stimulusTrials],
+function mapToFlanker(itemDto: FlankerItemDto): ActivityItem {
+  const dto = itemDto.config;
+
+  const settings: FlankerItemSettings = {
+    blocks: dto.blocks.map<BlockConfiguration>(x => ({ ...x })),
+    buttons: dto.buttons.map<ButtonConfiguration>(x => ({ ...x })),
+    stimulusTrials: dto.stimulusTrials.map<StimulusConfiguration>(x => ({
+      ...x,
+    })),
+    blockType: dto.blockType,
+    fixationDuration: dto.fixationDuration ?? 0,
+    fixationScreen: dto.fixationScreen ?? {
+      image: '',
+      value: '',
     },
-    practice: {
-      blocks: [...dto.practice.blocks],
-      instruction: dto.practice.instruction,
-      randomizeOrder: dto.practice.randomizeOrder,
-      showFeedback: dto.practice.showFeedback,
-      showSummary: dto.practice.showSummary,
-      stimulusDuration: dto.practice.stimulusDuration,
-      threshold: dto.practice.threshold,
-    },
-    test: {
-      blocks: [...dto.test.blocks],
-      instruction: dto.test.instruction,
-      randomizeOrder: dto.test.randomizeOrder,
-      showFeedback: dto.test.showFeedback,
-      showSummary: dto.test.showSummary,
-      stimulusDuration: dto.test.stimulusDuration,
-    },
+    isFirstPractice: dto.isFirstPractice,
+    isLastPractice: dto.isLastPractice,
+    isLastTest: dto.isLastTest,
+    nextButton: dto.nextButton,
+    sampleSize: dto.sampleSize,
+    samplingMethod: dto.samplingMethod,
+    showFeedback: dto.showFeedback,
+    showFixation: dto.showFixation,
+    showResults: dto.showResults,
+    trialDuration: dto.trialDuration,
+    minimumAccuracy: dto.minimumAccuracy,
   };
 
   return {
@@ -172,7 +230,7 @@ function mapToAudio(dto: AudioItemDto): ActivityItem {
     hasScore: false,
     isAbleToMoveBack: !dto.config.removeBackButton,
     hasTextResponse: false,
-    canBeReset: false,
+    canBeReset: true,
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
@@ -238,7 +296,7 @@ function mapToTime(dto: TimeItemDto): ActivityItem {
     hasScore: false,
     isAbleToMoveBack: !dto.config.removeBackButton,
     hasTextResponse: false,
-    canBeReset: false,
+    canBeReset: true,
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
@@ -296,7 +354,7 @@ function mapToCheckbox(dto: MultiSelectionItemDto): ActivityItem {
       setAlerts: dto.config.setAlerts,
       addTooltip: dto.config.addTooltip,
       setPalette: dto.config.setPalette,
-      options: dto.responseValues.options,
+      options: mapToCheckboxOptions(dto.responseValues.options),
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -326,7 +384,7 @@ function mapToStackedCheckboxes(dto: MultiSelectionRowsItemDto): ActivityItem {
       addScores: dto.config.addScores,
       rows: dto.responseValues.rows,
       options: dto.responseValues.options,
-      dataMatrix: dto.responseValues.dataMatrix,
+      dataMatrix: mapToStackedCheckboxAlerts(dto.responseValues.dataMatrix),
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -397,7 +455,7 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
       setAlerts: dto.config.setAlerts,
       addTooltip: dto.config.addTooltip,
       setPalette: dto.config.setPalette,
-      options: dto.responseValues.options,
+      options: mapToRadioAlerts(dto.responseValues.options),
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -427,7 +485,7 @@ function mapToStackedRadio(dto: SingleSelectionRowsItemDto): ActivityItem {
       addScores: dto.config.addScores,
       rows: dto.responseValues.rows,
       options: dto.responseValues.options,
-      dataMatrix: dto.responseValues.dataMatrix,
+      dataMatrix: mapToStackedRadioDataMatrix(dto.responseValues.dataMatrix),
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -458,6 +516,7 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
       showTickMarks: dto.config.showTickMarks,
       showTickLabels: dto.config.showTickLabels,
       isContinuousSlider: dto.config.continuousSlider,
+      alerts: mapToSliderAlerts(dto.responseValues.alerts),
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -483,13 +542,7 @@ function mapToStackedSlider(dto: SliderRowsItemDto): ActivityItem {
     config: {
       setAlerts: dto.config.setAlerts,
       addScores: dto.config.addScores,
-      rows: dto.responseValues.rows.map(item => ({
-        ...item,
-        leftTitle: item.minLabel,
-        rightTitle: item.maxLabel,
-        leftImageUrl: item.minImage,
-        rightImageUrl: item.maxImage,
-      })),
+      rows: mapToStackedSliderAlerts(dto.responseValues.rows),
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -614,8 +667,10 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
     order: dto.order,
     items: dto.items.map(item => {
       switch (item.responseType) {
-        case 'abTest':
+        case 'ABTrails':
           return mapToAbTest(item);
+        case 'stabilityTracker':
+          return mapToStabilityTracker(item);
         case 'audio':
           return mapToAudio(item);
         case 'audioPlayer':
@@ -663,4 +718,103 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
   }
 
   return activity;
+}
+
+function mapToRadioAlerts(options: OptionsDto) {
+  return options.map(option => ({
+    id: option.id,
+    text: option.text,
+    image: option.image,
+    score: option.score,
+    tooltip: option.tooltip,
+    color: option.color,
+    isHidden: option.isHidden,
+    value: option.value,
+    alert: option.alert
+      ? {
+          message: option.alert,
+        }
+      : null,
+  }));
+}
+
+function mapToStackedRadioDataMatrix(dataMatrix: DataMatrixDto) {
+  return (
+    dataMatrix?.map(matrix => ({
+      rowId: matrix.rowId,
+      options: matrix.options.map(option => ({
+        optionId: option.optionId,
+        score: option.score,
+        alert: option.alert
+          ? {
+              message: option.alert,
+            }
+          : null,
+      })),
+    })) ?? []
+  );
+}
+
+function mapToSliderAlerts(alerts: SliderAlertsDto) {
+  return (
+    alerts?.map(alert => ({
+      value: alert.value,
+      minValue: alert.minValue,
+      maxValue: alert.maxValue,
+      message: alert.alert,
+    })) ?? null
+  );
+}
+
+function mapToCheckboxOptions(options: OptionsDto) {
+  return options.map(option => ({
+    id: option.id,
+    text: option.text,
+    image: option.image,
+    score: option.score,
+    tooltip: option.tooltip,
+    color: option.color,
+    isHidden: option.isHidden,
+    value: option.value,
+    alert: option.alert
+      ? {
+          message: option.alert,
+        }
+      : null,
+  }));
+}
+
+function mapToStackedCheckboxAlerts(dataMatrix: DataMatrixDto) {
+  return (
+    dataMatrix?.map(matrix => ({
+      rowId: matrix.rowId,
+      options: matrix.options.map(option => ({
+        optionId: option.optionId,
+        score: option.score,
+        alert: option.alert
+          ? {
+              message: option.alert,
+            }
+          : null,
+      })),
+    })) ?? []
+  );
+}
+
+function mapToStackedSliderAlerts(rows: SliderRowsDto) {
+  return rows.map(row => ({
+    leftTitle: row.minLabel,
+    rightTitle: row.maxLabel,
+    leftImageUrl: row.minImage,
+    rightImageUrl: row.maxImage,
+    minValue: row.minValue,
+    maxValue: row.maxValue,
+    id: row.id,
+    label: row.label,
+    alerts:
+      row.alerts?.map(alert => ({
+        value: alert.value,
+        message: alert.alert,
+      })) ?? null,
+  }));
 }

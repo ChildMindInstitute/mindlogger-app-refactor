@@ -15,6 +15,7 @@ import { Box, Text, AudioPlayer, VideoPlayer, YoutubeVideo } from '@shared/ui';
 import { colors } from './constants';
 
 const { width: viewPortWidth } = Dimensions.get('window');
+const PADDING_X = 32;
 
 const localStyles = StyleSheet.create({
   alignLeftContainer: {
@@ -59,6 +60,28 @@ const localStyles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+const listItemStyles = {
+  bullet_list_icon: {
+    fontSize: 20,
+    fontWeight: '400',
+    color: '#000',
+    alignSelf: 'center',
+    width: 8,
+  },
+  ordered_list_icon: {
+    fontSize: 13,
+    fontWeight: '400',
+    color: '#000',
+    alignSelf: 'center',
+  },
+  _VIEW_SAFE_ordered_list_content: {
+    marginLeft: 3,
+  },
+  _VIEW_SAFE_bullet_list_content: {
+    marginLeft: 3,
+  },
+};
 
 export const activityMarkDownStyles = StyleSheet.create({
   heading1: {
@@ -211,6 +234,13 @@ const markDownRules: RenderRules = {
       </Box>
     );
   },
+  table: (node, children) => {
+    return (
+      <Box key={node.key} width={viewPortWidth - PADDING_X}>
+        {children}
+      </Box>
+    );
+  },
   text: (node, children, parent, styles, inheritedStyles = {}) => {
     let additionalStyles = {};
     let updatedNodeContent = node.content;
@@ -307,18 +337,23 @@ const markDownRules: RenderRules = {
         source={{ html: node.content }}
         scrollEnabled={false}
         scalesPageToFit={false}
+        allowsProtectedMedia
+        mixedContentMode="always"
         viewportContent="width=device-width, user-scalable=no"
         onShouldStartLoadWithRequest={onHtmlBlockLinkPress}
-        androidLayerType="software"
+        androidLayerType="none"
       />
     );
   },
   list_item: (node, children, parents, styles) => {
     return (
-      <Box key={node.key} my={-10}>
+      <Box key={node.key} my={-6}>
         {
           // @ts-ignore
-          defaultRenderRules.list_item(node, children, parents, styles)
+          defaultRenderRules.list_item(node, children, parents, {
+            ...styles,
+            ...listItemStyles,
+          })
         }
       </Box>
     );

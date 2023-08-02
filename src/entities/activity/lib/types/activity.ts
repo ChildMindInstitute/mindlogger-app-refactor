@@ -1,8 +1,10 @@
+import { AbPayload, FlankerItemSettings } from '@app/abstract/lib';
+
 import { ConditionalLogic } from './conditionalLogic';
-import { FlankerSettings } from './flanker';
 
 export type ActivityItemType =
-  | 'AbTest'
+  | 'StabilityTracker'
+  | 'AbTrails'
   | 'DrawingTest'
   | 'Splash'
   | 'Flanker'
@@ -24,8 +26,12 @@ export type ActivityItemType =
   | 'Date'
   | 'Time';
 
-type AbTestConfig = {
-  device: 'Phone' | 'Tablet';
+export type StabilityTrackerConfig = {
+  lambdaSlope: number;
+  durationMinutes: number;
+  trialsNumber: number;
+  userInputType: 'gyroscope' | 'touch';
+  phase: 'practice' | 'test';
 };
 
 type DrawingTestTestConfig = {
@@ -49,6 +55,12 @@ type SliderConfig = {
   showTickMarks: boolean | null;
   showTickLabels: boolean | null;
   isContinuousSlider: boolean | null;
+  alerts: Array<{
+    value: number;
+    minValue: number;
+    maxValue: number;
+    message: string;
+  }> | null;
 };
 
 type NumberSelectConfig = {
@@ -74,6 +86,9 @@ type CheckboxConfig = {
     color: string | null;
     isHidden: boolean;
     value: number;
+    alert: {
+      message: string;
+    } | null;
   }>;
 };
 
@@ -107,13 +122,13 @@ type StackedCheckboxConfig = {
   }>;
   dataMatrix: Array<{
     rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: string;
-      },
-    ];
+    options: Array<{
+      optionId: string;
+      score: number;
+      alert: {
+        message: string;
+      } | null;
+    }>;
   }>;
 };
 
@@ -136,13 +151,13 @@ type StackedRadioConfig = {
   }>;
   dataMatrix: Array<{
     rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: string;
-      },
-    ];
+    options: Array<{
+      optionId: string;
+      score: number;
+      alert: {
+        message: string;
+      } | null;
+    }>;
   }>;
 };
 
@@ -158,6 +173,10 @@ type StackedSliderConfig = {
     maxValue: number;
     leftImageUrl: string | null;
     rightImageUrl: string | null;
+    alerts: Array<{
+      value: number;
+      message: string;
+    }> | null;
   }[];
 };
 
@@ -175,6 +194,9 @@ type RadioConfig = {
     color: string | null;
     isHidden: boolean;
     value: number;
+    alert: {
+      message: string;
+    } | null;
   }>;
 };
 
@@ -184,8 +206,11 @@ type VideoConfig = null;
 
 type TimeConfig = null;
 
+type AbTrailsConfig = AbPayload;
+
 export type ActivityItemConfig =
-  | AbTestConfig
+  | AbTrailsConfig
+  | StabilityTrackerConfig
   | DrawingTestTestConfig
   | TextInputConfig
   | NumberSelectConfig
@@ -201,7 +226,7 @@ export type ActivityItemConfig =
   | PhotoConfig
   | VideoConfig
   | TimeConfig
-  | FlankerSettings
+  | FlankerItemSettings
   | null;
 
 type ActivityItemBase = {
@@ -230,8 +255,13 @@ type ActivityItemBase = {
 };
 
 interface AbTestActivityItem extends ActivityItemBase {
-  inputType: 'AbTest';
-  config: AbTestConfig;
+  inputType: 'AbTrails';
+  config: AbTrailsConfig;
+}
+
+interface StabilityTrackerActivityItem extends ActivityItemBase {
+  inputType: 'StabilityTracker';
+  config: StabilityTrackerConfig;
 }
 
 interface SplashActivityItem extends ActivityItemBase {
@@ -246,7 +276,7 @@ interface DrawingTestTestActivityItem extends ActivityItemBase {
 
 interface FlankerActivityItem extends ActivityItemBase {
   inputType: 'Flanker';
-  config: FlankerSettings;
+  config: FlankerItemSettings;
 }
 
 interface TextInputActivityItem extends ActivityItemBase {
@@ -333,6 +363,7 @@ interface TimeActivityItem extends ActivityItemBase {
 
 export type ActivityItem =
   | AbTestActivityItem
+  | StabilityTrackerActivityItem
   | SplashActivityItem
   | DrawingTestTestActivityItem
   | TextInputActivityItem

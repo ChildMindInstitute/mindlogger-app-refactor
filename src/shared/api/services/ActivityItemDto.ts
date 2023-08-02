@@ -1,6 +1,7 @@
 import { ImageUrl } from '@app/shared/lib';
 
-import { FlankerSettingsDto } from './FlankerSettingsDto';
+import { AbTrailsItemSettingsDto } from './AbTrailsSettingsDtos';
+import { FlankerItemSettingsDto } from './FlankerSettingsDto';
 
 export type ResponseType =
   | 'text'
@@ -21,8 +22,9 @@ export type ResponseType =
   | 'audio'
   | 'audioPlayer'
   | 'flanker'
-  | 'abTest'
-  | 'time';
+  | 'stabilityTracker'
+  | 'time'
+  | 'ABTrails';
 
 type Match = 'any' | 'all';
 
@@ -47,7 +49,7 @@ type IncludesOptionConditionDto = {
   itemName: string;
   type: 'INCLUDES_OPTION';
   payload: {
-    optionId: string;
+    optionValue: string;
   };
 };
 
@@ -55,7 +57,7 @@ type NotIncludesOptionConditionDto = {
   itemName: string;
   type: 'NOT_INCLUDES_OPTION';
   payload: {
-    optionId: string;
+    optionValue: string;
   };
 };
 
@@ -63,7 +65,7 @@ type EqualToOptionConditionDto = {
   itemName: string;
   type: 'EQUAL_TO_OPTION';
   payload: {
-    optionId: string;
+    optionValue: string;
   };
 };
 
@@ -71,7 +73,7 @@ type NotEqualToOptionConditionDto = {
   itemName: string;
   type: 'NOT_EQUAL_TO_OPTION';
   payload: {
-    optionId: string;
+    optionValue: string;
   };
 };
 
@@ -151,17 +153,48 @@ type SingleSelectionConfiguration = ButtonsConfiguration &
     setPalette: boolean;
   };
 
-type SingleSelectionAnswerSettings = {
+export type DataMatrixDto = Array<{
+  rowId: string;
   options: Array<{
-    id: string;
-    text: string;
-    image: ImageUrl | null;
-    score: number | null;
-    tooltip: string | null;
-    color: string | null;
-    isHidden: boolean;
-    value: number;
+    optionId: string;
+    score: number;
+    alert: string | null;
   }>;
+}>;
+
+export type SliderAlertsDto = Array<{
+  value: number;
+  minValue: number;
+  maxValue: number;
+  alert: string;
+}> | null;
+
+export type SliderRowsDto = Array<{
+  id: string;
+  label: string;
+  minLabel: string | null;
+  maxLabel: string | null;
+  minValue: number;
+  maxValue: number;
+  minImage: ImageUrl | null;
+  maxImage: ImageUrl | null;
+  alerts: SliderAlertsDto;
+}>;
+
+export type OptionsDto = Array<{
+  id: string;
+  text: string;
+  image: string | null;
+  score: number | null;
+  tooltip: string | null;
+  color: string | null;
+  isHidden: boolean;
+  value: number;
+  alert: string | null;
+}>;
+
+type SingleSelectionAnswerSettings = {
+  options: OptionsDto;
 };
 
 type MultiSelectionConfiguration = ButtonsConfiguration &
@@ -175,16 +208,7 @@ type MultiSelectionConfiguration = ButtonsConfiguration &
   };
 
 type MultiSelectionAnswerSettings = {
-  options: Array<{
-    id: string;
-    text: string;
-    image: ImageUrl | null;
-    score: number | null;
-    tooltip: string | null;
-    color: string | null;
-    isHidden: boolean;
-    value: number;
-  }>;
+  options: OptionsDto;
 };
 
 type TextConfiguration = ButtonsConfiguration &
@@ -219,16 +243,7 @@ type SingleSelectionRowsAnswerSettings = {
     image: ImageUrl | null;
     tooltip: string | null;
   }>;
-  dataMatrix: Array<{
-    rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: string;
-      },
-    ];
-  }>;
+  dataMatrix: DataMatrixDto;
 };
 
 type MultiSelectionRowsConfiguration = ButtonsConfiguration &
@@ -252,16 +267,7 @@ type MultiSelectionRowsAnswerSettings = {
     image: ImageUrl | null;
     tooltip: string | null;
   }>;
-  dataMatrix: Array<{
-    rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: string;
-      },
-    ];
-  }>;
+  dataMatrix: DataMatrixDto;
 };
 
 type AudioConfiguration = ButtonsConfiguration &
@@ -303,6 +309,7 @@ type SliderAnswerSettings = {
   maxValue: number;
   minImage: ImageUrl | null;
   maxImage: ImageUrl | null;
+  alerts: SliderAlertsDto;
 };
 
 type NumberSelectionConfiguration = ButtonsConfiguration &
@@ -368,16 +375,7 @@ type SliderRowsConfiguration = ButtonsConfiguration &
   };
 
 type SliderRowsAnswerSettings = {
-  rows: Array<{
-    id: string;
-    label: string;
-    minLabel: string | null;
-    maxLabel: string | null;
-    minValue: number;
-    maxValue: number;
-    minImage: ImageUrl | null;
-    maxImage: ImageUrl | null;
-  }>;
+  rows: SliderRowsDto;
 };
 
 // @todo Change when the BE integration is done
@@ -388,9 +386,23 @@ type AbTestAnswerSettings = {
   device: 'Phone' | 'Tablet';
 };
 
-type FlankerConfiguration = null;
+export type FlankerConfiguration = FlankerItemSettingsDto;
 
-export type FlankerAnswerSettings = FlankerSettingsDto;
+type StabilityTrackerAnswerSettings = null;
+
+type StabilityTrackerConfiguration = {
+  lambdaSlope: number;
+  durationMinutes: number;
+  trialsNumber: number;
+  userInputType: 'gyroscope' | 'touch';
+  phase: 'practice' | 'test';
+};
+
+export type FlankerAnswerSettings = null;
+
+export type AbTrailsConfiguration = AbTrailsItemSettingsDto;
+
+export type AbTrailsAnswerSettings = null;
 
 type Configuration =
   | TextConfiguration
@@ -412,7 +424,9 @@ type Configuration =
   | SingleSelectionConfiguration
   | MultiSelectionConfiguration
   | AbTestConfiguration
-  | FlankerConfiguration;
+  | StabilityTrackerConfiguration
+  | FlankerConfiguration
+  | AbTrailsConfiguration;
 
 type AnswerSettings =
   | TextAnswerSettings
@@ -433,7 +447,9 @@ type AnswerSettings =
   | SingleSelectionAnswerSettings
   | MultiSelectionAnswerSettings
   | AbTestAnswerSettings
-  | FlankerAnswerSettings;
+  | StabilityTrackerAnswerSettings
+  | FlankerAnswerSettings
+  | AbTrailsAnswerSettings;
 
 type ActivityItemDtoBase = {
   id: string;
@@ -556,16 +572,22 @@ export interface AudioPlayerItemDto extends ActivityItemDtoBase {
   responseValues: AudioPlayerAnswerSettings;
 }
 
-export interface AbTestItemDto extends ActivityItemDtoBase {
-  responseType: 'abTest';
-  config: AbTestConfiguration;
-  responseValues: AbTestAnswerSettings;
+export interface StabilityTrackerItemDto extends ActivityItemDtoBase {
+  responseType: 'stabilityTracker';
+  config: StabilityTrackerConfiguration;
+  responseValues: StabilityTrackerAnswerSettings;
 }
 
 export interface FlankerItemDto extends ActivityItemDtoBase {
   responseType: 'flanker';
   config: FlankerConfiguration;
   responseValues: FlankerAnswerSettings;
+}
+
+export interface ABTrailsItemDto extends ActivityItemDtoBase {
+  responseType: 'ABTrails';
+  config: AbTrailsConfiguration;
+  responseValues: AbTrailsAnswerSettings;
 }
 
 export type ActivityItemDto =
@@ -586,6 +608,7 @@ export type ActivityItemDto =
   | MultiSelectionRowsItemDto
   | AudioItemDto
   | AudioPlayerItemDto
-  | AbTestItemDto
+  | ABTrailsItemDto
+  | StabilityTrackerItemDto
   | FlankerItemDto
   | TimeItemDto;

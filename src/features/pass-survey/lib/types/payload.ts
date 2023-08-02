@@ -1,9 +1,7 @@
+import { AbTestPayload, FlankerItemSettings } from '@app/abstract/lib';
 import { ConditionalLogic } from '@app/entities/activity';
 import { DrawResult } from '@app/entities/drawer';
-import {
-  FlankerConfiguration,
-  FlankerGameResponse,
-} from '@app/entities/flanker';
+import { FlankerGameResponse } from '@app/entities/flanker';
 import { HourMinute } from '@app/shared/lib';
 import {
   Coordinates,
@@ -11,7 +9,8 @@ import {
   StackedItem,
   StackedRowItemValue,
 } from '@app/shared/ui';
-import { LogLine, DeviceType, TestIndex } from '@entities/abTrail';
+import { AbTestResult } from '@entities/abTrail';
+import { StabilityTrackerResponse as StabilityTrackerBaseResponse } from '@entities/stabilityTracker';
 import { MediaFile } from '@shared/ui';
 import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
 
@@ -19,6 +18,7 @@ import { Tutorial } from './tutorial';
 
 export type ActivityItemType =
   | 'AbTest'
+  | 'StabilityTracker'
   | 'DrawingTest'
   | 'Tutorial'
   | 'Splash'
@@ -41,9 +41,25 @@ export type ActivityItemType =
   | 'Date'
   | 'Time';
 
-type AbTestPayload = {
-  testIndex: TestIndex;
-  deviceType: DeviceType;
+export type DataMatrix = Array<{
+  rowId: string;
+  options: DataMatrixOptions;
+}>;
+
+export type DataMatrixOptions = Array<{
+  optionId: string;
+  score: number;
+  alert: {
+    message: string;
+  } | null;
+}>;
+
+type StabilityTrackerPayload = {
+  phase: 'practice' | 'test';
+  lambdaSlope: number;
+  durationMinutes: number;
+  trialsNumber: number;
+  userInputType: 'gyroscope' | 'touch';
 };
 
 type SplashPayload = { imageUrl: string };
@@ -63,13 +79,21 @@ type SliderPayload = {
   showTickMarks: boolean | null;
   showTickLabels: boolean | null;
   isContinuousSlider: boolean | null;
+  alerts: Array<{
+    value: number;
+    minValue: number;
+    maxValue: number;
+    message: string;
+  }> | null;
 };
 
 type AudioPayload = {
   maxDuration: number;
 };
 
-type MessagePayload = null;
+type MessagePayload = {
+  alignToLeft: boolean;
+};
 
 type AudioPlayerPayload = {
   file: string;
@@ -93,16 +117,7 @@ type StackedCheckboxPayload = {
     image: string | null;
     tooltip: string | null;
   }>;
-  dataMatrix: Array<{
-    rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: string;
-      },
-    ];
-  }>;
+  dataMatrix: DataMatrix;
 };
 
 type StackedRadioPayload = {
@@ -122,16 +137,7 @@ type StackedRadioPayload = {
     image: string | null;
     tooltip: string | null;
   }>;
-  dataMatrix: Array<{
-    rowId: string;
-    options: [
-      {
-        optionId: string;
-        score: number;
-        alert: string;
-      },
-    ];
-  }>;
+  dataMatrix: DataMatrix;
 };
 
 type StackedSliderPayload = {
@@ -146,6 +152,10 @@ type StackedSliderPayload = {
     maxValue: number;
     leftImageUrl: string | null;
     rightImageUrl: string | null;
+    alerts: Array<{
+      value: number;
+      message: string;
+    }> | null;
   }[];
 };
 
@@ -167,6 +177,9 @@ type RadioPayload = {
     color: string | null;
     isHidden: boolean;
     value: number;
+    alert: {
+      message: string;
+    } | null;
   }>;
 };
 
@@ -184,10 +197,13 @@ type CheckboxPayload = {
     color: string | null;
     isHidden: boolean;
     value: number;
+    alert: {
+      message: string;
+    } | null;
   }>;
 };
 
-export type FlankerPayload = FlankerConfiguration;
+export type FlankerPayload = FlankerItemSettings;
 
 type TextInputPayload = {
   maxLength: number;
@@ -210,6 +226,7 @@ type VideoPayload = null;
 
 type PipelinePayload =
   | AbTestPayload
+  | StabilityTrackerPayload
   | SplashPayload
   | Tutorial
   | DrawingPayload
@@ -255,6 +272,10 @@ export interface AbTestPipelineItem extends PipelineItemBase {
   type: 'AbTest';
   payload: AbTestPayload;
 }
+export interface StabilityTrackerPipelineItem extends PipelineItemBase {
+  type: 'StabilityTracker';
+  payload: StabilityTrackerPayload;
+}
 
 export interface SplashPipelineItem extends PipelineItemBase {
   type: 'Splash';
@@ -278,7 +299,7 @@ export interface SliderPipelineItem extends PipelineItemBase {
 
 export interface FlankerPipelineItem extends PipelineItemBase {
   type: 'Flanker';
-  payload: FlankerConfiguration;
+  payload: FlankerPayload;
 }
 
 export interface TextInputPipelineItem extends PipelineItemBase {
@@ -355,7 +376,9 @@ export interface TimePipelineItem extends PipelineItemBase {
   payload: TimePayload;
 }
 
-export type AbTestResponse = LogLine[];
+export type StabilityTrackerResponse = StabilityTrackerBaseResponse;
+
+export type AbTestResponse = AbTestResult;
 
 export type DrawingTestResponse = DrawResult;
 
@@ -408,6 +431,7 @@ export type VideoResponse = MediaFile & {
 
 export type PipelineItemResponse =
   | AbTestResponse
+  | StabilityTrackerResponse
   | FlankerResponse
   | DrawingTestResponse
   | TextInputResponse
@@ -428,6 +452,7 @@ export type PipelineItemResponse =
 
 export type PipelineItem =
   | AbTestPipelineItem
+  | StabilityTrackerPipelineItem
   | SplashPipelineItem
   | TutorialPipelineItem
   | DrawingTestPipelineItem

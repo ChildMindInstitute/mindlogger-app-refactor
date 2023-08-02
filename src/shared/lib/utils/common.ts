@@ -21,7 +21,7 @@ export function range(n: number): number[] {
 }
 
 export const isEmptyObject = (object: any) => {
-  return Object.keys(object).length;
+  return !!Object.keys(object).length;
 };
 
 export function getCurrentWeekDates(): Array<Date> {
@@ -32,35 +32,6 @@ export function getCurrentWeekDates(): Array<Date> {
     return date;
   });
 }
-
-export const generateLicenseHTML = () => {
-  const htmlStyles = `
-    <style>
-      pre {
-       word-wrap: break-word;
-       white-space: pre-wrap;
-       font-size: 45px;
-       font-family: initial;
-      }
-       body {
-         background-color: white;
-       }
-    </style>`;
-
-  return async (licenseUrlLocal: string) => {
-    const response = await fetch(licenseUrlLocal);
-    const text = await response.text();
-    const html = `
-      <html>
-        ${htmlStyles}
-        <pre>
-          ${text}
-        </pre>
-      </html>`;
-
-    return html;
-  };
-};
 
 export function splitArray<TListItem>(
   array: TListItem[],
@@ -73,7 +44,13 @@ export function splitArray<TListItem>(
   return [leftArray, rightArray];
 }
 
-export const Mutex = () => {
+export interface IMutex {
+  setBusy: () => void;
+  release: () => void;
+  isBusy: () => boolean;
+}
+
+export const Mutex = (): IMutex => {
   let busy = false;
 
   return {

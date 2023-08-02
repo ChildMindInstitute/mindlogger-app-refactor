@@ -26,6 +26,7 @@ export type ActivityState = {
   appletVersion: string;
   timers: Timers;
   actions: UserAction[];
+  context: Record<string, unknown>;
 };
 
 const storage = createSecureStorage('activity_progress-storage');
@@ -45,9 +46,18 @@ export function useActivityStorageRecord({
     storage.delete(key);
   }, [key]);
 
+  const getCurrentActivityStorageRecord = useCallback(() => {
+    const json = storage.getString(key);
+
+    if (json) {
+      return JSON.parse(json) as ActivityState;
+    }
+  }, [key]);
+
   return {
     activityStorageRecord,
     upsertActivityStorageRecord,
     clearActivityStorageRecord,
+    getCurrentActivityStorageRecord,
   };
 }

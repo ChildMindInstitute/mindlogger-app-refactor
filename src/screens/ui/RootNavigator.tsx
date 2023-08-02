@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { useBackHandler } from '@react-native-community/hooks';
@@ -7,11 +8,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { EntityPath, StoreProgress } from '@app/abstract/lib';
-import { ActivityModel } from '@app/entities/activity';
+import { ActivityModel, QueueProcessingService } from '@app/entities/activity';
 import { MediaFilesCleaner } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
 import { TapOnNotificationModel } from '@app/features/tap-on-notification';
+import { SystemRecord } from '@app/shared/lib/records';
 import { SessionModel } from '@entities/session';
 import { EnterForegroundModel } from '@features/enter-foreground';
 import { LogoutModel } from '@features/logout';
@@ -24,6 +26,8 @@ import {
   useAlarmPermissions,
   useBackgroundTask,
   useAppSelector,
+  useFirebaseSetup,
+  useOnlineEstablished,
 } from '@shared/lib';
 import { UserProfileIcon, HomeIcon, BackButton, Text, Box } from '@shared/ui';
 
@@ -42,7 +46,6 @@ import {
   SettingsScreen,
   AppletBottomTabNavigator,
   InProgressActivityScreen,
-  OpenSourceUsed,
 } from '../ui';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -64,6 +67,11 @@ export default () => {
   useInitialRouteNavigation();
   useNotificationPermissions();
   useAlarmPermissions();
+  useFirebaseSetup({
+    onFCMTokenCreated: fcmToken => {
+      SystemRecord.setDeviceId(fcmToken);
+    },
+  });
 
   EnterForegroundModel.useRestackNotifications();
 
@@ -97,6 +105,12 @@ export default () => {
     return NotificationModel.topUpNotifications();
   });
 
+  const processQueue = useCallback(() => {
+    QueueProcessingService.process();
+  }, []);
+
+  useOnlineEstablished(processQueue);
+
   return (
     <Stack.Navigator
       screenOptions={getScreenOptions}
@@ -108,14 +122,6 @@ export default () => {
             options={{ headerShown: false }}
             name="Login"
             component={LoginScreen}
-          />
-
-          <Stack.Screen
-            name="OpenSourceUsed"
-            options={{
-              title: t('open_source:title'),
-            }}
-            component={OpenSourceUsed}
           />
 
           <Stack.Screen

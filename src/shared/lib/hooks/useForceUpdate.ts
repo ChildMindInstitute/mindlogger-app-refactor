@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+
+const MaxValue = 1000;
 
 const useForceUpdate = () => {
-  const [, setFlag] = useState(false);
+  const [, setValue] = useState<number>(0);
 
-  const forceRender = () => {
-    setFlag(x => !x);
-  };
+  const forceRender = useCallback(() => {
+    setValue(x => (x === MaxValue ? 0 : x + 1));
+  }, []);
 
   return forceRender;
 };

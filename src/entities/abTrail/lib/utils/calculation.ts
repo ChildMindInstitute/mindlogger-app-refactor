@@ -1,14 +1,16 @@
 import { SkPath } from '@shopify/react-native-skia';
 
-import { Point, TestScreenPayload } from '../types';
+import { AbTestPayload, Point } from '@app/abstract/lib';
 
 export const transformCoordinates = (
-  original: TestScreenPayload,
+  original: AbTestPayload,
   width: number,
-): TestScreenPayload => {
+): AbTestPayload => {
   const multiplier = width / 100;
 
-  const transformed: TestScreenPayload = {
+  const transformed: AbTestPayload = {
+    deviceType: original.deviceType,
+    isLast: original.isLast,
     config: {
       fontSize: original.config.fontSize * multiplier,
       fontSizeBeginEnd: original.config.fontSizeBeginEnd

@@ -31,11 +31,17 @@ function fileService() {
           type: request.type,
         } as unknown as Blob);
 
-        return httpService.post<FileUploadResponse>('/file/upload', data, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
+        const response = await httpService.post<FileUploadResponse>(
+          '/file/upload',
+          data,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          },
+        );
+        return response;
       } catch (error) {
-        console.error(error);
+        console.error('error', JSON.stringify(error));
+        throw error;
       }
     },
   };

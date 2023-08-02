@@ -1,14 +1,9 @@
-import { TestIndex, DeviceType } from '@entities/abTrail';
+import { AbTutorialPayload } from '@app/abstract/lib';
 
 export type TutorialType = 'AbTrails' | 'Gyroscope';
 
-type AbTutorialPayload = {
-  testIndex: TestIndex;
-  deviceType: DeviceType;
-};
-
 type ABTutorial = {
-  type: 'AbTrails';
+  type: 'AbTutorial';
 } & AbTutorialPayload;
 
 export type Tutorial = ABTutorial;

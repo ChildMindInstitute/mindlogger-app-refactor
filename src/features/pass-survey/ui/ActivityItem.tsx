@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 
 import {
   Box,
@@ -20,6 +20,7 @@ import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
+import { StabilityTracker } from '@entities/stabilityTracker';
 import { IS_ANDROID } from '@shared/lib';
 import {
   RadioActivityItem,
@@ -43,6 +44,8 @@ type Props = ActivityItemProps &
     onResponse: (response: PipelineItemResponse) => void;
     onAdditionalResponse: (response: string) => void;
     textVariableReplacer: (markdown: string) => string;
+    onContextChange: (contextKey: string, contextValue: unknown) => void;
+    context: Record<string, unknown>;
   };
 
 function ActivityItem({
@@ -52,21 +55,31 @@ function ActivityItem({
   onResponse,
   onAdditionalResponse,
   textVariableReplacer,
+  onContextChange,
+  context,
 }: Props) {
-  const [scrollEnabled, setScrollEnabled] = useState(true);
+  const initialScrollEnabled = type !== 'StabilityTracker' && type !== 'AbTest';
+
+  const [scrollEnabled, setScrollEnabled] = useState(initialScrollEnabled);
 
   const { next } = useContext(HandlersContext);
 
   let item: JSX.Element | null;
   const question = pipelineItem.question;
 
+  let alignMessageToLeft = false;
+
   const stopScrolling = () => setScrollEnabled(false);
 
   const releaseScrolling = () => setScrollEnabled(true);
 
+  const onTimeIsUp = useCallback(() => {
+    next(true);
+  }, [next]);
+
   function moveToNextItem() {
     if (!pipelineItem.additionalText?.required) {
-      setImmediate(next);
+      setImmediate(() => next(true));
     }
   }
 
@@ -81,23 +94,40 @@ function ActivityItem({
 
     case 'AbTest':
       item = (
-        <Box flex={1} onPressIn={stopScrolling} onPressOut={releaseScrolling}>
-          <AbTest {...pipelineItem.payload} onComplete={onResponse} />
+        <Box flex={1}>
+          <AbTest testData={pipelineItem.payload} onResponse={onResponse} />
+        </Box>
+      );
+      break;
+
+    case 'StabilityTracker':
+      item = (
+        <Box flex={1}>
+          <StabilityTracker
+            config={pipelineItem.payload}
+            onComplete={response => {
+              onResponse(response);
+              moveToNextItem();
+            }}
+            onMaxLambdaChange={onContextChange}
+            maxLambda={context?.maxLambda as number}
+          />
         </Box>
       );
       break;
 
     case 'DrawingTest':
       item = (
-        <Box
-          flex={1}
-          onPressIn={IS_ANDROID ? null : stopScrolling}
-          onPressOut={IS_ANDROID ? null : releaseScrolling}
-        >
+        <Box flex={1} mb="$6">
           <DrawingTest
             flex={1}
             {...pipelineItem.payload}
-            value={value?.answer?.lines ?? []}
+            toggleScroll={setScrollEnabled}
+            value={{
+              fileName: value?.answer?.fileName ?? null,
+              lines: value?.answer?.lines ?? [],
+            }}
+            isDrawingActive={!scrollEnabled}
             onStarted={() => console.log('onStarted')}
             onResult={onResponse}
           />
@@ -145,7 +175,7 @@ function ActivityItem({
             onChange={onResponse}
             onPress={() => console.log('pressed')}
             onRelease={() => console.log('released')}
-            initialValue={value?.answer ?? undefined}
+            initialValue={value?.answer ?? null}
           />
         </Box>
       );
@@ -153,7 +183,7 @@ function ActivityItem({
 
     case 'NumberSelect':
       item = (
-        <Box justifyContent="center" mx={16}>
+        <Box justifyContent="center" mb="$6" mx={16}>
           <NumberSelector
             value={value?.answer ?? ''}
             config={pipelineItem.payload}
@@ -217,7 +247,7 @@ function ActivityItem({
 
     case 'Audio':
       item = (
-        <Box mx="$6">
+        <Box mx="$6" mb="$6">
           <AudioRecorderItem
             onChange={onResponse}
             value={value?.answer}
@@ -227,9 +257,11 @@ function ActivityItem({
       );
       break;
 
-    case 'Message':
+    case 'Message': {
       item = null;
+      alignMessageToLeft = pipelineItem.payload.alignToLeft;
       break;
+    }
 
     case 'AudioPlayer':
       item = (
@@ -253,7 +285,7 @@ function ActivityItem({
 
     case 'Date':
       item = (
-        <Box mx="$6">
+        <Box mx="$6" mb="$6">
           <DatePickerItem onChange={onResponse} value={value?.answer} />
         </Box>
       );
@@ -319,14 +351,14 @@ function ActivityItem({
           <Box mx={16} mb={20}>
             <MarkdownMessage
               flex={1}
-              alignItems="center"
+              alignItems={alignMessageToLeft ? undefined : 'center'}
               content={textVariableReplacer(question)}
             />
           </Box>
         )}
 
         {!!pipelineItem.timer && (
-          <Timer duration={pipelineItem.timer} onTimeIsUp={next} />
+          <Timer duration={pipelineItem.timer} onTimeIsUp={onTimeIsUp} />
         )}
 
         {item}

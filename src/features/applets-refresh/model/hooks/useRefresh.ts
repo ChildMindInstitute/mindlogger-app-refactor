@@ -1,23 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import useRefreshMutation from './useRefreshMutation';
+import { AppletModel } from '@entities/applet';
 
 function useRefresh(onSuccess: () => void) {
-  const { isLoading: isRefreshLoading, mutate: refresh } =
-    useRefreshMutation(onSuccess);
+  const { mutateAsync: refresh } = AppletModel.useRefreshMutation(onSuccess);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const onRefresh = () => {
-    refresh();
+    refresh().then(() => setIsRefreshing(false));
     setIsRefreshing(true);
   };
-
-  useEffect(() => {
-    if (!isRefreshLoading) {
-      setIsRefreshing(false);
-    }
-  }, [isRefreshLoading]);
 
   return {
     refresh: onRefresh,

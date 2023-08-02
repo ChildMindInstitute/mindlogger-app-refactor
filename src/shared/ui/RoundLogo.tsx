@@ -18,20 +18,23 @@ type Props = {
 };
 
 const getImageUrl = (url: string): string => {
-  if (url.endsWith('.svg')) {
+  const encodedUrl = encodeURI(url);
+  if (encodedUrl.endsWith('.svg')) {
     // todo - remove later if unnecessary
-    return url.replace('.svg', '.jpg');
+    return encodedUrl.replace('.svg', '.jpg');
   }
-  return url;
+  return encodedUrl;
 };
 
 const RoundLogo: FC<Props> = ({ imageUri, imageStyle, letter, size = 64 }) => {
   if (imageUri) {
     return (
-      <CachedImage
-        style={[getStyles(size).image, imageStyle]}
-        source={getImageUrl(imageUri)}
-      />
+      <Box style={[getStyles(size).container]}>
+        <CachedImage
+          style={[getStyles(size).image, imageStyle]}
+          source={getImageUrl(imageUri)}
+        />
+      </Box>
     );
   }
 
@@ -66,6 +69,12 @@ const getStyles = (size: number) =>
       height: size,
       resizeMode: 'cover',
       borderRadius: size / 2,
+    },
+    container: {
+      width: size,
+      height: size,
+      borderRadius: size / 2,
+      overflow: 'hidden',
     },
   });
 
