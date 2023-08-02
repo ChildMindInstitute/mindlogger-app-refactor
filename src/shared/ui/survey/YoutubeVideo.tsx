@@ -16,6 +16,7 @@ const YoutubeVideo: FC<Props> = ({ src }) => {
     <WebView
       width="100%"
       height={250}
+      androidLayerType="hardware"
       mediaPlaybackRequiresUserAction
       source={{
         uri,

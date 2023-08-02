@@ -10,7 +10,14 @@ import {
 // @ts-ignore
 import * as mime from 'react-native-mime-types';
 
-import { Box, Text, AudioPlayer, VideoPlayer, YoutubeVideo } from '@shared/ui';
+import {
+  Box,
+  Text,
+  AudioPlayer,
+  VideoPlayer,
+  YoutubeVideo,
+  XStack,
+} from '@shared/ui';
 
 import { colors } from './constants';
 
@@ -135,6 +142,12 @@ export const activityMarkDownStyles = StyleSheet.create({
   },
 });
 
+const videoStyles = {
+  height: 250,
+  width: '100%',
+  backgroundColor: '#000',
+};
+
 const htmlBlockStyles = `
   * {
     font-size: 22px;
@@ -236,10 +249,56 @@ const markDownRules: RenderRules = {
   },
   table: (node, children) => {
     return (
-      <Box key={node.key} width={viewPortWidth - PADDING_X}>
+      <Box
+        key={node.key}
+        borderColor="$lightGrey"
+        borderTopWidth={0.5}
+        borderLeftWidth={0.5}
+        flex={1}
+        width={viewPortWidth - PADDING_X}
+      >
         {children}
       </Box>
     );
+  },
+  td: (node, children) => {
+    return (
+      <Box
+        key={node.key}
+        borderBottomWidth={0.5}
+        borderRightWidth={0.5}
+        borderColor="$lightGrey"
+        px={8}
+        py={14}
+        flex={1}
+      >
+        {children.map(child => (
+          <Text textAlign="center">{child}</Text>
+        ))}
+      </Box>
+    );
+  },
+  th: (node, children) => {
+    return (
+      <Box
+        key={node.key}
+        px={8}
+        py={14}
+        borderColor="$lightGrey"
+        borderBottomWidth={0.5}
+        borderRightWidth={0.5}
+        flex={1}
+      >
+        {children.map(child => (
+          <Text textAlign="center" fontWeight="700">
+            {child}
+          </Text>
+        ))}
+      </Box>
+    );
+  },
+  tr: (node, children) => {
+    return <XStack key={node.key}>{children}</XStack>;
   },
   text: (node, children, parent, styles, inheritedStyles = {}) => {
     let additionalStyles = {};
@@ -296,7 +355,15 @@ const markDownRules: RenderRules = {
     if (isAudio) {
       return <AudioPlayer uri={src} title={node.content} key={node.key} />;
     } else if (isVideo) {
-      return <VideoPlayer uri={src} key={node.key} />;
+      return (
+        <VideoPlayer
+          uri={src}
+          key={node.key}
+          thumbnailStyle={videoStyles}
+          videoStyle={videoStyles}
+          wrapperStyle={videoStyles}
+        />
+      );
     } else if (isYoutubeVideo) {
       return <YoutubeVideo key={node.key} src={src} />;
     }
@@ -341,7 +408,7 @@ const markDownRules: RenderRules = {
         mixedContentMode="always"
         viewportContent="width=device-width, user-scalable=no"
         onShouldStartLoadWithRequest={onHtmlBlockLinkPress}
-        androidLayerType="none"
+        androidLayerType="hardware"
       />
     );
   },
