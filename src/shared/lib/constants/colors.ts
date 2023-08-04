@@ -31,6 +31,5 @@ export const colors = {
   aqua: '#7FF7FF',
   black: '#000',
   red: '#FF0000',
-  pink: '#bf6b97',
   lightRed: '#ffdddd',
 };
