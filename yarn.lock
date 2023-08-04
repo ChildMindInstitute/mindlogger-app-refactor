@@ -7194,6 +7194,11 @@ react-native-file-access@^2.4.4, react-native-file-access@^2.5.2:
   resolved "https://registry.yarnpkg.com/react-native-file-access/-/react-native-file-access-2.5.3.tgz#2f45d8c5a264b8f62201d49b0308554c9030503d"
   integrity sha512-MtoFub8gGN7uYokbfySIeNb/7A4+ykRVTPd9wUMDMPQVOrDCtc/umlQL0p1xp55PnqOuN8rAir4yR7ujjFvE4A==
 
+react-native-file-logger@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/react-native-file-logger/-/react-native-file-logger-0.4.1.tgz#6d4cdfd333489a32b20242f898cff0b196444707"
+  integrity sha512-UpdMtpQvSgOB4ohid2QxwWFkI92gqKEl2woFbcPEWRbmfrwpTZuNPzNEooMTjmIhFBQPfaOcymCL9gK1naE01g==
+
 react-native-fit-image@^1.5.5:
   version "1.5.5"
   resolved "https://registry.yarnpkg.com/react-native-fit-image/-/react-native-fit-image-1.5.5.tgz#c660d1ad74b9dcaa1cba27a0d9c23837e000226c"

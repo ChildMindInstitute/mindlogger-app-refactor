@@ -373,7 +373,7 @@ class AnswersUploadService implements IAnswersUploadService {
       return processUserActions();
     } catch (error) {
       console.warn(
-        '[UploadAnswersService.assignRemoteUrlsToUserActions]: Error occurred while mapping user actions media files',
+        '[UploadAnswersService.assignRemoteUrlsToUserActions]: Error occurred while mapping user actions with media files\n\n',
         error!.toString(),
       );
       throw error;
