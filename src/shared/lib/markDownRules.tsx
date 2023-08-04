@@ -302,17 +302,9 @@ const markDownRules: RenderRules = {
   },
   code_inline: node => {
     return (
-      <Box
-        p={2}
-        key={node.key}
-        mb={-2}
-        backgroundColor="$lighterGrey3"
-        alignSelf="center"
-      >
-        <Text fontFamily="Menlo" color="$red">
-          {node.content}
-        </Text>
-      </Box>
+      <Text fontFamily="Menlo" fontSize={15} color="$codePink">
+        {node.content}
+      </Text>
     );
   },
   text: (node, children, parent, styles, inheritedStyles = {}) => {
@@ -348,6 +340,7 @@ const markDownRules: RenderRules = {
       <Text
         key={node.key}
         style={[
+          { display: 'flex' },
           inheritedStyles,
           styles.text,
           localStyles.text,
