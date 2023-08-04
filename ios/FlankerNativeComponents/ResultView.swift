@@ -63,7 +63,8 @@ class ResultView: UIView {
         textLabel.attributedText = textAttr
         finishButton.setTitle("Continue", for: .normal)
       } else {
-        let textAttr = ("<font size=\"+3\"><p>You responded correctly on <strong>" + String(procentCorrect) + "%</strong> of trials.</p><p>Your average response time was <strong>" + String(avrgTime) + "ms</strong>.</p> <p> \(parametersGame.restartText[0])</p> <p>\(parametersGame.restartText[1])</p></font>").htmlToAttributedString
+        let restartSubtitleText = parametersGame.restartText.count == 2 ? parametersGame.restartText[1] : ""
+        let textAttr = ("<font size=\"+3\"><p>You responded correctly on <strong>" + String(procentCorrect) + "%</strong> of trials.</p><p>Your average response time was <strong>" + String(avrgTime) + "ms</strong>.</p> <p> \(parametersGame.restartText[0])</p> <p>\(restartSubtitleText)</p></font>").htmlToAttributedString
         textLabel.attributedText = textAttr
         finishButton.setTitle("OK", for: .normal)
       }
