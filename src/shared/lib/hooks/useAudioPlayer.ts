@@ -3,6 +3,8 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 
+import { uriIsEncoded } from '../utils';
+
 const SUBSCRIPTION_DURATION = 500;
 
 const useAudioPlayer = () => {
@@ -17,9 +19,11 @@ const useAudioPlayer = () => {
   };
 
   const play = async (uri: string, onFinish?: () => void) => {
+    const encodedUri = uriIsEncoded(uri) ? uri : encodeURI(uri);
+
     setIsPlaying(true);
 
-    await audioRecorderPlayer.current.startPlayer(encodeURI(uri));
+    await audioRecorderPlayer.current.startPlayer(encodedUri);
 
     audioRecorderPlayer.current.addPlayBackListener(data => {
       if (data.currentPosition >= data.duration - SUBSCRIPTION_DURATION) {
@@ -39,10 +43,12 @@ const useAudioPlayer = () => {
   };
 
   const togglePlay = async (uri: string, onFinish?: () => void) => {
+    const encodedUri = uriIsEncoded(uri) ? uri : encodeURI(uri);
+
     if (isPlaying) {
       await pause();
     } else if (!isPlaying) {
-      await play(encodeURI(uri), onFinish);
+      await play(encodedUri, onFinish);
     }
   };
 

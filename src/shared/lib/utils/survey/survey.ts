@@ -12,3 +12,9 @@ export const invertColor = (hex: string) => {
     (red * RED_RATIO + green * GREEN_RATIO + blue * BLUE_RATIO) / 1000;
   return yiqColorSpaceValue >= 128 ? colors.darkerGrey : colors.white;
 };
+
+export const uriIsEncoded = (uri: string): boolean => {
+  const safeUri = uri || '';
+
+  return safeUri !== decodeURIComponent(safeUri);
+};
