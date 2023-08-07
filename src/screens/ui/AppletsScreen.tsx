@@ -9,7 +9,7 @@ import { StoreProgress } from '@app/abstract/lib';
 import { UploadRetryBanner } from '@app/entities/activity';
 import { NotificationModel } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
-import { useAppSelector } from '@app/shared/lib';
+import { Logger, useAppSelector } from '@app/shared/lib';
 import { AppletList, AppletModel } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
 import { AppletsRefresh, AppletsRefreshModel } from '@features/applets-refresh';
@@ -33,12 +33,13 @@ const AppletsScreen: FC = () => {
     AppletModel.selectors.selectInProgressApplets,
   );
 
-  AppletsRefreshModel.useAutomaticRefreshOnMount(() => {
-    NotificationModel.NotificationRefreshService.refresh(
+  AppletsRefreshModel.useAutomaticRefreshOnMount(async () => {
+    await NotificationModel.NotificationRefreshService.refresh(
       queryClient,
       storeProgress,
       LogTrigger.FirstAppRun,
     );
+    Logger.send();
   });
 
   return (

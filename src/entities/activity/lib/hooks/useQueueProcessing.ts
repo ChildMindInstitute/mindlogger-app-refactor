@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useForceUpdate } from '@app/shared/lib';
+import { Logger, useForceUpdate } from '@app/shared/lib';
 
 import { ChangeQueueObservable, UploadObservable } from '../observables';
 import { QueueProcessingService } from '../services';
@@ -40,8 +40,14 @@ const useQueueProcessing = (): Result => {
     };
   }, [update]);
 
+  const processQueueWithSendingLogs = async (): Promise<boolean> => {
+    const result = await QueueProcessingService.process();
+    Logger.send();
+    return result;
+  };
+
   return {
-    process: QueueProcessingService.process.bind(QueueProcessingService),
+    process: processQueueWithSendingLogs,
     push: QueueProcessingService.push.bind(QueueProcessingService),
     hasItemsInQueue: AnswersQueueService.getLength() > 0,
     isLoading: UploadObservable.isLoading,

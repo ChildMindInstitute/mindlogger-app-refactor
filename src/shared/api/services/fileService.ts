@@ -26,6 +26,7 @@ type CheckIfLogsExistResultDto = {
   files: Array<{
     fileName: string;
     exists: boolean;
+    size: number;
   }>;
 };
 
@@ -37,6 +38,13 @@ function fileService() {
       request: FileUploadRequest,
       actionType: 'log' | 'regular' = 'regular',
     ) {
+      if (actionType === 'log') {
+        // todo
+        return Promise.resolve<AxiosResponse<FileUploadResponse, any>>({
+          status: 200,
+        } as AxiosResponse<FileUploadResponse, any>);
+      }
+
       try {
         const data = new FormData();
         const uri = IS_ANDROID
