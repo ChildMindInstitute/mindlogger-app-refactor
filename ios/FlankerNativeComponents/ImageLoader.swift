@@ -26,10 +26,6 @@ class ImageLoader: UIView {
     }
 
   override func draw(_ rect: CGRect) {
-
-
-
-
     print("Marker Draw Start: \(CACurrentMediaTime())")
     guard let ctx = UIGraphicsGetCurrentContext() else { return }
 
@@ -39,15 +35,35 @@ class ImageLoader: UIView {
 
     if let im = image {
       let scale: CGFloat
-      if im.size.width >= im.size.height {
-        scale = bounds.width / im.size.width
+      let horizontalScale: CGFloat
+      let verticalScale: CGFloat
+      if bounds.width >= im.size.width {
+        horizontalScale = (im.size.width / bounds.width )
+      } else if (bounds.width <= im.size.width) {
+        horizontalScale = bounds.width / im.size.width
       } else {
-        scale = bounds.height / im.size.height
+        horizontalScale = 1
+      }
+      
+      if bounds.height >= im.size.height {
+        verticalScale = (im.size.height / bounds.height )
+      } else if (bounds.height <= im.size.height) {
+        verticalScale = bounds.height / im.size.height
+      } else {
+        verticalScale = 1
+      }
+      
+      if verticalScale > horizontalScale {
+        scale = verticalScale
+      } else if verticalScale < horizontalScale {
+        scale = verticalScale
+      } else {
+        scale = 1
       }
 
       let size = CGSize(width: im.size.width * scale, height: im.size.height * scale)
 
-      UIGraphicsBeginImageContextWithOptions(size, true, 1)
+      UIGraphicsBeginImageContextWithOptions(size, true, UIScreen.main.scale)
       guard let imgCtx = UIGraphicsGetCurrentContext() else { return }
 
       imgCtx.setFillColor(UIColor.white.cgColor)
@@ -79,7 +95,6 @@ class ImageLoader: UIView {
   }
 
     func loadImageWithUrl(_ url: URL) {
-
         // setup activityIndicator...
         activityIndicator.color = .darkGray
 
