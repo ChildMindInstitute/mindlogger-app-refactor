@@ -302,7 +302,12 @@ const markDownRules: RenderRules = {
   },
   code_inline: node => {
     return (
-      <Text fontFamily="Menlo" fontSize={15} color="$codePink">
+      <Text
+        fontFamily="Menlo"
+        fontSize={15}
+        backgroundColor="$lighterGrey3"
+        color="$codePink"
+      >
         {node.content}
       </Text>
     );
