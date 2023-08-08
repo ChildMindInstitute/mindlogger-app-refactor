@@ -27,7 +27,7 @@ export const API_URL = Config.API_URL as string;
 export const STORE_ENCRYPTION_KEY = Config.STORE_ENCRYPTION_KEY;
 
 // @ts-ignore
-export const APP_VERSION = process.env.VERSION;
+export const APP_VERSION = process.env.VERSION as string;
 
 export const META_APP_NAME = 'mindlogger-mobile';
 export const ONE_SECOND = 1000;

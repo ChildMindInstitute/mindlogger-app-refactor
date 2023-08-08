@@ -1,8 +1,7 @@
-import { Buffer } from 'buffer';
+import { Buffer } from '@craftzdog/react-native-buffer';
+import crypto from 'react-native-quick-crypto';
 
 import { IV_LENGTH } from '@shared/lib';
-
-import { crypto } from './crypto';
 
 type GetPrivateKeyProps = { userId: string; email: string; password: string };
 type GetPublicKeyProps = {
@@ -72,7 +71,7 @@ class EncryptionManager {
     privateKey,
   }: GetPublicKeyProps): number[] => {
     const key = crypto.createDiffieHellman(
-      Buffer.from(appletPrime),
+      Buffer.from(appletPrime) as any,
       Buffer.from(appletBase),
     );
     key.setPrivateKey(Buffer.from(privateKey));
@@ -88,7 +87,7 @@ class EncryptionManager {
     appletBase,
   }: GetAESKeyProps): number[] => {
     const key = crypto.createDiffieHellman(
-      Buffer.from(appletPrime),
+      Buffer.from(appletPrime) as any,
       Buffer.from(appletBase),
     );
     key.setPrivateKey(Buffer.from(privateKey));
@@ -99,11 +98,15 @@ class EncryptionManager {
   };
 
   public encryptData = ({ text, key }: EncryptDataProps): string => {
-    const iv: Buffer = crypto.randomBytes(Number(IV_LENGTH));
+    const iv = crypto.randomBytes(Number(IV_LENGTH)) as Buffer;
     const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
-    let encrypted: Buffer = cipher.update(text);
-    encrypted = Buffer.concat([encrypted, cipher.final()]);
-    return `${iv.toString('hex')}:${encrypted.toString('hex')}`;
+    const encryptedText = cipher.update(text) as Buffer;
+    const encryptedTextWithCipher = Buffer.concat([
+      encryptedText,
+      cipher.final() as Buffer,
+    ]);
+
+    return `${iv.toString('hex')}:${encryptedTextWithCipher.toString('hex')}`;
   };
 
   public decryptData = ({ text, key }: DecryptDataProps): string => {

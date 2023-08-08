@@ -5,7 +5,7 @@ const useInterval = (
   interval: number,
 ) => {
   const callbacksRef = useRef({ onIntervalPass });
-  let intervalRef = useRef(0);
+  let intervalRef = useRef<NodeJS.Timer>();
 
   callbacksRef.current = { onIntervalPass };
 
