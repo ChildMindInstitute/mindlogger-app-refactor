@@ -83,7 +83,11 @@ const StackedCheckboxItem: FC<Props> = ({
         options={memoizedOptions}
         renderCell={(index, option) => {
           return (
-            <YStack onPress={() => onValueChange(option, index)}>
+            <YStack
+              px="$4"
+              py="$3"
+              onPress={() => onValueChange(option, index)}
+            >
               <CheckBox
                 style={styles.checkbox}
                 lineWidth={2}
