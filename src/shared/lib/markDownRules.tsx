@@ -345,7 +345,6 @@ const markDownRules: RenderRules = {
       <Text
         key={node.key}
         style={[
-          { display: 'flex' },
           inheritedStyles,
           styles.text,
           localStyles.text,
