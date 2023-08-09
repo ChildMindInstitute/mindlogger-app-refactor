@@ -24,7 +24,28 @@ class ImageLoader: UIView {
             self.setNeedsDisplay()
         }
     }
-
+  
+  private func calculateScale(image: UIImage) -> CGFloat {
+    let scale: CGFloat
+    
+    let widthRatio = image.size.width / bounds.width
+    let heightRatio = image.size.height / bounds.height
+    
+    if heightRatio > widthRatio && heightRatio > 1 {
+      scale = widthRatio
+    } else if heightRatio > widthRatio && heightRatio < 1 {
+      scale =  bounds.height / image.size.height
+    } else if heightRatio < widthRatio && widthRatio > 1 {
+      scale = heightRatio
+    } else if heightRatio < widthRatio && widthRatio < 1 {
+      scale =  bounds.height / image.size.height
+    } else {
+      scale = 1
+    }
+  
+    return scale
+  }
+  
   override func draw(_ rect: CGRect) {
     print("Marker Draw Start: \(CACurrentMediaTime())")
     guard let ctx = UIGraphicsGetCurrentContext() else { return }
@@ -34,32 +55,7 @@ class ImageLoader: UIView {
     ctx.fillPath()
 
     if let im = image {
-      let scale: CGFloat
-      let horizontalScale: CGFloat
-      let verticalScale: CGFloat
-      if bounds.width >= im.size.width {
-        horizontalScale = (im.size.width / bounds.width )
-      } else if (bounds.width <= im.size.width) {
-        horizontalScale = bounds.width / im.size.width
-      } else {
-        horizontalScale = 1
-      }
-      
-      if bounds.height >= im.size.height {
-        verticalScale = (im.size.height / bounds.height )
-      } else if (bounds.height <= im.size.height) {
-        verticalScale = bounds.height / im.size.height
-      } else {
-        verticalScale = 1
-      }
-      
-      if verticalScale > horizontalScale {
-        scale = verticalScale
-      } else if verticalScale < horizontalScale {
-        scale = verticalScale
-      } else {
-        scale = 1
-      }
+      let scale: CGFloat = self.calculateScale(image: im)
 
       let size = CGSize(width: im.size.width * scale, height: im.size.height * scale)
 
@@ -78,6 +74,8 @@ class ImageLoader: UIView {
       ctx.fillPath()
       ctx.draw(cgImg, in: CGRect(x: (bounds.width - size.width) / 2, y: (bounds.height - size.height) / 2, width: size.width, height: size.height))
       UIGraphicsEndImageContext()
+      
+      self.contentMode = .scaleAspectFit
 
       if #available(iOS 10.0, *) {
         super.draw(rect)
