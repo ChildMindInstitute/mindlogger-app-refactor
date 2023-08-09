@@ -1,12 +1,9 @@
-import { Answers } from './hooks';
 import { MarkdownVariableReplacer } from './markdownVariableReplacer';
-import { PipelineItem } from './types';
 
 describe('MarkdownVariableReplacer', () => {
   it('should return the same markdown string when no variables are present', () => {
-    const activityItems: PipelineItem[] = [];
-    // @ts-ignore
-    const answers: Answers = [];
+    const activityItems = [];
+    const answers = [];
     const replacer = new MarkdownVariableReplacer(activityItems, answers);
     const markdown = 'This is some text';
     expect(replacer.process(markdown)).toEqual(markdown);
@@ -15,7 +12,6 @@ describe('MarkdownVariableReplacer', () => {
   it('should return the markdown string with the variable replaced when only one variable is present', () => {
     const activityItems = [{ name: 'foo', type: 'TextInput' }];
     const answers = [{ answer: 'bar' }];
-    // @ts-ignore
     const replacer = new MarkdownVariableReplacer(activityItems, answers);
     const markdown = 'This is some text [[foo]]';
     const expected = 'This is some text bar';
@@ -37,8 +33,11 @@ describe('MarkdownVariableReplacer', () => {
         },
       },
     ];
-    const answers = [{ answer: 'abc' }, { answer: '2' }, { answer: '1' }];
-    // @ts-ignore
+    const answers = [
+      { answer: 'abc' },
+      { answer: '2' },
+      { answer: { id: '1', text: 'Option 1' } },
+    ];
     const replacer = new MarkdownVariableReplacer(activityItems, answers);
     const markdown = 'This is some text [[foo]] and [[bar]] and [[baz]]';
     const expected = 'This is some text abc and 2 and Option 1';
@@ -48,7 +47,6 @@ describe('MarkdownVariableReplacer', () => {
   it('should escape special characters in the answer', () => {
     const activityItems = [{ name: 'foo', type: 'TextInput' }];
     const answers = [{ answer: '$10' }];
-    // @ts-ignore
     const replacer = new MarkdownVariableReplacer(activityItems, answers);
     const markdown = 'This is some text [[foo]]';
     const expected = 'This is some text \\$10';
@@ -57,9 +55,7 @@ describe('MarkdownVariableReplacer', () => {
 
   it('should return the markdown string with the variable name when no answer is present', () => {
     const activityItems = [{ name: 'foo', type: 'TextInput' }];
-    // @ts-ignore
     const answers = [];
-    // @ts-ignore
     const replacer = new MarkdownVariableReplacer(activityItems, answers);
     const markdown = 'This is some text [[foo]]';
     const expected = 'This is some text [[foo]]';
@@ -69,16 +65,15 @@ describe('MarkdownVariableReplacer', () => {
   it('should return the markdown string with the variable name when the activity item is not found', () => {
     const activityItems = [{ name: 'foo', type: 'TextInput' }];
     const answers = [{ answer: 'bar' }];
-    // @ts-ignore
     const replacer = new MarkdownVariableReplacer(activityItems, answers);
     const markdown = 'This is some text [[baz]]';
     const expected = 'This is some text [[baz]]';
     expect(replacer.process(markdown)).toEqual(expected);
   });
   describe('process', () => {
-    let activityItems: PipelineItem[];
-    let answers: Record<string, any>;
-    let replacer: MarkdownVariableReplacer;
+    let activityItems;
+    let answers;
+    let replacer;
 
     beforeEach(() => {
       activityItems = [
@@ -86,7 +81,6 @@ describe('MarkdownVariableReplacer', () => {
           id: '1',
           name: 'name1',
           type: 'TextInput',
-          // @ts-ignore
           payload: {},
         },
         {
@@ -95,11 +89,8 @@ describe('MarkdownVariableReplacer', () => {
           type: 'Checkbox',
           payload: {
             options: [
-              // @ts-ignore
               { id: '1', text: 'Option 1' },
-              // @ts-ignore
               { id: '2', text: 'Option 2' },
-              // @ts-ignore
               { id: '3', text: 'Option 3' },
             ],
           },
@@ -107,42 +98,66 @@ describe('MarkdownVariableReplacer', () => {
         {
           id: '3',
           name: 'name3',
+          type: 'Date',
+          payload: {},
+        },
+        {
+          id: '4',
+          name: 'name4',
           type: 'TimeRange',
-          // @ts-ignore
           payload: {},
         },
       ];
       answers = {
         0: { answer: 'John Doe' },
-        1: { answer: ['1', '3'] },
+        1: {
+          answer: [
+            {
+              id: '1',
+              text: 'Option 1',
+            },
+            {
+              id: '3',
+              text: 'Option 3',
+            },
+          ],
+        },
         2: {
+          answer: '2022-02-02',
+        },
+        3: {
           answer: {
-            from: 'Tue Apr 18 2023 13:55:02 GMT+0400',
-            to: 'Tue Apr 18 2023 15:04:02 GMT+0400',
+            startTime: {
+              hours: 10,
+              minutes: 0,
+            },
+            endTime: {
+              hours: 22,
+              minutes: 50,
+            },
           },
         },
       };
       replacer = new MarkdownVariableReplacer(activityItems, answers);
     });
 
-    it('should replace timeRange variable with selected time', () => {
-      const markdown = 'Hello [[name1]], you selected [[name3]] time.';
-      const expectedOutput = 'Hello John Doe, you selected 13:55 - 15:04 time.';
-      const processedMarkdown = replacer.process(markdown);
-      expect(processedMarkdown).toEqual(expectedOutput);
-    });
-
     it('should replace checkbox variable with selected options', () => {
       const markdown = 'Hello [[name1]], you selected [[name2]].';
-      const expectedOutput = 'Hello John Doe, you selected Option 1,Option 3.';
+      const expectedOutput = 'Hello John Doe, you selected Option 1, Option 3.';
       const processedMarkdown = replacer.process(markdown);
       expect(processedMarkdown).toEqual(expectedOutput);
     });
 
-    it('should leave checkbox variable as is if no options selected', () => {
-      answers[1].answer = ['1', '2'];
-      const markdown = 'Hello [[name1]], you selected [[name2]].';
-      const expectedOutput = 'Hello John Doe, you selected Option 1,Option 2.';
+    it('should replace Date variable with selected date', () => {
+      const markdown = 'Hello [[name1]], you selected date [[name3]].';
+      const expectedOutput = 'Hello John Doe, you selected date 2022-02-02.';
+      const processedMarkdown = replacer.process(markdown);
+      expect(processedMarkdown).toEqual(expectedOutput);
+    });
+
+    it('should replace Date variable with selected timeRange', () => {
+      const markdown = 'Hello [[name1]], you selected date [[name4]].';
+      const expectedOutput = 'Hello John Doe, you selected date 10:00 - 22:50.';
       const processedMarkdown = replacer.process(markdown);
       expect(processedMarkdown).toEqual(expectedOutput);
     });
