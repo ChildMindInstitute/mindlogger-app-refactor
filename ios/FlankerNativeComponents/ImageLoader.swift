@@ -28,19 +28,13 @@ class ImageLoader: UIView {
   private func calculateScale(image: UIImage) -> CGFloat {
     let scale: CGFloat
     
-    let widthRatio = image.size.width / bounds.width
-    let heightRatio = image.size.height / bounds.height
+    let widthRatio = bounds.width / image.size.width
+    let heightRatio = bounds.height / image.size.height
     
-    if heightRatio > widthRatio && heightRatio > 1 {
+    if heightRatio > widthRatio {
       scale = widthRatio
-    } else if heightRatio > widthRatio && heightRatio < 1 {
-      scale =  bounds.height / image.size.height
-    } else if heightRatio < widthRatio && widthRatio > 1 {
-      scale = heightRatio
-    } else if heightRatio < widthRatio && widthRatio < 1 {
-      scale =  bounds.height / image.size.height
     } else {
-      scale = 1
+      scale = heightRatio
     }
   
     return scale
