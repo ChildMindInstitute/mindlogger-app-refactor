@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { InteractionManager } from 'react-native';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +12,12 @@ import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
 import { PassSurveyModel } from '@features/pass-survey';
 import { LogTrigger } from '@shared/api';
-import { useActivityInfo, useAppDispatch, useAppSelector } from '@shared/lib';
+import {
+  useActivityInfo,
+  useAppDispatch,
+  useAppSelector,
+  wait,
+} from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
 import { getClientInformation } from '../lib';
@@ -111,6 +117,8 @@ function FinishItem({
       return;
     }
 
+    const interactionHandle = InteractionManager.createInteractionHandle();
+
     const alerts = mapAnswersToAlerts(
       activityStorageRecord.items,
       activityStorageRecord.answers,
@@ -161,11 +169,17 @@ function FinishItem({
 
     clearActivityStorageRecord();
 
-    const success = await processQueue();
+    InteractionManager.runAfterInteractions(async () => {
+      const success = await processQueue();
 
-    if (!success) {
-      openRetryAlert();
-    }
+      if (!success) {
+        openRetryAlert();
+      }
+    });
+
+    await wait(400);
+
+    InteractionManager.clearInteractionHandle(interactionHandle);
   }
 
   useEffect(() => {
