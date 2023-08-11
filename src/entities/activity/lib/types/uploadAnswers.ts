@@ -22,6 +22,8 @@ export type SendAnswersInput = {
   userIdentifier?: string;
   debug_activityName?: string;
   debug_completedAt?: string;
+  eventId: string;
+  isFlowCompleted: boolean;
   client: {
     appId: string;
     appVersion: string;
