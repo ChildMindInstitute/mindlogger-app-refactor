@@ -1,5 +1,7 @@
 import { useSelector } from 'react-redux';
 
+import { IdentityModel } from '@app/entities/identity';
+import { useAppSelector } from '@app/shared/lib';
 import { AppletModel } from '@entities/applet';
 
 import { Answers } from './useActivityStorageRecord';
@@ -18,6 +20,8 @@ const useTextVariablesReplacer = ({
   const completedEntities = useSelector(
     AppletModel.selectors.selectCompletedEntities,
   );
+  const userFirstName = useAppSelector(IdentityModel.selectors.selectFirstName);
+
   const lastResponseTime = completedEntities?.[activityId];
   const replaceTextVariables = (text: string) => {
     if (items && answers) {
@@ -25,6 +29,7 @@ const useTextVariablesReplacer = ({
         items,
         answers,
         lastResponseTime,
+        userFirstName,
       );
       return replacer.process(text);
     }
