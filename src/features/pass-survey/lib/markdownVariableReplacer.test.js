@@ -184,5 +184,115 @@ describe('MarkdownVariableReplacer', () => {
       const processedMarkdown = replacer.process(markdown);
       expect(processedMarkdown).toEqual(expectedOutput);
     });
+
+    it('should replace nested variables', () => {
+      const nestedActivityItems = [
+        {
+          id: 'df667c1a-a626-4f70-8081-95c504e7bfde',
+          name: 'ItemText',
+          type: 'TextInput',
+          payload: {},
+        },
+        {
+          id: '977c6e6c-dcd8-4cfa-9fe8-8aac7c7f574b',
+          name: 'ItemSS',
+          type: 'Radio',
+          payload: {
+            options: [
+              {
+                id: '871348a4-4820-43a5-8050-f5860a43d356',
+                text: '[[ItemText]]',
+                value: 0,
+              },
+              {
+                id: '2abfccd7-89b6-4a72-86cf-66223dba5d00',
+                text: 'opt2',
+                value: 1,
+              },
+            ],
+          },
+        },
+        {
+          id: '50919a95-e9d3-4cee-a4be-bc70e3387826',
+          name: 'ItemMS',
+          type: 'Checkbox',
+          payload: {
+            options: [
+              {
+                id: '2819eb70-8843-4b9c-a73f-fe370cc6809c',
+                text: '[[ItemSS]]',
+                value: 0,
+              },
+              {
+                id: '4ad7c96b-7c8f-4512-9293-4609950bfff1',
+                text: 'opt4',
+                value: 1,
+              },
+            ],
+          },
+        },
+        {
+          id: '3d696b71-48b6-426a-bc21-87833bda0351',
+          name: 'ItemSl',
+          type: 'Slider',
+          payload: {},
+        },
+        {
+          id: '90c99a5b-689e-45a0-8e63-c75e2335d85d',
+          name: 'ItemNS',
+          type: 'NumberSelect',
+          payload: {},
+        },
+        {
+          id: 'b1c54326-d856-492a-8c26-0c6f6e7b9653',
+          name: 'ItemT',
+          type: 'TextInput',
+          payload: {},
+        },
+      ];
+      const nestedAnswers = {
+        0: { answer: 'My name is John doe' },
+        1: {
+          answer: {
+            id: '871348a4-4820-43a5-8050-f5860a43d356',
+            text: '[[ItemText]]',
+            value: 0,
+          },
+        },
+        2: {
+          answer: [
+            {
+              id: '2819eb70-8843-4b9c-a73f-fe370cc6809c',
+              text: '[[ItemSS]]',
+              value: 0,
+            },
+          ],
+        },
+        3: { answer: 3 },
+        4: { answer: '1' },
+      };
+
+      replacer = new MarkdownVariableReplacer(
+        nestedActivityItems,
+        nestedAnswers,
+      );
+
+      const markdown = `**ItemText content:**
+            Text: [[ItemText]]
+            Single_Selection: [[ItemSS]]
+            Multiple_Selection: [[ItemMS]]
+            Slider: [[ItemSl]]
+            Number_Selection: [[ItemNS]]`;
+
+      const expectedOutput = `**ItemText content:**
+            Text: My name is John doe
+            Single_Selection: My name is John doe
+            Multiple_Selection: My name is John doe
+            Slider: 3
+            Number_Selection: 1`;
+
+      const processedMarkdown = replacer.process(markdown);
+      expect(processedMarkdown).toEqual(expectedOutput);
+    });
   });
 });
