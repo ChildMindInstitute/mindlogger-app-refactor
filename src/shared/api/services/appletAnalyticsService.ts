@@ -1,16 +1,17 @@
 import { AxiosResponse } from 'axios';
 
 import { AppletAnalyticsDto } from './AppletAnalyticsDto';
+import httpService from './httpService';
 import { appletAnalyticsMock } from './mockAppletAnalytics';
 import { SuccessfulResponse } from '../types';
 
 export * from './AppletAnalyticsDto';
 
-const mockAnalytics = true;
+const mockAnalytics = false;
 
-type ActivityAnswersResponse = SuccessfulResponse<AppletAnalyticsDto>;
+type ActivityAnalyticsResponse = SuccessfulResponse<AppletAnalyticsDto>;
 
-type FakeResponse = AxiosResponse<ActivityAnswersResponse>;
+type FakeResponse = AxiosResponse<ActivityAnalyticsResponse>;
 
 type ActivityAnalyticsRequest = {
   appletId: string;
@@ -28,6 +29,10 @@ function appletAnalyticsService() {
 
         return Promise.resolve(response);
       }
+
+      return httpService.get<ActivityAnalyticsResponse>(
+        `/answers/applet/${request.appletId}/data/mobile`,
+      );
     },
   };
 }
