@@ -214,6 +214,8 @@ function Intermediate({
       debug_completedAt: new Date().toString(),
       client: getClientInformation(),
       alerts,
+      eventId,
+      isFlowCompleted: false,
     });
 
     clearActivityStorageRecord();

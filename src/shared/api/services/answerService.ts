@@ -152,6 +152,9 @@ export type EncryptedAnswerDto = {
   endTime: number;
   userPublicKey: string;
   identifier?: string;
+  scheduledEventId: string;
+  localEndDate: string;
+  localEndTime: string;
 };
 
 export type UserActionDto = {
@@ -168,6 +171,7 @@ export type ActivityAnswersRequest = {
   version: string;
   createdAt: number;
   submitId: string;
+  isFlowCompleted: boolean;
   answer: EncryptedAnswerDto;
   client: {
     appId: string;

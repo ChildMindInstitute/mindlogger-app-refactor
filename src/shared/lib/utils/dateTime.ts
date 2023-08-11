@@ -27,6 +27,14 @@ export const format = (date: Date | number, formatStr: string) => {
   });
 };
 
+export const formatToDtoDate = (date: Date | number) => {
+  return formatBase(date, 'yyyy.MM.dd');
+};
+
+export const formatToDtoTime = (date: Date | number, addSeconds = false) => {
+  return formatBase(date, addSeconds ? 'HH:mm:ss' : 'HH:mm');
+};
+
 type TimeOrNoun = {
   formattedDate?: string | null;
   translationKey?: string | null;

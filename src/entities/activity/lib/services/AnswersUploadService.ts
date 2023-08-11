@@ -11,7 +11,7 @@ import {
 } from '@app/shared/api';
 import { MediaFile } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
-import { encryption } from '@shared/lib';
+import { encryption, formatToDtoDate, formatToDtoTime } from '@shared/lib';
 
 import MediaFilesCleaner from './MediaFilesCleaner';
 import {
@@ -298,6 +298,7 @@ class AnswersUploadService implements IAnswersUploadService {
       flowId: data.flowId,
       submitId: data.executionGroupKey,
       activityId: data.activityId,
+      isFlowCompleted: data.isFlowCompleted,
       answer: {
         answer: encryptedAnswers,
         itemIds: data.itemIds,
@@ -307,6 +308,9 @@ class AnswersUploadService implements IAnswersUploadService {
         scheduledTime: data.scheduledTime,
         userPublicKey: JSON.stringify(userPublicKey),
         identifier,
+        localEndDate: formatToDtoDate(data.endTime),
+        localEndTime: formatToDtoTime(data.endTime, true),
+        scheduledEventId: data.eventId,
       },
       createdAt: data.createdAt,
       client: data.client,
