@@ -149,7 +149,7 @@ export class MarkdownVariableReplacer {
     return value!.toString().replace(/(?=[$&])/g, '\\');
   };
 
-  private getReplaceValue = (variableName: string) => {
+  private getReplaceValue = (variableName: string): string => {
     const foundIndex = this.activityItems.findIndex(
       item => item.name === variableName,
     );
@@ -198,6 +198,12 @@ export class MarkdownVariableReplacer {
         updated = answer;
         break;
     }
+    const variablesLeftToProcess = this.extractVariables(updated);
+
+    if (variablesLeftToProcess?.length) {
+      return this.getReplaceValue(updated.replace(/[\[\]']+/g, ''));
+    }
+
     return updated;
   };
 }
