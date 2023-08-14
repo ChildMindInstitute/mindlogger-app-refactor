@@ -502,8 +502,6 @@ PODS:
     - React-jsi (= 0.70.10)
     - React-logger (= 0.70.10)
     - React-perflogger (= 0.70.10)
-  - rn-fetch-blob (0.12.0):
-    - React-Core
   - RNAudioRecorderPlayer (3.5.3):
     - React-Core
   - RNBackgroundFetch (4.1.9):
@@ -654,7 +652,6 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNAudioRecorderPlayer (from `../node_modules/react-native-audio-recorder-player`)
   - RNBackgroundFetch (from `../node_modules/react-native-background-fetch`)
   - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
@@ -801,8 +798,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  rn-fetch-blob:
-    :path: "../node_modules/rn-fetch-blob"
   RNAudioRecorderPlayer:
     :path: "../node_modules/react-native-audio-recorder-player"
   RNBackgroundFetch:
@@ -911,7 +906,6 @@ SPEC CHECKSUMS:
   React-RCTVibration: 0b23ba09f2f6671a1ddee3c37d27b772b9448346
   React-runtimeexecutor: 77aa3714a353cfb1a5f5e315e8af5154cd3d9402
   ReactCommon: a29dac86d7219579db079cef8f380ebffe1ba545
-  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAudioRecorderPlayer: 6638283925b46808310c9fdf803ebabc3abdbadc
   RNBackgroundFetch: 642777e4e76435773c149d565a043d66f1781237
   RNCCheckbox: 38989bbd3d7d536adf24ba26c6b3e6cefe0bea6f
@@ -921,7 +915,7 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: b69333e28f4c100dbbf69be885f80288b75c8f13
   RNFBMessaging: 3aca7a5b3b1f79a9ee75026662ea57693436a338
   RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
-  RNPermissions: 4f5e03e3272fdc6fcee6e571dfdcbad128aadffe
+  RNPermissions: 314155ed6ce65237e7bd9fb6239219cce83228d3
   RNReanimated: 47df570b2e2b9eba34e78a299dd6d44596ff7bb6
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNSensors: 117ba71c7eeeea0407ea0c0bb79e3495d602049b
