@@ -24,12 +24,23 @@ class ImageLoader: UIView {
             self.setNeedsDisplay()
         }
     }
-
+  
+  private func calculateScale(image: UIImage) -> CGFloat {
+    let scale: CGFloat
+    
+    let widthRatio = bounds.width / image.size.width
+    let heightRatio = bounds.height / image.size.height
+    
+    if heightRatio > widthRatio {
+      scale = widthRatio
+    } else {
+      scale = heightRatio
+    }
+  
+    return scale
+  }
+  
   override func draw(_ rect: CGRect) {
-
-
-
-
     print("Marker Draw Start: \(CACurrentMediaTime())")
     guard let ctx = UIGraphicsGetCurrentContext() else { return }
 
@@ -38,16 +49,11 @@ class ImageLoader: UIView {
     ctx.fillPath()
 
     if let im = image {
-      let scale: CGFloat
-      if im.size.width >= im.size.height {
-        scale = bounds.width / im.size.width
-      } else {
-        scale = bounds.height / im.size.height
-      }
+      let scale: CGFloat = self.calculateScale(image: im)
 
       let size = CGSize(width: im.size.width * scale, height: im.size.height * scale)
 
-      UIGraphicsBeginImageContextWithOptions(size, true, 1)
+      UIGraphicsBeginImageContextWithOptions(size, true, UIScreen.main.scale)
       guard let imgCtx = UIGraphicsGetCurrentContext() else { return }
 
       imgCtx.setFillColor(UIColor.white.cgColor)
@@ -62,6 +68,8 @@ class ImageLoader: UIView {
       ctx.fillPath()
       ctx.draw(cgImg, in: CGRect(x: (bounds.width - size.width) / 2, y: (bounds.height - size.height) / 2, width: size.width, height: size.height))
       UIGraphicsEndImageContext()
+      
+      self.contentMode = .scaleAspectFit
 
       if #available(iOS 10.0, *) {
         super.draw(rect)
@@ -79,7 +87,6 @@ class ImageLoader: UIView {
   }
 
     func loadImageWithUrl(_ url: URL) {
-
         // setup activityIndicator...
         activityIndicator.color = .darkGray
 

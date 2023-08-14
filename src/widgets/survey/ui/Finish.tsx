@@ -155,6 +155,8 @@ function FinishItem({
       debug_completedAt: new Date().toString(),
       client: getClientInformation(),
       alerts,
+      eventId,
+      isFlowCompleted: !!flowId,
     });
 
     clearActivityStorageRecord();
