@@ -1,3 +1,6 @@
-const crypto = require('../../../../crypto/crypto');
+import crypto from 'react-native-quick-crypto';
+import cryptoIos from 'react-native-quick-crypto-ios';
 
-export { crypto };
+import { IS_IOS } from '../constants';
+
+export default IS_IOS ? cryptoIos : crypto;

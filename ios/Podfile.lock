@@ -418,7 +418,7 @@ PODS:
     - React-Core
   - react-native-quick-base64 (2.0.7):
     - React-Core
-  - react-native-quick-crypto (0.5.0):
+  - react-native-quick-crypto (0.6.1):
     - OpenSSL-Universal
     - React
     - React-callinvoker
@@ -635,7 +635,7 @@ DEPENDENCIES:
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-quick-base64 (from `../node_modules/react-native-quick-base64`)
-  - react-native-quick-crypto (from `../node_modules/react-native-quick-crypto`)
+  - react-native-quick-crypto (from `../node_modules/react-native-quick-crypto-ios`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
   - react-native-video (from `../node_modules/react-native-video`)
@@ -765,7 +765,7 @@ EXTERNAL SOURCES:
   react-native-quick-base64:
     :path: "../node_modules/react-native-quick-base64"
   react-native-quick-crypto:
-    :path: "../node_modules/react-native-quick-crypto"
+    :path: "../node_modules/react-native-quick-crypto-ios"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-skia:
@@ -889,7 +889,7 @@ SPEC CHECKSUMS:
   react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
   react-native-quick-base64: a5dbe4528f1453e662fcf7351029500b8b63e7bb
-  react-native-quick-crypto: a903ff39ac8fea78bb9d37cccc5cc0596afc9670
+  react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-skia: 2049405da93eb5fc9a6279aa766bd007b4b2ee16
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
@@ -915,7 +915,7 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: b69333e28f4c100dbbf69be885f80288b75c8f13
   RNFBMessaging: 3aca7a5b3b1f79a9ee75026662ea57693436a338
   RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
-  RNPermissions: 314155ed6ce65237e7bd9fb6239219cce83228d3
+  RNPermissions: 4f5e03e3272fdc6fcee6e571dfdcbad128aadffe
   RNReanimated: 47df570b2e2b9eba34e78a299dd6d44596ff7bb6
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNSensors: 117ba71c7eeeea0407ea0c0bb79e3495d602049b
@@ -925,6 +925,6 @@ SPEC CHECKSUMS:
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
   ZIPFoundation: b1f0de4eed33e74a676f76e12559ab6b75990197
 
-PODFILE CHECKSUM: f7f9667917958c96e2cbd87a83bee9718d8baad2
+PODFILE CHECKSUM: 3c3fe7bdb5018c441c5e7a6bed5f566b33679330
 
 COCOAPODS: 1.11.3
