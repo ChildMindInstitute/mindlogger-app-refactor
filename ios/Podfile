@@ -3,10 +3,6 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '12.4'
 
-# We link a specific versin of react-native-quick-crypto that doesn't have memory leak issues.
-# On Android, we use different version as the latest one doesn't compile correctly because it aims for the latest RN applications.
-pod 'react-native-quick-crypto', :path => '../node_modules/react-native-quick-crypto-ios' 
-
 install! 'cocoapods', :deterministic_uuids => false
 
 abstract_target 'MindloggerMobileCommonPods' do
@@ -21,6 +17,10 @@ abstract_target 'MindloggerMobileCommonPods' do
 
   target 'MindloggerMobile' do
   end
+
+  # We link a specific versin of react-native-quick-crypto that doesn't have memory leak issues.
+  # On Android, we use different version as the latest one doesn't compile correctly because it aims for the latest RN applications.
+  pod 'react-native-quick-crypto', :path => '../node_modules/react-native-quick-crypto-ios' 
 
   config = use_native_modules!
 
