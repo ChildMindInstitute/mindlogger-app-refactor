@@ -2,7 +2,7 @@ import { AppState, NativeEventSubscription } from 'react-native';
 
 abstract class TimerBase {
   protected listener?: NativeEventSubscription;
-  protected timerId?: number;
+  protected timerId?: ReturnType<typeof setTimeout>;
   hasStarted: boolean = false;
 
   protected start(): void {
