@@ -3,8 +3,7 @@ import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
-import { FileSystem } from 'react-native-file-access';
-import RNFetchBlob from 'rn-fetch-blob';
+import { FileSystem, Dirs } from 'react-native-file-access';
 import { v4 as uuidv4 } from 'uuid';
 
 import { ActivityScrollContext } from '@app/features/pass-survey';
@@ -15,7 +14,7 @@ import { DrawLine, DrawResult } from '../lib';
 
 const RectPadding = 15;
 
-const filesCacheDir = RNFetchBlob.fs.dirs.CacheDir;
+const filesCacheDir = Dirs.CacheDir;
 
 type Props = {
   value: { lines: DrawLine[]; fileName: string | null };

@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import AudioRecorderPlayer, {
   AudioSet,
 } from 'react-native-audio-recorder-player';
-import { FileSystem } from 'react-native-file-access';
-import RNFetchBlob from 'rn-fetch-blob';
+import { FileSystem, Dirs } from 'react-native-file-access';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -20,7 +19,7 @@ import { StopIcon, MicrophoneIcon, XStack, Text, YStack } from '@shared/ui';
 const audioSetConfig: AudioSet = {
   AVNumberOfChannelsKeyIOS: 1,
 };
-const androidCacheDir = RNFetchBlob.fs.dirs.CacheDir;
+const androidCacheDir = Dirs.CacheDir;
 
 type Response = {
   uri: string;
