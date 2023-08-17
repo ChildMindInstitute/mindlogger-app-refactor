@@ -165,6 +165,8 @@ function FinishItem({
 
     if (!success) {
       openRetryAlert();
+    } else {
+      queryClient.invalidateQueries(['activity_analytics']);
     }
   }
 
