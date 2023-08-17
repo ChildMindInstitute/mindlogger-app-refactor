@@ -26,7 +26,7 @@ type InputProps = {
 };
 
 type EncryptDataProps = { text: string; key: number[] };
-type DecryptDataProps = { text: string; key: string };
+type DecryptDataProps = { text: string; key: number[] };
 
 class EncryptionManager {
   public createEncryptionService = (params: InputProps) => {
@@ -44,7 +44,14 @@ class EncryptionManager {
       });
     };
 
-    return { encrypt };
+    const decrypt = (json: string) => {
+      return this.decryptData({
+        text: json,
+        key: aesKey,
+      });
+    };
+
+    return { encrypt, decrypt };
   };
 
   public getPrivateKey = ({
