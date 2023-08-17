@@ -133,6 +133,7 @@ export function mapAppletAnalytics({
     activitiesResponses.push({
       id: activityDto.id,
       name: activityDto.name,
+      description: activityDto.description ?? null,
       responses: mapActivityResponses(analyticsItems, analyticsAnswers),
     });
   });
@@ -279,17 +280,25 @@ function getItemResponses(
 ): ResponseAnalyticsValue {
   switch (responseType) {
     case 'multiSelect':
-    case 'singleSelect':
-      const selectItemValue: number[] = answer.value;
-      return selectItemValue.map(value => ({
+      const multiSelectValue: number[] = answer.value;
+
+      return multiSelectValue?.map(value => ({
         value,
         date: new Date(createdAt),
       }));
-    case 'slider':
-      const sliderItemValue: number = answer.value;
+    case 'singleSelect':
+      const selectItemValue: number = answer.value;
       return [
         {
-          value: sliderItemValue,
+          value: selectItemValue,
+          date: new Date(createdAt),
+        },
+      ];
+    case 'slider':
+      const sliderValue: number = answer.value;
+      return [
+        {
+          value: sliderValue,
           date: new Date(createdAt),
         },
       ];

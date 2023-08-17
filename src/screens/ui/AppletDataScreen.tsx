@@ -17,6 +17,8 @@ const AppletDataScreen: FC<Props> = ({ route }) => {
 
   const { analytics } = useAppletAnalytics(appletId);
 
+  console.log(analytics);
+
   return (
     <Box flexGrow={1}>
       <UploadRetryBanner />

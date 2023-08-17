@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 import { UserPrivateKeyRecord } from '@app/entities/identity';
 import { encryption, getCurrentWeekDates } from '@app/shared/lib';
 
@@ -6,7 +8,7 @@ import { mapAppletAnalytics } from '../../model';
 
 export const useAppletAnalytics = (appletId: string) => {
   const currentWeekDates = getCurrentWeekDates();
-  const firstDateOfCurrentWeek = currentWeekDates[0].toString();
+  const firstDateOfCurrentWeek = format(currentWeekDates[0], 'yyyy-MM-dd');
 
   const { data: appletEncryption } = useAppletDetailsQuery(appletId, {
     select: response => response?.data.result.encryption,
