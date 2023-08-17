@@ -7,7 +7,7 @@ import {
 
 const getClientInformation = () => ({
   appId: META_APP_NAME,
-  appVersion: APP_VERSION,
+  appVersion: APP_VERSION!,
   width: VIEWPORT_WIDTH,
   height: VIEWPORT_HEIGHT,
 });
