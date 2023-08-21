@@ -1,15 +1,10 @@
-import { FileSystem } from 'react-native-file-access';
+import { Dirs, FileSystem } from 'react-native-file-access';
 import { FileLogger } from 'react-native-file-logger';
-import RNFetchBlob from 'rn-fetch-blob';
 
 import { FileService } from '@app/shared/api';
 
-import { IS_ANDROID } from '../constants';
-import { IMutex, Mutex, isAppOnline } from '../utils';
-
-const isAndroid = IS_ANDROID;
-
-const isIos = !isAndroid;
+import { IS_ANDROID, IS_IOS } from '../constants';
+import { IMutex, Mutex, callWithMutex, isAppOnline } from '../utils';
 
 interface ILogger {
   log: (message: string) => void;
@@ -18,7 +13,7 @@ interface ILogger {
   error: (message: string) => void;
   configure: () => void;
   send: () => Promise<boolean>;
-  cancelSending: () => void;
+  cancelSending: (reason: string) => void;
   clearAllLogFiles: () => Promise<void>;
 }
 
@@ -38,23 +33,15 @@ type FileExists = {
 class Logger implements ILogger {
   private mutex: IMutex;
 
-  private cancellationRequested: boolean;
+  private abortController: AbortController;
 
   constructor() {
     this.mutex = Mutex();
-    this.cancellationRequested = false;
+    this.abortController = new AbortController();
   }
 
-  private async callWithMutex(func: () => void | Promise<any>) {
-    if (this.mutex.isBusy()) {
-      return;
-    }
-    try {
-      this.mutex.setBusy();
-      await func();
-    } finally {
-      this.mutex.release();
-    }
+  private get isAborted(): boolean {
+    return this.abortController.signal.aborted;
   }
 
   private isNamedAsLatest(name: string) {
@@ -75,7 +62,7 @@ class Logger implements ILogger {
       });
     }
 
-    if (isIos) {
+    if (IS_IOS) {
       return result;
     } else {
       const latest = result.find(x => this.isNamedAsLatest(x.fileName))!;
@@ -122,7 +109,7 @@ class Logger implements ILogger {
       return false;
     }
 
-    if (this.cancellationRequested) {
+    if (this.isAborted) {
       return false;
     }
 
@@ -146,7 +133,7 @@ class Logger implements ILogger {
     let success = true;
 
     for (let checkRecord of checkResult) {
-      if (this.cancellationRequested) {
+      if (this.isAborted) {
         return false;
       }
 
@@ -162,8 +149,8 @@ class Logger implements ILogger {
 
       const shouldUpload =
         !isExist ||
-        (isExist && isAndroid && isCurrentLogInAndroid) ||
-        (isExist && isIos && !isSizeTheSame);
+        (isExist && IS_ANDROID && isCurrentLogInAndroid) ||
+        (isExist && IS_IOS && !isSizeTheSame);
 
       if (!shouldUpload) {
         continue;
@@ -197,7 +184,7 @@ class Logger implements ILogger {
   // PUBLIC
 
   public configure() {
-    const documentDir = RNFetchBlob.fs.dirs.DocumentDir;
+    const documentDir = Dirs.DocumentDir;
 
     const logsDir = `${documentDir}/Logs`;
 
@@ -212,7 +199,7 @@ class Logger implements ILogger {
 
   public async clearAllLogFiles() {
     try {
-      await this.callWithMutex(FileLogger.deleteLogFiles);
+      await callWithMutex(this.mutex, FileLogger.deleteLogFiles);
     } catch (error) {
       console.warn(
         'Logger.clearAllLogFiles]: Error occurred\n\n',
@@ -224,25 +211,25 @@ class Logger implements ILogger {
   public log(message: string) {
     console.log(message);
 
-    this.callWithMutex(() => FileLogger.debug(message));
+    callWithMutex(this.mutex, () => FileLogger.debug(message));
   }
 
   public info(message: string) {
     console.info(message);
 
-    this.callWithMutex(() => FileLogger.info(message));
+    callWithMutex(this.mutex, () => FileLogger.info(message));
   }
 
   public warn(message: string) {
     console.warn(message);
 
-    this.callWithMutex(() => FileLogger.warn(message));
+    callWithMutex(this.mutex, () => FileLogger.warn(message));
   }
 
   public error(message: string) {
     console.error(message);
 
-    this.callWithMutex(() => FileLogger.error(message));
+    callWithMutex(this.mutex, () => FileLogger.error(message));
   }
 
   public async send(): Promise<boolean> {
@@ -258,7 +245,7 @@ class Logger implements ILogger {
     try {
       this.mutex.setBusy();
 
-      this.cancellationRequested = false;
+      this.abortController = new AbortController();
 
       console.info('[Logger.send] Started sending log files to Server');
 
@@ -278,8 +265,8 @@ class Logger implements ILogger {
     return false;
   }
 
-  public cancelSending(): void {
-    this.cancellationRequested = true;
+  public cancelSending(reason: string): void {
+    this.abortController.abort(reason);
   }
 }
 
