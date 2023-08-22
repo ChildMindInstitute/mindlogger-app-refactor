@@ -6,15 +6,20 @@ import {
   createTheme,
 } from '@tamagui/core';
 import { shorthands } from '@tamagui/shorthands';
-import {
-  themes as baseThemes,
-  tokens as baseTokens,
-} from '@tamagui/theme-base';
+import { themes as baseThemes, tokens as baseTokens } from '@tamagui/themes';
 
 import { colors, IS_IOS } from '@app/shared/lib';
 
 const defaultFont = createFont({
   family: IS_IOS ? 'Avenir' : 'Roboto',
+  size: {},
+  lineHeight: {},
+  letterSpacing: {},
+  weight: {},
+});
+
+const codeFont = createFont({
+  family: 'Menlo',
   size: {},
   lineHeight: {},
   letterSpacing: {},
@@ -58,6 +63,7 @@ export const uiConfig = createTamagui({
   fonts: {
     body: defaultFont,
     title: defaultFont,
+    code: codeFont,
   },
   animations,
 });
