@@ -1,13 +1,17 @@
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useMemo } from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { mapThemeFromDto } from '@app/entities/applet/model';
+import { getMonthAgoDate } from '@app/shared/lib';
 import { ActivityIndicator, Center, ImageBackground } from '@app/shared/ui';
-import { useAppletDetailsQuery } from '@entities/applet';
+import {
+  AppletModel,
+  useAppletDetailsQuery,
+  useCompletedEntitiesQuery,
+} from '@entities/applet';
 
 import {
   AppletDetailsParamList,
@@ -25,9 +29,19 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
 
   const { title, appletId } = route.params;
 
-  const { data: appletTheme } = useAppletDetailsQuery(appletId, {
-    select: o => mapThemeFromDto(o.data.result.theme),
+  const { data: applet } = useAppletDetailsQuery(appletId, {
+    select: o => AppletModel.mapAppletDetailsFromDto(o.data.result),
   });
+
+  const appletTheme = applet?.theme;
+
+  const appletVersions = useMemo(
+    () =>
+      applet ? [{ appletId: applet!.id, version: applet!.version }] : null,
+    [applet],
+  );
+
+  useCompletedEntitiesQuery(getMonthAgoDate(), appletVersions);
 
   useLayoutEffect(() => {
     if (title) {
