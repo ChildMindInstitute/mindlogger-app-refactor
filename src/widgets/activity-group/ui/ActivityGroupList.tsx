@@ -1,7 +1,9 @@
 import { FC, useCallback, useState } from 'react';
 
 import { useFocusEffect } from '@react-navigation/native';
+import { useIsFetching } from '@tanstack/react-query';
 
+import { getAppletCompletedEntitiesKey } from '@app/shared/lib';
 import {
   Box,
   BoxProps,
@@ -20,6 +22,12 @@ type Props = {
 } & BoxProps;
 
 const ActivityGroupList: FC<Props> = props => {
+  const isLoadingCompletedEntities =
+    useIsFetching({
+      exact: true,
+      queryKey: getAppletCompletedEntitiesKey(props.appletId),
+    }) > 0;
+
   let { groups, isSuccess, isLoading, error } = useActivityGroups(
     props.appletId,
   );
@@ -41,7 +49,7 @@ const ActivityGroupList: FC<Props> = props => {
     return null;
   }
 
-  if (isLoading) {
+  if (isLoading || isLoadingCompletedEntities) {
     return (
       <Box flex={1} justifyContent="center">
         <ActivityIndicator size="large" />
