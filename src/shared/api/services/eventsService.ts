@@ -52,11 +52,44 @@ export type AppletEventsResponse = SuccessfulResponse<{
   events: ScheduleEventDto[];
 }>;
 
+export type CompletedEntityDto = {
+  id: string;
+  answerId: string;
+  submitId: string;
+  scheduledEventId: string;
+  localEndDate: string; // YYYY-MM-DD
+  localEndTime: string; // hh:mm:ss
+};
+
+type AppletCompletedEntitiesRequest = {
+  appletId: string;
+  fromDate: string; // YYYY-MM-DD
+  version: string;
+};
+
+export type AppletCompletedEntitiesResponse = SuccessfulResponse<{
+  id: string;
+  version: string;
+  activities: CompletedEntityDto[];
+  activityFlows: CompletedEntityDto[];
+}>;
+
 function eventsService() {
   return {
     getEvents(request: AppletEventsRequest) {
       return httpService.get<AppletEventsResponse>(
         `/users/me/events/${request.appletId}`,
+      );
+    },
+    getCompletedEntities(request: AppletCompletedEntitiesRequest) {
+      return httpService.get<AppletCompletedEntitiesResponse>(
+        `answers/applet/${request.appletId}/completions`,
+        {
+          params: {
+            fromDate: request.fromDate,
+            version: request.version,
+          },
+        },
       );
     },
   };

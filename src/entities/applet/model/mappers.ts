@@ -6,6 +6,7 @@ import {
   AppletAnalyticsDto,
   AppletDetailsDto,
   AppletDto,
+  CompletedEntityDto,
   ItemResponsesDto,
   ResponseAnalyticsDto,
   ThemeDto,
@@ -19,6 +20,8 @@ import {
   AppletAnalytics,
   AppletDetails,
   AppletTheme,
+  AppletVersion,
+  CompletedEntity,
   ItemResponses,
 } from '../lib';
 
@@ -139,5 +142,22 @@ export function mapAppletAnalytics(
   return {
     id: dto.appletId,
     activitiesResponses: mapActivitiesResponses(dto.activitiesResponses),
+  };
+}
+
+export function mapAppletDtoToAppletVersion(dto: AppletDto): AppletVersion {
+  return {
+    version: dto.version,
+    appletId: dto.id,
+  };
+}
+
+export function mapCompletedEntityFromDto(
+  dto: CompletedEntityDto,
+): CompletedEntity {
+  return {
+    eventId: dto.scheduledEventId,
+    entityId: dto.id,
+    endAt: new Date(`${dto.localEndDate} ${dto.localEndTime}`).valueOf(),
   };
 }
