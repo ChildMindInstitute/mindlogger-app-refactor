@@ -1,6 +1,8 @@
 import { QueryClient, QueryKey } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 
+type AppQueryKey = [string, Record<string, unknown>?];
+
 export const getDataFromQuery = <TResponse>(
   key: QueryKey,
   queryClient: QueryClient,
@@ -28,9 +30,19 @@ export const getAppletDetailsKey = (appletId: string) => [
   { appletId },
 ];
 
+export const getAllEventsKey = () => ['events'] satisfies AppQueryKey;
+
 export const getEventsKey = (appletId: string) => ['events', { appletId }];
 
 export const getActivityDetailsKey = (activityId: string) => [
   'activities',
   { activityId },
 ];
+
+export const getCompletedEntitiesKey = () =>
+  ['completed-entities'] satisfies AppQueryKey;
+
+export const getAppletCompletedEntitiesKey = (appletId: string) =>
+  ['completed-entities', { appletId }] satisfies AppQueryKey;
+
+export const getRefreshingKey = () => ['refresh'] satisfies AppQueryKey;
