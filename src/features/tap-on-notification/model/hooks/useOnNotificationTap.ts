@@ -19,7 +19,7 @@ import {
   useOnInitialAndroidNotification,
 } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
-import { useAppSelector } from '@app/shared/lib';
+import { Logger, useAppSelector } from '@app/shared/lib';
 
 type Input = {
   checkAvailability: (entityName: string, identifiers: EntityPath) => boolean;
@@ -97,36 +97,42 @@ export function useOnNotificationTap({
     'applet-update-alert': () => {
       navigator.navigate('Applets');
 
-      refresh().then(() => {
-        NotificationModel.NotificationRefreshService.refresh(
-          queryClient,
+      refresh()
+        .then(() => {
+          NotificationModel.NotificationRefreshService.refresh(
+            queryClient,
 
-          storeProgress,
-          LogTrigger.ScheduleUpdated,
-        );
-      });
+            storeProgress,
+            LogTrigger.ScheduleUpdated,
+          );
+        })
+        .then(() => Logger.send());
     },
     'applet-delete-alert': () => {
       navigator.navigate('Applets');
 
-      refresh().then(() => {
-        NotificationModel.NotificationRefreshService.refresh(
-          queryClient,
-          storeProgress,
-          LogTrigger.AppletRemoved,
-        );
-      });
+      refresh()
+        .then(() => {
+          NotificationModel.NotificationRefreshService.refresh(
+            queryClient,
+            storeProgress,
+            LogTrigger.AppletRemoved,
+          );
+        })
+        .then(() => Logger.send());
     },
     'schedule-updated': () => {
       navigator.navigate('Applets');
 
-      refresh().then(() => {
-        NotificationModel.NotificationRefreshService.refresh(
-          queryClient,
-          storeProgress,
-          LogTrigger.AppletUpdated,
-        );
-      });
+      refresh()
+        .then(() => {
+          NotificationModel.NotificationRefreshService.refresh(
+            queryClient,
+            storeProgress,
+            LogTrigger.AppletUpdated,
+          );
+        })
+        .then(() => Logger.send());
     },
   };
 

@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+
 import { IS_ANDROID } from '@app/shared/lib';
 
 import httpService from './httpService';
@@ -16,9 +18,33 @@ type UploadResultDto = {
 
 type FileUploadResponse = SuccessfulResponse<UploadResultDto>;
 
+type CheckIfLogsExistRequest = {
+  filesToCheck: Array<string>;
+};
+
+type CheckIfLogsExistResultDto = {
+  files: Array<{
+    fileName: string;
+    exists: boolean;
+    size: number;
+  }>;
+};
+
+type CheckIfLogsExistResponse = SuccessfulResponse<CheckIfLogsExistResultDto>;
+
 function fileService() {
   return {
-    async upload(request: FileUploadRequest) {
+    async upload(
+      request: FileUploadRequest,
+      actionType: 'log' | 'regular' = 'regular',
+    ) {
+      if (actionType === 'log') {
+        // todo
+        return Promise.resolve<AxiosResponse<FileUploadResponse, any>>({
+          status: 200,
+        } as AxiosResponse<FileUploadResponse, any>);
+      }
+
       try {
         const data = new FormData();
         const uri = IS_ANDROID
@@ -32,7 +58,7 @@ function fileService() {
         } as unknown as Blob);
 
         const response = await httpService.post<FileUploadResponse>(
-          '/file/upload',
+          actionType === 'regular' ? '/file/upload' : '/log-file/upload',
           data,
           {
             headers: { 'Content-Type': 'multipart/form-data' },
@@ -43,6 +69,22 @@ function fileService() {
         console.error('error', JSON.stringify(error));
         throw error;
       }
+    },
+
+    async checkIfLogsExist(request: CheckIfLogsExistRequest) {
+      // todo, fake response is here now
+
+      return Promise.resolve<AxiosResponse<CheckIfLogsExistResponse, any>>({
+        status: 200,
+        data: {
+          result: {
+            files: request.filesToCheck.map(x => ({
+              fileName: x,
+              exists: false,
+            })),
+          },
+        },
+      } as AxiosResponse<CheckIfLogsExistResponse, any>);
     },
   };
 }

@@ -1,4 +1,11 @@
-import { IMutex, Mutex, isAppOnline, wait } from '@app/shared/lib';
+import {
+  ILogger,
+  IMutex,
+  Logger,
+  Mutex,
+  isAppOnline,
+  wait,
+} from '@app/shared/lib';
 
 import AnswersQueueService, {
   IAnswersQueueService,
@@ -19,9 +26,12 @@ class QueueProcessingService {
 
   private mutex: IMutex;
 
+  private logger: ILogger;
+
   constructor(
     updateObservable: IUploadObservableSetters,
     queueService: IAnswersQueueService,
+    logger: ILogger,
   ) {
     this.uploadStatusObservable = updateObservable;
 
@@ -29,11 +39,9 @@ class QueueProcessingService {
 
     this.uploadService = AnswersUploadService;
 
-    this.mutex = Mutex();
-  }
+    this.logger = logger;
 
-  public push(input: SendAnswersInput) {
-    this.queueService.enqueue({ input });
+    this.mutex = Mutex();
   }
 
   private async processInternal(): Promise<boolean> {
@@ -46,23 +54,27 @@ class QueueProcessingService {
         return true;
       }
 
+      const logEntity = `"${uploadItem.input.logActivityName}, which completed at ${uploadItem.input.logCompletedAt}"`;
+
       try {
-        console.info(
-          `[QueueProcessingService:process]: Processing activity "${uploadItem.input.debug_activityName}", which completed at ${uploadItem.input.debug_completedAt}`,
+        this.logger.info(
+          `[QueueProcessingService:processInternal]: Processing activity ${logEntity}`,
         );
 
         await this.uploadService.sendAnswers(uploadItem.input);
 
         this.queueService.dequeue();
 
-        console.info('[QueueProcessingService:process] Queue item processed');
-      } catch (error) {
-        this.queueService.swap();
-
-        console.warn(
-          '[QueueProcessingService:process] Error occurred while sendAnswers\n\n',
-          error,
+        this.logger.info(
+          `[QueueProcessingService:processInternal] Queue item with activity ${logEntity} processed`,
         );
+      } catch (error) {
+        this.logger.warn(
+          `[QueueProcessingService:processInternal] Error occurred while executing sendAnswers for ${logEntity}.\nInternal error:\n\n` +
+            error,
+        );
+
+        this.queueService.swap();
       }
     }
 
@@ -71,6 +83,7 @@ class QueueProcessingService {
 
   public async process(): Promise<boolean> {
     if (this.mutex.isBusy()) {
+      this.logger.log('[QueueProcessingService.process]: Mutex is busy');
       return false;
     }
 
@@ -97,7 +110,11 @@ class QueueProcessingService {
       this.uploadStatusObservable.isCompleted = success;
 
       return success;
-    } catch {
+    } catch (error) {
+      this.logger.warn(
+        '[QueueProcessingService.process]: Error in processInternal occurred\n\n' +
+          error!.toString(),
+      );
       this.uploadStatusObservable.isError = true;
     } finally {
       this.mutex.release();
@@ -105,9 +122,14 @@ class QueueProcessingService {
     }
     return false;
   }
+
+  public push(input: SendAnswersInput) {
+    this.queueService.enqueue({ input });
+  }
 }
 
 export default new QueueProcessingService(
   UploadObservable,
   AnswersQueueService,
+  Logger,
 );
