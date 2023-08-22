@@ -1,21 +1,11 @@
 import { Dirs, FileSystem } from 'react-native-file-access';
-import { FileLogger } from 'react-native-file-logger';
+import { FileLogger, LogLevel } from 'react-native-file-logger';
 
 import { FileService } from '@app/shared/api';
 
 import { IS_ANDROID, IS_IOS } from '../constants';
+import { ILogger } from '../types';
 import { IMutex, Mutex, callWithMutex, isAppOnline } from '../utils';
-
-interface ILogger {
-  log: (message: string) => void;
-  info: (message: string) => void;
-  warn: (message: string) => void;
-  error: (message: string) => void;
-  configure: () => void;
-  send: () => Promise<boolean>;
-  cancelSending: (reason: string) => void;
-  clearAllLogFiles: () => Promise<void>;
-}
 
 type NamePath = {
   fileName: string;
@@ -35,9 +25,12 @@ class Logger implements ILogger {
 
   private abortController: AbortController;
 
+  private consoleLogLevel: LogLevel;
+
   constructor() {
     this.mutex = Mutex();
     this.abortController = new AbortController();
+    this.consoleLogLevel = LogLevel.Debug; // for developers
   }
 
   private get isAborted(): boolean {
@@ -183,7 +176,7 @@ class Logger implements ILogger {
 
   // PUBLIC
 
-  public configure() {
+  public configure(logLevel: LogLevel = LogLevel.Debug) {
     const documentDir = Dirs.DocumentDir;
 
     const logsDir = `${documentDir}/Logs`;
@@ -194,6 +187,7 @@ class Logger implements ILogger {
       captureConsole: false,
       dailyRolling: true,
       logsDirectory: logsDir,
+      logLevel: logLevel,
     });
   }
 
@@ -209,25 +203,33 @@ class Logger implements ILogger {
   }
 
   public log(message: string) {
-    console.log(message);
+    if (this.consoleLogLevel <= LogLevel.Debug) {
+      console.log(message);
+    }
 
     callWithMutex(this.mutex, () => FileLogger.debug(message));
   }
 
   public info(message: string) {
-    console.info(message);
+    if (this.consoleLogLevel <= LogLevel.Info) {
+      console.info(message);
+    }
 
     callWithMutex(this.mutex, () => FileLogger.info(message));
   }
 
   public warn(message: string) {
-    console.warn(message);
+    if (this.consoleLogLevel <= LogLevel.Warning) {
+      console.warn(message);
+    }
 
     callWithMutex(this.mutex, () => FileLogger.warn(message));
   }
 
   public error(message: string) {
-    console.error(message);
+    if (this.consoleLogLevel <= LogLevel.Error) {
+      console.error(message);
+    }
 
     callWithMutex(this.mutex, () => FileLogger.error(message));
   }
