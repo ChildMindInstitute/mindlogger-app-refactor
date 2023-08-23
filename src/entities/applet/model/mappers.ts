@@ -114,29 +114,28 @@ export function mapAppletAnalytics({
   answersDto,
   encryptionService,
 }: Config) {
-  const activitiesResponses: ActivityResponses[] = [];
+  const activitiesResponses: ActivityResponses[] =
+    activitiesDto?.map(activityDto => {
+      const activityAnswers = getAnswersByActivityId(
+        activityDto.id,
+        answersDto,
+        encryptionService,
+      );
 
-  activitiesDto?.forEach(activityDto => {
-    const activityAnswers = getAnswersByActivityId(
-      activityDto.id,
-      answersDto,
-      encryptionService,
-    );
+      const analyticsItems = getAnalyticItems(activityDto);
 
-    const analyticsItems = getAnalyticItems(activityDto);
+      const analyticsAnswers = mapAnswersWithAnalyticsItems(
+        activityAnswers,
+        analyticsItems,
+      );
 
-    const analyticsAnswers = mapAnswersWithAnalyticsItems(
-      activityAnswers,
-      analyticsItems,
-    );
-
-    activitiesResponses.push({
-      id: activityDto.id,
-      name: activityDto.name,
-      description: activityDto.description ?? null,
-      responses: mapActivityResponses(analyticsItems, analyticsAnswers),
-    });
-  });
+      return {
+        id: activityDto.id,
+        name: activityDto.name,
+        description: activityDto.description ?? null,
+        responses: mapActivityResponses(analyticsItems, analyticsAnswers),
+      };
+    }) ?? [];
 
   return {
     id: appletId,
