@@ -1,8 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
 
 import { AppletDetailsResponse } from '@app/shared/api';
-import { getAppletDetailsKey } from '@app/shared/lib';
+import { getAppletDetailsKey, getDataFromQuery } from '@app/shared/lib';
 
 import { mapAppletDetailsFromDto } from '../mappers';
 
@@ -10,11 +9,18 @@ class AppletQueryStorage {
   constructor(private queryClient: QueryClient) {}
 
   getAppletDetails(appletId: string) {
-    const response = this.queryClient.getQueryData(
+    const data = getDataFromQuery<AppletDetailsResponse>(
       getAppletDetailsKey(appletId),
-    ) as AxiosResponse<AppletDetailsResponse, any>;
+      this.queryClient,
+    );
 
-    return mapAppletDetailsFromDto(response.data.result);
+    if (!data) {
+      throw Error(
+        `[AppletQueryStorage]: No data found for applet details, appletId:${appletId}`,
+      );
+    }
+
+    return mapAppletDetailsFromDto(data.result);
   }
 }
 

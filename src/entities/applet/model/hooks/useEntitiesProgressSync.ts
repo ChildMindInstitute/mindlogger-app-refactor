@@ -83,7 +83,7 @@ function useEntitiesProgressSync(callbacks: Callbacks, enabled = true) {
           type: isFlow
             ? ActivityPipelineType.Flow
             : ActivityPipelineType.Regular,
-          startAt: serverEndAt,
+          startAt: 0,
           endAt: serverEndAt,
           appletId,
           entityId: completedEntity.entityId,

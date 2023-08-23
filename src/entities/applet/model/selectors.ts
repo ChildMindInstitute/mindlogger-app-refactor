@@ -10,7 +10,7 @@ export const selectInProgressApplets = createSelector(
 export const selectInProgressEntities = createSelector(
   selectInProgressApplets,
   inProgressApplets => {
-    return Object.values(inProgressApplets).reduce(
+    const result = Object.values(inProgressApplets).reduce(
       (progress, entityProgress) => {
         progress = {
           ...progress,
@@ -21,6 +21,8 @@ export const selectInProgressEntities = createSelector(
       },
       {},
     );
+
+    return result;
   },
 );
 
