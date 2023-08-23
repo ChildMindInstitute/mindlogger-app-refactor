@@ -1,5 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
+import { StoreEntitiesProgress } from '@app/abstract/lib';
+
 const selectApplets = (state: RootState) => state.applets;
 
 export const selectInProgressApplets = createSelector(
@@ -10,17 +12,16 @@ export const selectInProgressApplets = createSelector(
 export const selectInProgressEntities = createSelector(
   selectInProgressApplets,
   inProgressApplets => {
-    const result = Object.values(inProgressApplets).reduce(
-      (progress, entityProgress) => {
-        progress = {
-          ...progress,
-          ...entityProgress,
-        };
+    const result: StoreEntitiesProgress = Object.values(
+      inProgressApplets,
+    ).reduce((progress, entityProgress) => {
+      progress = {
+        ...progress,
+        ...entityProgress,
+      };
 
-        return progress;
-      },
-      {},
-    );
+      return progress;
+    }, {});
 
     return result;
   },
