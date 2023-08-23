@@ -145,3 +145,6 @@ export const convertToDayMonthYear = (date: Date): DayMonthYear => ({
 });
 
 export const getMonthAgoDate = () => formatToDtoDate(subMonths(new Date(), 1));
+
+export const buildDateTimeFromDto = (yyyymmdd: string, hhmmss: string) =>
+  new Date(`${yyyymmdd} ${hhmmss}`);
