@@ -7,7 +7,7 @@ import { StoreProgress } from '@app/abstract/lib';
 import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
-import { useAppSelector } from '@app/shared/lib';
+import { Logger, useAppSelector } from '@app/shared/lib';
 
 import { useRefresh } from '../model';
 
@@ -20,12 +20,13 @@ const AppletsRefresh: FC<Props> = props => {
     AppletModel.selectors.selectInProgressApplets,
   );
 
-  const { refresh, isRefreshing } = useRefresh(() => {
-    NotificationModel.NotificationRefreshService.refresh(
+  const { refresh, isRefreshing } = useRefresh(async () => {
+    await NotificationModel.NotificationRefreshService.refresh(
       queryClient,
       storeProgress,
       LogTrigger.PullToRefresh,
     );
+    Logger.send();
   });
 
   return (

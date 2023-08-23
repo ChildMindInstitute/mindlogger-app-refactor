@@ -7,6 +7,7 @@ import {
   FlowProgress,
   StoreProgressPayload,
   CompletedEntities,
+  IStoreProgressPayload,
 } from '@app/abstract/lib';
 
 type InProgressActivity = {
@@ -105,6 +106,32 @@ const slice = createSlice({
       const { appletId, entityId, eventId } = action.payload;
 
       delete state.inProgress[appletId][entityId][eventId];
+    },
+
+    completedEntityMissing: (
+      state,
+      action: PayloadAction<IStoreProgressPayload & InProgressEntity>,
+    ) => {
+      const { startAt, endAt, type, appletId, entityId, eventId } =
+        action.payload;
+
+      state.inProgress[appletId] = state.inProgress[appletId] ?? {};
+      state.inProgress[appletId][entityId] =
+        state.inProgress[appletId][entityId] ?? {};
+      state.inProgress[appletId][entityId][eventId] = {
+        type,
+        startAt,
+        endAt,
+      } as StoreProgressPayload;
+    },
+
+    completedEntityUpdated: (
+      state,
+      action: PayloadAction<InProgressEntity & { endAt: number }>,
+    ) => {
+      const { endAt, appletId, entityId, eventId } = action.payload;
+
+      state.inProgress[appletId][entityId][eventId].endAt = endAt;
     },
   },
 });
