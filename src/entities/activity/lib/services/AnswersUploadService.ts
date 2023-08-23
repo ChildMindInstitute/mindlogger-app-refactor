@@ -4,6 +4,7 @@ import {
   ActivityAnswersRequest,
   AnswerDto,
   AnswerService,
+  CheckIfFilesExistResultDto,
   DrawerAnswerDto,
   FileService,
   ObjectAnswerDto,
@@ -43,28 +44,41 @@ class AnswersUploadService implements IAnswersUploadService {
 
   private isFileUrl(value: string): boolean {
     const localFileRegex =
-      /^(file:\/\/|\/).*\/[^\/]+?\.(jpg|jpeg|png|gif|mp4|m4a|mov|MOV|svg)$/;
+      /^(file:\/\/|\/).*\/[^\/]+?\.(jpg|jpeg|png|gif|mp4|m4a|mov|MOV|svg|mpeg)$/;
 
     return localFileRegex.test(value);
   }
 
+  private mapFileExistenceDto(
+    dto: CheckIfFilesExistResultDto,
+  ): CheckFilesUploadResults {
+    return dto.map<CheckFileUploadResult>(x => ({
+      fileId: x.key,
+      remoteUrl: x.url,
+      uploaded: x.uploaded,
+    }));
+  }
+
   private async checkIfFilesUploaded(
     fileIds: string[],
-    fakeResult: boolean = false,
   ): Promise<CheckFilesUploadResults> {
-    return fileIds.map(x => ({
-      // todo
-      uploaded: fakeResult,
-      fileId: x,
-      remoteUrl: null,
-    }));
+    const response = await FileService.checkIfFilesExist({
+      files: fileIds,
+    });
+
+    return this.mapFileExistenceDto(response.data.result);
   }
 
   private async checkIfAnswersUploaded(
     checkInput: CheckAnswersInput,
-    fakeResult: boolean = false,
   ): Promise<boolean> {
-    return fakeResult; // todo
+    const response = await AnswerService.checkIfAnswersExist({
+      activityId: checkInput.activityId,
+      appletId: checkInput.appletId,
+      createdAt: checkInput.createdAt,
+    });
+
+    return response.data.result.exists;
   }
 
   private getUploadRecord(
@@ -130,6 +144,7 @@ class AnswersUploadService implements IAnswersUploadService {
           fileName: mediaFile.fileName,
           type: mediaFile.type,
           uri: mediaFile.uri,
+          fileId: this.getFileId(mediaFile),
         });
 
         remoteUrl = uploadResult.data.result.url;
@@ -210,7 +225,7 @@ class AnswersUploadService implements IAnswersUploadService {
     }
 
     try {
-      uploadChecks = await this.checkIfFilesUploaded(fileIds, true);
+      uploadChecks = await this.checkIfFilesUploaded(fileIds);
     } catch (error) {
       throw new Error(
         '[uploadAnswerMediaFiles.uploadAllMediaFiles]: Error occurred while 2nd files upload check\n\n' +
@@ -265,15 +280,12 @@ class AnswersUploadService implements IAnswersUploadService {
     }
 
     try {
-      uploaded = await this.checkIfAnswersUploaded(
-        {
-          activityId: encryptedData.activityId,
-          appletId: encryptedData.appletId,
-          flowId: encryptedData.flowId,
-          createdAt: encryptedData.createdAt,
-        },
-        true,
-      );
+      uploaded = await this.checkIfAnswersUploaded({
+        activityId: encryptedData.activityId,
+        appletId: encryptedData.appletId,
+        flowId: encryptedData.flowId,
+        createdAt: encryptedData.createdAt,
+      });
     } catch (error) {
       throw new Error(
         '[UploadAnswersService.uploadAnswers]: Error occurred while 2nd check if answers uploaded\n\n' +

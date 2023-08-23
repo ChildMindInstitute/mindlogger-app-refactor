@@ -84,7 +84,7 @@ class QueueProcessingService {
   public async process(): Promise<boolean> {
     if (this.mutex.isBusy()) {
       this.logger.log('[QueueProcessingService.process]: Mutex is busy');
-      return false;
+      return true;
     }
 
     try {
