@@ -11,6 +11,7 @@ import {
   ResponseAnalyticsDto,
   ThemeDto,
 } from '@app/shared/api';
+import { buildDateTimeFromDto } from '@app/shared/lib';
 
 import {
   Activity,
@@ -158,6 +159,6 @@ export function mapCompletedEntityFromDto(
   return {
     eventId: dto.scheduledEventId,
     entityId: dto.id,
-    endAt: new Date(`${dto.localEndDate} ${dto.localEndTime}`).valueOf(),
+    endAt: buildDateTimeFromDto(dto.localEndDate, dto.localEndTime).valueOf(),
   };
 }
