@@ -12,6 +12,7 @@ export const enum LogTrigger {
   ScheduleUpdated = 'ScheduleUpdated',
   AppletRemoved = 'AppletRemoved',
   AppletUpdated = 'AppletUpdated',
+  EntitiesSyncedUp = 'EntitiesSyncedUp',
 }
 
 export const enum LogAction {

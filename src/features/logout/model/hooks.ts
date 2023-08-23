@@ -31,8 +31,6 @@ export function useLogout() {
       console.log('Logout operation failed:', error);
     }
 
-    SessionModel.clearSession();
-
     dispatch(IdentityModel.actions.onLogout());
 
     CacheManager.clearCache();
@@ -53,6 +51,8 @@ export function useLogout() {
     await queryClient.removeQueries(['activities']);
 
     queryClient.clear();
+
+    SessionModel.clearSession();
   };
 
   const logout = async () => {
