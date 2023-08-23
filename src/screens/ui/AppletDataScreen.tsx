@@ -3,11 +3,8 @@ import { FC } from 'react';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 import { UploadRetryBanner } from '@app/entities/activity';
-import {
-  ActivityAnalyticsList,
-  useAppletAnalyticsQuery,
-} from '@app/entities/applet';
-import { mapAppletAnalytics } from '@app/entities/applet/model';
+import { ActivityAnalyticsList } from '@app/entities/applet';
+import { useAppletAnalytics } from '@app/entities/applet/lib/hooks/useAppletAnalytics';
 import { Box, HorizontalCalendar } from '@app/shared/ui';
 import { AppletDetailsParamList } from '@screens/config';
 
@@ -18,18 +15,13 @@ const AppletDataScreen: FC<Props> = ({ route }) => {
     params: { appletId },
   } = route;
 
-  const { data: appletAnalytics } = useAppletAnalyticsQuery(appletId, {
-    select: response => mapAppletAnalytics(response?.data.result),
-  });
+  const { analytics } = useAppletAnalytics(appletId);
 
   return (
     <Box flexGrow={1}>
       <UploadRetryBanner />
       <HorizontalCalendar mt={8} />
-
-      <ActivityAnalyticsList
-        activitiesResponses={appletAnalytics?.activitiesResponses ?? []}
-      />
+      <ActivityAnalyticsList analytics={analytics} />
     </Box>
   );
 };

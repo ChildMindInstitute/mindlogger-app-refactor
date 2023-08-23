@@ -4,17 +4,17 @@ import { StyleSheet } from 'react-native';
 import { Box, ScrollView } from '@app/shared/ui';
 
 import ActivityDataCard from './ActivityAnalyticsCard';
-import { ActivityResponses } from '../lib';
+import { AppletAnalytics } from '../lib';
 
 type Props = {
-  activitiesResponses: Array<ActivityResponses>;
+  analytics: AppletAnalytics | null;
 };
 
-const ActivityAnalyticsList: FC<Props> = ({ activitiesResponses }) => {
+const ActivityAnalyticsList: FC<Props> = ({ analytics }) => {
   return (
     <Box flex={1}>
       <ScrollView contentContainerStyle={styles.scrollView}>
-        {activitiesResponses.map(response => (
+        {analytics?.activitiesResponses?.map(response => (
           <ActivityDataCard key={response.id} responseData={response} />
         ))}
       </ScrollView>

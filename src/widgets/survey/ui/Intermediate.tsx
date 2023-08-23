@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react';
 
 import { styled } from '@tamagui/core';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
@@ -65,6 +66,7 @@ function Intermediate({
 }: Props) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   // TODO: The usage of useAppletDetailsQuery here should be removed in the future
   // because we should rely on the flow pipeline instead.
@@ -225,6 +227,7 @@ function Intermediate({
     if (!success) {
       openRetryAlert();
     } else {
+      queryClient.invalidateQueries(['activity_analytics']);
       changeActivity();
       onFinish();
     }
