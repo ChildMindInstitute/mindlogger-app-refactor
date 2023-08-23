@@ -12,6 +12,6 @@ export const useAppletAnalyticsQuery = <TData = ReturnAwaited<FetchFn>>(
   return useBaseQuery(
     ['activity_analytics', { appletId }],
     () => AppletAnalyticsService.getActivityAnalytics({ appletId, fromDate }),
-    { ...options },
+    { ...options, staleTime: 0 },
   );
 };
