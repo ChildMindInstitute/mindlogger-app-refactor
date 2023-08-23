@@ -159,6 +159,7 @@ class Logger implements ILogger {
             fileName: checkRecord.fileName,
             uri: checkRecord.filePath,
             type: 'log',
+            fileId: '',
           },
           'log',
         );
