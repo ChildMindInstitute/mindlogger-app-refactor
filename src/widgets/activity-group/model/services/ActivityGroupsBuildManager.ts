@@ -9,6 +9,8 @@ import { EventModel, ScheduleEvent } from '@app/entities/event';
 import { mapEventsFromDto } from '@app/entities/event/model/mappers';
 import { AppletDetailsResponse, AppletEventsResponse } from '@app/shared/api';
 import {
+  ILogger,
+  Logger,
   getAppletDetailsKey,
   getDataFromQuery,
   getEventsKey,
@@ -28,7 +30,7 @@ type BuildResult = {
   groups: ActivityListGroup[];
 };
 
-const createActivityGroupsBuildManager = () => {
+const createActivityGroupsBuildManager = (logger: ILogger) => {
   const buildIdToEntityMap = (
     activities: Activity[],
     activityFlows: ActivityFlow[],
@@ -56,7 +58,7 @@ const createActivityGroupsBuildManager = () => {
     return [...flows, ...activities];
   };
 
-  const process = (
+  const processInternal = (
     appletId: string,
     entitiesProgress: StoreProgress,
     queryClient: QueryClient,
@@ -67,8 +69,8 @@ const createActivityGroupsBuildManager = () => {
     )!;
 
     if (!appletResponse) {
-      console.warn(
-        '[ActivityGroupsBuildManager.process]: appletResponse not found',
+      logger.warn(
+        `[ActivityGroupsBuildManager.processInternal]: appletResponse not found, appletId=${appletId}`,
       );
       return { groups: [] };
     }
@@ -86,9 +88,13 @@ const createActivityGroupsBuildManager = () => {
       queryClient,
     )!;
 
+    logger.log(
+      `[ActivityGroupsBuildManager.processInternal]: Applet is "${appletId}|${appletResponse.result.displayName}"`,
+    );
+
     if (!eventsResponse) {
-      console.warn(
-        '[ActivityGroupsBuildManager.process]: eventsResponse not found',
+      logger.warn(
+        '[ActivityGroupsBuildManager.processInternal]: eventsResponse not found',
       );
       return { groups: [] };
     }
@@ -115,9 +121,17 @@ const createActivityGroupsBuildManager = () => {
 
     const calculator = EventModel.ScheduledDateCalculator;
 
+    logger.log('[ScheduledDateCalculator.calculate]: Calculating scheduledAt');
+
     for (let eventActivity of entityEvents) {
       const date = calculator.calculate(eventActivity.event);
       eventActivity.event.scheduledAt = date;
+
+      if (!date) {
+        logger.warn(
+          `[ScheduledDateCalculator.calculate]: result is null, entity|event = "${eventActivity.entity.name}|${eventActivity.event.id}"`,
+        );
+      }
     }
 
     entityEvents = entityEvents.filter(x => x.event.scheduledAt);
@@ -126,13 +140,53 @@ const createActivityGroupsBuildManager = () => {
 
     entityEvents = sort(entityEvents);
 
-    const groupAvailable = builder!.buildAvailable(entityEvents);
-    const groupInProgress = builder!.buildInProgress(entityEvents);
-    const groupScheduled = builder!.buildScheduled(entityEvents);
+    const result: BuildResult = { groups: [] };
 
-    return {
-      groups: [groupInProgress, groupAvailable, groupScheduled],
-    };
+    try {
+      logger.log(
+        '[ActivityGroupsBuildManager.processInternal]: Building available',
+      );
+      result.groups.push(builder!.buildAvailable(entityEvents));
+
+      logger.log(
+        '[ActivityGroupsBuildManager.processInternal]: Building in-progress',
+      );
+      result.groups.push(builder!.buildInProgress(entityEvents));
+
+      logger.log(
+        '[ActivityGroupsBuildManager.processInternal]: Building scheduled',
+      );
+      result.groups.push(builder!.buildScheduled(entityEvents));
+    } catch (error) {
+      logger.warn(
+        '[ActivityGroupsBuildManager.processInternal]: Build error occurred:\n\n' +
+          error!.toString(),
+      );
+    }
+
+    return result;
+  };
+
+  const process = (
+    appletId: string,
+    entitiesProgress: StoreProgress,
+    queryClient: QueryClient,
+  ): BuildResult => {
+    try {
+      logger.log('[ActivityGroupsBuildManager.process]: Building groups..');
+
+      const result = processInternal(appletId, entitiesProgress, queryClient);
+
+      logger.log('[ActivityGroupsBuildManager.process]: Build is done');
+
+      return result;
+    } catch (error) {
+      logger.warn(
+        '[ActivityGroupsBuildManager.process] Error occurred\nInternal error:\n' +
+          error!.toString(),
+      );
+    }
+    return { groups: [] };
   };
 
   return {
@@ -140,4 +194,4 @@ const createActivityGroupsBuildManager = () => {
   };
 };
 
-export default createActivityGroupsBuildManager();
+export default createActivityGroupsBuildManager(Logger);
