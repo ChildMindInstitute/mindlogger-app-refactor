@@ -26,7 +26,4 @@ export type ActivityResponsesDto = {
   responses: Array<ItemResponsesDto>;
 };
 
-export type AppletAnalyticsDto = {
-  appletId: string;
-  activitiesResponses?: Array<ActivityResponsesDto>;
-};
+export type AppletAnalyticsDto = any;

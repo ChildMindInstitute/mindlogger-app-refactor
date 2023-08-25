@@ -42,7 +42,7 @@ type NotificationRefreshService = {
     queryClient: QueryClient,
     storeProgress: StoreProgress,
     logTrigger: LogTrigger,
-  ) => void;
+  ) => Promise<void>;
 };
 
 const createNotificationRefreshService = (): NotificationRefreshService => {

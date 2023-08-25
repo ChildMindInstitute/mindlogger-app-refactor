@@ -23,6 +23,12 @@ export type StoreProgressPayload = EntityProgress & {
   endAt: number | null;
 };
 
+export interface IStoreProgressPayload {
+  type: ActivityPipelineType;
+  startAt: number;
+  endAt: number | null;
+}
+
 type EventId = string;
 
 type EntityId = string;

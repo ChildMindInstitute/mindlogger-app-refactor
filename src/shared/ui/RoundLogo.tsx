@@ -18,12 +18,11 @@ type Props = {
 };
 
 const getImageUrl = (url: string): string => {
-  const encodedUrl = encodeURI(url);
-  if (encodedUrl.endsWith('.svg')) {
+  if (url.endsWith('.svg')) {
     // todo - remove later if unnecessary
-    return encodedUrl.replace('.svg', '.jpg');
+    return url.replace('.svg', '.jpg');
   }
-  return encodedUrl;
+  return url;
 };
 
 const RoundLogo: FC<Props> = ({ imageUri, imageStyle, letter, size = 64 }) => {

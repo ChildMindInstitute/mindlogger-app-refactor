@@ -20,8 +20,8 @@ export type SendAnswersInput = {
   startTime: number;
   endTime: number;
   userIdentifier?: string;
-  debug_activityName?: string;
-  debug_completedAt?: string;
+  eventId: string;
+  isFlowCompleted: boolean;
   client: {
     appId: string;
     appVersion: string;
@@ -29,6 +29,8 @@ export type SendAnswersInput = {
     height: number;
   };
   alerts: AnswerAlertsDto;
+  logActivityName?: string;
+  logCompletedAt?: string;
 };
 
 export type CheckFileUploadResult = {

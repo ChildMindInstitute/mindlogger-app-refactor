@@ -5,17 +5,9 @@ import { Item } from '@app/shared/ui';
 import { Answers } from './hooks';
 import { PipelineItem, PipelineItemResponse } from './types';
 
-// @todo test this with other input types, finish date type
-
 type Time = {
   hours: number;
   minutes: number;
-};
-
-type DateAnswer = {
-  year: number;
-  month: number;
-  day: number;
 };
 
 export class MarkdownVariableReplacer {
@@ -58,18 +50,13 @@ export class MarkdownVariableReplacer {
   };
 
   private formatTime = (time: Time | undefined): string => {
+    if (time?.hours === 0) {
+      time.hours = 12;
+    }
     if (!time || !time.hours) {
       return '';
     }
-    return `${time.hours}:${time.minutes}`;
-  };
-
-  private formatDate = (dateObject: undefined | DateAnswer): string => {
-    if (!dateObject) {
-      return '';
-    }
-    const { year, month, day } = dateObject;
-    return format(new Date(year, month, day), 'y-MM-dd');
+    return `${time.hours}:${time.minutes < 10 ? '0' : ''}${time.minutes}`;
   };
 
   private parseBasicSystemVariables = (markdown: string) => {
@@ -127,6 +114,10 @@ export class MarkdownVariableReplacer {
       formattedString = `${interval.months} months and ` + formattedString;
     }
 
+    if (interval.seconds && formattedString === '') {
+      formattedString = 'minute';
+    }
+
     return formattedString;
   };
 
@@ -158,7 +149,7 @@ export class MarkdownVariableReplacer {
     return value!.toString().replace(/(?=[$&])/g, '\\');
   };
 
-  private getReplaceValue = (variableName: string) => {
+  private getReplaceValue = (variableName: string): string => {
     const foundIndex = this.activityItems.findIndex(
       item => item.name === variableName,
     );
@@ -203,14 +194,16 @@ export class MarkdownVariableReplacer {
           answer?.endTime,
         )}`;
         break;
-      case 'Time':
-        updated = this.formatTime(answer);
+      case 'Date':
+        updated = answer;
         break;
-      // @todo
-      // case 'date':
-      //   updated = this.formatDate(answer);
-      //   break;
     }
+    const variablesLeftToProcess = this.extractVariables(updated);
+
+    if (variablesLeftToProcess?.length) {
+      return this.getReplaceValue(updated.replace(/[\[\]']+/g, ''));
+    }
+
     return updated;
   };
 }

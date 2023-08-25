@@ -151,10 +151,12 @@ function FinishItem({
       startTime: getActivityStartAt(progressRecord)!,
       endTime: Date.now(),
       scheduledTime: scheduledDate,
-      debug_activityName: getActivityName(activityId),
-      debug_completedAt: new Date().toString(),
+      logActivityName: getActivityName(activityId),
+      logCompletedAt: new Date().toString(),
       client: getClientInformation(),
       alerts,
+      eventId,
+      isFlowCompleted: !!flowId,
     });
 
     clearActivityStorageRecord();
@@ -163,6 +165,8 @@ function FinishItem({
 
     if (!success) {
       openRetryAlert();
+    } else {
+      queryClient.invalidateQueries(['activity_analytics']);
     }
   }
 

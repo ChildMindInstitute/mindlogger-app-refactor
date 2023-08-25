@@ -11,7 +11,13 @@ import {
 } from '@app/shared/api';
 import { MediaFile } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
-import { encryption } from '@shared/lib';
+import {
+  ILogger,
+  Logger,
+  encryption,
+  formatToDtoDate,
+  formatToDtoTime,
+} from '@shared/lib';
 
 import MediaFilesCleaner from './MediaFilesCleaner';
 import {
@@ -28,8 +34,11 @@ export interface IAnswersUploadService {
 class AnswersUploadService implements IAnswersUploadService {
   private createdAt: number | null;
 
-  constructor() {
+  private logger: ILogger;
+
+  constructor(logger: ILogger) {
     this.createdAt = null;
+    this.logger = logger;
   }
 
   private isFileUrl(value: string): boolean {
@@ -59,10 +68,10 @@ class AnswersUploadService implements IAnswersUploadService {
   }
 
   private getUploadRecord(
-    results: CheckFilesUploadResults,
+    checks: CheckFilesUploadResults,
     fileId: string,
   ): CheckFileUploadResult {
-    return results.find(x => x.fileId === fileId)!;
+    return checks.find(x => x.fileId === fileId)!;
   }
 
   private getFileId(file: MediaFile): string {
@@ -87,26 +96,29 @@ class AnswersUploadService implements IAnswersUploadService {
     return result;
   }
 
-  private async uploadFilesForAnswer(
-    mediaAnswer: MediaFile,
-    uploadResults: CheckFilesUploadResults,
+  private async processFileUpload(
+    mediaFile: MediaFile,
+    uploadChecks: CheckFilesUploadResults,
+    logAnswerIndex: number,
   ): Promise<string> {
-    const localFileExists = await FileSystem.exists(mediaAnswer.uri);
+    const localFileExists = await FileSystem.exists(mediaFile.uri);
+
+    const logFileInfo = `(${mediaFile.type}, from answer #${logAnswerIndex})`;
 
     if (!localFileExists) {
       throw new Error(
-        '[UploadAnswersService.uploadFilesForAnswer]: Local file does not exist',
+        `[UploadAnswersService.uploadFilesForAnswer]: Local file ${logFileInfo} does not exist`,
       );
     }
 
     const uploadRecord = this.getUploadRecord(
-      uploadResults,
-      this.getFileId(mediaAnswer),
+      uploadChecks,
+      this.getFileId(mediaFile),
     );
 
     if (!uploadRecord) {
       throw new Error(
-        '[UploadAnswersService.uploadFilesForAnswer]: uploadRecord does not exist',
+        `[UploadAnswersService.uploadFilesForAnswer]: uploadRecord does not exist, file: ${logFileInfo}`,
       );
     }
 
@@ -115,23 +127,26 @@ class AnswersUploadService implements IAnswersUploadService {
 
       if (!uploadRecord.uploaded) {
         const uploadResult = await FileService.upload({
-          fileName: mediaAnswer.fileName,
-          type: mediaAnswer.type,
-          uri: mediaAnswer.uri,
+          fileName: mediaFile.fileName,
+          type: mediaFile.type,
+          uri: mediaFile.uri,
         });
 
         remoteUrl = uploadResult.data.result.url;
       } else {
+        this.logger.log(
+          `[UploadAnswersService.uploadFilesForAnswer] File ${logFileInfo} already uploaded`,
+        );
+
         remoteUrl = uploadRecord.remoteUrl;
       }
 
       return remoteUrl!;
     } catch (error) {
-      console.warn(
-        '[UploadAnswersService.uploadFilesForAnswer]: Error occurred while file uploading',
-        error!.toString(),
+      throw new Error(
+        `[UploadAnswersService.uploadFilesForAnswer]: Error occurred while file ${logFileInfo} uploading\n\n` +
+          error!.toString(),
       );
-      throw error;
     }
   }
 
@@ -140,10 +155,10 @@ class AnswersUploadService implements IAnswersUploadService {
   ): Promise<SendAnswersInput> {
     const fileIds = this.collectFileIds(body.answers);
 
-    let uploadResults: CheckFilesUploadResults;
+    let uploadChecks: CheckFilesUploadResults;
 
     try {
-      uploadResults = await this.checkIfFilesUploaded(fileIds);
+      uploadChecks = await this.checkIfFilesUploaded(fileIds);
     } catch (error) {
       throw new Error(
         '[UploadAnswersService.uploadAllMediaFiles]: Error occurred on 1st files upload check\n\n' +
@@ -154,8 +169,11 @@ class AnswersUploadService implements IAnswersUploadService {
     const itemsAnswers = [...body.answers] as ObjectAnswerDto[];
 
     const updatedAnswers = [];
+    let logAnswerIndex = -1;
 
     for (const itemAnswer of itemsAnswers) {
+      logAnswerIndex++;
+
       const answerValue = (itemAnswer as ObjectAnswerDto)?.value;
 
       const text = (itemAnswer as ObjectAnswerDto)?.text;
@@ -169,9 +187,10 @@ class AnswersUploadService implements IAnswersUploadService {
         continue;
       }
 
-      const remoteUrl = await this.uploadFilesForAnswer(
+      const remoteUrl = await this.processFileUpload(
         mediaAnswer,
-        uploadResults,
+        uploadChecks,
+        logAnswerIndex,
       );
 
       const isSvg = mediaAnswer.type === 'image/svg';
@@ -191,15 +210,15 @@ class AnswersUploadService implements IAnswersUploadService {
     }
 
     try {
-      uploadResults = await this.checkIfFilesUploaded(fileIds, true);
+      uploadChecks = await this.checkIfFilesUploaded(fileIds, true);
     } catch (error) {
       throw new Error(
-        '[uploadAnswerMediaFiles.uploadAllMediaFiles]: Error occurred on 2nd files upload check\n\n' +
+        '[uploadAnswerMediaFiles.uploadAllMediaFiles]: Error occurred while 2nd files upload check\n\n' +
           error!.toString(),
       );
     }
 
-    if (uploadResults.some(x => !x.uploaded)) {
+    if (uploadChecks.some(x => !x.uploaded)) {
       throw new Error(
         '[uploadAnswerMediaFiles.uploadAllMediaFiles]: Error occurred on final upload results check',
       );
@@ -214,32 +233,35 @@ class AnswersUploadService implements IAnswersUploadService {
     let uploaded: boolean;
 
     try {
+      const { activityId, appletId, flowId, createdAt } = encryptedData;
+
       uploaded = await this.checkIfAnswersUploaded({
-        activityId: encryptedData.activityId,
-        appletId: encryptedData.appletId,
-        flowId: encryptedData.flowId,
-        createdAt: encryptedData.createdAt,
+        activityId,
+        appletId,
+        flowId,
+        createdAt,
       });
     } catch (error) {
-      console.warn(
-        '[UploadAnswersService.uploadAnswers]: Error occurred while 1st check if answers uploaded\n\n',
-        error!.toString(),
+      throw new Error(
+        '[UploadAnswersService.uploadAnswers]: Error occurred while 1st check if answers uploaded\n\n' +
+          error!.toString(),
       );
-      throw error;
     }
 
     if (uploaded) {
+      this.logger.log(
+        '[UploadAnswersService.uploadAnswers]: Answers already uploaded',
+      );
       return;
     }
 
     try {
       await AnswerService.sendActivityAnswers(encryptedData);
     } catch (error) {
-      console.warn(
-        '[UploadAnswersService.uploadAnswers]: Error occurred while sending answers\n\n',
-        error!.toString(),
+      throw new Error(
+        '[UploadAnswersService.uploadAnswers]: Error occurred while sending answers\n\n' +
+          error!.toString(),
       );
-      throw error;
     }
 
     try {
@@ -253,11 +275,10 @@ class AnswersUploadService implements IAnswersUploadService {
         true,
       );
     } catch (error) {
-      console.warn(
-        '[UploadAnswersService.uploadAnswers]: Error occurred while 2nd check if answers uploaded\n\n',
-        error!.toString(),
+      throw new Error(
+        '[UploadAnswersService.uploadAnswers]: Error occurred while 2nd check if answers uploaded\n\n' +
+          error!.toString(),
       );
-      throw error;
     }
 
     if (!uploaded) {
@@ -272,7 +293,7 @@ class AnswersUploadService implements IAnswersUploadService {
     const userPrivateKey = UserPrivateKeyRecord.get();
 
     if (!userPrivateKey) {
-      throw new Error('User private key is undefined');
+      throw new Error('Error occurred while preparing answers');
     }
 
     const { encrypt } = encryption.createEncryptionService({
@@ -298,6 +319,7 @@ class AnswersUploadService implements IAnswersUploadService {
       flowId: data.flowId,
       submitId: data.executionGroupKey,
       activityId: data.activityId,
+      isFlowCompleted: data.isFlowCompleted,
       answer: {
         answer: encryptedAnswers,
         itemIds: data.itemIds,
@@ -307,6 +329,9 @@ class AnswersUploadService implements IAnswersUploadService {
         scheduledTime: data.scheduledTime,
         userPublicKey: JSON.stringify(userPublicKey),
         identifier,
+        localEndDate: formatToDtoDate(data.endTime),
+        localEndTime: formatToDtoTime(data.endTime, true),
+        scheduledEventId: data.eventId,
       },
       createdAt: data.createdAt,
       client: data.client,
@@ -368,18 +393,25 @@ class AnswersUploadService implements IAnswersUploadService {
     try {
       return processUserActions();
     } catch (error) {
-      console.warn(
-        '[UploadAnswersService.assignRemoteUrlsToUserActions]: Error occurred while mapping user actions media files',
-        error!.toString(),
+      throw new Error(
+        '[UploadAnswersService.assignRemoteUrlsToUserActions]: Error occurred while mapping user actions with media files\n\n' +
+          error!.toString(),
       );
-      throw error;
     }
   }
 
   public async sendAnswers(body: SendAnswersInput) {
     this.createdAt = body.createdAt;
 
+    this.logger.log(
+      '[UploadAnswersService.sendAnswers] executing upload files',
+    );
+
     const modifiedBody = await this.uploadAllMediaFiles(body);
+
+    this.logger.log(
+      '[UploadAnswersService.sendAnswers] executing assign urls to user actions',
+    );
 
     const updatedUserActions = this.assignRemoteUrlsToUserActions(
       body.answers,
@@ -394,12 +426,22 @@ class AnswersUploadService implements IAnswersUploadService {
       );
     }
 
+    this.logger.log(
+      '[UploadAnswersService.sendAnswers] executing prepare answers',
+    );
+
     const encryptedData = this.encryptAnswers(modifiedBody);
 
+    this.logger.log(
+      '[UploadAnswersService.sendAnswers] executing upload answers',
+    );
+
     await this.uploadAnswers(encryptedData);
+
+    this.logger.log('[UploadAnswersService.sendAnswers] executing clean up');
 
     MediaFilesCleaner.cleanUpByAnswers(body.answers);
   }
 }
 
-export default new AnswersUploadService();
+export default new AnswersUploadService(Logger);

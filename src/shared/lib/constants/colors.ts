@@ -32,4 +32,5 @@ export const colors = {
   black: '#000',
   red: '#FF0000',
   lightRed: '#ffdddd',
+  codePink: '#d63384',
 };

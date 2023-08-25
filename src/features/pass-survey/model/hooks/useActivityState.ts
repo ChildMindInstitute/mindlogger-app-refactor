@@ -41,27 +41,31 @@ function useActivityState({
   });
 
   function setStep(step: number) {
-    if (!activityStorageRecord) {
+    const currentStorageRecord = getCurrentActivityStorageRecord();
+
+    if (!currentStorageRecord) {
       return;
     }
 
     upsertActivityStorageRecord({
-      ...activityStorageRecord,
+      ...currentStorageRecord,
       step,
     });
   }
 
   function setAnswer(step: number, answer: PipelineItemResponse) {
-    if (!activityStorageRecord) {
+    const currentStorageRecord = getCurrentActivityStorageRecord();
+
+    if (!currentStorageRecord) {
       return;
     }
 
     upsertActivityStorageRecord({
-      ...activityStorageRecord,
+      ...currentStorageRecord,
       answers: {
-        ...activityStorageRecord.answers,
+        ...currentStorageRecord.answers,
         [step]: {
-          ...activityStorageRecord.answers?.[step],
+          ...currentStorageRecord.answers?.[step],
           answer,
         },
       },
@@ -70,30 +74,34 @@ function useActivityState({
   }
 
   function setContext(contextKey: string, contextValue: unknown) {
-    if (!activityStorageRecord) {
+    const currentStorageRecord = getCurrentActivityStorageRecord();
+
+    if (!currentStorageRecord) {
       return;
     }
 
     upsertActivityStorageRecord({
-      ...activityStorageRecord,
+      ...currentStorageRecord,
       context: {
-        ...activityStorageRecord.context,
+        ...currentStorageRecord.context,
         [contextKey]: contextValue,
       },
     });
   }
 
   function setAdditionalAnswer(step: number, answer: string) {
-    if (!activityStorageRecord) {
+    const currentStorageRecord = getCurrentActivityStorageRecord();
+
+    if (!currentStorageRecord) {
       return;
     }
 
     upsertActivityStorageRecord({
-      ...activityStorageRecord,
+      ...currentStorageRecord,
       answers: {
-        ...activityStorageRecord.answers,
+        ...currentStorageRecord.answers,
         [step]: {
-          ...activityStorageRecord.answers?.[step],
+          ...currentStorageRecord.answers?.[step],
           additionalAnswer: answer,
         },
       },
@@ -102,19 +110,21 @@ function useActivityState({
   }
 
   function removeAnswer(step: number) {
-    if (!activityStorageRecord) {
+    const currentStorageRecord = getCurrentActivityStorageRecord();
+
+    if (!currentStorageRecord) {
       return;
     }
 
-    const answers = { ...activityStorageRecord.answers };
+    const answers = { ...currentStorageRecord.answers };
 
     delete answers[step];
 
     const action = userActionCreator.undo();
 
-    if (activityStorageRecord) {
+    if (currentStorageRecord) {
       upsertActivityStorageRecord({
-        ...activityStorageRecord,
+        ...currentStorageRecord,
         answers,
         actions: addUserAction(action),
       });
@@ -122,29 +132,33 @@ function useActivityState({
   }
 
   function setTimer(step: number, progress: number) {
-    if (!activityStorageRecord) {
+    const currentStorageRecord = getCurrentActivityStorageRecord();
+
+    if (!currentStorageRecord) {
       return;
     }
 
     upsertActivityStorageRecord({
-      ...activityStorageRecord,
+      ...currentStorageRecord,
 
       timers: {
-        ...activityStorageRecord.timers,
+        ...currentStorageRecord.timers,
         [step]: progress,
       },
     });
   }
 
   function removeTimer(step: number) {
-    if (!activityStorageRecord?.timers) {
+    const currentStorageRecord = getCurrentActivityStorageRecord();
+
+    if (!currentStorageRecord?.timers) {
       return;
     }
 
-    delete activityStorageRecord.timers[step];
+    delete currentStorageRecord.timers[step];
 
     upsertActivityStorageRecord({
-      ...activityStorageRecord,
+      ...currentStorageRecord,
     });
   }
 
