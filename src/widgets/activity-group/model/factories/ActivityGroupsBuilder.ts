@@ -132,7 +132,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       const left: number = activityDuration - alreadyElapsed;
 
       const hours = Math.floor(left / MS_IN_MINUTE / MINUTES_IN_HOUR);
-      const minutes = Math.round((left - getMsFromHours(hours)) / MS_IN_MINUTE);
+      const minutes = Math.floor((left - getMsFromHours(hours)) / MS_IN_MINUTE);
 
       return { hours, minutes };
     } else {
