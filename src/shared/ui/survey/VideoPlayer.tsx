@@ -49,6 +49,12 @@ const VideoPlayer: FC<Props> = ({
     playerRef.current?.stop();
   };
 
+  useEffect(() => {
+    if (!autoPlay) {
+      playerRef.current?.pause();
+    }
+  }, [autoPlay, playerRef]);
+
   return (
     <Center flex={1} w="100%">
       <VideoPlayerBase
@@ -56,10 +62,9 @@ const VideoPlayer: FC<Props> = ({
         video={{
           uri,
         }}
-        autoplay={autoPlay}
+        autoplay
         resizeMode={resizeMode}
         showDuration
-        disableFullscreen
         pauseOnPress
         customStyles={{
           wrapper: mergeStyles(wrapperStyle),
