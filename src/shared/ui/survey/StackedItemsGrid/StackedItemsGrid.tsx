@@ -26,7 +26,7 @@ const AxisListItemText: FC<TextProps & { hasTooltip?: boolean }> = styled(
         true: { color: '$blue', textDecorationLine: 'underline' },
         false: { color: '$black' },
       },
-    },
+    } as const,
     defaultVariants: { hasTooltip: false },
   },
 );

@@ -1,33 +1,35 @@
-import { AxiosResponse } from 'axios';
-
-import { AppletAnalyticsDto } from './AppletAnalyticsDto';
-import { appletAnalyticsMock } from './mockAppletAnalytics';
+import { ActivityDto } from './activityService';
+import httpService from './httpService';
 import { SuccessfulResponse } from '../types';
 
 export * from './AppletAnalyticsDto';
 
-const mockAnalytics = true;
+export type AnalyticsAnswerDto = {
+  answer: string;
+  createdAt: string;
+  itemIds: string[];
+  activityId: string;
+};
 
-type ActivityAnswersResponse = SuccessfulResponse<AppletAnalyticsDto>;
+type ActivityAnalyticsDto = {
+  activities: ActivityDto[];
+  answers: AnalyticsAnswerDto[];
+};
 
-type FakeResponse = AxiosResponse<ActivityAnswersResponse>;
+type ActivityAnalyticsResponse = SuccessfulResponse<ActivityAnalyticsDto>;
 
 type ActivityAnalyticsRequest = {
   appletId: string;
+  fromDate: string;
 };
 
 function appletAnalyticsService() {
   return {
-    // eslint-disable-next-line
     async getActivityAnalytics(request: ActivityAnalyticsRequest) {
-      if (mockAnalytics) {
-        const response: FakeResponse = {
-          status: 200,
-          data: { result: appletAnalyticsMock },
-        } as FakeResponse;
-
-        return Promise.resolve(response);
-      }
+      return httpService.get<ActivityAnalyticsResponse>(
+        `/answers/applet/${request.appletId}/data`,
+        { params: { fromDate: request.fromDate } },
+      );
     },
   };
 }

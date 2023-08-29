@@ -7,6 +7,7 @@ import {
 } from '@app/abstract/lib';
 import { ActivityFlowRecordDto, AppletDetailsResponse } from '@app/shared/api';
 import {
+  Logger,
   getAppletDetailsKey,
   getDataFromQuery,
   isAppOnline,
@@ -106,6 +107,8 @@ function useStartEntity({
         return;
       }
 
+      Logger.cancelSending('Start activity');
+
       const isActivityInProgress = isInProgress(
         getProgress(appletId, activityId, eventId),
       );
@@ -176,6 +179,8 @@ function useStartEntity({
         resolve({ cannotBeStartedDueToMediaFound: true });
         return;
       }
+
+      Logger.cancelSending('Start flow');
 
       const isFlowInProgress = isInProgress(
         getProgress(appletId, flowId, eventId),

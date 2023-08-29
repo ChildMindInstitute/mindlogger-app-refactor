@@ -22,8 +22,8 @@ const ActivityAnalyticsCard: FC<Props> = ({ responseData }) => {
     <ActivityCardContainer>
       <Text fontSize={30}>{responseData.name}</Text>
 
-      {responseData.responses?.map(response => (
-        <Box pt={10} pb={10}>
+      {responseData.responses?.map((response, index) => (
+        <Box pt={10} pb={10} key={index}>
           <AnalyticsChart
             title={response.name}
             responseType={response.type}

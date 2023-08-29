@@ -3,7 +3,7 @@ import { LogBox } from 'react-native';
 import { RootNavigator } from '@screens';
 
 import localization from '@jobs/localization';
-import { jobRunner } from '@shared/lib';
+import { Logger, jobRunner } from '@shared/lib';
 
 import { AppProvider } from './ui';
 
@@ -15,6 +15,8 @@ if (hideIosSimulatorErrorWarningBadges) {
 }
 
 jobRunner.runAll([localization]);
+
+Logger.configure();
 
 const App = () => {
   return (

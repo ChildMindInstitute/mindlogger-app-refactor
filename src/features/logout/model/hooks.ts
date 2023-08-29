@@ -9,7 +9,12 @@ import { SystemRecord } from '@app/shared/lib/records';
 import { IdentityModel } from '@entities/identity';
 import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
-import { hasPendingMutations, isAppOnline, useAppDispatch } from '@shared/lib';
+import {
+  Logger,
+  hasPendingMutations,
+  isAppOnline,
+  useAppDispatch,
+} from '@shared/lib';
 
 import { clearEntityRecordStorages, clearUploadQueueStorage } from '../lib';
 
@@ -26,8 +31,6 @@ export function useLogout() {
       console.log('Logout operation failed:', error);
     }
 
-    SessionModel.clearSession();
-
     dispatch(IdentityModel.actions.onLogout());
 
     CacheManager.clearCache();
@@ -41,11 +44,15 @@ export function useLogout() {
     UserInfoRecord.clear();
     UserPrivateKeyRecord.clear();
 
+    Logger.clearAllLogFiles();
+
     await queryClient.removeQueries(['applets']);
     await queryClient.removeQueries(['events']);
     await queryClient.removeQueries(['activities']);
 
     queryClient.clear();
+
+    SessionModel.clearSession();
   };
 
   const logout = async () => {

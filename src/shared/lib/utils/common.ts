@@ -66,6 +66,21 @@ export const Mutex = (): IMutex => {
   };
 };
 
+export const callWithMutex = async (
+  mutex: IMutex,
+  func: () => void | Promise<any>,
+) => {
+  if (mutex.isBusy()) {
+    return;
+  }
+  try {
+    mutex.setBusy();
+    await func();
+  } finally {
+    mutex.release();
+  }
+};
+
 export const getTwoDigits = (val: number) => {
   return val.toString().padStart(2, '0');
 };

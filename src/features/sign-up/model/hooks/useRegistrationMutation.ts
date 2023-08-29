@@ -1,4 +1,7 @@
-import { UserInfoRecord } from '@app/entities/identity/lib';
+import {
+  UserInfoRecord,
+  UserPrivateKeyRecord,
+} from '@app/entities/identity/lib';
 import { SystemRecord } from '@app/shared/lib/records';
 import {
   useLoginMutation,
@@ -7,6 +10,7 @@ import {
 } from '@entities/identity';
 import { SessionModel } from '@entities/session';
 import { useAppDispatch } from '@shared/lib';
+import { encryption } from '@shared/lib';
 
 type UseRegistrationReturn = {
   isLoading: boolean;
@@ -25,7 +29,17 @@ export const useRegistrationMutation = (
     mutate: login,
     error: loginError,
   } = useLoginMutation({
-    onSuccess: response => {
+    onSuccess: (response, variables) => {
+      const userParams = {
+        userId: response.data.result.user.id,
+        email: response.data.result.user.email,
+        password: variables.password,
+      };
+
+      const userPrivateKey = encryption.getPrivateKey(userParams);
+
+      UserPrivateKeyRecord.set(userPrivateKey);
+
       const { user, token: session } = response.data.result;
 
       dispatch(IdentityModel.actions.onAuthSuccess(user));

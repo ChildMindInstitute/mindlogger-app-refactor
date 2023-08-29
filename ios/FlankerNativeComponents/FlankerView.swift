@@ -369,14 +369,14 @@ extension FlankerView: GameManagerProtocol {
         leftButton.backgroundColor = .clear
         leftButton.setImage(left.image, for: .normal)
         leftButton.setImage(left.image, for: .disabled)
-        leftButton.imageView?.contentMode = .scaleAspectFill
+        leftButton.imageView?.contentMode = .scaleAspectFit
         leftButton.imageView?.layer.cornerRadius = 5.0
 
         rightButton.setTitle(nil, for: .normal)
         rightButton.backgroundColor = .clear
         rightButton.setImage(right.image, for: .normal)
         rightButton.setImage(right.image, for: .disabled)
-        rightButton.imageView?.contentMode = .scaleAspectFill
+        rightButton.imageView?.contentMode = .scaleAspectFit
         rightButton.imageView?.layer.cornerRadius = 5.0
       }
     } else {

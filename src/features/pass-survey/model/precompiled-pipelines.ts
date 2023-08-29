@@ -11,6 +11,7 @@ export const getAbTrailsPipeline = (
     testPayload: AbTestPayload,
   ): PipelineItem => {
     return {
+      id,
       type: 'Tutorial',
       payload: {
         type: 'AbTutorial',

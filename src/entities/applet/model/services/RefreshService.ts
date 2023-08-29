@@ -13,6 +13,7 @@ import {
   getActivityDetailsKey,
   getAppletDetailsKey,
   getAppletsKey,
+  getCompletedEntitiesKey,
   getEventsKey,
   isAppOnline,
   onNetworkUnavailable,
@@ -41,6 +42,12 @@ class RefreshService {
     await this.queryClient.removeQueries(['applets']);
     await this.queryClient.removeQueries(['events']);
     await this.queryClient.removeQueries(['activities']);
+  }
+
+  private async invalidateCompletedEntities() {
+    await this.queryClient.invalidateQueries({
+      queryKey: getCompletedEntitiesKey(),
+    });
   }
 
   private isUrlValid = (url: string): boolean => {
@@ -152,6 +159,8 @@ class RefreshService {
         );
       }
     }
+
+    this.invalidateCompletedEntities();
   }
 
   // PUBLIC

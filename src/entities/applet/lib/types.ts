@@ -1,3 +1,4 @@
+import { Answer } from '@app/features/pass-survey';
 import {
   AnalyticsResponseType,
   AppletEncryptionDTO,
@@ -67,10 +68,30 @@ export type ItemResponses = {
 export type ActivityResponses = {
   id: string;
   name: string;
+  description: string | null;
   responses: Array<ItemResponses>;
 };
 
 export type AppletAnalytics = {
   id: string;
   activitiesResponses: Array<ActivityResponses> | null;
+};
+
+export type CompletedEntity = {
+  entityId: string;
+  eventId: string;
+  endAt: number;
+};
+
+export type AppletVersion = {
+  appletId: string;
+  version: string;
+};
+
+export type AnalyticsAnswer = {
+  itemId: string;
+  answer: Answer;
+  type: AnalyticsResponseType;
+  name: string;
+  createdAt: string;
 };

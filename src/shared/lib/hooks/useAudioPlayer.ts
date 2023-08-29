@@ -19,7 +19,7 @@ const useAudioPlayer = () => {
   const play = async (uri: string, onFinish?: () => void) => {
     setIsPlaying(true);
 
-    await audioRecorderPlayer.current.startPlayer(encodeURI(uri));
+    await audioRecorderPlayer.current.startPlayer(uri);
 
     audioRecorderPlayer.current.addPlayBackListener(data => {
       if (data.currentPosition >= data.duration - SUBSCRIPTION_DURATION) {
@@ -42,7 +42,7 @@ const useAudioPlayer = () => {
     if (isPlaying) {
       await pause();
     } else if (!isPlaying) {
-      await play(encodeURI(uri), onFinish);
+      await play(uri, onFinish);
     }
   };
 

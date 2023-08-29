@@ -392,8 +392,8 @@ function convertToStabilityTrackerAnswer(answer: Answer): AnswerDto {
     maxLambda: stabilityTrackerResponse.maxLambda,
     phaseType:
       stabilityTrackerResponse.phaseType === 'test'
-        ? 'challenge-phase'
-        : 'focus-phase',
+        ? 'focus-phase'
+        : 'challenge-phase',
   };
 
   return {

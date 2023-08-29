@@ -1,4 +1,10 @@
-import { format as formatBase, isEqual, subDays, getUnixTime } from 'date-fns';
+import {
+  format as formatBase,
+  isEqual,
+  subDays,
+  getUnixTime,
+  subMonths,
+} from 'date-fns';
 import { enGB, fr } from 'date-fns/locale';
 import i18n from 'i18next';
 
@@ -25,6 +31,14 @@ export const format = (date: Date | number, formatStr: string) => {
   return formatBase(date, formatStr, {
     locale: dateFnsLocales[i18n.language as Language],
   });
+};
+
+export const formatToDtoDate = (date: Date | number) => {
+  return formatBase(date, 'yyyy-MM-dd');
+};
+
+export const formatToDtoTime = (date: Date | number, addSeconds = false) => {
+  return formatBase(date, addSeconds ? 'HH:mm:ss' : 'HH:mm');
 };
 
 type TimeOrNoun = {
@@ -129,3 +143,8 @@ export const convertToDayMonthYear = (date: Date): DayMonthYear => ({
   month: date.getMonth() + 1,
   year: date.getFullYear(),
 });
+
+export const getMonthAgoDate = () => formatToDtoDate(subMonths(new Date(), 1));
+
+export const buildDateTimeFromDto = (yyyymmdd: string, hhmmss: string) =>
+  new Date(`${yyyymmdd} ${hhmmss}`);
