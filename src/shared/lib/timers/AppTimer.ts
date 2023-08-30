@@ -25,13 +25,13 @@ class AppTimer extends TimerBase {
     this.setTimer();
   }
 
-  stop() {
-    super.stop();
+  stop(isRestart = false) {
+    super.stop(isRestart);
     clearTimeout(this.timerId);
   }
 
   restart() {
-    this.stop();
+    this.stop(true);
     this.start();
   }
 
@@ -64,7 +64,6 @@ class AppTimer extends TimerBase {
       this.stop();
     } else {
       const timeLeft = this.getTimeLeftAfterBackground();
-
       this.setTimer(timeLeft);
     }
   }
