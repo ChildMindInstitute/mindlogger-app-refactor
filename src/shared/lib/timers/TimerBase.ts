@@ -8,9 +8,7 @@ abstract class TimerBase {
   constructor() {
     this.listener = AppState.addEventListener('change', nextAppState => {
       if (nextAppState === 'active') {
-        if (this.onForeground) {
-          this.onForeground();
-        }
+        this.onForeground();
       } else {
         if (this.onBackground) {
           this.onBackground();
@@ -25,12 +23,14 @@ abstract class TimerBase {
 
   abstract setTimer(duration?: number): void;
 
-  protected onForeground?(): void;
+  protected abstract onForeground(): void;
   protected onBackground?(): void;
 
-  public stop(): void {
+  public stop(isRestart = false): void {
     this.hasStarted = false;
-    this.removeAppStateListener();
+    if (!isRestart) {
+      this.removeAppStateListener();
+    }
   }
 
   protected removeAppStateListener() {
