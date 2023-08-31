@@ -6,6 +6,12 @@ abstract class TimerBase {
   hasStarted: boolean = false;
 
   protected start(): void {
+    this.hasStarted = true;
+
+    if (this.listener) {
+      return;
+    }
+
     this.listener = AppState.addEventListener('change', nextAppState => {
       if (nextAppState === 'active') {
         if (this.onForeground) {
@@ -17,7 +23,6 @@ abstract class TimerBase {
         }
       }
     });
-    this.hasStarted = true;
   }
 
   abstract setTimer(duration?: number): void;
