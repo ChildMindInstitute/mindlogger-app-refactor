@@ -296,11 +296,11 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
         item.availableTo = MIDNIGHT_DATE;
       }
 
-      const eventTimer = event.timers?.timer;
-      item.isTimerSet = !!eventTimer;
+      const timeLeftToComplete = event.timers?.timer;
+      item.isTimerSet = !!timeLeftToComplete;
 
       if (item.isTimerSet) {
-        item.timeLeftToComplete = eventTimer;
+        item.timeLeftToComplete = timeLeftToComplete;
       }
 
       activityItems.push(item);
