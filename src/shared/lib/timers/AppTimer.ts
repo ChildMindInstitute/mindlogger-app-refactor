@@ -25,13 +25,13 @@ class AppTimer extends TimerBase {
     this.setTimer();
   }
 
-  stop(isRestart = false) {
-    super.stop(isRestart);
+  stop() {
+    super.stop();
     clearTimeout(this.timerId);
   }
 
   restart() {
-    this.stop(true);
+    this.stop();
     this.start();
   }
 
