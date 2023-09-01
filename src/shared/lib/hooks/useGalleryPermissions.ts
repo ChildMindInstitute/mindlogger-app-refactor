@@ -13,7 +13,11 @@ const useGalleryPermissions = () => {
     checkGalleryPermissions().then(setGalleryPermission);
   }, []);
 
-  return { isGalleryAccessGranted: galleryPermission === RESULTS.GRANTED };
+  return {
+    isGalleryAccessGranted:
+      galleryPermission === RESULTS.GRANTED ||
+      galleryPermission === RESULTS.LIMITED,
+  };
 };
 
 export default useGalleryPermissions;

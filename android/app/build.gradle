@@ -96,6 +96,9 @@ project.ext.envConfigFiles = [
     stagingdebug: ".env.staging",
     stagingrelease: ".env.staging",
 
+    uatdebug: ".env.uat",
+    uatrelease: ".env.uat",
+
     productiondebug: ".env.production",
     productionrelease: ".env.production",
 ]
@@ -264,6 +267,10 @@ android {
         staging {
             resValue "string", "app_name", "Mindlogger Staging"
             applicationIdSuffix ".staging"
+        }
+        uat {
+            resValue "string", "app_name", "Mindlogger UAT"
+            applicationIdSuffix ".uat"
         }
         production {}
     }
