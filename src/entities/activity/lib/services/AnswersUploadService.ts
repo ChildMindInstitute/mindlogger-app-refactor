@@ -294,7 +294,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
     try {
       this.logger.log(
-        '[UploadAnswersService.uploadAnswers]: Not uploaded yet, so uploading answers',
+        '[UploadAnswersService.uploadAnswers]: Check result: not uploaded yet, so uploading answers',
       );
 
       await AnswerService.sendActivityAnswers(encryptedData);
