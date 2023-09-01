@@ -29,7 +29,7 @@ import {
   useFirebaseSetup,
   useOnlineEstablished,
   Logger,
-  isActivityExecuting,
+  useCurrentRoute,
 } from '@shared/lib';
 import { UserProfileIcon, HomeIcon, BackButton, Text, Box } from '@shared/ui';
 
@@ -107,8 +107,10 @@ export default () => {
     return NotificationModel.topUpNotifications();
   });
 
+  const { getCurrentRoute } = useCurrentRoute();
+
   const processQueue = useCallback(() => {
-    const executing = isActivityExecuting(navigation);
+    const executing = getCurrentRoute() === 'InProgressActivity';
 
     if (executing) {
       Logger.info(
@@ -118,7 +120,7 @@ export default () => {
     }
 
     QueueProcessingService.process();
-  }, [navigation]);
+  }, [getCurrentRoute]);
 
   useOnlineEstablished(processQueue);
 

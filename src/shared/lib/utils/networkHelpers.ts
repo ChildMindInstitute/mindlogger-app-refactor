@@ -54,12 +54,13 @@ export const watchForConnectionLoss = (
   mode: 'ping' | 'checkNetworkStatus' = 'ping',
 ) => {
   const abortController = new AbortController();
+  let intervalId = 0;
 
   const checkWithAbort = () => {
     const checkAction = (checkResult: boolean) => {
       if (!checkResult) {
         abortController.abort();
-        clearInterval(id);
+        clearInterval(intervalId);
         Logger.warn('[watchForConnectionWithAbort]: Connection aborted');
       }
     };
@@ -75,14 +76,14 @@ export const watchForConnectionLoss = (
     checkWithAbort();
   }
 
-  const id = setInterval(() => {
+  intervalId = setInterval(() => {
     checkWithAbort();
   }, WatchInterval);
 
   return {
     abortController,
     reset: () => {
-      clearInterval(id);
+      clearInterval(intervalId);
     },
   };
 };
