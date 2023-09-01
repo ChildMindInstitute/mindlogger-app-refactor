@@ -252,11 +252,13 @@ class Logger implements ILogger {
 
       console.info('[Logger.send] Started sending log files to Server');
 
-      const result = await this.sendInternal();
+      // TODO - uncomment the lines below when integration is done!
+
+      // const result = await this.sendInternal();
 
       console.info('[Logger.send] Completed sending log files to Server');
 
-      return result;
+      return true; // result; - todo - uncomment
     } catch (error) {
       console.warn(
         '[Logger.sendInternal]: Error occurred: \n\n',
