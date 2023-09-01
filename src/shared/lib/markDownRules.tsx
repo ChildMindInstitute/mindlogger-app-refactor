@@ -63,21 +63,21 @@ const localStyles = StyleSheet.create({
     width: Dimensions.get('window').width,
   },
   listItemText: {
-    fontSize: 13,
+    fontSize: 18,
     fontWeight: '500',
   },
 });
 
 const listItemStyles = {
   bullet_list_icon: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '400',
     color: '#000',
     alignSelf: 'center',
     width: 8,
   },
   ordered_list_icon: {
-    fontSize: 13,
+    fontSize: 16,
     fontWeight: '400',
     color: '#000',
     alignSelf: 'center',
