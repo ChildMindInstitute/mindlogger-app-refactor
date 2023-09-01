@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import { IS_ANDROID } from '@app/shared/lib';
+import { IS_ANDROID, watchForConnectionLoss } from '@app/shared/lib';
 
 import httpService from './httpService';
 import { SuccessfulResponse } from '../types';
@@ -9,6 +9,7 @@ type FileUploadRequest = {
   uri: string;
   fileName: string;
   type: string;
+  fileId: string;
 };
 
 type UploadResultDto = {
@@ -32,6 +33,20 @@ type CheckIfLogsExistResultDto = {
 
 type CheckIfLogsExistResponse = SuccessfulResponse<CheckIfLogsExistResultDto>;
 
+type FileId = string;
+
+type CheckIfFilesExistRequest = {
+  files: FileId[];
+};
+
+export type CheckIfFilesExistResultDto = Array<{
+  key: string;
+  uploaded: boolean;
+  url: string | null;
+}>;
+
+type CheckIfFilesExistResponse = SuccessfulResponse<CheckIfFilesExistResultDto>;
+
 function fileService() {
   return {
     async upload(
@@ -44,6 +59,8 @@ function fileService() {
           status: 200,
         } as AxiosResponse<FileUploadResponse, any>);
       }
+
+      const { abortController, reset } = watchForConnectionLoss();
 
       try {
         const data = new FormData();
@@ -62,12 +79,16 @@ function fileService() {
           data,
           {
             headers: { 'Content-Type': 'multipart/form-data' },
+            signal: abortController.signal,
+            params: { fileId: request.fileId },
           },
         );
         return response;
       } catch (error) {
         console.error('error', JSON.stringify(error));
         throw error;
+      } finally {
+        reset();
       }
     },
 
@@ -85,6 +106,23 @@ function fileService() {
           },
         },
       } as AxiosResponse<CheckIfLogsExistResponse, any>);
+    },
+
+    async checkIfFilesExist(request: CheckIfFilesExistRequest) {
+      const { abortController, reset } = watchForConnectionLoss();
+
+      try {
+        const response = await httpService.post<CheckIfFilesExistResponse>(
+          '/file/upload/check',
+          request,
+          {
+            signal: abortController.signal,
+          },
+        );
+        return response;
+      } finally {
+        reset();
+      }
     },
   };
 }
