@@ -121,7 +121,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
     if (!localFileExists) {
       throw new Error(
-        `[UploadAnswersService.uploadFilesForAnswer]: Local file ${logFileInfo} does not exist`,
+        `[UploadAnswersService.processFileUpload]: Local file ${logFileInfo} does not exist`,
       );
     }
 
@@ -132,7 +132,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
     if (!uploadRecord) {
       throw new Error(
-        `[UploadAnswersService.uploadFilesForAnswer]: uploadRecord does not exist, file: ${logFileInfo}`,
+        `[UploadAnswersService.processFileUpload]: uploadRecord does not exist, file: ${logFileInfo}`,
       );
     }
 
@@ -140,6 +140,10 @@ class AnswersUploadService implements IAnswersUploadService {
       let remoteUrl;
 
       if (!uploadRecord.uploaded) {
+        this.logger.log(
+          `[UploadAnswersService.processFileUpload] Uploading file ${logFileInfo}`,
+        );
+
         const uploadResult = await FileService.upload({
           fileName: mediaFile.fileName,
           type: mediaFile.type,
@@ -148,9 +152,13 @@ class AnswersUploadService implements IAnswersUploadService {
         });
 
         remoteUrl = uploadResult.data.result.url;
+
+        this.logger.log(
+          `[UploadAnswersService.processFileUpload]: Upload success, url = "${remoteUrl}"`,
+        );
       } else {
         this.logger.log(
-          `[UploadAnswersService.uploadFilesForAnswer] File ${logFileInfo} already uploaded`,
+          `[UploadAnswersService.processFileUpload] File ${logFileInfo} already uploaded`,
         );
 
         remoteUrl = uploadRecord.remoteUrl;
@@ -159,10 +167,20 @@ class AnswersUploadService implements IAnswersUploadService {
       return remoteUrl!;
     } catch (error) {
       throw new Error(
-        `[UploadAnswersService.uploadFilesForAnswer]: Error occurred while file ${logFileInfo} uploading\n\n` +
+        `[UploadAnswersService.processFileUpload]: Error occurred while file ${logFileInfo} uploading\n\n` +
           error!.toString(),
       );
     }
+  }
+
+  private logFilesUploadCheck(
+    uploadChecks: CheckFilesUploadResults,
+    position: '1' | '2',
+  ) {
+    this.logger.log(
+      `[UploadAnswersService.uploadAllMediaFiles] Check if files uploaded #${position}:\n\n` +
+        JSON.stringify(uploadChecks, null, 2),
+    );
   }
 
   private async uploadAllMediaFiles(
@@ -180,6 +198,8 @@ class AnswersUploadService implements IAnswersUploadService {
           error!.toString(),
       );
     }
+
+    this.logFilesUploadCheck(uploadChecks, '1');
 
     const itemsAnswers = [...body.answers] as ObjectAnswerDto[];
 
@@ -232,6 +252,8 @@ class AnswersUploadService implements IAnswersUploadService {
           error!.toString(),
       );
     }
+
+    this.logFilesUploadCheck(uploadChecks, '2');
 
     if (uploadChecks.some(x => !x.uploaded)) {
       throw new Error(
