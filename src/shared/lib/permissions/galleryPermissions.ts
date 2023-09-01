@@ -37,8 +37,10 @@ const checkGalleryIOSPermissions = async (): Promise<string> => {
 };
 
 const requestGalleryIOSPermissions = async () => {
+  const permissionState = await Permissions.request(GALLERY_IOS_PERMISSIONS);
+
   return (
-    (await Permissions.request(GALLERY_IOS_PERMISSIONS)) === RESULTS.GRANTED
+    permissionState === RESULTS.GRANTED || permissionState === RESULTS.LIMITED
   );
 };
 
