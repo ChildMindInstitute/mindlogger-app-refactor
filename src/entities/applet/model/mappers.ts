@@ -6,6 +6,7 @@ import {
   AnalyticsAnswerDto,
   AnalyticsResponseType,
   AppletDetailsDto,
+  AppletDetailsResponse,
   AppletDto,
   CompletedEntityDto,
   OptionsDto,
@@ -302,4 +303,10 @@ function getItemResponses(
         },
       ];
   }
+}
+
+export function mapDtoToRespondentMeta(
+  response?: AppletDetailsResponse,
+): string {
+  return response?.respondentMeta.nickname ?? '';
 }

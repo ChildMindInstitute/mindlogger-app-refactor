@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 
+import { mapDtoToRespondentMeta } from '@app/entities/applet/model';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 
 import { Answers } from './useActivityStorageRecord';
@@ -20,8 +21,8 @@ const useTextVariablesReplacer = ({
   const completedEntities = useSelector(
     AppletModel.selectors.selectCompletedEntities,
   );
-  const respondentNickname = useAppletDetailsQuery(appletId, {
-    select: r => r.data.respondentMeta.nickname,
+  const { data: respondentNickname } = useAppletDetailsQuery(appletId, {
+    select: ({ data }) => mapDtoToRespondentMeta(data),
   });
 
   const lastResponseTime = completedEntities?.[activityId];
@@ -31,7 +32,7 @@ const useTextVariablesReplacer = ({
         items,
         answers,
         lastResponseTime,
-        respondentNickname.data,
+        respondentNickname,
       );
       return replacer.process(text);
     }

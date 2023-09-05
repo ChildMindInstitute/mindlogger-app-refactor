@@ -60,7 +60,7 @@ export type AppletDetailsDto = {
 };
 
 export type AppletRespondentMetaDto = {
-  nickname: string;
+  nickname?: string;
 };
 
 export type AppletDto = {
