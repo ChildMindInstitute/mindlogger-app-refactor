@@ -12,6 +12,14 @@ type FileUploadRequest = {
   fileId: string;
 };
 
+type AppletFileUploadRequest = {
+  uri: string;
+  fileName: string;
+  type: string;
+  fileId: string;
+  appletId: string;
+};
+
 type UploadResultDto = {
   key: string;
   url: string;
@@ -37,6 +45,7 @@ type FileId = string;
 
 type CheckIfFilesExistRequest = {
   files: FileId[];
+  appletId: string;
 };
 
 export type CheckIfFilesExistResultDto = Array<{
@@ -113,13 +122,46 @@ function fileService() {
 
       try {
         const response = await httpService.post<CheckIfFilesExistResponse>(
-          '/file/upload/check',
+          `/file/${request.appletId}/upload/check`,
           request,
           {
             signal: abortController.signal,
           },
         );
         return response;
+      } finally {
+        reset();
+      }
+    },
+
+    async uploadAppletFile(request: AppletFileUploadRequest) {
+      const { abortController, reset } = watchForConnectionLoss();
+
+      try {
+        const data = new FormData();
+        const uri = IS_ANDROID
+          ? request.uri
+          : request.uri.replace('file://', '');
+
+        data.append('file', {
+          uri,
+          name: request.fileName,
+          type: request.type,
+        } as unknown as Blob);
+
+        const response = await httpService.post<FileUploadResponse>(
+          `/file/${request.appletId}/upload`,
+          data,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+            signal: abortController.signal,
+            params: { fileId: request.fileId },
+          },
+        );
+        return response;
+      } catch (error) {
+        console.error('error', JSON.stringify(error));
+        throw error;
       } finally {
         reset();
       }
