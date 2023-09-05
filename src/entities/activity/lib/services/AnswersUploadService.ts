@@ -61,9 +61,11 @@ class AnswersUploadService implements IAnswersUploadService {
 
   private async checkIfFilesUploaded(
     fileIds: string[],
+    appletId: string,
   ): Promise<CheckFilesUploadResults> {
     const response = await FileService.checkIfFilesExist({
       files: fileIds,
+      appletId,
     });
 
     return this.mapFileExistenceDto(response.data.result);
@@ -114,6 +116,7 @@ class AnswersUploadService implements IAnswersUploadService {
     mediaFile: MediaFile,
     uploadChecks: CheckFilesUploadResults,
     logAnswerIndex: number,
+    appletId: string,
   ): Promise<string> {
     const localFileExists = await FileSystem.exists(mediaFile.uri);
 
@@ -144,11 +147,12 @@ class AnswersUploadService implements IAnswersUploadService {
           `[UploadAnswersService.processFileUpload] Uploading file ${logFileInfo}`,
         );
 
-        const uploadResult = await FileService.upload({
+        const uploadResult = await FileService.uploadAppletFile({
           fileName: mediaFile.fileName,
           type: mediaFile.type,
           uri: mediaFile.uri,
           fileId: this.getFileId(mediaFile),
+          appletId,
         });
 
         remoteUrl = uploadResult.data.result.url;
@@ -188,10 +192,14 @@ class AnswersUploadService implements IAnswersUploadService {
   ): Promise<SendAnswersInput> {
     const fileIds = this.collectFileIds(body.answers);
 
+    if (fileIds.length === 0) {
+      return body;
+    }
+
     let uploadChecks: CheckFilesUploadResults;
 
     try {
-      uploadChecks = await this.checkIfFilesUploaded(fileIds);
+      uploadChecks = await this.checkIfFilesUploaded(fileIds, body.appletId);
     } catch (error) {
       throw new Error(
         '[UploadAnswersService.uploadAllMediaFiles]: Error occurred on 1st files upload check\n\n' +
@@ -226,6 +234,7 @@ class AnswersUploadService implements IAnswersUploadService {
         mediaAnswer,
         uploadChecks,
         logAnswerIndex,
+        body.appletId,
       );
 
       const isSvg = mediaAnswer.type === 'image/svg';
@@ -245,7 +254,7 @@ class AnswersUploadService implements IAnswersUploadService {
     }
 
     try {
-      uploadChecks = await this.checkIfFilesUploaded(fileIds);
+      uploadChecks = await this.checkIfFilesUploaded(fileIds, body.appletId);
     } catch (error) {
       throw new Error(
         '[uploadAnswerMediaFiles.uploadAllMediaFiles]: Error occurred while 2nd files upload check\n\n' +
