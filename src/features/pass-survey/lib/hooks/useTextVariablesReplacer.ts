@@ -1,8 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { IdentityModel } from '@app/entities/identity';
-import { useAppSelector } from '@app/shared/lib';
-import { AppletModel } from '@entities/applet';
+import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 
 import { Answers } from './useActivityStorageRecord';
 import { MarkdownVariableReplacer } from '../markdownVariableReplacer';
@@ -12,15 +10,19 @@ const useTextVariablesReplacer = ({
   items,
   answers,
   activityId,
+  appletId,
 }: {
   items: PipelineItem[] | undefined;
   answers: Answers | undefined;
   activityId: string;
+  appletId: string;
 }) => {
   const completedEntities = useSelector(
     AppletModel.selectors.selectCompletedEntities,
   );
-  const userFirstName = useAppSelector(IdentityModel.selectors.selectFirstName);
+  const respondentNickname = useAppletDetailsQuery(appletId, {
+    select: r => r.data.respondentMeta.nickname,
+  });
 
   const lastResponseTime = completedEntities?.[activityId];
   const replaceTextVariables = (text: string) => {
@@ -29,7 +31,7 @@ const useTextVariablesReplacer = ({
         items,
         answers,
         lastResponseTime,
-        userFirstName,
+        respondentNickname.data,
       );
       return replacer.process(text);
     }
