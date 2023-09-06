@@ -308,5 +308,5 @@ function getItemResponses(
 export function mapDtoToRespondentMeta(
   response?: AppletDetailsResponse,
 ): string {
-  return response?.respondentMeta.nickname ?? '';
+  return response?.respondentMeta?.nickname ?? '';
 }
