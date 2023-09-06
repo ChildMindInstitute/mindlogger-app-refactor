@@ -53,7 +53,7 @@ class AnswersUploadService implements IAnswersUploadService {
     dto: CheckIfFilesExistResultDto,
   ): CheckFilesUploadResults {
     return dto.map<CheckFileUploadResult>(x => ({
-      fileId: x.key,
+      fileId: x.fileId,
       remoteUrl: x.url,
       uploaded: x.uploaded,
     }));
