@@ -23,6 +23,7 @@ type AppletFileUploadRequest = {
 type UploadResultDto = {
   key: string;
   url: string;
+  fileId: string;
 };
 
 type FileUploadResponse = SuccessfulResponse<UploadResultDto>;
@@ -50,6 +51,7 @@ type CheckIfFilesExistRequest = {
 
 export type CheckIfFilesExistResultDto = Array<{
   key: string;
+  fileId: string;
   uploaded: boolean;
   url: string | null;
 }>;
