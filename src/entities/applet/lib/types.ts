@@ -53,7 +53,7 @@ export type AppletDetails = {
 
 export type AnalyticsItemValue = {
   date: Date;
-  value: number;
+  value: number | null;
 };
 
 export type ResponseAnalyticsValue = Array<AnalyticsItemValue>;

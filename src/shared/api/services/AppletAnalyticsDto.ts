@@ -2,7 +2,7 @@ export type AnalyticsResponseType = 'singleSelect' | 'multiSelect' | 'slider';
 
 export type AnalyticsItemValue = {
   date: string;
-  value: number;
+  value: number | null;
 };
 
 export type ResponseAnalyticsDto = Array<AnalyticsItemValue>;
