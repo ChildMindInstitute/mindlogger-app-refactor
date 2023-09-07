@@ -59,6 +59,10 @@ export type AppletDetailsDto = {
   encryption: AppletEncryptionDTO | null;
 };
 
+export type AppletRespondentMetaDto = {
+  nickname?: string;
+};
+
 export type AppletDto = {
   id: string;
   image: ImageUrl | null;
@@ -76,7 +80,10 @@ type AppletDetailsRequest = {
   appletId: string;
 };
 
-export type AppletDetailsResponse = SuccessfulResponse<AppletDetailsDto>;
+export type AppletDetailsResponse = {
+  result: AppletDetailsDto;
+  respondentMeta: AppletRespondentMetaDto;
+};
 
 function appletsService() {
   return {

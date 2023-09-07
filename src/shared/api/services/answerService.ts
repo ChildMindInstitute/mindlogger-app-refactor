@@ -1,11 +1,13 @@
-import { AxiosResponse } from 'axios';
-
 import { Point } from '@app/abstract/lib';
-import { DayMonthYear, HourMinute } from '@app/shared/lib';
+import {
+  DayMonthYear,
+  HourMinute,
+  watchForConnectionLoss,
+} from '@app/shared/lib';
 import { MediaFile, MediaValue } from '@app/shared/ui';
 
 import httpService from './httpService';
-import { SuccessfulEmptyResponse } from '../types';
+import { SuccessfulEmptyResponse, SuccessfulResponse } from '../types';
 
 export type TextAnswerDto = string;
 
@@ -184,19 +186,49 @@ export type ActivityAnswersRequest = {
 
 type ActivityAnswersResponse = SuccessfulEmptyResponse;
 
-type FakeResponse = AxiosResponse<ActivityAnswersResponse>;
+type CheckIfAnswersExistRequest = {
+  appletId: string;
+  createdAt: number;
+  activityId: string;
+};
 
-const mockActivity = false;
+type CheckIfAnswersExistResponse = SuccessfulResponse<{
+  exists: boolean;
+}>;
 
 function answerService() {
   return {
-    sendActivityAnswers(request: ActivityAnswersRequest) {
-      if (mockActivity) {
-        const response: FakeResponse = {} as FakeResponse;
-        return Promise.resolve(response);
-      }
+    async sendActivityAnswers(request: ActivityAnswersRequest) {
+      const { abortController, reset } = watchForConnectionLoss();
 
-      return httpService.post<ActivityAnswersResponse>('/answers', request);
+      try {
+        const response = await httpService.post<ActivityAnswersResponse>(
+          '/answers',
+          request,
+          {
+            signal: abortController.signal,
+          },
+        );
+        return response;
+      } finally {
+        reset();
+      }
+    },
+    async checkIfAnswersExist(request: CheckIfAnswersExistRequest) {
+      const { abortController, reset } = watchForConnectionLoss();
+
+      try {
+        const response = await httpService.post<CheckIfAnswersExistResponse>(
+          '/answers/check-existence',
+          request,
+          {
+            signal: abortController.signal,
+          },
+        );
+        return response;
+      } finally {
+        reset();
+      }
     },
   };
 }
