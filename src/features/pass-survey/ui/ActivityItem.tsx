@@ -169,7 +169,7 @@ function ActivityItem({
 
     case 'Slider':
       item = (
-        <Box mx={16}>
+        <Box mx={16} mb="$6">
           <SurveySlider
             config={pipelineItem.payload}
             onChange={onResponse}
@@ -195,7 +195,7 @@ function ActivityItem({
 
     case 'StackedSlider':
       item = (
-        <Box mx="$6">
+        <Box mx="$6" mb="$6">
           <StackedSlider
             config={pipelineItem.payload}
             onChange={onResponse}
@@ -265,7 +265,7 @@ function ActivityItem({
 
     case 'AudioPlayer':
       item = (
-        <Box mx="$6">
+        <Box mx="$6" mb="$6">
           <AudioStimulusItem
             onChange={onResponse}
             value={value?.answer || false}
@@ -277,7 +277,7 @@ function ActivityItem({
 
     case 'TimeRange':
       item = (
-        <Box mx="$6">
+        <Box mx="$6" mb="$6">
           <TimeRangeItem onChange={onResponse} value={value?.answer} />
         </Box>
       );
@@ -309,7 +309,7 @@ function ActivityItem({
 
     case 'Geolocation':
       item = (
-        <Box mx="$6">
+        <Box mx="$6" mb="$6">
           <GeolocationItem onChange={onResponse} value={value?.answer} />
         </Box>
       );
@@ -333,7 +333,7 @@ function ActivityItem({
 
     case 'Time':
       item = (
-        <Box mx="$6">
+        <Box mx="$6" mb="$6">
           <TimePickerItem onChange={onResponse} value={value?.answer} />
         </Box>
       );
