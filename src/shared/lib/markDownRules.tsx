@@ -368,13 +368,15 @@ const markDownRules: RenderRules = {
       return <AudioPlayer uri={src} title={node.content} key={node.key} />;
     } else if (isVideo) {
       return (
-        <VideoPlayer
-          uri={src}
-          key={node.key}
-          thumbnailStyle={videoStyles}
-          videoStyle={videoStyles}
-          wrapperStyle={videoStyles}
-        />
+        <Box key={`${node.key}-wrapper`} style={videoStyles}>
+          <VideoPlayer
+            uri={src}
+            key={node.key}
+            thumbnailStyle={videoStyles}
+            videoStyle={videoStyles}
+            wrapperStyle={videoStyles}
+          />
+        </Box>
       );
     } else if (isYoutubeVideo) {
       return <YoutubeVideo key={node.key} src={src} />;
