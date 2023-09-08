@@ -12,9 +12,11 @@ type Callbacks = {
 export function useTCPSocket(callbacks?: Callbacks) {
   const callbacksRef = useRef(callbacks);
 
-  const [connected, setConnected] = useState(
-    () => !!TCPSocketService.getSocket(),
-  );
+  const [connected, setConnected] = useState(() => {
+    const socket = TCPSocketService.getSocket();
+
+    return !!socket && socket.readyState !== 'opening';
+  });
 
   callbacksRef.current = callbacks;
 

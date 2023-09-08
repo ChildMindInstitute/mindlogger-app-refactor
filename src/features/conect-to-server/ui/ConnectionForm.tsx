@@ -23,6 +23,7 @@ type Props = {
   onSubmitSuccess: () => void;
 } & BoxProps;
 
+// TODO: move it redux initial state;
 const DEFAULT_HOST = '127.0.0.1';
 const DEFAULT_PORT = 8881;
 
@@ -34,18 +35,17 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
 
   const { connect, connected, closeConnection } = useTCPSocket({
     onError: () => {
+      // TODO: move it to translations
       setError('Connection failed. Please double check ip and port');
     },
     onConnected: () => {
-      setError('');
+      onSubmitSuccess();
     },
   });
 
   const { form, submit } = useAppForm(ConnectionFormSchema, {
     onSubmitSuccess: data => {
-      connect(data.ipAddress, data.port).then(() => {
-        onSubmitSuccess();
-      });
+      connect(data.ipAddress, data.port);
     },
     defaultValues: {
       ipAddress: DEFAULT_HOST,
