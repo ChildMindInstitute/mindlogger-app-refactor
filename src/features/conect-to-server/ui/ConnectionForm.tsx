@@ -1,10 +1,10 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { useAppForm } from '@app/shared/lib';
+import { useAppForm, useTCPSocket } from '@app/shared/lib';
 import { Box, BoxProps, CheckBox, Text, XStack, Button } from '@app/shared/ui';
 import { InputField } from '@app/shared/ui/form';
 import { colors } from '@shared/lib';
@@ -20,39 +20,47 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  onDisconnect: () => void;
-  onConnect: () => void;
-  onRememberConnection: () => void;
-  shouldRememberConnection: boolean;
-  connected: boolean;
-  port: number;
-  ipAddress: string;
+  onSubmitSuccess: () => void;
 } & BoxProps;
 
-export const ConnectionForm: FC<Props> = ({
-  onDisconnect,
-  onConnect,
-  onRememberConnection,
-  connected,
-  ipAddress,
-  port,
-  shouldRememberConnection,
-  ...props
-}) => {
+const DEFAULT_HOST = '127.0.0.1';
+const DEFAULT_PORT = 8881;
+
+export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   const { t } = useTranslation();
-  const { form, submit } = useAppForm(ConnectionFormSchema, {
-    onSubmitSuccess: onConnect,
-    defaultValues: {
-      ipAddress,
-      port,
+  // TODO: add error message to the form
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [error, setError] = useState('');
+
+  const { connect, connected, closeConnection } = useTCPSocket({
+    onError: () => {
+      setError('Connection failed. Please double check ip and port');
+    },
+    onConnected: () => {
+      setError('');
     },
   });
+
+  const { form, submit } = useAppForm(ConnectionFormSchema, {
+    onSubmitSuccess: data => {
+      connect(data.ipAddress, data.port).then(() => {
+        onSubmitSuccess();
+      });
+    },
+    defaultValues: {
+      ipAddress: DEFAULT_HOST,
+      // TODO: make it work with numbers
+      port: DEFAULT_PORT,
+    },
+  });
+
   const disconnect = () => {
-    onDisconnect();
+    closeConnection();
+    // TODO: add toast message
   };
 
   return (
-    <Box {...props}>
+    <Box {...props} onPress={e => e.stopPropagation()}>
       <FormProvider {...form}>
         <Text
           textAlign="center"
@@ -97,7 +105,7 @@ export const ConnectionForm: FC<Props> = ({
           />
         </Box>
 
-        <XStack onPress={onRememberConnection} ai="center" mb="$5">
+        <XStack onPress={() => {}} ai="center" mb="$5">
           <CheckBox
             style={styles.checkbox}
             boxType="square"
@@ -109,7 +117,8 @@ export const ConnectionForm: FC<Props> = ({
             onAnimationType="fade"
             offAnimationType="fade"
             animationDuration={0.2}
-            value={shouldRememberConnection}
+            // TODO: connect to FORM
+            value={false}
           />
 
           <Text fontWeight="900" color="$darkerGrey2" fontSize={16}>
@@ -118,11 +127,11 @@ export const ConnectionForm: FC<Props> = ({
         </XStack>
 
         {connected ? (
-          <Button br={4} onPress={submit}>
+          <Button br={4} onPress={disconnect}>
             {t('live_connection:disconnect')}
           </Button>
         ) : (
-          <Button br={4} onPress={disconnect}>
+          <Button br={4} onPress={submit}>
             {t('live_connection:connect')}
           </Button>
         )}
