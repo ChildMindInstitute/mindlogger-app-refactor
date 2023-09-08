@@ -6,23 +6,24 @@ function TCPSocketService() {
   let socket: TcpSocket.Socket | null = null;
 
   const createConnection = (host: string, port: number) => {
-    return new Promise<TcpSocket.Socket>((resolve, reject) => {
-      socket = TcpSocket.createConnection({ host, port }, () => {
-        resolve(socket!);
-      });
+    if (socket) {
+      disconnect();
+    }
 
-      socket.on('connect', () => {
-        TCPSocketEmitter.emit('tcp-socket-service:connected');
-      });
+    socket = TcpSocket.createConnection({ host, port }, () => {});
 
-      socket.on('error', error => {
-        TCPSocketEmitter.emit('tcp-socket-service:error', error);
-        reject();
-      });
+    socket.on('connect', () => {
+      TCPSocketEmitter.emit('tcp-socket-service:connected');
+    });
 
-      socket.on('close', () => {
-        TCPSocketEmitter.emit('tcp-socket-service:closed');
-      });
+    socket.on('error', error => {
+      socket?.removeAllListeners();
+      disconnect();
+      TCPSocketEmitter.emit('tcp-socket-service:error', error);
+    });
+
+    socket.on('close', () => {
+      TCPSocketEmitter.emit('tcp-socket-service:closed');
     });
   };
 
