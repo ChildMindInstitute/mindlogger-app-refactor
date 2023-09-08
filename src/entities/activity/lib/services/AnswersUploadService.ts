@@ -4,7 +4,6 @@ import {
   ActivityAnswersRequest,
   AnswerDto,
   AnswerService,
-  CheckIfFilesExistResultDto,
   DrawerAnswerDto,
   FileService,
   ObjectAnswerDto,
@@ -44,43 +43,28 @@ class AnswersUploadService implements IAnswersUploadService {
 
   private isFileUrl(value: string): boolean {
     const localFileRegex =
-      /^(file:\/\/|\/).*\/[^\/]+?\.(jpg|jpeg|png|gif|mp4|m4a|mov|MOV|svg|mpeg)$/;
+      /^(file:\/\/|\/).*\/[^\/]+?\.(jpg|jpeg|png|gif|mp4|m4a|mov|MOV|svg)$/;
 
     return localFileRegex.test(value);
   }
 
-  private mapFileExistenceDto(
-    dto: CheckIfFilesExistResultDto,
-  ): CheckFilesUploadResults {
-    return dto.map<CheckFileUploadResult>(x => ({
-      fileId: x.fileId,
-      remoteUrl: x.url,
-      uploaded: x.uploaded,
-    }));
-  }
-
   private async checkIfFilesUploaded(
     fileIds: string[],
-    appletId: string,
+    fakeResult: boolean = false,
   ): Promise<CheckFilesUploadResults> {
-    const response = await FileService.checkIfFilesExist({
-      files: fileIds,
-      appletId,
-    });
-
-    return this.mapFileExistenceDto(response.data.result);
+    return fileIds.map(x => ({
+      // todo
+      uploaded: fakeResult,
+      fileId: x,
+      remoteUrl: null,
+    }));
   }
 
   private async checkIfAnswersUploaded(
     checkInput: CheckAnswersInput,
+    fakeResult: boolean = false,
   ): Promise<boolean> {
-    const response = await AnswerService.checkIfAnswersExist({
-      activityId: checkInput.activityId,
-      appletId: checkInput.appletId,
-      createdAt: checkInput.createdAt,
-    });
-
-    return response.data.result.exists;
+    return fakeResult; // todo
   }
 
   private getUploadRecord(
@@ -116,7 +100,6 @@ class AnswersUploadService implements IAnswersUploadService {
     mediaFile: MediaFile,
     uploadChecks: CheckFilesUploadResults,
     logAnswerIndex: number,
-    appletId: string,
   ): Promise<string> {
     const localFileExists = await FileSystem.exists(mediaFile.uri);
 
@@ -124,7 +107,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
     if (!localFileExists) {
       throw new Error(
-        `[UploadAnswersService.processFileUpload]: Local file ${logFileInfo} does not exist`,
+        `[UploadAnswersService.uploadFilesForAnswer]: Local file ${logFileInfo} does not exist`,
       );
     }
 
@@ -135,7 +118,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
     if (!uploadRecord) {
       throw new Error(
-        `[UploadAnswersService.processFileUpload]: uploadRecord does not exist, file: ${logFileInfo}`,
+        `[UploadAnswersService.uploadFilesForAnswer]: uploadRecord does not exist, file: ${logFileInfo}`,
       );
     }
 
@@ -143,26 +126,16 @@ class AnswersUploadService implements IAnswersUploadService {
       let remoteUrl;
 
       if (!uploadRecord.uploaded) {
-        this.logger.log(
-          `[UploadAnswersService.processFileUpload] Uploading file ${logFileInfo}`,
-        );
-
-        const uploadResult = await FileService.uploadAppletFile({
+        const uploadResult = await FileService.upload({
           fileName: mediaFile.fileName,
           type: mediaFile.type,
           uri: mediaFile.uri,
-          fileId: this.getFileId(mediaFile),
-          appletId,
         });
 
         remoteUrl = uploadResult.data.result.url;
-
-        this.logger.log(
-          `[UploadAnswersService.processFileUpload]: Upload success, url = "${remoteUrl}"`,
-        );
       } else {
         this.logger.log(
-          `[UploadAnswersService.processFileUpload] File ${logFileInfo} already uploaded`,
+          `[UploadAnswersService.uploadFilesForAnswer] File ${logFileInfo} already uploaded`,
         );
 
         remoteUrl = uploadRecord.remoteUrl;
@@ -171,20 +144,10 @@ class AnswersUploadService implements IAnswersUploadService {
       return remoteUrl!;
     } catch (error) {
       throw new Error(
-        `[UploadAnswersService.processFileUpload]: Error occurred while file ${logFileInfo} uploading\n\n` +
+        `[UploadAnswersService.uploadFilesForAnswer]: Error occurred while file ${logFileInfo} uploading\n\n` +
           error!.toString(),
       );
     }
-  }
-
-  private logFilesUploadCheck(
-    uploadChecks: CheckFilesUploadResults,
-    position: '1' | '2',
-  ) {
-    this.logger.log(
-      `[UploadAnswersService.uploadAllMediaFiles] Check if files uploaded #${position}:\n\n` +
-        JSON.stringify(uploadChecks, null, 2),
-    );
   }
 
   private async uploadAllMediaFiles(
@@ -192,22 +155,16 @@ class AnswersUploadService implements IAnswersUploadService {
   ): Promise<SendAnswersInput> {
     const fileIds = this.collectFileIds(body.answers);
 
-    if (fileIds.length === 0) {
-      return body;
-    }
-
     let uploadChecks: CheckFilesUploadResults;
 
     try {
-      uploadChecks = await this.checkIfFilesUploaded(fileIds, body.appletId);
+      uploadChecks = await this.checkIfFilesUploaded(fileIds);
     } catch (error) {
       throw new Error(
         '[UploadAnswersService.uploadAllMediaFiles]: Error occurred on 1st files upload check\n\n' +
           error!.toString(),
       );
     }
-
-    this.logFilesUploadCheck(uploadChecks, '1');
 
     const itemsAnswers = [...body.answers] as ObjectAnswerDto[];
 
@@ -234,7 +191,6 @@ class AnswersUploadService implements IAnswersUploadService {
         mediaAnswer,
         uploadChecks,
         logAnswerIndex,
-        body.appletId,
       );
 
       const isSvg = mediaAnswer.type === 'image/svg';
@@ -254,15 +210,13 @@ class AnswersUploadService implements IAnswersUploadService {
     }
 
     try {
-      uploadChecks = await this.checkIfFilesUploaded(fileIds, body.appletId);
+      uploadChecks = await this.checkIfFilesUploaded(fileIds, true);
     } catch (error) {
       throw new Error(
         '[uploadAnswerMediaFiles.uploadAllMediaFiles]: Error occurred while 2nd files upload check\n\n' +
           error!.toString(),
       );
     }
-
-    this.logFilesUploadCheck(uploadChecks, '2');
 
     if (uploadChecks.some(x => !x.uploaded)) {
       throw new Error(
@@ -302,10 +256,6 @@ class AnswersUploadService implements IAnswersUploadService {
     }
 
     try {
-      this.logger.log(
-        '[UploadAnswersService.uploadAnswers]: Check result: not uploaded yet, so uploading answers',
-      );
-
       await AnswerService.sendActivityAnswers(encryptedData);
     } catch (error) {
       throw new Error(
@@ -315,12 +265,15 @@ class AnswersUploadService implements IAnswersUploadService {
     }
 
     try {
-      uploaded = await this.checkIfAnswersUploaded({
-        activityId: encryptedData.activityId,
-        appletId: encryptedData.appletId,
-        flowId: encryptedData.flowId,
-        createdAt: encryptedData.createdAt,
-      });
+      uploaded = await this.checkIfAnswersUploaded(
+        {
+          activityId: encryptedData.activityId,
+          appletId: encryptedData.appletId,
+          flowId: encryptedData.flowId,
+          createdAt: encryptedData.createdAt,
+        },
+        true,
+      );
     } catch (error) {
       throw new Error(
         '[UploadAnswersService.uploadAnswers]: Error occurred while 2nd check if answers uploaded\n\n' +

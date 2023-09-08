@@ -159,7 +159,6 @@ class Logger implements ILogger {
             fileName: checkRecord.fileName,
             uri: checkRecord.filePath,
             type: 'log',
-            fileId: '',
           },
           'log',
         );
@@ -252,13 +251,11 @@ class Logger implements ILogger {
 
       console.info('[Logger.send] Started sending log files to Server');
 
-      // TODO - uncomment the lines below when integration is done!
-
-      // const result = await this.sendInternal();
+      const result = await this.sendInternal();
 
       console.info('[Logger.send] Completed sending log files to Server');
 
-      return true; // result; - todo - uncomment
+      return result;
     } catch (error) {
       console.warn(
         '[Logger.sendInternal]: Error occurred: \n\n',

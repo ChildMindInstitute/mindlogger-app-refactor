@@ -33,7 +33,7 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
   const hasAvailableToOnly = isStatusAvailable;
 
   const hasTimeToComplete =
-    activity.isTimerSet && !!activity.timeLeftToComplete;
+    isStatusInProgress && activity.isTimerSet && !!activity.timeLeftToComplete;
 
   const hasTimerElapsed =
     isStatusInProgress &&

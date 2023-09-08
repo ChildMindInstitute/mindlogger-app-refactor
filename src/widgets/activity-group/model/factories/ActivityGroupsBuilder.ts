@@ -132,7 +132,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       const left: number = activityDuration - alreadyElapsed;
 
       const hours = Math.floor(left / MS_IN_MINUTE / MINUTES_IN_HOUR);
-      const minutes = Math.floor((left - getMsFromHours(hours)) / MS_IN_MINUTE);
+      const minutes = Math.round((left - getMsFromHours(hours)) / MS_IN_MINUTE);
 
       return { hours, minutes };
     } else {
@@ -294,13 +294,6 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
         item.availableTo = to;
       } else {
         item.availableTo = MIDNIGHT_DATE;
-      }
-
-      const timeLeftToComplete = event.timers?.timer;
-      item.isTimerSet = !!timeLeftToComplete;
-
-      if (item.isTimerSet) {
-        item.timeLeftToComplete = timeLeftToComplete;
       }
 
       activityItems.push(item);

@@ -18,8 +18,6 @@
     "android:qa-release": "react-native run-android --variant=qarelease --appIdSuffix=qa",
     "android:staging": "react-native run-android --variant=stagingdebug --appIdSuffix=staging",
     "android:staging-release": "react-native run-android --variant=stagingrelease --appIdSuffix=staging",
-    "android:uat": "react-native run-android --variant=uatdebug --appIdSuffix=uat",
-    "android:uat-release": "react-native run-android --variant=uatrelease --appIdSuffix=uat",
     "android:production": "react-native run-android --variant=productiondebug",
     "android:production-release": "react-native run-android --variant=productionrelease",
     "ios:dev": "react-native run-ios --scheme MindloggerMobileDev",
@@ -28,8 +26,6 @@
     "ios:qa-release": "react-native run-ios --scheme MindloggerMobileQA --configuration Release",
     "ios:staging": "react-native run-ios --scheme MindloggerMobileStaging",
     "ios:staging-release": "react-native run-ios --scheme MindloggerMobileStaging --configuration Release",
-    "ios:uat": "react-native run-ios --scheme MindloggerMobileUAT",
-    "ios:uat-release": "react-native run-ios --scheme MindloggerMobileUAT --configuration Release",
     "ios:production": "react-native run-ios --scheme MindloggerMobile",
     "ios:production-release": "react-native run-ios --scheme MindloggerMobile --configuration Release"
   },

@@ -19,7 +19,7 @@ import {
   useOnInitialAndroidNotification,
 } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
-import { Logger, useAppSelector, useCurrentRoute } from '@app/shared/lib';
+import { Logger, useAppSelector } from '@app/shared/lib';
 
 type Input = {
   checkAvailability: (entityName: string, identifiers: EntityPath) => boolean;
@@ -61,8 +61,6 @@ export function useOnNotificationTap({
     cleanUpMediaFiles,
   });
 
-  const { getCurrentRoute } = useCurrentRoute();
-
   const actions: Record<
     PushNotificationType,
     (eventDetail: LocalEventDetail) => void
@@ -82,7 +80,7 @@ export function useOnNotificationTap({
 
       const entityType: EntityType = activityFlowId ? 'flow' : 'regular';
 
-      const executing = getCurrentRoute() === 'InProgressActivity';
+      const executing = isActivityExecuting();
 
       if (executing) {
         navigator.goBack();
@@ -136,6 +134,16 @@ export function useOnNotificationTap({
         })
         .then(() => Logger.send());
     },
+  };
+
+  const isActivityExecuting = (): boolean => {
+    const navigationState = navigator.getState();
+    if (!navigationState) {
+      return false;
+    }
+    const length = navigationState.routes.length;
+    const lastRoute = navigationState.routes[length - 1];
+    return lastRoute.name === 'InProgressActivity';
   };
 
   function navigateSurvey({

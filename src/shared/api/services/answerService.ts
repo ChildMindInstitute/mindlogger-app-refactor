@@ -1,13 +1,11 @@
+import { AxiosResponse } from 'axios';
+
 import { Point } from '@app/abstract/lib';
-import {
-  DayMonthYear,
-  HourMinute,
-  watchForConnectionLoss,
-} from '@app/shared/lib';
+import { DayMonthYear, HourMinute } from '@app/shared/lib';
 import { MediaFile, MediaValue } from '@app/shared/ui';
 
 import httpService from './httpService';
-import { SuccessfulEmptyResponse, SuccessfulResponse } from '../types';
+import { SuccessfulEmptyResponse } from '../types';
 
 export type TextAnswerDto = string;
 
@@ -186,49 +184,19 @@ export type ActivityAnswersRequest = {
 
 type ActivityAnswersResponse = SuccessfulEmptyResponse;
 
-type CheckIfAnswersExistRequest = {
-  appletId: string;
-  createdAt: number;
-  activityId: string;
-};
+type FakeResponse = AxiosResponse<ActivityAnswersResponse>;
 
-type CheckIfAnswersExistResponse = SuccessfulResponse<{
-  exists: boolean;
-}>;
+const mockActivity = false;
 
 function answerService() {
   return {
-    async sendActivityAnswers(request: ActivityAnswersRequest) {
-      const { abortController, reset } = watchForConnectionLoss();
-
-      try {
-        const response = await httpService.post<ActivityAnswersResponse>(
-          '/answers',
-          request,
-          {
-            signal: abortController.signal,
-          },
-        );
-        return response;
-      } finally {
-        reset();
+    sendActivityAnswers(request: ActivityAnswersRequest) {
+      if (mockActivity) {
+        const response: FakeResponse = {} as FakeResponse;
+        return Promise.resolve(response);
       }
-    },
-    async checkIfAnswersExist(request: CheckIfAnswersExistRequest) {
-      const { abortController, reset } = watchForConnectionLoss();
 
-      try {
-        const response = await httpService.post<CheckIfAnswersExistResponse>(
-          '/answers/check-existence',
-          request,
-          {
-            signal: abortController.signal,
-          },
-        );
-        return response;
-      } finally {
-        reset();
-      }
+      return httpService.post<ActivityAnswersResponse>('/answers', request);
     },
   };
 }

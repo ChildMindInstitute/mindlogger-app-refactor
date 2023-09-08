@@ -81,7 +81,6 @@ function FinishItem({
   const {
     isCompleted,
     isPostponed,
-    isError,
     process: processQueue,
     push: pushInQueue,
   } = useQueueProcessing();
@@ -192,7 +191,7 @@ function FinishItem({
     return <ImageBackground />;
   }
 
-  if (!isCompleted && !isPostponed && !isError) {
+  if (!isCompleted && !isPostponed) {
     return (
       <ImageBackground>
         <Center flex={1} mx={16}>

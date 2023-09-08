@@ -300,7 +300,6 @@ function mapToTime(dto: TimeItemDto): ActivityItem {
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
-    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -607,7 +606,6 @@ function mapToTimeRange(dto: TimeRangeItemDto): ActivityItem {
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
-    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 

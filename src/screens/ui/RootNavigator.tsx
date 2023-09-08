@@ -28,8 +28,6 @@ import {
   useAppSelector,
   useFirebaseSetup,
   useOnlineEstablished,
-  Logger,
-  useCurrentRoute,
 } from '@shared/lib';
 import { UserProfileIcon, HomeIcon, BackButton, Text, Box } from '@shared/ui';
 
@@ -107,20 +105,9 @@ export default () => {
     return NotificationModel.topUpNotifications();
   });
 
-  const { getCurrentRoute } = useCurrentRoute();
-
   const processQueue = useCallback(() => {
-    const executing = getCurrentRoute() === 'InProgressActivity';
-
-    if (executing) {
-      Logger.info(
-        '[RootNavigator.useOnlineEstablished.processQueue]: Postponed due to entity is in progress',
-      );
-      return;
-    }
-
     QueueProcessingService.process();
-  }, [getCurrentRoute]);
+  }, []);
 
   useOnlineEstablished(processQueue);
 

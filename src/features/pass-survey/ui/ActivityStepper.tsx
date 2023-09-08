@@ -71,7 +71,6 @@ function ActivityStepper({
     items: activityStorageRecord?.items,
     answers: activityStorageRecord?.answers,
     activityId,
-    appletId,
   });
 
   const {

@@ -129,7 +129,6 @@ function Intermediate({
     isCompleted,
     isPostponed,
     isLoading,
-    isError,
     process: processQueue,
     push: pushInQueue,
   } = useQueueProcessing();
@@ -265,7 +264,7 @@ function Intermediate({
           <Button
             bg="$blue"
             onPress={completeActivity}
-            isLoading={isLoading && !isCompleted && !isPostponed && !isError}
+            isLoading={isLoading && !isCompleted && !isPostponed}
           >
             {t('change_study:submit')}
           </Button>
@@ -276,7 +275,7 @@ function Intermediate({
             fontSize={17}
             fontWeight="bold"
             onPress={onClose}
-            disabled={isLoading && !isCompleted && !isPostponed && !isError}
+            disabled={isLoading && !isCompleted && !isPostponed}
           >
             {t('activity_navigation:back')}
           </Text>

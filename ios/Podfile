@@ -14,9 +14,6 @@ abstract_target 'MindloggerMobileCommonPods' do
   target 'MindloggerMobileStaging' do
   end
 
-  target 'MindloggerMobileUAT' do
-  end
-
   target 'MindloggerMobile' do
   end
 
