@@ -109,3 +109,7 @@ export const MicrophoneIcon: FC<IconProps> = props => (
 export const ChevronDownIcon: FC<IconProps> = props => (
   <FontAwesome name="chevron-down" {...props} />
 );
+
+export const EditIcon: FC<IconProps> = props => (
+  <FontAwesome name="edit" {...props} />
+);

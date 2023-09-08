@@ -380,5 +380,9 @@
     "finished_complete": "Finished. Click Done to complete.",
     "begin": "Begin",
     "end": "End"
+  },
+  "liveStreaming": {
+    "live_connection": "Live Connection",
+    "not_available": "not available"
   }
 }

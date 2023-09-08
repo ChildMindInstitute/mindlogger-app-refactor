@@ -489,5 +489,9 @@
     "finished_complete": "Fini. Cliquer sur Terminé pour terminer.",
     "begin": "Commencer",
     "end": "Fin"
+  },
+  "liveStreaming": {
+    "live_connection": "Live Connection",
+    "not_available": "not available"
   }
 }
