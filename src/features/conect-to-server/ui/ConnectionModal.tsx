@@ -1,37 +1,22 @@
-import { useState } from 'react';
 import { Modal } from 'react-native';
 
 import { Box } from '@app/shared/ui';
 
 import { ConnectionForm } from './ConnectionForm';
 
-const useConnectionMock = () => ({
-  connect: () => {},
-  disconnect: () => {},
-  connected: false,
-  port: 1230,
-  ipAddress: '123.123.123.123',
-});
+type Props = {
+  visible: boolean;
+  onClose: () => void;
+};
 
-export const ConnectionModal = () => {
-  const [isModalVisible, setModalVisible] = useState(false);
-  const closeModal = () => setModalVisible(false);
-  const [shouldRememberConnection, setRememberConnection] = useState(false);
-  const { connect, connected, disconnect, port, ipAddress } =
-    useConnectionMock();
-
-  const onConnect = () => {
-    connect();
-    closeModal();
-  };
-
-  const onDisconnect = () => {
-    disconnect();
-    closeModal();
-  };
-
+export const ConnectionModal = ({ visible, onClose }: Props) => {
   return (
-    <Modal transparent onRequestClose={closeModal} visible={isModalVisible}>
+    <Modal
+      animationType="fade"
+      transparent
+      onRequestClose={onClose}
+      visible={visible}
+    >
       <Box
         flex={1}
         backgroundColor="$darkerGreyBackground"
@@ -39,6 +24,7 @@ export const ConnectionModal = () => {
         jc="center"
         px="$2"
         py="$20"
+        onPress={onClose}
       >
         <ConnectionForm
           backgroundColor="$white"
@@ -46,15 +32,7 @@ export const ConnectionModal = () => {
           px={30}
           py={22}
           borderRadius={12}
-          onDisconnect={onDisconnect}
-          onConnect={onConnect}
-          onRememberConnection={() =>
-            setRememberConnection(!shouldRememberConnection)
-          }
-          shouldRememberConnection={shouldRememberConnection}
-          connected={connected}
-          port={port}
-          ipAddress={ipAddress}
+          onSubmitSuccess={onClose}
         />
       </Box>
     </Modal>
