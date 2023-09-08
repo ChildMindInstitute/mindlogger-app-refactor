@@ -99,6 +99,7 @@
     "react-native-select-dropdown": "^3.3.2",
     "react-native-sensors": "^7.3.6",
     "react-native-svg": "^13.8.0",
+    "react-native-tcp-socket": "^6.0.6",
     "react-native-toast-notifications": "^3.3.1",
     "react-native-vector-icons": "^9.2.0",
     "react-native-video": "^5.2.1",
