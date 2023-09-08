@@ -79,6 +79,14 @@
     "back": "Back",
     "next": "Next"
   },
+  "live_connection": {
+    "disconnect": "DISCONNECT",
+    "connect": "SUBMIT",
+    "connect_to_server": "Connect to server",
+    "remember": "Remember",
+    "ip": "IP Address",
+    "port": "Port"
+  },
   "join_invite": {
     "click_below": "Click below if you are ready to join this study. You can remove yourself from this study and/or delete your data at any time with no consequences.",
     "decline": "If you do not feel comfortable with sharing your data from this study, you may decline this invitation. ",
