@@ -1,76 +1,80 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import TcpSocket from 'react-native-tcp-socket';
-
-import TCPSocketManager from './TCPSocketManager';
-
-type Config = {
-  host: string;
-  port: number;
-  enable?: boolean;
-};
+import { TCPSocketEmitter } from './TCPSocketEmitter';
+import TCPSocketService from './TCPSocketService';
 
 type Callbacks = {
   onError?: (error: Error) => void;
-  onClose?: () => void;
-  onOpen?: () => void;
+  onClosed?: () => void;
+  onConnected?: () => void;
 };
 
-export function useTCPSocket(
-  { host, port, enable = true }: Config,
-  callbacks?: Callbacks,
-) {
-  const socketRef = useRef<TcpSocket.Socket | null>(null);
+export function useTCPSocket(callbacks?: Callbacks) {
   const callbacksRef = useRef(callbacks);
+
+  const [connected, setConnected] = useState(
+    () => !!TCPSocketService.getSocket(),
+  );
 
   callbacksRef.current = callbacks;
 
-  const [ready, setReady] = useState(false);
+  const sendMessage = useCallback((message: string) => {
+    TCPSocketService.sendMessage(message);
+  }, []);
 
-  useEffect(() => {
-    if (!enable) {
-      return;
-    }
-
-    setReady(false);
-
-    const socket = TCPSocketManager.createOrJoin(host, port, () => {
-      setReady(true);
-      callbacksRef.current?.onOpen?.();
-    });
-
-    socketRef.current = socket;
-
-    const unsubscribe = TCPSocketManager.attachListeners(
-      socket,
-      callbacksRef.current,
-    );
-
-    return unsubscribe;
-  }, [enable, host, port]);
-
-  const sendMessage = useCallback(
-    (message: string) => {
-      if (!ready || !socketRef.current) {
-        return;
-      }
-
-      socketRef.current.write(message);
-    },
-    [ready],
-  );
+  const connect = useCallback((host: string, port: number) => {
+    return TCPSocketService.createConnection(host, port);
+  }, []);
 
   const closeConnection = useCallback(() => {
-    if (!ready || !socketRef.current || socketRef.current.destroyed) {
-      return;
+    TCPSocketService.disconnect();
+  }, []);
+
+  const getSocketInfo = useCallback(() => {
+    const socket = TCPSocketService.getSocket();
+
+    if (!socket) {
+      return null;
     }
 
-    TCPSocketManager.destroy(host, port);
-    setReady(false);
-    socketRef.current = null;
-  }, [host, port, ready]);
+    return {
+      host: socket.remoteAddress,
+      port: socket.remotePort,
+    };
+  }, []);
+
+  useEffect(() => {
+    const onConnected = () => {
+      setConnected(true);
+      callbacksRef.current?.onConnected?.();
+    };
+
+    const onClosed = () => {
+      setConnected(false);
+      callbacksRef.current?.onClosed?.();
+    };
+
+    const onError = (error: Error) => {
+      setConnected(false);
+      callbacksRef.current?.onError?.(error);
+    };
+
+    TCPSocketEmitter.on('tcp-socket-service:connected', onConnected);
+    TCPSocketEmitter.on('tcp-socket-service:closed', onClosed);
+    TCPSocketEmitter.on('tcp-socket-service:error', onError);
+
+    return () => {
+      TCPSocketEmitter.off('tcp-socket-service:connected', onConnected);
+      TCPSocketEmitter.off('tcp-socket-service:closed', onClosed);
+      TCPSocketEmitter.off('tcp-socket-service:error', onError);
+    };
+  }, []);
 
   return {
+    connect,
+    connected,
+
+    getSocketInfo,
     sendMessage,
     closeConnection,
   };
