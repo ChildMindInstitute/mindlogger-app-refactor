@@ -17,7 +17,7 @@ const ConnectionStatusBar: FC<Props> = ({ appletId }) => {
   const { t } = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
   const closeModal = () => setModalVisible(false);
-  const todoIsLiveStreamingEnabled = useAppletLiveConnectionStatus(appletId);
+  const streamEnabled = useAppletLiveConnectionStatus(appletId);
 
   const { connected, getSocketInfo } = useTCPSocket();
 
@@ -27,7 +27,7 @@ const ConnectionStatusBar: FC<Props> = ({ appletId }) => {
     setModalVisible(true);
   };
 
-  if (!todoIsLiveStreamingEnabled) {
+  if (!streamEnabled) {
     return null;
   }
 
