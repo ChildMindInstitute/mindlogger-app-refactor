@@ -49,7 +49,7 @@ export type AppletDetails = {
   activities: Activity[];
   activityFlows: ActivityFlow[];
   encryption: AppletEncryptionDTO | null;
-  todoIsLiveStreamingEnabled: boolean;
+  streamEnabled: boolean;
 };
 
 export type AnalyticsItemValue = {
