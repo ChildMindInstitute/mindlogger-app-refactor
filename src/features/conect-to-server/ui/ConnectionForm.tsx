@@ -4,9 +4,11 @@ import { StyleSheet } from 'react-native';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { useAppDispatch, useAppSelector } from '@app/shared/lib';
 import { useAppForm, useTCPSocket } from '@app/shared/lib';
 import { Box, BoxProps, CheckBox, Text, XStack, Button } from '@app/shared/ui';
 import { InputField } from '@app/shared/ui/form';
+import { LiveConnectionModel } from '@entities/liveConnection';
 import { colors } from '@shared/lib';
 
 import { ConnectionFormSchema } from '../model';
@@ -23,12 +25,14 @@ type Props = {
   onSubmitSuccess: () => void;
 } & BoxProps;
 
-// TODO: move it redux initial state;
-const DEFAULT_HOST = '127.0.0.1';
-const DEFAULT_PORT = 8881;
-
 export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+
+  const formDefaultValues = useAppSelector(
+    LiveConnectionModel.selectors.selectLiveConnectionHistory,
+  );
+
   // TODO: add error message to the form
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState('');
@@ -46,12 +50,15 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   const { form, submit } = useAppForm(ConnectionFormSchema, {
     onSubmitSuccess: data => {
       connect(data.ipAddress, data.port);
+      const remember = true;
+      // @todo connect to form
+      if (remember) {
+        dispatch(LiveConnectionModel.actions.setHistory(data));
+      } else {
+        dispatch(LiveConnectionModel.actions.clearHistory());
+      }
     },
-    defaultValues: {
-      ipAddress: DEFAULT_HOST,
-      // TODO: make it work with numbers
-      port: DEFAULT_PORT,
-    },
+    defaultValues: formDefaultValues ?? {},
   });
 
   const disconnect = () => {
@@ -118,7 +125,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
             offAnimationType="fade"
             animationDuration={0.2}
             // TODO: connect to FORM
-            value={false}
+            value={!!formDefaultValues}
           />
 
           <Text fontWeight="900" color="$darkerGrey2" fontSize={16}>
