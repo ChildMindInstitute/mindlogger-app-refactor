@@ -20,9 +20,16 @@ export function useTCPSocket(callbacks?: Callbacks) {
 
   callbacksRef.current = callbacks;
 
-  const sendMessage = useCallback((message: string) => {
-    TCPSocketService.sendMessage(message);
-  }, []);
+  const sendMessage = useCallback(
+    (message: string) => {
+      if (!connected) {
+        return;
+      }
+
+      TCPSocketService.sendMessage(`${message}$$$`);
+    },
+    [connected],
+  );
 
   const connect = useCallback((host: string, port: number) => {
     return TCPSocketService.createConnection(host, port);
