@@ -1,8 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+const DEFAULT_HOST = '127.0.0.1';
+const DEFAULT_PORT = '8881';
+
 type History = {
   ipAddress: string;
-  port: number;
+  port: string;
+  remember: boolean;
 };
 
 type InitialState = {
@@ -10,7 +14,11 @@ type InitialState = {
 };
 
 const initialState: InitialState = {
-  history: null,
+  history: {
+    ipAddress: DEFAULT_HOST,
+    port: DEFAULT_PORT,
+    remember: true,
+  },
 };
 
 const liveConnectionSlice = createSlice({
@@ -18,11 +26,12 @@ const liveConnectionSlice = createSlice({
   initialState,
   reducers: {
     setHistory: (state, action: PayloadAction<History>) => {
-      const { ipAddress, port } = action.payload;
+      const { ipAddress, port, remember } = action.payload;
 
       state.history = {
         ipAddress,
         port,
+        remember,
       };
     },
     clearHistory: state => {
