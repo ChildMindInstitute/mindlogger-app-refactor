@@ -49,6 +49,7 @@ export type AppletDetails = {
   activities: Activity[];
   activityFlows: ActivityFlow[];
   encryption: AppletEncryptionDTO | null;
+  todoIsLiveStreamingEnabled: boolean;
 };
 
 export type AnalyticsItemValue = {

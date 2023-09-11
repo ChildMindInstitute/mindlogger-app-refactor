@@ -86,6 +86,7 @@ export function mapAppletDetailsFromDto(
     activityFlows: mapActivityFlowsFromDto(detailsDto.activityFlows),
     theme: mapThemeFromDto(detailsDto.theme),
     encryption: detailsDto.encryption,
+    todoIsLiveStreamingEnabled: detailsDto.todoIsLiveStreamingEnabled ?? false,
   };
 }
 

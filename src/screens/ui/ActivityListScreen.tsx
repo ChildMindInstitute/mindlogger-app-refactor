@@ -16,7 +16,7 @@ const ActivityListScreen: FC<Props> = props => {
     <Box flex={1}>
       <UploadRetryBanner />
       <HorizontalCalendar mt={8} />
-      <LiveConnectionStatusBar />
+      <LiveConnectionStatusBar appletId={props.route.params.appletId} />
 
       <ScrollView contentContainerStyle={styles.scrollView}>
         <ActivityGroupList

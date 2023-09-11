@@ -3,30 +3,31 @@ import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
+import { useAppletLiveConnectionStatus } from '@entities/applet/lib/hooks/useAppletLiveConnectionStatus';
 import { colors, useTCPSocket } from '@shared/lib';
 import { XStack, Text, EditIcon } from '@shared/ui';
 
 import { ConnectionModal } from './ConnectionModal';
 
-const ConnectionStatusBar: FC = () => {
+type Props = {
+  appletId: string;
+};
+
+const ConnectionStatusBar: FC<Props> = ({ appletId }) => {
   const { t } = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
   const closeModal = () => setModalVisible(false);
+  const todoIsLiveStreamingEnabled = useAppletLiveConnectionStatus(appletId);
 
   const { connected, getSocketInfo } = useTCPSocket();
 
   const { host, port } = getSocketInfo() ?? {};
 
-  // TODO check Applet Details for this information
-  const { shouldShowStatusBar } = {
-    shouldShowStatusBar: true,
-  };
-
   const onEdit = () => {
     setModalVisible(true);
   };
 
-  if (!shouldShowStatusBar) {
+  if (!todoIsLiveStreamingEnabled) {
     return null;
   }
 
