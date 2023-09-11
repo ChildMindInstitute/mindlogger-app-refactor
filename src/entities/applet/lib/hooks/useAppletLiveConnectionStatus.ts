@@ -2,10 +2,10 @@ import { useAppletDetailsQuery } from '../../api';
 import { mapAppletDetailsFromDto } from '../../model';
 
 export const useAppletLiveConnectionStatus = (appletId: string) => {
-  const { data: todoIsLiveStreamingEnabled } = useAppletDetailsQuery(appletId, {
+  const { data: streamEnabled } = useAppletDetailsQuery(appletId, {
     select: response =>
-      mapAppletDetailsFromDto(response.data.result).todoIsLiveStreamingEnabled,
+      mapAppletDetailsFromDto(response.data.result).streamEnabled,
   });
 
-  return todoIsLiveStreamingEnabled;
+  return streamEnabled;
 };
