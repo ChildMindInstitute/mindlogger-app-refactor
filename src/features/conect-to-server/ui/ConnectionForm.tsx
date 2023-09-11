@@ -1,25 +1,15 @@
 import { FC, useState } from 'react';
-import { StyleSheet } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '@app/shared/lib';
 import { useAppForm, useTCPSocket } from '@app/shared/lib';
-import { Box, BoxProps, CheckBox, Text, XStack, Button } from '@app/shared/ui';
-import { InputField } from '@app/shared/ui/form';
+import { Box, BoxProps, Text, XStack, Button } from '@app/shared/ui';
+import { CheckBoxField, InputField } from '@app/shared/ui/form';
 import { LiveConnectionModel } from '@entities/liveConnection';
-import { colors } from '@shared/lib';
 
 import { ConnectionFormSchema } from '../model';
-
-const styles = StyleSheet.create({
-  checkbox: {
-    width: 20,
-    height: 20,
-    marginRight: 12,
-  },
-});
 
 type Props = {
   onSubmitSuccess: () => void;
@@ -29,7 +19,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const formDefaultValues = useAppSelector(
+  const connection = useAppSelector(
     LiveConnectionModel.selectors.selectLiveConnectionHistory,
   );
 
@@ -49,17 +39,33 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
 
   const { form, submit } = useAppForm(ConnectionFormSchema, {
     onSubmitSuccess: data => {
-      connect(data.ipAddress, data.port);
-      const remember = true;
-      // @todo connect to form
+      const { ipAddress, port, remember } = data;
+
+      connect(ipAddress, +port);
+
       if (remember) {
-        dispatch(LiveConnectionModel.actions.setHistory(data));
+        dispatch(
+          LiveConnectionModel.actions.setHistory({
+            ipAddress,
+            port,
+            remember: Boolean(remember),
+          }),
+        );
       } else {
         dispatch(LiveConnectionModel.actions.clearHistory());
       }
     },
-    defaultValues: formDefaultValues ?? {},
+    defaultValues: {
+      ipAddress: connection?.ipAddress,
+      port: connection?.port,
+      remember: connection?.remember,
+    },
+    onSubmitFail: () => {
+      setError('Cannot set connection');
+    },
   });
+
+  console.log(form.formState);
 
   const disconnect = () => {
     closeConnection();
@@ -107,26 +113,13 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
             mode="dark"
             editable={!connected}
             name="port"
-            keyboardType="number-pad"
+            // keyboardType="number-pad"
             placeholder=""
           />
         </Box>
 
-        <XStack onPress={() => {}} ai="center" mb="$5">
-          <CheckBox
-            style={styles.checkbox}
-            boxType="square"
-            lineWidth={2}
-            onTintColor={colors.darkerGrey3}
-            tintColor={colors.darkerGrey3}
-            onCheckColor={colors.white}
-            onFillColor={colors.darkerGrey3}
-            onAnimationType="fade"
-            offAnimationType="fade"
-            animationDuration={0.2}
-            // TODO: connect to FORM
-            value={!!formDefaultValues}
-          />
+        <XStack ai="center" mb="$5">
+          <CheckBoxField name="remember" />
 
           <Text fontWeight="900" color="$darkerGrey2" fontSize={16}>
             {t('live_connection:remember')}
