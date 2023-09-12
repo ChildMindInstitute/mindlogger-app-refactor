@@ -12,7 +12,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { AppletModel } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
-import { LiveConnectionModel } from '@entities/liveConnection';
+import { StreamingModel } from '@entities/streaming';
 import { createAsyncStorage, useSplash } from '@shared/lib';
 
 const storage = createAsyncStorage('redux-storage');
@@ -30,7 +30,7 @@ const rootReducer = (state: any, action: AnyAction) => {
   const reducer = combineReducers({
     identity: IdentityModel.reducer,
     applets: AppletModel.reducer,
-    liveConnection: LiveConnectionModel.reducer,
+    streaming: StreamingModel.reducer,
   });
 
   return reducer(state, action);

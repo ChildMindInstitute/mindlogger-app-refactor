@@ -15,7 +15,7 @@ import {
   ActivityIndicator,
 } from '@app/shared/ui';
 import { CheckBoxField, InputField } from '@app/shared/ui/form';
-import { LiveConnectionModel } from '@entities/liveConnection';
+import { StreamingModel } from '@entities/streaming';
 
 import { ConnectionFormSchema } from '../model';
 
@@ -43,7 +43,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   const dispatch = useAppDispatch();
 
   const connection = useAppSelector(
-    LiveConnectionModel.selectors.selectLiveConnectionHistory,
+    StreamingModel.selectors.selectStreamingHistory,
   );
 
   const [error, setError] = useState('');
@@ -65,7 +65,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
       connect(ipAddress, +port);
 
       dispatch(
-        LiveConnectionModel.actions.setHistory({
+        StreamingModel.actions.setHistory({
           ipAddress,
           port,
           remember: Boolean(remember),
@@ -86,7 +86,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
     const remember = form.getValues('remember');
 
     if (!remember) {
-      dispatch(LiveConnectionModel.actions.setDefaultHistory());
+      dispatch(StreamingModel.actions.setDefaultHistory());
     }
 
     closeConnection();
