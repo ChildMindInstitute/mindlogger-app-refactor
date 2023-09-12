@@ -70,7 +70,9 @@ type Props = {
 const StabilityTrackerItemScreen = (props: Props) => {
   const toast = useToast();
   const reRender = useForceUpdate();
-  const { sendMessage } = useTCPSocket();
+  const { sendMessage } = useTCPSocket({
+    onClosed: () => {},
+  });
 
   const {
     config: initialConfig,

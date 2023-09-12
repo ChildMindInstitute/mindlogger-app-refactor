@@ -49,7 +49,9 @@ type Props = {
 
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, onStarted, width, isDrawingActive } = props;
-  const { sendMessage } = useTCPSocket();
+  const { sendMessage } = useTCPSocket({
+    onClosed: () => {},
+  });
 
   const isEmpty = !value.length;
 
