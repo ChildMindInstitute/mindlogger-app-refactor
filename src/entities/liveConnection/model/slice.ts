@@ -17,7 +17,7 @@ const initialState: InitialState = {
   history: {
     ipAddress: DEFAULT_HOST,
     port: DEFAULT_PORT,
-    remember: true,
+    remember: false,
   },
 };
 
@@ -36,6 +36,9 @@ const liveConnectionSlice = createSlice({
     },
     clearHistory: state => {
       state.history = null;
+    },
+    setDefaultHistory: state => {
+      state.history = initialState.history;
     },
   },
 });

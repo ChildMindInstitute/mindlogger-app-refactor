@@ -82,7 +82,7 @@
   "live_connection": {
     "disconnect": "DISCONNECT",
     "connect": "SUBMIT",
-    "connect_to_server": "Connect to server",
+    "connect_to_server": "Connect To Server",
     "remember": "Remember",
     "ip": "IP Address",
     "port": "Port"
