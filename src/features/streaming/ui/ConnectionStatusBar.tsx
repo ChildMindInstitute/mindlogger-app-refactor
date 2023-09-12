@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { useAppletLiveConnectionStatus } from '@entities/applet/lib/hooks/useAppletLiveConnectionStatus';
+import { useAppletStreamingStatus } from '@entities/applet/lib/hooks';
 import { colors, useTCPSocket } from '@shared/lib';
 import { XStack, Text, EditIcon } from '@shared/ui';
 
@@ -17,7 +17,7 @@ const ConnectionStatusBar: FC<Props> = ({ appletId }) => {
   const { t } = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
   const closeModal = () => setModalVisible(false);
-  const streamEnabled = useAppletLiveConnectionStatus(appletId);
+  const streamEnabled = useAppletStreamingStatus(appletId);
 
   const { connected, getSocketInfo } = useTCPSocket();
 
