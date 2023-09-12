@@ -18,6 +18,8 @@ export function useTCPSocket(callbacks?: Callbacks) {
     return !!socket && socket.readyState !== 'opening';
   });
 
+  const [connecting, setConnecting] = useState(false);
+
   callbacksRef.current = callbacks;
 
   const sendMessage = useCallback(
@@ -32,6 +34,8 @@ export function useTCPSocket(callbacks?: Callbacks) {
   );
 
   const connect = useCallback((host: string, port: number) => {
+    setConnecting(true);
+
     return TCPSocketService.createConnection(host, port);
   }, []);
 
@@ -55,16 +59,19 @@ export function useTCPSocket(callbacks?: Callbacks) {
   useEffect(() => {
     const onConnected = () => {
       setConnected(true);
+      setConnecting(false);
       callbacksRef.current?.onConnected?.();
     };
 
     const onClosed = () => {
       setConnected(false);
+      setConnecting(false);
       callbacksRef.current?.onClosed?.();
     };
 
     const onError = (error: Error) => {
       setConnected(false);
+      setConnecting(false);
       callbacksRef.current?.onError?.(error);
     };
 
@@ -82,6 +89,7 @@ export function useTCPSocket(callbacks?: Callbacks) {
   return {
     connect,
     connected,
+    connecting,
 
     getSocketInfo,
     sendMessage,
