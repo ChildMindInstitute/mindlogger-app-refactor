@@ -7,7 +7,14 @@ import { useToast } from 'react-native-toast-notifications';
 
 import { colors, useAppDispatch, useAppSelector } from '@app/shared/lib';
 import { useAppForm, useTCPSocket } from '@app/shared/lib';
-import { Box, BoxProps, Text, XStack, Button } from '@app/shared/ui';
+import {
+  Box,
+  BoxProps,
+  Text,
+  XStack,
+  Button,
+  ActivityIndicator,
+} from '@app/shared/ui';
 import { CheckBoxField, InputField } from '@app/shared/ui/form';
 import { LiveConnectionModel } from '@entities/liveConnection';
 
@@ -44,7 +51,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState('');
 
-  const { connect, connected, closeConnection } = useTCPSocket({
+  const { connect, connected, connecting, closeConnection } = useTCPSocket({
     onError: () => {
       setError(t('live_connection:connection_error'));
     },
@@ -80,9 +87,11 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
 
   const disconnect = () => {
     const remember = form.getValues('remember');
+
     if (!remember) {
       dispatch(LiveConnectionModel.actions.setDefaultHistory());
     }
+
     closeConnection();
     onSubmitSuccess();
     toast.show(t('live_connection:connection_closed'));
@@ -91,15 +100,20 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   return (
     <Box {...props} onPress={e => e.stopPropagation()}>
       <FormProvider {...form}>
-        <Text
-          textAlign="center"
-          mb={20}
-          color="$darkerGrey3"
-          fontSize={20}
-          fontWeight="900"
-        >
-          {t('live_connection:connect_to_server')}
-        </Text>
+        <XStack justifyContent="center">
+          <Text
+            textAlign="center"
+            mb={20}
+            color="$darkerGrey3"
+            fontSize={20}
+            fontWeight="900"
+            mr={6}
+          >
+            {t('live_connection:connect_to_server')}
+          </Text>
+
+          {connecting && <ActivityIndicator size="small" mb={18} />}
+        </XStack>
 
         <Text color="$darkerGrey3" fontSize={18} fontWeight="700">
           {t('live_connection:ip')}:
@@ -123,7 +137,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
           />
         </Box>
 
-        <Text color="$darkerGrey3" fontSize={18} fontWeight="700">
+        <Text color="$darkerGrey3" fontSize={18} mt={8} fontWeight="700">
           {t('live_connection:port')}:
         </Text>
 
@@ -146,7 +160,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
           />
         </Box>
 
-        <XStack ai="center">
+        <XStack ai="center" my={8}>
           <CheckBoxField
             name="remember"
             onCheckColor={colors.white}
