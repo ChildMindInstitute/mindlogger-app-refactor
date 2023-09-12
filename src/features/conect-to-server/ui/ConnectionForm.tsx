@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useToast } from 'react-native-toast-notifications';
 
 import { colors, useAppDispatch, useAppSelector } from '@app/shared/lib';
 import { useAppForm, useTCPSocket } from '@app/shared/lib';
@@ -34,19 +35,18 @@ const styles = StyleSheet.create({
 export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const toast = useToast();
 
   const connection = useAppSelector(
     LiveConnectionModel.selectors.selectLiveConnectionHistory,
   );
 
-  // TODO: add error message to the form
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState('');
 
   const { connect, connected, closeConnection } = useTCPSocket({
     onError: () => {
-      // TODO: move it to translations
-      setError('Connection failed. Please double check ip and port');
+      setError(t('live_connection:connection_error'));
     },
     onConnected: () => {
       setError('');
@@ -74,7 +74,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
       remember: connection?.remember,
     },
     onSubmitFail: () => {
-      setError('Cannot set connection');
+      setError(t('live_connection:connection_set_error'));
     },
   });
 
@@ -85,7 +85,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
     }
     closeConnection();
     onSubmitSuccess();
-    // TODO: add toast message
+    toast.show(t('live_connection:connection_closed'));
   };
 
   return (

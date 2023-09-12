@@ -85,7 +85,10 @@
     "connect_to_server": "Connect To Server",
     "remember": "Remember",
     "ip": "IP Address",
-    "port": "Port"
+    "port": "Port",
+    "connection_closed": "TCP Connection was closed",
+    "connection_error": "Connection failed. Please double check ip and port",
+    "connection_set_error": "Cannot set connection"
   },
   "join_invite": {
     "click_below": "Click below if you are ready to join this study. You can remove yourself from this study and/or delete your data at any time with no consequences.",
