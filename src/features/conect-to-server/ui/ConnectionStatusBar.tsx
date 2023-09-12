@@ -28,7 +28,7 @@ const ConnectionStatusBar: FC<Props> = ({ appletId }) => {
   };
 
   if (!todoIsLiveStreamingEnabled) {
-    // return null;
+    return null;
   }
 
   return (
