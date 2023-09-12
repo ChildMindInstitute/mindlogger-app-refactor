@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useToast } from 'react-native-toast-notifications';
 
 import { colors, useAppDispatch, useAppSelector } from '@app/shared/lib';
 import { useAppForm, useTCPSocket } from '@app/shared/lib';
@@ -42,13 +41,11 @@ const styles = StyleSheet.create({
 export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const toast = useToast();
 
   const connection = useAppSelector(
     LiveConnectionModel.selectors.selectLiveConnectionHistory,
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState('');
 
   const { connect, connected, connecting, closeConnection } = useTCPSocket({
@@ -94,7 +91,6 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
 
     closeConnection();
     onSubmitSuccess();
-    toast.show(t('live_connection:connection_closed'));
   };
 
   return (

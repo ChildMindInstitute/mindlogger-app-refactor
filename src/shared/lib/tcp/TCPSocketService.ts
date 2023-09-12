@@ -23,6 +23,8 @@ function TCPSocketService() {
     });
 
     socket.on('close', () => {
+      socket?.removeAllListeners();
+      disconnect();
       TCPSocketEmitter.emit('tcp-socket-service:closed');
     });
   };
