@@ -21,8 +21,8 @@ const initialState: InitialState = {
   },
 };
 
-const liveConnectionSlice = createSlice({
-  name: 'liveConnection',
+const streamingSlice = createSlice({
+  name: 'streaming',
   initialState,
   reducers: {
     setHistory: (state, action: PayloadAction<History>) => {
@@ -44,7 +44,7 @@ const liveConnectionSlice = createSlice({
 });
 
 export const actions = {
-  ...liveConnectionSlice.actions,
+  ...streamingSlice.actions,
 };
 
-export const reducer = liveConnectionSlice.reducer;
+export const reducer = streamingSlice.reducer;
