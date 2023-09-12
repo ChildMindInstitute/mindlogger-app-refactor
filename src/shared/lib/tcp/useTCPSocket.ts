@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useTranslation } from 'react-i18next';
+import { useToast } from 'react-native-toast-notifications';
+
 import { TCPSocketEmitter } from './TCPSocketEmitter';
 import TCPSocketService from './TCPSocketService';
 
@@ -11,6 +14,9 @@ type Callbacks = {
 
 export function useTCPSocket(callbacks?: Callbacks) {
   const callbacksRef = useRef(callbacks);
+
+  const toast = useToast();
+  const { t } = useTranslation();
 
   const [connected, setConnected] = useState(() => {
     const socket = TCPSocketService.getSocket();
@@ -32,6 +38,10 @@ export function useTCPSocket(callbacks?: Callbacks) {
     },
     [connected],
   );
+
+  const showDisconnectAlert = useCallback(() => {
+    toast.show(t('live_connection:connection_closed'));
+  }, [toast, t]);
 
   const connect = useCallback((host: string, port: number) => {
     setConnecting(true);
@@ -66,7 +76,11 @@ export function useTCPSocket(callbacks?: Callbacks) {
     const onClosed = () => {
       setConnected(false);
       setConnecting(false);
-      callbacksRef.current?.onClosed?.();
+      if (!callbacksRef.current?.onClosed) {
+        showDisconnectAlert();
+      } else {
+        callbacksRef.current.onClosed();
+      }
     };
 
     const onError = (error: Error) => {
@@ -84,7 +98,7 @@ export function useTCPSocket(callbacks?: Callbacks) {
       TCPSocketEmitter.off('tcp-socket-service:closed', onClosed);
       TCPSocketEmitter.off('tcp-socket-service:error', onError);
     };
-  }, []);
+  }, [showDisconnectAlert]);
 
   return {
     connect,
