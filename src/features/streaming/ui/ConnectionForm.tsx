@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useToast } from 'react-native-toast-notifications';
 
 import { colors, useAppDispatch, useAppSelector } from '@app/shared/lib';
 import { useAppForm, useTCPSocket } from '@app/shared/lib';
@@ -16,7 +15,7 @@ import {
   ActivityIndicator,
 } from '@app/shared/ui';
 import { CheckBoxField, InputField } from '@app/shared/ui/form';
-import { LiveConnectionModel } from '@entities/liveConnection';
+import { StreamingModel } from '@entities/streaming';
 
 import { ConnectionFormSchema } from '../model';
 
@@ -42,13 +41,11 @@ const styles = StyleSheet.create({
 export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const toast = useToast();
 
   const connection = useAppSelector(
-    LiveConnectionModel.selectors.selectLiveConnectionHistory,
+    StreamingModel.selectors.selectStreamingHistory,
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState('');
 
   const { connect, connected, connecting, closeConnection } = useTCPSocket({
@@ -68,7 +65,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
       connect(ipAddress, +port);
 
       dispatch(
-        LiveConnectionModel.actions.setHistory({
+        StreamingModel.actions.setHistory({
           ipAddress,
           port,
           remember: Boolean(remember),
@@ -89,12 +86,11 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
     const remember = form.getValues('remember');
 
     if (!remember) {
-      dispatch(LiveConnectionModel.actions.setDefaultHistory());
+      dispatch(StreamingModel.actions.setDefaultHistory());
     }
 
     closeConnection();
     onSubmitSuccess();
-    toast.show(t('live_connection:connection_closed'));
   };
 
   return (

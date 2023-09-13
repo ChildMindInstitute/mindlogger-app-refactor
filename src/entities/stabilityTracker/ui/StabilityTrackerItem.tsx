@@ -11,7 +11,8 @@ import { orientation } from 'react-native-sensors';
 import Svg, { Circle } from 'react-native-svg';
 import { useToast } from 'react-native-toast-notifications';
 
-import { useForceUpdate } from '@shared/lib';
+import { StabilityTrackerAnswerValue } from '@shared/api';
+import { useForceUpdate, useTCPSocket } from '@shared/lib';
 import { YStack } from '@shared/ui';
 
 import ControlBar from './ControlBar';
@@ -69,6 +70,9 @@ type Props = {
 const StabilityTrackerItemScreen = (props: Props) => {
   const toast = useToast();
   const reRender = useForceUpdate();
+  const { sendMessage } = useTCPSocket({
+    onClosed: () => {},
+  });
 
   const {
     config: initialConfig,
@@ -117,6 +121,15 @@ const StabilityTrackerItemScreen = (props: Props) => {
   const IS_TOUCH = useMemo(() => {
     return userInputType === 'touch';
   }, [userInputType]);
+
+  const sendSocketData = (data: StabilityTrackerAnswerValue) => {
+    sendMessage(
+      JSON.stringify({
+        type: 'live_event',
+        data,
+      }),
+    );
+  };
 
   const handleGyroscopeError = useCallback(
     (error: Error) => {
@@ -302,6 +315,8 @@ const StabilityTrackerItemScreen = (props: Props) => {
     tickNumber: number,
     deltaTime: number,
   ) => {
+    let shouldSendSocketData = true;
+
     if (
       timeElapsed >= config.durationMinutes * 60 * 1000 ||
       tickNumber >= targetPoints.length
@@ -325,12 +340,15 @@ const StabilityTrackerItemScreen = (props: Props) => {
       updateCirclePosition(timeElapsed, deltaTime);
       updateLambdaValue(deltaTime);
       updateScore(deltaTime);
+    } else {
+      shouldSendSocketData = false;
     }
+
     reRender();
-    saveResponses();
+    saveResponses(shouldSendSocketData);
   };
 
-  const saveResponses = () => {
+  const saveResponses = (shouldSendSocketData: boolean) => {
     const response = {
       timestamp: new Date().getTime(),
       circlePosition: [circlePosition.current[1] / PANEL_RADIUS - 1],
@@ -340,6 +358,20 @@ const StabilityTrackerItemScreen = (props: Props) => {
       score: score.current,
       lambdaSlope: lambdaSlope.current,
     };
+
+    if (shouldSendSocketData) {
+      const socketData = {
+        timestamp: response.timestamp,
+        stimPos: response.circlePosition,
+        targetPos: response.targetPosition,
+        userPos: response.userPosition,
+        score: response.score,
+        lambda: response.lambda,
+        lambdaSlope: response.lambdaSlope,
+      };
+
+      sendSocketData(socketData);
+    }
 
     responses.current.push(response);
   };

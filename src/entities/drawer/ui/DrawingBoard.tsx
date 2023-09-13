@@ -18,6 +18,7 @@ import {
 import {
   colors,
   useShouldRestoreSkiaViewState,
+  useTCPSocket,
   useUndoClicked,
 } from '@app/shared/lib';
 import { Box } from '@app/shared/ui';
@@ -48,10 +49,22 @@ type Props = {
 
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, onStarted, width, isDrawingActive } = props;
+  const { sendMessage } = useTCPSocket({
+    onClosed: () => {},
+  });
 
   const isEmpty = !value.length;
 
   const { undoClicked, resetUndoClicked } = useUndoClicked(isEmpty);
+
+  const sendSocketData = (data: DrawPoint) => {
+    sendMessage(
+      JSON.stringify({
+        type: 'live_event',
+        data,
+      }),
+    );
+  };
 
   const { shouldRestore, updateShouldRestore } =
     useShouldRestoreSkiaViewState();
@@ -84,13 +97,21 @@ const DrawingBoard: FC<Props> = props => {
   const getNow = (): number => new Date().getTime();
 
   const createLogPoint = (point: Point): DrawPoint => {
-    return { ...point, time: getNow() };
+    const logPoint = { ...point, time: getNow() };
+
+    sendSocketData(logPoint);
+
+    return logPoint;
   };
 
   const createLogLine = ({ x, y }: Point): void => {
+    const logPoint = { x, y, time: getNow() };
+
+    sendSocketData(logPoint);
+
     currentLogLineRef.current = {
       startTime: getNow(),
-      points: [{ time: getNow(), x, y }],
+      points: [logPoint],
     };
   };
 
