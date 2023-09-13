@@ -88,7 +88,9 @@
     "port": "Port",
     "connection_closed": "TCP Connection was closed",
     "connection_error": "Connection failed. Please double check ip and port",
-    "connection_set_error": "Cannot set connection"
+    "connection_set_error": "Cannot set connection",
+    "live_connection": "Live Connection",
+    "not_available": "not available"
   },
   "join_invite": {
     "click_below": "Cliquez ci-dessous si vous êtes prêt à participer à cette étude. Vous pouvez vous retirer de cette étude et/ou supprimer vos données à tout moment sans conséquences.",
@@ -500,9 +502,5 @@
     "finished_complete": "Fini. Cliquer sur Terminé pour terminer.",
     "begin": "Commencer",
     "end": "Fin"
-  },
-  "liveStreaming": {
-    "live_connection": "Live Connection",
-    "not_available": "not available"
   }
 }
