@@ -13,8 +13,8 @@ import {
 } from '@shopify/react-native-skia';
 
 import { AbTestPayload, Point, TestNode } from '@app/abstract/lib';
-import { useTCPSocket } from '@app/shared/lib';
-import { Box, BoxProps } from '@app/shared/ui';
+import { useSendEvent } from '@shared/lib';
+import { Box, BoxProps } from '@shared/ui';
 
 import AbShapes from './AbShapes';
 import { LogLine, LogPoint, MessageType, OnResultLog } from '../lib';
@@ -40,9 +40,7 @@ type Props = {
 const AbCanvas: FC<Props> = props => {
   const [errorPath, setErrorPath] = useState<SkPath | null>(null);
 
-  const { sendLiveEvent } = useTCPSocket({
-    onClosed: () => {},
-  });
+  const { sendLiveEvent } = useSendEvent();
 
   const [paths, setPaths] = useState<Array<SkPath>>([]);
 
