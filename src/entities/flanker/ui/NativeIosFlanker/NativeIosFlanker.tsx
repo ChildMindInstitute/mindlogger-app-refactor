@@ -2,8 +2,8 @@ import { FC, useEffect, useMemo, useRef } from 'react';
 import { NativeModules, StyleSheet } from 'react-native';
 
 import { FlankerItemSettings } from '@app/abstract/lib';
-import { useTCPSocket } from '@app/shared/lib';
-import { Box } from '@app/shared/ui';
+import { useSendEvent } from '@shared/lib';
+import { Box } from '@shared/ui';
 
 import SwiftFlankerWrapper from './SwiftFlankerWrapper';
 import {
@@ -18,9 +18,7 @@ type Props = {
 };
 
 const NativeIosFlanker: FC<Props> = props => {
-  const { sendLiveEvent } = useTCPSocket({
-    onClosed: () => {},
-  });
+  const { sendLiveEvent } = useSendEvent();
 
   const configuration = useMemo(() => {
     return ConfigurationBuilder.buildForNativeIOS(props.configuration);

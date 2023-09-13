@@ -18,10 +18,10 @@ import {
 import {
   colors,
   useShouldRestoreSkiaViewState,
-  useTCPSocket,
   useUndoClicked,
-} from '@app/shared/lib';
-import { Box } from '@app/shared/ui';
+  useSendEvent,
+} from '@shared/lib';
+import { Box } from '@shared/ui';
 
 import {
   convertToSkPaths,
@@ -49,9 +49,8 @@ type Props = {
 
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, onStarted, width, isDrawingActive } = props;
-  const { sendLiveEvent } = useTCPSocket({
-    onClosed: () => {},
-  });
+
+  const { sendLiveEvent } = useSendEvent();
 
   const isEmpty = !value.length;
 
