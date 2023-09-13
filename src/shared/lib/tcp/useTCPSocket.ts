@@ -29,10 +29,12 @@ export function useTCPSocket(callbacks?: Callbacks) {
   callbacksRef.current = callbacks;
 
   const sendMessage = useCallback(
-    (message: string) => {
+    (payload: Object) => {
       if (!connected) {
         return;
       }
+
+      const message = JSON.stringify(payload);
 
       TCPSocketService.sendMessage(`${message}$$$`);
     },
