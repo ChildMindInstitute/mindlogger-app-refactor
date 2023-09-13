@@ -123,12 +123,10 @@ const StabilityTrackerItemScreen = (props: Props) => {
   }, [userInputType]);
 
   const sendSocketData = (data: StabilityTrackerAnswerValue) => {
-    sendMessage(
-      JSON.stringify({
-        type: 'live_event',
-        data,
-      }),
-    );
+    sendMessage({
+      type: 'live_event',
+      data,
+    });
   };
 
   const handleGyroscopeError = useCallback(
