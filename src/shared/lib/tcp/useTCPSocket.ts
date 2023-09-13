@@ -3,6 +3,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useToast } from 'react-native-toast-notifications';
 
+import { DrawPoint } from '@entities/drawer';
+import { FlankerWebViewLogRecord } from '@entities/flanker';
+import { StabilityTrackerAnswerValue } from '@shared/api';
+
 import { TCPSocketEmitter } from './TCPSocketEmitter';
 import TCPSocketService from './TCPSocketService';
 
@@ -11,6 +15,12 @@ type Callbacks = {
   onClosed?: () => void;
   onConnected?: () => void;
 };
+
+type LiveEvent =
+  | DrawPoint
+  | StabilityTrackerAnswerValue
+  | FlankerWebViewLogRecord
+  | FlankerWebViewLogRecord[];
 
 export function useTCPSocket(callbacks?: Callbacks) {
   const callbacksRef = useRef(callbacks);
@@ -29,16 +39,30 @@ export function useTCPSocket(callbacks?: Callbacks) {
   callbacksRef.current = callbacks;
 
   const sendMessage = useCallback(
-    (payload: Object) => {
+    (message: string) => {
       if (!connected) {
         return;
       }
 
-      const message = JSON.stringify(payload);
-
       TCPSocketService.sendMessage(`${message}$$$`);
     },
     [connected],
+  );
+
+  const sendLiveEvent = useCallback(
+    (data: LiveEvent) => {
+      if (!connected) {
+        return;
+      }
+
+      const liveEvent = {
+        type: 'live_event',
+        data,
+      };
+
+      sendMessage(JSON.stringify(liveEvent));
+    },
+    [sendMessage, connected],
   );
 
   const showDisconnectAlert = useCallback(() => {
@@ -108,7 +132,7 @@ export function useTCPSocket(callbacks?: Callbacks) {
     connecting,
 
     getSocketInfo,
-    sendMessage,
+    sendLiveEvent,
     closeConnection,
   };
 }

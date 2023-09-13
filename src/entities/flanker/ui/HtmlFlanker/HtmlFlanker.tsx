@@ -24,7 +24,9 @@ type Props = {
 const HtmlFlanker: FC<Props> = props => {
   const webView = useRef<any>();
 
-  const { sendMessage } = useTCPSocket();
+  const { sendLiveEvent } = useTCPSocket({
+    onClosed: () => {},
+  });
 
   const configuration = useMemo(() => {
     return ConfigurationBuilder.buildForWebView(props.configuration);
@@ -66,7 +68,7 @@ const HtmlFlanker: FC<Props> = props => {
             return;
           }
           if (type === 'response') {
-            sendMessage({ type: 'live_event', data });
+            sendLiveEvent(data);
 
             return;
           }
