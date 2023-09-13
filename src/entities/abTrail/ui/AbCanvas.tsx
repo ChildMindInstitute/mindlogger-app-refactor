@@ -13,6 +13,7 @@ import {
 } from '@shopify/react-native-skia';
 
 import { AbTestPayload, Point, TestNode } from '@app/abstract/lib';
+import { useTCPSocket } from '@app/shared/lib';
 import { Box, BoxProps } from '@app/shared/ui';
 
 import AbShapes from './AbShapes';
@@ -38,6 +39,8 @@ type Props = {
 
 const AbCanvas: FC<Props> = props => {
   const [errorPath, setErrorPath] = useState<SkPath | null>(null);
+
+  const { sendMessage } = useTCPSocket();
 
   const [paths, setPaths] = useState<Array<SkPath>>([]);
 
@@ -235,6 +238,10 @@ const AbCanvas: FC<Props> = props => {
     reCreatePath(point);
     drawPath();
     reRender();
+    sendMessage({
+      type: 'live_event',
+      data: { x: (touchInfo.x * width) / 100, y: (touchInfo.y * width) / 100 },
+    });
   };
 
   const onTouchProgress = (touchInfo: TouchInfo) => {
@@ -251,6 +258,11 @@ const AbCanvas: FC<Props> = props => {
     addLogPoint(createLogPoint(point));
 
     drawPath();
+
+    sendMessage({
+      type: 'live_event',
+      data: { x: (touchInfo.x * width) / 100, y: (touchInfo.y * width) / 100 },
+    });
 
     if (isOverNext(point) && isOverLast(point)) {
       markLastLogPoints({ valid: true });
