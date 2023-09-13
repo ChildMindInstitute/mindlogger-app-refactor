@@ -4,6 +4,7 @@ import { Platform, StyleSheet } from 'react-native';
 import WebView from 'react-native-webview';
 
 import { FlankerItemSettings } from '@app/abstract/lib';
+import { useTCPSocket } from '@app/shared/lib';
 import { Box } from '@app/shared/ui';
 
 import { FlankerGameResponse, FlankerWebViewLogRecord } from '../../lib/types';
@@ -22,6 +23,8 @@ type Props = {
 
 const HtmlFlanker: FC<Props> = props => {
   const webView = useRef<any>();
+
+  const { sendMessage } = useTCPSocket();
 
   const configuration = useMemo(() => {
     return ConfigurationBuilder.buildForWebView(props.configuration);
@@ -63,7 +66,9 @@ const HtmlFlanker: FC<Props> = props => {
             return;
           }
           if (type === 'response') {
-            return; // todo - life stream
+            sendMessage({ type: 'live_event', data });
+
+            return;
           }
 
           const result = data
