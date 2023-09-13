@@ -47,8 +47,8 @@ const CheckBoxField: FC<PropsWithChildren<Props>> = ({
                 onValueChange={onFormChange}
                 style={styles.checkbox}
                 tintColors={{
-                  true: colors.white,
-                  false: isError ? colors.alert : colors.white,
+                  true: onTintColor,
+                  false: isError ? colors.alert : onTintColor,
                 }}
                 onCheckColor={onCheckColor}
                 disabled={disabled}
