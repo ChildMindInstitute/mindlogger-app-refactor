@@ -70,7 +70,7 @@ type Props = {
 const StabilityTrackerItemScreen = (props: Props) => {
   const toast = useToast();
   const reRender = useForceUpdate();
-  const { sendMessage } = useTCPSocket({
+  const { sendLiveEvent } = useTCPSocket({
     onClosed: () => {},
   });
 
@@ -121,13 +121,6 @@ const StabilityTrackerItemScreen = (props: Props) => {
   const IS_TOUCH = useMemo(() => {
     return userInputType === 'touch';
   }, [userInputType]);
-
-  const sendSocketData = (data: StabilityTrackerAnswerValue) => {
-    sendMessage({
-      type: 'live_event',
-      data,
-    });
-  };
 
   const handleGyroscopeError = useCallback(
     (error: Error) => {
@@ -313,7 +306,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
     tickNumber: number,
     deltaTime: number,
   ) => {
-    let shouldSendSocketData = true;
+    let shouldSendLiveEvent = true;
 
     if (
       timeElapsed >= config.durationMinutes * 60 * 1000 ||
@@ -339,14 +332,14 @@ const StabilityTrackerItemScreen = (props: Props) => {
       updateLambdaValue(deltaTime);
       updateScore(deltaTime);
     } else {
-      shouldSendSocketData = false;
+      shouldSendLiveEvent = false;
     }
 
     reRender();
-    saveResponses(shouldSendSocketData);
+    saveResponses(shouldSendLiveEvent);
   };
 
-  const saveResponses = (shouldSendSocketData: boolean) => {
+  const saveResponses = (shouldSendLiveEvent: boolean) => {
     const response = {
       timestamp: new Date().getTime(),
       circlePosition: [circlePosition.current[1] / PANEL_RADIUS - 1],
@@ -357,8 +350,8 @@ const StabilityTrackerItemScreen = (props: Props) => {
       lambdaSlope: lambdaSlope.current,
     };
 
-    if (shouldSendSocketData) {
-      const socketData = {
+    if (shouldSendLiveEvent) {
+      const liveEvent: StabilityTrackerAnswerValue = {
         timestamp: response.timestamp,
         stimPos: response.circlePosition,
         targetPos: response.targetPosition,
@@ -368,7 +361,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
         lambdaSlope: response.lambdaSlope,
       };
 
-      sendSocketData(socketData);
+      sendLiveEvent(liveEvent);
     }
 
     responses.current.push(response);

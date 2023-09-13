@@ -18,7 +18,9 @@ type Props = {
 };
 
 const NativeIosFlanker: FC<Props> = props => {
-  const { sendMessage } = useTCPSocket();
+  const { sendLiveEvent } = useTCPSocket({
+    onClosed: () => {},
+  });
 
   const configuration = useMemo(() => {
     return ConfigurationBuilder.buildForNativeIOS(props.configuration);
@@ -62,7 +64,7 @@ const NativeIosFlanker: FC<Props> = props => {
 
           if (type === 'response') {
             responses.push(parsed);
-            sendMessage({ type: 'live_event', data: parsed });
+            sendLiveEvent(parsed);
 
             return;
           }

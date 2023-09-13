@@ -49,17 +49,13 @@ type Props = {
 
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, onStarted, width, isDrawingActive } = props;
-  const { sendMessage } = useTCPSocket({
+  const { sendLiveEvent } = useTCPSocket({
     onClosed: () => {},
   });
 
   const isEmpty = !value.length;
 
   const { undoClicked, resetUndoClicked } = useUndoClicked(isEmpty);
-
-  const sendSocketData = (data: DrawPoint) => {
-    sendMessage({ type: 'live_event', data });
-  };
 
   const { shouldRestore, updateShouldRestore } =
     useShouldRestoreSkiaViewState();
@@ -94,7 +90,7 @@ const DrawingBoard: FC<Props> = props => {
   const createLogPoint = (point: Point): DrawPoint => {
     const logPoint = { ...point, time: getNow() };
 
-    sendSocketData(logPoint);
+    sendLiveEvent(logPoint);
 
     return logPoint;
   };
@@ -102,7 +98,7 @@ const DrawingBoard: FC<Props> = props => {
   const createLogLine = ({ x, y }: Point): void => {
     const logPoint = { x, y, time: getNow() };
 
-    sendSocketData(logPoint);
+    sendLiveEvent(logPoint);
 
     currentLogLineRef.current = {
       startTime: getNow(),
