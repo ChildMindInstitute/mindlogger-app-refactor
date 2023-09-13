@@ -12,7 +12,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { useToast } from 'react-native-toast-notifications';
 
 import { StabilityTrackerAnswerValue } from '@shared/api';
-import { useForceUpdate, useTCPSocket } from '@shared/lib';
+import { useForceUpdate, useSendEvent } from '@shared/lib';
 import { YStack } from '@shared/ui';
 
 import ControlBar from './ControlBar';
@@ -70,9 +70,7 @@ type Props = {
 const StabilityTrackerItemScreen = (props: Props) => {
   const toast = useToast();
   const reRender = useForceUpdate();
-  const { sendLiveEvent } = useTCPSocket({
-    onClosed: () => {},
-  });
+  const { sendLiveEvent } = useSendEvent();
 
   const {
     config: initialConfig,

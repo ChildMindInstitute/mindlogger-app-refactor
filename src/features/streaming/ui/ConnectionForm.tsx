@@ -43,7 +43,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   const dispatch = useAppDispatch();
 
   const connection = useAppSelector(
-    StreamingModel.selectors.selectStreamingHistory,
+    StreamingModel.selectors.selectStreamingSettings,
   );
 
   const [error, setError] = useState('');
@@ -65,7 +65,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
       connect(ipAddress, +port);
 
       dispatch(
-        StreamingModel.actions.setHistory({
+        StreamingModel.actions.connectionEstabilished({
           ipAddress,
           port,
           remember: Boolean(remember),
@@ -86,7 +86,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
     const remember = form.getValues('remember');
 
     if (!remember) {
-      dispatch(StreamingModel.actions.setDefaultHistory());
+      dispatch(StreamingModel.actions.reset());
     }
 
     closeConnection();
