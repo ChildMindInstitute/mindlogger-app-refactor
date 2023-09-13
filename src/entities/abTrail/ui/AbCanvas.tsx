@@ -40,7 +40,9 @@ type Props = {
 const AbCanvas: FC<Props> = props => {
   const [errorPath, setErrorPath] = useState<SkPath | null>(null);
 
-  const { sendMessage } = useTCPSocket();
+  const { sendLiveEvent } = useTCPSocket({
+    onClosed: () => {},
+  });
 
   const [paths, setPaths] = useState<Array<SkPath>>([]);
 
@@ -238,9 +240,10 @@ const AbCanvas: FC<Props> = props => {
     reCreatePath(point);
     drawPath();
     reRender();
-    sendMessage({
-      type: 'live_event',
-      data: { x: (touchInfo.x * width) / 100, y: (touchInfo.y * width) / 100 },
+    sendLiveEvent({
+      x: (touchInfo.x * width) / 100,
+      y: (touchInfo.y * width) / 100,
+      time: Date.now(),
     });
   };
 
@@ -259,9 +262,10 @@ const AbCanvas: FC<Props> = props => {
 
     drawPath();
 
-    sendMessage({
-      type: 'live_event',
-      data: { x: (touchInfo.x * width) / 100, y: (touchInfo.y * width) / 100 },
+    sendLiveEvent({
+      x: (touchInfo.x * width) / 100,
+      y: (touchInfo.y * width) / 100,
+      time: Date.now(),
     });
 
     if (isOverNext(point) && isOverLast(point)) {
