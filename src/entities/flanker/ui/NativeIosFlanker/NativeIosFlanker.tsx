@@ -2,6 +2,7 @@ import { FC, useEffect, useMemo, useRef } from 'react';
 import { NativeModules, StyleSheet } from 'react-native';
 
 import { FlankerItemSettings } from '@app/abstract/lib';
+import { useTCPSocket } from '@app/shared/lib';
 import { Box } from '@app/shared/ui';
 
 import SwiftFlankerWrapper from './SwiftFlankerWrapper';
@@ -17,6 +18,8 @@ type Props = {
 };
 
 const NativeIosFlanker: FC<Props> = props => {
+  const { sendMessage } = useTCPSocket();
+
   const configuration = useMemo(() => {
     return ConfigurationBuilder.buildForNativeIOS(props.configuration);
   }, [props.configuration]);
@@ -59,7 +62,9 @@ const NativeIosFlanker: FC<Props> = props => {
 
           if (type === 'response') {
             responses.push(parsed);
-            return; // todo - life stream
+            sendMessage({ type: 'live_event', data: parsed });
+
+            return;
           }
 
           const result = responses.map(x =>
