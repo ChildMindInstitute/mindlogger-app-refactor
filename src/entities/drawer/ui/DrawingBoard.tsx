@@ -58,12 +58,7 @@ const DrawingBoard: FC<Props> = props => {
   const { undoClicked, resetUndoClicked } = useUndoClicked(isEmpty);
 
   const sendSocketData = (data: DrawPoint) => {
-    sendMessage(
-      JSON.stringify({
-        type: 'live_event',
-        data,
-      }),
-    );
+    sendMessage({ type: 'live_event', data });
   };
 
   const { shouldRestore, updateShouldRestore } =
