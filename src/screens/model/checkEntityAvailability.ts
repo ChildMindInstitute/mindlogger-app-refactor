@@ -8,6 +8,7 @@ import {
   onCompletedToday,
   onScheduledToday,
 } from '@app/features/tap-on-notification/lib';
+import { ILogger, Logger } from '@app/shared/lib';
 import {
   ActivityGroupType,
   ActivityGroupsModel,
@@ -21,12 +22,18 @@ type Input = {
   queryClient: QueryClient;
 };
 
+const logger: ILogger = Logger;
+
 export const checkEntityAvailability = ({
   entityName,
   identifiers: { appletId, entityId, entityType, eventId },
   storeProgress,
   queryClient,
 }: Input) => {
+  logger.log(
+    `[checkEntityAvailability]: Checking.. Entity = "${entityName}", appletId = ${appletId}, entityId = ${entityId}, entityType = ${entityType}, eventId = ${eventId} `,
+  );
+
   const groupsResult = ActivityGroupsModel.ActivityGroupsBuildManager.process(
     appletId,
     storeProgress,
@@ -53,6 +60,8 @@ export const checkEntityAvailability = ({
           (entityType === 'regular' && entityId === x.activityId)),
     )
   ) {
+    logger.log('[checkEntityAvailability] Check done: true');
+
     return true;
   }
 
@@ -66,6 +75,9 @@ export const checkEntityAvailability = ({
 
   if (scheduled) {
     onScheduledToday(entityName, scheduled.availableFrom!);
+
+    logger.log('[checkEntityAvailability] Check done: false (scheduled today)');
+
     return false;
   }
 
@@ -74,8 +86,12 @@ export const checkEntityAvailability = ({
   const completedToday = record && record.endAt && isToday(record.endAt);
 
   if (completedToday) {
+    logger.log('[checkEntityAvailability] Check done: false (completed today)');
+
     onCompletedToday(entityName);
   } else {
+    logger.log('[checkEntityAvailability] Check done: false (not available)');
+
     onActivityNotAvailable();
   }
 
