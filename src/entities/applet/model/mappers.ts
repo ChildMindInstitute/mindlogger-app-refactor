@@ -11,6 +11,7 @@ import {
   CompletedEntityDto,
   OptionsDto,
   ResponseConfig,
+  SliderResponseConfig,
   ThemeDto,
 } from '@app/shared/api';
 import { buildDateTimeFromDto } from '@app/shared/lib';
@@ -105,6 +106,7 @@ type Config = {
   appletId: string;
   activitiesDto?: ActivityDto[];
   answersDto: AnalyticsAnswerDto[];
+  aggregatedItemsDto: ActivityItemDto[];
   encryptionService: {
     decrypt: (json: string) => string;
   };
@@ -114,17 +116,21 @@ export function mapAppletAnalytics({
   appletId,
   activitiesDto,
   answersDto,
+  aggregatedItemsDto,
   encryptionService,
 }: Config) {
+  const activities = activitiesDto?.filter((value, index, self) => {
+    return self.findIndex(v => v.id === value.id) === index;
+  });
   const activitiesResponses: ActivityResponses[] =
-    activitiesDto?.map(activityDto => {
+    activities?.map(activityDto => {
       const activityAnswers = getAnswersByActivityId(
         activityDto.id,
         answersDto,
         encryptionService,
       );
 
-      const analyticsItems = getAnalyticItems(activityDto);
+      const analyticsItems = getAnalyticItems(activityDto, aggregatedItemsDto);
 
       const analyticsAnswers = mapAnswersWithAnalyticsItems(
         activityAnswers,
@@ -179,9 +185,17 @@ function getAnswersByActivityId(
     }));
 }
 
-function getAnalyticItems(activityDto: ActivityDto) {
-  return activityDto.items.filter(filterItem =>
-    ['multiSelect', 'singleSelect', 'slider'].includes(filterItem.responseType),
+function getAnalyticItems(
+  activityDto: ActivityDto,
+  aggregatedItems: ActivityItemDto[],
+) {
+  const activityItemsIds = activityDto.items.map(item => item.id);
+
+  return aggregatedItems.filter(
+    filterItem =>
+      ['multiSelect', 'singleSelect', 'slider'].includes(
+        filterItem.responseType,
+      ) && activityItemsIds.includes(filterItem.id),
   );
 }
 
@@ -242,6 +256,8 @@ function mapActivityResponsesByItem(
       return getItemResponses(answer.answer, answer.createdAt, answer.type);
     });
 
+  console.log('----', responses);
+
   const itemResponses = {
     name: item.name,
     type: type,
@@ -259,18 +275,22 @@ function mapResponseConfig(
   switch (responseType) {
     case 'multiSelect':
     case 'singleSelect':
-      const multiSelectConfig = itemDto.responseValues as {
+      const selectConfig = itemDto.responseValues as {
         options: OptionsDto;
       };
 
       return {
-        options: multiSelectConfig.options.map(option => ({
+        options: selectConfig.options.map(option => ({
           name: option.text,
           value: option.value,
         })),
       };
     case 'slider':
-      return null;
+      const sliderConfig = itemDto.responseValues as SliderResponseConfig;
+      return {
+        maxValue: sliderConfig.maxValue,
+        minValue: sliderConfig.minValue,
+      };
   }
 }
 

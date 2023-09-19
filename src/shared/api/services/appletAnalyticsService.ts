@@ -1,3 +1,4 @@
+import { ActivityItemDto } from './ActivityItemDto';
 import { ActivityDto } from './activityService';
 import httpService from './httpService';
 import { SuccessfulResponse } from '../types';
@@ -14,6 +15,7 @@ export type AnalyticsAnswerDto = {
 type ActivityAnalyticsDto = {
   activities: ActivityDto[];
   answers: AnalyticsAnswerDto[];
+  aggregatedItems: ActivityItemDto[];
 };
 
 type ActivityAnalyticsResponse = SuccessfulResponse<ActivityAnalyticsDto>;

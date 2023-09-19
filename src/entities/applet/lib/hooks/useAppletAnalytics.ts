@@ -37,6 +37,7 @@ export const useAppletAnalytics = (appletId: string) => {
           appletId,
           activitiesDto: response.data.result.activities,
           answersDto: response.data.result.answers,
+          aggregatedItemsDto: response.data.result.aggregatedItems,
           encryptionService,
         });
 
