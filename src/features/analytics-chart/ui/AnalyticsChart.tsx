@@ -31,7 +31,10 @@ const AnalyticsChart: FC<Props> = ({
       break;
     case 'slider':
       chart = (
-        <LineChart data={data.map(x => ({ ...x, date: new Date(x.date) }))} />
+        <LineChart
+          config={responseConfig}
+          data={data.map(x => ({ ...x, date: new Date(x.date) }))}
+        />
       );
       break;
 
