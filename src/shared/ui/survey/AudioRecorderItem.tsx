@@ -9,10 +9,12 @@ import { FileSystem, Dirs } from 'react-native-file-access';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
-import { IS_ANDROID, requestMicrophonePermissions } from '@app/shared/lib';
 import {
   useMicrophonePermissions,
   handleBlockedPermissions,
+  isLocalFileUrl,
+  IS_ANDROID,
+  requestMicrophonePermissions,
 } from '@shared/lib';
 import { StopIcon, MicrophoneIcon, XStack, Text, YStack } from '@shared/ui';
 
@@ -129,6 +131,10 @@ const AudioRecorderItem: FC<Props> = ({
       const fullPath = await audioRecorderPlayer.current.stopRecorder();
 
       setIsRecording(false);
+
+      if (!isLocalFileUrl(fullPath)) {
+        return;
+      }
 
       const name = fullPath
         ? fullPath.replace(/^(?:[^\/]*\/)*/, '').split('.')[0]
