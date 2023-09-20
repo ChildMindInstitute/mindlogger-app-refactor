@@ -304,8 +304,6 @@ const StabilityTrackerItemScreen = (props: Props) => {
     tickNumber: number,
     deltaTime: number,
   ) => {
-    let shouldSendLiveEvent = true;
-
     if (
       timeElapsed >= config.durationMinutes * 60 * 1000 ||
       tickNumber >= targetPoints.length
@@ -329,15 +327,13 @@ const StabilityTrackerItemScreen = (props: Props) => {
       updateCirclePosition(timeElapsed, deltaTime);
       updateLambdaValue(deltaTime);
       updateScore(deltaTime);
-    } else {
-      shouldSendLiveEvent = false;
     }
 
     reRender();
-    saveResponses(shouldSendLiveEvent);
+    saveResponses();
   };
 
-  const saveResponses = (shouldSendLiveEvent: boolean) => {
+  const saveResponses = () => {
     const response = {
       timestamp: new Date().getTime(),
       circlePosition: [circlePosition.current[1] / PANEL_RADIUS - 1],
@@ -348,19 +344,17 @@ const StabilityTrackerItemScreen = (props: Props) => {
       lambdaSlope: lambdaSlope.current,
     };
 
-    if (shouldSendLiveEvent) {
-      const liveEvent: StabilityTrackerAnswerValue = {
-        timestamp: response.timestamp,
-        stimPos: response.circlePosition,
-        targetPos: response.targetPosition,
-        userPos: response.userPosition,
-        score: response.score,
-        lambda: response.lambda,
-        lambdaSlope: response.lambdaSlope,
-      };
+    const liveEvent: StabilityTrackerAnswerValue = {
+      timestamp: response.timestamp,
+      stimPos: response.circlePosition,
+      targetPos: response.targetPosition,
+      userPos: response.userPosition,
+      score: response.score,
+      lambda: response.lambda,
+      lambdaSlope: response.lambdaSlope,
+    };
 
-      sendLiveEvent(liveEvent);
-    }
+    sendLiveEvent(liveEvent);
 
     responses.current.push(response);
   };
