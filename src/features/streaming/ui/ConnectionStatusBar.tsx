@@ -35,7 +35,7 @@ const ConnectionStatusBar: FC<Props> = ({ appletId }) => {
     <>
       <XStack px={14} mt={8}>
         <Text color="$black" fontWeight="bold" fontSize={17}>
-          {t('liveStreaming:live_connection')}:
+          {t('live_connection:live_connection')}:
         </Text>
 
         <Text
@@ -44,7 +44,7 @@ const ConnectionStatusBar: FC<Props> = ({ appletId }) => {
           mr={20}
           fontSize={17}
         >
-          {connected ? `${host} (${port})` : t('liveStreaming:not_available')}
+          {connected ? `${host} (${port})` : t('live_connection:not_available')}
         </Text>
 
         <TouchableOpacity onPress={onEdit}>
