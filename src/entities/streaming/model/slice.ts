@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const DEFAULT_HOST = '127.0.0.1';
-const DEFAULT_PORT = '8881';
+const DEFAULT_HOST = '';
+const DEFAULT_PORT = '';
 
 type StreamingState = {
   ipAddress: string;

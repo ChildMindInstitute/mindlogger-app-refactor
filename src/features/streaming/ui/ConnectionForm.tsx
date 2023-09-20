@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { colors, useAppDispatch, useAppSelector } from '@app/shared/lib';
+import { colors, useAppDispatch, useAppSelector, noop } from '@app/shared/lib';
 import { useAppForm, useTCPSocket } from '@app/shared/lib';
 import {
   Box,
@@ -183,7 +183,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
             {t('live_connection:disconnect')}
           </Button>
         ) : (
-          <Button br={4} mt={10} onPress={submit}>
+          <Button br={4} mt={10} onPress={connecting ? noop : submit}>
             {t('live_connection:connect')}
           </Button>
         )}
