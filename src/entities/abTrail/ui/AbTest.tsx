@@ -3,16 +3,22 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AbTestPayload } from '@app/abstract/lib';
-import { colors } from '@app/shared/lib';
-import { Box, BoxProps, Text, XStack } from '@app/shared/ui';
+import { colors, StreamEventLoggable } from '@shared/lib';
+import { Box, BoxProps, Text, XStack } from '@shared/ui';
 
 import AbCanvas from './AbCanvas';
-import { AbTestResult, MessageType, MessageTypeStrings } from '../lib';
+import {
+  AbTestResult,
+  MessageType,
+  MessageTypeStrings,
+  StreamEventPoint,
+} from '../lib';
 
 type Props = {
   testData: AbTestPayload;
   onResponse?: (response: AbTestResult) => void;
-} & BoxProps;
+} & StreamEventLoggable<StreamEventPoint> &
+  BoxProps;
 
 const ShapesRectPadding = 15;
 
@@ -21,7 +27,7 @@ const MessageTimeout = 2000;
 const AbTest: FC<Props> = props => {
   const { t } = useTranslation();
 
-  const { testData, onResponse } = props;
+  const { testData, onResponse, onLog } = props;
 
   const [width, setWidth] = useState<number | null>(null);
 
@@ -101,6 +107,7 @@ const AbTest: FC<Props> = props => {
             onMessage={msg => setMessage(msg)}
             onComplete={complete}
             readonly={completed}
+            onLog={onLog}
           />
         </XStack>
       )}

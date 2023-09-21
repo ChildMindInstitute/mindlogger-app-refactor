@@ -2,8 +2,7 @@ import { FC, useEffect, useMemo, useRef } from 'react';
 import { NativeModules, StyleSheet } from 'react-native';
 
 import { FlankerItemSettings } from '@app/abstract/lib';
-import { useSendEvent } from '@shared/lib';
-import { FlankerLiveEvent } from '@shared/lib/tcp/types';
+import { FlankerLiveEvent, StreamEventLoggable } from '@shared/lib';
 import { Box } from '@shared/ui';
 
 import SwiftFlankerWrapper from './SwiftFlankerWrapper';
@@ -16,11 +15,9 @@ import { ConfigurationBuilder, parseResponse } from '../../lib/utils';
 type Props = {
   configuration: FlankerItemSettings;
   onResult: (data: FlankerGameResponse) => void;
-};
+} & StreamEventLoggable<FlankerLiveEvent>;
 
 const NativeIosFlanker: FC<Props> = props => {
-  const { sendLiveEvent } = useSendEvent();
-
   const configuration = useMemo(() => {
     return ConfigurationBuilder.buildForNativeIOS(props.configuration);
   }, [props.configuration]);
@@ -76,7 +73,7 @@ const NativeIosFlanker: FC<Props> = props => {
 
           if (type === 'response') {
             responses.push(parsed);
-            sendLiveEvent(liveEvent);
+            props.onLog(liveEvent);
 
             return;
           }

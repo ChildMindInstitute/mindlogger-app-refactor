@@ -8,9 +8,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ActivityScrollContext } from '@app/features/pass-survey';
 import { Box, BoxProps, Center, Text, XStack } from '@app/shared/ui';
+import { StreamEventLoggable } from '@shared/lib';
 
 import DrawingBoard from './DrawingBoard';
-import { DrawLine, DrawResult } from '../lib';
+import { DrawLine, DrawPoint, DrawResult } from '../lib';
 
 const RectPadding = 15;
 
@@ -24,7 +25,8 @@ type Props = {
   onStarted: () => void;
   onResult: (result: DrawResult) => void;
   toggleScroll: (isScrollEnabled: boolean) => void;
-} & BoxProps;
+} & StreamEventLoggable<DrawPoint> &
+  BoxProps;
 
 const DrawingTest: FC<Props> = props => {
   const [width, setWidth] = useState<number | null>(null);
@@ -37,6 +39,7 @@ const DrawingTest: FC<Props> = props => {
     onStarted,
     isDrawingActive,
     toggleScroll,
+    onLog,
   } = props;
 
   const getFilePath = (fileName: string) => {
@@ -159,6 +162,7 @@ const DrawingTest: FC<Props> = props => {
             onResult={onResult}
             onStarted={onStarted}
             width={width}
+            onLog={onLog}
           />
         </XStack>
       )}

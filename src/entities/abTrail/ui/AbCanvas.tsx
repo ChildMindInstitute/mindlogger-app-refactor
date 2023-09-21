@@ -13,11 +13,17 @@ import {
 } from '@shopify/react-native-skia';
 
 import { AbTestPayload, Point, TestNode } from '@app/abstract/lib';
-import { useSendEvent } from '@shared/lib';
+import { StreamEventLoggable } from '@shared/lib';
 import { Box, BoxProps } from '@shared/ui';
 
 import AbShapes from './AbShapes';
-import { LogLine, LogPoint, MessageType, OnResultLog } from '../lib';
+import {
+  LogLine,
+  LogPoint,
+  MessageType,
+  OnResultLog,
+  StreamEventPoint,
+} from '../lib';
 import { getDistance, transformCoordinates } from '../lib/utils';
 
 const paint = Skia.Paint();
@@ -35,12 +41,11 @@ type Props = {
   onLogResult: (data: OnResultLog) => void;
   onMessage: (message: MessageType) => void;
   onComplete: () => void;
-} & BoxProps;
+} & StreamEventLoggable<StreamEventPoint> &
+  BoxProps;
 
 const AbCanvas: FC<Props> = props => {
   const [errorPath, setErrorPath] = useState<SkPath | null>(null);
-
-  const { sendLiveEvent } = useSendEvent();
 
   const [paths, setPaths] = useState<Array<SkPath>>([]);
 
@@ -56,8 +61,15 @@ const AbCanvas: FC<Props> = props => {
 
   const logLines = useRef<LogLine[]>([]).current;
 
-  const { testData, onLogResult, onComplete, onMessage, width, readonly } =
-    props;
+  const {
+    testData,
+    onLogResult,
+    onComplete,
+    onMessage,
+    width,
+    readonly,
+    onLog,
+  } = props;
 
   const canvasData = useMemo(
     () => (width ? transformCoordinates(testData, width) : null),
@@ -238,7 +250,7 @@ const AbCanvas: FC<Props> = props => {
     reCreatePath(point);
     drawPath();
     reRender();
-    sendLiveEvent({
+    onLog({
       x: (touchInfo.x * width) / 100,
       y: (touchInfo.y * width) / 100,
       time: Date.now(),
@@ -260,7 +272,7 @@ const AbCanvas: FC<Props> = props => {
 
     drawPath();
 
-    sendLiveEvent({
+    onLog({
       x: (touchInfo.x * width) / 100,
       y: (touchInfo.y * width) / 100,
       time: Date.now(),

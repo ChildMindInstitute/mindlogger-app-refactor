@@ -10,3 +10,7 @@ export type FlankerLiveEvent = {
   offset: number;
   button_pressed: string;
 };
+
+export type StreamEventLoggable<T> = {
+  onLog: (event: T) => void;
+};

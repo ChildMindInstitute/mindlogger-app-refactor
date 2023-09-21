@@ -12,7 +12,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { useToast } from 'react-native-toast-notifications';
 
 import { StabilityTrackerAnswerValue } from '@shared/api';
-import { useForceUpdate, useSendEvent } from '@shared/lib';
+import { useForceUpdate, StreamEventLoggable } from '@shared/lib';
 import { YStack } from '@shared/ui';
 
 import ControlBar from './ControlBar';
@@ -65,18 +65,18 @@ type Props = {
   onComplete: (response: StabilityTrackerResponse) => void;
   onMaxLambdaChange: (contextKey: string, contextValue: unknown) => void;
   maxLambda?: number;
-};
+} & StreamEventLoggable<StabilityTrackerAnswerValue>;
 
 const StabilityTrackerItemScreen = (props: Props) => {
   const toast = useToast();
   const reRender = useForceUpdate();
-  const { sendLiveEvent } = useSendEvent();
 
   const {
     config: initialConfig,
     onComplete,
     onMaxLambdaChange,
     maxLambda = 0,
+    onLog,
   } = props;
 
   const config = {
@@ -354,7 +354,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
       lambdaSlope: response.lambdaSlope,
     };
 
-    sendLiveEvent(liveEvent);
+    onLog(liveEvent);
 
     responses.current.push(response);
   };
