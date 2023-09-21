@@ -17,6 +17,10 @@ jest.mock('@app/shared/lib', () => ({
     })),
     getPublicKey: jest.fn(() => 'mocked_public_key'),
   },
+  Logger: {
+    log: jest.fn(),
+  },
+  isLocalFileUrl: jest.fn(),
 }));
 
 jest.mock('@app/shared/api', () => ({
@@ -39,33 +43,6 @@ describe('AnswersUploadService', () => {
     jest.clearAllMocks();
 
     AnswersUploadService.createdAt = MOCK_CREATED_AT;
-  });
-
-  describe('isFileUrl function', () => {
-    it('should correctly identify file URLs', () => {
-      const validFileUrls = [
-        'file:///path/to/image.jpg',
-        '/absolute/path/to/image.png',
-        '/relative/path/to/video.mp4',
-      ];
-
-      validFileUrls.forEach(url => {
-        expect(AnswersUploadService.isFileUrl(url)).toBe(true);
-      });
-    });
-
-    it('should correctly identify non-file URLs', () => {
-      const invalidUrls = [
-        'http://example.com/image.jpg',
-        'https://example.com/video.mp4',
-        '/path/to/document.pdf',
-        'file://image.png', // Invalid due to missing slashes after "file:"
-      ];
-
-      invalidUrls.forEach(url => {
-        expect(AnswersUploadService.isFileUrl(url)).toBe(false);
-      });
-    });
   });
 
   describe('getUploadRecord function', () => {
@@ -132,6 +109,19 @@ describe('AnswersUploadService', () => {
         },
       ];
 
+      const mockIsFileUrl = jest.fn(url => {
+        if (
+          url === 'file:///path/to/image.jpg' ||
+          url === '/absolute/path/to/video.mp4' ||
+          url === 'file:///path/to/audio.m4a'
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      AnswersUploadService.isFileUrl = mockIsFileUrl;
+
       const result = AnswersUploadService.collectFileIds(answers);
 
       expect(result).toEqual([
@@ -158,7 +148,7 @@ describe('AnswersUploadService', () => {
     exists: jest.fn(),
   }));
 
-  describe('uploadFilesForAnswer function', () => {
+  describe('processFileUpload function', () => {
     it('should throw an error for non-existing local file', async () => {
       FileSystem.exists.mockResolvedValueOnce(false);
 
@@ -168,10 +158,8 @@ describe('AnswersUploadService', () => {
       ];
 
       await expect(
-        AnswersUploadService.uploadFilesForAnswer(mediaAnswer, uploadResults),
-      ).rejects.toThrow(
-        '[UploadAnswersService.uploadFilesForAnswer]: Local file does not exist',
-      );
+        AnswersUploadService.processFileUpload(mediaAnswer, uploadResults),
+      ).rejects.toThrow(/does not exist/);
     });
 
     it('should throw an error for missing upload record', async () => {
@@ -183,88 +171,9 @@ describe('AnswersUploadService', () => {
       ];
 
       await expect(
-        AnswersUploadService.uploadFilesForAnswer(mediaAnswer, uploadResults),
-      ).rejects.toThrow(
-        '[UploadAnswersService.uploadFilesForAnswer]: uploadRecord does not exist',
-      );
+        AnswersUploadService.processFileUpload(mediaAnswer, uploadResults),
+      ).rejects.toThrow(/uploadRecord does not exist/);
     });
-
-    it('should upload file and return remote URL', async () => {
-      FileSystem.exists.mockResolvedValueOnce(true);
-
-      const mediaAnswer = {
-        uri: 'file:///path/to/image.jpg',
-        fileName: 'image.jpg',
-        type: 'image/jpeg',
-      };
-      const uploadResults = [
-        { fileId: 'fileId1', uploaded: false, remoteUrl: null },
-      ];
-
-      const uploadResultMock = 'https://example.com/uploads/image.jpg';
-
-      const mockUpload = jest.fn().mockResolvedValue(uploadResultMock);
-      AnswersUploadService.uploadFilesForAnswer = mockUpload;
-
-      const remoteUrl = await AnswersUploadService.uploadFilesForAnswer(
-        mediaAnswer,
-        uploadResults,
-      );
-
-      expect(remoteUrl).toBe('https://example.com/uploads/image.jpg');
-      expect(mockUpload).toHaveBeenCalledWith(mediaAnswer, uploadResults);
-    });
-  });
-
-  it('should handle file upload failure', async () => {
-    FileSystem.exists.mockResolvedValueOnce(true);
-
-    const mediaAnswer = {
-      uri: 'file:///path/to/image.jpg',
-      fileName: 'image.jpg',
-      type: 'image/jpeg',
-    };
-    const uploadResults = [
-      { fileId: 'fileId1', uploaded: false, remoteUrl: null },
-    ];
-
-    const errorMock = new Error(
-      '[UploadAnswersService.uploadFilesForAnswer]: Error occurred while file uploading',
-    );
-    const mockUpload = jest.fn().mockRejectedValue(errorMock);
-    AnswersUploadService.uploadFilesForAnswer = mockUpload;
-
-    await expect(
-      AnswersUploadService.uploadFilesForAnswer(mediaAnswer, uploadResults),
-    ).rejects.toThrow(
-      '[UploadAnswersService.uploadFilesForAnswer]: Error occurred while file uploading',
-    );
-  });
-
-  it('should handle SVG files', async () => {
-    FileSystem.exists.mockResolvedValueOnce(true);
-
-    const mediaAnswer = {
-      uri: 'file:///path/to/image.svg',
-      fileName: 'image.svg',
-      type: 'image/svg',
-    };
-    const uploadResults = [
-      { fileId: 'fileId1', uploaded: false, remoteUrl: null },
-    ];
-
-    const uploadResultMock = 'https://example.com/uploads/image.svg';
-
-    const mockUpload = jest.fn().mockResolvedValue(uploadResultMock);
-    AnswersUploadService.uploadFilesForAnswer = mockUpload;
-
-    const remoteUrl = await AnswersUploadService.uploadFilesForAnswer(
-      mediaAnswer,
-      uploadResults,
-    );
-
-    expect(remoteUrl).toBe('https://example.com/uploads/image.svg');
-    expect(mockUpload).toHaveBeenCalledWith(mediaAnswer, uploadResults);
   });
 
   it('should upload media files and update answers', async () => {
@@ -306,22 +215,35 @@ describe('AnswersUploadService', () => {
       .mockResolvedValue(fakeUploadResults);
     AnswersUploadService.checkIfFilesUploaded = mockCheckIfFilesUploaded;
 
-    const mockUploadFilesForAnswer = jest
+    const mockProcessFileUpload = jest
       .fn()
       .mockResolvedValue('https://example.com/modified-answer.jpg');
-    AnswersUploadService.uploadFilesForAnswer = mockUploadFilesForAnswer;
+    AnswersUploadService.processFileUpload = mockProcessFileUpload;
+
+    const mockIsFileUrl = jest.fn(url => {
+      if (
+        url === 'file:///path/to/image.jpg' ||
+        url === 'file:///path/to/video.mp4'
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    AnswersUploadService.isFileUrl = mockIsFileUrl;
 
     const modifiedBody = {
       answers,
+      appletId: '1e631d7f-2ce8-4ec0-be52-c77092bd203e',
     };
 
     const result = await AnswersUploadService.uploadAllMediaFiles(modifiedBody);
 
     expect(mockCheckIfFilesUploaded).toHaveBeenCalledWith(
       [`${MOCK_CREATED_AT}/image.jpg`, `${MOCK_CREATED_AT}/video.mp4`],
-      true,
+      '1e631d7f-2ce8-4ec0-be52-c77092bd203e',
     );
-    expect(mockUploadFilesForAnswer).toHaveBeenCalledTimes(2); // 2 media files
+    expect(mockProcessFileUpload).toHaveBeenCalledTimes(2); // 2 media files
     expect(result.answers).toEqual([
       { value: 'https://example.com/modified-answer.jpg' },
       { value: 'text answer' }, // Unchanged text answer
@@ -366,16 +288,17 @@ describe('AnswersUploadService', () => {
     const mockCheckIfFilesUploaded = jest
       .fn()
       .mockResolvedValue(fakeUploadResults);
+
     AnswersUploadService.checkIfFilesUploaded = mockCheckIfFilesUploaded;
 
-    const mockUploadFilesForAnswer = jest
+    const mockProcessFileUpload = jest
       .fn()
       .mockRejectedValue(
         new Error(
-          '[UploadAnswersService.uploadFilesForAnswer]: Error occurred while file uploading',
+          '[UploadAnswersService.mockProcessFileUpload]: Error occurred while file uploading',
         ),
       );
-    AnswersUploadService.uploadFilesForAnswer = mockUploadFilesForAnswer;
+    AnswersUploadService.processFileUpload = mockProcessFileUpload;
 
     const modifiedBody = {
       answers,
@@ -384,7 +307,7 @@ describe('AnswersUploadService', () => {
     await expect(
       AnswersUploadService.uploadAllMediaFiles(modifiedBody),
     ).rejects.toThrow(
-      '[UploadAnswersService.uploadFilesForAnswer]: Error occurred while file uploading',
+      '[UploadAnswersService.mockProcessFileUpload]: Error occurred while file uploading',
     );
   });
 
@@ -428,21 +351,21 @@ describe('AnswersUploadService', () => {
     const mockCheckIfAnswersUploaded = jest.fn().mockResolvedValueOnce(false);
     AnswersUploadService.checkIfAnswersUploaded = mockCheckIfAnswersUploaded;
 
-    const sendError = new Error(
-      '[UploadAnswersService.uploadAnswers]: Error occurred while sending answers',
-    );
+    const sendError = new Error('Any network layer error');
     const mockSendActivityAnswers = jest.fn().mockRejectedValue(sendError);
     AnswerService.sendActivityAnswers = mockSendActivityAnswers;
 
     await expect(
       AnswersUploadService.uploadAnswers(encryptedData),
-    ).rejects.toThrow(sendError);
+    ).rejects.toThrow(/Error occurred while sending answers/);
+
     expect(mockCheckIfAnswersUploaded).toHaveBeenCalledWith({
       activityId: 'activity123',
       appletId: 'applet123',
       flowId: 'flow123',
       createdAt: 1234567890,
     });
+
     expect(mockSendActivityAnswers).toHaveBeenCalledWith(encryptedData);
   });
 
@@ -485,7 +408,7 @@ describe('AnswersUploadService', () => {
     UserPrivateKeyRecord.get = jest.fn().mockReturnValueOnce(null);
 
     expect(() => AnswersUploadService.encryptAnswers(data)).toThrow(
-      'User private key is undefined',
+      'Error occurred while preparing answers',
     );
   });
 

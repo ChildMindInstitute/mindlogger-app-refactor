@@ -6,7 +6,7 @@
     "android": "yarn android:dev",
     "ios": "yarn ios:dev",
     "start": "react-native start",
-    "test": "jest",
+    "test": "jest --noStackTrace",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "pods": "cd ios && pod install",
     "prepare": "husky install",
