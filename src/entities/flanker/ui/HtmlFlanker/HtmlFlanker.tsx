@@ -4,9 +4,8 @@ import { Platform, StyleSheet } from 'react-native';
 import WebView from 'react-native-webview';
 
 import { FlankerItemSettings } from '@app/abstract/lib';
-import { useSendEvent } from '@app/shared/lib';
 import { Box } from '@app/shared/ui';
-import { FlankerLiveEvent } from '@shared/lib/tcp/types';
+import { FlankerLiveEvent, StreamEventLoggable } from '@shared/lib';
 
 import { FlankerGameResponse, FlankerWebViewLogRecord } from '../../lib/types';
 import {
@@ -20,12 +19,10 @@ const htmlAsset = require('./visual-stimulus-response.html');
 type Props = {
   configuration: FlankerItemSettings;
   onResult: (data: FlankerGameResponse) => void;
-};
+} & StreamEventLoggable<FlankerLiveEvent>;
 
 const HtmlFlanker: FC<Props> = props => {
   const webView = useRef<any>();
-
-  const { sendLiveEvent } = useSendEvent();
 
   const configuration = useMemo(() => {
     return ConfigurationBuilder.buildForWebView(props.configuration);
@@ -101,7 +98,7 @@ const HtmlFlanker: FC<Props> = props => {
               data as FlankerWebViewLogRecord,
             );
 
-            sendLiveEvent(liveEvent);
+            props.onLog(liveEvent);
 
             return;
           }
