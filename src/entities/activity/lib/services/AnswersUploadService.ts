@@ -88,6 +88,10 @@ class AnswersUploadService implements IAnswersUploadService {
     return `${this.createdAt!.toString()}/${file.fileName}`;
   }
 
+  private isFileUrl(url: string): boolean {
+    return isLocalFileUrl(url);
+  }
+
   private collectFileIds(answers: AnswerDto[]): string[] {
     const result: string[] = [];
 
@@ -96,7 +100,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
       const mediaAnswer = answerValue as MediaFile;
 
-      const isMediaItem = mediaAnswer?.uri && isLocalFileUrl(mediaAnswer.uri);
+      const isMediaItem = mediaAnswer?.uri && this.isFileUrl(mediaAnswer.uri);
 
       if (isMediaItem) {
         result.push(this.getFileId(mediaAnswer));
@@ -217,7 +221,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
       const mediaAnswer = answerValue as MediaFile;
 
-      const isMediaItem = mediaAnswer?.uri && isLocalFileUrl(mediaAnswer.uri);
+      const isMediaItem = mediaAnswer?.uri && this.isFileUrl(mediaAnswer.uri);
 
       if (!isMediaItem) {
         updatedAnswers.push(itemAnswer);
