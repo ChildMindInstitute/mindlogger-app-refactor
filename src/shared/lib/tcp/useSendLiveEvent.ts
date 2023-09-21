@@ -2,17 +2,13 @@ import { useCallback, useContext } from 'react';
 
 import { useAppletStreamingStatus } from '@entities/applet/lib/hooks';
 import { DrawPoint } from '@entities/drawer';
-import { FlankerWebViewLogRecord } from '@entities/flanker';
 import { ActivityIdentityContext } from '@features/pass-survey';
 import { StabilityTrackerAnswerValue } from '@shared/api';
 
+import { FlankerLiveEvent } from './types';
 import { useTCPSocket } from './useTCPSocket';
 
-type LiveEvent =
-  | DrawPoint
-  | StabilityTrackerAnswerValue
-  | FlankerWebViewLogRecord
-  | FlankerWebViewLogRecord[];
+type LiveEvent = DrawPoint | StabilityTrackerAnswerValue | FlankerLiveEvent;
 
 export function useSendEvent() {
   const { appletId } = useContext(ActivityIdentityContext);
