@@ -18,6 +18,7 @@ import {
   encryption,
   formatToDtoDate,
   formatToDtoTime,
+  isLocalFileUrl,
 } from '@shared/lib';
 
 import MediaFilesCleaner from './MediaFilesCleaner';
@@ -40,13 +41,6 @@ class AnswersUploadService implements IAnswersUploadService {
   constructor(logger: ILogger) {
     this.createdAt = null;
     this.logger = logger;
-  }
-
-  private isFileUrl(value: string): boolean {
-    const localFileRegex =
-      /^(file:\/\/|\/).*\/[^\/]+?\.(jpg|jpeg|png|gif|mp4|m4a|mov|MOV|svg|mpeg)$/;
-
-    return localFileRegex.test(value);
   }
 
   private mapFileExistenceDto(
@@ -102,7 +96,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
       const mediaAnswer = answerValue as MediaFile;
 
-      const isMediaItem = mediaAnswer?.uri && this.isFileUrl(mediaAnswer.uri);
+      const isMediaItem = mediaAnswer?.uri && isLocalFileUrl(mediaAnswer.uri);
 
       if (isMediaItem) {
         result.push(this.getFileId(mediaAnswer));
@@ -223,7 +217,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
       const mediaAnswer = answerValue as MediaFile;
 
-      const isMediaItem = mediaAnswer?.uri && this.isFileUrl(mediaAnswer.uri);
+      const isMediaItem = mediaAnswer?.uri && isLocalFileUrl(mediaAnswer.uri);
 
       if (!isMediaItem) {
         updatedAnswers.push(itemAnswer);
