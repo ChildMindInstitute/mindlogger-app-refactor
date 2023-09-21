@@ -57,6 +57,7 @@ export type AppletDetailsDto = {
   activities: ActivityRecordDto[];
   activityFlows: ActivityFlowRecordDto[];
   encryption: AppletEncryptionDTO | null;
+  streamEnabled: boolean;
 };
 
 export type AppletRespondentMetaDto = {

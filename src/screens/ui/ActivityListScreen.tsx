@@ -5,6 +5,7 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 import { UploadRetryBanner } from '@app/entities/activity';
 import { ActivityGroupList } from '@app/widgets/activity-group';
+import { StreamingStatusBar } from '@features/streaming';
 import { AppletDetailsParamList } from '@screens/config';
 import { Box, HorizontalCalendar, ScrollView } from '@shared/ui';
 
@@ -15,6 +16,7 @@ const ActivityListScreen: FC<Props> = props => {
     <Box flex={1}>
       <UploadRetryBanner />
       <HorizontalCalendar mt={8} />
+      <StreamingStatusBar appletId={props.route.params.appletId} />
 
       <ScrollView contentContainerStyle={styles.scrollView}>
         <ActivityGroupList

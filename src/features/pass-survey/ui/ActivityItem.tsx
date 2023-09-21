@@ -18,10 +18,11 @@ import {
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
+import { useAppletStreamingStatus } from '@entities/applet/lib/hooks';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
 import { StabilityTracker } from '@entities/stabilityTracker';
-import { IS_ANDROID } from '@shared/lib';
+import { IS_ANDROID, useSendEvent } from '@shared/lib';
 import {
   RadioActivityItem,
   SurveySlider,
@@ -37,6 +38,7 @@ import {
   PipelineItemAnswer,
   ActivityItem as ActivityItemProps,
   PipelineItemResponse,
+  ActivityIdentityContext,
 } from '../lib';
 
 type Props = ActivityItemProps &
@@ -58,9 +60,14 @@ function ActivityItem({
   onContextChange,
   context,
 }: Props) {
+  const { appletId } = useContext(ActivityIdentityContext);
+  const streamEnabled = useAppletStreamingStatus(appletId);
+
   const initialScrollEnabled = type !== 'StabilityTracker' && type !== 'AbTest';
 
   const [scrollEnabled, setScrollEnabled] = useState(initialScrollEnabled);
+
+  const { sendLiveEvent } = useSendEvent(streamEnabled);
 
   const { next } = useContext(HandlersContext);
 
@@ -95,7 +102,11 @@ function ActivityItem({
     case 'AbTest':
       item = (
         <Box flex={1}>
-          <AbTest testData={pipelineItem.payload} onResponse={onResponse} />
+          <AbTest
+            testData={pipelineItem.payload}
+            onResponse={onResponse}
+            onLog={sendLiveEvent}
+          />
         </Box>
       );
       break;
@@ -111,6 +122,7 @@ function ActivityItem({
             }}
             onMaxLambdaChange={onContextChange}
             maxLambda={context?.maxLambda as number}
+            onLog={sendLiveEvent}
           />
         </Box>
       );
@@ -130,6 +142,7 @@ function ActivityItem({
             isDrawingActive={!scrollEnabled}
             onStarted={() => console.log('onStarted')}
             onResult={onResponse}
+            onLog={sendLiveEvent}
           />
         </Box>
       );
@@ -143,6 +156,7 @@ function ActivityItem({
             onResponse(data);
             moveToNextItem();
           }}
+          onLog={sendLiveEvent}
         />
       ) : (
         <NativeIosFlanker
@@ -151,6 +165,7 @@ function ActivityItem({
             onResponse(data);
             moveToNextItem();
           }}
+          onLog={sendLiveEvent}
         />
       );
       break;
