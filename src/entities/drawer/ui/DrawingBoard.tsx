@@ -19,7 +19,7 @@ import {
   colors,
   useShouldRestoreSkiaViewState,
   useUndoClicked,
-  useSendEvent,
+  StreamEventLoggable,
 } from '@shared/lib';
 import { Box } from '@shared/ui';
 
@@ -45,12 +45,10 @@ type Props = {
   onResult: (result: DrawResult) => void;
   width: number;
   isDrawingActive: boolean;
-};
+} & StreamEventLoggable<DrawPoint>;
 
 const DrawingBoard: FC<Props> = props => {
-  const { value, onResult, onStarted, width, isDrawingActive } = props;
-
-  const { sendLiveEvent } = useSendEvent();
+  const { value, onResult, onStarted, width, isDrawingActive, onLog } = props;
 
   const [lastPath, setLastPath] = useState<DrawLine[]>([]);
 
@@ -95,7 +93,7 @@ const DrawingBoard: FC<Props> = props => {
   const createLogPoint = (point: Point): DrawPoint => {
     const logPoint = { ...point, time: getNow() };
 
-    sendLiveEvent(logPoint);
+    onLog(logPoint);
 
     return logPoint;
   };
@@ -103,7 +101,7 @@ const DrawingBoard: FC<Props> = props => {
   const createLogLine = ({ x, y }: Point): void => {
     const logPoint = { x, y, time: getNow() };
 
-    sendLiveEvent(logPoint);
+    onLog(logPoint);
 
     currentLogLineRef.current = {
       startTime: getNow(),

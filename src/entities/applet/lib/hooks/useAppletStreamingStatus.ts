@@ -7,5 +7,5 @@ export const useAppletStreamingStatus = (appletId: string) => {
       mapAppletDetailsFromDto(response.data.result).streamEnabled,
   });
 
-  return streamEnabled;
+  return streamEnabled || false;
 };
