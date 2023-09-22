@@ -106,7 +106,6 @@ type Config = {
   appletId: string;
   activitiesDto?: ActivityDto[];
   answersDto: AnalyticsAnswerDto[];
-  aggregatedItemsDto: ActivityItemDto[];
   encryptionService: {
     decrypt: (json: string) => string;
   };
@@ -116,21 +115,17 @@ export function mapAppletAnalytics({
   appletId,
   activitiesDto,
   answersDto,
-  aggregatedItemsDto,
   encryptionService,
 }: Config) {
-  const activities = activitiesDto?.filter((value, index, self) => {
-    return self.findIndex(v => v.id === value.id) === index;
-  });
   const activitiesResponses: ActivityResponses[] =
-    activities?.map(activityDto => {
+    activitiesDto?.map(activityDto => {
       const activityAnswers = getAnswersByActivityId(
         activityDto.id,
         answersDto,
         encryptionService,
       );
 
-      const analyticsItems = getAnalyticItems(activityDto, aggregatedItemsDto);
+      const analyticsItems = getAnalyticItems(activityDto);
 
       const analyticsAnswers = mapAnswersWithAnalyticsItems(
         activityAnswers,
@@ -185,13 +180,10 @@ function getAnswersByActivityId(
     }));
 }
 
-function getAnalyticItems(
-  activityDto: ActivityDto,
-  aggregatedItems: ActivityItemDto[],
-) {
+function getAnalyticItems(activityDto: ActivityDto) {
   const activityItemsIds = activityDto.items.map(item => item.id);
 
-  return aggregatedItems.filter(
+  return activityDto.items.filter(
     filterItem =>
       ['multiSelect', 'singleSelect', 'slider'].includes(
         filterItem.responseType,
