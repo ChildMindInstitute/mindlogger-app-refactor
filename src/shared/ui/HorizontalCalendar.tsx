@@ -14,7 +14,7 @@ const HorizontalCalendar: FC<BoxProps> = styledProps => {
         {title}
       </Text>
 
-      <XStack space={6}>
+      <XStack px={6} jc="space-around" width="100%">
         {dates.map(date => {
           const dateOfMonth = date.getDate();
           const weekDayName = format(date, 'EE').toUpperCase();

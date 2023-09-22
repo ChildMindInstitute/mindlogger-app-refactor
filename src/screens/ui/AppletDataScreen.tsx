@@ -4,7 +4,7 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 import { UploadRetryBanner } from '@app/entities/activity';
 import { ActivityAnalyticsList } from '@app/entities/applet';
-import { useAppletAnalytics } from '@app/entities/applet/lib/hooks/useAppletAnalytics';
+import { useAppletAnalytics } from '@app/entities/applet/lib/hooks';
 import { Box, HorizontalCalendar } from '@app/shared/ui';
 import { AppletDetailsParamList } from '@screens/config';
 

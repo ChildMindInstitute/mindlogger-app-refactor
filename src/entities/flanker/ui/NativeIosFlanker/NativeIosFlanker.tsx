@@ -2,7 +2,8 @@ import { FC, useEffect, useMemo, useRef } from 'react';
 import { NativeModules, StyleSheet } from 'react-native';
 
 import { FlankerItemSettings } from '@app/abstract/lib';
-import { Box } from '@app/shared/ui';
+import { FlankerLiveEvent, StreamEventLoggable } from '@shared/lib';
+import { Box } from '@shared/ui';
 
 import SwiftFlankerWrapper from './SwiftFlankerWrapper';
 import {
@@ -14,7 +15,7 @@ import { ConfigurationBuilder, parseResponse } from '../../lib/utils';
 type Props = {
   configuration: FlankerItemSettings;
   onResult: (data: FlankerGameResponse) => void;
-};
+} & StreamEventLoggable<FlankerLiveEvent>;
 
 const NativeIosFlanker: FC<Props> = props => {
   const configuration = useMemo(() => {
@@ -57,9 +58,24 @@ const NativeIosFlanker: FC<Props> = props => {
             return;
           }
 
+          const liveEvent: FlankerLiveEvent = {
+            trial_index: parsed.trial_index,
+            duration: parsed.rt,
+            question: parsed.stimulus,
+            correct: parsed.correct,
+            response_touch_timestamp: parsed.response_touch_timestamp,
+            tag: parsed.tag,
+            start_time: parsed.start_time,
+            start_timestamp: parsed.image_time,
+            offset: 0,
+            button_pressed: parsed.button_pressed,
+          };
+
           if (type === 'response') {
             responses.push(parsed);
-            return; // todo - life stream
+            props.onLog(liveEvent);
+
+            return;
           }
 
           const result = responses.map(x =>

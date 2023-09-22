@@ -1,6 +1,8 @@
 import { useSelector } from 'react-redux';
 
 import { mapDtoToRespondentMeta } from '@app/entities/applet/model';
+import { IdentityModel } from '@app/entities/identity';
+import { useAppSelector } from '@app/shared/lib';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 
 import { Answers } from './useActivityStorageRecord';
@@ -25,14 +27,17 @@ const useTextVariablesReplacer = ({
     select: ({ data }) => mapDtoToRespondentMeta(data),
   });
 
+  const userFirstName = useAppSelector(IdentityModel.selectors.selectFirstName);
+
   const lastResponseTime = completedEntities?.[activityId];
+
   const replaceTextVariables = (text: string) => {
     if (items && answers) {
       const replacer = new MarkdownVariableReplacer(
         items,
         answers,
         lastResponseTime,
-        respondentNickname,
+        respondentNickname || userFirstName,
       );
       return replacer.process(text);
     }

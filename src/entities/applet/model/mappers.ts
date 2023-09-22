@@ -86,6 +86,7 @@ export function mapAppletDetailsFromDto(
     activityFlows: mapActivityFlowsFromDto(detailsDto.activityFlows),
     theme: mapThemeFromDto(detailsDto.theme),
     encryption: detailsDto.encryption,
+    streamEnabled: detailsDto.streamEnabled,
   };
 }
 
@@ -280,14 +281,15 @@ function getItemResponses(
 ): ResponseAnalyticsValue {
   switch (responseType) {
     case 'multiSelect':
-      const multiSelectValue: number[] = answer.value;
+      const multiSelectValue: number[] = answer?.value ?? [];
 
       return multiSelectValue?.map(value => ({
         value,
         date: new Date(createdAt),
       }));
     case 'singleSelect':
-      const selectItemValue: number = answer.value;
+      const selectItemValue: number | null = answer?.value ?? null;
+
       return [
         {
           value: selectItemValue,
@@ -295,7 +297,8 @@ function getItemResponses(
         },
       ];
     case 'slider':
-      const sliderValue: number = answer.value;
+      const sliderValue: number | null = answer?.value ?? null;
+
       return [
         {
           value: sliderValue,

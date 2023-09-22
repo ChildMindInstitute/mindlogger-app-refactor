@@ -95,16 +95,18 @@ export type GeolocationAnswerDto = {
   longitude: number;
 };
 
+export type StabilityTrackerAnswerValue = {
+  timestamp: number;
+  stimPos: number[];
+  userPos: number[];
+  targetPos: number[];
+  lambda: number;
+  score: number;
+  lambdaSlope: number;
+};
+
 export type StabilityTrackerAnswerDto = {
-  value: {
-    timestamp: number;
-    stimPos: number[];
-    userPos: number[];
-    targetPos: number[];
-    lambda: number;
-    score: number;
-    lambdaSlope: number;
-  }[];
+  value: StabilityTrackerAnswerValue[];
   maxLambda: number;
   phaseType: 'challenge-phase' | 'focus-phase';
 };

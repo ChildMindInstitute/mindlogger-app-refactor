@@ -316,7 +316,7 @@ class NotificationBuilder implements INotificationBuilder {
 
     const reminderFireDay = addDays(scheduledDay, daysIncomplete);
 
-    const description = `Just a kindly reminder to complete the activity for ${scheduledDay.toDateString()}`;
+    const description = 'Just a kindly reminder to complete the activity';
 
     const triggerAt = this.getNotificationTriggerDateTime(
       reminderFireDay,

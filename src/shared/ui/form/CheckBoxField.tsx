@@ -9,9 +9,22 @@ import { ErrorMessage } from '@shared/ui/form';
 
 type Props = {
   name: string;
+  onFillColor?: string;
+  onCheckColor?: string;
+  onTintColor?: string;
+  tintColor?: string;
+  disabled?: boolean;
 };
 
-const CheckBoxField: FC<PropsWithChildren<Props>> = ({ name, children }) => {
+const CheckBoxField: FC<PropsWithChildren<Props>> = ({
+  name,
+  onFillColor = colors.white,
+  onCheckColor = colors.darkBlue,
+  onTintColor = colors.white,
+  tintColor = colors.white,
+  disabled = false,
+  children,
+}) => {
   const { control } = useFormContext();
   const {
     field: { onChange: onFormChange, value },
@@ -34,13 +47,14 @@ const CheckBoxField: FC<PropsWithChildren<Props>> = ({ name, children }) => {
                 onValueChange={onFormChange}
                 style={styles.checkbox}
                 tintColors={{
-                  true: colors.white,
-                  false: isError ? colors.alert : colors.white,
+                  true: onTintColor,
+                  false: isError ? colors.alert : onTintColor,
                 }}
-                onCheckColor={colors.darkBlue}
-                onFillColor={colors.white}
-                onTintColor={colors.white}
-                tintColor={isError ? colors.alert : colors.white}
+                onCheckColor={onCheckColor}
+                disabled={disabled}
+                onFillColor={onFillColor}
+                onTintColor={onTintColor}
+                tintColor={isError ? colors.alert : tintColor}
                 boxType="square"
                 lineWidth={2}
                 onAnimationType="fade"
