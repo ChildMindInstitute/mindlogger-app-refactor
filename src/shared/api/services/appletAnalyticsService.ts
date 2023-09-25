@@ -32,7 +32,7 @@ function appletAnalyticsService() {
         {
           params: {
             fromDate: request.fromDate,
-            activities_last_version: request.isLastVersion,
+            activitiesLastVersion: request.isLastVersion,
           },
         },
       );
