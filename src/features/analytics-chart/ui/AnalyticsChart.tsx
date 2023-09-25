@@ -55,12 +55,12 @@ const AnalyticsChart: FC<Props> = ({
         {title}
       </Text>
 
-      {chart}
-
-      {!data.length && (
+      {!data.length ? (
         <Text p={20} fontWeight="400">
           {t('applet_data:title')}
         </Text>
+      ) : (
+        chart
       )}
     </Box>
   );
