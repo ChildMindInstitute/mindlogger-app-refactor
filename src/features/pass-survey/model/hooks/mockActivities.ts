@@ -20,6 +20,10 @@ const grid: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '101',
@@ -64,6 +68,10 @@ const vortex: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '102',
@@ -108,6 +116,10 @@ const allDrawing: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [...grid.items, ...vortex.items],
 };
 
@@ -165,6 +177,10 @@ const FlankerWithImageActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '100',
@@ -195,6 +211,10 @@ const FlankerWithStSFxActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '100',
@@ -225,6 +245,10 @@ const FlankerWithTextSignsActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '100',
@@ -255,6 +279,10 @@ const FlankerAllTypesActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     ...FlankerWithTextSignsActivity.items,
     ...FlankerWithImageActivity.items,
@@ -276,6 +304,10 @@ export const TextActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '104',
@@ -356,6 +388,10 @@ export const SliderTestActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       responseValues: {
@@ -367,6 +403,7 @@ export const SliderTestActivity: ActivityDto = {
         minLabel: 'Minimum label',
         maxLabel: 'Maximum label',
         alerts: null,
+        scores: [],
       },
       id: '101231',
       timer: null,
@@ -407,6 +444,10 @@ export const NumberSelectActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '105',
@@ -446,6 +487,10 @@ export const CheckboxTestActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '2345',
@@ -524,6 +569,10 @@ export const RadioTestActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       responseValues: {
@@ -660,6 +709,10 @@ export const AllTextsActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '12319758',
@@ -742,6 +795,10 @@ export const AllCheckboxesActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '346574',
@@ -944,6 +1001,10 @@ export const AllRadioActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       timer: null,
@@ -1200,6 +1261,10 @@ export const AllSliderActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       responseValues: {
@@ -1211,6 +1276,7 @@ export const AllSliderActivity: ActivityDto = {
         minLabel: 'Minimum label',
         maxLabel: 'Maximum label',
         alerts: null,
+        scores: [],
       },
       id: '345',
       timer: null,
@@ -1244,6 +1310,7 @@ export const AllSliderActivity: ActivityDto = {
         minLabel: 'Sad',
         maxLabel: 'Happy',
         alerts: null,
+        scores: [],
       },
       id: '345',
       timer: null,
@@ -1277,6 +1344,7 @@ export const AllSliderActivity: ActivityDto = {
         minLabel: 'Start',
         maxLabel: 'End',
         alerts: null,
+        scores: [],
       },
       id: '345',
       config: {
@@ -1318,6 +1386,10 @@ export const PhotoActivityDto: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '23465',
@@ -1356,6 +1428,10 @@ export const VideoActivityDto: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '23465',
@@ -1394,6 +1470,10 @@ export const DateActivityDto: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '23465',
@@ -1432,6 +1512,10 @@ export const TimeActivityDto: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '23465',
@@ -1470,6 +1554,10 @@ export const AllMediaActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [...PhotoActivityDto.items, ...VideoActivityDto.items],
 };
 
@@ -1487,6 +1575,10 @@ export const DemoActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     ...AllTextsActivity.items,
     ...AllCheckboxesActivity.items,

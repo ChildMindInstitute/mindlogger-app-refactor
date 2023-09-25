@@ -1,6 +1,9 @@
-import { useState } from 'react';
-
-import { useFlowStorageRecord } from '../../lib';
+import {
+  FlowSummaryData,
+  SummaryDataKey,
+  useFlowStorageRecord,
+} from '../../lib';
+import { FlowPipelineItem } from '../pipelineBuilder';
 
 export type UseFlowStateArgs = {
   appletId: string;
@@ -9,61 +12,23 @@ export type UseFlowStateArgs = {
 };
 
 export function useFlowState({ appletId, eventId, flowId }: UseFlowStateArgs) {
-  const { flowStorageRecord, upsertFlowStorageRecord, clearFlowStorageRecord } =
-    useFlowStorageRecord({
-      appletId,
-      eventId,
-      flowId,
-    });
+  const { flowStorageRecord: record } = useFlowStorageRecord({
+    appletId,
+    eventId,
+    flowId,
+  });
 
-  const step = flowStorageRecord?.step ?? 0;
-  const pipeline = flowStorageRecord?.pipeline ?? [];
+  const step = record?.step ?? 0;
 
-  const [isTimerElapsed, setIsTimerElapsed] = useState(false);
+  const pipeline: FlowPipelineItem[] = record?.pipeline ?? [];
 
-  const isLastStep = pipeline && step === pipeline.length - 1;
-
-  function next() {
-    if (isLastStep) {
-      return;
-    }
-
-    upsertFlowStorageRecord({
-      ...flowStorageRecord!,
-      step: step + 1,
-    });
-  }
-
-  function back() {
-    const currentItem = pipeline![step];
-
-    if (currentItem.type === 'Intermediate') {
-      upsertFlowStorageRecord({
-        ...flowStorageRecord!,
-        step: step - 1,
-      });
-    }
-  }
-
-  function completeByTimer() {
-    if (isLastStep) {
-      return;
-    }
-
-    upsertFlowStorageRecord({
-      ...flowStorageRecord!,
-      step: pipeline!.length - 1,
-    });
-    setIsTimerElapsed(true);
-  }
+  const flowSummaryData: FlowSummaryData = (record?.context?.[SummaryDataKey] ??
+    {}) as FlowSummaryData;
 
   return {
     step,
-    next,
-    back,
-    completeByTimer,
-    isTimerElapsed,
+    isTimerElapsed: record?.isCompletedDueToTimer ?? false,
     pipeline,
-    clearFlowStorageRecord,
+    flowSummaryData,
   };
 }
