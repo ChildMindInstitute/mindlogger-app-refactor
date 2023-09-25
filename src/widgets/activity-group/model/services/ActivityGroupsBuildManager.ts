@@ -144,14 +144,14 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
 
     try {
       logger.log(
-        '[ActivityGroupsBuildManager.processInternal]: Building available',
-      );
-      result.groups.push(builder!.buildAvailable(entityEvents));
-
-      logger.log(
         '[ActivityGroupsBuildManager.processInternal]: Building in-progress',
       );
       result.groups.push(builder!.buildInProgress(entityEvents));
+
+      logger.log(
+        '[ActivityGroupsBuildManager.processInternal]: Building available',
+      );
+      result.groups.push(builder!.buildAvailable(entityEvents));
 
       logger.log(
         '[ActivityGroupsBuildManager.processInternal]: Building scheduled',
