@@ -38,6 +38,10 @@ const LineChart: FC<Props> = ({ data, config }) => {
   const getXAxisDots = (): Array<ChartAxisDot> =>
     range(8).map(item => ({ dot: item, value: 0 }));
 
+  console.log(maxValue);
+
+  console.log(data);
+
   const getYAxisDots = (): Array<ChartAxisDot> =>
     range(maxValue + 1).map(item => ({ dot: 1, value: item * 2 }));
 
@@ -46,12 +50,12 @@ const LineChart: FC<Props> = ({ data, config }) => {
 
     return currentWeekDates.flatMap(currentWeekDate => {
       const currentWeekDayValues = data.map(dataItem =>
-        areDatesEqual(dataItem.date, currentWeekDate) && dataItem.value
+        areDatesEqual(dataItem.date, currentWeekDate) &&
+        dataItem.value &&
+        dataItem.value < maxValue
           ? dataItem.value * 2
           : null,
       );
-
-      console.log('currentWeekDayValues ++++++++++', currentWeekDayValues);
 
       const values = currentWeekDayValues.map(currentWeekDayValue => {
         return {
@@ -62,11 +66,7 @@ const LineChart: FC<Props> = ({ data, config }) => {
 
       return values;
     });
-  }, [data]);
-
-  console.log('---');
-  console.log('---');
-  console.log('=========', lineChartData);
+  }, [data, maxValue]);
 
   return (
     <Box>
@@ -91,7 +91,6 @@ const LineChart: FC<Props> = ({ data, config }) => {
           style={{ axis: { stroke: colors.lightGrey } }}
           dependentAxis
           tickFormat={() => null}
-          domain={{ y: [0, 10] }}
         />
 
         <VictoryAxis
