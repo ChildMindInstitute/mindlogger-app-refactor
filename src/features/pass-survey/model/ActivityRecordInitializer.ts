@@ -66,6 +66,8 @@ export function ActivityRecordInitializer({
     const state: ActivityState = {
       step: 0,
       items: buildPipeline(activity),
+      scoreSettings: activity.scoreSettings,
+      hasSummary: activity.hasSummary,
       answers: {},
       appletVersion: applet.version,
       timers: {},

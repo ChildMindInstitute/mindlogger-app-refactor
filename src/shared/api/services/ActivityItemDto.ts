@@ -310,6 +310,7 @@ type SliderAnswerSettings = {
   minImage: ImageUrl | null;
   maxImage: ImageUrl | null;
   alerts: SliderAlertsDto;
+  scores: Array<number>;
 };
 
 type NumberSelectionConfiguration = ButtonsConfiguration &
