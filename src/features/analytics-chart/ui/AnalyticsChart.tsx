@@ -49,7 +49,7 @@ const AnalyticsChart: FC<Props> = ({
         textAlign="center"
         mb={10}
         color="$tertiary"
-        fontWeight="500"
+        fontWeight="800"
         fontSize={15}
       >
         {title}
