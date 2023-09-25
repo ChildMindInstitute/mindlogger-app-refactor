@@ -38,10 +38,6 @@ const LineChart: FC<Props> = ({ data, config }) => {
   const getXAxisDots = (): Array<ChartAxisDot> =>
     range(8).map(item => ({ dot: item, value: 0 }));
 
-  console.log(maxValue);
-
-  console.log(data);
-
   const getYAxisDots = (): Array<ChartAxisDot> =>
     range(maxValue + 1).map(item => ({ dot: 1, value: item * 2 }));
 
