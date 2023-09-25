@@ -32,8 +32,8 @@ export function mapThemeFromDto(dto: ThemeDto | null): AppletTheme | null {
   return dto === null
     ? null
     : {
-        backgroundImage: dto.backgroundImage,
-        logo: dto.logo,
+        backgroundImage: dto.backgroundImage ?? undefined,
+        logo: dto.logo ?? undefined,
         primaryColor: dto.primaryColor,
         secondaryColor: dto.secondaryColor,
         tertiaryColor: dto.tertiaryColor,
