@@ -20,10 +20,12 @@ const ActivityCardContainer = styled(Center, {
 const ActivityAnalyticsCard: FC<Props> = ({ responseData }) => {
   return (
     <ActivityCardContainer>
-      <Text fontSize={30}>{responseData.name}</Text>
+      <Text fontSize={30} fontWeight="100">
+        {responseData.name}
+      </Text>
 
       {responseData.responses?.map((response, index) => (
-        <Box pt={10} pb={10} key={index}>
+        <Box pb={5} key={index}>
           <AnalyticsChart
             title={response.name}
             responseType={response.type}
