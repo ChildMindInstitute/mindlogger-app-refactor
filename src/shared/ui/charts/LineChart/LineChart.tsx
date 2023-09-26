@@ -8,6 +8,7 @@ import {
   VictoryScatter,
 } from 'victory-native';
 
+import { ResponseConfig, SliderResponseConfig } from '@app/shared/api';
 import {
   areDatesEqual,
   colors,
@@ -27,29 +28,41 @@ type LineChartDataItem = {
 
 type Props = {
   data: Array<ChartItem>;
+  config: ResponseConfig;
 };
 
-const LineChart: FC<Props> = ({ data }) => {
+const LineChart: FC<Props> = ({ data, config }) => {
   const dateFormat = 'yyyy dd MM';
+  const { maxValue } = config as SliderResponseConfig;
 
   const getXAxisDots = (): Array<ChartAxisDot> =>
     range(8).map(item => ({ dot: item, value: 0 }));
 
   const getYAxisDots = (): Array<ChartAxisDot> =>
-    range(6).map(item => ({ dot: 1, value: item * 2 }));
+    range(maxValue + 1).map(item => ({ dot: 1, value: item * 2 }));
 
   const lineChartData: Array<LineChartDataItem> = useMemo(() => {
     const currentWeekDates = getCurrentWeekDates();
 
-    return currentWeekDates.map(currentWeekDate => {
-      return {
-        date: format(currentWeekDate, dateFormat),
-        value:
-          data.find(dataItem => areDatesEqual(dataItem.date, currentWeekDate))
-            ?.value || null,
-      };
+    return currentWeekDates.flatMap(currentWeekDate => {
+      const currentWeekDayValues = data.map(dataItem =>
+        areDatesEqual(dataItem.date, currentWeekDate) &&
+        dataItem.value &&
+        dataItem.value < maxValue
+          ? dataItem.value * 2
+          : null,
+      );
+
+      const values = currentWeekDayValues.map(currentWeekDayValue => {
+        return {
+          date: format(currentWeekDate, dateFormat),
+          value: currentWeekDayValue,
+        };
+      });
+
+      return values;
     });
-  }, [data]);
+  }, [data, maxValue]);
 
   return (
     <Box>
@@ -74,7 +87,6 @@ const LineChart: FC<Props> = ({ data }) => {
           style={{ axis: { stroke: colors.lightGrey } }}
           dependentAxis
           tickFormat={() => null}
-          domain={{ y: [0, 10] }}
         />
 
         <VictoryAxis

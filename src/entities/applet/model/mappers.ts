@@ -11,6 +11,7 @@ import {
   CompletedEntityDto,
   OptionsDto,
   ResponseConfig,
+  SliderResponseConfig,
   ThemeDto,
 } from '@app/shared/api';
 import { buildDateTimeFromDto } from '@app/shared/lib';
@@ -180,8 +181,13 @@ function getAnswersByActivityId(
 }
 
 function getAnalyticItems(activityDto: ActivityDto) {
-  return activityDto.items.filter(filterItem =>
-    ['multiSelect', 'singleSelect', 'slider'].includes(filterItem.responseType),
+  const activityItemsIds = activityDto.items.map(item => item.id);
+
+  return activityDto.items.filter(
+    filterItem =>
+      ['multiSelect', 'singleSelect', 'slider'].includes(
+        filterItem.responseType,
+      ) && activityItemsIds.includes(filterItem.id),
   );
 }
 
@@ -242,6 +248,8 @@ function mapActivityResponsesByItem(
       return getItemResponses(answer.answer, answer.createdAt, answer.type);
     });
 
+  console.log('----', responses);
+
   const itemResponses = {
     name: item.name,
     type: type,
@@ -259,18 +267,22 @@ function mapResponseConfig(
   switch (responseType) {
     case 'multiSelect':
     case 'singleSelect':
-      const multiSelectConfig = itemDto.responseValues as {
+      const selectConfig = itemDto.responseValues as {
         options: OptionsDto;
       };
 
       return {
-        options: multiSelectConfig.options.map(option => ({
+        options: selectConfig.options.map(option => ({
           name: option.text,
           value: option.value,
         })),
       };
     case 'slider':
-      return null;
+      const sliderConfig = itemDto.responseValues as SliderResponseConfig;
+      return {
+        maxValue: sliderConfig.maxValue,
+        minValue: sliderConfig.minValue,
+      };
   }
 }
 
