@@ -54,7 +54,7 @@ export const watchForConnectionLoss = (
   mode: 'ping' | 'checkNetworkStatus' = 'ping',
 ) => {
   const abortController = new AbortController();
-  let intervalId: any = 0;
+  let intervalId: TimeoutId;
 
   const checkWithAbort = () => {
     const checkAction = (checkResult: boolean) => {
