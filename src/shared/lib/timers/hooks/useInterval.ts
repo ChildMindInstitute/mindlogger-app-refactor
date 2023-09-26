@@ -5,7 +5,7 @@ const useInterval = (
   interval: number,
 ) => {
   const callbacksRef = useRef({ onIntervalPass });
-  let intervalRef = useRef<ReturnType<typeof setInterval> | number>(0);
+  let intervalRef = useRef<IntervalId>();
 
   callbacksRef.current = { onIntervalPass };
 
