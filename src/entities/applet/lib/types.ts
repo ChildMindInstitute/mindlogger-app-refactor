@@ -69,7 +69,7 @@ export type ItemResponses = {
 export type ActivityResponses = {
   id: string;
   name: string;
-  description: string | { en: string } | null;
+  description: string | null;
   responses: Array<ItemResponses>;
 };
 

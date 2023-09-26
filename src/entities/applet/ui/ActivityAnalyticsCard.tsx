@@ -18,7 +18,7 @@ const ActivityCardContainer = styled(Center, {
 });
 
 const ActivityAnalyticsCard: FC<Props> = ({ responseData }) => {
-  const description = responseData.description as { en: string };
+  const { description } = responseData;
 
   return (
     <ActivityCardContainer>
@@ -28,7 +28,7 @@ const ActivityAnalyticsCard: FC<Props> = ({ responseData }) => {
 
       {description && (
         <Text fontSize={15} color="$tertiary">
-          {description.en ?? description}
+          {description}
         </Text>
       )}
 
