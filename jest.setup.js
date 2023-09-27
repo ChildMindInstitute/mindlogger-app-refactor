@@ -1,10 +1,46 @@
 import { jest } from '@jest/globals';
+import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
 
 jest.mock('react-native-file-access', () => {
   return {
     FileSystem: {
       exists: jest.fn(uri => uri.endsWith('.jpg')), // Mock exists() to return true for .jpg files
     },
+    Dirs: {
+      MainBundleDir: () => {},
+      CacheDir: () => {},
+      DocumentDir: () => {},
+    },
+  };
+});
+
+require('react-native-reanimated/lib/commonjs/reanimated2/jestUtils').setUpTests();
+
+jest.mock('react-native-reanimated', () => {
+  global.__reanimatedWorkletInit = () => {};
+  global.ReanimatedDataMock = {
+    now: () => 0,
+  };
+
+  const Mock = require('react-native-reanimated/mock');
+
+  const MockAnimation = jest.fn().mockImplementation(() => {
+    const instance = {
+      duration: jest.fn(() => instance),
+      build: jest.fn(() => instance),
+    };
+
+    return instance;
+  });
+
+  return {
+    ...Mock,
+    SlideInLeft: MockAnimation,
+    SlideInRight: MockAnimation,
+    SlideOutLeft: MockAnimation,
+    SlideOutRight: MockAnimation,
+    FadeIn: MockAnimation,
+    FadeOut: MockAnimation,
   };
 });
 
@@ -23,6 +59,19 @@ jest.mock('@react-native-community/geolocation', () =>
   jest.mock('@react-native-community/geolocation'),
 );
 
+jest.mock('react-native-sensors', () => jest.mock('react-native-sensors'));
+
+jest.mock('react-native-tcp-socket', () => {
+  return {
+    createConnection: () => {
+      return {
+        on: jest.fn(),
+        destroy: jest.fn(),
+      };
+    },
+  };
+});
+
 jest.mock('@shopify/react-native-skia', () => {
   global.SkiaApi = {
     Color: jest.fn(),
@@ -38,19 +87,39 @@ jest.mock('@shopify/react-native-skia', () => {
     createAnimation: jest.fn(),
     createClockValue: jest.fn(),
   };
+
+  return {
+    Skia: {
+      Paint: () => ({
+        setColor: jest.fn(),
+        setStrokeWidth: jest.fn(),
+        setStyle: jest.fn(),
+      }),
+      Color: jest.fn(),
+    },
+    PaintStyle: {
+      Stroke: 1,
+    },
+  };
 });
 
 jest.mock('axios', () => {
-  return {
-    create: () => {},
-    post: () => {},
-    defaults: {
-      headers: {
-        common: {
-          'Content-Type': 'aaa',
-        },
+  const defaults = {
+    headers: {
+      common: {
+        'Content-Type': '',
       },
     },
+  };
+
+  return {
+    create: () => {
+      return {
+        defaults,
+      };
+    },
+    post: () => {},
+    defaults,
   };
 });
 
@@ -99,7 +168,4 @@ jest.mock('@react-native-community/netinfo', () => {
   };
 });
 
-jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter.js', () => {
-  const { EventEmitter } = require('events');
-  return EventEmitter;
-});
+jest.mock('react-native-device-info', () => mockRNDeviceInfo);
