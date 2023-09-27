@@ -18,11 +18,19 @@ const ActivityCardContainer = styled(Center, {
 });
 
 const ActivityAnalyticsCard: FC<Props> = ({ responseData }) => {
+  const { description, name } = responseData;
+
   return (
     <ActivityCardContainer>
       <Text fontSize={30} fontWeight="100">
-        {responseData.name}
+        {name}
       </Text>
+
+      {description && (
+        <Text fontSize={15} fontWeight="200">
+          {description}
+        </Text>
+      )}
 
       {responseData.responses?.map((response, index) => (
         <Box pb={5} key={index}>
