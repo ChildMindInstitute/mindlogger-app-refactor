@@ -26,14 +26,14 @@ const CrossOffsetX = -5;
 type Props = {
   testData: AbTestPayload;
   paths?: SkPath[];
+  lastPath?: SkPath;
   errorPath?: SkPath | null;
   greenRoundOrder?: number | string | null;
 };
 
 const AbShapes: FC<Props> = props => {
   const { nodes, config, deviceType } = props.testData;
-  const { paths, greenRoundOrder, errorPath } = props;
-
+  const { paths, lastPath, greenRoundOrder, errorPath } = props;
   const fontBeginEndSize =
     deviceType === 'mobile' ? config.fontSize / 1.4 : config.fontSizeBeginEnd!;
 
@@ -109,6 +109,10 @@ const AbShapes: FC<Props> = props => {
               <Path key={i} path={path} strokeWidth={1} style="stroke" />
             ))}
           </Group>
+        )}
+
+        {!!lastPath && (
+          <Path key="lastPath" path={lastPath} strokeWidth={1} style="stroke" />
         )}
 
         {!!errorPath && !!errorMiddlePoint && (

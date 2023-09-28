@@ -49,6 +49,8 @@ const AbCanvas: FC<Props> = props => {
 
   const [paths, setPaths] = useState<Array<SkPath>>([]);
 
+  const [lastPath, setLastPath] = useState<SkPath | undefined>(undefined);
+
   const [flareGreenPointIndex, setFlareGreenPointIndex] = useState<{
     index: number;
   } | null>(null);
@@ -117,8 +119,12 @@ const AbCanvas: FC<Props> = props => {
     }
   };
 
-  const isOverNode = (pointToCheck: Point, nodeIndexToCheck: number) => {
-    const node = findNodeByPoint(pointToCheck);
+  const isOverNode = (
+    pointToCheck: Point,
+    nodeIndexToCheck: number,
+    radiusMultiplier?: number,
+  ) => {
+    const node = findNodeByPoint(pointToCheck, radiusMultiplier);
     return !!node && node.orderIndex === nodeIndexToCheck;
   };
 
@@ -128,6 +134,10 @@ const AbCanvas: FC<Props> = props => {
 
   const isOverNext = (point: Point) => {
     return isOverNode(point, getCurrentIndex() + 1);
+  };
+
+  const isCloseToNext = (point: Point) => {
+    return isOverNode(point, getCurrentIndex() + 1, 2);
   };
 
   const isOverLast = (point: Point) => {
@@ -162,13 +172,16 @@ const AbCanvas: FC<Props> = props => {
   const findNodeByIndex = (index: number) =>
     canvasData!.nodes.find(x => x.orderIndex === index)!;
 
-  const findNodeByPoint = (point: Point): TestNode | null => {
+  const findNodeByPoint = (
+    point: Point,
+    radiusMultiplier = 1,
+  ): TestNode | null => {
     const foundNode = canvasData?.nodes.find(node => {
       const distance = getDistance(
         { x: node.cx, y: node.cy },
         { x: point.x, y: point.y },
       );
-      return distance < canvasData.config.radius;
+      return distance < canvasData?.config.radius * radiusMultiplier;
     });
     return foundNode ?? null;
   };
@@ -272,6 +285,10 @@ const AbCanvas: FC<Props> = props => {
 
     drawPath();
 
+    if (isCloseToNext(point)) {
+      reRender();
+    }
+
     onLog({
       x: (touchInfo.x * width) / 100,
       y: (touchInfo.y * width) / 100,
@@ -305,6 +322,7 @@ const AbCanvas: FC<Props> = props => {
       setErrorPath(currentPath);
       resetCurrentPath();
       setFlareGreenPointIndex({ index: getCurrentIndex() });
+      setLastPath(undefined);
       onMessage(MessageType.IncorrectLine);
     }
   };
@@ -325,6 +343,7 @@ const AbCanvas: FC<Props> = props => {
     }
 
     markLastLogPoints({ valid: false, actual: node?.label ?? 'none' });
+    setLastPath(undefined);
   };
 
   const drawPath = () => {
@@ -332,6 +351,7 @@ const AbCanvas: FC<Props> = props => {
       return;
     }
     canvasRef.current?.drawPath(currentPathRef.current, paint.copy());
+    setLastPath(currentPathRef.current);
   };
 
   const touchHandler = useTouchHandler(
@@ -358,6 +378,7 @@ const AbCanvas: FC<Props> = props => {
       {canvasData && (
         <AbShapes
           paths={paths}
+          lastPath={lastPath}
           testData={canvasData}
           greenRoundOrder={getGreenPointIndex()}
           errorPath={errorPath}
