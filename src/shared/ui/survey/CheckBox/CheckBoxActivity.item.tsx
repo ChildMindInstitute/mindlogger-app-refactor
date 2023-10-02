@@ -60,7 +60,7 @@ const CheckBoxActivityItem: FC<Props> = ({
     <ScrollView>
       {mutatedItems.map(item => {
         return (
-          <Box key={`checkbox-${item.id}`}>
+          <Box data-test="checkbox-container" key={`checkbox-${item.id}`}>
             <CheckBoxItem
               {...item}
               tooltipAvailable={addTooltip}

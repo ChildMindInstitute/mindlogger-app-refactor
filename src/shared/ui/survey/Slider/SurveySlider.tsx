@@ -38,6 +38,7 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
     <YStack>
       <Slider
         animationType="spring"
+        data-test="slider"
         initialValue={initialValue}
         onSlidingComplete={onRelease}
         onSlidingStart={onPress}
@@ -53,7 +54,12 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
           return (
             <Box key={`tick-${value}`} w={THUMB_SIZE} ai="center">
               {showTickMarks && <Box w={1} bg="$black" h={8} />}
-              {showTickLabels && <Text mt="$1">{value}</Text>}
+
+              {showTickLabels && (
+                <Text data-test="slide-tick-label" mt="$1">
+                  {value}
+                </Text>
+              )}
             </Box>
           );
         })}
@@ -63,19 +69,25 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
         <YStack maxWidth="30%" ai="center">
           {leftImageUrl && (
             <CachedImage
+              data-test="slide-image"
               style={styles.imageLeft}
               resizeMode="contain"
               source={leftImageUrl}
             />
           )}
 
-          {leftTitle ? <Text textAlign="center">{leftTitle}</Text> : null}
+          {leftTitle ? (
+            <Text data-test="slide-left-title" textAlign="center">
+              {leftTitle}
+            </Text>
+          ) : null}
         </YStack>
 
         <YStack maxWidth="30%" ml="auto" ai="center">
           {rightImageUrl && (
             <XStack jc="center">
               <CachedImage
+                data-test="slide-right-image"
                 style={styles.imageRight}
                 resizeMode="contain"
                 source={rightImageUrl}

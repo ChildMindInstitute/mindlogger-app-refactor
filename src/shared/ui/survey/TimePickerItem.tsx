@@ -33,6 +33,7 @@ const TimePickerItem: FC<Props> = ({ value, onChange }) => {
 
   return (
     <DateTimePicker
+      data-test="time-picker"
       onChange={onChangeDate}
       value={new Date(timeInMs)}
       dateDisplayFormat="hh:mm aa"

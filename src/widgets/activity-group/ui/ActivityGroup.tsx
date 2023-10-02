@@ -78,9 +78,18 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
   };
 
   return (
-    <Box {...styledProps}>
+    <Box
+      data-test={`activity-group-${group.type}-${group.name}`}
+      {...styledProps}
+    >
       <Box mb={10}>
-        <Text mb={4} fontSize={14} fontWeight="600" color="$darkGrey2">
+        <Text
+          data-test="activity-group-name-text"
+          mb={4}
+          fontSize={14}
+          fontWeight="600"
+          color="$darkGrey2"
+        >
           {t(group.name)}
         </Text>
 

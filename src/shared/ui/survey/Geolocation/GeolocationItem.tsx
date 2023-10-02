@@ -71,6 +71,7 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
   return (
     <Center>
       <GeolocationButton
+        data-test="geolocation-submit-btn"
         onPress={handleGetGeolocation}
         iconAfter={<GeolocationIcon color="white" size={20} />}
       >
@@ -84,12 +85,20 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
       )}
 
       {errorMessage && (
-        <Text color="$red" textAlign="center">
+        <Text
+          data-test="geolocation-error-text"
+          color="$red"
+          textAlign="center"
+        >
           {errorMessage}
         </Text>
       )}
 
-      {isPermissionDenied && !value && <Text mt={10}>{descriptionText}</Text>}
+      {isPermissionDenied && !value && (
+        <Text data-test="geolocation-description-text" mt={10}>
+          {descriptionText}
+        </Text>
+      )}
     </Center>
   );
 };

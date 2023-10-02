@@ -101,6 +101,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
       onOpenCamera={onOpenPhotoCamera}
       onShowMediaLibrary={onShowImageGallery}
       mode="photo"
+      data-test="photo-item"
       uploadIcon={<PhotoIcon color={colors.red} size={50} />}
     >
       {value && <Image height="100%" width="100%" src={{ uri: value.uri }} />}

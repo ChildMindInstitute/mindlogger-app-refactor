@@ -12,10 +12,11 @@ type Props = {
 
 const ActivityList: FC<Props> = ({ activities, onCardPress }) => {
   return (
-    <YStack space={10}>
+    <YStack data-test="activity-list-container" space={10}>
       {activities.map(x => (
         <Box key={x.eventId}>
           <ActivityCard
+            data-test={`activity-card-${x.activityId}`}
             activity={x}
             disabled={false}
             onPress={() => onCardPress?.(x)}
