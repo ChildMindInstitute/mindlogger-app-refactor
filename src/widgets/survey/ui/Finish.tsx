@@ -9,7 +9,7 @@ import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcess
 import { EventModel } from '@app/entities/event';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
-import { PassSurveyModel } from '@features/pass-survey';
+import { PassSurveyModel, PipelineItem } from '@features/pass-survey';
 import { LogTrigger } from '@shared/api';
 import { useActivityInfo, useAppDispatch, useAppSelector } from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
@@ -117,9 +117,13 @@ function FinishItem({
       activityStorageRecord.answers,
     );
 
+    const originalItems = activityStorageRecord.context
+      .originalItems as PipelineItem[];
+
     const answers = mapAnswersToDto(
       activityStorageRecord.items,
       activityStorageRecord.answers,
+      originalItems,
     );
 
     const userIdentifier = getUserIdentifier(

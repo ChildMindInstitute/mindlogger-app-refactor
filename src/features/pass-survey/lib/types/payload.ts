@@ -266,6 +266,7 @@ type PipelineItemBase = {
     required: boolean;
   };
   conditionalLogic?: ConditionalLogic;
+  isHidden?: boolean;
 };
 
 export interface AbTestPipelineItem extends PipelineItemBase {

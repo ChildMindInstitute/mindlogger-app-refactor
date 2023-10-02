@@ -14,7 +14,7 @@ import {
   mapActivityFlowFromDto,
 } from '@app/entities/applet/model';
 import { EventModel } from '@app/entities/event';
-import { PassSurveyModel } from '@app/features/pass-survey';
+import { PassSurveyModel, PipelineItem } from '@app/features/pass-survey';
 import {
   useActivityInfo,
   useAppDispatch,
@@ -178,9 +178,13 @@ function Intermediate({
       activityStorageRecord.answers,
     );
 
+    const originalItems = activityStorageRecord.context
+      .originalItems as PipelineItem[];
+
     const answers = mapAnswersToDto(
       activityStorageRecord.items,
       activityStorageRecord.answers,
+      originalItems,
     );
 
     const userActions = mapUserActionsToDto(activityStorageRecord.actions);

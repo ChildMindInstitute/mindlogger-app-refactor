@@ -63,7 +63,9 @@ export function ActivityRecordInitializer({
       appletVersion: applet.version,
       timers: {},
       actions: [],
-      context: {},
+      context: {
+        originalItems: buildPipeline(activity, false),
+      },
     };
 
     const key = `${appletId}-${activityId}-${eventId}-${order}`;

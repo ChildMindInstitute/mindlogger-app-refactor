@@ -465,12 +465,6 @@ class AnswersUploadService implements IAnswersUploadService {
 
     modifiedBody.userActions = updatedUserActions;
 
-    if (modifiedBody.itemIds.length !== modifiedBody.answers.length) {
-      throw new Error(
-        "[UploadAnswersService.sendAnswers]: Items' length doesn't equal to answers' length ",
-      );
-    }
-
     this.logger.log(
       '[UploadAnswersService.sendAnswers] executing prepare answers',
     );

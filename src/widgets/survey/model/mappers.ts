@@ -66,25 +66,35 @@ type StackedRadioAnswerValue = Array<Array<Item>>;
 export function mapAnswersToDto(
   pipeline: PipelineItem[],
   answers: Answers,
+  originalItems: PipelineItem[],
 ): AnswerDto[] {
+  let hiddenItems = 0;
+
   if (pipeline.some(x => x.type === 'Flanker')) {
     return mapFlankerAnswersToDto(pipeline, answers);
   }
 
   const answerDtos: Array<AnswerDto> = [];
 
-  pipeline.forEach((pipelineItem, step) => {
+  originalItems.forEach((pipelineItem, step) => {
     const canHaveAnswer = canItemHaveAnswer(pipelineItem);
 
-    if (canHaveAnswer) {
-      const answer = answers[step] ?? null;
+    console.log(pipelineItem);
 
-      const dto =
-        answer === null || answer?.answer === null
-          ? null
-          : convertToAnswerDto(pipelineItem.type, answer);
+    if (pipelineItem.isHidden) {
+      hiddenItems += 1;
+      answerDtos.push(null);
+    } else {
+      if (canHaveAnswer) {
+        const answer = answers[step - hiddenItems] ?? null;
 
-      answerDtos.push(dto);
+        const dto =
+          answer === null || answer?.answer === null
+            ? null
+            : convertToAnswerDto(pipelineItem.type, answer);
+
+        answerDtos.push(dto);
+      }
     }
   });
 
