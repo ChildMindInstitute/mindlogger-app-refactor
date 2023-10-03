@@ -79,8 +79,6 @@ export function mapAnswersToDto(
   originalItems.forEach((pipelineItem, step) => {
     const canHaveAnswer = canItemHaveAnswer(pipelineItem);
 
-    console.log(pipelineItem);
-
     if (pipelineItem.isHidden) {
       hiddenItems += 1;
       answerDtos.push(null);
