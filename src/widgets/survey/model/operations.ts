@@ -8,6 +8,7 @@ import {
 import { EventModel, ScheduleEvent } from '@app/entities/event';
 import { ActivityItemType } from '@app/features/pass-survey';
 import { Answers, PipelineItem } from '@app/features/pass-survey';
+import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import { AnswerDto } from '@app/shared/api';
 
 export const getScheduledDate = (event: ScheduleEvent) => {
@@ -58,11 +59,7 @@ export const getItemIds = (pipeline: PipelineItem[]): string[] => {
 export const fillNullsForHiddenItems = (
   itemIds: string[],
   answers: AnswerDto[],
-  originalItems: Array<{
-    itemId: string;
-    isHidden: boolean;
-    type: ActivityItemType;
-  }>,
+  originalItems: InitializeHiddenItem[],
 ): { answers: AnswerDto[]; itemIds: string[] } => {
   const modifiedAnswers: Array<AnswerDto> = [];
   const filteredOriginalItems = originalItems.filter(originalItem =>

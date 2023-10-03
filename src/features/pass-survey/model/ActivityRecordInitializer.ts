@@ -1,11 +1,8 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import {
-  ActivityDetails,
-  ActivityItemType,
-  ActivityModel,
-} from '@app/entities/activity';
+import { ActivityDetails, ActivityModel } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
+import { ActivityItemType } from '@app/features/pass-survey';
 import { ActivityResponse, AppletDetailsResponse } from '@app/shared/api';
 import {
   createSecureStorage,
@@ -35,7 +32,7 @@ type InitializeFlowArgs = {
   eventId: string;
 };
 
-type InitializeHiddenItem = {
+export type InitializeHiddenItem = {
   isHidden: boolean;
   itemId: string;
   type: ActivityItemType;
@@ -74,7 +71,11 @@ export function ActivityRecordInitializer({
       timers: {},
       actions: [],
       context: {
-        originalItems: initializeHiddenItems(activity),
+        originalItems: activity.items.map<InitializeHiddenItem>(item => ({
+          itemId: item.id,
+          isHidden: item.isHidden,
+          type: item.inputType as ActivityItemType,
+        })),
       },
     };
 
@@ -86,15 +87,6 @@ export function ActivityRecordInitializer({
       initializeAbTrailsStep(key);
     }
   };
-
-  const initializeHiddenItems = (
-    activity: ActivityDetails,
-  ): InitializeHiddenItem[] =>
-    activity.items.map(item => ({
-      itemId: item.id,
-      isHidden: item.isHidden,
-      type: item.inputType,
-    }));
 
   const initializeAbTrailsStep = (key: string) => {
     const state = JSON.parse(storage.getString(key)!) as ActivityState;
