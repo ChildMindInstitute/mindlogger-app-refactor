@@ -7,6 +7,7 @@ import {
 } from '@app/abstract/lib';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
 import { Answers, PipelineItem } from '@app/features/pass-survey';
+import { AnswerDto } from '@app/shared/api';
 
 export const getScheduledDate = (event: ScheduleEvent) => {
   if (
@@ -51,6 +52,32 @@ export const getItemIds = (pipeline: PipelineItem[]): string[] => {
     },
     [],
   );
+};
+
+export const fillNullsForHiddenItems = (
+  itemIds: string[],
+  answers: AnswerDto[],
+  context: Array<{ itemId: string; isHidden: boolean; type: string }>,
+): { answers: AnswerDto[]; itemIds: string[] } => {
+  const modifiedAnswers: Array<AnswerDto> = [];
+  const modifiedContext = context.filter(i => i.type !== 'Splash');
+
+  let hiddenItemsCount = 0;
+
+  modifiedContext.forEach((item, step) => {
+    if (item.isHidden) {
+      const answer: AnswerDto = null;
+      modifiedAnswers.push(answer);
+      hiddenItemsCount += 1;
+    } else {
+      modifiedAnswers.push(answers[step - hiddenItemsCount]);
+    }
+  });
+
+  return {
+    itemIds: modifiedContext.map(c => c.itemId),
+    answers: modifiedAnswers,
+  };
 };
 
 export const canItemHaveAnswer = (pipelineItem: PipelineItem): boolean => {

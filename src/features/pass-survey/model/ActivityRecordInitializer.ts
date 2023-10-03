@@ -31,6 +31,12 @@ type InitializeFlowArgs = {
   eventId: string;
 };
 
+type InitializeHiddenItem = {
+  isHidden: boolean;
+  itemId: string;
+  type: string;
+};
+
 export function ActivityRecordInitializer({
   appletId,
   queryClient,
@@ -64,7 +70,7 @@ export function ActivityRecordInitializer({
       timers: {},
       actions: [],
       context: {
-        originalItems: buildPipeline(activity, false),
+        originalItems: initializeHiddenItems(activity),
       },
     };
 
@@ -76,6 +82,15 @@ export function ActivityRecordInitializer({
       initializeAbTrailsStep(key);
     }
   };
+
+  const initializeHiddenItems = (
+    activity: ActivityDetails,
+  ): InitializeHiddenItem[] =>
+    activity.items.map(item => ({
+      itemId: item.id,
+      isHidden: item.isHidden,
+      type: item.inputType,
+    }));
 
   const initializeAbTrailsStep = (key: string) => {
     const state = JSON.parse(storage.getString(key)!) as ActivityState;

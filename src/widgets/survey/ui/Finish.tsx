@@ -9,13 +9,14 @@ import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcess
 import { EventModel } from '@app/entities/event';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
-import { PassSurveyModel, PipelineItem } from '@features/pass-survey';
+import { PassSurveyModel } from '@features/pass-survey';
 import { LogTrigger } from '@shared/api';
 import { useActivityInfo, useAppDispatch, useAppSelector } from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
 import { getClientInformation } from '../lib';
 import {
+  fillNullsForHiddenItems,
   FinishReason,
   getActivityStartAt,
   getExecutionGroupKey,
@@ -117,13 +118,15 @@ function FinishItem({
       activityStorageRecord.answers,
     );
 
-    const originalItems = activityStorageRecord.context
-      .originalItems as PipelineItem[];
+    const originalItems = activityStorageRecord.context.originalItems as {
+      itemId: string;
+      isHidden: boolean;
+      type: string;
+    }[];
 
     const answers = mapAnswersToDto(
       activityStorageRecord.items,
       activityStorageRecord.answers,
-      originalItems,
     );
 
     const userIdentifier = getUserIdentifier(
@@ -135,6 +138,9 @@ function FinishItem({
 
     const itemIds = getItemIds(activityStorageRecord.items);
 
+    const { itemIds: modifiedItemIds, answers: modifiedAnswers } =
+      fillNullsForHiddenItems(itemIds, answers, originalItems);
+
     const progressRecord = storeProgress[appletId][entityId][eventId];
 
     const scheduledDate = getScheduledDate(scheduledEvent!);
@@ -145,9 +151,9 @@ function FinishItem({
       appletId,
       createdAt: Date.now(),
       version: activityStorageRecord.appletVersion,
-      answers: answers,
+      answers: modifiedAnswers,
       userActions,
-      itemIds,
+      itemIds: modifiedItemIds,
       appletEncryption,
       flowId: flowId ?? null,
       activityId: activityId,

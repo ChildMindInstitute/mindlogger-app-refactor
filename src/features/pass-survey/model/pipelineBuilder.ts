@@ -3,19 +3,12 @@ import { ActivityDetails, ActivityItem } from '@app/entities/activity';
 import { getAbTrailsPipeline } from './precompiled-pipelines';
 import { PipelineItem } from '../lib';
 
-export function buildPipeline(
-  activity: ActivityDetails,
-  filterHidden: boolean = true,
-): PipelineItem[] {
+export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
   const alignMessagesToLeft = activity.items.some(
     x => x.inputType === 'Flanker',
   );
 
-  const activityItems = filterHidden
-    ? filterHiddenItems(activity.items)
-    : activity.items;
-
-  const pipeline: PipelineItem[] = activityItems
+  const pipeline: PipelineItem[] = filterHiddenItems(activity.items)
     .map((item, index) => {
       switch (item.inputType) {
         case 'AbTrails': {
@@ -40,7 +33,6 @@ export function buildPipeline(
             validationOptions: item.validationOptions,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           } satisfies PipelineItem;
         }
 
@@ -52,7 +44,6 @@ export function buildPipeline(
             isSkippable: item.isSkippable,
             isAbleToMoveBack: item.isAbleToMoveBack,
             timer: item.timer,
-            isHidden: item.isHidden,
           } satisfies PipelineItem;
         }
 
@@ -69,7 +60,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           } satisfies PipelineItem;
         }
 
@@ -79,7 +69,6 @@ export function buildPipeline(
             type: item.inputType,
             payload: item.config,
             timer: null,
-            isHidden: item.isHidden,
           } satisfies PipelineItem;
         }
 
@@ -97,7 +86,6 @@ export function buildPipeline(
             validationOptions: item.validationOptions,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           } satisfies PipelineItem;
         }
 
@@ -116,7 +104,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           };
         }
 
@@ -135,7 +122,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           };
         }
 
@@ -154,7 +140,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           };
         }
 
@@ -168,7 +153,6 @@ export function buildPipeline(
             isAbleToMoveBack: item.isAbleToMoveBack,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           };
         }
 
@@ -187,7 +171,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           };
         }
 
@@ -206,7 +189,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           };
         }
 
@@ -225,7 +207,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           };
         }
 
@@ -243,7 +224,6 @@ export function buildPipeline(
             validationOptions: item.validationOptions,
             additionalText: item.additionalText,
             timer: item.timer,
-            isHidden: item.isHidden,
           };
         }
 
@@ -262,7 +242,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           };
         }
 
@@ -281,7 +260,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           };
         }
 
@@ -299,7 +277,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           } satisfies PipelineItem;
         }
 
@@ -317,7 +294,6 @@ export function buildPipeline(
             hasTopNavigation: item.hasTopNavigation,
             additionalText: item.additionalText,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           } satisfies PipelineItem;
         }
 
@@ -335,7 +311,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           } satisfies PipelineItem;
         }
 
@@ -353,7 +328,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           } satisfies PipelineItem;
         }
 
@@ -371,7 +345,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           } satisfies PipelineItem;
         }
 
@@ -389,7 +362,6 @@ export function buildPipeline(
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
-            isHidden: item.isHidden,
           } satisfies PipelineItem;
         }
       }
