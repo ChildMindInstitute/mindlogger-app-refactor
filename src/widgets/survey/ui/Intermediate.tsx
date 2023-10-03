@@ -14,7 +14,7 @@ import {
   mapActivityFlowFromDto,
 } from '@app/entities/applet/model';
 import { EventModel } from '@app/entities/event';
-import { PassSurveyModel } from '@app/features/pass-survey';
+import { ActivityItemType, PassSurveyModel } from '@app/features/pass-survey';
 import {
   useActivityInfo,
   useAppDispatch,
@@ -182,7 +182,7 @@ function Intermediate({
     const originalItems = activityStorageRecord.context.originalItems as {
       itemId: string;
       isHidden: boolean;
-      type: string;
+      type: ActivityItemType;
     }[];
 
     const answers = mapAnswersToDto(

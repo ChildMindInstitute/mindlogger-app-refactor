@@ -1,6 +1,10 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { ActivityDetails, ActivityModel } from '@app/entities/activity';
+import {
+  ActivityDetails,
+  ActivityItemType,
+  ActivityModel,
+} from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import { ActivityResponse, AppletDetailsResponse } from '@app/shared/api';
 import {
@@ -34,7 +38,7 @@ type InitializeFlowArgs = {
 type InitializeHiddenItem = {
   isHidden: boolean;
   itemId: string;
-  type: string;
+  type: ActivityItemType;
 };
 
 export function ActivityRecordInitializer({

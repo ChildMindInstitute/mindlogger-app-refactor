@@ -7,6 +7,7 @@ import { StoreProgress } from '@app/abstract/lib';
 import { UploadObservable, useRetryUpload } from '@app/entities/activity/lib';
 import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { EventModel } from '@app/entities/event';
+import { ActivityItemType } from '@app/features/pass-survey';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
 import { PassSurveyModel } from '@features/pass-survey';
@@ -121,7 +122,7 @@ function FinishItem({
     const originalItems = activityStorageRecord.context.originalItems as {
       itemId: string;
       isHidden: boolean;
-      type: string;
+      type: ActivityItemType;
     }[];
 
     const answers = mapAnswersToDto(
