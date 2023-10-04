@@ -6,7 +6,10 @@ import {
   StoreProgressPayload,
 } from '@app/abstract/lib';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
+import { ActivityItemType } from '@app/features/pass-survey';
 import { Answers, PipelineItem } from '@app/features/pass-survey';
+import { InitializeHiddenItem } from '@app/features/pass-survey/model';
+import { AnswerDto } from '@app/shared/api';
 
 export const getScheduledDate = (event: ScheduleEvent) => {
   if (
@@ -44,7 +47,7 @@ export const getUserIdentifier = (
 export const getItemIds = (pipeline: PipelineItem[]): string[] => {
   return pipeline.reduce(
     (accumulator: string[], current: PipelineItem, step: number) => {
-      if (canItemHaveAnswer(current)) {
+      if (canItemHaveAnswer(current.type)) {
         accumulator.push(pipeline[Number(step)].id!);
       }
       return accumulator;
@@ -53,6 +56,34 @@ export const getItemIds = (pipeline: PipelineItem[]): string[] => {
   );
 };
 
-export const canItemHaveAnswer = (pipelineItem: PipelineItem): boolean => {
-  return pipelineItem.type !== 'Tutorial' && pipelineItem.type !== 'Splash';
+export const fillNullsForHiddenItems = (
+  itemIds: string[],
+  answers: AnswerDto[],
+  originalItems: InitializeHiddenItem[],
+): { answers: AnswerDto[]; itemIds: string[] } => {
+  const modifiedAnswers: Array<AnswerDto> = [];
+  const filteredOriginalItems = originalItems.filter(originalItem =>
+    canItemHaveAnswer(originalItem.type),
+  );
+
+  filteredOriginalItems.forEach(item => {
+    if (item.isHidden) {
+      const answer: AnswerDto = null;
+
+      modifiedAnswers.push(answer);
+    } else {
+      const answerPosition = itemIds.indexOf(item.itemId);
+
+      modifiedAnswers.push(answers[answerPosition]);
+    }
+  });
+
+  return {
+    itemIds: filteredOriginalItems.map(c => c.itemId),
+    answers: modifiedAnswers,
+  };
+};
+
+export const canItemHaveAnswer = (type: ActivityItemType): boolean => {
+  return type !== 'Tutorial' && type !== 'Splash';
 };

@@ -2,6 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 
 import { ActivityDetails, ActivityModel } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
+import { ActivityItemType } from '@app/features/pass-survey';
 import { ActivityResponse, AppletDetailsResponse } from '@app/shared/api';
 import {
   createSecureStorage,
@@ -29,6 +30,12 @@ type InitializeArgs = {
 type InitializeFlowArgs = {
   flowId: string;
   eventId: string;
+};
+
+export type InitializeHiddenItem = {
+  isHidden: boolean;
+  itemId: string;
+  type: ActivityItemType;
 };
 
 export function ActivityRecordInitializer({
@@ -63,7 +70,13 @@ export function ActivityRecordInitializer({
       appletVersion: applet.version,
       timers: {},
       actions: [],
-      context: {},
+      context: {
+        originalItems: activity.items.map<InitializeHiddenItem>(item => ({
+          itemId: item.id,
+          isHidden: item.isHidden,
+          type: item.inputType as ActivityItemType,
+        })),
+      },
     };
 
     const key = `${appletId}-${activityId}-${eventId}-${order}`;
