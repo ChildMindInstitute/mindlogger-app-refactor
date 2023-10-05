@@ -54,15 +54,16 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
     if (title) {
       navigation.setOptions({
         title,
-        headerRight: () => (
-          <Box backgroundColor="$white" style={style.themeLogoContainer}>
-            <CachedImage
-              source={applet?.theme?.logo ?? ''}
-              style={style.themeLogo}
-              resizeMode="contain"
-            />
-          </Box>
-        ),
+        headerRight: () =>
+          applet?.theme?.logo && (
+            <Box backgroundColor="$white" style={style.themeLogoContainer}>
+              <CachedImage
+                source={applet.theme.logo}
+                style={style.themeLogo}
+                resizeMode="contain"
+              />
+            </Box>
+          ),
       });
     }
   }, [title, navigation, applet?.theme?.logo]);
