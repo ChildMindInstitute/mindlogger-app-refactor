@@ -215,9 +215,9 @@ class AnswersUploadService implements IAnswersUploadService {
     for (const itemAnswer of itemsAnswers) {
       logAnswerIndex++;
 
-      const answerValue = (itemAnswer as ObjectAnswerDto)?.value;
+      const answerValue = itemAnswer?.value;
 
-      const text = (itemAnswer as ObjectAnswerDto)?.text;
+      const text = 'text' in itemAnswer ? itemAnswer.text : undefined;
 
       const mediaAnswer = answerValue as MediaFile;
 
@@ -463,7 +463,7 @@ class AnswersUploadService implements IAnswersUploadService {
       modifiedBody,
     );
 
-    modifiedBody.userActions = updatedUserActions;
+    modifiedBody.userActions = updatedUserActions as UserActionDto[];
 
     if (modifiedBody.itemIds.length !== modifiedBody.answers.length) {
       throw new Error(
