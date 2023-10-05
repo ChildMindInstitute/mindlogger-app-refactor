@@ -78,10 +78,7 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
   };
 
   return (
-    <Box
-      data-test={`activity-group-${group.type}-${group.name}`}
-      {...styledProps}
-    >
+    <Box data-test={`activity-group-${group.type}`} {...styledProps}>
       <Box mb={10}>
         <Text
           data-test="activity-group-name-text"

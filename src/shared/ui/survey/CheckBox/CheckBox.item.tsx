@@ -90,7 +90,7 @@ const CheckBoxItem: FC<Props> = ({
 
       <CheckBox
         style={styles.checkbox}
-        data-test={`checkbox-${value}`}
+        data-test="checkbox"
         lineWidth={2}
         animationDuration={0.2}
         boxType="square"

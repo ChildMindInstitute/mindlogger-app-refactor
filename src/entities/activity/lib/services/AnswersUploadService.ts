@@ -334,8 +334,6 @@ class AnswersUploadService implements IAnswersUploadService {
   }
 
   private encryptAnswers(data: SendAnswersInput): ActivityAnswersRequest {
-    console.log('======', data.answers);
-
     const { appletEncryption } = data;
     const userPrivateKey = UserPrivateKeyRecord.get();
 

@@ -52,6 +52,7 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
         {optionsList.map(option => (
           <Box my="$1" key={option.id} onPress={() => onValueChange(option.id)}>
             <RadioItem
+              data-test="radio-item-option"
               option={option}
               addTooltip={addTooltip}
               setPalette={setPalette}
