@@ -127,16 +127,17 @@ export type AnswerValueDto =
   | TimeAnswerDto
   | DateAnswerDto
   | GeolocationAnswerDto
-  | StabilityTrackerAnswerDto
   | FlankerAnswerDto
   | DrawerAnswerDto
   | AbTestAnswerDto
   | null;
 
-export type ObjectAnswerDto = {
-  value?: AnswerValueDto;
-  text?: string;
-};
+export type ObjectAnswerDto =
+  | {
+      value?: AnswerValueDto;
+      text?: string;
+    }
+  | StabilityTrackerAnswerDto;
 
 export type AnswerDto = TextAnswerDto | ObjectAnswerDto | null;
 
