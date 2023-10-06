@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, FC } from 'react';
+import React, { FC, useState, useRef, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import {
@@ -50,6 +50,8 @@ type Props = {
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, onStarted, width, isDrawingActive, onLog } = props;
 
+  const [lastPath, setLastPath] = useState<DrawLine[]>([]);
+
   const isEmpty = !value.length;
 
   const { undoClicked, resetUndoClicked } = useUndoClicked(isEmpty);
@@ -70,16 +72,20 @@ const DrawingBoard: FC<Props> = props => {
       pathsCache.splice(0, pathsCache.length);
     }
 
-    const newPaths = convertToSkPaths([...value], pathsCache.length);
+    const newPaths = convertToSkPaths(
+      [...value, ...lastPath],
+      pathsCache.length,
+    );
 
     pathsCache.push(...newPaths);
 
     return [...pathsCache];
-  }, [value, pathsCache]);
+  }, [value, pathsCache, lastPath]);
 
   const resetCurrentLine = () => {
     currentLogLineRef.current = null;
     canvasRef.current?.clear(Skia.Color('transparent'));
+    setLastPath([]);
   };
 
   const getNow = (): number => new Date().getTime();
@@ -183,6 +189,10 @@ const DrawingBoard: FC<Props> = props => {
     for (let i = 1; i < bezierPoints.length; i++) {
       const point = bezierPoints[i];
       path.lineTo(point.x, point.y);
+    }
+
+    if (currentLogLineRef.current) {
+      setLastPath([{ ...currentLogLineRef.current }]);
     }
 
     canvasRef.current?.drawPath(path, paint.copy());
