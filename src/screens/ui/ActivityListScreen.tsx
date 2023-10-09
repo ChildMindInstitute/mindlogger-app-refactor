@@ -14,7 +14,7 @@ type Props = BottomTabScreenProps<AppletDetailsParamList, 'ActivityList'>;
 const ActivityListScreen: FC<Props> = props => {
   return (
     <Box flex={1}>
-      <UploadRetryBanner />
+      <UploadRetryBanner data-test="upload-banner" />
       <HorizontalCalendar mt={8} />
       <StreamingStatusBar appletId={props.route.params.appletId} />
 

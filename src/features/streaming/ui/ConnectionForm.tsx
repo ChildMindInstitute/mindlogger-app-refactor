@@ -95,7 +95,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
 
   return (
     <Box {...props} onPress={e => e.stopPropagation()}>
-      <FormProvider {...form}>
+      <FormProvider data-test="connection-form" {...form}>
         <XStack justifyContent="center">
           <Text
             textAlign="center"
@@ -108,7 +108,13 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
             {t('live_connection:connect_to_server')}
           </Text>
 
-          {connecting && <ActivityIndicator size="small" mb={18} />}
+          {connecting && (
+            <ActivityIndicator
+              data-test="connection-form-loader"
+              size="small"
+              mb={18}
+            />
+          )}
         </XStack>
 
         <Text color="$darkerGrey3" fontSize={18} fontWeight="700">
@@ -119,6 +125,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
           <InputField
             editable={!connected}
             name="ipAddress"
+            data-test="connection-form-ip"
             mode="dark"
             style={[
               styles.input,
@@ -141,6 +148,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
           <InputField
             mode="dark"
             editable={!connected}
+            data-test="connection-form-port"
             name="port"
             style={[
               styles.input,
@@ -159,6 +167,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
         <XStack ai="center" my={8}>
           <CheckBoxField
             name="remember"
+            data-test="connection-form-remember"
             onCheckColor={colors.white}
             onFillColor={colors.grey}
             onTintColor={colors.grey}
@@ -169,6 +178,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
               fontWeight="900"
               ml={12}
               color={connected ? colors.grey2 : colors.darkerGrey2}
+              data-test="connection-form-remember-status"
               fontSize={16}
             >
               {t('live_connection:remember')}
@@ -176,14 +186,29 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
           </CheckBoxField>
         </XStack>
 
-        {(error && <Text style={styles.error}>{error}</Text>) || <></>}
+        {(error && (
+          <Text data-test="connection-form-error" style={styles.error}>
+            {error}
+          </Text>
+        )) || <></>}
 
         {connected ? (
-          <Button br={4} mt={10} onPress={disconnect}>
+          <Button
+            data-test="connection-form-disconnect-btn"
+            br={4}
+            mt={10}
+            onPress={disconnect}
+          >
             {t('live_connection:disconnect')}
           </Button>
         ) : (
-          <Button br={4} mt={10} isLoading={connecting} onPress={submit}>
+          <Button
+            data-test="connection-form-connect-btn"
+            br={4}
+            mt={10}
+            isLoading={connecting}
+            onPress={submit}
+          >
             {t('live_connection:connect')}
           </Button>
         )}

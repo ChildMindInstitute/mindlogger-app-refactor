@@ -40,6 +40,7 @@ const AboutAppletScreen: FC<Props> = ({ route }) => {
 
       <ScrollView px="$5" pt="$2">
         <MarkdownMessage
+          data-test="about-applet-markup-view"
           flex={1}
           mb="$3"
           alignItems={alignItems}
