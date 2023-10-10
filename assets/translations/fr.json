@@ -9,7 +9,8 @@
   "activity": {
     "incorrect_answer": "Réponse incorrecte. Veuillez réessayer",
     "failed": "Échoué",
-    "flanker_accuracy_warn": "*Les horodatages collectés pour un Android ne sont pas aussi précis que les appareils iOS."
+    "flanker_accuracy_warn": "*Les horodatages collectés pour un Android ne sont pas aussi précis que les appareils iOS.",
+    "please_wait": "S'il vous plaît, attendez"
   },
   "activity_time": {
     "time_remaining": "Temps restant"

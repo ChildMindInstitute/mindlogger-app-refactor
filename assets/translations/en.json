@@ -9,7 +9,8 @@
   "activity": {
     "incorrect_answer": "Incorrect answer. Please try again",
     "failed": "Failed",
-    "flanker_accuracy_warn": "*The timestamps collected for an android are not as accurate as iOS devices."
+    "flanker_accuracy_warn": "*The timestamps collected for an android are not as accurate as iOS devices.",
+    "please_wait": "Please wait"
   },
   "activity_time": {
     "time_remaining": "Time Remaining"

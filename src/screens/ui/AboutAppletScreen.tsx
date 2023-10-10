@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { type FlexAlignType } from 'react-native';
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { useTranslation } from 'react-i18next';
 
 import { UploadRetryBanner } from '@app/entities/activity';
 import { useAppletDetailsQuery } from '@app/entities/applet';
@@ -13,6 +14,7 @@ import { AppletDetailsParamList } from '../config';
 type Props = BottomTabScreenProps<AppletDetailsParamList, 'About'>;
 
 const AboutAppletScreen: FC<Props> = ({ route }) => {
+  const { t } = useTranslation();
   let content;
   let alignItems: FlexAlignType;
 
@@ -25,10 +27,9 @@ const AboutAppletScreen: FC<Props> = ({ route }) => {
   });
 
   if (!appletAbout || appletAbout.startsWith('404:')) {
+    console.log(t('applet_about.no_info'));
     alignItems = 'flex-start';
-    content =
-      '# ¯\\\\_(ツ)_/¯ ' +
-      '\n The authors of this applet have not provided any information!';
+    content = '# ¯\\\\_(ツ)_/¯ ' + '\n ' + t('applet_about:no_info');
   } else {
     alignItems = 'center';
     content = appletAbout;
