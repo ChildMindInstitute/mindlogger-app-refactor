@@ -191,7 +191,8 @@ const AudioRecorderItem: FC<Props> = ({
         >
           <XStack
             h={50}
-            w={150}
+            minWidth={150}
+            maxWidth={250}
             ai="center"
             jc="center"
             bg={isRecording ? '$alert' : '$primary'}
