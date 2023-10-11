@@ -1,6 +1,6 @@
 export type ChartItem = {
   date: Date;
-  value: number;
+  value: number | null;
 };
 
 export type ChartAxisDot = {

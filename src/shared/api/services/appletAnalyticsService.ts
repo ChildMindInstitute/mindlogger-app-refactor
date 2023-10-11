@@ -21,6 +21,7 @@ type ActivityAnalyticsResponse = SuccessfulResponse<ActivityAnalyticsDto>;
 type ActivityAnalyticsRequest = {
   appletId: string;
   fromDate: string;
+  isLastVersion: boolean;
 };
 
 function appletAnalyticsService() {
@@ -28,7 +29,12 @@ function appletAnalyticsService() {
     async getActivityAnalytics(request: ActivityAnalyticsRequest) {
       return httpService.get<ActivityAnalyticsResponse>(
         `/answers/applet/${request.appletId}/data`,
-        { params: { fromDate: request.fromDate } },
+        {
+          params: {
+            fromDate: request.fromDate,
+            activitiesLastVersion: request.isLastVersion,
+          },
+        },
       );
     },
   };

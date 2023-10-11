@@ -5,3 +5,4 @@ export * from './survey';
 export * from './reactQueryHelpers';
 export * from './networkHelpers';
 export * from './observable';
+export * from './file';

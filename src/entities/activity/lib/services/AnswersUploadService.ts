@@ -18,6 +18,7 @@ import {
   encryption,
   formatToDtoDate,
   formatToDtoTime,
+  isLocalFileUrl,
 } from '@shared/lib';
 
 import MediaFilesCleaner from './MediaFilesCleaner';
@@ -40,13 +41,6 @@ class AnswersUploadService implements IAnswersUploadService {
   constructor(logger: ILogger) {
     this.createdAt = null;
     this.logger = logger;
-  }
-
-  private isFileUrl(value: string): boolean {
-    const localFileRegex =
-      /^(file:\/\/|\/).*\/[^\/]+?\.(jpg|jpeg|png|gif|mp4|m4a|mov|MOV|svg|mpeg)$/;
-
-    return localFileRegex.test(value);
   }
 
   private mapFileExistenceDto(
@@ -92,6 +86,10 @@ class AnswersUploadService implements IAnswersUploadService {
 
   private getFileId(file: MediaFile): string {
     return `${this.createdAt!.toString()}/${file.fileName}`;
+  }
+
+  private isFileUrl(url: string): boolean {
+    return isLocalFileUrl(url);
   }
 
   private collectFileIds(answers: AnswerDto[]): string[] {
