@@ -61,6 +61,16 @@ const AbCanvas: FC<Props> = props => {
 
   const logLines = useRef<LogLine[]>([]).current;
 
+  const isCloseToNextRerenderedRef = useRef(false);
+
+  const isCloseToNextRerendered = () => isCloseToNextRerenderedRef.current;
+
+  const setCloseToNextRerendered = () =>
+    (isCloseToNextRerenderedRef.current = true);
+
+  const resetCloseToNextRerendered = () =>
+    (isCloseToNextRerenderedRef.current = false);
+
   const {
     testData,
     onLogResult,
@@ -284,8 +294,13 @@ const AbCanvas: FC<Props> = props => {
 
     drawPath();
 
-    if (isCloseToNext(point)) {
+    if (isCloseToNext(point) && !isCloseToNextRerendered()) {
       reRender();
+      setCloseToNextRerendered();
+    }
+
+    if (!isCloseToNext(point)) {
+      resetCloseToNextRerendered();
     }
 
     onLog({
