@@ -74,7 +74,7 @@ export function mapAnswersToDto(
   const answerDtos: Array<AnswerDto> = [];
 
   pipeline.forEach((pipelineItem, step) => {
-    const canHaveAnswer = canItemHaveAnswer(pipelineItem);
+    const canHaveAnswer = canItemHaveAnswer(pipelineItem.type);
 
     if (canHaveAnswer) {
       const answer = answers[step] ?? null;

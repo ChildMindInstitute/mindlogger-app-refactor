@@ -27,6 +27,7 @@ const UploadRetryBanner = () => {
         <Box pl={10}>
           <Button
             bg="transparent"
+            data-test="upload-banner-btn"
             spinnerColor="black"
             isLoading={isLoading}
             onPress={onRetry}

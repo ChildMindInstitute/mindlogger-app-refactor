@@ -1,1 +1,1 @@
-export { default as ScheduledDateCalculator } from './SheduledDateCalculator';
+export { default as ScheduledDateCalculator } from './ScheduledDateCalculator';

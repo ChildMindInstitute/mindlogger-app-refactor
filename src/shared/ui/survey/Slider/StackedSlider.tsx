@@ -38,12 +38,17 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
 
         return (
           <YStack key={`slider-${currentRowId}`}>
-            <Text fontSize={12} my="$3">
+            <Text
+              data-test={`stacked-slider-label-${currentRowId}`}
+              fontSize={12}
+              my="$3"
+            >
               {label}
             </Text>
 
             <SurveySlider
               config={singleSliderProps}
+              data-test={`stacked-slider-${currentRowId}`}
               onChange={value => onSliderValueChange(value, rowIndex)}
               onRelease={onRelease}
               initialValue={rowValue}

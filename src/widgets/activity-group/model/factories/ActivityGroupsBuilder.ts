@@ -1,4 +1,4 @@
-import { isToday } from 'date-fns';
+import { isEqual, startOfDay } from 'date-fns';
 
 import {
   ActivityPipelineType,
@@ -51,6 +51,13 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 
   private getNow = () => new Date();
+
+  private isToday(date: Date | null | undefined): boolean {
+    if (!date) {
+      return false;
+    }
+    return isEqual(startOfDay(this.getNow()), startOfDay(date));
+  }
 
   private getProgressRecord(
     eventActivity: EventEntity,
@@ -126,7 +133,8 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     const activityDuration: number =
       getMsFromHours(timer.hours) + getMsFromMinutes(timer.minutes);
 
-    const alreadyElapsed: number = new Date().getTime() - startedTime.getTime();
+    const alreadyElapsed: number =
+      this.getNow().getTime() - startedTime.getTime();
 
     if (alreadyElapsed < activityDuration) {
       const left: number = activityDuration - alreadyElapsed;
@@ -235,11 +243,11 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
       const endAt = progressRecord?.endAt;
 
-      const completedToday = !!endAt && isToday(endAt);
+      const completedToday = !!endAt && this.isToday(endAt);
 
       const neverCompleted = !progressRecord;
 
-      const scheduledToday = isToday(event.scheduledAt!);
+      const scheduledToday = this.isToday(event.scheduledAt!);
 
       const accessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime;
 
@@ -337,9 +345,9 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
       const endAt = this.getProgressRecord(eventActivity)?.endAt;
 
-      const completedToday = !!endAt && isToday(endAt);
+      const completedToday = !!endAt && this.isToday(endAt);
 
-      const scheduledToday = isToday(event.scheduledAt!);
+      const scheduledToday = this.isToday(event.scheduledAt!);
 
       if (
         typeIsScheduled &&
@@ -383,7 +391,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 }
 
-type ActivityGroupsBuilderInput = {
+export type ActivityGroupsBuilderInput = {
   allAppletActivities: Activity[];
   progress: Progress;
   appletId: string;

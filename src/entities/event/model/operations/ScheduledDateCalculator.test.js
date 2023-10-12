@@ -1,5 +1,5 @@
 import { addDays, addMonths, startOfDay, subDays, subMonths } from 'date-fns';
-import ScheduledDateCalculator from './SheduledDateCalculator';
+import ScheduledDateCalculator from './ScheduledDateCalculator';
 
 const now = new Date();
 

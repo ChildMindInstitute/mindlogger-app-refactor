@@ -71,7 +71,11 @@ const AudioStimulusItem: FC<Props> = ({ config, onChange: onFinish }) => {
 
   return (
     <>
-      <TouchableOpacity disabled={isInActive} onPress={onPress}>
+      <TouchableOpacity
+        data-test="audio-stimulus-btn"
+        disabled={isInActive}
+        onPress={onPress}
+      >
         <XStack
           h={50}
           w={150}
@@ -81,7 +85,13 @@ const AudioStimulusItem: FC<Props> = ({ config, onChange: onFinish }) => {
           p="$3"
           opacity={isInActive ? 0.5 : 1}
         >
-          <Text mr="$2" color="$white" fontWeight="700" fontSize={16}>
+          <Text
+            data-test="audio-record-btn-text"
+            mr="$2"
+            color="$white"
+            fontWeight="700"
+            fontSize={16}
+          >
             {getButtonText()}
           </Text>
 

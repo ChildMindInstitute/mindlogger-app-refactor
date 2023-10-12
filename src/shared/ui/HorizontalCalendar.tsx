@@ -10,11 +10,16 @@ const HorizontalCalendar: FC<BoxProps> = styledProps => {
 
   return (
     <Box alignItems="center" {...styledProps}>
-      <Text fontSize={15} mb={20}>
+      <Text data-test="calendar-title" fontSize={15} mb={20}>
         {title}
       </Text>
 
-      <XStack px={6} jc="space-around" width="100%">
+      <XStack
+        data-test="calendar-dates-container"
+        px={6}
+        jc="space-around"
+        width="100%"
+      >
         {dates.map(date => {
           const dateOfMonth = date.getDate();
           const weekDayName = format(date, 'EE').toUpperCase();
@@ -25,6 +30,7 @@ const HorizontalCalendar: FC<BoxProps> = styledProps => {
           return (
             <YStack
               key={dateOfMonth}
+              data-test="calendar-item"
               px={14}
               py={6}
               br={50}
@@ -32,11 +38,20 @@ const HorizontalCalendar: FC<BoxProps> = styledProps => {
               jc="center"
               bg={isToday ? '$lightBlue' : 'transparent'}
             >
-              <Text mb="$1" fontSize={10} color={textColor}>
+              <Text
+                data-test="calendar-week-name"
+                mb="$1"
+                fontSize={10}
+                color={textColor}
+              >
                 {weekDayName}
               </Text>
 
-              <Text color={textColor} fontWeight="700">
+              <Text
+                data-test="calendar-day-of-month"
+                color={textColor}
+                fontWeight="700"
+              >
                 {dateOfMonth}
               </Text>
             </YStack>

@@ -15,6 +15,7 @@ import {
 } from '@app/entities/applet/model';
 import { EventModel } from '@app/entities/event';
 import { PassSurveyModel } from '@app/features/pass-survey';
+import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import {
   useActivityInfo,
   useAppDispatch,
@@ -26,6 +27,7 @@ import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 import { getClientInformation } from '../lib';
 import { useFlowStorageRecord } from '../lib';
 import {
+  fillNullsForHiddenItems,
   getActivityStartAt,
   getExecutionGroupKey,
   getItemIds,
@@ -178,6 +180,9 @@ function Intermediate({
       activityStorageRecord.answers,
     );
 
+    const originalItems = activityStorageRecord.context
+      .originalItems as InitializeHiddenItem[];
+
     const answers = mapAnswersToDto(
       activityStorageRecord.items,
       activityStorageRecord.answers,
@@ -186,6 +191,9 @@ function Intermediate({
     const userActions = mapUserActionsToDto(activityStorageRecord.actions);
 
     const itemIds = getItemIds(activityStorageRecord.items);
+
+    const { itemIds: modifiedItemIds, answers: modifiedAnswers } =
+      fillNullsForHiddenItems(itemIds, answers, originalItems);
 
     const progressRecord = storeProgress[appletId][entityId][eventId];
 
@@ -202,9 +210,9 @@ function Intermediate({
       appletId,
       createdAt: Date.now(),
       version: activityStorageRecord.appletVersion,
-      answers: answers,
+      answers: modifiedAnswers,
       userActions,
-      itemIds,
+      itemIds: modifiedItemIds,
       appletEncryption,
       flowId: flowId ?? null,
       activityId: activityId,

@@ -34,7 +34,7 @@ const RadioTextContainer = styled(Box, {
 });
 
 const RadioItem: FC<RadioLabelProps> = ({
-  option: { isHidden, id, text, color, image, tooltip },
+  option: { isHidden, id, text, color, image, tooltip, value },
   addTooltip,
   setPalette,
   textReplacer,
@@ -70,7 +70,10 @@ const RadioItem: FC<RadioLabelProps> = ({
     >
       {addTooltip && tooltip && (
         <RadioTooltipContainer>
-          <Tooltip markdown={tooltipText}>
+          <Tooltip
+            data-test={`radio-option-tooltip-${value}`}
+            markdown={tooltipText}
+          >
             <QuestionTooltipIcon
               color={hasColor ? invertedColor : colors.grey}
               size={22}
@@ -83,6 +86,7 @@ const RadioItem: FC<RadioLabelProps> = ({
         <Box width="10%">
           <CachedImage
             resizeMode="contain"
+            data-test={`radio-option-image-${value}`}
             style={styles.image}
             source={image}
           />
@@ -90,13 +94,18 @@ const RadioItem: FC<RadioLabelProps> = ({
       )}
 
       <RadioTextContainer w="50%" px="2%">
-        <Text fontSize={18} color={invertedTextColor}>
+        <Text
+          data-test={`radio-option-text${value}`}
+          fontSize={18}
+          color={invertedTextColor}
+        >
           {name}
         </Text>
       </RadioTextContainer>
 
       <Box>
         <RadioGroup.Item
+          data-test={`radio-option-${value}`}
           borderColor={invertedColor}
           borderWidth={3}
           bg={setPalette && color ? color : '#fff'}

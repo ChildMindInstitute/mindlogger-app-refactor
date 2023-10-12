@@ -17,9 +17,9 @@ import {
 
 import {
   colors,
-  useShouldRestoreSkiaViewState,
   useUndoClicked,
   StreamEventLoggable,
+  useForceUpdate,
 } from '@shared/lib';
 import { Box } from '@shared/ui';
 
@@ -47,23 +47,31 @@ type Props = {
   isDrawingActive: boolean;
 } & StreamEventLoggable<DrawPoint>;
 
+const RenderFrequency = 50;
+
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, onStarted, width, isDrawingActive, onLog } = props;
 
-  const isEmpty = !value.length;
+  const reRender = useForceUpdate();
 
-  const { undoClicked, resetUndoClicked } = useUndoClicked(isEmpty);
-
-  const { shouldRestore, updateShouldRestore } =
-    useShouldRestoreSkiaViewState();
+  const { undoClicked, resetUndoClicked } = useUndoClicked(!value.length);
 
   const canvasRef = useRef<SkCanvas>();
 
-  const bezierCurrentCache = useRef<Array<CachedBezierItem>>([]).current;
+  const bezierCache = useRef<Array<CachedBezierItem>>([]).current;
 
   const pathsCache = useRef<Array<SkPath>>([]).current;
 
-  const currentLogLineRef = useRef<DrawLine | null>(null);
+  const drawingValueLineRef = useRef<DrawLine | null>(null);
+
+  const drawingPathRef = useRef<SkPath | null>(null);
+
+  const renderCounterRef = useRef(0);
+
+  const updateDrawingPath = (path: SkPath) => (drawingPathRef.current = path);
+
+  const isRenderCounterAchieved = () =>
+    renderCounterRef.current++ % RenderFrequency === 0;
 
   const paths = useMemo(() => {
     if (!value.length) {
@@ -78,13 +86,14 @@ const DrawingBoard: FC<Props> = props => {
   }, [value, pathsCache]);
 
   const resetCurrentLine = () => {
-    currentLogLineRef.current = null;
+    drawingValueLineRef.current = null;
+    drawingPathRef.current = null;
     canvasRef.current?.clear(Skia.Color('transparent'));
   };
 
   const getNow = (): number => new Date().getTime();
 
-  const createLogPoint = (point: Point): DrawPoint => {
+  const createValuePoint = (point: Point): DrawPoint => {
     const logPoint = { ...point, time: getNow() };
 
     onLog(logPoint);
@@ -92,23 +101,27 @@ const DrawingBoard: FC<Props> = props => {
     return logPoint;
   };
 
-  const createLogLine = ({ x, y }: Point): void => {
+  const createValueLine = ({ x, y }: Point): void => {
     const logPoint = { x, y, time: getNow() };
 
     onLog(logPoint);
 
-    currentLogLineRef.current = {
+    drawingValueLineRef.current = {
       startTime: getNow(),
       points: [logPoint],
     };
   };
 
-  const addLogPoint = (point: DrawPoint) => {
-    getLogLine()!.points.push(point);
+  const addValuePoint = (point: DrawPoint) => {
+    getValueLine()!.points.push(point);
+  };
+
+  const getValueLine = (): DrawLine | null => {
+    return drawingValueLineRef.current;
   };
 
   const isEqualToLastPoint = (point: Point): boolean => {
-    const line = getLogLine()!;
+    const line = getValueLine()!;
 
     if (!line.points.length) {
       return false;
@@ -122,18 +135,14 @@ const DrawingBoard: FC<Props> = props => {
     );
   };
 
-  const getLogLine = (): DrawLine | null => {
-    return currentLogLineRef.current;
-  };
-
   const onTouchStart = (touchInfo: TouchInfo) => {
-    bezierCurrentCache.splice(0, bezierCurrentCache.length);
+    bezierCache.splice(0, bezierCache.length);
 
     resetCurrentLine();
 
     const point: Point = { x: touchInfo.x, y: touchInfo.y };
 
-    createLogLine(point);
+    createValueLine(point);
     drawPath();
     onStarted();
   };
@@ -146,16 +155,16 @@ const DrawingBoard: FC<Props> = props => {
       return;
     }
 
-    addLogPoint(createLogPoint(point));
+    addValuePoint(createValuePoint(point));
     drawPath();
   };
 
   const onTouchEnd = () => {
-    if (!currentLogLineRef.current) {
+    if (!drawingValueLineRef.current) {
       return;
     }
 
-    const newLine = { ...currentLogLineRef.current };
+    const newLine = { ...drawingValueLineRef.current };
 
     const lines = [...value, newLine];
 
@@ -167,25 +176,34 @@ const DrawingBoard: FC<Props> = props => {
       width,
     } as DrawResult;
 
+    reRender();
+
     onResult(result);
   };
 
+  const reRenderByCounter = () => {
+    if (isRenderCounterAchieved()) {
+      reRender();
+    }
+  };
+
   const drawPath = () => {
-    const originalPoints = getLogLine()?.points;
+    const originalPoints = getValueLine()?.points;
     if (!originalPoints) {
       return;
     }
 
-    const bezierPoints = getBezierArray(originalPoints, bezierCurrentCache);
+    const bezierPoints = getBezierArray(originalPoints, bezierCache);
 
-    const path = Skia.Path.Make().moveTo(bezierPoints[0].x, bezierPoints[0].y);
+    const path = Skia.Path.Make();
 
-    for (let i = 1; i < bezierPoints.length; i++) {
-      const point = bezierPoints[i];
-      path.lineTo(point.x, point.y);
-    }
+    path.addPoly(bezierPoints, false);
 
     canvasRef.current?.drawPath(path, paint.copy());
+
+    updateDrawingPath(path);
+
+    reRenderByCounter();
   };
 
   const touchHandler = useTouchHandler(
@@ -212,11 +230,6 @@ const DrawingBoard: FC<Props> = props => {
         resetUndoClicked();
         return;
       }
-
-      if (shouldRestore()) {
-        drawPath();
-        updateShouldRestore();
-      }
     },
     [width, touchHandler, isDrawingActive],
   );
@@ -234,6 +247,16 @@ const DrawingBoard: FC<Props> = props => {
       <View style={styles.canvasView} pointerEvents="none">
         <Canvas style={styles.canvas}>
           <Group>
+            <Group>
+              {!!drawingPathRef.current && (
+                <Path
+                  path={drawingPathRef.current}
+                  strokeWidth={1}
+                  style="stroke"
+                />
+              )}
+            </Group>
+
             {paths.map((path, i) => (
               <Group key={i}>
                 <Path path={path} strokeWidth={1} style="stroke" />
