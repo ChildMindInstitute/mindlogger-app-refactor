@@ -13,7 +13,6 @@ export { default as useBackgroundTask } from './useBackgroundTask';
 export { default as usePrevious } from './usePrevious';
 export { default as useForceUpdate } from './useForceUpdate';
 export { default as useUndoClicked } from './useUndoClicked';
-export { default as useShouldRestoreSkiaViewState } from './useShouldRestoreSkiaViewState';
 export { default as useFirebaseSetup } from './useFirebaseSetup';
 export { default as useIsOnline } from './useIsOnline';
 export { default as useOnlineEstablished } from './useOnlineEstablished';
