@@ -27,7 +27,6 @@ const AboutAppletScreen: FC<Props> = ({ route }) => {
   });
 
   if (!appletAbout || appletAbout.startsWith('404:')) {
-    console.log(t('applet_about.no_info'));
     alignItems = 'flex-start';
     content = '# ¯\\\\_(ツ)_/¯ ' + '\n ' + t('applet_about:no_info');
   } else {
