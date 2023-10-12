@@ -47,6 +47,8 @@ type Props = {
   isDrawingActive: boolean;
 } & StreamEventLoggable<DrawPoint>;
 
+const RenderFrequency = 50;
+
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, onStarted, width, isDrawingActive, onLog } = props;
 
@@ -64,7 +66,12 @@ const DrawingBoard: FC<Props> = props => {
 
   const drawingPathRef = useRef<SkPath | null>(null);
 
+  const renderCounterRef = useRef(0);
+
   const updateDrawingPath = (path: SkPath) => (drawingPathRef.current = path);
+
+  const isRenderCounterAchieved = () =>
+    renderCounterRef.current++ % RenderFrequency === 0;
 
   const paths = useMemo(() => {
     if (!value.length) {
@@ -174,6 +181,12 @@ const DrawingBoard: FC<Props> = props => {
     onResult(result);
   };
 
+  const reRenderByCounter = () => {
+    if (isRenderCounterAchieved()) {
+      reRender();
+    }
+  };
+
   const drawPath = () => {
     const originalPoints = getValueLine()?.points;
     if (!originalPoints) {
@@ -184,11 +197,13 @@ const DrawingBoard: FC<Props> = props => {
 
     const path = Skia.Path.Make();
 
-    updateDrawingPath(path);
-
     path.addPoly(bezierPoints, false);
 
     canvasRef.current?.drawPath(path, paint.copy());
+
+    updateDrawingPath(path);
+
+    reRenderByCounter();
   };
 
   const touchHandler = useTouchHandler(
