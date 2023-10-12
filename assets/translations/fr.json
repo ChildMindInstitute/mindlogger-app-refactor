@@ -79,6 +79,19 @@
     "back": "Retour",
     "next": "Suivant"
   },
+  "live_connection": {
+    "disconnect": "DISCONNECT",
+    "connect": "SUBMIT",
+    "connect_to_server": "Connect To Server",
+    "remember": "Remember",
+    "ip": "IP Address",
+    "port": "Port",
+    "connection_closed": "TCP Connection was closed",
+    "connection_error": "Connection failed. Please double check ip and port",
+    "connection_set_error": "Cannot set connection",
+    "live_connection": "Live Connection",
+    "not_available": "not available"
+  },
   "join_invite": {
     "click_below": "Cliquez ci-dessous si vous êtes prêt à participer à cette étude. Vous pouvez vous retirer de cette étude et/ou supprimer vos données à tout moment sans conséquences.",
     "decline": "Si vous ne vous sentez pas disposé à partager vos données issues de cette étude, vous pouvez décliner cette invitation.",

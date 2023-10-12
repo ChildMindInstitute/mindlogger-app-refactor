@@ -12,7 +12,9 @@ export const colors = {
   darkGrey: '#3b3a3a',
   darkGrey2: '#6b6a6a',
   darkerGrey3: '#7E7E7E',
+  darkerGreyBackground: '#7E7E7E80',
   darkerGrey: '#333333',
+  darkerGrey2: '#101010',
   mediumGrey: '#B6B6B6',
   lighterGrey: '#e8e8e8',
   lighterGrey2: '#f7f7f7',
@@ -33,4 +35,5 @@ export const colors = {
   red: '#FF0000',
   lightRed: '#ffdddd',
   codePink: '#d63384',
+  errorRed: '#800000',
 };

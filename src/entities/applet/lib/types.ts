@@ -49,11 +49,12 @@ export type AppletDetails = {
   activities: Activity[];
   activityFlows: ActivityFlow[];
   encryption: AppletEncryptionDTO | null;
+  streamEnabled: boolean;
 };
 
 export type AnalyticsItemValue = {
   date: Date;
-  value: number;
+  value: number | null;
 };
 
 export type ResponseAnalyticsValue = Array<AnalyticsItemValue>;

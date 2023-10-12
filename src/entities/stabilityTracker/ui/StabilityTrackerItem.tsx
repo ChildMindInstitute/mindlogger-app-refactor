@@ -11,7 +11,8 @@ import { orientation } from 'react-native-sensors';
 import Svg, { Circle } from 'react-native-svg';
 import { useToast } from 'react-native-toast-notifications';
 
-import { useForceUpdate } from '@shared/lib';
+import { StabilityTrackerAnswerValue } from '@shared/api';
+import { useForceUpdate, StreamEventLoggable } from '@shared/lib';
 import { YStack } from '@shared/ui';
 
 import ControlBar from './ControlBar';
@@ -64,7 +65,7 @@ type Props = {
   onComplete: (response: StabilityTrackerResponse) => void;
   onMaxLambdaChange: (contextKey: string, contextValue: unknown) => void;
   maxLambda?: number;
-};
+} & StreamEventLoggable<StabilityTrackerAnswerValue>;
 
 const StabilityTrackerItemScreen = (props: Props) => {
   const toast = useToast();
@@ -75,6 +76,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
     onComplete,
     onMaxLambdaChange,
     maxLambda = 0,
+    onLog,
   } = props;
 
   const config = {
@@ -326,6 +328,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
       updateLambdaValue(deltaTime);
       updateScore(deltaTime);
     }
+
     reRender();
     saveResponses();
   };
@@ -340,6 +343,18 @@ const StabilityTrackerItemScreen = (props: Props) => {
       score: score.current,
       lambdaSlope: lambdaSlope.current,
     };
+
+    const liveEvent: StabilityTrackerAnswerValue = {
+      timestamp: response.timestamp,
+      stimPos: response.circlePosition,
+      targetPos: response.targetPosition,
+      userPos: response.userPosition,
+      score: response.score,
+      lambda: response.lambda,
+      lambdaSlope: response.lambdaSlope,
+    };
+
+    onLog(liveEvent);
 
     responses.current.push(response);
   };

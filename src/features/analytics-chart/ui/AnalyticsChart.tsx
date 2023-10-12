@@ -31,7 +31,10 @@ const AnalyticsChart: FC<Props> = ({
       break;
     case 'slider':
       chart = (
-        <LineChart data={data.map(x => ({ ...x, date: new Date(x.date) }))} />
+        <LineChart
+          config={responseConfig}
+          data={data.map(x => ({ ...x, date: new Date(x.date) }))}
+        />
       );
       break;
 
@@ -46,18 +49,18 @@ const AnalyticsChart: FC<Props> = ({
         textAlign="center"
         mb={10}
         color="$tertiary"
-        fontWeight="500"
+        fontWeight="800"
         fontSize={15}
       >
         {title}
       </Text>
 
-      {chart}
-
-      {!data.length && (
+      {!data.length ? (
         <Text p={20} fontWeight="400">
           {t('applet_data:title')}
         </Text>
+      ) : (
+        chart
       )}
     </Box>
   );

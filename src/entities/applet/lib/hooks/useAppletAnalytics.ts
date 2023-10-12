@@ -10,40 +10,44 @@ export const useAppletAnalytics = (appletId: string) => {
   const currentWeekDates = getCurrentWeekDates();
   const firstDateOfCurrentWeek = format(currentWeekDates[0], 'yyyy-MM-dd');
 
-  const { data: appletEncryption } = useAppletDetailsQuery(appletId, {
-    select: response =>
-      mapAppletDetailsFromDto(response.data.result).encryption,
-  });
+  const { data: appletEncryption, isLoading: isDetailsLoading } =
+    useAppletDetailsQuery(appletId, {
+      select: response =>
+        mapAppletDetailsFromDto(response.data.result).encryption,
+    });
 
   const userPrivateKey = UserPrivateKeyRecord.get();
 
-  const { data: appletAnalytics } = useAppletAnalyticsQuery(
-    appletId,
-    firstDateOfCurrentWeek,
-    {
-      select: response => {
-        if (!appletEncryption || !userPrivateKey) {
-          return;
-        }
+  const { data: appletAnalytics, isLoading: isAnalyticsLoading } =
+    useAppletAnalyticsQuery(
+      { appletId, fromDate: firstDateOfCurrentWeek, isLastVersion: true },
+      {
+        select: response => {
+          if (!appletEncryption || !userPrivateKey) {
+            return;
+          }
 
-        const encryptionService = encryption.createEncryptionService({
-          prime: appletEncryption.prime,
-          publicKey: appletEncryption.publicKey,
-          base: appletEncryption.base,
-          privateKey: userPrivateKey,
-        });
+          const encryptionService = encryption.createEncryptionService({
+            prime: appletEncryption.prime,
+            publicKey: appletEncryption.publicKey,
+            base: appletEncryption.base,
+            privateKey: userPrivateKey,
+          });
 
-        const analytics = mapAppletAnalytics({
-          appletId,
-          activitiesDto: response.data.result.activities,
-          answersDto: response.data.result.answers,
-          encryptionService,
-        });
+          const analytics = mapAppletAnalytics({
+            appletId,
+            activitiesDto: response.data.result.activities,
+            answersDto: response.data.result.answers,
+            encryptionService,
+          });
 
-        return analytics;
+          return analytics;
+        },
       },
-    },
-  );
+    );
 
-  return { analytics: appletAnalytics ?? null };
+  return {
+    analytics: appletAnalytics ?? null,
+    isLoading: isAnalyticsLoading || isDetailsLoading,
+  };
 };

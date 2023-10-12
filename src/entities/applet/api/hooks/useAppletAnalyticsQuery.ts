@@ -3,15 +3,26 @@ import { AppletAnalyticsService } from '@app/shared/api/services/appletAnalytics
 
 type FetchFn = typeof AppletAnalyticsService.getActivityAnalytics;
 type Options<TData> = QueryOptions<FetchFn, TData>;
+type Payload = {
+  appletId: string;
+  fromDate: string;
+  isLastVersion: boolean;
+};
 
 export const useAppletAnalyticsQuery = <TData = ReturnAwaited<FetchFn>>(
-  appletId: string,
-  fromDate: string,
+  payload: Payload,
   options?: Options<TData>,
 ) => {
+  const { appletId, isLastVersion, fromDate } = payload;
+
   return useBaseQuery(
-    ['activity_analytics', { appletId }],
-    () => AppletAnalyticsService.getActivityAnalytics({ appletId, fromDate }),
+    ['activity_analytics', { appletId, isLastVersion }],
+    () =>
+      AppletAnalyticsService.getActivityAnalytics({
+        appletId,
+        fromDate,
+        isLastVersion,
+      }),
     { ...options, staleTime: 0 },
   );
 };

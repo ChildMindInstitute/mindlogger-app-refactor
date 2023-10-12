@@ -11,6 +11,7 @@ import {
   CompletedEntityDto,
   OptionsDto,
   ResponseConfig,
+  SliderResponseConfig,
   ThemeDto,
 } from '@app/shared/api';
 import { buildDateTimeFromDto } from '@app/shared/lib';
@@ -32,8 +33,8 @@ export function mapThemeFromDto(dto: ThemeDto | null): AppletTheme | null {
   return dto === null
     ? null
     : {
-        backgroundImage: dto.backgroundImage,
-        logo: dto.logo,
+        backgroundImage: dto.backgroundImage ?? undefined,
+        logo: dto.logo ?? undefined,
         primaryColor: dto.primaryColor,
         secondaryColor: dto.secondaryColor,
         tertiaryColor: dto.tertiaryColor,
@@ -86,6 +87,7 @@ export function mapAppletDetailsFromDto(
     activityFlows: mapActivityFlowsFromDto(detailsDto.activityFlows),
     theme: mapThemeFromDto(detailsDto.theme),
     encryption: detailsDto.encryption,
+    streamEnabled: detailsDto.streamEnabled,
   };
 }
 
@@ -179,8 +181,13 @@ function getAnswersByActivityId(
 }
 
 function getAnalyticItems(activityDto: ActivityDto) {
-  return activityDto.items.filter(filterItem =>
-    ['multiSelect', 'singleSelect', 'slider'].includes(filterItem.responseType),
+  const activityItemsIds = activityDto.items.map(item => item.id);
+
+  return activityDto.items.filter(
+    filterItem =>
+      ['multiSelect', 'singleSelect', 'slider'].includes(
+        filterItem.responseType,
+      ) && activityItemsIds.includes(filterItem.id),
   );
 }
 
@@ -241,6 +248,8 @@ function mapActivityResponsesByItem(
       return getItemResponses(answer.answer, answer.createdAt, answer.type);
     });
 
+  console.log('----', responses);
+
   const itemResponses = {
     name: item.name,
     type: type,
@@ -258,18 +267,22 @@ function mapResponseConfig(
   switch (responseType) {
     case 'multiSelect':
     case 'singleSelect':
-      const multiSelectConfig = itemDto.responseValues as {
+      const selectConfig = itemDto.responseValues as {
         options: OptionsDto;
       };
 
       return {
-        options: multiSelectConfig.options.map(option => ({
+        options: selectConfig.options.map(option => ({
           name: option.text,
           value: option.value,
         })),
       };
     case 'slider':
-      return null;
+      const sliderConfig = itemDto.responseValues as SliderResponseConfig;
+      return {
+        maxValue: sliderConfig.maxValue,
+        minValue: sliderConfig.minValue,
+      };
   }
 }
 
@@ -280,14 +293,15 @@ function getItemResponses(
 ): ResponseAnalyticsValue {
   switch (responseType) {
     case 'multiSelect':
-      const multiSelectValue: number[] = answer.value;
+      const multiSelectValue: number[] = answer?.value ?? [];
 
       return multiSelectValue?.map(value => ({
         value,
         date: new Date(createdAt),
       }));
     case 'singleSelect':
-      const selectItemValue: number = answer.value;
+      const selectItemValue: number | null = answer?.value ?? null;
+
       return [
         {
           value: selectItemValue,
@@ -295,7 +309,8 @@ function getItemResponses(
         },
       ];
     case 'slider':
-      const sliderValue: number = answer.value;
+      const sliderValue: number | null = answer?.value ?? null;
+
       return [
         {
           value: sliderValue,
