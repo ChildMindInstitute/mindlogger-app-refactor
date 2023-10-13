@@ -96,15 +96,26 @@ const DrawingBoard: FC<Props> = props => {
   const createValuePoint = (point: Point): DrawPoint => {
     const logPoint = { ...point, time: getNow() };
 
-    onLog(logPoint);
+    const liveEventLogPoint = {
+      x: (point.x / width) * 100,
+      y: (point.y / width) * 100,
+      time: getNow(),
+    };
+
+    onLog(liveEventLogPoint);
 
     return logPoint;
   };
 
   const createValueLine = ({ x, y }: Point): void => {
     const logPoint = { x, y, time: getNow() };
+    const liveEventLogPoint = {
+      x: (x / width) * 100,
+      y: (y / width) * 100,
+      time: getNow(),
+    };
 
-    onLog(logPoint);
+    onLog(liveEventLogPoint);
 
     drawingValueLineRef.current = {
       startTime: getNow(),

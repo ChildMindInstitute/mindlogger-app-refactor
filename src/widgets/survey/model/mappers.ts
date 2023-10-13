@@ -396,9 +396,7 @@ function convertToStabilityTrackerAnswer(answer: Answer): AnswerDto {
         : 'challenge-phase',
   };
 
-  return {
-    value: dto,
-  };
+  return dto;
 }
 
 function convertToAbTestAnswer(answer: Answer): AnswerDto {

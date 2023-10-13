@@ -204,7 +204,7 @@ function FinishItem({
     return (
       <ImageBackground>
         <Center flex={1} mx={16}>
-          <Text fontSize={22}>Please Wait ...</Text>
+          <Text fontSize={22}>{t('activity:please_wait')}...</Text>
         </Center>
       </ImageBackground>
     );
