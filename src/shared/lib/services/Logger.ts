@@ -1,7 +1,7 @@
 import { Dirs, FileSystem } from 'react-native-file-access';
 import { FileLogger, LogLevel } from 'react-native-file-logger';
 
-import { FileService } from '@app/shared/api';
+import { FileService } from '@shared/api';
 
 import { IS_ANDROID, IS_IOS } from '../constants';
 import { ILogger } from '../types';
@@ -72,17 +72,18 @@ class Logger implements ILogger {
     files: Array<NamePath>,
   ): Promise<FileExists[]> {
     const checkResult = await FileService.checkIfLogsExist({
-      filesToCheck: files.map(x => x.fileName),
+      files: files.map(x => x.fileName),
     });
 
     const result: FileExists[] = [];
 
-    for (let existRecord of checkResult.data.result.files) {
-      const fileInfo = files.find(x => x.fileName === existRecord.fileName)!;
+    for (let existRecord of checkResult.data.result) {
+      const fileInfo = files.find(x => x.fileName === existRecord.fileId)!;
+
       result.push({
         ...fileInfo,
-        exists: existRecord.exists,
-        size: existRecord.size,
+        exists: existRecord.uploaded,
+        size: existRecord.fileSize || 0,
       });
     }
 
@@ -154,15 +155,12 @@ class Logger implements ILogger {
           `[Logger.sendInternal] Sending log file "${checkRecord.fileName}"`,
         );
 
-        await FileService.upload(
-          {
-            fileName: checkRecord.fileName,
-            uri: checkRecord.filePath,
-            type: 'log',
-            fileId: '',
-          },
-          'log',
-        );
+        await FileService.uploadLogFile({
+          fileName: checkRecord.fileName,
+          uri: checkRecord.filePath,
+          type: 'text/x-log',
+          fileId: checkRecord.fileName,
+        });
       } catch (error) {
         console.warn(
           `[Logger.upload]: Error occurred while sending file "${checkRecord.fileName}"\n\n`,
@@ -252,13 +250,11 @@ class Logger implements ILogger {
 
       console.info('[Logger.send] Started sending log files to Server');
 
-      // TODO - uncomment the lines below when integration is done!
-
-      // const result = await this.sendInternal();
+      const result = await this.sendInternal();
 
       console.info('[Logger.send] Completed sending log files to Server');
 
-      return true; // result; - todo - uncomment
+      return result;
     } catch (error) {
       console.warn(
         '[Logger.sendInternal]: Error occurred: \n\n',

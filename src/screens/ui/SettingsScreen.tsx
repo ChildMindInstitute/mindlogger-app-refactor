@@ -25,6 +25,10 @@ const SettingsScreen: FC = () => {
     navigate('ChangePassword');
   };
 
+  const navigateToAppLogs = () => {
+    navigate('ApplicationLogs');
+  };
+
   return (
     <Box flex={1} bg="$secondary">
       <StatusBar />
@@ -46,6 +50,11 @@ const SettingsScreen: FC = () => {
           <RowButton
             onPress={navigateToAppLanguage}
             title={t('language_screen:change_app_language')}
+          />
+
+          <RowButton
+            onPress={navigateToAppLogs}
+            title={t('settings:upload_logs')}
           />
 
           <LogoutRowButton />

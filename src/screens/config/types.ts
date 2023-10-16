@@ -16,6 +16,7 @@ export type RootStackParamList = {
   ChangePassword: undefined;
   InProgressActivity: EntityPath;
   ActivityPassedScreen: undefined;
+  ApplicationLogs: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
