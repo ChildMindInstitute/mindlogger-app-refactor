@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import {
   ActivityRecordKeyParams,
-  LookupMediaInput,
+  LookupEntityInput,
   StoreProgressPayload,
 } from '@app/abstract/lib';
 import { ActivityFlowRecordDto, AppletDetailsResponse } from '@app/shared/api';
@@ -15,22 +15,30 @@ import {
   useAppSelector,
 } from '@shared/lib';
 
-import { onBeforeStartingActivity, onMediaReferencesFound } from '../../lib';
+import {
+  onActivityContainsAllItemsHidden,
+  onAnActivityContainsAllItemsHidden,
+  onBeforeStartingActivity,
+  onMediaReferencesFound,
+} from '../../lib';
 import { selectInProgressApplets } from '../selectors';
 import { actions } from '../slice';
 
 type StartResult = {
   startedFromScratch?: boolean;
   cannotBeStartedDueToMediaFound?: boolean;
+  cannotBeStartedDueToAllItemsHidden?: boolean;
 };
 
 type UseStartEntityInput = {
-  hasMediaReferences: (input: LookupMediaInput) => boolean;
+  hasMediaReferences: (input: LookupEntityInput) => boolean;
+  hasActivityWithHiddenAllItems: (input: LookupEntityInput) => boolean;
   cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
 };
 
 function useStartEntity({
   hasMediaReferences,
+  hasActivityWithHiddenAllItems,
   cleanUpMediaFiles,
 }: UseStartEntityInput) {
   const dispatch = useAppDispatch();
@@ -84,6 +92,7 @@ function useStartEntity({
     appletId: string,
     activityId: string,
     eventId: string,
+    entityName: string,
     isTimerElapsed: boolean = false,
   ): Promise<StartResult> {
     const isOnline = await isAppOnline();
@@ -100,10 +109,29 @@ function useStartEntity({
       );
     };
 
+    const shouldBreakDueToAllItemsHidden = (): boolean => {
+      return hasActivityWithHiddenAllItems({
+        appletId,
+        entityId: activityId,
+        entityType: 'regular',
+        queryClient,
+      });
+    };
+
     return new Promise<StartResult>(resolve => {
       if (shouldBreakDueToMediaReferences()) {
         onMediaReferencesFound();
-        resolve({ cannotBeStartedDueToMediaFound: true });
+        resolve({
+          cannotBeStartedDueToMediaFound: true,
+        });
+        return;
+      }
+
+      if (shouldBreakDueToAllItemsHidden()) {
+        onActivityContainsAllItemsHidden(entityName);
+        resolve({
+          cannotBeStartedDueToAllItemsHidden: true,
+        });
         return;
       }
 
@@ -139,6 +167,7 @@ function useStartEntity({
     appletId: string,
     flowId: string,
     eventId: string,
+    entityName: string,
     isTimerElapsed: boolean = false,
   ): Promise<StartResult> {
     const isOnline = await isAppOnline();
@@ -153,6 +182,15 @@ function useStartEntity({
           queryClient,
         })
       );
+    };
+
+    const shouldBreakDueToAllItemsHidden = (): boolean => {
+      return hasActivityWithHiddenAllItems({
+        appletId,
+        entityId: flowId,
+        entityType: 'flow',
+        queryClient,
+      });
     };
 
     const getFlowActivities = (): string[] => {
@@ -177,6 +215,14 @@ function useStartEntity({
       if (shouldBreakDueToMediaReferences()) {
         onMediaReferencesFound();
         resolve({ cannotBeStartedDueToMediaFound: true });
+        return;
+      }
+
+      if (shouldBreakDueToAllItemsHidden()) {
+        onAnActivityContainsAllItemsHidden(entityName);
+        resolve({
+          cannotBeStartedDueToAllItemsHidden: true,
+        });
         return;
       }
 

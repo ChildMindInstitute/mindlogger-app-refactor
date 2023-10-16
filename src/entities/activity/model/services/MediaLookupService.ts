@@ -1,11 +1,7 @@
-import { LookupMediaInput } from '@app/abstract/lib';
-import { ActivityDetails, ActivityModel } from '@app/entities/activity';
-import { ActivityResponse, AppletDetailsResponse } from '@app/shared/api';
-import {
-  getActivityDetailsKey,
-  getAppletDetailsKey,
-  getDataFromQuery,
-} from '@app/shared/lib';
+import { LookupEntityInput } from '@app/abstract/lib';
+import { ActivityDetails } from '@app/entities/activity';
+
+import EntityActivitiesCollector from './EntityActivitiesCollector';
 
 const createMediaLookupService = () => {
   const lookupInMarkdown = (message: string): boolean => {
@@ -24,46 +20,9 @@ const createMediaLookupService = () => {
     });
   };
 
-  const lookup = ({
-    appletId,
-    entityId,
-    entityType,
-    queryClient,
-  }: LookupMediaInput): boolean => {
-    const activitiesToLookup: ActivityDetails[] = [];
-
-    const addActivity = (id: string) => {
-      const activityResponse = getDataFromQuery<ActivityResponse>(
-        getActivityDetailsKey(id),
-        queryClient,
-      );
-
-      const activity: ActivityDetails = ActivityModel.mapToActivity(
-        activityResponse!.result,
-      );
-      activitiesToLookup.push(activity);
-    };
-
-    if (entityType === 'regular') {
-      addActivity(entityId);
-    }
-
-    if (entityType === 'flow') {
-      const appletDetailsResponse = getDataFromQuery<AppletDetailsResponse>(
-        getAppletDetailsKey(appletId),
-        queryClient,
-      );
-
-      const flowDto = appletDetailsResponse?.result.activityFlows.find(
-        x => x.id === entityId,
-      );
-
-      const activityIds: string[] = flowDto!.activityIds;
-
-      for (let activityId of activityIds) {
-        addActivity(activityId);
-      }
-    }
+  const lookup = (lookupInput: LookupEntityInput): boolean => {
+    const activitiesToLookup: ActivityDetails[] =
+      EntityActivitiesCollector.collect(lookupInput);
 
     return activitiesToLookup.some(activity => {
       return lookupInActivity(activity);

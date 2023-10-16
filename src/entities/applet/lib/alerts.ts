@@ -52,3 +52,11 @@ export function onAppletListRefreshError(applets: string[]) {
       }, ''),
   );
 }
+
+export function onActivityContainsAllItemsHidden(entityName: string) {
+  Alert.alert('', i18n.t('activity:activity_all_items_hidden', { entityName }));
+}
+
+export function onAnActivityContainsAllItemsHidden(entityName: string) {
+  Alert.alert('', i18n.t('activity:flow_all_items_hidden', { entityName }));
+}
