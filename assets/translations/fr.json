@@ -183,7 +183,8 @@
     "use_cellular_data": "Utiliser les données mobiles",
     "logout": "Déconnexion",
     "permanently_delete_account": "Supprimer définitivement mon compte",
-    "user_settings": "Paramètres utilisateur"
+    "user_settings": "Paramètres utilisateur",
+    "upload_logs": "Télécharger les journaux"
   },
   "sign_up_form": {
     "sign_up": "S'inscrire",
@@ -351,6 +352,13 @@
     "change_app_language": "Changer la langue",
     "en": "English",
     "fr": "Français"
+  },
+  "application_logs_screen": {
+    "upload_button": "Télécharger les journaux",
+    "title": "Vous rencontrez des problèmes techniques ? Vos fichiers journaux aideront notre équipe à résoudre les problèmes.",
+    "subTitle": "Veuillez les télécharger en utilisant le bouton ci-dessous.",
+    "success": "Succès - nous avons reçu vos journaux.",
+    "error": "Erreur - journaux non envoyés. Veuillez réessayer."
   },
   "additional": {
     "server-error": "Une erreur de serveur s'est produite",

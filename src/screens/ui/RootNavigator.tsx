@@ -48,6 +48,7 @@ import {
   SettingsScreen,
   AppletBottomTabNavigator,
   InProgressActivityScreen,
+  ApplicationLogsScreen,
 } from '../ui';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -201,6 +202,14 @@ export default () => {
               title: t('settings:change_pass'),
             }}
             component={ChangePasswordScreen}
+          />
+
+          <Stack.Screen
+            name="ApplicationLogs"
+            options={{
+              title: t('settings:upload_logs'),
+            }}
+            component={ApplicationLogsScreen}
           />
 
           <Stack.Screen

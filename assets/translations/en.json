@@ -183,13 +183,21 @@
     "use_cellular_data": "Use Cellular Data",
     "logout": "Logout",
     "permanently_delete_account": "Permanently Delete Account",
-    "user_settings": "User Settings"
+    "user_settings": "User Settings",
+    "upload_logs": "Upload Logs"
   },
   "language_screen": {
     "app_language": "Application language",
     "change_app_language": "Change Language",
     "en": "English",
     "fr": "Français"
+  },
+  "application_logs_screen": {
+    "upload_button": "Upload logs",
+    "title": "Having technical issues? Your log files will help our team troubleshoot.",
+    "subTitle": "Please upload them using the button below.",
+    "success": "Success - we received your logs.",
+    "error": "Error - logs not sent. Please try again."
   },
   "sign_up_form": {
     "sign_up": "Sign Up",
