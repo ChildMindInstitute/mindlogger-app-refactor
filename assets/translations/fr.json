@@ -102,7 +102,10 @@
     "about_title": "À propos de MindLogger",
     "no_applets_yet": "Vous n’avez pas d’applets",
     "noon": "Midi",
-    "midnight": "Minuit"
+    "midnight": "Minuit",
+    "refresh_error_header": "Erreur d'actualisation",
+    "applets_not_refreshed": "Les applets suivants n'ont pas été actualisés :",
+    "common_refresh_error": "La liste des applets n'a pas été actualisée. Veuillez réessayer."
   },
   "activity_list_component": {
     "no_activities_yet": "Aucune activité spécifiée pour le moment"

@@ -28,6 +28,7 @@ import { mapActivitiesFromDto, mapActivityFlowsFromDto } from '../mappers';
 
 type BuildResult = {
   groups: ActivityListGroup[];
+  isCacheInsufficientError?: boolean;
 };
 
 const createActivityGroupsBuildManager = (logger: ILogger) => {
@@ -72,7 +73,7 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
       logger.warn(
         `[ActivityGroupsBuildManager.processInternal]: appletResponse not found, appletId=${appletId}`,
       );
-      return { groups: [] };
+      return { groups: [], isCacheInsufficientError: true };
     }
 
     const activities: Activity[] = mapActivitiesFromDto(
@@ -96,7 +97,7 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
       logger.warn(
         '[ActivityGroupsBuildManager.processInternal]: eventsResponse not found',
       );
-      return { groups: [] };
+      return { groups: [], isCacheInsufficientError: true };
     }
 
     const events: ScheduleEvent[] = mapEventsFromDto(

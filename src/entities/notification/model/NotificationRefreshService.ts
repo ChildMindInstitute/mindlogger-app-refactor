@@ -1,6 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 
 import { StoreProgress, convertProgress } from '@app/abstract/lib';
+import { RefreshService } from '@app/entities/applet/model';
 import { EventModel } from '@app/entities/event';
 import {
   AppletDetailsResponse,
@@ -11,6 +12,8 @@ import {
   LogTrigger,
 } from '@app/shared/api';
 import {
+  ILogger,
+  Logger,
   getAppletDetailsKey,
   getAppletsKey,
   getDataFromQuery,
@@ -45,7 +48,9 @@ type NotificationRefreshService = {
   ) => Promise<void>;
 };
 
-const createNotificationRefreshService = (): NotificationRefreshService => {
+const createNotificationRefreshService = (
+  logger: ILogger,
+): NotificationRefreshService => {
   const buildIdToEntityMap = (entities: Entity[]): Record<string, Entity> => {
     return entities.reduce<Record<string, Entity>>((acc, current) => {
       acc[current.id] = current;
@@ -86,6 +91,13 @@ const createNotificationRefreshService = (): NotificationRefreshService => {
         queryClient,
       )!;
 
+      if (!detailsResponse || !eventsResponse) {
+        logger.info(
+          `[NotificationRefreshService.refreshInternal] Notifications cannot be build for the applet "${applet.name}|${applet.id}" as required data is missing in the cache`,
+        );
+        continue;
+      }
+
       const events: ScheduleEvent[] = mapEventsFromDto(
         eventsResponse.result.events,
       );
@@ -106,6 +118,13 @@ const createNotificationRefreshService = (): NotificationRefreshService => {
         entity: idToEntity[event.entityId],
         event,
       }));
+
+      if (entityEvents.some(x => x.entity == null)) {
+        logger.log(
+          `[NotificationRefreshService.refreshInternal] Discovered event(s) for applet "${applet.name}|${applet.id}" that referenced to a missing entity`,
+        );
+        entityEvents = entityEvents.filter(x => x.entity != null);
+      }
 
       const calculator = EventModel.ScheduledDateCalculator;
 
@@ -150,6 +169,12 @@ const createNotificationRefreshService = (): NotificationRefreshService => {
     if (NotificationManager.mutex.isBusy()) {
       return;
     }
+    if (RefreshService.isBusy()) {
+      logger.info(
+        '[NotificationRefreshService.refresh]: RefreshService.mutex set to busy state',
+      );
+      return;
+    }
 
     try {
       NotificationManager.mutex.setBusy();
@@ -162,13 +187,13 @@ const createNotificationRefreshService = (): NotificationRefreshService => {
         action: LogAction.ReSchedule,
       });
 
-      console.info(
+      logger.info(
         '[NotificationRefreshService.refresh]: Notifications rescheduled',
       );
     } catch (error) {
-      console.log(
-        '[NotificationRefreshService.refresh]: Notifications rescheduling failed',
-        error,
+      logger.log(
+        '[NotificationRefreshService.refresh]: Notifications rescheduling failed\n\n' +
+          error!.toString(),
       );
     } finally {
       NotificationManager.mutex.release();
@@ -182,4 +207,4 @@ const createNotificationRefreshService = (): NotificationRefreshService => {
   return result;
 };
 
-export default createNotificationRefreshService();
+export default createNotificationRefreshService(Logger);
