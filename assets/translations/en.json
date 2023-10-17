@@ -191,7 +191,8 @@
     "logout": "Logout",
     "permanently_delete_account": "Permanently Delete Account",
     "user_settings": "User Settings",
-    "upload_logs": "Upload Logs"
+    "upload_logs": "Upload Logs",
+    "delete_account": "Request account deletion"
   },
   "language_screen": {
     "app_language": "Application language",

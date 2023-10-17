@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { UploadRetryBanner } from '@app/entities/activity';
 import { IdentityModel } from '@app/entities/identity';
+import { DeleteAccountRowButton } from '@app/features/account-deletion';
 import { LogoutRowButton } from '@features/logout';
 import {
   SystemRecord,

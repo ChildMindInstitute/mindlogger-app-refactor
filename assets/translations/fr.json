@@ -190,7 +190,8 @@
     "logout": "Déconnexion",
     "permanently_delete_account": "Supprimer définitivement mon compte",
     "user_settings": "Paramètres utilisateur",
-    "upload_logs": "Télécharger les journaux"
+    "upload_logs": "Télécharger les journaux",
+    "delete_account": "Request account deletion"
   },
   "sign_up_form": {
     "sign_up": "S'inscrire",
