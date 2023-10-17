@@ -1,5 +1,4 @@
 import { FC, useLayoutEffect } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useIsMutating, useQueryClient } from '@tanstack/react-query';
@@ -18,7 +17,13 @@ import {
 import { AppletList, AppletModel } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
 import { AppletsRefresh, AppletsRefreshModel } from '@features/applets-refresh';
-import { Box, ImageBackground, ScrollView, Text, XStack } from '@shared/ui';
+import {
+  Box,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  XStack,
+} from '@shared/ui';
 
 const AppletsScreen: FC = () => {
   const { t } = useTranslation();
@@ -70,38 +75,35 @@ const AppletsScreen: FC = () => {
       <UploadRetryBanner />
 
       <ImageBackground>
-        <ScrollView
-          contentContainerStyle={styles.scrollView}
-          refreshControl={<AppletsRefresh />}
-        >
-          <Box flex={1} pt={12} pb={34}>
-            <AppletList
-              flex={1}
-              px={14}
-              mb={28}
-              onAppletPress={({ id, displayName }) =>
-                navigate('AppletDetails', { appletId: id, title: displayName })
-              }
-            />
-
-            <XStack jc="center">
-              <TouchableOpacity onPress={() => navigate('AboutApp')}>
-                <Text color="$primary" fontSize={16} fontWeight="700">
-                  {t('applet_list_component:about_title')}
-                </Text>
-              </TouchableOpacity>
-            </XStack>
-          </Box>
-        </ScrollView>
+        <Box flex={1} pt={12} pb={34}>
+          <AppletList
+            flex={1}
+            px={14}
+            refreshControl={<AppletsRefresh />}
+            ListFooterComponent={<AboutAppLink />}
+            onAppletPress={({ id, displayName }) =>
+              navigate('AppletDetails', { appletId: id, title: displayName })
+            }
+          />
+        </Box>
       </ImageBackground>
     </Box>
   );
 };
 
-const styles = StyleSheet.create({
-  scrollView: {
-    flexGrow: 1,
-  },
-});
+const AboutAppLink = () => {
+  const { t } = useTranslation();
+  const { navigate } = useNavigation();
+
+  return (
+    <XStack jc="center">
+      <TouchableOpacity onPress={() => navigate('AboutApp')}>
+        <Text color="$primary" fontSize={16} fontWeight="700">
+          {t('applet_list_component:about_title')}
+        </Text>
+      </TouchableOpacity>
+    </XStack>
+  );
+};
 
 export default AppletsScreen;
