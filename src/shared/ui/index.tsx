@@ -38,6 +38,7 @@ export { default as Button } from './Button';
 export { default as DateTimePicker } from './DateTimePicker';
 export { default as ScrollButton } from './ScrollButton';
 export { default as ScrollableContent } from './ScrollableContent';
+export { default as TouchableOpacity } from './TouchableOpacity';
 
 export {
   StatusBar,
