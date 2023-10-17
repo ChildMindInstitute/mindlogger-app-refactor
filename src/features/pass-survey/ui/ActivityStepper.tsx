@@ -116,6 +116,12 @@ function ActivityStepper({
     if (!isForced) {
       trackUserAction(userActionCreator.next());
     }
+
+    const currentStepAnswer = activityStorageRecord?.answers[currentStep];
+
+    if (!currentStepAnswer) {
+      trackUserAction(userActionCreator.skip());
+    }
   };
 
   const onBack = (nextStep: number) => {
