@@ -181,7 +181,7 @@ class Logger implements ILogger {
     const logsDir = `${documentDir}/Logs`;
 
     FileLogger.configure({
-      maximumFileSize: 1024, // 1 KB, todo - 1MB after integration
+      maximumFileSize: 1024 * 1024,
       maximumNumberOfFiles: 5,
       captureConsole: false,
       dailyRolling: true,
