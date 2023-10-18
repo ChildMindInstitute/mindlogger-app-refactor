@@ -115,12 +115,12 @@ function ActivityStepper({
 
     if (!isForced) {
       trackUserAction(userActionCreator.next());
-    }
+    } else {
+      const currentStepAnswer = activityStorageRecord?.answers[currentStep];
 
-    const currentStepAnswer = activityStorageRecord?.answers[currentStep];
-
-    if (!currentStepAnswer) {
-      trackUserAction(userActionCreator.skip());
+      if (!currentStepAnswer) {
+        trackUserAction(userActionCreator.skip());
+      }
     }
   };
 
