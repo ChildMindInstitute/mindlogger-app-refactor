@@ -1,28 +1,40 @@
-import { FC } from 'react';
+import { useMemo, PropsWithChildren, memo } from 'react';
+import { SectionList, StyleSheet } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { EntityType } from '@app/abstract/lib';
-import { MediaFilesCleaner } from '@app/entities/activity';
 import {
-  ActivityList,
-  ActivityListItem,
+  ActivityCard,
   ActivityModel,
+  ActivityListItem,
+  MediaFilesCleaner,
 } from '@entities/activity';
 import { AppletModel, clearStorageRecords } from '@entities/applet';
-import { Box, BoxProps, Text } from '@shared/ui';
+import { Box, Text, YStack } from '@shared/ui';
 
 import { ActivityListGroup } from '../lib';
 
-type Props = BoxProps & {
+type Props = {
   appletId: string;
-  group: ActivityListGroup;
+  groups: Array<ActivityListGroup>;
 };
 
-const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
+function ActivitySectionList({ appletId, groups }: Props) {
   const { t } = useTranslation();
   const { navigate } = useNavigation();
+
+  const sections = useMemo(() => {
+    return groups
+      .filter(g => g.activities.length)
+      .map(group => {
+        return {
+          data: group.activities,
+          key: t(group.name),
+        };
+      });
+  }, [t, groups]);
 
   const { startFlow, startActivity } = AppletModel.useStartEntity({
     hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
@@ -89,27 +101,49 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
   };
 
   return (
-    <Box data-test={`activity-group-${group.type}`} {...styledProps}>
-      <Box mb={10}>
-        <Text
-          data-test="activity-group-name-text"
-          mb={4}
-          fontSize={14}
-          fontWeight="600"
-          color="$darkGrey2"
-        >
-          {t(group.name)}
-        </Text>
-
-        <Box width="100%" height={1} bc="$darkGrey2" />
-      </Box>
-
-      <ActivityList
-        activities={group.activities}
-        onCardPress={startActivityOrFlow}
-      />
-    </Box>
+    <SectionList
+      sections={sections}
+      renderSectionHeader={({ section }) => (
+        <SectionHeader>{section.key}</SectionHeader>
+      )}
+      renderItem={({ item }) => (
+        <ActivityCard
+          data-test={`activity-card-${item.activityId}`}
+          activity={item}
+          disabled={false}
+          onPress={() => startActivityOrFlow(item)}
+        />
+      )}
+      ItemSeparatorComponent={ItemSeparator}
+      stickySectionHeadersEnabled={false}
+      contentContainerStyle={styles.sectionList}
+    />
   );
-};
+}
 
-export default ActivityGroup;
+const SectionHeader = ({ children }: PropsWithChildren) => (
+  <Box mb={10}>
+    <Text
+      data-test="activity-group-name-text"
+      mb={4}
+      fontSize={14}
+      fontWeight="600"
+      color="$darkGrey2"
+    >
+      {children}
+    </Text>
+
+    <Box width="100%" height={1} bc="$darkGrey2" />
+  </Box>
+);
+
+const ItemSeparator = () => <YStack my={6} />;
+
+const styles = StyleSheet.create({
+  sectionList: {
+    flexGrow: 1,
+    paddingBottom: 42,
+  },
+});
+
+export default memo(ActivitySectionList);

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
@@ -100,4 +100,4 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
   );
 };
 
-export default ActivityCard;
+export default memo(ActivityCard);
