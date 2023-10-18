@@ -1,7 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 
 import { StoreProgress, convertProgress } from '@app/abstract/lib';
-import { RefreshService } from '@app/entities/applet/model';
+import { AppletModel } from '@app/entities/applet';
 import { EventModel } from '@app/entities/event';
 import {
   AppletDetailsResponse,
@@ -169,7 +169,7 @@ const createNotificationRefreshService = (
     if (NotificationManager.mutex.isBusy()) {
       return;
     }
-    if (RefreshService.isBusy()) {
+    if (AppletModel.RefreshService.isBusy()) {
       logger.info(
         '[NotificationRefreshService.refresh]: RefreshService.mutex set to busy state',
       );
