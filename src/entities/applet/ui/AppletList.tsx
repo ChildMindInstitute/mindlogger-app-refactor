@@ -1,5 +1,10 @@
-import { FC, memo } from 'react';
-import { FlatList, ScrollViewProps, StyleSheet } from 'react-native';
+import { FC, memo, useCallback } from 'react';
+import {
+  FlatList,
+  ListRenderItem,
+  ScrollViewProps,
+  StyleSheet,
+} from 'react-native';
 
 import { XStack, YStack } from '@tamagui/stacks';
 import { useIsMutating } from '@tanstack/react-query';
@@ -10,6 +15,7 @@ import { LoadListError } from '@app/shared/ui';
 
 import AppletCard from './AppletCard';
 import { useAppletsQuery } from '../api';
+import { Applet } from '../lib';
 import { mapApplets } from '../model';
 
 type SelectedApplet = {
@@ -39,6 +45,19 @@ const AppletList: FC<Props> = ({
 
   const hasError = !!refreshError || !!getAppletsError;
 
+  const renderItem: ListRenderItem<Applet> = useCallback(
+    ({ item }) => (
+      <AppletCard
+        applet={item}
+        disabled={!!isRefreshing}
+        onPress={() =>
+          onAppletPress({ id: item.id, displayName: item.displayName })
+        }
+      />
+    ),
+    [isRefreshing, onAppletPress],
+  );
+
   if (hasError) {
     return (
       <XStack flex={1} jc="center" ai="center">
@@ -61,19 +80,13 @@ const AppletList: FC<Props> = ({
         contentContainerStyle={styles.flatList}
         data={applets}
         keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <AppletCard
-            applet={item}
-            disabled={!!isRefreshing}
-            onPress={() =>
-              onAppletPress({ id: item.id, displayName: item.displayName })
-            }
-          />
-        )}
+        renderItem={renderItem}
         ItemSeparatorComponent={Separator}
         ListFooterComponent={ListFooterComponent}
         ListFooterComponentStyle={styles.listFooterComponent}
         refreshControl={refreshControl}
+        removeClippedSubviews={true}
+        updateCellsBatchingPeriod={12}
       />
     </Box>
   );

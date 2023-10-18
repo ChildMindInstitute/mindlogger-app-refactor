@@ -1,4 +1,4 @@
-import { FC, useLayoutEffect } from 'react';
+import { FC, useCallback, useLayoutEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { useIsMutating, useQueryClient } from '@tanstack/react-query';
@@ -14,7 +14,7 @@ import {
   getRefreshingKey,
   useAppSelector,
 } from '@app/shared/lib';
-import { AppletList, AppletModel } from '@entities/applet';
+import { Applet, AppletList, AppletModel } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
 import { AppletsRefresh, AppletsRefreshModel } from '@features/applets-refresh';
 import {
@@ -24,6 +24,8 @@ import {
   TouchableOpacity,
   XStack,
 } from '@shared/ui';
+
+type SelectedApplet = Pick<Applet, 'id' | 'displayName'>;
 
 const AppletsScreen: FC = () => {
   const { t } = useTranslation();
@@ -46,6 +48,12 @@ const AppletsScreen: FC = () => {
 
   const storeProgress: StoreProgress = useAppSelector(
     AppletModel.selectors.selectInProgressApplets,
+  );
+
+  const navigateAppletDetails: (applet: SelectedApplet) => void = useCallback(
+    ({ id, displayName }) =>
+      navigate('AppletDetails', { appletId: id, title: displayName }),
+    [navigate],
   );
 
   AppletsRefreshModel.useAutomaticRefreshOnMount(async () => {
@@ -81,9 +89,7 @@ const AppletsScreen: FC = () => {
             px={14}
             refreshControl={<AppletsRefresh />}
             ListFooterComponent={<AboutAppLink />}
-            onAppletPress={({ id, displayName }) =>
-              navigate('AppletDetails', { appletId: id, title: displayName })
-            }
+            onAppletPress={navigateAppletDetails}
           />
         </Box>
       </ImageBackground>
