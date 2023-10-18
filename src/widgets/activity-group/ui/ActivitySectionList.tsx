@@ -125,6 +125,7 @@ const SectionHeader = ({ children }: PropsWithChildren) => (
   <Box mb={10}>
     <Text
       data-test="activity-group-name-text"
+      mt={16}
       mb={4}
       fontSize={14}
       fontWeight="600"
