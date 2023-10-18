@@ -1,6 +1,5 @@
-import { FC, useCallback, useState } from 'react';
+import { FC } from 'react';
 
-import { useFocusEffect } from '@react-navigation/native';
 import { useIsFetching } from '@tanstack/react-query';
 
 import { getAppletCompletedEntitiesKey } from '@app/shared/lib';
@@ -14,14 +13,14 @@ import {
   LoadListError,
 } from '@app/shared/ui';
 
-import ActivityGroup from './ActivityGroup';
+import ActivitySectionList from './ActivitySectionList';
 import { useActivityGroups } from '../model';
 
 type Props = {
   appletId: string;
 } & BoxProps;
 
-const ActivityGroupList: FC<Props> = props => {
+const ActivityGroups: FC<Props> = props => {
   const isLoadingCompletedEntities =
     useIsFetching({
       exact: true,
@@ -29,23 +28,8 @@ const ActivityGroupList: FC<Props> = props => {
     }) > 0;
 
   let { groups, isSuccess, error } = useActivityGroups(props.appletId);
-  const [shouldShowList, setShouldShowList] = useState(true);
 
   const hasError = !isSuccess;
-
-  useFocusEffect(
-    useCallback(() => {
-      setShouldShowList(true);
-
-      return () => {
-        setTimeout(() => setShouldShowList(false), 300);
-      };
-    }, []),
-  );
-
-  if (!shouldShowList) {
-    return null;
-  }
 
   if (isLoadingCompletedEntities) {
     return (
@@ -77,15 +61,11 @@ const ActivityGroupList: FC<Props> = props => {
 
   return (
     <Box {...props}>
-      <YStack data-test="activity-group-list" space={12}>
-        {groups
-          ?.filter(g => g.activities.length)
-          .map(g => (
-            <ActivityGroup group={g} key={g.name} appletId={props.appletId} />
-          ))}
+      <YStack data-test="activity-group-list" flex={1}>
+        <ActivitySectionList appletId={props.appletId} groups={groups} />
       </YStack>
     </Box>
   );
 };
 
-export default ActivityGroupList;
+export default ActivityGroups;

@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { FC, memo } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
@@ -11,6 +11,7 @@ import {
   Text,
   XStack,
   YStack,
+  TouchableOpacity,
 } from '@app/shared/ui';
 
 import { Applet } from '../lib';
@@ -96,4 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AppletCard;
+export default memo(AppletCard);
