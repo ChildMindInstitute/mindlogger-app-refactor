@@ -217,7 +217,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
       const answerValue = itemAnswer?.value;
 
-      const text = 'text' in itemAnswer ? itemAnswer.text : undefined;
+      const text = itemAnswer?.text;
 
       const mediaAnswer = answerValue as MediaFile;
 

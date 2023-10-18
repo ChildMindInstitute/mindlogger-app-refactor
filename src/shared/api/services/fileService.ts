@@ -1,6 +1,5 @@
-import { AxiosResponse } from 'axios';
-
-import { IS_ANDROID, watchForConnectionLoss } from '@app/shared/lib';
+import { IS_ANDROID, watchForConnectionLoss } from '@shared/lib';
+import { SystemRecord } from '@shared/lib/records';
 
 import httpService from './httpService';
 import { SuccessfulResponse } from '../types';
@@ -28,20 +27,6 @@ type UploadResultDto = {
 
 type FileUploadResponse = SuccessfulResponse<UploadResultDto>;
 
-type CheckIfLogsExistRequest = {
-  filesToCheck: Array<string>;
-};
-
-type CheckIfLogsExistResultDto = {
-  files: Array<{
-    fileName: string;
-    exists: boolean;
-    size: number;
-  }>;
-};
-
-type CheckIfLogsExistResponse = SuccessfulResponse<CheckIfLogsExistResultDto>;
-
 type FileId = string;
 
 type CheckIfFilesExistRequest = {
@@ -54,23 +39,22 @@ export type CheckIfFilesExistResultDto = Array<{
   fileId: string;
   uploaded: boolean;
   url: string | null;
+  fileSize?: number | null;
 }>;
 
 type CheckIfFilesExistResponse = SuccessfulResponse<CheckIfFilesExistResultDto>;
 
+type CheckIfLogsExistRequest = {
+  files: FileId[];
+};
+
+type CheckIfLogsExistResultDto = CheckIfFilesExistResultDto;
+
+type CheckIfLogsExistResponse = SuccessfulResponse<CheckIfLogsExistResultDto>;
+
 function fileService() {
   return {
-    async upload(
-      request: FileUploadRequest,
-      actionType: 'log' | 'regular' = 'regular',
-    ) {
-      if (actionType === 'log') {
-        // todo
-        return Promise.resolve<AxiosResponse<FileUploadResponse, any>>({
-          status: 200,
-        } as AxiosResponse<FileUploadResponse, any>);
-      }
-
+    async upload(request: FileUploadRequest) {
       const { abortController, reset } = watchForConnectionLoss();
 
       try {
@@ -86,7 +70,7 @@ function fileService() {
         } as unknown as Blob);
 
         const response = await httpService.post<FileUploadResponse>(
-          actionType === 'regular' ? '/file/upload' : '/log-file/upload',
+          '/file/upload',
           data,
           {
             headers: { 'Content-Type': 'multipart/form-data' },
@@ -94,6 +78,43 @@ function fileService() {
             params: { fileId: request.fileId },
           },
         );
+
+        return response;
+      } catch (error) {
+        console.error('error', JSON.stringify(error));
+        throw error;
+      } finally {
+        reset();
+      }
+    },
+
+    async uploadLogFile(request: FileUploadRequest) {
+      const { abortController, reset } = watchForConnectionLoss();
+
+      try {
+        const data = new FormData();
+        const uri = IS_ANDROID
+          ? `file://${request.uri}`
+          : request.uri.replace('file://', '');
+
+        data.append('file', {
+          uri,
+          name: request.fileName,
+          type: request.type,
+        } as unknown as Blob);
+
+        const deviceId = SystemRecord.getDeviceId()!;
+
+        const response = await httpService.post<FileUploadResponse>(
+          `/file/log-file/${deviceId}`,
+          data,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+            signal: abortController.signal,
+            params: { fileId: request.fileId },
+          },
+        );
+
         return response;
       } catch (error) {
         console.error('error', JSON.stringify(error));
@@ -104,19 +125,23 @@ function fileService() {
     },
 
     async checkIfLogsExist(request: CheckIfLogsExistRequest) {
-      // todo, fake response is here now
+      const deviceId = SystemRecord.getDeviceId()!;
 
-      return Promise.resolve<AxiosResponse<CheckIfLogsExistResponse, any>>({
-        status: 200,
-        data: {
-          result: {
-            files: request.filesToCheck.map(x => ({
-              fileName: x,
-              exists: false,
-            })),
+      const { abortController, reset } = watchForConnectionLoss();
+
+      try {
+        const response = await httpService.post<CheckIfLogsExistResponse>(
+          `/file/log-file/${deviceId}/check`,
+          request,
+          {
+            signal: abortController.signal,
           },
-        },
-      } as AxiosResponse<CheckIfLogsExistResponse, any>);
+        );
+
+        return response;
+      } finally {
+        reset();
+      }
     },
 
     async checkIfFilesExist(request: CheckIfFilesExistRequest) {

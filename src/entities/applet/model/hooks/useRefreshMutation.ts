@@ -2,13 +2,15 @@ import { useMemo } from 'react';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { Logger } from '@app/shared/lib';
+
 import { RefreshService } from '../services';
 
 const useRefreshMutation = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
 
   const refreshService = useMemo(
-    () => new RefreshService(queryClient),
+    () => new RefreshService(queryClient, Logger),
     [queryClient],
   );
 

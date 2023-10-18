@@ -10,7 +10,9 @@
     "incorrect_answer": "Réponse incorrecte. Veuillez réessayer",
     "failed": "Échoué",
     "flanker_accuracy_warn": "*Les horodatages collectés pour un Android ne sont pas aussi précis que les appareils iOS.",
-    "please_wait": "S'il vous plaît, attendez"
+    "please_wait": "S'il vous plaît, attendez",
+    "activity_all_items_hidden": "\"{{entityName}}\" ne peut pas être démarré car tous les éléments de l'activité sont masqués",
+    "flow_all_items_hidden": "\"{{entityName}}\" ne peut pas être démarré car il contient une activité dans laquelle tous les éléments sont masqués"
   },
   "activity_time": {
     "time_remaining": "Temps restant"
@@ -102,7 +104,10 @@
     "about_title": "À propos de MindLogger",
     "no_applets_yet": "Vous n’avez pas d’applets",
     "noon": "Midi",
-    "midnight": "Minuit"
+    "midnight": "Minuit",
+    "refresh_error_header": "Erreur d'actualisation",
+    "applets_not_refreshed": "Les applets suivants n'ont pas été actualisés :",
+    "common_refresh_error": "La liste des applets n'a pas été actualisée. Veuillez réessayer."
   },
   "activity_list_component": {
     "no_activities_yet": "Aucune activité spécifiée pour le moment"
@@ -183,7 +188,8 @@
     "use_cellular_data": "Utiliser les données mobiles",
     "logout": "Déconnexion",
     "permanently_delete_account": "Supprimer définitivement mon compte",
-    "user_settings": "Paramètres utilisateur"
+    "user_settings": "Paramètres utilisateur",
+    "upload_logs": "Télécharger les journaux"
   },
   "sign_up_form": {
     "sign_up": "S'inscrire",
@@ -351,6 +357,13 @@
     "change_app_language": "Changer la langue",
     "en": "English",
     "fr": "Français"
+  },
+  "application_logs_screen": {
+    "upload_button": "Télécharger les journaux",
+    "title": "Vous rencontrez des problèmes techniques ? Vos fichiers journaux aideront notre équipe à résoudre les problèmes.",
+    "subTitle": "Veuillez les télécharger en utilisant le bouton ci-dessous.",
+    "success": "Succès - nous avons reçu vos journaux.",
+    "error": "Erreur - journaux non envoyés. Veuillez réessayer."
   },
   "additional": {
     "server-error": "Une erreur de serveur s'est produite",

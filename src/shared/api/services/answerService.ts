@@ -109,6 +109,7 @@ export type StabilityTrackerAnswerDto = {
   value: StabilityTrackerAnswerValue[];
   maxLambda: number;
   phaseType: 'challenge-phase' | 'focus-phase';
+  text?: string;
 };
 
 export type AnswerValueDto =
