@@ -17,7 +17,7 @@ import {
 
 import {
   onActivityContainsAllItemsHidden,
-  onAnActivityContainsAllItemsHidden,
+  onFlowActivityContainsAllItemsHidden,
   onBeforeStartingActivity,
   onMediaReferencesFound,
 } from '../../lib';
@@ -219,7 +219,7 @@ function useStartEntity({
       }
 
       if (shouldBreakDueToAllItemsHidden()) {
-        onAnActivityContainsAllItemsHidden(entityName);
+        onFlowActivityContainsAllItemsHidden(entityName);
         resolve({
           cannotBeStartedDueToAllItemsHidden: true,
         });
