@@ -9,7 +9,7 @@ export type EntityPath = {
   entityType: EntityType;
 };
 
-export type LookupMediaInput = {
+export type LookupEntityInput = {
   appletId: string;
   entityId: string;
   entityType: EntityType;

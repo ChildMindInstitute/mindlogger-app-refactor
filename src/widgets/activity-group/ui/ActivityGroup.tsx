@@ -27,6 +27,8 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
   const { startFlow, startActivity } = AppletModel.useStartEntity({
     hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
     cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
+    hasActivityWithHiddenAllItems:
+      ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
   });
 
   function navigateSurvey(
@@ -47,23 +49,32 @@ const ActivityGroup: FC<Props> = ({ appletId, group, ...styledProps }) => {
     eventId,
     flowId,
     isTimerElapsed,
+    name,
   }: ActivityListItem) => {
     if (flowId) {
-      startFlow(appletId, flowId, eventId, isTimerElapsed).then(result => {
-        if (result.cannotBeStartedDueToMediaFound) {
-          return;
-        }
-
-        if (result.startedFromScratch) {
-          clearStorageRecords.byEventId(eventId);
-        }
-
-        navigateSurvey(flowId, 'flow', eventId);
-      });
-    } else {
-      startActivity(appletId, activityId, eventId, isTimerElapsed).then(
+      startFlow(appletId, flowId, eventId, name, isTimerElapsed).then(
         result => {
-          if (result.cannotBeStartedDueToMediaFound) {
+          if (
+            result.cannotBeStartedDueToMediaFound ||
+            result.cannotBeStartedDueToAllItemsHidden
+          ) {
+            return;
+          }
+
+          if (result.startedFromScratch) {
+            clearStorageRecords.byEventId(eventId);
+          }
+
+          navigateSurvey(flowId, 'flow', eventId);
+        },
+      );
+    } else {
+      startActivity(appletId, activityId, eventId, name, isTimerElapsed).then(
+        result => {
+          if (
+            result.cannotBeStartedDueToMediaFound ||
+            result.cannotBeStartedDueToAllItemsHidden
+          ) {
             return;
           }
 

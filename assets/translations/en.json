@@ -10,7 +10,9 @@
     "incorrect_answer": "Incorrect answer. Please try again",
     "failed": "Failed",
     "flanker_accuracy_warn": "*The timestamps collected for an android are not as accurate as iOS devices.",
-    "please_wait": "Please wait"
+    "please_wait": "Please wait",
+    "activity_all_items_hidden": "\"{{entityName}}\" cannot be started because all items inside the activity are hidden",
+    "flow_all_items_hidden": "\"{{entityName}}\" cannot be started because it contains an activity in which all items are hidden"
   },
   "activity_time": {
     "time_remaining": "Time Remaining"

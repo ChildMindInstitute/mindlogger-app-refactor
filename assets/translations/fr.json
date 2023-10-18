@@ -10,7 +10,9 @@
     "incorrect_answer": "Réponse incorrecte. Veuillez réessayer",
     "failed": "Échoué",
     "flanker_accuracy_warn": "*Les horodatages collectés pour un Android ne sont pas aussi précis que les appareils iOS.",
-    "please_wait": "S'il vous plaît, attendez"
+    "please_wait": "S'il vous plaît, attendez",
+    "activity_all_items_hidden": "\"{{entityName}}\" ne peut pas être démarré car tous les éléments de l'activité sont masqués",
+    "flow_all_items_hidden": "\"{{entityName}}\" ne peut pas être démarré car il contient une activité dans laquelle tous les éléments sont masqués"
   },
   "activity_time": {
     "time_remaining": "Temps restant"

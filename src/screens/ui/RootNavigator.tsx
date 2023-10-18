@@ -102,6 +102,8 @@ export default () => {
     },
     hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
     cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
+    hasActivityWithHiddenAllItems:
+      ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
   });
 
   useBackgroundTask(() => {
