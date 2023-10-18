@@ -102,10 +102,14 @@
     "about_title": "About MindLogger",
     "no_applets_yet": "You have no applets.",
     "noon": "Noon",
-    "midnight": "Midnight"
+    "midnight": "Midnight",
+    "refresh_error_header": "Refresh error",
+    "applets_not_refreshed": "The following applets were not refreshed:",
+    "common_refresh_error": "The applets list was not refreshed. Please try again."
   },
   "activity_list_component": {
-    "no_activities_yet": "No activities specified yet"
+    "no_activities_yet": "No activities specified yet",
+    "insufficient_data_error": "This applet was not refreshed. Please try to refresh again."
   },
   "applet_settings": {
     "applet_not_defined": "There isn't an applet defined.",

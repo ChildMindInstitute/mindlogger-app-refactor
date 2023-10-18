@@ -28,12 +28,10 @@ const ActivityGroupList: FC<Props> = props => {
       queryKey: getAppletCompletedEntitiesKey(props.appletId),
     }) > 0;
 
-  let { groups, isSuccess, isLoading, error } = useActivityGroups(
-    props.appletId,
-  );
+  let { groups, isSuccess, error } = useActivityGroups(props.appletId);
   const [shouldShowList, setShouldShowList] = useState(true);
 
-  const hasError = !!error;
+  const hasError = !isSuccess;
 
   useFocusEffect(
     useCallback(() => {
@@ -49,7 +47,7 @@ const ActivityGroupList: FC<Props> = props => {
     return null;
   }
 
-  if (isLoading || isLoadingCompletedEntities) {
+  if (isLoadingCompletedEntities) {
     return (
       <Box data-test="activity-group-loader" flex={1} justifyContent="center">
         <ActivityIndicator size="large" />
@@ -60,7 +58,11 @@ const ActivityGroupList: FC<Props> = props => {
   if (hasError) {
     return (
       <XStack data-test="activity-group-error" flex={1} jc="center" ai="center">
-        <LoadListError error="widget_error:error_text" />
+        <LoadListError
+          paddingHorizontal="10%"
+          textAlign="center"
+          error={!error ? 'widget_error:error_text' : error}
+        />
       </XStack>
     );
   }

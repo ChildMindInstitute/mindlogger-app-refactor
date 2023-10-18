@@ -103,7 +103,6 @@ export function useOnNotificationTap({
         .then(() => {
           NotificationModel.NotificationRefreshService.refresh(
             queryClient,
-
             storeProgress,
             LogTrigger.ScheduleUpdated,
           );

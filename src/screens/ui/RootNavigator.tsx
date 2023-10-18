@@ -178,7 +178,12 @@ export default () => {
               },
               headerRight: () => (
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('Settings')}
+                  onPress={() => {
+                    if (AppletModel.RefreshService.isBusy()) {
+                      return;
+                    }
+                    navigation.navigate('Settings');
+                  }}
                 >
                   <UserProfileIcon color={colors.tertiary} size={22} />
                 </TouchableOpacity>
