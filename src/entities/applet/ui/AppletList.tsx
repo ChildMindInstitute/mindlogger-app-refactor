@@ -1,4 +1,4 @@
-import { FC, memo, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 import {
   FlatList,
   ListRenderItem,
@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(AppletList);
+export default AppletList;
