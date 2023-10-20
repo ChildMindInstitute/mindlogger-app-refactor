@@ -69,6 +69,13 @@ const createNotificationRefreshService = (
       queryClient,
     )!;
 
+    if (!appletsResponse) {
+      logger.warn(
+        '[NotificationRefreshService.refreshInternal] Cannot to build notifications as appletsResponse is absent in the cache',
+      );
+      return result;
+    }
+
     const progress = convertProgress(storeProgress);
 
     const appletDtos: AppletDto[] = appletsResponse.result;
