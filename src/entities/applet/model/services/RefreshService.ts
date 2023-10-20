@@ -120,7 +120,7 @@ class RefreshService implements IRefreshService {
     } catch (error) {
       this.logger.log(
         `[RefreshService.collectActivityDetails]: Get activity "${activityId}" details caused error:\n\n` +
-          error!.toString(),
+          error,
       );
       return Promise.resolve(null);
     }
@@ -162,7 +162,7 @@ class RefreshService implements IRefreshService {
     } catch (error) {
       throw new Error(
         "[RefreshService.collectAppletInternals]: Error occurred during getting applet's details or events\n\n" +
-          error!.toString(),
+          error,
       );
     }
 
@@ -255,7 +255,7 @@ class RefreshService implements IRefreshService {
       } catch (error) {
         this.logger.warn(
           `[RefreshService.refreshInternal]: Error occurred during refresh the applet "${appletDto.displayName}|${appletDto.id}".\nInternal error:\n\n` +
-            error!.toString(),
+            error,
         );
         unsuccessfulApplets.push({
           appletId: appletDto.id,
@@ -313,7 +313,7 @@ class RefreshService implements IRefreshService {
     } catch (error) {
       this.logger.warn(
         '[RefreshService.refresh]: Error occurred:\nInternal error:\n\n' +
-          error!.toString(),
+          error,
       );
     } finally {
       RefreshService.mutex.release();
