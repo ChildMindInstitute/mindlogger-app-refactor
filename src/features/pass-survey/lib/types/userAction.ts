@@ -46,9 +46,19 @@ type UndoAction = {
   };
 };
 
+type SkipAction = {
+  type: 'SKIP';
+  payload: {
+    activityId: string;
+    activityItemId: string;
+    date: number;
+  };
+};
+
 export type UserAction =
   | SetAnswerAction
   | GoBackAction
   | GoNextAction
   | CompleteAction
-  | UndoAction;
+  | UndoAction
+  | SkipAction;

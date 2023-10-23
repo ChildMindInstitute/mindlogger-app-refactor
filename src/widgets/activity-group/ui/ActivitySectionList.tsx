@@ -1,4 +1,4 @@
-import { useMemo, PropsWithChildren, memo } from 'react';
+import { useMemo, PropsWithChildren } from 'react';
 import { SectionList, StyleSheet } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -147,4 +147,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(ActivitySectionList);
+export default ActivitySectionList;

@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(AppletCard);
+export default AppletCard;

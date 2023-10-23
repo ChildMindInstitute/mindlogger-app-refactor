@@ -1,7 +1,9 @@
 import NetInfo from '@react-native-community/netinfo';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import { httpService } from '@app/shared/api';
 
+import { wait } from './common';
 import { onNetworkUnavailable } from '../alerts';
 import { Logger } from '../services';
 
@@ -86,4 +88,36 @@ export const watchForConnectionLoss = (
       clearInterval(intervalId);
     },
   };
+};
+
+const RetryAttempts = 5;
+const RetryWaitInterval = 1000;
+
+export const callApiWithRetry = async <TResponse>(
+  apiFunction: () => Promise<AxiosResponse<TResponse>>,
+  retryErrorCode: number = 502,
+): Promise<AxiosResponse<TResponse>> => {
+  const isRetryErrorCode = (error: any) => {
+    return (error as AxiosError).response?.status === retryErrorCode;
+  };
+
+  for (let attempt = 0; attempt < RetryAttempts; attempt++) {
+    const isLast = attempt === RetryAttempts - 1;
+
+    try {
+      return await apiFunction();
+    } catch (error) {
+      Logger.warn(
+        '[callApiWithRetry]: Error occurred:\nInternal error:\n\n' + error,
+      );
+      if (!isRetryErrorCode(error) || isLast) {
+        throw error;
+      }
+    }
+    await wait(RetryWaitInterval);
+
+    Logger.info('[callApiWithRetry]: Retry api call');
+  }
+
+  throw new Error('[callApiWithRetry]: Number of attempts exceed');
 };

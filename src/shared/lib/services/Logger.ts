@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { Dirs, FileSystem } from 'react-native-file-access';
 import { FileLogger, LogLevel } from 'react-native-file-logger';
 
@@ -31,6 +32,10 @@ class Logger implements ILogger {
     this.mutex = Mutex();
     this.abortController = new AbortController();
     this.consoleLogLevel = LogLevel.Debug; // for developers
+  }
+
+  private withTime(message: string) {
+    return format(new Date(), 'HH:mm:ss') + ': ' + message;
   }
 
   private get isAborted(): boolean {
@@ -203,7 +208,7 @@ class Logger implements ILogger {
 
   public log(message: string) {
     if (this.consoleLogLevel <= LogLevel.Debug) {
-      console.log(message);
+      console.log(this.withTime(message));
     }
 
     callWithMutex(this.mutex, () => FileLogger.debug(message));
@@ -211,7 +216,7 @@ class Logger implements ILogger {
 
   public info(message: string) {
     if (this.consoleLogLevel <= LogLevel.Info) {
-      console.info(message);
+      console.info(this.withTime(message));
     }
 
     callWithMutex(this.mutex, () => FileLogger.info(message));
@@ -219,7 +224,7 @@ class Logger implements ILogger {
 
   public warn(message: string) {
     if (this.consoleLogLevel <= LogLevel.Warning) {
-      console.warn(message);
+      console.warn(this.withTime(message));
     }
 
     callWithMutex(this.mutex, () => FileLogger.warn(message));
@@ -227,7 +232,7 @@ class Logger implements ILogger {
 
   public error(message: string) {
     if (this.consoleLogLevel <= LogLevel.Error) {
-      console.error(message);
+      console.error(this.withTime(message));
     }
 
     callWithMutex(this.mutex, () => FileLogger.error(message));
