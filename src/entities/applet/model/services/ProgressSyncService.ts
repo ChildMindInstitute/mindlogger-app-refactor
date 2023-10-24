@@ -53,7 +53,9 @@ class ProgressSyncService {
     const serverEndAt = completedEntity.endAt;
 
     const entityEventMissing =
-      inProgressEntities?.[completedEntity.entityId]?.[completedEntity.eventId];
+      !inProgressEntities?.[completedEntity.entityId]?.[
+        completedEntity.eventId
+      ];
     const isFlow = appletDetails.activityFlows.find(
       flow => flow.id === completedEntity.entityId,
     );
