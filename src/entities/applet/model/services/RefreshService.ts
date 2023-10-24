@@ -59,16 +59,27 @@ interface IRefreshService {
   refresh(): void;
 }
 
+interface IAppletProgressSyncService {
+  sync(appletDto: AppletDto): Promise<void>;
+}
+
 class RefreshService implements IRefreshService {
   private queryClient: QueryClient;
   private showWrongUrlLogs: boolean;
   private logger: ILogger;
+  private appletProgressSyncService: IAppletProgressSyncService;
+
   private static mutex: IMutex = Mutex();
 
-  constructor(queryClient: QueryClient, logger: ILogger) {
+  constructor(
+    queryClient: QueryClient,
+    logger: ILogger,
+    appletProgressSyncService: IAppletProgressSyncService,
+  ) {
     this.queryClient = queryClient;
     this.showWrongUrlLogs = false;
     this.logger = logger;
+    this.appletProgressSyncService = appletProgressSyncService;
   }
 
   private async resetAllQueries() {
@@ -248,6 +259,8 @@ class RefreshService implements IRefreshService {
           await this.collectAppletInternals(appletDto);
 
         this.updateAppletCaches(appletInternalDtos);
+
+        await this.appletProgressSyncService.sync(appletDto);
 
         this.logger.log(
           `[RefreshService.refreshInternal]: Applet "${appletDto.displayName}|${appletDto.id}" refreshed successfully`,
