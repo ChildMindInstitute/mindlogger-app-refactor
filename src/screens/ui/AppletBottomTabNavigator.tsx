@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo } from 'react';
+import { useLayoutEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
@@ -7,18 +7,13 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { getMonthAgoDate } from '@app/shared/lib';
 import {
   ActivityIndicator,
   Box,
   Center,
   ImageBackground,
 } from '@app/shared/ui';
-import {
-  AppletModel,
-  useAppletDetailsQuery,
-  useCompletedEntitiesQuery,
-} from '@entities/applet';
+import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 
 import {
   AppletDetailsParamList,
@@ -41,14 +36,6 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
   });
 
   const appletTheme = applet?.theme;
-
-  const appletVersions = useMemo(
-    () =>
-      applet ? [{ appletId: applet!.id, version: applet!.version }] : null,
-    [applet],
-  );
-
-  useCompletedEntitiesQuery(getMonthAgoDate(), appletVersions);
 
   useLayoutEffect(() => {
     if (title) {
