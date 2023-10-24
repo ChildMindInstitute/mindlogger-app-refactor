@@ -81,6 +81,7 @@ function ActivityStepper({
     canMoveNext,
     canMoveBack,
     canReset,
+    canSkip,
 
     showWatermark,
     showTopNavigation,
@@ -113,14 +114,14 @@ function ActivityStepper({
     restartIdleTimer();
     setCurrentStep(nextStep);
 
-    if (!isForced) {
-      trackUserAction(userActionCreator.next());
-    } else {
-      const currentStepAnswer = activityStorageRecord?.answers[currentStep];
+    if (isForced) {
+      return;
+    }
 
-      if (!currentStepAnswer) {
-        trackUserAction(userActionCreator.skip());
-      }
+    if (canSkip) {
+      trackUserAction(userActionCreator.skip());
+    } else {
+      trackUserAction(userActionCreator.next());
     }
   };
 
