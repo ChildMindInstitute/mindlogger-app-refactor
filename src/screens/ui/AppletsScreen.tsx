@@ -1,19 +1,14 @@
 import { FC, useCallback, useLayoutEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
-import { useIsMutating, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
 import { UploadRetryBanner } from '@app/entities/activity';
 import { NotificationModel } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
-import {
-  Logger,
-  getAllEventsKey,
-  getRefreshingKey,
-  useAppSelector,
-} from '@app/shared/lib';
+import { Logger, useAppSelector } from '@app/shared/lib';
 import { Applet, AppletList, AppletModel } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
 import { AppletsRefresh, AppletsRefreshModel } from '@features/applets-refresh';
@@ -41,11 +36,6 @@ const AppletsScreen: FC = () => {
 
   const queryClient = useQueryClient();
 
-  const eventsDownloaded =
-    queryClient.getQueriesData(getAllEventsKey()).length > 0;
-
-  const isRefreshing = useIsMutating(getRefreshingKey()) > 0;
-
   const storeProgress: StoreProgress = useAppSelector(
     AppletModel.selectors.selectInProgressApplets,
   );
@@ -64,19 +54,6 @@ const AppletsScreen: FC = () => {
     );
     Logger.send();
   });
-
-  AppletModel.useEntitiesProgressSync(
-    {
-      onSuccess: () => {
-        NotificationModel.NotificationRefreshService.refresh(
-          queryClient,
-          storeProgress,
-          LogTrigger.EntitiesSyncedUp,
-        );
-      },
-    },
-    eventsDownloaded && !isRefreshing,
-  );
 
   return (
     <Box bg="$secondary" flex={1}>

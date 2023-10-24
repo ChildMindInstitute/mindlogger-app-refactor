@@ -79,7 +79,7 @@ const AppletList: FC<Props> = ({
       <FlatList
         contentContainerStyle={styles.flatList}
         data={applets}
-        keyExtractor={item => item.id}
+        keyExtractor={getId}
         renderItem={renderItem}
         ItemSeparatorComponent={Separator}
         ListFooterComponent={ListFooterComponent}
@@ -93,6 +93,12 @@ const AppletList: FC<Props> = ({
 };
 
 const Separator = () => <YStack my={9} />;
+
+type IdentifiedObject = {
+  id: string;
+};
+
+const getId = (item: IdentifiedObject) => item.id;
 
 const styles = StyleSheet.create({
   flatList: {
