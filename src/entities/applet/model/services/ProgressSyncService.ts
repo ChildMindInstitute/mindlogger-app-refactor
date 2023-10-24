@@ -1,4 +1,4 @@
-import { ActivityPipelineType } from '@app/abstract/lib';
+import { ActivityPipelineType, StoreEntitiesProgress } from '@app/abstract/lib';
 import { AppletDetailsDto, EventsService } from '@app/shared/api';
 import { getMonthAgoDate, ILogger } from '@app/shared/lib';
 
@@ -18,7 +18,7 @@ class ProgressSyncService {
     this.state = state;
   }
 
-  private getProgressState() {
+  private getProgressState(): StoreEntitiesProgress {
     return selectInProgressEntities(this.state);
   }
 
@@ -26,20 +26,27 @@ class ProgressSyncService {
     const appletDetails = mapAppletDetailsFromDto(appletDto);
     const fromDate = getMonthAgoDate();
 
-    const response = await EventsService.getCompletedEntities({
-      fromDate,
-      appletId: appletDetails.id,
-      version: appletDetails.version,
-    });
+    try {
+      const response = await EventsService.getCompletedEntities({
+        fromDate,
+        appletId: appletDetails.id,
+        version: appletDetails.version,
+      });
 
-    const completedEntities = [
-      ...response.data.result.activities.map(mapCompletedEntityFromDto),
-      ...response.data.result.activityFlows.map(mapCompletedEntityFromDto),
-    ];
+      const completedEntities: CompletedEntity[] = [
+        ...response.data.result.activities.map(mapCompletedEntityFromDto),
+        ...response.data.result.activityFlows.map(mapCompletedEntityFromDto),
+      ];
 
-    completedEntities.map(completedEntity =>
-      this.syncAppletEntityWithServer(appletDetails, completedEntity),
-    );
+      completedEntities.map(completedEntity =>
+        this.syncAppletEntityWithServer(appletDetails, completedEntity),
+      );
+    } catch (error) {
+      throw new Error(
+        '[ProgressSyncService]: Error occurred during getting progress entities from api:\n\n' +
+          error,
+      );
+    }
   }
 
   private syncAppletEntityWithServer(
@@ -47,15 +54,12 @@ class ProgressSyncService {
     completedEntity: CompletedEntity,
   ) {
     const inProgressEntities = this.getProgressState();
-    const localEndAt =
-      inProgressEntities?.[completedEntity.entityId]?.[completedEntity.eventId]
-        .endAt;
+    const progressEntity =
+      inProgressEntities?.[completedEntity.entityId]?.[completedEntity.eventId];
+    const localEndAt = progressEntity.endAt;
     const serverEndAt = completedEntity.endAt;
 
-    const entityEventMissing =
-      !inProgressEntities?.[completedEntity.entityId]?.[
-        completedEntity.eventId
-      ];
+    const entityEventMissing = !inProgressEntities;
     const isFlow = appletDetails.activityFlows.find(
       flow => flow.id === completedEntity.entityId,
     );
@@ -75,13 +79,13 @@ class ProgressSyncService {
       );
 
       this.logger.log(
-        `[RefreshService.refresh]: Added missing entity event [entityId: ${completedEntity.entityId}, eventId: ${completedEntity.eventId}]`,
+        `[ProgressSyncService.syncAppletEntityWithServer]: Added missing entity event [entityId: ${completedEntity.entityId}, eventId: ${completedEntity.eventId}]`,
       );
     }
 
-    const completedLaterThanFromServer = localEndAt && localEndAt < serverEndAt;
+    const completedLaterThanOnServer = localEndAt && localEndAt < serverEndAt;
 
-    if (completedLaterThanFromServer) {
+    if (completedLaterThanOnServer) {
       this.dispatch(
         actions.completedEntityUpdated({
           endAt: serverEndAt,
@@ -92,13 +96,22 @@ class ProgressSyncService {
       );
 
       this.logger.log(
-        `[RefreshService.refresh]: Updated entity event [entityId: ${completedEntity.entityId}, eventId: ${completedEntity.eventId}] with data from the server`,
+        `[ProgressSyncService.syncAppletEntityWithServer]: Updated entity event [entityId: ${completedEntity.entityId}, eventId: ${completedEntity.eventId}] with data from the server`,
       );
     }
   }
 
   public sync(appletDto: AppletDetailsDto) {
-    return this.syncWithAppletDto(appletDto);
+    try {
+      return this.syncWithAppletDto(appletDto);
+    } catch (error) {
+      this.logger.warn(
+        '[ProgressSyncService.sync]: Error occurred: \nInternal Error: \n\n' +
+          error,
+      );
+
+      throw error;
+    }
   }
 }
 
