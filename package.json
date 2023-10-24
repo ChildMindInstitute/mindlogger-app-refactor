@@ -9,6 +9,7 @@
     "test": "jest --noStackTrace",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "pods": "cd ios && pod install",
+    "pods-release": "NO_FLIPPER=1 bundle exec pod install --project-directory=ios",
     "prepare": "husky install",
     "postinstall": "react-native setup-ios-permissions",
     "start:reset-cache": "watchman watch-del-all && react-native start --reset-cache",
