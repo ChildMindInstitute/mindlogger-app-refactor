@@ -260,7 +260,9 @@ class RefreshService implements IRefreshService {
 
         this.updateAppletCaches(appletInternalDtos);
 
-        await this.appletProgressSyncService.sync(appletDto);
+        await this.appletProgressSyncService.sync(
+          appletInternalDtos.appletDetailsResponse.data.result,
+        );
 
         this.logger.log(
           `[RefreshService.refreshInternal]: Applet "${appletDto.displayName}|${appletDto.id}" refreshed successfully`,
