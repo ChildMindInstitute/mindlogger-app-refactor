@@ -73,6 +73,7 @@ const SettingsScreen: FC = () => {
             title={t('settings:upload_logs')}
           />
 
+          <DeleteAccountRowButton />
           <LogoutRowButton />
         </YStack>
       </Box>
