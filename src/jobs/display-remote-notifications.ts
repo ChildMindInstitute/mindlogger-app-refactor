@@ -5,7 +5,7 @@ import {
   RemoteNotification,
   RemoteNotificationPayload,
 } from '@app/entities/notification';
-import { createJob } from '@shared/lib';
+import { createJob, Logger } from '@shared/lib';
 
 async function onMessageReceived(notification: RemoteNotification) {
   if (notification.data) {
@@ -20,10 +20,10 @@ async function onMessageReceived(notification: RemoteNotification) {
         data: payload.data,
       });
     } catch (error) {
-      console.log(
+      Logger.log(
         '[onMessageReceived]: Failed to render a notification: ' + notification,
-        'Error: ' + error,
       );
+      Logger.log('[onMessageReceived]: Error: ' + error);
     }
   }
 }

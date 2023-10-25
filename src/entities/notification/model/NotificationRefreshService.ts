@@ -173,7 +173,14 @@ const createNotificationRefreshService = (
     storeProgress: StoreProgress,
     logTrigger: LogTrigger,
   ) => {
+    logger.info(
+      '[NotificationRefreshService.refresh]: Start notifications refresh process',
+    );
+
     if (NotificationManager.mutex.isBusy()) {
+      logger.info(
+        '[NotificationRefreshService.refresh]: Break as mutex set to busy',
+      );
       return;
     }
     if (AppletModel.RefreshService.isBusy()) {
@@ -195,7 +202,7 @@ const createNotificationRefreshService = (
       });
 
       logger.info(
-        '[NotificationRefreshService.refresh]: Notifications rescheduled',
+        '[NotificationRefreshService.refresh]: Completed. Notifications rescheduled',
       );
     } catch (error) {
       logger.log(

@@ -19,6 +19,7 @@ const storage = createAsyncStorage('redux-storage');
 
 export const persistConfig = {
   key: 'root',
+  throttle: 1000,
   storage: storage,
 };
 

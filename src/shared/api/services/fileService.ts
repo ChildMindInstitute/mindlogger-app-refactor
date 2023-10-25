@@ -1,4 +1,8 @@
-import { IS_ANDROID, watchForConnectionLoss } from '@shared/lib';
+import {
+  IS_ANDROID,
+  getStringHashCode,
+  watchForConnectionLoss,
+} from '@shared/lib';
 import { SystemRecord } from '@shared/lib/records';
 
 import httpService from './httpService';
@@ -105,8 +109,12 @@ function fileService() {
 
         const deviceId = SystemRecord.getDeviceId()!;
 
+        const hashedDeviceId: string = !deviceId
+          ? 'undefined'
+          : getStringHashCode(deviceId).toString();
+
         const response = await httpService.post<FileUploadResponse>(
-          `/file/log-file/${deviceId}`,
+          `/file/log-file/${hashedDeviceId}`,
           data,
           {
             headers: { 'Content-Type': 'multipart/form-data' },
