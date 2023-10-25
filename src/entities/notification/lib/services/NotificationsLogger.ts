@@ -5,7 +5,12 @@ import {
   NotificationLogsRequest,
   NotificationService,
 } from '@app/shared/api';
-import { isAppOnline, Logger } from '@app/shared/lib';
+import {
+  SystemRecord,
+  getStringHashCode,
+  isAppOnline,
+  Logger,
+} from '@app/shared/lib';
 
 import NotificationQueue from './NotificationQueue';
 import NotificationScheduler from './NotificationScheduler';
@@ -40,10 +45,14 @@ function NotificationsLogger() {
 
     const scheduledNotifications = scheduled.length === 0 ? [{}] : scheduled;
 
+    const deviceId = SystemRecord.getDeviceId();
+
     const request: NotificationLogsRequest = {
       actionType: `${payload.trigger} -> ${payload.action}`,
       userId: email!,
-      deviceId: '1',
+      deviceId: !deviceId
+        ? 'undefined'
+        : getStringHashCode(deviceId).toString(),
       notificationDescriptions: JSON.stringify(
         notificationDescriptions,
         null,

@@ -96,3 +96,14 @@ export const callWithMutex = (mutex: IMutex, func: () => void) => {
 export const getTwoDigits = (val: number) => {
   return val.toString().padStart(2, '0');
 };
+
+export const getStringHashCode = (inputString: string) => {
+  if (!inputString) {
+    throw new Error('[getStringHashCode] inputString is not defined');
+  }
+  let result = 0;
+  for (let i = 0; i < inputString.length; i++) {
+    result = Math.imul(31, result) + inputString.charCodeAt(i);
+  }
+  return Math.abs(result);
+};

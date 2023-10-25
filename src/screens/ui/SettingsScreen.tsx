@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { StatusBar } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -7,7 +7,12 @@ import { useTranslation } from 'react-i18next';
 import { UploadRetryBanner } from '@app/entities/activity';
 import { IdentityModel } from '@app/entities/identity';
 import { LogoutRowButton } from '@features/logout';
-import { colors, useAppSelector } from '@shared/lib';
+import {
+  SystemRecord,
+  colors,
+  getStringHashCode,
+  useAppSelector,
+} from '@shared/lib';
 import { YStack, Box, RowButton, UserIcon, Text } from '@shared/ui';
 
 const SettingsScreen: FC = () => {
@@ -29,6 +34,15 @@ const SettingsScreen: FC = () => {
     navigate('ApplicationLogs');
   };
 
+  const hashedDeviceId: string = useMemo(() => {
+    const deviceId = SystemRecord.getDeviceId()!;
+
+    const hashed: string = !deviceId
+      ? 'undefined'
+      : getStringHashCode(deviceId).toString();
+    return hashed;
+  }, []);
+
   return (
     <Box flex={1} bg="$secondary">
       <StatusBar />
@@ -40,6 +54,7 @@ const SettingsScreen: FC = () => {
             <UserIcon color={colors.darkGrey} size={45} />
             <Text>{userName}</Text>
             <Text>{userEmail}</Text>
+            <Text>{`${t('about:device_id')}: ${hashedDeviceId}`}</Text>
           </YStack>
 
           <RowButton
