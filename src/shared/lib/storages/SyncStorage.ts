@@ -10,6 +10,9 @@ class SyncStorage {
   }
 
   setItem(key: string, value: string): void {
+    // We have to remove item before setting a new value in MMKV
+    // https://github.com/mrousavy/react-native-mmkv/issues/440
+    this.storage.delete(key);
     this.storage.set(key, value);
   }
 
