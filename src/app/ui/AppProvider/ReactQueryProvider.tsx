@@ -23,7 +23,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const asyncPersist = createSyncStoragePersister({
+const syncPersist = createSyncStoragePersister({
   key: 'OFFLINE_CACHE',
   storage,
   throttleTime: 1000,
@@ -71,7 +71,7 @@ const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
       client={queryClient}
       persistOptions={{
         maxAge: Infinity,
-        persister: asyncPersist,
+        persister: syncPersist,
         buster: 'kill-cache',
       }}
       onSuccess={onCacheRestored}

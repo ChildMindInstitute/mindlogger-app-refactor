@@ -121,3 +121,15 @@ export const callApiWithRetry = async <TResponse>(
 
   throw new Error('[callApiWithRetry]: Number of attempts exceed');
 };
+
+export const withDataExtraction = <TResponse>(
+  apiFunction: () => Promise<AxiosResponse<TResponse>>,
+) => {
+  return () => {
+    return apiFunction().then(response => {
+      return {
+        data: response.data,
+      } as AxiosResponse<TResponse>;
+    });
+  };
+};
