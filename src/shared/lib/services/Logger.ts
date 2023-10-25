@@ -6,7 +6,13 @@ import { FileService } from '@shared/api';
 
 import { IS_ANDROID, IS_IOS } from '../constants';
 import { ILogger } from '../types';
-import { IMutex, Mutex, callWithMutex, isAppOnline } from '../utils';
+import {
+  IMutex,
+  Mutex,
+  callWithMutex,
+  callWithMutexAsync,
+  isAppOnline,
+} from '../utils';
 
 type NamePath = {
   fileName: string;
@@ -146,10 +152,13 @@ class Logger implements ILogger {
 
       const isCurrentLogInAndroid = this.isNamedAsLatest(checkRecord.fileName);
 
+      const isFileEmpty = file.size === 0;
+
       const shouldUpload =
-        !isExist ||
-        (isExist && IS_ANDROID && isCurrentLogInAndroid) ||
-        (isExist && IS_IOS && !isSizeTheSame);
+        !isFileEmpty &&
+        (!isExist ||
+          (isExist && IS_ANDROID && isCurrentLogInAndroid) ||
+          (isExist && IS_IOS && !isSizeTheSame));
 
       if (!shouldUpload) {
         continue;
@@ -197,7 +206,7 @@ class Logger implements ILogger {
 
   public async clearAllLogFiles() {
     try {
-      await callWithMutex(this.mutex, FileLogger.deleteLogFiles);
+      await callWithMutexAsync(this.mutex, FileLogger.deleteLogFiles);
     } catch (error) {
       console.warn(
         'Logger.clearAllLogFiles]: Error occurred\n\n',

@@ -83,9 +83,11 @@ function NotificationsLogger() {
 
     try {
       await logInternal(payload);
-    } catch {
+      console.info('[NotificationsLogger.log]: Logs sent to server');
+    } catch (error) {
       console.warn(
-        '[NotificationsLogger.log] Error occurred while sending notification logs',
+        '[NotificationsLogger.log] Error occurred while sending notification logs:\n\n' +
+          error,
       );
     }
   };

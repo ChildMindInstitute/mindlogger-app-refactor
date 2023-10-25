@@ -66,9 +66,9 @@ export const Mutex = (): IMutex => {
   };
 };
 
-export const callWithMutex = async (
+export const callWithMutexAsync = async (
   mutex: IMutex,
-  func: () => void | Promise<any>,
+  func: () => Promise<any>,
 ) => {
   if (mutex.isBusy()) {
     return;
@@ -76,6 +76,18 @@ export const callWithMutex = async (
   try {
     mutex.setBusy();
     await func();
+  } finally {
+    mutex.release();
+  }
+};
+
+export const callWithMutex = (mutex: IMutex, func: () => void) => {
+  if (mutex.isBusy()) {
+    return;
+  }
+  try {
+    mutex.setBusy();
+    func();
   } finally {
     mutex.release();
   }
