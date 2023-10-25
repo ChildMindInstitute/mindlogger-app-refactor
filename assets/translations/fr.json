@@ -63,7 +63,8 @@
     "applets_title": "En savoir plus sur chacune de vos applets et sur la plateforme MindLogger.",
     "data_title": "Pour en savoir plus sur la plate-forme de collecte de données MindLogger, cliquez sur 'À propos\nde MindLogger' ci-dessous.",
     "about_mindLogger": "À propos de MindLogger",
-    "icons_title": "Les icônes NounProject ont été créées par Alina Oleynik (enquête), Beth Bolton (livre), et\nShakeel (graphique)"
+    "icons_title": "Les icônes NounProject ont été créées par Alina Oleynik (enquête), Beth Bolton (livre), et\nShakeel (graphique)",
+    "device_id": "Reference de l'appareil"
   },
   "about_app": {
     "title_with_version": "Qu'est-ce que MindLogger? v.{{version}}",

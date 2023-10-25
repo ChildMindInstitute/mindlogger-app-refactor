@@ -15,3 +15,4 @@ export * from './permissions';
 export * from './timers';
 export * from './encryption';
 export * from './tcp';
+export * from './records';
