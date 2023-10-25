@@ -5,7 +5,7 @@ import {
   NotificationLogsRequest,
   NotificationService,
 } from '@app/shared/api';
-import { isAppOnline } from '@app/shared/lib';
+import { isAppOnline, Logger } from '@app/shared/lib';
 
 import NotificationQueue from './NotificationQueue';
 import NotificationScheduler from './NotificationScheduler';
@@ -75,7 +75,7 @@ function NotificationsLogger() {
   const log = async (payload: LogPayload) => {
     const isOnline = await isAppOnline();
     if (!isOnline) {
-      console.info(
+      Logger.info(
         '[NotificationsLogger.log]: Logs will not be added due to offline',
       );
       return;
@@ -85,7 +85,7 @@ function NotificationsLogger() {
       await logInternal(payload);
       console.info('[NotificationsLogger.log]: Logs sent to server');
     } catch (error) {
-      console.warn(
+      Logger.warn(
         '[NotificationsLogger.log] Error occurred while sending notification logs:\n\n' +
           error,
       );
