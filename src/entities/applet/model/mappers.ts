@@ -248,8 +248,6 @@ function mapActivityResponsesByItem(
       return getItemResponses(answer.answer, answer.createdAt, answer.type);
     });
 
-  console.log('----', responses);
-
   const itemResponses = {
     name: item.name,
     type: type,

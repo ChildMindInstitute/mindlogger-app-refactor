@@ -14,7 +14,6 @@ function BackgroundWorkerBuilder() {
     const { intervalInMinutes } = options;
 
     function onTimeout(taskId: string) {
-      console.log('[BackgroundFetch] Failed to start background task');
       BackgroundFetch.finish(taskId);
     }
 
@@ -27,9 +26,7 @@ function BackgroundWorkerBuilder() {
         enableHeadless: true,
       },
       async taskId => {
-        console.log('[BackgroundWorker] Background job started running');
         await Promise.resolve(callback());
-        console.log('[BackgroundWorker] Background job finished');
 
         BackgroundFetch.finish(taskId);
       },
@@ -39,8 +36,6 @@ function BackgroundWorkerBuilder() {
 
   function setAndroidHeadlessTask(callback: () => void) {
     async function headlessTask(event: HeadlessEvent) {
-      console.log('[BackgroundWorker] Background headless job started running');
-
       const { taskId, timeout } = event;
 
       if (timeout) {
@@ -50,7 +45,6 @@ function BackgroundWorkerBuilder() {
 
       await Promise.resolve(callback());
 
-      console.log('[BackgroundWorker] Background headless job finished');
       BackgroundFetch.finish(taskId);
     }
 
