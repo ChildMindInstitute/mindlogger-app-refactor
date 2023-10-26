@@ -29,6 +29,10 @@ function useUserActionCreator({ activityId, activityState }: Args) {
       type: 'DONE',
       payload: getDefaultUserEventPayload(),
     }),
+    skip: () => ({
+      type: 'SKIP',
+      payload: getDefaultUserEventPayload(),
+    }),
     setAnswer: (answer: PipelineItemAnswerBase) => {
       return {
         type: 'SET_ANSWER',

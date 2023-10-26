@@ -14,6 +14,7 @@ const YoutubeVideo: FC<Props> = ({ src }) => {
 
   return (
     <WebView
+      data-test="youtube-video"
       width="100%"
       height={250}
       androidLayerType="hardware"

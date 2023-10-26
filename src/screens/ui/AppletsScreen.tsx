@@ -1,24 +1,26 @@
-import { FC, useLayoutEffect } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { FC, useCallback, useLayoutEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
-import { useIsMutating, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
 import { UploadRetryBanner } from '@app/entities/activity';
 import { NotificationModel } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
-import {
-  Logger,
-  getAllEventsKey,
-  getRefreshingKey,
-  useAppSelector,
-} from '@app/shared/lib';
-import { AppletList, AppletModel } from '@entities/applet';
+import { Logger, useAppSelector } from '@app/shared/lib';
+import { Applet, AppletList, AppletModel } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
 import { AppletsRefresh, AppletsRefreshModel } from '@features/applets-refresh';
-import { Box, ImageBackground, ScrollView, Text, XStack } from '@shared/ui';
+import {
+  Box,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  XStack,
+} from '@shared/ui';
+
+type SelectedApplet = Pick<Applet, 'id' | 'displayName'>;
 
 const AppletsScreen: FC = () => {
   const { t } = useTranslation();
@@ -34,13 +36,14 @@ const AppletsScreen: FC = () => {
 
   const queryClient = useQueryClient();
 
-  const eventsDownloaded =
-    queryClient.getQueriesData(getAllEventsKey()).length > 0;
-
-  const isRefreshing = useIsMutating(getRefreshingKey()) > 0;
-
   const storeProgress: StoreProgress = useAppSelector(
     AppletModel.selectors.selectInProgressApplets,
+  );
+
+  const navigateAppletDetails: (applet: SelectedApplet) => void = useCallback(
+    ({ id, displayName }) =>
+      navigate('AppletDetails', { appletId: id, title: displayName }),
+    [navigate],
   );
 
   AppletsRefreshModel.useAutomaticRefreshOnMount(async () => {
@@ -52,56 +55,38 @@ const AppletsScreen: FC = () => {
     Logger.send();
   });
 
-  AppletModel.useEntitiesProgressSync(
-    {
-      onSuccess: () => {
-        NotificationModel.NotificationRefreshService.refresh(
-          queryClient,
-          storeProgress,
-          LogTrigger.EntitiesSyncedUp,
-        );
-      },
-    },
-    eventsDownloaded && !isRefreshing,
-  );
-
   return (
     <Box bg="$secondary" flex={1}>
       <UploadRetryBanner />
 
       <ImageBackground>
-        <ScrollView
-          contentContainerStyle={styles.scrollView}
-          refreshControl={<AppletsRefresh />}
-        >
-          <Box flex={1} pt={12} pb={34}>
-            <AppletList
-              flex={1}
-              px={14}
-              mb={28}
-              onAppletPress={({ id, displayName }) =>
-                navigate('AppletDetails', { appletId: id, title: displayName })
-              }
-            />
-
-            <XStack jc="center">
-              <TouchableOpacity onPress={() => navigate('AboutApp')}>
-                <Text color="$primary" fontSize={16} fontWeight="700">
-                  {t('applet_list_component:about_title')}
-                </Text>
-              </TouchableOpacity>
-            </XStack>
-          </Box>
-        </ScrollView>
+        <Box flex={1} pt={12} pb={34}>
+          <AppletList
+            flex={1}
+            px={14}
+            refreshControl={<AppletsRefresh />}
+            ListFooterComponent={<AboutAppLink />}
+            onAppletPress={navigateAppletDetails}
+          />
+        </Box>
       </ImageBackground>
     </Box>
   );
 };
 
-const styles = StyleSheet.create({
-  scrollView: {
-    flexGrow: 1,
-  },
-});
+const AboutAppLink = () => {
+  const { t } = useTranslation();
+  const { navigate } = useNavigation();
+
+  return (
+    <XStack jc="center">
+      <TouchableOpacity onPress={() => navigate('AboutApp')}>
+        <Text color="$primary" fontSize={16} fontWeight="700">
+          {t('applet_list_component:about_title')}
+        </Text>
+      </TouchableOpacity>
+    </XStack>
+  );
+};
 
 export default AppletsScreen;

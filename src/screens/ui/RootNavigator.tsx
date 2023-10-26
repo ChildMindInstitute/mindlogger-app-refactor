@@ -48,6 +48,7 @@ import {
   SettingsScreen,
   AppletBottomTabNavigator,
   InProgressActivityScreen,
+  ApplicationLogsScreen,
 } from '../ui';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -101,6 +102,8 @@ export default () => {
     },
     hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
     cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
+    hasActivityWithHiddenAllItems:
+      ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
   });
 
   useBackgroundTask(() => {
@@ -177,7 +180,12 @@ export default () => {
               },
               headerRight: () => (
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('Settings')}
+                  onPress={() => {
+                    if (AppletModel.RefreshService.isBusy()) {
+                      return;
+                    }
+                    navigation.navigate('Settings');
+                  }}
                 >
                   <UserProfileIcon color={colors.tertiary} size={22} />
                 </TouchableOpacity>
@@ -201,6 +209,14 @@ export default () => {
               title: t('settings:change_pass'),
             }}
             component={ChangePasswordScreen}
+          />
+
+          <Stack.Screen
+            name="ApplicationLogs"
+            options={{
+              title: t('settings:upload_logs'),
+            }}
+            component={ApplicationLogsScreen}
           />
 
           <Stack.Screen

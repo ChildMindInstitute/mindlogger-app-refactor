@@ -1,5 +1,9 @@
 import { NotificationTriggerType } from '@app/abstract/lib';
-import { HourMinute } from '@app/shared/lib';
+import {
+  HourMinute,
+  callApiWithRetry,
+  withDataExtraction,
+} from '@app/shared/lib';
 
 import httpService from './httpService';
 import { SuccessfulResponse } from '../types';
@@ -77,20 +81,24 @@ export type AppletCompletedEntitiesResponse = SuccessfulResponse<{
 function eventsService() {
   return {
     getEvents(request: AppletEventsRequest) {
-      return httpService.get<AppletEventsResponse>(
-        `/users/me/events/${request.appletId}`,
-      );
+      const apiCall = () =>
+        httpService.get<AppletEventsResponse>(
+          `/users/me/events/${request.appletId}`,
+        );
+      return callApiWithRetry(withDataExtraction(apiCall));
     },
     getCompletedEntities(request: AppletCompletedEntitiesRequest) {
-      return httpService.get<AppletCompletedEntitiesResponse>(
-        `answers/applet/${request.appletId}/completions`,
-        {
-          params: {
-            fromDate: request.fromDate,
-            version: request.version,
+      const apiCall = () =>
+        httpService.get<AppletCompletedEntitiesResponse>(
+          `answers/applet/${request.appletId}/completions`,
+          {
+            params: {
+              fromDate: request.fromDate,
+              version: request.version,
+            },
           },
-        },
-      );
+        );
+      return callApiWithRetry(withDataExtraction(apiCall));
     },
   };
 }

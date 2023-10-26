@@ -109,6 +109,7 @@ export type StabilityTrackerAnswerDto = {
   value: StabilityTrackerAnswerValue[];
   maxLambda: number;
   phaseType: 'challenge-phase' | 'focus-phase';
+  text?: string;
 };
 
 export type AnswerValueDto =
@@ -127,16 +128,17 @@ export type AnswerValueDto =
   | TimeAnswerDto
   | DateAnswerDto
   | GeolocationAnswerDto
-  | StabilityTrackerAnswerDto
   | FlankerAnswerDto
   | DrawerAnswerDto
   | AbTestAnswerDto
   | null;
 
-export type ObjectAnswerDto = {
-  value?: AnswerValueDto;
-  text?: string;
-};
+export type ObjectAnswerDto =
+  | {
+      value?: AnswerValueDto;
+      text?: string;
+    }
+  | StabilityTrackerAnswerDto;
 
 export type AnswerDto = TextAnswerDto | ObjectAnswerDto | null;
 
@@ -162,7 +164,7 @@ export type EncryptedAnswerDto = {
 };
 
 export type UserActionDto = {
-  type: 'SET_ANSWER' | 'PREV' | 'NEXT' | 'DONE' | 'UNDO';
+  type: 'SET_ANSWER' | 'PREV' | 'NEXT' | 'DONE' | 'UNDO' | 'SKIP';
   screen: string;
   time: number;
   response?: AnswerDto;

@@ -81,6 +81,7 @@ function ActivityStepper({
     canMoveNext,
     canMoveBack,
     canReset,
+    canSkip,
 
     showWatermark,
     showTopNavigation,
@@ -113,7 +114,13 @@ function ActivityStepper({
     restartIdleTimer();
     setCurrentStep(nextStep);
 
-    if (!isForced) {
+    if (isForced) {
+      return;
+    }
+
+    if (canSkip) {
+      trackUserAction(userActionCreator.skip());
+    } else {
       trackUserAction(userActionCreator.next());
     }
   };

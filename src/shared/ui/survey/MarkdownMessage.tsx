@@ -11,6 +11,7 @@ const MarkdownMessage: FC<Props> = ({ content, ...styledProps }) => {
   return (
     <Box {...styledProps}>
       <MarkdownView
+        data-test="markdown"
         content={content}
         rules={markdownRules}
         markdownStyle={activityMarkDownStyles}

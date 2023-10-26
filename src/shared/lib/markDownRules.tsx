@@ -487,4 +487,8 @@ const parseNodeContent = (content: string) => {
   return styleVariables(content);
 };
 
+export const preprocessImageLinks = (content: string) => {
+  return content?.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2');
+};
+
 export default markDownRules;

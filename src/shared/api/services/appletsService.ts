@@ -1,4 +1,8 @@
-import { ImageUrl } from '@app/shared/lib';
+import {
+  ImageUrl,
+  callApiWithRetry,
+  withDataExtraction,
+} from '@app/shared/lib';
 
 import httpService from './httpService';
 import { SuccessfulResponse } from '../types';
@@ -89,14 +93,19 @@ export type AppletDetailsResponse = {
 function appletsService() {
   return {
     getApplets() {
-      return httpService.get<AppletsResponse>('/applets', {
-        params: { roles: 'respondent' },
-      });
+      const apiCall = () =>
+        httpService.get<AppletsResponse>('/applets', {
+          params: { roles: 'respondent' },
+        });
+      return callApiWithRetry(withDataExtraction(apiCall));
     },
     getAppletDetails(request: AppletDetailsRequest) {
-      return httpService.get<AppletDetailsResponse>(
-        `/applets/${request.appletId}`,
-      );
+      const apiCall = () => {
+        return httpService.get<AppletDetailsResponse>(
+          `/applets/${request.appletId}`,
+        );
+      };
+      return callApiWithRetry(withDataExtraction(apiCall));
     },
   };
 }

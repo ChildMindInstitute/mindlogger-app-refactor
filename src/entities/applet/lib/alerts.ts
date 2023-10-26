@@ -34,3 +34,29 @@ export function onMediaReferencesFound() {
     i18n.t('media:media_found_body'),
   );
 }
+
+export function onAppletRefreshError() {
+  Alert.alert(
+    i18n.t('applet_list_component:refresh_error_header'),
+    i18n.t('applet_list_component:common_refresh_error'),
+  );
+}
+
+export function onAppletListRefreshError(applets: string[]) {
+  Alert.alert(
+    i18n.t('applet_list_component:refresh_error_header'),
+    i18n.t('applet_list_component:applets_not_refreshed') +
+      '\n' +
+      applets.reduce((result, current) => {
+        return (result.length ? result + '\n' : '') + current;
+      }, ''),
+  );
+}
+
+export function onActivityContainsAllItemsHidden(entityName: string) {
+  Alert.alert('', i18n.t('activity:activity_all_items_hidden', { entityName }));
+}
+
+export function onFlowActivityContainsAllItemsHidden(entityName: string) {
+  Alert.alert('', i18n.t('activity:flow_all_items_hidden', { entityName }));
+}

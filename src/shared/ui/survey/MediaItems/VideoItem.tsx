@@ -108,6 +108,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
       onOpenCamera={onOpenVideoCamera}
       onShowMediaLibrary={onShowVideoGallery}
       mode="video"
+      data-test="video-item"
       uploadIcon={<VideoIcon color={colors.red} size={50} />}
     >
       {value && (

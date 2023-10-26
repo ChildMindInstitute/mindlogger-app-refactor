@@ -1,4 +1,10 @@
-import { FC } from 'react';
+import { FC, memo, useCallback } from 'react';
+import {
+  FlatList,
+  ListRenderItem,
+  ScrollViewProps,
+  StyleSheet,
+} from 'react-native';
 
 import { XStack, YStack } from '@tamagui/stacks';
 import { useIsMutating } from '@tanstack/react-query';
@@ -9,6 +15,7 @@ import { LoadListError } from '@app/shared/ui';
 
 import AppletCard from './AppletCard';
 import { useAppletsQuery } from '../api';
+import { Applet } from '../lib';
 import { mapApplets } from '../model';
 
 type SelectedApplet = {
@@ -18,9 +25,16 @@ type SelectedApplet = {
 
 type Props = {
   onAppletPress: (applet: SelectedApplet) => void;
+  refreshControl: ScrollViewProps['refreshControl'];
+  ListFooterComponent: JSX.Element;
 } & BoxProps;
 
-const AppletList: FC<Props> = ({ onAppletPress, ...styledProps }) => {
+const AppletList: FC<Props> = ({
+  onAppletPress,
+  refreshControl,
+  ListFooterComponent,
+  ...styledProps
+}) => {
   const { error: getAppletsError, data: applets } = useAppletsQuery({
     select: response => mapApplets(response.data.result),
   });
@@ -30,6 +44,19 @@ const AppletList: FC<Props> = ({ onAppletPress, ...styledProps }) => {
   const refreshError = useOnMutationCacheChange();
 
   const hasError = !!refreshError || !!getAppletsError;
+
+  const renderItem: ListRenderItem<Applet> = useCallback(
+    ({ item }) => (
+      <AppletCard
+        applet={item}
+        disabled={!!isRefreshing}
+        onPress={() =>
+          onAppletPress({ id: item.id, displayName: item.displayName })
+        }
+      />
+    ),
+    [isRefreshing, onAppletPress],
+  );
 
   if (hasError) {
     return (
@@ -49,20 +76,39 @@ const AppletList: FC<Props> = ({ onAppletPress, ...styledProps }) => {
 
   return (
     <Box {...styledProps}>
-      <YStack space={18}>
-        {applets?.map(x => (
-          <AppletCard
-            applet={x}
-            key={x.id}
-            disabled={!!isRefreshing}
-            onPress={() =>
-              onAppletPress({ id: x.id, displayName: x.displayName })
-            }
-          />
-        ))}
-      </YStack>
+      <FlatList
+        contentContainerStyle={styles.flatList}
+        data={applets}
+        keyExtractor={getId}
+        renderItem={renderItem}
+        ItemSeparatorComponent={Separator}
+        ListFooterComponent={ListFooterComponent}
+        ListFooterComponentStyle={styles.listFooterComponent}
+        refreshControl={refreshControl}
+        removeClippedSubviews={true}
+        updateCellsBatchingPeriod={12}
+      />
     </Box>
   );
 };
 
-export default AppletList;
+const Separator = () => <YStack my={9} />;
+
+type IdentifiedObject = {
+  id: string;
+};
+
+const getId = (item: IdentifiedObject) => item.id;
+
+const styles = StyleSheet.create({
+  flatList: {
+    flexGrow: 1,
+  },
+  listFooterComponent: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginTop: 28,
+  },
+});
+
+export default memo(AppletList);

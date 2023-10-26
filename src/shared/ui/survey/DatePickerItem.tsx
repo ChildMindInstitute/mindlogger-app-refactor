@@ -24,6 +24,7 @@ const DatePickerItem: FC<Props> = ({ value, onChange }) => {
 
   return (
     <DateTimePicker
+      data-test="date-picker"
       onChange={onChangeDate}
       value={valueAsDate}
       iconAfter={<RightArrowIcon color={colors.lightGrey2} size={15} />}

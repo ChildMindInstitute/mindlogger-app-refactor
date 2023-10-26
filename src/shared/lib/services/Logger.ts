@@ -1,11 +1,18 @@
+import { format } from 'date-fns';
 import { Dirs, FileSystem } from 'react-native-file-access';
 import { FileLogger, LogLevel } from 'react-native-file-logger';
 
-import { FileService } from '@app/shared/api';
+import { FileService } from '@shared/api';
 
 import { IS_ANDROID, IS_IOS } from '../constants';
 import { ILogger } from '../types';
-import { IMutex, Mutex, callWithMutex, isAppOnline } from '../utils';
+import {
+  IMutex,
+  Mutex,
+  callWithMutex,
+  callWithMutexAsync,
+  isAppOnline,
+} from '../utils';
 
 type NamePath = {
   fileName: string;
@@ -31,6 +38,10 @@ class Logger implements ILogger {
     this.mutex = Mutex();
     this.abortController = new AbortController();
     this.consoleLogLevel = LogLevel.Debug; // for developers
+  }
+
+  private withTime(message: string) {
+    return format(new Date(), 'HH:mm:ss') + ': ' + message;
   }
 
   private get isAborted(): boolean {
@@ -72,17 +83,18 @@ class Logger implements ILogger {
     files: Array<NamePath>,
   ): Promise<FileExists[]> {
     const checkResult = await FileService.checkIfLogsExist({
-      filesToCheck: files.map(x => x.fileName),
+      files: files.map(x => x.fileName),
     });
 
     const result: FileExists[] = [];
 
-    for (let existRecord of checkResult.data.result.files) {
-      const fileInfo = files.find(x => x.fileName === existRecord.fileName)!;
+    for (let existRecord of checkResult.data.result) {
+      const fileInfo = files.find(x => x.fileName === existRecord.fileId)!;
+
       result.push({
         ...fileInfo,
-        exists: existRecord.exists,
-        size: existRecord.size,
+        exists: existRecord.uploaded,
+        size: existRecord.fileSize || 0,
       });
     }
 
@@ -140,10 +152,13 @@ class Logger implements ILogger {
 
       const isCurrentLogInAndroid = this.isNamedAsLatest(checkRecord.fileName);
 
+      const isFileEmpty = file.size === 0;
+
       const shouldUpload =
-        !isExist ||
-        (isExist && IS_ANDROID && isCurrentLogInAndroid) ||
-        (isExist && IS_IOS && !isSizeTheSame);
+        !isFileEmpty &&
+        (!isExist ||
+          (isExist && IS_ANDROID && isCurrentLogInAndroid) ||
+          (isExist && IS_IOS && !isSizeTheSame));
 
       if (!shouldUpload) {
         continue;
@@ -154,15 +169,12 @@ class Logger implements ILogger {
           `[Logger.sendInternal] Sending log file "${checkRecord.fileName}"`,
         );
 
-        await FileService.upload(
-          {
-            fileName: checkRecord.fileName,
-            uri: checkRecord.filePath,
-            type: 'log',
-            fileId: '',
-          },
-          'log',
-        );
+        await FileService.uploadLogFile({
+          fileName: checkRecord.fileName,
+          uri: checkRecord.filePath,
+          type: 'text/x-log',
+          fileId: checkRecord.fileName,
+        });
       } catch (error) {
         console.warn(
           `[Logger.upload]: Error occurred while sending file "${checkRecord.fileName}"\n\n`,
@@ -183,7 +195,7 @@ class Logger implements ILogger {
     const logsDir = `${documentDir}/Logs`;
 
     FileLogger.configure({
-      maximumFileSize: 1024, // 1 KB, todo - 1MB after integration
+      maximumFileSize: 1024 * 1024,
       maximumNumberOfFiles: 5,
       captureConsole: false,
       dailyRolling: true,
@@ -194,7 +206,7 @@ class Logger implements ILogger {
 
   public async clearAllLogFiles() {
     try {
-      await callWithMutex(this.mutex, FileLogger.deleteLogFiles);
+      await callWithMutexAsync(this.mutex, FileLogger.deleteLogFiles);
     } catch (error) {
       console.warn(
         'Logger.clearAllLogFiles]: Error occurred\n\n',
@@ -205,7 +217,7 @@ class Logger implements ILogger {
 
   public log(message: string) {
     if (this.consoleLogLevel <= LogLevel.Debug) {
-      console.log(message);
+      console.log(this.withTime(message));
     }
 
     callWithMutex(this.mutex, () => FileLogger.debug(message));
@@ -213,7 +225,7 @@ class Logger implements ILogger {
 
   public info(message: string) {
     if (this.consoleLogLevel <= LogLevel.Info) {
-      console.info(message);
+      console.info(this.withTime(message));
     }
 
     callWithMutex(this.mutex, () => FileLogger.info(message));
@@ -221,7 +233,7 @@ class Logger implements ILogger {
 
   public warn(message: string) {
     if (this.consoleLogLevel <= LogLevel.Warning) {
-      console.warn(message);
+      console.warn(this.withTime(message));
     }
 
     callWithMutex(this.mutex, () => FileLogger.warn(message));
@@ -229,7 +241,7 @@ class Logger implements ILogger {
 
   public error(message: string) {
     if (this.consoleLogLevel <= LogLevel.Error) {
-      console.error(message);
+      console.error(this.withTime(message));
     }
 
     callWithMutex(this.mutex, () => FileLogger.error(message));
@@ -252,13 +264,11 @@ class Logger implements ILogger {
 
       console.info('[Logger.send] Started sending log files to Server');
 
-      // TODO - uncomment the lines below when integration is done!
-
-      // const result = await this.sendInternal();
+      const result = await this.sendInternal();
 
       console.info('[Logger.send] Completed sending log files to Server');
 
-      return true; // result; - todo - uncomment
+      return result;
     } catch (error) {
       console.warn(
         '[Logger.sendInternal]: Error occurred: \n\n',

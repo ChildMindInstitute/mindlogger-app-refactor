@@ -28,7 +28,7 @@ export function useLogout() {
         deviceId: SystemRecord.getDeviceId()!,
       });
     } catch (error) {
-      console.log('Logout operation failed:', error);
+      Logger.error(`Logout operation failed: ${error}`);
     }
 
     dispatch(IdentityModel.actions.onLogout());

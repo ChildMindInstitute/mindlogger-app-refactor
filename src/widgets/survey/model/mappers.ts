@@ -74,7 +74,7 @@ export function mapAnswersToDto(
   const answerDtos: Array<AnswerDto> = [];
 
   pipeline.forEach((pipelineItem, step) => {
-    const canHaveAnswer = canItemHaveAnswer(pipelineItem);
+    const canHaveAnswer = canItemHaveAnswer(pipelineItem.type);
 
     if (canHaveAnswer) {
       const answer = answers[step] ?? null;
@@ -396,9 +396,7 @@ function convertToStabilityTrackerAnswer(answer: Answer): AnswerDto {
         : 'challenge-phase',
   };
 
-  return {
-    value: dto,
-  };
+  return dto;
 }
 
 function convertToAbTestAnswer(answer: Answer): AnswerDto {
