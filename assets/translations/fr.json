@@ -193,6 +193,14 @@
     "upload_logs": "Télécharger les journaux",
     "delete_account": "Request account deletion"
   },
+  "delete_user_account": {
+    "request": "Demande de Suppression de Compte",
+    "delete_data": "Supprimer votre compte et vos données? Toutes les données seront définitivement supprimées et ne pourront pas être récupérées.",
+    "cancel": "Non, annuler",
+    "confirm": "Oui, supprimer",
+    "request_sent": "Requête de suppression de compte envoyée",
+    "what_to_know": "Ce qu'il faut savoir :\n Supprimer votre compte entraînera également la suppression définitive de l'ensemble de vos données. Après avoir demandé la suppression de votre compte, le processus peut prendre jusqu'à 24 heures. Pendant ce temps, vous serez déconnecté(e), et l'accès à votre compte sera bloqué. Si vous changez d'avis concernant la suppression de votre compte, veuillez nous contacter."
+  },
   "sign_up_form": {
     "sign_up": "S'inscrire",
     "error": "L'inscription a échoué : le nom d'utilisateur est peut-être déjà utilisé.",
