@@ -161,7 +161,6 @@ function Intermediate({
       return;
     }
 
-    Logger.log(`Next ${flowId ? 'flow' : 'activity'} started`);
     dispatch(
       AppletModel.actions.flowUpdated({
         appletId,
@@ -241,7 +240,14 @@ function Intermediate({
       activityStorageRecord.answers,
     );
 
-    Logger.log(`${flowId ? 'Flow' : 'Activity'} completed`);
+    const logActivityName = getActivityName(activityId);
+
+    Logger.log(
+      `[Intermediate.completeActivity]: ${
+        flowId ? 'flow' : 'activity'
+      } ${logActivityName}|${activityId} completed`,
+    );
+
     pushInQueue({
       appletId,
       createdAt: Date.now(),
@@ -257,7 +263,7 @@ function Intermediate({
       startTime: getActivityStartAt(progressRecord)!,
       endTime: Date.now(),
       scheduledTime: scheduledDate,
-      logActivityName: activityName,
+      logActivityName,
       logCompletedAt: new Date().toString(),
       client: getClientInformation(),
       alerts,

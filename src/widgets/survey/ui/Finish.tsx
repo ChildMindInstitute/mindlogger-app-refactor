@@ -150,7 +150,13 @@ function FinishItem({
 
     const executionGroupKey = getExecutionGroupKey(progressRecord);
 
-    Logger.log(`${flowId ? 'Flow' : 'Activity'} completed`);
+    const logActivityName = getActivityName(activityId);
+
+    Logger.log(
+      `[Finish.completeActivity]: ${
+        flowId ? 'Flow' : 'Activity'
+      } ${logActivityName}|${activityId} completed`,
+    );
 
     pushInQueue({
       appletId,
@@ -167,7 +173,7 @@ function FinishItem({
       startTime: getActivityStartAt(progressRecord)!,
       endTime: Date.now(),
       scheduledTime: scheduledDate,
-      logActivityName: getActivityName(activityId),
+      logActivityName,
       logCompletedAt: new Date().toString(),
       client: getClientInformation(),
       alerts,

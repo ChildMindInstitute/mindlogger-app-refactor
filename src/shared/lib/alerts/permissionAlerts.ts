@@ -21,7 +21,7 @@ export const handleBlockedPermissions = async (
         text: t('permissions:alert_button_cancel'),
         onPress: () => {
           Logger.log(
-            `permissionAlerts.handleBlockedPermissions ${title} result: dismissed`,
+            `[permissionAlerts.handleBlockedPermissions] ${title} result: dismissed`,
           );
           resolve(false);
         },
@@ -31,7 +31,7 @@ export const handleBlockedPermissions = async (
         text: t('permissions:alert_button_ok'),
         onPress: async () => {
           Logger.log(
-            `permissionAlerts.handleBlockedPermissions ${title} result: opened settings`,
+            `[permissionAlerts.handleBlockedPermissions] ${title} result: opened settings`,
           );
           await openSettings();
           resolve(false);
@@ -53,7 +53,7 @@ export const onAlarmPermissionsDisabled = () => {
         style: 'cancel',
         onPress: () => {
           Logger.log(
-            'permissionAlerts.onAlarmPermissionsDisabled result: dismissed',
+            '[permissionAlerts.onAlarmPermissionsDisabled] result: dismissed',
           );
         },
       },
@@ -61,7 +61,7 @@ export const onAlarmPermissionsDisabled = () => {
         text: t('permissions:alert_button_ok'),
         onPress: () => {
           Logger.log(
-            'permissionAlerts.onAlarmPermissionsDisabled result: opened settings',
+            '[permissionAlerts.onAlarmPermissionsDisabled] result: opened settings',
           );
           openAlarmPermissionSettings();
         },
@@ -81,7 +81,7 @@ export const onNotificationPermissionsDisabled = () => {
         style: 'cancel',
         onPress: () => {
           Logger.log(
-            `permissionAlerts.onNotificationPermissionsDisabled OS[${Platform.OS}] result: dismissed`,
+            `[permissionAlerts.onNotificationPermissionsDisabled] OS[${Platform.OS}] result: dismissed`,
           );
         },
       },
@@ -89,7 +89,7 @@ export const onNotificationPermissionsDisabled = () => {
         text: i18n.t('firebase_messaging:alert_text'),
         onPress: () => {
           Logger.log(
-            `permissionAlerts.onNotificationPermissionsDisabled OS[${Platform.OS}] result: opened settings`,
+            `[permissionAlerts.onNotificationPermissionsDisabled] OS[${Platform.OS}] result: opened settings`,
           );
 
           IS_ANDROID

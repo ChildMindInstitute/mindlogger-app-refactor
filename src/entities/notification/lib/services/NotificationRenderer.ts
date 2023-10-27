@@ -33,7 +33,7 @@ function NotificationRenderer() {
       });
     } catch (error) {
       Logger.warn(
-        `NotificationRenderer:displayNotification OS[${Platform.OS}]: error ${error}`,
+        `[NotificationRenderer:displayNotification] OS[${Platform.OS}]: error ${error}`,
       );
     }
   }
