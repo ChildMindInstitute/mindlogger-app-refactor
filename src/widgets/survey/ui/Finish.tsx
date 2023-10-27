@@ -12,7 +12,12 @@ import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
 import { PassSurveyModel } from '@features/pass-survey';
 import { LogTrigger } from '@shared/api';
-import { useActivityInfo, useAppDispatch, useAppSelector } from '@shared/lib';
+import {
+  Logger,
+  useActivityInfo,
+  useAppDispatch,
+  useAppSelector,
+} from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
 import { getClientInformation } from '../lib';
@@ -144,6 +149,8 @@ function FinishItem({
     const scheduledDate = getScheduledDate(scheduledEvent!);
 
     const executionGroupKey = getExecutionGroupKey(progressRecord);
+
+    Logger.log(`${flowId ? 'Flow' : 'Activity'} completed`);
 
     pushInQueue({
       appletId,

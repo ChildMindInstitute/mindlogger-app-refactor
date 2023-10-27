@@ -21,6 +21,7 @@ import {
 } from '@app/features/pass-survey';
 import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import {
+  Logger,
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
@@ -160,6 +161,7 @@ function Intermediate({
       return;
     }
 
+    Logger.log(`Next ${flowId ? 'flow' : 'activity'} started`);
     dispatch(
       AppletModel.actions.flowUpdated({
         appletId,
@@ -239,6 +241,7 @@ function Intermediate({
       activityStorageRecord.answers,
     );
 
+    Logger.log(`${flowId ? 'Flow' : 'Activity'} completed`);
     pushInQueue({
       appletId,
       createdAt: Date.now(),

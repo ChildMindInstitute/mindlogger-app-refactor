@@ -151,12 +151,17 @@ function useStartEntity({
           onRestart: () => {
             cleanUpMediaFiles({ activityId, appletId, eventId, order: 0 });
 
+            Logger.log('Activity restarted');
             activityStarted(appletId, activityId, eventId);
             resolve({ startedFromScratch: true });
           },
-          onResume: () => resolve({ startedFromScratch: false }),
+          onResume: () => {
+            Logger.log('Activity resumed');
+            return resolve({ startedFromScratch: false });
+          },
         });
       } else {
+        Logger.log('Activity started');
         activityStarted(appletId, activityId, eventId);
         resolve({ startedFromScratch: true });
       }
@@ -250,18 +255,23 @@ function useStartEntity({
                 order: i,
               });
             }
+            Logger.log('Flow restarted');
 
             flowStarted(appletId, flowId, firstActivityId, eventId, 0);
             resolve({
               startedFromScratch: true,
             });
           },
-          onResume: () =>
-            resolve({
+          onResume: () => {
+            Logger.log('Flow resumed');
+
+            return resolve({
               startedFromScratch: false,
-            }),
+            });
+          },
         });
       } else {
+        Logger.log('Flow started');
         flowStarted(appletId, flowId, firstActivityId, eventId, 0);
         resolve({
           startedFromScratch: true,
