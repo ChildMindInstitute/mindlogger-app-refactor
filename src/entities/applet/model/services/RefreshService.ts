@@ -30,6 +30,11 @@ import {
   collectAppletRecordImageUrls,
 } from '@app/shared/lib';
 
+import ProgressDataCollector, {
+  CollectRemoteCompletionsResult,
+  IProgressDataCollector,
+} from './ProgressDataCollector';
+import { IAppletProgressSyncService } from './ProgressSyncService';
 import { onAppletListRefreshError, onAppletRefreshError } from '../../lib';
 
 type CollectAppletInternalsResult = {
@@ -59,15 +64,12 @@ interface IRefreshService {
   refresh(): void;
 }
 
-interface IAppletProgressSyncService {
-  sync(appletDto: AppletDto): Promise<void>;
-}
-
 class RefreshService implements IRefreshService {
   private queryClient: QueryClient;
   private showWrongUrlLogs: boolean;
   private logger: ILogger;
   private appletProgressSyncService: IAppletProgressSyncService;
+  private progressDataCollector: IProgressDataCollector;
 
   private static mutex: IMutex = Mutex();
 
@@ -80,6 +82,7 @@ class RefreshService implements IRefreshService {
     this.showWrongUrlLogs = false;
     this.logger = logger;
     this.appletProgressSyncService = appletProgressSyncService;
+    this.progressDataCollector = new ProgressDataCollector(logger);
   }
 
   private async resetAllQueries() {
@@ -249,6 +252,29 @@ class RefreshService implements IRefreshService {
       };
     }
 
+    let appletRemoteCompletions: CollectRemoteCompletionsResult;
+
+    try {
+      this.logger.log(
+        "[RefreshService.refreshInternal]: Getting all applets' remotely completed entities",
+      );
+      appletRemoteCompletions = await this.progressDataCollector.collect({
+        applets: appletsResponse.data.result.map(x => ({
+          appletId: x.id,
+          version: x.version,
+        })),
+      });
+    } catch (error) {
+      this.logger.log(
+        "[RefreshService.refreshInternal]: Error occurred during getting all applets' remote completions:\nInternal error:\n\n" +
+          error,
+      );
+      return {
+        success: false,
+        unsuccessfulApplets: [],
+      };
+    }
+
     const appletDtos: AppletDto[] = appletsResponse.data.result;
 
     const unsuccessfulApplets: UnsuccessfulApplet[] = [];
@@ -260,8 +286,16 @@ class RefreshService implements IRefreshService {
 
         this.updateAppletCaches(appletInternalDtos);
 
+        const appletCompletions =
+          appletRemoteCompletions.appletEntities[appletDto.id];
+
+        if (!appletCompletions) {
+          throw new Error('appletCompletions is missed');
+        }
+
         await this.appletProgressSyncService.sync(
           appletInternalDtos.appletDetailsResponse.data.result,
+          appletCompletions.data,
         );
 
         this.logger.log(
@@ -280,6 +314,8 @@ class RefreshService implements IRefreshService {
     }
 
     this.invalidateCompletedEntities();
+
+    this.logger.info('[RefreshService.refreshAllApplets] Refresh is done');
 
     return {
       success: unsuccessfulApplets.length === 0,
