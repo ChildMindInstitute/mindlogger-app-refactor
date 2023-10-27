@@ -8,17 +8,10 @@ import {
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { isTablet } from 'react-native-device-info';
 
 import { LoginForm } from '@features/login';
-import {
-  Link,
-  Image,
-  YStack,
-  XStack,
-  Box,
-  SubmitButton,
-  Center,
-} from '@shared/ui';
+import { Link, Image, YStack, XStack, Box, SubmitButton } from '@shared/ui';
 
 import { cloudLogo } from '@images';
 
@@ -47,53 +40,47 @@ const LoginScreen: FC = () => {
       <Box flex={1} bg="$primary">
         <StatusBar />
 
-        <Box flex={1} py="$8">
-          <YStack space={30} f={1}>
-            <YStack f={2} jc="space-between" h="100%">
-              <Center f={1} pt="$5">
-                <Image
-                  alignSelf="center"
-                  src={cloudLogo}
-                  width={310}
-                  height={55}
-                />
-              </Center>
+        <Box f={1} px={isTablet() ? '$16' : '$8'}>
+          <Box mb={64} pt={isTablet() ? 250 : 140} jc="flex-end">
+            <Image alignSelf="center" src={cloudLogo} width={310} height={55} />
+          </Box>
 
-              <LoginForm px="$8" pt="$3" onLoginSuccess={onLoginSuccess} />
-            </YStack>
+          <Box f={1}>
+            <LoginForm onLoginSuccess={onLoginSuccess} />
 
-            <YStack flex={1} px="$8" jc="space-between">
-              <SubmitButton
-                borderRadius={30}
-                width="100%"
-                backgroundColor="$primary"
-                borderColor="$white"
-                borderWidth={1}
-                buttonStyle={{ paddingVertical: 14 }}
-                textProps={{
-                  fontSize: 14,
-                  color: '$white',
-                }}
-                onPress={navigateToSignUp}
-              >
-                {t('login:account_create')}
-              </SubmitButton>
-
-              <XStack jc="space-between">
-                <Link
-                  textDecorationLine="underline"
-                  onPress={navigateToAppLanguage}
-                >
-                  {t('language_screen:change_app_language')}
-                </Link>
-
-                <Link textDecorationLine="underline" onPress={navigateToTerms}>
-                  {t('auth:terms_of_service')}
-                </Link>
-              </XStack>
-            </YStack>
-          </YStack>
+            <SubmitButton
+              borderRadius={30}
+              mt={24}
+              width="100%"
+              backgroundColor="$primary"
+              borderColor="$white"
+              borderWidth={1}
+              buttonStyle={{ paddingVertical: 16 }}
+              textProps={{
+                fontSize: 14,
+                color: '$white',
+              }}
+              onPress={navigateToSignUp}
+            >
+              {t('login:account_create')}
+            </SubmitButton>
+          </Box>
         </Box>
+
+        <YStack px="$8" mt={24} jc="space-between">
+          <XStack jc="space-between" mb={40}>
+            <Link
+              textDecorationLine="underline"
+              onPress={navigateToAppLanguage}
+            >
+              {t('language_screen:change_app_language')}
+            </Link>
+
+            <Link textDecorationLine="underline" onPress={navigateToTerms}>
+              {t('auth:terms_of_service')}
+            </Link>
+          </XStack>
+        </YStack>
       </Box>
     </TouchableWithoutFeedback>
   );

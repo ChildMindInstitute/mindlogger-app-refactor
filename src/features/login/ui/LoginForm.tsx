@@ -87,7 +87,7 @@ const LoginForm: FC<Props> = props => {
   return (
     <Box {...props}>
       <FormProvider {...form}>
-        <YStack space={8}>
+        <YStack space={24}>
           <InputField
             name="email"
             placeholder={t('login_form:email_placeholder')}
@@ -107,7 +107,7 @@ const LoginForm: FC<Props> = props => {
           )}
         </YStack>
 
-        <Center my="$7">
+        <Center mt={42}>
           <Link
             textDecorationLine="underline"
             onPress={navigateToForgotPassword}
@@ -117,14 +117,16 @@ const LoginForm: FC<Props> = props => {
         </Center>
 
         <SubmitButton
+          mt={35}
           isLoading={isLoading}
           borderRadius={30}
           width="100%"
           textProps={{
             fontSize: 14,
+            color: 'black',
           }}
           onPress={submit}
-          buttonStyle={{ alignSelf: 'center', paddingVertical: 14 }}
+          buttonStyle={{ alignSelf: 'center', paddingVertical: 16 }}
         >
           {t('login_form:login')}
         </SubmitButton>
