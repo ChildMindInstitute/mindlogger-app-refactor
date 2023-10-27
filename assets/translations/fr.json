@@ -160,11 +160,12 @@
     "email_address": "Adresse e-mail",
     "email_sent": "L'e-mail de réinitialisation a été envoyé",
     "email_send_error": "Cette adresse e-mail n'existe pas dans le système.",
-    "forgot_password": "Mot de passe oublié"
+    "forgot_password": "Mot de passe oublié?"
   },
   "login": {
     "new_user": "Nouvel utilisateur",
-    "forgot_password": "Mot de passe oublié",
+    "account_create": "Créer un compte",
+    "forgot_password": "Mot de passe oublié?",
     "what_is": "C'est quoi",
     "login_error": "La connexion a échoué.",
     "password_at_least_characters": "Le mot de passe doit être au moins de 6 caractères"
