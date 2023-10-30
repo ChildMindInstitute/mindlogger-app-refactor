@@ -7,31 +7,20 @@ import {
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
+import { isTablet } from 'react-native-device-info';
 
 import { LoginForm } from '@features/login';
-import { Center, Text, Image, YStack, XStack, Box } from '@shared/ui';
+import { Link, Image, XStack, Box, SubmitButton } from '@shared/ui';
 
-import { whiteLogo } from '@images';
-
-const Link = styled(Text, { color: '$secondary' });
+import { cloudLogo } from '@images';
 
 const LoginScreen: FC = () => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
-  const title = 'MindLogger';
 
   const navigateToSignUp = () => {
     navigate('SignUp');
-  };
-
-  const navigateToForgotPassword = () => {
-    navigate('ForgotPassword');
-  };
-
-  const navigateToAbout = () => {
-    navigate('AboutApp');
   };
 
   const navigateToAppLanguage = () => {
@@ -48,46 +37,57 @@ const LoginScreen: FC = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Box flex={1} bg="$primary">
+      <Box flex={1} bg="$primary" px={isTablet() ? '$12' : 0}>
         <StatusBar />
 
-        <Box flex={1} jc="center">
-          <YStack space={30}>
-            <Link
-              color="$secondary"
-              fontWeight="400"
-              fontSize={40}
+        <Box f={1} px={isTablet() ? '$16' : '$8'}>
+          <Box
+            mb={isTablet() ? 50 : 50}
+            pt={isTablet() ? 200 : 110}
+            jc="flex-end"
+          >
+            <Image
               alignSelf="center"
+              resizeMode="contain"
+              src={cloudLogo}
+              width="100%"
+              height={70}
+            />
+          </Box>
+
+          <Box f={1}>
+            <LoginForm onLoginSuccess={onLoginSuccess} />
+
+            <SubmitButton
+              borderRadius={30}
+              mt={24}
+              width="100%"
+              backgroundColor="$primary"
+              borderColor="$white"
+              borderWidth={1}
+              buttonStyle={{ paddingVertical: 16 }}
+              textProps={{
+                fontSize: 14,
+                color: '$white',
+              }}
+              onPress={navigateToSignUp}
             >
-              {title}
+              {t('login:account_create')}
+            </SubmitButton>
+          </Box>
+
+          <XStack jc="space-between" mb={40}>
+            <Link
+              textDecorationLine="underline"
+              onPress={navigateToAppLanguage}
+            >
+              {t('language_screen:change_app_language')}
             </Link>
 
-            <LoginForm px="$8" onLoginSuccess={onLoginSuccess} />
-
-            <Center space>
-              <XStack space>
-                <Link onPress={navigateToSignUp}>{t('login:new_user')}</Link>
-
-                <Link onPress={navigateToForgotPassword}>
-                  {t('login:forgot_password')}
-                </Link>
-              </XStack>
-
-              <Link onPress={navigateToAbout}>{`${t(
-                'login:what_is',
-              )} ${title}?`}</Link>
-
-              <Link onPress={navigateToAppLanguage}>
-                {t('language_screen:change_app_language')}
-              </Link>
-
-              <Link onPress={navigateToTerms}>
-                {t('auth:terms_of_service')}
-              </Link>
-            </Center>
-
-            <Image alignSelf="center" src={whiteLogo} width={70} height={70} />
-          </YStack>
+            <Link textDecorationLine="underline" onPress={navigateToTerms}>
+              {t('auth:terms_of_service')}
+            </Link>
+          </XStack>
         </Box>
       </Box>
     </TouchableWithoutFeedback>
