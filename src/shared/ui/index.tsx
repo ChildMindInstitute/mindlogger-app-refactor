@@ -5,6 +5,7 @@ import type { StackProps, TextProps } from '@tamagui/core';
 import Center from './Center';
 import Input from './Input';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
+import Link from './Link';
 import RowButton from './RowButton';
 import ScrollView from './ScrollView';
 import Splash from './Splash';
@@ -54,4 +55,5 @@ export {
   SubmitButton,
   Splash,
   Text,
+  Link,
 };

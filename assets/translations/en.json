@@ -161,17 +161,18 @@
     "email_address": "Email address",
     "email_sent": "Reset email has been sent",
     "email_send_error": "That email does not exist in the system.",
-    "forgot_password": "Forgot password"
+    "forgot_password": "Forgot password?"
   },
   "login": {
     "new_user": "New User",
-    "forgot_password": "Forgot Password",
+    "account_create": "Create an account",
+    "forgot_password": "Forgot Password?",
     "what_is": "What is",
     "login_error": "Login failed.",
     "password_at_least_characters": "Password must be at least 6 characters"
   },
   "login_form": {
-    "login": "LOGIN",
+    "login": "Log In",
     "email_placeholder": "Email",
     "password": "Password"
   },

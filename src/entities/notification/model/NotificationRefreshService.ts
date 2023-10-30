@@ -190,16 +190,12 @@ const createNotificationRefreshService = (
       return;
     }
 
+    let describers: AppletNotificationDescribers[] | null = null;
+
     try {
       NotificationManager.mutex.setBusy();
 
-      const describers = await refreshInternal(queryClient, storeProgress);
-
-      NotificationsLogger.log({
-        trigger: logTrigger,
-        notificationDescriptions: describers,
-        action: LogAction.ReSchedule,
-      });
+      describers = await refreshInternal(queryClient, storeProgress);
 
       logger.info(
         '[NotificationRefreshService.refresh]: Completed. Notifications rescheduled',
@@ -211,6 +207,14 @@ const createNotificationRefreshService = (
       );
     } finally {
       NotificationManager.mutex.release();
+    }
+
+    if (describers) {
+      await NotificationsLogger.log({
+        trigger: logTrigger,
+        notificationDescriptions: describers,
+        action: LogAction.ReSchedule,
+      });
     }
   };
 

@@ -76,7 +76,7 @@ function NotificationsLogger() {
 
     try {
       await logInternal(payload);
-      console.info('[NotificationsLogger.log]: Logs sent to server');
+      Logger.info('[NotificationsLogger.log]: Logs sent to server');
     } catch (error) {
       Logger.warn(
         '[NotificationsLogger.log] Error occurred while sending notification logs:\n\n' +
