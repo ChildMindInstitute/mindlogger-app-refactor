@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
 
 import { LoginForm } from '@features/login';
-import { Link, Image, YStack, XStack, Box, SubmitButton } from '@shared/ui';
+import { Link, Image, XStack, Box, SubmitButton } from '@shared/ui';
 
 import { cloudLogo } from '@images';
 
@@ -37,12 +37,23 @@ const LoginScreen: FC = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Box flex={1} bg="$primary">
+      <Box flex={1} bg="$primary" px={isTablet() ? '$12' : 0}>
         <StatusBar />
 
         <Box f={1} px={isTablet() ? '$16' : '$8'}>
-          <Box mb={64} pt={isTablet() ? 250 : 140} jc="flex-end">
-            <Image alignSelf="center" src={cloudLogo} width={310} height={55} />
+          <Box
+            mb={isTablet() ? 50 : 50}
+            pt={isTablet() ? 200 : 140}
+            jc="flex-end"
+          >
+            <Image
+              alignSelf="center"
+              resizeMode="contain"
+              src={cloudLogo}
+              // width={isTablet() ? '100%' : 310}
+              width={'100%'}
+              height={70}
+            />
           </Box>
 
           <Box f={1}>
@@ -65,9 +76,7 @@ const LoginScreen: FC = () => {
               {t('login:account_create')}
             </SubmitButton>
           </Box>
-        </Box>
 
-        <YStack px="$8" mt={24} jc="space-between">
           <XStack jc="space-between" mb={40}>
             <Link
               textDecorationLine="underline"
@@ -80,7 +89,7 @@ const LoginScreen: FC = () => {
               {t('auth:terms_of_service')}
             </Link>
           </XStack>
-        </YStack>
+        </Box>
       </Box>
     </TouchableWithoutFeedback>
   );

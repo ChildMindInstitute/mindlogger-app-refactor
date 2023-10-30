@@ -87,7 +87,7 @@ const LoginForm: FC<Props> = props => {
   return (
     <Box {...props}>
       <FormProvider {...form}>
-        <YStack space={24}>
+        <YStack space={20}>
           <InputField
             name="email"
             placeholder={t('login_form:email_placeholder')}
