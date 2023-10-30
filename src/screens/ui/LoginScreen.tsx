@@ -43,15 +43,14 @@ const LoginScreen: FC = () => {
         <Box f={1} px={isTablet() ? '$16' : '$8'}>
           <Box
             mb={isTablet() ? 50 : 50}
-            pt={isTablet() ? 200 : 140}
+            pt={isTablet() ? 200 : 110}
             jc="flex-end"
           >
             <Image
               alignSelf="center"
               resizeMode="contain"
               src={cloudLogo}
-              // width={isTablet() ? '100%' : 310}
-              width={'100%'}
+              width="100%"
               height={70}
             />
           </Box>
