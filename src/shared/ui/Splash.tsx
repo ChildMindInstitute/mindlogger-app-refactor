@@ -1,7 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-import { Animated, StyleSheet, ActivityIndicator } from 'react-native';
+import {
+  Animated,
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+  View,
+} from 'react-native';
 
-import { colors } from '@shared/lib';
+import DeviceInfo from 'react-native-device-info';
+
+import { colors, IS_IOS } from '@shared/lib';
 
 const WAIT_FOR_APP_TO_BE_READY = 'WAIT_FOR_APP_TO_BE_READY';
 const FADE_OUT = 'FADE_OUT';
@@ -15,6 +23,8 @@ type SplashState =
 const SplashScreen = ({ isAppReady }: { isAppReady: boolean }) => {
   const containerOpacity = useRef(new Animated.Value(1)).current;
   const imageOpacity = useRef(new Animated.Value(0)).current;
+
+  const appVersion = DeviceInfo.getVersion();
 
   const [state, setState] = useState<SplashState>(WAIT_FOR_APP_TO_BE_READY);
 
@@ -56,6 +66,10 @@ const SplashScreen = ({ isAppReady }: { isAppReady: boolean }) => {
       style={[style.container, { opacity: containerOpacity }]}
     >
       <ActivityIndicator size="large" color={colors.secondary} />
+
+      <View style={style.versionContainer}>
+        <Text style={style.versionText}>Version: {appVersion}</Text>
+      </View>
     </Animated.View>
   );
 };
@@ -67,6 +81,14 @@ const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
+  },
+  versionContainer: {
+    position: 'absolute',
+    bottom: 30,
+  },
+  versionText: {
+    color: 'white',
+    fontFamily: IS_IOS ? 'Avenir' : 'Roboto',
   },
 });
 
