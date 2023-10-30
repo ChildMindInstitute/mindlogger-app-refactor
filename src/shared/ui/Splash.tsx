@@ -7,6 +7,8 @@ import {
   View,
 } from 'react-native';
 
+import DeviceInfo from 'react-native-device-info';
+
 import { APP_VERSION, ENV, colors, IS_IOS } from '@shared/lib';
 
 const WAIT_FOR_APP_TO_BE_READY = 'WAIT_FOR_APP_TO_BE_READY';
@@ -22,7 +24,11 @@ const SplashScreen = ({ isAppReady }: { isAppReady: boolean }) => {
   const containerOpacity = useRef(new Animated.Value(1)).current;
   const imageOpacity = useRef(new Animated.Value(0)).current;
 
-  const appVersion = ENV ? `${APP_VERSION} ${ENV}` : APP_VERSION;
+  const buildNumber = DeviceInfo.getBuildNumber();
+
+  const appVersion = ENV
+    ? `${APP_VERSION} (${buildNumber}) ${ENV}`
+    : APP_VERSION;
 
   const [state, setState] = useState<SplashState>(WAIT_FOR_APP_TO_BE_READY);
 
