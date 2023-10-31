@@ -11,9 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
 
 import { LoginForm } from '@features/login';
-import { Link, Image, XStack, Box, SubmitButton } from '@shared/ui';
-
-import { cloudLogo } from '@images';
+import { Link, XStack, Box, SubmitButton, CloudLogo } from '@shared/ui';
 
 const LoginScreen: FC = () => {
   const { navigate } = useNavigation();
@@ -40,19 +38,13 @@ const LoginScreen: FC = () => {
       <Box flex={1} bg="$primary" px={isTablet() ? '$12' : 0}>
         <StatusBar />
 
-        <Box f={1} px={isTablet() ? '$16' : '$8'}>
+        <Box f={1} px={isTablet() ? '$17' : '$8'}>
           <Box
-            mb={isTablet() ? 50 : 50}
-            pt={isTablet() ? 200 : 110}
+            mb={isTablet() ? 30 : 50}
+            pt={isTablet() ? 220 : 110}
             jc="flex-end"
           >
-            <Image
-              alignSelf="center"
-              resizeMode="contain"
-              src={cloudLogo}
-              width="100%"
-              height={70}
-            />
+            <CloudLogo width="100%" height={70} />
           </Box>
 
           <Box f={1}>
@@ -60,10 +52,10 @@ const LoginScreen: FC = () => {
 
             <SubmitButton
               borderRadius={30}
-              mt={24}
+              mt={22}
               width="100%"
               backgroundColor="$primary"
-              borderColor="$white"
+              borderColor="$lighterGrey4"
               borderWidth={1}
               buttonStyle={{ paddingVertical: 16 }}
               textProps={{
@@ -76,7 +68,10 @@ const LoginScreen: FC = () => {
             </SubmitButton>
           </Box>
 
-          <XStack jc="space-between" mb={40}>
+          <XStack
+            jc={isTablet() ? 'space-around' : 'space-between'}
+            mb={isTablet() ? 50 : 40}
+          >
             <Link
               textDecorationLine="underline"
               onPress={navigateToAppLanguage}

@@ -87,7 +87,7 @@ const LoginForm: FC<Props> = props => {
   return (
     <Box {...props}>
       <FormProvider {...form}>
-        <YStack space={20}>
+        <YStack space={16}>
           <InputField
             name="email"
             placeholder={t('login_form:email_placeholder')}
@@ -117,10 +117,11 @@ const LoginForm: FC<Props> = props => {
         </Center>
 
         <SubmitButton
-          mt={35}
+          mt={32}
           isLoading={isLoading}
           borderRadius={30}
           width="100%"
+          bg="$lighterGrey4"
           textProps={{
             fontSize: 14,
             color: 'black',

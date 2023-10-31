@@ -8,6 +8,7 @@ import Foundation from 'react-native-vector-icons/Foundation';
 export { default as AboutIcon } from './About';
 export { default as DataIcon } from './Data';
 export { default as SurveyIcon } from './Survey';
+export { default as CloudLogo } from './CloudLogo';
 
 type IconProps = {
   color: string;
