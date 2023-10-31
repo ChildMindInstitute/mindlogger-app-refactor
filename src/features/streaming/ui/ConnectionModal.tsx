@@ -16,6 +16,7 @@ export const ConnectionModal = ({ visible, onClose }: Props) => {
       transparent
       onRequestClose={onClose}
       visible={visible}
+      data-test="streaming-connection-modal"
     >
       <Box
         flex={1}

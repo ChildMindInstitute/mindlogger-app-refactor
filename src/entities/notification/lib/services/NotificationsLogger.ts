@@ -5,7 +5,12 @@ import {
   NotificationLogsRequest,
   NotificationService,
 } from '@app/shared/api';
-import { isAppOnline } from '@app/shared/lib';
+import {
+  SystemRecord,
+  getStringHashCode,
+  isAppOnline,
+  Logger,
+} from '@app/shared/lib';
 
 import NotificationQueue from './NotificationQueue';
 import NotificationScheduler from './NotificationScheduler';
@@ -22,10 +27,6 @@ type LogPayload = {
 };
 
 function NotificationsLogger() {
-  const showInConsoleAsJsonString: boolean = false;
-
-  const showInConsoleAsObjects: boolean = false;
-
   const logInternal = async (payload: LogPayload) => {
     const queued: NotificationDescriber[] = NotificationQueue.get();
 
@@ -44,10 +45,14 @@ function NotificationsLogger() {
 
     const scheduledNotifications = scheduled.length === 0 ? [{}] : scheduled;
 
+    const deviceId = SystemRecord.getDeviceId();
+
     const request: NotificationLogsRequest = {
       actionType: `${payload.trigger} -> ${payload.action}`,
       userId: email!,
-      deviceId: '1',
+      deviceId: !deviceId
+        ? 'undefined'
+        : getStringHashCode(deviceId).toString(),
       notificationDescriptions: JSON.stringify(
         notificationDescriptions,
         null,
@@ -57,25 +62,13 @@ function NotificationsLogger() {
       scheduledNotifications: JSON.stringify(scheduledNotifications, null, 2),
     };
 
-    if (showInConsoleAsJsonString) {
-      console.log('notificationDescriptions', request.notificationDescriptions);
-      console.log('notificationInQueue', request.notificationInQueue);
-      console.log('scheduledNotifications', request.scheduledNotifications);
-    }
-
-    if (showInConsoleAsObjects) {
-      console.log('notificationDescriptions', notificationDescriptions);
-      console.log('notificationsInQueue', notificationsInQueue);
-      console.log('scheduledNotifications', scheduledNotifications);
-    }
-
     await NotificationService.sendNotificationLogs(request);
   };
 
   const log = async (payload: LogPayload) => {
     const isOnline = await isAppOnline();
     if (!isOnline) {
-      console.info(
+      Logger.info(
         '[NotificationsLogger.log]: Logs will not be added due to offline',
       );
       return;
@@ -83,9 +76,11 @@ function NotificationsLogger() {
 
     try {
       await logInternal(payload);
-    } catch {
-      console.warn(
-        '[NotificationsLogger.log] Error occurred while sending notification logs',
+      Logger.info('[NotificationsLogger.log]: Logs sent to server');
+    } catch (error) {
+      Logger.warn(
+        '[NotificationsLogger.log] Error occurred while sending notification logs:\n\n' +
+          error,
       );
     }
   };

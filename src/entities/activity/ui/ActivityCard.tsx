@@ -29,7 +29,11 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled;
 
   return (
-    <TouchableOpacity onPress={onPress} disabled={isDisabled}>
+    <TouchableOpacity
+      data-test={`activity-card-${activity.activityId}-btn`}
+      onPress={onPress}
+      disabled={isDisabled}
+    >
       <XStack
         mx={3}
         p={14}
@@ -41,7 +45,10 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
       >
         {!!activity.image && (
           <Box mr={14} alignSelf="center">
-            <RoundLogo imageUri={activity.image} />
+            <RoundLogo
+              data-test={`activity-card-${activity.activityId}-image`}
+              imageUri={activity.image}
+            />
           </Box>
         )}
 
@@ -59,6 +66,7 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
             mb={8}
             fontWeight={IS_IOS ? '600' : '700'}
             fontSize={16}
+            data-test={`activity-card-${activity.activityId}-name`}
             lineHeight={20}
             opacity={isDisabled ? 0.5 : 1}
           >
@@ -70,6 +78,7 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
             fontWeight="300"
             lineHeight={20}
             opacity={isDisabled ? 0.5 : 1}
+            data-test={`activity-card-${activity.activityId}-desc`}
           >
             {activity.description}
           </Text>

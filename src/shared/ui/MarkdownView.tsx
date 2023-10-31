@@ -7,6 +7,8 @@ import Markdown, {
   MarkdownIt,
 } from 'react-native-markdown-display';
 
+import { preprocessImageLinks } from '../lib';
+
 const markdownItInstance = MarkdownIt({
   html: true,
   linkify: true,
@@ -37,7 +39,7 @@ const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
       markdownit={markdownItInstance}
       style={markdownStyle}
     >
-      {content}
+      {preprocessImageLinks(content)}
     </Markdown>
   );
 };

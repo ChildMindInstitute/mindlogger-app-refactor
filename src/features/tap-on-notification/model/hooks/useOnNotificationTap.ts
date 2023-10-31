@@ -5,7 +5,7 @@ import {
   ActivityRecordKeyParams,
   EntityPath,
   EntityType,
-  LookupMediaInput,
+  LookupEntityInput,
   StoreProgress,
 } from '@app/abstract/lib';
 import { AppletModel, clearStorageRecords } from '@app/entities/applet';
@@ -23,7 +23,8 @@ import { Logger, useAppSelector, useCurrentRoute } from '@app/shared/lib';
 
 type Input = {
   checkAvailability: (entityName: string, identifiers: EntityPath) => boolean;
-  hasMediaReferences: (input: LookupMediaInput) => boolean;
+  hasMediaReferences: (input: LookupEntityInput) => boolean;
+  hasActivityWithHiddenAllItems: (input: LookupEntityInput) => boolean;
   cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
 };
 
@@ -45,6 +46,7 @@ export function useOnNotificationTap({
   checkAvailability,
   hasMediaReferences,
   cleanUpMediaFiles,
+  hasActivityWithHiddenAllItems,
 }: Input) {
   const queryClient = useQueryClient();
 
@@ -59,6 +61,7 @@ export function useOnNotificationTap({
   const { startFlow, startActivity } = AppletModel.useStartEntity({
     hasMediaReferences,
     cleanUpMediaFiles,
+    hasActivityWithHiddenAllItems,
   });
 
   const { getCurrentRoute } = useCurrentRoute();
@@ -103,7 +106,6 @@ export function useOnNotificationTap({
         .then(() => {
           NotificationModel.NotificationRefreshService.refresh(
             queryClient,
-
             storeProgress,
             LogTrigger.ScheduleUpdated,
           );
@@ -171,9 +173,16 @@ export function useOnNotificationTap({
     }
 
     if (entityType === 'flow') {
-      startFlow(appletId, entityId, eventId).then(
-        ({ startedFromScratch, cannotBeStartedDueToMediaFound }) => {
-          if (cannotBeStartedDueToMediaFound) {
+      startFlow(appletId, entityId, eventId, entityName).then(
+        ({
+          startedFromScratch,
+          cannotBeStartedDueToMediaFound,
+          cannotBeStartedDueToAllItemsHidden,
+        }) => {
+          if (
+            cannotBeStartedDueToMediaFound ||
+            cannotBeStartedDueToAllItemsHidden
+          ) {
             return;
           }
 
@@ -185,9 +194,16 @@ export function useOnNotificationTap({
         },
       );
     } else {
-      startActivity(appletId, entityId, eventId).then(
-        ({ startedFromScratch, cannotBeStartedDueToMediaFound }) => {
-          if (cannotBeStartedDueToMediaFound) {
+      startActivity(appletId, entityId, eventId, entityName).then(
+        ({
+          startedFromScratch,
+          cannotBeStartedDueToMediaFound,
+          cannotBeStartedDueToAllItemsHidden,
+        }) => {
+          if (
+            cannotBeStartedDueToMediaFound ||
+            cannotBeStartedDueToAllItemsHidden
+          ) {
             return;
           }
 

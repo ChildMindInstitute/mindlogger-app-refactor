@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { FC } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -15,7 +16,7 @@ import {
   useFormChanges,
 } from '@shared/lib';
 import { encryption } from '@shared/lib';
-import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
+import { YStack, Box, BoxProps, SubmitButton, Center, Link } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
 import { LoginFormSchema } from '../model';
@@ -26,8 +27,13 @@ type Props = {
 
 const LoginForm: FC<Props> = props => {
   const { t } = useTranslation();
+  const { navigate } = useNavigation();
 
   const dispatch = useAppDispatch();
+
+  const navigateToForgotPassword = () => {
+    navigate('ForgotPassword');
+  };
 
   const {
     mutate: login,
@@ -81,7 +87,7 @@ const LoginForm: FC<Props> = props => {
   return (
     <Box {...props}>
       <FormProvider {...form}>
-        <YStack space={8} mb={40}>
+        <YStack space={16}>
           <InputField
             name="email"
             placeholder={t('login_form:email_placeholder')}
@@ -101,10 +107,27 @@ const LoginForm: FC<Props> = props => {
           )}
         </YStack>
 
+        <Center mt={42}>
+          <Link
+            textDecorationLine="underline"
+            onPress={navigateToForgotPassword}
+          >
+            {t('login:forgot_password')}
+          </Link>
+        </Center>
+
         <SubmitButton
+          mt={32}
           isLoading={isLoading}
+          borderRadius={30}
+          width="100%"
+          bg="$lighterGrey4"
+          textProps={{
+            fontSize: 14,
+            color: 'black',
+          }}
           onPress={submit}
-          buttonStyle={{ alignSelf: 'center' }}
+          buttonStyle={{ alignSelf: 'center', paddingVertical: 16 }}
         >
           {t('login_form:login')}
         </SubmitButton>

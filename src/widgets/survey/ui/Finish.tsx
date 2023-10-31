@@ -7,6 +7,7 @@ import { StoreProgress } from '@app/abstract/lib';
 import { UploadObservable, useRetryUpload } from '@app/entities/activity/lib';
 import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { EventModel } from '@app/entities/event';
+import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
 import { PassSurveyModel } from '@features/pass-survey';
@@ -16,6 +17,7 @@ import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
 import { getClientInformation } from '../lib';
 import {
+  fillNullsForHiddenItems,
   FinishReason,
   getActivityStartAt,
   getExecutionGroupKey,
@@ -117,6 +119,9 @@ function FinishItem({
       activityStorageRecord.answers,
     );
 
+    const originalItems = activityStorageRecord.context
+      .originalItems as InitializeHiddenItem[];
+
     const answers = mapAnswersToDto(
       activityStorageRecord.items,
       activityStorageRecord.answers,
@@ -131,6 +136,9 @@ function FinishItem({
 
     const itemIds = getItemIds(activityStorageRecord.items);
 
+    const { itemIds: modifiedItemIds, answers: modifiedAnswers } =
+      fillNullsForHiddenItems(itemIds, answers, originalItems);
+
     const progressRecord = storeProgress[appletId][entityId][eventId];
 
     const scheduledDate = getScheduledDate(scheduledEvent!);
@@ -141,9 +149,9 @@ function FinishItem({
       appletId,
       createdAt: Date.now(),
       version: activityStorageRecord.appletVersion,
-      answers: answers,
+      answers: modifiedAnswers,
       userActions,
-      itemIds,
+      itemIds: modifiedItemIds,
       appletEncryption,
       flowId: flowId ?? null,
       activityId: activityId,
@@ -196,7 +204,7 @@ function FinishItem({
     return (
       <ImageBackground>
         <Center flex={1} mx={16}>
-          <Text fontSize={22}>Please Wait ...</Text>
+          <Text fontSize={22}>{t('activity:please_wait')}...</Text>
         </Center>
       </ImageBackground>
     );

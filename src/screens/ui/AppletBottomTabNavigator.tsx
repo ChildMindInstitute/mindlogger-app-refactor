@@ -1,17 +1,14 @@
-import { useLayoutEffect, useMemo } from 'react';
+import { useLayoutEffect } from 'react';
+import { StyleSheet } from 'react-native';
 
+import { CachedImage } from '@georstat/react-native-image-cache';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { getMonthAgoDate } from '@app/shared/lib';
-import { ActivityIndicator, Center, ImageBackground } from '@app/shared/ui';
-import {
-  AppletModel,
-  useAppletDetailsQuery,
-  useCompletedEntitiesQuery,
-} from '@entities/applet';
+import { Box, ImageBackground } from '@app/shared/ui';
+import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 
 import {
   AppletDetailsParamList,
@@ -35,19 +32,23 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
 
   const appletTheme = applet?.theme;
 
-  const appletVersions = useMemo(
-    () =>
-      applet ? [{ appletId: applet!.id, version: applet!.version }] : null,
-    [applet],
-  );
-
-  useCompletedEntitiesQuery(getMonthAgoDate(), appletVersions);
-
   useLayoutEffect(() => {
     if (title) {
-      navigation.setOptions({ title });
+      navigation.setOptions({
+        title,
+        headerRight: () =>
+          applet?.theme?.logo && (
+            <Box backgroundColor="$white" style={style.themeLogoContainer}>
+              <CachedImage
+                source={applet.theme.logo}
+                style={style.themeLogo}
+                resizeMode="contain"
+              />
+            </Box>
+          ),
+      });
     }
-  }, [title, navigation]);
+  }, [title, navigation, applet?.theme?.logo]);
 
   useLayoutEffect(() => {
     if (appletTheme) {
@@ -65,11 +66,6 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
     <ImageBackground
       uri={appletTheme?.backgroundImage}
       bg={appletTheme?.primaryColor ?? '$white'}
-      loader={
-        <Center position="absolute" width="100%" height="100%">
-          <ActivityIndicator size="large" color="$secondary" />
-        </Center>
-      }
     >
       <Tab.Navigator
         screenOptions={getAppletDetailsScreenOptions(
@@ -108,5 +104,17 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
     </ImageBackground>
   );
 };
+
+const style = StyleSheet.create({
+  themeLogoContainer: {
+    width: 30,
+    height: 30,
+    paddingBottom: 0,
+  },
+  themeLogo: {
+    width: '100%',
+    height: '100%',
+  },
+});
 
 export default AppletBottomTabNavigator;

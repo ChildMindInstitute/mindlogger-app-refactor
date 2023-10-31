@@ -9,7 +9,10 @@
   "activity": {
     "incorrect_answer": "Incorrect answer. Please try again",
     "failed": "Failed",
-    "flanker_accuracy_warn": "*The timestamps collected for an android are not as accurate as iOS devices."
+    "flanker_accuracy_warn": "*The timestamps collected for an android are not as accurate as iOS devices.",
+    "please_wait": "Please wait",
+    "activity_all_items_hidden": "\"{{entityName}}\" cannot be started because all items inside the activity are hidden",
+    "flow_all_items_hidden": "\"{{entityName}}\" cannot be started because it contains an activity in which all items are hidden"
   },
   "activity_time": {
     "time_remaining": "Time Remaining"
@@ -60,13 +63,14 @@
     "applets_title": "Find out more about each of your applets and about the MindLogger platform.",
     "data_title": "Find out more about the MindLogger data collection platform by tapping 'About\nMindLogger' below.",
     "about_mindLogger": "About MindLogger",
-    "icons_title": "NounProject icons were created by Alina Oleynik (survey), beth bolton (book), and\nShakeel (chart)"
+    "icons_title": "NounProject icons were created by Alina Oleynik (survey), beth bolton (book), and\nShakeel (chart)",
+    "device_id": "Device ID"
   },
   "about_app": {
     "title_with_version": "What is MindLogger? v.{{version}}",
     "title": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
     "subtitle": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
-    "mindlogger_about": "## \n ### What is MindLogger? \n\n This app is part of the open source MindLogger data collection and analysis platform designed by the MATTER Lab at the Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### What can MindLogger do? \n\n MindLogger's feature set is growing, and currently supports a wide variety of input types. Each screen in a MindLogger activity can include any of the following: \n  - Text, picture, and audio \n  - Question followed by image and/or text response options \n  - Slider bar \n  - Text entry \n  - Table entry \n  - Audio record \n  - Photo/video capture \n  - Drawing or tapping \n  - Current geolocation \n  - Simple cognitive task \n  - Delay before response \n  - Timer \n  - Conditional logic to determine where to go next \n\n #### Where can I learn more? \n Please visit [https://mindlogger.org](https://mindlogger.org) for more information.  \n ## [Credits]({{credits_link}}) \n\n ##### Cheers, \n\n ##### MindLogger Team \n\n ##### Child Mind Institute"
+    "mindlogger_about": "## \n ### What is MindLogger? \n\n This app is part of the open source MindLogger data collection and analysis platform designed by the MATTER Lab at the Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### What can MindLogger do? \n\n MindLogger's feature set is growing, and currently supports a wide variety of input types. Each screen in a MindLogger activity can include any of the following: \n  - Text, picture, and audio \n  - Question followed by image and/or text response options \n  - Slider bar \n  - Text entry \n  - Table entry \n  - Audio record \n  - Photo/video capture \n  - Drawing or tapping \n  - Current geolocation \n  - Simple cognitive task \n  - Delay before response \n  - Timer \n  - Conditional logic to determine where to go next \n\n #### Where can I learn more? \n Please visit [https://mindlogger.org](https://mindlogger.org) for more information.  \n ## [Support]({{credits_link}}) \n\n ##### Cheers, \n\n ##### MindLogger Team \n\n ##### Child Mind Institute"
   },
   "applet_footer": {
     "surveys": "Surveys",
@@ -101,10 +105,14 @@
     "about_title": "About MindLogger",
     "no_applets_yet": "You have no applets.",
     "noon": "Noon",
-    "midnight": "Midnight"
+    "midnight": "Midnight",
+    "refresh_error_header": "Refresh error",
+    "applets_not_refreshed": "The following applets were not refreshed:",
+    "common_refresh_error": "The applets list was not refreshed. Please try again."
   },
   "activity_list_component": {
-    "no_activities_yet": "No activities specified yet"
+    "no_activities_yet": "No activities specified yet",
+    "insufficient_data_error": "This applet was not refreshed. Please try to refresh again."
   },
   "applet_settings": {
     "applet_not_defined": "There isn't an applet defined.",
@@ -153,17 +161,18 @@
     "email_address": "Email address",
     "email_sent": "Reset email has been sent",
     "email_send_error": "That email does not exist in the system.",
-    "forgot_password": "Forgot password"
+    "forgot_password": "Forgot password?"
   },
   "login": {
     "new_user": "New User",
-    "forgot_password": "Forgot Password",
+    "account_create": "Create an account",
+    "forgot_password": "Forgot Password?",
     "what_is": "What is",
     "login_error": "Login failed.",
     "password_at_least_characters": "Password must be at least 6 characters"
   },
   "login_form": {
-    "login": "LOGIN",
+    "login": "Log In",
     "email_placeholder": "Email",
     "password": "Password"
   },
@@ -182,13 +191,21 @@
     "use_cellular_data": "Use Cellular Data",
     "logout": "Logout",
     "permanently_delete_account": "Permanently Delete Account",
-    "user_settings": "User Settings"
+    "user_settings": "User Settings",
+    "upload_logs": "Upload Logs"
   },
   "language_screen": {
     "app_language": "Application language",
     "change_app_language": "Change Language",
     "en": "English",
     "fr": "Français"
+  },
+  "application_logs_screen": {
+    "upload_button": "Upload logs",
+    "title": "Having technical issues? Your log files will help our team troubleshoot.",
+    "subTitle": "Please upload them using the button below.",
+    "success": "Success - we received your logs.",
+    "error": "Error - logs not sent. Please try again."
   },
   "sign_up_form": {
     "sign_up": "Sign Up",

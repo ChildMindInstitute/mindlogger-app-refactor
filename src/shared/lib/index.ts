@@ -8,9 +8,11 @@ export * from './contexts';
 export {
   default as markdownRules,
   activityMarkDownStyles,
+  preprocessImageLinks,
 } from './markDownRules';
 export * from './alerts';
 export * from './permissions';
 export * from './timers';
 export * from './encryption';
 export * from './tcp';
+export * from './records';

@@ -19,6 +19,7 @@ export const colors = {
   lighterGrey: '#e8e8e8',
   lighterGrey2: '#f7f7f7',
   lighterGrey3: '#e2f0fe',
+  lighterGrey4: '#D5E4F7',
   lightGrey: '#00000026',
   lightGrey2: '#00000032',
   alert: '#e63232',

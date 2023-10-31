@@ -140,7 +140,7 @@ function ActivityItem({
               lines: value?.answer?.lines ?? [],
             }}
             isDrawingActive={!scrollEnabled}
-            onStarted={() => console.log('onStarted')}
+            onStarted={() => {}}
             onResult={onResponse}
             onLog={sendLiveEvent}
           />
@@ -188,8 +188,6 @@ function ActivityItem({
           <SurveySlider
             config={pipelineItem.payload}
             onChange={onResponse}
-            onPress={() => console.log('pressed')}
-            onRelease={() => console.log('released')}
             initialValue={value?.answer ?? null}
           />
         </Box>
@@ -215,8 +213,6 @@ function ActivityItem({
             config={pipelineItem.payload}
             onChange={onResponse}
             values={value?.answer || null}
-            onPress={() => console.log('pressed')}
-            onRelease={() => console.log('released')}
           />
         </Box>
       );

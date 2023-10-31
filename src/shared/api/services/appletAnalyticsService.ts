@@ -1,3 +1,5 @@
+import { withDataExtraction } from '@app/shared/lib';
+
 import { ActivityDto } from './activityService';
 import httpService from './httpService';
 import { SuccessfulResponse } from '../types';
@@ -27,15 +29,17 @@ type ActivityAnalyticsRequest = {
 function appletAnalyticsService() {
   return {
     async getActivityAnalytics(request: ActivityAnalyticsRequest) {
-      return httpService.get<ActivityAnalyticsResponse>(
-        `/answers/applet/${request.appletId}/data`,
-        {
-          params: {
-            fromDate: request.fromDate,
-            activitiesLastVersion: request.isLastVersion,
+      const apiCall = () =>
+        httpService.get<ActivityAnalyticsResponse>(
+          `/answers/applet/${request.appletId}/data`,
+          {
+            params: {
+              fromDate: request.fromDate,
+              activitiesLastVersion: request.isLastVersion,
+            },
           },
-        },
-      );
+        );
+      return withDataExtraction(apiCall)();
     },
   };
 }

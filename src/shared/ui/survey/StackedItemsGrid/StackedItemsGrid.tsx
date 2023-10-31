@@ -43,7 +43,10 @@ const AxisListItem: FC<{
       {option && (
         <Center>
           {option.tooltip ? (
-            <Tooltip markdown={option.tooltip}>
+            <Tooltip
+              data-test={`row-list-item-tooltip-${option.id}`}
+              markdown={option.tooltip}
+            >
               <AxisListItemText hasTooltip>{title}</AxisListItemText>
             </Tooltip>
           ) : (
@@ -52,6 +55,7 @@ const AxisListItem: FC<{
 
           {imageUrl && (
             <CachedImage
+              data-test={`row-list-item-image-${option.id}`}
               style={styles.image}
               resizeMode="contain"
               source={imageUrl}
@@ -140,6 +144,7 @@ const StackedItemsGrid: FC<StackedItemsGridProps> = ({
       {items.map((item, index) => (
         <RadioGroup key={`StackGrid_${item.id}`} value={getRadioValue(item)}>
           <RowListItem
+            data-test={`row-list-item-${item.id}`}
             options={options}
             item={item}
             renderCell={renderCell.bind(null, index)}

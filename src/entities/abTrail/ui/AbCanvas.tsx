@@ -61,6 +61,16 @@ const AbCanvas: FC<Props> = props => {
 
   const logLines = useRef<LogLine[]>([]).current;
 
+  const isCloseToNextRerenderedRef = useRef(false);
+
+  const isCloseToNextRerendered = () => isCloseToNextRerenderedRef.current;
+
+  const setCloseToNextRerendered = () =>
+    (isCloseToNextRerenderedRef.current = true);
+
+  const resetCloseToNextRerendered = () =>
+    (isCloseToNextRerenderedRef.current = false);
+
   const {
     testData,
     onLogResult,
@@ -122,12 +132,21 @@ const AbCanvas: FC<Props> = props => {
     return !!node && node.orderIndex === nodeIndexToCheck;
   };
 
+  const isCloseToNode = (pointToCheck: Point, nodeIndexToCheck: number) => {
+    const node = findNodeByPoint(pointToCheck, 2);
+    return !!node && node.orderIndex === nodeIndexToCheck;
+  };
+
   const isOverCurrent = (point: Point) => {
     return isOverNode(point, getCurrentIndex());
   };
 
   const isOverNext = (point: Point) => {
     return isOverNode(point, getCurrentIndex() + 1);
+  };
+
+  const isCloseToNext = (point: Point) => {
+    return isCloseToNode(point, getCurrentIndex() + 1);
   };
 
   const isOverLast = (point: Point) => {
@@ -162,13 +181,16 @@ const AbCanvas: FC<Props> = props => {
   const findNodeByIndex = (index: number) =>
     canvasData!.nodes.find(x => x.orderIndex === index)!;
 
-  const findNodeByPoint = (point: Point): TestNode | null => {
+  const findNodeByPoint = (
+    point: Point,
+    radiusMultiplier = 1,
+  ): TestNode | null => {
     const foundNode = canvasData?.nodes.find(node => {
       const distance = getDistance(
         { x: node.cx, y: node.cy },
         { x: point.x, y: point.y },
       );
-      return distance < canvasData.config.radius;
+      return distance < canvasData.config.radius * radiusMultiplier;
     });
     return foundNode ?? null;
   };
@@ -272,6 +294,15 @@ const AbCanvas: FC<Props> = props => {
 
     drawPath();
 
+    if (isCloseToNext(point) && !isCloseToNextRerendered()) {
+      reRender();
+      setCloseToNextRerendered();
+    }
+
+    if (!isCloseToNext(point)) {
+      resetCloseToNextRerendered();
+    }
+
     onLog({
       x: (touchInfo.x * width) / 100,
       y: (touchInfo.y * width) / 100,
@@ -358,6 +389,7 @@ const AbCanvas: FC<Props> = props => {
       {canvasData && (
         <AbShapes
           paths={paths}
+          lastPath={currentPathRef.current}
           testData={canvasData}
           greenRoundOrder={getGreenPointIndex()}
           errorPath={errorPath}

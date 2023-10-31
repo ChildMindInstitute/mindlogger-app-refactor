@@ -1,6 +1,10 @@
 import { AxiosResponse } from 'axios';
 
-import { ImageUrl } from '@app/shared/lib';
+import {
+  ImageUrl,
+  callApiWithRetry,
+  withDataExtraction,
+} from '@app/shared/lib';
 
 import { ActivityItemDto } from './ActivityItemDto';
 import httpService from './httpService';
@@ -40,10 +44,10 @@ function activityService() {
         } as FakeResponse;
         return Promise.resolve(response);
       } else {
-        const response = await httpService.get<ActivityResponse>(
-          `/activities/${id}`,
-        );
-        return response;
+        const apiCall = async () => {
+          return await httpService.get<ActivityResponse>(`/activities/${id}`);
+        };
+        return callApiWithRetry(withDataExtraction(apiCall));
       }
     },
   };
