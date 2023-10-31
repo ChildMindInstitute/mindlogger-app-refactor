@@ -152,11 +152,17 @@ function FinishItem({
 
     const logActivityName = getActivityName(activityId);
 
+    const appletName = applet?.displayName;
+
     Logger.log(
-      `[Finish.completeActivity]: ${
-        flowId ? 'Flow' : 'Activity'
-      } ${logActivityName}|${activityId} completed`,
+      `[Finish.completeActivity]: Applet "${appletName}|${appletId}", Activity "${logActivityName}|${activityId}" completed`,
     );
+
+    if (flowId) {
+      Logger.log(
+        `[Finish.completeActivity]:Flow "${flowId}" completed, Applet is "${appletName}|${appletId}"`,
+      );
+    }
 
     pushInQueue({
       appletId,

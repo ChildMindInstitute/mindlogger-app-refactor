@@ -86,6 +86,8 @@ function Intermediate({
       ),
   });
 
+  const flowName = activityFlow?.name;
+
   let { data: allActivities } = useAppletDetailsQuery(appletId, {
     select: r => mapActivitiesFromDto(r.data.result.activities),
   });
@@ -161,6 +163,19 @@ function Intermediate({
       return;
     }
 
+    const appletName = applet?.displayName;
+    const currentActivityName = getActivityName(activityId);
+
+    if (flowId) {
+      Logger.log(
+        `[Intermediate.completeActivity]: Activity "${currentActivityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivity.name}|${nextActivity.id}", Applet is "${appletName}|${appletId}"`,
+      );
+    } else {
+      Logger.log(
+        `[Intermediate.completeActivity]: Applet "${appletName}|${appletId}", Activity "${currentActivityName}|${activityId}" changed to next activity "${nextActivity.name}|${nextActivity.id}"`,
+      );
+    }
+
     dispatch(
       AppletModel.actions.flowUpdated({
         appletId,
@@ -170,7 +185,18 @@ function Intermediate({
         pipelineActivityOrder: activitiesPassed,
       }),
     );
-  }, [appletId, dispatch, eventId, flowId, nextActivity, activitiesPassed]);
+  }, [
+    getActivityName,
+    activityId,
+    applet?.displayName,
+    flowName,
+    appletId,
+    dispatch,
+    eventId,
+    flowId,
+    nextActivity,
+    activitiesPassed,
+  ]);
 
   async function completeActivity() {
     if (!activityStorageRecord) {
@@ -242,11 +268,17 @@ function Intermediate({
 
     const logActivityName = getActivityName(activityId);
 
-    Logger.log(
-      `[Intermediate.completeActivity]: ${
-        flowId ? 'flow' : 'activity'
-      } ${logActivityName}|${activityId} completed`,
-    );
+    const appletName = applet?.displayName;
+
+    if (flowId) {
+      Logger.log(
+        `[Intermediate.completeActivity]: Activity "${logActivityName}|${activityId}" within flow "${flowName}|${flowId}" completed, Applet is "${appletName}|${appletId}"`,
+      );
+    } else {
+      Logger.log(
+        `[Intermediate.completeActivity]: Applet "${appletName}|${appletId}", activity "${logActivityName}|${activityId}" completed`,
+      );
+    }
 
     pushInQueue({
       appletId,
@@ -306,7 +338,7 @@ function Intermediate({
             <Image src={badge} width={18} height={18} opacity={0.6} r={4} />
 
             <Text fontSize={14} color="$grey">
-              {activitiesPassed + 1} of {totalActivities} {activityFlow!.name}
+              {activitiesPassed + 1} of {totalActivities} {flowName}
             </Text>
           </XStack>
         </ActivityBox>
