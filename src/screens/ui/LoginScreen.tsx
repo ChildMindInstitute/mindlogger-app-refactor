@@ -10,9 +10,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
 
-import { CloudLogo } from '@assets/images';
 import { LoginForm } from '@features/login';
-import { Link, XStack, Box, SubmitButton } from '@shared/ui';
+import { Link, XStack, Box, SubmitButton, CloudLogo } from '@shared/ui';
 
 const LoginScreen: FC = () => {
   const { navigate } = useNavigation();

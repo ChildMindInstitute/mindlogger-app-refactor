@@ -1,6 +1,6 @@
 import Svg, { Path, SvgProps } from 'react-native-svg';
 
-export const CloudLogo = (props: SvgProps) => (
+export default (props: SvgProps) => (
   <Svg {...props} viewBox="0 0 400 70">
     <Path
       fill="#9EDCFF"
