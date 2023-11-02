@@ -50,10 +50,6 @@ function ActivitySectionList({ appletId, groups }: Props) {
     entityType: EntityType,
     eventId: string,
   ) {
-    if (!isFocused) {
-      return;
-    }
-
     navigate('InProgressActivity', {
       appletId,
       entityId,
@@ -69,6 +65,10 @@ function ActivitySectionList({ appletId, groups }: Props) {
     isTimerElapsed,
     name,
   }: ActivityListItem) => {
+    if (!isFocused) {
+      return;
+    }
+
     if (flowId) {
       startFlow(appletId, flowId, eventId, name, isTimerElapsed).then(
         result => {
