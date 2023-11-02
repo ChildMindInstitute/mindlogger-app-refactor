@@ -1,4 +1,4 @@
-import { isLocalFileUrl } from './file';
+import { isLocalFileUrl } from '../file';
 
 describe('isFileUrl function', () => {
   it('should correctly identify file URLs', () => {
