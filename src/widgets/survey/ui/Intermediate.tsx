@@ -167,7 +167,7 @@ function Intermediate({
     const currentActivityName = getActivityName(activityId);
 
     Logger.log(
-      `[Intermediate.completeActivity]: Activity "${currentActivityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivity.name}|${nextActivity.id}", applet "${appletName}|${appletId}"`,
+      `[Intermediate.completeActivity]: Activity "${currentActivityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivity?.name}|${nextActivity?.id}", applet "${appletName}|${appletId}"`,
     );
 
     dispatch(
