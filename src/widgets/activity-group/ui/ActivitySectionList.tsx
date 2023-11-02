@@ -2,6 +2,7 @@ import { useMemo, PropsWithChildren } from 'react';
 import { SectionList, StyleSheet } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { EntityType } from '@app/abstract/lib';
@@ -24,6 +25,7 @@ type Props = {
 function ActivitySectionList({ appletId, groups }: Props) {
   const { t } = useTranslation();
   const { navigate } = useNavigation();
+  const isFocused = useIsFocused();
 
   const sections = useMemo(() => {
     return groups
@@ -48,6 +50,10 @@ function ActivitySectionList({ appletId, groups }: Props) {
     entityType: EntityType,
     eventId: string,
   ) {
+    if (!isFocused) {
+      return;
+    }
+
     navigate('InProgressActivity', {
       appletId,
       entityId,
