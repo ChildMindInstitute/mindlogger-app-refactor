@@ -155,12 +155,12 @@ function FinishItem({
     const appletName = applet?.displayName;
 
     Logger.log(
-      `[Finish.completeActivity]: Applet "${appletName}|${appletId}", Activity "${logActivityName}|${activityId}" completed`,
+      `[Finish.completeActivity]: Activity "${logActivityName}|${activityId}" completed, applet "${appletName}|${appletId}"`,
     );
 
     if (flowId) {
       Logger.log(
-        `[Finish.completeActivity]:Flow "${flowId}" completed, Applet is "${appletName}|${appletId}"`,
+        `[Finish.completeActivity]: Flow "${flowId}" completed, applet "${appletName}|${appletId}"`,
       );
     }
 

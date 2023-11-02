@@ -62,7 +62,6 @@ export function useOnNotificationTap({
     hasMediaReferences,
     cleanUpMediaFiles,
     hasActivityWithHiddenAllItems,
-    logger: Logger,
   });
 
   const { getCurrentRoute } = useCurrentRoute();

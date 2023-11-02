@@ -11,6 +11,7 @@ import {
   getDataFromQuery,
   ILogger,
   isAppOnline,
+  Logger,
   useAppDispatch,
   useAppletInfo,
   useAppSelector,
@@ -35,14 +36,12 @@ type UseStartEntityInput = {
   hasMediaReferences: (input: LookupEntityInput) => boolean;
   hasActivityWithHiddenAllItems: (input: LookupEntityInput) => boolean;
   cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
-  logger: ILogger;
 };
 
 function useStartEntity({
   hasMediaReferences,
   hasActivityWithHiddenAllItems,
   cleanUpMediaFiles,
-  logger,
 }: UseStartEntityInput) {
   const dispatch = useAppDispatch();
 
@@ -51,6 +50,8 @@ function useStartEntity({
   const queryClient = useQueryClient();
 
   const { getName: getAppletDisplayName } = useAppletInfo();
+
+  const logger: ILogger = Logger;
 
   const getProgress = (
     appletId: string,
@@ -159,21 +160,21 @@ function useStartEntity({
             cleanUpMediaFiles({ activityId, appletId, eventId, order: 0 });
 
             logger.log(
-              `[useStartEntity.startActivity]:Applet "${appletName}|${appletId}", Activity "${entityName}|${activityId}" restarted`,
+              `[useStartEntity.startActivity]: Activity "${entityName}|${activityId}" restarted, applet "${appletName}|${appletId}"`,
             );
             activityStarted(appletId, activityId, eventId);
             resolve({ startedFromScratch: true });
           },
           onResume: () => {
             logger.log(
-              `[useStartEntity.startActivity]:Applet "${appletName}|${appletId}", Activity "${entityName}|${activityId}" resumed`,
+              `[useStartEntity.startActivity]: Activity "${entityName}|${activityId}" resumed, applet "${appletName}|${appletId}"`,
             );
             return resolve({ startedFromScratch: false });
           },
         });
       } else {
         logger.log(
-          `[useStartEntity.startActivity]:Applet "${appletName}|${appletId}", Activity "${entityName}|${activityId}" started`,
+          `[useStartEntity.startActivity]: Activity "${entityName}|${activityId}" started, applet "${appletName}|${appletId}"`,
         );
         activityStarted(appletId, activityId, eventId);
         resolve({ startedFromScratch: true });
@@ -271,7 +272,7 @@ function useStartEntity({
               });
             }
             logger.log(
-              `[useStartEntity.startFlow]:Flow "${entityName}|${flowId}" restarted, Applet is "${appletName}|${appletId}"`,
+              `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" restarted, applet "${appletName}|${appletId}"`,
             );
 
             flowStarted(appletId, flowId, firstActivityId, eventId, 0);
@@ -281,7 +282,7 @@ function useStartEntity({
           },
           onResume: () => {
             logger.log(
-              `[useStartEntity.startFlow]:Flow "${entityName}|${flowId}" resumed, Applet is "${appletName}|${appletId}"`,
+              `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" resumed, applet "${appletName}|${appletId}"`,
             );
 
             return resolve({
@@ -291,7 +292,7 @@ function useStartEntity({
         });
       } else {
         logger.log(
-          `[useStartEntity.startFlow]:Flow "${entityName}|${flowId}" started, Applet is "${appletName}|${appletId}"`,
+          `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" started, applet "${appletName}|${appletId}"`,
         );
 
         flowStarted(appletId, flowId, firstActivityId, eventId, 0);

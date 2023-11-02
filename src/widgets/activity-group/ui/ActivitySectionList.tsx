@@ -12,7 +12,6 @@ import {
   MediaFilesCleaner,
 } from '@entities/activity';
 import { AppletModel, clearStorageRecords } from '@entities/applet';
-import { Logger } from '@shared/lib';
 import { Box, Text, YStack } from '@shared/ui';
 
 import { ActivityListGroup } from '../lib';
@@ -42,7 +41,6 @@ function ActivitySectionList({ appletId, groups }: Props) {
     cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
     hasActivityWithHiddenAllItems:
       ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
-    logger: Logger,
   });
 
   function navigateSurvey(

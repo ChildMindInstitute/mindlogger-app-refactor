@@ -166,15 +166,9 @@ function Intermediate({
     const appletName = applet?.displayName;
     const currentActivityName = getActivityName(activityId);
 
-    if (flowId) {
-      Logger.log(
-        `[Intermediate.completeActivity]: Activity "${currentActivityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivity.name}|${nextActivity.id}", Applet is "${appletName}|${appletId}"`,
-      );
-    } else {
-      Logger.log(
-        `[Intermediate.completeActivity]: Applet "${appletName}|${appletId}", Activity "${currentActivityName}|${activityId}" changed to next activity "${nextActivity.name}|${nextActivity.id}"`,
-      );
-    }
+    Logger.log(
+      `[Intermediate.completeActivity]: Activity "${currentActivityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivity.name}|${nextActivity.id}", applet "${appletName}|${appletId}"`,
+    );
 
     dispatch(
       AppletModel.actions.flowUpdated({
@@ -270,15 +264,9 @@ function Intermediate({
 
     const appletName = applet?.displayName;
 
-    if (flowId) {
-      Logger.log(
-        `[Intermediate.completeActivity]: Activity "${logActivityName}|${activityId}" within flow "${flowName}|${flowId}" completed, Applet is "${appletName}|${appletId}"`,
-      );
-    } else {
-      Logger.log(
-        `[Intermediate.completeActivity]: Applet "${appletName}|${appletId}", activity "${logActivityName}|${activityId}" completed`,
-      );
-    }
+    Logger.log(
+      `[Intermediate.completeActivity]: Activity "${logActivityName}|${activityId}" within flow "${flowName}|${flowId}" completed, applet "${appletName}|${appletId}"`,
+    );
 
     pushInQueue({
       appletId,
