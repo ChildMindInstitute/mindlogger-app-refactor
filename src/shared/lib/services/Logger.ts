@@ -29,6 +29,15 @@ type FileExists = {
   exists: boolean;
 } & NamePathSize;
 
+type DeviceInfoLogObject = {
+  brand: string;
+  readableVersion: string;
+  buildNumber: string;
+  firstInstallTime: number;
+  freeDiskStorage: number;
+  lastUpdateTime: number;
+};
+
 class Logger implements ILogger {
   private mutex: IMutex;
 
@@ -123,7 +132,7 @@ class Logger implements ILogger {
       getLastUpdateTime,
     } = DeviceInfo;
 
-    const deviceInfo = {
+    const deviceInfo: DeviceInfoLogObject = {
       brand: getBrand(),
       readableVersion: getReadableVersion(),
       buildNumber: getBuildNumber(),
@@ -142,10 +151,7 @@ class Logger implements ILogger {
       await this.appendNotificationLogs();
       await this.appendDeviceInfoLogs();
     } catch (error) {
-      console.warn(
-        '[Logger.onBeforeSendLogs]: Error occurred: \n\n',
-        error!.toString(),
-      );
+      console.warn('[Logger.onBeforeSendLogs]: Error occurred: \n\n', error);
     }
   }
 
@@ -306,9 +312,9 @@ class Logger implements ILogger {
     }
 
     try {
-      await this.onBeforeSendLogs();
-
       this.mutex.setBusy();
+
+      await this.onBeforeSendLogs();
 
       this.abortController = new AbortController();
 
