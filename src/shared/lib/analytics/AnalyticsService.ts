@@ -23,9 +23,9 @@ const AnalyticsService = {
       service.track(`[Mobile] ${action}`, payload);
     }
   },
-  login(userId: string) {
+  async login(userId: string) {
     if (shouldEnableMixpanel) {
-      service.login(userId);
+      return service.login(userId);
     }
   },
   logout() {

@@ -16,7 +16,7 @@ class MixpanelAnalytics implements IAnalyticsService {
   }
 
   login(id: string): Promise<void> {
-    return this.mixpanel?.identify(id).then(console.log);
+    return this.mixpanel?.identify(id);
   }
 
   logout(): void {

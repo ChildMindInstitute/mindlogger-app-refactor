@@ -23,6 +23,7 @@ import {
   ActivityIdentityContext,
   FlankerResponse,
   useTextVariablesReplacer,
+  useOnStartActivityTracking,
 } from '../lib';
 import { useActivityState, useActivityStepper, useIdleTimer } from '../model';
 import { evaluateFlankerNextStep } from '../model/flankerNextStepEvaluator';
@@ -187,6 +188,8 @@ function ActivityStepper({
     }
     onFinish('regular');
   };
+
+  useOnStartActivityTracking(activityStorageRecord!.step);
 
   if (!activityStorageRecord) {
     return (

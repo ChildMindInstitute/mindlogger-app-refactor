@@ -10,6 +10,7 @@ import { IdentityModel, useLoginMutation } from '@entities/identity';
 import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
 import {
+  AnalyticsService,
   executeIfOnline,
   useAppDispatch,
   useAppForm,
@@ -58,6 +59,10 @@ const LoginForm: FC<Props> = props => {
       UserInfoRecord.setEmail(user.email);
 
       SessionModel.storeSession(session);
+
+      AnalyticsService.login(user.id).then(() => {
+        AnalyticsService.track('Login Successful');
+      });
 
       props.onLoginSuccess();
     },
