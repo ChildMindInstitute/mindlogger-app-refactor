@@ -14,6 +14,7 @@ import { PassSurveyModel } from '@features/pass-survey';
 import { LogTrigger } from '@shared/api';
 import {
   Logger,
+  AnalyticsService,
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
@@ -188,6 +189,8 @@ function FinishItem({
     });
 
     clearActivityStorageRecord();
+
+    AnalyticsService.track('Assessment completed');
 
     const success = await processQueue();
 

@@ -22,6 +22,7 @@ import {
 import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import {
   Logger,
+  AnalyticsService,
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
@@ -292,6 +293,8 @@ function Intermediate({
     });
 
     clearActivityStorageRecord();
+
+    AnalyticsService.track('Assessment completed');
 
     const success = await processQueue();
 
