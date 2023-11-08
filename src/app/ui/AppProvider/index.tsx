@@ -1,4 +1,4 @@
-import { FC, Suspense, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren, useState } from 'react';
 
 import { CacheManager } from '@georstat/react-native-image-cache';
 import { PortalProvider } from '@tamagui/portal';
@@ -10,6 +10,7 @@ import NavigationProvider from './NavigationProvider';
 import ReactQueryProvider from './ReactQueryProvider';
 import ReduxProvider from './ReduxProvider';
 import SplashProvider from './SplashProvider';
+import SystemBootUpProvider from './SystemBootUpProvider';
 import TamaguiProvider from './TamaguiProvider';
 import ToastProvider from './ToastProvider';
 
@@ -22,8 +23,10 @@ CacheManager.config = {
 };
 
 const AppProvider: FC<PropsWithChildren> = ({ children }) => {
+  const [isBootingUp, setIsBootingUp] = useState(true);
+
   return (
-    <SplashProvider>
+    <SystemBootUpProvider onLoadingFinished={() => setIsBootingUp(false)}>
       <ReduxProvider>
         <ReactQueryProvider>
           <LocalizationProvider>
@@ -31,7 +34,9 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
               <NavigationProvider>
                 <PortalProvider>
                   <ToastProvider>
-                    <Suspense>{children}</Suspense>
+                    <SplashProvider isLoading={isBootingUp}>
+                      {children}
+                    </SplashProvider>
                   </ToastProvider>
                 </PortalProvider>
               </NavigationProvider>
@@ -39,7 +44,7 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
           </LocalizationProvider>
         </ReactQueryProvider>
       </ReduxProvider>
-    </SplashProvider>
+    </SystemBootUpProvider>
   );
 };
 

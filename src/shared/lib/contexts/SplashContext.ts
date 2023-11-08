@@ -1,15 +1,13 @@
 import { createContext, useContext } from 'react';
 
-type SplashContext = {
-  setLoadingState: (this: void, value: boolean) => any;
+type SystemBootUpContext = {
   onModuleInitialized: (module: string) => void;
 };
 
-export const SplashContext = createContext<SplashContext>({
-  setLoadingState: () => {},
+export const SystemBootUpContext = createContext<SystemBootUpContext>({
   onModuleInitialized: () => {},
 });
 
-export function useSplash() {
-  return useContext(SplashContext);
+export function useSystemBootUp() {
+  return useContext(SystemBootUpContext);
 }

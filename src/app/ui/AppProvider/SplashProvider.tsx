@@ -1,42 +1,17 @@
-import { PropsWithChildren, useState, useMemo, useRef } from 'react';
+import { PropsWithChildren } from 'react';
 
-import { SplashContext } from '@shared/lib';
-import { Splash } from '@shared/ui';
+import { Box, Splash } from '@shared/ui';
 
-function SplashProvider({ children }: PropsWithChildren<unknown>) {
-  const [isLoading, setIsLoading] = useState(true);
-  const moduleWaitList = useRef(['cache', 'state']);
+type Props = PropsWithChildren<{
+  isLoading: boolean;
+}>;
 
-  const contextValue = useMemo(
-    () => ({
-      setLoadingState: (value: boolean) => {
-        if (moduleWaitList.current.length !== 0) {
-          return;
-        }
-
-        setIsLoading(value);
-      },
-      onModuleInitialized: (module: string) => {
-        moduleWaitList.current = moduleWaitList.current.filter(
-          item => item !== module,
-        );
-
-        if (moduleWaitList.current.length === 0) {
-          setIsLoading(false);
-        }
-      },
-    }),
-    [],
-  );
-
+function SplashProvider({ isLoading, children }: Props) {
   return (
-    <>
-      <SplashContext.Provider value={contextValue}>
-        {children}
-      </SplashContext.Provider>
-
-      <Splash isAppReady={!isLoading} />
-    </>
+    <Box flex={1}>
+      {isLoading ? <Box flex={1} /> : children}
+      {isLoading ? <Splash /> : <></>}
+    </Box>
   );
 }
 
