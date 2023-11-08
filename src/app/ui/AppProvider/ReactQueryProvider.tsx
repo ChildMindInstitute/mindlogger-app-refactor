@@ -5,7 +5,7 @@ import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persist
 import { QueryClient, onlineManager } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
-import { createSyncStorage, isAppOnline, useSplash } from '@shared/lib';
+import { createSyncStorage, isAppOnline, useSystemBootUp } from '@shared/lib';
 
 const storage = createSyncStorage('cache-storage');
 
@@ -53,7 +53,7 @@ if (__DEV__) {
 }
 
 const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { onModuleInitialized } = useSplash();
+  const { onModuleInitialized } = useSystemBootUp();
 
   const onCacheRestored = () => {
     isAppOnline().then(isOnline => {
