@@ -31,7 +31,15 @@ import {
   Logger,
   useCurrentRoute,
 } from '@shared/lib';
-import { UserProfileIcon, HomeIcon, BackButton, Text, Box } from '@shared/ui';
+import {
+  UserProfileIcon,
+  HomeIcon,
+  BackButton,
+  Text,
+  Box,
+  ChevronLeft,
+  XStack,
+} from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
 import { onBeforeAppClose } from '../lib';
@@ -154,14 +162,22 @@ export default () => {
 
           <Stack.Screen
             name="SignUp"
-            options={{
-              title: t('login:new_user'),
-              contentStyle: {
-                borderTopColor: colors.grey,
-                borderTopWidth: 1,
-              },
-            }}
             component={SignUpScreen}
+            options={{
+              headerBackTitle: 'Back',
+              title: '',
+              headerLeft: () => (
+                <BackButton>
+                  <XStack ai="center">
+                    <ChevronLeft color="white" size={16} />
+
+                    <Text ml={2} color="$white" fontSize={16}>
+                      Back
+                    </Text>
+                  </XStack>
+                </BackButton>
+              ),
+            }}
           />
         </>
       )}

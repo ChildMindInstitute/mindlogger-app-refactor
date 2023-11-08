@@ -206,7 +206,8 @@
     "please_accept_terms": "Veuillez accepter les conditions d'utilisation.",
     "password_at_least_characters": "Le mot de passe doit être au moins de 6 caractères",
     "email_looks_incomplete": "Il semble que cet e-mail soit incomplet",
-    "password_no_spaces": "Le mot de passe ne doit pas contenir d'espaces vides"
+    "password_no_spaces": "Le mot de passe ne doit pas contenir d'espaces vides",
+    "sign_up_agree": "By signing up, you agree to MindLogger’s"
   },
   "geolocation": {
     "get_location": "LOCALISATION",
