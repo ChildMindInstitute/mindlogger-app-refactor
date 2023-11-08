@@ -87,7 +87,6 @@ const SignUpForm: FC<Props> = props => {
           }}
           buttonStyle={{
             alignSelf: 'center',
-            paddingHorizontal: 56,
             paddingVertical: isTablet() ? 13 : 16,
           }}
         >
