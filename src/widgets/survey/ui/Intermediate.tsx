@@ -21,6 +21,7 @@ import {
 } from '@app/features/pass-survey';
 import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import {
+  Logger,
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
@@ -84,6 +85,8 @@ function Intermediate({
         response.data.result.activityFlows.find(o => o.id === flowId)!,
       ),
   });
+
+  const flowName = activityFlow?.name;
 
   let { data: allActivities } = useAppletDetailsQuery(appletId, {
     select: r => mapActivitiesFromDto(r.data.result.activities),
@@ -160,6 +163,13 @@ function Intermediate({
       return;
     }
 
+    const appletName = applet?.displayName;
+    const currentActivityName = getActivityName(activityId);
+
+    Logger.log(
+      `[Intermediate.completeActivity]: Activity "${currentActivityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivity?.name}|${nextActivity?.id}", applet "${appletName}|${appletId}"`,
+    );
+
     dispatch(
       AppletModel.actions.flowUpdated({
         appletId,
@@ -169,7 +179,18 @@ function Intermediate({
         pipelineActivityOrder: activitiesPassed,
       }),
     );
-  }, [appletId, dispatch, eventId, flowId, nextActivity, activitiesPassed]);
+  }, [
+    getActivityName,
+    activityId,
+    applet?.displayName,
+    flowName,
+    appletId,
+    dispatch,
+    eventId,
+    flowId,
+    nextActivity,
+    activitiesPassed,
+  ]);
 
   async function completeActivity() {
     if (!activityStorageRecord) {
@@ -239,6 +260,14 @@ function Intermediate({
       activityStorageRecord.answers,
     );
 
+    const logActivityName = getActivityName(activityId);
+
+    const appletName = applet?.displayName;
+
+    Logger.log(
+      `[Intermediate.completeActivity]: Activity "${logActivityName}|${activityId}" within flow "${flowName}|${flowId}" completed, applet "${appletName}|${appletId}"`,
+    );
+
     pushInQueue({
       appletId,
       createdAt: Date.now(),
@@ -254,7 +283,7 @@ function Intermediate({
       startTime: getActivityStartAt(progressRecord)!,
       endTime: Date.now(),
       scheduledTime: scheduledDate,
-      logActivityName: activityName,
+      logActivityName,
       logCompletedAt: new Date().toString(),
       client: getClientInformation(),
       alerts,
@@ -297,7 +326,7 @@ function Intermediate({
             <Image src={badge} width={18} height={18} opacity={0.6} r={4} />
 
             <Text fontSize={14} color="$grey">
-              {activitiesPassed + 1} of {totalActivities} {activityFlow!.name}
+              {activitiesPassed + 1} of {totalActivities} {flowName}
             </Text>
           </XStack>
         </ActivityBox>
