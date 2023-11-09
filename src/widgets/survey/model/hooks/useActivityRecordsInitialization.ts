@@ -5,6 +5,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { EntityType } from '@app/abstract/lib';
 import { PassSurveyModel } from '@app/features/pass-survey';
 
+import { useFlowState } from './useFlowState';
+
 type UseActivityRecordsInitializationArgs = {
   appletId: string;
   eventId: string;
@@ -20,6 +22,12 @@ export function useActivityRecordsInitialization({
 }: UseActivityRecordsInitializationArgs) {
   const queryClient = useQueryClient();
 
+  const { restFlowActivityIds } = useFlowState({
+    appletId,
+    eventId,
+    flowId: entityType === 'flow' ? entityId : undefined,
+  });
+
   const Initializer = useMemo(
     () =>
       PassSurveyModel.ActivityRecordInitializer({
@@ -32,14 +40,17 @@ export function useActivityRecordsInitialization({
   const isFlow = entityType === 'flow';
 
   useMemo(() => {
-    if (isFlow) {
-      Initializer.initializeFlow({ flowId: entityId, eventId });
+    if (isFlow && restFlowActivityIds.length) {
+      Initializer.initializeFlowActivities({
+        eventId,
+        flowActivityIds: restFlowActivityIds,
+      });
     }
-  }, [Initializer, eventId, isFlow, entityId]);
+  }, [Initializer, eventId, isFlow, restFlowActivityIds]);
 
   useMemo(() => {
-    if (!isFlow) {
+    if (!isFlow && restFlowActivityIds.length) {
       Initializer.initializeActivity({ activityId: entityId, eventId });
     }
-  }, [Initializer, eventId, isFlow, entityId]);
+  }, [Initializer, eventId, isFlow, entityId, restFlowActivityIds]);
 }

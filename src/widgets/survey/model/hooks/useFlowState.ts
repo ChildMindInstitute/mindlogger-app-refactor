@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import {
   FlowSummaryData,
   SummaryDataKey,
@@ -25,10 +27,22 @@ export function useFlowState({ appletId, eventId, flowId }: UseFlowStateArgs) {
   const flowSummaryData: FlowSummaryData = (record?.context?.[SummaryDataKey] ??
     {}) as FlowSummaryData;
 
+  const restFlowActivityIds: string[] = useMemo(() => {
+    if (!record?.pipeline.length || record?.step == null) {
+      return [];
+    }
+
+    const restActivitySteps = record.pipeline
+      .slice(record.step)
+      .filter(x => x.type === 'Stepper');
+    return restActivitySteps.map(x => x.payload.activityId);
+  }, [record?.pipeline, record?.step]);
+
   return {
     step,
     isTimerElapsed: record?.isCompletedDueToTimer ?? false,
     pipeline,
     flowSummaryData,
+    restFlowActivityIds,
   };
 }

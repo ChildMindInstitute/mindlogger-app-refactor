@@ -40,6 +40,8 @@ export type FlowSummaryData = Record<
 
 export type FlowState = {
   step: number;
+  flowName: string | null;
+  scheduledDate: number | null;
   pipeline: FlowPipelineItem[];
   isCompletedDueToTimer: boolean;
   context: Record<string, unknown>;

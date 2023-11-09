@@ -6,8 +6,12 @@ export const enum ActivityPipelineType {
 
 export type FlowProgress = {
   type: ActivityPipelineType.Flow;
-  currentActivityId: string;
   pipelineActivityOrder: number;
+  totalActivitiesInPipeline: number;
+  currentActivityId: string;
+  currentActivityName: string;
+  currentActivityDescription: string;
+  currentActivityImage: string | null;
   currentActivityStartAt: number | null;
   executionGroupKey: string;
 };

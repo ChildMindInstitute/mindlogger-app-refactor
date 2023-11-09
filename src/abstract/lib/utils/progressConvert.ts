@@ -29,15 +29,20 @@ export const convertProgress = (storeProgress: StoreProgress): Progress => {
       for (let eventId in eventsProgress) {
         const storePayload: StoreProgressPayload = eventsProgress[eventId];
 
+        const flowProgress = storePayload as FlowProgress;
+
         const payload: ProgressPayload = {
-          currentActivityId: (storePayload as FlowProgress).currentActivityId,
+          currentActivityId: flowProgress.currentActivityId,
+          currentActivityName: flowProgress.currentActivityName,
+          currentActivityDescription: flowProgress.currentActivityDescription,
+          currentActivityImage: flowProgress.currentActivityImage,
           endAt: !storePayload.endAt ? null : new Date(storePayload.endAt),
           startAt: new Date(storePayload.startAt),
           type: storePayload.type,
           currentActivityStartAt: null,
           executionGroupKey: uuidv4(),
-          pipelineActivityOrder: (storePayload as FlowProgress)
-            .pipelineActivityOrder,
+          pipelineActivityOrder: flowProgress.pipelineActivityOrder,
+          totalActivitiesInPipeline: flowProgress.totalActivitiesInPipeline,
         };
         result[appletId][entityId][eventId] = payload;
       }

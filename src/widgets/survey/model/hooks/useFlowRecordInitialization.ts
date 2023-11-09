@@ -5,8 +5,10 @@ import { useQueryClient } from '@tanstack/react-query';
 import { EntityType } from '@app/abstract/lib';
 import { ActivityModel } from '@app/entities/activity';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
+import { EventModel } from '@app/entities/event';
 
 import { useFlowStorageRecord } from '../../lib';
+import { getScheduledDate } from '../operations';
 import {
   buildActivityFlowPipeline,
   buildSingleActivityPipeline,
@@ -47,6 +49,10 @@ export function useFlowRecordInitialization({
       AppletModel.mapAppletDetailsFromDto(response.data.result),
   });
 
+  const scheduledEvent = EventModel.useScheduledEvent({ appletId, eventId });
+
+  const flow = applet?.activityFlows.find(x => x.id === entityId);
+
   const buildPipeline = useCallback(() => {
     if (!applet) {
       return [];
@@ -59,19 +65,32 @@ export function useFlowRecordInitialization({
     const isActivityFlow = entityType === 'flow';
 
     if (!isActivityFlow) {
+      const activity = applet.activities.find(x => x.id === entityId)!;
+
       return buildSingleActivityPipeline({
         appletId,
         eventId,
-        activityId: entityId,
+        activity: {
+          id: activity.id,
+          name: activity.name,
+          description: activity.description,
+          image: activity.image,
+        },
         hasSummary,
       });
     } else {
-      const activityIds = applet.activityFlows.find(
-        flow => flow.id === entityId,
-      )?.activityIds;
+      const activities = flow!.activityIds.map(id => {
+        const found = applet.activities.find(x => x.id === id)!;
+        return {
+          id: found.id,
+          name: found.name,
+          description: found.description,
+          image: found.image,
+        };
+      });
 
       return buildActivityFlowPipeline({
-        activityIds: activityIds!,
+        activities,
         appletId,
         eventId,
         flowId: entityId,
@@ -87,19 +106,24 @@ export function useFlowRecordInitialization({
     entityId,
     entityType,
     activityQueryService,
+    flow,
   ]);
 
   const canCreateStorageRecord =
     !initializedRef.current && applet && !flowStorageRecord;
 
   const createStorageRecord = useCallback(() => {
+    const scheduledDate = getScheduledDate(scheduledEvent!);
+
     return upsertFlowStorageRecord({
       step: 0,
       pipeline: buildPipeline(),
       isCompletedDueToTimer: false,
       context: {},
+      flowName: flow?.name ?? null,
+      scheduledDate: scheduledDate ?? null,
     });
-  }, [buildPipeline, upsertFlowStorageRecord]);
+  }, [buildPipeline, upsertFlowStorageRecord, flow, scheduledEvent]);
 
   useEffect(() => {
     if (canCreateStorageRecord) {
