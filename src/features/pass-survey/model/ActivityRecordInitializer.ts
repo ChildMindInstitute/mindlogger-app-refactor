@@ -28,8 +28,8 @@ type InitializeArgs = {
 };
 
 type InitializeFlowArgs = {
-  flowId: string;
   eventId: string;
+  flowActivityIds: string[];
 };
 
 export type InitializeHiddenItem = {
@@ -54,6 +54,15 @@ export function ActivityRecordInitializer({
     eventId,
     order = 0,
   }: InitializeArgs) => {
+    const key = `${appletId}-${activityId}-${eventId}-${order}`;
+
+    const storageRecordExist = storage.contains(key);
+
+    if (storageRecordExist) {
+      setAbTrailsStep(key);
+      return;
+    }
+
     const activityResponse = getDataFromQuery<ActivityResponse>(
       getActivityDetailsKey(activityId),
       queryClient,
@@ -81,16 +90,10 @@ export function ActivityRecordInitializer({
       },
     };
 
-    const key = `${appletId}-${activityId}-${eventId}-${order}`;
-
-    if (!storage.contains(key)) {
-      storage.set(key, JSON.stringify(state));
-    } else {
-      initializeAbTrailsStep(key);
-    }
+    storage.set(key, JSON.stringify(state));
   };
 
-  const initializeAbTrailsStep = (key: string) => {
+  const setAbTrailsStep = (key: string) => {
     const state = JSON.parse(storage.getString(key)!) as ActivityState;
 
     if (state.items[state.step].type === 'AbTest') {
@@ -99,16 +102,11 @@ export function ActivityRecordInitializer({
     }
   };
 
-  const initializeFlow = ({ flowId, eventId }: InitializeFlowArgs) => {
-    const flow = applet.activityFlows.find(o => o.id === flowId);
-
-    if (!flow) {
-      throw Error(
-        '[ActivityRecordInitializer]: flow has not been found in the applet',
-      );
-    }
-
-    flow.activityIds.forEach((activityId, order) => {
+  const initializeFlowActivities = ({
+    eventId,
+    flowActivityIds,
+  }: InitializeFlowArgs) => {
+    flowActivityIds.forEach((activityId, order) => {
       initializeActivity({
         activityId,
         eventId,
@@ -119,6 +117,6 @@ export function ActivityRecordInitializer({
 
   return {
     initializeActivity,
-    initializeFlow,
+    initializeFlowActivities,
   };
 }

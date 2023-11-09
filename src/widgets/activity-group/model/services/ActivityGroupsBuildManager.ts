@@ -29,6 +29,7 @@ import { mapActivitiesFromDto, mapActivityFlowsFromDto } from '../mappers';
 type BuildResult = {
   groups: ActivityListGroup[];
   isCacheInsufficientError?: boolean;
+  otherError?: boolean;
 };
 
 const createActivityGroupsBuildManager = (logger: ILogger) => {
@@ -163,6 +164,7 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
         '[ActivityGroupsBuildManager.processInternal]: Build error occurred:\n\n' +
           error!.toString(),
       );
+      result.otherError = true;
     }
 
     return result;
@@ -186,8 +188,8 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
         '[ActivityGroupsBuildManager.process] Error occurred\nInternal error:\n' +
           error!.toString(),
       );
+      return { groups: [], otherError: true };
     }
-    return { groups: [] };
   };
 
   return {

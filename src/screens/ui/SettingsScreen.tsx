@@ -15,12 +15,16 @@ import {
 } from '@shared/lib';
 import { YStack, Box, RowButton, UserIcon, Text } from '@shared/ui';
 
+import useMigration1 from './Migrations/useMigration1';
+
 const SettingsScreen: FC = () => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
 
   const userName = useAppSelector(IdentityModel.selectors.selectFirstName);
   const userEmail = useAppSelector(IdentityModel.selectors.selectEmail);
+
+  const { migrate } = useMigration1();
 
   const navigateToAppLanguage = () => {
     navigate('ChangeLanguage');
@@ -32,6 +36,10 @@ const SettingsScreen: FC = () => {
 
   const navigateToAppLogs = () => {
     navigate('ApplicationLogs');
+  };
+
+  const runMigration = () => {
+    migrate();
   };
 
   const hashedDeviceId: string = useMemo(() => {
@@ -78,6 +86,7 @@ const SettingsScreen: FC = () => {
             title={t('settings:upload_logs')}
           />
 
+          <RowButton onPress={runMigration} title={t('Test migration #1')} />
           <LogoutRowButton />
         </YStack>
       </Box>

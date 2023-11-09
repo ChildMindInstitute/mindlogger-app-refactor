@@ -27,6 +27,10 @@ type InProgressFlow = {
   appletId: string;
   flowId: string;
   activityId: string;
+  activityName: string;
+  activityDescription: string;
+  activityImage: string | null;
+  totalActivities: number;
   eventId: string;
   pipelineActivityOrder: number;
 };
@@ -64,17 +68,30 @@ const slice = createSlice({
     },
 
     flowStarted: (state, action: PayloadAction<InProgressFlow>) => {
-      const { appletId, activityId, flowId, eventId, pipelineActivityOrder } =
-        action.payload;
+      const {
+        appletId,
+        activityId,
+        activityName,
+        activityDescription,
+        activityImage,
+        flowId,
+        eventId,
+        pipelineActivityOrder,
+        totalActivities,
+      } = action.payload;
 
       const flowEvent: StoreProgressPayload = {
         type: ActivityPipelineType.Flow,
         currentActivityId: activityId,
+        currentActivityName: activityName,
+        currentActivityDescription: activityDescription,
+        currentActivityImage: activityImage,
         startAt: new Date().getTime(),
         currentActivityStartAt: new Date().getTime(),
         endAt: null,
         executionGroupKey: uuidv4(),
         pipelineActivityOrder,
+        totalActivitiesInPipeline: totalActivities,
       };
 
       state.inProgress[appletId] = state.inProgress[appletId] ?? {};
@@ -85,14 +102,27 @@ const slice = createSlice({
     },
 
     flowUpdated: (state, action: PayloadAction<InProgressFlow>) => {
-      const { appletId, activityId, flowId, eventId, pipelineActivityOrder } =
-        action.payload;
+      const {
+        appletId,
+        activityId,
+        activityName,
+        activityDescription,
+        activityImage,
+        flowId,
+        eventId,
+        pipelineActivityOrder,
+        totalActivities,
+      } = action.payload;
 
       const event = state.inProgress[appletId][flowId][eventId] as FlowProgress;
 
       event.currentActivityId = activityId;
+      event.currentActivityName = activityName;
+      event.currentActivityDescription = activityDescription;
+      event.currentActivityImage = activityImage;
       event.pipelineActivityOrder = pipelineActivityOrder;
       event.currentActivityStartAt = new Date().getTime();
+      event.totalActivitiesInPipeline = totalActivities;
     },
 
     entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {

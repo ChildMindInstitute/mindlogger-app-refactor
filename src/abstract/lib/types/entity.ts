@@ -1,5 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 
+import { IdName } from './primitive';
+
 export type EntityType = 'flow' | 'regular';
 
 export type EntityPath = {
@@ -14,4 +16,9 @@ export type LookupEntityInput = {
   entityId: string;
   entityType: EntityType;
   queryClient: QueryClient;
+};
+
+export type FlowProgressActivity = IdName & {
+  description: string;
+  image: string | null;
 };

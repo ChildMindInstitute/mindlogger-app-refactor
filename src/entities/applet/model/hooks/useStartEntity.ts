@@ -5,7 +5,11 @@ import {
   LookupEntityInput,
   StoreProgressPayload,
 } from '@app/abstract/lib';
-import { ActivityFlowRecordDto, AppletDetailsResponse } from '@app/shared/api';
+import {
+  ActivityFlowRecordDto,
+  ActivityRecordDto,
+  AppletDetailsResponse,
+} from '@app/shared/api';
 import {
   AnalyticsService,
   getAppletDetailsKey,
@@ -39,6 +43,18 @@ type UseStartEntityInput = {
   hasMediaReferences: (input: LookupEntityInput) => boolean;
   hasActivityWithHiddenAllItems: (input: LookupEntityInput) => boolean;
   cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
+};
+
+type FlowStartedArgs = {
+  appletId: string;
+  flowId: string;
+  eventId: string;
+  activityId: string;
+  activityName: string;
+  activityDescription: string;
+  activityImage: string | null;
+  pipelineActivityOrder: number;
+  totalActivities: number;
 };
 
 function useStartEntity({
@@ -79,20 +95,28 @@ function useStartEntity({
     );
   }
 
-  function flowStarted(
-    appletId: string,
-    flowId: string,
-    activityId: string,
-    eventId: string,
-    pipelineActivityOrder: number,
-  ) {
+  function flowStarted({
+    appletId,
+    flowId,
+    eventId,
+    activityId,
+    activityName,
+    activityDescription,
+    activityImage,
+    totalActivities,
+    pipelineActivityOrder,
+  }: FlowStartedArgs) {
     dispatch(
       actions.flowStarted({
         appletId,
         flowId,
-        activityId,
         eventId,
+        activityId,
+        activityName,
+        activityDescription,
+        activityImage,
         pipelineActivityOrder,
+        totalActivities,
       }),
     );
   }
@@ -236,13 +260,13 @@ function useStartEntity({
       });
     };
 
-    const getFlowActivities = (): string[] => {
-      const detailsResponse: AppletDetailsResponse =
-        getDataFromQuery<AppletDetailsResponse>(
-          getAppletDetailsKey(appletId),
-          queryClient,
-        )!;
+    const detailsResponse: AppletDetailsResponse =
+      getDataFromQuery<AppletDetailsResponse>(
+        getAppletDetailsKey(appletId),
+        queryClient,
+      )!;
 
+    const getFlowActivities = (): string[] => {
       const activityFlowDtos: ActivityFlowRecordDto[] =
         detailsResponse.result.activityFlows;
       const flow = activityFlowDtos!.find(x => x.id === flowId)!;
@@ -280,9 +304,17 @@ function useStartEntity({
       });
     };
 
+    const getActivity = (id: string): ActivityRecordDto => {
+      return detailsResponse.result.activities.find(x => x.id === id)!;
+    };
+
     const flowActivities: string[] = getFlowActivities();
 
     const firstActivityId: string = flowActivities[0];
+
+    const firstActivity = getActivity(firstActivityId);
+
+    const totalActivities = flowActivities.length;
 
     return new Promise<StartResult>(resolve => {
       if (shouldBreakDueToMediaReferences()) {
@@ -324,7 +356,18 @@ function useStartEntity({
               });
             }
             logRestart();
-            flowStarted(appletId, flowId, firstActivityId, eventId, 0);
+
+            flowStarted({
+              appletId,
+              flowId,
+              activityId: firstActivity.id,
+              activityDescription: firstActivity.description,
+              activityImage: firstActivity.image,
+              eventId,
+              pipelineActivityOrder: 0,
+              activityName: firstActivity.name,
+              totalActivities,
+            });
             resolve({
               startedFromScratch: true,
             });
@@ -338,7 +381,18 @@ function useStartEntity({
         });
       } else {
         logStart();
-        flowStarted(appletId, flowId, firstActivityId, eventId, 0);
+        flowStarted({
+          appletId,
+          flowId,
+          eventId,
+          activityId: firstActivity.id,
+          activityName: firstActivity.name,
+          activityDescription: firstActivity.description,
+          activityImage: firstActivity.image,
+          pipelineActivityOrder: 0,
+          totalActivities,
+        });
+
         resolve({
           startedFromScratch: true,
         });
