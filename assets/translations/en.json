@@ -121,7 +121,8 @@
   },
   "activity_list_component": {
     "no_activities_yet": "No activities specified yet",
-    "insufficient_data_error": "This applet was not refreshed. Please try to refresh again."
+    "insufficient_data_error": "This applet was not refreshed. Please try to refresh again.",
+    "other_error": "Undefined error occurred"
   },
   "applet_settings": {
     "applet_not_defined": "There isn't an applet defined.",

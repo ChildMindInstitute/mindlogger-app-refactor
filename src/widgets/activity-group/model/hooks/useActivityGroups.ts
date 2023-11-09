@@ -30,11 +30,23 @@ export const useActivityGroups = (
     queryClient,
   );
 
-  return {
-    groups: groupsResult.groups,
-    isSuccess: !groupsResult.isCacheInsufficientError,
-    error: groupsResult.isCacheInsufficientError
-      ? 'activity_list_component:insufficient_data_error'
-      : null,
+  const buildResult = (): UseActivityGroupsReturn => {
+    const result: UseActivityGroupsReturn = {
+      groups: groupsResult.groups,
+      isSuccess:
+        !groupsResult.isCacheInsufficientError && !groupsResult.otherError,
+      error: null,
+    };
+
+    if (groupsResult.isCacheInsufficientError) {
+      result.error = 'activity_list_component:insufficient_data_error';
+    }
+    if (groupsResult.otherError) {
+      result.error = 'activity_list_component:other_error';
+    }
+
+    return result;
   };
+
+  return buildResult();
 };
