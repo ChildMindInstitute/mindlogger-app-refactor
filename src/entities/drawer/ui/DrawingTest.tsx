@@ -17,6 +17,8 @@ const RectPadding = 15;
 
 const filesCacheDir = Dirs.CacheDir;
 
+const SCROLL_ENABLING_DELAY = 300;
+
 type Props = {
   value: { lines: DrawLine[]; fileName: string | null };
   imageUrl: string | null;
@@ -29,6 +31,8 @@ type Props = {
   BoxProps;
 
 const DrawingTest: FC<Props> = props => {
+  const timeoutIdRef = useRef<TimeoutId>();
+
   const [width, setWidth] = useState<number | null>(null);
   const { scrollToEnd, isAreaScrollable } = useContext(ActivityScrollContext);
 
@@ -99,6 +103,19 @@ const DrawingTest: FC<Props> = props => {
 
   const disableScroll = () => toggleScrollRef.current(false);
 
+  const onCanvasTouchStart = () => {
+    runOnIOS(() => {
+      clearTimeout(timeoutIdRef.current);
+      disableScroll();
+    });
+  };
+
+  const onCanvasTouchEnd = () => {
+    runOnIOS(() => {
+      timeoutIdRef.current = setTimeout(enableScroll, SCROLL_ENABLING_DELAY);
+    });
+  };
+
   useEffect(() => {
     if (IS_ANDROID) {
       if (isAreaScrollable) {
@@ -151,8 +168,8 @@ const DrawingTest: FC<Props> = props => {
       {!!width && (
         <XStack
           jc="center"
-          onTouchStart={() => runOnIOS(disableScroll)}
-          onTouchEnd={() => runOnIOS(enableScroll)}
+          onTouchStart={onCanvasTouchStart}
+          onTouchEnd={onCanvasTouchEnd}
         >
           {!!backgroundImageUrl && (
             <CachedImage
