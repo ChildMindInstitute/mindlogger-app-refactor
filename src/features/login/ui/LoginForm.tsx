@@ -121,7 +121,7 @@ const LoginForm: FC<Props> = props => {
           isLoading={isLoading}
           borderRadius={30}
           width="100%"
-          bg="$lighterGrey4"
+          bg="$lighterGrey6"
           textProps={{
             fontSize: 14,
             color: 'black',

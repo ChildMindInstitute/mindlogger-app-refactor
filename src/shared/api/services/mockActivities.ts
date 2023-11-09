@@ -20,6 +20,10 @@ const grid: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '101',
@@ -64,6 +68,10 @@ const vortex: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '102',
@@ -108,6 +116,10 @@ const allDrawing: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [...grid.items, ...vortex.items],
 };
 
@@ -165,6 +177,10 @@ export const TextActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '104',
@@ -204,6 +220,10 @@ export const GeolocationActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '104',
@@ -241,6 +261,10 @@ export const SliderTestActivity: ActivityDto = {
   responseIsEditable: false,
   isHidden: false,
   order: 0,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       responseValues: {
@@ -252,6 +276,7 @@ export const SliderTestActivity: ActivityDto = {
         minLabel: 'Minimum label',
         maxLabel: 'Maximum label',
         alerts: null,
+        scores: [],
       },
       id: '105',
       timer: null,
@@ -293,6 +318,10 @@ export const StabilityTrackerActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  scoresAndReports: {
+    showScoreSummary: false,
+    reports: [],
+  },
   items: [
     {
       id: '103011',

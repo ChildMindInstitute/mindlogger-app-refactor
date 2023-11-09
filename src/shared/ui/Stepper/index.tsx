@@ -133,6 +133,8 @@ export function Stepper({
   );
 }
 
+export type StepperProps = Props;
+
 Stepper.Progress = Progress;
 Stepper.ViewList = ViewList;
 Stepper.NavigationPanel = NavigationPanel;
