@@ -1,8 +1,10 @@
 import { format } from 'date-fns';
+import DeviceInfo from 'react-native-device-info';
 import { Dirs, FileSystem } from 'react-native-file-access';
 import { FileLogger, LogLevel } from 'react-native-file-logger';
 
 import { FileService } from '@shared/api';
+import { getNotificationSettingsData } from '@shared/lib';
 
 import { IS_ANDROID, IS_IOS } from '../constants';
 import { ILogger } from '../types';
@@ -26,6 +28,15 @@ type NamePathSize = {
 type FileExists = {
   exists: boolean;
 } & NamePathSize;
+
+type DeviceInfoLogObject = {
+  brand: string;
+  readableVersion: string;
+  buildNumber: string;
+  firstInstallTime: number;
+  freeDiskStorage: number;
+  lastUpdateTime: number;
+};
 
 class Logger implements ILogger {
   private mutex: IMutex;
@@ -99,6 +110,49 @@ class Logger implements ILogger {
     }
 
     return result;
+  }
+
+  private async appendNotificationLogs(): Promise<void> {
+    const notificationSettings = await getNotificationSettingsData();
+
+    const rawNotificationSettings = JSON.stringify(notificationSettings);
+
+    this.log(
+      `[Logger:appendNotificationLogs] NotificationSettings: ${rawNotificationSettings}`,
+    );
+  }
+
+  private async appendDeviceInfoLogs(): Promise<void> {
+    const {
+      getBrand,
+      getReadableVersion,
+      getBuildNumber,
+      getFirstInstallTime,
+      getFreeDiskStorage,
+      getLastUpdateTime,
+    } = DeviceInfo;
+
+    const deviceInfo: DeviceInfoLogObject = {
+      brand: getBrand(),
+      readableVersion: getReadableVersion(),
+      buildNumber: getBuildNumber(),
+      firstInstallTime: await getFirstInstallTime(),
+      freeDiskStorage: await getFreeDiskStorage(),
+      lastUpdateTime: await getLastUpdateTime(),
+    };
+
+    const rawDeviceInfo = JSON.stringify(deviceInfo);
+
+    this.log(`[Logger:appendDeviceInfoLogs] DeviceInfo: ${rawDeviceInfo}`);
+  }
+
+  private async onBeforeSendLogs(): Promise<void> {
+    try {
+      await this.appendNotificationLogs();
+      await this.appendDeviceInfoLogs();
+    } catch (error) {
+      console.warn('[Logger.onBeforeSendLogs]: Error occurred: \n\n', error);
+    }
   }
 
   private async sendInternal(): Promise<boolean> {
@@ -259,6 +313,8 @@ class Logger implements ILogger {
 
     try {
       this.mutex.setBusy();
+
+      await this.onBeforeSendLogs();
 
       this.abortController = new AbortController();
 

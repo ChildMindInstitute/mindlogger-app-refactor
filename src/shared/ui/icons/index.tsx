@@ -19,6 +19,10 @@ export const CloseIcon: FC<IconProps> = props => (
   <AntDesign name="close" {...props} />
 );
 
+export const ChevronLeft: FC<IconProps> = props => (
+  <AntDesign name="left" {...props} />
+);
+
 export const CrossIcon: FC<IconProps> = props => (
   <FontAwesome name="close" {...props} />
 );

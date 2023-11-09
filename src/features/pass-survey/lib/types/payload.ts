@@ -85,6 +85,7 @@ type SliderPayload = {
     maxValue: number;
     message: string;
   }> | null;
+  scores: Array<number>;
 };
 
 type AudioPayload = {

@@ -5,7 +5,7 @@ import notifee, {
   Notification,
 } from '@notifee/react-native';
 
-import { IS_IOS } from '@app/shared/lib';
+import { IS_IOS, Logger } from '@app/shared/lib';
 
 import { ANDROID_DEFAULT_CHANNEL_ID } from '../constants';
 
@@ -32,8 +32,9 @@ function NotificationRenderer() {
         },
       });
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn(`FCM[${Platform.OS}]: error `, error);
+      Logger.warn(
+        `[NotificationRenderer:displayNotification] OS[${Platform.OS}]: error ${error}`,
+      );
     }
   }
 

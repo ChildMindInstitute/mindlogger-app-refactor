@@ -7,6 +7,7 @@ import {
 } from '@app/shared/lib';
 
 import { ActivityItemDto } from './ActivityItemDto';
+import { ReportDto } from './ActivityReportSettingsDtos';
 import httpService from './httpService';
 import { getTestActivity } from './mockActivities';
 import { SuccessfulResponse } from '../types';
@@ -26,6 +27,10 @@ export type ActivityDto = {
   responseIsEditable: boolean;
   order: number;
   items: ActivityItemDto[];
+  scoresAndReports?: {
+    showScoreSummary: boolean;
+    reports: Array<ReportDto>;
+  };
 };
 
 export type ActivityResponse = SuccessfulResponse<ActivityDto>;
