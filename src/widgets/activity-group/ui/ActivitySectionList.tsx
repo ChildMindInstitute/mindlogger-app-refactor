@@ -2,7 +2,6 @@ import { useMemo, PropsWithChildren } from 'react';
 import { SectionList, StyleSheet } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import { useIsFocused } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { EntityType } from '@app/abstract/lib';
@@ -24,8 +23,7 @@ type Props = {
 
 function ActivitySectionList({ appletId, groups }: Props) {
   const { t } = useTranslation();
-  const { navigate } = useNavigation();
-  const isFocused = useIsFocused();
+  const { navigate, isFocused } = useNavigation();
 
   const sections = useMemo(() => {
     return groups
@@ -65,10 +63,6 @@ function ActivitySectionList({ appletId, groups }: Props) {
     isTimerElapsed,
     name,
   }: ActivityListItem) => {
-    if (!isFocused) {
-      return;
-    }
-
     if (flowId) {
       startFlow(appletId, flowId, eventId, name, isTimerElapsed).then(
         result => {
@@ -117,7 +111,12 @@ function ActivitySectionList({ appletId, groups }: Props) {
           data-test={`activity-card-${item.activityId}`}
           activity={item}
           disabled={false}
-          onPress={() => startActivityOrFlow(item)}
+          onPress={() => {
+            if (!isFocused()) {
+              return;
+            }
+            startActivityOrFlow(item);
+          }}
         />
       )}
       ItemSeparatorComponent={ItemSeparator}
