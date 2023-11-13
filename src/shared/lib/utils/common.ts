@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 
+import { IS_ANDROID, IS_IOS } from '../constants';
 import { type Language } from '../types';
 
 export const noop = () => {};
@@ -116,4 +117,12 @@ export const getStringHashCode = (inputString: string) => {
     result = Math.imul(31, result) + inputString.charCodeAt(i);
   }
   return Math.abs(result);
+};
+
+export const runOnIOS = (cb: () => void) => {
+  IS_IOS && cb();
+};
+
+export const runOnAndroid = (cb: () => void) => {
+  IS_ANDROID && cb();
 };
