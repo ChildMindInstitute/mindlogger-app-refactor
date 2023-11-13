@@ -100,6 +100,9 @@ class QueueProcessingService {
       const online = await isAppOnline();
 
       if (!online) {
+        this.logger.log(
+          '[QueueProcessingService.process]: Application is offline',
+        );
         this.uploadStatusObservable.isPostponed = true;
         return true;
       }

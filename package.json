@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-mobile",
-  "version": "0.22.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "android": "yarn android:dev",
@@ -93,7 +93,7 @@
     "react-native-permissions": "^3.7.3",
     "react-native-popover-view": "^5.1.7",
     "react-native-progress": "^5.0.0",
-    "react-native-reanimated": "^3.1.0",
+    "react-native-reanimated": "^3.5.4",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "^3.27.0",
     "react-native-select-dropdown": "^3.3.2",

@@ -1,6 +1,7 @@
 import notifee, {
   AuthorizationStatus,
   AndroidNotificationSetting,
+  NotificationSettings,
 } from '@notifee/react-native';
 
 export type NotificationPermissionStatus =
@@ -28,6 +29,10 @@ export async function getNotificationPermissions(): Promise<NotificationPermissi
   const settings = await notifee.requestPermission();
 
   return AuthorizationStatusMap[settings.authorizationStatus];
+}
+
+export async function getNotificationSettingsData(): Promise<NotificationSettings> {
+  return await notifee.getNotificationSettings();
 }
 
 export async function getAlarmPermissions() {

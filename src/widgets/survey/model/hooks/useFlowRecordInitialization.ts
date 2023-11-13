@@ -1,6 +1,9 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+
+import { useQueryClient } from '@tanstack/react-query';
 
 import { EntityType } from '@app/abstract/lib';
+import { ActivityModel } from '@app/entities/activity';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 
 import { useFlowStorageRecord } from '../../lib';
@@ -28,7 +31,14 @@ export function useFlowRecordInitialization({
     flowId: entityType === 'flow' ? entityId : undefined,
   });
 
+  const queryClient = useQueryClient();
+
   const initializedRef = useRef(!!flowStorageRecord);
+
+  const activityQueryService = useMemo(
+    () => new ActivityModel.ActivityQueryService(queryClient),
+    [queryClient],
+  );
 
   const step = flowStorageRecord?.step ?? 0;
 
@@ -42,6 +52,10 @@ export function useFlowRecordInitialization({
       return [];
     }
 
+    const hasSummary = (activityId: string) => {
+      return activityQueryService.getActivityDetails(activityId).hasSummary;
+    };
+
     const isActivityFlow = entityType === 'flow';
 
     if (!isActivityFlow) {
@@ -49,6 +63,7 @@ export function useFlowRecordInitialization({
         appletId,
         eventId,
         activityId: entityId,
+        hasSummary,
       });
     } else {
       const activityIds = applet.activityFlows.find(
@@ -61,24 +76,35 @@ export function useFlowRecordInitialization({
         eventId,
         flowId: entityId,
         startFrom: step,
+        hasSummary,
       });
     }
-  }, [applet, appletId, eventId, step, entityId, entityType]);
+  }, [
+    applet,
+    appletId,
+    eventId,
+    step,
+    entityId,
+    entityType,
+    activityQueryService,
+  ]);
 
   const canCreateStorageRecord =
     !initializedRef.current && applet && !flowStorageRecord;
 
-  const createActivityRecord = useCallback(() => {
+  const createStorageRecord = useCallback(() => {
     return upsertFlowStorageRecord({
       step: 0,
       pipeline: buildPipeline(),
+      isCompletedDueToTimer: false,
+      context: {},
     });
   }, [buildPipeline, upsertFlowStorageRecord]);
 
   useEffect(() => {
     if (canCreateStorageRecord) {
-      createActivityRecord();
+      createStorageRecord();
       initializedRef.current = true;
     }
-  }, [canCreateStorageRecord, createActivityRecord]);
+  }, [canCreateStorageRecord, createStorageRecord]);
 }

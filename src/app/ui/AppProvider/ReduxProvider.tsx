@@ -13,7 +13,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { AppletModel } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
 import { StreamingModel } from '@entities/streaming';
-import { createAsyncStorage, useSplash } from '@shared/lib';
+import { createAsyncStorage, useSystemBootUp } from '@shared/lib';
 
 const storage = createAsyncStorage('redux-storage');
 
@@ -57,7 +57,7 @@ export const reduxStore = configureStore({
 const persistor = persistStore(reduxStore);
 
 const ReduxProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { onModuleInitialized } = useSplash();
+  const { onModuleInitialized } = useSystemBootUp();
 
   const onBeforeLift = () => {
     onModuleInitialized('state');

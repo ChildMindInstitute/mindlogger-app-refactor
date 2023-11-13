@@ -518,6 +518,7 @@ function mapToSlider(dto: SliderSelectionItemDto): ActivityItem {
       showTickLabels: dto.config.showTickLabels,
       isContinuousSlider: dto.config.continuousSlider,
       alerts: mapToSliderAlerts(dto.responseValues.alerts),
+      scores: dto.responseValues.scores,
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -654,7 +655,7 @@ function mapToSplash(splashScreen: string): ActivityItem {
 }
 
 export function mapToActivity(dto: ActivityDto): ActivityDetails {
-  const activity = {
+  const activity: ActivityDetails = {
     ...dto,
     id: dto.id,
     name: dto.name,
@@ -713,6 +714,20 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
           return mapToTime(item);
       }
     }),
+    hasSummary: dto.scoresAndReports?.showScoreSummary ?? false,
+    scoreSettings:
+      dto.scoresAndReports == null
+        ? []
+        : dto.scoresAndReports.reports
+            .filter(x => x.type === 'score')
+            .map(x => ({
+              id: x.id,
+              name: x.name,
+              type: x.type,
+              calculationType: x.calculationType,
+              conditionalLogic: x.conditionalLogic,
+              includedItems: x.itemsScore,
+            })),
   };
 
   if (dto.splashScreen) {

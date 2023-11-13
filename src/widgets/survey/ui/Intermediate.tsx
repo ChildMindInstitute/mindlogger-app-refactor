@@ -14,9 +14,14 @@ import {
   mapActivityFlowFromDto,
 } from '@app/entities/applet/model';
 import { EventModel } from '@app/entities/event';
-import { PassSurveyModel } from '@app/features/pass-survey';
+import {
+  AnswerAlerts,
+  PassSurveyModel,
+  ScoreRecord,
+} from '@app/features/pass-survey';
 import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import {
+  Logger,
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
@@ -25,7 +30,6 @@ import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
 import { getClientInformation } from '../lib';
-import { useFlowStorageRecord } from '../lib';
 import {
   fillNullsForHiddenItems,
   getActivityStartAt,
@@ -36,6 +40,8 @@ import {
   mapAnswersToAlerts,
   mapAnswersToDto,
   mapUserActionsToDto,
+  useFlowState,
+  useFlowStateActions,
 } from '../model';
 
 type Props = {
@@ -80,6 +86,8 @@ function Intermediate({
       ),
   });
 
+  const flowName = activityFlow?.name;
+
   let { data: allActivities } = useAppletDetailsQuery(appletId, {
     select: r => mapActivitiesFromDto(r.data.result.activities),
   });
@@ -89,9 +97,9 @@ function Intermediate({
       AppletModel.mapAppletDetailsFromDto(response.data.result),
   });
 
-  const appletEncryption = applet?.encryption || null;
+  const { step, pipeline } = useFlowState({ appletId, eventId, flowId });
 
-  const { flowStorageRecord } = useFlowStorageRecord({
+  const { saveActivitySummary } = useFlowStateActions({
     appletId,
     eventId,
     flowId,
@@ -101,15 +109,15 @@ function Intermediate({
     AppletModel.selectors.selectInProgressApplets,
   );
 
-  const { step, pipeline } = flowStorageRecord!;
-
-  const nextFlowItem = pipeline[step + 1];
+  const appletEncryption = applet?.encryption || null;
 
   const activitiesPassed = pipeline
     .slice(0, step)
     .filter(o => o.type === 'Stepper').length;
 
   const totalActivities = activityFlow!.activityIds.length;
+
+  const nextFlowItem = pipeline[step + 1];
 
   const nextActivityId = nextFlowItem.payload.activityId;
 
@@ -155,6 +163,13 @@ function Intermediate({
       return;
     }
 
+    const appletName = applet?.displayName;
+    const currentActivityName = getActivityName(activityId);
+
+    Logger.log(
+      `[Intermediate.completeActivity]: Activity "${currentActivityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivity?.name}|${nextActivity?.id}", applet "${appletName}|${appletId}"`,
+    );
+
     dispatch(
       AppletModel.actions.flowUpdated({
         appletId,
@@ -164,7 +179,18 @@ function Intermediate({
         pipelineActivityOrder: activitiesPassed,
       }),
     );
-  }, [appletId, dispatch, eventId, flowId, nextActivity, activitiesPassed]);
+  }, [
+    getActivityName,
+    activityId,
+    applet?.displayName,
+    flowName,
+    appletId,
+    dispatch,
+    eventId,
+    flowId,
+    nextActivity,
+    activitiesPassed,
+  ]);
 
   async function completeActivity() {
     if (!activityStorageRecord) {
@@ -173,6 +199,34 @@ function Intermediate({
 
     if (!appletEncryption) {
       throw new Error('Encryption params is undefined');
+    }
+
+    const activityName: string = getActivityName(activityId)!;
+
+    if (activityStorageRecord.hasSummary) {
+      const summaryAlerts: AnswerAlerts =
+        PassSurveyModel.AlertsExtractor.extractForSummary(
+          activityStorageRecord.items,
+          activityStorageRecord.answers,
+          activityName,
+        );
+
+      const scores: ScoreRecord[] = PassSurveyModel.ScoresExtractor.extract(
+        activityStorageRecord.items,
+        activityStorageRecord.answers,
+        activityStorageRecord.scoreSettings,
+        activityName,
+      );
+
+      saveActivitySummary({
+        activityId,
+        order,
+        alerts: summaryAlerts,
+        scores: {
+          activityName,
+          scores,
+        },
+      });
     }
 
     const alerts = mapAnswersToAlerts(
@@ -206,6 +260,14 @@ function Intermediate({
       activityStorageRecord.answers,
     );
 
+    const logActivityName = getActivityName(activityId);
+
+    const appletName = applet?.displayName;
+
+    Logger.log(
+      `[Intermediate.completeActivity]: Activity "${logActivityName}|${activityId}" within flow "${flowName}|${flowId}" completed, applet "${appletName}|${appletId}"`,
+    );
+
     pushInQueue({
       appletId,
       createdAt: Date.now(),
@@ -221,7 +283,7 @@ function Intermediate({
       startTime: getActivityStartAt(progressRecord)!,
       endTime: Date.now(),
       scheduledTime: scheduledDate,
-      logActivityName: getActivityName(activityId),
+      logActivityName,
       logCompletedAt: new Date().toString(),
       client: getClientInformation(),
       alerts,
@@ -264,7 +326,7 @@ function Intermediate({
             <Image src={badge} width={18} height={18} opacity={0.6} r={4} />
 
             <Text fontSize={14} color="$grey">
-              {activitiesPassed + 1} of {totalActivities} {activityFlow!.name}
+              {activitiesPassed + 1} of {totalActivities} {flowName}
             </Text>
           </XStack>
         </ActivityBox>

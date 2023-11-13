@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ActivityScrollContext } from '@app/features/pass-survey';
 import { Box, BoxProps, Center, Text, XStack } from '@app/shared/ui';
-import { StreamEventLoggable } from '@shared/lib';
+import { IS_ANDROID, IS_IOS, runOnIOS, StreamEventLoggable } from '@shared/lib';
 
 import DrawingBoard from './DrawingBoard';
 import { DrawLine, DrawPoint, DrawResult } from '../lib';
@@ -16,6 +16,8 @@ import { DrawLine, DrawPoint, DrawResult } from '../lib';
 const RectPadding = 15;
 
 const filesCacheDir = Dirs.CacheDir;
+
+const SCROLL_ENABLING_DELAY = 300;
 
 type Props = {
   value: { lines: DrawLine[]; fileName: string | null };
@@ -29,6 +31,8 @@ type Props = {
   BoxProps;
 
 const DrawingTest: FC<Props> = props => {
+  const timeoutIdRef = useRef<TimeoutId>();
+
   const [width, setWidth] = useState<number | null>(null);
   const { scrollToEnd, isAreaScrollable } = useContext(ActivityScrollContext);
 
@@ -99,11 +103,26 @@ const DrawingTest: FC<Props> = props => {
 
   const disableScroll = () => toggleScrollRef.current(false);
 
-  useEffect(() => {
-    if (isAreaScrollable) {
-      enableScroll();
-    } else {
+  const onCanvasTouchStart = () => {
+    runOnIOS(() => {
+      clearTimeout(timeoutIdRef.current);
       disableScroll();
+    });
+  };
+
+  const onCanvasTouchEnd = () => {
+    runOnIOS(() => {
+      timeoutIdRef.current = setTimeout(enableScroll, SCROLL_ENABLING_DELAY);
+    });
+  };
+
+  useEffect(() => {
+    if (IS_ANDROID) {
+      if (isAreaScrollable) {
+        enableScroll();
+      } else {
+        disableScroll();
+      }
     }
   }, [isAreaScrollable]);
 
@@ -134,7 +153,7 @@ const DrawingTest: FC<Props> = props => {
         </XStack>
       )}
 
-      {isAreaScrollable && (
+      {IS_ANDROID && isAreaScrollable && (
         <TouchableOpacity onPress={handleToggle}>
           <Center mb={16}>
             <Text color={isDrawingActive ? '$red' : '$primary'} fontSize={18}>
@@ -147,7 +166,11 @@ const DrawingTest: FC<Props> = props => {
       )}
 
       {!!width && (
-        <XStack jc="center">
+        <XStack
+          jc="center"
+          onTouchStart={onCanvasTouchStart}
+          onTouchEnd={onCanvasTouchEnd}
+        >
           {!!backgroundImageUrl && (
             <CachedImage
               source={backgroundImageUrl}
@@ -158,7 +181,7 @@ const DrawingTest: FC<Props> = props => {
 
           <DrawingBoard
             value={value.lines}
-            isDrawingActive={isDrawingActive}
+            isDrawingActive={isDrawingActive || IS_IOS}
             onResult={onResult}
             onStarted={onStarted}
             width={width}

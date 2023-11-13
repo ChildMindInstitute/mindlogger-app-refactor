@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 
+import { IS_ANDROID, IS_IOS } from '../constants';
 import { type Language } from '../types';
 
 export const noop = () => {};
@@ -43,6 +44,16 @@ export function splitArray<TListItem>(
 
   return [leftArray, rightArray];
 }
+
+export const getFloatPartLength = (numberValue: number) => {
+  const numberAsString = numberValue.toString();
+
+  const pointPosition = Math.max(
+    numberAsString.indexOf('.'),
+    numberAsString.indexOf(','),
+  );
+  return pointPosition === -1 ? 0 : numberAsString.length - pointPosition - 1;
+};
 
 export interface IMutex {
   setBusy: () => void;
@@ -106,4 +117,12 @@ export const getStringHashCode = (inputString: string) => {
     result = Math.imul(31, result) + inputString.charCodeAt(i);
   }
   return Math.abs(result);
+};
+
+export const runOnIOS = (cb: () => void) => {
+  IS_IOS && cb();
+};
+
+export const runOnAndroid = (cb: () => void) => {
+  IS_ANDROID && cb();
 };
