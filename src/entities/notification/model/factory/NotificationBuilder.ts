@@ -4,6 +4,7 @@ import {
   addMonths,
   isEqual,
   startOfDay,
+  subDays,
   subMonths,
   subWeeks,
 } from 'date-fns';
@@ -190,7 +191,8 @@ class NotificationBuilder implements INotificationBuilder {
     const dayTo = this.getDayTo(lastScheduleDay, periodEndDay);
 
     if (periodicity === PeriodicityType.Always) {
-      let day = new Date(dayFrom);
+      const previousDay = subDays(dayFrom, 1);
+      let day = previousDay;
 
       while (day <= dayTo) {
         eventDays.push(day);
@@ -199,7 +201,8 @@ class NotificationBuilder implements INotificationBuilder {
     }
 
     if (periodicity === PeriodicityType.Daily) {
-      let day = new Date(dayFrom);
+      const previousDay = subDays(dayFrom, 1);
+      let day = previousDay;
 
       while (day <= dayTo) {
         eventDays.push(day);
