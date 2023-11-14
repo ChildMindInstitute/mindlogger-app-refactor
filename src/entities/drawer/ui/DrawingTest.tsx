@@ -1,9 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 import { FC, useContext, useEffect, useRef, useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { GestureResponderEvent, TouchableOpacity } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { FileSystem, Dirs } from 'react-native-file-access';
+import { useDebouncedCallback } from 'use-debounce';
 import { v4 as uuidv4 } from 'uuid';
 
 import { ActivityScrollContext } from '@app/features/pass-survey';
@@ -31,8 +32,6 @@ type Props = {
   BoxProps;
 
 const DrawingTest: FC<Props> = props => {
-  const timeoutIdRef = useRef<TimeoutId>();
-
   const [width, setWidth] = useState<number | null>(null);
   const { scrollToEnd, isAreaScrollable } = useContext(ActivityScrollContext);
 
@@ -99,20 +98,23 @@ const DrawingTest: FC<Props> = props => {
     toggleScrollRef.current(isDrawingActive);
   };
 
-  const enableScroll = () => toggleScrollRef.current(true);
+  const enableScroll = useDebouncedCallback(() => {
+    toggleScrollRef.current(true);
+  }, SCROLL_ENABLING_DELAY);
 
   const disableScroll = () => toggleScrollRef.current(false);
 
-  const onCanvasTouchStart = () => {
+  const onCanvasTouchStart = (e: GestureResponderEvent) => {
+    e.stopPropagation();
+
     runOnIOS(() => {
-      clearTimeout(timeoutIdRef.current);
       disableScroll();
     });
   };
 
   const onCanvasTouchEnd = () => {
     runOnIOS(() => {
-      timeoutIdRef.current = setTimeout(enableScroll, SCROLL_ENABLING_DELAY);
+      enableScroll();
     });
   };
 
@@ -124,11 +126,14 @@ const DrawingTest: FC<Props> = props => {
         disableScroll();
       }
     }
-  }, [isAreaScrollable]);
+  }, [isAreaScrollable, enableScroll]);
 
   return (
     <Box
       {...props}
+      onTouchStart={() => {
+        enableScroll.flush();
+      }}
       onLayout={x => {
         const containerWidth = x.nativeEvent.layout.width - RectPadding * 2;
 
