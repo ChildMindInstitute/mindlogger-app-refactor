@@ -94,10 +94,13 @@ class AlertsExtractor {
         sliderAnswer >= alert.minValue &&
         sliderAnswer <= alert.maxValue;
 
-      if (
-        alert.value === sliderAnswer ||
-        (isContinuousSlider && isValueInRange)
-      ) {
+      if (!isContinuousSlider && alert.value === sliderAnswer) {
+        alerts.push({
+          activityItemId: sliderItem.id!,
+          message: alert.message,
+        });
+      }
+      if (isContinuousSlider && isValueInRange) {
         alerts.push({
           activityItemId: sliderItem.id!,
           message: alert.message,
