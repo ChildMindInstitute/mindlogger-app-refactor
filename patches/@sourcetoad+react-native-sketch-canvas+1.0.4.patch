@@ -1,0 +1,42 @@
+diff --git a/node_modules/@sourcetoad/react-native-sketch-canvas/src/SketchCanvas.tsx b/node_modules/@sourcetoad/react-native-sketch-canvas/src/SketchCanvas.tsx
+index bd0ba8d..c46006a 100644
+--- a/node_modules/@sourcetoad/react-native-sketch-canvas/src/SketchCanvas.tsx
++++ b/node_modules/@sourcetoad/react-native-sketch-canvas/src/SketchCanvas.tsx
+@@ -42,6 +42,7 @@ class SketchCanvas extends React.Component<SketchCanvasProps, CanvasState> {
+ 
+     permissionDialogTitle: '',
+     permissionDialogMessage: '',
++    promptForExternalWritePermissions: false
+   };
+ 
+   _pathsToProcess: Path[];
+@@ -329,10 +330,12 @@ class SketchCanvas extends React.Component<SketchCanvasProps, CanvasState> {
+   }
+ 
+   async componentDidMount() {
+-    await requestPermissions(
+-      this.props.permissionDialogTitle || '',
+-      this.props.permissionDialogMessage || '',
+-    );
++    if (this.props.promptForExternalWritePermissions) {
++      await requestPermissions(
++        this.props.permissionDialogTitle || '',
++        this.props.permissionDialogMessage || '',
++      );
++    }
+   }
+ 
+   render() {
+diff --git a/node_modules/@sourcetoad/react-native-sketch-canvas/src/types.tsx b/node_modules/@sourcetoad/react-native-sketch-canvas/src/types.tsx
+index d5f1574..8cd3b84 100644
+--- a/node_modules/@sourcetoad/react-native-sketch-canvas/src/types.tsx
++++ b/node_modules/@sourcetoad/react-native-sketch-canvas/src/types.tsx
+@@ -75,6 +75,8 @@ export interface SketchCanvasProps {
+    */
+   permissionDialogMessage?: string;
+ 
++  promptForExternalWritePermissions?: boolean;
++
+   onStrokeStart?: (x: number, y: number) => void;
+   onStrokeChanged?: (x: number, y: number) => void;
+   onStrokeEnd?: (path: Path) => void;
