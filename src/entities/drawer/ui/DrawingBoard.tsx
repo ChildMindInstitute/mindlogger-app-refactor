@@ -1,27 +1,14 @@
-import React, { useRef, FC, useState, useCallback, useMemo } from 'react';
+import React, { useRef, FC, useCallback, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import {
-  Skia,
-  TouchInfo,
-  PaintStyle,
-  useTouchHandler,
-  Canvas,
-  Group,
-  Path,
-  SkPath,
-} from '@shopify/react-native-skia';
+import { Skia, PaintStyle } from '@shopify/react-native-skia';
+import { SketchCanvas } from '@sourcetoad/react-native-sketch-canvas';
 
 import { colors, StreamEventLoggable } from '@shared/lib';
 import { Box, useOnUndo } from '@shared/ui';
 
-import {
-  DrawLine,
-  DrawPoint,
-  ResponseSerializer,
-  DrawResult,
-  LineSketcher,
-} from '../lib';
+import { DrawLine, ResponseSerializer, DrawResult, LinesTracker } from '../lib';
+import DrawPoint from '../lib/utils/DrawPoint';
 
 const paint = Skia.Paint();
 paint.setColor(Skia.Color(colors.black));
@@ -39,6 +26,8 @@ type Props = {
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, onStarted, width, isDrawingActive, onLog } = props;
 
+  const vector = width / 100;
+
   const callbacksRef = useRef({
     onStarted,
     onLog,
@@ -49,53 +38,34 @@ const DrawingBoard: FC<Props> = props => {
     onLog,
   };
 
-  const drawingValueLineRef = useRef<DrawLine>({
-    startTime: Date.now(),
-    points: [],
-  });
+  const canvasRef = useRef<SketchCanvas | null>();
 
-  const [paths, setPaths] = useState<SkPath[]>(() =>
-    LineSketcher.fromDrawLines(value),
-  );
+  const linesRef = useRef<Array<DrawLine>>(value);
 
-  const lineSketcher = useMemo(
-    () =>
-      new LineSketcher(drawingValueLineRef, {
-        onPointAdded: point => {
-          const vector = width / 100;
+  const lineTracker = useMemo(() => {
+    return new LinesTracker(linesRef, {
+      onPointAdded: point => {
+        callbacksRef.current.onLog(point.scale(vector));
+      },
+    });
+  }, [vector]);
 
-          callbacksRef.current.onLog(point.scale(vector));
-        },
-      }),
-    [width],
-  );
-
-  const onTouchStart = useCallback(
-    (touchInfo: TouchInfo) => {
-      setPaths(currentPaths => {
-        const newPath = lineSketcher.createLine(touchInfo);
-
-        return [...currentPaths, newPath];
-      });
-
-      callbacksRef.current.onStarted();
+  const onStrokeStart = useCallback(
+    (x: number, y: number) => {
+      lineTracker.createLine(x, y);
     },
-    [lineSketcher],
+    [lineTracker],
   );
 
-  const onTouchProgress = useCallback(
-    (touchInfo: TouchInfo) => {
-      setPaths(currentPaths => {
-        return lineSketcher.progressLine(touchInfo, currentPaths);
-      });
+  const onStrokeChanged = useCallback(
+    (x: number, y: number) => {
+      lineTracker.progressLine(x, y);
     },
-    [lineSketcher],
+    [lineTracker],
   );
 
-  const onTouchEnd = useCallback(() => {
-    const newLine = { ...drawingValueLineRef.current };
-
-    const lines = [...value, newLine];
+  const onStrokeEnd = useCallback(() => {
+    const lines = linesRef.current;
 
     const svgString = ResponseSerializer.process(lines, width);
 
@@ -106,24 +76,33 @@ const DrawingBoard: FC<Props> = props => {
     } as DrawResult;
 
     onResult(result);
-  }, [onResult, value, width]);
+  }, [onResult, width]);
 
-  const touchHandler = useTouchHandler(
-    {
-      onStart: onTouchStart,
-      onActive: onTouchProgress,
-      onEnd: onTouchEnd,
+  const initializeDrawing = useCallback(
+    (canvas: SketchCanvas) => {
+      const paths = LinesTracker.fromDrawLines(linesRef.current, width);
+
+      paths.forEach(path => {
+        canvas.addPath(path);
+      });
     },
-    [width, value],
+    [width],
+  );
+
+  const onRefReceived = useCallback(
+    (ref: SketchCanvas | null) => {
+      canvasRef.current = ref;
+
+      if (canvasRef.current) {
+        initializeDrawing(canvasRef.current);
+      }
+    },
+    [initializeDrawing],
   );
 
   useOnUndo(() => {
-    setPaths([]);
-
-    drawingValueLineRef.current = {
-      startTime: Date.now(),
-      points: [],
-    };
+    canvasRef.current?.clear();
+    linesRef.current = [];
   });
 
   return (
@@ -136,15 +115,15 @@ const DrawingBoard: FC<Props> = props => {
       pointerEvents={isDrawingActive ? 'auto' : 'none'}
     >
       <View style={styles.canvasView}>
-        <Canvas style={styles.canvas} onTouch={touchHandler}>
-          <Group>
-            {paths.map((path, i) => (
-              <Group key={i}>
-                <Path path={path} strokeWidth={1} style="stroke" />
-              </Group>
-            ))}
-          </Group>
-        </Canvas>
+        <SketchCanvas
+          ref={onRefReceived}
+          style={styles.canvasView}
+          strokeColor={'black'}
+          strokeWidth={1.5}
+          onStrokeStart={onStrokeStart}
+          onStrokeChanged={onStrokeChanged}
+          onStrokeEnd={onStrokeEnd}
+        />
       </View>
     </Box>
   );

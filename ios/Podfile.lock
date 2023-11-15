@@ -569,6 +569,8 @@ PODS:
     - React-RCTImage
   - RNSensors (7.3.6):
     - React-Core
+  - RNSketchCanvas (1.0.4):
+    - React
   - RNSVG (13.8.0):
     - React-Core
   - SocketRocket (0.6.1)
@@ -669,6 +671,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSensors (from `../node_modules/react-native-sensors`)
+  - "RNSketchCanvas (from `../node_modules/@sourcetoad/react-native-sketch-canvas`)"
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -829,6 +832,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSensors:
     :path: "../node_modules/react-native-sensors"
+  RNSketchCanvas:
+    :path: "../node_modules/@sourcetoad/react-native-sketch-canvas"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -925,6 +930,7 @@ SPEC CHECKSUMS:
   RNReanimated: 12a905af0de1a7f728eacebc5a6af1cc5ada64ad
   RNScreens: 2b19e2471db8a581c83f381f4ea5d43071c9a3bf
   RNSensors: 117ba71c7eeeea0407ea0c0bb79e3495d602049b
+  RNSketchCanvas: a4f3b8e0054ce5e9f769391c252120c1f9cc60b4
   RNSVG: c1e76b81c76cdcd34b4e1188852892dc280eb902
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 0518155cfbcc68c56223422f6a20a71b82e307d2
