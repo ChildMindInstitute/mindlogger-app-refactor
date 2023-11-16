@@ -26,6 +26,13 @@ export const getMsFromSeconds = (seconds: number): number => {
   return seconds * MS_IN_SECOND;
 };
 
+export const getHourMinute = (dateTime: Date): HourMinute => {
+  return {
+    hours: dateTime.getHours(),
+    minutes: dateTime.getMinutes(),
+  };
+};
+
 export const format = (date: Date | number, formatStr: string) => {
   // todo - it doesn't work, tried  H or HH
   return formatBase(date, formatStr, {
@@ -73,10 +80,12 @@ export const getDiff = (from: HourMinute, to: HourMinute): number => {
   );
 };
 
-export const isSourceLess = (
-  timeSource: HourMinute,
-  timeTarget: HourMinute,
-) => {
+type TimeCompareInput = {
+  timeSource: HourMinute;
+  timeTarget: HourMinute;
+};
+
+export const isSourceLess = ({ timeSource, timeTarget }: TimeCompareInput) => {
   const sourceInMinutes =
     timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
   const targetInMinutes =
@@ -84,10 +93,10 @@ export const isSourceLess = (
   return sourceInMinutes < targetInMinutes;
 };
 
-export const isSourceBiggerOrEqual = (
-  timeSource: HourMinute,
-  timeTarget: HourMinute,
-) => {
+export const isSourceBiggerOrEqual = ({
+  timeSource,
+  timeTarget,
+}: TimeCompareInput) => {
   const sourceInMinutes =
     timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
   const targetInMinutes =
@@ -95,15 +104,47 @@ export const isSourceBiggerOrEqual = (
   return sourceInMinutes >= targetInMinutes;
 };
 
-export const isTimeInInterval = (
-  timeToCheck: HourMinute,
-  intervalFrom: HourMinute,
-  intervalTo: HourMinute,
-) => {
-  return (
-    isSourceBiggerOrEqual(timeToCheck, intervalFrom) &&
-    isSourceLess(timeToCheck, intervalTo)
-  );
+export const isSourceBigger = ({
+  timeSource,
+  timeTarget,
+}: TimeCompareInput) => {
+  const sourceInMinutes =
+    timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
+  const targetInMinutes =
+    timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
+  return sourceInMinutes > targetInMinutes;
+};
+
+type InIntervalCheckInput = {
+  timeToCheck: HourMinute;
+  intervalFrom: HourMinute;
+  intervalTo: HourMinute;
+  including: 'from' | 'to' | 'both' | 'none';
+};
+
+export const isTimeInInterval = ({
+  timeToCheck,
+  intervalFrom,
+  intervalTo,
+  including,
+}: InIntervalCheckInput) => {
+  if (including === 'from') {
+    return (
+      isSourceBiggerOrEqual({
+        timeSource: timeToCheck,
+        timeTarget: intervalFrom,
+      }) && isSourceLess({ timeSource: timeToCheck, timeTarget: intervalTo })
+    );
+  } else if (including === 'none') {
+    return (
+      isSourceBigger({ timeSource: timeToCheck, timeTarget: intervalFrom }) &&
+      isSourceLess({ timeSource: timeToCheck, timeTarget: intervalTo })
+    );
+  } else {
+    throw new Error(
+      '[isTimeInInterval]: Not supported, including = ' + including,
+    );
+  }
 };
 
 export function getLast7Dates() {

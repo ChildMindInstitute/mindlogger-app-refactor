@@ -27,6 +27,7 @@ export type NotificationSetting = {
 export type EventAvailability = {
   availabilityType: AvailabilityType;
   oneTimeCompletion: boolean;
+  allowAccessBeforeFromTime: boolean;
   periodicityType: PeriodicityType;
   timeFrom: HourMinute | null;
   timeTo: HourMinute | null;
@@ -75,7 +76,6 @@ export const enum InactiveReason {
   NotDefined = 'NotDefined',
   Outdated = 'Outdated',
   ActivityCompleted = 'ActivityCompleted',
-  ActivityCompletedInReminderInterval = 'ActivityCompletedInReminderInterval',
   EntityHidden = 'EntityHidden',
   OneTimeCompletion = 'OneTimeCompletion',
   FallOnWeekends = 'FallOnWeekends',
