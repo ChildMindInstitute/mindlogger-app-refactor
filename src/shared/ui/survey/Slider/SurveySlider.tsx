@@ -36,20 +36,22 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
 
   return (
     <YStack>
-      <Slider
-        animationType="spring"
-        data-test="slider"
-        initialValue={initialValue}
-        onSlidingComplete={onRelease}
-        onSlidingStart={onPress}
-        onValueChange={onValueChange}
-        maximumValue={maxValue}
-        minimumValue={minValue}
-        step={isContinuousSlider ? 0.01 : 1}
-        size={THUMB_SIZE}
-      />
+      <Box px={10}>
+        <Slider
+          animationType="spring"
+          data-test="slider"
+          initialValue={initialValue}
+          onSlidingComplete={onRelease}
+          onSlidingStart={onPress}
+          onValueChange={onValueChange}
+          maximumValue={maxValue}
+          minimumValue={minValue}
+          step={isContinuousSlider ? 0.01 : 1}
+          size={THUMB_SIZE}
+        />
+      </Box>
 
-      <XStack jc="space-between" mt={9}>
+      <XStack px={11} jc="space-between" mt={9}>
         {items.map(value => {
           return (
             <Box key={`tick-${value}`} w={THUMB_SIZE} ai="center">
