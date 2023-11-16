@@ -90,6 +90,12 @@ function ActivityItem({
     }
   }
 
+  function moveToNextItemWithDelay() {
+    if (!pipelineItem.additionalText?.required) {
+      setTimeout(() => setImmediate(() => next(true)), 200);
+    }
+  }
+
   switch (type) {
     case 'Splash':
       item = (
@@ -307,7 +313,7 @@ function ActivityItem({
             config={pipelineItem.payload}
             onChange={radioValue => {
               onResponse(radioValue);
-              moveToNextItem();
+              moveToNextItemWithDelay();
             }}
             initialValue={value?.answer}
             textReplacer={textVariableReplacer}
