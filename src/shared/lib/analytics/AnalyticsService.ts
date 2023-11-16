@@ -1,8 +1,12 @@
+import { createStorage } from '@shared/lib';
+
 import MixpanelAnalytics from './MixpanelAnalytics';
 import { ENV, MIXPANEL_TOKEN } from '../constants';
 
 const isProduction = !ENV;
 const shouldEnableMixpanel = MIXPANEL_TOKEN && isProduction;
+
+export const storage = createStorage('analytics-storage');
 
 export interface IAnalyticsService {
   track(action: string, payload?: Record<string, any>): void;
@@ -24,13 +28,18 @@ const AnalyticsService = {
     }
   },
   async login(userId: string) {
-    if (shouldEnableMixpanel) {
-      return service.login(userId);
+    const isLoggedIn = storage.getBoolean('IS_LOGGED_IN');
+
+    if (shouldEnableMixpanel && !isLoggedIn) {
+      return service.login(userId).then(() => {
+        storage.set('IS_LOGGED_IN', true);
+      });
     }
   },
   logout() {
     if (shouldEnableMixpanel) {
       service.logout();
+      storage.clearAll();
     }
   },
 };

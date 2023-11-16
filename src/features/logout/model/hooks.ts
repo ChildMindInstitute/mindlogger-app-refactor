@@ -17,11 +17,7 @@ import {
   AnalyticsService,
 } from '@shared/lib';
 
-import {
-  clearAnalyticsStorage,
-  clearEntityRecordStorages,
-  clearUploadQueueStorage,
-} from '../lib';
+import { clearEntityRecordStorages, clearUploadQueueStorage } from '../lib';
 
 export function useLogout() {
   const dispatch = useAppDispatch();
@@ -50,8 +46,6 @@ export function useLogout() {
 
     UserInfoRecord.clear();
     UserPrivateKeyRecord.clear();
-
-    clearAnalyticsStorage();
 
     Logger.clearAllLogFiles();
 
