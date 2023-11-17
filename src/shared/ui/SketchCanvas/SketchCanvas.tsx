@@ -78,6 +78,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   const onTouchEnd = useCallback(() => {
     callbacksRef.current.onStrokeEnd();
     pointsRef.current = [];
+    skiaViewRef.current?.redraw();
   }, [callbacksRef]);
 
   const touchHandler = useTouchHandler(
