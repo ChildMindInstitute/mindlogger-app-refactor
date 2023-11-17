@@ -6,7 +6,8 @@ import { Skia, TouchInfo, PaintStyle } from '@shopify/react-native-skia';
 import { colors, StreamEventLoggable } from '@shared/lib';
 import { Box, SketchCanvas, SketchCanvasRef, useOnUndo } from '@shared/ui';
 
-import { DrawLine, DrawPoint, ResponseSerializer, DrawResult } from '../lib';
+import { DrawLine, ResponseSerializer, DrawResult } from '../lib';
+import DrawPoint from '../lib/utils/DrawPoint';
 
 const paint = Skia.Paint();
 paint.setColor(Skia.Color(colors.black));
@@ -23,6 +24,8 @@ type Props = {
 
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, onStarted, width, isDrawingActive, onLog } = props;
+
+  const vector = width / 100;
 
   const sketchCanvasRef = useRef<SketchCanvasRef | null>(null);
 
@@ -41,12 +44,27 @@ const DrawingBoard: FC<Props> = props => {
     points: [],
   });
 
-  const onTouchStart = useCallback((touchInfo: TouchInfo) => {}, []);
+  const onTouchStart = (x: number, y: number) => {
+    const drawPoint = new DrawPoint(x, y).scale(vector);
 
-  const onTouchProgress = useCallback((touchInfo: TouchInfo) => {}, []);
+    drawingValueLineRef.current = {
+      startTime: Date.now(),
+      points: [drawPoint],
+    };
 
-  const onTouchEnd = useCallback(() => {
-    const newLine = { ...drawingValueLineRef.current };
+    onLog(drawPoint);
+  };
+
+  const onTouchProgress = (x: number, y: number) => {
+    const drawPoint = new DrawPoint(x, y).scale(vector);
+
+    drawingValueLineRef.current.points.push(drawPoint);
+
+    onLog(drawPoint);
+  };
+
+  const onTouchEnd = () => {
+    const newLine = drawingValueLineRef.current;
 
     const lines = [...value, newLine];
 
@@ -59,7 +77,7 @@ const DrawingBoard: FC<Props> = props => {
     } as DrawResult;
 
     onResult(result);
-  }, [onResult, value, width]);
+  };
 
   useOnUndo(() => {
     sketchCanvasRef.current?.clear();
@@ -74,7 +92,13 @@ const DrawingBoard: FC<Props> = props => {
       borderColor="$lightGrey2"
       pointerEvents={isDrawingActive ? 'auto' : 'none'}
     >
-      <SketchCanvas ref={sketchCanvasRef} width={width} />
+      <SketchCanvas
+        ref={sketchCanvasRef}
+        width={width}
+        onStrokeStart={onTouchStart}
+        onStrokeChanged={onTouchProgress}
+        onStrokeEnd={onTouchEnd}
+      />
     </Box>
   );
 };

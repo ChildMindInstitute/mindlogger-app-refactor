@@ -1,5 +1,4 @@
 import {
-  memo,
   useCallback,
   useMemo,
   useRef,
@@ -20,7 +19,7 @@ import {
 } from '@shopify/react-native-skia';
 import { Point } from 'react-native-svg/lib/typescript/elements/Shape';
 
-import { colors } from '@app/shared/lib';
+import { colors, useCallbacksRefs } from '@app/shared/lib';
 
 import LineSketcher from './LineSketcher';
 
@@ -35,77 +34,90 @@ export type SketchCanvasRef = {
 
 type Props = {
   width: number;
+  onStrokeStart: (x: number, y: number) => void;
+  onStrokeChanged: (x: number, y: number) => void;
+  onStrokeEnd: () => void;
 };
 
-const SketchCanvas = forwardRef<SketchCanvasRef, Props>(({ width }, ref) => {
-  const pathsRef = useRef<Array<SkPath>>([]);
+const SketchCanvas = forwardRef<SketchCanvasRef, Props>(
+  ({ width, onStrokeStart, onStrokeChanged, onStrokeEnd }, ref) => {
+    const pathsRef = useRef<Array<SkPath>>([]);
+    const canvasRef = useRef<SkCanvas | null>(null);
+    const pointsRef = useRef<Array<Point>>([]);
 
-  const canvasRef = useRef<SkCanvas | null>(null);
-  const pointsRef = useRef<Array<Point>>([]);
+    const skiaViewRef = useRef<SkiaView | null>(null);
 
-  const skiaViewRef = useRef<SkiaView | null>(null);
-
-  const lineSketcher = useMemo(
-    () => new LineSketcher(pathsRef, canvasRef, pointsRef),
-    [],
-  );
-
-  const onTouchStart = useCallback(
-    (touchInfo: TouchInfo) => {
-      lineSketcher.createLine(touchInfo);
-    },
-    [lineSketcher],
-  );
-
-  const onTouchProgress = useCallback(
-    (touchInfo: TouchInfo) => {
-      lineSketcher.progressLine(touchInfo);
-    },
-    [lineSketcher],
-  );
-
-  const onTouchEnd = useCallback(() => {
-    // currentPathRef.current = null;
-  }, []);
-
-  const touchHandler = useTouchHandler(
-    {
-      onStart: onTouchStart,
-      onActive: onTouchProgress,
-      onEnd: onTouchEnd,
-    },
-    [],
-  );
-
-  const onDraw = useDrawCallback((canvas, info) => {
-    canvasRef.current = canvas;
-
-    pathsRef.current.forEach(path => {
-      canvasRef.current?.drawPath(path, paint.copy());
+    const callbacksRef = useCallbacksRefs({
+      onStrokeStart,
+      onStrokeChanged,
+      onStrokeEnd,
     });
 
-    touchHandler(info.touches);
-  });
+    const lineSketcher = useMemo(
+      () => new LineSketcher(pathsRef, canvasRef, pointsRef),
+      [],
+    );
 
-  useImperativeHandle(ref, () => {
-    return {
-      clear() {
-        pathsRef.current = [];
-        skiaViewRef.current?.redraw();
+    const onTouchStart = useCallback(
+      (touchInfo: TouchInfo) => {
+        lineSketcher.createLine(touchInfo);
+        callbacksRef.current.onStrokeStart(touchInfo.x, touchInfo.y);
       },
-    };
-  });
+      [lineSketcher, callbacksRef],
+    );
 
-  const styles = useMemo(
-    () =>
-      StyleSheet.flatten({
-        width: width,
-        height: width,
-      }),
-    [width],
-  );
+    const onTouchProgress = useCallback(
+      (touchInfo: TouchInfo) => {
+        lineSketcher.progressLine(touchInfo);
+        callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
+      },
+      [lineSketcher, callbacksRef],
+    );
 
-  return <SkiaView ref={skiaViewRef} style={styles} onDraw={onDraw} />;
-});
+    const onTouchEnd = useCallback(() => {
+      callbacksRef.current.onStrokeEnd();
+      pointsRef.current = [];
+    }, [callbacksRef]);
 
-export default memo(SketchCanvas);
+    const touchHandler = useTouchHandler(
+      {
+        onStart: onTouchStart,
+        onActive: onTouchProgress,
+        onEnd: onTouchEnd,
+      },
+      [],
+    );
+
+    const onDraw = useDrawCallback((canvas, info) => {
+      canvasRef.current = canvas;
+
+      pathsRef.current.forEach(path => {
+        canvasRef.current?.drawPath(path, paint.copy());
+      });
+
+      touchHandler(info.touches);
+    });
+
+    useImperativeHandle(ref, () => {
+      return {
+        clear() {
+          pathsRef.current = [];
+          skiaViewRef.current?.redraw();
+        },
+      };
+    });
+
+    const styles = useMemo(
+      () =>
+        StyleSheet.flatten({
+          width: width,
+          height: width,
+        }),
+      [width],
+    );
+
+    return <SkiaView ref={skiaViewRef} style={styles} onDraw={onDraw} />;
+  },
+);
+
+export default SketchCanvas;
