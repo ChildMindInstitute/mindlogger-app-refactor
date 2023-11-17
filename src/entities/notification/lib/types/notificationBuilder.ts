@@ -78,6 +78,7 @@ export const enum InactiveReason {
   ActivityCompletedInReminderInterval = 'ActivityCompletedInReminderInterval',
   EntityHidden = 'EntityHidden',
   OneTimeCompletion = 'OneTimeCompletion',
+  FallOnWeekends = 'FallOnWeekends',
 }
 
 type NotificationDescriberDebugPayload = {
