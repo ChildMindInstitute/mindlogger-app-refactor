@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useRef, FC, useCallback } from 'react';
+import React, { useRef, FC, useCallback, useMemo } from 'react';
 
 import { Skia, TouchInfo, PaintStyle } from '@shopify/react-native-skia';
 
@@ -38,6 +38,16 @@ const DrawingBoard: FC<Props> = props => {
     onStarted,
     onLog,
   };
+
+  const drawPoints = useMemo(() => {
+    return value.reduce<DrawPoint[]>((accumulator, drawLine) => {
+      const normalizedPoints = drawLine.points.map(point => {
+        return new DrawPoint(point.x, point.y, point.time).scale(100 / width);
+      });
+
+      return accumulator.concat(normalizedPoints);
+    }, []);
+  }, [value, width]);
 
   const drawingValueLineRef = useRef<DrawLine>({
     startTime: Date.now(),
@@ -95,6 +105,7 @@ const DrawingBoard: FC<Props> = props => {
       <SketchCanvas
         ref={sketchCanvasRef}
         width={width}
+        initialPoints={drawPoints}
         onStrokeStart={onTouchStart}
         onStrokeChanged={onTouchProgress}
         onStrokeEnd={onTouchEnd}

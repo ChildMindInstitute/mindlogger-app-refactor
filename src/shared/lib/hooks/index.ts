@@ -21,5 +21,6 @@ export { default as useAppletInfo } from './useAppletInfo';
 export { default as useCurrentRoute } from './useCurrentRoute';
 export { default as useCachedImage } from './useCachedImage';
 export { default as useCallbacksRefs } from './useCallbacksRefs';
+export { default as useEvaluateOnce } from './useEvaluateOnce';
 
 export * from './redux';

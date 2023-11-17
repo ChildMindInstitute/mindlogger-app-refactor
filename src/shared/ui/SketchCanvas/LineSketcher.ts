@@ -4,7 +4,7 @@ import { PaintStyle, SkCanvas, Skia, SkPath } from '@shopify/react-native-skia';
 
 import { colors } from '@app/shared/lib';
 
-type Point = {
+export type Point = {
   x: number;
   y: number;
 };
@@ -65,7 +65,41 @@ class LineSketcher {
     path.quadTo(pPoint.x, pPoint.y, mid2.x, mid2.y);
   }
 
-  static fromDrawLines() {}
+  public static createPathFromPoints(points: Array<Point>): SkPath {
+    const pointsCount = points.length;
+    const path = Skia.Path.Make();
+
+    for (let pointIndex = 0; pointIndex < pointsCount; pointIndex++) {
+      if (pointsCount >= 3 && pointIndex >= 2) {
+        LineSketcher.addPointToPath(
+          path,
+          points[pointIndex - 2],
+          points[pointIndex - 1],
+          points[pointIndex],
+        );
+      } else if (pointsCount >= 2 && pointIndex >= 1) {
+        LineSketcher.addPointToPath(
+          path,
+          points[0],
+          points[0],
+          points[pointIndex],
+        );
+      } else if (pointsCount >= 1) {
+        const a = points[pointIndex];
+
+        path.moveTo(a.x, a.y);
+        path.lineTo(a.x, a.y);
+      }
+    }
+
+    return path;
+  }
+
+  public static drawPaths(canvas: SkCanvas, paths: Array<SkPath>): void {
+    paths.forEach(path => {
+      canvas.drawPath(path, paint);
+    });
+  }
 
   public createLine(point: Point): void {
     if (!this.canvas) {
