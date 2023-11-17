@@ -161,6 +161,7 @@ function Intermediate({
 
   const changeActivity = useCallback(() => {
     if (!nextActivity) {
+      AnalyticsService.track('Assessment completed');
       return;
     }
 
@@ -293,8 +294,6 @@ function Intermediate({
     });
 
     clearActivityStorageRecord();
-
-    AnalyticsService.track('Assessment completed');
 
     const success = await processQueue();
 
