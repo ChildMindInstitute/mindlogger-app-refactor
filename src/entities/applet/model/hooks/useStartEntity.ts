@@ -7,6 +7,7 @@ import {
 } from '@app/abstract/lib';
 import { ActivityFlowRecordDto, AppletDetailsResponse } from '@app/shared/api';
 import {
+  AnalyticsService,
   getAppletDetailsKey,
   getDataFromQuery,
   ILogger,
@@ -176,6 +177,9 @@ function useStartEntity({
         logger.log(
           `[useStartEntity.startActivity]: Activity "${entityName}|${activityId}" started, applet "${appletName}|${appletId}"`,
         );
+
+        AnalyticsService.track('Assessment started');
+
         activityStarted(appletId, activityId, eventId);
         resolve({ startedFromScratch: true });
       }
@@ -294,6 +298,8 @@ function useStartEntity({
         logger.log(
           `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" started, applet "${appletName}|${appletId}"`,
         );
+
+        AnalyticsService.track('Assessment started');
 
         flowStarted(appletId, flowId, firstActivityId, eventId, 0);
         resolve({

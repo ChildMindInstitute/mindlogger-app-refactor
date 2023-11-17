@@ -57,9 +57,9 @@ const AppletsScreen: FC = () => {
 
   return (
     <Box bg="$secondary" flex={1}>
-      <UploadRetryBanner />
-
       <ImageBackground>
+        <UploadRetryBanner />
+
         <Box flex={1} pt={12} pb={34}>
           <AppletList
             flex={1}

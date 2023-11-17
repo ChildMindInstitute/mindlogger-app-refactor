@@ -16,3 +16,4 @@ export * from './timers';
 export * from './encryption';
 export * from './tcp';
 export * from './records';
+export * from './analytics';
