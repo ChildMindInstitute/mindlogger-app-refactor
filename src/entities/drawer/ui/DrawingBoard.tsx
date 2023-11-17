@@ -1,27 +1,12 @@
-import React, { useRef, FC, useState, useCallback, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useRef, FC, useCallback } from 'react';
 
-import {
-  Skia,
-  TouchInfo,
-  PaintStyle,
-  useTouchHandler,
-  Canvas,
-  Group,
-  Path,
-  SkPath,
-} from '@shopify/react-native-skia';
+import { Skia, TouchInfo, PaintStyle } from '@shopify/react-native-skia';
 
 import { colors, StreamEventLoggable } from '@shared/lib';
-import { Box, useOnUndo } from '@shared/ui';
+import { Box, SketchCanvas, SketchCanvasRef, useOnUndo } from '@shared/ui';
 
-import {
-  DrawLine,
-  DrawPoint,
-  ResponseSerializer,
-  DrawResult,
-  LineSketcher,
-} from '../lib';
+import { DrawLine, DrawPoint, ResponseSerializer, DrawResult } from '../lib';
 
 const paint = Skia.Paint();
 paint.setColor(Skia.Color(colors.black));
@@ -39,6 +24,8 @@ type Props = {
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, onStarted, width, isDrawingActive, onLog } = props;
 
+  const sketchCanvasRef = useRef<SketchCanvasRef | null>(null);
+
   const callbacksRef = useRef({
     onStarted,
     onLog,
@@ -54,43 +41,9 @@ const DrawingBoard: FC<Props> = props => {
     points: [],
   });
 
-  const [paths, setPaths] = useState<SkPath[]>(() =>
-    LineSketcher.fromDrawLines(value),
-  );
+  const onTouchStart = useCallback((touchInfo: TouchInfo) => {}, []);
 
-  const lineSketcher = useMemo(
-    () =>
-      new LineSketcher(drawingValueLineRef, {
-        onPointAdded: point => {
-          const vector = width / 100;
-
-          callbacksRef.current.onLog(point.scale(vector));
-        },
-      }),
-    [width],
-  );
-
-  const onTouchStart = useCallback(
-    (touchInfo: TouchInfo) => {
-      setPaths(currentPaths => {
-        const newPath = lineSketcher.createLine(touchInfo);
-
-        return [...currentPaths, newPath];
-      });
-
-      callbacksRef.current.onStarted();
-    },
-    [lineSketcher],
-  );
-
-  const onTouchProgress = useCallback(
-    (touchInfo: TouchInfo) => {
-      setPaths(currentPaths => {
-        return lineSketcher.progressLine(touchInfo, currentPaths);
-      });
-    },
-    [lineSketcher],
-  );
+  const onTouchProgress = useCallback((touchInfo: TouchInfo) => {}, []);
 
   const onTouchEnd = useCallback(() => {
     const newLine = { ...drawingValueLineRef.current };
@@ -108,22 +61,8 @@ const DrawingBoard: FC<Props> = props => {
     onResult(result);
   }, [onResult, value, width]);
 
-  const touchHandler = useTouchHandler(
-    {
-      onStart: onTouchStart,
-      onActive: onTouchProgress,
-      onEnd: onTouchEnd,
-    },
-    [width, value],
-  );
-
   useOnUndo(() => {
-    setPaths([]);
-
-    drawingValueLineRef.current = {
-      startTime: Date.now(),
-      points: [],
-    };
+    sketchCanvasRef.current?.clear();
   });
 
   return (
@@ -135,35 +74,9 @@ const DrawingBoard: FC<Props> = props => {
       borderColor="$lightGrey2"
       pointerEvents={isDrawingActive ? 'auto' : 'none'}
     >
-      <View style={styles.canvasView}>
-        <Canvas style={styles.canvas} onTouch={touchHandler}>
-          <Group>
-            {paths.map((path, i) => (
-              <Group key={i}>
-                <Path path={path} strokeWidth={1} style="stroke" />
-              </Group>
-            ))}
-          </Group>
-        </Canvas>
-      </View>
+      <SketchCanvas ref={sketchCanvasRef} width={width} />
     </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  skiaView: {
-    height: '100%',
-    width: '100%',
-  },
-  canvasView: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-  },
-  canvas: {
-    height: '100%',
-    width: '100%',
-  },
-});
 
 export default DrawingBoard;
