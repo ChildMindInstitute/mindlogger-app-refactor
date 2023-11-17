@@ -131,9 +131,8 @@ const DrawingTest: FC<Props> = props => {
   return (
     <Box
       {...props}
-      onTouchStart={() => {
-        enableScroll.flush();
-      }}
+      onStartShouldSetResponder={() => true}
+      onResponderGrant={() => enableScroll.flush()}
       onLayout={x => {
         const containerWidth = x.nativeEvent.layout.width - RectPadding * 2;
 
@@ -173,7 +172,8 @@ const DrawingTest: FC<Props> = props => {
       {!!width && (
         <XStack
           jc="center"
-          onTouchStart={onCanvasTouchStart}
+          onStartShouldSetResponder={() => true}
+          onResponderGrant={onCanvasTouchStart}
           onTouchEnd={onCanvasTouchEnd}
         >
           {!!backgroundImageUrl && (
