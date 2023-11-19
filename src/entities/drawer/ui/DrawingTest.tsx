@@ -2,19 +2,15 @@
 import { FC, useState } from 'react';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
-import { FileSystem, Dirs } from 'react-native-file-access';
 import { useDebouncedCallback } from 'use-debounce';
-import { v4 as uuidv4 } from 'uuid';
 
 import { Box, BoxProps, XStack } from '@app/shared/ui';
 import { StreamEventLoggable } from '@shared/lib';
 
 import DrawingBoard from './DrawingBoard';
-import { DrawLine, DrawPoint, DrawResult } from '../lib';
+import { DrawLine, DrawPoint, DrawResult, SvgFileManager } from '../lib';
 
 const RectPadding = 15;
-
-const filesCacheDir = Dirs.CacheDir;
 
 type Props = {
   value: { lines: DrawLine[]; fileName: string | null };
@@ -30,45 +26,23 @@ const DrawingTest: FC<Props> = props => {
 
   const { value, backgroundImageUrl, imageUrl, onLog } = props;
 
-  const getFilePath = (fileName: string) => {
-    return `file://${filesCacheDir}/${fileName}`;
-  };
-
   const onResult = async (result: DrawResult) => {
     let fileName = value.fileName;
 
-    if (!fileName?.length) {
-      fileName = `${uuidv4()}.svg`;
-    }
+    const fileMeta = SvgFileManager.getFileMeta(fileName);
 
-    const path = getFilePath(fileName);
-
-    result.fileName = fileName;
-    result.type = 'image/svg';
-    result.uri = path;
+    result.fileName = fileMeta.fileName;
+    result.type = fileMeta.type;
+    result.uri = fileMeta.uri;
 
     props.onResult(result);
 
     writeFile.cancel();
-    writeFile(path, result.svgString);
+    writeFile(fileMeta.uri, result.svgString);
   };
 
   const writeFile = useDebouncedCallback(async (path: string, svg: string) => {
-    try {
-      const fileExists = await FileSystem.exists(path);
-
-      if (fileExists) {
-        await FileSystem.unlink(path);
-      }
-
-      await FileSystem.writeFile(path, svg);
-    } catch (error) {
-      console.warn(
-        '[DrawingTest.onResult]: Error occurred while delete or write file\n\n',
-        error,
-      );
-      return;
-    }
+    SvgFileManager.writeFile(path, svg);
   }, 500);
 
   return (
