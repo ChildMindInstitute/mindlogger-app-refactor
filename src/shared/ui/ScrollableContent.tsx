@@ -96,12 +96,15 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
             onContentSizeChange={(_, contentHeight) => {
               setScrollContentHeight(contentHeight);
             }}
-            scrollEnabled={isAreaScrollable && scrollEnabled}
+            scrollEnabled={scrollEnabled}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             keyboardOpeningTime={0}
             scrollEventThrottle={300}
             onScroll={onScroll}
+            overScrollMode="never"
+            alwaysBounceVertical={false}
+            bounces={false}
           >
             {children}
           </KeyboardAwareScrollView>

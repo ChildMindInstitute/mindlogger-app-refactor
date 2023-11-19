@@ -1,15 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
-import { FC, useContext, useEffect, useRef, useState } from 'react';
-import { GestureResponderEvent, TouchableOpacity } from 'react-native';
+import { FC, useState } from 'react';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { FileSystem, Dirs } from 'react-native-file-access';
 import { useDebouncedCallback } from 'use-debounce';
 import { v4 as uuidv4 } from 'uuid';
 
-import { ActivityScrollContext } from '@app/features/pass-survey';
-import { Box, BoxProps, Center, Text, XStack } from '@app/shared/ui';
-import { IS_ANDROID, IS_IOS, runOnIOS, StreamEventLoggable } from '@shared/lib';
+import { Box, BoxProps, XStack } from '@app/shared/ui';
+import { StreamEventLoggable } from '@shared/lib';
 
 import DrawingBoard from './DrawingBoard';
 import { DrawLine, DrawPoint, DrawResult } from '../lib';
@@ -18,14 +16,10 @@ const RectPadding = 15;
 
 const filesCacheDir = Dirs.CacheDir;
 
-const SCROLL_ENABLING_DELAY = 300;
-
 type Props = {
   value: { lines: DrawLine[]; fileName: string | null };
   imageUrl: string | null;
-  isDrawingActive: boolean;
   backgroundImageUrl: string | null;
-  onStarted: () => void;
   onResult: (result: DrawResult) => void;
   toggleScroll: (isScrollEnabled: boolean) => void;
 } & StreamEventLoggable<DrawPoint> &
@@ -33,17 +27,8 @@ type Props = {
 
 const DrawingTest: FC<Props> = props => {
   const [width, setWidth] = useState<number | null>(null);
-  const { scrollToEnd, isAreaScrollable } = useContext(ActivityScrollContext);
 
-  const {
-    value,
-    backgroundImageUrl,
-    imageUrl,
-    onStarted,
-    isDrawingActive,
-    toggleScroll,
-    onLog,
-  } = props;
+  const { value, backgroundImageUrl, imageUrl, onLog } = props;
 
   const getFilePath = (fileName: string) => {
     return `file://${filesCacheDir}/${fileName}`;
@@ -64,13 +49,11 @@ const DrawingTest: FC<Props> = props => {
 
     props.onResult(result);
 
-    setTimeout(() => {
-      // not to affect render
-      writeFile(path, result.svgString);
-    }, 500);
+    writeFile.cancel();
+    writeFile(path, result.svgString);
   };
 
-  const writeFile = async (path: string, svg: string) => {
+  const writeFile = useDebouncedCallback(async (path: string, svg: string) => {
     try {
       const fileExists = await FileSystem.exists(path);
 
@@ -86,53 +69,11 @@ const DrawingTest: FC<Props> = props => {
       );
       return;
     }
-  };
-
-  const toggleScrollRef = useRef(toggleScroll);
-
-  toggleScrollRef.current = toggleScroll;
-
-  const handleToggle = () => {
-    !isDrawingActive && scrollToEnd();
-
-    toggleScrollRef.current(isDrawingActive);
-  };
-
-  const enableScroll = useDebouncedCallback(() => {
-    toggleScrollRef.current(true);
-  }, SCROLL_ENABLING_DELAY);
-
-  const disableScroll = () => toggleScrollRef.current(false);
-
-  const onCanvasTouchStart = (e: GestureResponderEvent) => {
-    e.stopPropagation();
-
-    runOnIOS(() => {
-      disableScroll();
-    });
-  };
-
-  const onCanvasTouchEnd = () => {
-    runOnIOS(() => {
-      enableScroll();
-    });
-  };
-
-  useEffect(() => {
-    if (IS_ANDROID) {
-      if (isAreaScrollable) {
-        enableScroll();
-      } else {
-        disableScroll();
-      }
-    }
-  }, [isAreaScrollable, enableScroll]);
+  }, 500);
 
   return (
     <Box
       {...props}
-      onStartShouldSetResponder={() => true}
-      onResponderGrant={() => enableScroll.flush()}
       onLayout={x => {
         const containerWidth = x.nativeEvent.layout.width - RectPadding * 2;
 
@@ -157,25 +98,8 @@ const DrawingTest: FC<Props> = props => {
         </XStack>
       )}
 
-      {IS_ANDROID && isAreaScrollable && (
-        <TouchableOpacity onPress={handleToggle}>
-          <Center mb={16}>
-            <Text color={isDrawingActive ? '$red' : '$primary'} fontSize={18}>
-              {isDrawingActive
-                ? 'Tap here to stop drawing' // @todo add translations after confirmation
-                : 'Tap here to start drawing'}
-            </Text>
-          </Center>
-        </TouchableOpacity>
-      )}
-
       {!!width && (
-        <XStack
-          jc="center"
-          onStartShouldSetResponder={() => true}
-          onResponderGrant={onCanvasTouchStart}
-          onTouchEnd={onCanvasTouchEnd}
-        >
+        <XStack jc="center">
           {!!backgroundImageUrl && (
             <CachedImage
               source={backgroundImageUrl}
@@ -186,9 +110,7 @@ const DrawingTest: FC<Props> = props => {
 
           <DrawingBoard
             value={value.lines}
-            isDrawingActive={isDrawingActive || IS_IOS}
             onResult={onResult}
-            onStarted={onStarted}
             width={width}
             onLog={onLog}
           />

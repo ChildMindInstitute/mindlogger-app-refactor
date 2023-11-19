@@ -1,52 +1,39 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useRef, FC, useCallback, useMemo } from 'react';
 
-import { Skia, TouchInfo, PaintStyle } from '@shopify/react-native-skia';
-
-import { colors, StreamEventLoggable } from '@shared/lib';
+import { StreamEventLoggable } from '@shared/lib';
 import { Box, SketchCanvas, SketchCanvasRef, useOnUndo } from '@shared/ui';
 
 import { DrawLine, ResponseSerializer, DrawResult } from '../lib';
 import DrawPoint from '../lib/utils/DrawPoint';
 
-const paint = Skia.Paint();
-paint.setColor(Skia.Color(colors.black));
-paint.setStrokeWidth(1);
-paint.setStyle(PaintStyle.Stroke);
-
 type Props = {
   value: Array<DrawLine>;
-  onStarted: () => void;
   onResult: (result: DrawResult) => void;
   width: number;
-  isDrawingActive: boolean;
 } & StreamEventLoggable<DrawPoint>;
 
 const DrawingBoard: FC<Props> = props => {
-  const { value, onResult, onStarted, width, isDrawingActive, onLog } = props;
+  const { value, onResult, width, onLog } = props;
 
   const vector = width / 100;
 
   const sketchCanvasRef = useRef<SketchCanvasRef | null>(null);
 
   const callbacksRef = useRef({
-    onStarted,
     onLog,
   });
 
   callbacksRef.current = {
-    onStarted,
     onLog,
   };
 
-  const drawPoints = useMemo(() => {
-    return value.reduce<DrawPoint[]>((accumulator, drawLine) => {
-      const normalizedPoints = drawLine.points.map(point => {
+  const initialLines: DrawPoint[][] = useMemo(() => {
+    return value.map(line => {
+      return line.points.map(point => {
         return new DrawPoint(point.x, point.y, point.time).scale(100 / width);
       });
-
-      return accumulator.concat(normalizedPoints);
-    }, []);
+    });
   }, [value, width]);
 
   const drawingValueLineRef = useRef<DrawLine>({
@@ -100,12 +87,11 @@ const DrawingBoard: FC<Props> = props => {
       zIndex={1}
       borderWidth={1}
       borderColor="$lightGrey2"
-      pointerEvents={isDrawingActive ? 'auto' : 'none'}
     >
       <SketchCanvas
         ref={sketchCanvasRef}
         width={width}
-        initialPoints={drawPoints}
+        initialLines={initialLines}
         onStrokeStart={onTouchStart}
         onStrokeChanged={onTouchProgress}
         onStrokeEnd={onTouchEnd}

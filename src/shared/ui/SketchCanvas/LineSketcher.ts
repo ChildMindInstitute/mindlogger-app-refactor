@@ -1,6 +1,4 @@
-import { MutableRefObject } from 'react';
-
-import { PaintStyle, SkCanvas, Skia, SkPath } from '@shopify/react-native-skia';
+import { PaintStyle, Skia, SkPath } from '@shopify/react-native-skia';
 
 import { colors } from '@app/shared/lib';
 
@@ -9,10 +7,6 @@ export type Point = {
   y: number;
 };
 
-type PathsRef = MutableRefObject<Array<SkPath>>;
-type CanvasRef = MutableRefObject<SkCanvas | null>;
-type PointsRef = MutableRefObject<Array<Point>>;
-
 const paint = Skia.Paint();
 
 paint.setColor(Skia.Color(colors.black));
@@ -20,30 +14,10 @@ paint.setStrokeWidth(1.5);
 paint.setStyle(PaintStyle.Stroke);
 
 class LineSketcher {
-  pathsRef: PathsRef;
-  canvasRef: CanvasRef;
-  pointsRef: PointsRef;
+  private points: Array<Point>;
 
-  constructor(pathsRef: PathsRef, canvasRef: CanvasRef, pointsRef: PointsRef) {
-    this.pathsRef = pathsRef;
-    this.canvasRef = canvasRef;
-    this.pointsRef = pointsRef;
-  }
-
-  private get paths() {
-    return this.pathsRef.current;
-  }
-
-  private get canvas() {
-    return this.canvasRef.current;
-  }
-
-  private get points() {
-    return this.pointsRef.current;
-  }
-
-  private set points(points: Array<Point>) {
-    this.pointsRef.current = points;
+  constructor() {
+    this.points = [];
   }
 
   private static addPointToPath(
@@ -51,7 +25,7 @@ class LineSketcher {
     tPoint: Point,
     pPoint: Point,
     point: Point,
-  ) {
+  ): void {
     const mid1: Point = {
       x: (pPoint.x + tPoint.x) / 2,
       y: (pPoint.y + tPoint.y) / 2,
@@ -95,49 +69,30 @@ class LineSketcher {
     return path;
   }
 
-  public static drawPaths(canvas: SkCanvas, paths: Array<SkPath>): void {
-    paths.forEach(path => {
-      canvas.drawPath(path, paint);
-    });
-  }
-
-  public createLine(point: Point): void {
-    if (!this.canvas) {
-      return;
-    }
-
+  public createLine(point: Point): SkPath {
     this.points = [point];
 
     const newPath = Skia.Path.Make();
 
     newPath.moveTo(point.x, point.y);
 
-    this.paths.push(newPath);
-
-    this.canvas.drawPath(newPath, paint);
+    return newPath;
   }
 
-  public progressLine(point: Point): void {
+  public progressLine(path: SkPath, point: Point): void {
     this.points.push(point);
 
     const pointsCount = this.points.length;
 
-    const currentPath = this.paths[this.paths.length - 1];
-
     if (pointsCount >= 3) {
       LineSketcher.addPointToPath(
-        currentPath,
+        path,
         this.points[pointsCount - 3],
         this.points[pointsCount - 2],
         point,
       );
     } else {
-      LineSketcher.addPointToPath(
-        currentPath,
-        this.points[0],
-        this.points[0],
-        point,
-      );
+      LineSketcher.addPointToPath(path, this.points[0], this.points[0], point);
     }
   }
 }
