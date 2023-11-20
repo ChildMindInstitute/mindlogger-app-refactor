@@ -167,7 +167,7 @@ class FlankerView: UIView {
 
   @objc var dataJson: NSString? {
     didSet {
-      ParameterGameManager.shared.loadAllImage(dataJson: String(dataJson ?? ""))
+      ParameterGameManager.shared.loadAllImage(dataJson: String(dataJson ?? "")) { _ in }
     }
   }
 
@@ -362,9 +362,9 @@ extension FlankerView: GameManagerProtocol {
         rightButton.titleLabel?.textAlignment = .center
       } else if let leftImage = leftImage, let rightImage = rightImage {
         let left = ImageLoader()
-        left.loadImageWithUrl(leftImage)
+        left.loadImageWithUrl(leftImage){}
         let right = ImageLoader()
-        right.loadImageWithUrl(rightImage)
+        right.loadImageWithUrl(rightImage){}
         leftButton.setTitle(nil, for: .normal)
         leftButton.backgroundColor = .clear
         leftButton.setImage(left.image, for: .normal)
@@ -387,7 +387,7 @@ extension FlankerView: GameManagerProtocol {
         leftButton.titleLabel?.textAlignment = .center
       } else if let leftImage = leftImage {
         let left = ImageLoader()
-        left.loadImageWithUrl(leftImage)
+        left.loadImageWithUrl(leftImage) {}
         leftButton.setTitle(nil, for: .normal)
         leftButton.backgroundColor = .clear
         leftButton.setImage(left.image, for: .normal)
@@ -406,7 +406,7 @@ extension FlankerView: GameManagerProtocol {
       let time = CACurrentMediaTime()
       print("Marker: self.displayLink?.isPaused = false: \(time)")
       fixationImage.isHidden = false
-      fixationImage.loadImageWithUrl(url)
+      fixationImage.loadImageWithUrl(url){}
       drawPixel()
     }
   }

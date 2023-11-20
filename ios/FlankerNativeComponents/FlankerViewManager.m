@@ -10,7 +10,8 @@
 
 @interface RCT_EXTERN_MODULE(FlankerViewManager, RCTViewManager)
 RCT_EXTERN_METHOD(setGameParameters:(NSString *)json)
-RCT_EXTERN_METHOD(preloadGameImages:(NSString *)json)
+RCT_EXTERN_METHOD(preloadGameImages:(NSString *)dataJson
+                  onFinish: (RCTResponseSenderBlock)onFinish)
 RCT_EXTERN_METHOD(startGame:(BOOL *)isFirst isLast:(BOOL *)isLast)
 RCT_EXPORT_VIEW_PROPERTY(onEndGame, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(dataJson, NSString)

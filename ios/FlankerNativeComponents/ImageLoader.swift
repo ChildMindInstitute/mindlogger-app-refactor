@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import Promises
 
 let imageCache = NSCache<AnyObject, AnyObject>()
 
@@ -86,7 +87,7 @@ class ImageLoader: UIView {
 
   }
 
-    func loadImageWithUrl(_ url: URL) {
+  func loadImageWithUrl(_ url: URL, callback: @escaping () -> Void) {
         // setup activityIndicator...
         activityIndicator.color = .darkGray
 
@@ -130,7 +131,17 @@ class ImageLoader: UIView {
                     imageCache.setObject(imageToCache, forKey: url as AnyObject)
                 }
                 self.activityIndicator.stopAnimating()
+              
+              callback()
             })
         }).resume()
     }
+  
+  func loadImageWithUrlWrapper(_ url: URL) -> Promise<Any?>{
+    return Promise<Any?> { fulfill, reject in
+      self.loadImageWithUrl(url) {
+        fulfill(nil)
+      }
+    }
+  }
 }

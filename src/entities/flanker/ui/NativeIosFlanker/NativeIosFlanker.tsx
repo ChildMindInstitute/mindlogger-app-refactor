@@ -31,18 +31,13 @@ const NativeIosFlanker: FC<Props> = props => {
 
     const configString = JSON.stringify(configuration);
 
-    NativeModules.FlankerViewManager.preloadGameImages(configString);
-
-    // Race condition issue:
-    // FlankerView.swift may be created after startGame call
-
-    setTimeout(() => {
+    NativeModules.FlankerViewManager.preloadGameImages(configString, () => {
       NativeModules.FlankerViewManager.setGameParameters(configString);
       NativeModules.FlankerViewManager.startGame(
         props.configuration.isFirstPractice,
         props.configuration.isLastTest,
       );
-    }, 600);
+    });
   }, [configuration, props.configuration]);
 
   return (

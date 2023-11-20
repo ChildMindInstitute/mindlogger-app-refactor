@@ -21,8 +21,8 @@ class FlankerViewManager: RCTViewManager {
   }
 
   @objc
-  func preloadGameImages(_ json: String) {
-    ParameterGameManager.shared.loadAllImage(dataJson: json)
+  func preloadGameImages(_ json: String, onFinish: @escaping RCTResponseSenderBlock) {
+    ParameterGameManager.shared.loadAllImage(dataJson: json, onFinish: onFinish)
   }
 
   @objc
