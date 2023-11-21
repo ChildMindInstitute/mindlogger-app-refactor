@@ -1,6 +1,6 @@
 import { PaintStyle, Skia, SkPath } from '@shopify/react-native-skia';
 
-import { colors } from '@app/shared/lib';
+import { colors, IS_ANDROID } from '@app/shared/lib';
 
 export type Point = {
   x: number;
@@ -99,7 +99,7 @@ class LineSketcher {
 
   public shouldCreateNewLine(): boolean {
     const pointsCount = this.points.length;
-    const suggestedMaxPointsPerLine = 100;
+    const suggestedMaxPointsPerLine = IS_ANDROID ? 300 : Infinity;
 
     return pointsCount % suggestedMaxPointsPerLine === 0;
   }
