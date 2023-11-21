@@ -1,11 +1,11 @@
 import { createContext } from 'react';
 
-type ActivityScroll = {
+type ScrollViewContext = {
   scrollToEnd: () => void;
   isAreaScrollable: boolean;
   setScrollEnabled: (value: boolean) => void;
 };
 
-const ActivityScrollContext = createContext({} as ActivityScroll);
+const ScrollViewContext = createContext({} as ScrollViewContext);
 
-export default ActivityScrollContext;
+export default ScrollViewContext;

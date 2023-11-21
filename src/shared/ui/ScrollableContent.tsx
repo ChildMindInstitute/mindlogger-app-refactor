@@ -17,8 +17,9 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDebounce } from 'use-debounce';
 
-import { ActivityScrollContext } from '@app/features/pass-survey';
 import { Box, ScrollButton } from '@app/shared/ui';
+
+import { ScrollViewContext } from '../lib';
 
 type Props = {
   scrollEnabled: boolean;
@@ -101,7 +102,7 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
   }, [containerHeight, debouncedScrollContentHeight]);
 
   return (
-    <ActivityScrollContext.Provider value={context}>
+    <ScrollViewContext.Provider value={context}>
       <Box
         flex={1}
         onLayout={e => {
@@ -141,7 +142,7 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
           />
         )}
       </Box>
-    </ActivityScrollContext.Provider>
+    </ScrollViewContext.Provider>
   );
 };
 

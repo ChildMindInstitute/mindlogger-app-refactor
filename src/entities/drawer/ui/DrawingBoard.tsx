@@ -1,10 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useRef, FC, useCallback, useMemo, useContext } from 'react';
+import React, { useRef, FC, useMemo, useContext } from 'react';
 
-import { useDebouncedCallback } from 'use-debounce';
-
-import { ActivityScrollContext } from '@app/features/pass-survey';
-import { StreamEventLoggable } from '@shared/lib';
+import { ScrollViewContext, StreamEventLoggable } from '@shared/lib';
 import { Box, SketchCanvas, SketchCanvasRef, useOnUndo } from '@shared/ui';
 
 import { DrawLine, ResponseSerializer, DrawResult } from '../lib';
@@ -19,7 +15,7 @@ type Props = {
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, width, onLog } = props;
 
-  const { setScrollEnabled } = useContext(ActivityScrollContext);
+  const { setScrollEnabled } = useContext(ScrollViewContext);
 
   const vector = width / 100;
 
