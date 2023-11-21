@@ -1,7 +1,7 @@
 import React, { FC, useMemo, useState } from 'react';
 import { AccessibilityProps } from 'react-native';
 
-import { shuffle } from '@shared/lib';
+import { shuffle, colors } from '@shared/lib';
 import { YStack, RadioGroup, Box, useOnUndo } from '@shared/ui';
 
 import RadioItem from './RadioItem';
@@ -57,7 +57,12 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
         accessibilityLabel={accessibilityLabel}
       >
         {optionsList.map(option => (
-          <Box my="$1" key={option.id} onPress={() => onValueChange(option.id)}>
+          <Box
+            key={option.id}
+            bbc={colors.lighterGrey}
+            bbw={setPalette ? 0 : 1}
+            onPress={() => onValueChange(option.id)}
+          >
             <RadioItem
               accessibilityLabel="radio-item-option"
               option={option}

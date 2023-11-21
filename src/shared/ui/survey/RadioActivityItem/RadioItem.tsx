@@ -56,14 +56,15 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
     : colors.primary;
   const invertedTextColor = hasColor
     ? invertColor(color as string)
-    : colors.black;
+    : colors.darkerGrey;
 
   return (
     <XStack
       minHeight="$7"
       bg={setPalette ? color : 'none'}
-      px="$3"
-      py="$3"
+      py="$4"
+      px="$5"
+      my="$1"
       jc="center"
       ai="center"
       ac="center"
@@ -95,10 +96,12 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
         </Box>
       )}
 
-      <RadioTextContainer w="50%" px="2%">
+      <RadioTextContainer w="50%">
         <Text
           accessibilityLabel={`radio-option-text${value}`}
-          fontSize={18}
+          fontSize={17}
+          maxWidth="70%"
+          ml="$4"
           color={invertedTextColor}
         >
           {name}
@@ -125,9 +128,7 @@ export default RadioItem;
 
 const styles = StyleSheet.create({
   image: {
-    width: '100%',
-    height: 40,
-    marginTop: 'auto',
-    marginBottom: 'auto',
+    width: '15%',
+    height: 64,
   },
 });
