@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useRef, FC, useCallback, useMemo } from 'react';
+import React, { useRef, FC, useCallback, useMemo, useContext } from 'react';
 
+import { useDebouncedCallback } from 'use-debounce';
+
+import { ActivityScrollContext } from '@app/features/pass-survey';
 import { StreamEventLoggable } from '@shared/lib';
 import { Box, SketchCanvas, SketchCanvasRef, useOnUndo } from '@shared/ui';
 
@@ -15,6 +18,8 @@ type Props = {
 
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, width, onLog } = props;
+
+  const { setScrollEnabled } = useContext(ActivityScrollContext);
 
   const vector = width / 100;
 
@@ -41,7 +46,13 @@ const DrawingBoard: FC<Props> = props => {
     points: [],
   });
 
+  const enableScroll = () => setScrollEnabled(true);
+
+  const disableScroll = () => setScrollEnabled(false);
+
   const onTouchStart = (x: number, y: number) => {
+    disableScroll();
+
     const drawPoint = new DrawPoint(x, y).scale(vector);
 
     drawingValueLineRef.current = {
@@ -74,6 +85,7 @@ const DrawingBoard: FC<Props> = props => {
     } as DrawResult;
 
     onResult(result);
+    enableScroll();
   };
 
   useOnUndo(() => {

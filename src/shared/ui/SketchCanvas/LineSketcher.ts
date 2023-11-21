@@ -69,12 +69,13 @@ class LineSketcher {
     return path;
   }
 
-  public createLine(point: Point): SkPath {
+  public createLine(point: Point, startFromPoint: Point = point): SkPath {
     this.points = [point];
 
     const newPath = Skia.Path.Make();
 
-    newPath.moveTo(point.x, point.y);
+    newPath.moveTo(startFromPoint.x, startFromPoint.y);
+    newPath.lineTo(point.x, point.y);
 
     return newPath;
   }
@@ -94,6 +95,13 @@ class LineSketcher {
     } else {
       LineSketcher.addPointToPath(path, this.points[0], this.points[0], point);
     }
+  }
+
+  public shouldCreateNewLine(): boolean {
+    const pointsCount = this.points.length;
+    const suggestedMaxPointsPerLine = 100;
+
+    return pointsCount % suggestedMaxPointsPerLine === 0;
   }
 }
 

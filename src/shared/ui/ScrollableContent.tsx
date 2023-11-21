@@ -9,6 +9,8 @@ import {
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
+  PanResponder,
+  ScrollView,
   StyleSheet,
 } from 'react-native';
 
@@ -38,7 +40,7 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
 
   const [showScrollButton, setShowScrollButton] = useState(false);
 
-  const scrollViewRef = useRef<KeyboardAwareScrollView>();
+  const scrollViewRef = useRef<ScrollView>();
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (endOfContentReachedOnce) {
@@ -63,9 +65,28 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
     setEndOfContentReachedOnce(true);
   }
 
+  function setScrollEnabled(value: boolean) {
+    scrollViewRef.current?.setNativeProps({
+      scrollEnabled: value,
+    });
+  }
+
   const context = useMemo(
-    () => ({ scrollToEnd, isAreaScrollable }),
+    () => ({ scrollToEnd, isAreaScrollable, setScrollEnabled }),
     [isAreaScrollable],
+  );
+
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => false,
+        onStartShouldSetPanResponderCapture: () => false,
+        onMoveShouldSetPanResponder: () => false,
+        onMoveShouldSetPanResponderCapture: () => false,
+        onShouldBlockNativeResponder: () => false,
+        onPanResponderTerminationRequest: () => false,
+      }),
+    [],
   );
 
   useEffect(() => {
@@ -90,7 +111,7 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
         <Box flex={1}>
           <KeyboardAwareScrollView
             innerRef={ref => {
-              scrollViewRef.current = ref as unknown as KeyboardAwareScrollView;
+              scrollViewRef.current = ref as unknown as ScrollView;
             }}
             contentContainerStyle={styles.scrollView}
             onContentSizeChange={(_, contentHeight) => {
@@ -105,6 +126,7 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
             overScrollMode="never"
             alwaysBounceVertical={false}
             bounces={false}
+            {...panResponder.panHandlers}
           >
             {children}
           </KeyboardAwareScrollView>

@@ -1,8 +1,20 @@
-import { useMemo, forwardRef, useImperativeHandle, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import {
+  useMemo,
+  forwardRef,
+  useImperativeHandle,
+  useState,
+  useCallback,
+} from 'react';
+import { PanResponder, StyleSheet } from 'react-native';
 
-import { SkPath, Canvas, Group, Path } from '@shopify/react-native-skia';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import {
+  SkPath,
+  Canvas,
+  Group,
+  Path,
+  useTouchHandler,
+  TouchInfo,
+} from '@shopify/react-native-skia';
 
 import { useCallbacksRefs } from '@app/shared/lib';
 
@@ -53,59 +65,79 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     [width],
   );
 
-  const panResponder = useMemo(
-    () =>
-      Gesture.Pan()
-        .onBegin(e => {
-          const point: Point = {
-            x: e.x,
-            y: e.y,
-          };
+  const onTouchStart = useCallback(
+    (touchInfo: TouchInfo) => {
+      const path = lineSketcher.createLine(touchInfo);
 
-          const path = lineSketcher.createLine(point);
-
-          setPaths(currentPaths => [...currentPaths, path]);
-          callbacksRef.current.onStrokeStart(point.x, point.y);
-        })
-        .onChange(e => {
-          const point: Point = {
-            x: e.x,
-            y: e.y,
-          };
-
-          callbacksRef.current.onStrokeChanged(point.x, point.y);
-
-          setPaths(currentPaths => {
-            const lastPath = currentPaths[currentPaths.length - 1];
-
-            lineSketcher.progressLine(lastPath, point);
-
-            return [...currentPaths.slice(0, -1), lastPath];
-          });
-        })
-        .onEnd(() => {
-          callbacksRef.current.onStrokeEnd();
-        })
-        .runOnJS(true),
+      setPaths(currentPaths => [...currentPaths, path]);
+      callbacksRef.current.onStrokeStart(touchInfo.x, touchInfo.y);
+    },
     [lineSketcher, callbacksRef],
   );
 
+  const onTouchProgress = useCallback(
+    (touchInfo: TouchInfo) => {
+      callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
+
+      setPaths(currentPaths => {
+        const pathsCount = currentPaths.length;
+        const lastPath = currentPaths[pathsCount - 1];
+
+        if (lineSketcher.shouldCreateNewLine()) {
+          const lastPoint = lastPath.getLastPt();
+          const path = lineSketcher.createLine(touchInfo, lastPoint);
+
+          return [...currentPaths, path];
+        } else {
+          lineSketcher.progressLine(lastPath, touchInfo);
+
+          return [...currentPaths.slice(0, -1), lastPath];
+        }
+      });
+    },
+    [lineSketcher, callbacksRef],
+  );
+
+  const onTouchEnd = useCallback(() => {
+    callbacksRef.current.onStrokeEnd();
+  }, [callbacksRef]);
+
+  const touchHandler = useTouchHandler(
+    {
+      onStart: onTouchStart,
+      onActive: onTouchProgress,
+      onEnd: onTouchEnd,
+    },
+    [],
+  );
+
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onStartShouldSetPanResponderCapture: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponderCapture: () => true,
+        onShouldBlockNativeResponder: () => true,
+        onPanResponderTerminationRequest: () => true,
+      }),
+    [],
+  );
+
   return (
-    <GestureDetector gesture={panResponder}>
-      <Canvas style={styles}>
-        <Group>
-          {paths.map((path, i) => (
-            <Path
-              key={i}
-              path={path}
-              strokeWidth={1.5}
-              color="black"
-              style="stroke"
-            />
-          ))}
-        </Group>
-      </Canvas>
-    </GestureDetector>
+    <Canvas style={styles} onTouch={touchHandler} {...panResponder.panHandlers}>
+      <Group>
+        {paths.map((path, i) => (
+          <Path
+            key={i}
+            path={path}
+            strokeWidth={1.5}
+            color="black"
+            style="stroke"
+          />
+        ))}
+      </Group>
+    </Canvas>
   );
 });
 
