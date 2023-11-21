@@ -282,7 +282,7 @@ function ActivityStepper({
         <Stepper.Progress />
 
         {showBottomNavigation && (
-          <Stepper.NavigationPanel mt={16} minHeight={24} mb={bottom ? 0 : 16}>
+          <Stepper.NavigationPanel mt={18} minHeight={27} mb={bottom ? 0 : 16}>
             {canMoveBack && (
               <Stepper.BackButton>
                 {t(
