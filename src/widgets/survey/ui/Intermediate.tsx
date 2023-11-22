@@ -22,6 +22,7 @@ import {
 import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import {
   Logger,
+  AnalyticsService,
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
@@ -160,6 +161,7 @@ function Intermediate({
 
   const changeActivity = useCallback(() => {
     if (!nextActivity) {
+      AnalyticsService.track('Assessment completed');
       return;
     }
 

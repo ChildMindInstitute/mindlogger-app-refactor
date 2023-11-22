@@ -20,5 +20,6 @@ export { default as useActivityInfo } from './useActivityInfo';
 export { default as useAppletInfo } from './useAppletInfo';
 export { default as useCurrentRoute } from './useCurrentRoute';
 export { default as useCachedImage } from './useCachedImage';
+export { default as useCallbacksRefs } from './useCallbacksRefs';
 
 export * from './redux';

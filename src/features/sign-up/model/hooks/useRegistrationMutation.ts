@@ -9,7 +9,7 @@ import {
   IdentityModel,
 } from '@entities/identity';
 import { SessionModel } from '@entities/session';
-import { useAppDispatch } from '@shared/lib';
+import { AnalyticsService, useAppDispatch } from '@shared/lib';
 import { encryption } from '@shared/lib';
 
 type UseRegistrationReturn = {
@@ -47,6 +47,10 @@ export const useRegistrationMutation = (
       UserInfoRecord.setEmail(user.email);
 
       SessionModel.storeSession(session);
+
+      AnalyticsService.login(user.id).then(() => {
+        AnalyticsService.track('Login Successful');
+      });
 
       if (onSuccess) {
         onSuccess();

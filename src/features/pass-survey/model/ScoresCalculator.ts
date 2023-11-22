@@ -237,7 +237,7 @@ export class ScoresCalculator implements IScoresCalculator {
         const sumOfMaxScores = Calculator.sum(filteredMaxScores);
 
         if (sumOfMaxScores === 0) {
-          return null;
+          return 0;
         }
 
         return (100 * currentScore) / sumOfMaxScores;

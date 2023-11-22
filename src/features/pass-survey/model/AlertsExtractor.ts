@@ -79,18 +79,28 @@ class AlertsExtractor {
     answer: Answer,
   ): AnswerAlerts {
     const sliderAnswer = answer.answer as SliderResponse;
+    const isContinuousSlider = sliderItem.payload.isContinuousSlider;
 
-    if (!sliderItem.payload.alerts || !sliderAnswer) {
+    if (!sliderItem.payload.alerts || sliderAnswer === null) {
       return [];
     }
 
     const alerts: AnswerAlerts = [];
 
     sliderItem.payload.alerts.forEach(alert => {
-      if (
-        alert.value === sliderAnswer ||
-        (sliderAnswer >= alert.minValue && sliderAnswer <= alert.maxValue)
-      ) {
+      const isValueInRange =
+        alert.minValue !== null &&
+        alert.maxValue !== null &&
+        sliderAnswer >= alert.minValue &&
+        sliderAnswer <= alert.maxValue;
+
+      if (!isContinuousSlider && alert.value === sliderAnswer) {
+        alerts.push({
+          activityItemId: sliderItem.id!,
+          message: alert.message,
+        });
+      }
+      if (isContinuousSlider && isValueInRange) {
         alerts.push({
           activityItemId: sliderItem.id!,
           message: alert.message,

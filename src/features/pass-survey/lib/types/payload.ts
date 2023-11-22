@@ -81,8 +81,8 @@ type SliderPayload = {
   isContinuousSlider: boolean | null;
   alerts: Array<{
     value: number;
-    minValue: number;
-    maxValue: number;
+    minValue: number | null;
+    maxValue: number | null;
     message: string;
   }> | null;
   scores: Array<number>;

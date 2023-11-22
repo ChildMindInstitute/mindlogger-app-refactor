@@ -12,6 +12,7 @@ import { ActivityModel, QueueProcessingService } from '@app/entities/activity';
 import { MediaFilesCleaner } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
+import { LoginModel } from '@app/features/login';
 import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SystemRecord } from '@app/shared/lib/records';
 import { SessionModel } from '@entities/session';
@@ -134,6 +135,8 @@ export default () => {
   }, [getCurrentRoute]);
 
   useOnlineEstablished(processQueue);
+
+  LoginModel.useAnalyticsAutoLogin();
 
   return (
     <Stack.Navigator

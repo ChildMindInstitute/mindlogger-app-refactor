@@ -14,6 +14,7 @@ import {
   hasPendingMutations,
   isAppOnline,
   useAppDispatch,
+  AnalyticsService,
 } from '@shared/lib';
 
 import { clearEntityRecordStorages, clearUploadQueueStorage } from '../lib';
@@ -30,6 +31,8 @@ export function useLogout() {
     } catch (error) {
       Logger.error(`Logout operation failed: ${error}`);
     }
+
+    AnalyticsService.logout();
 
     dispatch(IdentityModel.actions.onLogout());
 

@@ -9,14 +9,17 @@ import {
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
+  PanResponder,
+  ScrollView,
   StyleSheet,
 } from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDebounce } from 'use-debounce';
 
-import { ActivityScrollContext } from '@app/features/pass-survey';
 import { Box, ScrollButton } from '@app/shared/ui';
+
+import { ScrollViewContext } from '../lib';
 
 type Props = {
   scrollEnabled: boolean;
@@ -38,7 +41,7 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
 
   const [showScrollButton, setShowScrollButton] = useState(false);
 
-  const scrollViewRef = useRef<KeyboardAwareScrollView>();
+  const scrollViewRef = useRef<ScrollView>();
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (endOfContentReachedOnce) {
@@ -63,9 +66,28 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
     setEndOfContentReachedOnce(true);
   }
 
+  function setScrollEnabled(value: boolean) {
+    scrollViewRef.current?.setNativeProps({
+      scrollEnabled: value,
+    });
+  }
+
   const context = useMemo(
-    () => ({ scrollToEnd, isAreaScrollable }),
+    () => ({ scrollToEnd, isAreaScrollable, setScrollEnabled }),
     [isAreaScrollable],
+  );
+
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => false,
+        onStartShouldSetPanResponderCapture: () => false,
+        onMoveShouldSetPanResponder: () => false,
+        onMoveShouldSetPanResponderCapture: () => false,
+        onShouldBlockNativeResponder: () => false,
+        onPanResponderTerminationRequest: () => false,
+      }),
+    [],
   );
 
   useEffect(() => {
@@ -80,7 +102,7 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
   }, [containerHeight, debouncedScrollContentHeight]);
 
   return (
-    <ActivityScrollContext.Provider value={context}>
+    <ScrollViewContext.Provider value={context}>
       <Box
         flex={1}
         onLayout={e => {
@@ -90,18 +112,22 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
         <Box flex={1}>
           <KeyboardAwareScrollView
             innerRef={ref => {
-              scrollViewRef.current = ref as unknown as KeyboardAwareScrollView;
+              scrollViewRef.current = ref as unknown as ScrollView;
             }}
             contentContainerStyle={styles.scrollView}
             onContentSizeChange={(_, contentHeight) => {
               setScrollContentHeight(contentHeight);
             }}
-            scrollEnabled={isAreaScrollable && scrollEnabled}
+            scrollEnabled={scrollEnabled}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             keyboardOpeningTime={0}
             scrollEventThrottle={300}
             onScroll={onScroll}
+            overScrollMode="never"
+            alwaysBounceVertical={false}
+            bounces={false}
+            {...panResponder.panHandlers}
           >
             {children}
           </KeyboardAwareScrollView>
@@ -116,7 +142,7 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
           />
         )}
       </Box>
-    </ActivityScrollContext.Provider>
+    </ScrollViewContext.Provider>
   );
 };
 
