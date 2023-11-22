@@ -23,6 +23,7 @@ export const IS_TABLET = isTablet();
 
 export const ENV = Config.ENV;
 export const API_URL = Config.API_URL as string;
+export const MIXPANEL_TOKEN = Config.MIXPANEL_TOKEN;
 
 export const STORE_ENCRYPTION_KEY = Config.STORE_ENCRYPTION_KEY;
 

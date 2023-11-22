@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Text } from '@app/shared/ui';
+import { AnalyticsService } from '@shared/lib';
 
 import useQueueProcessing from '../lib/hooks/useQueueProcessing';
 
@@ -10,6 +11,7 @@ const UploadRetryBanner = () => {
   const { t } = useTranslation();
 
   const onRetry = () => {
+    AnalyticsService.track('Retry button pressed');
     process();
   };
 

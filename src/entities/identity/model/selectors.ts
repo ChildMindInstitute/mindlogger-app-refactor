@@ -13,3 +13,5 @@ export const selectFirstName = createSelector(
   selectUser,
   user => user?.firstName,
 );
+
+export const selectUserId = createSelector(selectUser, user => user?.id);
