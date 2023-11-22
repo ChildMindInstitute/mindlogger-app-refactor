@@ -28,7 +28,6 @@ const SignUpForm: FC<Props> = props => {
 
   const { form, submit } = useAppForm(SignUpFormSchema, {
     defaultValues: {
-      terms: false,
       email: '',
       password: '',
     },
