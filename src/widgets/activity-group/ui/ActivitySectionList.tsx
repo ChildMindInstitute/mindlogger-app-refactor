@@ -23,7 +23,7 @@ type Props = {
 
 function ActivitySectionList({ appletId, groups }: Props) {
   const { t } = useTranslation();
-  const { navigate } = useNavigation();
+  const { navigate, isFocused } = useNavigation();
 
   const sections = useMemo(() => {
     return groups
@@ -111,7 +111,12 @@ function ActivitySectionList({ appletId, groups }: Props) {
           data-test={`activity-card-${item.activityId}`}
           activity={item}
           disabled={false}
-          onPress={() => startActivityOrFlow(item)}
+          onPress={() => {
+            if (!isFocused()) {
+              return;
+            }
+            startActivityOrFlow(item);
+          }}
         />
       )}
       ItemSeparatorComponent={ItemSeparator}
