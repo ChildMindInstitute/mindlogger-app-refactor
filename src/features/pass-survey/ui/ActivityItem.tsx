@@ -139,8 +139,6 @@ function ActivityItem({
               fileName: value?.answer?.fileName ?? null,
               lines: value?.answer?.lines ?? [],
             }}
-            isDrawingActive={!scrollEnabled}
-            onStarted={() => {}}
             onResult={onResponse}
             onLog={sendLiveEvent}
           />

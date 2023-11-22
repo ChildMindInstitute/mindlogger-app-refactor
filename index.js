@@ -1,7 +1,3 @@
-/**
- * @format
- */
-
 import { AppRegistry } from 'react-native';
 
 import { jobRunner } from './src/shared/lib';
