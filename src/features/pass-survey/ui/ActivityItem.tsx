@@ -1,4 +1,5 @@
 import { useCallback, useContext, useState } from 'react';
+import { InteractionManager } from 'react-native';
 
 import {
   Box,
@@ -22,7 +23,7 @@ import { useAppletStreamingStatus } from '@entities/applet/lib/hooks';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
 import { StabilityTracker } from '@entities/stabilityTracker';
-import { IS_ANDROID, useSendEvent } from '@shared/lib';
+import { IS_ANDROID, useSendEvent, wait } from '@shared/lib';
 import {
   RadioActivityItem,
   SurveySlider,
@@ -92,7 +93,10 @@ function ActivityItem({
 
   function moveToNextItemWithDelay() {
     if (!pipelineItem.additionalText?.required) {
-      setTimeout(() => setImmediate(() => next(true)), 200);
+      InteractionManager.runAfterInteractions(async () => {
+        await wait(200);
+        next(true);
+      });
     }
   }
 
