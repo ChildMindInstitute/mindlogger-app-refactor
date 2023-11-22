@@ -37,6 +37,11 @@ import {
 const NumberOfDaysForSchedule = 14;
 const DaysInWeek = 7;
 
+type ReminderSettings = {
+  setting: ReminderSetting | null;
+  excludeWeekends: boolean;
+};
+
 interface INotificationBuilder {
   build: () => AppletNotificationDescribers;
 }
@@ -126,6 +131,17 @@ class NotificationBuilder implements INotificationBuilder {
     if (notification.scheduledAt < this.now.valueOf()) {
       notification.isActive = false;
       notification.inactiveReason = InactiveReason.Outdated;
+    }
+  }
+
+  private markIfFallOnWeekend(notification: NotificationDescriber) {
+    const day = startOfDay(notification.scheduledAt);
+
+    const isWeekend = day.getDay() === 6 || day.getDay() === 0;
+
+    if (isWeekend) {
+      notification.isActive = false;
+      notification.inactiveReason = InactiveReason.FallOnWeekends;
     }
   }
 
@@ -315,6 +331,7 @@ class NotificationBuilder implements INotificationBuilder {
     if (!this.isReminderSet(reminderData)) {
       return null;
     }
+
     const { reminderTime, activityIncomplete: daysIncomplete } = reminderData!;
 
     const reminderFireDay = addDays(scheduledDay, daysIncomplete);
@@ -405,7 +422,7 @@ class NotificationBuilder implements INotificationBuilder {
   private processNotificationsSection(
     day: Date,
     eventNotifications: NotificationSetting[],
-    reminderSetting: ReminderSetting | null,
+    reminderSettings: ReminderSettings,
     activityId: string | null,
     activityFlowId: string | null,
     entityName: string,
@@ -452,11 +469,15 @@ class NotificationBuilder implements INotificationBuilder {
       activityFlowId,
       entityName,
       eventId,
-      reminderSetting,
+      reminderSettings.setting,
     );
 
     if (reminder?.isActive) {
       this.markIfNotificationOutdated(reminder);
+    }
+
+    if (reminder?.isActive && reminderSettings.excludeWeekends) {
+      this.markIfFallOnWeekend(reminder);
     }
 
     if (reminder) {
@@ -513,14 +534,19 @@ class NotificationBuilder implements INotificationBuilder {
 
     const eventNotifications = event.notificationSettings.notifications;
 
-    const reminderSettings: ReminderSetting | null =
+    const reminderSetting: ReminderSetting | null =
       event.notificationSettings.reminder;
+
+    const reminderSettings: ReminderSettings = {
+      setting: reminderSetting,
+      excludeWeekends: periodicity === PeriodicityType.Weekdays,
+    };
 
     eventResult.eventName = this.generateEventName(
       entityName,
       periodicity,
       eventNotifications,
-      reminderSettings,
+      reminderSetting,
     );
 
     const aWeekAgoDay = addDays(this.currentDay, -7);
