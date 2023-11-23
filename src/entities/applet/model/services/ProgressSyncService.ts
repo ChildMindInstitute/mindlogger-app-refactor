@@ -1,8 +1,8 @@
 import { ActivityPipelineType, StoreEntitiesProgress } from '@app/abstract/lib';
 import {
-  AppletCompletedEntitiesResponse,
   AppletDetailsDto,
   AppletDto,
+  EntitiesCompletionsDto,
 } from '@app/shared/api';
 import { ILogger } from '@app/shared/lib';
 
@@ -14,7 +14,7 @@ import { actions } from '../slice';
 export interface IAppletProgressSyncService {
   sync(
     appletDto: AppletDto,
-    appletCompletions: AppletCompletedEntitiesResponse,
+    appletCompletions: EntitiesCompletionsDto,
   ): Promise<void>;
 }
 
@@ -35,12 +35,12 @@ class ProgressSyncService implements IAppletProgressSyncService {
 
   private async syncWithAppletDto(
     appletDto: AppletDetailsDto,
-    appletCompletions: AppletCompletedEntitiesResponse,
+    appletCompletions: EntitiesCompletionsDto,
   ) {
     const appletDetails = mapAppletDetailsFromDto(appletDto);
 
     try {
-      const { activities, activityFlows } = appletCompletions.result;
+      const { activities, activityFlows } = appletCompletions;
 
       const completedEntities: CompletedEntity[] = [
         ...activities.map(mapCompletedEntityFromDto),
@@ -112,7 +112,7 @@ class ProgressSyncService implements IAppletProgressSyncService {
 
   public sync(
     appletDto: AppletDetailsDto,
-    appletCompletions: AppletCompletedEntitiesResponse,
+    appletCompletions: EntitiesCompletionsDto,
   ) {
     try {
       return this.syncWithAppletDto(appletDto, appletCompletions);

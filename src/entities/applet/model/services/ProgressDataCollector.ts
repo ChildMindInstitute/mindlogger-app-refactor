@@ -1,34 +1,25 @@
 import { AxiosResponse } from 'axios';
 
-import { AppletWithVersion } from '@app/abstract/lib';
 import {
-  AppletCompletedEntitiesResponse,
+  CompletedEntitiesResponse,
+  EntitiesCompletionsDto,
   EventsService,
 } from '@app/shared/api';
-import { ILogger, getMonthAgoDate, splitArrayToBulks } from '@app/shared/lib';
+import { ILogger, getMonthAgoDate } from '@app/shared/lib';
 
 type AppletId = string;
 
-type CollectInput = {
-  applets: Array<AppletWithVersion>;
-};
-
-type CollectForAppletResult = {
-  appletId: AppletId;
-  response: AxiosResponse<AppletCompletedEntitiesResponse> | null;
-};
+type CollectForAppletResult = AxiosResponse<
+  CompletedEntitiesResponse,
+  any
+> | null;
 
 export type CollectRemoteCompletionsResult = {
-  appletEntities: Record<
-    AppletId,
-    AxiosResponse<AppletCompletedEntitiesResponse> | null
-  >;
+  appletEntities: Record<AppletId, EntitiesCompletionsDto>;
 };
 
-const BulkSize = 10;
-
 export interface IProgressDataCollector {
-  collect(input: CollectInput): Promise<CollectRemoteCompletionsResult>;
+  collect(): Promise<CollectRemoteCompletionsResult>;
 }
 
 class ProgressDataCollector implements IProgressDataCollector {
@@ -38,63 +29,37 @@ class ProgressDataCollector implements IProgressDataCollector {
     this.logger = logger;
   }
 
-  private async collectForApplet(
-    applet: AppletWithVersion,
-  ): Promise<CollectForAppletResult> {
+  private async collectAllCompletions(): Promise<CollectForAppletResult> {
     try {
       const fromDate = getMonthAgoDate();
 
-      const response = await EventsService.getCompletedEntities({
+      const response = await EventsService.getAllCompletedEntities({
         fromDate,
-        appletId: applet.appletId,
-        version: applet.version,
       });
-      return {
-        appletId: applet.appletId,
-        response,
-      };
+
+      return response;
     } catch (error) {
-      return {
-        appletId: applet.appletId,
-        response: null,
-      };
+      return null;
     }
   }
 
-  private async collectInternal(
-    applets: Array<AppletWithVersion>,
-  ): Promise<CollectRemoteCompletionsResult> {
+  private async collectInternal(): Promise<CollectRemoteCompletionsResult> {
     const result: CollectRemoteCompletionsResult = {
       appletEntities: {},
     };
 
-    const appletArrays = splitArrayToBulks<AppletWithVersion>(
-      BulkSize,
-      applets,
-    );
+    const response = await this.collectAllCompletions();
 
-    for (let appletsArray of appletArrays) {
-      const promises = [];
-
-      for (let applet of appletsArray) {
-        promises.push(this.collectForApplet(applet));
-      }
-
-      const bulkResults = await Promise.all(promises);
-
-      bulkResults.forEach(r => {
-        result.appletEntities[r.appletId] = r.response;
-      });
-    }
+    response?.data?.result?.forEach(completions => {
+      result.appletEntities[completions.id] = completions;
+    });
 
     return result;
   }
 
-  public async collect(
-    input: CollectInput,
-  ): Promise<CollectRemoteCompletionsResult> {
+  public async collect(): Promise<CollectRemoteCompletionsResult> {
     try {
-      return await this.collectInternal(input.applets);
+      return await this.collectInternal();
     } catch (error) {
       this.logger.warn(
         '[ProgressDataCollector.collect]: Error occurred during collect remotely completed entities for all applets',

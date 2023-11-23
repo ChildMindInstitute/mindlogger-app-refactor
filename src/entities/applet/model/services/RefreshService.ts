@@ -1,33 +1,16 @@
-import { CacheManager } from '@georstat/react-native-image-cache';
 import type { QueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 
-import {
-  ActivityDto,
-  ActivityResponse,
-  ActivityService,
-  AppletDetailsResponse,
-  AppletEventsResponse,
-  AppletsResponse,
-} from '@app/shared/api';
-import { EventsService, AppletsService, AppletDto } from '@app/shared/api';
+import { AppletsResponse } from '@app/shared/api';
+import { AppletsService, AppletDto } from '@app/shared/api';
 import {
   ILogger,
   IMutex,
-  ImageUrl,
   Mutex,
-  getActivityDetailsKey,
-  getAppletDetailsKey,
   getAppletsKey,
   getCompletedEntitiesKey,
-  getEventsKey,
   isAppOnline,
   onNetworkUnavailable,
-} from '@app/shared/lib';
-import {
-  collectActivityDetailsImageUrls,
-  collectAppletDetailsImageUrls,
-  collectAppletRecordImageUrls,
 } from '@app/shared/lib';
 
 import ProgressDataCollector, {
@@ -35,20 +18,15 @@ import ProgressDataCollector, {
   IProgressDataCollector,
 } from './ProgressDataCollector';
 import { IAppletProgressSyncService } from './ProgressSyncService';
+import RefreshAppletService, {
+  IRefreshAppletService,
+} from './RefreshAppletService';
+import RefreshDataCollector, {
+  CollectAllAppletEventsResult,
+  IRefreshDataCollector,
+} from './RefreshDataCollector';
+import RefreshOptimization from './RefreshOptimization';
 import { onAppletListRefreshError, onAppletRefreshError } from '../../lib';
-
-type CollectAppletInternalsResult = {
-  appletId: string;
-  appletDetailsResponse: AxiosResponse<AppletDetailsResponse>;
-  eventsResponse: AxiosResponse<AppletEventsResponse>;
-  activities: CollectActivityDetailsResult[];
-  imageUrls: string[];
-};
-
-type CollectActivityDetailsResult = {
-  imageUrls: string[];
-  activityDetailsResponse: AxiosResponse<ActivityResponse>;
-};
 
 type UnsuccessfulApplet = {
   appletId: string;
@@ -60,17 +38,16 @@ type RefreshResult = {
   unsuccessfulApplets: Array<UnsuccessfulApplet>;
 };
 
-interface IRefreshService {
+interface IRefreshServicePOC {
   refresh(): void;
 }
 
-class RefreshService implements IRefreshService {
+class RefreshServicePOC implements IRefreshServicePOC {
   private queryClient: QueryClient;
-  private showWrongUrlLogs: boolean;
   private logger: ILogger;
-  private appletProgressSyncService: IAppletProgressSyncService;
+  private refreshDataCollector: IRefreshDataCollector;
   private progressDataCollector: IProgressDataCollector;
-
+  private refreshAppletService: IRefreshAppletService;
   private static mutex: IMutex = Mutex();
 
   constructor(
@@ -79,16 +56,25 @@ class RefreshService implements IRefreshService {
     appletProgressSyncService: IAppletProgressSyncService,
   ) {
     this.queryClient = queryClient;
-    this.showWrongUrlLogs = false;
     this.logger = logger;
-    this.appletProgressSyncService = appletProgressSyncService;
+    this.refreshDataCollector = new RefreshDataCollector(logger);
     this.progressDataCollector = new ProgressDataCollector(logger);
+    this.refreshAppletService = new RefreshAppletService(
+      queryClient,
+      logger,
+      appletProgressSyncService,
+    );
   }
 
-  private async resetAllQueries() {
-    await this.queryClient.removeQueries(['applets']);
+  private async resetEventsQuery() {
     await this.queryClient.removeQueries(['events']);
-    await this.queryClient.removeQueries(['activities']);
+  }
+
+  private resetAppletListQuery() {
+    this.queryClient.removeQueries({
+      exact: true,
+      queryKey: getAppletsKey(),
+    });
   }
 
   private async invalidateCompletedEntities() {
@@ -97,148 +83,26 @@ class RefreshService implements IRefreshService {
     });
   }
 
-  private isUrlValid = (url: string): boolean => {
-    return url.includes('www') || url.includes('http');
-  };
-
-  private cacheImages(urls: ImageUrl[]) {
-    for (let url of urls) {
-      try {
-        if (!this.isUrlValid(url)) {
-          continue;
-        }
-        CacheManager.prefetch(url);
-      } catch (err) {
-        this.showWrongUrlLogs &&
-          this.logger.info(
-            '[RefreshService.cacheImages]: Ignored due to error: url: ' + url,
-          );
-      }
-    }
-  }
-
-  private async collectActivityDetails(
-    activityId: string,
-  ): Promise<CollectActivityDetailsResult | null> {
-    try {
-      const activityDetailsResponse = await ActivityService.getById(activityId);
-
-      const activityDto: ActivityDto = activityDetailsResponse.data.result;
-
-      const imageUrls: string[] = collectActivityDetailsImageUrls(activityDto);
-
-      return {
-        activityDetailsResponse,
-        imageUrls,
-      };
-    } catch (error) {
-      this.logger.log(
-        `[RefreshService.collectActivityDetails]: Get activity "${activityId}" details caused error:\n\n` +
-          error,
-      );
-      return Promise.resolve(null);
-    }
-  }
-
-  private async collectAppletDetails(
-    appletDto: AppletDto,
-  ): Promise<CollectAppletInternalsResult> {
-    const appletId = appletDto.id;
-
-    const appletDetailsResponse = await AppletsService.getAppletDetails({
-      appletId,
-    });
-
-    const appletDetailsDto = appletDetailsResponse.data.result;
-
-    const imageUrls: string[] = collectAppletDetailsImageUrls(appletDetailsDto);
-
-    const eventsResponse = await EventsService.getEvents({ appletId });
-
-    return {
-      appletId: appletDto.id,
-      appletDetailsResponse,
-      eventsResponse,
-      imageUrls,
-      activities: [],
-    };
-  }
-
-  private async collectAppletInternals(
-    appletDto: AppletDto,
-  ): Promise<CollectAppletInternalsResult> {
-    const imageUrls: string[] = collectAppletRecordImageUrls(appletDto);
-
-    let collectResult: CollectAppletInternalsResult;
-
-    try {
-      collectResult = await this.collectAppletDetails(appletDto);
-    } catch (error) {
-      throw new Error(
-        "[RefreshService.collectAppletInternals]: Error occurred during getting applet's details or events\n\n" +
-          error,
-      );
-    }
-
-    collectResult.imageUrls = collectResult.imageUrls.concat(imageUrls);
-
-    const appletDetailsDto = collectResult.appletDetailsResponse.data.result;
-
-    const activityIds: string[] = appletDetailsDto.activities.map(x => x.id);
-
-    const promises: Promise<CollectActivityDetailsResult | null>[] = [];
-
-    for (let activityId of activityIds) {
-      const promise = this.collectActivityDetails(activityId);
-      promises.push(promise);
-    }
-
-    const collectActivityResults = await Promise.all(promises);
-
-    if (collectActivityResults.some(x => x === null)) {
-      throw new Error(
-        "[RefreshService.collectAppletInternals]: Error occurred during getting applet's activities",
-      );
-    }
-
-    collectResult.activities = collectActivityResults.map(x => x!);
-
-    return collectResult;
-  }
-
-  private updateAppletCaches(appletInternalDtos: CollectAppletInternalsResult) {
-    for (let activity of appletInternalDtos.activities) {
-      const activityDto = activity.activityDetailsResponse.data.result;
-      const activityKey = getActivityDetailsKey(activityDto.id);
-
-      this.queryClient.setQueryData(
-        activityKey,
-        activity.activityDetailsResponse,
-      );
-
-      this.cacheImages(activity.imageUrls);
-    }
-
-    const appletDetailsKey = getAppletDetailsKey(appletInternalDtos.appletId);
-
-    this.queryClient.setQueryData(
-      appletDetailsKey,
-      appletInternalDtos.appletDetailsResponse,
-    );
-
-    const eventsKey = getEventsKey(appletInternalDtos.appletId);
-
-    this.queryClient.setQueryData(eventsKey, appletInternalDtos.eventsResponse);
-
-    this.cacheImages(appletInternalDtos.imageUrls);
-  }
-
   private async refreshInternal(): Promise<RefreshResult> {
-    await this.resetAllQueries();
+    const optimization = new RefreshOptimization(this.queryClient);
+
+    optimization.keepExistingAppletVersions();
+
+    await this.resetEventsQuery();
+
+    await this.resetAppletListQuery();
+
+    const emptyResult = {
+      success: false,
+      unsuccessfulApplets: [],
+    };
 
     let appletsResponse: AxiosResponse<AppletsResponse>;
 
     try {
+      this.logger.log(
+        '[RefreshService.refreshInternal]: Getting flat list of applets',
+      );
       appletsResponse = await AppletsService.getApplets();
 
       this.queryClient.setQueryData(getAppletsKey(), appletsResponse);
@@ -246,33 +110,38 @@ class RefreshService implements IRefreshService {
       this.logger.warn(
         '[RefreshService.refreshInternal]: Error occurred during refresh flat list of applets',
       );
-      return {
-        success: false,
-        unsuccessfulApplets: [],
-      };
+      return emptyResult;
+    }
+
+    let allAppletEvents: CollectAllAppletEventsResult;
+
+    try {
+      this.logger.log(
+        "[RefreshService.refreshInternal]: Getting all applets' events",
+      );
+      allAppletEvents =
+        await this.refreshDataCollector.collectAllAppletEvents();
+    } catch (error) {
+      this.logger.log(
+        '[RefreshService.refreshInternal]: Error occurred during getting all applet events:\nInternal error:\n\n' +
+          error,
+      );
+      return emptyResult;
     }
 
     let appletRemoteCompletions: CollectRemoteCompletionsResult;
 
     try {
       this.logger.log(
-        "[RefreshService.refreshInternal]: Getting all applets' remotely completed entities",
+        "[RefreshService.refreshInternal]: Getting all applets' remote completions",
       );
-      appletRemoteCompletions = await this.progressDataCollector.collect({
-        applets: appletsResponse.data.result.map(x => ({
-          appletId: x.id,
-          version: x.version,
-        })),
-      });
+      appletRemoteCompletions = await this.progressDataCollector.collect();
     } catch (error) {
       this.logger.log(
         "[RefreshService.refreshInternal]: Error occurred during getting all applets' remote completions:\nInternal error:\n\n" +
           error,
       );
-      return {
-        success: false,
-        unsuccessfulApplets: [],
-      };
+      return emptyResult;
     }
 
     const appletDtos: AppletDto[] = appletsResponse.data.result;
@@ -281,25 +150,11 @@ class RefreshService implements IRefreshService {
 
     for (let appletDto of appletDtos) {
       try {
-        const appletInternalDtos: CollectAppletInternalsResult =
-          await this.collectAppletInternals(appletDto);
-
-        this.updateAppletCaches(appletInternalDtos);
-
-        const appletCompletions =
-          appletRemoteCompletions.appletEntities[appletDto.id];
-
-        if (!appletCompletions) {
-          throw new Error('appletCompletions is missed');
-        }
-
-        await this.appletProgressSyncService.sync(
-          appletInternalDtos.appletDetailsResponse.data.result,
-          appletCompletions.data,
-        );
-
-        this.logger.log(
-          `[RefreshService.refreshInternal]: Applet "${appletDto.displayName}|${appletDto.id}" refreshed successfully`,
+        await this.refreshAppletService.refreshApplet(
+          appletDto,
+          allAppletEvents,
+          appletRemoteCompletions,
+          optimization,
         );
       } catch (error) {
         this.logger.warn(
@@ -315,7 +170,7 @@ class RefreshService implements IRefreshService {
 
     this.invalidateCompletedEntities();
 
-    this.logger.info('[RefreshService.refreshAllApplets] Refresh is done');
+    this.logger.info('[RefreshService.refreshInternal] Refresh is done');
 
     return {
       success: unsuccessfulApplets.length === 0,
@@ -326,29 +181,29 @@ class RefreshService implements IRefreshService {
   // PUBLIC
 
   public static isBusy() {
-    return RefreshService.mutex.isBusy();
+    return RefreshServicePOC.mutex.isBusy();
   }
 
   public async refresh() {
-    this.logger.log('[RefreshService.refresh]: Started to work');
+    this.logger.log('[RefreshService.refresh]: Started to work POC');
 
     const isOnline = await isAppOnline();
 
     if (!isOnline) {
       this.logger.log(
-        '[RefreshService.refresh]: Stopped to work as isOnline is false',
+        '[RefreshService.refresh]: Stopped to work due to Offline',
       );
       await onNetworkUnavailable();
       return;
     }
 
-    if (RefreshService.mutex.isBusy()) {
-      this.logger.log('[RefreshService.refresh]: Mutex is busy');
+    if (RefreshServicePOC.mutex.isBusy()) {
+      this.logger.log('[RefreshService.process]: Mutex is busy');
       return;
     }
 
     try {
-      RefreshService.mutex.setBusy();
+      RefreshServicePOC.mutex.setBusy();
 
       const refreshResult = await this.refreshInternal();
 
@@ -363,13 +218,13 @@ class RefreshService implements IRefreshService {
       }
     } catch (error) {
       this.logger.warn(
-        '[RefreshService.refresh]: Error occurred:\nInternal error:\n\n' +
-          error,
+        '[RefreshService.process]: Error occurred:\nInternal error:\n\n' +
+          error!.toString(),
       );
     } finally {
-      RefreshService.mutex.release();
+      RefreshServicePOC.mutex.release();
     }
   }
 }
 
-export default RefreshService;
+export default RefreshServicePOC;

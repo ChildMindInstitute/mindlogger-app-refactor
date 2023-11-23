@@ -56,6 +56,10 @@ export type AppletEventsResponse = SuccessfulResponse<{
   events: ScheduleEventDto[];
 }>;
 
+export type AllEventsResponse = SuccessfulResponse<
+  Array<{ appletId: string; events: ScheduleEventDto[] }>
+>;
+
 export type CompletedEntityDto = {
   id: string;
   answerId: string;
@@ -71,12 +75,27 @@ type AppletCompletedEntitiesRequest = {
   version: string;
 };
 
+type CompletedEntitiesRequest = {
+  fromDate: string; // YYYY-MM-DD
+};
+
 export type AppletCompletedEntitiesResponse = SuccessfulResponse<{
   id: string;
   version: string;
   activities: CompletedEntityDto[];
   activityFlows: CompletedEntityDto[];
 }>;
+
+export type EntitiesCompletionsDto = {
+  id: string;
+  version: string;
+  activities: CompletedEntityDto[];
+  activityFlows: CompletedEntityDto[];
+};
+
+export type CompletedEntitiesResponse = SuccessfulResponse<
+  Array<EntitiesCompletionsDto>
+>;
 
 function eventsService() {
   return {
@@ -95,6 +114,26 @@ function eventsService() {
             params: {
               fromDate: request.fromDate,
               version: request.version,
+            },
+          },
+        );
+      return callApiWithRetry(withDataExtraction(apiCall));
+    },
+    getAllEvents() {
+      const apiCall = () =>
+        httpService.get<AllEventsResponse>(
+          '/users/me/respondent/current_events',
+        );
+
+      return callApiWithRetry(withDataExtraction(apiCall));
+    },
+    getAllCompletedEntities(request: CompletedEntitiesRequest) {
+      const apiCall = () =>
+        httpService.get<CompletedEntitiesResponse>(
+          '/answers/applet/completions',
+          {
+            params: {
+              fromDate: request.fromDate,
             },
           },
         );

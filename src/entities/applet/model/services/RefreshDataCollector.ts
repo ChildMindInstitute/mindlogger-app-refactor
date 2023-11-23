@@ -1,39 +1,31 @@
 import { AxiosResponse } from 'axios';
 
-import { IdName } from '@app/abstract/lib';
 import {
   ActivityDto,
-  ActivityResponse,
-  ActivityService,
-  AppletDetailsResponse,
+  AllEventsResponse,
+  AppletDetailsDto,
   AppletEventsResponse,
+  AppletRespondentMetaDto,
+  toAxiosResponse,
+  EventsService,
+  AppletsService,
+  AppletDto,
 } from '@app/shared/api';
-import { EventsService, AppletsService, AppletDto } from '@app/shared/api';
 import {
   ILogger,
   collectActivityDetailsImageUrls,
   collectAppletDetailsImageUrls,
   collectAppletRecordImageUrls,
-  splitArrayToBulks,
 } from '@app/shared/lib';
 
 type AppletId = string;
 
 export type CollectAppletInternalsResult = {
   appletId: AppletId;
-  appletDetailsResponse: AxiosResponse<AppletDetailsResponse>;
-  activities: CollectActivityDetailsResult[];
+  appletDetails: AppletDetailsDto;
+  activities: Array<ActivityDto>;
   imageUrls: string[];
-};
-
-export type CollectAppletEventsResult = {
-  appletId: AppletId;
-  eventsResponse: AxiosResponse<AppletEventsResponse>;
-};
-
-export type CollectActivityDetailsResult = {
-  imageUrls: string[];
-  activityDetailsResponse: AxiosResponse<ActivityResponse>;
+  respondentMeta: AppletRespondentMetaDto;
 };
 
 export type CollectAllAppletEventsResult = {
@@ -41,21 +33,18 @@ export type CollectAllAppletEventsResult = {
 };
 
 type CollectAppletDetailsResult = {
-  appletDetailsResponse: AxiosResponse<AppletDetailsResponse>;
+  appletDetailsDto: AppletDetailsDto;
+  activityDetailsDtos: Array<ActivityDto>;
   imageUrls: string[];
+  respondentMeta: AppletRespondentMetaDto;
 };
 
 export interface IRefreshDataCollector {
   collectAppletInternals(
     appletDto: AppletDto,
   ): Promise<CollectAppletInternalsResult>;
-  collectAllAppletEvents(
-    applets: IdName[],
-  ): Promise<CollectAllAppletEventsResult>;
+  collectAllAppletEvents(): Promise<CollectAllAppletEventsResult>;
 }
-
-const EventBulkSize = 10;
-const ActivityBulkSize = 10;
 
 class RefreshDataCollector implements IRefreshDataCollector {
   private logger: ILogger;
@@ -64,79 +53,37 @@ class RefreshDataCollector implements IRefreshDataCollector {
     this.logger = logger;
   }
 
-  private async collectActivityDetails(
-    activityId: string,
-  ): Promise<CollectActivityDetailsResult | null> {
-    try {
-      const activityDetailsResponse = await ActivityService.getById(activityId);
-
-      const activityDto: ActivityDto = activityDetailsResponse.data.result;
-
-      const imageUrls: string[] = collectActivityDetailsImageUrls(activityDto);
-
-      return {
-        activityDetailsResponse,
-        imageUrls,
-      };
-    } catch (error) {
-      this.logger.log(
-        `[RefreshDataCollector.collectActivityDetails]: Get activity "${activityId}" details caused error:\n\n` +
-          error,
-      );
-      return null;
-    }
-  }
-
   private async collectAppletDetails(
     appletId: string,
   ): Promise<CollectAppletDetailsResult> {
-    const appletDetailsResponse = await AppletsService.getAppletDetails({
-      appletId,
-    });
+    const appletDetailsResponse =
+      await AppletsService.getAppletAndActivitiesDetails({
+        appletId,
+      });
 
-    const appletDetailsDto = appletDetailsResponse.data.result;
+    const { appletDetail, activitiesDetails, respondentMeta } =
+      appletDetailsResponse.data.result;
 
-    const imageUrls: string[] = collectAppletDetailsImageUrls(appletDetailsDto);
+    const imageUrls: string[] = collectAppletDetailsImageUrls(appletDetail);
 
     return {
-      appletDetailsResponse,
+      appletDetailsDto: appletDetail,
+      activityDetailsDtos: activitiesDetails,
+      respondentMeta,
       imageUrls,
     };
   }
 
-  private async collectActivities(
-    activityIds: string[],
-  ): Promise<Array<CollectActivityDetailsResult | null>> {
-    const collectActivityResults: Array<CollectActivityDetailsResult | null> =
-      [];
-
-    const activityIdsArrays: string[][] = splitArrayToBulks(
-      ActivityBulkSize,
-      activityIds,
-    );
-
-    for (let activityIdsArray of activityIdsArrays) {
-      const promises: Promise<CollectActivityDetailsResult | null>[] = [];
-
-      for (let activityId of activityIdsArray) {
-        const promise = this.collectActivityDetails(activityId);
-        promises.push(promise);
-      }
-      const bulkResult = await Promise.all(promises);
-
-      collectActivityResults.push(...bulkResult);
-    }
-    return collectActivityResults;
+  private collectActivitiesImages(activityDtos: Array<ActivityDto>): string[] {
+    return activityDtos.flatMap(activityDto => {
+      return collectActivityDetailsImageUrls(activityDto);
+    });
   }
 
   public async collectAppletInternals(
     appletDto: AppletDto,
   ): Promise<CollectAppletInternalsResult> {
     const imageUrls: string[] = collectAppletRecordImageUrls(appletDto);
-
-    const collectResult = {
-      appletId: appletDto.id,
-    } as CollectAppletInternalsResult;
 
     let collectDetailsResult: CollectAppletDetailsResult;
 
@@ -149,71 +96,53 @@ class RefreshDataCollector implements IRefreshDataCollector {
       );
     }
 
-    collectResult.appletDetailsResponse =
-      collectDetailsResult.appletDetailsResponse;
+    const activitiesImages = this.collectActivitiesImages(
+      collectDetailsResult.activityDetailsDtos,
+    );
 
-    collectResult.imageUrls = collectDetailsResult.imageUrls.concat(imageUrls);
+    const allImageUrls = collectDetailsResult.imageUrls.concat(
+      imageUrls,
+      activitiesImages,
+    );
 
-    const appletDetailsDto = collectResult.appletDetailsResponse.data.result;
-
-    const activityIds = appletDetailsDto.activities.map(x => x.id);
-
-    const collectActivityResults: Array<CollectActivityDetailsResult | null> =
-      await this.collectActivities(activityIds);
-
-    if (collectActivityResults.some(x => x == null)) {
-      throw new Error(
-        "[RefreshDataCollector.collectAppletInternals]: Error occurred during getting applet's activities",
-      );
-    }
-
-    collectResult.activities = collectActivityResults.map(x => x!);
+    const collectResult: CollectAppletInternalsResult = {
+      appletId: appletDto.id,
+      appletDetails: collectDetailsResult.appletDetailsDto,
+      activities: collectDetailsResult.activityDetailsDtos,
+      imageUrls: allImageUrls,
+      respondentMeta: collectDetailsResult.respondentMeta,
+    };
 
     return collectResult;
   }
 
-  private async collectEvents(applet: IdName): Promise<{
-    appletId: string;
-    response: AxiosResponse<AppletEventsResponse> | null;
-  }> {
+  private async collectEvents(): Promise<AxiosResponse<AllEventsResponse> | null> {
     try {
-      const response = await EventsService.getEvents({ appletId: applet.id });
-      return {
-        response,
-        appletId: applet.id,
-      };
+      return await EventsService.getAllEvents();
     } catch (error) {
-      console.warn(
-        `[RefreshDataCollector.collectEvents]: Error occurred for applet "${applet.name}|${applet.id}":\n\n` +
+      this.logger.warn(
+        '[RefreshDataCollector.collectEvents]: Error occurred while fetching events":\n\n' +
           error,
       );
-      return {
-        appletId: applet.id,
-        response: null,
-      };
+
+      return null;
     }
   }
 
-  public async collectAllAppletEvents(
-    applets: Array<IdName>,
-  ): Promise<CollectAllAppletEventsResult> {
+  public async collectAllAppletEvents(): Promise<CollectAllAppletEventsResult> {
     const result: CollectAllAppletEventsResult = {
       appletEvents: {},
     };
 
-    const appletArrays: IdName[][] = splitArrayToBulks(EventBulkSize, applets);
+    const eventsResponse = await this.collectEvents();
 
-    for (let appletsArray of appletArrays) {
-      const promises = [];
-
-      for (let applet of appletsArray) {
-        promises.push(this.collectEvents(applet));
-      }
-
-      const bulkResults = await Promise.all(promises);
-
-      bulkResults.forEach(r => {
-        result.appletEvents[r.appletId] = r.response;
+    if (eventsResponse) {
+      eventsResponse.data.result.forEach(({ appletId, events }) => {
+        result.appletEvents[appletId] = toAxiosResponse({
+          result: {
+            events,
+          },
+        });
       });
     }
 

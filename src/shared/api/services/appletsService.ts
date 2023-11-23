@@ -4,6 +4,7 @@ import {
   withDataExtraction,
 } from '@app/shared/lib';
 
+import { ActivityDto } from './activityService';
 import httpService from './httpService';
 import { SuccessfulResponse } from '../types';
 
@@ -90,6 +91,14 @@ export type AppletDetailsResponse = {
   respondentMeta: AppletRespondentMetaDto;
 };
 
+export type AppletAndActivitiesDetailsResponse = {
+  result: {
+    appletDetail: AppletDetailsDto;
+    activitiesDetails: Array<ActivityDto>;
+    respondentMeta: AppletRespondentMetaDto;
+  };
+};
+
 function appletsService() {
   return {
     getApplets() {
@@ -103,6 +112,14 @@ function appletsService() {
       const apiCall = () => {
         return httpService.get<AppletDetailsResponse>(
           `/applets/${request.appletId}`,
+        );
+      };
+      return callApiWithRetry(withDataExtraction(apiCall));
+    },
+    getAppletAndActivitiesDetails(request: AppletDetailsRequest) {
+      const apiCall = () => {
+        return httpService.get<AppletAndActivitiesDetailsResponse>(
+          `/activities/applet/${request.appletId}`,
         );
       };
       return callApiWithRetry(withDataExtraction(apiCall));

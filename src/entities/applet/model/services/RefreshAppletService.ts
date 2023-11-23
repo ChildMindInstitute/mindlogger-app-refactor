@@ -6,6 +6,7 @@ import {
   AppletDetailsResponse,
   AppletDto,
   AppletEventsResponse,
+  toAxiosResponse,
 } from '@app/shared/api';
 import {
   ILogger,
@@ -101,26 +102,27 @@ class RefreshAppletService implements IRefreshAppletService {
   ) {
     this.resetAppletDetailsQuery(appletInternalDtos.appletId);
 
-    for (let activity of appletInternalDtos.activities) {
-      const activityDto = activity.activityDetailsResponse.data.result;
-
+    for (let activityDto of appletInternalDtos.activities) {
       this.resetActivityDetailsQuery(activityDto.id);
 
       const activityKey = getActivityDetailsKey(activityDto.id);
 
       this.queryClient.setQueryData(
         activityKey,
-        activity.activityDetailsResponse,
+        toAxiosResponse({
+          result: activityDto,
+        }),
       );
-
-      this.cacheImages(activity.imageUrls);
     }
 
     const appletDetailsKey = getAppletDetailsKey(appletInternalDtos.appletId);
 
     this.queryClient.setQueryData(
       appletDetailsKey,
-      appletInternalDtos.appletDetailsResponse,
+      toAxiosResponse({
+        result: appletInternalDtos.appletDetails,
+        respondentMeta: appletInternalDtos.respondentMeta,
+      }),
     );
 
     this.cacheImages(appletInternalDtos.imageUrls);
@@ -159,8 +161,8 @@ class RefreshAppletService implements IRefreshAppletService {
     }
 
     await this.appletProgressSyncService.sync(
-      appletInternalDtos.appletDetailsResponse.data.result,
-      appletCompletions.data,
+      appletInternalDtos.appletDetails,
+      appletCompletions,
     );
   }
 
@@ -198,7 +200,7 @@ class RefreshAppletService implements IRefreshAppletService {
 
     await this.appletProgressSyncService.sync(
       appletResponse.result,
-      appletCompletions.data,
+      appletCompletions,
     );
   }
 
