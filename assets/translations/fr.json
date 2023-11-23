@@ -45,7 +45,14 @@
     "share_all_reports": "Partager tous les rapports"
   },
   "activity_chart": {
-    "title": "Veuillez passer l'évaluation pour que les données soient affichées."
+    "title": "Veuillez passer l'évaluation pour que les données soient affichées.",
+    "monday": "L",
+    "tuesday": "M",
+    "wednesday": "M",
+    "thursday": "J",
+    "friday": "V",
+    "saturday": "S",
+    "sunday": "D"
   },
   "calendar": {
     "months": "Janvier_Février_Mars_Avril_Mai_Juin_Juillet_Août_Septembre_Octobre_Novembre_Décembre",
