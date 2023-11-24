@@ -90,16 +90,6 @@ function ActivityItem({
     }
   }
 
-  // function moveToNextItemWithDelay(onDelayEnd: () => void) {
-  //   if (!pipelineItem.additionalText?.required) {
-  //     InteractionManager.runAfterInteractions(async () => {
-  //       await wait(200);
-  //       next(true);
-  //       onDelayEnd();
-  //     });
-  //   }
-  // }
-
   switch (type) {
     case 'Splash':
       item = (
