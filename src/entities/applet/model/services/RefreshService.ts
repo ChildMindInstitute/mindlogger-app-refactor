@@ -38,11 +38,11 @@ type RefreshResult = {
   unsuccessfulApplets: Array<UnsuccessfulApplet>;
 };
 
-interface IRefreshServicePOC {
+interface IRefreshService {
   refresh(): void;
 }
 
-class RefreshServicePOC implements IRefreshServicePOC {
+class RefreshService implements IRefreshService {
   private queryClient: QueryClient;
   private logger: ILogger;
   private refreshDataCollector: IRefreshDataCollector;
@@ -181,11 +181,11 @@ class RefreshServicePOC implements IRefreshServicePOC {
   // PUBLIC
 
   public static isBusy() {
-    return RefreshServicePOC.mutex.isBusy();
+    return RefreshService.mutex.isBusy();
   }
 
   public async refresh() {
-    this.logger.log('[RefreshService.refresh]: Started to work POC');
+    this.logger.log('[RefreshService.refresh]: Started to working');
 
     const isOnline = await isAppOnline();
 
@@ -197,13 +197,13 @@ class RefreshServicePOC implements IRefreshServicePOC {
       return;
     }
 
-    if (RefreshServicePOC.mutex.isBusy()) {
+    if (RefreshService.mutex.isBusy()) {
       this.logger.log('[RefreshService.process]: Mutex is busy');
       return;
     }
 
     try {
-      RefreshServicePOC.mutex.setBusy();
+      RefreshService.mutex.setBusy();
 
       const refreshResult = await this.refreshInternal();
 
@@ -222,9 +222,9 @@ class RefreshServicePOC implements IRefreshServicePOC {
           error!.toString(),
       );
     } finally {
-      RefreshServicePOC.mutex.release();
+      RefreshService.mutex.release();
     }
   }
 }
 
-export default RefreshServicePOC;
+export default RefreshService;
