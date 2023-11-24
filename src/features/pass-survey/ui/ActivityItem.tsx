@@ -22,7 +22,7 @@ import { useAppletStreamingStatus } from '@entities/applet/lib/hooks';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
 import { StabilityTracker } from '@entities/stabilityTracker';
-import { IS_ANDROID, useSendEvent } from '@shared/lib';
+import { IS_ANDROID, useSendEvent, wait } from '@shared/lib';
 import {
   RadioActivityItem,
   SurveySlider,
@@ -305,8 +305,8 @@ function ActivityItem({
         <Box mx="$6">
           <RadioActivityItem
             config={pipelineItem.payload}
-            delay={100}
-            onChange={radioValue => {
+            onChange={async radioValue => {
+              await wait(100);
               onResponse(radioValue);
               moveToNextItem();
             }}

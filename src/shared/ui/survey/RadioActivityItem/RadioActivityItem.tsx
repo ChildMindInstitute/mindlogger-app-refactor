@@ -1,13 +1,12 @@
 import React, { FC, useMemo, useState } from 'react';
 
-import { shuffle, wait } from '@shared/lib';
+import { shuffle } from '@shared/lib';
 import { YStack, RadioGroup, Box } from '@shared/ui';
 
 import RadioItem from './RadioItem';
 import RadioOption from './types';
 
 type RadioActivityItemProps = {
-  delay?: number;
   config: {
     options: Array<RadioOption>;
     setPalette: boolean;
@@ -20,7 +19,6 @@ type RadioActivityItemProps = {
 };
 
 const RadioActivityItem: FC<RadioActivityItemProps> = ({
-  delay = 0,
   config,
   onChange,
   initialValue,
@@ -38,12 +36,10 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [randomizeOptions]);
 
-  const onValueChange = async (value: string) => {
+  const onValueChange = (value: string) => {
     const selectedOption = options.find(option => option.id === value);
 
     setRadioValueId(selectedOption?.id);
-
-    await wait(delay);
 
     onChange(selectedOption!);
   };
