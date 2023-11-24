@@ -91,11 +91,12 @@ function ActivityItem({
     }
   }
 
-  function moveToNextItemWithDelay() {
+  function moveToNextItemWithDelay(onDelayEnd: () => void) {
     if (!pipelineItem.additionalText?.required) {
       InteractionManager.runAfterInteractions(async () => {
         await wait(200);
         next(true);
+        onDelayEnd();
       });
     }
   }
@@ -316,8 +317,7 @@ function ActivityItem({
           <RadioActivityItem
             config={pipelineItem.payload}
             onChange={radioValue => {
-              onResponse(radioValue);
-              moveToNextItemWithDelay();
+              moveToNextItemWithDelay(() => onResponse(radioValue));
             }}
             initialValue={value?.answer}
             textReplacer={textVariableReplacer}
