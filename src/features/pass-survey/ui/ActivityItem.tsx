@@ -1,5 +1,4 @@
 import { useCallback, useContext, useState } from 'react';
-import { InteractionManager } from 'react-native';
 
 import {
   Box,
@@ -23,7 +22,7 @@ import { useAppletStreamingStatus } from '@entities/applet/lib/hooks';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
 import { StabilityTracker } from '@entities/stabilityTracker';
-import { IS_ANDROID, useSendEvent, wait } from '@shared/lib';
+import { IS_ANDROID, useSendEvent } from '@shared/lib';
 import {
   RadioActivityItem,
   SurveySlider,
@@ -91,15 +90,15 @@ function ActivityItem({
     }
   }
 
-  function moveToNextItemWithDelay(onDelayEnd: () => void) {
-    if (!pipelineItem.additionalText?.required) {
-      InteractionManager.runAfterInteractions(async () => {
-        await wait(200);
-        next(true);
-        onDelayEnd();
-      });
-    }
-  }
+  // function moveToNextItemWithDelay(onDelayEnd: () => void) {
+  //   if (!pipelineItem.additionalText?.required) {
+  //     InteractionManager.runAfterInteractions(async () => {
+  //       await wait(200);
+  //       next(true);
+  //       onDelayEnd();
+  //     });
+  //   }
+  // }
 
   switch (type) {
     case 'Splash':
@@ -316,8 +315,10 @@ function ActivityItem({
         <Box mx="$6">
           <RadioActivityItem
             config={pipelineItem.payload}
+            delay={200}
             onChange={radioValue => {
-              moveToNextItemWithDelay(() => onResponse(radioValue));
+              onResponse(radioValue);
+              moveToNextItem();
             }}
             initialValue={value?.answer}
             textReplacer={textVariableReplacer}

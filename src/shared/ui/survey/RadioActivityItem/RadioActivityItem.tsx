@@ -1,12 +1,13 @@
 import React, { FC, useMemo, useState } from 'react';
 
-import { shuffle } from '@shared/lib';
+import { shuffle, wait } from '@shared/lib';
 import { YStack, RadioGroup, Box } from '@shared/ui';
 
 import RadioItem from './RadioItem';
 import RadioOption from './types';
 
 type RadioActivityItemProps = {
+  delay?: number;
   config: {
     options: Array<RadioOption>;
     setPalette: boolean;
@@ -19,13 +20,14 @@ type RadioActivityItemProps = {
 };
 
 const RadioActivityItem: FC<RadioActivityItemProps> = ({
+  delay = 0,
   config,
   onChange,
   initialValue,
   textReplacer,
 }) => {
   const { options, randomizeOptions, addTooltip, setPalette } = config;
-  const [radioValue, setValue] = useState(initialValue);
+  const [radioValueId, setRadioValueId] = useState(initialValue?.id);
 
   const optionsList = useMemo(() => {
     if (randomizeOptions) {
@@ -36,10 +38,12 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [randomizeOptions]);
 
-  const onValueChange = (value: string) => {
+  const onValueChange = async (value: string) => {
     const selectedOption = options.find(option => option.id === value);
 
-    setValue(selectedOption);
+    setRadioValueId(selectedOption?.id);
+
+    await wait(delay);
 
     onChange(selectedOption!);
   };
@@ -47,7 +51,7 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
   return (
     <YStack>
       <RadioGroup
-        value={radioValue?.id ?? ''}
+        value={radioValueId ?? ''}
         onValueChange={onValueChange}
         name="radio"
         data-test="radio-item-group"
