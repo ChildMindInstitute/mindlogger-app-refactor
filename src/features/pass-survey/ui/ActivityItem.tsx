@@ -315,7 +315,7 @@ function ActivityItem({
         <Box mx="$6">
           <RadioActivityItem
             config={pipelineItem.payload}
-            delay={200}
+            delay={100}
             onChange={radioValue => {
               onResponse(radioValue);
               moveToNextItem();
