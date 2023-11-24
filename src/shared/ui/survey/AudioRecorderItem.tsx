@@ -186,7 +186,7 @@ const AudioRecorderItem: FC<Props> = ({
 
       <XStack ai="center">
         <TouchableOpacity
-          data-test="audio-record-btn"
+          accessibilityLabel="audio-record-btn"
           onPress={isRecording ? stop : startRecord}
         >
           <XStack
@@ -200,7 +200,7 @@ const AudioRecorderItem: FC<Props> = ({
             mr="$3"
           >
             <Text
-              data-test="audio-record-btn-text"
+              accessibilityLabel="audio-record-btn-text"
               mr="$2"
               color="$white"
               fontWeight="700"
@@ -214,10 +214,12 @@ const AudioRecorderItem: FC<Props> = ({
         </TouchableOpacity>
 
         <YStack>
-          <Text data-test="audio-record-info-text">{getInfoText()}</Text>
+          <Text accessibilityLabel="audio-record-info-text">
+            {getInfoText()}
+          </Text>
 
           {isRecording && (
-            <Text data-test="audio-record-status-text">{`${secondsElapsed} ${t(
+            <Text accessibilityLabel="audio-record-status-text">{`${secondsElapsed} ${t(
               'audio_recorder:seconds',
             )}`}</Text>
           )}

@@ -35,7 +35,7 @@ const NumberSelector: FC<Props> = ({ config, value, onChange }) => {
   return (
     <Dropdown
       onValueChange={onChange}
-      data-test="number-selection"
+      accessibilityLabel="number-selection"
       placeholder={t('select:select_one')}
       items={numberRange}
       value={mappedValue}

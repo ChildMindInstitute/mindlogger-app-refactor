@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { AccessibilityProps } from 'react-native';
 
 import { styled } from '@tamagui/core';
 
@@ -17,7 +18,9 @@ const ActivityCardContainer = styled(Center, {
   backgroundColor: '$white',
 });
 
-const ActivityAnalyticsCard: FC<Props> = ({ responseData }) => {
+const ActivityAnalyticsCard: FC<Props & AccessibilityProps> = ({
+  responseData,
+}) => {
   const { description, name } = responseData;
 
   return (

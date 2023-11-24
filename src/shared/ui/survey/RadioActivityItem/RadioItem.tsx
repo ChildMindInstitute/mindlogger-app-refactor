@@ -1,5 +1,5 @@
 import { FC, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
@@ -33,7 +33,7 @@ const RadioTextContainer = styled(Box, {
   flexGrow: 1,
 });
 
-const RadioItem: FC<RadioLabelProps> = ({
+const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
   option: { isHidden, id, text, color, image, tooltip, value },
   addTooltip,
   setPalette,
@@ -71,7 +71,7 @@ const RadioItem: FC<RadioLabelProps> = ({
       {addTooltip && tooltip && (
         <RadioTooltipContainer>
           <Tooltip
-            data-test={`radio-option-tooltip-${value}`}
+            accessibilityLabel={`radio-option-tooltip-${value}`}
             markdown={tooltipText}
           >
             <QuestionTooltipIcon
@@ -86,7 +86,7 @@ const RadioItem: FC<RadioLabelProps> = ({
         <Box width="10%">
           <CachedImage
             resizeMode="contain"
-            data-test={`radio-option-image-${value}`}
+            accessibilityLabel={`radio-option-image-${value}`}
             style={styles.image}
             source={image}
           />
@@ -95,7 +95,7 @@ const RadioItem: FC<RadioLabelProps> = ({
 
       <RadioTextContainer w="50%" px="2%">
         <Text
-          data-test={`radio-option-text${value}`}
+          accessibilityLabel={`radio-option-text${value}`}
           fontSize={18}
           color={invertedTextColor}
         >
@@ -105,7 +105,7 @@ const RadioItem: FC<RadioLabelProps> = ({
 
       <Box>
         <RadioGroup.Item
-          data-test={`radio-option-${value}`}
+          accessibilityLabel={`radio-option-${value}`}
           borderColor={invertedColor}
           borderWidth={3}
           bg={setPalette && color ? color : '#fff'}

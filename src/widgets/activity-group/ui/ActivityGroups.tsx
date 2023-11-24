@@ -33,7 +33,11 @@ const ActivityGroups: FC<Props> = props => {
 
   if (isLoadingCompletedEntities) {
     return (
-      <Box data-test="activity-group-loader" flex={1} justifyContent="center">
+      <Box
+        accessibilityLabel="activity-group-loader"
+        flex={1}
+        justifyContent="center"
+      >
         <ActivityIndicator size="large" />
       </Box>
     );
@@ -41,7 +45,12 @@ const ActivityGroups: FC<Props> = props => {
 
   if (hasError) {
     return (
-      <XStack data-test="activity-group-error" flex={1} jc="center" ai="center">
+      <XStack
+        accessibilityLabel="activity-group-error"
+        flex={1}
+        jc="center"
+        ai="center"
+      >
         <LoadListError
           paddingHorizontal="10%"
           textAlign="center"
@@ -53,7 +62,12 @@ const ActivityGroups: FC<Props> = props => {
 
   if (isSuccess && !groups?.length) {
     return (
-      <XStack data-test="activity-group-empty" flex={1} jc="center" ai="center">
+      <XStack
+        accessibilityLabel="activity-group-empty"
+        flex={1}
+        jc="center"
+        ai="center"
+      >
         <NoListItemsYet translationKey="activity_list_component:no_activities_yet" />
       </XStack>
     );
@@ -61,7 +75,7 @@ const ActivityGroups: FC<Props> = props => {
 
   return (
     <Box {...props}>
-      <YStack data-test="activity-group-list" flex={1}>
+      <YStack accessibilityLabel="activity-group-list" flex={1}>
         <ActivitySectionList appletId={props.appletId} groups={groups} />
       </YStack>
     </Box>

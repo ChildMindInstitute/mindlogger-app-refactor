@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { StyleSheet } from 'react-native';
+import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
@@ -22,7 +22,11 @@ type Props = {
   onPress?: (...args: any[]) => void;
 };
 
-const AppletCard: FC<Props> = ({ applet, disabled, onPress }) => {
+const AppletCard: FC<Props & AccessibilityProps> = ({
+  applet,
+  disabled,
+  onPress,
+}) => {
   const theme = applet.theme;
 
   const renderThemeLogo = () => {
@@ -34,7 +38,11 @@ const AppletCard: FC<Props> = ({ applet, disabled, onPress }) => {
   };
 
   return (
-    <TouchableOpacity onPress={onPress} disabled={disabled}>
+    <TouchableOpacity
+      accessibilityLabel={`applet-card-${applet.id}`}
+      onPress={onPress}
+      disabled={disabled}
+    >
       <XStack
         position="relative"
         mx={3}
@@ -47,6 +55,7 @@ const AppletCard: FC<Props> = ({ applet, disabled, onPress }) => {
       >
         <Box mr={14}>
           <RoundLogo
+            accessibilityLabel={`applet-card-logo-${applet.id}`}
             imageUri={applet.image}
             letter={applet.displayName[0].toUpperCase()}
           />
@@ -59,6 +68,7 @@ const AppletCard: FC<Props> = ({ applet, disabled, onPress }) => {
               flex={1}
               fontWeight={IS_IOS ? '600' : '700'}
               fontSize={16}
+              accessibilityLabel={`applet-name-${applet.id}`}
               lineHeight={20}
             >
               {applet.displayName}
@@ -67,14 +77,22 @@ const AppletCard: FC<Props> = ({ applet, disabled, onPress }) => {
             {renderThemeLogo()}
           </XStack>
 
-          <Text fontSize={14} fontWeight="300" lineHeight={20}>
+          <Text
+            accessibilityLabel={`applet-description-${applet.id}`}
+            fontSize={14}
+            fontWeight="300"
+            lineHeight={20}
+          >
             {applet.description}
           </Text>
         </YStack>
 
         {!!applet.numberOverdue && (
           <Box position="absolute" top={-14} right={-14}>
-            <RoundTextNotification text={applet.numberOverdue.toString()} />
+            <RoundTextNotification
+              accessibilityLabel={`applet-number-overdue-${applet.id}`}
+              text={applet.numberOverdue.toString()}
+            />
           </Box>
         )}
       </XStack>

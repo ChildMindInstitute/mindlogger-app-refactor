@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { StyleSheet } from 'react-native';
+import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import {
   Slider as SliderBase,
@@ -13,7 +13,7 @@ type Props = SliderProps & { size: number; initialValue: number | null };
 
 const CHANGE_VALUE_DELAY = 100;
 
-const Slider: FC<Props> = props => {
+const Slider: FC<Props & AccessibilityProps> = props => {
   const { size, initialValue = null } = props;
   const opacity = initialValue !== null ? 1 : 0;
 

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet } from 'react-native';
+import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import Popover from 'react-native-popover-view';
 
@@ -13,7 +13,10 @@ type TooltipProps = {
   markdown?: string;
 };
 
-const Tooltip: FC<TooltipProps> = ({ children, markdown }) => {
+const Tooltip: FC<TooltipProps & AccessibilityProps> = ({
+  children,
+  markdown,
+}) => {
   if (!markdown) {
     return null;
   }

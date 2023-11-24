@@ -46,27 +46,35 @@ const SignUpForm: FC<Props> = props => {
     <Box {...props}>
       <FormProvider {...form}>
         <YStack space={isTablet() ? 10 : 22}>
-          <InputField name="email" placeholder={t('auth:email')} />
+          <InputField
+            name="email"
+            accessibilityLabel="signup-email-input"
+            placeholder={t('auth:email')}
+          />
 
           <InputField
             name="firstName"
+            accessibilityLabel="signup-first-name-input"
             placeholder={t('sign_up_form:first_name')}
           />
 
           <InputField
             name="lastName"
+            accessibilityLabel="signup-last-name-input"
             placeholder={t('sign_up_form:last_name')}
           />
 
           <InputField
             secureTextEntry
             name="password"
+            accessibilityLabel="signup-password-input"
             placeholder={t('auth:password')}
           />
 
           {error && (
             <ErrorMessage
               mode="light"
+              accessibilityLabel="signup-error-message"
               mt={8}
               error={{ message: error?.evaluatedMessage! }}
             />
@@ -76,6 +84,7 @@ const SignUpForm: FC<Props> = props => {
         <SubmitButton
           isLoading={isLoading}
           onPress={submit}
+          accessibilityLabel="signup-submit-button"
           borderRadius={30}
           width="100%"
           bg="$lighterGrey4"

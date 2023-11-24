@@ -81,13 +81,13 @@ const StackedCheckboxItem: FC<Props> = ({
       <StackedItemsGrid
         items={memoizedRows}
         options={memoizedOptions}
-        data-test="stacked-checkbox-container"
+        accessibilityLabel="stacked-checkbox-container"
         renderCell={(index, option) => {
           return (
             <YStack hitSlop={15} onPress={() => onValueChange(option, index)}>
               <CheckBox
                 style={styles.checkbox}
-                data-test={`stacked-checkbox-option-${option.id}`}
+                accessibilityLabel={`stacked-checkbox-option-${option.id}`}
                 lineWidth={2}
                 animationDuration={0.2}
                 boxType="square"

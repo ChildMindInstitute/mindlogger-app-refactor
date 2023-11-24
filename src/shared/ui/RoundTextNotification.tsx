@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { AccessibilityProps } from 'react-native';
 
 import { Box, Text } from '@app/shared/ui';
 
@@ -6,7 +7,9 @@ type Props = {
   text: string;
 };
 
-const RoundTextNotification: FC<Props> = ({ text }: Props) => (
+const RoundTextNotification: FC<Props & AccessibilityProps> = ({
+  text,
+}: Props) => (
   <Box
     w={20}
     height={20}

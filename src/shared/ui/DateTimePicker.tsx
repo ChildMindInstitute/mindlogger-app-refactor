@@ -1,4 +1,5 @@
 import { useState, FC } from 'react';
+import { AccessibilityProps } from 'react-native';
 
 import { Button } from '@tamagui/button';
 import { styled } from '@tamagui/core';
@@ -23,7 +24,7 @@ const DatePickerButton = styled(Button, {
   backgroundColor: '$white',
 });
 
-const DateTimePicker: FC<Props> = ({
+const DateTimePicker: FC<Props & AccessibilityProps> = ({
   value = new Date(),
   onChange,
   label,

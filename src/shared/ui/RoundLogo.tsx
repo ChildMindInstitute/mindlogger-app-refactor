@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { FC } from 'react';
-import { StyleSheet, ImageStyle } from 'react-native';
+import { StyleSheet, ImageStyle, AccessibilityProps } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { Text } from '@tamagui/core';
@@ -25,7 +25,12 @@ const getImageUrl = (url: string): string => {
   return url;
 };
 
-const RoundLogo: FC<Props> = ({ imageUri, imageStyle, letter, size = 64 }) => {
+const RoundLogo: FC<Props & AccessibilityProps> = ({
+  imageUri,
+  imageStyle,
+  letter,
+  size = 64,
+}) => {
   if (imageUri) {
     return (
       <Box style={[getStyles(size).container]}>

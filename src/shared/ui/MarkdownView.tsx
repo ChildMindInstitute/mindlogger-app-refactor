@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet } from 'react-native';
+import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import markdownContainer from 'markdown-it-container';
 import Markdown, {
@@ -31,7 +31,11 @@ declare module 'react-native-markdown-display' {
   }
 }
 
-const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
+const MarkdownView: FC<Props & AccessibilityProps> = ({
+  content,
+  markdownStyle,
+  rules,
+}) => {
   return (
     <Markdown
       rules={rules}

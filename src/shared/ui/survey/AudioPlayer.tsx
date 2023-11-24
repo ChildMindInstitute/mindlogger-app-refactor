@@ -15,21 +15,29 @@ const AudioPlayer: FC<Props> = ({ uri, title }) => {
   return (
     <XStack ai="center">
       <TouchableOpacity
-        data-test="audio-player-btn"
+        accessibilityLabel="audio-player-btn"
         onPress={() => togglePlay(uri)}
       >
         <Box w={40} ai="center">
           {isPlaying ? (
-            <PauseIcon data-test="audio-player-pause" size={30} color="black" />
+            <PauseIcon
+              accessibilityLabel="audio-player-pause"
+              size={30}
+              color="black"
+            />
           ) : (
-            <PlayIcon data-test="audio-player-play" size={30} color="black" />
+            <PlayIcon
+              accessibilityLabel="audio-player-play"
+              size={30}
+              color="black"
+            />
           )}
         </Box>
       </TouchableOpacity>
 
       {title && (
         <Text
-          data-test="audio-player-title"
+          accessibilityLabel="audio-player-title"
           maxWidth="90%"
           fontSize={20}
           fontWeight="500"
