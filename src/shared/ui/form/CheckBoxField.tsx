@@ -23,6 +23,7 @@ const CheckBoxField: FC<PropsWithChildren<Props & AccessibilityProps>> = ({
   onTintColor = colors.white,
   tintColor = colors.white,
   disabled = false,
+  accessibilityLabel,
   children,
 }) => {
   const { control } = useFormContext();
@@ -41,7 +42,7 @@ const CheckBoxField: FC<PropsWithChildren<Props & AccessibilityProps>> = ({
       <Controller
         control={control}
         render={() => (
-          <Box>
+          <Box accessibilityLabel={accessibilityLabel}>
             <XStack minHeight={24}>
               <CheckBox
                 onValueChange={onFormChange}

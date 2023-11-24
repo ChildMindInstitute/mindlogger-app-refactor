@@ -38,6 +38,7 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
   addTooltip,
   setPalette,
   textReplacer,
+  accessibilityLabel,
 }) => {
   const name = useMemo(() => textReplacer(text), [textReplacer, text]);
   const tooltipText = useMemo(
@@ -67,6 +68,7 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
       ai="center"
       ac="center"
       borderRadius={7}
+      accessibilityLabel={accessibilityLabel}
     >
       {addTooltip && tooltip && (
         <RadioTooltipContainer>

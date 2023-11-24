@@ -25,6 +25,7 @@ type Props = {
 
 const ActivityCard: FC<Props & AccessibilityProps> = ({
   activity,
+  accessibilityLabel,
   disabled,
   onPress,
 }) => {
@@ -34,7 +35,7 @@ const ActivityCard: FC<Props & AccessibilityProps> = ({
 
   return (
     <TouchableOpacity
-      accessibilityLabel={`activity-card-${activity.activityId}-btn`}
+      accessibilityLabel={accessibilityLabel}
       onPress={onPress}
       disabled={isDisabled}
     >

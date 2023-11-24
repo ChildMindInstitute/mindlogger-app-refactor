@@ -11,7 +11,6 @@ const MarkdownMessage: FC<Props> = ({ content, ...styledProps }) => {
   return (
     <Box {...styledProps}>
       <MarkdownView
-        accessibilityLabel="markdown"
         content={content}
         rules={markdownRules}
         markdownStyle={activityMarkDownStyles}

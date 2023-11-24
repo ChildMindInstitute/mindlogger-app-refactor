@@ -61,12 +61,14 @@ const SubmitButton: FC<Props & AccessibilityProps> = ({
   mode = 'light',
   buttonStyle,
   isLoading = false,
+  accessibilityLabel,
   ...stylesProps
 }) => {
   return (
     <TouchableOpacity
       onPress={!disabled ? onPress : undefined}
       disabled={disabled || isLoading}
+      accessibilityLabel={accessibilityLabel}
     >
       <Button
         style={buttonStyle}

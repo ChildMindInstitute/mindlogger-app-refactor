@@ -26,6 +26,7 @@ const AppletCard: FC<Props & AccessibilityProps> = ({
   applet,
   disabled,
   onPress,
+  accessibilityLabel,
 }) => {
   const theme = applet.theme;
 
@@ -39,7 +40,7 @@ const AppletCard: FC<Props & AccessibilityProps> = ({
 
   return (
     <TouchableOpacity
-      accessibilityLabel={`applet-card-${applet.id}`}
+      accessibilityLabel={accessibilityLabel}
       onPress={onPress}
       disabled={disabled}
     >

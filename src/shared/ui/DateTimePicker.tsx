@@ -26,6 +26,7 @@ const DatePickerButton = styled(Button, {
 
 const DateTimePicker: FC<Props & AccessibilityProps> = ({
   value = new Date(),
+  accessibilityLabel,
   onChange,
   label,
   iconAfter,
@@ -55,7 +56,11 @@ const DateTimePicker: FC<Props & AccessibilityProps> = ({
         </Text>
       )}
 
-      <DatePickerButton onPress={showDatePicker} iconAfter={iconAfter}>
+      <DatePickerButton
+        accessibilityLabel={accessibilityLabel}
+        onPress={showDatePicker}
+        iconAfter={iconAfter}
+      >
         <XStack flex={1}>
           <Text>{format(value, dateDisplayFormat)}</Text>
         </XStack>

@@ -1,4 +1,4 @@
-import { AccessibilityProps, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import SelectDropdown from 'react-native-select-dropdown';
 
@@ -14,7 +14,7 @@ type DropdownProps = {
   items: LabeledValue[];
   value?: LabeledValue;
   onValueChange: (value: string) => void;
-} & AccessibilityProps;
+};
 
 function Dropdown({ placeholder, value, onValueChange, items }: DropdownProps) {
   const onChange = (item: LabeledValue) => {

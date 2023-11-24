@@ -16,6 +16,7 @@ type TooltipProps = {
 const Tooltip: FC<TooltipProps & AccessibilityProps> = ({
   children,
   markdown,
+  accessibilityLabel,
 }) => {
   if (!markdown) {
     return null;
@@ -26,7 +27,11 @@ const Tooltip: FC<TooltipProps & AccessibilityProps> = ({
       popoverStyle={styles.popover}
       from={<YStack hitSlop={40}>{children}</YStack>}
     >
-      <ScrollView flex={1} maxHeight={300}>
+      <ScrollView
+        accessibilityLabel={accessibilityLabel}
+        flex={1}
+        maxHeight={300}
+      >
         <MarkdownView
           content={markdown}
           rules={markdownRules}

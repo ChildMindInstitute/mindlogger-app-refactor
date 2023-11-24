@@ -15,7 +15,6 @@ const AboutScreen: FC = () => {
     <Box bg="$secondary">
       <ScrollView px="$6">
         <MarkdownView
-          accessibilityLabel="about-applet-screen-markup-view"
           content={t('about_app:mindlogger_about', {
             credits_link: 'https://help.mindlogger.org',
           })}

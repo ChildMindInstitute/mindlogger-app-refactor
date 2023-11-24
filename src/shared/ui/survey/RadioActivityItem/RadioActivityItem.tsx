@@ -24,6 +24,7 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
   onChange,
   initialValue,
   textReplacer,
+  accessibilityLabel,
 }) => {
   const { options, randomizeOptions, addTooltip, setPalette } = config;
   const [radioValueId, setRadioValueId] = useState(initialValue?.id);
@@ -51,7 +52,7 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
         value={radioValueId ?? ''}
         onValueChange={onValueChange}
         name="radio"
-        accessibilityLabel="radio-item-group"
+        accessibilityLabel={accessibilityLabel}
       >
         {optionsList.map(option => (
           <Box my="$1" key={option.id} onPress={() => onValueChange(option.id)}>

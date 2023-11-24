@@ -130,6 +130,7 @@ const StackedItemsGrid: FC<StackedItemsGridProps> = ({
   renderCell,
   options,
   values,
+  accessibilityLabel,
 }) => {
   const getRadioValue = (stackedItem: StackedRowItemValue) => {
     if (!values) {
@@ -142,7 +143,7 @@ const StackedItemsGrid: FC<StackedItemsGridProps> = ({
   };
 
   return (
-    <YStack>
+    <YStack accessibilityLabel={accessibilityLabel}>
       <RowHeader options={options} />
 
       {items.map((item, index) => (

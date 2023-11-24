@@ -20,11 +20,12 @@ const ActivityCardContainer = styled(Center, {
 
 const ActivityAnalyticsCard: FC<Props & AccessibilityProps> = ({
   responseData,
+  accessibilityLabel,
 }) => {
   const { description, name } = responseData;
 
   return (
-    <ActivityCardContainer>
+    <ActivityCardContainer accessibilityLabel={accessibilityLabel}>
       <Text fontSize={30} fontWeight="100">
         {name}
       </Text>
