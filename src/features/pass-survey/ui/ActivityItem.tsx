@@ -1,5 +1,4 @@
 import { useCallback, useContext, useState } from 'react';
-import { InteractionManager } from 'react-native';
 
 import {
   Box,
@@ -88,15 +87,6 @@ function ActivityItem({
   function moveToNextItem() {
     if (!pipelineItem.additionalText?.required) {
       setImmediate(() => next(true));
-    }
-  }
-
-  function moveToNextItemWithDelay() {
-    if (!pipelineItem.additionalText?.required) {
-      InteractionManager.runAfterInteractions(async () => {
-        await wait(200);
-        next(true);
-      });
     }
   }
 
@@ -315,9 +305,10 @@ function ActivityItem({
         <Box mx="$6">
           <RadioActivityItem
             config={pipelineItem.payload}
-            onChange={radioValue => {
+            onChange={async radioValue => {
+              await wait(100);
               onResponse(radioValue);
-              moveToNextItemWithDelay();
+              moveToNextItem();
             }}
             initialValue={value?.answer}
             textReplacer={textVariableReplacer}
