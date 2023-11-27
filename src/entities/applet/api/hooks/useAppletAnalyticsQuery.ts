@@ -7,13 +7,14 @@ type Payload = {
   appletId: string;
   fromDate: string;
   isLastVersion: boolean;
+  respondentIds: string;
 };
 
 export const useAppletAnalyticsQuery = <TData = ReturnAwaited<FetchFn>>(
   payload: Payload,
   options?: Options<TData>,
 ) => {
-  const { appletId, isLastVersion, fromDate } = payload;
+  const { appletId, isLastVersion, fromDate, respondentIds } = payload;
 
   return useBaseQuery(
     ['activity_analytics', { appletId, isLastVersion }],
@@ -22,6 +23,7 @@ export const useAppletAnalyticsQuery = <TData = ReturnAwaited<FetchFn>>(
         appletId,
         fromDate,
         isLastVersion,
+        respondentIds,
       }),
     { ...options, staleTime: 0 },
   );
