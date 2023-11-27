@@ -1,24 +1,24 @@
 import {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
   useMemo,
+  forwardRef,
+  useImperativeHandle,
   useState,
+  useCallback,
 } from 'react';
 import { PanResponder, StyleSheet } from 'react-native';
 
 import {
+  SkPath,
   Canvas,
   Group,
   Path,
-  SkPath,
-  TouchInfo,
   useTouchHandler,
+  TouchInfo,
 } from '@shopify/react-native-skia';
 
 import { useCallbacksRefs } from '@app/shared/lib';
 
-import LineSketcher, { Point, Shape } from './LineSketcher';
+import LineSketcher, { Point } from './LineSketcher';
 
 export type SketchCanvasRef = {
   clear: () => void;
@@ -76,7 +76,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   );
 
   const onTouchProgress = useCallback(
-    (touchInfo: TouchInfo) => {
+    (touchInfo: TouchInfo | Point) => {
       callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
 
       setPaths(currentPaths => {
@@ -98,34 +98,18 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     [lineSketcher, callbacksRef],
   );
 
-  const createDot = useCallback(
-    (touchInfo: Point) => {
-      callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
-
-      setPaths(currentPaths => {
-        const pathsCount = currentPaths.length;
-        const lastPath = currentPaths[pathsCount - 1];
-
-        lineSketcher.progressLine(lastPath, touchInfo);
-
-        return [...currentPaths.slice(0, -1), lastPath];
-      });
-    },
-    [lineSketcher, callbacksRef],
-  );
-
   const onTouchEnd = useCallback(() => {
-    if (lineSketcher.getCurrentShape() === Shape.Dot) {
+    if (lineSketcher.isDot()) {
       const firstPoint = lineSketcher.getFirstPoint();
 
-      createDot({
+      onTouchProgress({
         x: firstPoint.x + 1.5,
         y: firstPoint.y + 1.5,
       });
     }
 
     callbacksRef.current.onStrokeEnd();
-  }, [callbacksRef, lineSketcher, createDot]);
+  }, [callbacksRef, lineSketcher, onTouchProgress]);
 
   const touchHandler = useTouchHandler(
     {
