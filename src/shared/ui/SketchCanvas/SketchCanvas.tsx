@@ -76,7 +76,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   );
 
   const onTouchProgress = useCallback(
-    (touchInfo: TouchInfo | Point) => {
+    (touchInfo: TouchInfo) => {
       callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
 
       setPaths(currentPaths => {
@@ -99,17 +99,8 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   );
 
   const onTouchEnd = useCallback(() => {
-    if (lineSketcher.isDot()) {
-      const firstPoint = lineSketcher.getFirstPoint();
-
-      onTouchProgress({
-        x: firstPoint.x + 1.5,
-        y: firstPoint.y + 1.5,
-      });
-    }
-
     callbacksRef.current.onStrokeEnd();
-  }, [callbacksRef, lineSketcher, onTouchProgress]);
+  }, [callbacksRef]);
 
   const touchHandler = useTouchHandler(
     {
