@@ -103,6 +103,16 @@ class LineSketcher {
 
     return pointsCount % suggestedMaxPointsPerLine === 0;
   }
+
+  public isDot(): boolean {
+    const pointsCount = this.points.length;
+
+    return pointsCount === 1;
+  }
+
+  public getFirstPoint(): Point {
+    return this.points[0];
+  }
 }
 
 export default LineSketcher;
