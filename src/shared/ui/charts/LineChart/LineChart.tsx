@@ -47,7 +47,7 @@ const LineChart: FC<Props> = ({ data, config }) => {
     return currentWeekDates.flatMap(currentWeekDate => {
       const currentWeekDayValues = data.map(dataItem =>
         areDatesEqual(dataItem.date, currentWeekDate) &&
-        typeof dataItem.value === 'number' &&
+        (!!dataItem.value || typeof dataItem.value === 'number') &&
         dataItem.value < maxValue
           ? dataItem.value * 2
           : null,
