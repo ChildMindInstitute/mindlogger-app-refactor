@@ -41,15 +41,18 @@ const LineChart: FC<Props> = ({ data, config }) => {
   const getYAxisDots = (): Array<ChartAxisDot> =>
     range(maxValue + 1).map(item => ({ dot: 1, value: item * 2 }));
 
+  const numberValueExists = (value: number | null) =>
+    !!value || typeof value === 'number';
+
   const lineChartData: Array<LineChartDataItem> = useMemo(() => {
     const currentWeekDates = getCurrentWeekDates();
 
     return currentWeekDates.flatMap(currentWeekDate => {
       const currentWeekDayValues = data.map(dataItem =>
         areDatesEqual(dataItem.date, currentWeekDate) &&
-        (!!dataItem.value || typeof dataItem.value === 'number') &&
-        dataItem.value < maxValue
-          ? dataItem.value * 2
+        numberValueExists(dataItem.value) &&
+        dataItem.value! < maxValue
+          ? dataItem.value! * 2
           : null,
       );
 
