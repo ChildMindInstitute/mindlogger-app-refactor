@@ -1,7 +1,11 @@
 import { format } from 'date-fns';
 
-import { UserPrivateKeyRecord } from '@app/entities/identity';
-import { encryption, getCurrentWeekDates } from '@app/shared/lib';
+import { IdentityModel, UserPrivateKeyRecord } from '@app/entities/identity';
+import {
+  encryption,
+  getCurrentWeekDates,
+  useAppSelector,
+} from '@app/shared/lib';
 
 import { useAppletAnalyticsQuery, useAppletDetailsQuery } from '../../api';
 import { mapAppletAnalytics, mapAppletDetailsFromDto } from '../../model';
@@ -9,6 +13,7 @@ import { mapAppletAnalytics, mapAppletDetailsFromDto } from '../../model';
 export const useAppletAnalytics = (appletId: string) => {
   const currentWeekDates = getCurrentWeekDates();
   const firstDateOfCurrentWeek = format(currentWeekDates[0], 'yyyy-MM-dd');
+  const respondentId = useAppSelector(IdentityModel.selectors.selectUserId);
 
   const { data: appletEncryption, isLoading: isDetailsLoading } =
     useAppletDetailsQuery(appletId, {
@@ -20,7 +25,12 @@ export const useAppletAnalytics = (appletId: string) => {
 
   const { data: appletAnalytics, isLoading: isAnalyticsLoading } =
     useAppletAnalyticsQuery(
-      { appletId, fromDate: firstDateOfCurrentWeek, isLastVersion: true },
+      {
+        appletId,
+        fromDate: firstDateOfCurrentWeek,
+        respondentIds: respondentId ?? '',
+        isLastVersion: true,
+      },
       {
         select: response => {
           if (!appletEncryption || !userPrivateKey) {
