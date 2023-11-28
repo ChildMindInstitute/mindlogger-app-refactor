@@ -45,7 +45,14 @@
     "share_all_reports": "Share All Reports"
   },
   "activity_chart": {
-    "title": "Please take the assessment for data to be displayed."
+    "title": "Please take the assessment for data to be displayed.",
+    "monday": "M",
+    "tuesday": "T",
+    "wednesday": "W",
+    "thursday": "T",
+    "friday": "F",
+    "saturday": "S",
+    "sunday": "S"
   },
   "calendar": {
     "months": "January_February_March_April_May_June_July_August_September_October_November_December",

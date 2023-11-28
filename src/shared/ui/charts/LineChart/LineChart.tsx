@@ -13,12 +13,12 @@ import {
   areDatesEqual,
   colors,
   DAYS_OF_WEEK_NUMBERS,
-  DAYS_OF_WEEK_SHORT_NAMES,
   getCurrentWeekDates,
   range,
 } from '@shared/lib';
 import { Box } from '@shared/ui';
 
+import { getWeekDaysWithLocale } from '../lib';
 import { ChartAxisDot, ChartItem } from '../types';
 
 type LineChartDataItem = {
@@ -67,6 +67,8 @@ const LineChart: FC<Props> = ({ data, config }) => {
     });
   }, [data, maxValue]);
 
+  const daysOfWeek = getWeekDaysWithLocale();
+
   return (
     <Box>
       <VictoryChart>
@@ -101,7 +103,7 @@ const LineChart: FC<Props> = ({ data, config }) => {
           }}
           tickCount={7}
           tickFormat={(_, index) => {
-            return DAYS_OF_WEEK_SHORT_NAMES[index];
+            return daysOfWeek[index];
           }}
         />
 
