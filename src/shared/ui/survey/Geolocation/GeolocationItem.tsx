@@ -71,7 +71,7 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
   return (
     <Center>
       <GeolocationButton
-        data-test="geolocation-submit-btn"
+        accessibilityLabel="geolocation-submit-btn"
         onPress={handleGetGeolocation}
         iconAfter={<GeolocationIcon color="white" size={20} />}
       >
@@ -86,7 +86,7 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
 
       {errorMessage && (
         <Text
-          data-test="geolocation-error-text"
+          accessibilityLabel="geolocation-error-text"
           color="$red"
           textAlign="center"
         >
@@ -95,7 +95,7 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
       )}
 
       {isPermissionDenied && !value && (
-        <Text data-test="geolocation-description-text" mt={10}>
+        <Text accessibilityLabel="geolocation-description-text" mt={10}>
           {descriptionText}
         </Text>
       )}

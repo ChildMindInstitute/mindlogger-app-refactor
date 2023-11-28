@@ -38,7 +38,7 @@ const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
   return (
     <StackedItemsGrid
       items={config.rows}
-      data-test="stack-radio-container"
+      accessibilityLabel="stack-radio-container"
       renderCell={(index, option) => {
         const { id: currentRowId } = config.rows[index];
         const currentValue = values.find(value => {
@@ -49,16 +49,16 @@ const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
           <RadioGroup
             key={option.id + currentRowId}
             value={currentValue?.id ?? ''}
-            data-test="stack-radio-group"
+            accessibilityLabel="stack-radio-group"
           >
             <RadioGroup.Item
-              data-test="stack-radio-item"
+              accessibilityLabel="stack-radio-item"
               onPress={() => onRowValueChange(option, index)}
               borderColor={colors.blue}
               value={option.id}
             >
               <RadioGroup.Indicator
-                data-test="stack-radio-indicator"
+                accessibilityLabel="stack-radio-indicator"
                 backgroundColor={colors.blue}
               />
             </RadioGroup.Item>

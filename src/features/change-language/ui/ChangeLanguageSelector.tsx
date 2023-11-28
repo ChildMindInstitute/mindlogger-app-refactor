@@ -26,10 +26,11 @@ const ChangeLanguageSelector: FC<Props> = props => {
   };
 
   return (
-    <YStack {...props}>
+    <YStack accessibilityLabel="change-language-list" {...props}>
       {languagesAvailable.map(locale => {
         return (
           <RowButton
+            accessibilityLabel={`change-language-button-${locale}`}
             onPress={() => onLanguagePress(locale)}
             key={`${locale}`}
             bg={resolvedLanguage === locale ? '$aqua' : 'transparent'}

@@ -60,7 +60,7 @@ const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
     <YStack>
       <DateTimePicker
         label="From"
-        data-test="time-picker-from-date"
+        accessibilityLabel="time-picker-from-date"
         onChange={onChangeStartTime}
         dateDisplayFormat="h:mm a"
         value={startTimeAsDate}
@@ -70,7 +70,7 @@ const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
 
       <DateTimePicker
         label="To"
-        data-test="time-picker-to-date"
+        accessibilityLabel="time-picker-to-date"
         onChange={onChangeEndTime}
         dateDisplayFormat="h:mm a"
         mode="time"

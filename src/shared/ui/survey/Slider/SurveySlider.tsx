@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { StyleSheet } from 'react-native';
+import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
@@ -9,7 +9,10 @@ import { SliderProps } from './types';
 
 const THUMB_SIZE = 22;
 
-const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
+const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
+  config,
+  ...props
+}) => {
   const {
     leftTitle,
     rightTitle,
@@ -39,7 +42,7 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
       <Box px={10}>
         <Slider
           animationType="spring"
-          data-test="slider"
+          accessibilityLabel="slider"
           initialValue={initialValue}
           onSlidingComplete={onRelease}
           onSlidingStart={onPress}
@@ -58,7 +61,7 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
               {showTickMarks && <Box w={1} bg="$black" h={8} />}
 
               {showTickLabels && (
-                <Text data-test="slide-tick-label" mt="$1">
+                <Text accessibilityLabel="slide-tick-label" mt="$1">
                   {value}
                 </Text>
               )}
@@ -71,7 +74,7 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
         <YStack maxWidth="30%" ai="center">
           {leftImageUrl && (
             <CachedImage
-              data-test="slide-image"
+              accessibilityLabel="slide-image"
               style={styles.imageLeft}
               resizeMode="contain"
               source={leftImageUrl}
@@ -79,7 +82,7 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
           )}
 
           {leftTitle ? (
-            <Text data-test="slide-left-title" textAlign="center">
+            <Text accessibilityLabel="slide-left-title" textAlign="center">
               {leftTitle}
             </Text>
           ) : null}
@@ -89,7 +92,7 @@ const SurveySlider: FC<SliderProps> = ({ config, ...props }) => {
           {rightImageUrl && (
             <XStack jc="center">
               <CachedImage
-                data-test="slide-right-image"
+                accessibilityLabel="slide-right-image"
                 style={styles.imageRight}
                 resizeMode="contain"
                 source={rightImageUrl}

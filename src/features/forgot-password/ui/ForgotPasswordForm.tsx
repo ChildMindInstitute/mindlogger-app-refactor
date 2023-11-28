@@ -47,7 +47,11 @@ const ForgotPasswordForm: FC<Props> = props => {
     <Box {...props}>
       <FormProvider {...form}>
         <YStack mb={40}>
-          <InputField name="email" placeholder={t('auth:email_address')} />
+          <InputField
+            accessibilityLabel="forgot-password-email-input"
+            name="email"
+            placeholder={t('auth:email_address')}
+          />
 
           {error && (
             <ErrorMessage
@@ -60,6 +64,7 @@ const ForgotPasswordForm: FC<Props> = props => {
 
         <SubmitButton
           isLoading={isLoading}
+          accessibilityLabel="forgot-password-submit-button"
           onPress={submit}
           buttonStyle={{ alignSelf: 'center', paddingHorizontal: 24 }}
         >
