@@ -58,7 +58,7 @@ const VideoPlayer: FC<Props> = ({
   return (
     <Center flex={1} w="100%">
       <VideoPlayerBase
-        data-test="video-player"
+        accessibilityLabel="video-player"
         ref={playerRef}
         video={{
           uri,

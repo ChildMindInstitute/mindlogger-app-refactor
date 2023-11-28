@@ -18,7 +18,7 @@ const SplashItem: FC<Props> = ({ config }) => {
 
   return (
     <CachedImage
-      data-test="splash-image"
+      accessibilityLabel="splash-image"
       resizeMode="contain"
       style={styles.image}
       source={imageUrl}

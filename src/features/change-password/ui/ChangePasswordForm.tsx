@@ -54,6 +54,7 @@ const ChangePasswordForm: FC<Props> = props => {
         <YStack space={8} mb={40}>
           <InputField
             mode="dark"
+            accessibilityLabel="change-password-prev-password-input"
             backgroundColor="transparent"
             placeholderTextColor={colors.grey3}
             secureTextEntry
@@ -64,6 +65,7 @@ const ChangePasswordForm: FC<Props> = props => {
           <InputField
             mode="dark"
             backgroundColor="transparent"
+            accessibilityLabel="change-password-password-input"
             placeholderTextColor={colors.grey3}
             secureTextEntry
             name="password"
@@ -71,11 +73,20 @@ const ChangePasswordForm: FC<Props> = props => {
           />
 
           {error && (
-            <ErrorMessage error={{ message: error.evaluatedMessage! }} mt={8} />
+            <ErrorMessage
+              accessibilityLabel="change-password-error-message"
+              error={{ message: error.evaluatedMessage! }}
+              mt={8}
+            />
           )}
         </YStack>
 
-        <SubmitButton mode="dark" onPress={submit} isLoading={isLoading}>
+        <SubmitButton
+          accessibilityLabel="change-password-submit-button"
+          mode="dark"
+          onPress={submit}
+          isLoading={isLoading}
+        >
           {t('change_pass_form:update')}
         </SubmitButton>
       </FormProvider>

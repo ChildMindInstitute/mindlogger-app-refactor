@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { AccessibilityProps } from 'react-native';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -67,11 +68,11 @@ export const RestartIcon: FC<IconProps> = props => (
   <FontAwesome name="refresh" {...props} />
 );
 
-export const PlayIcon: FC<IconProps> = props => (
+export const PlayIcon: FC<IconProps & AccessibilityProps> = props => (
   <Entypo name="controller-play" {...props} />
 );
 
-export const PauseIcon: FC<IconProps> = props => (
+export const PauseIcon: FC<IconProps & AccessibilityProps> = props => (
   <Foundation name="pause" {...props} />
 );
 

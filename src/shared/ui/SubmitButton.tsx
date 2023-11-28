@@ -1,5 +1,5 @@
 import { PropsWithChildren, FC } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { AccessibilityProps, StyleSheet, TouchableOpacity } from 'react-native';
 import { StyleProp, ViewStyle } from 'react-native';
 
 import { Text, Stack, styled, StackStyleProps, TextProps } from '@tamagui/core';
@@ -53,7 +53,7 @@ type Props = PropsWithChildren<
   } & StackStyleProps
 >;
 
-const SubmitButton: FC<Props> = ({
+const SubmitButton: FC<Props & AccessibilityProps> = ({
   children,
   onPress,
   disabled,
@@ -61,12 +61,14 @@ const SubmitButton: FC<Props> = ({
   mode = 'light',
   buttonStyle,
   isLoading = false,
+  accessibilityLabel,
   ...stylesProps
 }) => {
   return (
     <TouchableOpacity
       onPress={!disabled ? onPress : undefined}
       disabled={disabled || isLoading}
+      accessibilityLabel={accessibilityLabel}
     >
       <Button
         style={buttonStyle}

@@ -52,6 +52,7 @@ const LoginScreen: FC = () => {
 
             <SubmitButton
               borderRadius={30}
+              accessibilityLabel="create-account-navigation-button"
               mt={22}
               width="100%"
               backgroundColor="$primary"

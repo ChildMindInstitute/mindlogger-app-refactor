@@ -10,12 +10,12 @@ const HorizontalCalendar: FC<BoxProps> = styledProps => {
 
   return (
     <Box alignItems="center" {...styledProps}>
-      <Text data-test="calendar-title" fontSize={15} mb={20}>
+      <Text accessibilityLabel="calendar-title" fontSize={15} mb={20}>
         {title}
       </Text>
 
       <XStack
-        data-test="calendar-dates-container"
+        accessibilityLabel="calendar-dates-container"
         px={6}
         jc="space-around"
         width="100%"
@@ -30,7 +30,7 @@ const HorizontalCalendar: FC<BoxProps> = styledProps => {
           return (
             <YStack
               key={dateOfMonth}
-              data-test="calendar-item"
+              accessibilityLabel="calendar-item"
               px={14}
               py={6}
               br={50}
@@ -39,7 +39,7 @@ const HorizontalCalendar: FC<BoxProps> = styledProps => {
               bg={isToday ? '$lightBlue' : 'transparent'}
             >
               <Text
-                data-test="calendar-week-name"
+                accessibilityLabel="calendar-week-name"
                 mb="$1"
                 fontSize={10}
                 color={textColor}
@@ -48,7 +48,7 @@ const HorizontalCalendar: FC<BoxProps> = styledProps => {
               </Text>
 
               <Text
-                data-test="calendar-day-of-month"
+                accessibilityLabel="calendar-day-of-month"
                 color={textColor}
                 fontWeight="700"
               >

@@ -48,6 +48,7 @@ const AppletList: FC<Props> = ({
   const renderItem: ListRenderItem<Applet> = useCallback(
     ({ item }) => (
       <AppletCard
+        accessibilityLabel={`applet-card-${item.id}`}
         applet={item}
         disabled={!!isRefreshing}
         onPress={() =>
@@ -70,6 +71,7 @@ const AppletList: FC<Props> = ({
     <Box {...styledProps}>
       <FlatList
         contentContainerStyle={styles.flatList}
+        accessibilityLabel="applet-list"
         data={applets ?? []}
         keyExtractor={getId}
         renderItem={renderItem}
