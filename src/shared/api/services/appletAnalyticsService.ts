@@ -24,6 +24,7 @@ type ActivityAnalyticsRequest = {
   appletId: string;
   fromDate: string;
   isLastVersion: boolean;
+  respondentIds: string;
 };
 
 function appletAnalyticsService() {
@@ -36,6 +37,7 @@ function appletAnalyticsService() {
             params: {
               fromDate: request.fromDate,
               activitiesLastVersion: request.isLastVersion,
+              respondentIds: request.respondentIds,
             },
           },
         );

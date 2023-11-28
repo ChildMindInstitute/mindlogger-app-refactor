@@ -7,6 +7,10 @@ export type Point = {
   y: number;
 };
 
+export const enum Shape {
+  Dot = 'dot',
+  Line = 'line',
+}
 const paint = Skia.Paint();
 
 paint.setColor(Skia.Color(colors.black));
@@ -102,6 +106,16 @@ class LineSketcher {
     const suggestedMaxPointsPerLine = IS_ANDROID ? 300 : Infinity;
 
     return pointsCount % suggestedMaxPointsPerLine === 0;
+  }
+
+  public getCurrentShape(): Shape {
+    const pointsCount = this.points.length;
+
+    return pointsCount === 1 ? Shape.Dot : Shape.Line;
+  }
+
+  public getFirstPoint(): Point {
+    return this.points[0];
   }
 }
 

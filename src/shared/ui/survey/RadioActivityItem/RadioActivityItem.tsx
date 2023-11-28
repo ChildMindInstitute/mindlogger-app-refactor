@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 
 import { shuffle } from '@shared/lib';
 import { YStack, RadioGroup, Box } from '@shared/ui';
@@ -25,6 +25,7 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
   textReplacer,
 }) => {
   const { options, randomizeOptions, addTooltip, setPalette } = config;
+  const [radioValueId, setRadioValueId] = useState(initialValue?.id);
 
   const optionsList = useMemo(() => {
     if (randomizeOptions) {
@@ -38,13 +39,15 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
   const onValueChange = (value: string) => {
     const selectedOption = options.find(option => option.id === value);
 
+    setRadioValueId(selectedOption?.id);
+
     onChange(selectedOption!);
   };
 
   return (
     <YStack>
       <RadioGroup
-        value={initialValue?.id ?? ''}
+        value={radioValueId ?? ''}
         onValueChange={onValueChange}
         name="radio"
         data-test="radio-item-group"
