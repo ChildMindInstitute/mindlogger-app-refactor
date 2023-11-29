@@ -86,7 +86,7 @@ export const PHOTO_TAKE_OPTIONS: CameraOptions = {
   mediaType: 'photo',
   maxWidth: 800,
   maxHeight: 800,
-  quality: 0.9,
+  quality: 1,
   saveToPhotos: false,
   presentationStyle: 'fullScreen',
 };
