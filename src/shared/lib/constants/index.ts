@@ -89,6 +89,7 @@ export const PHOTO_TAKE_OPTIONS: CameraOptions = {
   quality: 1,
   saveToPhotos: false,
   presentationStyle: 'fullScreen',
+  assetRepresentationMode: 'auto',
 };
 
 export const MICROPHONE_PERMISSIONS = Platform.select({
