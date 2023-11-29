@@ -56,6 +56,8 @@ export function useOnNotificationTap({
     AppletModel.selectors.selectInProgressApplets,
   );
 
+  const completions = useAppSelector(AppletModel.selectors.selectCompletions);
+
   const { mutateAsync: refresh } = AppletModel.useRefreshMutation();
 
   const { startFlow, startActivity } = AppletModel.useStartEntity({
@@ -74,6 +76,7 @@ export function useOnNotificationTap({
       NotificationModel.NotificationRefreshService.refresh(
         queryClient,
         storeProgress,
+        completions,
         LogTrigger.LimitReachedNotification,
       );
     },
@@ -107,6 +110,7 @@ export function useOnNotificationTap({
           NotificationModel.NotificationRefreshService.refresh(
             queryClient,
             storeProgress,
+            completions,
             LogTrigger.ScheduleUpdated,
           );
         })
@@ -120,6 +124,7 @@ export function useOnNotificationTap({
           NotificationModel.NotificationRefreshService.refresh(
             queryClient,
             storeProgress,
+            completions,
             LogTrigger.AppletRemoved,
           );
         })
@@ -133,6 +138,7 @@ export function useOnNotificationTap({
           NotificationModel.NotificationRefreshService.refresh(
             queryClient,
             storeProgress,
+            completions,
             LogTrigger.AppletUpdated,
           );
         })

@@ -325,6 +325,8 @@ class RefreshService implements IRefreshService {
           refreshResult.unsuccessfulApplets.map(x => x.appletName),
         );
       }
+
+      this.logger.log('[RefreshService.refresh]: Completed');
     } catch (error) {
       this.logger.warn(
         '[RefreshService.refresh]: Error occurred:\nInternal error:\n\n' +

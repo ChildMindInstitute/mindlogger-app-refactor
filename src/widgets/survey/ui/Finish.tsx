@@ -78,6 +78,8 @@ function FinishItem({
     AppletModel.selectors.selectInProgressApplets,
   );
 
+  const completions = useAppSelector(AppletModel.selectors.selectCompletions);
+
   const { activityStorageRecord, clearActivityStorageRecord } =
     PassSurveyModel.useActivityState({
       appletId,
@@ -213,6 +215,7 @@ function FinishItem({
     NotificationModel.NotificationRefreshService.refresh(
       queryClient,
       storeProgress,
+      completions,
       LogTrigger.EntityCompleted,
     );
     onClose();

@@ -93,6 +93,17 @@ export const isSourceLess = ({ timeSource, timeTarget }: TimeCompareInput) => {
   return sourceInMinutes < targetInMinutes;
 };
 
+export const isSourceLessOrEqual = ({
+  timeSource,
+  timeTarget,
+}: TimeCompareInput) => {
+  const sourceInMinutes =
+    timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
+  const targetInMinutes =
+    timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
+  return sourceInMinutes <= targetInMinutes;
+};
+
 export const isSourceBiggerOrEqual = ({
   timeSource,
   timeTarget,

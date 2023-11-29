@@ -8,6 +8,7 @@ import {
   StoreProgressPayload,
   CompletedEntities,
   IStoreProgressPayload,
+  CompletedEventEntities,
 } from '@app/abstract/lib';
 
 type InProgressActivity = {
@@ -32,12 +33,15 @@ type InProgressFlow = {
 
 type InitialState = {
   inProgress: StoreProgress;
+  // todo - change to CompletedEventEntities when migrations infrastructure is ready
   completedEntities: CompletedEntities;
+  completions: CompletedEventEntities;
 };
 
 const initialState: InitialState = {
   inProgress: {},
   completedEntities: {},
+  completions: {},
 };
 
 const slice = createSlice({
@@ -99,7 +103,22 @@ const slice = createSlice({
 
       const completedEntities = state.completedEntities ?? {};
 
-      completedEntities[entityId] = new Date().getTime();
+      const completions = state.completions ?? {};
+
+      const now = new Date().getTime();
+
+      completedEntities[entityId] = now;
+
+      if (!completions[entityId]) {
+        completions[entityId] = {};
+      }
+
+      const entityCompletions = completions[entityId];
+
+      if (!entityCompletions[eventId]) {
+        entityCompletions[eventId] = [];
+      }
+      entityCompletions[eventId].push(now);
     },
 
     entityAnswersSent: (state, action: PayloadAction<InProgressEntity>) => {
