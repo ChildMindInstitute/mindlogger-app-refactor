@@ -2,7 +2,6 @@
 import { FC, useState } from 'react';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
-import { useDebouncedCallback } from 'use-debounce';
 
 import { Box, BoxProps, XStack } from '@app/shared/ui';
 import { StreamEventLoggable } from '@shared/lib';
@@ -36,14 +35,7 @@ const DrawingTest: FC<Props> = props => {
     result.uri = fileMeta.uri;
 
     props.onResult(result);
-
-    writeFile.cancel();
-    writeFile(fileMeta.uri, result.svgString);
   };
-
-  const writeFile = useDebouncedCallback(async (path: string, svg: string) => {
-    SvgFileManager.writeFile(path, svg);
-  }, 500);
 
   return (
     <Box

@@ -23,6 +23,7 @@ import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
 import { getClientInformation } from '../lib';
 import {
+  createSvgFiles,
   fillNullsForHiddenItems,
   FinishReason,
   getActivityStartAt,
@@ -119,6 +120,11 @@ function FinishItem({
     if (!activityStorageRecord) {
       return;
     }
+
+    await createSvgFiles(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
 
     const alerts = mapAnswersToAlerts(
       activityStorageRecord.items,
