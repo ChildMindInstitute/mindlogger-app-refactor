@@ -118,7 +118,7 @@ class LineSketcher {
     return this.points[0];
   }
 
-  public getLastPoint(): Point {
+  public getLastPoint(): Point | undefined {
     const pointsCount = this.points.length;
 
     return this.points[pointsCount - 1];

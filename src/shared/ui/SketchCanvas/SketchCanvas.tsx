@@ -79,13 +79,15 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     (touchInfo: TouchInfo) => {
       const lastDrawnPoint = lineSketcher.getLastPoint();
 
-      const dx = touchInfo.x - lastDrawnPoint.x;
-      const dy = touchInfo.y - lastDrawnPoint.y;
+      if (lastDrawnPoint) {
+        const dx = touchInfo.x - lastDrawnPoint.x;
+        const dy = touchInfo.y - lastDrawnPoint.y;
 
-      const isSamePoint = dx === 0 && dy === 0;
+        const isSamePoint = dx === 0 && dy === 0;
 
-      if (isSamePoint) {
-        return;
+        if (isSamePoint) {
+          return;
+        }
       }
 
       callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
