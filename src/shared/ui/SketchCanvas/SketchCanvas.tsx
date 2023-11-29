@@ -129,7 +129,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
 
   const onTouchEnd = useCallback(() => {
     if (lineSketcher.getCurrentShape() === Shape.Dot) {
-      const firstPoint = lineSketcher.getFirstPoint();
+      const firstPoint = lineSketcher.getFirstPoint() as Point;
 
       createDot({
         x: firstPoint.x + 1.5,
