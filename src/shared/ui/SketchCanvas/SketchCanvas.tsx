@@ -77,6 +77,17 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
 
   const onTouchProgress = useCallback(
     (touchInfo: TouchInfo) => {
+      const lastDrawnPoint = lineSketcher.getLastPoint();
+
+      const dx = touchInfo.x - lastDrawnPoint.x;
+      const dy = touchInfo.y - lastDrawnPoint.y;
+
+      const isSamePoint = dx === 0 && dy === 0;
+
+      if (isSamePoint) {
+        return;
+      }
+
       callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
 
       setPaths(currentPaths => {
