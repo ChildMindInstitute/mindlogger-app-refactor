@@ -25,7 +25,7 @@ type Props = {
   scrollEnabled: boolean;
 } & PropsWithChildren;
 
-const PaddingToBottom = 40;
+const PaddingToBottom = 30;
 
 const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
   const [containerHeight, setContainerHeight] = useState<number | null>(null);
