@@ -114,8 +114,14 @@ class LineSketcher {
     return pointsCount === 1 ? Shape.Dot : Shape.Line;
   }
 
-  public getFirstPoint(): Point {
+  public getFirstPoint(): Point | undefined {
     return this.points[0];
+  }
+
+  public getLastPoint(): Point | undefined {
+    const pointsCount = this.points.length;
+
+    return this.points[pointsCount - 1];
   }
 }
 

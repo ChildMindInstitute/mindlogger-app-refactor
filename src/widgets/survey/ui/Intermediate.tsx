@@ -32,6 +32,7 @@ import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
 import { getClientInformation } from '../lib';
 import {
+  createSvgFiles,
   fillNullsForHiddenItems,
   getActivityStartAt,
   getExecutionGroupKey,
@@ -202,6 +203,11 @@ function Intermediate({
     if (!appletEncryption) {
       throw new Error('Encryption params is undefined');
     }
+
+    await createSvgFiles(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
 
     const activityName: string = getActivityName(activityId)!;
 
