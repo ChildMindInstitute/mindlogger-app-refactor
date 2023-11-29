@@ -99,7 +99,7 @@ export const createSvgFiles = async (
   const drawingTestItems: DrawingTestResponse[] = [];
 
   pipelineItems.forEach((item, index) => {
-    const answer = answers[index].answer;
+    const answer = answers[index]?.answer;
 
     if (item.type === 'DrawingTest' && answer) {
       drawingTestItems.push(answer as DrawingTestResponse);
