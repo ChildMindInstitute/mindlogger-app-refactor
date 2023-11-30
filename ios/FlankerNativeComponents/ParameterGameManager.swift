@@ -28,11 +28,11 @@ class ParameterGameManager {
     return allParameters
   }
   
-  func loadAllImage(dataJson: String, onFinish: @escaping RCTResponseSenderBlock) {
+  func loadAllImage(dataJson: String) -> Promise<[UIImage]>? {
     guard
       let jsonData = dataJson.data(using: .utf8),
       let parameters: ParameterModel = try? JSONDecoder().decode(ParameterModel.self, from: jsonData)
-    else { return }
+    else { return nil }
     
     var urls: [URL] = []
     
@@ -51,14 +51,12 @@ class ParameterGameManager {
       }
     }
     
-    DispatchQueue.main.sync {
+    return DispatchQueue.main.sync {
       let promises: [Promise<UIImage>] = urls.map{url in
         return ImageLoader().downloadImage(url: url)
       }
       
-      all(promises).then(on: .main) {_ in
-        onFinish(nil)
-      }
+      return all(promises)
     }
   }
 }
