@@ -165,11 +165,7 @@ class FlankerView: UIView {
 
   var isFirstScreen = true
 
-  @objc var dataJson: NSString? {
-    didSet {
-      ParameterGameManager.shared.loadAllImage(dataJson: String(dataJson ?? "")) { _ in }
-    }
-  }
+  @objc var dataJson: NSString?
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -362,13 +358,18 @@ extension FlankerView: GameManagerProtocol {
         rightButton.titleLabel?.textAlignment = .center
       } else if let leftImage = leftImage, let rightImage = rightImage {
         let left = ImageLoader()
-        left.loadImageWithUrl(leftImage){}
+        left.downloadImage(url: leftImage).then { image in
+          self.leftButton.setImage(image, for: .normal)
+          self.leftButton.setImage(image, for: .disabled)
+        }
         let right = ImageLoader()
-        right.loadImageWithUrl(rightImage){}
+        right.downloadImage(url: rightImage).then { image in
+          self.rightButton.setImage(image, for: .normal)
+          self.rightButton.setImage(image, for: .disabled)
+        }
         leftButton.setTitle(nil, for: .normal)
         leftButton.backgroundColor = .clear
-        leftButton.setImage(left.image, for: .normal)
-        leftButton.setImage(left.image, for: .disabled)
+        
         leftButton.imageView?.contentMode = .scaleAspectFit
         leftButton.imageView?.layer.cornerRadius = 5.0
 
@@ -387,7 +388,7 @@ extension FlankerView: GameManagerProtocol {
         leftButton.titleLabel?.textAlignment = .center
       } else if let leftImage = leftImage {
         let left = ImageLoader()
-        left.loadImageWithUrl(leftImage) {}
+        let _ = left.downloadImage(url: leftImage)
         leftButton.setTitle(nil, for: .normal)
         leftButton.backgroundColor = .clear
         leftButton.setImage(left.image, for: .normal)
@@ -406,7 +407,7 @@ extension FlankerView: GameManagerProtocol {
       let time = CACurrentMediaTime()
       print("Marker: self.displayLink?.isPaused = false: \(time)")
       fixationImage.isHidden = false
-      fixationImage.loadImageWithUrl(url){}
+      let _ = fixationImage.downloadImage(url: url)
       drawPixel()
     }
   }

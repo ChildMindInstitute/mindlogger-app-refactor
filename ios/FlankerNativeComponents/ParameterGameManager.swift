@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Promises
+import React
  
 class ParameterGameManager {
   static let shared = ParameterGameManager()
@@ -50,12 +51,14 @@ class ParameterGameManager {
       }
     }
     
-    let promises: [Promise<Any?>] = urls.map{url in
-      return ImageLoader().loadImageWithUrlWrapper(url)
-    }
-    
-    all(promises).then(on: .main) {_ in
-      onFinish(nil)
+    DispatchQueue.main.sync {
+      let promises: [Promise<UIImage>] = urls.map{url in
+        return ImageLoader().downloadImage(url: url)
+      }
+      
+      all(promises).then(on: .main) {_ in
+        onFinish(nil)
+      }
     }
   }
 }
