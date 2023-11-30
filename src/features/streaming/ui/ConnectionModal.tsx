@@ -17,7 +17,7 @@ export const ConnectionModal = ({ visible, onClose }: Props) => {
       transparent
       onRequestClose={onClose}
       visible={visible}
-      data-test="streaming-connection-modal"
+      accessibilityLabel="streaming-connection-modal"
     >
       <KeyboardAvoidingView
         behavior="padding"

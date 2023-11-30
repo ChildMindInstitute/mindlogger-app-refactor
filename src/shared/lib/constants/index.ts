@@ -23,6 +23,7 @@ export const IS_TABLET = isTablet();
 
 export const ENV = Config.ENV;
 export const API_URL = Config.API_URL as string;
+export const MIXPANEL_TOKEN = Config.MIXPANEL_TOKEN;
 
 export const STORE_ENCRYPTION_KEY = Config.STORE_ENCRYPTION_KEY;
 
@@ -85,9 +86,10 @@ export const PHOTO_TAKE_OPTIONS: CameraOptions = {
   mediaType: 'photo',
   maxWidth: 800,
   maxHeight: 800,
-  quality: 0.9,
+  quality: 1,
   saveToPhotos: false,
   presentationStyle: 'fullScreen',
+  assetRepresentationMode: 'auto',
 };
 
 export const MICROPHONE_PERMISSIONS = Platform.select({
@@ -96,7 +98,6 @@ export const MICROPHONE_PERMISSIONS = Platform.select({
 });
 
 export const DAYS_OF_WEEK_NUMBERS = [0, 1, 2, 3, 4, 5, 6];
-export const DAYS_OF_WEEK_SHORT_NAMES = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
 export const IV_LENGTH = 16;
 

@@ -26,7 +26,7 @@ const SimpleTextInput: FC<Props> = ({ value, onChange, config, ...props }) => {
 
   return (
     <Input
-      data-test="text-item"
+      accessibilityLabel="text-item"
       placeholder={t('text_entry:type_placeholder')}
       placeholderTextColor={colors.mediumGrey}
       onChangeText={onChangeText}

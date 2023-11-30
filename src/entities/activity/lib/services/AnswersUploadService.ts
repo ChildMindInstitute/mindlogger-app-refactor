@@ -431,6 +431,8 @@ class AnswersUploadService implements IAnswersUploadService {
           response: {
             value: (updatedAnswers[originalAnswerIndex] as ObjectAnswerDto)
               .value,
+            text: (updatedAnswers[originalAnswerIndex] as ObjectAnswerDto)
+              ?.text,
           },
         };
       });

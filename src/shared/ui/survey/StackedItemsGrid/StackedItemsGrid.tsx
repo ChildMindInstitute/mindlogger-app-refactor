@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from 'react';
-import { StyleSheet } from 'react-native';
+import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled, TextProps } from '@tamagui/core';
@@ -44,7 +44,7 @@ const AxisListItem: FC<{
         <Center>
           {option.tooltip ? (
             <Tooltip
-              data-test={`row-list-item-tooltip-${option.id}`}
+              accessibilityLabel={`row-list-item-tooltip-${option.id}`}
               markdown={option.tooltip}
             >
               <AxisListItemText hasTooltip>{title}</AxisListItemText>
@@ -55,7 +55,7 @@ const AxisListItem: FC<{
 
           {imageUrl && (
             <CachedImage
-              data-test={`row-list-item-image-${option.id}`}
+              accessibilityLabel={`row-list-item-image-${option.id}`}
               style={styles.image}
               resizeMode="contain"
               source={imageUrl}
@@ -93,7 +93,11 @@ type RowListItemProps = {
   renderCell: (option: StackedRowItemValue) => ReactElement;
 };
 
-const RowListItem: FC<RowListItemProps> = ({ item, options, renderCell }) => {
+const RowListItem: FC<RowListItemProps & AccessibilityProps> = ({
+  item,
+  options,
+  renderCell,
+}) => {
   return (
     <YStack>
       <XStack>
@@ -119,13 +123,14 @@ type StackedItemsGridProps = {
     optionIndex: number,
     option: StackedRowItemValue,
   ) => ReactElement;
-};
+} & AccessibilityProps;
 
 const StackedItemsGrid: FC<StackedItemsGridProps> = ({
   items = [],
   renderCell,
   options,
   values,
+  accessibilityLabel,
 }) => {
   const getRadioValue = (stackedItem: StackedRowItemValue) => {
     if (!values) {
@@ -138,13 +143,13 @@ const StackedItemsGrid: FC<StackedItemsGridProps> = ({
   };
 
   return (
-    <YStack>
+    <YStack accessibilityLabel={accessibilityLabel}>
       <RowHeader options={options} />
 
       {items.map((item, index) => (
         <RadioGroup key={`StackGrid_${item.id}`} value={getRadioValue(item)}>
           <RowListItem
-            data-test={`row-list-item-${item.id}`}
+            accessibilityLabel={`row-list-item-${item.id}`}
             options={options}
             item={item}
             renderCell={renderCell.bind(null, index)}

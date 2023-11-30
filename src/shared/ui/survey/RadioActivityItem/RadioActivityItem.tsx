@@ -1,4 +1,5 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, useState } from 'react';
+import { AccessibilityProps } from 'react-native';
 
 import { shuffle } from '@shared/lib';
 import { YStack, RadioGroup, Box } from '@shared/ui';
@@ -18,13 +19,15 @@ type RadioActivityItemProps = {
   textReplacer: (markdown: string) => string;
 };
 
-const RadioActivityItem: FC<RadioActivityItemProps> = ({
+const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
   config,
   onChange,
   initialValue,
   textReplacer,
+  accessibilityLabel,
 }) => {
   const { options, randomizeOptions, addTooltip, setPalette } = config;
+  const [radioValueId, setRadioValueId] = useState(initialValue?.id);
 
   const optionsList = useMemo(() => {
     if (randomizeOptions) {
@@ -38,21 +41,23 @@ const RadioActivityItem: FC<RadioActivityItemProps> = ({
   const onValueChange = (value: string) => {
     const selectedOption = options.find(option => option.id === value);
 
+    setRadioValueId(selectedOption?.id);
+
     onChange(selectedOption!);
   };
 
   return (
     <YStack>
       <RadioGroup
-        value={initialValue?.id ?? ''}
+        value={radioValueId ?? ''}
         onValueChange={onValueChange}
         name="radio"
-        data-test="radio-item-group"
+        accessibilityLabel={accessibilityLabel}
       >
         {optionsList.map(option => (
           <Box my="$1" key={option.id} onPress={() => onValueChange(option.id)}>
             <RadioItem
-              data-test="radio-item-option"
+              accessibilityLabel="radio-item-option"
               option={option}
               addTooltip={addTooltip}
               setPalette={setPalette}

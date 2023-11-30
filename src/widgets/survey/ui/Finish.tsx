@@ -14,6 +14,7 @@ import { PassSurveyModel } from '@features/pass-survey';
 import { LogTrigger } from '@shared/api';
 import {
   Logger,
+  AnalyticsService,
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
@@ -22,6 +23,7 @@ import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
 import { getClientInformation } from '../lib';
 import {
+  createSvgFiles,
   fillNullsForHiddenItems,
   FinishReason,
   getActivityStartAt,
@@ -119,6 +121,11 @@ function FinishItem({
       return;
     }
 
+    await createSvgFiles(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
+
     const alerts = mapAnswersToAlerts(
       activityStorageRecord.items,
       activityStorageRecord.answers,
@@ -188,6 +195,8 @@ function FinishItem({
     });
 
     clearActivityStorageRecord();
+
+    AnalyticsService.track('Assessment completed');
 
     const success = await processQueue();
 

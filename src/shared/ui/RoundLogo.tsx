@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { FC } from 'react';
-import { StyleSheet, ImageStyle } from 'react-native';
+import { StyleSheet, ImageStyle, AccessibilityProps } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { Text } from '@tamagui/core';
@@ -25,10 +25,19 @@ const getImageUrl = (url: string): string => {
   return url;
 };
 
-const RoundLogo: FC<Props> = ({ imageUri, imageStyle, letter, size = 64 }) => {
+const RoundLogo: FC<Props & AccessibilityProps> = ({
+  accessibilityLabel,
+  imageUri,
+  imageStyle,
+  letter,
+  size = 64,
+}) => {
   if (imageUri) {
     return (
-      <Box style={[getStyles(size).container]}>
+      <Box
+        accessibilityLabel={accessibilityLabel}
+        style={[getStyles(size).container]}
+      >
         <CachedImage
           style={[getStyles(size).image, imageStyle]}
           source={getImageUrl(imageUri)}
@@ -42,7 +51,13 @@ const RoundLogo: FC<Props> = ({ imageUri, imageStyle, letter, size = 64 }) => {
   }
 
   return (
-    <Box w={size} h={size} jc="center" ai="center">
+    <Box
+      accessibilityLabel="round-logo-default"
+      w={size}
+      h={size}
+      jc="center"
+      ai="center"
+    >
       <Svg height={size} width={size} style={{ position: 'absolute' }}>
         <Defs>
           <LinearGradient id="grad" x1="0" y1="0" x2={size} y2={size}>

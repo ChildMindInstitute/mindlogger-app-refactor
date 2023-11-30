@@ -65,13 +65,13 @@ const MediaInput: FC<Props> = ({
 
   return (
     <ContentWrapper
-      data-test="media-input-container"
+      accessibilityLabel="media-input-container"
       borderColor={borderColor}
       height={windowWidth * 0.85}
     >
       {children || (
         <TouchableOpacity
-          data-test="media-input-btn"
+          accessibilityLabel="media-input-btn"
           onPress={onUploadPress}
           style={styles.touchable}
         >

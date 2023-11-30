@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { AccessibilityProps, TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
@@ -23,14 +23,19 @@ type Props = {
   onPress?: (...args: any[]) => void;
 };
 
-const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
+const ActivityCard: FC<Props & AccessibilityProps> = ({
+  activity,
+  accessibilityLabel,
+  disabled,
+  onPress,
+}) => {
   const { t } = useTranslation();
 
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled;
 
   return (
     <TouchableOpacity
-      data-test={`activity-card-${activity.activityId}-btn`}
+      accessibilityLabel={accessibilityLabel}
       onPress={onPress}
       disabled={isDisabled}
     >
@@ -44,11 +49,12 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
         backgroundColor="$white"
       >
         {!!activity.image && (
-          <Box mr={14} alignSelf="center">
-            <RoundLogo
-              data-test={`activity-card-${activity.activityId}-image`}
-              imageUri={activity.image}
-            />
+          <Box
+            mr={14}
+            alignSelf="center"
+            accessibilityLabel={`activity-card-${activity.activityId}-image`}
+          >
+            <RoundLogo imageUri={activity.image} />
           </Box>
         )}
 
@@ -66,7 +72,7 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
             mb={8}
             fontWeight={IS_IOS ? '600' : '700'}
             fontSize={16}
-            data-test={`activity-card-${activity.activityId}-name`}
+            accessibilityLabel={`activity-card-${activity.activityId}-name`}
             lineHeight={20}
             opacity={isDisabled ? 0.5 : 1}
           >
@@ -78,7 +84,7 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
             fontWeight="300"
             lineHeight={20}
             opacity={isDisabled ? 0.5 : 1}
-            data-test={`activity-card-${activity.activityId}-desc`}
+            accessibilityLabel={`activity-card-${activity.activityId}-desc`}
           >
             {activity.description}
           </Text>

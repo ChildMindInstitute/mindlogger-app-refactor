@@ -22,6 +22,7 @@ import {
 import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import {
   Logger,
+  AnalyticsService,
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
@@ -31,6 +32,7 @@ import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
 import { getClientInformation } from '../lib';
 import {
+  createSvgFiles,
   fillNullsForHiddenItems,
   getActivityStartAt,
   getExecutionGroupKey,
@@ -160,6 +162,7 @@ function Intermediate({
 
   const changeActivity = useCallback(() => {
     if (!nextActivity) {
+      AnalyticsService.track('Assessment completed');
       return;
     }
 
@@ -200,6 +203,11 @@ function Intermediate({
     if (!appletEncryption) {
       throw new Error('Encryption params is undefined');
     }
+
+    await createSvgFiles(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
 
     const activityName: string = getActivityName(activityId)!;
 

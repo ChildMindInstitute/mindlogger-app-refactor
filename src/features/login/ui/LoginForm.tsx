@@ -10,6 +10,7 @@ import { IdentityModel, useLoginMutation } from '@entities/identity';
 import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
 import {
+  AnalyticsService,
   executeIfOnline,
   useAppDispatch,
   useAppForm,
@@ -59,6 +60,10 @@ const LoginForm: FC<Props> = props => {
 
       SessionModel.storeSession(session);
 
+      AnalyticsService.login(user.id).then(() => {
+        AnalyticsService.track('Login Successful');
+      });
+
       props.onLoginSuccess();
     },
   });
@@ -90,18 +95,21 @@ const LoginForm: FC<Props> = props => {
         <YStack space={16}>
           <InputField
             name="email"
+            accessibilityLabel="login-email-input"
             placeholder={t('login_form:email_placeholder')}
           />
 
           <InputField
             secureTextEntry
             name="password"
+            accessibilityLabel="login-password-input"
             placeholder={t('auth:password')}
           />
 
           {error && (
             <ErrorMessage
               mode="light"
+              accessibilityLabel="login-error-message"
               error={{ message: error.evaluatedMessage! }}
             />
           )}
@@ -110,6 +118,7 @@ const LoginForm: FC<Props> = props => {
         <Center mt={42}>
           <Link
             textDecorationLine="underline"
+            accessibilityLabel="login-forgot-password"
             onPress={navigateToForgotPassword}
           >
             {t('login:forgot_password')}
@@ -119,6 +128,7 @@ const LoginForm: FC<Props> = props => {
         <SubmitButton
           mt={32}
           isLoading={isLoading}
+          accessibilityLabel="login-submit-putton"
           borderRadius={30}
           width="100%"
           bg="$lighterGrey6"

@@ -5,8 +5,12 @@ import {
   AvailabilityType,
   StoreProgressPayload,
 } from '@app/abstract/lib';
+import { SvgFileManager } from '@app/entities/drawer';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
-import { ActivityItemType } from '@app/features/pass-survey';
+import {
+  ActivityItemType,
+  DrawingTestResponse,
+} from '@app/features/pass-survey';
 import { Answers, PipelineItem } from '@app/features/pass-survey';
 import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import { AnswerDto } from '@app/shared/api';
@@ -86,4 +90,28 @@ export const fillNullsForHiddenItems = (
 
 export const canItemHaveAnswer = (type: ActivityItemType): boolean => {
   return type !== 'Tutorial' && type !== 'Splash';
+};
+
+export const createSvgFiles = async (
+  pipelineItems: PipelineItem[],
+  answers: Answers,
+) => {
+  const drawingTestItems: DrawingTestResponse[] = [];
+
+  pipelineItems.forEach((item, index) => {
+    const answer = answers[index]?.answer;
+
+    if (item.type === 'DrawingTest' && answer) {
+      drawingTestItems.push(answer as DrawingTestResponse);
+    }
+  });
+
+  const promises = drawingTestItems.map(drawingTestItem => {
+    return SvgFileManager.writeFile(
+      drawingTestItem.uri,
+      drawingTestItem.svgString,
+    );
+  });
+
+  return Promise.all(promises);
 };
