@@ -12,11 +12,11 @@ import {
   areDatesEqual,
   colors,
   DAYS_OF_WEEK_NUMBERS,
-  DAYS_OF_WEEK_SHORT_NAMES,
   getCurrentWeekDates,
   range,
 } from '@shared/lib';
 
+import { getWeekDaysWithLocale } from '../lib';
 import { ChartAxisDot, ChartItem } from '../types';
 
 type BarChartDataItem = {
@@ -46,6 +46,8 @@ const BarChart: FC<Props> = ({ data }) => {
     });
   }, [data]);
 
+  const daysOfWeek = getWeekDaysWithLocale();
+
   return (
     <VictoryChart>
       <VictoryScatter
@@ -65,7 +67,7 @@ const BarChart: FC<Props> = ({ data }) => {
         }}
         tickCount={6}
         tickFormat={(_, index) => {
-          return DAYS_OF_WEEK_SHORT_NAMES[index];
+          return daysOfWeek[index];
         }}
       />
 

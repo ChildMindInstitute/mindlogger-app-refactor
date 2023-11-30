@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import {
+  Asset,
   ImagePickerResponse,
   launchCamera,
   launchImageLibrary,
@@ -27,6 +28,21 @@ type Props = {
   value?: MediaValue;
 };
 
+const preparePhotoFile = (image: Asset, isFromLibrary: boolean) => {
+  const fileName = image.fileName?.replace(/HEIC/gi, 'jpg') ?? '';
+  const mimeType = image.type?.replace(/HEIC/gi, 'jpg') ?? '';
+
+  const photoFile = {
+    uri: image.uri || '',
+    fileName,
+    size: image.fileSize || 0,
+    type: mimeType,
+    fromLibrary: isFromLibrary,
+  };
+
+  return photoFile;
+};
+
 const PhotoItem: FC<Props> = ({ onChange, value }) => {
   const { t } = useTranslation();
   const { isCameraAccessGranted } = useCameraPermissions();
@@ -37,13 +53,8 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
 
     if (assets?.length) {
       const imageItem = assets[0];
-      const photo = {
-        uri: imageItem.uri || '',
-        fileName: imageItem.fileName || '',
-        size: imageItem.fileSize || 0,
-        type: imageItem.type || '',
-        fromLibrary: isFromLibrary,
-      };
+
+      const photo = preparePhotoFile(imageItem, isFromLibrary);
 
       onChange(photo);
     }
@@ -101,7 +112,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
       onOpenCamera={onOpenPhotoCamera}
       onShowMediaLibrary={onShowImageGallery}
       mode="photo"
-      data-test="photo-item"
+      accessibilityLabel="photo-item"
       uploadIcon={<PhotoIcon color={colors.red} size={50} />}
     >
       {value && <Image height="100%" width="100%" src={{ uri: value.uri }} />}

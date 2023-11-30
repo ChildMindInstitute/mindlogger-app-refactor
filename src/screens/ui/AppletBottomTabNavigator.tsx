@@ -7,12 +7,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import {
-  ActivityIndicator,
-  Box,
-  Center,
-  ImageBackground,
-} from '@app/shared/ui';
+import { Box, ImageBackground } from '@app/shared/ui';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 
 import {
@@ -71,11 +66,6 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
     <ImageBackground
       uri={appletTheme?.backgroundImage}
       bg={appletTheme?.primaryColor ?? '$white'}
-      loader={
-        <Center position="absolute" width="100%" height="100%">
-          <ActivityIndicator size="large" color="$secondary" />
-        </Center>
-      }
     >
       <Tab.Navigator
         screenOptions={getAppletDetailsScreenOptions(

@@ -23,7 +23,7 @@ type Props = {
 
 function ActivitySectionList({ appletId, groups }: Props) {
   const { t } = useTranslation();
-  const { navigate } = useNavigation();
+  const { navigate, isFocused } = useNavigation();
 
   const sections = useMemo(() => {
     return groups
@@ -108,10 +108,15 @@ function ActivitySectionList({ appletId, groups }: Props) {
       )}
       renderItem={({ item }) => (
         <ActivityCard
-          data-test={`activity-card-${item.activityId}`}
+          accessibilityLabel={`activity-card-${item.activityId}`}
           activity={item}
           disabled={false}
-          onPress={() => startActivityOrFlow(item)}
+          onPress={() => {
+            if (!isFocused()) {
+              return;
+            }
+            startActivityOrFlow(item);
+          }}
         />
       )}
       ItemSeparatorComponent={ItemSeparator}
@@ -124,7 +129,7 @@ function ActivitySectionList({ appletId, groups }: Props) {
 const SectionHeader = ({ children }: PropsWithChildren) => (
   <Box mb={10}>
     <Text
-      data-test="activity-group-name-text"
+      accessibilityLabel="activity-group-name-text"
       mt={16}
       mb={4}
       fontSize={14}

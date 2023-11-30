@@ -28,6 +28,7 @@
     "score_on_subscale": "The score on the {{name}} subscale was",
     "save": "Save",
     "summary": "Summary",
+    "alerts": "Alerts",
     "report_summary": "Report Summary",
     "not_yet_completed": "Not yet completed",
     "last_completed": "Last completed",
@@ -44,7 +45,14 @@
     "share_all_reports": "Share All Reports"
   },
   "activity_chart": {
-    "title": "Please take the assessment for data to be displayed."
+    "title": "Please take the assessment for data to be displayed.",
+    "monday": "M",
+    "tuesday": "T",
+    "wednesday": "W",
+    "thursday": "T",
+    "friday": "F",
+    "saturday": "S",
+    "sunday": "S"
   },
   "calendar": {
     "months": "January_February_March_April_May_June_July_August_September_October_November_December",
@@ -161,17 +169,18 @@
     "email_address": "Email address",
     "email_sent": "Reset email has been sent",
     "email_send_error": "That email does not exist in the system.",
-    "forgot_password": "Forgot password"
+    "forgot_password": "Forgot password?"
   },
   "login": {
     "new_user": "New User",
-    "forgot_password": "Forgot Password",
+    "account_create": "Create an account",
+    "forgot_password": "Forgot Password?",
     "what_is": "What is",
     "login_error": "Login failed.",
     "password_at_least_characters": "Password must be at least 6 characters"
   },
   "login_form": {
-    "login": "LOGIN",
+    "login": "Log In",
     "email_placeholder": "Email",
     "password": "Password"
   },
@@ -219,7 +228,8 @@
     "please_accept_terms": "Please accept terms of service.",
     "password_at_least_characters": "Password must be at least 6 characters",
     "email_looks_incomplete": "Looks like this email is incomplete",
-    "password_no_spaces": "Password should not contain blank spaces"
+    "password_no_spaces": "Password should not contain blank spaces",
+    "sign_up_agree": "By signing up, you agree to MindLogger’s"
   },
   "geolocation": {
     "get_location": "GET LOCATION",

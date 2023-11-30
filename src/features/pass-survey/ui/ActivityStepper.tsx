@@ -32,7 +32,7 @@ type Props = {
   entityStartedAt: number;
   timer: HourMinute | null;
   onClose: () => void;
-  onFinish: () => void;
+  onFinish: (reason: 'regular' | 'idle') => void;
 };
 
 function ActivityStepper({
@@ -93,7 +93,7 @@ function ActivityStepper({
   } = useActivityStepper(activityStorageRecord);
 
   const { restart: restartIdleTimer } = useIdleTimer({
-    onFinish,
+    onFinish: () => onFinish('idle'),
     hourMinute: idleTimer,
   });
 
@@ -185,7 +185,7 @@ function ActivityStepper({
     if (!isForced) {
       trackUserAction(userActionCreator.done());
     }
-    onFinish();
+    onFinish('regular');
   };
 
   if (!activityStorageRecord) {
@@ -282,7 +282,7 @@ function ActivityStepper({
         <Stepper.Progress />
 
         {showBottomNavigation && (
-          <Stepper.NavigationPanel mt={16} minHeight={24} mb={bottom ? 0 : 16}>
+          <Stepper.NavigationPanel mt={18} minHeight={27} mb={bottom ? 0 : 16}>
             {canMoveBack && (
               <Stepper.BackButton>
                 {t(

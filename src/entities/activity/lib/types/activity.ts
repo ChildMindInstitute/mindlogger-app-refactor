@@ -1,5 +1,6 @@
 import { AbPayload, FlankerItemSettings } from '@app/abstract/lib';
 
+import { Report } from './activityReportSettings';
 import { ConditionalLogic } from './conditionalLogic';
 
 export type ActivityItemType =
@@ -61,6 +62,7 @@ type SliderConfig = {
     maxValue: number;
     message: string;
   }> | null;
+  scores: Array<number>;
 };
 
 type NumberSelectConfig = {
@@ -398,4 +400,6 @@ export type ActivityDetails = {
   order: number;
   isHidden: boolean;
   items: ActivityItem[];
+  hasSummary: boolean;
+  scoreSettings: Array<Report>;
 };

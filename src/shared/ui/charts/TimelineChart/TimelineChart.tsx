@@ -7,12 +7,12 @@ import {
   areDatesEqual,
   colors,
   DAYS_OF_WEEK_NUMBERS,
-  DAYS_OF_WEEK_SHORT_NAMES,
   getCurrentWeekDates,
   range,
 } from '@shared/lib';
 
 import { Box } from '../..';
+import { getWeekDaysWithLocale } from '../lib';
 import { ChartAxisDot, ChartItem } from '../types';
 
 type TimelineChartOption = {
@@ -88,6 +88,8 @@ const TimelineChart: FC<Props> = ({ data, config }) => {
     });
   }, [getTimelineItems, options]);
 
+  const daysOfWeek = getWeekDaysWithLocale();
+
   return (
     <Box>
       {timelineChartData.map(option => (
@@ -110,7 +112,7 @@ const TimelineChart: FC<Props> = ({ data, config }) => {
             }}
             tickCount={7}
             tickFormat={(_, index) => {
-              return DAYS_OF_WEEK_SHORT_NAMES[index];
+              return daysOfWeek[index];
             }}
           />
 

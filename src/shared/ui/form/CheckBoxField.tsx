@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from 'react';
-import { StyleSheet } from 'react-native';
+import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { Controller, useFormContext, useController } from 'react-hook-form';
 
@@ -16,13 +16,14 @@ type Props = {
   disabled?: boolean;
 };
 
-const CheckBoxField: FC<PropsWithChildren<Props>> = ({
+const CheckBoxField: FC<PropsWithChildren<Props & AccessibilityProps>> = ({
   name,
   onFillColor = colors.white,
   onCheckColor = colors.darkBlue,
   onTintColor = colors.white,
   tintColor = colors.white,
   disabled = false,
+  accessibilityLabel,
   children,
 }) => {
   const { control } = useFormContext();
@@ -41,7 +42,7 @@ const CheckBoxField: FC<PropsWithChildren<Props>> = ({
       <Controller
         control={control}
         render={() => (
-          <Box>
+          <Box accessibilityLabel={accessibilityLabel}>
             <XStack minHeight={24}>
               <CheckBox
                 onValueChange={onFormChange}

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { AnalyticsService } from '@shared/lib';
+
 import { showUploadErrorAlert } from '../alerts';
 import { UploadObservable } from '../observables';
 
@@ -26,6 +28,7 @@ export const useRetryUpload = ({
 
     showUploadErrorAlert({
       onRetry: async () => {
+        AnalyticsService.track('Retry button pressed');
         try {
           setIsAlertOpened(false);
 

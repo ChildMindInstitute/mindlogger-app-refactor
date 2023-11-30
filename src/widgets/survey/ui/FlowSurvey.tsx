@@ -8,6 +8,7 @@ import {
   useActivityRecordsInitialization,
   useFlowRecordInitialization,
   useFlowState,
+  useFlowStateActions,
 } from '../model';
 import useTimer from '../model/hooks/useTimer';
 
@@ -22,15 +23,19 @@ function FlowSurvey({
   eventId,
   onClose,
 }: Props) {
+  const { step, pipeline, isTimerElapsed } = useFlowState({
+    appletId,
+    eventId,
+    flowId: entityType === 'flow' ? entityId : undefined,
+  });
+
   const {
     next,
     back,
-    step,
+    idleTimeoutNext,
     completeByTimer,
-    pipeline,
-    isTimerElapsed,
     clearFlowStorageRecord,
-  } = useFlowState({
+  } = useFlowStateActions({
     appletId,
     eventId,
     flowId: entityType === 'flow' ? entityId : undefined,
@@ -59,11 +64,13 @@ function FlowSurvey({
     onClose();
   }
 
-  function complete() {
+  function complete(reason: 'regular' | 'idle' = 'regular') {
     const isLast = step === pipeline.length - 1;
 
     if (isLast) {
       closeFlow();
+    } else if (reason === 'idle') {
+      idleTimeoutNext();
     } else {
       next();
     }

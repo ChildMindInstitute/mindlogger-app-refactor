@@ -28,6 +28,7 @@
     "score_on_subscale": "Le score pour la sous-échelle {{name}} est",
     "save": "Sauvegarder",
     "summary": "Résumé",
+    "alerts": "Alertes",
     "report_summary": "Résumé du rapport",
     "not_yet_completed": "Pas encore terminé",
     "last_completed": "Dernier en date terminé",
@@ -44,7 +45,14 @@
     "share_all_reports": "Partager tous les rapports"
   },
   "activity_chart": {
-    "title": "Veuillez passer l'évaluation pour que les données soient affichées."
+    "title": "Veuillez passer l'évaluation pour que les données soient affichées.",
+    "monday": "L",
+    "tuesday": "M",
+    "wednesday": "M",
+    "thursday": "J",
+    "friday": "V",
+    "saturday": "S",
+    "sunday": "D"
   },
   "calendar": {
     "months": "Janvier_Février_Mars_Avril_Mai_Juin_Juillet_Août_Septembre_Octobre_Novembre_Décembre",
@@ -160,11 +168,12 @@
     "email_address": "Adresse e-mail",
     "email_sent": "L'e-mail de réinitialisation a été envoyé",
     "email_send_error": "Cette adresse e-mail n'existe pas dans le système.",
-    "forgot_password": "Mot de passe oublié"
+    "forgot_password": "Mot de passe oublié?"
   },
   "login": {
     "new_user": "Nouvel utilisateur",
-    "forgot_password": "Mot de passe oublié",
+    "account_create": "Créer un compte",
+    "forgot_password": "Mot de passe oublié?",
     "what_is": "C'est quoi",
     "login_error": "La connexion a échoué.",
     "password_at_least_characters": "Le mot de passe doit être au moins de 6 caractères"
@@ -205,7 +214,8 @@
     "please_accept_terms": "Veuillez accepter les conditions d'utilisation.",
     "password_at_least_characters": "Le mot de passe doit être au moins de 6 caractères",
     "email_looks_incomplete": "Il semble que cet e-mail soit incomplet",
-    "password_no_spaces": "Le mot de passe ne doit pas contenir d'espaces vides"
+    "password_no_spaces": "Le mot de passe ne doit pas contenir d'espaces vides",
+    "sign_up_agree": "By signing up, you agree to MindLogger’s"
   },
   "geolocation": {
     "get_location": "LOCALISATION",

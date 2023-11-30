@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { AccessibilityProps } from 'react-native';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -8,6 +9,7 @@ import Foundation from 'react-native-vector-icons/Foundation';
 export { default as AboutIcon } from './About';
 export { default as DataIcon } from './Data';
 export { default as SurveyIcon } from './Survey';
+export { default as CloudLogo } from './CloudLogo';
 
 type IconProps = {
   color: string;
@@ -16,6 +18,10 @@ type IconProps = {
 
 export const CloseIcon: FC<IconProps> = props => (
   <AntDesign name="close" {...props} />
+);
+
+export const ChevronLeft: FC<IconProps> = props => (
+  <AntDesign name="left" {...props} />
 );
 
 export const CrossIcon: FC<IconProps> = props => (
@@ -62,11 +68,11 @@ export const RestartIcon: FC<IconProps> = props => (
   <FontAwesome name="refresh" {...props} />
 );
 
-export const PlayIcon: FC<IconProps> = props => (
+export const PlayIcon: FC<IconProps & AccessibilityProps> = props => (
   <Entypo name="controller-play" {...props} />
 );
 
-export const PauseIcon: FC<IconProps> = props => (
+export const PauseIcon: FC<IconProps & AccessibilityProps> = props => (
   <Foundation name="pause" {...props} />
 );
 

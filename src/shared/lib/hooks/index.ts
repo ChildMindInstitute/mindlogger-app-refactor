@@ -17,6 +17,9 @@ export { default as useFirebaseSetup } from './useFirebaseSetup';
 export { default as useIsOnline } from './useIsOnline';
 export { default as useOnlineEstablished } from './useOnlineEstablished';
 export { default as useActivityInfo } from './useActivityInfo';
+export { default as useAppletInfo } from './useAppletInfo';
 export { default as useCurrentRoute } from './useCurrentRoute';
+export { default as useCachedImage } from './useCachedImage';
+export { default as useCallbacksRefs } from './useCallbacksRefs';
 
 export * from './redux';

@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { FC } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -9,13 +10,14 @@ import { IdentityModel, useLoginMutation } from '@entities/identity';
 import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
 import {
+  AnalyticsService,
   executeIfOnline,
   useAppDispatch,
   useAppForm,
   useFormChanges,
 } from '@shared/lib';
 import { encryption } from '@shared/lib';
-import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
+import { YStack, Box, BoxProps, SubmitButton, Center, Link } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
 import { LoginFormSchema } from '../model';
@@ -26,8 +28,13 @@ type Props = {
 
 const LoginForm: FC<Props> = props => {
   const { t } = useTranslation();
+  const { navigate } = useNavigation();
 
   const dispatch = useAppDispatch();
+
+  const navigateToForgotPassword = () => {
+    navigate('ForgotPassword');
+  };
 
   const {
     mutate: login,
@@ -52,6 +59,10 @@ const LoginForm: FC<Props> = props => {
       UserInfoRecord.setEmail(user.email);
 
       SessionModel.storeSession(session);
+
+      AnalyticsService.login(user.id).then(() => {
+        AnalyticsService.track('Login Successful');
+      });
 
       props.onLoginSuccess();
     },
@@ -81,30 +92,52 @@ const LoginForm: FC<Props> = props => {
   return (
     <Box {...props}>
       <FormProvider {...form}>
-        <YStack space={8} mb={40}>
+        <YStack space={16}>
           <InputField
             name="email"
+            accessibilityLabel="login-email-input"
             placeholder={t('login_form:email_placeholder')}
           />
 
           <InputField
             secureTextEntry
             name="password"
+            accessibilityLabel="login-password-input"
             placeholder={t('auth:password')}
           />
 
           {error && (
             <ErrorMessage
               mode="light"
+              accessibilityLabel="login-error-message"
               error={{ message: error.evaluatedMessage! }}
             />
           )}
         </YStack>
 
+        <Center mt={42}>
+          <Link
+            textDecorationLine="underline"
+            accessibilityLabel="login-forgot-password"
+            onPress={navigateToForgotPassword}
+          >
+            {t('login:forgot_password')}
+          </Link>
+        </Center>
+
         <SubmitButton
+          mt={32}
           isLoading={isLoading}
+          accessibilityLabel="login-submit-putton"
+          borderRadius={30}
+          width="100%"
+          bg="$lighterGrey6"
+          textProps={{
+            fontSize: 14,
+            color: 'black',
+          }}
           onPress={submit}
-          buttonStyle={{ alignSelf: 'center' }}
+          buttonStyle={{ alignSelf: 'center', paddingVertical: 16 }}
         >
           {t('login_form:login')}
         </SubmitButton>

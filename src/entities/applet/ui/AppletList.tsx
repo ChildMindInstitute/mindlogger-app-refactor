@@ -48,6 +48,7 @@ const AppletList: FC<Props> = ({
   const renderItem: ListRenderItem<Applet> = useCallback(
     ({ item }) => (
       <AppletCard
+        accessibilityLabel={`applet-card-${item.id}`}
         applet={item}
         disabled={!!isRefreshing}
         onPress={() =>
@@ -66,19 +67,12 @@ const AppletList: FC<Props> = ({
     );
   }
 
-  if (!isRefreshing && !applets?.length) {
-    return (
-      <XStack flex={1} jc="center" ai="center">
-        <NoListItemsYet translationKey="applet_list_component:no_applets_yet" />
-      </XStack>
-    );
-  }
-
   return (
     <Box {...styledProps}>
       <FlatList
         contentContainerStyle={styles.flatList}
-        data={applets}
+        accessibilityLabel="applet-list"
+        data={applets ?? []}
         keyExtractor={getId}
         renderItem={renderItem}
         ItemSeparatorComponent={Separator}
@@ -87,6 +81,15 @@ const AppletList: FC<Props> = ({
         refreshControl={refreshControl}
         removeClippedSubviews={true}
         updateCellsBatchingPeriod={12}
+        ListEmptyComponent={
+          !isRefreshing ? (
+            <YStack flex={1} jc="flex-end" ai="center">
+              <NoListItemsYet translationKey="applet_list_component:no_applets_yet" />
+            </YStack>
+          ) : (
+            <></>
+          )
+        }
       />
     </Box>
   );

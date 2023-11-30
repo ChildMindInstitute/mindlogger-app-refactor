@@ -12,6 +12,7 @@ import { ActivityModel, QueueProcessingService } from '@app/entities/activity';
 import { MediaFilesCleaner } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
+import { LoginModel } from '@app/features/login';
 import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SystemRecord } from '@app/shared/lib/records';
 import { SessionModel } from '@entities/session';
@@ -31,7 +32,15 @@ import {
   Logger,
   useCurrentRoute,
 } from '@shared/lib';
-import { UserProfileIcon, HomeIcon, BackButton, Text, Box } from '@shared/ui';
+import {
+  UserProfileIcon,
+  HomeIcon,
+  BackButton,
+  Text,
+  Box,
+  ChevronLeft,
+  XStack,
+} from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
 import { onBeforeAppClose } from '../lib';
@@ -127,6 +136,8 @@ export default () => {
 
   useOnlineEstablished(processQueue);
 
+  LoginModel.useAnalyticsAutoLogin();
+
   return (
     <Stack.Navigator
       screenOptions={getScreenOptions}
@@ -154,14 +165,22 @@ export default () => {
 
           <Stack.Screen
             name="SignUp"
-            options={{
-              title: t('login:new_user'),
-              contentStyle: {
-                borderTopColor: colors.grey,
-                borderTopWidth: 1,
-              },
-            }}
             component={SignUpScreen}
+            options={{
+              headerBackTitle: 'Back',
+              title: '',
+              headerLeft: () => (
+                <BackButton>
+                  <XStack ai="center">
+                    <ChevronLeft color="white" size={16} />
+
+                    <Text ml={2} color="$white" fontSize={16}>
+                      Back
+                    </Text>
+                  </XStack>
+                </BackButton>
+              ),
+            }}
           />
         </>
       )}

@@ -12,11 +12,18 @@ import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
 import { PassSurveyModel } from '@features/pass-survey';
 import { LogTrigger } from '@shared/api';
-import { useActivityInfo, useAppDispatch, useAppSelector } from '@shared/lib';
+import {
+  Logger,
+  AnalyticsService,
+  useActivityInfo,
+  useAppDispatch,
+  useAppSelector,
+} from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
 import { getClientInformation } from '../lib';
 import {
+  createSvgFiles,
   fillNullsForHiddenItems,
   FinishReason,
   getActivityStartAt,
@@ -114,6 +121,11 @@ function FinishItem({
       return;
     }
 
+    await createSvgFiles(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+    );
+
     const alerts = mapAnswersToAlerts(
       activityStorageRecord.items,
       activityStorageRecord.answers,
@@ -145,6 +157,20 @@ function FinishItem({
 
     const executionGroupKey = getExecutionGroupKey(progressRecord);
 
+    const logActivityName = getActivityName(activityId);
+
+    const appletName = applet?.displayName;
+
+    Logger.log(
+      `[Finish.completeActivity]: Activity "${logActivityName}|${activityId}" completed, applet "${appletName}|${appletId}"`,
+    );
+
+    if (flowId) {
+      Logger.log(
+        `[Finish.completeActivity]: Flow "${flowId}" completed, applet "${appletName}|${appletId}"`,
+      );
+    }
+
     pushInQueue({
       appletId,
       createdAt: Date.now(),
@@ -160,7 +186,7 @@ function FinishItem({
       startTime: getActivityStartAt(progressRecord)!,
       endTime: Date.now(),
       scheduledTime: scheduledDate,
-      logActivityName: getActivityName(activityId),
+      logActivityName,
       logCompletedAt: new Date().toString(),
       client: getClientInformation(),
       alerts,
@@ -169,6 +195,8 @@ function FinishItem({
     });
 
     clearActivityStorageRecord();
+
+    AnalyticsService.track('Assessment completed');
 
     const success = await processQueue();
 

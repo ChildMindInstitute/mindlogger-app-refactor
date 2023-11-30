@@ -8,9 +8,12 @@ import NavigationPanel from './NavigationPanel';
 import NextButton from './NextButton';
 import Progress from './Progress';
 import UndoButton from './UndoButton';
+import { undoPressed } from './useOnUndo';
 import ViewList from './ViewList';
 
 export * from './contexts';
+
+export { default as useOnUndo } from './useOnUndo';
 
 type Props = PropsWithChildren<{
   startFrom: number;
@@ -103,6 +106,7 @@ export function Stepper({
 
   const undo = useCallback(() => {
     onUndoRef.current?.(stepRef.current);
+    undoPressed();
   }, []);
 
   const handlersContext = useMemo(
@@ -132,6 +136,8 @@ export function Stepper({
     </HandlersContext.Provider>
   );
 }
+
+export type StepperProps = Props;
 
 Stepper.Progress = Progress;
 Stepper.ViewList = ViewList;

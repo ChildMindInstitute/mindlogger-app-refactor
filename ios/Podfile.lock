@@ -161,6 +161,12 @@ PODS:
     - GoogleUtilities/Logger
   - hermes-engine (0.70.10)
   - libevent (2.1.12)
+  - Mixpanel-swift (4.1.3):
+    - Mixpanel-swift/Complete (= 4.1.3)
+  - Mixpanel-swift/Complete (4.1.3)
+  - MixpanelReactNative (2.3.1):
+    - Mixpanel-swift (= 4.1.3)
+    - React-Core
   - MMKV (1.3.1):
     - MMKVCore (~> 1.3.1)
   - MMKVCore (1.3.1)
@@ -412,7 +418,7 @@ PODS:
     - React-Core
   - react-native-get-random-values (1.8.0):
     - React-Core
-  - react-native-image-picker (5.3.1):
+  - react-native-image-picker (7.0.3):
     - React-Core
   - react-native-mmkv (2.5.1):
     - MMKV (>= 1.2.13)
@@ -535,11 +541,12 @@ PODS:
     - React-Core
   - RNPermissions (3.7.3):
     - React-Core
-  - RNReanimated (3.1.0):
+  - RNReanimated (3.5.4):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
     - glog
+    - hermes-engine
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
@@ -549,6 +556,7 @@ PODS:
     - React-Core/RCTWebSocket
     - React-CoreModules
     - React-cxxreact
+    - React-hermes
     - React-jsi
     - React-jsiexecutor
     - React-jsinspector
@@ -562,7 +570,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.20.0):
+  - RNScreens (3.27.0):
     - React-Core
     - React-RCTImage
   - RNSensors (7.3.6):
@@ -609,6 +617,7 @@ DEPENDENCIES:
   - GoogleUtilities
   - hermes-engine (from `../node_modules/react-native/sdks/hermes/hermes-engine.podspec`)
   - libevent (~> 2.1.12)
+  - MixpanelReactNative (from `../node_modules/mixpanel-react-native`)
   - nanopb
   - OpenSSL-Universal (= 1.1.1100)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
@@ -696,6 +705,7 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleUtilities
     - libevent
+    - Mixpanel-swift
     - MMKV
     - MMKVCore
     - nanopb
@@ -719,6 +729,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes/hermes-engine.podspec"
+  MixpanelReactNative:
+    :path: "../node_modules/mixpanel-react-native"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -863,6 +875,8 @@ SPEC CHECKSUMS:
   GoogleUtilities: 13e2c67ede716b8741c7989e26893d151b2b2084
   hermes-engine: 409b787d72bde225a3e5ce982f9c3ace6ff56691
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
+  Mixpanel-swift: d7c7c6a2f7c65f735af3cb4746ed61a5aab0e551
+  MixpanelReactNative: 07c808338a1eb69b0c9077668e3acfb0b2dd6689
   MMKV: 5a07930c70c70b86cd87761a42c8f3836fb681d7
   MMKVCore: e50135dbd33235b6ab390635991bab437ab873c0
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
@@ -889,7 +903,7 @@ SPEC CHECKSUMS:
   react-native-flipper: 6e4e344a0104a34a4e189a9ef2b3b5634b516dc8
   react-native-geolocation: 7383cbe9fa75b168bbbe40b566070fd0b44d30d6
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
-  react-native-image-picker: ec9b713e248760bfa0f879f0715391de4651a7cb
+  react-native-image-picker: 2381c008bbb09e72395a2d043c147b11bd1523d9
   react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
@@ -920,8 +934,8 @@ SPEC CHECKSUMS:
   RNFileLogger: 9eaf7a6ea709eaaffe646cc485b98ae1dbf1e9f0
   RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
   RNPermissions: 4f5e03e3272fdc6fcee6e571dfdcbad128aadffe
-  RNReanimated: 47df570b2e2b9eba34e78a299dd6d44596ff7bb6
-  RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
+  RNReanimated: 12a905af0de1a7f728eacebc5a6af1cc5ada64ad
+  RNScreens: 2b19e2471db8a581c83f381f4ea5d43071c9a3bf
   RNSensors: 117ba71c7eeeea0407ea0c0bb79e3495d602049b
   RNSVG: c1e76b81c76cdcd34b4e1188852892dc280eb902
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17

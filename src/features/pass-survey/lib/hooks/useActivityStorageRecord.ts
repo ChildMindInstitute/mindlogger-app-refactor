@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { useMMKVObject } from 'react-native-mmkv';
 
+import { Report } from '@app/entities/activity';
 import { createSecureStorage } from '@app/shared/lib';
 
 import { PipelineItem, PipelineItemAnswer, UserAction } from '../types';
@@ -26,6 +27,8 @@ export type ActivityState = {
   appletVersion: string;
   timers: Timers;
   actions: UserAction[];
+  scoreSettings: Array<Report>;
+  hasSummary: boolean;
   context: Record<string, unknown>;
 };
 

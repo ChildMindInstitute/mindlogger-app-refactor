@@ -5,6 +5,7 @@ import type { StackProps, TextProps } from '@tamagui/core';
 import Center from './Center';
 import Input from './Input';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
+import Link from './Link';
 import RowButton from './RowButton';
 import ScrollView from './ScrollView';
 import Splash from './Splash';
@@ -39,6 +40,7 @@ export { default as DateTimePicker } from './DateTimePicker';
 export { default as ScrollButton } from './ScrollButton';
 export { default as ScrollableContent } from './ScrollableContent';
 export { default as TouchableOpacity } from './TouchableOpacity';
+export * from './SketchCanvas';
 
 export {
   StatusBar,
@@ -54,4 +56,5 @@ export {
   SubmitButton,
   Splash,
   Text,
+  Link,
 };
