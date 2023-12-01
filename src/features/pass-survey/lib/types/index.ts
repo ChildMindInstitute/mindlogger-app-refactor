@@ -4,3 +4,4 @@ export * from './activityItem';
 export * from './pipelineItemAnswer';
 export * from './userAction';
 export * from './summary';
+export * from './stepperNextButtonType';

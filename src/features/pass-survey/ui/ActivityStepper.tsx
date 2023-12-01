@@ -22,6 +22,7 @@ import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
 import {
   ActivityIdentityContext,
   FlankerResponse,
+  StepperNextButtonType,
   useTextVariablesReplacer,
 } from '../lib';
 import { useActivityState, useActivityStepper, useIdleTimer } from '../model';
@@ -104,6 +105,19 @@ function ActivityStepper({
   const currentStep = activityStorageRecord?.step ?? 0;
 
   const nextButtonText = getNextButtonText();
+
+  const getNextButtonType = (text: string): StepperNextButtonType | null => {
+    switch (text) {
+      case t('activity_navigation:done'):
+        return StepperNextButtonType.DONE;
+      case t('activity_navigation:skip'):
+        return StepperNextButtonType.SKIP;
+      case t('activity_navigation:next'):
+        return StepperNextButtonType.NEXT;
+      default:
+        return null;
+    }
+  };
 
   const tutorialViewerRef = useRef<TutorialViewerRef | null>(null);
 
@@ -230,7 +244,13 @@ function ActivityStepper({
           <Stepper.NavigationPanel mx={16}>
             {canMoveBack && <Stepper.BackButton isIcon />}
             {canReset && <Stepper.UndoButton isIcon />}
-            {canMoveNext && <Stepper.NextButton isIcon />}
+
+            {canMoveNext && (
+              <Stepper.NextButton
+                type={getNextButtonType(nextButtonText)}
+                isIcon
+              />
+            )}
           </Stepper.NavigationPanel>
         )}
 
@@ -300,7 +320,9 @@ function ActivityStepper({
             )}
 
             {canMoveNext && (
-              <Stepper.NextButton>{t(nextButtonText)}</Stepper.NextButton>
+              <Stepper.NextButton type={getNextButtonType(nextButtonText)}>
+                {t(nextButtonText)}
+              </Stepper.NextButton>
             )}
           </Stepper.NavigationPanel>
         )}

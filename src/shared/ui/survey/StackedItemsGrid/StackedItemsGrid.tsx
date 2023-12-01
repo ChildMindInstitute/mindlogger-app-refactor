@@ -34,7 +34,8 @@ const AxisListItemText: FC<TextProps & { hasTooltip?: boolean }> = styled(
 const AxisListItem: FC<{
   option?: StackedRowItemValue;
   maxWidth?: string | number;
-}> = ({ option, maxWidth }) => {
+  accessibilityLabel: string | null;
+}> = ({ option, maxWidth, accessibilityLabel }) => {
   const title = option?.text || option?.rowName;
   const imageUrl = option?.image || option?.rowImage;
 
@@ -50,7 +51,9 @@ const AxisListItem: FC<{
               <AxisListItemText hasTooltip>{title}</AxisListItemText>
             </Tooltip>
           ) : (
-            <AxisListItemText>{title}</AxisListItemText>
+            <AxisListItemText accessibilityLabel={accessibilityLabel ?? ''}>
+              {title}
+            </AxisListItemText>
           )}
 
           {imageUrl && (
@@ -73,11 +76,15 @@ const RowHeader: FC<RowHeaderProps> = ({ options }) => {
   return (
     <YStack>
       <XStack>
-        <AxisListItem maxWidth="25%" />
+        <AxisListItem accessibilityLabel={null} maxWidth="25%" />
 
         {options.map((option, optionIndex) => (
           <YStack key={option.id} flex={1}>
-            <AxisListItem key={optionIndex + optionIndex} option={option} />
+            <AxisListItem
+              accessibilityLabel={`option_text_${optionIndex}`}
+              key={optionIndex + optionIndex}
+              option={option}
+            />
           </YStack>
         ))}
       </XStack>
@@ -101,7 +108,11 @@ const RowListItem: FC<RowListItemProps & AccessibilityProps> = ({
   return (
     <YStack>
       <XStack>
-        <AxisListItem maxWidth="25%" option={item} />
+        <AxisListItem
+          accessibilityLabel={`row_text_${item.id}`}
+          maxWidth="25%"
+          option={item}
+        />
 
         {options.map(option => (
           <AxisListItemContainer key={option.id}>

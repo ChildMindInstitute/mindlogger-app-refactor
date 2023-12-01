@@ -52,23 +52,29 @@ const SettingsScreen: FC = () => {
         <YStack>
           <YStack space="$2" my="$4" ai="center">
             <UserIcon color={colors.darkGrey} size={45} />
-            <Text>{userName}</Text>
-            <Text>{userEmail}</Text>
-            <Text>{`${t('about:device_id')}: ${hashedDeviceId}`}</Text>
+            <Text accessibilityLabel="account_name">{userName}</Text>
+            <Text accessibilityLabel="account_email">{userEmail}</Text>
+
+            <Text accessibilityLabel="account_device_id">{`${t(
+              'about:device_id',
+            )}: ${hashedDeviceId}`}</Text>
           </YStack>
 
           <RowButton
             onPress={navigateToChangePasswordScreen}
+            accessibilityLabel="change_password-button"
             title={t('settings:change_pass')}
           />
 
           <RowButton
             onPress={navigateToAppLanguage}
+            accessibilityLabel="change_language-button"
             title={t('language_screen:change_app_language')}
           />
 
           <RowButton
             onPress={navigateToAppLogs}
+            accessibilityLabel="upload_logs-button"
             title={t('settings:upload_logs')}
           />
 

@@ -360,6 +360,7 @@ function ActivityItem({
         {question && (
           <Box mx={16} mb={20}>
             <MarkdownMessage
+              accessibilityLabel="item_display_content"
               flex={1}
               alignItems={alignMessageToLeft ? undefined : 'center'}
               content={textVariableReplacer(question)}

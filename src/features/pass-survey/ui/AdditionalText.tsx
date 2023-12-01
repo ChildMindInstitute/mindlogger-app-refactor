@@ -26,6 +26,7 @@ function AdditionalText({ value, onChange, required }: Props) {
   return (
     <Input
       placeholder={placeholder}
+      accessibilityLabel="additional_text-input"
       placeholderTextColor={colors.mediumGrey}
       value={value}
       onChangeText={onChange}

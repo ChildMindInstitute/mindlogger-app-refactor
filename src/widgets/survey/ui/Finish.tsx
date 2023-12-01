@@ -246,11 +246,13 @@ function FinishItem({
           {finishReason === 'time-is-up' && t('additional:time-end')}
         </Text>
 
-        <Text fontSize={16} mb={20}>
+        <Text fontSize={16} mb={20} accessibilityLabel="answer_saved-label">
           {t('additional:saved_answers')}
         </Text>
 
-        <Button onPress={onCloseEntity}>{t('additional:close')}</Button>
+        <Button accessibilityLabel="close-button" onPress={onCloseEntity}>
+          {t('additional:close')}
+        </Button>
       </Center>
     </ImageBackground>
   );
