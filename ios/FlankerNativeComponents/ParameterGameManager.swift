@@ -8,12 +8,14 @@
 
 import Foundation
 import UIKit
+import Promises
+import React
  
 class ParameterGameManager {
   static let shared = ParameterGameManager()
   private var allParameters: ParameterModel?
   var fixationImage: UIImageView?
-
+  
   func setJsonWithParameters(json: String) {
     guard
       let jsonData = json.data(using: .utf8),
@@ -21,30 +23,40 @@ class ParameterGameManager {
     else { return }
     allParameters = parameters
   }
-
+  
   func getParameters() -> ParameterModel? {
     return allParameters
   }
-
-  func loadAllImage(dataJson: String) {
+  
+  func loadAllImage(dataJson: String) -> Promise<[UIImage]>? {
     guard
       let jsonData = dataJson.data(using: .utf8),
       let parameters: ParameterModel = try? JSONDecoder().decode(ParameterModel.self, from: jsonData)
-    else { return }
-
-    if let url = URL(string: parameters.fixation) {
-      ImageLoader().loadImageWithUrl(url)
+    else { return nil }
+    
+    var urls: [URL] = []
+    
+    if let fixationUrl = URL(string: parameters.fixation) {
+      urls.append(fixationUrl)
     }
-
+    
     parameters.trials.forEach { trial in
       if let url = URL(string: trial.stimulus.en) {
-        ImageLoader().loadImageWithUrl(url)
+        urls.append(url)
       }
       trial.choices.forEach { choice in
         if let url = URL(string: choice.name.en) {
-          ImageLoader().loadImageWithUrl(url)
+          urls.append(url)
         }
       }
+    }
+    
+    return DispatchQueue.main.sync {
+      let promises: [Promise<UIImage>] = urls.map{url in
+        return ImageLoader().downloadImage(url: url)
+      }
+      
+      return all(promises)
     }
   }
 }

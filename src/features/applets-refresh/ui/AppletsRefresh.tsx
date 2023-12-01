@@ -20,10 +20,13 @@ const AppletsRefresh: FC<Props> = props => {
     AppletModel.selectors.selectInProgressApplets,
   );
 
+  const completions = useAppSelector(AppletModel.selectors.selectCompletions);
+
   const { refresh, isRefreshing } = useRefresh(async () => {
     await NotificationModel.NotificationRefreshService.refresh(
       queryClient,
       storeProgress,
+      completions,
       LogTrigger.PullToRefresh,
     );
     Logger.send();

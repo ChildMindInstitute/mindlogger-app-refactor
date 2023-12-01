@@ -1,13 +1,24 @@
 import { ActivityPipelineType, StoreEntitiesProgress } from '@app/abstract/lib';
-import { AppletDetailsDto, EventsService } from '@app/shared/api';
-import { getMonthAgoDate, ILogger } from '@app/shared/lib';
+import {
+  AppletDetailsDto,
+  AppletDto,
+  EntitiesCompletionsDto,
+} from '@app/shared/api';
+import { ILogger } from '@app/shared/lib';
 
 import { AppletDetails, CompletedEntity } from '../../lib';
 import { mapAppletDetailsFromDto, mapCompletedEntityFromDto } from '../mappers';
 import { selectInProgressEntities } from '../selectors';
 import { actions } from '../slice';
 
-class ProgressSyncService {
+export interface IAppletProgressSyncService {
+  sync(
+    appletDto: AppletDto,
+    appletCompletions: EntitiesCompletionsDto,
+  ): Promise<void>;
+}
+
+class ProgressSyncService implements IAppletProgressSyncService {
   private logger: ILogger;
   private dispatch: AppDispatch;
   private state: RootState;
@@ -22,20 +33,18 @@ class ProgressSyncService {
     return selectInProgressEntities(this.state);
   }
 
-  private async syncWithAppletDto(appletDto: AppletDetailsDto) {
+  private async syncWithAppletDto(
+    appletDto: AppletDetailsDto,
+    appletCompletions: EntitiesCompletionsDto,
+  ) {
     const appletDetails = mapAppletDetailsFromDto(appletDto);
-    const fromDate = getMonthAgoDate();
 
     try {
-      const response = await EventsService.getCompletedEntities({
-        fromDate,
-        appletId: appletDetails.id,
-        version: appletDetails.version,
-      });
+      const { activities, activityFlows } = appletCompletions;
 
       const completedEntities: CompletedEntity[] = [
-        ...response.data.result.activities.map(mapCompletedEntityFromDto),
-        ...response.data.result.activityFlows.map(mapCompletedEntityFromDto),
+        ...activities.map(mapCompletedEntityFromDto),
+        ...activityFlows.map(mapCompletedEntityFromDto),
       ];
 
       completedEntities.map(completedEntity =>
@@ -43,7 +52,7 @@ class ProgressSyncService {
       );
     } catch (error) {
       throw new Error(
-        '[ProgressSyncService]: Error occurred during getting progress entities from api:\n\n' +
+        '[ProgressSyncService.syncWithAppletDto]: Error occurred during sync progress entities:\n\n' +
           error,
       );
     }
@@ -101,9 +110,12 @@ class ProgressSyncService {
     }
   }
 
-  public sync(appletDto: AppletDetailsDto) {
+  public sync(
+    appletDto: AppletDetailsDto,
+    appletCompletions: EntitiesCompletionsDto,
+  ) {
     try {
-      return this.syncWithAppletDto(appletDto);
+      return this.syncWithAppletDto(appletDto, appletCompletions);
     } catch (error) {
       this.logger.warn(
         '[ProgressSyncService.sync]: Error occurred: \nInternal Error: \n\n' +

@@ -2,7 +2,7 @@ import React, { FC, useMemo, useState } from 'react';
 import { AccessibilityProps } from 'react-native';
 
 import { shuffle } from '@shared/lib';
-import { YStack, RadioGroup, Box } from '@shared/ui';
+import { YStack, RadioGroup, Box, useOnUndo } from '@shared/ui';
 
 import RadioItem from './RadioItem';
 import RadioOption from './types';
@@ -27,7 +27,9 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
   accessibilityLabel,
 }) => {
   const { options, randomizeOptions, addTooltip, setPalette } = config;
-  const [radioValueId, setRadioValueId] = useState(initialValue?.id);
+  const [radioValueId, setRadioValueId] = useState(initialValue?.id ?? null);
+
+  useOnUndo(() => setRadioValueId(null));
 
   const optionsList = useMemo(() => {
     if (randomizeOptions) {
@@ -41,7 +43,7 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
   const onValueChange = (value: string) => {
     const selectedOption = options.find(option => option.id === value);
 
-    setRadioValueId(selectedOption?.id);
+    setRadioValueId(selectedOption?.id ?? null);
 
     onChange(selectedOption!);
   };

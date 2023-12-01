@@ -6,9 +6,13 @@ import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 import { RESULTS } from 'react-native-permissions';
 
-import { getLocationPermissions, IS_ANDROID } from '@app/shared/lib';
-import { Center, GeolocationIcon, Text } from '@app/shared/ui';
-import { useLocationPermissions } from '@shared/lib';
+import {
+  useIsOnline,
+  useLocationPermissions,
+  getLocationPermissions,
+  IS_ANDROID,
+} from '@shared/lib';
+import { Center, GeolocationIcon, Text } from '@shared/ui';
 
 import { Coordinates } from './types';
 
@@ -28,6 +32,7 @@ type Props = {
 const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
   const { t } = useTranslation();
   const [errorMessage, setErrorMessage] = useState('');
+  const isOnline = useIsOnline();
   const locationPermission = useLocationPermissions();
 
   const descriptionText = IS_ANDROID
@@ -42,9 +47,14 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
           longitude: successResult.coords.longitude,
         };
         onChange(coordinatesResult);
+        setErrorMessage('');
       },
       () => {
         setErrorMessage(t('geolocation:service_not_available'));
+      },
+      {
+        timeout: 60 * 1000,
+        enableHighAccuracy: !isOnline,
       },
     );
   };

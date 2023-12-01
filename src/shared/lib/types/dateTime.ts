@@ -8,3 +8,5 @@ export type DayMonthYear = {
   month: number;
   year: number;
 };
+
+export type DatesFromTo = { from: Date; to: Date };

@@ -14,7 +14,7 @@ jest.mock('react-native-file-access', () => {
   };
 });
 
-require('react-native-reanimated/lib/commonjs/reanimated2/jestUtils').setUpTests();
+require('react-native-reanimated/src/reanimated2/jestUtils').setUpTests();
 
 jest.mock('react-native-reanimated', () => {
   global.__reanimatedWorkletInit = () => {};
@@ -60,6 +60,8 @@ jest.mock('@react-native-community/geolocation', () =>
 );
 
 jest.mock('react-native-sensors', () => jest.mock('react-native-sensors'));
+
+jest.mock('mixpanel-react-native', () => jest.mock('mixpanel-react-native'));
 
 jest.mock('react-native-tcp-socket', () => {
   return {

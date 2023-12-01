@@ -48,6 +48,10 @@ export type ProgressPayload = EntityProgress & {
 
 export type CompletedEntities = Record<EntityId, number>;
 
+export type EventCompletions = Record<EventId, number[]>;
+
+export type CompletedEventEntities = Record<EntityId, EventCompletions>;
+
 type EventsProgress = Record<EventId, ProgressPayload>;
 
 type EntitiesProgress = Record<EntityId, EventsProgress>;
