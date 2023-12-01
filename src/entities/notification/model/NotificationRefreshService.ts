@@ -1,6 +1,10 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { StoreProgress, convertProgress } from '@app/abstract/lib';
+import {
+  CompletedEventEntities,
+  StoreProgress,
+  convertProgress,
+} from '@app/abstract/lib';
 import { AppletModel } from '@app/entities/applet';
 import { EventModel } from '@app/entities/event';
 import {
@@ -44,6 +48,7 @@ type NotificationRefreshService = {
   refresh: (
     queryClient: QueryClient,
     storeProgress: StoreProgress,
+    completions: CompletedEventEntities,
     logTrigger: LogTrigger,
   ) => Promise<void>;
 };
@@ -61,6 +66,7 @@ const createNotificationRefreshService = (
   const refreshInternal = async (
     queryClient: QueryClient,
     storeProgress: StoreProgress,
+    completions: CompletedEventEntities,
   ): Promise<AppletNotificationDescribers[]> => {
     const result: Array<AppletNotificationDescribers> = [];
 
@@ -145,6 +151,7 @@ const createNotificationRefreshService = (
         appletName: applet.name,
         eventEntities: entityEvents,
         progress,
+        completions,
       });
 
       const appletNotifications: AppletNotificationDescribers = builder.build();
@@ -171,6 +178,7 @@ const createNotificationRefreshService = (
   const refresh = async (
     queryClient: QueryClient,
     storeProgress: StoreProgress,
+    completions: CompletedEventEntities,
     logTrigger: LogTrigger,
   ) => {
     logger.info(
@@ -195,7 +203,11 @@ const createNotificationRefreshService = (
     try {
       NotificationManager.mutex.setBusy();
 
-      describers = await refreshInternal(queryClient, storeProgress);
+      describers = await refreshInternal(
+        queryClient,
+        storeProgress,
+        completions,
+      );
 
       logger.info(
         '[NotificationRefreshService.refresh]: Completed. Notifications rescheduled',

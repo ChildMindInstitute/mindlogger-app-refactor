@@ -5,7 +5,7 @@ const now = new Date();
 
 describe('ScheduledDateCalculator', () => {
   describe('Test Always Available events', () => {
-    it("Should return today's start of day", () => {
+    it('Should return today with time eq.to start of day or to timeFrom', () => {
       const eventAvailability = {
         availabilityType: 'AlwaysAvailable',
         periodicityType: 'ALWAYS',
@@ -23,12 +23,20 @@ describe('ScheduledDateCalculator', () => {
         scheduledAt: null,
       };
 
-      const resultDate = ScheduledDateCalculator.calculate(
-        scheduleEvent,
-        false,
-      );
+      let resultDate = ScheduledDateCalculator.calculate(scheduleEvent, false);
 
-      const expectedDate = startOfDay(now);
+      let expectedDate = startOfDay(now);
+
+      expect(resultDate).toEqual(expectedDate);
+
+      // sub-test 2 - with timeFrom
+      eventAvailability.timeFrom = { hours: 16, minutes: 15 };
+
+      resultDate = ScheduledDateCalculator.calculate(scheduleEvent, false);
+
+      expectedDate = startOfDay(now);
+      expectedDate.setHours(16);
+      expectedDate.setMinutes(15);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -56,13 +64,26 @@ describe('ScheduledDateCalculator', () => {
       return scheduleEvent;
     };
 
-    it('Should return null when selected date is in the past', () => {
+    it('Should return null when selected date is in the past and earlier than yesterday', () => {
+      const onceEvent = getOnceEvent();
+      onceEvent.selectedDate = subDays(startOfDay(now), 2);
+
+      const resultDate = ScheduledDateCalculator.calculate(onceEvent, false);
+
+      expect(resultDate).toEqual(null);
+    });
+
+    it('Should return selectedDate when selected date is in the past and less than yesterday', () => {
       const onceEvent = getOnceEvent();
       onceEvent.selectedDate = subDays(startOfDay(now), 1);
 
       const resultDate = ScheduledDateCalculator.calculate(onceEvent, false);
 
-      expect(resultDate).toEqual(null);
+      const expectedDate = new Date(onceEvent.selectedDate);
+      expectedDate.setHours(onceEvent.availability.timeFrom.hours);
+      expectedDate.setMinutes(onceEvent.availability.timeFrom.minutes);
+
+      expect(resultDate).toEqual(expectedDate);
     });
 
     it("Should return tomorrow's day with timeFrom when selected date is tomorrow and timeFrom is set", () => {
@@ -86,6 +107,20 @@ describe('ScheduledDateCalculator', () => {
       const resultDate = ScheduledDateCalculator.calculate(onceEvent, false);
 
       const expectedDate = startOfDay(now);
+
+      expect(resultDate).toEqual(expectedDate);
+    });
+
+    it("Should return todays's start of day with timeFrom when selected date is today and time from is set", () => {
+      const onceEvent = getOnceEvent();
+      onceEvent.selectedDate = startOfDay(now);
+      onceEvent.availability.timeFrom = { hours: 16, minutes: 30 };
+
+      const resultDate = ScheduledDateCalculator.calculate(onceEvent, false);
+
+      const expectedDate = startOfDay(now);
+      expectedDate.setHours(16);
+      expectedDate.setMinutes(30);
 
       expect(resultDate).toEqual(expectedDate);
     });

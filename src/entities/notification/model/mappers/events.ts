@@ -23,6 +23,7 @@ export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
       startDate: buildDateFromDto(dto.availability.startDate),
       endDate: buildDateFromDto(dto.availability.endDate),
       oneTimeCompletion: dto.availability.oneTimeCompletion,
+      allowAccessBeforeFromTime: dto.availability.allowAccessBeforeFromTime,
     },
     notificationSettings: {
       notifications:

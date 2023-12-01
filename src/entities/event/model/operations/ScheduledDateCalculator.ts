@@ -3,6 +3,7 @@ import {
   differenceInMonths,
   isEqual,
   startOfDay,
+  subDays,
   subMinutes,
   subMonths,
 } from 'date-fns';
@@ -68,9 +69,9 @@ class ScheduledDateCalculator {
     specificDay: Date,
     availability: EventAvailability,
   ): Date | null {
-    const today = startOfDay(this.getNow());
+    const yesterday = subDays(startOfDay(this.getNow()), 1);
 
-    if (specificDay < today) {
+    if (specificDay < yesterday) {
       return null;
     }
 

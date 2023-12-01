@@ -1,487 +1,161 @@
-import {
-  addDays,
-  addMilliseconds,
-  addMonths,
-  isEqual,
-  startOfDay,
-  subDays,
-  subMonths,
-  subWeeks,
-} from 'date-fns';
+import { addDays, isEqual, startOfDay } from 'date-fns';
 import i18next from 'i18next';
-import { v4 as uuidv4 } from 'uuid';
 
 import {
   ActivityPipelineType,
-  Progress,
   NotificationTriggerType,
   PeriodicityType,
-  ProgressPayload,
 } from '@app/abstract/lib';
-import { getDiff, HourMinute } from '@app/shared/lib';
+import { DatesFromTo, Logger } from '@app/shared/lib';
 
+import { NotificationDaysExtractor } from './NotificationDaysExtractor';
+import { NotificationUtility } from './NotificationUtility';
+import { ReminderCreator } from './ReminderCreator';
 import {
   AppletNotificationDescribers,
   Entity,
   EventEntity,
-  NotificationSetting,
   EventNotificationDescribers,
-  InactiveReason,
   NotificationBuilderInput,
   NotificationDescriber,
   NotificationType,
+  RandomCrossBorderType,
   ReminderSetting,
   ScheduleEvent,
 } from '../../lib/types';
 
 const NumberOfDaysForSchedule = 14;
-const DaysInWeek = 7;
-
-type ReminderSettings = {
-  setting: ReminderSetting | null;
-  excludeWeekends: boolean;
-};
 
 interface INotificationBuilder {
   build: () => AppletNotificationDescribers;
 }
 
 class NotificationBuilder implements INotificationBuilder {
-  private now: Date;
-
-  private progress: Progress;
-
-  private appletId: string;
-
   private appletName: string;
 
   private eventEntities: EventEntity[];
 
-  private _weekDays: Date[] | null;
-
   private keepDebugData: boolean;
 
+  private notificationDaysExtractor: NotificationDaysExtractor;
+
+  private reminderCreator: ReminderCreator;
+
+  private utility: NotificationUtility;
+
+  private appletId: string;
+
   constructor(inputData: NotificationBuilderInput) {
-    this.now = new Date();
-    this.progress = inputData.progress;
-    this.appletId = inputData.appletId;
     this.appletName = inputData.appletName;
     this.eventEntities = inputData.eventEntities;
-    this._weekDays = null;
+
     this.keepDebugData = false;
-  }
 
-  private get currentDay(): Date {
-    return startOfDay(this.now);
-  }
-
-  private get weekDays(): Date[] {
-    if (this._weekDays) {
-      return this._weekDays;
-    }
-
-    const aWeekAgoDay = subWeeks(this.currentDay, 1);
-
-    const result: Date[] = [];
-
-    for (let i = 0; i < NumberOfDaysForSchedule + DaysInWeek; i++) {
-      const current = addDays(aWeekAgoDay, i);
-      const weekDay = current.getDay();
-      if (weekDay >= 1 && weekDay <= 5) {
-        result.push(current);
-      }
-    }
-    this._weekDays = result;
-
-    return this._weekDays;
-  }
-
-  private getProgressRecord(
-    entityId: string,
-    eventId: string,
-  ): ProgressPayload | null {
-    const record = this.progress[this.appletId]?.[entityId]?.[eventId];
-    return record ?? null;
-  }
-
-  private isReminderSet(reminder: ReminderSetting | null): boolean {
-    return (
-      !!reminder &&
-      (reminder.activityIncomplete > 0 ||
-        reminder.reminderTime.hours > 0 ||
-        reminder.reminderTime.minutes > 0)
-    );
-  }
-
-  private generateEventName(
-    entityName: string,
-    periodicity: PeriodicityType,
-    notifications: NotificationSetting[],
-    reminder: ReminderSetting | null,
-  ) {
-    const isReminderSet = this.isReminderSet(reminder);
-
-    const result = `For ${entityName}, ${periodicity}, ${
-      notifications.length
-    } notifications, reminder ${isReminderSet ? 'set' : 'unset'}`;
-    return result;
-  }
-
-  private markIfNotificationOutdated(notification: NotificationDescriber) {
-    if (notification.scheduledAt < this.now.valueOf()) {
-      notification.isActive = false;
-      notification.inactiveReason = InactiveReason.Outdated;
-    }
-  }
-
-  private markIfFallOnWeekend(notification: NotificationDescriber) {
-    const day = startOfDay(notification.scheduledAt);
-
-    const isWeekend = day.getDay() === 6 || day.getDay() === 0;
-
-    if (isWeekend) {
-      notification.isActive = false;
-      notification.inactiveReason = InactiveReason.FallOnWeekends;
-    }
-  }
-
-  private markAllAsInactiveDueToEntityHidden(
-    notifications: NotificationDescriber[],
-  ) {
-    for (let notification of notifications) {
-      notification.isActive = false;
-      notification.inactiveReason = InactiveReason.EntityHidden;
-    }
-  }
-
-  private getActivityCompleteDateTime(
-    entityId: string,
-    eventId: string,
-  ): Date | null {
-    const progress = this.getProgressRecord(entityId, eventId);
-
-    return progress ? progress.endAt : null;
-  }
-
-  private getRandomInt(max: number): number {
-    return Math.floor(Math.random() * max);
-  }
-
-  private getDayFrom(
-    firstScheduleDay: Date,
-    periodStartDay: Date | null,
-  ): Date {
-    let dayFrom;
-    if (!periodStartDay) {
-      dayFrom = firstScheduleDay;
-    } else {
-      dayFrom =
-        periodStartDay > firstScheduleDay ? periodStartDay : firstScheduleDay;
-    }
-    return dayFrom;
-  }
-
-  private getDayTo(lastScheduleDay: Date, periodEndDay: Date | null): Date {
-    let dayTo;
-    if (!periodEndDay) {
-      dayTo = lastScheduleDay;
-    } else {
-      dayTo = periodEndDay < lastScheduleDay ? periodEndDay : lastScheduleDay;
-    }
-    return dayTo;
-  }
-
-  private extractDaysFromPeriodicitySettings(
-    firstScheduleDay: Date,
-    lastScheduleDay: Date,
-    periodStartDay: Date | null,
-    periodEndDay: Date | null,
-    periodicity: PeriodicityType,
-    aWeekAgoDay: Date,
-    scheduledDay: Date,
-  ) {
-    const eventDays = [];
-
-    const dayFrom = this.getDayFrom(firstScheduleDay, periodStartDay);
-
-    const dayTo = this.getDayTo(lastScheduleDay, periodEndDay);
-
-    if (periodicity === PeriodicityType.Always) {
-      const previousDay = subDays(dayFrom, 1);
-      let day = previousDay;
-
-      while (day <= dayTo) {
-        eventDays.push(day);
-        day = addDays(day, 1);
-      }
-    }
-
-    if (periodicity === PeriodicityType.Daily) {
-      const previousDay = subDays(dayFrom, 1);
-      let day = previousDay;
-
-      while (day <= dayTo) {
-        eventDays.push(day);
-        day = addDays(day, 1);
-      }
-    }
-
-    if (periodicity === PeriodicityType.Weekly) {
-      let day = new Date(scheduledDay);
-
-      while (day <= dayTo) {
-        if (day >= aWeekAgoDay) {
-          eventDays.push(day);
-        }
-        day = addDays(day, 7);
-      }
-    }
-
-    if (periodicity === PeriodicityType.Weekdays) {
-      let day = new Date(dayFrom);
-
-      while (day <= dayTo) {
-        const found = this.weekDays.find(x => isEqual(x, day));
-        if (found && day >= aWeekAgoDay) {
-          eventDays.push(day);
-        }
-        day = addDays(day, 1);
-      }
-    }
-
-    if (periodicity === PeriodicityType.Monthly) {
-      const monthAgoDay = subMonths(this.currentDay, 1);
-
-      let day = new Date(scheduledDay);
-
-      while (day <= dayTo) {
-        if (day >= monthAgoDay) {
-          eventDays.push(day);
-        }
-        day = addMonths(day, 1);
-      }
-    }
-    return eventDays;
-  }
-
-  private getNotificationTriggerDateTime(
-    scheduledDay: Date,
-    from: HourMinute | null,
-    to: HourMinute | null,
-    at: HourMinute | null,
-    triggerType: NotificationTriggerType,
-  ): Date {
-    if (triggerType === NotificationTriggerType.FIXED) {
-      const result = new Date(scheduledDay);
-      result.setHours(at!.hours);
-      result.setMinutes(at!.minutes);
-      return result;
-    }
-
-    const diff = getDiff(from!, to!);
-
-    const randomValueToAdd = this.getRandomInt(diff);
-
-    const result = new Date(scheduledDay);
-    result.setHours(from!.hours);
-    result.setMinutes(from!.minutes);
-
-    return addMilliseconds(result, randomValueToAdd);
-  }
-
-  private createNotification(
-    triggerAt: Date,
-    name: string,
-    description: string,
-    activityId: string | null,
-    activityFlowId: string | null,
-    eventId: string,
-    type: NotificationType,
-  ): NotificationDescriber {
-    const id = uuidv4();
-    const shortId = `${id.slice(0, 2)}_${id.slice(-3)}`;
-
-    const notification: NotificationDescriber = {
-      notificationId: id,
-      shortId,
-      appletId: this.appletId,
-      activityId,
-      activityFlowId,
-      entityName: name,
-      eventId,
-      type: type,
-      notificationHeader: name,
-      notificationBody: description,
-      scheduledAt: triggerAt.valueOf(),
-      scheduledAtString: triggerAt.toString(),
-      isActive: true,
-    };
-
-    return notification;
-  }
-
-  private createReminder(
-    scheduledDay: Date,
-    activityId: string | null,
-    activityFlowId: string | null,
-    entityName: string,
-    eventId: string,
-    reminderData: ReminderSetting | null,
-  ) {
-    if (!this.isReminderSet(reminderData)) {
-      return null;
-    }
-
-    const { reminderTime, activityIncomplete: daysIncomplete } = reminderData!;
-
-    const reminderFireDay = addDays(scheduledDay, daysIncomplete);
-
-    const description = 'Just a kindly reminder to complete the activity';
-
-    const triggerAt = this.getNotificationTriggerDateTime(
-      reminderFireDay,
-      null,
-      null,
-      reminderTime,
-      NotificationTriggerType.FIXED,
+    this.notificationDaysExtractor = new NotificationDaysExtractor(
+      inputData.progress,
+      inputData.appletId,
     );
 
-    const notification = this.createNotification(
-      triggerAt,
-      entityName,
-      description,
-      activityId,
-      activityFlowId,
-      eventId,
-      NotificationType.Reminder,
+    this.reminderCreator = new ReminderCreator(
+      inputData.progress,
+      inputData.appletId,
+      inputData.completions,
     );
 
-    const completedAt = this.getActivityCompleteDateTime(
-      (activityId || activityFlowId)!,
-      eventId,
+    this.utility = new NotificationUtility(
+      inputData.progress,
+      inputData.appletId,
     );
 
-    if (completedAt) {
-      const completeDay = startOfDay(completedAt);
-
-      if (scheduledDay <= completeDay && completeDay <= reminderFireDay) {
-        notification.isActive = false;
-        notification.inactiveReason =
-          InactiveReason.ActivityCompletedInReminderInterval;
-        return notification;
-      }
-    }
-
-    return notification;
+    this.appletId = inputData.appletId;
   }
 
-  private markNotificationIfActivityCompleted(
-    activityId: string | null,
-    activityFlowId: string | null,
-    eventId: string,
-    notification: NotificationDescriber,
-  ) {
-    const completedAt = this.getActivityCompleteDateTime(
-      (activityId ?? activityFlowId)!,
-      eventId,
-    );
-    if (!completedAt) {
-      return;
-    }
-
-    const completeDay = startOfDay(completedAt);
-
-    const triggerAt = notification.scheduledAt;
-
-    const triggerDay = startOfDay(triggerAt);
-
-    if (isEqual(completeDay, triggerDay) && triggerAt > completedAt.valueOf()) {
-      notification.isActive = false;
-      notification.inactiveReason = InactiveReason.ActivityCompleted;
-    }
-  }
-
-  private markNotificationsDueToOneTimeCompletionSetting(
-    notifications: NotificationDescriber[],
-    entityId: string,
-    eventId: string,
-    isOneTimeCompletion: boolean,
-  ) {
-    if (!isOneTimeCompletion) {
-      return;
-    }
-    const completedAt = this.getActivityCompleteDateTime(entityId, eventId);
-    if (completedAt) {
-      for (let notification of notifications) {
-        notification.isActive = false;
-        notification.inactiveReason = InactiveReason.OneTimeCompletion;
-      }
-    }
-  }
-
-  private processNotificationsSection(
+  private processEventDay(
     day: Date,
-    eventNotifications: NotificationSetting[],
-    reminderSettings: ReminderSettings,
-    activityId: string | null,
-    activityFlowId: string | null,
-    entityName: string,
-    entityDescription: string,
-    eventId: string,
+    event: ScheduleEvent,
+    entity: Entity,
   ): NotificationDescriber[] {
+    const activityId: string | null =
+      entity.pipelineType === ActivityPipelineType.Regular ? entity.id : null;
+
+    const activityFlowId: string | null =
+      entity.pipelineType === ActivityPipelineType.Flow ? entity.id : null;
+
+    const entityName = entity.name;
+
+    const entityDescription = i18next.t(
+      'local_notifications:complete_activity',
+    );
+
+    const eventNotifications = event.notificationSettings.notifications;
+
     const result: NotificationDescriber[] = [];
+
+    const currentInterval: DatesFromTo = this.utility.getAvailabilityInterval(
+      day,
+      event,
+    );
+
+    const isSpread = this.utility.isSpreadToNextDay(event);
 
     for (let eventNotification of eventNotifications) {
       const { from, to, at, triggerType } = eventNotification;
 
-      const triggerAt = this.getNotificationTriggerDateTime(
-        day,
-        from,
-        to,
-        at,
-        triggerType,
-      );
+      let triggerAt: Date;
+      let randomBorderType: RandomCrossBorderType | null | undefined;
 
-      const notification = this.createNotification(
-        triggerAt,
-        entityName,
-        entityDescription,
-        activityId,
-        activityFlowId,
-        eventId,
-        NotificationType.Regular,
-      );
+      if (triggerType === NotificationTriggerType.FIXED) {
+        const isNextDay =
+          isSpread && this.utility.isNextDay(event, eventNotification.at!);
 
-      this.markNotificationIfActivityCompleted(
-        activityId,
-        activityFlowId,
-        eventId,
+        triggerAt = this.utility.getTriggerAtForFixed(day, at!, isNextDay);
+      }
+
+      if (triggerType === NotificationTriggerType.RANDOM) {
+        randomBorderType = !isSpread
+          ? 'both-in-current-day'
+          : this.utility.getRandomBorderType(event, eventNotification)!;
+
+        triggerAt = this.utility.getTriggerAtForRandom(
+          day,
+          from!,
+          to!,
+          randomBorderType!,
+        );
+
+        if (!triggerAt) {
+          Logger.warn(
+            '[NotificationBuilder.processEventDay]: triggerAt is not defined for random notification',
+          );
+          continue;
+        }
+      }
+
+      const notification: NotificationDescriber =
+        this.utility.createNotification(
+          triggerAt!,
+          entityName,
+          entityDescription,
+          activityId,
+          activityFlowId,
+          event.id,
+          NotificationType.Regular,
+        );
+
+      notification.fallType = this.utility.getFallType(triggerAt!, day);
+      notification.isSpreadInEventSet = isSpread;
+      notification.randomDayCrossType = randomBorderType;
+
+      this.utility.markNotificationIfActivityCompleted(
+        (activityId ?? activityFlowId)!,
+        event.id,
         notification,
+        currentInterval,
       );
-      this.markIfNotificationOutdated(notification);
+
+      this.utility.markIfNotificationOutdated(notification, event);
 
       result.push(notification);
-    }
-
-    const reminder = this.createReminder(
-      day,
-      activityId,
-      activityFlowId,
-      entityName,
-      eventId,
-      reminderSettings.setting,
-    );
-
-    if (reminder?.isActive) {
-      this.markIfNotificationOutdated(reminder);
-    }
-
-    if (reminder?.isActive && reminderSettings.excludeWeekends) {
-      this.markIfFallOnWeekend(reminder);
-    }
-
-    if (reminder) {
-      result.push(reminder);
     }
 
     return result;
@@ -503,10 +177,10 @@ class NotificationBuilder implements INotificationBuilder {
 
     const scheduledDay = startOfDay(event.scheduledAt);
 
-    const firstScheduleDay = this.currentDay;
+    const firstScheduleDay = this.utility.currentDay;
 
     const lastScheduleDay = addDays(
-      this.currentDay,
+      this.utility.currentDay,
       NumberOfDaysForSchedule - 1,
     );
 
@@ -518,17 +192,7 @@ class NotificationBuilder implements INotificationBuilder {
 
     const entityName = entity.name;
 
-    const notificationDescription = i18next.t(
-      'local_notifications:complete_activity',
-    );
-
     const isEntityHidden = !entity.isVisible;
-
-    const activityId: string | null =
-      entity.pipelineType === ActivityPipelineType.Regular ? entity.id : null;
-
-    const activityFlowId: string | null =
-      entity.pipelineType === ActivityPipelineType.Flow ? entity.id : null;
 
     const eventId = event.id;
 
@@ -537,19 +201,14 @@ class NotificationBuilder implements INotificationBuilder {
     const reminderSetting: ReminderSetting | null =
       event.notificationSettings.reminder;
 
-    const reminderSettings: ReminderSettings = {
-      setting: reminderSetting,
-      excludeWeekends: periodicity === PeriodicityType.Weekdays,
-    };
-
-    eventResult.eventName = this.generateEventName(
+    eventResult.eventName = this.utility.generateEventName(
       entityName,
       periodicity,
       eventNotifications,
       reminderSetting,
     );
 
-    const aWeekAgoDay = addDays(this.currentDay, -7);
+    const aWeekAgoDay = addDays(this.utility.currentDay, -7);
 
     const isPeriodicitySet =
       periodicity === PeriodicityType.Daily ||
@@ -562,7 +221,11 @@ class NotificationBuilder implements INotificationBuilder {
     if (isOnceEvent && scheduledDay < aWeekAgoDay) {
       return eventResult;
     }
-    if (isPeriodicitySet && periodEndDay && periodEndDay < this.currentDay) {
+    if (
+      isPeriodicitySet &&
+      periodEndDay &&
+      periodEndDay < this.utility.currentDay
+    ) {
       return eventResult;
     }
     if (
@@ -574,25 +237,25 @@ class NotificationBuilder implements INotificationBuilder {
     }
 
     if (isOnceEvent) {
-      const notifications = this.processNotificationsSection(
-        scheduledDay,
-        eventNotifications,
-        reminderSettings,
-        activityId,
-        activityFlowId,
-        entityName,
-        notificationDescription,
-        eventId,
-      );
-      this.markNotificationsDueToOneTimeCompletionSetting(
+      const notifications = this.processEventDay(scheduledDay, event, entity);
+      this.utility.markNotificationsDueToOneTimeCompletionSetting(
         notifications,
         entity.id,
         eventId,
         event.availability.oneTimeCompletion,
       );
       eventResult.notifications.push(...notifications);
+
+      const reminders = this.reminderCreator.create(
+        [scheduledDay],
+        event,
+        entity,
+      );
+      if (reminders.length) {
+        eventResult.notifications.push(reminders[0].reminder);
+      }
     } else {
-      const days = this.extractDaysFromPeriodicitySettings(
+      const days = this.notificationDaysExtractor.extract(
         firstScheduleDay,
         lastScheduleDay,
         periodStartDay,
@@ -602,23 +265,24 @@ class NotificationBuilder implements INotificationBuilder {
         scheduledDay,
       );
 
+      const reminders = this.reminderCreator.create(days, event, entity);
+
       for (let day of days) {
-        const notifications = this.processNotificationsSection(
-          day,
-          eventNotifications,
-          reminderSettings,
-          activityId,
-          activityFlowId,
-          entityName,
-          notificationDescription,
-          eventId,
-        );
+        const notifications = this.processEventDay(day, event, entity);
         eventResult.notifications.push(...notifications);
+
+        const currentReminder = reminders.find(x => isEqual(x.eventDay, day));
+
+        if (currentReminder) {
+          eventResult.notifications.push(currentReminder.reminder);
+        }
       }
     }
 
     if (isEntityHidden) {
-      this.markAllAsInactiveDueToEntityHidden(eventResult.notifications);
+      this.utility.markAllAsInactiveDueToEntityHidden(
+        eventResult.notifications,
+      );
     }
 
     if (this.keepDebugData) {

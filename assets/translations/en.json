@@ -288,7 +288,8 @@
     "to": "To",
     "day": "day",
     "days": "days",
-    "am": "AM"
+    "am": "AM",
+    "the_following_day": "the following day"
   },
   "form_item": {
     "required": "Required",

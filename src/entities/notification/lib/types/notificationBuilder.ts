@@ -4,6 +4,7 @@ import {
   Progress,
   NotificationTriggerType,
   PeriodicityType,
+  CompletedEventEntities,
 } from '@app/abstract/lib';
 import { HourMinute } from '@app/shared/lib';
 
@@ -27,6 +28,7 @@ export type NotificationSetting = {
 export type EventAvailability = {
   availabilityType: AvailabilityType;
   oneTimeCompletion: boolean;
+  allowAccessBeforeFromTime: boolean;
   periodicityType: PeriodicityType;
   timeFrom: HourMinute | null;
   timeTo: HourMinute | null;
@@ -74,12 +76,19 @@ export const enum NotificationType {
 export const enum InactiveReason {
   NotDefined = 'NotDefined',
   Outdated = 'Outdated',
+  OutdatedByStartTime = 'OutdatedByStartTime',
   ActivityCompleted = 'ActivityCompleted',
-  ActivityCompletedInReminderInterval = 'ActivityCompletedInReminderInterval',
   EntityHidden = 'EntityHidden',
   OneTimeCompletion = 'OneTimeCompletion',
-  FallOnWeekends = 'FallOnWeekends',
+  FallOnInvalidPeriod = 'FallOnInvalidPeriod',
 }
+
+export type RandomCrossBorderType =
+  | 'both-in-current-day'
+  | 'from-current-to-next'
+  | 'both-in-next-day';
+
+export type FallType = 'current-day' | 'next-day' | 'in-future';
 
 type NotificationDescriberDebugPayload = {
   scheduledEvent_Debug?: ScheduleEvent;
@@ -100,6 +109,9 @@ export type NotificationDescriber = {
   scheduledAtString: string;
   notificationHeader: string;
   notificationBody: string;
+  isSpreadInEventSet?: boolean;
+  fallType?: FallType;
+  randomDayCrossType?: RandomCrossBorderType | null;
   isActive: boolean;
   inactiveReason?: InactiveReason;
 } & NotificationDescriberDebugPayload;
@@ -109,6 +121,7 @@ export type NotificationBuilderInput = {
   appletName: string;
   eventEntities: EventEntity[];
   progress: Progress;
+  completions: CompletedEventEntities;
 };
 
 export type EventNotificationDescribers = {
