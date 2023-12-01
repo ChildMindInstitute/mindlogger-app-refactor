@@ -39,7 +39,11 @@ const NativeIosFlanker: FC<Props> = props => {
           props.configuration.isLastTest,
         );
       })
-      .catch((error: string) => Logger.log(error));
+      .catch((error: string) =>
+        Logger.log(
+          `[NativeModules.FlankerViewManager.preloadGameImages] An internal error occurred during caching images or starting the game: \n\n ${error}`,
+        ),
+      );
   }, [configuration, props.configuration]);
 
   return (

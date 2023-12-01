@@ -361,24 +361,24 @@ extension FlankerView: GameManagerProtocol {
         left.downloadImage(url: leftImage).then { image in
           self.leftButton.setImage(image, for: .normal)
           self.leftButton.setImage(image, for: .disabled)
+          self.leftButton.imageView?.contentMode = .scaleAspectFit
+          self.leftButton.imageView?.layer.cornerRadius = 5.0
+        }.catch { error in
+          print(error.localizedDescription)
         }
         let right = ImageLoader()
         right.downloadImage(url: rightImage).then { image in
           self.rightButton.setImage(image, for: .normal)
           self.rightButton.setImage(image, for: .disabled)
+          self.rightButton.imageView?.contentMode = .scaleAspectFit
+          self.rightButton.imageView?.layer.cornerRadius = 5.0
+        }.catch { error in
+          print(error.localizedDescription)
         }
         leftButton.setTitle(nil, for: .normal)
         leftButton.backgroundColor = .clear
-        
-        leftButton.imageView?.contentMode = .scaleAspectFit
-        leftButton.imageView?.layer.cornerRadius = 5.0
-
         rightButton.setTitle(nil, for: .normal)
         rightButton.backgroundColor = .clear
-        rightButton.setImage(right.image, for: .normal)
-        rightButton.setImage(right.image, for: .disabled)
-        rightButton.imageView?.contentMode = .scaleAspectFit
-        rightButton.imageView?.layer.cornerRadius = 5.0
       }
     } else {
       if let left = left {
@@ -388,13 +388,14 @@ extension FlankerView: GameManagerProtocol {
         leftButton.titleLabel?.textAlignment = .center
       } else if let leftImage = leftImage {
         let left = ImageLoader()
-        let _ = left.downloadImage(url: leftImage)
+        left.downloadImage(url: leftImage).then{ image in
+          self.leftButton.setImage(image, for: .normal)
+          self.leftButton.setImage(image, for: .disabled)
+          self.leftButton.imageView?.contentMode = .scaleAspectFit
+          self.leftButton.imageView?.layer.cornerRadius = 5.0
+        }
         leftButton.setTitle(nil, for: .normal)
         leftButton.backgroundColor = .clear
-        leftButton.setImage(left.image, for: .normal)
-        leftButton.setImage(left.image, for: .disabled)
-        leftButton.imageView?.contentMode = .scaleAspectFit
-        leftButton.imageView?.layer.cornerRadius = 5.0
       }
     }
   }
