@@ -200,6 +200,10 @@ export class GroupUtility {
 
     const completedAt = this.getCompletedAt(eventActivity)!;
 
+    if (!completedAt) {
+      return false;
+    }
+
     if (scheduledWhen === 'today') {
       return allowedFrom <= completedAt && completedAt <= allowedTo;
     } else {
