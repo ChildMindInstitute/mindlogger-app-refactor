@@ -1,5 +1,3 @@
-//import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
-
 import {
   addDays,
   addHours,
@@ -31,7 +29,7 @@ import {
   ActivityGroupsBuilder,
   createActivityGroupsBuilder,
 } from './ActivityGroupsBuilder';
-import { GroupsBuildContext } from './GroupBuildMethods';
+import { GroupsBuildContext } from './GroupUtility';
 import { ActivityListGroup, EventEntity, Entity } from '../../lib';
 
 jest.mock('@app/shared/lib/constants', () => ({
@@ -201,13 +199,17 @@ const getAlwaysAvailableEventEntity = (settings: {
 
 const mockGetNow = (builder: ActivityGroupsBuilder, mockedNowDate: Date) => {
   //@ts-ignore
-  builder.getNow = jest.fn(() => new Date(mockedNowDate));
+  builder.utility.getNow = jest.fn(() => new Date(mockedNowDate));
   //@ts-ignore
-  builder.itemsFactory.getNow = jest.fn(() => new Date(mockedNowDate));
+  builder.itemsFactory.utility.getNow = jest.fn(() => new Date(mockedNowDate));
   //@ts-ignore
-  builder.scheduledEvaluator.getNow = jest.fn(() => new Date(mockedNowDate));
+  builder.scheduledEvaluator.utility.getNow = jest.fn(
+    () => new Date(mockedNowDate),
+  );
   //@ts-ignore
-  builder.availableEvaluator.getNow = jest.fn(() => new Date(mockedNowDate));
+  builder.availableEvaluator.utility.getNow = jest.fn(
+    () => new Date(mockedNowDate),
+  );
 };
 
 describe('ActivityGroupsBuilder', () => {

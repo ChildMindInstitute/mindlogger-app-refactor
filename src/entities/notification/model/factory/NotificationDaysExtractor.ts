@@ -2,11 +2,13 @@ import { addDays, addMonths, isEqual, subDays, subMonths } from 'date-fns';
 
 import { PeriodicityType, Progress } from '@app/abstract/lib';
 
-import { NotificationBuildMethods } from './NotificationBuildMethods';
+import { NotificationUtility } from './NotificationUtility';
 
-export class NotificationDaysExtractor extends NotificationBuildMethods {
+export class NotificationDaysExtractor {
+  private utility: NotificationUtility;
+
   constructor(progress: Progress, appletId: string) {
-    super(progress, appletId);
+    this.utility = new NotificationUtility(progress, appletId);
   }
 
   private getDayFrom(
@@ -84,7 +86,7 @@ export class NotificationDaysExtractor extends NotificationBuildMethods {
       let day = previousDay;
 
       while (day <= dayTo) {
-        const found = this.weekDays.find(x => isEqual(x, day));
+        const found = this.utility.weekDays.find(x => isEqual(x, day));
         if (found && day >= aWeekAgoDay) {
           eventDays.push(day);
         }
@@ -93,7 +95,7 @@ export class NotificationDaysExtractor extends NotificationBuildMethods {
     }
 
     if (periodicity === PeriodicityType.Monthly) {
-      const monthAgoDay = subMonths(this.currentDay, 1);
+      const monthAgoDay = subMonths(this.utility.currentDay, 1);
 
       let day = new Date(scheduledDay);
 

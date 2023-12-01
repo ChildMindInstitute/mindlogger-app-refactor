@@ -1,12 +1,14 @@
-import { AvailabilityType } from '@app/abstract/lib';
+import { AvailabilityType, IEvaluator } from '@app/abstract/lib';
 import { getHourMinute, isTimeInInterval } from '@shared/lib';
 
-import { GroupsBuildContext, GroupBuildMethods } from './GroupBuildMethods';
+import { GroupUtility, GroupsBuildContext } from './GroupUtility';
 import { EventEntity } from '../../lib';
 
-export class AvailableGroupEvaluator extends GroupBuildMethods {
+export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
+  private utility: GroupUtility;
+
   constructor(inputParams: GroupsBuildContext) {
-    super(inputParams);
+    this.utility = new GroupUtility(inputParams);
   }
 
   private isValidForAlwaysAvailable(eventEntity: EventEntity): boolean {
@@ -14,7 +16,7 @@ export class AvailableGroupEvaluator extends GroupBuildMethods {
 
     const isOneTimeCompletion = event.availability.oneTimeCompletion;
 
-    const progressRecord = this.getProgressRecord(eventEntity);
+    const progressRecord = this.utility.getProgressRecord(eventEntity);
 
     const isNeverCompleted = !progressRecord;
 
@@ -26,9 +28,9 @@ export class AvailableGroupEvaluator extends GroupBuildMethods {
   ): boolean {
     const { event } = eventEntity;
 
-    const isScheduledToday = this.isToday(event.scheduledAt!);
+    const isScheduledToday = this.utility.isToday(event.scheduledAt!);
 
-    const now = this.getNow();
+    const now = this.utility.getNow();
 
     const isCurrentTimeInTimeWindow = isTimeInInterval({
       timeToCheck: getHourMinute(now),
@@ -37,11 +39,11 @@ export class AvailableGroupEvaluator extends GroupBuildMethods {
       including: 'from',
     });
 
-    const progressRecord = this.getProgressRecord(eventEntity);
+    const progressRecord = this.utility.getProgressRecord(eventEntity);
 
     const endAt = progressRecord?.endAt;
 
-    const isCompletedToday = !!endAt && this.isToday(endAt);
+    const isCompletedToday = !!endAt && this.utility.isToday(endAt);
 
     return (
       isScheduledToday &&
@@ -56,12 +58,12 @@ export class AvailableGroupEvaluator extends GroupBuildMethods {
   ): boolean {
     const { event } = eventEntity;
 
-    const isScheduledToday = this.isToday(event.scheduledAt!);
+    const isScheduledToday = this.utility.isToday(event.scheduledAt!);
 
-    const isScheduledYesterday = this.isScheduledYesterday(event);
+    const isScheduledYesterday = this.utility.isScheduledYesterday(event);
 
     if (isScheduledToday) {
-      const valid = !this.isCompletedToday(eventEntity);
+      const valid = !this.utility.isCompletedToday(eventEntity);
 
       if (valid) {
         return true;
@@ -70,8 +72,12 @@ export class AvailableGroupEvaluator extends GroupBuildMethods {
 
     if (isScheduledYesterday) {
       return (
-        this.isInAllowedTimeInterval(eventEntity, 'yesterday', true) &&
-        !this.isCompletedInAllowedTimeInterval(eventEntity, 'yesterday', true)
+        this.utility.isInAllowedTimeInterval(eventEntity, 'yesterday', true) &&
+        !this.utility.isCompletedInAllowedTimeInterval(
+          eventEntity,
+          'yesterday',
+          true,
+        )
       );
     }
 
@@ -83,14 +89,14 @@ export class AvailableGroupEvaluator extends GroupBuildMethods {
   ): boolean {
     const { event } = eventEntity;
 
-    const isScheduledToday = this.isToday(event.scheduledAt!);
+    const isScheduledToday = this.utility.isToday(event.scheduledAt!);
 
-    const isScheduledYesterday = this.isScheduledYesterday(event);
+    const isScheduledYesterday = this.utility.isScheduledYesterday(event);
 
     if (isScheduledToday) {
       const isValid =
-        this.isInAllowedTimeInterval(eventEntity, 'today') &&
-        !this.isCompletedInAllowedTimeInterval(eventEntity, 'today');
+        this.utility.isInAllowedTimeInterval(eventEntity, 'today') &&
+        !this.utility.isCompletedInAllowedTimeInterval(eventEntity, 'today');
 
       if (isValid) {
         return true;
@@ -99,8 +105,8 @@ export class AvailableGroupEvaluator extends GroupBuildMethods {
 
     if (isScheduledYesterday) {
       return (
-        this.isInAllowedTimeInterval(eventEntity, 'yesterday') &&
-        !this.isCompletedInAllowedTimeInterval(eventEntity, 'yesterday')
+        this.utility.isInAllowedTimeInterval(eventEntity, 'yesterday') &&
+        !this.utility.isCompletedInAllowedTimeInterval(eventEntity, 'yesterday')
       );
     }
 
@@ -108,7 +114,9 @@ export class AvailableGroupEvaluator extends GroupBuildMethods {
   }
 
   public evaluate(eventsEntities: Array<EventEntity>): Array<EventEntity> {
-    const notInProgress = eventsEntities.filter(x => !this.isInProgress(x));
+    const notInProgress = eventsEntities.filter(
+      x => !this.utility.isInProgress(x),
+    );
 
     const result: Array<EventEntity> = [];
 
@@ -131,7 +139,7 @@ export class AvailableGroupEvaluator extends GroupBuildMethods {
         continue;
       }
 
-      const isSpreadToNextDay = this.isSpreadToNextDay(event);
+      const isSpreadToNextDay = this.utility.isSpreadToNextDay(event);
 
       const isAccessBeforeTimeFrom =
         event.availability.allowAccessBeforeFromTime;

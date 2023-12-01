@@ -64,7 +64,7 @@ describe('ScheduledDateCalculator', () => {
       return scheduleEvent;
     };
 
-    it('Should return null when selected date is in the past and more than yesterday', () => {
+    it('Should return null when selected date is in the past and earlier than yesterday', () => {
       const onceEvent = getOnceEvent();
       onceEvent.selectedDate = subDays(startOfDay(now), 2);
 

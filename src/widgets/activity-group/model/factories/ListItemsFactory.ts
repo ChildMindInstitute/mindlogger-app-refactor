@@ -10,10 +10,16 @@ import {
 } from '@entities/activity';
 import { MIDNIGHT_DATE } from '@shared/lib';
 
-import { GroupBuildMethods } from './GroupBuildMethods';
+import { GroupUtility, GroupsBuildContext } from './GroupUtility';
 import { EventEntity, Activity, ActivityFlow } from '../../lib';
 
-export class ListItemsFactory extends GroupBuildMethods {
+export class ListItemsFactory {
+  private utility: GroupUtility;
+
+  constructor(inputParams: GroupsBuildContext) {
+    this.utility = new GroupUtility(inputParams);
+  }
+
   private populateActivityFlowFields(
     item: ActivityListItem,
     activityEvent: EventEntity,
@@ -28,21 +34,21 @@ export class ListItemsFactory extends GroupBuildMethods {
       activityPositionInFlow: 0,
     };
 
-    const isInProgress = this.isInProgress(activityEvent);
+    const isInProgress = this.utility.isInProgress(activityEvent);
 
     let activity: Activity, position: number;
 
     if (isInProgress) {
-      const progressRecord = this.getProgressRecord(
+      const progressRecord = this.utility.getProgressRecord(
         activityEvent,
       ) as FlowProgress;
 
-      activity = this.activities.find(
+      activity = this.utility.activities.find(
         x => x.id === progressRecord.currentActivityId,
       )!;
       position = progressRecord.pipelineActivityOrder + 1;
     } else {
-      activity = this.activities.find(
+      activity = this.utility.activities.find(
         x => x.id === activityFlow.activityIds[0],
       )!;
       position = 1;
@@ -92,9 +98,11 @@ export class ListItemsFactory extends GroupBuildMethods {
     if (
       event.availability.availabilityType === AvailabilityType.ScheduledAccess
     ) {
-      const isSpread = this.isSpreadToNextDay(event);
+      const isSpread = this.utility.isSpreadToNextDay(event);
 
-      const to = isSpread ? this.getTomorrow() : this.getToday();
+      const to = isSpread
+        ? this.utility.getTomorrow()
+        : this.utility.getToday();
       to.setHours(event.availability.timeTo!.hours);
       to.setMinutes(event.availability.timeTo!.minutes);
       item.availableTo = to;
@@ -119,13 +127,13 @@ export class ListItemsFactory extends GroupBuildMethods {
 
     const { event } = eventActivity;
 
-    const from = this.getNow();
+    const from = this.utility.getNow();
     from.setHours(event.availability.timeFrom!.hours);
     from.setMinutes(event.availability.timeFrom!.minutes);
 
-    const isSpread = this.isSpreadToNextDay(event);
+    const isSpread = this.utility.isSpreadToNextDay(event);
 
-    const to = isSpread ? this.getTomorrow() : this.getToday();
+    const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday();
     to.setHours(event.availability.timeTo!.hours);
     to.setMinutes(event.availability.timeTo!.minutes);
 
@@ -145,7 +153,7 @@ export class ListItemsFactory extends GroupBuildMethods {
     item.isTimerSet = !!event.timers?.timer;
 
     if (item.isTimerSet) {
-      const timeLeft = this.getTimeToComplete(eventActivity);
+      const timeLeft = this.utility.getTimeToComplete(eventActivity);
       item.timeLeftToComplete = timeLeft;
 
       if (timeLeft === null) {

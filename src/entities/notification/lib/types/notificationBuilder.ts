@@ -88,7 +88,7 @@ export type RandomCrossBorderType =
   | 'from-current-to-next'
   | 'both-in-next-day';
 
-export type FallType = 'undefined' | 'current-day' | 'next-day' | 'in-future';
+export type FallType = 'current-day' | 'next-day' | 'in-future';
 
 type NotificationDescriberDebugPayload = {
   scheduledEvent_Debug?: ScheduleEvent;

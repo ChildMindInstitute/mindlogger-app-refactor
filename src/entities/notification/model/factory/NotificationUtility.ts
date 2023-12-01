@@ -39,7 +39,7 @@ const NumberOfDaysForSchedule = 14;
 
 const DaysInWeek = 7;
 
-export class NotificationBuildMethods {
+export class NotificationUtility {
   private _weekDays: Date[] | null;
 
   private progress: Progress;
@@ -55,15 +55,36 @@ export class NotificationBuildMethods {
 
   protected now: Date;
 
-  protected get currentDay(): Date {
-    return startOfDay(this.now);
-  }
-
   protected getEndOfDay(date: Date): Date {
     return subSeconds(addDays(startOfDay(date), 1), 1);
   }
 
-  protected get weekDays(): Date[] {
+  protected getRandomInt(max: number): number {
+    return Math.floor(Math.random() * max);
+  }
+
+  protected getProgressRecord(
+    entityId: string,
+    eventId: string,
+  ): ProgressPayload | null {
+    const record = this.progress[this.appletId]?.[entityId]?.[eventId];
+    return record ?? null;
+  }
+
+  protected getActivityCompletedAt(
+    entityId: string,
+    eventId: string,
+  ): Date | null {
+    const progress = this.getProgressRecord(entityId, eventId);
+
+    return progress ? progress.endAt : null;
+  }
+
+  public get currentDay(): Date {
+    return startOfDay(this.now);
+  }
+
+  public get weekDays(): Date[] {
     if (this._weekDays) {
       return this._weekDays;
     }
@@ -84,11 +105,7 @@ export class NotificationBuildMethods {
     return this._weekDays;
   }
 
-  protected getRandomInt(max: number): number {
-    return Math.floor(Math.random() * max);
-  }
-
-  protected isReminderSet(reminder: ReminderSetting | null): boolean {
+  public isReminderSet(reminder: ReminderSetting | null): boolean {
     return (
       !!reminder &&
       (reminder.activityIncomplete > 0 ||
@@ -97,24 +114,7 @@ export class NotificationBuildMethods {
     );
   }
 
-  protected getProgressRecord(
-    entityId: string,
-    eventId: string,
-  ): ProgressPayload | null {
-    const record = this.progress[this.appletId]?.[entityId]?.[eventId];
-    return record ?? null;
-  }
-
-  protected getActivityCompletedAt(
-    entityId: string,
-    eventId: string,
-  ): Date | null {
-    const progress = this.getProgressRecord(entityId, eventId);
-
-    return progress ? progress.endAt : null;
-  }
-
-  protected generateEventName(
+  public generateEventName(
     entityName: string,
     periodicity: PeriodicityType,
     notifications: NotificationSetting[],
@@ -128,7 +128,7 @@ export class NotificationBuildMethods {
     return result;
   }
 
-  protected getFallType(
+  public getFallType(
     triggerAt: Date,
     scheduledDay: Date,
   ): FallType | undefined {
@@ -148,7 +148,7 @@ export class NotificationBuildMethods {
     return fallType;
   }
 
-  protected getTriggerAtForFixed(
+  public getTriggerAtForFixed(
     scheduledDay: Date,
     at: HourMinute,
     isNextDay: boolean,
@@ -163,7 +163,7 @@ export class NotificationBuildMethods {
     return result;
   }
 
-  protected getTriggerAtForRandom(
+  public getTriggerAtForRandom(
     scheduledDay: Date,
     from: HourMinute,
     to: HourMinute,
@@ -207,7 +207,7 @@ export class NotificationBuildMethods {
     return result!;
   }
 
-  protected isSpreadToNextDay(event: ScheduleEvent): boolean {
+  public isSpreadToNextDay(event: ScheduleEvent): boolean {
     return (
       event.availability.availabilityType ===
         AvailabilityType.ScheduledAccess &&
@@ -218,14 +218,14 @@ export class NotificationBuildMethods {
     );
   }
 
-  protected isNextDay(event: ScheduleEvent, timeInSetting: HourMinute) {
+  public isNextDay(event: ScheduleEvent, timeInSetting: HourMinute) {
     return isSourceLess({
       timeSource: timeInSetting,
       timeTarget: event.availability.timeFrom!,
     });
   }
 
-  protected getRandomBorderType(
+  public getRandomBorderType(
     event: ScheduleEvent,
     setting: NotificationSetting,
   ): RandomCrossBorderType | null {
@@ -271,7 +271,7 @@ export class NotificationBuildMethods {
     return null;
   }
 
-  protected getAvailabilityInterval(
+  public getAvailabilityInterval(
     eventDay: Date,
     event: ScheduleEvent,
   ): DatesFromTo {
@@ -305,7 +305,7 @@ export class NotificationBuildMethods {
     return { from: dateFrom, to: dateTo };
   }
 
-  protected markNotificationIfActivityCompleted(
+  public markNotificationIfActivityCompleted(
     entityId: string,
     eventId: string,
     notification: NotificationDescriber,
@@ -325,7 +325,7 @@ export class NotificationBuildMethods {
     }
   }
 
-  protected markNotificationsDueToOneTimeCompletionSetting(
+  public markNotificationsDueToOneTimeCompletionSetting(
     notifications: NotificationDescriber[],
     entityId: string,
     eventId: string,
@@ -334,6 +334,7 @@ export class NotificationBuildMethods {
     if (!isOneTimeCompletion) {
       return;
     }
+
     const completedAt = this.getActivityCompletedAt(entityId, eventId);
     if (completedAt) {
       for (let notification of notifications) {
@@ -343,7 +344,7 @@ export class NotificationBuildMethods {
     }
   }
 
-  protected markIfNotificationOutdated(
+  public markIfNotificationOutdated(
     notification: NotificationDescriber,
     event: ScheduleEvent,
   ) {
@@ -361,7 +362,7 @@ export class NotificationBuildMethods {
     }
   }
 
-  protected markAllAsInactiveDueToEntityHidden(
+  public markAllAsInactiveDueToEntityHidden(
     notifications: NotificationDescriber[],
   ) {
     for (let notification of notifications) {
@@ -370,7 +371,7 @@ export class NotificationBuildMethods {
     }
   }
 
-  protected createNotification(
+  public createNotification(
     triggerAt: Date,
     name: string,
     description: string,

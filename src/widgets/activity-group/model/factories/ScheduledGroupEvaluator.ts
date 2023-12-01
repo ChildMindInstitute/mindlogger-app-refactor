@@ -1,20 +1,28 @@
-import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
+import {
+  AvailabilityType,
+  IEvaluator,
+  PeriodicityType,
+} from '@app/abstract/lib';
 import { DatesFromTo } from '@shared/lib';
 
-import { GroupsBuildContext, GroupBuildMethods } from './GroupBuildMethods';
+import { GroupUtility, GroupsBuildContext } from './GroupUtility';
 import { EventEntity } from '../../lib';
 
-export class ScheduledGroupEvaluator extends GroupBuildMethods {
+export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
+  private utility: GroupUtility;
+
   constructor(inputParams: GroupsBuildContext) {
-    super(inputParams);
+    this.utility = new GroupUtility(inputParams);
   }
 
   public evaluate(eventsEntities: Array<EventEntity>): Array<EventEntity> {
-    const notInProgress = eventsEntities.filter(x => !this.isInProgress(x));
+    const notInProgress = eventsEntities.filter(
+      x => !this.utility.isInProgress(x),
+    );
 
     const result: Array<EventEntity> = [];
 
-    const now = this.getNow();
+    const now = this.utility.getNow();
 
     for (let eventEntity of notInProgress) {
       const { event } = eventEntity;
@@ -26,11 +34,11 @@ export class ScheduledGroupEvaluator extends GroupBuildMethods {
       const isAccessBeforeTimeFrom =
         event.availability.allowAccessBeforeFromTime;
 
-      const isCompletedToday = this.isCompletedToday(eventEntity);
+      const isCompletedToday = this.utility.isCompletedToday(eventEntity);
 
-      const isScheduledToday = this.isToday(event.scheduledAt!);
+      const isScheduledToday = this.utility.isToday(event.scheduledAt!);
 
-      const isSpreadToNextDay = this.isSpreadToNextDay(event);
+      const isSpreadToNextDay = this.utility.isSpreadToNextDay(event);
 
       const isCandidateForBeingScheduled: boolean =
         isTypeScheduled &&
@@ -70,16 +78,20 @@ export class ScheduledGroupEvaluator extends GroupBuildMethods {
 
       const considerSpread = doAdvancedSpreadCheck;
 
-      const voidInterval: DatesFromTo = this.getVoidTimeInterval(
+      const voidInterval: DatesFromTo = this.utility.getVoidTimeInterval(
         eventEntity.event,
         considerSpread,
       );
 
-      const isInVoidInterval = this.isInTimeInterval(voidInterval, now, 'from');
-
-      const isCompletedInVoidInterval = this.isInTimeInterval(
+      const isInVoidInterval = this.utility.isInTimeInterval(
         voidInterval,
-        this.getCompletedAt(eventEntity),
+        now,
+        'from',
+      );
+
+      const isCompletedInVoidInterval = this.utility.isInTimeInterval(
+        voidInterval,
+        this.utility.getCompletedAt(eventEntity),
         'from',
       );
 

@@ -8,8 +8,8 @@ import {
 } from '@app/abstract/lib';
 import { DatesFromTo, Logger } from '@app/shared/lib';
 
-import { NotificationBuildMethods } from './NotificationBuildMethods';
 import { NotificationDaysExtractor } from './NotificationDaysExtractor';
+import { NotificationUtility } from './NotificationUtility';
 import { ReminderCreator } from './ReminderCreator';
 import {
   AppletNotificationDescribers,
@@ -30,10 +30,7 @@ interface INotificationBuilder {
   build: () => AppletNotificationDescribers;
 }
 
-class NotificationBuilder
-  extends NotificationBuildMethods
-  implements INotificationBuilder
-{
+class NotificationBuilder implements INotificationBuilder {
   private appletName: string;
 
   private eventEntities: EventEntity[];
@@ -44,9 +41,11 @@ class NotificationBuilder
 
   private reminderCreator: ReminderCreator;
 
-  constructor(inputData: NotificationBuilderInput) {
-    super(inputData.progress, inputData.appletId);
+  private utility: NotificationUtility;
 
+  private appletId: string;
+
+  constructor(inputData: NotificationBuilderInput) {
     this.appletName = inputData.appletName;
     this.eventEntities = inputData.eventEntities;
 
@@ -56,11 +55,19 @@ class NotificationBuilder
       inputData.progress,
       inputData.appletId,
     );
+
     this.reminderCreator = new ReminderCreator(
       inputData.progress,
       inputData.appletId,
       inputData.completions,
     );
+
+    this.utility = new NotificationUtility(
+      inputData.progress,
+      inputData.appletId,
+    );
+
+    this.appletId = inputData.appletId;
   }
 
   private processEventDay(
@@ -84,12 +91,12 @@ class NotificationBuilder
 
     const result: NotificationDescriber[] = [];
 
-    const currentInterval: DatesFromTo = this.getAvailabilityInterval(
+    const currentInterval: DatesFromTo = this.utility.getAvailabilityInterval(
       day,
       event,
     );
 
-    const isSpread = this.isSpreadToNextDay(event);
+    const isSpread = this.utility.isSpreadToNextDay(event);
 
     for (let eventNotification of eventNotifications) {
       const { from, to, at, triggerType } = eventNotification;
@@ -99,17 +106,17 @@ class NotificationBuilder
 
       if (triggerType === NotificationTriggerType.FIXED) {
         const isNextDay =
-          isSpread && this.isNextDay(event, eventNotification.at!);
+          isSpread && this.utility.isNextDay(event, eventNotification.at!);
 
-        triggerAt = this.getTriggerAtForFixed(day, at!, isNextDay);
+        triggerAt = this.utility.getTriggerAtForFixed(day, at!, isNextDay);
       }
 
       if (triggerType === NotificationTriggerType.RANDOM) {
         randomBorderType = !isSpread
           ? 'both-in-current-day'
-          : this.getRandomBorderType(event, eventNotification)!;
+          : this.utility.getRandomBorderType(event, eventNotification)!;
 
-        triggerAt = this.getTriggerAtForRandom(
+        triggerAt = this.utility.getTriggerAtForRandom(
           day,
           from!,
           to!,
@@ -124,28 +131,29 @@ class NotificationBuilder
         }
       }
 
-      const notification: NotificationDescriber = this.createNotification(
-        triggerAt!,
-        entityName,
-        entityDescription,
-        activityId,
-        activityFlowId,
-        event.id,
-        NotificationType.Regular,
-      );
+      const notification: NotificationDescriber =
+        this.utility.createNotification(
+          triggerAt!,
+          entityName,
+          entityDescription,
+          activityId,
+          activityFlowId,
+          event.id,
+          NotificationType.Regular,
+        );
 
-      notification.fallType = this.getFallType(triggerAt!, day);
+      notification.fallType = this.utility.getFallType(triggerAt!, day);
       notification.isSpreadInEventSet = isSpread;
       notification.randomDayCrossType = randomBorderType;
 
-      this.markNotificationIfActivityCompleted(
+      this.utility.markNotificationIfActivityCompleted(
         (activityId ?? activityFlowId)!,
         event.id,
         notification,
         currentInterval,
       );
 
-      this.markIfNotificationOutdated(notification, event);
+      this.utility.markIfNotificationOutdated(notification, event);
 
       result.push(notification);
     }
@@ -169,10 +177,10 @@ class NotificationBuilder
 
     const scheduledDay = startOfDay(event.scheduledAt);
 
-    const firstScheduleDay = this.currentDay;
+    const firstScheduleDay = this.utility.currentDay;
 
     const lastScheduleDay = addDays(
-      this.currentDay,
+      this.utility.currentDay,
       NumberOfDaysForSchedule - 1,
     );
 
@@ -193,14 +201,14 @@ class NotificationBuilder
     const reminderSetting: ReminderSetting | null =
       event.notificationSettings.reminder;
 
-    eventResult.eventName = this.generateEventName(
+    eventResult.eventName = this.utility.generateEventName(
       entityName,
       periodicity,
       eventNotifications,
       reminderSetting,
     );
 
-    const aWeekAgoDay = addDays(this.currentDay, -7);
+    const aWeekAgoDay = addDays(this.utility.currentDay, -7);
 
     const isPeriodicitySet =
       periodicity === PeriodicityType.Daily ||
@@ -213,7 +221,11 @@ class NotificationBuilder
     if (isOnceEvent && scheduledDay < aWeekAgoDay) {
       return eventResult;
     }
-    if (isPeriodicitySet && periodEndDay && periodEndDay < this.currentDay) {
+    if (
+      isPeriodicitySet &&
+      periodEndDay &&
+      periodEndDay < this.utility.currentDay
+    ) {
       return eventResult;
     }
     if (
@@ -226,7 +238,7 @@ class NotificationBuilder
 
     if (isOnceEvent) {
       const notifications = this.processEventDay(scheduledDay, event, entity);
-      this.markNotificationsDueToOneTimeCompletionSetting(
+      this.utility.markNotificationsDueToOneTimeCompletionSetting(
         notifications,
         entity.id,
         eventId,
@@ -268,7 +280,9 @@ class NotificationBuilder
     }
 
     if (isEntityHidden) {
-      this.markAllAsInactiveDueToEntityHidden(eventResult.notifications);
+      this.utility.markAllAsInactiveDueToEntityHidden(
+        eventResult.notifications,
+      );
     }
 
     if (this.keepDebugData) {

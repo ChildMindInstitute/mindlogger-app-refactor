@@ -25,95 +25,26 @@ export type GroupsBuildContext = {
   appletId: string;
 };
 
-export class GroupBuildMethods {
+export class GroupUtility {
   protected progress: Progress;
 
   protected appletId: string;
 
-  protected activities: Activity[];
+  protected _activities: Activity[];
 
   constructor(inputParams: GroupsBuildContext) {
     this.progress = inputParams.progress;
-    this.activities = inputParams.allAppletActivities;
+    this._activities = inputParams.allAppletActivities;
     this.appletId = inputParams.appletId;
   }
 
-  protected getNow = () => new Date();
-
-  protected getToday = () => startOfDay(this.getNow());
-
-  protected getYesterday = () => subDays(this.getToday(), 1);
-
-  protected getTomorrow = () => addDays(this.getToday(), 1);
-
-  protected getEndOfDay = () => subSeconds(addDays(this.getToday(), 1), 1);
-
-  protected isToday(date: Date | null | undefined): boolean {
-    if (!date) {
-      return false;
-    }
-    return isEqual(this.getToday(), startOfDay(date));
-  }
-
-  protected isYesterday(date: Date | null | undefined): boolean {
-    if (!date) {
-      return false;
-    }
-    return isEqual(this.getYesterday(), startOfDay(date));
-  }
-
-  protected getProgressRecord(
-    eventActivity: EventEntity,
-  ): ProgressPayload | null {
-    const record =
-      this.progress[this.appletId]?.[eventActivity.entity.id]?.[
-        eventActivity.event.id
-      ];
-    return record ?? null;
-  }
-
-  protected getStartedAt(eventActivity: EventEntity): Date {
+  private getStartedAt(eventActivity: EventEntity): Date {
     const record = this.getProgressRecord(eventActivity)!;
 
     return record.startAt!;
   }
 
-  protected getCompletedAt(eventActivity: EventEntity): Date | null {
-    const progressRecord = this.getProgressRecord(eventActivity);
-
-    return progressRecord?.endAt ?? null;
-  }
-
-  protected isInProgress(eventActivity: EventEntity): boolean {
-    const record = this.getProgressRecord(eventActivity);
-    if (!record) {
-      return false;
-    }
-    return !!record.startAt && !record.endAt;
-  }
-
-  protected isInTimeInterval(
-    interval: DatesFromTo,
-    valueToCheck: Date | null,
-    including: 'from' | 'to' | 'both' | 'none',
-  ): boolean {
-    if (!valueToCheck) {
-      return false;
-    }
-
-    switch (including) {
-      case 'both':
-        return interval.from <= valueToCheck && valueToCheck <= interval.to;
-      case 'from':
-        return interval.from <= valueToCheck && valueToCheck < interval.to;
-      case 'to':
-        return interval.from < valueToCheck && valueToCheck <= interval.to;
-      case 'none':
-        return interval.from < valueToCheck && valueToCheck < interval.to;
-    }
-  }
-
-  protected getAllowedTimeInterval(
+  private getAllowedTimeInterval(
     eventActivity: EventEntity,
     scheduledWhen: 'today' | 'yesterday',
     isAccessBeforeStartTime: boolean = false,
@@ -151,7 +82,78 @@ export class GroupBuildMethods {
     }
   }
 
-  protected getVoidTimeInterval(
+  public get activities(): Activity[] {
+    return this._activities;
+  }
+
+  public getNow = () => new Date();
+
+  public getToday = () => startOfDay(this.getNow());
+
+  public getYesterday = () => subDays(this.getToday(), 1);
+
+  public getEndOfDay = () => subSeconds(addDays(this.getToday(), 1), 1);
+
+  public getTomorrow = () => addDays(this.getToday(), 1);
+
+  public isToday(date: Date | null | undefined): boolean {
+    if (!date) {
+      return false;
+    }
+    return isEqual(this.getToday(), startOfDay(date));
+  }
+
+  public isYesterday(date: Date | null | undefined): boolean {
+    if (!date) {
+      return false;
+    }
+    return isEqual(this.getYesterday(), startOfDay(date));
+  }
+
+  public getProgressRecord(eventActivity: EventEntity): ProgressPayload | null {
+    const record =
+      this.progress[this.appletId]?.[eventActivity.entity.id]?.[
+        eventActivity.event.id
+      ];
+    return record ?? null;
+  }
+
+  public getCompletedAt(eventActivity: EventEntity): Date | null {
+    const progressRecord = this.getProgressRecord(eventActivity);
+
+    return progressRecord?.endAt ?? null;
+  }
+
+  public isInProgress(eventActivity: EventEntity): boolean {
+    const record = this.getProgressRecord(eventActivity);
+    if (!record) {
+      return false;
+    }
+    return !!record.startAt && !record.endAt;
+  }
+
+  public isInTimeInterval(
+    interval: DatesFromTo,
+    valueToCheck: Date | null,
+    including: 'from' | 'to' | 'both' | 'none',
+  ): boolean {
+    if (!valueToCheck) {
+      return false;
+    }
+
+    switch (including) {
+      case 'both':
+        return interval.from <= valueToCheck && valueToCheck <= interval.to;
+      case 'from':
+        return interval.from <= valueToCheck && valueToCheck < interval.to;
+      case 'to':
+        return interval.from < valueToCheck && valueToCheck <= interval.to;
+      case 'none':
+        return interval.from < valueToCheck && valueToCheck < interval.to;
+    }
+  }
+
+  public getVoidTimeInterval(
     event: ScheduleEvent,
     considerSpread: boolean,
   ): DatesFromTo {
@@ -174,7 +176,7 @@ export class GroupBuildMethods {
     return { from, to };
   }
 
-  protected isSpreadToNextDay(event: ScheduleEvent): boolean {
+  public isSpreadToNextDay(event: ScheduleEvent): boolean {
     return (
       event.availability.availabilityType ===
         AvailabilityType.ScheduledAccess &&
@@ -185,7 +187,7 @@ export class GroupBuildMethods {
     );
   }
 
-  protected isCompletedInAllowedTimeInterval(
+  public isCompletedInAllowedTimeInterval(
     eventActivity: EventEntity,
     scheduledWhen: 'today' | 'yesterday',
     isAccessBeforeStartTime: boolean = false,
@@ -205,7 +207,7 @@ export class GroupBuildMethods {
     }
   }
 
-  protected isScheduledYesterday(event: ScheduleEvent): boolean {
+  public isScheduledYesterday(event: ScheduleEvent): boolean {
     if (
       event.availability.availabilityType === AvailabilityType.AlwaysAvailable
     ) {
@@ -235,13 +237,13 @@ export class GroupBuildMethods {
     return false;
   }
 
-  protected isCompletedToday(eventActivity: EventEntity): boolean {
+  public isCompletedToday(eventActivity: EventEntity): boolean {
     const date = this.getCompletedAt(eventActivity);
 
     return !!date && this.isToday(date);
   }
 
-  protected isInAllowedTimeInterval(
+  public isInAllowedTimeInterval(
     eventActivity: EventEntity,
     scheduledWhen: 'today' | 'yesterday',
     isAccessBeforeStartTime: boolean = false,
@@ -261,7 +263,7 @@ export class GroupBuildMethods {
     }
   }
 
-  protected getTimeToComplete(eventActivity: EventEntity): HourMinute | null {
+  public getTimeToComplete(eventActivity: EventEntity): HourMinute | null {
     const { event } = eventActivity;
     const timer = event.timers!.timer!;
 

@@ -10,7 +10,7 @@ import { ActivityType } from '@app/entities/activity/lib';
 import { EventAvailability } from '@app/entities/event';
 import { HourMinute } from '@app/shared/lib';
 
-import { GroupsBuildContext } from './GroupBuildMethods';
+import { GroupsBuildContext } from './GroupUtility';
 import { ScheduledGroupEvaluator } from './ScheduledGroupEvaluator';
 import { EventEntity, Entity } from '../../lib';
 
@@ -117,7 +117,7 @@ const mockGetNow = (
   mockedNowDate: Date,
 ) => {
   //@ts-ignore
-  evaluator.getNow = jest.fn(() => new Date(mockedNowDate));
+  evaluator.utility.getNow = jest.fn(() => new Date(mockedNowDate));
 };
 
 const buildDateTime = (startAt: Date, time: HourMinute): Date => {

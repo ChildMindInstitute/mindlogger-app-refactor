@@ -1,7 +1,7 @@
 import { ActivityListItem } from '@entities/activity';
 
 import { AvailableGroupEvaluator } from './AvailableGroupEvaluator';
-import { GroupsBuildContext, GroupBuildMethods } from './GroupBuildMethods';
+import { GroupsBuildContext, GroupUtility } from './GroupUtility';
 import { ListItemsFactory } from './ListItemsFactory';
 import { ScheduledGroupEvaluator } from './ScheduledGroupEvaluator';
 import {
@@ -17,27 +17,26 @@ export interface IActivityGroupsBuilder {
   buildScheduled: (eventsActivities: Array<EventEntity>) => ActivityListGroup;
 }
 
-export class ActivityGroupsBuilder
-  extends GroupBuildMethods
-  implements IActivityGroupsBuilder
-{
+export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   private itemsFactory: ListItemsFactory;
 
   private scheduledEvaluator: ScheduledGroupEvaluator;
 
   private availableEvaluator: AvailableGroupEvaluator;
 
+  private utility: GroupUtility;
+
   constructor(inputParams: GroupsBuildContext) {
-    super(inputParams);
     this.itemsFactory = new ListItemsFactory(inputParams);
     this.scheduledEvaluator = new ScheduledGroupEvaluator(inputParams);
     this.availableEvaluator = new AvailableGroupEvaluator(inputParams);
+    this.utility = new GroupUtility(inputParams);
   }
 
   public buildInProgress(
     eventsActivities: Array<EventEntity>,
   ): ActivityListGroup {
-    const filtered = eventsActivities.filter(x => this.isInProgress(x));
+    const filtered = eventsActivities.filter(x => this.utility.isInProgress(x));
 
     const activityItems: Array<ActivityListItem> = [];
 

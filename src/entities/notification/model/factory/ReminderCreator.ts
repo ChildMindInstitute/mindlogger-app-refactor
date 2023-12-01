@@ -8,7 +8,7 @@ import {
 } from '@app/abstract/lib';
 import { DatesFromTo } from '@app/shared/lib';
 
-import { NotificationBuildMethods } from './NotificationBuildMethods';
+import { NotificationUtility } from './NotificationUtility';
 import {
   Entity,
   InactiveReason,
@@ -17,16 +17,18 @@ import {
   ScheduleEvent,
 } from '../../lib';
 
-export class ReminderCreator extends NotificationBuildMethods {
+export class ReminderCreator {
   private completions: CompletedEventEntities;
+
+  private utility: NotificationUtility;
 
   constructor(
     progress: Progress,
     appletId: string,
     completions: CompletedEventEntities,
   ) {
-    super(progress, appletId);
     this.completions = completions;
+    this.utility = new NotificationUtility(progress, appletId);
   }
 
   private isCompletedInInterval(
@@ -61,7 +63,7 @@ export class ReminderCreator extends NotificationBuildMethods {
         ? addMonths(scheduledDay, daysIncomplete)
         : addDays(scheduledDay, daysIncomplete);
 
-    const isNextDay = this.isNextDay(event, reminderTime);
+    const isNextDay = this.utility.isNextDay(event, reminderTime);
     if (
       event.availability.periodicityType === PeriodicityType.Monthly &&
       isNextDay
@@ -71,13 +73,13 @@ export class ReminderCreator extends NotificationBuildMethods {
 
     const description = 'Just a kindly reminder to complete the activity';
 
-    const triggerAt = this.getTriggerAtForFixed(
+    const triggerAt = this.utility.getTriggerAtForFixed(
       reminderFireDay,
       reminderTime,
       false,
     );
 
-    const notification = this.createNotification(
+    const notification = this.utility.createNotification(
       triggerAt,
       entity.name,
       description,
@@ -87,8 +89,8 @@ export class ReminderCreator extends NotificationBuildMethods {
       NotificationType.Reminder,
     );
 
-    notification.isSpreadInEventSet = this.isSpreadToNextDay(event);
-    notification.fallType = this.getFallType(triggerAt, scheduledDay);
+    notification.isSpreadInEventSet = this.utility.isSpreadToNextDay(event);
+    notification.fallType = this.utility.getFallType(triggerAt, scheduledDay);
 
     return notification;
   }
@@ -97,7 +99,9 @@ export class ReminderCreator extends NotificationBuildMethods {
     eventDays: Date[],
     event: ScheduleEvent,
   ): DatesFromTo[] {
-    return eventDays.map(day => this.getAvailabilityInterval(day, event));
+    return eventDays.map(day =>
+      this.utility.getAvailabilityInterval(day, event),
+    );
   }
 
   private markIfCompletionExist(
@@ -139,7 +143,7 @@ export class ReminderCreator extends NotificationBuildMethods {
     event: ScheduleEvent,
     entity: Entity,
   ): Array<{ reminder: NotificationDescriber; eventDay: Date }> {
-    if (!this.isReminderSet(event.notificationSettings.reminder)) {
+    if (!this.utility.isReminderSet(event.notificationSettings.reminder)) {
       return [];
     }
 
@@ -158,7 +162,7 @@ export class ReminderCreator extends NotificationBuildMethods {
       );
       result.push({ reminder, eventDay: day });
 
-      const interval = this.getAvailabilityInterval(day, event);
+      const interval = this.utility.getAvailabilityInterval(day, event);
 
       if (reminder?.isActive) {
         this.markIfFallOnUnavailablePeriod(reminder, availabilityIntervals);
@@ -169,7 +173,7 @@ export class ReminderCreator extends NotificationBuildMethods {
       }
 
       if (reminder?.isActive) {
-        this.markIfNotificationOutdated(reminder, event);
+        this.utility.markIfNotificationOutdated(reminder, event);
       }
     }
 
