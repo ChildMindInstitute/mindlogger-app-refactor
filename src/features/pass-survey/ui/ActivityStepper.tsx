@@ -22,7 +22,6 @@ import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
 import {
   ActivityIdentityContext,
   FlankerResponse,
-  StepperNextButtonType,
   useTextVariablesReplacer,
 } from '../lib';
 import { useActivityState, useActivityStepper, useIdleTimer } from '../model';
@@ -106,14 +105,14 @@ function ActivityStepper({
 
   const nextButtonText = getNextButtonText();
 
-  const getNextButtonType = (text: string): StepperNextButtonType | null => {
+  const getAccessibilityLabel = (text: string): string | null => {
     switch (text) {
       case t('activity_navigation:done'):
-        return StepperNextButtonType.DONE;
+        return 'done-button';
       case t('activity_navigation:skip'):
-        return StepperNextButtonType.SKIP;
+        return 'skip-button';
       case t('activity_navigation:next'):
-        return StepperNextButtonType.NEXT;
+        return 'next-button';
       default:
         return null;
     }
@@ -247,7 +246,7 @@ function ActivityStepper({
 
             {canMoveNext && (
               <Stepper.NextButton
-                type={getNextButtonType(nextButtonText)}
+                accessibilityLabel={getAccessibilityLabel(nextButtonText)}
                 isIcon
               />
             )}
@@ -320,7 +319,9 @@ function ActivityStepper({
             )}
 
             {canMoveNext && (
-              <Stepper.NextButton type={getNextButtonType(nextButtonText)}>
+              <Stepper.NextButton
+                accessibilityLabel={getAccessibilityLabel(nextButtonText)}
+              >
                 {t(nextButtonText)}
               </Stepper.NextButton>
             )}

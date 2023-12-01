@@ -1,7 +1,6 @@
 import { PropsWithChildren, useCallback, useContext } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { StepperNextButtonType } from '@app/features/pass-survey';
 import { colors } from '@shared/lib';
 import { RightArrowIcon } from '@shared/ui';
 
@@ -10,10 +9,10 @@ import { HandlersContext } from './contexts';
 
 type Props = PropsWithChildren<{
   isIcon?: boolean;
-  type: StepperNextButtonType | null;
+  accessibilityLabel: string | null;
 }>;
 
-function NextButton({ children, isIcon, type }: Props) {
+function NextButton({ children, isIcon, accessibilityLabel }: Props) {
   const { next } = useContext(HandlersContext);
 
   const onPressNext = useCallback(() => {
@@ -23,7 +22,7 @@ function NextButton({ children, isIcon, type }: Props) {
   if (isIcon) {
     return (
       <TouchableOpacity
-        accessibilityLabel={`${type}-button`}
+        accessibilityLabel={accessibilityLabel ?? ''}
         onPress={onPressNext}
       >
         <RightArrowIcon color={colors.tertiary} size={30} />
@@ -32,7 +31,10 @@ function NextButton({ children, isIcon, type }: Props) {
   }
 
   return (
-    <ActionButton accessibilityLabel={`${type}-button`} onPress={onPressNext}>
+    <ActionButton
+      accessibilityLabel={accessibilityLabel ?? ''}
+      onPress={onPressNext}
+    >
       {children}
     </ActionButton>
   );
