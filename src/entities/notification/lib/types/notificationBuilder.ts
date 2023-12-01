@@ -111,7 +111,7 @@ export type NotificationDescriber = {
   notificationBody: string;
   isSpreadInEventSet?: boolean;
   fallType?: FallType;
-  randomDayCrossType?: RandomCrossBorderType;
+  randomDayCrossType?: RandomCrossBorderType | null;
   isActive: boolean;
   inactiveReason?: InactiveReason;
 } & NotificationDescriberDebugPayload;

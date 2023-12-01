@@ -6,7 +6,7 @@ import {
   NotificationTriggerType,
   PeriodicityType,
 } from '@app/abstract/lib';
-import { DatesFromTo } from '@app/shared/lib';
+import { DatesFromTo, Logger } from '@app/shared/lib';
 
 import { NotificationBuildMethods } from './NotificationBuildMethods';
 import { NotificationDaysExtractor } from './NotificationDaysExtractor';
@@ -95,7 +95,7 @@ class NotificationBuilder
       const { from, to, at, triggerType } = eventNotification;
 
       let triggerAt: Date;
-      let randomBorderType: RandomCrossBorderType | undefined;
+      let randomBorderType: RandomCrossBorderType | null | undefined;
 
       if (triggerType === NotificationTriggerType.FIXED) {
         const isNextDay =
@@ -115,6 +115,13 @@ class NotificationBuilder
           to!,
           randomBorderType!,
         );
+
+        if (!triggerAt) {
+          Logger.warn(
+            '[NotificationBuilder.processEventDay]: triggerAt is not defined for random notification',
+          );
+          continue;
+        }
       }
 
       const notification: NotificationDescriber = this.createNotification(
