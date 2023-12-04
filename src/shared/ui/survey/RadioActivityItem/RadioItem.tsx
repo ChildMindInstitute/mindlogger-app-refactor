@@ -29,7 +29,6 @@ const RadioTooltipContainer = styled(Box, {
 });
 
 const RadioTextContainer = styled(Box, {
-  marginLeft: 10,
   flexGrow: 1,
 });
 
@@ -86,21 +85,18 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
       )}
 
       {image && (
-        <Box width="10%">
-          <CachedImage
-            resizeMode="contain"
-            accessibilityLabel={`radio-option-image-${value}`}
-            style={styles.image}
-            source={image}
-          />
-        </Box>
+        <CachedImage
+          resizeMode="contain"
+          accessibilityLabel={`radio-option-image-${value}`}
+          style={styles.image}
+          source={image}
+        />
       )}
 
       <RadioTextContainer w="50%">
         <Text
           accessibilityLabel={`radio-option-text${value}`}
           fontSize={17}
-          maxWidth="70%"
           ml="$4"
           color={invertedTextColor}
         >
