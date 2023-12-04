@@ -19,13 +19,13 @@ import { useDebounce } from 'use-debounce';
 
 import { Box, ScrollButton } from '@app/shared/ui';
 
-import { ScrollViewContext } from '../lib';
+import { IS_SMALL_SIZE_SCREEN, ScrollViewContext } from '../lib';
 
 type Props = {
   scrollEnabled: boolean;
 } & PropsWithChildren;
 
-const PaddingToBottom = 30;
+const PaddingToBottom = IS_SMALL_SIZE_SCREEN ? 30 : 40;
 
 const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
   const [containerHeight, setContainerHeight] = useState<number | null>(null);
