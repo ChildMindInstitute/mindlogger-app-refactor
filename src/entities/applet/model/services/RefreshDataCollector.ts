@@ -43,7 +43,9 @@ export interface IRefreshDataCollector {
   collectAppletInternals(
     appletDto: AppletDto,
   ): Promise<CollectAppletInternalsResult>;
-  collectAllAppletEvents(): Promise<CollectAllAppletEventsResult>;
+  collectAllAppletEvents(
+    currentApplets: string[],
+  ): Promise<CollectAllAppletEventsResult>;
 }
 
 class RefreshDataCollector implements IRefreshDataCollector {
@@ -129,7 +131,9 @@ class RefreshDataCollector implements IRefreshDataCollector {
     }
   }
 
-  public async collectAllAppletEvents(): Promise<CollectAllAppletEventsResult> {
+  public async collectAllAppletEvents(
+    currentApplets: string[],
+  ): Promise<CollectAllAppletEventsResult> {
     const result: CollectAllAppletEventsResult = {
       appletEvents: {},
     };
@@ -137,7 +141,15 @@ class RefreshDataCollector implements IRefreshDataCollector {
     const eventsResponse = await this.collectEvents();
 
     if (eventsResponse) {
-      eventsResponse.data.result.forEach(({ appletId, events }) => {
+      const appletEvents = currentApplets.map(appletId => ({
+        appletId,
+        events:
+          eventsResponse.data.result.find(
+            appletEventsDto => appletEventsDto.appletId === appletId,
+          )?.events ?? [],
+      }));
+
+      appletEvents.forEach(({ appletId, events }) => {
         result.appletEvents[appletId] = toAxiosResponse({
           result: {
             events,
