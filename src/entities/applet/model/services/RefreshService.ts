@@ -11,6 +11,7 @@ import {
   getCompletedEntitiesKey,
   isAppOnline,
   onNetworkUnavailable,
+  splitArrayToBulks,
 } from '@app/shared/lib';
 
 import ProgressDataCollector, {
@@ -81,6 +82,53 @@ class RefreshService implements IRefreshService {
     await this.queryClient.invalidateQueries({
       queryKey: getCompletedEntitiesKey(),
     });
+  }
+
+  private async parallelRefresh(
+    applets: Array<AppletDto>,
+    allAppletEvents: CollectAllAppletEventsResult,
+    appletRemoteCompletions: CollectRemoteCompletionsResult,
+    optimization: RefreshOptimization,
+  ): Promise<Array<UnsuccessfulApplet>> {
+    const result: Array<UnsuccessfulApplet> = [];
+
+    const appletArrays = splitArrayToBulks<AppletDto>(3, applets);
+
+    for (let appletsArray of appletArrays) {
+      const promises = [];
+
+      for (let appletDto of appletsArray) {
+        try {
+          const promise = this.refreshAppletService.refreshApplet(
+            appletDto,
+            allAppletEvents,
+            appletRemoteCompletions,
+            optimization,
+          );
+          promises.push(promise);
+        } catch (error) {
+          this.logger.warn(
+            `[RefreshService.refreshInternal]: Error occurred during refresh the applet "${appletDto.displayName}|${appletDto.id}".\nInternal error:\n\n` +
+              error,
+          );
+          promises.push(
+            Promise.resolve({
+              appletId: appletDto.id,
+              appletName: appletDto.displayName,
+            }),
+          );
+        }
+      }
+
+      const bulkResults = await Promise.all(promises);
+      const bulkResultsFiltered = bulkResults
+        .filter(x => !!x)
+        .map<UnsuccessfulApplet>(x => x!);
+
+      result.push(...bulkResultsFiltered);
+    }
+
+    return result;
   }
 
   private async refreshInternal(): Promise<RefreshResult> {
@@ -167,6 +215,13 @@ class RefreshService implements IRefreshService {
         });
       }
     }
+
+    // const unsuccessfulApplets = await this.parallelRefresh(
+    //   appletDtos,
+    //   allAppletEvents,
+    //   appletRemoteCompletions,
+    //   optimization,
+    // );
 
     this.invalidateCompletedEntities();
 
