@@ -10,6 +10,7 @@ import {
   EventsService,
   AppletsService,
   AppletDto,
+  ScheduleEventDto,
 } from '@app/shared/api';
 import {
   ILogger,
@@ -43,7 +44,9 @@ export interface IRefreshDataCollector {
   collectAppletInternals(
     appletDto: AppletDto,
   ): Promise<CollectAppletInternalsResult>;
-  collectAllAppletEvents(): Promise<CollectAllAppletEventsResult>;
+  collectAllAppletEvents(
+    currentApplets: string[],
+  ): Promise<CollectAllAppletEventsResult>;
 }
 
 class RefreshDataCollector implements IRefreshDataCollector {
@@ -129,7 +132,9 @@ class RefreshDataCollector implements IRefreshDataCollector {
     }
   }
 
-  public async collectAllAppletEvents(): Promise<CollectAllAppletEventsResult> {
+  public async collectAllAppletEvents(
+    currentApplets: string[],
+  ): Promise<CollectAllAppletEventsResult> {
     const result: CollectAllAppletEventsResult = {
       appletEvents: {},
     };
@@ -137,7 +142,20 @@ class RefreshDataCollector implements IRefreshDataCollector {
     const eventsResponse = await this.collectEvents();
 
     if (eventsResponse) {
-      eventsResponse.data.result.forEach(({ appletId, events }) => {
+      const appletEvents: Array<{
+        appletId: string;
+        events: ScheduleEventDto[];
+      }> = eventsResponse.data.result;
+
+      const responseApplets = appletEvents.map(x => x.appletId);
+      const absentApplets = currentApplets.filter(
+        id => !responseApplets.includes(id),
+      );
+      absentApplets.forEach(id =>
+        appletEvents.push({ appletId: id, events: [] }),
+      );
+
+      appletEvents.forEach(({ appletId, events }) => {
         result.appletEvents[appletId] = toAxiosResponse({
           result: {
             events,

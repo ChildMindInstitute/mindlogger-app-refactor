@@ -119,8 +119,9 @@ class RefreshService implements IRefreshService {
       this.logger.log(
         "[RefreshService.refreshInternal]: Getting all applets' events",
       );
-      allAppletEvents =
-        await this.refreshDataCollector.collectAllAppletEvents();
+      allAppletEvents = await this.refreshDataCollector.collectAllAppletEvents(
+        appletsResponse.data.result.map(x => x.id),
+      );
     } catch (error) {
       this.logger.log(
         '[RefreshService.refreshInternal]: Error occurred during getting all applet events:\nInternal error:\n\n' +
