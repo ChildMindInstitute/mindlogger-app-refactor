@@ -10,7 +10,6 @@ import {
   EventsService,
   AppletsService,
   AppletDto,
-  ScheduleEventDto,
 } from '@app/shared/api';
 import {
   ILogger,
@@ -142,18 +141,13 @@ class RefreshDataCollector implements IRefreshDataCollector {
     const eventsResponse = await this.collectEvents();
 
     if (eventsResponse) {
-      const appletEvents: Array<{
-        appletId: string;
-        events: ScheduleEventDto[];
-      }> = eventsResponse.data.result;
-
-      const responseApplets = appletEvents.map(x => x.appletId);
-      const absentApplets = currentApplets.filter(
-        id => !responseApplets.includes(id),
-      );
-      absentApplets.forEach(id =>
-        appletEvents.push({ appletId: id, events: [] }),
-      );
+      const appletEvents = currentApplets.map(appletId => ({
+        appletId,
+        events:
+          eventsResponse.data.result.find(
+            appletEventsDto => appletEventsDto.appletId === appletId,
+          )?.events ?? [],
+      }));
 
       appletEvents.forEach(({ appletId, events }) => {
         result.appletEvents[appletId] = toAxiosResponse({
