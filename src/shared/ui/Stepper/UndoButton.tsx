@@ -16,13 +16,17 @@ function UndoButton({ children, isIcon }: Props) {
 
   if (isIcon) {
     return (
-      <TouchableOpacity onPress={undo}>
+      <TouchableOpacity accessibilityLabel="undo-button" onPress={undo}>
         <RestartIcon color={colors.tertiary} size={30} />
       </TouchableOpacity>
     );
   }
 
-  return <ActionButton onPress={undo}>{children}</ActionButton>;
+  return (
+    <ActionButton accessibilityLabel="undo-button" onPress={undo}>
+      {children}
+    </ActionButton>
+  );
 }
 
 export default UndoButton;

@@ -26,7 +26,11 @@ export const getScreenOptions = ({ navigation }: ScreenOptions) => {
     },
     headerShadowVisible: false,
     headerLeft: () => (
-      <Text onPress={navigation.goBack} mr={24}>
+      <Text
+        accessibilityLabel="close-button"
+        onPress={navigation.goBack}
+        mr={24}
+      >
         <CloseIcon color={colors.white} size={22} />
       </Text>
     ),
@@ -41,11 +45,21 @@ export const getAppletDetailsScreenOptions = (
     const tabBarIcon = (color: string) => {
       switch (route.name) {
         case 'ActivityList':
-          return <SurveyIcon color={color} size={40} />;
+          return (
+            <SurveyIcon
+              accessibilityLabel="activities-tab"
+              color={color}
+              size={40}
+            />
+          );
         case 'Data':
-          return <DataIcon color={color} size={40} />;
+          return (
+            <DataIcon accessibilityLabel="data-tab" color={color} size={40} />
+          );
         case 'About':
-          return <AboutIcon color={color} size={40} />;
+          return (
+            <AboutIcon accessibilityLabel="about-tab" color={color} size={40} />
+          );
         default:
           break;
       }

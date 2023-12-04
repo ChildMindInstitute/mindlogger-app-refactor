@@ -54,6 +54,7 @@ const SignUpScreen: FC = () => {
                   color="$white"
                   ta="center"
                   textDecorationLine="underline"
+                  accessibilityLabel="terms_of_service_link"
                   onPress={navigateToTerms}
                 >
                   {t('auth:terms_of_service')}

@@ -95,6 +95,7 @@ const DrawingBoard: FC<Props> = props => {
       zIndex={1}
       borderWidth={1}
       borderColor="$lightGrey2"
+      accessibilityLabel="drawing-area"
     >
       <SketchCanvas
         ref={sketchCanvasRef}

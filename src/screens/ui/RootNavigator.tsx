@@ -40,6 +40,7 @@ import {
   Box,
   ChevronLeft,
   XStack,
+  CloseIcon,
 } from '@shared/ui';
 
 import { getScreenOptions, RootStackParamList } from '../config';
@@ -159,6 +160,15 @@ export default () => {
                 borderTopColor: colors.grey,
                 borderTopWidth: 1,
               },
+              headerLeft: () => (
+                <Text
+                  accessibilityLabel="close-button"
+                  onPress={navigation.goBack}
+                  mr={24}
+                >
+                  <CloseIcon color={colors.white} size={22} />
+                </Text>
+              ),
             }}
             component={ForgotPasswordScreen}
           />
@@ -170,7 +180,7 @@ export default () => {
               headerBackTitle: 'Back',
               title: '',
               headerLeft: () => (
-                <BackButton>
+                <BackButton accessibilityLabel="back_button">
                   <XStack ai="center">
                     <ChevronLeft color="white" size={16} />
 
@@ -199,6 +209,7 @@ export default () => {
               },
               headerRight: () => (
                 <TouchableOpacity
+                  accessibilityLabel="user_settings-button"
                   onPress={() => {
                     if (AppletModel.RefreshService.isBusy()) {
                       return;
@@ -258,7 +269,11 @@ export default () => {
                   )
                 : undefined,
               headerLeft: () => (
-                <BackButton mr={IS_ANDROID && 15} fallbackRoute="Applets">
+                <BackButton
+                  accessibilityLabel="home-button"
+                  mr={IS_ANDROID && 15}
+                  fallbackRoute="Applets"
+                >
                   <HomeIcon color={colors.white} size={32} />
                 </BackButton>
               ),

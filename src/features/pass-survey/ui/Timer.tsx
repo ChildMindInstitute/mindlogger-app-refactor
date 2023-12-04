@@ -115,7 +115,7 @@ const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
   }, [startInterval, stopInterval]);
 
   return (
-    <TimerContainer>
+    <TimerContainer accessibilityLabel="timer-widget">
       <Svg height={50} width={50}>
         <Circle
           cx={25}

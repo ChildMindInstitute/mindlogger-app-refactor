@@ -83,7 +83,10 @@ const AboutAppLink = () => {
 
   return (
     <XStack jc="center">
-      <TouchableOpacity onPress={() => navigate('AboutApp')}>
+      <TouchableOpacity
+        accessibilityLabel="about-link"
+        onPress={() => navigate('AboutApp')}
+      >
         <Text color="$primary" fontSize={16} fontWeight="700">
           {t('applet_list_component:about_title')}
         </Text>

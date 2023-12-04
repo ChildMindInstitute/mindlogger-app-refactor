@@ -326,7 +326,12 @@ function Intermediate({
         </Text>
 
         <ActivityBox>
-          <Text fontWeight="bold" mb={10} fontSize={16}>
+          <Text
+            accessibilityLabel="next_activity-name"
+            fontWeight="bold"
+            mb={10}
+            fontSize={16}
+          >
             {nextActivity?.name ?? 'Activity'}
           </Text>
 
@@ -342,6 +347,7 @@ function Intermediate({
         <YStack space={10}>
           <Button
             bg="$blue"
+            accessibilityLabel="submit-button"
             onPress={completeActivity}
             isLoading={isLoading && !isCompleted && !isPostponed && !isError}
           >
@@ -350,6 +356,7 @@ function Intermediate({
 
           <Text
             color="$blue"
+            accessibilityLabel="back-button"
             textAlign="center"
             fontSize={17}
             fontWeight="bold"
