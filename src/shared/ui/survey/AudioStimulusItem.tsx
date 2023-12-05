@@ -11,6 +11,7 @@ import {
   SpeakerIcon,
   XStack,
   Text,
+  ActivityIndicator,
 } from '@shared/ui';
 
 type Props = {
@@ -28,9 +29,12 @@ const AudioStimulusItem: FC<Props> = ({ config, onChange: onFinish }) => {
 
   const { t } = useTranslation();
 
-  const { isPlaying, playbackCount, play, pause } = useAudioPlayer();
+  const { isPlaying, playbackCount, play, pause, isLoading } = useAudioPlayer();
 
   const renderIcon = () => {
+    if (isLoading) {
+      return <ActivityIndicator size={22} color="white" />;
+    }
     if (isPlaying) {
       if (replayIsAllowed) {
         return <StopIcon size={17} color="white" />;
@@ -45,6 +49,9 @@ const AudioStimulusItem: FC<Props> = ({ config, onChange: onFinish }) => {
   };
 
   const getButtonText = () => {
+    if (isLoading) {
+      return t('audio_player:loading');
+    }
     if (isPlaying) {
       if (replayIsAllowed) {
         return t('audio_player:stop');
