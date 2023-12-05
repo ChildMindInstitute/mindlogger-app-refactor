@@ -48,7 +48,7 @@ const CheckBoxItem: FC<Props> = ({
   return (
     <XStack
       minHeight="$7"
-      py="$3"
+      py="$4"
       px="$5"
       my="$1"
       ai="center"
