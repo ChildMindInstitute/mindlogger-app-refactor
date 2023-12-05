@@ -20,7 +20,7 @@ type RadioLabelProps = {
   option: RadioOption;
   addTooltip: boolean;
   setPalette: boolean;
-  setEmptyImage: boolean;
+  setImageContainer: boolean;
   textReplacer: (markdown: string) => string;
 };
 
@@ -36,7 +36,7 @@ const RadioTextContainer = styled(Box, {
 const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
   option: { isHidden, id, text, color, image, tooltip, value },
   addTooltip,
-  setEmptyImage,
+  setImageContainer,
   setPalette,
   textReplacer,
   accessibilityLabel,
@@ -86,7 +86,7 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
         </RadioTooltipContainer>
       )}
 
-      {setEmptyImage && (
+      {setImageContainer && (
         <Box style={styles.imageContainer}>
           {image && (
             <CachedImage

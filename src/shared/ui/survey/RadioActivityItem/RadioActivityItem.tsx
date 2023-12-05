@@ -71,7 +71,7 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
             <RadioItem
               accessibilityLabel="radio-item-option"
               option={option}
-              setEmptyImage={hasImage}
+              setImageContainer={hasImage}
               addTooltip={addTooltip}
               setPalette={setPalette}
               textReplacer={textReplacer}
