@@ -19,6 +19,7 @@ import { Item } from './types';
 
 type Props = {
   setPalette: boolean;
+  setEmptyImage: boolean;
   tooltipAvailable: boolean;
   onChange: () => void;
   value: boolean;
@@ -28,6 +29,7 @@ type Props = {
 const CheckBoxItem: FC<Props> = ({
   value,
   setPalette,
+  setEmptyImage,
   tooltipAvailable,
   onChange,
   tooltip,
@@ -67,13 +69,15 @@ const CheckBoxItem: FC<Props> = ({
           </Tooltip>
         )}
 
-        {image ? (
-          <Box borderRadius={4} ml={4} overflow="hidden">
-            <CachedImage
-              style={styles.image}
-              source={image}
-              resizeMode="contain"
-            />
+        {setEmptyImage ? (
+          <Box style={styles.imageContainer}>
+            {image && (
+              <CachedImage
+                style={styles.image}
+                source={image}
+                resizeMode="contain"
+              />
+            )}
           </Box>
         ) : null}
 
@@ -116,9 +120,16 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
+  imageContainer: {
+    width: 56,
+    height: 56,
+    overflow: 'hidden',
+    borderRadius: 4,
+    marginLeft: 4,
+  },
   image: {
-    width: 54,
-    height: 54,
+    height: '100%',
+    width: '100%',
   },
 });
 

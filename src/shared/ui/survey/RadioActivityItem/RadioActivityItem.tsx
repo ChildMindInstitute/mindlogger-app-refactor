@@ -31,6 +31,11 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
 
   useOnUndo(() => setRadioValueId(null));
 
+  const hasImage = useMemo(
+    () => Boolean(options.find(option => !!option.image)),
+    [options],
+  );
+
   const optionsList = useMemo(() => {
     if (randomizeOptions) {
       return shuffle(options);
@@ -66,6 +71,7 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
             <RadioItem
               accessibilityLabel="radio-item-option"
               option={option}
+              setEmptyImage={hasImage}
               addTooltip={addTooltip}
               setPalette={setPalette}
               textReplacer={textReplacer}
