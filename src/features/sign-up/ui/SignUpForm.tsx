@@ -84,7 +84,7 @@ const SignUpForm: FC<Props> = props => {
         <SubmitButton
           isLoading={isLoading}
           onPress={submit}
-          accessibilityLabel="signup-submit-button"
+          accessibilityLabel="sign_up-button"
           borderRadius={30}
           width="100%"
           bg="$lighterGrey4"
