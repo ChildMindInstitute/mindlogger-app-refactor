@@ -204,13 +204,24 @@ class RefreshAppletService implements IRefreshAppletService {
     );
   }
 
+  private isAppletDataExist(appletId: string): boolean {
+    const appletResponse = getDataFromQuery<AppletDetailsResponse>(
+      getAppletDetailsKey(appletId),
+      this.queryClient,
+    );
+    return !!appletResponse;
+  }
+
   public async refreshApplet(
     appletDto: AppletDto,
     allAppletEvents: CollectAllAppletEventsResult,
     appletRemoteCompletions: CollectRemoteCompletionsResult,
     optimization: RefreshOptimization,
   ) {
-    if (optimization.shouldBeFullyUpdated(appletDto)) {
+    if (
+      optimization.shouldBeFullyUpdated(appletDto) ||
+      !this.isAppletDataExist(appletDto.id)
+    ) {
       await this.fullRefresh(
         appletDto,
         allAppletEvents,
