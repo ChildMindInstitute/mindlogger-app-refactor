@@ -20,13 +20,9 @@ const useAudioPlayer = () => {
   };
 
   const play = async (uri: string, onFinish?: () => void) => {
-    if (isLoading) {
-      return;
-    }
-
     setIsLoading(true);
 
-    await wait(400);
+    await wait(100);
 
     await audioRecorderPlayer.current.startPlayer(uri);
 
@@ -50,10 +46,6 @@ const useAudioPlayer = () => {
   };
 
   const pause = () => {
-    if (isLoading) {
-      return;
-    }
-
     setIsPlaying(false);
 
     if (IS_ANDROID) {

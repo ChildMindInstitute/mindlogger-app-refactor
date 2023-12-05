@@ -80,7 +80,7 @@ const AudioStimulusItem: FC<Props> = ({ config, onChange: onFinish }) => {
     <>
       <TouchableOpacity
         accessibilityLabel="audio-stimulus-btn"
-        disabled={isInActive}
+        disabled={isLoading || isInActive}
         onPress={onPress}
       >
         <XStack
