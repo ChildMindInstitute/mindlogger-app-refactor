@@ -12,6 +12,7 @@ import {
   QuestionTooltipIcon,
   Tooltip,
   CheckBox,
+  Box,
 } from '@shared/ui';
 
 import { Item } from './types';
@@ -49,7 +50,7 @@ const CheckBoxItem: FC<Props> = ({
     <XStack
       minHeight="$7"
       py="$4"
-      px="$5"
+      px={10}
       my="$1"
       ai="center"
       jc="space-between"
@@ -67,15 +68,13 @@ const CheckBoxItem: FC<Props> = ({
         )}
 
         {image ? (
-          <CachedImage
-            style={{
-              width: '15%',
-              height: 64,
-              marginLeft: tooltip ? 12 : 0,
-            }}
-            source={image}
-            resizeMode="contain"
-          />
+          <Box borderRadius={4} ml={4} overflow="hidden">
+            <CachedImage
+              style={styles.image}
+              source={image}
+              resizeMode="contain"
+            />
+          </Box>
         ) : null}
 
         <Text
@@ -116,6 +115,10 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 20,
     height: 20,
+  },
+  image: {
+    width: 54,
+    height: 54,
   },
 });
 

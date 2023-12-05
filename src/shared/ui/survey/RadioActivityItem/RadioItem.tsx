@@ -62,7 +62,7 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
       minHeight="$7"
       bg={setPalette ? color : 'none'}
       py="$4"
-      px="$5"
+      px={10}
       my="$1"
       jc="center"
       ai="center"
@@ -85,12 +85,14 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
       )}
 
       {image && (
-        <CachedImage
-          resizeMode="contain"
-          accessibilityLabel={`radio-option-image-${value}`}
-          style={styles.image}
-          source={image}
-        />
+        <Box borderRadius={4} overflow="hidden">
+          <CachedImage
+            resizeMode="contain"
+            accessibilityLabel={`radio-option-image-${value}`}
+            style={styles.image}
+            source={image}
+          />
+        </Box>
       )}
 
       <RadioTextContainer w="50%">
@@ -124,7 +126,8 @@ export default RadioItem;
 
 const styles = StyleSheet.create({
   image: {
-    width: '15%',
-    height: 64,
+    width: 56,
+    height: 56,
+    borderRadius: 4,
   },
 });
