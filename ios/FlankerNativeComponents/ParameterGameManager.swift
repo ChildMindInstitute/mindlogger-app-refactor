@@ -35,22 +35,22 @@ class ParameterGameManager {
     else { return nil }
     
     var urls: [URL] = []
-    
+        
     if let fixationUrl = URL(string: parameters.fixation) {
       urls.append(fixationUrl)
     }
     
     parameters.trials.forEach { trial in
-      if let url = URL(string: trial.stimulus.en) {
+      if trial.stimulus.en.isValidURL, let url = URL(string: trial.stimulus.en) {
         urls.append(url)
       }
       trial.choices.forEach { choice in
-        if let url = URL(string: choice.name.en) {
+        if choice.name.en.isValidURL, let url = URL(string: choice.name.en) {
           urls.append(url)
         }
       }
     }
-    
+        
     return DispatchQueue.main.sync {
       let promises: [Promise<UIImage>] = urls.map{url in
         return ImageLoader().downloadImage(url: url)

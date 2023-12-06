@@ -420,7 +420,20 @@ private extension GameManager {
         gameParameters.trials[countTest].choices[0].name.en.contains("https"),
         gameParameters.trials[countTest].choices[1].name.en.contains("https") {
         delegate?.updateTitleButton(left: nil, right: nil, leftImage: leftImage, rightImage: rightImage, countButton: 2)
-      } else {
+      }
+      else if
+        let leftImage = URL(string: gameParameters.trials[countTest].choices[0].name.en),
+        gameParameters.trials[countTest].choices[0].name.en.contains("https"),
+        !gameParameters.trials[countTest].choices[1].name.en.contains("https") {
+        delegate?.updateTitleButton(left: nil, right: gameParameters.trials[countTest].choices[1].name.en, leftImage: leftImage, rightImage: nil, countButton: 2)
+      }
+      else if
+        let rightImage = URL(string: gameParameters.trials[countTest].choices[1].name.en),
+        gameParameters.trials[countTest].choices[1].name.en.contains("https"),
+        !gameParameters.trials[countTest].choices[0].name.en.contains("https") {
+        delegate?.updateTitleButton(left: gameParameters.trials[countTest].choices[0].name.en, right: nil, leftImage: nil, rightImage: rightImage, countButton: 2)
+      }
+      else {
         delegate?.updateTitleButton(left: gameParameters.trials[countTest].choices[0].name.en, right: gameParameters.trials[countTest].choices[1].name.en, leftImage: nil, rightImage: nil, countButton: 2)
       }
     } else {
