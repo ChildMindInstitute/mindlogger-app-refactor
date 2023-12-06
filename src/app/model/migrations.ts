@@ -14,7 +14,7 @@ type RootStateV0 = Omit<RootState, 'applets'> & {
 type RootStateV1 = RootState;
 
 const migrations: Migrations = {
-  0: (state: RootStateV0): MigrationState => {
+  0: (state: RootStateV0): RootStateV1 => {
     return {
       ...state,
       applets: {
