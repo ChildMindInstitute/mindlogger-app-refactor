@@ -1,5 +1,6 @@
 import {
   IS_ANDROID,
+  Logger,
   callApiWithRetry,
   getStringHashCode,
   watchForConnectionLoss,
@@ -201,7 +202,9 @@ function fileService() {
           );
           return response;
         } catch (error) {
-          console.error('error', JSON.stringify(error));
+          Logger.error(
+            '[fileService.uploadAppletFile]: Error occurred: \n\n' + error,
+          );
           throw error;
         } finally {
           reset();
