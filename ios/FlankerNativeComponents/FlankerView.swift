@@ -397,6 +397,22 @@ extension FlankerView: GameManagerProtocol {
         leftButton.setTitle(nil, for: .normal)
         leftButton.backgroundColor = .clear
       }
+      if let right = right {
+        rightButton.setImage(nil, for: .normal)
+        rightButton.backgroundColor = UIColor(red: 37, green: 95, blue: 158)
+        rightButton.setTitle(right, for: .normal)
+        rightButton.titleLabel?.textAlignment = .center
+      } else if let rightImage = rightImage {
+        let right = ImageLoader()
+        right.downloadImage(url: rightImage).then{ image in
+          self.rightButton.setImage(image, for: .normal)
+          self.rightButton.setImage(image, for: .disabled)
+          self.rightButton.imageView?.contentMode = .scaleAspectFit
+          self.rightButton.imageView?.layer.cornerRadius = 5.0
+        }
+        rightButton.setTitle(nil, for: .normal)
+        rightButton.backgroundColor = .clear
+      }
     }
   }
 
