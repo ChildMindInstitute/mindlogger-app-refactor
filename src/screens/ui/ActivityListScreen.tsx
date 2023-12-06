@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 import { UploadRetryBanner } from '@app/entities/activity';
+import { SharedContentConsent } from '@app/entities/applet';
 import { ActivityGroups } from '@app/widgets/activity-group';
 import { StreamingStatusBar } from '@features/streaming';
 import { AppletDetailsParamList } from '@screens/config';
@@ -16,6 +17,13 @@ const ActivityListScreen: FC<Props> = props => {
       <UploadRetryBanner accessibilityLabel="upload-banner" />
       <HorizontalCalendar mt={8} />
       <StreamingStatusBar appletId={props.route.params.appletId} mb={20} />
+
+      <SharedContentConsent
+        appletId={props.route.params.appletId}
+        px={14}
+        mt={10}
+      />
+
       <ActivityGroups flex={1} px={14} appletId={props.route.params.appletId} />
     </Box>
   );

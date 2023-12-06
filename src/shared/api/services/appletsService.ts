@@ -50,6 +50,8 @@ export type AppletEncryptionDTO = {
   publicKey: string;
 };
 
+type Integration = 'loris';
+
 export type AppletDetailsDto = {
   id: string;
   displayName: string;
@@ -63,6 +65,7 @@ export type AppletDetailsDto = {
   activityFlows: ActivityFlowRecordDto[];
   encryption: AppletEncryptionDTO | null;
   streamEnabled: boolean;
+  integrations: Integration[];
 };
 
 export type AppletRespondentMetaDto = {

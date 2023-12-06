@@ -36,3 +36,15 @@ export const selectCompletions = createSelector(
   selectApplets,
   applet => applet.completions,
 );
+
+export const selectConsents = createSelector(
+  selectApplets,
+  applets => applets.consents,
+);
+
+const selectAppletId = (_: any, appletId: string) => appletId;
+
+export const selectAppletConsents = createSelector(
+  [selectConsents, selectAppletId],
+  (consents, appletId) => consents[appletId],
+);

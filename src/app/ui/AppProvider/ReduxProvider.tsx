@@ -15,15 +15,22 @@ import { IdentityModel } from '@entities/identity';
 import { StreamingModel } from '@entities/streaming';
 import { createAsyncStorage, useSystemBootUp } from '@shared/lib';
 
+import { migrate } from '../../model';
+
 const storage = createAsyncStorage('redux-storage');
 
 export const persistConfig = {
   key: 'root',
   throttle: 1000,
   storage: storage,
+  version: 1,
+  migrate,
 };
 
-const rootReducer = (state: any, action: AnyAction) => {
+const rootReducer = (
+  state: any,
+  action: AnyAction,
+): ReturnType<typeof reducer> => {
   if (action.type === 'identity/onLogout') {
     state = undefined;
   }
@@ -37,10 +44,7 @@ const rootReducer = (state: any, action: AnyAction) => {
   return reducer(state, action);
 };
 
-const persistedReducer = persistReducer(
-  persistConfig,
-  rootReducer,
-) as typeof rootReducer;
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const reduxStore = configureStore({
   reducer: persistedReducer,

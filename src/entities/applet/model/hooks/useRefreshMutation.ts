@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Logger, useAppDispatch, useAppSelector } from '@app/shared/lib';
 
+import { AppletIntegrationsService } from '../integrations';
 import { ProgressSyncService, RefreshService } from '../services';
 
 const useRefreshMutation = (onSuccess?: () => void) => {
@@ -16,9 +17,20 @@ const useRefreshMutation = (onSuccess?: () => void) => {
     [dispatch, state],
   );
 
+  const appletIntegrationService = useMemo(
+    () => new AppletIntegrationsService(state, dispatch, Logger),
+    [dispatch, state],
+  );
+
   const refreshService = useMemo(
-    () => new RefreshService(queryClient, Logger, progressSyncService),
-    [queryClient, progressSyncService],
+    () =>
+      new RefreshService(
+        queryClient,
+        Logger,
+        progressSyncService,
+        appletIntegrationService,
+      ),
+    [queryClient, progressSyncService, appletIntegrationService],
   );
 
   const refresh = useMemo(

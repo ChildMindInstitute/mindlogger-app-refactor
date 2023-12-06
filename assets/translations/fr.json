@@ -529,5 +529,13 @@
     "finished_complete": "Fini. Cliquer sur Terminé pour terminer.",
     "begin": "Commencer",
     "end": "Fin"
+  },
+  "data_sharing": {
+    "consent": "Je consens à rendre mes réponses",
+    "media_consent": "Je consens à rendre mes réponses des médias",
+    "public": "publiques",
+    "dialog": {
+      "body": "Le partage public des réponses implique que les informations fournies par les utilisateurs individuels, telles que les réponses au sondage ou les commentaires, seront librement accessibles à d'autres personnes."
+    }
   }
 }

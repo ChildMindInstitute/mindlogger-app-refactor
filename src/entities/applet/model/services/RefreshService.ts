@@ -27,6 +27,7 @@ import RefreshDataCollector, {
 } from './RefreshDataCollector';
 import RefreshOptimization from './RefreshOptimization';
 import { onAppletListRefreshError, onAppletRefreshError } from '../../lib';
+import type { AppletIntegrationsService } from '../integrations';
 
 type UnsuccessfulApplet = {
   appletId: string;
@@ -54,6 +55,7 @@ class RefreshService implements IRefreshService {
     queryClient: QueryClient,
     logger: ILogger,
     appletProgressSyncService: IAppletProgressSyncService,
+    appletIntegrationService: AppletIntegrationsService,
   ) {
     this.queryClient = queryClient;
     this.logger = logger;
@@ -63,6 +65,7 @@ class RefreshService implements IRefreshService {
       queryClient,
       logger,
       appletProgressSyncService,
+      appletIntegrationService,
     );
   }
 
