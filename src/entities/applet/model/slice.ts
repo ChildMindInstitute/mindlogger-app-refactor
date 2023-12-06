@@ -189,16 +189,16 @@ const slice = createSlice({
     ) => {
       const { appletId } = action.payload;
 
-      const consents = state.consents[appletId];
+      const appletConsents = state.consents[appletId];
 
-      if (!consents) {
+      if (!appletConsents) {
         return;
       }
 
-      const currentValue = consents.shareToPublic;
+      const currentValue = appletConsents.shareToPublic;
 
-      consents.shareToPublic = !currentValue;
-      consents.shareMediaToPublic = !currentValue;
+      appletConsents.shareToPublic = !currentValue;
+      appletConsents.shareMediaToPublic = !currentValue;
     },
 
     toggleMediaConsent: (
@@ -207,15 +207,15 @@ const slice = createSlice({
     ) => {
       const { appletId } = action.payload;
 
-      const consents = state.consents[appletId];
+      const appletConsents = state.consents[appletId];
 
-      if (!consents) {
+      if (!appletConsents) {
         return;
       }
 
-      const currentValue = consents.shareMediaToPublic;
+      const currentValue = appletConsents.shareMediaToPublic;
 
-      consents.shareMediaToPublic = !currentValue;
+      appletConsents.shareMediaToPublic = !currentValue;
     },
   },
 });
