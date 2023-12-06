@@ -2,6 +2,7 @@ import { Point } from '@app/abstract/lib';
 import {
   DayMonthYear,
   HourMinute,
+  callApiWithRetry,
   watchForConnectionLoss,
 } from '@app/shared/lib';
 import { MediaFile, MediaValue } from '@app/shared/ui';
@@ -203,36 +204,44 @@ type CheckIfAnswersExistResponse = SuccessfulResponse<{
 function answerService() {
   return {
     async sendActivityAnswers(request: ActivityAnswersRequest) {
-      const { abortController, reset } = watchForConnectionLoss();
+      const apiCall = async () => {
+        const { abortController, reset } = watchForConnectionLoss();
 
-      try {
-        const response = await httpService.post<ActivityAnswersResponse>(
-          '/answers',
-          request,
-          {
-            signal: abortController.signal,
-          },
-        );
-        return response;
-      } finally {
-        reset();
-      }
+        try {
+          const response = await httpService.post<ActivityAnswersResponse>(
+            '/answers',
+            request,
+            {
+              signal: abortController.signal,
+            },
+          );
+          return response;
+        } finally {
+          reset();
+        }
+      };
+
+      return callApiWithRetry(apiCall);
     },
     async checkIfAnswersExist(request: CheckIfAnswersExistRequest) {
-      const { abortController, reset } = watchForConnectionLoss();
+      const apiCall = async () => {
+        const { abortController, reset } = watchForConnectionLoss();
 
-      try {
-        const response = await httpService.post<CheckIfAnswersExistResponse>(
-          '/answers/check-existence',
-          request,
-          {
-            signal: abortController.signal,
-          },
-        );
-        return response;
-      } finally {
-        reset();
-      }
+        try {
+          const response = await httpService.post<CheckIfAnswersExistResponse>(
+            '/answers/check-existence',
+            request,
+            {
+              signal: abortController.signal,
+            },
+          );
+          return response;
+        } finally {
+          reset();
+        }
+      };
+
+      return callApiWithRetry(apiCall);
     },
   };
 }
