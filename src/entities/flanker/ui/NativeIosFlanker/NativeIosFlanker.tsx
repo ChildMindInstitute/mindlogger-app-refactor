@@ -31,8 +31,6 @@ const NativeIosFlanker: FC<Props> = props => {
 
     const configString = JSON.stringify(configuration);
 
-    console.log(JSON.stringify(configuration, null, 1));
-
     NativeModules.FlankerViewManager.preloadGameImages(configString)
       .then(() => {
         NativeModules.FlankerViewManager.setGameParameters(configString);
