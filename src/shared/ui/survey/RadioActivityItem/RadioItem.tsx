@@ -21,6 +21,7 @@ type RadioLabelProps = {
   addTooltip: boolean;
   setPalette: boolean;
   setImageContainer: boolean;
+  setTooltipContainer: boolean;
   textReplacer: (markdown: string) => string;
 };
 
@@ -37,6 +38,7 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
   option: { isHidden, id, text, color, image, tooltip, value },
   addTooltip,
   setImageContainer,
+  setTooltipContainer,
   setPalette,
   textReplacer,
   accessibilityLabel,
@@ -72,17 +74,19 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
       borderRadius={7}
       accessibilityLabel={accessibilityLabel}
     >
-      {addTooltip && tooltip && (
+      {addTooltip && setTooltipContainer && (
         <RadioTooltipContainer>
-          <Tooltip
-            accessibilityLabel={`radio-option-tooltip-${value}`}
-            markdown={tooltipText}
-          >
-            <QuestionTooltipIcon
-              color={hasColor ? invertedColor : colors.grey}
-              size={22}
-            />
-          </Tooltip>
+          {tooltip && (
+            <Tooltip
+              accessibilityLabel={`radio-option-tooltip-${value}`}
+              markdown={tooltipText}
+            >
+              <QuestionTooltipIcon
+                color={hasColor ? invertedColor : colors.grey}
+                size={22}
+              />
+            </Tooltip>
+          )}
         </RadioTooltipContainer>
       )}
 

@@ -3,6 +3,7 @@ import { FC, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
+import { styled } from '@tamagui/core';
 
 import { colors } from '@shared/lib';
 import { invertColor } from '@shared/lib/utils';
@@ -17,9 +18,15 @@ import {
 
 import { Item } from './types';
 
+const CheckboxTooltipContainer = styled(Box, {
+  marginRight: 10,
+  width: '8%',
+});
+
 type Props = {
   setPalette: boolean;
   setImageContainer: boolean;
+  setTooltipContainer: boolean;
   tooltipAvailable: boolean;
   onChange: () => void;
   value: boolean;
@@ -30,6 +37,7 @@ const CheckBoxItem: FC<Props> = ({
   value,
   setPalette,
   setImageContainer,
+  setTooltipContainer,
   tooltipAvailable,
   onChange,
   tooltip,
@@ -63,10 +71,14 @@ const CheckBoxItem: FC<Props> = ({
       onPress={onChange}
     >
       <XStack flex={1} ai="center">
-        {!!tooltip && tooltipAvailable && (
-          <Tooltip markdown={tooltipText}>
-            <QuestionTooltipIcon color={invertedColor} size={25} />
-          </Tooltip>
+        {tooltipAvailable && setTooltipContainer && (
+          <CheckboxTooltipContainer>
+            {!!tooltip && (
+              <Tooltip markdown={tooltipText}>
+                <QuestionTooltipIcon color={invertedColor} size={25} />
+              </Tooltip>
+            )}
+          </CheckboxTooltipContainer>
         )}
 
         {setImageContainer ? (

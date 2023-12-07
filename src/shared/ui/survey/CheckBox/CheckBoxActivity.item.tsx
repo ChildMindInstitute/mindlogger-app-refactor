@@ -32,7 +32,12 @@ const CheckBoxActivityItem: FC<Props> = ({
   const { options, randomizeOptions, addTooltip, setPalette } = config;
 
   const hasImage = useMemo(
-    () => Boolean(options.find(option => !!option.image)),
+    () => options.some(option => !!option.image),
+    [options],
+  );
+
+  const hasTooltip = useMemo(
+    () => options.some(option => !!option.tooltip),
     [options],
   );
 
@@ -74,6 +79,7 @@ const CheckBoxActivityItem: FC<Props> = ({
               tooltipAvailable={addTooltip}
               setPalette={setPalette}
               setImageContainer={hasImage}
+              setTooltipContainer={hasTooltip}
               onChange={() => onItemValueChanged(item.id)}
               value={!!findById(values, item.id)}
               textReplacer={textReplacer}
