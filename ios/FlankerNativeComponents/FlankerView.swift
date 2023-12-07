@@ -165,11 +165,7 @@ class FlankerView: UIView {
 
   var isFirstScreen = true
 
-  @objc var dataJson: NSString? {
-    didSet {
-      ParameterGameManager.shared.loadAllImage(dataJson: String(dataJson ?? ""))
-    }
-  }
+  @objc var dataJson: NSString?
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -362,22 +358,61 @@ extension FlankerView: GameManagerProtocol {
         rightButton.titleLabel?.textAlignment = .center
       } else if let leftImage = leftImage, let rightImage = rightImage {
         let left = ImageLoader()
-        left.loadImageWithUrl(leftImage)
+        left.downloadImage(url: leftImage).then { image in
+          self.leftButton.setImage(image, for: .normal)
+          self.leftButton.setImage(image, for: .disabled)
+          self.leftButton.imageView?.contentMode = .scaleAspectFit
+          self.leftButton.imageView?.layer.cornerRadius = 5.0
+        }.catch { error in
+          print(error.localizedDescription)
+        }
         let right = ImageLoader()
-        right.loadImageWithUrl(rightImage)
+        right.downloadImage(url: rightImage).then { image in
+          self.rightButton.setImage(image, for: .normal)
+          self.rightButton.setImage(image, for: .disabled)
+          self.rightButton.imageView?.contentMode = .scaleAspectFit
+          self.rightButton.imageView?.layer.cornerRadius = 5.0
+        }.catch { error in
+          print(error.localizedDescription)
+        }
         leftButton.setTitle(nil, for: .normal)
         leftButton.backgroundColor = .clear
-        leftButton.setImage(left.image, for: .normal)
-        leftButton.setImage(left.image, for: .disabled)
-        leftButton.imageView?.contentMode = .scaleAspectFit
-        leftButton.imageView?.layer.cornerRadius = 5.0
-
         rightButton.setTitle(nil, for: .normal)
         rightButton.backgroundColor = .clear
-        rightButton.setImage(right.image, for: .normal)
-        rightButton.setImage(right.image, for: .disabled)
-        rightButton.imageView?.contentMode = .scaleAspectFit
-        rightButton.imageView?.layer.cornerRadius = 5.0
+      }
+      else if let leftImage = leftImage, let right = right {
+        let left = ImageLoader()
+        left.downloadImage(url: leftImage).then { image in
+          self.leftButton.setImage(image, for: .normal)
+          self.leftButton.setImage(image, for: .disabled)
+          self.leftButton.imageView?.contentMode = .scaleAspectFit
+          self.leftButton.imageView?.layer.cornerRadius = 5.0
+          self.leftButton.setTitle(nil, for: .normal)
+          self.leftButton.backgroundColor = .clear
+        }.catch { error in
+          print(error.localizedDescription)
+        }
+        rightButton.setImage(nil, for: .normal)
+        rightButton.backgroundColor = UIColor(red: 37, green: 95, blue: 158)
+        rightButton.setTitle(right, for: .normal)
+        rightButton.titleLabel?.textAlignment = .center
+      }
+      else if let rightImage = rightImage, let left = left {
+        let right = ImageLoader()
+        right.downloadImage(url: rightImage).then { image in
+          self.rightButton.setImage(image, for: .normal)
+          self.rightButton.setImage(image, for: .disabled)
+          self.rightButton.imageView?.contentMode = .scaleAspectFit
+          self.rightButton.imageView?.layer.cornerRadius = 5.0
+          self.rightButton.setTitle(nil, for: .normal)
+          self.rightButton.backgroundColor = .clear
+        }.catch { error in
+          print(error.localizedDescription)
+        }
+        leftButton.setImage(nil, for: .normal)
+        leftButton.backgroundColor = UIColor(red: 37, green: 95, blue: 158)
+        leftButton.setTitle(left, for: .normal)
+        leftButton.titleLabel?.textAlignment = .center
       }
     } else {
       if let left = left {
@@ -387,13 +422,30 @@ extension FlankerView: GameManagerProtocol {
         leftButton.titleLabel?.textAlignment = .center
       } else if let leftImage = leftImage {
         let left = ImageLoader()
-        left.loadImageWithUrl(leftImage)
+        left.downloadImage(url: leftImage).then{ image in
+          self.leftButton.setImage(image, for: .normal)
+          self.leftButton.setImage(image, for: .disabled)
+          self.leftButton.imageView?.contentMode = .scaleAspectFit
+          self.leftButton.imageView?.layer.cornerRadius = 5.0
+        }
         leftButton.setTitle(nil, for: .normal)
         leftButton.backgroundColor = .clear
-        leftButton.setImage(left.image, for: .normal)
-        leftButton.setImage(left.image, for: .disabled)
-        leftButton.imageView?.contentMode = .scaleAspectFit
-        leftButton.imageView?.layer.cornerRadius = 5.0
+      }
+      if let right = right {
+        rightButton.setImage(nil, for: .normal)
+        rightButton.backgroundColor = UIColor(red: 37, green: 95, blue: 158)
+        rightButton.setTitle(right, for: .normal)
+        rightButton.titleLabel?.textAlignment = .center
+      } else if let rightImage = rightImage {
+        let right = ImageLoader()
+        right.downloadImage(url: rightImage).then{ image in
+          self.rightButton.setImage(image, for: .normal)
+          self.rightButton.setImage(image, for: .disabled)
+          self.rightButton.imageView?.contentMode = .scaleAspectFit
+          self.rightButton.imageView?.layer.cornerRadius = 5.0
+        }
+        rightButton.setTitle(nil, for: .normal)
+        rightButton.backgroundColor = .clear
       }
     }
   }
@@ -406,7 +458,7 @@ extension FlankerView: GameManagerProtocol {
       let time = CACurrentMediaTime()
       print("Marker: self.displayLink?.isPaused = false: \(time)")
       fixationImage.isHidden = false
-      fixationImage.loadImageWithUrl(url)
+      let _ = fixationImage.downloadImage(url: url)
       drawPixel()
     }
   }

@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { ScheduleEvent } from '@app/entities/event';
 import {
   ActivityIdentityContext,
@@ -39,12 +41,24 @@ function FlowElementSwitch({
     [payload],
   );
 
+  const navigator = useNavigation();
+
+  const closeAssessment = () => {
+    navigator.goBack();
+  };
+
   switch (type) {
     case 'Stepper': {
       return (
         <ActivityIdentityContext.Provider value={context}>
           <Box flex={1}>
-            <BackButton alignSelf="flex-end" mr={16} mt={10} mb={4}>
+            <BackButton
+              accessibilityLabel="close-button"
+              alignSelf="flex-end"
+              mr={16}
+              mt={10}
+              mb={4}
+            >
               <CrossIcon color={colors.tertiary} size={30} />
             </BackButton>
 
@@ -52,7 +66,7 @@ function FlowElementSwitch({
               idleTimer={event.timers.idleTimer}
               timer={event.timers.timer}
               entityStartedAt={entityStartedAt}
-              onClose={onClose}
+              onClose={closeAssessment}
               onFinish={onComplete}
             />
           </Box>

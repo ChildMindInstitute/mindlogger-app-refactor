@@ -40,6 +40,8 @@ const AppletsScreen: FC = () => {
     AppletModel.selectors.selectInProgressApplets,
   );
 
+  const completions = useAppSelector(AppletModel.selectors.selectCompletions);
+
   const navigateAppletDetails: (applet: SelectedApplet) => void = useCallback(
     ({ id, displayName }) =>
       navigate('AppletDetails', { appletId: id, title: displayName }),
@@ -50,6 +52,7 @@ const AppletsScreen: FC = () => {
     await NotificationModel.NotificationRefreshService.refresh(
       queryClient,
       storeProgress,
+      completions,
       LogTrigger.FirstAppRun,
     );
     Logger.send();
@@ -80,7 +83,10 @@ const AboutAppLink = () => {
 
   return (
     <XStack jc="center">
-      <TouchableOpacity onPress={() => navigate('AboutApp')}>
+      <TouchableOpacity
+        accessibilityLabel="about-link"
+        onPress={() => navigate('AboutApp')}
+      >
         <Text color="$primary" fontSize={16} fontWeight="700">
           {t('applet_list_component:about_title')}
         </Text>

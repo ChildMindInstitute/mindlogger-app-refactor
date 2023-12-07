@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions, Linking } from 'react-native';
 
-import { CachedImage } from '@georstat/react-native-image-cache';
+import { CachedImage, CacheManager } from '@georstat/react-native-image-cache';
 import { format } from 'date-fns';
 import AutoHeightWebView from 'react-native-autoheight-webview';
 import {
@@ -382,12 +382,15 @@ const markDownRules: RenderRules = {
       return <YoutubeVideo key={node.key} src={src} />;
     }
 
+    const isCached = !!CacheManager.entries[node.attributes.src];
+
     return (
       <CachedImage
         key={node.key}
         resizeMode="contain"
         style={localStyles.image}
         source={node.attributes.src}
+        sourceAnimationDuration={isCached ? 0 : 200}
       />
     );
   },

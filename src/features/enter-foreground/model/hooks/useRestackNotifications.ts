@@ -16,11 +16,14 @@ function useRestackNotifications() {
     AppletModel.selectors.selectInProgressApplets,
   );
 
+  const completions = useAppSelector(AppletModel.selectors.selectCompletions);
+
   useOnForeground(
     () => {
       NotificationModel.NotificationRefreshService.refresh(
         queryClient,
         storeProgress,
+        completions,
         LogTrigger.GoToForeground,
       );
     },

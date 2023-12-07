@@ -64,7 +64,7 @@ const ForgotPasswordForm: FC<Props> = props => {
 
         <SubmitButton
           isLoading={isLoading}
-          accessibilityLabel="forgot-password-submit-button"
+          accessibilityLabel="reset_password-button"
           onPress={submit}
           buttonStyle={{ alignSelf: 'center', paddingHorizontal: 24 }}
         >

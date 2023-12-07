@@ -52,7 +52,7 @@ const LoginScreen: FC = () => {
 
             <SubmitButton
               borderRadius={30}
-              accessibilityLabel="create-account-navigation-button"
+              accessibilityLabel="create_an_account-button"
               mt={22}
               width="100%"
               backgroundColor="$primary"
@@ -75,12 +75,17 @@ const LoginScreen: FC = () => {
           >
             <Link
               textDecorationLine="underline"
+              accessibilityLabel="change_language-link"
               onPress={navigateToAppLanguage}
             >
               {t('language_screen:change_app_language')}
             </Link>
 
-            <Link textDecorationLine="underline" onPress={navigateToTerms}>
+            <Link
+              textDecorationLine="underline"
+              onPress={navigateToTerms}
+              accessibilityLabel="terms_of_service_link"
+            >
               {t('auth:terms_of_service')}
             </Link>
           </XStack>

@@ -4,6 +4,8 @@ import SelectDropdown from 'react-native-select-dropdown';
 
 import { colors } from '../lib';
 
+import { Box } from '.';
+
 export type LabeledValue = {
   label: string;
   value: string;
@@ -22,16 +24,18 @@ function Dropdown({ placeholder, value, onValueChange, items }: DropdownProps) {
   };
 
   return (
-    <SelectDropdown
-      data={items}
-      dropdownStyle={styles.dropdown}
-      buttonStyle={styles.button}
-      defaultButtonText={value ? value.value : placeholder}
-      defaultValue={value ? value.value : placeholder}
-      onSelect={onChange}
-      buttonTextAfterSelection={() => (value ? value.value : placeholder)}
-      rowTextForSelection={item => item.label}
-    />
+    <Box accessibilityLabel="select-dropdown">
+      <SelectDropdown
+        data={items}
+        dropdownStyle={styles.dropdown}
+        buttonStyle={styles.button}
+        defaultButtonText={value ? value.value : placeholder}
+        defaultValue={value ? value.value : placeholder}
+        onSelect={onChange}
+        buttonTextAfterSelection={() => (value ? value.value : placeholder)}
+        rowTextForSelection={item => item.label}
+      />
+    </Box>
   );
 }
 

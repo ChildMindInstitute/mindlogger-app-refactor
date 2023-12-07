@@ -82,7 +82,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
           )}
 
           {leftTitle ? (
-            <Text accessibilityLabel="slide-left-title" textAlign="center">
+            <Text accessibilityLabel="min-label" textAlign="center">
               {leftTitle}
             </Text>
           ) : null}
@@ -100,7 +100,11 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
             </XStack>
           )}
 
-          {rightTitle ? <Text textAlign="center">{rightTitle}</Text> : null}
+          {rightTitle ? (
+            <Text accessibilityLabel="max-label" textAlign="center">
+              {rightTitle}
+            </Text>
+          ) : null}
         </YStack>
       </XStack>
     </YStack>
