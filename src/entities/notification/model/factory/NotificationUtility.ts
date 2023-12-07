@@ -362,6 +362,25 @@ export class NotificationUtility {
     }
   }
 
+  public markIfIsOutOfStartEndDatesRange(
+    notification: NotificationDescriber,
+    event: ScheduleEvent,
+  ) {
+    const startDate = event.availability.startDate;
+    const endDate = event.availability.endDate;
+
+    if (!startDate || !endDate) {
+      return;
+    }
+
+    const notificationDay = startOfDay(notification.scheduledAt);
+
+    if (notificationDay < startDate || notificationDay > endDate) {
+      notification.isActive = false;
+      notification.inactiveReason = InactiveReason.OutOfStartEndDay;
+    }
+  }
+
   public markAllAsInactiveDueToEntityHidden(
     notifications: NotificationDescriber[],
   ) {

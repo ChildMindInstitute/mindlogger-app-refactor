@@ -248,6 +248,7 @@ class NotificationBuilder implements INotificationBuilder {
 
       const reminders = this.reminderCreator.create(
         [scheduledDay],
+        [scheduledDay],
         event,
         entity,
       );
@@ -255,7 +256,7 @@ class NotificationBuilder implements INotificationBuilder {
         eventResult.notifications.push(reminders[0].reminder);
       }
     } else {
-      const days = this.notificationDaysExtractor.extract(
+      const eventDays = this.notificationDaysExtractor.extract(
         firstScheduleDay,
         lastScheduleDay,
         periodStartDay,
@@ -265,9 +266,30 @@ class NotificationBuilder implements INotificationBuilder {
         scheduledDay,
       );
 
-      const reminders = this.reminderCreator.create(days, event, entity);
+      const reminderDays = this.notificationDaysExtractor.extractForReminders(
+        lastScheduleDay,
+        periodEndDay,
+        periodicity,
+        aWeekAgoDay,
+        scheduledDay,
+      );
 
-      for (let day of days) {
+      const reminders = this.reminderCreator.create(
+        eventDays,
+        reminderDays,
+        event,
+        entity,
+      );
+
+      const reminderFromPastDays = reminders.filter(
+        r => !eventDays.includes(r.eventDay),
+      );
+
+      eventResult.notifications.push(
+        ...reminderFromPastDays.map(x => x.reminder),
+      );
+
+      for (let day of eventDays) {
         const notifications = this.processEventDay(day, event, entity);
         eventResult.notifications.push(...notifications);
 
@@ -326,6 +348,9 @@ class NotificationBuilder implements INotificationBuilder {
       events: eventNotificationsResult,
     };
 
+    if (eventNotificationsResult.some(x => x.notifications.length)) {
+      console.log('notifications->', JSON.stringify(result, null, 2));
+    }
     return result;
   }
 }
