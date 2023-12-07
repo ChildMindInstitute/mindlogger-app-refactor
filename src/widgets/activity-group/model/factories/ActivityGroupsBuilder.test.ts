@@ -1,5 +1,3 @@
-//import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
-
 import {
   addDays,
   addHours,
@@ -28,9 +26,10 @@ import { EventAvailability } from '@app/entities/event';
 import { MIDNIGHT_DATE } from '@app/shared/lib';
 
 import {
-  ActivityGroupsBuilderInput,
+  ActivityGroupsBuilder,
   createActivityGroupsBuilder,
 } from './ActivityGroupsBuilder';
+import { GroupsBuildContext } from './GroupUtility';
 import { ActivityListGroup, EventEntity, Entity } from '../../lib';
 
 jest.mock('@app/shared/lib/constants', () => ({
@@ -198,6 +197,21 @@ const getAlwaysAvailableEventEntity = (settings: {
   return result;
 };
 
+const mockGetNow = (builder: ActivityGroupsBuilder, mockedNowDate: Date) => {
+  //@ts-ignore
+  builder.utility.getNow = jest.fn(() => new Date(mockedNowDate));
+  //@ts-ignore
+  builder.itemsFactory.utility.getNow = jest.fn(() => new Date(mockedNowDate));
+  //@ts-ignore
+  builder.scheduledEvaluator.utility.getNow = jest.fn(
+    () => new Date(mockedNowDate),
+  );
+  //@ts-ignore
+  builder.availableEvaluator.utility.getNow = jest.fn(
+    () => new Date(mockedNowDate),
+  );
+};
+
 describe('ActivityGroupsBuilder', () => {
   describe('Test In-progress group', () => {
     it('Should return group item when event is always-available and startAt is set in progress record', () => {
@@ -205,7 +219,7 @@ describe('ActivityGroupsBuilder', () => {
 
       const progress: Progress = getProgress(startAt, null);
 
-      const input: ActivityGroupsBuilderInput = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
@@ -236,7 +250,7 @@ describe('ActivityGroupsBuilder', () => {
 
       let progress: Progress = getProgress(startAt, endAt);
 
-      let input: ActivityGroupsBuilderInput = {
+      let input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
@@ -279,7 +293,7 @@ describe('ActivityGroupsBuilder', () => {
 
       const progress: Progress = getProgress(date, null);
 
-      const input: ActivityGroupsBuilderInput = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
@@ -293,8 +307,7 @@ describe('ActivityGroupsBuilder', () => {
         scheduledAt: startOfDay(date),
       });
 
-      //@ts-ignore
-      builder.getNow = jest.fn(() => addDays(date, 10));
+      mockGetNow(builder, addDays(date, 10));
 
       const result = builder.buildInProgress([eventEntity]);
 
@@ -314,7 +327,7 @@ describe('ActivityGroupsBuilder', () => {
 
       const progress: Progress = getProgress(startAt, null);
 
-      const input: ActivityGroupsBuilderInput = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
@@ -333,8 +346,7 @@ describe('ActivityGroupsBuilder', () => {
       mockedNowDate.setHours(startAt.getHours() + 3);
       mockedNowDate.setMinutes(startAt.getMinutes() + 12);
 
-      //@ts-ignore
-      builder.getNow = jest.fn(() => mockedNowDate);
+      mockGetNow(builder, mockedNowDate);
 
       let result = builder.buildInProgress([eventEntity]);
 
@@ -356,8 +368,7 @@ describe('ActivityGroupsBuilder', () => {
       mockedNowDate.setHours(startAt.getHours() + 5);
       mockedNowDate.setMinutes(startAt.getMinutes() + 19);
 
-      //@ts-ignore
-      builder.getNow = jest.fn(() => mockedNowDate);
+      mockGetNow(builder, mockedNowDate);
 
       result = builder.buildInProgress([eventEntity]);
 
@@ -371,7 +382,7 @@ describe('ActivityGroupsBuilder', () => {
 
       const progress: Progress = getProgress(startAt, null);
 
-      const input: ActivityGroupsBuilderInput = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
@@ -390,8 +401,7 @@ describe('ActivityGroupsBuilder', () => {
       mockedNowDate.setHours(startAt.getHours() + 5);
       mockedNowDate.setMinutes(startAt.getMinutes() + 20);
 
-      //@ts-ignore
-      builder.getNow = jest.fn(() => mockedNowDate);
+      mockGetNow(builder, mockedNowDate);
 
       let result = builder.buildInProgress([eventEntity]);
 
@@ -413,8 +423,7 @@ describe('ActivityGroupsBuilder', () => {
       mockedNowDate.setHours(startAt.getHours() + 6);
       mockedNowDate.setMinutes(startAt.getMinutes() + 30);
 
-      //@ts-ignore
-      builder.getNow = jest.fn(() => mockedNowDate);
+      mockGetNow(builder, mockedNowDate);
 
       result = builder.buildInProgress([eventEntity]);
 
@@ -429,7 +438,7 @@ describe('ActivityGroupsBuilder', () => {
 
       let progress: Progress = getProgress(startAt, endAt);
 
-      let input: ActivityGroupsBuilderInput = {
+      let input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
@@ -444,8 +453,8 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.oneTimeCompletion = false;
 
       const now = addMonths(endAt, 1);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => now);
+
+      mockGetNow(builder, now);
 
       let result = builder.buildAvailable([eventEntity]);
 
@@ -470,8 +479,8 @@ describe('ActivityGroupsBuilder', () => {
       };
 
       builder = createActivityGroupsBuilder(input);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => now);
+
+      mockGetNow(builder, now);
 
       result = builder.buildAvailable([eventEntity]);
 
@@ -484,7 +493,7 @@ describe('ActivityGroupsBuilder', () => {
 
       let progress: Progress = getProgress(startAt, endAt);
 
-      let input: ActivityGroupsBuilderInput = {
+      let input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
@@ -499,8 +508,8 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.oneTimeCompletion = true;
 
       const now = subMinutes(endAt, 10);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => now);
+
+      mockGetNow(builder, now);
 
       let result = builder.buildAvailable([eventEntity]);
 
@@ -518,7 +527,7 @@ describe('ActivityGroupsBuilder', () => {
 
       let progress: Progress = getEmptyProgress();
 
-      let input: ActivityGroupsBuilderInput = {
+      let input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
@@ -539,8 +548,7 @@ describe('ActivityGroupsBuilder', () => {
 
       const now = addMinutes(scheduledAt, 1);
 
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+      mockGetNow(builder, new Date(now));
 
       let result = builder.buildAvailable([eventEntity]);
 
@@ -604,8 +612,8 @@ describe('ActivityGroupsBuilder', () => {
       };
 
       builder = createActivityGroupsBuilder(input);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+
+      mockGetNow(builder, new Date(now));
 
       result = builder.buildAvailable([eventEntity]);
       expect(result).toEqual(expectedResult);
@@ -616,7 +624,7 @@ describe('ActivityGroupsBuilder', () => {
 
       let progress: Progress = getEmptyProgress();
 
-      let input: ActivityGroupsBuilderInput = {
+      let input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
@@ -638,8 +646,7 @@ describe('ActivityGroupsBuilder', () => {
       //sub-test-1 - scheduledToday is false
       let now = subDays(scheduledAt, 1);
 
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+      mockGetNow(builder, new Date(now));
 
       let result = builder.buildAvailable([eventEntity]);
 
@@ -653,8 +660,9 @@ describe('ActivityGroupsBuilder', () => {
 
       //sub-test-2  - now's time is less than timeFrom
       now = subMinutes(scheduledAt, 1);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+
+      mockGetNow(builder, new Date(now));
+
       result = builder.buildAvailable([eventEntity]);
       expect(result).toEqual(expectedResult);
 
@@ -663,8 +671,9 @@ describe('ActivityGroupsBuilder', () => {
       now.setHours(16);
       now.setMinutes(30);
       now = addMinutes(now, 1);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+
+      mockGetNow(builder, new Date(now));
+
       result = builder.buildAvailable([eventEntity]);
       expect(result).toEqual(expectedResult);
 
@@ -680,8 +689,8 @@ describe('ActivityGroupsBuilder', () => {
       builder = createActivityGroupsBuilder(input);
 
       now = addMinutes(scheduledAt, 10);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+
+      mockGetNow(builder, new Date(now));
 
       result = builder.buildAvailable([eventEntity]);
       expect(result).toEqual(expectedResult);
@@ -698,8 +707,8 @@ describe('ActivityGroupsBuilder', () => {
       builder = createActivityGroupsBuilder(input);
 
       now = addMinutes(scheduledAt, 10);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+
+      mockGetNow(builder, new Date(now));
 
       result = builder.buildAvailable([eventEntity]);
       expect(result).toEqual(expectedResult);
@@ -710,7 +719,7 @@ describe('ActivityGroupsBuilder', () => {
 
       let progress: Progress = getEmptyProgress();
 
-      let input: ActivityGroupsBuilderInput = {
+      let input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
@@ -731,8 +740,7 @@ describe('ActivityGroupsBuilder', () => {
 
       const now = subHours(scheduledAt, 1);
 
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+      mockGetNow(builder, new Date(now));
 
       let result = builder.buildAvailable([eventEntity]);
 
@@ -796,8 +804,8 @@ describe('ActivityGroupsBuilder', () => {
       };
 
       builder = createActivityGroupsBuilder(input);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+
+      mockGetNow(builder, new Date(now));
 
       result = builder.buildAvailable([eventEntity]);
       expect(result).toEqual(expectedResult);
@@ -808,7 +816,7 @@ describe('ActivityGroupsBuilder', () => {
 
       let progress: Progress = getEmptyProgress();
 
-      let input: ActivityGroupsBuilderInput = {
+      let input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
@@ -829,8 +837,8 @@ describe('ActivityGroupsBuilder', () => {
 
       //sub-test-1 - scheduledToday is false
       let now = subDays(scheduledAt, 1);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+
+      mockGetNow(builder, new Date(now));
 
       let result = builder.buildAvailable([eventEntity]);
 
@@ -854,8 +862,8 @@ describe('ActivityGroupsBuilder', () => {
       builder = createActivityGroupsBuilder(input);
 
       now = subHours(scheduledAt, 1);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+
+      mockGetNow(builder, new Date(now));
 
       result = builder.buildAvailable([eventEntity]);
       expect(result).toEqual(expectedResult);
@@ -872,8 +880,8 @@ describe('ActivityGroupsBuilder', () => {
       builder = createActivityGroupsBuilder(input);
 
       now = subHours(scheduledAt, 1);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+
+      mockGetNow(builder, new Date(now));
 
       result = builder.buildAvailable([eventEntity]);
       expect(result).toEqual(expectedResult);
@@ -886,7 +894,7 @@ describe('ActivityGroupsBuilder', () => {
 
       let progress: Progress = getEmptyProgress();
 
-      let input: ActivityGroupsBuilderInput = {
+      let input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
@@ -906,8 +914,8 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.timeTo = { hours: 16, minutes: 30 };
 
       let now = subHours(scheduledAt, 1);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+
+      mockGetNow(builder, new Date(now));
 
       let result = builder.buildScheduled([eventEntity]);
 
@@ -973,8 +981,8 @@ describe('ActivityGroupsBuilder', () => {
       };
 
       builder = createActivityGroupsBuilder(input);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+
+      mockGetNow(builder, new Date(now));
 
       result = builder.buildScheduled([eventEntity]);
       expect(result).toEqual(expectedResult);
@@ -985,7 +993,7 @@ describe('ActivityGroupsBuilder', () => {
 
       let progress: Progress = getEmptyProgress();
 
-      let input: ActivityGroupsBuilderInput = {
+      let input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
@@ -1005,8 +1013,8 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.timeTo = { hours: 16, minutes: 30 };
 
       let now = subHours(scheduledAt, 1);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+
+      mockGetNow(builder, new Date(now));
 
       let result = builder.buildScheduled([eventEntity]);
 
@@ -1031,8 +1039,8 @@ describe('ActivityGroupsBuilder', () => {
       };
 
       builder = createActivityGroupsBuilder(input);
-      //@ts-ignore
-      builder.getNow = jest.fn(() => new Date(now));
+
+      mockGetNow(builder, new Date(now));
 
       result = builder.buildScheduled([eventEntity]);
       expect(result).toEqual(expectedResult);
@@ -1059,7 +1067,7 @@ describe('ActivityGroupsBuilder', () => {
         },
       };
 
-      let input: ActivityGroupsBuilderInput = {
+      let input: GroupsBuildContext = {
         allAppletActivities: [
           {
             description: 'test-description-1',

@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* MindloggerMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MindloggerMobileTests.m */; };
+		01325BFD2B206CFB00F4DD1F /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */; };
+		01325BFE2B206CFB00F4DD1F /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */; };
+		01325BFF2B206CFB00F4DD1F /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */; };
+		01325C002B206CFB00F4DD1F /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */; };
+		01325C012B206CFB00F4DD1F /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */; };
 		014B5A6929CAFAF600882214 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2129C88A590089AB98 /* CustomButton.swift */; };
 		014B5A6A29CAFAF600882214 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2129C88A590089AB98 /* CustomButton.swift */; };
 		014B5A6B29CAFAF700882214 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2129C88A590089AB98 /* CustomButton.swift */; };
@@ -99,7 +104,7 @@
 		4E9EC54929BA279C002F69A5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
 		4E9EC54A29BA279C002F69A5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
 		4EBCD5B22971514E00D3C04C /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
-		51A6E1C8BEDF3FA779731DCF /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		51A6E1C8BEDF3FA779731DCF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		6EC24D24F27BA05AB9A0E180 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FE1464BAFCB848C5E7FEB6 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */; };
 		77B9BC525DD1581D3656C695 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6F78F58C2DEE16D76268FE2 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -188,6 +193,7 @@
 		00E356EE1AD99517003FC87E /* MindloggerMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MindloggerMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* MindloggerMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MindloggerMobileTests.m; sourceTree = "<group>"; };
+		01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		01D339DD29C2E672003935D9 /* MindloggerMobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MindloggerMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlankerSandboxView.swift; sourceTree = "<group>"; usesTabs = 0; };
 		01D339E029C2E8B6003935D9 /* FlankerSandboxViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlankerSandboxViewManager.swift; sourceTree = "<group>"; };
@@ -305,7 +311,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51A6E1C8BEDF3FA779731DCF /* BuildFile in Frameworks */,
+				51A6E1C8BEDF3FA779731DCF /* (null) in Frameworks */,
 				870409EDEE2F518052805DAA /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -389,6 +395,7 @@
 				288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */,
 				288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */,
 				288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */,
+				01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */,
 			);
 			path = FlankerNativeComponents;
 			sourceTree = "<group>";
@@ -1352,6 +1359,7 @@
 				288FAB3529C88A590089AB98 /* ImageLoader.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				01325BFD2B206CFB00F4DD1F /* String+Extensions.swift in Sources */,
 				288FAB2D29C88A590089AB98 /* FlankerModel.swift in Sources */,
 				01D339E129C2E8B6003935D9 /* FlankerSandboxViewManager.swift in Sources */,
 				01D339DF29C2E672003935D9 /* FlankerSandboxView.swift in Sources */,
@@ -1363,6 +1371,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				014B5A7429CAFB5400882214 /* FlankerViewManager.m in Sources */,
+				01325BFE2B206CFB00F4DD1F /* String+Extensions.swift in Sources */,
 				014B5A8329CAFB6B00882214 /* ParameterModel.swift in Sources */,
 				014B5A8C29CAFB7700882214 /* TimeInterval+Extension.swift in Sources */,
 				F83E655029FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */,
@@ -1390,6 +1399,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				014B5A7329CAFB5300882214 /* FlankerViewManager.m in Sources */,
+				01325BFF2B206CFB00F4DD1F /* String+Extensions.swift in Sources */,
 				014B5A8229CAFB6A00882214 /* ParameterModel.swift in Sources */,
 				014B5A8B29CAFB7600882214 /* TimeInterval+Extension.swift in Sources */,
 				F83E655129FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */,
@@ -1417,6 +1427,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				014B5A7229CAFB5300882214 /* FlankerViewManager.m in Sources */,
+				01325C002B206CFB00F4DD1F /* String+Extensions.swift in Sources */,
 				014B5A8129CAFB6A00882214 /* ParameterModel.swift in Sources */,
 				014B5A8A29CAFB7600882214 /* TimeInterval+Extension.swift in Sources */,
 				F83E655229FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */,
@@ -1444,6 +1455,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8EF454A2A975A9200EEC085 /* FlankerViewManager.m in Sources */,
+				01325C012B206CFB00F4DD1F /* String+Extensions.swift in Sources */,
 				F8EF454B2A975A9200EEC085 /* ParameterModel.swift in Sources */,
 				F8EF454C2A975A9200EEC085 /* TimeInterval+Extension.swift in Sources */,
 				F8EF454D2A975A9200EEC085 /* RNBackgroundFetch+AppDelegate.m in Sources */,

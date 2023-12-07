@@ -105,6 +105,19 @@ function ActivityStepper({
 
   const nextButtonText = getNextButtonText();
 
+  const getAccessibilityLabel = (text: string): string | null => {
+    switch (text) {
+      case t('activity_navigation:done'):
+        return 'done-button';
+      case t('activity_navigation:skip'):
+        return 'skip-button';
+      case t('activity_navigation:next'):
+        return 'next-button';
+      default:
+        return null;
+    }
+  };
+
   const tutorialViewerRef = useRef<TutorialViewerRef | null>(null);
 
   const showTimeLeft = !!timer;
@@ -230,7 +243,13 @@ function ActivityStepper({
           <Stepper.NavigationPanel mx={16}>
             {canMoveBack && <Stepper.BackButton isIcon />}
             {canReset && <Stepper.UndoButton isIcon />}
-            {canMoveNext && <Stepper.NextButton isIcon />}
+
+            {canMoveNext && (
+              <Stepper.NextButton
+                accessibilityLabel={getAccessibilityLabel(nextButtonText)}
+                isIcon
+              />
+            )}
           </Stepper.NavigationPanel>
         )}
 
@@ -300,7 +319,11 @@ function ActivityStepper({
             )}
 
             {canMoveNext && (
-              <Stepper.NextButton>{t(nextButtonText)}</Stepper.NextButton>
+              <Stepper.NextButton
+                accessibilityLabel={getAccessibilityLabel(nextButtonText)}
+              >
+                {t(nextButtonText)}
+              </Stepper.NextButton>
             )}
           </Stepper.NavigationPanel>
         )}

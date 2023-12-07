@@ -16,13 +16,17 @@ function BackButton({ children, isIcon }: Props) {
 
   if (isIcon) {
     return (
-      <TouchableOpacity onPress={back}>
+      <TouchableOpacity accessibilityLabel="back-button" onPress={back}>
         <LeftArrowIcon color={colors.tertiary} size={30} />
       </TouchableOpacity>
     );
   }
 
-  return <ActionButton onPress={back}>{children}</ActionButton>;
+  return (
+    <ActionButton accessibilityLabel="back-button" onPress={back}>
+      {children}
+    </ActionButton>
+  );
 }
 
 export default BackButton;

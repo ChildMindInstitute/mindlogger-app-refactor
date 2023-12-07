@@ -126,3 +126,14 @@ export const runOnIOS = (cb: () => void) => {
 export const runOnAndroid = (cb: () => void) => {
   IS_ANDROID && cb();
 };
+
+export const splitArrayToBulks = <T>(
+  bulkSize: number,
+  array: T[],
+): Array<T[]> => {
+  const result: Array<T[]> = [];
+  for (let i = 0; i < array.length; i += bulkSize) {
+    result.push(array.slice(i, i + bulkSize));
+  }
+  return result;
+};

@@ -1,4 +1,5 @@
 import React from 'react';
+import { AccessibilityProps } from 'react-native';
 
 import { Svg, Path, G, Rect, Circle } from 'react-native-svg';
 
@@ -6,12 +7,23 @@ type Props = {
   color: string;
   size?: number;
   tokenLogger?: boolean;
-};
+} & AccessibilityProps;
 
-export default ({ color, size = 45, tokenLogger = false }: Props) => {
+export default ({
+  color,
+  size = 45,
+  tokenLogger = false,
+  accessibilityLabel,
+}: Props) => {
   if (tokenLogger) {
     return (
-      <Svg width={size} height={size} viewBox="0 0 52 37" fill="none">
+      <Svg
+        accessibilityLabel={accessibilityLabel}
+        width={size}
+        height={size}
+        viewBox="0 0 52 37"
+        fill="none"
+      >
         <G transform="translate(-31 -847)">
           <Rect
             width="40"

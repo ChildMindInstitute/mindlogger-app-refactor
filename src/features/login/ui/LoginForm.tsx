@@ -118,7 +118,7 @@ const LoginForm: FC<Props> = props => {
         <Center mt={42}>
           <Link
             textDecorationLine="underline"
-            accessibilityLabel="login-forgot-password"
+            accessibilityLabel="forgot_password-link"
             onPress={navigateToForgotPassword}
           >
             {t('login:forgot_password')}
@@ -128,7 +128,7 @@ const LoginForm: FC<Props> = props => {
         <SubmitButton
           mt={32}
           isLoading={isLoading}
-          accessibilityLabel="login-submit-putton"
+          accessibilityLabel="login-button"
           borderRadius={30}
           width="100%"
           bg="$lighterGrey6"

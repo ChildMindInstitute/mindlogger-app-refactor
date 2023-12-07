@@ -48,7 +48,7 @@ const CheckBoxItem: FC<Props> = ({
   return (
     <XStack
       minHeight="$7"
-      py="$3"
+      py="$4"
       px="$5"
       my="$1"
       ai="center"
@@ -80,6 +80,7 @@ const CheckBoxItem: FC<Props> = ({
 
         <Text
           maxWidth="70%"
+          accessibilityLabel="option_text"
           ml="$4"
           color={setPalette && color ? invertedColor : colors.darkerGrey}
           fontSize={17}
@@ -90,7 +91,7 @@ const CheckBoxItem: FC<Props> = ({
 
       <CheckBox
         style={styles.checkbox}
-        accessibilityLabel="checkbox"
+        accessibilityLabel="option_checkbox"
         lineWidth={2}
         animationDuration={0.2}
         boxType="square"

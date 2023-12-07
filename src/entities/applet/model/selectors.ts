@@ -31,3 +31,8 @@ export const selectCompletedEntities = createSelector(
   selectApplets,
   applet => applet.completedEntities,
 );
+
+export const selectCompletions = createSelector(
+  selectApplets,
+  applet => applet.completions,
+);

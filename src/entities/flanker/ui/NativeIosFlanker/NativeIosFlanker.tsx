@@ -2,7 +2,7 @@ import { FC, useEffect, useMemo, useRef } from 'react';
 import { NativeModules, StyleSheet } from 'react-native';
 
 import { FlankerItemSettings } from '@app/abstract/lib';
-import { FlankerLiveEvent, StreamEventLoggable } from '@shared/lib';
+import { FlankerLiveEvent, Logger, StreamEventLoggable } from '@shared/lib';
 import { Box } from '@shared/ui';
 
 import SwiftFlankerWrapper from './SwiftFlankerWrapper';
@@ -31,18 +31,19 @@ const NativeIosFlanker: FC<Props> = props => {
 
     const configString = JSON.stringify(configuration);
 
-    NativeModules.FlankerViewManager.preloadGameImages(configString);
-
-    // Race condition issue:
-    // FlankerView.swift may be created after startGame call
-
-    setTimeout(() => {
-      NativeModules.FlankerViewManager.setGameParameters(configString);
-      NativeModules.FlankerViewManager.startGame(
-        props.configuration.isFirstPractice,
-        props.configuration.isLastTest,
+    NativeModules.FlankerViewManager.preloadGameImages(configString)
+      .then(() => {
+        NativeModules.FlankerViewManager.setGameParameters(configString);
+        NativeModules.FlankerViewManager.startGame(
+          props.configuration.isFirstPractice,
+          props.configuration.isLastTest,
+        );
+      })
+      .catch((error: string) =>
+        Logger.log(
+          `[NativeModules.FlankerViewManager.preloadGameImages] An internal error occurred during caching images or starting the game: \n\n ${error}`,
+        ),
       );
-    }, 600);
   }, [configuration, props.configuration]);
 
   return (

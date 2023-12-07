@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { styled } from '@tamagui/core';
+import { addDays, startOfDay } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import { convertToTimeOnNoun } from '@app/shared/lib';
@@ -35,6 +36,11 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
   const hasTimeToComplete =
     activity.isTimerSet && !!activity.timeLeftToComplete;
 
+  const tomorrow = addDays(startOfDay(new Date()), 1);
+
+  const isSpreadToNextDay =
+    !!activity.availableTo && activity.availableTo > tomorrow;
+
   const hasTimerElapsed =
     isStatusInProgress &&
     activity.isTimerSet &&
@@ -56,14 +62,18 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
         <StatusLine>
           {`${t('activity_due_date:available')} ${convert(
             activity.availableFrom!,
-          )} ${t('activity_due_date:to')} ${convert(activity.availableTo!)}`}
+          )} ${t('activity_due_date:to')} ${convert(activity.availableTo!)} ${
+            isSpreadToNextDay ? t('activity_due_date:the_following_day') : ''
+          }`}
         </StatusLine>
       )}
 
       {hasAvailableToOnly && (
         <StatusLine>{`${t('activity_due_date:to')} ${convert(
           activity.availableTo!,
-        )}`}</StatusLine>
+        )} ${
+          isSpreadToNextDay ? t('activity_due_date:the_following_day') : ''
+        }`}</StatusLine>
       )}
 
       {hasTimeToComplete && (

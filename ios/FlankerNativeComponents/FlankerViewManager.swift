@@ -21,8 +21,16 @@ class FlankerViewManager: RCTViewManager {
   }
 
   @objc
-  func preloadGameImages(_ json: String) {
-    ParameterGameManager.shared.loadAllImage(dataJson: json)
+  func preloadGameImages(_ dataJson: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+    let promise = ParameterGameManager.shared.loadAllImage(dataJson: dataJson)
+    
+    if promise != nil {
+      promise?.then({_ in 
+        resolve(nil)
+      }).catch({err in
+        reject("", err.localizedDescription, err)
+      })
+    }
   }
 
   @objc

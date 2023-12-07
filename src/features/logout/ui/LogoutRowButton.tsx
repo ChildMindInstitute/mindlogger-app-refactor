@@ -13,6 +13,7 @@ const LogoutRowButton: FC = () => {
   return (
     <RowButton
       onPress={logout}
+      accessibilityLabel="logout-button"
       title={t('settings:logout')}
       rightIcon={KeyIcon}
     />
