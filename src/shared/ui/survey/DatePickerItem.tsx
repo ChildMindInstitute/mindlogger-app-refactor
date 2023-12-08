@@ -2,7 +2,7 @@ import { FC, useMemo } from 'react';
 
 import { format } from 'date-fns';
 
-import { colors } from '@app/shared/lib';
+import { colors, getDateFromString } from '@shared/lib';
 import { RightArrowIcon, DateTimePicker } from '@shared/ui';
 
 type Props = {
@@ -21,9 +21,8 @@ const DatePickerItem: FC<Props> = ({ value, onChange }) => {
     if (!value) {
       return new Date();
     }
-    const [year, month, day] = value.split('-');
 
-    return new Date(Number(year), Number(month) - 1, Number(day));
+    return getDateFromString(value);
   }, [value]);
 
   return (

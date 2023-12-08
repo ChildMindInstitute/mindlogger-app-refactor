@@ -44,10 +44,15 @@ import {
   AbLogLineDto,
   AbLogPointDto,
   AnswerAlertsDto,
-} from '@app/shared/api';
-import { HourMinute, Logger, convertToDayMonthYear } from '@app/shared/lib';
-import { Item } from '@app/shared/ui';
-import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem';
+} from '@shared/api';
+import {
+  HourMinute,
+  Logger,
+  convertToDayMonthYear,
+  getDateFromString,
+} from '@shared/lib';
+import { Item } from '@shared/ui';
+import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
 
 import { canItemHaveAnswer } from './operations';
 
@@ -198,7 +203,7 @@ function convertToTimeAnswer(answer: Answer): AnswerDto {
 function convertToDateAnswerAnswer(answer: Answer): AnswerDto {
   return {
     ...(answer.answer && {
-      value: convertToDayMonthYear(new Date(answer.answer as string)),
+      value: convertToDayMonthYear(getDateFromString(answer.answer as string)),
     }),
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
