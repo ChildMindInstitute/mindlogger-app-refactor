@@ -25,8 +25,8 @@ const CheckboxTooltipContainer = styled(Box, {
 
 type Props = {
   setPalette: boolean;
-  setImageContainer: boolean;
-  setTooltipContainer: boolean;
+  imageContainerVisible: boolean;
+  tooltipContainerVisible: boolean;
   tooltipAvailable: boolean;
   onChange: () => void;
   value: boolean;
@@ -36,8 +36,8 @@ type Props = {
 const CheckBoxItem: FC<Props> = ({
   value,
   setPalette,
-  setImageContainer,
-  setTooltipContainer,
+  imageContainerVisible,
+  tooltipContainerVisible,
   tooltipAvailable,
   onChange,
   tooltip,
@@ -71,7 +71,7 @@ const CheckBoxItem: FC<Props> = ({
       onPress={onChange}
     >
       <XStack flex={1} ai="center">
-        {tooltipAvailable && setTooltipContainer && (
+        {tooltipAvailable && tooltipContainerVisible && (
           <CheckboxTooltipContainer>
             {!!tooltip && (
               <Tooltip markdown={tooltipText}>
@@ -81,7 +81,7 @@ const CheckBoxItem: FC<Props> = ({
           </CheckboxTooltipContainer>
         )}
 
-        {setImageContainer ? (
+        {imageContainerVisible ? (
           <Box style={styles.imageContainer}>
             {image && (
               <CachedImage

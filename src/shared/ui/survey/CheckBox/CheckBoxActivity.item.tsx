@@ -78,8 +78,8 @@ const CheckBoxActivityItem: FC<Props> = ({
               {...item}
               tooltipAvailable={addTooltip}
               setPalette={setPalette}
-              setImageContainer={hasImage}
-              setTooltipContainer={hasTooltip}
+              imageContainerVisible={hasImage}
+              tooltipContainerVisible={hasTooltip}
               onChange={() => onItemValueChanged(item.id)}
               value={!!findById(values, item.id)}
               textReplacer={textReplacer}
