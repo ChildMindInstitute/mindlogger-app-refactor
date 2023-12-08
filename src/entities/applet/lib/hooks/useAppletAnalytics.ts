@@ -1,8 +1,9 @@
-import { format } from 'date-fns';
+import { useMemo } from 'react';
 
 import { IdentityModel, UserPrivateKeyRecord } from '@app/entities/identity';
 import {
   encryption,
+  formatToISODate,
   getCurrentWeekDates,
   useAppSelector,
 } from '@app/shared/lib';
@@ -12,7 +13,7 @@ import { mapAppletAnalytics, mapAppletDetailsFromDto } from '../../model';
 
 export const useAppletAnalytics = (appletId: string) => {
   const currentWeekDates = getCurrentWeekDates();
-  const firstDateOfCurrentWeek = format(currentWeekDates[0], 'yyyy-MM-dd');
+  const firstDateOfCurrentWeek = currentWeekDates[0];
   const respondentId = useAppSelector(IdentityModel.selectors.selectUserId);
 
   const { data: appletEncryption, isLoading: isDetailsLoading } =
@@ -21,13 +22,13 @@ export const useAppletAnalytics = (appletId: string) => {
         mapAppletDetailsFromDto(response.data.result).encryption,
     });
 
-  const userPrivateKey = UserPrivateKeyRecord.get();
+  const userPrivateKey = useMemo(() => UserPrivateKeyRecord.get(), []);
 
   const { data: appletAnalytics, isLoading: isAnalyticsLoading } =
     useAppletAnalyticsQuery(
       {
         appletId,
-        fromDate: firstDateOfCurrentWeek,
+        fromDate: formatToISODate(firstDateOfCurrentWeek),
         respondentIds: respondentId ?? '',
         isLastVersion: true,
       },

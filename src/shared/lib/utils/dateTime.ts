@@ -48,6 +48,9 @@ export const formatToDtoTime = (date: Date | number, addSeconds = false) => {
   return formatBase(date, addSeconds ? 'HH:mm:ss' : 'HH:mm');
 };
 
+export const formatToISODate = (date: Date | number) =>
+  new Date(date).toISOString().substring(0, 19);
+
 type TimeOrNoun = {
   formattedDate?: string | null;
   translationKey?: string | null;
