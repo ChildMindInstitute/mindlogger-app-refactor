@@ -3,6 +3,7 @@ import { FC, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
+import { styled } from '@tamagui/core';
 
 import { colors } from '@shared/lib';
 import { invertColor } from '@shared/lib/utils';
@@ -12,12 +13,20 @@ import {
   QuestionTooltipIcon,
   Tooltip,
   CheckBox,
+  Box,
 } from '@shared/ui';
 
 import { Item } from './types';
 
+const CheckboxTooltipContainer = styled(Box, {
+  marginRight: 10,
+  width: '8%',
+});
+
 type Props = {
   setPalette: boolean;
+  imageContainerVisible: boolean;
+  tooltipContainerVisible: boolean;
   tooltipAvailable: boolean;
   onChange: () => void;
   value: boolean;
@@ -27,6 +36,8 @@ type Props = {
 const CheckBoxItem: FC<Props> = ({
   value,
   setPalette,
+  imageContainerVisible,
+  tooltipContainerVisible,
   tooltipAvailable,
   onChange,
   tooltip,
@@ -49,7 +60,7 @@ const CheckBoxItem: FC<Props> = ({
     <XStack
       minHeight="$7"
       py="$4"
-      px="$5"
+      px={10}
       my="$1"
       ai="center"
       jc="space-between"
@@ -60,22 +71,26 @@ const CheckBoxItem: FC<Props> = ({
       onPress={onChange}
     >
       <XStack flex={1} ai="center">
-        {!!tooltip && tooltipAvailable && (
-          <Tooltip markdown={tooltipText}>
-            <QuestionTooltipIcon color={invertedColor} size={25} />
-          </Tooltip>
+        {tooltipAvailable && tooltipContainerVisible && (
+          <CheckboxTooltipContainer>
+            {!!tooltip && (
+              <Tooltip markdown={tooltipText}>
+                <QuestionTooltipIcon color={invertedColor} size={25} />
+              </Tooltip>
+            )}
+          </CheckboxTooltipContainer>
         )}
 
-        {image ? (
-          <CachedImage
-            style={{
-              width: '15%',
-              height: 64,
-              marginLeft: tooltip ? 12 : 0,
-            }}
-            source={image}
-            resizeMode="contain"
-          />
+        {imageContainerVisible ? (
+          <Box style={styles.imageContainer}>
+            {image && (
+              <CachedImage
+                style={styles.image}
+                source={image}
+                resizeMode="contain"
+              />
+            )}
+          </Box>
         ) : null}
 
         <Text
@@ -116,6 +131,17 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 20,
     height: 20,
+  },
+  imageContainer: {
+    width: 56,
+    height: 56,
+    overflow: 'hidden',
+    borderRadius: 4,
+    marginLeft: 4,
+  },
+  image: {
+    height: '100%',
+    width: '100%',
   },
 });
 

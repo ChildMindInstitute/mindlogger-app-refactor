@@ -243,7 +243,7 @@ function ActivityItem({
 
     case 'Checkbox':
       item = (
-        <Box mx="$6">
+        <Box mx={16}>
           <CheckBoxActivityItem
             config={pipelineItem.payload}
             onChange={onResponse}
@@ -302,7 +302,7 @@ function ActivityItem({
 
     case 'Radio':
       item = (
-        <Box mx="$6">
+        <Box mx={16}>
           <RadioActivityItem
             config={pipelineItem.payload}
             onChange={async radioValue => {
