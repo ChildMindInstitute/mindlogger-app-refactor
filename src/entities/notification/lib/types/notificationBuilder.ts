@@ -108,7 +108,7 @@ export type NotificationDescriber = {
   entityName: string;
   scheduledAt: number;
   scheduledAtString: string;
-  reminderEventDayString?: string;
+  eventDayString?: string;
   notificationHeader: string;
   notificationBody: string;
   isSpreadInEventSet?: boolean;

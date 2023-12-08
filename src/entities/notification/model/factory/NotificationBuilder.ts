@@ -145,6 +145,7 @@ class NotificationBuilder implements INotificationBuilder {
       notification.fallType = this.utility.getFallType(triggerAt!, day);
       notification.isSpreadInEventSet = isSpread;
       notification.randomDayCrossType = randomBorderType;
+      notification.eventDayString = day.toString();
 
       this.utility.markNotificationIfActivityCompleted(
         (activityId ?? activityFlowId)!,
@@ -282,7 +283,7 @@ class NotificationBuilder implements INotificationBuilder {
       );
 
       const reminderFromPastDays = reminders.filter(
-        r => !eventDays.includes(r.eventDay),
+        r => !eventDays.some(ed => isEqual(ed, r.eventDay)),
       );
 
       eventResult.notifications.push(
@@ -348,9 +349,6 @@ class NotificationBuilder implements INotificationBuilder {
       events: eventNotificationsResult,
     };
 
-    if (eventNotificationsResult.some(x => x.notifications.length)) {
-      console.log('notifications->', JSON.stringify(result, null, 2));
-    }
     return result;
   }
 }

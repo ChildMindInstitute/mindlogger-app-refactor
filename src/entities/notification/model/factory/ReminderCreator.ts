@@ -91,7 +91,7 @@ export class ReminderCreator {
 
     notification.isSpreadInEventSet = this.utility.isSpreadToNextDay(event);
     notification.fallType = this.utility.getFallType(triggerAt, scheduledDay);
-    notification.reminderEventDayString = scheduledDay.toString();
+    notification.eventDayString = scheduledDay.toString();
 
     return notification;
   }
