@@ -17,10 +17,14 @@ const DatePickerItem: FC<Props> = ({ value, onChange }) => {
     onChange(formattedDate);
   };
 
-  const valueAsDate = useMemo(
-    () => (value ? new Date(value) : new Date()),
-    [value],
-  );
+  const valueAsDate = useMemo(() => {
+    if (!value) {
+      return new Date();
+    }
+    const [year, month, day] = value.split('-');
+
+    return new Date(Number(year), Number(month) - 1, Number(day));
+  }, [value]);
 
   return (
     <DateTimePicker
