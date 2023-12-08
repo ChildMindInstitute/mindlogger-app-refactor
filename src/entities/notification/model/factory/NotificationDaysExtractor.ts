@@ -1,14 +1,26 @@
-import { addDays, addMonths, isEqual, subDays, subMonths } from 'date-fns';
+import {
+  addDays,
+  addMonths,
+  addWeeks,
+  isEqual,
+  subDays,
+  subMonths,
+  subWeeks,
+} from 'date-fns';
 
 import { PeriodicityType, Progress } from '@app/abstract/lib';
+import { ILogger, Logger } from '@app/shared/lib';
 
 import { NotificationUtility } from './NotificationUtility';
 
 export class NotificationDaysExtractor {
   private utility: NotificationUtility;
 
+  private logger: ILogger;
+
   constructor(progress: Progress, appletId: string) {
     this.utility = new NotificationUtility(progress, appletId);
+    this.logger = Logger;
   }
 
   private getDayFrom(
@@ -43,7 +55,7 @@ export class NotificationDaysExtractor {
     periodicity: PeriodicityType,
     aWeekAgoDay: Date,
     scheduledDay: Date,
-  ) {
+  ): Date[] {
     const eventDays = [];
 
     const dayFrom = this.getDayFrom(firstScheduleDay, periodStartDay);
@@ -103,6 +115,88 @@ export class NotificationDaysExtractor {
         if (day >= monthAgoDay) {
           eventDays.push(day);
         }
+        day = addMonths(day, 1);
+      }
+    }
+
+    return eventDays;
+  }
+
+  public extractForReminders(
+    lastScheduleDay: Date,
+    periodEndDay: Date | null,
+    periodicity: PeriodicityType,
+    aWeekAgoDay: Date,
+    scheduledDay: Date,
+  ): Date[] {
+    const eventDays: Date[] = [];
+
+    const dayTo = this.getDayTo(lastScheduleDay, periodEndDay);
+
+    let reminderStartDay: Date = scheduledDay;
+
+    if (scheduledDay < subMonths(this.utility.currentDay, 1)) {
+      this.logger.warn(
+        '[NotificationDaysExtractor.extractForReminders]: scheduledDay is far in the past: ' +
+          scheduledDay.toString(),
+      );
+      return eventDays;
+    }
+
+    switch (periodicity) {
+      case PeriodicityType.Always:
+      case PeriodicityType.Daily:
+      case PeriodicityType.Weekdays: {
+        reminderStartDay = subDays(scheduledDay, 7);
+        break;
+      }
+      case PeriodicityType.Weekly: {
+        reminderStartDay = subWeeks(scheduledDay, 4);
+        break;
+      }
+      case PeriodicityType.Monthly: {
+        reminderStartDay = subMonths(scheduledDay, 2);
+      }
+    }
+
+    if (
+      periodicity === PeriodicityType.Always ||
+      periodicity === PeriodicityType.Daily
+    ) {
+      let day = reminderStartDay;
+
+      while (day <= dayTo) {
+        eventDays.push(day);
+        day = addDays(day, 1);
+      }
+    }
+
+    if (periodicity === PeriodicityType.Weekly) {
+      let day = reminderStartDay;
+
+      while (day <= dayTo) {
+        eventDays.push(day);
+        day = addWeeks(day, 1);
+      }
+    }
+
+    if (periodicity === PeriodicityType.Weekdays) {
+      let day = reminderStartDay;
+
+      while (day <= dayTo) {
+        const found = this.utility.weekDays.find(x => isEqual(x, day));
+        if (found && day >= aWeekAgoDay) {
+          eventDays.push(day);
+        }
+        day = addDays(day, 1);
+      }
+    }
+
+    if (periodicity === PeriodicityType.Monthly) {
+      let day = reminderStartDay;
+
+      while (day <= dayTo) {
+        eventDays.push(day);
         day = addMonths(day, 1);
       }
     }
