@@ -205,5 +205,9 @@ export const getDateFromString = (dateString: string) => {
   // converts yyyy-mm-dd string to Date , ignoring timeZone
   const [year, month, day] = dateString.split('-');
 
+  if (!year || !month || !day) {
+    throw new Error('[getDateFromString] dateString format is not valid');
+  }
+
   return new Date(Number(year), Number(month) - 1, Number(day));
 };
