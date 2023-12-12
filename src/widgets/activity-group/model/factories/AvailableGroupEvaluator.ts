@@ -1,4 +1,5 @@
 import { AvailabilityType, IEvaluator } from '@app/abstract/lib';
+import { ScheduleEvent } from '@app/entities/event';
 import { getHourMinute, isTimeInInterval } from '@shared/lib';
 
 import { GroupUtility, GroupsBuildContext } from './GroupUtility';
@@ -113,6 +114,28 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
     return false;
   }
 
+  private isEventInsideValidTimeInterval(event: ScheduleEvent) {
+    const { startDate, endDate } = event.availability;
+
+    if (!startDate || !endDate) {
+      return true;
+    }
+
+    const dateFrom = startDate;
+    const dateTo = this.utility.getEndOfDay(endDate);
+
+    const now = this.utility.getNow();
+
+    return this.utility.isInTimeInterval(
+      {
+        from: dateFrom,
+        to: dateTo,
+      },
+      now,
+      'none',
+    );
+  }
+
   public evaluate(eventsEntities: Array<EventEntity>): Array<EventEntity> {
     const notInProgress = eventsEntities.filter(
       x => !this.utility.isInProgress(x),
@@ -122,6 +145,10 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
 
     for (let eventEntity of notInProgress) {
       const { event } = eventEntity;
+
+      if (!this.isEventInsideValidTimeInterval(event)) {
+        continue;
+      }
 
       const isAlwaysAvailable =
         event.availability.availabilityType ===

@@ -92,7 +92,8 @@ export class GroupUtility {
 
   public getYesterday = () => subDays(this.getToday(), 1);
 
-  public getEndOfDay = () => subSeconds(addDays(this.getToday(), 1), 1);
+  public getEndOfDay = (date: Date = this.getToday()) =>
+    subSeconds(addDays(date, 1), 1);
 
   public getTomorrow = () => addDays(this.getToday(), 1);
 
