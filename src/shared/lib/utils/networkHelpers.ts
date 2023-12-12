@@ -93,19 +93,44 @@ export const watchForConnectionLoss = (
 const RetryAttempts = 5;
 const RetryWaitInterval = 1000;
 
+const NetworkErrorCode = -1;
+const NetworkErrorMessage = 'network error';
+
 export const callApiWithRetry = async <TResponse>(
   apiFunction: () => Promise<AxiosResponse<TResponse>>,
-  retryErrorCode: number = 502,
+  retryErrorCodes: number[] = [502, NetworkErrorCode],
 ): Promise<AxiosResponse<TResponse>> => {
+  const shouldCheckNetworkError = () =>
+    retryErrorCodes.includes(NetworkErrorCode);
+
+  const isNetworkErrorTextInErrorMessage = (error: any) =>
+    error.toString().toLowerCase().includes(NetworkErrorMessage);
+
   const isRetryErrorCode = (error: any) => {
-    return (error as AxiosError).response?.status === retryErrorCode;
+    const status = (error as AxiosError)?.response?.status ?? 0;
+
+    if (status > 0 && retryErrorCodes.includes(status)) {
+      return true;
+    } else if (
+      shouldCheckNetworkError() &&
+      isNetworkErrorTextInErrorMessage(error)
+    ) {
+      return true;
+    }
+    return false;
   };
 
   for (let attempt = 0; attempt < RetryAttempts; attempt++) {
     const isLast = attempt === RetryAttempts - 1;
 
     try {
-      return await apiFunction();
+      const result = await apiFunction();
+
+      if (attempt > 0) {
+        Logger.info('[callApiWithRetry]: Retried successfully');
+      }
+
+      return result;
     } catch (error) {
       Logger.warn(
         '[callApiWithRetry]: Error occurred:\nInternal error:\n\n' + error,
