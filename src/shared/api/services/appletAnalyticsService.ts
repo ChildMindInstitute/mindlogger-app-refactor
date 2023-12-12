@@ -22,7 +22,7 @@ type ActivityAnalyticsResponse = SuccessfulResponse<ActivityAnalyticsDto>;
 
 type ActivityAnalyticsRequest = {
   appletId: string;
-  fromDate: string;
+  fromDate: string; // YYYY-MM-DD HH:mm:ss
   isLastVersion: boolean;
   respondentIds: string;
 };
