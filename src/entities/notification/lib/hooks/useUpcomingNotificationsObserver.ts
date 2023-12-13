@@ -4,7 +4,7 @@ import { AppState } from 'react-native';
 import { NotificationManager } from '@entities/notification/model';
 import { useInterval } from '@shared/lib';
 
-const CHECK_INTERVAL = 4;
+const CHECK_INTERVAL = 20;
 
 export const useUpcomingNotificationsObserver = (
   eventId: string,
