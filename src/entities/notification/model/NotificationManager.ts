@@ -92,6 +92,7 @@ function NotificationManager() {
     NotificationScheduler.cancelAllNotifications();
     NotificationQueue.clear();
   }
+
   async function getNotificationsByEventId(
     eventId: string,
   ): Promise<LocalEventTriggerNotification[]> {
