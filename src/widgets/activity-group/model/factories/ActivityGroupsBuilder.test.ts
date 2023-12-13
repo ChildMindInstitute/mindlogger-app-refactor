@@ -563,6 +563,12 @@ describe('ActivityGroupsBuilder', () => {
         activities: [expectedItem],
       };
 
+      const expectedEmptyResult: ActivityListGroup = {
+        name: 'additional:available',
+        type: 3,
+        activities: [],
+      };
+
       expect(result).toEqual(expectedResult);
 
       //sub-test-2
@@ -590,14 +596,14 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.startDate = addMonths(now, 2);
       eventEntity.event.availability.endDate = addMonths(now, 3);
       result = builder.buildAvailable([eventEntity]);
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(expectedEmptyResult);
 
       //sub-test-7
       eventEntity.event.availability.periodicityType = PeriodicityType.Daily;
       eventEntity.event.availability.startDate = subMonths(now, 3);
       eventEntity.event.availability.endDate = subMonths(now, 2);
       result = builder.buildAvailable([eventEntity]);
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(expectedEmptyResult);
 
       //sub-test-8 check when progress record exist and completed yesterday
       progress = getProgress(
@@ -614,6 +620,9 @@ describe('ActivityGroupsBuilder', () => {
       builder = createActivityGroupsBuilder(input);
 
       mockGetNow(builder, new Date(now));
+
+      eventEntity.event.availability.startDate = subMonths(now, 2);
+      eventEntity.event.availability.endDate = addMonths(now, 2);
 
       result = builder.buildAvailable([eventEntity]);
       expect(result).toEqual(expectedResult);
@@ -755,6 +764,12 @@ describe('ActivityGroupsBuilder', () => {
         activities: [expectedItem],
       };
 
+      const expectedEmptyResult: ActivityListGroup = {
+        name: 'additional:available',
+        type: 3,
+        activities: [],
+      };
+
       expect(result).toEqual(expectedResult);
 
       //sub-test-2
@@ -777,19 +792,19 @@ describe('ActivityGroupsBuilder', () => {
       result = builder.buildAvailable([eventEntity]);
       expect(result).toEqual(expectedResult);
 
-      //sub-test-6 - start-end dates not considered in BL
+      //sub-test-6
       eventEntity.event.availability.periodicityType = PeriodicityType.Daily;
       eventEntity.event.availability.startDate = addMonths(now, 2);
       eventEntity.event.availability.endDate = addMonths(now, 3);
       result = builder.buildAvailable([eventEntity]);
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(expectedEmptyResult);
 
-      //sub-test-7 - start-end dates not considered in BL
+      //sub-test-7
       eventEntity.event.availability.periodicityType = PeriodicityType.Daily;
       eventEntity.event.availability.startDate = subMonths(now, 3);
       eventEntity.event.availability.endDate = subMonths(now, 2);
       result = builder.buildAvailable([eventEntity]);
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(expectedEmptyResult);
 
       //sub-test-8 check when progress record exist and completed yesterday
       progress = getProgress(
@@ -806,6 +821,9 @@ describe('ActivityGroupsBuilder', () => {
       builder = createActivityGroupsBuilder(input);
 
       mockGetNow(builder, new Date(now));
+
+      eventEntity.event.availability.startDate = subMonths(now, 2);
+      eventEntity.event.availability.endDate = addMonths(now, 2);
 
       result = builder.buildAvailable([eventEntity]);
       expect(result).toEqual(expectedResult);
@@ -932,6 +950,12 @@ describe('ActivityGroupsBuilder', () => {
         activities: [expectedItem],
       };
 
+      const expectedEmptyResult: ActivityListGroup = {
+        name: 'additional:scheduled',
+        type: 2,
+        activities: [],
+      };
+
       expect(result).toEqual(expectedResult);
 
       //sub-test-2
@@ -959,14 +983,14 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.startDate = addMonths(now, 2);
       eventEntity.event.availability.endDate = addMonths(now, 3);
       result = builder.buildScheduled([eventEntity]);
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(expectedEmptyResult);
 
       //sub-test-7
       eventEntity.event.availability.periodicityType = PeriodicityType.Daily;
       eventEntity.event.availability.startDate = subMonths(now, 3);
       eventEntity.event.availability.endDate = subMonths(now, 2);
       result = builder.buildScheduled([eventEntity]);
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(expectedEmptyResult);
 
       //sub-test-8 check when progress record exist and completed yesterday
       progress = getProgress(
@@ -983,6 +1007,9 @@ describe('ActivityGroupsBuilder', () => {
       builder = createActivityGroupsBuilder(input);
 
       mockGetNow(builder, new Date(now));
+
+      eventEntity.event.availability.startDate = subMonths(now, 2);
+      eventEntity.event.availability.endDate = addMonths(now, 2);
 
       result = builder.buildScheduled([eventEntity]);
       expect(result).toEqual(expectedResult);

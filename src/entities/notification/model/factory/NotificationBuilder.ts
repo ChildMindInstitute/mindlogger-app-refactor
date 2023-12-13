@@ -145,6 +145,7 @@ class NotificationBuilder implements INotificationBuilder {
       notification.fallType = this.utility.getFallType(triggerAt!, day);
       notification.isSpreadInEventSet = isSpread;
       notification.randomDayCrossType = randomBorderType;
+      notification.eventDayString = day.toString();
 
       this.utility.markNotificationIfActivityCompleted(
         (activityId ?? activityFlowId)!,
@@ -248,6 +249,7 @@ class NotificationBuilder implements INotificationBuilder {
 
       const reminders = this.reminderCreator.create(
         [scheduledDay],
+        [scheduledDay],
         event,
         entity,
       );
@@ -255,7 +257,7 @@ class NotificationBuilder implements INotificationBuilder {
         eventResult.notifications.push(reminders[0].reminder);
       }
     } else {
-      const days = this.notificationDaysExtractor.extract(
+      const eventDays = this.notificationDaysExtractor.extract(
         firstScheduleDay,
         lastScheduleDay,
         periodStartDay,
@@ -265,9 +267,30 @@ class NotificationBuilder implements INotificationBuilder {
         scheduledDay,
       );
 
-      const reminders = this.reminderCreator.create(days, event, entity);
+      const reminderDays = this.notificationDaysExtractor.extractForReminders(
+        lastScheduleDay,
+        periodEndDay,
+        periodicity,
+        aWeekAgoDay,
+        scheduledDay,
+      );
 
-      for (let day of days) {
+      const reminders = this.reminderCreator.create(
+        eventDays,
+        reminderDays,
+        event,
+        entity,
+      );
+
+      const reminderFromPastDays = reminders.filter(
+        r => !eventDays.some(ed => isEqual(ed, r.eventDay)),
+      );
+
+      eventResult.notifications.push(
+        ...reminderFromPastDays.map(x => x.reminder),
+      );
+
+      for (let day of eventDays) {
         const notifications = this.processEventDay(day, event, entity);
         eventResult.notifications.push(...notifications);
 
