@@ -92,41 +92,42 @@ function NotificationManager() {
     NotificationScheduler.cancelAllNotifications();
     NotificationQueue.clear();
   }
+  async function getNotificationsByEventId(
+    eventId: string,
+  ): Promise<LocalEventTriggerNotification[]> {
+    const triggerNotifications =
+      await NotificationScheduler.getAllScheduledNotifications();
 
-  async function cancelUpcomingNotificationsForInProgressActivity(
+    return triggerNotifications.filter(
+      notification => notification.notification.data?.eventId === eventId,
+    );
+  }
+
+  async function cancelNotificationsForEventEntityInTimeInterval(
     eventId: string,
     entityId: string,
-    interval: number,
-    isForeground: boolean,
+    timeInterval: { from: number; to: number },
   ) {
-    const cancelNotificationForInProgressActivity = (
+    const notificationsForEventId = await getNotificationsByEventId(eventId);
+
+    const cancelNotificationForEventEntityInTimeInterval = (
       notification: LocalEventTriggerNotification,
     ) => {
       const { data, id: notificationId } = notification?.notification;
-      const {
-        scheduledAt,
-        eventId: notificationEventId,
-        scheduledAtString,
-      } = data;
-      const difference = differenceInSeconds(scheduledAt, Date.now());
+      const { scheduledAt, scheduledAtString } = data;
+      const difference = differenceInSeconds(scheduledAt, timeInterval.from);
 
-      if (
-        difference <= interval &&
-        notificationEventId === eventId &&
-        notificationId &&
-        isForeground
-      ) {
+      if (notificationId && difference <= timeInterval.to) {
         Logger.log(
-          `[NotificationManager.cancelUpcomingNotificationsForInProgressActivity]: Notification ${notificationId}, scheduled at ${scheduledAtString}, was canceled because entity ${entityId} is in progress`,
+          `[NotificationManager.cancelNotificationForEventEntityInTimeInterval]: Notification ${notificationId}, scheduled at ${scheduledAtString}, was canceled because entity ${entityId} is in progress`,
         );
         NotificationScheduler.cancelNotification(notificationId);
       }
     };
 
-    const triggerNotifications =
-      await NotificationScheduler.getAllScheduledNotifications();
-
-    triggerNotifications.map(cancelNotificationForInProgressActivity);
+    for (let notification of notificationsForEventId) {
+      cancelNotificationForEventEntityInTimeInterval(notification);
+    }
   }
 
   return {
@@ -135,7 +136,7 @@ function NotificationManager() {
     scheduleNotifications,
     topUpNotificationsFromQueue,
     clearScheduledNotifications,
-    cancelUpcomingNotificationsForInProgressActivity,
+    cancelNotificationsForEventEntityInTimeInterval,
   };
 }
 
