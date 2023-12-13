@@ -1,7 +1,6 @@
-import { createStorage } from '@shared/lib';
-
 import MixpanelAnalytics from './MixpanelAnalytics';
 import { ENV, MIXPANEL_TOKEN } from '../constants';
+import { createStorage } from '../storages';
 
 const isProduction = !ENV;
 const shouldEnableMixpanel = MIXPANEL_TOKEN && isProduction;

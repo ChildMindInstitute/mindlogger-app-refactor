@@ -1,24 +1,17 @@
-/* eslint-disable react-native/no-inline-styles */
 import { FC, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
+import { XStack } from '@tamagui/stacks';
 
 import { colors } from '@shared/lib';
 import { invertColor } from '@shared/lib/utils';
-import {
-  Text,
-  XStack,
-  QuestionTooltipIcon,
-  Tooltip,
-  CheckBox,
-  Box,
-} from '@shared/ui';
+import { Text, Tooltip, CheckBox, QuestionTooltipIcon } from '@shared/ui';
 
 import { Item } from './types';
 
-const CheckboxTooltipContainer = styled(Box, {
+const CheckboxTooltipContainer = styled(XStack, {
   marginRight: 10,
   width: '8%',
 });
@@ -82,7 +75,7 @@ const CheckBoxItem: FC<Props> = ({
         )}
 
         {imageContainerVisible ? (
-          <Box style={styles.imageContainer}>
+          <XStack style={styles.imageContainer}>
             {image && (
               <CachedImage
                 style={styles.image}
@@ -90,7 +83,7 @@ const CheckBoxItem: FC<Props> = ({
                 resizeMode="contain"
               />
             )}
-          </Box>
+          </XStack>
         ) : null}
 
         <Text
