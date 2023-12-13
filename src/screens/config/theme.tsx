@@ -1,3 +1,5 @@
+import { StyleSheet } from 'react-native';
+
 import {
   BottomTabScreenProps,
   BottomTabNavigationOptions,
@@ -104,3 +106,11 @@ export const getAppletDetailsScreenOptions = (
     };
   };
 };
+
+export const appletScreenHeaderStyles = StyleSheet.create({
+  title: {
+    fontSize: 16,
+    color: colors.tertiary,
+    fontWeight: '600',
+  },
+});

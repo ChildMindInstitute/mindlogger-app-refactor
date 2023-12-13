@@ -244,14 +244,16 @@ function FinishItem({
   return (
     <ImageBackground>
       <Center flex={1} mx={16}>
-        <Text fontSize={24} fontWeight="bold">
-          {finishReason === 'regular' && t('additional:thanks')}
-          {finishReason === 'time-is-up' && t('additional:time-end')}
-        </Text>
+        <Center accessibilityLabel="answer_saved-label">
+          <Text fontSize={24} fontWeight="bold">
+            {finishReason === 'regular' && t('additional:thanks')}
+            {finishReason === 'time-is-up' && t('additional:time-end')}
+          </Text>
 
-        <Text fontSize={16} mb={20} accessibilityLabel="answer_saved-label">
-          {t('additional:saved_answers')}
-        </Text>
+          <Text fontSize={16} mb={20}>
+            {t('additional:saved_answers')}
+          </Text>
+        </Center>
 
         <Button accessibilityLabel="close-button" onPress={onCloseEntity}>
           {t('additional:close')}
