@@ -253,7 +253,9 @@ const AbCanvas: FC<Props> = props => {
   };
 
   const onTouchStart = (touchInfo: TouchInfo) => {
-    if (currentPathRef.current || readonly) {
+    const isFinished = paths.length === currentIndexRef.current;
+
+    if (currentPathRef.current || readonly || isFinished) {
       return;
     }
 
