@@ -541,7 +541,7 @@ PODS:
     - React-Core
   - RNPermissions (3.7.3):
     - React-Core
-  - RNReanimated (3.5.4):
+  - RNReanimated (3.6.1):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -934,7 +934,7 @@ SPEC CHECKSUMS:
   RNFileLogger: 9eaf7a6ea709eaaffe646cc485b98ae1dbf1e9f0
   RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
   RNPermissions: 4f5e03e3272fdc6fcee6e571dfdcbad128aadffe
-  RNReanimated: 12a905af0de1a7f728eacebc5a6af1cc5ada64ad
+  RNReanimated: c5a0074efffd21f4af324e86b19468758fe39fa2
   RNScreens: 2b19e2471db8a581c83f381f4ea5d43071c9a3bf
   RNSensors: 117ba71c7eeeea0407ea0c0bb79e3495d602049b
   RNSVG: c1e76b81c76cdcd34b4e1188852892dc280eb902

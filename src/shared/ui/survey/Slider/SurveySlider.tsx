@@ -73,12 +73,14 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
       <XStack mt="$2" jc="space-between">
         <YStack maxWidth="30%" ai="center">
           {leftImageUrl && (
-            <CachedImage
-              accessibilityLabel="slide-image"
-              style={styles.imageLeft}
-              resizeMode="contain"
-              source={leftImageUrl}
-            />
+            <Box borderRadius={4} overflow="hidden">
+              <CachedImage
+                accessibilityLabel="slide-image"
+                style={styles.image}
+                resizeMode="contain"
+                source={leftImageUrl}
+              />
+            </Box>
           )}
 
           {leftTitle ? (
@@ -93,7 +95,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
             <XStack jc="center">
               <CachedImage
                 accessibilityLabel="slide-right-image"
-                style={styles.imageRight}
+                style={styles.image}
                 resizeMode="contain"
                 source={rightImageUrl}
               />
@@ -114,12 +116,8 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
 export default SurveySlider;
 
 const styles = StyleSheet.create({
-  imageLeft: {
-    width: 45,
-    height: 45,
-  },
-  imageRight: {
-    width: 45,
-    height: 45,
+  image: {
+    width: 44,
+    height: 44,
   },
 });

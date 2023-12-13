@@ -27,6 +27,10 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
     for (let eventEntity of notInProgress) {
       const { event } = eventEntity;
 
+      if (!this.utility.isInsideValidDatesInterval(event)) {
+        continue;
+      }
+
       const isTypeScheduled =
         event.availability.availabilityType ===
         AvailabilityType.ScheduledAccess;
@@ -78,18 +82,18 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
 
       const considerSpread = doAdvancedSpreadCheck;
 
-      const voidInterval: DatesFromTo = this.utility.getVoidTimeInterval(
+      const voidInterval: DatesFromTo = this.utility.getVoidInterval(
         eventEntity.event,
         considerSpread,
       );
 
-      const isInVoidInterval = this.utility.isInTimeInterval(
+      const isInVoidInterval = this.utility.isInInterval(
         voidInterval,
         now,
         'from',
       );
 
-      const isCompletedInVoidInterval = this.utility.isInTimeInterval(
+      const isCompletedInVoidInterval = this.utility.isInInterval(
         voidInterval,
         this.utility.getCompletedAt(eventEntity),
         'from',

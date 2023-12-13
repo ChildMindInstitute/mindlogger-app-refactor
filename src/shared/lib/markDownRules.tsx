@@ -4,6 +4,7 @@ import { CachedImage, CacheManager } from '@georstat/react-native-image-cache';
 import { format } from 'date-fns';
 import AutoHeightWebView from 'react-native-autoheight-webview';
 import {
+  ASTNode,
   RenderRules,
   renderRules as defaultRenderRules,
 } from 'react-native-markdown-display';
@@ -395,15 +396,7 @@ const markDownRules: RenderRules = {
     );
   },
   paragraph: (node, children, parents, styles) => {
-    let customContainerTagExists = false;
-
-    for (let parent of parents) {
-      const { type } = parent;
-      if (type.includes('container_hljs')) {
-        customContainerTagExists = true;
-        break;
-      }
-    }
+    const customContainerTagExists = checkIfContainerTypeIsHljs(parents);
 
     if (customContainerTagExists) {
       return <Box key={node.key}>{children}</Box>;
@@ -430,8 +423,10 @@ const markDownRules: RenderRules = {
     );
   },
   list_item: (node, children, parents, styles) => {
+    const customContainerTagExists = checkIfContainerTypeIsHljs(parents);
+
     return (
-      <Box key={node.key} my={-6}>
+      <Box key={node.key} my={customContainerTagExists ? 3 : -6}>
         {
           // @ts-ignore
           defaultRenderRules.list_item(node, children, parents, {
@@ -488,6 +483,17 @@ const styleVariables = (content: string) => {
 
 const parseNodeContent = (content: string) => {
   return styleVariables(content);
+};
+
+const checkIfContainerTypeIsHljs = (parents: ASTNode[]) => {
+  for (let parent of parents) {
+    const { type } = parent;
+    if (type.includes('container_hljs')) {
+      return true;
+    }
+  }
+
+  return false;
 };
 
 export const preprocessImageLinks = (content: string) => {

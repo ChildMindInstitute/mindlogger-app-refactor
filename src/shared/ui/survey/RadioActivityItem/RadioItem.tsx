@@ -20,6 +20,8 @@ type RadioLabelProps = {
   option: RadioOption;
   addTooltip: boolean;
   setPalette: boolean;
+  imageContainerVisible: boolean;
+  tooltipContainerVisible: boolean;
   textReplacer: (markdown: string) => string;
 };
 
@@ -35,6 +37,8 @@ const RadioTextContainer = styled(Box, {
 const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
   option: { isHidden, id, text, color, image, tooltip, value },
   addTooltip,
+  imageContainerVisible,
+  tooltipContainerVisible,
   setPalette,
   textReplacer,
   accessibilityLabel,
@@ -62,7 +66,7 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
       minHeight="$7"
       bg={setPalette ? color : 'none'}
       py="$4"
-      px="$5"
+      px={10}
       my="$1"
       jc="center"
       ai="center"
@@ -70,27 +74,33 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
       borderRadius={7}
       accessibilityLabel={accessibilityLabel}
     >
-      {addTooltip && tooltip && (
+      {addTooltip && tooltipContainerVisible && (
         <RadioTooltipContainer>
-          <Tooltip
-            accessibilityLabel={`radio-option-tooltip-${value}`}
-            markdown={tooltipText}
-          >
-            <QuestionTooltipIcon
-              color={hasColor ? invertedColor : colors.grey}
-              size={22}
-            />
-          </Tooltip>
+          {tooltip && (
+            <Tooltip
+              accessibilityLabel={`radio-option-tooltip-${value}`}
+              markdown={tooltipText}
+            >
+              <QuestionTooltipIcon
+                color={hasColor ? invertedColor : colors.grey}
+                size={22}
+              />
+            </Tooltip>
+          )}
         </RadioTooltipContainer>
       )}
 
-      {image && (
-        <CachedImage
-          resizeMode="contain"
-          accessibilityLabel={`radio-option-image-${value}`}
-          style={styles.image}
-          source={image}
-        />
+      {imageContainerVisible && (
+        <Box style={styles.imageContainer}>
+          {image && (
+            <CachedImage
+              resizeMode="contain"
+              accessibilityLabel={`radio-option-image-${value}`}
+              style={styles.image}
+              source={image}
+            />
+          )}
+        </Box>
       )}
 
       <RadioTextContainer w="50%">
@@ -123,8 +133,14 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
 export default RadioItem;
 
 const styles = StyleSheet.create({
+  imageContainer: {
+    width: 56,
+    height: 56,
+    overflow: 'hidden',
+    borderRadius: 4,
+  },
   image: {
-    width: '15%',
-    height: 64,
+    height: '100%',
+    width: '100%',
   },
 });
