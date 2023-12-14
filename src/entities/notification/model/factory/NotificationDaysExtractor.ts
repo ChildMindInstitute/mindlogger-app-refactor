@@ -124,14 +124,15 @@ export class NotificationDaysExtractor {
 
   public extractForReminders(
     lastScheduleDay: Date,
-    periodEndDay: Date | null,
+    eventDayFrom: Date | null,
+    eventDayTo: Date | null,
     periodicity: PeriodicityType,
     aWeekAgoDay: Date,
     scheduledDay: Date,
   ): Date[] {
-    const eventDays: Date[] = [];
+    let eventDays: Date[] = [];
 
-    const dayTo = this.getDayTo(lastScheduleDay, periodEndDay);
+    const dayTo = this.getDayTo(lastScheduleDay, eventDayTo);
 
     let reminderStartDay: Date = scheduledDay;
 
@@ -200,6 +201,8 @@ export class NotificationDaysExtractor {
         day = addMonths(day, 1);
       }
     }
+
+    eventDays = eventDays.filter(day => !eventDayFrom || day >= eventDayFrom);
 
     return eventDays;
   }
