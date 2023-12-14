@@ -1,3 +1,5 @@
+import { callApiWithRetry } from '@app/shared/lib';
+
 import httpService from './httpService';
 import { SuccessfulEmptyResponse } from '../types';
 
@@ -34,10 +36,13 @@ export type NotificationLogsResponse = SuccessfulEmptyResponse;
 function notificationService() {
   return {
     sendNotificationLogs(request: NotificationLogsRequest) {
-      return httpService.post<NotificationLogsResponse>(
-        '/logs/notification',
-        request,
-      );
+      const apiCall = async () => {
+        return httpService.post<NotificationLogsResponse>(
+          '/logs/notification',
+          request,
+        );
+      };
+      return callApiWithRetry(apiCall);
     },
   };
 }
