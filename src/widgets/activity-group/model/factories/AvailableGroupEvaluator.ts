@@ -123,6 +123,10 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
     for (let eventEntity of notInProgress) {
       const { event } = eventEntity;
 
+      if (!this.utility.isInsideValidDatesInterval(event)) {
+        continue;
+      }
+
       const isAlwaysAvailable =
         event.availability.availabilityType ===
         AvailabilityType.AlwaysAvailable;

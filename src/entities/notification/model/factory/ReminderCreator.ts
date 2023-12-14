@@ -91,6 +91,7 @@ export class ReminderCreator {
 
     notification.isSpreadInEventSet = this.utility.isSpreadToNextDay(event);
     notification.fallType = this.utility.getFallType(triggerAt, scheduledDay);
+    notification.eventDayString = scheduledDay.toString();
 
     return notification;
   }
@@ -140,6 +141,7 @@ export class ReminderCreator {
 
   public create(
     eventDays: Date[],
+    reminderDays: Date[],
     event: ScheduleEvent,
     entity: Entity,
   ): Array<{ reminder: NotificationDescriber; eventDay: Date }> {
@@ -154,7 +156,7 @@ export class ReminderCreator {
       event,
     );
 
-    for (let day of eventDays) {
+    for (let day of reminderDays) {
       const reminder: NotificationDescriber = this.createReminder(
         day,
         entity,
@@ -174,6 +176,10 @@ export class ReminderCreator {
 
       if (reminder?.isActive) {
         this.utility.markIfNotificationOutdated(reminder, event);
+      }
+
+      if (reminder?.isActive) {
+        this.utility.markIfIsOutOfStartEndDatesRange(reminder, event);
       }
     }
 

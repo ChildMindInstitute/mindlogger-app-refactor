@@ -108,7 +108,8 @@ class RefreshService implements IRefreshService {
       this.queryClient.setQueryData(getAppletsKey(), appletsResponse);
     } catch (error) {
       this.logger.warn(
-        '[RefreshService.refreshInternal]: Error occurred during refresh flat list of applets',
+        '[RefreshService.refreshInternal]: Error occurred during refresh flat list of applets:\nInternal error:\n\n' +
+          error,
       );
       return emptyResult;
     }

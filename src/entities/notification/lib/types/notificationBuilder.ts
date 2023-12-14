@@ -77,6 +77,7 @@ export const enum InactiveReason {
   NotDefined = 'NotDefined',
   Outdated = 'Outdated',
   OutdatedByStartTime = 'OutdatedByStartTime',
+  OutOfStartEndDay = 'OutOfStartEndDay',
   ActivityCompleted = 'ActivityCompleted',
   EntityHidden = 'EntityHidden',
   OneTimeCompletion = 'OneTimeCompletion',
@@ -107,6 +108,7 @@ export type NotificationDescriber = {
   entityName: string;
   scheduledAt: number;
   scheduledAtString: string;
+  eventDayString?: string;
   notificationHeader: string;
   notificationBody: string;
   isSpreadInEventSet?: boolean;

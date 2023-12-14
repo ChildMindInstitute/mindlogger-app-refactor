@@ -255,7 +255,8 @@
     "stop": "STOP",
     "playing": "LECTURE...",
     "play": "Lecture",
-    "done": "Fait"
+    "done": "Fait",
+    "loading": "Chargement"
   },
   "optional_text": {
     "required": "Ceci est un champ obligatoire.",

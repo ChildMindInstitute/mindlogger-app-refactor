@@ -268,7 +268,8 @@
     "stop": "STOP",
     "playing": "PLAYING...",
     "play": "PLAY",
-    "done": "DONE"
+    "done": "DONE",
+    "loading": "LOADING"
   },
   "optional_text": {
     "required": "This is a required field.",
