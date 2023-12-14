@@ -185,9 +185,9 @@ class NotificationBuilder implements INotificationBuilder {
       NumberOfDaysForSchedule - 1,
     );
 
-    const periodStartDay = event.availability.startDate;
+    const eventDayFrom = event.availability.startDate;
 
-    const periodEndDay = event.availability.endDate;
+    const eventDayTo = event.availability.endDate;
 
     const periodicity = event.availability.periodicityType;
 
@@ -224,16 +224,12 @@ class NotificationBuilder implements INotificationBuilder {
     }
     if (
       isPeriodicitySet &&
-      periodEndDay &&
-      periodEndDay < this.utility.currentDay
+      eventDayTo &&
+      eventDayTo < this.utility.currentDay
     ) {
       return eventResult;
     }
-    if (
-      isPeriodicitySet &&
-      periodStartDay &&
-      periodStartDay > lastScheduleDay
-    ) {
+    if (isPeriodicitySet && eventDayFrom && eventDayFrom > lastScheduleDay) {
       return eventResult;
     }
 
@@ -260,8 +256,8 @@ class NotificationBuilder implements INotificationBuilder {
       const eventDays = this.notificationDaysExtractor.extract(
         firstScheduleDay,
         lastScheduleDay,
-        periodStartDay,
-        periodEndDay,
+        eventDayFrom,
+        eventDayTo,
         periodicity,
         aWeekAgoDay,
         scheduledDay,
@@ -269,7 +265,8 @@ class NotificationBuilder implements INotificationBuilder {
 
       const reminderDays = this.notificationDaysExtractor.extractForReminders(
         lastScheduleDay,
-        periodEndDay,
+        eventDayFrom,
+        eventDayTo,
         periodicity,
         aWeekAgoDay,
         scheduledDay,
