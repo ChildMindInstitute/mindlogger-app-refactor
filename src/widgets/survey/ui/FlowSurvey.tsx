@@ -1,7 +1,6 @@
 import { EntityPath, StoreProgressPayload } from '@app/abstract/lib';
 import { useInProgressRecord } from '@app/entities/applet/model';
-import { ScheduleEvent } from '@app/entities/event';
-import { useEventQuery } from '@app/entities/event/api';
+import { EventModel } from '@app/entities/event';
 
 import FlowElementSwitch from './FlowElementSwitch';
 import {
@@ -41,7 +40,7 @@ function FlowSurvey({
     flowId: entityType === 'flow' ? entityId : undefined,
   });
 
-  const event: ScheduleEvent = useEventQuery(appletId, eventId);
+  const event = EventModel.useScheduledEvent({ appletId, eventId })!;
 
   const progressRecord: StoreProgressPayload = useInProgressRecord({
     appletId,
