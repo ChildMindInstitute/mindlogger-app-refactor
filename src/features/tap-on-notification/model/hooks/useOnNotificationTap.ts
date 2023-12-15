@@ -89,6 +89,7 @@ export function useOnNotificationTap({
       const entityType: EntityType = activityFlowId ? 'flow' : 'regular';
 
       const executing = getCurrentRoute() === 'InProgressActivity';
+      console.log(getCurrentRoute(), 'getCurrentRoute');
 
       if (executing) {
         navigator.goBack();

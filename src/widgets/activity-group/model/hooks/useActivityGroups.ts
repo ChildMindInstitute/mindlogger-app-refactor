@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { AppletModel } from '@app/entities/applet';
 import { useAppSelector } from '@app/shared/lib';
 
-import useTimer from './useTimer';
+import useActivityGroupsTimer from './useActivityGroupsTimer';
 import { ActivityListGroup } from '../../lib';
 import { ActivityGroupsBuildManager } from '../services';
 
@@ -16,7 +16,7 @@ type UseActivityGroupsReturn = {
 export const useActivityGroups = (
   appletId: string,
 ): UseActivityGroupsReturn => {
-  useTimer();
+  useActivityGroupsTimer();
 
   const queryClient = useQueryClient();
 

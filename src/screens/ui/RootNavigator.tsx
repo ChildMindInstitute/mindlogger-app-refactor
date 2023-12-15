@@ -124,7 +124,7 @@ export default () => {
 
   const processQueue = useCallback(() => {
     const executing = getCurrentRoute() === 'InProgressActivity';
-
+    console.log(getCurrentRoute(), 'getCurrentRoute');
     if (executing) {
       Logger.info(
         '[RootNavigator.useOnlineEstablished.processQueue]: Postponed due to entity is in progress',

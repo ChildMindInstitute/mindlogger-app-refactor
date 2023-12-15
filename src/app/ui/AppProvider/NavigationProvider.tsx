@@ -7,6 +7,8 @@ import {
 } from '@react-navigation/native';
 import { ScreensModel, RootStackParamList } from '@screens';
 
+import { navigationRef } from '../../lib';
+
 const theme = {
   ...DefaultTheme,
   colors: {
@@ -25,6 +27,7 @@ const NavigationProvider: FC<PropsWithChildren> = ({ children }) => {
           state as NavigationState<RootStackParamList>,
         )
       }
+      ref={navigationRef}
     >
       {children}
     </NavigationContainer>

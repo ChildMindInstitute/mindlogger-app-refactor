@@ -19,6 +19,11 @@ export function onScreenChanged(
   } else {
     navigationService.clearInitialRoute();
   }
+
+  navigationService.setCurrentRoute({
+    route: currentScreen.name,
+    params: currentScreen.params,
+  });
 }
 
 export const clearInitialRoute = navigationService.clearInitialRoute;
