@@ -48,10 +48,6 @@ export type ScheduleEventDto = {
   };
 };
 
-type AppletEventsRequest = {
-  appletId: string;
-};
-
 export type AppletEventsResponse = SuccessfulResponse<{
   events: ScheduleEventDto[];
 }>;
@@ -99,13 +95,6 @@ export type CompletedEntitiesResponse = SuccessfulResponse<
 
 function eventsService() {
   return {
-    getEvents(request: AppletEventsRequest) {
-      const apiCall = () =>
-        httpService.get<AppletEventsResponse>(
-          `/users/me/events/${request.appletId}`,
-        );
-      return callApiWithRetry(withDataExtraction(apiCall));
-    },
     getCompletedEntities(request: AppletCompletedEntitiesRequest) {
       const apiCall = () =>
         httpService.get<AppletCompletedEntitiesResponse>(
