@@ -37,6 +37,7 @@ const AnalyticsService = {
   },
   logout() {
     if (shouldEnableMixpanel) {
+      this.track('Logout');
       service.logout();
       storage.clearAll();
     }
