@@ -11,6 +11,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'InProgressActivity'>;
 
 const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
   const { appletId, eventId, entityId, entityType } = route.params;
+
   useUpcomingNotificationsObserver(eventId, entityId);
 
   return (
