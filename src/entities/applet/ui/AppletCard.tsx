@@ -56,7 +56,7 @@ const AppletCard: FC<Props & AccessibilityProps> = ({
       >
         <Box mr={14}>
           <RoundLogo
-            accessibilityLabel={`applet-card-logo-${applet.id}`}
+            accessibilityLabel="applet_logo-image"
             imageUri={applet.image}
             letter={applet.displayName[0].toUpperCase()}
           />
@@ -69,7 +69,7 @@ const AppletCard: FC<Props & AccessibilityProps> = ({
               flex={1}
               fontWeight={IS_IOS ? '600' : '700'}
               fontSize={16}
-              accessibilityLabel={`applet-name-${applet.id}`}
+              accessibilityLabel="applet_name-text"
               lineHeight={20}
             >
               {applet.displayName}
@@ -79,7 +79,7 @@ const AppletCard: FC<Props & AccessibilityProps> = ({
           </XStack>
 
           <Text
-            accessibilityLabel={`applet-description-${applet.id}`}
+            accessibilityLabel="applet_description-text"
             fontSize={14}
             fontWeight="300"
             lineHeight={20}
@@ -91,7 +91,7 @@ const AppletCard: FC<Props & AccessibilityProps> = ({
         {!!applet.numberOverdue && (
           <Box position="absolute" top={-14} right={-14}>
             <RoundTextNotification
-              accessibilityLabel={`applet-number-overdue-${applet.id}`}
+              accessibilityLabel="applet_number_overdue-text"
               text={applet.numberOverdue.toString()}
             />
           </Box>

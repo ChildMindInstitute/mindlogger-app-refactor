@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Text as RNText } from 'react-native';
 
 import { useBackHandler } from '@react-native-community/hooks';
 import { useNavigation } from '@react-navigation/native';
@@ -43,7 +43,11 @@ import {
   CloseIcon,
 } from '@shared/ui';
 
-import { getScreenOptions, RootStackParamList } from '../config';
+import {
+  appletScreenHeaderStyles,
+  getScreenOptions,
+  RootStackParamList,
+} from '../config';
 import { onBeforeAppClose } from '../lib';
 import { useDefaultRoute, useInitialRouteNavigation } from '../model';
 import { checkEntityAvailability } from '../model/checkEntityAvailability';
@@ -203,10 +207,15 @@ export default () => {
               headerStyle: {
                 backgroundColor: colors.lighterGrey2,
               },
-              headerTitleStyle: {
-                fontSize: 16,
-                color: colors.tertiary,
-              },
+
+              headerTitle: props => (
+                <RNText
+                  accessibilityLabel="welcome_name-text"
+                  style={appletScreenHeaderStyles.title}
+                >
+                  {props.children}
+                </RNText>
+              ),
               headerRight: () => (
                 <TouchableOpacity
                   accessibilityLabel="user_settings-button"

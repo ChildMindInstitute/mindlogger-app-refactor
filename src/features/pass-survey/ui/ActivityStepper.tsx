@@ -107,11 +107,11 @@ function ActivityStepper({
 
   const getAccessibilityLabel = (text: string): string | null => {
     switch (text) {
-      case t('activity_navigation:done'):
+      case 'activity_navigation:done':
         return 'done-button';
-      case t('activity_navigation:skip'):
+      case 'activity_navigation:skip':
         return 'skip-button';
-      case t('activity_navigation:next'):
+      case 'activity_navigation:next':
         return 'next-button';
       default:
         return null;
