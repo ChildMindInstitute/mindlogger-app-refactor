@@ -52,9 +52,7 @@ const ping = async (): Promise<boolean> => {
 
 const WatchInterval = 30000;
 
-export const watchForConnectionLoss = (
-  mode: 'ping' | 'checkNetworkStatus' = 'ping',
-) => {
+export const watchForConnectionLoss = () => {
   const abortController = new AbortController();
   let intervalId: TimeoutId;
 
@@ -67,16 +65,8 @@ export const watchForConnectionLoss = (
       }
     };
 
-    if (mode === 'checkNetworkStatus') {
-      isAppOnline().then(result => checkAction(result));
-    } else {
-      ping().then(result => checkAction(result));
-    }
+    ping().then(result => checkAction(result));
   };
-
-  if (mode === 'checkNetworkStatus') {
-    checkWithAbort();
-  }
 
   intervalId = setInterval(() => {
     checkWithAbort();
