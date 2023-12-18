@@ -19,6 +19,10 @@ class MixpanelAnalytics implements IAnalyticsService {
     return this.mixpanel?.identify(id);
   }
 
+  setAttribute(key: string, value: string): void {
+    return this.mixpanel?.getPeople()?.set(key, value);
+  }
+
   logout(): void {
     this.mixpanel?.reset();
   }
