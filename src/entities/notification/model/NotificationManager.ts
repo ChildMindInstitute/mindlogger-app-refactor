@@ -1,5 +1,4 @@
 import { TimestampTrigger } from '@notifee/react-native';
-import { differenceInSeconds } from 'date-fns';
 
 import { Logger, Mutex, splitArray } from '@shared/lib';
 
@@ -116,9 +115,10 @@ function NotificationManager() {
     ) => {
       const { data, id: notificationId } = notification?.notification;
       const { scheduledAt, scheduledAtString } = data;
-      const difference = differenceInSeconds(scheduledAt, timeInterval.from);
+      const shouldCancel =
+        timeInterval.from <= scheduledAt && scheduledAt <= timeInterval.to;
 
-      if (notificationId && difference <= timeInterval.to) {
+      if (notificationId && shouldCancel) {
         Logger.log(
           `[NotificationManager.cancelNotificationForEventEntityInTimeInterval]: Notification ${notificationId}, scheduled at ${scheduledAtString}, was canceled because entity ${entityId} is in progress`,
         );

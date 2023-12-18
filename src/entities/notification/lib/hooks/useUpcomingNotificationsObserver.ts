@@ -4,7 +4,7 @@ import { AppState } from 'react-native';
 import { NotificationManager } from '@entities/notification/model';
 import { useInterval } from '@shared/lib';
 
-const CHECK_INTERVAL = 20;
+const CHECK_INTERVAL = 20000;
 
 export const useUpcomingNotificationsObserver = (
   eventId: string,
@@ -17,10 +17,10 @@ export const useUpcomingNotificationsObserver = (
       NotificationManager.cancelNotificationsForEventEntityInTimeInterval(
         eventId,
         entityId,
-        { from: Date.now(), to: CHECK_INTERVAL },
+        { from: Date.now(), to: Date.now() + CHECK_INTERVAL },
       );
     }
-  }, CHECK_INTERVAL * 1000);
+  }, CHECK_INTERVAL);
 
   useEffect(() => {
     startInterval();
