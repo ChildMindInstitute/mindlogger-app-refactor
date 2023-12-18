@@ -79,6 +79,10 @@ function FinishItem({
     AppletModel.selectors.selectInProgressApplets,
   );
 
+  const appletConsents = useAppSelector(state =>
+    AppletModel.selectors.selectAppletConsents(state, appletId),
+  );
+
   const completions = useAppSelector(AppletModel.selectors.selectCompletions);
 
   const { activityStorageRecord, clearActivityStorageRecord } =
@@ -163,6 +167,8 @@ function FinishItem({
 
     const appletName = applet?.displayName;
 
+    const dataShareEnabled = appletConsents?.shareToPublic ?? false;
+
     Logger.log(
       `[Finish.completeActivity]: Activity "${logActivityName}|${activityId}" completed, applet "${appletName}|${appletId}"`,
     );
@@ -194,6 +200,7 @@ function FinishItem({
       alerts,
       eventId,
       isFlowCompleted: !!flowId,
+      dataShareEnabled,
     });
 
     clearActivityStorageRecord();

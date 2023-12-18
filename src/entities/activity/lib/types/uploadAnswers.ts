@@ -29,6 +29,7 @@ export type SendAnswersInput = {
     height: number;
   };
   alerts: AnswerAlertsDto;
+  dataShareEnabled: boolean;
   logActivityName?: string;
   logCompletedAt?: string;
 };

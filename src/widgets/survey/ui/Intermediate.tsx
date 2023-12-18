@@ -111,6 +111,10 @@ function Intermediate({
     AppletModel.selectors.selectInProgressApplets,
   );
 
+  const appletConsents = useAppSelector(state =>
+    AppletModel.selectors.selectAppletConsents(state, appletId),
+  );
+
   const appletEncryption = applet?.encryption || null;
 
   const activitiesPassed = pipeline
@@ -272,6 +276,8 @@ function Intermediate({
 
     const appletName = applet?.displayName;
 
+    const dataShareEnabled = appletConsents?.shareToPublic ?? false;
+
     Logger.log(
       `[Intermediate.completeActivity]: Activity "${logActivityName}|${activityId}" within flow "${flowName}|${flowId}" completed, applet "${appletName}|${appletId}"`,
     );
@@ -297,6 +303,7 @@ function Intermediate({
       alerts,
       eventId,
       isFlowCompleted: false,
+      dataShareEnabled,
     });
 
     clearActivityStorageRecord();
