@@ -49,9 +49,7 @@ export const useRegistrationMutation = (
       SessionModel.storeSession(session);
 
       AnalyticsService.login(user.id).then(() => {
-        AnalyticsService.track('Signup Successful', {
-          'User ID': user.id,
-        });
+        AnalyticsService.track('Signup Successful');
       });
 
       if (onSuccess) {
