@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { useIsFocused } from '@react-navigation/core';
 
 import { UploadRetryBanner } from '@app/entities/activity';
 import { ActivityGroups } from '@app/widgets/activity-group';
@@ -11,12 +12,21 @@ import { Box, HorizontalCalendar } from '@shared/ui';
 type Props = BottomTabScreenProps<AppletDetailsParamList, 'ActivityList'>;
 
 const ActivityListScreen: FC<Props> = props => {
+  const isFocused = useIsFocused();
+
   return (
     <Box flex={1}>
       <UploadRetryBanner accessibilityLabel="upload-banner" />
       <HorizontalCalendar mt={8} />
       <StreamingStatusBar appletId={props.route.params.appletId} mb={20} />
-      <ActivityGroups flex={1} px={14} appletId={props.route.params.appletId} />
+
+      {isFocused && (
+        <ActivityGroups
+          flex={1}
+          px={14}
+          appletId={props.route.params.appletId}
+        />
+      )}
     </Box>
   );
 };
