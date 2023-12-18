@@ -21,7 +21,7 @@ const AnalyticsService = {
       service = new MixpanelAnalytics(MIXPANEL_TOKEN);
     }
   },
-  track(action: string, payload?: Record<string, null>) {
+  track(action: string, payload?: Record<string, any>) {
     if (shouldEnableMixpanel) {
       service.track(`[Mobile] ${action}`, payload);
     }
