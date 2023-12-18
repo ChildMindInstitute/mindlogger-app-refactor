@@ -9,7 +9,6 @@ export const storage = createStorage('analytics-storage');
 
 export interface IAnalyticsService {
   track(action: string, payload?: Record<string, any>): void;
-  setAttribute(key: string, value: string): void;
   login(id: string): Promise<void>;
   logout(): void;
 }
@@ -27,18 +26,12 @@ const AnalyticsService = {
       service.track(`[Mobile] ${action}`, payload);
     }
   },
-  setAttribute(key: string, value: string) {
-    if (shouldEnableMixpanel) {
-      service.setAttribute(key, value);
-    }
-  },
   async login(userId: string) {
     const isLoggedIn = storage.getBoolean('IS_LOGGED_IN');
 
     if (shouldEnableMixpanel && !isLoggedIn) {
       return service.login(userId).then(() => {
         storage.set('IS_LOGGED_IN', true);
-        service.setAttribute('User ID', userId);
       });
     }
   },
