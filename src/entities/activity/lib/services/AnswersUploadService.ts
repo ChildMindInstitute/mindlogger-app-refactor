@@ -118,13 +118,17 @@ class AnswersUploadService implements IAnswersUploadService {
   ): Promise<string> {
     const localFileExists = await FileSystem.exists(mediaFile.uri);
 
-    const logFileInfo = `(${mediaFile.type}, from answer #${logAnswerIndex})`;
+    let logFileInfo = `(${mediaFile.type}, from answer #${logAnswerIndex})`;
 
     if (!localFileExists) {
       throw new Error(
         `[UploadAnswersService.processFileUpload]: Local file ${logFileInfo} does not exist`,
       );
     }
+
+    const fileStat = await FileSystem.stat(mediaFile.uri);
+
+    logFileInfo += `, with size = ${fileStat.size} bytes`;
 
     const uploadRecord = this.getUploadRecord(
       uploadChecks,
@@ -151,6 +155,7 @@ class AnswersUploadService implements IAnswersUploadService {
           uri: mediaFile.uri,
           fileId: this.getFileId(mediaFile),
           appletId,
+          fileSize: fileStat.size,
         });
 
         remoteUrl = uploadResult.data.result.url;

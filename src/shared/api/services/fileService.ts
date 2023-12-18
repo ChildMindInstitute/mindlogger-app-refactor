@@ -3,6 +3,7 @@ import {
   Logger,
   callApiWithRetry,
   getStringHashCode,
+  watchForConnectionInterrupted,
   watchForConnectionLoss,
 } from '@shared/lib';
 import { SystemRecord } from '@shared/lib/records';
@@ -22,6 +23,7 @@ type AppletFileUploadRequest = {
   fileName: string;
   type: string;
   fileId: string;
+  fileSize: number;
   appletId: string;
 };
 
@@ -153,6 +155,11 @@ function fileService() {
       const apiCall = async () => {
         const { abortController, reset } = watchForConnectionLoss();
 
+        const { reset: interruptReset } = watchForConnectionInterrupted(
+          request.fileSize,
+          abortController,
+        );
+
         try {
           const data = new FormData();
           const uri = IS_ANDROID
@@ -182,6 +189,7 @@ function fileService() {
           throw error;
         } finally {
           reset();
+          interruptReset();
         }
       };
 

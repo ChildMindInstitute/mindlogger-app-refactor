@@ -5,6 +5,7 @@ import { httpService } from '@app/shared/api';
 
 import { wait } from './common';
 import { onNetworkUnavailable } from '../alerts';
+import { MS_IN_SECOND } from '../constants';
 import { Logger } from '../services';
 
 export const isAppOnline = async (): Promise<boolean> => {
@@ -76,6 +77,35 @@ export const watchForConnectionLoss = () => {
     abortController,
     reset: () => {
       clearInterval(intervalId);
+    },
+  };
+};
+
+const BytesInMegabyte = 1024 * 1024;
+
+const MinimumSpeedInMbPerSecond = 0.5;
+
+const SpeedUpLagInSeconds = 5;
+
+export const watchForConnectionInterrupted = (
+  fileSizeInBytes: number,
+  abortController: AbortController,
+) => {
+  const fileSizeInMb = fileSizeInBytes / BytesInMegabyte;
+
+  const timeoutInSeconds =
+    Math.round(fileSizeInMb / MinimumSpeedInMbPerSecond) + SpeedUpLagInSeconds;
+
+  const timeoutId = setTimeout(() => {
+    Logger.warn(
+      '[watchForConnectionInterrupted]: Abort request due to timeout and possible connection interruption by Server',
+    );
+    abortController.abort();
+  }, timeoutInSeconds * MS_IN_SECOND);
+
+  return {
+    reset: () => {
+      clearTimeout(timeoutId);
     },
   };
 };
