@@ -10,7 +10,7 @@ const SUBSCRIPTION_DURATION = 500;
 const useAudioPlayer = () => {
   const audioRecorderPlayer = useRef(new AudioRecorderPlayer());
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<null | boolean>(null);
   const [playbackCount, setPlaybackCount] = useState(0);
 
   const destroy = () => {
@@ -20,7 +20,9 @@ const useAudioPlayer = () => {
   };
 
   const play = async (uri: string, onFinish?: () => void) => {
-    setIsLoading(true);
+    if (!IS_ANDROID || isLoading === null) {
+      setIsLoading(true);
+    }
 
     await wait(100);
 
