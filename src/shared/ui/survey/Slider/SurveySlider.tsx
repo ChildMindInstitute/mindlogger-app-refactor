@@ -26,6 +26,8 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
   } = config;
   const { onChange, onRelease, onPress, initialValue } = props;
 
+  const hasAtLeastOneImage = Boolean(leftImageUrl || rightImageUrl);
+
   const onValueChange = (arrayOfValues: number[]) => {
     const [value] = arrayOfValues;
     const roundedValue = Math.round(value * 100) / 100;
@@ -35,6 +37,10 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
   const items = Array.from(
     { length: maxValue - minValue + 1 },
     (_, index) => index + minValue,
+  );
+
+  const DummyBox = () => (
+    <Box h={hasAtLeastOneImage ? 44 : 0} w={hasAtLeastOneImage ? 44 : 0} />
   );
 
   return (
@@ -72,7 +78,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
 
       <XStack mt="$2" jc="space-between">
         <YStack maxWidth="30%" ai="center">
-          {leftImageUrl && (
+          {leftImageUrl ? (
             <Box borderRadius={4} overflow="hidden">
               <CachedImage
                 accessibilityLabel="slide-image"
@@ -81,6 +87,8 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
                 source={leftImageUrl}
               />
             </Box>
+          ) : (
+            <DummyBox />
           )}
 
           {leftTitle ? (
@@ -91,7 +99,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
         </YStack>
 
         <YStack maxWidth="30%" ml="auto" ai="center">
-          {rightImageUrl && (
+          {rightImageUrl ? (
             <XStack jc="center">
               <CachedImage
                 accessibilityLabel="slide-right-image"
@@ -100,6 +108,8 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
                 source={rightImageUrl}
               />
             </XStack>
+          ) : (
+            <DummyBox />
           )}
 
           {rightTitle ? (
