@@ -39,10 +39,6 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
     (_, index) => index + minValue,
   );
 
-  const DummyBox = () => (
-    <Box h={hasAtLeastOneImage ? 44 : 0} w={hasAtLeastOneImage ? 44 : 0} />
-  );
-
   return (
     <YStack>
       <Box px={10}>
@@ -78,18 +74,18 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
 
       <XStack mt="$2" jc="space-between">
         <YStack maxWidth="30%" ai="center">
-          {leftImageUrl ? (
-            <Box borderRadius={4} overflow="hidden">
-              <CachedImage
-                accessibilityLabel="slide-image"
-                style={styles.image}
-                resizeMode="contain"
-                source={leftImageUrl}
-              />
-            </Box>
-          ) : (
-            <DummyBox />
-          )}
+          <Box h={hasAtLeastOneImage ? 44 : 0} w={hasAtLeastOneImage ? 44 : 0}>
+            {leftImageUrl && (
+              <Box borderRadius={4} overflow="hidden">
+                <CachedImage
+                  accessibilityLabel="slide-image"
+                  style={styles.image}
+                  resizeMode="contain"
+                  source={leftImageUrl}
+                />
+              </Box>
+            )}
+          </Box>
 
           {leftTitle ? (
             <Text accessibilityLabel="min-label" textAlign="center">
@@ -99,18 +95,18 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
         </YStack>
 
         <YStack maxWidth="30%" ml="auto" ai="center">
-          {rightImageUrl ? (
-            <XStack jc="center">
-              <CachedImage
-                accessibilityLabel="slide-right-image"
-                style={styles.image}
-                resizeMode="contain"
-                source={rightImageUrl}
-              />
-            </XStack>
-          ) : (
-            <DummyBox />
-          )}
+          <Box h={hasAtLeastOneImage ? 44 : 0} w={hasAtLeastOneImage ? 44 : 0}>
+            {rightImageUrl && (
+              <XStack jc="center">
+                <CachedImage
+                  accessibilityLabel="slide-right-image"
+                  style={styles.image}
+                  resizeMode="contain"
+                  source={rightImageUrl}
+                />
+              </XStack>
+            )}
+          </Box>
 
           {rightTitle ? (
             <Text accessibilityLabel="max-label" textAlign="center">
