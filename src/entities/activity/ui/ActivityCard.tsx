@@ -52,7 +52,7 @@ const ActivityCard: FC<Props & AccessibilityProps> = ({
           <Box
             mr={14}
             alignSelf="center"
-            accessibilityLabel={`activity-card-${activity.activityId}-image`}
+            accessibilityLabel="activity_card-image"
           >
             <RoundLogo imageUri={activity.image} />
           </Box>
@@ -72,7 +72,7 @@ const ActivityCard: FC<Props & AccessibilityProps> = ({
             mb={8}
             fontWeight={IS_IOS ? '600' : '700'}
             fontSize={16}
-            accessibilityLabel={`activity-card-${activity.activityId}-name`}
+            accessibilityLabel="activity_card_name-text"
             lineHeight={20}
             opacity={isDisabled ? 0.5 : 1}
           >
@@ -84,7 +84,7 @@ const ActivityCard: FC<Props & AccessibilityProps> = ({
             fontWeight="300"
             lineHeight={20}
             opacity={isDisabled ? 0.5 : 1}
-            accessibilityLabel={`activity-card-${activity.activityId}-desc`}
+            accessibilityLabel="activity_card_desc-text"
           >
             {activity.description}
           </Text>

@@ -60,98 +60,72 @@ type CheckIfLogsExistResponse = SuccessfulResponse<CheckIfLogsExistResultDto>;
 
 function fileService() {
   return {
-    async upload(request: FileUploadRequest) {
-      const { abortController, reset } = watchForConnectionLoss();
-
-      try {
-        const data = new FormData();
-        const uri = IS_ANDROID
-          ? request.uri
-          : request.uri.replace('file://', '');
-
-        data.append('file', {
-          uri,
-          name: request.fileName,
-          type: request.type,
-        } as unknown as Blob);
-
-        const response = await httpService.post<FileUploadResponse>(
-          '/file/upload',
-          data,
-          {
-            headers: { 'Content-Type': 'multipart/form-data' },
-            signal: abortController.signal,
-            params: { fileId: request.fileId },
-          },
-        );
-
-        return response;
-      } catch (error) {
-        console.error('error', JSON.stringify(error));
-        throw error;
-      } finally {
-        reset();
-      }
-    },
-
     async uploadLogFile(request: FileUploadRequest) {
-      const { abortController, reset } = watchForConnectionLoss();
+      const apiCall = async () => {
+        const { abortController, reset } = watchForConnectionLoss();
 
-      try {
-        const data = new FormData();
-        const uri = IS_ANDROID
-          ? `file://${request.uri}`
-          : request.uri.replace('file://', '');
+        try {
+          const data = new FormData();
+          const uri = IS_ANDROID
+            ? `file://${request.uri}`
+            : request.uri.replace('file://', '');
 
-        data.append('file', {
-          uri,
-          name: request.fileName,
-          type: request.type,
-        } as unknown as Blob);
+          data.append('file', {
+            uri,
+            name: request.fileName,
+            type: request.type,
+          } as unknown as Blob);
 
-        const deviceId = SystemRecord.getDeviceId()!;
+          const deviceId = SystemRecord.getDeviceId()!;
 
-        const hashedDeviceId: string = !deviceId
-          ? 'undefined'
-          : getStringHashCode(deviceId).toString();
+          const hashedDeviceId: string = !deviceId
+            ? 'undefined'
+            : getStringHashCode(deviceId).toString();
 
-        const response = await httpService.post<FileUploadResponse>(
-          `/file/log-file/${hashedDeviceId}`,
-          data,
-          {
-            headers: { 'Content-Type': 'multipart/form-data' },
-            signal: abortController.signal,
-            params: { fileId: request.fileId },
-          },
-        );
+          const response = await httpService.post<FileUploadResponse>(
+            `/file/log-file/${hashedDeviceId}`,
+            data,
+            {
+              headers: { 'Content-Type': 'multipart/form-data' },
+              signal: abortController.signal,
+              params: { fileId: request.fileId },
+            },
+          );
 
-        return response;
-      } catch (error) {
-        console.error('error', JSON.stringify(error));
-        throw error;
-      } finally {
-        reset();
-      }
+          return response;
+        } catch (error) {
+          console.error('error', JSON.stringify(error));
+          throw error;
+        } finally {
+          reset();
+        }
+      };
+
+      return callApiWithRetry(apiCall);
     },
 
     async checkIfLogsExist(request: CheckIfLogsExistRequest) {
-      const deviceId = SystemRecord.getDeviceId()!;
+      const apiCall = async () => {
+        const deviceId = SystemRecord.getDeviceId()!;
 
-      const { abortController, reset } = watchForConnectionLoss();
+        const { abortController, reset } = watchForConnectionLoss();
 
-      try {
-        const response = await httpService.post<CheckIfLogsExistResponse>(
-          `/file/log-file/${deviceId}/check`,
-          request,
-          {
-            signal: abortController.signal,
-          },
-        );
+        try {
+          const response = await httpService.post<CheckIfLogsExistResponse>(
+            `/file/log-file/${deviceId}/check`,
+            request,
+            {
+              signal: abortController.signal,
+            },
+          );
 
-        return response;
-      } finally {
-        reset();
-      }
+          return response;
+        } finally {
+          reset();
+        }
+      };
+
+      return callApiWithRetry(apiCall);
     },
 
     async checkIfFilesExist(request: CheckIfFilesExistRequest) {
