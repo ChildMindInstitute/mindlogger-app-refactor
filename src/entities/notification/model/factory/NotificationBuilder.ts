@@ -170,7 +170,7 @@ class NotificationBuilder implements INotificationBuilder {
       eventId: event.id,
       notifications: [],
       eventName: '',
-      eventObject: event,
+      scheduleEvent: event,
     };
 
     if (!event.scheduledAt) {
