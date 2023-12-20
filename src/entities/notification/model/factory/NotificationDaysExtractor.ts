@@ -50,17 +50,16 @@ export class NotificationDaysExtractor {
   public extract(
     firstScheduleDay: Date,
     lastScheduleDay: Date,
-    periodStartDay: Date | null,
-    periodEndDay: Date | null,
+    eventDayFrom: Date | null,
+    eventDayTo: Date | null,
     periodicity: PeriodicityType,
-    aWeekAgoDay: Date,
     scheduledDay: Date,
   ): Date[] {
-    const eventDays = [];
+    let eventDays = [];
 
-    const dayFrom = this.getDayFrom(firstScheduleDay, periodStartDay);
+    const dayFrom = this.getDayFrom(firstScheduleDay, eventDayFrom);
 
-    const dayTo = this.getDayTo(lastScheduleDay, periodEndDay);
+    const dayTo = this.getDayTo(lastScheduleDay, eventDayTo);
 
     if (periodicity === PeriodicityType.Always) {
       const previousDay = subDays(dayFrom, 1);
@@ -86,7 +85,7 @@ export class NotificationDaysExtractor {
       let day = new Date(scheduledDay);
 
       while (day <= dayTo) {
-        if (day >= aWeekAgoDay) {
+        if (day >= this.utility.aWeekAgoDay) {
           eventDays.push(day);
         }
         day = addDays(day, 7);
@@ -99,7 +98,7 @@ export class NotificationDaysExtractor {
 
       while (day <= dayTo) {
         const found = this.utility.weekDays.find(x => isEqual(x, day));
-        if (found && day >= aWeekAgoDay) {
+        if (found && day >= this.utility.aWeekAgoDay) {
           eventDays.push(day);
         }
         day = addDays(day, 1);
@@ -119,6 +118,8 @@ export class NotificationDaysExtractor {
       }
     }
 
+    eventDays = eventDays.filter(day => !eventDayFrom || day >= eventDayFrom);
+
     return eventDays;
   }
 
@@ -127,7 +128,6 @@ export class NotificationDaysExtractor {
     eventDayFrom: Date | null,
     eventDayTo: Date | null,
     periodicity: PeriodicityType,
-    aWeekAgoDay: Date,
     scheduledDay: Date,
   ): Date[] {
     let eventDays: Date[] = [];
@@ -186,7 +186,7 @@ export class NotificationDaysExtractor {
 
       while (day <= dayTo) {
         const found = this.utility.weekDays.find(x => isEqual(x, day));
-        if (found && day >= aWeekAgoDay) {
+        if (found && day >= this.utility.aWeekAgoDay) {
           eventDays.push(day);
         }
         day = addDays(day, 1);

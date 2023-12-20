@@ -3,6 +3,7 @@ import {
   addMilliseconds,
   isEqual,
   startOfDay,
+  subDays,
   subSeconds,
   subWeeks,
 } from 'date-fns';
@@ -82,6 +83,10 @@ export class NotificationUtility {
 
   public get currentDay(): Date {
     return startOfDay(this.now);
+  }
+
+  public get aWeekAgoDay() {
+    return subDays(this.currentDay, 7);
   }
 
   public get weekDays(): Date[] {
