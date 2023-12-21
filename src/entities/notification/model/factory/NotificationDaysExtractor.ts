@@ -136,7 +136,7 @@ export class NotificationDaysExtractor {
 
     let reminderStartDay: Date = scheduledDay;
 
-    if (scheduledDay < subMonths(this.utility.currentDay, 1)) {
+    if (scheduledDay < subMonths(this.utility.currentDay, 2)) {
       this.logger.warn(
         '[NotificationDaysExtractor.extractForReminders]: scheduledDay is far in the past: ' +
           scheduledDay.toString(),
