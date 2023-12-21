@@ -129,6 +129,7 @@ export type NotificationBuilderInput = {
 export type EventNotificationDescribers = {
   eventId: string;
   eventName: string;
+  scheduleEvent: ScheduleEvent;
   notifications: Array<NotificationDescriber>;
 };
 
