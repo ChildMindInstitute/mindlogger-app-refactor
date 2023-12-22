@@ -9,6 +9,11 @@ import {
 
 const selectApplets = (state: RootState) => state.applets;
 
+export const selectGlobalState = createSelector(
+  (state: RootState) => state,
+  state => ({ ...state }),
+);
+
 export const selectInProgressApplets = createSelector(
   selectApplets,
   applet => applet.inProgress,
