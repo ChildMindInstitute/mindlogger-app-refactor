@@ -4,11 +4,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Logger, useAppDispatch, useAppSelector } from '@app/shared/lib';
 
+import { selectGlobalState } from '../selectors';
 import { ProgressSyncService, RefreshService } from '../services';
 
 const useRefreshMutation = (onSuccess?: () => void) => {
   const dispatch = useAppDispatch();
-  const state = useAppSelector(s => s);
+  const state = useAppSelector(selectGlobalState);
   const queryClient = useQueryClient();
 
   const progressSyncService = useMemo(

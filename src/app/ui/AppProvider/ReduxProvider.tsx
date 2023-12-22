@@ -42,10 +42,7 @@ export const reduxStore = configureStore({
   reducer: persistedReducer,
   middleware: getDefaultMiddleware => {
     const middlewares = getDefaultMiddleware({ serializableCheck: false });
-    if (__DEV__) {
-      const createDebugger = require('redux-flipper').default;
-      middlewares.push(createDebugger());
-    }
+
     return middlewares;
   },
 });

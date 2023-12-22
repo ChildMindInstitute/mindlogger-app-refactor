@@ -134,7 +134,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
       accessibilityLabel="photo-item"
       uploadIcon={<PhotoIcon color={colors.red} size={50} />}
     >
-      {value && <Image height="100%" width="100%" src={{ uri: value.uri }} />}
+      {value && <Image height="100%" width="100%" src={value.uri} />}
     </MediaInput>
   );
 };

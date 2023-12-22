@@ -11,7 +11,7 @@ async function onMessageReceived(notification: RemoteNotification) {
   if (notification.data) {
     try {
       const payload = JSON.parse(
-        notification.data.message,
+        notification.data.message as string,
       ) as RemoteNotificationPayload;
 
       NotificationRenderer.displayNotification({
