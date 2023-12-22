@@ -67,7 +67,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		143DBD48109F8C5B0574C468 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B0CF32465AE0FEAF18650A51 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */; };
+		1D5AD5B19895D8E9A8D97BCE /* Pods_MindloggerMobileCommonPods_MindloggerMobileQA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6A280ACCA7B73A3580EA955 /* Pods_MindloggerMobileCommonPods_MindloggerMobileQA.framework */; };
 		288FAA9A29C882AB0089AB98 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
 		288FAA9B29C882AC0089AB98 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
 		288FAA9C29C882B00089AB98 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
@@ -87,7 +87,7 @@
 		288FAB3729C88A590089AB98 /* FlankerViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2629C88A590089AB98 /* FlankerViewManager.swift */; };
 		288FAB3829C88A590089AB98 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */; };
 		288FAB3929C88A590089AB98 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2929C88A590089AB98 /* ResultView.swift */; };
-		3B8689E401F36349D9697DA5 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73A2B1EDC50A14EC123FD1CE /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */; };
+		2A9EC4C8096D3D35CBA6E075 /* Pods_MindloggerMobileCommonPods_MindloggerMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7FBA0FFF5FD95227CDF7672 /* Pods_MindloggerMobileCommonPods_MindloggerMobile.framework */; };
 		4E2C2E9229A3826900BAEF10 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C2E9129A3826900BAEF10 /* Entypo.ttf */; };
 		4E2C2E9329A3826900BAEF10 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C2E9129A3826900BAEF10 /* Entypo.ttf */; };
 		4E2C2E9429A3826900BAEF10 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C2E9129A3826900BAEF10 /* Entypo.ttf */; };
@@ -99,17 +99,16 @@
 		4E5906BB2987C41300A5D9E5 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
 		4E5906BC2987C41700A5D9E5 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
 		4E5906BD2987C41B00A5D9E5 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
+		4E68910F269A55048D4B129E /* Pods_MindloggerMobileCommonPods_MindloggerMobileUAT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD610DB2F510F043E073607A /* Pods_MindloggerMobileCommonPods_MindloggerMobileUAT.framework */; };
 		4E9EC54729BA279C002F69A5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
 		4E9EC54829BA279C002F69A5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
 		4E9EC54929BA279C002F69A5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
 		4E9EC54A29BA279C002F69A5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
 		4EBCD5B22971514E00D3C04C /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
-		51A6E1C8BEDF3FA779731DCF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		576A514B56E3A67507F07537 /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 21757FDADD80F784BA19F9CE /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a */; };
-		64E12A71F27F432DC162ADD4 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7DDDCABAD8F56B29309A97 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		E46740FDE708A77B6E900F4C /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E22B04944A139D59C30AEEFD /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a */; };
-		E4EE5203507F0D384A133C99 /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DFBED16C42BB1590161DAD9C /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */; };
+		D53265F9F29EE1E8E2A37EF0 /* Pods_MindloggerMobileCommonPods_MindloggerMobileStaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F1AC6CD3D30EA150E519E26 /* Pods_MindloggerMobileCommonPods_MindloggerMobileStaging.framework */; };
+		D6164597A53D0701C22EE65E /* Pods_MindloggerMobileCommonPods_MindloggerMobileDev.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90401BFB6BBB006E9CAA20E1 /* Pods_MindloggerMobileCommonPods_MindloggerMobileDev.framework */; };
+		E8DD96AE0DC551CD5342059D /* Pods_MindloggerMobileCommonPods_MindloggerMobileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1C06D7669CDD800C6E8B34E /* Pods_MindloggerMobileCommonPods_MindloggerMobileTests.framework */; };
 		F80121702A017A2B00F31D91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F801216E2A017A2B00F31D91 /* GoogleService-Info.plist */; };
 		F80121732A017AB300F31D91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F80121712A017AB300F31D91 /* GoogleService-Info.plist */; };
 		F80121762A017B2300F31D91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F80121742A017B2300F31D91 /* GoogleService-Info.plist */; };
@@ -204,10 +203,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MindloggerMobile/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MindloggerMobile/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MindloggerMobile/main.m; sourceTree = "<group>"; };
-		1D071C9586DC1FFE40CF6B24 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig"; sourceTree = "<group>"; };
-		1DE66C0B2574000B083AFA0C /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; sourceTree = "<group>"; };
-		21757FDADD80F784BA19F9CE /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		27215BA6DB8A2E33E2B15C68 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; sourceTree = "<group>"; };
+		1E8181CBF43C62AECDEC337D /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig"; sourceTree = "<group>"; };
 		288FAB1929C88A580089AB98 /* ParameterGameManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterGameManager.swift; sourceTree = "<group>"; };
 		288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		288FAB1B29C88A580089AB98 /* GameManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
@@ -228,6 +224,7 @@
 		3C835A8674B8C88D9343D4FD /* Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		40932F5617DFCA1C42388086 /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		460AE10D47ECAF083434EC9D /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
+		495D1220FFE010B98FBD7BA5 /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig"; sourceTree = "<group>"; };
 		4E2C2E9129A3826900BAEF10 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
 		4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
 		4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
@@ -235,19 +232,21 @@
 		4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
 		4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
 		4EBCD5B12971514E00D3C04C /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Foundation.ttf; sourceTree = "<group>"; };
-		52877052C3C270B145BE04AD /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; sourceTree = "<group>"; };
-		73A2B1EDC50A14EC123FD1CE /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7D7DDDCABAD8F56B29309A97 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61D19208BA4AF09E17EA0285 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig"; sourceTree = "<group>"; };
+		67F2C3C747ACE0246F942CE6 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; sourceTree = "<group>"; };
+		68480DA878A0DE26623AD7B3 /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; sourceTree = "<group>"; };
+		6F1AC6CD3D30EA150E519E26 /* Pods_MindloggerMobileCommonPods_MindloggerMobileStaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MindloggerMobileCommonPods_MindloggerMobileStaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MindloggerMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		968510687704A704C1C4781E /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig"; sourceTree = "<group>"; };
-		9888E589D4B5061BEDF44FAE /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig"; sourceTree = "<group>"; };
-		B0CF32465AE0FEAF18650A51 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C0291341DEA47DB3CB5E55A6 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig"; sourceTree = "<group>"; };
-		DA5F8C3C5092CE0F46685106 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig"; sourceTree = "<group>"; };
-		DFBED16C42BB1590161DAD9C /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E22B04944A139D59C30AEEFD /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		85000AFF48FE2EAC514B3886 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig"; sourceTree = "<group>"; };
+		90401BFB6BBB006E9CAA20E1 /* Pods_MindloggerMobileCommonPods_MindloggerMobileDev.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MindloggerMobileCommonPods_MindloggerMobileDev.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A909ADF56B509F79088C9DC7 /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig"; sourceTree = "<group>"; };
+		B523576F9E73DE3C9CDE92AC /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; sourceTree = "<group>"; };
+		BD610DB2F510F043E073607A /* Pods_MindloggerMobileCommonPods_MindloggerMobileUAT.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MindloggerMobileCommonPods_MindloggerMobileUAT.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1C06D7669CDD800C6E8B34E /* Pods_MindloggerMobileCommonPods_MindloggerMobileTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MindloggerMobileCommonPods_MindloggerMobileTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7FBA0FFF5FD95227CDF7672 /* Pods_MindloggerMobileCommonPods_MindloggerMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MindloggerMobileCommonPods_MindloggerMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8EFAF02FD6EEB6D5CF3CE58 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F67CE9B394623080D8A8AB85 /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig"; sourceTree = "<group>"; };
+		F6A280ACCA7B73A3580EA955 /* Pods_MindloggerMobileCommonPods_MindloggerMobileQA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MindloggerMobileCommonPods_MindloggerMobileQA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F801216E2A017A2B00F31D91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F80121712A017AB300F31D91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F80121742A017B2300F31D91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -264,13 +263,13 @@
 		F86964FB2A4ECEC000AD759D /* MindloggerMobileQARelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileQARelease.entitlements; sourceTree = "<group>"; };
 		F86964FC2A4ECEC300AD759D /* MindloggerMobileStagingRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileStagingRelease.entitlements; sourceTree = "<group>"; };
 		F87E176029771F200021550E /* MindloggerMobileDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F87E176129771F200021550E /* MindloggerMobile dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MindloggerMobile dev-Info.plist"; path = "/Users/amironov/Documents/childmind/mindlogger-app-refactor/mindlogger-app-refactor/ios/MindloggerMobile dev-Info.plist"; sourceTree = "<absolute>"; };
+		F87E176129771F200021550E /* MindloggerMobile dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MindloggerMobile dev-Info.plist"; sourceTree = "<absolute>"; };
 		F87E177729771F290021550E /* MindloggerMobileQA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileQA.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F87E177829771F290021550E /* MindloggerMobile qa-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MindloggerMobile qa-Info.plist"; path = "/Users/amironov/Documents/childmind/mindlogger-app-refactor/mindlogger-app-refactor/ios/MindloggerMobile qa-Info.plist"; sourceTree = "<absolute>"; };
+		F87E177829771F290021550E /* MindloggerMobile qa-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MindloggerMobile qa-Info.plist"; sourceTree = "<absolute>"; };
 		F87E178E29771F310021550E /* MindloggerMobileStaging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileStaging.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F87E178F29771F310021550E /* MindloggerMobile staging-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MindloggerMobile staging-Info.plist"; path = "/Users/amironov/Documents/childmind/mindlogger-app-refactor/mindlogger-app-refactor/ios/MindloggerMobile staging-Info.plist"; sourceTree = "<absolute>"; };
+		F87E178F29771F310021550E /* MindloggerMobile staging-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MindloggerMobile staging-Info.plist"; sourceTree = "<absolute>"; };
 		F8EF45722A975A9200EEC085 /* MindloggerMobileUAT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileUAT.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F8EF45732A975A9300EEC085 /* MindloggerMobile uat-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MindloggerMobile uat-Info.plist"; path = "/Users/amironov/Documents/childmind/mindlogger-app-refactor/mindlogger-app-refactor/ios/MindloggerMobile uat-Info.plist"; sourceTree = "<absolute>"; };
+		F8EF45732A975A9300EEC085 /* MindloggerMobile uat-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MindloggerMobile uat-Info.plist"; sourceTree = "<absolute>"; };
 		F8EF45752A97619D00EEC085 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -279,7 +278,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B8689E401F36349D9697DA5 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a in Frameworks */,
+				E8DD96AE0DC551CD5342059D /* Pods_MindloggerMobileCommonPods_MindloggerMobileTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,7 +286,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				64E12A71F27F432DC162ADD4 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a in Frameworks */,
+				2A9EC4C8096D3D35CBA6E075 /* Pods_MindloggerMobileCommonPods_MindloggerMobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,7 +294,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				143DBD48109F8C5B0574C468 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a in Frameworks */,
+				D6164597A53D0701C22EE65E /* Pods_MindloggerMobileCommonPods_MindloggerMobileDev.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,7 +302,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				576A514B56E3A67507F07537 /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a in Frameworks */,
+				1D5AD5B19895D8E9A8D97BCE /* Pods_MindloggerMobileCommonPods_MindloggerMobileQA.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,8 +310,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51A6E1C8BEDF3FA779731DCF /* (null) in Frameworks */,
-				E4EE5203507F0D384A133C99 /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a in Frameworks */,
+				D53265F9F29EE1E8E2A37EF0 /* Pods_MindloggerMobileCommonPods_MindloggerMobileStaging.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,7 +318,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E46740FDE708A77B6E900F4C /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a in Frameworks */,
+				4E68910F269A55048D4B129E /* Pods_MindloggerMobileCommonPods_MindloggerMobileUAT.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,12 +403,12 @@
 			children = (
 				F83ED9792A40549C00DD5C3F /* hermes.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				7D7DDDCABAD8F56B29309A97 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */,
-				B0CF32465AE0FEAF18650A51 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */,
-				21757FDADD80F784BA19F9CE /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a */,
-				DFBED16C42BB1590161DAD9C /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */,
-				73A2B1EDC50A14EC123FD1CE /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */,
-				E22B04944A139D59C30AEEFD /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a */,
+				D7FBA0FFF5FD95227CDF7672 /* Pods_MindloggerMobileCommonPods_MindloggerMobile.framework */,
+				90401BFB6BBB006E9CAA20E1 /* Pods_MindloggerMobileCommonPods_MindloggerMobileDev.framework */,
+				F6A280ACCA7B73A3580EA955 /* Pods_MindloggerMobileCommonPods_MindloggerMobileQA.framework */,
+				6F1AC6CD3D30EA150E519E26 /* Pods_MindloggerMobileCommonPods_MindloggerMobileStaging.framework */,
+				C1C06D7669CDD800C6E8B34E /* Pods_MindloggerMobileCommonPods_MindloggerMobileTests.framework */,
+				BD610DB2F510F043E073607A /* Pods_MindloggerMobileCommonPods_MindloggerMobileUAT.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -480,17 +478,17 @@
 			isa = PBXGroup;
 			children = (
 				3C835A8674B8C88D9343D4FD /* Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig */,
-				52877052C3C270B145BE04AD /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */,
-				F67CE9B394623080D8A8AB85 /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig */,
-				1DE66C0B2574000B083AFA0C /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */,
-				27215BA6DB8A2E33E2B15C68 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */,
-				1D071C9586DC1FFE40CF6B24 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig */,
-				DA5F8C3C5092CE0F46685106 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */,
-				C0291341DEA47DB3CB5E55A6 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */,
 				460AE10D47ECAF083434EC9D /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig */,
 				40932F5617DFCA1C42388086 /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig */,
-				968510687704A704C1C4781E /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig */,
-				9888E589D4B5061BEDF44FAE /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig */,
+				68480DA878A0DE26623AD7B3 /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */,
+				495D1220FFE010B98FBD7BA5 /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig */,
+				B523576F9E73DE3C9CDE92AC /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */,
+				67F2C3C747ACE0246F942CE6 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */,
+				85000AFF48FE2EAC514B3886 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig */,
+				D8EFAF02FD6EEB6D5CF3CE58 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */,
+				61D19208BA4AF09E17EA0285 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */,
+				A909ADF56B509F79088C9DC7 /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig */,
+				1E8181CBF43C62AECDEC337D /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1557,6 +1555,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MindloggerMobile/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Mindlogger;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1583,7 +1582,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 52877052C3C270B145BE04AD /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */;
+			baseConfigurationReference = 68480DA878A0DE26623AD7B3 /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1595,6 +1594,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = MindloggerMobile/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Mindlogger;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1623,7 +1623,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1667,6 +1667,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
@@ -1679,14 +1690,20 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -1695,7 +1712,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1732,6 +1749,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
@@ -1743,21 +1771,27 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		F87E175E29771F200021550E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F67CE9B394623080D8A8AB85 /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig */;
+			baseConfigurationReference = 495D1220FFE010B98FBD7BA5 /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1771,6 +1805,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "MindloggerMobile dev-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger Dev";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1796,7 +1831,7 @@
 		};
 		F87E175F29771F200021550E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1DE66C0B2574000B083AFA0C /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */;
+			baseConfigurationReference = B523576F9E73DE3C9CDE92AC /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1808,6 +1843,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = "MindloggerMobile dev-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger Dev";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1832,7 +1868,7 @@
 		};
 		F87E177529771F290021550E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 27215BA6DB8A2E33E2B15C68 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */;
+			baseConfigurationReference = 67F2C3C747ACE0246F942CE6 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1846,6 +1882,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "MindloggerMobile qa-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger QA";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1871,7 +1908,7 @@
 		};
 		F87E177629771F290021550E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1D071C9586DC1FFE40CF6B24 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig */;
+			baseConfigurationReference = 85000AFF48FE2EAC514B3886 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1884,6 +1921,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = "MindloggerMobile qa-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger QA";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1908,7 +1946,7 @@
 		};
 		F87E178C29771F310021550E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DA5F8C3C5092CE0F46685106 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */;
+			baseConfigurationReference = D8EFAF02FD6EEB6D5CF3CE58 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1920,6 +1958,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "MindloggerMobile staging-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger Staging";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1945,7 +1984,7 @@
 		};
 		F87E178D29771F310021550E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C0291341DEA47DB3CB5E55A6 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */;
+			baseConfigurationReference = 61D19208BA4AF09E17EA0285 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1957,6 +1996,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = "MindloggerMobile staging-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger Staging";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1981,7 +2021,7 @@
 		};
 		F8EF45702A975A9200EEC085 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 968510687704A704C1C4781E /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig */;
+			baseConfigurationReference = A909ADF56B509F79088C9DC7 /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1995,6 +2035,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "MindloggerMobile uat-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger UAT";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2020,7 +2061,7 @@
 		};
 		F8EF45712A975A9200EEC085 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9888E589D4B5061BEDF44FAE /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig */;
+			baseConfigurationReference = 1E8181CBF43C62AECDEC337D /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -2033,6 +2074,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = "MindloggerMobile uat-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger UAT";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

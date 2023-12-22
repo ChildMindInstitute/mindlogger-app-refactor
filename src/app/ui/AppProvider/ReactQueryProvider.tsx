@@ -46,12 +46,6 @@ onlineManager.setEventListener(setOnline => {
   });
 });
 
-if (__DEV__) {
-  import('react-query-native-devtools').then(({ addPlugin }) => {
-    addPlugin({ queryClient });
-  });
-}
-
 const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
   const { onModuleInitialized } = useSystemBootUp();
 

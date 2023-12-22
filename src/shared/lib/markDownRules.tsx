@@ -401,7 +401,7 @@ const markDownRules: RenderRules = {
       return <AudioPlayer uri={src} title={node.content} key={node.key} />;
     } else if (isVideo) {
       return (
-        <Box key={`${node.key}-wrapper`} style={videoStyles}>
+        <Box key={`${node.key}-wrapper`} {...videoStyles}>
           <VideoPlayer
             uri={src}
             key={node.key}

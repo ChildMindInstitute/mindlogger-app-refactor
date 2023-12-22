@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { AccessibilityProps } from 'react-native';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -14,6 +13,10 @@ export { default as CloudLogo } from './CloudLogo';
 type IconProps = {
   color: string;
   size: number;
+};
+
+type AccessibilityProps = {
+  accessibilityLabel?: string | undefined;
 };
 
 export const CloseIcon: FC<IconProps> = props => (

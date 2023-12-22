@@ -1,6 +1,5 @@
-// prettier-ignore
 {
-  "extends": "@tsconfig/react-native/tsconfig.json", /* Recommended React Native TSConfig base */
+  "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
     "lib": [
@@ -19,9 +18,6 @@
       "@jobs/*": ["src/jobs/*"],
       "@widgets/*": ["src/widgets/*"],
       "*": ["*","*.ios","*.android"]
-    },
-     "skipLibCheck": true
-  },
-  "include": ["**/*.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+    }
+  }
 }
