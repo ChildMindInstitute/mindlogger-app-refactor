@@ -70,7 +70,7 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
       <Tab.Navigator
         screenOptions={getAppletDetailsScreenOptions(
           appletTheme ?? null,
-          bottom,
+          Boolean(bottom),
         )}
         initialRouteName="ActivityList"
       >
