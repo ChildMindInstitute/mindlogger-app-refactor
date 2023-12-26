@@ -11,6 +11,7 @@ const THUMB_SIZE = 22;
 
 const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
   config,
+  accessibilityLabel,
   ...props
 }) => {
   const {
@@ -44,7 +45,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
       <Box px={10}>
         <Slider
           animationType="spring"
-          accessibilityLabel="slider"
+          accessibilityLabel={accessibilityLabel}
           initialValue={initialValue}
           onSlidingComplete={onRelease}
           onSlidingStart={onPress}

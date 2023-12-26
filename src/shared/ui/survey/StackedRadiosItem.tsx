@@ -45,6 +45,8 @@ const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
           return value?.rowId === currentRowId;
         });
 
+        const optionIndex = config.options.indexOf(option);
+
         return (
           <RadioGroup
             key={option.id + currentRowId}
@@ -52,7 +54,7 @@ const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
             accessibilityLabel="stack-radio-group"
           >
             <RadioGroup.Item
-              accessibilityLabel="stack-radio-item"
+              accessibilityLabel={`stacked-radio-item-${optionIndex}-${index}`}
               onPress={() => onRowValueChange(option, index)}
               borderColor={colors.blue}
               value={option.id}

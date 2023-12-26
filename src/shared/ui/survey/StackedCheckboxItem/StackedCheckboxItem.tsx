@@ -32,7 +32,7 @@ const StackedCheckboxItem: FC<Props> = ({
 }) => {
   const { options, rows } = config;
 
-  const memoizedOptions = useMemo(() => {
+  const memoizedOptions: StackedRowItemValue[] = useMemo(() => {
     return options.map(option => {
       return {
         ...option,
@@ -83,11 +83,13 @@ const StackedCheckboxItem: FC<Props> = ({
         options={memoizedOptions}
         accessibilityLabel="stacked-checkbox-container"
         renderCell={(index, option) => {
+          const optionIndex = memoizedOptions.indexOf(option);
+
           return (
             <YStack hitSlop={15} onPress={() => onValueChange(option, index)}>
               <CheckBox
                 style={styles.checkbox}
-                accessibilityLabel={`stacked-checkbox-option-${option.id}`}
+                accessibilityLabel={`stacked-checkbox-option-${optionIndex}-${index}`}
                 lineWidth={2}
                 animationDuration={0.2}
                 boxType="square"
