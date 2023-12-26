@@ -89,14 +89,18 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
       </GeolocationButton>
 
       {value && (
-        <Text mt={10} textAlign="center">
+        <Text
+          mt={10}
+          accessibilityLabel="geolocation_result-text"
+          textAlign="center"
+        >
           {t('geolocation:location_saved')}
         </Text>
       )}
 
       {errorMessage && (
         <Text
-          accessibilityLabel="geolocation-error-text"
+          accessibilityLabel="geolocation_error-text"
           color="$red"
           textAlign="center"
         >
@@ -105,7 +109,7 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
       )}
 
       {isPermissionDenied && !value && (
-        <Text accessibilityLabel="geolocation-description-text" mt={10}>
+        <Text accessibilityLabel="geolocation_description-text" mt={10}>
           {descriptionText}
         </Text>
       )}
