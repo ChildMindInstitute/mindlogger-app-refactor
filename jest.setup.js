@@ -150,6 +150,12 @@ jest.mock('react-native-audio-recorder-player', () => {
     wrap: () => {},
     polyfill: () => {},
     JSONStream: () => {},
+    stopPlayer: () => {},
+    removePlayBackListener: () => {},
+    startPlayer: () => {},
+    addPlayBackListener: () => {},
+    pausePlayer: () => {},
+    setSubscriptionDuration: () => {},
   };
 });
 
