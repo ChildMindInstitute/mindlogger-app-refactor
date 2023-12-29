@@ -44,4 +44,4 @@ const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
   );
 };
 
-export default MarkdownView; // @todo was the memo a good idea?
+export default MarkdownView;
