@@ -336,8 +336,8 @@ class Logger implements ILogger {
     return false;
   }
 
-  public cancelSending(reason: string): void {
-    this.abortController.abort(reason);
+  public cancelSending(): void {
+    this.abortController.abort();
   }
 }
 

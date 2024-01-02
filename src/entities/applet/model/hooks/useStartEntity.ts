@@ -142,7 +142,7 @@ function useStartEntity({
         return;
       }
 
-      logger.cancelSending('Start activity');
+      logger.cancelSending();
 
       const isActivityInProgress = isInProgress(
         getProgress(appletId, activityId, eventId),
@@ -249,7 +249,7 @@ function useStartEntity({
         return;
       }
 
-      logger.cancelSending('Start flow');
+      logger.cancelSending();
 
       const isFlowInProgress = isInProgress(
         getProgress(appletId, flowId, eventId),
