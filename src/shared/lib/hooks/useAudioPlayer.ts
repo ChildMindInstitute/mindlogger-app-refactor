@@ -7,10 +7,18 @@ import { IS_ANDROID, wait } from '@shared/lib';
 
 const SUBSCRIPTION_DURATION = 500;
 
+enum LoadingStates {
+  'initial' = 0,
+  'loading' = 1,
+  'loaded' = 2,
+}
+
 const useAudioPlayer = () => {
   const audioRecorderPlayer = useRef(new AudioRecorderPlayer());
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<LoadingStates>(
+    LoadingStates.initial,
+  );
   const [playbackCount, setPlaybackCount] = useState(0);
 
   const destroy = () => {
@@ -20,7 +28,9 @@ const useAudioPlayer = () => {
   };
 
   const play = async (uri: string, onFinish?: () => void) => {
-    setIsLoading(true);
+    if (!IS_ANDROID || isLoading === LoadingStates.initial) {
+      setIsLoading(LoadingStates.loading);
+    }
 
     await wait(100);
 
@@ -29,14 +39,14 @@ const useAudioPlayer = () => {
     setIsPlaying(true);
 
     if (IS_ANDROID) {
-      setIsLoading(false);
+      setIsLoading(LoadingStates.loaded);
     }
 
     audioRecorderPlayer.current.addPlayBackListener(data => {
-      setIsLoading(false);
+      setIsLoading(LoadingStates.loaded);
       if (data.currentPosition >= data.duration - SUBSCRIPTION_DURATION) {
         setIsPlaying(false);
-        setIsLoading(false);
+        setIsLoading(LoadingStates.loaded);
         setPlaybackCount(playbackCount + 1);
         if (onFinish) {
           onFinish();
@@ -84,7 +94,7 @@ const useAudioPlayer = () => {
     destroy,
     isPlaying,
     playbackCount,
-    isLoading,
+    isLoading: isLoading === LoadingStates.loading,
   };
 };
 
