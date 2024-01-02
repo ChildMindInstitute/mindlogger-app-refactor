@@ -5,6 +5,6 @@ export interface ILogger {
   error: (message: string) => void;
   configure: () => void;
   send: () => Promise<boolean>;
-  cancelSending: (reason: string) => void;
+  cancelSending: () => void;
   clearAllLogFiles: () => Promise<void>;
 }
