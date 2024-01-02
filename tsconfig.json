@@ -2,10 +2,6 @@
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "lib": [
-      "ESNext",
-      "dom"
-    ],
     "paths" : {
       "@app/*": ["src/*"],
       "@assets/*": ["assets/*"],

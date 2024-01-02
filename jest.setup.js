@@ -203,6 +203,19 @@ jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => {
       }
       return turboModuleRegistry.getEnforcing(name);
     },
+  }
+});
+
+jest.mock('react-native-webview', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+
+  const WebView = props => <View {...props} />;
+
+  return {
+    WebView,
+    default: WebView,
+    __esModule: true,
   };
 });
 
