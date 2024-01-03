@@ -35,15 +35,11 @@ function NotificationsLogger() {
 
     const email = UserInfoRecord.getEmail();
 
-    const notificationDescriptions =
-      !payload.notificationDescriptions ||
-      payload.notificationDescriptions.length === 0
-        ? [{}]
-        : payload.notificationDescriptions;
+    const notificationDescriptions = payload.notificationDescriptions || null;
 
-    const notificationsInQueue = queued.length === 0 ? [{}] : queued;
+    const notificationInQueue = queued;
 
-    const scheduledNotifications = scheduled.length === 0 ? [{}] : scheduled;
+    const scheduledNotifications = scheduled;
 
     const deviceId = SystemRecord.getDeviceId();
 
@@ -53,13 +49,9 @@ function NotificationsLogger() {
       deviceId: !deviceId
         ? 'undefined'
         : getStringHashCode(deviceId).toString(),
-      notificationDescriptions: JSON.stringify(
-        notificationDescriptions,
-        null,
-        2,
-      ),
-      notificationInQueue: JSON.stringify(notificationsInQueue, null, 2),
-      scheduledNotifications: JSON.stringify(scheduledNotifications, null, 2),
+      notificationDescriptions,
+      notificationInQueue,
+      scheduledNotifications,
     };
 
     await NotificationService.sendNotificationLogs(request);
