@@ -36,9 +36,9 @@ import {
   ScheduleEvent,
 } from '../../lib/types';
 
-const NumberOfDaysForSchedule = 14;
+export const NumberOfDaysForSchedule = 14;
 
-const DaysInWeek = 7;
+export const DaysInWeek = 7;
 
 export class NotificationUtility {
   private _weekDays: Date[] | null;
@@ -140,6 +140,7 @@ export class NotificationUtility {
     let fallType: FallType | undefined;
 
     const triggerDay = startOfDay(triggerAt);
+
     const tomorrow = addDays(scheduledDay, 1);
 
     if (isEqual(triggerDay, scheduledDay)) {

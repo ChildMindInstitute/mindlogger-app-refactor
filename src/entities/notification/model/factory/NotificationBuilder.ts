@@ -9,7 +9,10 @@ import {
 import { DatesFromTo, Logger } from '@app/shared/lib';
 
 import { NotificationDaysExtractor } from './NotificationDaysExtractor';
-import { NotificationUtility } from './NotificationUtility';
+import {
+  NotificationUtility,
+  NumberOfDaysForSchedule,
+} from './NotificationUtility';
 import { ReminderCreator } from './ReminderCreator';
 import {
   AppletNotificationDescribers,
@@ -23,8 +26,6 @@ import {
   ReminderSetting,
   ScheduleEvent,
 } from '../../lib/types';
-
-export const NumberOfDaysForSchedule = 14;
 
 interface INotificationBuilder {
   build: () => AppletNotificationDescribers;
