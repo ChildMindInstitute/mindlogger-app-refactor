@@ -33,7 +33,7 @@ type Props = BoxProps & {
 const ContentWrapper: FC<BoxProps> = styled(Center, {
   width: '100%',
   marginBottom: 15,
-
+  overflow: 'hidden',
   borderWidth: 4,
   backgroundColor: '$lightRed',
   borderRadius: 15,
