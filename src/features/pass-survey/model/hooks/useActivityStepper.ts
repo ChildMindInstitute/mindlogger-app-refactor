@@ -43,7 +43,7 @@ function useActivityStepper(state: ActivityState | undefined) {
   const visibilityChecker = PipelineVisibilityChecker(items, answers);
 
   function isValid() {
-    const valid = answerValidator.isValid();
+    const valid = answerValidator.isCorrect();
 
     if (!valid) {
       onIncorrectAnswerGiven();
