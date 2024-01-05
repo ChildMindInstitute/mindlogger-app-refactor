@@ -342,6 +342,7 @@ export class NotificationUtility {
     }
 
     const completedAt = this.getActivityCompletedAt(entityId, eventId);
+
     if (completedAt) {
       for (let notification of notifications) {
         notification.isActive = false;
