@@ -26,9 +26,9 @@ export type NotificationLogsRequest = {
   userId: string;
   deviceId: string;
   actionType: string;
-  notificationDescriptions: string;
-  notificationInQueue: string;
-  scheduledNotifications: string;
+  notificationDescriptions: Array<any> | null;
+  notificationInQueue: Array<any> | null;
+  scheduledNotifications: Array<any> | null;
 };
 
 export type NotificationLogsResponse = SuccessfulEmptyResponse;
