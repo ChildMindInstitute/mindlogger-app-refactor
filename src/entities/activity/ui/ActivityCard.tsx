@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
@@ -28,16 +28,9 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
 
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled;
 
-  const accessibilityLabel = useMemo(
-    () =>
-      `activity-${
-        activity.isInActivityFlow &&
-        activity.activityFlowDetails!.showActivityFlowBadge
-          ? 'flow-'
-          : ''
-      }${activity.name}`,
-    [activity],
-  );
+  const accessibilityLabel = activity.isInActivityFlow
+    ? `activity-flow-${activity.activityFlowDetails!.activityFlowName}`
+    : `activity-${activity.name}`;
 
   return (
     <TouchableOpacity
