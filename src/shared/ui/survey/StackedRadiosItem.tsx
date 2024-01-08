@@ -39,11 +39,13 @@ const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
     <StackedItemsGrid
       items={config.rows}
       accessibilityLabel="stack-radio-container"
-      renderCell={(index, option) => {
-        const { id: currentRowId } = config.rows[index];
+      renderCell={(rowIndex, option) => {
+        const { id: currentRowId } = config.rows[rowIndex];
         const currentValue = values.find(value => {
           return value?.rowId === currentRowId;
         });
+
+        const optionIndex = config.options.indexOf(option);
 
         return (
           <RadioGroup
@@ -52,8 +54,8 @@ const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
             accessibilityLabel="stack-radio-group"
           >
             <RadioGroup.Item
-              accessibilityLabel="stack-radio-item"
-              onPress={() => onRowValueChange(option, index)}
+              accessibilityLabel={`stacked-radio-item-${optionIndex}-${rowIndex}`}
+              onPress={() => onRowValueChange(option, rowIndex)}
               borderColor={colors.blue}
               value={option.id}
             >

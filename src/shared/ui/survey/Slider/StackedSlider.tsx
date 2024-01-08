@@ -39,7 +39,7 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
         return (
           <YStack key={`slider-${currentRowId}`}>
             <Text
-              accessibilityLabel={`stacked-slider-label-${currentRowId}`}
+              accessibilityLabel={`stacked-slider-label-${label}`}
               fontSize={12}
               my="$3"
             >
@@ -48,7 +48,7 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
 
             <SurveySlider
               config={singleSliderProps}
-              accessibilityLabel={`stacked-slider-${currentRowId}`}
+              accessibilityLabel={`stacked-slider-view-${label}`}
               onChange={value => onSliderValueChange(value, rowIndex)}
               onRelease={onRelease}
               initialValue={rowValue}

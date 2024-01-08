@@ -186,6 +186,7 @@ function ActivityItem({
           <SurveySlider
             config={pipelineItem.payload}
             onChange={onResponse}
+            accessibilityLabel="slider"
             initialValue={value?.answer ?? null}
           />
         </Box>

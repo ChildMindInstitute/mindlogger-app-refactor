@@ -108,7 +108,6 @@ function ActivitySectionList({ appletId, groups }: Props) {
       )}
       renderItem={({ item }) => (
         <ActivityCard
-          accessibilityLabel={`activity-flow-${item.name}`}
           activity={item}
           disabled={false}
           onPress={() => {

@@ -81,7 +81,7 @@ const RowHeader: FC<RowHeaderProps> = ({ options }) => {
         {options.map((option, optionIndex) => (
           <YStack key={option.id} flex={1}>
             <AxisListItem
-              accessibilityLabel={`option_text_${optionIndex}`}
+              accessibilityLabel="option_text"
               key={optionIndex + optionIndex}
               option={option}
             />
@@ -109,7 +109,7 @@ const RowListItem: FC<RowListItemProps & AccessibilityProps> = ({
     <YStack>
       <XStack>
         <AxisListItem
-          accessibilityLabel={`row_text_${item.id}`}
+          accessibilityLabel="row_text"
           maxWidth="25%"
           option={item}
         />
