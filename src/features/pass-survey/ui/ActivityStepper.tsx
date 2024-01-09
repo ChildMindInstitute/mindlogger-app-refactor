@@ -56,10 +56,13 @@ function ActivityStepper({
     trackUserAction,
     setStep: setCurrentStep,
     setAnswer,
+    resetAnswer,
     removeAnswer,
     setAdditionalAnswer,
     removeTimer,
     setContext,
+    iteratePipeline,
+    getNextStepShift,
   } = useActivityState({
     appletId,
     activityId,
@@ -77,6 +80,7 @@ function ActivityStepper({
   const {
     isFirstStep,
     isTutorialStep,
+    isItemAPartOfCL,
 
     canMoveNext,
     canMoveBack,
@@ -88,7 +92,6 @@ function ActivityStepper({
     showBottomNavigation,
 
     isValid,
-    getNextStepShift,
     getNextButtonText,
   } = useActivityStepper(activityStorageRecord);
 
@@ -174,6 +177,15 @@ function ActivityStepper({
       return nextStepIndex === null ? 1 : nextStepIndex - currentStep;
     }
 
+    if (isItemAPartOfCL) {
+      iteratePipeline(currentStep + 1, (isItemVisible, step) => {
+        if (!isItemVisible) {
+          removeAnswer(step);
+          removeTimer(step);
+        }
+      });
+    }
+
     return getNextStepShift('forwards');
   };
 
@@ -190,7 +202,7 @@ function ActivityStepper({
   };
 
   const onUndo = () => {
-    removeAnswer(currentStep);
+    resetAnswer(currentStep);
     restartIdleTimer();
   };
 

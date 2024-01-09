@@ -4,6 +4,7 @@ import {
   UserAction,
   useActivityStorageRecord,
 } from '../../lib';
+import PipelineVisibilityChecker from '../PipelineVisibilityChecker';
 
 type UseActivityPipelineArgs = {
   appletId: string;
@@ -109,7 +110,7 @@ function useActivityState({
     });
   }
 
-  function removeAnswer(step: number) {
+  function resetAnswer(step: number) {
     const currentStorageRecord = getCurrentActivityStorageRecord();
 
     if (!currentStorageRecord) {
@@ -169,11 +170,86 @@ function useActivityState({
     });
   }
 
+  function removeAnswer(step: number) {
+    const currentStorageRecord = getCurrentActivityStorageRecord();
+
+    if (!currentStorageRecord) {
+      return;
+    }
+
+    const answers = { ...currentStorageRecord.answers };
+
+    delete answers[step];
+
+    if (currentStorageRecord) {
+      upsertActivityStorageRecord({
+        ...currentStorageRecord,
+        answers,
+      });
+    }
+  }
+
+  function iteratePipeline(
+    fromStep: number,
+    cb: (isItemVisible: boolean, step: number) => void,
+  ) {
+    for (
+      let index = fromStep;
+      index < activityStorageRecord!.items.length;
+      index++
+    ) {
+      const currentStorageRecord = getCurrentActivityStorageRecord()!;
+      const visibilityChecker = PipelineVisibilityChecker(
+        currentStorageRecord.items,
+        currentStorageRecord.answers,
+      );
+      const isItemVisible = visibilityChecker.isItemVisible(index);
+
+      cb(isItemVisible, index);
+    }
+  }
+
+  function getNextStepShift(direction: 'forwards' | 'backwards') {
+    const currentStorageRecord = getCurrentActivityStorageRecord()!;
+    const { step, items } = currentStorageRecord;
+
+    let shift = 1;
+
+    const visibilityChecker = PipelineVisibilityChecker(
+      currentStorageRecord.items,
+      currentStorageRecord.answers,
+    );
+
+    while (true) {
+      let nextStep = direction === 'forwards' ? step + shift : step - shift;
+
+      if (nextStep > items.length - 1) {
+        shift = items.length;
+        break;
+      }
+
+      if (nextStep < 0) {
+        break;
+      }
+
+      const isItemVisible = visibilityChecker.isItemVisible(nextStep);
+
+      if (isItemVisible) {
+        break;
+      } else {
+        shift++;
+      }
+    }
+
+    return shift;
+  }
+
   return {
     activityStorageRecord,
     userActionCreator,
     setStep,
     setAnswer,
+    resetAnswer,
     removeAnswer,
     setAdditionalAnswer,
     clearActivityStorageRecord,
@@ -181,6 +257,8 @@ function useActivityState({
     removeTimer,
     trackUserAction,
     setContext,
+    iteratePipeline,
+    getNextStepShift,
   };
 }
 

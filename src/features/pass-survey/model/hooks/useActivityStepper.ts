@@ -1,6 +1,12 @@
-import { ActivityState, onIncorrectAnswerGiven } from '../../lib';
+import {
+  ActivityItemType,
+  ActivityState,
+  onIncorrectAnswerGiven,
+} from '../../lib';
 import AnswerValidator from '../AnswerValidator';
 import PipelineVisibilityChecker from '../PipelineVisibilityChecker';
+
+const ItemsTakePartInCL: ActivityItemType[] = ['Radio', 'Checkbox', 'Slider'];
 
 function useActivityStepper(state: ActivityState | undefined) {
   const step = state?.step ?? 0;
@@ -37,6 +43,10 @@ function useActivityStepper(state: ActivityState | undefined) {
   const showTopNavigation = currentPipelineItem?.hasTopNavigation;
   const showBottomNavigation = !showTopNavigation;
   const showWatermark = !isSplashStep && !showTopNavigation;
+
+  const isItemAPartOfCL = ItemsTakePartInCL.includes(
+    currentPipelineItem!?.type,
+  );
 
   const answerValidator = AnswerValidator(state);
 
@@ -97,6 +107,7 @@ function useActivityStepper(state: ActivityState | undefined) {
     isTutorialStep,
     isFirstStep,
     isLastStep,
+    isItemAPartOfCL,
 
     canSkip,
     canMoveNext,
@@ -108,7 +119,6 @@ function useActivityStepper(state: ActivityState | undefined) {
     showBottomNavigation,
 
     isValid,
-    getNextStepShift,
     getNextButtonText,
   };
 }
