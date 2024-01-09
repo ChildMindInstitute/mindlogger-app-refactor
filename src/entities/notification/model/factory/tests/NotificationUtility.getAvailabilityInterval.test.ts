@@ -8,14 +8,20 @@ import { NotificationUtility } from '../NotificationUtility';
 
 const AppletId = 'e31c7468-4197-4ed1-a908-72af80d7765f';
 
-const mockUtilityProps = (utility: NotificationUtility, currentDay: Date) => {
-  const now = new Date(currentDay);
+const mockUtilityProps = (
+  utility: NotificationUtility,
+  now: Date,
+  setTime = true,
+) => {
+  const date = new Date(now);
 
-  now.setHours(15);
-  now.setMinutes(30);
+  if (setTime) {
+    date.setHours(15);
+    date.setMinutes(30);
+  }
 
   //@ts-ignore
-  utility.now = new Date(now);
+  utility.now = date;
 };
 
 const getTestEvent = (): ScheduleEvent => {
@@ -42,7 +48,7 @@ const getTestEvent = (): ScheduleEvent => {
 };
 
 describe('NotificationUtility: getAvailabilityInterval tests', () => {
-  describe('Test current day event', () => {
+  describe('Test current day events', () => {
     it('Should return dates interval within the event day with timeFrom/to set and equal to event timeFrom/to when allowAccessBeforeFromTime is false', () => {
       const today = new Date(2024, 0, 3);
 
