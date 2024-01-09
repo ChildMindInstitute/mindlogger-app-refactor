@@ -25,7 +25,11 @@ const Tooltip: FC<TooltipProps & AccessibilityProps> = ({
   return (
     <Popover
       popoverStyle={styles.popover}
-      from={<YStack hitSlop={40}>{children}</YStack>}
+      from={
+        <YStack hitSlop={40} accessibilityLabel="tooltip-button">
+          {children}
+        </YStack>
+      }
     >
       <ScrollView
         accessibilityLabel={accessibilityLabel}

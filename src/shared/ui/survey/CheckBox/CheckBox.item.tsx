@@ -67,7 +67,10 @@ const CheckBoxItem: FC<Props> = ({
         {tooltipAvailable && tooltipContainerVisible && (
           <CheckboxTooltipContainer>
             {!!tooltip && (
-              <Tooltip markdown={tooltipText}>
+              <Tooltip
+                markdown={tooltipText}
+                accessibilityLabel={'checkbox-tooltip-view'}
+              >
                 <QuestionTooltipIcon color={invertedColor} size={25} />
               </Tooltip>
             )}
