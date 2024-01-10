@@ -5,6 +5,7 @@ import {
   useActivityStorageRecord,
 } from '../../lib';
 import PipelineVisibilityChecker from '../PipelineVisibilityChecker';
+import StepperUtils from '../StepperUtils';
 
 type UseActivityPipelineArgs = {
   appletId: string;
@@ -210,38 +211,9 @@ function useActivityState({
   }
 
   function getNextStepShift(direction: 'forwards' | 'backwards') {
-    const currentStorageRecord = getCurrentActivityStorageRecord()!;
-    const { step, items } = currentStorageRecord;
+    const stepperUtils = new StepperUtils(getCurrentActivityStorageRecord()!);
 
-    let shift = 1;
-
-    const visibilityChecker = PipelineVisibilityChecker(
-      currentStorageRecord.items,
-      currentStorageRecord.answers,
-    );
-
-    while (true) {
-      let nextStep = direction === 'forwards' ? step + shift : step - shift;
-
-      if (nextStep > items.length - 1) {
-        shift = items.length;
-        break;
-      }
-
-      if (nextStep < 0) {
-        break;
-      }
-
-      const isItemVisible = visibilityChecker.isItemVisible(nextStep);
-
-      if (isItemVisible) {
-        break;
-      } else {
-        shift++;
-      }
-    }
-
-    return shift;
+    return stepperUtils.getNextStepShift(direction);
   }
 
   return {

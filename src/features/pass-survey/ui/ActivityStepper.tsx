@@ -80,7 +80,7 @@ function ActivityStepper({
   const {
     isFirstStep,
     isTutorialStep,
-    isItemAPartOfCL,
+    isConditionalLogicItem,
 
     canMoveNext,
     canMoveBack,
@@ -177,7 +177,7 @@ function ActivityStepper({
       return nextStepIndex === null ? 1 : nextStepIndex - currentStep;
     }
 
-    if (isItemAPartOfCL) {
+    if (isConditionalLogicItem) {
       iteratePipeline(currentStep + 1, (isItemVisible, step) => {
         if (!isItemVisible) {
           removeAnswer(step);
