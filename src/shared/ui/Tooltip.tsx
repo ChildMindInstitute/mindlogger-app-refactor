@@ -11,12 +11,14 @@ import { MarkdownView, ScrollView, YStack } from '../ui';
 type TooltipProps = {
   children: React.ReactNode;
   markdown?: string;
+  triggerAccessibilityLabel?: string | null;
 };
 
 const Tooltip: FC<TooltipProps & AccessibilityProps> = ({
   children,
   markdown,
   accessibilityLabel,
+  triggerAccessibilityLabel,
 }) => {
   if (!markdown) {
     return null;
@@ -26,7 +28,10 @@ const Tooltip: FC<TooltipProps & AccessibilityProps> = ({
     <Popover
       popoverStyle={styles.popover}
       from={
-        <YStack hitSlop={40} accessibilityLabel="tooltip-button">
+        <YStack
+          hitSlop={40}
+          accessibilityLabel={triggerAccessibilityLabel ?? 'tooltip-button'}
+        >
           {children}
         </YStack>
       }
