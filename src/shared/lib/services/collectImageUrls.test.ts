@@ -527,7 +527,7 @@ describe('Image URL Collection Functions', () => {
     streamEnabled: false,
   };
 
-  it('collectAppletRecordImageUrls should collect image URLs from AppletDto', () => {
+  it('should collect image URLs from AppletRecord', () => {
     const result = collectAppletRecordImageUrls(sampleApplet);
     expect(result).toEqual([
       'https://media-dev.cmiml.net/mindlogger/content/2923f4a9-20ef-4995-a340-251d96ff3082/0e06365a-acc7-4db9-b7fc-8a0017a2354f/%D0%A8%D0%AC%D0%A4%D0%9F%D0%A3%206.png',
@@ -537,7 +537,7 @@ describe('Image URL Collection Functions', () => {
     ]);
   });
 
-  it('collectAppletDetailsImageUrls should collect image URLs from AppletDetailsDto', () => {
+  it('should collect image URLs from AppletDetails', () => {
     const result = collectAppletDetailsImageUrls(sampleAppletDetails);
     expect(result).toEqual([
       'https://media-dev.cmiml.net/mindlogger/content/2923f4a9-20ef-4995-a340-251d96ff3082/0e06365a-acc7-4db9-b7fc-8a0017a2354f/%D0%A8%D0%AC%D0%A4%D0%9F%D0%A3%206.png',
@@ -549,7 +549,7 @@ describe('Image URL Collection Functions', () => {
     ]);
   });
 
-  it('collectActivityDetailsImageUrls should collect image URLs from ActivityDto', () => {
+  it('should collect image URLs from ActivityDetails', () => {
     // @ts-expect-error
     const result = collectActivityDetailsImageUrls(sampleActivity);
     expect(result).toEqual([
