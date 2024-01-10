@@ -3,6 +3,7 @@ import {
   addMilliseconds,
   isEqual,
   startOfDay,
+  subDays,
   subSeconds,
   subWeeks,
 } from 'date-fns';
@@ -35,9 +36,9 @@ import {
   ScheduleEvent,
 } from '../../lib/types';
 
-const NumberOfDaysForSchedule = 14;
+export const NumberOfDaysForSchedule = 14;
 
-const DaysInWeek = 7;
+export const DaysInWeek = 7;
 
 export class NotificationUtility {
   private _weekDays: Date[] | null;
@@ -82,6 +83,10 @@ export class NotificationUtility {
 
   public get currentDay(): Date {
     return startOfDay(this.now);
+  }
+
+  public get aWeekAgoDay() {
+    return subDays(this.currentDay, 7);
   }
 
   public get weekDays(): Date[] {
@@ -135,6 +140,7 @@ export class NotificationUtility {
     let fallType: FallType | undefined;
 
     const triggerDay = startOfDay(triggerAt);
+
     const tomorrow = addDays(scheduledDay, 1);
 
     if (isEqual(triggerDay, scheduledDay)) {
@@ -336,6 +342,7 @@ export class NotificationUtility {
     }
 
     const completedAt = this.getActivityCompletedAt(entityId, eventId);
+
     if (completedAt) {
       for (let notification of notifications) {
         notification.isActive = false;

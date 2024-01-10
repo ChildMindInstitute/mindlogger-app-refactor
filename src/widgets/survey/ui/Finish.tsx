@@ -245,12 +245,20 @@ function FinishItem({
     <ImageBackground>
       <Center flex={1} mx={16}>
         <Center accessibilityLabel="answer_saved-label">
-          <Text fontSize={24} fontWeight="bold">
+          <Text
+            fontSize={24}
+            accessibilityLabel="answer_saved-title"
+            fontWeight="bold"
+          >
             {finishReason === 'regular' && t('additional:thanks')}
             {finishReason === 'time-is-up' && t('additional:time-end')}
           </Text>
 
-          <Text fontSize={16} mb={20}>
+          <Text
+            fontSize={16}
+            mb={20}
+            accessibilityLabel="answer_saved-description"
+          >
             {t('additional:saved_answers')}
           </Text>
         </Center>

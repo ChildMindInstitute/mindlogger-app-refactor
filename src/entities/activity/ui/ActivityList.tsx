@@ -16,7 +16,6 @@ const ActivityList: FC<Props> = ({ activities, onCardPress }) => {
       {activities.map(x => (
         <Box key={x.eventId}>
           <ActivityCard
-            accessibilityLabel={`activity-${x.name}`}
             activity={x}
             disabled={false}
             onPress={() => onCardPress?.(x)}
