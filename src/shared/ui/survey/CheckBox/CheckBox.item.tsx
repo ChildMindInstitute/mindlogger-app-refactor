@@ -24,6 +24,7 @@ type Props = {
   onChange: () => void;
   value: boolean;
   textReplacer: (markdown: string) => string;
+  position: number;
 } & Omit<Item, 'value'>;
 
 const CheckBoxItem: FC<Props> = ({
@@ -38,6 +39,7 @@ const CheckBoxItem: FC<Props> = ({
   color,
   text,
   textReplacer,
+  position,
 }) => {
   const invertedColor =
     setPalette && color ? invertColor(color) : colors.primary;
@@ -84,6 +86,7 @@ const CheckBoxItem: FC<Props> = ({
                 style={styles.image}
                 source={image}
                 resizeMode="contain"
+                accessibilityLabel={`checkbox_option_index-${position}`}
               />
             )}
           </XStack>

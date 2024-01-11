@@ -68,7 +68,7 @@ const CheckBoxActivityItem: FC<Props> = ({
 
   return (
     <ScrollView>
-      {mutatedItems.map(item => {
+      {mutatedItems.map((item, index) => {
         return (
           <Box
             accessibilityLabel="checkbox-container"
@@ -83,6 +83,7 @@ const CheckBoxActivityItem: FC<Props> = ({
               onChange={() => onItemValueChanged(item.id)}
               value={!!findById(values, item.id)}
               textReplacer={textReplacer}
+              position={index}
             />
           </Box>
         );

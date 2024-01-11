@@ -12,6 +12,7 @@ const THUMB_SIZE = 22;
 const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
   config,
   accessibilityLabel,
+  sliderLabel,
   ...props
 }) => {
   const {
@@ -28,6 +29,8 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
   const { onChange, onRelease, onPress, initialValue } = props;
 
   const hasAtLeastOneImage = Boolean(leftImageUrl || rightImageUrl);
+
+  const rightPartOfAccessibilityLabel = sliderLabel ? `-${sliderLabel}` : '';
 
   const onValueChange = (arrayOfValues: number[]) => {
     const [value] = arrayOfValues;
@@ -79,7 +82,9 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
             {leftImageUrl && (
               <Box borderRadius={4} overflow="hidden">
                 <CachedImage
-                  accessibilityLabel="slide-image"
+                  accessibilityLabel={
+                    'slider-left-image' + rightPartOfAccessibilityLabel
+                  }
                   style={styles.image}
                   resizeMode="contain"
                   source={leftImageUrl}
@@ -89,7 +94,10 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
           </Box>
 
           {leftTitle ? (
-            <Text accessibilityLabel="min-label" textAlign="center">
+            <Text
+              accessibilityLabel={'min-label' + rightPartOfAccessibilityLabel}
+              textAlign="center"
+            >
               {leftTitle}
             </Text>
           ) : null}
@@ -100,7 +108,9 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
             {rightImageUrl && (
               <XStack jc="center">
                 <CachedImage
-                  accessibilityLabel="slide-right-image"
+                  accessibilityLabel={
+                    'slider-right-image' + rightPartOfAccessibilityLabel
+                  }
                   style={styles.image}
                   resizeMode="contain"
                   source={rightImageUrl}
@@ -110,7 +120,10 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
           </Box>
 
           {rightTitle ? (
-            <Text accessibilityLabel="max-label" textAlign="center">
+            <Text
+              accessibilityLabel={'max-label' + rightPartOfAccessibilityLabel}
+              textAlign="center"
+            >
               {rightTitle}
             </Text>
           ) : null}
