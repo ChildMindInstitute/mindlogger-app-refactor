@@ -109,12 +109,12 @@ describe('[isOutsideOfValues] function', () => {
 });
 
 describe('[isEqualToValue] function', () => {
-  const emptyObject = {};
+  const object = {};
   const sameValueTestCases = [
     { a: 1, b: 1 },
     { a: 'Hello', b: 'Hello' },
     { a: 0, b: 0 },
-    { a: emptyObject, b: emptyObject },
+    { a: object, b: object },
   ];
 
   sameValueTestCases.forEach(({ a, b }) => {

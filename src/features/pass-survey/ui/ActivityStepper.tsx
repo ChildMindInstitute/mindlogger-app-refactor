@@ -56,13 +56,14 @@ function ActivityStepper({
     trackUserAction,
     setStep: setCurrentStep,
     setAnswer,
-    resetAnswer,
+    undoAnswer,
     removeAnswer,
     setAdditionalAnswer,
     removeTimer,
     setContext,
     iteratePipeline,
     getNextStepShift,
+    getPreviousStepShift,
   } = useActivityState({
     appletId,
     activityId,
@@ -186,7 +187,7 @@ function ActivityStepper({
       });
     }
 
-    return getNextStepShift('forwards');
+    return getNextStepShift();
   };
 
   const onBeforeBack = (): number => {
@@ -198,11 +199,11 @@ function ActivityStepper({
       return moved ? 0 : 1;
     }
 
-    return getNextStepShift('backwards');
+    return getPreviousStepShift();
   };
 
   const onUndo = () => {
-    resetAnswer(currentStep);
+    undoAnswer(currentStep);
     restartIdleTimer();
   };
 

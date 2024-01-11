@@ -66,9 +66,10 @@ function useActivityStepper(state: ActivityState | undefined) {
 
   function getNextButtonText() {
     const stepperUtils = new StepperUtils(state!);
-    const shift = stepperUtils.getNextStepShift('forwards');
+    const shift = stepperUtils.getNextStepShift();
+    const nextStep = step + shift;
 
-    if (shift >= items.length) {
+    if (nextStep >= items.length) {
       return 'activity_navigation:done';
     }
 

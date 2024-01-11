@@ -111,7 +111,7 @@ function useActivityState({
     });
   }
 
-  function resetAnswer(step: number) {
+  function undoAnswer(step: number) {
     const currentStorageRecord = getCurrentActivityStorageRecord();
 
     if (!currentStorageRecord) {
@@ -192,7 +192,7 @@ function useActivityState({
 
   function iteratePipeline(
     fromStep: number,
-    cb: (isItemVisible: boolean, step: number) => void,
+    callback: (isItemVisible: boolean, step: number) => void,
   ) {
     for (
       let index = fromStep;
@@ -206,14 +206,20 @@ function useActivityState({
       );
       const isItemVisible = visibilityChecker.isItemVisible(index);
 
-      cb(isItemVisible, index);
+      callback(isItemVisible, index);
     }
   }
 
-  function getNextStepShift(direction: 'forwards' | 'backwards') {
+  function getNextStepShift() {
     const stepperUtils = new StepperUtils(getCurrentActivityStorageRecord()!);
 
-    return stepperUtils.getNextStepShift(direction);
+    return stepperUtils.getNextStepShift();
+  }
+
+  function getPreviousStepShift() {
+    const stepperUtils = new StepperUtils(getCurrentActivityStorageRecord()!);
+
+    return stepperUtils.getPreviousStepShift();
   }
 
   return {
@@ -221,7 +227,7 @@ function useActivityState({
     userActionCreator,
     setStep,
     setAnswer,
-    resetAnswer,
+    undoAnswer,
     removeAnswer,
     setAdditionalAnswer,
     clearActivityStorageRecord,
@@ -230,7 +236,9 @@ function useActivityState({
     trackUserAction,
     setContext,
     iteratePipeline,
+
     getNextStepShift,
+    getPreviousStepShift,
   };
 }
 
