@@ -6,7 +6,7 @@ import { styled, TextProps } from '@tamagui/core';
 
 import { ListSeparator, YStack, XStack, Tooltip, RadioGroup } from '@shared/ui';
 
-import { type StackedRowItemValue } from './types';
+import { AxisItem, type StackedRowItemValue } from './types';
 import Center from '../../Center';
 import Text from '../../Text';
 
@@ -16,6 +16,7 @@ const AxisListItemContainer = styled(Center, {
   padding: 5,
 });
 
+//@ts-ignore todo - define correct type
 const AxisListItemText: FC<TextProps & { hasTooltip?: boolean }> = styled(
   Text,
   {
@@ -32,21 +33,22 @@ const AxisListItemText: FC<TextProps & { hasTooltip?: boolean }> = styled(
 );
 
 const AxisListItem: FC<{
-  option?: StackedRowItemValue;
+  item: AxisItem | null;
   maxWidth?: string | number;
   accessibilityLabel: string | null;
-}> = ({ option, maxWidth, accessibilityLabel }) => {
-  const title = option?.text || option?.rowName;
-  const imageUrl = option?.image || option?.rowImage;
+  axisHeaderFor: 'column' | 'row';
+}> = ({ maxWidth, accessibilityLabel, item, axisHeaderFor }) => {
+  const { title, imageUrl, tooltip, id } = item || {};
 
   return (
     <AxisListItemContainer maxWidth={maxWidth}>
-      {option && (
+      {item && (
         <Center>
-          {option.tooltip ? (
+          {tooltip ? (
             <Tooltip
-              accessibilityLabel={`row-list-item-tooltip-${option.id}`}
-              markdown={option.tooltip}
+              accessibilityLabel={'tooltip_view-' + tooltip}
+              triggerAccessibilityLabel={`tooltip_trigger_${axisHeaderFor}-${title}`}
+              markdown={tooltip}
             >
               <AxisListItemText hasTooltip>{title}</AxisListItemText>
             </Tooltip>
@@ -58,7 +60,7 @@ const AxisListItem: FC<{
 
           {imageUrl && (
             <CachedImage
-              accessibilityLabel={`row-list-item-image-${option.id}`}
+              accessibilityLabel={`row-list-item-image-${id}`}
               style={styles.image}
               resizeMode="contain"
               source={imageUrl}
@@ -70,20 +72,31 @@ const AxisListItem: FC<{
   );
 };
 
-type RowHeaderProps = { options: StackedRowItemValue[] };
+type ColumnHeadersProps = { options: StackedRowItemValue[] };
 
-const RowHeader: FC<RowHeaderProps> = ({ options }) => {
+const ColumnHeaders: FC<ColumnHeadersProps> = ({ options }) => {
   return (
     <YStack>
       <XStack>
-        <AxisListItem accessibilityLabel={null} maxWidth="25%" />
+        <AxisListItem
+          accessibilityLabel={null}
+          item={null}
+          axisHeaderFor="column"
+          maxWidth="25%"
+        />
 
         {options.map((option, optionIndex) => (
           <YStack key={option.id} flex={1}>
             <AxisListItem
               accessibilityLabel="option_text"
+              axisHeaderFor="column"
               key={optionIndex + optionIndex}
-              option={option}
+              item={{
+                id: option.id,
+                tooltip: option.tooltip,
+                title: option.text!,
+                imageUrl: option.image ?? null,
+              }}
             />
           </YStack>
         ))}
@@ -110,8 +123,14 @@ const RowListItem: FC<RowListItemProps & AccessibilityProps> = ({
       <XStack>
         <AxisListItem
           accessibilityLabel="row_text"
+          axisHeaderFor="row"
           maxWidth="25%"
-          option={item}
+          item={{
+            id: item.id,
+            tooltip: item.tooltip,
+            title: item.rowName!,
+            imageUrl: item.rowImage ?? null,
+          }}
         />
 
         {options.map(option => (
@@ -155,7 +174,7 @@ const StackedItemsGrid: FC<StackedItemsGridProps> = ({
 
   return (
     <YStack accessibilityLabel={accessibilityLabel}>
-      <RowHeader options={options} />
+      <ColumnHeaders options={options} />
 
       {items.map((item, index) => (
         <RadioGroup key={`StackGrid_${item.id}`} value={getRadioValue(item)}>

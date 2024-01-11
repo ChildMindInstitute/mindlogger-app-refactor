@@ -78,7 +78,7 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
         <RadioTooltipContainer>
           {tooltip && (
             <Tooltip
-              accessibilityLabel={`radio-option-tooltip-${value}`}
+              accessibilityLabel={'tooltip_view-' + tooltipText}
               markdown={tooltipText}
             >
               <QuestionTooltipIcon
