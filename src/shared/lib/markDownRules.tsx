@@ -229,21 +229,21 @@ const onHtmlBlockLinkPress = (request: { url: string }) => {
 const markDownRules: RenderRules = {
   'container_hljs-left': (node, children) => {
     return (
-      <Box key={node.key} style={localStyles.alignLeftContainer}>
+      <Box key={node.key} style={localStyles.alignLeftContainer} space={20}>
         {children}
       </Box>
     );
   },
   'container_hljs-center': (node, children) => {
     return (
-      <Box key={node.key} style={localStyles.alignCenterContainer}>
+      <Box key={node.key} style={localStyles.alignCenterContainer} space={20}>
         {children}
       </Box>
     );
   },
   'container_hljs-right': (node, children) => {
     return (
-      <Box key={node.key} style={localStyles.alignRightContainer}>
+      <Box key={node.key} style={localStyles.alignRightContainer} space={20}>
         {children}
       </Box>
     );
