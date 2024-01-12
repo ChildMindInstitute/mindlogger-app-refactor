@@ -19,6 +19,7 @@ import {
 import { useCallbacksRefs } from '@app/shared/lib';
 
 import LineSketcher, { Point, Shape } from './LineSketcher';
+import TouchInfoMatrix from './TouchInfoMatrix';
 
 export type SketchCanvasRef = {
   clear: () => void;
@@ -162,8 +163,21 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     [],
   );
 
+  const preprocessedTouchHandler = (
+    touchInfoMatrix: Array<Array<TouchInfo>>,
+  ) => {
+    const matrix = new TouchInfoMatrix(touchInfoMatrix);
+    const updatedTouchInfoMatrix = matrix.filterOutMultiTouches();
+
+    touchHandler(updatedTouchInfoMatrix);
+  };
+
   return (
-    <Canvas style={styles} onTouch={touchHandler} {...panResponder.panHandlers}>
+    <Canvas
+      style={styles}
+      onTouch={preprocessedTouchHandler}
+      {...panResponder.panHandlers}
+    >
       <Group>
         {paths.map((path, i) => (
           <Path
