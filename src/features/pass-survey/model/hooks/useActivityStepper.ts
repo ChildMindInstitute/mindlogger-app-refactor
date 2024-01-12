@@ -1,6 +1,16 @@
-import { ActivityState, onIncorrectAnswerGiven } from '../../lib';
+import {
+  ActivityItemType,
+  ActivityState,
+  onIncorrectAnswerGiven,
+} from '../../lib';
 import AnswerValidator from '../AnswerValidator';
-import PipelineVisibilityChecker from '../PipelineVisibilityChecker';
+import StepperUtils from '../StepperUtils';
+
+const ConditionalLogicItems: ActivityItemType[] = [
+  'Radio',
+  'Checkbox',
+  'Slider',
+];
 
 function useActivityStepper(state: ActivityState | undefined) {
   const step = state?.step ?? 0;
@@ -38,12 +48,14 @@ function useActivityStepper(state: ActivityState | undefined) {
   const showBottomNavigation = !showTopNavigation;
   const showWatermark = !isSplashStep && !showTopNavigation;
 
+  const isConditionalLogicItem = ConditionalLogicItems.includes(
+    currentPipelineItem!?.type,
+  );
+
   const answerValidator = AnswerValidator(state);
 
-  const visibilityChecker = PipelineVisibilityChecker(items, answers);
-
   function isValid() {
-    const valid = answerValidator.isValid();
+    const valid = answerValidator.isCorrect();
 
     if (!valid) {
       onIncorrectAnswerGiven();
@@ -52,37 +64,12 @@ function useActivityStepper(state: ActivityState | undefined) {
     return valid;
   }
 
-  function getNextStepShift(direction: 'forwards' | 'backwards') {
-    let shift = 1;
-
-    while (true) {
-      let nextStep = direction === 'forwards' ? step + shift : step - shift;
-
-      if (nextStep > items.length - 1) {
-        shift = items.length;
-        break;
-      }
-
-      if (nextStep < 0) {
-        break;
-      }
-
-      const isItemVisible = visibilityChecker.isItemVisible(nextStep);
-
-      if (isItemVisible) {
-        break;
-      } else {
-        shift++;
-      }
-    }
-
-    return shift;
-  }
-
   function getNextButtonText() {
-    const shift = getNextStepShift('forwards');
+    const stepperUtils = new StepperUtils(state!);
+    const shift = stepperUtils.getNextStepShift();
+    const nextStep = step + shift;
 
-    if (shift >= items.length) {
+    if (nextStep >= items.length) {
       return 'activity_navigation:done';
     }
 
@@ -97,6 +84,7 @@ function useActivityStepper(state: ActivityState | undefined) {
     isTutorialStep,
     isFirstStep,
     isLastStep,
+    isConditionalLogicItem,
 
     canSkip,
     canMoveNext,
@@ -108,7 +96,6 @@ function useActivityStepper(state: ActivityState | undefined) {
     showBottomNavigation,
 
     isValid,
-    getNextStepShift,
     getNextButtonText,
   };
 }
