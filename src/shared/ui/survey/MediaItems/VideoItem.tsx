@@ -79,7 +79,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
         selectVideo();
       } else {
         await handleBlockedPermissions(
-          '"MindLogger" would like to use your gallery to complete this task', // @todo add specific translations for photo camera
+          t('permissions:gallery'),
           t('media:alert_message'),
         );
       }
@@ -96,7 +96,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
         recordVideo();
       } else {
         await handleBlockedPermissions(
-          '"MindLogger" would like to use your camera to complete this task', // @todo add specific translations for photo camera
+          t('permissions:camera'),
           t('media:alert_message'),
         );
       }
