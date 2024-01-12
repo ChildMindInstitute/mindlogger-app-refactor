@@ -225,6 +225,7 @@ function ActivityItem({
             onChange={onResponse}
             values={value?.answer || null}
             textReplacer={textVariableReplacer}
+            tooltipsShown={pipelineItem.payload.addTooltip}
           />
         </Box>
       );
@@ -237,6 +238,8 @@ function ActivityItem({
             config={pipelineItem.payload}
             onChange={onResponse}
             values={value?.answer || []}
+            textReplacer={textVariableReplacer}
+            tooltipsShown={pipelineItem.payload.addTooltip}
           />
         </Box>
       );

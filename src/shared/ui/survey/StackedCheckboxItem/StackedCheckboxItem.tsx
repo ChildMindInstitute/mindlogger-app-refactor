@@ -21,6 +21,7 @@ type Props = {
   values: Values | null;
   onChange: (value: Values | null) => void;
   config: StackedCheckboxConfig;
+  tooltipsShown: boolean;
   textReplacer: (markdown: string) => string;
 };
 
@@ -29,6 +30,7 @@ const StackedCheckboxItem: FC<Props> = ({
   onChange,
   config,
   textReplacer,
+  tooltipsShown,
 }) => {
   const { options, rows } = config;
 
@@ -36,19 +38,19 @@ const StackedCheckboxItem: FC<Props> = ({
     return options.map(option => {
       return {
         ...option,
-        tooltip: textReplacer(option.tooltip || ''),
+        tooltip: tooltipsShown ? textReplacer(option.tooltip || '') : '',
       };
     });
-  }, [options, textReplacer]);
+  }, [tooltipsShown, options, textReplacer]);
 
   const memoizedRows = useMemo(() => {
     return rows.map(row => {
       return {
         ...row,
-        tooltip: textReplacer(row.tooltip || ''),
+        tooltip: tooltipsShown ? textReplacer(row.tooltip || '') : '',
       };
     });
-  }, [rows, textReplacer]);
+  }, [tooltipsShown, rows, textReplacer]);
 
   const isValueSelected = (value: StackedItem, rowIndex: number) => {
     if (!values || !values[rowIndex]?.length) {
