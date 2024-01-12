@@ -225,7 +225,11 @@ function ActivityStepper({
         onUndo={onUndo}
       >
         {showWatermark && watermark && (
-          <CachedImage source={watermark} style={styles.watermark} />
+          <CachedImage
+            source={watermark}
+            style={styles.watermark}
+            accessibilityLabel="watermark-image"
+          />
         )}
 
         {showTimeLeft && (

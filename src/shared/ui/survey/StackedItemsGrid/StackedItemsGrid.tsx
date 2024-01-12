@@ -16,7 +16,6 @@ const AxisListItemContainer = styled(Center, {
   padding: 5,
 });
 
-//@ts-ignore todo - define correct type
 const AxisListItemText: FC<TextProps & { hasTooltip?: boolean }> = styled(
   Text,
   {
@@ -38,7 +37,7 @@ const AxisListItem: FC<{
   accessibilityLabel: string | null;
   axisHeaderFor: 'column' | 'row';
 }> = ({ maxWidth, accessibilityLabel, item, axisHeaderFor }) => {
-  const { title, imageUrl, tooltip, id } = item || {};
+  const { title, imageUrl, tooltip } = item || {};
 
   return (
     <AxisListItemContainer maxWidth={maxWidth}>
@@ -60,7 +59,7 @@ const AxisListItem: FC<{
 
           {imageUrl && (
             <CachedImage
-              accessibilityLabel={`row-list-item-image-${id}`}
+              accessibilityLabel={`${axisHeaderFor}_header_image-${title}`}
               style={styles.image}
               resizeMode="contain"
               source={imageUrl}

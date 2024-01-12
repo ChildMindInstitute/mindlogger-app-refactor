@@ -48,7 +48,8 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
 
             <SurveySlider
               config={singleSliderProps}
-              accessibilityLabel={`stacked-slider-view-${label}`}
+              accessibilityLabel={'stacked-slider-view'}
+              sliderLabel={label}
               onChange={value => onSliderValueChange(value, rowIndex)}
               onRelease={onRelease}
               initialValue={rowValue}
