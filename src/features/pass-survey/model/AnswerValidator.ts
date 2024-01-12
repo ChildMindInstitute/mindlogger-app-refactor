@@ -1,4 +1,5 @@
 import { Item } from '@app/shared/ui';
+import { ConditionalLogicModel } from '@entities/conditional-logic';
 
 import { Answers, PipelineItem, RadioResponse } from '../lib';
 
@@ -14,7 +15,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
   const currentAnswer = answers?.[step];
 
   return {
-    isValid() {
+    isCorrect() {
       if (!currentPipelineItem?.validationOptions) {
         return true;
       }
@@ -25,87 +26,56 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     isBetweenValues(min: number, max: number) {
-      if (currentAnswer?.answer == null) {
-        return false;
-      }
+      const answer = currentAnswer?.answer as Maybe<number>;
 
-      const answer = currentAnswer.answer as number;
-
-      return answer > min && answer < max;
+      return ConditionalLogicModel.isBetweenValues(answer, min, max);
     },
 
     isOutsideOfValues(min: number, max: number) {
-      if (currentAnswer?.answer == null) {
-        return false;
-      }
+      const answer = currentAnswer?.answer as Maybe<number>;
 
-      const answer = currentAnswer.answer as number;
-
-      return answer < min || answer > max;
+      return ConditionalLogicModel.isBetweenValues(answer, min, max);
     },
 
     isEqualToValue(value: any) {
-      if (currentAnswer?.answer == null) {
-        return false;
-      }
+      const answer = currentAnswer?.answer as Maybe<unknown>;
 
-      const answer = currentAnswer.answer as number;
-
-      return answer === value;
+      return ConditionalLogicModel.isEqualToValue(answer, value);
     },
 
     isEqualToOption(optionValue: string) {
-      if (currentAnswer?.answer == null) {
-        return false;
-      }
+      const answer = currentAnswer?.answer as Maybe<RadioResponse>;
+      const selectedOption = answer?.value?.toString();
 
-      const answer = currentAnswer.answer as RadioResponse;
-
-      return String(answer.value) === optionValue;
+      return ConditionalLogicModel.isEqualToValue(selectedOption, optionValue);
     },
 
     isGreaterThen(value: number) {
-      if (currentAnswer?.answer == null) {
-        return false;
-      }
+      const answer = currentAnswer?.answer as Maybe<number>;
 
-      const answer = currentAnswer.answer as number;
-
-      return answer > value;
+      return ConditionalLogicModel.isGreaterThan(answer, value);
     },
 
     isLessThen(value: number) {
-      if (currentAnswer?.answer == null) {
-        return false;
-      }
+      const answer = currentAnswer?.answer as Maybe<number>;
 
-      const answer = currentAnswer.answer as number;
-
-      return answer < value;
+      return ConditionalLogicModel.isLessThan(answer, value);
     },
 
     includesOption(optionValue: string) {
-      if (currentAnswer?.answer == null) {
-        return false;
-      }
-
-      const answer = currentAnswer.answer as Item[];
-
-      return answer.find(
-        answerItem => String(answerItem.value) === optionValue,
+      const answer = (currentAnswer?.answer as Maybe<Item[]>)?.map(item =>
+        item.value.toString(),
       );
+
+      return ConditionalLogicModel.includesValue(answer, optionValue);
     },
 
     notIncludesOption(optionValue: string) {
-      if (currentAnswer?.answer == null) {
-        return false;
-      }
-
-      const answer = currentAnswer.answer as Item[];
-
-      return !answer.find(
-        answerItem => String(answerItem.value) === optionValue,
+      const answer = (currentAnswer?.answer as Maybe<Item[]>)?.map(item =>
+        item.value.toString(),
       );
+
+      return ConditionalLogicModel.doesNotIncludeValue(answer, optionValue);
     },
   };
 }

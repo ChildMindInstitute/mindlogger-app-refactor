@@ -3,6 +3,10 @@ import { Answers, PipelineItem } from '../lib';
 
 function PipelineVisibilityChecker(pipeline: PipelineItem[], answers: Answers) {
   function isItemVisible(index: number) {
+    if (index >= pipeline.length) {
+      return false;
+    }
+
     const item = pipeline[index];
 
     if (!item.conditionalLogic) {

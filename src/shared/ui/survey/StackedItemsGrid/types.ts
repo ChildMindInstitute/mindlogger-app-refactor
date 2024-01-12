@@ -12,3 +12,10 @@ export type Item = CommonFields &
   }>;
 
 export type StackedRowItemValue = Item;
+
+export type AxisItem = {
+  id: string;
+  tooltip: string | null;
+  title: string;
+  imageUrl: string | null;
+};
