@@ -1,20 +1,22 @@
 import PipelineVisibilityChecker from './PipelineVisibilityChecker';
-import ShiftCalculator, { IStepSkipper } from './ShiftCalculator';
+import ShiftCalculator from './ShiftCalculator';
 import { ActivityState } from '../lib';
 
-class StepperUtils implements IStepSkipper {
+class StepperUtils {
   private activityState: ActivityState;
   private shiftCalculator: ShiftCalculator;
 
   constructor(activityState: ActivityState) {
     this.activityState = activityState;
     this.shiftCalculator = new ShiftCalculator(
-      this,
+      {
+        shouldSkipStep: (step: number) => this.shouldSkipStep(step),
+      },
       activityState.items.length,
     );
   }
 
-  public shouldSkipStep(step: number) {
+  private shouldSkipStep(step: number) {
     const { items, answers } = this.activityState;
     const visibilityChecker = PipelineVisibilityChecker(items, answers);
     const isItemVisible = visibilityChecker.isItemVisible(step);
@@ -25,13 +27,13 @@ class StepperUtils implements IStepSkipper {
   public getNextStepShift() {
     const { step } = this.activityState;
 
-    return this.shiftCalculator.calculateShift(step, 'forwards');
+    return this.shiftCalculator.calculateShiftForForwards(step);
   }
 
   public getPreviousStepShift() {
     const { step } = this.activityState;
 
-    return this.shiftCalculator.calculateShift(step, 'backwards');
+    return this.shiftCalculator.calculateShiftForBackwards(step);
   }
 }
 

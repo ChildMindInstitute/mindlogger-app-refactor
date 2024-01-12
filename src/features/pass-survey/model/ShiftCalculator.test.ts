@@ -84,10 +84,7 @@ describe('[ShiftCalculator]', () => {
           list.length,
         );
 
-        const actualShift = shiftCalculator.calculateShift(
-          fromStep,
-          'forwards',
-        );
+        const actualShift = shiftCalculator.calculateShiftForForwards(fromStep);
 
         expect(actualShift).toBe(expectedShift);
       });
@@ -157,10 +154,8 @@ describe('[ShiftCalculator]', () => {
           list.length,
         );
 
-        const actualShift = shiftCalculator.calculateShift(
-          fromStep,
-          'backwards',
-        );
+        const actualShift =
+          shiftCalculator.calculateShiftForBackwards(fromStep);
 
         expect(actualShift).toBe(expectedShift);
       });

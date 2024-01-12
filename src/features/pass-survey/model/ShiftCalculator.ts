@@ -11,28 +11,48 @@ class ShiftCalculator {
     this.arrayLength = arrayLength;
   }
 
-  calculateShift(
-    fromIndex: number = 0,
-    direction: 'forwards' | 'backwards' = 'forwards',
-  ): number {
+  calculateShiftForForwards(inputStep: number = 0): number {
     let result = 0;
 
     let shift = 1;
 
-    while (true) {
-      let nextStep =
-        direction === 'forwards' ? fromIndex + shift : fromIndex - shift;
+    const exceedRangeShift = this.arrayLength - inputStep;
 
-      if (nextStep < 0) {
-        break;
-      }
+    while (true) {
+      let nextStep = inputStep + shift;
 
       if (nextStep >= this.arrayLength) {
-        result = this.arrayLength - fromIndex;
+        result = exceedRangeShift;
         break;
       }
 
       if (this.skipper.shouldSkipStep(nextStep)) {
+        shift++;
+      } else {
+        result = shift;
+        break;
+      }
+    }
+
+    return result;
+  }
+
+  calculateShiftForBackwards(inputStep: number = 0): number {
+    let result = 0;
+
+    let shift = 1;
+
+    const noShift = 0;
+
+    while (true) {
+      let previousStep = inputStep - shift;
+
+      if (previousStep < 0) {
+        result = noShift;
+        break;
+      }
+
+      if (this.skipper.shouldSkipStep(previousStep)) {
         shift++;
       } else {
         result = shift;
