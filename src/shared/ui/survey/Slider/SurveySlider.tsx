@@ -30,7 +30,12 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
 
   const hasAtLeastOneImage = Boolean(leftImageUrl || rightImageUrl);
 
-  const rightPartOfAccessibilityLabel = sliderLabel ? `-${sliderLabel}` : '';
+  const addRightPartTo = (accessibilityValue?: string) => {
+    if (!accessibilityValue) {
+      return undefined;
+    }
+    return accessibilityValue + (sliderLabel ? `-${sliderLabel}` : '');
+  };
 
   const onValueChange = (arrayOfValues: number[]) => {
     const [value] = arrayOfValues;
@@ -48,7 +53,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
       <Box px={10}>
         <Slider
           animationType="spring"
-          accessibilityLabel={accessibilityLabel}
+          accessibilityLabel={addRightPartTo(accessibilityLabel)}
           initialValue={initialValue}
           onSlidingComplete={onRelease}
           onSlidingStart={onPress}
@@ -82,9 +87,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
             {leftImageUrl && (
               <Box borderRadius={4} overflow="hidden">
                 <CachedImage
-                  accessibilityLabel={
-                    'slider-left-image' + rightPartOfAccessibilityLabel
-                  }
+                  accessibilityLabel={addRightPartTo('slider-left-image')}
                   style={styles.image}
                   resizeMode="contain"
                   source={leftImageUrl}
@@ -95,7 +98,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
 
           {leftTitle ? (
             <Text
-              accessibilityLabel={'min-label' + rightPartOfAccessibilityLabel}
+              accessibilityLabel={addRightPartTo('min-label')}
               textAlign="center"
             >
               {leftTitle}
@@ -108,9 +111,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
             {rightImageUrl && (
               <XStack jc="center">
                 <CachedImage
-                  accessibilityLabel={
-                    'slider-right-image' + rightPartOfAccessibilityLabel
-                  }
+                  accessibilityLabel={addRightPartTo('slider-right-image')}
                   style={styles.image}
                   resizeMode="contain"
                   source={rightImageUrl}
@@ -121,7 +122,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
 
           {rightTitle ? (
             <Text
-              accessibilityLabel={'max-label' + rightPartOfAccessibilityLabel}
+              accessibilityLabel={addRightPartTo('max-label')}
               textAlign="center"
             >
               {rightTitle}
