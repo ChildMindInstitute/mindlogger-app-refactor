@@ -1,4 +1,4 @@
-import { addDays, isEqual, startOfDay } from 'date-fns';
+import { isEqual, startOfDay } from 'date-fns';
 import i18next from 'i18next';
 
 import {
@@ -9,13 +9,11 @@ import {
 import { DatesFromTo, Logger } from '@app/shared/lib';
 
 import { NotificationDaysExtractor } from './NotificationDaysExtractor';
-import {
-  NotificationUtility,
-  NumberOfDaysForSchedule,
-} from './NotificationUtility';
+import { NotificationUtility } from './NotificationUtility';
 import { ReminderCreator } from './ReminderCreator';
 import {
   AppletNotificationDescribers,
+  BreakReason,
   Entity,
   EventEntity,
   EventNotificationDescribers,
@@ -27,7 +25,7 @@ import {
   ScheduleEvent,
 } from '../../lib/types';
 
-interface INotificationBuilder {
+export interface INotificationBuilder {
   build: () => AppletNotificationDescribers;
 }
 
@@ -175,17 +173,13 @@ class NotificationBuilder implements INotificationBuilder {
     };
 
     if (!event.scheduledAt) {
+      eventResult.breakReason = BreakReason.ScheduledAtIsEmpty;
       return eventResult;
     }
 
     const scheduledDay = startOfDay(event.scheduledAt);
 
     const firstScheduleDay = this.utility.currentDay;
-
-    const lastScheduleDay = addDays(
-      this.utility.currentDay,
-      NumberOfDaysForSchedule - 1,
-    );
 
     const eventDayFrom = event.availability.startDate;
 
@@ -219,7 +213,8 @@ class NotificationBuilder implements INotificationBuilder {
 
     const isOnceEvent = periodicity === PeriodicityType.Once;
 
-    if (isOnceEvent && scheduledDay < this.utility.aWeekAgoDay) {
+    if (isOnceEvent && scheduledDay < this.utility.yesterday) {
+      eventResult.breakReason = BreakReason.ScheduledDayIsLessThanYesterday;
       return eventResult;
     }
     if (
@@ -227,15 +222,28 @@ class NotificationBuilder implements INotificationBuilder {
       eventDayTo &&
       eventDayTo < this.utility.currentDay
     ) {
+      eventResult.breakReason = BreakReason.EventDayToIsLessThanCurrentDay;
       return eventResult;
     }
-    if (isPeriodicitySet && eventDayFrom && eventDayFrom > lastScheduleDay) {
+    if (
+      isPeriodicitySet &&
+      eventDayFrom &&
+      eventDayFrom > this.utility.lastScheduleDay
+    ) {
+      eventResult.breakReason =
+        BreakReason.EventDayFromIsMoreThanLastScheduleDay;
+      return eventResult;
+    }
+
+    if (isEntityHidden) {
+      eventResult.breakReason = BreakReason.EntityHidden;
       return eventResult;
     }
 
     if (isOnceEvent) {
       const notifications = this.processEventDay(scheduledDay, event, entity);
       this.utility.markNotificationsDueToOneTimeCompletionSetting(
+        // todo - shouldn't it be in the else block? or in the processEventDay?
         notifications,
         entity.id,
         eventId,
@@ -255,7 +263,7 @@ class NotificationBuilder implements INotificationBuilder {
     } else {
       const eventDays = this.notificationDaysExtractor.extract(
         firstScheduleDay,
-        lastScheduleDay,
+        this.utility.lastScheduleDay,
         eventDayFrom,
         eventDayTo,
         periodicity,
@@ -263,7 +271,7 @@ class NotificationBuilder implements INotificationBuilder {
       );
 
       const reminderDays = this.notificationDaysExtractor.extractForReminders(
-        lastScheduleDay,
+        this.utility.lastScheduleDay,
         eventDayFrom,
         eventDayTo,
         periodicity,
@@ -295,12 +303,6 @@ class NotificationBuilder implements INotificationBuilder {
           eventResult.notifications.push(currentReminder.reminder);
         }
       }
-    }
-
-    if (isEntityHidden) {
-      this.utility.markAllAsInactiveDueToEntityHidden(
-        eventResult.notifications,
-      );
     }
 
     if (this.keepDebugData) {
