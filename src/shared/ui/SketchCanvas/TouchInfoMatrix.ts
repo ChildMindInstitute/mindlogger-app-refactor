@@ -1,18 +1,22 @@
 import { TouchInfo } from '@shopify/react-native-skia';
 
 class TouchInfoMatrix {
-  private matrix: Array<Array<TouchInfo>>;
+  private rawMatrix: Array<Array<TouchInfo>>;
 
-  constructor(matrix: Array<Array<TouchInfo>>) {
-    this.matrix = matrix;
+  constructor(rawMatrix: Array<Array<TouchInfo>>) {
+    this.rawMatrix = rawMatrix;
   }
 
-  filterOutMultiTouches(): Array<Array<TouchInfo>> {
-    const firstTouchId = 0;
-
-    return this.matrix.map(touchInfoList => {
-      return touchInfoList.filter(touchInfo => touchInfo.id === firstTouchId);
+  public filterByTouchId(touchId: number): TouchInfoMatrix {
+    const rawMatrix = this.rawMatrix.map(touchInfoList => {
+      return touchInfoList.filter(touchInfo => touchInfo.id === touchId);
     });
+
+    return new TouchInfoMatrix(rawMatrix);
+  }
+
+  public getValue(): Array<Array<TouchInfo>> {
+    return this.rawMatrix;
   }
 }
 
