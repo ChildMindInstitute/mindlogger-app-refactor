@@ -3,6 +3,7 @@ import {
   useCallback,
   useImperativeHandle,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { PanResponder, StyleSheet } from 'react-native';
@@ -13,6 +14,7 @@ import {
   Path,
   SkPath,
   TouchInfo,
+  TouchType,
   useTouchHandler,
 } from '@shopify/react-native-skia';
 
@@ -47,6 +49,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     onStrokeEnd,
   });
 
+  const currentTouchIdRef = useRef<number | null>(null);
   const lineSketcher = useMemo(() => new LineSketcher(), []);
 
   useImperativeHandle(ref, () => {
@@ -139,6 +142,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     }
 
     callbacksRef.current.onStrokeEnd();
+    currentTouchIdRef.current = null;
   }, [callbacksRef, lineSketcher, createDot]);
 
   const touchHandler = useTouchHandler(
@@ -166,10 +170,21 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   const preprocessedTouchHandler = (
     touchInfoMatrix: Array<Array<TouchInfo>>,
   ) => {
-    const matrix = new TouchInfoMatrix(touchInfoMatrix);
-    const updatedTouchInfoMatrix = matrix.filterOutMultiTouches();
+    const { type, id } = touchInfoMatrix[0][0];
 
-    touchHandler(updatedTouchInfoMatrix);
+    if (type === TouchType.Start && currentTouchIdRef.current === null) {
+      currentTouchIdRef.current = id;
+    }
+
+    let matrix = new TouchInfoMatrix(touchInfoMatrix);
+
+    if (currentTouchIdRef.current !== null) {
+      matrix = matrix.filterByTouchId(currentTouchIdRef.current);
+    } else {
+      return;
+    }
+
+    touchHandler(matrix.getValue());
   };
 
   return (
