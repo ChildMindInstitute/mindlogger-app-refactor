@@ -226,6 +226,26 @@ const onHtmlBlockLinkPress = (request: { url: string }) => {
   return true;
 };
 
+const AlignmentTags = [
+  'container_hljs-left',
+  'container_hljs-center',
+  'container_hljs-right',
+] as const;
+
+type AlignmentTag = (typeof AlignmentTags)[number];
+
+const AlignmentStyles = {
+  'container_hljs-left': {
+    textAlign: 'left',
+  },
+  'container_hljs-right': {
+    textAlign: 'right',
+  },
+  'container_hljs-center': {
+    textAlign: 'center',
+  },
+} as const satisfies Record<AlignmentTag, object>;
+
 const markDownRules: RenderRules = {
   'container_hljs-left': (node, children) => {
     return (
@@ -313,9 +333,12 @@ const markDownRules: RenderRules = {
       </Text>
     );
   },
-  text: (node, children, parent, styles, inheritedStyles = {}) => {
+  text: (node, children, parents, styles, inheritedStyles = {}) => {
+    const containerAlignTag = getContainerAlignTag(parents);
+
     let additionalStyles = {};
     let updatedNodeContent = node.content;
+
     if (node.content.startsWith('++') && node.content.endsWith('++')) {
       updatedNodeContent = node.content.replace(/[+]+/g, '');
       additionalStyles = localStyles.underline;
@@ -333,12 +356,21 @@ const markDownRules: RenderRules = {
     updatedNodeContent = updatedNodeContent
       .replace(/<([^‘]*[a-zA-Z]+[^‘]*)>/gi, '')
       .replace(/\[\[sys.date]]/i, todayDate);
-    const [, , wrapperParent] = parent;
+    const [, , wrapperParent] = parents;
 
     if (wrapperParent?.type === 'list_item') {
       inheritedStyles = {
         ...inheritedStyles,
         ...localStyles.listItemText,
+      };
+    }
+
+    if (containerAlignTag) {
+      const alignmentStyles = AlignmentStyles[containerAlignTag];
+
+      additionalStyles = {
+        ...additionalStyles,
+        ...alignmentStyles,
       };
     }
 
@@ -494,6 +526,16 @@ const checkIfContainerTypeIsHljs = (parents: ASTNode[]) => {
   }
 
   return false;
+};
+
+const getContainerAlignTag = (parents: ASTNode[]): AlignmentTag | undefined => {
+  const tag = parents
+    .map(parent => parent.type)
+    .find((type): type is AlignmentTag =>
+      (AlignmentTags as readonly string[]).includes(type),
+    );
+
+  return tag;
 };
 
 export const preprocessImageLinks = (content: string) => {
