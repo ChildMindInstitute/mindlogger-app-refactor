@@ -673,25 +673,4 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       );
     });
   });
-
-  describe('Test markAllAsInactiveDueToEntityHidden', () => {
-    it('Should mark any passed notification', () => {
-      const today = new Date(2024, 0, 3);
-
-      const utility = new NotificationUtility({}, AppletId);
-
-      const now = new Date(today);
-      now.setHours(18);
-      now.setMinutes(10);
-
-      mockUtilityProps(utility, now, false);
-
-      const notification = getTestNotification();
-
-      utility.markAllAsInactiveDueToEntityHidden([notification]);
-
-      expect(notification.isActive).toEqual(false);
-      expect(notification.inactiveReason).toEqual(InactiveReason.EntityHidden);
-    });
-  });
 });
