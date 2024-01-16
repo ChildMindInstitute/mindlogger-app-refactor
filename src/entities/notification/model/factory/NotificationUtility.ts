@@ -85,8 +85,16 @@ export class NotificationUtility {
     return startOfDay(this.now);
   }
 
+  public get yesterday(): Date {
+    return subDays(this.currentDay, 1);
+  }
+
   public get aWeekAgoDay() {
     return subDays(this.currentDay, 7);
+  }
+
+  public get lastScheduleDay() {
+    return addDays(this.currentDay, NumberOfDaysForSchedule - 1);
   }
 
   public get weekDays(): Date[] {
@@ -385,15 +393,6 @@ export class NotificationUtility {
     if (notificationDay < startDate || notificationDay > endDate) {
       notification.isActive = false;
       notification.inactiveReason = InactiveReason.OutOfStartEndDay;
-    }
-  }
-
-  public markAllAsInactiveDueToEntityHidden(
-    notifications: NotificationDescriber[],
-  ) {
-    for (let notification of notifications) {
-      notification.isActive = false;
-      notification.inactiveReason = InactiveReason.EntityHidden;
     }
   }
 

@@ -84,6 +84,15 @@ export const enum InactiveReason {
   FallOnInvalidPeriod = 'FallOnInvalidPeriod',
 }
 
+export const enum BreakReason {
+  NotDefined = 'NotDefined',
+  ScheduledAtIsEmpty = 'ScheduledAtIsEmpty',
+  ScheduledDayIsLessThanYesterday = 'ScheduledDayIsLessThanYesterday',
+  EventDayToIsLessThanCurrentDay = 'EventDayToIsLessThanCurrentDay',
+  EventDayFromIsMoreThanLastScheduleDay = 'EventDayFromIsMoreThanLastScheduleDay',
+  EntityHidden = 'EntityHidden',
+}
+
 export type RandomCrossBorderType =
   | 'both-in-current-day'
   | 'from-current-to-next'
@@ -131,6 +140,7 @@ export type EventNotificationDescribers = {
   eventName: string;
   scheduleEvent: ScheduleEvent;
   notifications: Array<NotificationDescriber>;
+  breakReason?: BreakReason;
 };
 
 export type AppletNotificationDescribers = {
