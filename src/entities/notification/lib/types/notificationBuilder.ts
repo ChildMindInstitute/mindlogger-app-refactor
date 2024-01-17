@@ -80,7 +80,6 @@ export const enum InactiveReason {
   OutOfStartEndDay = 'OutOfStartEndDay',
   ActivityCompleted = 'ActivityCompleted',
   EntityHidden = 'EntityHidden',
-  OneTimeCompletion = 'OneTimeCompletion',
   FallOnInvalidPeriod = 'FallOnInvalidPeriod',
 }
 
@@ -91,6 +90,7 @@ export const enum BreakReason {
   EventDayToIsLessThanCurrentDay = 'EventDayToIsLessThanCurrentDay',
   EventDayFromIsMoreThanLastScheduleDay = 'EventDayFromIsMoreThanLastScheduleDay',
   EntityHidden = 'EntityHidden',
+  OneTimeCompletion = 'OneTimeCompletion',
 }
 
 export type RandomCrossBorderType =

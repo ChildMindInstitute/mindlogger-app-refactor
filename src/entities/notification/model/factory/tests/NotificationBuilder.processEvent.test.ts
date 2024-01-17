@@ -36,6 +36,9 @@ const mockUtilityProps = (
 
   //@ts-ignore
   builder.utility.now = date;
+
+  //@ts-ignore
+  builder.utility.isCompleted = jest.fn().mockReturnValue(false);
 };
 
 const getTestEvent = (): ScheduleEvent => {
@@ -301,6 +304,37 @@ describe('NotificationBuilder: processEvent tests', () => {
 
         expect(result.events).toEqual([expected]);
       });
+    });
+
+    it('Should break with the reason OneTimeCompletion when event-oneTimeCompletion flag is true and entity is completed and event is always-available', () => {
+      const today = new Date(2024, 0, 3);
+
+      const event = getTestEvent();
+      setNormalSettingsToEvent(event, PeriodicityType.Always, today);
+      event.scheduledAt = today;
+
+      event.availability.oneTimeCompletion = true;
+      event.availability.availabilityType = AvailabilityType.AlwaysAvailable;
+
+      const eventEntity = getEventEntity(event);
+
+      const builder = createBuilder(eventEntity);
+      mockUtilityProps(builder, today);
+
+      //@ts-ignore
+      builder.utility.isCompleted = jest.fn().mockReturnValue(true);
+
+      const result = builder.build();
+
+      const expected: EventNotificationDescribers = {
+        eventId: 'mock-event-id',
+        eventName: `For mock-entity-name, ${PeriodicityType.Always}, 1 notifications, reminder unset`,
+        notifications: [],
+        scheduleEvent: event,
+        breakReason: BreakReason.OneTimeCompletion,
+      };
+
+      expect(result.events).toEqual([expected]);
     });
   });
 
