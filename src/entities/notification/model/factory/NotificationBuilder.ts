@@ -3,6 +3,7 @@ import i18next from 'i18next';
 
 import {
   ActivityPipelineType,
+  AvailabilityType,
   NotificationTriggerType,
   PeriodicityType,
 } from '@app/abstract/lib';
@@ -191,8 +192,6 @@ class NotificationBuilder implements INotificationBuilder {
 
     const isEntityHidden = !entity.isVisible;
 
-    const eventId = event.id;
-
     const eventNotifications = event.notificationSettings.notifications;
 
     const reminderSetting: ReminderSetting | null =
@@ -225,6 +224,7 @@ class NotificationBuilder implements INotificationBuilder {
       eventResult.breakReason = BreakReason.EventDayToIsLessThanCurrentDay;
       return eventResult;
     }
+
     if (
       isPeriodicitySet &&
       eventDayFrom &&
@@ -240,15 +240,19 @@ class NotificationBuilder implements INotificationBuilder {
       return eventResult;
     }
 
+    if (
+      event.availability.availabilityType ===
+        AvailabilityType.AlwaysAvailable &&
+      event.availability.oneTimeCompletion &&
+      this.utility.isCompleted(entity.id, event.id)
+    ) {
+      eventResult.breakReason = BreakReason.OneTimeCompletion;
+      return eventResult;
+    }
+
     if (isOnceEvent) {
       const notifications = this.processEventDay(scheduledDay, event, entity);
-      this.utility.markNotificationsDueToOneTimeCompletionSetting(
-        // todo - shouldn't it be in the else block? or in the processEventDay?
-        notifications,
-        entity.id,
-        eventId,
-        event.availability.oneTimeCompletion,
-      );
+
       eventResult.notifications.push(...notifications);
 
       const reminders = this.reminderCreator.create(
