@@ -376,6 +376,12 @@ export class NotificationUtility {
     }
   }
 
+  private getNotificationIds = () => {
+    const id = uuidv4();
+    const shortId = `${id.slice(0, 2)}_${id.slice(-3)}`;
+    return { id, shortId };
+  };
+
   public createNotification(
     triggerAt: Date,
     name: string,
@@ -385,8 +391,7 @@ export class NotificationUtility {
     eventId: string,
     type: NotificationType,
   ): NotificationDescriber {
-    const id = uuidv4();
-    const shortId = `${id.slice(0, 2)}_${id.slice(-3)}`;
+    const { id, shortId } = this.getNotificationIds();
 
     const notification: NotificationDescriber = {
       notificationId: id,
