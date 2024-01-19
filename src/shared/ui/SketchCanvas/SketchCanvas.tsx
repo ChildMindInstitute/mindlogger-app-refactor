@@ -2,7 +2,11 @@ import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { Canvas, Group, Path, SkPath } from '@shopify/react-native-skia';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import {
+  Gesture,
+  GestureDetector,
+  TouchData,
+} from 'react-native-gesture-handler';
 import { runOnJS, useSharedValue } from 'react-native-reanimated';
 
 import { useCallbacksRefs } from '@app/shared/lib';
@@ -132,6 +136,30 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     );
   };
 
+  const normalizeCoordinates = (
+    touchData: TouchData,
+    deviation: number = 0,
+  ): TouchData => {
+    'worklet';
+    const normalize = (value: number) => {
+      if (value < 0) {
+        return 0 + deviation;
+      }
+
+      if (value > sizeRef.value) {
+        return sizeRef.value - deviation;
+      }
+
+      return value;
+    };
+
+    return {
+      ...touchData,
+      x: normalize(touchData.x),
+      y: normalize(touchData.y),
+    };
+  };
+
   const drawingGesture = Gesture.Pan()
     .manualActivation(true)
     .onTouchesDown((event, stateManager) => {
@@ -159,10 +187,18 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
       const touchData = event.allTouches[0];
 
       if (isOutOfCanvas(touchData)) {
-        manager.end();
-      }
+        const finalPoint = normalizeCoordinates(touchData);
+        // It is crucial to create an anchor point in this case before the final step
+        // because the lines are painted as curved lines that rely on anchors.
+        const anchorFinalPoint = normalizeCoordinates(touchData, 1);
 
-      runOnJS(onTouchProgress)(touchData);
+        runOnJS(onTouchProgress)(anchorFinalPoint);
+        runOnJS(onTouchProgress)(finalPoint);
+
+        manager.end();
+      } else {
+        runOnJS(onTouchProgress)(touchData);
+      }
     })
     .onFinalize(() => {
       runOnJS(onTouchEnd)();
