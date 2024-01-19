@@ -36,6 +36,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   });
 
   const currentTouchIdRef = useSharedValue<number | null>(null);
+  const sizeRef = useSharedValue(width);
   const lineSketcher = useMemo(() => new LineSketcher(), []);
 
   useImperativeHandle(ref, () => {
@@ -121,6 +122,16 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     callbacksRef.current.onStrokeEnd();
   };
 
+  const isOutOfCanvas = (point: Point) => {
+    'worklet';
+    return (
+      point.x > sizeRef.value ||
+      point.y > sizeRef.value ||
+      point.x < 0 ||
+      point.y < 0
+    );
+  };
+
   const drawingGesture = Gesture.Pan()
     .manualActivation(true)
     .onTouchesDown((event, stateManager) => {
@@ -144,8 +155,12 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     .onBegin(event => {
       runOnJS(onTouchStart)(event);
     })
-    .onTouchesMove(event => {
+    .onTouchesMove((event, manager) => {
       const touchData = event.allTouches[0];
+
+      if (isOutOfCanvas(touchData)) {
+        manager.end();
+      }
 
       runOnJS(onTouchProgress)(touchData);
     })
