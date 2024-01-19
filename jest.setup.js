@@ -171,3 +171,7 @@ jest.mock('@react-native-community/netinfo', () => {
 });
 
 jest.mock('react-native-device-info', () => mockRNDeviceInfo);
+
+jest.mock('react-native-gesture-handler', () =>
+  jest.mock('react-native-gesture-handler'),
+);

@@ -162,7 +162,7 @@ const getMockNotificationPattern = () => {
   } as unknown as NotificationDescriber;
 };
 
-const addSimpleReminder = (
+const addReminder = (
   result: NotificationDescriber[],
   eventDate: Date,
   inactiveDays: number,
@@ -239,120 +239,117 @@ const addNotification = (
 };
 
 describe('NotificationBuilder: always-available penetrating tests', () => {
-  describe('Test non cross-day', () => {
-    it('Should return array of 15 notifications when reminder is unset', () => {
-      const today = new Date(2024, 0, 3);
+  it('Should return array of 15 notifications when reminder is unset', () => {
+    const today = new Date(2024, 0, 3);
 
-      const event = getTestEvent();
-      setNormalSettingsToEvent(event, PeriodicityType.Always, today);
+    const event = getTestEvent();
+    setNormalSettingsToEvent(event, PeriodicityType.Always, today);
 
-      event.scheduledAt = new Date(today);
-      event.scheduledAt.setHours(FixedHourAt);
-      event.scheduledAt.setMinutes(FixedMinuteAt);
+    event.scheduledAt = new Date(today);
+    event.scheduledAt.setHours(FixedHourAt);
+    event.scheduledAt.setMinutes(FixedMinuteAt);
 
-      const eventEntity = getEventEntity(event);
+    const eventEntity = getEventEntity(event);
 
-      const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+    const builder = createBuilder(eventEntity);
+    mockUtilityProps(builder, today);
 
-      const result = builder.build();
+    const result = builder.build();
 
-      const expected: NotificationDescriber[] = [];
+    const expected: NotificationDescriber[] = [];
 
-      addNotification(expected, subDays(today, 1), 'outdated');
-      addNotification(expected, new Date(today));
-      addNotification(expected, addDays(today, 1));
-      addNotification(expected, addDays(today, 2));
-      addNotification(expected, addDays(today, 3));
-      addNotification(expected, addDays(today, 4));
-      addNotification(expected, addDays(today, 5));
-      addNotification(expected, addDays(today, 6));
-      addNotification(expected, addDays(today, 7));
-      addNotification(expected, addDays(today, 8));
-      addNotification(expected, addDays(today, 9));
-      addNotification(expected, addDays(today, 10));
-      addNotification(expected, addDays(today, 11));
-      addNotification(expected, addDays(today, 12));
-      addNotification(expected, addDays(today, 13));
+    addNotification(expected, subDays(today, 1), 'outdated');
+    addNotification(expected, new Date(today));
+    addNotification(expected, addDays(today, 1));
+    addNotification(expected, addDays(today, 2));
+    addNotification(expected, addDays(today, 3));
+    addNotification(expected, addDays(today, 4));
+    addNotification(expected, addDays(today, 5));
+    addNotification(expected, addDays(today, 6));
+    addNotification(expected, addDays(today, 7));
+    addNotification(expected, addDays(today, 8));
+    addNotification(expected, addDays(today, 9));
+    addNotification(expected, addDays(today, 10));
+    addNotification(expected, addDays(today, 11));
+    addNotification(expected, addDays(today, 12));
+    addNotification(expected, addDays(today, 13));
 
-      const expectedResult: EventNotificationDescribers = {
-        eventId: 'mock-event-id',
-        eventName:
-          'For mock-entity-name, ALWAYS, 1 notifications, reminder unset',
-        notifications: expected,
-        scheduleEvent: event,
-      };
+    const expectedResult: EventNotificationDescribers = {
+      eventId: 'mock-event-id',
+      eventName:
+        'For mock-entity-name, ALWAYS, 1 notifications, reminder unset',
+      notifications: expected,
+      scheduleEvent: event,
+    };
 
-      expect(result.events).toEqual([expectedResult]);
-      expect(result.events[0].notifications.length).toEqual(15);
-    });
+    expect(result.events).toEqual([expectedResult]);
+    expect(result.events[0].notifications.length).toEqual(15);
+  });
 
-    it('Should return array of 30 notifications including reminders when reminder is set and activityIncomplete is 1', () => {
-      const today = new Date(2024, 0, 3);
+  it('Should return array of 30 notifications including reminders when reminder is set and activityIncomplete is 1', () => {
+    const today = new Date(2024, 0, 3);
 
-      const event = getTestEvent();
-      setNormalSettingsToEvent(event, PeriodicityType.Always, today, true);
+    const event = getTestEvent();
+    setNormalSettingsToEvent(event, PeriodicityType.Always, today, true);
 
-      event.scheduledAt = new Date(today);
-      event.scheduledAt.setHours(FixedHourAt);
-      event.scheduledAt.setMinutes(FixedMinuteAt);
+    event.scheduledAt = new Date(today);
+    event.scheduledAt.setHours(FixedHourAt);
+    event.scheduledAt.setMinutes(FixedMinuteAt);
 
-      const eventEntity = getEventEntity(event);
+    const eventEntity = getEventEntity(event);
 
-      const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+    const builder = createBuilder(eventEntity);
+    mockUtilityProps(builder, today);
 
-      const result = builder.build();
+    const result = builder.build();
 
-      const expected: NotificationDescriber[] = [];
+    const expected: NotificationDescriber[] = [];
 
-      addSimpleReminder(expected, subDays(today, 7), 1, 'invalid-period');
-      addSimpleReminder(expected, subDays(today, 6), 1, 'invalid-period');
-      addSimpleReminder(expected, subDays(today, 5), 1, 'invalid-period');
-      addSimpleReminder(expected, subDays(today, 4), 1, 'invalid-period');
-      addSimpleReminder(expected, subDays(today, 3), 1, 'invalid-period');
-      addSimpleReminder(expected, subDays(today, 2), 1, 'outdated');
+    addReminder(expected, subDays(today, 7), 1, 'invalid-period');
+    addReminder(expected, subDays(today, 6), 1, 'invalid-period');
+    addReminder(expected, subDays(today, 5), 1, 'invalid-period');
+    addReminder(expected, subDays(today, 4), 1, 'invalid-period');
+    addReminder(expected, subDays(today, 3), 1, 'invalid-period');
+    addReminder(expected, subDays(today, 2), 1, 'outdated');
 
-      addNotification(expected, subDays(today, 1), 'outdated');
-      addSimpleReminder(expected, subDays(today, 1), 1);
-      addNotification(expected, new Date(today));
-      addSimpleReminder(expected, new Date(today), 1);
-      addNotification(expected, addDays(today, 1));
-      addSimpleReminder(expected, addDays(today, 1), 1);
-      addNotification(expected, addDays(today, 2));
-      addSimpleReminder(expected, addDays(today, 2), 1);
-      addNotification(expected, addDays(today, 3));
-      addSimpleReminder(expected, addDays(today, 3), 1);
-      addNotification(expected, addDays(today, 4));
-      addSimpleReminder(expected, addDays(today, 4), 1);
-      addNotification(expected, addDays(today, 5));
-      addSimpleReminder(expected, addDays(today, 5), 1);
-      addNotification(expected, addDays(today, 6));
-      addSimpleReminder(expected, addDays(today, 6), 1);
-      addNotification(expected, addDays(today, 7));
-      addSimpleReminder(expected, addDays(today, 7), 1);
-      addNotification(expected, addDays(today, 8));
-      addSimpleReminder(expected, addDays(today, 8), 1);
-      addNotification(expected, addDays(today, 9));
-      addSimpleReminder(expected, addDays(today, 9), 1);
-      addNotification(expected, addDays(today, 10));
-      addSimpleReminder(expected, addDays(today, 10), 1);
-      addNotification(expected, addDays(today, 11));
-      addSimpleReminder(expected, addDays(today, 11), 1);
-      addNotification(expected, addDays(today, 12));
-      addSimpleReminder(expected, addDays(today, 12), 1);
-      addNotification(expected, addDays(today, 13));
-      addSimpleReminder(expected, addDays(today, 13), 1, 'invalid-period');
+    addNotification(expected, subDays(today, 1), 'outdated');
+    addReminder(expected, subDays(today, 1), 1);
+    addNotification(expected, new Date(today));
+    addReminder(expected, new Date(today), 1);
+    addNotification(expected, addDays(today, 1));
+    addReminder(expected, addDays(today, 1), 1);
+    addNotification(expected, addDays(today, 2));
+    addReminder(expected, addDays(today, 2), 1);
+    addNotification(expected, addDays(today, 3));
+    addReminder(expected, addDays(today, 3), 1);
+    addNotification(expected, addDays(today, 4));
+    addReminder(expected, addDays(today, 4), 1);
+    addNotification(expected, addDays(today, 5));
+    addReminder(expected, addDays(today, 5), 1);
+    addNotification(expected, addDays(today, 6));
+    addReminder(expected, addDays(today, 6), 1);
+    addNotification(expected, addDays(today, 7));
+    addReminder(expected, addDays(today, 7), 1);
+    addNotification(expected, addDays(today, 8));
+    addReminder(expected, addDays(today, 8), 1);
+    addNotification(expected, addDays(today, 9));
+    addReminder(expected, addDays(today, 9), 1);
+    addNotification(expected, addDays(today, 10));
+    addReminder(expected, addDays(today, 10), 1);
+    addNotification(expected, addDays(today, 11));
+    addReminder(expected, addDays(today, 11), 1);
+    addNotification(expected, addDays(today, 12));
+    addReminder(expected, addDays(today, 12), 1);
+    addNotification(expected, addDays(today, 13));
+    addReminder(expected, addDays(today, 13), 1, 'invalid-period');
 
-      const expectedResult: EventNotificationDescribers = {
-        eventId: 'mock-event-id',
-        eventName:
-          'For mock-entity-name, ALWAYS, 1 notifications, reminder set',
-        notifications: expected,
-        scheduleEvent: event,
-      };
+    const expectedResult: EventNotificationDescribers = {
+      eventId: 'mock-event-id',
+      eventName: 'For mock-entity-name, ALWAYS, 1 notifications, reminder set',
+      notifications: expected,
+      scheduleEvent: event,
+    };
 
-      expect(result.events).toEqual([expectedResult]);
-    });
+    expect(result.events).toEqual([expectedResult]);
   });
 });
