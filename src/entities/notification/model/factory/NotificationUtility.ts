@@ -339,26 +339,6 @@ export class NotificationUtility {
     }
   }
 
-  public markNotificationsDueToOneTimeCompletionSetting(
-    notifications: NotificationDescriber[],
-    entityId: string,
-    eventId: string,
-    isOneTimeCompletion: boolean,
-  ) {
-    if (!isOneTimeCompletion) {
-      return;
-    }
-
-    const completedAt = this.getActivityCompletedAt(entityId, eventId);
-
-    if (completedAt) {
-      for (let notification of notifications) {
-        notification.isActive = false;
-        notification.inactiveReason = InactiveReason.OneTimeCompletion;
-      }
-    }
-  }
-
   public markIfNotificationOutdated(
     notification: NotificationDescriber,
     event: ScheduleEvent,
@@ -425,5 +405,9 @@ export class NotificationUtility {
     };
 
     return notification;
+  }
+
+  public isCompleted(entityId: string, eventId: string) {
+    return !!this.getActivityCompletedAt(entityId, eventId);
   }
 }

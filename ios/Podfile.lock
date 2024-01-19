@@ -534,6 +534,8 @@ PODS:
   - RNFileLogger (0.4.1):
     - CocoaLumberjack
     - React
+  - RNGestureHandler (2.14.1):
+    - React-Core
   - RNNotifee (7.8.0):
     - React-Core
     - RNNotifee/NotifeeCore (= 7.8.0)
@@ -671,6 +673,7 @@ DEPENDENCIES:
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNFileLogger (from `../node_modules/react-native-file-logger`)
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -829,6 +832,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNFileLogger:
     :path: "../node_modules/react-native-file-logger"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
   RNNotifee:
     :path: "../node_modules/@notifee/react-native"
   RNPermissions:
@@ -932,6 +937,7 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: b69333e28f4c100dbbf69be885f80288b75c8f13
   RNFBMessaging: 3aca7a5b3b1f79a9ee75026662ea57693436a338
   RNFileLogger: 9eaf7a6ea709eaaffe646cc485b98ae1dbf1e9f0
+  RNGestureHandler: e98441928705d9d1184b599d7c1c6df2dd4f7724
   RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
   RNPermissions: 4f5e03e3272fdc6fcee6e571dfdcbad128aadffe
   RNReanimated: c5a0074efffd21f4af324e86b19468758fe39fa2
