@@ -1,27 +1,13 @@
-import {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { PanResponder, StyleSheet } from 'react-native';
+import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
+import { StyleSheet } from 'react-native';
 
-import {
-  Canvas,
-  Group,
-  Path,
-  SkPath,
-  TouchInfo,
-  TouchType,
-  useTouchHandler,
-} from '@shopify/react-native-skia';
+import { Canvas, Group, Path, SkPath } from '@shopify/react-native-skia';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { runOnJS, useSharedValue } from 'react-native-reanimated';
 
 import { useCallbacksRefs } from '@app/shared/lib';
 
 import LineSketcher, { Point, Shape } from './LineSketcher';
-import TouchInfoMatrix from './TouchInfoMatrix';
 
 export type SketchCanvasRef = {
   clear: () => void;
@@ -49,7 +35,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     onStrokeEnd,
   });
 
-  const currentTouchIdRef = useRef<number | null>(null);
+  const currentTouchIdRef = useSharedValue<number | null>(null);
   const lineSketcher = useMemo(() => new LineSketcher(), []);
 
   useImperativeHandle(ref, () => {
@@ -69,69 +55,60 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     [width],
   );
 
-  const onTouchStart = useCallback(
-    (touchInfo: TouchInfo) => {
-      const path = lineSketcher.createLine(touchInfo);
+  const onTouchStart = (touchInfo: Point) => {
+    const path = lineSketcher.createLine(touchInfo);
 
-      setPaths(currentPaths => [...currentPaths, path]);
-      callbacksRef.current.onStrokeStart(touchInfo.x, touchInfo.y);
-    },
-    [lineSketcher, callbacksRef],
-  );
+    setPaths(currentPaths => [...currentPaths, path]);
+    callbacksRef.current.onStrokeStart(touchInfo.x, touchInfo.y);
+  };
 
-  const onTouchProgress = useCallback(
-    (touchInfo: TouchInfo) => {
-      const lastDrawnPoint = lineSketcher.getLastPoint();
+  const onTouchProgress = (touchInfo: Point) => {
+    const lastDrawnPoint = lineSketcher.getLastPoint();
 
-      if (lastDrawnPoint) {
-        const dx = touchInfo.x - lastDrawnPoint.x;
-        const dy = touchInfo.y - lastDrawnPoint.y;
+    if (lastDrawnPoint) {
+      const dx = touchInfo.x - lastDrawnPoint.x;
+      const dy = touchInfo.y - lastDrawnPoint.y;
 
-        const isSamePoint = dx === 0 && dy === 0;
+      const isSamePoint = dx === 0 && dy === 0;
 
-        if (isSamePoint) {
-          return;
-        }
+      if (isSamePoint) {
+        return;
       }
+    }
 
-      callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
+    callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
 
-      setPaths(currentPaths => {
-        const pathsCount = currentPaths.length;
-        const lastPath = currentPaths[pathsCount - 1];
+    setPaths(currentPaths => {
+      const pathsCount = currentPaths.length;
+      const lastPath = currentPaths[pathsCount - 1];
 
-        if (lineSketcher.shouldCreateNewLine()) {
-          const lastPoint = lastPath.getLastPt();
-          const path = lineSketcher.createLine(touchInfo, lastPoint);
+      if (lineSketcher.shouldCreateNewLine()) {
+        const lastPoint = lastPath.getLastPt();
+        const path = lineSketcher.createLine(touchInfo, lastPoint);
 
-          return [...currentPaths, path];
-        } else {
-          lineSketcher.progressLine(lastPath, touchInfo);
-
-          return [...currentPaths.slice(0, -1), lastPath];
-        }
-      });
-    },
-    [lineSketcher, callbacksRef],
-  );
-
-  const createDot = useCallback(
-    (touchInfo: Point) => {
-      callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
-
-      setPaths(currentPaths => {
-        const pathsCount = currentPaths.length;
-        const lastPath = currentPaths[pathsCount - 1];
-
+        return [...currentPaths, path];
+      } else {
         lineSketcher.progressLine(lastPath, touchInfo);
 
         return [...currentPaths.slice(0, -1), lastPath];
-      });
-    },
-    [lineSketcher, callbacksRef],
-  );
+      }
+    });
+  };
 
-  const onTouchEnd = useCallback(() => {
+  const createDot = (touchInfo: Point) => {
+    callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
+
+    setPaths(currentPaths => {
+      const pathsCount = currentPaths.length;
+      const lastPath = currentPaths[pathsCount - 1];
+
+      lineSketcher.progressLine(lastPath, touchInfo);
+
+      return [...currentPaths.slice(0, -1), lastPath];
+    });
+  };
+
+  const onTouchEnd = () => {
     if (lineSketcher.getCurrentShape() === Shape.Dot) {
       const firstPoint = lineSketcher.getFirstPoint() as Point;
 
@@ -142,69 +119,56 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     }
 
     callbacksRef.current.onStrokeEnd();
-    currentTouchIdRef.current = null;
-  }, [callbacksRef, lineSketcher, createDot]);
-
-  const touchHandler = useTouchHandler(
-    {
-      onStart: onTouchStart,
-      onActive: onTouchProgress,
-      onEnd: onTouchEnd,
-    },
-    [],
-  );
-
-  const panResponder = useMemo(
-    () =>
-      PanResponder.create({
-        onStartShouldSetPanResponder: () => true,
-        onStartShouldSetPanResponderCapture: () => true,
-        onMoveShouldSetPanResponder: () => true,
-        onMoveShouldSetPanResponderCapture: () => true,
-        onShouldBlockNativeResponder: () => true,
-        onPanResponderTerminationRequest: () => true,
-      }),
-    [],
-  );
-
-  const preprocessedTouchHandler = (
-    touchInfoMatrix: Array<Array<TouchInfo>>,
-  ) => {
-    const { type, id } = touchInfoMatrix[0][0];
-
-    if (type === TouchType.Start && currentTouchIdRef.current === null) {
-      currentTouchIdRef.current = id;
-    }
-
-    let matrix = new TouchInfoMatrix(touchInfoMatrix);
-
-    if (currentTouchIdRef.current !== null) {
-      matrix = matrix.filterByTouchId(currentTouchIdRef.current);
-    } else {
-      return;
-    }
-
-    touchHandler(matrix.getValue());
   };
 
+  const drawingGesture = Gesture.Pan()
+    .manualActivation(true)
+    .onTouchesDown((event, stateManager) => {
+      if (event.numberOfTouches === 1) {
+        const touchId = event.allTouches[0].id;
+
+        currentTouchIdRef.value = touchId;
+        stateManager.activate();
+      }
+    })
+    .onTouchesUp((event, stateManager) => {
+      const shouldEndGesture = event.changedTouches.some(
+        touchData => touchData.id === currentTouchIdRef.value,
+      );
+
+      if (shouldEndGesture) {
+        stateManager.end();
+        currentTouchIdRef.value = null;
+      }
+    })
+    .onBegin(event => {
+      runOnJS(onTouchStart)(event);
+    })
+    .onTouchesMove(event => {
+      const touchData = event.allTouches[0];
+
+      runOnJS(onTouchProgress)(touchData);
+    })
+    .onFinalize(() => {
+      runOnJS(onTouchEnd)();
+    });
+
   return (
-    <Canvas
-      style={styles}
-      onTouch={preprocessedTouchHandler}
-      {...panResponder.panHandlers}
-    >
-      <Group>
-        {paths.map((path, i) => (
-          <Path
-            key={i}
-            path={path}
-            strokeWidth={1.5}
-            color="black"
-            style="stroke"
-          />
-        ))}
-      </Group>
-    </Canvas>
+    <GestureDetector gesture={drawingGesture}>
+      <Canvas style={styles}>
+        <Group>
+          {paths.map((path, i) => (
+            <Path
+              key={i}
+              path={path}
+              strokeWidth={1.5}
+              color="black"
+              style="stroke"
+            />
+          ))}
+        </Group>
+      </Canvas>
+    </GestureDetector>
   );
 });
 
