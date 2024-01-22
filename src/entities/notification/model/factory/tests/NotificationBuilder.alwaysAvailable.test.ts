@@ -1,13 +1,12 @@
 import { addDays, addMonths, subDays, subMonths } from 'date-fns';
 
 import {
-  ActivityPipelineType,
   AvailabilityType,
   NotificationTriggerType,
   PeriodicityType,
 } from '@app/abstract/lib';
+import { ScheduledDateCalculator } from '@app/entities/event/model';
 import {
-  EventEntity,
   EventNotificationDescribers,
   InactiveReason,
   NotificationDescriber,
@@ -16,9 +15,12 @@ import {
 } from '@app/entities/notification/lib';
 
 import {
-  createNotificationBuilder,
-  INotificationBuilder,
-} from '../NotificationBuilder';
+  createBuilder,
+  getEmptyEvent,
+  getEventEntity,
+  getMockNotificationPattern,
+} from './testHelpers';
+import { INotificationBuilder } from '../NotificationBuilder';
 
 const mockUtilityProps = (
   builder: INotificationBuilder,
@@ -52,27 +54,10 @@ const mockUtilityProps = (
   builder.reminderCreator.utility.now = date;
 };
 
-const getTestEvent = (): ScheduleEvent => {
-  return {
-    entityId: 'mock-entity-id',
-    id: 'mock-event-id',
-    scheduledAt: null,
-    selectedDate: null,
-    notificationSettings: {
-      notifications: [],
-      reminder: null,
-    },
-    availability: {
-      allowAccessBeforeFromTime: false,
-      availabilityType: AvailabilityType.ScheduledAccess,
-      periodicityType: PeriodicityType.Daily,
-      oneTimeCompletion: false,
-      endDate: null,
-      startDate: null,
-      timeFrom: null,
-      timeTo: null,
-    },
-  };
+const calculateScheduledAt = (event: ScheduleEvent, now: Date) => {
+  //@ts-ignore
+  ScheduledDateCalculator.getNow = jest.fn().mockReturnValue(new Date(now));
+  return ScheduledDateCalculator.calculate(event, false);
 };
 
 const FixedHourAt = 16;
@@ -118,59 +103,18 @@ const setNormalSettingsToEvent = (
   }
 };
 
-const getEventEntity = (event: ScheduleEvent): EventEntity => {
-  return {
-    event,
-    entity: {
-      description: 'mock-entity-description',
-      name: 'mock-entity-name',
-      id: 'mock-entity-id',
-      isVisible: true,
-      pipelineType: ActivityPipelineType.Regular,
-    },
-  };
-};
-
-const createBuilder = (eventEntity: EventEntity) => {
-  return createNotificationBuilder({
-    appletId: 'mock-applet-id',
-    appletName: 'mock-applet-name',
-    completions: {},
-    eventEntities: [eventEntity],
-    progress: {},
-  });
-};
-
-const getMockNotificationPattern = () => {
-  return {
-    activityFlowId: null,
-    activityId: 'mock-entity-id',
-    appletId: 'mock-applet-id',
-    entityName: 'mock-entity-name',
-    eventDayString: undefined,
-    eventId: 'mock-event-id',
-    fallType: 'current-day',
-    isActive: true,
-    isSpreadInEventSet: false,
-    notificationBody: undefined,
-    notificationHeader: 'mock-entity-name',
-    notificationId: undefined,
-    scheduledAt: undefined,
-    scheduledAtString: undefined,
-    shortId: undefined,
-    type: NotificationType.Regular,
-  } as unknown as NotificationDescriber;
-};
-
 const addReminder = (
   result: NotificationDescriber[],
   eventDate: Date,
-  inactiveDays: number,
+  activityIncompleteDays: number,
   inactiveReason?: 'invalid-period' | 'outdated',
 ) => {
   const mockNotificationPattern = getMockNotificationPattern();
 
-  const reminderTriggerAt = addDays(new Date(eventDate), inactiveDays);
+  const reminderTriggerAt = addDays(
+    new Date(eventDate),
+    activityIncompleteDays,
+  );
   reminderTriggerAt.setHours(ReminderHourAt);
   reminderTriggerAt.setMinutes(ReminderMinuteAt);
 
@@ -180,9 +124,9 @@ const addReminder = (
     scheduledAtString: reminderTriggerAt.toString(),
     eventDayString: eventDate.toString(),
     fallType:
-      inactiveDays === 0
+      activityIncompleteDays === 0
         ? 'current-day'
-        : inactiveDays === 1
+        : activityIncompleteDays === 1
         ? 'next-day'
         : 'in-future',
     type: NotificationType.Reminder,
@@ -221,6 +165,8 @@ const addNotification = (
     scheduledAt: triggerAt.getTime(),
     scheduledAtString: triggerAt.toString(),
     eventDayString: eventDate.toString(),
+    type: NotificationType.Regular,
+    fallType: 'current-day',
     randomDayCrossType: undefined,
   };
 
@@ -242,12 +188,10 @@ describe('NotificationBuilder: always-available penetrating tests', () => {
   it('Should return array of 15 notifications when reminder is unset', () => {
     const today = new Date(2024, 0, 3);
 
-    const event = getTestEvent();
+    const event = getEmptyEvent();
     setNormalSettingsToEvent(event, PeriodicityType.Always, today);
 
-    event.scheduledAt = new Date(today);
-    event.scheduledAt.setHours(FixedHourAt);
-    event.scheduledAt.setMinutes(FixedMinuteAt);
+    event.scheduledAt = calculateScheduledAt(event, today);
 
     const eventEntity = getEventEntity(event);
 
@@ -286,15 +230,13 @@ describe('NotificationBuilder: always-available penetrating tests', () => {
     expect(result.events[0].notifications.length).toEqual(15);
   });
 
-  it('Should return array of 30 notifications including reminders when reminder is set and activityIncomplete is 1', () => {
+  it('Should return array of 36 notifications including reminders when reminder is set and activityIncomplete is 1', () => {
     const today = new Date(2024, 0, 3);
 
-    const event = getTestEvent();
+    const event = getEmptyEvent();
     setNormalSettingsToEvent(event, PeriodicityType.Always, today, true);
 
-    event.scheduledAt = new Date(today);
-    event.scheduledAt.setHours(FixedHourAt);
-    event.scheduledAt.setMinutes(FixedMinuteAt);
+    event.scheduledAt = calculateScheduledAt(event, today);
 
     const eventEntity = getEventEntity(event);
 
@@ -351,5 +293,6 @@ describe('NotificationBuilder: always-available penetrating tests', () => {
     };
 
     expect(result.events).toEqual([expectedResult]);
+    expect(result.events[0].notifications.length).toEqual(36);
   });
 });

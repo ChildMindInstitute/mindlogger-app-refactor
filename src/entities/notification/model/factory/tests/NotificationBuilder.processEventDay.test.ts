@@ -1,23 +1,19 @@
 import { addDays, addMonths, subMonths } from 'date-fns';
 
 import {
-  ActivityPipelineType,
   AvailabilityType,
   NotificationTriggerType,
   PeriodicityType,
 } from '@app/abstract/lib';
 import {
-  EventEntity,
   NotificationDescriber,
   NotificationType,
   ScheduleEvent,
 } from '@app/entities/notification/lib';
 import { MINUTES_IN_HOUR, MS_IN_MINUTE } from '@app/shared/lib';
 
-import {
-  createNotificationBuilder,
-  INotificationBuilder,
-} from '../NotificationBuilder';
+import { createBuilder, getEmptyEvent, getEventEntity } from './testHelpers';
+import { INotificationBuilder } from '../NotificationBuilder';
 
 const mockUtilityProps = (
   builder: INotificationBuilder,
@@ -36,29 +32,6 @@ const mockUtilityProps = (
 
   //@ts-ignore
   builder.utility.isCompleted = jest.fn().mockReturnValue(false);
-};
-
-const getTestEvent = (): ScheduleEvent => {
-  return {
-    entityId: 'mock-entity-id',
-    id: 'mock-event-id',
-    scheduledAt: null,
-    selectedDate: null,
-    notificationSettings: {
-      notifications: [],
-      reminder: null,
-    },
-    availability: {
-      allowAccessBeforeFromTime: false,
-      availabilityType: AvailabilityType.ScheduledAccess,
-      periodicityType: PeriodicityType.Daily,
-      oneTimeCompletion: false,
-      endDate: null,
-      startDate: null,
-      timeFrom: null,
-      timeTo: null,
-    },
-  };
 };
 
 const FixedHourAt = 16;
@@ -102,29 +75,6 @@ const setNormalSettingsToEvent = (
   }
 };
 
-const getEventEntity = (event: ScheduleEvent): EventEntity => {
-  return {
-    event,
-    entity: {
-      description: 'mock-entity-description',
-      name: 'mock-entity-name',
-      id: 'mock-entity-id',
-      isVisible: true,
-      pipelineType: ActivityPipelineType.Regular,
-    },
-  };
-};
-
-const createBuilder = (eventEntity: EventEntity) => {
-  return createNotificationBuilder({
-    appletId: 'mock-applet-id',
-    appletName: 'mock-applet-name',
-    completions: {},
-    eventEntities: [eventEntity],
-    progress: {},
-  });
-};
-
 const getMockNotification = (index = 1) => {
   const result: NotificationDescriber = {
     activityFlowId: null,
@@ -136,20 +86,20 @@ const getMockNotification = (index = 1) => {
     notificationBody: 'mock-notification-body',
     notificationHeader: 'mock-notification-header',
     notificationId: 'mock-notification-id' + index,
-    scheduledAt: new Date(2024, 0, 1).getTime(),
-    scheduledAtString: new Date(2024, 0, 1).toString(),
+    scheduledAt: undefined,
+    scheduledAtString: undefined,
     shortId: 'mock-shortId' + index,
     type: NotificationType.Regular,
-  };
+  } as unknown as NotificationDescriber;
   return result;
 };
 
 describe('NotificationBuilder: processEventDay tests', () => {
-  describe('Test Fixed', () => {
+  describe('Test Fixed notifications', () => {
     it('Should return notification scheduled for the event day when cross day is not set', () => {
       const today = new Date(2024, 0, 3);
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.NotDefined, today);
 
       const eventEntity = getEventEntity(event);
@@ -203,7 +153,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
     it('Should return notification scheduled for the next day from the event day when cross day is set', () => {
       const today = new Date(2024, 0, 3);
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.NotDefined, today);
 
       const eventNotification = event.notificationSettings.notifications[0];
@@ -261,11 +211,11 @@ describe('NotificationBuilder: processEventDay tests', () => {
     });
   });
 
-  describe('Test Random', () => {
+  describe('Test Random notifications', () => {
     it('Should return notification scheduled for the event day when cross day is not set', () => {
       const today = new Date(2024, 0, 3);
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       setNormalSettingsToEvent(
         event,
         PeriodicityType.NotDefined,
@@ -338,7 +288,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
     it('Should return notification scheduled for the event day when cross day is set and schedule-time triggers in the current day', () => {
       const today = new Date(2024, 0, 3);
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       setNormalSettingsToEvent(
         event,
         PeriodicityType.NotDefined,
@@ -412,7 +362,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
     it('Should return notification scheduled for the next from the event day when cross day is set and schedule-time triggers in the next day', () => {
       const today = new Date(2024, 0, 3);
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       setNormalSettingsToEvent(
         event,
         PeriodicityType.NotDefined,

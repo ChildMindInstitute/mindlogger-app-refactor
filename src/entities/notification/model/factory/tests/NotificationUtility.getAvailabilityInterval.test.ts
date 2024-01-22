@@ -4,6 +4,7 @@ import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
 import { ScheduleEvent } from '@app/entities/notification/lib';
 import { DatesFromTo } from '@app/shared/lib';
 
+import { getEmptyEvent } from './testHelpers';
 import { NotificationUtility } from '../NotificationUtility';
 
 const AppletId = 'e31c7468-4197-4ed1-a908-72af80d7765f';
@@ -24,27 +25,9 @@ const mockUtilityProps = (
   utility.now = date;
 };
 
-const getTestEvent = (): ScheduleEvent => {
-  return {
-    entityId: 'mock-entity-id',
-    id: 'mock-id',
-    scheduledAt: null,
-    selectedDate: null,
-    notificationSettings: {
-      notifications: [],
-      reminder: null,
-    },
-    availability: {
-      allowAccessBeforeFromTime: false,
-      availabilityType: AvailabilityType.ScheduledAccess,
-      periodicityType: PeriodicityType.Daily,
-      oneTimeCompletion: false,
-      endDate: null,
-      startDate: null,
-      timeFrom: null,
-      timeTo: null,
-    },
-  };
+const setEventAsScheduled = (event: ScheduleEvent) => {
+  event.availability.availabilityType = AvailabilityType.ScheduledAccess;
+  event.availability.periodicityType = PeriodicityType.NotDefined;
 };
 
 describe('NotificationUtility: getAvailabilityInterval tests', () => {
@@ -56,7 +39,8 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       mockUtilityProps(utility, today);
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
+      setEventAsScheduled(event);
       event.availability.timeFrom = { hours: 15, minutes: 30 };
       event.availability.timeTo = { hours: 20, minutes: 15 };
 
@@ -88,7 +72,8 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       mockUtilityProps(utility, today);
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
+      setEventAsScheduled(event);
       event.availability.timeFrom = { hours: 15, minutes: 30 };
       event.availability.timeTo = { hours: 20, minutes: 15 };
       event.availability.allowAccessBeforeFromTime = true;
@@ -119,7 +104,8 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       mockUtilityProps(utility, today);
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
+      setEventAsScheduled(event);
       event.availability.timeFrom = { hours: 15, minutes: 30 };
       event.availability.timeTo = { hours: 23, minutes: 59 };
 
@@ -153,7 +139,8 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       mockUtilityProps(utility, today);
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
+      setEventAsScheduled(event);
       event.availability.timeFrom = { hours: 15, minutes: 30 };
       event.availability.timeTo = { hours: 0, minutes: 0 };
 
@@ -184,7 +171,8 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       mockUtilityProps(utility, today);
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
+      setEventAsScheduled(event);
       event.availability.timeFrom = { hours: 15, minutes: 30 };
       event.availability.timeTo = { hours: 10, minutes: 35 };
 
@@ -217,7 +205,8 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       mockUtilityProps(utility, today);
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
+      setEventAsScheduled(event);
       event.availability.timeFrom = { hours: 15, minutes: 30 };
       event.availability.timeTo = { hours: 10, minutes: 35 };
       event.availability.allowAccessBeforeFromTime = true;
@@ -251,8 +240,9 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       mockUtilityProps(utility, today);
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       event.availability.availabilityType = AvailabilityType.AlwaysAvailable;
+      event.availability.periodicityType = PeriodicityType.Always;
       event.availability.timeFrom = { hours: 15, minutes: 30 };
       event.availability.timeTo = { hours: 20, minutes: 15 };
 

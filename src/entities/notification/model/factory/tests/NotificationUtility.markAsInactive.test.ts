@@ -1,14 +1,13 @@
 import { addDays, addHours, addMinutes, subDays, subSeconds } from 'date-fns';
 
-import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
 import {
   InactiveReason,
   NotificationDescriber,
   NotificationType,
-  ScheduleEvent,
 } from '@app/entities/notification/lib';
 import { DatesFromTo } from '@app/shared/lib';
 
+import { getEmptyEvent } from './testHelpers';
 import { NotificationUtility } from '../NotificationUtility';
 
 const AppletId = 'e31c7468-4197-4ed1-a908-72af80d7765f';
@@ -46,29 +45,6 @@ const getTestNotification = (): NotificationDescriber => {
     scheduledAtString: ScheduledAt.toString(),
     shortId: 'mock-short-id',
     type: NotificationType.Regular,
-  };
-};
-
-const getTestEvent = (): ScheduleEvent => {
-  return {
-    entityId: 'mock-entity-id',
-    id: 'mock-id',
-    scheduledAt: null,
-    selectedDate: null,
-    notificationSettings: {
-      notifications: [],
-      reminder: null,
-    },
-    availability: {
-      allowAccessBeforeFromTime: false,
-      availabilityType: AvailabilityType.ScheduledAccess,
-      periodicityType: PeriodicityType.Daily,
-      oneTimeCompletion: false,
-      endDate: null,
-      startDate: null,
-      timeFrom: null,
-      timeTo: null,
-    },
   };
 };
 
@@ -297,7 +273,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
 
       notification.scheduledAt = addHours(now, 1).getTime();
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       event.availability.startDate = null;
 
       utility.markIfNotificationOutdated(notification, event);
@@ -320,7 +296,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
 
       notification.scheduledAt = now.getTime();
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       event.availability.startDate = null;
 
       utility.markIfNotificationOutdated(notification, event);
@@ -343,7 +319,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
 
       notification.scheduledAt = addHours(now, 1).getTime();
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       event.availability.startDate = subDays(today, 2);
 
       utility.markIfNotificationOutdated(notification, event);
@@ -366,7 +342,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
 
       notification.scheduledAt = addDays(today, 1).getTime();
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       event.availability.startDate = addDays(today, 1);
 
       utility.markIfNotificationOutdated(notification, event);
@@ -389,7 +365,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
 
       notification.scheduledAt = subSeconds(now, 1).getTime();
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       event.availability.startDate = null;
 
       utility.markIfNotificationOutdated(notification, event);
@@ -413,7 +389,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
 
       notification.scheduledAt = addMinutes(now, 10).getTime();
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       event.availability.startDate = addDays(today, 1);
 
       utility.markIfNotificationOutdated(notification, event);
@@ -441,7 +417,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
 
       notification.scheduledAt = addHours(now, 1).getTime();
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       event.availability.startDate = null;
       event.availability.endDate = addDays(today, 10);
 
@@ -465,7 +441,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
 
       notification.scheduledAt = addHours(now, 1).getTime();
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       event.availability.startDate = addDays(today, 10);
       event.availability.endDate = null;
 
@@ -489,7 +465,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
 
       notification.scheduledAt = subDays(today, 1).getTime();
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       event.availability.startDate = subDays(today, 1);
       event.availability.endDate = addDays(today, 1);
 
@@ -513,7 +489,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
 
       notification.scheduledAt = addDays(today, 1).getTime();
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       event.availability.startDate = subDays(today, 1);
       event.availability.endDate = addDays(today, 1);
 
@@ -537,7 +513,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
 
       notification.scheduledAt = subDays(today, 2).getTime();
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       event.availability.startDate = subDays(today, 1);
       event.availability.endDate = addDays(today, 1);
 
@@ -564,7 +540,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
 
       notification.scheduledAt = addDays(today, 2).getTime();
 
-      const event = getTestEvent();
+      const event = getEmptyEvent();
       event.availability.startDate = subDays(today, 1);
       event.availability.endDate = addDays(today, 1);
 
