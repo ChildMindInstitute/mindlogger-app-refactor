@@ -33,10 +33,10 @@ const DrawingBoard: FC<Props> = props => {
   const initialLines: DrawPoint[][] = useMemo(() => {
     return value.map(line => {
       return line.points.map(point => {
-        return new DrawPoint(point.x, point.y, point.time).scale(100 / width);
+        return new DrawPoint(point.x, point.y, point.time);
       });
     });
-  }, [value, width]);
+  }, [value]);
 
   const drawingValueLineRef = useRef<DrawLine>({
     startTime: Date.now(),
