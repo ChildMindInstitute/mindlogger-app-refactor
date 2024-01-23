@@ -1,6 +1,9 @@
+import { subMinutes } from 'date-fns';
+
 import {
   ActivityPipelineType,
   AvailabilityType,
+  Progress,
   PeriodicityType,
 } from '@app/abstract/lib';
 import {
@@ -48,13 +51,25 @@ export const getEventEntity = (event: ScheduleEvent): EventEntity => {
   };
 };
 
-export const createBuilder = (eventEntity: EventEntity) => {
+export const createBuilder = (eventEntity: EventEntity, completedAt?: Date) => {
+  const progress: Progress = {};
+
+  if (completedAt) {
+    progress['mock-applet-id'] = {};
+    progress['mock-applet-id']['mock-entity-id'] = {};
+    progress['mock-applet-id']['mock-entity-id']['mock-event-id'] = {
+      type: ActivityPipelineType.Regular,
+      startAt: subMinutes(completedAt, 1),
+      endAt: completedAt,
+    };
+  }
+
   return createNotificationBuilder({
     appletId: 'mock-applet-id',
     appletName: 'mock-applet-name',
     completions: {},
     eventEntities: [eventEntity],
-    progress: {},
+    progress,
   });
 };
 

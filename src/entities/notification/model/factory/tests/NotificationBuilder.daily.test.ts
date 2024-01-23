@@ -52,6 +52,9 @@ const mockUtilityProps = (
     });
   //@ts-ignore
   builder.reminderCreator.utility.now = date;
+
+  //@ts-ignore
+  builder.reminderCreator.utility.now = date;
 };
 
 const calculateScheduledAt = (event: ScheduleEvent, now: Date) => {

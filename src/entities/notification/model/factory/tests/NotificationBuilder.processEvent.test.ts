@@ -35,6 +35,9 @@ const mockUtilityProps = (
 
   //@ts-ignore
   builder.utility.isCompleted = jest.fn().mockReturnValue(false);
+
+  //@ts-ignore
+  builder.reminderCreator.utility.now = date;
 };
 
 const setNormalSettingsToEvent = (
