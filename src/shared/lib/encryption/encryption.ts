@@ -106,9 +106,17 @@ class EncryptionManager {
   };
 
   public encryptData = ({ text, key }: EncryptDataProps): string => {
+    const CHUNK_SIZE = 10240;
     const iv: Buffer = crypto.randomBytes(Number(IV_LENGTH));
     const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
-    let encrypted: Buffer = cipher.update(text);
+
+    let encrypted: Buffer = Buffer.alloc(0);
+
+    for (let i = 0; i < text.length; i += CHUNK_SIZE) {
+      const chunk = text.slice(i, i + CHUNK_SIZE);
+      encrypted = Buffer.concat([encrypted, cipher.update(chunk)]);
+    }
+
     encrypted = Buffer.concat([encrypted, cipher.final()]);
     return `${iv.toString('hex')}:${encrypted.toString('hex')}`;
   };

@@ -134,7 +134,13 @@ describe('Encryption', () => {
 
       const encryptedText = encryption.encryptData({ text, key: aesKey });
 
+      const decryptedText = encryption.decryptData({
+        text: encryptedText,
+        key: aesKey,
+      });
+
       expect(typeof encryptedText).toBe('string');
+      expect(decryptedText).toEqual(text);
       expect(encryptedText.length).toBeGreaterThan(0);
     });
   });
