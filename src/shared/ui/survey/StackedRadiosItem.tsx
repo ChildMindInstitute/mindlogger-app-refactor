@@ -74,7 +74,7 @@ const StackedRadios: FC<Props> = ({
           return value?.rowId === currentRowId;
         });
 
-        const optionIndex = config.options.indexOf(option);
+        const optionIndex = config.options.findIndex(o => o.id === option.id);
 
         return (
           <RadioGroup
