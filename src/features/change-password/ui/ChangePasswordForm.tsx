@@ -32,7 +32,7 @@ const ChangePasswordForm: FC<Props> = props => {
   } = useChangePasswordMutation({
     onSuccess: () => {
       props.onChangePasswordSuccess();
-      toast.show('Password updated'); // @todo add correct translations
+      toast.show(t('auth:password_updated'));
     },
   });
 

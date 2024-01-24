@@ -56,10 +56,14 @@ function ActivityStepper({
     trackUserAction,
     setStep: setCurrentStep,
     setAnswer,
+    undoAnswer,
     removeAnswer,
     setAdditionalAnswer,
     removeTimer,
     setContext,
+    iteratePipeline,
+    getNextStepShift,
+    getPreviousStepShift,
   } = useActivityState({
     appletId,
     activityId,
@@ -77,6 +81,7 @@ function ActivityStepper({
   const {
     isFirstStep,
     isTutorialStep,
+    isConditionalLogicItem,
 
     canMoveNext,
     canMoveBack,
@@ -88,7 +93,6 @@ function ActivityStepper({
     showBottomNavigation,
 
     isValid,
-    getNextStepShift,
     getNextButtonText,
   } = useActivityStepper(activityStorageRecord);
 
@@ -174,7 +178,16 @@ function ActivityStepper({
       return nextStepIndex === null ? 1 : nextStepIndex - currentStep;
     }
 
-    return getNextStepShift('forwards');
+    if (isConditionalLogicItem) {
+      iteratePipeline(currentStep + 1, (isItemVisible, step) => {
+        if (!isItemVisible) {
+          removeAnswer(step);
+          removeTimer(step);
+        }
+      });
+    }
+
+    return getNextStepShift();
   };
 
   const onBeforeBack = (): number => {
@@ -186,11 +199,11 @@ function ActivityStepper({
       return moved ? 0 : 1;
     }
 
-    return getNextStepShift('backwards');
+    return getPreviousStepShift();
   };
 
   const onUndo = () => {
-    removeAnswer(currentStep);
+    undoAnswer(currentStep);
     restartIdleTimer();
   };
 
@@ -225,7 +238,11 @@ function ActivityStepper({
         onUndo={onUndo}
       >
         {showWatermark && watermark && (
-          <CachedImage source={watermark} style={styles.watermark} />
+          <CachedImage
+            source={watermark}
+            style={styles.watermark}
+            accessibilityLabel="watermark-image"
+          />
         )}
 
         {showTimeLeft && (

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { AccessibilityProps, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
@@ -23,15 +23,14 @@ type Props = {
   onPress?: (...args: any[]) => void;
 };
 
-const ActivityCard: FC<Props & AccessibilityProps> = ({
-  activity,
-  accessibilityLabel,
-  disabled,
-  onPress,
-}) => {
+const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
   const { t } = useTranslation();
 
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled;
+
+  const accessibilityLabel = activity.isInActivityFlow
+    ? `activity-flow-${activity.activityFlowDetails!.activityFlowName}`
+    : `activity-${activity.name}`;
 
   return (
     <TouchableOpacity

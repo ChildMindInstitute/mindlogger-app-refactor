@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-mobile",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "private": true,
   "scripts": {
     "android": "yarn android:dev",
@@ -85,6 +85,7 @@
     "react-native-device-info": "^10.6.0",
     "react-native-file-access": "^2.5.2",
     "react-native-file-logger": "^0.4.1",
+    "react-native-gesture-handler": "^2.14.1",
     "react-native-get-random-values": "^1.8.0",
     "react-native-image-picker": "^7.0.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",

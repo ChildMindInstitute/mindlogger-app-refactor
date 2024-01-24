@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 import { colors } from '@app/shared/lib';
 
@@ -22,9 +22,19 @@ type Props = {
   values: Array<StackedRadioAnswerValue>;
   onChange: (value: Array<StackedRadioAnswerValue>) => unknown;
   config: StackedRadioConfig;
+  tooltipsShown: boolean;
+  textReplacer: (markdown: string) => string;
 };
 
-const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
+const StackedRadios: FC<Props> = ({
+  values,
+  onChange,
+  config,
+  textReplacer,
+  tooltipsShown,
+}) => {
+  const { options, rows } = config;
+
   const onRowValueChange = (option: StackedRowItemValue, itemIndex: number) => {
     const { id: currentRowId } = config.rows[itemIndex];
     const newValue = [...values];
@@ -35,15 +45,36 @@ const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
     onChange(newValue);
   };
 
+  const memoizedOptions: StackedRowItemValue[] = useMemo(() => {
+    return options.map(option => {
+      return {
+        ...option,
+        tooltip: tooltipsShown ? textReplacer(option.tooltip || '') : '',
+      };
+    });
+  }, [tooltipsShown, options, textReplacer]);
+
+  const memoizedRows = useMemo(() => {
+    return rows.map(row => {
+      return {
+        ...row,
+        tooltip: tooltipsShown ? textReplacer(row.tooltip || '') : '',
+      };
+    });
+  }, [tooltipsShown, rows, textReplacer]);
+
   return (
     <StackedItemsGrid
-      items={config.rows}
+      items={memoizedRows}
+      options={memoizedOptions}
       accessibilityLabel="stack-radio-container"
-      renderCell={(index, option) => {
-        const { id: currentRowId } = config.rows[index];
+      renderCell={(rowIndex, option) => {
+        const { id: currentRowId } = config.rows[rowIndex];
         const currentValue = values.find(value => {
           return value?.rowId === currentRowId;
         });
+
+        const optionIndex = config.options.findIndex(o => o.id === option.id);
 
         return (
           <RadioGroup
@@ -52,8 +83,8 @@ const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
             accessibilityLabel="stack-radio-group"
           >
             <RadioGroup.Item
-              accessibilityLabel="stack-radio-item"
-              onPress={() => onRowValueChange(option, index)}
+              accessibilityLabel={`stacked-radio-item-${optionIndex}-${rowIndex}`}
+              onPress={() => onRowValueChange(option, rowIndex)}
               borderColor={colors.blue}
               value={option.id}
             >
@@ -65,7 +96,6 @@ const StackedRadios: FC<Props> = ({ values, onChange, config }) => {
           </RadioGroup>
         );
       }}
-      options={config.options}
     />
   );
 };

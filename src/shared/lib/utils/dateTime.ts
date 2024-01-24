@@ -34,7 +34,6 @@ export const getHourMinute = (dateTime: Date): HourMinute => {
 };
 
 export const format = (date: Date | number, formatStr: string) => {
-  // todo - it doesn't work, tried  H or HH
   return formatBase(date, formatStr, {
     locale: dateFnsLocales[i18n.language as Language],
   });

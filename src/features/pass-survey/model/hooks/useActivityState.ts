@@ -4,6 +4,8 @@ import {
   UserAction,
   useActivityStorageRecord,
 } from '../../lib';
+import PipelineVisibilityChecker from '../PipelineVisibilityChecker';
+import StepperUtils from '../StepperUtils';
 
 type UseActivityPipelineArgs = {
   appletId: string;
@@ -109,7 +111,7 @@ function useActivityState({
     });
   }
 
-  function removeAnswer(step: number) {
+  function undoAnswer(step: number) {
     const currentStorageRecord = getCurrentActivityStorageRecord();
 
     if (!currentStorageRecord) {
@@ -169,11 +171,63 @@ function useActivityState({
     });
   }
 
+  function removeAnswer(step: number) {
+    const currentStorageRecord = getCurrentActivityStorageRecord();
+
+    if (!currentStorageRecord) {
+      return;
+    }
+
+    const answers = { ...currentStorageRecord.answers };
+
+    delete answers[step];
+
+    if (currentStorageRecord) {
+      upsertActivityStorageRecord({
+        ...currentStorageRecord,
+        answers,
+      });
+    }
+  }
+
+  function iteratePipeline(
+    fromStep: number,
+    callback: (isItemVisible: boolean, step: number) => void,
+  ) {
+    for (
+      let index = fromStep;
+      index < activityStorageRecord!.items.length;
+      index++
+    ) {
+      const currentStorageRecord = getCurrentActivityStorageRecord()!;
+      const visibilityChecker = PipelineVisibilityChecker(
+        currentStorageRecord.items,
+        currentStorageRecord.answers,
+      );
+      const isItemVisible = visibilityChecker.isItemVisible(index);
+
+      callback(isItemVisible, index);
+    }
+  }
+
+  function getNextStepShift() {
+    const stepperUtils = new StepperUtils(getCurrentActivityStorageRecord()!);
+
+    return stepperUtils.getNextStepShift();
+  }
+
+  function getPreviousStepShift() {
+    const stepperUtils = new StepperUtils(getCurrentActivityStorageRecord()!);
+
+    return stepperUtils.getPreviousStepShift();
+  }
+
   return {
     activityStorageRecord,
     userActionCreator,
     setStep,
     setAnswer,
+    undoAnswer,
     removeAnswer,
     setAdditionalAnswer,
     clearActivityStorageRecord,
@@ -181,6 +235,10 @@ function useActivityState({
     removeTimer,
     trackUserAction,
     setContext,
+    iteratePipeline,
+
+    getNextStepShift,
+    getPreviousStepShift,
   };
 }
 

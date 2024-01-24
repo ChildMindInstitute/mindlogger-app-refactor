@@ -22,7 +22,7 @@ function NextButton({ children, isIcon, accessibilityLabel }: Props) {
   if (isIcon) {
     return (
       <TouchableOpacity
-        accessibilityLabel={accessibilityLabel ?? ''}
+        accessibilityLabel={`${accessibilityLabel}-top` ?? ''}
         onPress={onPressNext}
       >
         <RightArrowIcon color={colors.tertiary} size={30} />
@@ -32,7 +32,7 @@ function NextButton({ children, isIcon, accessibilityLabel }: Props) {
 
   return (
     <ActionButton
-      accessibilityLabel={accessibilityLabel ?? ''}
+      accessibilityLabel={`${accessibilityLabel}-bottom` ?? ''}
       onPress={onPressNext}
     >
       {children}

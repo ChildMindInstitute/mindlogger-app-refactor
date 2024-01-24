@@ -3,6 +3,7 @@ import {
   addMilliseconds,
   isEqual,
   startOfDay,
+  subDays,
   subSeconds,
   subWeeks,
 } from 'date-fns';
@@ -35,9 +36,9 @@ import {
   ScheduleEvent,
 } from '../../lib/types';
 
-const NumberOfDaysForSchedule = 14;
+export const NumberOfDaysForSchedule = 14;
 
-const DaysInWeek = 7;
+export const DaysInWeek = 7;
 
 export class NotificationUtility {
   private _weekDays: Date[] | null;
@@ -82,6 +83,18 @@ export class NotificationUtility {
 
   public get currentDay(): Date {
     return startOfDay(this.now);
+  }
+
+  public get yesterday(): Date {
+    return subDays(this.currentDay, 1);
+  }
+
+  public get aWeekAgoDay() {
+    return subDays(this.currentDay, 7);
+  }
+
+  public get lastScheduleDay() {
+    return addDays(this.currentDay, NumberOfDaysForSchedule - 1);
   }
 
   public get weekDays(): Date[] {
@@ -135,6 +148,7 @@ export class NotificationUtility {
     let fallType: FallType | undefined;
 
     const triggerDay = startOfDay(triggerAt);
+
     const tomorrow = addDays(scheduledDay, 1);
 
     if (isEqual(triggerDay, scheduledDay)) {
@@ -325,25 +339,6 @@ export class NotificationUtility {
     }
   }
 
-  public markNotificationsDueToOneTimeCompletionSetting(
-    notifications: NotificationDescriber[],
-    entityId: string,
-    eventId: string,
-    isOneTimeCompletion: boolean,
-  ) {
-    if (!isOneTimeCompletion) {
-      return;
-    }
-
-    const completedAt = this.getActivityCompletedAt(entityId, eventId);
-    if (completedAt) {
-      for (let notification of notifications) {
-        notification.isActive = false;
-        notification.inactiveReason = InactiveReason.OneTimeCompletion;
-      }
-    }
-  }
-
   public markIfNotificationOutdated(
     notification: NotificationDescriber,
     event: ScheduleEvent,
@@ -381,15 +376,6 @@ export class NotificationUtility {
     }
   }
 
-  public markAllAsInactiveDueToEntityHidden(
-    notifications: NotificationDescriber[],
-  ) {
-    for (let notification of notifications) {
-      notification.isActive = false;
-      notification.inactiveReason = InactiveReason.EntityHidden;
-    }
-  }
-
   public createNotification(
     triggerAt: Date,
     name: string,
@@ -419,5 +405,9 @@ export class NotificationUtility {
     };
 
     return notification;
+  }
+
+  public isCompleted(entityId: string, eventId: string) {
+    return !!this.getActivityCompletedAt(entityId, eventId);
   }
 }

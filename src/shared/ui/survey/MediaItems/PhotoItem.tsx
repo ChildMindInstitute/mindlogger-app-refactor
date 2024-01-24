@@ -82,7 +82,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
         selectImage();
       } else {
         await handleBlockedPermissions(
-          '"MindLogger" would like to use your gallery to complete this task', // @todo add specific translations for photo camera
+          t('permissions:gallery'),
           t('media:alert_message'),
         );
       }
@@ -99,7 +99,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
         takePhoto();
       } else {
         await handleBlockedPermissions(
-          '"MindLogger" would like to use your camera to complete this task', // @todo add specific translations for photo camera
+          t('permissions:camera'),
           t('media:alert_message'),
         );
       }

@@ -80,8 +80,17 @@ export const enum InactiveReason {
   OutOfStartEndDay = 'OutOfStartEndDay',
   ActivityCompleted = 'ActivityCompleted',
   EntityHidden = 'EntityHidden',
-  OneTimeCompletion = 'OneTimeCompletion',
   FallOnInvalidPeriod = 'FallOnInvalidPeriod',
+}
+
+export const enum BreakReason {
+  NotDefined = 'NotDefined',
+  ScheduledAtIsEmpty = 'ScheduledAtIsEmpty',
+  ScheduledDayIsLessThanYesterday = 'ScheduledDayIsLessThanYesterday',
+  EventDayToIsLessThanCurrentDay = 'EventDayToIsLessThanCurrentDay',
+  EventDayFromIsMoreThanLastScheduleDay = 'EventDayFromIsMoreThanLastScheduleDay',
+  EntityHidden = 'EntityHidden',
+  OneTimeCompletion = 'OneTimeCompletion',
 }
 
 export type RandomCrossBorderType =
@@ -129,7 +138,9 @@ export type NotificationBuilderInput = {
 export type EventNotificationDescribers = {
   eventId: string;
   eventName: string;
+  scheduleEvent: ScheduleEvent;
   notifications: Array<NotificationDescriber>;
+  breakReason?: BreakReason;
 };
 
 export type AppletNotificationDescribers = {
