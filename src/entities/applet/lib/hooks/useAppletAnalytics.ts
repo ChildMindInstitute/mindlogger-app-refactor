@@ -4,7 +4,7 @@ import { InteractionManager } from 'react-native';
 import { IdentityModel, UserPrivateKeyRecord } from '@app/entities/identity';
 import {
   encryption,
-  formatToISODate,
+  formatToISODateMidnight,
   getCurrentWeekDates,
   useAppSelector,
   wait,
@@ -38,7 +38,7 @@ export const useAppletAnalytics = (appletId: string) => {
   const { data: analyticsResponse, isFetching: isAnalyticsLoading } =
     useAppletAnalyticsQuery({
       appletId,
-      fromDate: formatToISODate(firstDateOfCurrentWeek),
+      fromDate: formatToISODateMidnight(firstDateOfCurrentWeek),
       respondentIds: respondentId ?? '',
       isLastVersion: true,
     });
