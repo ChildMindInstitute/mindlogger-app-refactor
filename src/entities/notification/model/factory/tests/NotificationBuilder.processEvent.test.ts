@@ -13,31 +13,25 @@ import {
   ScheduleEvent,
 } from '@app/entities/notification/lib';
 
-import { createBuilder, getEmptyEvent, getEventEntity } from './testHelpers';
+import {
+  addTime,
+  createBuilder,
+  getEmptyEvent,
+  getEventEntity,
+} from './testHelpers';
 import { INotificationBuilder } from '../NotificationBuilder';
 
 const anyDay = new Date(2018, 1, 2);
 
-const mockUtilityProps = (
-  builder: INotificationBuilder,
-  now: Date,
-  setTime = true,
-) => {
-  const date = new Date(now);
-
-  if (setTime) {
-    date.setHours(15);
-    date.setMinutes(30);
-  }
-
+const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
   //@ts-ignore
-  builder.utility.now = date;
+  builder.utility.now = new Date(now);
 
   //@ts-ignore
   builder.utility.isCompleted = jest.fn().mockReturnValue(false);
 
   //@ts-ignore
-  builder.reminderCreator.utility.now = date;
+  builder.reminderCreator.utility.now = new Date(now);
 };
 
 const setNormalSettingsToEvent = (
@@ -116,6 +110,7 @@ describe('NotificationBuilder: processEvent tests', () => {
     anyPeriodicity.forEach(periodicity => {
       it(`Should break with the reason ScheduledAtIsEmpty when scheduledAt is not set and periodicity=${periodicity}`, () => {
         const today = new Date(2024, 0, 3);
+        const now = addTime({ hours: 15, minutes: 30 }, today);
 
         const event = getEmptyEvent();
         setNormalSettingsToEvent(event, periodicity, today);
@@ -125,7 +120,7 @@ describe('NotificationBuilder: processEvent tests', () => {
         const eventEntity = getEventEntity(event);
 
         const builder = createBuilder(eventEntity);
-        mockUtilityProps(builder, today);
+        mockUtilityProps(builder, now);
 
         const result = builder.build();
 
@@ -143,6 +138,7 @@ describe('NotificationBuilder: processEvent tests', () => {
 
     it('Should break with the reason ScheduledDayIsLessThanYesterday when scheduledAt is 1 day before yesterday and periodicity is Once', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Once, today);
@@ -152,7 +148,7 @@ describe('NotificationBuilder: processEvent tests', () => {
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const result = builder.build();
 
@@ -171,16 +167,18 @@ describe('NotificationBuilder: processEvent tests', () => {
     repeatablePeriodicity.forEach(periodicity => {
       it(`Should break with the reason EventDayToIsLessThanCurrentDay when event-endDate is less than today and periodicity is ${periodicity}`, () => {
         const today = new Date(2024, 0, 3);
+        const now = addTime({ hours: 15, minutes: 30 }, today);
 
         const event = getEmptyEvent();
         setNormalSettingsToEvent(event, periodicity, today);
+
         event.availability.endDate = subDays(today, 1);
         event.scheduledAt = today;
 
         const eventEntity = getEventEntity(event);
 
         const builder = createBuilder(eventEntity);
-        mockUtilityProps(builder, today);
+        mockUtilityProps(builder, now);
 
         const result = builder.build();
 
@@ -199,6 +197,7 @@ describe('NotificationBuilder: processEvent tests', () => {
     repeatablePeriodicity.forEach(periodicity => {
       it(`Should break with the reason EventDayFromIsMoreThanLastScheduleDay when event-startDate is more than lastScheduleDay and periodicity is ${periodicity}`, () => {
         const today = new Date(2024, 0, 3);
+        const now = addTime({ hours: 15, minutes: 30 }, today);
 
         const event = getEmptyEvent();
         setNormalSettingsToEvent(event, periodicity, today);
@@ -208,7 +207,7 @@ describe('NotificationBuilder: processEvent tests', () => {
         const eventEntity = getEventEntity(event);
 
         const builder = createBuilder(eventEntity);
-        mockUtilityProps(builder, today);
+        mockUtilityProps(builder, now);
 
         event.availability.startDate = addDays(
           //@ts-ignore
@@ -233,6 +232,7 @@ describe('NotificationBuilder: processEvent tests', () => {
     anyPeriodicity.forEach(periodicity => {
       it(`Should break with the reason EntityHidden when entity-isVisible flag is false and periodicity is ${periodicity}`, () => {
         const today = new Date(2024, 0, 3);
+        const now = addTime({ hours: 15, minutes: 30 }, today);
 
         const event = getEmptyEvent();
         setNormalSettingsToEvent(event, periodicity, today);
@@ -243,7 +243,7 @@ describe('NotificationBuilder: processEvent tests', () => {
         eventEntity.entity.isVisible = false;
 
         const builder = createBuilder(eventEntity);
-        mockUtilityProps(builder, today);
+        mockUtilityProps(builder, now);
 
         const result = builder.build();
 
@@ -261,6 +261,7 @@ describe('NotificationBuilder: processEvent tests', () => {
 
     it('Should break with the reason OneTimeCompletion when event-oneTimeCompletion flag is true and entity is completed and event is always-available', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Always, today);
@@ -272,7 +273,7 @@ describe('NotificationBuilder: processEvent tests', () => {
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       //@ts-ignore
       builder.utility.isCompleted = jest.fn().mockReturnValue(true);
@@ -294,6 +295,7 @@ describe('NotificationBuilder: processEvent tests', () => {
   describe('Test the processing part of algorithm', () => {
     it('Should call both: processEventDay and reminderCreator.create each one once when periodicity is once', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Once, today, true);
@@ -303,7 +305,7 @@ describe('NotificationBuilder: processEvent tests', () => {
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const mockNotification = getMockNotification(1);
       const mockReminder = getMockNotification(2);
@@ -337,6 +339,7 @@ describe('NotificationBuilder: processEvent tests', () => {
     repeatablePeriodicity.forEach(periodicity => {
       it(`Should fulfill array with reminders and notifications in correct order way when periodicity is ${periodicity} and 1 reminder is not associated with an event day`, () => {
         const today = new Date(2024, 0, 3);
+        const now = addTime({ hours: 15, minutes: 30 }, today);
 
         const event = getEmptyEvent();
         setNormalSettingsToEvent(event, periodicity, today, true);
@@ -346,7 +349,7 @@ describe('NotificationBuilder: processEvent tests', () => {
         const eventEntity = getEventEntity(event);
 
         const builder = createBuilder(eventEntity);
-        mockUtilityProps(builder, today);
+        mockUtilityProps(builder, now);
 
         const extractEventDaysMock = jest.fn();
         //@ts-ignore

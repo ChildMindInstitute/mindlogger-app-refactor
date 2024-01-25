@@ -15,6 +15,7 @@ import {
 } from '@app/entities/notification/lib';
 
 import {
+  addTime,
   createBuilder,
   getEmptyEvent,
   getEventEntity,
@@ -22,20 +23,9 @@ import {
 } from './testHelpers';
 import { INotificationBuilder } from '../NotificationBuilder';
 
-const mockUtilityProps = (
-  builder: INotificationBuilder,
-  now: Date,
-  setTime = true,
-) => {
-  const date = new Date(now);
-
-  if (setTime) {
-    date.setHours(15);
-    date.setMinutes(30);
-  }
-
+const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
   //@ts-ignore
-  builder.utility.now = date;
+  builder.utility.now = new Date(now);
 
   //@ts-ignore
   builder.utility.getNotificationIds = jest.fn().mockReturnValue({
@@ -51,10 +41,7 @@ const mockUtilityProps = (
       shortId: undefined,
     });
   //@ts-ignore
-  builder.reminderCreator.utility.now = date;
-
-  //@ts-ignore
-  builder.reminderCreator.utility.now = date;
+  builder.reminderCreator.utility.now = new Date(now);
 };
 
 const calculateScheduledAt = (event: ScheduleEvent, now: Date) => {
@@ -249,18 +236,19 @@ describe('NotificationBuilder: daily event penetrating tests', () => {
   describe('Test non cross-day', () => {
     it('Should return array of 9 notifications when reminder is unset and event-endDate is today + 7 days', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Daily, today);
 
       event.availability.endDate = addDays(today, 7);
 
-      event.scheduledAt = calculateScheduledAt(event, today);
+      event.scheduledAt = calculateScheduledAt(event, now);
 
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const result = builder.build();
 
@@ -289,18 +277,19 @@ describe('NotificationBuilder: daily event penetrating tests', () => {
 
     it('Should return array of 9 notifications when reminder is unset and event-startDate is today + 5 days', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Daily, today);
 
       event.availability.startDate = addDays(today, 5);
 
-      event.scheduledAt = calculateScheduledAt(event, today);
+      event.scheduledAt = calculateScheduledAt(event, now);
 
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const result = builder.build();
 
@@ -329,18 +318,19 @@ describe('NotificationBuilder: daily event penetrating tests', () => {
 
     it('Should return array of 24 notifications including reminders when reminder is set and activityIncomplete is 1 and event-endDate is today + 7 days', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Daily, today, true);
 
       event.availability.endDate = addDays(today, 7);
 
-      event.scheduledAt = calculateScheduledAt(event, today);
+      event.scheduledAt = calculateScheduledAt(event, now);
 
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const result = builder.build();
 
@@ -385,18 +375,19 @@ describe('NotificationBuilder: daily event penetrating tests', () => {
 
     it('Should return array of 18 notifications including reminders when reminder is set and activityIncomplete is 1 and event-startDate is today + 5 days', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Daily, today, true);
 
       event.availability.startDate = addDays(today, 5);
 
-      event.scheduledAt = calculateScheduledAt(event, today);
+      event.scheduledAt = calculateScheduledAt(event, now);
 
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const result = builder.build();
 
@@ -436,18 +427,19 @@ describe('NotificationBuilder: daily event penetrating tests', () => {
   describe('Test cross-day, regular notifications time should be set to the next day from the event day', () => {
     it('Should return array of 9 notifications when reminder is unset and event-endDate is today + 7 days', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setCrossDaySettingsToEvent(event, PeriodicityType.Daily, today);
 
       event.availability.endDate = addDays(today, 7);
 
-      event.scheduledAt = calculateScheduledAt(event, today);
+      event.scheduledAt = calculateScheduledAt(event, now);
 
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const result = builder.build();
 
@@ -476,18 +468,19 @@ describe('NotificationBuilder: daily event penetrating tests', () => {
 
     it('Should return array of 9 notifications when reminder is unset and event-startDate is today + 5 days', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setCrossDaySettingsToEvent(event, PeriodicityType.Daily, today);
 
       event.availability.startDate = addDays(today, 5);
 
-      event.scheduledAt = calculateScheduledAt(event, today);
+      event.scheduledAt = calculateScheduledAt(event, now);
 
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const result = builder.build();
 
@@ -516,18 +509,19 @@ describe('NotificationBuilder: daily event penetrating tests', () => {
 
     it('Should return array of 24 notifications including reminders when reminder is set and activityIncomplete is 1 and event-endDate is today + 7 days', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setCrossDaySettingsToEvent(event, PeriodicityType.Daily, today, true);
 
       event.availability.endDate = addDays(today, 7);
 
-      event.scheduledAt = calculateScheduledAt(event, today);
+      event.scheduledAt = calculateScheduledAt(event, now);
 
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const result = builder.build();
 
@@ -572,18 +566,19 @@ describe('NotificationBuilder: daily event penetrating tests', () => {
 
     it('Should return array of 18 notifications including reminders when reminder is set and activityIncomplete is 1 and event-startDate is today + 5 days', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setCrossDaySettingsToEvent(event, PeriodicityType.Daily, today, true);
 
       event.availability.startDate = addDays(today, 5);
 
-      event.scheduledAt = calculateScheduledAt(event, today);
+      event.scheduledAt = calculateScheduledAt(event, now);
 
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const result = builder.build();
 

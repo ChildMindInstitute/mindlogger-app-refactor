@@ -12,6 +12,7 @@ import {
   NotificationType,
   ScheduleEvent,
 } from '@app/entities/notification/lib';
+import { HourMinute } from '@app/shared/lib';
 
 import { createNotificationBuilder } from '../NotificationBuilder';
 
@@ -92,4 +93,11 @@ export const getMockNotificationPattern = () => {
     shortId: undefined,
     type: NotificationType.NotDefined,
   } as unknown as NotificationDescriber;
+};
+
+export const addTime = (time: HourMinute, date: Date): Date => {
+  const result = new Date(date);
+  result.setHours(time.hours);
+  result.setMinutes(time.minutes);
+  return result;
 };

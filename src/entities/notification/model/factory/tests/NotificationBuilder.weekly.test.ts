@@ -24,6 +24,7 @@ import {
 } from '@app/entities/notification/lib';
 
 import {
+  addTime,
   createBuilder,
   getEmptyEvent,
   getEventEntity,
@@ -32,10 +33,8 @@ import {
 import { INotificationBuilder } from '../NotificationBuilder';
 
 const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
-  const date = new Date(now);
-
   //@ts-ignore
-  builder.utility.now = date;
+  builder.utility.now = new Date(now);
 
   //@ts-ignore
   builder.utility.getNotificationIds = jest.fn().mockReturnValue({
@@ -52,10 +51,10 @@ const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
     });
 
   //@ts-ignore
-  builder.notificationDaysExtractor.utility.now = date;
+  builder.reminderCreator.utility.now = new Date(now);
 
   //@ts-ignore
-  builder.reminderCreator.utility.now = date;
+  builder.notificationDaysExtractor.utility.now = new Date(now);
 };
 
 const calculateScheduledAt = (event: ScheduleEvent, now: Date) => {
@@ -246,9 +245,7 @@ describe('NotificationBuilder: weekly event penetrating tests', () => {
   describe('Test non cross-day', () => {
     it('Should return array with 2 notifications when reminder is unset and selectedDate is today', () => {
       const today = new Date(2024, 0, 3);
-      const now = new Date(today);
-      now.setHours(12);
-      now.setMinutes(30);
+      const now = addTime({ hours: 12, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Weekly, today);
@@ -282,9 +279,7 @@ describe('NotificationBuilder: weekly event penetrating tests', () => {
 
     it('Should return array with 3 notifications when reminder is unset and selectedDate is today - 2 days', () => {
       const today = new Date(2024, 0, 3);
-      const now = new Date(today);
-      now.setHours(12);
-      now.setMinutes(30);
+      const now = addTime({ hours: 12, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Weekly, today);
@@ -319,9 +314,7 @@ describe('NotificationBuilder: weekly event penetrating tests', () => {
 
     it('Should return array with 2 notifications when reminder is unset and selectedDate is today - 7 days', () => {
       const today = new Date(2024, 0, 3);
-      const now = new Date(today);
-      now.setHours(12);
-      now.setMinutes(30);
+      const now = addTime({ hours: 12, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Weekly, today);
@@ -355,9 +348,7 @@ describe('NotificationBuilder: weekly event penetrating tests', () => {
 
     it('Should return array with 3 notifications when reminder is unset and selectedDate is today - 10 days', () => {
       const today = new Date(2024, 0, 3);
-      const now = new Date(today);
-      now.setHours(12);
-      now.setMinutes(30);
+      const now = addTime({ hours: 12, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Weekly, today);
@@ -392,9 +383,7 @@ describe('NotificationBuilder: weekly event penetrating tests', () => {
 
     it('Should return array with 3 notifications when reminder is unset and selectedDate is today + 2 days', () => {
       const today = new Date(2024, 0, 3);
-      const now = new Date(today);
-      now.setHours(12);
-      now.setMinutes(30);
+      const now = addTime({ hours: 12, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Weekly, today);
@@ -429,9 +418,7 @@ describe('NotificationBuilder: weekly event penetrating tests', () => {
 
     it('Should return array with 8 notifications when reminder is set and selectedDate is today', () => {
       const today = new Date(2024, 0, 3);
-      const now = new Date(today);
-      now.setHours(12);
-      now.setMinutes(30);
+      const now = addTime({ hours: 12, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Weekly, today, true);
@@ -477,9 +464,7 @@ describe('NotificationBuilder: weekly event penetrating tests', () => {
   describe('Test cross-day', () => {
     it('Should return array with 3 notifications when reminder is unset and selectedDate is yesterday', () => {
       const today = new Date(2024, 0, 3);
-      const now = new Date(today);
-      now.setHours(12);
-      now.setMinutes(30);
+      const now = addTime({ hours: 12, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Weekly, today, false);
@@ -525,9 +510,7 @@ describe('NotificationBuilder: weekly event penetrating tests', () => {
 
     it('Should return array with 10 notifications when reminder is set and selectedDate is yesterday', () => {
       const today = new Date(2024, 0, 3);
-      const now = new Date(today);
-      now.setHours(12);
-      now.setMinutes(30);
+      const now = addTime({ hours: 12, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Weekly, today, true);
@@ -590,9 +573,7 @@ describe('NotificationBuilder: weekly event penetrating tests', () => {
   describe('Test when there is progress with completed entity', () => {
     it('Should return array with 2 notifications when reminder is unset and selectedDate is today and regular event', () => {
       const today = new Date(2024, 0, 3);
-      const now = new Date(today);
-      now.setHours(16);
-      now.setMinutes(30);
+      const now = addTime({ hours: 16, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Weekly, today);
@@ -626,9 +607,7 @@ describe('NotificationBuilder: weekly event penetrating tests', () => {
 
     it('Should return array with 2 notifications when reminder is unset and selectedDate is yesterday and cross day event', () => {
       const today = new Date(2024, 0, 3);
-      const now = new Date(today);
-      now.setHours(5);
-      now.setMinutes(0);
+      const now = addTime({ hours: 5, minutes: 0 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.Weekly, today, false);

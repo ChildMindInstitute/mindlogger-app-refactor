@@ -12,29 +12,25 @@ import {
 } from '@app/entities/notification/lib';
 import { MINUTES_IN_HOUR, MS_IN_MINUTE } from '@app/shared/lib';
 
-import { createBuilder, getEmptyEvent, getEventEntity } from './testHelpers';
+import {
+  addTime,
+  createBuilder,
+  getEmptyEvent,
+  getEventEntity,
+} from './testHelpers';
 import { INotificationBuilder } from '../NotificationBuilder';
 
-const mockUtilityProps = (
-  builder: INotificationBuilder,
-  now: Date,
-  setTime = true,
-) => {
+const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
   const date = new Date(now);
 
-  if (setTime) {
-    date.setHours(15);
-    date.setMinutes(30);
-  }
-
   //@ts-ignore
-  builder.utility.now = date;
+  builder.utility.now = new Date(date);
 
   //@ts-ignore
   builder.utility.isCompleted = jest.fn().mockReturnValue(false);
 
   //@ts-ignore
-  builder.reminderCreator.utility.now = date;
+  builder.reminderCreator.utility.now = new Date(date);
 };
 
 const FixedHourAt = 16;
@@ -101,6 +97,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
   describe('Test Fixed notifications', () => {
     it('Should return notification scheduled for the event day when cross day is not set', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.NotDefined, today);
@@ -108,7 +105,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const markCompletedMock = jest.fn();
       const markOutdatedMock = jest.fn();
@@ -155,6 +152,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
 
     it('Should return notification scheduled for the next day from the event day when cross day is set', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(event, PeriodicityType.NotDefined, today);
@@ -168,7 +166,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const markCompletedMock = jest.fn();
       const markOutdatedMock = jest.fn();
@@ -217,6 +215,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
   describe('Test Random notifications', () => {
     it('Should return notification scheduled for the event day when cross day is not set', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(
@@ -237,7 +236,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const markCompletedMock = jest.fn();
       const markOutdatedMock = jest.fn();
@@ -290,6 +289,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
 
     it('Should return notification scheduled for the event day when cross day is set and schedule-time triggers in the current day', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(
@@ -311,7 +311,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const markCompletedMock = jest.fn();
       const markOutdatedMock = jest.fn();
@@ -364,6 +364,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
 
     it('Should return notification scheduled for the next from the event day when cross day is set and schedule-time triggers in the next day', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
       setNormalSettingsToEvent(
@@ -385,7 +386,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       const eventEntity = getEventEntity(event);
 
       const builder = createBuilder(eventEntity);
-      mockUtilityProps(builder, today);
+      mockUtilityProps(builder, now);
 
       const markCompletedMock = jest.fn();
       const markOutdatedMock = jest.fn();

@@ -22,20 +22,9 @@ import {
 } from './testHelpers';
 import { INotificationBuilder } from '../NotificationBuilder';
 
-const mockUtilityProps = (
-  builder: INotificationBuilder,
-  now: Date,
-  setTime = true,
-) => {
-  const date = new Date(now);
-
-  if (setTime) {
-    date.setHours(15);
-    date.setMinutes(30);
-  }
-
+const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
   //@ts-ignore
-  builder.utility.now = date;
+  builder.utility.now = new Date(now);
 
   //@ts-ignore
   builder.utility.getNotificationIds = jest.fn().mockReturnValue({
@@ -51,10 +40,7 @@ const mockUtilityProps = (
       shortId: undefined,
     });
   //@ts-ignore
-  builder.reminderCreator.utility.now = date;
-
-  //@ts-ignore
-  builder.reminderCreator.utility.now = date;
+  builder.reminderCreator.utility.now = new Date(now);
 };
 
 const calculateScheduledAt = (event: ScheduleEvent, now: Date) => {

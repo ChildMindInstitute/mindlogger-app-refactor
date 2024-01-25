@@ -4,25 +4,14 @@ import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
 import { ScheduleEvent } from '@app/entities/notification/lib';
 import { DatesFromTo } from '@app/shared/lib';
 
-import { getEmptyEvent } from './testHelpers';
+import { addTime, getEmptyEvent } from './testHelpers';
 import { NotificationUtility } from '../NotificationUtility';
 
 const AppletId = 'e31c7468-4197-4ed1-a908-72af80d7765f';
 
-const mockUtilityProps = (
-  utility: NotificationUtility,
-  now: Date,
-  setTime = true,
-) => {
-  const date = new Date(now);
-
-  if (setTime) {
-    date.setHours(15);
-    date.setMinutes(30);
-  }
-
+const mockUtilityProps = (utility: NotificationUtility, now: Date) => {
   //@ts-ignore
-  utility.now = date;
+  utility.now = new Date(now);
 };
 
 const setEventAsScheduled = (event: ScheduleEvent) => {
@@ -34,10 +23,11 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
   describe('Test current day events', () => {
     it('Should return dates interval within the event day with timeFrom/to set and equal to event timeFrom/to when allowAccessBeforeFromTime is false', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const utility = new NotificationUtility({}, AppletId);
 
-      mockUtilityProps(utility, today);
+      mockUtilityProps(utility, now);
 
       const event = getEmptyEvent();
       setEventAsScheduled(event);
@@ -67,10 +57,11 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
     it('Should return dates interval within the event day with only timeTo set and equal to event timeTo when allowAccessBeforeFromTime is true', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const utility = new NotificationUtility({}, AppletId);
 
-      mockUtilityProps(utility, today);
+      mockUtilityProps(utility, now);
 
       const event = getEmptyEvent();
       setEventAsScheduled(event);
@@ -99,10 +90,11 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
     it('Should return dates interval within the event day with timeFrom equal to event timeFrom and timeTo set to 23:59 when allowAccessBeforeFromTime is false and event timeTo is 23:59', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const utility = new NotificationUtility({}, AppletId);
 
-      mockUtilityProps(utility, today);
+      mockUtilityProps(utility, now);
 
       const event = getEmptyEvent();
       setEventAsScheduled(event);
@@ -134,10 +126,11 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
   describe('Test cross day event', () => {
     it('Should return dates interval where dateFrom is in event day and dateTo is start of the next day when allowAccessBeforeFromTime is false and event timeTo is 00:00', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const utility = new NotificationUtility({}, AppletId);
 
-      mockUtilityProps(utility, today);
+      mockUtilityProps(utility, now);
 
       const event = getEmptyEvent();
       setEventAsScheduled(event);
@@ -166,10 +159,11 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
     it('Should return dates interval where dateFrom is in event day and dateTo is in the next day when allowAccessBeforeFromTime is false', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const utility = new NotificationUtility({}, AppletId);
 
-      mockUtilityProps(utility, today);
+      mockUtilityProps(utility, now);
 
       const event = getEmptyEvent();
       setEventAsScheduled(event);
@@ -200,10 +194,11 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
     it('Should return dates interval where dateFrom is start of event day and dateTo is in the next day when allowAccessBeforeFromTime is true', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const utility = new NotificationUtility({}, AppletId);
 
-      mockUtilityProps(utility, today);
+      mockUtilityProps(utility, now);
 
       const event = getEmptyEvent();
       setEventAsScheduled(event);
@@ -235,10 +230,11 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
   describe('Test always-available event', () => {
     it('Should return dates interval where dateFrom is start of eventDay and dateTo is end of eventDay', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const utility = new NotificationUtility({}, AppletId);
 
-      mockUtilityProps(utility, today);
+      mockUtilityProps(utility, now);
 
       const event = getEmptyEvent();
       event.availability.availabilityType = AvailabilityType.AlwaysAvailable;
