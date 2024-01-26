@@ -5,7 +5,7 @@ const jestConfig: JestConfigWithTsJest = {
   preset: 'react-native',
   moduleFileExtensions: ['ts', 'tsx', 'js'],
   transform: {
-    '^.+\\.(js)$': '<rootDir>/node_modules/babel-jest',
+    '^.+\\.(js|jsx)$': '<rootDir>/node_modules/babel-jest',
     '\\.(ts|tsx)$': [
       'ts-jest',
       {

@@ -84,22 +84,24 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
       <XStack mt="$2" jc="space-between">
         <YStack maxWidth="30%" ai="center">
           <Box h={hasAtLeastOneImage ? 44 : 0} w={hasAtLeastOneImage ? 44 : 0}>
-            {leftImageUrl && (
+            {leftImageUrl ? (
               <Box borderRadius={4} overflow="hidden">
                 <CachedImage
+                  data-test="slide-left-image"
                   accessibilityLabel={addRightPartTo('slider-left-image')}
                   style={styles.image}
                   resizeMode="contain"
                   source={leftImageUrl}
                 />
               </Box>
-            )}
+            ) : null}
           </Box>
 
           {leftTitle ? (
             <Text
               accessibilityLabel={addRightPartTo('min-label')}
               textAlign="center"
+              data-test="slide-left-title"
             >
               {leftTitle}
             </Text>
@@ -111,6 +113,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
             {rightImageUrl && (
               <XStack jc="center">
                 <CachedImage
+                  data-test="slide-right-image"
                   accessibilityLabel={addRightPartTo('slider-right-image')}
                   style={styles.image}
                   resizeMode="contain"
@@ -123,6 +126,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
           {rightTitle ? (
             <Text
               accessibilityLabel={addRightPartTo('max-label')}
+              data-test="slide-right-title"
               textAlign="center"
             >
               {rightTitle}
