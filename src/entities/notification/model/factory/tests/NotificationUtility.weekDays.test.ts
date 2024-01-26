@@ -1,13 +1,9 @@
+import { addTime } from './testHelpers';
 import { NotificationUtility } from '../NotificationUtility';
 
 const AppletId = 'e31c7468-4197-4ed1-a908-72af80d7765f';
 
-const mockUtilityProps = (utility: NotificationUtility, currentDay: Date) => {
-  const now = new Date(currentDay);
-
-  now.setHours(15);
-  now.setMinutes(30);
-
+const mockUtilityProps = (utility: NotificationUtility, now: Date) => {
   //@ts-ignore
   utility.now = new Date(now);
 };
@@ -15,10 +11,11 @@ const mockUtilityProps = (utility: NotificationUtility, currentDay: Date) => {
 describe('NotificationUtility: weekdays property tests.', () => {
   it('Should return 15 weekdays days when today is Sat, Jan 6', () => {
     const today = new Date(2024, 0, 6);
+    const now = addTime({ hours: 15, minutes: 30 }, today);
 
     const utility = new NotificationUtility({}, AppletId);
 
-    mockUtilityProps(utility, today);
+    mockUtilityProps(utility, now);
 
     const weekDaysIndexes = utility.weekDays.map(x => x.getDay());
 
@@ -31,10 +28,11 @@ describe('NotificationUtility: weekdays property tests.', () => {
 
   it('Should return weekdays where the first day is Monday, Jan 1 and the last is Fri, Jan 19 when today is Sat, Jan 6', () => {
     const today = new Date(2024, 0, 6);
+    const now = addTime({ hours: 15, minutes: 30 }, today);
 
     const utility = new NotificationUtility({}, AppletId);
 
-    mockUtilityProps(utility, today);
+    mockUtilityProps(utility, now);
 
     const first = utility.weekDays[0];
 
@@ -47,10 +45,11 @@ describe('NotificationUtility: weekdays property tests.', () => {
 
   it('Should return 15 weekdays days when today is Wed, Jan 3', () => {
     const today = new Date(2024, 0, 3);
+    const now = addTime({ hours: 15, minutes: 30 }, today);
 
     const utility = new NotificationUtility({}, AppletId);
 
-    mockUtilityProps(utility, today);
+    mockUtilityProps(utility, now);
 
     const weekDaysIndexes = utility.weekDays.map(x => x.getDay());
 
@@ -63,10 +62,11 @@ describe('NotificationUtility: weekdays property tests.', () => {
 
   it('Should return weekdays where the first day is Wed, Dec 27 and the last is Tue, Jan 16 when today is Wed, Jan 3', () => {
     const today = new Date(2024, 0, 3);
+    const now = addTime({ hours: 15, minutes: 30 }, today);
 
     const utility = new NotificationUtility({}, AppletId);
 
-    mockUtilityProps(utility, today);
+    mockUtilityProps(utility, now);
 
     const first = utility.weekDays[0];
 
