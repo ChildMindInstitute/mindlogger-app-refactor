@@ -81,12 +81,17 @@ function ActivityItem({
   const releaseScrolling = () => setScrollEnabled(true);
 
   const onTimeIsUp = useCallback(() => {
-    next(true);
+    next(true, true);
   }, [next]);
 
   function moveToNextItem() {
-    if (!pipelineItem.additionalText?.required) {
-      setImmediate(() => next(true));
+    const isRadioItem = pipelineItem.type === 'Radio';
+    const autoAdvanceDisabled =
+      isRadioItem && !pipelineItem.payload.autoAdvance;
+    const shouldAutoFinish = !isRadioItem;
+
+    if (!pipelineItem.additionalText?.required && !autoAdvanceDisabled) {
+      setImmediate(() => next(true, shouldAutoFinish));
     }
   }
 
