@@ -1,6 +1,6 @@
 export { default as SimpleTextInput } from './SimpleTextInput';
 export { RadioActivityItem } from './RadioActivityItem';
-export { default as StackedRadiosItem } from './StackedRadiosItem';
+export { StackedRadiosItem } from './StackedRadioItem';
 export { StackedCheckBoxItem } from './StackedCheckboxItem';
 export { default as AudioPlayer } from './AudioPlayer';
 export { default as VideoPlayer } from './VideoPlayer';

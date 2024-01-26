@@ -2,12 +2,12 @@ import { FC, useMemo } from 'react';
 
 import { colors } from '@app/shared/lib';
 
+import { RadioGroup } from '../..';
 import {
   StackedItem,
   StackedItemsGrid,
   StackedRowItemValue,
-} from './StackedItemsGrid';
-import { RadioGroup } from '../';
+} from '../StackedItemsGrid';
 
 type StackedRadioConfig = {
   rows: Array<StackedItem>;
@@ -84,6 +84,7 @@ const StackedRadios: FC<Props> = ({
           >
             <RadioGroup.Item
               accessibilityLabel={`stacked-radio-item-${optionIndex}-${rowIndex}`}
+              data-test={`stack-radio-item-${option.id}-${currentRowId}`}
               onPress={() => onRowValueChange(option, rowIndex)}
               borderColor={colors.blue}
               value={option.id}
