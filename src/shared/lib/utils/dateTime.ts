@@ -47,8 +47,8 @@ export const formatToDtoTime = (date: Date | number, addSeconds = false) => {
   return formatBase(date, addSeconds ? 'HH:mm:ss' : 'HH:mm');
 };
 
-export const formatToISODate = (date: Date | number) =>
-  new Date(date).toISOString().substring(0, 19);
+export const formatToISODateMidnight = (date: Date | number) =>
+  formatBase(date, "yyyy-MM-dd'T'00:00:00");
 
 type TimeOrNoun = {
   formattedDate?: string | null;
