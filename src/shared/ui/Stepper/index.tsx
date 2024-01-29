@@ -72,7 +72,13 @@ export function Stepper({
   const stepRef = useRef(startFrom ?? 0);
 
   const next = useCallback(
-    (isForced: boolean, shouldAutoFinish: boolean) => {
+    ({
+      isForced,
+      shouldAutoSubmit,
+    }: {
+      isForced: boolean;
+      shouldAutoSubmit: boolean;
+    }) => {
       const step = stepRef.current;
       const stepShift = onBeforeNextRef.current?.(step) ?? 1;
       const nextStep = step + stepShift;
@@ -83,7 +89,7 @@ export function Stepper({
         stepRef.current = nextStep;
         onNextRef.current?.(nextStep, isForced);
       } else if (nextStep >= stepsCount) {
-        if (isForced && !shouldAutoFinish) {
+        if (isForced && !shouldAutoSubmit) {
           return;
         }
 

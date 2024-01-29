@@ -16,7 +16,7 @@ function NextButton({ children, isIcon, accessibilityLabel }: Props) {
   const { next } = useContext(HandlersContext);
 
   const onPressNext = useCallback(() => {
-    next(false, true);
+    next({ isForced: false, shouldAutoSubmit: true });
   }, [next]);
 
   if (isIcon) {
