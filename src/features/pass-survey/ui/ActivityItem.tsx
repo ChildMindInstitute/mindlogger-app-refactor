@@ -86,12 +86,11 @@ function ActivityItem({
 
   function moveToNextItem() {
     const isRadioItem = pipelineItem.type === 'Radio';
-    const autoAdvanceEnabled = !(
-      isRadioItem && !pipelineItem.payload.autoAdvance
-    );
+    const autoAdvanceDisabled =
+      isRadioItem && !pipelineItem.payload.autoAdvance;
     const shouldAutoSubmit = !isRadioItem;
 
-    if (!pipelineItem.additionalText?.required && autoAdvanceEnabled) {
+    if (!pipelineItem.additionalText?.required && !autoAdvanceDisabled) {
       setImmediate(() =>
         next({ isForced: true, shouldAutoSubmit: shouldAutoSubmit }),
       );
