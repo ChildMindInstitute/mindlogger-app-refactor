@@ -455,6 +455,7 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
       randomizeOptions: dto.config.randomizeOptions,
       setAlerts: dto.config.setAlerts,
       addTooltip: dto.config.addTooltip,
+      autoAdvance: dto.config.autoAdvance,
       setPalette: dto.config.setPalette,
       options: mapToRadioAlerts(dto.responseValues.options),
     },

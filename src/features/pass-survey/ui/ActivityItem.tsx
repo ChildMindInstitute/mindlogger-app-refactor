@@ -81,12 +81,19 @@ function ActivityItem({
   const releaseScrolling = () => setScrollEnabled(true);
 
   const onTimeIsUp = useCallback(() => {
-    next(true);
+    next({ isForced: true, shouldAutoSubmit: true });
   }, [next]);
 
   function moveToNextItem() {
-    if (!pipelineItem.additionalText?.required) {
-      setImmediate(() => next(true));
+    const isRadioItem = pipelineItem.type === 'Radio';
+    const autoAdvanceDisabled =
+      isRadioItem && !pipelineItem.payload.autoAdvance;
+    const shouldAutoSubmit = !isRadioItem;
+
+    if (!pipelineItem.additionalText?.required && !autoAdvanceDisabled) {
+      setImmediate(() =>
+        next({ isForced: true, shouldAutoSubmit: shouldAutoSubmit }),
+      );
     }
   }
 
