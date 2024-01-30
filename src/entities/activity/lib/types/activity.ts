@@ -187,6 +187,7 @@ type RadioConfig = {
   setAlerts: boolean;
   addTooltip: boolean;
   setPalette: boolean;
+  autoAdvance: boolean;
   options: Array<{
     id: string;
     text: string;

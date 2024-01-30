@@ -7,7 +7,7 @@ type Config = {
   rightImageUrl: string | null;
 };
 
-type SliderConfig = Config & {
+export type SliderConfig = Config & {
   showTickMarks?: boolean | null;
   showTickLabels?: boolean | null;
   isContinuousSlider?: boolean | null;
@@ -22,7 +22,7 @@ export type SliderProps = {
   onRelease?: () => void;
 };
 
-type StackedSliderConfig = {
+export type StackedSliderConfig = {
   rows: (Config & {
     label: string;
     id: string;

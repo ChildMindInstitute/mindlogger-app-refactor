@@ -1,6 +1,8 @@
 import { jest } from '@jest/globals';
 import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
 
+import './jest.components.jsx';
+
 jest.mock('react-native-file-access', () => {
   return {
     FileSystem: {
@@ -171,3 +173,7 @@ jest.mock('@react-native-community/netinfo', () => {
 });
 
 jest.mock('react-native-device-info', () => mockRNDeviceInfo);
+
+jest.mock('react-native-gesture-handler', () =>
+  jest.mock('react-native-gesture-handler'),
+);

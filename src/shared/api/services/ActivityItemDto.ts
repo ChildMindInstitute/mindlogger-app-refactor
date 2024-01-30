@@ -150,6 +150,7 @@ type SingleSelectionConfiguration = ButtonsConfiguration &
     addScores: boolean;
     setAlerts: boolean;
     addTooltip: boolean;
+    autoAdvance: boolean;
     setPalette: boolean;
   };
 

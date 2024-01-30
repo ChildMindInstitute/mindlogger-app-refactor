@@ -9,6 +9,7 @@ import {
 
 import { PeriodicityType } from '@app/abstract/lib';
 
+import { addTime } from './testHelpers';
 import { NotificationDaysExtractor } from '../NotificationDaysExtractor';
 import { NumberOfDaysForSchedule } from '../NotificationUtility';
 
@@ -47,15 +48,7 @@ const getDays = (from: Date, to: Date): Date[] => {
   return result;
 };
 
-const mockUtilityProps = (
-  extractor: NotificationDaysExtractor,
-  currentDay: Date,
-) => {
-  const now = new Date(currentDay);
-
-  now.setHours(15);
-  now.setMinutes(30);
-
+const mockUtilityProps = (extractor: NotificationDaysExtractor, now: Date) => {
   //@ts-ignore
   extractor.utility.now = new Date(now);
 };
@@ -86,9 +79,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
   describe('Test Always Available event', () => {
     it("Should return days for next two weeks + yesterday when event's startDate/endDate are nulls", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extract(
         FirstScheduleDay,
@@ -106,9 +100,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return 4 days: from yesterday to the day after tomorrow when event's dateFrom is currentDay - 2 days and dateTo is currentDay + 2 days", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 2);
       const eventDayTo = addDays(CurrentDay, 2);
@@ -134,12 +129,13 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it('Should return days: yesterday, today when startDate is null and endDate is today', () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const eventDayFrom = null;
       const eventDayTo = new Date(CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extract(
         FirstScheduleDay,
@@ -157,9 +153,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return yesterday when event's dateFrom is currentDay - 5 days and dateTo is yesterday", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 5);
       const eventDayTo = subDays(CurrentDay, 1);
@@ -180,9 +177,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return empty array when event's dateFrom is currentDay - 5 days and dateTo is currentDay - 2 days", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 5);
       const eventDayTo = subDays(CurrentDay, 2);
@@ -201,9 +199,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: today and tomorrow when event's dateFrom is currentDay and dateTo is tomorrow", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(CurrentDay);
       const eventDayTo = addDays(CurrentDay, 1);
@@ -224,9 +223,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: from tomorrow to tomorrow + 2 days when event's dateFrom is tomorrow and dateTo is tomorrow + 2 days", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
       const eventDayTo = addDays(Tomorrow, 2);
@@ -247,9 +247,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: from tomorrow to currentDay + NumberOfDaysForSchedule days when event's dateFrom is tomorrow and dateTo is null", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
       const eventDayTo = null;
@@ -274,9 +275,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
   describe('Test Daily event', () => {
     it("Should return days for next two weeks + yesterday when event's startDate/endDate are nulls", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extract(
         FirstScheduleDay,
@@ -322,12 +324,13 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it('Should return days: yesterday, today when startDate is null and endDate is today', () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const eventDayFrom = null;
       const eventDayTo = new Date(CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extract(
         FirstScheduleDay,
@@ -345,9 +348,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return yesterday when event's dateFrom is currentDay - 5 days and dateTo is yesterday", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 5);
       const eventDayTo = subDays(CurrentDay, 1);
@@ -368,9 +372,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return empty array when event's dateFrom is currentDay - 5 days and dateTo is currentDay - 2 days", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 5);
       const eventDayTo = subDays(CurrentDay, 2);
@@ -389,9 +394,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: today and tomorrow when event's dateFrom is currentDay and dateTo is tomorrow", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(CurrentDay);
       const eventDayTo = addDays(CurrentDay, 1);
@@ -412,9 +418,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: from tomorrow to tomorrow + 2 days when event's dateFrom is tomorrow and dateTo is tomorrow + 2 days", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
       const eventDayTo = addDays(Tomorrow, 2);
@@ -435,9 +442,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: from tomorrow to currentDay + NumberOfDaysForSchedule days when event's dateFrom is tomorrow and dateTo is null", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
       const eventDayTo = null;
@@ -462,9 +470,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
   describe('Test Weekly event', () => {
     it("Should return days: scheduledDay, scheduledDay + 1 week, scheduledDay + 2 weeks when event's startDate/endDate are nulls and scheduledDay is currentDay - 3 days", () => {
       const scheduledDay = subDays(CurrentDay, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extract(
         FirstScheduleDay,
@@ -486,9 +495,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return 1 day: scheduledDay + 7 days when event's dateFrom is currentDay - 2 days and dateTo is currentDay + 5 days and scheduledDay is currentDay - 3 days", () => {
       const scheduledDay = subDays(CurrentDay, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 2);
       const eventDayTo = addDays(CurrentDay, 5);
@@ -509,9 +519,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: scheduledDay + 7 days, scheduledDay + 14 days when event's dateFrom is currentDay - 2 days and dateTo is null and scheduledDay is currentDay - 3 days", () => {
       const scheduledDay = subDays(CurrentDay, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 2);
       const eventDayTo = null;
@@ -532,9 +543,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: scheduledDay, scheduledDay + 7 days when event's dateFrom is null and dateTo is currentDay + 5 days and scheduledDay is currentDay - 3 days", () => {
       const scheduledDay = subDays(CurrentDay, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = null;
       const eventDayTo = addDays(CurrentDay, 5);
@@ -555,9 +567,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return 1 day: scheduledDay + 7 days when event's dateFrom is currentDay + 1 day and dateTo is currentDay + 5 days and scheduledDay is currentDay - 3 days", () => {
       const scheduledDay = subDays(CurrentDay, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = addDays(CurrentDay, 1);
       const eventDayTo = addDays(CurrentDay, 5);
@@ -580,9 +593,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
   describe('Test Weekdays event, currentDay is monday', () => {
     it("Should return days for next two weeks + yesterday except weekends when event's startDate/endDate are nulls", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extract(
         FirstScheduleDay,
@@ -603,9 +617,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: currentDay, tomorrow, day after tomorrow when event's dateFrom is currentDay - 2 days and dateTo is currentDay + 2 days", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 2);
       const eventDayTo = addDays(CurrentDay, 2);
@@ -626,12 +641,13 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it('Should return today when startDate is null and endDate is today', () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const eventDayFrom = null;
       const eventDayTo = new Date(CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extract(
         FirstScheduleDay,
@@ -649,9 +665,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return empty when event's dateFrom is currentDay - 5 days and dateTo is yesterday", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 5);
       const eventDayTo = subDays(CurrentDay, 1);
@@ -670,9 +687,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: today and tomorrow when event's dateFrom is currentDay and dateTo is tomorrow", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(CurrentDay);
       const eventDayTo = addDays(CurrentDay, 1);
@@ -693,9 +711,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: from tomorrow to tomorrow + 2 days when event's dateFrom is tomorrow and dateTo is tomorrow + 2 days", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
       const eventDayTo = addDays(Tomorrow, 2);
@@ -716,9 +735,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: Thu, Fri when event's dateFrom is Thu and dateTo is Sat", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = addDays(CurrentDay, 3);
       const eventDayTo = addDays(CurrentDay, 5);
@@ -740,9 +760,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: from tomorrow to currentDay + NumberOfDaysForSchedule except weekends when event's dateFrom is tomorrow and dateTo is null", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
       const eventDayTo = null;
@@ -768,9 +789,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
   describe('Test Monthly event', () => {
     it("Should return scheduledDay + 1 month when event's startDate/endDate are nulls and scheduledDay is currentDay - 35 days", () => {
       const scheduledDay = subDays(CurrentDay, 35);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extract(
         FirstScheduleDay,
@@ -788,9 +810,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return days: scheduledDay, scheduledDay + 1 month when event's startDate/endDate are nulls and scheduledDay is currentDay - 25 days", () => {
       const scheduledDay = subDays(CurrentDay, 25);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extract(
         FirstScheduleDay,
@@ -808,9 +831,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return scheduledDay when event's startDate/endDate are nulls and scheduledDay is currentDay", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extract(
         FirstScheduleDay,
@@ -828,9 +852,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return scheduledDay when event's startDate/endDate are nulls and scheduledDay is currentDay + 10 days", () => {
       const scheduledDay = addDays(CurrentDay, 10);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extract(
         FirstScheduleDay,
@@ -848,9 +873,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return empty when event's startDate/endDate are nulls and scheduledDay is currentDay + 20 days", () => {
       const scheduledDay = addDays(CurrentDay, 20);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extract(
         FirstScheduleDay,
@@ -866,9 +892,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it('Should return scheduledDay + 1 month when startDate is currentDay - 15 days and endDate is null and scheduledDay is currentDay - 25 days', () => {
       const scheduledDay = subDays(CurrentDay, 25);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const startDate = subDays(CurrentDay, 15);
 
@@ -888,9 +915,10 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
     it("Should return scheduledDay when event's startDate is null and endDate is currentDay and scheduledDay is currentDay - 25 days", () => {
       const scheduledDay = subDays(CurrentDay, 25);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const endDate = new Date(CurrentDay);
 
@@ -932,9 +960,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
   describe('Test Always Available event', () => {
     it("Should return days: from a week ago to currentDay + 2 weeks when event's startDate/endDate are nulls", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
         LastScheduleDay,
@@ -951,9 +980,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return 5 days: from currentDay - 2 days to currentDay + 2 days when event's dateFrom is currentDay - 2 days and dateTo is currentDay + 2 days", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 2);
       const eventDayTo = addDays(CurrentDay, 2);
@@ -979,12 +1009,13 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it('Should return days for a last week when startDate is null and endDate is today', () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const eventDayFrom = null;
       const eventDayTo = new Date(CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
         LastScheduleDay,
@@ -1001,9 +1032,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return days: from currentDay - 5 days to yesterday when event's dateFrom is currentDay - 5 days and dateTo is yesterday", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 5);
       const eventDayTo = subDays(CurrentDay, 1);
@@ -1023,9 +1055,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return days: today and tomorrow when event's dateFrom is currentDay and dateTo is tomorrow", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(CurrentDay);
       const eventDayTo = addDays(CurrentDay, 1);
@@ -1045,9 +1078,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return days: from tomorrow to tomorrow + 2 days when event's dateFrom is tomorrow and dateTo is tomorrow + 2 days", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
       const eventDayTo = addDays(Tomorrow, 2);
@@ -1067,9 +1101,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return days: from tomorrow to currentDay + NumberOfDaysForSchedule days when event's dateFrom is tomorrow and dateTo is null", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
       const eventDayTo = null;
@@ -1093,9 +1128,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
   describe('Test Daily event', () => {
     it("Should return days: from a week ago to currentDay + 2 weeks when event's startDate/endDate are nulls", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
         LastScheduleDay,
@@ -1112,9 +1148,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return 5 days: from currentDay - 2 days to currentDay + 2 days when event's dateFrom is currentDay - 2 days and dateTo is currentDay + 2 days", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 2);
       const eventDayTo = addDays(CurrentDay, 2);
@@ -1140,12 +1177,13 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it('Should return days for a last week when startDate is null and endDate is today', () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const eventDayFrom = null;
       const eventDayTo = new Date(CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
         LastScheduleDay,
@@ -1162,9 +1200,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return days: from currentDay - 5 days to yesterday when event's dateFrom is currentDay - 5 days and dateTo is yesterday", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 5);
       const eventDayTo = subDays(CurrentDay, 1);
@@ -1184,9 +1223,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return days: today and tomorrow when event's dateFrom is currentDay and dateTo is tomorrow", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(CurrentDay);
       const eventDayTo = addDays(CurrentDay, 1);
@@ -1206,9 +1246,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return days: from tomorrow to tomorrow + 2 days when event's dateFrom is tomorrow and dateTo is tomorrow + 2 days", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
       const eventDayTo = addDays(Tomorrow, 2);
@@ -1228,9 +1269,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return days: from tomorrow to currentDay + NumberOfDaysForSchedule days when event's dateFrom is tomorrow and dateTo is null", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
       const eventDayTo = null;
@@ -1254,9 +1296,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
   describe('Test Weekly event', () => {
     it("Should return days: scheduledDay - 4,3,2,1 weeks, scheduledDay, scheduledDay + 1 week, scheduledDay + 2 weeks when event's startDate/endDate are nulls and scheduledDay is currentDay - 3 days", () => {
       const scheduledDay = subDays(CurrentDay, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
         LastScheduleDay,
@@ -1281,9 +1324,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return 1 day: scheduledDay + 7 days when event's dateFrom is currentDay - 2 days and dateTo is currentDay + 5 days and scheduledDay is currentDay - 3 days", () => {
       const scheduledDay = subDays(CurrentDay, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 2);
       const eventDayTo = addDays(CurrentDay, 5);
@@ -1303,9 +1347,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return days: scheduledDay + 7 days, scheduledDay + 14 days when event's dateFrom is currentDay - 2 days and dateTo is null and scheduledDay is currentDay - 3 days", () => {
       const scheduledDay = subDays(CurrentDay, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 2);
       const eventDayTo = null;
@@ -1325,9 +1370,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return days: scheduledDay - 4,3,2,1 weeks, scheduledDay, scheduledDay + 1 week when event's dateFrom is null and dateTo is currentDay + 5 days and scheduledDay is currentDay - 3 days", () => {
       const scheduledDay = subDays(CurrentDay, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = null;
       const eventDayTo = addDays(CurrentDay, 5);
@@ -1354,9 +1400,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return 1 day: scheduledDay + 1 week when event's dateFrom is currentDay + 1 day and dateTo is currentDay + 5 days and scheduledDay is currentDay - 3 days", () => {
       const scheduledDay = subDays(CurrentDay, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const eventDayFrom = addDays(CurrentDay, 1);
       const eventDayTo = addDays(CurrentDay, 5);
@@ -1378,9 +1425,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
   describe('Test Monthly event', () => {
     it("Should return days: scheduledDay - 2, 1 months, scheduledDay, scheduledDay + 1 month when event's startDate/endDate are nulls and scheduledDay is currentDay - 35 days", () => {
       const scheduledDay = subDays(CurrentDay, 35);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
         LastScheduleDay,
@@ -1402,9 +1450,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return days: scheduledDay - 2, 1 months, scheduledDay, scheduledDay + 1 month when event's startDate/endDate are nulls and scheduledDay is currentDay - 25 days", () => {
       const scheduledDay = subDays(CurrentDay, 25);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
         LastScheduleDay,
@@ -1426,9 +1475,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return 3 days: scheduledDay - 2, 1 months, scheduledDay when event's startDate/endDate are nulls and scheduledDay is currentDay", () => {
       const scheduledDay = CurrentDay;
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
         LastScheduleDay,
@@ -1449,9 +1499,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return 3 days: scheduledDay - 2, 1 months, scheduledDay when event's startDate/endDate are nulls and scheduledDay is currentDay + 10 days", () => {
       const scheduledDay = addDays(CurrentDay, 10);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
         LastScheduleDay,
@@ -1472,9 +1523,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return 2 days: scheduledDay - 2, 1 months when event's startDate/endDate are nulls and scheduledDay is currentDay + 20 days", () => {
       const scheduledDay = addDays(CurrentDay, 20);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
         LastScheduleDay,
@@ -1491,9 +1543,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it('Should return scheduledDay + 1 month when startDate is currentDay - 15 days and endDate is null and scheduledDay is currentDay - 25 days', () => {
       const scheduledDay = subDays(CurrentDay, 25);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const startDate = subDays(CurrentDay, 15);
 
@@ -1512,9 +1565,10 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
 
     it("Should return 3 days: scheduledDay - 2, 1 months, scheduledDay when event's startDate is null and endDate is currentDay and scheduledDay is currentDay - 25 days", () => {
       const scheduledDay = subDays(CurrentDay, 25);
+      const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
       const extractor = new NotificationDaysExtractor({}, AppletId);
-      mockUtilityProps(extractor, CurrentDay);
+      mockUtilityProps(extractor, now);
 
       const endDate = new Date(CurrentDay);
 

@@ -1,15 +1,11 @@
 import { addDays } from 'date-fns';
 
+import { addTime } from './testHelpers';
 import { NotificationUtility } from '../NotificationUtility';
 
 const AppletId = 'e31c7468-4197-4ed1-a908-72af80d7765f';
 
-const mockUtilityProps = (utility: NotificationUtility, currentDay: Date) => {
-  const now = new Date(currentDay);
-
-  now.setHours(15);
-  now.setMinutes(30);
-
+const mockUtilityProps = (utility: NotificationUtility, now: Date) => {
   //@ts-ignore
   utility.now = new Date(now);
 };
@@ -18,10 +14,11 @@ describe('NotificationUtility: test getTriggerAt methods with taking into accoun
   describe('Test fixed notifications', () => {
     it('Should return today + 2 days with set time when isNextDay parameter is false and scheduledDay is today + 2 days', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const utility = new NotificationUtility({}, AppletId);
 
-      mockUtilityProps(utility, today);
+      mockUtilityProps(utility, now);
 
       const scheduledDay = addDays(today, 2);
 
@@ -43,10 +40,11 @@ describe('NotificationUtility: test getTriggerAt methods with taking into accoun
 
     it('Should return today + 3 days with set time when isNextDay parameter is true and scheduledDay is today + 2 days', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const utility = new NotificationUtility({}, AppletId);
 
-      mockUtilityProps(utility, today);
+      mockUtilityProps(utility, now);
 
       const scheduledDay = addDays(today, 2);
 
@@ -71,10 +69,11 @@ describe('NotificationUtility: test getTriggerAt methods with taking into accoun
   describe('Test random notifications', () => {
     it('Should return tomorrow with set time when both: from and to are in the same current day and scheduledDay is tomorrow', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const utility = new NotificationUtility({}, AppletId);
 
-      mockUtilityProps(utility, today);
+      mockUtilityProps(utility, now);
 
       const scheduledDay = addDays(today, 1);
 
@@ -107,10 +106,11 @@ describe('NotificationUtility: test getTriggerAt methods with taking into accoun
 
     it('Should return tomorrow + 1 day with set time when both: from and to are in the same next day and scheduledDay is tomorrow', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const utility = new NotificationUtility({}, AppletId);
 
-      mockUtilityProps(utility, today);
+      mockUtilityProps(utility, now);
 
       const scheduledDay = addDays(today, 1);
 
@@ -144,10 +144,11 @@ describe('NotificationUtility: test getTriggerAt methods with taking into accoun
 
     it('Should return tomorrow + 1 day with set time when from is in the current day and to is in the next day and scheduledDay is tomorrow', () => {
       const today = new Date(2024, 0, 3);
+      const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const utility = new NotificationUtility({}, AppletId);
 
-      mockUtilityProps(utility, today);
+      mockUtilityProps(utility, now);
 
       const scheduledDay = addDays(today, 1);
 
