@@ -60,6 +60,7 @@ const AxisListItem: FC<{
           {imageUrl && (
             <CachedImage
               accessibilityLabel={`${axisHeaderFor}_header_image-${title}`}
+              data-test="row-list-item-image"
               style={styles.image}
               resizeMode="contain"
               source={imageUrl}

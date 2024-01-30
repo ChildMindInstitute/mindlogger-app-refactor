@@ -3,7 +3,13 @@ import { createContext, Ref } from 'react';
 import { ViewSliderRef } from '@shared/ui';
 
 type Handlers = {
-  next: (isForced: boolean) => void;
+  next: ({
+    isForced,
+    shouldAutoSubmit,
+  }: {
+    isForced: boolean;
+    shouldAutoSubmit: boolean;
+  }) => void;
   back: () => void;
   undo: () => void;
 };
