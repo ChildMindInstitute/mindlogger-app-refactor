@@ -1,13 +1,12 @@
 import {
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useMemo,
-  useState,
+  useRef,
 } from 'react';
-import { StyleSheet } from 'react-native';
 
-import { Canvas, Group, Path, SkPath } from '@shopify/react-native-skia';
 import {
   Gesture,
   GestureDetector,
@@ -17,6 +16,7 @@ import { runOnJS, useSharedValue } from 'react-native-reanimated';
 
 import { useCallbacksRefs } from '@app/shared/lib';
 
+import CanvasBoard, { CanvasBoardRef } from './CanvasBoard';
 import LineSketcher, { Point, Shape } from './LineSketcher';
 
 export type SketchCanvasRef = {
@@ -35,9 +35,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   const { initialLines, width, onStrokeStart, onStrokeChanged, onStrokeEnd } =
     props;
 
-  const [paths, setPaths] = useState<Array<SkPath>>(() =>
-    initialLines.map(points => LineSketcher.createPathFromPoints(points)),
-  );
+  const canvasRef = useRef<CanvasBoardRef | null>(null);
 
   const callbacksRef = useCallbacksRefs({
     onStrokeStart,
@@ -52,25 +50,16 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   useImperativeHandle(ref, () => {
     return {
       clear() {
-        setPaths([]);
+        canvasRef.current?.setPaths([]);
       },
     };
   });
-
-  const styles = useMemo(
-    () =>
-      StyleSheet.flatten({
-        width: width,
-        height: width,
-      }),
-    [width],
-  );
 
   const onTouchStart = useCallback(
     (touchInfo: Point) => {
       const path = lineSketcher.createLine(touchInfo);
 
-      setPaths(currentPaths => [...currentPaths, path]);
+      canvasRef.current?.setPaths(currentPaths => [...currentPaths, path]);
       callbacksRef.current.onStrokeStart(touchInfo.x, touchInfo.y);
     },
     [callbacksRef, lineSketcher],
@@ -93,7 +82,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
 
       callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
 
-      setPaths(currentPaths => {
+      canvasRef.current?.setPaths(currentPaths => {
         const pathsCount = currentPaths.length;
         const lastPath = currentPaths[pathsCount - 1];
 
@@ -116,7 +105,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     (touchInfo: Point) => {
       callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
 
-      setPaths(currentPaths => {
+      canvasRef.current?.setPaths(currentPaths => {
         const pathsCount = currentPaths.length;
         const lastPath = currentPaths[pathsCount - 1];
 
@@ -233,21 +222,16 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     ],
   );
 
+  useEffect(() => {
+    canvasRef.current?.setPaths(
+      initialLines.map(points => LineSketcher.createPathFromPoints(points)),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <GestureDetector gesture={drawingGesture}>
-      <Canvas style={styles}>
-        <Group>
-          {paths.map((path, i) => (
-            <Path
-              key={i}
-              path={path}
-              strokeWidth={1.5}
-              color="black"
-              style="stroke"
-            />
-          ))}
-        </Group>
-      </Canvas>
+      <CanvasBoard size={width} ref={canvasRef} />
     </GestureDetector>
   );
 });
