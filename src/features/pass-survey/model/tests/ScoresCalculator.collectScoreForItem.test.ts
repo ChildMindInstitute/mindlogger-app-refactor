@@ -1,5 +1,5 @@
-import { ActivityItemType, Answer, PipelineItem } from '../../lib';
-import ScoresCalculator from '../ScoresCalculator';
+import { ActivityItemType, PipelineItem } from '../../lib';
+import { IScoresCalculator, ScoresCalculator } from '../ScoresCalculator';
 
 type WrappedAnswer = { answer: any };
 
@@ -19,9 +19,13 @@ const getMockItem = (type: ActivityItemType): PipelineItem => {
 };
 
 describe('ScoresCalculator: test collectScoreForItem', () => {
-  it('Should call collectScoreForCheckboxes once when item.type is checkbox', () => {
-    const calculator = ScoresCalculator;
+  let calculator: IScoresCalculator;
 
+  beforeEach(() => {
+    calculator = new ScoresCalculator();
+  });
+
+  it('Should call collectScoreForCheckboxes once when item.type is checkbox', () => {
     const wrappedAnswer: WrappedAnswer = getAnswer();
 
     const item: PipelineItem = getMockItem('Checkbox');
@@ -45,9 +49,7 @@ describe('ScoresCalculator: test collectScoreForItem', () => {
     expect(mockCollectScoreForRadio).toHaveBeenCalledTimes(0);
   });
 
-  it('Should call collectScoreForCheckboxes once when item.type is slider', () => {
-    const calculator = ScoresCalculator;
-
+  it('Should call mockCollectScoreForSlider once when item.type is slider', () => {
     const wrappedAnswer: WrappedAnswer = getAnswer();
 
     const item: PipelineItem = getMockItem('Slider');
@@ -71,9 +73,7 @@ describe('ScoresCalculator: test collectScoreForItem', () => {
     expect(mockCollectScoreForRadio).toHaveBeenCalledTimes(0);
   });
 
-  it('Should call collectScoreForCheckboxes once when item.type is radio', () => {
-    const calculator = ScoresCalculator;
-
+  it('Should call mockCollectScoreForRadio once when item.type is radio', () => {
     const wrappedAnswer: WrappedAnswer = getAnswer();
 
     const item: PipelineItem = getMockItem('Radio');
@@ -98,8 +98,6 @@ describe('ScoresCalculator: test collectScoreForItem', () => {
   });
 
   it('Should return null and should not call any collect function when item.type is radio and answer is null', () => {
-    const calculator = ScoresCalculator;
-
     const item: PipelineItem = getMockItem('Radio');
 
     const mockCollectScoreForSlider = jest.fn();
@@ -114,7 +112,7 @@ describe('ScoresCalculator: test collectScoreForItem', () => {
     calculator.collectScoreForCheckboxes = mockCollectScoreForCheckboxes;
 
     // @ts-expect-error
-    const result = calculator.collectScoreForItem(item, null as Answer);
+    const result = calculator.collectScoreForItem(item, null);
 
     expect(result).toEqual(null);
     expect(mockCollectScoreForCheckboxes).toHaveBeenCalledTimes(0);
@@ -123,8 +121,6 @@ describe('ScoresCalculator: test collectScoreForItem', () => {
   });
 
   it('Should return null and should not call any collect function when item.type is audio', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer();
 
     const item: PipelineItem = getMockItem('Audio');

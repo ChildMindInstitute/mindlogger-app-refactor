@@ -1,5 +1,5 @@
 import { RadioResponse, RadioPipelineItem } from '../../lib';
-import ScoresCalculator from '../ScoresCalculator';
+import { IScoresCalculator, ScoresCalculator } from '../ScoresCalculator';
 
 type WrappedAnswer = { answer: RadioResponse };
 
@@ -57,9 +57,13 @@ const fillOptions = (item: RadioPipelineItem, from = 1) => {
 };
 
 describe('ScoresCalculator: test collectScoreForRadio', () => {
-  it('Should return null when value is undefined', () => {
-    const calculator = ScoresCalculator;
+  let calculator: IScoresCalculator;
 
+  beforeEach(() => {
+    calculator = new ScoresCalculator();
+  });
+
+  it('Should return null when value is undefined', () => {
     const wrappedAnswer: WrappedAnswer = getAnswer(undefined);
 
     const item: RadioPipelineItem = getEmptyItem();
@@ -71,8 +75,6 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
   });
 
   it('Should return null when value is null', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer(null);
 
     const item: RadioPipelineItem = getEmptyItem();
@@ -84,8 +86,6 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
   });
 
   it('Should return 30 when value is 3', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer(3);
 
     const item: RadioPipelineItem = getEmptyItem();
@@ -99,8 +99,6 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
   });
 
   it('Should return null when value is out of range (eq. to 10)', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer(10);
 
     const item: RadioPipelineItem = getEmptyItem();
@@ -114,8 +112,6 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
   });
 
   it('Should return 0 when value is 0 and there is an option with score eq equal to 0 and value equal to 0 correspondingly', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer(0);
 
     const item: RadioPipelineItem = getEmptyItem();
@@ -129,8 +125,6 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
   });
 
   it('Should return null when value is 0 and there is no any option with score eq equal to 0 and value equal to 0 correspondingly', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer(0);
 
     const item: RadioPipelineItem = getEmptyItem();

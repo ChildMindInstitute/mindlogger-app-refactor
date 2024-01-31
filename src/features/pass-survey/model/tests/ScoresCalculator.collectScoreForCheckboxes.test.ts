@@ -1,5 +1,5 @@
 import { CheckboxResponse, CheckboxPipelineItem } from '../../lib';
-import ScoresCalculator from '../ScoresCalculator';
+import { IScoresCalculator, ScoresCalculator } from '../ScoresCalculator';
 
 type WrappedAnswer = { answer: CheckboxResponse };
 
@@ -60,9 +60,13 @@ const fillOptions = (item: CheckboxPipelineItem, from = 1) => {
 };
 
 describe('ScoresCalculator: test collectScoreForCheckboxes', () => {
-  it('Should return null when value is undefined', () => {
-    const calculator = ScoresCalculator;
+  let calculator: IScoresCalculator;
 
+  beforeEach(() => {
+    calculator = new ScoresCalculator();
+  });
+
+  it('Should return null when value is undefined', () => {
     const wrappedAnswer: WrappedAnswer = getAnswer(undefined);
 
     const item: CheckboxPipelineItem = getEmptyItem();
@@ -74,8 +78,6 @@ describe('ScoresCalculator: test collectScoreForCheckboxes', () => {
   });
 
   it('Should return null when value is null', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer(null);
 
     const item: CheckboxPipelineItem = getEmptyItem();
@@ -86,9 +88,7 @@ describe('ScoresCalculator: test collectScoreForCheckboxes', () => {
     expect(result).toEqual(null);
   });
 
-  it('Should return 100 when value is 2, 3, 5', () => {
-    const calculator = ScoresCalculator;
-
+  it('Should return 100 when value is [2, 3, 5]', () => {
     const wrappedAnswer: WrappedAnswer = getAnswer([2, 3, 5]);
 
     const item: CheckboxPipelineItem = getEmptyItem();
@@ -102,8 +102,6 @@ describe('ScoresCalculator: test collectScoreForCheckboxes', () => {
   });
 
   it('Should return 0 when value is [0]', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer([0]);
 
     const item: CheckboxPipelineItem = getEmptyItem();
@@ -117,8 +115,6 @@ describe('ScoresCalculator: test collectScoreForCheckboxes', () => {
   });
 
   it('Should return 30 when value is [0, 1, 2]', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer([0, 1, 2]);
 
     const item: CheckboxPipelineItem = getEmptyItem();
@@ -132,8 +128,6 @@ describe('ScoresCalculator: test collectScoreForCheckboxes', () => {
   });
 
   it('Should return 90 when value is [4, 5, 6, 7]', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer([4, 5, 6, 7]);
 
     const item: CheckboxPipelineItem = getEmptyItem();

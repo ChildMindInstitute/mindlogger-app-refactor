@@ -1,5 +1,5 @@
 import { SliderPipelineItem, SliderResponse } from '../../lib';
-import ScoresCalculator from '../ScoresCalculator';
+import { IScoresCalculator, ScoresCalculator } from '../ScoresCalculator';
 
 type WrappedAnswer = { answer: SliderResponse };
 
@@ -41,9 +41,13 @@ const fillOptions = (item: SliderPipelineItem, count: number) => {
 };
 
 describe('ScoresCalculator: test collectScoreForRadio', () => {
-  it('Should return null when value is undefined', () => {
-    const calculator = ScoresCalculator;
+  let calculator: IScoresCalculator;
 
+  beforeEach(() => {
+    calculator = new ScoresCalculator();
+  });
+
+  it('Should return null when value is undefined', () => {
     const wrappedAnswer: WrappedAnswer = getAnswer(undefined);
 
     const item: SliderPipelineItem = getEmptyItem();
@@ -55,8 +59,6 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
   });
 
   it('Should return null when value is null', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer(null);
 
     const item: SliderPipelineItem = getEmptyItem();
@@ -68,8 +70,6 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
   });
 
   it('Should return null when value is 1', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer(1);
 
     const item: SliderPipelineItem = getEmptyItem();
@@ -82,8 +82,6 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
   });
 
   it('Should return 0 when value is 2', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer(2);
 
     const item: SliderPipelineItem = getEmptyItem();
@@ -96,8 +94,6 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
   });
 
   it('Should return 10 when value is 3', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer(3);
 
     const item: SliderPipelineItem = getEmptyItem();
@@ -110,8 +106,6 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
   });
 
   it('Should return 70 when value is 9', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer(9);
 
     const item: SliderPipelineItem = getEmptyItem();
@@ -124,8 +118,6 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
   });
 
   it('Should return null when value is 10', () => {
-    const calculator = ScoresCalculator;
-
     const wrappedAnswer: WrappedAnswer = getAnswer(10);
 
     const item: SliderPipelineItem = getEmptyItem();
