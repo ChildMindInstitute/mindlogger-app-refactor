@@ -3,14 +3,14 @@ import React, { useRef, FC, useMemo } from 'react';
 import { StreamEventLoggable } from '@shared/lib';
 import { Box, SketchCanvas, SketchCanvasRef, useOnUndo } from '@shared/ui';
 
-import { DrawLine, ResponseSerializer, DrawResult } from '../lib';
+import { DrawLine, ResponseSerializer, DrawResult, LogPoint } from '../lib';
 import DrawPoint from '../lib/utils/DrawPoint';
 
 type Props = {
   value: Array<DrawLine>;
   onResult: (result: DrawResult) => void;
   width: number;
-} & StreamEventLoggable<DrawPoint>;
+} & StreamEventLoggable<LogPoint>;
 
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, width, onLog } = props;
@@ -50,8 +50,9 @@ const DrawingBoard: FC<Props> = props => {
       startTime: Date.now(),
       points: [drawPoint],
     };
+    const logPoint = drawPoint.scale(vector) as DrawPoint;
 
-    onLog(drawPoint.scale(vector));
+    onLog({ ...logPoint, line_number: value?.length });
   };
 
   const onTouchProgress = (x: number, y: number) => {
@@ -59,7 +60,9 @@ const DrawingBoard: FC<Props> = props => {
 
     drawingValueLineRef.current.points.push(drawPoint);
 
-    onLog(drawPoint.scale(vector));
+    const logPoint = drawPoint.scale(vector);
+
+    onLog({ ...logPoint, line_number: value?.length });
   };
 
   const onTouchEnd = () => {

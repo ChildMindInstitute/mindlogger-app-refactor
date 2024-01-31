@@ -23,6 +23,7 @@ import {
   MessageType,
   OnResultLog,
   StreamEventPoint,
+  StreamEventError,
 } from '../lib';
 import { getDistance, transformCoordinates } from '../lib/utils';
 
@@ -195,22 +196,42 @@ const AbCanvas: FC<Props> = props => {
     return foundNode ?? null;
   };
 
-  const createLogPoint = (point: Point): LogPoint => {
+  const getCurrentAndNextNodeLabels = () => {
     const index = getCurrentIndex();
 
     const currentNode = findNodeByIndex(index);
     const nextNode = findNodeByIndex(index + 1);
+
+    return [currentNode.label, nextNode.label];
+  };
+
+  const createLogPoint = (point: Point): LogPoint => {
+    const [currentNodeLabel, nextNodeLabel] = getCurrentAndNextNodeLabels();
 
     const logPoint: LogPoint = {
       x: point.x,
       y: point.y,
       time: new Date().getTime(),
       valid: null,
-      start: currentNode.label,
-      end: nextNode.label,
+      start: currentNodeLabel,
+      end: nextNodeLabel,
       actual: null,
     };
     return logPoint;
+  };
+
+  const createStreamEventPoint = (point: Point): StreamEventPoint => {
+    const [currentNodeLabel, nextNodeLabel] = getCurrentAndNextNodeLabels();
+
+    return {
+      x: (point.x * width) / 100,
+      y: (point.y * width) / 100,
+      time: Date.now(),
+      line_number: logLines?.length - 1,
+      error: StreamEventError.NotDefined,
+      correct_path: `${currentNodeLabel} ~ ${nextNodeLabel}`,
+      actual_path: '-1',
+    };
   };
 
   const addLogLine = ({ x, y }: Point): void => {
@@ -274,11 +295,8 @@ const AbCanvas: FC<Props> = props => {
     reCreatePath(point);
     drawPath();
     reRender();
-    onLog({
-      x: (touchInfo.x * width) / 100,
-      y: (touchInfo.y * width) / 100,
-      time: Date.now(),
-    });
+
+    onLog(createStreamEventPoint(point));
   };
 
   const onTouchProgress = (touchInfo: TouchInfo) => {
@@ -289,6 +307,7 @@ const AbCanvas: FC<Props> = props => {
     }
 
     const point: Point = { x: touchInfo.x, y: touchInfo.y };
+    const streamEventPoint = createStreamEventPoint(point);
 
     currentPath.lineTo(point.x, point.y);
 
@@ -305,12 +324,6 @@ const AbCanvas: FC<Props> = props => {
       resetCloseToNextRerendered();
     }
 
-    onLog({
-      x: (touchInfo.x * width) / 100,
-      y: (touchInfo.y * width) / 100,
-      time: Date.now(),
-    });
-
     if (isOverNext(point) && isOverLast(point)) {
       markLastLogPoints({ valid: true });
       keepPathInState();
@@ -321,6 +334,11 @@ const AbCanvas: FC<Props> = props => {
       });
       onMessage(MessageType.Completed);
       onComplete();
+
+      streamEventPoint.error = StreamEventError.OVER_RIGHT_POINT;
+      streamEventPoint.actual_path = streamEventPoint.correct_path;
+
+      onLog(streamEventPoint);
       return;
     }
 
@@ -329,6 +347,11 @@ const AbCanvas: FC<Props> = props => {
       keepPathInState();
       reCreatePath(point);
       incrementCurrentIndex();
+
+      streamEventPoint.error = StreamEventError.OVER_RIGHT_POINT;
+      streamEventPoint.actual_path = streamEventPoint.correct_path;
+
+      onLog(streamEventPoint);
       return;
     }
 
@@ -339,7 +362,12 @@ const AbCanvas: FC<Props> = props => {
       resetCurrentPath();
       setFlareGreenPointIndex({ index: getCurrentIndex() });
       onMessage(MessageType.IncorrectLine);
+
+      streamEventPoint.error = StreamEventError.OVER_WRONG_POINT;
+      streamEventPoint.actual_path = node.label;
     }
+
+    onLog(streamEventPoint);
   };
 
   const onTouchEnd = (touchInfo: TouchInfo) => {
@@ -351,12 +379,17 @@ const AbCanvas: FC<Props> = props => {
 
     const point: Point = { x: touchInfo.x, y: touchInfo.y };
 
+    const streamEventPoint = createStreamEventPoint(point);
+
     const node = findNodeByPoint(point);
 
     if (!node) {
       setFlareGreenPointIndex({ index: getCurrentIndex() });
     }
 
+    streamEventPoint.error = StreamEventError.OVER_UNDEFINED_POINT;
+
+    onLog(streamEventPoint);
     markLastLogPoints({ valid: false, actual: node?.label ?? 'none' });
   };
 

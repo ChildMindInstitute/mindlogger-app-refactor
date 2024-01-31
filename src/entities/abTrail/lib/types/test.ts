@@ -29,10 +29,20 @@ export type OnResultLog = {
   currentIndex: number;
 };
 
+export const enum StreamEventError {
+  NotDefined = '?',
+  OVER_RIGHT_POINT = 'E0',
+  OVER_WRONG_POINT = 'E1',
+  OVER_UNDEFINED_POINT = 'E2',
+}
 export type StreamEventPoint = {
   x: number;
   y: number;
   time: number;
+  line_number: number;
+  error: StreamEventError;
+  correct_path: string;
+  actual_path: string;
 };
 
 export type AbTestResult = {
