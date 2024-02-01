@@ -84,12 +84,18 @@ class LineSketcher {
     return newPath;
   }
 
-  public progressLine(path: SkPath, point: Point): void {
+  public progressLine(
+    path: SkPath,
+    point: Point,
+    straightLine: boolean = false,
+  ): void {
     this.points.push(point);
 
     const pointsCount = this.points.length;
 
-    if (pointsCount >= 3) {
+    if (straightLine) {
+      path.lineTo(point.x, point.y);
+    } else if (pointsCount >= 3) {
       LineSketcher.addPointToPath(
         path,
         this.points[pointsCount - 3],
