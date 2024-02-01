@@ -7,7 +7,7 @@ import { Box, BoxProps, XStack } from '@app/shared/ui';
 import { StreamEventLoggable } from '@shared/lib';
 
 import DrawingBoard from './DrawingBoard';
-import { DrawLine, DrawResult, LogPoint, SvgFileManager } from '../lib';
+import { DrawLine, DrawResult, StreamLogPoint, SvgFileManager } from '../lib';
 
 const RectPadding = 15;
 
@@ -17,7 +17,7 @@ type Props = {
   backgroundImageUrl: string | null;
   onResult: (result: DrawResult) => void;
   toggleScroll: (isScrollEnabled: boolean) => void;
-} & StreamEventLoggable<LogPoint> &
+} & StreamEventLoggable<StreamLogPoint> &
   BoxProps;
 
 const DrawingTest: FC<Props> = props => {

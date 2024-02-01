@@ -3,14 +3,19 @@ import React, { useRef, FC, useMemo } from 'react';
 import { StreamEventLoggable } from '@shared/lib';
 import { Box, SketchCanvas, SketchCanvasRef, useOnUndo } from '@shared/ui';
 
-import { DrawLine, ResponseSerializer, DrawResult, LogPoint } from '../lib';
+import {
+  DrawLine,
+  ResponseSerializer,
+  DrawResult,
+  StreamLogPoint,
+} from '../lib';
 import DrawPoint from '../lib/utils/DrawPoint';
 
 type Props = {
   value: Array<DrawLine>;
   onResult: (result: DrawResult) => void;
   width: number;
-} & StreamEventLoggable<LogPoint>;
+} & StreamEventLoggable<StreamLogPoint>;
 
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, width, onLog } = props;

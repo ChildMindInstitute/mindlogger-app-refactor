@@ -11,13 +11,13 @@ import {
   AbTestResult,
   MessageType,
   MessageTypeStrings,
-  StreamEventPoint,
+  StreamEventDto,
 } from '../lib';
 
 type Props = {
   testData: AbTestPayload;
   onResponse?: (response: AbTestResult) => void;
-} & StreamEventLoggable<StreamEventPoint> &
+} & StreamEventLoggable<StreamEventDto> &
   BoxProps;
 
 const ShapesRectPadding = 15;

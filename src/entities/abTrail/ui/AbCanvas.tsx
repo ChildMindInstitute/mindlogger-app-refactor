@@ -23,9 +23,14 @@ import {
   MessageType,
   OnResultLog,
   StreamEventPoint,
-  StreamEventError,
+  StreamEventErrorType,
+  StreamEventDto,
 } from '../lib';
-import { getDistance, transformCoordinates } from '../lib/utils';
+import {
+  getDistance,
+  mapStreamEventToDto,
+  transformCoordinates,
+} from '../lib/utils';
 
 const paint = Skia.Paint();
 paint.setColor(Skia.Color('black'));
@@ -42,7 +47,7 @@ type Props = {
   onLogResult: (data: OnResultLog) => void;
   onMessage: (message: MessageType) => void;
   onComplete: () => void;
-} & StreamEventLoggable<StreamEventPoint> &
+} & StreamEventLoggable<StreamEventDto> &
   BoxProps;
 
 const AbCanvas: FC<Props> = props => {
@@ -79,7 +84,7 @@ const AbCanvas: FC<Props> = props => {
     onMessage,
     width,
     readonly,
-    onLog,
+    onLog: onAddPointToStream,
   } = props;
 
   const canvasData = useMemo(
@@ -227,11 +232,39 @@ const AbCanvas: FC<Props> = props => {
       x: (point.x * width) / 100,
       y: (point.y * width) / 100,
       time: Date.now(),
-      line_number: logLines?.length - 1,
-      error: StreamEventError.NotDefined,
-      correct_path: `${currentNodeLabel} ~ ${nextNodeLabel}`,
-      actual_path: '-1',
+      lineNumber: logLines?.length - 1,
+      error: StreamEventErrorType.NotDefined,
+      currentNodeLabel,
+      nextNodeLabel,
     };
+  };
+
+  const addOverRightPointToStream = (point: Point) => {
+    const streamEventPoint = createStreamEventPoint(point);
+    streamEventPoint.error = StreamEventErrorType.OverRightPoint;
+
+    onAddPointToStream(mapStreamEventToDto(streamEventPoint));
+  };
+
+  const addOverWrongPointToStream = (point: Point, wrongPointLabel: string) => {
+    const streamEventPoint = createStreamEventPoint(point);
+    streamEventPoint.error = StreamEventErrorType.OverWrongPoint;
+    streamEventPoint.wrongPointLabel = wrongPointLabel;
+
+    onAddPointToStream(mapStreamEventToDto(streamEventPoint));
+  };
+
+  const addPointToStream = (point: Point) => {
+    const streamEventPoint = createStreamEventPoint(point);
+
+    onAddPointToStream(mapStreamEventToDto(streamEventPoint));
+  };
+
+  const addOverUndefinedPointToStream = (point: Point) => {
+    const streamEventPoint = createStreamEventPoint(point);
+    streamEventPoint.error = StreamEventErrorType.OverUndefinedPoint;
+
+    onAddPointToStream(mapStreamEventToDto(streamEventPoint));
   };
 
   const addLogLine = ({ x, y }: Point): void => {
@@ -296,7 +329,7 @@ const AbCanvas: FC<Props> = props => {
     drawPath();
     reRender();
 
-    onLog(createStreamEventPoint(point));
+    onAddPointToStream(mapStreamEventToDto(createStreamEventPoint(point)));
   };
 
   const onTouchProgress = (touchInfo: TouchInfo) => {
@@ -307,7 +340,6 @@ const AbCanvas: FC<Props> = props => {
     }
 
     const point: Point = { x: touchInfo.x, y: touchInfo.y };
-    const streamEventPoint = createStreamEventPoint(point);
 
     currentPath.lineTo(point.x, point.y);
 
@@ -335,10 +367,7 @@ const AbCanvas: FC<Props> = props => {
       onMessage(MessageType.Completed);
       onComplete();
 
-      streamEventPoint.error = StreamEventError.OVER_RIGHT_POINT;
-      streamEventPoint.actual_path = streamEventPoint.correct_path;
-
-      onLog(streamEventPoint);
+      addOverRightPointToStream(point);
       return;
     }
 
@@ -348,10 +377,7 @@ const AbCanvas: FC<Props> = props => {
       reCreatePath(point);
       incrementCurrentIndex();
 
-      streamEventPoint.error = StreamEventError.OVER_RIGHT_POINT;
-      streamEventPoint.actual_path = streamEventPoint.correct_path;
-
-      onLog(streamEventPoint);
+      addOverRightPointToStream(point);
       return;
     }
 
@@ -363,11 +389,11 @@ const AbCanvas: FC<Props> = props => {
       setFlareGreenPointIndex({ index: getCurrentIndex() });
       onMessage(MessageType.IncorrectLine);
 
-      streamEventPoint.error = StreamEventError.OVER_WRONG_POINT;
-      streamEventPoint.actual_path = node.label;
+      addOverWrongPointToStream(point, node.label);
+      return;
     }
 
-    onLog(streamEventPoint);
+    addPointToStream(point);
   };
 
   const onTouchEnd = (touchInfo: TouchInfo) => {
@@ -379,17 +405,14 @@ const AbCanvas: FC<Props> = props => {
 
     const point: Point = { x: touchInfo.x, y: touchInfo.y };
 
-    const streamEventPoint = createStreamEventPoint(point);
-
     const node = findNodeByPoint(point);
 
     if (!node) {
       setFlareGreenPointIndex({ index: getCurrentIndex() });
     }
 
-    streamEventPoint.error = StreamEventError.OVER_UNDEFINED_POINT;
+    addOverUndefinedPointToStream(point);
 
-    onLog(streamEventPoint);
     markLastLogPoints({ valid: false, actual: node?.label ?? 'none' });
   };
 
