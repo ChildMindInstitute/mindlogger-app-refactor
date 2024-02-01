@@ -6,7 +6,7 @@ import { Controller, useFormContext, useController } from 'react-hook-form';
 import { Input } from '@shared/ui';
 import { ErrorMessage } from '@shared/ui/form';
 
-type Props = {
+export type InputFieldProps = {
   name: string;
   placeholder: string;
   defaultValue?: string;
@@ -16,7 +16,7 @@ type Props = {
   mode?: 'dark' | 'light';
 } & TextInputProps;
 
-const InputField: FC<Props> = ({
+const InputField: FC<InputFieldProps> = ({
   name,
   defaultValue = '',
   placeholder,

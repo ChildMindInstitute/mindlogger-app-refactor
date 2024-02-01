@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Text, TextProps } from '@shared/ui';
 
 type Props = {
-  error?: FieldError | { message: string };
+  error?: Partial<FieldError>;
   mode?: 'dark' | 'light';
 } & TextProps;
 
@@ -16,21 +16,19 @@ const ErrorMessage: FC<PropsWithChildren<Props>> = ({
   ...props
 }) => {
   const { t } = useTranslation();
+  const renderError = (err: string, params?: any) => {
+    return (
+      <Text
+        color={mode === 'light' ? '$secondary' : '$tertiary'}
+        fontSize={12}
+        {...props}
+      >
+        {t(err, params)}
+      </Text>
+    );
+  };
 
-  return (
-    <>
-      {error?.message && (
-        <Text
-          color={mode === 'light' ? '$secondary' : '$tertiary'}
-          fontSize={12}
-          {...props}
-        >
-          {/* @ts-ignore */}
-          {t(error.message, error.params)}
-        </Text>
-      )}
-    </>
-  );
+  return <>{error?.message && renderError(error?.message)}</>;
 };
 
 export default ErrorMessage;

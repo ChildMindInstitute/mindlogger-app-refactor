@@ -1,5 +1,6 @@
 import CheckBoxField from './CheckBoxField';
 import ErrorMessage from './ErrorMessage';
 import InputField from './InputField';
+import InputPassword from './InputPassword';
 
-export { InputField, CheckBoxField, ErrorMessage };
+export { InputField, InputPassword, CheckBoxField, ErrorMessage };

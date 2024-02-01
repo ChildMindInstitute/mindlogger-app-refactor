@@ -7,7 +7,7 @@ import { isTablet } from 'react-native-device-info';
 
 import { executeIfOnline, useAppForm, useFormChanges } from '@app/shared/lib';
 import { Box, BoxProps, YStack, SubmitButton } from '@shared/ui';
-import { InputField, ErrorMessage } from '@shared/ui/form';
+import { InputField, InputPassword, ErrorMessage } from '@shared/ui/form';
 
 import { SignUpModel } from '../';
 import { SignUpFormSchema } from '../validation';
@@ -64,8 +64,7 @@ const SignUpForm: FC<Props> = props => {
             placeholder={t('sign_up_form:last_name')}
           />
 
-          <InputField
-            secureTextEntry
+          <InputPassword
             name="password"
             accessibilityLabel="signup-password-input"
             placeholder={t('auth:password')}
