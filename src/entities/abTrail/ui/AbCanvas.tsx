@@ -13,24 +13,16 @@ import {
 } from '@shopify/react-native-skia';
 
 import { AbTestPayload, Point, TestNode } from '@app/abstract/lib';
-import { StreamEventLoggable } from '@shared/lib';
+import {
+  AbTestStreamEvent,
+  AbTestStreamEventErrorType,
+  StreamEventLoggable,
+} from '@shared/lib';
 import { Box, BoxProps } from '@shared/ui';
 
 import AbShapes from './AbShapes';
-import {
-  LogLine,
-  LogPoint,
-  MessageType,
-  OnResultLog,
-  StreamEventPoint,
-  StreamEventErrorType,
-  StreamEventDto,
-} from '../lib';
-import {
-  getDistance,
-  mapStreamEventToDto,
-  transformCoordinates,
-} from '../lib/utils';
+import { LogLine, LogPoint, MessageType, OnResultLog } from '../lib';
+import { getDistance, transformCoordinates } from '../lib/utils';
 
 const paint = Skia.Paint();
 paint.setColor(Skia.Color('black'));
@@ -47,7 +39,7 @@ type Props = {
   onLogResult: (data: OnResultLog) => void;
   onMessage: (message: MessageType) => void;
   onComplete: () => void;
-} & StreamEventLoggable<StreamEventDto> &
+} & StreamEventLoggable<AbTestStreamEvent> &
   BoxProps;
 
 const AbCanvas: FC<Props> = props => {
@@ -225,7 +217,7 @@ const AbCanvas: FC<Props> = props => {
     return logPoint;
   };
 
-  const createStreamEventPoint = (point: Point): StreamEventPoint => {
+  const createStreamEventPoint = (point: Point): AbTestStreamEvent => {
     const [currentNodeLabel, nextNodeLabel] = getCurrentAndNextNodeLabels();
 
     return {
@@ -233,38 +225,38 @@ const AbCanvas: FC<Props> = props => {
       y: (point.y * width) / 100,
       time: Date.now(),
       lineNumber: logLines?.length - 1,
-      error: StreamEventErrorType.NotDefined,
+      error: AbTestStreamEventErrorType.NotDefined,
       currentNodeLabel,
       nextNodeLabel,
     };
   };
 
-  const addOverRightPointToStream = (point: Point) => {
+  const addOverCorrectPointToStream = (point: Point) => {
     const streamEventPoint = createStreamEventPoint(point);
-    streamEventPoint.error = StreamEventErrorType.OverRightPoint;
+    streamEventPoint.error = AbTestStreamEventErrorType.OverCorrectPoint;
 
-    onAddPointToStream(mapStreamEventToDto(streamEventPoint));
+    onAddPointToStream(streamEventPoint);
   };
 
   const addOverWrongPointToStream = (point: Point, wrongPointLabel: string) => {
     const streamEventPoint = createStreamEventPoint(point);
-    streamEventPoint.error = StreamEventErrorType.OverWrongPoint;
+    streamEventPoint.error = AbTestStreamEventErrorType.OverWrongPoint;
     streamEventPoint.wrongPointLabel = wrongPointLabel;
 
-    onAddPointToStream(mapStreamEventToDto(streamEventPoint));
+    onAddPointToStream(streamEventPoint);
   };
 
   const addPointToStream = (point: Point) => {
     const streamEventPoint = createStreamEventPoint(point);
 
-    onAddPointToStream(mapStreamEventToDto(streamEventPoint));
+    onAddPointToStream(streamEventPoint);
   };
 
   const addOverUndefinedPointToStream = (point: Point) => {
     const streamEventPoint = createStreamEventPoint(point);
-    streamEventPoint.error = StreamEventErrorType.OverUndefinedPoint;
+    streamEventPoint.error = AbTestStreamEventErrorType.OverUndefinedPoint;
 
-    onAddPointToStream(mapStreamEventToDto(streamEventPoint));
+    onAddPointToStream(streamEventPoint);
   };
 
   const addLogLine = ({ x, y }: Point): void => {
@@ -329,7 +321,7 @@ const AbCanvas: FC<Props> = props => {
     drawPath();
     reRender();
 
-    onAddPointToStream(mapStreamEventToDto(createStreamEventPoint(point)));
+    onAddPointToStream(createStreamEventPoint(point));
   };
 
   const onTouchProgress = (touchInfo: TouchInfo) => {
@@ -358,6 +350,7 @@ const AbCanvas: FC<Props> = props => {
 
     if (isOverNext(point) && isOverLast(point)) {
       markLastLogPoints({ valid: true });
+      addOverCorrectPointToStream(point);
       keepPathInState();
       resetCurrentPath();
       onLogResult({
@@ -367,17 +360,16 @@ const AbCanvas: FC<Props> = props => {
       onMessage(MessageType.Completed);
       onComplete();
 
-      addOverRightPointToStream(point);
       return;
     }
 
     if (isOverNext(point)) {
       markLastLogPoints({ valid: true });
+      addOverCorrectPointToStream(point);
       keepPathInState();
       reCreatePath(point);
       incrementCurrentIndex();
 
-      addOverRightPointToStream(point);
       return;
     }
 

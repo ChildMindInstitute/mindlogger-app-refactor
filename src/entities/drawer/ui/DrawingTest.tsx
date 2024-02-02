@@ -4,10 +4,10 @@ import { FC, useState } from 'react';
 import { CachedImage } from '@georstat/react-native-image-cache';
 
 import { Box, BoxProps, XStack } from '@app/shared/ui';
-import { StreamEventLoggable } from '@shared/lib';
+import { DrawingStreamEvent, StreamEventLoggable } from '@shared/lib';
 
 import DrawingBoard from './DrawingBoard';
-import { DrawLine, DrawResult, StreamLogPoint, SvgFileManager } from '../lib';
+import { DrawLine, DrawResult, SvgFileManager } from '../lib';
 
 const RectPadding = 15;
 
@@ -17,7 +17,7 @@ type Props = {
   backgroundImageUrl: string | null;
   onResult: (result: DrawResult) => void;
   toggleScroll: (isScrollEnabled: boolean) => void;
-} & StreamEventLoggable<StreamLogPoint> &
+} & StreamEventLoggable<DrawingStreamEvent> &
   BoxProps;
 
 const DrawingTest: FC<Props> = props => {

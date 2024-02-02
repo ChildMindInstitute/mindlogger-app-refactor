@@ -29,34 +29,6 @@ export type OnResultLog = {
   currentIndex: number;
 };
 
-export const enum StreamEventErrorType {
-  NotDefined = '?',
-  OverRightPoint = 'E0',
-  OverWrongPoint = 'E1',
-  OverUndefinedPoint = 'E2',
-}
-
-export type StreamEventPoint = {
-  x: number;
-  y: number;
-  time: number;
-  lineNumber: number;
-  error: StreamEventErrorType;
-  currentNodeLabel: string;
-  nextNodeLabel: string;
-  wrongPointLabel?: string;
-};
-
-export type StreamEventDto = {
-  x: number;
-  y: number;
-  time: number;
-  line_number: number;
-  error: StreamEventErrorType;
-  correct_path: string;
-  actual_path: string;
-};
-
 export type AbTestResult = {
   width: number;
   startTime: number;

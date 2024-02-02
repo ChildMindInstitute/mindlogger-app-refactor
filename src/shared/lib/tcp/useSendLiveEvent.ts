@@ -1,14 +1,13 @@
 import { useCallback } from 'react';
 
-import { DrawPoint } from '@entities/drawer';
-import { StabilityTrackerAnswerValue } from '@shared/api';
-
-import { FlankerLiveEvent } from './types';
+import { mapStreamEventToDto } from './lib/streamEventMapper';
+import { LiveEvent, StreamEventActivityItemType } from './types';
 import { useTCPSocket } from './useTCPSocket';
 
-type LiveEvent = DrawPoint | StabilityTrackerAnswerValue | FlankerLiveEvent;
-
-export function useSendEvent(streamEnabled: boolean) {
+export function useSendEvent(
+  type: StreamEventActivityItemType,
+  streamEnabled: boolean,
+) {
   const { sendMessage, connected } = useTCPSocket({
     onClosed: () => {},
   });
@@ -18,15 +17,16 @@ export function useSendEvent(streamEnabled: boolean) {
       if (!connected || !streamEnabled) {
         return;
       }
+      const dataDto = mapStreamEventToDto(type, data);
 
       const liveEvent = {
         type: 'live_event',
-        data,
+        data: dataDto,
       };
 
       sendMessage(JSON.stringify(liveEvent));
     },
-    [sendMessage, connected, streamEnabled],
+    [type, sendMessage, connected, streamEnabled],
   );
 
   return {

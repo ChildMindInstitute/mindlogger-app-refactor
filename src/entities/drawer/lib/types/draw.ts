@@ -26,5 +26,3 @@ export type CachedBezierItem = {
   curveResult: Point[];
   curveToInterpolate: Point[];
 };
-
-export type StreamLogPoint = DrawPoint & { line_number: number };
