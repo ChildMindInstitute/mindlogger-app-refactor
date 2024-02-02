@@ -18,6 +18,7 @@ import {
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
+  MixProperties,
 } from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
@@ -102,6 +103,7 @@ function FinishItem({
   const { isAlertOpened: isRetryAlertOpened, openAlert: openRetryAlert } =
     useRetryUpload({
       retryUpload: processQueue,
+      appletId,
     });
 
   let finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';
@@ -198,7 +200,9 @@ function FinishItem({
 
     clearActivityStorageRecord();
 
-    AnalyticsService.track('Assessment completed');
+    AnalyticsService.track('Assessment completed', {
+      [MixProperties.AppletId]: appletId,
+    });
 
     const success = await processQueue();
 

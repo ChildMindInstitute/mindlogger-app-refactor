@@ -13,6 +13,8 @@ import {
   ILogger,
   isAppOnline,
   Logger,
+  MixEvents,
+  MixProperties,
   useAppDispatch,
   useAppletInfo,
   useAppSelector,
@@ -125,6 +127,39 @@ function useStartEntity({
       });
     };
 
+    const appletName = getAppletDisplayName(appletId);
+
+    const logStart = () => {
+      logger.log(
+        `[useStartEntity.startActivity]: Activity "${entityName}|${activityId}" started, applet "${appletName}|${appletId}"`,
+      );
+      AnalyticsService.track(MixEvents.AssessmentStarted, {
+        [MixProperties.AppletId]: appletId,
+      });
+    };
+    const logRestart = () => {
+      logger.log(
+        `[useStartEntity.startActivity]: Activity "${entityName}|${activityId}" restarted, applet "${appletName}|${appletId}"`,
+      );
+      AnalyticsService.track(MixEvents.ActivityRestart, {
+        [MixProperties.AppletId]: appletId,
+      });
+      AnalyticsService.track(MixEvents.AssessmentStarted, {
+        [MixProperties.AppletId]: appletId,
+      });
+    };
+    const logResume = () => {
+      logger.log(
+        `[useStartEntity.startActivity]: Activity "${entityName}|${activityId}" resumed, applet "${appletName}|${appletId}"`,
+      );
+      AnalyticsService.track(MixEvents.ActivityResume, {
+        [MixProperties.AppletId]: appletId,
+      });
+      AnalyticsService.track(MixEvents.AssessmentStarted, {
+        [MixProperties.AppletId]: appletId,
+      });
+    };
+
     return new Promise<StartResult>(resolve => {
       if (shouldBreakDueToMediaReferences()) {
         onMediaReferencesFound();
@@ -148,8 +183,6 @@ function useStartEntity({
         getProgress(appletId, activityId, eventId),
       );
 
-      const appletName = getAppletDisplayName(appletId);
-
       if (isActivityInProgress) {
         if (isTimerElapsed) {
           resolve({ startedFromScratch: false });
@@ -159,27 +192,17 @@ function useStartEntity({
         onBeforeStartingActivity({
           onRestart: () => {
             cleanUpMediaFiles({ activityId, appletId, eventId, order: 0 });
-
-            logger.log(
-              `[useStartEntity.startActivity]: Activity "${entityName}|${activityId}" restarted, applet "${appletName}|${appletId}"`,
-            );
+            logRestart();
             activityStarted(appletId, activityId, eventId);
             resolve({ startedFromScratch: true });
           },
           onResume: () => {
-            logger.log(
-              `[useStartEntity.startActivity]: Activity "${entityName}|${activityId}" resumed, applet "${appletName}|${appletId}"`,
-            );
+            logResume();
             return resolve({ startedFromScratch: false });
           },
         });
       } else {
-        logger.log(
-          `[useStartEntity.startActivity]: Activity "${entityName}|${activityId}" started, applet "${appletName}|${appletId}"`,
-        );
-
-        AnalyticsService.track('Assessment started');
-
+        logStart();
         activityStarted(appletId, activityId, eventId);
         resolve({ startedFromScratch: true });
       }
@@ -230,6 +253,39 @@ function useStartEntity({
       return flow.activityIds;
     };
 
+    const appletName = getAppletDisplayName(appletId);
+
+    const logStart = () => {
+      logger.log(
+        `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" started, applet "${appletName}|${appletId}"`,
+      );
+      AnalyticsService.track(MixEvents.AssessmentStarted, {
+        [MixProperties.AppletId]: appletId,
+      });
+    };
+    const logRestart = () => {
+      logger.log(
+        `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" restarted, applet "${appletName}|${appletId}"`,
+      );
+      AnalyticsService.track(MixEvents.ActivityRestart, {
+        [MixProperties.AppletId]: appletId,
+      });
+      AnalyticsService.track(MixEvents.AssessmentStarted, {
+        [MixProperties.AppletId]: appletId,
+      });
+    };
+    const logResume = () => {
+      logger.log(
+        `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" resumed, applet "${appletName}|${appletId}"`,
+      );
+      AnalyticsService.track(MixEvents.ActivityResume, {
+        [MixProperties.AppletId]: appletId,
+      });
+      AnalyticsService.track(MixEvents.AssessmentStarted, {
+        [MixProperties.AppletId]: appletId,
+      });
+    };
+
     const flowActivities: string[] = getFlowActivities();
 
     const firstActivityId: string = flowActivities[0];
@@ -255,8 +311,6 @@ function useStartEntity({
         getProgress(appletId, flowId, eventId),
       );
 
-      const appletName = getAppletDisplayName(appletId);
-
       if (isFlowInProgress) {
         if (isTimerElapsed) {
           resolve({
@@ -275,32 +329,21 @@ function useStartEntity({
                 order: i,
               });
             }
-            logger.log(
-              `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" restarted, applet "${appletName}|${appletId}"`,
-            );
-
+            logRestart();
             flowStarted(appletId, flowId, firstActivityId, eventId, 0);
             resolve({
               startedFromScratch: true,
             });
           },
           onResume: () => {
-            logger.log(
-              `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" resumed, applet "${appletName}|${appletId}"`,
-            );
-
+            logResume();
             return resolve({
               startedFromScratch: false,
             });
           },
         });
       } else {
-        logger.log(
-          `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" started, applet "${appletName}|${appletId}"`,
-        );
-
-        AnalyticsService.track('Assessment started');
-
+        logStart();
         flowStarted(appletId, flowId, firstActivityId, eventId, 0);
         resolve({
           startedFromScratch: true,
