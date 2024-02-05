@@ -1,13 +1,30 @@
 import { DrawPoint } from '@entities/drawer';
 
 export type FlankerLiveEvent = {
+  trialIndex: number;
+  duration: number;
+  question: string;
+  buttonPressed: string;
+  imageTime?: number;
+  correct: boolean;
+  tag: string;
+  startTime: number;
+  startTimestamp: number;
+  offset?: number;
+  responseTouchTimeStamp?: number;
+  showFixation?: boolean;
+  showFeedback?: boolean;
+  type: 'Flanker';
+};
+
+export type FlankerLiveEventDto = {
   trial_index: number;
   duration: number;
   question: string;
   correct: boolean;
-  response_touch_timestamp: number | null;
+  response_touch_timestamp?: number | null;
   tag: string;
-  start_time: number;
+  start_time?: number;
   start_timestamp: number;
   offset: number;
   button_pressed: string;
@@ -41,15 +58,13 @@ export type StabilityTrackerEvent = {
   lambda: number;
   score: number;
   lambdaSlope: number;
+  type: 'StabilityTracker';
 };
 
-export type StreamEventActivityItemType =
-  | 'AbTest'
-  | 'StabilityTracker'
-  | 'DrawingTest'
-  | 'Flanker';
-
-export type DrawingStreamEvent = DrawPoint & { lineNumber: number };
+export type DrawingStreamEvent = DrawPoint & {
+  lineNumber: number;
+  type: 'DrawingTest';
+};
 
 export type DrawingStreamEventDto = DrawPoint & { line_number: number };
 
@@ -69,6 +84,7 @@ export type AbTestStreamEvent = {
   currentNodeLabel: string;
   nextNodeLabel: string;
   wrongPointLabel?: string;
+  type: 'AbTest';
 };
 
 export type AbTestStreamEventDto = {
@@ -80,3 +96,9 @@ export type AbTestStreamEventDto = {
   correct_path: string;
   actual_path: string;
 };
+
+export type LiveEventDto =
+  | AbTestStreamEventDto
+  | DrawingStreamEventDto
+  | FlankerLiveEventDto
+  | StabilityTrackerEventDto;

@@ -1,23 +1,19 @@
 import { useCallback } from 'react';
 
-import { mapStreamEventToDto } from './lib/streamEventMapper';
-import { LiveEvent, StreamEventActivityItemType } from './types';
+import { LiveEventDto } from './types';
 import { useTCPSocket } from './useTCPSocket';
 
-export function useSendEvent(
-  type: StreamEventActivityItemType,
-  streamEnabled: boolean,
-) {
+export function useSendEvent(streamEnabled: boolean) {
   const { sendMessage, connected } = useTCPSocket({
     onClosed: () => {},
   });
 
   const sendLiveEvent = useCallback(
-    (data: LiveEvent) => {
+    (dataDto: LiveEventDto) => {
+      console.log(dataDto);
       if (!connected || !streamEnabled) {
         return;
       }
-      const dataDto = mapStreamEventToDto(type, data);
 
       const liveEvent = {
         type: 'live_event',
@@ -26,7 +22,7 @@ export function useSendEvent(
 
       sendMessage(JSON.stringify(liveEvent));
     },
-    [type, sendMessage, connected, streamEnabled],
+    [sendMessage, connected, streamEnabled],
   );
 
   return {

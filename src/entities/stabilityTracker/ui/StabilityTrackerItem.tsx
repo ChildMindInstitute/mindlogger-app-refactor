@@ -337,7 +337,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
   };
 
   const saveResponses = () => {
-    const response = {
+    const response: StabilityTrackerEvent = {
       timestamp: new Date().getTime(),
       circlePosition: [circlePosition.current[1] / PANEL_RADIUS - 1],
       userPosition: [userPosition.current[1] / PANEL_RADIUS - 1],
@@ -345,6 +345,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
       lambda: lambdaValue.current,
       score: score.current,
       lambdaSlope: lambdaSlope.current,
+      type: 'StabilityTracker',
     };
 
     onLog(response);

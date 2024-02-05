@@ -52,7 +52,7 @@ const DrawingBoard: FC<Props> = props => {
     };
     const logPoint = drawPoint.scale(vector) as DrawPoint;
 
-    onLog({ ...logPoint, lineNumber: value?.length });
+    onLog({ ...logPoint, lineNumber: value?.length, type: 'DrawingTest' });
   };
 
   const onTouchProgress = (x: number, y: number) => {
@@ -62,7 +62,7 @@ const DrawingBoard: FC<Props> = props => {
 
     const logPoint = drawPoint.scale(vector);
 
-    onLog({ ...logPoint, lineNumber: value?.length });
+    onLog({ ...logPoint, lineNumber: value?.length, type: 'DrawingTest' });
   };
 
   const onTouchEnd = () => {

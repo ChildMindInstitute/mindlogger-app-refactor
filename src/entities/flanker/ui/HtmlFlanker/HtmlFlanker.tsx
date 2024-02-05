@@ -46,34 +46,6 @@ const HtmlFlanker: FC<Props> = props => {
     configuration.buttons,
   )}); \n ${parsedConfiguration}`;
 
-  const generateLiveEvent = (
-    data: FlankerWebViewLogRecord,
-  ): FlankerLiveEvent => {
-    let screenCountPerTrial = 1;
-
-    if (configuration.showFeedback) {
-      screenCountPerTrial++;
-    }
-    if (configuration.showFixation) {
-      screenCountPerTrial++;
-    }
-
-    const liveEvent = {
-      trial_index: Math.ceil((data.trial_index + 1) / screenCountPerTrial),
-      duration: data.rt,
-      question: data.stimulus,
-      button_pressed: data.button_pressed,
-      start_time: data.image_time,
-      correct: data.correct,
-      start_timestamp: data.start_timestamp,
-      offset: data.start_timestamp - data.start_time,
-      tag: data.tag,
-      response_touch_timestamp: data.rt ? data.start_timestamp + data.rt : null,
-    };
-
-    return liveEvent;
-  };
-
   return (
     <Box flex={1}>
       <WebView
@@ -94,9 +66,22 @@ const HtmlFlanker: FC<Props> = props => {
           }
 
           if (type === 'response') {
-            const liveEvent = generateLiveEvent(
-              data as FlankerWebViewLogRecord,
-            );
+            const responseData = parsed.data as FlankerWebViewLogRecord;
+
+            const liveEvent: FlankerLiveEvent = {
+              trialIndex: responseData.trial_index,
+              duration: responseData.rt,
+              question: responseData.stimulus,
+              buttonPressed: responseData.button_pressed,
+              imageTime: responseData.image_time,
+              startTime: responseData.start_time,
+              correct: responseData.correct,
+              startTimestamp: responseData.start_timestamp,
+              tag: responseData.tag,
+              showFeedback: configuration.showFeedback,
+              showFixation: configuration.showFixation,
+              type: 'Flanker',
+            };
 
             props.onLog(liveEvent);
 

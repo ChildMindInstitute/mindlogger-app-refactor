@@ -22,12 +22,7 @@ import { useAppletStreamingStatus } from '@entities/applet/lib/hooks';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
 import { StabilityTracker } from '@entities/stabilityTracker';
-import {
-  IS_ANDROID,
-  StreamEventActivityItemType,
-  useSendEvent,
-  wait,
-} from '@shared/lib';
+import { IS_ANDROID, LiveEvent, useSendEvent, wait } from '@shared/lib';
 import {
   RadioActivityItem,
   SurveySlider,
@@ -45,6 +40,7 @@ import {
   PipelineItemResponse,
   ActivityIdentityContext,
 } from '../lib';
+import { mapStreamEventToDto } from '../model';
 
 type Props = ActivityItemProps &
   PipelineItemAnswer & {
@@ -72,10 +68,13 @@ function ActivityItem({
 
   const [scrollEnabled, setScrollEnabled] = useState(initialScrollEnabled);
 
-  const { sendLiveEvent } = useSendEvent(
-    type as StreamEventActivityItemType,
-    streamEnabled,
-  );
+  const { sendLiveEvent } = useSendEvent(streamEnabled);
+
+  const processLiveEvent = (streamEvent: LiveEvent) => {
+    const liveEventDto = mapStreamEventToDto(streamEvent);
+
+    sendLiveEvent(liveEventDto);
+  };
 
   const { next } = useContext(HandlersContext);
 
@@ -120,7 +119,7 @@ function ActivityItem({
           <AbTest
             testData={pipelineItem.payload}
             onResponse={onResponse}
-            onLog={sendLiveEvent}
+            onLog={processLiveEvent}
           />
         </Box>
       );
@@ -137,7 +136,7 @@ function ActivityItem({
             }}
             onMaxLambdaChange={onContextChange}
             maxLambda={context?.maxLambda as number}
-            onLog={sendLiveEvent}
+            onLog={processLiveEvent}
           />
         </Box>
       );
@@ -155,7 +154,7 @@ function ActivityItem({
               lines: value?.answer?.lines ?? [],
             }}
             onResult={onResponse}
-            onLog={sendLiveEvent}
+            onLog={processLiveEvent}
           />
         </Box>
       );
@@ -169,7 +168,7 @@ function ActivityItem({
             onResponse(data);
             moveToNextItem();
           }}
-          onLog={sendLiveEvent}
+          onLog={processLiveEvent}
         />
       ) : (
         <NativeIosFlanker
@@ -178,7 +177,7 @@ function ActivityItem({
             onResponse(data);
             moveToNextItem();
           }}
-          onLog={sendLiveEvent}
+          onLog={processLiveEvent}
         />
       );
       break;

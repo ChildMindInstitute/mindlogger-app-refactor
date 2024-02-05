@@ -228,6 +228,7 @@ const AbCanvas: FC<Props> = props => {
       error: AbTestStreamEventErrorType.NotDefined,
       currentNodeLabel,
       nextNodeLabel,
+      type: 'AbTest',
     };
   };
 
