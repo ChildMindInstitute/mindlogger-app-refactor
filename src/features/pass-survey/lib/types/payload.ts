@@ -202,6 +202,7 @@ type CheckboxPayload = {
     alert: {
       message: string;
     } | null;
+    isNoneAbove: boolean;
   }>;
 };
 

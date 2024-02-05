@@ -41,18 +41,34 @@ const CheckBoxActivityItem: FC<Props> = ({
     [options],
   );
 
-  const onItemValueChanged = (checkedItemValue: string) => {
-    const checkedValue = findById(values, checkedItemValue);
+  const removeItem = (item: Item) => {
+    const filteredValues = values.filter(val => val.id !== item.id);
+    const value = filteredValues.length ? filteredValues : null;
 
-    if (checkedValue != null) {
-      const filteredValues = values.filter(val => val.id !== checkedItemValue);
-      const value = filteredValues.length ? filteredValues : null;
+    onChange(value);
+  };
 
-      onChange(value);
+  const addItem = (selectedItem: Item) => {
+    let itemList: Item[];
+
+    if (selectedItem.isNoneAbove) {
+      itemList = [];
     } else {
-      const value = [...values, findById(config.options, checkedItemValue)!];
+      itemList = values.filter(val => !val.isNoneAbove);
+    }
 
-      onChange(value);
+    const value = [...itemList, selectedItem];
+
+    onChange(value);
+  };
+
+  const onItemValueChanged = (item: Item) => {
+    const alreadySelected = values.find(o => o.id === item.id);
+
+    if (alreadySelected) {
+      removeItem(item);
+    } else {
+      addItem(item);
     }
   };
 
@@ -80,7 +96,7 @@ const CheckBoxActivityItem: FC<Props> = ({
               setPalette={setPalette}
               imageContainerVisible={hasImage}
               tooltipContainerVisible={hasTooltip}
-              onChange={() => onItemValueChanged(item.id)}
+              onChange={() => onItemValueChanged(item)}
               value={!!findById(values, item.id)}
               textReplacer={textReplacer}
               position={index}
