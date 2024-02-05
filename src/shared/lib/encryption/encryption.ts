@@ -29,6 +29,10 @@ type EncryptDataProps = { text: string; key: number[] };
 type DecryptDataProps = { text: string; key: number[] };
 
 class EncryptionManager {
+  private getRandomBytes(): Buffer {
+    return crypto.randomBytes(Number(IV_LENGTH));
+  }
+
   public createEncryptionService = (params: InputProps) => {
     const aesKey = this.getAESKey({
       appletPrime: JSON.parse(params.prime),
@@ -107,7 +111,7 @@ class EncryptionManager {
 
   public encryptData = ({ text, key }: EncryptDataProps): string => {
     const CHUNK_SIZE = 10240;
-    const iv: Buffer = crypto.randomBytes(Number(IV_LENGTH));
+    const iv: Buffer = this.getRandomBytes();
     const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
 
     let encrypted: Buffer = Buffer.alloc(0);
