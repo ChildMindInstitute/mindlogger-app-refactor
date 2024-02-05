@@ -7,16 +7,13 @@ import {
   useRef,
 } from 'react';
 
-import {
-  Gesture,
-  GestureDetector,
-  TouchData,
-} from 'react-native-gesture-handler';
-import { runOnJS, useSharedValue } from 'react-native-reanimated';
+import { GestureDetector } from 'react-native-gesture-handler';
+import { useSharedValue } from 'react-native-reanimated';
 
 import { useCallbacksRefs } from '@app/shared/lib';
 
 import CanvasBoard, { CanvasBoardRef } from './CanvasBoard';
+import DrawingGesture from './DrawingGesture';
 import LineSketcher, { Point, Shape } from './LineSketcher';
 
 export type SketchCanvasRef = {
@@ -66,7 +63,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   );
 
   const onTouchProgress = useCallback(
-    (touchInfo: Point) => {
+    (touchInfo: Point, straightLine: boolean) => {
       const lastDrawnPoint = lineSketcher.getLastPoint();
 
       if (lastDrawnPoint) {
@@ -92,7 +89,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
 
           return [...currentPaths, path];
         } else {
-          lineSketcher.progressLine(lastPath, touchInfo);
+          lineSketcher.progressLine(lastPath, touchInfo, straightLine);
 
           return [...currentPaths.slice(0, -1), lastPath];
         }
@@ -130,96 +127,13 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     callbacksRef.current.onStrokeEnd();
   }, [callbacksRef, createDot, lineSketcher]);
 
-  const isOutOfCanvas = useCallback(
-    (point: Point) => {
-      'worklet';
-      return (
-        point.x > sizeRef.value ||
-        point.y > sizeRef.value ||
-        point.x < 0 ||
-        point.y < 0
-      );
-    },
-    [sizeRef],
-  );
-
-  const normalizeCoordinates = useCallback(
-    (touchData: TouchData, deviation: number = 0): TouchData => {
-      'worklet';
-      const normalize = (value: number) => {
-        if (value < 0) {
-          return 0 + deviation;
-        }
-
-        if (value > sizeRef.value) {
-          return sizeRef.value - deviation;
-        }
-
-        return value;
-      };
-
-      return {
-        ...touchData,
-        x: normalize(touchData.x),
-        y: normalize(touchData.y),
-      };
-    },
-    [sizeRef],
-  );
-
   const drawingGesture = useMemo(
     () =>
-      Gesture.Pan()
-        .manualActivation(true)
-        .onTouchesDown((event, stateManager) => {
-          if (event.numberOfTouches === 1) {
-            const touchId = event.allTouches[0].id;
-
-            currentTouchIdRef.value = touchId;
-            stateManager.activate();
-          }
-        })
-        .onTouchesUp((event, stateManager) => {
-          const shouldEndGesture = event.changedTouches.some(
-            touchData => touchData.id === currentTouchIdRef.value,
-          );
-
-          if (shouldEndGesture) {
-            stateManager.end();
-            currentTouchIdRef.value = null;
-          }
-        })
-        .onBegin(event => {
-          runOnJS(onTouchStart)(event);
-        })
-        .onTouchesMove((event, manager) => {
-          const touchData = event.allTouches[0];
-
-          if (isOutOfCanvas(touchData)) {
-            const finalPoint = normalizeCoordinates(touchData);
-            // It is crucial to create an anchor point in this case before the final step
-            // because the lines are painted as curved lines that rely on anchors.
-            const anchorFinalPoint = normalizeCoordinates(touchData, 1);
-
-            runOnJS(onTouchProgress)(anchorFinalPoint);
-            runOnJS(onTouchProgress)(finalPoint);
-
-            manager.end();
-          } else {
-            runOnJS(onTouchProgress)(touchData);
-          }
-        })
-        .onFinalize(() => {
-          runOnJS(onTouchEnd)();
-        }),
-    [
-      currentTouchIdRef,
-      isOutOfCanvas,
-      normalizeCoordinates,
-      onTouchEnd,
-      onTouchProgress,
-      onTouchStart,
-    ],
+      DrawingGesture(
+        { sizeRef, currentTouchIdRef },
+        { onTouchStart, onTouchProgress, onTouchEnd },
+      ),
+    [currentTouchIdRef, onTouchEnd, onTouchProgress, onTouchStart, sizeRef],
   );
 
   useEffect(() => {

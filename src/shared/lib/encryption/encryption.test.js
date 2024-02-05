@@ -1,5 +1,6 @@
 import { encryption } from './encryption';
 import { answerRequestExample } from './mockData';
+import { Buffer } from 'buffer';
 
 jest.mock('@shared/lib', () => ({ IV_LENGTH: 16 }));
 
@@ -8,6 +9,19 @@ describe('Encryption', () => {
   const publicKey = [4, 5, 6];
   const appletPrime = [7, 8, 9];
   const appletBase = [10, 11, 12];
+
+  let tempGetRandomBytes;
+
+  beforeAll(() => {
+    tempGetRandomBytes = encryption.getRandomBytes;
+    encryption.getRandomBytes = jest
+      .fn()
+      .mockReturnValue(Buffer.alloc(16, 'Mock generate string'));
+  });
+
+  afterAll(() => {
+    encryption.getRandomBytes = tempGetRandomBytes;
+  });
 
   describe('getPrivateKey', () => {
     it('should return a valid private key', () => {

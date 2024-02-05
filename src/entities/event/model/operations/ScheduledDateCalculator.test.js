@@ -1,9 +1,20 @@
 import { addDays, addMonths, startOfDay, subDays, subMonths } from 'date-fns';
 import ScheduledDateCalculator from './ScheduledDateCalculator';
 
-const now = new Date();
+const now = new Date(2024, 0, 25);
 
 describe('ScheduledDateCalculator', () => {
+  let tempGetNow;
+
+  beforeAll(() => {
+    tempGetNow = ScheduledDateCalculator.getNow;
+    ScheduledDateCalculator.getNow = jest.fn().mockReturnValue(new Date(now));
+  });
+
+  afterAll(() => {
+    ScheduledDateCalculator.getNow = tempGetNow;
+  });
+
   describe('Test Always Available events', () => {
     it('Should return today with time eq.to start of day or to timeFrom', () => {
       const eventAvailability = {
