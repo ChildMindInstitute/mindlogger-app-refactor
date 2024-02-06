@@ -217,9 +217,7 @@
     "sign_up_agree": "By signing up, you agree to MindLogger’s"
   },
   "password_requirements": {
-    "at_least_characters": "8 caractères",
-    "at_least_capital_letter": "lettre capitale",
-    "no_special_characters": "caractères spéciaux",
+    "at_least_characters": "6 caractères",
     "no_blank_spaces": "pas d'espaces vides",
     "must_include": "Le mot de passe doit inclure:"
   },

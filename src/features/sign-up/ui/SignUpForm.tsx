@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { FC } from 'react';
+import { FC, useCallback, useState, useEffect } from 'react';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -7,10 +7,13 @@ import { isTablet } from 'react-native-device-info';
 
 import { executeIfOnline, useAppForm, useFormChanges } from '@app/shared/lib';
 import { Box, BoxProps, YStack, SubmitButton } from '@shared/ui';
-import { InputField, InputPassword, ErrorMessage } from '@shared/ui/form';
+import { InputField, ErrorMessage } from '@shared/ui/form';
+import { EyeIcon, EyeSlashIcon } from '@shared/ui/icons';
 
 import { SignUpModel } from '../';
 import { SignUpFormSchema } from '../validation';
+import { TouchableWithoutFeedback } from 'react-native';
+import PasswordRequirements from '@app/shared/ui/form/PasswordRequirements';
 
 type Props = BoxProps & {
   onLoginSuccess: () => void;
@@ -18,11 +21,11 @@ type Props = BoxProps & {
 
 const SignUpForm: FC<Props> = props => {
   const { t } = useTranslation();
+  const [isPasswordHidden, setPasswordHidden] = useState(true);
 
   const {
     isLoading,
     error,
-    reset,
     mutate: signUp,
   } = SignUpModel.useRegistrationMutation(props.onLoginSuccess);
 
@@ -34,13 +37,39 @@ const SignUpForm: FC<Props> = props => {
     onSubmitSuccess: data => {
       executeIfOnline(() => signUp(data));
     },
+    criteriaMode: 'all',
+    shouldUseNativeValidation: false,
   });
 
   useFormChanges({
     form,
     watchInputs: ['password'],
-    onInputChange: () => reset(),
+    onInputChange: function () {
+      form.trigger('password');
+    },
   });
+
+  const passwordRequirements = useCallback(() => {
+    const errors = Object.values(
+      form.formState.errors?.password?.types || {},
+    ).flat();
+    return [
+      {
+        label: 'password_requirements:at_least_characters',
+        isValid:
+          form.getValues().password.length > 0 &&
+          !errors.includes('password_requirements:at_least_characters'),
+      },
+      {
+        label: 'password_requirements:no_blank_spaces',
+        isValid:
+          form.getValues().password.length > 0 &&
+          !errors.includes('password_requirements:no_blank_spaces'),
+      },
+    ];
+  }, [form.formState.errors?.password?.types]);
+
+  const ShowPasswordIcon = isPasswordHidden ? EyeSlashIcon : EyeIcon;
 
   return (
     <Box {...props}>
@@ -64,10 +93,19 @@ const SignUpForm: FC<Props> = props => {
             placeholder={t('sign_up_form:last_name')}
           />
 
-          <InputPassword
+          <InputField
             name="password"
             accessibilityLabel="signup-password-input"
             placeholder={t('auth:password')}
+            secureTextEntry={isPasswordHidden}
+            rightIcon={
+              <TouchableWithoutFeedback
+                onPress={() => setPasswordHidden(!isPasswordHidden)}
+              >
+                <ShowPasswordIcon size={24} color="#FFFFFF" />
+              </TouchableWithoutFeedback>
+            }
+            hideError
           />
 
           {error && (
@@ -79,6 +117,8 @@ const SignUpForm: FC<Props> = props => {
             />
           )}
         </YStack>
+
+        <PasswordRequirements requirements={passwordRequirements()} />
 
         <SubmitButton
           isLoading={isLoading}

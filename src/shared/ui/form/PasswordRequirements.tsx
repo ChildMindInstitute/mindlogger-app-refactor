@@ -8,25 +8,13 @@ import { colors } from '@shared/lib/constants/colors';
 import { FeatherCrossIcon, FeatherCheckIcon } from '../icons';
 
 const themeColors = {
-  dark: {
-    valid: {
-      iconColor: colors.white,
-      textColor: colors.white,
-    },
-    invalid: {
-      iconColor: colors.whiteTsp2,
-      textColor: colors.whiteTsp2,
-    },
+  valid: {
+    iconColor: colors.white,
+    textColor: colors.white,
   },
-  light: {
-    valid: {
-      iconColor: colors.blue3,
-      textColor: colors.darkerGrey4,
-    },
-    invalid: {
-      iconColor: colors.grey4,
-      textColor: colors.grey4,
-    },
+  invalid: {
+    iconColor: colors.whiteTsp2,
+    textColor: colors.whiteTsp2,
   },
 };
 
@@ -54,8 +42,8 @@ const StyledIconView = styled(View, {
   width: 18,
 });
 
-const getColor = (mode: 'light' | 'dark', isValid: boolean) => {
-  return themeColors[mode][isValid ? 'valid' : 'invalid'];
+const getColor = (isValid: boolean) => {
+  return themeColors[isValid ? 'valid' : 'invalid'];
 };
 
 export type Requirement = {
@@ -70,10 +58,9 @@ export type PasswordRequirementProps = Requirement & {
 export const PasswordRequirement = ({
   label,
   isValid,
-  mode = 'dark',
 }: PasswordRequirementProps) => {
   const Icon = isValid ? FeatherCheckIcon : FeatherCrossIcon;
-  const { iconColor, textColor } = getColor(mode, !!isValid);
+  const { iconColor, textColor } = getColor(!!isValid);
   return (
     <StyledView testID={label}>
       <StyledIconView>
@@ -89,15 +76,13 @@ export const PasswordRequirement = ({
 
 export type PasswordRequirementsProps = {
   requirements: Requirement[];
-  mode?: 'dark' | 'light';
 };
 
 export const PasswordRequirements = ({
   requirements,
-  mode = 'dark',
 }: PasswordRequirementsProps) => {
   const { t } = useTranslation();
-  const { textColor } = themeColors[mode].valid;
+  const { textColor } = themeColors.valid;
   return (
     <>
       <StyledPasswordRequirementLabel color={textColor}>
@@ -108,7 +93,6 @@ export const PasswordRequirements = ({
         {requirements.map(requirement => (
           <PasswordRequirement
             key={requirement.label}
-            mode={mode}
             label={t(requirement.label)}
             isValid={requirement.isValid}
           />
