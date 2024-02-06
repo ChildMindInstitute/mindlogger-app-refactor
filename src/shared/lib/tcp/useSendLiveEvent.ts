@@ -10,7 +10,6 @@ export function useSendEvent(streamEnabled: boolean) {
 
   const sendLiveEvent = useCallback(
     (dataDto: LiveEventDto) => {
-      console.log(dataDto);
       if (!connected || !streamEnabled) {
         return;
       }
