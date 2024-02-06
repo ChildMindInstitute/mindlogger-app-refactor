@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { FC, useCallback, useState, useEffect } from 'react';
+import { FC, useCallback, useState } from 'react';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -7,13 +7,16 @@ import { isTablet } from 'react-native-device-info';
 
 import { executeIfOnline, useAppForm, useFormChanges } from '@app/shared/lib';
 import { Box, BoxProps, YStack, SubmitButton } from '@shared/ui';
-import { InputField, ErrorMessage } from '@shared/ui/form';
+import {
+  InputField,
+  PasswordRequirements,
+  ErrorMessage,
+} from '@shared/ui/form';
 import { EyeIcon, EyeSlashIcon } from '@shared/ui/icons';
 
 import { SignUpModel } from '../';
 import { SignUpFormSchema } from '../validation';
 import { TouchableWithoutFeedback } from 'react-native';
-import PasswordRequirements from '@app/shared/ui/form/PasswordRequirements';
 
 type Props = BoxProps & {
   onLoginSuccess: () => void;
