@@ -23,8 +23,8 @@ export type SketchCanvasRef = {
 type Props = {
   initialLines: Array<Point[]>;
   width: number;
-  onStrokeStart: (x: number, y: number) => void;
-  onStrokeChanged: (x: number, y: number) => void;
+  onStrokeStart: (x: number, y: number, time: number) => void;
+  onStrokeChanged: (x: number, y: number, time: number) => void;
   onStrokeEnd: () => void;
 };
 
@@ -53,17 +53,17 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   });
 
   const onTouchStart = useCallback(
-    (touchInfo: Point) => {
+    (touchInfo: Point, time: number) => {
       const path = lineSketcher.createLine(touchInfo);
 
       canvasRef.current?.setPaths(currentPaths => [...currentPaths, path]);
-      callbacksRef.current.onStrokeStart(touchInfo.x, touchInfo.y);
+      callbacksRef.current.onStrokeStart(touchInfo.x, touchInfo.y, time);
     },
     [callbacksRef, lineSketcher],
   );
 
   const onTouchProgress = useCallback(
-    (touchInfo: Point, straightLine: boolean) => {
+    (touchInfo: Point, straightLine: boolean, time: number) => {
       const lastDrawnPoint = lineSketcher.getLastPoint();
 
       if (lastDrawnPoint) {
@@ -77,7 +77,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
         }
       }
 
-      callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
+      callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y, time);
 
       canvasRef.current?.setPaths(currentPaths => {
         const pathsCount = currentPaths.length;
@@ -99,8 +99,8 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   );
 
   const createDot = useCallback(
-    (touchInfo: Point) => {
-      callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y);
+    (touchInfo: Point, time: number) => {
+      callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y, time);
 
       canvasRef.current?.setPaths(currentPaths => {
         const pathsCount = currentPaths.length;
@@ -118,10 +118,13 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     if (lineSketcher.getCurrentShape() === Shape.Dot) {
       const firstPoint = lineSketcher.getFirstPoint() as Point;
 
-      createDot({
-        x: firstPoint.x + 1.5,
-        y: firstPoint.y + 1.5,
-      });
+      createDot(
+        {
+          x: firstPoint.x + 1.5,
+          y: firstPoint.y + 1.5,
+        },
+        Date.now(),
+      );
     }
 
     callbacksRef.current.onStrokeEnd();
