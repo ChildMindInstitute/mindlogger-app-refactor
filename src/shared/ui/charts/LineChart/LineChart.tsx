@@ -91,7 +91,7 @@ const LineChart: FC<Props> = ({ data, config }) => {
         <VictoryAxis
           style={{ axis: { stroke: colors.lightGrey } }}
           dependentAxis
-          tickFormat={() => null}
+          tickFormat={() => ''}
         />
 
         <VictoryAxis
