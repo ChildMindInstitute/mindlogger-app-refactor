@@ -43,8 +43,8 @@ const DrawingBoard: FC<Props> = props => {
     points: [],
   });
 
-  const onTouchStart = (x: number, y: number) => {
-    const drawPoint = new DrawPoint(x, y);
+  const onTouchStart = (x: number, y: number, time: number) => {
+    const drawPoint = new DrawPoint(x, y, time);
 
     drawingValueLineRef.current = {
       startTime: Date.now(),
@@ -54,8 +54,8 @@ const DrawingBoard: FC<Props> = props => {
     onLog(drawPoint.scale(vector));
   };
 
-  const onTouchProgress = (x: number, y: number) => {
-    const drawPoint = new DrawPoint(x, y);
+  const onTouchProgress = (x: number, y: number, time: number) => {
+    const drawPoint = new DrawPoint(x, y, time);
 
     drawingValueLineRef.current.points.push(drawPoint);
 
