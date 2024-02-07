@@ -5,7 +5,7 @@ import { Text, YStack, Box, XStack, BoxProps } from '@shared/ui';
 
 const HorizontalCalendar: FC<BoxProps> = styledProps => {
   const currentDate = new Date();
-  const title = format(currentDate, 'MMMM Y');
+  const title = format(currentDate, 'MMMM y');
   const dates = getLast7Dates();
 
   return (
