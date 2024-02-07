@@ -34,7 +34,7 @@ const SignUpScreen: FC = () => {
           <StatusBar />
 
           <Box flex={1}>
-            <ScrollView flex={1} keyboardShouldPersistTaps="handled">
+            <ScrollView flex={1}>
               <Box f={1} px={isTablet() ? 210 : '$7'}>
                 <Box mt={isTablet() ? 170 : 52} mb={isTablet() ? 0 : 12}>
                   <Text fontSize={36} color="$white" fontWeight="600">

@@ -1,11 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
-import { FC, useCallback, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
+import { TouchableWithoutFeedback } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
 
-import { executeIfOnline, useAppForm, useFormChanges } from '@app/shared/lib';
+import {
+  executeIfOnline,
+  useAppForm,
+  useFormChanges,
+  colors,
+} from '@app/shared/lib';
 import { Box, BoxProps, YStack, SubmitButton } from '@shared/ui';
 import {
   InputField,
@@ -16,7 +22,6 @@ import { EyeIcon, EyeSlashIcon } from '@shared/ui/icons';
 
 import { SignUpModel } from '../';
 import { SignUpFormSchema } from '../validation';
-import { TouchableWithoutFeedback } from 'react-native';
 
 type Props = BoxProps & {
   onLoginSuccess: () => void;
@@ -25,6 +30,8 @@ type Props = BoxProps & {
 const SignUpForm: FC<Props> = props => {
   const { t } = useTranslation();
   const [isPasswordHidden, setPasswordHidden] = useState(true);
+  const [displayPasswordRequirements, setDisplayPasswordRequirements] =
+    useState(false);
 
   const {
     isLoading,
@@ -52,25 +59,20 @@ const SignUpForm: FC<Props> = props => {
     },
   });
 
-  const passwordRequirements = useCallback(() => {
+  const passwordHasLength = !!form.getValues().password.length;
+  const passwordRequirements = useMemo(() => {
     const errors = Object.values(
       form.formState.errors?.password?.types || {},
     ).flat();
+
     return [
-      {
-        label: 'password_requirements:at_least_characters',
-        isValid:
-          form.getValues().password.length > 0 &&
-          !errors.includes('password_requirements:at_least_characters'),
-      },
-      {
-        label: 'password_requirements:no_blank_spaces',
-        isValid:
-          form.getValues().password.length > 0 &&
-          !errors.includes('password_requirements:no_blank_spaces'),
-      },
-    ];
-  }, [form.formState.errors?.password?.types]);
+      'password_requirements:at_least_characters',
+      'password_requirements:no_blank_spaces',
+    ].map(key => ({
+      label: key,
+      isValid: passwordHasLength && !errors.includes(key),
+    }));
+  }, [passwordHasLength, form.formState.errors?.password?.types]);
 
   const ShowPasswordIcon = isPasswordHidden ? EyeSlashIcon : EyeIcon;
 
@@ -105,10 +107,12 @@ const SignUpForm: FC<Props> = props => {
               <TouchableWithoutFeedback
                 onPress={() => setPasswordHidden(!isPasswordHidden)}
               >
-                <ShowPasswordIcon size={24} color="#FFFFFF" />
+                <ShowPasswordIcon size={24} color={colors.white} />
               </TouchableWithoutFeedback>
             }
-            hideError
+            hideError={displayPasswordRequirements || passwordHasLength}
+            onFocus={() => setDisplayPasswordRequirements(true)}
+            onBlur={() => setDisplayPasswordRequirements(false)}
           />
 
           {error && (
@@ -119,29 +123,31 @@ const SignUpForm: FC<Props> = props => {
               error={{ message: error?.evaluatedMessage! }}
             />
           )}
+
+          {(displayPasswordRequirements || passwordHasLength) && (
+            <PasswordRequirements requirements={passwordRequirements} />
+          )}
+
+          <SubmitButton
+            isLoading={isLoading}
+            onPress={submit}
+            accessibilityLabel="sign_up-button"
+            borderRadius={30}
+            width="100%"
+            bg="$lighterGrey4"
+            mt={isTablet() ? 110 : 50}
+            textProps={{
+              fontSize: 14,
+              color: 'black',
+            }}
+            buttonStyle={{
+              alignSelf: 'center',
+              paddingVertical: isTablet() ? 13 : 16,
+            }}
+          >
+            {t('sign_up_form:sign_up')}
+          </SubmitButton>
         </YStack>
-
-        <PasswordRequirements requirements={passwordRequirements()} />
-
-        <SubmitButton
-          isLoading={isLoading}
-          onPress={submit}
-          accessibilityLabel="sign_up-button"
-          borderRadius={30}
-          width="100%"
-          bg="$lighterGrey4"
-          mt={isTablet() ? 110 : 50}
-          textProps={{
-            fontSize: 14,
-            color: 'black',
-          }}
-          buttonStyle={{
-            alignSelf: 'center',
-            paddingVertical: isTablet() ? 13 : 16,
-          }}
-        >
-          {t('sign_up_form:sign_up')}
-        </SubmitButton>
       </FormProvider>
     </Box>
   );

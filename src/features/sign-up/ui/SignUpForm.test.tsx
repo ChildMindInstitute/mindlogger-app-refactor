@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import ReactQueryProvider from '@app/app/ui/AppProvider/ReactQueryProvider';
 import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
@@ -45,7 +45,7 @@ const FormTestWrapper = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const createTest = ({}: any = {}) => {
+const createTest = () => {
   const tree = renderer.create(
     <FormTestWrapper>
       <SignUpForm onLoginSuccess={() => {}} />
@@ -57,10 +57,12 @@ const createTest = ({}: any = {}) => {
 
 describe('SignUp Form', () => {
   it('should render properly', () => {
-    const { getRequirements } = createTest();
-    const [minCharacters, noBlankSpaces] = getRequirements();
-    expect(minCharacters.props.isValid).toBe(false);
-    expect(noBlankSpaces.props.isValid).toBe(false);
+    const { tree, instance } = createTest();
+    act(() => {
+      /* display password requirements */
+      instance.findByProps({ name: 'password' }).props.onFocus();
+    });
+    expect(tree.toJSON()).toMatchSnapshot();
   });
 
   it.todo('should validate password requirements');

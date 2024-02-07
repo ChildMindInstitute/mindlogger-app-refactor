@@ -85,9 +85,7 @@ export const PasswordRequirements = ({
   const { textColor } = themeColors.valid;
   return (
     <>
-      <StyledPasswordRequirementLabel color={textColor}>
-        {t('password_requirements:must_include')}
-      </StyledPasswordRequirementLabel>
+      <Text color={textColor}>{t('password_requirements:must_include')}</Text>
 
       <StyledPasswordRequirementContainer>
         {requirements.map(requirement => (
