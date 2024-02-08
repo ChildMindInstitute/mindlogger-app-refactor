@@ -11,8 +11,12 @@ type Refs = {
 };
 
 type Callbacks = {
-  onTouchStart: (touchInfo: Point) => void;
-  onTouchProgress: (touchInfo: Point, straightLine: boolean) => void;
+  onTouchStart: (touchInfo: Point, time: number) => void;
+  onTouchProgress: (
+    touchInfo: Point,
+    straightLine: boolean,
+    time: number,
+  ) => void;
   onTouchEnd: () => void;
 };
 
@@ -76,19 +80,20 @@ function DrawingGesture(
         }
       })
       .onBegin(event => {
-        runOnJS(onTouchStart)(event);
+        runOnJS(onTouchStart)(event, Date.now());
       })
       .onTouchesMove((event, manager) => {
         const touchData = event.allTouches[0];
+        const time = Date.now();
 
         if (isOutOfCanvas(touchData)) {
           const finalPoint = normalizeCoordinates(touchData);
 
-          runOnJS(onTouchProgress)(finalPoint, true);
+          runOnJS(onTouchProgress)(finalPoint, true, time);
 
           manager.end();
         } else {
-          runOnJS(onTouchProgress)(touchData, false);
+          runOnJS(onTouchProgress)(touchData, false, time);
         }
       })
       .onFinalize(() => {
@@ -99,19 +104,20 @@ function DrawingGesture(
     Gesture.Pan()
       .maxPointers(1)
       .onBegin(event => {
-        runOnJS(onTouchStart)(event);
+        runOnJS(onTouchStart)(event, Date.now());
       })
       .onTouchesMove((event, manager) => {
         const touchData = event.allTouches[0];
+        const time = Date.now();
 
         if (isOutOfCanvas(touchData)) {
           const finalPoint = normalizeCoordinates(touchData);
 
-          runOnJS(onTouchProgress)(finalPoint, true);
+          runOnJS(onTouchProgress)(finalPoint, true, time);
 
           manager.end();
         } else {
-          runOnJS(onTouchProgress)(touchData, false);
+          runOnJS(onTouchProgress)(touchData, false, time);
         }
       })
       .onFinalize(() => {
