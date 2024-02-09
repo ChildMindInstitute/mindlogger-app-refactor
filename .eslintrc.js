@@ -2,26 +2,14 @@ module.exports = {
   root: true,
   parser: '@babel/eslint-parser',
   extends: ['eslint:recommended', 'plugin:prettier/recommended'],
-  plugins: [
-    'import',
-    'prettier',
-    'react',
-    'react-hooks',
-    'unused-imports',
-    'jest',
-  ],
+  plugins: ['import', 'prettier', 'react', 'react-hooks', 'unused-imports', 'jest'],
   rules: {
     // Error
     'react/jsx-newline': [2, { prevent: true, allowMultilines: true }],
     'import/order': [
       'error',
       {
-        groups: [
-          ['external', 'builtin'],
-          'internal',
-          ['sibling', 'parent'],
-          'index',
-        ],
+        groups: [['external', 'builtin'], 'internal', ['sibling', 'parent'], 'index'],
         pathGroups: [
           {
             pattern: '@(react|react-native)',
@@ -29,8 +17,7 @@ module.exports = {
             position: 'before',
           },
           {
-            pattern:
-              '@(@app|@shared|@features|@screens|@entities|@assets|@jobs|@widgets)/**',
+            pattern: '@(@app|@shared|@features|@screens|@entities|@assets|@jobs|@widgets)/**',
             group: 'internal',
           },
           {

@@ -2,20 +2,15 @@ import 'react-native-gesture-handler';
 
 import { AppRegistry } from 'react-native';
 
-import { jobRunner } from './src/shared/lib';
+import { name as appName } from './app.json';
+import displayRemoteNotifications from './src/jobs/display-remote-notifications';
+import localization from './src/jobs/localization';
 import requestInterception from './src/jobs/request-interception';
 import responseInterception from './src/jobs/response-interception';
 import setBackgroundTask from './src/jobs/set-background-task';
-import displayRemoteNotifications from './src/jobs/display-remote-notifications';
-import localization from './src/jobs/localization';
-import App from './src/app';
-import { name as appName } from './app.json';
+import { jobRunner } from './src/shared/lib';
 
-jobRunner.runAll([
-  requestInterception,
-  responseInterception,
-  setBackgroundTask,
-]);
+jobRunner.runAll([requestInterception, responseInterception, setBackgroundTask]);
 
 jobRunner.runAllSync([localization, displayRemoteNotifications]);
 

@@ -6,7 +6,7 @@ import './jest.components.jsx';
 jest.mock('react-native-file-access', () => {
   return {
     FileSystem: {
-      exists: jest.fn(uri => uri.endsWith('.jpg')), // Mock exists() to return true for .jpg files
+      exists: jest.fn((uri) => uri.endsWith('.jpg')), // Mock exists() to return true for .jpg files
     },
     Dirs: {
       MainBundleDir: () => {},
@@ -46,20 +46,12 @@ jest.mock('react-native-reanimated', () => {
   };
 });
 
-jest.mock('react-native-background-fetch', () =>
-  jest.mock('react-native-background-fetch'),
-);
-jest.mock('@react-native-firebase/messaging', () =>
-  jest.mock('@react-native-firebase/messaging'),
-);
+jest.mock('react-native-background-fetch', () => jest.mock('react-native-background-fetch'));
+jest.mock('@react-native-firebase/messaging', () => jest.mock('@react-native-firebase/messaging'));
 
-jest.mock('@georstat/react-native-image-cache', () =>
-  jest.mock('@georstat/react-native-image-cache'),
-);
+jest.mock('@georstat/react-native-image-cache', () => jest.mock('@georstat/react-native-image-cache'));
 
-jest.mock('@react-native-community/geolocation', () =>
-  jest.mock('@react-native-community/geolocation'),
-);
+jest.mock('@react-native-community/geolocation', () => jest.mock('@react-native-community/geolocation'));
 
 jest.mock('react-native-sensors', () => jest.mock('react-native-sensors'));
 
@@ -86,7 +78,7 @@ jest.mock('@shopify/react-native-skia', () => {
   };
 
   global.SkiaValueApi = {
-    createValue: jest.fn().mockImplementation(v => v),
+    createValue: jest.fn().mockImplementation((v) => v),
     createDerivedValue: jest.fn(),
     createAnimation: jest.fn(),
     createClockValue: jest.fn(),
@@ -127,9 +119,7 @@ jest.mock('axios', () => {
   };
 });
 
-jest.mock('react-native-permissions', () =>
-  require('react-native-permissions/mock'),
-);
+jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
 
 jest.mock('react-native-audio-recorder-player', () => {
   return {
@@ -153,9 +143,7 @@ jest.mock('react-native-audio-recorder-player', () => {
   };
 });
 
-jest.mock('@notifee/react-native', () =>
-  require('@notifee/react-native/jest-mock'),
-);
+jest.mock('@notifee/react-native', () => require('@notifee/react-native/jest-mock'));
 jest.mock('@react-native-community/netinfo', () => {
   return {
     getCurrentConnectivity: jest.fn(),
@@ -174,6 +162,4 @@ jest.mock('@react-native-community/netinfo', () => {
 
 jest.mock('react-native-device-info', () => mockRNDeviceInfo);
 
-jest.mock('react-native-gesture-handler', () =>
-  jest.mock('react-native-gesture-handler'),
-);
+jest.mock('react-native-gesture-handler', () => jest.mock('react-native-gesture-handler'));
