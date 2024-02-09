@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useToast } from 'react-native-toast-notifications';
 
 import { TCPSocketEmitter } from './TCPSocketEmitter';
 import TCPSocketService from './TCPSocketService';
+import { useToast } from '../hooks';
 
 type Callbacks = {
   onError?: (error: Error) => void;

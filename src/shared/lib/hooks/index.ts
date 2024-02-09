@@ -24,5 +24,6 @@ export { default as useCallbacksRefs } from './useCallbacksRefs';
 export { default as useCachedItem } from './useCachedItem';
 export { default as useOnFocus } from './useOnFocus';
 export { default as useBanner } from './useBanner';
+export { default as useToast } from './useToast';
 
 export * from './redux';
