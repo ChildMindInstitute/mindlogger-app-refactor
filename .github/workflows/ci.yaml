@@ -27,7 +27,7 @@ jobs:
         with:
           eslint: true
           eslint_extensions: ts,js
-          eslint_args: 'src'
+          eslint_dir: src
           prettier: true
           prettier_extensions: ts
           continue_on_error: false
