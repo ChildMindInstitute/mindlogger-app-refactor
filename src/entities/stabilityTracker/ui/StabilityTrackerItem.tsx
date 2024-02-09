@@ -9,9 +9,9 @@ import { GestureResponderEvent } from 'react-native';
 
 import { orientation } from 'react-native-sensors';
 import Svg, { Circle } from 'react-native-svg';
-import { useToast } from 'react-native-toast-notifications';
 
 import {
+  useToast,
   useForceUpdate,
   StreamEventLoggable,
   StabilityTrackerEvent,

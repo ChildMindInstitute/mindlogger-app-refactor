@@ -2,6 +2,7 @@ import { FC, PropsWithChildren } from 'react';
 
 import { styled } from '@tamagui/core';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import ToastMessage, { BaseToastProps } from 'react-native-toast-message';
 import { ToastProvider as RNTNToastProvider } from 'react-native-toast-notifications';
 
 import { IS_IOS, colors } from '@app/shared/lib';
@@ -112,5 +113,18 @@ const ToastProvider: FC<PropsWithChildren> = ({ children }) => {
     </RNTNToastProvider>
   );
 };
+
+const config = {
+  dark: ({ text1 }: BaseToastProps) => <Toast message={text1!} />,
+};
+
+export const ToastProvider_NewImplementation: FC<PropsWithChildren> = ({
+  children,
+}) => (
+  <>
+    {children}
+    <ToastMessage config={config} />
+  </>
+);
 
 export default ToastProvider;
