@@ -9,10 +9,9 @@ import { GestureResponderEvent } from 'react-native';
 
 import { orientation } from 'react-native-sensors';
 import Svg, { Circle } from 'react-native-svg';
-import { useToast } from 'react-native-toast-notifications';
 
 import { StabilityTrackerAnswerValue } from '@shared/api';
-import { useForceUpdate, StreamEventLoggable } from '@shared/lib';
+import { useForceUpdate, StreamEventLoggable, useToast } from '@shared/lib';
 import { YStack } from '@shared/ui';
 
 import ControlBar from './ControlBar';

@@ -35,13 +35,13 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
             <LocalizationProvider>
               <TamaguiProvider>
                 <NavigationProvider>
-                  <PortalProvider>
-                    <ToastProvider>
+                  <ToastProvider>
+                    <PortalProvider>
                       <SplashProvider isLoading={isBootingUp}>
                         {children}
                       </SplashProvider>
-                    </ToastProvider>
-                  </PortalProvider>
+                    </PortalProvider>
+                  </ToastProvider>
                 </NavigationProvider>
               </TamaguiProvider>
             </LocalizationProvider>

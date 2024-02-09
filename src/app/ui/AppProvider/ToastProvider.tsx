@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from 'react';
 
 import { styled } from '@tamagui/core';
-import { ToastProvider as RNTNToastProvider } from 'react-native-toast-notifications';
+import ToastMessage, { BaseToastProps } from 'react-native-toast-message';
 
 import { Box, Text } from '@app/shared/ui';
 
@@ -14,7 +14,7 @@ const ToastButton = styled(Box, {
 });
 
 type ToastProps = {
-  message: string | JSX.Element;
+  message?: string;
 };
 
 const Toast: FC<ToastProps> = ({ message }) => (
@@ -27,15 +27,15 @@ const Toast: FC<ToastProps> = ({ message }) => (
   </Box>
 );
 
+const config = {
+  dark: ({ text1 }: BaseToastProps) => <Toast message={text1} />,
+};
+
 const ToastProvider: FC<PropsWithChildren> = ({ children }) => (
-  <RNTNToastProvider
-    offsetBottom={20}
-    renderToast={({ message }) => {
-      return <Toast message={message} />;
-    }}
-  >
+  <>
     {children}
-  </RNTNToastProvider>
+    <ToastMessage config={config} />
+  </>
 );
 
 export default ToastProvider;

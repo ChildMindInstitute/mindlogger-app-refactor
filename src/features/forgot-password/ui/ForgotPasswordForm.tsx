@@ -3,10 +3,14 @@ import { FC } from 'react';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useToast } from 'react-native-toast-notifications';
 
 import { usePasswordRecoveryMutation } from '@app/entities/identity';
-import { executeIfOnline, useAppForm, useFormChanges } from '@shared/lib';
+import {
+  executeIfOnline,
+  useAppForm,
+  useFormChanges,
+  useToast,
+} from '@shared/lib';
 import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 

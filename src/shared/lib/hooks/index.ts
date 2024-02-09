@@ -22,5 +22,6 @@ export { default as useCurrentRoute } from './useCurrentRoute';
 export { default as useCachedImage } from './useCachedImage';
 export { default as useCallbacksRefs } from './useCallbacksRefs';
 export { default as useCachedItem } from './useCachedItem';
+export { default as useToast } from './useToast';
 
 export * from './redux';
