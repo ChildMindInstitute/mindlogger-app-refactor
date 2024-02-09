@@ -37,10 +37,7 @@ function notificationService() {
   return {
     sendNotificationLogs(request: NotificationLogsRequest) {
       const apiCall = async () => {
-        return httpService.post<NotificationLogsResponse>(
-          '/logs/notification',
-          request,
-        );
+        return httpService.post<NotificationLogsResponse>('/logs/notification', request);
       };
       return callApiWithRetry(apiCall);
     },

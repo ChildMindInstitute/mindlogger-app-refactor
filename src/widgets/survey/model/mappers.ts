@@ -26,7 +26,6 @@ import {
   GeolocationAnswerDto,
   NumberSelectAnswerDto,
   PhotoAnswerDto,
-  RadioAnswerDto,
   SliderAnswerDto,
   StackedCheckboxAnswerDto,
   StackedRadioAnswerDto,
@@ -45,12 +44,7 @@ import {
   AbLogPointDto,
   AnswerAlertsDto,
 } from '@shared/api';
-import {
-  HourMinute,
-  Logger,
-  convertToDayMonthYear,
-  getDateFromString,
-} from '@shared/lib';
+import { HourMinute, Logger, convertToDayMonthYear, getDateFromString } from '@shared/lib';
 import { Item } from '@shared/ui';
 import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
 
@@ -65,11 +59,8 @@ type TimeRange = {
 
 type StackedRadioAnswerValue = Array<Array<Item>>;
 
-export function mapAnswersToDto(
-  pipeline: PipelineItem[],
-  answers: Answers,
-): AnswerDto[] {
-  if (pipeline.some(x => x.type === 'Flanker')) {
+export function mapAnswersToDto(pipeline: PipelineItem[], answers: Answers): AnswerDto[] {
+  if (pipeline.some((x) => x.type === 'Flanker')) {
     return mapFlankerAnswersToDto(pipeline, answers);
   }
 
@@ -81,10 +72,7 @@ export function mapAnswersToDto(
     if (canHaveAnswer) {
       const answer = answers[step] ?? null;
 
-      const dto =
-        answer === null || answer?.answer === null
-          ? null
-          : convertToAnswerDto(pipelineItem.type, answer);
+      const dto = answer === null || answer?.answer === null ? null : convertToAnswerDto(pipelineItem.type, answer);
 
       answerDtos.push(dto);
     }
@@ -93,35 +81,25 @@ export function mapAnswersToDto(
   return answerDtos;
 }
 
-const mapFlankerAnswersToDto = (
-  pipeline: PipelineItem[],
-  answers: Answers,
-): AnswerDto[] => {
+const mapFlankerAnswersToDto = (pipeline: PipelineItem[], answers: Answers): AnswerDto[] => {
   const practiceSteps = pipeline
-    .map((x, index) =>
-      x.type === 'Flanker' && x.payload.blockType === 'practice' ? index : null,
-    )
-    .filter(x => x !== null)
-    .map(x => x!);
+    .map((x, index) => (x.type === 'Flanker' && x.payload.blockType === 'practice' ? index : null))
+    .filter((x) => x !== null)
+    .map((x) => x!);
 
   const firstPracticeAnswer = answers[practiceSteps[0]];
 
-  const firstAnswerDto: AnswerDto = convertToAnswerDto(
-    'Flanker',
-    firstPracticeAnswer,
-  );
+  const firstAnswerDto: AnswerDto = convertToAnswerDto('Flanker', firstPracticeAnswer);
 
   const restOfAnswerDtos = practiceSteps
-    .filter(x => x !== practiceSteps[0])
-    .filter(x => !!answers[x])
-    .map(x => convertToAnswerDto('Flanker', answers[x]));
+    .filter((x) => x !== practiceSteps[0])
+    .filter((x) => !!answers[x])
+    .map((x) => convertToAnswerDto('Flanker', answers[x]));
 
-  for (let practiceAnswerDto of restOfAnswerDtos) {
-    const records = (practiceAnswerDto as ObjectAnswerDto)
-      .value as Array<FlankerAnswerRecordDto>;
+  for (const practiceAnswerDto of restOfAnswerDtos) {
+    const records = (practiceAnswerDto as ObjectAnswerDto).value as Array<FlankerAnswerRecordDto>;
 
-    const firstItemRecords = (firstAnswerDto as ObjectAnswerDto)
-      .value as Array<FlankerAnswerRecordDto>;
+    const firstItemRecords = (firstAnswerDto as ObjectAnswerDto).value as Array<FlankerAnswerRecordDto>;
 
     firstItemRecords.push(...records);
   }
@@ -134,9 +112,7 @@ const mapFlankerAnswersToDto = (
     }
 
     const answer = answers[step] ?? null;
-    return answer === null
-      ? null
-      : convertToAnswerDto(pipelineItem.type, answer);
+    return answer === null ? null : convertToAnswerDto(pipelineItem.type, answer);
   });
 };
 
@@ -149,7 +125,7 @@ function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
 
   return {
     ...(radioValue && {
-      value: radioValue.value as RadioAnswerDto,
+      value: radioValue.value,
     }),
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
@@ -168,9 +144,7 @@ function convertToSliderAnswer(answer: Answer): AnswerDto {
 
 function convertToCheckboxAnswer(answer: Answer): AnswerDto {
   const checkboxAnswers = answer.answer as Item[];
-  const answerDto = checkboxAnswers?.map(
-    checkboxAnswer => checkboxAnswer.value,
-  );
+  const answerDto = checkboxAnswers?.map((checkboxAnswer) => checkboxAnswer.value);
 
   return {
     ...(answerDto && {
@@ -245,9 +219,7 @@ function convertToGeolocationAnswer(answer: Answer): AnswerDto {
 
 function convertToStackedRadioAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as StackedRadioResponse;
-  const answerDto = answers?.map(answerItem =>
-    answerItem ? answerItem.text : null,
-  ) as string[];
+  const answerDto = answers?.map((answerItem) => (answerItem ? answerItem.text : null)) as string[];
 
   return {
     ...(answerDto && {
@@ -262,9 +234,9 @@ function convertToStackedRadioAnswer(answer: Answer): AnswerDto {
 function convertToStackedCheckboxAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as StackedRadioAnswerValue;
 
-  const answersDto = answers?.map(answerRow => {
+  const answersDto = answers?.map((answerRow) => {
     if (answerRow) {
-      return answerRow.map(answerItem => (answerItem ? answerItem.text : null));
+      return answerRow.map((answerItem) => (answerItem ? answerItem.text : null));
     }
 
     return null;
@@ -283,7 +255,7 @@ function convertToStackedCheckboxAnswer(answer: Answer): AnswerDto {
 function convertToStackedSliderAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as number[];
   const answerDto = answers?.map(
-    answerItem => answerItem || null, // @todo check with BE
+    (answerItem) => answerItem || null, // @todo check with BE
   ) as number[];
 
   return {
@@ -335,7 +307,7 @@ function convertToAudioPlayerAnswer(answer: Answer): AnswerDto {
 function convertToFlankerAnswer(answer: Answer): AnswerDto {
   const gameResponse = answer.answer as FlankerResponse;
 
-  const recordDtos = gameResponse.records.map<FlankerAnswerRecordDto>(x => ({
+  const recordDtos = gameResponse.records.map<FlankerAnswerRecordDto>((x) => ({
     button_pressed: x.buttonPressed,
     correct: x.correct,
     duration: x.duration,
@@ -362,7 +334,7 @@ function convertToDrawingAnswer(answer: Answer): AnswerDto {
     fileName: drawerResponse.fileName,
     type: drawerResponse.type,
     uri: drawerResponse.uri,
-    lines: drawerResponse.lines.map<DrawerLineDto>(x => ({
+    lines: drawerResponse.lines.map<DrawerLineDto>((x) => ({
       startTime: x.startTime,
       points: x.points,
     })),
@@ -379,7 +351,7 @@ function convertToDrawingAnswer(answer: Answer): AnswerDto {
 function convertToStabilityTrackerAnswer(answer: Answer): AnswerDto {
   const stabilityTrackerResponse = answer.answer as StabilityTrackerResponse;
 
-  const values = stabilityTrackerResponse.value.map(x => ({
+  const values = stabilityTrackerResponse.value.map((x) => ({
     timestamp: x.timestamp,
     stimPos: x.circlePosition,
     targetPos: x.targetPosition,
@@ -392,10 +364,7 @@ function convertToStabilityTrackerAnswer(answer: Answer): AnswerDto {
   const dto: StabilityTrackerAnswerDto = {
     value: values,
     maxLambda: stabilityTrackerResponse.maxLambda,
-    phaseType:
-      stabilityTrackerResponse.phaseType === 'test'
-        ? 'focus-phase'
-        : 'challenge-phase',
+    phaseType: stabilityTrackerResponse.phaseType === 'test' ? 'focus-phase' : 'challenge-phase',
   };
 
   return dto;
@@ -409,8 +378,8 @@ function convertToAbTestAnswer(answer: Answer): AnswerDto {
     startTime: abResponse.startTime,
     width: abResponse.width,
     updated: abResponse.updated,
-    lines: abResponse.lines.map<AbLogLineDto>(x => ({
-      points: x.points.map<AbLogPointDto>(p => ({
+    lines: abResponse.lines.map<AbLogLineDto>((x) => ({
+      points: x.points.map<AbLogPointDto>((p) => ({
         ...p,
         actual: p.actual ?? undefined,
       })),
@@ -491,25 +460,19 @@ function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
 }
 
 export function mapUserActionsToDto(actions: UserAction[]): UserActionDto[] {
-  return actions.map(action => {
+  return actions.map((action) => {
     return {
       type: action.type,
       screen: `${action.payload.activityId}/${action.payload.activityItemId}`,
       time: action.payload.date,
       ...(action.type === 'SET_ANSWER' && {
-        response: convertToAnswerDto(
-          action.payload.answer.type,
-          action.payload.answer.value,
-        ),
+        response: convertToAnswerDto(action.payload.answer.type, action.payload.answer.value),
       }),
     };
   });
 }
 
-export function mapAnswersToAlerts(
-  pipelineItems: PipelineItem[],
-  answers: Answers,
-) {
+export function mapAnswersToAlerts(pipelineItems: PipelineItem[], answers: Answers) {
   try {
     const alerts = pipelineItems
       .flatMap((pipelineItem, step) => {
@@ -525,17 +488,12 @@ export function mapAnswersToAlerts(
 
     return alerts as AnswerAlertsDto;
   } catch (error) {
-    Logger.warn(
-      '[mapAnswersToAlerts]: Error occurred: \n\n' + error!.toString(),
-    );
+    Logger.warn(`[mapAnswersToAlerts]: Error occurred: \n\n${error}`);
     throw error;
   }
 }
 
-export function convertAnswersToAlerts(
-  pipelineItem: PipelineItem,
-  answer: Answer,
-): AnswerAlertsDto {
+export function convertAnswersToAlerts(pipelineItem: PipelineItem, answer: Answer): AnswerAlertsDto {
   switch (pipelineItem.type) {
     case 'Radio':
       return convertRadioAlerts(pipelineItem, answer);
@@ -561,52 +519,31 @@ export function convertAnswersToAlerts(
 }
 
 function convertRadioAlerts(radioItem: RadioPipelineItem, answer: Answer) {
-  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromRadio(
-    radioItem,
-    answer,
-  );
+  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromRadio(radioItem, answer);
 
   const alertDtos: AnswerAlertsDto = alerts;
 
   return alertDtos;
 }
 
-function convertCheckboxAlerts(
-  checkboxItem: CheckboxPipelineItem,
-  answer: Answer,
-) {
-  const alerts: AnswerAlerts =
-    PassSurveyModel.AlertsExtractor.extractFromCheckbox(checkboxItem, answer);
+function convertCheckboxAlerts(checkboxItem: CheckboxPipelineItem, answer: Answer) {
+  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromCheckbox(checkboxItem, answer);
 
   const alertDtos: AnswerAlertsDto = alerts;
 
   return alertDtos;
 }
 
-function convertStackedRadioAlerts(
-  stackedRadioItem: StackedRadioPipelineItem,
-  answer: Answer,
-) {
-  const alerts: AnswerAlerts =
-    PassSurveyModel.AlertsExtractor.extractFromStackedRadio(
-      stackedRadioItem,
-      answer,
-    );
+function convertStackedRadioAlerts(stackedRadioItem: StackedRadioPipelineItem, answer: Answer) {
+  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromStackedRadio(stackedRadioItem, answer);
 
   const alertDtos: AnswerAlertsDto = alerts;
 
   return alertDtos;
 }
 
-function convertStackedCheckboxAlerts(
-  stackedCheckboxItem: StackedCheckboxPipelineItem,
-  answer: Answer,
-) {
-  const alerts: AnswerAlerts =
-    PassSurveyModel.AlertsExtractor.extractFromStackedCheckbox(
-      stackedCheckboxItem,
-      answer,
-    );
+function convertStackedCheckboxAlerts(stackedCheckboxItem: StackedCheckboxPipelineItem, answer: Answer) {
+  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromStackedCheckbox(stackedCheckboxItem, answer);
 
   const alertDtos: AnswerAlertsDto = alerts;
 
@@ -614,23 +551,15 @@ function convertStackedCheckboxAlerts(
 }
 
 function convertSliderAlerts(sliderItem: SliderPipelineItem, answer: Answer) {
-  const alerts: AnswerAlerts =
-    PassSurveyModel.AlertsExtractor.extractFromSlider(sliderItem, answer);
+  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromSlider(sliderItem, answer);
 
   const alertDtos: AnswerAlertsDto = alerts;
 
   return alertDtos;
 }
 
-function convertStackedSliderAlerts(
-  sliderItem: StackedSliderPipelineItem,
-  answer: Answer,
-) {
-  const alerts: AnswerAlerts =
-    PassSurveyModel.AlertsExtractor.extractFromStackedSlider(
-      sliderItem,
-      answer,
-    );
+function convertStackedSliderAlerts(sliderItem: StackedSliderPipelineItem, answer: Answer) {
+  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromStackedSlider(sliderItem, answer);
 
   const alertDtos: AnswerAlertsDto = alerts;
 

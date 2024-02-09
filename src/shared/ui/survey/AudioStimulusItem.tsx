@@ -4,15 +4,7 @@ import { TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { useAudioPlayer } from '@shared/lib';
-import {
-  PlayIcon,
-  StopIcon,
-  CheckIcon,
-  SpeakerIcon,
-  XStack,
-  Text,
-  ActivityIndicator,
-} from '@shared/ui';
+import { PlayIcon, StopIcon, CheckIcon, SpeakerIcon, XStack, Text, ActivityIndicator } from '@shared/ui';
 
 type Props = {
   config: {
@@ -78,27 +70,9 @@ const AudioStimulusItem: FC<Props> = ({ config, onChange: onFinish }) => {
 
   return (
     <>
-      <TouchableOpacity
-        accessibilityLabel="audio-stimulus-btn"
-        disabled={isLoading || isInActive}
-        onPress={onPress}
-      >
-        <XStack
-          h={50}
-          w={150}
-          ai="center"
-          jc="center"
-          bg="$primary"
-          p="$3"
-          opacity={isInActive ? 0.5 : 1}
-        >
-          <Text
-            accessibilityLabel="audio-record-btn-text"
-            mr="$2"
-            color="$white"
-            fontWeight="700"
-            fontSize={16}
-          >
+      <TouchableOpacity accessibilityLabel="audio-stimulus-btn" disabled={isLoading || isInActive} onPress={onPress}>
+        <XStack h={50} w={150} ai="center" jc="center" bg="$primary" p="$3" opacity={isInActive ? 0.5 : 1}>
+          <Text accessibilityLabel="audio-record-btn-text" mr="$2" color="$white" fontWeight="700" fontSize={16}>
             {getButtonText()}
           </Text>
 

@@ -7,16 +7,14 @@ import { PERMISSIONS } from 'react-native-permissions';
 
 import { Language } from '../types';
 
-const { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT } =
-  Dimensions.get('window');
+const { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT } = Dimensions.get('window');
 
 export * from './colors';
 export * from './dateTime';
 
 export const IS_IOS = Platform.OS === 'ios';
 export const IS_ANDROID = Platform.OS === 'android';
-export const IS_ANDROID_12_OR_HIGHER =
-  IS_ANDROID && (Platform.Version as number) >= 31;
+export const IS_ANDROID_12_OR_HIGHER = IS_ANDROID && (Platform.Version as number) >= 31;
 export const IS_ANDROID_13_OR_HIGHER = IS_ANDROID && +getSystemVersion() >= 13;
 
 export const IS_SMALL_SIZE_SCREEN = VIEWPORT_WIDTH <= 375;

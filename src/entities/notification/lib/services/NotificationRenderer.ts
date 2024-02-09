@@ -1,9 +1,6 @@
 import { Platform } from 'react-native';
 
-import notifee, {
-  AndroidImportance,
-  Notification,
-} from '@notifee/react-native';
+import notifee, { AndroidImportance, Notification } from '@notifee/react-native';
 
 import { IS_IOS, Logger } from '@app/shared/lib';
 
@@ -32,9 +29,7 @@ function NotificationRenderer() {
         },
       });
     } catch (error) {
-      Logger.warn(
-        `[NotificationRenderer:displayNotification] OS[${Platform.OS}]: error ${error}`,
-      );
+      Logger.warn(`[NotificationRenderer:displayNotification] OS[${Platform.OS}]: error ${error}`);
     }
   }
 

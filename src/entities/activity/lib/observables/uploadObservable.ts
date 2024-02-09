@@ -8,10 +8,7 @@ export interface IUploadObservableSetters {
   reset(): void;
 }
 
-class UploadObservable
-  extends CommonObservable
-  implements IUploadObservableSetters
-{
+class UploadObservable extends CommonObservable implements IUploadObservableSetters {
   private _isLoading: boolean;
 
   private _isError: boolean;

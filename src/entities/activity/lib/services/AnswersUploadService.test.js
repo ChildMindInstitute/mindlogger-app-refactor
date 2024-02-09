@@ -1,19 +1,20 @@
-import { AnswerService } from '@shared/api';
 import { FileSystem } from 'react-native-file-access';
 
+import { AnswerService } from '@shared/api';
+
 import AnswersUploadService from './AnswersUploadService';
-import { UserPrivateKeyRecord } from '../../../identity';
 import MediaFilesCleaner from './MediaFilesCleaner';
+import { UserPrivateKeyRecord } from '../../../identity';
 
 const MOCK_CREATED_AT = +new Date();
 
 jest.mock('@app/shared/lib', () => ({
   createSecureStorage: jest.fn(() => ({
-    getString: jest.fn(data => '{}'),
+    getString: jest.fn((data) => '{}'),
   })),
   encryption: {
     createEncryptionService: jest.fn(() => ({
-      encrypt: jest.fn(data => `encrypted_${data}`),
+      encrypt: jest.fn((data) => `encrypted_${data}`),
     })),
     getPublicKey: jest.fn(() => 'mocked_public_key'),
   },
@@ -55,10 +56,7 @@ describe('AnswersUploadService', () => {
 
       const fileId = 'fileId2';
 
-      const result = AnswersUploadService.getUploadRecord(
-        uploadResults,
-        fileId,
-      );
+      const result = AnswersUploadService.getUploadRecord(uploadResults, fileId);
 
       expect(result).toEqual({
         uploaded: false,
@@ -75,10 +73,7 @@ describe('AnswersUploadService', () => {
 
       const fileId = 'fileId3';
 
-      const result = AnswersUploadService.getUploadRecord(
-        uploadResults,
-        fileId,
-      );
+      const result = AnswersUploadService.getUploadRecord(uploadResults, fileId);
 
       expect(result).toBeUndefined();
     });
@@ -109,7 +104,7 @@ describe('AnswersUploadService', () => {
         },
       ];
 
-      const mockIsFileUrl = jest.fn(url => {
+      const mockIsFileUrl = jest.fn((url) => {
         if (
           url === 'file:///path/to/image.jpg' ||
           url === '/absolute/path/to/video.mp4' ||
@@ -153,26 +148,22 @@ describe('AnswersUploadService', () => {
       FileSystem.exists.mockResolvedValueOnce(false);
 
       const mediaAnswer = { uri: 'file:///non/existing/file.jpg' };
-      const uploadResults = [
-        { fileId: 'fileId1', uploaded: false, remoteUrl: null },
-      ];
+      const uploadResults = [{ fileId: 'fileId1', uploaded: false, remoteUrl: null }];
 
-      await expect(
-        AnswersUploadService.processFileUpload(mediaAnswer, uploadResults),
-      ).rejects.toThrow(/does not exist/);
+      await expect(AnswersUploadService.processFileUpload(mediaAnswer, uploadResults)).rejects.toThrow(
+        /does not exist/,
+      );
     });
 
     it('should throw an error for missing upload record', async () => {
       FileSystem.exists.mockResolvedValueOnce(true);
 
       const mediaAnswer = { uri: 'file:///path/to/image.jpg' };
-      const uploadResults = [
-        { fileId: 'fileId1', uploaded: false, remoteUrl: null },
-      ];
+      const uploadResults = [{ fileId: 'fileId1', uploaded: false, remoteUrl: null }];
 
-      await expect(
-        AnswersUploadService.processFileUpload(mediaAnswer, uploadResults),
-      ).rejects.toThrow(/uploadRecord does not exist/);
+      await expect(AnswersUploadService.processFileUpload(mediaAnswer, uploadResults)).rejects.toThrow(
+        /uploadRecord does not exist/,
+      );
     });
   });
 
@@ -210,21 +201,14 @@ describe('AnswersUploadService', () => {
       },
     ];
 
-    const mockCheckIfFilesUploaded = jest
-      .fn()
-      .mockResolvedValue(fakeUploadResults);
+    const mockCheckIfFilesUploaded = jest.fn().mockResolvedValue(fakeUploadResults);
     AnswersUploadService.checkIfFilesUploaded = mockCheckIfFilesUploaded;
 
-    const mockProcessFileUpload = jest
-      .fn()
-      .mockResolvedValue('https://example.com/modified-answer.jpg');
+    const mockProcessFileUpload = jest.fn().mockResolvedValue('https://example.com/modified-answer.jpg');
     AnswersUploadService.processFileUpload = mockProcessFileUpload;
 
-    const mockIsFileUrl = jest.fn(url => {
-      if (
-        url === 'file:///path/to/image.jpg' ||
-        url === 'file:///path/to/video.mp4'
-      ) {
+    const mockIsFileUrl = jest.fn((url) => {
+      if (url === 'file:///path/to/image.jpg' || url === 'file:///path/to/video.mp4') {
         return true;
       } else {
         return false;
@@ -252,10 +236,7 @@ describe('AnswersUploadService', () => {
   });
 
   it('should handle no media files to upload', async () => {
-    const answers = [
-      { value: 'text answer' },
-      { value: 'another text answer' },
-    ];
+    const answers = [{ value: 'text answer' }, { value: 'another text answer' }];
 
     const modifiedBody = {
       answers,
@@ -281,22 +262,16 @@ describe('AnswersUploadService', () => {
       },
     ];
 
-    const fakeUploadResults = [
-      { uploaded: false, fileId: 'fileId1', remoteUrl: null },
-    ];
+    const fakeUploadResults = [{ uploaded: false, fileId: 'fileId1', remoteUrl: null }];
 
-    const mockCheckIfFilesUploaded = jest
-      .fn()
-      .mockResolvedValue(fakeUploadResults);
+    const mockCheckIfFilesUploaded = jest.fn().mockResolvedValue(fakeUploadResults);
 
     AnswersUploadService.checkIfFilesUploaded = mockCheckIfFilesUploaded;
 
     const mockProcessFileUpload = jest
       .fn()
       .mockRejectedValue(
-        new Error(
-          '[UploadAnswersService.mockProcessFileUpload]: Error occurred while file uploading',
-        ),
+        new Error('[UploadAnswersService.mockProcessFileUpload]: Error occurred while file uploading'),
       );
     AnswersUploadService.processFileUpload = mockProcessFileUpload;
 
@@ -304,9 +279,7 @@ describe('AnswersUploadService', () => {
       answers,
     };
 
-    await expect(
-      AnswersUploadService.uploadAllMediaFiles(modifiedBody),
-    ).rejects.toThrow(
+    await expect(AnswersUploadService.uploadAllMediaFiles(modifiedBody)).rejects.toThrow(
       '[UploadAnswersService.mockProcessFileUpload]: Error occurred while file uploading',
     );
   });
@@ -323,9 +296,7 @@ describe('AnswersUploadService', () => {
     AnswersUploadService.checkIfAnswersUploaded = mockCheckIfAnswersUploaded;
 
     const mockSendActivityAnswers = jest.fn(() => {
-      AnswersUploadService.checkIfAnswersUploaded = jest
-        .fn()
-        .mockResolvedValueOnce(true);
+      AnswersUploadService.checkIfAnswersUploaded = jest.fn().mockResolvedValueOnce(true);
     });
     AnswerService.sendActivityAnswers = mockSendActivityAnswers;
 
@@ -355,9 +326,9 @@ describe('AnswersUploadService', () => {
     const mockSendActivityAnswers = jest.fn().mockRejectedValue(sendError);
     AnswerService.sendActivityAnswers = mockSendActivityAnswers;
 
-    await expect(
-      AnswersUploadService.uploadAnswers(encryptedData),
-    ).rejects.toThrow(/Error occurred while sending answers/);
+    await expect(AnswersUploadService.uploadAnswers(encryptedData)).rejects.toThrow(
+      /Error occurred while sending answers/,
+    );
 
     expect(mockCheckIfAnswersUploaded).toHaveBeenCalledWith({
       activityId: 'activity123',
@@ -407,9 +378,7 @@ describe('AnswersUploadService', () => {
 
     UserPrivateKeyRecord.get = jest.fn().mockReturnValueOnce(null);
 
-    expect(() => AnswersUploadService.encryptAnswers(data)).toThrow(
-      'Error occurred while preparing answers',
-    );
+    expect(() => AnswersUploadService.encryptAnswers(data)).toThrow('Error occurred while preparing answers');
   });
 
   describe('assignRemoteUrlsToUserActions function', () => {
@@ -426,10 +395,7 @@ describe('AnswersUploadService', () => {
       ];
 
       const modifiedBody = {
-        answers: [
-          { value: 'https://example.com/modified-answer.jpg' },
-          { value: 'text answer' },
-        ],
+        answers: [{ value: 'https://example.com/modified-answer.jpg' }, { value: 'text answer' }],
         userActions: [
           {
             type: 'SET_ANSWER',
@@ -439,15 +405,9 @@ describe('AnswersUploadService', () => {
         ],
       };
 
-      const updatedUserActions =
-        AnswersUploadService.assignRemoteUrlsToUserActions(
-          originalAnswers,
-          modifiedBody,
-        );
+      const updatedUserActions = AnswersUploadService.assignRemoteUrlsToUserActions(originalAnswers, modifiedBody);
 
-      expect(updatedUserActions[0].response.value).toBe(
-        'https://example.com/modified-answer.jpg',
-      );
+      expect(updatedUserActions[0].response.value).toBe('https://example.com/modified-answer.jpg');
       expect(updatedUserActions[1].response.value).toBe('text answer');
     });
 
@@ -472,15 +432,9 @@ describe('AnswersUploadService', () => {
         ],
       };
 
-      const updatedUserActions =
-        AnswersUploadService.assignRemoteUrlsToUserActions(
-          originalAnswers,
-          modifiedBody,
-        );
+      const updatedUserActions = AnswersUploadService.assignRemoteUrlsToUserActions(originalAnswers, modifiedBody);
 
-      expect(updatedUserActions[0].response.value).toBe(
-        'https://example.com/modified-answer.svg',
-      );
+      expect(updatedUserActions[0].response.value).toBe('https://example.com/modified-answer.svg');
     });
 
     it('should handle SVG files and non-SVG files together', () => {
@@ -518,18 +472,10 @@ describe('AnswersUploadService', () => {
         ],
       };
 
-      const updatedUserActions =
-        AnswersUploadService.assignRemoteUrlsToUserActions(
-          originalAnswers,
-          modifiedBody,
-        );
+      const updatedUserActions = AnswersUploadService.assignRemoteUrlsToUserActions(originalAnswers, modifiedBody);
 
-      expect(updatedUserActions[0].response.value).toBe(
-        'https://example.com/modified-answer.jpg',
-      );
-      expect(updatedUserActions[1].response.value).toBe(
-        'https://example.com/modified-answer.svg',
-      );
+      expect(updatedUserActions[0].response.value).toBe('https://example.com/modified-answer.jpg');
+      expect(updatedUserActions[1].response.value).toBe('https://example.com/modified-answer.svg');
     });
 
     it('should handle SVG URLs missing in modified answers', () => {
@@ -572,18 +518,10 @@ describe('AnswersUploadService', () => {
         ],
       };
 
-      const updatedUserActions =
-        AnswersUploadService.assignRemoteUrlsToUserActions(
-          originalAnswers,
-          modifiedBody,
-        );
+      const updatedUserActions = AnswersUploadService.assignRemoteUrlsToUserActions(originalAnswers, modifiedBody);
 
-      expect(updatedUserActions[0].response.value).toBe(
-        'https://example.com/modified-answer.jpg',
-      );
-      expect(updatedUserActions[1].response.uri).toBe(
-        'file:///path/to/image.svg',
-      );
+      expect(updatedUserActions[0].response.value).toBe('https://example.com/modified-answer.jpg');
+      expect(updatedUserActions[1].response.uri).toBe('file:///path/to/image.svg');
     });
 
     it('should handle missing user actions', () => {
@@ -602,11 +540,7 @@ describe('AnswersUploadService', () => {
         userActions: [],
       };
 
-      const updatedUserActions =
-        AnswersUploadService.assignRemoteUrlsToUserActions(
-          originalAnswers,
-          modifiedBody,
-        );
+      const updatedUserActions = AnswersUploadService.assignRemoteUrlsToUserActions(originalAnswers, modifiedBody);
 
       expect(updatedUserActions).toEqual([]);
     });
@@ -622,10 +556,7 @@ describe('AnswersUploadService', () => {
 
     const modifiedBody = {
       createdAt: 1234567890,
-      answers: [
-        { value: 'https://example.com/modified-answer.jpg' },
-        { value: 'text answer' },
-      ],
+      answers: [{ value: 'https://example.com/modified-answer.jpg' }, { value: 'text answer' }],
       userActions: [
         {
           type: 'SET_ANSWER',
@@ -636,15 +567,10 @@ describe('AnswersUploadService', () => {
       itemIds: ['item1', 'item2'],
     };
 
-    AnswersUploadService.uploadAllMediaFiles = jest
-      .fn()
-      .mockResolvedValue(modifiedBody);
+    AnswersUploadService.uploadAllMediaFiles = jest.fn().mockResolvedValue(modifiedBody);
 
-    const mockAssignRemoteUrlsToUserActions = jest
-      .fn()
-      .mockReturnValue(modifiedBody.userActions);
-    AnswersUploadService.assignRemoteUrlsToUserActions =
-      mockAssignRemoteUrlsToUserActions;
+    const mockAssignRemoteUrlsToUserActions = jest.fn().mockReturnValue(modifiedBody.userActions);
+    AnswersUploadService.assignRemoteUrlsToUserActions = mockAssignRemoteUrlsToUserActions;
 
     const mockEncryptAnswers = jest.fn().mockReturnValue('encrypted-data');
     AnswersUploadService.encryptAnswers = mockEncryptAnswers;
@@ -658,10 +584,7 @@ describe('AnswersUploadService', () => {
     await AnswersUploadService.sendAnswers(body);
 
     expect(AnswersUploadService.uploadAllMediaFiles).toHaveBeenCalledWith(body);
-    expect(mockAssignRemoteUrlsToUserActions).toHaveBeenCalledWith(
-      body.answers,
-      modifiedBody,
-    );
+    expect(mockAssignRemoteUrlsToUserActions).toHaveBeenCalledWith(body.answers, modifiedBody);
     expect(mockEncryptAnswers).toHaveBeenCalledWith(modifiedBody);
     expect(mockUploadAnswers).toHaveBeenCalledWith('encrypted-data');
     expect(mockCleanUpByAnswers).toHaveBeenCalledWith(body.answers);
@@ -676,13 +599,9 @@ describe('AnswersUploadService', () => {
     };
 
     const uploadError = new Error('Uploading media files failed');
-    AnswersUploadService.uploadAllMediaFiles = jest
-      .fn()
-      .mockRejectedValue(uploadError);
+    AnswersUploadService.uploadAllMediaFiles = jest.fn().mockRejectedValue(uploadError);
 
-    await expect(AnswersUploadService.sendAnswers(body)).rejects.toThrow(
-      uploadError,
-    );
+    await expect(AnswersUploadService.sendAnswers(body)).rejects.toThrow(uploadError);
   });
 });
 
@@ -694,85 +613,67 @@ describe('AnswersUploadService real example', () => {
         appletId: '1e631d7f-2ce8-4ec0-be52-c77092bd203e',
         createdAt: MOCK_CREATED_AT,
         version: '3.2.0',
-        answers: [
-          'Lkjjjkh',
-          { value: 1 },
-          { value: [0] },
-          { value: 5 },
-          { value: '1' },
-          'Kljk',
-        ],
+        answers: ['Lkjjjkh', { value: 1 }, { value: [0] }, { value: 5 }, { value: '1' }, 'Kljk'],
         userActions: [
           {
             type: 'SET_ANSWER',
-            screen:
-              '55aa0609-6be5-4c24-83e2-7926fc60d074/df667c1a-a626-4f70-8081-95c504e7bfde',
+            screen: '55aa0609-6be5-4c24-83e2-7926fc60d074/df667c1a-a626-4f70-8081-95c504e7bfde',
             time: 1692005982379,
             response: 'Lkjjjkh',
           },
           {
             type: 'NEXT',
-            screen:
-              '55aa0609-6be5-4c24-83e2-7926fc60d074/df667c1a-a626-4f70-8081-95c504e7bfde',
+            screen: '55aa0609-6be5-4c24-83e2-7926fc60d074/df667c1a-a626-4f70-8081-95c504e7bfde',
             time: 1692005983716,
           },
           {
             type: 'SET_ANSWER',
-            screen:
-              '55aa0609-6be5-4c24-83e2-7926fc60d074/977c6e6c-dcd8-4cfa-9fe8-8aac7c7f574b',
+            screen: '55aa0609-6be5-4c24-83e2-7926fc60d074/977c6e6c-dcd8-4cfa-9fe8-8aac7c7f574b',
             time: 1692005984444,
             response: { value: 1 },
           },
           {
             type: 'SET_ANSWER',
-            screen:
-              '55aa0609-6be5-4c24-83e2-7926fc60d074/50919a95-e9d3-4cee-a4be-bc70e3387826',
+            screen: '55aa0609-6be5-4c24-83e2-7926fc60d074/50919a95-e9d3-4cee-a4be-bc70e3387826',
             time: 1692005985232,
             response: { value: [0] },
           },
           {
             type: 'NEXT',
-            screen:
-              '55aa0609-6be5-4c24-83e2-7926fc60d074/50919a95-e9d3-4cee-a4be-bc70e3387826',
+            screen: '55aa0609-6be5-4c24-83e2-7926fc60d074/50919a95-e9d3-4cee-a4be-bc70e3387826',
             time: 1692005986098,
           },
           {
             type: 'SET_ANSWER',
-            screen:
-              '55aa0609-6be5-4c24-83e2-7926fc60d074/3d696b71-48b6-426a-bc21-87833bda0351',
+            screen: '55aa0609-6be5-4c24-83e2-7926fc60d074/3d696b71-48b6-426a-bc21-87833bda0351',
             time: 1692005987044,
             response: { value: 5 },
           },
           {
             type: 'NEXT',
-            screen:
-              '55aa0609-6be5-4c24-83e2-7926fc60d074/3d696b71-48b6-426a-bc21-87833bda0351',
+            screen: '55aa0609-6be5-4c24-83e2-7926fc60d074/3d696b71-48b6-426a-bc21-87833bda0351',
             time: 1692005987698,
           },
           {
             type: 'SET_ANSWER',
-            screen:
-              '55aa0609-6be5-4c24-83e2-7926fc60d074/90c99a5b-689e-45a0-8e63-c75e2335d85d',
+            screen: '55aa0609-6be5-4c24-83e2-7926fc60d074/90c99a5b-689e-45a0-8e63-c75e2335d85d',
             time: 1692005988956,
             response: { value: '1' },
           },
           {
             type: 'NEXT',
-            screen:
-              '55aa0609-6be5-4c24-83e2-7926fc60d074/90c99a5b-689e-45a0-8e63-c75e2335d85d',
+            screen: '55aa0609-6be5-4c24-83e2-7926fc60d074/90c99a5b-689e-45a0-8e63-c75e2335d85d',
             time: 1692005989678,
           },
           {
             type: 'SET_ANSWER',
-            screen:
-              '55aa0609-6be5-4c24-83e2-7926fc60d074/b1c54326-d856-492a-8c26-0c6f6e7b9653',
+            screen: '55aa0609-6be5-4c24-83e2-7926fc60d074/b1c54326-d856-492a-8c26-0c6f6e7b9653',
             time: 1692005991357,
             response: 'Kljk',
           },
           {
             type: 'DONE',
-            screen:
-              '55aa0609-6be5-4c24-83e2-7926fc60d074/b1c54326-d856-492a-8c26-0c6f6e7b9653',
+            screen: '55aa0609-6be5-4c24-83e2-7926fc60d074/b1c54326-d856-492a-8c26-0c6f6e7b9653',
             time: 1692005992241,
           },
         ],
@@ -808,32 +709,18 @@ describe('AnswersUploadService real example', () => {
         alerts: [],
       };
 
-      AnswersUploadService.uploadAllMediaFiles = jest
-        .fn()
-        .mockResolvedValue(body);
+      AnswersUploadService.uploadAllMediaFiles = jest.fn().mockResolvedValue(body);
 
-      AnswersUploadService.assignRemoteUrlsToUserActions = jest
-        .fn()
-        .mockResolvedValue(body.userActions);
+      AnswersUploadService.assignRemoteUrlsToUserActions = jest.fn().mockResolvedValue(body.userActions);
 
-      AnswersUploadService.createEncryptionService = jest
-        .fn()
-        .mockResolvedValue(() => {});
+      AnswersUploadService.createEncryptionService = jest.fn().mockResolvedValue(() => {});
 
-      MediaFilesCleaner.cleanUpByAnswers = jest
-        .fn()
-        .mockResolvedValue(() => {});
+      MediaFilesCleaner.cleanUpByAnswers = jest.fn().mockResolvedValue(() => {});
 
       await AnswersUploadService.sendAnswers(body);
-      expect(AnswersUploadService.uploadAllMediaFiles).toHaveBeenCalledWith(
-        body,
-      );
-      expect(
-        AnswersUploadService.assignRemoteUrlsToUserActions,
-      ).toHaveBeenCalledWith(body.answers, body);
-      expect(MediaFilesCleaner.cleanUpByAnswers).toHaveBeenCalledWith(
-        body.answers,
-      );
+      expect(AnswersUploadService.uploadAllMediaFiles).toHaveBeenCalledWith(body);
+      expect(AnswersUploadService.assignRemoteUrlsToUserActions).toHaveBeenCalledWith(body.answers, body);
+      expect(MediaFilesCleaner.cleanUpByAnswers).toHaveBeenCalledWith(body.answers);
     });
   });
 });

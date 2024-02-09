@@ -28,10 +28,10 @@ const fillOptionsForCheckboxes = (item: CheckboxPipelineItem, from = 1) => {
     item.payload.options.push({
       alert: null,
       color: null,
-      id: 'mock-id-' + i,
+      id: `mock-id-${i}`,
       image: null,
       isHidden: false,
-      text: 'mock-text-' + i,
+      text: `mock-text-${i}`,
       tooltip: null,
       score: i * 10,
       value: i,
@@ -72,10 +72,10 @@ const fillOptionsForRadio = (item: RadioPipelineItem, from = 1) => {
     item.payload.options.push({
       alert: null,
       color: null,
-      id: 'mock-id-' + i,
+      id: `mock-id-${i}`,
       image: null,
       isHidden: false,
-      text: 'mock-text-' + i,
+      text: `mock-text-${i}`,
       tooltip: null,
       score: i * 10,
       value: i,
@@ -130,17 +130,13 @@ describe('ScoresCalculator: test collectMaxScores', () => {
     const selectedItems: string[] = [];
 
     // @ts-expect-error
-    const result = calculator.collectMaxScores(
-      [checkboxesItem, radiosItem, sliderItem],
-      selectedItems,
-    );
+    const result = calculator.collectMaxScores([checkboxesItem, radiosItem, sliderItem], selectedItems);
 
     expect(result).toEqual([null, null, null]);
   });
 
   it("Should return [150, 50, 40] when selectedItems are ['checkbox-item', 'radio-item', 'slider-item']", () => {
-    const checkboxesItem: PipelineItem =
-      getEmptyCheckboxesItem('checkbox-item');
+    const checkboxesItem: PipelineItem = getEmptyCheckboxesItem('checkbox-item');
     const radiosItem: PipelineItem = getEmptyRadioItem('radio-item');
     const sliderItem: PipelineItem = getEmptySliderItem('slider-item');
 
@@ -148,24 +144,16 @@ describe('ScoresCalculator: test collectMaxScores', () => {
     fillOptionsForRadio(radiosItem);
     fillOptionsForSlider(sliderItem, 5);
 
-    const selectedItems: string[] = [
-      'checkbox-item',
-      'radio-item',
-      'slider-item',
-    ];
+    const selectedItems: string[] = ['checkbox-item', 'radio-item', 'slider-item'];
 
     // @ts-expect-error
-    const result = calculator.collectMaxScores(
-      [checkboxesItem, radiosItem, sliderItem],
-      selectedItems,
-    );
+    const result = calculator.collectMaxScores([checkboxesItem, radiosItem, sliderItem], selectedItems);
 
     expect(result).toEqual([150, 50, 40]);
   });
 
   it("Should return [40, 50, 150] when selectedItems are ['checkbox-item', 'radio-item', 'slider-item'] and pipelineItems reversed", () => {
-    const checkboxesItem: PipelineItem =
-      getEmptyCheckboxesItem('checkbox-item');
+    const checkboxesItem: PipelineItem = getEmptyCheckboxesItem('checkbox-item');
     const radiosItem: PipelineItem = getEmptyRadioItem('radio-item');
     const sliderItem: PipelineItem = getEmptySliderItem('slider-item');
 
@@ -173,24 +161,16 @@ describe('ScoresCalculator: test collectMaxScores', () => {
     fillOptionsForRadio(radiosItem);
     fillOptionsForSlider(sliderItem, 5);
 
-    const selectedItems: string[] = [
-      'checkbox-item',
-      'radio-item',
-      'slider-item',
-    ];
+    const selectedItems: string[] = ['checkbox-item', 'radio-item', 'slider-item'];
 
     // @ts-expect-error
-    const result = calculator.collectMaxScores(
-      [sliderItem, radiosItem, checkboxesItem],
-      selectedItems,
-    );
+    const result = calculator.collectMaxScores([sliderItem, radiosItem, checkboxesItem], selectedItems);
 
     expect(result).toEqual([40, 50, 150]);
   });
 
   it("Should return [40, 50, 50, 150, 40] when selectedItems are ['checkbox-item', 'radio-item', 'slider-item'] and pipelineItems ['slider-item', 'radio-item', 'radio-item', 'checkbox-item', 'slider-item']", () => {
-    const checkboxesItem: PipelineItem =
-      getEmptyCheckboxesItem('checkbox-item');
+    const checkboxesItem: PipelineItem = getEmptyCheckboxesItem('checkbox-item');
     const radiosItem: PipelineItem = getEmptyRadioItem('radio-item');
     const sliderItem: PipelineItem = getEmptySliderItem('slider-item');
 
@@ -198,11 +178,7 @@ describe('ScoresCalculator: test collectMaxScores', () => {
     fillOptionsForRadio(radiosItem);
     fillOptionsForSlider(sliderItem, 5);
 
-    const selectedItems: string[] = [
-      'checkbox-item',
-      'radio-item',
-      'slider-item',
-    ];
+    const selectedItems: string[] = ['checkbox-item', 'radio-item', 'slider-item'];
 
     // @ts-expect-error
     const result = calculator.collectMaxScores(
@@ -214,8 +190,7 @@ describe('ScoresCalculator: test collectMaxScores', () => {
   });
 
   it("Should return [150, 50] when selectedItems are ['checkbox-item', 'radio-item'] and pipelineItems are ['checkbox-item', 'radio-item', 'slider-item']", () => {
-    const checkboxesItem: PipelineItem =
-      getEmptyCheckboxesItem('checkbox-item');
+    const checkboxesItem: PipelineItem = getEmptyCheckboxesItem('checkbox-item');
     const radiosItem: PipelineItem = getEmptyRadioItem('radio-item');
     const sliderItem: PipelineItem = getEmptySliderItem('slider-item');
 
@@ -226,34 +201,23 @@ describe('ScoresCalculator: test collectMaxScores', () => {
     const selectedItems: string[] = ['checkbox-item', 'radio-item'];
 
     // @ts-expect-error
-    const result = calculator.collectMaxScores(
-      [checkboxesItem, radiosItem, sliderItem],
-      selectedItems,
-    );
+    const result = calculator.collectMaxScores([checkboxesItem, radiosItem, sliderItem], selectedItems);
 
     expect(result).toEqual([150, 50, null]);
   });
 
   it("Should return [150, null, 50] when selectedItems are ['checkbox-item', 'audio-item', 'radio-item'] and pipelineItems are ['checkbox-item', 'audio-item', 'radio-item']", () => {
-    const checkboxesItem: PipelineItem =
-      getEmptyCheckboxesItem('checkbox-item');
+    const checkboxesItem: PipelineItem = getEmptyCheckboxesItem('checkbox-item');
     const radiosItem: PipelineItem = getEmptyRadioItem('radio-item');
     const audioItem: PipelineItem = getEmptyAudioItem('audio-item');
 
     fillOptionsForCheckboxes(checkboxesItem);
     fillOptionsForRadio(radiosItem);
 
-    const selectedItems: string[] = [
-      'checkbox-item',
-      'audio-item',
-      'radio-item',
-    ];
+    const selectedItems: string[] = ['checkbox-item', 'audio-item', 'radio-item'];
 
     // @ts-expect-error
-    const result = calculator.collectMaxScores(
-      [checkboxesItem, audioItem, radiosItem],
-      selectedItems,
-    );
+    const result = calculator.collectMaxScores([checkboxesItem, audioItem, radiosItem], selectedItems);
 
     expect(result).toEqual([150, null, 50]);
   });

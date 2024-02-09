@@ -1,10 +1,6 @@
 import { addDays, addMonths, subDays, subMonths } from 'date-fns';
 
-import {
-  AvailabilityType,
-  NotificationTriggerType,
-  PeriodicityType,
-} from '@app/abstract/lib';
+import { AvailabilityType, NotificationTriggerType, PeriodicityType } from '@app/abstract/lib';
 import {
   BreakReason,
   EventNotificationDescribers,
@@ -13,12 +9,7 @@ import {
   ScheduleEvent,
 } from '@app/entities/notification/lib';
 
-import {
-  addTime,
-  createBuilder,
-  getEmptyEvent,
-  getEventEntity,
-} from './testHelpers';
+import { addTime, createBuilder, getEmptyEvent, getEventEntity } from './testHelpers';
 import { INotificationBuilder } from '../NotificationBuilder';
 
 const anyDay = new Date(2018, 1, 2);
@@ -41,17 +32,11 @@ const setNormalSettingsToEvent = (
   setReminder = false,
 ) => {
   event.availability.timeFrom =
-    periodicityType === PeriodicityType.Always
-      ? { hours: 0, minutes: 0 }
-      : { hours: 15, minutes: 30 };
+    periodicityType === PeriodicityType.Always ? { hours: 0, minutes: 0 } : { hours: 15, minutes: 30 };
   event.availability.timeTo =
-    periodicityType === PeriodicityType.Always
-      ? { hours: 23, minutes: 59 }
-      : { hours: 20, minutes: 15 };
+    periodicityType === PeriodicityType.Always ? { hours: 23, minutes: 59 } : { hours: 20, minutes: 15 };
   event.availability.availabilityType =
-    periodicityType === PeriodicityType.Always
-      ? AvailabilityType.AlwaysAvailable
-      : AvailabilityType.ScheduledAccess;
+    periodicityType === PeriodicityType.Always ? AvailabilityType.AlwaysAvailable : AvailabilityType.ScheduledAccess;
   event.availability.periodicityType = periodicityType;
   event.availability.startDate = subMonths(today, 1);
   event.availability.endDate = addMonths(today, 1);
@@ -79,10 +64,10 @@ const getMockNotification = (index = 1) => {
     isActive: true,
     notificationBody: 'mock-notification-body',
     notificationHeader: 'mock-notification-header',
-    notificationId: 'ock-notification-id' + index,
+    notificationId: `ock-notification-id${index}`,
     scheduledAt: new Date(2024, 0, 1).getTime(),
     scheduledAtString: new Date(2024, 0, 1).toString(),
-    shortId: 'mock-shortId' + index,
+    shortId: `mock-shortId${index}`,
     type: NotificationType.Regular,
   };
   return result;
@@ -107,7 +92,7 @@ const anyPeriodicity = [
 
 describe('NotificationBuilder: processEvent tests', () => {
   describe('Test breaking of algorithm', () => {
-    anyPeriodicity.forEach(periodicity => {
+    anyPeriodicity.forEach((periodicity) => {
       it(`Should break with the reason ScheduledAtIsEmpty when scheduledAt is not set and periodicity=${periodicity}`, () => {
         const today = new Date(2024, 0, 3);
         const now = addTime({ hours: 15, minutes: 30 }, today);
@@ -154,8 +139,7 @@ describe('NotificationBuilder: processEvent tests', () => {
 
       const expected: EventNotificationDescribers = {
         eventId: 'mock-event-id',
-        eventName:
-          'For mock-entity-name, ONCE, 1 notifications, reminder unset',
+        eventName: 'For mock-entity-name, ONCE, 1 notifications, reminder unset',
         notifications: [],
         scheduleEvent: event,
         breakReason: BreakReason.ScheduledDayIsLessThanYesterday,
@@ -164,7 +148,7 @@ describe('NotificationBuilder: processEvent tests', () => {
       expect(result.events).toEqual([expected]);
     });
 
-    repeatablePeriodicity.forEach(periodicity => {
+    repeatablePeriodicity.forEach((periodicity) => {
       it(`Should break with the reason EventDayToIsLessThanCurrentDay when event-endDate is less than today and periodicity is ${periodicity}`, () => {
         const today = new Date(2024, 0, 3);
         const now = addTime({ hours: 15, minutes: 30 }, today);
@@ -194,7 +178,7 @@ describe('NotificationBuilder: processEvent tests', () => {
       });
     });
 
-    repeatablePeriodicity.forEach(periodicity => {
+    repeatablePeriodicity.forEach((periodicity) => {
       it(`Should break with the reason EventDayFromIsMoreThanLastScheduleDay when event-startDate is more than lastScheduleDay and periodicity is ${periodicity}`, () => {
         const today = new Date(2024, 0, 3);
         const now = addTime({ hours: 15, minutes: 30 }, today);
@@ -229,7 +213,7 @@ describe('NotificationBuilder: processEvent tests', () => {
       });
     });
 
-    anyPeriodicity.forEach(periodicity => {
+    anyPeriodicity.forEach((periodicity) => {
       it(`Should break with the reason EntityHidden when entity-isVisible flag is false and periodicity is ${periodicity}`, () => {
         const today = new Date(2024, 0, 3);
         const now = addTime({ hours: 15, minutes: 30 }, today);
@@ -314,9 +298,7 @@ describe('NotificationBuilder: processEvent tests', () => {
       const processEventDayMock = jest.fn();
       const mockCreateReminder = jest.fn();
       //@ts-ignore
-      builder.processEventDay = processEventDayMock.mockReturnValue([
-        mockNotification,
-      ]);
+      builder.processEventDay = processEventDayMock.mockReturnValue([mockNotification]);
       //@ts-ignore
       builder.reminderCreator.create = mockCreateReminder.mockReturnValue([
         { reminder: mockReminder, eventDay: new Date(anyDay) },
@@ -336,7 +318,7 @@ describe('NotificationBuilder: processEvent tests', () => {
       expect(mockCreateReminder).toHaveBeenCalledTimes(1);
     });
 
-    repeatablePeriodicity.forEach(periodicity => {
+    repeatablePeriodicity.forEach((periodicity) => {
       it(`Should fulfill array with reminders and notifications in correct order way when periodicity is ${periodicity} and 1 reminder is not associated with an event day`, () => {
         const today = new Date(2024, 0, 3);
         const now = addTime({ hours: 15, minutes: 30 }, today);
@@ -353,24 +335,21 @@ describe('NotificationBuilder: processEvent tests', () => {
 
         const extractEventDaysMock = jest.fn();
         //@ts-ignore
-        builder.notificationDaysExtractor.extract =
-          extractEventDaysMock.mockReturnValue([
-            new Date(today),
-            addDays(today, 1),
-            addDays(today, 2),
-          ]);
+        builder.notificationDaysExtractor.extract = extractEventDaysMock.mockReturnValue([
+          new Date(today),
+          addDays(today, 1),
+          addDays(today, 2),
+        ]);
 
         //@ts-ignore
         builder.notificationDaysExtractor.extractForReminders = jest.fn();
 
-        const mockedReminders = [
-          getMockNotification(2),
-          getMockNotification(3),
-          getMockNotification(4),
-        ].map((r, index) => {
-          r.type = NotificationType.Reminder;
-          return { reminder: r, eventDay: addDays(today, index - 1) };
-        });
+        const mockedReminders = [getMockNotification(2), getMockNotification(3), getMockNotification(4)].map(
+          (r, index) => {
+            r.type = NotificationType.Reminder;
+            return { reminder: r, eventDay: addDays(today, index - 1) };
+          },
+        );
 
         const mockCreateReminder = jest.fn().mockReturnValue(mockedReminders);
         //@ts-ignore
@@ -380,9 +359,7 @@ describe('NotificationBuilder: processEvent tests', () => {
 
         const processEventDayMock = jest.fn();
         //@ts-ignore
-        builder.processEventDay = processEventDayMock.mockReturnValue([
-          mockNotification,
-        ]);
+        builder.processEventDay = processEventDayMock.mockReturnValue([mockNotification]);
 
         const result = builder.build();
 

@@ -7,10 +7,7 @@ import { ActivityModel } from '@app/entities/activity';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 
 import { useFlowStorageRecord } from '../../lib';
-import {
-  buildActivityFlowPipeline,
-  buildSingleActivityPipeline,
-} from '../pipelineBuilder';
+import { buildActivityFlowPipeline, buildSingleActivityPipeline } from '../pipelineBuilder';
 
 type UseActivityRecordCreatorArgs = {
   appletId: string;
@@ -19,12 +16,7 @@ type UseActivityRecordCreatorArgs = {
   entityType: EntityType;
 };
 
-export function useFlowRecordInitialization({
-  appletId,
-  eventId,
-  entityId,
-  entityType,
-}: UseActivityRecordCreatorArgs) {
+export function useFlowRecordInitialization({ appletId, eventId, entityId, entityType }: UseActivityRecordCreatorArgs) {
   const { flowStorageRecord, upsertFlowStorageRecord } = useFlowStorageRecord({
     appletId,
     eventId,
@@ -35,16 +27,12 @@ export function useFlowRecordInitialization({
 
   const initializedRef = useRef(!!flowStorageRecord);
 
-  const activityQueryService = useMemo(
-    () => new ActivityModel.ActivityQueryService(queryClient),
-    [queryClient],
-  );
+  const activityQueryService = useMemo(() => new ActivityModel.ActivityQueryService(queryClient), [queryClient]);
 
   const step = flowStorageRecord?.step ?? 0;
 
   const { data: applet } = useAppletDetailsQuery(appletId, {
-    select: response =>
-      AppletModel.mapAppletDetailsFromDto(response.data.result),
+    select: (response) => AppletModel.mapAppletDetailsFromDto(response.data.result),
   });
 
   const buildPipeline = useCallback(() => {
@@ -66,9 +54,7 @@ export function useFlowRecordInitialization({
         hasSummary,
       });
     } else {
-      const activityIds = applet.activityFlows.find(
-        flow => flow.id === entityId,
-      )?.activityIds;
+      const activityIds = applet.activityFlows.find((flow) => flow.id === entityId)?.activityIds;
 
       return buildActivityFlowPipeline({
         activityIds: activityIds!,
@@ -79,18 +65,9 @@ export function useFlowRecordInitialization({
         hasSummary,
       });
     }
-  }, [
-    applet,
-    appletId,
-    eventId,
-    step,
-    entityId,
-    entityType,
-    activityQueryService,
-  ]);
+  }, [applet, appletId, eventId, step, entityId, entityType, activityQueryService]);
 
-  const canCreateStorageRecord =
-    !initializedRef.current && applet && !flowStorageRecord;
+  const canCreateStorageRecord = !initializedRef.current && applet && !flowStorageRecord;
 
   const createStorageRecord = useCallback(() => {
     return upsertFlowStorageRecord({

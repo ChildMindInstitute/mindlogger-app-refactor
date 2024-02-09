@@ -1,18 +1,7 @@
-import {
-  ILogger,
-  IMutex,
-  Logger,
-  Mutex,
-  isAppOnline,
-  wait,
-} from '@app/shared/lib';
+import { ILogger, IMutex, Logger, Mutex, isAppOnline, wait } from '@app/shared/lib';
 
-import AnswersQueueService, {
-  IAnswersQueueService,
-} from './AnswersQueueService';
-import AnswersUploadService, {
-  IAnswersUploadService,
-} from './AnswersUploadService';
+import AnswersQueueService, { IAnswersQueueService } from './AnswersQueueService';
+import AnswersUploadService, { IAnswersUploadService } from './AnswersUploadService';
 import { UploadObservable } from '../observables';
 import { IUploadObservableSetters } from '../observables/uploadObservable';
 import { SendAnswersInput } from '../types';
@@ -28,11 +17,7 @@ class QueueProcessingService {
 
   private logger: ILogger;
 
-  constructor(
-    updateObservable: IUploadObservableSetters,
-    queueService: IAnswersQueueService,
-    logger: ILogger,
-  ) {
+  constructor(updateObservable: IUploadObservableSetters, queueService: IAnswersQueueService, logger: ILogger) {
     this.uploadStatusObservable = updateObservable;
 
     this.queueService = queueService;
@@ -57,21 +42,16 @@ class QueueProcessingService {
       const logEntity = `"${uploadItem.input.logActivityName}, which completed at ${uploadItem.input.logCompletedAt}"`;
 
       try {
-        this.logger.info(
-          `[QueueProcessingService:processInternal]: Processing activity ${logEntity}`,
-        );
+        this.logger.info(`[QueueProcessingService:processInternal]: Processing activity ${logEntity}`);
 
         await this.uploadService.sendAnswers(uploadItem.input);
 
         this.queueService.dequeue();
 
-        this.logger.info(
-          `[QueueProcessingService:processInternal] Queue item with activity ${logEntity} processed`,
-        );
+        this.logger.info(`[QueueProcessingService:processInternal] Queue item with activity ${logEntity} processed`);
       } catch (error) {
         this.logger.warn(
-          `[QueueProcessingService:processInternal] Error occurred while executing sendAnswers for ${logEntity}.\nInternal error:\n\n` +
-            error,
+          `[QueueProcessingService:processInternal] Error occurred while executing sendAnswers for ${logEntity}.\nInternal error:\n\n${error}`,
         );
 
         this.queueService.swap();
@@ -100,9 +80,7 @@ class QueueProcessingService {
       const online = await isAppOnline();
 
       if (!online) {
-        this.logger.log(
-          '[QueueProcessingService.process]: Application is offline',
-        );
+        this.logger.log('[QueueProcessingService.process]: Application is offline');
         this.uploadStatusObservable.isPostponed = true;
         return true;
       }
@@ -114,10 +92,7 @@ class QueueProcessingService {
 
       return success;
     } catch (error) {
-      this.logger.warn(
-        '[QueueProcessingService.process]: Error in processInternal occurred\n\n' +
-          error!.toString(),
-      );
+      this.logger.warn(`[QueueProcessingService.process]: Error in processInternal occurred\n\n${error}`);
       this.uploadStatusObservable.isError = true;
     } finally {
       this.mutex.release();
@@ -131,8 +106,4 @@ class QueueProcessingService {
   }
 }
 
-export default new QueueProcessingService(
-  UploadObservable,
-  AnswersQueueService,
-  Logger,
-);
+export default new QueueProcessingService(UploadObservable, AnswersQueueService, Logger);

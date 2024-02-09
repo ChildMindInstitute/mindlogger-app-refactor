@@ -5,9 +5,7 @@ import { RESULTS } from 'react-native-permissions';
 import { checkCameraPermissions } from '../permissions';
 
 const useCameraPermissions = () => {
-  const [cameraPermission, setCameraPermission] = useState<string>(
-    RESULTS.UNAVAILABLE,
-  );
+  const [cameraPermission, setCameraPermission] = useState<string>(RESULTS.UNAVAILABLE);
 
   useEffect(() => {
     checkCameraPermissions().then(setCameraPermission);

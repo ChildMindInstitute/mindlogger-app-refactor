@@ -1,18 +1,12 @@
 import messaging from '@react-native-firebase/messaging';
 
-import {
-  NotificationRenderer,
-  RemoteNotification,
-  RemoteNotificationPayload,
-} from '@app/entities/notification';
+import { NotificationRenderer, RemoteNotification, RemoteNotificationPayload } from '@app/entities/notification';
 import { createJob, Logger } from '@shared/lib';
 
 async function onMessageReceived(notification: RemoteNotification) {
   if (notification.data) {
     try {
-      const payload = JSON.parse(
-        notification.data.message,
-      ) as RemoteNotificationPayload;
+      const payload = JSON.parse(notification.data.message) as RemoteNotificationPayload;
 
       NotificationRenderer.displayNotification({
         title: payload.title,
@@ -20,10 +14,8 @@ async function onMessageReceived(notification: RemoteNotification) {
         data: payload.data,
       });
     } catch (error) {
-      Logger.log(
-        '[onMessageReceived]: Failed to render a notification: ' + notification,
-      );
-      Logger.log('[onMessageReceived]: Error: ' + error);
+      Logger.log(`[onMessageReceived]: Failed to render a notification: ${notification}`);
+      Logger.log(`[onMessageReceived]: Error: ${error}`);
     }
   }
 }

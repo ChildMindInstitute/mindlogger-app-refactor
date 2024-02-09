@@ -6,11 +6,8 @@ const useOnlineEstablished = (callback: () => void) => {
   const currentStateRef = useRef<boolean | null>(null);
 
   useEffect(() => {
-    return NetInfo.addEventListener(state => {
-      const status =
-        state.isConnected != null &&
-        state.isConnected &&
-        Boolean(state.isInternetReachable);
+    return NetInfo.addEventListener((state) => {
+      const status = state.isConnected != null && state.isConnected && Boolean(state.isInternetReachable);
 
       if (!currentStateRef.current && status) {
         callback();

@@ -13,7 +13,7 @@ function useOnForeground(callback: () => void, options?: Partial<Options>) {
   const enabled = options?.enabled ?? true;
 
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', status => {
+    const subscription = AppState.addEventListener('change', (status) => {
       if (status === 'active' && enabled) {
         callbackRef.current();
       }

@@ -4,14 +4,7 @@ import { TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { colors, IS_ANDROID, IS_IOS } from '@app/shared/lib';
-import {
-  RoundLogo,
-  Box,
-  Text,
-  XStack,
-  YStack,
-  ChevronRightIcon,
-} from '@app/shared/ui';
+import { RoundLogo, Box, Text, XStack, YStack, ChevronRightIcon } from '@app/shared/ui';
 
 import ActivityFlowStep from './ActivityFlowStep';
 import TimeStatusRecord from './TimeStatusRecord';
@@ -33,11 +26,7 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
     : `activity-${activity.name}`;
 
   return (
-    <TouchableOpacity
-      accessibilityLabel={accessibilityLabel}
-      onPress={onPress}
-      disabled={isDisabled}
-    >
+    <TouchableOpacity accessibilityLabel={accessibilityLabel} onPress={onPress} disabled={isDisabled}>
       <XStack
         mx={3}
         p={14}
@@ -48,24 +37,15 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
         backgroundColor="$white"
       >
         {!!activity.image && (
-          <Box
-            mr={14}
-            alignSelf="center"
-            accessibilityLabel="activity_card-image"
-          >
+          <Box mr={14} alignSelf="center" accessibilityLabel="activity_card-image">
             <RoundLogo imageUri={activity.image} />
           </Box>
         )}
 
         <YStack flexGrow={1} flexShrink={1}>
-          {activity.isInActivityFlow &&
-            activity.activityFlowDetails!.showActivityFlowBadge && (
-              <ActivityFlowStep
-                hasOpacity={isDisabled}
-                activity={activity}
-                mb={7}
-              />
-            )}
+          {activity.isInActivityFlow && activity.activityFlowDetails!.showActivityFlowBadge && (
+            <ActivityFlowStep hasOpacity={isDisabled} activity={activity} mb={7} />
+          )}
 
           <Text
             mb={8}

@@ -1,9 +1,5 @@
 import { Answer } from '@app/features/pass-survey';
-import {
-  AnalyticsResponseType,
-  AppletEncryptionDTO,
-  ResponseConfig,
-} from '@shared/api';
+import { AnalyticsResponseType, AppletEncryptionDTO, ResponseConfig } from '@shared/api';
 
 export type AppletTheme = {
   logo: string;

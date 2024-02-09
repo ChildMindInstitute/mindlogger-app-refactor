@@ -20,13 +20,13 @@ type Props = {
 } & StreamEventLoggable<DrawingStreamEvent> &
   BoxProps;
 
-const DrawingTest: FC<Props> = props => {
+const DrawingTest: FC<Props> = (props) => {
   const [width, setWidth] = useState<number | null>(null);
 
   const { value, backgroundImageUrl, imageUrl, onLog } = props;
 
   const onResult = async (result: DrawResult) => {
-    let fileName = value.fileName;
+    const fileName = value.fileName;
 
     const fileMeta = SvgFileManager.getFileMeta(fileName);
 
@@ -40,7 +40,7 @@ const DrawingTest: FC<Props> = props => {
   return (
     <Box
       {...props}
-      onLayout={x => {
+      onLayout={(x) => {
         const containerWidth = x.nativeEvent.layout.width - RectPadding * 2;
 
         if (containerWidth > 0) {
@@ -74,12 +74,7 @@ const DrawingTest: FC<Props> = props => {
             />
           )}
 
-          <DrawingBoard
-            value={value.lines}
-            onResult={onResult}
-            width={width}
-            onLog={onLog}
-          />
+          <DrawingBoard value={value.lines} onResult={onResult} width={width} onLog={onLog} />
         </XStack>
       )}
     </Box>

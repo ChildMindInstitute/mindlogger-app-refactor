@@ -16,12 +16,12 @@ const getAnswer = (value: number[] | null | undefined): WrappedAnswer => {
 
   result.answer = value.map((v, index) => ({
     color: null,
-    id: 'mock-id-' + index,
+    id: `mock-id-${index}`,
     image: null,
     isHidden: false,
     score: null,
     value: v,
-    text: 'mock-text-' + index,
+    text: `mock-text-${index}`,
     tooltip: null,
   }));
 
@@ -48,10 +48,10 @@ const fillOptions = (item: CheckboxPipelineItem, from = 1) => {
     item.payload.options.push({
       alert: null,
       color: null,
-      id: 'mock-id-' + i,
+      id: `mock-id-${i}`,
       image: null,
       isHidden: false,
-      text: 'mock-text-' + i,
+      text: `mock-text-${i}`,
       tooltip: null,
       score: i * 10,
       value: i,

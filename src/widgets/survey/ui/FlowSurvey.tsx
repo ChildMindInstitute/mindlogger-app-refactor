@@ -15,26 +15,14 @@ type Props = {
   onClose: () => void;
 } & EntityPath;
 
-function FlowSurvey({
-  appletId,
-  entityId,
-  entityType,
-  eventId,
-  onClose,
-}: Props) {
+function FlowSurvey({ appletId, entityId, entityType, eventId, onClose }: Props) {
   const { step, pipeline, isTimerElapsed } = useFlowState({
     appletId,
     eventId,
     flowId: entityType === 'flow' ? entityId : undefined,
   });
 
-  const {
-    next,
-    back,
-    idleTimeoutNext,
-    completeByTimer,
-    clearFlowStorageRecord,
-  } = useFlowStateActions({
+  const { next, back, idleTimeoutNext, completeByTimer, clearFlowStorageRecord } = useFlowStateActions({
     appletId,
     eventId,
     flowId: entityType === 'flow' ? entityId : undefined,
@@ -92,7 +80,7 @@ function FlowSurvey({
   return (
     <FlowElementSwitch
       {...flowPipelineItem}
-      event={event!}
+      event={event}
       entityStartedAt={entityStartedAt}
       isTimerElapsed={isTimerElapsed}
       onClose={closeFlow}

@@ -1,10 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import {
-  AnswerAlerts,
-  PassSurveyModel,
-  ScoreRecord,
-} from '@app/features/pass-survey';
+import { AnswerAlerts, PassSurveyModel, ScoreRecord } from '@app/features/pass-survey';
 import { useActivityInfo } from '@app/shared/lib';
 
 import { useFlowState } from './useFlowState';
@@ -34,13 +30,7 @@ type UISummaryData = {
   scores: UIActivityScores[];
 };
 
-export const useSummaryData = ({
-  appletId,
-  flowId,
-  activityId,
-  eventId,
-  order,
-}: Props): UISummaryData | null => {
+export const useSummaryData = ({ appletId, flowId, activityId, eventId, order }: Props): UISummaryData | null => {
   const { getName: getActivityName } = useActivityInfo();
 
   const { activityStorageRecord } = PassSurveyModel.useActivityState({
@@ -64,20 +54,18 @@ export const useSummaryData = ({
       const answers = activityRecord.answers;
       const reportSettings = activityRecord.scoreSettings;
 
-      const extractedAlerts: AnswerAlerts =
-        PassSurveyModel.AlertsExtractor.extractForSummary(
-          items,
-          answers,
-          logActivityName,
-        );
+      const extractedAlerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractForSummary(
+        items,
+        answers,
+        logActivityName,
+      );
 
-      const scoreRecords: Array<ScoreRecord> =
-        PassSurveyModel.ScoresExtractor.extract(
-          items,
-          answers,
-          reportSettings,
-          logActivityName,
-        );
+      const scoreRecords: Array<ScoreRecord> = PassSurveyModel.ScoresExtractor.extract(
+        items,
+        answers,
+        reportSettings,
+        logActivityName,
+      );
 
       return { alerts: extractedAlerts, scores: scoreRecords };
     },
@@ -91,8 +79,7 @@ export const useSummaryData = ({
 
     const currentActivityName = getActivityName(activityId)!;
 
-    const { alerts: currentAlerts, scores: currentScores } =
-      getSummaryForCurrentActivity(currentActivityName);
+    const { alerts: currentAlerts, scores: currentScores } = getSummaryForCurrentActivity(currentActivityName);
 
     let activityIds: string[] = Object.keys(flowSummaryData);
 
@@ -103,7 +90,7 @@ export const useSummaryData = ({
     const fullAlertsList: AnswerAlerts = [];
     const fullScoresList: ActivityScores[] = [];
 
-    for (let aid of activityIds) {
+    for (const aid of activityIds) {
       const { alerts, scores } = flowSummaryData[aid];
       fullAlertsList.push(...alerts);
       fullScoresList.push(scores);
@@ -117,12 +104,12 @@ export const useSummaryData = ({
     });
 
     const result: UISummaryData = {
-      alerts: fullAlertsList.map(x => x.message),
+      alerts: fullAlertsList.map((x) => x.message),
       scores: fullScoresList
-        .filter(x => x.scores.length)
-        .map(x => ({
+        .filter((x) => x.scores.length)
+        .map((x) => ({
           activityName: x.activityName,
-          scores: x.scores.map(s => ({
+          scores: x.scores.map((s) => ({
             label: s.name,
             value: s.value,
             highlighted: s.flagged,
@@ -130,13 +117,7 @@ export const useSummaryData = ({
         })),
     };
     return result;
-  }, [
-    activityStorageRecord,
-    getActivityName,
-    activityId,
-    getSummaryForCurrentActivity,
-    flowSummaryData,
-  ]);
+  }, [activityStorageRecord, getActivityName, activityId, getSummaryForCurrentActivity, flowSummaryData]);
 
   return summaryData;
 };

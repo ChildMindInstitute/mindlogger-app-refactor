@@ -1,10 +1,6 @@
 import { addDays, addHours, addMinutes, subDays, subSeconds } from 'date-fns';
 
-import {
-  InactiveReason,
-  NotificationDescriber,
-  NotificationType,
-} from '@app/entities/notification/lib';
+import { InactiveReason, NotificationDescriber, NotificationType } from '@app/entities/notification/lib';
 import { DatesFromTo } from '@app/shared/lib';
 
 import { addTime, getEmptyEvent } from './testHelpers';
@@ -57,12 +53,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
         to: new Date(today),
       };
 
-      utility.markNotificationIfActivityCompleted(
-        'mock-entity-id',
-        'mock-event-id',
-        notification,
-        interval,
-      );
+      utility.markNotificationIfActivityCompleted('mock-entity-id', 'mock-event-id', notification, interval);
 
       expect(notification.isActive).toEqual(true);
     });
@@ -92,17 +83,10 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       interval.to.setHours(23);
       interval.to.setMinutes(15);
 
-      utility.markNotificationIfActivityCompleted(
-        'mock-entity-id',
-        'mock-event-id',
-        notification,
-        interval,
-      );
+      utility.markNotificationIfActivityCompleted('mock-entity-id', 'mock-event-id', notification, interval);
 
       expect(notification.isActive).toEqual(false);
-      expect(notification.inactiveReason).toEqual(
-        InactiveReason.ActivityCompleted,
-      );
+      expect(notification.inactiveReason).toEqual(InactiveReason.ActivityCompleted);
     });
 
     it('Should mark when activity is completed and completedAt is equal to interval-from value', () => {
@@ -131,17 +115,10 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       interval.to.setHours(23);
       interval.to.setMinutes(15);
 
-      utility.markNotificationIfActivityCompleted(
-        'mock-entity-id',
-        'mock-event-id',
-        notification,
-        interval,
-      );
+      utility.markNotificationIfActivityCompleted('mock-entity-id', 'mock-event-id', notification, interval);
 
       expect(notification.isActive).toEqual(false);
-      expect(notification.inactiveReason).toEqual(
-        InactiveReason.ActivityCompleted,
-      );
+      expect(notification.inactiveReason).toEqual(InactiveReason.ActivityCompleted);
     });
 
     it('Should not mark when activity is completed and completedAt is equal to interval-to value', () => {
@@ -170,12 +147,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       interval.to.setHours(23);
       interval.to.setMinutes(15);
 
-      utility.markNotificationIfActivityCompleted(
-        'mock-entity-id',
-        'mock-event-id',
-        notification,
-        interval,
-      );
+      utility.markNotificationIfActivityCompleted('mock-entity-id', 'mock-event-id', notification, interval);
 
       expect(notification.isActive).toEqual(true);
     });
@@ -205,12 +177,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       interval.to.setHours(23);
       interval.to.setMinutes(15);
 
-      utility.markNotificationIfActivityCompleted(
-        'mock-entity-id',
-        'mock-event-id',
-        notification,
-        interval,
-      );
+      utility.markNotificationIfActivityCompleted('mock-entity-id', 'mock-event-id', notification, interval);
 
       expect(notification.isActive).toEqual(true);
     });
@@ -241,12 +208,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       interval.to.setHours(23);
       interval.to.setMinutes(15);
 
-      utility.markNotificationIfActivityCompleted(
-        'mock-entity-id',
-        'mock-event-id',
-        notification,
-        interval,
-      );
+      utility.markNotificationIfActivityCompleted('mock-entity-id', 'mock-event-id', notification, interval);
 
       expect(notification.isActive).toEqual(true);
     });
@@ -372,9 +334,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markIfNotificationOutdated(notification, event);
 
       expect(notification.isActive).toEqual(false);
-      expect(notification.inactiveReason).toEqual(
-        InactiveReason.OutdatedByStartTime,
-      );
+      expect(notification.inactiveReason).toEqual(InactiveReason.OutdatedByStartTime);
     });
   });
 
@@ -482,9 +442,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markIfIsOutOfStartEndDatesRange(notification, event);
 
       expect(notification.isActive).toEqual(false);
-      expect(notification.inactiveReason).toEqual(
-        InactiveReason.OutOfStartEndDay,
-      );
+      expect(notification.inactiveReason).toEqual(InactiveReason.OutOfStartEndDay);
     });
 
     it('Should mark when notification-scheduledAt is greater than event-endDate', () => {
@@ -506,9 +464,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markIfIsOutOfStartEndDatesRange(notification, event);
 
       expect(notification.isActive).toEqual(false);
-      expect(notification.inactiveReason).toEqual(
-        InactiveReason.OutOfStartEndDay,
-      );
+      expect(notification.inactiveReason).toEqual(InactiveReason.OutOfStartEndDay);
     });
   });
 });

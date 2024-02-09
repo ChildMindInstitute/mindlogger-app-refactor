@@ -1,17 +1,7 @@
 import { subMinutes } from 'date-fns';
 
-import {
-  ActivityPipelineType,
-  AvailabilityType,
-  Progress,
-  PeriodicityType,
-} from '@app/abstract/lib';
-import {
-  EventEntity,
-  NotificationDescriber,
-  NotificationType,
-  ScheduleEvent,
-} from '@app/entities/notification/lib';
+import { ActivityPipelineType, AvailabilityType, Progress, PeriodicityType } from '@app/abstract/lib';
+import { EventEntity, NotificationDescriber, NotificationType, ScheduleEvent } from '@app/entities/notification/lib';
 import { HourMinute } from '@app/shared/lib';
 
 import { createNotificationBuilder } from '../NotificationBuilder';

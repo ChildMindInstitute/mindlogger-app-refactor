@@ -1,11 +1,8 @@
 import { useCallback, useRef } from 'react';
 
-const useInterval = (
-  onIntervalPass: (...args: any) => unknown,
-  interval: number,
-) => {
+const useInterval = (onIntervalPass: (...args: any) => unknown, interval: number) => {
   const callbacksRef = useRef({ onIntervalPass });
-  let intervalRef = useRef<IntervalId>();
+  const intervalRef = useRef<IntervalId>();
 
   callbacksRef.current = { onIntervalPass };
 

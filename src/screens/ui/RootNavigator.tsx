@@ -32,22 +32,9 @@ import {
   Logger,
   useCurrentRoute,
 } from '@shared/lib';
-import {
-  UserProfileIcon,
-  HomeIcon,
-  BackButton,
-  Text,
-  Box,
-  ChevronLeft,
-  XStack,
-  CloseIcon,
-} from '@shared/ui';
+import { UserProfileIcon, HomeIcon, BackButton, Text, Box, ChevronLeft, XStack, CloseIcon } from '@shared/ui';
 
-import {
-  appletScreenHeaderStyles,
-  getScreenOptions,
-  RootStackParamList,
-} from '../config';
+import { appletScreenHeaderStyles, getScreenOptions, RootStackParamList } from '../config';
 import { onBeforeAppClose } from '../lib';
 import { useDefaultRoute, useInitialRouteNavigation } from '../model';
 import { checkEntityAvailability } from '../model/checkEntityAvailability';
@@ -77,15 +64,13 @@ export default () => {
 
   const queryClient = useQueryClient();
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
-  );
+  const storeProgress: StoreProgress = useAppSelector(AppletModel.selectors.selectInProgressApplets);
 
   useInitialRouteNavigation();
   useNotificationPermissions();
   useAlarmPermissions();
   useFirebaseSetup({
-    onFCMTokenCreated: fcmToken => {
+    onFCMTokenCreated: (fcmToken) => {
       SystemRecord.setDeviceId(fcmToken);
     },
   });
@@ -103,10 +88,7 @@ export default () => {
   });
 
   TapOnNotificationModel.useOnNotificationTap({
-    checkAvailability: (
-      entityName: string,
-      { appletId, eventId, entityId, entityType }: EntityPath,
-    ) => {
+    checkAvailability: (entityName: string, { appletId, eventId, entityId, entityType }: EntityPath) => {
       return checkEntityAvailability({
         entityName,
         identifiers: { appletId, eventId, entityId, entityType },
@@ -116,8 +98,7 @@ export default () => {
     },
     hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
     cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
-    hasActivityWithHiddenAllItems:
-      ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
+    hasActivityWithHiddenAllItems: ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
   });
 
   useBackgroundTask(() => {
@@ -130,9 +111,7 @@ export default () => {
     const executing = getCurrentRoute() === 'InProgressActivity';
 
     if (executing) {
-      Logger.info(
-        '[RootNavigator.useOnlineEstablished.processQueue]: Postponed due to entity is in progress',
-      );
+      Logger.info('[RootNavigator.useOnlineEstablished.processQueue]: Postponed due to entity is in progress');
       return;
     }
 
@@ -144,17 +123,10 @@ export default () => {
   LoginModel.useAnalyticsAutoLogin();
 
   return (
-    <Stack.Navigator
-      screenOptions={getScreenOptions}
-      initialRouteName={defaultRoute}
-    >
+    <Stack.Navigator screenOptions={getScreenOptions} initialRouteName={defaultRoute}>
       {!hasSession && (
         <>
-          <Stack.Screen
-            options={{ headerShown: false }}
-            name="Login"
-            component={LoginScreen}
-          />
+          <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
 
           <Stack.Screen
             name="ForgotPassword"
@@ -165,11 +137,7 @@ export default () => {
                 borderTopWidth: 1,
               },
               headerLeft: () => (
-                <Text
-                  accessibilityLabel="close-button"
-                  onPress={navigation.goBack}
-                  mr={24}
-                >
+                <Text accessibilityLabel="close-button" onPress={navigation.goBack} mr={24}>
                   <CloseIcon color={colors.white} size={22} />
                 </Text>
               ),
@@ -208,11 +176,8 @@ export default () => {
                 backgroundColor: colors.lighterGrey2,
               },
 
-              headerTitle: props => (
-                <RNText
-                  accessibilityLabel="welcome_name-text"
-                  style={appletScreenHeaderStyles.title}
-                >
+              headerTitle: (props) => (
+                <RNText accessibilityLabel="welcome_name-text" style={appletScreenHeaderStyles.title}>
                   {props.children}
                 </RNText>
               ),
@@ -266,23 +231,14 @@ export default () => {
               headerTitle: IS_ANDROID
                 ? () => (
                     <Box flex={1} mr={20}>
-                      <Text
-                        color={colors.white}
-                        fontSize={18}
-                        fontWeight="700"
-                        numberOfLines={1}
-                      >
+                      <Text color={colors.white} fontSize={18} fontWeight="700" numberOfLines={1}>
                         {route.params.title}
                       </Text>
                     </Box>
                   )
                 : undefined,
               headerLeft: () => (
-                <BackButton
-                  accessibilityLabel="home-button"
-                  mr={IS_ANDROID && 15}
-                  fallbackRoute="Applets"
-                >
+                <BackButton accessibilityLabel="home-button" mr={IS_ANDROID && 15} fallbackRoute="Applets">
                   <HomeIcon color={colors.white} size={32} />
                 </BackButton>
               ),

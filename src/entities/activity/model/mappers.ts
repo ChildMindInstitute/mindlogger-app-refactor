@@ -63,7 +63,7 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
     ? {
         conditionalLogic: {
           match: dto.match,
-          conditions: dto.conditions.map(condition => {
+          conditions: dto.conditions.map((condition) => {
             return {
               ...condition,
               activityItemName: condition.itemName,
@@ -120,10 +120,10 @@ function mapToAbTest(dto: ABTrailsItemDto): ActivityItem {
         fontSizeBeginEnd: nodesSettingsDto.fontSizeBeginEnd,
       },
       deviceType: config.deviceType,
-      nodes: nodes.map<TestNode>(x => ({
+      nodes: nodes.map<TestNode>((x) => ({
         ...x,
       })),
-      tutorials: tutorials.tutorials.map<TutorialRecord>(x => ({
+      tutorials: tutorials.tutorials.map<TutorialRecord>((x) => ({
         ...x,
       })),
     },
@@ -171,9 +171,9 @@ function mapToFlanker(itemDto: FlankerItemDto): ActivityItem {
   const dto = itemDto.config;
 
   const settings: FlankerItemSettings = {
-    blocks: dto.blocks.map<BlockConfiguration>(x => ({ ...x })),
-    buttons: dto.buttons.map<ButtonConfiguration>(x => ({ ...x })),
-    stimulusTrials: dto.stimulusTrials.map<StimulusConfiguration>(x => ({
+    blocks: dto.blocks.map<BlockConfiguration>((x) => ({ ...x })),
+    buttons: dto.buttons.map<ButtonConfiguration>((x) => ({ ...x })),
+    stimulusTrials: dto.stimulusTrials.map<StimulusConfiguration>((x) => ({
       ...x,
     })),
     blockType: dto.blockType,
@@ -669,7 +669,7 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
     isReviewable: dto.isReviewable,
     responseIsEditable: dto.responseIsEditable,
     order: dto.order,
-    items: dto.items.map(item => {
+    items: dto.items.map((item) => {
       switch (item.responseType) {
         case 'ABTrails':
           return mapToAbTest(item);
@@ -720,8 +720,8 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
       dto.scoresAndReports == null
         ? []
         : dto.scoresAndReports.reports
-            .filter(x => x.type === 'score')
-            .map(x => ({
+            .filter((x) => x.type === 'score')
+            .map((x) => ({
               id: x.id,
               name: x.name,
               type: x.type,
@@ -739,7 +739,7 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
 }
 
 function mapToRadioAlerts(options: OptionsDto) {
-  return options.map(option => ({
+  return options.map((option) => ({
     id: option.id,
     text: option.text,
     image: option.image,
@@ -758,9 +758,9 @@ function mapToRadioAlerts(options: OptionsDto) {
 
 function mapToStackedRadioDataMatrix(dataMatrix: DataMatrixDto) {
   return (
-    dataMatrix?.map(matrix => ({
+    dataMatrix?.map((matrix) => ({
       rowId: matrix.rowId,
-      options: matrix.options.map(option => ({
+      options: matrix.options.map((option) => ({
         optionId: option.optionId,
         score: option.score,
         alert: option.alert
@@ -775,7 +775,7 @@ function mapToStackedRadioDataMatrix(dataMatrix: DataMatrixDto) {
 
 function mapToSliderAlerts(alerts: SliderAlertsDto) {
   return (
-    alerts?.map(alert => ({
+    alerts?.map((alert) => ({
       value: alert.value,
       minValue: alert.minValue,
       maxValue: alert.maxValue,
@@ -785,7 +785,7 @@ function mapToSliderAlerts(alerts: SliderAlertsDto) {
 }
 
 function mapToCheckboxOptions(options: OptionsDto) {
-  return options.map(option => ({
+  return options.map((option) => ({
     id: option.id,
     text: option.text,
     image: option.image,
@@ -805,9 +805,9 @@ function mapToCheckboxOptions(options: OptionsDto) {
 
 function mapToStackedCheckboxAlerts(dataMatrix: DataMatrixDto) {
   return (
-    dataMatrix?.map(matrix => ({
+    dataMatrix?.map((matrix) => ({
       rowId: matrix.rowId,
-      options: matrix.options.map(option => ({
+      options: matrix.options.map((option) => ({
         optionId: option.optionId,
         score: option.score,
         alert: option.alert
@@ -821,7 +821,7 @@ function mapToStackedCheckboxAlerts(dataMatrix: DataMatrixDto) {
 }
 
 function mapToStackedSliderAlerts(rows: SliderRowsDto) {
-  return rows.map(row => ({
+  return rows.map((row) => ({
     leftTitle: row.minLabel,
     rightTitle: row.maxLabel,
     leftImageUrl: row.minImage,
@@ -831,7 +831,7 @@ function mapToStackedSliderAlerts(rows: SliderRowsDto) {
     id: row.id,
     label: row.label,
     alerts:
-      row.alerts?.map(alert => ({
+      row.alerts?.map((alert) => ({
         value: alert.value,
         message: alert.alert,
       })) ?? null,

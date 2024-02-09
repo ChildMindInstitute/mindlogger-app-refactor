@@ -72,13 +72,7 @@ export function Stepper({
   const stepRef = useRef(startFrom ?? 0);
 
   const next = useCallback(
-    ({
-      isForced,
-      shouldAutoSubmit,
-    }: {
-      isForced: boolean;
-      shouldAutoSubmit: boolean;
-    }) => {
+    ({ isForced, shouldAutoSubmit }: { isForced: boolean; shouldAutoSubmit: boolean }) => {
       const step = stepRef.current;
       const stepShift = onBeforeNextRef.current?.(step) ?? 1;
       const nextStep = step + stepShift;
@@ -139,9 +133,7 @@ export function Stepper({
   return (
     <HandlersContext.Provider value={handlersContext}>
       <RefContext.Provider value={viewSliderRef}>
-        <ValuesContext.Provider value={valuesContext}>
-          {children}
-        </ValuesContext.Provider>
+        <ValuesContext.Provider value={valuesContext}>{children}</ValuesContext.Provider>
       </RefContext.Provider>
     </HandlersContext.Provider>
   );

@@ -19,9 +19,7 @@ function AdditionalText({ value, onChange, required }: Props) {
   const { t } = useTranslation();
   const [height, setHeight] = useState(MIN_FIELD_HEIGHT);
 
-  const placeholder = t(
-    required ? 'optional_text:required' : 'optional_text:enter_text',
-  );
+  const placeholder = t(required ? 'optional_text:required' : 'optional_text:enter_text');
 
   return (
     <Input
@@ -30,7 +28,7 @@ function AdditionalText({ value, onChange, required }: Props) {
       placeholderTextColor={colors.mediumGrey}
       value={value}
       onChangeText={onChange}
-      onContentSizeChange={e => {
+      onContentSizeChange={(e) => {
         const contentHeight = e.nativeEvent.contentSize.height;
 
         if (contentHeight < MAX_FIELD_HEIGHT) {

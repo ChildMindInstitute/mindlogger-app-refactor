@@ -4,13 +4,9 @@ import { IS_IOS } from '@shared/lib';
 
 import { type Coordinate } from '../types';
 
-const { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT } =
-  Dimensions.get('window');
+const { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT } = Dimensions.get('window');
 
-export const PLAYGROUND_WIDTH = Math.min(
-  VIEWPORT_WIDTH - 10,
-  VIEWPORT_HEIGHT - 110,
-);
+export const PLAYGROUND_WIDTH = Math.min(VIEWPORT_WIDTH - 10, VIEWPORT_HEIGHT - 110);
 
 export const TASK_LOOP_RATE = 0.0167; // 60hz
 export const INITIAL_LAMBDA = 0.075;

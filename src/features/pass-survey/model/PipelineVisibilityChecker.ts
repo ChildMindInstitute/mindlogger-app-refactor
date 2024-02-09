@@ -15,10 +15,8 @@ function PipelineVisibilityChecker(pipeline: PipelineItem[], answers: Answers) {
 
     const method = item.conditionalLogic.match === 'all' ? 'every' : 'some';
 
-    return item.conditionalLogic.conditions[method](condition => {
-      const step = pipeline.findIndex(
-        x => x.name === condition.activityItemName,
-      );
+    return item.conditionalLogic.conditions[method]((condition) => {
+      const step = pipeline.findIndex((x) => x.name === condition.activityItemName);
 
       const answerValidator = AnswerValidator({
         step,
@@ -28,16 +26,10 @@ function PipelineVisibilityChecker(pipeline: PipelineItem[], answers: Answers) {
 
       switch (condition.type) {
         case 'BETWEEN':
-          return answerValidator.isBetweenValues(
-            condition.payload.minValue,
-            condition.payload.maxValue,
-          );
+          return answerValidator.isBetweenValues(condition.payload.minValue, condition.payload.maxValue);
 
         case 'OUTSIDE_OF': {
-          return answerValidator.isOutsideOfValues(
-            condition.payload.minValue,
-            condition.payload.maxValue,
-          );
+          return answerValidator.isOutsideOfValues(condition.payload.minValue, condition.payload.maxValue);
         }
 
         case 'EQUAL':
@@ -50,9 +42,7 @@ function PipelineVisibilityChecker(pipeline: PipelineItem[], answers: Answers) {
           return answerValidator.isEqualToOption(condition.payload.optionValue);
 
         case 'NOT_EQUAL_TO_OPTION':
-          return !answerValidator.isEqualToOption(
-            condition.payload.optionValue,
-          );
+          return !answerValidator.isEqualToOption(condition.payload.optionValue);
 
         case 'GREATER_THAN':
           return answerValidator.isGreaterThen(condition.payload.value);
@@ -64,9 +54,7 @@ function PipelineVisibilityChecker(pipeline: PipelineItem[], answers: Answers) {
           return answerValidator.includesOption(condition.payload.optionValue);
 
         case 'NOT_INCLUDES_OPTION':
-          return answerValidator.notIncludesOption(
-            condition.payload.optionValue,
-          );
+          return answerValidator.notIncludesOption(condition.payload.optionValue);
 
         default:
           return true;

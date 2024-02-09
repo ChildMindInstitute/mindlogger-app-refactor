@@ -14,23 +14,18 @@ class RefreshOptimization {
   }
 
   private getKeptVersion(appletId: string): string | null {
-    return (
-      this.keptVersions.find(x => x.appletId === appletId)?.version ?? null
-    );
+    return this.keptVersions.find((x) => x.appletId === appletId)?.version ?? null;
   }
 
   public keepExistingAppletVersions() {
-    const appletsResponse = getDataFromQuery<AppletsResponse>(
-      getAppletsKey(),
-      this.queryClient,
-    );
+    const appletsResponse = getDataFromQuery<AppletsResponse>(getAppletsKey(), this.queryClient);
 
     if (!appletsResponse) {
       this.keptVersions = [];
       return;
     }
 
-    this.keptVersions = appletsResponse.result.map<AppletWithVersion>(x => ({
+    this.keptVersions = appletsResponse.result.map<AppletWithVersion>((x) => ({
       appletId: x.id,
       version: x.version,
     }));

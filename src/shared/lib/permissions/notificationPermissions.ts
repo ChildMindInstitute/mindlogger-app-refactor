@@ -1,14 +1,6 @@
-import notifee, {
-  AuthorizationStatus,
-  AndroidNotificationSetting,
-  NotificationSettings,
-} from '@notifee/react-native';
+import notifee, { AuthorizationStatus, AndroidNotificationSetting, NotificationSettings } from '@notifee/react-native';
 
-export type NotificationPermissionStatus =
-  | 'AUTHORIZED'
-  | 'DENIED'
-  | 'PROVISIONAL'
-  | 'NOT_DETERMINED';
+export type NotificationPermissionStatus = 'AUTHORIZED' | 'DENIED' | 'PROVISIONAL' | 'NOT_DETERMINED';
 
 export type AlarmPermissionStatus = 'NOT_SUPPORTED' | 'DISABLED' | 'ENABLED';
 

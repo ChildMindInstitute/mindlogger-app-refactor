@@ -16,9 +16,7 @@ type UseIdleTimerResult = {
 const useIdleTimer = (input: UseIdleTimerInput): UseIdleTimerResult => {
   const { onFinish, hourMinute } = input;
 
-  const duration = hourMinute
-    ? getMsFromHours(hourMinute.hours) + getMsFromMinutes(hourMinute.minutes)
-    : 0;
+  const duration = hourMinute ? getMsFromHours(hourMinute.hours) + getMsFromMinutes(hourMinute.minutes) : 0;
 
   const idleLogicIsUsed = duration > 0;
 
@@ -33,7 +31,7 @@ const useIdleTimer = (input: UseIdleTimerInput): UseIdleTimerResult => {
 
     timerRef.current = new AppTimer(onIdleElapsed, false, duration);
 
-    timerRef.current!.start();
+    timerRef.current.start();
 
     return () => {
       timerRef.current!.stop();

@@ -9,8 +9,7 @@ const testMessage2 =
 const grid: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',
@@ -46,8 +45,7 @@ const grid: ActivityDto = {
       },
       responseValues: {
         drawingExample: '',
-        drawingBackground:
-          'https://mindlogger-applet-contents.s3.amazonaws.com/image/9qPz3D1kyzwD2pAAHpP5Hv.jpeg',
+        drawingBackground: 'https://mindlogger-applet-contents.s3.amazonaws.com/image/9qPz3D1kyzwD2pAAHpP5Hv.jpeg',
       },
       conditionalLogic: null,
     },
@@ -57,8 +55,7 @@ const grid: ActivityDto = {
 const vortex: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',
@@ -94,8 +91,7 @@ const vortex: ActivityDto = {
       },
       responseValues: {
         drawingExample: '',
-        drawingBackground:
-          'https://mindlogger-applet-contents.s3.amazonaws.com/image/w93voaqZA7ZGoZryorBvQc.jpeg',
+        drawingBackground: 'https://mindlogger-applet-contents.s3.amazonaws.com/image/w93voaqZA7ZGoZryorBvQc.jpeg',
       },
       conditionalLogic: null,
     },
@@ -105,8 +101,7 @@ const vortex: ActivityDto = {
 const allDrawing: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',
@@ -166,8 +161,7 @@ export const AbTestActivity: ActivityDto = {
 export const TextActivity: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',
@@ -209,8 +203,7 @@ export const TextActivity: ActivityDto = {
 export const GeolocationActivity: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',
@@ -307,8 +300,7 @@ export const SliderTestActivity: ActivityDto = {
 export const StabilityTrackerActivity: ActivityDto = {
   id: 'aid01',
   name: 'Activity number 01',
-  description:
-    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',

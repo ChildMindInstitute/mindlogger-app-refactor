@@ -9,15 +9,10 @@ class ActivityQueryService {
   constructor(private queryClient: QueryClient) {}
 
   getActivityDetails(activityId: string) {
-    const data = getDataFromQuery<ActivityResponse>(
-      getActivityDetailsKey(activityId),
-      this.queryClient,
-    );
+    const data = getDataFromQuery<ActivityResponse>(getActivityDetailsKey(activityId), this.queryClient);
 
     if (!data) {
-      throw Error(
-        `[AppletQueryStorage]: No data found for activity details, activityId:${activityId}`,
-      );
+      throw Error(`[AppletQueryStorage]: No data found for activity details, activityId:${activityId}`);
     }
 
     return mapToActivity(data.result);

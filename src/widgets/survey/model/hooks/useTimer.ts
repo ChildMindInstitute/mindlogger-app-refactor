@@ -14,8 +14,7 @@ const useTimer = (input: UseTimerInput) => {
   const { onFinish, entityStartedAt, timerHourMinute } = input;
 
   const durationBySettings = timerHourMinute
-    ? getMsFromHours(timerHourMinute.hours) +
-      getMsFromMinutes(timerHourMinute.minutes)
+    ? getMsFromHours(timerHourMinute.hours) + getMsFromMinutes(timerHourMinute.minutes)
     : 0;
 
   const timerLogicIsUsed = durationBySettings > 0;

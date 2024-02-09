@@ -72,22 +72,13 @@ function IdentityService() {
       return httpService.post<SignUpResponse>('/users', request);
     },
     passwordRecover(request: PasswordRecoveryRequest) {
-      return httpService.post<PasswordRecoveryResponse>(
-        '/users/me/password/recover',
-        request,
-      );
+      return httpService.post<PasswordRecoveryResponse>('/users/me/password/recover', request);
     },
     refreshToken(request: RefreshTokenRequest) {
-      return httpService.post<RefreshTokenResponse>(
-        '/auth/token/refresh',
-        request,
-      );
+      return httpService.post<RefreshTokenResponse>('/auth/token/refresh', request);
     },
     changePassword(request: ChangePasswordRequest) {
-      return httpService.put<ChangePasswordResponse>(
-        '/users/me/password',
-        request,
-      );
+      return httpService.put<ChangePasswordResponse>('/users/me/password', request);
     },
   };
 }

@@ -4,11 +4,7 @@ import { StyleSheet } from 'react-native';
 import { colors } from '@shared/lib';
 
 import { CheckBox, YStack } from '../..';
-import {
-  StackedItemsGrid,
-  type StackedRowItemValue,
-  type StackedItem,
-} from '../StackedItemsGrid';
+import { StackedItemsGrid, type StackedRowItemValue, type StackedItem } from '../StackedItemsGrid';
 
 type StackedCheckboxConfig = {
   rows: Array<StackedItem>;
@@ -25,17 +21,11 @@ type Props = {
   textReplacer: (markdown: string) => string;
 };
 
-const StackedCheckboxItem: FC<Props> = ({
-  values,
-  onChange,
-  config,
-  textReplacer,
-  tooltipsShown,
-}) => {
+const StackedCheckboxItem: FC<Props> = ({ values, onChange, config, textReplacer, tooltipsShown }) => {
   const { options, rows } = config;
 
   const memoizedOptions: StackedRowItemValue[] = useMemo(() => {
-    return options.map(option => {
+    return options.map((option) => {
       return {
         ...option,
         tooltip: tooltipsShown ? textReplacer(option.tooltip || '') : '',
@@ -44,7 +34,7 @@ const StackedCheckboxItem: FC<Props> = ({
   }, [tooltipsShown, options, textReplacer]);
 
   const memoizedRows = useMemo(() => {
-    return rows.map(row => {
+    return rows.map((row) => {
       return {
         ...row,
         tooltip: tooltipsShown ? textReplacer(row.tooltip || '') : '',
@@ -57,7 +47,7 @@ const StackedCheckboxItem: FC<Props> = ({
       return false;
     }
 
-    const selectedValue = values[rowIndex].find(item => item.id === value.id);
+    const selectedValue = values[rowIndex].find((item) => item.id === value.id);
 
     return !!selectedValue;
   };
@@ -71,7 +61,7 @@ const StackedCheckboxItem: FC<Props> = ({
       newValues = [...values];
 
       newValues[rowIndex] = isValueSelected(option, rowIndex)
-        ? newValues[rowIndex].filter(value => value.id !== option.id)
+        ? newValues[rowIndex].filter((value) => value.id !== option.id)
         : [...(newValues[rowIndex] ? newValues[rowIndex] : []), option];
     }
 
@@ -88,10 +78,7 @@ const StackedCheckboxItem: FC<Props> = ({
           const optionIndex = memoizedOptions.indexOf(option);
 
           return (
-            <YStack
-              hitSlop={15}
-              onPress={() => onValueChange(option, rowIndex)}
-            >
+            <YStack hitSlop={15} onPress={() => onValueChange(option, rowIndex)}>
               <CheckBox
                 style={styles.checkbox}
                 accessibilityLabel={`stacked-checkbox-option-${optionIndex}-${rowIndex}`}

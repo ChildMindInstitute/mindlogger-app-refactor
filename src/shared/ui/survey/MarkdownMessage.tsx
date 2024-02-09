@@ -10,11 +10,7 @@ type Props = {
 const MarkdownMessage: FC<Props> = ({ content, ...styledProps }) => {
   return (
     <Box {...styledProps}>
-      <MarkdownView
-        content={content}
-        rules={markdownRules}
-        markdownStyle={activityMarkDownStyles}
-      />
+      <MarkdownView content={content} rules={markdownRules} markdownStyle={activityMarkDownStyles} />
     </Box>
   );
 };

@@ -1,9 +1,5 @@
 import { NotificationTriggerType } from '@app/abstract/lib';
-import {
-  HourMinute,
-  callApiWithRetry,
-  withDataExtraction,
-} from '@app/shared/lib';
+import { HourMinute, callApiWithRetry, withDataExtraction } from '@app/shared/lib';
 
 import httpService from './httpService';
 import { SuccessfulResponse } from '../types';
@@ -52,9 +48,7 @@ export type AppletEventsResponse = SuccessfulResponse<{
   events: ScheduleEventDto[];
 }>;
 
-export type AllEventsResponse = SuccessfulResponse<
-  Array<{ appletId: string; events: ScheduleEventDto[] }>
->;
+export type AllEventsResponse = SuccessfulResponse<Array<{ appletId: string; events: ScheduleEventDto[] }>>;
 
 export type CompletedEntityDto = {
   id: string;
@@ -89,43 +83,32 @@ export type EntitiesCompletionsDto = {
   activityFlows: CompletedEntityDto[];
 };
 
-export type CompletedEntitiesResponse = SuccessfulResponse<
-  Array<EntitiesCompletionsDto>
->;
+export type CompletedEntitiesResponse = SuccessfulResponse<Array<EntitiesCompletionsDto>>;
 
 function eventsService() {
   return {
     getCompletedEntities(request: AppletCompletedEntitiesRequest) {
       const apiCall = () =>
-        httpService.get<AppletCompletedEntitiesResponse>(
-          `answers/applet/${request.appletId}/completions`,
-          {
-            params: {
-              fromDate: request.fromDate,
-              version: request.version,
-            },
+        httpService.get<AppletCompletedEntitiesResponse>(`answers/applet/${request.appletId}/completions`, {
+          params: {
+            fromDate: request.fromDate,
+            version: request.version,
           },
-        );
+        });
       return callApiWithRetry(withDataExtraction(apiCall));
     },
     getAllEvents() {
-      const apiCall = () =>
-        httpService.get<AllEventsResponse>(
-          '/users/me/respondent/current_events',
-        );
+      const apiCall = () => httpService.get<AllEventsResponse>('/users/me/respondent/current_events');
 
       return callApiWithRetry(withDataExtraction(apiCall));
     },
     getAllCompletedEntities(request: CompletedEntitiesRequest) {
       const apiCall = () =>
-        httpService.get<CompletedEntitiesResponse>(
-          '/answers/applet/completions',
-          {
-            params: {
-              fromDate: request.fromDate,
-            },
+        httpService.get<CompletedEntitiesResponse>('/answers/applet/completions', {
+          params: {
+            fromDate: request.fromDate,
           },
-        );
+        });
       return callApiWithRetry(withDataExtraction(apiCall));
     },
   };

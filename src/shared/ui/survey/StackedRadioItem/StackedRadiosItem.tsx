@@ -3,11 +3,7 @@ import { FC, useMemo } from 'react';
 import { colors } from '@app/shared/lib';
 
 import { RadioGroup } from '../..';
-import {
-  StackedItem,
-  StackedItemsGrid,
-  StackedRowItemValue,
-} from '../StackedItemsGrid';
+import { StackedItem, StackedItemsGrid, StackedRowItemValue } from '../StackedItemsGrid';
 
 type StackedRadioConfig = {
   rows: Array<StackedItem>;
@@ -26,13 +22,7 @@ type Props = {
   textReplacer: (markdown: string) => string;
 };
 
-const StackedRadios: FC<Props> = ({
-  values,
-  onChange,
-  config,
-  textReplacer,
-  tooltipsShown,
-}) => {
+const StackedRadios: FC<Props> = ({ values, onChange, config, textReplacer, tooltipsShown }) => {
   const { options, rows } = config;
 
   const onRowValueChange = (option: StackedRowItemValue, itemIndex: number) => {
@@ -46,7 +36,7 @@ const StackedRadios: FC<Props> = ({
   };
 
   const memoizedOptions: StackedRowItemValue[] = useMemo(() => {
-    return options.map(option => {
+    return options.map((option) => {
       return {
         ...option,
         tooltip: tooltipsShown ? textReplacer(option.tooltip || '') : '',
@@ -55,7 +45,7 @@ const StackedRadios: FC<Props> = ({
   }, [tooltipsShown, options, textReplacer]);
 
   const memoizedRows = useMemo(() => {
-    return rows.map(row => {
+    return rows.map((row) => {
       return {
         ...row,
         tooltip: tooltipsShown ? textReplacer(row.tooltip || '') : '',
@@ -70,11 +60,11 @@ const StackedRadios: FC<Props> = ({
       accessibilityLabel="stack-radio-container"
       renderCell={(rowIndex, option) => {
         const { id: currentRowId } = config.rows[rowIndex];
-        const currentValue = values.find(value => {
+        const currentValue = values.find((value) => {
           return value?.rowId === currentRowId;
         });
 
-        const optionIndex = config.options.findIndex(o => o.id === option.id);
+        const optionIndex = config.options.findIndex((o) => o.id === option.id);
 
         return (
           <RadioGroup
@@ -89,10 +79,7 @@ const StackedRadios: FC<Props> = ({
               borderColor={colors.blue}
               value={option.id}
             >
-              <RadioGroup.Indicator
-                accessibilityLabel="stack-radio-indicator"
-                backgroundColor={colors.blue}
-              />
+              <RadioGroup.Indicator accessibilityLabel="stack-radio-indicator" backgroundColor={colors.blue} />
             </RadioGroup.Item>
           </RadioGroup>
         );

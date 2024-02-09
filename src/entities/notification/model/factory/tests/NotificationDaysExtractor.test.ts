@@ -1,11 +1,4 @@
-import {
-  addDays,
-  addMonths,
-  addWeeks,
-  subDays,
-  subMonths,
-  subWeeks,
-} from 'date-fns';
+import { addDays, addMonths, addWeeks, subDays, subMonths, subWeeks } from 'date-fns';
 
 import { PeriodicityType } from '@app/abstract/lib';
 
@@ -15,10 +8,7 @@ import { NumberOfDaysForSchedule } from '../NotificationUtility';
 
 const AppletId = 'e31c7468-4197-4ed1-a908-72af80d7765f';
 
-const getDaysForNextTwoWeeks = (
-  includeYesterday: boolean,
-  currentDay: Date,
-): Date[] => {
+const getDaysForNextTwoWeeks = (includeYesterday: boolean, currentDay: Date): Date[] => {
   const result = [];
 
   const yesterday = subDays(currentDay, 1);
@@ -117,12 +107,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [
-        Yesterday,
-        CurrentDay,
-        addDays(CurrentDay, 1),
-        addDays(CurrentDay, 2),
-      ];
+      const expected = [Yesterday, CurrentDay, addDays(CurrentDay, 1), addDays(CurrentDay, 2)];
 
       expect(result).toEqual(expected);
     });
@@ -265,7 +250,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
       );
 
       let expected = getDaysForNextTwoWeeks(false, CurrentDay);
-      expected = expected.filter(d => d >= eventDayFrom);
+      expected = expected.filter((d) => d >= eventDayFrom);
 
       expect(result).toEqual(expected);
       expect(result.length).toEqual(NumberOfDaysForSchedule - 1);
@@ -312,12 +297,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [
-        Yesterday,
-        CurrentDay,
-        addDays(CurrentDay, 1),
-        addDays(CurrentDay, 2),
-      ];
+      const expected = [Yesterday, CurrentDay, addDays(CurrentDay, 1), addDays(CurrentDay, 2)];
 
       expect(result).toEqual(expected);
     });
@@ -460,7 +440,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
       );
 
       let expected = getDaysForNextTwoWeeks(false, CurrentDay);
-      expected = expected.filter(d => d >= eventDayFrom);
+      expected = expected.filter((d) => d >= eventDayFrom);
 
       expect(result).toEqual(expected);
       expect(result.length).toEqual(NumberOfDaysForSchedule - 1);
@@ -484,11 +464,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      const expected = [
-        scheduledDay,
-        addWeeks(scheduledDay, 1),
-        addWeeks(scheduledDay, 2),
-      ];
+      const expected = [scheduledDay, addWeeks(scheduledDay, 1), addWeeks(scheduledDay, 2)];
 
       expect(result).toEqual(expected);
     });
@@ -512,7 +488,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [addDays(scheduledDay, 7)];
+      const expected = [addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });
@@ -536,7 +512,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [addDays(scheduledDay, 7), addDays(scheduledDay, 14)];
+      const expected = [addDays(scheduledDay, 7), addDays(scheduledDay, 14)];
 
       expect(result).toEqual(expected);
     });
@@ -560,7 +536,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [scheduledDay, addDays(scheduledDay, 7)];
+      const expected = [scheduledDay, addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });
@@ -584,7 +560,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [addDays(scheduledDay, 7)];
+      const expected = [addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });
@@ -609,7 +585,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
       let expected = getDaysForNextTwoWeeks(true, CurrentDay);
 
-      expected = expected.filter(d => d.getDay() >= 1 && d.getDay() <= 5);
+      expected = expected.filter((d) => d.getDay() >= 1 && d.getDay() <= 5);
 
       expect(result).toEqual(expected);
       expect(result.length).toEqual(10);
@@ -634,7 +610,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [CurrentDay, Tomorrow, addDays(Tomorrow, 1)];
+      const expected = [CurrentDay, Tomorrow, addDays(Tomorrow, 1)];
 
       expect(result).toEqual(expected);
     });
@@ -778,9 +754,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
       );
 
       let expected = getDaysForNextTwoWeeks(false, CurrentDay);
-      expected = expected.filter(
-        d => d >= eventDayFrom && d.getDay() >= 1 && d.getDay() <= 5,
-      );
+      expected = expected.filter((d) => d >= eventDayFrom && d.getDay() >= 1 && d.getDay() <= 5);
 
       expect(result).toEqual(expected);
     });
@@ -965,13 +939,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const extractor = new NotificationDaysExtractor({}, AppletId);
       mockUtilityProps(extractor, now);
 
-      const result = extractor.extractForReminders(
-        LastScheduleDay,
-        null,
-        null,
-        PeriodicityType.Always,
-        scheduledDay,
-      );
+      const result = extractor.extractForReminders(LastScheduleDay, null, null, PeriodicityType.Always, scheduledDay);
 
       const expected = getDays(subWeeks(CurrentDay, 1), LastScheduleDay);
 
@@ -996,7 +964,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      let expected = [
+      const expected = [
         subDays(CurrentDay, 2),
         subDays(CurrentDay, 1),
         CurrentDay,
@@ -1118,7 +1086,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       );
 
       let expected = getDaysForNextTwoWeeks(false, CurrentDay);
-      expected = expected.filter(d => d >= eventDayFrom);
+      expected = expected.filter((d) => d >= eventDayFrom);
 
       expect(result).toEqual(expected);
       expect(result.length).toEqual(NumberOfDaysForSchedule - 1);
@@ -1133,13 +1101,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const extractor = new NotificationDaysExtractor({}, AppletId);
       mockUtilityProps(extractor, now);
 
-      const result = extractor.extractForReminders(
-        LastScheduleDay,
-        null,
-        null,
-        PeriodicityType.Daily,
-        scheduledDay,
-      );
+      const result = extractor.extractForReminders(LastScheduleDay, null, null, PeriodicityType.Daily, scheduledDay);
 
       const expected = getDays(subWeeks(CurrentDay, 1), LastScheduleDay);
 
@@ -1164,7 +1126,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      let expected = [
+      const expected = [
         subDays(CurrentDay, 2),
         subDays(CurrentDay, 1),
         CurrentDay,
@@ -1286,7 +1248,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       );
 
       let expected = getDaysForNextTwoWeeks(false, CurrentDay);
-      expected = expected.filter(d => d >= eventDayFrom);
+      expected = expected.filter((d) => d >= eventDayFrom);
 
       expect(result).toEqual(expected);
       expect(result.length).toEqual(NumberOfDaysForSchedule - 1);
@@ -1301,13 +1263,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const extractor = new NotificationDaysExtractor({}, AppletId);
       mockUtilityProps(extractor, now);
 
-      const result = extractor.extractForReminders(
-        LastScheduleDay,
-        null,
-        null,
-        PeriodicityType.Weekly,
-        scheduledDay,
-      );
+      const result = extractor.extractForReminders(LastScheduleDay, null, null, PeriodicityType.Weekly, scheduledDay);
 
       const expected = [
         subWeeks(scheduledDay, 4),
@@ -1340,7 +1296,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      let expected = [addDays(scheduledDay, 7)];
+      const expected = [addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });
@@ -1363,7 +1319,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      let expected = [addDays(scheduledDay, 7), addDays(scheduledDay, 14)];
+      const expected = [addDays(scheduledDay, 7), addDays(scheduledDay, 14)];
 
       expect(result).toEqual(expected);
     });
@@ -1386,7 +1342,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      let expected = [
+      const expected = [
         subWeeks(scheduledDay, 4),
         subWeeks(scheduledDay, 3),
         subWeeks(scheduledDay, 2),
@@ -1416,7 +1372,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      let expected = [addDays(scheduledDay, 7)];
+      const expected = [addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });
@@ -1430,13 +1386,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const extractor = new NotificationDaysExtractor({}, AppletId);
       mockUtilityProps(extractor, now);
 
-      const result = extractor.extractForReminders(
-        LastScheduleDay,
-        null,
-        null,
-        PeriodicityType.Monthly,
-        scheduledDay,
-      );
+      const result = extractor.extractForReminders(LastScheduleDay, null, null, PeriodicityType.Monthly, scheduledDay);
 
       const expected = [
         subMonths(scheduledDay, 2),
@@ -1455,13 +1405,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const extractor = new NotificationDaysExtractor({}, AppletId);
       mockUtilityProps(extractor, now);
 
-      const result = extractor.extractForReminders(
-        LastScheduleDay,
-        null,
-        null,
-        PeriodicityType.Monthly,
-        scheduledDay,
-      );
+      const result = extractor.extractForReminders(LastScheduleDay, null, null, PeriodicityType.Monthly, scheduledDay);
 
       const expected = [
         subMonths(scheduledDay, 2),
@@ -1480,19 +1424,9 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const extractor = new NotificationDaysExtractor({}, AppletId);
       mockUtilityProps(extractor, now);
 
-      const result = extractor.extractForReminders(
-        LastScheduleDay,
-        null,
-        null,
-        PeriodicityType.Monthly,
-        scheduledDay,
-      );
+      const result = extractor.extractForReminders(LastScheduleDay, null, null, PeriodicityType.Monthly, scheduledDay);
 
-      const expected = [
-        subMonths(scheduledDay, 2),
-        subMonths(scheduledDay, 1),
-        scheduledDay,
-      ];
+      const expected = [subMonths(scheduledDay, 2), subMonths(scheduledDay, 1), scheduledDay];
 
       expect(result).toEqual(expected);
     });
@@ -1504,19 +1438,9 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const extractor = new NotificationDaysExtractor({}, AppletId);
       mockUtilityProps(extractor, now);
 
-      const result = extractor.extractForReminders(
-        LastScheduleDay,
-        null,
-        null,
-        PeriodicityType.Monthly,
-        scheduledDay,
-      );
+      const result = extractor.extractForReminders(LastScheduleDay, null, null, PeriodicityType.Monthly, scheduledDay);
 
-      const expected = [
-        subMonths(scheduledDay, 2),
-        subMonths(scheduledDay, 1),
-        scheduledDay,
-      ];
+      const expected = [subMonths(scheduledDay, 2), subMonths(scheduledDay, 1), scheduledDay];
 
       expect(result).toEqual(expected);
     });
@@ -1528,13 +1452,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const extractor = new NotificationDaysExtractor({}, AppletId);
       mockUtilityProps(extractor, now);
 
-      const result = extractor.extractForReminders(
-        LastScheduleDay,
-        null,
-        null,
-        PeriodicityType.Monthly,
-        scheduledDay,
-      );
+      const result = extractor.extractForReminders(LastScheduleDay, null, null, PeriodicityType.Monthly, scheduledDay);
 
       const expected = [subMonths(scheduledDay, 2), subMonths(scheduledDay, 1)];
 
@@ -1580,11 +1498,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      const expected = [
-        subMonths(scheduledDay, 2),
-        subMonths(scheduledDay, 1),
-        scheduledDay,
-      ];
+      const expected = [subMonths(scheduledDay, 2), subMonths(scheduledDay, 1), scheduledDay];
 
       expect(result).toEqual(expected);
     });

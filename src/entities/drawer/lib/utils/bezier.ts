@@ -1,11 +1,6 @@
 import { CachedBezierItem, Point } from '../types';
 
-function getBezierPoint(
-  startPoint: Point,
-  anchorPoint: Point,
-  endPoint: Point,
-  tIndex: number,
-): Point {
+function getBezierPoint(startPoint: Point, anchorPoint: Point, endPoint: Point, tIndex: number): Point {
   const x =
     Math.pow(1 - tIndex, 2) * startPoint.x +
     2 * tIndex * (1 - tIndex) * anchorPoint.x +
@@ -17,12 +12,7 @@ function getBezierPoint(
   return { x, y };
 }
 
-function getBezierCurvePoints(
-  startPoint: Point,
-  anchorPoint: Point,
-  endPoint: Point,
-  pointsCount: number,
-): Point[] {
+function getBezierCurvePoints(startPoint: Point, anchorPoint: Point, endPoint: Point, pointsCount: number): Point[] {
   const curvePoints: Point[] = [];
 
   for (let i = 0; i <= pointsCount; i++) {
@@ -37,10 +27,7 @@ function getBezierCurvePoints(
 const CurvePointsCount = 5;
 const MiddlePointIndex = Math.floor(CurvePointsCount / 2);
 
-const buildResultArray = (
-  originalPoints: Point[],
-  cachedBezierPoints: Array<CachedBezierItem>,
-) => {
+const buildResultArray = (originalPoints: Point[], cachedBezierPoints: Array<CachedBezierItem>) => {
   const result: Point[] = [];
 
   result.push(originalPoints[0]);
@@ -62,10 +49,7 @@ const buildResultArray = (
   return result;
 };
 
-export const getBezierArray = (
-  originalPoints: Point[],
-  cachedBezierPoints: Array<CachedBezierItem>,
-): Point[] => {
+export const getBezierArray = (originalPoints: Point[], cachedBezierPoints: Array<CachedBezierItem>): Point[] => {
   if (originalPoints.length === 1) {
     const point = originalPoints[0];
     return [
@@ -91,12 +75,7 @@ export const getBezierArray = (
     const anchorPoint: Point = originalPoints[i];
     const endPoint: Point = originalPoints[i + 1];
 
-    const curve: Point[] = getBezierCurvePoints(
-      startPoint,
-      anchorPoint,
-      endPoint,
-      CurvePointsCount,
-    );
+    const curve: Point[] = getBezierCurvePoints(startPoint, anchorPoint, endPoint, CurvePointsCount);
 
     const shouldInterpolate = i > 1;
 

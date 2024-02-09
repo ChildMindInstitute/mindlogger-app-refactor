@@ -10,7 +10,7 @@ export const changeLanguage = (locale: Language) => {
 };
 
 export function wait(milliseconds: number) {
-  return new Promise(resolve => setTimeout(resolve, milliseconds));
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
 export const shuffle = <T>(array: Array<T>) => {
@@ -26,7 +26,7 @@ export const isEmptyObject = (object: any) => {
 };
 
 export function getCurrentWeekDates(): Array<Date> {
-  return Array.from(Array(7).keys()).map(idx => {
+  return Array.from(Array(7).keys()).map((idx) => {
     const date = new Date();
     date.setDate(date.getDate() - date.getDay() + (idx + 1));
 
@@ -34,10 +34,7 @@ export function getCurrentWeekDates(): Array<Date> {
   });
 }
 
-export function splitArray<TListItem>(
-  array: TListItem[],
-  leftArraySize: number,
-): [TListItem[], TListItem[]] {
+export function splitArray<TListItem>(array: TListItem[], leftArraySize: number): [TListItem[], TListItem[]] {
   const rightArray = [...array];
 
   const leftArray = rightArray.splice(0, leftArraySize);
@@ -48,10 +45,7 @@ export function splitArray<TListItem>(
 export const getFloatPartLength = (numberValue: number) => {
   const numberAsString = numberValue.toString();
 
-  const pointPosition = Math.max(
-    numberAsString.indexOf('.'),
-    numberAsString.indexOf(','),
-  );
+  const pointPosition = Math.max(numberAsString.indexOf('.'), numberAsString.indexOf(','));
   return pointPosition === -1 ? 0 : numberAsString.length - pointPosition - 1;
 };
 
@@ -65,22 +59,19 @@ export const Mutex = (): IMutex => {
   let busy = false;
 
   return {
-    setBusy: function () {
+    setBusy() {
       busy = true;
     },
-    release: function () {
+    release() {
       busy = false;
     },
-    isBusy: function () {
+    isBusy() {
       return busy;
     },
   };
 };
 
-export const callWithMutexAsync = async (
-  mutex: IMutex,
-  func: () => Promise<any>,
-) => {
+export const callWithMutexAsync = async (mutex: IMutex, func: () => Promise<any>) => {
   if (mutex.isBusy()) {
     return;
   }
@@ -127,10 +118,7 @@ export const runOnAndroid = (cb: () => void) => {
   IS_ANDROID && cb();
 };
 
-export const splitArrayToBulks = <T>(
-  bulkSize: number,
-  array: T[],
-): Array<T[]> => {
+export const splitArrayToBulks = <T>(bulkSize: number, array: T[]): Array<T[]> => {
   const result: Array<T[]> = [];
   for (let i = 0; i < array.length; i += bulkSize) {
     result.push(array.slice(i, i + bulkSize));

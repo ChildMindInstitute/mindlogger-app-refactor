@@ -1,10 +1,4 @@
-import {
-  format as formatBase,
-  isEqual,
-  subDays,
-  getUnixTime,
-  subMonths,
-} from 'date-fns';
+import { format as formatBase, isEqual, subDays, getUnixTime, subMonths } from 'date-fns';
 import { enGB, fr } from 'date-fns/locale';
 import i18n from 'i18next';
 
@@ -47,8 +41,7 @@ export const formatToDtoTime = (date: Date | number, addSeconds = false) => {
   return formatBase(date, addSeconds ? 'HH:mm:ss' : 'HH:mm');
 };
 
-export const formatToISODateMidnight = (date: Date | number) =>
-  formatBase(date, "yyyy-MM-dd'T'00:00:00");
+export const formatToISODateMidnight = (date: Date | number) => formatBase(date, "yyyy-MM-dd'T'00:00:00");
 
 type TimeOrNoun = {
   formattedDate?: string | null;
@@ -88,43 +81,26 @@ type TimeCompareInput = {
 };
 
 export const isSourceLess = ({ timeSource, timeTarget }: TimeCompareInput) => {
-  const sourceInMinutes =
-    timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
-  const targetInMinutes =
-    timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
+  const sourceInMinutes = timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
+  const targetInMinutes = timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
   return sourceInMinutes < targetInMinutes;
 };
 
-export const isSourceLessOrEqual = ({
-  timeSource,
-  timeTarget,
-}: TimeCompareInput) => {
-  const sourceInMinutes =
-    timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
-  const targetInMinutes =
-    timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
+export const isSourceLessOrEqual = ({ timeSource, timeTarget }: TimeCompareInput) => {
+  const sourceInMinutes = timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
+  const targetInMinutes = timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
   return sourceInMinutes <= targetInMinutes;
 };
 
-export const isSourceBiggerOrEqual = ({
-  timeSource,
-  timeTarget,
-}: TimeCompareInput) => {
-  const sourceInMinutes =
-    timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
-  const targetInMinutes =
-    timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
+export const isSourceBiggerOrEqual = ({ timeSource, timeTarget }: TimeCompareInput) => {
+  const sourceInMinutes = timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
+  const targetInMinutes = timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
   return sourceInMinutes >= targetInMinutes;
 };
 
-export const isSourceBigger = ({
-  timeSource,
-  timeTarget,
-}: TimeCompareInput) => {
-  const sourceInMinutes =
-    timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
-  const targetInMinutes =
-    timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
+export const isSourceBigger = ({ timeSource, timeTarget }: TimeCompareInput) => {
+  const sourceInMinutes = timeSource.hours * MINUTES_IN_HOUR + timeSource.minutes;
+  const targetInMinutes = timeTarget.hours * MINUTES_IN_HOUR + timeTarget.minutes;
   return sourceInMinutes > targetInMinutes;
 };
 
@@ -135,12 +111,7 @@ type InIntervalCheckInput = {
   including: 'from' | 'to' | 'both' | 'none';
 };
 
-export const isTimeInInterval = ({
-  timeToCheck,
-  intervalFrom,
-  intervalTo,
-  including,
-}: InIntervalCheckInput) => {
+export const isTimeInInterval = ({ timeToCheck, intervalFrom, intervalTo, including }: InIntervalCheckInput) => {
   if (including === 'from') {
     return (
       isSourceBiggerOrEqual({
@@ -154,9 +125,7 @@ export const isTimeInInterval = ({
       isSourceLess({ timeSource: timeToCheck, timeTarget: intervalTo })
     );
   } else {
-    throw new Error(
-      '[isTimeInInterval]: Not supported, including = ' + including,
-    );
+    throw new Error(`[isTimeInInterval]: Not supported, including = ${including}`);
   }
 };
 
@@ -164,13 +133,11 @@ export function getLast7Dates() {
   const now = new Date();
 
   return range(7)
-    .map(i => subDays(now, i))
+    .map((i) => subDays(now, i))
     .reverse();
 }
 
-export const buildDateFromDto = (
-  dto: string | null | undefined,
-): Date | null => {
+export const buildDateFromDto = (dto: string | null | undefined): Date | null => {
   if (!dto) {
     return null;
   }
@@ -186,11 +153,9 @@ export const buildDateFromDto = (
 export const areDatesEqual = (dateLeft: Date, dateRight: Date): boolean =>
   isEqual(dateLeft.setHours(0, 0, 0, 0), dateRight.setHours(0, 0, 0, 0));
 
-export const getUnixTimestamp = (date: Date | number): number =>
-  getUnixTime(date);
+export const getUnixTimestamp = (date: Date | number): number => getUnixTime(date);
 
-export const getMidnightDateInMs = (date: Date = new Date()): number =>
-  date.setHours(0, 0, 0, 0);
+export const getMidnightDateInMs = (date: Date = new Date()): number => date.setHours(0, 0, 0, 0);
 
 export const convertToDayMonthYear = (date: Date): DayMonthYear => ({
   day: date.getDate(),
@@ -200,8 +165,7 @@ export const convertToDayMonthYear = (date: Date): DayMonthYear => ({
 
 export const getMonthAgoDate = () => formatToDtoDate(subMonths(new Date(), 1));
 
-export const buildDateTimeFromDto = (yyyymmdd: string, hhmmss: string) =>
-  new Date(`${yyyymmdd} ${hhmmss}`);
+export const buildDateTimeFromDto = (yyyymmdd: string, hhmmss: string) => new Date(`${yyyymmdd} ${hhmmss}`);
 
 export const getDateFromString = (dateString: string) => {
   // converts yyyy-mm-dd string to Date , ignoring timeZone

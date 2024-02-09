@@ -1,10 +1,7 @@
 import { FC } from 'react';
 import { AccessibilityProps, StyleSheet } from 'react-native';
 
-import {
-  Slider as SliderBase,
-  SliderProps,
-} from '@miblanchard/react-native-slider';
+import { Slider as SliderBase, SliderProps } from '@miblanchard/react-native-slider';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { colors } from '@shared/lib/constants';
@@ -13,11 +10,11 @@ type Props = SliderProps & { size: number; initialValue: number | null };
 
 const CHANGE_VALUE_DELAY = 100;
 
-const Slider: FC<Props & AccessibilityProps> = props => {
+const Slider: FC<Props & AccessibilityProps> = (props) => {
   const { size, initialValue = null } = props;
   const opacity = initialValue !== null ? 1 : 0;
 
-  const debouncedOnValueChange = useDebouncedCallback(value => {
+  const debouncedOnValueChange = useDebouncedCallback((value) => {
     props.onValueChange?.(value);
   }, CHANGE_VALUE_DELAY);
 
@@ -28,7 +25,7 @@ const Slider: FC<Props & AccessibilityProps> = props => {
         height: size,
         width: size,
         borderRadius: size,
-        opacity: opacity,
+        opacity,
       }}
       minimumTrackStyle={styles.minimumTrackStyle}
       maximumTrackTintColor={colors.lightGrey}

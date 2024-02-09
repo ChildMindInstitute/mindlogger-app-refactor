@@ -1,12 +1,6 @@
 import { FC, useMemo } from 'react';
 
-import {
-  HourMinute,
-  colors,
-  getMsFromHours,
-  getMidnightDateInMs,
-  getMsFromMinutes,
-} from '@shared/lib';
+import { HourMinute, colors, getMsFromHours, getMidnightDateInMs, getMsFromMinutes } from '@shared/lib';
 import { AlarmIcon, DateTimePicker } from '@shared/ui';
 
 type Props = {
@@ -22,12 +16,7 @@ const TimePickerItem: FC<Props> = ({ value, onChange }) => {
     });
 
   const timeInMs = useMemo(
-    () =>
-      value
-        ? getMidnightDateInMs() +
-          getMsFromHours(value.hours) +
-          getMsFromMinutes(value.minutes)
-        : Date.now(),
+    () => (value ? getMidnightDateInMs() + getMsFromHours(value.hours) + getMsFromMinutes(value.minutes) : Date.now()),
     [value],
   );
 

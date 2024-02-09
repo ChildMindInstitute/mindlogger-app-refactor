@@ -24,12 +24,7 @@ class LineSketcher {
     this.points = [];
   }
 
-  private static addPointToPath(
-    path: SkPath,
-    tPoint: Point,
-    pPoint: Point,
-    point: Point,
-  ): void {
+  private static addPointToPath(path: SkPath, tPoint: Point, pPoint: Point, point: Point): void {
     const mid1: Point = {
       x: (pPoint.x + tPoint.x) / 2,
       y: (pPoint.y + tPoint.y) / 2,
@@ -49,19 +44,9 @@ class LineSketcher {
 
     for (let pointIndex = 0; pointIndex < pointsCount; pointIndex++) {
       if (pointsCount >= 3 && pointIndex >= 2) {
-        LineSketcher.addPointToPath(
-          path,
-          points[pointIndex - 2],
-          points[pointIndex - 1],
-          points[pointIndex],
-        );
+        LineSketcher.addPointToPath(path, points[pointIndex - 2], points[pointIndex - 1], points[pointIndex]);
       } else if (pointsCount >= 2 && pointIndex >= 1) {
-        LineSketcher.addPointToPath(
-          path,
-          points[0],
-          points[0],
-          points[pointIndex],
-        );
+        LineSketcher.addPointToPath(path, points[0], points[0], points[pointIndex]);
       } else if (pointsCount >= 1) {
         const a = points[pointIndex];
 
@@ -84,11 +69,7 @@ class LineSketcher {
     return newPath;
   }
 
-  public progressLine(
-    path: SkPath,
-    point: Point,
-    straightLine: boolean = false,
-  ): void {
+  public progressLine(path: SkPath, point: Point, straightLine: boolean = false): void {
     this.points.push(point);
 
     const pointsCount = this.points.length;
@@ -96,12 +77,7 @@ class LineSketcher {
     if (straightLine) {
       path.lineTo(point.x, point.y);
     } else if (pointsCount >= 3) {
-      LineSketcher.addPointToPath(
-        path,
-        this.points[pointsCount - 3],
-        this.points[pointsCount - 2],
-        point,
-      );
+      LineSketcher.addPointToPath(path, this.points[pointsCount - 3], this.points[pointsCount - 2], point);
     } else {
       LineSketcher.addPointToPath(path, this.points[0], this.points[0], point);
     }

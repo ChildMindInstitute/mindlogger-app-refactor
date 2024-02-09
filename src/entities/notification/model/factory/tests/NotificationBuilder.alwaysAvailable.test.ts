@@ -1,10 +1,6 @@
 import { addDays, addMonths, subDays, subMonths } from 'date-fns';
 
-import {
-  AvailabilityType,
-  NotificationTriggerType,
-  PeriodicityType,
-} from '@app/abstract/lib';
+import { AvailabilityType, NotificationTriggerType, PeriodicityType } from '@app/abstract/lib';
 import { ScheduledDateCalculator } from '@app/entities/event/model';
 import {
   EventNotificationDescribers,
@@ -14,12 +10,7 @@ import {
   ScheduleEvent,
 } from '@app/entities/notification/lib';
 
-import {
-  createBuilder,
-  getEmptyEvent,
-  getEventEntity,
-  getMockNotificationPattern,
-} from './testHelpers';
+import { createBuilder, getEmptyEvent, getEventEntity, getMockNotificationPattern } from './testHelpers';
 import { INotificationBuilder } from '../NotificationBuilder';
 
 const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
@@ -33,12 +24,10 @@ const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
   });
 
   //@ts-ignore
-  builder.reminderCreator.utility.getNotificationIds = jest
-    .fn()
-    .mockReturnValue({
-      id: undefined,
-      shortId: undefined,
-    });
+  builder.reminderCreator.utility.getNotificationIds = jest.fn().mockReturnValue({
+    id: undefined,
+    shortId: undefined,
+  });
   //@ts-ignore
   builder.reminderCreator.utility.now = new Date(now);
 };
@@ -62,25 +51,17 @@ const setNormalSettingsToEvent = (
   fixed = true,
 ) => {
   event.availability.timeFrom =
-    periodicityType === PeriodicityType.Always
-      ? { hours: 0, minutes: 0 }
-      : { hours: 15, minutes: 30 };
+    periodicityType === PeriodicityType.Always ? { hours: 0, minutes: 0 } : { hours: 15, minutes: 30 };
   event.availability.timeTo =
-    periodicityType === PeriodicityType.Always
-      ? { hours: 23, minutes: 59 }
-      : { hours: 20, minutes: 15 };
+    periodicityType === PeriodicityType.Always ? { hours: 23, minutes: 59 } : { hours: 20, minutes: 15 };
   event.availability.availabilityType =
-    periodicityType === PeriodicityType.Always
-      ? AvailabilityType.AlwaysAvailable
-      : AvailabilityType.ScheduledAccess;
+    periodicityType === PeriodicityType.Always ? AvailabilityType.AlwaysAvailable : AvailabilityType.ScheduledAccess;
   event.availability.periodicityType = periodicityType;
   event.availability.startDate = subMonths(today, 1);
   event.availability.endDate = addMonths(today, 1);
   event.notificationSettings.notifications.push({
     at: fixed ? { hours: FixedHourAt, minutes: FixedMinuteAt } : null,
-    triggerType: fixed
-      ? NotificationTriggerType.FIXED
-      : NotificationTriggerType.RANDOM,
+    triggerType: fixed ? NotificationTriggerType.FIXED : NotificationTriggerType.RANDOM,
     from: null,
     to: null,
   });
@@ -100,10 +81,7 @@ const addReminder = (
 ) => {
   const mockNotificationPattern = getMockNotificationPattern();
 
-  const reminderTriggerAt = addDays(
-    new Date(eventDate),
-    activityIncompleteDays,
-  );
+  const reminderTriggerAt = addDays(new Date(eventDate), activityIncompleteDays);
   reminderTriggerAt.setHours(ReminderHourAt);
   reminderTriggerAt.setMinutes(ReminderMinuteAt);
 
@@ -112,12 +90,7 @@ const addReminder = (
     scheduledAt: reminderTriggerAt.getTime(),
     scheduledAtString: reminderTriggerAt.toString(),
     eventDayString: eventDate.toString(),
-    fallType:
-      activityIncompleteDays === 0
-        ? 'current-day'
-        : activityIncompleteDays === 1
-        ? 'next-day'
-        : 'in-future',
+    fallType: activityIncompleteDays === 0 ? 'current-day' : activityIncompleteDays === 1 ? 'next-day' : 'in-future',
     type: NotificationType.Reminder,
     notificationBody: 'Just a kindly reminder to complete the activity',
   };
@@ -130,19 +103,15 @@ const addReminder = (
         inactiveReason === 'invalid-period'
           ? InactiveReason.FallOnInvalidPeriod
           : inactiveReason === 'outdated'
-          ? InactiveReason.Outdated
-          : InactiveReason.NotDefined,
+            ? InactiveReason.Outdated
+            : InactiveReason.NotDefined,
     };
   }
 
   result.push(itemToAdd);
 };
 
-const addNotification = (
-  result: NotificationDescriber[],
-  eventDate: Date,
-  inactiveReason?: 'outdated',
-) => {
+const addNotification = (result: NotificationDescriber[], eventDate: Date, inactiveReason?: 'outdated') => {
   const mockNotificationPattern = getMockNotificationPattern();
 
   const triggerAt = new Date(eventDate);
@@ -163,10 +132,7 @@ const addNotification = (
     itemToAdd = {
       ...itemToAdd,
       isActive: false,
-      inactiveReason:
-        inactiveReason === 'outdated'
-          ? InactiveReason.Outdated
-          : InactiveReason.NotDefined,
+      inactiveReason: inactiveReason === 'outdated' ? InactiveReason.Outdated : InactiveReason.NotDefined,
     };
   }
 
@@ -209,8 +175,7 @@ describe('NotificationBuilder: always-available penetrating tests', () => {
 
     const expectedResult: EventNotificationDescribers = {
       eventId: 'mock-event-id',
-      eventName:
-        'For mock-entity-name, ALWAYS, 1 notifications, reminder unset',
+      eventName: 'For mock-entity-name, ALWAYS, 1 notifications, reminder unset',
       notifications: expected,
       scheduleEvent: event,
     };

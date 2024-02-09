@@ -6,9 +6,9 @@ type Props = PropsWithChildren<BoxProps>;
 
 function NavigationPanel({ children, ...styledProps }: Props) {
   const buttons = useMemo(() => {
-    let allChildren: ReactNode[] = [];
+    const allChildren: ReactNode[] = [];
 
-    Children.forEach(children, child => {
+    Children.forEach(children, (child) => {
       allChildren.push(child);
     });
 

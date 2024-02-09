@@ -8,22 +8,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppletDetailsQuery } from '@app/entities/applet';
 import { HourMinute } from '@app/shared/lib';
 import TimeRemaining from '@app/shared/ui/TimeRemaining';
-import {
-  ActivityIndicator,
-  Box,
-  Center,
-  StatusBar,
-  Stepper,
-  XStack,
-} from '@shared/ui';
+import { ActivityIndicator, Box, Center, StatusBar, Stepper, XStack } from '@shared/ui';
 
 import ActivityItem from './ActivityItem';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
-import {
-  ActivityIdentityContext,
-  FlankerResponse,
-  useTextVariablesReplacer,
-} from '../lib';
+import { ActivityIdentityContext, FlankerResponse, useTextVariablesReplacer } from '../lib';
 import { useActivityState, useActivityStepper, useIdleTimer } from '../model';
 import { evaluateFlankerNextStep } from '../model/flankerNextStepEvaluator';
 
@@ -35,20 +24,12 @@ type Props = {
   onFinish: (reason: 'regular' | 'idle') => void;
 };
 
-function ActivityStepper({
-  idleTimer,
-  timer,
-  entityStartedAt,
-  onClose,
-  onFinish,
-}: Props) {
+function ActivityStepper({ idleTimer, timer, entityStartedAt, onClose, onFinish }: Props) {
   const { t } = useTranslation();
 
   const { bottom } = useSafeAreaInsets();
 
-  const { appletId, activityId, eventId, order } = useContext(
-    ActivityIdentityContext,
-  );
+  const { appletId, activityId, eventId, order } = useContext(ActivityIdentityContext);
 
   const {
     activityStorageRecord,
@@ -102,7 +83,7 @@ function ActivityStepper({
   });
 
   const { data: watermark } = useAppletDetailsQuery(appletId, {
-    select: r => r.data.result.watermark,
+    select: (r) => r.data.result.watermark,
   });
 
   const currentStep = activityStorageRecord?.step ?? 0;
@@ -242,11 +223,7 @@ function ActivityStepper({
         onUndo={onUndo}
       >
         {showWatermark && watermark && (
-          <CachedImage
-            source={watermark}
-            style={styles.watermark}
-            accessibilityLabel="watermark-image"
-          />
+          <CachedImage source={watermark} style={styles.watermark} accessibilityLabel="watermark-image" />
         )}
 
         {showTimeLeft && (
@@ -265,12 +242,7 @@ function ActivityStepper({
             {canMoveBack && <Stepper.BackButton isIcon />}
             {canReset && <Stepper.UndoButton isIcon />}
 
-            {canMoveNext && (
-              <Stepper.NextButton
-                accessibilityLabel={getAccessibilityLabel(nextButtonText)}
-                isIcon
-              />
-            )}
+            {canMoveNext && <Stepper.NextButton accessibilityLabel={getAccessibilityLabel(nextButtonText)} isIcon />}
           </Stepper.NavigationPanel>
         )}
 
@@ -280,18 +252,10 @@ function ActivityStepper({
             const value = activityStorageRecord.answers[index];
 
             return (
-              <XStack
-                flex={1}
-                key={index}
-                alignItems="center"
-                onTouchStart={() => restartIdleTimer()}
-              >
+              <XStack flex={1} key={index} alignItems="center" onTouchStart={() => restartIdleTimer()}>
                 <>
                   {pipelineItem.type === 'Tutorial' && (
-                    <TutorialViewerItem
-                      {...pipelineItem.payload}
-                      ref={tutorialViewerRef}
-                    />
+                    <TutorialViewerItem {...pipelineItem.payload} ref={tutorialViewerRef} />
                   )}
 
                   {pipelineItem.type !== 'Tutorial' && (
@@ -302,10 +266,10 @@ function ActivityStepper({
                       type={pipelineItem.type}
                       value={value}
                       pipelineItem={pipelineItem}
-                      onResponse={response => {
+                      onResponse={(response) => {
                         setAnswer(currentStep, response);
                       }}
-                      onAdditionalResponse={response => {
+                      onAdditionalResponse={(response) => {
                         setAdditionalAnswer(currentStep, response);
                       }}
                       textVariableReplacer={replaceTextVariables}
@@ -325,24 +289,14 @@ function ActivityStepper({
           <Stepper.NavigationPanel mt={18} minHeight={27} mb={bottom ? 0 : 16}>
             {canMoveBack && (
               <Stepper.BackButton>
-                {t(
-                  isFirstStep
-                    ? 'activity_navigation:return'
-                    : 'activity_navigation:back',
-                )}
+                {t(isFirstStep ? 'activity_navigation:return' : 'activity_navigation:back')}
               </Stepper.BackButton>
             )}
 
-            {canReset && (
-              <Stepper.UndoButton>
-                {t('activity_navigation:undo')}
-              </Stepper.UndoButton>
-            )}
+            {canReset && <Stepper.UndoButton>{t('activity_navigation:undo')}</Stepper.UndoButton>}
 
             {canMoveNext && (
-              <Stepper.NextButton
-                accessibilityLabel={getAccessibilityLabel(nextButtonText)}
-              >
+              <Stepper.NextButton accessibilityLabel={getAccessibilityLabel(nextButtonText)}>
                 {t(nextButtonText)}
               </Stepper.NextButton>
             )}

@@ -4,12 +4,7 @@ import { AvailableGroupEvaluator } from './AvailableGroupEvaluator';
 import { GroupsBuildContext, GroupUtility } from './GroupUtility';
 import { ListItemsFactory } from './ListItemsFactory';
 import { ScheduledGroupEvaluator } from './ScheduledGroupEvaluator';
-import {
-  EventEntity,
-  ActivityGroupType,
-  ActivityGroupTypeNames,
-  ActivityListGroup,
-} from '../../lib';
+import { EventEntity, ActivityGroupType, ActivityGroupTypeNames, ActivityListGroup } from '../../lib';
 
 export interface IActivityGroupsBuilder {
   buildInProgress: (eventsActivities: Array<EventEntity>) => ActivityListGroup;
@@ -33,14 +28,12 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     this.utility = new GroupUtility(inputParams);
   }
 
-  public buildInProgress(
-    eventsActivities: Array<EventEntity>,
-  ): ActivityListGroup {
-    const filtered = eventsActivities.filter(x => this.utility.isInProgress(x));
+  public buildInProgress(eventsActivities: Array<EventEntity>): ActivityListGroup {
+    const filtered = eventsActivities.filter((x) => this.utility.isInProgress(x));
 
     const activityItems: Array<ActivityListItem> = [];
 
-    for (let eventActivity of filtered) {
+    for (const eventActivity of filtered) {
       const item = this.itemsFactory.createProgressItem(eventActivity);
 
       activityItems.push(item);
@@ -60,7 +53,7 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
     const activityItems: Array<ActivityListItem> = [];
 
-    for (let eventActivity of filtered) {
+    for (const eventActivity of filtered) {
       const item = this.itemsFactory.createAvailableItem(eventActivity);
 
       activityItems.push(item);
@@ -80,7 +73,7 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
     const activityItems: Array<ActivityListItem> = [];
 
-    for (let eventActivity of filtered) {
+    for (const eventActivity of filtered) {
       const item = this.itemsFactory.createScheduledItem(eventActivity);
 
       activityItems.push(item);
@@ -96,8 +89,6 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 }
 
-export const createActivityGroupsBuilder = (
-  inputData: GroupsBuildContext,
-): ActivityGroupsBuilder => {
+export const createActivityGroupsBuilder = (inputData: GroupsBuildContext): ActivityGroupsBuilder => {
   return new ActivityGroupsBuilder(inputData);
 };

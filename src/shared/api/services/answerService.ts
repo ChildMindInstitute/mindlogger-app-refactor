@@ -1,10 +1,5 @@
 import { Point } from '@app/abstract/lib';
-import {
-  DayMonthYear,
-  HourMinute,
-  callApiWithRetry,
-  watchForConnectionLoss,
-} from '@app/shared/lib';
+import { DayMonthYear, HourMinute, callApiWithRetry, watchForConnectionLoss } from '@app/shared/lib';
 import { MediaFile, MediaValue } from '@app/shared/ui';
 
 import httpService from './httpService';
@@ -208,13 +203,9 @@ function answerService() {
         const { abortController, reset } = watchForConnectionLoss();
 
         try {
-          const response = await httpService.post<ActivityAnswersResponse>(
-            '/answers',
-            request,
-            {
-              signal: abortController.signal,
-            },
-          );
+          const response = await httpService.post<ActivityAnswersResponse>('/answers', request, {
+            signal: abortController.signal,
+          });
           return response;
         } finally {
           reset();
@@ -228,13 +219,9 @@ function answerService() {
         const { abortController, reset } = watchForConnectionLoss();
 
         try {
-          const response = await httpService.post<CheckIfAnswersExistResponse>(
-            '/answers/check-existence',
-            request,
-            {
-              signal: abortController.signal,
-            },
-          );
+          const response = await httpService.post<CheckIfAnswersExistResponse>('/answers/check-existence', request, {
+            signal: abortController.signal,
+          });
           return response;
         } finally {
           reset();

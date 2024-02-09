@@ -14,7 +14,7 @@ const ActivityAnalyticsList: FC<Props> = ({ analytics }) => {
   return (
     <Box flex={1}>
       <ScrollView contentContainerStyle={styles.scrollView}>
-        {analytics?.activitiesResponses?.map(response => (
+        {analytics?.activitiesResponses?.map((response) => (
           <ActivityDataCard
             accessibilityLabel={`activity-data-card-${response.id}`}
             key={response.id}

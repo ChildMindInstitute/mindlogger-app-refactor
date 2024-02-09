@@ -2,13 +2,9 @@ import { isLocalFileUrl } from './file';
 
 describe('isFileUrl function', () => {
   it('should correctly identify file URLs', () => {
-    const validFileUrls = [
-      'file:///path/to/image.jpg',
-      '/absolute/path/to/image.png',
-      '/relative/path/to/video.mp4',
-    ];
+    const validFileUrls = ['file:///path/to/image.jpg', '/absolute/path/to/image.png', '/relative/path/to/video.mp4'];
 
-    validFileUrls.forEach(url => {
+    validFileUrls.forEach((url) => {
       expect(isLocalFileUrl(url)).toBe(true);
     });
   });
@@ -21,7 +17,7 @@ describe('isFileUrl function', () => {
       'file://image.png', // Invalid due to missing slashes after "file:"
     ];
 
-    invalidUrls.forEach(url => {
+    invalidUrls.forEach((url) => {
       expect(isLocalFileUrl(url)).toBe(false);
     });
   });

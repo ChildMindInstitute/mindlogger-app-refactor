@@ -1,9 +1,4 @@
-import {
-  APP_VERSION,
-  META_APP_NAME,
-  VIEWPORT_HEIGHT,
-  VIEWPORT_WIDTH,
-} from '@shared/lib';
+import { APP_VERSION, META_APP_NAME, VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from '@shared/lib';
 
 const getClientInformation = () => ({
   appId: META_APP_NAME,

@@ -1,12 +1,4 @@
-import {
-  addDays,
-  addMonths,
-  addWeeks,
-  isEqual,
-  subDays,
-  subMonths,
-  subWeeks,
-} from 'date-fns';
+import { addDays, addMonths, addWeeks, isEqual, subDays, subMonths, subWeeks } from 'date-fns';
 
 import { PeriodicityType, Progress } from '@app/abstract/lib';
 import { ILogger, Logger } from '@app/shared/lib';
@@ -23,16 +15,12 @@ export class NotificationDaysExtractor {
     this.logger = Logger;
   }
 
-  private getDayFrom(
-    firstScheduleDay: Date,
-    periodStartDay: Date | null,
-  ): Date {
+  private getDayFrom(firstScheduleDay: Date, periodStartDay: Date | null): Date {
     let dayFrom;
     if (!periodStartDay) {
       dayFrom = firstScheduleDay;
     } else {
-      dayFrom =
-        periodStartDay > firstScheduleDay ? periodStartDay : firstScheduleDay;
+      dayFrom = periodStartDay > firstScheduleDay ? periodStartDay : firstScheduleDay;
     }
     return dayFrom;
   }
@@ -97,7 +85,7 @@ export class NotificationDaysExtractor {
       let day = previousDay;
 
       while (day <= dayTo) {
-        const found = this.utility.weekDays.find(x => isEqual(x, day));
+        const found = this.utility.weekDays.find((x) => isEqual(x, day));
         if (found && day >= this.utility.aWeekAgoDay) {
           eventDays.push(day);
         }
@@ -118,7 +106,7 @@ export class NotificationDaysExtractor {
       }
     }
 
-    eventDays = eventDays.filter(day => !eventDayFrom || day >= eventDayFrom);
+    eventDays = eventDays.filter((day) => !eventDayFrom || day >= eventDayFrom);
 
     return eventDays;
   }
@@ -138,8 +126,7 @@ export class NotificationDaysExtractor {
 
     if (scheduledDay < subMonths(this.utility.currentDay, 2)) {
       this.logger.warn(
-        '[NotificationDaysExtractor.extractForReminders]: scheduledDay is far in the past: ' +
-          scheduledDay.toString(),
+        `[NotificationDaysExtractor.extractForReminders]: scheduledDay is far in the past: ${scheduledDay.toString()}`,
       );
       return eventDays;
     }
@@ -160,10 +147,7 @@ export class NotificationDaysExtractor {
       }
     }
 
-    if (
-      periodicity === PeriodicityType.Always ||
-      periodicity === PeriodicityType.Daily
-    ) {
+    if (periodicity === PeriodicityType.Always || periodicity === PeriodicityType.Daily) {
       let day = reminderStartDay;
 
       while (day <= dayTo) {
@@ -185,7 +169,7 @@ export class NotificationDaysExtractor {
       let day = reminderStartDay;
 
       while (day <= dayTo) {
-        const found = this.utility.weekDays.find(x => isEqual(x, day));
+        const found = this.utility.weekDays.find((x) => isEqual(x, day));
         if (found && day >= this.utility.aWeekAgoDay) {
           eventDays.push(day);
         }
@@ -202,7 +186,7 @@ export class NotificationDaysExtractor {
       }
     }
 
-    eventDays = eventDays.filter(day => !eventDayFrom || day >= eventDayFrom);
+    eventDays = eventDays.filter((day) => !eventDayFrom || day >= eventDayFrom);
 
     return eventDays;
   }

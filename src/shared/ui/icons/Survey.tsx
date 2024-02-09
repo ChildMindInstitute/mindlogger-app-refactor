@@ -9,69 +9,22 @@ type Props = {
   tokenLogger?: boolean;
 } & AccessibilityProps;
 
-export default ({
-  color,
-  size = 45,
-  tokenLogger = false,
-  accessibilityLabel,
-}: Props) => {
+export default ({ color, size = 45, tokenLogger = false, accessibilityLabel }: Props) => {
   if (tokenLogger) {
     return (
-      <Svg
-        accessibilityLabel={accessibilityLabel}
-        width={size}
-        height={size}
-        viewBox="0 0 52 37"
-        fill="none"
-      >
+      <Svg accessibilityLabel={accessibilityLabel} width={size} height={size} viewBox="0 0 52 37" fill="none">
         <G transform="translate(-31 -847)">
-          <Rect
-            width="40"
-            height="7"
-            rx="3.5"
-            transform="translate(43 862)"
-            fill={color}
-          />
+          <Rect width="40" height="7" rx="3.5" transform="translate(43 862)" fill={color} />
 
-          <Rect
-            width="40"
-            height="7"
-            rx="3.5"
-            transform="translate(43 847)"
-            fill={color}
-          />
+          <Rect width="40" height="7" rx="3.5" transform="translate(43 847)" fill={color} />
 
-          <Rect
-            width="40"
-            height="7"
-            rx="3.5"
-            transform="translate(43 877)"
-            fill={color}
-          />
+          <Rect width="40" height="7" rx="3.5" transform="translate(43 877)" fill={color} />
 
-          <Circle
-            cx="3.5"
-            cy="3.5"
-            r="3.5"
-            transform="translate(31 847)"
-            fill={color}
-          />
+          <Circle cx="3.5" cy="3.5" r="3.5" transform="translate(31 847)" fill={color} />
 
-          <Circle
-            cx="3.5"
-            cy="3.5"
-            r="3.5"
-            transform="translate(31 862)"
-            fill={color}
-          />
+          <Circle cx="3.5" cy="3.5" r="3.5" transform="translate(31 862)" fill={color} />
 
-          <Circle
-            cx="3.5"
-            cy="3.5"
-            r="3.5"
-            transform="translate(31 877)"
-            fill={color}
-          />
+          <Circle cx="3.5" cy="3.5" r="3.5" transform="translate(31 877)" fill={color} />
         </G>
       </Svg>
     );
@@ -85,30 +38,18 @@ export default ({
           fill={color}
         />
 
-        <Path
-          d="M37.2653 30.8915H25.7453V32.8355H37.2653V30.8915Z"
-          fill={color}
-        />
+        <Path d="M37.2653 30.8915H25.7453V32.8355H37.2653V30.8915Z" fill={color} />
 
-        <Path
-          d="M37.2653 26.1935H25.7453V28.1375H37.2653V26.1935Z"
-          fill={color}
-        />
+        <Path d="M37.2653 26.1935H25.7453V28.1375H37.2653V26.1935Z" fill={color} />
 
         <Path
           d="M11.7939 51.4382H22.3539V40.7462H11.7939V51.4382ZM13.7139 42.6902H20.4339V49.4942H13.7139V42.6902Z"
           fill={color}
         />
 
-        <Path
-          d="M37.2653 47.4692H25.7453V49.4132H37.2653V47.4692Z"
-          fill={color}
-        />
+        <Path d="M37.2653 47.4692H25.7453V49.4132H37.2653V47.4692Z" fill={color} />
 
-        <Path
-          d="M37.2653 42.7712H25.7453V44.7152H37.2653V42.7712Z"
-          fill={color}
-        />
+        <Path d="M37.2653 42.7712H25.7453V44.7152H37.2653V42.7712Z" fill={color} />
 
         <Path
           d="M33.911 9.8982H30.0512C30.0512 6.83057 27.5949 4.34354 24.5651 4.34354C21.5353 4.34354 19.079 6.83057 19.079 9.8982H15.3939L14.5478 13.8005H5.84894V60.1927H43.2877V13.8011H34.7565L33.911 9.8982ZM24.5651 7.94059C25.6333 7.94059 26.4985 8.81734 26.4985 9.8982C26.4985 10.9791 25.6326 11.8558 24.5651 11.8558C23.4969 11.8558 22.6317 10.9791 22.6317 9.8982C22.6317 8.81734 23.4969 7.94059 24.5651 7.94059ZM41.3677 15.7451V58.2487H7.76894V15.7451H14.1261L13.5417 18.4401H35.7619L35.1776 15.7451H41.3677Z"

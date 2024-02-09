@@ -1,20 +1,7 @@
-import {
-  addDays,
-  addMilliseconds,
-  isEqual,
-  startOfDay,
-  subDays,
-  subSeconds,
-  subWeeks,
-} from 'date-fns';
+import { addDays, addMilliseconds, isEqual, startOfDay, subDays, subSeconds, subWeeks } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 
-import {
-  AvailabilityType,
-  PeriodicityType,
-  Progress,
-  ProgressPayload,
-} from '@app/abstract/lib';
+import { AvailabilityType, PeriodicityType, Progress, ProgressPayload } from '@app/abstract/lib';
 import {
   DatesFromTo,
   HourMinute,
@@ -64,18 +51,12 @@ export class NotificationUtility {
     return Math.floor(Math.random() * max);
   }
 
-  protected getProgressRecord(
-    entityId: string,
-    eventId: string,
-  ): ProgressPayload | null {
+  protected getProgressRecord(entityId: string, eventId: string): ProgressPayload | null {
     const record = this.progress[this.appletId]?.[entityId]?.[eventId];
     return record ?? null;
   }
 
-  protected getActivityCompletedAt(
-    entityId: string,
-    eventId: string,
-  ): Date | null {
+  protected getActivityCompletedAt(entityId: string, eventId: string): Date | null {
     const progress = this.getProgressRecord(entityId, eventId);
 
     return progress ? progress.endAt : null;
@@ -121,9 +102,7 @@ export class NotificationUtility {
   public isReminderSet(reminder: ReminderSetting | null): boolean {
     return (
       !!reminder &&
-      (reminder.activityIncomplete > 0 ||
-        reminder.reminderTime.hours > 0 ||
-        reminder.reminderTime.minutes > 0)
+      (reminder.activityIncomplete > 0 || reminder.reminderTime.hours > 0 || reminder.reminderTime.minutes > 0)
     );
   }
 
@@ -141,10 +120,7 @@ export class NotificationUtility {
     return result;
   }
 
-  public getFallType(
-    triggerAt: Date,
-    scheduledDay: Date,
-  ): FallType | undefined {
+  public getFallType(triggerAt: Date, scheduledDay: Date): FallType | undefined {
     let fallType: FallType | undefined;
 
     const triggerDay = startOfDay(triggerAt);
@@ -162,11 +138,7 @@ export class NotificationUtility {
     return fallType;
   }
 
-  public getTriggerAtForFixed(
-    scheduledDay: Date,
-    at: HourMinute,
-    isNextDay: boolean,
-  ): Date {
+  public getTriggerAtForFixed(scheduledDay: Date, at: HourMinute, isNextDay: boolean): Date {
     let result = new Date(scheduledDay);
     result.setHours(at.hours);
     result.setMinutes(at.minutes);
@@ -185,11 +157,8 @@ export class NotificationUtility {
   ): Date {
     let result: Date;
 
-    if (
-      bordersType === 'both-in-current-day' ||
-      bordersType === 'both-in-next-day'
-    ) {
-      let diff = getDiff(from, to);
+    if (bordersType === 'both-in-current-day' || bordersType === 'both-in-next-day') {
+      const diff = getDiff(from, to);
 
       const randomValueToAdd = this.getRandomInt(diff);
 
@@ -205,7 +174,7 @@ export class NotificationUtility {
     }
 
     if (bordersType === 'from-current-to-next') {
-      let diff = getDiff(from!, to!);
+      let diff = getDiff(from, to);
 
       diff = getMsFromHours(24) + diff;
 
@@ -223,8 +192,7 @@ export class NotificationUtility {
 
   public isSpreadToNextDay(event: ScheduleEvent): boolean {
     return (
-      event.availability.availabilityType ===
-        AvailabilityType.ScheduledAccess &&
+      event.availability.availabilityType === AvailabilityType.ScheduledAccess &&
       isSourceLess({
         timeSource: event.availability.timeTo!,
         timeTarget: event.availability.timeFrom!,
@@ -239,10 +207,7 @@ export class NotificationUtility {
     });
   }
 
-  public getRandomBorderType(
-    event: ScheduleEvent,
-    setting: NotificationSetting,
-  ): RandomCrossBorderType | null {
+  public getRandomBorderType(event: ScheduleEvent, setting: NotificationSetting): RandomCrossBorderType | null {
     if (
       isSourceLess({
         timeSource: setting.from!,
@@ -285,13 +250,8 @@ export class NotificationUtility {
     return null;
   }
 
-  public getAvailabilityInterval(
-    eventDay: Date,
-    event: ScheduleEvent,
-  ): DatesFromTo {
-    if (
-      event.availability.availabilityType === AvailabilityType.AlwaysAvailable
-    ) {
+  public getAvailabilityInterval(eventDay: Date, event: ScheduleEvent): DatesFromTo {
+    if (event.availability.availabilityType === AvailabilityType.AlwaysAvailable) {
       return { from: new Date(eventDay), to: this.getEndOfDay(eventDay) };
     }
 
@@ -330,37 +290,25 @@ export class NotificationUtility {
       return;
     }
 
-    if (
-      currentInterval.from <= completedAt &&
-      completedAt < currentInterval.to
-    ) {
+    if (currentInterval.from <= completedAt && completedAt < currentInterval.to) {
       notification.isActive = false;
       notification.inactiveReason = InactiveReason.ActivityCompleted;
     }
   }
 
-  public markIfNotificationOutdated(
-    notification: NotificationDescriber,
-    event: ScheduleEvent,
-  ) {
+  public markIfNotificationOutdated(notification: NotificationDescriber, event: ScheduleEvent) {
     if (notification.scheduledAt < this.now.valueOf()) {
       notification.isActive = false;
       notification.inactiveReason = InactiveReason.Outdated;
     }
 
-    if (
-      !!event.availability.startDate &&
-      notification.scheduledAt < event.availability.startDate.valueOf()
-    ) {
+    if (!!event.availability.startDate && notification.scheduledAt < event.availability.startDate.valueOf()) {
       notification.isActive = false;
       notification.inactiveReason = InactiveReason.OutdatedByStartTime;
     }
   }
 
-  public markIfIsOutOfStartEndDatesRange(
-    notification: NotificationDescriber,
-    event: ScheduleEvent,
-  ) {
+  public markIfIsOutOfStartEndDatesRange(notification: NotificationDescriber, event: ScheduleEvent) {
     const startDate = event.availability.startDate;
     const endDate = event.availability.endDate;
 
@@ -401,7 +349,7 @@ export class NotificationUtility {
       activityFlowId,
       entityName: name,
       eventId,
-      type: type,
+      type,
       notificationHeader: name,
       notificationBody: description,
       scheduledAt: triggerAt.valueOf(),

@@ -9,13 +9,7 @@ import { SystemRecord } from '@app/shared/lib/records';
 import { IdentityModel } from '@entities/identity';
 import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
-import {
-  Logger,
-  hasPendingMutations,
-  isAppOnline,
-  useAppDispatch,
-  AnalyticsService,
-} from '@shared/lib';
+import { Logger, hasPendingMutations, isAppOnline, useAppDispatch, AnalyticsService } from '@shared/lib';
 
 import { clearEntityRecordStorages, clearUploadQueueStorage } from '../lib';
 

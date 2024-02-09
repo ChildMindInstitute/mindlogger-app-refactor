@@ -13,18 +13,10 @@ import {
   onNetworkUnavailable,
 } from '@app/shared/lib';
 
-import ProgressDataCollector, {
-  CollectRemoteCompletionsResult,
-  IProgressDataCollector,
-} from './ProgressDataCollector';
+import ProgressDataCollector, { CollectRemoteCompletionsResult, IProgressDataCollector } from './ProgressDataCollector';
 import { IAppletProgressSyncService } from './ProgressSyncService';
-import RefreshAppletService, {
-  IRefreshAppletService,
-} from './RefreshAppletService';
-import RefreshDataCollector, {
-  CollectAllAppletEventsResult,
-  IRefreshDataCollector,
-} from './RefreshDataCollector';
+import RefreshAppletService, { IRefreshAppletService } from './RefreshAppletService';
+import RefreshDataCollector, { CollectAllAppletEventsResult, IRefreshDataCollector } from './RefreshDataCollector';
 import RefreshOptimization from './RefreshOptimization';
 import { onAppletListRefreshError, onAppletRefreshError } from '../../lib';
 
@@ -50,20 +42,12 @@ class RefreshService implements IRefreshService {
   private refreshAppletService: IRefreshAppletService;
   private static mutex: IMutex = Mutex();
 
-  constructor(
-    queryClient: QueryClient,
-    logger: ILogger,
-    appletProgressSyncService: IAppletProgressSyncService,
-  ) {
+  constructor(queryClient: QueryClient, logger: ILogger, appletProgressSyncService: IAppletProgressSyncService) {
     this.queryClient = queryClient;
     this.logger = logger;
     this.refreshDataCollector = new RefreshDataCollector(logger);
     this.progressDataCollector = new ProgressDataCollector(logger);
-    this.refreshAppletService = new RefreshAppletService(
-      queryClient,
-      logger,
-      appletProgressSyncService,
-    );
+    this.refreshAppletService = new RefreshAppletService(queryClient, logger, appletProgressSyncService);
   }
 
   private async resetEventsQuery() {
@@ -100,16 +84,13 @@ class RefreshService implements IRefreshService {
     let appletsResponse: AxiosResponse<AppletsResponse>;
 
     try {
-      this.logger.log(
-        '[RefreshService.refreshInternal]: Getting flat list of applets',
-      );
+      this.logger.log('[RefreshService.refreshInternal]: Getting flat list of applets');
       appletsResponse = await AppletsService.getApplets();
 
       this.queryClient.setQueryData(getAppletsKey(), appletsResponse);
     } catch (error) {
       this.logger.warn(
-        '[RefreshService.refreshInternal]: Error occurred during refresh flat list of applets:\nInternal error:\n\n' +
-          error,
+        `[RefreshService.refreshInternal]: Error occurred during refresh flat list of applets:\nInternal error:\n\n${error}`,
       );
       return emptyResult;
     }
@@ -117,16 +98,13 @@ class RefreshService implements IRefreshService {
     let allAppletEvents: CollectAllAppletEventsResult;
 
     try {
-      this.logger.log(
-        "[RefreshService.refreshInternal]: Getting all applets' events",
-      );
+      this.logger.log("[RefreshService.refreshInternal]: Getting all applets' events");
       allAppletEvents = await this.refreshDataCollector.collectAllAppletEvents(
-        appletsResponse.data.result.map(x => x.id),
+        appletsResponse.data.result.map((x) => x.id),
       );
     } catch (error) {
       this.logger.log(
-        '[RefreshService.refreshInternal]: Error occurred during getting all applet events:\nInternal error:\n\n' +
-          error,
+        `[RefreshService.refreshInternal]: Error occurred during getting all applet events:\nInternal error:\n\n${error}`,
       );
       return emptyResult;
     }
@@ -134,14 +112,11 @@ class RefreshService implements IRefreshService {
     let appletRemoteCompletions: CollectRemoteCompletionsResult;
 
     try {
-      this.logger.log(
-        "[RefreshService.refreshInternal]: Getting all applets' remote completions",
-      );
+      this.logger.log("[RefreshService.refreshInternal]: Getting all applets' remote completions");
       appletRemoteCompletions = await this.progressDataCollector.collect();
     } catch (error) {
       this.logger.log(
-        "[RefreshService.refreshInternal]: Error occurred during getting all applets' remote completions:\nInternal error:\n\n" +
-          error,
+        `[RefreshService.refreshInternal]: Error occurred during getting all applets' remote completions:\nInternal error:\n\n${error}`,
       );
       return emptyResult;
     }
@@ -150,7 +125,7 @@ class RefreshService implements IRefreshService {
 
     const unsuccessfulApplets: UnsuccessfulApplet[] = [];
 
-    for (let appletDto of appletDtos) {
+    for (const appletDto of appletDtos) {
       try {
         await this.refreshAppletService.refreshApplet(
           appletDto,
@@ -160,8 +135,7 @@ class RefreshService implements IRefreshService {
         );
       } catch (error) {
         this.logger.warn(
-          `[RefreshService.refreshInternal]: Error occurred during refresh the applet "${appletDto.displayName}|${appletDto.id}".\nInternal error:\n\n` +
-            error,
+          `[RefreshService.refreshInternal]: Error occurred during refresh the applet "${appletDto.displayName}|${appletDto.id}".\nInternal error:\n\n${error}`,
         );
         unsuccessfulApplets.push({
           appletId: appletDto.id,
@@ -192,9 +166,7 @@ class RefreshService implements IRefreshService {
     const isOnline = await isAppOnline();
 
     if (!isOnline) {
-      this.logger.log(
-        '[RefreshService.refresh]: Stopped to work due to Offline',
-      );
+      this.logger.log('[RefreshService.refresh]: Stopped to work due to Offline');
       await onNetworkUnavailable();
       return;
     }
@@ -214,17 +186,12 @@ class RefreshService implements IRefreshService {
       }
 
       if (!refreshResult.success && refreshResult.unsuccessfulApplets.length) {
-        onAppletListRefreshError(
-          refreshResult.unsuccessfulApplets.map(x => x.appletName),
-        );
+        onAppletListRefreshError(refreshResult.unsuccessfulApplets.map((x) => x.appletName));
       }
 
       this.logger.log('[RefreshService.refresh]: Completed');
     } catch (error) {
-      this.logger.warn(
-        '[RefreshService.process]: Error occurred:\nInternal error:\n\n' +
-          error!.toString(),
-      );
+      this.logger.warn(`[RefreshService.process]: Error occurred:\nInternal error:\n\n${error}`);
     } finally {
       RefreshService.mutex.release();
     }

@@ -98,10 +98,7 @@ describe('Logger', () => {
   });
 
   it('should return file information for existing log files', async () => {
-    (FileLogger.getLogFilePaths as jest.Mock).mockReturnValue([
-      '/path/to/file1.log',
-      '/path/to/file2.log',
-    ]);
+    (FileLogger.getLogFilePaths as jest.Mock).mockReturnValue(['/path/to/file1.log', '/path/to/file2.log']);
 
     (FileSystem.stat as jest.Mock).mockImplementation(async (path: string) => {
       if (path === '/path/to/file1.log') {

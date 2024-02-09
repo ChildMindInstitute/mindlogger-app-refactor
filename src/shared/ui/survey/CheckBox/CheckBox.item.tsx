@@ -41,13 +41,9 @@ const CheckBoxItem: FC<Props> = ({
   textReplacer,
   position,
 }) => {
-  const invertedColor =
-    setPalette && color ? invertColor(color) : colors.primary;
+  const invertedColor = setPalette && color ? invertColor(color) : colors.primary;
 
-  const tooltipText = useMemo(
-    () => textReplacer(tooltip || ''),
-    [textReplacer, tooltip],
-  );
+  const tooltipText = useMemo(() => textReplacer(tooltip || ''), [textReplacer, tooltip]);
 
   const name = useMemo(() => textReplacer(text), [textReplacer, text]);
 
@@ -69,10 +65,7 @@ const CheckBoxItem: FC<Props> = ({
         {tooltipAvailable && tooltipContainerVisible && (
           <CheckboxTooltipContainer>
             {!!tooltip && (
-              <Tooltip
-                markdown={tooltipText}
-                accessibilityLabel="checkbox-tooltip-view"
-              >
+              <Tooltip markdown={tooltipText} accessibilityLabel="checkbox-tooltip-view">
                 <QuestionTooltipIcon color={invertedColor} size={25} />
               </Tooltip>
             )}

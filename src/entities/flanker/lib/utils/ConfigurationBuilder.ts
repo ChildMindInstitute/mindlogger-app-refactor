@@ -17,17 +17,11 @@ import {
 } from '../types';
 
 type ConfigurationBuilder = {
-  buildForWebView: (
-    configuration: FlankerItemSettings,
-  ) => FlankerWebViewConfiguration;
+  buildForWebView: (configuration: FlankerItemSettings) => FlankerWebViewConfiguration;
 
-  buildForNativeIOS: (
-    configuration: FlankerItemSettings,
-  ) => FlankerNativeIOSConfiguration;
+  buildForNativeIOS: (configuration: FlankerItemSettings) => FlankerNativeIOSConfiguration;
 
-  parseToWebViewConfigString: (
-    testConfiguration: FlankerWebViewConfiguration,
-  ) => string;
+  parseToWebViewConfigString: (testConfiguration: FlankerWebViewConfiguration) => string;
 };
 
 const createConfigurationBuilder = (): ConfigurationBuilder => {
@@ -38,11 +32,7 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
     return alt;
   };
 
-  const getImageForWebView = (
-    image: StringOrNull,
-    alt: string,
-    isButton: boolean = false,
-  ): string => {
+  const getImageForWebView = (image: StringOrNull, alt: string, isButton: boolean = false): string => {
     if (image) {
       return `<img src="${image}" alt="${alt}">`;
     }
@@ -52,11 +42,8 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
     return alt;
   };
 
-  const getScreens = (
-    stimulusTrials: StimulusConfiguration[],
-    isWebView: boolean,
-  ): Array<StimulusScreen> => {
-    return stimulusTrials.map<StimulusScreen>(stimulusConfig => ({
+  const getScreens = (stimulusTrials: StimulusConfiguration[], isWebView: boolean): Array<StimulusScreen> => {
+    return stimulusTrials.map<StimulusScreen>((stimulusConfig) => ({
       id: stimulusConfig.id,
       stimulus: {
         en: !isWebView
@@ -64,10 +51,7 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
           : getImageForWebView(stimulusConfig.image, stimulusConfig.text),
       },
       correctChoice: stimulusConfig.value === null ? -1 : stimulusConfig.value,
-      weight:
-        stimulusConfig.weight === null || stimulusConfig.weight === undefined
-          ? 1
-          : stimulusConfig.weight,
+      weight: stimulusConfig.weight === null || stimulusConfig.weight === undefined ? 1 : stimulusConfig.weight,
     }));
   };
 
@@ -80,7 +64,7 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
   ): Array<TestTrial> => {
     const trials: TestTrial[] = [];
 
-    const choices: TestChoice[] = buttons.map(button => ({
+    const choices: TestChoice[] = buttons.map((button) => ({
       value: button.value,
       name: {
         en: !isWebView
@@ -90,13 +74,10 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
     }));
 
     for (const block of blocks) {
-      const order =
-        samplingMethod === 'randomize-order'
-          ? shuffle([...block.order])
-          : block.order;
+      const order = samplingMethod === 'randomize-order' ? shuffle([...block.order]) : block.order;
 
       for (const stimulusId of order) {
-        const screen = screens.find(s => s.id === stimulusId);
+        const screen = screens.find((s) => s.id === stimulusId);
         if (screen) {
           trials.push({
             ...screen,
@@ -141,19 +122,10 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
     isWebView: boolean,
   ): FlankerNativeIOSConfiguration | FlankerWebViewConfiguration => {
     const fixation: string = isWebView
-      ? getImageForWebView(
-          configuration.fixationScreen.image,
-          configuration.fixationScreen.value,
-        )
-      : getImageForIOSNative(
-          configuration.fixationScreen.image,
-          configuration.fixationScreen.value,
-        );
+      ? getImageForWebView(configuration.fixationScreen.image, configuration.fixationScreen.value)
+      : getImageForIOSNative(configuration.fixationScreen.image, configuration.fixationScreen.value);
 
-    const screens: StimulusScreen[] = getScreens(
-      configuration.stimulusTrials,
-      isWebView,
-    );
+    const screens: StimulusScreen[] = getScreens(configuration.stimulusTrials, isWebView);
 
     const testTrials: TestTrial[] = getTestTrials(
       screens,
@@ -163,50 +135,41 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
       isWebView,
     );
 
-    const continueText = [
-      `Press the button below to ${
-        configuration.isLastTest ? 'finish' : 'continue'
-      }.`,
-    ];
+    const continueText = [`Press the button below to ${configuration.isLastTest ? 'finish' : 'continue'}.`];
     const restartText = [
       'Remember to respond only to the central arrow.',
       'Press the button below to end current block and restart.',
     ];
 
-    const result: FlankerNativeIOSConfiguration | FlankerWebViewConfiguration =
-      {
-        trials: testTrials,
-        fixationDuration: configuration.fixationDuration,
-        fixation,
-        showFixation: configuration.showFixation && fixation.length > 0,
-        showFeedback: configuration.showFeedback,
-        showResults: configuration.showResults,
-        trialDuration: configuration.trialDuration || 1500,
-        samplingMethod: 'fixed-order',
-        samplingSize: configuration.sampleSize,
-        buttonLabel: configuration.nextButton,
-        minimumAccuracy: configuration.minimumAccuracy || 0,
-        continueText,
-        restartText: configuration.isLastPractice ? continueText : restartText,
-        buttons: configuration.buttons.map(x => ({
-          image: x.image,
-          name: { en: x.text },
-          value: x.value,
-        })),
-      };
+    const result: FlankerNativeIOSConfiguration | FlankerWebViewConfiguration = {
+      trials: testTrials,
+      fixationDuration: configuration.fixationDuration,
+      fixation,
+      showFixation: configuration.showFixation && fixation.length > 0,
+      showFeedback: configuration.showFeedback,
+      showResults: configuration.showResults,
+      trialDuration: configuration.trialDuration || 1500,
+      samplingMethod: 'fixed-order',
+      samplingSize: configuration.sampleSize,
+      buttonLabel: configuration.nextButton,
+      minimumAccuracy: configuration.minimumAccuracy || 0,
+      continueText,
+      restartText: configuration.isLastPractice ? continueText : restartText,
+      buttons: configuration.buttons.map((x) => ({
+        image: x.image,
+        name: { en: x.text },
+        value: x.value,
+      })),
+    };
 
     return result;
   };
 
-  const buildForNativeIOS = (
-    configuration: FlankerItemSettings,
-  ): FlankerNativeIOSConfiguration => {
+  const buildForNativeIOS = (configuration: FlankerItemSettings): FlankerNativeIOSConfiguration => {
     return build(configuration, false);
   };
 
-  const buildForWebView = (
-    configuration: FlankerItemSettings,
-  ): FlankerWebViewConfiguration => {
+  const buildForWebView = (configuration: FlankerItemSettings): FlankerWebViewConfiguration => {
     return build(configuration, true);
   };
 

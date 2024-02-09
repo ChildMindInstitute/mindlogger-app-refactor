@@ -4,10 +4,7 @@ import { ONE_MINUTE } from '../constants';
 class AppClockTimer extends TimerBase {
   onMinutePass: (...args: any[]) => unknown;
 
-  constructor(
-    onMinutePass: (...args: any[]) => unknown,
-    startImmediately: boolean,
-  ) {
+  constructor(onMinutePass: (...args: any[]) => unknown, startImmediately: boolean) {
     super();
     this.onMinutePass = onMinutePass;
 

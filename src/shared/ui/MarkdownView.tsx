@@ -2,10 +2,7 @@ import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
 import markdownContainer from 'markdown-it-container';
-import Markdown, {
-  RenderRules,
-  MarkdownIt,
-} from 'react-native-markdown-display';
+import Markdown, { RenderRules, MarkdownIt } from 'react-native-markdown-display';
 
 import { preprocessImageLinks } from '../lib';
 
@@ -33,12 +30,7 @@ declare module 'react-native-markdown-display' {
 
 const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
   return (
-    <Markdown
-      rules={rules}
-      mergeStyle
-      markdownit={markdownItInstance}
-      style={markdownStyle}
-    >
+    <Markdown rules={rules} mergeStyle markdownit={markdownItInstance} style={markdownStyle}>
       {preprocessImageLinks(content)}
     </Markdown>
   );

@@ -1,12 +1,7 @@
 import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import {
-  Asset,
-  ImagePickerResponse,
-  launchCamera,
-  launchImageLibrary,
-} from 'react-native-image-picker';
+import { Asset, ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 import {
   colors,
@@ -81,10 +76,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
       if (isPermissionAllowed) {
         selectImage();
       } else {
-        await handleBlockedPermissions(
-          t('permissions:gallery'),
-          t('media:alert_message'),
-        );
+        await handleBlockedPermissions(t('permissions:gallery'), t('media:alert_message'));
       }
     }
   };
@@ -98,10 +90,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
       if (isPermissionAllowed) {
         takePhoto();
       } else {
-        await handleBlockedPermissions(
-          t('permissions:camera'),
-          t('media:alert_message'),
-        );
+        await handleBlockedPermissions(t('permissions:camera'), t('media:alert_message'));
       }
     }
   };

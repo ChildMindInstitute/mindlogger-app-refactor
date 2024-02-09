@@ -7,10 +7,7 @@ export type BackgroundTaskOptions = {
 };
 
 function BackgroundWorkerBuilder() {
-  function setTask(
-    callback: () => Promise<unknown>,
-    options: BackgroundTaskOptions = {},
-  ) {
+  function setTask(callback: () => Promise<unknown>, options: BackgroundTaskOptions = {}) {
     const { intervalInMinutes } = options;
 
     function onTimeout(taskId: string) {
@@ -19,13 +16,12 @@ function BackgroundWorkerBuilder() {
 
     BackgroundFetch.configure(
       {
-        minimumFetchInterval:
-          intervalInMinutes ?? MINIMUM_ALLOWED_BG_TASK_INTERVAL_MINUTES,
+        minimumFetchInterval: intervalInMinutes ?? MINIMUM_ALLOWED_BG_TASK_INTERVAL_MINUTES,
         stopOnTerminate: false,
         startOnBoot: true,
         enableHeadless: true,
       },
-      async taskId => {
+      async (taskId) => {
         await Promise.resolve(callback());
 
         BackgroundFetch.finish(taskId);

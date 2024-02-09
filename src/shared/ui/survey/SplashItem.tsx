@@ -16,14 +16,7 @@ const styles = StyleSheet.create({
 const SplashItem: FC<Props> = ({ config }) => {
   const { imageUrl } = config;
 
-  return (
-    <CachedImage
-      accessibilityLabel="splash-image"
-      resizeMode="contain"
-      style={styles.image}
-      source={imageUrl}
-    />
-  );
+  return <CachedImage accessibilityLabel="splash-image" resizeMode="contain" style={styles.image} source={imageUrl} />;
 };
 
 export default SplashItem;

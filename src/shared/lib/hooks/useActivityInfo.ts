@@ -11,10 +11,7 @@ const useActivityInfo = () => {
 
   const getName = useCallback(
     (id: string) => {
-      const activityResponse = getDataFromQuery<ActivityResponse>(
-        getActivityDetailsKey(id),
-        queryClient,
-      );
+      const activityResponse = getDataFromQuery<ActivityResponse>(getActivityDetailsKey(id), queryClient);
       return activityResponse?.result.name;
     },
     [queryClient],

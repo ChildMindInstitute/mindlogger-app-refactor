@@ -1,10 +1,5 @@
 import { ReactNode, FC } from 'react';
-import {
-  Alert,
-  TouchableOpacity,
-  StyleSheet,
-  useWindowDimensions,
-} from 'react-native';
+import { Alert, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
@@ -39,14 +34,7 @@ const ContentWrapper: FC<BoxProps> = styled(Center, {
   borderRadius: 15,
 });
 
-const MediaInput: FC<Props> = ({
-  children,
-  mode,
-  onOpenCamera,
-  onShowMediaLibrary,
-  uploadIcon,
-  borderColor,
-}) => {
+const MediaInput: FC<Props> = ({ children, mode, onOpenCamera, onShowMediaLibrary, uploadIcon, borderColor }) => {
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowDimensions();
 
@@ -64,17 +52,9 @@ const MediaInput: FC<Props> = ({
   };
 
   return (
-    <ContentWrapper
-      accessibilityLabel="media-input-container"
-      borderColor={borderColor}
-      height={windowWidth * 0.85}
-    >
+    <ContentWrapper accessibilityLabel="media-input-container" borderColor={borderColor} height={windowWidth * 0.85}>
       {children || (
-        <TouchableOpacity
-          accessibilityLabel="media-input-btn"
-          onPress={onUploadPress}
-          style={styles.touchable}
-        >
+        <TouchableOpacity accessibilityLabel="media-input-btn" onPress={onUploadPress} style={styles.touchable}>
           <Box>{uploadIcon}</Box>
         </TouchableOpacity>
       )}

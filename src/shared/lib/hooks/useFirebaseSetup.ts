@@ -18,17 +18,13 @@ async function useFirebaseSetup(callbacks: Callbacks) {
 
         callbacksRef.current.onFCMTokenCreated(fcmToken);
       } catch (error) {
-        console.warn(
-          'The app is running on an emulator. Hence, it cannot receive remote notifications',
-        );
+        console.warn('The app is running on an emulator. Hence, it cannot receive remote notifications');
       }
     }
 
     fetchToken();
 
-    return messaging().onTokenRefresh(token =>
-      callbacksRef.current.onFCMTokenCreated(token),
-    );
+    return messaging().onTokenRefresh((token) => callbacksRef.current.onFCMTokenCreated(token));
   }, []);
 }
 

@@ -7,12 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { UploadRetryBanner } from '@app/entities/activity';
 import { IdentityModel } from '@app/entities/identity';
 import { LogoutRowButton } from '@features/logout';
-import {
-  SystemRecord,
-  colors,
-  getStringHashCode,
-  useAppSelector,
-} from '@shared/lib';
+import { SystemRecord, colors, getStringHashCode, useAppSelector } from '@shared/lib';
 import { YStack, Box, RowButton, UserIcon, Text } from '@shared/ui';
 
 const SettingsScreen: FC = () => {
@@ -37,9 +32,7 @@ const SettingsScreen: FC = () => {
   const hashedDeviceId: string = useMemo(() => {
     const deviceId = SystemRecord.getDeviceId()!;
 
-    const hashed: string = !deviceId
-      ? 'undefined'
-      : getStringHashCode(deviceId).toString();
+    const hashed: string = !deviceId ? 'undefined' : getStringHashCode(deviceId).toString();
     return hashed;
   }, []);
 
@@ -55,9 +48,7 @@ const SettingsScreen: FC = () => {
             <Text accessibilityLabel="account_name">{userName}</Text>
             <Text accessibilityLabel="account_email">{userEmail}</Text>
 
-            <Text accessibilityLabel="account_device_id">{`${t(
-              'about:device_id',
-            )}: ${hashedDeviceId}`}</Text>
+            <Text accessibilityLabel="account_device_id">{`${t('about:device_id')}: ${hashedDeviceId}`}</Text>
           </YStack>
 
           <RowButton

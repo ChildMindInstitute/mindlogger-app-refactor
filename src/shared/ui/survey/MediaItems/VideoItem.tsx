@@ -2,11 +2,7 @@ import { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
-import {
-  ImagePickerResponse,
-  launchCamera,
-  launchImageLibrary,
-} from 'react-native-image-picker';
+import { ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 import {
   colors,
@@ -78,10 +74,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
       if (isPermissionAllowed) {
         selectVideo();
       } else {
-        await handleBlockedPermissions(
-          t('permissions:gallery'),
-          t('media:alert_message'),
-        );
+        await handleBlockedPermissions(t('permissions:gallery'), t('media:alert_message'));
       }
     }
   };
@@ -95,10 +88,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
       if (isPermissionAllowed) {
         recordVideo();
       } else {
-        await handleBlockedPermissions(
-          t('permissions:camera'),
-          t('media:alert_message'),
-        );
+        await handleBlockedPermissions(t('permissions:camera'), t('media:alert_message'));
       }
     }
   };

@@ -40,8 +40,7 @@ describe('Image URL Collection Functions', () => {
     theme: {
       name: 'Default',
       logo: 'https://media-dev.cmiml.net/mindlogger/content/some-logo.png',
-      backgroundImage:
-        'https://media-dev.cmiml.net/mindlogger/content/some-backgroundImage.png',
+      backgroundImage: 'https://media-dev.cmiml.net/mindlogger/content/some-backgroundImage.png',
       primaryColor: '#0067a0',
       secondaryColor: '#fff',
       tertiaryColor: '#404040',
@@ -494,8 +493,7 @@ describe('Image URL Collection Functions', () => {
       id: '9b023afd-e5f9-403c-b154-fc8f35fcf3ab',
       name: 'Default',
       logo: 'https://media-dev.cmiml.net/mindlogger/content/some-logo.png',
-      backgroundImage:
-        'https://media-dev.cmiml.net/mindlogger/content/some-backgroundImage.png',
+      backgroundImage: 'https://media-dev.cmiml.net/mindlogger/content/some-backgroundImage.png',
       primaryColor: '#0067a0',
       secondaryColor: '#fff',
       tertiaryColor: '#404040',

@@ -4,11 +4,7 @@ import { Answers, PipelineItem } from '../../lib';
 import { IScoresCalculator, ScoresCalculator } from '../ScoresCalculator';
 
 describe('ScoresCalculator: test calculate', () => {
-  const mockPipelineItems = [
-    {} as PipelineItem,
-    {} as PipelineItem,
-    {} as PipelineItem,
-  ];
+  const mockPipelineItems = [{} as PipelineItem, {} as PipelineItem, {} as PipelineItem];
   const mockAnswers = {} as Answers;
 
   let calculator: IScoresCalculator;
@@ -18,26 +14,18 @@ describe('ScoresCalculator: test calculate', () => {
   });
 
   it('Should return null when collectActualScores returns arrays with nulls', () => {
-    const mockCollectActualScores = jest
-      .fn()
-      .mockReturnValue([null, null, null]);
+    const mockCollectActualScores = jest.fn().mockReturnValue([null, null, null]);
     //@ts-expect-error
     calculator.collectActualScores = mockCollectActualScores;
 
-    const result = calculator.calculate(
-      mockPipelineItems,
-      mockAnswers,
-      {} as Report,
-    );
+    const result = calculator.calculate(mockPipelineItems, mockAnswers, {} as Report);
 
     expect(result).toEqual(null);
     expect(mockCollectActualScores).toBeCalledTimes(1);
   });
 
   it('Should return NaN when collectActualScores returns arrays with nulls and undefined and calculationType is sum', () => {
-    const mockCollectActualScores = jest
-      .fn()
-      .mockReturnValue([null, undefined, null]);
+    const mockCollectActualScores = jest.fn().mockReturnValue([null, undefined, null]);
     //@ts-expect-error
     calculator.collectActualScores = mockCollectActualScores;
 
@@ -90,9 +78,7 @@ describe('ScoresCalculator: test calculate', () => {
     calculator.collectActualScores = jest.fn().mockReturnValue([1, 3, 8]);
 
     //@ts-expect-error
-    calculator.collectMaxScores = jest
-      .fn()
-      .mockReturnValue([2, null, undefined]);
+    calculator.collectMaxScores = jest.fn().mockReturnValue([2, null, undefined]);
 
     const result = calculator.calculate(mockPipelineItems, mockAnswers, {
       calculationType: 'percentage',

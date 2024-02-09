@@ -31,16 +31,13 @@ function appletAnalyticsService() {
   return {
     async getActivityAnalytics(request: ActivityAnalyticsRequest) {
       const apiCall = () =>
-        httpService.get<ActivityAnalyticsResponse>(
-          `/answers/applet/${request.appletId}/data`,
-          {
-            params: {
-              fromDate: request.fromDate,
-              activitiesLastVersion: request.isLastVersion,
-              respondentIds: request.respondentIds,
-            },
+        httpService.get<ActivityAnalyticsResponse>(`/answers/applet/${request.appletId}/data`, {
+          params: {
+            fromDate: request.fromDate,
+            activitiesLastVersion: request.isLastVersion,
+            respondentIds: request.respondentIds,
           },
-        );
+        });
       return withDataExtraction(apiCall)();
     },
   };

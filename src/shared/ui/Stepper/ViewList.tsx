@@ -17,12 +17,7 @@ function ViewList({ renderItem }: Props) {
   const ref = useContext(RefContext);
 
   return (
-    <ViewSlider
-      viewCount={stepsCount}
-      step={getCurrentStep()}
-      ref={ref}
-      renderView={item => renderItem(item)}
-    />
+    <ViewSlider viewCount={stepsCount} step={getCurrentStep()} ref={ref} renderView={(item) => renderItem(item)} />
   );
 }
 

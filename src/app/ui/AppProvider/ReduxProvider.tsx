@@ -1,11 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 
-import {
-  AnyAction,
-  combineReducers,
-  configureStore,
-  ThunkAction,
-} from '@reduxjs/toolkit';
+import { AnyAction, combineReducers, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -20,7 +15,7 @@ const storage = createAsyncStorage('redux-storage');
 export const persistConfig = {
   key: 'root',
   throttle: 1000,
-  storage: storage,
+  storage,
 };
 
 const rootReducer = (state: any, action: AnyAction) => {
@@ -37,14 +32,11 @@ const rootReducer = (state: any, action: AnyAction) => {
   return reducer(state, action);
 };
 
-const persistedReducer = persistReducer(
-  persistConfig,
-  rootReducer,
-) as typeof rootReducer;
+const persistedReducer = persistReducer(persistConfig, rootReducer) as typeof rootReducer;
 
 export const reduxStore = configureStore({
   reducer: persistedReducer,
-  middleware: getDefaultMiddleware => {
+  middleware: (getDefaultMiddleware) => {
     const middlewares = getDefaultMiddleware({ serializableCheck: false });
     if (__DEV__) {
       const createDebugger = require('redux-flipper').default;

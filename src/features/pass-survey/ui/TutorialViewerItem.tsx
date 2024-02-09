@@ -13,16 +13,14 @@ export type TutorialViewerRef = {
   back: () => boolean;
 };
 
-const TutorialViewerItem = forwardRef<TutorialViewerRef, Props>(
-  (props: Props, ref) => {
-    switch (props.type) {
-      case 'AbTutorial':
-        return <AbTutorialViewer ref={ref} {...props} />;
+const TutorialViewerItem = forwardRef<TutorialViewerRef, Props>((props: Props, ref) => {
+  switch (props.type) {
+    case 'AbTutorial':
+      return <AbTutorialViewer ref={ref} {...props} />;
 
-      default:
-        return <></>;
-    }
-  },
-);
+    default:
+      return <></>;
+  }
+});
 
 export default TutorialViewerItem;

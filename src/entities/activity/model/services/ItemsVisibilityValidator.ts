@@ -9,18 +9,15 @@ type ItemsVisibilityValidator = {
 
 const createItemsVisibilityValidator = (): ItemsVisibilityValidator => {
   const check = (activity: ActivityDetails): boolean => {
-    return activity.items.every(item => {
+    return activity.items.every((item) => {
       return item.isHidden;
     });
   };
 
-  function hasActivityWithHiddenAllItems(
-    lookupInput: LookupEntityInput,
-  ): boolean {
-    const activitiesToLookup: ActivityDetails[] =
-      EntityActivitiesCollector.collect(lookupInput);
+  function hasActivityWithHiddenAllItems(lookupInput: LookupEntityInput): boolean {
+    const activitiesToLookup: ActivityDetails[] = EntityActivitiesCollector.collect(lookupInput);
 
-    return activitiesToLookup.some(activity => {
+    return activitiesToLookup.some((activity) => {
       return check(activity);
     });
   }

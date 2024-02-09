@@ -15,8 +15,7 @@ const useUndoClicked = (isCurrentValueEmpty: boolean): Result => {
 
   const reRender = useForceUpdate();
 
-  undoClickedRef.current =
-    isCurrentValueEmpty && isPreviousValueEmpty === false;
+  undoClickedRef.current = isCurrentValueEmpty && isPreviousValueEmpty === false;
 
   const undoClicked = () => undoClickedRef.current;
 

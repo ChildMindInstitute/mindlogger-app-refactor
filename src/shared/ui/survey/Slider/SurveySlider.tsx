@@ -9,12 +9,7 @@ import { SliderProps } from './types';
 
 const THUMB_SIZE = 22;
 
-const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
-  config,
-  accessibilityLabel,
-  sliderLabel,
-  ...props
-}) => {
+const SurveySlider: FC<SliderProps & AccessibilityProps> = ({ config, accessibilityLabel, sliderLabel, ...props }) => {
   const {
     leftTitle,
     rightTitle,
@@ -43,10 +38,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
     onChange(roundedValue);
   };
 
-  const items = Array.from(
-    { length: maxValue - minValue + 1 },
-    (_, index) => index + minValue,
-  );
+  const items = Array.from({ length: maxValue - minValue + 1 }, (_, index) => index + minValue);
 
   return (
     <YStack>
@@ -66,7 +58,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
       </Box>
 
       <XStack px={11} jc="space-between" mt={9}>
-        {items.map(value => {
+        {items.map((value) => {
           return (
             <Box key={`tick-${value}`} w={THUMB_SIZE} ai="center">
               {showTickMarks && <Box w={1} bg="$black" h={8} />}
@@ -98,11 +90,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
           </Box>
 
           {leftTitle ? (
-            <Text
-              accessibilityLabel={addRightPartTo('min-label')}
-              textAlign="center"
-              data-test="slide-left-title"
-            >
+            <Text accessibilityLabel={addRightPartTo('min-label')} textAlign="center" data-test="slide-left-title">
               {leftTitle}
             </Text>
           ) : null}
@@ -124,11 +112,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
           </Box>
 
           {rightTitle ? (
-            <Text
-              accessibilityLabel={addRightPartTo('max-label')}
-              data-test="slide-right-title"
-              textAlign="center"
-            >
+            <Text accessibilityLabel={addRightPartTo('max-label')} data-test="slide-right-title" textAlign="center">
               {rightTitle}
             </Text>
           ) : null}

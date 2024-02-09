@@ -9,13 +9,8 @@ type Props = {
   rightIcon?: ElementType;
 } & BoxProps;
 
-const RowButton: FC<Props> = props => {
-  const {
-    onPress,
-    title,
-    rightIcon: RightIcon = ArrowRightIcon,
-    ...boxProps
-  } = props;
+const RowButton: FC<Props> = (props) => {
+  const { onPress, title, rightIcon: RightIcon = ArrowRightIcon, ...boxProps } = props;
 
   return (
     <XStack

@@ -5,12 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { EntityType } from '@app/abstract/lib';
-import {
-  ActivityCard,
-  ActivityModel,
-  ActivityListItem,
-  MediaFilesCleaner,
-} from '@entities/activity';
+import { ActivityCard, ActivityModel, ActivityListItem, MediaFilesCleaner } from '@entities/activity';
 import { AppletModel, clearStorageRecords } from '@entities/applet';
 import { Box, Text, YStack } from '@shared/ui';
 
@@ -27,8 +22,8 @@ function ActivitySectionList({ appletId, groups }: Props) {
 
   const sections = useMemo(() => {
     return groups
-      .filter(g => g.activities.length)
-      .map(group => {
+      .filter((g) => g.activities.length)
+      .map((group) => {
         return {
           data: group.activities,
           key: t(group.name),
@@ -39,15 +34,10 @@ function ActivitySectionList({ appletId, groups }: Props) {
   const { startFlow, startActivity } = AppletModel.useStartEntity({
     hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
     cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
-    hasActivityWithHiddenAllItems:
-      ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
+    hasActivityWithHiddenAllItems: ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
   });
 
-  function navigateSurvey(
-    entityId: string,
-    entityType: EntityType,
-    eventId: string,
-  ) {
+  function navigateSurvey(entityId: string, entityType: EntityType, eventId: string) {
     navigate('InProgressActivity', {
       appletId,
       entityId,
@@ -56,56 +46,38 @@ function ActivitySectionList({ appletId, groups }: Props) {
     });
   }
 
-  const startActivityOrFlow = ({
-    activityId,
-    eventId,
-    flowId,
-    isTimerElapsed,
-    name,
-  }: ActivityListItem) => {
+  const startActivityOrFlow = ({ activityId, eventId, flowId, isTimerElapsed, name }: ActivityListItem) => {
     if (flowId) {
-      startFlow(appletId, flowId, eventId, name, isTimerElapsed).then(
-        result => {
-          if (
-            result.cannotBeStartedDueToMediaFound ||
-            result.cannotBeStartedDueToAllItemsHidden
-          ) {
-            return;
-          }
+      startFlow(appletId, flowId, eventId, name, isTimerElapsed).then((result) => {
+        if (result.cannotBeStartedDueToMediaFound || result.cannotBeStartedDueToAllItemsHidden) {
+          return;
+        }
 
-          if (result.startedFromScratch) {
-            clearStorageRecords.byEventId(eventId);
-          }
+        if (result.startedFromScratch) {
+          clearStorageRecords.byEventId(eventId);
+        }
 
-          navigateSurvey(flowId, 'flow', eventId);
-        },
-      );
+        navigateSurvey(flowId, 'flow', eventId);
+      });
     } else {
-      startActivity(appletId, activityId, eventId, name, isTimerElapsed).then(
-        result => {
-          if (
-            result.cannotBeStartedDueToMediaFound ||
-            result.cannotBeStartedDueToAllItemsHidden
-          ) {
-            return;
-          }
+      startActivity(appletId, activityId, eventId, name, isTimerElapsed).then((result) => {
+        if (result.cannotBeStartedDueToMediaFound || result.cannotBeStartedDueToAllItemsHidden) {
+          return;
+        }
 
-          if (result.startedFromScratch) {
-            clearStorageRecords.byEventId(eventId);
-          }
+        if (result.startedFromScratch) {
+          clearStorageRecords.byEventId(eventId);
+        }
 
-          navigateSurvey(activityId, 'regular', eventId);
-        },
-      );
+        navigateSurvey(activityId, 'regular', eventId);
+      });
     }
   };
 
   return (
     <SectionList
       sections={sections}
-      renderSectionHeader={({ section }) => (
-        <SectionHeader>{section.key}</SectionHeader>
-      )}
+      renderSectionHeader={({ section }) => <SectionHeader>{section.key}</SectionHeader>}
       renderItem={({ item }) => (
         <ActivityCard
           activity={item}

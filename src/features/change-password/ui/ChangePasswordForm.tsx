@@ -5,12 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useToast } from 'react-native-toast-notifications';
 
 import { useChangePasswordMutation } from '@app/entities/identity';
-import {
-  colors,
-  executeIfOnline,
-  useAppForm,
-  useFormChanges,
-} from '@shared/lib';
+import { colors, executeIfOnline, useAppForm, useFormChanges } from '@shared/lib';
 import { SubmitButton, YStack, Box, BoxProps } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
@@ -20,7 +15,7 @@ type Props = BoxProps & {
   onChangePasswordSuccess: () => void;
 };
 
-const ChangePasswordForm: FC<Props> = props => {
+const ChangePasswordForm: FC<Props> = (props) => {
   const { t } = useTranslation();
   const toast = useToast();
 
@@ -41,7 +36,7 @@ const ChangePasswordForm: FC<Props> = props => {
       prev_password: '',
       password: '',
     },
-    onSubmitSuccess: data => {
+    onSubmitSuccess: (data) => {
       executeIfOnline(() => changePassword(data));
     },
   });

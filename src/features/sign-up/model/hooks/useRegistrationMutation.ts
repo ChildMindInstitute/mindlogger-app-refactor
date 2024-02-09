@@ -1,13 +1,6 @@
-import {
-  UserInfoRecord,
-  UserPrivateKeyRecord,
-} from '@app/entities/identity/lib';
+import { UserInfoRecord, UserPrivateKeyRecord } from '@app/entities/identity/lib';
 import { SystemRecord } from '@app/shared/lib/records';
-import {
-  useLoginMutation,
-  useSignUpMutation,
-  IdentityModel,
-} from '@entities/identity';
+import { useLoginMutation, useSignUpMutation, IdentityModel } from '@entities/identity';
 import { SessionModel } from '@entities/session';
 import { AnalyticsService, MixEvents, useAppDispatch } from '@shared/lib';
 import { encryption } from '@shared/lib';
@@ -19,9 +12,7 @@ type UseRegistrationReturn = {
   reset: ReturnType<typeof useSignUpMutation>['reset'];
 };
 
-export const useRegistrationMutation = (
-  onSuccess: () => void,
-): UseRegistrationReturn => {
+export const useRegistrationMutation = (onSuccess: () => void): UseRegistrationReturn => {
   const dispatch = useAppDispatch();
 
   const {

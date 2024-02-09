@@ -28,19 +28,12 @@ const Tooltip: FC<TooltipProps & AccessibilityProps> = ({
     <Popover
       popoverStyle={styles.popover}
       from={
-        <YStack
-          hitSlop={40}
-          accessibilityLabel={triggerAccessibilityLabel ?? 'tooltip-button'}
-        >
+        <YStack hitSlop={40} accessibilityLabel={triggerAccessibilityLabel ?? 'tooltip-button'}>
           {children}
         </YStack>
       }
     >
-      <ScrollView
-        accessibilityLabel={accessibilityLabel}
-        flex={1}
-        maxHeight={300}
-      >
+      <ScrollView accessibilityLabel={accessibilityLabel} flex={1} maxHeight={300}>
         <MarkdownView
           content={markdown}
           rules={markdownRules}

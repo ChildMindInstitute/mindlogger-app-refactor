@@ -10,9 +10,7 @@ export const parseResponse = (data: {
   const { record, numberOfScreensPerTrial, isWebView } = data;
 
   const parseResponseResult: FlankerLogRecord = {
-    trialIndex: !isWebView
-      ? record.trial_index
-      : Math.ceil((record.trial_index + 1) / numberOfScreensPerTrial!),
+    trialIndex: !isWebView ? record.trial_index : Math.ceil((record.trial_index + 1) / numberOfScreensPerTrial!),
     duration: record.rt,
     question: record.stimulus,
     buttonPressed: record.button_pressed,
@@ -24,16 +22,14 @@ export const parseResponse = (data: {
     responseTouchTimestamp: !isWebView
       ? record.response_touch_timestamp
       : record.rt
-      ? record.start_timestamp + record.rt
-      : null,
+        ? record.start_timestamp + record.rt
+        : null,
   };
 
   return parseResponseResult;
 };
 
-export const getScreensNumberPerTrial = (
-  configuration: FlankerItemSettings,
-): number => {
+export const getScreensNumberPerTrial = (configuration: FlankerItemSettings): number => {
   let result = 1;
 
   if (configuration.showFeedback) {

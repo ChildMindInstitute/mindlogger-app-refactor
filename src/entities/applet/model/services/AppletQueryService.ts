@@ -9,15 +9,10 @@ class AppletQueryStorage {
   constructor(private queryClient: QueryClient) {}
 
   getAppletDetails(appletId: string) {
-    const data = getDataFromQuery<AppletDetailsResponse>(
-      getAppletDetailsKey(appletId),
-      this.queryClient,
-    );
+    const data = getDataFromQuery<AppletDetailsResponse>(getAppletDetailsKey(appletId), this.queryClient);
 
     if (!data) {
-      throw Error(
-        `[AppletQueryStorage]: No data found for applet details, appletId:${appletId}`,
-      );
+      throw Error(`[AppletQueryStorage]: No data found for applet details, appletId:${appletId}`);
     }
 
     return mapAppletDetailsFromDto(data.result);

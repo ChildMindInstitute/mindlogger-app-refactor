@@ -14,21 +14,13 @@ type Props = {
   mode?: 'dark' | 'light';
 } & TextProps;
 
-const LoadListError: FC<PropsWithChildren<Props>> = ({
-  error,
-  mode,
-  ...props
-}) => {
+const LoadListError: FC<PropsWithChildren<Props>> = ({ error, mode, ...props }) => {
   const { t } = useTranslation();
 
   return (
     <>
       {!!error && (
-        <Text
-          color={mode === 'light' ? '$secondary' : '$tertiary'}
-          fontSize={14}
-          {...props}
-        >
+        <Text color={mode === 'light' ? '$secondary' : '$tertiary'} fontSize={14} {...props}>
           {/* @ts-ignore */}
           {error.key ? t(error.key, error.params ?? {}) : t(error)}
         </Text>

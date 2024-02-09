@@ -1,10 +1,5 @@
 import useUserActionCreator from './useUserActionCreator';
-import {
-  ActivityState,
-  PipelineItemResponse,
-  SetAnswerAction,
-  UserAction,
-} from '../../lib';
+import { ActivityState, PipelineItemResponse, SetAnswerAction, UserAction } from '../../lib';
 
 type Args = {
   activityId: string;
@@ -24,11 +19,8 @@ function useUserActionManager({ activityId, activityState }: Args) {
   };
 
   const updateUserAction = (action: UserAction) => {
-    return activityState!.actions.map(o => {
-      return o.payload.activityItemId === action.payload.activityItemId &&
-        o.type === action.type
-        ? action
-        : o;
+    return activityState!.actions.map((o) => {
+      return o.payload.activityItemId === action.payload.activityItemId && o.type === action.type ? action : o;
     });
   };
 
@@ -37,9 +29,7 @@ function useUserActionManager({ activityId, activityState }: Args) {
     const step = activityState!.step;
     const currentPipelineItem = activityState!.items[step];
 
-    const lastUserAction = actions[actions.length - 1] as
-      | SetAnswerAction
-      | undefined;
+    const lastUserAction = actions[actions.length - 1] as SetAnswerAction | undefined;
 
     const shouldUpdateLastAction =
       lastUserAction &&
@@ -65,9 +55,7 @@ function useUserActionManager({ activityId, activityState }: Args) {
   function updateUserActionsWithAdditionalAnswer(step: number, answer: string) {
     const actions = activityState!.actions;
     const currentPipelineItem = activityState!.items[step];
-    const lastUserAction = actions[actions.length - 1] as
-      | SetAnswerAction
-      | undefined;
+    const lastUserAction = actions[actions.length - 1] as SetAnswerAction | undefined;
 
     const shouldUpdateLastAction =
       lastUserAction &&

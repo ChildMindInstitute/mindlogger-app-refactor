@@ -7,19 +7,16 @@ import { Box, BoxProps } from '.';
 
 type RootParamList = ReactNavigation.RootParamList;
 
-type Props<RouteName extends keyof RootParamList> =
-  undefined extends RootParamList[RouteName]
-    ?
-        | { fallbackRoute?: RouteName }
-        | {
-            fallbackRoute: RouteName;
-            fallbackParams: RootParamList[RouteName];
-          }
-    : { fallbackRoute: RouteName; fallbackParams: RootParamList[RouteName] };
+type Props<RouteName extends keyof RootParamList> = undefined extends RootParamList[RouteName]
+  ?
+      | { fallbackRoute?: RouteName }
+      | {
+          fallbackRoute: RouteName;
+          fallbackParams: RootParamList[RouteName];
+        }
+  : { fallbackRoute: RouteName; fallbackParams: RootParamList[RouteName] };
 
-function BackButton<TRouteName extends keyof RootParamList>(
-  props: PropsWithChildren<Props<TRouteName>> & BoxProps,
-) {
+function BackButton<TRouteName extends keyof RootParamList>(props: PropsWithChildren<Props<TRouteName>> & BoxProps) {
   // fallbackParams is of any type here if we use object destructuring
   // @ts-ignore
   const { children, fallbackRoute, fallbackParams, ...styledProps } = props;

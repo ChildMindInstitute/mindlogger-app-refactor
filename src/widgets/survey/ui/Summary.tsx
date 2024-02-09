@@ -20,14 +20,7 @@ type Props = {
   onFinish: () => void;
 };
 
-function Summary({
-  onFinish,
-  appletId,
-  flowId,
-  activityId,
-  eventId,
-  order,
-}: Props) {
+function Summary({ onFinish, appletId, flowId, activityId, eventId, order }: Props) {
   const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
 
@@ -50,11 +43,7 @@ function Summary({
     if (!initialized) {
       return;
     }
-    if (
-      initialized &&
-      !summaryData.alerts.length &&
-      !summaryData.scores.length
-    ) {
+    if (initialized && !summaryData.alerts.length && !summaryData.scores.length) {
       onFinishRef.current();
     }
   }, [initialized, summaryData]);
@@ -64,12 +53,7 @@ function Summary({
       <Box flex={1} mb={bottom} bg="$white">
         <Box style={styles.scrollView} mx={20} />
 
-        <StaticNavigationPanel
-          stepper={{ onEndReached: onFinish }}
-          mt={16}
-          minHeight={24}
-          mb={bottom ? 0 : 16}
-        />
+        <StaticNavigationPanel stepper={{ onEndReached: onFinish }} mt={16} minHeight={24} mb={bottom ? 0 : 16} />
       </Box>
     );
   }
@@ -87,21 +71,12 @@ function Summary({
 
         <YStack space={40} pb={30}>
           {scores!.map((activityScore, index) => (
-            <ScoreList
-              key={index}
-              label={activityScore.activityName}
-              scores={activityScore.scores}
-            />
+            <ScoreList key={index} label={activityScore.activityName} scores={activityScore.scores} />
           ))}
         </YStack>
       </ScrollView>
 
-      <StaticNavigationPanel
-        stepper={{ onEndReached: onFinish }}
-        mt={16}
-        minHeight={24}
-        mb={bottom ? 0 : 16}
-      />
+      <StaticNavigationPanel stepper={{ onEndReached: onFinish }} mt={16} minHeight={24} mb={bottom ? 0 : 16} />
     </Box>
   );
 }

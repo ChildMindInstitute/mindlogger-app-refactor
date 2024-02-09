@@ -40,11 +40,7 @@ export class MarkdownVariableReplacer {
     return matches;
   };
 
-  private updateMarkdown = (
-    variableName: string,
-    replaceValue: string,
-    markdown: string,
-  ) => {
+  private updateMarkdown = (variableName: string, replaceValue: string, markdown: string) => {
     const reg = new RegExp(`\\[\\[${variableName}\\]\\]`, 'gi');
     return markdown.replace(reg, replaceValue);
   };
@@ -61,7 +57,7 @@ export class MarkdownVariableReplacer {
 
   private parseBasicSystemVariables = (markdown: string) => {
     return markdown
-      .replaceAll(/\[Now]/gi, format(this.now, 'h:mm aa') + ' today (now)')
+      .replaceAll(/\[Now]/gi, `${format(this.now, 'h:mm aa')} today (now)`)
       .replaceAll(/\[Nickname]/gi, this.nickName)
       .replaceAll(/\[sys.date]/gi, format(this.now, 'MM/dd/y'));
   };
@@ -84,14 +80,8 @@ export class MarkdownVariableReplacer {
     );
 
     return this.parseBasicSystemVariables(markdown)
-      .replaceAll(
-        /\[Time_Elapsed_Activity_Last_Completed]/gi,
-        this.getTimeElapsed(),
-      )
-      .replaceAll(
-        /\[Time_Activity_Last_Completed]/gi,
-        this.getLastResponseTime(),
-      );
+      .replaceAll(/\[Time_Elapsed_Activity_Last_Completed]/gi, this.getTimeElapsed())
+      .replaceAll(/\[Time_Activity_Last_Completed]/gi, this.getLastResponseTime());
   };
 
   private getTimeElapsed = () => {
@@ -105,13 +95,13 @@ export class MarkdownVariableReplacer {
       formattedString = `${interval.minutes} minutes`;
     }
     if (interval.hours) {
-      formattedString = `${interval.hours} hours and ` + formattedString;
+      formattedString = `${interval.hours} hours and ${formattedString}`;
     }
     if (interval.days) {
-      formattedString = `${interval.days} days and ` + formattedString;
+      formattedString = `${interval.days} days and ${formattedString}`;
     }
     if (interval.months) {
-      formattedString = `${interval.months} months and ` + formattedString;
+      formattedString = `${interval.months} months and ${formattedString}`;
     }
 
     if (interval.seconds && formattedString === '') {
@@ -134,7 +124,7 @@ export class MarkdownVariableReplacer {
     const variableNames = this.extractVariables(markdown);
 
     try {
-      variableNames.forEach(variableName => {
+      variableNames.forEach((variableName) => {
         const updated = this.getReplaceValue(variableName);
         markdown = this.updateMarkdown(variableName, updated, markdown);
       });
@@ -150,9 +140,7 @@ export class MarkdownVariableReplacer {
   };
 
   private getReplaceValue = (variableName: string): string => {
-    const foundIndex = this.activityItems.findIndex(
-      item => item.name === variableName,
-    );
+    const foundIndex = this.activityItems.findIndex((item) => item.name === variableName);
     const answerNotFound = foundIndex < 0 || !this.answers[foundIndex];
 
     if (answerNotFound) {
@@ -172,9 +160,7 @@ export class MarkdownVariableReplacer {
         updated = this.escapeSpecialChars(answer);
         break;
       case 'Radio':
-        const filteredItem = activityItem.payload.options.find(
-          ({ id }) => id === answer.id,
-        );
+        const filteredItem = activityItem.payload.options.find(({ id }) => id === answer.id);
         if (filteredItem) {
           updated = filteredItem.text;
         }
@@ -190,9 +176,7 @@ export class MarkdownVariableReplacer {
         }
         break;
       case 'TimeRange':
-        updated = `${this.formatTime(answer?.startTime)} - ${this.formatTime(
-          answer?.endTime,
-        )}`;
+        updated = `${this.formatTime(answer?.startTime)} - ${this.formatTime(answer?.endTime)}`;
         break;
       case 'Date':
         updated = answer;

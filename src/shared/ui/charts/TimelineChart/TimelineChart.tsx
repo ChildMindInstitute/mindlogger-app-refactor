@@ -3,13 +3,7 @@ import { FC, useCallback, useMemo } from 'react';
 import { VictoryAxis, VictoryChart, VictoryScatter } from 'victory-native';
 
 import { ResponseConfig, SelectionsResponseConfig } from '@shared/api';
-import {
-  areDatesEqual,
-  colors,
-  DAYS_OF_WEEK_NUMBERS,
-  getCurrentWeekDates,
-  range,
-} from '@shared/lib';
+import { areDatesEqual, colors, DAYS_OF_WEEK_NUMBERS, getCurrentWeekDates, range } from '@shared/lib';
 
 import { Box } from '../..';
 import { getWeekDaysWithLocale } from '../lib';
@@ -44,19 +38,12 @@ const getScatterDots = (chartDataItem: TimelineChartData) => {
 const TimelineChart: FC<Props> = ({ data, config }) => {
   const { options } = config as SelectionsResponseConfig;
 
-  const getXAxisDots = (): Array<ChartAxisDot> =>
-    range(7).map(item => ({ dot: item, value: 0 }));
+  const getXAxisDots = (): Array<ChartAxisDot> => range(7).map((item) => ({ dot: item, value: 0 }));
 
-  const getValueForChartItem: (
-    option: TimelineChartOption,
-    currentWeekDate: Date,
-  ) => number | null = useCallback(
+  const getValueForChartItem: (option: TimelineChartOption, currentWeekDate: Date) => number | null = useCallback(
     (option: TimelineChartOption, currentWeekDate: Date) => {
-      const chartItem = data.find(dateItem => {
-        return (
-          areDatesEqual(dateItem.date, currentWeekDate) &&
-          dateItem.value === option.value
-        );
+      const chartItem = data.find((dateItem) => {
+        return areDatesEqual(dateItem.date, currentWeekDate) && dateItem.value === option.value;
       });
 
       return !isNaN(Number(chartItem?.value)) ? chartItem!.value : null;
@@ -64,23 +51,22 @@ const TimelineChart: FC<Props> = ({ data, config }) => {
     [data],
   );
 
-  const getTimelineItems: (option: TimelineChartOption) => Array<Timeline> =
-    useCallback(
-      (option: TimelineChartOption) => {
-        const currentWeekDates = getCurrentWeekDates();
+  const getTimelineItems: (option: TimelineChartOption) => Array<Timeline> = useCallback(
+    (option: TimelineChartOption) => {
+      const currentWeekDates = getCurrentWeekDates();
 
-        return currentWeekDates.map(currentWeekDate => {
-          return {
-            date: currentWeekDate,
-            value: getValueForChartItem(option, currentWeekDate),
-          };
-        });
-      },
-      [getValueForChartItem],
-    );
+      return currentWeekDates.map((currentWeekDate) => {
+        return {
+          date: currentWeekDate,
+          value: getValueForChartItem(option, currentWeekDate),
+        };
+      });
+    },
+    [getValueForChartItem],
+  );
 
   const timelineChartData: Array<TimelineChartData> = useMemo(() => {
-    return options.map(option => {
+    return options.map((option) => {
       return {
         optionName: option.name,
         timelines: getTimelineItems(option),
@@ -92,7 +78,7 @@ const TimelineChart: FC<Props> = ({ data, config }) => {
 
   return (
     <Box>
-      {timelineChartData.map(option => (
+      {timelineChartData.map((option) => (
         <VictoryChart key={option.optionName} height={60}>
           <VictoryScatter
             style={{ data: { fill: colors.lighterGrey } }}

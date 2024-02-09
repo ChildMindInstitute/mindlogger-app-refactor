@@ -1,8 +1,7 @@
 export const answerRequestExample = [
   {
     type: 'SET_ANSWER',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/b203f92c-7e9f-4469-996f-ed685a6596a5',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/b203f92c-7e9f-4469-996f-ed685a6596a5',
     time: 1690375361729,
     response: {
       value: {
@@ -106,8 +105,7 @@ export const answerRequestExample = [
   },
   {
     type: 'SET_ANSWER',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/b203f92c-7e9f-4469-996f-ed685a6596a5',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/b203f92c-7e9f-4469-996f-ed685a6596a5',
     time: 1690375361729,
     response: {
       value: {
@@ -211,8 +209,7 @@ export const answerRequestExample = [
   },
   {
     type: 'SET_ANSWER',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/b203f92c-7e9f-4469-996f-ed685a6596a5',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/b203f92c-7e9f-4469-996f-ed685a6596a5',
     time: 1690375361729,
     response: {
       value: {
@@ -316,14 +313,12 @@ export const answerRequestExample = [
   },
   {
     type: 'NEXT',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/b203f92c-7e9f-4469-996f-ed685a6596a5',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/b203f92c-7e9f-4469-996f-ed685a6596a5',
     time: 1690375363189,
   },
   {
     type: 'SET_ANSWER',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/0fd9ea4d-4a9c-4f05-8e29-d81b0c6eb0be',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/0fd9ea4d-4a9c-4f05-8e29-d81b0c6eb0be',
     time: 1690375367356,
     response: {
       value:
@@ -332,40 +327,34 @@ export const answerRequestExample = [
   },
   {
     type: 'NEXT',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/0fd9ea4d-4a9c-4f05-8e29-d81b0c6eb0be',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/0fd9ea4d-4a9c-4f05-8e29-d81b0c6eb0be',
     time: 1690375368040,
   },
   {
     type: 'SET_ANSWER',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/7f0720d0-7856-43d6-a478-30b657fdd809',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/7f0720d0-7856-43d6-a478-30b657fdd809',
     time: 1690375370277,
     response: { value: null },
   },
   {
     type: 'UNDO',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/7f0720d0-7856-43d6-a478-30b657fdd809',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/7f0720d0-7856-43d6-a478-30b657fdd809',
     time: 1690375371729,
   },
   {
     type: 'SET_ANSWER',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/7f0720d0-7856-43d6-a478-30b657fdd809',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/7f0720d0-7856-43d6-a478-30b657fdd809',
     time: 1690375374219,
     response: { value: null },
   },
   {
     type: 'UNDO',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/7f0720d0-7856-43d6-a478-30b657fdd809',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/7f0720d0-7856-43d6-a478-30b657fdd809',
     time: 1690375375054,
   },
   {
     type: 'SET_ANSWER',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/7f0720d0-7856-43d6-a478-30b657fdd809',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/7f0720d0-7856-43d6-a478-30b657fdd809',
     time: 1690375377355,
     response: {
       value:
@@ -374,34 +363,29 @@ export const answerRequestExample = [
   },
   {
     type: 'NEXT',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/7f0720d0-7856-43d6-a478-30b657fdd809',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/7f0720d0-7856-43d6-a478-30b657fdd809',
     time: 1690375378182,
   },
   {
     type: 'SET_ANSWER',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/53dc5d44-fc9e-4668-a84c-817046c4fb38',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/53dc5d44-fc9e-4668-a84c-817046c4fb38',
     time: 1690375382690,
     response: { value: null },
   },
   {
     type: 'SET_ANSWER',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/53dc5d44-fc9e-4668-a84c-817046c4fb38',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/53dc5d44-fc9e-4668-a84c-817046c4fb38',
     time: 1690375387411,
     response: { value: null },
   },
   {
     type: 'UNDO',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/53dc5d44-fc9e-4668-a84c-817046c4fb38',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/53dc5d44-fc9e-4668-a84c-817046c4fb38',
     time: 1690375388291,
   },
   {
     type: 'SET_ANSWER',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/53dc5d44-fc9e-4668-a84c-817046c4fb38',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/53dc5d44-fc9e-4668-a84c-817046c4fb38',
     time: 1690375391141,
     response: {
       value:
@@ -410,8 +394,7 @@ export const answerRequestExample = [
   },
   {
     type: 'DONE',
-    screen:
-      '56715d82-114f-41aa-afc2-0b39859ea10d/53dc5d44-fc9e-4668-a84c-817046c4fb38',
+    screen: '56715d82-114f-41aa-afc2-0b39859ea10d/53dc5d44-fc9e-4668-a84c-817046c4fb38',
     time: 1690375392022,
   },
 ];

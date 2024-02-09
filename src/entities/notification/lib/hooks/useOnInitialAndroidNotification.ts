@@ -6,9 +6,7 @@ import { IS_ANDROID } from '@app/shared/lib';
 
 import { LocalInitialNotification } from '../types';
 
-export function useOnInitialAndroidNotification(
-  callback: (initialNotification: LocalInitialNotification) => void,
-) {
+export function useOnInitialAndroidNotification(callback: (initialNotification: LocalInitialNotification) => void) {
   const callbackRef = useRef(callback);
 
   callbackRef.current = callback;

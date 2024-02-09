@@ -22,7 +22,7 @@ describe('StackedRadiosItem', () => {
           values={[]}
           onChange={changeHandler}
           tooltipsShown={false}
-          textReplacer={text => text}
+          textReplacer={(text) => text}
         />
       </TamaguiProvider>,
     );
@@ -41,7 +41,7 @@ describe('StackedRadiosItem', () => {
           values={mock.radiosValues}
           onChange={changeHandler}
           tooltipsShown={false}
-          textReplacer={text => text}
+          textReplacer={(text) => text}
         />
       </TamaguiProvider>,
     );
@@ -50,12 +50,8 @@ describe('StackedRadiosItem', () => {
 
     expect(radios.length).toBe(9);
 
-    const radiosValues = radios.filter(radio =>
-      mock.radiosValues.find(
-        value =>
-          radio.props['data-test'] ===
-          `stack-radio-item-${value.id}-${value.rowId}`,
-      ),
+    const radiosValues = radios.filter((radio) =>
+      mock.radiosValues.find((value) => radio.props['data-test'] === `stack-radio-item-${value.id}-${value.rowId}`),
     );
 
     expect(radiosValues.length).toBe(3);
@@ -70,7 +66,7 @@ describe('StackedRadiosItem', () => {
           values={[]}
           onChange={changeHandler}
           tooltipsShown={false}
-          textReplacer={text => text}
+          textReplacer={(text) => text}
         />
       </TamaguiProvider>,
     );

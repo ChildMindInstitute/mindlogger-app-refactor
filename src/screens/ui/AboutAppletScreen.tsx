@@ -23,12 +23,12 @@ const AboutAppletScreen: FC<Props> = ({ route }) => {
   } = route;
 
   const { data: appletAbout } = useAppletDetailsQuery(appletId, {
-    select: r => r.data.result?.about,
+    select: (r) => r.data.result?.about,
   });
 
   if (!appletAbout || appletAbout.startsWith('404:')) {
     alignItems = 'flex-start';
-    content = '# ¯\\\\_(ツ)_/¯ ' + '\n ' + t('applet_about:no_info');
+    content = `# ¯\\\\_(ツ)_/¯ ` + `\n ${t('applet_about:no_info')}`;
   } else {
     alignItems = 'center';
     content = appletAbout;

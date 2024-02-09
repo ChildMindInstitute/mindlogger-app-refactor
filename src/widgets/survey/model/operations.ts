@@ -1,25 +1,16 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import {
-  ActivityPipelineType,
-  AvailabilityType,
-  StoreProgressPayload,
-} from '@app/abstract/lib';
+import { ActivityPipelineType, AvailabilityType, StoreProgressPayload } from '@app/abstract/lib';
 import { SvgFileManager } from '@app/entities/drawer';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
-import {
-  ActivityItemType,
-  DrawingTestResponse,
-} from '@app/features/pass-survey';
+import { ActivityItemType, DrawingTestResponse } from '@app/features/pass-survey';
 import { Answers, PipelineItem } from '@app/features/pass-survey';
 import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import { AnswerDto } from '@app/shared/api';
 
 export const getScheduledDate = (event: ScheduleEvent) => {
-  if (
-    event.availability.availabilityType !== AvailabilityType.AlwaysAvailable
-  ) {
-    return EventModel.ScheduledDateCalculator.calculate(event!)!.valueOf();
+  if (event.availability.availabilityType !== AvailabilityType.AlwaysAvailable) {
+    return EventModel.ScheduledDateCalculator.calculate(event)!.valueOf();
   }
 };
 
@@ -30,16 +21,11 @@ export const getActivityStartAt = (progressRecord: StoreProgressPayload) => {
 };
 
 export const getExecutionGroupKey = (progressRecord: StoreProgressPayload) => {
-  return progressRecord.type === ActivityPipelineType.Flow
-    ? progressRecord.executionGroupKey
-    : uuidv4();
+  return progressRecord.type === ActivityPipelineType.Flow ? progressRecord.executionGroupKey : uuidv4();
 };
 
-export const getUserIdentifier = (
-  pipeline: PipelineItem[],
-  answers: Answers,
-) => {
-  const itemWithIdentifierStep = pipeline.findIndex(item => {
+export const getUserIdentifier = (pipeline: PipelineItem[], answers: Answers) => {
+  const itemWithIdentifierStep = pipeline.findIndex((item) => {
     return item.type === 'TextInput' && item.payload.shouldIdentifyResponse;
   });
 
@@ -49,15 +35,12 @@ export const getUserIdentifier = (
 };
 
 export const getItemIds = (pipeline: PipelineItem[]): string[] => {
-  return pipeline.reduce(
-    (accumulator: string[], current: PipelineItem, step: number) => {
-      if (canItemHaveAnswer(current.type)) {
-        accumulator.push(pipeline[Number(step)].id!);
-      }
-      return accumulator;
-    },
-    [],
-  );
+  return pipeline.reduce((accumulator: string[], current: PipelineItem, step: number) => {
+    if (canItemHaveAnswer(current.type)) {
+      accumulator.push(pipeline[Number(step)].id!);
+    }
+    return accumulator;
+  }, []);
 };
 
 export const fillNullsForHiddenItems = (
@@ -66,11 +49,9 @@ export const fillNullsForHiddenItems = (
   originalItems: InitializeHiddenItem[],
 ): { answers: AnswerDto[]; itemIds: string[] } => {
   const modifiedAnswers: Array<AnswerDto> = [];
-  const filteredOriginalItems = originalItems.filter(originalItem =>
-    canItemHaveAnswer(originalItem.type),
-  );
+  const filteredOriginalItems = originalItems.filter((originalItem) => canItemHaveAnswer(originalItem.type));
 
-  filteredOriginalItems.forEach(item => {
+  filteredOriginalItems.forEach((item) => {
     if (item.isHidden) {
       const answer: AnswerDto = null;
 
@@ -83,7 +64,7 @@ export const fillNullsForHiddenItems = (
   });
 
   return {
-    itemIds: filteredOriginalItems.map(c => c.itemId),
+    itemIds: filteredOriginalItems.map((c) => c.itemId),
     answers: modifiedAnswers,
   };
 };
@@ -92,10 +73,7 @@ export const canItemHaveAnswer = (type: ActivityItemType): boolean => {
   return type !== 'Tutorial' && type !== 'Splash';
 };
 
-export const createSvgFiles = async (
-  pipelineItems: PipelineItem[],
-  answers: Answers,
-) => {
+export const createSvgFiles = async (pipelineItems: PipelineItem[], answers: Answers) => {
   const drawingTestItems: DrawingTestResponse[] = [];
 
   pipelineItems.forEach((item, index) => {
@@ -106,11 +84,8 @@ export const createSvgFiles = async (
     }
   });
 
-  const promises = drawingTestItems.map(drawingTestItem => {
-    return SvgFileManager.writeFile(
-      drawingTestItem.uri,
-      drawingTestItem.svgString,
-    );
+  const promises = drawingTestItems.map((drawingTestItem) => {
+    return SvgFileManager.writeFile(drawingTestItem.uri, drawingTestItem.svgString);
   });
 
   return Promise.all(promises);

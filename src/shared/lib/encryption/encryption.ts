@@ -58,11 +58,7 @@ class EncryptionManager {
     return { encrypt, decrypt };
   };
 
-  public getPrivateKey = ({
-    userId,
-    email,
-    password,
-  }: GetPrivateKeyProps): number[] => {
+  public getPrivateKey = ({ userId, email, password }: GetPrivateKeyProps): number[] => {
     const leftPart = crypto
       .createHash('sha512')
       .update(password + email)
@@ -72,36 +68,19 @@ class EncryptionManager {
       .update(userId + email)
       .digest();
 
-    return Array.from(
-      Buffer.concat([Buffer.from(leftPart), Buffer.from(rightPart)]),
-    );
+    return Array.from(Buffer.concat([Buffer.from(leftPart), Buffer.from(rightPart)]));
   };
 
-  public getPublicKey = ({
-    appletPrime,
-    appletBase,
-    privateKey,
-  }: GetPublicKeyProps): number[] => {
-    const key = crypto.createDiffieHellman(
-      Buffer.from(appletPrime),
-      Buffer.from(appletBase),
-    );
+  public getPublicKey = ({ appletPrime, appletBase, privateKey }: GetPublicKeyProps): number[] => {
+    const key = crypto.createDiffieHellman(Buffer.from(appletPrime), Buffer.from(appletBase));
     key.setPrivateKey(Buffer.from(privateKey));
     key.generateKeys();
 
     return Array.from(key.getPublicKey());
   };
 
-  public getAESKey = ({
-    privateKey,
-    publicKey,
-    appletPrime,
-    appletBase,
-  }: GetAESKeyProps): number[] => {
-    const key = crypto.createDiffieHellman(
-      Buffer.from(appletPrime),
-      Buffer.from(appletBase),
-    );
+  public getAESKey = ({ privateKey, publicKey, appletPrime, appletBase }: GetAESKeyProps): number[] => {
+    const key = crypto.createDiffieHellman(Buffer.from(appletPrime), Buffer.from(appletBase));
     key.setPrivateKey(Buffer.from(privateKey));
 
     const secretKey = key.computeSecret(Buffer.from(publicKey));
@@ -129,24 +108,13 @@ class EncryptionManager {
     const textParts = text.split(':');
     const iv = Buffer.from(textParts.shift()!, 'hex');
     const encryptedText = Buffer.from(textParts.join(':'), 'hex');
-    const decipher = crypto.createDecipheriv(
-      'aes-256-cbc',
-      Buffer.from(key),
-      iv,
-    );
+    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
     const decrypted = decipher.update(encryptedText);
 
     try {
       return decrypted.toString() + decipher.final('utf8');
     } catch (error) {
-      console.error(
-        'Decrypt data failed. Text:',
-        text,
-        'key:',
-        key,
-        'error:',
-        error,
-      );
+      console.error('Decrypt data failed. Text:', text, 'key:', key, 'error:', error);
 
       return JSON.stringify([{ type: '', time: '', screen: '' }]);
     }

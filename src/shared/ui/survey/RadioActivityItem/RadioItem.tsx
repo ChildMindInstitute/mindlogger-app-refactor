@@ -5,14 +5,7 @@ import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 
 import { colors, invertColor } from '@shared/lib';
-import {
-  XStack,
-  RadioGroup,
-  Text,
-  Box,
-  QuestionTooltipIcon,
-  Tooltip,
-} from '@shared/ui';
+import { XStack, RadioGroup, Text, Box, QuestionTooltipIcon, Tooltip } from '@shared/ui';
 
 import RadioOption from './types';
 
@@ -44,22 +37,15 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
   accessibilityLabel,
 }) => {
   const name = useMemo(() => textReplacer(text), [textReplacer, text]);
-  const tooltipText = useMemo(
-    () => textReplacer(tooltip ?? ''),
-    [textReplacer, tooltip],
-  );
+  const tooltipText = useMemo(() => textReplacer(tooltip ?? ''), [textReplacer, tooltip]);
 
   if (isHidden) {
     return null;
   }
 
   const hasColor = color && setPalette;
-  const invertedColor = hasColor
-    ? invertColor(color as string)
-    : colors.primary;
-  const invertedTextColor = hasColor
-    ? invertColor(color as string)
-    : colors.darkerGrey;
+  const invertedColor = hasColor ? invertColor(color) : colors.primary;
+  const invertedTextColor = hasColor ? invertColor(color) : colors.darkerGrey;
 
   return (
     <XStack
@@ -77,14 +63,8 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
       {addTooltip && tooltipContainerVisible && (
         <RadioTooltipContainer>
           {tooltip && (
-            <Tooltip
-              accessibilityLabel={'tooltip_view-' + tooltipText}
-              markdown={tooltipText}
-            >
-              <QuestionTooltipIcon
-                color={hasColor ? invertedColor : colors.grey}
-                size={22}
-              />
+            <Tooltip accessibilityLabel={`tooltip_view-${tooltipText}`} markdown={tooltipText}>
+              <QuestionTooltipIcon color={hasColor ? invertedColor : colors.grey} size={22} />
             </Tooltip>
           )}
         </RadioTooltipContainer>
@@ -104,12 +84,7 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
       )}
 
       <RadioTextContainer w="50%">
-        <Text
-          accessibilityLabel={'radio-option-text'}
-          fontSize={17}
-          ml="$4"
-          color={invertedTextColor}
-        >
+        <Text accessibilityLabel={'radio-option-text'} fontSize={17} ml="$4" color={invertedTextColor}>
           {name}
         </Text>
       </RadioTextContainer>

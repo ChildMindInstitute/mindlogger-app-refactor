@@ -36,10 +36,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       const eventDay = addDays(today, 3);
 
-      const interval: DatesFromTo = utility.getAvailabilityInterval(
-        eventDay,
-        event,
-      );
+      const interval: DatesFromTo = utility.getAvailabilityInterval(eventDay, event);
 
       const expectedFrom = new Date(eventDay);
       expectedFrom.setHours(15);
@@ -71,10 +68,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       const eventDay = addDays(today, 3);
 
-      const interval: DatesFromTo = utility.getAvailabilityInterval(
-        eventDay,
-        event,
-      );
+      const interval: DatesFromTo = utility.getAvailabilityInterval(eventDay, event);
 
       const expectedFrom = new Date(eventDay);
 
@@ -103,10 +97,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       const eventDay = subDays(today, 3);
 
-      const interval: DatesFromTo = utility.getAvailabilityInterval(
-        eventDay,
-        event,
-      );
+      const interval: DatesFromTo = utility.getAvailabilityInterval(eventDay, event);
 
       const expectedFrom = new Date(eventDay);
       expectedFrom.setHours(15);
@@ -139,10 +130,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       const eventDay = addDays(today, 3);
 
-      const interval: DatesFromTo = utility.getAvailabilityInterval(
-        eventDay,
-        event,
-      );
+      const interval: DatesFromTo = utility.getAvailabilityInterval(eventDay, event);
 
       const expectedFrom = new Date(eventDay);
       expectedFrom.setHours(15);
@@ -172,10 +160,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       const eventDay = addDays(today, 3);
 
-      const interval: DatesFromTo = utility.getAvailabilityInterval(
-        eventDay,
-        event,
-      );
+      const interval: DatesFromTo = utility.getAvailabilityInterval(eventDay, event);
 
       const expectedFrom = new Date(eventDay);
       expectedFrom.setHours(15);
@@ -208,10 +193,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       const eventDay = addDays(today, 3);
 
-      const interval: DatesFromTo = utility.getAvailabilityInterval(
-        eventDay,
-        event,
-      );
+      const interval: DatesFromTo = utility.getAvailabilityInterval(eventDay, event);
 
       const expectedFrom = new Date(eventDay);
 
@@ -244,10 +226,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
 
       const eventDay = addDays(today, 3);
 
-      const interval: DatesFromTo = utility.getAvailabilityInterval(
-        eventDay,
-        event,
-      );
+      const interval: DatesFromTo = utility.getAvailabilityInterval(eventDay, event);
 
       const expectedFrom = new Date(eventDay);
 

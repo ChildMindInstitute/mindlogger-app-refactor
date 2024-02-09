@@ -1,16 +1,8 @@
-import {
-  ActivityItemType,
-  ActivityState,
-  onIncorrectAnswerGiven,
-} from '../../lib';
+import { ActivityItemType, ActivityState, onIncorrectAnswerGiven } from '../../lib';
 import AnswerValidator from '../AnswerValidator';
 import StepperUtils from '../StepperUtils';
 
-const ConditionalLogicItems: ActivityItemType[] = [
-  'Radio',
-  'Checkbox',
-  'Slider',
-];
+const ConditionalLogicItems: ActivityItemType[] = ['Radio', 'Checkbox', 'Slider'];
 
 function useActivityStepper(state: ActivityState | undefined) {
   const step = state?.step ?? 0;
@@ -25,32 +17,24 @@ function useActivityStepper(state: ActivityState | undefined) {
   const isFirstStep = step === 0;
   const isLastStep = items && step === items.length - 1;
 
-  const additionalAnswerRequired =
-    currentPipelineItem?.additionalText?.required;
+  const additionalAnswerRequired = currentPipelineItem?.additionalText?.required;
 
-  const hasAnswer =
-    answers[step]?.answer != null && answers[step]?.answer !== '';
-  const hasAdditionalAnswer =
-    answers[step]?.additionalAnswer != null &&
-    answers[step]?.additionalAnswer !== '';
+  const hasAnswer = answers[step]?.answer != null && answers[step]?.answer !== '';
+  const hasAdditionalAnswer = answers[step]?.additionalAnswer != null && answers[step]?.additionalAnswer !== '';
 
-  const canSkip =
-    !!currentPipelineItem?.isSkippable && !hasAnswer && !isSplashStep;
+  const canSkip = !!currentPipelineItem?.isSkippable && !hasAnswer && !isSplashStep;
   const canMoveNext =
     isTutorialStep ||
     isMessageStep ||
     currentPipelineItem?.isSkippable ||
     (hasAnswer && (!additionalAnswerRequired || hasAdditionalAnswer));
   const canMoveBack = currentPipelineItem?.isAbleToMoveBack;
-  const canReset =
-    currentPipelineItem?.canBeReset && (hasAnswer || hasAdditionalAnswer);
+  const canReset = currentPipelineItem?.canBeReset && (hasAnswer || hasAdditionalAnswer);
   const showTopNavigation = currentPipelineItem?.hasTopNavigation;
   const showBottomNavigation = !showTopNavigation;
   const showWatermark = !isSplashStep && !showTopNavigation;
 
-  const isConditionalLogicItem = ConditionalLogicItems.includes(
-    currentPipelineItem!?.type,
-  );
+  const isConditionalLogicItem = ConditionalLogicItems.includes(currentPipelineItem!?.type);
 
   const answerValidator = AnswerValidator(state);
 
@@ -73,11 +57,7 @@ function useActivityStepper(state: ActivityState | undefined) {
       return 'activity_navigation:done';
     }
 
-    return isLastStep
-      ? 'activity_navigation:done'
-      : canSkip
-      ? 'activity_navigation:skip'
-      : 'activity_navigation:next';
+    return isLastStep ? 'activity_navigation:done' : canSkip ? 'activity_navigation:skip' : 'activity_navigation:next';
   }
 
   return {

@@ -4,15 +4,7 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 import { CachedImage } from '@georstat/react-native-image-cache';
 
 import { IS_IOS } from '@app/shared/lib';
-import {
-  RoundLogo,
-  Box,
-  RoundTextNotification,
-  Text,
-  XStack,
-  YStack,
-  TouchableOpacity,
-} from '@app/shared/ui';
+import { RoundLogo, Box, RoundTextNotification, Text, XStack, YStack, TouchableOpacity } from '@app/shared/ui';
 
 import { Applet } from '../lib';
 
@@ -22,12 +14,7 @@ type Props = {
   onPress?: (...args: any[]) => void;
 };
 
-const AppletCard: FC<Props & AccessibilityProps> = ({
-  applet,
-  disabled,
-  onPress,
-  accessibilityLabel,
-}) => {
+const AppletCard: FC<Props & AccessibilityProps> = ({ applet, disabled, onPress, accessibilityLabel }) => {
   const theme = applet.theme;
 
   const renderThemeLogo = () => {
@@ -39,11 +26,7 @@ const AppletCard: FC<Props & AccessibilityProps> = ({
   };
 
   return (
-    <TouchableOpacity
-      accessibilityLabel={accessibilityLabel}
-      onPress={onPress}
-      disabled={disabled}
-    >
+    <TouchableOpacity accessibilityLabel={accessibilityLabel} onPress={onPress} disabled={disabled}>
       <XStack
         position="relative"
         mx={3}
@@ -78,12 +61,7 @@ const AppletCard: FC<Props & AccessibilityProps> = ({
             {renderThemeLogo()}
           </XStack>
 
-          <Text
-            accessibilityLabel="applet_description-text"
-            fontSize={14}
-            fontWeight="300"
-            lineHeight={20}
-          >
+          <Text accessibilityLabel="applet_description-text" fontSize={14} fontWeight="300" lineHeight={20}>
             {applet.description}
           </Text>
         </YStack>

@@ -39,11 +39,7 @@ const SendApplicationLogsForm: FC = () => {
 
         <Box>
           <Box>
-            <SubmitButton
-              mode="dark"
-              onPress={onSendLogs}
-              isLoading={isLoading}
-            >
+            <SubmitButton mode="dark" onPress={onSendLogs} isLoading={isLoading}>
               {t('application_logs_screen:upload_button')}
             </SubmitButton>
           </Box>

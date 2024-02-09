@@ -79,7 +79,7 @@ describe('[ShiftCalculator]', () => {
       it(`should return ${expectedShift} if the current item is at ${fromStep} step`, () => {
         const shiftCalculator = new ShiftCalculator(
           {
-            shouldSkipStep: step => list[step].shouldBeSkipped,
+            shouldSkipStep: (step) => list[step].shouldBeSkipped,
           },
           list.length,
         );
@@ -149,13 +149,12 @@ describe('[ShiftCalculator]', () => {
       it(`should return ${expectedShift} if the current item is at ${fromStep} step`, () => {
         const shiftCalculator = new ShiftCalculator(
           {
-            shouldSkipStep: step => list[step].shouldBeSkipped,
+            shouldSkipStep: (step) => list[step].shouldBeSkipped,
           },
           list.length,
         );
 
-        const actualShift =
-          shiftCalculator.calculateShiftForBackwards(fromStep);
+        const actualShift = shiftCalculator.calculateShiftForBackwards(fromStep);
 
         expect(actualShift).toBe(expectedShift);
       });

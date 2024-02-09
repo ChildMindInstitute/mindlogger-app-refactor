@@ -22,9 +22,7 @@ const createMediaFilesCleaner = (): Result => {
     const storageActivityState = activityStorage.getString(key);
 
     if (!storageActivityState) {
-      console.warn(
-        "[MediaFilesCleaner.cleanUp]: Activity record doesn't exist",
-      );
+      console.warn("[MediaFilesCleaner.cleanUp]: Activity record doesn't exist");
       return;
     }
 
@@ -32,7 +30,7 @@ const createMediaFilesCleaner = (): Result => {
 
     const urlsToProcess: string[] = [];
 
-    for (let recordId in entityRecord.answers) {
+    for (const recordId in entityRecord.answers) {
       const record = entityRecord.answers[recordId]?.answer;
 
       if (record?.uri) {
@@ -40,7 +38,7 @@ const createMediaFilesCleaner = (): Result => {
       }
     }
 
-    for (let fileUrl of urlsToProcess) {
+    for (const fileUrl of urlsToProcess) {
       try {
         const fileExists = await FileSystem.exists(fileUrl);
 
@@ -48,9 +46,7 @@ const createMediaFilesCleaner = (): Result => {
           await FileSystem.unlink(fileUrl);
         }
       } catch (error) {
-        console.warn(
-          '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',
-        );
+        console.warn('[MediaFilesCleaner.cleanUp]: Error occurred while deleting file');
         console.error(error);
       }
     }
@@ -58,12 +54,7 @@ const createMediaFilesCleaner = (): Result => {
     console.info('[MediaFilesCleaner.cleanUp]: completed');
   };
 
-  const cleanUp = async ({
-    appletId,
-    activityId,
-    eventId,
-    order,
-  }: ActivityRecordKeyParams) => {
+  const cleanUp = async ({ appletId, activityId, eventId, order }: ActivityRecordKeyParams) => {
     const key = `${appletId}-${activityId}-${eventId}-${order}`;
 
     return cleanUpByStorageKey(key);
@@ -71,7 +62,7 @@ const createMediaFilesCleaner = (): Result => {
 
   const cleanUpByAnswers = async (answers: AnswerDto[]) => {
     try {
-      answers.filter(Boolean).forEach(async answer => {
+      answers.filter(Boolean).forEach(async (answer) => {
         const { value: answerValue } = answer as ObjectAnswerDto;
 
         const mediaValue = answerValue as MediaValue;
@@ -87,10 +78,7 @@ const createMediaFilesCleaner = (): Result => {
         }
       });
     } catch (error) {
-      console.warn(
-        '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',
-        error,
-      );
+      console.warn('[MediaFilesCleaner.cleanUp]: Error occurred while deleting file', error);
     }
   };
 

@@ -1,16 +1,12 @@
-import {
-  AppletNotificationDescribers,
-  EventNotificationDescribers,
-  NotificationDescriber,
-} from '../types';
+import { AppletNotificationDescribers, EventNotificationDescribers, NotificationDescriber } from '../types';
 
 export const filterNotifications = (
   appletNotifications: AppletNotificationDescribers,
 ): Array<NotificationDescriber> => {
-  let result: Array<NotificationDescriber> = [];
+  const result: Array<NotificationDescriber> = [];
 
-  for (let eventNotifications of appletNotifications.events) {
-    for (let notification of eventNotifications.notifications) {
+  for (const eventNotifications of appletNotifications.events) {
+    for (const notification of eventNotifications.notifications) {
       if (notification.isActive) {
         result.push(notification);
       }
@@ -20,9 +16,7 @@ export const filterNotifications = (
   return result;
 };
 
-export const sortNotificationDescribers = (
-  notificationDescribers: NotificationDescriber[],
-) => {
+export const sortNotificationDescribers = (notificationDescribers: NotificationDescriber[]) => {
   const notificationDescribersCopy = [...notificationDescribers];
 
   notificationDescribersCopy.sort((a, b) => a.scheduledAt - b.scheduledAt);
@@ -39,15 +33,13 @@ export const filterAppletNotifications = (
     events: [],
   };
 
-  for (let eventNotifications of appletNotifications.events) {
+  for (const eventNotifications of appletNotifications.events) {
     const eventsClone: EventNotificationDescribers = {
       ...eventNotifications,
       notifications: [],
     };
 
-    eventsClone.notifications = eventNotifications.notifications.filter(
-      x => x.isActive,
-    );
+    eventsClone.notifications = eventNotifications.notifications.filter((x) => x.isActive);
 
     result.events.push(eventsClone);
   }

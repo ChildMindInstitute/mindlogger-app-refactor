@@ -10,25 +10,12 @@ import {
   subMonths,
 } from 'date-fns';
 
-import {
-  ActivityPipelineType,
-  AvailabilityType,
-  FlowProgress,
-  PeriodicityType,
-  Progress,
-} from '@app/abstract/lib';
-import {
-  ActivityListItem,
-  ActivityStatus,
-  ActivityType,
-} from '@app/entities/activity/lib';
+import { ActivityPipelineType, AvailabilityType, FlowProgress, PeriodicityType, Progress } from '@app/abstract/lib';
+import { ActivityListItem, ActivityStatus, ActivityType } from '@app/entities/activity/lib';
 import { EventAvailability } from '@app/entities/event';
 import { MIDNIGHT_DATE } from '@app/shared/lib';
 
-import {
-  ActivityGroupsBuilder,
-  createActivityGroupsBuilder,
-} from './ActivityGroupsBuilder';
+import { ActivityGroupsBuilder, createActivityGroupsBuilder } from './ActivityGroupsBuilder';
 import { GroupsBuildContext } from './GroupUtility';
 import { ActivityListGroup, EventEntity, Entity } from '../../lib';
 
@@ -140,11 +127,7 @@ const getExpectedScheduledItem = (): ActivityListItem => {
   };
 };
 
-const getScheduledEventEntity = (settings: {
-  startDate: Date;
-  endDate: Date;
-  scheduledAt: Date;
-}): EventEntity => {
+const getScheduledEventEntity = (settings: { startDate: Date; endDate: Date; scheduledAt: Date }): EventEntity => {
   const { startDate, endDate, scheduledAt } = settings;
 
   const result: EventEntity = {
@@ -171,9 +154,7 @@ const getScheduledEventEntity = (settings: {
   return result;
 };
 
-const getAlwaysAvailableEventEntity = (settings: {
-  scheduledAt: Date;
-}): EventEntity => {
+const getAlwaysAvailableEventEntity = (settings: { scheduledAt: Date }): EventEntity => {
   const { scheduledAt } = settings;
 
   const result: EventEntity = {
@@ -185,7 +166,7 @@ const getAlwaysAvailableEventEntity = (settings: {
       notificationSettings: {
         notifications: [],
       },
-      scheduledAt: scheduledAt,
+      scheduledAt,
       selectedDate: null,
       timers: {
         idleTimer: null,
@@ -203,13 +184,9 @@ const mockGetNow = (builder: ActivityGroupsBuilder, mockedNowDate: Date) => {
   //@ts-ignore
   builder.itemsFactory.utility.getNow = jest.fn(() => new Date(mockedNowDate));
   //@ts-ignore
-  builder.scheduledEvaluator.utility.getNow = jest.fn(
-    () => new Date(mockedNowDate),
-  );
+  builder.scheduledEvaluator.utility.getNow = jest.fn(() => new Date(mockedNowDate));
   //@ts-ignore
-  builder.availableEvaluator.utility.getNow = jest.fn(
-    () => new Date(mockedNowDate),
-  );
+  builder.availableEvaluator.utility.getNow = jest.fn(() => new Date(mockedNowDate));
 };
 
 describe('ActivityGroupsBuilder', () => {
@@ -248,21 +225,21 @@ describe('ActivityGroupsBuilder', () => {
       const startAt = new Date(2023, 8, 1, 0, 0, 0);
       const endAt = new Date(2023, 8, 1, 15, 30, 0);
 
-      let progress: Progress = getProgress(startAt, endAt);
+      const progress: Progress = getProgress(startAt, endAt);
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getAlwaysAvailableEventEntity({
         scheduledAt: startAt,
       });
 
-      let result = builder.buildInProgress([eventEntity]);
+      const result = builder.buildInProgress([eventEntity]);
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:in_progress',
@@ -278,19 +255,19 @@ describe('ActivityGroupsBuilder', () => {
 
       const progress = getEmptyProgress();
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getAlwaysAvailableEventEntity({
         scheduledAt: startAt,
       });
 
-      let result = builder.buildInProgress([eventEntity]);
+      const result = builder.buildInProgress([eventEntity]);
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:in_progress',
@@ -356,13 +333,13 @@ describe('ActivityGroupsBuilder', () => {
       });
       eventEntity.event.timers.timer = { hours: 5, minutes: 20 };
 
-      let mockedNowDate = new Date(date);
+      const mockedNowDate = new Date(date);
       mockedNowDate.setHours(date.getHours() + 3);
       mockedNowDate.setMinutes(date.getMinutes() + 12);
 
       mockGetNow(builder, mockedNowDate);
 
-      let result = builder.buildInProgress([eventEntity]);
+      const result = builder.buildInProgress([eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedInProgressItem();
       expectedItem.isTimerSet = true;
@@ -405,7 +382,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, mockedNowDate);
 
-      let result = builder.buildInProgress([eventEntity]);
+      const result = builder.buildInProgress([eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedInProgressItem();
       expectedItem.isTimerSet = true;
@@ -442,13 +419,13 @@ describe('ActivityGroupsBuilder', () => {
       });
       eventEntity.event.timers.timer = { hours: 5, minutes: 20 };
 
-      let mockedNowDate = new Date(date);
+      const mockedNowDate = new Date(date);
       mockedNowDate.setHours(date.getHours() + 5);
       mockedNowDate.setMinutes(date.getMinutes() + 20);
 
       mockGetNow(builder, mockedNowDate);
 
-      let result = builder.buildInProgress([eventEntity]);
+      const result = builder.buildInProgress([eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedInProgressItem();
       expectedItem.isTimerSet = true;
@@ -470,15 +447,15 @@ describe('ActivityGroupsBuilder', () => {
       const startAt = new Date(2023, 8, 1, 15, 0, 0);
       const endAt = addHours(startAt, 1);
 
-      let progress: Progress = getProgress(startAt, endAt);
+      const progress: Progress = getProgress(startAt, endAt);
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getAlwaysAvailableEventEntity({
         scheduledAt: startAt,
@@ -490,7 +467,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, now);
 
-      let result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable([eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedAvailableItem();
       expectedItem.availableTo = MIDNIGHT_DATE;
@@ -510,13 +487,13 @@ describe('ActivityGroupsBuilder', () => {
 
       const progress = getEmptyProgress();
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getAlwaysAvailableEventEntity({
         scheduledAt: startAt,
@@ -528,7 +505,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, now);
 
-      let result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable([eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedAvailableItem();
       expectedItem.availableTo = MIDNIGHT_DATE;
@@ -546,15 +523,15 @@ describe('ActivityGroupsBuilder', () => {
       const startAt = new Date(2023, 8, 1, 15, 0, 0);
       const endAt = addHours(startAt, 1);
 
-      let progress: Progress = getProgress(startAt, endAt);
+      const progress: Progress = getProgress(startAt, endAt);
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getAlwaysAvailableEventEntity({
         scheduledAt: startAt,
@@ -566,7 +543,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, now);
 
-      let result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable([eventEntity]);
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:available',
@@ -583,19 +560,19 @@ describe('ActivityGroupsBuilder', () => {
       PeriodicityType.Weekly,
       PeriodicityType.Weekdays,
       PeriodicityType.Monthly,
-    ].forEach(periodicity => {
+    ].forEach((periodicity) => {
       it(`Should return group-item for scheduled event when periodicity is ${periodicity} and allowAccessBeforeFromTime is false and current time is is allowed time window`, () => {
         const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-        let progress: Progress = getEmptyProgress();
+        const progress: Progress = getEmptyProgress();
 
-        let input: GroupsBuildContext = {
+        const input: GroupsBuildContext = {
           allAppletActivities: [],
           progress,
           appletId: 'test-applet-id-1',
         };
 
-        let builder = createActivityGroupsBuilder(input);
+        const builder = createActivityGroupsBuilder(input);
 
         const eventEntity: EventEntity = getScheduledEventEntity({
           scheduledAt,
@@ -612,7 +589,7 @@ describe('ActivityGroupsBuilder', () => {
 
         mockGetNow(builder, new Date(now));
 
-        let result = builder.buildAvailable([eventEntity]);
+        const result = builder.buildAvailable([eventEntity]);
 
         const expectedItem = getExpectedAvailableItem();
         expectedItem.availableTo = new Date(startOfDay(scheduledAt));
@@ -632,15 +609,15 @@ describe('ActivityGroupsBuilder', () => {
     it('Should return empty for scheduled event when periodicity is Daily and allowAccessBeforeFromTime is false and current time is is allowed time window and start/end dates are in the future in 2-3 months', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      let progress: Progress = getEmptyProgress();
+      const progress: Progress = getEmptyProgress();
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -680,15 +657,15 @@ describe('ActivityGroupsBuilder', () => {
     it('Should return empty for scheduled event when periodicity is Daily and allowAccessBeforeFromTime is false and current time is is allowed time window and start/end dates are in the past 2-3 months', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      let progress: Progress = getEmptyProgress();
+      const progress: Progress = getEmptyProgress();
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -707,7 +684,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, new Date(now));
 
-      let result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable([eventEntity]);
 
       const expectedItem = getExpectedAvailableItem();
       expectedItem.availableTo = new Date(startOfDay(scheduledAt));
@@ -726,10 +703,7 @@ describe('ActivityGroupsBuilder', () => {
     it('Should return item for scheduled event when periodicity is Daily and allowAccessBeforeFromTime is false and current time is is allowed time window and start/end dates cover now (-/+ 2 months)', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      const progress = getProgress(
-        subDays(scheduledAt, 1),
-        addMinutes(subDays(scheduledAt, 1), 5),
-      );
+      const progress = getProgress(subDays(scheduledAt, 1), addMinutes(subDays(scheduledAt, 1), 5));
 
       const input = {
         allAppletActivities: [],
@@ -737,7 +711,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -756,7 +730,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, new Date(now));
 
-      let result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable([eventEntity]);
 
       const expectedItem = getExpectedAvailableItem();
       expectedItem.availableTo = new Date(startOfDay(scheduledAt));
@@ -775,15 +749,15 @@ describe('ActivityGroupsBuilder', () => {
     it('Should not return group-item for scheduled event and periodicity is Weekly and allowAccessBeforeFromTime is false when scheduledToday is false', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      let progress: Progress = getEmptyProgress();
+      const progress: Progress = getEmptyProgress();
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -796,11 +770,11 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.timeFrom = { hours: 15, minutes: 0 };
       eventEntity.event.availability.timeTo = { hours: 16, minutes: 30 };
 
-      let now = subDays(scheduledAt, 1);
+      const now = subDays(scheduledAt, 1);
 
       mockGetNow(builder, new Date(now));
 
-      let result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable([eventEntity]);
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:available',
@@ -814,15 +788,15 @@ describe('ActivityGroupsBuilder', () => {
     it('Should not return group-item for scheduled event and periodicity is Weekly and allowAccessBeforeFromTime is false when now time is less than timeFrom', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      let progress: Progress = getEmptyProgress();
+      const progress: Progress = getEmptyProgress();
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -852,15 +826,15 @@ describe('ActivityGroupsBuilder', () => {
     it('Should not return group-item for scheduled event and periodicity is Weekly and allowAccessBeforeFromTime is false when now time is more than timeTo', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      let progress: Progress = getEmptyProgress();
+      const progress: Progress = getEmptyProgress();
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -992,19 +966,19 @@ describe('ActivityGroupsBuilder', () => {
       PeriodicityType.Weekly,
       PeriodicityType.Weekdays,
       PeriodicityType.Monthly,
-    ].forEach(periodicity => {
+    ].forEach((periodicity) => {
       it(`Should return group-item for scheduled event when periodicity is ${periodicity} and allowAccessBeforeFromTime is true and current time is less than startTime`, () => {
         const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-        let progress: Progress = getEmptyProgress();
+        const progress: Progress = getEmptyProgress();
 
-        let input: GroupsBuildContext = {
+        const input: GroupsBuildContext = {
           allAppletActivities: [],
           progress,
           appletId: 'test-applet-id-1',
         };
 
-        let builder = createActivityGroupsBuilder(input);
+        const builder = createActivityGroupsBuilder(input);
 
         const eventEntity: EventEntity = getScheduledEventEntity({
           scheduledAt,
@@ -1021,7 +995,7 @@ describe('ActivityGroupsBuilder', () => {
 
         mockGetNow(builder, new Date(now));
 
-        let result = builder.buildAvailable([eventEntity]);
+        const result = builder.buildAvailable([eventEntity]);
 
         const expectedItem = getExpectedAvailableItem();
         expectedItem.availableTo = new Date(startOfDay(scheduledAt));
@@ -1041,15 +1015,15 @@ describe('ActivityGroupsBuilder', () => {
     it('Should return group-item for scheduled event when periodicity is Daily and allowAccessBeforeFromTime is true and current time is less than startTime and start/end dates are in the future in 2/3 months', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      let progress: Progress = getEmptyProgress();
+      const progress: Progress = getEmptyProgress();
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -1083,15 +1057,15 @@ describe('ActivityGroupsBuilder', () => {
     it('Should return group-item for scheduled event when periodicity is Daily and allowAccessBeforeFromTime is true and current time is less than startTime when start/end dates are in the past 3/2 months', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      let progress: Progress = getEmptyProgress();
+      const progress: Progress = getEmptyProgress();
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -1130,10 +1104,7 @@ describe('ActivityGroupsBuilder', () => {
     it('Should return group-item for scheduled event when periodicity is Daily and allowAccessBeforeFromTime is true and current time is less than startTime and progress record exist and completed yesterday', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      const progress = getProgress(
-        subDays(scheduledAt, 1),
-        addMinutes(subDays(scheduledAt, 1), 5),
-      );
+      const progress = getProgress(subDays(scheduledAt, 1), addMinutes(subDays(scheduledAt, 1), 5));
 
       const input = {
         allAppletActivities: [],
@@ -1141,7 +1112,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -1181,15 +1152,15 @@ describe('ActivityGroupsBuilder', () => {
     it('Should not return group-item for scheduled event when periodicity is Weekly and allowAccessBeforeFromTime is true and scheduledToday is false', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      let progress: Progress = getEmptyProgress();
+      const progress: Progress = getEmptyProgress();
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -1202,11 +1173,11 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.timeFrom = { hours: 15, minutes: 0 };
       eventEntity.event.availability.timeTo = { hours: 16, minutes: 30 };
 
-      let now = subDays(scheduledAt, 1);
+      const now = subDays(scheduledAt, 1);
 
       mockGetNow(builder, new Date(now));
 
-      let result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable([eventEntity]);
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:available',
@@ -1220,10 +1191,7 @@ describe('ActivityGroupsBuilder', () => {
     it('Should not return group-item for scheduled event when periodicity is Weekly and allowAccessBeforeFromTime is true and completed today is true', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      const progress = getProgress(
-        new Date(scheduledAt),
-        addMinutes(scheduledAt, 5),
-      );
+      const progress = getProgress(new Date(scheduledAt), addMinutes(scheduledAt, 5));
 
       const input = {
         allAppletActivities: [],
@@ -1306,19 +1274,19 @@ describe('ActivityGroupsBuilder', () => {
       PeriodicityType.Weekly,
       PeriodicityType.Weekdays,
       PeriodicityType.Monthly,
-    ].forEach(periodicity => {
+    ].forEach((periodicity) => {
       it(`Should return group item when event is scheduled of ${periodicity} periodicity and now is less than scheduledAt and accessBeforeTimeFrom is false and not completed today`, () => {
         const scheduledAt = new Date(2023, 8, 1, 15, 30, 0);
 
-        let progress: Progress = getEmptyProgress();
+        const progress: Progress = getEmptyProgress();
 
-        let input: GroupsBuildContext = {
+        const input: GroupsBuildContext = {
           allAppletActivities: [],
           progress,
           appletId: 'test-applet-id-1',
         };
 
-        let builder = createActivityGroupsBuilder(input);
+        const builder = createActivityGroupsBuilder(input);
 
         const eventEntity: EventEntity = getScheduledEventEntity({
           scheduledAt,
@@ -1331,11 +1299,11 @@ describe('ActivityGroupsBuilder', () => {
         eventEntity.event.availability.timeFrom = { hours: 15, minutes: 0 };
         eventEntity.event.availability.timeTo = { hours: 16, minutes: 30 };
 
-        let now = subHours(scheduledAt, 1);
+        const now = subHours(scheduledAt, 1);
 
         mockGetNow(builder, new Date(now));
 
-        let result = builder.buildScheduled([eventEntity]);
+        const result = builder.buildScheduled([eventEntity]);
 
         const expectedItem: ActivityListItem = getExpectedScheduledItem();
         expectedItem.availableFrom = startOfDay(scheduledAt);
@@ -1357,17 +1325,17 @@ describe('ActivityGroupsBuilder', () => {
     it('Should return group item when event is scheduled of Daily periodicity and now is less than scheduledAt and accessBeforeTimeFrom is false and not completed today and start/end dates in the future in 2/3 months', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 30, 0);
 
-      let progress: Progress = getEmptyProgress();
+      const progress: Progress = getEmptyProgress();
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
-      let now = subHours(scheduledAt, 1);
+      const now = subHours(scheduledAt, 1);
 
       mockGetNow(builder, new Date(now));
 
@@ -1407,17 +1375,17 @@ describe('ActivityGroupsBuilder', () => {
     it('Should return group item when event is scheduled of Daily periodicity and now is less than scheduledAt and accessBeforeTimeFrom is false and not completed today and start/end dates are in the past: 3/2 months ago', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 30, 0);
 
-      let progress: Progress = getEmptyProgress();
+      const progress: Progress = getEmptyProgress();
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
-      let now = subHours(scheduledAt, 1);
+      const now = subHours(scheduledAt, 1);
 
       mockGetNow(builder, new Date(now));
 
@@ -1467,7 +1435,7 @@ describe('ActivityGroupsBuilder', () => {
 
       let builder = createActivityGroupsBuilder(input);
 
-      let now = subHours(scheduledAt, 1);
+      const now = subHours(scheduledAt, 1);
 
       mockGetNow(builder, new Date(now));
 
@@ -1497,10 +1465,7 @@ describe('ActivityGroupsBuilder', () => {
         activities: [expectedItem],
       };
 
-      progress = getProgress(
-        subDays(scheduledAt, 1),
-        addMinutes(subDays(scheduledAt, 1), 5),
-      );
+      progress = getProgress(subDays(scheduledAt, 1), addMinutes(subDays(scheduledAt, 1), 5));
 
       input = {
         allAppletActivities: [],
@@ -1522,17 +1487,17 @@ describe('ActivityGroupsBuilder', () => {
     it('Should not return group item when event is scheduled and now is less than scheduledAt and no progress record and accessBeforeTimeFrom is true', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 30, 0);
 
-      let progress: Progress = getEmptyProgress();
+      const progress: Progress = getEmptyProgress();
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
-      let now = subHours(scheduledAt, 1);
+      const now = subHours(scheduledAt, 1);
 
       mockGetNow(builder, new Date(now));
 
@@ -1547,7 +1512,7 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.timeFrom = { hours: 15, minutes: 0 };
       eventEntity.event.availability.timeTo = { hours: 16, minutes: 30 };
 
-      let result = builder.buildScheduled([eventEntity]);
+      const result = builder.buildScheduled([eventEntity]);
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:scheduled',
@@ -1561,10 +1526,7 @@ describe('ActivityGroupsBuilder', () => {
     it('2-Should not return group item when event is scheduled and now is less than scheduledAt and completed today and accessBeforeTimeFrom is true', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 30, 0);
 
-      const progress = getProgress(
-        subHours(scheduledAt, 1),
-        subMinutes(scheduledAt, 30),
-      );
+      const progress = getProgress(subHours(scheduledAt, 1), subMinutes(scheduledAt, 30));
 
       const input = {
         allAppletActivities: [],
@@ -1574,7 +1536,7 @@ describe('ActivityGroupsBuilder', () => {
 
       const builder = createActivityGroupsBuilder(input);
 
-      let now = subHours(scheduledAt, 1);
+      const now = subHours(scheduledAt, 1);
 
       mockGetNow(builder, new Date(now));
 
@@ -1621,7 +1583,7 @@ describe('ActivityGroupsBuilder', () => {
         },
       };
 
-      let input: GroupsBuildContext = {
+      const input: GroupsBuildContext = {
         allAppletActivities: [
           {
             description: 'test-description-1',
@@ -1709,9 +1671,7 @@ describe('ActivityGroupsBuilder', () => {
 
       //switch to 2nd activity
 
-      const progressRecord = progress['test-applet-id-1']['test-flow-id-1'][
-        'test-event-id-1'
-      ] as FlowProgress;
+      const progressRecord = progress['test-applet-id-1']['test-flow-id-1']['test-event-id-1'] as FlowProgress;
       progressRecord.currentActivityId = 'test-id-2';
       progressRecord.pipelineActivityOrder = 1;
       activityFlow.hideBadge = true;

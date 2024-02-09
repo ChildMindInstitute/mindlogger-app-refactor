@@ -2,10 +2,7 @@ import { SkPath } from '@shopify/react-native-skia';
 
 import { AbTestPayload, Point } from '@app/abstract/lib';
 
-export const transformCoordinates = (
-  original: AbTestPayload,
-  width: number,
-): AbTestPayload => {
+export const transformCoordinates = (original: AbTestPayload, width: number): AbTestPayload => {
   const multiplier = width / 100;
 
   const transformed: AbTestPayload = {
@@ -13,18 +10,12 @@ export const transformCoordinates = (
     isLast: original.isLast,
     config: {
       fontSize: original.config.fontSize * multiplier,
-      fontSizeBeginEnd: original.config.fontSizeBeginEnd
-        ? original.config.fontSizeBeginEnd * multiplier
-        : null,
-      beginWordLength: original.config.beginWordLength
-        ? original.config.beginWordLength * multiplier
-        : null,
-      endWordLength: original.config.endWordLength
-        ? original.config.endWordLength * multiplier
-        : null,
+      fontSizeBeginEnd: original.config.fontSizeBeginEnd ? original.config.fontSizeBeginEnd * multiplier : null,
+      beginWordLength: original.config.beginWordLength ? original.config.beginWordLength * multiplier : null,
+      endWordLength: original.config.endWordLength ? original.config.endWordLength * multiplier : null,
       radius: original.config.radius * multiplier,
     },
-    nodes: original.nodes.map(x => ({
+    nodes: original.nodes.map((x) => ({
       cx: x.cx * multiplier,
       cy: x.cy * multiplier,
       label: x.label,

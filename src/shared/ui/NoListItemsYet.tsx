@@ -8,10 +8,7 @@ type Props = {
   translationKey: string;
 } & TextProps;
 
-const NoListItemsYet: FC<PropsWithChildren<Props>> = ({
-  translationKey,
-  ...props
-}) => {
+const NoListItemsYet: FC<PropsWithChildren<Props>> = ({ translationKey, ...props }) => {
   const { t } = useTranslation();
 
   return (

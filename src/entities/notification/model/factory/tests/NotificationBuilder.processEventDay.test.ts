@@ -1,23 +1,10 @@
 import { addDays, addMonths, subMonths } from 'date-fns';
 
-import {
-  AvailabilityType,
-  NotificationTriggerType,
-  PeriodicityType,
-} from '@app/abstract/lib';
-import {
-  NotificationDescriber,
-  NotificationType,
-  ScheduleEvent,
-} from '@app/entities/notification/lib';
+import { AvailabilityType, NotificationTriggerType, PeriodicityType } from '@app/abstract/lib';
+import { NotificationDescriber, NotificationType, ScheduleEvent } from '@app/entities/notification/lib';
 import { MINUTES_IN_HOUR, MS_IN_MINUTE } from '@app/shared/lib';
 
-import {
-  addTime,
-  createBuilder,
-  getEmptyEvent,
-  getEventEntity,
-} from './testHelpers';
+import { addTime, createBuilder, getEmptyEvent, getEventEntity } from './testHelpers';
 import { INotificationBuilder } from '../NotificationBuilder';
 
 const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
@@ -44,25 +31,17 @@ const setNormalSettingsToEvent = (
   fixed = true,
 ) => {
   event.availability.timeFrom =
-    periodicityType === PeriodicityType.Always
-      ? { hours: 0, minutes: 0 }
-      : { hours: 15, minutes: 30 };
+    periodicityType === PeriodicityType.Always ? { hours: 0, minutes: 0 } : { hours: 15, minutes: 30 };
   event.availability.timeTo =
-    periodicityType === PeriodicityType.Always
-      ? { hours: 23, minutes: 59 }
-      : { hours: 20, minutes: 15 };
+    periodicityType === PeriodicityType.Always ? { hours: 23, minutes: 59 } : { hours: 20, minutes: 15 };
   event.availability.availabilityType =
-    periodicityType === PeriodicityType.Always
-      ? AvailabilityType.AlwaysAvailable
-      : AvailabilityType.ScheduledAccess;
+    periodicityType === PeriodicityType.Always ? AvailabilityType.AlwaysAvailable : AvailabilityType.ScheduledAccess;
   event.availability.periodicityType = periodicityType;
   event.availability.startDate = subMonths(today, 1);
   event.availability.endDate = addMonths(today, 1);
   event.notificationSettings.notifications.push({
     at: fixed ? { hours: FixedHourAt, minutes: FixedMinuteAt } : null,
-    triggerType: fixed
-      ? NotificationTriggerType.FIXED
-      : NotificationTriggerType.RANDOM,
+    triggerType: fixed ? NotificationTriggerType.FIXED : NotificationTriggerType.RANDOM,
     from: null,
     to: null,
   });
@@ -84,10 +63,10 @@ const getMockNotification = (index = 1) => {
     isActive: true,
     notificationBody: 'mock-notification-body',
     notificationHeader: 'mock-notification-header',
-    notificationId: 'mock-notification-id' + index,
+    notificationId: `mock-notification-id${index}`,
     scheduledAt: undefined,
     scheduledAtString: undefined,
-    shortId: 'mock-shortId' + index,
+    shortId: `mock-shortId${index}`,
     type: NotificationType.Regular,
   } as unknown as NotificationDescriber;
   return result;
@@ -114,8 +93,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       //@ts-ignore
       builder.utility.markIfNotificationOutdated = markOutdatedMock;
 
-      const expectedNotification: NotificationDescriber =
-        getMockNotification(1);
+      const expectedNotification: NotificationDescriber = getMockNotification(1);
 
       //@ts-ignore
       builder.utility.getNotificationIds = jest.fn().mockReturnValue({
@@ -126,11 +104,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       const eventDay = addDays(today, 1);
 
       //@ts-ignore
-      const notifications = builder.processEventDay(
-        eventDay,
-        eventEntity.event,
-        eventEntity.entity,
-      );
+      const notifications = builder.processEventDay(eventDay, eventEntity.event, eventEntity.entity);
 
       const scheduledAt = new Date(eventDay);
       scheduledAt.setHours(FixedHourAt);
@@ -175,8 +149,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       //@ts-ignore
       builder.utility.markIfNotificationOutdated = markOutdatedMock;
 
-      const expectedNotification: NotificationDescriber =
-        getMockNotification(1);
+      const expectedNotification: NotificationDescriber = getMockNotification(1);
 
       //@ts-ignore
       builder.utility.getNotificationIds = jest.fn().mockReturnValue({
@@ -187,11 +160,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       const eventDay = addDays(today, 1);
 
       //@ts-ignore
-      const notifications = builder.processEventDay(
-        eventDay,
-        eventEntity.event,
-        eventEntity.entity,
-      );
+      const notifications = builder.processEventDay(eventDay, eventEntity.event, eventEntity.entity);
 
       const scheduledAt = addDays(new Date(eventDay), 1);
       scheduledAt.setHours(9);
@@ -218,13 +187,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
-      setNormalSettingsToEvent(
-        event,
-        PeriodicityType.NotDefined,
-        today,
-        false,
-        false,
-      );
+      setNormalSettingsToEvent(event, PeriodicityType.NotDefined, today, false, false);
       event.availability.timeFrom = { hours: 16, minutes: 0 };
       event.availability.timeTo = { hours: 23, minutes: 45 };
 
@@ -246,12 +209,9 @@ describe('NotificationBuilder: processEventDay tests', () => {
       //@ts-ignore
       builder.utility.markIfNotificationOutdated = markOutdatedMock;
       //@ts-ignore
-      builder.utility.getRandomInt = getRandomIntMock.mockReturnValue(
-        MS_IN_MINUTE * 120,
-      );
+      builder.utility.getRandomInt = getRandomIntMock.mockReturnValue(MS_IN_MINUTE * 120);
 
-      const expectedNotification: NotificationDescriber =
-        getMockNotification(1);
+      const expectedNotification: NotificationDescriber = getMockNotification(1);
 
       //@ts-ignore
       builder.utility.getNotificationIds = jest.fn().mockReturnValue({
@@ -262,11 +222,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       const eventDay = addDays(today, 1);
 
       //@ts-ignore
-      const notifications = builder.processEventDay(
-        eventDay,
-        eventEntity.event,
-        eventEntity.entity,
-      );
+      const notifications = builder.processEventDay(eventDay, eventEntity.event, eventEntity.entity);
 
       const scheduledAt = new Date(eventDay);
       scheduledAt.setHours(18);
@@ -292,13 +248,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
-      setNormalSettingsToEvent(
-        event,
-        PeriodicityType.NotDefined,
-        today,
-        false,
-        false,
-      );
+      setNormalSettingsToEvent(event, PeriodicityType.NotDefined, today, false, false);
 
       event.availability.timeFrom = { hours: 16, minutes: 0 };
       event.availability.timeTo = { hours: 10, minutes: 45 };
@@ -321,12 +271,9 @@ describe('NotificationBuilder: processEventDay tests', () => {
       //@ts-ignore
       builder.utility.markIfNotificationOutdated = markOutdatedMock;
       //@ts-ignore
-      builder.utility.getRandomInt = getRandomIntMock.mockReturnValue(
-        MS_IN_MINUTE * 240,
-      );
+      builder.utility.getRandomInt = getRandomIntMock.mockReturnValue(MS_IN_MINUTE * 240);
 
-      const expectedNotification: NotificationDescriber =
-        getMockNotification(1);
+      const expectedNotification: NotificationDescriber = getMockNotification(1);
 
       //@ts-ignore
       builder.utility.getNotificationIds = jest.fn().mockReturnValue({
@@ -337,11 +284,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       const eventDay = addDays(today, 1);
 
       //@ts-ignore
-      const notifications = builder.processEventDay(
-        eventDay,
-        eventEntity.event,
-        eventEntity.entity,
-      );
+      const notifications = builder.processEventDay(eventDay, eventEntity.event, eventEntity.entity);
 
       const scheduledAt = new Date(eventDay);
       scheduledAt.setHours(20);
@@ -367,13 +310,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
       const event = getEmptyEvent();
-      setNormalSettingsToEvent(
-        event,
-        PeriodicityType.NotDefined,
-        today,
-        false,
-        false,
-      );
+      setNormalSettingsToEvent(event, PeriodicityType.NotDefined, today, false, false);
 
       event.availability.timeFrom = { hours: 16, minutes: 0 };
       event.availability.timeTo = { hours: 10, minutes: 45 };
@@ -400,8 +337,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
         MS_IN_MINUTE * MINUTES_IN_HOUR * 12 + MS_IN_MINUTE * 10, //12h 10m
       );
 
-      const expectedNotification: NotificationDescriber =
-        getMockNotification(1);
+      const expectedNotification: NotificationDescriber = getMockNotification(1);
 
       //@ts-ignore
       builder.utility.getNotificationIds = jest.fn().mockReturnValue({
@@ -412,11 +348,7 @@ describe('NotificationBuilder: processEventDay tests', () => {
       const eventDay = addDays(today, 1);
 
       //@ts-ignore
-      const notifications = builder.processEventDay(
-        eventDay,
-        eventEntity.event,
-        eventEntity.entity,
-      );
+      const notifications = builder.processEventDay(eventDay, eventEntity.event, eventEntity.entity);
 
       const scheduledAt = addDays(new Date(eventDay), 1);
       scheduledAt.setHours(4);

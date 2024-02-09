@@ -6,10 +6,7 @@ import { FlankerLiveEvent, Logger, StreamEventLoggable } from '@shared/lib';
 import { Box } from '@shared/ui';
 
 import SwiftFlankerWrapper from './SwiftFlankerWrapper';
-import {
-  FlankerGameResponse,
-  FlankerNativeIosLogRecord,
-} from '../../lib/types';
+import { FlankerGameResponse, FlankerNativeIosLogRecord } from '../../lib/types';
 import { ConfigurationBuilder, parseResponse } from '../../lib/utils';
 
 type Props = {
@@ -17,7 +14,7 @@ type Props = {
   onResult: (data: FlankerGameResponse) => void;
 } & StreamEventLoggable<FlankerLiveEvent>;
 
-const NativeIosFlanker: FC<Props> = props => {
+const NativeIosFlanker: FC<Props> = (props) => {
   const configuration = useMemo(() => {
     return ConfigurationBuilder.buildForNativeIOS(props.configuration);
   }, [props.configuration]);
@@ -34,10 +31,7 @@ const NativeIosFlanker: FC<Props> = props => {
     NativeModules.FlankerViewManager.preloadGameImages(configString)
       .then(() => {
         NativeModules.FlankerViewManager.setGameParameters(configString);
-        NativeModules.FlankerViewManager.startGame(
-          props.configuration.isFirstPractice,
-          props.configuration.isLastTest,
-        );
+        NativeModules.FlankerViewManager.startGame(props.configuration.isFirstPractice, props.configuration.isLastTest);
       })
       .catch((error: string) =>
         Logger.log(
@@ -50,7 +44,7 @@ const NativeIosFlanker: FC<Props> = props => {
     <Box flex={1}>
       <SwiftFlankerWrapper
         style={styles.wrapper}
-        onLogResult={e => {
+        onLogResult={(e) => {
           const dataString = e.data;
           const type = e.type;
           const parsed: FlankerNativeIosLogRecord = JSON.parse(dataString);
@@ -80,7 +74,7 @@ const NativeIosFlanker: FC<Props> = props => {
             return;
           }
 
-          const result = responses.map(x =>
+          const result = responses.map((x) =>
             parseResponse({
               isWebView: false,
               record: x,

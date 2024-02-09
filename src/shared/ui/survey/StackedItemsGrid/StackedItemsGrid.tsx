@@ -16,20 +16,17 @@ const AxisListItemContainer = styled(Center, {
   padding: 5,
 });
 
-const AxisListItemText: FC<TextProps & { hasTooltip?: boolean }> = styled(
-  Text,
-  {
-    name: 'SingleSelectionPerRowAxisListItemText',
-    fontSize: 12,
-    variants: {
-      hasTooltip: {
-        true: { color: '$blue', textDecorationLine: 'underline' },
-        false: { color: '$black' },
-      },
-    } as const,
-    defaultVariants: { hasTooltip: false },
-  },
-);
+const AxisListItemText: FC<TextProps & { hasTooltip?: boolean }> = styled(Text, {
+  name: 'SingleSelectionPerRowAxisListItemText',
+  fontSize: 12,
+  variants: {
+    hasTooltip: {
+      true: { color: '$blue', textDecorationLine: 'underline' },
+      false: { color: '$black' },
+    },
+  } as const,
+  defaultVariants: { hasTooltip: false },
+});
 
 const AxisListItem: FC<{
   item: AxisItem | null;
@@ -45,16 +42,14 @@ const AxisListItem: FC<{
         <Center>
           {tooltip ? (
             <Tooltip
-              accessibilityLabel={'tooltip_view-' + tooltip}
+              accessibilityLabel={`tooltip_view-${tooltip}`}
               triggerAccessibilityLabel={`tooltip_trigger_${axisHeaderFor}-${title}`}
               markdown={tooltip}
             >
               <AxisListItemText hasTooltip>{title}</AxisListItemText>
             </Tooltip>
           ) : (
-            <AxisListItemText accessibilityLabel={accessibilityLabel ?? ''}>
-              {title}
-            </AxisListItemText>
+            <AxisListItemText accessibilityLabel={accessibilityLabel ?? ''}>{title}</AxisListItemText>
           )}
 
           {imageUrl && (
@@ -78,12 +73,7 @@ const ColumnHeaders: FC<ColumnHeadersProps> = ({ options }) => {
   return (
     <YStack>
       <XStack>
-        <AxisListItem
-          accessibilityLabel={null}
-          item={null}
-          axisHeaderFor="column"
-          maxWidth="25%"
-        />
+        <AxisListItem accessibilityLabel={null} item={null} axisHeaderFor="column" maxWidth="25%" />
 
         {options.map((option, optionIndex) => (
           <YStack key={option.id} flex={1}>
@@ -113,11 +103,7 @@ type RowListItemProps = {
   renderCell: (option: StackedRowItemValue) => ReactElement;
 };
 
-const RowListItem: FC<RowListItemProps & AccessibilityProps> = ({
-  item,
-  options,
-  renderCell,
-}) => {
+const RowListItem: FC<RowListItemProps & AccessibilityProps> = ({ item, options, renderCell }) => {
   return (
     <YStack>
       <XStack>
@@ -133,10 +119,8 @@ const RowListItem: FC<RowListItemProps & AccessibilityProps> = ({
           }}
         />
 
-        {options.map(option => (
-          <AxisListItemContainer key={option.id}>
-            {renderCell(option)}
-          </AxisListItemContainer>
+        {options.map((option) => (
+          <AxisListItemContainer key={option.id}>{renderCell(option)}</AxisListItemContainer>
         ))}
       </XStack>
 
@@ -149,10 +133,7 @@ type StackedItemsGridProps = {
   items: StackedRowItemValue[];
   options: StackedRowItemValue[];
   values?: Array<{ rowId: string; optionId: string }> | null;
-  renderCell: (
-    optionIndex: number,
-    option: StackedRowItemValue,
-  ) => ReactElement;
+  renderCell: (optionIndex: number, option: StackedRowItemValue) => ReactElement;
 } & AccessibilityProps;
 
 const StackedItemsGrid: FC<StackedItemsGridProps> = ({
@@ -167,7 +148,7 @@ const StackedItemsGrid: FC<StackedItemsGridProps> = ({
       return '';
     }
 
-    const rowSelection = values?.find(v => v.rowId === stackedItem.id);
+    const rowSelection = values?.find((v) => v.rowId === stackedItem.id);
 
     return rowSelection?.optionId || '';
   };

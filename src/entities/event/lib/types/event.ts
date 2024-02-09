@@ -1,8 +1,4 @@
-import {
-  AvailabilityType,
-  NotificationTriggerType,
-  PeriodicityType,
-} from '@app/abstract/lib';
+import { AvailabilityType, NotificationTriggerType, PeriodicityType } from '@app/abstract/lib';
 import { HourMinute } from '@app/shared/lib';
 
 type NotificationSettings = {

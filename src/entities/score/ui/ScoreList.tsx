@@ -16,12 +16,7 @@ function ScoreList({ label, scores }: Props) {
 
       <YStack space={20}>
         {scores.map((score, index) => (
-          <Score
-            key={index}
-            label={score.label}
-            value={score.value}
-            highlighted={score.highlighted}
-          />
+          <Score key={index} label={score.label} value={score.value} highlighted={score.highlighted} />
         ))}
       </YStack>
     </Box>

@@ -5,11 +5,7 @@ class AppTimer extends TimerBase {
   private startTime?: number;
   private onFinish: (...args: any[]) => unknown;
 
-  constructor(
-    onFinish: (...args: any[]) => unknown,
-    startImmediately: boolean,
-    duration: number,
-  ) {
+  constructor(onFinish: (...args: any[]) => unknown, startImmediately: boolean, duration: number) {
     super();
     this.duration = duration;
     this.onFinish = onFinish;

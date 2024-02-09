@@ -19,8 +19,7 @@ export type RootStackParamList = {
   ApplicationLogs: undefined;
 };
 
-export type RootStackScreenProps<T extends keyof RootStackParamList> =
-  NativeStackScreenProps<RootStackParamList, T>;
+export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, T>;
 
 export type AppletDetailsParamList = {
   ActivityList: { appletId: string };
@@ -31,11 +30,10 @@ export type AppletDetailsParamList = {
 export type ScreenRoute = keyof RootStackParamList;
 export type ScreenParams = RootStackParamList[ScreenRoute];
 
-export type AppletDetailsScreenProps<T extends keyof AppletDetailsParamList> =
-  CompositeScreenProps<
-    BottomTabScreenProps<AppletDetailsParamList, T>,
-    RootStackScreenProps<keyof RootStackParamList>
-  >;
+export type AppletDetailsScreenProps<T extends keyof AppletDetailsParamList> = CompositeScreenProps<
+  BottomTabScreenProps<AppletDetailsParamList, T>,
+  RootStackScreenProps<keyof RootStackParamList>
+>;
 
 declare global {
   namespace ReactNavigation {

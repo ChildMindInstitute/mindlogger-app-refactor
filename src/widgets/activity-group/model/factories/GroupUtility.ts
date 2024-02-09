@@ -1,19 +1,6 @@
-import {
-  addDays,
-  addYears,
-  isEqual,
-  startOfDay,
-  subDays,
-  subSeconds,
-  subYears,
-} from 'date-fns';
+import { addDays, addYears, isEqual, startOfDay, subDays, subSeconds, subYears } from 'date-fns';
 
-import {
-  AvailabilityType,
-  PeriodicityType,
-  Progress,
-  ProgressPayload,
-} from '@app/abstract/lib';
+import { AvailabilityType, PeriodicityType, Progress, ProgressPayload } from '@app/abstract/lib';
 import { ScheduleEvent } from '@app/entities/event';
 import {
   DatesFromTo,
@@ -51,7 +38,7 @@ export class GroupUtility {
   private getStartedAt(eventActivity: EventEntity): Date {
     const record = this.getProgressRecord(eventActivity)!;
 
-    return record.startAt!;
+    return record.startAt;
   }
 
   private getAllowedTimeInterval(
@@ -61,8 +48,7 @@ export class GroupUtility {
   ): DatesFromTo {
     const { event } = eventActivity;
 
-    const { hours: hoursFrom, minutes: minutesFrom } =
-      event.availability.timeFrom!;
+    const { hours: hoursFrom, minutes: minutesFrom } = event.availability.timeFrom!;
     const { hours: hoursTo, minutes: minutesTo } = event.availability.timeTo!;
 
     if (scheduledWhen === 'today') {
@@ -102,8 +88,7 @@ export class GroupUtility {
 
   public getYesterday = () => subDays(this.getToday(), 1);
 
-  public getEndOfDay = (date: Date = this.getToday()) =>
-    subSeconds(addDays(date, 1), 1);
+  public getEndOfDay = (date: Date = this.getToday()) => subSeconds(addDays(date, 1), 1);
 
   public getTomorrow = () => addDays(this.getToday(), 1);
 
@@ -122,10 +107,7 @@ export class GroupUtility {
   }
 
   public getProgressRecord(eventActivity: EventEntity): ProgressPayload | null {
-    const record =
-      this.progress[this.appletId]?.[eventActivity.entity.id]?.[
-        eventActivity.event.id
-      ];
+    const record = this.progress[this.appletId]?.[eventActivity.entity.id]?.[eventActivity.event.id];
     return record ?? null;
   }
 
@@ -170,13 +152,10 @@ export class GroupUtility {
     }
   }
 
-  public getVoidInterval(
-    event: ScheduleEvent,
-    considerSpread: boolean,
-  ): DatesFromTo {
+  public getVoidInterval(event: ScheduleEvent, considerSpread: boolean): DatesFromTo {
     const buildFrom = considerSpread && this.isSpreadToNextDay(event);
 
-    const { timeFrom, timeTo } = event.availability!;
+    const { timeFrom, timeTo } = event.availability;
 
     let from = this.getToday();
 
@@ -195,8 +174,7 @@ export class GroupUtility {
 
   public isSpreadToNextDay(event: ScheduleEvent): boolean {
     return (
-      event.availability.availabilityType ===
-        AvailabilityType.ScheduledAccess &&
+      event.availability.availabilityType === AvailabilityType.ScheduledAccess &&
       isSourceLess({
         timeSource: event.availability.timeTo!,
         timeTarget: event.availability.timeFrom!,
@@ -244,9 +222,7 @@ export class GroupUtility {
   }
 
   public isScheduledYesterday(event: ScheduleEvent): boolean {
-    if (
-      event.availability.availabilityType === AvailabilityType.AlwaysAvailable
-    ) {
+    if (event.availability.availabilityType === AvailabilityType.AlwaysAvailable) {
       return true;
     }
 
@@ -301,15 +277,13 @@ export class GroupUtility {
 
   public getTimeToComplete(eventActivity: EventEntity): HourMinute | null {
     const { event } = eventActivity;
-    const timer = event.timers!.timer!;
+    const timer = event.timers.timer!;
 
     const startedTime = this.getStartedAt(eventActivity);
 
-    const activityDuration: number =
-      getMsFromHours(timer.hours) + getMsFromMinutes(timer.minutes);
+    const activityDuration: number = getMsFromHours(timer.hours) + getMsFromMinutes(timer.minutes);
 
-    const alreadyElapsed: number =
-      this.getNow().getTime() - startedTime.getTime();
+    const alreadyElapsed: number = this.getNow().getTime() - startedTime.getTime();
 
     if (alreadyElapsed < activityDuration) {
       const left: number = activityDuration - alreadyElapsed;

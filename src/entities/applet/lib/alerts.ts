@@ -7,10 +7,7 @@ type OnBeforeStartingActivityArgs = {
   onResume: () => void;
 };
 
-export function onBeforeStartingActivity({
-  onRestart,
-  onResume,
-}: OnBeforeStartingActivityArgs) {
+export function onBeforeStartingActivity({ onRestart, onResume }: OnBeforeStartingActivityArgs) {
   Alert.alert(
     i18n.t('additional:resume_activity'),
     i18n.t('additional:activity_resume_restart'),
@@ -29,10 +26,7 @@ export function onBeforeStartingActivity({
 }
 
 export function onMediaReferencesFound() {
-  Alert.alert(
-    i18n.t('media:media_found_title'),
-    i18n.t('media:media_found_body'),
-  );
+  Alert.alert(i18n.t('media:media_found_title'), i18n.t('media:media_found_body'));
 }
 
 export function onAppletRefreshError() {
@@ -45,11 +39,9 @@ export function onAppletRefreshError() {
 export function onAppletListRefreshError(applets: string[]) {
   Alert.alert(
     i18n.t('applet_list_component:refresh_error_header'),
-    i18n.t('applet_list_component:applets_not_refreshed') +
-      '\n' +
-      applets.reduce((result, current) => {
-        return (result.length ? result + '\n' : '') + current;
-      }, ''),
+    `${i18n.t('applet_list_component:applets_not_refreshed')}\n${applets.reduce((result, current) => {
+      return (result.length ? `${result}\n` : '') + current;
+    }, '')}`,
   );
 }
 

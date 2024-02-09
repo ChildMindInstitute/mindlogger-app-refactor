@@ -16,10 +16,7 @@ const ForgotPasswordScreen: FC = () => {
 
         <Box flex={1} mt="$6">
           <YStack>
-            <ForgotPasswordForm
-              px="$8"
-              onRecoverySuccess={() => navigate('Login')}
-            />
+            <ForgotPasswordForm px="$8" onRecoverySuccess={() => navigate('Login')} />
           </YStack>
         </Box>
       </Box>

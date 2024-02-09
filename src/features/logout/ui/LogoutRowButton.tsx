@@ -11,12 +11,7 @@ const LogoutRowButton: FC = () => {
   const { logout } = useLogout();
 
   return (
-    <RowButton
-      onPress={logout}
-      accessibilityLabel="logout-button"
-      title={t('settings:logout')}
-      rightIcon={KeyIcon}
-    />
+    <RowButton onPress={logout} accessibilityLabel="logout-button" title={t('settings:logout')} rightIcon={KeyIcon} />
   );
 };
 

@@ -11,10 +11,8 @@ const checkGalleryAndroidPermissions = async (): Promise<string> => {
   const statuses = await Permissions.checkMultiple(GALLERY_ANDROID_PERMISSIONS);
 
   if (
-    (statuses[PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE] ===
-      Permissions.RESULTS.GRANTED &&
-      statuses[PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE] ===
-        Permissions.RESULTS.GRANTED) ||
+    (statuses[PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE] === Permissions.RESULTS.GRANTED &&
+      statuses[PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE] === Permissions.RESULTS.GRANTED) ||
     IS_ANDROID_13_OR_HIGHER
   ) {
     return RESULTS.GRANTED;
@@ -39,15 +37,11 @@ const checkGalleryIOSPermissions = async (): Promise<string> => {
 const requestGalleryIOSPermissions = async () => {
   const permissionState = await Permissions.request(GALLERY_IOS_PERMISSIONS);
 
-  return (
-    permissionState === RESULTS.GRANTED || permissionState === RESULTS.LIMITED
-  );
+  return permissionState === RESULTS.GRANTED || permissionState === RESULTS.LIMITED;
 };
 
 export const checkGalleryPermissions = () =>
   IS_ANDROID ? checkGalleryAndroidPermissions() : checkGalleryIOSPermissions();
 
 export const requestGalleryPermissions = () =>
-  IS_ANDROID
-    ? requestGalleryAndroidPermissions()
-    : requestGalleryIOSPermissions();
+  IS_ANDROID ? requestGalleryAndroidPermissions() : requestGalleryIOSPermissions();

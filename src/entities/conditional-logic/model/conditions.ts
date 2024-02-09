@@ -1,8 +1,4 @@
-export const isBetweenValues = (
-  input: Maybe<number>,
-  min: number,
-  max: number,
-) => {
+export const isBetweenValues = (input: Maybe<number>, min: number, max: number) => {
   if (input == null) {
     return false;
   }
@@ -10,11 +6,7 @@ export const isBetweenValues = (
   return input > min && input < max;
 };
 
-export const isOutsideOfValues = (
-  input: Maybe<number>,
-  min: number,
-  max: number,
-) => {
+export const isOutsideOfValues = (input: Maybe<number>, min: number, max: number) => {
   if (input == null) {
     return false;
   }
@@ -23,10 +15,7 @@ export const isOutsideOfValues = (
 };
 
 // and isEqualToOption
-export const isEqualToValue = (
-  input: unknown,
-  valueToCompareWith: NonNullable<unknown>,
-) => {
+export const isEqualToValue = (input: unknown, valueToCompareWith: NonNullable<unknown>) => {
   if (input == null) {
     return false;
   }
@@ -34,10 +23,7 @@ export const isEqualToValue = (
   return input === valueToCompareWith;
 };
 
-export const isGreaterThan = (
-  input: Maybe<number>,
-  valueToCompareWith: number,
-) => {
+export const isGreaterThan = (input: Maybe<number>, valueToCompareWith: number) => {
   if (input == null) {
     return false;
   }
@@ -45,10 +31,7 @@ export const isGreaterThan = (
   return input > valueToCompareWith;
 };
 
-export const isLessThan = (
-  input: Maybe<number>,
-  valueToCompareWith: number,
-) => {
+export const isLessThan = (input: Maybe<number>, valueToCompareWith: number) => {
   if (input == null) {
     return false;
   }
@@ -64,10 +47,7 @@ export const includesValue = <TItem>(input: Maybe<TItem[]>, value: TItem) => {
   return input.includes(value);
 };
 
-export const doesNotIncludeValue = <TItem>(
-  input: Maybe<TItem[]>,
-  value: TItem,
-) => {
+export const doesNotIncludeValue = <TItem>(input: Maybe<TItem[]>, value: TItem) => {
   if (input == null) {
     return false;
   }

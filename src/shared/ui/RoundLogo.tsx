@@ -25,23 +25,11 @@ const getImageUrl = (url: string): string => {
   return url;
 };
 
-const RoundLogo: FC<Props & AccessibilityProps> = ({
-  accessibilityLabel,
-  imageUri,
-  imageStyle,
-  letter,
-  size = 64,
-}) => {
+const RoundLogo: FC<Props & AccessibilityProps> = ({ accessibilityLabel, imageUri, imageStyle, letter, size = 64 }) => {
   if (imageUri) {
     return (
-      <Box
-        accessibilityLabel={accessibilityLabel}
-        style={[getStyles(size).container]}
-      >
-        <CachedImage
-          style={[getStyles(size).image, imageStyle]}
-          source={getImageUrl(imageUri)}
-        />
+      <Box accessibilityLabel={accessibilityLabel} style={[getStyles(size).container]}>
+        <CachedImage style={[getStyles(size).image, imageStyle]} source={getImageUrl(imageUri)} />
       </Box>
     );
   }
@@ -51,13 +39,7 @@ const RoundLogo: FC<Props & AccessibilityProps> = ({
   }
 
   return (
-    <Box
-      accessibilityLabel="round-logo-default"
-      w={size}
-      h={size}
-      jc="center"
-      ai="center"
-    >
+    <Box accessibilityLabel="round-logo-default" w={size} h={size} jc="center" ai="center">
       <Svg height={size} width={size} style={{ position: 'absolute' }}>
         <Defs>
           <LinearGradient id="grad" x1="0" y1="0" x2={size} y2={size}>
