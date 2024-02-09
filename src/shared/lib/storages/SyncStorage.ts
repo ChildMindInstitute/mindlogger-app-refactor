@@ -3,6 +3,10 @@ import { MMKV } from 'react-native-mmkv';
 class SyncStorage {
   constructor(private storage: MMKV) {}
 
+  get __originalStorage__() {
+    return this.storage;
+  }
+
   getItem(key: string): string | null {
     const value = this.storage.getString(key) ?? null;
 
