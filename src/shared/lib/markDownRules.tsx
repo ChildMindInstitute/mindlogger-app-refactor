@@ -10,6 +10,7 @@ import {
 } from 'react-native-markdown-display';
 // @ts-ignore
 import * as mime from 'react-native-mime-types';
+import sanitizeHtml from 'sanitize-html';
 
 import {
   Box,
@@ -437,13 +438,20 @@ const markDownRules: RenderRules = {
     // @ts-ignore
     return defaultRenderRules.paragraph(node, children, parents, styles);
   },
+  html_inline: (node, children) => {
+    const isSafeTag = !!sanitizeHtml(node.content);
+
+    return isSafeTag ? children : null;
+  },
   html_block: node => {
+    const htmlContent = sanitizeHtml(node.content);
+
     return (
       <AutoHeightWebView
         key={node.key}
         style={localStyles.htmlWebView}
         customStyle={htmlBlockStyles}
-        source={{ html: node.content }}
+        source={{ html: htmlContent }}
         scrollEnabled={false}
         scalesPageToFit={false}
         allowsProtectedMedia
