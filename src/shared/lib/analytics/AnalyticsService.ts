@@ -34,6 +34,7 @@ export const MixEvents = {
   ActivityRestart: 'Activity Restart Button Pressed',
   ActivityResume: 'Activity Resume Button Pressed',
   AppletSelected: 'Applet Selected',
+  ReturnToActivitiesPressed: 'Return to Activities pressed',
 };
 
 const AnalyticsService = {

@@ -158,7 +158,6 @@ function Intermediate({
       changeActivity();
       onFinish();
     },
-    appletId,
   });
 
   const { getName: getActivityName } = useActivityInfo();

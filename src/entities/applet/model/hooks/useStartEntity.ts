@@ -155,9 +155,6 @@ function useStartEntity({
       AnalyticsService.track(MixEvents.ActivityResume, {
         [MixProperties.AppletId]: appletId,
       });
-      AnalyticsService.track(MixEvents.AssessmentStarted, {
-        [MixProperties.AppletId]: appletId,
-      });
     };
 
     return new Promise<StartResult>(resolve => {
@@ -279,9 +276,6 @@ function useStartEntity({
         `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" resumed, applet "${appletName}|${appletId}"`,
       );
       AnalyticsService.track(MixEvents.ActivityResume, {
-        [MixProperties.AppletId]: appletId,
-      });
-      AnalyticsService.track(MixEvents.AssessmentStarted, {
         [MixProperties.AppletId]: appletId,
       });
     };

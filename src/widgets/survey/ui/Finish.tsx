@@ -104,7 +104,6 @@ function FinishItem({
   const { isAlertOpened: isRetryAlertOpened, openAlert: openRetryAlert } =
     useRetryUpload({
       retryUpload: processQueue,
-      appletId,
     });
 
   let finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';

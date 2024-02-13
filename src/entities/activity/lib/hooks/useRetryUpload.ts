@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { AnalyticsService, MixEvents, MixProperties } from '@shared/lib';
+import { AnalyticsService, MixEvents } from '@shared/lib';
 
 import { showUploadErrorAlert } from '../alerts';
 import { UploadObservable } from '../observables';
@@ -9,7 +9,6 @@ type Input = {
   retryUpload: () => Promise<boolean>;
   onPostpone?: () => void;
   onSuccess?: () => void;
-  appletId: string;
 };
 
 type Result = {
@@ -21,7 +20,6 @@ export const useRetryUpload = ({
   retryUpload,
   onPostpone: postpone,
   onSuccess: success,
-  appletId,
 }: Input): Result => {
   const [isAlertOpened, setIsAlertOpened] = useState(false);
 
@@ -30,9 +28,7 @@ export const useRetryUpload = ({
 
     showUploadErrorAlert({
       onRetry: async () => {
-        AnalyticsService.track(MixEvents.RetryButtonPressed, {
-          [MixProperties.AppletId]: appletId,
-        });
+        AnalyticsService.track(MixEvents.RetryButtonPressed);
         try {
           setIsAlertOpened(false);
 
