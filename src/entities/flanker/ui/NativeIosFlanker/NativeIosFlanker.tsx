@@ -60,16 +60,17 @@ const NativeIosFlanker: FC<Props> = props => {
           }
 
           const liveEvent: FlankerLiveEvent = {
-            trial_index: parsed.trial_index,
+            trialIndex: parsed.trial_index,
             duration: parsed.rt,
             question: parsed.stimulus,
             correct: parsed.correct,
-            response_touch_timestamp: parsed.response_touch_timestamp,
+            responseTouchTimeStamp: parsed.response_touch_timestamp,
             tag: parsed.tag,
-            start_time: parsed.start_time,
-            start_timestamp: parsed.image_time,
+            startTime: parsed.start_time,
+            startTimestamp: parsed.image_time,
             offset: 0,
-            button_pressed: parsed.button_pressed,
+            buttonPressed: parsed.button_pressed,
+            type: 'Flanker',
           };
 
           if (type === 'response') {
