@@ -89,6 +89,8 @@ module.exports = {
     'no-unsafe-optional-chaining': 'warn',
     'react/prop-types': 'warn',
     'react/jsx-key': 'warn',
+    'react/jsx-uses-react': 'warn',
+    'react/jsx-uses-vars': 'warn',
 
     // Off
     'no-shadow': 'off',
