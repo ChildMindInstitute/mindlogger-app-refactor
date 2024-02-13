@@ -1,5 +1,13 @@
-import { ActivityPipelineType, AvailabilityType, FlowProgress } from '@app/abstract/lib';
-import { ActivityListItem, ActivityStatus, ActivityType } from '@entities/activity';
+import {
+  ActivityPipelineType,
+  AvailabilityType,
+  FlowProgress,
+} from '@app/abstract/lib';
+import {
+  ActivityListItem,
+  ActivityStatus,
+  ActivityType,
+} from '@entities/activity';
 import { MIDNIGHT_DATE } from '@shared/lib';
 
 import { GroupUtility, GroupsBuildContext } from './GroupUtility';
@@ -12,7 +20,10 @@ export class ListItemsFactory {
     this.utility = new GroupUtility(inputParams);
   }
 
-  private populateActivityFlowFields(item: ActivityListItem, activityEvent: EventEntity) {
+  private populateActivityFlowFields(
+    item: ActivityListItem,
+    activityEvent: EventEntity,
+  ) {
     const activityFlow = activityEvent.entity as ActivityFlow;
 
     item.isInActivityFlow = true;
@@ -28,12 +39,18 @@ export class ListItemsFactory {
     let activity: Activity, position: number;
 
     if (isInProgress) {
-      const progressRecord = this.utility.getProgressRecord(activityEvent) as FlowProgress;
+      const progressRecord = this.utility.getProgressRecord(
+        activityEvent,
+      ) as FlowProgress;
 
-      activity = this.utility.activities.find((x) => x.id === progressRecord.currentActivityId)!;
+      activity = this.utility.activities.find(
+        (x) => x.id === progressRecord.currentActivityId,
+      )!;
       position = progressRecord.pipelineActivityOrder + 1;
     } else {
-      activity = this.utility.activities.find((x) => x.id === activityFlow.activityIds[0])!;
+      activity = this.utility.activities.find(
+        (x) => x.id === activityFlow.activityIds[0],
+      )!;
       position = 1;
     }
 
@@ -78,10 +95,14 @@ export class ListItemsFactory {
 
     const { event } = eventActivity;
 
-    if (event.availability.availabilityType === AvailabilityType.ScheduledAccess) {
+    if (
+      event.availability.availabilityType === AvailabilityType.ScheduledAccess
+    ) {
       const isSpread = this.utility.isSpreadToNextDay(event);
 
-      const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday();
+      const to = isSpread
+        ? this.utility.getTomorrow()
+        : this.utility.getToday();
       to.setHours(event.availability.timeTo!.hours);
       to.setMinutes(event.availability.timeTo!.minutes);
       item.availableTo = to;

@@ -19,7 +19,7 @@ const ShapesRectPadding = 15;
 
 const MessageTimeout = 2000;
 
-const AbTest: FC<Props> = props => {
+const AbTest: FC<Props> = (props) => {
   const { t } = useTranslation();
 
   const { testData, onResponse, onLog } = props;
@@ -75,7 +75,7 @@ const AbTest: FC<Props> = props => {
     <Box
       flex={1}
       justifyContent="center"
-      onLayout={x =>
+      onLayout={(x) =>
         setWidth(x.nativeEvent.layout.width - ShapesRectPadding * 2)
       }
       {...props}
@@ -96,10 +96,10 @@ const AbTest: FC<Props> = props => {
             testData={testData}
             width={width}
             height={width}
-            onLogResult={logData =>
+            onLogResult={(logData) =>
               onResponse?.({ ...logData, width, startTime, updated: true })
             }
-            onMessage={msg => setMessage(msg)}
+            onMessage={(msg) => setMessage(msg)}
             onComplete={complete}
             readonly={completed}
             onLog={onLog}

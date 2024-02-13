@@ -18,7 +18,9 @@ function SystemBootUpProvider({ children, onLoadingFinished }: Props) {
   const contextValue = useMemo(
     () => ({
       onModuleInitialized: async (module: string) => {
-        moduleWaitList.current = moduleWaitList.current.filter((item) => item !== module);
+        moduleWaitList.current = moduleWaitList.current.filter(
+          (item) => item !== module,
+        );
 
         if (moduleWaitList.current.length === 0) {
           await wait(SYSTEM_BOOT_UP_DELAY);
@@ -32,7 +34,9 @@ function SystemBootUpProvider({ children, onLoadingFinished }: Props) {
 
   return (
     <>
-      <SystemBootUpContext.Provider value={contextValue}>{children}</SystemBootUpContext.Provider>
+      <SystemBootUpContext.Provider value={contextValue}>
+        {children}
+      </SystemBootUpContext.Provider>
     </>
   );
 }

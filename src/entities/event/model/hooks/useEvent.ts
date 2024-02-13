@@ -11,12 +11,20 @@ type UseScheduledEventArgs = {
   eventId: string;
 };
 
-export function useScheduledEvent({ appletId, eventId }: UseScheduledEventArgs) {
+export function useScheduledEvent({
+  appletId,
+  eventId,
+}: UseScheduledEventArgs) {
   const queryClient = useQueryClient();
 
-  const eventsResponse = getDataFromQuery<AppletEventsResponse>(getEventsKey(appletId), queryClient)!;
+  const eventsResponse = getDataFromQuery<AppletEventsResponse>(
+    getEventsKey(appletId),
+    queryClient,
+  )!;
 
-  const events: ScheduleEvent[] = mapEventsFromDto(eventsResponse.result.events);
+  const events: ScheduleEvent[] = mapEventsFromDto(
+    eventsResponse.result.events,
+  );
 
   return events.find((event) => event.id === eventId);
 }

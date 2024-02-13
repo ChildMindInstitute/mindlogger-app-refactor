@@ -1,5 +1,9 @@
 import useUserActionManager from './useUserActionManager';
-import { PipelineItemResponse, UserAction, useActivityStorageRecord } from '../../lib';
+import {
+  PipelineItemResponse,
+  UserAction,
+  useActivityStorageRecord,
+} from '../../lib';
 import PipelineVisibilityChecker from '../PipelineVisibilityChecker';
 import StepperUtils from '../StepperUtils';
 
@@ -10,7 +14,12 @@ type UseActivityPipelineArgs = {
   order: number;
 };
 
-function useActivityState({ appletId, activityId, eventId, order }: UseActivityPipelineArgs) {
+function useActivityState({
+  appletId,
+  activityId,
+  eventId,
+  order,
+}: UseActivityPipelineArgs) {
   const {
     activityStorageRecord,
     upsertActivityStorageRecord,
@@ -23,11 +32,15 @@ function useActivityState({ appletId, activityId, eventId, order }: UseActivityP
     order,
   });
 
-  const { userActionCreator, addUserAction, updateUserActionsWithAdditionalAnswer, updateUserActionsWithAnswer } =
-    useUserActionManager({
-      activityId,
-      activityState: activityStorageRecord,
-    });
+  const {
+    userActionCreator,
+    addUserAction,
+    updateUserActionsWithAdditionalAnswer,
+    updateUserActionsWithAnswer,
+  } = useUserActionManager({
+    activityId,
+    activityState: activityStorageRecord,
+  });
 
   function setStep(step: number) {
     const currentStorageRecord = getCurrentActivityStorageRecord();
@@ -177,10 +190,20 @@ function useActivityState({ appletId, activityId, eventId, order }: UseActivityP
     }
   }
 
-  function iteratePipeline(fromStep: number, callback: (isItemVisible: boolean, step: number) => void) {
-    for (let index = fromStep; index < activityStorageRecord!.items.length; index++) {
+  function iteratePipeline(
+    fromStep: number,
+    callback: (isItemVisible: boolean, step: number) => void,
+  ) {
+    for (
+      let index = fromStep;
+      index < activityStorageRecord!.items.length;
+      index++
+    ) {
       const currentStorageRecord = getCurrentActivityStorageRecord()!;
-      const visibilityChecker = PipelineVisibilityChecker(currentStorageRecord.items, currentStorageRecord.answers);
+      const visibilityChecker = PipelineVisibilityChecker(
+        currentStorageRecord.items,
+        currentStorageRecord.answers,
+      );
       const isItemVisible = visibilityChecker.isItemVisible(index);
 
       callback(isItemVisible, index);

@@ -22,9 +22,16 @@ const PlayGround: FC<Props> = (props) => {
 
   const getBackgroundColorBasedOnTimeline = (defaultColor: string) => {
     if (boundWasHit) {
-      const timeProgress = (boundHitAnimationDuration / BOUND_HIT_ANIMATION_DURATION / 1000) * 4;
-      const mixRate = [timeProgress - Math.floor(timeProgress), Math.floor(timeProgress) + 1 - timeProgress];
-      const updatedColors = [Math.floor(mixRate[0] * 255), Math.floor(mixRate[1] * 255)];
+      const timeProgress =
+        (boundHitAnimationDuration / BOUND_HIT_ANIMATION_DURATION / 1000) * 4;
+      const mixRate = [
+        timeProgress - Math.floor(timeProgress),
+        Math.floor(timeProgress) + 1 - timeProgress,
+      ];
+      const updatedColors = [
+        Math.floor(mixRate[0] * 255),
+        Math.floor(mixRate[1] * 255),
+      ];
 
       if (Math.floor(timeProgress) % 2) {
         return `rgb(${updatedColors[0]}, ${updatedColors[1]}, 0)`;

@@ -3,9 +3,17 @@ import { isToday } from 'date-fns';
 
 import { EntityPath, StoreProgress } from '@app/abstract/lib';
 import { ActivityListItem } from '@app/entities/activity';
-import { onActivityNotAvailable, onCompletedToday, onScheduledToday } from '@app/features/tap-on-notification/lib';
+import {
+  onActivityNotAvailable,
+  onCompletedToday,
+  onScheduledToday,
+} from '@app/features/tap-on-notification/lib';
 import { ILogger, Logger } from '@app/shared/lib';
-import { ActivityGroupType, ActivityGroupsModel, ActivityListGroup } from '@app/widgets/activity-group';
+import {
+  ActivityGroupType,
+  ActivityGroupsModel,
+  ActivityListGroup,
+} from '@app/widgets/activity-group';
 
 type Input = {
   entityName: string;
@@ -26,19 +34,30 @@ export const checkEntityAvailability = ({
     `[checkEntityAvailability]: Checking.. Entity = "${entityName}", appletId = ${appletId}, entityId = ${entityId}, entityType = ${entityType}, eventId = ${eventId} `,
   );
 
-  const groupsResult = ActivityGroupsModel.ActivityGroupsBuildManager.process(appletId, storeProgress, queryClient);
+  const groupsResult = ActivityGroupsModel.ActivityGroupsBuildManager.process(
+    appletId,
+    storeProgress,
+    queryClient,
+  );
 
-  const groupInProgress: ActivityListGroup = groupsResult.groups.find((x) => x.type === ActivityGroupType.InProgress)!;
+  const groupInProgress: ActivityListGroup = groupsResult.groups.find(
+    (x) => x.type === ActivityGroupType.InProgress,
+  )!;
 
-  const groupAvailable: ActivityListGroup = groupsResult.groups.find((x) => x.type === ActivityGroupType.Available)!;
+  const groupAvailable: ActivityListGroup = groupsResult.groups.find(
+    (x) => x.type === ActivityGroupType.Available,
+  )!;
 
-  const groupScheduled: ActivityListGroup = groupsResult.groups.find((x) => x.type === ActivityGroupType.Scheduled)!;
+  const groupScheduled: ActivityListGroup = groupsResult.groups.find(
+    (x) => x.type === ActivityGroupType.Scheduled,
+  )!;
 
   if (
     [...groupAvailable.activities, ...groupInProgress.activities].some(
       (x) =>
         x.eventId === eventId &&
-        ((entityType === 'flow' && entityId === x.flowId) || (entityType === 'regular' && entityId === x.activityId)),
+        ((entityType === 'flow' && entityId === x.flowId) ||
+          (entityType === 'regular' && entityId === x.activityId)),
     )
   ) {
     logger.log('[checkEntityAvailability] Check done: true');
@@ -46,11 +65,13 @@ export const checkEntityAvailability = ({
     return true;
   }
 
-  const scheduled: ActivityListItem | undefined = groupScheduled.activities.find(
-    (x) =>
-      x.eventId === eventId &&
-      ((entityType === 'flow' && entityId === x.flowId) || (entityType === 'regular' && entityId === x.activityId)),
-  );
+  const scheduled: ActivityListItem | undefined =
+    groupScheduled.activities.find(
+      (x) =>
+        x.eventId === eventId &&
+        ((entityType === 'flow' && entityId === x.flowId) ||
+          (entityType === 'regular' && entityId === x.activityId)),
+    );
 
   if (scheduled) {
     onScheduledToday(entityName, scheduled.availableFrom!);

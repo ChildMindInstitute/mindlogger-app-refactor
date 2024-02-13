@@ -13,18 +13,28 @@ type UseActivityGroupsReturn = {
   groups: ActivityListGroup[];
 };
 
-export const useActivityGroups = (appletId: string): UseActivityGroupsReturn => {
+export const useActivityGroups = (
+  appletId: string,
+): UseActivityGroupsReturn => {
   useTimer();
 
   const queryClient = useQueryClient();
 
-  const entitiesProgress = useAppSelector(AppletModel.selectors.selectInProgressApplets);
+  const entitiesProgress = useAppSelector(
+    AppletModel.selectors.selectInProgressApplets,
+  );
 
-  const groupsResult = ActivityGroupsBuildManager.process(appletId, entitiesProgress, queryClient);
+  const groupsResult = ActivityGroupsBuildManager.process(
+    appletId,
+    entitiesProgress,
+    queryClient,
+  );
 
   return {
     groups: groupsResult.groups,
     isSuccess: !groupsResult.isCacheInsufficientError,
-    error: groupsResult.isCacheInsufficientError ? 'activity_list_component:insufficient_data_error' : null,
+    error: groupsResult.isCacheInsufficientError
+      ? 'activity_list_component:insufficient_data_error'
+      : null,
   };
 };

@@ -13,13 +13,17 @@ export const evaluateFlankerNextStep = (
 
   const currentItem: PipelineItem = items[currentIndex];
 
-  const itemConfiguration: FlankerItemSettings = currentItem.payload as FlankerPayload;
+  const itemConfiguration: FlankerItemSettings =
+    currentItem.payload as FlankerPayload;
 
   if (itemConfiguration.blockType === 'test') {
     return itemConfiguration.isLastTest ? null : currentIndex + 1;
   }
 
-  if (itemConfiguration.blockType === 'practice' && itemConfiguration.isLastPractice) {
+  if (
+    itemConfiguration.blockType === 'practice' &&
+    itemConfiguration.isLastPractice
+  ) {
     return currentIndex + 1;
   }
 
@@ -46,7 +50,9 @@ export const evaluateFlankerNextStep = (
   }
 
   if (correctCount * 100 >= totalCount * minimumAccuracy) {
-    const lastPracticeIndex = items.findIndex((x) => !!x.payload && (x.payload as FlankerItemSettings).isLastPractice);
+    const lastPracticeIndex = items.findIndex(
+      (x) => !!x.payload && (x.payload as FlankerItemSettings).isLastPractice,
+    );
     return lastPracticeIndex + 1;
   }
 

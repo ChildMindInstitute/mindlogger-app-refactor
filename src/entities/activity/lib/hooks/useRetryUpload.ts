@@ -16,7 +16,11 @@ type Result = {
   openAlert: () => void;
 };
 
-export const useRetryUpload = ({ retryUpload, onPostpone: postpone, onSuccess: success }: Input): Result => {
+export const useRetryUpload = ({
+  retryUpload,
+  onPostpone: postpone,
+  onSuccess: success,
+}: Input): Result => {
   const [isAlertOpened, setIsAlertOpened] = useState(false);
 
   const openAlert = async () => {

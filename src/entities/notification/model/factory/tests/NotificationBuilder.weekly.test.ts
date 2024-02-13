@@ -1,6 +1,19 @@
-import { addDays, addMonths, addWeeks, subDays, subHours, subMinutes, subMonths, subWeeks } from 'date-fns';
+import {
+  addDays,
+  addMonths,
+  addWeeks,
+  subDays,
+  subHours,
+  subMinutes,
+  subMonths,
+  subWeeks,
+} from 'date-fns';
 
-import { AvailabilityType, NotificationTriggerType, PeriodicityType } from '@app/abstract/lib';
+import {
+  AvailabilityType,
+  NotificationTriggerType,
+  PeriodicityType,
+} from '@app/abstract/lib';
 import { ScheduledDateCalculator } from '@app/entities/event/model';
 import {
   EventNotificationDescribers,
@@ -10,7 +23,13 @@ import {
   ScheduleEvent,
 } from '@app/entities/notification/lib';
 
-import { addTime, createBuilder, getEmptyEvent, getEventEntity, getMockNotificationPattern } from './testHelpers';
+import {
+  addTime,
+  createBuilder,
+  getEmptyEvent,
+  getEventEntity,
+  getMockNotificationPattern,
+} from './testHelpers';
 import { INotificationBuilder } from '../NotificationBuilder';
 
 const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
@@ -24,10 +43,12 @@ const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
   });
 
   //@ts-ignore
-  builder.reminderCreator.utility.getNotificationIds = jest.fn().mockReturnValue({
-    id: undefined,
-    shortId: undefined,
-  });
+  builder.reminderCreator.utility.getNotificationIds = jest
+    .fn()
+    .mockReturnValue({
+      id: undefined,
+      shortId: undefined,
+    });
 
   //@ts-ignore
   builder.reminderCreator.utility.now = new Date(now);
@@ -59,17 +80,25 @@ const setNormalSettingsToEvent = (
   fixed = true,
 ) => {
   event.availability.timeFrom =
-    periodicityType === PeriodicityType.Always ? { hours: 0, minutes: 0 } : { hours: 15, minutes: 30 };
+    periodicityType === PeriodicityType.Always
+      ? { hours: 0, minutes: 0 }
+      : { hours: 15, minutes: 30 };
   event.availability.timeTo =
-    periodicityType === PeriodicityType.Always ? { hours: 23, minutes: 59 } : { hours: 20, minutes: 15 };
+    periodicityType === PeriodicityType.Always
+      ? { hours: 23, minutes: 59 }
+      : { hours: 20, minutes: 15 };
   event.availability.availabilityType =
-    periodicityType === PeriodicityType.Always ? AvailabilityType.AlwaysAvailable : AvailabilityType.ScheduledAccess;
+    periodicityType === PeriodicityType.Always
+      ? AvailabilityType.AlwaysAvailable
+      : AvailabilityType.ScheduledAccess;
   event.availability.periodicityType = periodicityType;
   event.availability.startDate = subMonths(today, 1);
   event.availability.endDate = addMonths(today, 1);
   event.notificationSettings.notifications.push({
     at: fixed ? { hours: FixedHourAt, minutes: FixedMinuteAt } : null,
-    triggerType: fixed ? NotificationTriggerType.FIXED : NotificationTriggerType.RANDOM,
+    triggerType: fixed
+      ? NotificationTriggerType.FIXED
+      : NotificationTriggerType.RANDOM,
     from: null,
     to: null,
   });
@@ -90,7 +119,10 @@ const addReminder = (
 ) => {
   const mockNotificationPattern = getMockNotificationPattern();
 
-  const reminderTriggerAt = addDays(new Date(eventDate), activityIncompleteDays);
+  const reminderTriggerAt = addDays(
+    new Date(eventDate),
+    activityIncompleteDays,
+  );
   if (!isCrossDay) {
     reminderTriggerAt.setHours(ReminderHourAt);
     reminderTriggerAt.setMinutes(ReminderMinuteAt);
@@ -104,7 +136,12 @@ const addReminder = (
     scheduledAt: reminderTriggerAt.getTime(),
     scheduledAtString: reminderTriggerAt.toString(),
     eventDayString: eventDate.toString(),
-    fallType: activityIncompleteDays === 0 ? 'current-day' : activityIncompleteDays === 1 ? 'next-day' : 'in-future',
+    fallType:
+      activityIncompleteDays === 0
+        ? 'current-day'
+        : activityIncompleteDays === 1
+          ? 'next-day'
+          : 'in-future',
     type: NotificationType.Reminder,
     isSpreadInEventSet: isCrossDay,
     notificationBody: 'Just a kindly reminder to complete the activity',
@@ -452,7 +489,11 @@ describe('NotificationBuilder: weekly event penetrating tests', () => {
 
       const expected: NotificationDescriber[] = [];
 
-      addCrossDayNotification(expected, new Date(event.selectedDate), 'outdated');
+      addCrossDayNotification(
+        expected,
+        new Date(event.selectedDate),
+        'outdated',
+      );
       addCrossDayNotification(expected, addWeeks(event.selectedDate, 1));
       addCrossDayNotification(expected, addWeeks(event.selectedDate, 2));
 
@@ -591,7 +632,11 @@ describe('NotificationBuilder: weekly event penetrating tests', () => {
 
       const expected: NotificationDescriber[] = [];
 
-      addCrossDayNotification(expected, new Date(event.selectedDate), 'completed');
+      addCrossDayNotification(
+        expected,
+        new Date(event.selectedDate),
+        'completed',
+      );
       addCrossDayNotification(expected, addWeeks(event.selectedDate, 1));
       addCrossDayNotification(expected, addWeeks(event.selectedDate, 2));
 

@@ -1,11 +1,18 @@
 import { AxiosResponse } from 'axios';
 
-import { CompletedEntitiesResponse, EntitiesCompletionsDto, EventsService } from '@app/shared/api';
+import {
+  CompletedEntitiesResponse,
+  EntitiesCompletionsDto,
+  EventsService,
+} from '@app/shared/api';
 import { ILogger, getMonthAgoDate } from '@app/shared/lib';
 
 type AppletId = string;
 
-type CollectForAppletResult = AxiosResponse<CompletedEntitiesResponse, any> | null;
+type CollectForAppletResult = AxiosResponse<
+  CompletedEntitiesResponse,
+  any
+> | null;
 
 export type CollectRemoteCompletionsResult = {
   appletEntities: Record<AppletId, EntitiesCompletionsDto>;

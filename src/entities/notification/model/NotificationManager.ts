@@ -12,36 +12,52 @@ import {
   LocalEventTriggerNotification,
 } from '../lib';
 
-function filterNotificationsByDate(notifications: NotificationDescriber[], date: number) {
+function filterNotificationsByDate(
+  notifications: NotificationDescriber[],
+  date: number,
+) {
   return notifications.filter((notification) => {
     return notification.scheduledAt > date;
   });
 }
 
 function NotificationManager() {
-  async function restackNotifications(notifications: NotificationDescriber[], amount: number) {
-    const [notificationsToSchedule, notificationsToQueue] = splitArray(notifications, amount);
+  async function restackNotifications(
+    notifications: NotificationDescriber[],
+    amount: number,
+  ) {
+    const [notificationsToSchedule, notificationsToQueue] = splitArray(
+      notifications,
+      amount,
+    );
 
     NotificationQueue.set(notificationsToQueue);
 
-    const triggerNotifications = await mapToTriggerNotifications(notificationsToSchedule);
+    const triggerNotifications = await mapToTriggerNotifications(
+      notificationsToSchedule,
+    );
 
     for (const notification of triggerNotifications) {
       await NotificationScheduler.scheduleLocalNotification(notification);
     }
 
-    const shouldCreateSystemIOSNotification = triggerNotifications.length === MAX_SCHEDULED_NOTIFICATIONS_SIZE;
+    const shouldCreateSystemIOSNotification =
+      triggerNotifications.length === MAX_SCHEDULED_NOTIFICATIONS_SIZE;
 
     if (!shouldCreateSystemIOSNotification) {
       return;
     }
 
-    const lastTriggerNotification = triggerNotifications[triggerNotifications.length - 1];
+    const lastTriggerNotification =
+      triggerNotifications[triggerNotifications.length - 1];
 
     const systemNotificationDate =
-      (lastTriggerNotification.trigger as TimestampTrigger).timestamp + SYSTEM_NOTIFICATION_DELAY;
+      (lastTriggerNotification.trigger as TimestampTrigger).timestamp +
+      SYSTEM_NOTIFICATION_DELAY;
 
-    await NotificationScheduler.scheduleSystemIOSNotification(systemNotificationDate);
+    await NotificationScheduler.scheduleSystemIOSNotification(
+      systemNotificationDate,
+    );
   }
 
   async function scheduleNotifications(notifications: NotificationDescriber[]) {
@@ -50,9 +66,11 @@ function NotificationManager() {
   }
 
   async function topUpNotificationsFromQueue() {
-    const scheduledNotifications = await NotificationScheduler.getAllScheduledNotifications();
+    const scheduledNotifications =
+      await NotificationScheduler.getAllScheduledNotifications();
 
-    const freeSlotsCount = MAX_SCHEDULED_NOTIFICATIONS_SIZE - scheduledNotifications.length;
+    const freeSlotsCount =
+      MAX_SCHEDULED_NOTIFICATIONS_SIZE - scheduledNotifications.length;
 
     const canScheduleMore = freeSlotsCount > 0;
 
@@ -61,7 +79,10 @@ function NotificationManager() {
     }
 
     const queuedNotifications = NotificationQueue.get();
-    const filteredQueuedNotifications = filterNotificationsByDate(queuedNotifications, Date.now());
+    const filteredQueuedNotifications = filterNotificationsByDate(
+      queuedNotifications,
+      Date.now(),
+    );
 
     await restackNotifications(filteredQueuedNotifications, freeSlotsCount);
   }
@@ -71,10 +92,15 @@ function NotificationManager() {
     NotificationQueue.clear();
   }
 
-  async function getNotificationsByEventId(eventId: string): Promise<LocalEventTriggerNotification[]> {
-    const triggerNotifications = await NotificationScheduler.getAllScheduledNotifications();
+  async function getNotificationsByEventId(
+    eventId: string,
+  ): Promise<LocalEventTriggerNotification[]> {
+    const triggerNotifications =
+      await NotificationScheduler.getAllScheduledNotifications();
 
-    return triggerNotifications.filter((notification) => notification.notification.data?.eventId === eventId);
+    return triggerNotifications.filter(
+      (notification) => notification.notification.data?.eventId === eventId,
+    );
   }
 
   async function cancelNotificationsForEventEntityInTimeInterval(
@@ -84,10 +110,13 @@ function NotificationManager() {
   ) {
     const notificationsForEventId = await getNotificationsByEventId(eventId);
 
-    const cancelNotificationForEventEntityInTimeInterval = (notification: LocalEventTriggerNotification) => {
+    const cancelNotificationForEventEntityInTimeInterval = (
+      notification: LocalEventTriggerNotification,
+    ) => {
       const { data, id: notificationId } = notification?.notification;
       const { scheduledAt, scheduledAtString } = data;
-      const shouldCancel = timeInterval.from <= scheduledAt && scheduledAt <= timeInterval.to;
+      const shouldCancel =
+        timeInterval.from <= scheduledAt && scheduledAt <= timeInterval.to;
 
       if (notificationId && shouldCancel) {
         Logger.log(

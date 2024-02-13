@@ -11,41 +11,43 @@ export type ViewerRef = {
   back: (step?: number) => boolean;
 };
 
-export const AbTutorialViewer = forwardRef<ViewerRef, AbTutorialViewerProps>((props, ref) => {
-  const [step, setStep] = useState(0);
+export const AbTutorialViewer = forwardRef<ViewerRef, AbTutorialViewerProps>(
+  (props, ref) => {
+    const [step, setStep] = useState(0);
 
-  const stepsCount = props.tutorials.length;
+    const stepsCount = props.tutorials.length;
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        next: () => {
-          const nextStep = step + 1;
+    useImperativeHandle(
+      ref,
+      () => {
+        return {
+          next: () => {
+            const nextStep = step + 1;
 
-          const canMove = nextStep < stepsCount;
+            const canMove = nextStep < stepsCount;
 
-          if (canMove) {
-            setStep(nextStep);
-          }
+            if (canMove) {
+              setStep(nextStep);
+            }
 
-          return canMove;
-        },
-        back: () => {
-          const nextStep = step - 1;
+            return canMove;
+          },
+          back: () => {
+            const nextStep = step - 1;
 
-          const canMove = nextStep >= 0;
+            const canMove = nextStep >= 0;
 
-          if (canMove) {
-            setStep(nextStep);
-          }
+            if (canMove) {
+              setStep(nextStep);
+            }
 
-          return canMove;
-        },
-      };
-    },
-    [step, stepsCount],
-  );
+            return canMove;
+          },
+        };
+      },
+      [step, stepsCount],
+    );
 
-  return <AbTutorial tutorialPayload={props} tutorialStepIndex={step} />;
-});
+    return <AbTutorial tutorialPayload={props} tutorialStepIndex={step} />;
+  },
+);

@@ -1,4 +1,8 @@
-import { SamplingMethod, StimulusConfigId, StringOrNull } from '@app/abstract/lib';
+import {
+  SamplingMethod,
+  StimulusConfigId,
+  StringOrNull,
+} from '@app/abstract/lib';
 
 export type FlankerWebViewConfiguration = {
   trials: Array<TestTrial>;

@@ -36,7 +36,8 @@ export const convertProgress = (storeProgress: StoreProgress): Progress => {
           type: storePayload.type,
           currentActivityStartAt: null,
           executionGroupKey: uuidv4(),
-          pipelineActivityOrder: (storePayload as FlowProgress).pipelineActivityOrder,
+          pipelineActivityOrder: (storePayload as FlowProgress)
+            .pipelineActivityOrder,
         };
         result[appletId][entityId][eventId] = payload;
       }

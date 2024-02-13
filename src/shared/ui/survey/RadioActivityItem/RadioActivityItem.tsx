@@ -31,9 +31,15 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
 
   useOnUndo(() => setRadioValueId(null));
 
-  const hasImage = useMemo(() => options.some((option) => !!option.image), [options]);
+  const hasImage = useMemo(
+    () => options.some((option) => !!option.image),
+    [options],
+  );
 
-  const hasTooltip = useMemo(() => options.some((option) => !!option.tooltip), [options]);
+  const hasTooltip = useMemo(
+    () => options.some((option) => !!option.tooltip),
+    [options],
+  );
 
   const optionsList = useMemo(() => {
     if (randomizeOptions) {

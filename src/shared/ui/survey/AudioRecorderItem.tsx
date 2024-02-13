@@ -2,7 +2,9 @@ import { useState, useRef, useEffect, FC } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
-import AudioRecorderPlayer, { AudioSet } from 'react-native-audio-recorder-player';
+import AudioRecorderPlayer, {
+  AudioSet,
+} from 'react-native-audio-recorder-player';
 import { FileSystem, Dirs } from 'react-native-file-access';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
@@ -35,7 +37,11 @@ type Props = {
   onChange: (response: Response) => void;
 };
 
-const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish, value: initialValue }) => {
+const AudioRecorderItem: FC<Props> = ({
+  config,
+  onChange: onFinish,
+  value: initialValue,
+}) => {
   const audioRecorderPlayer = useRef(new AudioRecorderPlayer());
   audioRecorderPlayer.current.setSubscriptionDuration(0.1);
   const { t } = useTranslation();
@@ -52,7 +58,9 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish, value: initi
   };
 
   const unlinkOldRecordingFile = async () => {
-    const isUrlValid = Boolean(lastFilePath && (await FileSystem.exists(lastFilePath)));
+    const isUrlValid = Boolean(
+      lastFilePath && (await FileSystem.exists(lastFilePath)),
+    );
     if (isUrlValid) {
       try {
         await FileSystem.unlink(lastFilePath!);
@@ -64,7 +72,9 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish, value: initi
 
   const generateNewFilePath = async () => {
     const randomString = uuidv4();
-    const newFilePath = IS_ANDROID ? `${androidCacheDir}/${randomString}.mp4` : `${randomString}.m4a`;
+    const newFilePath = IS_ANDROID
+      ? `${androidCacheDir}/${randomString}.mp4`
+      : `${randomString}.m4a`;
 
     await unlinkOldRecordingFile();
 
@@ -76,17 +86,22 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish, value: initi
     try {
       const newFilePath = await generateNewFilePath();
 
-      await audioRecorderPlayer.current.startRecorder(newFilePath, audioSetConfig);
+      await audioRecorderPlayer.current.startRecorder(
+        newFilePath,
+        audioSetConfig,
+      );
 
-      audioRecorderPlayer.current.addRecordBackListener(({ currentPosition }) => {
-        const elapsedSeconds = Math.floor(currentPosition / 1000);
-        setSecondsElapsed(elapsedSeconds);
-        setIsRecording(true);
+      audioRecorderPlayer.current.addRecordBackListener(
+        ({ currentPosition }) => {
+          const elapsedSeconds = Math.floor(currentPosition / 1000);
+          setSecondsElapsed(elapsedSeconds);
+          setIsRecording(true);
 
-        if (maxDuration <= elapsedSeconds) {
-          stop();
-        }
-      });
+          if (maxDuration <= elapsedSeconds) {
+            stop();
+          }
+        },
+      );
     } catch (e) {
       setErrorDescription(t('audio_recorder:record_error'));
       destroy();
@@ -103,7 +118,10 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish, value: initi
       if (isPermissionAllowed) {
         await record();
       } else {
-        await handleBlockedPermissions(t('audio_recorder:alert_title'), t('audio_recorder:alert_message'));
+        await handleBlockedPermissions(
+          t('audio_recorder:alert_title'),
+          t('audio_recorder:alert_message'),
+        );
       }
     }
   };
@@ -118,7 +136,9 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish, value: initi
         return;
       }
 
-      const name = fullPath ? fullPath.replace(/^(?:[^\/]*\/)*/, '').split('.')[0] : uuidv4();
+      const name = fullPath
+        ? fullPath.replace(/^(?:[^\/]*\/)*/, '').split('.')[0]
+        : uuidv4();
 
       const response = {
         uri: fullPath,
@@ -165,7 +185,10 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish, value: initi
       {errorDescription.length ? <Text mb={7}>{errorDescription}</Text> : null}
 
       <XStack ai="center">
-        <TouchableOpacity accessibilityLabel="audio-record-btn" onPress={isRecording ? stop : startRecord}>
+        <TouchableOpacity
+          accessibilityLabel="audio-record-btn"
+          onPress={isRecording ? stop : startRecord}
+        >
           <XStack
             h={50}
             minWidth={150}
@@ -176,7 +199,13 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish, value: initi
             p="$3"
             mr="$3"
           >
-            <Text accessibilityLabel="audio-record-btn-text" mr="$2" color="$white" fontWeight="700" fontSize={16}>
+            <Text
+              accessibilityLabel="audio-record-btn-text"
+              mr="$2"
+              color="$white"
+              fontWeight="700"
+              fontSize={16}
+            >
               {getButtonText()}
             </Text>
 
@@ -185,7 +214,9 @@ const AudioRecorderItem: FC<Props> = ({ config, onChange: onFinish, value: initi
         </TouchableOpacity>
 
         <YStack>
-          <Text accessibilityLabel="audio-record-info-text">{getInfoText()}</Text>
+          <Text accessibilityLabel="audio-record-info-text">
+            {getInfoText()}
+          </Text>
 
           {isRecording && (
             <Text accessibilityLabel="audio-record-status-text">{`${secondsElapsed} ${t(

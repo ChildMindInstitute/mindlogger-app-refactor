@@ -15,7 +15,13 @@ type Props = {
 };
 
 const ControlBar: FC<Props> = (props) => {
-  const { isTestRunning, onStartTouch, onReleaseTouch, onMove, showControlBar } = props;
+  const {
+    isTestRunning,
+    onStartTouch,
+    onReleaseTouch,
+    onMove,
+    showControlBar,
+  } = props;
 
   return (
     <YStack

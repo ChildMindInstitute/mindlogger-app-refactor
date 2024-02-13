@@ -3,7 +3,10 @@ import { Skia, SkPath } from '@shopify/react-native-skia';
 import { getBezierArray } from './bezier';
 import { DrawLine, Point } from '../types';
 
-export const convertToSkPaths = (lines: DrawLine[], startFrom: number): SkPath[] => {
+export const convertToSkPaths = (
+  lines: DrawLine[],
+  startFrom: number,
+): SkPath[] => {
   const skPaths: SkPath[] = [];
 
   for (const line of lines.slice(startFrom)) {

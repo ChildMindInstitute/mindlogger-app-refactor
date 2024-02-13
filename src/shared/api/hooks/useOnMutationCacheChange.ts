@@ -12,7 +12,11 @@ const useOnMutationCacheChange = () => {
       const key = event.mutation?.options.mutationKey?.[0];
 
       if (key === 'refresh') {
-        setRefreshError(event.mutation!.state.status === 'error' ? event.mutation!.state.error : null);
+        setRefreshError(
+          event.mutation!.state.status === 'error'
+            ? event.mutation!.state.error
+            : null,
+        );
       }
     });
   }, [queryClient]);

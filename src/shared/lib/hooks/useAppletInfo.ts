@@ -11,7 +11,10 @@ const useAppletInfo = () => {
 
   const getName = useCallback(
     (id: string) => {
-      const appletResponse = getDataFromQuery<AppletDetailsResponse>(getAppletDetailsKey(id), queryClient);
+      const appletResponse = getDataFromQuery<AppletDetailsResponse>(
+        getAppletDetailsKey(id),
+        queryClient,
+      );
       return appletResponse?.result.displayName;
     },
     [queryClient],

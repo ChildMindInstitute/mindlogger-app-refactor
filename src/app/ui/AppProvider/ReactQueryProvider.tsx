@@ -31,7 +31,10 @@ const syncPersist = createSyncStoragePersister({
 
 onlineManager.setEventListener((setOnline) => {
   return NetInfo.addEventListener((state) => {
-    const status = state.isConnected != null && state.isConnected && Boolean(state.isInternetReachable);
+    const status =
+      state.isConnected != null &&
+      state.isConnected &&
+      Boolean(state.isInternetReachable);
 
     const mutations = queryClient.getMutationCache().getAll();
 

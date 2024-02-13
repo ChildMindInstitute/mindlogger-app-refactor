@@ -3,7 +3,11 @@ import { FC, useMemo } from 'react';
 import { colors } from '@app/shared/lib';
 
 import { RadioGroup } from '../..';
-import { StackedItem, StackedItemsGrid, StackedRowItemValue } from '../StackedItemsGrid';
+import {
+  StackedItem,
+  StackedItemsGrid,
+  StackedRowItemValue,
+} from '../StackedItemsGrid';
 
 type StackedRadioConfig = {
   rows: Array<StackedItem>;
@@ -22,7 +26,13 @@ type Props = {
   textReplacer: (markdown: string) => string;
 };
 
-const StackedRadios: FC<Props> = ({ values, onChange, config, textReplacer, tooltipsShown }) => {
+const StackedRadios: FC<Props> = ({
+  values,
+  onChange,
+  config,
+  textReplacer,
+  tooltipsShown,
+}) => {
   const { options, rows } = config;
 
   const onRowValueChange = (option: StackedRowItemValue, itemIndex: number) => {
@@ -79,7 +89,10 @@ const StackedRadios: FC<Props> = ({ values, onChange, config, textReplacer, tool
               borderColor={colors.blue}
               value={option.id}
             >
-              <RadioGroup.Indicator accessibilityLabel="stack-radio-indicator" backgroundColor={colors.blue} />
+              <RadioGroup.Indicator
+                accessibilityLabel="stack-radio-indicator"
+                backgroundColor={colors.blue}
+              />
             </RadioGroup.Item>
           </RadioGroup>
         );

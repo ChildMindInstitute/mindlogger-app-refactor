@@ -1,4 +1,10 @@
-import { ActivitySummaryData, FlowState, FlowSummaryData, SummaryDataKey, useFlowStorageRecord } from '../../lib';
+import {
+  ActivitySummaryData,
+  FlowState,
+  FlowSummaryData,
+  SummaryDataKey,
+  useFlowStorageRecord,
+} from '../../lib';
 import { FlowPipelineItem } from '../pipelineBuilder';
 
 export type UseFlowStateActionsArgs = {
@@ -7,8 +13,16 @@ export type UseFlowStateActionsArgs = {
   flowId?: string;
 };
 
-export function useFlowStateActions({ appletId, eventId, flowId }: UseFlowStateActionsArgs) {
-  const { upsertFlowStorageRecord, clearFlowStorageRecord, getCurrentFlowStorageRecord } = useFlowStorageRecord({
+export function useFlowStateActions({
+  appletId,
+  eventId,
+  flowId,
+}: UseFlowStateActionsArgs) {
+  const {
+    upsertFlowStorageRecord,
+    clearFlowStorageRecord,
+    getCurrentFlowStorageRecord,
+  } = useFlowStorageRecord({
     appletId,
     eventId,
     flowId,
@@ -58,7 +72,8 @@ export function useFlowStateActions({ appletId, eventId, flowId }: UseFlowStateA
 
     const { alerts, scores, activityId } = activitySummary;
 
-    const summaryData: FlowSummaryData = (record.context?.[SummaryDataKey] ?? {}) as FlowSummaryData;
+    const summaryData: FlowSummaryData = (record.context?.[SummaryDataKey] ??
+      {}) as FlowSummaryData;
 
     summaryData[activityId] = {
       alerts,
@@ -87,7 +102,8 @@ export function useFlowStateActions({ appletId, eventId, flowId }: UseFlowStateA
 
     const step = getStep(record);
 
-    const isNextStepSummary = hasSummaryStep && pipeline[step + 1]?.type === 'Summary';
+    const isNextStepSummary =
+      hasSummaryStep && pipeline[step + 1]?.type === 'Summary';
 
     upsertFlowStorageRecord({
       ...record,

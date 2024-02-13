@@ -11,7 +11,9 @@ export type Props = {
 function Score({ label, value, highlighted }: Props) {
   return (
     <XStack alignItems="center">
-      {highlighted && <Image mr={7} src={roundAlertIcon} width={17} height={16} />}
+      {highlighted && (
+        <Image mr={7} src={roundAlertIcon} width={17} height={16} />
+      )}
 
       <Text
         mr={8}
@@ -24,7 +26,11 @@ function Score({ label, value, highlighted }: Props) {
       </Text>
 
       <Box br={10} bg={highlighted ? '$lighterGrey5' : 'white'} px={40} py={2}>
-        <Text color={highlighted ? colors.red2 : 'black'} fontWeight={highlighted ? 'bold' : 'normal'} fontSize={22}>
+        <Text
+          color={highlighted ? colors.red2 : 'black'}
+          fontWeight={highlighted ? 'bold' : 'normal'}
+          fontSize={22}
+        >
           {getFloatPartLength(value) > 2 ? value.toFixed(2) : value}
         </Text>
       </Box>

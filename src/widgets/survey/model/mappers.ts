@@ -44,7 +44,12 @@ import {
   AbLogPointDto,
   AnswerAlertsDto,
 } from '@shared/api';
-import { HourMinute, Logger, convertToDayMonthYear, getDateFromString } from '@shared/lib';
+import {
+  HourMinute,
+  Logger,
+  convertToDayMonthYear,
+  getDateFromString,
+} from '@shared/lib';
 import { Item } from '@shared/ui';
 import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
 
@@ -59,7 +64,10 @@ type TimeRange = {
 
 type StackedRadioAnswerValue = Array<Array<Item>>;
 
-export function mapAnswersToDto(pipeline: PipelineItem[], answers: Answers): AnswerDto[] {
+export function mapAnswersToDto(
+  pipeline: PipelineItem[],
+  answers: Answers,
+): AnswerDto[] {
   if (pipeline.some((x) => x.type === 'Flanker')) {
     return mapFlankerAnswersToDto(pipeline, answers);
   }
@@ -72,7 +80,10 @@ export function mapAnswersToDto(pipeline: PipelineItem[], answers: Answers): Ans
     if (canHaveAnswer) {
       const answer = answers[step] ?? null;
 
-      const dto = answer === null || answer?.answer === null ? null : convertToAnswerDto(pipelineItem.type, answer);
+      const dto =
+        answer === null || answer?.answer === null
+          ? null
+          : convertToAnswerDto(pipelineItem.type, answer);
 
       answerDtos.push(dto);
     }
@@ -81,15 +92,23 @@ export function mapAnswersToDto(pipeline: PipelineItem[], answers: Answers): Ans
   return answerDtos;
 }
 
-const mapFlankerAnswersToDto = (pipeline: PipelineItem[], answers: Answers): AnswerDto[] => {
+const mapFlankerAnswersToDto = (
+  pipeline: PipelineItem[],
+  answers: Answers,
+): AnswerDto[] => {
   const practiceSteps = pipeline
-    .map((x, index) => (x.type === 'Flanker' && x.payload.blockType === 'practice' ? index : null))
+    .map((x, index) =>
+      x.type === 'Flanker' && x.payload.blockType === 'practice' ? index : null,
+    )
     .filter((x) => x !== null)
     .map((x) => x!);
 
   const firstPracticeAnswer = answers[practiceSteps[0]];
 
-  const firstAnswerDto: AnswerDto = convertToAnswerDto('Flanker', firstPracticeAnswer);
+  const firstAnswerDto: AnswerDto = convertToAnswerDto(
+    'Flanker',
+    firstPracticeAnswer,
+  );
 
   const restOfAnswerDtos = practiceSteps
     .filter((x) => x !== practiceSteps[0])
@@ -97,9 +116,11 @@ const mapFlankerAnswersToDto = (pipeline: PipelineItem[], answers: Answers): Ans
     .map((x) => convertToAnswerDto('Flanker', answers[x]));
 
   for (const practiceAnswerDto of restOfAnswerDtos) {
-    const records = (practiceAnswerDto as ObjectAnswerDto).value as Array<FlankerAnswerRecordDto>;
+    const records = (practiceAnswerDto as ObjectAnswerDto)
+      .value as Array<FlankerAnswerRecordDto>;
 
-    const firstItemRecords = (firstAnswerDto as ObjectAnswerDto).value as Array<FlankerAnswerRecordDto>;
+    const firstItemRecords = (firstAnswerDto as ObjectAnswerDto)
+      .value as Array<FlankerAnswerRecordDto>;
 
     firstItemRecords.push(...records);
   }
@@ -112,7 +133,9 @@ const mapFlankerAnswersToDto = (pipeline: PipelineItem[], answers: Answers): Ans
     }
 
     const answer = answers[step] ?? null;
-    return answer === null ? null : convertToAnswerDto(pipelineItem.type, answer);
+    return answer === null
+      ? null
+      : convertToAnswerDto(pipelineItem.type, answer);
   });
 };
 
@@ -144,7 +167,9 @@ function convertToSliderAnswer(answer: Answer): AnswerDto {
 
 function convertToCheckboxAnswer(answer: Answer): AnswerDto {
   const checkboxAnswers = answer.answer as Item[];
-  const answerDto = checkboxAnswers?.map((checkboxAnswer) => checkboxAnswer.value);
+  const answerDto = checkboxAnswers?.map(
+    (checkboxAnswer) => checkboxAnswer.value,
+  );
 
   return {
     ...(answerDto && {
@@ -219,7 +244,9 @@ function convertToGeolocationAnswer(answer: Answer): AnswerDto {
 
 function convertToStackedRadioAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as StackedRadioResponse;
-  const answerDto = answers?.map((answerItem) => (answerItem ? answerItem.text : null)) as string[];
+  const answerDto = answers?.map((answerItem) =>
+    answerItem ? answerItem.text : null,
+  ) as string[];
 
   return {
     ...(answerDto && {
@@ -236,7 +263,9 @@ function convertToStackedCheckboxAnswer(answer: Answer): AnswerDto {
 
   const answersDto = answers?.map((answerRow) => {
     if (answerRow) {
-      return answerRow.map((answerItem) => (answerItem ? answerItem.text : null));
+      return answerRow.map((answerItem) =>
+        answerItem ? answerItem.text : null,
+      );
     }
 
     return null;
@@ -364,7 +393,10 @@ function convertToStabilityTrackerAnswer(answer: Answer): AnswerDto {
   const dto: StabilityTrackerAnswerDto = {
     value: values,
     maxLambda: stabilityTrackerResponse.maxLambda,
-    phaseType: stabilityTrackerResponse.phaseType === 'test' ? 'focus-phase' : 'challenge-phase',
+    phaseType:
+      stabilityTrackerResponse.phaseType === 'test'
+        ? 'focus-phase'
+        : 'challenge-phase',
   };
 
   return dto;
@@ -466,13 +498,19 @@ export function mapUserActionsToDto(actions: UserAction[]): UserActionDto[] {
       screen: `${action.payload.activityId}/${action.payload.activityItemId}`,
       time: action.payload.date,
       ...(action.type === 'SET_ANSWER' && {
-        response: convertToAnswerDto(action.payload.answer.type, action.payload.answer.value),
+        response: convertToAnswerDto(
+          action.payload.answer.type,
+          action.payload.answer.value,
+        ),
       }),
     };
   });
 }
 
-export function mapAnswersToAlerts(pipelineItems: PipelineItem[], answers: Answers) {
+export function mapAnswersToAlerts(
+  pipelineItems: PipelineItem[],
+  answers: Answers,
+) {
   try {
     const alerts = pipelineItems
       .flatMap((pipelineItem, step) => {
@@ -493,7 +531,10 @@ export function mapAnswersToAlerts(pipelineItems: PipelineItem[], answers: Answe
   }
 }
 
-export function convertAnswersToAlerts(pipelineItem: PipelineItem, answer: Answer): AnswerAlertsDto {
+export function convertAnswersToAlerts(
+  pipelineItem: PipelineItem,
+  answer: Answer,
+): AnswerAlertsDto {
   switch (pipelineItem.type) {
     case 'Radio':
       return convertRadioAlerts(pipelineItem, answer);
@@ -519,31 +560,52 @@ export function convertAnswersToAlerts(pipelineItem: PipelineItem, answer: Answe
 }
 
 function convertRadioAlerts(radioItem: RadioPipelineItem, answer: Answer) {
-  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromRadio(radioItem, answer);
+  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromRadio(
+    radioItem,
+    answer,
+  );
 
   const alertDtos: AnswerAlertsDto = alerts;
 
   return alertDtos;
 }
 
-function convertCheckboxAlerts(checkboxItem: CheckboxPipelineItem, answer: Answer) {
-  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromCheckbox(checkboxItem, answer);
+function convertCheckboxAlerts(
+  checkboxItem: CheckboxPipelineItem,
+  answer: Answer,
+) {
+  const alerts: AnswerAlerts =
+    PassSurveyModel.AlertsExtractor.extractFromCheckbox(checkboxItem, answer);
 
   const alertDtos: AnswerAlertsDto = alerts;
 
   return alertDtos;
 }
 
-function convertStackedRadioAlerts(stackedRadioItem: StackedRadioPipelineItem, answer: Answer) {
-  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromStackedRadio(stackedRadioItem, answer);
+function convertStackedRadioAlerts(
+  stackedRadioItem: StackedRadioPipelineItem,
+  answer: Answer,
+) {
+  const alerts: AnswerAlerts =
+    PassSurveyModel.AlertsExtractor.extractFromStackedRadio(
+      stackedRadioItem,
+      answer,
+    );
 
   const alertDtos: AnswerAlertsDto = alerts;
 
   return alertDtos;
 }
 
-function convertStackedCheckboxAlerts(stackedCheckboxItem: StackedCheckboxPipelineItem, answer: Answer) {
-  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromStackedCheckbox(stackedCheckboxItem, answer);
+function convertStackedCheckboxAlerts(
+  stackedCheckboxItem: StackedCheckboxPipelineItem,
+  answer: Answer,
+) {
+  const alerts: AnswerAlerts =
+    PassSurveyModel.AlertsExtractor.extractFromStackedCheckbox(
+      stackedCheckboxItem,
+      answer,
+    );
 
   const alertDtos: AnswerAlertsDto = alerts;
 
@@ -551,15 +613,23 @@ function convertStackedCheckboxAlerts(stackedCheckboxItem: StackedCheckboxPipeli
 }
 
 function convertSliderAlerts(sliderItem: SliderPipelineItem, answer: Answer) {
-  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromSlider(sliderItem, answer);
+  const alerts: AnswerAlerts =
+    PassSurveyModel.AlertsExtractor.extractFromSlider(sliderItem, answer);
 
   const alertDtos: AnswerAlertsDto = alerts;
 
   return alertDtos;
 }
 
-function convertStackedSliderAlerts(sliderItem: StackedSliderPipelineItem, answer: Answer) {
-  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromStackedSlider(sliderItem, answer);
+function convertStackedSliderAlerts(
+  sliderItem: StackedSliderPipelineItem,
+  answer: Answer,
+) {
+  const alerts: AnswerAlerts =
+    PassSurveyModel.AlertsExtractor.extractFromStackedSlider(
+      sliderItem,
+      answer,
+    );
 
   const alertDtos: AnswerAlertsDto = alerts;
 

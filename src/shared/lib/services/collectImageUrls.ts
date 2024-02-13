@@ -1,28 +1,38 @@
 import { ActivityDto, AppletDetailsDto, AppletDto } from '@app/shared/api';
 
-export const collectAppletRecordImageUrls = (applet: AppletDto): Array<string> => {
+export const collectAppletRecordImageUrls = (
+  applet: AppletDto,
+): Array<string> => {
   try {
     const result: Array<string> = [];
 
     applet.watermark && result.push(applet.watermark);
     applet.image && result.push(applet.image);
     applet.theme && applet.theme.logo && result.push(applet.theme.logo);
-    applet.theme && applet.theme.backgroundImage && result.push(applet.theme.backgroundImage);
+    applet.theme &&
+      applet.theme.backgroundImage &&
+      result.push(applet.theme.backgroundImage);
 
     return result;
   } catch (error) {
-    throw new Error(`[collectAppletRecordImageUrls]: Error occurred:\n\n${error}`);
+    throw new Error(
+      `[collectAppletRecordImageUrls]: Error occurred:\n\n${error}`,
+    );
   }
 };
 
-export const collectAppletDetailsImageUrls = (applet: AppletDetailsDto): Array<string> => {
+export const collectAppletDetailsImageUrls = (
+  applet: AppletDetailsDto,
+): Array<string> => {
   try {
     const result: Array<string> = [];
 
     applet.watermark && result.push(applet.watermark);
     applet.image && result.push(applet.image);
     applet.theme && applet.theme.logo && result.push(applet.theme.logo);
-    applet.theme && applet.theme.backgroundImage && result.push(applet.theme.backgroundImage);
+    applet.theme &&
+      applet.theme.backgroundImage &&
+      result.push(applet.theme.backgroundImage);
 
     for (const activity of applet.activities) {
       activity.splashScreen && result.push(activity.splashScreen);
@@ -31,7 +41,9 @@ export const collectAppletDetailsImageUrls = (applet: AppletDetailsDto): Array<s
 
     return result;
   } catch (error) {
-    throw new Error(`[collectAppletDetailsImageUrls]: Error occurred:\n\n${error}`);
+    throw new Error(
+      `[collectAppletDetailsImageUrls]: Error occurred:\n\n${error}`,
+    );
   }
 };
 
@@ -56,13 +68,17 @@ const collectActivityDetailsImageUrlsInternal = (activity: ActivityDto) => {
         break;
       }
       case 'slider': {
-        item.responseValues.minImage && result.push(item.responseValues.minImage);
-        item.responseValues.maxImage && result.push(item.responseValues.maxImage);
+        item.responseValues.minImage &&
+          result.push(item.responseValues.minImage);
+        item.responseValues.maxImage &&
+          result.push(item.responseValues.maxImage);
         break;
       }
       case 'drawing': {
-        item.responseValues.drawingBackground && result.push(item.responseValues.drawingBackground);
-        item.responseValues.drawingExample && result.push(item.responseValues.drawingExample);
+        item.responseValues.drawingBackground &&
+          result.push(item.responseValues.drawingBackground);
+        item.responseValues.drawingExample &&
+          result.push(item.responseValues.drawingExample);
         break;
       }
       case 'sliderRows': {
@@ -99,6 +115,8 @@ export const collectActivityDetailsImageUrls = (activity: ActivityDto) => {
   try {
     return collectActivityDetailsImageUrlsInternal(activity);
   } catch (error) {
-    throw new Error(`[collectActivityDetailsImageUrls]: Error occurred:\n\n${error}`);
+    throw new Error(
+      `[collectActivityDetailsImageUrls]: Error occurred:\n\n${error}`,
+    );
   }
 };

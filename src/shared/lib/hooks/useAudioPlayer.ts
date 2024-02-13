@@ -16,7 +16,9 @@ enum LoadingStates {
 const useAudioPlayer = () => {
   const audioRecorderPlayer = useRef(new AudioRecorderPlayer());
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState<LoadingStates>(LoadingStates.initial);
+  const [isLoading, setIsLoading] = useState<LoadingStates>(
+    LoadingStates.initial,
+  );
   const [playbackCount, setPlaybackCount] = useState(0);
 
   const destroy = () => {

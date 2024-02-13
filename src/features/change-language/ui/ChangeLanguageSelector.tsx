@@ -12,7 +12,9 @@ type Props = {
 const ChangeLanguageSelector: FC<Props> = (props) => {
   const { onLanguageChanged } = props;
   const { t, i18n } = useTranslation();
-  const languagesAvailable = Object.keys(i18n.services.resourceStore.data) as Language[];
+  const languagesAvailable = Object.keys(
+    i18n.services.resourceStore.data,
+  ) as Language[];
   const { resolvedLanguage } = i18n;
 
   const onLanguagePress = async (locale: Language) => {

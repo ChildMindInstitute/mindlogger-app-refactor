@@ -3,7 +3,9 @@ import { ActivityFlowRecordDto, ActivityRecordDto } from '@app/shared/api';
 
 import { Activity, ActivityFlow } from '../../lib';
 
-export const mapActivitiesFromDto = (activityDtos: ActivityRecordDto[]): Activity[] => {
+export const mapActivitiesFromDto = (
+  activityDtos: ActivityRecordDto[],
+): Activity[] => {
   const activities: Activity[] = activityDtos.map((x) => ({
     description: x.description,
     id: x.id,
@@ -14,7 +16,9 @@ export const mapActivitiesFromDto = (activityDtos: ActivityRecordDto[]): Activit
   return activities;
 };
 
-export const mapActivityFlowsFromDto = (dtos: ActivityFlowRecordDto[]): ActivityFlow[] => {
+export const mapActivityFlowsFromDto = (
+  dtos: ActivityFlowRecordDto[],
+): ActivityFlow[] => {
   const activityFlows: ActivityFlow[] = dtos.map((x) => ({
     description: x.description,
     id: x.id,

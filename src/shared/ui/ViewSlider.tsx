@@ -1,4 +1,11 @@
-import { forwardRef, useImperativeHandle, PropsWithChildren, useCallback, useMemo, useRef } from 'react';
+import {
+  forwardRef,
+  useImperativeHandle,
+  PropsWithChildren,
+  useCallback,
+  useMemo,
+  useRef,
+} from 'react';
 import { StyleSheet } from 'react-native';
 
 import Animated, {
@@ -34,93 +41,99 @@ const SlideOutRightAnimation = new SlideOutRight().duration(300).build();
 const FadeInAnimation = new FadeIn().build();
 const FadeOutAnimation = new FadeOut().build();
 
-export const ViewSlider = forwardRef<ViewSliderRef, Props>(({ viewCount, step = 0, renderView }, ref) => {
-  const views = useMemo(() => range(viewCount), [viewCount]);
+export const ViewSlider = forwardRef<ViewSliderRef, Props>(
+  ({ viewCount, step = 0, renderView }, ref) => {
+    const views = useMemo(() => range(viewCount), [viewCount]);
 
-  const currentIndexRef = useRef<number>(step);
+    const currentIndexRef = useRef<number>(step);
 
-  const enteringDirection = useSharedValue<Direction>('not-specified');
-  const exitingDirection = useSharedValue<Direction>('not-specified');
+    const enteringDirection = useSharedValue<Direction>('not-specified');
+    const exitingDirection = useSharedValue<Direction>('not-specified');
 
-  const isLast = step === views.length - 1;
+    const isLast = step === views.length - 1;
 
-  const next = useCallback(
-    (shift: number = 1) => {
-      const currentIndex = currentIndexRef.current;
-      const canMove = shift > 0 && currentIndex + shift < views.length;
+    const next = useCallback(
+      (shift: number = 1) => {
+        const currentIndex = currentIndexRef.current;
+        const canMove = shift > 0 && currentIndex + shift < views.length;
 
-      if (canMove) {
-        currentIndexRef.current = currentIndex + shift;
-        enteringDirection.value = 'right';
-        exitingDirection.value = 'left';
-      } else {
-        enteringDirection.value = 'not-specified';
-        exitingDirection.value = 'not-specified';
+        if (canMove) {
+          currentIndexRef.current = currentIndex + shift;
+          enteringDirection.value = 'right';
+          exitingDirection.value = 'left';
+        } else {
+          enteringDirection.value = 'not-specified';
+          exitingDirection.value = 'not-specified';
+        }
+
+        return canMove;
+      },
+      [enteringDirection, exitingDirection, views.length],
+    );
+
+    const back = useCallback(
+      (shift: number = 1) => {
+        const currentIndex = currentIndexRef.current;
+        const canMove = shift > 0 && currentIndex - shift >= 0;
+
+        if (canMove) {
+          currentIndexRef.current = currentIndex - shift;
+          enteringDirection.value = 'left';
+          exitingDirection.value = 'right';
+        }
+
+        return canMove;
+      },
+      [enteringDirection, exitingDirection],
+    );
+
+    const EnteringAnimation: EntryExitAnimationFunction = (values: any) => {
+      'worklet';
+
+      if (enteringDirection.value === 'not-specified') {
+        return FadeInAnimation(values);
       }
 
-      return canMove;
-    },
-    [enteringDirection, exitingDirection, views.length],
-  );
+      return enteringDirection.value === 'right'
+        ? SlideInRightAnimation(values)
+        : SlideInLeftAnimation(values);
+    };
 
-  const back = useCallback(
-    (shift: number = 1) => {
-      const currentIndex = currentIndexRef.current;
-      const canMove = shift > 0 && currentIndex - shift >= 0;
+    const ExitingAnimation: EntryExitAnimationFunction = (values: any) => {
+      'worklet';
 
-      if (canMove) {
-        currentIndexRef.current = currentIndex - shift;
-        enteringDirection.value = 'left';
-        exitingDirection.value = 'right';
+      if (exitingDirection.value === 'not-specified') {
+        return FadeOutAnimation(values);
       }
 
-      return canMove;
-    },
-    [enteringDirection, exitingDirection],
-  );
+      return exitingDirection.value === 'left'
+        ? SlideOutLeftAnimation(values)
+        : SlideOutRightAnimation(values);
+    };
 
-  const EnteringAnimation: EntryExitAnimationFunction = (values: any) => {
-    'worklet';
+    useImperativeHandle(
+      ref,
+      () => {
+        return {
+          next,
+          back,
+        };
+      },
+      [back, next],
+    );
 
-    if (enteringDirection.value === 'not-specified') {
-      return FadeInAnimation(values);
-    }
-
-    return enteringDirection.value === 'right' ? SlideInRightAnimation(values) : SlideInLeftAnimation(values);
-  };
-
-  const ExitingAnimation: EntryExitAnimationFunction = (values: any) => {
-    'worklet';
-
-    if (exitingDirection.value === 'not-specified') {
-      return FadeOutAnimation(values);
-    }
-
-    return exitingDirection.value === 'left' ? SlideOutLeftAnimation(values) : SlideOutRightAnimation(values);
-  };
-
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        next,
-        back,
-      };
-    },
-    [back, next],
-  );
-
-  return (
-    <Animated.View
-      style={styles.box}
-      key={step}
-      entering={EnteringAnimation}
-      exiting={isLast ? undefined : ExitingAnimation}
-    >
-      {renderView({ index: step })}
-    </Animated.View>
-  );
-});
+    return (
+      <Animated.View
+        style={styles.box}
+        key={step}
+        entering={EnteringAnimation}
+        exiting={isLast ? undefined : ExitingAnimation}
+      >
+        {renderView({ index: step })}
+      </Animated.View>
+    );
+  },
+);
 
 const styles = StyleSheet.create({
   box: {

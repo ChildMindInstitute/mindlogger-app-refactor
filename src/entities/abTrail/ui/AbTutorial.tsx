@@ -38,11 +38,20 @@ const AbTutorial: FC<Props> = (props) => {
     if (!tutorialRecord || !shapesData) {
       return null;
     }
-    return shapesData.nodes.find((x) => x.label === tutorialRecord.nodeLabel?.toString())?.orderIndex ?? null;
+    return (
+      shapesData.nodes.find(
+        (x) => x.label === tutorialRecord.nodeLabel?.toString(),
+      )?.orderIndex ?? null
+    );
   };
 
   return (
-    <Box flex={1} onLayout={(x) => setWidth(x.nativeEvent.layout.width - ShapesRectPadding * 2)}>
+    <Box
+      flex={1}
+      onLayout={(x) =>
+        setWidth(x.nativeEvent.layout.width - ShapesRectPadding * 2)
+      }
+    >
       {!!tutorialRecord && (
         <Text alignSelf="center" h={70} mx={ShapesRectPadding} fontSize={15}>
           {tutorialRecord.text}
@@ -51,8 +60,19 @@ const AbTutorial: FC<Props> = (props) => {
 
       {width && (
         <XStack jc="center">
-          <Box w={width} h={width} borderWidth={1} borderColor="$lightGrey2" p={ContentPadding}>
-            {shapesData && <AbShapes testData={shapesData} greenRoundOrder={getOrderIndexByLabel()} />}
+          <Box
+            w={width}
+            h={width}
+            borderWidth={1}
+            borderColor="$lightGrey2"
+            p={ContentPadding}
+          >
+            {shapesData && (
+              <AbShapes
+                testData={shapesData}
+                greenRoundOrder={getOrderIndexByLabel()}
+              />
+            )}
           </Box>
         </XStack>
       )}

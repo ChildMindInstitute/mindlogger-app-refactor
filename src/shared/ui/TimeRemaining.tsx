@@ -45,7 +45,10 @@ const TimeRemaining: FC<Props> = (props: Props) => {
   }, []);
 
   const getEntityDuration = (): number => {
-    return getMsFromHours(timerSettings.hours) + getMsFromMinutes(timerSettings.minutes);
+    return (
+      getMsFromHours(timerSettings.hours) +
+      getMsFromMinutes(timerSettings.minutes)
+    );
   };
 
   const getFormattedTimeLeft = (): string => {
@@ -54,11 +57,15 @@ const TimeRemaining: FC<Props> = (props: Props) => {
     }
     const hours = Math.floor(left / MS_IN_MINUTE / MINUTES_IN_HOUR);
     const minutes = Math.floor((left - getMsFromHours(hours)) / MS_IN_MINUTE);
-    const seconds = Math.round((left - getMsFromHours(hours) - getMsFromMinutes(minutes)) / MS_IN_SECOND);
+    const seconds = Math.round(
+      (left - getMsFromHours(hours) - getMsFromMinutes(minutes)) / MS_IN_SECOND,
+    );
 
-    return `${t('activity_time:time_remaining')}: ${getTwoDigits(
-      hours,
-    )}:${getTwoDigits(minutes)}:${getTwoDigits(seconds)}`;
+    return `${t(
+      'activity_time:time_remaining',
+    )}: ${getTwoDigits(hours)}:${getTwoDigits(minutes)}:${getTwoDigits(
+      seconds,
+    )}`;
   };
 
   const text = getFormattedTimeLeft();

@@ -1,7 +1,9 @@
 import { Report } from '@app/entities/activity';
 import { ILogger, Logger } from '@app/shared/lib';
 
-import ScoreConditionsEvaluator, { IScoreConditionsEvaluator } from './ScoreConditionsEvaluator';
+import ScoreConditionsEvaluator, {
+  IScoreConditionsEvaluator,
+} from './ScoreConditionsEvaluator';
 import ScoresCalculator, { IScoresCalculator } from './ScoresCalculator';
 import { Answers, PipelineItem, ScoreRecord } from '../lib';
 
@@ -12,14 +14,26 @@ class ScoresExtractor {
 
   private logger: ILogger;
 
-  constructor(conditionsEvaluator: IScoreConditionsEvaluator, scoresCalculator: IScoresCalculator, logger: ILogger) {
+  constructor(
+    conditionsEvaluator: IScoreConditionsEvaluator,
+    scoresCalculator: IScoresCalculator,
+    logger: ILogger,
+  ) {
     this.conditionsEvaluator = conditionsEvaluator;
     this.scoresCalculator = scoresCalculator;
     this.logger = logger;
   }
 
-  private extractInternal(pipelineItems: PipelineItem[], answers: Answers, scoreSettings: Report): ScoreRecord | null {
-    const score: number | null = this.scoresCalculator.calculate(pipelineItems, answers, scoreSettings);
+  private extractInternal(
+    pipelineItems: PipelineItem[],
+    answers: Answers,
+    scoreSettings: Report,
+  ): ScoreRecord | null {
+    const score: number | null = this.scoresCalculator.calculate(
+      pipelineItems,
+      answers,
+      scoreSettings,
+    );
 
     if (score === null) {
       return null;
@@ -27,7 +41,9 @@ class ScoresExtractor {
 
     const conditionLogicResults: Array<boolean> = scoreSettings.conditionalLogic
       .filter((x) => x.flagScore)
-      .map((conditions) => this.conditionsEvaluator.evaluate(conditions, score));
+      .map((conditions) =>
+        this.conditionsEvaluator.evaluate(conditions, score),
+      );
 
     return {
       name: scoreSettings.name,
@@ -46,15 +62,23 @@ class ScoresExtractor {
 
     let settingsIndex = 0;
 
-    this.logger.log(`[ScoresExtractor.extract]: Extracting scores for activity '${logActivityName}'`);
+    this.logger.log(
+      `[ScoresExtractor.extract]: Extracting scores for activity '${logActivityName}'`,
+    );
 
     for (const scoreSettings of settings) {
       const logScore = `'${scoreSettings.name}' for settings with index '${settingsIndex}'`;
 
       try {
-        this.logger.log(`[ScoresExtractor.extract]: Extracting score ${logScore}`);
+        this.logger.log(
+          `[ScoresExtractor.extract]: Extracting score ${logScore}`,
+        );
 
-        const score: ScoreRecord | null = this.extractInternal(pipelineItems, answers, scoreSettings);
+        const score: ScoreRecord | null = this.extractInternal(
+          pipelineItems,
+          answers,
+          scoreSettings,
+        );
 
         if (score !== null) {
           result.push(score);
@@ -77,4 +101,8 @@ class ScoresExtractor {
   }
 }
 
-export default new ScoresExtractor(ScoreConditionsEvaluator, ScoresCalculator, Logger);
+export default new ScoresExtractor(
+  ScoreConditionsEvaluator,
+  ScoresCalculator,
+  Logger,
+);

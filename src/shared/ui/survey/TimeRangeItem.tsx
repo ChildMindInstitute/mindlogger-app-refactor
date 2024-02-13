@@ -1,6 +1,12 @@
 import { FC, useMemo } from 'react';
 
-import { HourMinute, colors, getMidnightDateInMs, getMsFromHours, getMsFromMinutes } from '@app/shared/lib';
+import {
+  HourMinute,
+  colors,
+  getMidnightDateInMs,
+  getMsFromHours,
+  getMsFromMinutes,
+} from '@app/shared/lib';
 import { YStack, DateTimePicker, AlarmIcon, BedIcon } from '@shared/ui';
 
 type TimeRangeValue = {
@@ -15,7 +21,10 @@ type Props = {
 
 const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
   const transformToDate = (hourMinute: HourMinute): Date => {
-    const msTime = getMidnightDateInMs() + getMsFromHours(hourMinute.hours) + getMsFromMinutes(hourMinute.minutes);
+    const msTime =
+      getMidnightDateInMs() +
+      getMsFromHours(hourMinute.hours) +
+      getMsFromMinutes(hourMinute.minutes);
 
     return new Date(msTime);
   };
@@ -25,9 +34,15 @@ const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
     hours: time.getHours(),
   });
 
-  const startTimeAsDate = useMemo(() => (value?.startTime ? transformToDate(value.startTime) : new Date()), [value]);
+  const startTimeAsDate = useMemo(
+    () => (value?.startTime ? transformToDate(value.startTime) : new Date()),
+    [value],
+  );
 
-  const endTimeAsDate = useMemo(() => (value?.endTime ? transformToDate(value.endTime) : new Date()), [value]);
+  const endTimeAsDate = useMemo(
+    () => (value?.endTime ? transformToDate(value.endTime) : new Date()),
+    [value],
+  );
 
   const onChangeStartTime = (time: Date) =>
     onChange({

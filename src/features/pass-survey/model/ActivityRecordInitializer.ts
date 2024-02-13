@@ -4,7 +4,12 @@ import { ActivityDetails, ActivityModel } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import { ActivityItemType } from '@app/features/pass-survey';
 import { ActivityResponse, AppletDetailsResponse } from '@app/shared/api';
-import { createSecureStorage, getActivityDetailsKey, getAppletDetailsKey, getDataFromQuery } from '@app/shared/lib';
+import {
+  createSecureStorage,
+  getActivityDetailsKey,
+  getAppletDetailsKey,
+  getDataFromQuery,
+} from '@app/shared/lib';
 
 import { buildPipeline } from './pipelineBuilder';
 import { ActivityState } from '../lib';
@@ -33,15 +38,30 @@ export type InitializeHiddenItem = {
   type: ActivityItemType;
 };
 
-export function ActivityRecordInitializer({ appletId, queryClient }: ActivityRecordInitializerArgs) {
-  const appletResponse = getDataFromQuery<AppletDetailsResponse>(getAppletDetailsKey(appletId), queryClient)!;
+export function ActivityRecordInitializer({
+  appletId,
+  queryClient,
+}: ActivityRecordInitializerArgs) {
+  const appletResponse = getDataFromQuery<AppletDetailsResponse>(
+    getAppletDetailsKey(appletId),
+    queryClient,
+  )!;
 
   const applet = AppletModel.mapAppletDetailsFromDto(appletResponse.result);
 
-  const initializeActivity = ({ activityId, eventId, order = 0 }: InitializeArgs) => {
-    const activityResponse = getDataFromQuery<ActivityResponse>(getActivityDetailsKey(activityId), queryClient)!;
+  const initializeActivity = ({
+    activityId,
+    eventId,
+    order = 0,
+  }: InitializeArgs) => {
+    const activityResponse = getDataFromQuery<ActivityResponse>(
+      getActivityDetailsKey(activityId),
+      queryClient,
+    )!;
 
-    const activity: ActivityDetails = ActivityModel.mapToActivity(activityResponse.result);
+    const activity: ActivityDetails = ActivityModel.mapToActivity(
+      activityResponse.result,
+    );
 
     const state: ActivityState = {
       step: 0,
@@ -83,7 +103,9 @@ export function ActivityRecordInitializer({ appletId, queryClient }: ActivityRec
     const flow = applet.activityFlows.find((o) => o.id === flowId);
 
     if (!flow) {
-      throw Error('[ActivityRecordInitializer]: flow has not been found in the applet');
+      throw Error(
+        '[ActivityRecordInitializer]: flow has not been found in the applet',
+      );
     }
 
     flow.activityIds.forEach((activityId, order) => {

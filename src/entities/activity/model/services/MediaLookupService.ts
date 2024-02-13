@@ -14,12 +14,15 @@ const createMediaLookupService = () => {
 
   const lookupInActivity = (activity: ActivityDetails): boolean => {
     return activity.items.some((item) => {
-      return lookupInMarkdown(item.question) || item.inputType === 'AudioPlayer';
+      return (
+        lookupInMarkdown(item.question) || item.inputType === 'AudioPlayer'
+      );
     });
   };
 
   const lookup = (lookupInput: LookupEntityInput): boolean => {
-    const activitiesToLookup: ActivityDetails[] = EntityActivitiesCollector.collect(lookupInput);
+    const activitiesToLookup: ActivityDetails[] =
+      EntityActivitiesCollector.collect(lookupInput);
 
     return activitiesToLookup.some((activity) => {
       return lookupInActivity(activity);

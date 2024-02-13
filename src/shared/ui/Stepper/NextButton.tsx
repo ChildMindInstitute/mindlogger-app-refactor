@@ -21,14 +21,20 @@ function NextButton({ children, isIcon, accessibilityLabel }: Props) {
 
   if (isIcon) {
     return (
-      <TouchableOpacity accessibilityLabel={`${accessibilityLabel}-top` ?? ''} onPress={onPressNext}>
+      <TouchableOpacity
+        accessibilityLabel={`${accessibilityLabel}-top` ?? ''}
+        onPress={onPressNext}
+      >
         <RightArrowIcon color={colors.tertiary} size={30} />
       </TouchableOpacity>
     );
   }
 
   return (
-    <ActionButton accessibilityLabel={`${accessibilityLabel}-bottom` ?? ''} onPress={onPressNext}>
+    <ActionButton
+      accessibilityLabel={`${accessibilityLabel}-bottom` ?? ''}
+      onPress={onPressNext}
+    >
       {children}
     </ActionButton>
   );

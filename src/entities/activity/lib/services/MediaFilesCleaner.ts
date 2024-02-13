@@ -22,7 +22,9 @@ const createMediaFilesCleaner = (): Result => {
     const storageActivityState = activityStorage.getString(key);
 
     if (!storageActivityState) {
-      console.warn("[MediaFilesCleaner.cleanUp]: Activity record doesn't exist");
+      console.warn(
+        "[MediaFilesCleaner.cleanUp]: Activity record doesn't exist",
+      );
       return;
     }
 
@@ -46,7 +48,9 @@ const createMediaFilesCleaner = (): Result => {
           await FileSystem.unlink(fileUrl);
         }
       } catch (error) {
-        console.warn('[MediaFilesCleaner.cleanUp]: Error occurred while deleting file');
+        console.warn(
+          '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',
+        );
         console.error(error);
       }
     }
@@ -54,7 +58,12 @@ const createMediaFilesCleaner = (): Result => {
     console.info('[MediaFilesCleaner.cleanUp]: completed');
   };
 
-  const cleanUp = async ({ appletId, activityId, eventId, order }: ActivityRecordKeyParams) => {
+  const cleanUp = async ({
+    appletId,
+    activityId,
+    eventId,
+    order,
+  }: ActivityRecordKeyParams) => {
     const key = `${appletId}-${activityId}-${eventId}-${order}`;
 
     return cleanUpByStorageKey(key);
@@ -78,7 +87,10 @@ const createMediaFilesCleaner = (): Result => {
         }
       });
     } catch (error) {
-      console.warn('[MediaFilesCleaner.cleanUp]: Error occurred while deleting file', error);
+      console.warn(
+        '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',
+        error,
+      );
     }
   };
 

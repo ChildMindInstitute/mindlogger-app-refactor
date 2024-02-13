@@ -58,12 +58,14 @@ const slice = createSlice({
       };
 
       state.inProgress[appletId] = state.inProgress[appletId] ?? {};
-      state.inProgress[appletId][activityId] = state.inProgress[appletId][activityId] ?? {};
+      state.inProgress[appletId][activityId] =
+        state.inProgress[appletId][activityId] ?? {};
       state.inProgress[appletId][activityId][eventId] = activityEvent;
     },
 
     flowStarted: (state, action: PayloadAction<InProgressFlow>) => {
-      const { appletId, activityId, flowId, eventId, pipelineActivityOrder } = action.payload;
+      const { appletId, activityId, flowId, eventId, pipelineActivityOrder } =
+        action.payload;
 
       const flowEvent: StoreProgressPayload = {
         type: ActivityPipelineType.Flow,
@@ -76,13 +78,15 @@ const slice = createSlice({
       };
 
       state.inProgress[appletId] = state.inProgress[appletId] ?? {};
-      state.inProgress[appletId][flowId] = state.inProgress[appletId][flowId] ?? {};
+      state.inProgress[appletId][flowId] =
+        state.inProgress[appletId][flowId] ?? {};
 
       state.inProgress[appletId][flowId][eventId] = flowEvent;
     },
 
     flowUpdated: (state, action: PayloadAction<InProgressFlow>) => {
-      const { appletId, activityId, flowId, eventId, pipelineActivityOrder } = action.payload;
+      const { appletId, activityId, flowId, eventId, pipelineActivityOrder } =
+        action.payload;
 
       const event = state.inProgress[appletId][flowId][eventId] as FlowProgress;
 
@@ -94,7 +98,8 @@ const slice = createSlice({
     entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {
       const { appletId, entityId, eventId } = action.payload;
 
-      state.inProgress[appletId][entityId][eventId].endAt = new Date().getTime();
+      state.inProgress[appletId][entityId][eventId].endAt =
+        new Date().getTime();
 
       const completedEntities = state.completedEntities ?? {};
 
@@ -122,11 +127,16 @@ const slice = createSlice({
       delete state.inProgress[appletId][entityId][eventId];
     },
 
-    completedEntityMissing: (state, action: PayloadAction<IStoreProgressPayload & InProgressEntity>) => {
-      const { startAt, endAt, type, appletId, entityId, eventId } = action.payload;
+    completedEntityMissing: (
+      state,
+      action: PayloadAction<IStoreProgressPayload & InProgressEntity>,
+    ) => {
+      const { startAt, endAt, type, appletId, entityId, eventId } =
+        action.payload;
 
       state.inProgress[appletId] = state.inProgress[appletId] ?? {};
-      state.inProgress[appletId][entityId] = state.inProgress[appletId][entityId] ?? {};
+      state.inProgress[appletId][entityId] =
+        state.inProgress[appletId][entityId] ?? {};
       state.inProgress[appletId][entityId][eventId] = {
         type,
         startAt,
@@ -134,7 +144,10 @@ const slice = createSlice({
       } as StoreProgressPayload;
     },
 
-    completedEntityUpdated: (state, action: PayloadAction<InProgressEntity & { endAt: number }>) => {
+    completedEntityUpdated: (
+      state,
+      action: PayloadAction<InProgressEntity & { endAt: number }>,
+    ) => {
       const { endAt, appletId, entityId, eventId } = action.payload;
 
       state.inProgress[appletId][entityId][eventId].endAt = endAt;

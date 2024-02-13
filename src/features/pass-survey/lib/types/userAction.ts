@@ -55,4 +55,10 @@ type SkipAction = {
   };
 };
 
-export type UserAction = SetAnswerAction | GoBackAction | GoNextAction | CompleteAction | UndoAction | SkipAction;
+export type UserAction =
+  | SetAnswerAction
+  | GoBackAction
+  | GoNextAction
+  | CompleteAction
+  | UndoAction
+  | SkipAction;

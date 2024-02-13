@@ -15,7 +15,9 @@ type StackedSliderAnswerDto = AnswerWithAdditionalTextDto<Array<number>>;
 
 type CheckboxAnswerDto = AnswerWithAdditionalTextDto<string[]>;
 
-type StackedCheckboxAnswerDto = AnswerWithAdditionalTextDto<Array<Array<string>>>;
+type StackedCheckboxAnswerDto = AnswerWithAdditionalTextDto<
+  Array<Array<string>>
+>;
 
 type RadioAnswerDto = AnswerWithAdditionalTextDto<string>;
 

@@ -1,7 +1,10 @@
 import { FC } from 'react';
 import { AccessibilityProps, StyleSheet } from 'react-native';
 
-import { Slider as SliderBase, SliderProps } from '@miblanchard/react-native-slider';
+import {
+  Slider as SliderBase,
+  SliderProps,
+} from '@miblanchard/react-native-slider';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { colors } from '@shared/lib/constants';

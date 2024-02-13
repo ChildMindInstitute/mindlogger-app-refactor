@@ -1,6 +1,14 @@
-import { ActivityListItem, ActivityStatus, ActivityType } from '@app/entities/activity';
+import {
+  ActivityListItem,
+  ActivityStatus,
+  ActivityType,
+} from '@app/entities/activity';
 
-import { ActivityGroupType, ActivityGroupTypeNames, ActivityListGroup } from '../../../lib';
+import {
+  ActivityGroupType,
+  ActivityGroupTypeNames,
+  ActivityListGroup,
+} from '../../../lib';
 
 const groupMocks: ActivityListGroup[] = [];
 

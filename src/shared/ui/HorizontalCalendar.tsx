@@ -14,7 +14,12 @@ const HorizontalCalendar: FC<BoxProps> = (styledProps) => {
         {title}
       </Text>
 
-      <XStack accessibilityLabel="calendar-dates-container" px={6} jc="space-around" width="100%">
+      <XStack
+        accessibilityLabel="calendar-dates-container"
+        px={6}
+        jc="space-around"
+        width="100%"
+      >
         {dates.map((date) => {
           const dateOfMonth = date.getDate();
           const weekDayName = format(date, 'EE').toUpperCase();
@@ -33,11 +38,20 @@ const HorizontalCalendar: FC<BoxProps> = (styledProps) => {
               jc="center"
               bg={isToday ? '$lightBlue' : 'transparent'}
             >
-              <Text accessibilityLabel="calendar-week-name" mb="$1" fontSize={10} color={textColor}>
+              <Text
+                accessibilityLabel="calendar-week-name"
+                mb="$1"
+                fontSize={10}
+                color={textColor}
+              >
                 {weekDayName}
               </Text>
 
-              <Text accessibilityLabel="calendar-day-of-month" color={textColor} fontWeight="700">
+              <Text
+                accessibilityLabel="calendar-day-of-month"
+                color={textColor}
+                fontWeight="700"
+              >
                 {dateOfMonth}
               </Text>
             </YStack>

@@ -1,6 +1,11 @@
 import { addDays, addMinutes, subDays, subMinutes } from 'date-fns';
 
-import { ActivityPipelineType, AvailabilityType, PeriodicityType, Progress } from '@app/abstract/lib';
+import {
+  ActivityPipelineType,
+  AvailabilityType,
+  PeriodicityType,
+  Progress,
+} from '@app/abstract/lib';
 import { ActivityType } from '@app/entities/activity/lib';
 import { EventAvailability } from '@app/entities/event';
 import { HourMinute } from '@app/shared/lib';
@@ -69,7 +74,11 @@ const getScheduledSection = (): EventAvailability => {
   return result;
 };
 
-const getScheduledEventEntity = (settings: { startDate: Date; endDate: Date; scheduledAtDay: Date }): EventEntity => {
+const getScheduledEventEntity = (settings: {
+  startDate: Date;
+  endDate: Date;
+  scheduledAtDay: Date;
+}): EventEntity => {
   const { startDate, endDate, scheduledAtDay } = settings;
 
   const section = getScheduledSection();
@@ -103,7 +112,10 @@ const getScheduledEventEntity = (settings: { startDate: Date; endDate: Date; sch
   return result;
 };
 
-const mockGetNow = (evaluator: ScheduledGroupEvaluator, mockedNowDate: Date) => {
+const mockGetNow = (
+  evaluator: ScheduledGroupEvaluator,
+  mockedNowDate: Date,
+) => {
   //@ts-ignore
   evaluator.utility.getNow = jest.fn(() => new Date(mockedNowDate));
 };
@@ -183,7 +195,10 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
 
     let now = buildDateTime(startAt, TimeFrom);
 
-    const progress: Progress = getProgress(subMinutes(now, 10), subMinutes(now, 5));
+    const progress: Progress = getProgress(
+      subMinutes(now, 10),
+      subMinutes(now, 5),
+    );
 
     const input: GroupsBuildContext = {
       allAppletActivities: [],

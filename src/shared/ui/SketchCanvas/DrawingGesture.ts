@@ -12,7 +12,11 @@ type Refs = {
 
 type Callbacks = {
   onTouchStart: (touchInfo: Point, time: number) => void;
-  onTouchProgress: (touchInfo: Point, straightLine: boolean, time: number) => void;
+  onTouchProgress: (
+    touchInfo: Point,
+    straightLine: boolean,
+    time: number,
+  ) => void;
   onTouchEnd: () => void;
 };
 
@@ -22,10 +26,18 @@ function DrawingGesture(
 ) {
   const isOutOfCanvas = (point: Point) => {
     'worklet';
-    return point.x > sizeRef.value || point.y > sizeRef.value || point.x < 0 || point.y < 0;
+    return (
+      point.x > sizeRef.value ||
+      point.y > sizeRef.value ||
+      point.x < 0 ||
+      point.y < 0
+    );
   };
 
-  const normalizeCoordinates = (touchData: TouchData, deviation: number = 0): TouchData => {
+  const normalizeCoordinates = (
+    touchData: TouchData,
+    deviation: number = 0,
+  ): TouchData => {
     'worklet';
     const normalize = (value: number) => {
       if (value < 0) {
@@ -58,7 +70,9 @@ function DrawingGesture(
         }
       })
       .onTouchesUp((event, stateManager) => {
-        const shouldEndGesture = event.changedTouches.some((touchData) => touchData.id === currentTouchIdRef.value);
+        const shouldEndGesture = event.changedTouches.some(
+          (touchData) => touchData.id === currentTouchIdRef.value,
+        );
 
         if (shouldEndGesture) {
           stateManager.end();

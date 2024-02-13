@@ -20,7 +20,9 @@ const useTextVariablesReplacer = ({
   activityId: string;
   appletId: string;
 }) => {
-  const completedEntities = useSelector(AppletModel.selectors.selectCompletedEntities);
+  const completedEntities = useSelector(
+    AppletModel.selectors.selectCompletedEntities,
+  );
   const { data: respondentNickname } = useAppletDetailsQuery(appletId, {
     select: ({ data }) => mapDtoToRespondentMeta(data),
   });

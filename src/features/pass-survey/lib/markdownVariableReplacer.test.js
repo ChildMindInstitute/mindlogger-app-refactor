@@ -33,7 +33,11 @@ describe('MarkdownVariableReplacer', () => {
         },
       },
     ];
-    const answers = [{ answer: 'abc' }, { answer: '2' }, { answer: { id: '1', text: 'Option 1' } }];
+    const answers = [
+      { answer: 'abc' },
+      { answer: '2' },
+      { answer: { id: '1', text: 'Option 1' } },
+    ];
     const replacer = new MarkdownVariableReplacer(activityItems, answers);
     const markdown = 'This is some text [[foo]] and [[bar]] and [[baz]]';
     const expected = 'This is some text abc and 2 and Option 1';
@@ -268,7 +272,10 @@ describe('MarkdownVariableReplacer', () => {
         4: { answer: '1' },
       };
 
-      replacer = new MarkdownVariableReplacer(nestedActivityItems, nestedAnswers);
+      replacer = new MarkdownVariableReplacer(
+        nestedActivityItems,
+        nestedAnswers,
+      );
 
       const markdown = `**ItemText content:**
             Text: [[ItemText]]

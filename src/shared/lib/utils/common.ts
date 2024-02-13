@@ -34,7 +34,10 @@ export function getCurrentWeekDates(): Array<Date> {
   });
 }
 
-export function splitArray<TListItem>(array: TListItem[], leftArraySize: number): [TListItem[], TListItem[]] {
+export function splitArray<TListItem>(
+  array: TListItem[],
+  leftArraySize: number,
+): [TListItem[], TListItem[]] {
   const rightArray = [...array];
 
   const leftArray = rightArray.splice(0, leftArraySize);
@@ -45,7 +48,10 @@ export function splitArray<TListItem>(array: TListItem[], leftArraySize: number)
 export const getFloatPartLength = (numberValue: number) => {
   const numberAsString = numberValue.toString();
 
-  const pointPosition = Math.max(numberAsString.indexOf('.'), numberAsString.indexOf(','));
+  const pointPosition = Math.max(
+    numberAsString.indexOf('.'),
+    numberAsString.indexOf(','),
+  );
   return pointPosition === -1 ? 0 : numberAsString.length - pointPosition - 1;
 };
 
@@ -71,7 +77,10 @@ export const Mutex = (): IMutex => {
   };
 };
 
-export const callWithMutexAsync = async (mutex: IMutex, func: () => Promise<any>) => {
+export const callWithMutexAsync = async (
+  mutex: IMutex,
+  func: () => Promise<any>,
+) => {
   if (mutex.isBusy()) {
     return;
   }
@@ -118,7 +127,10 @@ export const runOnAndroid = (cb: () => void) => {
   IS_ANDROID && cb();
 };
 
-export const splitArrayToBulks = <T>(bulkSize: number, array: T[]): Array<T[]> => {
+export const splitArrayToBulks = <T>(
+  bulkSize: number,
+  array: T[],
+): Array<T[]> => {
   const result: Array<T[]> = [];
   for (let i = 0; i < array.length; i += bulkSize) {
     result.push(array.slice(i, i + bulkSize));

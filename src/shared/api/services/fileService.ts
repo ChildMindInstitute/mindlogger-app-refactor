@@ -1,4 +1,10 @@
-import { IS_ANDROID, Logger, callApiWithRetry, getStringHashCode, watchForConnectionLoss } from '@shared/lib';
+import {
+  IS_ANDROID,
+  Logger,
+  callApiWithRetry,
+  getStringHashCode,
+  watchForConnectionLoss,
+} from '@shared/lib';
 import { SystemRecord } from '@shared/lib/records';
 
 import httpService from './httpService';
@@ -60,7 +66,9 @@ function fileService() {
 
         try {
           const data = new FormData();
-          const uri = IS_ANDROID ? `file://${request.uri}` : request.uri.replace('file://', '');
+          const uri = IS_ANDROID
+            ? `file://${request.uri}`
+            : request.uri.replace('file://', '');
 
           data.append('file', {
             uri,
@@ -70,13 +78,19 @@ function fileService() {
 
           const deviceId = SystemRecord.getDeviceId()!;
 
-          const hashedDeviceId: string = !deviceId ? 'undefined' : getStringHashCode(deviceId).toString();
+          const hashedDeviceId: string = !deviceId
+            ? 'undefined'
+            : getStringHashCode(deviceId).toString();
 
-          const response = await httpService.post<FileUploadResponse>(`/file/log-file/${hashedDeviceId}`, data, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-            signal: abortController.signal,
-            params: { fileId: request.fileId },
-          });
+          const response = await httpService.post<FileUploadResponse>(
+            `/file/log-file/${hashedDeviceId}`,
+            data,
+            {
+              headers: { 'Content-Type': 'multipart/form-data' },
+              signal: abortController.signal,
+              params: { fileId: request.fileId },
+            },
+          );
 
           return response;
         } catch (error) {
@@ -141,7 +155,9 @@ function fileService() {
 
         try {
           const data = new FormData();
-          const uri = IS_ANDROID ? request.uri : request.uri.replace('file://', '');
+          const uri = IS_ANDROID
+            ? request.uri
+            : request.uri.replace('file://', '');
 
           data.append('file', {
             uri,
@@ -149,14 +165,20 @@ function fileService() {
             type: request.type,
           } as unknown as Blob);
 
-          const response = await httpService.post<FileUploadResponse>(`/file/${request.appletId}/upload`, data, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-            signal: abortController.signal,
-            params: { fileId: request.fileId },
-          });
+          const response = await httpService.post<FileUploadResponse>(
+            `/file/${request.appletId}/upload`,
+            data,
+            {
+              headers: { 'Content-Type': 'multipart/form-data' },
+              signal: abortController.signal,
+              params: { fileId: request.fileId },
+            },
+          );
           return response;
         } catch (error) {
-          Logger.error(`[fileService.uploadAppletFile]: Error occurred: \n\n${error}`);
+          Logger.error(
+            `[fileService.uploadAppletFile]: Error occurred: \n\n${error}`,
+          );
           throw error;
         } finally {
           reset();

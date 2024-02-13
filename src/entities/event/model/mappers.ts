@@ -4,7 +4,9 @@ import { buildDateFromDto } from '@app/shared/lib';
 
 import { ScheduleEvent } from '../lib';
 
-export function mapEventsFromDto(eventsDto: ScheduleEventDto[]): ScheduleEvent[] {
+export function mapEventsFromDto(
+  eventsDto: ScheduleEventDto[],
+): ScheduleEvent[] {
   return eventsDto.map<ScheduleEvent>((x) => mapEventFromDto(x));
 }
 export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {

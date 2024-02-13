@@ -17,7 +17,11 @@ describe('StackedSlider', () => {
     const changeHandler = jest.fn();
     const stackedSlider = renderer.create(
       <TamaguiProvider>
-        <StackedSlider config={mock.sliderConfig} values={null} onChange={changeHandler} />
+        <StackedSlider
+          config={mock.sliderConfig}
+          values={null}
+          onChange={changeHandler}
+        />
       </TamaguiProvider>,
     );
 
@@ -30,7 +34,11 @@ describe('StackedSlider', () => {
     const changeHandler = jest.fn();
     const stackedSlider = renderer.create(
       <TamaguiProvider>
-        <StackedSlider config={mock.sliderConfig} values={mock.sliderValues} onChange={changeHandler} />
+        <StackedSlider
+          config={mock.sliderConfig}
+          values={mock.sliderValues}
+          onChange={changeHandler}
+        />
       </TamaguiProvider>,
     );
 
@@ -49,7 +57,11 @@ describe('StackedSlider', () => {
     const changeHandler = jest.fn();
     const stackedSlider = renderer.create(
       <TamaguiProvider>
-        <StackedSlider config={mock.sliderConfig} values={mock.sliderValues} onChange={changeHandler} />
+        <StackedSlider
+          config={mock.sliderConfig}
+          values={mock.sliderValues}
+          onChange={changeHandler}
+        />
       </TamaguiProvider>,
     );
 
@@ -69,15 +81,23 @@ describe('StackedSlider', () => {
     const changeHandler = jest.fn();
     const stackedSlider = renderer.create(
       <TamaguiProvider>
-        <StackedSlider config={mock.sliderConfig} values={mock.sliderValues} onChange={changeHandler} />
+        <StackedSlider
+          config={mock.sliderConfig}
+          values={mock.sliderValues}
+          onChange={changeHandler}
+        />
       </TamaguiProvider>,
     );
 
     const textComponents = stackedSlider.root.findAllByType(Text);
 
-    const rightTitles = textComponents.filter((component) => component.props['data-test'] === 'slide-right-title');
+    const rightTitles = textComponents.filter(
+      (component) => component.props['data-test'] === 'slide-right-title',
+    );
 
-    const leftTitles = textComponents.filter((component) => component.props['data-test'] === 'slide-left-title');
+    const leftTitles = textComponents.filter(
+      (component) => component.props['data-test'] === 'slide-left-title',
+    );
 
     expect(rightTitles.length).toBe(2);
     expect(leftTitles.length).toBe(2);

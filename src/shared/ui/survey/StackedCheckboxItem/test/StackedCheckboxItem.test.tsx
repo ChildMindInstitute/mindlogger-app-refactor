@@ -45,7 +45,9 @@ describe('StackedCheckboxItem', () => {
 
     const checkboxes = stackedCheckbox.root.findAllByType(CheckBox);
 
-    const selectedCheckboxes = checkboxes.filter((checkbox) => checkbox.props.value);
+    const selectedCheckboxes = checkboxes.filter(
+      (checkbox) => checkbox.props.value,
+    );
 
     expect(selectedCheckboxes.length).toBe(2);
   });

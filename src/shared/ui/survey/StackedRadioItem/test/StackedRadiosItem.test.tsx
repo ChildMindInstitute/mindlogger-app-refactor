@@ -51,7 +51,11 @@ describe('StackedRadiosItem', () => {
     expect(radios.length).toBe(9);
 
     const radiosValues = radios.filter((radio) =>
-      mock.radiosValues.find((value) => radio.props['data-test'] === `stack-radio-item-${value.id}-${value.rowId}`),
+      mock.radiosValues.find(
+        (value) =>
+          radio.props['data-test'] ===
+          `stack-radio-item-${value.id}-${value.rowId}`,
+      ),
     );
 
     expect(radiosValues.length).toBe(3);

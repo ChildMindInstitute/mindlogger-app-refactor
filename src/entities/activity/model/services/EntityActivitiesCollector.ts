@@ -1,6 +1,10 @@
 import { LookupEntityInput } from '@app/abstract/lib';
 import { ActivityResponse, AppletDetailsResponse } from '@app/shared/api';
-import { getActivityDetailsKey, getAppletDetailsKey, getDataFromQuery } from '@app/shared/lib';
+import {
+  getActivityDetailsKey,
+  getAppletDetailsKey,
+  getDataFromQuery,
+} from '@app/shared/lib';
 
 import { ActivityModel } from '../..';
 import { ActivityDetails } from '../../lib';
@@ -10,13 +14,23 @@ export type EntityActivitiesCollector = {
 };
 
 const createEntityActivitiesCollector = (): EntityActivitiesCollector => {
-  function collect({ appletId, entityId, entityType, queryClient }: LookupEntityInput): ActivityDetails[] {
+  function collect({
+    appletId,
+    entityId,
+    entityType,
+    queryClient,
+  }: LookupEntityInput): ActivityDetails[] {
     const result: ActivityDetails[] = [];
 
     const addActivity = (id: string) => {
-      const activityResponse = getDataFromQuery<ActivityResponse>(getActivityDetailsKey(id), queryClient);
+      const activityResponse = getDataFromQuery<ActivityResponse>(
+        getActivityDetailsKey(id),
+        queryClient,
+      );
 
-      const activity: ActivityDetails = ActivityModel.mapToActivity(activityResponse!.result);
+      const activity: ActivityDetails = ActivityModel.mapToActivity(
+        activityResponse!.result,
+      );
       result.push(activity);
     };
 
@@ -25,9 +39,14 @@ const createEntityActivitiesCollector = (): EntityActivitiesCollector => {
     }
 
     if (entityType === 'flow') {
-      const appletDetailsResponse = getDataFromQuery<AppletDetailsResponse>(getAppletDetailsKey(appletId), queryClient);
+      const appletDetailsResponse = getDataFromQuery<AppletDetailsResponse>(
+        getAppletDetailsKey(appletId),
+        queryClient,
+      );
 
-      const flowDto = appletDetailsResponse?.result.activityFlows.find((x) => x.id === entityId);
+      const flowDto = appletDetailsResponse?.result.activityFlows.find(
+        (x) => x.id === entityId,
+      );
 
       const activityIds: string[] = flowDto!.activityIds;
 

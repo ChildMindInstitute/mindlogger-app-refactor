@@ -27,12 +27,17 @@ class AlertsExtractor {
     this.logger = logger;
   }
 
-  public extractFromRadio(radioItem: RadioPipelineItem, answer: Answer): AnswerAlerts {
+  public extractFromRadio(
+    radioItem: RadioPipelineItem,
+    answer: Answer,
+  ): AnswerAlerts {
     const alerts: AnswerAlerts = [];
 
     const radioAnswer = answer.answer as RadioResponse;
 
-    const alertOption = radioItem.payload.options.find((o) => o.alert && o.value === radioAnswer.value);
+    const alertOption = radioItem.payload.options.find(
+      (o) => o.alert && o.value === radioAnswer.value,
+    );
 
     if (alertOption) {
       alerts.push({
@@ -44,7 +49,10 @@ class AlertsExtractor {
     return alerts;
   }
 
-  public extractFromCheckbox(checkboxItem: CheckboxPipelineItem, answer: Answer): AnswerAlerts {
+  public extractFromCheckbox(
+    checkboxItem: CheckboxPipelineItem,
+    answer: Answer,
+  ): AnswerAlerts {
     const checkboxAnswers = answer.answer as CheckboxResponse;
     const alertOptions = checkboxItem.payload.options.filter((o) => {
       const checkboxAnswerAlert = checkboxAnswers?.find((checkboxAnswer) => {
@@ -66,7 +74,10 @@ class AlertsExtractor {
     return alerts;
   }
 
-  public extractFromSlider(sliderItem: SliderPipelineItem, answer: Answer): AnswerAlerts {
+  public extractFromSlider(
+    sliderItem: SliderPipelineItem,
+    answer: Answer,
+  ): AnswerAlerts {
     const sliderAnswer = answer.answer as SliderResponse;
     const isContinuousSlider = sliderItem.payload.isContinuousSlider;
 
@@ -100,7 +111,10 @@ class AlertsExtractor {
     return alerts;
   }
 
-  public extractFromStackedRadio(stackedRadioItem: StackedRadioPipelineItem, answer: Answer): AnswerAlerts {
+  public extractFromStackedRadio(
+    stackedRadioItem: StackedRadioPipelineItem,
+    answer: Answer,
+  ): AnswerAlerts {
     const stackedRadioAnswer = answer.answer as StackedRadioResponse;
 
     const alerts: AnswerAlerts = [];
@@ -108,7 +122,10 @@ class AlertsExtractor {
     stackedRadioItem.payload.dataMatrix.forEach((row) => {
       row.options.forEach((option) => {
         stackedRadioAnswer.forEach((itemAnswer) => {
-          if (itemAnswer?.rowId === row.rowId && itemAnswer.id === option.optionId) {
+          if (
+            itemAnswer?.rowId === row.rowId &&
+            itemAnswer.id === option.optionId
+          ) {
             option.alert &&
               alerts.push({
                 activityItemId: stackedRadioItem.id!,
@@ -122,7 +139,10 @@ class AlertsExtractor {
     return alerts;
   }
 
-  public extractFromStackedCheckbox(stackedCheckboxItem: StackedCheckboxPipelineItem, answer: Answer): AnswerAlerts {
+  public extractFromStackedCheckbox(
+    stackedCheckboxItem: StackedCheckboxPipelineItem,
+    answer: Answer,
+  ): AnswerAlerts {
     const stackedCheckboxAnswer = answer.answer as StackedCheckboxResponse;
 
     if (!stackedCheckboxAnswer) {
@@ -135,7 +155,10 @@ class AlertsExtractor {
       if (stackedCheckboxAnswer[rowIndex]?.length) {
         row.options.forEach((option) => {
           stackedCheckboxAnswer[rowIndex].forEach((itemAnswer) => {
-            if (stackedCheckboxAnswer[rowIndex] && itemAnswer.id === option.optionId) {
+            if (
+              stackedCheckboxAnswer[rowIndex] &&
+              itemAnswer.id === option.optionId
+            ) {
               option.alert &&
                 alerts.push({
                   activityItemId: stackedCheckboxItem.id!,
@@ -150,7 +173,10 @@ class AlertsExtractor {
     return alerts;
   }
 
-  public extractFromStackedSlider(sliderItem: StackedSliderPipelineItem, answer: Answer): AnswerAlerts {
+  public extractFromStackedSlider(
+    sliderItem: StackedSliderPipelineItem,
+    answer: Answer,
+  ): AnswerAlerts {
     const sliderAnswer = answer.answer as StackedSliderResponse;
 
     if (!sliderAnswer) {
@@ -175,7 +201,10 @@ class AlertsExtractor {
     return alerts;
   }
 
-  private extractFromItem(pipelineItem: PipelineItem, answer: Answer): AnswerAlerts {
+  private extractFromItem(
+    pipelineItem: PipelineItem,
+    answer: Answer,
+  ): AnswerAlerts {
     switch (pipelineItem.type) {
       case 'Radio':
         return this.extractFromRadio(pipelineItem, answer);
@@ -200,7 +229,10 @@ class AlertsExtractor {
     }
   }
 
-  private extractInternal(pipelineItems: PipelineItem[], answers: Answers): AnswerAlerts {
+  private extractInternal(
+    pipelineItems: PipelineItem[],
+    answers: Answers,
+  ): AnswerAlerts {
     const alerts = pipelineItems
       .flatMap((pipelineItem, step) => {
         const canHaveAnswer = canItemHaveAnswer(pipelineItem.type);
@@ -217,13 +249,21 @@ class AlertsExtractor {
     return alerts;
   }
 
-  public extractForSummary(pipelineItems: PipelineItem[], answers: Answers, logActivityName: string): AnswerAlerts {
+  public extractForSummary(
+    pipelineItems: PipelineItem[],
+    answers: Answers,
+    logActivityName: string,
+  ): AnswerAlerts {
     try {
-      this.logger.log(`[AlertsExtractor.extractForSummary]: Extracting alerts for activity '${logActivityName}'`);
+      this.logger.log(
+        `[AlertsExtractor.extractForSummary]: Extracting alerts for activity '${logActivityName}'`,
+      );
 
       return this.extractInternal(pipelineItems, answers);
     } catch (error) {
-      this.logger.warn(`[AlertsExtractor.extractForSummary]: Error occurred: \n\n${error}`);
+      this.logger.warn(
+        `[AlertsExtractor.extractForSummary]: Error occurred: \n\n${error}`,
+      );
       return [
         {
           message: '[Error occurred]',

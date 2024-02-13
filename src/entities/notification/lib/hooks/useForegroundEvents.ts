@@ -2,7 +2,11 @@ import { useRef, useEffect } from 'react';
 
 import notifee, { EventType } from '@notifee/react-native';
 
-import { LocalEventDetail, NotificationEventCallbacks, NotificationEventHandlersFunctions } from '../types';
+import {
+  LocalEventDetail,
+  NotificationEventCallbacks,
+  NotificationEventHandlersFunctions,
+} from '../types';
 
 export type UseForegroundEventArgs = Partial<NotificationEventCallbacks>;
 
@@ -53,9 +57,12 @@ export function useForegroundEvents({
       [EventType.DELIVERED]: () => callbackRefs.current.onDelivered,
       [EventType.APP_BLOCKED]: () => callbackRefs.current.onAppBlocked,
       [EventType.CHANNEL_BLOCKED]: () => callbackRefs.current.onChannelBlocked,
-      [EventType.CHANNEL_GROUP_BLOCKED]: () => callbackRefs.current.onChannelGroupBlocked,
-      [EventType.TRIGGER_NOTIFICATION_CREATED]: () => callbackRefs.current.onTriggerNotificationCreated,
-      [EventType.FG_ALREADY_EXIST]: () => callbackRefs.current.onFGAlreadyExists,
+      [EventType.CHANNEL_GROUP_BLOCKED]: () =>
+        callbackRefs.current.onChannelGroupBlocked,
+      [EventType.TRIGGER_NOTIFICATION_CREATED]: () =>
+        callbackRefs.current.onTriggerNotificationCreated,
+      [EventType.FG_ALREADY_EXIST]: () =>
+        callbackRefs.current.onFGAlreadyExists,
     };
 
     return notifee.onForegroundEvent((event) => {

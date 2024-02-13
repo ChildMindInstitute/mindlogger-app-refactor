@@ -18,7 +18,10 @@ const ActivityCardContainer = styled(Center, {
   backgroundColor: '$white',
 });
 
-const ActivityAnalyticsCard: FC<Props & AccessibilityProps> = ({ responseData, accessibilityLabel }) => {
+const ActivityAnalyticsCard: FC<Props & AccessibilityProps> = ({
+  responseData,
+  accessibilityLabel,
+}) => {
   const { description, name } = responseData;
 
   return (

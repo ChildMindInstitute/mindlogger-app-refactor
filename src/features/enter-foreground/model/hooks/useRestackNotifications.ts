@@ -12,7 +12,9 @@ function useRestackNotifications() {
   const isRestoring = useIsRestoring();
   const hasSession = SessionModel.useHasSession();
 
-  const storeProgress: StoreProgress = useAppSelector(AppletModel.selectors.selectInProgressApplets);
+  const storeProgress: StoreProgress = useAppSelector(
+    AppletModel.selectors.selectInProgressApplets,
+  );
 
   const completions = useAppSelector(AppletModel.selectors.selectCompletions);
 

@@ -1,5 +1,9 @@
 import { toNestError, validateFieldsNatively } from '@hookform/resolvers';
-import { appendErrors, FieldError as BaseFieldError, FieldErrors } from 'react-hook-form';
+import {
+  appendErrors,
+  FieldError as BaseFieldError,
+  FieldErrors,
+} from 'react-hook-form';
 import { z } from 'zod';
 
 import type { Resolver } from './types';
@@ -8,7 +12,10 @@ type FieldError = BaseFieldError & {
   params: Record<string, any>;
 };
 
-const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boolean) => {
+const parseErrorSchema = (
+  zodErrors: z.ZodIssue[],
+  validateAllFieldCriteria: boolean,
+) => {
   const errors: Record<string, FieldError> = {};
 
   for (; zodErrors.length; ) {
@@ -31,7 +38,9 @@ const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boo
     }
 
     if ('unionErrors' in error) {
-      error.unionErrors.forEach((unionError) => unionError.errors.forEach((e) => zodErrors.push(e)));
+      error.unionErrors.forEach((unionError) =>
+        unionError.errors.forEach((e) => zodErrors.push(e)),
+      );
     }
 
     if (validateAllFieldCriteria) {
@@ -44,7 +53,9 @@ const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boo
         errors,
         code,
         //@ts-ignore
-        messages ? ([] as string[]).concat(messages as any as string[], error.message) : error.message,
+        messages
+          ? ([] as string[]).concat(messages as any as string[], error.message)
+          : error.message,
       ) as FieldError;
     }
 
@@ -57,7 +68,9 @@ const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boo
 const zodResolver: Resolver = (schema, schemaOptions, resolverOptions = {}) => {
   return async (values, _, options) => {
     try {
-      const data = await schema[resolverOptions.mode === 'sync' ? 'parse' : 'parseAsync'](values, schemaOptions);
+      const data = await schema[
+        resolverOptions.mode === 'sync' ? 'parse' : 'parseAsync'
+      ](values, schemaOptions);
 
       options.shouldUseNativeValidation && validateFieldsNatively({}, options);
 
@@ -75,7 +88,11 @@ const zodResolver: Resolver = (schema, schemaOptions, resolverOptions = {}) => {
         return {
           values: {},
           errors: toNestError(
-            parseErrorSchema(error.errors, !options.shouldUseNativeValidation && options.criteriaMode === 'all'),
+            parseErrorSchema(
+              error.errors,
+              !options.shouldUseNativeValidation &&
+                options.criteriaMode === 'all',
+            ),
             options,
           ),
         };

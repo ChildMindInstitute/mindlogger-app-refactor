@@ -1,6 +1,10 @@
 import notifee, { EventType } from '@notifee/react-native';
 
-import { LocalEventDetail, NotificationEventCallbacks, NotificationEventHandlers } from './types';
+import {
+  LocalEventDetail,
+  NotificationEventCallbacks,
+  NotificationEventHandlers,
+} from './types';
 
 export type WatchBackgroundEventArgs = Partial<NotificationEventCallbacks>;
 
@@ -14,7 +18,8 @@ export function onBackgroundEvent(callbacks: WatchBackgroundEventArgs) {
     [EventType.APP_BLOCKED]: callbacks.onAppBlocked,
     [EventType.CHANNEL_BLOCKED]: callbacks.onChannelBlocked,
     [EventType.CHANNEL_GROUP_BLOCKED]: callbacks.onChannelGroupBlocked,
-    [EventType.TRIGGER_NOTIFICATION_CREATED]: callbacks.onTriggerNotificationCreated,
+    [EventType.TRIGGER_NOTIFICATION_CREATED]:
+      callbacks.onTriggerNotificationCreated,
     [EventType.FG_ALREADY_EXIST]: callbacks.onFGAlreadyExists,
   };
 

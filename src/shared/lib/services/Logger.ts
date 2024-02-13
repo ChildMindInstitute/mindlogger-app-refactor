@@ -8,7 +8,13 @@ import { getNotificationSettingsData } from '@shared/lib';
 
 import { IS_ANDROID, IS_IOS } from '../constants';
 import { ILogger } from '../types';
-import { IMutex, Mutex, callWithMutex, callWithMutexAsync, isAppOnline } from '../utils';
+import {
+  IMutex,
+  Mutex,
+  callWithMutex,
+  callWithMutexAsync,
+  isAppOnline,
+} from '../utils';
 
 type NamePath = {
   fileName: string;
@@ -84,7 +90,9 @@ class Logger implements ILogger {
     }
   }
 
-  private async checkIfFilesExist(files: Array<NamePath>): Promise<FileExists[]> {
+  private async checkIfFilesExist(
+    files: Array<NamePath>,
+  ): Promise<FileExists[]> {
     const checkResult = await FileService.checkIfLogsExist({
       files: files.map((x) => x.fileName),
     });
@@ -109,12 +117,20 @@ class Logger implements ILogger {
 
     const rawNotificationSettings = JSON.stringify(notificationSettings);
 
-    this.log(`[Logger:appendNotificationLogs] NotificationSettings: ${rawNotificationSettings}`);
+    this.log(
+      `[Logger:appendNotificationLogs] NotificationSettings: ${rawNotificationSettings}`,
+    );
   }
 
   private async appendDeviceInfoLogs(): Promise<void> {
-    const { getBrand, getReadableVersion, getBuildNumber, getFirstInstallTime, getFreeDiskStorage, getLastUpdateTime } =
-      DeviceInfo;
+    const {
+      getBrand,
+      getReadableVersion,
+      getBuildNumber,
+      getFirstInstallTime,
+      getFreeDiskStorage,
+      getLastUpdateTime,
+    } = DeviceInfo;
 
     const deviceInfo: DeviceInfoLogObject = {
       brand: getBrand(),
@@ -145,7 +161,7 @@ class Logger implements ILogger {
     try {
       logFiles = await this.getLogFiles();
     } catch (error) {
-      console.warn('[Logger.getLogFiles]: Error occurred\n\n', error);
+      console.warn('[Logger.getLogFiles]: Error occurred\n\n', `${error}`);
       return false;
     }
 
@@ -163,7 +179,10 @@ class Logger implements ILogger {
         })),
       );
     } catch (error) {
-      console.warn('[Logger.checkIfFilesExist]: Error occurred\n\n', error);
+      console.warn(
+        '[Logger.checkIfFilesExist]: Error occurred\n\n',
+        `${error}`,
+      );
       return false;
     }
 
@@ -174,7 +193,9 @@ class Logger implements ILogger {
         return false;
       }
 
-      const file: NamePathSize = logFiles.find((x) => x.fileName === checkRecord.fileName)!;
+      const file: NamePathSize = logFiles.find(
+        (x) => x.fileName === checkRecord.fileName,
+      )!;
 
       const isExist = checkRecord.exists;
 
@@ -186,14 +207,18 @@ class Logger implements ILogger {
 
       const shouldUpload =
         !isFileEmpty &&
-        (!isExist || (isExist && IS_ANDROID && isCurrentLogInAndroid) || (isExist && IS_IOS && !isSizeTheSame));
+        (!isExist ||
+          (isExist && IS_ANDROID && isCurrentLogInAndroid) ||
+          (isExist && IS_IOS && !isSizeTheSame));
 
       if (!shouldUpload) {
         continue;
       }
 
       try {
-        console.info(`[Logger.sendInternal] Sending log file "${checkRecord.fileName}"`);
+        console.info(
+          `[Logger.sendInternal] Sending log file "${checkRecord.fileName}"`,
+        );
 
         await FileService.uploadLogFile({
           fileName: checkRecord.fileName,
@@ -202,7 +227,10 @@ class Logger implements ILogger {
           fileId: checkRecord.fileName,
         });
       } catch (error) {
-        console.warn(`[Logger.upload]: Error occurred while sending file "${checkRecord.fileName}"\n\n`, error);
+        console.warn(
+          `[Logger.upload]: Error occurred while sending file "${checkRecord.fileName}"\n\n`,
+          `${error}`,
+        );
         success = false;
       }
     }
@@ -231,7 +259,7 @@ class Logger implements ILogger {
     try {
       await callWithMutexAsync(this.mutex, FileLogger.deleteLogFiles);
     } catch (error) {
-      console.warn('Logger.clearAllLogFiles]: Error occurred\n\n', error);
+      console.warn('Logger.clearAllLogFiles]: Error occurred\n\n', `${error}`);
     }
   }
 
@@ -292,7 +320,7 @@ class Logger implements ILogger {
 
       return result;
     } catch (error) {
-      console.warn('[Logger.sendInternal]: Error occurred: \n\n', error);
+      console.warn('[Logger.sendInternal]: Error occurred: \n\n', `${error}`);
     } finally {
       this.mutex.release();
     }

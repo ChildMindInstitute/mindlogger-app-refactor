@@ -1,7 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { ActivityRecordKeyParams, EntityPath, EntityType, LookupEntityInput, StoreProgress } from '@app/abstract/lib';
+import {
+  ActivityRecordKeyParams,
+  EntityPath,
+  EntityType,
+  LookupEntityInput,
+  StoreProgress,
+} from '@app/abstract/lib';
 import { AppletModel, clearStorageRecords } from '@app/entities/applet';
 import {
   LocalEventDetail,
@@ -46,7 +52,9 @@ export function useOnNotificationTap({
 
   const navigator = useNavigation();
 
-  const storeProgress: StoreProgress = useAppSelector(AppletModel.selectors.selectInProgressApplets);
+  const storeProgress: StoreProgress = useAppSelector(
+    AppletModel.selectors.selectInProgressApplets,
+  );
 
   const completions = useAppSelector(AppletModel.selectors.selectCompletions);
 
@@ -60,7 +68,10 @@ export function useOnNotificationTap({
 
   const { getCurrentRoute } = useCurrentRoute();
 
-  const actions: Record<PushNotificationType, (eventDetail: LocalEventDetail) => void> = {
+  const actions: Record<
+    PushNotificationType,
+    (eventDetail: LocalEventDetail) => void
+  > = {
     'request-to-reschedule-due-to-limit': () => {
       NotificationModel.NotificationRefreshService.refresh(
         queryClient,
@@ -70,7 +81,8 @@ export function useOnNotificationTap({
       );
     },
     'schedule-event-alert': (eventDetail) => {
-      const { appletId, activityId, activityFlowId, eventId, entityName } = eventDetail.notification.data;
+      const { appletId, activityId, activityFlowId, eventId, entityName } =
+        eventDetail.notification.data;
 
       const entityId: string = (activityId ?? activityFlowId)!;
 
@@ -134,7 +146,12 @@ export function useOnNotificationTap({
     },
   };
 
-  function navigateSurvey({ appletId, eventId, entityId, entityType }: EntityPath) {
+  function navigateSurvey({
+    appletId,
+    eventId,
+    entityId,
+    entityType,
+  }: EntityPath) {
     navigator.navigate('InProgressActivity', {
       appletId,
       eventId,
@@ -163,8 +180,15 @@ export function useOnNotificationTap({
 
     if (entityType === 'flow') {
       startFlow(appletId, entityId, eventId, entityName).then(
-        ({ startedFromScratch, cannotBeStartedDueToMediaFound, cannotBeStartedDueToAllItemsHidden }) => {
-          if (cannotBeStartedDueToMediaFound || cannotBeStartedDueToAllItemsHidden) {
+        ({
+          startedFromScratch,
+          cannotBeStartedDueToMediaFound,
+          cannotBeStartedDueToAllItemsHidden,
+        }) => {
+          if (
+            cannotBeStartedDueToMediaFound ||
+            cannotBeStartedDueToAllItemsHidden
+          ) {
             return;
           }
 
@@ -177,8 +201,15 @@ export function useOnNotificationTap({
       );
     } else {
       startActivity(appletId, entityId, eventId, entityName).then(
-        ({ startedFromScratch, cannotBeStartedDueToMediaFound, cannotBeStartedDueToAllItemsHidden }) => {
-          if (cannotBeStartedDueToMediaFound || cannotBeStartedDueToAllItemsHidden) {
+        ({
+          startedFromScratch,
+          cannotBeStartedDueToMediaFound,
+          cannotBeStartedDueToAllItemsHidden,
+        }) => {
+          if (
+            cannotBeStartedDueToMediaFound ||
+            cannotBeStartedDueToAllItemsHidden
+          ) {
             return;
           }
 
@@ -208,9 +239,11 @@ export function useOnNotificationTap({
     },
   });
 
-  useOnInitialAndroidNotification((initialNotification: LocalInitialNotification) => {
-    const action = actions[initialNotification.notification.data.type];
+  useOnInitialAndroidNotification(
+    (initialNotification: LocalInitialNotification) => {
+      const action = actions[initialNotification.notification.data.type];
 
-    action?.(initialNotification);
-  });
+      action?.(initialNotification);
+    },
+  );
 }

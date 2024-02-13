@@ -2,7 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { InteractionManager } from 'react-native';
 
 import { IdentityModel, UserPrivateKeyRecord } from '@app/entities/identity';
-import { encryption, formatToISODateMidnight, getCurrentWeekDates, useAppSelector, wait } from '@app/shared/lib';
+import {
+  encryption,
+  formatToISODateMidnight,
+  getCurrentWeekDates,
+  useAppSelector,
+  wait,
+} from '@app/shared/lib';
 
 import { useAppletAnalyticsQuery, useAppletDetailsQuery } from '../../api';
 import { mapAppletAnalytics, mapAppletDetailsFromDto } from '../../model';
@@ -18,20 +24,24 @@ export const useAppletAnalytics = (appletId: string) => {
   const firstDateOfCurrentWeek = currentWeekDates[0];
   const respondentId = useAppSelector(IdentityModel.selectors.selectUserId);
 
-  const { data: appletEncryption, isLoading: isDetailsLoading } = useAppletDetailsQuery(appletId, {
-    select: (response) => mapAppletDetailsFromDto(response.data.result).encryption,
-  });
+  const { data: appletEncryption, isLoading: isDetailsLoading } =
+    useAppletDetailsQuery(appletId, {
+      select: (response) =>
+        mapAppletDetailsFromDto(response.data.result).encryption,
+    });
 
   const userPrivateKey = useMemo(() => UserPrivateKeyRecord.get(), []);
 
-  const [appletAnalytics, setAppletAnalytics] = useState<AppletActivitiesResponses>();
+  const [appletAnalytics, setAppletAnalytics] =
+    useState<AppletActivitiesResponses>();
 
-  const { data: analyticsResponse, isFetching: isAnalyticsLoading } = useAppletAnalyticsQuery({
-    appletId,
-    fromDate: formatToISODateMidnight(firstDateOfCurrentWeek),
-    respondentIds: respondentId ?? '',
-    isLastVersion: true,
-  });
+  const { data: analyticsResponse, isFetching: isAnalyticsLoading } =
+    useAppletAnalyticsQuery({
+      appletId,
+      fromDate: formatToISODateMidnight(firstDateOfCurrentWeek),
+      respondentIds: respondentId ?? '',
+      isLastVersion: true,
+    });
 
   useEffect(() => {
     if (!analyticsResponse || !appletEncryption || !userPrivateKey) {

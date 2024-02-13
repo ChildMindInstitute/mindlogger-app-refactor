@@ -4,7 +4,10 @@ import { format } from 'date-fns';
 import i18n from 'i18next';
 
 export function onAppletNotFound() {
-  Alert.alert(i18n.t('firebase_messaging:applet_not_found_1'), i18n.t('firebase_messaging:applet_not_found_2'));
+  Alert.alert(
+    i18n.t('firebase_messaging:applet_not_found_1'),
+    i18n.t('firebase_messaging:applet_not_found_2'),
+  );
 }
 
 export function onActivityNotAvailable() {
@@ -20,7 +23,11 @@ export function onScheduledToday(name: string, timeFrom: Date) {
 
   Alert.alert(
     '',
-    `${i18n.t('firebase_messaging:not_able_to_start')}, ‘${name}’ ${i18n.t('firebase_messaging:is')} ` +
-      `${i18n.t('firebase_messaging:scheduled_to_start_at')} ${from} ${i18n.t('firebase_messaging:today')}`,
+    `${i18n.t('firebase_messaging:not_able_to_start')}, ‘${name}’ ${i18n.t(
+      'firebase_messaging:is',
+    )} ` +
+      `${i18n.t('firebase_messaging:scheduled_to_start_at')} ${from} ${i18n.t(
+        'firebase_messaging:today',
+      )}`,
   );
 }

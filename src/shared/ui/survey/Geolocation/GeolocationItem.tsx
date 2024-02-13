@@ -6,7 +6,12 @@ import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 import { RESULTS } from 'react-native-permissions';
 
-import { useIsOnline, useLocationPermissions, getLocationPermissions, IS_ANDROID } from '@shared/lib';
+import {
+  useIsOnline,
+  useLocationPermissions,
+  getLocationPermissions,
+  IS_ANDROID,
+} from '@shared/lib';
 import { Center, GeolocationIcon, Text } from '@shared/ui';
 
 import { Coordinates } from './types';
@@ -54,7 +59,9 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
     );
   };
 
-  const isPermissionDenied = locationPermission === RESULTS.DENIED || locationPermission === RESULTS.BLOCKED;
+  const isPermissionDenied =
+    locationPermission === RESULTS.DENIED ||
+    locationPermission === RESULTS.BLOCKED;
 
   const handleGetGeolocation = async () => {
     setErrorMessage(''); // @todo: change to toast alert when it will be available
@@ -82,13 +89,21 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
       </GeolocationButton>
 
       {value && (
-        <Text mt={10} accessibilityLabel="geolocation_result-text" textAlign="center">
+        <Text
+          mt={10}
+          accessibilityLabel="geolocation_result-text"
+          textAlign="center"
+        >
           {t('geolocation:location_saved')}
         </Text>
       )}
 
       {errorMessage && (
-        <Text accessibilityLabel="geolocation_error-text" color="$red" textAlign="center">
+        <Text
+          accessibilityLabel="geolocation_error-text"
+          color="$red"
+          textAlign="center"
+        >
           {errorMessage}
         </Text>
       )}

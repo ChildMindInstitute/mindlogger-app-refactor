@@ -9,7 +9,10 @@ type AppClockTimerConfig = {
 
 const useAppClockTimer = (appClockTimerConfig: AppClockTimerConfig) => {
   const { startImmediately, onMinutePass } = appClockTimerConfig;
-  return useMemo(() => new AppClockTimer(onMinutePass, startImmediately), [onMinutePass, startImmediately]);
+  return useMemo(
+    () => new AppClockTimer(onMinutePass, startImmediately),
+    [onMinutePass, startImmediately],
+  );
 };
 
 export default useAppClockTimer;

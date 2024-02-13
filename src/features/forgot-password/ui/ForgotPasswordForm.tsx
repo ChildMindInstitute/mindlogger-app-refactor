@@ -53,7 +53,13 @@ const ForgotPasswordForm: FC<Props> = (props) => {
             placeholder={t('auth:email_address')}
           />
 
-          {error && <ErrorMessage mode="light" error={{ message: error.evaluatedMessage! }} mt={8} />}
+          {error && (
+            <ErrorMessage
+              mode="light"
+              error={{ message: error.evaluatedMessage! }}
+              mt={8}
+            />
+          )}
         </YStack>
 
         <SubmitButton

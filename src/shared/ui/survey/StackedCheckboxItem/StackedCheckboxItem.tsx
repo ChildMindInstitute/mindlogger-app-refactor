@@ -4,7 +4,11 @@ import { StyleSheet } from 'react-native';
 import { colors } from '@shared/lib';
 
 import { CheckBox, YStack } from '../..';
-import { StackedItemsGrid, type StackedRowItemValue, type StackedItem } from '../StackedItemsGrid';
+import {
+  StackedItemsGrid,
+  type StackedRowItemValue,
+  type StackedItem,
+} from '../StackedItemsGrid';
 
 type StackedCheckboxConfig = {
   rows: Array<StackedItem>;
@@ -21,7 +25,13 @@ type Props = {
   textReplacer: (markdown: string) => string;
 };
 
-const StackedCheckboxItem: FC<Props> = ({ values, onChange, config, textReplacer, tooltipsShown }) => {
+const StackedCheckboxItem: FC<Props> = ({
+  values,
+  onChange,
+  config,
+  textReplacer,
+  tooltipsShown,
+}) => {
   const { options, rows } = config;
 
   const memoizedOptions: StackedRowItemValue[] = useMemo(() => {
@@ -78,7 +88,10 @@ const StackedCheckboxItem: FC<Props> = ({ values, onChange, config, textReplacer
           const optionIndex = memoizedOptions.indexOf(option);
 
           return (
-            <YStack hitSlop={15} onPress={() => onValueChange(option, rowIndex)}>
+            <YStack
+              hitSlop={15}
+              onPress={() => onValueChange(option, rowIndex)}
+            >
               <CheckBox
                 style={styles.checkbox}
                 accessibilityLabel={`stacked-checkbox-option-${optionIndex}-${rowIndex}`}

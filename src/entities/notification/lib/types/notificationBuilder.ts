@@ -93,7 +93,10 @@ export const enum BreakReason {
   OneTimeCompletion = 'OneTimeCompletion',
 }
 
-export type RandomCrossBorderType = 'both-in-current-day' | 'from-current-to-next' | 'both-in-next-day';
+export type RandomCrossBorderType =
+  | 'both-in-current-day'
+  | 'from-current-to-next'
+  | 'both-in-next-day';
 
 export type FallType = 'current-day' | 'next-day' | 'in-future';
 

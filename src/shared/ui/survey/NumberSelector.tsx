@@ -20,17 +20,25 @@ const NumberSelector: FC<Props> = ({ config, value, onChange }) => {
 
   const numberRange = useMemo(
     () =>
-      Array.from({ length: config.max - config.min + 1 }, (_, index) => index + config.min).map((item) => ({
-        label: String(item),
-        value: String(item),
-      })),
+      Array.from(
+        { length: config.max - config.min + 1 },
+        (_, index) => index + config.min,
+      ).map((item) => ({ label: String(item), value: String(item) })),
     [config],
   );
 
-  const mappedValue = useMemo(() => (value ? { label: String(value), value } : undefined), [value]);
+  const mappedValue = useMemo(
+    () => (value ? { label: String(value), value } : undefined),
+    [value],
+  );
 
   return (
-    <Dropdown onValueChange={onChange} placeholder={t('select:select_one')} items={numberRange} value={mappedValue} />
+    <Dropdown
+      onValueChange={onChange}
+      placeholder={t('select:select_one')}
+      items={numberRange}
+      value={mappedValue}
+    />
   );
 };
 

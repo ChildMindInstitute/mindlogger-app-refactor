@@ -34,10 +34,16 @@ export type ActivityState = {
 
 const storage = createSecureStorage('activity_progress-storage');
 
-export function useActivityStorageRecord({ appletId, activityId, eventId, order }: UseActivityStorageArgs) {
+export function useActivityStorageRecord({
+  appletId,
+  activityId,
+  eventId,
+  order,
+}: UseActivityStorageArgs) {
   const key = `${appletId}-${activityId}-${eventId}-${order}`;
 
-  const [activityStorageRecord, upsertActivityStorageRecord] = useMMKVObject<ActivityState>(key, storage);
+  const [activityStorageRecord, upsertActivityStorageRecord] =
+    useMMKVObject<ActivityState>(key, storage);
 
   const clearActivityStorageRecord = useCallback(() => {
     storage.delete(key);

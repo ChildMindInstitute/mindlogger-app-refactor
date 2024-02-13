@@ -3,7 +3,12 @@ import { ConditionalLogic } from '@app/entities/activity';
 import { DrawResult } from '@app/entities/drawer';
 import { FlankerGameResponse } from '@app/entities/flanker';
 import { HourMinute } from '@app/shared/lib';
-import { Coordinates, Item, StackedItem, StackedRowItemValue } from '@app/shared/ui';
+import {
+  Coordinates,
+  Item,
+  StackedItem,
+  StackedRowItemValue,
+} from '@app/shared/ui';
 import { AbTestResult } from '@entities/abTrail';
 import { StabilityTrackerResponse as StabilityTrackerBaseResponse } from '@entities/stabilityTracker';
 import { MediaFile } from '@shared/ui';

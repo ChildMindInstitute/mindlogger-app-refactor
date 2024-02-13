@@ -41,7 +41,9 @@ export function mapThemeFromDto(dto: ThemeDto | null): AppletTheme | null {
       };
 }
 
-export function mapActivityFlowFromDto(dto: ActivityFlowRecordDto): ActivityFlow {
+export function mapActivityFlowFromDto(
+  dto: ActivityFlowRecordDto,
+): ActivityFlow {
   return {
     activityIds: dto.activityIds,
     description: dto.description,
@@ -51,7 +53,9 @@ export function mapActivityFlowFromDto(dto: ActivityFlowRecordDto): ActivityFlow
   };
 }
 
-export function mapActivityFlowsFromDto(dtos: ActivityFlowRecordDto[]): ActivityFlow[] {
+export function mapActivityFlowsFromDto(
+  dtos: ActivityFlowRecordDto[],
+): ActivityFlow[] {
   return dtos.map((x) => mapActivityFlowFromDto(x));
 }
 
@@ -68,7 +72,9 @@ export function mapActivitiesFromDto(dtos: ActivityRecordDto[]): Activity[] {
   return dtos.map((x) => mapActivityFromDto(x));
 }
 
-export function mapAppletDetailsFromDto(detailsDto: AppletDetailsDto): AppletDetails {
+export function mapAppletDetailsFromDto(
+  detailsDto: AppletDetailsDto,
+): AppletDetails {
   return {
     id: detailsDto.id,
     about: detailsDto.about,
@@ -105,14 +111,26 @@ type Config = {
   };
 };
 
-export function mapAppletAnalytics({ appletId, activitiesDto, answersDto, encryptionService }: Config) {
+export function mapAppletAnalytics({
+  appletId,
+  activitiesDto,
+  answersDto,
+  encryptionService,
+}: Config) {
   const activitiesResponses: ActivityResponses[] =
     activitiesDto?.map((activityDto) => {
-      const activityAnswers = getAnswersByActivityId(activityDto.id, answersDto, encryptionService);
+      const activityAnswers = getAnswersByActivityId(
+        activityDto.id,
+        answersDto,
+        encryptionService,
+      );
 
       const analyticsItems = getAnalyticItems(activityDto);
 
-      const analyticsAnswers = mapAnswersWithAnalyticsItems(activityAnswers, analyticsItems);
+      const analyticsAnswers = mapAnswersWithAnalyticsItems(
+        activityAnswers,
+        analyticsItems,
+      );
 
       return {
         id: activityDto.id,
@@ -135,7 +153,9 @@ export function mapAppletDtoToAppletVersion(dto: AppletDto): AppletVersion {
   };
 }
 
-export function mapCompletedEntityFromDto(dto: CompletedEntityDto): CompletedEntity {
+export function mapCompletedEntityFromDto(
+  dto: CompletedEntityDto,
+): CompletedEntity {
   return {
     eventId: dto.scheduledEventId,
     entityId: dto.id,
@@ -165,13 +185,19 @@ function getAnalyticItems(activityDto: ActivityDto) {
 
   return activityDto.items.filter(
     (filterItem) =>
-      ['multiSelect', 'singleSelect', 'slider'].includes(filterItem.responseType) &&
-      activityItemsIds.includes(filterItem.id),
+      ['multiSelect', 'singleSelect', 'slider'].includes(
+        filterItem.responseType,
+      ) && activityItemsIds.includes(filterItem.id),
   );
 }
 
-function mapAnswersWithAnalyticsItems(analyticsAnswers: AnalyticsAnswerDto[], analyticsItemIds: ActivityItemDto[]) {
-  return analyticsAnswers.flatMap((analyticsAnswer) => getAnalyticsItemAnswers(analyticsAnswer, analyticsItemIds));
+function mapAnswersWithAnalyticsItems(
+  analyticsAnswers: AnalyticsAnswerDto[],
+  analyticsItemIds: ActivityItemDto[],
+) {
+  return analyticsAnswers.flatMap((analyticsAnswer) =>
+    getAnalyticsItemAnswers(analyticsAnswer, analyticsItemIds),
+  );
 }
 
 function getAnalyticsItemAnswers(
@@ -199,13 +225,21 @@ function getAnalyticsItemAnswers(
   return analyticsItemAnswers;
 }
 
-function mapActivityResponses(items: ActivityItemDto[], analyticsAnswers: AnalyticsAnswer[]) {
-  const allItemsResponses = items.map((item) => mapActivityResponsesByItem(analyticsAnswers, item));
+function mapActivityResponses(
+  items: ActivityItemDto[],
+  analyticsAnswers: AnalyticsAnswer[],
+) {
+  const allItemsResponses = items.map((item) =>
+    mapActivityResponsesByItem(analyticsAnswers, item),
+  );
 
   return allItemsResponses;
 }
 
-function mapActivityResponsesByItem(analyticsAnswers: AnalyticsAnswer[], item: ActivityItemDto) {
+function mapActivityResponsesByItem(
+  analyticsAnswers: AnalyticsAnswer[],
+  item: ActivityItemDto,
+) {
   const type = item.responseType as AnalyticsResponseType;
 
   const responses = analyticsAnswers
@@ -224,7 +258,10 @@ function mapActivityResponsesByItem(analyticsAnswers: AnalyticsAnswer[], item: A
   return itemResponses;
 }
 
-function mapResponseConfig(itemDto: ActivityItemDto, responseType: AnalyticsResponseType): ResponseConfig {
+function mapResponseConfig(
+  itemDto: ActivityItemDto,
+  responseType: AnalyticsResponseType,
+): ResponseConfig {
   switch (responseType) {
     case 'multiSelect':
     case 'singleSelect':
@@ -247,7 +284,11 @@ function mapResponseConfig(itemDto: ActivityItemDto, responseType: AnalyticsResp
   }
 }
 
-function getItemResponses(answer: any, createdAt: string, responseType: AnalyticsResponseType): ResponseAnalyticsValue {
+function getItemResponses(
+  answer: any,
+  createdAt: string,
+  responseType: AnalyticsResponseType,
+): ResponseAnalyticsValue {
   switch (responseType) {
     case 'multiSelect':
       const multiSelectValue: number[] = answer?.value ?? [];
@@ -277,6 +318,8 @@ function getItemResponses(answer: any, createdAt: string, responseType: Analytic
   }
 }
 
-export function mapDtoToRespondentMeta(response?: AppletDetailsResponse): string {
+export function mapDtoToRespondentMeta(
+  response?: AppletDetailsResponse,
+): string {
   return response?.respondentMeta?.nickname ?? '';
 }

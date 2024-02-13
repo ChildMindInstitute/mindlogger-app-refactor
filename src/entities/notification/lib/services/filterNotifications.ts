@@ -1,4 +1,8 @@
-import { AppletNotificationDescribers, EventNotificationDescribers, NotificationDescriber } from '../types';
+import {
+  AppletNotificationDescribers,
+  EventNotificationDescribers,
+  NotificationDescriber,
+} from '../types';
 
 export const filterNotifications = (
   appletNotifications: AppletNotificationDescribers,
@@ -16,7 +20,9 @@ export const filterNotifications = (
   return result;
 };
 
-export const sortNotificationDescribers = (notificationDescribers: NotificationDescriber[]) => {
+export const sortNotificationDescribers = (
+  notificationDescribers: NotificationDescriber[],
+) => {
   const notificationDescribersCopy = [...notificationDescribers];
 
   notificationDescribersCopy.sort((a, b) => a.scheduledAt - b.scheduledAt);
@@ -39,7 +45,9 @@ export const filterAppletNotifications = (
       notifications: [],
     };
 
-    eventsClone.notifications = eventNotifications.notifications.filter((x) => x.isActive);
+    eventsClone.notifications = eventNotifications.notifications.filter(
+      (x) => x.isActive,
+    );
 
     result.events.push(eventsClone);
   }

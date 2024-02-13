@@ -1,5 +1,10 @@
 import { FC } from 'react';
-import { Linking, StatusBar, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import {
+  Linking,
+  StatusBar,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -34,7 +39,11 @@ const LoginScreen: FC = () => {
         <StatusBar />
 
         <Box f={1} px={isTablet() ? '$17' : '$8'}>
-          <Box mb={isTablet() ? 30 : 50} pt={isTablet() ? 220 : 110} jc="flex-end">
+          <Box
+            mb={isTablet() ? 30 : 50}
+            pt={isTablet() ? 220 : 110}
+            jc="flex-end"
+          >
             <CloudLogo width="100%" height={70} />
           </Box>
 
@@ -60,7 +69,10 @@ const LoginScreen: FC = () => {
             </SubmitButton>
           </Box>
 
-          <XStack jc={isTablet() ? 'space-around' : 'space-between'} mb={isTablet() ? 50 : 40}>
+          <XStack
+            jc={isTablet() ? 'space-around' : 'space-between'}
+            mb={isTablet() ? 50 : 40}
+          >
             <Link
               textDecorationLine="underline"
               accessibilityLabel="change_language-link"
@@ -69,7 +81,11 @@ const LoginScreen: FC = () => {
               {t('language_screen:change_app_language')}
             </Link>
 
-            <Link textDecorationLine="underline" onPress={navigateToTerms} accessibilityLabel="terms_of_service_link">
+            <Link
+              textDecorationLine="underline"
+              onPress={navigateToTerms}
+              accessibilityLabel="terms_of_service_link"
+            >
               {t('auth:terms_of_service')}
             </Link>
           </XStack>

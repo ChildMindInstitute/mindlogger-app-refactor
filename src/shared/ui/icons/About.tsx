@@ -9,10 +9,21 @@ type Props = {
   tokenLogger?: boolean;
 } & AccessibilityProps;
 
-export default ({ color, size = 45, tokenLogger = false, accessibilityLabel }: Props) => {
+export default ({
+  color,
+  size = 45,
+  tokenLogger = false,
+  accessibilityLabel,
+}: Props) => {
   if (tokenLogger) {
     return (
-      <Svg accessibilityLabel={accessibilityLabel} width={size} height={size} viewBox="0 0 57.156 57.156" fill="none">
+      <Svg
+        accessibilityLabel={accessibilityLabel}
+        width={size}
+        height={size}
+        viewBox="0 0 57.156 57.156"
+        fill="none"
+      >
         <G transform="translate(1.847 0.693)">
           <Path
             d="M28.578,0A28.578,28.578,0,1,0,57.156,28.578,28.611,28.611,0,0,0,28.578,0Zm0,51.849A23.382,23.382,0,1,1,51.96,28.467,23.408,23.408,0,0,1,28.578,51.849Z"

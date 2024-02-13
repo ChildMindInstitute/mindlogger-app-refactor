@@ -5,7 +5,9 @@ import { navigationService } from '../lib';
 
 const ROUTES_TO_PERSIST: ScreenRoute[] = ['AppletDetails'];
 
-export function onScreenChanged(navigationState: NavigationState<RootStackParamList>) {
+export function onScreenChanged(
+  navigationState: NavigationState<RootStackParamList>,
+) {
   const history = navigationState.routes;
   const currentScreen = history[history.length - 1];
 

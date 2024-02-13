@@ -10,7 +10,10 @@ type Payload = {
   respondentIds: string;
 };
 
-export const useAppletAnalyticsQuery = <TData = ReturnAwaited<FetchFn>>(payload: Payload, options?: Options<TData>) => {
+export const useAppletAnalyticsQuery = <TData = ReturnAwaited<FetchFn>>(
+  payload: Payload,
+  options?: Options<TData>,
+) => {
   const { appletId, isLastVersion, fromDate, respondentIds } = payload;
 
   return useBaseQuery(

@@ -19,7 +19,9 @@ function AdditionalText({ value, onChange, required }: Props) {
   const { t } = useTranslation();
   const [height, setHeight] = useState(MIN_FIELD_HEIGHT);
 
-  const placeholder = t(required ? 'optional_text:required' : 'optional_text:enter_text');
+  const placeholder = t(
+    required ? 'optional_text:required' : 'optional_text:enter_text',
+  );
 
   return (
     <Input

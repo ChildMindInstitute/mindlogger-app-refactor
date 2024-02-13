@@ -272,7 +272,9 @@ type MultiSelectionRowsAnswerSettings = {
   dataMatrix: DataMatrixDto;
 };
 
-type AudioConfiguration = ButtonsConfiguration & TimerConfiguration & AdditionalResponseConfiguration;
+type AudioConfiguration = ButtonsConfiguration &
+  TimerConfiguration &
+  AdditionalResponseConfiguration;
 
 type AudioAnswerSettings = {
   maxDuration: number;
@@ -287,7 +289,8 @@ type AudioPlayerAnswerSettings = {
   file: string;
 };
 
-type MessageConfiguration = Omit<ButtonsConfiguration, 'skippableItem'> & TimerConfiguration;
+type MessageConfiguration = Omit<ButtonsConfiguration, 'skippableItem'> &
+  TimerConfiguration;
 
 type MessageAnswerSettings = null;
 
@@ -312,18 +315,23 @@ type SliderAnswerSettings = {
   scores: Array<number>;
 };
 
-type NumberSelectionConfiguration = ButtonsConfiguration & AdditionalResponseConfiguration;
+type NumberSelectionConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration;
 
 type NumberSelectionAnswerSettings = {
   minValue: number;
   maxValue: number;
 };
 
-type TimeRangeConfiguration = ButtonsConfiguration & AdditionalResponseConfiguration & TimerConfiguration;
+type TimeRangeConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
 
 type TimerRangeAnswerSettings = null;
 
-type GeolocationConfiguration = ButtonsConfiguration & AdditionalResponseConfiguration & TimerConfiguration;
+type GeolocationConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
 
 type GeolocationAnswerSettings = null;
 
@@ -339,17 +347,25 @@ type DrawingAnswerSettings = {
   drawingBackground: string | null;
 };
 
-type PhotoConfiguration = ButtonsConfiguration & AdditionalResponseConfiguration & TimerConfiguration;
+type PhotoConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
 
 type PhotoAnswerSettings = null;
 
-type VideoConfiguration = ButtonsConfiguration & AdditionalResponseConfiguration & TimerConfiguration;
+type VideoConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
 
 type VideoAnswerSettings = null;
 
-type DateConfiguration = ButtonsConfiguration & AdditionalResponseConfiguration & TimerConfiguration;
+type DateConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
 
-type TimeConfiguration = ButtonsConfiguration & AdditionalResponseConfiguration & TimerConfiguration;
+type TimeConfiguration = ButtonsConfiguration &
+  AdditionalResponseConfiguration &
+  TimerConfiguration;
 
 type DateAnswerSettings = null;
 

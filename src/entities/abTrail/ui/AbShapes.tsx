@@ -1,7 +1,15 @@
 import { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { Canvas, Path, Circle, Group, Text, SkPath, useFont } from '@shopify/react-native-skia';
+import {
+  Canvas,
+  Path,
+  Circle,
+  Group,
+  Text,
+  SkPath,
+  useFont,
+} from '@shopify/react-native-skia';
 import { useTranslation } from 'react-i18next';
 
 import { AbTestPayload, Point } from '@app/abstract/lib';
@@ -26,7 +34,8 @@ type Props = {
 const AbShapes: FC<Props> = (props) => {
   const { nodes, config, deviceType } = props.testData;
   const { paths, lastPath, greenRoundOrder, errorPath } = props;
-  const fontBeginEndSize = deviceType === 'mobile' ? config.fontSize / 1.4 : config.fontSizeBeginEnd!;
+  const fontBeginEndSize =
+    deviceType === 'mobile' ? config.fontSize / 1.4 : config.fontSizeBeginEnd!;
 
   const first = nodes[0];
 
@@ -83,7 +92,9 @@ const AbShapes: FC<Props> = (props) => {
 
   const endOffset = getEndOffset();
 
-  const errorMiddlePoint: Point | null = errorPath ? getEquidistantPoint(errorPath) : null;
+  const errorMiddlePoint: Point | null = errorPath
+    ? getEquidistantPoint(errorPath)
+    : null;
 
   if (!fontDigits || !fontBeginEnd) {
     return <View />;
@@ -100,7 +111,9 @@ const AbShapes: FC<Props> = (props) => {
           </Group>
         )}
 
-        {!!lastPath && <Path key="lastPath" path={lastPath} strokeWidth={1} style="stroke" />}
+        {!!lastPath && (
+          <Path key="lastPath" path={lastPath} strokeWidth={1} style="stroke" />
+        )}
 
         {!!errorPath && !!errorMiddlePoint && (
           <Group>
@@ -123,7 +136,9 @@ const AbShapes: FC<Props> = (props) => {
                 cx={x.cx}
                 cy={x.cy}
                 r={config.radius}
-                color={greenRoundOrder === x.orderIndex ? colors.green : colors.black}
+                color={
+                  greenRoundOrder === x.orderIndex ? colors.green : colors.black
+                }
               />
 
               <Text

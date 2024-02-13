@@ -6,7 +6,14 @@ import { useTranslation } from 'react-i18next';
 
 import { colors, useAppDispatch, useAppSelector } from '@app/shared/lib';
 import { useAppForm, useTCPSocket } from '@app/shared/lib';
-import { Box, BoxProps, Text, XStack, Button, ActivityIndicator } from '@app/shared/ui';
+import {
+  Box,
+  BoxProps,
+  Text,
+  XStack,
+  Button,
+  ActivityIndicator,
+} from '@app/shared/ui';
 import { CheckBoxField, InputField } from '@app/shared/ui/form';
 import { StreamingModel } from '@entities/streaming';
 
@@ -35,7 +42,9 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const connection = useAppSelector(StreamingModel.selectors.selectStreamingSettings);
+  const connection = useAppSelector(
+    StreamingModel.selectors.selectStreamingSettings,
+  );
 
   const [error, setError] = useState('');
 
@@ -85,14 +94,31 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   };
 
   return (
-    <Box accessibilityLabel="connection-form" {...props} onPress={(e) => e.stopPropagation()}>
+    <Box
+      accessibilityLabel="connection-form"
+      {...props}
+      onPress={(e) => e.stopPropagation()}
+    >
       <FormProvider {...form}>
         <XStack justifyContent="center">
-          <Text textAlign="center" mb={20} color="$darkerGrey3" fontSize={20} fontWeight="900" mr={6}>
+          <Text
+            textAlign="center"
+            mb={20}
+            color="$darkerGrey3"
+            fontSize={20}
+            fontWeight="900"
+            mr={6}
+          >
             {t('live_connection:connect_to_server')}
           </Text>
 
-          {connecting && <ActivityIndicator accessibilityLabel="connection-form-loader" size="small" mb={18} />}
+          {connecting && (
+            <ActivityIndicator
+              accessibilityLabel="connection-form-loader"
+              size="small"
+              mb={18}
+            />
+          )}
         </XStack>
 
         <Text color="$darkerGrey3" fontSize={18} fontWeight="700">
@@ -109,7 +135,9 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
               styles.input,
               {
                 color: connected ? colors.grey2 : colors.darkerGrey2,
-                borderBottomColor: connected ? colors.grey2 : colors.darkerGrey2,
+                borderBottomColor: connected
+                  ? colors.grey2
+                  : colors.darkerGrey2,
               },
             ]}
             placeholder=""
@@ -130,7 +158,9 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
               styles.input,
               {
                 color: connected ? colors.grey2 : colors.darkerGrey2,
-                borderBottomColor: connected ? colors.grey2 : colors.darkerGrey2,
+                borderBottomColor: connected
+                  ? colors.grey2
+                  : colors.darkerGrey2,
               },
             ]}
             keyboardType="number-pad"
@@ -167,7 +197,12 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
         )) || <></>}
 
         {connected ? (
-          <Button accessibilityLabel="connection-form-disconnect-btn" br={4} mt={10} onPress={disconnect}>
+          <Button
+            accessibilityLabel="connection-form-disconnect-btn"
+            br={4}
+            mt={10}
+            onPress={disconnect}
+          >
             {t('live_connection:disconnect')}
           </Button>
         ) : (

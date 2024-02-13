@@ -2,7 +2,10 @@ import { useEffect, useRef } from 'react';
 
 import { TASK_LOOP_RATE } from '../constants';
 
-const useAnimation = (callback: (a: number, b: number, c: number) => void, running = false) => {
+const useAnimation = (
+  callback: (a: number, b: number, c: number) => void,
+  running = false,
+) => {
   const animation = useRef<number | undefined>();
   const startTime = useRef(performance.now());
   const previousTime = useRef(performance.now());
@@ -14,7 +17,11 @@ const useAnimation = (callback: (a: number, b: number, c: number) => void, runni
 
     if (newTick > tickNumber.current) {
       tickNumber.current = newTick;
-      callback(timeElapsed, tickNumber.current, timeStamp - previousTime.current);
+      callback(
+        timeElapsed,
+        tickNumber.current,
+        timeStamp - previousTime.current,
+      );
       previousTime.current = timeStamp;
     }
 

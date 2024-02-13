@@ -63,13 +63,17 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     includesOption(optionValue: string) {
-      const answer = (currentAnswer?.answer as Maybe<Item[]>)?.map((item) => item.value.toString());
+      const answer = (currentAnswer?.answer as Maybe<Item[]>)?.map((item) =>
+        item.value.toString(),
+      );
 
       return ConditionalLogicModel.includesValue(answer, optionValue);
     },
 
     notIncludesOption(optionValue: string) {
-      const answer = (currentAnswer?.answer as Maybe<Item[]>)?.map((item) => item.value.toString());
+      const answer = (currentAnswer?.answer as Maybe<Item[]>)?.map((item) =>
+        item.value.toString(),
+      );
 
       return ConditionalLogicModel.doesNotIncludeValue(answer, optionValue);
     },

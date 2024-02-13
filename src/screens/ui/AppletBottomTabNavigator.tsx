@@ -10,7 +10,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Box, ImageBackground } from '@app/shared/ui';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 
-import { AppletDetailsParamList, getAppletDetailsScreenOptions, RootStackParamList } from '../config';
+import {
+  AppletDetailsParamList,
+  getAppletDetailsScreenOptions,
+  RootStackParamList,
+} from '../config';
 import { ActivityListScreen, AboutAppletScreen, AppletDataScreen } from '../ui';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AppletDetails'>;
@@ -35,7 +39,11 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
         headerRight: () =>
           applet?.theme?.logo && (
             <Box backgroundColor="$white" style={style.themeLogoContainer}>
-              <CachedImage source={applet.theme.logo} style={style.themeLogo} resizeMode="contain" />
+              <CachedImage
+                source={applet.theme.logo}
+                style={style.themeLogo}
+                resizeMode="contain"
+              />
             </Box>
           ),
       });
@@ -55,9 +63,15 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
   const { bottom } = useSafeAreaInsets();
 
   return (
-    <ImageBackground uri={appletTheme?.backgroundImage} bg={appletTheme?.primaryColor ?? '$white'}>
+    <ImageBackground
+      uri={appletTheme?.backgroundImage}
+      bg={appletTheme?.primaryColor ?? '$white'}
+    >
       <Tab.Navigator
-        screenOptions={getAppletDetailsScreenOptions(appletTheme ?? null, Boolean(bottom))}
+        screenOptions={getAppletDetailsScreenOptions(
+          appletTheme ?? null,
+          Boolean(bottom),
+        )}
         initialRouteName="ActivityList"
       >
         <Tab.Screen

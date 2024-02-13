@@ -16,7 +16,10 @@ export type SliderResponseConfig = {
   minValue: number;
 };
 
-export type ResponseConfig = SelectionsResponseConfig | SliderResponseConfig | null;
+export type ResponseConfig =
+  | SelectionsResponseConfig
+  | SliderResponseConfig
+  | null;
 
 export type ItemResponsesDto = {
   name: string;

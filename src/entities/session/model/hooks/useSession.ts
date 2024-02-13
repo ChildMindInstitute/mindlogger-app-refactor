@@ -4,7 +4,10 @@ import { sessionService } from '../../lib';
 import { Session } from '../../types';
 
 function useSession() {
-  const [session] = useMMKVObject<Session>('sessionKeys', sessionService.getStorage());
+  const [session] = useMMKVObject<Session>(
+    'sessionKeys',
+    sessionService.getStorage(),
+  );
 
   return session;
 }

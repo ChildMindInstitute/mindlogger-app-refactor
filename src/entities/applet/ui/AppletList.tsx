@@ -1,5 +1,10 @@
 import { FC, memo, useCallback } from 'react';
-import { FlatList, ListRenderItem, ScrollViewProps, StyleSheet } from 'react-native';
+import {
+  FlatList,
+  ListRenderItem,
+  ScrollViewProps,
+  StyleSheet,
+} from 'react-native';
 
 import { XStack, YStack } from '@tamagui/stacks';
 import { useIsMutating } from '@tanstack/react-query';
@@ -24,7 +29,12 @@ type Props = {
   ListFooterComponent: JSX.Element;
 } & BoxProps;
 
-const AppletList: FC<Props> = ({ onAppletPress, refreshControl, ListFooterComponent, ...styledProps }) => {
+const AppletList: FC<Props> = ({
+  onAppletPress,
+  refreshControl,
+  ListFooterComponent,
+  ...styledProps
+}) => {
   const { error: getAppletsError, data: applets } = useAppletsQuery({
     select: (response) => mapApplets(response.data.result),
   });
@@ -41,7 +51,9 @@ const AppletList: FC<Props> = ({ onAppletPress, refreshControl, ListFooterCompon
         accessibilityLabel={`applet-${item.displayName}`}
         applet={item}
         disabled={!!isRefreshing}
-        onPress={() => onAppletPress({ id: item.id, displayName: item.displayName })}
+        onPress={() =>
+          onAppletPress({ id: item.id, displayName: item.displayName })
+        }
       />
     ),
     [isRefreshing, onAppletPress],

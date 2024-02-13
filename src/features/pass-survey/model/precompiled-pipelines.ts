@@ -2,8 +2,14 @@ import { AbPayload, AbTestPayload } from '@app/abstract/lib';
 
 import { PipelineItem } from '../lib';
 
-export const getAbTrailsPipeline = (id: string, abPayload: AbPayload, isLast: boolean): PipelineItem[] => {
-  const getTutorialPipelineItem = (testPayload: AbTestPayload): PipelineItem => {
+export const getAbTrailsPipeline = (
+  id: string,
+  abPayload: AbPayload,
+  isLast: boolean,
+): PipelineItem[] => {
+  const getTutorialPipelineItem = (
+    testPayload: AbTestPayload,
+  ): PipelineItem => {
     return {
       id,
       type: 'Tutorial',
@@ -38,7 +44,9 @@ export const getAbTrailsPipeline = (id: string, abPayload: AbPayload, isLast: bo
 
   const testItem = getTestPipelineItem();
 
-  const tutorialItem = getTutorialPipelineItem(testItem.payload as AbTestPayload);
+  const tutorialItem = getTutorialPipelineItem(
+    testItem.payload as AbTestPayload,
+  );
 
   return [tutorialItem, testItem];
 };

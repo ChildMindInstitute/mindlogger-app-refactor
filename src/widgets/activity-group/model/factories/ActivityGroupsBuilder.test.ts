@@ -10,12 +10,25 @@ import {
   subMonths,
 } from 'date-fns';
 
-import { ActivityPipelineType, AvailabilityType, FlowProgress, PeriodicityType, Progress } from '@app/abstract/lib';
-import { ActivityListItem, ActivityStatus, ActivityType } from '@app/entities/activity/lib';
+import {
+  ActivityPipelineType,
+  AvailabilityType,
+  FlowProgress,
+  PeriodicityType,
+  Progress,
+} from '@app/abstract/lib';
+import {
+  ActivityListItem,
+  ActivityStatus,
+  ActivityType,
+} from '@app/entities/activity/lib';
 import { EventAvailability } from '@app/entities/event';
 import { MIDNIGHT_DATE } from '@app/shared/lib';
 
-import { ActivityGroupsBuilder, createActivityGroupsBuilder } from './ActivityGroupsBuilder';
+import {
+  ActivityGroupsBuilder,
+  createActivityGroupsBuilder,
+} from './ActivityGroupsBuilder';
 import { GroupsBuildContext } from './GroupUtility';
 import { ActivityListGroup, EventEntity, Entity } from '../../lib';
 
@@ -127,7 +140,11 @@ const getExpectedScheduledItem = (): ActivityListItem => {
   };
 };
 
-const getScheduledEventEntity = (settings: { startDate: Date; endDate: Date; scheduledAt: Date }): EventEntity => {
+const getScheduledEventEntity = (settings: {
+  startDate: Date;
+  endDate: Date;
+  scheduledAt: Date;
+}): EventEntity => {
   const { startDate, endDate, scheduledAt } = settings;
 
   const result: EventEntity = {
@@ -154,7 +171,9 @@ const getScheduledEventEntity = (settings: { startDate: Date; endDate: Date; sch
   return result;
 };
 
-const getAlwaysAvailableEventEntity = (settings: { scheduledAt: Date }): EventEntity => {
+const getAlwaysAvailableEventEntity = (settings: {
+  scheduledAt: Date;
+}): EventEntity => {
   const { scheduledAt } = settings;
 
   const result: EventEntity = {
@@ -184,9 +203,13 @@ const mockGetNow = (builder: ActivityGroupsBuilder, mockedNowDate: Date) => {
   //@ts-ignore
   builder.itemsFactory.utility.getNow = jest.fn(() => new Date(mockedNowDate));
   //@ts-ignore
-  builder.scheduledEvaluator.utility.getNow = jest.fn(() => new Date(mockedNowDate));
+  builder.scheduledEvaluator.utility.getNow = jest.fn(
+    () => new Date(mockedNowDate),
+  );
   //@ts-ignore
-  builder.availableEvaluator.utility.getNow = jest.fn(() => new Date(mockedNowDate));
+  builder.availableEvaluator.utility.getNow = jest.fn(
+    () => new Date(mockedNowDate),
+  );
 };
 
 describe('ActivityGroupsBuilder', () => {
@@ -703,7 +726,10 @@ describe('ActivityGroupsBuilder', () => {
     it('Should return item for scheduled event when periodicity is Daily and allowAccessBeforeFromTime is false and current time is is allowed time window and start/end dates cover now (-/+ 2 months)', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      const progress = getProgress(subDays(scheduledAt, 1), addMinutes(subDays(scheduledAt, 1), 5));
+      const progress = getProgress(
+        subDays(scheduledAt, 1),
+        addMinutes(subDays(scheduledAt, 1), 5),
+      );
 
       const input = {
         allAppletActivities: [],
@@ -1104,7 +1130,10 @@ describe('ActivityGroupsBuilder', () => {
     it('Should return group-item for scheduled event when periodicity is Daily and allowAccessBeforeFromTime is true and current time is less than startTime and progress record exist and completed yesterday', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      const progress = getProgress(subDays(scheduledAt, 1), addMinutes(subDays(scheduledAt, 1), 5));
+      const progress = getProgress(
+        subDays(scheduledAt, 1),
+        addMinutes(subDays(scheduledAt, 1), 5),
+      );
 
       const input = {
         allAppletActivities: [],
@@ -1191,7 +1220,10 @@ describe('ActivityGroupsBuilder', () => {
     it('Should not return group-item for scheduled event when periodicity is Weekly and allowAccessBeforeFromTime is true and completed today is true', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
-      const progress = getProgress(new Date(scheduledAt), addMinutes(scheduledAt, 5));
+      const progress = getProgress(
+        new Date(scheduledAt),
+        addMinutes(scheduledAt, 5),
+      );
 
       const input = {
         allAppletActivities: [],
@@ -1465,7 +1497,10 @@ describe('ActivityGroupsBuilder', () => {
         activities: [expectedItem],
       };
 
-      progress = getProgress(subDays(scheduledAt, 1), addMinutes(subDays(scheduledAt, 1), 5));
+      progress = getProgress(
+        subDays(scheduledAt, 1),
+        addMinutes(subDays(scheduledAt, 1), 5),
+      );
 
       input = {
         allAppletActivities: [],
@@ -1526,7 +1561,10 @@ describe('ActivityGroupsBuilder', () => {
     it('2-Should not return group item when event is scheduled and now is less than scheduledAt and completed today and accessBeforeTimeFrom is true', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 30, 0);
 
-      const progress = getProgress(subHours(scheduledAt, 1), subMinutes(scheduledAt, 30));
+      const progress = getProgress(
+        subHours(scheduledAt, 1),
+        subMinutes(scheduledAt, 30),
+      );
 
       const input = {
         allAppletActivities: [],
@@ -1671,7 +1709,9 @@ describe('ActivityGroupsBuilder', () => {
 
       //switch to 2nd activity
 
-      const progressRecord = progress['test-applet-id-1']['test-flow-id-1']['test-event-id-1'] as FlowProgress;
+      const progressRecord = progress['test-applet-id-1']['test-flow-id-1'][
+        'test-event-id-1'
+      ] as FlowProgress;
       progressRecord.currentActivityId = 'test-id-2';
       progressRecord.pipelineActivityOrder = 1;
       activityFlow.hideBadge = true;

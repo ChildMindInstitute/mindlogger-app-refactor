@@ -1,4 +1,12 @@
-import { addDays, addMonths, addWeeks, isEqual, subDays, subMonths, subWeeks } from 'date-fns';
+import {
+  addDays,
+  addMonths,
+  addWeeks,
+  isEqual,
+  subDays,
+  subMonths,
+  subWeeks,
+} from 'date-fns';
 
 import { PeriodicityType, Progress } from '@app/abstract/lib';
 import { ILogger, Logger } from '@app/shared/lib';
@@ -15,12 +23,16 @@ export class NotificationDaysExtractor {
     this.logger = Logger;
   }
 
-  private getDayFrom(firstScheduleDay: Date, periodStartDay: Date | null): Date {
+  private getDayFrom(
+    firstScheduleDay: Date,
+    periodStartDay: Date | null,
+  ): Date {
     let dayFrom;
     if (!periodStartDay) {
       dayFrom = firstScheduleDay;
     } else {
-      dayFrom = periodStartDay > firstScheduleDay ? periodStartDay : firstScheduleDay;
+      dayFrom =
+        periodStartDay > firstScheduleDay ? periodStartDay : firstScheduleDay;
     }
     return dayFrom;
   }
@@ -147,7 +159,10 @@ export class NotificationDaysExtractor {
       }
     }
 
-    if (periodicity === PeriodicityType.Always || periodicity === PeriodicityType.Daily) {
+    if (
+      periodicity === PeriodicityType.Always ||
+      periodicity === PeriodicityType.Daily
+    ) {
       let day = reminderStartDay;
 
       while (day <= dayTo) {

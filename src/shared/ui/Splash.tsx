@@ -8,10 +8,16 @@ import { APP_VERSION, ENV, colors, IS_IOS } from '@shared/lib';
 const SplashScreen = () => {
   const buildNumber = DeviceInfo.getBuildNumber();
 
-  const appVersion = ENV ? `${APP_VERSION} (${buildNumber}) ${ENV}` : APP_VERSION;
+  const appVersion = ENV
+    ? `${APP_VERSION} (${buildNumber}) ${ENV}`
+    : APP_VERSION;
 
   return (
-    <Animated.View collapsable={false} exiting={FadeOut.duration(500)} style={style.container}>
+    <Animated.View
+      collapsable={false}
+      exiting={FadeOut.duration(500)}
+      style={style.container}
+    >
       <ActivityIndicator size="large" color={colors.secondary} />
 
       <View style={style.versionContainer}>

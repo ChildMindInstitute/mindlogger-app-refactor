@@ -14,8 +14,11 @@ const createItemsVisibilityValidator = (): ItemsVisibilityValidator => {
     });
   };
 
-  function hasActivityWithHiddenAllItems(lookupInput: LookupEntityInput): boolean {
-    const activitiesToLookup: ActivityDetails[] = EntityActivitiesCollector.collect(lookupInput);
+  function hasActivityWithHiddenAllItems(
+    lookupInput: LookupEntityInput,
+  ): boolean {
+    const activitiesToLookup: ActivityDetails[] =
+      EntityActivitiesCollector.collect(lookupInput);
 
     return activitiesToLookup.some((activity) => {
       return check(activity);

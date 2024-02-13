@@ -1,4 +1,8 @@
-import { AvailabilityType, IEvaluator, PeriodicityType } from '@app/abstract/lib';
+import {
+  AvailabilityType,
+  IEvaluator,
+  PeriodicityType,
+} from '@app/abstract/lib';
 import { DatesFromTo } from '@shared/lib';
 
 import { GroupUtility, GroupsBuildContext } from './GroupUtility';
@@ -12,7 +16,9 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
   }
 
   public evaluate(eventsEntities: Array<EventEntity>): Array<EventEntity> {
-    const notInProgress = eventsEntities.filter((x) => !this.utility.isInProgress(x));
+    const notInProgress = eventsEntities.filter(
+      (x) => !this.utility.isInProgress(x),
+    );
 
     const result: Array<EventEntity> = [];
 
@@ -25,9 +31,12 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
         continue;
       }
 
-      const isTypeScheduled = event.availability.availabilityType === AvailabilityType.ScheduledAccess;
+      const isTypeScheduled =
+        event.availability.availabilityType ===
+        AvailabilityType.ScheduledAccess;
 
-      const isAccessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime;
+      const isAccessBeforeTimeFrom =
+        event.availability.allowAccessBeforeFromTime;
 
       const isCompletedToday = this.utility.isCompletedToday(eventEntity);
 
@@ -36,7 +45,10 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
       const isSpreadToNextDay = this.utility.isSpreadToNextDay(event);
 
       const isCandidateForBeingScheduled: boolean =
-        isTypeScheduled && isScheduledToday && now < event.scheduledAt! && !isAccessBeforeTimeFrom;
+        isTypeScheduled &&
+        isScheduledToday &&
+        now < event.scheduledAt! &&
+        !isAccessBeforeTimeFrom;
 
       if (!isCandidateForBeingScheduled) {
         continue;
@@ -65,13 +77,21 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
       const isFromTueToFri = now.getDay() >= 2 && now.getDay() <= 5;
 
       const doAdvancedSpreadCheck =
-        periodicity === PeriodicityType.Daily || (periodicity === PeriodicityType.Weekdays && isFromTueToFri);
+        periodicity === PeriodicityType.Daily ||
+        (periodicity === PeriodicityType.Weekdays && isFromTueToFri);
 
       const considerSpread = doAdvancedSpreadCheck;
 
-      const voidInterval: DatesFromTo = this.utility.getVoidInterval(eventEntity.event, considerSpread);
+      const voidInterval: DatesFromTo = this.utility.getVoidInterval(
+        eventEntity.event,
+        considerSpread,
+      );
 
-      const isInVoidInterval = this.utility.isInInterval(voidInterval, now, 'from');
+      const isInVoidInterval = this.utility.isInInterval(
+        voidInterval,
+        now,
+        'from',
+      );
 
       const isCompletedInVoidInterval = this.utility.isInInterval(
         voidInterval,
@@ -79,7 +99,11 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
         'from',
       );
 
-      if (doAdvancedSpreadCheck && isInVoidInterval && !isCompletedInVoidInterval) {
+      if (
+        doAdvancedSpreadCheck &&
+        isInVoidInterval &&
+        !isCompletedInVoidInterval
+      ) {
         result.push(eventEntity);
       }
     }

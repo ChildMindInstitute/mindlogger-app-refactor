@@ -36,11 +36,20 @@ export type QueryOptions<
   TData = Awaited<ReturnType<TFetchFn>>,
   TQueryFnData = Awaited<ReturnType<TFetchFn>>,
   TError = BaseError,
-> = Omit<UseQueryOptions<TQueryFnData, TError, TData, QueryKey>, 'queryKey' | 'queryFn'>;
+> = Omit<
+  UseQueryOptions<TQueryFnData, TError, TData, QueryKey>,
+  'queryKey' | 'queryFn'
+>;
 
-export type ReturnAwaited<TFetchReturn extends AnyPromiseFn> = Awaited<ReturnType<TFetchReturn>>;
+export type ReturnAwaited<TFetchReturn extends AnyPromiseFn> = Awaited<
+  ReturnType<TFetchReturn>
+>;
 
 export type MutationOptions<TFetchFn extends AnyPromiseFn> = Omit<
-  UseMutationOptions<Awaited<ReturnType<TFetchFn>>, BaseError, FnParams<TFetchFn>>,
+  UseMutationOptions<
+    Awaited<ReturnType<TFetchFn>>,
+    BaseError,
+    FnParams<TFetchFn>
+  >,
   'queryKey' | 'queryFn'
 >;

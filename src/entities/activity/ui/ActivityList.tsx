@@ -15,7 +15,11 @@ const ActivityList: FC<Props> = ({ activities, onCardPress }) => {
     <YStack accessibilityLabel="activity-list-container" space={10}>
       {activities.map((x) => (
         <Box key={x.eventId}>
-          <ActivityCard activity={x} disabled={false} onPress={() => onCardPress?.(x)} />
+          <ActivityCard
+            activity={x}
+            disabled={false}
+            onPress={() => onCardPress?.(x)}
+          />
         </Box>
       ))}
     </YStack>

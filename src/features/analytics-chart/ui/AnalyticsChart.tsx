@@ -14,7 +14,12 @@ type Props = {
   title: string;
 };
 
-const AnalyticsChart: FC<Props> = ({ responseType, data, title, responseConfig }) => {
+const AnalyticsChart: FC<Props> = ({
+  responseType,
+  data,
+  title,
+  responseConfig,
+}) => {
   let chart: JSX.Element | null;
 
   const { t } = useTranslation();
@@ -25,7 +30,12 @@ const AnalyticsChart: FC<Props> = ({ responseType, data, title, responseConfig }
       chart = <TimelineChart config={responseConfig} data={data} />;
       break;
     case 'slider':
-      chart = <LineChart config={responseConfig} data={data.map((x) => ({ ...x, date: new Date(x.date) }))} />;
+      chart = (
+        <LineChart
+          config={responseConfig}
+          data={data.map((x) => ({ ...x, date: new Date(x.date) }))}
+        />
+      );
       break;
 
     default:
@@ -35,7 +45,13 @@ const AnalyticsChart: FC<Props> = ({ responseType, data, title, responseConfig }
 
   return (
     <Box>
-      <Text textAlign="center" mb={10} color="$tertiary" fontWeight="800" fontSize={15}>
+      <Text
+        textAlign="center"
+        mb={10}
+        color="$tertiary"
+        fontWeight="800"
+        fontSize={15}
+      >
         {title}
       </Text>
 

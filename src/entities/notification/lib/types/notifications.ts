@@ -1,4 +1,10 @@
-import { EventDetail, EventType, InitialNotification, Notification, TriggerNotification } from '@notifee/react-native';
+import {
+  EventDetail,
+  EventType,
+  InitialNotification,
+  Notification,
+  TriggerNotification,
+} from '@notifee/react-native';
 import { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 
 type NotificationEventCallback = (eventDetail: LocalEventDetail) => void;
@@ -16,11 +22,19 @@ export type NotificationEventCallbacks = {
   onUnknown: NotificationEventCallback;
 };
 
-export type NotificationEventHandlers = Record<EventType, NotificationEventCallback>;
+export type NotificationEventHandlers = Record<
+  EventType,
+  NotificationEventCallback
+>;
 
-export type NotificationEventHandlersFunctions = Record<EventType, () => NotificationEventCallback | undefined>;
+export type NotificationEventHandlersFunctions = Record<
+  EventType,
+  () => NotificationEventCallback | undefined
+>;
 
-type LocalNotificationType = 'schedule-event-alert' | 'request-to-reschedule-due-to-limit';
+type LocalNotificationType =
+  | 'schedule-event-alert'
+  | 'request-to-reschedule-due-to-limit';
 
 type RemoteNotificationType =
   | 'response-data-alert'
@@ -28,7 +42,9 @@ type RemoteNotificationType =
   | 'applet-delete-alert'
   | 'schedule-updated';
 
-export type PushNotificationType = LocalNotificationType | RemoteNotificationType;
+export type PushNotificationType =
+  | LocalNotificationType
+  | RemoteNotificationType;
 
 export type EventPushNotification = Notification & {
   data: {

@@ -4,7 +4,10 @@ export interface IChangeQueueNotify {
   notify: () => void;
 }
 
-class ChangeQueueObservable extends CommonObservable implements IChangeQueueNotify {
+class ChangeQueueObservable
+  extends CommonObservable
+  implements IChangeQueueNotify
+{
   constructor() {
     super();
   }

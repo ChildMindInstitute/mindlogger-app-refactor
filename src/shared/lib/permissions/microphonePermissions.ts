@@ -13,7 +13,10 @@ const checkMicrophoneAndroidPermissions = async (): Promise<string> => {
   const result = await Permissions.checkMultiple([
     PERMISSIONS.ANDROID.RECORD_AUDIO,
     ...(!IS_ANDROID_13_OR_HIGHER
-      ? [PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE, PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE]
+      ? [
+          PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
+          PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+        ]
       : []),
   ]);
 
@@ -33,13 +36,18 @@ const checkMicrophoneAndroidPermissions = async (): Promise<string> => {
 };
 
 export const checkMicrophonePermissions = async () =>
-  IS_ANDROID ? checkMicrophoneAndroidPermissions() : checkMicrophoneIOSPermissions();
+  IS_ANDROID
+    ? checkMicrophoneAndroidPermissions()
+    : checkMicrophoneIOSPermissions();
 
 const getMicrophoneAndroidPermissions = async (): Promise<boolean> => {
   const result = (await Permissions.requestMultiple([
     PERMISSIONS.ANDROID.RECORD_AUDIO,
     ...(!IS_ANDROID_13_OR_HIGHER
-      ? [PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE, PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE]
+      ? [
+          PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
+          PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+        ]
       : []),
   ])) as Record<string, string>;
 
@@ -55,4 +63,6 @@ const getMicrophoneIOSPermissions = async (): Promise<boolean> => {
 };
 
 export const requestMicrophonePermissions = () =>
-  IS_ANDROID ? getMicrophoneAndroidPermissions() : getMicrophoneIOSPermissions();
+  IS_ANDROID
+    ? getMicrophoneAndroidPermissions()
+    : getMicrophoneIOSPermissions();

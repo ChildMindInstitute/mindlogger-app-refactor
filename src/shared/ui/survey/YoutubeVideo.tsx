@@ -8,7 +8,9 @@ type Props = {
 
 const YoutubeVideo: FC<Props> = ({ src }) => {
   const videoId = src.split('.be/')?.[1];
-  const uri = src?.includes('watch?') ? src : `https://www.youtube.com/embed/${videoId}`;
+  const uri = src?.includes('watch?')
+    ? src
+    : `https://www.youtube.com/embed/${videoId}`;
 
   return (
     <WebView

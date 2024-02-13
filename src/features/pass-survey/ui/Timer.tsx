@@ -2,10 +2,18 @@ import { FC, memo, useContext, useEffect, useMemo } from 'react';
 
 import { styled } from '@tamagui/core';
 import { Easing, useSharedValue, withTiming } from 'react-native-reanimated';
-import Animated, { SharedValue, useAnimatedProps } from 'react-native-reanimated';
+import Animated, {
+  SharedValue,
+  useAnimatedProps,
+} from 'react-native-reanimated';
 import { Circle, Svg } from 'react-native-svg';
 
-import { ONE_SECOND, isEmptyObject, useAppTimer, useInterval } from '@app/shared/lib';
+import {
+  ONE_SECOND,
+  isEmptyObject,
+  useAppTimer,
+  useInterval,
+} from '@app/shared/lib';
 import { Box } from '@shared/ui';
 
 import { ActivityIdentityContext } from '../lib';
@@ -54,7 +62,9 @@ const AnimatedCircle: FC<AnimatedSvgCircleProps> = ({ progress }) => {
 };
 
 const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
-  const { appletId, activityId, eventId, order } = useContext(ActivityIdentityContext);
+  const { appletId, activityId, eventId, order } = useContext(
+    ActivityIdentityContext,
+  );
 
   const { removeTimer, setTimer, activityStorageRecord } = useActivityState({
     appletId,
@@ -64,7 +74,10 @@ const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
   });
 
   const progressDone = useMemo(() => {
-    if (activityStorageRecord?.timers && isEmptyObject(activityStorageRecord?.timers)) {
+    if (
+      activityStorageRecord?.timers &&
+      isEmptyObject(activityStorageRecord?.timers)
+    ) {
       return activityStorageRecord.timers[activityStorageRecord.step] ?? 0;
     }
 
@@ -104,7 +117,14 @@ const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
   return (
     <TimerContainer accessibilityLabel="timer-widget">
       <Svg height={50} width={50}>
-        <Circle cx={25} cy={25} r={12.5} fill="transparent" stroke="rgba(0, 0, 0, 0.1)" strokeWidth={25} />
+        <Circle
+          cx={25}
+          cy={25}
+          r={12.5}
+          fill="transparent"
+          stroke="rgba(0, 0, 0, 0.1)"
+          strokeWidth={25}
+        />
 
         <AnimatedCircle progress={progress} duration={10000} />
       </Svg>

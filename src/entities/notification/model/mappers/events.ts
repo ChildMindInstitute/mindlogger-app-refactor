@@ -4,7 +4,9 @@ import { buildDateFromDto } from '@app/shared/lib';
 
 import { ScheduleEvent } from '../../lib';
 
-export function mapEventsFromDto(eventsDto: ScheduleEventDto[]): ScheduleEvent[] {
+export function mapEventsFromDto(
+  eventsDto: ScheduleEventDto[],
+): ScheduleEvent[] {
   return eventsDto.map<ScheduleEvent>((x) => mapEventFromDto(x));
 }
 export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
@@ -36,7 +38,8 @@ export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
       reminder: !dto.notificationSettings?.reminder
         ? null
         : {
-            activityIncomplete: dto.notificationSettings.reminder.activityIncomplete,
+            activityIncomplete:
+              dto.notificationSettings.reminder.activityIncomplete,
             reminderTime: dto.notificationSettings.reminder.reminderTime,
           },
     },

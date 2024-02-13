@@ -35,7 +35,12 @@ export const computeDxDt = (
   return changeRate;
 };
 
-export const getNewLambda = (currentLambda: number, deltaTime: number, lambdaSlope: number, maxLambda: number) => {
+export const getNewLambda = (
+  currentLambda: number,
+  deltaTime: number,
+  lambdaSlope: number,
+  maxLambda: number,
+) => {
   const lambdaValue = currentLambda + (deltaTime / 1000) * lambdaSlope;
 
   if (maxLambda > 0 && lambdaValue >= maxLambda) {
@@ -49,7 +54,10 @@ export const isInBounds = (value: number, start: number, end: number) => {
   return value >= start && value <= end;
 };
 
-export const getScoreChange = (bonusMultiplier: BonusMultiplier, deltaTime: number): number => {
+export const getScoreChange = (
+  bonusMultiplier: BonusMultiplier,
+  deltaTime: number,
+): number => {
   return (bonusMultiplier * deltaTime) / 1000;
 };
 

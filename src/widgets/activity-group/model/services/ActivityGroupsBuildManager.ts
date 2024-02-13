@@ -1,12 +1,28 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { ActivityPipelineType, StoreProgress, convertProgress } from '@app/abstract/lib';
+import {
+  ActivityPipelineType,
+  StoreProgress,
+  convertProgress,
+} from '@app/abstract/lib';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
 import { mapEventsFromDto } from '@app/entities/event/model/mappers';
 import { AppletDetailsResponse, AppletEventsResponse } from '@app/shared/api';
-import { ILogger, Logger, getAppletDetailsKey, getDataFromQuery, getEventsKey } from '@app/shared/lib';
+import {
+  ILogger,
+  Logger,
+  getAppletDetailsKey,
+  getDataFromQuery,
+  getEventsKey,
+} from '@app/shared/lib';
 
-import { Activity, ActivityFlow, ActivityListGroup, Entity, EventEntity } from '../../lib';
+import {
+  Activity,
+  ActivityFlow,
+  ActivityListGroup,
+  Entity,
+  EventEntity,
+} from '../../lib';
 import { createActivityGroupsBuilder } from '../factories/ActivityGroupsBuilder';
 import { mapActivitiesFromDto, mapActivityFlowsFromDto } from '../mappers';
 
@@ -16,16 +32,26 @@ type BuildResult = {
 };
 
 const createActivityGroupsBuildManager = (logger: ILogger) => {
-  const buildIdToEntityMap = (activities: Activity[], activityFlows: ActivityFlow[]): Record<string, Entity> => {
-    return [...activities, ...activityFlows].reduce<Record<string, Entity>>((acc, current) => {
-      acc[current.id] = current;
-      return acc;
-    }, {});
+  const buildIdToEntityMap = (
+    activities: Activity[],
+    activityFlows: ActivityFlow[],
+  ): Record<string, Entity> => {
+    return [...activities, ...activityFlows].reduce<Record<string, Entity>>(
+      (acc, current) => {
+        acc[current.id] = current;
+        return acc;
+      },
+      {},
+    );
   };
 
   const sort = (eventEntities: EventEntity[]) => {
-    let flows = eventEntities.filter((x) => x.entity.pipelineType === ActivityPipelineType.Flow);
-    let activities = eventEntities.filter((x) => x.entity.pipelineType === ActivityPipelineType.Regular);
+    let flows = eventEntities.filter(
+      (x) => x.entity.pipelineType === ActivityPipelineType.Flow,
+    );
+    let activities = eventEntities.filter(
+      (x) => x.entity.pipelineType === ActivityPipelineType.Regular,
+    );
 
     flows = flows.sort((a, b) => a.entity.order - b.entity.order);
     activities = activities.sort((a, b) => a.entity.order - b.entity.order);
@@ -38,29 +64,45 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
     entitiesProgress: StoreProgress,
     queryClient: QueryClient,
   ): BuildResult => {
-    const appletResponse = getDataFromQuery<AppletDetailsResponse>(getAppletDetailsKey(appletId), queryClient)!;
+    const appletResponse = getDataFromQuery<AppletDetailsResponse>(
+      getAppletDetailsKey(appletId),
+      queryClient,
+    )!;
 
     if (!appletResponse) {
-      logger.warn(`[ActivityGroupsBuildManager.processInternal]: appletResponse not found, appletId=${appletId}`);
+      logger.warn(
+        `[ActivityGroupsBuildManager.processInternal]: appletResponse not found, appletId=${appletId}`,
+      );
       return { groups: [], isCacheInsufficientError: true };
     }
 
-    const activities: Activity[] = mapActivitiesFromDto(appletResponse.result.activities);
+    const activities: Activity[] = mapActivitiesFromDto(
+      appletResponse.result.activities,
+    );
 
-    const activityFlows: ActivityFlow[] = mapActivityFlowsFromDto(appletResponse.result.activityFlows);
+    const activityFlows: ActivityFlow[] = mapActivityFlowsFromDto(
+      appletResponse.result.activityFlows,
+    );
 
-    const eventsResponse = getDataFromQuery<AppletEventsResponse>(getEventsKey(appletId), queryClient)!;
+    const eventsResponse = getDataFromQuery<AppletEventsResponse>(
+      getEventsKey(appletId),
+      queryClient,
+    )!;
 
     logger.log(
       `[ActivityGroupsBuildManager.processInternal]: Applet is "${appletId}|${appletResponse.result.displayName}"`,
     );
 
     if (!eventsResponse) {
-      logger.warn('[ActivityGroupsBuildManager.processInternal]: eventsResponse not found');
+      logger.warn(
+        '[ActivityGroupsBuildManager.processInternal]: eventsResponse not found',
+      );
       return { groups: [], isCacheInsufficientError: true };
     }
 
-    const events: ScheduleEvent[] = mapEventsFromDto(eventsResponse.result.events);
+    const events: ScheduleEvent[] = mapEventsFromDto(
+      eventsResponse.result.events,
+    );
 
     const idToEntity = buildIdToEntityMap(activities, activityFlows);
 
@@ -102,22 +144,34 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
     const result: BuildResult = { groups: [] };
 
     try {
-      logger.log('[ActivityGroupsBuildManager.processInternal]: Building in-progress');
+      logger.log(
+        '[ActivityGroupsBuildManager.processInternal]: Building in-progress',
+      );
       result.groups.push(builder.buildInProgress(entityEvents));
 
-      logger.log('[ActivityGroupsBuildManager.processInternal]: Building available');
+      logger.log(
+        '[ActivityGroupsBuildManager.processInternal]: Building available',
+      );
       result.groups.push(builder.buildAvailable(entityEvents));
 
-      logger.log('[ActivityGroupsBuildManager.processInternal]: Building scheduled');
+      logger.log(
+        '[ActivityGroupsBuildManager.processInternal]: Building scheduled',
+      );
       result.groups.push(builder.buildScheduled(entityEvents));
     } catch (error) {
-      logger.warn(`[ActivityGroupsBuildManager.processInternal]: Build error occurred:\n\n${error}`);
+      logger.warn(
+        `[ActivityGroupsBuildManager.processInternal]: Build error occurred:\n\n${error}`,
+      );
     }
 
     return result;
   };
 
-  const process = (appletId: string, entitiesProgress: StoreProgress, queryClient: QueryClient): BuildResult => {
+  const process = (
+    appletId: string,
+    entitiesProgress: StoreProgress,
+    queryClient: QueryClient,
+  ): BuildResult => {
     try {
       logger.log('[ActivityGroupsBuildManager.process]: Building groups..');
 
@@ -127,7 +181,9 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
 
       return result;
     } catch (error) {
-      logger.warn(`[ActivityGroupsBuildManager.process] Error occurred\nInternal error:\n${error}`);
+      logger.warn(
+        `[ActivityGroupsBuildManager.process] Error occurred\nInternal error:\n${error}`,
+      );
     }
     return { groups: [] };
   };

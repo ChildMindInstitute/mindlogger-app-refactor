@@ -1,5 +1,18 @@
-import { FC, PropsWithChildren, useEffect, useMemo, useRef, useState } from 'react';
-import { NativeScrollEvent, NativeSyntheticEvent, PanResponder, ScrollView, StyleSheet } from 'react-native';
+import {
+  FC,
+  PropsWithChildren,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  PanResponder,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDebounce } from 'use-debounce';
@@ -18,7 +31,9 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
   const [containerHeight, setContainerHeight] = useState<number | null>(null);
   const [isAreaScrollable, setAreaScrollable] = useState<boolean>(false);
 
-  const [scrollContentHeight, setScrollContentHeight] = useState<number | null>(null);
+  const [scrollContentHeight, setScrollContentHeight] = useState<number | null>(
+    null,
+  );
 
   const [debouncedScrollContentHeight] = useDebounce(scrollContentHeight, 300);
 
@@ -35,7 +50,9 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
 
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
 
-    const endReached = layoutMeasurement.height + contentOffset.y >= contentSize.height - PaddingToBottom;
+    const endReached =
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - PaddingToBottom;
 
     if (endReached) {
       setShowScrollButton(false);
@@ -55,7 +72,10 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
     });
   }
 
-  const context = useMemo(() => ({ scrollToEnd, isAreaScrollable, setScrollEnabled }), [isAreaScrollable]);
+  const context = useMemo(
+    () => ({ scrollToEnd, isAreaScrollable, setScrollEnabled }),
+    [isAreaScrollable],
+  );
 
   const panResponder = useMemo(
     () =>
@@ -113,7 +133,14 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
           </KeyboardAwareScrollView>
         </Box>
 
-        {showScrollButton && <ScrollButton onPress={scrollToEnd} position="absolute" bottom={7} alignSelf="center" />}
+        {showScrollButton && (
+          <ScrollButton
+            onPress={scrollToEnd}
+            position="absolute"
+            bottom={7}
+            alignSelf="center"
+          />
+        )}
       </Box>
     </ScrollViewContext.Provider>
   );

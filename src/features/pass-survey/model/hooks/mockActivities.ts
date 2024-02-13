@@ -9,7 +9,8 @@ const testMessage2 =
 const grid: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
-  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',
@@ -45,7 +46,8 @@ const grid: ActivityDto = {
       },
       responseValues: {
         drawingExample: '',
-        drawingBackground: 'https://mindlogger-applet-contents.s3.amazonaws.com/image/9qPz3D1kyzwD2pAAHpP5Hv.jpeg',
+        drawingBackground:
+          'https://mindlogger-applet-contents.s3.amazonaws.com/image/9qPz3D1kyzwD2pAAHpP5Hv.jpeg',
       },
       conditionalLogic: null,
     },
@@ -55,7 +57,8 @@ const grid: ActivityDto = {
 const vortex: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
-  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',
@@ -91,7 +94,8 @@ const vortex: ActivityDto = {
       },
       responseValues: {
         drawingExample: '',
-        drawingBackground: 'https://mindlogger-applet-contents.s3.amazonaws.com/image/w93voaqZA7ZGoZryorBvQc.jpeg',
+        drawingBackground:
+          'https://mindlogger-applet-contents.s3.amazonaws.com/image/w93voaqZA7ZGoZryorBvQc.jpeg',
       },
       conditionalLogic: null,
     },
@@ -101,7 +105,8 @@ const vortex: ActivityDto = {
 const allDrawing: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
-  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',
@@ -161,7 +166,8 @@ export const AbTestActivity: ActivityDto = {
 const FlankerWithImageActivity: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
-  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',
@@ -194,7 +200,8 @@ const FlankerWithImageActivity: ActivityDto = {
 const FlankerWithStSFxActivity: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
-  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',
@@ -227,7 +234,8 @@ const FlankerWithStSFxActivity: ActivityDto = {
 const FlankerWithTextSignsActivity: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
-  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',
@@ -260,7 +268,8 @@ const FlankerWithTextSignsActivity: ActivityDto = {
 const FlankerAllTypesActivity: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
-  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',
@@ -284,7 +293,8 @@ const FlankerAllTypesActivity: ActivityDto = {
 export const TextActivity: ActivityDto = {
   id: 'aid1',
   name: 'Activity number 1',
-  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
   splashScreen: '',
@@ -692,7 +702,8 @@ export const AllTextsActivity: ActivityDto = {
   description: 'Radio Activity Description',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: 'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
   showAllAtOnce: false,
   isSkippable: false,
   isReviewable: false,
@@ -708,7 +719,8 @@ export const AllTextsActivity: ActivityDto = {
       id: '12319758',
       name: 'Text input',
       timer: null,
-      question: '## Welcome to the demo session!\nWe\'ll start with the text fields.\nType "Hello!"',
+      question:
+        '## Welcome to the demo session!\nWe\'ll start with the text fields.\nType "Hello!"',
       responseType: 'text',
       config: {
         timer: null,
@@ -776,7 +788,8 @@ export const AllCheckboxesActivity: ActivityDto = {
   description: 'Radio Activity Description',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: 'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
   showAllAtOnce: false,
   isSkippable: false,
   isReviewable: false,
@@ -791,7 +804,8 @@ export const AllCheckboxesActivity: ActivityDto = {
     {
       id: '346574',
       name: 'checkboxname',
-      question: 'These are colored randomized checkboxes. Some of them have a tooltip',
+      question:
+        'These are colored randomized checkboxes. Some of them have a tooltip',
       responseType: 'multiSelect',
       timer: null,
       order: 0,
@@ -827,7 +841,8 @@ export const AllCheckboxesActivity: ActivityDto = {
             score: null,
             value: 1,
             alert: null,
-            tooltip: 'This is a ~~tooltip~~! A long long loooong loooooooooooong text',
+            tooltip:
+              'This is a ~~tooltip~~! A long long loooong loooooooooooong text',
             color: '#F8FF00',
             isHidden: false,
           },
@@ -1014,7 +1029,8 @@ export const AllRadioActivity: ActivityDto = {
             score: null,
             alert: null,
             value: 1,
-            tooltip: 'Which kind of music do you like?\n- Pop\n- Classic\n- Dance/Electronic\n- Rock\n',
+            tooltip:
+              'Which kind of music do you like?\n- Pop\n- Classic\n- Dance/Electronic\n- Rock\n',
             color: '#000000',
             isHidden: false,
           },
@@ -1226,7 +1242,8 @@ export const AllRadioActivity: ActivityDto = {
       responseType: 'singleSelect',
       name: 'radioName',
       timer: null,
-      question: 'These are simple single select. Cannot move back. Has required text field',
+      question:
+        'These are simple single select. Cannot move back. Has required text field',
       order: 1,
       isHidden: false,
       conditionalLogic: null,
@@ -1364,7 +1381,8 @@ export const PhotoActivityDto: ActivityDto = {
   description: 'Radio Activity Description',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: 'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
   showAllAtOnce: false,
   isSkippable: false,
   isReviewable: false,
@@ -1405,7 +1423,8 @@ export const VideoActivityDto: ActivityDto = {
   description: 'Radio Activity Description',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: 'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
   showAllAtOnce: false,
   isSkippable: false,
   isReviewable: false,
@@ -1446,7 +1465,8 @@ export const DateActivityDto: ActivityDto = {
   description: 'Time Description',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: 'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
   showAllAtOnce: false,
   isSkippable: false,
   isReviewable: false,
@@ -1487,7 +1507,8 @@ export const TimeActivityDto: ActivityDto = {
   description: 'Time Description',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: 'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
   showAllAtOnce: false,
   isSkippable: false,
   isReviewable: false,
@@ -1528,7 +1549,8 @@ export const AllMediaActivity: ActivityDto = {
   description: 'Radio Activity Description',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: 'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
   showAllAtOnce: false,
   isSkippable: false,
   isReviewable: false,
@@ -1548,7 +1570,8 @@ export const DemoActivity: ActivityDto = {
   description: 'Radio Activity Description',
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-  splashScreen: 'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
+  splashScreen:
+    'https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg',
   showAllAtOnce: false,
   isSkippable: false,
   isReviewable: false,

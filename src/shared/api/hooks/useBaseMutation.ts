@@ -1,11 +1,22 @@
-import { MutationFunction, UseMutationOptions, useMutation } from '@tanstack/react-query';
+import {
+  MutationFunction,
+  UseMutationOptions,
+  useMutation,
+} from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 
 import { BaseError } from '../types';
 
 const useBaseMutation = <TRequest, TResponse>(
   mutationFn: MutationFunction<AxiosResponse<TResponse, BaseError>, TRequest>,
-  options?: Omit<UseMutationOptions<AxiosResponse<TResponse, BaseError>, BaseError, TRequest>, 'mutationFn'>,
+  options?: Omit<
+    UseMutationOptions<
+      AxiosResponse<TResponse, BaseError>,
+      BaseError,
+      TRequest
+    >,
+    'mutationFn'
+  >,
 ) => {
   return useMutation(mutationFn, {
     ...options,

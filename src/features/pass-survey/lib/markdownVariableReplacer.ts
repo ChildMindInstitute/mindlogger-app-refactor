@@ -40,7 +40,11 @@ export class MarkdownVariableReplacer {
     return matches;
   };
 
-  private updateMarkdown = (variableName: string, replaceValue: string, markdown: string) => {
+  private updateMarkdown = (
+    variableName: string,
+    replaceValue: string,
+    markdown: string,
+  ) => {
     const reg = new RegExp(`\\[\\[${variableName}\\]\\]`, 'gi');
     return markdown.replace(reg, replaceValue);
   };
@@ -80,8 +84,14 @@ export class MarkdownVariableReplacer {
     );
 
     return this.parseBasicSystemVariables(markdown)
-      .replaceAll(/\[Time_Elapsed_Activity_Last_Completed]/gi, this.getTimeElapsed())
-      .replaceAll(/\[Time_Activity_Last_Completed]/gi, this.getLastResponseTime());
+      .replaceAll(
+        /\[Time_Elapsed_Activity_Last_Completed]/gi,
+        this.getTimeElapsed(),
+      )
+      .replaceAll(
+        /\[Time_Activity_Last_Completed]/gi,
+        this.getLastResponseTime(),
+      );
   };
 
   private getTimeElapsed = () => {
@@ -140,7 +150,9 @@ export class MarkdownVariableReplacer {
   };
 
   private getReplaceValue = (variableName: string): string => {
-    const foundIndex = this.activityItems.findIndex((item) => item.name === variableName);
+    const foundIndex = this.activityItems.findIndex(
+      (item) => item.name === variableName,
+    );
     const answerNotFound = foundIndex < 0 || !this.answers[foundIndex];
 
     if (answerNotFound) {
@@ -160,7 +172,9 @@ export class MarkdownVariableReplacer {
         updated = this.escapeSpecialChars(answer);
         break;
       case 'Radio':
-        const filteredItem = activityItem.payload.options.find(({ id }) => id === answer.id);
+        const filteredItem = activityItem.payload.options.find(
+          ({ id }) => id === answer.id,
+        );
         if (filteredItem) {
           updated = filteredItem.text;
         }
@@ -176,7 +190,9 @@ export class MarkdownVariableReplacer {
         }
         break;
       case 'TimeRange':
-        updated = `${this.formatTime(answer?.startTime)} - ${this.formatTime(answer?.endTime)}`;
+        updated = `${this.formatTime(answer?.startTime)} - ${this.formatTime(
+          answer?.endTime,
+        )}`;
         break;
       case 'Date':
         updated = answer;

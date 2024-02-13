@@ -1,4 +1,8 @@
-import { FlowSummaryData, SummaryDataKey, useFlowStorageRecord } from '../../lib';
+import {
+  FlowSummaryData,
+  SummaryDataKey,
+  useFlowStorageRecord,
+} from '../../lib';
 import { FlowPipelineItem } from '../pipelineBuilder';
 
 export type UseFlowStateArgs = {
@@ -18,7 +22,8 @@ export function useFlowState({ appletId, eventId, flowId }: UseFlowStateArgs) {
 
   const pipeline: FlowPipelineItem[] = record?.pipeline ?? [];
 
-  const flowSummaryData: FlowSummaryData = (record?.context?.[SummaryDataKey] ?? {}) as FlowSummaryData;
+  const flowSummaryData: FlowSummaryData = (record?.context?.[SummaryDataKey] ??
+    {}) as FlowSummaryData;
 
   return {
     step,

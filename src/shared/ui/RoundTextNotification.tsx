@@ -7,7 +7,10 @@ type Props = {
   text: string;
 } & AccessibilityProps;
 
-const RoundTextNotification: FC<Props> = ({ text, accessibilityLabel }: Props) => (
+const RoundTextNotification: FC<Props> = ({
+  text,
+  accessibilityLabel,
+}: Props) => (
   <Box
     w={20}
     height={20}

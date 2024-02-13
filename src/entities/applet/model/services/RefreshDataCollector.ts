@@ -40,8 +40,12 @@ type CollectAppletDetailsResult = {
 };
 
 export interface IRefreshDataCollector {
-  collectAppletInternals(appletDto: AppletDto): Promise<CollectAppletInternalsResult>;
-  collectAllAppletEvents(currentApplets: string[]): Promise<CollectAllAppletEventsResult>;
+  collectAppletInternals(
+    appletDto: AppletDto,
+  ): Promise<CollectAppletInternalsResult>;
+  collectAllAppletEvents(
+    currentApplets: string[],
+  ): Promise<CollectAllAppletEventsResult>;
 }
 
 class RefreshDataCollector implements IRefreshDataCollector {
@@ -51,12 +55,16 @@ class RefreshDataCollector implements IRefreshDataCollector {
     this.logger = logger;
   }
 
-  private async collectAppletDetails(appletId: string): Promise<CollectAppletDetailsResult> {
-    const appletDetailsResponse = await AppletsService.getAppletAndActivitiesDetails({
-      appletId,
-    });
+  private async collectAppletDetails(
+    appletId: string,
+  ): Promise<CollectAppletDetailsResult> {
+    const appletDetailsResponse =
+      await AppletsService.getAppletAndActivitiesDetails({
+        appletId,
+      });
 
-    const { appletDetail, activitiesDetails, respondentMeta } = appletDetailsResponse.data.result;
+    const { appletDetail, activitiesDetails, respondentMeta } =
+      appletDetailsResponse.data.result;
 
     const imageUrls: string[] = collectAppletDetailsImageUrls(appletDetail);
 
@@ -74,7 +82,9 @@ class RefreshDataCollector implements IRefreshDataCollector {
     });
   }
 
-  public async collectAppletInternals(appletDto: AppletDto): Promise<CollectAppletInternalsResult> {
+  public async collectAppletInternals(
+    appletDto: AppletDto,
+  ): Promise<CollectAppletInternalsResult> {
     const imageUrls: string[] = collectAppletRecordImageUrls(appletDto);
 
     let collectDetailsResult: CollectAppletDetailsResult;
@@ -87,9 +97,14 @@ class RefreshDataCollector implements IRefreshDataCollector {
       );
     }
 
-    const activitiesImages = this.collectActivitiesImages(collectDetailsResult.activityDetailsDtos);
+    const activitiesImages = this.collectActivitiesImages(
+      collectDetailsResult.activityDetailsDtos,
+    );
 
-    const allImageUrls = collectDetailsResult.imageUrls.concat(imageUrls, activitiesImages);
+    const allImageUrls = collectDetailsResult.imageUrls.concat(
+      imageUrls,
+      activitiesImages,
+    );
 
     const collectResult: CollectAppletInternalsResult = {
       appletId: appletDto.id,
@@ -106,13 +121,17 @@ class RefreshDataCollector implements IRefreshDataCollector {
     try {
       return await EventsService.getAllEvents();
     } catch (error) {
-      this.logger.warn(`[RefreshDataCollector.collectEvents]: Error occurred while fetching events":\n\n${error}`);
+      this.logger.warn(
+        `[RefreshDataCollector.collectEvents]: Error occurred while fetching events":\n\n${error}`,
+      );
 
       return null;
     }
   }
 
-  public async collectAllAppletEvents(currentApplets: string[]): Promise<CollectAllAppletEventsResult> {
+  public async collectAllAppletEvents(
+    currentApplets: string[],
+  ): Promise<CollectAllAppletEventsResult> {
     const result: CollectAllAppletEventsResult = {
       appletEvents: {},
     };
@@ -123,7 +142,9 @@ class RefreshDataCollector implements IRefreshDataCollector {
       const appletEvents = currentApplets.map((appletId) => ({
         appletId,
         events:
-          eventsResponse.data.result.find((appletEventsDto) => appletEventsDto.appletId === appletId)?.events ?? [],
+          eventsResponse.data.result.find(
+            (appletEventsDto) => appletEventsDto.appletId === appletId,
+          )?.events ?? [],
       }));
 
       appletEvents.forEach(({ appletId, events }) => {

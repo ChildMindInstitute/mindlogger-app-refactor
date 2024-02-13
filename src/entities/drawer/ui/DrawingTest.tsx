@@ -74,7 +74,12 @@ const DrawingTest: FC<Props> = (props) => {
             />
           )}
 
-          <DrawingBoard value={value.lines} onResult={onResult} width={width} onLog={onLog} />
+          <DrawingBoard
+            value={value.lines}
+            onResult={onResult}
+            width={width}
+            onLog={onLog}
+          />
         </XStack>
       )}
     </Box>

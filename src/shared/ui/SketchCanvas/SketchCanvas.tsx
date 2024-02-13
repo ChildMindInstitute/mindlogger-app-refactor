@@ -1,4 +1,11 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from 'react';
 
 import { GestureDetector } from 'react-native-gesture-handler';
 import { useSharedValue } from 'react-native-reanimated';
@@ -22,7 +29,8 @@ type Props = {
 };
 
 const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
-  const { initialLines, width, onStrokeStart, onStrokeChanged, onStrokeEnd } = props;
+  const { initialLines, width, onStrokeStart, onStrokeChanged, onStrokeEnd } =
+    props;
 
   const canvasRef = useRef<CanvasBoardRef | null>(null);
 
@@ -123,12 +131,18 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   }, [callbacksRef, createDot, lineSketcher]);
 
   const drawingGesture = useMemo(
-    () => DrawingGesture({ sizeRef, currentTouchIdRef }, { onTouchStart, onTouchProgress, onTouchEnd }),
+    () =>
+      DrawingGesture(
+        { sizeRef, currentTouchIdRef },
+        { onTouchStart, onTouchProgress, onTouchEnd },
+      ),
     [currentTouchIdRef, onTouchEnd, onTouchProgress, onTouchStart, sizeRef],
   );
 
   useEffect(() => {
-    canvasRef.current?.setPaths(initialLines.map((points) => LineSketcher.createPathFromPoints(points)));
+    canvasRef.current?.setPaths(
+      initialLines.map((points) => LineSketcher.createPathFromPoints(points)),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

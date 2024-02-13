@@ -16,7 +16,9 @@ function StaticNavigationPanel(props: Props) {
       <Stepper.NavigationPanel {...props}>
         <></>
         <></>
-        <Stepper.NextButton accessibilityLabel="done-button">{t('activity_navigation:done')}</Stepper.NextButton>
+        <Stepper.NextButton accessibilityLabel="done-button">
+          {t('activity_navigation:done')}
+        </Stepper.NextButton>
       </Stepper.NavigationPanel>
     </Stepper>
   );

@@ -1,5 +1,10 @@
 import { createAnimations } from '@tamagui/animations-react-native';
-import { createFont, createTokens, createTamagui, createTheme } from '@tamagui/core';
+import {
+  createFont,
+  createTokens,
+  createTamagui,
+  createTheme,
+} from '@tamagui/core';
 import { shorthands } from '@tamagui/shorthands';
 import { themes as baseThemes, tokens as baseTokens } from '@tamagui/themes';
 

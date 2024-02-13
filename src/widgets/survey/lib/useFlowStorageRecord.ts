@@ -47,11 +47,18 @@ export type FlowState = {
 
 const storage = createStorage('flow_progress-storage');
 
-export function useFlowStorageRecord({ appletId, eventId, flowId }: UseFlowStorageArgs) {
+export function useFlowStorageRecord({
+  appletId,
+  eventId,
+  flowId,
+}: UseFlowStorageArgs) {
   const flowKey = flowId ?? 'default_one_step_flow';
   const key = `${flowKey}-${appletId}-${eventId}`;
 
-  const [flowStorageRecord, upsertFlowStorageRecord] = useMMKVObject<FlowState>(key, storage);
+  const [flowStorageRecord, upsertFlowStorageRecord] = useMMKVObject<FlowState>(
+    key,
+    storage,
+  );
 
   const clearFlowStorageRecord = useCallback(() => {
     storage.delete(key);

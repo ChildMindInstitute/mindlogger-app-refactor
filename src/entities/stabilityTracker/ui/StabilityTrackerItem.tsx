@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import { GestureResponderEvent } from 'react-native';
 
 import { orientation } from 'react-native-sensors';
@@ -68,7 +74,13 @@ const StabilityTrackerItemScreen = (props: Props) => {
   const toast = useToast();
   const reRender = useForceUpdate();
 
-  const { config: initialConfig, onComplete, onMaxLambdaChange, maxLambda = 0, onLog } = props;
+  const {
+    config: initialConfig,
+    onComplete,
+    onMaxLambdaChange,
+    maxLambda = 0,
+    onLog,
+  } = props;
 
   const config = {
     lambdaSlope: initialConfig?.lambdaSlope || 20.0,
@@ -77,12 +89,19 @@ const StabilityTrackerItemScreen = (props: Props) => {
     phase: initialConfig?.phase ?? 'practice',
   };
 
-  const targetPoints = generateTargetTrajectory(config.durationMinutes, TASK_LOOP_RATE, 1, CENTER);
+  const targetPoints = generateTargetTrajectory(
+    config.durationMinutes,
+    TASK_LOOP_RATE,
+    1,
+    CENTER,
+  );
   const IS_TRIAL = config.phase === 'practice';
 
   // we are using refs instead of state , because useAnimation hook is much faster, than react can (or needs) to be rerendered
   const [isRunning, setIsRunning] = useState(false);
-  const [userInputType, setUserInputType] = useState<'touch' | 'gyroscope'>(initialConfig?.userInputType);
+  const [userInputType, setUserInputType] = useState<'touch' | 'gyroscope'>(
+    initialConfig?.userInputType,
+  );
 
   const score = useRef(0);
   const trialsNumber = useRef(0);
@@ -125,7 +144,11 @@ const StabilityTrackerItemScreen = (props: Props) => {
             initialOrientation.current = pitch;
           } else {
             const newPositionY =
-              CENTER + ((SENSORS_DATA_MULTIPLIER * (pitch - initialOrientation.current)) / MAX_RADIUS) * PANEL_RADIUS;
+              CENTER +
+              ((SENSORS_DATA_MULTIPLIER *
+                (pitch - initialOrientation.current)) /
+                MAX_RADIUS) *
+                PANEL_RADIUS;
 
             updateUserPosition(CENTER, newPositionY);
           }
@@ -160,9 +183,15 @@ const StabilityTrackerItemScreen = (props: Props) => {
   const onUserStoppedMoving = (event: GestureResponderEvent) => {
     if (IS_TOUCH) {
       if (isRunning) {
-        updateUserPosition(event.nativeEvent.locationX, CENTER + event.nativeEvent.locationY - startPosition.current);
+        updateUserPosition(
+          event.nativeEvent.locationX,
+          CENTER + event.nativeEvent.locationY - startPosition.current,
+        );
       } else {
-        updateUserPosition(event.nativeEvent.locationX, event.nativeEvent.locationY);
+        updateUserPosition(
+          event.nativeEvent.locationX,
+          event.nativeEvent.locationY,
+        );
       }
       startPosition.current = 0;
     }
@@ -173,7 +202,10 @@ const StabilityTrackerItemScreen = (props: Props) => {
 
   const onUserMove = (event: GestureResponderEvent) => {
     if (IS_TOUCH && !showControlBar.current) {
-      updateUserPosition(event.nativeEvent.locationX, CENTER + event.nativeEvent.locationY - startPosition.current);
+      updateUserPosition(
+        event.nativeEvent.locationX,
+        CENTER + event.nativeEvent.locationY - startPosition.current,
+      );
     }
   };
 
@@ -224,22 +256,36 @@ const StabilityTrackerItemScreen = (props: Props) => {
 
   const updateScore = (deltaTime: number) => {
     const distance = computeDistance(circlePosition.current, TARGET_POSITION);
-    const bonusMultiplier = getBonusMultiplier(distance, INNER_CIRCLE_RADIUS, OUTER_CIRCLE_RADIUS);
+    const bonusMultiplier = getBonusMultiplier(
+      distance,
+      INNER_CIRCLE_RADIUS,
+      OUTER_CIRCLE_RADIUS,
+    );
     const scoreChange = getScoreChange(bonusMultiplier, deltaTime);
 
     score.current = score.current + scoreChange;
   };
 
   const updateCirclePosition = (timeElapsed: number, deltaTime: number) => {
-    const delta = computeDxDt(circlePosition.current, userPosition.current, lambdaValue.current, CENTER);
+    const delta = computeDxDt(
+      circlePosition.current,
+      userPosition.current,
+      lambdaValue.current,
+      CENTER,
+    );
 
-    const newCirclePositionY = (delta[1] * deltaTime) / 1000 + circlePosition.current[1];
+    const newCirclePositionY =
+      (delta[1] * deltaTime) / 1000 + circlePosition.current[1];
 
     circlePosition.current = [CENTER, newCirclePositionY];
   };
 
   const updateLambdaValue = (deltaTime: number) => {
-    const inBounds = isInBounds(circlePosition.current[1], BLOCK_HEIGHT, PLAYGROUND_WIDTH - BLOCK_HEIGHT);
+    const inBounds = isInBounds(
+      circlePosition.current[1],
+      BLOCK_HEIGHT,
+      PLAYGROUND_WIDTH - BLOCK_HEIGHT,
+    );
 
     if (!inBounds) {
       boundHitAnimationDuration.current = 0;
@@ -247,12 +293,24 @@ const StabilityTrackerItemScreen = (props: Props) => {
       showControlBar.current = true;
       userPosition.current = [CENTER, CENTER];
     } else {
-      lambdaValue.current = getNewLambda(lambdaValue.current, deltaTime / 1000, lambdaSlope.current, lambdaLimit);
+      lambdaValue.current = getNewLambda(
+        lambdaValue.current,
+        deltaTime / 1000,
+        lambdaSlope.current,
+        lambdaLimit,
+      );
     }
   };
 
-  const animationCallback = (timeElapsed: number, tickNumber: number, deltaTime: number) => {
-    if (timeElapsed >= config.durationMinutes * 60 * 1000 || tickNumber >= targetPoints.length) {
+  const animationCallback = (
+    timeElapsed: number,
+    tickNumber: number,
+    deltaTime: number,
+  ) => {
+    if (
+      timeElapsed >= config.durationMinutes * 60 * 1000 ||
+      tickNumber >= targetPoints.length
+    ) {
       finishResponse();
       return;
     }
@@ -260,7 +318,10 @@ const StabilityTrackerItemScreen = (props: Props) => {
     if (boundWasHit.current) {
       boundHitAnimationDuration.current += deltaTime;
 
-      if (boundHitAnimationDuration.current > BOUND_HIT_ANIMATION_DURATION * 1000) {
+      if (
+        boundHitAnimationDuration.current >
+        BOUND_HIT_ANIMATION_DURATION * 1000
+      ) {
         boundHitAnimationDuration.current = 0;
         boundWasHit.current = false;
         restartTrial();
@@ -307,7 +368,10 @@ const StabilityTrackerItemScreen = (props: Props) => {
 
       <YStack flex={1}>
         <Svg width={PLAYGROUND_WIDTH} height={PLAYGROUND_WIDTH}>
-          <PlayGround boundWasHit={boundWasHit.current} boundHitAnimationDuration={boundHitAnimationDuration.current} />
+          <PlayGround
+            boundWasHit={boundWasHit.current}
+            boundHitAnimationDuration={boundHitAnimationDuration.current}
+          />
 
           <>
             <Circle

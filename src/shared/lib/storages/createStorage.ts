@@ -7,7 +7,9 @@ import { throwError } from '../services';
 
 export function createSecureStorage(id: string) {
   if (!STORE_ENCRYPTION_KEY) {
-    throwError('[createSecureStorage]: STORE_ENCRYPTION_KEY has not been provided');
+    throwError(
+      '[createSecureStorage]: STORE_ENCRYPTION_KEY has not been provided',
+    );
   }
 
   return new MMKV({ id, encryptionKey: STORE_ENCRYPTION_KEY });
@@ -27,8 +29,12 @@ export function createAsyncStorage(id: string) {
 
 export function createSecureAsyncStorage(id: string) {
   if (!STORE_ENCRYPTION_KEY) {
-    throwError('[createSecureAsyncStorage]: STORE_ENCRYPTION_KEY has not been provided');
+    throwError(
+      '[createSecureAsyncStorage]: STORE_ENCRYPTION_KEY has not been provided',
+    );
   }
 
-  return new AsyncStorage(new MMKV({ id, encryptionKey: STORE_ENCRYPTION_KEY }));
+  return new AsyncStorage(
+    new MMKV({ id, encryptionKey: STORE_ENCRYPTION_KEY }),
+  );
 }

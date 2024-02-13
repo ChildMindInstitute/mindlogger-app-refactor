@@ -1,6 +1,8 @@
 type ObserverFunctionBase = (...args: any[]) => void;
 
-export class CommonObservable<TObserver extends ObserverFunctionBase = ObserverFunctionBase> {
+export class CommonObservable<
+  TObserver extends ObserverFunctionBase = ObserverFunctionBase,
+> {
   protected _observers: Array<TObserver>;
 
   constructor() {

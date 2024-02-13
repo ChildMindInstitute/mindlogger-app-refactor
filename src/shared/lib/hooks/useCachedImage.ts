@@ -19,10 +19,14 @@ function useCachedImage(uri?: string) {
         if (path) {
           setSource(getFilePath(path));
         } else {
-          Logger.warn(`[useCachedImage] No cache entry was found for uri:${uri}`);
+          Logger.warn(
+            `[useCachedImage] No cache entry was found for uri:${uri}`,
+          );
         }
       } catch (error) {
-        Logger.error(`[useCachedImage] Fetching of the path for ${uri} failed: \n\n: ${error}`);
+        Logger.error(
+          `[useCachedImage] Fetching of the path for ${uri} failed: \n\n: ${error}`,
+        );
       }
     }
 

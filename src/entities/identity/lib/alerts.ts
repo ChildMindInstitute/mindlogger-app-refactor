@@ -8,11 +8,17 @@ type OnBeforeLogoutArgs = {
   onLogout: () => void;
 };
 
-export function onBeforeLogout({ isOnline, onCancel, onLogout }: OnBeforeLogoutArgs) {
+export function onBeforeLogout({
+  isOnline,
+  onCancel,
+  onLogout,
+}: OnBeforeLogoutArgs) {
   Alert.alert(
     i18n.t('logout_warning:warning'),
     `${
-      isOnline ? i18n.t('logout_warning:currently_uploading') : i18n.t('logout_warning:not_uploaded')
+      isOnline
+        ? i18n.t('logout_warning:currently_uploading')
+        : i18n.t('logout_warning:not_uploaded')
     }\n\n${i18n.t('logout_warning:sure_logout')}`,
     [
       {

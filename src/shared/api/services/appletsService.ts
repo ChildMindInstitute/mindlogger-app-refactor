@@ -1,4 +1,8 @@
-import { ImageUrl, callApiWithRetry, withDataExtraction } from '@app/shared/lib';
+import {
+  ImageUrl,
+  callApiWithRetry,
+  withDataExtraction,
+} from '@app/shared/lib';
 
 import { ActivityDto } from './activityService';
 import httpService from './httpService';
@@ -106,13 +110,17 @@ function appletsService() {
     },
     getAppletDetails(request: AppletDetailsRequest) {
       const apiCall = () => {
-        return httpService.get<AppletDetailsResponse>(`/applets/${request.appletId}`);
+        return httpService.get<AppletDetailsResponse>(
+          `/applets/${request.appletId}`,
+        );
       };
       return callApiWithRetry(withDataExtraction(apiCall));
     },
     getAppletAndActivitiesDetails(request: AppletDetailsRequest) {
       const apiCall = () => {
-        return httpService.get<AppletAndActivitiesDetailsResponse>(`/activities/applet/${request.appletId}`);
+        return httpService.get<AppletAndActivitiesDetailsResponse>(
+          `/activities/applet/${request.appletId}`,
+        );
       };
       return callApiWithRetry(withDataExtraction(apiCall));
     },

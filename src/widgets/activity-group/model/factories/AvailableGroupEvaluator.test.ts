@@ -1,6 +1,18 @@
-import { addDays, addHours, addMinutes, subDays, subHours, subMinutes } from 'date-fns';
+import {
+  addDays,
+  addHours,
+  addMinutes,
+  subDays,
+  subHours,
+  subMinutes,
+} from 'date-fns';
 
-import { ActivityPipelineType, AvailabilityType, PeriodicityType, Progress } from '@app/abstract/lib';
+import {
+  ActivityPipelineType,
+  AvailabilityType,
+  PeriodicityType,
+  Progress,
+} from '@app/abstract/lib';
 import { ActivityType } from '@app/entities/activity/lib';
 import { EventAvailability } from '@app/entities/event';
 import { HourMinute } from '@app/shared/lib';
@@ -69,7 +81,11 @@ const getScheduledSection = (): EventAvailability => {
   return result;
 };
 
-const getScheduledEventEntity = (settings: { startDate: Date; endDate: Date; scheduledAtDay: Date }): EventEntity => {
+const getScheduledEventEntity = (settings: {
+  startDate: Date;
+  endDate: Date;
+  scheduledAtDay: Date;
+}): EventEntity => {
   const { startDate, endDate, scheduledAtDay } = settings;
 
   const section = getScheduledSection();
@@ -103,7 +119,10 @@ const getScheduledEventEntity = (settings: { startDate: Date; endDate: Date; sch
   return result;
 };
 
-const mockGetNow = (evaluator: AvailableGroupEvaluator, mockedNowDate: Date) => {
+const mockGetNow = (
+  evaluator: AvailableGroupEvaluator,
+  mockedNowDate: Date,
+) => {
   //@ts-ignore
   evaluator.utility.getNow = jest.fn(() => new Date(mockedNowDate));
 };
@@ -284,7 +303,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
 
     let now = buildDateTime(startAt, TimeFrom);
 
-    const progress: Progress = getProgress(addMinutes(now, 5), addMinutes(now, 6));
+    const progress: Progress = getProgress(
+      addMinutes(now, 5),
+      addMinutes(now, 6),
+    );
 
     now = addMinutes(now, 10);
 
@@ -340,7 +362,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
 
     let now = buildDateTime(startAt, TimeFrom);
 
-    const progress: Progress = getProgress(subMinutes(now, 6), subMinutes(now, 5));
+    const progress: Progress = getProgress(
+      subMinutes(now, 6),
+      subMinutes(now, 5),
+    );
 
     now = addMinutes(now, 10);
 
@@ -444,7 +469,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
 
     let now = buildDateTime(addDays(startAt, 1), TimeTo);
 
-    const progress: Progress = getProgress(subMinutes(now, 10), subMinutes(now, 5));
+    const progress: Progress = getProgress(
+      subMinutes(now, 10),
+      subMinutes(now, 5),
+    );
 
     now = subMinutes(now, 1);
 
@@ -496,7 +524,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
 
     const progressAnchorDate = buildDateTime(startAt, TimeFrom);
 
-    const progress: Progress = getProgress(addMinutes(progressAnchorDate, 10), addMinutes(progressAnchorDate, 15));
+    const progress: Progress = getProgress(
+      addMinutes(progressAnchorDate, 10),
+      addMinutes(progressAnchorDate, 15),
+    );
 
     now = subMinutes(now, 1);
 
@@ -1088,7 +1119,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
 
     let now = buildDateTime(startAt, TimeFrom);
 
-    const progress: Progress = getProgress(addMinutes(now, 5), addMinutes(now, 6));
+    const progress: Progress = getProgress(
+      addMinutes(now, 5),
+      addMinutes(now, 6),
+    );
 
     now = addMinutes(now, 10);
 
@@ -1251,7 +1285,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
 
     let now = buildDateTime(addDays(startAt, 1), TimeTo);
 
-    const progress: Progress = getProgress(subMinutes(now, 10), subMinutes(now, 5));
+    const progress: Progress = getProgress(
+      subMinutes(now, 10),
+      subMinutes(now, 5),
+    );
 
     now = subMinutes(now, 1);
 
@@ -1302,7 +1339,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
 
     const progressAnchorDate = buildDateTime(startAt, TimeFrom);
 
-    const progress: Progress = getProgress(addMinutes(progressAnchorDate, 10), addMinutes(progressAnchorDate, 15));
+    const progress: Progress = getProgress(
+      addMinutes(progressAnchorDate, 10),
+      addMinutes(progressAnchorDate, 15),
+    );
 
     let now = buildDateTime(addDays(startAt, 1), TimeTo);
     now = subMinutes(now, 1);
@@ -1354,7 +1394,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
 
     let now = buildDateTime(addDays(startAt, 1), TimeTo);
 
-    const progress: Progress = getProgress(addHours(startAt, 1), addHours(startAt, 2));
+    const progress: Progress = getProgress(
+      addHours(startAt, 1),
+      addHours(startAt, 2),
+    );
 
     now = subMinutes(now, 1);
 

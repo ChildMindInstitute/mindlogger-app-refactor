@@ -14,7 +14,10 @@ const ImageBackground: FC<PropsWithChildren<Props>> = ({ children, uri }) => {
   const imageSource = useCachedImage(uri);
 
   const source = useMemo(
-    () => (imageSource ? { uri: imageSource, cache: 'force-cache' } : cloudBackground),
+    () =>
+      imageSource
+        ? { uri: imageSource, cache: 'force-cache' }
+        : cloudBackground,
     [imageSource],
   );
 

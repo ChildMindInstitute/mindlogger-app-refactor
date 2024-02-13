@@ -1,10 +1,24 @@
 import { UserInfoRecord } from '@app/entities/identity/lib';
-import { LogAction, LogTrigger, NotificationLogsRequest, NotificationService } from '@app/shared/api';
-import { SystemRecord, getStringHashCode, isAppOnline, Logger } from '@app/shared/lib';
+import {
+  LogAction,
+  LogTrigger,
+  NotificationLogsRequest,
+  NotificationService,
+} from '@app/shared/api';
+import {
+  SystemRecord,
+  getStringHashCode,
+  isAppOnline,
+  Logger,
+} from '@app/shared/lib';
 
 import NotificationQueue from './NotificationQueue';
 import NotificationScheduler from './NotificationScheduler';
-import { AppletNotificationDescribers, LocalEventTriggerNotification, NotificationDescriber } from '../types';
+import {
+  AppletNotificationDescribers,
+  LocalEventTriggerNotification,
+  NotificationDescriber,
+} from '../types';
 
 type LogPayload = {
   trigger: LogTrigger;
@@ -16,7 +30,8 @@ function NotificationsLogger() {
   const logInternal = async (payload: LogPayload) => {
     const queued: NotificationDescriber[] = NotificationQueue.get();
 
-    const scheduled: LocalEventTriggerNotification[] = await NotificationScheduler.getAllScheduledNotifications();
+    const scheduled: LocalEventTriggerNotification[] =
+      await NotificationScheduler.getAllScheduledNotifications();
 
     const email = UserInfoRecord.getEmail();
 
@@ -31,7 +46,9 @@ function NotificationsLogger() {
     const request: NotificationLogsRequest = {
       actionType: `${payload.trigger} -> ${payload.action}`,
       userId: email!,
-      deviceId: !deviceId ? 'undefined' : getStringHashCode(deviceId).toString(),
+      deviceId: !deviceId
+        ? 'undefined'
+        : getStringHashCode(deviceId).toString(),
       notificationDescriptions,
       notificationInQueue,
       scheduledNotifications,
@@ -43,7 +60,9 @@ function NotificationsLogger() {
   const log = async (payload: LogPayload) => {
     const isOnline = await isAppOnline();
     if (!isOnline) {
-      Logger.info('[NotificationsLogger.log]: Logs will not be added due to offline');
+      Logger.info(
+        '[NotificationsLogger.log]: Logs will not be added due to offline',
+      );
       return;
     }
 
@@ -51,7 +70,9 @@ function NotificationsLogger() {
       await logInternal(payload);
       Logger.info('[NotificationsLogger.log]: Logs sent to server');
     } catch (error) {
-      Logger.warn(`[NotificationsLogger.log] Error occurred while sending notification logs:\n\n${error}`);
+      Logger.warn(
+        `[NotificationsLogger.log] Error occurred while sending notification logs:\n\n${error}`,
+      );
     }
   };
 

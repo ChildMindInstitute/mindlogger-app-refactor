@@ -1,4 +1,12 @@
-import { Dispatch, forwardRef, memo, SetStateAction, useImperativeHandle, useMemo, useState } from 'react';
+import {
+  Dispatch,
+  forwardRef,
+  memo,
+  SetStateAction,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from 'react';
 import { StyleSheet } from 'react-native';
 
 import { Canvas, Group, Path, SkPath } from '@shopify/react-native-skia';
@@ -37,7 +45,14 @@ const CanvasBoard = forwardRef<CanvasBoardRef, Props>(({ size }, ref) => {
       <Group>
         <DrawnPaths paths={drawnPaths} />
 
-        {activePath && <Path path={activePath} strokeWidth={1.5} color="black" style="stroke" />}
+        {activePath && (
+          <Path
+            path={activePath}
+            strokeWidth={1.5}
+            color="black"
+            style="stroke"
+          />
+        )}
       </Group>
     </Canvas>
   );
@@ -51,7 +66,13 @@ const DrawnPaths = memo(
   ({ paths }: DrawnPathsProps) => (
     <>
       {paths.map((path, i) => (
-        <Path key={i} path={path} strokeWidth={1.5} color="black" style="stroke" />
+        <Path
+          key={i}
+          path={path}
+          strokeWidth={1.5}
+          color="black"
+          style="stroke"
+        />
       ))}
     </>
   ),

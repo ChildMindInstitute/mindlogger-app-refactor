@@ -5,19 +5,25 @@ import { IS_ANDROID } from '@app/shared/lib';
 import { SYSTEM_RESCHEDULING_NOTIFICATION_ID } from '../constants';
 import { LocalEventTriggerNotification } from '../types';
 
-function sortLocalEventTriggerNotifications(a: LocalEventTriggerNotification, b: LocalEventTriggerNotification) {
+function sortLocalEventTriggerNotifications(
+  a: LocalEventTriggerNotification,
+  b: LocalEventTriggerNotification,
+) {
   return a.notification.data.scheduledAt - b.notification.data.scheduledAt;
 }
 
 function NotificationScheduler() {
-  function scheduleLocalNotification(triggerNotification: LocalEventTriggerNotification) {
+  function scheduleLocalNotification(
+    triggerNotification: LocalEventTriggerNotification,
+  ) {
     const { notification, trigger } = triggerNotification;
 
     return notifee.createTriggerNotification(notification, trigger);
   }
 
   async function getAllScheduledNotifications() {
-    const triggerNotifications = (await notifee.getTriggerNotifications()) as LocalEventTriggerNotification[];
+    const triggerNotifications =
+      (await notifee.getTriggerNotifications()) as LocalEventTriggerNotification[];
 
     triggerNotifications.sort(sortLocalEventTriggerNotifications);
 
@@ -28,7 +34,8 @@ function NotificationScheduler() {
     const triggerNotifications = await getAllScheduledNotifications();
 
     const notification = triggerNotifications.find(
-      (triggerNotification) => triggerNotification.notification.id === notificationId,
+      (triggerNotification) =>
+        triggerNotification.notification.id === notificationId,
     );
 
     return notification;
@@ -66,11 +73,17 @@ function NotificationScheduler() {
   }
 
   async function cancelNotDisplayedNotifications() {
-    const displayNotificationIds = (await notifee.getDisplayedNotifications()).map((n) => n.notification.id);
+    const displayNotificationIds = (
+      await notifee.getDisplayedNotifications()
+    ).map((n) => n.notification.id);
 
-    const allNotificationIds = (await getAllScheduledNotifications()).map((n) => n.notification.id as string);
+    const allNotificationIds = (await getAllScheduledNotifications()).map(
+      (n) => n.notification.id as string,
+    );
 
-    const notificationIds = allNotificationIds.filter((id) => !displayNotificationIds.includes(id));
+    const notificationIds = allNotificationIds.filter(
+      (id) => !displayNotificationIds.includes(id),
+    );
 
     notifee.cancelTriggerNotifications(notificationIds);
   }

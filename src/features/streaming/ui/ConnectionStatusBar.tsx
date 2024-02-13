@@ -48,7 +48,10 @@ const ConnectionStatusBar: FC<Props> = ({ appletId, ...styleProps }) => {
           {connected ? `${host} (${port})` : t('live_connection:not_available')}
         </Text>
 
-        <TouchableOpacity accessibilityLabel="streaming-modal-open-btn" onPress={onEdit}>
+        <TouchableOpacity
+          accessibilityLabel="streaming-modal-open-btn"
+          onPress={onEdit}
+        >
           <EditIcon color={colors.black} size={22} />
         </TouchableOpacity>
       </XStack>

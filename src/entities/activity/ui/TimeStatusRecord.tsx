@@ -33,14 +33,19 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
 
   const hasAvailableToOnly = isStatusAvailable;
 
-  const hasTimeToComplete = activity.isTimerSet && !!activity.timeLeftToComplete;
+  const hasTimeToComplete =
+    activity.isTimerSet && !!activity.timeLeftToComplete;
 
   const tomorrow = addDays(startOfDay(new Date()), 1);
 
-  const isSpreadToNextDay = !!activity.availableTo && activity.availableTo > tomorrow;
+  const isSpreadToNextDay =
+    !!activity.availableTo && activity.availableTo > tomorrow;
 
   const hasTimerElapsed =
-    isStatusInProgress && activity.isTimerSet && !activity.timeLeftToComplete && activity.isTimerElapsed;
+    isStatusInProgress &&
+    activity.isTimerSet &&
+    !activity.timeLeftToComplete &&
+    activity.isTimerElapsed;
 
   const convert = (date: Date): string => {
     const convertResult = convertToTimeOnNoun(date);
@@ -64,16 +69,25 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
       )}
 
       {hasAvailableToOnly && (
-        <StatusLine>{`${t('activity_due_date:to')} ${convert(activity.availableTo!)} ${
+        <StatusLine>{`${t('activity_due_date:to')} ${convert(
+          activity.availableTo!,
+        )} ${
           isSpreadToNextDay ? t('activity_due_date:the_following_day') : ''
         }`}</StatusLine>
       )}
 
       {hasTimeToComplete && (
-        <StatusLine>{`${t('timed_activity:time_to_complete_hm', activity.timeLeftToComplete!)}`}</StatusLine>
+        <StatusLine>
+          {`${t(
+            'timed_activity:time_to_complete_hm',
+            activity.timeLeftToComplete!,
+          )}`}
+        </StatusLine>
       )}
 
-      {hasTimerElapsed && <StatusLine>{t('additional:time-end-tap')}</StatusLine>}
+      {hasTimerElapsed && (
+        <StatusLine>{t('additional:time-end-tap')}</StatusLine>
+      )}
     </Box>
   );
 };

@@ -21,7 +21,9 @@ describe('NotificationUtility: weekdays property tests.', () => {
 
     expect(utility.weekDays.length).toEqual(15);
 
-    expect(weekDaysIndexes).toEqual([1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5]);
+    expect(weekDaysIndexes).toEqual([
+      1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5,
+    ]);
   });
 
   it('Should return weekdays where the first day is Monday, Jan 1 and the last is Fri, Jan 19 when today is Sat, Jan 6', () => {
@@ -53,7 +55,9 @@ describe('NotificationUtility: weekdays property tests.', () => {
 
     expect(utility.weekDays.length).toEqual(15);
 
-    expect(weekDaysIndexes).toEqual([3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2]);
+    expect(weekDaysIndexes).toEqual([
+      3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2,
+    ]);
   });
 
   it('Should return weekdays where the first day is Wed, Dec 27 and the last is Tue, Jan 16 when today is Wed, Jan 3', () => {

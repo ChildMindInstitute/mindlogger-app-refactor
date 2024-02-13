@@ -15,7 +15,11 @@ const ChangePasswordScreen: FC = () => {
         <StatusBar />
 
         <Box flex={1} jc="flex-start">
-          <ChangePasswordForm px="$8" mt="$2" onChangePasswordSuccess={() => navigate('Settings')} />
+          <ChangePasswordForm
+            px="$8"
+            mt="$2"
+            onChangePasswordSuccess={() => navigate('Settings')}
+          />
         </Box>
       </Box>
     </TouchableWithoutFeedback>

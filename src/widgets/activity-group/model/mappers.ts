@@ -17,7 +17,9 @@ export const mapActivitiesFromDto = (dtos: ActivityRecordDto[]): Activity[] => {
   }));
 };
 
-export const mapActivityFlowsFromDto = (dtos: ActivityFlowRecordDto[]): ActivityFlow[] => {
+export const mapActivityFlowsFromDto = (
+  dtos: ActivityFlowRecordDto[],
+): ActivityFlow[] => {
   return dtos.map((dto) => ({
     activityIds: dto.activityIds,
     description: dto.description,

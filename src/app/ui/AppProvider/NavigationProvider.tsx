@@ -1,6 +1,10 @@
 import { FC, PropsWithChildren } from 'react';
 
-import { NavigationContainer, NavigationState, DefaultTheme } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  NavigationState,
+  DefaultTheme,
+} from '@react-navigation/native';
 import { ScreensModel, RootStackParamList } from '@screens';
 
 const theme = {

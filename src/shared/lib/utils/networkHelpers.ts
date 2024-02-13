@@ -11,7 +11,9 @@ export const isAppOnline = async (): Promise<boolean> => {
   const networkState = await NetInfo.fetch();
 
   const result =
-    networkState.isConnected != null && networkState.isConnected && Boolean(networkState.isInternetReachable);
+    networkState.isConnected != null &&
+    networkState.isConnected &&
+    Boolean(networkState.isInternetReachable);
 
   return result;
 };
@@ -50,7 +52,9 @@ const ping = async (): Promise<boolean> => {
 
 const WatchInterval = 30000;
 
-export const watchForConnectionLoss = (mode: 'ping' | 'checkNetworkStatus' = 'ping') => {
+export const watchForConnectionLoss = (
+  mode: 'ping' | 'checkNetworkStatus' = 'ping',
+) => {
   const abortController = new AbortController();
   let intervalId: TimeoutId;
 
@@ -96,16 +100,21 @@ export const callApiWithRetry = async <TResponse>(
   apiFunction: () => Promise<AxiosResponse<TResponse>>,
   retryErrorCodes: number[] = [502, NetworkErrorCode],
 ): Promise<AxiosResponse<TResponse>> => {
-  const shouldCheckNetworkError = () => retryErrorCodes.includes(NetworkErrorCode);
+  const shouldCheckNetworkError = () =>
+    retryErrorCodes.includes(NetworkErrorCode);
 
-  const isNetworkErrorTextInErrorMessage = (error: any) => error.toString().toLowerCase().includes(NetworkErrorMessage);
+  const isNetworkErrorTextInErrorMessage = (error: any) =>
+    error.toString().toLowerCase().includes(NetworkErrorMessage);
 
   const isRetryErrorCode = (error: any) => {
     const status = (error as AxiosError)?.response?.status ?? 0;
 
     if (status > 0 && retryErrorCodes.includes(status)) {
       return true;
-    } else if (shouldCheckNetworkError() && isNetworkErrorTextInErrorMessage(error)) {
+    } else if (
+      shouldCheckNetworkError() &&
+      isNetworkErrorTextInErrorMessage(error)
+    ) {
       return true;
     }
     return false;
@@ -123,7 +132,9 @@ export const callApiWithRetry = async <TResponse>(
 
       return result;
     } catch (error) {
-      Logger.warn(`[callApiWithRetry]: Error occurred:\nInternal error:\n\n${error}`);
+      Logger.warn(
+        `[callApiWithRetry]: Error occurred:\nInternal error:\n\n${error}`,
+      );
       if (!isRetryErrorCode(error) || isLast) {
         throw error;
       }
@@ -136,7 +147,9 @@ export const callApiWithRetry = async <TResponse>(
   throw new Error('[callApiWithRetry]: Number of attempts exceed');
 };
 
-export const withDataExtraction = <TResponse>(apiFunction: () => Promise<AxiosResponse<TResponse>>) => {
+export const withDataExtraction = <TResponse>(
+  apiFunction: () => Promise<AxiosResponse<TResponse>>,
+) => {
   return () => {
     return apiFunction().then((response) => {
       return {

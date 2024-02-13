@@ -1,4 +1,9 @@
-import { ActivityPipelineType, AvailabilityType, Progress, PeriodicityType } from '@app/abstract/lib';
+import {
+  ActivityPipelineType,
+  AvailabilityType,
+  Progress,
+  PeriodicityType,
+} from '@app/abstract/lib';
 import { ActivityType } from '@app/entities/activity';
 
 import { Activity, ActivityFlow, EventEntity } from '../../../lib';
@@ -29,7 +34,8 @@ export const progress: Progress = {
 const activity1: Activity = {
   id: 'aid1',
   name: 'Activity number 1',
-  description: 'Activity description number 1 Activity description 1 number 1 Activity description number 1',
+  description:
+    'Activity description number 1 Activity description 1 number 1 Activity description number 1',
   pipelineType: ActivityPipelineType.Regular,
   type: ActivityType.NotDefined,
   image:
@@ -41,7 +47,8 @@ const activity1: Activity = {
 const activity2: Activity = {
   id: 'aid2',
   name: 'Activity number 2',
-  description: 'Activity description number 2 Activity description 1 number 1 Activity description number 1',
+  description:
+    'Activity description number 2 Activity description 1 number 1 Activity description number 1',
   pipelineType: ActivityPipelineType.Regular,
   type: ActivityType.NotDefined,
   image: null,
@@ -52,7 +59,8 @@ const activity2: Activity = {
 const activityFlow1: ActivityFlow = {
   id: 'afid1',
   name: 'Activity Flow number 1',
-  description: 'Activity Flow description number 1 Activity description 1 number 1 Activity description number 1',
+  description:
+    'Activity Flow description number 1 Activity description 1 number 1 Activity description number 1',
   pipelineType: ActivityPipelineType.Flow,
   image:
     'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',

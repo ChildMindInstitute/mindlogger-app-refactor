@@ -6,7 +6,10 @@ import { FlankerLiveEvent, Logger, StreamEventLoggable } from '@shared/lib';
 import { Box } from '@shared/ui';
 
 import SwiftFlankerWrapper from './SwiftFlankerWrapper';
-import { FlankerGameResponse, FlankerNativeIosLogRecord } from '../../lib/types';
+import {
+  FlankerGameResponse,
+  FlankerNativeIosLogRecord,
+} from '../../lib/types';
 import { ConfigurationBuilder, parseResponse } from '../../lib/utils';
 
 type Props = {
@@ -31,7 +34,10 @@ const NativeIosFlanker: FC<Props> = (props) => {
     NativeModules.FlankerViewManager.preloadGameImages(configString)
       .then(() => {
         NativeModules.FlankerViewManager.setGameParameters(configString);
-        NativeModules.FlankerViewManager.startGame(props.configuration.isFirstPractice, props.configuration.isLastTest);
+        NativeModules.FlankerViewManager.startGame(
+          props.configuration.isFirstPractice,
+          props.configuration.isLastTest,
+        );
       })
       .catch((error: string) =>
         Logger.log(

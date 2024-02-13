@@ -1,6 +1,10 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { CompletedEventEntities, StoreProgress, convertProgress } from '@app/abstract/lib';
+import {
+  CompletedEventEntities,
+  StoreProgress,
+  convertProgress,
+} from '@app/abstract/lib';
 import { AppletModel } from '@app/entities/applet';
 import { EventModel } from '@app/entities/event';
 import {
@@ -11,10 +15,21 @@ import {
   LogAction,
   LogTrigger,
 } from '@app/shared/api';
-import { ILogger, Logger, getAppletDetailsKey, getAppletsKey, getDataFromQuery, getEventsKey } from '@app/shared/lib';
+import {
+  ILogger,
+  Logger,
+  getAppletDetailsKey,
+  getAppletsKey,
+  getDataFromQuery,
+  getEventsKey,
+} from '@app/shared/lib';
 
 import { createNotificationBuilder } from './factory';
-import { mapActivitiesFromDto, mapActivityFlowsFromDto, mapEventsFromDto } from './mappers';
+import {
+  mapActivitiesFromDto,
+  mapActivityFlowsFromDto,
+  mapEventsFromDto,
+} from './mappers';
 import NotificationManager from './NotificationManager';
 import {
   Activity,
@@ -38,7 +53,9 @@ type NotificationRefreshService = {
   ) => Promise<void>;
 };
 
-const createNotificationRefreshService = (logger: ILogger): NotificationRefreshService => {
+const createNotificationRefreshService = (
+  logger: ILogger,
+): NotificationRefreshService => {
   const buildIdToEntityMap = (entities: Entity[]): Record<string, Entity> => {
     return entities.reduce<Record<string, Entity>>((acc, current) => {
       acc[current.id] = current;
@@ -53,7 +70,10 @@ const createNotificationRefreshService = (logger: ILogger): NotificationRefreshS
   ): Promise<AppletNotificationDescribers[]> => {
     const result: Array<AppletNotificationDescribers> = [];
 
-    const appletsResponse = getDataFromQuery<AppletsResponse>(getAppletsKey(), queryClient)!;
+    const appletsResponse = getDataFromQuery<AppletsResponse>(
+      getAppletsKey(),
+      queryClient,
+    )!;
 
     if (!appletsResponse) {
       logger.warn(
@@ -74,9 +94,15 @@ const createNotificationRefreshService = (logger: ILogger): NotificationRefreshS
     const allNotificationDescribers: NotificationDescriber[] = [];
 
     for (const applet of applets) {
-      const detailsResponse = getDataFromQuery<AppletDetailsResponse>(getAppletDetailsKey(applet.id), queryClient)!;
+      const detailsResponse = getDataFromQuery<AppletDetailsResponse>(
+        getAppletDetailsKey(applet.id),
+        queryClient,
+      )!;
 
-      const eventsResponse = getDataFromQuery<AppletEventsResponse>(getEventsKey(applet.id), queryClient)!;
+      const eventsResponse = getDataFromQuery<AppletEventsResponse>(
+        getEventsKey(applet.id),
+        queryClient,
+      )!;
 
       if (!detailsResponse || !eventsResponse) {
         logger.info(
@@ -85,11 +111,17 @@ const createNotificationRefreshService = (logger: ILogger): NotificationRefreshS
         continue;
       }
 
-      const events: ScheduleEvent[] = mapEventsFromDto(eventsResponse.result.events);
+      const events: ScheduleEvent[] = mapEventsFromDto(
+        eventsResponse.result.events,
+      );
 
-      const activities: Activity[] = mapActivitiesFromDto(detailsResponse.result.activities);
+      const activities: Activity[] = mapActivitiesFromDto(
+        detailsResponse.result.activities,
+      );
 
-      const activityFlows: ActivityFlow[] = mapActivityFlowsFromDto(detailsResponse.result.activityFlows);
+      const activityFlows: ActivityFlow[] = mapActivityFlowsFromDto(
+        detailsResponse.result.activityFlows,
+      );
 
       const entities: Entity[] = [...activities, ...activityFlows];
 
@@ -126,14 +158,19 @@ const createNotificationRefreshService = (logger: ILogger): NotificationRefreshS
 
       result.push(appletNotifications);
 
-      const filteredNotificationsArray: NotificationDescriber[] = filterNotifications(appletNotifications);
+      const filteredNotificationsArray: NotificationDescriber[] =
+        filterNotifications(appletNotifications);
 
       allNotificationDescribers.push(...filteredNotificationsArray);
     }
 
-    const sortedNotificationDescribers = sortNotificationDescribers(allNotificationDescribers);
+    const sortedNotificationDescribers = sortNotificationDescribers(
+      allNotificationDescribers,
+    );
 
-    await NotificationManager.scheduleNotifications(sortedNotificationDescribers);
+    await NotificationManager.scheduleNotifications(
+      sortedNotificationDescribers,
+    );
 
     return result;
   };
@@ -144,14 +181,20 @@ const createNotificationRefreshService = (logger: ILogger): NotificationRefreshS
     completions: CompletedEventEntities,
     logTrigger: LogTrigger,
   ) => {
-    logger.info('[NotificationRefreshService.refresh]: Start notifications refresh process');
+    logger.info(
+      '[NotificationRefreshService.refresh]: Start notifications refresh process',
+    );
 
     if (NotificationManager.mutex.isBusy()) {
-      logger.info('[NotificationRefreshService.refresh]: Break as mutex set to busy');
+      logger.info(
+        '[NotificationRefreshService.refresh]: Break as mutex set to busy',
+      );
       return;
     }
     if (AppletModel.RefreshService.isBusy()) {
-      logger.info('[NotificationRefreshService.refresh]: RefreshService.mutex set to busy state');
+      logger.info(
+        '[NotificationRefreshService.refresh]: RefreshService.mutex set to busy state',
+      );
       return;
     }
 
@@ -160,11 +203,19 @@ const createNotificationRefreshService = (logger: ILogger): NotificationRefreshS
     try {
       NotificationManager.mutex.setBusy();
 
-      describers = await refreshInternal(queryClient, storeProgress, completions);
+      describers = await refreshInternal(
+        queryClient,
+        storeProgress,
+        completions,
+      );
 
-      logger.info('[NotificationRefreshService.refresh]: Completed. Notifications rescheduled');
+      logger.info(
+        '[NotificationRefreshService.refresh]: Completed. Notifications rescheduled',
+      );
     } catch (error) {
-      logger.log(`[NotificationRefreshService.refresh]: Notifications rescheduling failed\n\n${error}`);
+      logger.log(
+        `[NotificationRefreshService.refresh]: Notifications rescheduling failed\n\n${error}`,
+      );
     } finally {
       NotificationManager.mutex.release();
     }
