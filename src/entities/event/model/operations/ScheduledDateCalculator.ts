@@ -20,7 +20,7 @@ type EventParseInput = Parameters<typeof Parse.schedule>[0];
 
 const cache = new Map();
 
-class ScheduledDateCalculator {
+export class ScheduledDateCalculator {
   constructor() {}
 
   private setTime(target: Date, availability: EventAvailability) {
