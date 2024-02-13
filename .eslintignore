@@ -6,4 +6,6 @@
 
 # And any top-level JS or TS files
 !/*.js
+!/*.jsx
 !/*.ts
+!/*.tsx
