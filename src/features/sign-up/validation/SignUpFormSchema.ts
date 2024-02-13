@@ -9,8 +9,11 @@ const schema = z.object({
   password: z
     .string()
     .min(1, 'form_item:required')
-    .min(6, 'sign_up_form:password_at_least_characters')
-    .refine(value => !value.includes(' '), 'sign_up_form:password_no_spaces'),
+    .min(6, 'password_requirements:at_least_characters')
+    .refine(
+      value => !value.includes(' '),
+      'password_requirements:no_blank_spaces',
+    ),
   firstName: z.string().trim().min(1, 'form_item:required'),
   lastName: z.string().trim().min(1, 'form_item:required'),
 });

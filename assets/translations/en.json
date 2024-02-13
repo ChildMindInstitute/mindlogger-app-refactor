@@ -227,10 +227,13 @@
     "last_name": "Last Name",
     "password_placeholder": "Password",
     "please_accept_terms": "Please accept terms of service.",
-    "password_at_least_characters": "Password must be at least 6 characters",
     "email_looks_incomplete": "Looks like this email is incomplete",
-    "password_no_spaces": "Password should not contain blank spaces",
     "sign_up_agree": "By signing up, you agree to MindLogger’s"
+  },
+  "password_requirements": {
+    "at_least_characters": "6 characters",
+    "no_blank_spaces": "no blank spaces",
+    "must_include": "Password must include:"
   },
   "geolocation": {
     "get_location": "GET LOCATION",

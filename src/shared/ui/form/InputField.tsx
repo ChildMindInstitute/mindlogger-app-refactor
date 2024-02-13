@@ -3,10 +3,10 @@ import { ColorValue, TextInputProps } from 'react-native';
 
 import { Controller, useFormContext, useController } from 'react-hook-form';
 
-import { Input } from '@shared/ui';
+import { Box, Input, XStack } from '@shared/ui';
 import { ErrorMessage } from '@shared/ui/form';
 
-type Props = {
+export type InputFieldProps = {
   name: string;
   placeholder: string;
   defaultValue?: string;
@@ -14,14 +14,20 @@ type Props = {
   secureTextEntry?: boolean;
   backgroundColor?: ColorValue | undefined;
   mode?: 'dark' | 'light';
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  hideError?: boolean;
 } & TextInputProps;
 
-const InputField: FC<Props> = ({
+const InputField: FC<InputFieldProps> = ({
   name,
   defaultValue = '',
   placeholder,
   mode = 'light',
   backgroundColor,
+  leftIcon,
+  rightIcon,
+  hideError,
   ...props
 }) => {
   const { control } = useFormContext();
@@ -39,23 +45,45 @@ const InputField: FC<Props> = ({
       <Controller
         control={control}
         render={() => (
-          <Input
-            ref={ref}
-            onBlur={onBlur}
-            onChangeText={onFormChange}
-            value={value}
-            placeholder={placeholder}
-            autoCapitalize="none"
-            mode={mode}
-            backgroundColor={backgroundColor}
-            {...props}
-            isInvalid={!!error}
-          />
+          <>
+            <XStack alignItems="center">
+              {leftIcon && (
+                <Box px={10} position="absolute" left={0}>
+                  {leftIcon}
+                </Box>
+              )}
+
+              <Input
+                flex={1}
+                ref={ref}
+                onBlur={e => {
+                  onBlur();
+                  props.onBlur && props.onBlur(e);
+                }}
+                onChangeText={onFormChange}
+                value={value}
+                placeholder={placeholder}
+                autoCapitalize="none"
+                mode={mode}
+                backgroundColor={backgroundColor}
+                {...props}
+                isInvalid={!!error}
+                pl={leftIcon ? 40 : 0}
+                pr={rightIcon ? 40 : 0}
+              />
+
+              {rightIcon && (
+                <Box px={10} position="absolute" right={0}>
+                  {rightIcon}
+                </Box>
+              )}
+            </XStack>
+          </>
         )}
         name={name}
       />
 
-      <ErrorMessage mode={mode} mt={8} error={error} />
+      {!hideError && <ErrorMessage mode={mode} mt={8} error={error} />}
     </>
   );
 };
