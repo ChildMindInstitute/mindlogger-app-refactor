@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { styled, Text } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@shared/lib/constants/colors';
+import { colors } from '@shared/lib';
 
 import { FeatherCrossIcon, FeatherCheckIcon } from '../icons';
 

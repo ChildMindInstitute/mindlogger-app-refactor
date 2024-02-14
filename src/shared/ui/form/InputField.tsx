@@ -6,7 +6,7 @@ import { Controller, useFormContext, useController } from 'react-hook-form';
 import { Box, Input, XStack } from '@shared/ui';
 import { ErrorMessage } from '@shared/ui/form';
 
-export type InputFieldProps = {
+type Props = {
   name: string;
   placeholder: string;
   defaultValue?: string;
@@ -19,7 +19,7 @@ export type InputFieldProps = {
   hideError?: boolean;
 } & TextInputProps;
 
-const InputField: FC<InputFieldProps> = ({
+const InputField: FC<Props> = ({
   name,
   defaultValue = '',
   placeholder,

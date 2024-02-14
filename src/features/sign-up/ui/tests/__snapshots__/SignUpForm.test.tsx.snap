@@ -1,15 +1,54 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SignUp SignUpForm should render properly 1`] = `
-<div
-  boxSizing="border-box"
+<View
   onLoginSuccess={[Function]}
+  style={
+    [
+      {
+        "alignItems": "stretch",
+        "display": "flex",
+        "flexBasis": "auto",
+        "flexDirection": "column",
+        "flexShrink": 0,
+        "minHeight": 0,
+        "minWidth": 0,
+        "position": "relative",
+      },
+    ]
+  }
 >
-  <div
-    boxSizing="border-box"
+  <View
+    style={
+      [
+        {
+          "alignItems": "stretch",
+          "display": "flex",
+          "flexBasis": "auto",
+          "flexDirection": "column",
+          "flexShrink": 0,
+          "minHeight": 0,
+          "minWidth": 0,
+          "position": "relative",
+        },
+      ]
+    }
   >
-    <div
-      boxSizing="border-box"
+    <View
+      style={
+        [
+          {
+            "alignItems": "center",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexDirection": "row",
+            "flexShrink": 0,
+            "minHeight": 0,
+            "minWidth": 0,
+            "position": "relative",
+          },
+        ]
+      }
     >
       <TextInput
         accessibilityLabel="signup-email-input"
@@ -23,16 +62,62 @@ exports[`SignUp SignUpForm should render properly 1`] = `
         placeholder="auth:email"
         placeholderTextColor="rgba(255,255,255,0.60)"
         selectionColor="black"
+        style={
+          [
+            {
+              "borderBottomColor": "rgba(255,255,255,0.60)",
+              "borderBottomWidth": 0.75,
+              "borderStyle": "solid",
+              "flex": 1,
+              "marginBottom": 0,
+              "marginLeft": 0,
+              "marginRight": 0,
+              "marginTop": 0,
+              "minWidth": 0,
+              "paddingBottom": 8,
+              "paddingLeft": 0,
+              "paddingRight": 0,
+              "paddingTop": 8,
+            },
+          ]
+        }
         underlineColorAndroid="transparent"
         value=""
       />
-    </div>
-    <div
-      boxSizing="border-box"
+    </View>
+    <View
       pointerEvents="none"
+      style={
+        [
+          {
+            "alignItems": "stretch",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexShrink": 0,
+            "height": 22,
+            "minHeight": 22,
+            "minWidth": 22,
+            "position": "relative",
+            "width": 22,
+          },
+        ]
+      }
     />
-    <div
-      boxSizing="border-box"
+    <View
+      style={
+        [
+          {
+            "alignItems": "center",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexDirection": "row",
+            "flexShrink": 0,
+            "minHeight": 0,
+            "minWidth": 0,
+            "position": "relative",
+          },
+        ]
+      }
     >
       <TextInput
         accessibilityLabel="signup-first-name-input"
@@ -46,16 +131,62 @@ exports[`SignUp SignUpForm should render properly 1`] = `
         placeholder="sign_up_form:first_name"
         placeholderTextColor="rgba(255,255,255,0.60)"
         selectionColor="black"
+        style={
+          [
+            {
+              "borderBottomColor": "rgba(255,255,255,0.60)",
+              "borderBottomWidth": 0.75,
+              "borderStyle": "solid",
+              "flex": 1,
+              "marginBottom": 0,
+              "marginLeft": 0,
+              "marginRight": 0,
+              "marginTop": 0,
+              "minWidth": 0,
+              "paddingBottom": 8,
+              "paddingLeft": 0,
+              "paddingRight": 0,
+              "paddingTop": 8,
+            },
+          ]
+        }
         underlineColorAndroid="transparent"
         value=""
       />
-    </div>
-    <div
-      boxSizing="border-box"
+    </View>
+    <View
       pointerEvents="none"
+      style={
+        [
+          {
+            "alignItems": "stretch",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexShrink": 0,
+            "height": 22,
+            "minHeight": 22,
+            "minWidth": 22,
+            "position": "relative",
+            "width": 22,
+          },
+        ]
+      }
     />
-    <div
-      boxSizing="border-box"
+    <View
+      style={
+        [
+          {
+            "alignItems": "center",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexDirection": "row",
+            "flexShrink": 0,
+            "minHeight": 0,
+            "minWidth": 0,
+            "position": "relative",
+          },
+        ]
+      }
     >
       <TextInput
         accessibilityLabel="signup-last-name-input"
@@ -69,16 +200,62 @@ exports[`SignUp SignUpForm should render properly 1`] = `
         placeholder="sign_up_form:last_name"
         placeholderTextColor="rgba(255,255,255,0.60)"
         selectionColor="black"
+        style={
+          [
+            {
+              "borderBottomColor": "rgba(255,255,255,0.60)",
+              "borderBottomWidth": 0.75,
+              "borderStyle": "solid",
+              "flex": 1,
+              "marginBottom": 0,
+              "marginLeft": 0,
+              "marginRight": 0,
+              "marginTop": 0,
+              "minWidth": 0,
+              "paddingBottom": 8,
+              "paddingLeft": 0,
+              "paddingRight": 0,
+              "paddingTop": 8,
+            },
+          ]
+        }
         underlineColorAndroid="transparent"
         value=""
       />
-    </div>
-    <div
-      boxSizing="border-box"
+    </View>
+    <View
       pointerEvents="none"
+      style={
+        [
+          {
+            "alignItems": "stretch",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexShrink": 0,
+            "height": 22,
+            "minHeight": 22,
+            "minWidth": 22,
+            "position": "relative",
+            "width": 22,
+          },
+        ]
+      }
     />
-    <div
-      boxSizing="border-box"
+    <View
+      style={
+        [
+          {
+            "alignItems": "center",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexDirection": "row",
+            "flexShrink": 0,
+            "minHeight": 0,
+            "minWidth": 0,
+            "position": "relative",
+          },
+        ]
+      }
     >
       <TextInput
         accessibilityLabel="signup-password-input"
@@ -94,11 +271,46 @@ exports[`SignUp SignUpForm should render properly 1`] = `
         placeholderTextColor="rgba(255,255,255,0.60)"
         secureTextEntry={true}
         selectionColor="black"
+        style={
+          [
+            {
+              "borderBottomColor": "rgba(255,255,255,0.60)",
+              "borderBottomWidth": 0.75,
+              "borderStyle": "solid",
+              "flex": 1,
+              "marginBottom": 0,
+              "marginLeft": 0,
+              "marginRight": 0,
+              "marginTop": 0,
+              "minWidth": 0,
+              "paddingBottom": 8,
+              "paddingLeft": 0,
+              "paddingRight": 40,
+              "paddingTop": 8,
+            },
+          ]
+        }
         underlineColorAndroid="transparent"
         value=""
       />
-      <div
-        boxSizing="border-box"
+      <View
+        style={
+          [
+            {
+              "alignItems": "stretch",
+              "display": "flex",
+              "flexBasis": "auto",
+              "flexDirection": "column",
+              "flexShrink": 0,
+              "minHeight": 0,
+              "minWidth": 0,
+              "paddingLeft": 10,
+              "paddingRight": 10,
+              "position": "absolute",
+              "right": 0,
+            },
+          ]
+        }
       >
         <Text
           accessible={true}
@@ -130,11 +342,25 @@ exports[`SignUp SignUpForm should render properly 1`] = `
         >
           
         </Text>
-      </div>
-    </div>
-    <div
-      boxSizing="border-box"
+      </View>
+    </View>
+    <View
       pointerEvents="none"
+      style={
+        [
+          {
+            "alignItems": "stretch",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexShrink": 0,
+            "height": 22,
+            "minHeight": 22,
+            "minWidth": 22,
+            "position": "relative",
+            "width": 22,
+          },
+        ]
+      }
     />
     <View
       accessibilityLabel="sign_up-button"
@@ -159,31 +385,106 @@ exports[`SignUp SignUpForm should render properly 1`] = `
         }
       }
     >
-      <div
-        boxSizing="border-box"
+      <View
+        style={
+          [
+            {
+              "alignItems": "stretch",
+              "alignSelf": "center",
+              "backgroundColor": "rgba(236,223,223,1.00)",
+              "borderBottomLeftRadius": 30,
+              "borderBottomRightRadius": 30,
+              "borderTopLeftRadius": 30,
+              "borderTopRightRadius": 30,
+              "display": "flex",
+              "flexBasis": "auto",
+              "flexDirection": "row",
+              "flexShrink": 0,
+              "justifyContent": "center",
+              "marginTop": 50,
+              "minHeight": 0,
+              "minWidth": 0,
+              "paddingLeft": 50,
+              "paddingRight": 50,
+              "paddingVertical": 16,
+              "position": "relative",
+              "width": "100%",
+            },
+          ]
+        }
       >
-        <span
+        <Text
           fontFamily="System"
+          style={
+            [
+              {
+                "color": "rgba(0,0,0,1.00)",
+                "display": "flex",
+                "fontFamily": "System",
+                "fontSize": 14,
+                "opacity": 1,
+              },
+            ]
+          }
           suppressHighlighting={true}
         >
           sign_up_form:sign_up
-        </span>
-      </div>
+        </Text>
+      </View>
     </View>
-  </div>
-</div>
+  </View>
+</View>
 `;
 
 exports[`SignUp SignUpPasswordRequirements should render properly after password input focus 1`] = `
-<div
-  boxSizing="border-box"
+<View
   onLoginSuccess={[Function]}
+  style={
+    [
+      {
+        "alignItems": "stretch",
+        "display": "flex",
+        "flexBasis": "auto",
+        "flexDirection": "column",
+        "flexShrink": 0,
+        "minHeight": 0,
+        "minWidth": 0,
+        "position": "relative",
+      },
+    ]
+  }
 >
-  <div
-    boxSizing="border-box"
+  <View
+    style={
+      [
+        {
+          "alignItems": "stretch",
+          "display": "flex",
+          "flexBasis": "auto",
+          "flexDirection": "column",
+          "flexShrink": 0,
+          "minHeight": 0,
+          "minWidth": 0,
+          "position": "relative",
+        },
+      ]
+    }
   >
-    <div
-      boxSizing="border-box"
+    <View
+      style={
+        [
+          {
+            "alignItems": "center",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexDirection": "row",
+            "flexShrink": 0,
+            "minHeight": 0,
+            "minWidth": 0,
+            "position": "relative",
+          },
+        ]
+      }
     >
       <TextInput
         accessibilityLabel="signup-email-input"
@@ -197,16 +498,62 @@ exports[`SignUp SignUpPasswordRequirements should render properly after password
         placeholder="auth:email"
         placeholderTextColor="rgba(255,255,255,0.60)"
         selectionColor="black"
+        style={
+          [
+            {
+              "borderBottomColor": "rgba(255,255,255,0.60)",
+              "borderBottomWidth": 0.75,
+              "borderStyle": "solid",
+              "flex": 1,
+              "marginBottom": 0,
+              "marginLeft": 0,
+              "marginRight": 0,
+              "marginTop": 0,
+              "minWidth": 0,
+              "paddingBottom": 8,
+              "paddingLeft": 0,
+              "paddingRight": 0,
+              "paddingTop": 8,
+            },
+          ]
+        }
         underlineColorAndroid="transparent"
         value=""
       />
-    </div>
-    <div
-      boxSizing="border-box"
+    </View>
+    <View
       pointerEvents="none"
+      style={
+        [
+          {
+            "alignItems": "stretch",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexShrink": 0,
+            "height": 22,
+            "minHeight": 22,
+            "minWidth": 22,
+            "position": "relative",
+            "width": 22,
+          },
+        ]
+      }
     />
-    <div
-      boxSizing="border-box"
+    <View
+      style={
+        [
+          {
+            "alignItems": "center",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexDirection": "row",
+            "flexShrink": 0,
+            "minHeight": 0,
+            "minWidth": 0,
+            "position": "relative",
+          },
+        ]
+      }
     >
       <TextInput
         accessibilityLabel="signup-first-name-input"
@@ -220,16 +567,62 @@ exports[`SignUp SignUpPasswordRequirements should render properly after password
         placeholder="sign_up_form:first_name"
         placeholderTextColor="rgba(255,255,255,0.60)"
         selectionColor="black"
+        style={
+          [
+            {
+              "borderBottomColor": "rgba(255,255,255,0.60)",
+              "borderBottomWidth": 0.75,
+              "borderStyle": "solid",
+              "flex": 1,
+              "marginBottom": 0,
+              "marginLeft": 0,
+              "marginRight": 0,
+              "marginTop": 0,
+              "minWidth": 0,
+              "paddingBottom": 8,
+              "paddingLeft": 0,
+              "paddingRight": 0,
+              "paddingTop": 8,
+            },
+          ]
+        }
         underlineColorAndroid="transparent"
         value=""
       />
-    </div>
-    <div
-      boxSizing="border-box"
+    </View>
+    <View
       pointerEvents="none"
+      style={
+        [
+          {
+            "alignItems": "stretch",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexShrink": 0,
+            "height": 22,
+            "minHeight": 22,
+            "minWidth": 22,
+            "position": "relative",
+            "width": 22,
+          },
+        ]
+      }
     />
-    <div
-      boxSizing="border-box"
+    <View
+      style={
+        [
+          {
+            "alignItems": "center",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexDirection": "row",
+            "flexShrink": 0,
+            "minHeight": 0,
+            "minWidth": 0,
+            "position": "relative",
+          },
+        ]
+      }
     >
       <TextInput
         accessibilityLabel="signup-last-name-input"
@@ -243,16 +636,62 @@ exports[`SignUp SignUpPasswordRequirements should render properly after password
         placeholder="sign_up_form:last_name"
         placeholderTextColor="rgba(255,255,255,0.60)"
         selectionColor="black"
+        style={
+          [
+            {
+              "borderBottomColor": "rgba(255,255,255,0.60)",
+              "borderBottomWidth": 0.75,
+              "borderStyle": "solid",
+              "flex": 1,
+              "marginBottom": 0,
+              "marginLeft": 0,
+              "marginRight": 0,
+              "marginTop": 0,
+              "minWidth": 0,
+              "paddingBottom": 8,
+              "paddingLeft": 0,
+              "paddingRight": 0,
+              "paddingTop": 8,
+            },
+          ]
+        }
         underlineColorAndroid="transparent"
         value=""
       />
-    </div>
-    <div
-      boxSizing="border-box"
+    </View>
+    <View
       pointerEvents="none"
+      style={
+        [
+          {
+            "alignItems": "stretch",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexShrink": 0,
+            "height": 22,
+            "minHeight": 22,
+            "minWidth": 22,
+            "position": "relative",
+            "width": 22,
+          },
+        ]
+      }
     />
-    <div
-      boxSizing="border-box"
+    <View
+      style={
+        [
+          {
+            "alignItems": "center",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexDirection": "row",
+            "flexShrink": 0,
+            "minHeight": 0,
+            "minWidth": 0,
+            "position": "relative",
+          },
+        ]
+      }
     >
       <TextInput
         accessibilityLabel="signup-password-input"
@@ -268,11 +707,46 @@ exports[`SignUp SignUpPasswordRequirements should render properly after password
         placeholderTextColor="rgba(255,255,255,0.60)"
         secureTextEntry={true}
         selectionColor="black"
+        style={
+          [
+            {
+              "borderBottomColor": "rgba(255,255,255,0.60)",
+              "borderBottomWidth": 0.75,
+              "borderStyle": "solid",
+              "flex": 1,
+              "marginBottom": 0,
+              "marginLeft": 0,
+              "marginRight": 0,
+              "marginTop": 0,
+              "minWidth": 0,
+              "paddingBottom": 8,
+              "paddingLeft": 0,
+              "paddingRight": 40,
+              "paddingTop": 8,
+            },
+          ]
+        }
         underlineColorAndroid="transparent"
         value=""
       />
-      <div
-        boxSizing="border-box"
+      <View
+        style={
+          [
+            {
+              "alignItems": "stretch",
+              "display": "flex",
+              "flexBasis": "auto",
+              "flexDirection": "column",
+              "flexShrink": 0,
+              "minHeight": 0,
+              "minWidth": 0,
+              "paddingLeft": 10,
+              "paddingRight": 10,
+              "position": "absolute",
+              "right": 0,
+            },
+          ]
+        }
       >
         <Text
           accessible={true}
@@ -304,49 +778,158 @@ exports[`SignUp SignUpPasswordRequirements should render properly after password
         >
           
         </Text>
-      </div>
-    </div>
-    <div
-      boxSizing="border-box"
+      </View>
+    </View>
+    <View
       pointerEvents="none"
+      style={
+        [
+          {
+            "alignItems": "stretch",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexShrink": 0,
+            "height": 22,
+            "minHeight": 22,
+            "minWidth": 22,
+            "position": "relative",
+            "width": 22,
+          },
+        ]
+      }
     />
-    <span
+    <Text
       fontFamily="System"
+      style={
+        [
+          {
+            "color": "rgba(255,255,255,1.00)",
+            "display": "flex",
+            "fontFamily": "System",
+          },
+        ]
+      }
       suppressHighlighting={true}
     >
       password_requirements:must_include
-    </span>
-    <View>
+    </Text>
+    <View
+      style={
+        [
+          {
+            "display": "flex",
+            "flexDirection": "row",
+            "flexWrap": "wrap",
+            "justifyContent": "center",
+            "marginTop": 12,
+          },
+        ]
+      }
+    >
       <View
+        style={
+          [
+            {
+              "alignItems": "center",
+              "display": "flex",
+              "flexDirection": "row",
+              "marginBottom": 4,
+              "width": "50%",
+            },
+          ]
+        }
         testID="password_requirements:at_least_characters"
       >
-        <View>
+        <View
+          style={
+            [
+              {
+                "width": 18,
+              },
+            ]
+          }
+        >
           x
         </View>
-        <span
+        <Text
           fontFamily="System"
+          style={
+            [
+              {
+                "color": "rgba(255,255,255,0.60)",
+                "display": "flex",
+                "fontFamily": "System",
+                "fontSize": 14,
+                "marginLeft": 8,
+              },
+            ]
+          }
           suppressHighlighting={true}
         >
           password_requirements:at_least_characters
-        </span>
+        </Text>
       </View>
       <View
+        style={
+          [
+            {
+              "alignItems": "center",
+              "display": "flex",
+              "flexDirection": "row",
+              "marginBottom": 4,
+              "width": "50%",
+            },
+          ]
+        }
         testID="password_requirements:no_blank_spaces"
       >
-        <View>
+        <View
+          style={
+            [
+              {
+                "width": 18,
+              },
+            ]
+          }
+        >
           x
         </View>
-        <span
+        <Text
           fontFamily="System"
+          style={
+            [
+              {
+                "color": "rgba(255,255,255,0.60)",
+                "display": "flex",
+                "fontFamily": "System",
+                "fontSize": 14,
+                "marginLeft": 8,
+              },
+            ]
+          }
           suppressHighlighting={true}
         >
           password_requirements:no_blank_spaces
-        </span>
+        </Text>
       </View>
     </View>
-    <div
-      boxSizing="border-box"
+    <View
       pointerEvents="none"
+      style={
+        [
+          {
+            "alignItems": "stretch",
+            "display": "flex",
+            "flexBasis": "auto",
+            "flexShrink": 0,
+            "height": 22,
+            "minHeight": 22,
+            "minWidth": 22,
+            "position": "relative",
+            "width": 22,
+          },
+        ]
+      }
     />
     <View
       accessibilityLabel="sign_up-button"
@@ -371,17 +954,53 @@ exports[`SignUp SignUpPasswordRequirements should render properly after password
         }
       }
     >
-      <div
-        boxSizing="border-box"
+      <View
+        style={
+          [
+            {
+              "alignItems": "stretch",
+              "alignSelf": "center",
+              "backgroundColor": "rgba(236,223,223,1.00)",
+              "borderBottomLeftRadius": 30,
+              "borderBottomRightRadius": 30,
+              "borderTopLeftRadius": 30,
+              "borderTopRightRadius": 30,
+              "display": "flex",
+              "flexBasis": "auto",
+              "flexDirection": "row",
+              "flexShrink": 0,
+              "justifyContent": "center",
+              "marginTop": 50,
+              "minHeight": 0,
+              "minWidth": 0,
+              "paddingLeft": 50,
+              "paddingRight": 50,
+              "paddingVertical": 16,
+              "position": "relative",
+              "width": "100%",
+            },
+          ]
+        }
       >
-        <span
+        <Text
           fontFamily="System"
+          style={
+            [
+              {
+                "color": "rgba(0,0,0,1.00)",
+                "display": "flex",
+                "fontFamily": "System",
+                "fontSize": 14,
+                "opacity": 1,
+              },
+            ]
+          }
           suppressHighlighting={true}
         >
           sign_up_form:sign_up
-        </span>
-      </div>
+        </Text>
+      </View>
     </View>
-  </div>
-</div>
+  </View>
+</View>
 `;
