@@ -1,10 +1,9 @@
 import MixpanelAnalytics from './MixpanelAnalytics';
-import { ENV, MIXPANEL_TOKEN } from '../constants';
+import { MIXPANEL_TOKEN } from '../constants';
 import { Logger } from '../services';
 import { createStorage } from '../storages';
 
-const isProduction = !ENV;
-const shouldEnableMixpanel = MIXPANEL_TOKEN && isProduction;
+const shouldEnableMixpanel = !!MIXPANEL_TOKEN;
 
 export const storage = createStorage('analytics-storage');
 
@@ -39,8 +38,12 @@ export const MixEvents = {
 
 const AnalyticsService = {
   async init(): Promise<void> {
-    if (shouldEnableMixpanel && MIXPANEL_TOKEN) {
-      service = new MixpanelAnalytics(MIXPANEL_TOKEN);
+    if (shouldEnableMixpanel) {
+      Logger.log(
+        '[AnalyticsService]: Create and init MixpanelAnalytics object',
+      );
+
+      service = new MixpanelAnalytics(MIXPANEL_TOKEN!);
       return service.init();
     }
   },
