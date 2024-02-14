@@ -1,6 +1,6 @@
 import {
   addDays,
-  differenceInMonths,
+  addMonths,
   isEqual,
   startOfDay,
   subDays,
@@ -42,24 +42,27 @@ export class ScheduledDateCalculator {
 
     let date = new Date(selectedDate!);
 
-    const diff = differenceInMonths(date, today);
-    let check = subMonths(date, diff);
+    if (selectedDate > today) {
+      let months = 0;
 
-    if (check > today) {
-      date = subMonths(date, diff + 1);
-    } else {
-      date = check;
+      while (date > today) {
+        months++;
+        date = subMonths(selectedDate, months);
+      }
     }
 
-    const aMonthAgo = subMonths(today, 1);
+    if (selectedDate < today) {
+      let months = 0;
 
-    const isBeyondOfDateBorders =
-      date < aMonthAgo ||
-      (!!availability.endDate && date > availability.endDate);
-
-    if (isBeyondOfDateBorders) {
-      return null;
+      while (date < today) {
+        months++;
+        date = addMonths(selectedDate, months);
+      }
+      if (date > today) {
+        date = subMonths(date, 1);
+      }
     }
+
     this.setTime(date, availability);
 
     return date;

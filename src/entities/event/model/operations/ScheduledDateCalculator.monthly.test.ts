@@ -187,7 +187,7 @@ describe('ScheduledDateCalculator: test monthly events', () => {
       expect(resultDate).toEqual(expectedDate);
     });
 
-    it('Should return null when selected date is (today - 1 days) and start/end date earlier than (today -1 day)', () => {
+    it('Should return selected date with set time when selected date is (today - 1 days) and start/end date earlier than (today -1 day)', () => {
       const event = getMonthlyEvent();
       event.availability.startDate = subDays(startOfDay(now), 56);
       event.availability.endDate = subDays(startOfDay(now), 3);
@@ -195,28 +195,88 @@ describe('ScheduledDateCalculator: test monthly events', () => {
 
       const resultDate = scheduledDateCalculator.calculate(event, false);
 
-      expect(resultDate).toEqual(null);
-    });
-  });
-
-  describe('Test edge cases', () => {
-    it('Should return ...', () => {
-      const now = new Date(2024, 1, 29);
-
-      const calculator = getScheduledDateCalculator(now);
-
-      const event = getMonthlyEvent();
-      event.availability.startDate = subMonths(now, 6);
-      event.availability.endDate = addMonths(startOfDay(now), 6);
-      event.selectedDate = new Date(2024, 0, 31);
-
-      const resultDate = calculator.calculate(event, false);
-
-      const expectedDate = new Date(2024, 1, 29);
+      const expectedDate = new Date(event.selectedDate);
       expectedDate.setHours(event.availability.timeFrom!.hours);
       expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
+    });
+  });
+
+  describe('Test edge cases', () => {
+    [
+      {
+        now: new Date(2024, 1, 29),
+        selectedDate: new Date(2024, 0, 31),
+        expected: new Date(2024, 1, 29),
+      },
+      {
+        now: new Date(2024, 2, 10),
+        selectedDate: new Date(2024, 0, 30),
+        expected: new Date(2024, 1, 29),
+      },
+      {
+        now: new Date(2024, 2, 1),
+        selectedDate: new Date(2024, 0, 29),
+        expected: new Date(2024, 1, 29),
+      },
+      {
+        now: new Date(2024, 2, 10),
+        selectedDate: new Date(2024, 2, 29),
+        expected: new Date(2024, 1, 29),
+      },
+      {
+        now: new Date(2024, 2, 10),
+        selectedDate: new Date(2024, 2, 30),
+        expected: new Date(2024, 1, 29),
+      },
+      {
+        now: new Date(2024, 2, 10),
+        selectedDate: new Date(2024, 2, 31),
+        expected: new Date(2024, 1, 29),
+      },
+      {
+        now: new Date(2024, 1, 29),
+        selectedDate: new Date(2024, 2, 31),
+        expected: new Date(2024, 1, 29),
+      },
+      {
+        now: new Date(2024, 4, 10),
+        selectedDate: new Date(2024, 1, 29),
+        expected: new Date(2024, 3, 29),
+      },
+      {
+        now: new Date(2024, 4, 10),
+        selectedDate: new Date(2024, 2, 31),
+        expected: new Date(2024, 3, 30),
+      },
+      {
+        now: new Date(2024, 2, 10),
+        selectedDate: new Date(2023, 1, 28),
+        expected: new Date(2024, 1, 28),
+      },
+      {
+        now: new Date(2023, 2, 10),
+        selectedDate: new Date(2024, 1, 29),
+        expected: new Date(2023, 1, 28),
+      },
+    ].forEach(({ now, selectedDate, expected }) => {
+      it(`Should return ${expected.toDateString()} when now is ${now.toDateString()} and selected date is ${selectedDate.toDateString()}`, () => {
+        const calculator = getScheduledDateCalculator(now);
+
+        const event = getMonthlyEvent();
+        event.availability.startDate = subMonths(now, 6);
+        event.availability.endDate = addMonths(startOfDay(now), 6);
+        event.selectedDate = selectedDate;
+
+        const resultDate = calculator.calculate(event, false);
+
+        const expectedDate = new Date(expected);
+        expectedDate.setHours(event.availability.timeFrom!.hours);
+        expectedDate.setMinutes(event.availability.timeFrom!.minutes);
+
+        expect(resultDate).toEqual(expectedDate);
+      });
     });
   });
 });
