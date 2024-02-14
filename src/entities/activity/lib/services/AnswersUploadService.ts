@@ -1,3 +1,4 @@
+// import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { FileSystem } from 'react-native-file-access';
 
 import {
@@ -109,6 +110,40 @@ class AnswersUploadService implements IAnswersUploadService {
 
     return result;
   }
+  /*
+  private testS3() {
+    const options = {
+      keyPrefix: 'uploads/',
+      bucket: 'fileUploadExample',
+      region: 'eu-central-1',
+      successActionStatus: 201,
+    };
+
+    let credentials = {
+      accessKeyId: 'ACCESS_KEY',
+      secretAccessKey: 'SECRET_ACCESS_KEY',
+    };
+    const client = new S3Client({
+      region: options.region,
+      credentials: credentials,
+    });
+
+    const file = {
+      uri: `file://${path}`,
+      name: 'getFileName(path)',
+      type: 'getFileType(path)',
+    };
+
+    const cmd = new PutObjectCommand({
+      Bucket: 'camera-sec',
+      Key: 'uploads/' + file.name,
+      Body: 'file',
+    });
+
+    client.send(cmd);
+
+    console.log(client);
+  }*/
 
   private async processFileUpload(
     mediaFile: MediaFile,

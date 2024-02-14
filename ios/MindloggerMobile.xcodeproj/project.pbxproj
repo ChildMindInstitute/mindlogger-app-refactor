@@ -104,7 +104,7 @@
 		4E9EC54929BA279C002F69A5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
 		4E9EC54A29BA279C002F69A5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
 		4EBCD5B22971514E00D3C04C /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
-		51A6E1C8BEDF3FA779731DCF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		51A6E1C8BEDF3FA779731DCF /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		576A514B56E3A67507F07537 /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 21757FDADD80F784BA19F9CE /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a */; };
 		64E12A71F27F432DC162ADD4 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7DDDCABAD8F56B29309A97 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -311,7 +311,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51A6E1C8BEDF3FA779731DCF /* (null) in Frameworks */,
+				51A6E1C8BEDF3FA779731DCF /* BuildFile in Frameworks */,
 				E4EE5203507F0D384A133C99 /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
