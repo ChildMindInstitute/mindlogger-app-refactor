@@ -1,12 +1,7 @@
 import { useCallback } from 'react';
 
-import { DrawPoint } from '@entities/drawer';
-import { StabilityTrackerAnswerValue } from '@shared/api';
-
-import { FlankerLiveEvent } from './types';
+import { LiveEventDto } from './types';
 import { useTCPSocket } from './useTCPSocket';
-
-type LiveEvent = DrawPoint | StabilityTrackerAnswerValue | FlankerLiveEvent;
 
 export function useSendEvent(streamEnabled: boolean) {
   const { sendMessage, connected } = useTCPSocket({
@@ -14,14 +9,14 @@ export function useSendEvent(streamEnabled: boolean) {
   });
 
   const sendLiveEvent = useCallback(
-    (data: LiveEvent) => {
+    (dataDto: LiveEventDto) => {
       if (!connected || !streamEnabled) {
         return;
       }
 
       const liveEvent = {
         type: 'live_event',
-        data,
+        data: dataDto,
       };
 
       sendMessage(JSON.stringify(liveEvent));
