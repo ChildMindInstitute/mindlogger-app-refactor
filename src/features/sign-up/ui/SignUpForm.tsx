@@ -1,14 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { TouchableWithoutFeedback } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
 
-import { executeIfOnline, useAppForm, useFormChanges } from '@app/shared/lib';
+import { executeIfOnline, useAppForm, colors } from '@app/shared/lib';
 import { Box, BoxProps, YStack, SubmitButton } from '@shared/ui';
 import { InputField, ErrorMessage } from '@shared/ui/form';
+import { EyeIcon, EyeSlashIcon } from '@shared/ui/icons';
 
+import SignUpPasswordRequirements from './SignUpPasswordRequirements';
 import { SignUpModel } from '../';
 import { SignUpFormSchema } from '../validation';
 
@@ -18,11 +21,12 @@ type Props = BoxProps & {
 
 const SignUpForm: FC<Props> = props => {
   const { t } = useTranslation();
+  const [isPasswordHidden, setPasswordHidden] = useState(true);
+  const [isPasswordFocus, setIsPasswordFocus] = useState(false);
 
   const {
     isLoading,
     error,
-    reset,
     mutate: signUp,
   } = SignUpModel.useRegistrationMutation(props.onLoginSuccess);
 
@@ -34,13 +38,11 @@ const SignUpForm: FC<Props> = props => {
     onSubmitSuccess: data => {
       executeIfOnline(() => signUp(data));
     },
+    criteriaMode: 'all',
+    shouldUseNativeValidation: false,
   });
 
-  useFormChanges({
-    form,
-    watchInputs: ['password'],
-    onInputChange: () => reset(),
-  });
+  const ShowPasswordIcon = isPasswordHidden ? EyeSlashIcon : EyeIcon;
 
   return (
     <Box {...props}>
@@ -65,10 +67,20 @@ const SignUpForm: FC<Props> = props => {
           />
 
           <InputField
-            secureTextEntry
             name="password"
             accessibilityLabel="signup-password-input"
             placeholder={t('auth:password')}
+            secureTextEntry={isPasswordHidden}
+            rightIcon={
+              <TouchableWithoutFeedback
+                onPress={() => setPasswordHidden(!isPasswordHidden)}
+              >
+                <ShowPasswordIcon size={24} color={colors.white} />
+              </TouchableWithoutFeedback>
+            }
+            hideError={isPasswordFocus}
+            onFocus={() => setIsPasswordFocus(true)}
+            onBlur={() => setIsPasswordFocus(false)}
           />
 
           {error && (
@@ -79,27 +91,29 @@ const SignUpForm: FC<Props> = props => {
               error={{ message: error?.evaluatedMessage! }}
             />
           )}
-        </YStack>
 
-        <SubmitButton
-          isLoading={isLoading}
-          onPress={submit}
-          accessibilityLabel="sign_up-button"
-          borderRadius={30}
-          width="100%"
-          bg="$lighterGrey4"
-          mt={isTablet() ? 110 : 50}
-          textProps={{
-            fontSize: 14,
-            color: 'black',
-          }}
-          buttonStyle={{
-            alignSelf: 'center',
-            paddingVertical: isTablet() ? 13 : 16,
-          }}
-        >
-          {t('sign_up_form:sign_up')}
-        </SubmitButton>
+          {isPasswordFocus && <SignUpPasswordRequirements />}
+
+          <SubmitButton
+            isLoading={isLoading}
+            onPress={submit}
+            accessibilityLabel="sign_up-button"
+            borderRadius={30}
+            width="100%"
+            bg="$lighterGrey4"
+            mt={isTablet() ? 110 : 50}
+            textProps={{
+              fontSize: 14,
+              color: 'black',
+            }}
+            buttonStyle={{
+              alignSelf: 'center',
+              paddingVertical: isTablet() ? 13 : 16,
+            }}
+          >
+            {t('sign_up_form:sign_up')}
+          </SubmitButton>
+        </YStack>
       </FormProvider>
     </Box>
   );
