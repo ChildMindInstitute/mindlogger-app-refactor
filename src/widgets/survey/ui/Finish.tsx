@@ -18,6 +18,8 @@ import {
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
+  MixProperties,
+  MixEvents,
 } from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
@@ -198,7 +200,9 @@ function FinishItem({
 
     clearActivityStorageRecord();
 
-    AnalyticsService.track('Assessment completed');
+    AnalyticsService.track(MixEvents.AssessmentCompleted, {
+      [MixProperties.AppletId]: appletId,
+    });
 
     const success = await processQueue();
 

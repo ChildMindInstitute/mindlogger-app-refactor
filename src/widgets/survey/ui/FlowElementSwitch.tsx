@@ -7,7 +7,12 @@ import {
   ActivityIdentityContext,
   ActivityStepper,
 } from '@app/features/pass-survey';
-import { colors } from '@app/shared/lib';
+import {
+  AnalyticsService,
+  colors,
+  MixEvents,
+  MixProperties,
+} from '@app/shared/lib';
 import { BackButton, CrossIcon, Box } from '@app/shared/ui';
 
 import Finish from './Finish';
@@ -43,7 +48,12 @@ function FlowElementSwitch({
 
   const navigator = useNavigation();
 
-  const closeAssessment = () => {
+  const closeAssessment = (reason: 'regular' | 'click-on-return') => {
+    if (reason === 'click-on-return') {
+      AnalyticsService.track(MixEvents.ReturnToActivitiesPressed, {
+        [MixProperties.AppletId]: context.appletId,
+      });
+    }
     navigator.goBack();
   };
 

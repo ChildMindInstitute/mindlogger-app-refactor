@@ -26,6 +26,8 @@ import {
   useActivityInfo,
   useAppDispatch,
   useAppSelector,
+  MixProperties,
+  MixEvents,
 } from '@app/shared/lib';
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
@@ -162,7 +164,9 @@ function Intermediate({
 
   const changeActivity = useCallback(() => {
     if (!nextActivity) {
-      AnalyticsService.track('Assessment completed');
+      AnalyticsService.track(MixEvents.AssessmentCompleted, {
+        [MixProperties.AppletId]: appletId,
+      });
       return;
     }
 

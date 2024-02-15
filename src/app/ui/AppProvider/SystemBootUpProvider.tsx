@@ -9,7 +9,7 @@ type Props = PropsWithChildren<{
 const SYSTEM_BOOT_UP_DELAY = 300;
 
 function SystemBootUpProvider({ children, onLoadingFinished }: Props) {
-  const moduleWaitList = useRef(['cache', 'state']);
+  const moduleWaitList = useRef(['cache', 'state', 'analytics']);
 
   const onLoadingFinishedRef = useRef(onLoadingFinished);
 

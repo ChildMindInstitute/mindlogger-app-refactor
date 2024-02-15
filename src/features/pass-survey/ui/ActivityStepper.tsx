@@ -31,7 +31,7 @@ type Props = {
   idleTimer: HourMinute | null;
   entityStartedAt: number;
   timer: HourMinute | null;
-  onClose: () => void;
+  onClose: (reason: 'regular' | 'click-on-return') => void;
   onFinish: (reason: 'regular' | 'idle') => void;
 };
 
@@ -207,6 +207,10 @@ function ActivityStepper({
     restartIdleTimer();
   };
 
+  const onStartReached = () => {
+    onClose('click-on-return');
+  };
+
   const onEndReached = (isForced: boolean) => {
     if (!isForced) {
       trackUserAction(userActionCreator.done());
@@ -233,7 +237,7 @@ function ActivityStepper({
         onBack={onBack}
         onBeforeNext={onBeforeNext}
         onBeforeBack={onBeforeBack}
-        onStartReached={onClose}
+        onStartReached={onStartReached}
         onEndReached={onEndReached}
         onUndo={onUndo}
       >
