@@ -10,4 +10,8 @@ const httpService = axios.create({
 httpService.defaults.headers.common['Content-Type'] = 'application/json';
 httpService.defaults.headers.common['Mindlogger-Content-Source'] = 'mobile';
 
+export const getAxiosInstance = () => {
+  return axios.create();
+};
+
 export default httpService;
