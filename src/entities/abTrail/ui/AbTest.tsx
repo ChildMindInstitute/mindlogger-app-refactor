@@ -3,21 +3,16 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AbTestPayload } from '@app/abstract/lib';
-import { colors, StreamEventLoggable } from '@shared/lib';
+import { AbTestStreamEvent, colors, StreamEventLoggable } from '@shared/lib';
 import { Box, BoxProps, Text, XStack } from '@shared/ui';
 
 import AbCanvas from './AbCanvas';
-import {
-  AbTestResult,
-  MessageType,
-  MessageTypeStrings,
-  StreamEventPoint,
-} from '../lib';
+import { AbTestResult, MessageType, MessageTypeStrings } from '../lib';
 
 type Props = {
   testData: AbTestPayload;
   onResponse?: (response: AbTestResult) => void;
-} & StreamEventLoggable<StreamEventPoint> &
+} & StreamEventLoggable<AbTestStreamEvent> &
   BoxProps;
 
 const ShapesRectPadding = 15;

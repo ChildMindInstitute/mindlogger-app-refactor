@@ -1,6 +1,6 @@
 import React, { useRef, FC, useMemo } from 'react';
 
-import { StreamEventLoggable } from '@shared/lib';
+import { DrawingStreamEvent, StreamEventLoggable } from '@shared/lib';
 import { Box, SketchCanvas, SketchCanvasRef, useOnUndo } from '@shared/ui';
 
 import { DrawLine, ResponseSerializer, DrawResult } from '../lib';
@@ -10,7 +10,7 @@ type Props = {
   value: Array<DrawLine>;
   onResult: (result: DrawResult) => void;
   width: number;
-} & StreamEventLoggable<DrawPoint>;
+} & StreamEventLoggable<DrawingStreamEvent>;
 
 const DrawingBoard: FC<Props> = props => {
   const { value, onResult, width, onLog } = props;
@@ -50,8 +50,9 @@ const DrawingBoard: FC<Props> = props => {
       startTime: Date.now(),
       points: [drawPoint],
     };
+    const logPoint = drawPoint.scale(vector) as DrawPoint;
 
-    onLog(drawPoint.scale(vector));
+    onLog({ ...logPoint, lineNumber: value?.length, type: 'DrawingTest' });
   };
 
   const onTouchProgress = (x: number, y: number, time: number) => {
@@ -59,7 +60,9 @@ const DrawingBoard: FC<Props> = props => {
 
     drawingValueLineRef.current.points.push(drawPoint);
 
-    onLog(drawPoint.scale(vector));
+    const logPoint = drawPoint.scale(vector);
+
+    onLog({ ...logPoint, lineNumber: value?.length, type: 'DrawingTest' });
   };
 
   const onTouchEnd = () => {

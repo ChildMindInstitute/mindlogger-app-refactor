@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Text, TextProps } from '@shared/ui';
 
 type Props = {
-  error?: FieldError | { message: string };
+  error?: Partial<FieldError>;
   mode?: 'dark' | 'light';
 } & TextProps;
 
@@ -16,10 +16,9 @@ const ErrorMessage: FC<PropsWithChildren<Props>> = ({
   ...props
 }) => {
   const { t } = useTranslation();
-
   return (
     <>
-      {error?.message && (
+      {!!error?.message && (
         <Text
           color={mode === 'light' ? '$secondary' : '$tertiary'}
           fontSize={12}

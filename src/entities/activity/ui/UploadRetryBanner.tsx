@@ -4,7 +4,7 @@ import { AccessibilityProps } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Text } from '@app/shared/ui';
-import { AnalyticsService } from '@shared/lib';
+import { AnalyticsService, MixEvents } from '@shared/lib';
 
 import useQueueProcessing from '../lib/hooks/useQueueProcessing';
 
@@ -16,7 +16,7 @@ const UploadRetryBanner: FC<Props> = () => {
   const { t } = useTranslation();
 
   const onRetry = () => {
-    AnalyticsService.track('Retry button pressed');
+    AnalyticsService.track(MixEvents.RetryButtonPressed);
     process();
   };
 

@@ -3,6 +3,7 @@ import { AccessibilityProps } from 'react-native';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Foundation from 'react-native-vector-icons/Foundation';
 
@@ -118,4 +119,20 @@ export const ChevronDownIcon: FC<IconProps> = props => (
 
 export const EditIcon: FC<IconProps> = props => (
   <FontAwesome name="edit" {...props} />
+);
+
+export const EyeIcon: FC<IconProps> = props => (
+  <FontAwesome name="eye" {...props} />
+);
+
+export const EyeSlashIcon: FC<IconProps> = props => (
+  <FontAwesome name="eye-slash" {...props} />
+);
+
+export const FeatherCrossIcon: FC<IconProps> = props => (
+  <Feather name="x" {...props} />
+);
+
+export const FeatherCheckIcon: FC<IconProps> = props => (
+  <Feather name="check" {...props} />
 );

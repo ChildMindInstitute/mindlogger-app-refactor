@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-mobile",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "private": true,
   "scripts": {
     "android": "yarn android:dev",
@@ -110,6 +110,7 @@
     "react-native-webview": "^11.26.1",
     "react-redux": "^8.0.5",
     "redux-persist": "^6.0.0",
+    "sanitize-html": "^2.11.0",
     "use-debounce": "^9.0.4",
     "uuid": "^9.0.0",
     "victory-native": "^36.6.8",
@@ -130,6 +131,7 @@
     "@types/react-native-video": "^5.0.14",
     "@types/react-native-video-player": "^0.10.3",
     "@types/react-test-renderer": "^18.0.0",
+    "@types/sanitize-html": "^2.11.0",
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "@typescript-eslint/parser": "^5.37.0",
