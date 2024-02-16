@@ -29,12 +29,6 @@ export type OnResultLog = {
   currentIndex: number;
 };
 
-export type StreamEventPoint = {
-  x: number;
-  y: number;
-  time: number;
-};
-
 export type AbTestResult = {
   width: number;
   startTime: number;

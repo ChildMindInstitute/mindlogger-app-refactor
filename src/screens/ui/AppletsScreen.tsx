@@ -8,7 +8,14 @@ import { StoreProgress } from '@app/abstract/lib';
 import { UploadRetryBanner } from '@app/entities/activity';
 import { NotificationModel } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
-import { Logger, useAppSelector } from '@app/shared/lib';
+import {
+  AnalyticsService,
+  Logger,
+  MixEvents,
+  MixProperties,
+  useAppSelector,
+  useOnFocus,
+} from '@app/shared/lib';
 import { Applet, AppletList, AppletModel } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
 import { AppletsRefresh, AppletsRefreshModel } from '@features/applets-refresh';
@@ -34,6 +41,10 @@ const AppletsScreen: FC = () => {
     }
   }, [t, userFirstName, setOptions]);
 
+  useOnFocus(() => {
+    AnalyticsService.track(MixEvents.HomeView);
+  });
+
   const queryClient = useQueryClient();
 
   const storeProgress: StoreProgress = useAppSelector(
@@ -43,8 +54,13 @@ const AppletsScreen: FC = () => {
   const completions = useAppSelector(AppletModel.selectors.selectCompletions);
 
   const navigateAppletDetails: (applet: SelectedApplet) => void = useCallback(
-    ({ id, displayName }) =>
-      navigate('AppletDetails', { appletId: id, title: displayName }),
+    ({ id, displayName }) => {
+      navigate('AppletDetails', { appletId: id, title: displayName });
+
+      AnalyticsService.track(MixEvents.AppletSelected, {
+        [MixProperties.AppletId]: id,
+      });
+    },
     [navigate],
   );
 

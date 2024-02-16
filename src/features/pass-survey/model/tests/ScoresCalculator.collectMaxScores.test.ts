@@ -59,6 +59,7 @@ const getEmptyRadioItem = (name: string): RadioPipelineItem => {
       setAlerts: false,
       setPalette: false,
       options: [],
+      autoAdvance: false,
     },
     type: 'Radio',
   };

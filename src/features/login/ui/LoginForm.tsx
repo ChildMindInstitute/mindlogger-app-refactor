@@ -12,6 +12,7 @@ import { SessionModel } from '@entities/session';
 import {
   AnalyticsService,
   executeIfOnline,
+  MixEvents,
   useAppDispatch,
   useAppForm,
   useFormChanges,
@@ -61,7 +62,7 @@ const LoginForm: FC<Props> = props => {
       SessionModel.storeSession(session);
 
       AnalyticsService.login(user.id).then(() => {
-        AnalyticsService.track('Login Successful');
+        AnalyticsService.track(MixEvents.LoginSuccessful);
       });
 
       props.onLoginSuccess();

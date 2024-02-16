@@ -5,6 +5,12 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { UploadRetryBanner } from '@app/entities/activity';
 import { ActivityAnalyticsList } from '@app/entities/applet';
 import { useAppletAnalytics } from '@app/entities/applet/lib/hooks';
+import {
+  AnalyticsService,
+  MixEvents,
+  MixProperties,
+  useOnFocus,
+} from '@app/shared/lib';
 import { ActivityIndicator, Box, HorizontalCalendar } from '@app/shared/ui';
 import { AppletDetailsParamList } from '@screens/config';
 
@@ -16,6 +22,12 @@ const AppletDataScreen: FC<Props> = ({ route }) => {
   } = route;
 
   const { analytics, isLoading } = useAppletAnalytics(appletId);
+
+  useOnFocus(() => {
+    AnalyticsService.track(MixEvents.DataView, {
+      [MixProperties.AppletId]: appletId,
+    });
+  });
 
   if (isLoading) {
     return (

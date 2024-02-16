@@ -7,8 +7,10 @@ class MixpanelAnalytics implements IAnalyticsService {
 
   constructor(projectToken: string) {
     this.mixpanel = new Mixpanel(projectToken, false);
+  }
 
-    this.mixpanel.init();
+  init(): Promise<void> {
+    return this.mixpanel.init();
   }
 
   track(action: string, payload?: Record<string, any> | undefined): void {

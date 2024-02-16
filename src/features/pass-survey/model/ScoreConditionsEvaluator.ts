@@ -4,7 +4,7 @@ export interface IScoreConditionsEvaluator {
   evaluate(settings: ScoreConditionalLogic, score: number): boolean;
 }
 
-class ScoreConditionsEvaluator implements IScoreConditionsEvaluator {
+export class ScoreConditionsEvaluator implements IScoreConditionsEvaluator {
   constructor() {}
 
   private evaluateInternal(
