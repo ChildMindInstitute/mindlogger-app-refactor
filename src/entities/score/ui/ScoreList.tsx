@@ -9,8 +9,14 @@ type Props = {
 
 function ScoreList({ label, scores }: Props) {
   return (
-    <Box btw={1} btc="$lighterGrey0" px={20}>
-      <Text fontWeight="600" fontSize={25} mt={10} mb={15}>
+    <Box btw={1} btc="$lighterGrey0" px={20} accessibilityLabel="scores-group">
+      <Text
+        fontWeight="600"
+        fontSize={25}
+        mt={10}
+        mb={15}
+        accessibilityLabel="scores-group-name"
+      >
         {label}
       </Text>
 
