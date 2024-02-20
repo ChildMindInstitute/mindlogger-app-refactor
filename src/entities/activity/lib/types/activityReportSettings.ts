@@ -1,6 +1,6 @@
 type ReportType = 'score' | 'section';
 
-type CalculationType = 'average' | 'percentage' | 'sum';
+export type CalculationType = 'average' | 'percentage' | 'sum';
 
 type MatchType = 'all' | 'any';
 
