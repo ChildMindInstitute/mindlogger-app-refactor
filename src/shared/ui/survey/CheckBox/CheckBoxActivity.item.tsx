@@ -51,10 +51,10 @@ const CheckBoxActivityItem: FC<Props> = ({
   const addItem = (selectedItem: Item) => {
     let itemList: Item[];
 
-    if (selectedItem.isNoneAbove) {
+    if (selectedItem.isNoneOption) {
       itemList = [];
     } else {
-      itemList = values.filter(val => !val.isNoneAbove);
+      itemList = values.filter(val => !val.isNoneOption);
     }
 
     const value = [...itemList, selectedItem];

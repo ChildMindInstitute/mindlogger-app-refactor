@@ -91,7 +91,7 @@ type CheckboxConfig = {
     alert: {
       message: string;
     } | null;
-    isNoneAbove: boolean;
+    isNoneOption: boolean;
   }>;
 };
 

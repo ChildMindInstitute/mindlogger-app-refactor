@@ -799,7 +799,7 @@ function mapToCheckboxOptions(options: OptionsDto) {
           message: option.alert,
         }
       : null,
-    isNoneAbove: !!option.isNoneAbove,
+    isNoneOption: !!option.isNoneAbove,
   }));
 }
 
