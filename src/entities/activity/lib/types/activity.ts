@@ -91,6 +91,7 @@ type CheckboxConfig = {
     alert: {
       message: string;
     } | null;
+    isNoneOption: boolean;
   }>;
 };
 
