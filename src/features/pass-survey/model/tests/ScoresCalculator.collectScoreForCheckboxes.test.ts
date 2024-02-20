@@ -55,6 +55,7 @@ const fillOptions = (item: CheckboxPipelineItem, from = 1) => {
       tooltip: null,
       score: i * 10,
       value: i,
+      isNoneAbove: false,
     });
   }
 };

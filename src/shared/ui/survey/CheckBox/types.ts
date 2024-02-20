@@ -9,5 +9,5 @@ export type Item = {
   image: ImageUrl | null;
   score: number | null;
   value: number;
-  isNoneAbove: boolean;
+  isNoneAbove?: boolean;
 };
