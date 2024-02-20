@@ -192,6 +192,7 @@ export type OptionsDto = Array<{
   isHidden: boolean;
   value: number;
   alert: string | null;
+  isNoneAbove?: boolean;
 }>;
 
 type SingleSelectionAnswerSettings = {
