@@ -6,6 +6,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Foundation from 'react-native-vector-icons/Foundation';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import Octicons from 'react-native-vector-icons/Octicons';
 
 export { default as AboutIcon } from './About';
 export { default as DataIcon } from './Data';
@@ -15,6 +17,7 @@ export { default as CloudLogo } from './CloudLogo';
 type IconProps = {
   color: string;
   size: number;
+  solid?: boolean;
 };
 
 export const CloseIcon: FC<IconProps> = props => (
@@ -135,4 +138,20 @@ export const FeatherCrossIcon: FC<IconProps> = props => (
 
 export const FeatherCheckIcon: FC<IconProps> = props => (
   <Feather name="check" {...props} />
+);
+
+export const MaterialAlertOctagon: FC<IconProps> = props => (
+  <Material name="alert-octagon" {...props} />
+);
+
+export const MaterialAlertCircle: FC<IconProps> = props => (
+  <Material name="alert-circle" {...props} />
+);
+
+export const MaterialInformation: FC<IconProps> = props => (
+  <Material name="information" {...props} />
+);
+
+export const OcticonsCircleCheckFill: FC<IconProps> = props => (
+  <Octicons name="check-circle-fill" {...props} />
 );

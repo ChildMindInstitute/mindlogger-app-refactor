@@ -167,8 +167,9 @@
     "enter_email_mess": "Veuillez saisir votre adresse e-mail",
     "invalid_email": "Adresse e-mail invalide",
     "email_address": "Adresse e-mail",
-    "email_sent": "L'e-mail de réinitialisation a été envoyé",
-    "email_send_error": "Cette adresse e-mail n'existe pas dans le système.",
+    "email_sent_1": "L'e-mail de réinitialisation a été envoyé à",
+    "email_sent_2": "si le compte existe.",
+    "email_send_error": "Impossible d'envoyer un e-mail de réinitialisation pour le moment.",
     "forgot_password": "Mot de passe oublié?"
   },
   "login": {
