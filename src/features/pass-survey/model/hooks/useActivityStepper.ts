@@ -76,8 +76,8 @@ function useActivityStepper(state: ActivityState | undefined) {
     return isLastStep
       ? 'activity_navigation:done'
       : canSkip
-        ? 'activity_navigation:skip'
-        : 'activity_navigation:next';
+      ? 'activity_navigation:skip'
+      : 'activity_navigation:next';
   }
 
   return {
