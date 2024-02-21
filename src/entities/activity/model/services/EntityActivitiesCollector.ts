@@ -45,12 +45,12 @@ const createEntityActivitiesCollector = (): EntityActivitiesCollector => {
       );
 
       const flowDto = appletDetailsResponse?.result.activityFlows.find(
-        (x) => x.id === entityId,
+        x => x.id === entityId,
       );
 
       const activityIds: string[] = flowDto!.activityIds;
 
-      for (const activityId of activityIds) {
+      for (let activityId of activityIds) {
         addActivity(activityId);
       }
     }

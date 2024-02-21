@@ -19,7 +19,7 @@ export const getScheduledDate = (event: ScheduleEvent) => {
   if (
     event.availability.availabilityType !== AvailabilityType.AlwaysAvailable
   ) {
-    return EventModel.ScheduledDateCalculator.calculate(event)!.valueOf();
+    return EventModel.ScheduledDateCalculator.calculate(event!)!.valueOf();
   }
 };
 
@@ -39,7 +39,7 @@ export const getUserIdentifier = (
   pipeline: PipelineItem[],
   answers: Answers,
 ) => {
-  const itemWithIdentifierStep = pipeline.findIndex((item) => {
+  const itemWithIdentifierStep = pipeline.findIndex(item => {
     return item.type === 'TextInput' && item.payload.shouldIdentifyResponse;
   });
 
@@ -66,11 +66,11 @@ export const fillNullsForHiddenItems = (
   originalItems: InitializeHiddenItem[],
 ): { answers: AnswerDto[]; itemIds: string[] } => {
   const modifiedAnswers: Array<AnswerDto> = [];
-  const filteredOriginalItems = originalItems.filter((originalItem) =>
+  const filteredOriginalItems = originalItems.filter(originalItem =>
     canItemHaveAnswer(originalItem.type),
   );
 
-  filteredOriginalItems.forEach((item) => {
+  filteredOriginalItems.forEach(item => {
     if (item.isHidden) {
       const answer: AnswerDto = null;
 
@@ -83,7 +83,7 @@ export const fillNullsForHiddenItems = (
   });
 
   return {
-    itemIds: filteredOriginalItems.map((c) => c.itemId),
+    itemIds: filteredOriginalItems.map(c => c.itemId),
     answers: modifiedAnswers,
   };
 };
@@ -106,7 +106,7 @@ export const createSvgFiles = async (
     }
   });
 
-  const promises = drawingTestItems.map((drawingTestItem) => {
+  const promises = drawingTestItems.map(drawingTestItem => {
     return SvgFileManager.writeFile(
       drawingTestItem.uri,
       drawingTestItem.svgString,

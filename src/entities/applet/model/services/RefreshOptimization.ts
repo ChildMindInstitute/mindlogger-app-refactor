@@ -15,7 +15,7 @@ class RefreshOptimization {
 
   private getKeptVersion(appletId: string): string | null {
     return (
-      this.keptVersions.find((x) => x.appletId === appletId)?.version ?? null
+      this.keptVersions.find(x => x.appletId === appletId)?.version ?? null
     );
   }
 
@@ -30,7 +30,7 @@ class RefreshOptimization {
       return;
     }
 
-    this.keptVersions = appletsResponse.result.map<AppletWithVersion>((x) => ({
+    this.keptVersions = appletsResponse.result.map<AppletWithVersion>(x => ({
       appletId: x.id,
       version: x.version,
     }));

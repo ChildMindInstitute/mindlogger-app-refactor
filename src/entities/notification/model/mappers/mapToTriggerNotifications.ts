@@ -30,7 +30,7 @@ export async function mapToTriggerNotifications(
     name: 'Default Channel',
   });
 
-  return notifications.map((notification) => ({
+  return notifications.map(notification => ({
     notification: {
       id: notification.notificationId,
       title: notification.notificationHeader,

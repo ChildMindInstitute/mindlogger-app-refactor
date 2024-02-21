@@ -16,7 +16,7 @@ function filterNotificationsByDate(
   notifications: NotificationDescriber[],
   date: number,
 ) {
-  return notifications.filter((notification) => {
+  return notifications.filter(notification => {
     return notification.scheduledAt > date;
   });
 }
@@ -37,7 +37,7 @@ function NotificationManager() {
       notificationsToSchedule,
     );
 
-    for (const notification of triggerNotifications) {
+    for (let notification of triggerNotifications) {
       await NotificationScheduler.scheduleLocalNotification(notification);
     }
 
@@ -99,7 +99,7 @@ function NotificationManager() {
       await NotificationScheduler.getAllScheduledNotifications();
 
     return triggerNotifications.filter(
-      (notification) => notification.notification.data?.eventId === eventId,
+      notification => notification.notification.data?.eventId === eventId,
     );
   }
 
@@ -126,7 +126,7 @@ function NotificationManager() {
       }
     };
 
-    for (const notification of notificationsForEventId) {
+    for (let notification of notificationsForEventId) {
       cancelNotificationForEventEntityInTimeInterval(notification);
     }
   }

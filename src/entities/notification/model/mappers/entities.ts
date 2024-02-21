@@ -6,7 +6,7 @@ import { Activity, ActivityFlow } from '../../lib';
 export const mapActivitiesFromDto = (
   activityDtos: ActivityRecordDto[],
 ): Activity[] => {
-  const activities: Activity[] = activityDtos.map((x) => ({
+  const activities: Activity[] = activityDtos.map(x => ({
     description: x.description,
     id: x.id,
     isVisible: !x.isHidden,
@@ -19,7 +19,7 @@ export const mapActivitiesFromDto = (
 export const mapActivityFlowsFromDto = (
   dtos: ActivityFlowRecordDto[],
 ): ActivityFlow[] => {
-  const activityFlows: ActivityFlow[] = dtos.map((x) => ({
+  const activityFlows: ActivityFlow[] = dtos.map(x => ({
     description: x.description,
     id: x.id,
     isVisible: !x.isHidden,

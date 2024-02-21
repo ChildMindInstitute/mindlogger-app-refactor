@@ -12,7 +12,7 @@ type Props = {
   width: number;
 } & StreamEventLoggable<DrawingStreamEvent>;
 
-const DrawingBoard: FC<Props> = (props) => {
+const DrawingBoard: FC<Props> = props => {
   const { value, onResult, width, onLog } = props;
 
   const vector = width / 100;
@@ -31,8 +31,8 @@ const DrawingBoard: FC<Props> = (props) => {
   };
 
   const initialLines: DrawPoint[][] = useMemo(() => {
-    return value.map((line) => {
-      return line.points.map((point) => {
+    return value.map(line => {
+      return line.points.map(point => {
         return new DrawPoint(point.x, point.y, point.time);
       });
     });
@@ -50,7 +50,7 @@ const DrawingBoard: FC<Props> = (props) => {
       startTime: Date.now(),
       points: [drawPoint],
     };
-    const logPoint = drawPoint.scale(vector);
+    const logPoint = drawPoint.scale(vector) as DrawPoint;
 
     onLog({ ...logPoint, lineNumber: value?.length, type: 'DrawingTest' });
   };

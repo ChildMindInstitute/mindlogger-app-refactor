@@ -31,7 +31,7 @@ type Props = {
   greenRoundOrder?: number | string | null;
 };
 
-const AbShapes: FC<Props> = (props) => {
+const AbShapes: FC<Props> = props => {
   const { nodes, config, deviceType } = props.testData;
   const { paths, lastPath, greenRoundOrder, errorPath } = props;
   const fontBeginEndSize =
@@ -92,7 +92,7 @@ const AbShapes: FC<Props> = (props) => {
 
   const endOffset = getEndOffset();
 
-  const errorMiddlePoint: Point | null = errorPath
+  let errorMiddlePoint: Point | null = errorPath
     ? getEquidistantPoint(errorPath)
     : null;
 

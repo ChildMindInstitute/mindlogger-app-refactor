@@ -31,7 +31,7 @@ export const evaluateFlankerNextStep = (
 
   let totalCount: number = 0;
 
-  for (const logRecord of gameResult.records) {
+  for (let logRecord of gameResult.records) {
     if (logRecord.tag !== 'trial') {
       continue;
     }
@@ -51,7 +51,7 @@ export const evaluateFlankerNextStep = (
 
   if (correctCount * 100 >= totalCount * minimumAccuracy) {
     const lastPracticeIndex = items.findIndex(
-      (x) => !!x.payload && (x.payload as FlankerItemSettings).isLastPractice,
+      x => !!x.payload && (x.payload as FlankerItemSettings).isLastPractice,
     );
     return lastPracticeIndex + 1;
   }

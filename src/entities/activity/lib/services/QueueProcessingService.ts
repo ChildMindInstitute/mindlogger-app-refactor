@@ -70,7 +70,8 @@ class QueueProcessingService {
         );
       } catch (error) {
         this.logger.warn(
-          `[QueueProcessingService:processInternal] Error occurred while executing sendAnswers for ${logEntity}.\nInternal error:\n\n${error}`,
+          `[QueueProcessingService:processInternal] Error occurred while executing sendAnswers for ${logEntity}.\nInternal error:\n\n` +
+            error,
         );
 
         this.queueService.swap();
@@ -114,7 +115,8 @@ class QueueProcessingService {
       return success;
     } catch (error) {
       this.logger.warn(
-        `[QueueProcessingService.process]: Error in processInternal occurred\n\n${error}`,
+        '[QueueProcessingService.process]: Error in processInternal occurred\n\n' +
+          error!.toString(),
       );
       this.uploadStatusObservable.isError = true;
     } finally {

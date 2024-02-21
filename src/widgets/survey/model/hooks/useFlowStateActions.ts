@@ -58,7 +58,7 @@ export function useFlowStateActions({
     const step = getStep(record);
 
     upsertFlowStorageRecord({
-      ...record,
+      ...record!,
       step: step + 1,
     });
   }
@@ -66,7 +66,7 @@ export function useFlowStateActions({
   function saveActivitySummary(activitySummary: ActivitySummaryData) {
     const record: FlowState = getCurrentFlowStorageRecord()!;
 
-    const updatedContext: Record<string, unknown> = {
+    let updatedContext: Record<string, unknown> = {
       ...(record.context ?? {}),
     };
 
@@ -98,7 +98,7 @@ export function useFlowStateActions({
 
     const pipeline = getPipeline(record);
 
-    const hasSummaryStep = pipeline.some((x) => x.type === 'Summary');
+    const hasSummaryStep = pipeline.some(x => x.type === 'Summary');
 
     const step = getStep(record);
 
@@ -139,7 +139,7 @@ export function useFlowStateActions({
 
     upsertFlowStorageRecord({
       ...record,
-      step: pipeline.length - 1,
+      step: pipeline!.length - 1,
       isCompletedDueToTimer: true,
     });
   }

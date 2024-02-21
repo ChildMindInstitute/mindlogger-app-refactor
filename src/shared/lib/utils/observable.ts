@@ -14,10 +14,10 @@ export class CommonObservable<
   }
 
   public removeObserver(observer: TObserver) {
-    this._observers = this._observers.filter((o) => o !== observer);
+    this._observers = this._observers.filter(o => o !== observer);
   }
 
   public notify(...args: any[]) {
-    this._observers.forEach((o) => o(...args));
+    this._observers.forEach(o => o(...args));
   }
 }

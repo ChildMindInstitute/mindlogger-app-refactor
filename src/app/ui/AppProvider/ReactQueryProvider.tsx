@@ -29,8 +29,8 @@ const syncPersist = createSyncStoragePersister({
   throttleTime: 1000,
 });
 
-onlineManager.setEventListener((setOnline) => {
-  return NetInfo.addEventListener((state) => {
+onlineManager.setEventListener(setOnline => {
+  return NetInfo.addEventListener(state => {
     const status =
       state.isConnected != null &&
       state.isConnected &&
@@ -56,7 +56,7 @@ const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
   const { onModuleInitialized } = useSystemBootUp();
 
   const onCacheRestored = () => {
-    isAppOnline().then((isOnline) => {
+    isAppOnline().then(isOnline => {
       if (isOnline) {
         onlineManager.setOnline(true);
         queryClient.resumePausedMutations();

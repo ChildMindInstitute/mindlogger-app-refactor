@@ -34,7 +34,7 @@ function NotificationScheduler() {
     const triggerNotifications = await getAllScheduledNotifications();
 
     const notification = triggerNotifications.find(
-      (triggerNotification) =>
+      triggerNotification =>
         triggerNotification.notification.id === notificationId,
     );
 
@@ -75,14 +75,14 @@ function NotificationScheduler() {
   async function cancelNotDisplayedNotifications() {
     const displayNotificationIds = (
       await notifee.getDisplayedNotifications()
-    ).map((n) => n.notification.id);
+    ).map(n => n.notification.id);
 
     const allNotificationIds = (await getAllScheduledNotifications()).map(
-      (n) => n.notification.id as string,
+      n => n.notification.id as string,
     );
 
     const notificationIds = allNotificationIds.filter(
-      (id) => !displayNotificationIds.includes(id),
+      id => !displayNotificationIds.includes(id),
     );
 
     notifee.cancelTriggerNotifications(notificationIds);

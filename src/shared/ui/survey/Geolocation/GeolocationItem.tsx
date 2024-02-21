@@ -41,7 +41,7 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
 
   const fetchCurrentPosition = () => {
     NativeGeolocation.getCurrentPosition(
-      (successResult) => {
+      successResult => {
         const coordinatesResult = {
           latitude: successResult.coords.latitude,
           longitude: successResult.coords.longitude,

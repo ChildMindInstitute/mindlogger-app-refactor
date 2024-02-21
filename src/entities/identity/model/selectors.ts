@@ -4,14 +4,14 @@ const selectIdentity = (state: RootState) => state.identity;
 
 export const selectUser = createSelector(
   selectIdentity,
-  (identity) => identity.user,
+  identity => identity.user,
 );
 
-export const selectEmail = createSelector(selectUser, (user) => user?.email);
+export const selectEmail = createSelector(selectUser, user => user?.email);
 
 export const selectFirstName = createSelector(
   selectUser,
-  (user) => user?.firstName,
+  user => user?.firstName,
 );
 
-export const selectUserId = createSelector(selectUser, (user) => user?.id);
+export const selectUserId = createSelector(selectUser, user => user?.id);

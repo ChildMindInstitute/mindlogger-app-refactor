@@ -47,12 +47,13 @@ class ProgressSyncService implements IAppletProgressSyncService {
         ...activityFlows.map(mapCompletedEntityFromDto),
       ];
 
-      completedEntities.map((completedEntity) =>
+      completedEntities.map(completedEntity =>
         this.syncAppletEntityWithServer(appletDetails, completedEntity),
       );
     } catch (error) {
       throw new Error(
-        `[ProgressSyncService.syncWithAppletDto]: Error occurred during sync progress entities:\n\n${error}`,
+        '[ProgressSyncService.syncWithAppletDto]: Error occurred during sync progress entities:\n\n' +
+          error,
       );
     }
   }
@@ -69,7 +70,7 @@ class ProgressSyncService implements IAppletProgressSyncService {
 
     const entityEventMissing = !progressEntity;
     const isFlow = appletDetails.activityFlows.find(
-      (flow) => flow.id === completedEntity.entityId,
+      flow => flow.id === completedEntity.entityId,
     );
 
     if (entityEventMissing) {
@@ -117,7 +118,8 @@ class ProgressSyncService implements IAppletProgressSyncService {
       return this.syncWithAppletDto(appletDto, appletCompletions);
     } catch (error) {
       this.logger.warn(
-        `[ProgressSyncService.sync]: Error occurred: \nInternal Error: \n\n${error}`,
+        '[ProgressSyncService.sync]: Error occurred: \nInternal Error: \n\n' +
+          error,
       );
 
       throw error;

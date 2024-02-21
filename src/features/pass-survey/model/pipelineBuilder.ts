@@ -5,7 +5,7 @@ import { PipelineItem } from '../lib';
 
 export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
   const alignMessagesToLeft = activity.items.some(
-    (x) => x.inputType === 'Flanker',
+    x => x.inputType === 'Flanker',
   );
 
   const pipeline: PipelineItem[] = filterHiddenItems(activity.items)
@@ -369,15 +369,15 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
     .reduce<PipelineItem[]>((items, item) => {
       return Array.isArray(item) ? [...items, ...item] : [...items, item];
     }, [])
-    .map((item) => {
+    .map(item => {
       const isAbleToMoveBack =
         activity.responseIsEditable && item.isAbleToMoveBack;
       const isSkippable = activity.isSkippable || item.isSkippable;
 
       return {
         ...item,
-        isAbleToMoveBack,
-        isSkippable,
+        isAbleToMoveBack: isAbleToMoveBack,
+        isSkippable: isSkippable,
       };
     });
 
@@ -385,5 +385,5 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
 }
 
 function filterHiddenItems(items: ActivityItem[]) {
-  return items.filter((item) => !item.isHidden);
+  return items.filter(item => !item.isHidden);
 }

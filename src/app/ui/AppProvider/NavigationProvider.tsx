@@ -19,7 +19,7 @@ const NavigationProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <NavigationContainer
       theme={theme}
-      onStateChange={(state) =>
+      onStateChange={state =>
         ScreensModel.onScreenChanged(
           // @react-navigation's poor type inference
           state as NavigationState<RootStackParamList>,

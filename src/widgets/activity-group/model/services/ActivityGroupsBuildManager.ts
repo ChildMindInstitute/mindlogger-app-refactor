@@ -47,10 +47,10 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
 
   const sort = (eventEntities: EventEntity[]) => {
     let flows = eventEntities.filter(
-      (x) => x.entity.pipelineType === ActivityPipelineType.Flow,
+      x => x.entity.pipelineType === ActivityPipelineType.Flow,
     );
     let activities = eventEntities.filter(
-      (x) => x.entity.pipelineType === ActivityPipelineType.Regular,
+      x => x.entity.pipelineType === ActivityPipelineType.Regular,
     );
 
     flows = flows.sort((a, b) => a.entity.order - b.entity.order);
@@ -108,23 +108,23 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
 
     const builder = createActivityGroupsBuilder({
       allAppletActivities: activities,
-      appletId,
+      appletId: appletId,
       progress: convertProgress(entitiesProgress),
     });
 
     let entityEvents = events
-      .map<EventEntity>((event) => ({
+      .map<EventEntity>(event => ({
         entity: idToEntity[event.entityId],
         event,
       }))
       // @todo - remove after fix on BE
-      .filter((entityEvent) => !!entityEvent.entity);
+      .filter(entityEvent => !!entityEvent.entity);
 
     const calculator = EventModel.ScheduledDateCalculator;
 
     logger.log('[ScheduledDateCalculator.calculate]: Calculating scheduledAt');
 
-    for (const eventActivity of entityEvents) {
+    for (let eventActivity of entityEvents) {
       const date = calculator.calculate(eventActivity.event);
       eventActivity.event.scheduledAt = date;
 
@@ -135,9 +135,9 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
       }
     }
 
-    entityEvents = entityEvents.filter((x) => x.event.scheduledAt);
+    entityEvents = entityEvents.filter(x => x.event.scheduledAt);
 
-    entityEvents = entityEvents.filter((x) => !x.entity.isHidden);
+    entityEvents = entityEvents.filter(x => !x.entity.isHidden);
 
     entityEvents = sort(entityEvents);
 
@@ -147,20 +147,21 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
       logger.log(
         '[ActivityGroupsBuildManager.processInternal]: Building in-progress',
       );
-      result.groups.push(builder.buildInProgress(entityEvents));
+      result.groups.push(builder!.buildInProgress(entityEvents));
 
       logger.log(
         '[ActivityGroupsBuildManager.processInternal]: Building available',
       );
-      result.groups.push(builder.buildAvailable(entityEvents));
+      result.groups.push(builder!.buildAvailable(entityEvents));
 
       logger.log(
         '[ActivityGroupsBuildManager.processInternal]: Building scheduled',
       );
-      result.groups.push(builder.buildScheduled(entityEvents));
+      result.groups.push(builder!.buildScheduled(entityEvents));
     } catch (error) {
       logger.warn(
-        `[ActivityGroupsBuildManager.processInternal]: Build error occurred:\n\n${error}`,
+        '[ActivityGroupsBuildManager.processInternal]: Build error occurred:\n\n' +
+          error!.toString(),
       );
     }
 
@@ -182,7 +183,8 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
       return result;
     } catch (error) {
       logger.warn(
-        `[ActivityGroupsBuildManager.process] Error occurred\nInternal error:\n${error}`,
+        '[ActivityGroupsBuildManager.process] Error occurred\nInternal error:\n' +
+          error!.toString(),
       );
     }
     return { groups: [] };

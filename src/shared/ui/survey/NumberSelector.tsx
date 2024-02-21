@@ -23,12 +23,12 @@ const NumberSelector: FC<Props> = ({ config, value, onChange }) => {
       Array.from(
         { length: config.max - config.min + 1 },
         (_, index) => index + config.min,
-      ).map((item) => ({ label: String(item), value: String(item) })),
+      ).map(item => ({ label: String(item), value: String(item) })),
     [config],
   );
 
   const mappedValue = useMemo(
-    () => (value ? { label: String(value), value } : undefined),
+    () => (value ? { label: String(value), value: value } : undefined),
     [value],
   );
 

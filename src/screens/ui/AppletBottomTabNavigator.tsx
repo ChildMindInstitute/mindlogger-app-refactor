@@ -27,7 +27,7 @@ const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
   const { title, appletId } = route.params;
 
   const { data: applet } = useAppletDetailsQuery(appletId, {
-    select: (o) => AppletModel.mapAppletDetailsFromDto(o.data.result),
+    select: o => AppletModel.mapAppletDetailsFromDto(o.data.result),
   });
 
   const appletTheme = applet?.theme;

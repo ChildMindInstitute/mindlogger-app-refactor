@@ -13,20 +13,20 @@ import {
 export const convertProgress = (storeProgress: StoreProgress): Progress => {
   const result: Progress = {};
 
-  for (const appletId in storeProgress) {
+  for (let appletId in storeProgress) {
     if (!result[appletId]) {
       result[appletId] = {};
     }
     const entitiesProgress: StoreEntitiesProgress = storeProgress[appletId];
 
-    for (const entityId in entitiesProgress) {
+    for (let entityId in entitiesProgress) {
       if (!result[appletId][entityId]) {
         result[appletId][entityId] = {};
       }
 
       const eventsProgress: StoreEventsProgress = entitiesProgress[entityId];
 
-      for (const eventId in eventsProgress) {
+      for (let eventId in eventsProgress) {
         const storePayload: StoreProgressPayload = eventsProgress[eventId];
 
         const payload: ProgressPayload = {

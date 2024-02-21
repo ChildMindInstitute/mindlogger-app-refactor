@@ -7,10 +7,10 @@ import {
 export const filterNotifications = (
   appletNotifications: AppletNotificationDescribers,
 ): Array<NotificationDescriber> => {
-  const result: Array<NotificationDescriber> = [];
+  let result: Array<NotificationDescriber> = [];
 
-  for (const eventNotifications of appletNotifications.events) {
-    for (const notification of eventNotifications.notifications) {
+  for (let eventNotifications of appletNotifications.events) {
+    for (let notification of eventNotifications.notifications) {
       if (notification.isActive) {
         result.push(notification);
       }
@@ -39,14 +39,14 @@ export const filterAppletNotifications = (
     events: [],
   };
 
-  for (const eventNotifications of appletNotifications.events) {
+  for (let eventNotifications of appletNotifications.events) {
     const eventsClone: EventNotificationDescribers = {
       ...eventNotifications,
       notifications: [],
     };
 
     eventsClone.notifications = eventNotifications.notifications.filter(
-      (x) => x.isActive,
+      x => x.isActive,
     );
 
     result.events.push(eventsClone);

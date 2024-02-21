@@ -54,8 +54,12 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
   }
 
   const hasColor = color && setPalette;
-  const invertedColor = hasColor ? invertColor(color) : colors.primary;
-  const invertedTextColor = hasColor ? invertColor(color) : colors.darkerGrey;
+  const invertedColor = hasColor
+    ? invertColor(color as string)
+    : colors.primary;
+  const invertedTextColor = hasColor
+    ? invertColor(color as string)
+    : colors.darkerGrey;
 
   return (
     <XStack
@@ -74,7 +78,7 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
         <RadioTooltipContainer>
           {tooltip && (
             <Tooltip
-              accessibilityLabel={`tooltip_view-${tooltipText}`}
+              accessibilityLabel={'tooltip_view-' + tooltipText}
               markdown={tooltipText}
             >
               <QuestionTooltipIcon

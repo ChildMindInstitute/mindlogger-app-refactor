@@ -108,7 +108,8 @@ class RefreshService implements IRefreshService {
       this.queryClient.setQueryData(getAppletsKey(), appletsResponse);
     } catch (error) {
       this.logger.warn(
-        `[RefreshService.refreshInternal]: Error occurred during refresh flat list of applets:\nInternal error:\n\n${error}`,
+        '[RefreshService.refreshInternal]: Error occurred during refresh flat list of applets:\nInternal error:\n\n' +
+          error,
       );
       return emptyResult;
     }
@@ -120,11 +121,12 @@ class RefreshService implements IRefreshService {
         "[RefreshService.refreshInternal]: Getting all applets' events",
       );
       allAppletEvents = await this.refreshDataCollector.collectAllAppletEvents(
-        appletsResponse.data.result.map((x) => x.id),
+        appletsResponse.data.result.map(x => x.id),
       );
     } catch (error) {
       this.logger.log(
-        `[RefreshService.refreshInternal]: Error occurred during getting all applet events:\nInternal error:\n\n${error}`,
+        '[RefreshService.refreshInternal]: Error occurred during getting all applet events:\nInternal error:\n\n' +
+          error,
       );
       return emptyResult;
     }
@@ -138,7 +140,8 @@ class RefreshService implements IRefreshService {
       appletRemoteCompletions = await this.progressDataCollector.collect();
     } catch (error) {
       this.logger.log(
-        `[RefreshService.refreshInternal]: Error occurred during getting all applets' remote completions:\nInternal error:\n\n${error}`,
+        "[RefreshService.refreshInternal]: Error occurred during getting all applets' remote completions:\nInternal error:\n\n" +
+          error,
       );
       return emptyResult;
     }
@@ -147,7 +150,7 @@ class RefreshService implements IRefreshService {
 
     const unsuccessfulApplets: UnsuccessfulApplet[] = [];
 
-    for (const appletDto of appletDtos) {
+    for (let appletDto of appletDtos) {
       try {
         await this.refreshAppletService.refreshApplet(
           appletDto,
@@ -157,7 +160,8 @@ class RefreshService implements IRefreshService {
         );
       } catch (error) {
         this.logger.warn(
-          `[RefreshService.refreshInternal]: Error occurred during refresh the applet "${appletDto.displayName}|${appletDto.id}".\nInternal error:\n\n${error}`,
+          `[RefreshService.refreshInternal]: Error occurred during refresh the applet "${appletDto.displayName}|${appletDto.id}".\nInternal error:\n\n` +
+            error,
         );
         unsuccessfulApplets.push({
           appletId: appletDto.id,
@@ -211,14 +215,15 @@ class RefreshService implements IRefreshService {
 
       if (!refreshResult.success && refreshResult.unsuccessfulApplets.length) {
         onAppletListRefreshError(
-          refreshResult.unsuccessfulApplets.map((x) => x.appletName),
+          refreshResult.unsuccessfulApplets.map(x => x.appletName),
         );
       }
 
       this.logger.log('[RefreshService.refresh]: Completed');
     } catch (error) {
       this.logger.warn(
-        `[RefreshService.process]: Error occurred:\nInternal error:\n\n${error}`,
+        '[RefreshService.process]: Error occurred:\nInternal error:\n\n' +
+          error!.toString(),
       );
     } finally {
       RefreshService.mutex.release();

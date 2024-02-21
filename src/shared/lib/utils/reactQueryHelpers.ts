@@ -20,7 +20,7 @@ export const hasPendingMutations = (queryClient: QueryClient): boolean => {
   return !!queryClient
     .getMutationCache()
     .getAll()
-    .some((x) => x.state.status === 'loading' || x.state.status === 'idle');
+    .some(x => x.state.status === 'loading' || x.state.status === 'idle');
 };
 
 export const getAppletsKey = () => ['applets'];

@@ -73,7 +73,7 @@ export function ActivityRecordInitializer({
       timers: {},
       actions: [],
       context: {
-        originalItems: activity.items.map<InitializeHiddenItem>((item) => ({
+        originalItems: activity.items.map<InitializeHiddenItem>(item => ({
           itemId: item.id,
           isHidden: item.isHidden,
           type: item.inputType as ActivityItemType,
@@ -100,7 +100,7 @@ export function ActivityRecordInitializer({
   };
 
   const initializeFlow = ({ flowId, eventId }: InitializeFlowArgs) => {
-    const flow = applet.activityFlows.find((o) => o.id === flowId);
+    const flow = applet.activityFlows.find(o => o.id === flowId);
 
     if (!flow) {
       throw Error(

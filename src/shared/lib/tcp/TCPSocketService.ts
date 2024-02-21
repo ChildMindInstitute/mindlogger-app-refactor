@@ -16,7 +16,7 @@ function TCPSocketService() {
       TCPSocketEmitter.emit('tcp-socket-service:connected');
     });
 
-    socket.on('error', (error) => {
+    socket.on('error', error => {
       socket?.removeAllListeners();
       disconnect();
       TCPSocketEmitter.emit('tcp-socket-service:error', error);

@@ -40,15 +40,13 @@ class ScoresExtractor {
     }
 
     const conditionLogicResults: Array<boolean> = scoreSettings.conditionalLogic
-      .filter((x) => x.flagScore)
-      .map((conditions) =>
-        this.conditionsEvaluator.evaluate(conditions, score),
-      );
+      .filter(x => x.flagScore)
+      .map(conditions => this.conditionsEvaluator.evaluate(conditions, score));
 
     return {
       name: scoreSettings.name,
       value: score,
-      flagged: conditionLogicResults.some((x) => x),
+      flagged: conditionLogicResults.some(x => x),
     };
   }
 
@@ -66,7 +64,7 @@ class ScoresExtractor {
       `[ScoresExtractor.extract]: Extracting scores for activity '${logActivityName}'`,
     );
 
-    for (const scoreSettings of settings) {
+    for (let scoreSettings of settings) {
       const logScore = `'${scoreSettings.name}' for settings with index '${settingsIndex}'`;
 
       try {
@@ -85,7 +83,8 @@ class ScoresExtractor {
         }
       } catch (error) {
         this.logger.warn(
-          `[ScoresExtractor.extract]: Error occurred during extracting score ${logScore}\n\nInternal Error:\n\n${error}`,
+          `[ScoresExtractor.extract]: Error occurred during extracting score ${logScore}\n\nInternal Error:\n\n` +
+            error!.toString(),
         );
         result.push({
           name: '[Error occurred]',

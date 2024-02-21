@@ -17,7 +17,7 @@ type Props = {
   onResult: (data: FlankerGameResponse) => void;
 } & StreamEventLoggable<FlankerLiveEvent>;
 
-const NativeIosFlanker: FC<Props> = (props) => {
+const NativeIosFlanker: FC<Props> = props => {
   const configuration = useMemo(() => {
     return ConfigurationBuilder.buildForNativeIOS(props.configuration);
   }, [props.configuration]);
@@ -50,7 +50,7 @@ const NativeIosFlanker: FC<Props> = (props) => {
     <Box flex={1}>
       <SwiftFlankerWrapper
         style={styles.wrapper}
-        onLogResult={(e) => {
+        onLogResult={e => {
           const dataString = e.data;
           const type = e.type;
           const parsed: FlankerNativeIosLogRecord = JSON.parse(dataString);
@@ -80,7 +80,7 @@ const NativeIosFlanker: FC<Props> = (props) => {
             return;
           }
 
-          const result = responses.map((x) =>
+          const result = responses.map(x =>
             parseResponse({
               isWebView: false,
               record: x,

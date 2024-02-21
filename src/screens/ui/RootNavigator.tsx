@@ -85,7 +85,7 @@ export default () => {
   useNotificationPermissions();
   useAlarmPermissions();
   useFirebaseSetup({
-    onFCMTokenCreated: (fcmToken) => {
+    onFCMTokenCreated: fcmToken => {
       SystemRecord.setDeviceId(fcmToken);
     },
   });
@@ -208,7 +208,7 @@ export default () => {
                 backgroundColor: colors.lighterGrey2,
               },
 
-              headerTitle: (props) => (
+              headerTitle: props => (
                 <RNText
                   accessibilityLabel="welcome_name-text"
                   style={appletScreenHeaderStyles.title}

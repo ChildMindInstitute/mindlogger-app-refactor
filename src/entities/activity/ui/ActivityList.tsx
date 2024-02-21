@@ -13,7 +13,7 @@ type Props = {
 const ActivityList: FC<Props> = ({ activities, onCardPress }) => {
   return (
     <YStack accessibilityLabel="activity-list-container" space={10}>
-      {activities.map((x) => (
+      {activities.map(x => (
         <Box key={x.eventId}>
           <ActivityCard
             activity={x}

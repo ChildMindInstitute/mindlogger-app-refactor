@@ -50,7 +50,7 @@ class ProgressDataCollector implements IProgressDataCollector {
 
     const response = await this.collectAllCompletions();
 
-    response?.data?.result?.forEach((completions) => {
+    response?.data?.result?.forEach(completions => {
       result.appletEntities[completions.id] = completions;
     });
 

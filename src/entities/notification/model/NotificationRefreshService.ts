@@ -86,14 +86,14 @@ const createNotificationRefreshService = (
 
     const appletDtos: AppletDto[] = appletsResponse.result;
 
-    const applets = appletDtos.map((x) => ({
+    const applets = appletDtos.map(x => ({
       id: x.id,
       name: x.displayName,
     }));
 
     const allNotificationDescribers: NotificationDescriber[] = [];
 
-    for (const applet of applets) {
+    for (let applet of applets) {
       const detailsResponse = getDataFromQuery<AppletDetailsResponse>(
         getAppletDetailsKey(applet.id),
         queryClient,
@@ -127,21 +127,21 @@ const createNotificationRefreshService = (
 
       const idToEntity = buildIdToEntityMap(entities);
 
-      let entityEvents = events.map<EventEntity>((event) => ({
+      let entityEvents = events.map<EventEntity>(event => ({
         entity: idToEntity[event.entityId],
         event,
       }));
 
-      if (entityEvents.some((x) => x.entity == null)) {
+      if (entityEvents.some(x => x.entity == null)) {
         logger.log(
           `[NotificationRefreshService.refreshInternal] Discovered event(s) for applet "${applet.name}|${applet.id}" that referenced to a missing entity`,
         );
-        entityEvents = entityEvents.filter((x) => x.entity != null);
+        entityEvents = entityEvents.filter(x => x.entity != null);
       }
 
       const calculator = EventModel.ScheduledDateCalculator;
 
-      for (const eventEntity of entityEvents) {
+      for (let eventEntity of entityEvents) {
         const date = calculator.calculate(eventEntity.event);
         eventEntity.event.scheduledAt = date;
       }
@@ -214,7 +214,8 @@ const createNotificationRefreshService = (
       );
     } catch (error) {
       logger.log(
-        `[NotificationRefreshService.refresh]: Notifications rescheduling failed\n\n${error}`,
+        '[NotificationRefreshService.refresh]: Notifications rescheduling failed\n\n' +
+          error!.toString(),
       );
     } finally {
       NotificationManager.mutex.release();

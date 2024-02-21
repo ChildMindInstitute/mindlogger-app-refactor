@@ -17,9 +17,9 @@ const ResponseSerializer = function () {
   const serialize = (logLines: DrawLine[], width: number): string => {
     const ratio = 100 / width;
 
-    const transformedLines = logLines.map<DrawLine>((l) => ({
+    const transformedLines = logLines.map<DrawLine>(l => ({
       startTime: l.startTime,
-      points: l.points.map((p) => ({
+      points: l.points.map(p => ({
         time: p.time,
         x: p.x * ratio,
         y: p.y * ratio,
@@ -28,7 +28,7 @@ const ResponseSerializer = function () {
 
     const chunks: string[] = getChunkedPointsAsStrings(transformedLines);
 
-    const polyLines: string[] = chunks.map((x) => getPolyline(x));
+    const polyLines: string[] = chunks.map(x => getPolyline(x));
 
     const joinedLineNodes = polyLines.join('\n');
 

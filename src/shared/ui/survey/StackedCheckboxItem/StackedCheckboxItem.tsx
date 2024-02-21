@@ -35,7 +35,7 @@ const StackedCheckboxItem: FC<Props> = ({
   const { options, rows } = config;
 
   const memoizedOptions: StackedRowItemValue[] = useMemo(() => {
-    return options.map((option) => {
+    return options.map(option => {
       return {
         ...option,
         tooltip: tooltipsShown ? textReplacer(option.tooltip || '') : '',
@@ -44,7 +44,7 @@ const StackedCheckboxItem: FC<Props> = ({
   }, [tooltipsShown, options, textReplacer]);
 
   const memoizedRows = useMemo(() => {
-    return rows.map((row) => {
+    return rows.map(row => {
       return {
         ...row,
         tooltip: tooltipsShown ? textReplacer(row.tooltip || '') : '',
@@ -57,7 +57,7 @@ const StackedCheckboxItem: FC<Props> = ({
       return false;
     }
 
-    const selectedValue = values[rowIndex].find((item) => item.id === value.id);
+    const selectedValue = values[rowIndex].find(item => item.id === value.id);
 
     return !!selectedValue;
   };
@@ -71,7 +71,7 @@ const StackedCheckboxItem: FC<Props> = ({
       newValues = [...values];
 
       newValues[rowIndex] = isValueSelected(option, rowIndex)
-        ? newValues[rowIndex].filter((value) => value.id !== option.id)
+        ? newValues[rowIndex].filter(value => value.id !== option.id)
         : [...(newValues[rowIndex] ? newValues[rowIndex] : []), option];
     }
 

@@ -63,7 +63,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     includesOption(optionValue: string) {
-      const answer = (currentAnswer?.answer as Maybe<Item[]>)?.map((item) =>
+      const answer = (currentAnswer?.answer as Maybe<Item[]>)?.map(item =>
         item.value.toString(),
       );
 
@@ -71,7 +71,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     },
 
     notIncludesOption(optionValue: string) {
-      const answer = (currentAnswer?.answer as Maybe<Item[]>)?.map((item) =>
+      const answer = (currentAnswer?.answer as Maybe<Item[]>)?.map(item =>
         item.value.toString(),
       );
 

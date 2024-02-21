@@ -177,7 +177,7 @@ function fileService() {
           return response;
         } catch (error) {
           Logger.error(
-            `[fileService.uploadAppletFile]: Error occurred: \n\n${error}`,
+            '[fileService.uploadAppletFile]: Error occurred: \n\n' + error,
           );
           throw error;
         } finally {

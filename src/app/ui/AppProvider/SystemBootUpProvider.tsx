@@ -1,6 +1,6 @@
 import { PropsWithChildren, useMemo, useRef } from 'react';
 
-import { SystemBootUpContext, wait } from '@shared/lib';
+import { SystemBootUpContext as SystemBootUpContext, wait } from '@shared/lib';
 
 type Props = PropsWithChildren<{
   onLoadingFinished: () => void;
@@ -19,7 +19,7 @@ function SystemBootUpProvider({ children, onLoadingFinished }: Props) {
     () => ({
       onModuleInitialized: async (module: string) => {
         moduleWaitList.current = moduleWaitList.current.filter(
-          (item) => item !== module,
+          item => item !== module,
         );
 
         if (moduleWaitList.current.length === 0) {

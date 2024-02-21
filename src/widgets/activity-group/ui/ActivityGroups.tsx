@@ -20,14 +20,14 @@ type Props = {
   appletId: string;
 } & BoxProps;
 
-const ActivityGroups: FC<Props> = (props) => {
+const ActivityGroups: FC<Props> = props => {
   const isLoadingCompletedEntities =
     useIsFetching({
       exact: true,
       queryKey: getAppletCompletedEntitiesKey(props.appletId),
     }) > 0;
 
-  const { groups, isSuccess, error } = useActivityGroups(props.appletId);
+  let { groups, isSuccess, error } = useActivityGroups(props.appletId);
 
   const hasError = !isSuccess;
 

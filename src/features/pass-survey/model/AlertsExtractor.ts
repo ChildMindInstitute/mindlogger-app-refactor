@@ -36,13 +36,13 @@ class AlertsExtractor {
     const radioAnswer = answer.answer as RadioResponse;
 
     const alertOption = radioItem.payload.options.find(
-      (o) => o.alert && o.value === radioAnswer.value,
+      o => o.alert && o.value === radioAnswer.value,
     );
 
     if (alertOption) {
       alerts.push({
         activityItemId: radioItem.id!,
-        message: alertOption.alert!.message,
+        message: alertOption!.alert!.message,
       });
     }
 
@@ -54,8 +54,8 @@ class AlertsExtractor {
     answer: Answer,
   ): AnswerAlerts {
     const checkboxAnswers = answer.answer as CheckboxResponse;
-    const alertOptions = checkboxItem.payload.options.filter((o) => {
-      const checkboxAnswerAlert = checkboxAnswers?.find((checkboxAnswer) => {
+    const alertOptions = checkboxItem.payload.options.filter(o => {
+      const checkboxAnswerAlert = checkboxAnswers?.find(checkboxAnswer => {
         return checkboxAnswer.value === o.value;
       });
 
@@ -63,8 +63,8 @@ class AlertsExtractor {
     });
 
     const alerts = alertOptions
-      .filter((alertOption) => !!alertOption.alert)
-      .map((alertOption) => {
+      .filter(alertOption => !!alertOption.alert)
+      .map(alertOption => {
         return {
           activityItemId: checkboxItem.id!,
           message: alertOption.alert!.message,
@@ -87,7 +87,7 @@ class AlertsExtractor {
 
     const alerts: AnswerAlerts = [];
 
-    sliderItem.payload.alerts.forEach((alert) => {
+    sliderItem.payload.alerts.forEach(alert => {
       const isValueInRange =
         alert.minValue !== null &&
         alert.maxValue !== null &&
@@ -119,17 +119,17 @@ class AlertsExtractor {
 
     const alerts: AnswerAlerts = [];
 
-    stackedRadioItem.payload.dataMatrix.forEach((row) => {
-      row.options.forEach((option) => {
-        stackedRadioAnswer.forEach((itemAnswer) => {
+    stackedRadioItem.payload.dataMatrix.forEach(row => {
+      row.options.forEach(option => {
+        stackedRadioAnswer.forEach(itemAnswer => {
           if (
             itemAnswer?.rowId === row.rowId &&
-            itemAnswer.id === option.optionId
+            itemAnswer.id === option.optionId!
           ) {
             option.alert &&
               alerts.push({
                 activityItemId: stackedRadioItem.id!,
-                message: option.alert.message,
+                message: option.alert!.message,
               });
           }
         });
@@ -153,16 +153,16 @@ class AlertsExtractor {
 
     stackedCheckboxItem.payload.dataMatrix.forEach((row, rowIndex) => {
       if (stackedCheckboxAnswer[rowIndex]?.length) {
-        row.options.forEach((option) => {
-          stackedCheckboxAnswer[rowIndex].forEach((itemAnswer) => {
+        row.options.forEach(option => {
+          stackedCheckboxAnswer[rowIndex].forEach(itemAnswer => {
             if (
               stackedCheckboxAnswer[rowIndex] &&
-              itemAnswer.id === option.optionId
+              itemAnswer.id === option.optionId!
             ) {
               option.alert &&
                 alerts.push({
                   activityItemId: stackedCheckboxItem.id!,
-                  message: option.alert.message,
+                  message: option.alert!.message,
                 });
             }
           });
@@ -187,7 +187,7 @@ class AlertsExtractor {
 
     sliderItem.payload.rows.forEach((row, rowIndex) => {
       if (row.alerts) {
-        row.alerts.forEach((alert) => {
+        row.alerts.forEach(alert => {
           if (alert.value === sliderAnswer[rowIndex]) {
             alerts.push({
               activityItemId: sliderItem.id!,
@@ -243,8 +243,8 @@ class AlertsExtractor {
           return this.extractFromItem(pipelineItem, answer);
         }
       })
-      .filter((x) => x != null)
-      .map((x) => x!);
+      .filter(x => x != null)
+      .map(x => x!);
 
     return alerts;
   }
@@ -262,7 +262,8 @@ class AlertsExtractor {
       return this.extractInternal(pipelineItems, answers);
     } catch (error) {
       this.logger.warn(
-        `[AlertsExtractor.extractForSummary]: Error occurred: \n\n${error}`,
+        '[AlertsExtractor.extractForSummary]: Error occurred: \n\n' +
+          error!.toString(),
       );
       return [
         {

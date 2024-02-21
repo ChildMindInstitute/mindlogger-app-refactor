@@ -52,7 +52,7 @@ class Logger implements ILogger {
   }
 
   private withTime(message: string) {
-    return `${format(new Date(), 'HH:mm:ss')}: ${message}`;
+    return format(new Date(), 'HH:mm:ss') + ': ' + message;
   }
 
   private get isAborted(): boolean {
@@ -68,7 +68,7 @@ class Logger implements ILogger {
 
     const result: Array<NamePathSize> = [];
 
-    for (const path of filePaths) {
+    for (let path of filePaths) {
       const fileInfo = await FileSystem.stat(path);
       result.push({
         fileName: fileInfo.filename,
@@ -80,9 +80,9 @@ class Logger implements ILogger {
     if (IS_IOS) {
       return result;
     } else {
-      const latest = result.find((x) => this.isNamedAsLatest(x.fileName))!;
+      const latest = result.find(x => this.isNamedAsLatest(x.fileName))!;
 
-      const rest = result.filter((x) => x !== latest);
+      const rest = result.filter(x => x !== latest);
 
       const sorted = rest.sort((x, y) => (x.fileName > y.fileName ? -1 : 1));
 
@@ -94,13 +94,13 @@ class Logger implements ILogger {
     files: Array<NamePath>,
   ): Promise<FileExists[]> {
     const checkResult = await FileService.checkIfLogsExist({
-      files: files.map((x) => x.fileName),
+      files: files.map(x => x.fileName),
     });
 
     const result: FileExists[] = [];
 
-    for (const existRecord of checkResult.data.result) {
-      const fileInfo = files.find((x) => x.fileName === existRecord.fileId)!;
+    for (let existRecord of checkResult.data.result) {
+      const fileInfo = files.find(x => x.fileName === existRecord.fileId)!;
 
       result.push({
         ...fileInfo,
@@ -161,7 +161,10 @@ class Logger implements ILogger {
     try {
       logFiles = await this.getLogFiles();
     } catch (error) {
-      console.warn('[Logger.getLogFiles]: Error occurred\n\n', `${error}`);
+      console.warn(
+        '[Logger.getLogFiles]: Error occurred\n\n',
+        error!.toString(),
+      );
       return false;
     }
 
@@ -173,7 +176,7 @@ class Logger implements ILogger {
 
     try {
       checkResult = await this.checkIfFilesExist(
-        logFiles.map<NamePath>((x) => ({
+        logFiles.map<NamePath>(x => ({
           fileName: x.fileName,
           filePath: x.filePath,
         })),
@@ -181,20 +184,20 @@ class Logger implements ILogger {
     } catch (error) {
       console.warn(
         '[Logger.checkIfFilesExist]: Error occurred\n\n',
-        `${error}`,
+        error!.toString(),
       );
       return false;
     }
 
     let success = true;
 
-    for (const checkRecord of checkResult) {
+    for (let checkRecord of checkResult) {
       if (this.isAborted) {
         return false;
       }
 
       const file: NamePathSize = logFiles.find(
-        (x) => x.fileName === checkRecord.fileName,
+        x => x.fileName === checkRecord.fileName,
       )!;
 
       const isExist = checkRecord.exists;
@@ -229,7 +232,7 @@ class Logger implements ILogger {
       } catch (error) {
         console.warn(
           `[Logger.upload]: Error occurred while sending file "${checkRecord.fileName}"\n\n`,
-          `${error}`,
+          error!.toString(),
         );
         success = false;
       }
@@ -251,7 +254,7 @@ class Logger implements ILogger {
       captureConsole: false,
       dailyRolling: true,
       logsDirectory: logsDir,
-      logLevel,
+      logLevel: logLevel,
     });
   }
 
@@ -259,7 +262,10 @@ class Logger implements ILogger {
     try {
       await callWithMutexAsync(this.mutex, FileLogger.deleteLogFiles);
     } catch (error) {
-      console.warn('Logger.clearAllLogFiles]: Error occurred\n\n', `${error}`);
+      console.warn(
+        'Logger.clearAllLogFiles]: Error occurred\n\n',
+        error!.toString(),
+      );
     }
   }
 
@@ -320,7 +326,10 @@ class Logger implements ILogger {
 
       return result;
     } catch (error) {
-      console.warn('[Logger.sendInternal]: Error occurred: \n\n', `${error}`);
+      console.warn(
+        '[Logger.sendInternal]: Error occurred: \n\n',
+        error!.toString(),
+      );
     } finally {
       this.mutex.release();
     }

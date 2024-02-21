@@ -105,13 +105,13 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
     <ScrollViewContext.Provider value={context}>
       <Box
         flex={1}
-        onLayout={(e) => {
+        onLayout={e => {
           setContainerHeight(e.nativeEvent.layout.height);
         }}
       >
         <Box flex={1}>
           <KeyboardAwareScrollView
-            innerRef={(ref) => {
+            innerRef={ref => {
               scrollViewRef.current = ref as unknown as ScrollView;
             }}
             contentContainerStyle={styles.scrollView}

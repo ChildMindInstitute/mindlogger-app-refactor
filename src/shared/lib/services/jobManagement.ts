@@ -15,7 +15,7 @@ export const jobRunner = {
     return Promise.resolve(job.run());
   },
   runAll(jobs: Job[]) {
-    const promises = jobs.map((job) => Promise.resolve(job.run()));
+    const promises = jobs.map(job => Promise.resolve(job.run()));
 
     return Promise.all(promises);
   },

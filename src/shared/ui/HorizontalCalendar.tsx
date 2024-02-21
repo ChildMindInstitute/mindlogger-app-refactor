@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { format, getLast7Dates } from '@shared/lib';
 import { Text, YStack, Box, XStack, BoxProps } from '@shared/ui';
 
-const HorizontalCalendar: FC<BoxProps> = (styledProps) => {
+const HorizontalCalendar: FC<BoxProps> = styledProps => {
   const currentDate = new Date();
   const title = format(currentDate, 'MMMM Y');
   const dates = getLast7Dates();
@@ -20,7 +20,7 @@ const HorizontalCalendar: FC<BoxProps> = (styledProps) => {
         jc="space-around"
         width="100%"
       >
-        {dates.map((date) => {
+        {dates.map(date => {
           const dateOfMonth = date.getDate();
           const weekDayName = format(date, 'EE').toUpperCase();
 

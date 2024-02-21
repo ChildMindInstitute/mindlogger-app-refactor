@@ -39,8 +39,8 @@ export class ReminderCreator {
     const dates: number[] = this.completions[entityId]?.[eventId] ?? [];
 
     return dates
-      .map<Date>((x) => new Date(x))
-      .some((date) => interval.from <= date && date <= interval.to);
+      .map<Date>(x => new Date(x))
+      .some(date => interval.from <= date && date <= interval.to);
   }
 
   private createReminder(
@@ -100,7 +100,7 @@ export class ReminderCreator {
     eventDays: Date[],
     event: ScheduleEvent,
   ): DatesFromTo[] {
-    return eventDays.map((day) =>
+    return eventDays.map(day =>
       this.utility.getAvailabilityInterval(day, event),
     );
   }
@@ -130,7 +130,7 @@ export class ReminderCreator {
     const date = new Date(reminder.scheduledAt);
 
     const fallsOnAvailablePeriod = availabilityIntervals.some(
-      (x) => x.from <= date && date <= x.to,
+      x => x.from <= date && date <= x.to,
     );
 
     if (!fallsOnAvailablePeriod) {
@@ -156,7 +156,7 @@ export class ReminderCreator {
       event,
     );
 
-    for (const day of reminderDays) {
+    for (let day of reminderDays) {
       const reminder: NotificationDescriber = this.createReminder(
         day,
         entity,

@@ -9,7 +9,7 @@ type Props = {
   onLanguageChanged: () => void;
 } & BoxProps;
 
-const ChangeLanguageSelector: FC<Props> = (props) => {
+const ChangeLanguageSelector: FC<Props> = props => {
   const { onLanguageChanged } = props;
   const { t, i18n } = useTranslation();
   const languagesAvailable = Object.keys(
@@ -27,7 +27,7 @@ const ChangeLanguageSelector: FC<Props> = (props) => {
 
   return (
     <YStack accessibilityLabel="change-language-list" {...props}>
-      {languagesAvailable.map((locale) => {
+      {languagesAvailable.map(locale => {
         return (
           <RowButton
             accessibilityLabel={`change-language-button-${locale}`}

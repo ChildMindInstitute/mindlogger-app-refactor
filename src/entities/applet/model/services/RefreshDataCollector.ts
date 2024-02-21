@@ -77,7 +77,7 @@ class RefreshDataCollector implements IRefreshDataCollector {
   }
 
   private collectActivitiesImages(activityDtos: Array<ActivityDto>): string[] {
-    return activityDtos.flatMap((activityDto) => {
+    return activityDtos.flatMap(activityDto => {
       return collectActivityDetailsImageUrls(activityDto);
     });
   }
@@ -93,7 +93,8 @@ class RefreshDataCollector implements IRefreshDataCollector {
       collectDetailsResult = await this.collectAppletDetails(appletDto.id);
     } catch (error) {
       throw new Error(
-        `[RefreshDataCollector.collectAppletInternals]: Error occurred during getting applet's details\n\n${error}`,
+        "[RefreshDataCollector.collectAppletInternals]: Error occurred during getting applet's details\n\n" +
+          error,
       );
     }
 
@@ -122,7 +123,8 @@ class RefreshDataCollector implements IRefreshDataCollector {
       return await EventsService.getAllEvents();
     } catch (error) {
       this.logger.warn(
-        `[RefreshDataCollector.collectEvents]: Error occurred while fetching events":\n\n${error}`,
+        '[RefreshDataCollector.collectEvents]: Error occurred while fetching events":\n\n' +
+          error,
       );
 
       return null;
@@ -139,11 +141,11 @@ class RefreshDataCollector implements IRefreshDataCollector {
     const eventsResponse = await this.collectEvents();
 
     if (eventsResponse) {
-      const appletEvents = currentApplets.map((appletId) => ({
+      const appletEvents = currentApplets.map(appletId => ({
         appletId,
         events:
           eventsResponse.data.result.find(
-            (appletEventsDto) => appletEventsDto.appletId === appletId,
+            appletEventsDto => appletEventsDto.appletId === appletId,
           )?.events ?? [],
       }));
 

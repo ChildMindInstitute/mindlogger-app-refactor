@@ -33,7 +33,7 @@ function Dropdown({ placeholder, value, onValueChange, items }: DropdownProps) {
         defaultValue={value ? value.value : placeholder}
         onSelect={onChange}
         buttonTextAfterSelection={() => (value ? value.value : placeholder)}
-        rowTextForSelection={(item) => item.label}
+        rowTextForSelection={item => item.label}
       />
     </Box>
   );

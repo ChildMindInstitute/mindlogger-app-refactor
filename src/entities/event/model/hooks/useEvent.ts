@@ -26,5 +26,5 @@ export function useScheduledEvent({
     eventsResponse.result.events,
   );
 
-  return events.find((event) => event.id === eventId);
+  return events.find(event => event.id === eventId);
 }

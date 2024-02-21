@@ -42,7 +42,7 @@ const useAudioPlayer = () => {
       setIsLoading(LoadingStates.loaded);
     }
 
-    audioRecorderPlayer.current.addPlayBackListener((data) => {
+    audioRecorderPlayer.current.addPlayBackListener(data => {
       setIsLoading(LoadingStates.loaded);
       if (data.currentPosition >= data.duration - SUBSCRIPTION_DURATION) {
         setIsPlaying(false);

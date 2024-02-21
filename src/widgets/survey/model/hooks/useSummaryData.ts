@@ -103,7 +103,7 @@ export const useSummaryData = ({
     const fullAlertsList: AnswerAlerts = [];
     const fullScoresList: ActivityScores[] = [];
 
-    for (const aid of activityIds) {
+    for (let aid of activityIds) {
       const { alerts, scores } = flowSummaryData[aid];
       fullAlertsList.push(...alerts);
       fullScoresList.push(scores);
@@ -117,12 +117,12 @@ export const useSummaryData = ({
     });
 
     const result: UISummaryData = {
-      alerts: fullAlertsList.map((x) => x.message),
+      alerts: fullAlertsList.map(x => x.message),
       scores: fullScoresList
-        .filter((x) => x.scores.length)
-        .map((x) => ({
+        .filter(x => x.scores.length)
+        .map(x => ({
           activityName: x.activityName,
-          scores: x.scores.map((s) => ({
+          scores: x.scores.map(s => ({
             label: s.name,
             value: s.value,
             highlighted: s.flagged,

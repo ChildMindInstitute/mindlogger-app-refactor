@@ -65,7 +65,7 @@ export function useBackgroundEvents({
         callbackRefs.current.onFGAlreadyExists,
     };
 
-    return notifee.onBackgroundEvent(async (event) => {
+    return notifee.onBackgroundEvent(async event => {
       const type = event.type;
 
       EventCallbacks[type]?.()?.(event.detail as LocalEventDetail);

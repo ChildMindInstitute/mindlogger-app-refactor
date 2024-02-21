@@ -97,7 +97,7 @@ export class NotificationDaysExtractor {
       let day = previousDay;
 
       while (day <= dayTo) {
-        const found = this.utility.weekDays.find((x) => isEqual(x, day));
+        const found = this.utility.weekDays.find(x => isEqual(x, day));
         if (found && day >= this.utility.aWeekAgoDay) {
           eventDays.push(day);
         }
@@ -118,7 +118,7 @@ export class NotificationDaysExtractor {
       }
     }
 
-    eventDays = eventDays.filter((day) => !eventDayFrom || day >= eventDayFrom);
+    eventDays = eventDays.filter(day => !eventDayFrom || day >= eventDayFrom);
 
     return eventDays;
   }
@@ -138,7 +138,8 @@ export class NotificationDaysExtractor {
 
     if (scheduledDay < subMonths(this.utility.currentDay, 2)) {
       this.logger.warn(
-        `[NotificationDaysExtractor.extractForReminders]: scheduledDay is far in the past: ${scheduledDay.toString()}`,
+        '[NotificationDaysExtractor.extractForReminders]: scheduledDay is far in the past: ' +
+          scheduledDay.toString(),
       );
       return eventDays;
     }
@@ -184,7 +185,7 @@ export class NotificationDaysExtractor {
       let day = reminderStartDay;
 
       while (day <= dayTo) {
-        const found = this.utility.weekDays.find((x) => isEqual(x, day));
+        const found = this.utility.weekDays.find(x => isEqual(x, day));
         if (found && day >= this.utility.aWeekAgoDay) {
           eventDays.push(day);
         }
@@ -201,7 +202,7 @@ export class NotificationDaysExtractor {
       }
     }
 
-    eventDays = eventDays.filter((day) => !eventDayFrom || day >= eventDayFrom);
+    eventDays = eventDays.filter(day => !eventDayFrom || day >= eventDayFrom);
 
     return eventDays;
   }

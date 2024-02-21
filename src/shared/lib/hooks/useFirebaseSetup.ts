@@ -26,7 +26,7 @@ async function useFirebaseSetup(callbacks: Callbacks) {
 
     fetchToken();
 
-    return messaging().onTokenRefresh((token) =>
+    return messaging().onTokenRefresh(token =>
       callbacksRef.current.onFCMTokenCreated(token),
     );
   }, []);

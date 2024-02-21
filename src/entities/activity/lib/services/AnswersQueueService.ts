@@ -28,7 +28,7 @@ class AnswersQueueService implements IAnswersQueueService {
   }
 
   private getKeys(): number[] {
-    return storage.getAllKeys().map((x) => Number(x));
+    return storage.getAllKeys().map(x => Number(x));
   }
 
   private getMinimumKeyValue(): number | null {

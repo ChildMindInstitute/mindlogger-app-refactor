@@ -5,7 +5,7 @@ import { getNotificationPermissions } from '../permissions';
 
 const useNotificationPermissions = () => {
   useEffect(() => {
-    getNotificationPermissions().then((permissionStatus) => {
+    getNotificationPermissions().then(permissionStatus => {
       if (permissionStatus !== 'AUTHORIZED') {
         onNotificationPermissionsDisabled();
       }

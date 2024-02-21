@@ -56,7 +56,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     (touchInfo: Point, time: number) => {
       const path = lineSketcher.createLine(touchInfo);
 
-      canvasRef.current?.setPaths((currentPaths) => [...currentPaths, path]);
+      canvasRef.current?.setPaths(currentPaths => [...currentPaths, path]);
       callbacksRef.current.onStrokeStart(touchInfo.x, touchInfo.y, time);
     },
     [callbacksRef, lineSketcher],
@@ -79,7 +79,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
 
       callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y, time);
 
-      canvasRef.current?.setPaths((currentPaths) => {
+      canvasRef.current?.setPaths(currentPaths => {
         const pathsCount = currentPaths.length;
         const lastPath = currentPaths[pathsCount - 1];
 
@@ -102,7 +102,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     (touchInfo: Point, time: number) => {
       callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y, time);
 
-      canvasRef.current?.setPaths((currentPaths) => {
+      canvasRef.current?.setPaths(currentPaths => {
         const pathsCount = currentPaths.length;
         const lastPath = currentPaths[pathsCount - 1];
 
@@ -141,7 +141,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
 
   useEffect(() => {
     canvasRef.current?.setPaths(
-      initialLines.map((points) => LineSketcher.createPathFromPoints(points)),
+      initialLines.map(points => LineSketcher.createPathFromPoints(points)),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

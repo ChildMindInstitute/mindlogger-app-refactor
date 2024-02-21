@@ -23,7 +23,7 @@ export function onBackgroundEvent(callbacks: WatchBackgroundEventArgs) {
     [EventType.FG_ALREADY_EXIST]: callbacks.onFGAlreadyExists,
   };
 
-  notifee.onBackgroundEvent(async (event) => {
+  notifee.onBackgroundEvent(async event => {
     const { detail } = event;
 
     EventCallbacks[event.type]?.(detail as LocalEventDetail);

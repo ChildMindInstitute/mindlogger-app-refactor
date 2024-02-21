@@ -32,12 +32,12 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
   useOnUndo(() => setRadioValueId(null));
 
   const hasImage = useMemo(
-    () => options.some((option) => !!option.image),
+    () => options.some(option => !!option.image),
     [options],
   );
 
   const hasTooltip = useMemo(
-    () => options.some((option) => !!option.tooltip),
+    () => options.some(option => !!option.tooltip),
     [options],
   );
 
@@ -51,7 +51,7 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
   }, [randomizeOptions]);
 
   const onValueChange = (value: string) => {
-    const selectedOption = options.find((option) => option.id === value);
+    const selectedOption = options.find(option => option.id === value);
 
     setRadioValueId(selectedOption?.id ?? null);
 
@@ -66,7 +66,7 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
         name="radio"
         accessibilityLabel={accessibilityLabel}
       >
-        {optionsList.map((option) => (
+        {optionsList.map(option => (
           <Box
             key={option.id}
             bbc={colors.lighterGrey}

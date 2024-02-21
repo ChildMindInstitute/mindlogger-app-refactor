@@ -26,6 +26,7 @@ import {
   GeolocationAnswerDto,
   NumberSelectAnswerDto,
   PhotoAnswerDto,
+  RadioAnswerDto,
   SliderAnswerDto,
   StackedCheckboxAnswerDto,
   StackedRadioAnswerDto,
@@ -68,7 +69,7 @@ export function mapAnswersToDto(
   pipeline: PipelineItem[],
   answers: Answers,
 ): AnswerDto[] {
-  if (pipeline.some((x) => x.type === 'Flanker')) {
+  if (pipeline.some(x => x.type === 'Flanker')) {
     return mapFlankerAnswersToDto(pipeline, answers);
   }
 
@@ -100,8 +101,8 @@ const mapFlankerAnswersToDto = (
     .map((x, index) =>
       x.type === 'Flanker' && x.payload.blockType === 'practice' ? index : null,
     )
-    .filter((x) => x !== null)
-    .map((x) => x!);
+    .filter(x => x !== null)
+    .map(x => x!);
 
   const firstPracticeAnswer = answers[practiceSteps[0]];
 
@@ -111,11 +112,11 @@ const mapFlankerAnswersToDto = (
   );
 
   const restOfAnswerDtos = practiceSteps
-    .filter((x) => x !== practiceSteps[0])
-    .filter((x) => !!answers[x])
-    .map((x) => convertToAnswerDto('Flanker', answers[x]));
+    .filter(x => x !== practiceSteps[0])
+    .filter(x => !!answers[x])
+    .map(x => convertToAnswerDto('Flanker', answers[x]));
 
-  for (const practiceAnswerDto of restOfAnswerDtos) {
+  for (let practiceAnswerDto of restOfAnswerDtos) {
     const records = (practiceAnswerDto as ObjectAnswerDto)
       .value as Array<FlankerAnswerRecordDto>;
 
@@ -148,7 +149,7 @@ function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
 
   return {
     ...(radioValue && {
-      value: radioValue.value,
+      value: radioValue.value as RadioAnswerDto,
     }),
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
@@ -168,7 +169,7 @@ function convertToSliderAnswer(answer: Answer): AnswerDto {
 function convertToCheckboxAnswer(answer: Answer): AnswerDto {
   const checkboxAnswers = answer.answer as Item[];
   const answerDto = checkboxAnswers?.map(
-    (checkboxAnswer) => checkboxAnswer.value,
+    checkboxAnswer => checkboxAnswer.value,
   );
 
   return {
@@ -244,7 +245,7 @@ function convertToGeolocationAnswer(answer: Answer): AnswerDto {
 
 function convertToStackedRadioAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as StackedRadioResponse;
-  const answerDto = answers?.map((answerItem) =>
+  const answerDto = answers?.map(answerItem =>
     answerItem ? answerItem.text : null,
   ) as string[];
 
@@ -261,11 +262,9 @@ function convertToStackedRadioAnswer(answer: Answer): AnswerDto {
 function convertToStackedCheckboxAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as StackedRadioAnswerValue;
 
-  const answersDto = answers?.map((answerRow) => {
+  const answersDto = answers?.map(answerRow => {
     if (answerRow) {
-      return answerRow.map((answerItem) =>
-        answerItem ? answerItem.text : null,
-      );
+      return answerRow.map(answerItem => (answerItem ? answerItem.text : null));
     }
 
     return null;
@@ -284,7 +283,7 @@ function convertToStackedCheckboxAnswer(answer: Answer): AnswerDto {
 function convertToStackedSliderAnswer(answer: Answer): AnswerDto {
   const answers = answer.answer as number[];
   const answerDto = answers?.map(
-    (answerItem) => answerItem || null, // @todo check with BE
+    answerItem => answerItem || null, // @todo check with BE
   ) as number[];
 
   return {
@@ -336,7 +335,7 @@ function convertToAudioPlayerAnswer(answer: Answer): AnswerDto {
 function convertToFlankerAnswer(answer: Answer): AnswerDto {
   const gameResponse = answer.answer as FlankerResponse;
 
-  const recordDtos = gameResponse.records.map<FlankerAnswerRecordDto>((x) => ({
+  const recordDtos = gameResponse.records.map<FlankerAnswerRecordDto>(x => ({
     button_pressed: x.buttonPressed,
     correct: x.correct,
     duration: x.duration,
@@ -363,7 +362,7 @@ function convertToDrawingAnswer(answer: Answer): AnswerDto {
     fileName: drawerResponse.fileName,
     type: drawerResponse.type,
     uri: drawerResponse.uri,
-    lines: drawerResponse.lines.map<DrawerLineDto>((x) => ({
+    lines: drawerResponse.lines.map<DrawerLineDto>(x => ({
       startTime: x.startTime,
       points: x.points,
     })),
@@ -380,7 +379,7 @@ function convertToDrawingAnswer(answer: Answer): AnswerDto {
 function convertToStabilityTrackerAnswer(answer: Answer): AnswerDto {
   const stabilityTrackerResponse = answer.answer as StabilityTrackerResponse;
 
-  const values = stabilityTrackerResponse.value.map((x) => ({
+  const values = stabilityTrackerResponse.value.map(x => ({
     timestamp: x.timestamp,
     stimPos: x.circlePosition,
     targetPos: x.targetPosition,
@@ -410,8 +409,8 @@ function convertToAbTestAnswer(answer: Answer): AnswerDto {
     startTime: abResponse.startTime,
     width: abResponse.width,
     updated: abResponse.updated,
-    lines: abResponse.lines.map<AbLogLineDto>((x) => ({
-      points: x.points.map<AbLogPointDto>((p) => ({
+    lines: abResponse.lines.map<AbLogLineDto>(x => ({
+      points: x.points.map<AbLogPointDto>(p => ({
         ...p,
         actual: p.actual ?? undefined,
       })),
@@ -492,7 +491,7 @@ function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
 }
 
 export function mapUserActionsToDto(actions: UserAction[]): UserActionDto[] {
-  return actions.map((action) => {
+  return actions.map(action => {
     return {
       type: action.type,
       screen: `${action.payload.activityId}/${action.payload.activityItemId}`,
@@ -526,7 +525,9 @@ export function mapAnswersToAlerts(
 
     return alerts as AnswerAlertsDto;
   } catch (error) {
-    Logger.warn(`[mapAnswersToAlerts]: Error occurred: \n\n${error}`);
+    Logger.warn(
+      '[mapAnswersToAlerts]: Error occurred: \n\n' + error!.toString(),
+    );
     throw error;
   }
 }

@@ -12,7 +12,7 @@ abstract class TimerBase {
       return;
     }
 
-    this.listener = AppState.addEventListener('change', (nextAppState) => {
+    this.listener = AppState.addEventListener('change', nextAppState => {
       if (nextAppState === 'active') {
         if (this.onForeground) {
           this.onForeground();

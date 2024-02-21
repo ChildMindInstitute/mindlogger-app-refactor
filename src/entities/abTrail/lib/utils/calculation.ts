@@ -24,7 +24,7 @@ export const transformCoordinates = (
         : null,
       radius: original.config.radius * multiplier,
     },
-    nodes: original.nodes.map((x) => ({
+    nodes: original.nodes.map(x => ({
       cx: x.cx * multiplier,
       cy: x.cy * multiplier,
       label: x.label,

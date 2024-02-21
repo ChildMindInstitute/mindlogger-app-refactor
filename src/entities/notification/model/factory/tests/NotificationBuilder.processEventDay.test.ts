@@ -84,10 +84,10 @@ const getMockNotification = (index = 1) => {
     isActive: true,
     notificationBody: 'mock-notification-body',
     notificationHeader: 'mock-notification-header',
-    notificationId: `mock-notification-id${index}`,
+    notificationId: 'mock-notification-id' + index,
     scheduledAt: undefined,
     scheduledAtString: undefined,
-    shortId: `mock-shortId${index}`,
+    shortId: 'mock-shortId' + index,
     type: NotificationType.Regular,
   } as unknown as NotificationDescriber;
   return result;

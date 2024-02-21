@@ -61,7 +61,7 @@ export class MarkdownVariableReplacer {
 
   private parseBasicSystemVariables = (markdown: string) => {
     return markdown
-      .replaceAll(/\[Now]/gi, `${format(this.now, 'h:mm aa')} today (now)`)
+      .replaceAll(/\[Now]/gi, format(this.now, 'h:mm aa') + ' today (now)')
       .replaceAll(/\[Nickname]/gi, this.nickName)
       .replaceAll(/\[sys.date]/gi, format(this.now, 'MM/dd/y'));
   };
@@ -105,13 +105,13 @@ export class MarkdownVariableReplacer {
       formattedString = `${interval.minutes} minutes`;
     }
     if (interval.hours) {
-      formattedString = `${interval.hours} hours and ${formattedString}`;
+      formattedString = `${interval.hours} hours and ` + formattedString;
     }
     if (interval.days) {
-      formattedString = `${interval.days} days and ${formattedString}`;
+      formattedString = `${interval.days} days and ` + formattedString;
     }
     if (interval.months) {
-      formattedString = `${interval.months} months and ${formattedString}`;
+      formattedString = `${interval.months} months and ` + formattedString;
     }
 
     if (interval.seconds && formattedString === '') {
@@ -134,7 +134,7 @@ export class MarkdownVariableReplacer {
     const variableNames = this.extractVariables(markdown);
 
     try {
-      variableNames.forEach((variableName) => {
+      variableNames.forEach(variableName => {
         const updated = this.getReplaceValue(variableName);
         markdown = this.updateMarkdown(variableName, updated, markdown);
       });
@@ -151,7 +151,7 @@ export class MarkdownVariableReplacer {
 
   private getReplaceValue = (variableName: string): string => {
     const foundIndex = this.activityItems.findIndex(
-      (item) => item.name === variableName,
+      item => item.name === variableName,
     );
     const answerNotFound = foundIndex < 0 || !this.answers[foundIndex];
 

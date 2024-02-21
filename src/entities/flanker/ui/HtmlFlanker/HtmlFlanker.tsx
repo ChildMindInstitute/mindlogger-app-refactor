@@ -21,7 +21,7 @@ type Props = {
   onResult: (data: FlankerGameResponse) => void;
 } & StreamEventLoggable<FlankerLiveEvent>;
 
-const HtmlFlanker: FC<Props> = (props) => {
+const HtmlFlanker: FC<Props> = props => {
   const webView = useRef<any>();
 
   const configuration = useMemo(() => {
@@ -49,7 +49,7 @@ const HtmlFlanker: FC<Props> = (props) => {
   return (
     <Box flex={1}>
       <WebView
-        ref={(ref) => (webView.current = ref)}
+        ref={ref => (webView.current = ref)}
         style={styles.webView}
         source={source}
         originWhitelist={['*']}
@@ -89,8 +89,8 @@ const HtmlFlanker: FC<Props> = (props) => {
           }
 
           const result = (data as FlankerWebViewLogRecord[])
-            .filter((x) => x.tag !== 'result' && x.tag !== 'prepare')
-            .map((x) =>
+            .filter(x => x.tag !== 'result' && x.tag !== 'prepare')
+            .map(x =>
               parseResponse({
                 isWebView: true,
                 numberOfScreensPerTrial: getScreensNumberPerTrial(

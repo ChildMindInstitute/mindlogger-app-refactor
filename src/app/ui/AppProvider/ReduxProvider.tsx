@@ -20,7 +20,7 @@ const storage = createAsyncStorage('redux-storage');
 export const persistConfig = {
   key: 'root',
   throttle: 1000,
-  storage,
+  storage: storage,
 };
 
 const rootReducer = (state: any, action: AnyAction) => {
@@ -44,7 +44,7 @@ const persistedReducer = persistReducer(
 
 export const reduxStore = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) => {
+  middleware: getDefaultMiddleware => {
     const middlewares = getDefaultMiddleware({ serializableCheck: false });
     if (__DEV__) {
       const createDebugger = require('redux-flipper').default;

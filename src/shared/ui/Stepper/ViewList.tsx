@@ -21,7 +21,7 @@ function ViewList({ renderItem }: Props) {
       viewCount={stepsCount}
       step={getCurrentStep()}
       ref={ref}
-      renderView={(item) => renderItem(item)}
+      renderView={item => renderItem(item)}
     />
   );
 }

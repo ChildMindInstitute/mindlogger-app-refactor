@@ -14,7 +14,7 @@ type Props = {
   onMove: (event: GestureResponderEvent) => void;
 };
 
-const ControlBar: FC<Props> = (props) => {
+const ControlBar: FC<Props> = props => {
   const {
     isTestRunning,
     onStartTouch,

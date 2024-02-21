@@ -24,7 +24,7 @@ function useUserActionManager({ activityId, activityState }: Args) {
   };
 
   const updateUserAction = (action: UserAction) => {
-    return activityState!.actions.map((o) => {
+    return activityState!.actions.map(o => {
       return o.payload.activityItemId === action.payload.activityItemId &&
         o.type === action.type
         ? action

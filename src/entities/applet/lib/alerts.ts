@@ -45,12 +45,11 @@ export function onAppletRefreshError() {
 export function onAppletListRefreshError(applets: string[]) {
   Alert.alert(
     i18n.t('applet_list_component:refresh_error_header'),
-    `${i18n.t('applet_list_component:applets_not_refreshed')}\n${applets.reduce(
-      (result, current) => {
-        return (result.length ? `${result}\n` : '') + current;
-      },
-      '',
-    )}`,
+    i18n.t('applet_list_component:applets_not_refreshed') +
+      '\n' +
+      applets.reduce((result, current) => {
+        return (result.length ? result + '\n' : '') + current;
+      }, ''),
   );
 }
 

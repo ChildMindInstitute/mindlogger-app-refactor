@@ -13,7 +13,7 @@ export const handleBlockedPermissions = async (
   title: string,
   subtitle: string,
 ) =>
-  new Promise((resolve) => {
+  new Promise(resolve => {
     const { t } = i18n;
 
     Alert.alert(title, subtitle, [

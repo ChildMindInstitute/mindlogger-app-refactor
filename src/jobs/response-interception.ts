@@ -10,7 +10,7 @@ type RequestConfig = InternalAxiosRequestConfig<any> & {
 
 export default createJob(() => {
   httpService.interceptors.response.use(
-    (response) => response,
+    response => response,
     async (error: AxiosError) => {
       const config = error.config as RequestConfig;
 

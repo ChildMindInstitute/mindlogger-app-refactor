@@ -6,12 +6,12 @@ const selectApplets = (state: RootState) => state.applets;
 
 export const selectInProgressApplets = createSelector(
   selectApplets,
-  (applet) => applet.inProgress,
+  applet => applet.inProgress,
 );
 
 export const selectInProgressEntities = createSelector(
   selectInProgressApplets,
-  (inProgressApplets) => {
+  inProgressApplets => {
     const result: StoreEntitiesProgress = Object.values(
       inProgressApplets,
     ).reduce((progress, entityProgress) => {
@@ -29,10 +29,10 @@ export const selectInProgressEntities = createSelector(
 
 export const selectCompletedEntities = createSelector(
   selectApplets,
-  (applet) => applet.completedEntities,
+  applet => applet.completedEntities,
 );
 
 export const selectCompletions = createSelector(
   selectApplets,
-  (applet) => applet.completions,
+  applet => applet.completions,
 );

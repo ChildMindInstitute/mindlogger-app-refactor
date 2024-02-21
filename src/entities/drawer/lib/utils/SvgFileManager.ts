@@ -47,7 +47,8 @@ class SvgFileManager {
       await FileSystem.writeFile(filePath, svg);
     } catch (error) {
       Logger.warn(
-        `[SvgFileManager.writeFile]: Error occurred while deleting or writing a file\n\n${error}`,
+        '[SvgFileManager.writeFile]: Error occurred while deleting or writing a file\n\n' +
+          error,
       );
     }
   }

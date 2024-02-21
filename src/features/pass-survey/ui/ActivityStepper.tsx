@@ -102,7 +102,7 @@ function ActivityStepper({
   });
 
   const { data: watermark } = useAppletDetailsQuery(appletId, {
-    select: (r) => r.data.result.watermark,
+    select: r => r.data.result.watermark,
   });
 
   const currentStep = activityStorageRecord?.step ?? 0;
@@ -302,10 +302,10 @@ function ActivityStepper({
                       type={pipelineItem.type}
                       value={value}
                       pipelineItem={pipelineItem}
-                      onResponse={(response) => {
+                      onResponse={response => {
                         setAnswer(currentStep, response);
                       }}
-                      onAdditionalResponse={(response) => {
+                      onAdditionalResponse={response => {
                         setAdditionalAnswer(currentStep, response);
                       }}
                       textVariableReplacer={replaceTextVariables}

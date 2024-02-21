@@ -6,7 +6,7 @@ import './jest.components.jsx';
 jest.mock('react-native-file-access', () => {
   return {
     FileSystem: {
-      exists: jest.fn((uri) => uri.endsWith('.jpg')), // Mock exists() to return true for .jpg files
+      exists: jest.fn(uri => uri.endsWith('.jpg')), // Mock exists() to return true for .jpg files
     },
     Dirs: {
       MainBundleDir: () => {},
@@ -86,7 +86,7 @@ jest.mock('@shopify/react-native-skia', () => {
   };
 
   global.SkiaValueApi = {
-    createValue: jest.fn().mockImplementation((v) => v),
+    createValue: jest.fn().mockImplementation(v => v),
     createDerivedValue: jest.fn(),
     createAnimation: jest.fn(),
     createClockValue: jest.fn(),

@@ -10,7 +10,7 @@ export const changeLanguage = (locale: Language) => {
 };
 
 export function wait(milliseconds: number) {
-  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
 export const shuffle = <T>(array: Array<T>) => {
@@ -26,7 +26,7 @@ export const isEmptyObject = (object: any) => {
 };
 
 export function getCurrentWeekDates(): Array<Date> {
-  return Array.from(Array(7).keys()).map((idx) => {
+  return Array.from(Array(7).keys()).map(idx => {
     const date = new Date();
     date.setDate(date.getDate() - date.getDay() + (idx + 1));
 
@@ -65,13 +65,13 @@ export const Mutex = (): IMutex => {
   let busy = false;
 
   return {
-    setBusy() {
+    setBusy: function () {
       busy = true;
     },
-    release() {
+    release: function () {
       busy = false;
     },
-    isBusy() {
+    isBusy: function () {
       return busy;
     },
   };

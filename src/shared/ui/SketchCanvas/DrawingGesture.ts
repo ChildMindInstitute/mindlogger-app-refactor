@@ -71,7 +71,7 @@ function DrawingGesture(
       })
       .onTouchesUp((event, stateManager) => {
         const shouldEndGesture = event.changedTouches.some(
-          (touchData) => touchData.id === currentTouchIdRef.value,
+          touchData => touchData.id === currentTouchIdRef.value,
         );
 
         if (shouldEndGesture) {
@@ -79,7 +79,7 @@ function DrawingGesture(
           currentTouchIdRef.value = null;
         }
       })
-      .onBegin((event) => {
+      .onBegin(event => {
         runOnJS(onTouchStart)(event, Date.now());
       })
       .onTouchesMove((event, manager) => {
@@ -103,7 +103,7 @@ function DrawingGesture(
   const iosGesture = () =>
     Gesture.Pan()
       .maxPointers(1)
-      .onBegin((event) => {
+      .onBegin(event => {
         runOnJS(onTouchStart)(event, Date.now());
       })
       .onTouchesMove((event, manager) => {

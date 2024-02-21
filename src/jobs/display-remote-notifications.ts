@@ -21,9 +21,9 @@ async function onMessageReceived(notification: RemoteNotification) {
       });
     } catch (error) {
       Logger.log(
-        `[onMessageReceived]: Failed to render a notification: ${notification}`,
+        '[onMessageReceived]: Failed to render a notification: ' + notification,
       );
-      Logger.log(`[onMessageReceived]: Error: ${error}`);
+      Logger.log('[onMessageReceived]: Error: ' + error);
     }
   }
 }

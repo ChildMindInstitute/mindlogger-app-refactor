@@ -14,7 +14,7 @@ type Props = {
 const ShapesRectPadding = 15;
 const ContentPadding = 5;
 
-const AbTutorial: FC<Props> = (props) => {
+const AbTutorial: FC<Props> = props => {
   const { tutorialStepIndex, tutorialPayload } = props;
 
   const [width, setWidth] = useState<number | null>(null);
@@ -40,7 +40,7 @@ const AbTutorial: FC<Props> = (props) => {
     }
     return (
       shapesData.nodes.find(
-        (x) => x.label === tutorialRecord.nodeLabel?.toString(),
+        x => x.label === tutorialRecord.nodeLabel?.toString(),
       )?.orderIndex ?? null
     );
   };
@@ -48,7 +48,7 @@ const AbTutorial: FC<Props> = (props) => {
   return (
     <Box
       flex={1}
-      onLayout={(x) =>
+      onLayout={x =>
         setWidth(x.nativeEvent.layout.width - ShapesRectPadding * 2)
       }
     >

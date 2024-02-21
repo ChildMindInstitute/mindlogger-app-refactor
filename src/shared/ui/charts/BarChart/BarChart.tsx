@@ -31,16 +31,16 @@ type Props = {
 const BarChart: FC<Props> = ({ data }) => {
   const dateFormat = 'yyyy dd MM';
   const getXAxisDots = (): Array<ChartAxisDot> =>
-    range(8).map((item) => ({ dot: item + 1, value: 0 }));
+    range(8).map(item => ({ dot: item + 1, value: 0 }));
 
   const barChartData: Array<BarChartDataItem> = useMemo(() => {
     const currentWeekDates = getCurrentWeekDates();
 
-    return currentWeekDates.map((currentWeekDate) => {
+    return currentWeekDates.map(currentWeekDate => {
       return {
         date: format(currentWeekDate, dateFormat),
         value:
-          data.find((dataItem) => areDatesEqual(dataItem.date, currentWeekDate))
+          data.find(dataItem => areDatesEqual(dataItem.date, currentWeekDate))
             ?.value || null,
       };
     });

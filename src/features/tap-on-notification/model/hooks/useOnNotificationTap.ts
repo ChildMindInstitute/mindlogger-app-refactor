@@ -80,7 +80,7 @@ export function useOnNotificationTap({
         LogTrigger.LimitReachedNotification,
       );
     },
-    'schedule-event-alert': (eventDetail) => {
+    'schedule-event-alert': eventDetail => {
       const { appletId, activityId, activityFlowId, eventId, entityName } =
         eventDetail.notification.data;
 

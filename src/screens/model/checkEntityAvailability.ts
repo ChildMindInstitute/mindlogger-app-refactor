@@ -41,20 +41,20 @@ export const checkEntityAvailability = ({
   );
 
   const groupInProgress: ActivityListGroup = groupsResult.groups.find(
-    (x) => x.type === ActivityGroupType.InProgress,
+    x => x.type === ActivityGroupType.InProgress,
   )!;
 
   const groupAvailable: ActivityListGroup = groupsResult.groups.find(
-    (x) => x.type === ActivityGroupType.Available,
+    x => x.type === ActivityGroupType.Available,
   )!;
 
   const groupScheduled: ActivityListGroup = groupsResult.groups.find(
-    (x) => x.type === ActivityGroupType.Scheduled,
+    x => x.type === ActivityGroupType.Scheduled,
   )!;
 
   if (
     [...groupAvailable.activities, ...groupInProgress.activities].some(
-      (x) =>
+      x =>
         x.eventId === eventId &&
         ((entityType === 'flow' && entityId === x.flowId) ||
           (entityType === 'regular' && entityId === x.activityId)),
@@ -67,7 +67,7 @@ export const checkEntityAvailability = ({
 
   const scheduled: ActivityListItem | undefined =
     groupScheduled.activities.find(
-      (x) =>
+      x =>
         x.eventId === eventId &&
         ((entityType === 'flow' && entityId === x.flowId) ||
           (entityType === 'regular' && entityId === x.activityId)),

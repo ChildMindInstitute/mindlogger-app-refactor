@@ -17,7 +17,7 @@ describe('NotificationUtility: weekdays property tests.', () => {
 
     mockUtilityProps(utility, now);
 
-    const weekDaysIndexes = utility.weekDays.map((x) => x.getDay());
+    const weekDaysIndexes = utility.weekDays.map(x => x.getDay());
 
     expect(utility.weekDays.length).toEqual(15);
 
@@ -51,7 +51,7 @@ describe('NotificationUtility: weekdays property tests.', () => {
 
     mockUtilityProps(utility, now);
 
-    const weekDaysIndexes = utility.weekDays.map((x) => x.getDay());
+    const weekDaysIndexes = utility.weekDays.map(x => x.getDay());
 
     expect(utility.weekDays.length).toEqual(15);
 

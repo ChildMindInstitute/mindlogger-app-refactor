@@ -19,7 +19,7 @@ export const isAppOnline = async (): Promise<boolean> => {
 };
 
 export const executeIfOnline = (callback: (...args: any[]) => unknown) => {
-  isAppOnline().then((isOnline) => {
+  isAppOnline().then(isOnline => {
     if (isOnline) {
       callback();
     } else {
@@ -68,9 +68,9 @@ export const watchForConnectionLoss = (
     };
 
     if (mode === 'checkNetworkStatus') {
-      isAppOnline().then((result) => checkAction(result));
+      isAppOnline().then(result => checkAction(result));
     } else {
-      ping().then((result) => checkAction(result));
+      ping().then(result => checkAction(result));
     }
   };
 
@@ -133,7 +133,7 @@ export const callApiWithRetry = async <TResponse>(
       return result;
     } catch (error) {
       Logger.warn(
-        `[callApiWithRetry]: Error occurred:\nInternal error:\n\n${error}`,
+        '[callApiWithRetry]: Error occurred:\nInternal error:\n\n' + error,
       );
       if (!isRetryErrorCode(error) || isLast) {
         throw error;
@@ -151,7 +151,7 @@ export const withDataExtraction = <TResponse>(
   apiFunction: () => Promise<AxiosResponse<TResponse>>,
 ) => {
   return () => {
-    return apiFunction().then((response) => {
+    return apiFunction().then(response => {
       return {
         data: response.data,
       } as AxiosResponse<TResponse>;

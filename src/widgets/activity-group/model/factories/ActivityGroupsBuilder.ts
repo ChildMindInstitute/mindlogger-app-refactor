@@ -36,13 +36,11 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   public buildInProgress(
     eventsActivities: Array<EventEntity>,
   ): ActivityListGroup {
-    const filtered = eventsActivities.filter((x) =>
-      this.utility.isInProgress(x),
-    );
+    const filtered = eventsActivities.filter(x => this.utility.isInProgress(x));
 
     const activityItems: Array<ActivityListItem> = [];
 
-    for (const eventActivity of filtered) {
+    for (let eventActivity of filtered) {
       const item = this.itemsFactory.createProgressItem(eventActivity);
 
       activityItems.push(item);
@@ -62,7 +60,7 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
     const activityItems: Array<ActivityListItem> = [];
 
-    for (const eventActivity of filtered) {
+    for (let eventActivity of filtered) {
       const item = this.itemsFactory.createAvailableItem(eventActivity);
 
       activityItems.push(item);
@@ -82,7 +80,7 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
     const activityItems: Array<ActivityListItem> = [];
 
-    for (const eventActivity of filtered) {
+    for (let eventActivity of filtered) {
       const item = this.itemsFactory.createScheduledItem(eventActivity);
 
       activityItems.push(item);

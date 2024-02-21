@@ -8,8 +8,8 @@ class TouchInfoMatrix {
   }
 
   public filterByTouchId(touchId: number): TouchInfoMatrix {
-    const rawMatrix = this.rawMatrix.map((touchInfoList) => {
-      return touchInfoList.filter((touchInfo) => touchInfo.id === touchId);
+    const rawMatrix = this.rawMatrix.map(touchInfoList => {
+      return touchInfoList.filter(touchInfo => touchInfo.id === touchId);
     });
 
     return new TouchInfoMatrix(rawMatrix);

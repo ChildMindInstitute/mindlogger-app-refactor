@@ -45,7 +45,7 @@ const AxisListItem: FC<{
         <Center>
           {tooltip ? (
             <Tooltip
-              accessibilityLabel={`tooltip_view-${tooltip}`}
+              accessibilityLabel={'tooltip_view-' + tooltip}
               triggerAccessibilityLabel={`tooltip_trigger_${axisHeaderFor}-${title}`}
               markdown={tooltip}
             >
@@ -133,7 +133,7 @@ const RowListItem: FC<RowListItemProps & AccessibilityProps> = ({
           }}
         />
 
-        {options.map((option) => (
+        {options.map(option => (
           <AxisListItemContainer key={option.id}>
             {renderCell(option)}
           </AxisListItemContainer>
@@ -167,7 +167,7 @@ const StackedItemsGrid: FC<StackedItemsGridProps> = ({
       return '';
     }
 
-    const rowSelection = values?.find((v) => v.rowId === stackedItem.id);
+    const rowSelection = values?.find(v => v.rowId === stackedItem.id);
 
     return rowSelection?.optionId || '';
   };

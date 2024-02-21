@@ -79,10 +79,10 @@ const getMockNotification = (index = 1) => {
     isActive: true,
     notificationBody: 'mock-notification-body',
     notificationHeader: 'mock-notification-header',
-    notificationId: `ock-notification-id${index}`,
+    notificationId: 'ock-notification-id' + index,
     scheduledAt: new Date(2024, 0, 1).getTime(),
     scheduledAtString: new Date(2024, 0, 1).toString(),
-    shortId: `mock-shortId${index}`,
+    shortId: 'mock-shortId' + index,
     type: NotificationType.Regular,
   };
   return result;
@@ -107,7 +107,7 @@ const anyPeriodicity = [
 
 describe('NotificationBuilder: processEvent tests', () => {
   describe('Test breaking of algorithm', () => {
-    anyPeriodicity.forEach((periodicity) => {
+    anyPeriodicity.forEach(periodicity => {
       it(`Should break with the reason ScheduledAtIsEmpty when scheduledAt is not set and periodicity=${periodicity}`, () => {
         const today = new Date(2024, 0, 3);
         const now = addTime({ hours: 15, minutes: 30 }, today);
@@ -164,7 +164,7 @@ describe('NotificationBuilder: processEvent tests', () => {
       expect(result.events).toEqual([expected]);
     });
 
-    repeatablePeriodicity.forEach((periodicity) => {
+    repeatablePeriodicity.forEach(periodicity => {
       it(`Should break with the reason EventDayToIsLessThanCurrentDay when event-endDate is less than today and periodicity is ${periodicity}`, () => {
         const today = new Date(2024, 0, 3);
         const now = addTime({ hours: 15, minutes: 30 }, today);
@@ -194,7 +194,7 @@ describe('NotificationBuilder: processEvent tests', () => {
       });
     });
 
-    repeatablePeriodicity.forEach((periodicity) => {
+    repeatablePeriodicity.forEach(periodicity => {
       it(`Should break with the reason EventDayFromIsMoreThanLastScheduleDay when event-startDate is more than lastScheduleDay and periodicity is ${periodicity}`, () => {
         const today = new Date(2024, 0, 3);
         const now = addTime({ hours: 15, minutes: 30 }, today);
@@ -229,7 +229,7 @@ describe('NotificationBuilder: processEvent tests', () => {
       });
     });
 
-    anyPeriodicity.forEach((periodicity) => {
+    anyPeriodicity.forEach(periodicity => {
       it(`Should break with the reason EntityHidden when entity-isVisible flag is false and periodicity is ${periodicity}`, () => {
         const today = new Date(2024, 0, 3);
         const now = addTime({ hours: 15, minutes: 30 }, today);
@@ -336,7 +336,7 @@ describe('NotificationBuilder: processEvent tests', () => {
       expect(mockCreateReminder).toHaveBeenCalledTimes(1);
     });
 
-    repeatablePeriodicity.forEach((periodicity) => {
+    repeatablePeriodicity.forEach(periodicity => {
       it(`Should fulfill array with reminders and notifications in correct order way when periodicity is ${periodicity} and 1 reminder is not associated with an event day`, () => {
         const today = new Date(2024, 0, 3);
         const now = addTime({ hours: 15, minutes: 30 }, today);

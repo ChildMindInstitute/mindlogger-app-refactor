@@ -13,11 +13,11 @@ type Props = SliderProps & { size: number; initialValue: number | null };
 
 const CHANGE_VALUE_DELAY = 100;
 
-const Slider: FC<Props & AccessibilityProps> = (props) => {
+const Slider: FC<Props & AccessibilityProps> = props => {
   const { size, initialValue = null } = props;
   const opacity = initialValue !== null ? 1 : 0;
 
-  const debouncedOnValueChange = useDebouncedCallback((value) => {
+  const debouncedOnValueChange = useDebouncedCallback(value => {
     props.onValueChange?.(value);
   }, CHANGE_VALUE_DELAY);
 
@@ -28,7 +28,7 @@ const Slider: FC<Props & AccessibilityProps> = (props) => {
         height: size,
         width: size,
         borderRadius: size,
-        opacity,
+        opacity: opacity,
       }}
       minimumTrackStyle={styles.minimumTrackStyle}
       maximumTrackTintColor={colors.lightGrey}

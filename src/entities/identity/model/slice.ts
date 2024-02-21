@@ -22,7 +22,7 @@ const identitySlice = createSlice({
     onAuthSuccess: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
     },
-    onLogout: (state) => {
+    onLogout: state => {
       state.user = null;
     },
   },

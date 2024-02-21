@@ -27,8 +27,8 @@ function ActivitySectionList({ appletId, groups }: Props) {
 
   const sections = useMemo(() => {
     return groups
-      .filter((g) => g.activities.length)
-      .map((group) => {
+      .filter(g => g.activities.length)
+      .map(group => {
         return {
           data: group.activities,
           key: t(group.name),
@@ -65,7 +65,7 @@ function ActivitySectionList({ appletId, groups }: Props) {
   }: ActivityListItem) => {
     if (flowId) {
       startFlow(appletId, flowId, eventId, name, isTimerElapsed).then(
-        (result) => {
+        result => {
           if (
             result.cannotBeStartedDueToMediaFound ||
             result.cannotBeStartedDueToAllItemsHidden
@@ -82,7 +82,7 @@ function ActivitySectionList({ appletId, groups }: Props) {
       );
     } else {
       startActivity(appletId, activityId, eventId, name, isTimerElapsed).then(
-        (result) => {
+        result => {
           if (
             result.cannotBeStartedDueToMediaFound ||
             result.cannotBeStartedDueToAllItemsHidden

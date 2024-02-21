@@ -56,7 +56,7 @@ export function mapActivityFlowFromDto(
 export function mapActivityFlowsFromDto(
   dtos: ActivityFlowRecordDto[],
 ): ActivityFlow[] {
-  return dtos.map((x) => mapActivityFlowFromDto(x));
+  return dtos.map(x => mapActivityFlowFromDto(x));
 }
 
 export function mapActivityFromDto(dto: ActivityRecordDto): Activity {
@@ -69,7 +69,7 @@ export function mapActivityFromDto(dto: ActivityRecordDto): Activity {
 }
 
 export function mapActivitiesFromDto(dtos: ActivityRecordDto[]): Activity[] {
-  return dtos.map((x) => mapActivityFromDto(x));
+  return dtos.map(x => mapActivityFromDto(x));
 }
 
 export function mapAppletDetailsFromDto(
@@ -92,7 +92,7 @@ export function mapAppletDetailsFromDto(
 }
 
 export function mapApplets(dto: AppletDto[]): Applet[] {
-  return dto.map((x) => ({
+  return dto.map(x => ({
     description: x.description,
     displayName: x.displayName,
     id: x.id,
@@ -118,7 +118,7 @@ export function mapAppletAnalytics({
   encryptionService,
 }: Config) {
   const activitiesResponses: ActivityResponses[] =
-    activitiesDto?.map((activityDto) => {
+    activitiesDto?.map(activityDto => {
       const activityAnswers = getAnswersByActivityId(
         activityDto.id,
         answersDto,
@@ -171,8 +171,8 @@ function getAnswersByActivityId(
   },
 ): AnalyticsAnswerDto[] {
   return answersDto
-    .filter((answerDto) => answerDto.activityId === activityId)
-    .map((x) => ({
+    .filter(answerDto => answerDto.activityId === activityId)
+    .map(x => ({
       answer: JSON.parse(encryptionService.decrypt(x.answer)),
       itemIds: x.itemIds,
       activityId: x.activityId,
@@ -181,10 +181,10 @@ function getAnswersByActivityId(
 }
 
 function getAnalyticItems(activityDto: ActivityDto) {
-  const activityItemsIds = activityDto.items.map((item) => item.id);
+  const activityItemsIds = activityDto.items.map(item => item.id);
 
   return activityDto.items.filter(
-    (filterItem) =>
+    filterItem =>
       ['multiSelect', 'singleSelect', 'slider'].includes(
         filterItem.responseType,
       ) && activityItemsIds.includes(filterItem.id),
@@ -195,7 +195,7 @@ function mapAnswersWithAnalyticsItems(
   analyticsAnswers: AnalyticsAnswerDto[],
   analyticsItemIds: ActivityItemDto[],
 ) {
-  return analyticsAnswers.flatMap((analyticsAnswer) =>
+  return analyticsAnswers.flatMap(analyticsAnswer =>
     getAnalyticsItemAnswers(analyticsAnswer, analyticsItemIds),
   );
 }
@@ -208,7 +208,7 @@ function getAnalyticsItemAnswers(
 
   const analyticsItemAnswers = itemIds
     .map((itemId, index) => {
-      const analyticsItem = analyticsItems.find((item) => itemId === item.id);
+      const analyticsItem = analyticsItems.find(item => itemId === item.id);
 
       if (analyticsItem) {
         return {
@@ -229,7 +229,7 @@ function mapActivityResponses(
   items: ActivityItemDto[],
   analyticsAnswers: AnalyticsAnswer[],
 ) {
-  const allItemsResponses = items.map((item) =>
+  const allItemsResponses = items.map(item =>
     mapActivityResponsesByItem(analyticsAnswers, item),
   );
 
@@ -243,14 +243,14 @@ function mapActivityResponsesByItem(
   const type = item.responseType as AnalyticsResponseType;
 
   const responses = analyticsAnswers
-    .filter((answer) => answer.itemId === item.id)
-    .flatMap((answer) => {
+    .filter(answer => answer.itemId === item.id)
+    .flatMap(answer => {
       return getItemResponses(answer.answer, answer.createdAt, answer.type);
     });
 
   const itemResponses = {
     name: item.name,
-    type,
+    type: type,
     responseConfig: mapResponseConfig(item, type),
     data: responses,
   };
@@ -270,7 +270,7 @@ function mapResponseConfig(
       };
 
       return {
-        options: selectConfig.options.map((option) => ({
+        options: selectConfig.options.map(option => ({
           name: option.text,
           value: option.value,
         })),
@@ -293,7 +293,7 @@ function getItemResponses(
     case 'multiSelect':
       const multiSelectValue: number[] = answer?.value ?? [];
 
-      return multiSelectValue?.map((value) => ({
+      return multiSelectValue?.map(value => ({
         value,
         date: new Date(createdAt),
       }));

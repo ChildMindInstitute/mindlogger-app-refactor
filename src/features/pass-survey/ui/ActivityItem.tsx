@@ -98,7 +98,9 @@ function ActivityItem({
     const shouldAutoSubmit = !isRadioItem;
 
     if (!pipelineItem.additionalText?.required && !autoAdvanceDisabled) {
-      setImmediate(() => next({ isForced: true, shouldAutoSubmit }));
+      setImmediate(() =>
+        next({ isForced: true, shouldAutoSubmit: shouldAutoSubmit }),
+      );
     }
   }
 
@@ -128,7 +130,7 @@ function ActivityItem({
         <Box flex={1}>
           <StabilityTracker
             config={pipelineItem.payload}
-            onComplete={(response) => {
+            onComplete={response => {
               onResponse(response);
               moveToNextItem();
             }}
@@ -162,7 +164,7 @@ function ActivityItem({
       item = IS_ANDROID ? (
         <HtmlFlanker
           configuration={pipelineItem.payload}
-          onResult={(data) => {
+          onResult={data => {
             onResponse(data);
             moveToNextItem();
           }}
@@ -171,7 +173,7 @@ function ActivityItem({
       ) : (
         <NativeIosFlanker
           configuration={pipelineItem.payload}
-          onResult={(data) => {
+          onResult={data => {
             onResponse(data);
             moveToNextItem();
           }}
@@ -321,7 +323,7 @@ function ActivityItem({
         <Box mx={16}>
           <RadioActivityItem
             config={pipelineItem.payload}
-            onChange={async (radioValue) => {
+            onChange={async radioValue => {
               await wait(100);
               onResponse(radioValue);
               moveToNextItem();

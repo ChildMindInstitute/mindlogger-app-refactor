@@ -1,20 +1,19 @@
+import { AnswerService } from '@shared/api';
 import { FileSystem } from 'react-native-file-access';
 
-import { AnswerService } from '@shared/api';
-
 import AnswersUploadService from './AnswersUploadService';
-import MediaFilesCleaner from './MediaFilesCleaner';
 import { UserPrivateKeyRecord } from '../../../identity';
+import MediaFilesCleaner from './MediaFilesCleaner';
 
 const MOCK_CREATED_AT = +new Date();
 
 jest.mock('@app/shared/lib', () => ({
   createSecureStorage: jest.fn(() => ({
-    getString: jest.fn((data) => '{}'),
+    getString: jest.fn(data => '{}'),
   })),
   encryption: {
     createEncryptionService: jest.fn(() => ({
-      encrypt: jest.fn((data) => `encrypted_${data}`),
+      encrypt: jest.fn(data => `encrypted_${data}`),
     })),
     getPublicKey: jest.fn(() => 'mocked_public_key'),
   },
@@ -110,7 +109,7 @@ describe('AnswersUploadService', () => {
         },
       ];
 
-      const mockIsFileUrl = jest.fn((url) => {
+      const mockIsFileUrl = jest.fn(url => {
         if (
           url === 'file:///path/to/image.jpg' ||
           url === '/absolute/path/to/video.mp4' ||
@@ -221,7 +220,7 @@ describe('AnswersUploadService', () => {
       .mockResolvedValue('https://example.com/modified-answer.jpg');
     AnswersUploadService.processFileUpload = mockProcessFileUpload;
 
-    const mockIsFileUrl = jest.fn((url) => {
+    const mockIsFileUrl = jest.fn(url => {
       if (
         url === 'file:///path/to/image.jpg' ||
         url === 'file:///path/to/video.mp4'

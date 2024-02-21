@@ -35,7 +35,7 @@ export class ScoresCalculator implements IScoresCalculator {
     }
 
     const option = radioItem.payload.options.find(
-      (o) => o.value === radioAnswer.value,
+      o => o.value === radioAnswer.value,
     );
 
     return option ? option.score : null;
@@ -52,15 +52,15 @@ export class ScoresCalculator implements IScoresCalculator {
     }
 
     const scores: number[] = checkboxItem.payload.options
-      .map<number | null>((option) => {
-        const foundAnswer = checkboxAnswers?.find((checkboxAnswer) => {
+      .map<number | null>(option => {
+        const foundAnswer = checkboxAnswers?.find(checkboxAnswer => {
           return checkboxAnswer.value === option.value;
         });
 
         return foundAnswer ? option.score : null;
       })
-      .filter((x) => x != null)
-      .map((x) => x!);
+      .filter(x => x != null)
+      .map(x => x!);
 
     return Calculator.sum(scores);
   }
@@ -149,20 +149,20 @@ export class ScoresCalculator implements IScoresCalculator {
         switch (item.type) {
           case 'Radio': {
             const allScores = item.payload.options
-              .map((x) => x.score)
-              .filter((x) => x != null)
-              .map((x) => x!);
+              .map(x => x.score)
+              .filter(x => x != null)
+              .map(x => x!);
             return Math.max(...allScores);
           }
           case 'Checkbox': {
             const allScores = item.payload.options
-              .map((x) => x.score)
-              .filter((x) => x != null)
-              .map((x) => x!);
+              .map(x => x.score)
+              .filter(x => x != null)
+              .map(x => x!);
             return Calculator.sum(allScores);
           }
           case 'Slider': {
-            if (!item.payload.scores.some((x) => x >= 0)) {
+            if (!item.payload.scores.some(x => x >= 0)) {
               return null;
             }
             return Math.max(...item.payload.scores);
@@ -184,7 +184,8 @@ export class ScoresCalculator implements IScoresCalculator {
       return this.collectMaxScoresInternal(pipelineItems, selectedItems);
     } catch (error) {
       throw new Error(
-        `[ScoresCalculator:collectMaxScores]: Error occurred:\n\n${error}`,
+        '[ScoresCalculator:collectMaxScores]: Error occurred:\n\n' +
+          error!.toString(),
       );
     }
   }
@@ -204,13 +205,14 @@ export class ScoresCalculator implements IScoresCalculator {
       );
     } catch (error) {
       throw new Error(
-        `[ScoresCalculator.calculate]: Error occurred during collecting actual scores:\n\n${error}`,
+        '[ScoresCalculator.calculate]: Error occurred during collecting actual scores:\n\n' +
+          error!.toString(),
       );
     }
 
     const filteredScores: number[] = scores
-      .filter((x) => x !== null)
-      .map((x) => x!);
+      .filter(x => x !== null)
+      .map(x => x!);
 
     if (!filteredScores.length) {
       return null;
@@ -228,8 +230,8 @@ export class ScoresCalculator implements IScoresCalculator {
         );
 
         const filteredMaxScores = maxScores
-          .filter((x) => x !== null)
-          .map((x) => x!);
+          .filter(x => x !== null)
+          .map(x => x!);
 
         const currentScore = Calculator.sum(filteredScores);
         const sumOfMaxScores = Calculator.sum(filteredMaxScores);

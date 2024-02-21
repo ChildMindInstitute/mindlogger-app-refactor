@@ -8,7 +8,7 @@ const useOnMutationCacheChange = () => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    queryClient.getMutationCache().subscribe((event) => {
+    queryClient.getMutationCache().subscribe(event => {
       const key = event.mutation?.options.mutationKey?.[0];
 
       if (key === 'refresh') {

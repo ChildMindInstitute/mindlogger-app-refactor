@@ -28,7 +28,7 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
   ): boolean {
     const { event } = eventEntity;
 
-    const isScheduledToday = this.utility.isToday(event.scheduledAt);
+    const isScheduledToday = this.utility.isToday(event.scheduledAt!);
 
     const now = this.utility.getNow();
 
@@ -58,7 +58,7 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
   ): boolean {
     const { event } = eventEntity;
 
-    const isScheduledToday = this.utility.isToday(event.scheduledAt);
+    const isScheduledToday = this.utility.isToday(event.scheduledAt!);
 
     const isScheduledYesterday = this.utility.isScheduledYesterday(event);
 
@@ -89,7 +89,7 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
   ): boolean {
     const { event } = eventEntity;
 
-    const isScheduledToday = this.utility.isToday(event.scheduledAt);
+    const isScheduledToday = this.utility.isToday(event.scheduledAt!);
 
     const isScheduledYesterday = this.utility.isScheduledYesterday(event);
 
@@ -115,12 +115,12 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
 
   public evaluate(eventsEntities: Array<EventEntity>): Array<EventEntity> {
     const notInProgress = eventsEntities.filter(
-      (x) => !this.utility.isInProgress(x),
+      x => !this.utility.isInProgress(x),
     );
 
     const result: Array<EventEntity> = [];
 
-    for (const eventEntity of notInProgress) {
+    for (let eventEntity of notInProgress) {
       const { event } = eventEntity;
 
       if (!this.utility.isInsideValidDatesInterval(event)) {

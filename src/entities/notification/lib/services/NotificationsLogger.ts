@@ -71,7 +71,8 @@ function NotificationsLogger() {
       Logger.info('[NotificationsLogger.log]: Logs sent to server');
     } catch (error) {
       Logger.warn(
-        `[NotificationsLogger.log] Error occurred while sending notification logs:\n\n${error}`,
+        '[NotificationsLogger.log] Error occurred while sending notification logs:\n\n' +
+          error,
       );
     }
   };

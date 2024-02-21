@@ -36,10 +36,10 @@ const LineChart: FC<Props> = ({ data, config }) => {
   const { maxValue } = config as SliderResponseConfig;
 
   const getXAxisDots = (): Array<ChartAxisDot> =>
-    range(8).map((item) => ({ dot: item, value: 0 }));
+    range(8).map(item => ({ dot: item, value: 0 }));
 
   const getYAxisDots = (): Array<ChartAxisDot> =>
-    range(maxValue + 1).map((item) => ({ dot: 1, value: item * 2 }));
+    range(maxValue + 1).map(item => ({ dot: 1, value: item * 2 }));
 
   const numberValueExists = (value: number | null) =>
     !!value || typeof value === 'number';
@@ -47,8 +47,8 @@ const LineChart: FC<Props> = ({ data, config }) => {
   const lineChartData: Array<LineChartDataItem> = useMemo(() => {
     const currentWeekDates = getCurrentWeekDates();
 
-    return currentWeekDates.flatMap((currentWeekDate) => {
-      const currentWeekDayValues = data.map((dataItem) =>
+    return currentWeekDates.flatMap(currentWeekDate => {
+      const currentWeekDayValues = data.map(dataItem =>
         areDatesEqual(dataItem.date, currentWeekDate) &&
         numberValueExists(dataItem.value) &&
         dataItem.value! < maxValue
@@ -56,7 +56,7 @@ const LineChart: FC<Props> = ({ data, config }) => {
           : null,
       );
 
-      const values = currentWeekDayValues.map((currentWeekDayValue) => {
+      const values = currentWeekDayValues.map(currentWeekDayValue => {
         return {
           date: format(currentWeekDate, dateFormat),
           value: currentWeekDayValue,

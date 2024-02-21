@@ -13,7 +13,7 @@ const createMediaLookupService = () => {
   };
 
   const lookupInActivity = (activity: ActivityDetails): boolean => {
-    return activity.items.some((item) => {
+    return activity.items.some(item => {
       return (
         lookupInMarkdown(item.question) || item.inputType === 'AudioPlayer'
       );
@@ -24,7 +24,7 @@ const createMediaLookupService = () => {
     const activitiesToLookup: ActivityDetails[] =
       EntityActivitiesCollector.collect(lookupInput);
 
-    return activitiesToLookup.some((activity) => {
+    return activitiesToLookup.some(activity => {
       return lookupInActivity(activity);
     });
   };

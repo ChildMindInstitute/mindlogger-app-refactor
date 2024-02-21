@@ -56,7 +56,7 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
     stimulusTrials: StimulusConfiguration[],
     isWebView: boolean,
   ): Array<StimulusScreen> => {
-    return stimulusTrials.map<StimulusScreen>((stimulusConfig) => ({
+    return stimulusTrials.map<StimulusScreen>(stimulusConfig => ({
       id: stimulusConfig.id,
       stimulus: {
         en: !isWebView
@@ -80,7 +80,7 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
   ): Array<TestTrial> => {
     const trials: TestTrial[] = [];
 
-    const choices: TestChoice[] = buttons.map((button) => ({
+    const choices: TestChoice[] = buttons.map(button => ({
       value: button.value,
       name: {
         en: !isWebView
@@ -96,7 +96,7 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
           : block.order;
 
       for (const stimulusId of order) {
-        const screen = screens.find((s) => s.id === stimulusId);
+        const screen = screens.find(s => s.id === stimulusId);
         if (screen) {
           trials.push({
             ...screen,
@@ -188,7 +188,7 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
         minimumAccuracy: configuration.minimumAccuracy || 0,
         continueText,
         restartText: configuration.isLastPractice ? continueText : restartText,
-        buttons: configuration.buttons.map((x) => ({
+        buttons: configuration.buttons.map(x => ({
           image: x.image,
           name: { en: x.text },
           value: x.value,

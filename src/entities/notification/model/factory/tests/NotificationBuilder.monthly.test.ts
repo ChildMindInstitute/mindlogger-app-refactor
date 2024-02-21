@@ -152,8 +152,8 @@ const addReminder = (
         inactiveReason === 'invalid-period'
           ? InactiveReason.FallOnInvalidPeriod
           : inactiveReason === 'outdated'
-            ? InactiveReason.Outdated
-            : InactiveReason.NotDefined,
+          ? InactiveReason.Outdated
+          : InactiveReason.NotDefined,
     };
   }
 
@@ -196,8 +196,8 @@ const addNotification = (
         inactiveReason === 'outdated'
           ? InactiveReason.Outdated
           : inactiveReason === 'completed'
-            ? InactiveReason.ActivityCompleted
-            : InactiveReason.NotDefined,
+          ? InactiveReason.ActivityCompleted
+          : InactiveReason.NotDefined,
     };
   }
 
@@ -237,8 +237,8 @@ const addCrossDayNotification = (
         inactiveReason === 'outdated'
           ? InactiveReason.Outdated
           : inactiveReason === 'completed'
-            ? InactiveReason.ActivityCompleted
-            : InactiveReason.NotDefined,
+          ? InactiveReason.ActivityCompleted
+          : InactiveReason.NotDefined,
     };
   }
 

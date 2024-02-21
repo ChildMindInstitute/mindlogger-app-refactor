@@ -17,7 +17,7 @@ type Props = {
   boundHitAnimationDuration: number;
 };
 
-const PlayGround: FC<Props> = (props) => {
+const PlayGround: FC<Props> = props => {
   const { boundWasHit, boundHitAnimationDuration } = props;
 
   const getBackgroundColorBasedOnTimeline = (defaultColor: string) => {

@@ -42,7 +42,7 @@ type Props = {
 } & StreamEventLoggable<AbTestStreamEvent> &
   BoxProps;
 
-const AbCanvas: FC<Props> = (props) => {
+const AbCanvas: FC<Props> = props => {
   const [errorPath, setErrorPath] = useState<SkPath | null>(null);
 
   const [paths, setPaths] = useState<Array<SkPath>>([]);
@@ -121,7 +121,7 @@ const AbCanvas: FC<Props> = (props) => {
   const keepPathInState = () => {
     const path = getCurrentPath();
     if (path) {
-      setPaths((list) => [...list, path]);
+      setPaths(list => [...list, path]);
     }
   };
 
@@ -169,7 +169,7 @@ const AbCanvas: FC<Props> = (props) => {
   };
 
   const reRender = () => {
-    setPaths((x) => [...x]);
+    setPaths(x => [...x]);
   };
 
   const reCreatePath = (point: Point) => {
@@ -177,13 +177,13 @@ const AbCanvas: FC<Props> = (props) => {
   };
 
   const findNodeByIndex = (index: number) =>
-    canvasData!.nodes.find((x) => x.orderIndex === index)!;
+    canvasData!.nodes.find(x => x.orderIndex === index)!;
 
   const findNodeByPoint = (
     point: Point,
     radiusMultiplier = 1,
   ): TestNode | null => {
-    const foundNode = canvasData?.nodes.find((node) => {
+    const foundNode = canvasData?.nodes.find(node => {
       const distance = getDistance(
         { x: node.cx, y: node.cy },
         { x: point.x, y: point.y },
@@ -279,7 +279,7 @@ const AbCanvas: FC<Props> = (props) => {
     valid: boolean;
     actual?: string | null;
   }) => {
-    getLastLogLine().points.forEach((x) => {
+    getLastLogLine().points.forEach(x => {
       if (x.valid === null) {
         x.valid = mark.valid;
         x.actual = mark.actual ?? null;

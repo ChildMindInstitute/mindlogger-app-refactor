@@ -46,7 +46,7 @@ class AnswersUploadService implements IAnswersUploadService {
   private mapFileExistenceDto(
     dto: CheckIfFilesExistResultDto,
   ): CheckFilesUploadResults {
-    return dto.map<CheckFileUploadResult>((x) => ({
+    return dto.map<CheckFileUploadResult>(x => ({
       fileId: x.fileId,
       remoteUrl: x.url,
       uploaded: x.uploaded,
@@ -81,7 +81,7 @@ class AnswersUploadService implements IAnswersUploadService {
     checks: CheckFilesUploadResults,
     fileId: string,
   ): CheckFileUploadResult {
-    return checks.find((x) => x.fileId === fileId)!;
+    return checks.find(x => x.fileId === fileId)!;
   }
 
   private getFileId(file: MediaFile): string {
@@ -169,7 +169,8 @@ class AnswersUploadService implements IAnswersUploadService {
       return remoteUrl!;
     } catch (error) {
       throw new Error(
-        `[UploadAnswersService.processFileUpload]: Error occurred while file ${logFileInfo} uploading\n\n${error}`,
+        `[UploadAnswersService.processFileUpload]: Error occurred while file ${logFileInfo} uploading\n\n` +
+          error!.toString(),
       );
     }
   }
@@ -179,11 +180,8 @@ class AnswersUploadService implements IAnswersUploadService {
     position: '1' | '2',
   ) {
     this.logger.log(
-      `[UploadAnswersService.uploadAllMediaFiles] Check if files uploaded #${position}:\n\n${JSON.stringify(
-        uploadChecks,
-        null,
-        2,
-      )}`,
+      `[UploadAnswersService.uploadAllMediaFiles] Check if files uploaded #${position}:\n\n` +
+        JSON.stringify(uploadChecks, null, 2),
     );
   }
 
@@ -202,7 +200,8 @@ class AnswersUploadService implements IAnswersUploadService {
       uploadChecks = await this.checkIfFilesUploaded(fileIds, body.appletId);
     } catch (error) {
       throw new Error(
-        `[UploadAnswersService.uploadAllMediaFiles]: Error occurred on 1st files upload check\n\n${error}`,
+        '[UploadAnswersService.uploadAllMediaFiles]: Error occurred on 1st files upload check\n\n' +
+          error!.toString(),
       );
     }
 
@@ -256,13 +255,14 @@ class AnswersUploadService implements IAnswersUploadService {
       uploadChecks = await this.checkIfFilesUploaded(fileIds, body.appletId);
     } catch (error) {
       throw new Error(
-        `[uploadAnswerMediaFiles.uploadAllMediaFiles]: Error occurred while 2nd files upload check\n\n${error}`,
+        '[uploadAnswerMediaFiles.uploadAllMediaFiles]: Error occurred while 2nd files upload check\n\n' +
+          error!.toString(),
       );
     }
 
     this.logFilesUploadCheck(uploadChecks, '2');
 
-    if (uploadChecks.some((x) => !x.uploaded)) {
+    if (uploadChecks.some(x => !x.uploaded)) {
       throw new Error(
         '[uploadAnswerMediaFiles.uploadAllMediaFiles]: Error occurred on final upload results check',
       );
@@ -287,7 +287,8 @@ class AnswersUploadService implements IAnswersUploadService {
       });
     } catch (error) {
       throw new Error(
-        `[UploadAnswersService.uploadAnswers]: Error occurred while 1st check if answers uploaded\n\n${error}`,
+        '[UploadAnswersService.uploadAnswers]: Error occurred while 1st check if answers uploaded\n\n' +
+          error!.toString(),
       );
     }
 
@@ -306,7 +307,8 @@ class AnswersUploadService implements IAnswersUploadService {
       await AnswerService.sendActivityAnswers(encryptedData);
     } catch (error) {
       throw new Error(
-        `[UploadAnswersService.uploadAnswers]: Error occurred while sending answers\n\n${error}`,
+        '[UploadAnswersService.uploadAnswers]: Error occurred while sending answers\n\n' +
+          error!.toString(),
       );
     }
 
@@ -319,7 +321,8 @@ class AnswersUploadService implements IAnswersUploadService {
       });
     } catch (error) {
       throw new Error(
-        `[UploadAnswersService.uploadAnswers]: Error occurred while 2nd check if answers uploaded\n\n${error}`,
+        '[UploadAnswersService.uploadAnswers]: Error occurred while 2nd check if answers uploaded\n\n' +
+          error!.toString(),
       );
     }
 
@@ -400,7 +403,7 @@ class AnswersUploadService implements IAnswersUploadService {
           return userAction;
         }
 
-        const originalAnswerIndex = originalAnswers.findIndex((answer) => {
+        const originalAnswerIndex = originalAnswers.findIndex(answer => {
           const currentAnswerValue = (answer as ObjectAnswerDto)
             ?.value as MediaFile;
 
@@ -438,7 +441,8 @@ class AnswersUploadService implements IAnswersUploadService {
       return processUserActions();
     } catch (error) {
       throw new Error(
-        `[UploadAnswersService.assignRemoteUrlsToUserActions]: Error occurred while mapping user actions with media files\n\n${error}`,
+        '[UploadAnswersService.assignRemoteUrlsToUserActions]: Error occurred while mapping user actions with media files\n\n' +
+          error!.toString(),
       );
     }
   }

@@ -11,7 +11,7 @@ type Props = BoxProps & {
   hasOpacity: boolean;
 };
 
-const ActivityFlowStep: FC<Props> = (props) => {
+const ActivityFlowStep: FC<Props> = props => {
   const { activity, hasOpacity } = props;
 
   const { activityPositionInFlow, numberOfActivitiesInFlow, activityFlowName } =
@@ -33,7 +33,7 @@ const ActivityFlowStep: FC<Props> = (props) => {
         accessibilityLabel="activity-card-flow"
         opacity={hasOpacity ? 0.5 : 1}
       >
-        {`(${activityPositionInFlow} of ${numberOfActivitiesInFlow}) ${activityFlowName}`}
+        {`(${activityPositionInFlow!} of ${numberOfActivitiesInFlow!}) ${activityFlowName}`}
       </Text>
     </XStack>
   );

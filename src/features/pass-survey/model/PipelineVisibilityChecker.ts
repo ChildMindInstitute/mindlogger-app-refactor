@@ -15,9 +15,9 @@ function PipelineVisibilityChecker(pipeline: PipelineItem[], answers: Answers) {
 
     const method = item.conditionalLogic.match === 'all' ? 'every' : 'some';
 
-    return item.conditionalLogic.conditions[method]((condition) => {
+    return item.conditionalLogic.conditions[method](condition => {
       const step = pipeline.findIndex(
-        (x) => x.name === condition.activityItemName,
+        x => x.name === condition.activityItemName,
       );
 
       const answerValidator = AnswerValidator({

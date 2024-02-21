@@ -26,7 +26,7 @@ export const useAppletAnalytics = (appletId: string) => {
 
   const { data: appletEncryption, isLoading: isDetailsLoading } =
     useAppletDetailsQuery(appletId, {
-      select: (response) =>
+      select: response =>
         mapAppletDetailsFromDto(response.data.result).encryption,
     });
 

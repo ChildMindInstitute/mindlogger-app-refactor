@@ -5,7 +5,7 @@ import { getAlarmPermissions } from '../permissions';
 
 const useAlarmPermissions = () => {
   useEffect(() => {
-    getAlarmPermissions().then((status) => {
+    getAlarmPermissions().then(status => {
       if (status === 'DISABLED') {
         onAlarmPermissionsDisabled();
       }

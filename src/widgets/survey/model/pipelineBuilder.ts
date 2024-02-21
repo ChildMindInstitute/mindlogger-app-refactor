@@ -76,7 +76,7 @@ export function buildActivityFlowPipeline({
 }: BuildPipelineArgs): FlowPipelineItem[] {
   const pipeline: FlowPipelineItem[] = [];
 
-  const showSummary = activityIds.some((id) => hasSummary(id));
+  const showSummary = activityIds.some(id => hasSummary(id));
 
   for (let i = 0; i < activityIds.length; i++) {
     const activityId = activityIds[i];

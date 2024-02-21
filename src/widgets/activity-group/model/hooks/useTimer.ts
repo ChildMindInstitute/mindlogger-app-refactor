@@ -6,7 +6,7 @@ const useTimer = () => {
   const [, reRender] = useState(false);
 
   const onTick = useCallback(() => {
-    reRender((x) => !x);
+    reRender(x => !x);
   }, []);
 
   useEffect(() => {

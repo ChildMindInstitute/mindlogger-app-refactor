@@ -16,7 +16,7 @@ type Props = BoxProps & {
   onRecoverySuccess: () => void;
 };
 
-const ForgotPasswordForm: FC<Props> = (props) => {
+const ForgotPasswordForm: FC<Props> = props => {
   const { t } = useTranslation();
   const toast = useToast();
 
@@ -36,7 +36,7 @@ const ForgotPasswordForm: FC<Props> = (props) => {
     defaultValues: {
       email: '',
     },
-    onSubmitSuccess: (data) => {
+    onSubmitSuccess: data => {
       executeIfOnline(() => recover({ email: data.email }));
     },
   });

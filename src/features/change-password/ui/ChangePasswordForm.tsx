@@ -20,7 +20,7 @@ type Props = BoxProps & {
   onChangePasswordSuccess: () => void;
 };
 
-const ChangePasswordForm: FC<Props> = (props) => {
+const ChangePasswordForm: FC<Props> = props => {
   const { t } = useTranslation();
   const toast = useToast();
 
@@ -41,7 +41,7 @@ const ChangePasswordForm: FC<Props> = (props) => {
       prev_password: '',
       password: '',
     },
-    onSubmitSuccess: (data) => {
+    onSubmitSuccess: data => {
       executeIfOnline(() => changePassword(data));
     },
   });

@@ -46,7 +46,7 @@ const StackedRadios: FC<Props> = ({
   };
 
   const memoizedOptions: StackedRowItemValue[] = useMemo(() => {
-    return options.map((option) => {
+    return options.map(option => {
       return {
         ...option,
         tooltip: tooltipsShown ? textReplacer(option.tooltip || '') : '',
@@ -55,7 +55,7 @@ const StackedRadios: FC<Props> = ({
   }, [tooltipsShown, options, textReplacer]);
 
   const memoizedRows = useMemo(() => {
-    return rows.map((row) => {
+    return rows.map(row => {
       return {
         ...row,
         tooltip: tooltipsShown ? textReplacer(row.tooltip || '') : '',
@@ -70,11 +70,11 @@ const StackedRadios: FC<Props> = ({
       accessibilityLabel="stack-radio-container"
       renderCell={(rowIndex, option) => {
         const { id: currentRowId } = config.rows[rowIndex];
-        const currentValue = values.find((value) => {
+        const currentValue = values.find(value => {
           return value?.rowId === currentRowId;
         });
 
-        const optionIndex = config.options.findIndex((o) => o.id === option.id);
+        const optionIndex = config.options.findIndex(o => o.id === option.id);
 
         return (
           <RadioGroup

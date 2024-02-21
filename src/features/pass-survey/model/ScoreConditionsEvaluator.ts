@@ -12,7 +12,7 @@ export class ScoreConditionsEvaluator implements IScoreConditionsEvaluator {
     score: number,
   ): boolean {
     const expressionResults: Array<boolean> = settings.conditions.map(
-      (condition) => {
+      condition => {
         switch (condition.type) {
           case 'BETWEEN':
             return (
@@ -40,10 +40,10 @@ export class ScoreConditionsEvaluator implements IScoreConditionsEvaluator {
     );
 
     if (settings.match === 'all') {
-      return expressionResults.every((x) => x);
+      return expressionResults.every(x => x);
     }
     if (settings.match === 'any') {
-      return expressionResults.some((x) => x);
+      return expressionResults.some(x => x);
     }
     return false;
   }
@@ -53,7 +53,8 @@ export class ScoreConditionsEvaluator implements IScoreConditionsEvaluator {
       return this.evaluateInternal(settings, score);
     } catch (error) {
       throw new Error(
-        `[ScoreConditionsEvaluator.evaluate]: Error occurred:\n\n${error}`,
+        '[ScoreConditionsEvaluator.evaluate]: Error occurred:\n\n' +
+          error!.toString(),
       );
     }
   }

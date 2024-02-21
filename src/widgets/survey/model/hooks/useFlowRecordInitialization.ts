@@ -43,7 +43,7 @@ export function useFlowRecordInitialization({
   const step = flowStorageRecord?.step ?? 0;
 
   const { data: applet } = useAppletDetailsQuery(appletId, {
-    select: (response) =>
+    select: response =>
       AppletModel.mapAppletDetailsFromDto(response.data.result),
   });
 
@@ -67,7 +67,7 @@ export function useFlowRecordInitialization({
       });
     } else {
       const activityIds = applet.activityFlows.find(
-        (flow) => flow.id === entityId,
+        flow => flow.id === entityId,
       )?.activityIds;
 
       return buildActivityFlowPipeline({

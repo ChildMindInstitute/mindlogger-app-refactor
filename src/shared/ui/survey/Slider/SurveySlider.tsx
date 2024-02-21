@@ -66,7 +66,7 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
       </Box>
 
       <XStack px={11} jc="space-between" mt={9}>
-        {items.map((value) => {
+        {items.map(value => {
           return (
             <Box key={`tick-${value}`} w={THUMB_SIZE} ai="center">
               {showTickMarks && <Box w={1} bg="$black" h={8} />}

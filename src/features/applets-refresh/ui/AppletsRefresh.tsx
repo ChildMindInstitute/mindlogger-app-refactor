@@ -13,7 +13,7 @@ import { useRefresh } from '../model';
 
 type Props = Omit<RefreshControlProps, 'refreshing' | 'onRefresh'>;
 
-const AppletsRefresh: FC<Props> = (props) => {
+const AppletsRefresh: FC<Props> = props => {
   const queryClient = useQueryClient();
 
   const storeProgress: StoreProgress = useAppSelector(

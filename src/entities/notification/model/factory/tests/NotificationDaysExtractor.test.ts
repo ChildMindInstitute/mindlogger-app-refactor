@@ -117,7 +117,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      const expected = [
+      let expected = [
         Yesterday,
         CurrentDay,
         addDays(CurrentDay, 1),
@@ -265,7 +265,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
       );
 
       let expected = getDaysForNextTwoWeeks(false, CurrentDay);
-      expected = expected.filter((d) => d >= eventDayFrom);
+      expected = expected.filter(d => d >= eventDayFrom);
 
       expect(result).toEqual(expected);
       expect(result.length).toEqual(NumberOfDaysForSchedule - 1);
@@ -312,7 +312,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      const expected = [
+      let expected = [
         Yesterday,
         CurrentDay,
         addDays(CurrentDay, 1),
@@ -460,7 +460,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
       );
 
       let expected = getDaysForNextTwoWeeks(false, CurrentDay);
-      expected = expected.filter((d) => d >= eventDayFrom);
+      expected = expected.filter(d => d >= eventDayFrom);
 
       expect(result).toEqual(expected);
       expect(result.length).toEqual(NumberOfDaysForSchedule - 1);
@@ -512,7 +512,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      const expected = [addDays(scheduledDay, 7)];
+      let expected = [addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });
@@ -536,7 +536,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      const expected = [addDays(scheduledDay, 7), addDays(scheduledDay, 14)];
+      let expected = [addDays(scheduledDay, 7), addDays(scheduledDay, 14)];
 
       expect(result).toEqual(expected);
     });
@@ -560,7 +560,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      const expected = [scheduledDay, addDays(scheduledDay, 7)];
+      let expected = [scheduledDay, addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });
@@ -584,7 +584,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      const expected = [addDays(scheduledDay, 7)];
+      let expected = [addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });
@@ -609,7 +609,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
       let expected = getDaysForNextTwoWeeks(true, CurrentDay);
 
-      expected = expected.filter((d) => d.getDay() >= 1 && d.getDay() <= 5);
+      expected = expected.filter(d => d.getDay() >= 1 && d.getDay() <= 5);
 
       expect(result).toEqual(expected);
       expect(result.length).toEqual(10);
@@ -634,7 +634,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      const expected = [CurrentDay, Tomorrow, addDays(Tomorrow, 1)];
+      let expected = [CurrentDay, Tomorrow, addDays(Tomorrow, 1)];
 
       expect(result).toEqual(expected);
     });
@@ -779,7 +779,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
 
       let expected = getDaysForNextTwoWeeks(false, CurrentDay);
       expected = expected.filter(
-        (d) => d >= eventDayFrom && d.getDay() >= 1 && d.getDay() <= 5,
+        d => d >= eventDayFrom && d.getDay() >= 1 && d.getDay() <= 5,
       );
 
       expect(result).toEqual(expected);
@@ -996,7 +996,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      const expected = [
+      let expected = [
         subDays(CurrentDay, 2),
         subDays(CurrentDay, 1),
         CurrentDay,
@@ -1118,7 +1118,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       );
 
       let expected = getDaysForNextTwoWeeks(false, CurrentDay);
-      expected = expected.filter((d) => d >= eventDayFrom);
+      expected = expected.filter(d => d >= eventDayFrom);
 
       expect(result).toEqual(expected);
       expect(result.length).toEqual(NumberOfDaysForSchedule - 1);
@@ -1164,7 +1164,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      const expected = [
+      let expected = [
         subDays(CurrentDay, 2),
         subDays(CurrentDay, 1),
         CurrentDay,
@@ -1286,7 +1286,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       );
 
       let expected = getDaysForNextTwoWeeks(false, CurrentDay);
-      expected = expected.filter((d) => d >= eventDayFrom);
+      expected = expected.filter(d => d >= eventDayFrom);
 
       expect(result).toEqual(expected);
       expect(result.length).toEqual(NumberOfDaysForSchedule - 1);
@@ -1340,7 +1340,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      const expected = [addDays(scheduledDay, 7)];
+      let expected = [addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });
@@ -1363,7 +1363,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      const expected = [addDays(scheduledDay, 7), addDays(scheduledDay, 14)];
+      let expected = [addDays(scheduledDay, 7), addDays(scheduledDay, 14)];
 
       expect(result).toEqual(expected);
     });
@@ -1386,7 +1386,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      const expected = [
+      let expected = [
         subWeeks(scheduledDay, 4),
         subWeeks(scheduledDay, 3),
         subWeeks(scheduledDay, 2),
@@ -1416,7 +1416,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      const expected = [addDays(scheduledDay, 7)];
+      let expected = [addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });

@@ -4,5 +4,5 @@ const selectStreaming = (state: RootState) => state.streaming;
 
 export const selectStreamingSettings = createSelector(
   selectStreaming,
-  (streaming) => streaming,
+  streaming => streaming,
 );

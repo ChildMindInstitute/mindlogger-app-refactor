@@ -38,8 +38,8 @@ const parseErrorSchema = (
     }
 
     if ('unionErrors' in error) {
-      error.unionErrors.forEach((unionError) =>
-        unionError.errors.forEach((e) => zodErrors.push(e)),
+      error.unionErrors.forEach(unionError =>
+        unionError.errors.forEach(e => zodErrors.push(e)),
       );
     }
 

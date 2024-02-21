@@ -9,7 +9,7 @@ type ItemsVisibilityValidator = {
 
 const createItemsVisibilityValidator = (): ItemsVisibilityValidator => {
   const check = (activity: ActivityDetails): boolean => {
-    return activity.items.every((item) => {
+    return activity.items.every(item => {
       return item.isHidden;
     });
   };
@@ -20,7 +20,7 @@ const createItemsVisibilityValidator = (): ItemsVisibilityValidator => {
     const activitiesToLookup: ActivityDetails[] =
       EntityActivitiesCollector.collect(lookupInput);
 
-    return activitiesToLookup.some((activity) => {
+    return activitiesToLookup.some(activity => {
       return check(activity);
     });
   }

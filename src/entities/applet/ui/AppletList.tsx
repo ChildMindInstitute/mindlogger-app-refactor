@@ -36,7 +36,7 @@ const AppletList: FC<Props> = ({
   ...styledProps
 }) => {
   const { error: getAppletsError, data: applets } = useAppletsQuery({
-    select: (response) => mapApplets(response.data.result),
+    select: response => mapApplets(response.data.result),
   });
 
   const isRefreshing = useIsMutating(['refresh']);

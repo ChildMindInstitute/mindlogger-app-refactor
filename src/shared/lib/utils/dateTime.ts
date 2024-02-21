@@ -155,7 +155,7 @@ export const isTimeInInterval = ({
     );
   } else {
     throw new Error(
-      `[isTimeInInterval]: Not supported, including = ${including}`,
+      '[isTimeInInterval]: Not supported, including = ' + including,
     );
   }
 };
@@ -164,7 +164,7 @@ export function getLast7Dates() {
   const now = new Date();
 
   return range(7)
-    .map((i) => subDays(now, i))
+    .map(i => subDays(now, i))
     .reverse();
 }
 

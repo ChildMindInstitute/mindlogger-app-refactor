@@ -33,7 +33,7 @@ const AnalyticsChart: FC<Props> = ({
       chart = (
         <LineChart
           config={responseConfig}
-          data={data.map((x) => ({ ...x, date: new Date(x.date) }))}
+          data={data.map(x => ({ ...x, date: new Date(x.date) }))}
         />
       );
       break;

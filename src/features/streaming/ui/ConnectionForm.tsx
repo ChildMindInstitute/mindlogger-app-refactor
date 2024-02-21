@@ -59,7 +59,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
   });
 
   const { form, submit } = useAppForm(ConnectionFormSchema, {
-    onSubmitSuccess: (data) => {
+    onSubmitSuccess: data => {
       const { ipAddress, port, remember } = data;
 
       connect(ipAddress, +port);
@@ -97,7 +97,7 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
     <Box
       accessibilityLabel="connection-form"
       {...props}
-      onPress={(e) => e.stopPropagation()}
+      onPress={e => e.stopPropagation()}
     >
       <FormProvider {...form}>
         <XStack justifyContent="center">

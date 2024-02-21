@@ -61,11 +61,12 @@ const TimeRemaining: FC<Props> = (props: Props) => {
       (left - getMsFromHours(hours) - getMsFromMinutes(minutes)) / MS_IN_SECOND,
     );
 
-    return `${t(
-      'activity_time:time_remaining',
-    )}: ${getTwoDigits(hours)}:${getTwoDigits(minutes)}:${getTwoDigits(
-      seconds,
-    )}`;
+    return (
+      t('activity_time:time_remaining') +
+      `: ${getTwoDigits(hours)}:${getTwoDigits(minutes)}:${getTwoDigits(
+        seconds,
+      )}`
+    );
   };
 
   const text = getFormattedTimeLeft();

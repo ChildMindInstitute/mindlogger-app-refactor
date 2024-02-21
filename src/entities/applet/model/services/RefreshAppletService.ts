@@ -59,7 +59,7 @@ class RefreshAppletService implements IRefreshAppletService {
   };
 
   private cacheImages(urls: ImageUrl[]) {
-    for (const url of urls) {
+    for (let url of urls) {
       try {
         if (!this.isUrlValid(url)) {
           continue;
@@ -68,7 +68,7 @@ class RefreshAppletService implements IRefreshAppletService {
       } catch (err) {
         this.showWrongUrlLogs &&
           this.logger.info(
-            `[RefreshService.cacheImages] Ignored due to error: url: ${url}`,
+            '[RefreshService.cacheImages] Ignored due to error: url: ' + url,
           );
       }
     }
@@ -102,7 +102,7 @@ class RefreshAppletService implements IRefreshAppletService {
   ) {
     this.resetAppletDetailsQuery(appletInternalDtos.appletId);
 
-    for (const activityDto of appletInternalDtos.activities) {
+    for (let activityDto of appletInternalDtos.activities) {
       this.resetActivityDetailsQuery(activityDto.id);
 
       const activityKey = getActivityDetailsKey(activityDto.id);

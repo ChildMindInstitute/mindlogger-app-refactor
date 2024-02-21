@@ -7,7 +7,7 @@ import { ScheduleEvent } from '../lib';
 export function mapEventsFromDto(
   eventsDto: ScheduleEventDto[],
 ): ScheduleEvent[] {
-  return eventsDto.map<ScheduleEvent>((x) => mapEventFromDto(x));
+  return eventsDto.map<ScheduleEvent>(x => mapEventFromDto(x));
 }
 export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
   return {

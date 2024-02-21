@@ -92,11 +92,11 @@ describe('StackedSlider', () => {
     const textComponents = stackedSlider.root.findAllByType(Text);
 
     const rightTitles = textComponents.filter(
-      (component) => component.props['data-test'] === 'slide-right-title',
+      component => component.props['data-test'] === 'slide-right-title',
     );
 
     const leftTitles = textComponents.filter(
-      (component) => component.props['data-test'] === 'slide-left-title',
+      component => component.props['data-test'] === 'slide-left-title',
     );
 
     expect(rightTitles.length).toBe(2);

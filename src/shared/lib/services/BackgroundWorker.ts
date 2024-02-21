@@ -25,7 +25,7 @@ function BackgroundWorkerBuilder() {
         startOnBoot: true,
         enableHeadless: true,
       },
-      async (taskId) => {
+      async taskId => {
         await Promise.resolve(callback());
 
         BackgroundFetch.finish(taskId);

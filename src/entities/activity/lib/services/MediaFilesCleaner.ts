@@ -32,7 +32,7 @@ const createMediaFilesCleaner = (): Result => {
 
     const urlsToProcess: string[] = [];
 
-    for (const recordId in entityRecord.answers) {
+    for (let recordId in entityRecord.answers) {
       const record = entityRecord.answers[recordId]?.answer;
 
       if (record?.uri) {
@@ -40,7 +40,7 @@ const createMediaFilesCleaner = (): Result => {
       }
     }
 
-    for (const fileUrl of urlsToProcess) {
+    for (let fileUrl of urlsToProcess) {
       try {
         const fileExists = await FileSystem.exists(fileUrl);
 
@@ -71,7 +71,7 @@ const createMediaFilesCleaner = (): Result => {
 
   const cleanUpByAnswers = async (answers: AnswerDto[]) => {
     try {
-      answers.filter(Boolean).forEach(async (answer) => {
+      answers.filter(Boolean).forEach(async answer => {
         const { value: answerValue } = answer as ObjectAnswerDto;
 
         const mediaValue = answerValue as MediaValue;

@@ -50,7 +50,7 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
               config={singleSliderProps}
               accessibilityLabel={'stacked-slider-view'}
               sliderLabel={label}
-              onChange={(value) => onSliderValueChange(value, rowIndex)}
+              onChange={value => onSliderValueChange(value, rowIndex)}
               onRelease={onRelease}
               initialValue={rowValue}
               onPress={onSliderPress}

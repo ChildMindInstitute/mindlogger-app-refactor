@@ -6,7 +6,7 @@ import { createJob } from '@shared/lib';
 
 export default createJob(() => {
   httpService.interceptors.request.use(
-    (config) => {
+    config => {
       const { accessToken, tokenType } = SessionModel.getSession();
 
       if (accessToken && tokenType) {
@@ -17,7 +17,7 @@ export default createJob(() => {
 
       return config;
     },
-    (error) => {
+    error => {
       return Promise.reject(error);
     },
   );

@@ -8,7 +8,7 @@ import { ProgressSyncService, RefreshService } from '../services';
 
 const useRefreshMutation = (onSuccess?: () => void) => {
   const dispatch = useAppDispatch();
-  const state = useAppSelector((s) => s);
+  const state = useAppSelector(s => s);
   const queryClient = useQueryClient();
 
   const progressSyncService = useMemo(

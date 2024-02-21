@@ -7,7 +7,7 @@ import { ScheduleEvent } from '../../lib';
 export function mapEventsFromDto(
   eventsDto: ScheduleEventDto[],
 ): ScheduleEvent[] {
-  return eventsDto.map<ScheduleEvent>((x) => mapEventFromDto(x));
+  return eventsDto.map<ScheduleEvent>(x => mapEventFromDto(x));
 }
 export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
   return {
@@ -28,7 +28,7 @@ export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
     notificationSettings: {
       notifications:
         dto.notificationSettings && dto.notificationSettings.notifications
-          ? dto.notificationSettings.notifications.map((x) => ({
+          ? dto.notificationSettings.notifications.map(x => ({
               at: x.atTime,
               from: x.fromTime,
               to: x.toTime,
