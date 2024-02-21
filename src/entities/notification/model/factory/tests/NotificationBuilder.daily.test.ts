@@ -138,8 +138,8 @@ const addReminder = (
       activityIncompleteDays === 0
         ? 'current-day'
         : activityIncompleteDays === 1
-        ? 'next-day'
-        : 'in-future',
+          ? 'next-day'
+          : 'in-future',
     type: NotificationType.Reminder,
     isSpreadInEventSet: isCrossDay,
     notificationBody: 'Just a kindly reminder to complete the activity',
@@ -153,8 +153,8 @@ const addReminder = (
         inactiveReason === 'invalid-period'
           ? InactiveReason.FallOnInvalidPeriod
           : inactiveReason === 'outdated'
-          ? InactiveReason.Outdated
-          : InactiveReason.NotDefined,
+            ? InactiveReason.Outdated
+            : InactiveReason.NotDefined,
     };
   }
 
