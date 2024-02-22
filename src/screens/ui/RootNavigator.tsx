@@ -90,6 +90,7 @@ export default () => {
     },
   });
 
+  EnterForegroundModel.useAnalyticsEventTrack();
   EnterForegroundModel.useRestackNotifications();
 
   useBackHandler(() => {
