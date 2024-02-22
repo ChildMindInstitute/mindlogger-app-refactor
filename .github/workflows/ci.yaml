@@ -1,0 +1,54 @@
+name: CI
+on: [pull_request]
+
+env:
+  NODE_VERSION: 16.20.2
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - run: yarn install --frozen-lockfile
+
+      - uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+          eslint_extensions: js,jsx,ts,tsx
+          prettier: true
+          prettier_extensions: js,jsx,ts,tsx
+          continue_on_error: false
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install deps
+        run: yarn install --frozen-lockfile
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Running tests
+        env:
+          REACT_APP_API_DOMAIN: http://localhost:8080
+        run: yarn test
