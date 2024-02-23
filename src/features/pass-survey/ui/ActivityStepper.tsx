@@ -57,11 +57,10 @@ function ActivityStepper({
     setStep: setCurrentStep,
     setAnswer,
     undoAnswer,
-    removeAnswer,
     setAdditionalAnswer,
     removeTimer,
     setContext,
-    iteratePipeline,
+    removeConditionallyHiddenItemsAnswersAndTimers,
     getNextStepShift,
     getPreviousStepShift,
   } = useActivityState({
@@ -179,12 +178,7 @@ function ActivityStepper({
     }
 
     if (isConditionalLogicItem) {
-      iteratePipeline(currentStep + 1, (isItemVisible, step) => {
-        if (!isItemVisible) {
-          removeAnswer(step);
-          removeTimer(step);
-        }
-      });
+      removeConditionallyHiddenItemsAnswersAndTimers(currentStep + 1);
     }
 
     return getNextStepShift();

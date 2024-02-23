@@ -171,43 +171,31 @@ function useActivityState({
     });
   }
 
-  function removeAnswer(step: number) {
-    const currentStorageRecord = getCurrentActivityStorageRecord();
+  function removeConditionallyHiddenItemsAnswersAndTimers(fromStep: number) {
+    const currentStorageRecord = getCurrentActivityStorageRecord()!;
+    const answers = { ...(currentStorageRecord.answers ?? {}) };
+    const timers = { ...(currentStorageRecord.timers ?? {}) };
+    const items = currentStorageRecord.items ?? {};
 
-    if (!currentStorageRecord) {
-      return;
-    }
-
-    const answers = { ...currentStorageRecord.answers };
-
-    delete answers[step];
-
-    if (currentStorageRecord) {
-      upsertActivityStorageRecord({
-        ...currentStorageRecord,
-        answers,
-      });
-    }
-  }
-
-  function iteratePipeline(
-    fromStep: number,
-    callback: (isItemVisible: boolean, step: number) => void,
-  ) {
     for (
       let index = fromStep;
       index < activityStorageRecord!.items.length;
       index++
     ) {
-      const currentStorageRecord = getCurrentActivityStorageRecord()!;
-      const visibilityChecker = PipelineVisibilityChecker(
-        currentStorageRecord.items,
-        currentStorageRecord.answers,
-      );
+      const visibilityChecker = PipelineVisibilityChecker(items, answers);
       const isItemVisible = visibilityChecker.isItemVisible(index);
 
-      callback(isItemVisible, index);
+      if (!isItemVisible) {
+        delete answers[index];
+        delete timers[index];
+      }
     }
+
+    upsertActivityStorageRecord({
+      ...currentStorageRecord,
+      answers,
+      timers,
+    });
   }
 
   function getNextStepShift() {
@@ -228,14 +216,13 @@ function useActivityState({
     setStep,
     setAnswer,
     undoAnswer,
-    removeAnswer,
     setAdditionalAnswer,
     clearActivityStorageRecord,
     setTimer,
     removeTimer,
     trackUserAction,
     setContext,
-    iteratePipeline,
+    removeConditionallyHiddenItemsAnswersAndTimers,
 
     getNextStepShift,
     getPreviousStepShift,
