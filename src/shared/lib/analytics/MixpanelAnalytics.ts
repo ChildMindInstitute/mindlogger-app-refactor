@@ -1,6 +1,7 @@
 import { Mixpanel } from 'mixpanel-react-native';
 
-import { IAnalyticsService } from './AnalyticsService';
+import { IAnalyticsService, MixProperties } from './AnalyticsService';
+import { APP_VERSION } from '../constants';
 
 class MixpanelAnalytics implements IAnalyticsService {
   private mixpanel: Mixpanel;
@@ -10,7 +11,9 @@ class MixpanelAnalytics implements IAnalyticsService {
   }
 
   init(): Promise<void> {
-    return this.mixpanel.init();
+    return this.mixpanel.init(undefined, {
+      [MixProperties.MindLoggerVersion]: APP_VERSION,
+    });
   }
 
   track(action: string, payload?: Record<string, any> | undefined): void {
