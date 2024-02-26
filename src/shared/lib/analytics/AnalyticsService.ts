@@ -19,6 +19,7 @@ let service: IAnalyticsService;
 export const MixProperties = {
   AppletId: 'Applet ID',
   MindLoggerVersion: 'MindLogger Version',
+  NotificationType: 'Notification Type',
 };
 
 export const MixEvents = {
@@ -39,6 +40,7 @@ export const MixEvents = {
   UploadLogsPressed: 'Upload Logs Pressed',
   UploadedLogsSuccessfully: 'Uploaded Logs Successfully',
   UploadLogsError: 'Upload Logs Error Occurred',
+  NotificationTap: 'Notification tap',
 };
 
 const AnalyticsService = {
