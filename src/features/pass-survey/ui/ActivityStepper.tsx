@@ -60,7 +60,7 @@ function ActivityStepper({
     setAdditionalAnswer,
     removeTimer,
     setContext,
-    removeConditionallyHiddenItemsAnswersAndTimers,
+    iterateWithConditionalLogic,
     getNextStepShift,
     getPreviousStepShift,
   } = useActivityState({
@@ -178,7 +178,7 @@ function ActivityStepper({
     }
 
     if (isConditionalLogicItem) {
-      removeConditionallyHiddenItemsAnswersAndTimers(currentStep + 1);
+      iterateWithConditionalLogic(currentStep + 1);
     }
 
     return getNextStepShift();

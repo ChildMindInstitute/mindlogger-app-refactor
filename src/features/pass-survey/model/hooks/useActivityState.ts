@@ -171,7 +171,7 @@ function useActivityState({
     });
   }
 
-  function removeConditionallyHiddenItemsAnswersAndTimers(fromStep: number) {
+  function iterateWithConditionalLogic(fromStep: number) {
     const currentStorageRecord = getCurrentActivityStorageRecord()!;
     const answers = { ...(currentStorageRecord.answers ?? {}) };
     const timers = { ...(currentStorageRecord.timers ?? {}) };
@@ -186,8 +186,8 @@ function useActivityState({
       const isItemVisible = visibilityChecker.isItemVisible(index);
 
       if (!isItemVisible) {
-        delete answers[index];
         delete timers[index];
+        delete answers[index];
       }
     }
 
@@ -222,7 +222,7 @@ function useActivityState({
     removeTimer,
     trackUserAction,
     setContext,
-    removeConditionallyHiddenItemsAnswersAndTimers,
+    iterateWithConditionalLogic,
 
     getNextStepShift,
     getPreviousStepShift,
