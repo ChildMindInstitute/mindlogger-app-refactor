@@ -58,7 +58,7 @@ export const GALLERY_IOS_PERMISSIONS = PERMISSIONS.IOS.PHOTO_LIBRARY;
 
 export const GALLERY_PHOTO_OPTIONS: ImageLibraryOptions = {
   mediaType: 'photo',
-  quality: 0.8,
+  quality: 1,
   maxWidth: 800,
   maxHeight: 800,
   selectionLimit: 1,
