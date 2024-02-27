@@ -1,4 +1,12 @@
 export const colors = {
+  alertSuccessBg: '#B5D5D3',
+  alertSuccessIcon: '#0F7B6C',
+  alertErrorBg: '#FFDAD6',
+  alertErrorIcon: '#BA1A1A',
+  alertWarnBg: '#F3E4B3',
+  alertWarnIcon: '#DFAC03',
+  alertInfoBg: '#B4D1E0',
+  alertInfoIcon: '#0B6E99',
   white: '#FFFFFF',
   whiteTsp: 'rgba(255, 255, 255, 0.8)',
   whiteTsp2: 'rgba(255, 255, 255, 0.6)',
