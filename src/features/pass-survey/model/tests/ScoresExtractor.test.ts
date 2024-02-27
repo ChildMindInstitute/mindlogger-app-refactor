@@ -16,11 +16,15 @@ import { ScoreConditionsEvaluator } from '../ScoreConditionsEvaluator';
 import { ScoresCalculator } from '../ScoresCalculator';
 import { ScoresExtractor } from '../ScoresExtractor';
 
+const RadioItemName = 'item-radio';
+const CheckboxesItemName = 'item-checkboxes';
+const SliderItemName = 'item-slider';
+
 const getRadiosItem = (): RadioPipelineItem => {
   const radiosItem: RadioPipelineItem = {
     type: 'Radio',
     timer: null,
-    name: 'item-radio',
+    name: RadioItemName,
     payload: {
       addTooltip: false,
       autoAdvance: false,
@@ -71,7 +75,7 @@ const getCheckboxesItem = (): CheckboxPipelineItem => {
   const checkboxesItem: CheckboxPipelineItem = {
     type: 'Checkbox',
     timer: null,
-    name: 'item-checkboxes',
+    name: CheckboxesItemName,
     payload: {
       addTooltip: false,
       randomizeOptions: false,
@@ -124,7 +128,7 @@ const getSliderItem = (): SliderPipelineItem => {
   const sliderItem: SliderPipelineItem = {
     type: 'Slider',
     timer: null,
-    name: 'item-slider',
+    name: SliderItemName,
     payload: {
       alerts: [],
       isContinuousSlider: false,
@@ -140,6 +144,39 @@ const getSliderItem = (): SliderPipelineItem => {
     },
   };
   return sliderItem;
+};
+
+const getItemsAndAnswers = () => {
+  const pipelineItems: PipelineItem[] = [];
+
+  const radiosItem: PipelineItem = getRadiosItem();
+
+  const checkBoxesItem: PipelineItem = getCheckboxesItem();
+
+  const sliderItem: PipelineItem = getSliderItem();
+
+  pipelineItems.push(radiosItem);
+  pipelineItems.push(checkBoxesItem);
+  pipelineItems.push(sliderItem);
+
+  const radioAnswer: RadioResponse = radiosItem.payload.options[0];
+
+  const checkBoxAnswer: Item[] = [
+    checkBoxesItem.payload.options[1],
+    checkBoxesItem.payload.options[2],
+  ];
+
+  const sliderAnswer: SliderResponse = 7;
+
+  const answers: Answers = {
+    0: { answer: radioAnswer },
+    1: {
+      answer: checkBoxAnswer,
+    },
+    2: { answer: sliderAnswer },
+  };
+
+  return { pipelineItems, answers };
 };
 
 describe('ScoresCalculator: test collectScoreForRadio', () => {
@@ -158,51 +195,22 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
     );
   });
 
-  [
+  let simpleTestParameters = [
     { expectedValue: 517, calculationType: 'sum' },
     { expectedValue: 517 / 3, calculationType: 'average' },
     { expectedValue: 80.78125, calculationType: 'percentage' },
-  ].forEach(({ expectedValue, calculationType }) => {
+  ];
+
+  simpleTestParameters.forEach(({ expectedValue, calculationType }) => {
     it(`Should return ${expectedValue} when calculationType is ${calculationType} and no set conditions`, () => {
-      const pipelineItems: PipelineItem[] = [];
-
-      const radiosItem: PipelineItem = getRadiosItem();
-
-      const checkBoxesItem: PipelineItem = getCheckboxesItem();
-
-      const sliderItem: PipelineItem = getSliderItem();
-
-      pipelineItems.push(radiosItem);
-      pipelineItems.push(checkBoxesItem);
-      pipelineItems.push(sliderItem);
-
-      const radioAnswer: RadioResponse = radiosItem.payload.options[0];
-
-      const checkBoxAnswer: Item[] = [
-        checkBoxesItem.payload.options[1],
-        checkBoxesItem.payload.options[2],
-      ];
-
-      const sliderAnswer: SliderResponse = 7;
-
-      const answers: Answers = {
-        0: { answer: radioAnswer },
-        1: {
-          answer: checkBoxAnswer,
-        },
-        2: { answer: sliderAnswer },
-      };
+      const { pipelineItems, answers } = getItemsAndAnswers();
 
       const reportSettings: Report[] = [
         {
           calculationType: calculationType as CalculationType,
           conditionalLogic: [],
           id: 'mock-report-id-1',
-          includedItems: [
-            radiosItem.name!,
-            checkBoxesItem.name!,
-            sliderItem.name!,
-          ],
+          includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
           name: 'mock-report-name-1',
           type: 'score',
         },
@@ -224,45 +232,14 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
   });
 
   it("Should return [517, 517 / 3, 80.78125] when calculationTypes are ['sum', 'average', percentage'] and no set conditions", () => {
-    const pipelineItems: PipelineItem[] = [];
-
-    const radiosItem: PipelineItem = getRadiosItem();
-
-    const checkBoxesItem: PipelineItem = getCheckboxesItem();
-
-    const sliderItem: PipelineItem = getSliderItem();
-
-    pipelineItems.push(radiosItem);
-    pipelineItems.push(checkBoxesItem);
-    pipelineItems.push(sliderItem);
-
-    const radioAnswer: RadioResponse = radiosItem.payload.options[0];
-
-    const checkBoxAnswer: Item[] = [
-      checkBoxesItem.payload.options[1],
-      checkBoxesItem.payload.options[2],
-    ];
-
-    const sliderAnswer: SliderResponse = 7;
-
-    const answers: Answers = {
-      0: { answer: radioAnswer },
-      1: {
-        answer: checkBoxAnswer,
-      },
-      2: { answer: sliderAnswer },
-    };
+    const { pipelineItems, answers } = getItemsAndAnswers();
 
     const reportSettings: Report[] = [
       {
         calculationType: 'sum',
         conditionalLogic: [],
         id: 'mock-report-id-1',
-        includedItems: [
-          radiosItem.name!,
-          checkBoxesItem.name!,
-          sliderItem.name!,
-        ],
+        includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
         name: 'mock-report-name-1',
         type: 'score',
       },
@@ -270,11 +247,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
         calculationType: 'average',
         conditionalLogic: [],
         id: 'mock-report-id-1',
-        includedItems: [
-          radiosItem.name!,
-          checkBoxesItem.name!,
-          sliderItem.name!,
-        ],
+        includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
         name: 'mock-report-name-2',
         type: 'score',
       },
@@ -282,11 +255,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
         calculationType: 'percentage',
         conditionalLogic: [],
         id: 'mock-report-id-1',
-        includedItems: [
-          radiosItem.name!,
-          checkBoxesItem.name!,
-          sliderItem.name!,
-        ],
+        includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
         name: 'mock-report-name-3',
         type: 'score',
       },
@@ -308,7 +277,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
     expect(result).toEqual(expected);
   });
 
-  [
+  const testParametersWithSelectedItems = [
     {
       expectedValue: 510,
       calculationType: 'sum',
@@ -339,92 +308,42 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
       calculationType: 'percentage',
       selectedItems: ['item-checkboxes', 'item-slider'],
     },
-  ].forEach(({ expectedValue, calculationType, selectedItems }) => {
-    it(`Should return ${expectedValue} when calculationType is ${calculationType} and selectedItems are ${selectedItems} and no set conditions`, () => {
-      const pipelineItems: PipelineItem[] = [];
+  ];
 
-      const radiosItem: PipelineItem = getRadiosItem();
+  testParametersWithSelectedItems.forEach(
+    ({ expectedValue, calculationType, selectedItems }) => {
+      it(`Should return ${expectedValue} when calculationType is ${calculationType} and selectedItems are ${selectedItems} and no set conditions`, () => {
+        const { pipelineItems, answers } = getItemsAndAnswers();
 
-      const checkBoxesItem: PipelineItem = getCheckboxesItem();
+        const reportSettings: Report[] = [
+          {
+            calculationType: calculationType as CalculationType,
+            conditionalLogic: [],
+            id: 'mock-report-id-1',
+            includedItems: selectedItems,
+            name: 'mock-report-name-1',
+            type: 'score',
+          },
+        ];
 
-      const sliderItem: PipelineItem = getSliderItem();
+        const result: ScoreRecord[] = extractor.extract(
+          pipelineItems,
+          answers,
+          reportSettings,
+          'mock-log-activity-name-1',
+        );
 
-      pipelineItems.push(radiosItem);
-      pipelineItems.push(checkBoxesItem);
-      pipelineItems.push(sliderItem);
+        const expected: ScoreRecord[] = [
+          { flagged: false, name: 'mock-report-name-1', value: expectedValue },
+        ];
 
-      const radioAnswer: RadioResponse = radiosItem.payload.options[0];
-
-      const checkBoxAnswer: Item[] = [
-        checkBoxesItem.payload.options[1],
-        checkBoxesItem.payload.options[2],
-      ];
-
-      const sliderAnswer: SliderResponse = 7;
-
-      const answers: Answers = {
-        0: { answer: radioAnswer },
-        1: {
-          answer: checkBoxAnswer,
-        },
-        2: { answer: sliderAnswer },
-      };
-
-      const reportSettings: Report[] = [
-        {
-          calculationType: calculationType as CalculationType,
-          conditionalLogic: [],
-          id: 'mock-report-id-1',
-          includedItems: selectedItems,
-          name: 'mock-report-name-1',
-          type: 'score',
-        },
-      ];
-
-      const result: ScoreRecord[] = extractor.extract(
-        pipelineItems,
-        answers,
-        reportSettings,
-        'mock-log-activity-name-1',
-      );
-
-      const expected: ScoreRecord[] = [
-        { flagged: false, name: 'mock-report-name-1', value: expectedValue },
-      ];
-
-      expect(result).toEqual(expected);
-    });
-  });
+        expect(result).toEqual(expected);
+      });
+    },
+  );
 
   it("Should return 517 and flagged set to true when calculationType is 'sum' and one condition is set: equal to 517", () => {
-    const pipelineItems: PipelineItem[] = [];
-
-    const radiosItem: PipelineItem = getRadiosItem();
-
-    const checkBoxesItem: PipelineItem = getCheckboxesItem();
-
-    const sliderItem: PipelineItem = getSliderItem();
-
-    pipelineItems.push(radiosItem);
-    pipelineItems.push(checkBoxesItem);
-    pipelineItems.push(sliderItem);
-
-    const radioAnswer: RadioResponse = radiosItem.payload.options[0];
-
-    const checkBoxAnswer: Item[] = [
-      checkBoxesItem.payload.options[1],
-      checkBoxesItem.payload.options[2],
-    ];
-
-    const sliderAnswer: SliderResponse = 7;
-
-    const answers: Answers = {
-      0: { answer: radioAnswer },
-      1: {
-        answer: checkBoxAnswer,
-      },
-      2: { answer: sliderAnswer },
-    };
+    const { pipelineItems, answers } = getItemsAndAnswers();
 
     const reportSettings: Report[] = [
       {
@@ -445,11 +364,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
           },
         ],
         id: 'mock-report-id-1',
-        includedItems: [
-          radiosItem.name!,
-          checkBoxesItem.name!,
-          sliderItem.name!,
-        ],
+        includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
         name: 'mock-report-name-1',
         type: 'score',
       },
