@@ -1,44 +1,11 @@
 import {
-  AudioPipelineItem,
-  CheckboxPipelineItem,
-  PipelineItem,
-  RadioPipelineItem,
-  SliderPipelineItem,
-} from '../../lib';
+  fillOptionsForCheckboxes,
+  fillOptionsForRadio,
+  getEmptyCheckboxesItem,
+  getEmptyRadioItem,
+} from './testHelpers';
+import { AudioPipelineItem, PipelineItem, SliderPipelineItem } from '../../lib';
 import { IScoresCalculator, ScoresCalculator } from '../ScoresCalculator';
-
-const getEmptyCheckboxesItem = (name: string): CheckboxPipelineItem => {
-  const result: CheckboxPipelineItem = {
-    name,
-    timer: null,
-    payload: {
-      addTooltip: false,
-      randomizeOptions: false,
-      setAlerts: false,
-      setPalette: false,
-      options: [],
-    },
-    type: 'Checkbox',
-  };
-  return result;
-};
-
-const fillOptionsForCheckboxes = (item: CheckboxPipelineItem, from = 1) => {
-  for (let i = from; i <= 5; i++) {
-    item.payload.options.push({
-      alert: null,
-      color: null,
-      id: 'mock-id-' + i,
-      image: null,
-      isHidden: false,
-      text: 'mock-text-' + i,
-      tooltip: null,
-      score: i * 10,
-      value: i,
-      isNoneOption: false,
-    });
-  }
-};
 
 const getEmptyAudioItem = (name: string): AudioPipelineItem => {
   const result: AudioPipelineItem = {
@@ -48,39 +15,6 @@ const getEmptyAudioItem = (name: string): AudioPipelineItem => {
     type: 'Audio',
   };
   return result;
-};
-
-const getEmptyRadioItem = (name: string): RadioPipelineItem => {
-  const result: RadioPipelineItem = {
-    name,
-    timer: null,
-    payload: {
-      addTooltip: false,
-      randomizeOptions: false,
-      setAlerts: false,
-      setPalette: false,
-      options: [],
-      autoAdvance: false,
-    },
-    type: 'Radio',
-  };
-  return result;
-};
-
-const fillOptionsForRadio = (item: RadioPipelineItem, from = 1) => {
-  for (let i = from; i <= 5; i++) {
-    item.payload.options.push({
-      alert: null,
-      color: null,
-      id: 'mock-id-' + i,
-      image: null,
-      isHidden: false,
-      text: 'mock-text-' + i,
-      tooltip: null,
-      score: i * 10,
-      value: i,
-    });
-  }
 };
 
 const getEmptySliderItem = (name: string): SliderPipelineItem => {
