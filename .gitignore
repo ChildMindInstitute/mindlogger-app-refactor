@@ -68,4 +68,5 @@ buck-out/
 /vendor/bundle/
 
 .env*
+!.env.example
 /.jest/
