@@ -8,9 +8,10 @@ import { ConnectionForm } from './ConnectionForm';
 type Props = {
   visible: boolean;
   onClose: () => void;
+  appletId: string;
 };
 
-export const ConnectionModal = ({ visible, onClose }: Props) => {
+export const ConnectionModal = ({ visible, onClose, appletId }: Props) => {
   return (
     <Modal
       animationType="fade"
@@ -42,6 +43,7 @@ export const ConnectionModal = ({ visible, onClose }: Props) => {
             py={22}
             borderRadius={12}
             onSubmitSuccess={onClose}
+            appletId={appletId}
           />
         </Box>
       </KeyboardAvoidingView>

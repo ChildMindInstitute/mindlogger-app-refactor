@@ -18,7 +18,7 @@ import {
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
-import { useAppletStreamingStatus } from '@entities/applet/lib/hooks';
+import { useAppletStreamingDetails } from '@entities/applet/lib/hooks';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
 import { StabilityTracker } from '@entities/stabilityTracker';
@@ -62,13 +62,15 @@ function ActivityItem({
   context,
 }: Props) {
   const { appletId } = useContext(ActivityIdentityContext);
-  const streamEnabled = useAppletStreamingStatus(appletId);
+  const streamingDetails = useAppletStreamingDetails(appletId);
 
   const initialScrollEnabled = type !== 'StabilityTracker' && type !== 'AbTest';
 
   const [scrollEnabled, setScrollEnabled] = useState(initialScrollEnabled);
 
-  const { sendLiveEvent } = useSendEvent(streamEnabled);
+  const { sendLiveEvent } = useSendEvent(
+    streamingDetails?.streamEnabled || false,
+  );
 
   const processLiveEvent = (streamEvent: LiveEvent) => {
     const liveEventDto = mapStreamEventToDto(streamEvent);

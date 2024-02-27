@@ -50,6 +50,8 @@ export type AppletDetails = {
   activityFlows: ActivityFlow[];
   encryption: AppletEncryptionDTO | null;
   streamEnabled: boolean;
+  streamIpAddress: string | null;
+  streamPort: string | null;
 };
 
 export type AnalyticsItemValue = {

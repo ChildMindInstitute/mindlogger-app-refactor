@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { useAppletStreamingStatus } from '@entities/applet/lib/hooks';
+import { useAppletStreamingDetails } from '@entities/applet/lib/hooks';
 import { colors, useTCPSocket } from '@shared/lib';
 import { XStack, Text, EditIcon, BoxProps } from '@shared/ui';
 
@@ -17,7 +17,7 @@ const ConnectionStatusBar: FC<Props> = ({ appletId, ...styleProps }) => {
   const { t } = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
   const closeModal = () => setModalVisible(false);
-  const streamEnabled = useAppletStreamingStatus(appletId);
+  const streamingDetails = useAppletStreamingDetails(appletId);
 
   const { connected, getSocketInfo } = useTCPSocket();
 
@@ -27,7 +27,7 @@ const ConnectionStatusBar: FC<Props> = ({ appletId, ...styleProps }) => {
     setModalVisible(true);
   };
 
-  if (!streamEnabled) {
+  if (!streamingDetails?.streamEnabled) {
     return null;
   }
 
@@ -56,7 +56,11 @@ const ConnectionStatusBar: FC<Props> = ({ appletId, ...styleProps }) => {
         </TouchableOpacity>
       </XStack>
 
-      <ConnectionModal visible={isModalVisible} onClose={closeModal} />
+      <ConnectionModal
+        visible={isModalVisible}
+        onClose={closeModal}
+        appletId={appletId}
+      />
     </>
   );
 };
