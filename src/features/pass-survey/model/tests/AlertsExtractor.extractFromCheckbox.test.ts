@@ -40,11 +40,11 @@ describe('AlertsExtractor: test extractFromRadio', () => {
 
     const expected: AnswerAlerts = [
       {
-        activityItemId: checkboxesItem.id!,
+        activityItemId: 'mock-checkbox-id',
         message: 'mock-alert-1',
       },
       {
-        activityItemId: checkboxesItem.id!,
+        activityItemId: 'mock-checkbox-id',
         message: 'mock-alert-2',
       },
     ];
@@ -68,7 +68,7 @@ describe('AlertsExtractor: test extractFromRadio', () => {
 
     const expected: AnswerAlerts = [
       {
-        activityItemId: checkboxesItem.id!,
+        activityItemId: 'mock-checkbox-id',
         message: 'mock-alert-1',
       },
     ];

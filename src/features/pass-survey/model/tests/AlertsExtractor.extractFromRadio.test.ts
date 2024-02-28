@@ -33,7 +33,7 @@ describe('AlertsExtractor: test extractFromRadio', () => {
 
     const expected: AnswerAlerts = [
       {
-        activityItemId: radiosItem.id!,
+        activityItemId: 'mock-radio-id',
         message: 'mock-alert-2',
       },
     ];
