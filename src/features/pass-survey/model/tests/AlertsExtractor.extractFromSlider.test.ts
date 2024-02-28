@@ -9,7 +9,7 @@ jest.mock('@app/shared/lib/constants', () => ({
   STORE_ENCRYPTION_KEY: '12345',
 }));
 
-describe('AlertsExtractor: test extractFromRadio', () => {
+describe('AlertsExtractor: test extractFromSlider', () => {
   let extractor: AlertsExtractor;
 
   beforeEach(() => {
