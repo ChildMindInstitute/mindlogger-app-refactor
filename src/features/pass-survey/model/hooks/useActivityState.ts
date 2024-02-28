@@ -174,7 +174,7 @@ function useActivityState({
   function iterateWithConditionalLogic(fromStep: number) {
     const currentStorageRecord = getCurrentActivityStorageRecord()!;
     const answers = { ...(currentStorageRecord.answers ?? {}) };
-    const timers = { ...(currentStorageRecord.timers ?? {}) };
+    const timers = currentStorageRecord?.timers;
     const items = currentStorageRecord.items ?? {};
 
     for (
@@ -185,9 +185,14 @@ function useActivityState({
       const visibilityChecker = PipelineVisibilityChecker(items, answers);
       const isItemVisible = visibilityChecker.isItemVisible(index);
 
-      if (!isItemVisible) {
+      if (isItemVisible) {
+        continue;
+      }
+
+      delete answers[index];
+
+      if (timers) {
         delete timers[index];
-        delete answers[index];
       }
     }
 
