@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
+import { FileSystem } from 'react-native-file-access';
 import {
   Asset,
   ImagePickerResponse,
@@ -12,6 +13,8 @@ import {
   colors,
   GALLERY_PHOTO_OPTIONS,
   handleBlockedPermissions,
+  ImageConverter,
+  Logger,
   PHOTO_TAKE_OPTIONS,
   requestCameraPermissions,
   requestGalleryPermissions,
@@ -28,15 +31,28 @@ type Props = {
   value?: MediaValue;
 };
 
-const preparePhotoFile = (image: Asset, isFromLibrary: boolean) => {
-  const fileName = image.fileName?.replace(/HEIC/gi, 'jpg') ?? '';
-  const mimeType = image.type?.replace(/HEIC/gi, 'jpg') ?? '';
+const preparePhotoFile = async (image: Asset, isFromLibrary: boolean) => {
+  const isHeic = image.fileName?.includes('heic');
+
+  if (isHeic) {
+    try {
+      const originalUri = image.uri!;
+
+      const jpgImage = await ImageConverter.convertHeicToJpg(image);
+
+      image = jpgImage;
+
+      await FileSystem.unlink(originalUri);
+    } catch (error) {
+      Logger.error(error as string);
+    }
+  }
 
   const photoFile = {
     uri: image.uri || '',
-    fileName,
+    fileName: image.fileName || '',
     size: image.fileSize || 0,
-    type: mimeType,
+    type: image.type || '',
     fromLibrary: isFromLibrary,
   };
 
@@ -48,13 +64,16 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
   const { isCameraAccessGranted } = useCameraPermissions();
   const { isGalleryAccessGranted } = useGalleryPermissions();
 
-  const pickImage = (response: ImagePickerResponse, isFromLibrary: boolean) => {
+  const pickImage = async (
+    response: ImagePickerResponse,
+    isFromLibrary: boolean,
+  ) => {
     const { assets } = response;
 
     if (assets?.length) {
       const imageItem = assets[0];
 
-      const photo = preparePhotoFile(imageItem, isFromLibrary);
+      const photo = await preparePhotoFile(imageItem, isFromLibrary);
 
       onChange(photo);
     }
