@@ -142,18 +142,29 @@ class AnswersUploadService implements IAnswersUploadService {
 
       if (!uploadRecord.uploaded) {
         this.logger.log(
+          `[UploadAnswersService.processFileUpload] Getting upload fields for file ${logFileInfo}`,
+        );
+
+        const fieldsResponse = await FileService.getFieldsForFileUpload({
+          appletId,
+          fileId: this.getFileId(mediaFile),
+        });
+
+        const getFieldsDto = fieldsResponse.data.result;
+
+        this.logger.log(
           `[UploadAnswersService.processFileUpload] Uploading file ${logFileInfo}`,
         );
 
-        const uploadResult = await FileService.uploadAppletFile({
+        await FileService.uploadAppletFileToS3({
+          fields: getFieldsDto.fields,
           fileName: mediaFile.fileName,
+          localUrl: mediaFile.uri,
           type: mediaFile.type,
-          uri: mediaFile.uri,
-          fileId: this.getFileId(mediaFile),
-          appletId,
+          uploadUrl: getFieldsDto.uploadUrl,
         });
 
-        remoteUrl = uploadResult.data.result.url;
+        remoteUrl = getFieldsDto.url;
 
         this.logger.log(
           `[UploadAnswersService.processFileUpload]: Upload success, url = "${remoteUrl}"`,
