@@ -20,7 +20,7 @@ import {
   StackedSliderResponse,
 } from '../lib';
 
-class AlertsExtractor {
+export class AlertsExtractor {
   private logger: ILogger;
 
   constructor(logger: ILogger) {
