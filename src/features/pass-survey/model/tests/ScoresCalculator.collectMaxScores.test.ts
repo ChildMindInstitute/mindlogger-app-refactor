@@ -1,115 +1,14 @@
 import {
-  AudioPipelineItem,
-  CheckboxPipelineItem,
-  PipelineItem,
-  RadioPipelineItem,
-  SliderPipelineItem,
-} from '../../lib';
+  fillOptionsForCheckboxes,
+  fillOptionsForRadio,
+  fillScoresForSlider,
+  getEmptyAudioItem,
+  getEmptyCheckboxesItem,
+  getEmptyRadioItem,
+  getEmptySliderItem,
+} from './testHelpers';
+import { PipelineItem } from '../../lib';
 import { IScoresCalculator, ScoresCalculator } from '../ScoresCalculator';
-
-const getEmptyCheckboxesItem = (name: string): CheckboxPipelineItem => {
-  const result: CheckboxPipelineItem = {
-    name,
-    timer: null,
-    payload: {
-      addTooltip: false,
-      randomizeOptions: false,
-      setAlerts: false,
-      setPalette: false,
-      options: [],
-    },
-    type: 'Checkbox',
-  };
-  return result;
-};
-
-const fillOptionsForCheckboxes = (item: CheckboxPipelineItem, from = 1) => {
-  for (let i = from; i <= 5; i++) {
-    item.payload.options.push({
-      alert: null,
-      color: null,
-      id: 'mock-id-' + i,
-      image: null,
-      isHidden: false,
-      text: 'mock-text-' + i,
-      tooltip: null,
-      score: i * 10,
-      value: i,
-      isNoneOption: false,
-    });
-  }
-};
-
-const getEmptyAudioItem = (name: string): AudioPipelineItem => {
-  const result: AudioPipelineItem = {
-    name,
-    timer: null,
-    payload: {} as any,
-    type: 'Audio',
-  };
-  return result;
-};
-
-const getEmptyRadioItem = (name: string): RadioPipelineItem => {
-  const result: RadioPipelineItem = {
-    name,
-    timer: null,
-    payload: {
-      addTooltip: false,
-      randomizeOptions: false,
-      setAlerts: false,
-      setPalette: false,
-      options: [],
-      autoAdvance: false,
-    },
-    type: 'Radio',
-  };
-  return result;
-};
-
-const fillOptionsForRadio = (item: RadioPipelineItem, from = 1) => {
-  for (let i = from; i <= 5; i++) {
-    item.payload.options.push({
-      alert: null,
-      color: null,
-      id: 'mock-id-' + i,
-      image: null,
-      isHidden: false,
-      text: 'mock-text-' + i,
-      tooltip: null,
-      score: i * 10,
-      value: i,
-    });
-  }
-};
-
-const getEmptySliderItem = (name: string): SliderPipelineItem => {
-  const result: SliderPipelineItem = {
-    name,
-    timer: null,
-    payload: {
-      isContinuousSlider: false,
-      leftImageUrl: null,
-      rightImageUrl: null,
-      leftTitle: 'left-title',
-      rightTitle: 'right-title',
-      showTickLabels: false,
-      showTickMarks: false,
-      alerts: null,
-      scores: [],
-      minValue: 2,
-      maxValue: 9,
-    },
-    type: 'Slider',
-  };
-  return result;
-};
-
-const fillOptionsForSlider = (item: SliderPipelineItem, count: number) => {
-  for (let i = 0; i < count; i++) {
-    item.payload.scores.push(i * 10);
-  }
-};
 
 describe('ScoresCalculator: test collectMaxScores', () => {
   let calculator: IScoresCalculator;
@@ -125,7 +24,7 @@ describe('ScoresCalculator: test collectMaxScores', () => {
 
     fillOptionsForCheckboxes(checkboxesItem);
     fillOptionsForRadio(radiosItem);
-    fillOptionsForSlider(sliderItem, 5);
+    fillScoresForSlider(sliderItem, 5);
 
     const selectedItems: string[] = [];
 
@@ -146,7 +45,7 @@ describe('ScoresCalculator: test collectMaxScores', () => {
 
     fillOptionsForCheckboxes(checkboxesItem);
     fillOptionsForRadio(radiosItem);
-    fillOptionsForSlider(sliderItem, 5);
+    fillScoresForSlider(sliderItem, 5);
 
     const selectedItems: string[] = [
       'checkbox-item',
@@ -171,7 +70,7 @@ describe('ScoresCalculator: test collectMaxScores', () => {
 
     fillOptionsForCheckboxes(checkboxesItem);
     fillOptionsForRadio(radiosItem);
-    fillOptionsForSlider(sliderItem, 5);
+    fillScoresForSlider(sliderItem, 5);
 
     const selectedItems: string[] = [
       'checkbox-item',
@@ -196,7 +95,7 @@ describe('ScoresCalculator: test collectMaxScores', () => {
 
     fillOptionsForCheckboxes(checkboxesItem);
     fillOptionsForRadio(radiosItem);
-    fillOptionsForSlider(sliderItem, 5);
+    fillScoresForSlider(sliderItem, 5);
 
     const selectedItems: string[] = [
       'checkbox-item',
@@ -221,7 +120,7 @@ describe('ScoresCalculator: test collectMaxScores', () => {
 
     fillOptionsForCheckboxes(checkboxesItem);
     fillOptionsForRadio(radiosItem);
-    fillOptionsForSlider(sliderItem, 5);
+    fillScoresForSlider(sliderItem, 5);
 
     const selectedItems: string[] = ['checkbox-item', 'radio-item'];
 

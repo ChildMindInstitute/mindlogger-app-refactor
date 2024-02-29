@@ -168,8 +168,8 @@
     "enter_email_mess": "Please enter your email address",
     "invalid_email": "Invalid email address",
     "email_address": "Email address",
-    "email_sent": "Reset email has been sent",
-    "email_send_error": "That email does not exist in the system.",
+    "email_send_success": "Reset email has been sent to <strong>{{email}}</strong> if the account exists.",
+    "email_send_error": "Unable to send reset email at this time.",
     "forgot_password": "Forgot password?"
   },
   "login": {

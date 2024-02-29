@@ -23,5 +23,6 @@ export { default as useCachedImage } from './useCachedImage';
 export { default as useCallbacksRefs } from './useCallbacksRefs';
 export { default as useCachedItem } from './useCachedItem';
 export { default as useOnFocus } from './useOnFocus';
+export { default as useBanner } from './useBanner';
 
 export * from './redux';

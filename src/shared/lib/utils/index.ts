@@ -7,3 +7,5 @@ export * from './networkHelpers';
 export * from './observable';
 export * from './file';
 export * from './calculator';
+export * from './calculator';
+export * from './imageConverter';

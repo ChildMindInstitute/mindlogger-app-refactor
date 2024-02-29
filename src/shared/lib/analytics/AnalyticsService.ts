@@ -18,6 +18,7 @@ let service: IAnalyticsService;
 
 export const MixProperties = {
   AppletId: 'Applet ID',
+  MindLoggerVersion: 'MindLogger Version',
 };
 
 export const MixEvents = {
@@ -30,10 +31,14 @@ export const MixEvents = {
   LoginSuccessful: 'Login Successful',
   SignupSuccessful: 'Signup Successful',
   AppOpen: 'App Open',
+  AppReOpen: 'App Re-Open',
   ActivityRestart: 'Activity Restart Button Pressed',
   ActivityResume: 'Activity Resume Button Pressed',
   AppletSelected: 'Applet Selected',
   ReturnToActivitiesPressed: 'Return to Activities pressed',
+  UploadLogsPressed: 'Upload Logs Pressed',
+  UploadedLogsSuccessfully: 'Uploaded Logs Successfully',
+  UploadLogsError: 'Upload Logs Error Occurred',
 };
 
 const AnalyticsService = {

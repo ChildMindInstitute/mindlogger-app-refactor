@@ -7,22 +7,14 @@ import {
 } from '@shared/lib';
 import { SystemRecord } from '@shared/lib/records';
 
-import httpService from './httpService';
-import { SuccessfulResponse } from '../types';
+import httpService, { getAxiosInstance } from './httpService';
+import { SuccessfulResponse, SuccessfulEmptyResponse } from '../types';
 
 type FileUploadRequest = {
   uri: string;
   fileName: string;
   type: string;
   fileId: string;
-};
-
-type AppletFileUploadRequest = {
-  uri: string;
-  fileName: string;
-  type: string;
-  fileId: string;
-  appletId: string;
 };
 
 type UploadResultDto = {
@@ -49,6 +41,34 @@ export type CheckIfFilesExistResultDto = Array<{
 }>;
 
 type CheckIfFilesExistResponse = SuccessfulResponse<CheckIfFilesExistResultDto>;
+
+type GetFieldsForFileUploadRequest = {
+  appletId: string;
+  fileId: string;
+};
+
+type FieldsForFileUploadDto = {
+  uploadUrl: string;
+  url: string;
+  fields: {
+    key: string;
+    AWSAccessKeyId: string;
+    'x-amz-security-token': string;
+    policy: string;
+    signature: string;
+  };
+};
+
+type GetFieldsForFileUploadResponse =
+  SuccessfulResponse<FieldsForFileUploadDto>;
+
+type AppletFileUploadToS3Request = Omit<FieldsForFileUploadDto, 'url'> & {
+  localUrl: string;
+  fileName: string;
+  type: string;
+};
+
+type AppletFileUploadToS3Response = SuccessfulEmptyResponse;
 
 type CheckIfLogsExistRequest = {
   files: FileId[];
@@ -149,35 +169,70 @@ function fileService() {
       return callApiWithRetry(apiCall);
     },
 
-    async uploadAppletFile(request: AppletFileUploadRequest) {
+    async getFieldsForFileUpload(request: GetFieldsForFileUploadRequest) {
+      const apiCall = async () => {
+        const { abortController, reset } = watchForConnectionLoss();
+
+        try {
+          const response =
+            await httpService.post<GetFieldsForFileUploadResponse>(
+              `/file/${request.appletId}/upload-url`,
+              {
+                fileId: request.fileId,
+              },
+              {
+                signal: abortController.signal,
+              },
+            );
+          return response;
+        } finally {
+          reset();
+        }
+      };
+
+      return callApiWithRetry(apiCall);
+    },
+
+    async uploadAppletFileToS3(request: AppletFileUploadToS3Request) {
       const apiCall = async () => {
         const { abortController, reset } = watchForConnectionLoss();
 
         try {
           const data = new FormData();
-          const uri = IS_ANDROID
-            ? request.uri
-            : request.uri.replace('file://', '');
+          const localUrl = IS_ANDROID
+            ? request.localUrl
+            : request.localUrl.replace('file://', '');
+
+          data.append('key', request.fields.key);
+          data.append('AWSAccessKeyId', request.fields.AWSAccessKeyId);
+          data.append(
+            'x-amz-security-token',
+            request.fields['x-amz-security-token'],
+          );
+          data.append('policy', request.fields.policy);
+          data.append('signature', request.fields.signature);
 
           data.append('file', {
-            uri,
+            uri: localUrl,
             name: request.fileName,
             type: request.type,
           } as unknown as Blob);
 
-          const response = await httpService.post<FileUploadResponse>(
-            `/file/${request.appletId}/upload`,
-            data,
-            {
-              headers: { 'Content-Type': 'multipart/form-data' },
-              signal: abortController.signal,
-              params: { fileId: request.fileId },
-            },
-          );
+          const httpInstance = getAxiosInstance();
+
+          const response =
+            await httpInstance.post<AppletFileUploadToS3Response>(
+              request.uploadUrl,
+              data,
+              {
+                headers: { 'Content-Type': 'multipart/form-data' },
+                signal: abortController.signal,
+              },
+            );
           return response;
         } catch (error) {
           Logger.error(
-            '[fileService.uploadAppletFile]: Error occurred: \n\n' + error,
+            '[fileService.uploadAppletFileToS3]: Error occurred: \n\n' + error,
           );
           throw error;
         } finally {

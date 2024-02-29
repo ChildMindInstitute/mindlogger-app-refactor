@@ -34,7 +34,7 @@ function AnswerValidator(params?: AnswerValidatorArgs) {
     isOutsideOfValues(min: number, max: number) {
       const answer = currentAnswer?.answer as Maybe<number>;
 
-      return ConditionalLogicModel.isBetweenValues(answer, min, max);
+      return ConditionalLogicModel.isOutsideOfValues(answer, min, max);
     },
 
     isEqualToValue(value: any) {

@@ -525,6 +525,8 @@ describe('Image URL Collection Functions', () => {
       accountId: '2923f4a9-20ef-4995-a340-251d96ff3082',
     },
     streamEnabled: false,
+    streamIpAddress: null,
+    streamPort: null,
   };
 
   it('should collect image URLs from AppletRecord', () => {

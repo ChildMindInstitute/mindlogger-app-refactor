@@ -365,7 +365,9 @@ project.ext.vectoricons = [
         'Foundation.ttf',
         'Entypo.ttf',
         'MaterialIcons.ttf',
-        'Feather.ttf'
+        'MaterialCommunityIcons.ttf',
+        'Feather.ttf',
+        'Octicons.ttf'
     ]
 ]
 

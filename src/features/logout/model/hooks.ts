@@ -15,6 +15,7 @@ import {
   isAppOnline,
   useAppDispatch,
   AnalyticsService,
+  useTCPSocket,
 } from '@shared/lib';
 
 import { clearEntityRecordStorages, clearUploadQueueStorage } from '../lib';
@@ -22,6 +23,7 @@ import { clearEntityRecordStorages, clearUploadQueueStorage } from '../lib';
 export function useLogout() {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+  const { closeConnection: closeActiveTCPConnection } = useTCPSocket();
 
   const processLogout = async () => {
     try {
@@ -56,6 +58,8 @@ export function useLogout() {
     queryClient.clear();
 
     SessionModel.clearSession();
+
+    closeActiveTCPConnection();
   };
 
   const logout = async () => {

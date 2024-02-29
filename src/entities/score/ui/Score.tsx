@@ -21,6 +21,7 @@ function Score({ label, value, highlighted }: Props) {
         fontSize={18}
         fontWeight={highlighted ? 'bold' : 'normal'}
         color={highlighted ? colors.red2 : 'black'}
+        accessibilityLabel="score-name"
       >
         {label}
       </Text>
@@ -30,6 +31,7 @@ function Score({ label, value, highlighted }: Props) {
           color={highlighted ? colors.red2 : 'black'}
           fontWeight={highlighted ? 'bold' : 'normal'}
           fontSize={22}
+          accessibilityLabel="score-value"
         >
           {getFloatPartLength(value) > 2 ? value.toFixed(2) : value}
         </Text>
