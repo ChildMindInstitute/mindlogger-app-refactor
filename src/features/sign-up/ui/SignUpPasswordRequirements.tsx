@@ -2,14 +2,22 @@ import { useMemo } from 'react';
 
 import { useFormContext } from 'react-hook-form';
 
+import { useFormChanges } from '@app/shared/lib';
 import { PasswordRequirements } from '@app/shared/ui/form';
 
 export const SignUpPasswordRequirements = () => {
-  const { formState, getValues } = useFormContext();
-  const passwordHasLength = !!getValues().password.length;
+  const form = useFormContext();
+
+  useFormChanges({
+    form,
+    watchInputs: ['password'],
+    onInputChange: () => form.trigger('password'),
+  });
+
+  const passwordHasLength = !!form.getValues().password.length;
   const passwordRequirements = useMemo(() => {
     const errors = Object.values(
-      formState.errors?.password?.types || {},
+      form.formState.errors?.password?.types || {},
     ).flat();
 
     return [
@@ -19,7 +27,7 @@ export const SignUpPasswordRequirements = () => {
       label: key,
       isValid: passwordHasLength && !errors.includes(key),
     }));
-  }, [passwordHasLength, formState.errors?.password?.types]);
+  }, [passwordHasLength, form.formState.errors?.password?.types]);
 
   return <PasswordRequirements requirements={passwordRequirements} />;
 };
