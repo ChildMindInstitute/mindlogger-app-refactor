@@ -1,2 +1,2 @@
-export * from './useAppletStreamingStatus';
+export * from './useAppletStreamingDetails';
 export * from './useAppletAnalytics';
