@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import {
   ActivityRecordKeyParams,
+  EntityType,
   LookupEntityInput,
   StoreProgressPayload,
 } from '@app/abstract/lib';
@@ -11,19 +12,26 @@ import {
   AppletDetailsResponse,
 } from '@app/shared/api';
 import {
-  AnalyticsService,
   getAppletDetailsKey,
   getDataFromQuery,
   ILogger,
   isAppOnline,
   Logger,
-  MixEvents,
-  MixProperties,
   useAppDispatch,
   useAppletInfo,
   useAppSelector,
 } from '@shared/lib';
 
+import {
+  LogActivityActionParams,
+  LogFlowActionParams,
+  logRestartActivity,
+  logRestartFlow,
+  logResumeActivity,
+  logResumeFlow,
+  logStartActivity,
+  logStartFlow,
+} from './startEntityHelpers';
 import {
   onActivityContainsAllItemsHidden,
   onFlowActivityContainsAllItemsHidden,
@@ -121,6 +129,37 @@ function useStartEntity({
     );
   }
 
+  const shouldBreakDueToMediaReferences = async (
+    appletId: string,
+    entityId: string,
+    entityType: EntityType,
+  ): Promise<boolean> => {
+    const isOnline = await isAppOnline();
+
+    return (
+      !isOnline &&
+      hasMediaReferences({
+        appletId,
+        entityId: entityId,
+        entityType,
+        queryClient,
+      })
+    );
+  };
+
+  const shouldBreakDueToAllItemsHidden = (
+    appletId: string,
+    entityId: string,
+    entityType: EntityType,
+  ): boolean => {
+    return hasActivityWithHiddenAllItems({
+      appletId,
+      entityId,
+      entityType: entityType,
+      queryClient,
+    });
+  };
+
   async function startActivity(
     appletId: string,
     activityId: string,
@@ -128,61 +167,14 @@ function useStartEntity({
     entityName: string,
     isTimerElapsed: boolean = false,
   ): Promise<StartResult> {
-    const isOnline = await isAppOnline();
+    const breakDueToMediaReferences = await shouldBreakDueToMediaReferences(
+      appletId,
+      activityId,
+      'regular',
+    );
 
-    const shouldBreakDueToMediaReferences = (): boolean => {
-      return (
-        !isOnline &&
-        hasMediaReferences({
-          appletId,
-          entityId: activityId,
-          entityType: 'regular',
-          queryClient,
-        })
-      );
-    };
-
-    const shouldBreakDueToAllItemsHidden = (): boolean => {
-      return hasActivityWithHiddenAllItems({
-        appletId,
-        entityId: activityId,
-        entityType: 'regular',
-        queryClient,
-      });
-    };
-
-    const appletName = getAppletDisplayName(appletId);
-
-    const logStart = () => {
-      logger.log(
-        `[useStartEntity.startActivity]: Activity "${entityName}|${activityId}" started, applet "${appletName}|${appletId}"`,
-      );
-      AnalyticsService.track(MixEvents.AssessmentStarted, {
-        [MixProperties.AppletId]: appletId,
-      });
-    };
-    const logRestart = () => {
-      logger.log(
-        `[useStartEntity.startActivity]: Activity "${entityName}|${activityId}" restarted, applet "${appletName}|${appletId}"`,
-      );
-      AnalyticsService.track(MixEvents.ActivityRestart, {
-        [MixProperties.AppletId]: appletId,
-      });
-      AnalyticsService.track(MixEvents.AssessmentStarted, {
-        [MixProperties.AppletId]: appletId,
-      });
-    };
-    const logResume = () => {
-      logger.log(
-        `[useStartEntity.startActivity]: Activity "${entityName}|${activityId}" resumed, applet "${appletName}|${appletId}"`,
-      );
-      AnalyticsService.track(MixEvents.ActivityResume, {
-        [MixProperties.AppletId]: appletId,
-      });
-    };
-
-    return new Promise<StartResult>(resolve => {
-      if (shouldBreakDueToMediaReferences()) {
+    return new Promise<StartResult>(async resolve => {
+      if (breakDueToMediaReferences) {
         onMediaReferencesFound();
         resolve({
           cannotBeStartedDueToMediaFound: true,
@@ -190,7 +182,7 @@ function useStartEntity({
         return;
       }
 
-      if (shouldBreakDueToAllItemsHidden()) {
+      if (shouldBreakDueToAllItemsHidden(appletId, activityId, 'flow')) {
         onActivityContainsAllItemsHidden(entityName);
         resolve({
           cannotBeStartedDueToAllItemsHidden: true,
@@ -204,6 +196,13 @@ function useStartEntity({
         getProgress(appletId, activityId, eventId),
       );
 
+      const logParams: LogActivityActionParams = {
+        activityId,
+        appletId,
+        appletName: getAppletDisplayName(appletId)!,
+        entityName,
+      };
+
       if (isActivityInProgress) {
         if (isTimerElapsed) {
           resolve({ startedFromScratch: false });
@@ -212,18 +211,18 @@ function useStartEntity({
 
         onBeforeStartingActivity({
           onRestart: () => {
+            logRestartActivity(logParams);
             cleanUpMediaFiles({ activityId, appletId, eventId, order: 0 });
-            logRestart();
             activityStarted(appletId, activityId, eventId);
             resolve({ startedFromScratch: true });
           },
           onResume: () => {
-            logResume();
+            logResumeActivity(logParams);
             return resolve({ startedFromScratch: false });
           },
         });
       } else {
-        logStart();
+        logStartActivity(logParams);
         activityStarted(appletId, activityId, eventId);
         resolve({ startedFromScratch: true });
       }
@@ -237,29 +236,6 @@ function useStartEntity({
     entityName: string,
     isTimerElapsed: boolean = false,
   ): Promise<StartResult> {
-    const isOnline = await isAppOnline();
-
-    const shouldBreakDueToMediaReferences = (): boolean => {
-      return (
-        !isOnline &&
-        hasMediaReferences({
-          appletId,
-          entityId: flowId,
-          entityType: 'flow',
-          queryClient,
-        })
-      );
-    };
-
-    const shouldBreakDueToAllItemsHidden = (): boolean => {
-      return hasActivityWithHiddenAllItems({
-        appletId,
-        entityId: flowId,
-        entityType: 'flow',
-        queryClient,
-      });
-    };
-
     const detailsResponse: AppletDetailsResponse =
       getDataFromQuery<AppletDetailsResponse>(
         getAppletDetailsKey(appletId),
@@ -274,36 +250,6 @@ function useStartEntity({
       return flow.activityIds;
     };
 
-    const appletName = getAppletDisplayName(appletId);
-
-    const logStart = () => {
-      logger.log(
-        `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" started, applet "${appletName}|${appletId}"`,
-      );
-      AnalyticsService.track(MixEvents.AssessmentStarted, {
-        [MixProperties.AppletId]: appletId,
-      });
-    };
-    const logRestart = () => {
-      logger.log(
-        `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" restarted, applet "${appletName}|${appletId}"`,
-      );
-      AnalyticsService.track(MixEvents.ActivityRestart, {
-        [MixProperties.AppletId]: appletId,
-      });
-      AnalyticsService.track(MixEvents.AssessmentStarted, {
-        [MixProperties.AppletId]: appletId,
-      });
-    };
-    const logResume = () => {
-      logger.log(
-        `[useStartEntity.startFlow]: Flow "${entityName}|${flowId}" resumed, applet "${appletName}|${appletId}"`,
-      );
-      AnalyticsService.track(MixEvents.ActivityResume, {
-        [MixProperties.AppletId]: appletId,
-      });
-    };
-
     const getActivity = (id: string): ActivityRecordDto => {
       return detailsResponse.result.activities.find(x => x.id === id)!;
     };
@@ -316,14 +262,20 @@ function useStartEntity({
 
     const totalActivities = flowActivities.length;
 
+    const breakDueToMediaReferences = await shouldBreakDueToMediaReferences(
+      appletId,
+      flowId,
+      'flow',
+    );
+
     return new Promise<StartResult>(resolve => {
-      if (shouldBreakDueToMediaReferences()) {
+      if (breakDueToMediaReferences) {
         onMediaReferencesFound();
         resolve({ cannotBeStartedDueToMediaFound: true });
         return;
       }
 
-      if (shouldBreakDueToAllItemsHidden()) {
+      if (shouldBreakDueToAllItemsHidden(appletId, flowId, 'flow')) {
         onFlowActivityContainsAllItemsHidden(entityName);
         resolve({
           cannotBeStartedDueToAllItemsHidden: true,
@@ -337,6 +289,13 @@ function useStartEntity({
         getProgress(appletId, flowId, eventId),
       );
 
+      const logParams: LogFlowActionParams = {
+        flowId,
+        appletId,
+        appletName: getAppletDisplayName(appletId)!,
+        entityName,
+      };
+
       if (isFlowInProgress) {
         if (isTimerElapsed) {
           resolve({
@@ -348,6 +307,7 @@ function useStartEntity({
         onBeforeStartingActivity({
           onRestart: () => {
             for (let i = 0; i < flowActivities.length; i++) {
+              // TODO: it should be based on progress record
               cleanUpMediaFiles({
                 activityId: flowActivities[i],
                 appletId,
@@ -355,7 +315,7 @@ function useStartEntity({
                 order: i,
               });
             }
-            logRestart();
+            logRestartFlow(logParams);
 
             flowStarted({
               appletId,
@@ -373,14 +333,14 @@ function useStartEntity({
             });
           },
           onResume: () => {
-            logResume();
+            logResumeFlow(logParams);
             return resolve({
               startedFromScratch: false,
             });
           },
         });
       } else {
-        logStart();
+        logStartFlow(logParams);
         flowStarted({
           appletId,
           flowId,

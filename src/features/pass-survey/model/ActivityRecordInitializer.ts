@@ -59,7 +59,7 @@ export function ActivityRecordInitializer({
     const storageRecordExist = storage.contains(key);
 
     if (storageRecordExist) {
-      setAbTrailsStep(key);
+      moveAbTrailsStepToTutorial(key);
       return;
     }
 
@@ -93,11 +93,11 @@ export function ActivityRecordInitializer({
     storage.set(key, JSON.stringify(state));
   };
 
-  const setAbTrailsStep = (key: string) => {
+  const moveAbTrailsStepToTutorial = (key: string) => {
     const state = JSON.parse(storage.getString(key)!) as ActivityState;
 
     if (state.items[state.step].type === 'AbTest') {
-      state.step -= 1; // go back to tutorial
+      state.step -= 1;
       storage.set(key, JSON.stringify(state));
     }
   };

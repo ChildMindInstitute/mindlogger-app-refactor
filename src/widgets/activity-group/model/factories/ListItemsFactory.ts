@@ -43,10 +43,6 @@ export class ListItemsFactory {
         activityEvent,
       ) as FlowProgress;
 
-      activity = this.utility.activities.find(
-        x => x.id === progressRecord.currentActivityId,
-      )!;
-
       item.activityId = progressRecord.currentActivityId;
       item.name = progressRecord.currentActivityName;
       item.description = progressRecord.currentActivityDescription;

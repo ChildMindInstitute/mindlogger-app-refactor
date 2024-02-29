@@ -101,9 +101,9 @@ const useMigration1 = () => {
           JSON.stringify(progress, null, 2),
       );
 
-      const applet = getAppletDto(appletId);
+      const appletDto = getAppletDto(appletId);
 
-      if (!applet) {
+      if (!appletDto) {
         Logger.warn(
           LogModuleName +
             "Migration cannot be executed as applet doesn't exist: " +
@@ -114,8 +114,8 @@ const useMigration1 = () => {
 
       const isFlow = payload.type === ActivityPipelineType.Flow;
 
-      const activityFlow = isFlow
-        ? applet.activityFlows.find(f => f.id === entityId)
+      const activityFlowDto = isFlow
+        ? appletDto.activityFlows.find(f => f.id === entityId)
         : null;
 
       const key = getFlowRecordKey(appletId, isFlow ? entityId : null, eventId);
@@ -127,18 +127,18 @@ const useMigration1 = () => {
 
         const flowProgress = payload as FlowProgress;
 
-        const currentActivity = applet.activities.find(
+        const currentActivityDto = appletDto.activities.find(
           a => a.id === flowProgress.currentActivityId,
         );
 
-        if (!currentActivity) {
+        if (!currentActivityDto) {
           Logger.warn(
             LogModuleName +
               "currentActivity doesn't exist in react-query cache: " +
               flowProgress.currentActivityId,
           );
         }
-        if (!activityFlow) {
+        if (!activityFlowDto) {
           Logger.warn(
             LogModuleName + "activityFlow doesn't exist: " + entityId,
           );
@@ -152,9 +152,9 @@ const useMigration1 = () => {
           pipelineActivityOrder: flowProgress.pipelineActivityOrder,
           activityId: flowProgress.currentActivityId,
           activityDescription:
-            currentActivity?.description ?? '[Description unknown]',
-          activityImage: currentActivity?.image ?? null,
-          activityName: currentActivity?.name ?? '[Name unknown]',
+            currentActivityDto?.description ?? '[Description unknown]',
+          activityImage: currentActivityDto?.image ?? null,
+          activityName: currentActivityDto?.name ?? '[Name unknown]',
           totalActivities: flowState.pipeline.filter(x => x.type === 'Stepper')
             .length,
         };
@@ -179,7 +179,7 @@ const useMigration1 = () => {
       );
 
       if (isFlow) {
-        flowState.flowName = activityFlow!.name;
+        flowState.flowName = activityFlowDto!.name;
       }
 
       if (eventDto) {
@@ -190,25 +190,24 @@ const useMigration1 = () => {
       }
 
       for (let pipelineItem of flowState.pipeline) {
-        const pipelineActivity = applet.activities.find(
+        const activityDto = appletDto.activities.find(
           a => a.id === pipelineItem.payload.activityId,
         );
 
         switch (pipelineItem.type) {
           case 'Stepper': {
             pipelineItem.payload.activityName =
-              pipelineActivity?.name ?? "'[Name unknown]'";
+              activityDto?.name ?? "'[Name unknown]'";
             pipelineItem.payload.activityDescription =
-              pipelineActivity?.description ?? '[Description unknown]';
-            pipelineItem.payload.activityImage =
-              pipelineActivity?.image ?? null;
+              activityDto?.description ?? '[Description unknown]';
+            pipelineItem.payload.activityImage = activityDto?.image ?? null;
             break;
           }
           case 'Finish':
           case 'Summary':
           case 'Intermediate':
             pipelineItem.payload.activityName =
-              pipelineActivity?.name ?? '[Name unknown]';
+              activityDto?.name ?? '[Name unknown]';
             break;
         }
       }
