@@ -78,7 +78,13 @@ function Summary({
     <Box flex={1} mb={bottom} bg="$white">
       <StatusBar hidden />
 
-      <Text fontWeight="500" fontSize={32} mx={20} mb={20}>
+      <Text
+        fontWeight="500"
+        fontSize={32}
+        mx={20}
+        mb={20}
+        accessibilityLabel="report_summary-text"
+      >
         {t('activity_summary:report_summary')}
       </Text>
 

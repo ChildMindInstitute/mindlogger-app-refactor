@@ -4,7 +4,6 @@ import {
   onIncorrectAnswerGiven,
 } from '../../lib';
 import AnswerValidator from '../AnswerValidator';
-import StepperUtils from '../StepperUtils';
 
 const ConditionalLogicItems: ActivityItemType[] = [
   'Radio',
@@ -65,19 +64,7 @@ function useActivityStepper(state: ActivityState | undefined) {
   }
 
   function getNextButtonText() {
-    const stepperUtils = new StepperUtils(state!);
-    const shift = stepperUtils.getNextStepShift();
-    const nextStep = step + shift;
-
-    if (nextStep >= items.length) {
-      return 'activity_navigation:done';
-    }
-
-    return isLastStep
-      ? 'activity_navigation:done'
-      : canSkip
-      ? 'activity_navigation:skip'
-      : 'activity_navigation:next';
+    return canSkip ? 'activity_navigation:skip' : 'activity_navigation:next';
   }
 
   return {

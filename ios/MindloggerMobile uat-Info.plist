@@ -67,7 +67,9 @@
 		<string>Foundation.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>MaterialIcons.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
 		<string>Feather.ttf</string>
+		<string>Octicons.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

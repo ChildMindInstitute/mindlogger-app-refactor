@@ -15,12 +15,14 @@ import {
   ActivityIndicator,
 } from '@app/shared/ui';
 import { CheckBoxField, InputField } from '@app/shared/ui/form';
+import { useAppletStreamingDetails } from '@entities/applet/lib/hooks';
 import { StreamingModel } from '@entities/streaming';
 
 import { ConnectionFormSchema } from '../model';
 
 type Props = {
   onSubmitSuccess: () => void;
+  appletId: string;
 } & BoxProps;
 
 const styles = StyleSheet.create({
@@ -38,9 +40,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
+export const ConnectionForm: FC<Props> = ({
+  onSubmitSuccess,
+  appletId,
+  ...props
+}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const streamingDetails = useAppletStreamingDetails(appletId);
 
   const connection = useAppSelector(
     StreamingModel.selectors.selectStreamingSettings,
@@ -73,8 +80,9 @@ export const ConnectionForm: FC<Props> = ({ onSubmitSuccess, ...props }) => {
       );
     },
     defaultValues: {
-      ipAddress: connection?.ipAddress,
-      port: connection?.port,
+      ipAddress:
+        (connection?.ipAddress || streamingDetails?.streamIpAddress) ?? '',
+      port: (connection?.port || streamingDetails?.streamPort) ?? '',
       remember: connection?.remember ?? true,
     },
     onSubmitFail: () => {

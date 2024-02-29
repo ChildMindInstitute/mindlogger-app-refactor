@@ -5,6 +5,7 @@ import { CacheManager } from '@georstat/react-native-image-cache';
 import { PortalProvider } from '@tamagui/portal';
 import { Dirs } from 'react-native-file-access';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { LocalizationProvider } from '@app/entities/localization';
 import { AnalyticsService, Logger, MixEvents } from '@app/shared/lib';
@@ -47,11 +48,13 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
                 <TamaguiProvider>
                   <NavigationProvider>
                     <PortalProvider>
-                      <ToastProvider>
-                        <SplashProvider isLoading={isBootingUp}>
-                          {children}
-                        </SplashProvider>
-                      </ToastProvider>
+                      <SafeAreaProvider>
+                        <ToastProvider>
+                          <SplashProvider isLoading={isBootingUp}>
+                            {children}
+                          </SplashProvider>
+                        </ToastProvider>
+                      </SafeAreaProvider>
                     </PortalProvider>
                   </NavigationProvider>
                 </TamaguiProvider>

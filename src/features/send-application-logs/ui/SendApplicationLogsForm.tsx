@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { Logger } from '@shared/lib';
+import { AnalyticsService, Logger, MixEvents } from '@shared/lib';
 import { SubmitButton, Box, Text, Center, ActivityIndicator } from '@shared/ui';
 
 const SendApplicationLogsForm: FC = () => {
@@ -13,7 +13,17 @@ const SendApplicationLogsForm: FC = () => {
 
   const onSendLogs = async () => {
     setIsLoading(true);
+
+    AnalyticsService.track(MixEvents.UploadLogsPressed);
+
     const result = await Logger.send();
+
+    if (result) {
+      AnalyticsService.track(MixEvents.UploadedLogsSuccessfully);
+    } else {
+      AnalyticsService.track(MixEvents.UploadLogsError);
+    }
+
     setUploadStatus(result);
     setIsLoading(false);
   };

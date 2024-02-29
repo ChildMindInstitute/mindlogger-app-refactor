@@ -83,7 +83,14 @@ const InputField: FC<Props> = ({
         name={name}
       />
 
-      {!hideError && <ErrorMessage mode={mode} mt={8} error={error} />}
+      {!hideError && (
+        <ErrorMessage
+          mode={mode}
+          mt={8}
+          error={error}
+          accessibilityLabel={`${name}-error-text`}
+        />
+      )}
     </>
   );
 };

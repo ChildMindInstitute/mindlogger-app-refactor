@@ -20,6 +20,7 @@ function useRefresh(onSuccess: () => void) {
     },
     { enabled: IS_IOS && isRefreshing },
   );
+
   const onRefresh = () => {
     refresh().then(() => setIsRefreshing(false));
     setIsRefreshing(true);

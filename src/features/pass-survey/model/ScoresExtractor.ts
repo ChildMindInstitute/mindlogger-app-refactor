@@ -7,7 +7,7 @@ import ScoreConditionsEvaluator, {
 import ScoresCalculator, { IScoresCalculator } from './ScoresCalculator';
 import { Answers, PipelineItem, ScoreRecord } from '../lib';
 
-class ScoresExtractor {
+export class ScoresExtractor {
   private conditionsEvaluator: IScoreConditionsEvaluator;
 
   private scoresCalculator: IScoresCalculator;

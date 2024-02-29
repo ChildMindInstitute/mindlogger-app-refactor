@@ -147,12 +147,17 @@ class NotificationBuilder implements INotificationBuilder {
       notification.randomDayCrossType = randomBorderType;
       notification.eventDayString = day.toString();
 
-      this.utility.markNotificationIfActivityCompleted(
-        (activityId ?? activityFlowId)!,
-        event.id,
-        notification,
-        currentInterval,
-      );
+      if (
+        event.availability.periodicityType !== PeriodicityType.Always ||
+        event.availability.oneTimeCompletion
+      ) {
+        this.utility.markNotificationIfActivityCompleted(
+          (activityId ?? activityFlowId)!,
+          event.id,
+          notification,
+          currentInterval,
+        );
+      }
 
       this.utility.markIfNotificationOutdated(notification, event);
 

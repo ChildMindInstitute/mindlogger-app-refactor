@@ -219,6 +219,57 @@ describe('NotificationBuilder: always-available penetrating tests', () => {
     expect(result.events[0].notifications.length).toEqual(15);
   });
 
+  it('Should return array of 15 notifications when reminder is unset and activity is completed today', () => {
+    const today = new Date(2024, 0, 3);
+    const now = new Date(today);
+    now.setHours(16);
+    now.setMinutes(10);
+
+    const event = getEmptyEvent();
+    setNormalSettingsToEvent(event, PeriodicityType.Always, today);
+
+    event.scheduledAt = calculateScheduledAt(event, now);
+
+    const eventEntity = getEventEntity(event);
+
+    const completedAt = new Date(now);
+    completedAt.setMinutes(5);
+
+    const builder = createBuilder(eventEntity, completedAt);
+    mockUtilityProps(builder, now);
+
+    const result = builder.build();
+
+    const expected: NotificationDescriber[] = [];
+
+    addNotification(expected, subDays(today, 1), 'outdated');
+    addNotification(expected, new Date(today));
+    addNotification(expected, addDays(today, 1));
+    addNotification(expected, addDays(today, 2));
+    addNotification(expected, addDays(today, 3));
+    addNotification(expected, addDays(today, 4));
+    addNotification(expected, addDays(today, 5));
+    addNotification(expected, addDays(today, 6));
+    addNotification(expected, addDays(today, 7));
+    addNotification(expected, addDays(today, 8));
+    addNotification(expected, addDays(today, 9));
+    addNotification(expected, addDays(today, 10));
+    addNotification(expected, addDays(today, 11));
+    addNotification(expected, addDays(today, 12));
+    addNotification(expected, addDays(today, 13));
+
+    const expectedResult: EventNotificationDescribers = {
+      eventId: 'mock-event-id',
+      eventName:
+        'For mock-entity-name, ALWAYS, 1 notifications, reminder unset',
+      notifications: expected,
+      scheduleEvent: event,
+    };
+
+    expect(result.events).toEqual([expectedResult]);
+    expect(result.events[0].notifications.length).toEqual(15);
+  });
+
   it('Should return array of 36 notifications including reminders when reminder is set and activityIncomplete is 1', () => {
     const today = new Date(2024, 0, 3);
 

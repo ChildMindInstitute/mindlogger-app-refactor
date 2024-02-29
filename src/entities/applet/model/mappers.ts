@@ -88,6 +88,8 @@ export function mapAppletDetailsFromDto(
     theme: mapThemeFromDto(detailsDto.theme),
     encryption: detailsDto.encryption,
     streamEnabled: detailsDto.streamEnabled,
+    streamIpAddress: detailsDto.streamIpAddress,
+    streamPort: detailsDto.streamPort,
   };
 }
 
