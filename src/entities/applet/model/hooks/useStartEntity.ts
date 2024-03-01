@@ -182,7 +182,7 @@ function useStartEntity({
         return;
       }
 
-      if (shouldBreakDueToAllItemsHidden(appletId, activityId, 'flow')) {
+      if (shouldBreakDueToAllItemsHidden(appletId, activityId, 'regular')) {
         onActivityContainsAllItemsHidden(entityName);
         resolve({
           cannotBeStartedDueToAllItemsHidden: true,
