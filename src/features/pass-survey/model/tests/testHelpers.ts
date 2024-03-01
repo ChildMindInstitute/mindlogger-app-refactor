@@ -3,6 +3,8 @@ import {
   CheckboxPipelineItem,
   RadioPipelineItem,
   SliderPipelineItem,
+  StackedRadioPipelineItem,
+  StackedRadioResponse,
 } from '../../lib';
 
 export const getEmptyRadioItem = (name: string): RadioPipelineItem => {
@@ -149,5 +151,88 @@ export const getEmptyAudioItem = (name: string): AudioPipelineItem => {
     payload: {} as any,
     type: 'Audio',
   };
+  return result;
+};
+
+export const getStackedRadioItem = () => {
+  const result: StackedRadioPipelineItem = {
+    timer: null,
+    type: 'StackedRadio',
+    id: 'item-stacked-radio',
+    payload: {
+      addScores: false,
+      setAlerts: true,
+      addTooltip: false,
+      options: [], // no need for alerts test
+      rows: [], // - / -
+      randomizeOptions: false,
+      dataMatrix: [
+        {
+          rowId: 'mock-row-id-1',
+          options: [
+            {
+              alert: { message: 'mock-alert-r1-o1' },
+              optionId: 'mock-opt-id-1',
+              score: 0,
+            },
+            {
+              alert: { message: 'mock-alert-r1-o2' },
+              optionId: 'mock-opt-id-2',
+              score: 0,
+            },
+            {
+              alert: { message: 'mock-alert-r1-o3' },
+              optionId: 'mock-opt-id-3',
+              score: 0,
+            },
+          ],
+        },
+        {
+          rowId: 'mock-row-id-2',
+          options: [
+            {
+              alert: { message: 'mock-alert-r2-o1' },
+              optionId: 'mock-opt-id-10',
+              score: 0,
+            },
+            {
+              alert: { message: 'mock-alert-r2-o2' },
+              optionId: 'mock-opt-id-20',
+              score: 0,
+            },
+            {
+              alert: null,
+              optionId: 'mock-opt-id-30',
+              score: 0,
+            },
+          ],
+        },
+      ],
+    },
+  };
+  return result;
+};
+
+export const getStackedRadioResponse = (test: '1' | '2') => {
+  const result: StackedRadioResponse = [];
+
+  if (test === '1') {
+    result.push({ id: 'mock-opt-id-1', rowId: 'mock-row-id-1', tooltip: null });
+    result.push({
+      id: 'mock-opt-id-20',
+      rowId: 'mock-row-id-2',
+      tooltip: null,
+    });
+  }
+
+  if (test === '2') {
+    result.push({ id: 'mock-opt-id-1', rowId: 'mock-row-id-1', tooltip: null });
+    result.push({
+      id: 'mock-opt-id-30',
+      rowId: 'mock-row-id-2',
+      tooltip: null,
+    });
+  }
+
   return result;
 };
