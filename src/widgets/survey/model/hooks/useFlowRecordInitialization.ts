@@ -6,6 +6,7 @@ import { EntityType } from '@app/abstract/lib';
 import { ActivityModel } from '@app/entities/activity';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 import { EventModel } from '@app/entities/event';
+import { Logger } from '@app/shared/lib';
 
 import { useFlowStorageRecord } from '../../lib';
 import { getScheduledDate } from '../operations';
@@ -131,4 +132,26 @@ export function useFlowRecordInitialization({
       initializedRef.current = true;
     }
   }, [canCreateStorageRecord, createStorageRecord]);
+
+  const logFlowStepItem = flowStorageRecord?.pipeline[flowStorageRecord?.step];
+  const logIsFlowStorageRecordExist = !!flowStorageRecord;
+
+  useEffect(() => {
+    if (!logIsFlowStorageRecordExist) {
+      Logger.log(
+        "[useFlowRecordInitialization]: flowStorageRecord doesn't exist",
+      );
+    } else {
+      Logger.log(
+        `[useFlowRecordInitialization]: flowStorageRecord's step changed: step = ${step}`,
+      );
+      Logger.log(
+        `[useFlowRecordInitialization]: flowStorageRecord current item: ${JSON.stringify(
+          logFlowStepItem,
+          null,
+          2,
+        )}`,
+      );
+    }
+  }, [logIsFlowStorageRecordExist, step, logFlowStepItem]);
 }

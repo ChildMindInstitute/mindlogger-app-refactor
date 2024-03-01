@@ -428,5 +428,8 @@
     "finished_complete": "Finished. Click Done to complete.",
     "begin": "Begin",
     "end": "End"
+  },
+  "system": {
+    "migration_not_applied_text": "Data migration was not successfully applied. Please, contact support."
   }
 }

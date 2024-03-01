@@ -537,5 +537,8 @@
     "finished_complete": "Fini. Cliquer sur Terminé pour terminer.",
     "begin": "Commencer",
     "end": "Fin"
+  },
+  "system": {
+    "migration_not_applied_text": "La migration des données n'a pas été appliquée avec succès. Veuillez contacter le support."
   }
 }

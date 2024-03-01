@@ -35,6 +35,10 @@ export function onMediaReferencesFound() {
   );
 }
 
+export function onMigrationsNotApplied() {
+  Alert.alert('', i18n.t('system:migration_not_applied_text'));
+}
+
 export function onAppletRefreshError() {
   Alert.alert(
     i18n.t('applet_list_component:refresh_error_header'),
