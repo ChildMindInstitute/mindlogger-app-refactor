@@ -40,6 +40,8 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     onStrokeEnd,
   });
 
+  const lastPointTimeRef = useRef<number | null>(null);
+
   const currentTouchIdRef = useSharedValue<number | null>(null);
   const sizeRef = useSharedValue(width);
   const lineSketcher = useMemo(() => new LineSketcher(), []);
@@ -56,6 +58,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     (touchInfo: Point, time: number) => {
       const path = lineSketcher.createLine(touchInfo);
 
+      lastPointTimeRef.current = time;
       canvasRef.current?.setPaths(currentPaths => [...currentPaths, path]);
       callbacksRef.current.onStrokeStart(touchInfo.x, touchInfo.y, time);
     },
@@ -70,13 +73,15 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
         const dx = touchInfo.x - lastDrawnPoint.x;
         const dy = touchInfo.y - lastDrawnPoint.y;
 
+        const isSameTime = lastPointTimeRef.current === time;
         const isSamePoint = dx === 0 && dy === 0;
 
-        if (isSamePoint) {
+        if (isSamePoint || isSameTime) {
           return;
         }
       }
 
+      lastPointTimeRef.current = time;
       callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y, time);
 
       canvasRef.current?.setPaths(currentPaths => {
@@ -127,6 +132,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
       );
     }
 
+    lastPointTimeRef.current = null;
     callbacksRef.current.onStrokeEnd();
   }, [callbacksRef, createDot, lineSketcher]);
 
