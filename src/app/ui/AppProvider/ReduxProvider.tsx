@@ -15,12 +15,16 @@ import { IdentityModel } from '@entities/identity';
 import { StreamingModel } from '@entities/streaming';
 import { createAsyncStorage, useSystemBootUp } from '@shared/lib';
 
+import { ReduxMigrationManager } from '../../model';
+
 const storage = createAsyncStorage('redux-storage');
 
 export const persistConfig = {
   key: 'root',
   throttle: 1000,
   storage: storage,
+  version: ReduxMigrationManager.version,
+  migrate: ReduxMigrationManager.createMigrate(),
 };
 
 const rootReducer = (state: any, action: AnyAction) => {
@@ -57,7 +61,7 @@ export const reduxStore = configureStore({
 const persistor = persistStore(reduxStore);
 
 const ReduxProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { onModuleInitialized } = useSystemBootUp();
+  const { onModuleInitialized, initialized } = useSystemBootUp();
 
   const onBeforeLift = () => {
     onModuleInitialized('state');
@@ -66,7 +70,7 @@ const ReduxProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <Provider store={reduxStore}>
       <PersistGate persistor={persistor} onBeforeLift={onBeforeLift}>
-        {children}
+        {initialized && children}
       </PersistGate>
     </Provider>
   );
