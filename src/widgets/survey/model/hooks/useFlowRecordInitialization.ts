@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { EntityType, FlowProgressActivity } from '@app/abstract/lib';
+import { EntityType } from '@app/abstract/lib';
 import { ActivityModel } from '@app/entities/activity';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 import { EventModel } from '@app/entities/event';
@@ -79,16 +79,15 @@ export function useFlowRecordInitialization({
         hasSummary,
       });
     } else {
-      const activityIds = flow!.activityIds;
-
-      const activities = applet.activities
-        .filter(x => activityIds.includes(x.id))
-        .map<FlowProgressActivity>(x => ({
-          id: x.id,
-          name: x.name,
-          description: x.description,
-          image: x.image,
-        }));
+      const activities = flow!.activityIds.map(id => {
+        const found = applet.activities.find(x => x.id === id)!;
+        return {
+          id: found.id,
+          name: found.name,
+          description: found.description,
+          image: found.image,
+        };
+      });
 
       return buildActivityFlowPipeline({
         activities,
