@@ -68,6 +68,7 @@ function ActivitySectionList({ appletId, groups }: Props) {
         result => {
           if (
             result.cannotBeStartedDueToMediaFound ||
+            result.cannotBeStartedDueToMigrationsNotApplied ||
             result.cannotBeStartedDueToAllItemsHidden
           ) {
             return;
@@ -85,6 +86,7 @@ function ActivitySectionList({ appletId, groups }: Props) {
         result => {
           if (
             result.cannotBeStartedDueToMediaFound ||
+            result.cannotBeStartedDueToMigrationsNotApplied ||
             result.cannotBeStartedDueToAllItemsHidden
           ) {
             return;

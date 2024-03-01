@@ -111,3 +111,5 @@ export const DAYS_OF_WEEK_NUMBERS = [0, 1, 2, 3, 4, 5, 6];
 export const IV_LENGTH = 16;
 
 export { VIEWPORT_WIDTH, VIEWPORT_HEIGHT };
+
+export const MIGRATION_PROCESSOR_VERSION = 1;

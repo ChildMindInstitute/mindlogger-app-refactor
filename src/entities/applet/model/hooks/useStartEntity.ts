@@ -17,6 +17,7 @@ import {
   ILogger,
   isAppOnline,
   Logger,
+  MigrationsValidator,
   useAppDispatch,
   useAppletInfo,
   useAppSelector,
@@ -37,6 +38,7 @@ import {
   onFlowActivityContainsAllItemsHidden,
   onBeforeStartingActivity,
   onMediaReferencesFound,
+  onMigrationsNotApplied,
 } from '../../lib';
 import { selectInProgressApplets } from '../selectors';
 import { actions } from '../slice';
@@ -44,6 +46,7 @@ import { actions } from '../slice';
 type StartResult = {
   startedFromScratch?: boolean;
   cannotBeStartedDueToMediaFound?: boolean;
+  cannotBeStartedDueToMigrationsNotApplied?: boolean;
   cannotBeStartedDueToAllItemsHidden?: boolean;
 };
 
@@ -174,6 +177,14 @@ function useStartEntity({
     );
 
     return new Promise<StartResult>(async resolve => {
+      if (!MigrationsValidator.allMigrationHaveBeenApplied()) {
+        onMigrationsNotApplied();
+        resolve({
+          cannotBeStartedDueToMigrationsNotApplied: true,
+        });
+        return;
+      }
+
       if (breakDueToMediaReferences) {
         onMediaReferencesFound();
         resolve({
@@ -269,6 +280,14 @@ function useStartEntity({
     );
 
     return new Promise<StartResult>(resolve => {
+      if (!MigrationsValidator.allMigrationHaveBeenApplied()) {
+        onMigrationsNotApplied();
+        resolve({
+          cannotBeStartedDueToMigrationsNotApplied: true,
+        });
+        return;
+      }
+
       if (breakDueToMediaReferences) {
         onMediaReferencesFound();
         resolve({ cannotBeStartedDueToMediaFound: true });

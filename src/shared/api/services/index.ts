@@ -7,3 +7,4 @@ export * from './eventsService';
 export * from './notificationService';
 export * from './fileService';
 export * from './appletAnalyticsService';
+export { default as QueryDataUtils } from './QueryDataUtils';

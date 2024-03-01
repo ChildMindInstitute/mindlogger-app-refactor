@@ -15,6 +15,7 @@ import NavigationProvider from './NavigationProvider';
 import ReactQueryProvider from './ReactQueryProvider';
 import ReduxProvider from './ReduxProvider';
 import SplashProvider from './SplashProvider';
+import StorageMigrationProvider from './StorageMigrationProvider';
 import SystemBootUpProvider from './SystemBootUpProvider';
 import TamaguiProvider from './TamaguiProvider';
 import ToastProvider from './ToastProvider';
@@ -42,25 +43,27 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     <GestureHandlerRootView style={styles.gestureHandlerView}>
       <SystemBootUpProvider onLoadingFinished={onLoadingFinished}>
         <AnalyticsProvider>
-          <ReduxProvider>
-            <ReactQueryProvider>
-              <LocalizationProvider>
-                <TamaguiProvider>
-                  <NavigationProvider>
-                    <PortalProvider>
-                      <SafeAreaProvider>
-                        <ToastProvider>
-                          <SplashProvider isLoading={isBootingUp}>
-                            {children}
-                          </SplashProvider>
-                        </ToastProvider>
-                      </SafeAreaProvider>
-                    </PortalProvider>
-                  </NavigationProvider>
-                </TamaguiProvider>
-              </LocalizationProvider>
-            </ReactQueryProvider>
-          </ReduxProvider>
+          <ReactQueryProvider>
+            <ReduxProvider>
+              <StorageMigrationProvider>
+                <LocalizationProvider>
+                  <TamaguiProvider>
+                    <NavigationProvider>
+                      <PortalProvider>
+                        <SafeAreaProvider>
+                          <ToastProvider>
+                            <SplashProvider isLoading={isBootingUp}>
+                              {children}
+                            </SplashProvider>
+                          </ToastProvider>
+                        </SafeAreaProvider>
+                      </PortalProvider>
+                    </NavigationProvider>
+                  </TamaguiProvider>
+                </LocalizationProvider>
+              </StorageMigrationProvider>
+            </ReduxProvider>
+          </ReactQueryProvider>
         </AnalyticsProvider>
       </SystemBootUpProvider>
     </GestureHandlerRootView>
