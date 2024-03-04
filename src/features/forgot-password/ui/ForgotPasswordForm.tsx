@@ -11,8 +11,8 @@ import {
   useBanner,
   useFormChanges,
 } from '@shared/lib';
-import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
-import { ErrorMessage, InputField } from '@shared/ui/form';
+import { Box, BoxProps, SubmitButton } from '@shared/ui';
+import { InputField } from '@shared/ui/form';
 
 import SuccessNotification from './SuccessNotification';
 import { ForgotPasswordFormSchema } from '../model';
@@ -36,7 +36,6 @@ const ForgotPasswordForm: FC<Props> = props => {
 
   const {
     mutate: recover,
-    error,
     isLoading,
     reset,
   } = usePasswordRecoveryMutation({
@@ -60,21 +59,13 @@ const ForgotPasswordForm: FC<Props> = props => {
   return (
     <Box {...props}>
       <FormProvider {...form}>
-        <YStack mb={40}>
+        <Box mb={40}>
           <InputField
             accessibilityLabel="forgot-password-email-input"
             name="email"
             placeholder={t('auth:email_address')}
           />
-
-          {error && (
-            <ErrorMessage
-              mode="light"
-              error={{ message: error.evaluatedMessage! }}
-              mt={8}
-            />
-          )}
-        </YStack>
+        </Box>
 
         <SubmitButton
           isLoading={isLoading}
