@@ -152,13 +152,12 @@ export class AlertsExtractor {
     const alerts: AnswerAlerts = [];
 
     stackedCheckboxItem.payload.dataMatrix.forEach((row, rowIndex) => {
-      if (stackedCheckboxAnswer[rowIndex]?.length) {
+      const columnAnswers = stackedCheckboxAnswer[rowIndex];
+
+      if (columnAnswers?.length) {
         row.options.forEach(option => {
-          stackedCheckboxAnswer[rowIndex].forEach(itemAnswer => {
-            if (
-              stackedCheckboxAnswer[rowIndex] &&
-              itemAnswer.id === option.optionId!
-            ) {
+          columnAnswers.forEach(cellAnswer => {
+            if (cellAnswer.id === option.optionId!) {
               option.alert &&
                 alerts.push({
                   activityItemId: stackedCheckboxItem.id!,

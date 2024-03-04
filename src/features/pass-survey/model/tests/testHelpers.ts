@@ -3,6 +3,8 @@ import {
   CheckboxPipelineItem,
   RadioPipelineItem,
   SliderPipelineItem,
+  StackedCheckboxPipelineItem,
+  StackedCheckboxResponse,
   StackedRadioPipelineItem,
   StackedRadioResponse,
 } from '../../lib';
@@ -163,8 +165,8 @@ export const getStackedRadioItem = () => {
       addScores: false,
       setAlerts: true,
       addTooltip: false,
-      options: [], // no need for alerts test
-      rows: [], // - / -
+      options: [],
+      rows: [],
       randomizeOptions: false,
       dataMatrix: [
         {
@@ -213,10 +215,12 @@ export const getStackedRadioItem = () => {
   return result;
 };
 
-export const getStackedRadioResponse = (test: '1' | '2') => {
+export const getStackedRadioResponse = (
+  test: '1-no-empty-alerts' | '2-is-empty-alert',
+) => {
   const result: StackedRadioResponse = [];
 
-  if (test === '1') {
+  if (test === '1-no-empty-alerts') {
     result.push({ id: 'mock-opt-id-1', rowId: 'mock-row-id-1', tooltip: null });
     result.push({
       id: 'mock-opt-id-20',
@@ -225,13 +229,107 @@ export const getStackedRadioResponse = (test: '1' | '2') => {
     });
   }
 
-  if (test === '2') {
+  if (test === '2-is-empty-alert') {
     result.push({ id: 'mock-opt-id-1', rowId: 'mock-row-id-1', tooltip: null });
     result.push({
       id: 'mock-opt-id-30',
       rowId: 'mock-row-id-2',
       tooltip: null,
     });
+  }
+
+  return result;
+};
+
+export const getStackedCheckboxItem = () => {
+  const result: StackedCheckboxPipelineItem = {
+    timer: null,
+    type: 'StackedCheckbox',
+    id: 'item-stacked-checkbox',
+    payload: {
+      addScores: false,
+      setAlerts: true,
+      addTooltip: false,
+      options: [],
+      rows: [],
+      randomizeOptions: false,
+      dataMatrix: [
+        {
+          rowId: 'mock-row-id-1',
+          options: [
+            {
+              alert: { message: 'mock-alert-r1-o1' },
+              optionId: 'mock-opt-id-1',
+              score: 0,
+            },
+            {
+              alert: { message: 'mock-alert-r1-o2' },
+              optionId: 'mock-opt-id-2',
+              score: 0,
+            },
+            {
+              alert: { message: 'mock-alert-r1-o3' },
+              optionId: 'mock-opt-id-3',
+              score: 0,
+            },
+          ],
+        },
+        {
+          rowId: 'mock-row-id-2',
+          options: [
+            {
+              alert: { message: 'mock-alert-r2-o1' },
+              optionId: 'mock-opt-id-10',
+              score: 0,
+            },
+            {
+              alert: { message: 'mock-alert-r2-o2' },
+              optionId: 'mock-opt-id-20',
+              score: 0,
+            },
+            {
+              alert: null,
+              optionId: 'mock-opt-id-30',
+              score: 0,
+            },
+          ],
+        },
+      ],
+    },
+  };
+  return result;
+};
+
+export const getStackedCheckboxResponse = (
+  test: '1-partially-selected' | '2-all-selected' | '3-no-selection',
+) => {
+  const result: StackedCheckboxResponse = [];
+
+  if (test === '1-partially-selected') {
+    result.push([
+      { id: 'mock-opt-id-1', tooltip: null },
+      { id: 'mock-opt-id-2', tooltip: null },
+    ]);
+    result.push([
+      { id: 'mock-opt-id-20', tooltip: null },
+      { id: 'mock-opt-id-30', tooltip: null },
+    ]);
+  }
+
+  if (test === '2-all-selected') {
+    result.push([
+      { id: 'mock-opt-id-1', tooltip: null },
+      { id: 'mock-opt-id-2', tooltip: null },
+      { id: 'mock-opt-id-3', tooltip: null },
+    ]);
+    result.push([
+      { id: 'mock-opt-id-10', tooltip: null },
+      { id: 'mock-opt-id-20', tooltip: null },
+      { id: 'mock-opt-id-30', tooltip: null },
+    ]);
+  }
+
+  if (test === '3-no-selection') {
   }
 
   return result;

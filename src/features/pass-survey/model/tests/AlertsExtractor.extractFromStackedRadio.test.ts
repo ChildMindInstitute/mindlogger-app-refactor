@@ -21,10 +21,11 @@ describe('AlertsExtractor: test extractFromStackedRadio', () => {
     } as unknown as ILogger);
   });
 
-  it('Should return two alerts from the two selected cells in the different rows', () => {
+  it('Should return two alerts from the two selected cells in different rows', () => {
     const radiosItem = getStackedRadioItem();
 
-    const radioAnswer: StackedRadioResponse = getStackedRadioResponse('1');
+    const radioAnswer: StackedRadioResponse =
+      getStackedRadioResponse('1-no-empty-alerts');
 
     const result: AnswerAlerts = extractor.extractFromStackedRadio(radiosItem, {
       answer: radioAnswer,
@@ -38,10 +39,11 @@ describe('AlertsExtractor: test extractFromStackedRadio', () => {
     expect(result).toEqual(expected);
   });
 
-  it('Should return a single alert from the two selected cells in the different rows', () => {
+  it('Should return a single alert from the two selected cells in different rows', () => {
     const radiosItem = getStackedRadioItem();
 
-    const radioAnswer: StackedRadioResponse = getStackedRadioResponse('2');
+    const radioAnswer: StackedRadioResponse =
+      getStackedRadioResponse('2-is-empty-alert');
 
     const result: AnswerAlerts = extractor.extractFromStackedRadio(radiosItem, {
       answer: radioAnswer,
