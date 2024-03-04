@@ -7,6 +7,7 @@ import {
   StackedCheckboxResponse,
   StackedRadioPipelineItem,
   StackedRadioResponse,
+  StackedSliderPipelineItem,
 } from '../../lib';
 
 export const getEmptyRadioItem = (name: string): RadioPipelineItem => {
@@ -332,5 +333,65 @@ export const getStackedCheckboxResponse = (
   if (test === '3-no-selection') {
   }
 
+  return result;
+};
+
+export const getStackedSliderItem = (): StackedSliderPipelineItem => {
+  const result: StackedSliderPipelineItem = {
+    id: 'mock-stacked-slider-id',
+    name: 'mock-stacked-slider-name',
+    timer: null,
+    payload: {
+      addScores: false,
+      setAlerts: true,
+      rows: [
+        {
+          id: 'mock-row1-id',
+          label: 'mock-row1-label',
+          leftImageUrl: null,
+          rightImageUrl: null,
+          leftTitle: 'left-title',
+          rightTitle: 'right-title',
+          alerts: [
+            {
+              message: 'mock-row1-2-alert',
+              value: 2,
+            },
+            {
+              message: 'mock-row1-5-alert',
+              value: 5,
+            },
+            {
+              message: 'mock-row1-6-alert',
+              value: 6,
+            },
+            {
+              message: 'mock-row1-9-alert',
+              value: 9,
+            },
+          ],
+          minValue: 2,
+          maxValue: 9,
+        },
+        {
+          id: 'mock-row1-id',
+          label: 'mock-row1-label',
+          leftImageUrl: null,
+          rightImageUrl: null,
+          leftTitle: 'left-title',
+          rightTitle: 'right-title',
+          alerts: [
+            {
+              message: 'mock-row2-3-alert',
+              value: 3,
+            },
+          ],
+          minValue: 1,
+          maxValue: 5,
+        },
+      ],
+    },
+    type: 'StackedSlider',
+  };
   return result;
 };
