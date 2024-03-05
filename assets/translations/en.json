@@ -201,7 +201,16 @@
     "logout": "Logout",
     "permanently_delete_account": "Permanently Delete Account",
     "user_settings": "User Settings",
-    "upload_logs": "Upload Logs"
+    "upload_logs": "Upload Logs",
+    "delete_account": "Request account deletion"
+  },
+  "delete_user_account": {
+    "request": "Request Account Deletion",
+    "delete_data": "Delete your account and data? All data will be permanently deleted and cannot be restored.",
+    "cancel": "No, cancel",
+    "confirm": "Yes, delete",
+    "request_sent": "Account Deletion Request sent",
+    "what_to_know": "What to know:\nDeleting your account will also permanently delete all of your data. After you ask to delete your account, the process takes up to 24 hours. During this time, you will be logged out, and your account access will be blocked. If you change your mind about deleting your account, please contact us."
   },
   "language_screen": {
     "app_language": "Application language",
