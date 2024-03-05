@@ -259,6 +259,7 @@ android {
         dev {
             resValue "string", "app_name", "Mindlogger Dev"
             applicationIdSuffix ".dev"
+            manifestPlaceholders = [domainName: "kenroy.dev"]
         }
         qa {
             resValue "string", "app_name", "Mindlogger QA"

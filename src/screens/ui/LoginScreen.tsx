@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import {
   Linking,
   StatusBar,
@@ -6,16 +6,29 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
 
 import { LoginForm } from '@features/login';
 import { Link, XStack, Box, SubmitButton, CloudLogo } from '@shared/ui';
 
-const LoginScreen: FC = () => {
+import { RootStackParamList } from '../config';
+
+type LoginScreenProps = {
+  route: RouteProp<RootStackParamList, 'Login'>;
+};
+
+const LoginScreen: FC<LoginScreenProps> = ({ route }) => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (route.params?.isPasswordRecovery) {
+      console.log('Came from password recovery screen');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const navigateToSignUp = () => {
     navigate('SignUp');

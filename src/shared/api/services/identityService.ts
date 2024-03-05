@@ -22,6 +22,17 @@ type PasswordRecoveryRequest = {
   email: string;
 };
 
+type ApprovePasswordRecoveryRequest = {
+  email: string;
+  key: string;
+  password: string;
+};
+
+type PasswordRecoveryHealthCheckRequest = {
+  email: string;
+  key: string;
+};
+
 type ChangePasswordRequest = {
   password: string;
   prev_password: string;
@@ -58,6 +69,10 @@ export type SignUpResponse = SuccessfulEmptyResponse;
 
 export type PasswordRecoveryResponse = SuccessfulEmptyResponse;
 
+export type ApprovePasswordRecoveryResponse = SuccessfulEmptyResponse;
+
+export type PasswordRecoveryHealthCheckResponse = SuccessfulEmptyResponse;
+
 export type ChangePasswordResponse = SuccessfulEmptyResponse;
 
 function IdentityService() {
@@ -75,6 +90,20 @@ function IdentityService() {
       return httpService.post<PasswordRecoveryResponse>(
         '/users/me/password/recover',
         request,
+      );
+    },
+    approvePasswordRecovery(request: ApprovePasswordRecoveryRequest) {
+      return httpService.post<ApprovePasswordRecoveryResponse>(
+        '/users/me/password/recover/approve',
+        request,
+      );
+    },
+    passwordRecoveryHealthCheck(request: PasswordRecoveryHealthCheckRequest) {
+      return httpService.get<PasswordRecoveryHealthCheckResponse>(
+        '/users/me/password/recover/healthcheck',
+        {
+          params: request,
+        },
       );
     },
     refreshToken(request: RefreshTokenRequest) {

@@ -29,6 +29,12 @@ export const MIXPANEL_TOKEN = Config.MIXPANEL_TOKEN;
 
 export const STORE_ENCRYPTION_KEY = Config.STORE_ENCRYPTION_KEY;
 
+/**
+ * The scheme and host of the respondent web app in this environment.
+ * Format `https://example.com`
+ */
+export const DEEP_LINK_PREFIX = Config.DEEP_LINK_PREFIX;
+
 // @ts-ignore
 export const APP_VERSION = process.env.VERSION;
 
