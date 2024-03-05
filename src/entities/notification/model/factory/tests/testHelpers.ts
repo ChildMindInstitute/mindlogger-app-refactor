@@ -12,7 +12,7 @@ import {
   NotificationType,
   ScheduleEvent,
 } from '@app/entities/notification/lib';
-import { HourMinute } from '@app/shared/lib';
+import { HourMinute, ILogger } from '@app/shared/lib';
 
 import { createNotificationBuilder } from '../NotificationBuilder';
 
@@ -100,4 +100,13 @@ export const addTime = (time: HourMinute, date: Date): Date => {
   result.setHours(time.hours);
   result.setMinutes(time.minutes);
   return result;
+};
+
+export const getLoggerMock = (): ILogger => {
+  return {
+    log: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+    info: jest.fn(),
+  } as unknown as ILogger;
 };

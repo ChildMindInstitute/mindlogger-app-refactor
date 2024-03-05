@@ -3,6 +3,11 @@ import {
   CheckboxPipelineItem,
   RadioPipelineItem,
   SliderPipelineItem,
+  StackedCheckboxPipelineItem,
+  StackedCheckboxResponse,
+  StackedRadioPipelineItem,
+  StackedRadioResponse,
+  StackedSliderPipelineItem,
 } from '../../lib';
 
 export const getEmptyRadioItem = (name: string): RadioPipelineItem => {
@@ -148,6 +153,245 @@ export const getEmptyAudioItem = (name: string): AudioPipelineItem => {
     timer: null,
     payload: {} as any,
     type: 'Audio',
+  };
+  return result;
+};
+
+export const getStackedRadioItem = () => {
+  const result: StackedRadioPipelineItem = {
+    timer: null,
+    type: 'StackedRadio',
+    id: 'item-stacked-radio',
+    payload: {
+      addScores: false,
+      setAlerts: true,
+      addTooltip: false,
+      options: [],
+      rows: [],
+      randomizeOptions: false,
+      dataMatrix: [
+        {
+          rowId: 'mock-row-id-1',
+          options: [
+            {
+              alert: { message: 'mock-alert-r1-o1' },
+              optionId: 'mock-opt-id-1',
+              score: 0,
+            },
+            {
+              alert: { message: 'mock-alert-r1-o2' },
+              optionId: 'mock-opt-id-2',
+              score: 0,
+            },
+            {
+              alert: { message: 'mock-alert-r1-o3' },
+              optionId: 'mock-opt-id-3',
+              score: 0,
+            },
+          ],
+        },
+        {
+          rowId: 'mock-row-id-2',
+          options: [
+            {
+              alert: { message: 'mock-alert-r2-o1' },
+              optionId: 'mock-opt-id-10',
+              score: 0,
+            },
+            {
+              alert: { message: 'mock-alert-r2-o2' },
+              optionId: 'mock-opt-id-20',
+              score: 0,
+            },
+            {
+              alert: null,
+              optionId: 'mock-opt-id-30',
+              score: 0,
+            },
+          ],
+        },
+      ],
+    },
+  };
+  return result;
+};
+
+export const getStackedRadioResponse = (
+  test: '1-no-empty-alerts' | '2-is-empty-alert',
+) => {
+  const result: StackedRadioResponse = [];
+
+  if (test === '1-no-empty-alerts') {
+    result.push({ id: 'mock-opt-id-1', rowId: 'mock-row-id-1', tooltip: null });
+    result.push({
+      id: 'mock-opt-id-20',
+      rowId: 'mock-row-id-2',
+      tooltip: null,
+    });
+  }
+
+  if (test === '2-is-empty-alert') {
+    result.push({ id: 'mock-opt-id-1', rowId: 'mock-row-id-1', tooltip: null });
+    result.push({
+      id: 'mock-opt-id-30',
+      rowId: 'mock-row-id-2',
+      tooltip: null,
+    });
+  }
+
+  return result;
+};
+
+export const getStackedCheckboxItem = () => {
+  const result: StackedCheckboxPipelineItem = {
+    timer: null,
+    type: 'StackedCheckbox',
+    id: 'item-stacked-checkbox',
+    payload: {
+      addScores: false,
+      setAlerts: true,
+      addTooltip: false,
+      options: [],
+      rows: [],
+      randomizeOptions: false,
+      dataMatrix: [
+        {
+          rowId: 'mock-row-id-1',
+          options: [
+            {
+              alert: { message: 'mock-alert-r1-o1' },
+              optionId: 'mock-opt-id-1',
+              score: 0,
+            },
+            {
+              alert: { message: 'mock-alert-r1-o2' },
+              optionId: 'mock-opt-id-2',
+              score: 0,
+            },
+            {
+              alert: { message: 'mock-alert-r1-o3' },
+              optionId: 'mock-opt-id-3',
+              score: 0,
+            },
+          ],
+        },
+        {
+          rowId: 'mock-row-id-2',
+          options: [
+            {
+              alert: { message: 'mock-alert-r2-o1' },
+              optionId: 'mock-opt-id-10',
+              score: 0,
+            },
+            {
+              alert: { message: 'mock-alert-r2-o2' },
+              optionId: 'mock-opt-id-20',
+              score: 0,
+            },
+            {
+              alert: null,
+              optionId: 'mock-opt-id-30',
+              score: 0,
+            },
+          ],
+        },
+      ],
+    },
+  };
+  return result;
+};
+
+export const getStackedCheckboxResponse = (
+  test: '1-partially-selected' | '2-all-selected' | '3-no-selection',
+) => {
+  const result: StackedCheckboxResponse = [];
+
+  if (test === '1-partially-selected') {
+    result.push([
+      { id: 'mock-opt-id-1', tooltip: null },
+      { id: 'mock-opt-id-2', tooltip: null },
+    ]);
+    result.push([
+      { id: 'mock-opt-id-20', tooltip: null },
+      { id: 'mock-opt-id-30', tooltip: null },
+    ]);
+  }
+
+  if (test === '2-all-selected') {
+    result.push([
+      { id: 'mock-opt-id-1', tooltip: null },
+      { id: 'mock-opt-id-2', tooltip: null },
+      { id: 'mock-opt-id-3', tooltip: null },
+    ]);
+    result.push([
+      { id: 'mock-opt-id-10', tooltip: null },
+      { id: 'mock-opt-id-20', tooltip: null },
+      { id: 'mock-opt-id-30', tooltip: null },
+    ]);
+  }
+
+  if (test === '3-no-selection') {
+  }
+
+  return result;
+};
+
+export const getStackedSliderItem = (): StackedSliderPipelineItem => {
+  const result: StackedSliderPipelineItem = {
+    id: 'mock-stacked-slider-id',
+    name: 'mock-stacked-slider-name',
+    timer: null,
+    payload: {
+      addScores: false,
+      setAlerts: true,
+      rows: [
+        {
+          id: 'mock-row1-id',
+          label: 'mock-row1-label',
+          leftImageUrl: null,
+          rightImageUrl: null,
+          leftTitle: 'left-title',
+          rightTitle: 'right-title',
+          alerts: [
+            {
+              message: 'mock-row1-2-alert',
+              value: 2,
+            },
+            {
+              message: 'mock-row1-5-alert',
+              value: 5,
+            },
+            {
+              message: 'mock-row1-6-alert',
+              value: 6,
+            },
+            {
+              message: 'mock-row1-9-alert',
+              value: 9,
+            },
+          ],
+          minValue: 2,
+          maxValue: 9,
+        },
+        {
+          id: 'mock-row1-id',
+          label: 'mock-row1-label',
+          leftImageUrl: null,
+          rightImageUrl: null,
+          leftTitle: 'left-title',
+          rightTitle: 'right-title',
+          alerts: [
+            {
+              message: 'mock-row2-3-alert',
+              value: 3,
+            },
+          ],
+          minValue: 1,
+          maxValue: 5,
+        },
+      ],
+    },
+    type: 'StackedSlider',
   };
   return result;
 };
