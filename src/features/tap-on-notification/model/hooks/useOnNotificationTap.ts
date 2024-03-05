@@ -80,10 +80,6 @@ export function useOnNotificationTap({
     (eventDetail: LocalEventDetail) => void
   > = {
     'request-to-reschedule-due-to-limit': () => {
-      AnalyticsService.track(MixEvents.NotificationTap, {
-        [MixProperties.NotificationType]: 'request-to-reschedule-due-to-limit',
-      });
-
       NotificationModel.NotificationRefreshService.refresh(
         queryClient,
         storeProgress,
@@ -102,7 +98,6 @@ export function useOnNotificationTap({
       const executing = getCurrentRoute() === 'InProgressActivity';
 
       AnalyticsService.track(MixEvents.NotificationTap, {
-        [MixProperties.NotificationType]: 'schedule-event-alert',
         [MixProperties.AppletId]: appletId,
       });
 
@@ -119,10 +114,6 @@ export function useOnNotificationTap({
     },
     'response-data-alert': () => {},
     'applet-update-alert': () => {
-      AnalyticsService.track(MixEvents.NotificationTap, {
-        [MixProperties.NotificationType]: 'applet-update-alert',
-      });
-
       navigator.navigate('Applets');
 
       refresh()
@@ -137,10 +128,6 @@ export function useOnNotificationTap({
         .then(() => Logger.send());
     },
     'applet-delete-alert': () => {
-      AnalyticsService.track(MixEvents.NotificationTap, {
-        [MixProperties.NotificationType]: 'applet-delete-alert',
-      });
-
       navigator.navigate('Applets');
 
       refresh()
@@ -155,10 +142,6 @@ export function useOnNotificationTap({
         .then(() => Logger.send());
     },
     'schedule-updated': () => {
-      AnalyticsService.track(MixEvents.NotificationTap, {
-        [MixProperties.NotificationType]: 'schedule-updated',
-      });
-
       navigator.navigate('Applets');
 
       refresh()
