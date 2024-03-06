@@ -7,7 +7,7 @@ import {
   NotificationTriggerType,
   PeriodicityType,
 } from '@app/abstract/lib';
-import { DatesFromTo, Logger } from '@app/shared/lib';
+import { DatesFromTo, ILogger, Logger } from '@app/shared/lib';
 
 import { NotificationDaysExtractor } from './NotificationDaysExtractor';
 import { NotificationUtility } from './NotificationUtility';
@@ -45,7 +45,9 @@ class NotificationBuilder implements INotificationBuilder {
 
   private appletId: string;
 
-  constructor(inputData: NotificationBuilderInput) {
+  private logger: ILogger;
+
+  constructor(inputData: NotificationBuilderInput, logger: ILogger) {
     this.appletName = inputData.appletName;
     this.eventEntities = inputData.eventEntities;
 
@@ -54,6 +56,7 @@ class NotificationBuilder implements INotificationBuilder {
     this.notificationDaysExtractor = new NotificationDaysExtractor(
       inputData.progress,
       inputData.appletId,
+      logger,
     );
 
     this.reminderCreator = new ReminderCreator(
@@ -68,6 +71,7 @@ class NotificationBuilder implements INotificationBuilder {
     );
 
     this.appletId = inputData.appletId;
+    this.logger = logger;
   }
 
   private processEventDay(
@@ -124,7 +128,7 @@ class NotificationBuilder implements INotificationBuilder {
         );
 
         if (!triggerAt) {
-          Logger.warn(
+          this.logger.warn(
             '[NotificationBuilder.processEventDay]: triggerAt is not defined for random notification',
           );
           continue;
@@ -361,6 +365,7 @@ class NotificationBuilder implements INotificationBuilder {
 
 export const createNotificationBuilder = (
   inputData: NotificationBuilderInput,
+  logger: ILogger = Logger,
 ): INotificationBuilder => {
-  return new NotificationBuilder(inputData);
+  return new NotificationBuilder(inputData, logger);
 };

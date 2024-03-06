@@ -42,6 +42,9 @@ const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
     });
   //@ts-ignore
   builder.reminderCreator.utility.now = new Date(now);
+
+  //@ts-ignore
+  builder.notificationDaysExtractor.utility.now = new Date(now);
 };
 
 const calculateScheduledAt = (event: ScheduleEvent, now: Date) => {

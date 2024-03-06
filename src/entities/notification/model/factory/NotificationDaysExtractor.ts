@@ -9,7 +9,7 @@ import {
 } from 'date-fns';
 
 import { PeriodicityType, Progress } from '@app/abstract/lib';
-import { ILogger, Logger } from '@app/shared/lib';
+import { ILogger } from '@app/shared/lib';
 
 import { NotificationUtility } from './NotificationUtility';
 
@@ -18,9 +18,9 @@ export class NotificationDaysExtractor {
 
   private logger: ILogger;
 
-  constructor(progress: Progress, appletId: string) {
+  constructor(progress: Progress, appletId: string, logger: ILogger) {
     this.utility = new NotificationUtility(progress, appletId);
-    this.logger = Logger;
+    this.logger = logger;
   }
 
   private getDayFrom(
