@@ -123,7 +123,9 @@ function DrawingGesture(
         }
       })
       .onUpdate(event => {
-        runOnJS(onTouchProgress)(event, false, event.timestamp);
+        const time = Date.now();
+
+        runOnJS(onTouchProgress)(event, false, time);
       })
       .onFinalize(() => {
         runOnJS(onTouchEnd)();
