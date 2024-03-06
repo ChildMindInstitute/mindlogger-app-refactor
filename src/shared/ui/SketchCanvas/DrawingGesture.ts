@@ -104,7 +104,9 @@ function DrawingGesture(
     Gesture.Pan()
       .maxPointers(1)
       .onBegin(event => {
-        runOnJS(onTouchStart)(event, event.timestamp);
+        const time = Date.now();
+
+        runOnJS(onTouchStart)(event, time);
       })
       .onTouchesMove((event, manager) => {
         const touchData = event.allTouches[0];
@@ -116,6 +118,8 @@ function DrawingGesture(
           runOnJS(onTouchProgress)(finalPoint, true, time);
 
           manager.end();
+        } else {
+          manager.activate();
         }
       })
       .onUpdate(event => {
