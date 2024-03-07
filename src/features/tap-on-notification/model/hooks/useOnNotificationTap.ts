@@ -19,7 +19,14 @@ import {
   useOnInitialAndroidNotification,
 } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
-import { Logger, useAppSelector, useCurrentRoute } from '@app/shared/lib';
+import {
+  AnalyticsService,
+  Logger,
+  MixEvents,
+  MixProperties,
+  useAppSelector,
+  useCurrentRoute,
+} from '@app/shared/lib';
 
 type Input = {
   checkAvailability: (entityName: string, identifiers: EntityPath) => boolean;
@@ -89,6 +96,10 @@ export function useOnNotificationTap({
       const entityType: EntityType = activityFlowId ? 'flow' : 'regular';
 
       const executing = getCurrentRoute() === 'InProgressActivity';
+
+      AnalyticsService.track(MixEvents.NotificationTap, {
+        [MixProperties.AppletId]: appletId,
+      });
 
       if (executing) {
         navigator.goBack();
