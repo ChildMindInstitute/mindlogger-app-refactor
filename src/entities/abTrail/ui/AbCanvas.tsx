@@ -13,7 +13,7 @@ import {
 } from '@shopify/react-native-skia';
 
 import { AbTestPayload, Point, TestNode } from '@app/abstract/lib';
-import { StreamEventLoggable } from '@shared/lib';
+import { IS_ANDROID, StreamEventLoggable } from '@shared/lib';
 import { Box, BoxProps } from '@shared/ui';
 
 import AbShapes from './AbShapes';
@@ -296,7 +296,7 @@ const AbCanvas: FC<Props> = props => {
 
     drawPath();
 
-    if (isCloseToNext(point) && !isCloseToNextRerendered()) {
+    if (isCloseToNext(point) && !isCloseToNextRerendered() && !IS_ANDROID) {
       reRender();
       setCloseToNextRerendered();
     }
@@ -339,6 +339,10 @@ const AbCanvas: FC<Props> = props => {
       resetCurrentPath();
       setFlareGreenPointIndex({ index: getCurrentIndex() });
       onMessage(MessageType.IncorrectLine);
+    }
+
+    if (IS_ANDROID) {
+      reRender(); // @todo this is a temporary fix , we need to rewrite this component as described in https://mindlogger.atlassian.net/browse/M2-5702
     }
   };
 
