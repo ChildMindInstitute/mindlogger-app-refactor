@@ -5,13 +5,13 @@ import { createStorage, Logger } from '@app/shared/lib';
 import { getScheduledDate } from '@app/widgets/survey/model';
 
 import {
-  FlowProgress0000,
-  FlowProgress0001,
-  FlowState0000,
-  FlowState0001,
+  FlowProgressFrom,
+  FlowProgressTo,
+  FlowStateFrom,
+  FlowStateTo,
   MigrationInput,
   MigrationOutput,
-  RootState0000,
+  RootStateFrom,
 } from './MigrationTypes0001';
 import {
   ActivityFlowRecordDto,
@@ -34,11 +34,11 @@ export class MigrationToVersion0001 implements IMigration {
     this.queryDataUtils = new QueryDataUtils(queryClient);
   }
 
-  private getFlowState = (key: string): FlowState0000 | null => {
+  private getFlowState = (key: string): FlowStateFrom | null => {
     const json = flowStorage.getString(key);
 
     if (json) {
-      return JSON.parse(json) as FlowState0000;
+      return JSON.parse(json) as FlowStateFrom;
     } else {
       return null;
     }
@@ -55,10 +55,10 @@ export class MigrationToVersion0001 implements IMigration {
 
   private getUpdatedFlowProgress(
     currentActivityDto: ActivityRecordDto,
-    flowProgressFrom: FlowProgress0000,
-    flowStateFrom: FlowState0000,
-  ): FlowProgress0001 {
-    const progressTo: FlowProgress0001 = {
+    flowProgressFrom: FlowProgressFrom,
+    flowStateFrom: FlowStateFrom,
+  ): FlowProgressTo {
+    const progressTo: FlowProgressTo = {
       currentActivityDescription:
         currentActivityDto?.description ?? '[Description unknown]',
       currentActivityImage: currentActivityDto?.image ?? null,
@@ -77,12 +77,12 @@ export class MigrationToVersion0001 implements IMigration {
   }
 
   private getUpdateFlowState(
-    flowStateFrom: FlowState0000,
+    flowStateFrom: FlowStateFrom,
     appletDto: AppletDetailsDto,
     activityFlowDto: ActivityFlowRecordDto,
     eventId: string,
-  ): FlowState0001 {
-    const flowStateTo = { ...flowStateFrom } as FlowState0001;
+  ): FlowStateTo {
+    const flowStateTo = { ...flowStateFrom } as FlowStateTo;
 
     const eventDtos = this.queryDataUtils.getEventsDto(appletDto.id)!;
 
@@ -128,7 +128,7 @@ export class MigrationToVersion0001 implements IMigration {
   }
 
   public migrate(input: MigrationInput): MigrationOutput {
-    const reduxRootStateFrom: RootState0000 = input.redux;
+    const reduxRootStateFrom: RootStateFrom = input.redux;
 
     // todo - check if cache exist ?
 
@@ -162,11 +162,11 @@ export class MigrationToVersion0001 implements IMigration {
 
       const key = this.getFlowRecordKey(appletId, entityId, eventId);
 
-      const flowStateFrom: FlowState0000 = this.getFlowState(key)!;
+      const flowStateFrom: FlowStateFrom = this.getFlowState(key)!;
 
       Logger.info('[MigrationToVersion0001]: Updating flow progress record');
 
-      const flowProgressFrom = payload as FlowProgress0000;
+      const flowProgressFrom = payload as FlowProgressFrom;
 
       const currentActivityDto = appletDto.activities.find(
         a => a.id === flowProgressFrom.currentActivityId,
@@ -185,7 +185,7 @@ export class MigrationToVersion0001 implements IMigration {
         continue;
       }
 
-      const progressTo: FlowProgress0001 = this.getUpdatedFlowProgress(
+      const progressTo: FlowProgressTo = this.getUpdatedFlowProgress(
         currentActivityDto!,
         flowProgressFrom,
         flowStateFrom,

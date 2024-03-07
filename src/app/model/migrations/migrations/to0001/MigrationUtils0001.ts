@@ -16,7 +16,7 @@ import {
   ImageUrl,
 } from '@app/shared/lib';
 
-import { RootState0000, StoreProgressPayload0000 } from './MigrationTypes0001';
+import { RootStateFrom, StoreProgressPayloadFrom } from './MigrationTypes0001';
 
 export type ActivityRecordDto = {
   id: string;
@@ -71,11 +71,11 @@ export type NotCompletedEntity = {
   appletId: string;
   entityId: string;
   eventId: string;
-  payload: StoreProgressPayload0000;
+  payload: StoreProgressPayloadFrom;
 };
 
 export const selectNotCompletedEntities = (
-  state: RootState0000,
+  state: RootStateFrom,
 ): NotCompletedEntity[] => {
   const inProgressApplets = state.applets.inProgress;
   const result: NotCompletedEntity[] = [];

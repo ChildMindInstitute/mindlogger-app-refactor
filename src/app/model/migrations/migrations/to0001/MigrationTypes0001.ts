@@ -2,7 +2,7 @@ import { ActivityPipelineType } from '@app/abstract/lib';
 
 // flow records
 
-type FlowPipelineItem0000 = {
+type FlowPipelineItemFrom = {
   type: 'Stepper' | 'Intermediate' | 'Summary' | 'Finish';
   payload: {
     appletId: string;
@@ -13,7 +13,7 @@ type FlowPipelineItem0000 = {
   };
 };
 
-type FlowPipelineItem0001 = {
+type FlowPipelineItemTo = {
   type: 'Stepper' | 'Intermediate' | 'Summary' | 'Finish';
   payload: {
     appletId: string;
@@ -27,25 +27,25 @@ type FlowPipelineItem0001 = {
   };
 };
 
-export type FlowState0000 = {
+export type FlowStateFrom = {
   step: number;
-  pipeline: FlowPipelineItem0000[];
+  pipeline: FlowPipelineItemFrom[];
   isCompletedDueToTimer: boolean;
   context: Record<string, unknown>;
 };
 
-export type FlowState0001 = {
+export type FlowStateTo = {
   step: number;
   flowName: string | null;
   scheduledDate: number | null;
-  pipeline: FlowPipelineItem0001[];
+  pipeline: FlowPipelineItemTo[];
   isCompletedDueToTimer: boolean;
   context: Record<string, unknown>;
 };
 
 // redux
 
-export type FlowProgress0000 = {
+export type FlowProgressFrom = {
   type: ActivityPipelineType.Flow;
   currentActivityId: string;
   pipelineActivityOrder: number;
@@ -53,24 +53,24 @@ export type FlowProgress0000 = {
   executionGroupKey: string;
 };
 
-type ActivityProgress0000 = {
+type ActivityProgressFrom = {
   type: ActivityPipelineType.Regular;
 };
 
-type EntityProgress0000 = FlowProgress0000 | ActivityProgress0000;
+type EntityProgressFrom = FlowProgressFrom | ActivityProgressFrom;
 
-export type StoreProgressPayload0000 = EntityProgress0000 & {
+export type StoreProgressPayloadFrom = EntityProgressFrom & {
   startAt: number;
   endAt: number | null;
 };
 
-type StoreEventsProgress0000 = Record<string, StoreProgressPayload0000>;
+type StoreEventsProgressFrom = Record<string, StoreProgressPayloadFrom>;
 
-type StoreEntitiesProgress0000 = Record<string, StoreEventsProgress0000>;
+type StoreEntitiesProgressFrom = Record<string, StoreEventsProgressFrom>;
 
-type StoreProgress0000 = Record<string, StoreEntitiesProgress0000>;
+type StoreProgressFrom = Record<string, StoreEntitiesProgressFrom>;
 
-export type FlowProgress0001 = {
+export type FlowProgressTo = {
   type: ActivityPipelineType.Flow;
   pipelineActivityOrder: number;
   totalActivitiesInPipeline: number;
@@ -82,26 +82,26 @@ export type FlowProgress0001 = {
   executionGroupKey: string;
 };
 
-type ActivityProgress0001 = {
+type ActivityProgressTo = {
   type: ActivityPipelineType.Regular;
 };
 
-type EntityProgress0001 = FlowProgress0001 | ActivityProgress0001;
+type EntityProgressTo = FlowProgressTo | ActivityProgressTo;
 
-type StoreProgressPayload0001 = EntityProgress0001 & {
+type StoreProgressPayloadTo = EntityProgressTo & {
   startAt: number;
   endAt: number | null;
 };
 
-type StoreEventsProgress0001 = Record<string, StoreProgressPayload0001>;
+type StoreEventsProgressTo = Record<string, StoreProgressPayloadTo>;
 
-type StoreEntitiesProgress0001 = Record<string, StoreEventsProgress0001>;
+type StoreEntitiesProgressTo = Record<string, StoreEventsProgressTo>;
 
-type StoreProgress0001 = Record<string, StoreEntitiesProgress0001>;
+type StoreProgressTo = Record<string, StoreEntitiesProgressTo>;
 
-export type RootState0000 = {
+export type RootStateFrom = {
   applets: {
-    inProgress: StoreProgress0000;
+    inProgress: StoreProgressFrom;
     completedEntities: any;
     completions: any;
   };
@@ -109,9 +109,9 @@ export type RootState0000 = {
   identity: any;
 };
 
-export type RootState0001 = {
+export type RootStateTo = {
   applets: {
-    inProgress: StoreProgress0001;
+    inProgress: StoreProgressTo;
     completedEntities: any;
     completions: any;
   };
@@ -122,10 +122,10 @@ export type RootState0001 = {
 // input / output
 
 export type MigrationInput = {
-  redux: RootState0000;
+  redux: RootStateFrom;
 };
 
 export type MigrationOutput = {
-  flowStateRecords: Record<string, FlowState0001>;
-  redux: RootState0001;
+  flowStateRecords: Record<string, FlowStateTo>;
+  redux: RootStateTo;
 };
