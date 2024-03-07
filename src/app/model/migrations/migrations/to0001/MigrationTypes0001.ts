@@ -1,7 +1,5 @@
 import { ActivityPipelineType } from '@app/abstract/lib';
 
-import { Excluded } from '../../types';
-
 // flow records
 
 type FlowPipelineItem0000 = {
@@ -47,7 +45,7 @@ export type FlowState0001 = {
 
 // redux
 
-type FlowProgress0000 = {
+export type FlowProgress0000 = {
   type: ActivityPipelineType.Flow;
   currentActivityId: string;
   pipelineActivityOrder: number;
@@ -61,7 +59,7 @@ type ActivityProgress0000 = {
 
 type EntityProgress0000 = FlowProgress0000 | ActivityProgress0000;
 
-type StoreProgressPayload0000 = EntityProgress0000 & {
+export type StoreProgressPayload0000 = EntityProgress0000 & {
   startAt: number;
   endAt: number | null;
 };
@@ -72,10 +70,14 @@ type StoreEntitiesProgress0000 = Record<string, StoreEventsProgress0000>;
 
 type StoreProgress0000 = Record<string, StoreEntitiesProgress0000>;
 
-type FlowProgress0001 = {
+export type FlowProgress0001 = {
   type: ActivityPipelineType.Flow;
-  currentActivityId: string;
   pipelineActivityOrder: number;
+  totalActivitiesInPipeline: number;
+  currentActivityId: string;
+  currentActivityName: string;
+  currentActivityDescription: string;
+  currentActivityImage: string | null;
   currentActivityStartAt: number | null;
   executionGroupKey: string;
 };
@@ -97,33 +99,33 @@ type StoreEntitiesProgress0001 = Record<string, StoreEventsProgress0001>;
 
 type StoreProgress0001 = Record<string, StoreEntitiesProgress0001>;
 
-type RootState0000 = {
+export type RootState0000 = {
   applets: {
     inProgress: StoreProgress0000;
-    completedEntities: Excluded;
-    completions: Excluded;
+    completedEntities: any;
+    completions: any;
   };
-  streaming: Excluded;
-  identity: Excluded;
+  streaming: any;
+  identity: any;
 };
 
-type RootState0001 = {
+export type RootState0001 = {
   applets: {
     inProgress: StoreProgress0001;
-    completedEntities: Excluded;
-    completions: Excluded;
+    completedEntities: any;
+    completions: any;
   };
-  streaming: Excluded;
-  identity: Excluded;
+  streaming: any;
+  identity: any;
 };
 
 // input / output
 
-export type MigrationInput0000 = {
+export type MigrationInput = {
   redux: RootState0000;
 };
 
-export type MigrationOutput0001 = {
+export type MigrationOutput = {
   flowStateRecords: Record<string, FlowState0001>;
   redux: RootState0001;
 };

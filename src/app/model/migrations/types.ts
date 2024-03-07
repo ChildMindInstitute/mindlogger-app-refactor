@@ -1,21 +1,22 @@
-import { FlowState0000, FlowState0001 } from './steps/types/types0001';
+import {
+  FlowState0000,
+  FlowState0001,
+  RootState0000,
+  RootState0001,
+} from './migrations/to0001/MigrationTypes0001';
 
-type FlowStateOfSpecificVersion = FlowState0000 | FlowState0001;
+type FlowState = FlowState0000 | FlowState0001;
+
+type ReduxRootState = RootState0000 | RootState0001;
 
 export type MigrationInput = {
-  redux?: ReduxSnippet;
+  redux?: ReduxRootState;
 };
 
 export type MigrationOutput = {
-  redux?: ReduxSnippet;
-  flowStateRecords?: Record<string, FlowStateOfSpecificVersion>;
+  redux?: any;
+  flowStateRecords?: Record<string, FlowState>;
 };
-
-export type Excluded = 'excluded';
-
-export type ReduxSubSnippet = Record<string, any | Excluded>;
-
-export type ReduxSnippet = Record<string, ReduxSubSnippet | Excluded>;
 
 export interface IMigration {
   migrate(input: MigrationInput): MigrationOutput;
