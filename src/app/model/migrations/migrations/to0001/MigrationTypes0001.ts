@@ -88,7 +88,7 @@ type ActivityProgressTo = {
 
 type EntityProgressTo = FlowProgressTo | ActivityProgressTo;
 
-type StoreProgressPayloadTo = EntityProgressTo & {
+export type StoreProgressPayloadTo = EntityProgressTo & {
   startAt: number;
   endAt: number | null;
 };
@@ -97,7 +97,7 @@ type StoreEventsProgressTo = Record<string, StoreProgressPayloadTo>;
 
 type StoreEntitiesProgressTo = Record<string, StoreEventsProgressTo>;
 
-type StoreProgressTo = Record<string, StoreEntitiesProgressTo>;
+export type StoreProgressTo = Record<string, StoreEntitiesProgressTo>;
 
 export type RootStateFrom = {
   applets: {

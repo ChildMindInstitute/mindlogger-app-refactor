@@ -16,7 +16,13 @@ import {
   ImageUrl,
 } from '@app/shared/lib';
 
-import { RootStateFrom, StoreProgressPayloadFrom } from './MigrationTypes0001';
+import {
+  RootStateFrom,
+  RootStateTo,
+  StoreProgressPayloadFrom,
+  StoreProgressPayloadTo,
+  StoreProgressTo,
+} from './MigrationTypes0001';
 
 export type ActivityRecordDto = {
   id: string;
@@ -66,19 +72,27 @@ export type AppletEventsResponse = SuccessfulResponse<{
   events: ScheduleEventDto[];
 }>;
 
-export type NotCompletedEntity = {
+export type NotCompletedFlowsTo = {
   type: ActivityPipelineType;
   appletId: string;
-  entityId: string;
+  flowId: string;
+  eventId: string;
+  payload: StoreProgressPayloadTo;
+};
+
+export type NotCompletedFlowsFrom = {
+  type: ActivityPipelineType;
+  appletId: string;
+  flowId: string;
   eventId: string;
   payload: StoreProgressPayloadFrom;
 };
 
-export const selectNotCompletedEntities = (
+export const selectNotCompletedFlows = (
   state: RootStateFrom,
-): NotCompletedEntity[] => {
+): NotCompletedFlowsFrom[] => {
   const inProgressApplets = state.applets.inProgress;
-  const result: NotCompletedEntity[] = [];
+  const result: NotCompletedFlowsFrom[] = [];
 
   const appletIds = Object.keys(inProgressApplets);
 
@@ -95,13 +109,13 @@ export const selectNotCompletedEntities = (
       for (let eventId of eventIds) {
         const payload = progressEvents[eventId];
 
-        if (payload.endAt) {
+        if (payload.endAt || payload.type === ActivityPipelineType.Regular) {
           continue;
         }
 
         result.push({
           appletId,
-          entityId,
+          flowId: entityId,
           eventId,
           type: payload.type,
           payload,
@@ -167,3 +181,23 @@ export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
     },
   };
 }
+
+export const getUpdatedReduxState = (
+  stateFrom: RootStateFrom,
+  progressFlowsTo: NotCompletedFlowsTo[],
+): RootStateTo => {
+  const result: RootStateTo = {
+    ...stateFrom,
+    applets: {
+      ...stateFrom.applets,
+      inProgress: { ...stateFrom.applets.inProgress } as StoreProgressTo,
+    },
+  };
+
+  for (let flow of progressFlowsTo) {
+    result.applets.inProgress[flow.appletId][flow.flowId][flow.eventId] =
+      flow.payload;
+  }
+
+  return result;
+};
