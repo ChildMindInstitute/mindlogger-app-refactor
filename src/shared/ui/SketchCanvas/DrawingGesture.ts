@@ -127,7 +127,7 @@ function DrawingGesture(
 
         runOnJS(onTouchProgress)(event, false, time);
       })
-      .onFinalize(() => {
+      .onEnd(() => {
         runOnJS(onTouchEnd)();
       });
 
