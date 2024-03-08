@@ -118,14 +118,3 @@ export type RootStateTo = {
   streaming: any;
   identity: any;
 };
-
-// input / output
-
-export type MigrationInput = {
-  redux: RootStateFrom;
-};
-
-export type MigrationOutput = {
-  flowStateRecords: Record<string, FlowStateTo>;
-  redux: RootStateTo;
-};

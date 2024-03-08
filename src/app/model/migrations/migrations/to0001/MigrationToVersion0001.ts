@@ -9,8 +9,6 @@ import {
   FlowProgressTo,
   FlowStateFrom,
   FlowStateTo,
-  MigrationInput,
-  MigrationOutput,
   RootStateFrom,
   RootStateTo,
   StoreProgressPayloadTo,
@@ -26,7 +24,7 @@ import {
   QueryDataUtils,
   selectNotCompletedFlows,
 } from './MigrationUtils0001';
-import { IMigration } from '../../types';
+import { IMigration, MigrationInput, MigrationOutput } from '../../types';
 
 const flowStorage = createStorage('flow_progress-storage');
 
@@ -145,11 +143,11 @@ export class MigrationToVersion0001 implements IMigration {
 
   public migrate(input: MigrationInput): MigrationOutput {
     const result: MigrationOutput = {
-      flowStateRecords: {},
-      redux: {} as RootStateTo,
+      reduxState: { ...input.reduxState } as RootStateTo,
+      storagesStates: { ...input.storagesStates },
     };
 
-    const reduxRootStateFrom: RootStateFrom = input.redux;
+    const reduxRootStateFrom: RootStateFrom = input.reduxState;
 
     // todo - check if cache exist ?
 
@@ -213,10 +211,19 @@ export class MigrationToVersion0001 implements IMigration {
         eventId,
       );
 
-      result.flowStateRecords[key] = flowStateTo;
+      result.storagesStates = {
+        ...result.storagesStates,
+        'flow_progress-storage': {
+          ...result.storagesStates['flow_progress-storage'],
+          key: flowStateTo,
+        },
+      };
     }
 
-    result.redux = getUpdatedReduxState(reduxRootStateFrom, progressFlowsTo);
+    result.reduxState = getUpdatedReduxState(
+      reduxRootStateFrom,
+      progressFlowsTo,
+    );
 
     return result;
   }

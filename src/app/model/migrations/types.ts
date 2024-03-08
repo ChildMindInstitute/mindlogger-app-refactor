@@ -7,15 +7,29 @@ import {
 
 type FlowState = FlowState0000 | FlowState0001;
 
-type ReduxRootState = RootState0000 | RootState0001;
+export type ReduxRootState = RootState0000 | RootState0001;
 
 export type MigrationInput = {
-  redux?: ReduxRootState;
+  reduxState: ReduxRootState;
+  storagesStates: StoragesStates;
+};
+
+type StorageKey = string;
+
+export type FlowProgressStates = Record<StorageKey, FlowState>;
+
+export type StoragesStates = {
+  system?: Record<StorageKey, {}>;
+  'flow_progress-storage'?: FlowProgressStates;
+  'notification-queue'?: Record<StorageKey, {}>;
+  localization?: Record<StorageKey, {}>;
+  'activity_progress-storage'?: Record<StorageKey, {}>;
+  'analytics-storage'?: Record<StorageKey, {}>;
 };
 
 export type MigrationOutput = {
-  redux?: any;
-  flowStateRecords?: Record<string, FlowState>;
+  reduxState: ReduxRootState;
+  storagesStates: StoragesStates;
 };
 
 export interface IMigration {

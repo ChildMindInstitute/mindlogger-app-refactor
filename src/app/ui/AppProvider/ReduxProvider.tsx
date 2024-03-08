@@ -15,7 +15,7 @@ import { IdentityModel } from '@entities/identity';
 import { StreamingModel } from '@entities/streaming';
 import { createAsyncStorage, useSystemBootUp } from '@shared/lib';
 
-import { ReduxMigrationManager } from '../../model';
+import { migrateReduxStore } from '../../model';
 
 const storage = createAsyncStorage('redux-storage');
 
@@ -23,13 +23,15 @@ export const persistConfig = {
   key: 'root',
   throttle: 1000,
   storage: storage,
-  version: ReduxMigrationManager.version,
-  migrate: ReduxMigrationManager.createMigrate(),
 };
 
 const rootReducer = (state: any, action: AnyAction) => {
   if (action.type === 'identity/onLogout') {
     state = undefined;
+  }
+
+  if (migrateReduxStore.match(action)) {
+    state = action.payload;
   }
 
   const reducer = combineReducers({
