@@ -2,7 +2,7 @@ import {
   callWithMutex,
   callWithMutexAsync,
   getStringHashCode,
-  isPropertyInObject,
+  isObjectNotEmpty,
   Mutex,
   range,
   wait,
@@ -23,7 +23,7 @@ describe('Test function isPropertyInObject', () => {
   it('should return false when an empty object provided', () => {
     const obj = {};
 
-    const result = isPropertyInObject(obj);
+    const result = isObjectNotEmpty(obj);
 
     expect(result).toBe(false);
   });
@@ -33,7 +33,7 @@ describe('Test function isPropertyInObject', () => {
       foo: 'bar',
     };
 
-    const result = isPropertyInObject(obj);
+    const result = isObjectNotEmpty(obj);
 
     expect(result).toBe(true);
   });
