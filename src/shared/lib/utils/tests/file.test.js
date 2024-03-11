@@ -1,7 +1,7 @@
 import { isLocalFileUrl } from '../file';
 
-describe('isFileUrl function', () => {
-  it('should correctly identify file URLs', () => {
+describe('Test isLocalFileUrl function', () => {
+  it('Should correctly identify file URLs', () => {
     const validFileUrls = [
       'file:///path/to/image.jpg',
       '/absolute/path/to/image.png',
@@ -13,7 +13,7 @@ describe('isFileUrl function', () => {
     });
   });
 
-  it('should correctly identify non-file URLs', () => {
+  it('Should correctly identify non-file URLs', () => {
     const invalidUrls = [
       'http://example.com/image.jpg',
       'https://example.com/video.mp4',

@@ -10,7 +10,7 @@ import { Circle, Svg } from 'react-native-svg';
 
 import {
   ONE_SECOND,
-  isEmptyObject,
+  isPropertyInObject,
   useAppTimer,
   useInterval,
 } from '@app/shared/lib';
@@ -76,7 +76,7 @@ const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
   const progressDone = useMemo(() => {
     if (
       activityStorageRecord?.timers &&
-      isEmptyObject(activityStorageRecord?.timers)
+      isPropertyInObject(activityStorageRecord?.timers)
     ) {
       return activityStorageRecord.timers[activityStorageRecord.step] ?? 0;
     }
