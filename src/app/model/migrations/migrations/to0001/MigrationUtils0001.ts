@@ -186,7 +186,7 @@ export const getUpdatedReduxState = (
   stateFrom: RootStateFrom,
   progressFlowsTo: NotCompletedFlowsTo[],
 ): RootStateTo => {
-  const result: RootStateTo = {
+  let result: RootStateTo = {
     ...stateFrom,
     applets: {
       ...stateFrom.applets,
@@ -195,8 +195,27 @@ export const getUpdatedReduxState = (
   };
 
   for (let flow of progressFlowsTo) {
-    result.applets.inProgress[flow.appletId][flow.flowId][flow.eventId] =
-      flow.payload;
+    result = {
+      ...result,
+      applets: {
+        ...result.applets,
+        inProgress: {
+          ...result.applets.inProgress,
+          [flow.appletId]: {
+            ...result.applets.inProgress[flow.appletId],
+            [flow.flowId]: {
+              ...result.applets.inProgress[flow.appletId][flow.flowId],
+              [flow.eventId]: {
+                ...result.applets.inProgress[flow.appletId][flow.flowId][
+                  flow.eventId
+                ],
+                ...flow.payload,
+              },
+            },
+          },
+        },
+      },
+    };
   }
 
   return result;
