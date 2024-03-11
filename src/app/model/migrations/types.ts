@@ -35,3 +35,10 @@ export type MigrationOutput = {
 export interface IMigration {
   migrate(input: MigrationInput): MigrationOutput;
 }
+
+export interface IMigrator {
+  migrate(
+    migrationInput: MigrationInput,
+    currentVersion: number,
+  ): Promise<MigrationOutput>;
+}

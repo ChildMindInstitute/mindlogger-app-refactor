@@ -3,6 +3,7 @@ import { createStorage } from '@shared/lib/storages';
 const storage = createStorage('system');
 
 const DEVICE_ID_KEY = 'deviceId';
+const DATA_VERSION_KEY = 'dataVersion';
 
 function SystemRecord() {
   function getDeviceId() {
@@ -10,12 +11,23 @@ function SystemRecord() {
   }
 
   function setDeviceId(deviceId: string) {
-    return storage.set(DEVICE_ID_KEY, deviceId);
+    storage.set(DEVICE_ID_KEY, deviceId);
+  }
+
+  function getDataVersion() {
+    return storage.getNumber(DATA_VERSION_KEY);
+  }
+
+  function setDataVersion(version: number) {
+    storage.set(DEVICE_ID_KEY, version);
   }
 
   return {
     getDeviceId,
     setDeviceId,
+
+    getDataVersion,
+    setDataVersion,
   };
 }
 

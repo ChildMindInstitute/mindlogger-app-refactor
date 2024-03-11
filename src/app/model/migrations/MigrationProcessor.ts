@@ -1,17 +1,15 @@
 import { createAction } from '@reduxjs/toolkit';
-import { MMKV } from 'react-native-mmkv';
 
-import { createStorage } from '@app/shared/lib';
+import { createStorage, SystemRecord } from '@app/shared/lib';
 
-import { MigrationFactory } from './MigrationFactory';
 import {
   FlowProgressStates,
+  IMigrator,
   MigrationInput,
   MigrationOutput,
   ReduxRootState,
   StoragesStates,
 } from './types';
-import { createMigrate, VERSION_KEY } from '../createMigrate';
 
 type IReduxStore = {
   getState(): ReduxRootState;
@@ -21,14 +19,14 @@ type IReduxStore = {
 export const migrateReduxStore = createAction<ReduxRootState>('@@MIGRATE');
 
 export class MigrationProcessor {
-  private systemStorage: MMKV;
   private reduxStore: IReduxStore;
+  private migrator: IMigrator;
 
   private static readonly version = 1;
 
-  constructor(reduxStore: IReduxStore) {
-    this.systemStorage = createStorage('system');
+  constructor(reduxStore: IReduxStore, migrator: IMigrator) {
     this.reduxStore = reduxStore;
+    this.migrator = migrator;
   }
 
   private getMigrationInput(): MigrationInput {
@@ -58,7 +56,7 @@ export class MigrationProcessor {
   }
 
   private updateVersion() {
-    this.systemStorage.set(VERSION_KEY, MigrationProcessor.version);
+    SystemRecord.setDataVersion(MigrationProcessor.version);
   }
 
   private updateReduxStore(updatedState: ReduxRootState) {
@@ -84,11 +82,8 @@ export class MigrationProcessor {
   }
 
   public async process() {
-    const migrations = new MigrationFactory().createMigrations();
-    const migrate = createMigrate(migrations);
-
     const migrationInput = this.getMigrationInput();
-    const migrationOutput = await migrate(
+    const migrationOutput = await this.migrator.migrate(
       migrationInput,
       MigrationProcessor.version,
     );
