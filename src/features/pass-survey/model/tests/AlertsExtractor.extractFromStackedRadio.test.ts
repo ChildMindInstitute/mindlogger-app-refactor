@@ -32,8 +32,14 @@ describe('AlertsExtractor: test extractFromStackedRadio', () => {
     });
 
     const expected: AnswerAlerts = [
-      { activityItemId: 'item-stacked-radio', message: 'mock-alert-r1-o1' },
-      { activityItemId: 'item-stacked-radio', message: 'mock-alert-r2-o2' },
+      {
+        activityItemId: 'mock-item-stacked-radio-id',
+        message: 'mock-alert-r1-o1',
+      },
+      {
+        activityItemId: 'mock-item-stacked-radio-id',
+        message: 'mock-alert-r2-o2',
+      },
     ];
 
     expect(result).toEqual(expected);
@@ -50,7 +56,10 @@ describe('AlertsExtractor: test extractFromStackedRadio', () => {
     });
 
     const expected: AnswerAlerts = [
-      { activityItemId: 'item-stacked-radio', message: 'mock-alert-r1-o1' },
+      {
+        activityItemId: 'mock-item-stacked-radio-id',
+        message: 'mock-alert-r1-o1',
+      },
     ];
 
     expect(result).toEqual(expected);

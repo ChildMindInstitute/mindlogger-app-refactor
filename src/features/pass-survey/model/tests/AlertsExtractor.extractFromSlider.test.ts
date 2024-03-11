@@ -35,7 +35,7 @@ describe('AlertsExtractor: test extractFromSlider', () => {
     const expected: AnswerAlerts = [
       {
         activityItemId: 'mock-slider-id',
-        message: 'alert-2',
+        message: 'mock-alert-2',
       },
     ];
 
@@ -56,7 +56,7 @@ describe('AlertsExtractor: test extractFromSlider', () => {
     const expected: AnswerAlerts = [
       {
         activityItemId: 'mock-slider-id',
-        message: 'alert-9',
+        message: 'mock-alert-9',
       },
     ];
 
@@ -77,7 +77,7 @@ describe('AlertsExtractor: test extractFromSlider', () => {
     const expected: AnswerAlerts = [
       {
         activityItemId: 'mock-slider-id',
-        message: 'alert-3',
+        message: 'mock-alert-3',
       },
     ];
 
@@ -147,7 +147,7 @@ describe('AlertsExtractor: test extractFromSlider', () => {
     const expected: AnswerAlerts = [
       {
         activityItemId: 'mock-slider-id',
-        message: 'alert-7-8',
+        message: 'mock-alert-7-8',
       },
     ];
 
