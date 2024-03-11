@@ -32,7 +32,9 @@ export class MigrationProcessor {
   }
 
   private getMigrationInput(): MigrationInput {
-    const reduxState = this.reduxStore.getState();
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _persist, ...reduxState } = this.reduxStore.getState();
     const storagesStates: StoragesStates = {
       'flow_progress-storage': this.getStorageStates<FlowProgressStates['key']>(
         'flow_progress-storage',
@@ -85,11 +87,14 @@ export class MigrationProcessor {
     const migrations = new MigrationFactory().createMigrations();
     const migrate = createMigrate(migrations);
 
+    const migrationInput = this.getMigrationInput();
     const migrationOutput = await migrate(
-      this.getMigrationInput(),
+      migrationInput,
       MigrationProcessor.version,
     );
 
-    this.commitChanges(migrationOutput);
+    if (migrationInput !== migrationOutput) {
+      return this.commitChanges(migrationOutput);
+    }
   }
 }
