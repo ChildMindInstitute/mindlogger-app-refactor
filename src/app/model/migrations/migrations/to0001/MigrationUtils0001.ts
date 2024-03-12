@@ -6,71 +6,26 @@ import {
   PeriodicityType,
 } from '@app/abstract/lib';
 import { ScheduleEvent } from '@app/entities/event';
-import { SuccessfulResponse } from '@app/shared/api';
 import {
   buildDateFromDto,
   getAppletDetailsKey,
   getDataFromQuery,
   getEventsKey,
-  HourMinute,
-  ImageUrl,
 } from '@app/shared/lib';
 
+import {
+  AppletDetailsDto,
+  AppletDetailsResponse,
+  AppletEventsResponse,
+  ScheduleEventDto,
+} from './MigrationDtoTypes0001';
 import {
   RootStateFrom,
   RootStateTo,
   StoreProgressPayloadFrom,
   StoreProgressPayloadTo,
   StoreProgressTo,
-} from './MigrationTypes0001';
-
-export type ActivityRecordDto = {
-  id: string;
-  name: string;
-  description: string;
-  image: ImageUrl | null;
-  order: number;
-};
-
-export type ActivityFlowRecordDto = {
-  id: string;
-  name: string;
-  description: string;
-  order: number;
-  activityIds: Array<string>;
-};
-
-export type AppletDetailsDto = {
-  id: string;
-  activities: ActivityRecordDto[];
-  activityFlows: ActivityFlowRecordDto[];
-};
-
-export type AppletDetailsResponse = {
-  result: AppletDetailsDto;
-};
-
-export type EventAvailabilityDto = {
-  oneTimeCompletion: boolean;
-  periodicityType: string;
-  timeFrom: HourMinute | null;
-  timeTo: HourMinute | null;
-  allowAccessBeforeFromTime: boolean;
-  startDate?: string | null;
-  endDate?: string | null;
-};
-
-export type ScheduleEventDto = {
-  id: string;
-  entityId: string;
-  availabilityType: string;
-  availability: EventAvailabilityDto;
-  selectedDate?: string | null;
-};
-
-export type AppletEventsResponse = SuccessfulResponse<{
-  events: ScheduleEventDto[];
-}>;
+} from './MigrationReduxTypes0001';
 
 export type NotCompletedFlowsTo = {
   type: ActivityPipelineType;

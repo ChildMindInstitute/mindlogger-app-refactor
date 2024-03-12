@@ -1,23 +1,17 @@
-import { Logger, SystemRecord } from '@shared/lib';
+import { Logger } from '@shared/lib';
 
 import {
   IMigration,
-  IMigrator,
+  IMigrationRunner,
   MigrationInput,
   MigrationOutput,
 } from './types';
 
-const DEFAULT_VERSION = -1;
-
-export class Migrator implements IMigrator {
+export class MigrationRunner implements IMigrationRunner {
   private migrations: Record<number, IMigration>;
 
   constructor(migrations: Record<number, IMigration>) {
     this.migrations = migrations;
-  }
-
-  private getInboundVersion(): number {
-    return SystemRecord.getDataVersion() ?? DEFAULT_VERSION;
   }
 
   private getMigrationKeys(
@@ -33,24 +27,23 @@ export class Migrator implements IMigrator {
   public async migrate(
     migrationInput: MigrationInput,
     currentVersion: number,
+    inboundVersion: number,
   ): Promise<MigrationOutput> {
-    const inboundVersion = this.getInboundVersion();
-
     if (inboundVersion === currentVersion) {
-      Logger.info('[Migrator]: versions match, noop migration');
+      Logger.info('[MigrationRunner]: versions match, noop migration');
 
       return migrationInput;
     }
 
     if (inboundVersion > currentVersion) {
-      Logger.warn('[Migrator]: downgrading version is not supported');
+      Logger.warn('[MigrationRunner]: downgrading version is not supported');
 
       return migrationInput;
     }
 
     let migrationKeys = this.getMigrationKeys(currentVersion, inboundVersion);
 
-    Logger.log(`[Migrator]: migrationKeys: ${migrationKeys}`);
+    Logger.log(`[MigrationRunner]: migrationKeys: ${migrationKeys}`);
 
     let reduxState = migrationInput.reduxState;
     let storagesStates = migrationInput.storagesStates;

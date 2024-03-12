@@ -4,7 +4,7 @@ import { createStorage, SystemRecord } from '@app/shared/lib';
 
 import {
   FlowProgressStates,
-  IMigrator,
+  IMigrationRunner,
   MigrationInput,
   MigrationOutput,
   ReduxRootState,
@@ -16,17 +16,23 @@ type IReduxStore = {
   dispatch: AppDispatch;
 };
 
+const DEFAULT_VERSION = -1;
+
 export const migrateReduxStore = createAction<ReduxRootState>('@@MIGRATE');
 
 export class MigrationProcessor {
   private reduxStore: IReduxStore;
-  private migrator: IMigrator;
+  private migrationRunner: IMigrationRunner;
 
   private static readonly version = 1;
 
-  constructor(reduxStore: IReduxStore, migrator: IMigrator) {
+  constructor(reduxStore: IReduxStore, migrationRunner: IMigrationRunner) {
     this.reduxStore = reduxStore;
-    this.migrator = migrator;
+    this.migrationRunner = migrationRunner;
+  }
+
+  private getInboundVersion(): number {
+    return SystemRecord.getDataVersion() ?? DEFAULT_VERSION;
   }
 
   private getMigrationInput(): MigrationInput {
@@ -83,9 +89,12 @@ export class MigrationProcessor {
 
   public async process() {
     const migrationInput = this.getMigrationInput();
-    const migrationOutput = await this.migrator.migrate(
+    const inboundVersion = this.getInboundVersion();
+
+    const migrationOutput = await this.migrationRunner.migrate(
       migrationInput,
       MigrationProcessor.version,
+      inboundVersion,
     );
 
     if (migrationInput !== migrationOutput) {

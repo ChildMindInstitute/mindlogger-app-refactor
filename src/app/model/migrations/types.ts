@@ -1,9 +1,11 @@
 import {
-  FlowStateFrom as FlowState0000,
-  FlowStateTo as FlowState0001,
   RootStateFrom as RootState0000,
   RootStateTo as RootState0001,
-} from './migrations/to0001/MigrationTypes0001';
+} from './migrations/to0001/MigrationReduxTypes0001';
+import {
+  FlowStateFrom as FlowState0000,
+  FlowStateTo as FlowState0001,
+} from './migrations/to0001/MigrationStorageTypes0001';
 
 type FlowState = FlowState0000 | FlowState0001;
 
@@ -36,9 +38,10 @@ export interface IMigration {
   migrate(input: MigrationInput): MigrationOutput;
 }
 
-export interface IMigrator {
+export interface IMigrationRunner {
   migrate(
     migrationInput: MigrationInput,
     currentVersion: number,
+    inboundVersion: number,
   ): Promise<MigrationOutput>;
 }

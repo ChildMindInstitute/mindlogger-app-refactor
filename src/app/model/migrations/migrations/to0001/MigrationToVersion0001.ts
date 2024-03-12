@@ -5,18 +5,19 @@ import { createStorage, Logger } from '@app/shared/lib';
 import { getScheduledDate } from '@app/widgets/survey/model';
 
 import {
-  FlowProgressFrom,
-  FlowProgressTo,
-  FlowStateFrom,
-  FlowStateTo,
-  RootStateFrom,
-  RootStateTo,
-  StoreProgressPayloadTo,
-} from './MigrationTypes0001';
-import {
   ActivityFlowRecordDto,
   ActivityRecordDto,
   AppletDetailsDto,
+} from './MigrationDtoTypes0001';
+import {
+  FlowProgressFrom,
+  FlowProgressTo,
+  RootStateFrom,
+  RootStateTo,
+  StoreProgressPayloadTo,
+} from './MigrationReduxTypes0001';
+import { FlowStateFrom, FlowStateTo } from './MigrationStorageTypes0001';
+import {
   getUpdatedReduxState,
   mapEventFromDto,
   NotCompletedFlowsFrom,
