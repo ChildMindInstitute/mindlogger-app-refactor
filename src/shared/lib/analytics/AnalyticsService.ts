@@ -39,6 +39,7 @@ export const MixEvents = {
   UploadLogsPressed: 'Upload Logs Pressed',
   UploadedLogsSuccessfully: 'Uploaded Logs Successfully',
   UploadLogsError: 'Upload Logs Error Occurred',
+  NotificationTap: 'Notification tap',
 };
 
 const AnalyticsService = {

@@ -38,9 +38,18 @@ describe('AlertsExtractor: test extractFromStackedCheckbox', () => {
     );
 
     const expected: AnswerAlerts = [
-      { activityItemId: 'item-stacked-checkbox', message: 'mock-alert-r1-o1' },
-      { activityItemId: 'item-stacked-checkbox', message: 'mock-alert-r1-o2' },
-      { activityItemId: 'item-stacked-checkbox', message: 'mock-alert-r2-o2' },
+      {
+        activityItemId: 'mock-item-stacked-checkbox-id',
+        message: 'mock-alert-r1-o1',
+      },
+      {
+        activityItemId: 'mock-item-stacked-checkbox-id',
+        message: 'mock-alert-r1-o2',
+      },
+      {
+        activityItemId: 'mock-item-stacked-checkbox-id',
+        message: 'mock-alert-r2-o2',
+      },
     ];
 
     expect(result).toEqual(expected);
@@ -60,11 +69,26 @@ describe('AlertsExtractor: test extractFromStackedCheckbox', () => {
     );
 
     const expected: AnswerAlerts = [
-      { activityItemId: 'item-stacked-checkbox', message: 'mock-alert-r1-o1' },
-      { activityItemId: 'item-stacked-checkbox', message: 'mock-alert-r1-o2' },
-      { activityItemId: 'item-stacked-checkbox', message: 'mock-alert-r1-o3' },
-      { activityItemId: 'item-stacked-checkbox', message: 'mock-alert-r2-o1' },
-      { activityItemId: 'item-stacked-checkbox', message: 'mock-alert-r2-o2' },
+      {
+        activityItemId: 'mock-item-stacked-checkbox-id',
+        message: 'mock-alert-r1-o1',
+      },
+      {
+        activityItemId: 'mock-item-stacked-checkbox-id',
+        message: 'mock-alert-r1-o2',
+      },
+      {
+        activityItemId: 'mock-item-stacked-checkbox-id',
+        message: 'mock-alert-r1-o3',
+      },
+      {
+        activityItemId: 'mock-item-stacked-checkbox-id',
+        message: 'mock-alert-r2-o1',
+      },
+      {
+        activityItemId: 'mock-item-stacked-checkbox-id',
+        message: 'mock-alert-r2-o2',
+      },
     ];
 
     expect(result).toEqual(expected);

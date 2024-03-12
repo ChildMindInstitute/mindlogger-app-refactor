@@ -121,26 +121,26 @@ export const fillScoresForSlider = (
 export const fillAlertsForSlider = (item: SliderPipelineItem) => {
   item.payload.alerts?.push({
     value: 2,
-    message: 'alert-2',
+    message: 'mock-alert-2',
     minValue: null,
     maxValue: null,
   });
   item.payload.alerts?.push({
     value: 3,
-    message: 'alert-3',
+    message: 'mock-alert-3',
     minValue: null,
     maxValue: null,
   });
   item.payload.alerts?.push({
     value: 9,
-    message: 'alert-9',
+    message: 'mock-alert-9',
     minValue: null,
     maxValue: null,
   });
 
   item.payload.alerts?.push({
     value: NaN,
-    message: 'alert-7-8',
+    message: 'mock-alert-7-8',
     minValue: 7,
     maxValue: 8,
   });
@@ -161,7 +161,7 @@ export const getStackedRadioItem = () => {
   const result: StackedRadioPipelineItem = {
     timer: null,
     type: 'StackedRadio',
-    id: 'item-stacked-radio',
+    id: 'mock-item-stacked-radio-id',
     payload: {
       addScores: false,
       setAlerts: true,
@@ -246,7 +246,7 @@ export const getStackedCheckboxItem = () => {
   const result: StackedCheckboxPipelineItem = {
     timer: null,
     type: 'StackedCheckbox',
-    id: 'item-stacked-checkbox',
+    id: 'mock-item-stacked-checkbox-id',
     payload: {
       addScores: false,
       setAlerts: true,
