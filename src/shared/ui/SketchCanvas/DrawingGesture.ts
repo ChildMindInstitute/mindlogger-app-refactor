@@ -17,7 +17,7 @@ type Callbacks = {
     straightLine: boolean,
     time: number,
   ) => void;
-  onTouchEnd: () => void;
+  onTouchEnd: (touchInfo: Point, time: number) => void;
 };
 
 function DrawingGesture(
@@ -96,8 +96,8 @@ function DrawingGesture(
           runOnJS(onTouchProgress)(touchData, false, time);
         }
       })
-      .onFinalize(() => {
-        runOnJS(onTouchEnd)();
+      .onFinalize(event => {
+        runOnJS(onTouchEnd)(event, Date.now());
       });
 
   const iosGesture = () =>
@@ -120,8 +120,8 @@ function DrawingGesture(
           runOnJS(onTouchProgress)(touchData, false, time);
         }
       })
-      .onFinalize(() => {
-        runOnJS(onTouchEnd)();
+      .onFinalize(event => {
+        runOnJS(onTouchEnd)(event, Date.now());
       });
 
   const gesture = IS_IOS ? iosGesture() : androidGesture();

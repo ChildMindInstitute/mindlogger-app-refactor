@@ -25,11 +25,15 @@ class LineSketcher {
   }
 
   private static addPointToPath(
-    path: SkPath,
+    path: SkPath | undefined,
     tPoint: Point,
     pPoint: Point,
     point: Point,
   ): void {
+    if (!path) {
+      return;
+    }
+
     const mid1: Point = {
       x: (pPoint.x + tPoint.x) / 2,
       y: (pPoint.y + tPoint.y) / 2,
@@ -85,10 +89,14 @@ class LineSketcher {
   }
 
   public progressLine(
-    path: SkPath,
+    path: SkPath | undefined,
     point: Point,
     straightLine: boolean = false,
   ): void {
+    if (!path) {
+      return;
+    }
+
     this.points.push(point);
 
     const pointsCount = this.points.length;

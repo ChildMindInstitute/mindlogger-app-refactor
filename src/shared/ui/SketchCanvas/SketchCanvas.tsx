@@ -25,7 +25,7 @@ type Props = {
   width: number;
   onStrokeStart: (x: number, y: number, time: number) => void;
   onStrokeChanged: (x: number, y: number, time: number) => void;
-  onStrokeEnd: () => void;
+  onStrokeEnd: (x: number, y: number, time: number) => void;
 };
 
 const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
@@ -114,21 +114,24 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     [callbacksRef, lineSketcher],
   );
 
-  const onTouchEnd = useCallback(() => {
-    if (lineSketcher.getCurrentShape() === Shape.Dot) {
-      const firstPoint = lineSketcher.getFirstPoint() as Point;
+  const onTouchEnd = useCallback(
+    (touchInfo: Point, time: number) => {
+      if (lineSketcher.getCurrentShape() === Shape.Dot) {
+        const firstPoint = lineSketcher.getFirstPoint() as Point;
 
-      createDot(
-        {
-          x: firstPoint.x + 1.5,
-          y: firstPoint.y + 1.5,
-        },
-        Date.now(),
-      );
-    }
+        createDot(
+          {
+            x: firstPoint.x + 1.5,
+            y: firstPoint.y + 1.5,
+          },
+          Date.now(),
+        );
+      }
 
-    callbacksRef.current.onStrokeEnd();
-  }, [callbacksRef, createDot, lineSketcher]);
+      callbacksRef.current.onStrokeEnd(touchInfo.x, touchInfo.y, time);
+    },
+    [callbacksRef, createDot, lineSketcher],
+  );
 
   const drawingGesture = useMemo(
     () =>

@@ -1,20 +1,10 @@
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet } from 'react-native';
 
-import {
-  Skia,
-  SkiaView,
-  SkPath,
-  TouchInfo,
-  PaintStyle,
-  useTouchHandler,
-  useDrawCallback,
-  SkCanvas,
-} from '@shopify/react-native-skia';
+import { PaintStyle, Skia, SkPath } from '@shopify/react-native-skia';
 
 import { AbTestPayload, Point, TestNode } from '@app/abstract/lib';
 import { StreamEventLoggable } from '@shared/lib';
-import { Box, BoxProps } from '@shared/ui';
+import { Box, BoxProps, SketchCanvas, SketchCanvasRef } from '@shared/ui';
 
 import AbShapes from './AbShapes';
 import {
@@ -57,19 +47,9 @@ const AbCanvas: FC<Props> = props => {
 
   const currentIndexRef = useRef(1);
 
-  const canvasRef = useRef<SkCanvas>();
+  const sketchCanvasRef = useRef<SketchCanvasRef | null>(null);
 
   const logLines = useRef<LogLine[]>([]).current;
-
-  const isCloseToNextRerenderedRef = useRef(false);
-
-  const isCloseToNextRerendered = () => isCloseToNextRerenderedRef.current;
-
-  const setCloseToNextRerendered = () =>
-    (isCloseToNextRerenderedRef.current = true);
-
-  const resetCloseToNextRerendered = () =>
-    (isCloseToNextRerenderedRef.current = false);
 
   const {
     testData,
@@ -132,21 +112,12 @@ const AbCanvas: FC<Props> = props => {
     return !!node && node.orderIndex === nodeIndexToCheck;
   };
 
-  const isCloseToNode = (pointToCheck: Point, nodeIndexToCheck: number) => {
-    const node = findNodeByPoint(pointToCheck, 2);
-    return !!node && node.orderIndex === nodeIndexToCheck;
-  };
-
   const isOverCurrent = (point: Point) => {
     return isOverNode(point, getCurrentIndex());
   };
 
   const isOverNext = (point: Point) => {
     return isOverNode(point, getCurrentIndex() + 1);
-  };
-
-  const isCloseToNext = (point: Point) => {
-    return isCloseToNode(point, getCurrentIndex() + 1);
   };
 
   const isOverLast = (point: Point) => {
@@ -166,12 +137,8 @@ const AbCanvas: FC<Props> = props => {
 
   const resetCurrentPath = () => {
     currentPathRef.current = null;
-    canvasRef.current?.clear(Skia.Color('white'));
-    reRender();
-  };
 
-  const reRender = () => {
-    setPaths(x => [...x]);
+    sketchCanvasRef?.current?.clear();
   };
 
   const reCreatePath = (point: Point) => {
@@ -252,63 +219,59 @@ const AbCanvas: FC<Props> = props => {
     return greenPointIndex;
   };
 
-  const onTouchStart = (touchInfo: TouchInfo) => {
+  const onTouchStart = (x: number, y: number, time: number) => {
     const isFinished = paths.length === currentIndexRef.current;
 
     if (currentPathRef.current || readonly || isFinished) {
+      resetCurrentPath();
       return;
     }
 
-    const point: Point = { x: touchInfo.x, y: touchInfo.y };
+    const point: Point = { x, y };
 
     if (isOverAny(point) && !isOverCurrent(point)) {
       onMessage(MessageType.IncorrectStartPoint);
+      resetCurrentPath();
       return;
     }
 
     if (!isOverCurrent(point)) {
+      resetCurrentPath();
       return;
     }
 
     addLogLine(point);
     reCreatePath(point);
-    drawPath();
-    reRender();
+
     onLog({
-      x: (touchInfo.x * width) / 100,
-      y: (touchInfo.y * width) / 100,
-      time: Date.now(),
+      x: (x * width) / 100,
+      y: (y * width) / 100,
+      time: time,
     });
   };
 
-  const onTouchProgress = (touchInfo: TouchInfo) => {
+  const onTouchProgress = (x: number, y: number, time: number) => {
     const currentPath = getCurrentPath();
+
+    if (errorPath) {
+      resetCurrentPath();
+      return;
+    }
 
     if (!currentPath) {
       return;
     }
 
-    const point: Point = { x: touchInfo.x, y: touchInfo.y };
+    const point: Point = { x, y };
 
     currentPath.lineTo(point.x, point.y);
 
     addLogPoint(createLogPoint(point));
 
-    drawPath();
-
-    if (isCloseToNext(point) && !isCloseToNextRerendered()) {
-      reRender();
-      setCloseToNextRerendered();
-    }
-
-    if (!isCloseToNext(point)) {
-      resetCloseToNextRerendered();
-    }
-
     onLog({
-      x: (touchInfo.x * width) / 100,
-      y: (touchInfo.y * width) / 100,
-      time: Date.now(),
+      x: (x * width) / 100,
+      y: (x * width) / 100,
+      time: time,
     });
 
     if (isOverNext(point) && isOverLast(point)) {
@@ -335,21 +298,19 @@ const AbCanvas: FC<Props> = props => {
     if (isOverWrong(point)) {
       const node = findNodeByPoint(point)!;
       markLastLogPoints({ valid: false, actual: node.label });
-      setErrorPath(currentPath);
-      resetCurrentPath();
       setFlareGreenPointIndex({ index: getCurrentIndex() });
       onMessage(MessageType.IncorrectLine);
+      setErrorPath(currentPath);
     }
   };
 
-  const onTouchEnd = (touchInfo: TouchInfo) => {
+  const onTouchEnd = (x: number, y: number) => {
     if (!getCurrentPath()) {
       return;
     }
 
     resetCurrentPath();
-
-    const point: Point = { x: touchInfo.x, y: touchInfo.y };
+    const point: Point = { x, y };
 
     const node = findNodeByPoint(point);
 
@@ -360,38 +321,20 @@ const AbCanvas: FC<Props> = props => {
     markLastLogPoints({ valid: false, actual: node?.label ?? 'none' });
   };
 
-  const drawPath = () => {
-    if (!currentPathRef.current) {
-      return;
-    }
-    canvasRef.current?.drawPath(currentPathRef.current, paint.copy());
-  };
-
-  const touchHandler = useTouchHandler(
-    {
-      onStart: onTouchStart,
-      onActive: onTouchProgress,
-      onEnd: onTouchEnd,
-    },
-    [canvasData],
-  );
-
-  const onDraw = useDrawCallback(
-    (canvas, info) => {
-      canvasRef.current = canvas;
-      touchHandler(info.touches);
-    },
-    [canvasData],
-  );
-
   return (
     <Box {...props} borderWidth={1} borderColor="$lightGrey2">
-      <SkiaView onDraw={onDraw} style={styles.skiaView} />
+      <SketchCanvas
+        ref={sketchCanvasRef}
+        width={width}
+        initialLines={[]}
+        onStrokeStart={onTouchStart}
+        onStrokeChanged={onTouchProgress}
+        onStrokeEnd={onTouchEnd}
+      />
 
       {canvasData && (
         <AbShapes
           paths={paths}
-          lastPath={currentPathRef.current}
           testData={canvasData}
           greenRoundOrder={getGreenPointIndex()}
           errorPath={errorPath}
@@ -400,12 +343,5 @@ const AbCanvas: FC<Props> = props => {
     </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  skiaView: {
-    height: '100%',
-    width: '100%',
-  },
-});
 
 export default AbCanvas;
