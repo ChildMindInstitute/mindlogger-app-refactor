@@ -1,7 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 
 import { ActivityPipelineType } from '@app/abstract/lib';
-import { createStorage, Logger } from '@app/shared/lib';
+import { Logger } from '@app/shared/lib';
 import { getScheduledDate } from '@app/widgets/survey/model';
 
 import {
@@ -27,8 +27,6 @@ import {
 } from './MigrationUtils0001';
 import { IMigration, MigrationInput, MigrationOutput } from '../../types';
 
-const flowStorage = createStorage('flow_progress-storage');
-
 export class MigrationToVersion0001 implements IMigration {
   private queryDataUtils: QueryDataUtils;
 
@@ -37,13 +35,15 @@ export class MigrationToVersion0001 implements IMigration {
   }
 
   private getFlowState = (key: string): FlowStateFrom | null => {
-    const json = flowStorage.getString(key);
+    // const json = flowStorage.getString(key);
 
-    if (json) {
-      return JSON.parse(json) as FlowStateFrom;
-    } else {
-      return null;
-    }
+    // if (json) {
+    //   return JSON.parse(json) as FlowStateFrom;
+    // } else {
+    //   return null;
+    // }
+    console.log(key);
+    return {} as FlowStateFrom;
   };
 
   private getFlowRecordKey = (
@@ -145,7 +145,6 @@ export class MigrationToVersion0001 implements IMigration {
   public migrate(input: MigrationInput): MigrationOutput {
     const result: MigrationOutput = {
       reduxState: { ...input.reduxState } as RootStateTo,
-      storagesStates: { ...input.storagesStates },
     };
 
     const reduxRootStateFrom: RootStateFrom = input.reduxState;
@@ -211,14 +210,15 @@ export class MigrationToVersion0001 implements IMigration {
         activityFlowDto,
         eventId,
       );
+      console.log(flowStateTo);
 
-      result.storagesStates = {
-        ...result.storagesStates,
-        'flow_progress-storage': {
-          ...result.storagesStates['flow_progress-storage'],
-          key: flowStateTo,
-        },
-      };
+      // result.storagesStates = {
+      //   ...result.storagesStates,
+      //   'flow_progress-storage': {
+      //     ...result.storagesStates['flow_progress-storage'],
+      //     key: flowStateTo,
+      //   },
+      // };
     }
 
     result.reduxState = getUpdatedReduxState(

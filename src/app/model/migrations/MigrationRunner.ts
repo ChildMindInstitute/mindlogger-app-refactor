@@ -46,24 +46,20 @@ export class MigrationRunner implements IMigrationRunner {
     Logger.log(`[MigrationRunner]: migrationKeys: ${migrationKeys}`);
 
     let reduxState = migrationInput.reduxState;
-    let storagesStates = migrationInput.storagesStates;
 
     for (const version of migrationKeys) {
       const performMigration = () =>
         this.migrations[version].migrate({
           reduxState: reduxState,
-          storagesStates: storagesStates,
         });
 
       const migrationOutput = await Promise.resolve(performMigration());
 
       reduxState = migrationOutput.reduxState;
-      storagesStates = migrationOutput.storagesStates;
     }
 
     return {
       reduxState,
-      storagesStates,
     };
   }
 }

@@ -1,15 +1,15 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import { createStorage, SystemRecord } from '@app/shared/lib';
+import { SystemRecord } from '@app/shared/lib';
 
 import {
-  FlowProgressStates,
   IMigrationRunner,
   MigrationInput,
   MigrationOutput,
   ReduxRootState,
-  StoragesStates,
+  StoragesArray,
 } from './types';
+import { createMigrationStorage, createRegularStorage } from './utils';
 
 type IReduxStore = {
   getState(): ReduxRootState;
@@ -39,26 +39,10 @@ export class MigrationProcessor {
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _persist, ...reduxState } = this.reduxStore.getState();
-    const storagesStates: StoragesStates = {
-      'flow_progress-storage': this.getStorageStates<FlowProgressStates['key']>(
-        'flow_progress-storage',
-      ),
-    };
 
     return {
       reduxState,
-      storagesStates,
     };
-  }
-
-  private getStorageStates<TState>(storageName: string) {
-    const storage = createStorage(storageName);
-
-    return storage.getAllKeys().reduce<Record<string, TState>>((state, key) => {
-      state[key] = JSON.parse(storage.getString(key) ?? '{}');
-
-      return state;
-    }, {});
   }
 
   private updateVersion() {
@@ -69,25 +53,38 @@ export class MigrationProcessor {
     this.reduxStore.dispatch(migrateReduxStore(updatedState));
   }
 
-  private updateStores(storagesStates: StoragesStates) {
-    Object.entries(storagesStates).forEach(([storageName, statesMap]) => {
-      const storage = createStorage(storageName);
+  private updateStorages() {
+    const storageNames = StoragesArray;
 
-      Object.entries(statesMap).forEach(([storageKey, state]) => {
-        const json = JSON.stringify(state);
+    for (let storageName of storageNames) {
+      const migrationStorage = createMigrationStorage(storageName);
+      const regularStorage = createRegularStorage(storageName);
+      const keys = migrationStorage.getAllKeys();
 
-        storage.set(storageKey, json);
-      });
-    });
+      for (let key of keys) {
+        const value = migrationStorage.getString(key)!;
+        regularStorage.set(key, value);
+      }
+    }
   }
 
   private commitChanges(migrationOutput: MigrationOutput) {
     this.updateReduxStore(migrationOutput.reduxState);
-    this.updateStores(migrationOutput.storagesStates);
+    this.updateStorages();
     this.updateVersion();
   }
 
+  private prepareStorages() {
+    const storageNames = StoragesArray;
+
+    for (let storageName of storageNames) {
+      const storage = createMigrationStorage(storageName);
+      storage.clearAll();
+    }
+  }
+
   public async process() {
+    this.prepareStorages();
     const migrationInput = this.getMigrationInput();
     const inboundVersion = this.getInboundVersion();
 
