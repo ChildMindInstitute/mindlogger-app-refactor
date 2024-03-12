@@ -46,25 +46,29 @@ export type NotCompletedFlowsFrom = {
 export const selectNotCompletedFlows = (
   state: RootStateFrom,
 ): NotCompletedFlowsFrom[] => {
-  const inProgressApplets = state.applets.inProgress;
+  const inProgressApplets = state.applets.inProgress ?? {};
   const result: NotCompletedFlowsFrom[] = [];
 
   const appletIds = Object.keys(inProgressApplets);
 
   for (let appletId of appletIds) {
-    const progressEntities = inProgressApplets[appletId];
+    const progressEntities = inProgressApplets[appletId] ?? {};
 
     const entityIds = Object.keys(progressEntities);
 
     for (let entityId of entityIds) {
-      const progressEvents = progressEntities[entityId];
+      const progressEvents = progressEntities[entityId] ?? {};
 
       const eventIds = Object.keys(progressEvents);
 
       for (let eventId of eventIds) {
-        const payload = progressEvents[eventId];
+        const payload = progressEvents[eventId] ?? {};
 
-        if (payload.endAt || payload.type === ActivityPipelineType.Regular) {
+        if (
+          !progressEvents[eventId] ||
+          payload.endAt ||
+          payload.type === ActivityPipelineType.Regular
+        ) {
           continue;
         }
 

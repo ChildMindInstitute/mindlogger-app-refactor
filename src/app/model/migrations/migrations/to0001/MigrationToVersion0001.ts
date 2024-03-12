@@ -25,7 +25,13 @@ import {
   QueryDataUtils,
   selectNotCompletedFlows,
 } from './MigrationUtils0001';
-import { IMigration, MigrationInput, MigrationOutput } from '../../types';
+import {
+  IMigration,
+  MigrationInput,
+  MigrationOutput,
+  Storages,
+} from '../../types';
+import { getStorageRecord, upsertStorageRecord } from '../../utils';
 
 export class MigrationToVersion0001 implements IMigration {
   private queryDataUtils: QueryDataUtils;
@@ -35,16 +41,12 @@ export class MigrationToVersion0001 implements IMigration {
   }
 
   private getFlowState = (key: string): FlowStateFrom | null => {
-    // const json = flowStorage.getString(key);
-
-    // if (json) {
-    //   return JSON.parse(json) as FlowStateFrom;
-    // } else {
-    //   return null;
-    // }
-    console.log(key);
-    return {} as FlowStateFrom;
+    return getStorageRecord(Storages.FlowProgress, key);
   };
+
+  private updateFlowState(key: string, state: FlowStateTo) {
+    upsertStorageRecord(Storages.FlowProgress, key, state);
+  }
 
   private getFlowRecordKey = (
     appletId: string,
@@ -103,11 +105,6 @@ export class MigrationToVersion0001 implements IMigration {
 
     const eventDto = eventDtos.find(e => e.id === eventId);
 
-    Logger.info(
-      '[MigrationToVersion0001]: Updating pipeline flow state. Before update:\n' +
-        JSON.stringify(flowStateFrom, null, 2),
-    );
-
     flowStateTo.flowName = activityFlowDto!.name;
 
     if (eventDto) {
@@ -148,8 +145,6 @@ export class MigrationToVersion0001 implements IMigration {
     };
 
     const reduxRootStateFrom: RootStateFrom = input.reduxState;
-
-    // todo - check if cache exist ?
 
     const progressFlowsTo: NotCompletedFlowsTo[] = [];
 
@@ -210,15 +205,8 @@ export class MigrationToVersion0001 implements IMigration {
         activityFlowDto,
         eventId,
       );
-      console.log(flowStateTo);
 
-      // result.storagesStates = {
-      //   ...result.storagesStates,
-      //   'flow_progress-storage': {
-      //     ...result.storagesStates['flow_progress-storage'],
-      //     key: flowStateTo,
-      //   },
-      // };
+      this.updateFlowState(key, flowStateTo);
     }
 
     result.reduxState = getUpdatedReduxState(

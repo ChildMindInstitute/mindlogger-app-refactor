@@ -4,7 +4,7 @@ import { createSecureStorage, createStorage } from '@app/shared/lib';
 
 import { MigrationPrefix, SecureStoragesArray, Storages } from './types';
 
-export const getStorageItem = <T>(
+export const getStorageRecord = <T>(
   storageName: Storages,
   key: string,
 ): T | null => {
