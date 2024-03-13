@@ -17,7 +17,7 @@ import {
   ILogger,
   isAppOnline,
   Logger,
-  MigrationsValidator,
+  MigrationValidator,
   useAppDispatch,
   useAppletInfo,
   useAppSelector,
@@ -177,7 +177,7 @@ function useStartEntity({
     );
 
     return new Promise<StartResult>(async resolve => {
-      if (!MigrationsValidator.allMigrationHaveBeenApplied()) {
+      if (!MigrationValidator.allMigrationHaveBeenApplied()) {
         onMigrationsNotApplied();
         resolve({
           cannotBeStartedDueToMigrationsNotApplied: true,
@@ -280,7 +280,7 @@ function useStartEntity({
     );
 
     return new Promise<StartResult>(resolve => {
-      if (!MigrationsValidator.allMigrationHaveBeenApplied()) {
+      if (!MigrationValidator.allMigrationHaveBeenApplied()) {
         onMigrationsNotApplied();
         resolve({
           cannotBeStartedDueToMigrationsNotApplied: true,
