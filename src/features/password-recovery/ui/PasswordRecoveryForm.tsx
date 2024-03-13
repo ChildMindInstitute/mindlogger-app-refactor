@@ -8,6 +8,7 @@ import {
   colors,
   executeIfOnline,
   useAppForm,
+  useBanner,
   useFormChanges,
 } from '@shared/lib';
 import { SubmitButton, YStack, Box, BoxProps } from '@shared/ui';
@@ -23,6 +24,7 @@ type Props = BoxProps & {
 
 const PasswordRecoveryForm: FC<Props> = props => {
   const { t } = useTranslation();
+  const banner = useBanner();
 
   const {
     mutate: recoverPassword,
@@ -30,7 +32,19 @@ const PasswordRecoveryForm: FC<Props> = props => {
     isLoading,
     reset,
   } = useApprovePasswordRecoveryMutation({
-    onSuccess: props.onPasswordRecoverySuccess,
+    onSuccess: () => {
+      props.onPasswordRecoverySuccess();
+      banner.show(t('password_recovery_form:success'), {
+        type: 'success',
+        duration: 5000,
+      });
+    },
+    onError: () => {
+      banner.show(t('password_recovery_form:error'), {
+        type: 'danger',
+        duration: 5000,
+      });
+    },
   });
 
   const { form, submit } = useAppForm(PasswordRecoveryFormSchema, {
