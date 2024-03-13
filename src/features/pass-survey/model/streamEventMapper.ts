@@ -12,12 +12,16 @@ import {
 const mapABTestStreamEventToDto = (
   streamEvent: AbTestStreamEvent,
 ): AbTestStreamEventDto => {
-  let actualPath = '-1';
+  let actualPath = '?';
+
   if (streamEvent.wrongPointLabel) {
     actualPath = streamEvent.wrongPointLabel;
   }
   if (streamEvent.error === AbTestStreamEventErrorType.OverCorrectPoint) {
     actualPath = streamEvent.nextNodeLabel;
+  }
+  if (streamEvent.error === AbTestStreamEventErrorType.OverUndefinedPoint) {
+    actualPath = '-1';
   }
 
   const dto = {
