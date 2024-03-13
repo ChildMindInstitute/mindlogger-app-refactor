@@ -70,9 +70,7 @@ const PasswordRecoveryScreen: FC<PasswordRecoveryScreenProps> = ({ route }) => {
             px="$8"
             mt="$2"
             onPasswordRecoverySuccess={() =>
-              dispatch(
-                StackActions.replace('Login', { isPasswordRecovery: true }),
-              )
+              dispatch(StackActions.replace('Login'))
             }
             email={route.params.email}
             resetKey={route.params.key}

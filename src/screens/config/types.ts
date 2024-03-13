@@ -5,7 +5,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { EntityPath } from '@app/abstract/lib';
 
 export type RootStackParamList = {
-  Login: { isPasswordRecovery: boolean } | undefined;
+  Login: undefined;
   PasswordRecovery: { email: string; key: string };
   SignUp: undefined;
   AboutApp: undefined;
