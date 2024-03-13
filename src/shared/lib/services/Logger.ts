@@ -14,6 +14,7 @@ import {
   callWithMutex,
   callWithMutexAsync,
   isAppOnline,
+  wait,
 } from '../utils';
 
 type NamePath = {
@@ -38,7 +39,7 @@ type DeviceInfoLogObject = {
   lastUpdateTime: number;
 };
 
-class Logger implements ILogger {
+export class Logger implements ILogger {
   private mutex: IMutex;
 
   private abortController: AbortController;
@@ -153,6 +154,10 @@ class Logger implements ILogger {
     } catch (error) {
       console.warn('[Logger.onBeforeSendLogs]: Error occurred: \n\n', error);
     }
+  }
+
+  private async isAppOnline() {
+    return isAppOnline();
   }
 
   private async sendInternal(): Promise<boolean> {
@@ -302,9 +307,16 @@ class Logger implements ILogger {
   }
 
   public async send(): Promise<boolean> {
-    const isOnline = await isAppOnline();
+    const isOnline = await this.isAppOnline();
     if (!isOnline) {
       return false;
+    }
+
+    let attemptsLeft = 5;
+
+    while (this.mutex.isBusy() && attemptsLeft > 0) {
+      await wait(500);
+      attemptsLeft--;
     }
 
     if (this.mutex.isBusy()) {
@@ -318,13 +330,9 @@ class Logger implements ILogger {
 
       this.abortController = new AbortController();
 
-      console.info('[Logger.send] Started sending log files to Server');
+      console.info('[Logger.send] Sending log files to Server');
 
-      const result = await this.sendInternal();
-
-      console.info('[Logger.send] Completed sending log files to Server');
-
-      return result;
+      return await this.sendInternal();
     } catch (error) {
       console.warn(
         '[Logger.sendInternal]: Error occurred: \n\n',
