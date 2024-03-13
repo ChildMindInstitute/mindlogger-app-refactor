@@ -2,6 +2,7 @@ import { FileSystem } from 'react-native-file-access';
 import { FileLogger } from 'react-native-file-logger';
 
 import Logger from './Logger';
+import { Logger as LoggerClass } from './Logger';
 
 jest.mock('@shared/api', () => ({
   FileService: {
@@ -37,7 +38,7 @@ jest.mock('react-native-file-logger', () => ({
   },
 }));
 
-describe('Logger', () => {
+describe('Logger: regular tests', () => {
   it('should add a timestamp to the message', async () => {
     const input = 'Some input string';
 
@@ -128,5 +129,30 @@ describe('Logger', () => {
         size: 512,
       },
     ]);
+  });
+});
+
+describe('Logger: test sending files', () => {
+  it('Should do 5 waiting mutex attempts (or 7 check if mutex is busy) when sending logs', async () => {
+    const logger = new LoggerClass();
+
+    //@ts-expect-error
+    logger.onBeforeSendLogs = jest.fn();
+    //@ts-expect-error
+    logger.sendInternal = jest.fn();
+    //@ts-expect-error
+    logger.isAppOnline = jest.fn().mockResolvedValue(true);
+
+    const isBusyMock = jest.fn(() => true);
+    //@ts-expect-error
+    logger.mutex.isBusy = isBusyMock;
+
+    //@ts-expect-error
+    logger.mutex.setBusy();
+
+    const result = await logger.send();
+
+    expect(result).toEqual(false);
+    expect(isBusyMock).toBeCalledTimes(7);
   });
 });

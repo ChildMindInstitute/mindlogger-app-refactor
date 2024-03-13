@@ -26,12 +26,18 @@ export function useLogout() {
   const { closeConnection: closeActiveTCPConnection } = useTCPSocket();
 
   const processLogout = async () => {
+    Logger.info('[useLogout.processLogout]: Processing logout');
+
+    await Logger.send();
+
     try {
       IdentityService.logout({
         deviceId: SystemRecord.getDeviceId()!,
       });
     } catch (error) {
-      Logger.error(`Logout operation failed: ${error}`);
+      console.warn(
+        `[useLogout.processLogout]: Logout operation failed: ${error}`,
+      );
     }
 
     AnalyticsService.logout();
