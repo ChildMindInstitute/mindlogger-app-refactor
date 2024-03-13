@@ -153,7 +153,7 @@
     "submit": "Submit",
     "invalid_password_reset_link": "This link is invalid or expired.",
     "click_to_reset_password": "Please click below to reset your password.",
-    "forgot_password": "Forgot Password?"
+    "forgot_password": "Forgot Password"
   },
   "change_study": {
     "reset": "Reset",
