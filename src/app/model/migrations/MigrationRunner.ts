@@ -29,21 +29,13 @@ export class MigrationRunner implements IMigrationRunner {
     currentVersion: number,
     inboundVersion: number,
   ): Promise<MigrationOutput> {
-    if (inboundVersion === currentVersion) {
-      Logger.info('[MigrationRunner]: versions match, noop migration');
-
-      return migrationInput;
-    }
-
-    if (inboundVersion > currentVersion) {
-      Logger.warn('[MigrationRunner]: downgrading version is not supported');
-
-      return migrationInput;
-    }
-
     let migrationKeys = this.getMigrationKeys(currentVersion, inboundVersion);
 
-    Logger.log(`[MigrationRunner]: migrationKeys: ${migrationKeys}`);
+    Logger.log(
+      `[MigrationRunner]: migrationKeys: [${migrationKeys}]${
+        migrationKeys.length === 0 ? ', no need to run migrations' : ''
+      }`,
+    );
 
     let reduxState = migrationInput.reduxState;
 

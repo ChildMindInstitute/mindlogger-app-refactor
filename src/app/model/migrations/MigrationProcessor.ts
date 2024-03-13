@@ -88,16 +88,34 @@ export class MigrationProcessor {
   }
 
   public async process() {
-    this.prepareStorages();
-    const migrationInput = this.getMigrationInput();
     const inboundVersion = this.getInboundVersion();
+
+    const currentVersion = MigrationProcessor.version;
+
+    Logger.log(
+      `[MigrationProcessor] inboundVersion=${inboundVersion}, currentVersion=${currentVersion}`,
+    );
+
+    if (inboundVersion === currentVersion) {
+      Logger.info('[MigrationRunner]: Versions match, noop migration');
+      return;
+    }
+
+    if (inboundVersion > currentVersion) {
+      Logger.warn('[MigrationRunner]: Downgrading version is not supported');
+      return;
+    }
 
     try {
       Logger.info('[MigrationProcessor] Start executing migrations');
 
+      this.prepareStorages();
+
+      const migrationInput = this.getMigrationInput();
+
       const migrationOutput = await this.migrationRunner.migrate(
         migrationInput,
-        MigrationProcessor.version,
+        currentVersion,
         inboundVersion,
       );
 
@@ -111,5 +129,6 @@ export class MigrationProcessor {
     } catch (error) {
       Logger.warn('[MigrationProcessor] Error occurred: \n\n' + error);
     }
+    await Logger.send();
   }
 }

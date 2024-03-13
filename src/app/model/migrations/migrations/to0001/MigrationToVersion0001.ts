@@ -155,9 +155,10 @@ export class MigrationToVersion0001 implements IMigration {
 
       let logAppletName = '',
         logFlowName = '';
-      let logFlowStateFrom = {} as FlowStateFrom;
-      let logCurrentActivityDto = {} as ActivityRecordDto;
-      let logActivityFlowDto = {} as ActivityFlowRecordDto;
+      let logFlowStateFrom = '';
+      let logCurrentActivityDto = '';
+      let logActivityFlowDto = '';
+      const logProgressFlowFrom = JSON.stringify(progressFlowFrom, null, 2);
 
       try {
         const appletDto = this.queryDataUtils.getAppletDto(appletId);
@@ -182,13 +183,13 @@ export class MigrationToVersion0001 implements IMigration {
           continue;
         }
         logFlowName = activityFlowDto.name;
-        logActivityFlowDto = activityFlowDto;
+        logActivityFlowDto = JSON.stringify(activityFlowDto, null, 2);
 
         const key = this.getFlowRecordKey(appletId, entityId, eventId);
 
         const flowStateFrom: FlowStateFrom = this.getFlowState(key)!;
 
-        logFlowStateFrom = flowStateFrom;
+        logFlowStateFrom = JSON.stringify(flowStateFrom, null, 2);
 
         const flowProgressPayloadFrom = payload as FlowProgressFrom;
 
@@ -202,7 +203,7 @@ export class MigrationToVersion0001 implements IMigration {
               flowProgressPayloadFrom.currentActivityId,
           );
         }
-        logCurrentActivityDto = currentActivityDto!;
+        logCurrentActivityDto = JSON.stringify(currentActivityDto!, null, 2);
 
         const progressFlowTo = this.getUpdatedFlowProgress(
           progressFlowFrom,
@@ -223,23 +224,7 @@ export class MigrationToVersion0001 implements IMigration {
         this.updateFlowState(key, flowStateTo);
       } catch (error) {
         Logger.warn(
-          `[MigrationToVersion0001.iterate]: Error occurred, appletName=${logAppletName}, flowName=${logFlowName}, progressFlowFrom=${JSON.stringify(
-            progressFlowFrom,
-            null,
-            2,
-          )}, flowStateFrom=${JSON.stringify(
-            logFlowStateFrom,
-            null,
-            2,
-          )}, logCurrentActivityDto=${JSON.stringify(
-            logCurrentActivityDto,
-            null,
-            2,
-          )}, activityFlowDto=${JSON.stringify(
-            logActivityFlowDto,
-            null,
-            2,
-          )}  \nerror: \n${error}`,
+          `[MigrationToVersion0001.iterate]: Error occurred, appletName=${logAppletName}, flowName=${logFlowName}, progressFlowFrom=${logProgressFlowFrom}, flowStateFrom=${logFlowStateFrom}, currentActivityDto=${logCurrentActivityDto}, activityFlowDto=${logActivityFlowDto}  \nerror: \n${error}`,
         );
       }
     }
