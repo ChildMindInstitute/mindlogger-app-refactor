@@ -17,7 +17,7 @@ const mapABTestStreamEventToDto = (
     actualPath = streamEvent.wrongPointLabel;
   }
   if (streamEvent.error === AbTestStreamEventErrorType.OverCorrectPoint) {
-    actualPath = `${streamEvent.currentNodeLabel} ~ ${streamEvent.nextNodeLabel}`;
+    actualPath = streamEvent.nextNodeLabel;
   }
 
   const dto = {
