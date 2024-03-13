@@ -6,8 +6,8 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:kenroy.dev?mode=developer</string>
-		<string>webcredentials:kenroy.dev?mode=developer</string>
+		<string>applinks:web-dev.cmiml.net</string>
+		<string>webcredentials:web-dev.cmiml.net</string>
 	</array>
 </dict>
 </plist>
