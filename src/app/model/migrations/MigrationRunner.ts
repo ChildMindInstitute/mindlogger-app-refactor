@@ -53,9 +53,15 @@ export class MigrationRunner implements IMigrationRunner {
           reduxState: reduxState,
         });
 
-      const migrationOutput = await Promise.resolve(performMigration());
-
-      reduxState = migrationOutput.reduxState;
+      try {
+        const migrationOutput = await Promise.resolve(performMigration());
+        reduxState = migrationOutput.reduxState;
+      } catch (error) {
+        Logger.warn(
+          `[MigrationRunner.performMigration] Error occurred during execution migration v${version}: \n\n${error}`,
+        );
+        throw error;
+      }
     }
 
     return {

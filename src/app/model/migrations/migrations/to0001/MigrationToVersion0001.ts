@@ -59,8 +59,8 @@ export class MigrationToVersion0001 implements IMigration {
 
   private getUpdatedFlowProgress(
     progressFlowFrom: NotCompletedFlowsFrom,
-    currentActivityDto: ActivityRecordDto,
-    flowProgressFrom: FlowProgressFrom,
+    currentActivityDto: ActivityRecordDto | undefined,
+    flowProgressPayloadFrom: FlowProgressFrom,
     flowStateFrom: FlowStateFrom,
   ): NotCompletedFlowsTo {
     const progressTo: FlowProgressTo = {
@@ -68,11 +68,11 @@ export class MigrationToVersion0001 implements IMigration {
         currentActivityDto?.description ?? '[Description unknown]',
       currentActivityImage: currentActivityDto?.image ?? null,
       currentActivityName: currentActivityDto?.name ?? '[Name unknown]',
-      currentActivityId: flowProgressFrom.currentActivityId,
-      currentActivityStartAt: flowProgressFrom.currentActivityStartAt,
+      currentActivityId: flowProgressPayloadFrom.currentActivityId,
+      currentActivityStartAt: flowProgressPayloadFrom.currentActivityStartAt,
       type: ActivityPipelineType.Flow,
-      executionGroupKey: flowProgressFrom.executionGroupKey,
-      pipelineActivityOrder: flowProgressFrom.pipelineActivityOrder,
+      executionGroupKey: flowProgressPayloadFrom.executionGroupKey,
+      pipelineActivityOrder: flowProgressPayloadFrom.pipelineActivityOrder,
       totalActivitiesInPipeline: flowStateFrom.pipeline.filter(
         x => x.type === 'Stepper',
       ).length,
@@ -153,60 +153,95 @@ export class MigrationToVersion0001 implements IMigration {
     for (let progressFlowFrom of progressFlowsFrom) {
       const { appletId, flowId: entityId, eventId, payload } = progressFlowFrom;
 
-      const appletDto = this.queryDataUtils.getAppletDto(appletId);
+      let logAppletName = '',
+        logFlowName = '';
+      let logFlowStateFrom = {} as FlowStateFrom;
+      let logCurrentActivityDto = {} as ActivityRecordDto;
+      let logActivityFlowDto = {} as ActivityFlowRecordDto;
 
-      if (!appletDto) {
-        Logger.warn(
-          "[MigrationToVersion0001]: Migration cannot be executed as applet doesn't exist: " +
-            appletId,
+      try {
+        const appletDto = this.queryDataUtils.getAppletDto(appletId);
+
+        if (!appletDto) {
+          Logger.warn(
+            "[MigrationToVersion0001]: Migration cannot be executed as applet doesn't exist: " +
+              appletId,
+          );
+          continue;
+        }
+        logAppletName = appletDto.displayName;
+
+        const activityFlowDto = appletDto.activityFlows.find(
+          f => f.id === entityId,
         );
-        continue;
-      }
 
-      const activityFlowDto = appletDto.activityFlows.find(
-        f => f.id === entityId,
-      );
+        if (!activityFlowDto) {
+          Logger.warn(
+            "[MigrationToVersion0001]: activityFlow doesn't exist: " + entityId,
+          );
+          continue;
+        }
+        logFlowName = activityFlowDto.name;
+        logActivityFlowDto = activityFlowDto;
 
-      const key = this.getFlowRecordKey(appletId, entityId, eventId);
+        const key = this.getFlowRecordKey(appletId, entityId, eventId);
 
-      const flowStateFrom: FlowStateFrom = this.getFlowState(key)!;
+        const flowStateFrom: FlowStateFrom = this.getFlowState(key)!;
 
-      const flowProgressFrom = payload as FlowProgressFrom;
+        logFlowStateFrom = flowStateFrom;
 
-      const currentActivityDto = appletDto.activities.find(
-        a => a.id === flowProgressFrom.currentActivityId,
-      );
+        const flowProgressPayloadFrom = payload as FlowProgressFrom;
 
-      if (!currentActivityDto) {
+        const currentActivityDto = appletDto.activities.find(
+          a => a.id === flowProgressPayloadFrom.currentActivityId,
+        );
+
+        if (!currentActivityDto) {
+          Logger.warn(
+            "[MigrationToVersion0001]: currentActivity doesn't exist in react-query cache: " +
+              flowProgressPayloadFrom.currentActivityId,
+          );
+        }
+        logCurrentActivityDto = currentActivityDto!;
+
+        const progressFlowTo = this.getUpdatedFlowProgress(
+          progressFlowFrom,
+          currentActivityDto,
+          flowProgressPayloadFrom,
+          flowStateFrom,
+        );
+
+        progressFlowsTo.push(progressFlowTo);
+
+        const flowStateTo = this.getUpdatedFlowState(
+          flowStateFrom,
+          appletDto,
+          activityFlowDto,
+          eventId,
+        );
+
+        this.updateFlowState(key, flowStateTo);
+      } catch (error) {
         Logger.warn(
-          "[MigrationToVersion0001]: currentActivity doesn't exist in react-query cache: " +
-            flowProgressFrom.currentActivityId,
+          `[MigrationToVersion0001.iterate]: Error occurred, appletName=${logAppletName}, flowName=${logFlowName}, progressFlowFrom=${JSON.stringify(
+            progressFlowFrom,
+            null,
+            2,
+          )}, flowStateFrom=${JSON.stringify(
+            logFlowStateFrom,
+            null,
+            2,
+          )}, logCurrentActivityDto=${JSON.stringify(
+            logCurrentActivityDto,
+            null,
+            2,
+          )}, activityFlowDto=${JSON.stringify(
+            logActivityFlowDto,
+            null,
+            2,
+          )}  \nerror: \n${error}`,
         );
       }
-      if (!activityFlowDto) {
-        Logger.warn(
-          "[MigrationToVersion0001]: activityFlow doesn't exist: " + entityId,
-        );
-        continue;
-      }
-
-      const progressFlowTo = this.getUpdatedFlowProgress(
-        progressFlowFrom,
-        currentActivityDto!,
-        flowProgressFrom,
-        flowStateFrom,
-      );
-
-      progressFlowsTo.push(progressFlowTo);
-
-      const flowStateTo = this.getUpdatedFlowState(
-        flowStateFrom,
-        appletDto,
-        activityFlowDto,
-        eventId,
-      );
-
-      this.updateFlowState(key, flowStateTo);
     }
 
     result.reduxState = getUpdatedReduxState(

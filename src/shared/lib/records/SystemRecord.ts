@@ -19,7 +19,7 @@ function SystemRecord() {
   }
 
   function setDataVersion(version: number) {
-    storage.set(DEVICE_ID_KEY, version);
+    storage.set(DATA_VERSION_KEY, version);
   }
 
   return {

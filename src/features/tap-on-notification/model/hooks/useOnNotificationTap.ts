@@ -183,11 +183,13 @@ export function useOnNotificationTap({
         ({
           startedFromScratch,
           cannotBeStartedDueToMediaFound,
+          cannotBeStartedDueToMigrationsNotApplied,
           cannotBeStartedDueToAllItemsHidden,
         }) => {
           if (
             cannotBeStartedDueToMediaFound ||
-            cannotBeStartedDueToAllItemsHidden
+            cannotBeStartedDueToAllItemsHidden ||
+            cannotBeStartedDueToMigrationsNotApplied
           ) {
             return;
           }
@@ -204,11 +206,13 @@ export function useOnNotificationTap({
         ({
           startedFromScratch,
           cannotBeStartedDueToMediaFound,
+          cannotBeStartedDueToMigrationsNotApplied,
           cannotBeStartedDueToAllItemsHidden,
         }) => {
           if (
             cannotBeStartedDueToMediaFound ||
-            cannotBeStartedDueToAllItemsHidden
+            cannotBeStartedDueToAllItemsHidden ||
+            cannotBeStartedDueToMigrationsNotApplied
           ) {
             return;
           }

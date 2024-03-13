@@ -1,6 +1,10 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import { SystemRecord } from '@app/shared/lib';
+import {
+  Logger,
+  MIGRATION_PROCESSOR_VERSION,
+  SystemRecord,
+} from '@app/shared/lib';
 
 import {
   IMigrationRunner,
@@ -24,7 +28,7 @@ export class MigrationProcessor {
   private reduxStore: IReduxStore;
   private migrationRunner: IMigrationRunner;
 
-  private static readonly version = 1;
+  private static readonly version = MIGRATION_PROCESSOR_VERSION;
 
   constructor(reduxStore: IReduxStore, migrationRunner: IMigrationRunner) {
     this.reduxStore = reduxStore;
@@ -88,14 +92,24 @@ export class MigrationProcessor {
     const migrationInput = this.getMigrationInput();
     const inboundVersion = this.getInboundVersion();
 
-    const migrationOutput = await this.migrationRunner.migrate(
-      migrationInput,
-      MigrationProcessor.version,
-      inboundVersion,
-    );
+    try {
+      Logger.info('[MigrationProcessor] Start executing migrations');
 
-    if (migrationInput !== migrationOutput) {
-      return this.commitChanges(migrationOutput);
+      const migrationOutput = await this.migrationRunner.migrate(
+        migrationInput,
+        MigrationProcessor.version,
+        inboundVersion,
+      );
+
+      Logger.info('[MigrationProcessor] Complete');
+
+      if (migrationInput !== migrationOutput) {
+        Logger.info('[MigrationProcessor] Commit changes');
+
+        return this.commitChanges(migrationOutput);
+      }
+    } catch (error) {
+      Logger.warn('[MigrationProcessor] Error occurred: \n\n' + error);
     }
   }
 }

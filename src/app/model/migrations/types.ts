@@ -41,17 +41,6 @@ export const StoragesArray = [
 
 export const SecureStoragesArray = [Storages.ActivityProgress];
 
-//export type StorageNames = keyof MigrationStorages;
-
-// export type StoragesStates = {
-//   system?: Record<StorageKey, {}>;
-//   'flow_progress-storage'?: FlowProgressStates;
-//   'notification-queue'?: Record<StorageKey, {}>;
-//   localization?: Record<StorageKey, {}>;
-//   'activity_progress-storage'?: Record<StorageKey, {}>;
-//   'analytics-storage'?: Record<StorageKey, {}>;
-// };
-
 export type MigrationOutput = {
   reduxState: ReduxRootState;
 };
