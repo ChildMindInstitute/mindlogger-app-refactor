@@ -15,6 +15,7 @@ import { NotificationModel } from '@app/entities/notification';
 import { LoginModel } from '@app/features/login';
 import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SystemRecord } from '@app/shared/lib/records';
+import { ActivityGroupsModel } from '@app/widgets/activity-group';
 import { SessionModel } from '@entities/session';
 import { EnterForegroundModel } from '@features/enter-foreground';
 import { LogoutModel } from '@features/logout';
@@ -119,6 +120,8 @@ export default () => {
     cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
     hasActivityWithHiddenAllItems:
       ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
+    evaluateAvailableTo:
+      ActivityGroupsModel.useAvailabilityEvaluator().evaluateAvailableTo,
   });
 
   useBackgroundTask(() => {

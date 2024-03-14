@@ -32,7 +32,6 @@ export interface IStoreProgressPayload {
   type: ActivityPipelineType;
   startAt: number;
   endAt: number | null;
-  availableTo: number | null;
 }
 
 type EventId = string;

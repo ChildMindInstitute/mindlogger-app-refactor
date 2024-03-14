@@ -15,6 +15,7 @@ import { AppletModel, clearStorageRecords } from '@entities/applet';
 import { Box, Text, YStack } from '@shared/ui';
 
 import { ActivityListGroup } from '../lib';
+import { useAvailabilityEvaluator } from '../model';
 
 type Props = {
   appletId: string;
@@ -41,6 +42,7 @@ function ActivitySectionList({ appletId, groups }: Props) {
     cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
     hasActivityWithHiddenAllItems:
       ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
+    evaluateAvailableTo: useAvailabilityEvaluator().evaluateAvailableTo,
   });
 
   function navigateSurvey(

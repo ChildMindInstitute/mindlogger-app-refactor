@@ -26,6 +26,7 @@ type Input = {
   hasMediaReferences: (input: LookupEntityInput) => boolean;
   hasActivityWithHiddenAllItems: (input: LookupEntityInput) => boolean;
   cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
+  evaluateAvailableTo: (appletId: string, eventId: string) => Date | null;
 };
 
 const GoBackDuration = 1000;
@@ -47,6 +48,7 @@ export function useOnNotificationTap({
   hasMediaReferences,
   cleanUpMediaFiles,
   hasActivityWithHiddenAllItems,
+  evaluateAvailableTo,
 }: Input) {
   const queryClient = useQueryClient();
 
@@ -64,6 +66,7 @@ export function useOnNotificationTap({
     hasMediaReferences,
     cleanUpMediaFiles,
     hasActivityWithHiddenAllItems,
+    evaluateAvailableTo,
   });
 
   const { getCurrentRoute } = useCurrentRoute();

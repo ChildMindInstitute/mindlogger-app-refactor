@@ -51,6 +51,7 @@ type UseStartEntityInput = {
   hasMediaReferences: (input: LookupEntityInput) => boolean;
   hasActivityWithHiddenAllItems: (input: LookupEntityInput) => boolean;
   cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
+  evaluateAvailableTo: (appletId: string, eventId: string) => Date | null;
 };
 
 type FlowStartedArgs = {
@@ -69,6 +70,7 @@ function useStartEntity({
   hasMediaReferences,
   hasActivityWithHiddenAllItems,
   cleanUpMediaFiles,
+  evaluateAvailableTo,
 }: UseStartEntityInput) {
   const dispatch = useAppDispatch();
 
@@ -94,11 +96,14 @@ function useStartEntity({
     activityId: string,
     eventId: string,
   ) {
+    const availableTo = evaluateAvailableTo(appletId, eventId);
+
     dispatch(
       actions.activityStarted({
         appletId,
         activityId,
         eventId,
+        availableTo,
       }),
     );
   }
@@ -114,6 +119,8 @@ function useStartEntity({
     totalActivities,
     pipelineActivityOrder,
   }: FlowStartedArgs) {
+    const availableTo = evaluateAvailableTo(appletId, eventId);
+
     dispatch(
       actions.flowStarted({
         appletId,
@@ -125,6 +132,7 @@ function useStartEntity({
         activityImage,
         pipelineActivityOrder,
         totalActivities,
+        availableTo,
       }),
     );
   }

@@ -27,6 +27,7 @@ const getProgress = (startAt: Date, endAt: Date | null) => {
           type: ActivityPipelineType.Regular,
           startAt,
           endAt,
+          availableTo: null,
         },
       },
     },

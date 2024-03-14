@@ -3,10 +3,16 @@ import { addDays, startOfDay } from 'date-fns';
 import { AvailabilityType } from '@app/abstract/lib';
 import { ScheduleEvent } from '@app/entities/event';
 
-import { GroupUtility } from './GroupUtility';
+interface IDayOverlapDetector {
+  isSpreadToNextDay(event: ScheduleEvent): boolean;
+}
 
 export class AvailableToEvaluator {
-  constructor() {}
+  private dayOverlapDetector: IDayOverlapDetector;
+
+  constructor(dayOverlapDetector: IDayOverlapDetector) {
+    this.dayOverlapDetector = dayOverlapDetector;
+  }
 
   public getNow = () => new Date();
 
@@ -21,7 +27,7 @@ export class AvailableToEvaluator {
       return null;
     }
 
-    const isSpread = GroupUtility.isSpreadToNextDay(event);
+    const isSpread = this.dayOverlapDetector.isSpreadToNextDay(event);
 
     const to = isSpread ? this.getTomorrow() : this.getToday();
     to.setHours(event.availability.timeTo!.hours);
