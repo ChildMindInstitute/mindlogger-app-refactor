@@ -24,10 +24,6 @@ export const persistConfig = {
 };
 
 const rootReducer = (state: any, action: AnyAction) => {
-  if (action.type === 'identity/onLogout') {
-    state = undefined;
-  }
-
   const reducer = combineReducers({
     identity: IdentityModel.reducer,
     applets: AppletModel.reducer,

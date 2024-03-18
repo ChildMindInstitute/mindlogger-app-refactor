@@ -15,6 +15,7 @@ import {
   MixEvents,
   useAppDispatch,
   useAppForm,
+  useAppSelector,
   useFormChanges,
 } from '@shared/lib';
 import { encryption } from '@shared/lib';
@@ -22,6 +23,7 @@ import { YStack, Box, BoxProps, SubmitButton, Center, Link } from '@shared/ui';
 import { ErrorMessage, InputField } from '@shared/ui/form';
 
 import { LoginFormSchema } from '../model';
+import { cleanupData } from '../model/cleanupData';
 
 type Props = {
   onLoginSuccess: () => void;
@@ -32,6 +34,7 @@ const LoginForm: FC<Props> = props => {
   const { navigate } = useNavigation();
 
   const dispatch = useAppDispatch();
+  const userId = useAppSelector(IdentityModel.selectors.selectUserId);
 
   const navigateToForgotPassword = () => {
     navigate('ForgotPassword');
@@ -43,12 +46,17 @@ const LoginForm: FC<Props> = props => {
     isLoading,
     reset,
   } = useLoginMutation({
-    onSuccess: (response, variables) => {
+    onSuccess: async (response, variables) => {
       const userParams = {
         userId: response.data.result.user.id,
         email: response.data.result.user.email,
         password: variables.password,
       };
+
+      if (userParams.userId !== userId) {
+        await cleanupData();
+      }
+
       const userPrivateKey = encryption.getPrivateKey(userParams);
 
       UserPrivateKeyRecord.set(userPrivateKey);
