@@ -6,22 +6,17 @@ import { onBeforeLogout } from '@app/entities/identity/lib/alerts';
 import { NotificationModel } from '@app/entities/notification';
 import { IdentityService } from '@app/shared/api';
 import { SystemRecord } from '@app/shared/lib/records';
-import { IdentityModel } from '@entities/identity';
 import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
 import {
   Logger,
   hasPendingMutations,
   isAppOnline,
-  useAppDispatch,
   AnalyticsService,
   useTCPSocket,
 } from '@shared/lib';
 
-import { clearEntityRecordStorages, clearUploadQueueStorage } from '../lib';
-
 export function useLogout() {
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const { closeConnection: closeActiveTCPConnection } = useTCPSocket();
 
@@ -42,13 +37,7 @@ export function useLogout() {
 
     AnalyticsService.logout();
 
-    dispatch(IdentityModel.actions.onLogout());
-
     CacheManager.clearCache();
-
-    clearEntityRecordStorages();
-
-    clearUploadQueueStorage();
 
     NotificationModel.NotificationManager.clearScheduledNotifications();
 
