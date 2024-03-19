@@ -219,6 +219,14 @@ const AbCanvas: FC<Props> = props => {
     return greenPointIndex;
   };
 
+  const addPointToStream = (x: number, y: number, time: number) => {
+    onLog({
+      x: (x * width) / 100,
+      y: (y * width) / 100,
+      time,
+    });
+  };
+
   const onTouchStart = (x: number, y: number, time: number) => {
     const isFinished = paths.length === currentIndexRef.current;
 
@@ -243,11 +251,7 @@ const AbCanvas: FC<Props> = props => {
     addLogLine(point);
     reCreatePath(point);
 
-    onLog({
-      x: (x * width) / 100,
-      y: (y * width) / 100,
-      time: time,
-    });
+    addPointToStream(x, y, time);
   };
 
   const onTouchProgress = (x: number, y: number, time: number) => {
@@ -268,11 +272,7 @@ const AbCanvas: FC<Props> = props => {
 
     addLogPoint(createLogPoint(point));
 
-    onLog({
-      x: (x * width) / 100,
-      y: (y * width) / 100,
-      time: time,
-    });
+    addPointToStream(x, y, time);
 
     if (isOverNext(point) && isOverLast(point)) {
       markLastLogPoints({ valid: true });
