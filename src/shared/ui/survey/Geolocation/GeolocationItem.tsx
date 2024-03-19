@@ -29,6 +29,13 @@ type Props = {
   value?: Coordinates;
 };
 
+type CurrentPositionSuccessResult = {
+  coords: {
+    latitude: number;
+    longitude: number;
+  };
+};
+
 const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
   const { t } = useTranslation();
   const [errorMessage, setErrorMessage] = useState('');
@@ -41,7 +48,7 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
 
   const fetchCurrentPosition = () => {
     NativeGeolocation.getCurrentPosition(
-      successResult => {
+      (successResult: CurrentPositionSuccessResult) => {
         const coordinatesResult = {
           latitude: successResult.coords.latitude,
           longitude: successResult.coords.longitude,
