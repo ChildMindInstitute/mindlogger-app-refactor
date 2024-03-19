@@ -21,7 +21,7 @@ export function range(n: number): number[] {
   return [...Array(n).keys()];
 }
 
-export const isObjectNotEmpty = (object: any) => {
+export const isObjectNotEmpty = (object: object) => {
   return !!Object.keys(object).length;
 };
 
