@@ -17,7 +17,7 @@ type Callbacks = {
     straightLine: boolean,
     time: number,
   ) => void;
-  onTouchEnd: () => void;
+  onTouchEnd: (touchInfo: Point, time: number) => void;
 };
 
 function DrawingGesture(
@@ -96,8 +96,8 @@ function DrawingGesture(
           runOnJS(onTouchProgress)(touchData, false, time);
         }
       })
-      .onEnd(() => {
-        runOnJS(onTouchEnd)();
+      .onEnd(event => {
+        runOnJS(onTouchEnd)(event, Date.now());
       });
 
   const iosPanGesture = () =>
@@ -127,8 +127,8 @@ function DrawingGesture(
 
         runOnJS(onTouchProgress)(event, false, time);
       })
-      .onEnd(() => {
-        runOnJS(onTouchEnd)();
+      .onEnd(event => {
+        runOnJS(onTouchEnd)(event, Date.now());
       });
 
   const tapGesture = () =>
@@ -136,8 +136,8 @@ function DrawingGesture(
       .onStart(event => {
         runOnJS(onTouchStart)(event, Date.now());
       })
-      .onEnd(() => {
-        runOnJS(onTouchEnd)();
+      .onEnd(event => {
+        runOnJS(onTouchEnd)(event, Date.now());
       });
 
   const longTapGesture = () =>
@@ -145,8 +145,8 @@ function DrawingGesture(
       .onStart(event => {
         runOnJS(onTouchStart)(event, Date.now());
       })
-      .onEnd(() => {
-        runOnJS(onTouchEnd)();
+      .onEnd(event => {
+        runOnJS(onTouchEnd)(event, Date.now());
       });
 
   const iosGesture = () =>

@@ -33,7 +33,7 @@ type Props = {
 
 const AbShapes: FC<Props> = props => {
   const { nodes, config, deviceType } = props.testData;
-  const { paths, lastPath, greenRoundOrder, errorPath } = props;
+  const { paths, greenRoundOrder, errorPath } = props;
   const fontBeginEndSize =
     deviceType === 'mobile' ? config.fontSize / 1.4 : config.fontSizeBeginEnd!;
 
@@ -106,18 +106,14 @@ const AbShapes: FC<Props> = props => {
         {!!paths && (
           <Group>
             {paths.map((path, i) => (
-              <Path key={i} path={path} strokeWidth={1} style="stroke" />
+              <Path key={i} path={path} strokeWidth={1.5} style="stroke" />
             ))}
           </Group>
         )}
 
-        {!!lastPath && (
-          <Path key="lastPath" path={lastPath} strokeWidth={1} style="stroke" />
-        )}
-
         {!!errorPath && !!errorMiddlePoint && (
           <Group>
-            <Path path={errorPath} strokeWidth={1} style="stroke" />
+            <Path path={errorPath} strokeWidth={1.5} style="stroke" />
 
             <Text
               x={errorMiddlePoint.x + CrossOffsetX}

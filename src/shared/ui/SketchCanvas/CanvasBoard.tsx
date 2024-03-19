@@ -65,15 +65,18 @@ type DrawnPathsProps = {
 const DrawnPaths = memo(
   ({ paths }: DrawnPathsProps) => (
     <>
-      {paths.map((path, i) => (
-        <Path
-          key={i}
-          path={path}
-          strokeWidth={1.5}
-          color="black"
-          style="stroke"
-        />
-      ))}
+      {paths.map(
+        (path, i) =>
+          path && (
+            <Path
+              key={i}
+              path={path}
+              strokeWidth={1.5}
+              color="black"
+              style="stroke"
+            />
+          ),
+      )}
     </>
   ),
   (prevProps, nextProps) => prevProps.paths.length === nextProps.paths.length,

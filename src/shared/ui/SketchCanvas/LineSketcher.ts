@@ -25,11 +25,15 @@ class LineSketcher {
   }
 
   private static addPointToPath(
-    path: SkPath,
+    path: SkPath | undefined,
     tPoint: Point,
     pPoint: Point,
     point: Point,
   ): void {
+    if (!path) {
+      return;
+    }
+
     const mid1: Point = {
       x: (pPoint.x + tPoint.x) / 2,
       y: (pPoint.y + tPoint.y) / 2,

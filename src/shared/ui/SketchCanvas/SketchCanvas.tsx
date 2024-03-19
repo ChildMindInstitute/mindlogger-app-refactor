@@ -7,6 +7,7 @@ import {
   useRef,
 } from 'react';
 
+import { SkPath } from '@shopify/react-native-skia';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { useSharedValue } from 'react-native-reanimated';
 
@@ -25,7 +26,7 @@ type Props = {
   width: number;
   onStrokeStart: (x: number, y: number, time: number) => void;
   onStrokeChanged: (x: number, y: number, time: number) => void;
-  onStrokeEnd: () => void;
+  onStrokeEnd: (x: number, y: number, time: number) => void;
 };
 
 const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
@@ -86,7 +87,11 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
 
       canvasRef.current?.setPaths(currentPaths => {
         const pathsCount = currentPaths.length;
-        const lastPath = currentPaths[pathsCount - 1];
+        const lastPath: SkPath | undefined = currentPaths[pathsCount - 1];
+
+        if (!lastPath) {
+          return [];
+        }
 
         if (lineSketcher.shouldCreateNewLine()) {
           const lastPoint = lastPath.getLastPt();
@@ -119,22 +124,25 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     [callbacksRef, lineSketcher],
   );
 
-  const onTouchEnd = useCallback(() => {
-    if (lineSketcher.getCurrentShape() === Shape.Dot) {
-      const firstPoint = lineSketcher.getFirstPoint() as Point;
+  const onTouchEnd = useCallback(
+    (touchInfo: Point, time: number) => {
+      if (lineSketcher.getCurrentShape() === Shape.Dot) {
+        const firstPoint = lineSketcher.getFirstPoint() as Point;
 
-      createDot(
-        {
-          x: firstPoint.x + 1.5,
-          y: firstPoint.y + 1.5,
-        },
-        Date.now(),
-      );
-    }
+        createDot(
+          {
+            x: firstPoint.x + 1.5,
+            y: firstPoint.y + 1.5,
+          },
+          Date.now(),
+        );
+      }
 
-    lastPointTimeRef.current = null;
-    callbacksRef.current.onStrokeEnd();
-  }, [callbacksRef, createDot, lineSketcher]);
+      lastPointTimeRef.current = null;
+      callbacksRef.current.onStrokeEnd(touchInfo.x, touchInfo.y, time);
+    },
+    [callbacksRef, createDot, lineSketcher],
+  );
 
   const drawingGesture = useMemo(
     () =>
