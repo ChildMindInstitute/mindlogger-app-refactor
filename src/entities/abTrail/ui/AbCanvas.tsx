@@ -270,7 +270,7 @@ const AbCanvas: FC<Props> = props => {
 
     onLog({
       x: (x * width) / 100,
-      y: (x * width) / 100,
+      y: (y * width) / 100,
       time: time,
     });
 
