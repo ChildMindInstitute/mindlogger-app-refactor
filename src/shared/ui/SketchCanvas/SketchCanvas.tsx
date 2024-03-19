@@ -7,6 +7,7 @@ import {
   useRef,
 } from 'react';
 
+import { SkPath } from '@shopify/react-native-skia';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { useSharedValue } from 'react-native-reanimated';
 
@@ -81,7 +82,11 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
 
       canvasRef.current?.setPaths(currentPaths => {
         const pathsCount = currentPaths.length;
-        const lastPath = currentPaths[pathsCount - 1];
+        const lastPath: SkPath | undefined = currentPaths[pathsCount - 1];
+
+        if (!lastPath) {
+          return [];
+        }
 
         if (lineSketcher.shouldCreateNewLine()) {
           const lastPoint = lastPath.getLastPt();

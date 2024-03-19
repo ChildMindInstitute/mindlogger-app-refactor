@@ -89,14 +89,10 @@ class LineSketcher {
   }
 
   public progressLine(
-    path: SkPath | undefined,
+    path: SkPath,
     point: Point,
     straightLine: boolean = false,
   ): void {
-    if (!path) {
-      return;
-    }
-
     this.points.push(point);
 
     const pointsCount = this.points.length;
