@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-mobile",
-  "version": "1.0.10",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "android": "yarn android:dev",
@@ -47,11 +47,11 @@
     "@react-native-firebase/app": "18.7.3",
     "@react-native-firebase/crashlytics": "18.7.3",
     "@react-native-firebase/messaging": "18.7.3",
-    "@react-navigation/bottom-tabs": "^6.5.11",
-    "@react-navigation/native": "^6.1.9",
-    "@react-navigation/native-stack": "^6.9.17",
+    "@react-navigation/bottom-tabs": "^6.5.20",
+    "@react-navigation/native": "^6.1.17",
+    "@react-navigation/native-stack": "^6.9.26",
     "@reduxjs/toolkit": "^2.0.1",
-    "@shopify/react-native-skia": "0.1.229",
+    "@shopify/react-native-skia": "1.0.4",
     "@tamagui/animations-react-native": "1.11.1",
     "@tamagui/button": "1.11.1",
     "@tamagui/core": "1.11.1",

@@ -1073,7 +1073,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.9.0):
     - React-Core
-  - react-native-skia (0.1.229):
+  - react-native-skia (1.0.4):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React
@@ -1696,7 +1696,7 @@ SPEC CHECKSUMS:
   react-native-mmkv: e97c0c79403fb94577e5d902ab1ebd42b0715b43
   react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
-  react-native-skia: a61da839ec19af7825ced141a903f8770e717194
+  react-native-skia: 8c3c1016dfb86ae82d61e08a16c7197ac2b58eed
   react-native-tcp-socket: e724380c910c2e704816ec817ed28f1342246ff7
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
   react-native-webview: a9454e7b9a99dc4c3fc865fd92de3e95d2eb79d2
