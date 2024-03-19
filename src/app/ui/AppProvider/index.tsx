@@ -18,9 +18,7 @@ import SplashProvider from './SplashProvider';
 import StorageMigrationProvider from './StorageMigrationProvider';
 import SystemBootUpProvider from './SystemBootUpProvider';
 import TamaguiProvider from './TamaguiProvider';
-import ToastProvider, {
-  ToastProvider_NewImplementation,
-} from './ToastProvider';
+import { ToastProvider_NewImplementation } from './ToastProvider';
 
 CacheManager.config = {
   baseDir: `${Dirs.CacheDir}/images_cache/`,
@@ -54,11 +52,9 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
                       <PortalProvider>
                         <SafeAreaProvider>
                           <ToastProvider_NewImplementation>
-                            <ToastProvider>
-                              <SplashProvider isLoading={isBootingUp}>
-                                {children}
-                              </SplashProvider>
-                            </ToastProvider>
+                            <SplashProvider isLoading={isBootingUp}>
+                              {children}
+                            </SplashProvider>
                           </ToastProvider_NewImplementation>
                         </SafeAreaProvider>
                       </PortalProvider>
