@@ -16,7 +16,7 @@ const schema = z
   })
   .refine(data => data.newPassword === data.confirmPassword, {
     message: 'password_recovery_form:passwords_do_not_match',
-    path: ['confirm'],
+    path: ['confirmPassword'],
   });
 
 export default schema;
