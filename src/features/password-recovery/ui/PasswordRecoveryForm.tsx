@@ -75,7 +75,7 @@ const PasswordRecoveryForm: FC<Props> = props => {
             backgroundColor="transparent"
             placeholderTextColor={colors.grey3}
             secureTextEntry
-            name="new_password"
+            name="newPassword"
             placeholder={t('password_recovery_form:new_password_placeholder')}
           />
 
@@ -85,7 +85,7 @@ const PasswordRecoveryForm: FC<Props> = props => {
             accessibilityLabel="password-recovery-confirm-password-input"
             placeholderTextColor={colors.grey3}
             secureTextEntry
-            name="confirm_password"
+            name="confirmPassword"
             placeholder={t(
               'password_recovery_form:confirm_password_placeholder',
             )}
