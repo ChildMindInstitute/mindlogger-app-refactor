@@ -141,10 +141,10 @@
     "error": "Unable to update user details.",
     "submission_error": "The current password you entered was incorrect.",
     "change_pass": "Change Password",
-    "password_at_least_characters": "Password must be at least 6 characters"
+    "password_at_least_characters": "Password must be at least {{min}} characters"
   },
   "password_recovery_form": {
-    "password_at_least_characters": "Password must be at least 6 characters",
+    "password_at_least_characters": "Password must be at least {{min}} characters",
     "password_no_spaces": "Password must not contain spaces",
     "passwords_do_not_match": "Passwords do not match",
     "password_confirmation_required": "Please confirm your password",

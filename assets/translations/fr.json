@@ -140,10 +140,10 @@
     "error": "Impossible de mettre à jour les données de l'utilisateur.",
     "submission_error": "Le mot de passe actuel que vous avez saisi était incorrect.",
     "change_pass": "Changer le mot de passe",
-    "password_at_least_characters": "Le mot de passe doit être au moins de 6 caractères"
+    "password_at_least_characters": "Le mot de passe doit être au moins de {{min}} caractères"
   },
   "password_recovery_form": {
-    "password_at_least_characters": "Le mot de passe doit être au moins de 6 caractères",
+    "password_at_least_characters": "Le mot de passe doit être au moins de {{min}} caractères",
     "password_no_spaces": "Le mot de passe ne doit pas contenir d'espaces",
     "passwords_do_not_match": "Les mots de passe ne correspondent pas",
     "password_confirmation_required": "Veuillez confirmer votre mot de passe",

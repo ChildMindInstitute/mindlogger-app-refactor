@@ -12,6 +12,7 @@ const { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT } =
 
 export * from './colors';
 export * from './dateTime';
+export * from './password';
 
 export const IS_IOS = Platform.OS === 'ios';
 export const IS_ANDROID = Platform.OS === 'android';
