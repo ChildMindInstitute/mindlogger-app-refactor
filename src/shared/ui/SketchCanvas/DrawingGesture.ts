@@ -58,7 +58,7 @@ function DrawingGesture(
     };
   };
 
-  const androidGesture = () =>
+  const androidPanGesture = () =>
     Gesture.Pan()
       .manualActivation(true)
       .onTouchesDown((event, stateManager) => {
@@ -79,7 +79,7 @@ function DrawingGesture(
           currentTouchIdRef.value = null;
         }
       })
-      .onBegin(event => {
+      .onStart(event => {
         runOnJS(onTouchStart)(event, Date.now());
       })
       .onTouchesMove((event, manager) => {
@@ -96,14 +96,14 @@ function DrawingGesture(
           runOnJS(onTouchProgress)(touchData, false, time);
         }
       })
-      .onFinalize(() => {
+      .onEnd(() => {
         runOnJS(onTouchEnd)();
       });
 
-  const iosGesture = () =>
+  const iosPanGesture = () =>
     Gesture.Pan()
       .maxPointers(1)
-      .onBegin(event => {
+      .onStart(event => {
         const time = Date.now();
 
         runOnJS(onTouchStart)(event, time);
@@ -130,6 +130,30 @@ function DrawingGesture(
       .onEnd(() => {
         runOnJS(onTouchEnd)();
       });
+
+  const tapGesture = () =>
+    Gesture.Tap()
+      .onStart(event => {
+        runOnJS(onTouchStart)(event, Date.now());
+      })
+      .onEnd(() => {
+        runOnJS(onTouchEnd)();
+      });
+
+  const longTapGesture = () =>
+    Gesture.LongPress()
+      .onStart(event => {
+        runOnJS(onTouchStart)(event, Date.now());
+      })
+      .onEnd(() => {
+        runOnJS(onTouchEnd)();
+      });
+
+  const iosGesture = () =>
+    Gesture.Exclusive(iosPanGesture(), tapGesture(), longTapGesture());
+
+  const androidGesture = () =>
+    Gesture.Exclusive(androidPanGesture(), tapGesture(), longTapGesture());
 
   const gesture = IS_IOS ? iosGesture() : androidGesture();
 

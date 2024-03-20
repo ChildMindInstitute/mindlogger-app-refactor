@@ -64,7 +64,7 @@ export type AppletDetailsDto = {
   encryption: AppletEncryptionDTO | null;
   streamEnabled: boolean;
   streamIpAddress: string | null;
-  streamPort: string | null;
+  streamPort: number | null;
 };
 
 export type AppletRespondentMetaDto = {

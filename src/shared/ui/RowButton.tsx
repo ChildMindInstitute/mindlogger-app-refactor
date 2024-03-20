@@ -9,6 +9,10 @@ type Props = {
   rightIcon?: ElementType;
 } & BoxProps;
 
+const pressStyle = {
+  opacity: 0.5,
+};
+
 const RowButton: FC<Props> = props => {
   const {
     onPress,
@@ -27,6 +31,7 @@ const RowButton: FC<Props> = props => {
       ai="center"
       bbc="$lightGrey"
       bbw={1}
+      pressStyle={pressStyle}
       {...boxProps}
     >
       <Text>{title}</Text>
