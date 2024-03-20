@@ -10,6 +10,7 @@ import {
   IStoreProgressPayload,
   CompletedEventEntities,
 } from '@app/abstract/lib';
+import { cleanUpAction } from '@app/shared/lib';
 
 type InProgressActivity = {
   appletId: string;
@@ -153,6 +154,10 @@ const slice = createSlice({
       state.inProgress[appletId][entityId][eventId].endAt = endAt;
     },
   },
+  extraReducers: builder =>
+    builder.addCase(cleanUpAction, () => {
+      return initialState;
+    }),
 });
 
 const { actions, reducer } = slice;
