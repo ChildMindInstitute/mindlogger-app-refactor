@@ -2,7 +2,7 @@ import i18n from 'i18next';
 
 import { SessionModel } from '@entities/session';
 import { httpService } from '@shared/api';
-import { createJob } from '@shared/lib';
+import { createJob, TIMEZONE } from '@shared/lib';
 
 export default createJob(() => {
   httpService.interceptors.request.use(
@@ -14,6 +14,7 @@ export default createJob(() => {
       }
 
       config.headers['Content-Language'] = i18n.resolvedLanguage;
+      config.headers['X-Timezone'] = TIMEZONE;
 
       return config;
     },
