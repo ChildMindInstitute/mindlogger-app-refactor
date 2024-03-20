@@ -11,6 +11,7 @@ import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
 import { SessionModel } from '@entities/session';
 import {
   AnalyticsService,
+  cleanUpAction,
   executeIfOnline,
   MixEvents,
   useAppDispatch,
@@ -55,6 +56,7 @@ const LoginForm: FC<Props> = props => {
 
       if (userParams.userId !== userId) {
         await cleanupData();
+        dispatch(cleanUpAction());
       }
 
       const userPrivateKey = encryption.getPrivateKey(userParams);
