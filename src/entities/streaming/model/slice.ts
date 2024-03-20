@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { cleanUpAction } from '@app/shared/lib';
+
 const DEFAULT_HOST = '';
 const DEFAULT_PORT = '';
 
@@ -32,6 +34,10 @@ const streamingSlice = createSlice({
       return initialState;
     },
   },
+  extraReducers: builder =>
+    builder.addCase(cleanUpAction, () => {
+      return initialState;
+    }),
 });
 
 export const actions = {
