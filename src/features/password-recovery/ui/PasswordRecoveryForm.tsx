@@ -49,15 +49,15 @@ const PasswordRecoveryForm: FC<Props> = props => {
 
   const { form, submit } = useAppForm(PasswordRecoveryFormSchema, {
     defaultValues: {
-      new_password: '',
-      confirm_password: '',
+      newPassword: '',
+      confirmPassword: '',
     },
     onSubmitSuccess: data => {
       executeIfOnline(() =>
         recoverPassword({
           email: props.email,
           key: props.resetKey,
-          password: data.new_password,
+          password: data.newPassword,
         }),
       );
     },
