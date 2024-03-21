@@ -22,36 +22,47 @@ const theme = {
   },
 };
 
-const linking: LinkingOptions<ReactNavigation.RootParamList> = {
-  prefixes: [DEEP_LINK_PREFIX!],
-  getStateFromPath: (path, options) => {
-    const state = getStateFromPath(path, options);
-    if (!state) {
-      Logger.warn(
-        `[${LOGGER_MODULE_NAME}] No matching route found, open URL in browser: ${DEEP_LINK_PREFIX}/${path}`,
-      );
+const getLinking = ():
+  | LinkingOptions<ReactNavigation.RootParamList>
+  | undefined => {
+  if (!DEEP_LINK_PREFIX) {
+    Logger.error(
+      `[${LOGGER_MODULE_NAME}] No deep link prefix found, deep linking will not work.`,
+    );
+    return undefined;
+  }
 
-      // No matching route found, open URL in browser
-      Linking.openURL(`${DEEP_LINK_PREFIX}/${path}`).catch(err =>
-        Logger.error(
-          `[${LOGGER_MODULE_NAME}] An error occurred opening deep link ${DEEP_LINK_PREFIX}/${path} in the browser:\n\n ${err}`,
-        ),
-      );
-    }
-    return state;
-  },
-  config: {
-    screens: {
-      PasswordRecovery: 'password-recovery',
+  return {
+    prefixes: [DEEP_LINK_PREFIX],
+    getStateFromPath: (path, options) => {
+      const state = getStateFromPath(path, options);
+      if (!state) {
+        Logger.warn(
+          `[${LOGGER_MODULE_NAME}] No matching route found, open URL in browser: ${DEEP_LINK_PREFIX}/${path}`,
+        );
+
+        // No matching route found, open URL in browser
+        Linking.openURL(`${DEEP_LINK_PREFIX}/${path}`).catch(err =>
+          Logger.error(
+            `[${LOGGER_MODULE_NAME}] An error occurred opening deep link ${DEEP_LINK_PREFIX}/${path} in the browser:\n\n ${err}`,
+          ),
+        );
+      }
+      return state;
     },
-  },
+    config: {
+      screens: {
+        PasswordRecovery: 'password-recovery',
+      },
+    },
+  };
 };
 
 const NavigationProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <NavigationContainer
       theme={theme}
-      linking={DEEP_LINK_PREFIX ? linking : undefined}
+      linking={getLinking()}
       onStateChange={state =>
         ScreensModel.onScreenChanged(
           // @react-navigation's poor type inference
