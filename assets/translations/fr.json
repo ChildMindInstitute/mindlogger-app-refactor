@@ -402,6 +402,7 @@
     "restart": "Recommencer",
     "resume": "Reprendre",
     "retry": "Recommencez",
+    "send": "Envoyer",
     "later": "Plus tard",
     "in_progress": "En cours",
     "unscheduled": "Non programmé",
@@ -414,7 +415,7 @@
     "hi": "Bonjour",
     "enter_old_password": "Veuillez saisir votre ancien mot de passe",
     "enter_new_password": "Veuillez saisir un nouveau mot de passe",
-    "data_not_sent": "Données non envoyées (garder l'application ouverte pendant que nous essayons)",
+    "data_not_sent": "Cliquez sur Envoyer pour télécharger les données collectées précédemment",
     "upload_error": "Erreur de téléversement",
     "want_to_retry": "Votre Internet peut être instable. Nous n'avons pas pu envoyer vos données."
   },

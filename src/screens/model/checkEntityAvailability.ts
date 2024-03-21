@@ -8,7 +8,7 @@ import {
   onCompletedToday,
   onScheduledToday,
 } from '@app/features/tap-on-notification/lib';
-import { ILogger, Logger } from '@app/shared/lib';
+import { ILogger, isReadyForAutocompletion, Logger } from '@app/shared/lib';
 import {
   ActivityGroupType,
   ActivityGroupsModel,
@@ -34,10 +34,23 @@ export const checkEntityAvailability = ({
     `[checkEntityAvailability]: Checking.. Entity = "${entityName}", appletId = ${appletId}, entityId = ${entityId}, entityType = ${entityType}, eventId = ${eventId} `,
   );
 
+  const shouldBeAutocompleted = isReadyForAutocompletion(
+    { appletId, entityId, eventId, entityType },
+    storeProgress,
+  );
+
+  const applyInProgressFilter = !shouldBeAutocompleted;
+
+  Logger.log(
+    '[checkEntityAvailability] applyInProgressFilter is set to ' +
+      applyInProgressFilter,
+  );
+
   const groupsResult = ActivityGroupsModel.ActivityGroupsBuildManager.process(
     appletId,
     storeProgress,
     queryClient,
+    applyInProgressFilter,
   );
 
   const groupInProgress: ActivityListGroup = groupsResult.groups.find(

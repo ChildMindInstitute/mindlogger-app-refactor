@@ -401,6 +401,7 @@
     "restart": "Restart",
     "resume": "Resume",
     "retry": "Retry",
+    "send": "Send",
     "later": "Later",
     "in_progress": "In Progress",
     "unscheduled": "Unscheduled",
@@ -413,7 +414,7 @@
     "hi": "Hi",
     "enter_old_password": "Please enter your old password",
     "enter_new_password": "Please enter a new password",
-    "data_not_sent": "Data not sent (keep app open while we try)",
+    "data_not_sent": "Click Send to upload the data collected earlier",
     "upload_error": "Upload Error",
     "want_to_retry": "Your Internet may be unstable. We weren't able to send your data."
   },
