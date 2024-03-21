@@ -90,6 +90,7 @@
     "react-native-get-random-values": "^1.8.0",
     "react-native-image-picker": "^7.0.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-localize": "^3.0.6",
     "react-native-markdown-display": "6.1.6",
     "react-native-mime-types": "^2.3.0",
     "react-native-mmkv": "2.5.1",
