@@ -1,18 +1,20 @@
 import {
-  Dispatch,
   forwardRef,
   memo,
-  SetStateAction,
   useImperativeHandle,
   useMemo,
   useState,
 } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { Canvas, Group, Path, SkPath } from '@shopify/react-native-skia';
+import { Canvas, Group, Path, Skia, SkPath } from '@shopify/react-native-skia';
+import { useSharedValue } from 'react-native-reanimated';
 
 export type CanvasBoardRef = {
-  setPaths: Dispatch<SetStateAction<SkPath[]>>;
+  addPath: (path: SkPath) => void;
+  changeLastPath: (callback: (prevPath: SkPath) => SkPath) => void;
+  clear: () => void;
+  initialize: (paths: SkPath[]) => void;
 };
 
 type Props = {
@@ -21,6 +23,8 @@ type Props = {
 
 const CanvasBoard = forwardRef<CanvasBoardRef, Props>(({ size }, ref) => {
   const [paths, setPaths] = useState<Array<SkPath>>([]);
+
+  const activePath = useSharedValue<SkPath>(Skia.Path.Make());
 
   const styles = useMemo(
     () =>
@@ -31,19 +35,33 @@ const CanvasBoard = forwardRef<CanvasBoardRef, Props>(({ size }, ref) => {
     [size],
   );
 
-  useImperativeHandle(ref, () => {
-    return {
-      setPaths,
-    };
-  });
+  useImperativeHandle(ref, () => ({
+    addPath: (path: SkPath) => {
+      const activePathValue = activePath.value;
 
-  const drawnPaths = [...paths];
-  const activePath = drawnPaths.pop();
+      if (activePathValue) {
+        setPaths(prevPaths => [...prevPaths, activePathValue]);
+      }
+
+      activePath.value = path;
+    },
+    changeLastPath: (callback: (prevPath: SkPath) => SkPath) => {
+      activePath.value = callback(paths[paths.length - 1]);
+    },
+    clear: () => {
+      setPaths([]);
+      activePath.value = Skia.Path.Make();
+    },
+    initialize: (initialPaths: SkPath[]) => {
+      setPaths(initialPaths);
+      activePath.value = Skia.Path.Make();
+    },
+  }));
 
   return (
     <Canvas style={styles}>
       <Group>
-        <DrawnPaths paths={drawnPaths} />
+        <DrawnPaths paths={paths} />
 
         {activePath && (
           <Path
