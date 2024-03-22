@@ -2,9 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
+import { useToast } from '@shared/lib';
+
 import { TCPSocketEmitter } from './TCPSocketEmitter';
 import TCPSocketService from './TCPSocketService';
-import { useToast } from '../hooks';
 
 type Callbacks = {
   onError?: (error: Error) => void;
@@ -15,8 +16,8 @@ type Callbacks = {
 export function useTCPSocket(callbacks?: Callbacks) {
   const callbacksRef = useRef(callbacks);
 
-  const toast = useToast();
   const { t } = useTranslation();
+  const toast = useToast();
 
   const [connected, setConnected] = useState(() => {
     const socket = TCPSocketService.getSocket();
@@ -41,7 +42,7 @@ export function useTCPSocket(callbacks?: Callbacks) {
 
   const showDisconnectAlert = useCallback(() => {
     toast.show(t('live_connection:connection_closed'));
-  }, [toast, t]);
+  }, [t, toast]);
 
   const connect = useCallback((host: string, port: number) => {
     setConnecting(true);
