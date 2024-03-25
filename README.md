@@ -25,7 +25,7 @@ Running the app:
   - Android SDK
 - [Backend](https://github.com/ChildMindInstitute/mindlogger-backend-refactor) project running locally or accessible in a test environment
 - Configured [environment variables](#environment-variables):\
-  `cp .env.example .env`
+  `cp .env.example .env.dev`
 
 ### 2. Run the app
 

@@ -6,6 +6,7 @@ import { EntityPath } from '@app/abstract/lib';
 
 export type RootStackParamList = {
   Login: undefined;
+  PasswordRecovery: { email: string; key: string };
   SignUp: undefined;
   AboutApp: undefined;
   ChangeLanguage: undefined;
