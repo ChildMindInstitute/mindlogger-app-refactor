@@ -1,20 +1,25 @@
 import {
   forwardRef,
-  useCallback,
-  useEffect,
+  memo,
   useImperativeHandle,
   useMemo,
-  useRef,
+  useState,
 } from 'react';
+import { StyleSheet } from 'react-native';
 
+import { Canvas, Group, Path, Skia, SkPath } from '@shopify/react-native-skia';
 import { GestureDetector } from 'react-native-gesture-handler';
-import { useSharedValue } from 'react-native-reanimated';
+import { runOnJS, useSharedValue } from 'react-native-reanimated';
 
-import { useCallbacksRefs } from '@app/shared/lib';
-
-import CanvasBoard, { CanvasBoardRef } from './CanvasBoard';
-import DrawingGesture from './DrawingGesture';
-import LineSketcher, { Point, Shape } from './LineSketcher';
+import {
+  createLine,
+  createPathFromPoints,
+  getCurrentShape,
+  Point,
+  progressLine,
+  Shape,
+} from './LineSketcher';
+import useDrawingGesture from './useDrawingGesture';
 
 export type SketchCanvasRef = {
   clear: () => void;
@@ -28,87 +33,102 @@ type Props = {
   onStrokeEnd: () => void;
 };
 
+const MAX_POINTS_PER_LINE = 50;
+
 const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   const { initialLines, width, onStrokeStart, onStrokeChanged, onStrokeEnd } =
     props;
 
-  const canvasRef = useRef<CanvasBoardRef | null>(null);
+  const [paths, setPaths] = useState<Array<SkPath>>(() =>
+    initialLines.map(points => createPathFromPoints(points)),
+  );
 
-  const callbacksRef = useCallbacksRefs({
-    onStrokeStart,
-    onStrokeChanged,
-    onStrokeEnd,
-  });
+  const points = useSharedValue<Point[]>([]);
 
-  const lastPointTimeRef = useRef<number | null>(null);
+  const lastPointTime = useSharedValue<number | null>(null);
 
-  const currentTouchIdRef = useSharedValue<number | null>(null);
-  const sizeRef = useSharedValue(width);
-  const lineSketcher = useMemo(() => new LineSketcher(), []);
+  const activePath = useSharedValue<SkPath>(Skia.Path.Make());
+  const tempPath = useSharedValue<SkPath>(Skia.Path.Make());
 
   useImperativeHandle(ref, () => {
     return {
       clear() {
-        canvasRef.current?.clear();
+        activePath.value = Skia.Path.Make();
+        setPaths([]);
       },
     };
   });
 
-  const onTouchStart = useCallback(
-    (touchInfo: Point, time: number) => {
-      const path = lineSketcher.createLine(touchInfo);
+  function updatePaths(path: SkPath) {
+    setPaths(prevPaths => [...prevPaths, path]);
+    tempPath.value = Skia.Path.Make();
+  }
 
-      lastPointTimeRef.current = time;
-      canvasRef.current?.addPath(path);
-      callbacksRef.current.onStrokeStart(touchInfo.x, touchInfo.y, time);
-    },
-    [callbacksRef, lineSketcher],
-  );
+  const onTouchStart = (point: Point, time: number) => {
+    'worklet';
+    activePath.value = createLine(points, point);
+    runOnJS(onStrokeStart)(point.x, point.y, time);
+  };
 
-  const onTouchProgress = useCallback(
-    (touchInfo: Point, straightLine: boolean, time: number) => {
-      const lastDrawnPoint = lineSketcher.getLastPoint();
+  const onTouchProgress = (
+    point: Point,
+    straightLine: boolean,
+    time: number,
+  ) => {
+    'worklet';
+    const lastDrawnPoint = points.value[points.value.length - 1];
 
-      if (lastDrawnPoint) {
-        const dx = touchInfo.x - lastDrawnPoint.x;
-        const dy = touchInfo.y - lastDrawnPoint.y;
+    if (lastDrawnPoint) {
+      const dx = point.x - lastDrawnPoint.x;
+      const dy = point.y - lastDrawnPoint.y;
 
-        const isSameTime = lastPointTimeRef.current === time;
-        const isSamePoint = dx === 0 && dy === 0;
+      const isSameTime = lastPointTime.value === time;
+      const isSamePoint = dx === 0 && dy === 0;
 
-        if (isSamePoint || isSameTime) {
-          return;
-        }
+      if (isSamePoint || isSameTime) {
+        return;
       }
+    }
 
-      lastPointTimeRef.current = time;
-      callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y, time);
+    lastPointTime.value = time;
 
-      canvasRef.current?.changeLastPath(lastPath => {
-        lineSketcher.progressLine(lastPath, touchInfo, straightLine);
+    activePath.modify(value => {
+      'worklet';
+      progressLine(points, value, point, straightLine);
 
-        return lastPath;
-      });
-    },
-    [callbacksRef, lineSketcher],
-  );
+      return value;
+    });
 
-  const createDot = useCallback(
-    (touchInfo: Point, time: number) => {
-      callbacksRef.current.onStrokeChanged(touchInfo.x, touchInfo.y, time);
+    if (points.value.length % MAX_POINTS_PER_LINE === 0) {
+      runOnJS(updatePaths)(activePath.value);
 
-      canvasRef.current?.changeLastPath(lastPath => {
-        lineSketcher.progressLine(lastPath, touchInfo);
+      tempPath.value = activePath.value;
 
-        return lastPath;
-      });
-    },
-    [callbacksRef, lineSketcher],
-  );
+      const lastPoint = activePath.value!.getLastPt();
+      const newPath = createLine(points, lastPoint);
 
-  const onTouchEnd = useCallback(() => {
-    if (lineSketcher.getCurrentShape() === Shape.Dot) {
-      const firstPoint = lineSketcher.getFirstPoint() as Point;
+      activePath.value = newPath;
+    }
+
+    runOnJS(onStrokeChanged)(point.x, point.y, time);
+  };
+
+  const createDot = (point: Point, time: number) => {
+    'worklet';
+    runOnJS(onStrokeChanged)(point.x, point.y, time);
+
+    activePath.modify(value => {
+      'worklet';
+      progressLine(points, value, point);
+
+      return value;
+    });
+  };
+
+  const onTouchEnd = () => {
+    'worklet';
+    if (getCurrentShape(points) === Shape.Dot) {
+      const firstPoint = points.value[points.value.length - 1];
 
       createDot(
         {
@@ -119,31 +139,68 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
       );
     }
 
-    lastPointTimeRef.current = null;
-    callbacksRef.current.onStrokeEnd();
-  }, [callbacksRef, createDot, lineSketcher]);
+    runOnJS(updatePaths)(activePath.value);
+    runOnJS(onStrokeEnd)();
+  };
 
-  const drawingGesture = useMemo(
-    () =>
-      DrawingGesture(
-        { sizeRef, currentTouchIdRef },
-        { onTouchStart, onTouchProgress, onTouchEnd },
-      ),
-    [currentTouchIdRef, onTouchEnd, onTouchProgress, onTouchStart, sizeRef],
+  const drawingGesture = useDrawingGesture(
+    { areaSize: width },
+    { onTouchStart, onTouchProgress, onTouchEnd },
   );
 
-  useEffect(() => {
-    canvasRef.current?.initialize(
-      initialLines.map(points => LineSketcher.createPathFromPoints(points)),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const styles = useMemo(
+    () =>
+      StyleSheet.flatten({
+        width,
+        height: width,
+      }),
+    [width],
+  );
 
   return (
     <GestureDetector gesture={drawingGesture}>
-      <CanvasBoard size={width} ref={canvasRef} />
+      <Canvas style={styles}>
+        <Group>
+          <DrawnPaths paths={paths} />
+
+          <Path
+            path={activePath}
+            strokeWidth={1.5}
+            color="black"
+            style="stroke"
+          />
+
+          <Path
+            path={tempPath}
+            strokeWidth={1.5}
+            color="black"
+            style="stroke"
+          />
+        </Group>
+      </Canvas>
     </GestureDetector>
   );
 });
+
+type DrawnPathsProps = {
+  paths: Array<SkPath>;
+};
+
+const DrawnPaths = memo(
+  ({ paths }: DrawnPathsProps) => (
+    <>
+      {paths.map((path, i) => (
+        <Path
+          key={i}
+          path={path}
+          strokeWidth={1.5}
+          color="black"
+          style="stroke"
+        />
+      ))}
+    </>
+  ),
+  (prevProps, nextProps) => prevProps.paths.length === nextProps.paths.length,
+);
 
 export default SketchCanvas;
