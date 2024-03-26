@@ -44,13 +44,13 @@ const ForgotPasswordForm: FC<Props> = props => {
       props.onRecoverySuccess();
       banner.show(<SuccessNotification email={form.getValues().email} />, {
         type: 'success',
-        duration: 5000,
+        visibilityTime: 5000,
       });
     },
     onError: () => {
       banner.show(t('forgot_pass_form:email_send_error'), {
-        type: 'danger',
-        duration: 5000,
+        type: 'error',
+        visibilityTime: 5000,
       });
     },
   });

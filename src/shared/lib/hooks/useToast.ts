@@ -4,7 +4,7 @@ import ToastMessage from 'react-native-toast-message';
 
 const showToastMessage = (message: string) =>
   ToastMessage.show({
-    type: 'dark',
+    type: 'toast',
     text1: message,
     position: 'bottom',
   });

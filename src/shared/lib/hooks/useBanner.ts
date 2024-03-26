@@ -1,14 +1,18 @@
-import type { ToastOptions } from 'react-native-toast-notifications/lib/typescript/toast';
-
-import useToast from './useToast';
+import Toast from 'react-native-toast-message';
+import type { ToastOptions } from 'react-native-toast-message/lib/src/types';
 
 export const useBanner = () => {
-  const toast = useToast();
   return {
-    ...toast,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     show: (content: string | JSX.Element, options: ToastOptions) => {
-      toast.show(content as string);
+      Toast.hide();
+      setTimeout(() => {
+        Toast.show({
+          props: { content },
+          position: 'top',
+          swipeable: false,
+          ...options,
+        });
+      }, 200);
     },
   };
 };
