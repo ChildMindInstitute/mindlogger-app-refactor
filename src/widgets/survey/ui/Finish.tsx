@@ -20,6 +20,7 @@ import {
   useAppSelector,
   MixProperties,
   MixEvents,
+  getTimezoneOffset,
 } from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
@@ -196,6 +197,7 @@ function FinishItem({
       alerts,
       eventId,
       isFlowCompleted: !!flowId,
+      tzOffset: getTimezoneOffset(),
     });
 
     clearActivityStorageRecord();

@@ -213,3 +213,10 @@ export const getDateFromString = (dateString: string) => {
 
   return new Date(Number(year), Number(month) - 1, Number(day));
 };
+
+/**
+ *
+ * @returns The difference, in minutes, between date as evaluated in the UTC time zone
+ * but with the opposite sign which is expected by the Backend server.
+ */
+export const getTimezoneOffset = () => new Date().getTimezoneOffset() * -1;

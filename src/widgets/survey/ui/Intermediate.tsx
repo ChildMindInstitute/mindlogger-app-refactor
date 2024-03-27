@@ -28,6 +28,7 @@ import {
   useAppSelector,
   MixProperties,
   MixEvents,
+  getTimezoneOffset,
 } from '@app/shared/lib';
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
@@ -301,6 +302,7 @@ function Intermediate({
       alerts,
       eventId,
       isFlowCompleted: false,
+      tzOffset: getTimezoneOffset(),
     });
 
     clearActivityStorageRecord();

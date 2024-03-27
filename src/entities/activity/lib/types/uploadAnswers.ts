@@ -29,6 +29,7 @@ export type SendAnswersInput = {
     height: number;
   };
   alerts: AnswerAlertsDto;
+  tzOffset: number;
   logActivityName?: string;
   logCompletedAt?: string;
 };
