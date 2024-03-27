@@ -388,6 +388,7 @@ class AnswersUploadService implements IAnswersUploadService {
         localEndDate: formatToDtoDate(data.endTime),
         localEndTime: formatToDtoTime(data.endTime, true),
         scheduledEventId: data.eventId,
+        tzOffset: data.tzOffset,
       },
       createdAt: data.createdAt,
       client: data.client,
