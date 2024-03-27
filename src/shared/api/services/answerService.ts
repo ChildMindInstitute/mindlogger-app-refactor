@@ -162,6 +162,7 @@ export type EncryptedAnswerDto = {
   scheduledEventId: string;
   localEndDate: string;
   localEndTime: string;
+  tzOffset: number;
 };
 
 export type UserActionDto = {
