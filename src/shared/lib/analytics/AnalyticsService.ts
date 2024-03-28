@@ -48,10 +48,10 @@ const AnalyticsService = {
       Logger.log(
         '[AnalyticsService]: Create and init MixpanelAnalytics object',
       );
-
       service = new MixpanelAnalytics(MIXPANEL_TOKEN!);
       return service.init();
     }
+    return Promise.resolve();
   },
   track(action: string, payload?: Record<string, any>) {
     if (payload) {
