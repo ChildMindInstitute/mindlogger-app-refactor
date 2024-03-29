@@ -60,6 +60,13 @@ type ConstructForFinishInput = {
   activityName: string;
 };
 
+type ConstructInput = (
+  | ConstructForIntermediateInput
+  | ConstructForFinishInput
+) & {
+  completionType: 'intermediate' | 'finish';
+};
+
 export class ConstructCompletionsService {
   private saveActivitySummary: SaveActivitySummary | null;
   private queryDataUtils: QueryDataUtils;
@@ -180,7 +187,7 @@ export class ConstructCompletionsService {
     });
   }
 
-  public async constructForIntermediate(
+  private async constructForIntermediate(
     input: ConstructForIntermediateInput,
   ): Promise<void> {
     Logger.log(
@@ -256,7 +263,7 @@ export class ConstructCompletionsService {
     clearActivityStorageRecord(appletId, activityId, eventId, order);
   }
 
-  public async constructForFinish(
+  private async constructForFinish(
     input: ConstructForFinishInput,
   ): Promise<void> {
     Logger.log(
@@ -344,5 +351,18 @@ export class ConstructCompletionsService {
     AnalyticsService.track(MixEvents.AssessmentCompleted, {
       [MixProperties.AppletId]: appletId,
     });
+  }
+
+  public async construct(input: ConstructInput): Promise<void> {
+    if (input.completionType === 'intermediate') {
+      await this.constructForIntermediate({
+        ...input,
+        flowId: input.flowId!,
+      });
+    }
+
+    if (input.completionType === 'finish') {
+      await this.constructForFinish(input);
+    }
   }
 }

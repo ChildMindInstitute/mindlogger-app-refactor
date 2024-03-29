@@ -27,7 +27,7 @@ export function useFlowState({ appletId, eventId, flowId }: UseFlowStateArgs) {
   const flowSummaryData: FlowSummaryData = (record?.context?.[SummaryDataKey] ??
     {}) as FlowSummaryData;
 
-  const restFlowActivityIds: string[] = useMemo(() => {
+  const remainingActivityIds: string[] = useMemo(() => {
     if (!record?.pipeline.length || record?.step == null) {
       return [];
     }
@@ -43,6 +43,6 @@ export function useFlowState({ appletId, eventId, flowId }: UseFlowStateArgs) {
     isTimerElapsed: record?.isCompletedDueToTimer ?? false,
     pipeline,
     flowSummaryData,
-    restFlowActivityIds,
+    remainingActivityIds,
   };
 }

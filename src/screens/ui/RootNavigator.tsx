@@ -33,7 +33,7 @@ import {
   useOnlineEstablished,
   Logger,
   useCurrentRoute,
-  useOnce,
+  useOnceRef,
 } from '@shared/lib';
 import {
   UserProfileIcon,
@@ -70,6 +70,8 @@ import {
 } from '../ui';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const AUTOCOMPLETION_DELAY_ON_APP_START = 2000;
 
 export default () => {
   const { t } = useTranslation();
@@ -168,13 +170,13 @@ export default () => {
   }, [getCurrentRoute, processAutocompletion]);
 
   const autocompleteWithDelay = useCallback(
-    () => setTimeout(autocomplete, 2000),
+    () => setTimeout(autocomplete, AUTOCOMPLETION_DELAY_ON_APP_START),
     [autocomplete],
   );
 
   useOnlineEstablished(autocomplete);
 
-  useOnce(autocompleteWithDelay);
+  useOnceRef(autocompleteWithDelay);
 
   LoginModel.useAnalyticsAutoLogin();
 

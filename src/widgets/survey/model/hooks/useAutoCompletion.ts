@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -38,7 +38,7 @@ type Result = {
 export const AutoCompletionMutex = Mutex();
 
 const useAutoCompletion = (): Result => {
-  const mutex = useRef(AutoCompletionMutex).current;
+  const mutex = AutoCompletionMutex;
 
   const notCompletedEntities = useAppSelector(
     AppletModel.selectors.selectNotCompletedEntities,
@@ -71,16 +71,7 @@ const useAutoCompletion = (): Result => {
     constructService: ConstructCompletionsService,
   ) => {
     try {
-      if (collectOutput.completionType === 'intermediate') {
-        await constructService.constructForIntermediate({
-          ...collectOutput,
-          flowId: collectOutput.flowId!,
-        });
-      }
-
-      if (collectOutput.completionType === 'finish') {
-        await constructService.constructForFinish(collectOutput);
-      }
+      await constructService.construct(collectOutput);
     } catch (error) {
       Logger.warn(
         '[useAutoCompletion.constructInternal] Error occurred:\n' + error,

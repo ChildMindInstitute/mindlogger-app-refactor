@@ -24,6 +24,13 @@ type Input = {
 
 const logger: ILogger = Logger;
 
+/*
+In case if entity is in progress and it's ready for autocompletion - we have to decide if we
+need to start this entity again. To decide that - we pass this entity through available and scheduled group evaluators.
+applyInProgressFilter is set false is this case  so that the ActivityGroupsBuilder will include
+the entity into the inputs of the mentioned groups' evaluators.
+*/
+
 export const checkEntityAvailability = ({
   entityName,
   identifiers: { appletId, entityId, entityType, eventId },

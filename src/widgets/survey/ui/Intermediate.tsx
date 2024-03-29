@@ -168,13 +168,14 @@ function Intermediate({
       dispatch,
     );
 
-    await constructCompletionService.constructForIntermediate({
+    await constructCompletionService.construct({
       activityId,
       activityName,
       appletId,
       eventId,
       flowId,
       order,
+      completionType: 'intermediate',
     });
 
     const exclude: EntityPathParams = {

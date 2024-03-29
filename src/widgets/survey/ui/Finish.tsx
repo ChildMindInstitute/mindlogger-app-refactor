@@ -73,13 +73,14 @@ function FinishItem({
       dispatch,
     );
 
-    await constructCompletionService.constructForFinish({
+    await constructCompletionService.construct({
       activityId,
       activityName,
       appletId,
       eventId,
       flowId,
       order,
+      completionType: 'finish',
     });
 
     const exclude: EntityPathParams = {

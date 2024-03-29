@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 import { useQueryClient } from '@tanstack/react-query';
 
 import {
@@ -92,7 +90,7 @@ function useStartEntity({
   completeEntityIntoUploadToQueue,
   checkAvailability,
 }: UseStartEntityInput) {
-  const mutex = useRef(StartEntityMutex).current;
+  const mutex = StartEntityMutex;
 
   const dispatch = useAppDispatch();
 
