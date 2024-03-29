@@ -40,7 +40,7 @@ for (let i = 0; i < 3; i++) {
       availableFrom: new Date(),
       availableTo: new Date(),
       timeLeftToComplete: null,
-      isTimerElapsed: false,
+      isExpired: false,
     });
   }
 }

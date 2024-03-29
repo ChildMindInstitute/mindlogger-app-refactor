@@ -3,21 +3,26 @@ import {
   AvailabilityType,
   FlowProgress,
 } from '@app/abstract/lib';
+import { EventModel } from '@app/entities/event';
 import {
   ActivityListItem,
   ActivityStatus,
   ActivityType,
 } from '@entities/activity';
-import { MIDNIGHT_DATE } from '@shared/lib';
+import { isEntityExpired, MIDNIGHT_DATE } from '@shared/lib';
 
 import { GroupUtility, GroupsBuildContext } from './GroupUtility';
 import { EventEntity, Activity, ActivityFlow } from '../../lib';
 
 export class ListItemsFactory {
   private utility: GroupUtility;
+  private availableToEvaluator: EventModel.AvailableToEvaluator;
 
   constructor(inputParams: GroupsBuildContext) {
     this.utility = new GroupUtility(inputParams);
+    this.availableToEvaluator = new EventModel.AvailableToEvaluator(
+      this.utility,
+    );
   }
 
   private populateActivityFlowFields(
@@ -81,7 +86,7 @@ export class ListItemsFactory {
       image: isFlow ? null : entity.image,
       status: ActivityStatus.NotDefined,
       isTimerSet: false,
-      isTimerElapsed: false,
+      isExpired: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
     };
@@ -102,13 +107,7 @@ export class ListItemsFactory {
     if (
       event.availability.availabilityType === AvailabilityType.ScheduledAccess
     ) {
-      const isSpread = this.utility.isSpreadToNextDay(event);
-
-      const to = isSpread
-        ? this.utility.getTomorrow()
-        : this.utility.getToday();
-      to.setHours(event.availability.timeTo!.hours);
-      to.setMinutes(event.availability.timeTo!.minutes);
+      const to = this.availableToEvaluator.evaluate(event);
       item.availableTo = to;
     } else {
       item.availableTo = MIDNIGHT_DATE;
@@ -161,7 +160,21 @@ export class ListItemsFactory {
       item.timeLeftToComplete = timeLeft;
 
       if (timeLeft === null) {
-        item.isTimerElapsed = true;
+        item.isExpired = true;
+      }
+    }
+
+    if (
+      event.availability.availabilityType === AvailabilityType.ScheduledAccess
+    ) {
+      const progressRecord = this.utility.getProgressRecord(eventActivity);
+
+      const to = progressRecord?.availableTo;
+
+      if (isEntityExpired(to?.getTime())) {
+        item.isExpired = true;
+      } else {
+        item.availableTo = to;
       }
     }
 

@@ -12,7 +12,7 @@ const useOnlineEstablished = (callback: () => void) => {
         state.isConnected &&
         Boolean(state.isInternetReachable);
 
-      if (!currentStateRef.current && status) {
+      if (currentStateRef.current === false && status) {
         callback();
       }
 

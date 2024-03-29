@@ -15,6 +15,7 @@ export const progress: Progress = {
         type: ActivityPipelineType.Regular,
         startAt: new Date(2023, 1, 12, 14, 16, 17),
         endAt: new Date(2023, 1, 12, 15, 26, 17),
+        availableTo: null,
       },
     },
     afid1: {
@@ -30,6 +31,7 @@ export const progress: Progress = {
         currentActivityDescription: 'aDescr2',
         currentActivityImage: null,
         totalActivitiesInPipeline: 2,
+        availableTo: null,
       },
     },
   },

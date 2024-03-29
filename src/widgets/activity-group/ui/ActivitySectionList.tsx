@@ -4,7 +4,14 @@ import { SectionList, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import { EntityType } from '@app/abstract/lib';
+import {
+  CheckAvailability,
+  CompleteEntityIntoUploadToQueue,
+  EntityType,
+  ProcessAutocompletion,
+} from '@app/abstract/lib';
+import { Logger, useUploadObservable } from '@app/shared/lib';
+import { AutoCompletionMutex } from '@app/widgets/survey/model';
 import {
   ActivityCard,
   ActivityModel,
@@ -15,15 +22,28 @@ import { AppletModel, clearStorageRecords } from '@entities/applet';
 import { Box, Text, YStack } from '@shared/ui';
 
 import { ActivityListGroup } from '../lib';
+import { useAvailabilityEvaluator } from '../model';
 
 type Props = {
   appletId: string;
   groups: Array<ActivityListGroup>;
+  completeEntity: CompleteEntityIntoUploadToQueue;
+  processAutocompletion: ProcessAutocompletion;
+  checkAvailability: CheckAvailability;
 };
 
-function ActivitySectionList({ appletId, groups }: Props) {
+function ActivitySectionList({
+  appletId,
+  groups,
+  completeEntity,
+  checkAvailability,
+  processAutocompletion,
+}: Props) {
   const { t } = useTranslation();
+
   const { navigate, isFocused } = useNavigation();
+
+  const { isUploading } = useUploadObservable();
 
   const sections = useMemo(() => {
     return groups
@@ -41,6 +61,9 @@ function ActivitySectionList({ appletId, groups }: Props) {
     cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
     hasActivityWithHiddenAllItems:
       ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
+    evaluateAvailableTo: useAvailabilityEvaluator().evaluateAvailableTo,
+    completeEntityIntoUploadToQueue: completeEntity,
+    checkAvailability,
   });
 
   function navigateSurvey(
@@ -60,17 +83,31 @@ function ActivitySectionList({ appletId, groups }: Props) {
     activityId,
     eventId,
     flowId,
-    isTimerElapsed,
+    isExpired: isTimerElapsed,
     name,
+    activityFlowDetails,
   }: ActivityListItem) => {
+    if (AutoCompletionMutex.isBusy()) {
+      Logger.log(
+        '[ActivitySectionList.startActivityOrFlow] Postponed due to AutoCompletionMutex is busy',
+      );
+      return;
+    }
+
+    const entityName = activityFlowDetails
+      ? activityFlowDetails.activityFlowName
+      : name;
+
     if (flowId) {
-      startFlow(appletId, flowId, eventId, name, isTimerElapsed).then(
+      startFlow(appletId, flowId, eventId, entityName, isTimerElapsed).then(
         result => {
           if (
             result.cannotBeStartedDueToMediaFound ||
             result.cannotBeStartedDueToMigrationsNotApplied ||
-            result.cannotBeStartedDueToAllItemsHidden
+            result.cannotBeStartedDueToAllItemsHidden ||
+            result.cannotBeStarted
           ) {
+            processAutocompletion();
             return;
           }
 
@@ -82,23 +119,29 @@ function ActivitySectionList({ appletId, groups }: Props) {
         },
       );
     } else {
-      startActivity(appletId, activityId, eventId, name, isTimerElapsed).then(
-        result => {
-          if (
-            result.cannotBeStartedDueToMediaFound ||
-            result.cannotBeStartedDueToMigrationsNotApplied ||
-            result.cannotBeStartedDueToAllItemsHidden
-          ) {
-            return;
-          }
+      startActivity(
+        appletId,
+        activityId,
+        eventId,
+        entityName,
+        isTimerElapsed,
+      ).then(result => {
+        if (
+          result.cannotBeStartedDueToMediaFound ||
+          result.cannotBeStartedDueToMigrationsNotApplied ||
+          result.cannotBeStartedDueToAllItemsHidden ||
+          result.cannotBeStarted
+        ) {
+          processAutocompletion();
+          return;
+        }
 
-          if (result.startedFromScratch) {
-            clearStorageRecords.byEventId(eventId);
-          }
+        if (result.startedFromScratch) {
+          clearStorageRecords.byEventId(eventId);
+        }
 
-          navigateSurvey(activityId, 'regular', eventId);
-        },
-      );
+        navigateSurvey(activityId, 'regular', eventId);
+      });
     }
   };
 
@@ -111,7 +154,7 @@ function ActivitySectionList({ appletId, groups }: Props) {
       renderItem={({ item }) => (
         <ActivityCard
           activity={item}
-          disabled={false}
+          disabled={isUploading}
           onPress={() => {
             if (!isFocused()) {
               return;

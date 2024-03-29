@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
-import { AnalyticsService, MixEvents } from '@shared/lib';
+import { AnalyticsService, MixEvents, UploadObservable } from '@shared/lib';
 
 import { showUploadErrorAlert } from '../alerts';
-import { UploadObservable } from '../observables';
 
 type Input = {
   retryUpload: () => Promise<boolean>;

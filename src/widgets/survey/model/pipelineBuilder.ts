@@ -47,7 +47,7 @@ interface SummaryPipelineItem extends FlowPipelineItemBase {
   };
 }
 
-interface FinishPipelineItem extends FlowPipelineItemBase {
+export interface FinishPipelineItem extends FlowPipelineItemBase {
   type: 'Finish';
   payload: {
     appletId: string;

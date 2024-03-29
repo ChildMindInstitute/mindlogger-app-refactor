@@ -27,6 +27,7 @@ const getProgress = (startAt: Date, endAt: Date | null) => {
           type: ActivityPipelineType.Regular,
           startAt,
           endAt,
+          availableTo: null,
         },
       },
     },
@@ -139,6 +140,7 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -204,6 +206,7 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const evaluator = new ScheduledGroupEvaluator(input);
@@ -251,6 +254,7 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -305,6 +309,7 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -359,6 +364,7 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -405,6 +411,7 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -446,6 +453,7 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({

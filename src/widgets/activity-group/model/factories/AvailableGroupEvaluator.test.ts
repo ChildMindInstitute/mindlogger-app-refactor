@@ -34,6 +34,7 @@ const getProgress = (startAt: Date, endAt: Date | null) => {
           type: ActivityPipelineType.Regular,
           startAt,
           endAt,
+          availableTo: null,
         },
       },
     },
@@ -146,6 +147,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -200,6 +202,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -253,6 +256,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -314,6 +318,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -373,6 +378,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -425,6 +431,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -480,6 +487,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -535,6 +543,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -581,6 +590,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -634,6 +644,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -693,6 +704,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -733,6 +745,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -791,6 +804,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -849,6 +863,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -905,6 +920,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -959,6 +975,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1014,6 +1031,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1068,6 +1086,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1130,6 +1149,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1187,6 +1207,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1240,6 +1261,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1296,6 +1318,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1351,6 +1374,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1405,6 +1429,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1452,6 +1477,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1500,6 +1526,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1559,6 +1586,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1618,6 +1646,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1677,6 +1706,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
+      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
