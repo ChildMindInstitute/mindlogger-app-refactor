@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { StoreProgress } from '@app/abstract/lib';
 import { UploadObservable, useRetryUpload } from '@app/entities/activity/lib';
 import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
-import { EventModel } from '@app/entities/event';
 import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
 import { NotificationModel } from '@entities/notification';
@@ -15,7 +14,6 @@ import { LogTrigger } from '@shared/api';
 import {
   Logger,
   AnalyticsService,
-  useActivityInfo,
   useAppDispatch,
   useAppSelector,
   MixProperties,
@@ -24,7 +22,7 @@ import {
 } from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
-import { getClientInformation } from '../lib';
+import { getClientInformation, useFlowStorageRecord } from '../lib';
 import {
   createSvgFiles,
   fillNullsForHiddenItems,
@@ -32,7 +30,6 @@ import {
   getActivityStartAt,
   getExecutionGroupKey,
   getItemIds,
-  getScheduledDate,
   getUserIdentifier,
 } from '../model';
 import {
@@ -44,6 +41,7 @@ import {
 type Props = {
   appletId: string;
   activityId: string;
+  activityName: string;
   eventId: string;
   flowId?: string;
   order: number;
@@ -56,6 +54,7 @@ function FinishItem({
   flowId,
   appletId,
   activityId,
+  activityName,
   eventId,
   order,
   isTimerElapsed,
@@ -63,16 +62,31 @@ function FinishItem({
 }: Props) {
   const { t } = useTranslation();
 
-  const { data: applet } = useAppletDetailsQuery(appletId, {
-    select: response =>
-      AppletModel.mapAppletDetailsFromDto(response.data.result),
+  const { flowStorageRecord } = useFlowStorageRecord({
+    appletId,
+    eventId,
+    flowId,
   });
 
+  const { data: appletData } = useAppletDetailsQuery(appletId, {
+    select: response => {
+      const appletDetails = AppletModel.mapAppletDetailsFromDto(
+        response.data.result,
+      );
+      return {
+        encryption: appletDetails.encryption,
+        appletName: appletDetails.displayName,
+      };
+    },
+  });
+
+  const appletName = appletData?.appletName;
+
+  const appletEncryption = appletData?.encryption || null;
+
+  const { scheduledDate } = flowStorageRecord!;
+
   const entityId = flowId ? flowId : activityId;
-
-  const scheduledEvent = EventModel.useScheduledEvent({ appletId, eventId });
-
-  const appletEncryption = applet?.encryption || null;
 
   const dispatch = useAppDispatch();
 
@@ -99,8 +113,6 @@ function FinishItem({
     process: processQueue,
     push: pushInQueue,
   } = useQueueProcessing();
-
-  const { getName: getActivityName } = useActivityInfo();
 
   const { isAlertOpened: isRetryAlertOpened, openAlert: openRetryAlert } =
     useRetryUpload({
@@ -158,13 +170,9 @@ function FinishItem({
 
     const progressRecord = storeProgress[appletId][entityId][eventId];
 
-    const scheduledDate = getScheduledDate(scheduledEvent!);
-
     const executionGroupKey = getExecutionGroupKey(progressRecord);
 
-    const logActivityName = getActivityName(activityId);
-
-    const appletName = applet?.displayName;
+    const logActivityName = activityName;
 
     Logger.log(
       `[Finish.completeActivity]: Activity "${logActivityName}|${activityId}" completed, applet "${appletName}|${appletId}"`,
@@ -190,8 +198,8 @@ function FinishItem({
       userIdentifier,
       startTime: getActivityStartAt(progressRecord)!,
       endTime: Date.now(),
-      scheduledTime: scheduledDate,
-      logActivityName,
+      scheduledTime: scheduledDate ?? undefined,
+      logActivityName: activityName,
       logCompletedAt: new Date().toString(),
       client: getClientInformation(),
       alerts,

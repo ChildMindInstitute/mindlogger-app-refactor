@@ -120,7 +120,9 @@
     "common_refresh_error": "La liste des applets n'a pas été actualisée. Veuillez réessayer."
   },
   "activity_list_component": {
-    "no_activities_yet": "Aucune activité spécifiée pour le moment"
+    "no_activities_yet": "Aucune activité spécifiée pour le moment",
+    "insufficient_data_error": "Cette applet n'a pas été actualisée. Veuillez réessayer d'actualiser.",
+    "other_error": "Une erreur non définie s'est produite"
   },
   "applet_settings": {
     "applet_not_defined": "Aucune applet n'est définie.",
@@ -550,5 +552,8 @@
     "finished_complete": "Fini. Cliquer sur Terminé pour terminer.",
     "begin": "Commencer",
     "end": "Fin"
+  },
+  "system": {
+    "migration_not_applied_text": "La migration des données n'a pas été appliquée avec succès. Veuillez contacter le support."
   }
 }

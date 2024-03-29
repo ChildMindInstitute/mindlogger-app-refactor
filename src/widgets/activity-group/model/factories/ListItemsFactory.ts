@@ -30,36 +30,40 @@ export class ListItemsFactory {
     item.activityFlowDetails = {
       showActivityFlowBadge: !activityFlow.hideBadge,
       activityFlowName: activityFlow.name,
-      numberOfActivitiesInFlow: activityFlow.activityIds.length,
+      numberOfActivitiesInFlow: 0,
       activityPositionInFlow: 0,
     };
 
     const isInProgress = this.utility.isInProgress(activityEvent);
 
-    let activity: Activity, position: number;
+    let activity: Activity;
 
     if (isInProgress) {
       const progressRecord = this.utility.getProgressRecord(
         activityEvent,
       ) as FlowProgress;
 
-      activity = this.utility.activities.find(
-        x => x.id === progressRecord.currentActivityId,
-      )!;
-      position = progressRecord.pipelineActivityOrder + 1;
+      item.activityId = progressRecord.currentActivityId;
+      item.name = progressRecord.currentActivityName;
+      item.description = progressRecord.currentActivityDescription;
+      item.image = progressRecord.currentActivityImage;
+      item.activityFlowDetails.activityPositionInFlow =
+        progressRecord.pipelineActivityOrder + 1;
+      item.activityFlowDetails.numberOfActivitiesInFlow =
+        progressRecord.totalActivitiesInPipeline;
     } else {
       activity = this.utility.activities.find(
         x => x.id === activityFlow.activityIds[0],
       )!;
-      position = 1;
-    }
 
-    item.activityId = activity.id;
-    item.activityFlowDetails.activityPositionInFlow = position;
-    item.name = activity.name;
-    item.description = activity.description;
-    item.type = activity.type;
-    item.image = activity.image;
+      item.activityId = activity.id;
+      item.name = activity.name;
+      item.description = activity.description;
+      item.image = activity.image;
+      item.activityFlowDetails.activityPositionInFlow = 1;
+      item.activityFlowDetails.numberOfActivitiesInFlow =
+        activityFlow.activityIds.length;
+    }
   }
 
   private createListItem(eventActivity: EventEntity) {

@@ -1,7 +1,9 @@
-import { createContext, useContext } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
+
+export type SystemModule = 'cache' | 'state' | 'analytics' | 'storage';
 
 type SystemBootUpContext = {
-  onModuleInitialized: (module: string) => void;
+  onModuleInitialized: (module: SystemModule) => void;
 };
 
 export const SystemBootUpContext = createContext<SystemBootUpContext>({
@@ -9,5 +11,20 @@ export const SystemBootUpContext = createContext<SystemBootUpContext>({
 });
 
 export function useSystemBootUp() {
-  return useContext(SystemBootUpContext);
+  const [initialized, setInitialized] = useState(false);
+
+  const context = useContext(SystemBootUpContext);
+
+  const onModuleInitialized = useCallback(
+    (moduleName: SystemModule) => {
+      context.onModuleInitialized(moduleName);
+      setInitialized(true);
+    },
+    [context],
+  );
+
+  return {
+    initialized,
+    onModuleInitialized,
+  };
 }
