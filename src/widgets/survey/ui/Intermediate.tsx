@@ -20,6 +20,9 @@ import {
   useAppDispatch,
   useAppSelector,
   getTimezoneOffset,
+  AnalyticsService,
+  MixProperties,
+  MixEvents,
 } from '@app/shared/lib';
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
@@ -149,6 +152,10 @@ function Intermediate({
   });
 
   const changeActivity = useCallback(() => {
+    AnalyticsService.track(MixEvents.AssessmentCompleted, {
+      [MixProperties.AppletId]: appletId,
+    });
+
     Logger.log(
       `[Intermediate.completeActivity]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivityPayload.activityName}|${nextActivityPayload.activityId}", applet "${appletName}|${appletId}"`,
     );
