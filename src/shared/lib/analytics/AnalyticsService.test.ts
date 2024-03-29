@@ -2,6 +2,7 @@ const constructorMock = jest.fn();
 const initMock = jest.fn();
 const trackMock = jest.fn();
 const identifyMock = jest.fn().mockResolvedValue(0);
+const resetMock = jest.fn();
 
 export class MixpanelMockClass {
   constructor(...args: any) {
@@ -22,6 +23,10 @@ export class MixpanelMockClass {
 
   public getPeople() {
     return { set: jest.fn() };
+  }
+
+  public reset() {
+    resetMock();
   }
 }
 
@@ -48,15 +53,17 @@ jest.mock('../services', () => ({
 }));
 
 const storageSetMock = jest.fn();
+const clearAllMock = jest.fn();
 
 jest.mock('../storages', () => ({
   createStorage: jest.fn().mockReturnValue({
     getBoolean: jest.fn().mockReturnValue(false),
     set: storageSetMock,
+    clearAll: clearAllMock,
   }),
 }));
 
-import AnalyticsService from './AnalyticsService';
+import AnalyticsService, { MixEvents, MixProperties } from './AnalyticsService';
 
 describe('Test AnalyticsService and MixpanelAnalytics', () => {
   beforeEach(() => {
@@ -64,6 +71,7 @@ describe('Test AnalyticsService and MixpanelAnalytics', () => {
     initMock.mockReset();
     trackMock.mockReset();
     storageSetMock.mockReset();
+    resetMock.mockReset();
   });
 
   it('Should pass MIXPANEL_TOKEN into constructor of Mixpanel class', async () => {
@@ -90,5 +98,44 @@ describe('Test AnalyticsService and MixpanelAnalytics', () => {
 
     expect(storageSetMock).toHaveBeenCalledTimes(1);
     expect(storageSetMock).toHaveBeenCalledWith('IS_LOGGED_IN', true);
+  });
+
+  it('Should track without params', async () => {
+    await AnalyticsService.init();
+
+    await AnalyticsService.track(MixEvents.AssessmentStarted);
+
+    expect(trackMock).toBeCalledTimes(1);
+    expect(trackMock).toBeCalledWith([
+      '[Mobile] Assessment started',
+      undefined,
+    ]);
+  });
+
+  it('Should track with two params', async () => {
+    await AnalyticsService.init();
+
+    await AnalyticsService.track(MixEvents.AssessmentStarted, {
+      [MixProperties.AppletId]: 'mock-applet-id',
+      [MixProperties.MindLoggerVersion]: 'mock-version',
+    });
+
+    expect(trackMock).toBeCalledTimes(1);
+    expect(trackMock).toBeCalledWith([
+      '[Mobile] Assessment started',
+      { 'Applet ID': 'mock-applet-id', 'MindLogger Version': 'mock-version' },
+    ]);
+  });
+
+  it('Should logout', async () => {
+    await AnalyticsService.init();
+
+    await AnalyticsService.logout();
+
+    expect(trackMock).toBeCalledTimes(1);
+    expect(trackMock).toBeCalledWith(['[Mobile] Logout', undefined]);
+
+    expect(resetMock).toBeCalledTimes(1);
+    expect(clearAllMock).toBeCalledTimes(1);
   });
 });
