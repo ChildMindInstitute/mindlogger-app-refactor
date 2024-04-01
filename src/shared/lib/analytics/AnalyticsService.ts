@@ -1,4 +1,4 @@
-import MixpanelAnalytics from './MixpanelAnalytics';
+import MixpanelAnalytics, { IAnalyticsService } from './MixpanelAnalytics';
 import { MIXPANEL_TOKEN } from '../constants';
 import { Logger } from '../services';
 import { createStorage } from '../storages';
@@ -6,13 +6,6 @@ import { createStorage } from '../storages';
 const shouldEnableMixpanel = !!MIXPANEL_TOKEN;
 
 export const storage = createStorage('analytics-storage');
-
-export interface IAnalyticsService {
-  track(action: string, payload?: Record<string, any>): void;
-  login(id: string): Promise<void>;
-  logout(): void;
-  init(): Promise<void>;
-}
 
 let service: IAnalyticsService;
 
@@ -53,6 +46,7 @@ const AnalyticsService = {
     }
     return Promise.resolve();
   },
+  hasInstance: () => service.hasInstance(),
   track(action: string, payload?: Record<string, any>) {
     if (payload) {
       Logger.log(
@@ -64,21 +58,21 @@ const AnalyticsService = {
       Logger.log('[AnalyticsService]: Action: ' + action);
     }
 
-    if (shouldEnableMixpanel) {
+    if (this.hasInstance()) {
       service.track(`[Mobile] ${action}`, payload);
     }
   },
   async login(userId: string) {
     const isLoggedIn = storage.getBoolean('IS_LOGGED_IN');
 
-    if (shouldEnableMixpanel && !isLoggedIn) {
+    if (this.hasInstance() && !isLoggedIn) {
       return service.login(userId).then(() => {
         storage.set('IS_LOGGED_IN', true);
       });
     }
   },
   logout() {
-    if (shouldEnableMixpanel) {
+    if (this.hasInstance()) {
       this.track('Logout');
       service.logout();
       storage.clearAll();

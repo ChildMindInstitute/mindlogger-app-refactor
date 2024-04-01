@@ -34,9 +34,9 @@ jest.mock('mixpanel-react-native', () => ({
   Mixpanel: MixpanelMockClass,
 }));
 
-const MOCK_MIXPANEL_TOKEN = 'MOCK_MIXPANEL_TOKEN_100500';
+const MOCK_MIXPANEL_TOKEN: string | undefined = 'MOCK_MIXPANEL_TOKEN_123';
 
-const MOCK_APP_VERSION = 'MOCK_APP_VERSION_200800';
+const MOCK_APP_VERSION = 'MOCK_APP_VERSION_456';
 
 jest.mock('../constants', () => ({
   MIXPANEL_TOKEN: MOCK_MIXPANEL_TOKEN,
@@ -69,6 +69,7 @@ describe('Test AnalyticsService and MixpanelAnalytics', () => {
   beforeEach(() => {
     constructorMock.mockReset();
     initMock.mockReset();
+    identifyMock.mockReset().mockResolvedValue(0);
     trackMock.mockReset();
     storageSetMock.mockReset();
     resetMock.mockReset();
@@ -96,6 +97,7 @@ describe('Test AnalyticsService and MixpanelAnalytics', () => {
 
     await AnalyticsService.login('mock-user-id');
 
+    expect(identifyMock).toHaveBeenCalledTimes(1);
     expect(storageSetMock).toHaveBeenCalledTimes(1);
     expect(storageSetMock).toHaveBeenCalledWith('IS_LOGGED_IN', true);
   });
@@ -137,5 +139,39 @@ describe('Test AnalyticsService and MixpanelAnalytics', () => {
 
     expect(resetMock).toBeCalledTimes(1);
     expect(clearAllMock).toBeCalledTimes(1);
+  });
+});
+
+describe('Test AnalyticsService and MixpanelAnalytics when Mixpanel instance is not created', () => {
+  beforeAll(() => {
+    AnalyticsService.hasInstance = jest.fn().mockReturnValue(false);
+  });
+
+  beforeEach(() => {
+    constructorMock.mockReset();
+    initMock.mockReset();
+    identifyMock.mockReset().mockResolvedValue(0);
+    trackMock.mockReset();
+    storageSetMock.mockReset();
+    resetMock.mockReset();
+  });
+
+  it('Should not login', async () => {
+    await AnalyticsService.login('mock-user-id');
+
+    expect(identifyMock).toHaveBeenCalledTimes(0);
+  });
+
+  it('Should not track', async () => {
+    await AnalyticsService.track(MixEvents.AssessmentStarted);
+
+    expect(trackMock).toBeCalledTimes(0);
+  });
+
+  it('Should not logout', async () => {
+    await AnalyticsService.logout();
+
+    expect(trackMock).toBeCalledTimes(0);
+    expect(resetMock).toBeCalledTimes(0);
   });
 });
