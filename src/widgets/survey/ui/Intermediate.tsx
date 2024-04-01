@@ -23,7 +23,6 @@ import {
   AnalyticsService,
   MixProperties,
   MixEvents,
-  getTimezoneOffset,
 } from '@app/shared/lib';
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
