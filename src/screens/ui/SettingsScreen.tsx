@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { StatusBar } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -13,6 +13,7 @@ import {
   colors,
   getStringHashCode,
   useAppSelector,
+  Emitter,
 } from '@shared/lib';
 import {
   YStack,
@@ -56,12 +57,20 @@ const SettingsScreen: FC = () => {
     return hashed;
   }, []);
 
-  function setLoading() {
-    setIsLoading(true);
-    setOptions({
-      headerShown: false,
-    });
-  }
+  useEffect(() => {
+    function setLoading() {
+      setIsLoading(true);
+      setOptions({
+        headerShown: false,
+      });
+    }
+
+    Emitter.on('logout', setLoading);
+
+    return () => {
+      Emitter.off('logout', setLoading);
+    };
+  }, [setOptions]);
 
   return (
     <>
@@ -99,7 +108,7 @@ const SettingsScreen: FC = () => {
               title={t('settings:upload_logs')}
             />
 
-            <LogoutRowButton onPress={setLoading} />
+            <LogoutRowButton />
           </YStack>
         </Box>
       </Box>

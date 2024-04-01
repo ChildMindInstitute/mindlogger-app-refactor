@@ -120,7 +120,9 @@
     "common_refresh_error": "La liste des applets n'a pas été actualisée. Veuillez réessayer."
   },
   "activity_list_component": {
-    "no_activities_yet": "Aucune activité spécifiée pour le moment"
+    "no_activities_yet": "Aucune activité spécifiée pour le moment",
+    "insufficient_data_error": "Cette applet n'a pas été actualisée. Veuillez réessayer d'actualiser.",
+    "other_error": "Une erreur non définie s'est produite"
   },
   "applet_settings": {
     "applet_not_defined": "Aucune applet n'est définie.",
@@ -140,7 +142,21 @@
     "error": "Impossible de mettre à jour les données de l'utilisateur.",
     "submission_error": "Le mot de passe actuel que vous avez saisi était incorrect.",
     "change_pass": "Changer le mot de passe",
-    "password_at_least_characters": "Le mot de passe doit être au moins de 6 caractères"
+    "password_at_least_characters": "Le mot de passe doit être au moins de {{min}} caractères"
+  },
+  "password_recovery_form": {
+    "password_at_least_characters": "Le mot de passe doit être au moins de {{min}} caractères",
+    "password_no_spaces": "Le mot de passe ne doit pas contenir d'espaces",
+    "passwords_do_not_match": "Les mots de passe ne correspondent pas",
+    "password_confirmation_required": "Veuillez confirmer votre mot de passe",
+    "new_password_placeholder":"Nouveau mot de passe",
+    "confirm_password_placeholder":"Confirmer le mot de passe",
+    "submit": "Soumettre",
+    "invalid_password_reset_link": "Ce lien est invalide ou expiré.",
+    "click_to_reset_password": "Veuillez cliquer ci-dessous pour réinitialiser votre mot de passe.",
+    "forgot_password": "Mot de passe oublié",
+    "success": "Votre mot de passe a été réinitialisé avec succès. Veuillez vous connecter avec votre nouveau mot de passe.",
+    "error": "Erreur lors de la réinitialisation de votre mot de passe"
   },
   "change_study": {
     "reset": "Reinitialiser",
@@ -200,7 +216,8 @@
     "logout": "Déconnexion",
     "permanently_delete_account": "Supprimer définitivement mon compte",
     "user_settings": "Paramètres utilisateur",
-    "upload_logs": "Télécharger les journaux"
+    "upload_logs": "Télécharger les journaux",
+    "create_new_password": "Crée un nouveau mot de passe"
   },
   "sign_up_form": {
     "sign_up": "S'inscrire",
@@ -535,5 +552,8 @@
     "finished_complete": "Fini. Cliquer sur Terminé pour terminer.",
     "begin": "Commencer",
     "end": "Fin"
+  },
+  "system": {
+    "migration_not_applied_text": "La migration des données n'a pas été appliquée avec succès. Veuillez contacter le support."
   }
 }

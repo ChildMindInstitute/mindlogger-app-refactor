@@ -5,7 +5,10 @@ export type Point = {
 
 export type StringOrNull = string | null;
 
-export type IdName = { name: string; id: string };
+export type IdName = {
+  id: string;
+  name: string;
+};
 
 export type AppletWithVersion = {
   appletId: string;

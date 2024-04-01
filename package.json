@@ -5,6 +5,7 @@
   "scripts": {
     "android": "yarn android:dev",
     "ios": "yarn ios:dev",
+    "clean-ios": "cd ios && xcodebuild clean -workspace MindloggerMobile.xcworkspace -scheme MindloggerMobileDev && cd ..",
     "start": "react-native start",
     "test": "jest --noStackTrace",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -96,7 +97,7 @@
     "react-native-modal-datetime-picker": "^14.0.1",
     "react-native-permissions": "^3.7.3",
     "react-native-popover-view": "^5.1.7",
-    "react-native-progress": "^5.0.0",
+    "react-native-progress": "^5.0.1",
     "react-native-reanimated": "^3.6.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "^3.27.0",

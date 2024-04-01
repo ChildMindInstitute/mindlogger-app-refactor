@@ -2,7 +2,7 @@ import { FileSystem } from 'react-native-file-access';
 
 import { ActivityRecordKeyParams } from '@app/abstract/lib';
 import { AnswerDto, ObjectAnswerDto } from '@app/shared/api';
-import { createSecureStorage } from '@app/shared/lib';
+import { createSecureStorage, Logger } from '@app/shared/lib';
 import { MediaFile, MediaValue } from '@app/shared/ui';
 
 type EntityRecord = {
@@ -22,9 +22,7 @@ const createMediaFilesCleaner = (): Result => {
     const storageActivityState = activityStorage.getString(key);
 
     if (!storageActivityState) {
-      console.warn(
-        "[MediaFilesCleaner.cleanUp]: Activity record doesn't exist",
-      );
+      Logger.warn("[MediaFilesCleaner.cleanUp]: Activity record doesn't exist");
       return;
     }
 
@@ -48,14 +46,13 @@ const createMediaFilesCleaner = (): Result => {
           await FileSystem.unlink(fileUrl);
         }
       } catch (error) {
-        console.warn(
+        Logger.warn(
           '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',
         );
-        console.error(error);
       }
     }
 
-    console.info('[MediaFilesCleaner.cleanUp]: completed');
+    Logger.info('[MediaFilesCleaner.cleanUp]: completed');
   };
 
   const cleanUp = async ({

@@ -1,3 +1,5 @@
+import { FlowProgressActivity } from '@app/abstract/lib';
+
 type FlowPipelineType = 'Stepper' | 'Intermediate' | 'Summary' | 'Finish';
 
 type FlowPipelineItemBase = {
@@ -6,11 +8,14 @@ type FlowPipelineItemBase = {
 
 type HasSummary = (activityId: string) => boolean;
 
-interface StepperPipelineItem extends FlowPipelineItemBase {
+export interface StepperPipelineItem extends FlowPipelineItemBase {
   type: 'Stepper';
   payload: {
     appletId: string;
     activityId: string;
+    activityName: string;
+    activityDescription: string;
+    activityImage: string | null;
     eventId: string;
     order: number;
   };
@@ -21,6 +26,7 @@ interface IntermediatePipelineItem extends FlowPipelineItemBase {
   payload: {
     appletId: string;
     activityId: string;
+    activityName: string;
     eventId: string;
     flowId: string;
     order: number;
@@ -34,6 +40,7 @@ interface SummaryPipelineItem extends FlowPipelineItemBase {
   payload: {
     appletId: string;
     activityId: string;
+    activityName: string;
     eventId: string;
     flowId?: string;
     order: number;
@@ -45,6 +52,7 @@ interface FinishPipelineItem extends FlowPipelineItemBase {
   payload: {
     appletId: string;
     activityId: string;
+    activityName: string;
     eventId: string;
     flowId?: string;
     order: number;
@@ -60,7 +68,7 @@ export type FlowPipelineItem =
 type BuildPipelineArgs = {
   appletId: string;
   eventId: string;
-  activityIds: string[];
+  activities: FlowProgressActivity[];
   flowId: string;
   startFrom: number;
   hasSummary: HasSummary;
@@ -70,20 +78,21 @@ export function buildActivityFlowPipeline({
   appletId,
   eventId,
   flowId,
-  activityIds,
+  activities,
   startFrom,
   hasSummary,
 }: BuildPipelineArgs): FlowPipelineItem[] {
   const pipeline: FlowPipelineItem[] = [];
 
-  const showSummary = activityIds.some(id => hasSummary(id));
+  const showSummary = activities.some(x => hasSummary(x.id));
 
-  for (let i = 0; i < activityIds.length; i++) {
-    const activityId = activityIds[i];
+  for (let i = 0; i < activities.length; i++) {
+    const activityId = activities[i].id;
+    const isNotLast = i !== activities.length - 1;
 
-    const isNotLast = i !== activityIds.length - 1;
     const payload = {
       activityId,
+      activityName: activities[i].name,
       appletId,
       eventId,
       order: i,
@@ -91,7 +100,11 @@ export function buildActivityFlowPipeline({
 
     pipeline.push({
       type: 'Stepper',
-      payload,
+      payload: {
+        ...payload,
+        activityDescription: activities[i].description,
+        activityImage: activities[i].image,
+      },
     });
 
     if (isNotLast) {
@@ -129,14 +142,14 @@ export function buildActivityFlowPipeline({
 type BuildSinglePipelineArgs = {
   appletId: string;
   eventId: string;
-  activityId: string;
+  activity: FlowProgressActivity;
   hasSummary: HasSummary;
 };
 
 export function buildSingleActivityPipeline({
   appletId,
   eventId,
-  activityId,
+  activity,
   hasSummary,
 }: BuildSinglePipelineArgs): FlowPipelineItem[] {
   const pipeline: FlowPipelineItem[] = [];
@@ -146,18 +159,22 @@ export function buildSingleActivityPipeline({
     payload: {
       appletId,
       eventId,
-      activityId,
+      activityId: activity.id,
+      activityName: activity.name,
+      activityDescription: activity.description,
+      activityImage: activity.image,
       order: 0,
     },
   });
 
-  if (hasSummary(activityId)) {
+  if (hasSummary(activity.id)) {
     pipeline.push({
       type: 'Summary',
       payload: {
         appletId,
         eventId,
-        activityId,
+        activityId: activity.id,
+        activityName: activity.name,
         order: 0,
       },
     });
@@ -168,7 +185,8 @@ export function buildSingleActivityPipeline({
     payload: {
       appletId,
       eventId,
-      activityId,
+      activityId: activity.id,
+      activityName: activity.name,
       order: 0,
     },
   });
