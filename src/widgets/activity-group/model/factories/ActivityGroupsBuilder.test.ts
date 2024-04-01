@@ -1616,6 +1616,10 @@ describe('ActivityGroupsBuilder', () => {
               currentActivityStartAt: addMinutes(scheduledAt, 5).getTime(),
               executionGroupKey: 'group-key-1',
               pipelineActivityOrder: 0,
+              totalActivitiesInPipeline: 2,
+              currentActivityName: 'test-activity-name-1',
+              currentActivityDescription: 'test-description-1',
+              currentActivityImage: null,
             },
           },
         },
@@ -1687,6 +1691,7 @@ describe('ActivityGroupsBuilder', () => {
             eventId: 'test-event-id-1',
             name: 'test-activity-name-1',
             description: 'test-description-1',
+            image: null,
             type: ActivityType.NotDefined,
             status: ActivityStatus.InProgress,
             isTimerSet: false,
@@ -1713,6 +1718,8 @@ describe('ActivityGroupsBuilder', () => {
         'test-event-id-1'
       ] as FlowProgress;
       progressRecord.currentActivityId = 'test-id-2';
+      progressRecord.currentActivityName = 'test-activity-name-2';
+      progressRecord.currentActivityDescription = 'test-description-2';
       progressRecord.pipelineActivityOrder = 1;
       activityFlow.hideBadge = true;
 
@@ -1726,6 +1733,7 @@ describe('ActivityGroupsBuilder', () => {
             eventId: 'test-event-id-1',
             name: 'test-activity-name-2',
             description: 'test-description-2',
+            image: null,
             type: ActivityType.NotDefined,
             status: ActivityStatus.InProgress,
             isTimerSet: false,

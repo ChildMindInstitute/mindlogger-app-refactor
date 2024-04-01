@@ -121,7 +121,8 @@
   },
   "activity_list_component": {
     "no_activities_yet": "No activities specified yet",
-    "insufficient_data_error": "This applet was not refreshed. Please try to refresh again."
+    "insufficient_data_error": "This applet was not refreshed. Please try to refresh again.",
+    "other_error": "Undefined error occurred"
   },
   "applet_settings": {
     "applet_not_defined": "There isn't an applet defined.",
@@ -141,7 +142,21 @@
     "error": "Unable to update user details.",
     "submission_error": "The current password you entered was incorrect.",
     "change_pass": "Change Password",
-    "password_at_least_characters": "Password must be at least 6 characters"
+    "password_at_least_characters": "Password must be at least {{min}} characters"
+  },
+  "password_recovery_form": {
+    "password_at_least_characters": "Password must be at least {{min}} characters",
+    "password_no_spaces": "Password must not contain spaces",
+    "passwords_do_not_match": "Passwords do not match",
+    "password_confirmation_required": "Please confirm your password",
+    "new_password_placeholder": "New password",
+    "confirm_password_placeholder": "Confirm password",
+    "submit": "Submit",
+    "invalid_password_reset_link": "This link is invalid or expired.",
+    "click_to_reset_password": "Please click below to reset your password.",
+    "forgot_password": "Forgot Password",
+    "success": "Your password has been reset successfully. Please log in with your new password.",
+    "error": "Error resetting your password"
   },
   "change_study": {
     "reset": "Reset",
@@ -201,7 +216,8 @@
     "logout": "Logout",
     "permanently_delete_account": "Permanently Delete Account",
     "user_settings": "User Settings",
-    "upload_logs": "Upload Logs"
+    "upload_logs": "Upload Logs",
+    "create_new_password": "Create a new password"
   },
   "language_screen": {
     "app_language": "Application language",
@@ -427,5 +443,8 @@
     "finished_complete": "Finished. Click Done to complete.",
     "begin": "Begin",
     "end": "End"
+  },
+  "system": {
+    "migration_not_applied_text": "Data migration was not successfully applied. Please, contact support."
   }
 }

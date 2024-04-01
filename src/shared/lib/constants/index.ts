@@ -12,6 +12,7 @@ const { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT } =
 
 export * from './colors';
 export * from './dateTime';
+export * from './password';
 
 export const IS_IOS = Platform.OS === 'ios';
 export const IS_ANDROID = Platform.OS === 'android';
@@ -28,6 +29,12 @@ export const API_URL = Config.API_URL as string;
 export const MIXPANEL_TOKEN = Config.MIXPANEL_TOKEN;
 
 export const STORE_ENCRYPTION_KEY = Config.STORE_ENCRYPTION_KEY;
+
+/**
+ * The scheme and host of the respondent web app in this environment.
+ * Format `https://example.com`
+ */
+export const DEEP_LINK_PREFIX = Config.DEEP_LINK_PREFIX;
 
 // @ts-ignore
 export const APP_VERSION = process.env.VERSION;
@@ -104,3 +111,5 @@ export const DAYS_OF_WEEK_NUMBERS = [0, 1, 2, 3, 4, 5, 6];
 export const IV_LENGTH = 16;
 
 export { VIEWPORT_WIDTH, VIEWPORT_HEIGHT };
+
+export const MIGRATION_PROCESSOR_VERSION = 1;

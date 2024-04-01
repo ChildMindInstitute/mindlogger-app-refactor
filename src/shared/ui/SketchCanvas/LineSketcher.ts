@@ -1,6 +1,7 @@
 import { PaintStyle, Skia, SkPath } from '@shopify/react-native-skia';
+import { SharedValue } from 'react-native-reanimated';
 
-import { colors, IS_ANDROID } from '@app/shared/lib';
+import { colors } from '@app/shared/lib';
 
 export type Point = {
   x: number;
@@ -17,118 +18,110 @@ paint.setColor(Skia.Color(colors.black));
 paint.setStrokeWidth(1.5);
 paint.setStyle(PaintStyle.Stroke);
 
-class LineSketcher {
-  private points: Array<Point>;
+export function shouldCreateNewLine(points: SharedValue<Point[]>): boolean {
+  'worklet';
+  const pointsCount = points.value.length;
+  const suggestedMaxPointsPerLine = 100;
 
-  constructor() {
-    this.points = [];
-  }
+  return pointsCount % suggestedMaxPointsPerLine === 0;
+}
 
-  private static addPointToPath(
-    path: SkPath,
-    tPoint: Point,
-    pPoint: Point,
-    point: Point,
-  ): void {
-    const mid1: Point = {
-      x: (pPoint.x + tPoint.x) / 2,
-      y: (pPoint.y + tPoint.y) / 2,
-    };
-    const mid2: Point = {
-      x: (point.x + pPoint.x) / 2,
-      y: (point.y + pPoint.y) / 2,
-    };
+export function createLine(
+  points: SharedValue<Point[]>,
+  point: Point,
+  startFromPoint: Point = point,
+): SkPath {
+  'worklet';
+  points.value = [point];
 
-    path.moveTo(mid1.x, mid1.y);
-    path.quadTo(pPoint.x, pPoint.y, mid2.x, mid2.y);
-  }
+  const newPath = Skia.Path.Make();
 
-  public static createPathFromPoints(points: Array<Point>): SkPath {
-    const pointsCount = points.length;
-    const path = Skia.Path.Make();
+  newPath.moveTo(startFromPoint.x, startFromPoint.y);
+  newPath.lineTo(point.x, point.y);
 
-    for (let pointIndex = 0; pointIndex < pointsCount; pointIndex++) {
-      if (pointsCount >= 3 && pointIndex >= 2) {
-        LineSketcher.addPointToPath(
-          path,
-          points[pointIndex - 2],
-          points[pointIndex - 1],
-          points[pointIndex],
-        );
-      } else if (pointsCount >= 2 && pointIndex >= 1) {
-        LineSketcher.addPointToPath(
-          path,
-          points[0],
-          points[0],
-          points[pointIndex],
-        );
-      } else if (pointsCount >= 1) {
-        const a = points[pointIndex];
+  return newPath;
+}
 
-        path.moveTo(a.x, a.y);
-        path.lineTo(a.x, a.y);
-      }
-    }
+function addPointToPath(
+  path: SkPath,
+  tPoint: Point,
+  pPoint: Point,
+  point: Point,
+): void {
+  'worklet';
+  const mid1: Point = {
+    x: (pPoint.x + tPoint.x) / 2,
+    y: (pPoint.y + tPoint.y) / 2,
+  };
+  const mid2: Point = {
+    x: (point.x + pPoint.x) / 2,
+    y: (point.y + pPoint.y) / 2,
+  };
 
-    return path;
-  }
+  path.moveTo(mid1.x, mid1.y);
+  path.quadTo(pPoint.x, pPoint.y, mid2.x, mid2.y);
+}
 
-  public createLine(point: Point, startFromPoint: Point = point): SkPath {
-    this.points = [point];
+export function progressLine(
+  points: SharedValue<Point[]>,
+  path: SkPath,
+  point: Point,
+  straightLine: boolean = false,
+): void {
+  'worklet';
+  points.modify(value => {
+    'worklet';
 
-    const newPath = Skia.Path.Make();
+    value.push(point);
 
-    newPath.moveTo(startFromPoint.x, startFromPoint.y);
-    newPath.lineTo(point.x, point.y);
+    return value;
+  });
 
-    return newPath;
-  }
+  const pointsCount = points.value.length;
 
-  public progressLine(
-    path: SkPath,
-    point: Point,
-    straightLine: boolean = false,
-  ): void {
-    this.points.push(point);
-
-    const pointsCount = this.points.length;
-
-    if (straightLine) {
-      path.lineTo(point.x, point.y);
-    } else if (pointsCount >= 3) {
-      LineSketcher.addPointToPath(
-        path,
-        this.points[pointsCount - 3],
-        this.points[pointsCount - 2],
-        point,
-      );
-    } else {
-      LineSketcher.addPointToPath(path, this.points[0], this.points[0], point);
-    }
-  }
-
-  public shouldCreateNewLine(): boolean {
-    const pointsCount = this.points.length;
-    const suggestedMaxPointsPerLine = IS_ANDROID ? 300 : Infinity;
-
-    return pointsCount % suggestedMaxPointsPerLine === 0;
-  }
-
-  public getCurrentShape(): Shape {
-    const pointsCount = this.points.length;
-
-    return pointsCount === 1 ? Shape.Dot : Shape.Line;
-  }
-
-  public getFirstPoint(): Point | undefined {
-    return this.points[0];
-  }
-
-  public getLastPoint(): Point | undefined {
-    const pointsCount = this.points.length;
-
-    return this.points[pointsCount - 1];
+  if (straightLine) {
+    path.lineTo(point.x, point.y);
+  } else if (pointsCount >= 3) {
+    addPointToPath(
+      path,
+      points.value[pointsCount - 3],
+      points.value[pointsCount - 2],
+      point,
+    );
+  } else {
+    addPointToPath(path, points.value[0], points.value[0], point);
   }
 }
 
-export default LineSketcher;
+export function createPathFromPoints(points: Array<Point>): SkPath {
+  'worklet';
+  const pointsCount = points.length;
+  const path = Skia.Path.Make();
+
+  for (let pointIndex = 0; pointIndex < pointsCount; pointIndex++) {
+    if (pointsCount >= 3 && pointIndex >= 2) {
+      addPointToPath(
+        path,
+        points[pointIndex - 2],
+        points[pointIndex - 1],
+        points[pointIndex],
+      );
+    } else if (pointsCount >= 2 && pointIndex >= 1) {
+      addPointToPath(path, points[0], points[0], points[pointIndex]);
+    } else if (pointsCount >= 1) {
+      const a = points[pointIndex];
+
+      path.moveTo(a.x, a.y);
+      path.lineTo(a.x, a.y);
+    }
+  }
+
+  return path;
+}
+
+export function getCurrentShape(points: SharedValue<Point[]>): Shape {
+  'worklet';
+  const pointsCount = points.value.length;
+
+  return pointsCount === 1 ? Shape.Dot : Shape.Line;
+}

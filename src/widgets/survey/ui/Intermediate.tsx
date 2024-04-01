@@ -10,11 +10,6 @@ import { UploadObservable } from '@app/entities/activity/lib';
 import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
 import {
-  mapActivitiesFromDto,
-  mapActivityFlowFromDto,
-} from '@app/entities/applet/model';
-import { EventModel } from '@app/entities/event';
-import {
   AnswerAlerts,
   PassSurveyModel,
   ScoreRecord,
@@ -22,10 +17,10 @@ import {
 import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import {
   Logger,
-  AnalyticsService,
-  useActivityInfo,
   useAppDispatch,
   useAppSelector,
+  getTimezoneOffset,
+  AnalyticsService,
   MixProperties,
   MixEvents,
   getTimezoneOffset,
@@ -34,24 +29,25 @@ import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
 import { getClientInformation } from '../lib';
+import { useFlowStorageRecord } from '../lib';
 import {
+  StepperPipelineItem,
   createSvgFiles,
   fillNullsForHiddenItems,
   getActivityStartAt,
   getExecutionGroupKey,
   getItemIds,
-  getScheduledDate,
   getUserIdentifier,
   mapAnswersToAlerts,
   mapAnswersToDto,
   mapUserActionsToDto,
-  useFlowState,
   useFlowStateActions,
 } from '../model';
 
 type Props = {
   appletId: string;
   activityId: string;
+  activityName: string;
   eventId: string;
   flowId: string;
   order: number;
@@ -72,6 +68,7 @@ function Intermediate({
   flowId,
   appletId,
   activityId,
+  activityName,
   eventId,
   order,
   onClose,
@@ -81,28 +78,26 @@ function Intermediate({
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
-  // TODO: The usage of useAppletDetailsQuery here should be removed in the future
-  // because we should rely on the flow pipeline instead.
-  // https://github.com/ChildMindInstitute/mindlogger-app-refactor/pull/172#discussion_r1178961244
-  let { data: activityFlow } = useAppletDetailsQuery(appletId, {
-    select: response =>
-      mapActivityFlowFromDto(
-        response.data.result.activityFlows.find(o => o.id === flowId)!,
-      ),
+  const { data: appletData } = useAppletDetailsQuery(appletId, {
+    select: response => {
+      const appletDetails = AppletModel.mapAppletDetailsFromDto(
+        response.data.result,
+      );
+      return {
+        encryption: appletDetails.encryption,
+        appletName: appletDetails.displayName,
+      };
+    },
   });
 
-  const flowName = activityFlow?.name;
+  const appletEncryption = appletData?.encryption || null;
+  const appletName = appletData?.appletName;
 
-  let { data: allActivities } = useAppletDetailsQuery(appletId, {
-    select: r => mapActivitiesFromDto(r.data.result.activities),
+  const { flowStorageRecord } = useFlowStorageRecord({
+    appletId,
+    eventId,
+    flowId,
   });
-
-  const { data: applet } = useAppletDetailsQuery(appletId, {
-    select: response =>
-      AppletModel.mapAppletDetailsFromDto(response.data.result),
-  });
-
-  const { step, pipeline } = useFlowState({ appletId, eventId, flowId });
 
   const { saveActivitySummary } = useFlowStateActions({
     appletId,
@@ -114,23 +109,19 @@ function Intermediate({
     AppletModel.selectors.selectInProgressApplets,
   );
 
-  const appletEncryption = applet?.encryption || null;
+  const { step, pipeline, flowName, scheduledDate } = flowStorageRecord!;
 
   const activitiesPassed = pipeline
     .slice(0, step)
     .filter(o => o.type === 'Stepper').length;
 
-  const totalActivities = activityFlow!.activityIds.length;
+  const totalActivities = pipeline.filter(o => o.type === 'Stepper').length;
 
   const nextFlowItem = pipeline[step + 1];
 
-  const nextActivityId = nextFlowItem.payload.activityId;
+  const nextActivityPayload = (nextFlowItem as StepperPipelineItem).payload;
 
-  const nextActivity = allActivities?.find(x => x.id === nextActivityId);
-
-  const entityId = flowId ? flowId : activityId;
-
-  const scheduledEvent = EventModel.useScheduledEvent({ appletId, eventId });
+  const progressRecord = storeProgress[appletId][flowId][eventId];
 
   const { activityStorageRecord, clearActivityStorageRecord } =
     PassSurveyModel.useActivityState({
@@ -161,43 +152,43 @@ function Intermediate({
     },
   });
 
-  const { getName: getActivityName } = useActivityInfo();
-
   const changeActivity = useCallback(() => {
-    if (!nextActivity) {
-      AnalyticsService.track(MixEvents.AssessmentCompleted, {
-        [MixProperties.AppletId]: appletId,
-      });
-      return;
-    }
-
-    const appletName = applet?.displayName;
-    const currentActivityName = getActivityName(activityId);
+    AnalyticsService.track(MixEvents.AssessmentCompleted, {
+      [MixProperties.AppletId]: appletId,
+    });
 
     Logger.log(
-      `[Intermediate.completeActivity]: Activity "${currentActivityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivity?.name}|${nextActivity?.id}", applet "${appletName}|${appletId}"`,
+      `[Intermediate.completeActivity]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivityPayload.activityName}|${nextActivityPayload.activityId}", applet "${appletName}|${appletId}"`,
     );
 
     dispatch(
       AppletModel.actions.flowUpdated({
         appletId,
         flowId,
-        activityId: nextActivity.id,
+        activityId: nextActivityPayload.activityId,
+        activityName: nextActivityPayload.activityName,
+        activityDescription: nextActivityPayload.activityDescription,
+        activityImage: nextActivityPayload.activityImage,
         eventId,
         pipelineActivityOrder: activitiesPassed,
+        totalActivities,
       }),
     );
   }, [
-    getActivityName,
-    activityId,
-    applet?.displayName,
-    flowName,
     appletId,
     dispatch,
     eventId,
     flowId,
-    nextActivity,
     activitiesPassed,
+    nextActivityPayload.activityId,
+    nextActivityPayload.activityName,
+    nextActivityPayload.activityDescription,
+    nextActivityPayload.activityImage,
+    totalActivities,
+    activityName,
+    activityId,
+    flowName,
+    appletName,
   ]);
 
   async function completeActivity() {
@@ -213,8 +204,6 @@ function Intermediate({
       activityStorageRecord.items,
       activityStorageRecord.answers,
     );
-
-    const activityName: string = getActivityName(activityId)!;
 
     if (activityStorageRecord.hasSummary) {
       const summaryAlerts: AnswerAlerts =
@@ -262,10 +251,6 @@ function Intermediate({
     const { itemIds: modifiedItemIds, answers: modifiedAnswers } =
       fillNullsForHiddenItems(itemIds, answers, originalItems);
 
-    const progressRecord = storeProgress[appletId][entityId][eventId];
-
-    const scheduledDate = getScheduledDate(scheduledEvent!);
-
     const executionGroupKey = getExecutionGroupKey(progressRecord);
 
     const userIdentifier = getUserIdentifier(
@@ -273,12 +258,8 @@ function Intermediate({
       activityStorageRecord.answers,
     );
 
-    const logActivityName = getActivityName(activityId);
-
-    const appletName = applet?.displayName;
-
     Logger.log(
-      `[Intermediate.completeActivity]: Activity "${logActivityName}|${activityId}" within flow "${flowName}|${flowId}" completed, applet "${appletName}|${appletId}"`,
+      `[Intermediate.completeActivity]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" completed, applet "${appletName}|${appletId}"`,
     );
 
     pushInQueue({
@@ -295,8 +276,8 @@ function Intermediate({
       userIdentifier,
       startTime: getActivityStartAt(progressRecord)!,
       endTime: Date.now(),
-      scheduledTime: scheduledDate,
-      logActivityName,
+      scheduledTime: scheduledDate ?? undefined,
+      logActivityName: activityName,
       logCompletedAt: new Date().toString(),
       client: getClientInformation(),
       alerts,
@@ -338,7 +319,7 @@ function Intermediate({
             mb={10}
             fontSize={16}
           >
-            {nextActivity?.name ?? 'Activity'}
+            {nextActivityPayload.activityName}
           </Text>
 
           <XStack>

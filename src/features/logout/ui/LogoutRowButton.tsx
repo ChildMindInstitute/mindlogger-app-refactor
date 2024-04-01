@@ -6,17 +6,12 @@ import { RowButton, KeyIcon } from '@shared/ui';
 
 import { useLogout } from '../model';
 
-type Props = {
-  onPress: () => void;
-};
-
-const LogoutRowButton: FC<Props> = ({ onPress }) => {
+const LogoutRowButton: FC = () => {
   const { t } = useTranslation();
   const { logout } = useLogout();
 
   function performLogout() {
     logout();
-    onPress();
   }
 
   return (

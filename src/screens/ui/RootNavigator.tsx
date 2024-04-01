@@ -63,6 +63,7 @@ import {
   AppletBottomTabNavigator,
   InProgressActivityScreen,
   ApplicationLogsScreen,
+  PasswordRecoveryScreen,
 } from '../ui';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -323,6 +324,14 @@ export default () => {
           component={AboutScreen}
         />
       </Stack.Group>
+
+      <Stack.Screen
+        name="PasswordRecovery"
+        component={PasswordRecoveryScreen}
+        options={{
+          title: t('settings:create_new_password'),
+        }}
+      />
     </Stack.Navigator>
   );
 };

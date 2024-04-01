@@ -1,6 +1,10 @@
 import { PropsWithChildren, useMemo, useRef } from 'react';
 
-import { SystemBootUpContext as SystemBootUpContext, wait } from '@shared/lib';
+import {
+  SystemBootUpContext as SystemBootUpContext,
+  SystemModule,
+  wait,
+} from '@shared/lib';
 
 type Props = PropsWithChildren<{
   onLoadingFinished: () => void;
@@ -9,7 +13,12 @@ type Props = PropsWithChildren<{
 const SYSTEM_BOOT_UP_DELAY = 300;
 
 function SystemBootUpProvider({ children, onLoadingFinished }: Props) {
-  const moduleWaitList = useRef(['cache', 'state', 'analytics']);
+  const moduleWaitList = useRef<Array<SystemModule>>([
+    'cache',
+    'state',
+    'analytics',
+    'storage',
+  ]);
 
   const onLoadingFinishedRef = useRef(onLoadingFinished);
 

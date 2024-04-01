@@ -9,7 +9,7 @@ import { createSyncStorage, isAppOnline, useSystemBootUp } from '@shared/lib';
 
 const storage = createSyncStorage('cache-storage');
 
-const queryClient = new QueryClient({
+export const __queryClient__ = new QueryClient({
   defaultOptions: {
     mutations: {
       cacheTime: Infinity,
@@ -36,30 +36,30 @@ onlineManager.setEventListener(setOnline => {
       state.isConnected &&
       Boolean(state.isInternetReachable);
 
-    const mutations = queryClient.getMutationCache().getAll();
+    const mutations = __queryClient__.getMutationCache().getAll();
 
     setOnline(status);
 
     if (mutations.length && status) {
-      queryClient.resumePausedMutations();
+      __queryClient__.resumePausedMutations();
     }
   });
 });
 
 if (__DEV__) {
   import('react-query-native-devtools').then(({ addPlugin }) => {
-    addPlugin({ queryClient });
+    addPlugin({ queryClient: __queryClient__ });
   });
 }
 
 const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { onModuleInitialized } = useSystemBootUp();
+  const { onModuleInitialized, initialized } = useSystemBootUp();
 
   const onCacheRestored = () => {
     isAppOnline().then(isOnline => {
       if (isOnline) {
         onlineManager.setOnline(true);
-        queryClient.resumePausedMutations();
+        __queryClient__.resumePausedMutations();
       }
     });
 
@@ -68,7 +68,7 @@ const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <PersistQueryClientProvider
-      client={queryClient}
+      client={__queryClient__}
       persistOptions={{
         maxAge: Infinity,
         persister: syncPersist,
@@ -76,7 +76,7 @@ const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
       }}
       onSuccess={onCacheRestored}
     >
-      {children}
+      {initialized && children}
     </PersistQueryClientProvider>
   );
 };

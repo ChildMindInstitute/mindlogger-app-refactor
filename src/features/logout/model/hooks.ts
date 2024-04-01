@@ -14,6 +14,7 @@ import {
   isAppOnline,
   AnalyticsService,
   useTCPSocket,
+  Emitter,
 } from '@shared/lib';
 
 export function useLogout() {
@@ -22,6 +23,8 @@ export function useLogout() {
 
   const processLogout = async () => {
     Logger.info('[useLogout.processLogout]: Processing logout');
+
+    Emitter.emit('logout');
 
     await Logger.send();
 
