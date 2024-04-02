@@ -10,6 +10,7 @@ import { XStack, YStack } from '@tamagui/stacks';
 import { useIsMutating } from '@tanstack/react-query';
 
 import { useOnMutationCacheChange } from '@app/shared/api';
+import { useUploadObservable } from '@app/shared/lib';
 import { Box, BoxProps, NoListItemsYet } from '@app/shared/ui';
 import { LoadListError } from '@app/shared/ui';
 
@@ -41,6 +42,8 @@ const AppletList: FC<Props> = ({
 
   const isRefreshing = useIsMutating(['refresh']);
 
+  const { isUploading } = useUploadObservable();
+
   const refreshError = useOnMutationCacheChange();
 
   const hasError = !!refreshError || !!getAppletsError;
@@ -50,13 +53,13 @@ const AppletList: FC<Props> = ({
       <AppletCard
         accessibilityLabel={`applet-${item.displayName}`}
         applet={item}
-        disabled={!!isRefreshing}
+        disabled={!!isRefreshing || isUploading}
         onPress={() =>
           onAppletPress({ id: item.id, displayName: item.displayName })
         }
       />
     ),
-    [isRefreshing, onAppletPress],
+    [isRefreshing, isUploading, onAppletPress],
   );
 
   if (hasError) {

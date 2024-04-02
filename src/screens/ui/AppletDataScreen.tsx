@@ -2,7 +2,6 @@ import { FC } from 'react';
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
-import { UploadRetryBanner } from '@app/entities/activity';
 import { ActivityAnalyticsList } from '@app/entities/applet';
 import { useAppletAnalytics } from '@app/entities/applet/lib/hooks';
 import {
@@ -12,6 +11,7 @@ import {
   useOnFocus,
 } from '@app/shared/lib';
 import { ActivityIndicator, Box, HorizontalCalendar } from '@app/shared/ui';
+import { UploadRetryBanner } from '@app/widgets/survey';
 import { AppletDetailsParamList } from '@screens/config';
 
 type Props = BottomTabScreenProps<AppletDetailsParamList, 'Data'>;

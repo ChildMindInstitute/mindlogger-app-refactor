@@ -50,6 +50,18 @@ class QueryDataUtils {
 
     return response?.result.events ?? null;
   }
+
+  getEventDto(appletId: string, eventId: string): ScheduleEventDto | null {
+    const eventsDto = this.getEventsDto(appletId);
+
+    if (!eventsDto) {
+      return null;
+    }
+
+    const eventDto = eventsDto.find(dto => dto.id === eventId);
+
+    return eventDto ?? null;
+  }
 }
 
 export default QueryDataUtils;

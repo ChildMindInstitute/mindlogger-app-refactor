@@ -114,13 +114,9 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
   }
 
   public evaluate(eventsEntities: Array<EventEntity>): Array<EventEntity> {
-    const notInProgress = eventsEntities.filter(
-      x => !this.utility.isInProgress(x),
-    );
-
     const result: Array<EventEntity> = [];
 
-    for (let eventEntity of notInProgress) {
+    for (let eventEntity of eventsEntities) {
       const { event } = eventEntity;
 
       if (!this.utility.isInsideValidDatesInterval(event)) {

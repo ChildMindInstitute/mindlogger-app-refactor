@@ -1,7 +1,9 @@
-import { createSecureStorage } from '@app/shared/lib';
+import {
+  ChangeQueueObservable,
+  createSecureStorage,
+  IChangeQueueNotify,
+} from '@app/shared/lib';
 
-import { ChangeQueueObservable } from '../observables';
-import { IChangeQueueNotify } from '../observables/changeQueueObservable';
 import { SendAnswersInput } from '../types';
 
 type UploadItem = {

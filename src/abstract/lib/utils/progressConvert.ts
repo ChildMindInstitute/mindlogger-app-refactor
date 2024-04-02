@@ -38,6 +38,9 @@ export const convertProgress = (storeProgress: StoreProgress): Progress => {
           currentActivityImage: flowProgress.currentActivityImage,
           endAt: !storePayload.endAt ? null : new Date(storePayload.endAt),
           startAt: new Date(storePayload.startAt),
+          availableTo: !storePayload.availableTo
+            ? null
+            : new Date(storePayload.availableTo),
           type: storePayload.type,
           currentActivityStartAt: null,
           executionGroupKey: uuidv4(),
