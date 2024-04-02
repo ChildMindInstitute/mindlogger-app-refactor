@@ -33,6 +33,7 @@ export type GroupsBuildContext = {
   allAppletActivities: Activity[];
   progress: Progress;
   appletId: string;
+  applyInProgressFilter: boolean;
 };
 
 export class GroupUtility {
@@ -193,7 +194,7 @@ export class GroupUtility {
     return { from, to };
   }
 
-  public isSpreadToNextDay(event: ScheduleEvent): boolean {
+  public static isSpreadToNextDay(event: ScheduleEvent): boolean {
     return (
       event.availability.availabilityType ===
         AvailabilityType.ScheduledAccess &&
@@ -202,6 +203,10 @@ export class GroupUtility {
         timeTarget: event.availability.timeFrom!,
       })
     );
+  }
+
+  public isSpreadToNextDay(event: ScheduleEvent): boolean {
+    return GroupUtility.isSpreadToNextDay(event);
   }
 
   public isInsideValidDatesInterval(event: ScheduleEvent) {

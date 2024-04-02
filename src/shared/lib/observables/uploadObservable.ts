@@ -1,4 +1,4 @@
-import { CommonObservable } from '@app/shared/lib';
+import { CommonObservable } from '../utils';
 
 export interface IUploadObservableSetters {
   set isLoading(value: boolean);

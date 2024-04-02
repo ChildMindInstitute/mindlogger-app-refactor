@@ -22,7 +22,7 @@ export function useActivityRecordsInitialization({
 }: UseActivityRecordsInitializationArgs) {
   const queryClient = useQueryClient();
 
-  const { restFlowActivityIds } = useFlowState({
+  const { remainingActivityIds } = useFlowState({
     appletId,
     eventId,
     flowId: entityType === 'flow' ? entityId : undefined,
@@ -40,17 +40,17 @@ export function useActivityRecordsInitialization({
   const isFlow = entityType === 'flow';
 
   useMemo(() => {
-    if (isFlow && restFlowActivityIds.length) {
+    if (isFlow && remainingActivityIds.length) {
       Initializer.initializeFlowActivities({
         eventId,
-        flowActivityIds: restFlowActivityIds,
+        flowActivityIds: remainingActivityIds,
       });
     }
-  }, [Initializer, eventId, isFlow, restFlowActivityIds]);
+  }, [Initializer, eventId, isFlow, remainingActivityIds]);
 
   useMemo(() => {
-    if (!isFlow && restFlowActivityIds.length) {
+    if (!isFlow && remainingActivityIds.length) {
       Initializer.initializeActivity({ activityId: entityId, eventId });
     }
-  }, [Initializer, eventId, isFlow, entityId, restFlowActivityIds]);
+  }, [Initializer, eventId, isFlow, entityId, remainingActivityIds]);
 }

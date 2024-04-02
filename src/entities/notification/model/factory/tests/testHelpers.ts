@@ -62,6 +62,7 @@ export const createBuilder = (eventEntity: EventEntity, completedAt?: Date) => {
       type: ActivityPipelineType.Regular,
       startAt: subMinutes(completedAt, 1),
       endAt: completedAt,
+      availableTo: null,
     };
   }
 

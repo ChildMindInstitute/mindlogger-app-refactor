@@ -2,6 +2,9 @@ import { useEffect, useRef } from 'react';
 
 import NetInfo from '@react-native-community/netinfo';
 
+/*
+The addEventListener is always fired on app start, so we ignore it by update the state from null to status.
+*/
 const useOnlineEstablished = (callback: () => void) => {
   const currentStateRef = useRef<boolean | null>(null);
 
@@ -12,7 +15,7 @@ const useOnlineEstablished = (callback: () => void) => {
         state.isConnected &&
         Boolean(state.isInternetReachable);
 
-      if (!currentStateRef.current && status) {
+      if (currentStateRef.current === false && status) {
         callback();
       }
 
