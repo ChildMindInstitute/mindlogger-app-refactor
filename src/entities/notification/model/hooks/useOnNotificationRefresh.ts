@@ -29,15 +29,13 @@ function useOnNotificationRefresh(callback?: () => void) {
         storeProgress,
         completions,
         logTrigger!,
-      )
-        .finally(() => {
-          Logger.send();
-        })
-        .finally(() => {
-          if (callbackRef.current) {
-            callbackRef.current();
-          }
-        });
+      ).finally(() => {
+        Logger.send();
+
+        if (callbackRef.current) {
+          callbackRef.current();
+        }
+      });
     },
     [queryClient, completions, storeProgress],
   );
