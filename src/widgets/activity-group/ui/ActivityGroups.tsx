@@ -2,6 +2,11 @@ import { FC } from 'react';
 
 import { useIsFetching } from '@tanstack/react-query';
 
+import {
+  CheckAvailability,
+  CompleteEntityIntoUploadToQueue,
+  ProcessAutocompletion,
+} from '@app/abstract/lib';
 import { getAppletCompletedEntitiesKey } from '@app/shared/lib';
 import {
   Box,
@@ -18,6 +23,9 @@ import { useActivityGroups } from '../model';
 
 type Props = {
   appletId: string;
+  completeEntity: CompleteEntityIntoUploadToQueue;
+  processAutocompletion: ProcessAutocompletion;
+  checkAvailability: CheckAvailability;
 } & BoxProps;
 
 const ActivityGroups: FC<Props> = props => {
@@ -76,7 +84,13 @@ const ActivityGroups: FC<Props> = props => {
   return (
     <Box {...props}>
       <YStack accessibilityLabel="activity-group-list" flex={1}>
-        <ActivitySectionList appletId={props.appletId} groups={groups} />
+        <ActivitySectionList
+          appletId={props.appletId}
+          groups={groups}
+          completeEntity={props.completeEntity}
+          processAutocompletion={props.processAutocompletion}
+          checkAvailability={props.checkAvailability}
+        />
       </YStack>
     </Box>
   );

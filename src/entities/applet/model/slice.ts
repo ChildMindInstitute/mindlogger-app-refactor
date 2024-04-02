@@ -10,12 +10,13 @@ import {
   IStoreProgressPayload,
   CompletedEventEntities,
 } from '@app/abstract/lib';
-import { cleanUpAction } from '@app/shared/lib';
+import { cleanUpAction, isEntityExpired } from '@app/shared/lib';
 
 type InProgressActivity = {
   appletId: string;
   activityId: string;
   eventId: string;
+  availableTo?: Date | null;
 };
 
 type InProgressEntity = {
@@ -34,6 +35,7 @@ type InProgressFlow = {
   totalActivities: number;
   eventId: string;
   pipelineActivityOrder: number;
+  availableTo?: Date | null;
 };
 
 type InitialState = {
@@ -60,6 +62,7 @@ const slice = createSlice({
         type: ActivityPipelineType.Regular,
         startAt: new Date().getTime(),
         endAt: null,
+        availableTo: action.payload.availableTo?.getTime() ?? null,
       };
 
       state.inProgress[appletId] = state.inProgress[appletId] ?? {};
@@ -79,6 +82,7 @@ const slice = createSlice({
         eventId,
         pipelineActivityOrder,
         totalActivities,
+        availableTo,
       } = action.payload;
 
       const flowEvent: StoreProgressPayload = {
@@ -90,6 +94,7 @@ const slice = createSlice({
         startAt: new Date().getTime(),
         currentActivityStartAt: new Date().getTime(),
         endAt: null,
+        availableTo: availableTo?.getTime() ?? null,
         executionGroupKey: uuidv4(),
         pipelineActivityOrder,
         totalActivitiesInPipeline: totalActivities,
@@ -129,14 +134,19 @@ const slice = createSlice({
     entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {
       const { appletId, entityId, eventId } = action.payload;
 
-      state.inProgress[appletId][entityId][eventId].endAt =
-        new Date().getTime();
+      const now = new Date().getTime();
+
+      const { availableTo } = state.inProgress[appletId][entityId][eventId];
+
+      const isExpired = isEntityExpired(availableTo);
+
+      state.inProgress[appletId][entityId][eventId].endAt = isExpired
+        ? availableTo
+        : now;
 
       const completedEntities = state.completedEntities ?? {};
 
       const completions = state.completions ?? {};
-
-      const now = new Date().getTime();
 
       completedEntities[entityId] = now;
 

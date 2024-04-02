@@ -5,7 +5,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { StoreProgress } from '@app/abstract/lib';
-import { UploadRetryBanner } from '@app/entities/activity';
 import { NotificationModel } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
 import {
@@ -16,6 +15,7 @@ import {
   useAppSelector,
   useOnFocus,
 } from '@app/shared/lib';
+import { UploadRetryBanner } from '@app/widgets/survey';
 import { Applet, AppletList, AppletModel } from '@entities/applet';
 import { IdentityModel } from '@entities/identity';
 import { AppletsRefresh, AppletsRefreshModel } from '@features/applets-refresh';

@@ -5,8 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { UploadRetryBanner } from '@app/entities/activity';
 import { IdentityModel } from '@app/entities/identity';
+import { UploadRetryBanner } from '@app/widgets/survey';
 import { LogoutRowButton } from '@features/logout';
 import {
   SystemRecord,

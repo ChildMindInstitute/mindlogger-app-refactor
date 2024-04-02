@@ -4,8 +4,8 @@ import { type FlexAlignType } from 'react-native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 
-import { UploadRetryBanner } from '@app/entities/activity';
 import { useAppletDetailsQuery } from '@app/entities/applet';
+import { UploadRetryBanner } from '@app/widgets/survey';
 import { MarkdownMessage } from '@shared/ui';
 import { YStack, ScrollView } from '@shared/ui';
 

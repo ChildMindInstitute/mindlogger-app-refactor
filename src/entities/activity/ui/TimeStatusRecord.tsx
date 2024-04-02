@@ -31,7 +31,8 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
 
   const hasAvailableFromTo = isStatusScheduled;
 
-  const hasAvailableToOnly = isStatusAvailable;
+  const hasAvailableToOnly =
+    isStatusAvailable || (isStatusInProgress && !!activity.availableTo);
 
   const hasTimeToComplete =
     activity.isTimerSet && !!activity.timeLeftToComplete;
@@ -40,12 +41,6 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
 
   const isSpreadToNextDay =
     !!activity.availableTo && activity.availableTo > tomorrow;
-
-  const hasTimerElapsed =
-    isStatusInProgress &&
-    activity.isTimerSet &&
-    !activity.timeLeftToComplete &&
-    activity.isTimerElapsed;
 
   const convert = (date: Date): string => {
     const convertResult = convertToTimeOnNoun(date);
@@ -85,7 +80,7 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
         </StatusLine>
       )}
 
-      {hasTimerElapsed && (
+      {activity.isExpired && (
         <StatusLine>{t('additional:time-end-tap')}</StatusLine>
       )}
     </Box>
