@@ -4,10 +4,13 @@ import { IdName } from './primitive';
 
 export type EntityType = 'flow' | 'regular';
 
-export type EntityPath = {
+export type EntityPathParams = {
   appletId: string;
   eventId: string;
   entityId: string;
+};
+
+export type EntityPath = EntityPathParams & {
   entityType: EntityType;
 };
 
@@ -22,3 +25,22 @@ export type FlowProgressActivity = IdName & {
   description: string;
   image: string | null;
 };
+
+export type CompleteEntityIntoUploadToQueue = (
+  entityPath: EntityPath,
+) => Promise<void>;
+
+export type ProcessAutocompletion = (
+  exclude?: EntityPathParams,
+  forceRefreshNotifications?: boolean,
+) => Promise<boolean>;
+
+export type CheckAvailability = (
+  entityName: string,
+  identifiers: EntityPath,
+) => boolean;
+
+export type EvaluateAvailableTo = (
+  appletId: string,
+  eventId: string,
+) => Date | null;

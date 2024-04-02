@@ -45,6 +45,7 @@ const getProgress = (startAt: Date, endAt: Date | null) => {
           type: ActivityPipelineType.Regular,
           startAt,
           endAt,
+          availableTo: null,
         },
       },
     },
@@ -112,9 +113,11 @@ const getExpectedItem = (): ActivityListItem => {
     type: ActivityType.NotDefined,
     status: ActivityStatus.InProgress,
     isTimerSet: false,
-    isTimerElapsed: false,
+    isExpired: false,
     timeLeftToComplete: null,
     isInActivityFlow: false,
+    image: undefined,
+    availableTo: null,
   };
   return expectedItem;
 };
@@ -203,6 +206,11 @@ const mockGetNow = (builder: ActivityGroupsBuilder, mockedNowDate: Date) => {
   //@ts-ignore
   builder.itemsFactory.utility.getNow = jest.fn(() => new Date(mockedNowDate));
   //@ts-ignore
+  builder.itemsFactory.availableToEvaluator.getNow = jest.fn(
+    () => new Date(mockedNowDate),
+  );
+
+  //@ts-ignore
   builder.scheduledEvaluator.utility.getNow = jest.fn(
     () => new Date(mockedNowDate),
   );
@@ -223,6 +231,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       const builder = createActivityGroupsBuilder(input);
@@ -234,6 +243,7 @@ describe('ActivityGroupsBuilder', () => {
       const result = builder.buildInProgress([eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedInProgressItem();
+      expectedItem.availableTo = undefined;
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:in_progress',
@@ -254,6 +264,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -282,6 +293,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -310,6 +322,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       const builder = createActivityGroupsBuilder(input);
@@ -345,6 +358,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       const builder = createActivityGroupsBuilder(input);
@@ -366,7 +380,7 @@ describe('ActivityGroupsBuilder', () => {
 
       const expectedItem: ActivityListItem = getExpectedInProgressItem();
       expectedItem.isTimerSet = true;
-      expectedItem.isTimerElapsed = false;
+      expectedItem.isExpired = false;
       expectedItem.timeLeftToComplete = { hours: 2, minutes: 8 };
 
       const expectedResult: ActivityListGroup = {
@@ -388,6 +402,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       const builder = createActivityGroupsBuilder(input);
@@ -409,7 +424,7 @@ describe('ActivityGroupsBuilder', () => {
 
       const expectedItem: ActivityListItem = getExpectedInProgressItem();
       expectedItem.isTimerSet = true;
-      expectedItem.isTimerElapsed = false;
+      expectedItem.isExpired = false;
       expectedItem.timeLeftToComplete = { hours: 0, minutes: 1 };
 
       const expectedResult: ActivityListGroup = {
@@ -431,6 +446,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       const builder = createActivityGroupsBuilder(input);
@@ -452,7 +468,7 @@ describe('ActivityGroupsBuilder', () => {
 
       const expectedItem: ActivityListItem = getExpectedInProgressItem();
       expectedItem.isTimerSet = true;
-      expectedItem.isTimerElapsed = true;
+      expectedItem.isExpired = true;
       expectedItem.timeLeftToComplete = null;
 
       const expectedResult: ActivityListGroup = {
@@ -476,6 +492,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -514,6 +531,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -552,6 +570,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -593,6 +612,7 @@ describe('ActivityGroupsBuilder', () => {
           allAppletActivities: [],
           progress,
           appletId: 'test-applet-id-1',
+          applyInProgressFilter: true,
         };
 
         let builder = createActivityGroupsBuilder(input);
@@ -638,6 +658,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -686,6 +707,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -735,6 +757,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -781,6 +804,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -820,6 +844,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -858,6 +883,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -899,6 +925,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -926,6 +953,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       builder = createActivityGroupsBuilder(input);
@@ -947,6 +975,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -974,6 +1003,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       builder = createActivityGroupsBuilder(input);
@@ -1002,6 +1032,7 @@ describe('ActivityGroupsBuilder', () => {
           allAppletActivities: [],
           progress,
           appletId: 'test-applet-id-1',
+          applyInProgressFilter: true,
         };
 
         let builder = createActivityGroupsBuilder(input);
@@ -1047,6 +1078,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -1089,6 +1121,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -1139,6 +1172,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -1187,6 +1221,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -1229,6 +1264,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       const builder = createActivityGroupsBuilder(input);
@@ -1268,6 +1304,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       const builder = createActivityGroupsBuilder(input);
@@ -1316,6 +1353,7 @@ describe('ActivityGroupsBuilder', () => {
           allAppletActivities: [],
           progress,
           appletId: 'test-applet-id-1',
+          applyInProgressFilter: true,
         };
 
         let builder = createActivityGroupsBuilder(input);
@@ -1363,6 +1401,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -1413,6 +1452,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -1463,6 +1503,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -1506,6 +1547,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       builder = createActivityGroupsBuilder(input);
@@ -1528,6 +1570,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       let builder = createActivityGroupsBuilder(input);
@@ -1570,6 +1613,7 @@ describe('ActivityGroupsBuilder', () => {
         allAppletActivities: [],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       const builder = createActivityGroupsBuilder(input);
@@ -1620,6 +1664,7 @@ describe('ActivityGroupsBuilder', () => {
               currentActivityName: 'test-activity-name-1',
               currentActivityDescription: 'test-description-1',
               currentActivityImage: null,
+              availableTo: null,
             },
           },
         },
@@ -1648,6 +1693,7 @@ describe('ActivityGroupsBuilder', () => {
         ],
         progress,
         appletId: 'test-applet-id-1',
+        applyInProgressFilter: true,
       };
 
       const builder = createActivityGroupsBuilder(input);
@@ -1695,7 +1741,7 @@ describe('ActivityGroupsBuilder', () => {
             type: ActivityType.NotDefined,
             status: ActivityStatus.InProgress,
             isTimerSet: false,
-            isTimerElapsed: false,
+            isExpired: false,
             timeLeftToComplete: null,
             isInActivityFlow: true,
             activityFlowDetails: {
@@ -1737,7 +1783,7 @@ describe('ActivityGroupsBuilder', () => {
             type: ActivityType.NotDefined,
             status: ActivityStatus.InProgress,
             isTimerSet: false,
-            isTimerElapsed: false,
+            isExpired: false,
             timeLeftToComplete: null,
             isInActivityFlow: true,
             activityFlowDetails: {

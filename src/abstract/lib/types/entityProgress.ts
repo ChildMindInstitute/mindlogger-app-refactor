@@ -25,6 +25,7 @@ export type EntityProgress = FlowProgress | ActivityProgress;
 export type StoreProgressPayload = EntityProgress & {
   startAt: number;
   endAt: number | null;
+  availableTo: number | null;
 };
 
 export interface IStoreProgressPayload {
@@ -48,6 +49,7 @@ export type StoreProgress = Record<AppletId, StoreEntitiesProgress>;
 export type ProgressPayload = EntityProgress & {
   startAt: Date;
   endAt: Date | null;
+  availableTo: Date | null;
 };
 
 export type CompletedEntities = Record<EntityId, number>;

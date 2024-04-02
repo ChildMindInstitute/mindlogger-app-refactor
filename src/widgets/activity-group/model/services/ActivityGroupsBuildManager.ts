@@ -64,6 +64,7 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
     appletId: string,
     entitiesProgress: StoreProgress,
     queryClient: QueryClient,
+    applyInProgressFilter: boolean,
   ): BuildResult => {
     const appletResponse = getDataFromQuery<AppletDetailsResponse>(
       getAppletDetailsKey(appletId),
@@ -111,6 +112,7 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
       allAppletActivities: activities,
       appletId: appletId,
       progress: convertProgress(entitiesProgress),
+      applyInProgressFilter,
     });
 
     let entityEvents = events
@@ -167,11 +169,17 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
     appletId: string,
     entitiesProgress: StoreProgress,
     queryClient: QueryClient,
+    applyInProgressFilter: boolean = true,
   ): BuildResult => {
     try {
       logger.log('[ActivityGroupsBuildManager.process]: Building groups..');
 
-      const result = processInternal(appletId, entitiesProgress, queryClient);
+      const result = processInternal(
+        appletId,
+        entitiesProgress,
+        queryClient,
+        applyInProgressFilter,
+      );
 
       logger.log('[ActivityGroupsBuildManager.process]: Build is done');
 

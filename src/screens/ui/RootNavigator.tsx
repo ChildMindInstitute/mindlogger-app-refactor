@@ -8,13 +8,15 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { EntityPath, StoreProgress } from '@app/abstract/lib';
-import { ActivityModel, QueueProcessingService } from '@app/entities/activity';
+import { ActivityModel } from '@app/entities/activity';
 import { MediaFilesCleaner } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
 import { LoginModel } from '@app/features/login';
 import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SystemRecord } from '@app/shared/lib/records';
+import { ActivityGroupsModel } from '@app/widgets/activity-group';
+import { SurveyModel } from '@app/widgets/survey';
 import { SessionModel } from '@entities/session';
 import { EnterForegroundModel } from '@features/enter-foreground';
 import { LogoutModel } from '@features/logout';
@@ -31,6 +33,7 @@ import {
   useOnlineEstablished,
   Logger,
   useCurrentRoute,
+  useOnceRef,
 } from '@shared/lib';
 import {
   UserProfileIcon,
@@ -68,6 +71,8 @@ import {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const AUTOCOMPLETION_DELAY_ON_APP_START = 2000;
+
 export default () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -104,6 +109,9 @@ export default () => {
     forceLogout();
   });
 
+  const { completeEntityIntoUploadToQueue, process: processAutocompletion } =
+    SurveyModel.useAutoCompletion();
+
   TapOnNotificationModel.useOnNotificationTap({
     checkAvailability: (
       entityName: string,
@@ -120,6 +128,10 @@ export default () => {
     cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
     hasActivityWithHiddenAllItems:
       ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
+    evaluateAvailableTo:
+      ActivityGroupsModel.useAvailabilityEvaluator().evaluateAvailableTo,
+    completeEntityIntoUploadToQueue,
+    processAutocompletion,
   });
 
   useBackgroundTask(() => {
@@ -128,22 +140,47 @@ export default () => {
 
   const { getCurrentRoute } = useCurrentRoute();
 
-  const processQueue = useCallback(() => {
+  const autocomplete = useCallback(() => {
     const executing = getCurrentRoute() === 'InProgressActivity';
+
+    Logger.log('[RootNavigator.autocomplete] Started');
 
     if (executing) {
       Logger.info(
-        '[RootNavigator.useOnlineEstablished.processQueue]: Postponed due to entity is in progress',
+        '[RootNavigator.autocomplete]: Postponed due to entity is in progress',
       );
       return;
     }
 
-    QueueProcessingService.process();
-  }, [getCurrentRoute]);
+    if (AppletModel.RefreshService.isBusy()) {
+      Logger.info(
+        '[RootNavigator.autocomplete]: Postponed due to RefreshService.mutex is busy',
+      );
+      return;
+    }
 
-  useOnlineEstablished(processQueue);
+    if (AppletModel.StartEntityMutex.isBusy()) {
+      Logger.log(
+        '[RootNavigator.startActivityOrFlow] Postponed due to StartEntityMutex is busy',
+      );
+      return;
+    }
+
+    processAutocompletion();
+  }, [getCurrentRoute, processAutocompletion]);
+
+  const autocompleteWithDelay = useCallback(
+    () => setTimeout(autocomplete, AUTOCOMPLETION_DELAY_ON_APP_START),
+    [autocomplete],
+  );
+
+  useOnlineEstablished(autocomplete);
+
+  useOnceRef(autocompleteWithDelay);
 
   LoginModel.useAnalyticsAutoLogin();
+
+  NotificationModel.useOnNotificationRefresh();
 
   return (
     <Stack.Navigator

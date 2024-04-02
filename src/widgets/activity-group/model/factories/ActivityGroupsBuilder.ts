@@ -26,17 +26,24 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
   private utility: GroupUtility;
 
+  private applyInProgressFilter: boolean;
+
   constructor(inputParams: GroupsBuildContext) {
     this.itemsFactory = new ListItemsFactory(inputParams);
     this.scheduledEvaluator = new ScheduledGroupEvaluator(inputParams);
     this.availableEvaluator = new AvailableGroupEvaluator(inputParams);
     this.utility = new GroupUtility(inputParams);
+    this.applyInProgressFilter = inputParams.applyInProgressFilter;
   }
 
   public buildInProgress(
     eventsActivities: Array<EventEntity>,
   ): ActivityListGroup {
-    const filtered = eventsActivities.filter(x => this.utility.isInProgress(x));
+    const considerProgressEntities = this.applyInProgressFilter;
+
+    const filtered = considerProgressEntities
+      ? eventsActivities.filter(x => this.utility.isInProgress(x))
+      : [];
 
     const activityItems: Array<ActivityListItem> = [];
 
@@ -56,7 +63,11 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 
   public buildAvailable(eventsEntities: Array<EventEntity>): ActivityListGroup {
-    const filtered = this.availableEvaluator.evaluate(eventsEntities);
+    const inputEntities = this.applyInProgressFilter
+      ? eventsEntities.filter(x => !this.utility.isInProgress(x))
+      : eventsEntities;
+
+    const filtered = this.availableEvaluator.evaluate(inputEntities);
 
     const activityItems: Array<ActivityListItem> = [];
 
@@ -76,7 +87,11 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 
   public buildScheduled(eventsEntities: Array<EventEntity>): ActivityListGroup {
-    const filtered = this.scheduledEvaluator.evaluate(eventsEntities);
+    const inputEntities = this.applyInProgressFilter
+      ? eventsEntities.filter(x => !this.utility.isInProgress(x))
+      : eventsEntities;
+
+    const filtered = this.scheduledEvaluator.evaluate(inputEntities);
 
     const activityItems: Array<ActivityListItem> = [];
 

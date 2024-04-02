@@ -5,6 +5,8 @@ import {
   Mutex,
   isAppOnline,
   wait,
+  IUploadObservableSetters,
+  UploadObservable,
 } from '@app/shared/lib';
 
 import AnswersQueueService, {
@@ -13,11 +15,13 @@ import AnswersQueueService, {
 import AnswersUploadService, {
   IAnswersUploadService,
 } from './AnswersUploadService';
-import { UploadObservable } from '../observables';
-import { IUploadObservableSetters } from '../observables/uploadObservable';
 import { SendAnswersInput } from '../types';
 
-class QueueProcessingService {
+export interface IPushToQueue {
+  push(input: SendAnswersInput): void;
+}
+
+class QueueProcessingService implements IPushToQueue {
   private queueService: IAnswersQueueService;
 
   private uploadService: IAnswersUploadService;

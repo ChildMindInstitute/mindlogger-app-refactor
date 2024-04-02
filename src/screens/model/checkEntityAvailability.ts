@@ -8,7 +8,7 @@ import {
   onCompletedToday,
   onScheduledToday,
 } from '@app/features/tap-on-notification/lib';
-import { ILogger, Logger } from '@app/shared/lib';
+import { ILogger, isReadyForAutocompletion, Logger } from '@app/shared/lib';
 import {
   ActivityGroupType,
   ActivityGroupsModel,
@@ -24,6 +24,13 @@ type Input = {
 
 const logger: ILogger = Logger;
 
+/*
+In case if entity is in progress and it's ready for autocompletion - we have to decide if we
+need to start this entity again. To decide that - we pass this entity through available and scheduled group evaluators.
+applyInProgressFilter is set false is this case  so that the ActivityGroupsBuilder will include
+the entity into the inputs of the mentioned groups' evaluators.
+*/
+
 export const checkEntityAvailability = ({
   entityName,
   identifiers: { appletId, entityId, entityType, eventId },
@@ -34,10 +41,23 @@ export const checkEntityAvailability = ({
     `[checkEntityAvailability]: Checking.. Entity = "${entityName}", appletId = ${appletId}, entityId = ${entityId}, entityType = ${entityType}, eventId = ${eventId} `,
   );
 
+  const shouldBeAutocompleted = isReadyForAutocompletion(
+    { appletId, entityId, eventId, entityType },
+    storeProgress,
+  );
+
+  const applyInProgressFilter = !shouldBeAutocompleted;
+
+  Logger.log(
+    '[checkEntityAvailability] applyInProgressFilter is set to ' +
+      applyInProgressFilter,
+  );
+
   const groupsResult = ActivityGroupsModel.ActivityGroupsBuildManager.process(
     appletId,
     storeProgress,
     queryClient,
+    applyInProgressFilter,
   );
 
   const groupInProgress: ActivityListGroup = groupsResult.groups.find(

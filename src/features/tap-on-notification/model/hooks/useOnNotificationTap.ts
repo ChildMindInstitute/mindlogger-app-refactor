@@ -3,9 +3,13 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import {
   ActivityRecordKeyParams,
+  CheckAvailability,
+  CompleteEntityIntoUploadToQueue,
   EntityPath,
   EntityType,
+  EvaluateAvailableTo,
   LookupEntityInput,
+  ProcessAutocompletion,
   StoreProgress,
 } from '@app/abstract/lib';
 import { AppletModel, clearStorageRecords } from '@app/entities/applet';
@@ -29,10 +33,13 @@ import {
 } from '@app/shared/lib';
 
 type Input = {
-  checkAvailability: (entityName: string, identifiers: EntityPath) => boolean;
+  checkAvailability: CheckAvailability;
   hasMediaReferences: (input: LookupEntityInput) => boolean;
   hasActivityWithHiddenAllItems: (input: LookupEntityInput) => boolean;
   cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
+  evaluateAvailableTo: EvaluateAvailableTo;
+  completeEntityIntoUploadToQueue: CompleteEntityIntoUploadToQueue;
+  processAutocompletion: ProcessAutocompletion;
 };
 
 const GoBackDuration = 1000;
@@ -54,6 +61,9 @@ export function useOnNotificationTap({
   hasMediaReferences,
   cleanUpMediaFiles,
   hasActivityWithHiddenAllItems,
+  evaluateAvailableTo,
+  completeEntityIntoUploadToQueue,
+  processAutocompletion,
 }: Input) {
   const queryClient = useQueryClient();
 
@@ -71,6 +81,9 @@ export function useOnNotificationTap({
     hasMediaReferences,
     cleanUpMediaFiles,
     hasActivityWithHiddenAllItems,
+    evaluateAvailableTo,
+    completeEntityIntoUploadToQueue,
+    checkAvailability,
   });
 
   const { getCurrentRoute } = useCurrentRoute();
@@ -178,17 +191,6 @@ export function useOnNotificationTap({
     eventId: string,
     entityName: string,
   ) => {
-    if (
-      !checkAvailability(entityName, {
-        appletId,
-        eventId,
-        entityId,
-        entityType,
-      })
-    ) {
-      return;
-    }
-
     if (entityType === 'flow') {
       startFlow(appletId, entityId, eventId, entityName).then(
         ({
@@ -196,12 +198,15 @@ export function useOnNotificationTap({
           cannotBeStartedDueToMediaFound,
           cannotBeStartedDueToMigrationsNotApplied,
           cannotBeStartedDueToAllItemsHidden,
+          cannotBeStarted,
         }) => {
           if (
             cannotBeStartedDueToMediaFound ||
             cannotBeStartedDueToAllItemsHidden ||
-            cannotBeStartedDueToMigrationsNotApplied
+            cannotBeStartedDueToMigrationsNotApplied ||
+            cannotBeStarted
           ) {
+            processAutocompletion();
             return;
           }
 
@@ -219,12 +224,15 @@ export function useOnNotificationTap({
           cannotBeStartedDueToMediaFound,
           cannotBeStartedDueToMigrationsNotApplied,
           cannotBeStartedDueToAllItemsHidden,
+          cannotBeStarted,
         }) => {
           if (
             cannotBeStartedDueToMediaFound ||
             cannotBeStartedDueToAllItemsHidden ||
-            cannotBeStartedDueToMigrationsNotApplied
+            cannotBeStartedDueToMigrationsNotApplied ||
+            cannotBeStarted
           ) {
+            processAutocompletion();
             return;
           }
 

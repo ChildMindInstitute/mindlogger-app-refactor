@@ -4,44 +4,31 @@ import { styled } from '@tamagui/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { StoreProgress } from '@app/abstract/lib';
+import { EntityPathParams, StoreProgress } from '@app/abstract/lib';
 import { useRetryUpload } from '@app/entities/activity';
-import { UploadObservable } from '@app/entities/activity/lib';
+import { QueueProcessingService } from '@app/entities/activity/lib';
 import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
-import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
+import { AppletModel } from '@app/entities/applet';
+import { QueryDataUtils } from '@app/shared/api';
 import {
-  AnswerAlerts,
-  PassSurveyModel,
-  ScoreRecord,
-} from '@app/features/pass-survey';
-import { InitializeHiddenItem } from '@app/features/pass-survey/model';
-import {
+  AnalyticsService,
   Logger,
+  MixEvents,
+  MixProperties,
+  UploadObservable,
   useAppDispatch,
   useAppSelector,
-  getTimezoneOffset,
-  AnalyticsService,
-  MixProperties,
-  MixEvents,
 } from '@app/shared/lib';
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
-import { getClientInformation } from '../lib';
 import { useFlowStorageRecord } from '../lib';
 import {
   StepperPipelineItem,
-  createSvgFiles,
-  fillNullsForHiddenItems,
-  getActivityStartAt,
-  getExecutionGroupKey,
-  getItemIds,
-  getUserIdentifier,
-  mapAnswersToAlerts,
-  mapAnswersToDto,
-  mapUserActionsToDto,
+  useAutoCompletion,
   useFlowStateActions,
 } from '../model';
+import { ConstructCompletionsService } from '../model/services/ConstructCompletionsService';
 
 type Props = {
   appletId: string;
@@ -77,21 +64,6 @@ function Intermediate({
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
-  const { data: appletData } = useAppletDetailsQuery(appletId, {
-    select: response => {
-      const appletDetails = AppletModel.mapAppletDetailsFromDto(
-        response.data.result,
-      );
-      return {
-        encryption: appletDetails.encryption,
-        appletName: appletDetails.displayName,
-      };
-    },
-  });
-
-  const appletEncryption = appletData?.encryption || null;
-  const appletName = appletData?.appletName;
-
   const { flowStorageRecord } = useFlowStorageRecord({
     appletId,
     eventId,
@@ -108,7 +80,7 @@ function Intermediate({
     AppletModel.selectors.selectInProgressApplets,
   );
 
-  const { step, pipeline, flowName, scheduledDate } = flowStorageRecord!;
+  const { step, pipeline, flowName } = flowStorageRecord!;
 
   const activitiesPassed = pipeline
     .slice(0, step)
@@ -120,23 +92,12 @@ function Intermediate({
 
   const nextActivityPayload = (nextFlowItem as StepperPipelineItem).payload;
 
-  const progressRecord = storeProgress[appletId][flowId][eventId];
-
-  const { activityStorageRecord, clearActivityStorageRecord } =
-    PassSurveyModel.useActivityState({
-      appletId,
-      activityId,
-      eventId,
-      order,
-    });
-
   const {
     isCompleted,
     isPostponed,
     isLoading,
     isError,
     process: processQueue,
-    push: pushInQueue,
   } = useQueueProcessing();
 
   const { openAlert: openRetryAlert } = useRetryUpload({
@@ -151,10 +112,18 @@ function Intermediate({
     },
   });
 
+  const { process: processWithAutocompletion } = useAutoCompletion();
+
+  const getAppletName = useCallback(() => {
+    return new QueryDataUtils(queryClient).getAppletDto(appletId)?.displayName;
+  }, [appletId, queryClient]);
+
   const changeActivity = useCallback(() => {
     AnalyticsService.track(MixEvents.AssessmentCompleted, {
       [MixProperties.AppletId]: appletId,
     });
+
+    const appletName = getAppletName();
 
     Logger.log(
       `[Intermediate.completeActivity]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivityPayload.activityName}|${nextActivityPayload.activityId}", applet "${appletName}|${appletId}"`,
@@ -187,107 +156,35 @@ function Intermediate({
     activityName,
     activityId,
     flowName,
-    appletName,
+    getAppletName,
   ]);
 
   async function completeActivity() {
-    if (!activityStorageRecord) {
-      return;
-    }
-
-    if (!appletEncryption) {
-      throw new Error('Encryption params is undefined');
-    }
-
-    await createSvgFiles(
-      activityStorageRecord.items,
-      activityStorageRecord.answers,
+    const constructCompletionService = new ConstructCompletionsService(
+      saveActivitySummary,
+      queryClient,
+      storeProgress,
+      QueueProcessingService,
+      dispatch,
     );
 
-    if (activityStorageRecord.hasSummary) {
-      const summaryAlerts: AnswerAlerts =
-        PassSurveyModel.AlertsExtractor.extractForSummary(
-          activityStorageRecord.items,
-          activityStorageRecord.answers,
-          activityName,
-        );
-
-      const scores: ScoreRecord[] = PassSurveyModel.ScoresExtractor.extract(
-        activityStorageRecord.items,
-        activityStorageRecord.answers,
-        activityStorageRecord.scoreSettings,
-        activityName,
-      );
-
-      saveActivitySummary({
-        activityId,
-        order,
-        alerts: summaryAlerts,
-        scores: {
-          activityName,
-          scores,
-        },
-      });
-    }
-
-    const alerts = mapAnswersToAlerts(
-      activityStorageRecord.items,
-      activityStorageRecord.answers,
-    );
-
-    const originalItems = activityStorageRecord.context
-      .originalItems as InitializeHiddenItem[];
-
-    const answers = mapAnswersToDto(
-      activityStorageRecord.items,
-      activityStorageRecord.answers,
-    );
-
-    const userActions = mapUserActionsToDto(activityStorageRecord.actions);
-
-    const itemIds = getItemIds(activityStorageRecord.items);
-
-    const { itemIds: modifiedItemIds, answers: modifiedAnswers } =
-      fillNullsForHiddenItems(itemIds, answers, originalItems);
-
-    const executionGroupKey = getExecutionGroupKey(progressRecord);
-
-    const userIdentifier = getUserIdentifier(
-      activityStorageRecord.items,
-      activityStorageRecord.answers,
-    );
-
-    Logger.log(
-      `[Intermediate.completeActivity]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" completed, applet "${appletName}|${appletId}"`,
-    );
-
-    pushInQueue({
+    await constructCompletionService.construct({
+      activityId,
+      activityName,
       appletId,
-      createdAt: Date.now(),
-      version: activityStorageRecord.appletVersion,
-      answers: modifiedAnswers,
-      userActions,
-      itemIds: modifiedItemIds,
-      appletEncryption,
-      flowId: flowId ?? null,
-      activityId: activityId,
-      executionGroupKey,
-      userIdentifier,
-      startTime: getActivityStartAt(progressRecord)!,
-      endTime: Date.now(),
-      scheduledTime: scheduledDate ?? undefined,
-      logActivityName: activityName,
-      logCompletedAt: new Date().toString(),
-      client: getClientInformation(),
-      alerts,
       eventId,
-      isFlowCompleted: false,
-      tzOffset: getTimezoneOffset(),
+      flowId,
+      order,
+      completionType: 'intermediate',
     });
 
-    clearActivityStorageRecord();
+    const exclude: EntityPathParams = {
+      appletId,
+      entityId: flowId ?? activityId,
+      eventId,
+    };
 
-    const success = await processQueue();
+    const success = await processWithAutocompletion(exclude);
 
     if (!success) {
       openRetryAlert();

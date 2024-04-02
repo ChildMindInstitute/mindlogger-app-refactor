@@ -4,14 +4,15 @@ import { AccessibilityProps } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Text } from '@app/shared/ui';
-import { AnalyticsService, MixEvents } from '@shared/lib';
+import { AnalyticsService, MixEvents, useUploadObservable } from '@shared/lib';
 
-import useQueueProcessing from '../lib/hooks/useQueueProcessing';
+import { useAutoCompletion } from '../model';
 
 type Props = AccessibilityProps;
 
 const UploadRetryBanner: FC<Props> = () => {
-  const { isLoading, hasItemsInQueue, process } = useQueueProcessing();
+  const { hasItemsInQueue, process } = useAutoCompletion();
+  const { isUploading } = useUploadObservable();
 
   const { t } = useTranslation();
 
@@ -27,7 +28,7 @@ const UploadRetryBanner: FC<Props> = () => {
   return (
     <Box h={50} px={18} bw={1} boc="$grey" bc="$alertLight">
       <Box jc="space-between" ai="center" flexDirection="row" flex={1}>
-        <Text flex={1} fos={15}>
+        <Text flex={1} fos={14}>
           {t('additional:data_not_sent')}
         </Text>
 
@@ -36,11 +37,11 @@ const UploadRetryBanner: FC<Props> = () => {
             bg="transparent"
             accessibilityLabel="upload-banner-btn"
             spinnerColor="black"
-            isLoading={isLoading}
+            isLoading={isUploading}
             onPress={onRetry}
           >
             <Text fos={16} fontWeight="700">
-              {t('additional:retry')}
+              {t('additional:send')}
             </Text>
           </Button>
         </Box>
