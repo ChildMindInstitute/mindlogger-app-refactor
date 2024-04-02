@@ -26,7 +26,10 @@ class MixpanelAnalytics implements IAnalyticsService {
     return !!this.mixpanel;
   }
 
-  init(): Promise<void> {
+  async init(): Promise<void> {
+    if (!this.hasInstance()) {
+      return;
+    }
     return this.mixpanel!.init(undefined, {
       [MixProperties.MindLoggerVersion]: APP_VERSION,
     });
@@ -36,14 +39,17 @@ class MixpanelAnalytics implements IAnalyticsService {
     this.mixpanel?.track(action, payload);
   }
 
-  login(id: string): Promise<void> {
+  async login(id: string): Promise<void> {
+    if (!this.hasInstance()) {
+      return;
+    }
     return this.mixpanel!.identify(id).then(() => {
       this.mixpanel?.getPeople()?.set('User ID', id);
     });
   }
 
   logout(): void {
-    this.mixpanel!.reset();
+    this.mixpanel?.reset();
   }
 }
 

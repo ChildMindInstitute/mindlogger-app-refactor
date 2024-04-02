@@ -44,7 +44,6 @@ const AnalyticsService = {
       service = new MixpanelAnalytics(MIXPANEL_TOKEN!);
       return service.init();
     }
-    return Promise.resolve();
   },
   hasInstance: () => service.hasInstance(),
   track(action: string, payload?: Record<string, any>) {
