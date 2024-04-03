@@ -1,4 +1,4 @@
-import { getEquidistantPoint, UtilsPath } from './calculation';
+import { getEquidistantPoint, Path } from './calculation';
 
 describe('Test getEquidistantPoint function', () => {
   const negativeTests = [
@@ -18,7 +18,7 @@ describe('Test getEquidistantPoint function', () => {
 
   negativeTests.forEach(({ points }) => {
     it(`Should return null when number of points is ${points.length}`, () => {
-      const result = getEquidistantPoint(new UtilsPath(points));
+      const result = getEquidistantPoint(new Path(points));
 
       expect(result).toEqual(null);
     });
@@ -93,7 +93,7 @@ describe('Test getEquidistantPoint function', () => {
     it(`Should return ${JSON.stringify(
       expectedResult,
     )} when number of points is ${points.length}`, () => {
-      const result = getEquidistantPoint(new UtilsPath(points));
+      const result = getEquidistantPoint(new Path(points));
 
       expect(result).toEqual(expectedResult);
     });
