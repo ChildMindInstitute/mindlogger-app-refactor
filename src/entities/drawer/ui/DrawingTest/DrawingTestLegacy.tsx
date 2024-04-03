@@ -13,7 +13,7 @@ const RectPadding = 15;
 
 type Props = Omit<DrawingTestProps, 'ratio'>;
 
-const DrawingTest: FC<Props> = props => {
+const DrawingTestLegacy: FC<Props> = props => {
   const [width, setWidth] = useState<number | null>(null);
 
   const { value, backgroundImageUrl, imageUrl, onLog } = props;
@@ -80,4 +80,4 @@ const DrawingTest: FC<Props> = props => {
   );
 };
 
-export default DrawingTest;
+export default DrawingTestLegacy;

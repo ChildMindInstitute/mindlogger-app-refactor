@@ -15,7 +15,7 @@ type Props = DrawingTestProps & {
   ratio: Ratio;
 };
 
-const DrawingTest: FC<Props> = props => {
+const DrawingTestWithRatio: FC<Props> = props => {
   const [canvasWidth, setCanvasWidth] = useState<number>(0);
 
   const { value, backgroundImageUrl, imageUrl, onLog, ratio } = props;
@@ -85,4 +85,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DrawingTest;
+export default DrawingTestWithRatio;
