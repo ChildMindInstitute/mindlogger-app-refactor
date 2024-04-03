@@ -3,22 +3,15 @@ import { FC, useState } from 'react';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
-import { Box, BoxProps, XStack } from '@app/shared/ui';
-import { DrawingStreamEvent, StreamEventLoggable } from '@shared/lib';
+import { XStack, YStack } from '@app/shared/ui';
 
-import DrawingBoard from './DrawingBoard';
-import { DrawLine, DrawResult, SvgFileManager } from '../lib';
+import { DrawingTestProps } from './DrawingTest';
+import { DrawResult, SvgFileManager } from '../../lib';
+import DrawingBoard from '../DrawingBoard';
 
 const RectPadding = 15;
 
-type Props = {
-  value: { lines: DrawLine[]; fileName: string | null };
-  imageUrl: string | null;
-  backgroundImageUrl: string | null;
-  onResult: (result: DrawResult) => void;
-  toggleScroll: (isScrollEnabled: boolean) => void;
-} & StreamEventLoggable<DrawingStreamEvent> &
-  BoxProps;
+type Props = Omit<DrawingTestProps, 'ratio'>;
 
 const DrawingTest: FC<Props> = props => {
   const [width, setWidth] = useState<number | null>(null);
@@ -38,8 +31,9 @@ const DrawingTest: FC<Props> = props => {
   };
 
   return (
-    <Box
+    <YStack
       {...props}
+      alignItems="center"
       onLayout={x => {
         const containerWidth = x.nativeEvent.layout.width - RectPadding * 2;
 
@@ -65,7 +59,7 @@ const DrawingTest: FC<Props> = props => {
       )}
 
       {!!width && (
-        <XStack jc="center">
+        <XStack jc="center" width={width} height={width}>
           {!!backgroundImageUrl && (
             <CachedImage
               source={backgroundImageUrl}
@@ -82,7 +76,7 @@ const DrawingTest: FC<Props> = props => {
           />
         </XStack>
       )}
-    </Box>
+    </YStack>
   );
 };
 

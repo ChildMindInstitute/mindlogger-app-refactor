@@ -82,6 +82,17 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
     config: {
       imageUrl: dto.responseValues.drawingExample,
       backgroundImageUrl: dto.responseValues.drawingBackground,
+      ratio: dto.responseValues.proportion?.enabled
+        ? /*
+           * For now, we set 1 / 1 ratio as a default value.
+           * When business requirements are ready and the backend changes are deployed,
+           * we will use the values provided by Backend.
+           */
+          {
+            exampleImage: 1,
+            canvas: 1,
+          }
+        : null,
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,

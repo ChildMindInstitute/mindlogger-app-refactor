@@ -38,6 +38,10 @@ export type StabilityTrackerConfig = {
 type DrawingTestTestConfig = {
   imageUrl: string | null;
   backgroundImageUrl: string | null;
+  ratio: {
+    exampleImage: number;
+    canvas: number;
+  } | null;
 };
 
 type TextInputConfig = {

@@ -67,6 +67,10 @@ type SplashPayload = { imageUrl: string };
 type DrawingPayload = {
   imageUrl: string | null;
   backgroundImageUrl: string | null;
+  ratio: {
+    exampleImage: number;
+    canvas: number;
+  } | null;
 };
 
 type SliderPayload = {

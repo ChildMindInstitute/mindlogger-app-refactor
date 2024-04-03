@@ -1,1 +1,1 @@
-export { default as DrawingTest } from './DrawingTest';
+export * from './DrawingTest';

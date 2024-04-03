@@ -1,10 +1,4 @@
-import {
-  forwardRef,
-  memo,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from 'react';
+import { forwardRef, memo, useImperativeHandle, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { Canvas, Group, Path, Skia, SkPath } from '@shopify/react-native-skia';
@@ -27,7 +21,6 @@ export type SketchCanvasRef = {
 
 type Props = {
   initialLines: Array<Point[]>;
-  width: number;
   onStrokeStart: (x: number, y: number, time: number) => void;
   onStrokeChanged: (x: number, y: number, time: number) => void;
   onStrokeEnd: () => void;
@@ -36,8 +29,7 @@ type Props = {
 const MAX_POINTS_PER_LINE = 50;
 
 const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
-  const { initialLines, width, onStrokeStart, onStrokeChanged, onStrokeEnd } =
-    props;
+  const { initialLines, onStrokeStart, onStrokeChanged, onStrokeEnd } = props;
 
   const [paths, setPaths] = useState<Array<SkPath>>(() =>
     initialLines.map(points => createPathFromPoints(points)),
@@ -49,6 +41,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
 
   const activePath = useSharedValue<SkPath>(Skia.Path.Make());
   const tempPath = useSharedValue<SkPath>(Skia.Path.Make());
+  const width = useSharedValue(0);
 
   useImperativeHandle(ref, () => {
     return {
@@ -148,18 +141,12 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     { onTouchStart, onTouchProgress, onTouchEnd },
   );
 
-  const styles = useMemo(
-    () =>
-      StyleSheet.flatten({
-        width,
-        height: width,
-      }),
-    [width],
-  );
-
   return (
     <GestureDetector gesture={drawingGesture}>
-      <Canvas style={styles}>
+      <Canvas
+        style={styles.canvas}
+        onLayout={e => (width.value = e.nativeEvent.layout.width)}
+      >
         <Group>
           <DrawnPaths paths={paths} />
 
@@ -202,5 +189,11 @@ const DrawnPaths = memo(
   ),
   (prevProps, nextProps) => prevProps.paths.length === nextProps.paths.length,
 );
+
+const styles = StyleSheet.create({
+  canvas: {
+    flex: 1,
+  },
+});
 
 export default SketchCanvas;
