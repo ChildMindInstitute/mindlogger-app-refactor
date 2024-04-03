@@ -38,12 +38,12 @@ export const getDistance = (from: Point, to: Point): number => {
 
 const MaxDistanceDiff = 10000;
 
-interface IPath {
-  getPoint: (index: number) => Point;
-  countPoints: () => number;
+interface IUtilsPath {
+  getPoint(index: number): Point;
+  countPoints(): number;
 }
 
-export class Path implements IPath {
+export class UtilsPath implements IUtilsPath {
   private points: Point[];
 
   constructor(points: Point[]) {
@@ -59,7 +59,7 @@ export class Path implements IPath {
   }
 }
 
-export const getEquidistantPoint = (errorPath: IPath): Point | null => {
+export const getEquidistantPoint = (errorPath: IUtilsPath): Point | null => {
   const points: Point[] = [];
 
   const totalPoints = errorPath.countPoints();

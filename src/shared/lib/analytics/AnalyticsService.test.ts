@@ -66,6 +66,10 @@ jest.mock('../storages', () => ({
 import AnalyticsService, { MixEvents, MixProperties } from './AnalyticsService';
 
 describe('Test AnalyticsService and MixpanelAnalytics', () => {
+  beforeAll(() => {
+    AnalyticsService.shouldEnableMixpanel = jest.fn().mockReturnValue(true);
+  });
+
   beforeEach(() => {
     constructorMock.mockReset();
     initMock.mockReset();
@@ -144,7 +148,7 @@ describe('Test AnalyticsService and MixpanelAnalytics', () => {
 
 describe('Test AnalyticsService and MixpanelAnalytics when Mixpanel instance is not created', () => {
   beforeAll(() => {
-    AnalyticsService.hasInstance = jest.fn().mockReturnValue(false);
+    AnalyticsService.shouldEnableMixpanel = jest.fn().mockReturnValue(false);
   });
 
   beforeEach(() => {
