@@ -165,9 +165,11 @@ function useActivityState({
   }
 
   function trackUserAction(action: UserAction) {
+    const currentStorageRecord = getCurrentActivityStorageRecord()!;
+
     upsertActivityStorageRecord({
-      ...getCurrentActivityStorageRecord()!,
-      actions: addUserAction(action),
+      ...currentStorageRecord,
+      actions: [...currentStorageRecord.actions, action],
     });
   }
 

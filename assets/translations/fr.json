@@ -556,5 +556,11 @@
   },
   "system": {
     "migration_not_applied_text": "La migration des données n'a pas été appliquée avec succès. Veuillez contacter le support."
+  },
+  "activity_skip_popup" : {
+    "popup_title": "Passer à l'essai suivant ?",
+    "popup_description": "Cet essai est incomplet. Si vous passez à l'essai suivant, votre progression sera sauvegardée. Vous ne pourrez pas terminer cet essai ultérieurement.",
+    "keep_working": "Continuer",
+    "skip": "Passer"
   }
 }

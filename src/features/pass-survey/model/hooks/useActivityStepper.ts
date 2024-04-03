@@ -15,10 +15,18 @@ function useActivityStepper(state: ActivityState | undefined) {
   const step = state?.step ?? 0;
   const items = state?.items ?? [];
   const answers = state?.answers ?? {};
+  const actions = state?.actions ?? [];
 
+  const lastAction = actions[actions.length - 1];
   const currentPipelineItem = state?.items[step];
+  const nextPipelineItem = state?.items[step + 1];
+
+  const shouldSkipNextUserAction =
+    lastAction?.type === 'SKIP_POPUP_CONFIRM' &&
+    nextPipelineItem?.type === 'Tutorial';
 
   const isTutorialStep = currentPipelineItem?.type === 'Tutorial';
+  const isAbTestStep = currentPipelineItem?.type === 'AbTest';
   const isMessageStep = currentPipelineItem?.type === 'Message';
   const isSplashStep = currentPipelineItem?.type === 'Splash';
   const isFirstStep = step === 0;
@@ -38,6 +46,7 @@ function useActivityStepper(state: ActivityState | undefined) {
   const canMoveNext =
     isTutorialStep ||
     isMessageStep ||
+    isAbTestStep ||
     currentPipelineItem?.isSkippable ||
     (hasAnswer && (!additionalAnswerRequired || hasAdditionalAnswer));
   const canMoveBack = currentPipelineItem?.isAbleToMoveBack;
@@ -72,6 +81,7 @@ function useActivityStepper(state: ActivityState | undefined) {
     isFirstStep,
     isLastStep,
     isConditionalLogicItem,
+    shouldSkipNextUserAction,
 
     canSkip,
     canMoveNext,

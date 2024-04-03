@@ -1,5 +1,5 @@
 import { useContext, useRef } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppletDetailsQuery } from '@app/entities/applet';
 import { HourMinute } from '@app/shared/lib';
 import TimeRemaining from '@app/shared/ui/TimeRemaining';
+import { AbTestResult } from '@entities/abTrail';
 import {
   ActivityIndicator,
   Box,
@@ -81,6 +82,7 @@ function ActivityStepper({
     isFirstStep,
     isTutorialStep,
     isConditionalLogicItem,
+    shouldSkipNextUserAction,
 
     canMoveNext,
     canMoveBack,
@@ -136,7 +138,7 @@ function ActivityStepper({
 
     if (canSkip) {
       trackUserAction(userActionCreator.skip());
-    } else {
+    } else if (!shouldSkipNextUserAction) {
       trackUserAction(userActionCreator.next());
     }
   };
@@ -148,7 +150,33 @@ function ActivityStepper({
     trackUserAction(userActionCreator.back());
   };
 
-  const onBeforeNext = (): number => {
+  const fetchSkipActivityUserConfirmation = () => {
+    return new Promise(resolve => {
+      Alert.alert(
+        t('activity_skip_popup:popup_title'),
+        t('activity_skip_popup:popup_description'),
+        [
+          {
+            text: t('activity_skip_popup:keep_working'),
+            onPress: () => {
+              resolve(false);
+            },
+            style: 'cancel',
+          },
+
+          {
+            text: t('activity_skip_popup:skip'),
+            onPress: () => {
+              resolve(true);
+            },
+            style: 'default',
+          },
+        ],
+      );
+    });
+  };
+
+  const onBeforeNext = async (): Promise<number> => {
     if (!isValid()) {
       return 0;
     }
@@ -175,6 +203,30 @@ function ActivityStepper({
       );
 
       return nextStepIndex === null ? 1 : nextStepIndex - currentStep;
+    }
+
+    if (currentItem.type === 'AbTest') {
+      const stepAnswer = activityStorageRecord?.answers[currentStep]?.answer as
+        | AbTestResult
+        | undefined;
+
+      const roundCompleted =
+        stepAnswer && stepAnswer.currentIndex === stepAnswer.maximumIndex;
+
+      if (roundCompleted) {
+        return 1;
+      }
+
+      trackUserAction(userActionCreator.next());
+      const shouldSkipRound = await fetchSkipActivityUserConfirmation();
+
+      if (shouldSkipRound) {
+        trackUserAction(userActionCreator.saveAndProceedPopupConfirm());
+        return 1;
+      } else {
+        trackUserAction(userActionCreator.saveAndProceedPopupCancel());
+        return 0;
+      }
     }
 
     if (isConditionalLogicItem) {

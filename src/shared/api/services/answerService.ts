@@ -80,6 +80,7 @@ export type AbTestAnswerDto = {
   updated: true;
   lines: AbLogLineDto[];
   currentIndex: number;
+  maximumIndex: number;
 };
 
 export type TimeRangeAnswerDto = {
@@ -166,7 +167,15 @@ export type EncryptedAnswerDto = {
 };
 
 export type UserActionDto = {
-  type: 'SET_ANSWER' | 'PREV' | 'NEXT' | 'DONE' | 'UNDO' | 'SKIP';
+  type:
+    | 'SET_ANSWER'
+    | 'PREV'
+    | 'NEXT'
+    | 'DONE'
+    | 'UNDO'
+    | 'SKIP'
+    | 'SKIP_POPUP_CONFIRM'
+    | 'SKIP_POPUP_CANCEL';
   screen: string;
   time: number;
   response?: AnswerDto;

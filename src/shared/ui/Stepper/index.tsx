@@ -23,7 +23,7 @@ type Props = PropsWithChildren<{
   onBack?: (step: number) => void;
   onUndo?: (step: number) => void;
 
-  onBeforeNext?: (step: number) => number;
+  onBeforeNext?: (step: number) => Promise<number>;
   onBeforeBack?: (step: number) => number;
 
   onStartReached?: () => void;
@@ -72,7 +72,7 @@ export function Stepper({
   const stepRef = useRef(startFrom ?? 0);
 
   const next = useCallback(
-    ({
+    async ({
       isForced,
       shouldAutoSubmit,
     }: {
@@ -80,7 +80,7 @@ export function Stepper({
       shouldAutoSubmit: boolean;
     }) => {
       const step = stepRef.current;
-      const stepShift = onBeforeNextRef.current?.(step) ?? 1;
+      const stepShift = (await onBeforeNextRef.current?.(step)) ?? 1;
       const nextStep = step + stepShift;
 
       const moved = viewSliderRef.current?.next(stepShift);

@@ -285,6 +285,12 @@ const AbCanvas: FC<Props> = props => {
         x.actual = mark.actual ?? null;
       }
     });
+
+    onLogResult({
+      lines: logLines,
+      currentIndex: getCurrentIndex() + 1,
+      maximumIndex: testData.nodes.length,
+    });
   };
 
   const getGreenPointIndex = () => {
@@ -354,10 +360,6 @@ const AbCanvas: FC<Props> = props => {
       addOverCorrectPointToStream(point);
       keepPathInState();
       resetCurrentPath();
-      onLogResult({
-        lines: logLines,
-        currentIndex: getCurrentIndex() + 1,
-      });
       onMessage(MessageType.Completed);
       onComplete();
 

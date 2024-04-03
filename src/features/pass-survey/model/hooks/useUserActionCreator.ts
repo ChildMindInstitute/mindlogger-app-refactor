@@ -33,6 +33,14 @@ function useUserActionCreator({ activityId, activityState }: Args) {
       type: 'SKIP',
       payload: getDefaultUserEventPayload(),
     }),
+    saveAndProceedPopupConfirm: () => ({
+      type: 'SKIP_POPUP_CONFIRM',
+      payload: getDefaultUserEventPayload(),
+    }),
+    saveAndProceedPopupCancel: () => ({
+      type: 'SKIP_POPUP_CANCEL',
+      payload: getDefaultUserEventPayload(),
+    }),
     setAnswer: (answer: PipelineItemAnswerBase) => {
       return {
         type: 'SET_ANSWER',

@@ -447,5 +447,11 @@
   },
   "system": {
     "migration_not_applied_text": "Data migration was not successfully applied. Please, contact support."
+  },
+  "activity_skip_popup" : {
+    "popup_title": "Skip to the next trial?",
+    "popup_description": "This trial is incomplete. If you skip to the next trial, your progress will be saved. You won't be able to finish this trial later.",
+    "keep_working": "Keep working",
+    "skip": "Skip"
   }
 }
