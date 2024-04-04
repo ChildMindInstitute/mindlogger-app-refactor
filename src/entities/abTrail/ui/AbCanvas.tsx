@@ -71,7 +71,6 @@ const AbCanvas: FC<Props> = props => {
 
   const {
     testData,
-    onLogResult,
     onComplete,
     onMessage,
     width,
@@ -288,7 +287,7 @@ const AbCanvas: FC<Props> = props => {
   };
 
   const onResult = () => {
-    onLogResult({
+    props.onLogResult({
       lines: logLines,
       currentIndex: getCurrentIndex() + 1,
       maximumIndex: testData.nodes.length,
@@ -357,9 +356,10 @@ const AbCanvas: FC<Props> = props => {
       resetCloseToNextRerendered();
     }
 
+    onResult();
+
     if (isOverNext(point) && isOverLast(point)) {
       markLastLogPoints({ valid: true });
-      onResult();
       addOverCorrectPointToStream(point);
       keepPathInState();
       resetCurrentPath();
@@ -371,7 +371,6 @@ const AbCanvas: FC<Props> = props => {
 
     if (isOverNext(point)) {
       markLastLogPoints({ valid: true });
-      onResult();
       addOverCorrectPointToStream(point);
       keepPathInState();
       reCreatePath(point);
@@ -383,7 +382,6 @@ const AbCanvas: FC<Props> = props => {
     if (isOverWrong(point)) {
       const node = findNodeByPoint(point)!;
       markLastLogPoints({ valid: false, actual: node.label });
-      onResult();
       setErrorPath(currentPath);
       resetCurrentPath();
       setFlareGreenPointIndex({ index: getCurrentIndex() });

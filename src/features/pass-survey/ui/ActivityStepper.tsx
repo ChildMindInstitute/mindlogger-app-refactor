@@ -197,10 +197,10 @@ function ActivityStepper({
       const shouldSkipRound = await fetchSkipActivityUserConfirmation();
 
       if (shouldSkipRound) {
-        skipService.onSkip();
+        skipService.skip();
         return 1;
       } else {
-        skipService.onProceed();
+        skipService.proceed();
         return 0;
       }
     }
