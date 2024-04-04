@@ -130,6 +130,11 @@
 		F80121732A017AB300F31D91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F80121712A017AB300F31D91 /* GoogleService-Info.plist */; };
 		F80121762A017B2300F31D91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F80121742A017B2300F31D91 /* GoogleService-Info.plist */; };
 		F801217A2A017BAF00F31D91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F80121792A017BAF00F31D91 /* GoogleService-Info.plist */; };
+		F802B1982BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F802B1972BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy */; };
+		F802B1992BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F802B1972BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy */; };
+		F802B19A2BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F802B1972BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy */; };
+		F802B19B2BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F802B1972BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy */; };
+		F802B19C2BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F802B1972BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy */; };
 		F83E654F29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */; };
 		F83E655029FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */; };
 		F83E655129FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */; };
@@ -271,6 +276,7 @@
 		F80121712A017AB300F31D91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F80121742A017B2300F31D91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F80121792A017BAF00F31D91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F802B1972BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		F82B3DAA2A54358900426E53 /* MindloggerMobileDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MindloggerMobileDebug.entitlements; path = MindloggerMobile/MindloggerMobileDebug.entitlements; sourceTree = "<group>"; };
 		F82B3DAB2A54358E00426E53 /* MindloggerMobileDevDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileDevDebug.entitlements; sourceTree = "<group>"; };
 		F82B3DAC2A54359300426E53 /* MindloggerMobileQADebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileQADebug.entitlements; sourceTree = "<group>"; };
@@ -462,6 +468,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				F802B1972BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy */,
 				F82B3DAD2A54359600426E53 /* MindloggerMobileStagingDebug.entitlements */,
 				F82B3DAC2A54359300426E53 /* MindloggerMobileQADebug.entitlements */,
 				F82B3DAB2A54358E00426E53 /* MindloggerMobileDevDebug.entitlements */,
@@ -751,6 +758,7 @@
 				4E30A59B2962C3D60032C2A8 /* AntDesign.ttf in Resources */,
 				4EBCD5B22971514E00D3C04C /* Foundation.ttf in Resources */,
 				A24425132B6D903700EDDAF4 /* Feather.ttf in Resources */,
+				F802B1982BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy in Resources */,
 				F83E655429FA845400D57006 /* Settings.bundle in Resources */,
 				4E30A5952962BE4F0032C2A8 /* FontAwesome.ttf in Resources */,
 				4E30A5942962BE4F0032C2A8 /* FontAwesome5_Regular.ttf in Resources */,
@@ -772,6 +780,7 @@
 				4E5906BB2987C41300A5D9E5 /* Foundation.ttf in Resources */,
 				F87E175429771F200021550E /* AntDesign.ttf in Resources */,
 				A24425152B6D903700EDDAF4 /* Feather.ttf in Resources */,
+				F802B1992BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy in Resources */,
 				F83E655529FA845400D57006 /* Settings.bundle in Resources */,
 				F87E175529771F200021550E /* FontAwesome.ttf in Resources */,
 				F87E175629771F200021550E /* FontAwesome5_Regular.ttf in Resources */,
@@ -793,6 +802,7 @@
 				4E5906BC2987C41700A5D9E5 /* Foundation.ttf in Resources */,
 				F87E176B29771F290021550E /* AntDesign.ttf in Resources */,
 				A24425162B6D903700EDDAF4 /* Feather.ttf in Resources */,
+				F802B19A2BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy in Resources */,
 				F83E655629FA845400D57006 /* Settings.bundle in Resources */,
 				F87E176C29771F290021550E /* FontAwesome.ttf in Resources */,
 				F87E176D29771F290021550E /* FontAwesome5_Regular.ttf in Resources */,
@@ -814,6 +824,7 @@
 				4E5906BD2987C41B00A5D9E5 /* Foundation.ttf in Resources */,
 				F87E178229771F310021550E /* AntDesign.ttf in Resources */,
 				A24425172B6D903700EDDAF4 /* Feather.ttf in Resources */,
+				F802B19B2BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy in Resources */,
 				F83E655729FA845400D57006 /* Settings.bundle in Resources */,
 				F87E178329771F310021550E /* FontAwesome.ttf in Resources */,
 				F87E178429771F310021550E /* FontAwesome5_Regular.ttf in Resources */,
@@ -835,6 +846,7 @@
 				F8EF45612A975A9200EEC085 /* Foundation.ttf in Resources */,
 				F8EF45622A975A9200EEC085 /* AntDesign.ttf in Resources */,
 				A24425182B6D903700EDDAF4 /* Feather.ttf in Resources */,
+				F802B19C2BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy in Resources */,
 				F8EF45632A975A9200EEC085 /* Settings.bundle in Resources */,
 				F8EF45642A975A9200EEC085 /* FontAwesome.ttf in Resources */,
 				F8EF45652A975A9200EEC085 /* FontAwesome5_Regular.ttf in Resources */,
