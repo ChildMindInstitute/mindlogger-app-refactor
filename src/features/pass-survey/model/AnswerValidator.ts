@@ -9,7 +9,19 @@ type AnswerValidatorArgs = {
   step: number;
 };
 
-function AnswerValidator(params?: AnswerValidatorArgs) {
+export interface IAnswerValidator {
+  isCorrect(): boolean;
+  isBetweenValues(min: number, max: number): boolean;
+  isOutsideOfValues(min: number, max: number): boolean;
+  isEqualToValue(value: any): boolean;
+  isEqualToOption(optionValue: string): boolean;
+  isGreaterThen(value: number): boolean;
+  isLessThen(value: number): boolean;
+  includesOption(optionValue: string): boolean;
+  notIncludesOption(optionValue: string): boolean;
+}
+
+function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator {
   const { items, answers, step = 0 } = params ?? {};
   const currentPipelineItem = items?.[step];
   const currentAnswer = answers?.[step];
