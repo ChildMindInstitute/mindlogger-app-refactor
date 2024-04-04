@@ -9,3 +9,29 @@ export function onIncorrectAnswerGiven() {
     },
   ]);
 }
+
+export function fetchSkipActivityUserConfirmation() {
+  return new Promise(resolve => {
+    Alert.alert(
+      i18n.t('activity_skip_popup:popup_title'),
+      i18n.t('activity_skip_popup:popup_description'),
+      [
+        {
+          text: i18n.t('activity_skip_popup:keep_working'),
+          onPress: () => {
+            resolve(false);
+          },
+          style: 'cancel',
+        },
+
+        {
+          text: i18n.t('activity_skip_popup:skip'),
+          onPress: () => {
+            resolve(true);
+          },
+          style: 'default',
+        },
+      ],
+    );
+  });
+}

@@ -1,5 +1,5 @@
 import { useContext, useRef } from 'react';
-import { StyleSheet, Alert } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,9 @@ import ActivityItem from './ActivityItem';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
 import {
   ActivityIdentityContext,
+  fetchSkipActivityUserConfirmation,
   FlankerResponse,
+  SkipService,
   useTextVariablesReplacer,
 } from '../lib';
 import { useActivityState, useActivityStepper, useIdleTimer } from '../model';
@@ -69,6 +71,13 @@ function ActivityStepper({
     activityId,
     eventId,
     order,
+  });
+
+  const skipService = new SkipService({
+    onSkip: () =>
+      trackUserAction(userActionCreator.saveAndProceedPopupConfirm()),
+    onProceed: () =>
+      trackUserAction(userActionCreator.saveAndProceedPopupCancel()),
   });
 
   const { replaceTextVariables } = useTextVariablesReplacer({
@@ -150,32 +159,6 @@ function ActivityStepper({
     trackUserAction(userActionCreator.back());
   };
 
-  const fetchSkipActivityUserConfirmation = () => {
-    return new Promise(resolve => {
-      Alert.alert(
-        t('activity_skip_popup:popup_title'),
-        t('activity_skip_popup:popup_description'),
-        [
-          {
-            text: t('activity_skip_popup:keep_working'),
-            onPress: () => {
-              resolve(false);
-            },
-            style: 'cancel',
-          },
-
-          {
-            text: t('activity_skip_popup:skip'),
-            onPress: () => {
-              resolve(true);
-            },
-            style: 'default',
-          },
-        ],
-      );
-    });
-  };
-
   const onBeforeNext = async (): Promise<number> => {
     if (!isValid()) {
       return 0;
@@ -205,7 +188,7 @@ function ActivityStepper({
       return nextStepIndex === null ? 1 : nextStepIndex - currentStep;
     }
 
-    if (currentItem.type === 'AbTest') {
+    if (skipService.isSkippableItem(currentItem.type)) {
       const stepAnswer = activityStorageRecord?.answers[currentStep]?.answer as
         | AbTestResult
         | undefined;
@@ -221,10 +204,10 @@ function ActivityStepper({
       const shouldSkipRound = await fetchSkipActivityUserConfirmation();
 
       if (shouldSkipRound) {
-        trackUserAction(userActionCreator.saveAndProceedPopupConfirm());
+        skipService.onSkip();
         return 1;
       } else {
-        trackUserAction(userActionCreator.saveAndProceedPopupCancel());
+        skipService.onProceed();
         return 0;
       }
     }
