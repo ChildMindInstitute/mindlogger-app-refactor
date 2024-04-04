@@ -36,7 +36,7 @@ type Props = {
   testData: AbTestPayload;
   readonly: boolean;
   width: number;
-  onLogResult: (data: OnResultLog) => void;
+  onResult: (data: OnResultLog) => void;
   onMessage: (message: MessageType) => void;
   onComplete: () => void;
 } & StreamEventLoggable<AbTestStreamEvent> &
@@ -287,7 +287,7 @@ const AbCanvas: FC<Props> = props => {
   };
 
   const onResult = () => {
-    props.onLogResult({
+    props.onResult({
       lines: logLines,
       currentIndex: getCurrentIndex() + 1,
       maximumIndex: testData.nodes.length,
