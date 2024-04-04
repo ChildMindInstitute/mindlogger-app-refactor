@@ -8,7 +8,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppletDetailsQuery } from '@app/entities/applet';
 import { HourMinute } from '@app/shared/lib';
 import TimeRemaining from '@app/shared/ui/TimeRemaining';
-import { AbTestResult } from '@entities/abTrail';
 import {
   ActivityIndicator,
   Box,
@@ -188,18 +187,12 @@ function ActivityStepper({
       return nextStepIndex === null ? 1 : nextStepIndex - currentStep;
     }
 
-    if (skipService.isSkippableItem(currentItem.type)) {
-      const stepAnswer = activityStorageRecord?.answers[currentStep]?.answer as
-        | AbTestResult
-        | undefined;
-
-      const roundCompleted =
-        stepAnswer && stepAnswer.currentIndex === stepAnswer.maximumIndex;
-
-      if (roundCompleted) {
-        return 1;
-      }
-
+    if (
+      skipService.canSkip(
+        currentItem.type,
+        activityStorageRecord?.answers[currentStep],
+      )
+    ) {
       trackUserAction(userActionCreator.next());
       const shouldSkipRound = await fetchSkipActivityUserConfirmation();
 

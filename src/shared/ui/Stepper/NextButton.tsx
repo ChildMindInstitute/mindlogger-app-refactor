@@ -1,6 +1,8 @@
 import { PropsWithChildren, useCallback, useContext } from 'react';
 import { TouchableOpacity } from 'react-native';
 
+import { useDebouncedCallback } from 'use-debounce';
+
 import { colors } from '@shared/lib';
 import { RightArrowIcon } from '@shared/ui';
 
@@ -12,6 +14,8 @@ type Props = PropsWithChildren<{
   accessibilityLabel: string | null;
 }>;
 
+const DEBOUNCE_DELAY = 300;
+
 function NextButton({ children, isIcon, accessibilityLabel }: Props) {
   const { next } = useContext(HandlersContext);
 
@@ -19,11 +23,16 @@ function NextButton({ children, isIcon, accessibilityLabel }: Props) {
     next({ isForced: false, shouldAutoSubmit: true });
   }, [next]);
 
+  const onPressNextDebounced = useDebouncedCallback(
+    onPressNext,
+    DEBOUNCE_DELAY,
+  );
+
   if (isIcon) {
     return (
       <TouchableOpacity
         accessibilityLabel={`${accessibilityLabel}-top` ?? ''}
-        onPress={onPressNext}
+        onPress={onPressNextDebounced}
       >
         <RightArrowIcon color={colors.tertiary} size={30} />
       </TouchableOpacity>
@@ -33,7 +42,7 @@ function NextButton({ children, isIcon, accessibilityLabel }: Props) {
   return (
     <ActionButton
       accessibilityLabel={`${accessibilityLabel}-bottom` ?? ''}
-      onPress={onPressNext}
+      onPress={onPressNextDebounced}
     >
       {children}
     </ActionButton>

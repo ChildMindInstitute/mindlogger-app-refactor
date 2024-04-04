@@ -1,4 +1,4 @@
-import { PipelineItem } from '@features/pass-survey';
+import { AbTestResponse, Answer, PipelineItem } from '@features/pass-survey';
 
 type Params = {
   onSkip: () => void;
@@ -14,8 +14,16 @@ class SkipService {
     this.onSkip = params.onSkip;
   }
 
-  public isSkippableItem(itemType: PipelineItem['type']) {
-    return itemType === 'AbTest';
+  public canSkip(itemType: PipelineItem['type'], stepAnswer?: Answer) {
+    if (itemType !== 'AbTest') {
+      return false;
+    }
+    const answerValue = stepAnswer?.answer as AbTestResponse | undefined;
+
+    const roundCompleted =
+      answerValue && answerValue?.currentIndex === answerValue?.maximumIndex;
+
+    return !roundCompleted;
   }
 }
 
