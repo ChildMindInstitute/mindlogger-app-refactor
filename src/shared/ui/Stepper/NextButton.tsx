@@ -1,7 +1,7 @@
 import { PropsWithChildren, useCallback, useContext } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { useDebouncedCallback } from 'use-debounce';
+import { useThrottledCallback } from 'use-debounce';
 
 import { colors } from '@shared/lib';
 import { RightArrowIcon } from '@shared/ui';
@@ -14,7 +14,7 @@ type Props = PropsWithChildren<{
   accessibilityLabel: string | null;
 }>;
 
-const DEBOUNCE_DELAY = 300;
+const THROTTLE_DELAY = 300;
 
 function NextButton({ children, isIcon, accessibilityLabel }: Props) {
   const { next } = useContext(HandlersContext);
@@ -23,9 +23,13 @@ function NextButton({ children, isIcon, accessibilityLabel }: Props) {
     next({ isForced: false, shouldAutoSubmit: true });
   }, [next]);
 
-  const onPressNextDebounced = useDebouncedCallback(
+  const onPressNextDebounced = useThrottledCallback(
     onPressNext,
-    DEBOUNCE_DELAY,
+    THROTTLE_DELAY,
+    {
+      leading: true,
+      trailing: false,
+    },
   );
 
   if (isIcon) {
