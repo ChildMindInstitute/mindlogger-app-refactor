@@ -51,6 +51,8 @@ type Props = ActivityItemProps &
     context: Record<string, unknown>;
   };
 
+const HEIGHT_REDUCTION_FACTOR = 0.85;
+
 function ActivityItem({
   type,
   value,
@@ -67,6 +69,7 @@ function ActivityItem({
   const initialScrollEnabled = type !== 'StabilityTracker' && type !== 'AbTest';
 
   const [scrollEnabled, setScrollEnabled] = useState(initialScrollEnabled);
+  const [height, setHeight] = useState(0);
 
   const { sendLiveEvent } = useSendEvent(
     streamingDetails?.streamEnabled || false,
@@ -146,7 +149,7 @@ function ActivityItem({
 
     case 'DrawingTest':
       item = (
-        <Box flex={1} mb="$6">
+        <Box mb="$6" height={height * HEIGHT_REDUCTION_FACTOR}>
           <DrawingTest
             flex={1}
             {...pipelineItem.payload}
@@ -376,7 +379,15 @@ function ActivityItem({
 
   return (
     <ScrollableContent scrollEnabled={scrollEnabled}>
-      <Box flex={1} justifyContent="center">
+      <Box
+        flex={1}
+        justifyContent="center"
+        onLayout={e => {
+          if (!height) {
+            setHeight(e.nativeEvent.layout.height);
+          }
+        }}
+      >
         {question && (
           <Box mx={16} mb={20}>
             <MarkdownMessage
