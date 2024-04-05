@@ -36,13 +36,13 @@ const PasswordRecoveryForm: FC<Props> = props => {
       props.onPasswordRecoverySuccess();
       banner.show(t('password_recovery_form:success'), {
         type: 'success',
-        duration: 5000,
+        visibilityTime: 5000,
       });
     },
     onError: () => {
       banner.show(t('password_recovery_form:error'), {
         type: 'danger',
-        duration: 5000,
+        visibilityTime: 5000,
       });
     },
   });

@@ -1,5 +1,4 @@
-import Toast from 'react-native-toast-message';
-import type { ToastOptions } from 'react-native-toast-message/lib/src/types';
+import Toast, { ToastOptions } from 'react-native-toast-message';
 
 export const useBanner = () => {
   return {
