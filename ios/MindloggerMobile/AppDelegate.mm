@@ -4,8 +4,6 @@
 #import <React/RCTLinkingManager.h>
 #import <React/RCTRootView.h>
 
-#import <React/RCTAppSetupUtils.h>
-
 #import <Firebase.h>
 #import <TSBackgroundFetch/TSBackgroundFetch.h>
 #import "RNFBMessagingModule.h"
