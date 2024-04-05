@@ -41,8 +41,12 @@ jest.mock('react-i18next', () => ({
   })),
 }));
 
-describe('AudioStimulusItem', () => {
-  it('should render play button', () => {
+describe('Test AudioStimulusItem', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('Should render play button', () => {
     const audioPlayer = renderer.create(
       <TamaguiProvider>
         <AudioStimulusItem
@@ -63,7 +67,7 @@ describe('AudioStimulusItem', () => {
     expect(playButton.props.children).toBe('audio_player:play');
   });
 
-  it('should render pause button', () => {
+  it('Should render pause button', () => {
     jest.spyOn(hooks, 'useAudioPlayer').mockReturnValue({
       play: jest.fn(),
       pause: jest.fn(),
@@ -94,7 +98,7 @@ describe('AudioStimulusItem', () => {
     expect(playButton.props.children).toBe('audio_player:stop');
   });
 
-  it('should render activity indicator while loading', () => {
+  it('Should render activity indicator while loading', () => {
     jest.spyOn(hooks, 'useAudioPlayer').mockReturnValue({
       play: jest.fn(),
       pause: jest.fn(),
@@ -119,15 +123,17 @@ describe('AudioStimulusItem', () => {
     );
 
     const activityIndicator = audioPlayer.root.findByType(ActivityIndicator);
+
     const playButton = audioPlayer.root.findByProps({
       accessibilityLabel: 'audio-record-btn-text',
     });
 
     expect(Boolean(activityIndicator)).toBe(true);
+
     expect(playButton.props.children).toBe('audio_player:loading');
   });
 
-  it('should render correct button text if replay is not allowed', () => {
+  it('Should render correct button text if replay is not allowed', () => {
     jest.spyOn(hooks, 'useAudioPlayer').mockReturnValue({
       play: jest.fn(),
       pause: jest.fn(),
@@ -156,9 +162,5 @@ describe('AudioStimulusItem', () => {
     });
 
     expect(playButton.props.children).toBe('audio_player:playing');
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 });

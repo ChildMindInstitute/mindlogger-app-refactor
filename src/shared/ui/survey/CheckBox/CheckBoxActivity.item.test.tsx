@@ -3,6 +3,8 @@ import renderer from 'react-test-renderer';
 import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
 import { CheckBox, CheckBoxActivityItem, Item } from '@shared/ui';
 
+import CheckBoxItem from './CheckBox.item';
+
 const options: Item[] = [
   {
     id: '37269e0e-9220-4c53-b3e6-86ec70c6a1d1',
@@ -36,8 +38,8 @@ const options: Item[] = [
   },
 ];
 
-describe('CheckBoxActivityItem', () => {
-  it('should render correct initial state', () => {
+describe('Test CheckBoxActivityItem', () => {
+  it('Should render initial state when nothing is checked', () => {
     const config = {
       options: options,
       randomizeOptions: false,
@@ -45,6 +47,7 @@ describe('CheckBoxActivityItem', () => {
       setPalette: false,
       setAlerts: false,
     };
+
     const checkboxItem = renderer.create(
       <TamaguiProvider>
         <CheckBoxActivityItem
@@ -65,7 +68,7 @@ describe('CheckBoxActivityItem', () => {
     expect(checkedCheckboxes.length).toBe(0);
   });
 
-  it('should render correct values', () => {
+  it('Should render when 2 checkboxes checked', () => {
     const config = {
       options: options,
       randomizeOptions: false,
@@ -84,10 +87,17 @@ describe('CheckBoxActivityItem', () => {
       </TamaguiProvider>,
     );
 
+    const checkboxes = checkboxItem.root.findAllByType(CheckBox);
     const checkedCheckboxes = checkboxItem.root
       .findAllByType(CheckBox)
       .filter(i => i.props.value);
 
+    const checkedCheckboxesItems = checkboxItem.root
+      .findAllByType(CheckBoxItem)
+      .filter(i => i.props.value && ['1', '3'].includes(i.props.text));
+
+    expect(checkboxes.length).toBe(3);
     expect(checkedCheckboxes.length).toBe(2);
+    expect(checkedCheckboxesItems.length).toBe(2);
   });
 });

@@ -4,8 +4,8 @@ import renderer from 'react-test-renderer';
 import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
 import { DatePickerItem } from '@shared/ui';
 
-describe('DatePickerItem', () => {
-  it('should be rendered correctly with null value', () => {
+describe('Test DatePickerItem', () => {
+  it('Should render now date when value is null', () => {
     const datePickerComponent = renderer.create(
       <TamaguiProvider>
         <DatePickerItem value={null} onChange={jest.fn()} />
@@ -16,17 +16,18 @@ describe('DatePickerItem', () => {
       accessibilityLabel: 'date-picker',
     });
 
-    const valueProp = format(datePicker.props.value, 'yyyy-MM-dd');
-    const currentDate = format(new Date(), 'yyyy-MM-dd');
+    const resultProp = format(datePicker.props.value, 'yyyy-MM-dd');
 
-    expect(valueProp).toBe(currentDate);
+    const expectedDate = format(new Date(), 'yyyy-MM-dd');
+
+    expect(resultProp).toBe(expectedDate);
   });
 
-  it('should render correct value', () => {
-    const fakeValue = '1970-01-01';
+  it('Should render new Date(0) when value is 1970-01-01', () => {
+    const testValue = '1970-01-01';
     const datePickerComponent = renderer.create(
       <TamaguiProvider>
-        <DatePickerItem value={fakeValue} onChange={jest.fn()} />
+        <DatePickerItem value={testValue} onChange={jest.fn()} />
       </TamaguiProvider>,
     );
 
@@ -34,9 +35,10 @@ describe('DatePickerItem', () => {
       accessibilityLabel: 'date-picker',
     });
 
-    const valueProp = format(datePicker.props.value, 'yyyy-MM-dd');
-    const fakeValueString = format(new Date(0), 'yyyy-MM-dd');
+    const resultProp = format(datePicker.props.value, 'yyyy-MM-dd');
 
-    expect(valueProp).toBe(fakeValueString);
+    const expectedDate = format(new Date(0), 'yyyy-MM-dd');
+
+    expect(resultProp).toBe(expectedDate);
   });
 });

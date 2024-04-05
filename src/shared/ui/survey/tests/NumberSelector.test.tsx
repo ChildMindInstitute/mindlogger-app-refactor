@@ -12,13 +12,13 @@ jest.mock(
 );
 
 jest.mock('react-i18next', () => ({
-  useTranslation: jest.fn().mockImplementation(() => ({
+  useTranslation: jest.fn().mockReturnValue({
     t: jest.fn().mockImplementation((key: string) => key),
-  })),
+  }),
 }));
 
-describe('NumberSelector', () => {
-  it('should render correct list of items', () => {
+describe('Test NumberSelector', () => {
+  it('Should render 4 dropdown items', () => {
     const selector = renderer.create(
       <TamaguiProvider>
         <NumberSelector

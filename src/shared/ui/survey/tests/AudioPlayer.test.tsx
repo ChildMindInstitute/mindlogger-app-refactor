@@ -4,21 +4,6 @@ import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
 import * as hooks from '@shared/lib/hooks';
 import { AudioPlayer } from '@shared/ui';
 
-// jest.mock(
-//   'react-native-audio-recorder-player',
-//   () =>
-//     function () {
-//       return {
-//         stopPlayer: jest.fn(),
-//         removePlayBackListener: jest.fn(),
-//         startPlayer: jest.fn(),
-//         addPlayBackListener: jest.fn(),
-//         pausePlayer: jest.fn(),
-//         setSubscriptionDuration: jest.fn(),
-//       };
-//     },
-// );
-
 jest.mock('@react-navigation/native', () => ({
   useFocusEffect: jest.fn(),
 }));
@@ -35,8 +20,12 @@ jest.mock('@app/shared/lib/hooks/useAudioPlayer', () =>
   })),
 );
 
-describe('AudioPlayer', () => {
-  it('should render play button', () => {
+describe('Test AudioPlayer', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('Should render play button', () => {
     const audioPlayer = renderer.create(
       <TamaguiProvider>
         <AudioPlayer uri="http://dummyUrl.com/audio" />
@@ -50,7 +39,7 @@ describe('AudioPlayer', () => {
     expect(!!playButton).toBe(true);
   });
 
-  it('should render pause button', () => {
+  it('Should render pause button', () => {
     jest.spyOn(hooks, 'useAudioPlayer').mockReturnValue({
       play: jest.fn(),
       pause: jest.fn(),
@@ -72,9 +61,5 @@ describe('AudioPlayer', () => {
     });
 
     expect(!!pauseButton).toBe(true);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 });

@@ -12,14 +12,19 @@ jest.mock('react-i18next', () => ({
   })),
 }));
 
-describe('SimpleTextInput', () => {
-  it('should render correctly', () => {
-    const fakeValue = '1234';
+describe('Test SimpleTextInput', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('Should be rendered with expected props', () => {
+    const mockValue = '1234';
+
     const textInput = renderer.create(
       <TamaguiProvider>
         <SimpleTextInput
           onChange={jest.fn()}
-          value={fakeValue}
+          value={mockValue}
           config={{
             maxLength: 300,
             isNumeric: true,
@@ -31,11 +36,9 @@ describe('SimpleTextInput', () => {
     const textField = textInput.root.findByType(TextInput);
 
     expect(textField.props.placeholder).toBe('text_entry:type_placeholder');
-    expect(textField.props.value).toBe('1234');
-    expect(textField.props.keyboardType).toBe('numeric');
-  });
 
-  afterEach(() => {
-    jest.clearAllMocks();
+    expect(textField.props.value).toBe('1234');
+
+    expect(textField.props.keyboardType).toBe('numeric');
   });
 });

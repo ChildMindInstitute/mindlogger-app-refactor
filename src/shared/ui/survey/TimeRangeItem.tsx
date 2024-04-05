@@ -6,6 +6,7 @@ import {
   getMidnightDateInMs,
   getMsFromHours,
   getMsFromMinutes,
+  getNow,
 } from '@app/shared/lib';
 import { YStack, DateTimePicker, AlarmIcon, BedIcon } from '@shared/ui';
 
@@ -35,12 +36,12 @@ const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
   });
 
   const startTimeAsDate = useMemo(
-    () => (value?.startTime ? transformToDate(value.startTime) : new Date()),
+    () => (value?.startTime ? transformToDate(value.startTime) : getNow()),
     [value],
   );
 
   const endTimeAsDate = useMemo(
-    () => (value?.endTime ? transformToDate(value.endTime) : new Date()),
+    () => (value?.endTime ? transformToDate(value.endTime) : getNow()),
     [value],
   );
 
