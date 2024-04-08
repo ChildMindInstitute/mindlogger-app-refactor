@@ -90,7 +90,6 @@ function ActivityStepper({
     isFirstStep,
     isTutorialStep,
     isConditionalLogicItem,
-    shouldSkipNextUserAction,
 
     canMoveNext,
     canMoveBack,
@@ -135,7 +134,11 @@ function ActivityStepper({
 
   const showTimeLeft = !!timer;
 
-  const onNext = (nextStep: number, isForced: boolean) => {
+  const onNext = (
+    nextStep: number,
+    isForced: boolean,
+    shouldIgnoreUserActionTrack: boolean,
+  ) => {
     removeTimer(currentStep);
     restartIdleTimer();
     setCurrentStep(nextStep);
@@ -146,7 +149,7 @@ function ActivityStepper({
 
     if (canSkip) {
       trackUserAction(userActionCreator.skip());
-    } else if (!shouldSkipNextUserAction) {
+    } else if (!shouldIgnoreUserActionTrack) {
       trackUserAction(userActionCreator.next());
     }
   };
@@ -158,9 +161,12 @@ function ActivityStepper({
     trackUserAction(userActionCreator.back());
   };
 
-  const onBeforeNext = async (): Promise<number> => {
+  const onBeforeNext = async (): Promise<{
+    stepShift: number;
+    shouldIgnoreUserActionTrack?: boolean;
+  }> => {
     if (!isValid()) {
-      return 0;
+      return { stepShift: 0 };
     }
 
     if (isTutorialStep) {
@@ -170,7 +176,7 @@ function ActivityStepper({
 
       !moved && restartIdleTimer();
 
-      return moved ? 0 : 1;
+      return moved ? { stepShift: 0 } : { stepShift: 1 };
     }
 
     const currentItem = activityStorageRecord!.items[currentStep];
@@ -184,7 +190,9 @@ function ActivityStepper({
         activityStorageRecord!.items,
       );
 
-      return nextStepIndex === null ? 1 : nextStepIndex - currentStep;
+      return nextStepIndex === null
+        ? { stepShift: 1 }
+        : { stepShift: nextStepIndex - currentStep };
     }
 
     if (
@@ -198,10 +206,10 @@ function ActivityStepper({
 
       if (shouldSkipRound) {
         skipService.skip();
-        return 1;
+        return { stepShift: 1, shouldIgnoreUserActionTrack: true };
       } else {
         skipService.proceed();
-        return 0;
+        return { stepShift: 0 };
       }
     }
 
@@ -209,7 +217,7 @@ function ActivityStepper({
       iterateWithConditionalLogic(currentStep + 1);
     }
 
-    return getNextStepShift();
+    return { stepShift: getNextStepShift() };
   };
 
   const onBeforeBack = (): number => {

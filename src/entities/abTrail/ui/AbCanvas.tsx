@@ -356,14 +356,13 @@ const AbCanvas: FC<Props> = props => {
       resetCloseToNextRerendered();
     }
 
-    onResult();
-
     if (isOverNext(point) && isOverLast(point)) {
       markLastLogPoints({ valid: true });
       addOverCorrectPointToStream(point);
       keepPathInState();
       resetCurrentPath();
       onMessage(MessageType.Completed);
+      onResult();
       onComplete();
 
       return;
@@ -388,6 +387,7 @@ const AbCanvas: FC<Props> = props => {
       onMessage(MessageType.IncorrectLine);
 
       addOverWrongPointToStream(point, node.label);
+      onResult();
       return;
     }
 

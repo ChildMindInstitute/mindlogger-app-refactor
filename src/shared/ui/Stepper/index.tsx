@@ -19,11 +19,17 @@ type Props = PropsWithChildren<{
   startFrom: number;
   stepsCount: number;
 
-  onNext?: (step: number, isForced: boolean) => void;
+  onNext?: (
+    step: number,
+    isForced: boolean,
+    shouldIgnoreUserActionTrack: boolean,
+  ) => void;
   onBack?: (step: number) => void;
   onUndo?: (step: number) => void;
 
-  onBeforeNext?: (step: number) => Promise<number>;
+  onBeforeNext?: (
+    step: number,
+  ) => Promise<{ stepShift: number; shouldIgnoreUserActionTrack?: boolean }>;
   onBeforeBack?: (step: number) => number;
 
   onStartReached?: () => void;
@@ -80,14 +86,15 @@ export function Stepper({
       shouldAutoSubmit: boolean;
     }) => {
       const step = stepRef.current;
-      const stepShift = (await onBeforeNextRef.current?.(step)) ?? 1;
+      const { stepShift = 1, shouldIgnoreUserActionTrack = false } =
+        (await onBeforeNextRef.current?.(step)) ?? {};
       const nextStep = step + stepShift;
 
       const moved = viewSliderRef.current?.next(stepShift);
 
       if (moved) {
         stepRef.current = nextStep;
-        onNextRef.current?.(nextStep, isForced);
+        onNextRef.current?.(nextStep, isForced, shouldIgnoreUserActionTrack);
       } else if (nextStep >= stepsCount) {
         if (isForced && !shouldAutoSubmit) {
           return;
