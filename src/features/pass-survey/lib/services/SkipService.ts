@@ -1,8 +1,9 @@
-import { AbTestResponse, Answer, PipelineItem } from '@features/pass-survey';
-
-type NoParamVoidFunction = () => void;
-
-type PipelineItemType = PipelineItem['type'];
+import { NoParamVoidFunction } from '@app/abstract/lib';
+import {
+  AbTestResponse,
+  Answer,
+  PipelineItemType,
+} from '@features/pass-survey';
 
 type Params = {
   onSkip: NoParamVoidFunction;

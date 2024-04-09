@@ -41,6 +41,32 @@ function useUserActionManager({ activityId, activityState }: Args) {
     });
   };
 
+  const removeDuplicateUserAnswers = (userActions: UserAction[]) => {
+    const step = activityState!.step;
+    const currentPipelineItem = activityState!.items[step];
+
+    if (currentPipelineItem.type !== 'AbTest') {
+      return userActions;
+    }
+
+    const setAnswerActionIndexToRemove = userActions.findIndex(
+      action =>
+        action.type === 'SET_ANSWER' &&
+        action?.payload?.activityItemId === currentPipelineItem.id,
+    );
+
+    if (
+      setAnswerActionIndexToRemove &&
+      setAnswerActionIndexToRemove < userActions.length - 1
+    ) {
+      return userActions.filter(
+        (o, index) => index !== setAnswerActionIndexToRemove,
+      );
+    }
+
+    return userActions;
+  };
+
   const updateUserActionsWithAnswer = (answer: PipelineItemResponse) => {
     const actions = activityState!.actions;
     const step = activityState!.step;
@@ -107,6 +133,7 @@ function useUserActionManager({ activityId, activityState }: Args) {
     addUserAction,
     updateUserActionsWithAnswer,
     updateUserActionsWithAdditionalAnswer,
+    removeDuplicateUserAnswers,
   };
 }
 

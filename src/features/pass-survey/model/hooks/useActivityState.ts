@@ -37,6 +37,7 @@ function useActivityState({
     addUserAction,
     updateUserActionsWithAdditionalAnswer,
     updateUserActionsWithAnswer,
+    removeDuplicateUserAnswers,
   } = useUserActionManager({
     activityId,
     activityState: activityStorageRecord,
@@ -71,7 +72,7 @@ function useActivityState({
           answer,
         },
       },
-      actions: updateUserActionsWithAnswer(answer),
+      actions: removeDuplicateUserAnswers(updateUserActionsWithAnswer(answer)),
     });
   }
 

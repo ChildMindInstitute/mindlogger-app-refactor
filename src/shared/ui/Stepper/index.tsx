@@ -15,21 +15,24 @@ export * from './contexts';
 
 export { default as useOnUndo } from './useOnUndo';
 
+export type TPayload = {
+  shouldIgnoreUserActionTrack: boolean;
+};
+
+export type OnBeforeNextResult = Promise<{
+  stepShift: number;
+  payload?: TPayload;
+}>;
+
 type Props = PropsWithChildren<{
   startFrom: number;
   stepsCount: number;
 
-  onNext?: (
-    step: number,
-    isForced: boolean,
-    shouldIgnoreUserActionTrack: boolean,
-  ) => void;
+  onNext?: (step: number, isForced: boolean, payload?: TPayload) => void;
   onBack?: (step: number) => void;
   onUndo?: (step: number) => void;
 
-  onBeforeNext?: (
-    step: number,
-  ) => Promise<{ stepShift: number; shouldIgnoreUserActionTrack?: boolean }>;
+  onBeforeNext?: (step: number) => OnBeforeNextResult;
   onBeforeBack?: (step: number) => number;
 
   onStartReached?: () => void;
@@ -86,7 +89,7 @@ export function Stepper({
       shouldAutoSubmit: boolean;
     }) => {
       const step = stepRef.current;
-      const { stepShift = 1, shouldIgnoreUserActionTrack = false } =
+      const { stepShift = 1, payload } =
         (await onBeforeNextRef.current?.(step)) ?? {};
       const nextStep = step + stepShift;
 
@@ -94,7 +97,7 @@ export function Stepper({
 
       if (moved) {
         stepRef.current = nextStep;
-        onNextRef.current?.(nextStep, isForced, shouldIgnoreUserActionTrack);
+        onNextRef.current?.(nextStep, isForced, payload);
       } else if (nextStep >= stepsCount) {
         if (isForced && !shouldAutoSubmit) {
           return;

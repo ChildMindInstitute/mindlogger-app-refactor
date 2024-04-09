@@ -12,8 +12,10 @@ import {
   ActivityIndicator,
   Box,
   Center,
+  OnBeforeNextResult,
   StatusBar,
   Stepper,
+  TPayload,
   XStack,
 } from '@shared/ui';
 
@@ -134,11 +136,9 @@ function ActivityStepper({
 
   const showTimeLeft = !!timer;
 
-  const onNext = (
-    nextStep: number,
-    isForced: boolean,
-    shouldIgnoreUserActionTrack: boolean,
-  ) => {
+  const onNext = (nextStep: number, isForced: boolean, payload?: TPayload) => {
+    const { shouldIgnoreUserActionTrack = false } = payload || {};
+
     removeTimer(currentStep);
     restartIdleTimer();
     setCurrentStep(nextStep);
@@ -161,10 +161,7 @@ function ActivityStepper({
     trackUserAction(userActionCreator.back());
   };
 
-  const onBeforeNext = async (): Promise<{
-    stepShift: number;
-    shouldIgnoreUserActionTrack?: boolean;
-  }> => {
+  const onBeforeNext = async (): OnBeforeNextResult => {
     if (!isValid()) {
       return { stepShift: 0 };
     }
@@ -206,7 +203,12 @@ function ActivityStepper({
 
       if (shouldSkipRound) {
         skipService.skip();
-        return { stepShift: 1, shouldIgnoreUserActionTrack: true };
+        return {
+          stepShift: 1,
+          payload: {
+            shouldIgnoreUserActionTrack: true,
+          },
+        };
       } else {
         skipService.proceed();
         return { stepShift: 0 };
