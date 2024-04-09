@@ -15,20 +15,20 @@ export * from './contexts';
 
 export { default as useOnUndo } from './useOnUndo';
 
-export type TPayload = {
+export type StepperPayload = {
   shouldIgnoreUserActionTrack: boolean;
 };
 
 export type OnBeforeNextResult = Promise<{
   stepShift: number;
-  payload?: TPayload;
+  payload?: StepperPayload;
 }>;
 
 type Props = PropsWithChildren<{
   startFrom: number;
   stepsCount: number;
 
-  onNext?: (step: number, isForced: boolean, payload?: TPayload) => void;
+  onNext?: (step: number, isForced: boolean, payload?: StepperPayload) => void;
   onBack?: (step: number) => void;
   onUndo?: (step: number) => void;
 

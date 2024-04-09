@@ -15,7 +15,7 @@ import {
   OnBeforeNextResult,
   StatusBar,
   Stepper,
-  TPayload,
+  StepperPayload,
   XStack,
 } from '@shared/ui';
 
@@ -136,7 +136,11 @@ function ActivityStepper({
 
   const showTimeLeft = !!timer;
 
-  const onNext = (nextStep: number, isForced: boolean, payload?: TPayload) => {
+  const onNext = (
+    nextStep: number,
+    isForced: boolean,
+    payload?: StepperPayload,
+  ) => {
     const { shouldIgnoreUserActionTrack = false } = payload || {};
 
     removeTimer(currentStep);
