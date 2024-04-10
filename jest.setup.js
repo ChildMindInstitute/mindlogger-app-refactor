@@ -201,3 +201,8 @@ jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => {
     },
   };
 });
+
+jest.mock('@app/shared/lib/constants', () => ({
+  ...jest.requireActual('@app/shared/lib/constants'),
+  STORE_ENCRYPTION_KEY: '12345',
+}));

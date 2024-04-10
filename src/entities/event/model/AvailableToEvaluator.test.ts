@@ -15,14 +15,8 @@ const getEmptyEvent = (): ScheduleEvent => {
     entityId: 'mock-entity-id-1',
     scheduledAt: null,
     availability: {
-      timeFrom: {
-        hours: 9,
-        minutes: 5,
-      },
-      timeTo: {
-        hours: 20,
-        minutes: 15,
-      },
+      timeFrom: null,
+      timeTo: null,
       startDate: null,
       endDate: null,
       periodicityType: PeriodicityType.NotDefined,
