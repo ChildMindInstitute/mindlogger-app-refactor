@@ -1,6 +1,6 @@
 import { ActivityPipelineType, EntityPath } from '@app/abstract/lib';
 import { NotCompletedEntity } from '@app/entities/applet/model/selectors';
-import { FlowState } from '@app/widgets/survey';
+import { CollectCompletionOutput, FlowState } from '@app/widgets/survey';
 
 export const getRegularProgressRecord = (
   path: EntityPath,
@@ -118,4 +118,13 @@ export const getMultipleActivityFlowState = (path: EntityPath): FlowState => {
       },
     ],
   };
+};
+
+export const deleteLogAvailableTo = (
+  collected: CollectCompletionOutput[],
+): CollectCompletionOutput[] => {
+  for (let item of collected) {
+    delete item.logAvailableTo;
+  }
+  return collected;
 };

@@ -2,6 +2,7 @@ import { EntityPath } from '@app/abstract/lib';
 import * as survey from '@app/shared/lib/utils/survey/survey';
 
 import {
+  deleteLogAvailableTo,
   getFlowProgressRecord,
   getMultipleActivityFlowState,
   getRegularProgressRecord,
@@ -103,7 +104,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
 
     const result = service.collectForEntity(pathOne);
 
-    expect(result).toEqual([
+    expect(deleteLogAvailableTo(result)).toEqual([
       {
         activityId: 'mock-entity-id-1',
         activityName: 'mock-activity-name',
@@ -111,7 +112,6 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
         completionType: 'finish',
         eventId: 'mock-event-id-1',
         flowId: undefined,
-        logAvailableTo: 'Sun Mar 05 2023 00:00:00 GMT+0300 (GMT+03:00)',
         order: 0,
       },
     ]);
@@ -141,7 +141,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
 
     const result = service.collectForEntity(path);
 
-    expect(result).toEqual([
+    expect(deleteLogAvailableTo(result)).toEqual([
       {
         activityId: 'mock-activity-id-1',
         activityName: 'mock-activity-name-1',
@@ -149,7 +149,6 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
         completionType: 'intermediate',
         eventId: 'mock-event-id-1',
         flowId: 'mock-entity-id-1',
-        logAvailableTo: 'Sun Mar 05 2023 00:00:00 GMT+0300 (GMT+03:00)',
         order: 0,
       },
       {
@@ -159,7 +158,6 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
         completionType: 'finish',
         eventId: 'mock-event-id-1',
         flowId: 'mock-entity-id-1',
-        logAvailableTo: 'Sun Mar 05 2023 00:00:00 GMT+0300 (GMT+03:00)',
         order: 1,
       },
     ]);
@@ -189,7 +187,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
 
     const result = service.collectForEntity(path);
 
-    expect(result).toEqual([
+    expect(deleteLogAvailableTo(result)).toEqual([
       {
         activityId: 'mock-activity-id-2',
         activityName: 'mock-activity-name-2',
@@ -197,7 +195,6 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
         completionType: 'finish',
         eventId: 'mock-event-id-1',
         flowId: 'mock-entity-id-1',
-        logAvailableTo: 'Sun Mar 05 2023 00:00:00 GMT+0300 (GMT+03:00)',
         order: 1,
       },
     ]);
