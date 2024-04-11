@@ -3,6 +3,7 @@ import {
   PipelineItemResponse,
   UserAction,
   useActivityStorageRecord,
+  UserActionsPostProcessorService,
 } from '../../lib';
 import PipelineVisibilityChecker from '../PipelineVisibilityChecker';
 import StepperUtils from '../StepperUtils';
@@ -37,11 +38,12 @@ function useActivityState({
     addUserAction,
     updateUserActionsWithAdditionalAnswer,
     updateUserActionsWithAnswer,
-    removeDuplicateUserAnswers,
   } = useUserActionManager({
     activityId,
     activityState: activityStorageRecord,
   });
+
+  const userActionsPostProcessorService = new UserActionsPostProcessorService();
 
   function setStep(step: number) {
     const currentStorageRecord = getCurrentActivityStorageRecord();
@@ -72,7 +74,7 @@ function useActivityState({
           answer,
         },
       },
-      actions: removeDuplicateUserAnswers(updateUserActionsWithAnswer(answer)),
+      actions: updateUserActionsWithAnswer(answer),
     });
   }
 
@@ -165,6 +167,17 @@ function useActivityState({
     });
   }
 
+  function postProcessUserActionsForCurrentItem() {
+    const currentStorageRecord = getCurrentActivityStorageRecord()!;
+
+    upsertActivityStorageRecord({
+      ...currentStorageRecord,
+      actions: userActionsPostProcessorService.postProcessUserActions(
+        currentStorageRecord!,
+      ),
+    });
+  }
+
   function trackUserAction(action: UserAction) {
     const currentStorageRecord = getCurrentActivityStorageRecord()!;
 
@@ -172,6 +185,8 @@ function useActivityState({
       ...currentStorageRecord,
       actions: [...currentStorageRecord.actions, action],
     });
+
+    postProcessUserActionsForCurrentItem();
   }
 
   function iterateWithConditionalLogic(fromStep: number) {
