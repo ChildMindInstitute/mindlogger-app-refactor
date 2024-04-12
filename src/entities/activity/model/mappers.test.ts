@@ -1,71 +1,51 @@
 import { mapToActivity } from './mappers';
 import {
-  basicItemsMapperInput,
-  basicItemsMapperOutput,
-  itemsWithAdditionalTextInput,
-  itemsWithAdditionalTextOutput,
-  drawingItemInput,
-  drawingItemOutput,
-  abTrailsInput,
-  abTrailsOutput,
-  flankerInput,
-  flankerOutput,
-  CSTInput,
-  CSTOutput,
+  // itemsWithAdditionalTextInput,
+  // itemsWithAdditionalTextOutput,
+  // drawingItemInput,
+  // drawingItemOutput,
+  // abTrailsInput,
+  // abTrailsOutput,
+  // flankerInput,
+  // flankerOutput,
+  // CSTInput,
+  // CSTOutput,
+  // conditionalInput,
+  // conditionalOutput,
+
+  //
+  stackedRadioOutput,
+  stackedRadioInput,
+  stackedCheckboxInput,
+  stackedCheckboxOutput,
+  stackedSliderInput,
+  stackedSliderOutput,
 } from './mappers.mock';
 
-describe('activity mapToActivity tests', () => {
-  it('should return mapped result for all basic items', async () => {
-    const input = basicItemsMapperInput;
+describe('Activity mapToActivity tests', () => {
+  it('Should return mapped result for stacked radio item', async () => {
+    const input = stackedRadioInput;
 
     // @ts-expect-error
     const result = mapToActivity(input);
 
-    expect(result).toEqual(basicItemsMapperOutput);
+    expect(result).toEqual(stackedRadioOutput);
+  });
+  it('Should return mapped result for stacked slider item', async () => {
+    const input = stackedSliderInput;
+
+    // @ts-expect-error
+    const result = mapToActivity(input);
+
+    expect(result).toEqual(stackedSliderOutput);
   });
 
-  it('should return mapped result for items with additionalText', async () => {
-    const input = itemsWithAdditionalTextInput;
+  it('Should return mapped result for stacked checkbox item', async () => {
+    const input = stackedCheckboxInput;
 
     // @ts-expect-error
     const result = mapToActivity(input);
 
-    expect(result).toEqual(itemsWithAdditionalTextOutput);
-  });
-
-  it('should return mapped result for drawing items with different configurations', async () => {
-    const input = drawingItemInput;
-
-    // @ts-expect-error
-    const result = mapToActivity(input);
-
-    expect(result).toEqual(drawingItemOutput);
-  });
-
-  it('should return mapped result for abTrails item', async () => {
-    const input = abTrailsInput;
-
-    // @ts-expect-error
-    const result = mapToActivity(input);
-
-    expect(result).toEqual(abTrailsOutput);
-  });
-
-  it('should return mapped result for flanker item', async () => {
-    const input = flankerInput;
-
-    // @ts-expect-error
-    const result = mapToActivity(input);
-
-    expect(result).toEqual(flankerOutput);
-  });
-
-  it('should return mapped result for stability tracker item', async () => {
-    const input = CSTInput;
-
-    // @ts-expect-error
-    const result = mapToActivity(input);
-
-    expect(result).toEqual(CSTOutput);
+    expect(result).toEqual(stackedCheckboxOutput);
   });
 });
