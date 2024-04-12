@@ -13,6 +13,8 @@ import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import { AppletEncryptionDTO, QueryDataUtils } from '@app/shared/api';
 import {
   AnalyticsService,
+  getEntityProgress,
+  getNow,
   getTimezoneOffset,
   Logger,
   MixEvents,
@@ -226,7 +228,12 @@ export class ConstructCompletionsService {
         activityStorageRecord.context.originalItems as InitializeHiddenItem[],
       );
 
-    const progressRecord = this.storeProgress[appletId][flowId][eventId];
+    const progressRecord = getEntityProgress(
+      appletId,
+      flowId,
+      eventId,
+      this.storeProgress,
+    )!;
 
     const { flowName, scheduledDate } = getFlowRecord(
       flowId,
@@ -238,7 +245,7 @@ export class ConstructCompletionsService {
 
     this.pushToQueueService.push({
       appletId,
-      createdAt: Date.now(),
+      createdAt: getNow().getTime(),
       version: activityStorageRecord.appletVersion,
       answers: modifiedAnswers,
       userActions: mapUserActionsToDto(actions),
@@ -249,10 +256,10 @@ export class ConstructCompletionsService {
       executionGroupKey: getExecutionGroupKey(progressRecord),
       userIdentifier: getUserIdentifier(items, recordAnswers),
       startTime: getActivityStartAt(progressRecord)!,
-      endTime: Date.now(),
+      endTime: getNow().getTime(),
       scheduledTime: scheduledDate ?? undefined,
       logActivityName: activityName,
-      logCompletedAt: new Date().toString(),
+      logCompletedAt: getNow().toUTCString(),
       client: getClientInformation(),
       alerts: mapAnswersToAlerts(items, recordAnswers),
       eventId,
@@ -308,7 +315,12 @@ export class ConstructCompletionsService {
         activityStorageRecord.context.originalItems as InitializeHiddenItem[],
       );
 
-    const progressRecord = this.storeProgress[appletId][entityId][eventId];
+    const progressRecord = getEntityProgress(
+      appletId,
+      entityId,
+      eventId,
+      this.storeProgress,
+    )!;
 
     this.logCompletion(activityName, activityId, flowId, appletName, appletId);
 

@@ -90,9 +90,12 @@ export const fillOptionsForCheckboxes = (
   return item;
 };
 
-export const getEmptySliderItem = (name: string): SliderPipelineItem => {
+export const getEmptySliderItem = (
+  name: string,
+  id: string = 'mock-slider-id',
+): SliderPipelineItem => {
   const result: SliderPipelineItem = {
-    id: 'mock-slider-id',
+    id,
     name,
     timer: null,
     payload: {
