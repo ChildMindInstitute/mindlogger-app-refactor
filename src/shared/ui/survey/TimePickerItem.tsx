@@ -6,6 +6,7 @@ import {
   getMsFromHours,
   getMidnightDateInMs,
   getMsFromMinutes,
+  getNow,
 } from '@shared/lib';
 import { AlarmIcon, DateTimePicker } from '@shared/ui';
 
@@ -24,10 +25,10 @@ const TimePickerItem: FC<Props> = ({ value, onChange }) => {
   const timeInMs = useMemo(
     () =>
       value
-        ? getMidnightDateInMs() +
+        ? getMidnightDateInMs(getNow()) +
           getMsFromHours(value.hours) +
           getMsFromMinutes(value.minutes)
-        : Date.now(),
+        : getNow(),
     [value],
   );
 
