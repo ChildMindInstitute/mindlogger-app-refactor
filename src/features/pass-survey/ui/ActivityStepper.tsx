@@ -67,6 +67,7 @@ function ActivityStepper({
     iterateWithConditionalLogic,
     getNextStepShift,
     getPreviousStepShift,
+    postProcessUserActionsForCurrentItem,
   } = useActivityState({
     appletId,
     activityId,
@@ -156,6 +157,8 @@ function ActivityStepper({
     } else if (!shouldIgnoreUserActionTrack) {
       trackUserAction(userActionCreator.next());
     }
+
+    postProcessUserActionsForCurrentItem();
   };
 
   const onBack = (nextStep: number) => {

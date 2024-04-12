@@ -185,8 +185,6 @@ function useActivityState({
       ...currentStorageRecord,
       actions: [...currentStorageRecord.actions, action],
     });
-
-    postProcessUserActionsForCurrentItem();
   }
 
   function iterateWithConditionalLogic(fromStep: number) {
@@ -249,6 +247,7 @@ function useActivityState({
 
     getNextStepShift,
     getPreviousStepShift,
+    postProcessUserActionsForCurrentItem,
   };
 }
 
