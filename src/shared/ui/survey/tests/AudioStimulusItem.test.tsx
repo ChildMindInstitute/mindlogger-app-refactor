@@ -4,25 +4,6 @@ import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
 import * as hooks from '@shared/lib/hooks';
 import { ActivityIndicator, AudioStimulusItem } from '@shared/ui';
 
-jest.mock(
-  'react-native-audio-recorder-player',
-  () =>
-    function () {
-      return {
-        stopPlayer: jest.fn(),
-        removePlayBackListener: jest.fn(),
-        startPlayer: jest.fn(),
-        addPlayBackListener: jest.fn(),
-        pausePlayer: jest.fn(),
-        setSubscriptionDuration: jest.fn(),
-      };
-    },
-);
-
-jest.mock('@react-navigation/native', () => ({
-  useFocusEffect: jest.fn(),
-}));
-
 jest.mock('@app/shared/lib/hooks/useAudioPlayer', () =>
   jest.fn().mockImplementation(() => ({
     play: jest.fn(),
@@ -34,12 +15,6 @@ jest.mock('@app/shared/lib/hooks/useAudioPlayer', () =>
     isLoading: false,
   })),
 );
-
-jest.mock('react-i18next', () => ({
-  useTranslation: jest.fn().mockImplementation(() => ({
-    t: jest.fn().mockImplementation((key: string) => key),
-  })),
-}));
 
 describe('Test AudioStimulusItem', () => {
   afterEach(() => {

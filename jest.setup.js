@@ -212,3 +212,29 @@ jest.mock('@app/shared/lib/constants', () => ({
   ...jest.requireActual('@app/shared/lib/constants'),
   STORE_ENCRYPTION_KEY: '12345',
 }));
+
+jest.mock('react-i18next', () => ({
+  useTranslation: jest.fn().mockImplementation(() => ({
+    t: jest.fn().mockImplementation(key => key),
+  })),
+}));
+
+jest.mock(
+  'react-native-audio-recorder-player',
+  () =>
+    function () {
+      return {
+        stopPlayer: jest.fn(),
+        removePlayBackListener: jest.fn(),
+        startPlayer: jest.fn(),
+        addPlayBackListener: jest.fn(),
+        pausePlayer: jest.fn(),
+        setSubscriptionDuration: jest.fn(),
+      };
+    },
+);
+
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useFocusEffect: jest.fn(),
+}));
