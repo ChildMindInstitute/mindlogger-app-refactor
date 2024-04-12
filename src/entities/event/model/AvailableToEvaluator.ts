@@ -15,11 +15,11 @@ export class AvailableToEvaluator {
     this.dayOverlapDetector = dayOverlapDetector;
   }
 
-  public getNow = () => new Date();
+  private getNow = () => new Date();
 
-  public getToday = () => startOfDay(this.getNow());
+  private getToday = () => startOfDay(this.getNow());
 
-  public getTomorrow = () => addDays(this.getToday(), 1);
+  private getTomorrow = () => addDays(this.getToday(), 1);
 
   public evaluate(event: ScheduleEvent): Date | null {
     if (

@@ -94,10 +94,7 @@ export class CollectCompletionsService implements ICollectCompletionsService {
       );
 
       collected.forEach(
-        x =>
-          (x.logAvailableTo = progress.availableTo
-            ? new Date(progress.availableTo).toString()
-            : 'not set'),
+        x => (x.logAvailableTo = new Date(progress.availableTo!).toString()),
       );
 
       result.push(...collected);
@@ -115,9 +112,7 @@ export class CollectCompletionsService implements ICollectCompletionsService {
         activityName,
         order,
         completionType: 'finish',
-        logAvailableTo: progress.availableTo
-          ? new Date(progress.availableTo).toString()
-          : 'not set',
+        logAvailableTo: new Date(progress.availableTo!).toString(),
       });
     }
 
