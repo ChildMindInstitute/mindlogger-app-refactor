@@ -656,7 +656,6 @@ function mapToSplash(splashScreen: string): ActivityItem {
 }
 
 export function mapToActivity(dto: ActivityDto): ActivityDetails {
-  console.log(JSON.stringify(dto), 'input!!!');
   const activity: ActivityDetails = {
     ...dto,
     id: dto.id,
@@ -735,12 +734,11 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
   if (dto.splashScreen) {
     activity.items = [mapToSplash(dto.splashScreen), ...activity.items];
   }
-  console.log(JSON.stringify(activity), 'output!!');
+
   return activity;
 }
 
 function mapToRadioAlerts(options: OptionsDto) {
-  console.log('AAAAAA mappingg!!!!');
   return options.map(option => ({
     id: option.id,
     text: option.text,
