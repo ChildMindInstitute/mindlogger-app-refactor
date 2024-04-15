@@ -203,7 +203,7 @@
   "logout_warning": {
     "warning": "Logout Warning",
     "uploads_in_progress": "Uploads in progress",
-    "currently_uploading": "You have responses that are currently uploading. If you log out now your responses will be lost.",
+    "currently_uploading": "You have responses that are currently uploading. If you log out now and then log in as a different user, your responses will be lost.",
     "not_uploaded": "You have not uploaded responses. If you log out now these responses will be lost.",
     "sure_logout": "Are you sure that you want to log out?",
     "cancel": "Cancel",
