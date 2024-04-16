@@ -64,10 +64,15 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
         conditionalLogic: {
           match: dto.match,
           conditions: dto.conditions.map(condition => {
-            return {
+            const updatedCondition = {
               ...condition,
               activityItemName: condition.itemName,
             };
+
+            // @ts-expect-error
+            delete updatedCondition.itemName;
+
+            return updatedCondition;
           }),
         },
       }
