@@ -1,5 +1,3 @@
-import { SkPath } from '@shopify/react-native-skia';
-
 import { AbTestPayload, Point } from '@app/abstract/lib';
 
 export const transformCoordinates = (
@@ -40,7 +38,28 @@ export const getDistance = (from: Point, to: Point): number => {
 
 const MaxDistanceDiff = 10000;
 
-export const getEquidistantPoint = (errorPath: SkPath): Point | null => {
+interface IPath {
+  getPoint(index: number): Point;
+  countPoints(): number;
+}
+
+export class Path implements IPath {
+  private points: Point[];
+
+  constructor(points: Point[]) {
+    this.points = points;
+  }
+
+  public getPoint(index: number) {
+    return this.points[index];
+  }
+
+  public countPoints(): number {
+    return this.points.length;
+  }
+}
+
+export const getEquidistantPoint = (errorPath: IPath): Point | null => {
   const points: Point[] = [];
 
   const totalPoints = errorPath.countPoints();

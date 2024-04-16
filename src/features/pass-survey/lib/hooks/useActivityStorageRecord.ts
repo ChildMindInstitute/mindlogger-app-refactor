@@ -16,7 +16,9 @@ type UseActivityStorageArgs = {
 
 export type Answer = PipelineItemAnswer['value'];
 
-export type Answers = Record<string, Answer>;
+type ZeroBasedIndex = string;
+
+export type Answers = Record<ZeroBasedIndex, Answer>;
 
 type Timers = Record<string, number>;
 

@@ -1,6 +1,7 @@
 import { Mixpanel } from 'mixpanel-react-native';
 
-import { IAnalyticsService, MixProperties } from './AnalyticsService';
+import { MixProperties } from './AnalyticsService';
+import { IAnalyticsService } from './IAnalyticsService';
 import { APP_VERSION } from '../constants';
 
 class MixpanelAnalytics implements IAnalyticsService {

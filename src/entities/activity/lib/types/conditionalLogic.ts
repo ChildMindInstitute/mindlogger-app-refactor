@@ -1,4 +1,4 @@
-type Match = 'any' | 'all';
+export type Match = 'any' | 'all';
 
 export type ConditionalLogic = {
   match: Match;
@@ -16,6 +16,8 @@ type Condition =
   | NotEqualCondition
   | BetweenCondition
   | OutsideOfCondition;
+
+export type ConditionType = Condition['type'];
 
 type IncludesOptionCondition = {
   activityItemName: string;

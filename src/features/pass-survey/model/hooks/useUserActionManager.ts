@@ -23,8 +23,17 @@ function useUserActionManager({ activityId, activityState }: Args) {
     return [...activityState!.actions, action];
   };
 
-  const updateUserAction = (action: UserAction) => {
-    return activityState!.actions.map(o => {
+  const updateUserAction = (
+    action: UserAction,
+    shouldUpdateOnlyLastAction: boolean,
+  ) => {
+    return activityState!.actions.map((o, index) => {
+      const isLastAction = index === activityState!.actions.length - 1;
+
+      if (shouldUpdateOnlyLastAction && !isLastAction) {
+        return o;
+      }
+
       return o.payload.activityItemId === action.payload.activityItemId &&
         o.type === action.type
         ? action
@@ -41,11 +50,13 @@ function useUserActionManager({ activityId, activityState }: Args) {
       | SetAnswerAction
       | undefined;
 
-    const shouldUpdateLastAction =
+    const shouldUpdateAllPreviousAnswerActions =
       lastUserAction &&
       lastUserAction?.payload?.activityItemId === currentPipelineItem.id &&
       lastUserAction.type === 'SET_ANSWER' &&
       ITEMS_TO_UPDATE_USER_ACTION.includes(currentPipelineItem.type);
+
+    const shouldUpdateOnlyLastAction = currentPipelineItem.type === 'TextInput';
 
     const action = userActionCreator.setAnswer({
       type: currentPipelineItem.type,
@@ -55,8 +66,8 @@ function useUserActionManager({ activityId, activityState }: Args) {
       },
     });
 
-    if (shouldUpdateLastAction) {
-      return updateUserAction(action);
+    if (shouldUpdateAllPreviousAnswerActions) {
+      return updateUserAction(action, shouldUpdateOnlyLastAction);
     } else {
       return addUserAction(action);
     }
@@ -69,10 +80,12 @@ function useUserActionManager({ activityId, activityState }: Args) {
       | SetAnswerAction
       | undefined;
 
-    const shouldUpdateLastAction =
+    const shouldUpdateAllPreviousAnswerActions =
       lastUserAction &&
       lastUserAction.type === 'SET_ANSWER' &&
       lastUserAction?.payload?.activityItemId === currentPipelineItem.id;
+
+    const shouldUpdateOnlyLastAction = currentPipelineItem.type === 'TextInput';
 
     const action = userActionCreator.setAnswer({
       type: currentPipelineItem.type,
@@ -82,8 +95,8 @@ function useUserActionManager({ activityId, activityState }: Args) {
       },
     });
 
-    if (shouldUpdateLastAction) {
-      return updateUserAction(action);
+    if (shouldUpdateAllPreviousAnswerActions) {
+      return updateUserAction(action, shouldUpdateOnlyLastAction);
     } else {
       return addUserAction(action);
     }
@@ -92,7 +105,6 @@ function useUserActionManager({ activityId, activityState }: Args) {
   return {
     userActionCreator,
     addUserAction,
-    updateUserAction,
     updateUserActionsWithAnswer,
     updateUserActionsWithAdditionalAnswer,
   };

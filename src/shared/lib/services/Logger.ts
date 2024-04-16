@@ -201,22 +201,22 @@ export class Logger implements ILogger {
         return false;
       }
 
-      const file: NamePathSize = logFiles.find(
+      const localFile: NamePathSize = logFiles.find(
         x => x.fileName === checkRecord.fileName,
       )!;
 
       const isExist = checkRecord.exists;
 
-      const isSizeTheSame = checkRecord.size === file.size;
+      const isSizeTheSame = checkRecord.size === localFile.size;
 
-      const isCurrentLogInAndroid = this.isNamedAsLatest(checkRecord.fileName);
+      const isFileNamedAsCurrent = this.isNamedAsLatest(checkRecord.fileName);
 
-      const isFileEmpty = file.size === 0;
+      const isFileEmpty = localFile.size === 0;
 
       const shouldUpload =
         !isFileEmpty &&
         (!isExist ||
-          (isExist && IS_ANDROID && isCurrentLogInAndroid) ||
+          (isExist && IS_ANDROID && isFileNamedAsCurrent) ||
           (isExist && IS_IOS && !isSizeTheSame));
 
       if (!shouldUpload) {
@@ -332,7 +332,11 @@ export class Logger implements ILogger {
 
       console.info('[Logger.send] Sending log files to Server');
 
-      return await this.sendInternal();
+      const result = await this.sendInternal();
+
+      console.info('[Logger.send] Sent');
+
+      return result;
     } catch (error) {
       console.warn(
         '[Logger.sendInternal]: Error occurred: \n\n',

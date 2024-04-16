@@ -1,7 +1,9 @@
 import {
   AudioPipelineItem,
   CheckboxPipelineItem,
+  CheckboxResponse,
   RadioPipelineItem,
+  RadioResponse,
   SliderPipelineItem,
   StackedCheckboxPipelineItem,
   StackedCheckboxResponse,
@@ -46,6 +48,7 @@ export const fillOptionsForRadio = (
       tooltip: null,
     });
   }
+  return item;
 };
 
 export const getEmptyCheckboxesItem = (name: string): CheckboxPipelineItem => {
@@ -84,6 +87,7 @@ export const fillOptionsForCheckboxes = (
       isNoneOption: false,
     });
   }
+  return item;
 };
 
 export const getEmptySliderItem = (name: string): SliderPipelineItem => {
@@ -393,5 +397,32 @@ export const getStackedSliderItem = (): StackedSliderPipelineItem => {
     },
     type: 'StackedSlider',
   };
+  return result;
+};
+
+export const getRadioResponse = (value: number): RadioResponse => {
+  return {
+    color: null,
+    id: 'mock-response-id',
+    image: null,
+    isHidden: false,
+    score: null,
+    text: 'mock-text',
+    tooltip: null,
+    value: value,
+  };
+};
+
+export const getCheckboxResponse = (values: number[]): CheckboxResponse => {
+  const result: CheckboxResponse = values.map(v => ({
+    color: null,
+    id: 'mock-id-' + v,
+    image: null,
+    isHidden: false,
+    score: null,
+    text: 'mock-text-' + v,
+    tooltip: null,
+    value: v,
+  }));
   return result;
 };

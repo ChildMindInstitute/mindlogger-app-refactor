@@ -128,11 +128,15 @@ function fileService() {
       const apiCall = async () => {
         const deviceId = SystemRecord.getDeviceId()!;
 
+        const hashedDeviceId: string = !deviceId
+          ? 'undefined'
+          : getStringHashCode(deviceId).toString();
+
         const { abortController, reset } = watchForConnectionLoss();
 
         try {
           const response = await httpService.post<CheckIfLogsExistResponse>(
-            `/file/log-file/${deviceId}/check`,
+            `/file/log-file/${hashedDeviceId}/check`,
             request,
             {
               signal: abortController.signal,
