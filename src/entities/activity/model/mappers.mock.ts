@@ -1,20 +1,5 @@
 import { ActivityDetails } from '@entities/activity';
-import {
-  AudioItemDto,
-  AudioPlayerItemDto,
-  DateItemDto,
-  DrawingItemDto,
-  GeolocationItemDto,
-  MessageItemDto,
-  MultiSelectionRowsItemDto,
-  PhotoItemDto,
-  SingleSelectionItemDto,
-  SingleSelectionRowsItemDto,
-  SliderRowsItemDto,
-  TimeRangeItemDto,
-  VideoItemDto,
-} from '@shared/api';
-import { ReportDto } from '@shared/api/services/ActivityReportSettingsDtos';
+import { ActivityDto } from '@shared/api';
 
 const basicAppletDetails = {
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -38,7 +23,7 @@ const basicAppletDetails = {
   timer: null,
 };
 
-export const stackedRadioInput = {
+export const stackedRadioInput: ActivityDto = {
   ...basicAppletDetails,
   items: [
     {
@@ -99,13 +84,11 @@ export const stackedRadioInput = {
                 optionId: '2e3bf074-f7f2-4a5e-927c-2dd17c93226a',
                 score: 0,
                 alert: null,
-                value: 1,
               },
               {
                 optionId: '7c362944-19df-4fa1-bbe7-13c1296cc96a',
                 score: 1,
                 alert: null,
-                value: 2,
               },
             ],
           },
@@ -116,19 +99,16 @@ export const stackedRadioInput = {
                 optionId: '945550e6-977e-44cb-a25a-8e52afcda407',
                 score: 1,
                 alert: null,
-                value: 0,
               },
               {
                 optionId: '2e3bf074-f7f2-4a5e-927c-2dd17c93226a',
                 score: 1,
                 alert: null,
-                value: 1,
               },
               {
                 optionId: '7c362944-19df-4fa1-bbe7-13c1296cc96a',
                 score: 1,
                 alert: null,
-                value: 2,
               },
             ],
           },
@@ -139,19 +119,16 @@ export const stackedRadioInput = {
                 optionId: '945550e6-977e-44cb-a25a-8e52afcda407',
                 score: 1,
                 alert: null,
-                value: 0,
               },
               {
                 optionId: '2e3bf074-f7f2-4a5e-927c-2dd17c93226a',
                 score: 1,
                 alert: null,
-                value: 1,
               },
               {
                 optionId: '7c362944-19df-4fa1-bbe7-13c1296cc96a',
                 score: 0,
                 alert: null,
-                value: 2,
               },
             ],
           },
@@ -164,21 +141,19 @@ export const stackedRadioInput = {
         addScores: false,
         setAlerts: false,
         addTooltip: false,
-        addTokens: null,
         randomizeOptions: false,
       },
       name: 'Screen1',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '64e31b66-22d8-1858-d681-b93c00000000',
       order: 0,
       timer: null,
-    } as SingleSelectionRowsItemDto,
+    },
   ],
 };
 
-export const stackedCheckboxInput = {
+export const stackedCheckboxInput: ActivityDto = {
   ...basicAppletDetails,
   items: [
     {
@@ -296,21 +271,19 @@ export const stackedCheckboxInput = {
         addScores: false,
         setAlerts: false,
         addTooltip: false,
-        addTokens: null,
         randomizeOptions: false,
       },
       name: 'Screen2',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '64e31b66-22d8-1858-d681-b93e00000000',
       timer: null,
       order: 1,
-    } as MultiSelectionRowsItemDto,
+    },
   ],
 };
 
-export const stackedSliderInput = {
+export const stackedSliderInput: ActivityDto = {
   ...basicAppletDetails,
   items: [
     {
@@ -364,15 +337,14 @@ export const stackedSliderInput = {
       name: 'Screen3',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '64e31b67-22d8-1858-d681-b94000000000',
       order: 1,
       timer: null,
-    } as SliderRowsItemDto,
+    },
   ],
 };
 
-export const photoInput = {
+export const photoInput: ActivityDto = {
   ...basicAppletDetails,
   items: [
     {
@@ -392,15 +364,14 @@ export const photoInput = {
       name: 'Screen4',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '64e31b67-22d8-1858-d681-b94200000000',
       order: 1,
       timer: null,
-    } as PhotoItemDto,
+    },
   ],
 };
 
-export const videoInput = {
+export const videoInput: ActivityDto = {
   ...basicAppletDetails,
   items: [
     {
@@ -420,15 +391,14 @@ export const videoInput = {
       name: 'Screen5',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '64e31b67-22d8-1858-d681-b94400000000',
       order: 1,
       timer: null,
-    } as VideoItemDto,
+    },
   ],
 };
 
-export const timeRangeInput = {
+export const timeRangeInput: ActivityDto = {
   ...basicAppletDetails,
   items: [
     {
@@ -448,15 +418,14 @@ export const timeRangeInput = {
       name: 'Screen6',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '64e31b67-22d8-1858-d681-b94600000000',
       order: 1,
       timer: 20,
-    } as TimeRangeItemDto,
+    },
   ],
 };
 
-export const dateInput = {
+export const dateInput: ActivityDto = {
   ...basicAppletDetails,
   items: [
     {
@@ -476,15 +445,14 @@ export const dateInput = {
       name: 'Screen7',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '64e31b67-22d8-1858-d681-b94800000000',
       order: 1,
       timer: null,
-    } as DateItemDto,
+    },
   ],
 };
 
-export const drawingInput = {
+export const drawingInput: ActivityDto = {
   ...basicAppletDetails,
   items: [
     {
@@ -506,15 +474,14 @@ export const drawingInput = {
       name: 'Screen8',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '64e31b67-22d8-1858-d681-b94a00000000',
       order: 1,
       timer: null,
-    } as DrawingItemDto,
+    },
   ],
 };
 
-export const audioInput = {
+export const audioInput: ActivityDto = {
   ...basicAppletDetails,
   items: [
     {
@@ -534,15 +501,14 @@ export const audioInput = {
       name: 'Screen9',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '64e31b67-22d8-1858-d681-b94c00000000',
       timer: null,
       order: 1,
-    } as AudioItemDto,
+    },
   ],
 };
 
-export const geoLocationInput = {
+export const geoLocationInput: ActivityDto = {
   ...basicAppletDetails,
   items: [
     {
@@ -562,14 +528,14 @@ export const geoLocationInput = {
       name: 'Screen11',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '64e31b68-22d8-1858-d681-b95000000000',
       order: 1,
       timer: null,
-    } as GeolocationItemDto,
+    },
   ],
 };
-export const audioPlayerInput = {
+
+export const audioPlayerInput: ActivityDto = {
   ...basicAppletDetails,
   items: [
     {
@@ -591,15 +557,14 @@ export const audioPlayerInput = {
       name: 'Screen12',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '64e31b68-22d8-1858-d681-b95200000000',
       order: 0,
       timer: null,
-    } as AudioPlayerItemDto,
+    },
   ],
 };
 
-export const messageInput = {
+export const messageInput: ActivityDto = {
   ...basicAppletDetails,
   items: [
     {
@@ -607,26 +572,20 @@ export const messageInput = {
       responseType: 'message',
       config: {
         removeBackButton: false,
-        skippableItem: true,
-        additionalResponseOption: {
-          textInputOption: false,
-          textInputRequired: false,
-        },
-        playOnce: false,
         timer: null,
       },
       name: 'Screen13',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '14e31b68-22d8-1858-d681-b95200000001',
       order: 1,
       timer: null,
       responseValues: null,
-    } as MessageItemDto,
+    },
   ],
 };
-export const messageOutput = {
+
+export const messageOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -657,17 +616,11 @@ export const messageOutput = {
   order: 2,
   responseIsEditable: true,
   scoreSettings: [],
-  scoresAndReports: {
-    generateReport: false,
-    reports: [],
-    showScoreSummary: false,
-  },
   showAllAtOnce: false,
   splashScreen: '',
-  timer: null,
-} as ActivityDetails;
+};
 
-export const stackedRadioOutput = {
+export const stackedRadioOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -806,17 +759,11 @@ export const stackedRadioOutput = {
   order: 2,
   responseIsEditable: true,
   scoreSettings: [],
-  scoresAndReports: {
-    generateReport: false,
-    reports: [],
-    showScoreSummary: false,
-  },
   showAllAtOnce: false,
   splashScreen: '',
-  timer: null,
-} as ActivityDetails;
+};
 
-export const stackedSliderOutput = {
+export const stackedSliderOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -886,17 +833,11 @@ export const stackedSliderOutput = {
   order: 2,
   responseIsEditable: true,
   scoreSettings: [],
-  scoresAndReports: {
-    generateReport: false,
-    reports: [],
-    showScoreSummary: false,
-  },
   showAllAtOnce: false,
   splashScreen: '',
-  timer: null,
-} as ActivityDetails;
+};
 
-export const stackedCheckboxOutput = {
+export const stackedCheckboxOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -1035,17 +976,11 @@ export const stackedCheckboxOutput = {
   order: 2,
   responseIsEditable: true,
   scoreSettings: [],
-  scoresAndReports: {
-    generateReport: false,
-    reports: [],
-    showScoreSummary: false,
-  },
   showAllAtOnce: false,
   splashScreen: '',
-  timer: null,
-} as ActivityDetails;
+};
 
-export const photoOutput = {
+export const photoOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -1077,17 +1012,11 @@ export const photoOutput = {
   order: 2,
   responseIsEditable: true,
   scoreSettings: [],
-  scoresAndReports: {
-    generateReport: false,
-    reports: [],
-    showScoreSummary: false,
-  },
   showAllAtOnce: false,
   splashScreen: '',
-  timer: null,
-} as ActivityDetails;
+};
 
-export const videoOutput = {
+export const videoOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -1119,17 +1048,11 @@ export const videoOutput = {
   order: 2,
   responseIsEditable: true,
   scoreSettings: [],
-  scoresAndReports: {
-    generateReport: false,
-    reports: [],
-    showScoreSummary: false,
-  },
   showAllAtOnce: false,
   splashScreen: '',
-  timer: null,
-} as ActivityDetails;
+};
 
-export const timeRangeOutput = {
+export const timeRangeOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -1161,17 +1084,11 @@ export const timeRangeOutput = {
   order: 2,
   responseIsEditable: true,
   scoreSettings: [],
-  scoresAndReports: {
-    generateReport: false,
-    reports: [],
-    showScoreSummary: false,
-  },
   showAllAtOnce: false,
   splashScreen: '',
-  timer: null,
-} as ActivityDetails;
+};
 
-export const dateOutput = {
+export const dateOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -1203,17 +1120,11 @@ export const dateOutput = {
   order: 2,
   responseIsEditable: true,
   scoreSettings: [],
-  scoresAndReports: {
-    generateReport: false,
-    reports: [],
-    showScoreSummary: false,
-  },
   showAllAtOnce: false,
   splashScreen: '',
-  timer: null,
-} as ActivityDetails;
+};
 
-export const drawingOutput = {
+export const drawingOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -1248,17 +1159,11 @@ export const drawingOutput = {
   order: 2,
   responseIsEditable: true,
   scoreSettings: [],
-  scoresAndReports: {
-    generateReport: false,
-    reports: [],
-    showScoreSummary: false,
-  },
   showAllAtOnce: false,
   splashScreen: '',
-  timer: null,
-} as ActivityDetails;
+};
 
-export const audioOutput = {
+export const audioOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -1292,17 +1197,11 @@ export const audioOutput = {
   order: 2,
   responseIsEditable: true,
   scoreSettings: [],
-  scoresAndReports: {
-    generateReport: false,
-    reports: [],
-    showScoreSummary: false,
-  },
   showAllAtOnce: false,
   splashScreen: '',
-  timer: null,
-} as ActivityDetails;
+};
 
-export const geolocationOutput = {
+export const geolocationOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -1334,17 +1233,11 @@ export const geolocationOutput = {
   order: 2,
   responseIsEditable: true,
   scoreSettings: [],
-  scoresAndReports: {
-    generateReport: false,
-    reports: [],
-    showScoreSummary: false,
-  },
   showAllAtOnce: false,
   splashScreen: '',
-  timer: null,
-} as ActivityDetails;
+};
 
-export const audioPlayerOutput = {
+export const audioPlayerOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -1379,17 +1272,11 @@ export const audioPlayerOutput = {
   order: 2,
   responseIsEditable: true,
   scoreSettings: [],
-  scoresAndReports: {
-    generateReport: false,
-    reports: [],
-    showScoreSummary: false,
-  },
   showAllAtOnce: false,
   splashScreen: '',
-  timer: null,
-} as ActivityDetails;
+};
 
-export const audioPlayerWithAdditionalTextInput = {
+export const audioPlayerWithAdditionalTextInput: ActivityDto = {
   ...basicAppletDetails,
   items: [
     {
@@ -1411,15 +1298,14 @@ export const audioPlayerWithAdditionalTextInput = {
       name: 'Screen12',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '64e31b68-22d8-1858-d681-b95200000000',
       timer: null,
       order: 1,
-    } as AudioPlayerItemDto,
+    },
   ],
 };
 
-export const audioPlayerWithAdditionalTextOutput = {
+export const audioPlayerWithAdditionalTextOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -1457,17 +1343,11 @@ export const audioPlayerWithAdditionalTextOutput = {
   order: 2,
   responseIsEditable: true,
   scoreSettings: [],
-  scoresAndReports: {
-    generateReport: false,
-    reports: [],
-    showScoreSummary: false,
-  },
   showAllAtOnce: false,
   splashScreen: '',
-  timer: null,
-} as ActivityDetails;
+};
 
-export const conditionalInput = {
+export const conditionalInput: ActivityDto = {
   id: 'd79bcaee-28e6-4f4c-b89c-e812b18aca46',
   name: 'PHQ-9',
   description: '2 out of 3',
@@ -1484,8 +1364,9 @@ export const conditionalInput = {
       question:
         'Durante las **++últimas 2 semanas++**, ¿qué tan seguido ha\ntenido molestias debido a los siguientes problemas?',
       responseType: 'singleSelect',
+      order: 1,
+      timer: null,
       responseValues: {
-        paletteName: null,
         options: [
           {
             id: '117c3a26-a3f8-449e-94d6-198b0c7280a8',
@@ -1509,7 +1390,6 @@ export const conditionalInput = {
         setAlerts: false,
         addTooltip: false,
         setPalette: false,
-        addTokens: null,
         additionalResponseOption: {
           textInputOption: false,
           textInputRequired: false,
@@ -1519,15 +1399,15 @@ export const conditionalInput = {
       name: 'phq9_instructions',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '465efd87-b4d5-4d23-8348-365dd0f435ba',
     },
     {
       question:
         '++**Durante las últimas 2 semanas...**++  \n\nPoco interés o placer en hacer cosas',
       responseType: 'singleSelect',
+      order: 1,
+      timer: null,
       responseValues: {
-        paletteName: null,
         options: [
           {
             id: '9a1f9632-b673-40ee-84ef-856bd035f602',
@@ -1584,7 +1464,6 @@ export const conditionalInput = {
         setAlerts: false,
         addTooltip: false,
         setPalette: false,
-        addTokens: null,
         additionalResponseOption: {
           textInputOption: false,
           textInputRequired: false,
@@ -1594,15 +1473,15 @@ export const conditionalInput = {
       name: 'phq9_01',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: '67fdc866-0e4b-40ae-a194-67c6bdaaab9a',
     },
     {
       question:
         'Durante las últimas 2 semanas… Se ha sentido decaído(a), deprimido(a) o sin esperanzas',
       responseType: 'singleSelect',
+      order: 1,
+      timer: null,
       responseValues: {
-        paletteName: null,
         options: [
           {
             id: '8cb97b4c-1518-4375-9866-48c07da941ad',
@@ -1659,7 +1538,6 @@ export const conditionalInput = {
         setAlerts: false,
         addTooltip: false,
         setPalette: false,
-        addTokens: null,
         additionalResponseOption: {
           textInputOption: false,
           textInputRequired: false,
@@ -1669,15 +1547,15 @@ export const conditionalInput = {
       name: 'phq9_02',
       isHidden: false,
       conditionalLogic: null,
-      allowEdit: true,
       id: 'b9fab9c9-1849-4192-8f78-5b70d23d51d6',
     },
     {
       question:
         '++**Durante las últimas 2 semanas...**++  \n\nHa tenido dificultad para quedarse o permanecer dormido(a), o ha dormido demasiado',
       responseType: 'singleSelect',
+      order: 1,
+      timer: null,
       responseValues: {
-        paletteName: null,
         options: [
           {
             id: '5b1ab613-f405-4004-8c92-e64f21d1ca7a',
@@ -1734,7 +1612,6 @@ export const conditionalInput = {
         setAlerts: false,
         addTooltip: false,
         setPalette: false,
-        addTokens: null,
         additionalResponseOption: {
           textInputOption: false,
           textInputRequired: false,
@@ -1774,8 +1651,9 @@ export const conditionalInput = {
       question:
         '++**Durante las últimas 2 semanas...**++  \n\nSe ha sentido cansado(a) o con poca energía',
       responseType: 'singleSelect',
+      order: 1,
+      timer: null,
       responseValues: {
-        paletteName: null,
         options: [
           {
             id: '737d58ec-d34e-44c8-aada-012afc7e2366',
@@ -1832,7 +1710,6 @@ export const conditionalInput = {
         setAlerts: false,
         addTooltip: false,
         setPalette: false,
-        addTokens: null,
         additionalResponseOption: {
           textInputOption: false,
           textInputRequired: false,
@@ -1866,15 +1743,15 @@ export const conditionalInput = {
           },
         ],
       },
-      allowEdit: true,
       id: '61411f69-b491-4a7c-a4cc-c05f762bcb2a',
     },
     {
       question:
         '++**Durante las últimas 2 semanas...**++  \n\nSin apetito o ha comido en exceso',
       responseType: 'singleSelect',
+      order: 1,
+      timer: null,
       responseValues: {
-        paletteName: null,
         options: [
           {
             id: 'c94be769-269c-458e-9d07-4eb2995bd5d8',
@@ -1931,7 +1808,6 @@ export const conditionalInput = {
         setAlerts: false,
         addTooltip: false,
         setPalette: false,
-        addTokens: null,
         additionalResponseOption: {
           textInputOption: false,
           textInputRequired: false,
@@ -1965,15 +1841,15 @@ export const conditionalInput = {
           },
         ],
       },
-      allowEdit: true,
       id: 'e99dfe82-58ce-4395-b3eb-f7d5e3369fc1',
     },
     {
       question:
         '++**Durante las últimas 2 semanas...**++  \n\nSe ha sentido mal con usted mismo(a) – o que es un fracaso o que ha quedado mal con usted mismo(a) o con su familia',
       responseType: 'singleSelect',
+      order: 2,
+      timer: null,
       responseValues: {
-        paletteName: null,
         options: [
           {
             id: '001028a9-ae42-4514-87b1-fcaad44c1d79',
@@ -2030,7 +1906,6 @@ export const conditionalInput = {
         setAlerts: false,
         addTooltip: false,
         setPalette: false,
-        addTokens: null,
         additionalResponseOption: {
           textInputOption: false,
           textInputRequired: false,
@@ -2064,15 +1939,15 @@ export const conditionalInput = {
           },
         ],
       },
-      allowEdit: true,
       id: 'b70a0f33-0d2f-4623-9491-45a3f73aa011',
     },
     {
       question:
         '++**Durante las últimas 2 semanas...**++  \n\nHa tenido dificultad para concentrarse en ciertas actividades, tales como leer el periódico o ver la televisión',
       responseType: 'singleSelect',
+      order: 2,
+      timer: null,
       responseValues: {
-        paletteName: null,
         options: [
           {
             id: '41ded225-7cce-42d0-b369-d9c096004da1',
@@ -2129,7 +2004,6 @@ export const conditionalInput = {
         setAlerts: false,
         addTooltip: false,
         setPalette: false,
-        addTokens: null,
         additionalResponseOption: {
           textInputOption: false,
           textInputRequired: false,
@@ -2163,15 +2037,15 @@ export const conditionalInput = {
           },
         ],
       },
-      allowEdit: true,
       id: 'f69c68c7-9edb-4e19-90c5-7a3e35759f31',
     },
     {
       question:
         '++**Durante las últimas 2 semanas...**++  \n\n¿Se ha movido o hablado tan lento que otras personas podrían haberlo notado? o lo contrario – muy inquieto(a) o agitado(a) que ha estado moviéndose mucho más de lo normal',
       responseType: 'singleSelect',
+      order: 2,
+      timer: null,
       responseValues: {
-        paletteName: null,
         options: [
           {
             id: 'b6bcba83-169b-4de3-8a18-f3bf3c1f1aed',
@@ -2228,7 +2102,6 @@ export const conditionalInput = {
         setAlerts: false,
         addTooltip: false,
         setPalette: false,
-        addTokens: null,
         additionalResponseOption: {
           textInputOption: false,
           textInputRequired: false,
@@ -2262,7 +2135,6 @@ export const conditionalInput = {
           },
         ],
       },
-      allowEdit: true,
       id: '40d88908-a121-4a93-80fe-8a79c86b8f48',
     },
     {
@@ -2363,18 +2235,21 @@ export const conditionalInput = {
       order: 1,
       timer: null,
     },
-  ] as SingleSelectionItemDto[],
+  ],
   scoresAndReports: {
-    generateReport: true,
     showScoreSummary: true,
     reports: [
       {
+        id: '',
+        calculationType: 'sum',
         type: 'section',
         name: 'PHQ',
         message:
           '## Patient Health Questionnaire (PHQ-9)  \n\nThe PHQ-9 screens for depression severity and impairment level in adolescents and adults. According to the DSM-5, depression refers to significant distress or impairment in daily life, accompanied by the frequent occurrence of some of the following symptoms:\n- depressed mood most of the day, almost every day\n- significantly decreased interest or pleasure in all or most activities\n- abnormal changes in weight (loss or gain) and in appetite (increased or decreased)\n- changes in sleep (e.g., insomnia)\n- psychomotor agitation or retardation (e.g., restlessness) that is observable by others\n- fatigue or loss of energy\n- feelings of worthlessness or inappropriate guilt\n- lack of concentration\n- suicidal thoughts, behaviors, or attempts ',
         itemsPrint: [],
+        // @ts-expect-error
         conditionalLogic: null,
+        itemsScore: ['0'],
       },
       {
         type: 'score',
@@ -2397,7 +2272,6 @@ export const conditionalInput = {
             name: 'minimal',
             id: 'sumScore_phq_totalscore_minimal',
             flagScore: false,
-            itemsPrint: [],
             match: 'all',
             conditions: [
               {
@@ -2411,7 +2285,6 @@ export const conditionalInput = {
             name: 'mild',
             id: 'sumScore_phq_totalscore_mild',
             flagScore: false,
-            itemsPrint: [],
             match: 'all',
             conditions: [
               {
@@ -2425,7 +2298,6 @@ export const conditionalInput = {
             name: 'moderate',
             id: 'sumScore_phq_totalscore_moderate',
             flagScore: true,
-            itemsPrint: [],
             match: 'all',
             conditions: [
               {
@@ -2457,7 +2329,6 @@ export const conditionalInput = {
             name: 'severe',
             id: 'sumScore_phq_totalscore_severe',
             flagScore: true,
-            itemsPrint: [],
             match: 'all',
             conditions: [
               {
@@ -2469,11 +2340,11 @@ export const conditionalInput = {
           },
         ],
       },
-    ] as ReportDto[],
+    ],
   },
 };
 
-export const conditionalOutput = {
+export const conditionalOutput: ActivityDetails = {
   description: '2 out of 3',
   hasSummary: true,
   id: 'd79bcaee-28e6-4f4c-b89c-e812b18aca46',
@@ -2514,6 +2385,7 @@ export const conditionalOutput = {
       isHidden: false,
       isSkippable: false,
       name: 'phq9_instructions',
+      order: 1,
       question:
         'Durante las **++últimas 2 semanas++**, ¿qué tan seguido ha\ntenido molestias debido a los siguientes problemas?',
       timer: null,
@@ -2583,6 +2455,7 @@ export const conditionalOutput = {
       isHidden: false,
       isSkippable: false,
       name: 'phq9_01',
+      order: 1,
       question:
         '++**Durante las últimas 2 semanas...**++  \n\nPoco interés o placer en hacer cosas',
       timer: null,
@@ -2652,6 +2525,7 @@ export const conditionalOutput = {
       isHidden: false,
       isSkippable: false,
       name: 'phq9_02',
+      order: 1,
       question:
         'Durante las últimas 2 semanas… Se ha sentido decaído(a), deprimido(a) o sin esperanzas',
       timer: null,
@@ -2662,7 +2536,6 @@ export const conditionalOutput = {
         conditions: [
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '2',
             },
@@ -2670,7 +2543,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '3',
             },
@@ -2678,7 +2550,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '2',
             },
@@ -2686,7 +2557,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '3',
             },
@@ -2758,6 +2628,7 @@ export const conditionalOutput = {
       isHidden: false,
       isSkippable: false,
       name: 'phq9_03',
+      order: 1,
       question:
         '++**Durante las últimas 2 semanas...**++  \n\nHa tenido dificultad para quedarse o permanecer dormido(a), o ha dormido demasiado',
       timer: null,
@@ -2768,7 +2639,6 @@ export const conditionalOutput = {
         conditions: [
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '2',
             },
@@ -2776,7 +2646,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '3',
             },
@@ -2784,7 +2653,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '2',
             },
@@ -2792,7 +2660,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '3',
             },
@@ -2864,6 +2731,7 @@ export const conditionalOutput = {
       isHidden: false,
       isSkippable: false,
       name: 'phq9_04',
+      order: 1,
       question:
         '++**Durante las últimas 2 semanas...**++  \n\nSe ha sentido cansado(a) o con poca energía',
       timer: null,
@@ -2874,7 +2742,6 @@ export const conditionalOutput = {
         conditions: [
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '2',
             },
@@ -2882,7 +2749,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '3',
             },
@@ -2890,7 +2756,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '2',
             },
@@ -2898,7 +2763,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '3',
             },
@@ -2970,6 +2834,7 @@ export const conditionalOutput = {
       isHidden: false,
       isSkippable: false,
       name: 'phq9_05',
+      order: 1,
       question:
         '++**Durante las últimas 2 semanas...**++  \n\nSin apetito o ha comido en exceso',
       timer: null,
@@ -2980,7 +2845,6 @@ export const conditionalOutput = {
         conditions: [
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '2',
             },
@@ -2988,7 +2852,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '3',
             },
@@ -2996,7 +2859,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '2',
             },
@@ -3004,7 +2866,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '3',
             },
@@ -3076,6 +2937,7 @@ export const conditionalOutput = {
       isHidden: false,
       isSkippable: false,
       name: 'phq9_06',
+      order: 2,
       question:
         '++**Durante las últimas 2 semanas...**++  \n\nSe ha sentido mal con usted mismo(a) – o que es un fracaso o que ha quedado mal con usted mismo(a) o con su familia',
       timer: null,
@@ -3086,7 +2948,6 @@ export const conditionalOutput = {
         conditions: [
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '2',
             },
@@ -3094,7 +2955,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '3',
             },
@@ -3102,7 +2962,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '2',
             },
@@ -3110,7 +2969,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '3',
             },
@@ -3182,6 +3040,7 @@ export const conditionalOutput = {
       isHidden: false,
       isSkippable: false,
       name: 'phq9_07',
+      order: 2,
       question:
         '++**Durante las últimas 2 semanas...**++  \n\nHa tenido dificultad para concentrarse en ciertas actividades, tales como leer el periódico o ver la televisión',
       timer: null,
@@ -3192,7 +3051,6 @@ export const conditionalOutput = {
         conditions: [
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '2',
             },
@@ -3200,7 +3058,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '3',
             },
@@ -3208,7 +3065,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '2',
             },
@@ -3216,7 +3072,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '3',
             },
@@ -3288,6 +3143,7 @@ export const conditionalOutput = {
       isHidden: false,
       isSkippable: false,
       name: 'phq9_08',
+      order: 2,
       question:
         '++**Durante las últimas 2 semanas...**++  \n\n¿Se ha movido o hablado tan lento que otras personas podrían haberlo notado? o lo contrario – muy inquieto(a) o agitado(a) que ha estado moviéndose mucho más de lo normal',
       timer: null,
@@ -3298,7 +3154,6 @@ export const conditionalOutput = {
         conditions: [
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '2',
             },
@@ -3306,7 +3161,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_01',
-            itemName: 'phq9_01',
             payload: {
               optionValue: '3',
             },
@@ -3314,7 +3168,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '2',
             },
@@ -3322,7 +3175,6 @@ export const conditionalOutput = {
           },
           {
             activityItemName: 'phq9_02',
-            itemName: 'phq9_02',
             payload: {
               optionValue: '3',
             },
@@ -3419,7 +3271,6 @@ export const conditionalOutput = {
           ],
           flagScore: false,
           id: 'sumScore_phq_totalscore_minimal',
-          itemsPrint: [],
           match: 'all',
           name: 'minimal',
         },
@@ -3436,7 +3287,6 @@ export const conditionalOutput = {
           ],
           flagScore: false,
           id: 'sumScore_phq_totalscore_mild',
-          itemsPrint: [],
           match: 'all',
           name: 'mild',
         },
@@ -3453,7 +3303,6 @@ export const conditionalOutput = {
           ],
           flagScore: true,
           id: 'sumScore_phq_totalscore_moderate',
-          itemsPrint: [],
           match: 'all',
           name: 'moderate',
         },
@@ -3491,7 +3340,6 @@ export const conditionalOutput = {
           ],
           flagScore: true,
           id: 'sumScore_phq_totalscore_severe',
-          itemsPrint: [],
           match: 'all',
           name: 'severe',
         },
@@ -3512,127 +3360,6 @@ export const conditionalOutput = {
       type: 'score',
     },
   ],
-  scoresAndReports: {
-    generateReport: true,
-    reports: [
-      {
-        conditionalLogic: null,
-        itemsPrint: [],
-        message:
-          '## Patient Health Questionnaire (PHQ-9)  \n\nThe PHQ-9 screens for depression severity and impairment level in adolescents and adults. According to the DSM-5, depression refers to significant distress or impairment in daily life, accompanied by the frequent occurrence of some of the following symptoms:\n- depressed mood most of the day, almost every day\n- significantly decreased interest or pleasure in all or most activities\n- abnormal changes in weight (loss or gain) and in appetite (increased or decreased)\n- changes in sleep (e.g., insomnia)\n- psychomotor agitation or retardation (e.g., restlessness) that is observable by others\n- fatigue or loss of energy\n- feelings of worthlessness or inappropriate guilt\n- lack of concentration\n- suicidal thoughts, behaviors, or attempts ',
-        name: 'PHQ',
-        type: 'section',
-      },
-      {
-        calculationType: 'sum',
-        conditionalLogic: [
-          {
-            conditions: [
-              {
-                itemName: 'sumScore_phq_totalscore',
-                payload: {
-                  value: 5,
-                },
-                type: 'LESS_THAN',
-              },
-            ],
-            flagScore: false,
-            id: 'sumScore_phq_totalscore_minimal',
-            itemsPrint: [],
-            match: 'all',
-            name: 'minimal',
-          },
-          {
-            conditions: [
-              {
-                itemName: 'sumScore_phq_totalscore',
-                payload: {
-                  maxValue: 10,
-                  minValue: 4,
-                },
-                type: 'BETWEEN',
-              },
-            ],
-            flagScore: false,
-            id: 'sumScore_phq_totalscore_mild',
-            itemsPrint: [],
-            match: 'all',
-            name: 'mild',
-          },
-          {
-            conditions: [
-              {
-                itemName: 'sumScore_phq_totalscore',
-                payload: {
-                  maxValue: 15,
-                  minValue: 9,
-                },
-                type: 'BETWEEN',
-              },
-            ],
-            flagScore: true,
-            id: 'sumScore_phq_totalscore_moderate',
-            itemsPrint: [],
-            match: 'all',
-            name: 'moderate',
-          },
-          {
-            conditions: [
-              {
-                itemName: 'sumScore_phq_totalscore',
-                payload: {
-                  value: 20,
-                },
-                type: 'LESS_THAN',
-              },
-              {
-                itemName: 'sumScore_phq_totalscore',
-                payload: {
-                  value: 14,
-                },
-                type: 'GREATER_THAN',
-              },
-            ],
-            flagScore: true,
-            id: 'sumScore_phq_totalscore_moderatelysevere',
-            match: 'all',
-            name: 'moderatelysevere',
-          },
-          {
-            conditions: [
-              {
-                itemName: 'sumScore_phq_totalscore',
-                payload: {
-                  value: 19,
-                },
-                type: 'GREATER_THAN',
-              },
-            ],
-            flagScore: true,
-            id: 'sumScore_phq_totalscore_severe',
-            itemsPrint: [],
-            match: 'all',
-            name: 'severe',
-          },
-        ],
-        id: 'sumScore_phq_totalscore',
-        itemsScore: [
-          'phq9_01',
-          'phq9_02',
-          'phq9_03',
-          'phq9_04',
-          'phq9_05',
-          'phq9_06',
-          'phq9_07',
-          'phq9_08',
-          'phq9_09',
-        ],
-        name: 'PHQ_TotalScore',
-        type: 'score',
-      },
-    ],
-    showScoreSummary: true,
-  },
   showAllAtOnce: false,
   splashScreen: '',
 };

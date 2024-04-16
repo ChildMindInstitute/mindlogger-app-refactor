@@ -36,7 +36,7 @@ type TestScreenConfig = {
 
 export type TutorialRecord = {
   text: string;
-  nodeLabel?: number | string;
+  nodeLabel?: number | string | null;
 };
 
 export type DeviceType = 'mobile' | 'tablet';

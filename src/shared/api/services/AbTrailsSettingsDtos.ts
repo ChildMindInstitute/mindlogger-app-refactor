@@ -25,6 +25,6 @@ type TutorialSettingsDto = {
 };
 
 type TutorialDto = {
-  nodeLabel: string;
+  nodeLabel: string | null;
   text: string;
 };

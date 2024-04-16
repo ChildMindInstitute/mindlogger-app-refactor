@@ -22,6 +22,7 @@ export type ActivityDto = {
   scoresAndReports?: {
     showScoreSummary: boolean;
     reports: Array<ReportDto>;
+    generateReport?: boolean;
   };
 };
 
