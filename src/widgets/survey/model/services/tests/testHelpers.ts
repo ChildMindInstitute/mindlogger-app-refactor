@@ -212,6 +212,22 @@ export const getFlowProgressMock = (): StoreProgress => {
   return progress;
 };
 
+export const getActivityProgressMock = (): StoreProgress => {
+  const progress: StoreProgress = {
+    'mock-applet-id-1': {
+      'mock-activity-id-1': {
+        'mock-event-id-1': {
+          type: ActivityPipelineType.Regular,
+          availableTo: null,
+          startAt: 12367800000,
+          endAt: null,
+        },
+      },
+    },
+  };
+  return progress;
+};
+
 export const getActivityRecordMockResult = (
   answersMock: Answers,
   userActionsMock: UserAction[],

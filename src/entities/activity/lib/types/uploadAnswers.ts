@@ -16,7 +16,7 @@ export type SendAnswersInput = {
   activityId: string;
   executionGroupKey: string;
   userActions: UserActionDto[];
-  scheduledTime?: number;
+  scheduledTime: number | null;
   startTime: number;
   endTime: number;
   userIdentifier?: string;

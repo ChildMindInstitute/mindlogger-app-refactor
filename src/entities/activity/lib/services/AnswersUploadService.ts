@@ -382,7 +382,7 @@ class AnswersUploadService implements IAnswersUploadService {
         events: encryptedUserActions,
         startTime: data.startTime,
         endTime: data.endTime,
-        scheduledTime: data.scheduledTime,
+        scheduledTime: data.scheduledTime ?? undefined,
         userPublicKey: JSON.stringify(userPublicKey),
         identifier,
         localEndDate: formatToDtoDate(data.endTime),
