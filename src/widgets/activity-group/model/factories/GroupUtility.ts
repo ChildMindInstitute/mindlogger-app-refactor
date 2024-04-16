@@ -306,6 +306,7 @@ export class GroupUtility {
     return EventModel.getTimeToComplete(
       eventActivity.event.timers.timer,
       this.getProgressRecord(eventActivity)!.startAt,
+      this.getNow(),
     );
   }
 }

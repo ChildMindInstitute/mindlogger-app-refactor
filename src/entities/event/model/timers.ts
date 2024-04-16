@@ -10,11 +10,12 @@ import {
 export const getTimeToComplete = (
   timer: HourMinute,
   startedAt: Date,
+  now: Date = getNow(),
 ): HourMinute | null => {
   const activityDuration: number =
     getMsFromHours(timer.hours) + getMsFromMinutes(timer.minutes);
 
-  const alreadyElapsed: number = getNow().getTime() - startedAt.getTime();
+  const alreadyElapsed: number = now.getTime() - startedAt.getTime();
 
   if (alreadyElapsed < activityDuration) {
     const left: number = activityDuration - alreadyElapsed;
