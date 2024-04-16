@@ -2,35 +2,37 @@ import { ActivityDetails } from '@entities/activity';
 
 import { mapToActivity } from './mappers';
 import {
-  stackedRadioOutput,
   stackedRadioInput,
   stackedCheckboxInput,
-  stackedCheckboxOutput,
   stackedSliderInput,
-  stackedSliderOutput,
   photoInput,
-  photoOutput,
   audioPlayerWithAdditionalTextInput,
-  audioPlayerWithAdditionalTextOutput,
   videoInput,
-  videoOutput,
   timeRangeInput,
-  timeRangeOutput,
   dateInput,
-  dateOutput,
   drawingInput,
-  drawingOutput,
   audioInput,
-  audioOutput,
   audioPlayerInput,
-  audioPlayerOutput,
   geoLocationInput,
-  geolocationOutput,
   messageInput,
-  messageOutput,
   conditionalInput,
+} from './mappers.input.mock';
+import {
+  stackedRadioOutput,
+  stackedCheckboxOutput,
+  stackedSliderOutput,
+  photoOutput,
+  audioPlayerWithAdditionalTextOutput,
+  videoOutput,
+  timeRangeOutput,
+  dateOutput,
+  drawingOutput,
+  audioOutput,
+  audioPlayerOutput,
+  geolocationOutput,
+  messageOutput,
   conditionalOutput,
-} from './mappers.mock';
+} from './mappers.output.mock';
 import { abTrailsInput, abTrailsOutput } from './performanceTasks.mock';
 
 const removeUnusedProperties = (
