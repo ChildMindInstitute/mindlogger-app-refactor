@@ -189,7 +189,7 @@ export const areDatesEqual = (dateLeft: Date, dateRight: Date): boolean =>
 export const getUnixTimestamp = (date: Date | number): number =>
   getUnixTime(date);
 
-export const getMidnightDateInMs = (date: Date = new Date()): number =>
+export const getMidnightDateInMs = (date: Date = getNow()): number =>
   date.setHours(0, 0, 0, 0);
 
 export const convertToDayMonthYear = (date: Date): DayMonthYear => ({
@@ -220,3 +220,5 @@ export const getDateFromString = (dateString: string) => {
  * but with the opposite sign which is expected by the Backend server.
  */
 export const getTimezoneOffset = () => new Date().getTimezoneOffset() * -1;
+
+export const getNow = () => new Date();
