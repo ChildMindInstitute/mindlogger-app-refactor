@@ -26,9 +26,10 @@ const getLinking = ():
   | LinkingOptions<ReactNavigation.RootParamList>
   | undefined => {
   if (!DEEP_LINK_PREFIX) {
-    Logger.error(
+    Logger[__DEV__ ? 'info' : 'error'](
       `[${LOGGER_MODULE_NAME}] No deep link prefix found, deep linking will not work.`,
     );
+
     return undefined;
   }
 

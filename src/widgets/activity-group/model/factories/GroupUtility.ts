@@ -14,16 +14,8 @@ import {
   Progress,
   ProgressPayload,
 } from '@app/abstract/lib';
-import { ScheduleEvent } from '@app/entities/event';
-import {
-  DatesFromTo,
-  getMsFromHours,
-  getMsFromMinutes,
-  HourMinute,
-  isSourceLess,
-  MINUTES_IN_HOUR,
-  MS_IN_MINUTE,
-} from '@shared/lib';
+import { EventModel, ScheduleEvent } from '@app/entities/event';
+import { DatesFromTo, HourMinute, isSourceLess } from '@shared/lib';
 
 import { EventEntity, Activity } from '../../lib';
 
@@ -305,26 +297,16 @@ export class GroupUtility {
   }
 
   public getTimeToComplete(eventActivity: EventEntity): HourMinute | null {
-    const { event } = eventActivity;
-    const timer = event.timers!.timer!;
-
-    const startedTime = this.getStartedAt(eventActivity);
-
-    const activityDuration: number =
-      getMsFromHours(timer.hours) + getMsFromMinutes(timer.minutes);
-
-    const alreadyElapsed: number =
-      this.getNow().getTime() - startedTime.getTime();
-
-    if (alreadyElapsed < activityDuration) {
-      const left: number = activityDuration - alreadyElapsed;
-
-      const hours = Math.floor(left / MS_IN_MINUTE / MINUTES_IN_HOUR);
-      const minutes = Math.floor((left - getMsFromHours(hours)) / MS_IN_MINUTE);
-
-      return { hours, minutes };
-    } else {
-      return null;
+    if (!eventActivity.event.timers.timer) {
+      throw new Error(
+        '[GroupUtility.getTimeToComplete] Timer is not specified',
+      );
     }
+
+    return EventModel.getTimeToComplete(
+      eventActivity.event.timers.timer,
+      this.getProgressRecord(eventActivity)!.startAt,
+      this.getNow(),
+    );
   }
 }

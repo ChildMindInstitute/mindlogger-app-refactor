@@ -302,7 +302,7 @@ function useStartEntity({
     activityId: string,
     eventId: string,
     entityName: string,
-    isTimerElapsed: boolean = false,
+    isTimerElapsed: boolean,
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
       Logger.log('[useStartEntity.startActivity] Mutex is busy');
@@ -486,7 +486,7 @@ function useStartEntity({
     flowId: string,
     eventId: string,
     entityName: string,
-    isTimerElapsed: boolean = false,
+    isTimerElapsed: boolean,
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
       Logger.log('[useStartEntity.startFlow] Mutex is busy');
