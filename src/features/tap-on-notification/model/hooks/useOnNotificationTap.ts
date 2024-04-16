@@ -13,6 +13,7 @@ import {
   StoreProgress,
 } from '@app/abstract/lib';
 import { AppletModel, clearStorageRecords } from '@app/entities/applet';
+import { EventModel } from '@app/entities/event';
 import {
   LocalEventDetail,
   LocalInitialNotification,
@@ -22,9 +23,12 @@ import {
   useForegroundEvents,
   useOnInitialAndroidNotification,
 } from '@app/entities/notification';
-import { LogTrigger } from '@app/shared/api';
+import { LogTrigger, QueryDataUtils } from '@app/shared/api';
 import {
   AnalyticsService,
+  getEntityProgress,
+  HourMinute,
+  isEntityInProgress,
   Logger,
   MixEvents,
   MixProperties,
@@ -191,8 +195,29 @@ export function useOnNotificationTap({
     eventId: string,
     entityName: string,
   ) => {
+    const progressRecord = getEntityProgress(
+      appletId,
+      entityId,
+      eventId,
+      storeProgress,
+    );
+
+    const timer: HourMinute | null =
+      new QueryDataUtils(queryClient).getEventDto(appletId, eventId)?.timers
+        .timer ?? null;
+
+    let isTimerElapsed = false;
+
+    if (progressRecord && timer && isEntityInProgress(progressRecord)) {
+      isTimerElapsed =
+        EventModel.getTimeToComplete(
+          timer,
+          new Date(progressRecord.startAt),
+        ) === null;
+    }
+
     if (entityType === 'flow') {
-      startFlow(appletId, entityId, eventId, entityName).then(
+      startFlow(appletId, entityId, eventId, entityName, isTimerElapsed).then(
         ({
           startedFromScratch,
           cannotBeStartedDueToMediaFound,
@@ -218,7 +243,13 @@ export function useOnNotificationTap({
         },
       );
     } else {
-      startActivity(appletId, entityId, eventId, entityName).then(
+      startActivity(
+        appletId,
+        entityId,
+        eventId,
+        entityName,
+        isTimerElapsed,
+      ).then(
         ({
           startedFromScratch,
           cannotBeStartedDueToMediaFound,
