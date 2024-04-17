@@ -203,8 +203,8 @@
   "logout_warning": {
     "warning": "Avertissement de déconnexion",
     "uploads_in_progress": "Téléchargements en cours",
-    "currently_uploading": "Vous avez des réponses en cours de téléchargement. Si vous vous déconnectez maintenant puis vous reconnectez en tant qu'utilisateur différent, vos réponses seront perdues.",
-    "not_uploaded": "Vous n'avez pas téléchargé de réponses. Si vous vous déconnectez maintenant, ces réponses seront perdues.",
+    "currently_uploading": "Vous n'avez pas téléchargé de réponses. Si vous vous déconnectez maintenant puis vous reconnectez en tant qu'utilisateur différent, vos réponses seront perdues.",
+    "not_uploaded": "Vous n'avez pas téléchargé de réponses. Si vous vous déconnectez maintenant puis vous reconnectez en tant qu'utilisateur différent, vos réponses seront perdues.",
     "sure_logout": "Êtes-vous sûr de vouloir vous déconnecter ?",
     "cancel": "Annuler",
     "logout": "Logout"
