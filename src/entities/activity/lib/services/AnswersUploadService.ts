@@ -116,7 +116,7 @@ class AnswersUploadService implements IAnswersUploadService {
     logAnswerIndex: number,
     appletId: string,
   ): Promise<string> {
-    /** Since CacheDir name changes upon app update
+    /** Since the application directory changes upon app update
      * it is required to build URIs from scratch using file names
      * just before we actually want to fetch those files.
      * Please see: https://github.com/joltup/rn-fetch-blob/issues/204#issuecomment-786321861
