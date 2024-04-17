@@ -1,19 +1,6 @@
 import { jest } from '@jest/globals';
 import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
 
-jest.mock('react-native-file-access', () => {
-  return {
-    FileSystem: {
-      exists: jest.fn(uri => uri.endsWith('.jpg')), // Mock exists() to return true for .jpg files
-    },
-    Dirs: {
-      MainBundleDir: () => {},
-      CacheDir: () => {},
-      DocumentDir: () => {},
-    },
-  };
-});
-
 jest.mock('react-native-reanimated', () => {
   const MockAnimation = jest.fn().mockImplementation(() => {
     const instance = {
