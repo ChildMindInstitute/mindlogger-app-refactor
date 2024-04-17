@@ -5,7 +5,7 @@ import {
   PipelineItem,
   UserAction,
 } from '@app/features/pass-survey';
-import { getEmptySliderItem as getSliderItem } from '@app/features/pass-survey/model/tests/testHelpers';
+import { getSliderItem } from '@app/features/pass-survey/model/tests/testHelpers';
 import { AnswerDto, SliderAnswerDto } from '@app/shared/api';
 import { FlowState } from '@app/widgets/survey/lib';
 import * as dateTimeUtils from '@shared/lib/utils/dateTime';
@@ -53,7 +53,7 @@ jest.spyOn(dateTimeUtils, 'getTimezoneOffset').mockReturnValue(3);
 
 const createSvgFilesMock = jest
   .spyOn(operations, 'createSvgFiles')
-  .mockResolvedValue([]);
+  .mockResolvedValue([undefined]);
 
 const saveSummaryMock = jest.fn();
 

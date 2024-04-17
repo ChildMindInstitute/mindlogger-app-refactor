@@ -6,7 +6,7 @@ import {
   getCheckboxResponse,
   getEmptyCheckboxesItem as getCheckboxesItem,
   getEmptyRadioItem as getRadioItem,
-  getEmptySliderItem as getSliderItem,
+  getSliderItem,
   getRadioResponse,
 } from './testHelpers';
 import { Answers, PipelineItem } from '../../lib';
