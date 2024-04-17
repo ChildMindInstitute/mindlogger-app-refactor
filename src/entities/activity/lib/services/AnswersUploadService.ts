@@ -18,8 +18,8 @@ import {
   encryption,
   formatToDtoDate,
   formatToDtoTime,
-  isLocalFileUrl,
 } from '@shared/lib';
+import { isLocalFileUrl, getLocalFileUri } from '@shared/lib/utils';
 
 import MediaFilesCleaner from './MediaFilesCleaner';
 import {
@@ -116,7 +116,13 @@ class AnswersUploadService implements IAnswersUploadService {
     logAnswerIndex: number,
     appletId: string,
   ): Promise<string> {
-    const localFileExists = await FileSystem.exists(mediaFile.uri);
+    /** Since CacheDir name changes upon app update
+     * it is required to build URIs from scratch using file names
+     * just before we actually want to fetch those files.
+     * Please see: https://github.com/joltup/rn-fetch-blob/issues/204#issuecomment-786321861
+     */
+    const localFileUri = getLocalFileUri(mediaFile.fileName);
+    const localFileExists = await FileSystem.exists(localFileUri);
 
     const logFileInfo = `(${mediaFile.type}, from answer #${logAnswerIndex})`;
 
@@ -159,7 +165,7 @@ class AnswersUploadService implements IAnswersUploadService {
         await FileService.uploadAppletFileToS3({
           fields: getFieldsDto.fields,
           fileName: mediaFile.fileName,
-          localUrl: mediaFile.uri,
+          localUrl: localFileUri,
           type: mediaFile.type,
           uploadUrl: getFieldsDto.uploadUrl,
         });
