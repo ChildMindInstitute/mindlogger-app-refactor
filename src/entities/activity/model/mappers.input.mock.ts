@@ -319,7 +319,20 @@ export const stackedSliderInput: ActivityDto = {
             maxValue: 5,
             minImage: null,
             maxImage: null,
-            alerts: null,
+            alerts: [
+              {
+                value: 1,
+                minValue: 0,
+                maxValue: 10,
+                alert: 'Some alert',
+              },
+              {
+                value: 2,
+                minValue: 5,
+                maxValue: 7,
+                alert: 'Some alert 2',
+              },
+            ],
             id: 'f010db9b-7299-4767-a172-757a21d6a53e',
             label: 'Slider 3',
           },
@@ -1019,7 +1032,212 @@ export const conditionalInput: ActivityDto = {
     },
   ],
   scoresAndReports: {
-    showScoreSummary: false,
-    reports: [],
+    showScoreSummary: true,
+    reports: [
+      {
+        itemsScore: ['one'],
+        type: 'score',
+        id: '1',
+        name: 'name',
+        calculationType: 'sum',
+        conditionalLogic: [
+          {
+            flagScore: true,
+            id: '1',
+            name: 'name',
+            match: 'any',
+            conditions: [
+              {
+                itemName: 'one',
+                type: 'GREATER_THAN',
+                payload: {
+                  value: 1,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
+};
+
+export const timeInput: ActivityDto = {
+  ...basicAppletDetails,
+  items: [
+    {
+      question: '\r\n\r\ntime',
+      responseType: 'time',
+      responseValues: null,
+      config: {
+        removeBackButton: false,
+        skippableItem: false,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        timer: 10,
+      },
+      name: 'Screen6',
+      isHidden: false,
+      conditionalLogic: null,
+      id: '64e31b67-22d8-1858-d681-b94600000000',
+      order: 1,
+      timer: 20,
+    },
+  ],
+};
+
+export const checkboxInput: ActivityDto = {
+  ...basicAppletDetails,
+  items: [
+    {
+      question: 'Checkbox',
+      responseType: 'multiSelect',
+      responseValues: {
+        options: [
+          {
+            id: 'string',
+            text: 'string',
+            image: null,
+            score: null,
+            color: null,
+            tooltip: 'string',
+            value: 1,
+            isNoneAbove: true,
+            isHidden: false,
+            alert: null,
+          },
+        ],
+      },
+      config: {
+        setPalette: false,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: false,
+        skippableItem: false,
+        timer: 10,
+        addScores: false,
+        setAlerts: false,
+        addTooltip: false,
+        randomizeOptions: false,
+      },
+      name: 'Screen2',
+      isHidden: false,
+      conditionalLogic: null,
+      id: '64e31b66-22d8-1858-d681-b93e00000000',
+      timer: null,
+      order: 1,
+    },
+  ],
+};
+
+export const numberSelectInput: ActivityDto = {
+  ...basicAppletDetails,
+  items: [
+    {
+      question: 'NumberSelect',
+      responseType: 'numberSelect',
+      responseValues: {
+        minValue: 0,
+        maxValue: 100,
+      },
+      config: {
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: false,
+        skippableItem: false,
+      },
+      name: 'Screen2',
+      isHidden: false,
+      conditionalLogic: null,
+      id: '64e31b66-22d8-1858-d681-b93e00000000',
+      timer: null,
+      order: 1,
+    },
+  ],
+};
+
+export const sliderInput: ActivityDto = {
+  ...basicAppletDetails,
+  items: [
+    {
+      timer: null,
+      question: 'Slider',
+      responseType: 'slider',
+      responseValues: {
+        minLabel: 'min label',
+        maxLabel: 'max label',
+        minImage: null,
+        maxImage: null,
+        minValue: 0,
+        maxValue: 10,
+        alerts: [
+          {
+            value: 1,
+            minValue: 0,
+            maxValue: 10,
+            alert: 'Some alert',
+          },
+          {
+            value: 2,
+            minValue: 5,
+            maxValue: 7,
+            alert: 'Some alert 2',
+          },
+        ],
+        scores: [0, 1],
+      },
+      config: {
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+        removeBackButton: false,
+        skippableItem: false,
+        timer: null,
+        addScores: false,
+        setAlerts: false,
+        showTickMarks: true,
+        showTickLabels: false,
+        continuousSlider: true,
+      },
+      name: 'Screen2',
+      isHidden: false,
+      conditionalLogic: null,
+      id: '64e31b66-22d8-1858-d681-b93e00000000',
+      order: 1,
+    },
+  ],
+};
+
+export const textInput: ActivityDto = {
+  ...basicAppletDetails,
+  items: [
+    {
+      question: 'TextInput',
+      responseType: 'text',
+      responseValues: null,
+      config: {
+        timer: null,
+        maxResponseLength: 20,
+        responseDataIdentifier: false,
+        correctAnswerRequired: true,
+        correctAnswer: 'correct',
+        numericalResponseRequired: false,
+        removeBackButton: false,
+        skippableItem: false,
+      },
+      name: 'Screen2',
+      isHidden: false,
+      conditionalLogic: null,
+      id: '64e31b66-22d8-1858-d681-b93e00000000',
+      timer: null,
+      order: 1,
+    },
+  ],
 };
