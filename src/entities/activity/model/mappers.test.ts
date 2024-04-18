@@ -16,6 +16,11 @@ import {
   geoLocationInput,
   messageInput,
   conditionalInput,
+  timeInput,
+  checkboxInput,
+  numberSelectInput,
+  sliderInput,
+  textInput,
 } from './mappers.input.mock';
 import {
   stackedRadioOutput,
@@ -32,6 +37,11 @@ import {
   geolocationOutput,
   messageOutput,
   conditionalOutput,
+  timeOutput,
+  checkboxOutput,
+  numberSelectOutput,
+  sliderOutput,
+  textOutput,
 } from './mappers.output.mock';
 
 const removeUnusedProperties = (
@@ -59,6 +69,14 @@ describe('Activity mapToActivity tests', () => {
     const result = mapToActivity(input);
 
     expect(removeUnusedProperties(result)).toEqual(stackedSliderOutput);
+  });
+
+  it('Should return mapped result for text item', async () => {
+    const input = textInput;
+
+    const result = mapToActivity(input);
+
+    expect(removeUnusedProperties(result)).toEqual(textOutput);
   });
 
   it('Should return mapped result for stacked checkbox item', async () => {
@@ -139,6 +157,38 @@ describe('Activity mapToActivity tests', () => {
     const result = mapToActivity(input);
 
     expect(removeUnusedProperties(result)).toEqual(messageOutput);
+  });
+
+  it('Should return mapped result for time item', async () => {
+    const input = timeInput;
+
+    const result = mapToActivity(input);
+
+    expect(removeUnusedProperties(result)).toEqual(timeOutput);
+  });
+
+  it('Should return mapped result for checkbox item', async () => {
+    const input = checkboxInput;
+
+    const result = mapToActivity(input);
+
+    expect(removeUnusedProperties(result)).toEqual(checkboxOutput);
+  });
+
+  it('Should return mapped result for NumberSelect item', async () => {
+    const input = numberSelectInput;
+
+    const result = mapToActivity(input);
+
+    expect(removeUnusedProperties(result)).toEqual(numberSelectOutput);
+  });
+
+  it('Should return mapped result for Slider item', async () => {
+    const input = sliderInput;
+
+    const result = mapToActivity(input);
+
+    expect(removeUnusedProperties(result)).toEqual(sliderOutput);
   });
 
   it('should return mapped result for items with additionalText', async () => {

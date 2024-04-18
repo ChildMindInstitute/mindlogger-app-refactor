@@ -209,10 +209,14 @@ function fileService() {
 
           data.append('key', request.fields.key);
           data.append('AWSAccessKeyId', request.fields.AWSAccessKeyId);
-          data.append(
-            'x-amz-security-token',
-            request.fields['x-amz-security-token'],
-          );
+
+          if (request.fields['x-amz-security-token']?.length) {
+            data.append(
+              'x-amz-security-token',
+              request.fields['x-amz-security-token'],
+            );
+          }
+
           data.append('policy', request.fields.policy);
           data.append('signature', request.fields.signature);
 
