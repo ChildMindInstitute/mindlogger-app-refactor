@@ -8,7 +8,7 @@ import {
   getSplashItem,
   getTextInputItem,
   getTutorialItem,
-} from '@app/features/pass-survey/model';
+} from '@app/features/pass-survey/model/tests';
 
 import { mapAnswersToDto } from '../mappers';
 import {
@@ -174,7 +174,7 @@ describe('Test survey operations', () => {
     const answerDtos = mapAnswersToDto(items, answers);
 
     const result = fillNullsForHiddenItems(
-      ['item-id-1', 'item-id-2', 'item-id-3', 'item-id-4'],
+      ['item-id-1', 'item-id-2', 'item-id-3'],
       answerDtos,
       [
         {
@@ -201,7 +201,7 @@ describe('Test survey operations', () => {
     });
   });
 
-  it('"createSvgFiles" should call SvgFileManager.writeFile with scgStrings taken from answers', async () => {
+  it('"createSvgFiles" should call SvgFileManager.writeFile with svgStrings taken from answers', async () => {
     const items = [
       getSplashItem('item-id-1'),
       getDrawerItem('item-id-2'),

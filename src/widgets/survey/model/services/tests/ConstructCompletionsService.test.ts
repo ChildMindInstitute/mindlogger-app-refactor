@@ -1,24 +1,16 @@
 import { StoreProgress } from '@app/abstract/lib';
-import {
-  Answer,
-  Answers,
-  PipelineItem,
-  UserAction,
-} from '@app/features/pass-survey';
+import { Answers, PipelineItem } from '@app/features/pass-survey';
 import { getSliderItem } from '@app/features/pass-survey/model/tests/testHelpers';
-import { AnswerDto, SliderAnswerDto } from '@app/shared/api';
-import { FlowState } from '@app/widgets/survey/lib';
-import * as dateTimeUtils from '@shared/lib/utils/dateTime';
 
 import {
+  createGetActivityRecordMock,
+  expectedUserActions,
   getActivityProgressMock,
-  getActivityRecordMockResult,
   getFlowProgressMock,
-  getUserActionsMock,
+  getInputsForFinish,
+  getInputsForIntermediate,
+  mockConstructionServiceExternals,
 } from './testHelpers';
-import * as metaHelpers from '../../../lib/metaHelpers';
-import * as storageHelpers from '../../../lib/storageHelpers';
-import * as mappers from '../../mappers';
 import * as operations from '../../operations';
 import { ConstructCompletionsService } from '../ConstructCompletionsService';
 
@@ -47,73 +39,6 @@ jest.mock('@app/features/pass-survey/model/AlertsExtractor', () => ({
 
 const mockNowDate = new Date(2023, 3, 8, 15, 27);
 
-jest.spyOn(dateTimeUtils, 'getNow').mockReturnValue(mockNowDate);
-
-jest.spyOn(dateTimeUtils, 'getTimezoneOffset').mockReturnValue(3);
-
-const createSvgFilesMock = jest
-  .spyOn(operations, 'createSvgFiles')
-  .mockResolvedValue([undefined]);
-
-const saveSummaryMock = jest.fn();
-
-const mapAnswersToDtoMock = jest
-  .spyOn(mappers, 'mapAnswersToDto')
-  .mockImplementation((_: any, answers: Answers) => {
-    return [
-      convertToSliderAnswerMock(answers[0]),
-      convertToSliderAnswerMock(answers[1]),
-    ];
-  });
-
-const mapUserActionsToDtoMock = jest
-  .spyOn(mappers, 'mapUserActionsToDto')
-  .mockReturnValue([]);
-
-const getItemIdsMock = jest
-  .spyOn(operations, 'getItemIds')
-  .mockReturnValue(['mock-slider-id-1', 'mock-slider-id-2']);
-
-const mockFillNullsForHiddenItems = jest
-  .spyOn(operations, 'fillNullsForHiddenItems')
-  .mockImplementation((itemIds: string[], answers: AnswerDto[], _: any) => {
-    return { answers, itemIds };
-  });
-
-const getFlowRecordMock = jest
-  .spyOn(storageHelpers, 'getFlowRecord')
-  .mockReturnValue({
-    scheduledDate: 1245800000,
-    flowName: null,
-  } as FlowState);
-
-const getUserIdentifierMock = jest
-  .spyOn(operations, 'getUserIdentifier')
-  .mockReturnValue('mock-user-id-1');
-
-const mapAnswersToAlertsMock = jest
-  .spyOn(mappers, 'mapAnswersToAlerts')
-  .mockReturnValue([]);
-
-const getClientInformationMock = jest
-  .spyOn(metaHelpers, 'getClientInformation')
-  .mockReturnValue({
-    appId: 'mock-app-name-1',
-    appVersion: 'mock-app-version-1',
-    width: 1347,
-    height: 2358,
-  });
-
-const clearActivityStorageRecordMock = jest
-  .spyOn(storageHelpers, 'clearActivityStorageRecord')
-  .mockReturnValue();
-
-function convertToSliderAnswerMock(answer: Answer): AnswerDto {
-  return {
-    value: answer.answer as SliderAnswerDto,
-  };
-}
-
 describe('Test ConstructCompletionsService.constructForIntermediate', () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -130,19 +55,25 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       getSliderItem('mock-slider-item-2', 'mock-slider-id-2'),
     ];
 
-    const userActionsMock: UserAction[] = getUserActionsMock(answersMock);
+    const {
+      getItemIdsMock,
+      mockFillNullsForHiddenItems,
+      getFlowRecordMock,
+      getUserIdentifierMock,
+      mapAnswersToAlertsMock,
+      getClientInformationMock,
+      clearActivityStorageRecordMock,
+      mapAnswersToDtoMock,
+      createSvgFilesMock,
+      saveSummaryMock,
+    } = mockConstructionServiceExternals(mockNowDate);
 
-    const getActivityRecordMock = jest
-      .spyOn(storageHelpers, 'getActivityRecord')
-      .mockReturnValue(
-        getActivityRecordMockResult(answersMock, userActionsMock, itemsMock),
-      );
+    const getActivityRecordMock = createGetActivityRecordMock(
+      itemsMock,
+      answersMock,
+    );
 
-    const pushMock = jest.fn();
-
-    const pushToQueueMock = { push: pushMock };
-
-    const dispatchMock = jest.fn();
+    const pushToQueueMock = { push: jest.fn() };
 
     const progress: StoreProgress = getFlowProgressMock();
 
@@ -151,7 +82,7 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       {} as any,
       progress,
       pushToQueueMock,
-      dispatchMock,
+      jest.fn(),
     );
 
     //@ts-expect-error
@@ -160,15 +91,7 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       displayName: 'mock-applet-name-1',
     });
 
-    await service.construct({
-      completionType: 'intermediate',
-      activityId: 'mock-activity-id-1',
-      activityName: 'mock-activity-name-1',
-      appletId: 'mock-applet-id-1',
-      eventId: 'mock-event-id-1',
-      flowId: 'mock-flow-id-1',
-      order: 0,
-    });
+    await service.construct(getInputsForIntermediate());
 
     expect(getActivityRecordMock).toBeCalledTimes(1);
 
@@ -186,17 +109,15 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
 
     expect(getUserIdentifierMock).toBeCalledTimes(1);
 
-    expect(mapUserActionsToDtoMock).toBeCalledTimes(1);
-
     expect(mapAnswersToAlertsMock).toBeCalledTimes(1);
 
     expect(getClientInformationMock).toBeCalledTimes(1);
 
     expect(clearActivityStorageRecordMock).toBeCalledTimes(1);
 
-    expect(pushMock).toBeCalledTimes(1);
+    expect(pushToQueueMock.push).toBeCalledTimes(1);
 
-    expect(pushMock).toBeCalledWith({
+    expect(pushToQueueMock.push).toBeCalledWith({
       activityId: 'mock-activity-id-1',
       alerts: [],
       answers: [{ value: 3 }, { value: 8 }],
@@ -208,19 +129,19 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
         height: 2358,
         width: 1347,
       },
-      createdAt: 1680956820000,
-      endTime: 1680956820000,
+      createdAt: mockNowDate.getTime(),
+      endTime: mockNowDate.getTime(),
       eventId: 'mock-event-id-1',
       executionGroupKey: 'mock-flow-group-key-1',
       flowId: 'mock-flow-id-1',
       isFlowCompleted: false,
       itemIds: ['mock-slider-id-1', 'mock-slider-id-2'],
       logActivityName: 'mock-activity-name-1',
-      logCompletedAt: 'Sat, 08 Apr 2023 12:27:00 GMT',
+      logCompletedAt: mockNowDate.toUTCString(),
       scheduledTime: 1245800000,
       startTime: 12389100000,
       tzOffset: 3,
-      userActions: [],
+      userActions: expectedUserActions,
       userIdentifier: 'mock-user-id-1',
       version: 'applet-version-mock-1',
     });
@@ -237,24 +158,11 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       getSliderItem('mock-slider-item-2', 'mock-slider-id-2'),
     ];
 
-    const userActionsMock: UserAction[] = getUserActionsMock(answersMock);
+    const { saveSummaryMock } = mockConstructionServiceExternals(mockNowDate);
 
-    const recordMock = getActivityRecordMockResult(
-      answersMock,
-      userActionsMock,
-      itemsMock,
-    )!;
+    createGetActivityRecordMock(itemsMock, answersMock, true);
 
-    jest.spyOn(storageHelpers, 'getActivityRecord').mockReturnValue({
-      ...recordMock,
-      hasSummary: true,
-    });
-
-    const pushMock = jest.fn();
-
-    const pushToQueueMock = { push: pushMock };
-
-    const dispatchMock = jest.fn();
+    const pushToQueueMock = { push: jest.fn() };
 
     const progress: StoreProgress = getFlowProgressMock();
 
@@ -263,7 +171,7 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       {} as any,
       progress,
       pushToQueueMock,
-      dispatchMock,
+      jest.fn(),
     );
 
     //@ts-expect-error
@@ -272,15 +180,7 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       displayName: 'mock-applet-name-1',
     });
 
-    await service.construct({
-      completionType: 'intermediate',
-      activityId: 'mock-activity-id-1',
-      activityName: 'mock-activity-name-1',
-      appletId: 'mock-applet-id-1',
-      eventId: 'mock-event-id-1',
-      flowId: 'mock-flow-id-1',
-      order: 0,
-    });
+    await service.construct(getInputsForIntermediate());
 
     expect(saveSummaryMock).toBeCalledTimes(1);
 
@@ -296,7 +196,7 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       },
     });
 
-    expect(pushMock).toBeCalledTimes(1);
+    expect(pushToQueueMock.push).toBeCalledTimes(1);
   });
 });
 
@@ -316,19 +216,25 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
       getSliderItem('mock-slider-item-2', 'mock-slider-id-2'),
     ];
 
-    const userActionsMock: UserAction[] = getUserActionsMock(answersMock);
+    const {
+      getItemIdsMock,
+      mockFillNullsForHiddenItems,
+      getFlowRecordMock,
+      getUserIdentifierMock,
+      mapAnswersToAlertsMock,
+      getClientInformationMock,
+      clearActivityStorageRecordMock,
+      mapAnswersToDtoMock,
+      createSvgFilesMock,
+      saveSummaryMock,
+    } = mockConstructionServiceExternals(mockNowDate);
 
-    const getActivityRecordMock = jest
-      .spyOn(storageHelpers, 'getActivityRecord')
-      .mockReturnValue(
-        getActivityRecordMockResult(answersMock, userActionsMock, itemsMock),
-      );
+    const getActivityRecordMock = createGetActivityRecordMock(
+      itemsMock,
+      answersMock,
+    );
 
-    const pushMock = jest.fn();
-
-    const pushToQueueMock = { push: pushMock };
-
-    const dispatchMock = jest.fn();
+    const pushToQueueMock = { push: jest.fn() };
 
     const progress: StoreProgress = getFlowProgressMock();
 
@@ -337,7 +243,7 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
       {} as any,
       progress,
       pushToQueueMock,
-      dispatchMock,
+      jest.fn(),
     );
 
     //@ts-expect-error
@@ -346,15 +252,7 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
       displayName: 'mock-applet-name-1',
     });
 
-    await service.construct({
-      completionType: 'finish',
-      activityId: 'mock-activity-id-1',
-      activityName: 'mock-activity-name-1',
-      appletId: 'mock-applet-id-1',
-      eventId: 'mock-event-id-1',
-      flowId: 'mock-flow-id-1',
-      order: 0,
-    });
+    await service.construct(getInputsForFinish('flow'));
 
     expect(getActivityRecordMock).toBeCalledTimes(1);
 
@@ -372,44 +270,46 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
 
     expect(getUserIdentifierMock).toBeCalledTimes(1);
 
-    expect(mapUserActionsToDtoMock).toBeCalledTimes(1);
-
     expect(mapAnswersToAlertsMock).toBeCalledTimes(1);
 
     expect(getClientInformationMock).toBeCalledTimes(1);
 
     expect(clearActivityStorageRecordMock).toBeCalledTimes(1);
 
-    expect(pushMock).toBeCalledTimes(1);
+    expect(pushToQueueMock.push).toBeCalledTimes(1);
 
-    expect(pushMock).toBeCalledWith({
-      activityId: 'mock-activity-id-1',
-      alerts: [],
-      answers: [{ value: 3 }, { value: 8 }],
-      appletEncryption: 'applet-encryption-mock-1',
-      appletId: 'mock-applet-id-1',
-      client: {
-        appId: 'mock-app-name-1',
-        appVersion: 'mock-app-version-1',
-        height: 2358,
-        width: 1347,
-      },
-      createdAt: 1680956820000,
-      endTime: 1680956820000,
-      eventId: 'mock-event-id-1',
-      executionGroupKey: 'mock-flow-group-key-1',
-      flowId: 'mock-flow-id-1',
-      isFlowCompleted: true,
-      itemIds: ['mock-slider-id-1', 'mock-slider-id-2'],
-      logActivityName: 'mock-activity-name-1',
-      logCompletedAt: 'Sat, 08 Apr 2023 12:27:00 GMT',
-      scheduledTime: 1245800000,
-      startTime: 12389100000,
-      tzOffset: 3,
-      userActions: [],
-      userIdentifier: 'mock-user-id-1',
-      version: 'applet-version-mock-1',
-    });
+    expect(pushToQueueMock.push.mock.calls).toEqual([
+      [
+        {
+          activityId: 'mock-activity-id-1',
+          alerts: [],
+          answers: [{ value: 3 }, { value: 8 }],
+          appletEncryption: 'applet-encryption-mock-1',
+          appletId: 'mock-applet-id-1',
+          client: {
+            appId: 'mock-app-name-1',
+            appVersion: 'mock-app-version-1',
+            height: 2358,
+            width: 1347,
+          },
+          createdAt: mockNowDate.getTime(),
+          endTime: mockNowDate.getTime(),
+          eventId: 'mock-event-id-1',
+          executionGroupKey: 'mock-flow-group-key-1',
+          flowId: 'mock-flow-id-1',
+          isFlowCompleted: true,
+          itemIds: ['mock-slider-id-1', 'mock-slider-id-2'],
+          logActivityName: 'mock-activity-name-1',
+          logCompletedAt: mockNowDate.toUTCString(),
+          scheduledTime: 1245800000,
+          startTime: 12389100000,
+          tzOffset: 3,
+          userActions: expectedUserActions,
+          userIdentifier: 'mock-user-id-1',
+          version: 'applet-version-mock-1',
+        },
+      ],
+    ]);
   });
 
   it('Should push item to queue for a single activity', async () => {
@@ -423,23 +323,29 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
       getSliderItem('mock-slider-item-2', 'mock-slider-id-2'),
     ];
 
-    const userActionsMock: UserAction[] = getUserActionsMock(answersMock);
+    const {
+      getItemIdsMock,
+      mockFillNullsForHiddenItems,
+      getFlowRecordMock,
+      getUserIdentifierMock,
+      mapAnswersToAlertsMock,
+      getClientInformationMock,
+      clearActivityStorageRecordMock,
+      mapAnswersToDtoMock,
+      createSvgFilesMock,
+      saveSummaryMock,
+    } = mockConstructionServiceExternals(mockNowDate);
 
-    const getActivityRecordMock = jest
-      .spyOn(storageHelpers, 'getActivityRecord')
-      .mockReturnValue(
-        getActivityRecordMockResult(answersMock, userActionsMock, itemsMock),
-      );
+    const getActivityRecordMock = createGetActivityRecordMock(
+      itemsMock,
+      answersMock,
+    );
 
     const mockGetExecutionGroupKey = jest
       .spyOn(operations, 'getExecutionGroupKey')
       .mockReturnValue('mock-group-key-1');
 
-    const pushMock = jest.fn();
-
-    const pushToQueueMock = { push: pushMock };
-
-    const dispatchMock = jest.fn();
+    const pushToQueueMock = { push: jest.fn() };
 
     const progress: StoreProgress = getActivityProgressMock();
 
@@ -448,7 +354,7 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
       {} as any,
       progress,
       pushToQueueMock,
-      dispatchMock,
+      jest.fn(),
     );
 
     //@ts-expect-error
@@ -457,15 +363,7 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
       displayName: 'mock-applet-name-1',
     });
 
-    await service.construct({
-      completionType: 'finish',
-      activityId: 'mock-activity-id-1',
-      activityName: 'mock-activity-name-1',
-      appletId: 'mock-applet-id-1',
-      eventId: 'mock-event-id-1',
-      flowId: undefined,
-      order: 0,
-    });
+    await service.construct(getInputsForFinish('regular'));
 
     expect(getActivityRecordMock).toBeCalledTimes(1);
 
@@ -483,8 +381,6 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
 
     expect(getUserIdentifierMock).toBeCalledTimes(1);
 
-    expect(mapUserActionsToDtoMock).toBeCalledTimes(1);
-
     expect(mapAnswersToAlertsMock).toBeCalledTimes(1);
 
     expect(getClientInformationMock).toBeCalledTimes(1);
@@ -493,36 +389,40 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
 
     expect(mockGetExecutionGroupKey).toBeCalledTimes(1);
 
-    expect(pushMock).toBeCalledTimes(1);
+    expect(pushToQueueMock.push).toBeCalledTimes(1);
 
-    expect(pushMock).toBeCalledWith({
-      activityId: 'mock-activity-id-1',
-      alerts: [],
-      answers: [{ value: 3 }, { value: 8 }],
-      appletEncryption: 'applet-encryption-mock-1',
-      appletId: 'mock-applet-id-1',
-      client: {
-        appId: 'mock-app-name-1',
-        appVersion: 'mock-app-version-1',
-        height: 2358,
-        width: 1347,
-      },
-      createdAt: 1680956820000,
-      endTime: 1680956820000,
-      eventId: 'mock-event-id-1',
-      executionGroupKey: 'mock-group-key-1',
-      flowId: null,
-      isFlowCompleted: false,
-      itemIds: ['mock-slider-id-1', 'mock-slider-id-2'],
-      logActivityName: 'mock-activity-name-1',
-      logCompletedAt: 'Sat, 08 Apr 2023 12:27:00 GMT',
-      scheduledTime: 1245800000,
-      startTime: 12367800000,
-      tzOffset: 3,
-      userActions: [],
-      userIdentifier: 'mock-user-id-1',
-      version: 'applet-version-mock-1',
-    });
+    expect(pushToQueueMock.push.mock.calls).toEqual([
+      [
+        {
+          activityId: 'mock-activity-id-1',
+          alerts: [],
+          answers: [{ value: 3 }, { value: 8 }],
+          appletEncryption: 'applet-encryption-mock-1',
+          appletId: 'mock-applet-id-1',
+          client: {
+            appId: 'mock-app-name-1',
+            appVersion: 'mock-app-version-1',
+            height: 2358,
+            width: 1347,
+          },
+          createdAt: mockNowDate.getTime(),
+          endTime: mockNowDate.getTime(),
+          eventId: 'mock-event-id-1',
+          executionGroupKey: 'mock-group-key-1',
+          flowId: null,
+          isFlowCompleted: false,
+          itemIds: ['mock-slider-id-1', 'mock-slider-id-2'],
+          logActivityName: 'mock-activity-name-1',
+          logCompletedAt: mockNowDate.toUTCString(),
+          scheduledTime: 1245800000,
+          startTime: 12367800000,
+          tzOffset: 3,
+          userActions: expectedUserActions,
+          userIdentifier: 'mock-user-id-1',
+          version: 'applet-version-mock-1',
+        },
+      ],
+    ]);
   });
 });
 
@@ -530,18 +430,16 @@ describe('Test ConstructCompletionsService: edge cases', () => {
   it('"getAppletProperties" should throw error when no applet dto in the cache', () => {
     const progress: StoreProgress = getFlowProgressMock();
 
-    const pushMock = jest.fn();
+    const pushToQueueMock = { push: jest.fn() };
 
-    const pushToQueueMock = { push: pushMock };
-
-    const dispatchMock = jest.fn();
+    const { saveSummaryMock } = mockConstructionServiceExternals(mockNowDate);
 
     const service = new ConstructCompletionsService(
       saveSummaryMock,
       {} as any,
       progress,
       pushToQueueMock,
-      dispatchMock,
+      jest.fn(),
     );
 
     //@ts-expect-error
@@ -594,18 +492,19 @@ describe('Test ConstructCompletionsService: edge cases', () => {
       it(`"validate" should throw error when activityStorageRecord is ${activityStorageRecordAsText} and appletEncryption is ${appletEncryptionAsText}`, () => {
         const progress: StoreProgress = getFlowProgressMock();
 
+        const { saveSummaryMock } =
+          mockConstructionServiceExternals(mockNowDate);
+
         const pushMock = jest.fn();
 
         const pushToQueueMock = { push: pushMock };
-
-        const dispatchMock = jest.fn();
 
         const service = new ConstructCompletionsService(
           saveSummaryMock,
           {} as any,
           progress,
           pushToQueueMock,
-          dispatchMock,
+          jest.fn(),
         );
 
         expect(() =>

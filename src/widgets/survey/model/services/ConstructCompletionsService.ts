@@ -62,7 +62,7 @@ type ConstructForFinishInput = {
   activityName: string;
 };
 
-type ConstructInput = (
+export type ConstructInput = (
   | ConstructForIntermediateInput
   | ConstructForFinishInput
 ) & {
