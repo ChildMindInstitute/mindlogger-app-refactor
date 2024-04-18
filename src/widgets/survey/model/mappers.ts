@@ -281,14 +281,9 @@ function convertToStackedCheckboxAnswer(answer: Answer): AnswerDto {
 }
 
 function convertToStackedSliderAnswer(answer: Answer): AnswerDto {
-  const answers = answer.answer as number[];
-  const answerDto = answers?.map(
-    answerItem => answerItem || null, // @todo check with BE
-  ) as number[];
-
   return {
-    ...(answerDto && {
-      value: answerDto as StackedSliderAnswerDto,
+    ...(answer.answer && {
+      value: answer.answer as StackedSliderAnswerDto,
     }),
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
