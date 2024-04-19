@@ -93,6 +93,7 @@ function ActivityStepper({
     isFirstStep,
     isTutorialStep,
     isConditionalLogicItem,
+    shouldPostProcessUserActions,
 
     canMoveNext,
     canMoveBack,
@@ -157,8 +158,6 @@ function ActivityStepper({
     } else if (!shouldIgnoreUserActionTrack) {
       trackUserAction(userActionCreator.next());
     }
-
-    postProcessUserActionsForCurrentItem();
   };
 
   const onBack = (nextStep: number) => {
@@ -343,6 +342,9 @@ function ActivityStepper({
                       pipelineItem={pipelineItem}
                       onResponse={response => {
                         setAnswer(currentStep, response);
+                        if (shouldPostProcessUserActions) {
+                          postProcessUserActionsForCurrentItem();
+                        }
                       }}
                       onAdditionalResponse={response => {
                         setAdditionalAnswer(currentStep, response);

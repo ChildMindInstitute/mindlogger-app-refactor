@@ -69,11 +69,14 @@ function useActivityStepper(state: ActivityState | undefined) {
     return canSkip ? 'activity_navigation:skip' : 'activity_navigation:next';
   }
 
+  const shouldPostProcessUserActions = isAbTestStep;
+
   return {
     isTutorialStep,
     isFirstStep,
     isLastStep,
     isConditionalLogicItem,
+    shouldPostProcessUserActions,
 
     canSkip,
     canMoveNext,
