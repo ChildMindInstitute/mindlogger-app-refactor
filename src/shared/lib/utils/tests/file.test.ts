@@ -1,4 +1,4 @@
-import { isLocalFileUrl, getFilePath, getLocalFileUri } from '../file';
+import { isLocalFileUrl, getFilePath, evaluateLocalFileUri } from '../file';
 
 const setPlatform = (platform: 'ios' | 'android') => {
   jest.mock('react-native/Libraries/Utilities/Platform', () => {
@@ -75,7 +75,7 @@ describe('Test getFilePath function', () => {
   });
 });
 
-describe('Test getLocalFileUri function', () => {
+describe('Test evaluateLocalFileUri function', () => {
   const testFilesNames = [
     'audio.mp3',
     '7d7f7g6d8.mp4',
@@ -90,7 +90,7 @@ describe('Test getLocalFileUri function', () => {
 
   it('Should return local URIs in the format: file://${CacheDir}/${fileName}', () => {
     testFilesNames.forEach((fileName, i) => {
-      expect(getLocalFileUri(fileName)).toBe(expectedURIs[i]);
+      expect(evaluateLocalFileUri(fileName)).toBe(expectedURIs[i]);
     });
   });
 });

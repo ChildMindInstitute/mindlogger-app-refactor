@@ -19,7 +19,7 @@ import {
   formatToDtoDate,
   formatToDtoTime,
 } from '@shared/lib';
-import { isLocalFileUrl, getLocalFileUri } from '@shared/lib/utils';
+import { isLocalFileUrl, evaluateLocalFileUri } from '@shared/lib/utils';
 
 import MediaFilesCleaner from './MediaFilesCleaner';
 import {
@@ -121,7 +121,7 @@ class AnswersUploadService implements IAnswersUploadService {
      * just before we actually want to fetch those files.
      * Please see: https://github.com/joltup/rn-fetch-blob/issues/204#issuecomment-786321861
      */
-    const localFileUri = getLocalFileUri(mediaFile.fileName);
+    const localFileUri = evaluateLocalFileUri(mediaFile.fileName);
     const localFileExists = await FileSystem.exists(localFileUri);
 
     const logFileInfo = `(${mediaFile.type}, from answer #${logAnswerIndex})`;

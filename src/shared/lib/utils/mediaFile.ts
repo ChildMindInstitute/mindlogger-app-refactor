@@ -1,7 +1,7 @@
 import { FileSystem } from 'react-native-file-access';
 import { Asset } from 'react-native-image-picker';
 
-import { getFilenameFromLocalUri, getLocalFileUri } from './file';
+import { getFilenameFromLocalUri, evaluateLocalFileUri } from './file';
 import { ImageConverter } from './imageConverter';
 import { IS_IOS } from '../constants';
 
@@ -9,7 +9,7 @@ export const moveMediaFileToCache = async (
   fileName: string,
   fromUri: string,
 ) => {
-  const localFileUri = getLocalFileUri(fileName!);
+  const localFileUri = evaluateLocalFileUri(fileName!);
 
   let fileExists = await FileSystem.exists(localFileUri);
 
