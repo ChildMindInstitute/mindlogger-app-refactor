@@ -236,6 +236,8 @@ export class ConstructCompletionsService {
 
     this.logIntermediate(input, flowName!, appletName);
 
+    const submitId = getExecutionGroupKey(progressRecord);
+
     this.pushToQueueService.push({
       appletId,
       createdAt: Date.now(),
@@ -246,7 +248,7 @@ export class ConstructCompletionsService {
       appletEncryption: appletEncryption!,
       flowId: flowId ?? null,
       activityId: activityId,
-      executionGroupKey: getExecutionGroupKey(progressRecord),
+      executionGroupKey: submitId,
       userIdentifier: getUserIdentifier(items, recordAnswers),
       startTime: getActivityStartAt(progressRecord)!,
       endTime: Date.now(),
@@ -261,6 +263,11 @@ export class ConstructCompletionsService {
     });
 
     clearActivityStorageRecord(appletId, activityId, eventId, order);
+
+    AnalyticsService.track(MixEvents.AssessmentCompleted, {
+      [MixProperties.AppletId]: appletId,
+      [MixProperties.SubmitId]: submitId,
+    });
   }
 
   private async constructForFinish(
@@ -314,6 +321,8 @@ export class ConstructCompletionsService {
 
     const { scheduledDate } = getFlowRecord(flowId, appletId, eventId)!;
 
+    const submitId = getExecutionGroupKey(progressRecord);
+
     this.pushToQueueService.push({
       appletId,
       createdAt: Date.now(),
@@ -324,7 +333,7 @@ export class ConstructCompletionsService {
       appletEncryption: appletEncryption!,
       flowId: flowId ?? null,
       activityId,
-      executionGroupKey: getExecutionGroupKey(progressRecord),
+      executionGroupKey: submitId,
       userIdentifier,
       startTime: getActivityStartAt(progressRecord)!,
       endTime: Date.now(),
@@ -350,6 +359,7 @@ export class ConstructCompletionsService {
 
     AnalyticsService.track(MixEvents.AssessmentCompleted, {
       [MixProperties.AppletId]: appletId,
+      [MixProperties.SubmitId]: submitId,
     });
   }
 
