@@ -6,6 +6,7 @@ export * from './reactQueryHelpers';
 export * from './networkHelpers';
 export * from './observable';
 export * from './file';
+export * from './mediaFile';
 export * from './calculator';
 export * from './calculator';
 export * from './imageConverter';

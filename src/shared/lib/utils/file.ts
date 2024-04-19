@@ -14,3 +14,10 @@ export const getFilePath = (path: string) =>
 
 export const getLocalFileUri = (fileName: string) =>
   `file://${Dirs.CacheDir}/${fileName}`;
+
+export const getFilenameFromLocalUri = (localUri: string) => {
+  const regex = /^file:\/\/(?:.*\/)?([^/]+)$/;
+  const match = localUri.match(regex);
+
+  return match ? match[1] : '';
+};
