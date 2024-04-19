@@ -84,7 +84,6 @@ export const preparePhotoFile = async (
   }
 
   const photoFile = {
-    uri: localFileUri,
     fileName,
     size: image.fileSize || 0,
     type: image.type || '',
@@ -137,7 +136,6 @@ export const prepareVideoFile = async (
   }
 
   const videoFile = {
-    uri: localFileUri,
     fileName,
     size: video.fileSize || 0,
     type: video.type || '',

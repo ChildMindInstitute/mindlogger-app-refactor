@@ -14,6 +14,7 @@ import {
 import { Answers, PipelineItem } from '@app/features/pass-survey';
 import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import { AnswerDto } from '@app/shared/api';
+import { evaluateLocalFileUri } from '@app/shared/lib';
 
 export const getScheduledDate = (event: ScheduleEvent) => {
   if (
@@ -107,10 +108,9 @@ export const createSvgFiles = async (
   });
 
   const promises = drawingTestItems.map(drawingTestItem => {
-    return SvgFileManager.writeFile(
-      drawingTestItem.uri,
-      drawingTestItem.svgString,
-    );
+    const fileUri = evaluateLocalFileUri(drawingTestItem.fileName);
+
+    return SvgFileManager.writeFile(fileUri, drawingTestItem.svgString);
   });
 
   return Promise.all(promises);

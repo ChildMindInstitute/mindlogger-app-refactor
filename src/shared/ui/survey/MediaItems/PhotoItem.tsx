@@ -9,6 +9,7 @@ import {
 
 import {
   colors,
+  evaluateLocalFileUri,
   GALLERY_PHOTO_OPTIONS,
   handleBlockedPermissions,
   Logger,
@@ -115,7 +116,13 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
       accessibilityLabel="photo-item"
       uploadIcon={<PhotoIcon color={colors.red} size={50} />}
     >
-      {value && <Image height="100%" width="100%" src={value.uri} />}
+      {value && (
+        <Image
+          height="100%"
+          width="100%"
+          src={{ uri: evaluateLocalFileUri(value.fileName) }}
+        />
+      )}
     </MediaInput>
   );
 };

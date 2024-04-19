@@ -6,11 +6,12 @@ import {
   AnswerService,
   CheckIfFilesExistResultDto,
   DrawerAnswerDto,
+  FileDto,
   FileService,
+  MediaFileDto,
   ObjectAnswerDto,
   UserActionDto,
 } from '@app/shared/api';
-import { MediaFile } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
 import {
   ILogger,
@@ -84,12 +85,21 @@ class AnswersUploadService implements IAnswersUploadService {
     return checks.find(x => x.fileId === fileId)!;
   }
 
-  private getFileId(file: MediaFile): string {
+  private getFileId(file: FileDto): string {
     return `${this.createdAt!.toString()}/${file.fileName}`;
   }
 
   private isFileUrl(url: string): boolean {
     return isLocalFileUrl(url);
+  }
+
+  private isMediaItemAnswer(answer: ObjectAnswerDto['value']) {
+    return (
+      answer &&
+      typeof answer === 'object' &&
+      'fileName' in answer &&
+      this.isFileUrl(evaluateLocalFileUri(answer.fileName))
+    );
   }
 
   private collectFileIds(answers: AnswerDto[]): string[] {
@@ -98,9 +108,9 @@ class AnswersUploadService implements IAnswersUploadService {
     for (const itemAnswer of answers) {
       const answerValue = (itemAnswer as ObjectAnswerDto)?.value;
 
-      const mediaAnswer = answerValue as MediaFile;
+      const mediaAnswer = answerValue as FileDto;
 
-      const isMediaItem = mediaAnswer?.uri && this.isFileUrl(mediaAnswer.uri);
+      const isMediaItem = this.isMediaItemAnswer(mediaAnswer);
 
       if (isMediaItem) {
         result.push(this.getFileId(mediaAnswer));
@@ -111,7 +121,7 @@ class AnswersUploadService implements IAnswersUploadService {
   }
 
   private async processFileUpload(
-    mediaFile: MediaFile,
+    mediaFile: FileDto,
     uploadChecks: CheckFilesUploadResults,
     logAnswerIndex: number,
     appletId: string,
@@ -234,9 +244,9 @@ class AnswersUploadService implements IAnswersUploadService {
 
       const text = itemAnswer?.text;
 
-      const mediaAnswer = answerValue as MediaFile;
+      const mediaAnswer = answerValue as MediaFileDto;
 
-      const isMediaItem = mediaAnswer?.uri && this.isFileUrl(mediaAnswer.uri);
+      const isMediaItem = this.isMediaItemAnswer(mediaAnswer);
 
       if (!isMediaItem) {
         updatedAnswers.push(itemAnswer);
@@ -408,18 +418,18 @@ class AnswersUploadService implements IAnswersUploadService {
     const processUserActions = () =>
       userActions.map((userAction: UserActionDto) => {
         const response = userAction?.response as ObjectAnswerDto;
-        const userActionValue = response?.value as MediaFile;
+        const userActionValue = response?.value as MediaFileDto;
         const isSvg = userActionValue?.type === 'image/svg';
 
-        if (userAction.type !== 'SET_ANSWER' || !userActionValue?.uri) {
+        if (userAction.type !== 'SET_ANSWER' || !userActionValue?.fileName) {
           return userAction;
         }
 
         const originalAnswerIndex = originalAnswers.findIndex(answer => {
           const currentAnswerValue = (answer as ObjectAnswerDto)
-            ?.value as MediaFile;
+            ?.value as MediaFileDto;
 
-          return currentAnswerValue?.uri === userActionValue.uri;
+          return currentAnswerValue?.fileName === userActionValue.fileName;
         });
 
         if (originalAnswerIndex === -1) {

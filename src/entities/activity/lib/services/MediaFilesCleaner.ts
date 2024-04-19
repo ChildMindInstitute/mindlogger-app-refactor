@@ -2,7 +2,11 @@ import { FileSystem } from 'react-native-file-access';
 
 import { ActivityRecordKeyParams } from '@app/abstract/lib';
 import { AnswerDto, ObjectAnswerDto } from '@app/shared/api';
-import { createSecureStorage, Logger } from '@app/shared/lib';
+import {
+  createSecureStorage,
+  evaluateLocalFileUri,
+  Logger,
+} from '@app/shared/lib';
 import { MediaFile, MediaValue } from '@app/shared/ui';
 
 type EntityRecord = {
@@ -33,8 +37,10 @@ const createMediaFilesCleaner = (): Result => {
     for (const recordId in entityRecord.answers) {
       const record = entityRecord.answers[recordId]?.answer;
 
-      if (record?.uri) {
-        urlsToProcess.push(record.uri);
+      if (record?.fileName) {
+        const fileUri = evaluateLocalFileUri(record.fileName);
+
+        urlsToProcess.push(fileUri);
       }
     }
 
@@ -73,11 +79,12 @@ const createMediaFilesCleaner = (): Result => {
 
         const mediaValue = answerValue as MediaValue;
 
-        if (mediaValue?.uri) {
-          const fileExists = await FileSystem.exists(mediaValue.uri);
+        if (mediaValue?.fileName) {
+          const fileUri = evaluateLocalFileUri(mediaValue.fileName);
+          const fileExists = await FileSystem.exists(fileUri);
 
           if (fileExists) {
-            await FileSystem.unlink(mediaValue.uri);
+            await FileSystem.unlink(fileUri);
 
             console.info('[MediaFilesCleaner.cleanUp]: completed');
           }

@@ -25,7 +25,6 @@ const audioSetConfig: AudioSet = {
 const androidCacheDir = Dirs.CacheDir;
 
 type Response = {
-  uri: string;
   fileName: string;
   type: string;
 };
@@ -155,7 +154,6 @@ const AudioRecorderItem: FC<Props> = ({
       const fileExtension = fileName.split('.')[1];
 
       const response = {
-        uri: fullPath,
         type: `audio/${fileExtension}`,
         fileName,
       };

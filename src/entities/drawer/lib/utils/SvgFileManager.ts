@@ -8,7 +8,6 @@ const filesCacheDir = Dirs.CacheDir;
 type SvgFileMeta = {
   fileName: string;
   type: 'image/svg';
-  uri: string;
 };
 
 class SvgFileManager {
@@ -27,12 +26,9 @@ class SvgFileManager {
       fileName = `${uuidv4()}.svg`;
     }
 
-    const filePath = SvgFileManager.getFilePath(fileName);
-
     return {
       fileName,
       type: 'image/svg',
-      uri: filePath,
     };
   }
 

@@ -1,5 +1,4 @@
 export type MediaFile = {
-  uri: string;
   type: string;
   fileName: string;
 };
