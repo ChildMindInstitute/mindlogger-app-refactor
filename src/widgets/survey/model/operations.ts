@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+//import { v4 as uuidv4 } from 'uuid';
 
 import {
   ActivityPipelineType,
@@ -32,7 +32,7 @@ export const getActivityStartAt = (progressRecord: StoreProgressPayload) => {
 export const getExecutionGroupKey = (progressRecord: StoreProgressPayload) => {
   return progressRecord.type === ActivityPipelineType.Flow
     ? progressRecord.executionGroupKey
-    : uuidv4();
+    : null;
 };
 
 export const getUserIdentifier = (

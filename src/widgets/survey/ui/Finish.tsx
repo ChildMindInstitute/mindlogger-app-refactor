@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 
 import { EntityPathParams, StoreProgress } from '@app/abstract/lib';
 import {
@@ -81,6 +82,7 @@ function FinishItem({
       flowId,
       order,
       completionType: 'finish',
+      submitId: uuidv4(),
     });
 
     const exclude: EntityPathParams = {

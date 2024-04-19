@@ -376,6 +376,7 @@ export const getInputsForFinish = (entityType: EntityType): ConstructInput => {
     eventId: 'mock-event-id-1',
     flowId: entityType === 'flow' ? 'mock-flow-id-1' : undefined,
     order: 0,
+    submitId: 'mock',
   };
 };
 

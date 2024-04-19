@@ -12,6 +12,7 @@ import { AppletModel } from '@app/entities/applet';
 import { QueryDataUtils } from '@app/shared/api';
 import {
   AnalyticsService,
+  getEntityProgress,
   Logger,
   MixEvents,
   MixProperties,
@@ -24,6 +25,7 @@ import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
 import { useFlowStorageRecord } from '../lib';
 import {
+  getExecutionGroupKey,
   StepperPipelineItem,
   useAutoCompletion,
   useFlowStateActions,
@@ -119,8 +121,17 @@ function Intermediate({
   }, [appletId, queryClient]);
 
   const changeActivity = useCallback(() => {
+    const progressRecord = getEntityProgress(
+      appletId,
+      flowId,
+      eventId,
+      storeProgress,
+    )!;
+    const submitId = getExecutionGroupKey(progressRecord)!;
+
     AnalyticsService.track(MixEvents.AssessmentCompleted, {
       [MixProperties.AppletId]: appletId,
+      [MixProperties.SubmitId]: submitId,
     });
 
     const appletName = getAppletName();
@@ -144,19 +155,20 @@ function Intermediate({
     );
   }, [
     appletId,
-    dispatch,
-    eventId,
     flowId,
-    activitiesPassed,
-    nextActivityPayload.activityId,
-    nextActivityPayload.activityName,
-    nextActivityPayload.activityDescription,
-    nextActivityPayload.activityImage,
-    totalActivities,
+    eventId,
+    storeProgress,
+    getAppletName,
     activityName,
     activityId,
     flowName,
-    getAppletName,
+    nextActivityPayload.activityName,
+    nextActivityPayload.activityId,
+    nextActivityPayload.activityDescription,
+    nextActivityPayload.activityImage,
+    dispatch,
+    activitiesPassed,
+    totalActivities,
   ]);
 
   async function completeActivity() {

@@ -60,6 +60,7 @@ type ConstructForFinishInput = {
   eventId: string;
   order: number;
   activityName: string;
+  submitId: string | null;
 };
 
 export type ConstructInput = (
@@ -253,7 +254,7 @@ export class ConstructCompletionsService {
       appletEncryption: appletEncryption!,
       flowId: flowId,
       activityId: activityId,
-      executionGroupKey: getExecutionGroupKey(progressRecord),
+      executionGroupKey: getExecutionGroupKey(progressRecord)!,
       userIdentifier: getUserIdentifier(items, recordAnswers),
       startTime: getActivityStartAt(progressRecord)!,
       endTime: getNow().getTime(),
@@ -282,6 +283,8 @@ export class ConstructCompletionsService {
       input;
 
     const entityId = flowId ? flowId : activityId;
+
+    const isFlow = !!flowId;
 
     const { appletEncryption, appletName } = this.getAppletProperties(appletId);
 
@@ -336,7 +339,9 @@ export class ConstructCompletionsService {
       appletEncryption: appletEncryption!,
       flowId: flowId ?? null,
       activityId,
-      executionGroupKey: getExecutionGroupKey(progressRecord),
+      executionGroupKey: isFlow
+        ? getExecutionGroupKey(progressRecord)!
+        : input.submitId!,
       userIdentifier,
       startTime: getActivityStartAt(progressRecord)!,
       endTime: getNow().getTime(),
@@ -367,14 +372,13 @@ export class ConstructCompletionsService {
 
   public async construct(input: ConstructInput): Promise<void> {
     if (input.completionType === 'intermediate') {
-      await this.constructForIntermediate({
-        ...input,
-        flowId: input.flowId!,
-      });
+      await this.constructForIntermediate(
+        input as ConstructForIntermediateInput,
+      );
     }
 
     if (input.completionType === 'finish') {
-      await this.constructForFinish(input);
+      await this.constructForFinish(input as ConstructForFinishInput);
     }
   }
 }
