@@ -243,9 +243,9 @@ export const sliderInput: PipelineItem = {
 
 export const stackedSliderInput: PipelineItem = {
   type: 'StackedSlider',
-  // @ts-expect-error
   payload: {
     addScores: true,
+    setAlerts: false,
     rows: [
       {
         id: '1',
