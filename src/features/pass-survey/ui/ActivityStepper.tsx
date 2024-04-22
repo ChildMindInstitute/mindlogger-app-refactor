@@ -12,8 +12,10 @@ import {
   ActivityIndicator,
   Box,
   Center,
+  OnBeforeNextResult,
   StatusBar,
   Stepper,
+  StepperPayload,
   XStack,
 } from '@shared/ui';
 
@@ -21,7 +23,9 @@ import ActivityItem from './ActivityItem';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
 import {
   ActivityIdentityContext,
+  fetchSkipActivityUserConfirmation,
   FlankerResponse,
+  SkipService,
   useTextVariablesReplacer,
 } from '../lib';
 import { useActivityState, useActivityStepper, useIdleTimer } from '../model';
@@ -63,11 +67,19 @@ function ActivityStepper({
     iterateWithConditionalLogic,
     getNextStepShift,
     getPreviousStepShift,
+    postProcessUserActionsForCurrentItem,
   } = useActivityState({
     appletId,
     activityId,
     eventId,
     order,
+  });
+
+  const skipService = new SkipService({
+    onSkip: () =>
+      trackUserAction(userActionCreator.saveAndProceedPopupConfirm()),
+    onProceed: () =>
+      trackUserAction(userActionCreator.saveAndProceedPopupCancel()),
   });
 
   const { replaceTextVariables } = useTextVariablesReplacer({
@@ -81,6 +93,7 @@ function ActivityStepper({
     isFirstStep,
     isTutorialStep,
     isConditionalLogicItem,
+    shouldPostProcessUserActions,
 
     canMoveNext,
     canMoveBack,
@@ -125,7 +138,13 @@ function ActivityStepper({
 
   const showTimeLeft = !!timer;
 
-  const onNext = (nextStep: number, isForced: boolean) => {
+  const onNext = (
+    nextStep: number,
+    isForced: boolean,
+    payload?: StepperPayload,
+  ) => {
+    const { shouldIgnoreUserActionTrack = false } = payload || {};
+
     removeTimer(currentStep);
     restartIdleTimer();
     setCurrentStep(nextStep);
@@ -136,7 +155,7 @@ function ActivityStepper({
 
     if (canSkip) {
       trackUserAction(userActionCreator.skip());
-    } else {
+    } else if (!shouldIgnoreUserActionTrack) {
       trackUserAction(userActionCreator.next());
     }
   };
@@ -148,9 +167,9 @@ function ActivityStepper({
     trackUserAction(userActionCreator.back());
   };
 
-  const onBeforeNext = (): number => {
+  const onBeforeNext = async (): OnBeforeNextResult => {
     if (!isValid()) {
-      return 0;
+      return { stepShift: 0 };
     }
 
     if (isTutorialStep) {
@@ -160,7 +179,7 @@ function ActivityStepper({
 
       !moved && restartIdleTimer();
 
-      return moved ? 0 : 1;
+      return moved ? { stepShift: 0 } : { stepShift: 1 };
     }
 
     const currentItem = activityStorageRecord!.items[currentStep];
@@ -174,14 +193,39 @@ function ActivityStepper({
         activityStorageRecord!.items,
       );
 
-      return nextStepIndex === null ? 1 : nextStepIndex - currentStep;
+      return nextStepIndex === null
+        ? { stepShift: 1 }
+        : { stepShift: nextStepIndex - currentStep };
+    }
+
+    if (
+      skipService.canSkip(
+        currentItem.type,
+        activityStorageRecord?.answers[currentStep],
+      )
+    ) {
+      trackUserAction(userActionCreator.next());
+      const shouldSkipRound = await fetchSkipActivityUserConfirmation();
+
+      if (shouldSkipRound) {
+        skipService.skip();
+        return {
+          stepShift: 1,
+          payload: {
+            shouldIgnoreUserActionTrack: true,
+          },
+        };
+      } else {
+        skipService.proceed();
+        return { stepShift: 0 };
+      }
     }
 
     if (isConditionalLogicItem) {
       iterateWithConditionalLogic(currentStep + 1);
     }
 
-    return getNextStepShift();
+    return { stepShift: getNextStepShift() };
   };
 
   const onBeforeBack = (): number => {
@@ -298,6 +342,9 @@ function ActivityStepper({
                       pipelineItem={pipelineItem}
                       onResponse={response => {
                         setAnswer(currentStep, response);
+                        if (shouldPostProcessUserActions) {
+                          postProcessUserActionsForCurrentItem();
+                        }
                       }}
                       onAdditionalResponse={response => {
                         setAdditionalAnswer(currentStep, response);
