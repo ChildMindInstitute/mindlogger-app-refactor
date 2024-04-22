@@ -36,7 +36,7 @@ type Props = {
   testData: AbTestPayload;
   readonly: boolean;
   width: number;
-  onLogResult: (data: OnResultLog) => void;
+  onResult: (data: OnResultLog) => void;
   onMessage: (message: MessageType) => void;
   onComplete: () => void;
 } & StreamEventLoggable<AbTestStreamEvent> &
@@ -71,7 +71,6 @@ const AbCanvas: FC<Props> = props => {
 
   const {
     testData,
-    onLogResult,
     onComplete,
     onMessage,
     width,
@@ -287,6 +286,14 @@ const AbCanvas: FC<Props> = props => {
     });
   };
 
+  const onResult = () => {
+    props.onResult({
+      lines: logLines,
+      currentIndex: getCurrentIndex() + 1,
+      maximumIndex: testData.nodes.length,
+    });
+  };
+
   const getGreenPointIndex = () => {
     const started = !!logLines.length;
 
@@ -354,11 +361,8 @@ const AbCanvas: FC<Props> = props => {
       addOverCorrectPointToStream(point);
       keepPathInState();
       resetCurrentPath();
-      onLogResult({
-        lines: logLines,
-        currentIndex: getCurrentIndex() + 1,
-      });
       onMessage(MessageType.Completed);
+      onResult();
       onComplete();
 
       return;
@@ -383,6 +387,7 @@ const AbCanvas: FC<Props> = props => {
       onMessage(MessageType.IncorrectLine);
 
       addOverWrongPointToStream(point, node.label);
+      onResult();
       return;
     }
 
@@ -407,6 +412,7 @@ const AbCanvas: FC<Props> = props => {
     addOverUndefinedPointToStream(point);
 
     markLastLogPoints({ valid: false, actual: node?.label ?? 'none' });
+    onResult();
   };
 
   const drawPath = () => {

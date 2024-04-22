@@ -401,6 +401,7 @@ function convertToAbTestAnswer(answer: Answer): AnswerDto {
 
   const dto: AbTestAnswerDto = {
     currentIndex: abResponse.currentIndex,
+    maximumIndex: abResponse.maximumIndex,
     startTime: abResponse.startTime,
     width: abResponse.width,
     updated: abResponse.updated,

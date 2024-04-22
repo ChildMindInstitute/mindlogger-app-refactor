@@ -19,6 +19,7 @@ function useActivityStepper(state: ActivityState | undefined) {
   const currentPipelineItem = state?.items[step];
 
   const isTutorialStep = currentPipelineItem?.type === 'Tutorial';
+  const isAbTestStep = currentPipelineItem?.type === 'AbTest';
   const isMessageStep = currentPipelineItem?.type === 'Message';
   const isSplashStep = currentPipelineItem?.type === 'Splash';
   const isFirstStep = step === 0;
@@ -38,6 +39,7 @@ function useActivityStepper(state: ActivityState | undefined) {
   const canMoveNext =
     isTutorialStep ||
     isMessageStep ||
+    isAbTestStep ||
     currentPipelineItem?.isSkippable ||
     (hasAnswer && (!additionalAnswerRequired || hasAdditionalAnswer));
   const canMoveBack = currentPipelineItem?.isAbleToMoveBack;
@@ -67,11 +69,14 @@ function useActivityStepper(state: ActivityState | undefined) {
     return canSkip ? 'activity_navigation:skip' : 'activity_navigation:next';
   }
 
+  const shouldPostProcessUserActions = isAbTestStep;
+
   return {
     isTutorialStep,
     isFirstStep,
     isLastStep,
     isConditionalLogicItem,
+    shouldPostProcessUserActions,
 
     canSkip,
     canMoveNext,

@@ -96,7 +96,7 @@ const AbTest: FC<Props> = props => {
             testData={testData}
             width={width}
             height={width}
-            onLogResult={logData =>
+            onResult={logData =>
               onResponse?.({ ...logData, width, startTime, updated: true })
             }
             onMessage={msg => setMessage(msg)}

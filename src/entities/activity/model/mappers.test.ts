@@ -1,4 +1,9 @@
 import { ActivityDetails } from '@entities/activity';
+import {
+  abTrailsOutput,
+  CSTOutput,
+  flankerOutput,
+} from '@entities/activity/model/performanceTasks.output.mock';
 
 import { mapToActivity } from './mappers';
 import {
@@ -43,6 +48,11 @@ import {
   sliderOutput,
   textOutput,
 } from './mappers.output.mock';
+import {
+  abTrailsInput,
+  CSTInput,
+  flankerInput,
+} from './performanceTasks.input.mock';
 
 const removeUnusedProperties = (
   activityDetails: ActivityDetails,
@@ -207,5 +217,29 @@ describe('Activity mapToActivity tests', () => {
     const result = mapToActivity(input);
 
     expect(removeUnusedProperties(result)).toEqual(conditionalOutput);
+  });
+
+  it('should return mapped result for AbTrails item', async () => {
+    const input = abTrailsInput;
+
+    const result = mapToActivity(input);
+
+    expect(removeUnusedProperties(result)).toEqual(abTrailsOutput);
+  });
+
+  it('should return mapped result for Stability tracker item', async () => {
+    const input = CSTInput;
+
+    const result = mapToActivity(input);
+
+    expect(removeUnusedProperties(result)).toEqual(CSTOutput);
+  });
+
+  it('should return mapped result for Flanker item', async () => {
+    const input = flankerInput;
+
+    const result = mapToActivity(input);
+
+    expect(removeUnusedProperties(result)).toEqual(flankerOutput);
   });
 });

@@ -654,7 +654,7 @@ export const conditionalInput: ActivityDto = {
             tooltip: '',
             isHidden: false,
             color: null,
-            alert: null,
+            alert: 'Some alert',
             value: 0,
           },
         ],
