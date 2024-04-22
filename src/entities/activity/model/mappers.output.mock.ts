@@ -757,7 +757,9 @@ export const conditionalOutput: ActivityDetails = {
         autoAdvance: true,
         options: [
           {
-            alert: null,
+            alert: {
+              message: 'Some alert',
+            },
             color: null,
             id: '117c3a26-a3f8-449e-94d6-198b0c7280a8',
             image: null,
