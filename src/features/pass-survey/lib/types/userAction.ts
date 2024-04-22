@@ -55,10 +55,30 @@ type SkipAction = {
   };
 };
 
+type SkipPopupConfirmAction = {
+  type: 'SKIP_POPUP_CONFIRM';
+  payload: {
+    activityId: string;
+    activityItemId: string;
+    date: number;
+  };
+};
+
+type SkipPopupCancelAction = {
+  type: 'SKIP_POPUP_CANCEL';
+  payload: {
+    activityId: string;
+    activityItemId: string;
+    date: number;
+  };
+};
+
 export type UserAction =
   | SetAnswerAction
   | GoBackAction
   | GoNextAction
   | CompleteAction
   | UndoAction
-  | SkipAction;
+  | SkipAction
+  | SkipPopupConfirmAction
+  | SkipPopupCancelAction;

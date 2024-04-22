@@ -15,15 +15,24 @@ export * from './contexts';
 
 export { default as useOnUndo } from './useOnUndo';
 
+export type StepperPayload = {
+  shouldIgnoreUserActionTrack: boolean;
+};
+
+export type OnBeforeNextResult = Promise<{
+  stepShift: number;
+  payload?: StepperPayload;
+}>;
+
 type Props = PropsWithChildren<{
   startFrom: number;
   stepsCount: number;
 
-  onNext?: (step: number, isForced: boolean) => void;
+  onNext?: (step: number, isForced: boolean, payload?: StepperPayload) => void;
   onBack?: (step: number) => void;
   onUndo?: (step: number) => void;
 
-  onBeforeNext?: (step: number) => number;
+  onBeforeNext?: (step: number) => OnBeforeNextResult;
   onBeforeBack?: (step: number) => number;
 
   onStartReached?: () => void;
@@ -72,7 +81,7 @@ export function Stepper({
   const stepRef = useRef(startFrom ?? 0);
 
   const next = useCallback(
-    ({
+    async ({
       isForced,
       shouldAutoSubmit,
     }: {
@@ -80,14 +89,15 @@ export function Stepper({
       shouldAutoSubmit: boolean;
     }) => {
       const step = stepRef.current;
-      const stepShift = onBeforeNextRef.current?.(step) ?? 1;
+      const { stepShift = 1, payload } =
+        (await onBeforeNextRef.current?.(step)) ?? {};
       const nextStep = step + stepShift;
 
       const moved = viewSliderRef.current?.next(stepShift);
 
       if (moved) {
         stepRef.current = nextStep;
-        onNextRef.current?.(nextStep, isForced);
+        onNextRef.current?.(nextStep, isForced, payload);
       } else if (nextStep >= stepsCount) {
         if (isForced && !shouldAutoSubmit) {
           return;

@@ -477,3 +477,5 @@ export type PipelineItem =
   | RadioPipelineItem
   | DatePipelineItem
   | TimePipelineItem;
+
+export type PipelineItemType = PipelineItem['type'];

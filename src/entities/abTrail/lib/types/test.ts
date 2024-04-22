@@ -27,6 +27,7 @@ export type LogLine = { points: Array<LogPoint> };
 export type OnResultLog = {
   lines: LogLine[];
   currentIndex: number;
+  maximumIndex: number;
 };
 
 export type AbTestResult = {

@@ -14,3 +14,5 @@ export type AppletWithVersion = {
   appletId: string;
   version: string;
 };
+
+export type NoParamVoidFunction = () => void;
