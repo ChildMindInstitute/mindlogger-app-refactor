@@ -46,7 +46,7 @@ export type MigrationOutput = {
 };
 
 export interface IMigration {
-  migrate(input: MigrationInput): MigrationOutput;
+  migrate(input: MigrationInput): MigrationOutput | Promise<MigrationOutput>;
 }
 
 export interface IMigrationRunner {
