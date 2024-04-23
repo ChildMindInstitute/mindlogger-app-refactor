@@ -12,7 +12,6 @@ export const useFeatureFlags = () => {
   const onChangeHandler = useCallback(() => updateFeatureFlags(), []);
 
   useEffect(() => {
-    updateFeatureFlags();
     FeatureFlagsService.setChangeHandler(onChangeHandler);
   }, [onChangeHandler]);
 
