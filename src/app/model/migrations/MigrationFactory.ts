@@ -11,8 +11,8 @@ type Migrations = Record<VersionFrom, IMigration>;
 export class MigrationFactory {
   public createMigrations(): Migrations {
     return {
-      0: new MigrationToVersion0001(__queryClient__),
-      1: new MigrationToVersion0002(),
+      1: new MigrationToVersion0001(__queryClient__),
+      2: new MigrationToVersion0002(),
     };
   }
 }
