@@ -5,6 +5,13 @@ import { getFilenameFromLocalUri, evaluateLocalFileUri } from './file';
 import { ImageConverter } from './imageConverter';
 import { IS_IOS } from '../constants';
 
+export type MediaAsset = {
+  fileName: string;
+  size: number;
+  type: string;
+  fromLibrary: boolean;
+};
+
 export const moveMediaFileToCache = async (
   fileName: string,
   fromUri: string,
@@ -25,7 +32,7 @@ export const moveMediaFileToCache = async (
 export const preparePhotoFile = async (
   image: Asset,
   isFromLibrary: boolean,
-) => {
+): Promise<MediaAsset> => {
   const isHeic = image.fileName?.includes('heic');
 
   if (isHeic) {
@@ -96,7 +103,7 @@ export const preparePhotoFile = async (
 export const prepareVideoFile = async (
   video: Asset,
   isFromLibrary: boolean,
-) => {
+): Promise<MediaAsset> => {
   let localFileUri = video.uri!;
   let fileName = video.fileName!;
 

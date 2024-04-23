@@ -1,16 +1,10 @@
-import { isLocalFileUrl, getFilePath, evaluateLocalFileUri } from '../file';
-
-const setPlatform = (platform: 'ios' | 'android') => {
-  jest.mock('react-native/Libraries/Utilities/Platform', () => {
-    const Platform = jest.requireActual(
-      'react-native/Libraries/Utilities/Platform',
-    );
-
-    Platform.OS = platform;
-
-    return Platform;
-  });
-};
+import { setPlatform } from './testHelpers';
+import {
+  isLocalFileUrl,
+  getFilePath,
+  evaluateLocalFileUri,
+  getFilenameFromLocalUri,
+} from '../file';
 
 describe('Test isLocalFileUrl function', () => {
   it('Should correctly identify file URLs', () => {
@@ -91,6 +85,36 @@ describe('Test evaluateLocalFileUri function', () => {
   it('Should return local URIs in the format: file://${CacheDir}/${fileName}', () => {
     testFilesNames.forEach((fileName, i) => {
       expect(evaluateLocalFileUri(fileName)).toBe(expectedURIs[i]);
+    });
+  });
+});
+
+describe('Test getFilenameFromLocalUri function', () => {
+  it('Should return file name from local path', () => {
+    const testCases = [
+      'file:///document.pdf',
+      'file:///path/image.jpg',
+      'file:///path/to/video.mp4',
+    ];
+
+    const expectedResult = ['document.pdf', 'image.jpg', 'video.mp4'];
+
+    testCases.forEach((testCase, i) => {
+      expect(getFilenameFromLocalUri(testCase)).toBe(expectedResult[i]);
+    });
+  });
+
+  it('Should return an empty string if a file does not have a local path', () => {
+    const testCases = [
+      'https://www.google.com/document.pdf',
+      'image.jpg',
+      'path/to/video.mp4',
+    ];
+
+    const expectedResult = '';
+
+    testCases.forEach(testCase => {
+      expect(getFilenameFromLocalUri(testCase)).toBe(expectedResult);
     });
   });
 });

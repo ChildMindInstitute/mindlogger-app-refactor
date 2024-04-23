@@ -197,6 +197,18 @@ jest.mock('react-native-webview', () => {
   };
 });
 
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native');
+
+  RN.NativeModules.ImageConversionModule = {
+    convertHeicToJpg: jest.fn(path =>
+      Promise.resolve(path.replace('heic', 'jpg')),
+    ),
+  };
+
+  return RN;
+});
+
 jest.mock('@app/shared/lib/constants', () => ({
   ...jest.requireActual('@app/shared/lib/constants'),
   STORE_ENCRYPTION_KEY: '12345',
