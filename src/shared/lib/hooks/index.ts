@@ -27,5 +27,6 @@ export { default as useBanner } from './useBanner';
 export { default as useOnceRef } from './useOnceRef';
 export { default as useUploadObservable } from './useUploadObservable';
 export { default as useToast } from './useToast';
+export { default as useFeatureFlags } from './useFeatureFlags';
 
 export * from './redux';

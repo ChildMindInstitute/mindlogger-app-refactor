@@ -12,6 +12,7 @@ import { LocalizationProvider } from '@app/entities/localization';
 import { AnalyticsService, Logger, MixEvents } from '@app/shared/lib';
 
 import AnalyticsProvider from './AnalyticsProvider';
+import FeatureFlagsProvider from './FeatureFlagsProvider';
 import NavigationProvider from './NavigationProvider';
 import ReactQueryProvider from './ReactQueryProvider';
 import ReduxProvider from './ReduxProvider';
@@ -43,29 +44,31 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <GestureHandlerRootView style={styles.gestureHandlerView}>
       <SystemBootUpProvider onLoadingFinished={onLoadingFinished}>
-        <AnalyticsProvider>
-          <ReactQueryProvider>
-            <ReduxProvider>
-              <StorageMigrationProvider>
-                <LocalizationProvider>
-                  <TamaguiProvider>
-                    <NavigationProvider>
-                      <PortalProvider>
-                        <SafeAreaProvider>
-                          <SplashProvider isLoading={isBootingUp}>
-                            {children}
-                          </SplashProvider>
+        <FeatureFlagsProvider>
+          <AnalyticsProvider>
+            <ReactQueryProvider>
+              <ReduxProvider>
+                <StorageMigrationProvider>
+                  <LocalizationProvider>
+                    <TamaguiProvider>
+                      <NavigationProvider>
+                        <PortalProvider>
+                          <SafeAreaProvider>
+                            <SplashProvider isLoading={isBootingUp}>
+                              {children}
+                            </SplashProvider>
 
-                          <Toast config={ToastConfig} topOffset={0} />
-                        </SafeAreaProvider>
-                      </PortalProvider>
-                    </NavigationProvider>
-                  </TamaguiProvider>
-                </LocalizationProvider>
-              </StorageMigrationProvider>
-            </ReduxProvider>
-          </ReactQueryProvider>
-        </AnalyticsProvider>
+                            <Toast config={ToastConfig} topOffset={0} />
+                          </SafeAreaProvider>
+                        </PortalProvider>
+                      </NavigationProvider>
+                    </TamaguiProvider>
+                  </LocalizationProvider>
+                </StorageMigrationProvider>
+              </ReduxProvider>
+            </ReactQueryProvider>
+          </AnalyticsProvider>
+        </FeatureFlagsProvider>
       </SystemBootUpProvider>
     </GestureHandlerRootView>
   );
