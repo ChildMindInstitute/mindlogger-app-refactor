@@ -132,6 +132,7 @@ The above scripts run the app using Debug configuration and for MindLogger's `d
 | `API_URL`              | yes      | `http://localhost:8000` | MindLogger Backend API base URL      |
 | `MIXPANEL_TOKEN`       | no       | null                    | Mixpanel analytics token             |
 | `STORE_ENCRYPTION_KEY` | yes      | `my-encryption-key`     | Secure storage encryption key        |
+| `LAUNCHDARKLY_CLIENT_ID` | yes      | `my-env-client-id`     | LaunchDarkly client ID, refer to Confluence for correct environment key         |
 
 ## License
 
