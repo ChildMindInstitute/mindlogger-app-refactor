@@ -43,9 +43,9 @@ describe('Test getFilePath function', () => {
   const iosExpectedPaths = testPaths;
 
   const androidExpectedPaths = [
-    'document.pdf',
-    '/path/document.pdf',
-    '/path/to/document.pdf',
+    'file://document.pdf',
+    'file:///path/document.pdf',
+    'file:///path/to/document.pdf',
   ];
 
   afterEach(() => {
