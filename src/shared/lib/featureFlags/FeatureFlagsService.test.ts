@@ -73,7 +73,7 @@ describe('Test FeatureFlagsService', () => {
     expect(constructorMock).toHaveBeenCalledTimes(1);
     expect(constructorMock).toHaveBeenCalledWith([
       MOCK_LD_CLIENT_ID,
-      AutoEnvAttributesMock.Enabled,
+      AutoEnvAttributesMock.Disabled,
       {},
     ]);
   });

@@ -15,7 +15,7 @@ const FeatureFlagsService = {
     Logger.log('[FeatureFlagsService]: Create and init LaunchDarkly client');
     launchDarkly = new ReactNativeLDClient(
       LAUNCHDARKLY_CLIENT_ID,
-      AutoEnvAttributes.Enabled,
+      AutoEnvAttributes.Disabled,
       {},
     );
     return launchDarkly;
@@ -25,6 +25,8 @@ const FeatureFlagsService = {
       kind: LD_KIND_PREFIX,
       key: `${LD_KIND_PREFIX}-${userId}`,
     };
+    Logger.log(`[FeatureFlagsService]: login: ${userId}`);
+
     return launchDarkly.identify(context);
   },
   logout() {
