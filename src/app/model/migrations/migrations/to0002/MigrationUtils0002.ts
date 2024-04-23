@@ -72,5 +72,7 @@ export const renameMediaFile = (mediaFile: MediaFile) => {
 
 const MEDIA_ITEM_TYPES: Array<ActivityItemType> = ['Photo', 'Video'];
 
-export const isMediaItem = (item: PipelineItem) =>
+export const isVideoOrPhotoItem = (item: PipelineItem) =>
   MEDIA_ITEM_TYPES.includes(item.type);
+
+export const isAudioItem = (item: PipelineItem) => item.type === 'Audio';

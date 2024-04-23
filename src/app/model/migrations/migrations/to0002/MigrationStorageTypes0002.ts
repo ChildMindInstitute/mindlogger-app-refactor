@@ -85,7 +85,7 @@ type GoNextAction = {
   };
 };
 
-type UserAction = GoNextAction | SetAnswerAction;
+export type UserAction = GoNextAction | SetAnswerAction;
 
 export type ActivityState = {
   step: number;
