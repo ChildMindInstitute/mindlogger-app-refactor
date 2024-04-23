@@ -4,6 +4,7 @@ import {
   ReactNativeLDClient,
 } from '@launchdarkly/react-native-client-sdk';
 
+import { LD_KIND_PREFIX } from './FeatureFlags.const';
 import { LAUNCHDARKLY_CLIENT_ID } from '../constants';
 import { Logger } from '../services';
 
@@ -21,8 +22,8 @@ const FeatureFlagsService = {
   },
   async login(userId: string) {
     const context = {
-      kind: 'mobile-app-users',
-      key: `mobile-app-users-${userId}`,
+      kind: LD_KIND_PREFIX,
+      key: `${LD_KIND_PREFIX}-${userId}`,
     };
     return launchDarkly.identify(context);
   },
