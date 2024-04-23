@@ -25,7 +25,6 @@ const FeatureFlagsService = {
       kind: LD_KIND_PREFIX,
       key: `${LD_KIND_PREFIX}-${userId}`,
     };
-    Logger.log(`[FeatureFlagsService]: login: ${userId}`);
 
     return launchDarkly.identify(context);
   },
