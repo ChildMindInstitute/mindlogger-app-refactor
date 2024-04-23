@@ -15,6 +15,7 @@ import {
   AnalyticsService,
   useTCPSocket,
   Emitter,
+  FeatureFlagsService,
 } from '@shared/lib';
 
 export function useLogout() {
@@ -39,6 +40,8 @@ export function useLogout() {
     }
 
     AnalyticsService.logout();
+
+    FeatureFlagsService.logout();
 
     CacheManager.clearCache();
 
