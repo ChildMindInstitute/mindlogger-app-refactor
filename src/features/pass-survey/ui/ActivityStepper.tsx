@@ -249,8 +249,10 @@ function ActivityStepper({
     onClose('click-on-return');
   };
 
-  const onEndReached = (isForced: boolean) => {
-    if (!isForced) {
+  const onEndReached = (isForced: boolean, payload?: StepperPayload) => {
+    const { shouldIgnoreUserActionTrack = false } = payload || {};
+
+    if (!isForced && !shouldIgnoreUserActionTrack) {
       trackUserAction(userActionCreator.done());
     }
     onFinish('regular');

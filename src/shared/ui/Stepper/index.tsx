@@ -36,7 +36,7 @@ type Props = PropsWithChildren<{
   onBeforeBack?: (step: number) => number;
 
   onStartReached?: () => void;
-  onEndReached?: (isForced: boolean) => void;
+  onEndReached?: (isForced: boolean, payload?: StepperPayload) => void;
 }>;
 
 export function Stepper({
@@ -103,7 +103,7 @@ export function Stepper({
           return;
         }
 
-        onEndReachedRef.current?.(isForced);
+        onEndReachedRef.current?.(isForced, payload);
       }
     },
     [stepsCount],
