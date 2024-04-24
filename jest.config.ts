@@ -19,7 +19,7 @@ const jestConfig: JestConfigWithTsJest = {
   transformIgnorePatterns: [
     'node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation|@react-native-device-info|@notifee|@miblanchard/react-native-slider|victory-*|@shopify/react-native-skia|react-native-reanimated)',
   ],
-  setupFiles: ['<rootDir>/jest.setup.js'],
+  setupFiles: ['<rootDir>/jest.setup.js', '<rootDir>/jest.components.jsx'],
   moduleDirectories: ['node_modules', '<rootDir>'],
   moduleNameMapper: {
     ...pathsToModuleNameMapper({

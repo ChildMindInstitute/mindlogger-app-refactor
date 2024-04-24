@@ -1,8 +1,6 @@
 import { jest } from '@jest/globals';
 import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
 
-import './jest.components.jsx';
-
 jest.mock('react-native-file-access', () => {
   return {
     FileSystem: {
