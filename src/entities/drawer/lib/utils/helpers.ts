@@ -1,6 +1,12 @@
 import { Skia, SkPath } from '@shopify/react-native-skia';
 
 import { getBezierArray } from './bezier';
+import {
+  CANVAS_HEIGHT_FACTOR,
+  ELEMENTS_GAP,
+  EXAMPLE_HEIGHT_FACTOR,
+  RECT_PADDING,
+} from './constants';
 import { DrawLine, Point } from '../types';
 
 export const convertToSkPaths = (
@@ -44,4 +50,69 @@ export const getChunkedPointsAsStrings = (lines: DrawLine[]) => {
     }
   }
   return results;
+};
+
+export type Dimensions = {
+  width: number;
+  height: number;
+};
+
+export const getCanvasSize = (
+  dimensions: Dimensions,
+  hasExampleImage: boolean,
+) => {
+  const factor = hasExampleImage ? CANVAS_HEIGHT_FACTOR : 1;
+  const canvasHeight = dimensions.height * factor - ELEMENTS_GAP;
+  const containerWidth = dimensions.width - RECT_PADDING * 2;
+
+  let result = canvasHeight;
+
+  if (canvasHeight > containerWidth) {
+    result = containerWidth;
+  } else if (containerWidth > canvasHeight) {
+    result = canvasHeight;
+  }
+
+  return result;
+};
+
+export const getExampleImageSize = (
+  height: number,
+  hasExampleImage: boolean,
+) => {
+  return hasExampleImage ? height * EXAMPLE_HEIGHT_FACTOR : 0;
+};
+
+export const getCanvasContainerHeight = (
+  dimensions: Dimensions,
+  hasExampleImage: boolean,
+) => {
+  return (
+    (hasExampleImage
+      ? dimensions.height * CANVAS_HEIGHT_FACTOR
+      : dimensions.height) - ELEMENTS_GAP
+  );
+};
+
+export const getElementsDimensions = (
+  dimensions: Dimensions,
+  hasExampleImage: boolean,
+) => {
+  const exampleImageHeight = getExampleImageSize(
+    dimensions.height,
+    hasExampleImage,
+  );
+
+  const canvasContainerHeight = getCanvasContainerHeight(
+    dimensions,
+    hasExampleImage,
+  );
+
+  const canvasSize = getCanvasSize(dimensions, hasExampleImage);
+
+  return {
+    exampleImageHeight,
+    canvasContainerHeight,
+    canvasSize,
+  };
 };

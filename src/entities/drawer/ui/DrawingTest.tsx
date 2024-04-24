@@ -1,28 +1,34 @@
-/* eslint-disable react-native/no-inline-styles */
-import { FC, useState } from 'react';
+import { FC } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
-import { Box, BoxProps, XStack } from '@app/shared/ui';
+import { BoxProps, XStack, YStack } from '@app/shared/ui';
 import { DrawingStreamEvent, StreamEventLoggable } from '@shared/lib';
 
 import DrawingBoard from './DrawingBoard';
-import { DrawLine, DrawResult, SvgFileManager } from '../lib';
-
-const RectPadding = 15;
+import {
+  DrawLine,
+  DrawResult,
+  getElementsDimensions,
+  SvgFileManager,
+  ELEMENTS_GAP,
+} from '../lib';
 
 type Props = {
   value: { lines: DrawLine[]; fileName: string | null };
   imageUrl: string | null;
   backgroundImageUrl: string | null;
+  dimensions: {
+    height: number;
+    width: number;
+  };
   onResult: (result: DrawResult) => void;
   toggleScroll: (isScrollEnabled: boolean) => void;
 } & StreamEventLoggable<DrawingStreamEvent> &
   BoxProps;
 
 const DrawingTest: FC<Props> = props => {
-  const [width, setWidth] = useState<number | null>(null);
-
   const { value, backgroundImageUrl, imageUrl, onLog } = props;
 
   const onResult = async (result: DrawResult) => {
@@ -37,53 +43,57 @@ const DrawingTest: FC<Props> = props => {
     props.onResult(result);
   };
 
-  return (
-    <Box
-      {...props}
-      onLayout={x => {
-        const containerWidth = x.nativeEvent.layout.width - RectPadding * 2;
+  const { exampleImageHeight, canvasContainerHeight, canvasSize } =
+    getElementsDimensions(props.dimensions, !!imageUrl);
 
-        if (containerWidth > 0) {
-          setWidth(containerWidth);
-        }
-      }}
-    >
+  return (
+    <YStack {...props} alignItems="center" space={ELEMENTS_GAP}>
       {!!imageUrl && (
-        <XStack jc="center">
+        <XStack jc="center" height={exampleImageHeight}>
           <CachedImage
             source={imageUrl}
-            style={{
-              width: 300,
-              height: 300,
-              padding: 20,
-              paddingBottom: 0,
-              marginBottom: 20,
-            }}
+            style={styles.exampleImage}
             resizeMode="contain"
           />
         </XStack>
       )}
 
-      {!!width && (
-        <XStack jc="center">
-          {!!backgroundImageUrl && (
-            <CachedImage
-              source={backgroundImageUrl}
-              style={{ position: 'absolute', width, height: width }}
-              resizeMode="contain"
-            />
-          )}
+      <YStack height={canvasContainerHeight}>
+        {!!canvasSize && (
+          <XStack width={canvasSize} height={canvasSize}>
+            {!!backgroundImageUrl && (
+              <CachedImage
+                source={backgroundImageUrl}
+                style={canvasStyles(canvasSize)}
+                resizeMode="contain"
+              />
+            )}
 
-          <DrawingBoard
-            value={value.lines}
-            onResult={onResult}
-            width={width}
-            onLog={onLog}
-          />
-        </XStack>
-      )}
-    </Box>
+            <DrawingBoard
+              value={value.lines}
+              onResult={onResult}
+              width={canvasSize}
+              onLog={onLog}
+            />
+          </XStack>
+        )}
+      </YStack>
+    </YStack>
   );
 };
+
+const canvasStyles = (canvasSize: number) =>
+  ({
+    position: 'absolute',
+    width: canvasSize,
+    height: canvasSize,
+  } as const);
+
+const styles = StyleSheet.create({
+  exampleImage: {
+    width: '100%',
+    height: '100%',
+  },
+});
 
 export default DrawingTest;

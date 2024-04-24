@@ -4,14 +4,14 @@ import {
   State as EventState,
   GestureTouchEvent,
 } from 'react-native-gesture-handler';
-import { useSharedValue } from 'react-native-reanimated';
+import { SharedValue, useSharedValue } from 'react-native-reanimated';
 
 import { IS_IOS } from '@app/shared/lib';
 
 import { Point } from './LineSketcher';
 
 type Options = {
-  areaSize: number;
+  areaSize: SharedValue<number>;
 };
 
 type Callbacks = {
@@ -40,7 +40,10 @@ function useDrawingGesture(
   const isOutOfCanvas = (point: Point) => {
     'worklet';
     return (
-      point.x > areaSize || point.y > areaSize || point.x < 0 || point.y < 0
+      point.x > areaSize.value ||
+      point.y > areaSize.value ||
+      point.x < 0 ||
+      point.y < 0
     );
   };
 
@@ -54,8 +57,8 @@ function useDrawingGesture(
         return 0 + deviation;
       }
 
-      if (value > areaSize) {
-        return areaSize - deviation;
+      if (value > areaSize.value) {
+        return areaSize.value - deviation;
       }
 
       return value;

@@ -67,6 +67,8 @@ function ActivityItem({
   const initialScrollEnabled = type !== 'StabilityTracker' && type !== 'AbTest';
 
   const [scrollEnabled, setScrollEnabled] = useState(initialScrollEnabled);
+  const [height, setHeight] = useState(0);
+  const [width, setWidth] = useState(0);
 
   const { sendLiveEvent } = useSendEvent(
     streamingDetails?.streamEnabled || false,
@@ -145,10 +147,17 @@ function ActivityItem({
       break;
 
     case 'DrawingTest':
-      item = (
-        <Box flex={1} mb="$6">
+      const heightReductionFactor = 0.85;
+      const itemHeight = height * heightReductionFactor;
+
+      item = height ? (
+        <Box height={itemHeight} mb="$6">
           <DrawingTest
             flex={1}
+            dimensions={{
+              height: itemHeight,
+              width,
+            }}
             {...pipelineItem.payload}
             toggleScroll={setScrollEnabled}
             value={{
@@ -159,7 +168,7 @@ function ActivityItem({
             onLog={processLiveEvent}
           />
         </Box>
-      );
+      ) : null;
       break;
 
     case 'Flanker':
@@ -376,7 +385,16 @@ function ActivityItem({
 
   return (
     <ScrollableContent scrollEnabled={scrollEnabled}>
-      <Box flex={1} justifyContent="center">
+      <Box
+        flex={1}
+        justifyContent="center"
+        onLayout={e => {
+          if (!height) {
+            setHeight(e.nativeEvent.layout.height);
+            setWidth(e.nativeEvent.layout.width);
+          }
+        }}
+      >
         {question && (
           <Box mx={16} mb={20}>
             <MarkdownMessage
