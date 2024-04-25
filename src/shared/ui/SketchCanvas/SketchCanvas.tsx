@@ -23,7 +23,7 @@ type Props = {
   initialLines: Array<Point[]>;
   onStrokeStart: (x: number, y: number, time: number) => void;
   onStrokeChanged: (x: number, y: number, time: number) => void;
-  onStrokeEnd: () => void;
+  onStrokeEnd: (x: number, y: number, time: number) => void;
 };
 
 const MAX_POINTS_PER_LINE = 50;
@@ -119,7 +119,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     });
   };
 
-  const onTouchEnd = () => {
+  const onTouchEnd = (point: Point, time: number) => {
     'worklet';
     if (getCurrentShape(points) === Shape.Dot) {
       const firstPoint = points.value[points.value.length - 1];
@@ -134,7 +134,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     }
 
     runOnJS(updatePaths)(activePath.value);
-    runOnJS(onStrokeEnd)();
+    runOnJS(onStrokeEnd)(point.x, point.y, time);
   };
 
   const drawingGesture = useDrawingGesture(

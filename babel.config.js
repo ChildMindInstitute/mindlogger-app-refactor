@@ -2,7 +2,7 @@ process.env.TAMAGUI_TARGET = 'native';
 process.env.VERSION = require('./package.json').version;
 
 module.exports = {
-  presets: ['module:metro-react-native-babel-preset'],
+  presets: ['module:@react-native/babel-preset'],
   plugins: [
     [
       'module-resolver',
@@ -28,7 +28,7 @@ module.exports = {
         include: ['NODE_ENV', 'TAMAGUI_TARGET', 'VERSION'],
       },
     ],
-    ['@babel/plugin-proposal-export-namespace-from'],
+    '@babel/plugin-proposal-export-namespace-from',
     'react-native-reanimated/plugin',
   ],
 };

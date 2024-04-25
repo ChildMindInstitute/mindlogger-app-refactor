@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  extends: '@react-native-community',
+  extends: '@react-native',
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'import'],
   overrides: [
@@ -11,6 +11,7 @@ module.exports = {
         'no-shadow': 'off',
         'no-undef': 'off',
         'react/react-in-jsx-scope': 'off',
+        'react/no-unstable-nested-components': 'off',
         'react/jsx-newline': [2, { prevent: true, allowMultilines: true }],
         'import/order': [
           'error',

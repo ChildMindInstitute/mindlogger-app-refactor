@@ -9,7 +9,9 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { colors } from '@shared/lib/constants';
 
-type Props = SliderProps & { size: number; initialValue: number | null };
+type Props = SliderProps & { size: number; initialValue: number | null } & {
+  onValueChange: NonNullable<SliderProps['onValueChange']>;
+};
 
 const CHANGE_VALUE_DELAY = 100;
 
@@ -17,9 +19,10 @@ const Slider: FC<Props & AccessibilityProps> = props => {
   const { size, initialValue = null } = props;
   const opacity = initialValue !== null ? 1 : 0;
 
-  const debouncedOnValueChange = useDebouncedCallback(value => {
-    props.onValueChange?.(value);
-  }, CHANGE_VALUE_DELAY);
+  const debouncedOnValueChange = useDebouncedCallback(
+    props.onValueChange,
+    CHANGE_VALUE_DELAY,
+  );
 
   return (
     <SliderBase

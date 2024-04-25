@@ -47,9 +47,9 @@ onlineManager.setEventListener(setOnline => {
 });
 
 if (__DEV__) {
-  import('react-query-native-devtools').then(({ addPlugin }) => {
-    addPlugin({ queryClient: __queryClient__ });
-  });
+  const { addPlugin } = require('react-query-native-devtools');
+
+  addPlugin({ queryClient: __queryClient__ });
 }
 
 const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {

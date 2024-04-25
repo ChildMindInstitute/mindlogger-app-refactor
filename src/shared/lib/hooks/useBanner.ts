@@ -1,19 +1,14 @@
-import { useToast } from 'react-native-toast-notifications';
-import type { ToastOptions } from 'react-native-toast-notifications/lib/typescript/toast';
+import Toast, { ToastOptions } from 'react-native-toast-message';
 
 export const useBanner = () => {
-  const toast = useToast();
   return {
-    ...toast,
     show: (content: string | JSX.Element, options: ToastOptions) => {
-      toast.hideAll();
+      Toast.hide();
       setTimeout(() => {
-        toast.show(content, {
-          placement: 'top',
-          swipeEnabled: false,
-          data: {
-            banner: true,
-          },
+        Toast.show({
+          props: { content },
+          position: 'top',
+          swipeable: false,
           ...options,
         });
       }, 200);

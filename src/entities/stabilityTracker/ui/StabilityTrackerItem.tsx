@@ -9,10 +9,10 @@ import { GestureResponderEvent } from 'react-native';
 
 import { orientation } from 'react-native-sensors';
 import Svg, { Circle } from 'react-native-svg';
-import { useToast } from 'react-native-toast-notifications';
 
 import {
   useForceUpdate,
+  useToast,
   StreamEventLoggable,
   StabilityTrackerEvent,
 } from '@shared/lib';
@@ -71,7 +71,6 @@ type Props = {
 } & StreamEventLoggable<StabilityTrackerEvent>;
 
 const StabilityTrackerItemScreen = (props: Props) => {
-  const toast = useToast();
   const reRender = useForceUpdate();
 
   const {
@@ -116,6 +115,7 @@ const StabilityTrackerItemScreen = (props: Props) => {
   const responses = useRef<Response[]>([]);
   const orientationSubscription = useRef<OrientationSubscription>();
   const initialOrientation = useRef<number>();
+  const toast = useToast();
 
   const lambdaLimit = IS_TRIAL ? 0 : 0.3 * maxLambda;
 

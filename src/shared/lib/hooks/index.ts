@@ -26,5 +26,6 @@ export { default as useOnFocus } from './useOnFocus';
 export { default as useBanner } from './useBanner';
 export { default as useOnceRef } from './useOnceRef';
 export { default as useUploadObservable } from './useUploadObservable';
+export { default as useToast } from './useToast';
 
 export * from './redux';

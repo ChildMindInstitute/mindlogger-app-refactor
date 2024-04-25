@@ -14,16 +14,7 @@ jest.mock('react-native-file-access', () => {
   };
 });
 
-require('react-native-reanimated/src/reanimated2/jestUtils').setUpTests();
-
 jest.mock('react-native-reanimated', () => {
-  global.__reanimatedWorkletInit = () => {};
-  global.ReanimatedDataMock = {
-    now: () => 0,
-  };
-
-  const Mock = require('react-native-reanimated/mock');
-
   const MockAnimation = jest.fn().mockImplementation(() => {
     const instance = {
       duration: jest.fn(() => instance),
@@ -34,7 +25,7 @@ jest.mock('react-native-reanimated', () => {
   });
 
   return {
-    ...Mock,
+    createAnimatedComponent: jest.fn(),
     SlideInLeft: MockAnimation,
     SlideInRight: MockAnimation,
     SlideOutLeft: MockAnimation,
@@ -203,6 +194,19 @@ jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => {
       }
       return turboModuleRegistry.getEnforcing(name);
     },
+  };
+});
+
+jest.mock('react-native-webview', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+
+  const WebView = props => <View {...props} />;
+
+  return {
+    WebView,
+    default: WebView,
+    __esModule: true,
   };
 });
 

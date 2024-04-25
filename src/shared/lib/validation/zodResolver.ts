@@ -1,4 +1,4 @@
-import { toNestError, validateFieldsNatively } from '@hookform/resolvers';
+import { toNestErrors, validateFieldsNatively } from '@hookform/resolvers';
 import {
   appendErrors,
   FieldError as BaseFieldError,
@@ -87,7 +87,7 @@ const zodResolver: Resolver = (schema, schemaOptions, resolverOptions = {}) => {
       } else {
         return {
           values: {},
-          errors: toNestError(
+          errors: toNestErrors(
             parseErrorSchema(
               error.errors,
               !options.shouldUseNativeValidation &&

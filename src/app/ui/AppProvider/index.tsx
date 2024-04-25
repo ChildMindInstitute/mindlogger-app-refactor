@@ -6,6 +6,7 @@ import { PortalProvider } from '@tamagui/portal';
 import { Dirs } from 'react-native-file-access';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
 import { LocalizationProvider } from '@app/entities/localization';
 import { AnalyticsService, Logger, MixEvents } from '@app/shared/lib';
@@ -18,7 +19,7 @@ import SplashProvider from './SplashProvider';
 import StorageMigrationProvider from './StorageMigrationProvider';
 import SystemBootUpProvider from './SystemBootUpProvider';
 import TamaguiProvider from './TamaguiProvider';
-import ToastProvider from './ToastProvider';
+import ToastConfig from './ToastConfig';
 
 CacheManager.config = {
   baseDir: `${Dirs.CacheDir}/images_cache/`,
@@ -51,11 +52,11 @@ const AppProvider: FC<PropsWithChildren> = ({ children }) => {
                     <NavigationProvider>
                       <PortalProvider>
                         <SafeAreaProvider>
-                          <ToastProvider>
-                            <SplashProvider isLoading={isBootingUp}>
-                              {children}
-                            </SplashProvider>
-                          </ToastProvider>
+                          <SplashProvider isLoading={isBootingUp}>
+                            {children}
+                          </SplashProvider>
+
+                          <Toast config={ToastConfig} topOffset={0} />
                         </SafeAreaProvider>
                       </PortalProvider>
                     </NavigationProvider>

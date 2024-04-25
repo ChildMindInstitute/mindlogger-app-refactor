@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { AccessibilityProps } from 'react-native';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -18,6 +17,10 @@ type IconProps = {
   color: string;
   size: number;
   solid?: boolean;
+};
+
+type AccessibilityProps = {
+  accessibilityLabel?: string | undefined;
 };
 
 export const CloseIcon: FC<IconProps> = props => (

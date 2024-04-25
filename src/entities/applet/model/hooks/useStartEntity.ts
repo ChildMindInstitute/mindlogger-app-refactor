@@ -262,7 +262,7 @@ function useStartEntity({
         return;
       }
 
-      logger.cancelSending('Start activity');
+      logger.cancelSending();
 
       const logParams: LogActivityActionParams = {
         activityId,
@@ -408,7 +408,7 @@ function useStartEntity({
         return;
       }
 
-      logger.cancelSending('Start flow');
+      logger.cancelSending();
 
       const logParams: LogFlowActionParams = {
         flowId,
