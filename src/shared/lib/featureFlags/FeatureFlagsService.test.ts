@@ -39,7 +39,7 @@ jest.mock('@launchdarkly/react-native-client-sdk', () => ({
 const MOCK_LD_CLIENT_ID: string | undefined = 'MOCK_LD_CLIENT_ID_123';
 
 jest.mock('../constants', () => ({
-  LAUNCHDARKLY_CLIENT_ID: MOCK_LD_CLIENT_ID,
+  LAUNCHDARKLY_MOBILE_KEY: MOCK_LD_CLIENT_ID,
 }));
 
 jest.mock('../services', () => ({
@@ -67,7 +67,7 @@ describe('Test FeatureFlagsService', () => {
     onMock.mockReset();
   });
 
-  it('Should pass LAUNCHDARKLY_CLIENT_ID into constructor of LaunchDarkly class', async () => {
+  it('Should pass LAUNCHDARKLY_MOBILE_KEY into constructor of LaunchDarkly class', async () => {
     FeatureFlagsService.init();
 
     expect(constructorMock).toHaveBeenCalledTimes(1);

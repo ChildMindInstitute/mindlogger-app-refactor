@@ -5,7 +5,7 @@ import {
 } from '@launchdarkly/react-native-client-sdk';
 
 import { LD_KIND_PREFIX } from './FeatureFlags.const';
-import { LAUNCHDARKLY_CLIENT_ID } from '../constants';
+import { LAUNCHDARKLY_MOBILE_KEY } from '../constants';
 import { Logger } from '../services';
 
 let launchDarkly: ReactNativeLDClient;
@@ -14,7 +14,7 @@ const FeatureFlagsService = {
   async init(): Promise<ReactNativeLDClient> {
     Logger.log('[FeatureFlagsService]: Create and init LaunchDarkly client');
     launchDarkly = new ReactNativeLDClient(
-      LAUNCHDARKLY_CLIENT_ID,
+      LAUNCHDARKLY_MOBILE_KEY,
       AutoEnvAttributes.Disabled,
       {},
     );

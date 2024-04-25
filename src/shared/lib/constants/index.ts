@@ -30,7 +30,7 @@ export const MIXPANEL_TOKEN = Config.MIXPANEL_TOKEN;
 
 export const STORE_ENCRYPTION_KEY = Config.STORE_ENCRYPTION_KEY;
 
-export const LAUNCHDARKLY_CLIENT_ID = Config.LAUNCHDARKLY_CLIENT_ID as string;
+export const LAUNCHDARKLY_MOBILE_KEY = Config.LAUNCHDARKLY_MOBILE_KEY as string;
 
 /**
  * The scheme and host of the respondent web app in this environment.
