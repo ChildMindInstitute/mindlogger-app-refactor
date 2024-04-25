@@ -11,10 +11,7 @@ import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcess
 import { AppletModel } from '@app/entities/applet';
 import { QueryDataUtils } from '@app/shared/api';
 import {
-  AnalyticsService,
   Logger,
-  MixEvents,
-  MixProperties,
   UploadObservable,
   useAppDispatch,
   useAppSelector,
@@ -119,10 +116,6 @@ function Intermediate({
   }, [appletId, queryClient]);
 
   const changeActivity = useCallback(() => {
-    AnalyticsService.track(MixEvents.AssessmentCompleted, {
-      [MixProperties.AppletId]: appletId,
-    });
-
     const appletName = getAppletName();
 
     Logger.log(

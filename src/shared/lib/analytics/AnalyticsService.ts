@@ -11,6 +11,7 @@ let service: IAnalyticsService;
 export const MixProperties = {
   AppletId: 'Applet ID',
   MindLoggerVersion: 'MindLogger Version',
+  SubmitId: 'Submit ID',
 };
 
 export const MixEvents = {
