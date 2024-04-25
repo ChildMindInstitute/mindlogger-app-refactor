@@ -49,6 +49,7 @@ export const ABTrailsOutput = [
   {
     value: {
       currentIndex: 11,
+      maximumIndex: 11,
       lines: [
         {
           points: [

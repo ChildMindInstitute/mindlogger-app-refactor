@@ -147,6 +147,7 @@ export const ABTrailsAnswer: Answer = {
       },
     ],
     currentIndex: 11,
+    maximumIndex: 11,
     width: 100,
     startTime: 112,
     updated: true,

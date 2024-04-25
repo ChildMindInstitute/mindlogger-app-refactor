@@ -289,7 +289,7 @@ const AbCanvas: FC<Props> = props => {
   const onResult = () => {
     props.onResult({
       lines: logLines,
-      currentIndex: getCurrentIndex() + 1,
+      currentIndex: getCurrentIndex(),
       maximumIndex: testData.nodes.length,
     });
   };
@@ -307,7 +307,7 @@ const AbCanvas: FC<Props> = props => {
   };
 
   const onTouchStart = (touchInfo: TouchInfo) => {
-    const isFinished = paths.length === currentIndexRef.current;
+    const isFinished = currentIndexRef.current === testData.nodes.length;
 
     if (currentPathRef.current || readonly || isFinished) {
       return;
@@ -362,6 +362,7 @@ const AbCanvas: FC<Props> = props => {
       keepPathInState();
       resetCurrentPath();
       onMessage(MessageType.Completed);
+      incrementCurrentIndex();
       onResult();
       onComplete();
 
