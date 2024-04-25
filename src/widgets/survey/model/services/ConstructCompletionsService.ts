@@ -162,6 +162,10 @@ export class ConstructCompletionsService {
     activityStorageRecord: ActivityState,
     { activityName, activityId, order }: ConstructForIntermediateInput,
   ) {
+    if (!this.saveActivitySummary) {
+      return;
+    }
+
     const summaryAlerts: AnswerAlerts =
       PassSurveyModel.AlertsExtractor.extractForSummary(
         activityStorageRecord.items,
