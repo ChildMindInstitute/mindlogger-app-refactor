@@ -1,33 +1,10 @@
-import { Skia, SkPath } from '@shopify/react-native-skia';
-
-import { getBezierArray } from './bezier';
-import { DrawLine, Point } from '../types';
-
-export const convertToSkPaths = (
-  lines: DrawLine[],
-  startFrom: number,
-): SkPath[] => {
-  const skPaths: SkPath[] = [];
-
-  for (let line of lines.slice(startFrom)) {
-    if (!line.points.length) {
-      continue;
-    }
-
-    const curvePoints: Point[] = getBezierArray(line.points, []);
-
-    const { x, y } = curvePoints[0];
-
-    const path = Skia.Path.Make().moveTo(x, y);
-
-    for (let point of curvePoints.slice(1)) {
-      path.lineTo(point.x, point.y);
-    }
-    skPaths.push(path);
-  }
-
-  return skPaths;
-};
+import {
+  CANVAS_HEIGHT_FACTOR,
+  ELEMENTS_GAP,
+  EXAMPLE_HEIGHT_FACTOR,
+  RECT_PADDING,
+} from './constants';
+import { DrawLine } from '../types';
 
 export const getChunkedPointsAsStrings = (lines: DrawLine[]) => {
   const results: string[] = [];
@@ -44,4 +21,52 @@ export const getChunkedPointsAsStrings = (lines: DrawLine[]) => {
     }
   }
   return results;
+};
+
+export type Dimensions = {
+  width: number;
+  height: number;
+};
+
+const getCanvasSize = (dimensions: Dimensions, hasExampleImage: boolean) => {
+  const factor = hasExampleImage ? CANVAS_HEIGHT_FACTOR : 1;
+  const canvasHeight = dimensions.height * factor - ELEMENTS_GAP;
+  const containerWidth = dimensions.width - RECT_PADDING * 2;
+
+  const result = canvasHeight > containerWidth ? containerWidth : canvasHeight;
+
+  return result;
+};
+
+const getExampleImageSize = (height: number, hasExampleImage: boolean) => {
+  return hasExampleImage ? height * EXAMPLE_HEIGHT_FACTOR : 0;
+};
+
+const getCanvasContainerHeight = (height: number, hasExampleImage: boolean) => {
+  return (
+    (hasExampleImage ? height * CANVAS_HEIGHT_FACTOR : height) - ELEMENTS_GAP
+  );
+};
+
+export const getElementsDimensions = (
+  dimensions: Dimensions,
+  hasExampleImage: boolean,
+) => {
+  const exampleImageHeight = getExampleImageSize(
+    dimensions.height,
+    hasExampleImage,
+  );
+
+  const canvasContainerHeight = getCanvasContainerHeight(
+    dimensions.height,
+    hasExampleImage,
+  );
+
+  const canvasSize = getCanvasSize(dimensions, hasExampleImage);
+
+  return {
+    exampleImageHeight,
+    canvasContainerHeight,
+    canvasSize,
+  };
 };

@@ -17,8 +17,6 @@ const DrawingBoard: FC<Props> = props => {
 
   const vector = width / 100;
   const borderWidth = 1;
-  const paddingSize = 1;
-  const containerSize = width + borderWidth + paddingSize;
 
   const sketchCanvasRef = useRef<SketchCanvasRef | null>(null);
 
@@ -87,16 +85,15 @@ const DrawingBoard: FC<Props> = props => {
 
   return (
     <Box
-      width={containerSize}
-      height={containerSize}
+      flex={1}
       zIndex={1}
+      maxWidth={width}
       borderWidth={borderWidth}
       borderColor="$lightGrey2"
       accessibilityLabel="drawing-area"
     >
       <SketchCanvas
         ref={sketchCanvasRef}
-        width={width}
         initialLines={initialLines}
         onStrokeStart={onTouchStart}
         onStrokeChanged={onTouchProgress}
