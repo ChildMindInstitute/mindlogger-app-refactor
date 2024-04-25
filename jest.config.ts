@@ -19,7 +19,12 @@ const jestConfig: JestConfigWithTsJest = {
   transformIgnorePatterns: [
     'node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation|@react-native-device-info|@notifee|@miblanchard/react-native-slider|victory-*|@shopify/react-native-skia|react-native-reanimated|react-redux)',
   ],
-  setupFiles: ['<rootDir>/jest.setup.js', '<rootDir>/jest.components.jsx'],
+  setupFiles: [
+    '<rootDir>/jest.setup.js',
+    '<rootDir>/jest.components.jsx',
+    '<rootDir>/node_modules/react-native-gesture-handler/jestSetup.js',
+    '<rootDir>/node_modules/react-native-reanimated/src/reanimated2/jestUtils.ts',
+  ],
   moduleDirectories: ['node_modules', '<rootDir>'],
   moduleNameMapper: {
     ...pathsToModuleNameMapper({
