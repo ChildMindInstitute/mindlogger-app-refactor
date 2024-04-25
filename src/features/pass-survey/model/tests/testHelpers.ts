@@ -2,14 +2,19 @@ import {
   AudioPipelineItem,
   CheckboxPipelineItem,
   CheckboxResponse,
+  DrawingTestPipelineItem,
+  DrawingTestResponse,
   RadioPipelineItem,
   RadioResponse,
   SliderPipelineItem,
+  SplashPipelineItem,
   StackedCheckboxPipelineItem,
   StackedCheckboxResponse,
   StackedRadioPipelineItem,
   StackedRadioResponse,
   StackedSliderPipelineItem,
+  TextInputPipelineItem,
+  TutorialPipelineItem,
 } from '../../lib';
 
 export const getEmptyRadioItem = (name: string): RadioPipelineItem => {
@@ -51,6 +56,19 @@ export const fillOptionsForRadio = (
   return item;
 };
 
+export const getRadioResponse = (value: number): RadioResponse => {
+  return {
+    color: null,
+    id: 'mock-response-id',
+    image: null,
+    isHidden: false,
+    score: null,
+    text: 'mock-text',
+    tooltip: null,
+    value: value,
+  };
+};
+
 export const getEmptyCheckboxesItem = (name: string): CheckboxPipelineItem => {
   const result: CheckboxPipelineItem = {
     id: 'mock-checkbox-id',
@@ -90,9 +108,26 @@ export const fillOptionsForCheckboxes = (
   return item;
 };
 
-export const getEmptySliderItem = (name: string): SliderPipelineItem => {
+export const getCheckboxResponse = (values: number[]): CheckboxResponse => {
+  const result: CheckboxResponse = values.map(v => ({
+    color: null,
+    id: 'mock-id-' + v,
+    image: null,
+    isHidden: false,
+    score: null,
+    text: 'mock-text-' + v,
+    tooltip: null,
+    value: v,
+  }));
+  return result;
+};
+
+export const getEmptySliderItem = (
+  name: string,
+  id: string = 'mock-slider-id',
+): SliderPipelineItem => {
   const result: SliderPipelineItem = {
-    id: 'mock-slider-id',
+    id,
     name,
     timer: null,
     payload: {
@@ -111,6 +146,102 @@ export const getEmptySliderItem = (name: string): SliderPipelineItem => {
     type: 'Slider',
   };
   return result;
+};
+
+export const getSliderItem = getEmptySliderItem;
+
+export const getDrawerItem = (id: string, index = 1) => {
+  const result: DrawingTestPipelineItem = {
+    id,
+    timer: null,
+    type: 'DrawingTest',
+    payload: {
+      backgroundImageUrl: null,
+      imageUrl: `http://www.mock-image-${index}.jpg`,
+    },
+  };
+  return result;
+};
+
+export const getDrawerResponse = (index: number = 1): DrawingTestResponse => {
+  return {
+    fileName: 'mock-file-name-' + index,
+    uri: 'mock-uri-' + index,
+    width: 308,
+    type: 'svg',
+    svgString: `<svg height="${200 + index}" width="${
+      100 + index
+    }" preserveAspectRatio="xMidYMid meet"><polyline points="72.96296013726129,65.83333121405708 73.42592451307509,64.62962892320421"></polyline></svg>`,
+    lines: [
+      {
+        startTime: 1235678000,
+        points: [
+          { x: 72.96296013726129, y: 65.83333121405708, time: 1235679000 },
+          { x: 73.42592451307509, y: 64.62962892320421, time: 1235679000 },
+        ],
+      },
+    ],
+  };
+};
+
+export const getTextInputItem = (id: string) => {
+  const testInputItem: TextInputPipelineItem = {
+    type: 'TextInput',
+    id,
+    payload: {
+      isNumeric: false,
+      maxLength: 100,
+      shouldIdentifyResponse: true,
+    },
+    timer: null,
+  };
+  return testInputItem;
+};
+
+export const getTutorialItem = (id: string) => {
+  const testInputItem: TutorialPipelineItem = {
+    type: 'Tutorial',
+    timer: null,
+    id,
+    payload: {
+      test: {
+        config: {
+          fontSize: 10,
+          radius: 20,
+        },
+        deviceType: 'mobile',
+        isLast: false,
+        nodes: [
+          {
+            cx: 100,
+            cy: 500,
+            label: 'A1',
+            orderIndex: 0,
+          },
+        ],
+      },
+      tutorials: [
+        {
+          text: 'tutorial-1',
+          nodeLabel: 'A1',
+        },
+      ],
+      type: 'AbTutorial',
+    },
+  };
+  return testInputItem;
+};
+
+export const getSplashItem = (id: string) => {
+  const item: SplashPipelineItem = {
+    timer: null,
+    id,
+    type: 'Splash',
+    payload: {
+      imageUrl: 'http://www.mock-url-1.com',
+    },
+  };
+  return item;
 };
 
 export const fillScoresForSlider = (
@@ -397,32 +528,5 @@ export const getStackedSliderItem = (): StackedSliderPipelineItem => {
     },
     type: 'StackedSlider',
   };
-  return result;
-};
-
-export const getRadioResponse = (value: number): RadioResponse => {
-  return {
-    color: null,
-    id: 'mock-response-id',
-    image: null,
-    isHidden: false,
-    score: null,
-    text: 'mock-text',
-    tooltip: null,
-    value: value,
-  };
-};
-
-export const getCheckboxResponse = (values: number[]): CheckboxResponse => {
-  const result: CheckboxResponse = values.map(v => ({
-    color: null,
-    id: 'mock-id-' + v,
-    image: null,
-    isHidden: false,
-    score: null,
-    text: 'mock-text-' + v,
-    tooltip: null,
-    value: v,
-  }));
   return result;
 };

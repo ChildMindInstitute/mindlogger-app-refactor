@@ -13,6 +13,8 @@ import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import { AppletEncryptionDTO, QueryDataUtils } from '@app/shared/api';
 import {
   AnalyticsService,
+  getEntityProgress,
+  getNow,
   getTimezoneOffset,
   Logger,
   MixEvents,
@@ -60,7 +62,7 @@ type ConstructForFinishInput = {
   activityName: string;
 };
 
-type ConstructInput = (
+export type ConstructInput = (
   | ConstructForIntermediateInput
   | ConstructForFinishInput
 ) & {
@@ -230,7 +232,12 @@ export class ConstructCompletionsService {
         activityStorageRecord.context.originalItems as InitializeHiddenItem[],
       );
 
-    const progressRecord = this.storeProgress[appletId][flowId][eventId];
+    const progressRecord = getEntityProgress(
+      appletId,
+      flowId,
+      eventId,
+      this.storeProgress,
+    )!;
 
     const { flowName, scheduledDate } = getFlowRecord(
       flowId,
@@ -244,21 +251,21 @@ export class ConstructCompletionsService {
 
     this.pushToQueueService.push({
       appletId,
-      createdAt: Date.now(),
+      createdAt: getNow().getTime(),
       version: activityStorageRecord.appletVersion,
       answers: modifiedAnswers,
       userActions: mapUserActionsToDto(actions),
       itemIds: modifiedItemIds,
       appletEncryption: appletEncryption!,
-      flowId: flowId ?? null,
+      flowId: flowId,
       activityId: activityId,
       executionGroupKey: submitId,
       userIdentifier: getUserIdentifier(items, recordAnswers),
       startTime: getActivityStartAt(progressRecord)!,
-      endTime: Date.now(),
-      scheduledTime: scheduledDate ?? undefined,
+      endTime: getNow().getTime(),
+      scheduledTime: scheduledDate,
       logActivityName: activityName,
-      logCompletedAt: new Date().toString(),
+      logCompletedAt: getNow().toUTCString(),
       client: getClientInformation(),
       alerts: mapAnswersToAlerts(items, recordAnswers),
       eventId,
@@ -319,7 +326,12 @@ export class ConstructCompletionsService {
         activityStorageRecord.context.originalItems as InitializeHiddenItem[],
       );
 
-    const progressRecord = this.storeProgress[appletId][entityId][eventId];
+    const progressRecord = getEntityProgress(
+      appletId,
+      entityId,
+      eventId,
+      this.storeProgress,
+    )!;
 
     this.logCompletion(activityName, activityId, flowId, appletName, appletId);
 
@@ -329,7 +341,7 @@ export class ConstructCompletionsService {
 
     this.pushToQueueService.push({
       appletId,
-      createdAt: Date.now(),
+      createdAt: getNow().getTime(),
       version: activityStorageRecord.appletVersion,
       answers: modifiedAnswers,
       userActions,
@@ -340,10 +352,10 @@ export class ConstructCompletionsService {
       executionGroupKey: submitId,
       userIdentifier,
       startTime: getActivityStartAt(progressRecord)!,
-      endTime: Date.now(),
-      scheduledTime: scheduledDate ?? undefined,
+      endTime: getNow().getTime(),
+      scheduledTime: scheduledDate,
       logActivityName: activityName,
-      logCompletedAt: new Date().toString(),
+      logCompletedAt: getNow().toUTCString(),
       client: getClientInformation(),
       alerts,
       eventId,
