@@ -89,6 +89,20 @@ Make sure Metro is running, then run:
 
     Builds and runs the iOS version of the app in the iOS Simulator.
 
+#### Feature Flags considerations
+
+LaunchDarkly currently has a issue with Flipper interfering with streaming connections on Android [link](https://github.com/launchdarkly/js-core/blob/main/packages/sdk/react-native/example/README.md#quickstart)
+Using features that require feature flags requires running the release version of the app, e.g. `yarn android:dev-release`
+Alternatively, you may manually edit the value of a flag by modifying it in the `useFeatureFlags` hook:
+
+```javascript
+  const updateFeatureFlags = () => {
+    ...
+    features.testingFlag = true;
+    setFlags(features);
+  };
+```
+
 #### Alternative Build Configurations
 
 The above scripts run the app using Debug configuration and for MindLogger's `dev` server environment. You can also run the app using the optimized Release configuration (which disables debugger integration) or for other MindLogger server environments, including `qa`, `staging`, `uat`, and `production`.
