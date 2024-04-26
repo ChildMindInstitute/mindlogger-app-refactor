@@ -384,7 +384,7 @@ const AbCanvas: FC<Props> = props => {
 
   return (
     <Box {...props} borderWidth={1} borderColor="$lightGrey2">
-      <Box width={width}>
+      <Box width={width} height={width}>
         <SketchCanvas
           ref={sketchCanvasRef}
           initialLines={[]}
