@@ -515,7 +515,7 @@ describe('Survey widget mapAnswersToDto tests', () => {
     ]);
   });
 
-  it('Should throw error for mapAnswersToAlerts', async () => {
+  it('Should throw error for mapAnswersToAlerts with invalid arguments', async () => {
     const pipeline = null;
     const answers = {
       0: stackedSliderAnswer,
