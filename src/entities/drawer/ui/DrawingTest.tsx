@@ -32,7 +32,7 @@ const DrawingTest: FC<Props> = props => {
   const { value, backgroundImageUrl, imageUrl, onLog } = props;
 
   const onResult = async (result: DrawResult) => {
-    let fileName = value.fileName;
+    const fileName = value.fileName;
 
     const fileMeta = SvgFileManager.getFileMeta(fileName);
 
@@ -87,7 +87,7 @@ const canvasStyles = (canvasSize: number) =>
     position: 'absolute',
     width: canvasSize,
     height: canvasSize,
-  } as const);
+  }) as const;
 
 const styles = StyleSheet.create({
   exampleImage: {

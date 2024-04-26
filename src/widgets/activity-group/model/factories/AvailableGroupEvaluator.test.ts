@@ -530,7 +530,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
 
     let now = buildDateTime(addDays(startAt, 1), TimeTo);
 
-    let progressAnchorDate = buildDateTime(startAt, TimeFrom);
+    const progressAnchorDate = buildDateTime(startAt, TimeFrom);
 
     const progress: Progress = getProgress(
       addMinutes(progressAnchorDate, 10),
@@ -932,7 +932,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
 
     const evaluator = new AvailableGroupEvaluator(input);
 
-    let now = buildDateTime(startAt, { hours: 0, minutes: 0 });
+    const now = buildDateTime(startAt, { hours: 0, minutes: 0 });
     mockGetNow(evaluator, now);
 
     it('Test Once', () => {
@@ -1360,7 +1360,7 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
   describe('Should not return item when now is 1 minute earlier than TimeTo in next day (Sat) and entity completed in Fri interval after TimeFrom', () => {
     const startAt = getFridayInSeptember();
 
-    let progressAnchorDate = buildDateTime(startAt, TimeFrom);
+    const progressAnchorDate = buildDateTime(startAt, TimeFrom);
 
     const progress: Progress = getProgress(
       addMinutes(progressAnchorDate, 10),

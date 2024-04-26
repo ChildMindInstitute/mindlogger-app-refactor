@@ -76,7 +76,7 @@ describe('AnswerValidator tests', () => {
         step: 0,
       });
 
-      let result = imitateValidate(validator, t);
+      const result = imitateValidate(validator, t);
 
       expect(result).toEqual(false);
     });
@@ -100,7 +100,7 @@ describe('AnswerValidator tests', () => {
         step: 0,
       });
 
-      let result = imitateValidate(validator, t);
+      const result = imitateValidate(validator, t);
 
       expect(result).toEqual(false);
     });
@@ -121,7 +121,7 @@ describe('AnswerValidator tests', () => {
         step: 0,
       });
 
-      let result = imitateValidate(validator, t);
+      const result = imitateValidate(validator, t);
 
       expect(result).toEqual(false);
     });
@@ -145,7 +145,7 @@ describe('AnswerValidator tests', () => {
         step: 0,
       });
 
-      let result = imitateValidate(validator, t);
+      const result = imitateValidate(validator, t);
 
       expect(result).toEqual(false);
     });
@@ -175,7 +175,7 @@ describe('AnswerValidator tests', () => {
       step: 1,
     });
 
-    let result = validator.isCorrect();
+    const result = validator.isCorrect();
 
     expect(result).toEqual(true);
   });
@@ -204,7 +204,7 @@ describe('AnswerValidator tests', () => {
       step: 1,
     });
 
-    let result = validator.isCorrect();
+    const result = validator.isCorrect();
 
     expect(result).toEqual(false);
   });

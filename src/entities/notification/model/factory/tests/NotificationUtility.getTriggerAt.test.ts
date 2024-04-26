@@ -95,7 +95,7 @@ describe('NotificationUtility: test getTriggerAt methods with taking into accoun
         'both-in-current-day',
       );
 
-      let expected = new Date(scheduledDay);
+      const expected = new Date(scheduledDay);
       expected.setHours(18);
       expected.setMinutes(45);
 

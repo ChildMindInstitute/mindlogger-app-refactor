@@ -20,7 +20,7 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
 
     const now = this.utility.getNow();
 
-    for (let eventEntity of eventsEntities) {
+    for (const eventEntity of eventsEntities) {
       const { event } = eventEntity;
 
       if (!this.utility.isInsideValidDatesInterval(event)) {
@@ -36,7 +36,7 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
 
       const isCompletedToday = this.utility.isCompletedToday(eventEntity);
 
-      const isScheduledToday = this.utility.isToday(event.scheduledAt!);
+      const isScheduledToday = this.utility.isToday(event.scheduledAt);
 
       const isSpreadToNextDay = this.utility.isSpreadToNextDay(event);
 
@@ -59,7 +59,7 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
 
       const isMonday = now.getDay() === 1;
 
-      let doSimpleSpreadCheck: boolean =
+      const doSimpleSpreadCheck: boolean =
         periodicity === PeriodicityType.Weekly ||
         periodicity === PeriodicityType.Monthly ||
         periodicity === PeriodicityType.Once ||

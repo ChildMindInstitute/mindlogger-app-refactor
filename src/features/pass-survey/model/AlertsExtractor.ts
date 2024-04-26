@@ -42,7 +42,7 @@ export class AlertsExtractor {
     if (alertOption) {
       alerts.push({
         activityItemId: radioItem.id!,
-        message: alertOption!.alert!.message,
+        message: alertOption.alert!.message,
       });
     }
 
@@ -124,12 +124,12 @@ export class AlertsExtractor {
         stackedRadioAnswer.forEach(itemAnswer => {
           if (
             itemAnswer?.rowId === row.rowId &&
-            itemAnswer.id === option.optionId!
+            itemAnswer.id === option.optionId
           ) {
             option.alert &&
               alerts.push({
                 activityItemId: stackedRadioItem.id!,
-                message: option.alert!.message,
+                message: option.alert.message,
               });
           }
         });
@@ -157,11 +157,11 @@ export class AlertsExtractor {
       if (columnAnswers?.length) {
         row.options.forEach(option => {
           columnAnswers.forEach(cellAnswer => {
-            if (cellAnswer.id === option.optionId!) {
+            if (cellAnswer.id === option.optionId) {
               option.alert &&
                 alerts.push({
                   activityItemId: stackedCheckboxItem.id!,
-                  message: option.alert!.message,
+                  message: option.alert.message,
                 });
             }
           });
@@ -261,8 +261,7 @@ export class AlertsExtractor {
       return this.extractInternal(pipelineItems, answers);
     } catch (error) {
       this.logger.warn(
-        '[AlertsExtractor.extractForSummary]: Error occurred: \n\n' +
-          error!.toString(),
+        `[AlertsExtractor.extractForSummary]: Error occurred: \n\n${error}`,
       );
       return [
         {

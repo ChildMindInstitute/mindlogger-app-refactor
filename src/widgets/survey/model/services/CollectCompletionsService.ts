@@ -172,7 +172,7 @@ export class CollectCompletionsService implements ICollectCompletionsService {
       );
     }
 
-    for (let notCompletedEntity of filtered) {
+    for (const notCompletedEntity of filtered) {
       const {
         appletId,
         entityId,

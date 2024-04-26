@@ -50,7 +50,7 @@ const createEntityActivitiesCollector = (): EntityActivitiesCollector => {
 
       const activityIds: string[] = flowDto!.activityIds;
 
-      for (let activityId of activityIds) {
+      for (const activityId of activityIds) {
         addActivity(activityId);
       }
     }

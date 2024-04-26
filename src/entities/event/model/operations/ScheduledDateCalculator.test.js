@@ -1,4 +1,5 @@
 import { addDays, startOfDay, subDays } from 'date-fns';
+
 import ScheduledDateCalculator from './ScheduledDateCalculator';
 
 const now = new Date(2024, 0, 25);
@@ -564,7 +565,7 @@ describe('ScheduledDateCalculator', () => {
       event.availability.startDate = new Date(wednesday);
       event.availability.endDate = addDays(wednesday, 30);
 
-      let getNowMock = jest.fn(() => {
+      const getNowMock = jest.fn(() => {
         return new Date(wednesday);
       });
 
@@ -592,7 +593,7 @@ describe('ScheduledDateCalculator', () => {
       event.availability.startDate = new subDays(new Date(wednesday), 30);
       event.availability.endDate = new Date(wednesday);
 
-      let getNowMock = jest.fn(() => {
+      const getNowMock = jest.fn(() => {
         return new Date(wednesday);
       });
 
@@ -620,7 +621,7 @@ describe('ScheduledDateCalculator', () => {
       event.availability.startDate = new addDays(new Date(wednesday), 10);
       event.availability.endDate = addDays(wednesday, 30);
 
-      let getNowMock = jest.fn(() => {
+      const getNowMock = jest.fn(() => {
         return new Date(wednesday);
       });
 
@@ -649,7 +650,7 @@ describe('ScheduledDateCalculator', () => {
       event.availability.startDate = new subDays(new Date(wednesday), 30);
       event.availability.endDate = subDays(wednesday, 10);
 
-      let getNowMock = jest.fn(() => {
+      const getNowMock = jest.fn(() => {
         return new Date(wednesday);
       });
 

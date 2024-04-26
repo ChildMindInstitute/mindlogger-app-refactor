@@ -103,7 +103,7 @@ export const useSummaryData = ({
     const fullAlertsList: AnswerAlerts = [];
     const fullScoresList: ActivityScores[] = [];
 
-    for (let aid of activityIds) {
+    for (const aid of activityIds) {
       const { alerts, scores } = flowSummaryData[aid];
       fullAlertsList.push(...alerts);
       fullScoresList.push(scores);

@@ -98,7 +98,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
 
       tempPath.value = activePath.value;
 
-      const lastPoint = activePath.value!.getLastPt();
+      const lastPoint = activePath.value.getLastPt();
       const newPath = createLine(points, lastPoint);
 
       activePath.value = newPath;

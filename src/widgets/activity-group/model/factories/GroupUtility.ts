@@ -44,7 +44,7 @@ export class GroupUtility {
   private getStartedAt(eventActivity: EventEntity): Date {
     const record = this.getProgressRecord(eventActivity)!;
 
-    return record.startAt!;
+    return record.startAt;
   }
 
   private getAllowedTimeInterval(
@@ -169,7 +169,7 @@ export class GroupUtility {
   ): DatesFromTo {
     const buildFrom = considerSpread && this.isSpreadToNextDay(event);
 
-    const { timeFrom, timeTo } = event.availability!;
+    const { timeFrom, timeTo } = event.availability;
 
     let from = this.getToday();
 

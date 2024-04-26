@@ -19,7 +19,7 @@ class ShiftCalculator {
     const exceedRangeShift = this.arrayLength - inputStep;
 
     while (true) {
-      let nextStep = inputStep + shift;
+      const nextStep = inputStep + shift;
 
       if (nextStep >= this.arrayLength) {
         result = exceedRangeShift;
@@ -45,7 +45,7 @@ class ShiftCalculator {
     const noShift = 0;
 
     while (true) {
-      let previousStep = inputStep - shift;
+      const previousStep = inputStep - shift;
 
       if (previousStep < 0) {
         result = noShift;

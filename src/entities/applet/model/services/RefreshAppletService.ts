@@ -59,7 +59,7 @@ class RefreshAppletService implements IRefreshAppletService {
   };
 
   private cacheImages(urls: ImageUrl[]) {
-    for (let url of urls) {
+    for (const url of urls) {
       try {
         if (!this.isUrlValid(url)) {
           continue;
@@ -102,7 +102,7 @@ class RefreshAppletService implements IRefreshAppletService {
   ) {
     this.resetAppletDetailsQuery(appletInternalDtos.appletId);
 
-    for (let activityDto of appletInternalDtos.activities) {
+    for (const activityDto of appletInternalDtos.activities) {
       this.resetActivityDetailsQuery(activityDto.id);
 
       const activityKey = getActivityDetailsKey(activityDto.id);
