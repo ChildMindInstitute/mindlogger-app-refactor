@@ -1,4 +1,3 @@
-import { mapAnswersToDto } from './mappers';
 import {
   textInput,
   radioInput,
@@ -32,6 +31,7 @@ import {
   audioPlayerAnswer,
   stackedCheckboxInput,
   stackedCheckboxAnswer,
+  userActionsInput,
 } from './mappers.input.mock';
 import {
   textOutput,
@@ -50,6 +50,7 @@ import {
   mediaOutput,
   audioPlayerOutput,
   stackedCheckboxOutput,
+  userActionsOutput,
 } from './mappers.output.mock';
 import {
   drawingInput,
@@ -58,12 +59,20 @@ import {
   CSTAnswer,
   ABTrailsInput,
   ABTrailsAnswer,
+  FlankerInput,
+  FlankerAnswers,
 } from './performanceTasks.input.mock';
 import {
   ABTrailsOutput,
   CSTOutput,
   drawingOutput,
+  FlankerOutput,
 } from './performanceTasks.output.mock';
+import {
+  mapAnswersToDto,
+  mapAnswersToAlerts,
+  mapUserActionsToDto,
+} from '../mappers';
 
 describe('Survey widget mapAnswersToDto tests', () => {
   it('Should return mapped result for different items pipeline', async () => {
@@ -120,6 +129,23 @@ describe('Survey widget mapAnswersToDto tests', () => {
     expect(result).toEqual(expect.arrayContaining(drawingOutput));
     expect(result).toEqual(expect.arrayContaining(CSTOutput));
     expect(result).toEqual(expect.arrayContaining(ABTrailsOutput));
+  });
+
+  it('Should return mapped result for undefined item', async () => {
+    const pipeline = [
+      {
+        type: 'undefined',
+      },
+    ];
+
+    const answers = {
+      0: textAnswer,
+    };
+
+    // @ts-expect-error
+    const result = mapAnswersToDto(pipeline, answers);
+
+    expect(result).toEqual([null]);
   });
 
   it('Should return mapped result for textInput item', async () => {
@@ -371,5 +397,111 @@ describe('Survey widget mapAnswersToDto tests', () => {
     const result = mapAnswersToDto(pipeline, answers);
 
     expect(result).toEqual(ABTrailsOutput);
+  });
+
+  it('Should return mapped result for Flanker item', async () => {
+    const pipeline = FlankerInput;
+    const answers = FlankerAnswers;
+
+    const result = mapAnswersToDto(pipeline, answers);
+
+    expect(result).toEqual(FlankerOutput);
+  });
+
+  it('Should return mapped result for radio item with alerts', async () => {
+    const pipeline = [radioInput];
+    const answers = {
+      0: radioAnswer,
+    };
+
+    const result = mapAnswersToAlerts(pipeline, answers);
+
+    expect(result).toEqual([
+      {
+        message: 'radio-alert',
+      },
+    ]);
+  });
+
+  it('Should return mapped result for checkbox item with alerts', async () => {
+    const pipeline = [checkboxInput];
+    const answers = {
+      0: checkboxAnswer,
+    };
+
+    const result = mapAnswersToAlerts(pipeline, answers);
+
+    expect(result).toEqual([
+      {
+        message: 'checkbox-alert',
+      },
+    ]);
+  });
+
+  it('Should return mapped result for stacked radio item with alerts', async () => {
+    const pipeline = [stackedRadioInput];
+    const answers = {
+      0: stackedRadioAnswer,
+    };
+
+    const result = mapAnswersToAlerts(pipeline, answers);
+
+    expect(result).toEqual([
+      {
+        message: 'stacked-radio-alert',
+      },
+    ]);
+  });
+
+  it('Should return mapped result for stacked checkbox item with alerts', async () => {
+    const pipeline = [stackedCheckboxInput];
+    const answers = {
+      0: stackedCheckboxAnswer,
+    };
+
+    const result = mapAnswersToAlerts(pipeline, answers);
+
+    expect(result).toEqual([
+      {
+        message: 'stacked-checkbox-alert',
+      },
+    ]);
+  });
+
+  it('Should return mapped result for slider item with alerts', async () => {
+    const pipeline = [sliderInput];
+    const answers = {
+      0: sliderAnswer,
+    };
+
+    const result = mapAnswersToAlerts(pipeline, answers);
+
+    expect(result).toEqual([
+      {
+        message: 'slider-alert',
+      },
+    ]);
+  });
+
+  it('Should return mapped result for stacked slider item with alerts', async () => {
+    const pipeline = [stackedSliderInput, textInput];
+    const answers = {
+      0: stackedSliderAnswer,
+      1: textAnswer,
+    };
+
+    const result = mapAnswersToAlerts(pipeline, answers);
+
+    expect(result).toEqual([
+      {
+        message: 'stacked-slider-alert',
+      },
+    ]);
+  });
+
+  it('Should return mapped result for userActions', async () => {
+    const result = mapUserActionsToDto(userActionsInput);
+
+    expect(result).toEqual(userActionsOutput);
   });
 });
