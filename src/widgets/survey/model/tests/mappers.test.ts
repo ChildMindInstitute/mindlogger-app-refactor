@@ -1,3 +1,5 @@
+import { Logger } from '@shared/lib';
+
 import {
   textInput,
   radioInput,
@@ -73,6 +75,20 @@ import {
   mapAnswersToAlerts,
   mapUserActionsToDto,
 } from '../mappers';
+
+jest.mock('@app/shared/lib', () => {
+  const mockedLib = jest.requireActual('@app/shared/lib');
+
+  return {
+    ...mockedLib,
+    Logger: {
+      log: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      info: jest.fn(),
+    },
+  };
+});
 
 describe('Survey widget mapAnswersToDto tests', () => {
   it('Should return mapped result for different items pipeline', async () => {
@@ -497,6 +513,17 @@ describe('Survey widget mapAnswersToDto tests', () => {
         message: 'stacked-slider-alert',
       },
     ]);
+  });
+
+  it('Should throw error for mapAnswersToAlerts', async () => {
+    const pipeline = null;
+    const answers = {
+      0: stackedSliderAnswer,
+    };
+
+    //@ts-ignore
+    expect(() => mapAnswersToAlerts(pipeline, answers)).toThrow();
+    expect(Logger.warn).toBeCalled();
   });
 
   it('Should return mapped result for userActions', async () => {
