@@ -33,7 +33,7 @@ const useIdleTimer = (input: UseIdleTimerInput): UseIdleTimerResult => {
 
     timerRef.current = new AppTimer(onIdleElapsed, false, duration);
 
-    timerRef.current!.start();
+    timerRef.current.start();
 
     return () => {
       timerRef.current!.stop();

@@ -105,7 +105,7 @@ export class MigrationToVersion0001 implements IMigration {
 
     const eventDto = eventDtos.find(e => e.id === eventId);
 
-    flowStateTo.flowName = activityFlowDto!.name;
+    flowStateTo.flowName = activityFlowDto.name;
 
     if (eventDto) {
       flowStateTo.scheduledDate =
@@ -114,7 +114,7 @@ export class MigrationToVersion0001 implements IMigration {
       Logger.warn("'[MigrationToVersion0001]: Event doesn't exist: " + eventId);
     }
 
-    for (let pipelineItem of flowStateTo.pipeline) {
+    for (const pipelineItem of flowStateTo.pipeline) {
       const activityDto = appletDto.activities.find(
         a => a.id === pipelineItem.payload.activityId,
       );
@@ -150,7 +150,7 @@ export class MigrationToVersion0001 implements IMigration {
 
     const progressFlowsFrom = selectNotCompletedFlows(reduxRootStateFrom);
 
-    for (let progressFlowFrom of progressFlowsFrom) {
+    for (const progressFlowFrom of progressFlowsFrom) {
       const { appletId, flowId: entityId, eventId, payload } = progressFlowFrom;
 
       let logAppletName = '',

@@ -156,7 +156,7 @@ export class ReminderCreator {
       event,
     );
 
-    for (let day of reminderDays) {
+    for (const day of reminderDays) {
       const reminder: NotificationDescriber = this.createReminder(
         day,
         entity,

@@ -33,7 +33,7 @@ const ActivityFlowStep: FC<Props> = props => {
         accessibilityLabel="activity-card-flow"
         opacity={hasOpacity ? 0.5 : 1}
       >
-        {`(${activityPositionInFlow!} of ${numberOfActivitiesInFlow!}) ${activityFlowName}`}
+        {`(${activityPositionInFlow} of ${numberOfActivitiesInFlow}) ${activityFlowName}`}
       </Text>
     </XStack>
   );

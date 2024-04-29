@@ -69,7 +69,7 @@ export class Logger implements ILogger {
 
     const result: Array<NamePathSize> = [];
 
-    for (let path of filePaths) {
+    for (const path of filePaths) {
       const fileInfo = await FileSystem.stat(path);
       result.push({
         fileName: fileInfo.filename,
@@ -100,7 +100,7 @@ export class Logger implements ILogger {
 
     const result: FileExists[] = [];
 
-    for (let existRecord of checkResult.data.result) {
+    for (const existRecord of checkResult.data.result) {
       const fileInfo = files.find(x => x.fileName === existRecord.fileId)!;
 
       result.push({
@@ -166,10 +166,7 @@ export class Logger implements ILogger {
     try {
       logFiles = await this.getLogFiles();
     } catch (error) {
-      console.warn(
-        '[Logger.getLogFiles]: Error occurred\n\n',
-        error!.toString(),
-      );
+      console.warn(`[Logger.getLogFiles]: Error occurred\n\n${error}`);
       return false;
     }
 
@@ -187,16 +184,13 @@ export class Logger implements ILogger {
         })),
       );
     } catch (error) {
-      console.warn(
-        '[Logger.checkIfFilesExist]: Error occurred\n\n',
-        error!.toString(),
-      );
+      console.warn(`[Logger.checkIfFilesExist]: Error occurred\n\n${error}`);
       return false;
     }
 
     let success = true;
 
-    for (let checkRecord of checkResult) {
+    for (const checkRecord of checkResult) {
       if (this.isAborted) {
         return false;
       }
@@ -236,8 +230,7 @@ export class Logger implements ILogger {
         });
       } catch (error) {
         console.warn(
-          `[Logger.upload]: Error occurred while sending file "${checkRecord.fileName}"\n\n`,
-          error!.toString(),
+          `[Logger.upload]: Error occurred while sending file "${checkRecord.fileName}"\n\n${error}`,
         );
         success = false;
       }
@@ -267,10 +260,7 @@ export class Logger implements ILogger {
     try {
       await callWithMutexAsync(this.mutex, FileLogger.deleteLogFiles);
     } catch (error) {
-      console.warn(
-        'Logger.clearAllLogFiles]: Error occurred\n\n',
-        error!.toString(),
-      );
+      console.warn(`Logger.clearAllLogFiles]: Error occurred\n\n${error}`);
     }
   }
 
@@ -338,10 +328,7 @@ export class Logger implements ILogger {
 
       return result;
     } catch (error) {
-      console.warn(
-        '[Logger.sendInternal]: Error occurred: \n\n',
-        error!.toString(),
-      );
+      console.warn(`[Logger.sendInternal]: Error occurred: \n\n${error}`);
     } finally {
       this.mutex.release();
     }

@@ -1,6 +1,7 @@
+import { Buffer } from 'buffer';
+
 import { encryption } from './encryption';
 import { answerRequestExample } from './mockData';
-import { Buffer } from 'buffer';
 
 jest.mock('@shared/lib', () => ({ IV_LENGTH: 16 }));
 

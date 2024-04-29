@@ -526,7 +526,7 @@ const parseNodeContent = (content: string) => {
 };
 
 const checkIfContainerTypeIsHljs = (parents: ASTNode[]) => {
-  for (let parent of parents) {
+  for (const parent of parents) {
     const { type } = parent;
     if (type.includes('container_hljs')) {
       return true;

@@ -29,7 +29,7 @@ export class MigrationRunner implements IMigrationRunner {
     currentVersion: number,
     inboundVersion: number,
   ): Promise<MigrationOutput> {
-    let migrationKeys = this.getMigrationKeys(currentVersion, inboundVersion);
+    const migrationKeys = this.getMigrationKeys(currentVersion, inboundVersion);
 
     Logger.log(
       `[MigrationRunner]: migrationKeys: [${migrationKeys}]${

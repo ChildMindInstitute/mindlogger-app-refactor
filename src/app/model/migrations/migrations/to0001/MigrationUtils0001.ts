@@ -51,17 +51,17 @@ export const selectNotCompletedFlows = (
 
   const appletIds = Object.keys(inProgressApplets);
 
-  for (let appletId of appletIds) {
+  for (const appletId of appletIds) {
     const progressEntities = inProgressApplets[appletId] ?? {};
 
     const entityIds = Object.keys(progressEntities);
 
-    for (let entityId of entityIds) {
+    for (const entityId of entityIds) {
       const progressEvents = progressEntities[entityId] ?? {};
 
       const eventIds = Object.keys(progressEvents);
 
-      for (let eventId of eventIds) {
+      for (const eventId of eventIds) {
         const payload = progressEvents[eventId] ?? {};
 
         if (
@@ -153,7 +153,7 @@ export const getUpdatedReduxState = (
     },
   };
 
-  for (let flow of progressFlowsTo) {
+  for (const flow of progressFlowsTo) {
     result = {
       ...result,
       applets: {

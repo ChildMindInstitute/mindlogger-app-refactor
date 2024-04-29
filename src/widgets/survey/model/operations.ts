@@ -19,7 +19,7 @@ export const getScheduledDate = (event: ScheduleEvent) => {
   if (
     event.availability.availabilityType !== AvailabilityType.AlwaysAvailable
   ) {
-    return EventModel.ScheduledDateCalculator.calculate(event!)!.valueOf();
+    return EventModel.ScheduledDateCalculator.calculate(event)!.valueOf();
   }
 };
 

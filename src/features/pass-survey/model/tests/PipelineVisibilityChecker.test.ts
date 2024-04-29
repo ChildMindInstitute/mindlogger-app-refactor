@@ -25,7 +25,7 @@ describe('PipelineVisibilityChecker: penetration tests', () => {
     });
   };
 
-  let setCondition = (
+  const setCondition = (
     itemSetTo: PipelineItem,
     itemPointedTo: PipelineItem,
     match: Match,

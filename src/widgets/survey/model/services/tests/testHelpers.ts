@@ -146,7 +146,7 @@ export const getMultipleActivityFlowState = (path: EntityPath): FlowState => {
 export const deleteLogAvailableTo = (
   collected: CollectCompletionOutput[],
 ): CollectCompletionOutput[] => {
-  for (let item of collected) {
+  for (const item of collected) {
     delete item.logAvailableTo;
   }
   return collected;

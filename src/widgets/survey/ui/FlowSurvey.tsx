@@ -92,7 +92,7 @@ function FlowSurvey({
   return (
     <FlowElementSwitch
       {...flowPipelineItem}
-      event={event!}
+      event={event}
       entityStartedAt={entityStartedAt}
       isTimerElapsed={isTimerElapsed}
       onClose={closeFlow}

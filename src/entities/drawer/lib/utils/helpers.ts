@@ -10,9 +10,9 @@ export const getChunkedPointsAsStrings = (lines: DrawLine[]) => {
   const results: string[] = [];
   const chunkSize: number = 50;
 
-  for (let line of lines) {
+  for (const line of lines) {
     const { points } = line;
-    let { length } = points;
+    const { length } = points;
 
     for (let index = 0; index < length; index += chunkSize) {
       const myChunk = line.points.slice(index, index + chunkSize + 1);

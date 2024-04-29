@@ -182,7 +182,7 @@ export class ConstructCompletionsService {
       activityName,
     );
 
-    this.saveActivitySummary!({
+    this.saveActivitySummary({
       activityId,
       order,
       alerts: summaryAlerts,

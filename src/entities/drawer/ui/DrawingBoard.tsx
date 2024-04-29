@@ -48,7 +48,7 @@ const DrawingBoard: FC<Props> = props => {
       startTime: Date.now(),
       points: [drawPoint],
     };
-    const logPoint = drawPoint.scale(vector) as DrawPoint;
+    const logPoint = drawPoint.scale(vector);
 
     onLog({ ...logPoint, lineNumber: value?.length, type: 'DrawingTest' });
   };

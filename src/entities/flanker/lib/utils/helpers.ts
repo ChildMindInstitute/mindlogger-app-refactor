@@ -24,8 +24,8 @@ export const parseResponse = (data: {
     responseTouchTimestamp: !isWebView
       ? record.response_touch_timestamp
       : record.rt
-      ? record.start_timestamp + record.rt
-      : null,
+        ? record.start_timestamp + record.rt
+        : null,
   };
 
   return parseResponseResult;

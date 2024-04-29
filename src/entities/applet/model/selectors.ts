@@ -57,18 +57,18 @@ export const selectNotCompletedEntities = createSelector(
 
     const appletIds = Object.keys(inProgressApplets);
 
-    for (let appletId of appletIds) {
+    for (const appletId of appletIds) {
       const progressEntities: StoreEntitiesProgress =
         inProgressApplets[appletId];
 
       const entityIds = Object.keys(progressEntities);
 
-      for (let entityId of entityIds) {
+      for (const entityId of entityIds) {
         const progressEvents: StoreEventsProgress = progressEntities[entityId];
 
         const eventIds = Object.keys(progressEvents);
 
-        for (let eventId of eventIds) {
+        for (const eventId of eventIds) {
           const payload: StoreProgressPayload = progressEvents[eventId];
 
           if (payload.endAt) {

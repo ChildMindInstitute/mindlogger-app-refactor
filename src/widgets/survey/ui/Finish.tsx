@@ -62,7 +62,7 @@ function FinishItem({
 
   const { process: processWithAutocompletion } = useAutoCompletion();
 
-  let finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';
+  const finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';
 
   async function completeActivity() {
     const constructCompletionService = new ConstructCompletionsService(

@@ -92,7 +92,7 @@ const AbShapes: FC<Props> = props => {
 
   const endOffset = getEndOffset();
 
-  let errorMiddlePoint: Point | null = errorPath
+  const errorMiddlePoint: Point | null = errorPath
     ? getEquidistantPoint(errorPath)
     : null;
 
@@ -119,7 +119,7 @@ const AbShapes: FC<Props> = props => {
               x={errorMiddlePoint.x + CrossOffsetX}
               y={errorMiddlePoint.y}
               text={'x'}
-              font={fontCross!}
+              font={fontCross}
               color={colors.red}
             />
           </Group>
