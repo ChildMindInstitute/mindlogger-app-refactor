@@ -20,7 +20,7 @@ const FeatureFlagsService = {
     );
     return launchDarkly;
   },
-  async login(userId: string) {
+  async login(userId: string): Promise<void> {
     const context = {
       kind: LD_KIND_PREFIX,
       key: `${LD_KIND_PREFIX}-${userId}`,
@@ -28,8 +28,8 @@ const FeatureFlagsService = {
 
     return launchDarkly.identify(context);
   },
-  logout() {
-    launchDarkly.identify({
+  logout(): Promise<void> {
+    return launchDarkly.identify({
       // The key attribute is required and should be empty
       // The SDK will automatically generate a unique, stable key
       key: '',
@@ -37,15 +37,12 @@ const FeatureFlagsService = {
       anonymous: true,
     });
   },
-  flags() {
-    return launchDarkly.allFlags();
-  },
-  evaluateFlag(flag: string) {
+  evaluateFlag(flag: string): boolean {
     return launchDarkly.boolVariation(flag, false);
   },
   setChangeHandler(
     changeHandler: (ctx: LDContext, changedKeys: string[]) => void,
-  ) {
+  ): void {
     launchDarkly.on('change', changeHandler);
   },
   removeChangeHandler(changeHandler: Function): void {
