@@ -48,6 +48,9 @@ const FeatureFlagsService = {
   ) {
     launchDarkly.on('change', changeHandler);
   },
+  removeChangeHandler(changeHandler: Function): void {
+    launchDarkly.off('change', changeHandler);
+  },
 };
 
 export default FeatureFlagsService;

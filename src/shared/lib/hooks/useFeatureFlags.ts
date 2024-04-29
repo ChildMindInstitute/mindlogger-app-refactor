@@ -13,6 +13,9 @@ export const useFeatureFlags = () => {
 
   useEffect(() => {
     FeatureFlagsService.setChangeHandler(onChangeHandler);
+    return () => {
+      FeatureFlagsService.removeChangeHandler(onChangeHandler);
+    };
   }, [onChangeHandler]);
 
   const updateFeatureFlags = () => {
