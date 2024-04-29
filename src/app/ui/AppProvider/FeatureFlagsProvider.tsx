@@ -12,12 +12,16 @@ const FeatureFlagsProvider: FC<PropsWithChildren> = ({ children }) => {
   const [ldClient, setClient] = useState<ReactNativeLDClient>();
 
   useEffect(() => {
-    FeatureFlagsService.init().then(client => {
-      Logger.log('[FeatureFlagsProvider]: Initialized');
+    FeatureFlagsService.init()
+      .then(client => {
+        Logger.log('[FeatureFlagsProvider]: Initialized');
 
-      setClient(client);
-      onModuleInitialized('featureFlags');
-    });
+        setClient(client);
+        onModuleInitialized('featureFlags');
+      })
+      .catch(error => {
+        Logger.error(`[FeatureFlagsProvider]: Failed to initialize\n${error}`);
+      });
   }, [onModuleInitialized, setClient]);
 
   return (
