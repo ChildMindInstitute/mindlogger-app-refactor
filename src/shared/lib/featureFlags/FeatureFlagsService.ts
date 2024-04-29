@@ -8,28 +8,34 @@ import { LD_KIND_PREFIX } from './FeatureFlags.const';
 import { LAUNCHDARKLY_MOBILE_KEY } from '../constants';
 import { Logger } from '../services';
 
-let launchDarkly: ReactNativeLDClient;
+let ldClient: ReactNativeLDClient;
 
 const FeatureFlagsService = {
   async init(): Promise<ReactNativeLDClient> {
-    Logger.log('[FeatureFlagsService]: Create and init LaunchDarkly client');
-    launchDarkly = new ReactNativeLDClient(
+    Logger.log('[FeatureFlagsService]: Create and init LaunchDarkly ldClient');
+    ldClient = new ReactNativeLDClient(
       LAUNCHDARKLY_MOBILE_KEY,
       AutoEnvAttributes.Disabled,
       {},
     );
-    return launchDarkly;
+    return ldClient;
   },
   async login(userId: string): Promise<void> {
+    if (!ldClient) {
+      return;
+    }
     const context = {
       kind: LD_KIND_PREFIX,
       key: `${LD_KIND_PREFIX}-${userId}`,
     };
 
-    return launchDarkly.identify(context);
+    return ldClient.identify(context);
   },
-  logout(): Promise<void> {
-    return launchDarkly.identify({
+  async logout(): Promise<void> {
+    if (!ldClient) {
+      return;
+    }
+    return ldClient.identify({
       // The key attribute is required and should be empty
       // The SDK will automatically generate a unique, stable key
       key: '',
@@ -38,15 +44,24 @@ const FeatureFlagsService = {
     });
   },
   evaluateFlag(flag: string): boolean {
-    return launchDarkly.boolVariation(flag, false);
+    if (!ldClient) {
+      return false;
+    }
+    return ldClient.boolVariation(flag, false);
   },
   setChangeHandler(
     changeHandler: (ctx: LDContext, changedKeys: string[]) => void,
   ): void {
-    launchDarkly.on('change', changeHandler);
+    if (!ldClient) {
+      return;
+    }
+    ldClient.on('change', changeHandler);
   },
   removeChangeHandler(changeHandler: Function): void {
-    launchDarkly.off('change', changeHandler);
+    if (!ldClient) {
+      return;
+    }
+    ldClient.off('change', changeHandler);
   },
 };
 

@@ -25,7 +25,13 @@ const FeatureFlagsProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [onModuleInitialized, setClient]);
 
   return (
-    <>{ldClient && <LDProvider client={ldClient}>{children}</LDProvider>}</>
+    <>
+      {ldClient ? (
+        <LDProvider client={ldClient}>{children}</LDProvider>
+      ) : (
+        children
+      )}
+    </>
   );
 };
 
