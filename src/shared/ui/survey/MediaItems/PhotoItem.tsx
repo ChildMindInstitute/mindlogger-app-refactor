@@ -120,7 +120,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
         <Image
           height="100%"
           width="100%"
-          src={{ uri: evaluateLocalFileUri(value.fileName) }}
+          src={evaluateLocalFileUri(value.fileName)}
         />
       )}
     </MediaInput>
