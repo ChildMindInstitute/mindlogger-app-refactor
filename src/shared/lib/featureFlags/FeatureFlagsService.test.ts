@@ -5,23 +5,23 @@ const boolVariationMock = jest.fn().mockResolvedValue(true);
 const onMock = jest.fn();
 
 class LaunchDarklyMockClass {
-  constructor(...args: any) {
+  constructor(...args: unknown[]) {
     constructorMock(args);
   }
 
-  public init(...args: any[]) {
+  public init(...args: unknown[]) {
     initMock(args);
   }
 
-  public identify(...args: any[]) {
+  public identify(...args: unknown[]) {
     return identifyMock(args);
   }
 
-  public boolVariation(...args: any) {
+  public boolVariation(...args: unknown[]) {
     return boolVariationMock(args);
   }
 
-  public on(...args: any[]) {
+  public on(...args: unknown[]) {
     onMock(args);
   }
 }
@@ -82,7 +82,7 @@ describe('Test FeatureFlagsService', () => {
     await FeatureFlagsService.login('mock-user-id');
 
     expect(identifyMock).toHaveBeenCalledTimes(1);
-    expect(identifyMock).toBeCalledWith([
+    expect(identifyMock).toHaveBeenCalledWith([
       {
         kind: LD_KIND_PREFIX,
         key: `${LD_KIND_PREFIX}-mock-user-id`,
@@ -93,8 +93,8 @@ describe('Test FeatureFlagsService', () => {
   it('Should logout', async () => {
     FeatureFlagsService.logout();
 
-    expect(identifyMock).toBeCalledTimes(1);
-    expect(identifyMock).toBeCalledWith([
+    expect(identifyMock).toHaveBeenCalledTimes(1);
+    expect(identifyMock).toHaveBeenCalledWith([
       {
         anonymous: true,
         key: '',
@@ -107,8 +107,8 @@ describe('Test FeatureFlagsService', () => {
     // await required for mockResolvedValue Promise
     const flagValue = await FeatureFlagsService.evaluateFlag('my-flag');
 
-    expect(boolVariationMock).toBeCalledTimes(1);
-    expect(boolVariationMock).toBeCalledWith(['my-flag', false]);
+    expect(boolVariationMock).toHaveBeenCalledTimes(1);
+    expect(boolVariationMock).toHaveBeenCalledWith(['my-flag', false]);
     expect(flagValue).toBe(true);
   });
 
@@ -117,6 +117,6 @@ describe('Test FeatureFlagsService', () => {
     FeatureFlagsService.setChangeHandler(changeHandler);
 
     expect(onMock).toHaveBeenCalledTimes(1);
-    expect(onMock).toBeCalledWith(['change', changeHandler]);
+    expect(onMock).toHaveBeenCalledWith(['change', changeHandler]);
   });
 });
