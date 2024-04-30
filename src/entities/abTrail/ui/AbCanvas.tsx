@@ -12,6 +12,7 @@ import { Box, BoxProps, SketchCanvas, SketchCanvasRef } from '@shared/ui';
 
 import AbShapes from './AbShapes';
 import { LogLine, LogPoint, MessageType, OnResultLog } from '../lib';
+import { useSketchCanvasTimedVisibility } from '../lib/hooks';
 import { getDistance, transformCoordinates } from '../lib/utils';
 
 const paint = Skia.Paint();
@@ -37,6 +38,8 @@ const AbCanvas: FC<Props> = props => {
 
   const [paths, setPaths] = useState<Array<SkPath>>([]);
 
+  const { isSketchCanvasShown, hideSketchCanvas } =
+    useSketchCanvasTimedVisibility();
   const [flareGreenPointIndex, setFlareGreenPointIndex] = useState<{
     index: number;
   } | null>(null);
@@ -67,6 +70,7 @@ const AbCanvas: FC<Props> = props => {
     if (!errorPath) {
       return;
     }
+
     const id = setTimeout(() => {
       setErrorPath(null);
     }, ErrorLineTimeout);
@@ -80,6 +84,7 @@ const AbCanvas: FC<Props> = props => {
     if (flareGreenPointIndex === null) {
       return;
     }
+
     const id = setTimeout(() => {
       setFlareGreenPointIndex(null);
     }, FlareGreenPointTimeout);
@@ -283,7 +288,8 @@ const AbCanvas: FC<Props> = props => {
   const onTouchStart = (x: number, y: number, time: number) => {
     const isFinished = currentIndexRef.current === testData.nodes.length;
 
-    if (currentPathRef.current || readonly || isFinished) {
+    if (readonly || isFinished) {
+      hideSketchCanvas();
       resetCurrentPath();
       return;
     }
@@ -293,11 +299,13 @@ const AbCanvas: FC<Props> = props => {
     if (isOverAny(point) && !isOverCurrent(point)) {
       onMessage(MessageType.IncorrectStartPoint);
       resetCurrentPath();
+      hideSketchCanvas();
       return;
     }
 
     if (!isOverCurrent(point)) {
       resetCurrentPath();
+      hideSketchCanvas();
       return;
     }
 
@@ -312,10 +320,12 @@ const AbCanvas: FC<Props> = props => {
 
     if (errorPath) {
       resetCurrentPath();
+      hideSketchCanvas();
       return;
     }
 
     if (!currentPath) {
+      hideSketchCanvas();
       return;
     }
 
@@ -326,6 +336,7 @@ const AbCanvas: FC<Props> = props => {
     addLogPoint(createLogPoint(point, time));
 
     if (isOverNext(point) && isOverLast(point)) {
+      hideSketchCanvas();
       markLastLogPoints({ valid: true });
       addOverCorrectPointToStream(point, time);
       keepPathInState();
@@ -349,13 +360,14 @@ const AbCanvas: FC<Props> = props => {
 
     if (isOverWrong(point)) {
       const node = findNodeByPoint(point)!;
+      hideSketchCanvas();
+      setErrorPath(currentPath);
       markLastLogPoints({ valid: false, actual: node.label });
       setFlareGreenPointIndex({ index: getCurrentIndex() });
       onMessage(MessageType.IncorrectLine);
 
       onResult();
       addOverWrongPointToStream(point, node.label, time);
-      setErrorPath(currentPath);
       return;
     }
 
@@ -368,6 +380,7 @@ const AbCanvas: FC<Props> = props => {
     }
 
     resetCurrentPath();
+
     const point: Point = { x, y };
 
     const node = findNodeByPoint(point);
@@ -385,13 +398,15 @@ const AbCanvas: FC<Props> = props => {
   return (
     <Box {...props} borderWidth={1} borderColor="$lightGrey2">
       <Box width={width} height={width}>
-        <SketchCanvas
-          ref={sketchCanvasRef}
-          initialLines={[]}
-          onStrokeStart={onTouchStart}
-          onStrokeChanged={onTouchProgress}
-          onStrokeEnd={onTouchEnd}
-        />
+        {isSketchCanvasShown && !readonly && (
+          <SketchCanvas
+            ref={sketchCanvasRef}
+            initialLines={[]}
+            onStrokeStart={onTouchStart}
+            onStrokeChanged={onTouchProgress}
+            onStrokeEnd={onTouchEnd}
+          />
+        )}
       </Box>
 
       {canvasData && (
