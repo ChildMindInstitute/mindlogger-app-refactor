@@ -11,41 +11,81 @@ describe('Test getElementsDimensions function', () => {
         width: 300,
         height: 800,
       },
-      hasExampleImage: true,
+      exampleImageDimensions: {
+        width: 300,
+        height: 300,
+        aspectRatio: 1,
+      },
     },
     {
       dimensions: {
         width: 800,
         height: 800,
       },
-      hasExampleImage: true,
+      exampleImageDimensions: {
+        width: 800,
+        height: 300,
+        aspectRatio: 2.666667,
+      },
     },
     {
       dimensions: {
         width: 300,
         height: 800,
       },
-      hasExampleImage: false,
+      exampleImageDimensions: {
+        width: 300,
+        height: 800,
+        aspectRatio: 0.375,
+      },
+    },
+    {
+      dimensions: {
+        width: 300,
+        height: 800,
+      },
+      exampleImageDimensions: {
+        width: 200,
+        height: 100,
+        aspectRatio: 2,
+      },
+    },
+    {
+      dimensions: {
+        width: 300,
+        height: 800,
+      },
+      exampleImageDimensions: null,
     },
     {
       dimensions: {
         width: 800,
         height: 800,
       },
-      hasExampleImage: false,
+      exampleImageDimensions: null,
     },
   ];
 
   const expectedResults = [
+    {
+      exampleImageHeight: 300,
+      canvasContainerHeight: 476,
+      canvasSize: 270,
+    },
+    {
+      exampleImageHeight: 299,
+      canvasContainerHeight: 476,
+      canvasSize: 476,
+    },
     {
       exampleImageHeight: 304,
       canvasContainerHeight: 476,
       canvasSize: 270,
     },
     {
-      exampleImageHeight: 304,
+      exampleImageHeight: 150,
       canvasContainerHeight: 476,
-      canvasSize: 476,
+      canvasSize: 270,
     },
     {
       exampleImageHeight: 0,
@@ -69,10 +109,13 @@ describe('Test getElementsDimensions function', () => {
     }, canvasSize: ${expectedResult.canvasSize} when height is ${
       testCase.dimensions.height
     }, width is ${testCase.dimensions.width} and the example image is ${
-      testCase.hasExampleImage ? '' : 'NOT'
+      testCase.exampleImageDimensions ? '' : 'NOT'
     } present`, () => {
       expect(
-        getElementsDimensions(testCase.dimensions, testCase.hasExampleImage),
+        getElementsDimensions(
+          testCase.dimensions,
+          testCase.exampleImageDimensions,
+        ),
       ).toMatchObject(expectedResult);
     });
   });

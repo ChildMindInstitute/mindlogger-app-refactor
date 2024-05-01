@@ -1,10 +1,13 @@
 import { FC } from 'react';
-import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
 import { BoxProps, XStack, YStack } from '@app/shared/ui';
-import { DrawingStreamEvent, StreamEventLoggable } from '@shared/lib';
+import {
+  DrawingStreamEvent,
+  StreamEventLoggable,
+  useImageDimensions,
+} from '@shared/lib';
 
 import DrawingBoard from './DrawingBoard';
 import {
@@ -43,23 +46,30 @@ const DrawingTest: FC<Props> = props => {
     props.onResult(result);
   };
 
+  const {
+    dimensions: exampleImageDimensions,
+    isLoading: isEvaluatingDimensions,
+  } = useImageDimensions(imageUrl);
+
   const { exampleImageHeight, canvasContainerHeight, canvasSize } =
-    getElementsDimensions(props.dimensions, !!imageUrl);
+    getElementsDimensions(props.dimensions, exampleImageDimensions);
+
+  const height = exampleImageHeight + canvasContainerHeight + ELEMENTS_GAP;
 
   return (
-    <YStack {...props} alignItems="center" space={ELEMENTS_GAP}>
+    <YStack {...props} height={height} alignItems="center" space={ELEMENTS_GAP}>
       {!!imageUrl && (
-        <XStack jc="center" height={exampleImageHeight}>
+        <XStack height={exampleImageHeight}>
           <CachedImage
             source={imageUrl}
-            style={styles.exampleImage}
+            style={{ height: exampleImageHeight, width: canvasSize }}
             resizeMode="contain"
           />
         </XStack>
       )}
 
       <YStack height={canvasContainerHeight}>
-        {!!canvasSize && (
+        {!!canvasSize && !isEvaluatingDimensions && (
           <XStack width={canvasSize} height={canvasSize}>
             {!!backgroundImageUrl && (
               <CachedImage
@@ -88,12 +98,5 @@ const canvasStyles = (canvasSize: number) =>
     width: canvasSize,
     height: canvasSize,
   }) as const;
-
-const styles = StyleSheet.create({
-  exampleImage: {
-    width: '100%',
-    height: '100%',
-  },
-});
 
 export default DrawingTest;

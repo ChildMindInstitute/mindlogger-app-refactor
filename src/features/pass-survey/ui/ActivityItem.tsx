@@ -151,9 +151,8 @@ function ActivityItem({
       const itemHeight = height * heightReductionFactor;
 
       item = height ? (
-        <Box height={itemHeight} mb="$6">
+        <Box flex={1} mb="$6">
           <DrawingTest
-            flex={1}
             dimensions={{
               height: itemHeight,
               width,
