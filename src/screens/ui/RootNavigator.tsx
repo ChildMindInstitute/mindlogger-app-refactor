@@ -180,6 +180,8 @@ export default () => {
 
   LoginModel.useAnalyticsAutoLogin();
 
+  LoginModel.useFeatureFlagsAutoLogin();
+
   NotificationModel.useOnNotificationRefresh();
 
   return (
