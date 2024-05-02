@@ -38,7 +38,7 @@ const AbCanvas: FC<Props> = props => {
 
   const [paths, setPaths] = useState<Array<SkPath>>([]);
 
-  const { isSketchCanvasShown, hideSketchCanvas } =
+  const { isSketchCanvasShown, hideSketchCanvas, showSketchCanvas } =
     useSketchCanvasTimedVisibility();
   const [flareGreenPointIndex, setFlareGreenPointIndex] = useState<{
     index: number;
@@ -309,6 +309,11 @@ const AbCanvas: FC<Props> = props => {
       return;
     }
 
+    if (errorPath) {
+      resetCurrentPath();
+      showSketchCanvas();
+    }
+
     addLogLine(point, time);
     reCreatePath(point);
 
@@ -317,12 +322,6 @@ const AbCanvas: FC<Props> = props => {
 
   const onTouchProgress = (x: number, y: number, time: number) => {
     const currentPath = getCurrentPath();
-
-    if (errorPath) {
-      resetCurrentPath();
-      hideSketchCanvas();
-      return;
-    }
 
     if (!currentPath) {
       hideSketchCanvas();
