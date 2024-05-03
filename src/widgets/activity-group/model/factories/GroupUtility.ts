@@ -209,7 +209,7 @@ export class GroupUtility {
     return this.isInInterval(
       {
         from: startDate ?? undefined,
-        to: endDate ?? undefined,
+        to: endDate ? this.getEndOfDay(endDate) : undefined,
       },
       now,
       'both',

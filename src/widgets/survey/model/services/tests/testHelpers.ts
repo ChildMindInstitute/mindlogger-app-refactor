@@ -364,6 +364,7 @@ export const getInputsForIntermediate = (): ConstructInput => {
     eventId: 'mock-event-id-1',
     flowId: 'mock-flow-id-1',
     order: 0,
+    isAutocompletion: false,
   };
 };
 
@@ -376,6 +377,7 @@ export const getInputsForFinish = (entityType: EntityType): ConstructInput => {
     eventId: 'mock-event-id-1',
     flowId: entityType === 'flow' ? 'mock-flow-id-1' : undefined,
     order: 0,
+    isAutocompletion: false,
   };
 };
 

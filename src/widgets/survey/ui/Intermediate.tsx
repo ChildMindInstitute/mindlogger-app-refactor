@@ -169,6 +169,7 @@ function Intermediate({
       flowId,
       order,
       completionType: 'intermediate',
+      isAutocompletion: false,
     });
 
     const exclude: EntityPathParams = {

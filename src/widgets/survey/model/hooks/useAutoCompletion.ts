@@ -71,7 +71,10 @@ const useAutoCompletion = (): Result => {
     constructService: ConstructCompletionsService,
   ) => {
     try {
-      await constructService.construct(collectOutput);
+      await constructService.construct({
+        ...collectOutput,
+        isAutocompletion: true,
+      });
     } catch (error) {
       Logger.warn(
         '[useAutoCompletion.constructInternal] Error occurred:\n' + error,

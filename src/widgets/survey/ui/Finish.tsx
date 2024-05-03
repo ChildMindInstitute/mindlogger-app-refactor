@@ -81,6 +81,7 @@ function FinishItem({
       flowId,
       order,
       completionType: 'finish',
+      isAutocompletion: false,
     });
 
     const exclude: EntityPathParams = {
