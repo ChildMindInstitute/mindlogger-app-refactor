@@ -65,7 +65,7 @@ type ConstructForFinishInput = {
   isAutocompletion: boolean;
 };
 
-type CompletionType = 'intermediate' | 'finish';
+export type CompletionType = 'intermediate' | 'finish';
 
 export type ConstructInput = (
   | ConstructForIntermediateInput
