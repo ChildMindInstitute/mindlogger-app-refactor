@@ -17,7 +17,6 @@ import {
   getEntityProgress,
   getNow,
   getTimezoneOffset,
-  isEntityExpired,
   Logger,
   MixEvents,
   MixProperties,
@@ -75,6 +74,8 @@ export type ConstructInput = (
   completionType: CompletionType;
 };
 
+const DistinguishInterimAndFinishLag = 1; // For correct sort on BE, Admin
+
 export class ConstructCompletionsService {
   private saveActivitySummary: SaveActivitySummary | null;
   private queryDataUtils: QueryDataUtils;
@@ -96,13 +97,16 @@ export class ConstructCompletionsService {
     this.dispatch = dispatch;
   }
 
-  private getLogDates(endAt: number, availableTo: number | null): string {
-    const logEndAt: string = new Date(endAt).toUTCString();
+  private getLogDates(
+    evaluatedEndAt: number,
+    availableTo: number | null,
+  ): string {
+    const logEndAt: string = new Date(evaluatedEndAt).toUTCString();
     const logAvailableTo = !availableTo
       ? 'not set'
       : new Date(availableTo).toUTCString();
 
-    return `endAt = ${logEndAt}, availableTo = ${logAvailableTo}`;
+    return `evaluatedEndAt = ${logEndAt}, availableTo = ${logAvailableTo}`;
   }
 
   private logCompletion(
@@ -111,10 +115,10 @@ export class ConstructCompletionsService {
     flowId: string | undefined,
     appletName: string,
     appletId: string,
-    endAt: number,
+    evaluatedEndAt: number,
     availableTo: number | null,
   ) {
-    const logDates = this.getLogDates(endAt, availableTo);
+    const logDates = this.getLogDates(evaluatedEndAt, availableTo);
 
     Logger.log(
       `[ConstructCompletionsService]: Activity "${activityName}|${activityId}" completed, applet "${appletName}|${appletId}, ${logDates}"`,
@@ -136,10 +140,10 @@ export class ConstructCompletionsService {
     }: ConstructForIntermediateInput,
     flowName: string,
     appletName: string,
-    endAt: number,
+    evaluatedEndAt: number,
     availableTo: number | null,
   ) {
-    const logDates = this.getLogDates(endAt, availableTo);
+    const logDates = this.getLogDates(evaluatedEndAt, availableTo);
 
     Logger.log(
       `[ConstructCompletionsService]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" completed, applet "${appletName}|${appletId}, ${logDates}"`,
@@ -155,15 +159,9 @@ export class ConstructCompletionsService {
       return getNow().getTime();
     }
 
-    if (!isEntityExpired(availableTo)) {
-      Logger.warn(
-        '[ConstructCompletionsService.evaluateEndAt]: isAutocompletion is true whereas entity is not expired',
-      );
-    }
-
     return completionType === 'intermediate'
       ? availableTo
-      : addMilliseconds(availableTo, 1).getTime();
+      : addMilliseconds(availableTo, DistinguishInterimAndFinishLag).getTime();
   }
 
   private getAppletProperties(appletId: string): {
