@@ -1,5 +1,7 @@
 import { Activity, Applet, AppletDetails, AppletTheme } from '@entities/applet';
 
+import { createdAtDate } from './mappers.input.mock.ts';
+
 export const mappedApplets: Applet[] = [
   {
     description: 'description',
@@ -126,7 +128,7 @@ export const mappedAnalytics = {
         {
           data: [
             {
-              date: new Date('2020-04-04T16:00:00.000Z'),
+              date: new Date(createdAtDate),
               value: 1,
             },
           ],
@@ -144,7 +146,7 @@ export const mappedAnalytics = {
         {
           data: [
             {
-              date: new Date('2020-04-04T16:00:00.000Z'),
+              date: new Date(createdAtDate),
               value: [2],
             },
           ],
@@ -158,7 +160,7 @@ export const mappedAnalytics = {
         {
           data: [
             {
-              date: new Date('2020-04-04T16:00:00.000Z'),
+              date: new Date(createdAtDate),
               value: '1',
             },
           ],
@@ -202,7 +204,7 @@ export const mappedAnalyticsWithEmptyAnswers = {
         {
           data: [
             {
-              date: new Date('2020-04-04T16:00:00.000Z'),
+              date: new Date(createdAtDate),
               value: null,
             },
           ],
@@ -216,7 +218,7 @@ export const mappedAnalyticsWithEmptyAnswers = {
         {
           data: [
             {
-              date: new Date('2020-04-04T16:00:00.000Z'),
+              date: new Date(createdAtDate),
               value: null,
             },
           ],

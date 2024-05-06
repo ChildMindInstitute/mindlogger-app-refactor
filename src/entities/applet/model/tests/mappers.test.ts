@@ -52,7 +52,9 @@ describe('Applet entity mappers tests', () => {
     const result = mapCompletedEntityFromDto(completedEntityDto);
 
     expect(result).toEqual({
-      endAt: 1586016000000,
+      endAt: +new Date(
+        `${completedEntityDto.localEndDate} ${completedEntityDto.localEndTime}`,
+      ),
       entityId: '0',
       eventId: '3',
     });

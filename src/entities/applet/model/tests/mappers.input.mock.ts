@@ -269,22 +269,24 @@ const activitiesDto: ActivityDto[] = [
   },
 ];
 
+export const createdAtDate = '2020-04-04T20:00:00.000Z';
+
 export const answersDto: AnalyticsAnswerDto[] = [
   {
     answer: 'Some answer 1 ',
-    createdAt: '2020-04-04 20:00',
+    createdAt: createdAtDate,
     itemIds: ['1', '2', '3'],
     activityId: '1',
   },
   {
     answer: 'Some answer 2',
-    createdAt: '2020-04-04 20:00',
+    createdAt: createdAtDate,
     itemIds: ['1', '2', '3'],
     activityId: '2',
   },
   {
     answer: 'Some answer 3',
-    createdAt: '2020-04-04 20:00',
+    createdAt: createdAtDate,
     itemIds: ['3'],
     activityId: '3',
   },
