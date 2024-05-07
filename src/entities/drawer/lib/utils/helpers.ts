@@ -1,3 +1,5 @@
+import { ImageDimensions } from '@app/shared/lib';
+
 import {
   CANVAS_HEIGHT_FACTOR,
   ELEMENTS_GAP,
@@ -28,18 +30,33 @@ export type Dimensions = {
   height: number;
 };
 
-const getCanvasSize = (dimensions: Dimensions, hasExampleImage: boolean) => {
+const getCanvasSize = (
+  itemDimensions: Dimensions,
+  hasExampleImage: boolean,
+) => {
   const factor = hasExampleImage ? CANVAS_HEIGHT_FACTOR : 1;
-  const canvasHeight = dimensions.height * factor - ELEMENTS_GAP;
-  const containerWidth = dimensions.width - RECT_PADDING * 2;
+  const canvasHeight = itemDimensions.height * factor - ELEMENTS_GAP;
+  const containerWidth = itemDimensions.width - RECT_PADDING * 2;
 
   const result = canvasHeight > containerWidth ? containerWidth : canvasHeight;
 
   return result;
 };
 
-const getExampleImageSize = (height: number, hasExampleImage: boolean) => {
-  return hasExampleImage ? height * EXAMPLE_HEIGHT_FACTOR : 0;
+const getExampleImageSize = (
+  itemDimensions: Dimensions,
+  exampleImageDimensions: ImageDimensions | null,
+) => {
+  if (!exampleImageDimensions) {
+    return 0;
+  }
+
+  const maxHeight = itemDimensions.height * EXAMPLE_HEIGHT_FACTOR;
+  const height = Math.floor(
+    itemDimensions.width / exampleImageDimensions.aspectRatio,
+  );
+
+  return height > maxHeight ? maxHeight : height;
 };
 
 const getCanvasContainerHeight = (height: number, hasExampleImage: boolean) => {
@@ -49,20 +66,20 @@ const getCanvasContainerHeight = (height: number, hasExampleImage: boolean) => {
 };
 
 export const getElementsDimensions = (
-  dimensions: Dimensions,
-  hasExampleImage: boolean,
+  itemDimensions: Dimensions,
+  exampleImageDimensions: ImageDimensions | null,
 ) => {
   const exampleImageHeight = getExampleImageSize(
-    dimensions.height,
-    hasExampleImage,
+    itemDimensions,
+    exampleImageDimensions,
   );
 
   const canvasContainerHeight = getCanvasContainerHeight(
-    dimensions.height,
-    hasExampleImage,
+    itemDimensions.height,
+    !!exampleImageDimensions,
   );
 
-  const canvasSize = getCanvasSize(dimensions, hasExampleImage);
+  const canvasSize = getCanvasSize(itemDimensions, !!exampleImageDimensions);
 
   return {
     exampleImageHeight,

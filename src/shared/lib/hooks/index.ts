@@ -29,4 +29,5 @@ export { default as useUploadObservable } from './useUploadObservable';
 export { default as useToast } from './useToast';
 export { default as useFeatureFlags } from './useFeatureFlags';
 
+export * from './useImageDimensions';
 export * from './redux';
