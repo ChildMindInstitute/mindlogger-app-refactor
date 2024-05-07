@@ -103,6 +103,14 @@ Alternatively, you may manually edit the value of a flag by modifying it in the 
   };
 ```
 
+### Updating the Application version
+
+Install Fastlane via Homebrew: `brew install fastlane`.
+
+Update the version in the `package.json` file and run: `yarn bump`.
+
+To update only the build version of the Application, just run `yarn bump` without updating the `package.json` file.
+
 #### Alternative Build Configurations
 
 The above scripts run the app using Debug configuration and for MindLogger's `dev` server environment. You can also run the app using the optimized Release configuration (which disables debugger integration) or for other MindLogger server environments, including `qa`, `staging`, `uat`, and `production`.
