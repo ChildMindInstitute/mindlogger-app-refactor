@@ -1,3 +1,5 @@
+import { addMilliseconds, subHours } from 'date-fns';
+
 import { StoreProgress } from '@app/abstract/lib';
 import { Answers, PipelineItem } from '@app/features/pass-survey';
 import { getSliderItem } from '@app/features/pass-survey/model/tests/testHelpers';
@@ -12,7 +14,10 @@ import {
   mockConstructionServiceExternals,
 } from './testHelpers';
 import * as operations from '../../operations';
-import { ConstructCompletionsService } from '../ConstructCompletionsService';
+import {
+  CompletionType,
+  ConstructCompletionsService,
+} from '../ConstructCompletionsService';
 
 jest.mock('@app/shared/lib/services/Logger', () => ({
   log: jest.fn(),
@@ -427,6 +432,10 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
 });
 
 describe('Test ConstructCompletionsService: edge cases', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('"getAppletProperties" should throw error when no applet dto in the cache', () => {
     const progress: StoreProgress = getFlowProgressMock();
 
@@ -514,6 +523,102 @@ describe('Test ConstructCompletionsService: edge cases', () => {
             appletEncryption as any,
           ),
         ).toThrow(new Error(expectedError));
+      });
+    },
+  );
+});
+
+describe('Test ConstructCompletionsService: evaluateEndAt', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  const now = mockNowDate.getTime();
+
+  const tests = [
+    {
+      completionType: 'intermediate',
+      availableTo: null,
+      logAvailableTo: 'null',
+      isAutocompletion: false,
+      expectedResult: now,
+      expectedResultLog: 'now',
+    },
+    {
+      completionType: 'intermediate',
+      availableTo: subHours(now, 1).getTime(),
+      logAvailableTo: 'subHours(now, 1)',
+      isAutocompletion: false,
+      expectedResult: now,
+      expectedResultLog: 'now',
+    },
+    {
+      completionType: 'intermediate',
+      availableTo: subHours(now, 1).getTime(),
+      logAvailableTo: 'subHours(now, 1)',
+      isAutocompletion: true,
+      expectedResult: subHours(now, 1).getTime(),
+      expectedResultLog: 'subHours(now, 1)',
+    },
+    {
+      completionType: 'finish',
+      availableTo: null,
+      logAvailableTo: 'null',
+      isAutocompletion: false,
+      expectedResult: now,
+      expectedResultLog: 'now',
+    },
+    {
+      completionType: 'finish',
+      availableTo: subHours(now, 1).getTime(),
+      logAvailableTo: 'subHours(now, 1)',
+      isAutocompletion: false,
+      expectedResult: now,
+      expectedResultLog: 'now',
+    },
+    {
+      completionType: 'finish',
+      availableTo: subHours(now, 1).getTime(),
+      logAvailableTo: 'subHours(now, 1)',
+      isAutocompletion: true,
+      expectedResult: addMilliseconds(subHours(now, 1), 1).getTime(),
+      expectedResultLog: 'addMilliseconds(subHours(now, 1), 1)',
+    },
+  ];
+
+  tests.forEach(
+    ({
+      completionType,
+      availableTo,
+      logAvailableTo,
+      isAutocompletion,
+      expectedResult,
+      expectedResultLog,
+    }) => {
+      it(`Should return '${expectedResultLog}' when completionType is ${completionType} and availableTo is '${logAvailableTo}' and isAutocompletion is ${isAutocompletion}`, () => {
+        const progress: StoreProgress = getFlowProgressMock();
+
+        const pushToQueueMock = { push: jest.fn() };
+
+        const { saveSummaryMock } =
+          mockConstructionServiceExternals(mockNowDate);
+
+        const service = new ConstructCompletionsService(
+          saveSummaryMock,
+          {} as any,
+          progress,
+          pushToQueueMock,
+          jest.fn(),
+        );
+
+        // @ts-expect-error
+        const result = service.evaluateEndAt(
+          completionType as CompletionType,
+          availableTo,
+          isAutocompletion,
+        );
+
+        expect(result).toEqual(expectedResult);
       });
     },
   );

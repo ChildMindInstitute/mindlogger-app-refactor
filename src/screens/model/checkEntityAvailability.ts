@@ -8,7 +8,13 @@ import {
   onCompletedToday,
   onScheduledToday,
 } from '@app/features/tap-on-notification/lib';
-import { ILogger, isReadyForAutocompletion, Logger } from '@app/shared/lib';
+import {
+  getEntityProgress,
+  getNow,
+  ILogger,
+  isReadyForAutocompletion,
+  Logger,
+} from '@app/shared/lib';
 import {
   ActivityGroupType,
   ActivityGroupsModel,
@@ -41,6 +47,12 @@ export const checkEntityAvailability = ({
     `[checkEntityAvailability]: Checking.. Entity = "${entityName}", appletId = ${appletId}, entityId = ${entityId}, entityType = ${entityType}, eventId = ${eventId} `,
   );
 
+  const record = getEntityProgress(appletId, entityId, eventId, storeProgress);
+
+  Logger.log(
+    `[checkEntityAvailability] Now is ${getNow().toUTCString()}, record = ${JSON.stringify(record)}`,
+  );
+
   const shouldBeAutocompleted = isReadyForAutocompletion(
     { appletId, entityId, eventId, entityType },
     storeProgress,
@@ -49,8 +61,7 @@ export const checkEntityAvailability = ({
   const applyInProgressFilter = !shouldBeAutocompleted;
 
   Logger.log(
-    '[checkEntityAvailability] applyInProgressFilter is set to ' +
-      applyInProgressFilter,
+    `[checkEntityAvailability] applyInProgressFilter is set to ${applyInProgressFilter}`,
   );
 
   const groupsResult = ActivityGroupsModel.ActivityGroupsBuildManager.process(
@@ -100,8 +111,6 @@ export const checkEntityAvailability = ({
 
     return false;
   }
-
-  const record = storeProgress[appletId]?.[entityId]?.[eventId];
 
   const completedToday = record && record.endAt && isToday(record.endAt);
 
