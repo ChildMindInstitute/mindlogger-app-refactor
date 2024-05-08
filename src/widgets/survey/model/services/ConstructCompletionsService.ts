@@ -74,7 +74,7 @@ export type ConstructInput = (
   completionType: CompletionType;
 };
 
-const DistinguishInterimAndFinishLag = 1; // For correct sort on BE, Admin
+const DistinguishInterimAndFinishLag = 1; // For correct sort on BE, Admin, TODO
 
 export class ConstructCompletionsService {
   private saveActivitySummary: SaveActivitySummary | null;
