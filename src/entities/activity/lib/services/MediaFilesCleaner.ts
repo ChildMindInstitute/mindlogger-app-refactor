@@ -73,8 +73,8 @@ const createMediaFilesCleaner = (): Result => {
   };
 
   const cleanUpByAnswers = async (answers: AnswerDto[]) => {
-    try {
-      for await (const answer of answers) {
+    for await (const answer of answers) {
+      try {
         const { value: answerValue } = answer as ObjectAnswerDto;
 
         const mediaValue = answerValue as MediaValue;
@@ -86,15 +86,17 @@ const createMediaFilesCleaner = (): Result => {
           if (fileExists) {
             await FileSystem.unlink(fileUri);
 
-            console.info('[MediaFilesCleaner.cleanUp]: completed');
+            Logger.info('[MediaFilesCleaner.cleanUp]: completed');
           }
         }
+      } catch (error) {
+        Logger.warn(
+          `[MediaFilesCleaner.cleanUp]: Error occurred while deleting the file from answer:
+          ${JSON.stringify(answer, null, 2)}
+
+          Error: ${error as string}`,
+        );
       }
-    } catch (error) {
-      console.warn(
-        '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',
-        error,
-      );
     }
   };
 
