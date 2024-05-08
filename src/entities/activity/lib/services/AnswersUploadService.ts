@@ -31,7 +31,7 @@ import {
 } from '../types';
 
 export interface IAnswersUploadService {
-  sendAnswers(body: SendAnswersInput): void;
+  sendAnswers(body: SendAnswersInput): Promise<void>;
 }
 
 class AnswersUploadService implements IAnswersUploadService {
@@ -512,9 +512,11 @@ class AnswersUploadService implements IAnswersUploadService {
 
     await this.uploadAnswers(encryptedData);
 
-    this.logger.log('[UploadAnswersService.sendAnswers] executing clean up');
+    this.logger.log('[UploadAnswersService.sendAnswers] executing cleanup');
 
-    MediaFilesCleaner.cleanUpByAnswers(body.answers);
+    await MediaFilesCleaner.cleanUpByAnswers(body.answers);
+
+    this.logger.log('[UploadAnswersService.sendAnswers] cleanup is completed');
   }
 }
 
