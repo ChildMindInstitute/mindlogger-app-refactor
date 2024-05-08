@@ -177,6 +177,63 @@ export const mappedAnalytics = {
         },
       ],
     },
+    {
+      description: null,
+      id: '2',
+      name: 'two',
+      responses: [
+        {
+          data: [
+            {
+              date: new Date(createdAtDate),
+              value: 1,
+            },
+          ],
+          name: 'Screen2',
+          responseConfig: {
+            options: [
+              {
+                name: 'string',
+                value: 1,
+              },
+            ],
+          },
+          type: 'multiSelect',
+        },
+        {
+          data: [
+            {
+              date: new Date(createdAtDate),
+              value: [2],
+            },
+          ],
+          name: 'Screen2',
+          responseConfig: {
+            maxValue: 10,
+            minValue: 0,
+          },
+          type: 'slider',
+        },
+        {
+          data: [
+            {
+              date: new Date(createdAtDate),
+              value: '1',
+            },
+          ],
+          name: 'name',
+          responseConfig: {
+            options: [
+              {
+                name: 'test',
+                value: 0,
+              },
+            ],
+          },
+          type: 'singleSelect',
+        },
+      ],
+    },
   ],
   id: '1',
 };
@@ -187,6 +244,58 @@ export const mappedAnalyticsWithEmptyAnswers = {
       description: 'description one',
       id: '1',
       name: 'one',
+      responses: [
+        {
+          data: [],
+          name: 'Screen2',
+          responseConfig: {
+            options: [
+              {
+                name: 'string',
+                value: 1,
+              },
+            ],
+          },
+          type: 'multiSelect',
+        },
+        {
+          data: [
+            {
+              date: new Date(createdAtDate),
+              value: null,
+            },
+          ],
+          name: 'Screen2',
+          responseConfig: {
+            maxValue: 10,
+            minValue: 0,
+          },
+          type: 'slider',
+        },
+        {
+          data: [
+            {
+              date: new Date(createdAtDate),
+              value: null,
+            },
+          ],
+          name: 'name',
+          responseConfig: {
+            options: [
+              {
+                name: 'test',
+                value: 0,
+              },
+            ],
+          },
+          type: 'singleSelect',
+        },
+      ],
+    },
+    {
+      description: null,
+      id: '2',
+      name: 'two',
       responses: [
         {
           data: [],

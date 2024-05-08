@@ -267,6 +267,21 @@ const activitiesDto: ActivityDto[] = [
     order: 0,
     items: activityItems,
   },
+  {
+    id: '2',
+    name: 'two',
+    splashScreen: null,
+    // @ts-expect-error
+    description: null,
+    image: null,
+    showAllAtOnce: false,
+    isSkippable: true,
+    isReviewable: false,
+    isHidden: false,
+    responseIsEditable: true,
+    order: 0,
+    items: activityItems,
+  },
 ];
 
 export const createdAtDate = '2020-04-04T20:00:00.000Z';
@@ -327,7 +342,6 @@ export const analyticsMapperInputWithEmptyAnswers = {
 
 export const analyticsMapperInputWithEmptyActivities = {
   appletId: '1',
-  activitiesDto: [],
   answersDto: answersDto,
   encryptionService: encryptionMockServiceWithEmptyAnswers,
 };
