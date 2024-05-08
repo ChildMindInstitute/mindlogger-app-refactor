@@ -9,7 +9,7 @@ import {
 
 import {
   colors,
-  evaluateLocalFileUri,
+  evaluateFileCacheUri,
   GALLERY_PHOTO_OPTIONS,
   handleBlockedPermissions,
   Logger,
@@ -120,7 +120,7 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
         <Image
           height="100%"
           width="100%"
-          src={evaluateLocalFileUri(value.fileName)}
+          src={evaluateFileCacheUri(value.fileName)}
         />
       )}
     </MediaInput>

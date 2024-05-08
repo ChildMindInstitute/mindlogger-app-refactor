@@ -20,7 +20,7 @@ import {
   formatToDtoDate,
   formatToDtoTime,
 } from '@shared/lib';
-import { isLocalFileUrl, evaluateLocalFileUri } from '@shared/lib/utils';
+import { isLocalFileUrl, evaluateFileCacheUri } from '@shared/lib/utils';
 
 import MediaFilesCleaner from './MediaFilesCleaner';
 import {
@@ -93,13 +93,21 @@ class AnswersUploadService implements IAnswersUploadService {
     return isLocalFileUrl(url);
   }
 
-  private isMediaItemAnswer(answer: ObjectAnswerDto['value']) {
+  private isMediaItemAnswer(
+    answer: ObjectAnswerDto['value'],
+  ): answer is FileDto {
     return (
-      answer &&
+      !!answer &&
       typeof answer === 'object' &&
       'fileName' in answer &&
-      this.isFileUrl(evaluateLocalFileUri(answer.fileName))
+      this.isFileUrl(evaluateFileCacheUri(answer.fileName))
     );
+  }
+
+  private isDrawingItemAnswer(
+    answer: ObjectAnswerDto['value'],
+  ): answer is DrawerAnswerDto {
+    return this.isMediaItemAnswer(answer) && answer.type === 'image/svg';
   }
 
   private collectFileIds(answers: AnswerDto[]): string[] {
@@ -108,12 +116,10 @@ class AnswersUploadService implements IAnswersUploadService {
     for (const itemAnswer of answers) {
       const answerValue = (itemAnswer as ObjectAnswerDto)?.value;
 
-      const mediaAnswer = answerValue as FileDto;
-
-      const isMediaItem = this.isMediaItemAnswer(mediaAnswer);
+      const isMediaItem = this.isMediaItemAnswer(answerValue);
 
       if (isMediaItem) {
-        result.push(this.getFileId(mediaAnswer));
+        result.push(this.getFileId(answerValue));
       }
     }
 
@@ -131,7 +137,7 @@ class AnswersUploadService implements IAnswersUploadService {
      * just before we actually want to fetch those files.
      * Please see: https://github.com/joltup/rn-fetch-blob/issues/204#issuecomment-786321861
      */
-    const localFileUri = evaluateLocalFileUri(mediaFile.fileName);
+    const localFileUri = evaluateFileCacheUri(mediaFile.fileName);
     const localFileExists = await FileSystem.exists(localFileUri);
 
     const logFileInfo = `(${mediaFile.type}, from answer #${logAnswerIndex})`;
@@ -244,7 +250,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
       const text = itemAnswer?.text;
 
-      const mediaAnswer = answerValue as MediaFileDto;
+      const mediaAnswer = answerValue;
 
       const isMediaItem = this.isMediaItemAnswer(mediaAnswer);
 
@@ -260,19 +266,19 @@ class AnswersUploadService implements IAnswersUploadService {
         body.appletId,
       );
 
-      const isSvg = mediaAnswer.type === 'image/svg';
+      if (remoteUrl) {
+        const answer = itemAnswer.value;
 
-      if (remoteUrl && !isSvg) {
-        updatedAnswers.push({ value: remoteUrl, text });
-      } else if (remoteUrl) {
-        const svgValue = itemAnswer.value as DrawerAnswerDto;
+        if (this.isDrawingItemAnswer(answer)) {
+          const copy: ObjectAnswerDto = {
+            text,
+            value: { ...answer, uri: remoteUrl },
+          };
 
-        const copy: ObjectAnswerDto = {
-          text,
-          value: { ...svgValue, uri: remoteUrl },
-        };
-
-        updatedAnswers.push(copy);
+          updatedAnswers.push(copy);
+        } else {
+          updatedAnswers.push({ value: remoteUrl, text });
+        }
       }
     }
 

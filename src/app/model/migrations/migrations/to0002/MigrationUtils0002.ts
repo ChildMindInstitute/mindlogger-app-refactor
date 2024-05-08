@@ -30,34 +30,37 @@ const getFilenameFromLocalUri = (localUri: string) => {
   return match ? match[1] : '';
 };
 
-export const evaluateLocalFileUri = (fileName: string) =>
+export const evaluateFileCacheUri = (fileName: string) =>
   `file://${Dirs.CacheDir}/${fileName}`;
 
 export const moveMediaFileToCache = async (
   fileName: string,
-  fromUri: string,
+  fromLocalUri: string,
 ) => {
-  const localFileUri = evaluateLocalFileUri(fileName!);
+  const cacheFileUri = evaluateFileCacheUri(fileName);
 
-  let fileExists = await FileSystem.exists(localFileUri);
+  const localFileExists = await FileSystem.exists(fromLocalUri);
 
-  if (fileExists) {
-    await FileSystem.unlink(localFileUri);
-  }
-
-  await FileSystem.mv(fromUri, localFileUri);
-
-  /** Double-check if the image has been moved correctly */
-  fileExists = await FileSystem.exists(localFileUri);
-
-  if (!fileExists) {
+  if (!localFileExists) {
     throw Error(
-      `[moveFileToCacheDir] Failed to move file from ${fromUri} to ${localFileUri}.
-        The file has not been found in the ${localFileUri}`,
+      `[moveFileToCacheDir] Failed to move file from ${fromLocalUri} to ${cacheFileUri}.
+        The file local file has not been found in the ${fromLocalUri}`,
     );
   }
 
-  return localFileUri;
+  await FileSystem.mv(fromLocalUri, cacheFileUri);
+
+  /** Double-check if the image has been moved correctly */
+  const cacheFileExists = await FileSystem.exists(cacheFileUri);
+
+  if (!cacheFileExists) {
+    throw Error(
+      `[moveFileToCacheDir] Failed to move file from ${fromLocalUri} to ${cacheFileUri}.
+        The file has not been found in the ${cacheFileUri}`,
+    );
+  }
+
+  return cacheFileUri;
 };
 
 export const renameMediaFile = (mediaFile: MediaFile) => {

@@ -12,7 +12,7 @@ export const isLocalFileUrl = (value: string) => {
 export const getFilePath = (path: string) =>
   IS_ANDROID ? `file://${path}` : path;
 
-export const evaluateLocalFileUri = (fileName: string) =>
+export const evaluateFileCacheUri = (fileName: string) =>
   `file://${Dirs.CacheDir}/${fileName}`;
 
 export const getFilenameFromLocalUri = (localUri: string) => {

@@ -17,10 +17,6 @@ class SvgFileManager {
     this.logger = logger;
   }
 
-  public static getFilePath = (fileName: string) => {
-    return `file://${filesCacheDir}/${fileName}`;
-  };
-
   public getFileMeta(fileName: string | null): SvgFileMeta {
     if (!fileName?.length) {
       fileName = `${uuidv4()}.svg`;

@@ -4,7 +4,7 @@ import { ActivityRecordKeyParams } from '@app/abstract/lib';
 import { AnswerDto, ObjectAnswerDto } from '@app/shared/api';
 import {
   createSecureStorage,
-  evaluateLocalFileUri,
+  evaluateFileCacheUri,
   Logger,
 } from '@app/shared/lib';
 import { MediaFile, MediaValue } from '@app/shared/ui';
@@ -16,9 +16,9 @@ type EntityRecord = {
 export const activityStorage = createSecureStorage('activity_progress-storage');
 
 type Result = {
-  cleanUp: (keyParams: ActivityRecordKeyParams) => void;
-  cleanUpByStorageKey: (key: string) => void;
-  cleanUpByAnswers: (answers: AnswerDto[]) => void;
+  cleanUp: (keyParams: ActivityRecordKeyParams) => Promise<void>;
+  cleanUpByStorageKey: (key: string) => Promise<void>;
+  cleanUpByAnswers: (answers: AnswerDto[]) => Promise<void>;
 };
 
 const createMediaFilesCleaner = (): Result => {
@@ -38,7 +38,7 @@ const createMediaFilesCleaner = (): Result => {
       const record = entityRecord.answers[recordId]?.answer;
 
       if (record?.fileName) {
-        const fileUri = evaluateLocalFileUri(record.fileName);
+        const fileUri = evaluateFileCacheUri(record.fileName);
 
         urlsToProcess.push(fileUri);
       }
@@ -74,13 +74,13 @@ const createMediaFilesCleaner = (): Result => {
 
   const cleanUpByAnswers = async (answers: AnswerDto[]) => {
     try {
-      answers.filter(Boolean).forEach(async answer => {
+      for await (const answer of answers) {
         const { value: answerValue } = answer as ObjectAnswerDto;
 
         const mediaValue = answerValue as MediaValue;
 
         if (mediaValue?.fileName) {
-          const fileUri = evaluateLocalFileUri(mediaValue.fileName);
+          const fileUri = evaluateFileCacheUri(mediaValue.fileName);
           const fileExists = await FileSystem.exists(fileUri);
 
           if (fileExists) {
@@ -89,7 +89,7 @@ const createMediaFilesCleaner = (): Result => {
             console.info('[MediaFilesCleaner.cleanUp]: completed');
           }
         }
-      });
+      }
     } catch (error) {
       console.warn(
         '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',

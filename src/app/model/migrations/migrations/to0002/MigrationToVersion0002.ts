@@ -70,9 +70,24 @@ export class MigrationToVersion0002 implements IMigration {
            * For iOS, it is required to moved files from /tmp/ folder (created by react-native-image-picker).
            * For Android, files' fileName property be renamed because react-native-image-picker assigns them wrong names.
            */
-          await moveMediaFileToCache(mediaFile.fileName, mediaFile.uri);
+          const cacheFileUri = await moveMediaFileToCache(
+            mediaFile.fileName,
+            mediaFile.uri,
+          );
+
+          Logger.info(
+            `[MigrationToVersion0002]: File ${mediaFile.fileName} has been moved from ${mediaFile.uri} to ${cacheFileUri}`,
+          );
         } else {
+          const originalName = mediaFile.fileName;
+
           renameMediaFile(mediaFile);
+
+          if (originalName !== mediaFile.fileName) {
+            Logger.info(
+              `[MigrationToVersion0002]: Media file ${originalName} has been renamed to ${mediaFile.fileName}`,
+            );
+          }
         }
       }
     }
@@ -89,7 +104,15 @@ export class MigrationToVersion0002 implements IMigration {
         continue;
       }
 
+      const originalName = audioFile.fileName;
+
       renameMediaFile(audioFile);
+
+      if (originalName !== audioFile.fileName) {
+        Logger.info(
+          `[MigrationToVersion0002]: Audio file ${originalName} has been renamed to ${audioFile.fileName}`,
+        );
+      }
     }
   }
 
@@ -110,7 +133,16 @@ export class MigrationToVersion0002 implements IMigration {
       const shouldRenameMediaFile = shouldRenamePhotoVideo || shouldRenameAudio;
 
       if (shouldRenameMediaFile) {
-        renameMediaFile(action.payload.answer.value.answer!);
+        const answerValue = action.payload.answer.value.answer!;
+        const originalName = answerValue.fileName;
+
+        renameMediaFile(answerValue);
+
+        if (originalName !== answerValue.fileName) {
+          Logger.info(
+            `[MigrationToVersion0002]: Filename ${originalName} in user actions has been renamed to ${answerValue.fileName}`,
+          );
+        }
       }
     }
   }
@@ -144,9 +176,8 @@ export class MigrationToVersion0002 implements IMigration {
       }
 
       try {
-        const updatedActivityState = await this.getUpdatedActivityState(
-          activityState,
-        );
+        const updatedActivityState =
+          await this.getUpdatedActivityState(activityState);
 
         updateActivityState(storageKey, updatedActivityState);
       } catch (error) {

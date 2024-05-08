@@ -10,7 +10,7 @@ import {
 
 import {
   colors,
-  evaluateLocalFileUri,
+  evaluateFileCacheUri,
   GALLERY_VIDEO_OPTIONS,
   handleBlockedPermissions,
   Logger,
@@ -128,7 +128,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
           wrapperStyle={styles.mediaContainer}
           videoStyle={styles.mediaContainer}
           thumbnailStyle={styles.mediaContainer}
-          uri={evaluateLocalFileUri(value.fileName)}
+          uri={evaluateFileCacheUri(value.fileName)}
           resizeMode="contain"
         />
       )}

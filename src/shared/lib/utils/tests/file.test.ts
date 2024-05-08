@@ -2,7 +2,7 @@ import { setPlatform } from './testHelpers';
 import {
   isLocalFileUrl,
   getFilePath,
-  evaluateLocalFileUri,
+  evaluateFileCacheUri,
   getFilenameFromLocalUri,
 } from '../file';
 
@@ -69,7 +69,7 @@ describe('Test getFilePath function', () => {
   });
 });
 
-describe('Test evaluateLocalFileUri function', () => {
+describe('Test evaluateFileCacheUri function', () => {
   const testFilesNames = [
     'audio.mp3',
     '7d7f7g6d8.mp4',
@@ -84,7 +84,7 @@ describe('Test evaluateLocalFileUri function', () => {
 
   it('Should return local URIs in the format: file://${CacheDir}/${fileName}', () => {
     testFilesNames.forEach((fileName, i) => {
-      expect(evaluateLocalFileUri(fileName)).toBe(expectedURIs[i]);
+      expect(evaluateFileCacheUri(fileName)).toBe(expectedURIs[i]);
     });
   });
 });

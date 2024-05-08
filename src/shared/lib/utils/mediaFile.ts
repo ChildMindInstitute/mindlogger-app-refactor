@@ -1,7 +1,7 @@
 import { FileSystem } from 'react-native-file-access';
 import { Asset } from 'react-native-image-picker';
 
-import { getFilenameFromLocalUri, evaluateLocalFileUri } from './file';
+import { getFilenameFromLocalUri, evaluateFileCacheUri } from './file';
 import { ImageConverter } from './imageConverter';
 import { IS_IOS } from '../constants';
 
@@ -14,19 +14,32 @@ export type MediaAsset = {
 
 export const moveMediaFileToCache = async (
   fileName: string,
-  fromUri: string,
+  fromLocalUri: string,
 ) => {
-  const localFileUri = evaluateLocalFileUri(fileName!);
+  const cacheFileUri = evaluateFileCacheUri(fileName);
 
-  let fileExists = await FileSystem.exists(localFileUri);
+  const localFileExists = await FileSystem.exists(fromLocalUri);
 
-  if (fileExists) {
-    await FileSystem.unlink(localFileUri);
+  if (!localFileExists) {
+    throw Error(
+      `[moveFileToCacheDir] Failed to move file from ${fromLocalUri} to ${cacheFileUri}.
+        The file local file has not been found in the ${fromLocalUri}`,
+    );
   }
 
-  await FileSystem.mv(fromUri, localFileUri);
+  await FileSystem.mv(fromLocalUri, cacheFileUri);
 
-  return localFileUri;
+  /** Double-check if the image has been moved correctly */
+  const cacheFileExists = await FileSystem.exists(cacheFileUri);
+
+  if (!cacheFileExists) {
+    throw Error(
+      `[moveFileToCacheDir] Failed to move file from ${fromLocalUri} to ${cacheFileUri}.
+        The file has not been found in the ${cacheFileUri}`,
+    );
+  }
+
+  return cacheFileUri;
 };
 
 export const preparePhotoFile = async (
