@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "278973275319",
+    "project_id": "mindlogger-dev",
+    "storage_bucket": "mindlogger-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278973275319:android:6ec0de52d2299d62aa8132",
+        "android_client_info": {
+          "package_name": "lab.childmindinstitute.data.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278973275319-r0dtma9hc8b55o1ne32l2fijqbif0jh1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLz05g6zXVNjejFNjtLJWlIkS5NMfKjsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "278973275319-r0dtma9hc8b55o1ne32l2fijqbif0jh1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "278973275319-rpckgb021k127r268lfqjhitl5snibba.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "lab.childmindinstitute.data.dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

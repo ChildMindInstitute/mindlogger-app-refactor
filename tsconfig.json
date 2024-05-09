@@ -1,10 +1,19 @@
-// prettier-ignore
 {
-  "extends": "@tsconfig/react-native/tsconfig.json",     /* Recommended React Native TSConfig base */
+  "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
-    /* Visit https://aka.ms/tsconfig.json to read more about this file */
-
-    /* Completeness */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "baseUrl": ".",
+    "paths" : {
+      "@app/*": ["src/*"],
+      "@assets/*": ["assets/*"],
+      "@shared/*": ["src/shared/*"],
+      "@images": ["assets/images/index"],
+      "@features/*": ["src/features/*"], 
+      "@screens": ["src/screens/index"],
+      "@screens/*": ["src/screens/*"],
+      "@entities/*": ["src/entities/*"],
+      "@jobs/*": ["src/jobs/*"],
+      "@widgets/*": ["src/widgets/*"],
+      "*": ["*","*.ios","*.android"]
+    }
   }
 }
