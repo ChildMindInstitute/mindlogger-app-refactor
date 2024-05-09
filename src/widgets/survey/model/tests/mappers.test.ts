@@ -91,7 +91,7 @@ jest.mock('@app/shared/lib', () => {
 });
 
 describe('Survey widget mapAnswersToDto tests', () => {
-  it('Should return mapped result for different items pipeline', async () => {
+  it('Should return mapped result for different items pipeline', () => {
     const pipeline = [
       textInput,
       radioInput,

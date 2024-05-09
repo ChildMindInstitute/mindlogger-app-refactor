@@ -10,8 +10,11 @@ import {
 
 import {
   colors,
+  evaluateFileCacheUri,
   GALLERY_VIDEO_OPTIONS,
   handleBlockedPermissions,
+  Logger,
+  prepareVideoFile,
   requestCameraPermissions,
   requestGalleryPermissions,
   useCameraPermissions,
@@ -40,20 +43,29 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
   const { isGalleryAccessGranted } = useGalleryPermissions();
   const { t } = useTranslation();
 
-  const pickVideo = (response: ImagePickerResponse, isFromLibrary: boolean) => {
+  const pickVideo = async (
+    response: ImagePickerResponse,
+    isFromLibrary: boolean,
+  ) => {
     const { assets } = response;
 
-    if (assets?.length) {
-      const videoItem = assets[0];
-      const videoUpload = {
-        uri: videoItem.uri || '',
-        fileName: videoItem.fileName || '',
-        size: videoItem.fileSize || 0,
-        type: videoItem.type || '',
-        fromLibrary: isFromLibrary,
-      };
+    if (!assets?.length) {
+      Logger.warn('[VideoItem.pickVideo] an image has not been picked up.');
+      return;
+    }
 
-      onChange(videoUpload);
+    try {
+      const videoItem = assets[0];
+
+      const video = await prepareVideoFile(videoItem, isFromLibrary);
+
+      onChange(video);
+    } catch (error) {
+      Logger.error(
+        `[VideoItem.pickVideo] An error occurred during picking a video.
+        Error:
+        ${error}`,
+      );
     }
   };
 
@@ -116,7 +128,7 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
           wrapperStyle={styles.mediaContainer}
           videoStyle={styles.mediaContainer}
           thumbnailStyle={styles.mediaContainer}
-          uri={value.uri}
+          uri={evaluateFileCacheUri(value.fileName)}
           resizeMode="contain"
         />
       )}

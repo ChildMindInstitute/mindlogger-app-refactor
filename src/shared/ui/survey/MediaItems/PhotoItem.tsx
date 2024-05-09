@@ -1,9 +1,7 @@
 import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { FileSystem } from 'react-native-file-access';
 import {
-  Asset,
   ImagePickerResponse,
   launchCamera,
   launchImageLibrary,
@@ -11,11 +9,12 @@ import {
 
 import {
   colors,
+  evaluateFileCacheUri,
   GALLERY_PHOTO_OPTIONS,
   handleBlockedPermissions,
-  ImageConverter,
   Logger,
   PHOTO_TAKE_OPTIONS,
+  preparePhotoFile,
   requestCameraPermissions,
   requestGalleryPermissions,
   useCameraPermissions,
@@ -31,34 +30,6 @@ type Props = {
   value?: MediaValue;
 };
 
-const preparePhotoFile = async (image: Asset, isFromLibrary: boolean) => {
-  const isHeic = image.fileName?.includes('heic');
-
-  if (isHeic) {
-    try {
-      const originalUri = image.uri!;
-
-      const jpgImage = await ImageConverter.convertHeicToJpg(image);
-
-      image = jpgImage;
-
-      await FileSystem.unlink(originalUri);
-    } catch (error) {
-      Logger.error(error as string);
-    }
-  }
-
-  const photoFile = {
-    uri: image.uri || '',
-    fileName: image.fileName || '',
-    size: image.fileSize || 0,
-    type: image.type || '',
-    fromLibrary: isFromLibrary,
-  };
-
-  return photoFile;
-};
-
 const PhotoItem: FC<Props> = ({ onChange, value }) => {
   const { t } = useTranslation();
   const { isCameraAccessGranted } = useCameraPermissions();
@@ -70,12 +41,23 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
   ) => {
     const { assets } = response;
 
-    if (assets?.length) {
+    if (!assets?.length) {
+      Logger.warn('[PhotoItem.pickImage] an image has not been picked up.');
+      return;
+    }
+
+    try {
       const imageItem = assets[0];
 
       const photo = await preparePhotoFile(imageItem, isFromLibrary);
 
       onChange(photo);
+    } catch (error) {
+      Logger.error(
+        `[PhotoItem.pickImage] An error occurred during picking an image.
+        error:
+        ${error}`,
+      );
     }
   };
 
@@ -134,7 +116,13 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
       accessibilityLabel="photo-item"
       uploadIcon={<PhotoIcon color={colors.red} size={50} />}
     >
-      {value && <Image height="100%" width="100%" src={value.uri} />}
+      {value && (
+        <Image
+          height="100%"
+          width="100%"
+          src={evaluateFileCacheUri(value.fileName)}
+        />
+      )}
     </MediaInput>
   );
 };

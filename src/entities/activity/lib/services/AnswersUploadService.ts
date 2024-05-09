@@ -6,11 +6,12 @@ import {
   AnswerService,
   CheckIfFilesExistResultDto,
   DrawerAnswerDto,
+  FileDto,
   FileService,
+  MediaFileDto,
   ObjectAnswerDto,
   UserActionDto,
 } from '@app/shared/api';
-import { MediaFile } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
 import {
   ILogger,
@@ -18,8 +19,8 @@ import {
   encryption,
   formatToDtoDate,
   formatToDtoTime,
-  isLocalFileUrl,
 } from '@shared/lib';
+import { isLocalFileUrl, evaluateFileCacheUri } from '@shared/lib/utils';
 
 import MediaFilesCleaner from './MediaFilesCleaner';
 import {
@@ -30,7 +31,7 @@ import {
 } from '../types';
 
 export interface IAnswersUploadService {
-  sendAnswers(body: SendAnswersInput): void;
+  sendAnswers(body: SendAnswersInput): Promise<void>;
 }
 
 class AnswersUploadService implements IAnswersUploadService {
@@ -84,12 +85,29 @@ class AnswersUploadService implements IAnswersUploadService {
     return checks.find(x => x.fileId === fileId)!;
   }
 
-  private getFileId(file: MediaFile): string {
+  private getFileId(file: FileDto): string {
     return `${this.createdAt!.toString()}/${file.fileName}`;
   }
 
   private isFileUrl(url: string): boolean {
     return isLocalFileUrl(url);
+  }
+
+  private isMediaItemAnswer(
+    answer: ObjectAnswerDto['value'],
+  ): answer is FileDto {
+    return (
+      !!answer &&
+      typeof answer === 'object' &&
+      'fileName' in answer &&
+      this.isFileUrl(evaluateFileCacheUri(answer.fileName))
+    );
+  }
+
+  private isDrawingItemAnswer(
+    answer: ObjectAnswerDto['value'],
+  ): answer is DrawerAnswerDto {
+    return this.isMediaItemAnswer(answer) && answer.type === 'image/svg';
   }
 
   private collectFileIds(answers: AnswerDto[]): string[] {
@@ -98,12 +116,10 @@ class AnswersUploadService implements IAnswersUploadService {
     for (const itemAnswer of answers) {
       const answerValue = (itemAnswer as ObjectAnswerDto)?.value;
 
-      const mediaAnswer = answerValue as MediaFile;
-
-      const isMediaItem = mediaAnswer?.uri && this.isFileUrl(mediaAnswer.uri);
+      const isMediaItem = this.isMediaItemAnswer(answerValue);
 
       if (isMediaItem) {
-        result.push(this.getFileId(mediaAnswer));
+        result.push(this.getFileId(answerValue));
       }
     }
 
@@ -111,12 +127,18 @@ class AnswersUploadService implements IAnswersUploadService {
   }
 
   private async processFileUpload(
-    mediaFile: MediaFile,
+    mediaFile: FileDto,
     uploadChecks: CheckFilesUploadResults,
     logAnswerIndex: number,
     appletId: string,
   ): Promise<string> {
-    const localFileExists = await FileSystem.exists(mediaFile.uri);
+    /** Since the application directory changes upon app update
+     * it is required to build URIs from scratch using file names
+     * just before we actually want to fetch those files.
+     * Please see: https://github.com/joltup/rn-fetch-blob/issues/204#issuecomment-786321861
+     */
+    const localFileUri = evaluateFileCacheUri(mediaFile.fileName);
+    const localFileExists = await FileSystem.exists(localFileUri);
 
     const logFileInfo = `(${mediaFile.type}, from answer #${logAnswerIndex})`;
 
@@ -159,7 +181,7 @@ class AnswersUploadService implements IAnswersUploadService {
         await FileService.uploadAppletFileToS3({
           fields: getFieldsDto.fields,
           fileName: mediaFile.fileName,
-          localUrl: mediaFile.uri,
+          localUrl: localFileUri,
           type: mediaFile.type,
           uploadUrl: getFieldsDto.uploadUrl,
         });
@@ -228,9 +250,9 @@ class AnswersUploadService implements IAnswersUploadService {
 
       const text = itemAnswer?.text;
 
-      const mediaAnswer = answerValue as MediaFile;
+      const mediaAnswer = answerValue;
 
-      const isMediaItem = mediaAnswer?.uri && this.isFileUrl(mediaAnswer.uri);
+      const isMediaItem = this.isMediaItemAnswer(mediaAnswer);
 
       if (!isMediaItem) {
         updatedAnswers.push(itemAnswer);
@@ -244,19 +266,19 @@ class AnswersUploadService implements IAnswersUploadService {
         body.appletId,
       );
 
-      const isSvg = mediaAnswer.type === 'image/svg';
+      if (remoteUrl) {
+        const answer = itemAnswer.value;
 
-      if (remoteUrl && !isSvg) {
-        updatedAnswers.push({ value: remoteUrl, text });
-      } else if (remoteUrl) {
-        const svgValue = itemAnswer.value as DrawerAnswerDto;
+        if (this.isDrawingItemAnswer(answer)) {
+          const copy: ObjectAnswerDto = {
+            text,
+            value: { ...answer, uri: remoteUrl },
+          };
 
-        const copy: ObjectAnswerDto = {
-          text,
-          value: { ...svgValue, uri: remoteUrl },
-        };
-
-        updatedAnswers.push(copy);
+          updatedAnswers.push(copy);
+        } else {
+          updatedAnswers.push({ value: remoteUrl, text });
+        }
       }
     }
 
@@ -402,18 +424,18 @@ class AnswersUploadService implements IAnswersUploadService {
     const processUserActions = () =>
       userActions.map((userAction: UserActionDto) => {
         const response = userAction?.response as ObjectAnswerDto;
-        const userActionValue = response?.value as MediaFile;
+        const userActionValue = response?.value as MediaFileDto;
         const isSvg = userActionValue?.type === 'image/svg';
 
-        if (userAction.type !== 'SET_ANSWER' || !userActionValue?.uri) {
+        if (userAction.type !== 'SET_ANSWER' || !userActionValue?.fileName) {
           return userAction;
         }
 
         const originalAnswerIndex = originalAnswers.findIndex(answer => {
           const currentAnswerValue = (answer as ObjectAnswerDto)
-            ?.value as MediaFile;
+            ?.value as MediaFileDto;
 
-          return currentAnswerValue?.uri === userActionValue.uri;
+          return currentAnswerValue?.fileName === userActionValue.fileName;
         });
 
         if (originalAnswerIndex === -1) {
@@ -490,9 +512,11 @@ class AnswersUploadService implements IAnswersUploadService {
 
     await this.uploadAnswers(encryptedData);
 
-    this.logger.log('[UploadAnswersService.sendAnswers] executing clean up');
+    this.logger.log('[UploadAnswersService.sendAnswers] executing cleanup');
 
-    MediaFilesCleaner.cleanUpByAnswers(body.answers);
+    await MediaFilesCleaner.cleanUpByAnswers(body.answers);
+
+    this.logger.log('[UploadAnswersService.sendAnswers] cleanup is completed');
   }
 }
 
