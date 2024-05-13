@@ -22,7 +22,13 @@ import { useAppletStreamingDetails } from '@entities/applet/lib/hooks';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
 import { StabilityTracker } from '@entities/stabilityTracker';
-import { IS_ANDROID, LiveEvent, useSendEvent, wait } from '@shared/lib';
+import {
+  Dimensions,
+  IS_ANDROID,
+  LiveEvent,
+  useSendEvent,
+  wait,
+} from '@shared/lib';
 import {
   RadioActivityItem,
   SurveySlider,
@@ -67,8 +73,7 @@ function ActivityItem({
   const initialScrollEnabled = type !== 'StabilityTracker' && type !== 'AbTest';
 
   const [scrollEnabled, setScrollEnabled] = useState(initialScrollEnabled);
-  const [height, setHeight] = useState(0);
-  const [width, setWidth] = useState(0);
+  const [dimensions, setDimensions] = useState<Dimensions | null>(null);
 
   const { sendLiveEvent } = useSendEvent(
     streamingDetails?.streamEnabled || false,
@@ -147,23 +152,18 @@ function ActivityItem({
       break;
 
     case 'DrawingTest':
-      const heightReductionFactor = 0.85;
-      const itemHeight = height * heightReductionFactor;
-
-      item = height ? (
-        <Box height={itemHeight} mb="$6">
+      item = dimensions ? (
+        <Box flex={1} mb="$6">
           <DrawingTest
             flex={1}
-            dimensions={{
-              height: itemHeight,
-              width,
-            }}
+            dimensions={dimensions}
             {...pipelineItem.payload}
             toggleScroll={setScrollEnabled}
             value={{
               fileName: value?.answer?.fileName ?? null,
               lines: value?.answer?.lines ?? [],
             }}
+            legacyLayoutSupport={!pipelineItem.payload.proportionEnabled}
             onResult={onResponse}
             onLog={processLiveEvent}
           />
@@ -389,9 +389,8 @@ function ActivityItem({
         flex={1}
         justifyContent="center"
         onLayout={e => {
-          if (!height) {
-            setHeight(e.nativeEvent.layout.height);
-            setWidth(e.nativeEvent.layout.width);
+          if (!dimensions) {
+            setDimensions(e.nativeEvent.layout);
           }
         }}
       >

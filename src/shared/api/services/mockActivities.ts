@@ -48,6 +48,7 @@ const grid: ActivityDto = {
         drawingExample: '',
         drawingBackground:
           'https://mindlogger-applet-contents.s3.amazonaws.com/image/9qPz3D1kyzwD2pAAHpP5Hv.jpeg',
+        proportion: { enabled: false },
       },
       conditionalLogic: null,
     },
@@ -96,6 +97,7 @@ const vortex: ActivityDto = {
         drawingExample: '',
         drawingBackground:
           'https://mindlogger-applet-contents.s3.amazonaws.com/image/w93voaqZA7ZGoZryorBvQc.jpeg',
+        proportion: { enabled: false },
       },
       conditionalLogic: null,
     },

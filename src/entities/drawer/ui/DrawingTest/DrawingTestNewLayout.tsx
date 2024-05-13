@@ -3,32 +3,20 @@ import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
-import { BoxProps, XStack, YStack } from '@app/shared/ui';
-import { DrawingStreamEvent, StreamEventLoggable } from '@shared/lib';
+import { Dimensions } from '@app/shared/lib';
+import { XStack, YStack } from '@app/shared/ui';
 
-import DrawingBoard from './DrawingBoard';
+import { DrawingTestProps } from './DrawingTest';
 import {
-  DrawLine,
   DrawResult,
   getElementsDimensions,
   SvgFileManager,
   ELEMENTS_GAP,
-} from '../lib';
+  HEIGHT_REDUCTION_FACTOR,
+} from '../../lib';
+import DrawingBoard from '../DrawingBoard';
 
-type Props = {
-  value: { lines: DrawLine[]; fileName: string | null };
-  imageUrl: string | null;
-  backgroundImageUrl: string | null;
-  dimensions: {
-    height: number;
-    width: number;
-  };
-  onResult: (result: DrawResult) => void;
-  toggleScroll: (isScrollEnabled: boolean) => void;
-} & StreamEventLoggable<DrawingStreamEvent> &
-  BoxProps;
-
-const DrawingTest: FC<Props> = props => {
+const DrawingTest: FC<DrawingTestProps> = props => {
   const { value, backgroundImageUrl, imageUrl, onLog } = props;
 
   const onResult = async (result: DrawResult) => {
@@ -43,11 +31,23 @@ const DrawingTest: FC<Props> = props => {
     props.onResult(result);
   };
 
+  const dimensions: Dimensions = {
+    width: props.dimensions.width,
+    height: props.dimensions.height * HEIGHT_REDUCTION_FACTOR,
+  };
+
   const { exampleImageHeight, canvasContainerHeight, canvasSize } =
-    getElementsDimensions(props.dimensions, !!imageUrl);
+    getElementsDimensions(dimensions, !!imageUrl);
+
+  const containerHeight = exampleImageHeight + canvasSize;
 
   return (
-    <YStack {...props} alignItems="center" space={ELEMENTS_GAP}>
+    <YStack
+      {...props}
+      height={containerHeight}
+      alignItems="center"
+      space={ELEMENTS_GAP}
+    >
       {!!imageUrl && (
         <XStack jc="center" height={exampleImageHeight}>
           <CachedImage

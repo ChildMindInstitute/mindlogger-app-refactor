@@ -38,6 +38,7 @@ export type StabilityTrackerConfig = {
 type DrawingTestTestConfig = {
   imageUrl: string | null;
   backgroundImageUrl: string | null;
+  proportionEnabled: boolean;
 };
 
 type TextInputConfig = {

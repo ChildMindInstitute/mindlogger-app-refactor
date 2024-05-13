@@ -87,6 +87,7 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
     config: {
       imageUrl: dto.responseValues.drawingExample,
       backgroundImageUrl: dto.responseValues.drawingBackground,
+      proportionEnabled: !!dto.responseValues.proportion?.enabled,
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
