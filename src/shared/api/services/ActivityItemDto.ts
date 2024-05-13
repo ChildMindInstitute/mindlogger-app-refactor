@@ -345,6 +345,9 @@ type DrawingConfiguration = ButtonsConfiguration &
 type DrawingAnswerSettings = {
   drawingExample: string | null;
   drawingBackground: string | null;
+  proportion: {
+    enabled: boolean;
+  } | null;
 };
 
 type PhotoConfiguration = ButtonsConfiguration &

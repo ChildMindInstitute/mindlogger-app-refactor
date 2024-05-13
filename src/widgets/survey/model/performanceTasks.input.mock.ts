@@ -6,6 +6,7 @@ export const drawingInput: PipelineItem = {
   payload: {
     imageUrl: 'url',
     backgroundImageUrl: null,
+    proportionEnabled: false,
   },
 };
 
