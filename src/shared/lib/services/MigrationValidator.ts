@@ -3,6 +3,8 @@ import { SystemRecord } from '../records';
 
 export const MigrationValidator = {
   allMigrationHaveBeenApplied: (): boolean => {
-    return SystemRecord.getDataVersion() === MIGRATION_PROCESSOR_VERSION;
+    const dataVersion = SystemRecord.getDataVersion();
+
+    return !!dataVersion && dataVersion >= MIGRATION_PROCESSOR_VERSION;
   },
 };
