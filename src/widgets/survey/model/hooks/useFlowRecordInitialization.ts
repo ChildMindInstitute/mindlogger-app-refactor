@@ -120,6 +120,7 @@ export function useFlowRecordInitialization({
       step: 0,
       pipeline: buildPipeline(),
       isCompletedDueToTimer: false,
+      interruptionStep: null,
       context: {},
       flowName: flow?.name ?? null,
       scheduledDate: scheduledDate ?? null,

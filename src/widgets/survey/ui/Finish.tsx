@@ -10,9 +10,15 @@ import {
 } from '@app/entities/activity/lib';
 import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { AppletModel } from '@entities/applet';
-import { UploadObservable, useAppDispatch, useAppSelector } from '@shared/lib';
+import {
+  Logger,
+  UploadObservable,
+  useAppDispatch,
+  useAppSelector,
+} from '@shared/lib';
 import { Center, ImageBackground, Text, Button } from '@shared/ui';
 
+import { useFlowStorageRecord } from '../';
 import { FinishReason, useAutoCompletion } from '../model';
 import { ConstructCompletionsService } from '../model/services/ConstructCompletionsService';
 
@@ -24,7 +30,7 @@ type Props = {
   flowId?: string;
   order: number;
   isTimerElapsed: boolean;
-
+  interruptionStep: number | null;
   onClose: () => void;
 };
 
@@ -36,6 +42,7 @@ function FinishItem({
   eventId,
   order,
   isTimerElapsed,
+  interruptionStep,
   onClose,
 }: Props) {
   const { t } = useTranslation();
@@ -47,6 +54,12 @@ function FinishItem({
   const storeProgress: StoreProgress = useAppSelector(
     AppletModel.selectors.selectInProgressApplets,
   );
+
+  const { flowStorageRecord: flowState } = useFlowStorageRecord({
+    appletId,
+    eventId,
+    flowId,
+  });
 
   const {
     isCompleted,
@@ -64,6 +77,37 @@ function FinishItem({
 
   const finishReason: FinishReason = isTimerElapsed ? 'time-is-up' : 'regular';
 
+  const isCompletedAutomatically = finishReason === 'time-is-up';
+
+  async function completeInterruptedActivity(
+    constructCompletionService: ConstructCompletionsService,
+  ) {
+    const {
+      order: interruptedOrder,
+      activityId: interruptedActivityId,
+      activityName: interruptedActivityName,
+    } = flowState!.pipeline[interruptionStep!].payload;
+
+    const isInterruptedActivityLast = interruptedOrder === order;
+
+    Logger.log(
+      `[Finish.completeInterruptedActivity] Interrupted activityId=${interruptedActivityId}, name=${interruptedActivityName} order=${interruptedOrder}, isLast=${isInterruptedActivityLast}`,
+    );
+
+    if (!isInterruptedActivityLast) {
+      await constructCompletionService.construct({
+        activityId: interruptedActivityId,
+        activityName: interruptedActivityName,
+        appletId,
+        eventId,
+        flowId,
+        order: interruptedOrder,
+        completionType: 'intermediate',
+        isAutocompletion: isCompletedAutomatically,
+      });
+    }
+  }
+
   async function completeActivity() {
     const constructCompletionService = new ConstructCompletionsService(
       null,
@@ -73,6 +117,10 @@ function FinishItem({
       dispatch,
     );
 
+    if (isCompletedAutomatically) {
+      await completeInterruptedActivity(constructCompletionService);
+    }
+
     await constructCompletionService.construct({
       activityId,
       activityName,
@@ -81,7 +129,7 @@ function FinishItem({
       flowId,
       order,
       completionType: 'finish',
-      isAutocompletion: false,
+      isAutocompletion: isCompletedAutomatically,
     });
 
     const exclude: EntityPathParams = {

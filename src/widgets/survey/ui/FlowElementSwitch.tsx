@@ -26,6 +26,7 @@ type Props = {
   onComplete: (reason: 'regular' | 'idle') => void;
   event: ScheduleEvent;
   isTimerElapsed: boolean;
+  interruptionStep: number | null;
   entityStartedAt: number;
 } & FlowPipelineItem;
 
@@ -37,6 +38,7 @@ function FlowElementSwitch({
   onClose,
   onComplete,
   isTimerElapsed,
+  interruptionStep,
   entityStartedAt,
 }: Props) {
   const context = useMemo(
@@ -111,6 +113,7 @@ function FlowElementSwitch({
         <Finish
           {...payload}
           isTimerElapsed={isTimerElapsed}
+          interruptionStep={interruptionStep}
           onClose={onClose}
         />
       );

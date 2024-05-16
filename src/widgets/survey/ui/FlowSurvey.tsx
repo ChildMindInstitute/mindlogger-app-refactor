@@ -22,7 +22,7 @@ function FlowSurvey({
   eventId,
   onClose,
 }: Props) {
-  const { step, pipeline, isTimerElapsed } = useFlowState({
+  const { step, pipeline, isTimerElapsed, interruptionStep } = useFlowState({
     appletId,
     eventId,
     flowId: entityType === 'flow' ? entityId : undefined,
@@ -95,6 +95,7 @@ function FlowSurvey({
       event={event}
       entityStartedAt={entityStartedAt}
       isTimerElapsed={isTimerElapsed}
+      interruptionStep={interruptionStep}
       onClose={closeFlow}
       onBack={back}
       onComplete={complete}

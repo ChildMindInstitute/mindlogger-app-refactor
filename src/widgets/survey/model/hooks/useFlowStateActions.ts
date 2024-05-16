@@ -141,6 +141,7 @@ export function useFlowStateActions({
       ...record,
       step: pipeline.length - 1,
       isCompletedDueToTimer: true,
+      interruptionStep: record.step,
     });
   }
 
