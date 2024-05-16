@@ -16,6 +16,7 @@ export const progress: Progress = {
         startAt: new Date(2023, 1, 12, 14, 16, 17),
         endAt: new Date(2023, 1, 12, 15, 26, 17),
         availableTo: null,
+        entityName: 'mock-entity-name',
       },
     },
     afid1: {
@@ -32,6 +33,7 @@ export const progress: Progress = {
         currentActivityImage: null,
         totalActivitiesInPipeline: 2,
         availableTo: null,
+        entityName: 'mock-entity-name',
       },
     },
   },
