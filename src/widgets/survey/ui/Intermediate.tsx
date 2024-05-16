@@ -133,6 +133,7 @@ function Intermediate({
         eventId,
         pipelineActivityOrder: activitiesPassed,
         totalActivities,
+        flowName: flowName || '[Name unknown]',
       }),
     );
   }, [

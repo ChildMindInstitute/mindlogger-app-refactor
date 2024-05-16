@@ -56,6 +56,8 @@ export class ListItemsFactory {
         progressRecord.pipelineActivityOrder + 1;
       item.activityFlowDetails.numberOfActivitiesInFlow =
         progressRecord.totalActivitiesInPipeline;
+      item.activityFlowDetails.activityFlowName =
+        progressRecord.entityName || activityFlow.name;
     } else {
       activity = this.utility.activities.find(
         x => x.id === activityFlow.activityIds[0],
@@ -68,6 +70,21 @@ export class ListItemsFactory {
       item.activityFlowDetails.activityPositionInFlow = 1;
       item.activityFlowDetails.numberOfActivitiesInFlow =
         activityFlow.activityIds.length;
+    }
+  }
+
+  private populateActivityFields(
+    item: ActivityListItem,
+    activityEvent: EventEntity,
+  ) {
+    const isInProgress = this.utility.isInProgress(activityEvent);
+
+    if (isInProgress) {
+      const progressRecord = this.utility.getProgressRecord(
+        activityEvent,
+      ) as FlowProgress;
+
+      item.name = progressRecord.entityName || item.name;
     }
   }
 
@@ -93,6 +110,8 @@ export class ListItemsFactory {
 
     if (isFlow) {
       this.populateActivityFlowFields(item, eventActivity);
+    } else {
+      this.populateActivityFields(item, eventActivity);
     }
     return item;
   }

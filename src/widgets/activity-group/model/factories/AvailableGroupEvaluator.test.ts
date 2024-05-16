@@ -35,6 +35,7 @@ const getProgress = (startAt: Date, endAt: Date | null) => {
           startAt,
           endAt,
           availableTo: null,
+          entityName: 'mock-entity-name',
         },
       },
     },
