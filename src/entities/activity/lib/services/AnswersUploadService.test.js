@@ -110,6 +110,19 @@ describe('AnswersUploadService', () => {
         },
       ];
 
+      const mockIsFileUrl = jest.fn(url => {
+        if (
+          url === 'file:///path/to/image.jpg' ||
+          url === '/absolute/path/to/video.mp4' ||
+          url === 'file:///path/to/audio.m4a'
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      AnswersUploadService.isFileUrl = mockIsFileUrl;
+
       const result = AnswersUploadService.collectFileIds(answers);
 
       expect(result).toEqual([
@@ -207,6 +220,18 @@ describe('AnswersUploadService', () => {
       .fn()
       .mockResolvedValue('https://example.com/modified-answer.jpg');
     AnswersUploadService.processFileUpload = mockProcessFileUpload;
+
+    const mockIsFileUrl = jest.fn(url => {
+      if (
+        url === 'file:///path/to/image.jpg' ||
+        url === 'file:///path/to/video.mp4'
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    AnswersUploadService.isFileUrl = mockIsFileUrl;
 
     const modifiedBody = {
       answers,
@@ -409,13 +434,7 @@ describe('AnswersUploadService', () => {
         userActions: [
           {
             type: 'SET_ANSWER',
-            response: {
-              value: {
-                uri: 'file:///path/to/image.jpg',
-                fileName: 'image.jpg',
-                type: 'image/jpeg',
-              },
-            },
+            response: { value: { uri: 'file:///path/to/image.jpg' } },
           },
           { type: 'SET_ANSWER', response: { value: 'text answer' } },
         ],
@@ -449,13 +468,7 @@ describe('AnswersUploadService', () => {
         userActions: [
           {
             type: 'SET_ANSWER',
-            response: {
-              value: {
-                uri: 'file:///path/to/image.svg',
-                fileName: 'image.svg',
-                type: 'image/svg',
-              },
-            },
+            response: { value: { uri: 'file:///path/to/image.svg' } },
           },
         ],
       };
@@ -497,23 +510,11 @@ describe('AnswersUploadService', () => {
         userActions: [
           {
             type: 'SET_ANSWER',
-            response: {
-              value: {
-                uri: 'file:///path/to/image.jpg',
-                fileName: 'image.jpg',
-                type: 'image/jpg',
-              },
-            },
+            response: { value: { uri: 'file:///path/to/image.jpg' } },
           },
           {
             type: 'SET_ANSWER',
-            response: {
-              value: {
-                uri: 'file:///path/to/image.svg',
-                fileName: 'image.svg',
-                type: 'image/svg',
-              },
-            },
+            response: { value: { uri: 'file:///path/to/image.svg' } },
           },
         ],
       };
@@ -561,22 +562,12 @@ describe('AnswersUploadService', () => {
         userActions: [
           {
             type: 'SET_ANSWER',
-            response: {
-              value: {
-                uri: 'file:///path/to/image.jpg',
-                fileName: 'image.jpg',
-                type: 'image/jpg',
-              },
-            },
+            response: { value: { uri: 'file:///path/to/image.jpg' } },
           },
           {
             type: 'SET_ANSWER',
             response: {
-              value: {
-                uri: 'file:///path/to/image.svg',
-                fileName: 'image.svg',
-                type: 'image/svg',
-              },
+              value: { uri: 'file:///path/to/image.svg', type: 'image/svg' },
             },
           },
         ],
@@ -639,13 +630,7 @@ describe('AnswersUploadService', () => {
       userActions: [
         {
           type: 'SET_ANSWER',
-          response: {
-            value: {
-              uri: 'file:///path/to/image.jpg',
-              fileName: 'image.jpg',
-              type: 'image/jpg',
-            },
-          },
+          response: { value: { uri: 'file:///path/to/image.jpg' } },
         },
         { type: 'SET_ANSWER', response: { value: 'text answer' } },
       ],

@@ -5,23 +5,10 @@ import {
   callApiWithRetry,
   watchForConnectionLoss,
 } from '@app/shared/lib';
+import { MediaFile, MediaValue } from '@app/shared/ui';
 
 import httpService from './httpService';
 import { SuccessfulEmptyResponse, SuccessfulResponse } from '../types';
-
-export type FileDto = {
-  uri: string;
-  type: string;
-  fileName: string;
-};
-
-export type MediaFileDto = {
-  uri: string;
-  type: string;
-  fileName: string;
-  size: number;
-  fromLibrary: boolean;
-};
 
 export type TextAnswerDto = string;
 
@@ -39,13 +26,13 @@ export type RadioAnswerDto = number;
 
 export type StackedRadioAnswerDto = Array<string>;
 
-export type AudioAnswerDto = FileDto;
+export type AudioAnswerDto = MediaValue;
 
 export type AudioPlayerAnswerDto = boolean;
 
-export type PhotoAnswerDto = MediaFileDto;
+export type PhotoAnswerDto = MediaValue;
 
-export type VideoAnswerDto = MediaFileDto;
+export type VideoAnswerDto = MediaValue;
 
 export type FlankerAnswerRecordDto = {
   button_pressed: string;
@@ -73,7 +60,7 @@ export type DrawerAnswerDto = {
   lines: Array<DrawerLineDto>;
   svgString: string;
   width: number;
-} & FileDto;
+} & MediaFile;
 
 export type AbLogPointDto = {
   x: number;

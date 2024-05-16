@@ -1,5 +1,3 @@
-import { Dirs } from 'react-native-file-access';
-
 import { IS_ANDROID } from '../constants';
 
 export const isLocalFileUrl = (value: string) => {
@@ -11,13 +9,3 @@ export const isLocalFileUrl = (value: string) => {
 
 export const getFilePath = (path: string) =>
   IS_ANDROID ? `file://${path}` : path;
-
-export const evaluateFileCacheUri = (fileName: string) =>
-  `file://${Dirs.CacheDir}/${fileName}`;
-
-export const getFilenameFromLocalUri = (localUri: string) => {
-  const regex = /^file:\/\/(?:.*\/)?([^/]+)$/;
-  const match = localUri.match(regex);
-
-  return match ? match[1] : '';
-};

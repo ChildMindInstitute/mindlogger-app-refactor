@@ -21,7 +21,7 @@ export const drawingOutput = [
       ],
       svgString: '<svg></svg>',
       type: 'image/svg',
-      uri: '',
+      uri: 'file://test.svg',
       width: 100,
     },
   },

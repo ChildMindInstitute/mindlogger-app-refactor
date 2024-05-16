@@ -20,12 +20,6 @@ export const getStorageRecord = <T>(
   }
 };
 
-export const getStorageRecordKeys = (storageName: Storages): string[] => {
-  const regularStorage = createRegularStorage(storageName);
-
-  return regularStorage.getAllKeys();
-};
-
 export const upsertStorageRecord = <T>(
   storageName: Storages,
   key: string,

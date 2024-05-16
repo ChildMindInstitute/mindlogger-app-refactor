@@ -41,6 +41,7 @@ const DrawingTest: FC<Props> = props => {
 
     result.fileName = fileMeta.fileName;
     result.type = fileMeta.type;
+    result.uri = fileMeta.uri;
 
     props.onResult(result);
   };

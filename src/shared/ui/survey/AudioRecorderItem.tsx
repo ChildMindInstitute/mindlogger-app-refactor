@@ -15,7 +15,6 @@ import {
   isLocalFileUrl,
   IS_ANDROID,
   requestMicrophonePermissions,
-  Logger,
 } from '@shared/lib';
 import { StopIcon, MicrophoneIcon, XStack, Text, YStack } from '@shared/ui';
 
@@ -25,6 +24,7 @@ const audioSetConfig: AudioSet = {
 const androidCacheDir = Dirs.CacheDir;
 
 type Response = {
+  uri: string;
   fileName: string;
   type: string;
 };
@@ -133,37 +133,22 @@ const AudioRecorderItem: FC<Props> = ({
       setIsRecording(false);
 
       if (!isLocalFileUrl(fullPath)) {
-        throw Error(
-          `[AudioRecorderItem]: Provided path "${fullPath}" does not correspond application format requirements:
-          /^(file:\/\/|\/).*\/[^\/]+?\.(jpg|jpeg|png|gif|mp4|m4a|mov|MOV|svg|mpeg)$/
-          `,
-        );
+        return;
       }
 
-      const fileNameRegex = /^file:\/\/(?:.*\/)?([^/]+)$/;
-
-      const match = fullPath.match(fileNameRegex);
-
-      if (!match) {
-        throw Error(
-          `[AudioRecorderItem]: File name can not be retrieved from path: ${fullPath}`,
-        );
-      }
-
-      const fileName = match[1];
-      const fileExtension = fileName.split('.')[1];
+      const name = fullPath
+        ? fullPath.replace(/^(?:[^\/]*\/)*/, '').split('.')[0]
+        : uuidv4();
 
       const response = {
-        type: `audio/${fileExtension}`,
-        fileName,
+        uri: fullPath,
+        type: `audio/${IS_ANDROID ? 'm4a' : 'mp4'}`,
+        fileName: `${name}.${IS_ANDROID ? 'm4a' : 'mp4'}`,
       };
 
       onFinish(response);
-    } catch (error) {
-      Logger.error(
-        `[AudioRecorderItem]: Error occurred during the recording process:
-        ${error}`,
-      );
+    } catch (e) {
+      console.error(e);
     }
   };
 

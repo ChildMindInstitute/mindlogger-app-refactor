@@ -2,11 +2,7 @@ import { FileSystem } from 'react-native-file-access';
 
 import { ActivityRecordKeyParams } from '@app/abstract/lib';
 import { AnswerDto, ObjectAnswerDto } from '@app/shared/api';
-import {
-  createSecureStorage,
-  evaluateFileCacheUri,
-  Logger,
-} from '@app/shared/lib';
+import { createSecureStorage, Logger } from '@app/shared/lib';
 import { MediaFile, MediaValue } from '@app/shared/ui';
 
 type EntityRecord = {
@@ -16,9 +12,9 @@ type EntityRecord = {
 export const activityStorage = createSecureStorage('activity_progress-storage');
 
 type Result = {
-  cleanUp: (keyParams: ActivityRecordKeyParams) => Promise<void>;
-  cleanUpByStorageKey: (key: string) => Promise<void>;
-  cleanUpByAnswers: (answers: AnswerDto[]) => Promise<void>;
+  cleanUp: (keyParams: ActivityRecordKeyParams) => void;
+  cleanUpByStorageKey: (key: string) => void;
+  cleanUpByAnswers: (answers: AnswerDto[]) => void;
 };
 
 const createMediaFilesCleaner = (): Result => {
@@ -37,10 +33,8 @@ const createMediaFilesCleaner = (): Result => {
     for (const recordId in entityRecord.answers) {
       const record = entityRecord.answers[recordId]?.answer;
 
-      if (record?.fileName) {
-        const fileUri = evaluateFileCacheUri(record.fileName);
-
-        urlsToProcess.push(fileUri);
+      if (record?.uri) {
+        urlsToProcess.push(record.uri);
       }
     }
 
@@ -73,30 +67,27 @@ const createMediaFilesCleaner = (): Result => {
   };
 
   const cleanUpByAnswers = async (answers: AnswerDto[]) => {
-    for await (const answer of answers) {
-      try {
+    try {
+      answers.filter(Boolean).forEach(async answer => {
         const { value: answerValue } = answer as ObjectAnswerDto;
 
         const mediaValue = answerValue as MediaValue;
 
-        if (mediaValue?.fileName) {
-          const fileUri = evaluateFileCacheUri(mediaValue.fileName);
-          const fileExists = await FileSystem.exists(fileUri);
+        if (mediaValue?.uri) {
+          const fileExists = await FileSystem.exists(mediaValue.uri);
 
           if (fileExists) {
-            await FileSystem.unlink(fileUri);
+            await FileSystem.unlink(mediaValue.uri);
 
-            Logger.info('[MediaFilesCleaner.cleanUp]: completed');
+            console.info('[MediaFilesCleaner.cleanUp]: completed');
           }
         }
-      } catch (error) {
-        Logger.warn(
-          `[MediaFilesCleaner.cleanUp]: Error occurred while deleting the file from answer:
-          ${JSON.stringify(answer, null, 2)}
-
-          Error: ${error as string}`,
-        );
-      }
+      });
+    } catch (error) {
+      console.warn(
+        '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',
+        error,
+      );
     }
   };
 

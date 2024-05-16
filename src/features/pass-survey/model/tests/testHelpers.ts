@@ -166,6 +166,7 @@ export const getDrawerItem = (id: string, index = 1) => {
 export const getDrawerResponse = (index: number = 1): DrawingTestResponse => {
   return {
     fileName: 'mock-file-name-' + index,
+    uri: 'mock-uri-' + index,
     width: 308,
     type: 'svg',
     svgString: `<svg height="${200 + index}" width="${
