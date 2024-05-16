@@ -26,7 +26,6 @@ import {
   GeolocationAnswerDto,
   NumberSelectAnswerDto,
   PhotoAnswerDto,
-  RadioAnswerDto,
   SliderAnswerDto,
   StackedCheckboxAnswerDto,
   StackedRadioAnswerDto,
@@ -116,7 +115,7 @@ const mapFlankerAnswersToDto = (
     .filter(x => !!answers[x])
     .map(x => convertToAnswerDto('Flanker', answers[x]));
 
-  for (let practiceAnswerDto of restOfAnswerDtos) {
+  for (const practiceAnswerDto of restOfAnswerDtos) {
     const records = (practiceAnswerDto as ObjectAnswerDto)
       .value as Array<FlankerAnswerRecordDto>;
 
@@ -149,7 +148,7 @@ function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
 
   return {
     ...(radioValue && {
-      value: radioValue.value as RadioAnswerDto,
+      value: radioValue.value,
     }),
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
@@ -521,9 +520,7 @@ export function mapAnswersToAlerts(
 
     return alerts as AnswerAlertsDto;
   } catch (error) {
-    Logger.warn(
-      '[mapAnswersToAlerts]: Error occurred: \n\n' + error!.toString(),
-    );
+    Logger.warn(`[mapAnswersToAlerts]: Error occurred: \n\n${error}`);
     throw error;
   }
 }

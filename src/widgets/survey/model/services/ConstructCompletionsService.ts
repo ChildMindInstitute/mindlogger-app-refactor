@@ -1,4 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
+import { addMilliseconds } from 'date-fns';
 
 import { StoreProgress } from '@app/abstract/lib';
 import { IPushToQueue } from '@app/entities/activity';
@@ -51,6 +52,7 @@ type ConstructForIntermediateInput = {
   eventId: string;
   order: number;
   activityName: string;
+  isAutocompletion: boolean;
 };
 
 type ConstructForFinishInput = {
@@ -60,14 +62,19 @@ type ConstructForFinishInput = {
   eventId: string;
   order: number;
   activityName: string;
+  isAutocompletion: boolean;
 };
+
+export type CompletionType = 'intermediate' | 'finish';
 
 export type ConstructInput = (
   | ConstructForIntermediateInput
   | ConstructForFinishInput
 ) & {
-  completionType: 'intermediate' | 'finish';
+  completionType: CompletionType;
 };
+
+const DistinguishInterimAndFinishLag = 1; // For correct sort on BE, Admin, TODO
 
 export class ConstructCompletionsService {
   private saveActivitySummary: SaveActivitySummary | null;
@@ -90,20 +97,36 @@ export class ConstructCompletionsService {
     this.dispatch = dispatch;
   }
 
+  private getLogDates(
+    evaluatedEndAt: number,
+    availableTo: number | null,
+  ): string {
+    const logEndAt: string = new Date(evaluatedEndAt).toUTCString();
+    const logAvailableTo = !availableTo
+      ? 'not set'
+      : new Date(availableTo).toUTCString();
+
+    return `evaluatedEndAt = ${logEndAt}, availableTo = ${logAvailableTo}`;
+  }
+
   private logCompletion(
     activityName: string,
     activityId: string,
     flowId: string | undefined,
     appletName: string,
     appletId: string,
+    evaluatedEndAt: number,
+    availableTo: number | null,
   ) {
+    const logDates = this.getLogDates(evaluatedEndAt, availableTo);
+
     Logger.log(
-      `[ConstructCompletionsService]: Activity "${activityName}|${activityId}" completed, applet "${appletName}|${appletId}"`,
+      `[ConstructCompletionsService]: Activity "${activityName}|${activityId}" completed, applet "${appletName}|${appletId}, ${logDates}"`,
     );
 
     if (flowId) {
       Logger.log(
-        `[ConstructCompletionsService]: Flow "${flowId}" completed, applet "${appletName}|${appletId}"`,
+        `[ConstructCompletionsService]: Flow "${flowId}" completed, applet "${appletName}|${appletId}, ${logDates}"`,
       );
     }
   }
@@ -117,10 +140,28 @@ export class ConstructCompletionsService {
     }: ConstructForIntermediateInput,
     flowName: string,
     appletName: string,
+    evaluatedEndAt: number,
+    availableTo: number | null,
   ) {
+    const logDates = this.getLogDates(evaluatedEndAt, availableTo);
+
     Logger.log(
-      `[ConstructCompletionsService]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" completed, applet "${appletName}|${appletId}"`,
+      `[ConstructCompletionsService]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" completed, applet "${appletName}|${appletId}, ${logDates}"`,
     );
+  }
+
+  private evaluateEndAt(
+    completionType: CompletionType,
+    availableTo: number | null,
+    isAutocompletion: boolean,
+  ): number {
+    if (!isAutocompletion || !availableTo) {
+      return getNow().getTime();
+    }
+
+    return completionType === 'intermediate'
+      ? availableTo
+      : addMilliseconds(availableTo, DistinguishInterimAndFinishLag).getTime();
   }
 
   private getAppletProperties(appletId: string): {
@@ -182,7 +223,7 @@ export class ConstructCompletionsService {
       activityName,
     );
 
-    this.saveActivitySummary!({
+    this.saveActivitySummary({
       activityId,
       order,
       alerts: summaryAlerts,
@@ -201,8 +242,15 @@ export class ConstructCompletionsService {
         JSON.stringify(input, null, 2),
     );
 
-    const { appletId, flowId, activityId, eventId, order, activityName } =
-      input;
+    const {
+      appletId,
+      flowId,
+      activityId,
+      eventId,
+      order,
+      activityName,
+      isAutocompletion,
+    } = input;
 
     const activityStorageRecord = getActivityRecord(
       appletId,
@@ -245,13 +293,25 @@ export class ConstructCompletionsService {
       eventId,
     )!;
 
-    this.logIntermediate(input, flowName!, appletName);
+    const evaluatedEndAt = this.evaluateEndAt(
+      'intermediate',
+      progressRecord.availableTo,
+      isAutocompletion,
+    );
+
+    this.logIntermediate(
+      input,
+      flowName!,
+      appletName,
+      evaluatedEndAt,
+      progressRecord.availableTo,
+    );
 
     const submitId = getExecutionGroupKey(progressRecord);
 
     this.pushToQueueService.push({
       appletId,
-      createdAt: getNow().getTime(),
+      createdAt: evaluatedEndAt,
       version: activityStorageRecord.appletVersion,
       answers: modifiedAnswers,
       userActions: mapUserActionsToDto(actions),
@@ -262,7 +322,7 @@ export class ConstructCompletionsService {
       executionGroupKey: submitId,
       userIdentifier: getUserIdentifier(items, recordAnswers),
       startTime: getActivityStartAt(progressRecord)!,
-      endTime: getNow().getTime(),
+      endTime: evaluatedEndAt,
       scheduledTime: scheduledDate,
       logActivityName: activityName,
       logCompletedAt: getNow().toUTCString(),
@@ -289,8 +349,15 @@ export class ConstructCompletionsService {
         JSON.stringify(input, null, 2),
     );
 
-    const { appletId, flowId, activityId, eventId, order, activityName } =
-      input;
+    const {
+      appletId,
+      flowId,
+      activityId,
+      eventId,
+      order,
+      activityName,
+      isAutocompletion,
+    } = input;
 
     const entityId = flowId ? flowId : activityId;
 
@@ -333,7 +400,21 @@ export class ConstructCompletionsService {
       this.storeProgress,
     )!;
 
-    this.logCompletion(activityName, activityId, flowId, appletName, appletId);
+    const evaluatedEndAt = this.evaluateEndAt(
+      'finish',
+      progressRecord.availableTo,
+      isAutocompletion,
+    );
+
+    this.logCompletion(
+      activityName,
+      activityId,
+      flowId,
+      appletName,
+      appletId,
+      evaluatedEndAt,
+      progressRecord.availableTo,
+    );
 
     const { scheduledDate } = getFlowRecord(flowId, appletId, eventId)!;
 
@@ -341,7 +422,7 @@ export class ConstructCompletionsService {
 
     this.pushToQueueService.push({
       appletId,
-      createdAt: getNow().getTime(),
+      createdAt: evaluatedEndAt,
       version: activityStorageRecord.appletVersion,
       answers: modifiedAnswers,
       userActions,
@@ -352,7 +433,7 @@ export class ConstructCompletionsService {
       executionGroupKey: submitId,
       userIdentifier,
       startTime: getActivityStartAt(progressRecord)!,
-      endTime: getNow().getTime(),
+      endTime: evaluatedEndAt,
       scheduledTime: scheduledDate,
       logActivityName: activityName,
       logCompletedAt: getNow().toUTCString(),
@@ -368,6 +449,7 @@ export class ConstructCompletionsService {
         appletId,
         eventId,
         entityId,
+        endAt: evaluatedEndAt,
       }),
     );
 

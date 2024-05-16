@@ -195,7 +195,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
     );
   });
 
-  let simpleTestParameters = [
+  const simpleTestParameters = [
     { expectedValue: 517, calculationType: 'sum' },
     { expectedValue: 517 / 3, calculationType: 'average' },
     { expectedValue: 80.78125, calculationType: 'percentage' },

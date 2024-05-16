@@ -93,7 +93,7 @@ const createNotificationRefreshService = (
 
     const allNotificationDescribers: NotificationDescriber[] = [];
 
-    for (let applet of applets) {
+    for (const applet of applets) {
       const detailsResponse = getDataFromQuery<AppletDetailsResponse>(
         getAppletDetailsKey(applet.id),
         queryClient,
@@ -141,7 +141,7 @@ const createNotificationRefreshService = (
 
       const calculator = EventModel.ScheduledDateCalculator;
 
-      for (let eventEntity of entityEvents) {
+      for (const eventEntity of entityEvents) {
         const date = calculator.calculate(eventEntity.event);
         eventEntity.event.scheduledAt = date;
       }
@@ -214,8 +214,7 @@ const createNotificationRefreshService = (
       );
     } catch (error) {
       logger.log(
-        '[NotificationRefreshService.refresh]: Notifications rescheduling failed\n\n' +
-          error!.toString(),
+        `[NotificationRefreshService.refresh]: Notifications rescheduling failed\n\n${error}`,
       );
     } finally {
       NotificationManager.mutex.release();

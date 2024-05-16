@@ -37,7 +37,7 @@ function NotificationManager() {
       notificationsToSchedule,
     );
 
-    for (let notification of triggerNotifications) {
+    for (const notification of triggerNotifications) {
       await NotificationScheduler.scheduleLocalNotification(notification);
     }
 
@@ -126,7 +126,7 @@ function NotificationManager() {
       }
     };
 
-    for (let notification of notificationsForEventId) {
+    for (const notification of notificationsForEventId) {
       cancelNotificationForEventEntityInTimeInterval(notification);
     }
   }

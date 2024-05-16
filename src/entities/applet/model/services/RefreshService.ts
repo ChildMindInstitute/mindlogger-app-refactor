@@ -150,7 +150,7 @@ class RefreshService implements IRefreshService {
 
     const unsuccessfulApplets: UnsuccessfulApplet[] = [];
 
-    for (let appletDto of appletDtos) {
+    for (const appletDto of appletDtos) {
       try {
         await this.refreshAppletService.refreshApplet(
           appletDto,
@@ -222,8 +222,7 @@ class RefreshService implements IRefreshService {
       this.logger.log('[RefreshService.refresh]: Completed');
     } catch (error) {
       this.logger.warn(
-        '[RefreshService.process]: Error occurred:\nInternal error:\n\n' +
-          error!.toString(),
+        `[RefreshService.process]: Error occurred:\nInternal error:\n\n${error}`,
       );
     } finally {
       RefreshService.mutex.release();

@@ -47,7 +47,7 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
     const activityItems: Array<ActivityListItem> = [];
 
-    for (let eventActivity of filtered) {
+    for (const eventActivity of filtered) {
       const item = this.itemsFactory.createProgressItem(eventActivity);
 
       activityItems.push(item);
@@ -71,7 +71,7 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
     const activityItems: Array<ActivityListItem> = [];
 
-    for (let eventActivity of filtered) {
+    for (const eventActivity of filtered) {
       const item = this.itemsFactory.createAvailableItem(eventActivity);
 
       activityItems.push(item);
@@ -95,7 +95,7 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
     const activityItems: Array<ActivityListItem> = [];
 
-    for (let eventActivity of filtered) {
+    for (const eventActivity of filtered) {
       const item = this.itemsFactory.createScheduledItem(eventActivity);
 
       activityItems.push(item);

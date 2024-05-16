@@ -1,9 +1,8 @@
 import { FC } from 'react';
-import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
-import { Dimensions } from '@app/shared/lib';
+import { Dimensions, useImageDimensions } from '@app/shared/lib';
 import { XStack, YStack } from '@app/shared/ui';
 
 import { DrawingTestProps } from './DrawingTest';
@@ -20,7 +19,7 @@ const DrawingTest: FC<DrawingTestProps> = props => {
   const { value, backgroundImageUrl, imageUrl, onLog } = props;
 
   const onResult = async (result: DrawResult) => {
-    let fileName = value.fileName;
+    const fileName = value.fileName;
 
     const fileMeta = SvgFileManager.getFileMeta(fileName);
 
@@ -36,8 +35,13 @@ const DrawingTest: FC<DrawingTestProps> = props => {
     height: props.dimensions.height * HEIGHT_REDUCTION_FACTOR,
   };
 
+  const {
+    dimensions: exampleImageDimensions,
+    isLoading: isEvaluatingDimensions,
+  } = useImageDimensions(imageUrl);
+
   const { exampleImageHeight, canvasContainerHeight, canvasSize } =
-    getElementsDimensions(dimensions, !!imageUrl);
+    getElementsDimensions(props.dimensions, exampleImageDimensions);
 
   const containerHeight = exampleImageHeight + canvasSize;
 
@@ -49,17 +53,17 @@ const DrawingTest: FC<DrawingTestProps> = props => {
       space={ELEMENTS_GAP}
     >
       {!!imageUrl && (
-        <XStack jc="center" height={exampleImageHeight}>
+        <XStack height={exampleImageHeight}>
           <CachedImage
             source={imageUrl}
-            style={styles.exampleImage}
+            style={{ height: exampleImageHeight, width: canvasSize }}
             resizeMode="contain"
           />
         </XStack>
       )}
 
       <YStack height={canvasContainerHeight}>
-        {!!canvasSize && (
+        {!!canvasSize && !isEvaluatingDimensions && (
           <XStack width={canvasSize} height={canvasSize}>
             {!!backgroundImageUrl && (
               <CachedImage
@@ -87,13 +91,6 @@ const canvasStyles = (canvasSize: number) =>
     position: 'absolute',
     width: canvasSize,
     height: canvasSize,
-  } as const);
-
-const styles = StyleSheet.create({
-  exampleImage: {
-    width: '100%',
-    height: '100%',
-  },
-});
+  }) as const;
 
 export default DrawingTest;

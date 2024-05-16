@@ -40,7 +40,7 @@ export class ScheduledDateCalculator {
   ): Date | null {
     const today = startOfDay(this.getNow());
 
-    let date = new Date(selectedDate!);
+    let date = new Date(selectedDate);
 
     if (selectedDate > today) {
       let months = 0;
@@ -82,13 +82,13 @@ export class ScheduledDateCalculator {
     const selectedMonth = specificDay.getMonth();
     const selectedDay = specificDay.getDate();
 
-    const result = new Date(selectedYear!, selectedMonth!, selectedDay!);
+    const result = new Date(selectedYear, selectedMonth, selectedDay);
     this.setTime(result, availability);
     return result;
   }
 
   private calculateScheduledAt(event: ScheduleEvent): Date | null {
-    let { availability, selectedDate } = event;
+    const { availability, selectedDate } = event;
 
     const now = this.getNow();
 
@@ -116,7 +116,7 @@ export class ScheduledDateCalculator {
       return this.calculateForMonthly(selectedDate!, availability);
     }
 
-    let parseInput: EventParseInput = {};
+    const parseInput: EventParseInput = {};
 
     if (availability.periodicityType === PeriodicityType.Weekly) {
       const dayOfWeek = selectedDate!.getDay();
@@ -134,7 +134,7 @@ export class ScheduledDateCalculator {
       parseInput.end = endOfDay.getTime();
     }
 
-    const parsedSchedule = Parse.schedule(parseInput!);
+    const parsedSchedule = Parse.schedule(parseInput);
 
     const fromDate = Day.fromDate(now);
 

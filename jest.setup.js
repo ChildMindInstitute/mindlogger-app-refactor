@@ -240,3 +240,7 @@ jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   useFocusEffect: jest.fn(),
 }));
+
+jest.mock('@launchdarkly/react-native-client-sdk', () =>
+  jest.mock('@launchdarkly/react-native-client-sdk'),
+);

@@ -32,7 +32,7 @@ jest.mock('@app/shared/lib/constants', () => ({
 }));
 
 describe('AlertsExtractor: penetration tests', () => {
-  let extractor: AlertsExtractor = new AlertsExtractor({
+  const extractor: AlertsExtractor = new AlertsExtractor({
     log: jest.fn(),
     warn: jest.fn(),
     error: jest.fn(),

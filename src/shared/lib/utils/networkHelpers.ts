@@ -56,6 +56,7 @@ export const watchForConnectionLoss = (
   mode: 'ping' | 'checkNetworkStatus' = 'ping',
 ) => {
   const abortController = new AbortController();
+  // eslint-disable-next-line prefer-const
   let intervalId: TimeoutId;
 
   const checkWithAbort = () => {

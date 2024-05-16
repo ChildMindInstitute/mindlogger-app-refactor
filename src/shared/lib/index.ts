@@ -19,3 +19,4 @@ export * from './records';
 export * from './analytics';
 export * from './redux-state';
 export * from './observables';
+export * from './featureFlags';

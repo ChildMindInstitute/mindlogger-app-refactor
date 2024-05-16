@@ -16,7 +16,7 @@ export const collectAppletRecordImageUrls = (
     return result;
   } catch (error) {
     throw new Error(
-      '[collectAppletRecordImageUrls]: Error occurred:\n\n' + error!.toString(),
+      `[collectAppletRecordImageUrls]: Error occurred:\n\n${error}`,
     );
   }
 };
@@ -34,7 +34,7 @@ export const collectAppletDetailsImageUrls = (
       applet.theme.backgroundImage &&
       result.push(applet.theme.backgroundImage);
 
-    for (let activity of applet.activities) {
+    for (const activity of applet.activities) {
       activity.splashScreen && result.push(activity.splashScreen);
       activity.image && result.push(activity.image);
     }
@@ -42,8 +42,7 @@ export const collectAppletDetailsImageUrls = (
     return result;
   } catch (error) {
     throw new Error(
-      '[collectAppletDetailsImageUrls]: Error occurred:\n\n' +
-        error!.toString(),
+      `[collectAppletDetailsImageUrls]: Error occurred:\n\n${error}`,
     );
   }
 };
@@ -54,16 +53,16 @@ const collectActivityDetailsImageUrlsInternal = (activity: ActivityDto) => {
   activity.image && result.push(activity.image);
   activity.splashScreen && result.push(activity.splashScreen);
 
-  for (let item of activity.items) {
+  for (const item of activity.items) {
     switch (item.responseType) {
       case 'singleSelect': {
-        for (let option of item.responseValues.options) {
+        for (const option of item.responseValues.options) {
           option.image && result.push(option.image);
         }
         break;
       }
       case 'multiSelect': {
-        for (let option of item.responseValues.options) {
+        for (const option of item.responseValues.options) {
           option.image && result.push(option.image);
         }
         break;
@@ -83,26 +82,26 @@ const collectActivityDetailsImageUrlsInternal = (activity: ActivityDto) => {
         break;
       }
       case 'sliderRows': {
-        for (let responseValue of item.responseValues.rows) {
+        for (const responseValue of item.responseValues.rows) {
           responseValue.minImage && result.push(responseValue.minImage);
           responseValue.maxImage && result.push(responseValue.maxImage);
         }
         break;
       }
       case 'singleSelectRows': {
-        for (let row of item.responseValues.rows) {
+        for (const row of item.responseValues.rows) {
           row.rowImage && result.push(row.rowImage);
         }
-        for (let option of item.responseValues.options) {
+        for (const option of item.responseValues.options) {
           option.image && result.push(option.image);
         }
         break;
       }
       case 'multiSelectRows': {
-        for (let row of item.responseValues.rows) {
+        for (const row of item.responseValues.rows) {
           row.rowImage && result.push(row.rowImage);
         }
-        for (let option of item.responseValues.options) {
+        for (const option of item.responseValues.options) {
           option.image && result.push(option.image);
         }
         break;
@@ -117,8 +116,7 @@ export const collectActivityDetailsImageUrls = (activity: ActivityDto) => {
     return collectActivityDetailsImageUrlsInternal(activity);
   } catch (error) {
     throw new Error(
-      '[collectActivityDetailsImageUrls]: Error occurred:\n\n' +
-        error!.toString(),
+      `[collectActivityDetailsImageUrls]: Error occurred:\n\n${error}`,
     );
   }
 };
