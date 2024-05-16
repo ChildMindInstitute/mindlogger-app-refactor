@@ -355,8 +355,7 @@ function convertToDrawingAnswer(answer: Answer): AnswerDto {
     width: drawerResponse.width,
     fileName: drawerResponse.fileName,
     type: drawerResponse.type,
-    /** URI will be assigned during the uploading phase */
-    uri: '',
+    uri: drawerResponse.uri,
     lines: drawerResponse.lines.map<DrawerLineDto>(x => ({
       startTime: x.startTime,
       points: x.points,

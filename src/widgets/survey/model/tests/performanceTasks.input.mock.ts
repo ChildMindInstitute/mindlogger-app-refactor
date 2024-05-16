@@ -38,6 +38,7 @@ export const ABTrailsInput: PipelineItem = {
 const mediaFile = {
   fileName: 'test.svg',
   type: 'image/svg',
+  uri: 'file://test.svg',
 };
 
 export const drawingAnswer: Answer = {

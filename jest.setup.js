@@ -1,6 +1,19 @@
 import { jest } from '@jest/globals';
 import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
 
+jest.mock('react-native-file-access', () => {
+  return {
+    FileSystem: {
+      exists: jest.fn(uri => uri.endsWith('.jpg')), // Mock exists() to return true for .jpg files
+    },
+    Dirs: {
+      MainBundleDir: () => {},
+      CacheDir: () => {},
+      DocumentDir: () => {},
+    },
+  };
+});
+
 jest.mock('react-native-reanimated', () => {
   const MockAnimation = jest.fn().mockImplementation(() => {
     const instance = {
@@ -195,18 +208,6 @@ jest.mock('react-native-webview', () => {
     default: WebView,
     __esModule: true,
   };
-});
-
-jest.mock('react-native', () => {
-  const RN = jest.requireActual('react-native');
-
-  RN.NativeModules.ImageConversionModule = {
-    convertHeicToJpg: jest.fn(path =>
-      Promise.resolve(path.replace('heic', 'jpg')),
-    ),
-  };
-
-  return RN;
 });
 
 jest.mock('@app/shared/lib/constants', () => ({

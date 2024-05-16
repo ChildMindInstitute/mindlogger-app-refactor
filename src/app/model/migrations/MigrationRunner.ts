@@ -19,7 +19,7 @@ export class MigrationRunner implements IMigrationRunner {
     inboundVersion: number,
   ): number[] {
     return Object.keys(this.migrations)
-      .map(key => parseInt(key, 10))
+      .map(parseInt)
       .filter(version => currentVersion >= version && version > inboundVersion)
       .sort((a, b) => a - b);
   }
