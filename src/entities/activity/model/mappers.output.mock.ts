@@ -561,6 +561,7 @@ export const drawingOutput: ActivityDetails = {
       config: {
         backgroundImageUrl: null,
         imageUrl: null,
+        proportionEnabled: false,
       },
       hasAlert: false,
       hasScore: false,

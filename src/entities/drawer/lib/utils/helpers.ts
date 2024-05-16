@@ -1,4 +1,4 @@
-import { ImageDimensions } from '@app/shared/lib';
+import { Dimensions, ImageDimensions } from '@app/shared/lib';
 
 import {
   CANVAS_HEIGHT_FACTOR,
@@ -23,11 +23,6 @@ export const getChunkedPointsAsStrings = (lines: DrawLine[]) => {
     }
   }
   return results;
-};
-
-export type Dimensions = {
-  width: number;
-  height: number;
 };
 
 const getCanvasSize = (

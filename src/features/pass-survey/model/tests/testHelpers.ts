@@ -158,6 +158,7 @@ export const getDrawerItem = (id: string, index = 1) => {
     payload: {
       backgroundImageUrl: null,
       imageUrl: `http://www.mock-image-${index}.jpg`,
+      proportionEnabled: false,
     },
   };
   return result;

@@ -470,7 +470,11 @@ export const drawingInput: ActivityDto = {
       question:
         "\r\n\r\n![''](https://mindlogger-applet-contents.s3.amazonaws.com/image/pbcpVTjSUKGybNARUBapMB.png =250x250)\r\n\r\ndrawing",
       responseType: 'drawing',
-      responseValues: { drawingExample: null, drawingBackground: null },
+      responseValues: {
+        drawingExample: null,
+        drawingBackground: null,
+        proportion: { enabled: false },
+      },
       config: {
         removeBackButton: false,
         skippableItem: false,

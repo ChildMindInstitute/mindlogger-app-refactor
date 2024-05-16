@@ -102,7 +102,7 @@ export class MigrationProcessor {
     }
 
     if (inboundVersion > currentVersion) {
-      Logger.warn('[MigrationRunner]: Downgrading version is not supported');
+      Logger.info('[MigrationRunner]: Downgrading version is not supported');
       return;
     }
 

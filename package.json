@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-mobile",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": true,
   "scripts": {
     "android": "yarn android:dev",
@@ -89,7 +89,7 @@
     "react-native": "0.73.4",
     "react-native-audio-recorder-player": "^3.6.5",
     "react-native-autoheight-webview": "^1.6.5",
-    "react-native-background-fetch": "^4.2.1",
+    "react-native-background-fetch": "^4.2.5",
     "react-native-config": "^1.5.1",
     "react-native-device-info": "^10.12.0",
     "react-native-file-access": "^3.0.4",
