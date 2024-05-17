@@ -7,6 +7,7 @@ import {
   getMidnightDateInMs,
   getMsFromMinutes,
   getNow,
+  TIME_PICKER_FORMAT_PLACEHOLDER,
 } from '@shared/lib';
 import { AlarmIcon, DateTimePicker } from '@shared/ui';
 
@@ -40,7 +41,7 @@ const TimePickerItem: FC<Props> = ({ value, onChange }) => {
       dateDisplayFormat="hh:mm aa"
       mode="time"
       iconAfter={<AlarmIcon color={colors.lightGrey} size={15} />}
-      placeholder="HH:MM AM/PM"
+      placeholder={TIME_PICKER_FORMAT_PLACEHOLDER}
     />
   );
 };
