@@ -8,16 +8,3 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
-
-# [react-native-background-fetch]
--keep class com.transistorsoft.rnbackgroundfetch.HeadlessTask { *; }
-
-# [react-native-skia]
--keep class com.shopify.reactnative.skia.** { *; }
-
-# [HERMES]
--keep class com.facebook.hermes.unicode.** { *; }
--keep class com.facebook.jni.** { *; }
-
-# [react-native-config]
--keep class lab.childmindinstitute.data.BuildConfig { *; }
