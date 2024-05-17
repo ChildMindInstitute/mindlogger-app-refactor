@@ -11,6 +11,7 @@ import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcess
 import { AppletModel } from '@app/entities/applet';
 import { QueryDataUtils } from '@app/shared/api';
 import {
+  InterimSubmitObservable,
   Logger,
   UploadObservable,
   useAppDispatch,
@@ -119,7 +120,7 @@ function Intermediate({
     const appletName = getAppletName();
 
     Logger.log(
-      `[Intermediate.completeActivity]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivityPayload.activityName}|${nextActivityPayload.activityId}", applet "${appletName}|${appletId}"`,
+      `[Intermediate.changeActivity]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivityPayload.activityName}|${nextActivityPayload.activityId}", applet "${appletName}|${appletId}"`,
     );
 
     dispatch(
@@ -153,6 +154,8 @@ function Intermediate({
   ]);
 
   async function completeActivity() {
+    InterimSubmitObservable.processing = true;
+
     const constructCompletionService = new ConstructCompletionsService(
       saveActivitySummary,
       queryClient,
@@ -191,6 +194,7 @@ function Intermediate({
 
   useEffect(() => {
     UploadObservable.reset();
+    InterimSubmitObservable.reset();
   }, []);
 
   return (

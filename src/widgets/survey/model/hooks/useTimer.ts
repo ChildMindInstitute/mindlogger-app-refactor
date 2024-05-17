@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { useRef } from 'react';
 
+import { TimerCallbackFeedback } from '@app/abstract/lib';
 import { HourMinute, getMsFromHours, getMsFromMinutes } from '@app/shared/lib';
 import { AppTimer } from '@app/shared/lib';
 
 type UseTimerInput = {
-  onFinish: () => void;
+  onFinish: () => TimerCallbackFeedback;
   entityStartedAt: number;
   timerHourMinute?: HourMinute | null;
 };

@@ -16,3 +16,5 @@ export type AppletWithVersion = {
 };
 
 export type NoParamVoidFunction = () => void;
+
+export type TimerCallbackFeedback = 'no-feedback' | 'request-for-postpone';
