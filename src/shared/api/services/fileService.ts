@@ -204,9 +204,6 @@ function fileService() {
           const fieldKeys = Object.keys(request.fields);
 
           for (const key of fieldKeys) {
-            if (!request.fields[key]?.length) {
-              continue;
-            }
             data.append(key, request.fields[key]);
           }
 
