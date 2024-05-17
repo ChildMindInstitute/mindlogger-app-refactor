@@ -7,6 +7,7 @@ import {
   getMsFromHours,
   getMsFromMinutes,
   getNow,
+  TIME_PICKER_FORMAT_PLACEHOLDER,
 } from '@app/shared/lib';
 import { YStack, DateTimePicker, AlarmIcon, BedIcon } from '@shared/ui';
 
@@ -67,6 +68,7 @@ const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
         value={startTimeAsDate}
         mode="time"
         iconAfter={<BedIcon color={colors.grey2} size={15} />}
+        placeholder={TIME_PICKER_FORMAT_PLACEHOLDER}
       />
 
       <DateTimePicker
@@ -77,6 +79,7 @@ const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
         mode="time"
         value={endTimeAsDate}
         iconAfter={<AlarmIcon color={colors.grey2} size={15} />}
+        placeholder={TIME_PICKER_FORMAT_PLACEHOLDER}
       />
     </YStack>
   );
