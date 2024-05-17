@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "363954502213",
+    "project_id": "mindlogger-staging",
+    "storage_bucket": "mindlogger-staging.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363954502213:android:c7e62e5a3de1922becc12c",
+        "android_client_info": {
+          "package_name": "lab.childmindinstitute.data.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "363954502213-kk2rds60jjalljiu6rcb0d0mu1p8o2i2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC88AbFU1ZNN4Hk55taOxvOW320kb99BLE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "363954502213-kk2rds60jjalljiu6rcb0d0mu1p8o2i2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "363954502213-dn0c4j0hdq978en14ncblfo7ds0dshb0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "lab.childmindinstitute.data.staging"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

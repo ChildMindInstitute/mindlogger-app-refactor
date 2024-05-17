@@ -1,0 +1,566 @@
+{
+  "auth": {
+    "email": "Email",
+    "email_address": "Adresse e-mail",
+    "password": "Mot de passe",
+    "i_agree": "J'accepte les",
+    "terms_of_service": "Conditions d'utilisation",
+    "password_updated": "Mot de passe mis à jour"
+  },
+  "activity": {
+    "incorrect_answer": "Réponse incorrecte. Veuillez réessayer",
+    "failed": "Échoué",
+    "flanker_accuracy_warn": "*Les horodatages collectés pour un Android ne sont pas aussi précis que les appareils iOS.",
+    "please_wait": "S'il vous plaît, attendez",
+    "activity_all_items_hidden": "\"{{entityName}}\" ne peut pas être démarré car tous les éléments de l'activité sont masqués",
+    "flow_all_items_hidden": "\"{{entityName}}\" ne peut pas être démarré car il contient une activité dans laquelle tous les éléments sont masqués"
+  },
+  "activity_time": {
+    "time_remaining": "Temps restant"
+  },
+  "timed_activity": {
+    "time_to_complete": "Temps pour terminer",
+    "time_to_complete_hm": "Temps pour terminer: {{hours}} heures et {{minutes}} minutes",
+    "hours": "les heures"
+  },
+  "activity_summary": {
+    "terms_text": "Je comprends que les informations fournies par ce questionnaire ne sont pas destinées à remplacer les conseils, le diagnostic ou le traitement offerts par un professionnel de la santé médicale ou mentale, et que mes réponses anonymes peuvent être utilisées et partagées pour des recherches sur la santé mentale des enfants.",
+    "footer_text": "CHILD MIND INSTITUTE, INC. ET CHILD MIND MEDICAL PRACTICE, PLLC (ENSEMBLE, \"CMI\") NE PRATIQUENT PAS DIRECTEMENT OU INDIRECTEMENT LA MÉDECINE ET NE DISPENSENT PAS DE CONSEILS MÉDICAUX DANS LE CADRE DE CE QUESTIONNAIRE. CMI DÉCLINE TOUTE RESPONSABILITÉ EN CE QUI CONCERNE LE DIAGNOSTIC, LE TRAITEMENT, LES DÉCISIONS OU LES ACTIONS PRISES SUR LA BASE DES INFORMATIONS FOURNIES PAR LE PRÉSENT QUESTIONNAIRE ET DÉCLINE TOUTE RESPONSABILITÉ QUANT À L'UTILISATION DE CE QUESTIONNAIRE.",
+    "score_on_subscale": "Le score pour la sous-échelle {{name}} est",
+    "save": "Sauvegarder",
+    "summary": "Résumé",
+    "alerts": "Alertes",
+    "report_summary": "Résumé du rapport",
+    "not_yet_completed": "Pas encore terminé",
+    "last_completed": "Dernier en date terminé",
+    "unscheduled": "Unscheduled",
+    "due": "À faire",
+    "scheduled_for": "Prévu pour",
+    "category_suicide": "Suicide",
+    "category_suicide_message": "Niveau critique : un parent a indiqué la possibilité d'un harcèlement scolaire. Porter immédiatement à l'attention d'un clinicien en raison d'une situation d'urgence potentielle.",
+    "category_emotional": "Emotionnel",
+    "category_emotional_message": "Dans les limites normales : Aucun autre examen ou évaluation n'est nécessaire.",
+    "category_sport": "Sport",
+    "category_sport_message": "Dans le domaine clinique : Mettre au courant un clinicien ; Effectuer une évaluation de suivi (recommandé) ; Générer une recommandation.",
+    "share_report": "Partager le rapport",
+    "share_all_reports": "Partager tous les rapports"
+  },
+  "activity_chart": {
+    "title": "Veuillez passer l'évaluation pour que les données soient affichées.",
+    "monday": "L",
+    "tuesday": "M",
+    "wednesday": "M",
+    "thursday": "J",
+    "friday": "V",
+    "saturday": "S",
+    "sunday": "D"
+  },
+  "calendar": {
+    "months": "Janvier_Février_Mars_Avril_Mai_Juin_Juillet_Août_Septembre_Octobre_Novembre_Décembre",
+    "weekdays": "Dim_Lun_Mar_Mer_Jeu_Ven_Sam",
+    "x_days": "L_M_M_J_V_S_D"
+  },
+  "applet_data": {
+    "title": "Veuillez passer l'évaluation pour que les données soient affichées."
+  },
+  "widget_error": {
+    "error_text": "Il y a eu un problème de chargement de cet écran.",
+    "error_description": "Veuillez vous assurer que vous avez la dernière version de MindLogger installée, puis contactez votre administrateur d'activité si le problème persiste."
+  },
+  "about": {
+    "about": "À propos",
+    "applets_title": "En savoir plus sur chacune de vos applets et sur la plateforme MindLogger.",
+    "data_title": "Pour en savoir plus sur la plate-forme de collecte de données MindLogger, cliquez sur 'À propos\nde MindLogger' ci-dessous.",
+    "about_mindLogger": "À propos de MindLogger",
+    "icons_title": "Les icônes NounProject ont été créées par Alina Oleynik (enquête), Beth Bolton (livre), et\nShakeel (graphique)",
+    "device_id": "Reference de l'appareil"
+  },
+  "about_app": {
+    "title_with_version": "Qu'est-ce que MindLogger? v.{{version}}",
+    "title": "Sauf indication contraire, les icônes sont tirées de OpenMoji et Nounproject.",
+    "subtitle": "Sauf indication contraire, les icônes sont tirées de OpenMoji et Nounproject.",
+    "mindlogger_about": "## \n ### Qu'est-ce que MindLogger ? \n\n Cette application fait partie de la plateforme open source de collecte et d'analyse de données MindLogger conçue par le MATTER Lab du Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### Que peut faire MindLogger ? \n\n  L'ensemble des fonctionnalités de MindLogger se développe, et prend actuellement en charge une grande variété de types d'entrées. Chaque écran d'une activité de MindLogger peut comprendre l'un des éléments suivants : \n - Texte, image et audio \n - Question suivie d'une option de répose en image et/ou textuelle \n -Curseur \n - Entrée textuelle \n - Saisie sous forme de tableau \n - Enregistrement audio \n - Capture photo/vidéo \n - Dessin ou tapotement \n - Géolocalisation \n - Tâche cognitive simple \n - Délai avant réponse \n - Minuterie \n - Logique conditionnelle pour déterminer la suite \n\n #### Où puis-je en apprendre davantage ? \n Veuillez consulter le site [https://mindlogger.org](https://mindlogger.org) pour plus d'informations. \n ## [Support]({{credits_link}})  \n\n ##### Santé, \n\n ##### MindLogger Team, \n\n ##### Child Mind Institute"
+  },
+  "applet_footer": {
+    "surveys": "Enquêtes",
+    "data": "Données",
+    "about": "À propos",
+    "activities": "Activités",
+    "activity": "Activité"
+  },
+  "applet_invite_flow": {
+    "back": "Retour",
+    "next": "Suivant"
+  },
+  "live_connection": {
+    "disconnect": "DISCONNECT",
+    "connect": "SUBMIT",
+    "connect_to_server": "Connect To Server",
+    "remember": "Remember",
+    "ip": "IP Address",
+    "port": "Port",
+    "connection_closed": "TCP Connection was closed",
+    "connection_error": "Connection failed. Please double check ip and port",
+    "connection_set_error": "Cannot set connection",
+    "live_connection": "Live Connection",
+    "not_available": "not available"
+  },
+  "join_invite": {
+    "click_below": "Cliquez ci-dessous si vous êtes prêt à participer à cette étude. Vous pouvez vous retirer de cette étude et/ou supprimer vos données à tout moment sans conséquences.",
+    "decline": "Si vous ne vous sentez pas disposé à partager vos données issues de cette étude, vous pouvez décliner cette invitation.",
+    "decline_title": "Refuser"
+  },
+  "applet_list_component": {
+    "about_title": "À propos de MindLogger",
+    "no_applets_yet": "Vous n’avez pas d’applets",
+    "noon": "Midi",
+    "midnight": "Minuit",
+    "refresh_error_header": "Erreur d'actualisation",
+    "applets_not_refreshed": "Les applets suivants n'ont pas été actualisés :",
+    "common_refresh_error": "La liste des applets n'a pas été actualisée. Veuillez réessayer."
+  },
+  "activity_list_component": {
+    "no_activities_yet": "Aucune activité spécifiée pour le moment",
+    "insufficient_data_error": "Cette applet n'a pas été actualisée. Veuillez réessayer d'actualiser.",
+    "other_error": "Une erreur non définie s'est produite"
+  },
+  "applet_settings": {
+    "applet_not_defined": "Aucune applet n'est définie.",
+    "want_remove": "Si vous souhaitez retirer cette applet, mais conserver vos données, cliquez ci-dessous",
+    "remove": "Retirer",
+    "want_delete": "Si vous souhaitez supprimer vos données de cette applet, et la retirer, cliquez ci-dessous.",
+    "remove_delete": "Retirer et supprimer les données",
+    "alert_title": "Êtes-vous sûr de vouloir supprimer vos données ?",
+    "alert_message": "Vous ne pourrez pas les récupérer",
+    "cancel_text": "Non, annuler",
+    "confirm_text": "Oui, effacer"
+  },
+  "change_pass_form": {
+    "update": "Mettre à jour",
+    "cur_pass_placeholder": "Mot de passe actuel",
+    "new_pass_placeholder": "Nouveau mot de passe",
+    "error": "Impossible de mettre à jour les données de l'utilisateur.",
+    "submission_error": "Le mot de passe actuel que vous avez saisi était incorrect.",
+    "change_pass": "Changer le mot de passe",
+    "password_at_least_characters": "Le mot de passe doit être au moins de {{min}} caractères"
+  },
+  "password_recovery_form": {
+    "password_at_least_characters": "Le mot de passe doit être au moins de {{min}} caractères",
+    "password_no_spaces": "Le mot de passe ne doit pas contenir d'espaces",
+    "passwords_do_not_match": "Les mots de passe ne correspondent pas",
+    "password_confirmation_required": "Veuillez confirmer votre mot de passe",
+    "new_password_placeholder":"Nouveau mot de passe",
+    "confirm_password_placeholder":"Confirmer le mot de passe",
+    "submit": "Soumettre",
+    "invalid_password_reset_link": "Ce lien est invalide ou expiré.",
+    "click_to_reset_password": "Veuillez cliquer ci-dessous pour réinitialiser votre mot de passe.",
+    "forgot_password": "Mot de passe oublié",
+    "success": "Votre mot de passe a été réinitialisé avec succès. Veuillez vous connecter avec votre nouveau mot de passe.",
+    "error": "Erreur lors de la réinitialisation de votre mot de passe"
+  },
+  "change_study": {
+    "reset": "Reinitialiser",
+    "submit": "Soumettre",
+    "enter_url_manually": "Saisir une URL manuellement",
+    "scan_qr": "Scanner un QR code",
+    "successfully_changed": "L'URL du serveur a été modifiée avec succès",
+    "successfully_reset": "L'URL du serveur a été réinitialisée avec succès",
+    "change_server": "Changer de serveur",
+    "http_confirm": "Etes-vous sûr de vouloir vous connecter à un serveur qui ne prend pas en charge le SSL ?",
+    "set_by_qr": "L'étude a été établie par QR.",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "consent": {
+    "this_app_provides": "Cette application fournit un moyen simple de collecter des données sous forme de questionnaire, d'enregistrement de la voix ou de dessin",
+    "i_understand": "Je comprends que je risque de voir des images dérangeantes lors de l'utilisation de cette application",
+    "i_will_allow": "J'autorise le Child Mind Institute à stocker les données provenant de l'utilisation de cette application sur un serveu rcloud sécurisé, et à accéder à ces informations à des fins cliniques et de recherche",
+    "i_premit": "J'autorise le Child Mind Institute à me contacter au sujet des informations recueillies à partir de cette application à des fins cliniques ou de recherche.",
+    "next": "Suivant"
+  },
+  "forgot_pass_form": {
+    "reset_pass": "Réinitialiser le mot de passe",
+    "enter_email_mess": "Veuillez saisir votre adresse e-mail",
+    "invalid_email": "Adresse e-mail invalide",
+    "email_address": "Adresse e-mail",
+    "email_send_success": "L'e-mail de réinitialisation a été envoyé à <strong>{{email}}</strong> si le compte existe.",
+    "email_send_error": "Impossible d'envoyer un e-mail de réinitialisation pour le moment.",
+    "forgot_password": "Mot de passe oublié?"
+  },
+  "login": {
+    "new_user": "Nouvel utilisateur",
+    "account_create": "Créer un compte",
+    "forgot_password": "Mot de passe oublié?",
+    "what_is": "C'est quoi",
+    "login_error": "La connexion a échoué.",
+    "password_at_least_characters": "Le mot de passe doit être au moins de 6 caractères"
+  },
+  "login_form": {
+    "login": "Connexion",
+    "email_placeholder": "E-mail",
+    "password": "Mot de passe"
+  },
+  "logout_warning": {
+    "warning": "Avertissement de déconnexion",
+    "uploads_in_progress": "Téléchargements en cours",
+    "currently_uploading": "Vous n'avez pas téléchargé de réponses. Si vous vous déconnectez maintenant puis vous reconnectez en tant qu'utilisateur différent, vos réponses seront perdues.",
+    "not_uploaded": "Vous n'avez pas téléchargé de réponses. Si vous vous déconnectez maintenant puis vous reconnectez en tant qu'utilisateur différent, vos réponses seront perdues.",
+    "sure_logout": "Êtes-vous sûr de vouloir vous déconnecter ?",
+    "cancel": "Annuler",
+    "logout": "Logout"
+  },
+  "settings": {
+    "logged_out": "Vous vous êtes déconnecté.",
+    "change_pass": "Changer le mot de passe",
+    "use_cellular_data": "Utiliser les données mobiles",
+    "logout": "Déconnexion",
+    "permanently_delete_account": "Supprimer définitivement mon compte",
+    "user_settings": "Paramètres utilisateur",
+    "upload_logs": "Télécharger les journaux",
+    "create_new_password": "Crée un nouveau mot de passe"
+  },
+  "sign_up_form": {
+    "sign_up": "S'inscrire",
+    "error": "L'inscription a échoué : le nom d'utilisateur est peut-être déjà utilisé.",
+    "new_user": "Nouvel utilisateur",
+    "username_validation_error": "Le nom d'utilisateur doit comporter au moins 4 caractères, commencer par une lettre et ne peut contenir que des lettres, des chiffres, des tirets et des points.",
+    "email_validation_error": "Il semble que cet e-mail soit incomplet",
+    "email_placeholder": "E-mail",
+    "first_name": "Prénom",
+    "last_name": "Nom",
+    "password_placeholder": "Mot de passe",
+    "please_accept_terms": "Veuillez accepter les conditions d'utilisation.",
+    "email_looks_incomplete": "Il semble que cet e-mail soit incomplet",
+    "sign_up_agree": "By signing up, you agree to MindLogger’s"
+  },
+  "password_requirements": {
+    "at_least_characters": "6 caractères",
+    "no_blank_spaces": "pas d'espaces vides",
+    "must_include": "Le mot de passe doit inclure:"
+  },
+  "geolocation": {
+    "get_location": "LOCALISATION",
+    "must_enable_location": "Vous devez permettre aux services de localisation d'accomplir cette tâche. Veuillez autoriser MindLogger dans les paramètres iOS et appuyez à nouveau sur le bouton.",
+    "must_enable_location_subtitle": "Vous devez permettre aux services de localisation d'accomplir cette tâche. Veuillez appuyer à nouveau sur le bouton et autoriser MindLogger à utiliser votre localisation.",
+    "location_saved": "Localisation sauvegardée.",
+    "service_not_available": "Le service de localisation n'est pas disponible."
+  },
+  "select": {
+    "select_one": "Sélectionnez une option",
+    "no_items": "Aucun élément"
+  },
+  "permissions": {
+    "alert_subtitle": "Ceux-ci peuvent être configurés dans les paramètres.",
+    "alert_button_ok": "Ouvrir les paramètres",
+    "alert_button_cancel": "Rejeter",
+    "alarm_permission_warning": "Demande d'autorisation d'alarme",
+    "alarm_permission_disabled": "Veuillez activer les autorisations d'alarme sur votre appareil pour recevoir les rappels MindLogger à temps. Veuillez noter que l'application sera fermée automatiquement lorsque vous activerez les autorisations d'alarme.",
+    "gallery": "\"MindLogger\" souhaite accéder à votre galerie photo pour effectuer cette tâche.",
+    "camera": "\"MindLogger\" souhaite accéder à votre appareil photo pour effectuer cette tâche."
+  },
+  "media": {
+    "alert_message": "Ceux-ci peuvent être configurés dans les paramètres",
+    "media_found_title": "Tu es hors ligne",
+    "media_found_body": "Cette activité contient des éléments qui nécessitent une connexion Internet. Veuillez activer Internet pour continuer."
+  },
+  "audio_recorder": {
+    "permission": "Vous devez accorder la permission d'utiliser votre microphone pour accomplir cette tâche.",
+    "alert_title": "\"MindLogger\" souhaite utiliser votre microphone pour effectuer cette tâche.",
+    "alert_message": "Ceux-ci peuvent être configurés dans les paramètres.",
+    "record_error": "Une erreur s'est produite lors de l'initialisation de l'enregistreur.",
+    "stop": "STOP",
+    "record": "ENREGISTREMENT",
+    "recording": "Enregistrement en cours...",
+    "seconds": "secondes",
+    "file_saved": "Fichier sauvegardé."
+  },
+  "audio_player": {
+    "stop": "STOP",
+    "playing": "LECTURE...",
+    "play": "Lecture",
+    "done": "Fait",
+    "loading": "Chargement"
+  },
+  "optional_text": {
+    "required": "Ceci est un champ obligatoire.",
+    "enter_text": "Veuillez saisir le texte."
+  },
+  "date_picker": {
+    "ok": "OK"
+  },
+  "table_input": {
+    "short_press_detail": "* Une pression courte augmente le compteur",
+    "long_press_detail": "* Une pression longue diminue le compteur"
+  },
+  "activity_due_date": {
+    "available_all_day": "Disponible : Toute la journée",
+    "available": "Disponible",
+    "scheduled_at": "Programmé à",
+    "to": "à",
+    "day": "jour",
+    "days": "jours",
+    "am": "AM",
+    "the_following_day": "le jour suivant"
+  },
+  "form_item": {
+    "required": "Obligatoire",
+    "must_be": "Doit être",
+    "characters_or_less": "caractères ou moins",
+    "must_be_a_number": "Doit être un nombre"
+  },
+  "applet_about": {
+    "loading": "chargement",
+    "no_info": "Les auteurs de cet applet n'ont fourni aucune information !"
+  },
+  "firebase_messaging": {
+    "alert_title": "\"MindLogger\" aimerait vous envoyer des notifications",
+    "alert_message": "Ceci peut être configuré dans les paramètres",
+    "alert_text": "Ouvrir les paramètres",
+    "response_refresh_request": "Demande de réactualisation de la réponse",
+    "refresh_request_details": "Comme votre mot de passe a été réinitialisé, vos réponses antérieures doivent être actualisées. Voulez-vous en faire la demande ?",
+    "refresh_request_text": "Vos managers lanceront bientôt la mise à jour.",
+    "applet_not_found_1": "L'applet n'a pas été trouvé",
+    "applet_not_found_2": "Il n'y a pas d'applet pour cet identifiant.",
+    "activity_not_found": "L'activité n'a pas été trouvée', 'Il n'y a pas d'activité pour cet identifiant.",
+    "already_completed": "Vous avez déjà terminé",
+    "activity_was_due_at": "Cette activité était prévue à",
+    "if_progress_was_made_on_the": "Si des progrès ont été réalisés sur le",
+    "it_was_saved_but_it_can_no_longer_be_taken": "cela a été sauvegardé et vous ne pouvez plus y répondre",
+    "today": "aujourd'hui",
+    "today2": "Programmé aujourd'hui",
+    "activity_not_ready": "Activité non prête",
+    "not_able_to_start": "Vous n'êtes pas encore en mesure de démarrer cette activité",
+    "is": "est",
+    "scheduled_to_start_at": "devrait commencer à"
+  },
+  "local_notifications": {
+    "complete_activity": "Veuillez effectuer cette activité."
+  },
+  "join_demo_applets": {
+    "healthy_brain_network": "Healthy Brain Network: EMA",
+    "cognitive_tasks": "Tâches cognitives",
+    "mind_logger_demos": "Démo de Mindlogger"
+  },
+  "data_invite": {
+    "message": "Nous pensons qu'il est important que vous sachiez qui a accès à vos données si vous acceptez cette invitation. Les personnes suivantes auront accès à vos données si vous acceptez cette invitation :"
+  },
+  "sidebar": {
+    "home": "Accueil",
+    "settings": "Paramètres",
+    "about": "À propos",
+    "logout": "Déconnexion"
+  },
+  "navigator": {
+    "exit_title": "Sortir de l'application",
+    "exit_subtitle": "Sortir de l'application ?",
+    "cancel": "Annuler"
+  },
+  "activity_navigation": {
+    "next": "Suivant",
+    "skip": "Passer",
+    "done": "Fait",
+    "back": "Retour",
+    "return": "Retourner",
+    "undo": "Défaire"
+  },
+  "network_alerts": {
+    "no_internet_title": "Pas de connexion internet",
+    "no_internet_subtitle": "Merci de vous connecter à internet",
+    "no_internet_text": "Masquer",
+    "cellular_data_title": "Les données cellulaires sont désactivées",
+    "cellular_data_subtitle": "Veuillez vous connecter au wi-fi ou autoriser les données mobiles.",
+    "cellular_data_text": "Masquer",
+    "use_cellular_data": "Utiliser les données mobiles"
+  },
+  "timing": {
+    "provide_option": "Vous devez fournir l'option \"aprèz\" ou \"tout\".",
+    "to_be_number": "Expected options.after to be a number",
+    "every_number": "Expected options.every to be a number"
+  },
+  "camera": {
+    "choose_photo": "Choisir photo",
+    "choose_video": "Choisir vidéo",
+    "take_a_photo": "Prenez une nouvelle photo, ou choisissez-en une dans votre bibliothèque",
+    "take_a_video": "Prenez une nouvelle vidéo, ou choisissez-en une dans votre bibliothèque",
+    "camera": "Appareil photo",
+    "library": "Bibliothèque"
+  },
+  "text_entry": {
+    "type_placeholder": "Veuiller saisir du texte"
+  },
+  "language_screen": {
+    "app_language": " Langue de l'application",
+    "change_app_language": "Changer la langue",
+    "en": "English",
+    "fr": "Français"
+  },
+  "application_logs_screen": {
+    "upload_button": "Télécharger les journaux",
+    "title": "Vous rencontrez des problèmes techniques ? Vos fichiers journaux aideront notre équipe à résoudre les problèmes.",
+    "subTitle": "Veuillez les télécharger en utilisant le bouton ci-dessous.",
+    "success": "Succès - nous avons reçu vos journaux.",
+    "error": "Erreur - journaux non envoyés. Veuillez réessayer."
+  },
+  "additional": {
+    "server-error": "Une erreur de serveur s'est produite",
+    "time-end": "Le temps est écoulé !",
+    "time-end-tap": "Le temps s'est écoulé. Appuyez pour terminer",
+    "thanks": "Merci !",
+    "sorry": "Désolée",
+    "saved_answers": "Réponses sauvegardées !",
+    "submit_flow_answers": "Appuyez sur",
+    "submit": "le",
+    "submit_flow_answers_ex": "bouton Soumettre pour enregistrer vos réponses et continuer :",
+    "close": "Fermer",
+    "resume_activity": "Reprendre l'activité",
+    "activity_resume_restart": "Souhaitez-vous reprendre cette activité en cours ou la recommencer ?",
+    "restart": "Recommencer",
+    "resume": "Reprendre",
+    "retry": "Recommencez",
+    "send": "Envoyer",
+    "later": "Plus tard",
+    "in_progress": "En cours",
+    "unscheduled": "Non programmé",
+    "scheduled": "Programmé",
+    "past_due": "En retard",
+    "available": "disponible",
+    "sure_delete_account_data": "Êtes-vous sûr de vouloir supprimer votre compte et vos données ?",
+    "no_cancel": "Non, annuler",
+    "yes_delete": "Oui, effacer",
+    "hi": "Bonjour",
+    "enter_old_password": "Veuillez saisir votre ancien mot de passe",
+    "enter_new_password": "Veuillez saisir un nouveau mot de passe",
+    "data_not_sent": "Cliquez sur Envoyer pour télécharger les données collectées précédemment",
+    "upload_error": "Erreur de téléversement",
+    "want_to_retry": "Votre Internet peut être instable. Nous n'avons pas pu envoyer vos données."
+  },
+  "zod": {
+    "errors": {
+      "invalid_type": "Type invalide: {{expected}} doit être fourni(e), mais {{received}} a été reçu(e)",
+      "invalid_type_received_undefined": "Obligatoire",
+      "invalid_literal": "Valeur doit être {{expected}}",
+      "unrecognized_keys": "Une ou plusieurs clé(s) non reconnue(s) dans l'objet: {{- keys}}",
+      "invalid_union": "Champ invalide",
+      "invalid_union_discriminator": "La valeur du discriminateur est invalide. Options attendus: {{- options}}",
+      "invalid_enum_value": "Valeur '{{received}}' n'existe pas dans les options: {{- options}}",
+      "invalid_arguments": "Fonction a reçu des arguments invalides",
+      "invalid_return_type": "Fonction a retourné un type invalide",
+      "invalid_date": "Date invalide",
+      "custom": "Champ invalide",
+      "invalid_intersection_types": "Les résultats d'intersection n'ont pas pu être fusionnés",
+      "not_multiple_of": "Nombre doit être multiple de {{multipleOf}}",
+      "not_finite": "Nombre doit être fini",
+      "invalid_string": {
+        "email": "{{validation}} invalide",
+        "url": "{{validation}} invalide",
+        "uuid": "{{validation}} invalide",
+        "cuid": "{{validation}} invalide",
+        "regex": "{{validation}} invalide",
+        "datetime": "{{validation}} invalide",
+        "startsWith": "Champ invalide: doit commencer par \"{{startsWith}}\"",
+        "endsWith": "Champ invalide: doit se terminer par \"{{endsWith}}\""
+      },
+      "too_small": {
+        "array": {
+          "exact": "Liste doit contenir exactement {{minimum}} élément(s)",
+          "inclusive": "Liste doit contenir au moins {{minimum}} élément(s)",
+          "not_inclusive": "Liste doit contenir plus de {{minimum}} élément(s)"
+        },
+        "string": {
+          "exact": "Champ de text doit contenir exactement {{minimum}} caractère(s)",
+          "inclusive": "Champ de text doit contenir au moins {{minimum}} caractère(s)",
+          "not_inclusive": "Champ de text doit centenir plus de {{minimum}} caractère(s)"
+        },
+        "number": {
+          "exact": "Nombre doit être égale à {{minimum}}",
+          "inclusive": "Nombre doit être supérieur ou égale à {{minimum}}",
+          "not_inclusive": "Nombre doit être supérieur à {{minimum}}"
+        },
+        "set": {
+          "exact": "Champ invalide",
+          "inclusive": "Champ invalide",
+          "not_inclusive": "Champ invalide"
+        },
+        "date": {
+          "exact": "Date doit être égale à {{- minimum, datetime}}",
+          "inclusive": "Date doit être supérieure ou égale à {{- minimum, datetime}}",
+          "not_inclusive": "Date doit être supérieure à {{- minimum, datetime}}"
+        }
+      },
+      "too_big": {
+        "array": {
+          "exact": "Liste doit contenir exactement {{maximum}} élément(s)",
+          "inclusive": "Liste doit contenir au plus {{maximum}} élément(s)",
+          "not_inclusive": "Liste doit contenir moins de {{maximum}} élément(s)"
+        },
+        "string": {
+          "exact": "Champ de text doit contenir exactement {{maximum}} caractère(s)",
+          "inclusive": "Champ de text doit contenir au plus {{maximum}} caractère(s)",
+          "not_inclusive": "Champ de text doit contenir moins de {{maximum}} caractère(s)"
+        },
+        "number": {
+          "exact": "Nombre doit être égale à {{maximum}}",
+          "inclusive": "Nombre doit être inférieur ou égale à {{maximum}}",
+          "not_inclusive": "Nombre doit être inférieur à {{maximum}}"
+        },
+        "set": {
+          "exact": "Champ invalide",
+          "inclusive": "Champ invalide",
+          "not_inclusive": "Champ invalide"
+        },
+        "date": {
+          "exact": "Date doit être égale à {{- maximum, datetime}}",
+          "inclusive": "Date doit être inférieure ou égale à {{- maximum, datetime}}",
+          "not_inclusive": "Date doit être inférieure à {{- maximum, datetime}}"
+        }
+      }
+    },
+    "validations": {
+      "email": "e-mail",
+      "url": "lien",
+      "uuid": "UUID",
+      "cuid": "CUID",
+      "regex": "expression régulière",
+      "datetime": "horodate"
+    },
+    "types": {
+      "function": "fonction",
+      "number": "nombre",
+      "string": "chaîne de caractères",
+      "nan": "NaN",
+      "integer": "entier",
+      "float": "décimal",
+      "boolean": "booléen",
+      "date": "date",
+      "bigint": "grand entier",
+      "undefined": "undefined",
+      "symbol": "symbole",
+      "null": "null",
+      "array": "liste",
+      "object": "objet",
+      "unknown": "inconnu",
+      "promise": "promise",
+      "void": "void",
+      "never": "never",
+      "map": "map",
+      "set": "ensemble"
+    }
+  },
+  "cognitive": {
+    "incorrect_start_point": "Mauvais point de départ!",
+    "incorrect_line": "Ligne incorrecte!",
+    "finished_continue": "Fini. Cliquez sur Suivant pour continuer.",
+    "finished_complete": "Fini. Cliquer sur Terminé pour terminer.",
+    "begin": "Commencer",
+    "end": "Fin"
+  },
+  "system": {
+    "migration_not_applied_text": "La migration des données n'a pas été appliquée avec succès. Veuillez contacter le support."
+  },
+  "activity_skip_popup" : {
+    "popup_title": "Passer à l'essai suivant ?",
+    "popup_description": "Cet essai est incomplet. Si vous passez à l'essai suivant, votre progression sera sauvegardée. Vous ne pourrez pas terminer cet essai ultérieurement.",
+    "keep_working": "Continuer",
+    "skip": "Passer"
+  }
+}

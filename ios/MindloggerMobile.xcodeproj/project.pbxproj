@@ -8,12 +8,234 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* MindloggerMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MindloggerMobileTests.m */; };
-		0C80B921A6F3F58F76C31292 /* libPods-MindloggerMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-MindloggerMobile.a */; };
+		01325BFD2B206CFB00F4DD1F /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */; };
+		01325BFE2B206CFB00F4DD1F /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */; };
+		01325BFF2B206CFB00F4DD1F /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */; };
+		01325C002B206CFB00F4DD1F /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */; };
+		01325C012B206CFB00F4DD1F /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */; };
+		014B5A6929CAFAF600882214 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2129C88A590089AB98 /* CustomButton.swift */; };
+		014B5A6A29CAFAF600882214 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2129C88A590089AB98 /* CustomButton.swift */; };
+		014B5A6B29CAFAF700882214 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2129C88A590089AB98 /* CustomButton.swift */; };
+		014B5A6C29CAFB1000882214 /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2029C88A590089AB98 /* CustomText.swift */; };
+		014B5A6D29CAFB1100882214 /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2029C88A590089AB98 /* CustomText.swift */; };
+		014B5A6E29CAFB1100882214 /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2029C88A590089AB98 /* CustomText.swift */; };
+		014B5A6F29CAFB4E00882214 /* FlankerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2229C88A590089AB98 /* FlankerView.swift */; };
+		014B5A7029CAFB4E00882214 /* FlankerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2229C88A590089AB98 /* FlankerView.swift */; };
+		014B5A7129CAFB4F00882214 /* FlankerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2229C88A590089AB98 /* FlankerView.swift */; };
+		014B5A7229CAFB5300882214 /* FlankerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2329C88A590089AB98 /* FlankerViewManager.m */; };
+		014B5A7329CAFB5300882214 /* FlankerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2329C88A590089AB98 /* FlankerViewManager.m */; };
+		014B5A7429CAFB5400882214 /* FlankerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2329C88A590089AB98 /* FlankerViewManager.m */; };
+		014B5A7529CAFB5700882214 /* FlankerViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2629C88A590089AB98 /* FlankerViewManager.swift */; };
+		014B5A7629CAFB5800882214 /* FlankerViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2629C88A590089AB98 /* FlankerViewManager.swift */; };
+		014B5A7729CAFB5800882214 /* FlankerViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2629C88A590089AB98 /* FlankerViewManager.swift */; };
+		014B5A7829CAFB5B00882214 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1B29C88A580089AB98 /* GameManager.swift */; };
+		014B5A7929CAFB5B00882214 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1B29C88A580089AB98 /* GameManager.swift */; };
+		014B5A7A29CAFB5C00882214 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1B29C88A580089AB98 /* GameManager.swift */; };
+		014B5A7B29CAFB6000882214 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2429C88A590089AB98 /* ImageLoader.swift */; };
+		014B5A7C29CAFB6100882214 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2429C88A590089AB98 /* ImageLoader.swift */; };
+		014B5A7D29CAFB6100882214 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2429C88A590089AB98 /* ImageLoader.swift */; };
+		014B5A7E29CAFB6600882214 /* ParameterGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1929C88A580089AB98 /* ParameterGameManager.swift */; };
+		014B5A7F29CAFB6600882214 /* ParameterGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1929C88A580089AB98 /* ParameterGameManager.swift */; };
+		014B5A8029CAFB6600882214 /* ParameterGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1929C88A580089AB98 /* ParameterGameManager.swift */; };
+		014B5A8129CAFB6A00882214 /* ParameterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1F29C88A590089AB98 /* ParameterModel.swift */; };
+		014B5A8229CAFB6A00882214 /* ParameterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1F29C88A590089AB98 /* ParameterModel.swift */; };
+		014B5A8329CAFB6B00882214 /* ParameterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1F29C88A590089AB98 /* ParameterModel.swift */; };
+		014B5A8429CAFB6D00882214 /* ResultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1D29C88A580089AB98 /* ResultManager.swift */; };
+		014B5A8529CAFB6F00882214 /* ResultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1D29C88A580089AB98 /* ResultManager.swift */; };
+		014B5A8629CAFB6F00882214 /* ResultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1D29C88A580089AB98 /* ResultManager.swift */; };
+		014B5A8729CAFB7200882214 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2929C88A590089AB98 /* ResultView.swift */; };
+		014B5A8829CAFB7200882214 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2929C88A590089AB98 /* ResultView.swift */; };
+		014B5A8929CAFB7300882214 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2929C88A590089AB98 /* ResultView.swift */; };
+		014B5A8A29CAFB7600882214 /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */; };
+		014B5A8B29CAFB7600882214 /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */; };
+		014B5A8C29CAFB7700882214 /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */; };
+		014B5A8D29CAFB7A00882214 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */; };
+		014B5A8E29CAFB7A00882214 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */; };
+		014B5A8F29CAFB7B00882214 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */; };
+		014B5A9029CAFB7E00882214 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */; };
+		014B5A9129CAFB7E00882214 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */; };
+		014B5A9229CAFB7F00882214 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */; };
+		014B5A9329CAFB8200882214 /* UITextFild+Extesion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */; };
+		014B5A9429CAFB8300882214 /* UITextFild+Extesion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */; };
+		014B5A9529CAFB8300882214 /* UITextFild+Extesion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */; };
+		014B5A9629CAFBB000882214 /* FlankerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1C29C88A580089AB98 /* FlankerModel.swift */; };
+		014B5A9729CAFBB100882214 /* FlankerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1C29C88A580089AB98 /* FlankerModel.swift */; };
+		014B5A9829CAFBB200882214 /* FlankerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1C29C88A580089AB98 /* FlankerModel.swift */; };
+		01D339DF29C2E672003935D9 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
+		01D339E129C2E8B6003935D9 /* FlankerSandboxViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339E029C2E8B6003935D9 /* FlankerSandboxViewManager.swift */; };
+		01D339E329C2F014003935D9 /* FlankerSandboxViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D339E229C2F014003935D9 /* FlankerSandboxViewManager.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		7699B88040F8A987B510C191 /* libPods-MindloggerMobile-MindloggerMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-MindloggerMobile-MindloggerMobileTests.a */; };
+		288FAA9A29C882AB0089AB98 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
+		288FAA9B29C882AC0089AB98 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
+		288FAA9C29C882B00089AB98 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
+		288FAB2A29C88A590089AB98 /* ParameterGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1929C88A580089AB98 /* ParameterGameManager.swift */; };
+		288FAB2B29C88A590089AB98 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */; };
+		288FAB2C29C88A590089AB98 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1B29C88A580089AB98 /* GameManager.swift */; };
+		288FAB2D29C88A590089AB98 /* FlankerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1C29C88A580089AB98 /* FlankerModel.swift */; };
+		288FAB2E29C88A590089AB98 /* ResultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1D29C88A580089AB98 /* ResultManager.swift */; };
+		288FAB2F29C88A590089AB98 /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */; };
+		288FAB3029C88A590089AB98 /* ParameterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1F29C88A590089AB98 /* ParameterModel.swift */; };
+		288FAB3129C88A590089AB98 /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2029C88A590089AB98 /* CustomText.swift */; };
+		288FAB3229C88A590089AB98 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2129C88A590089AB98 /* CustomButton.swift */; };
+		288FAB3329C88A590089AB98 /* FlankerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2229C88A590089AB98 /* FlankerView.swift */; };
+		288FAB3429C88A590089AB98 /* FlankerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2329C88A590089AB98 /* FlankerViewManager.m */; };
+		288FAB3529C88A590089AB98 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2429C88A590089AB98 /* ImageLoader.swift */; };
+		288FAB3629C88A590089AB98 /* UITextFild+Extesion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */; };
+		288FAB3729C88A590089AB98 /* FlankerViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2629C88A590089AB98 /* FlankerViewManager.swift */; };
+		288FAB3829C88A590089AB98 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */; };
+		288FAB3929C88A590089AB98 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2929C88A590089AB98 /* ResultView.swift */; };
+		34BCEEC774297104C5B09BF0 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4946490D95B230F1078533 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */; };
+		4E2C2E9229A3826900BAEF10 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C2E9129A3826900BAEF10 /* Entypo.ttf */; };
+		4E2C2E9329A3826900BAEF10 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C2E9129A3826900BAEF10 /* Entypo.ttf */; };
+		4E2C2E9429A3826900BAEF10 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C2E9129A3826900BAEF10 /* Entypo.ttf */; };
+		4E2C2E9529A3826900BAEF10 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C2E9129A3826900BAEF10 /* Entypo.ttf */; };
+		4E30A5932962BE4F0032C2A8 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */; };
+		4E30A5942962BE4F0032C2A8 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */; };
+		4E30A5952962BE4F0032C2A8 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5852962BE4E0032C2A8 /* FontAwesome.ttf */; };
+		4E30A59B2962C3D60032C2A8 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
+		4E5906BB2987C41300A5D9E5 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
+		4E5906BC2987C41700A5D9E5 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
+		4E5906BD2987C41B00A5D9E5 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
+		4E9EC54729BA279C002F69A5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
+		4E9EC54829BA279C002F69A5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
+		4E9EC54929BA279C002F69A5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
+		4E9EC54A29BA279C002F69A5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
+		4EBCD5B22971514E00D3C04C /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
+		5281A663B4A6545E53344B26 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E15E9E0090BA3AD1153C67A7 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		914062AC2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A02BB1D8C00021A2E8 /* FontAwesome5_Brands.ttf */; };
+		914062AD2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A02BB1D8C00021A2E8 /* FontAwesome5_Brands.ttf */; };
+		914062AE2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A02BB1D8C00021A2E8 /* FontAwesome5_Brands.ttf */; };
+		914062AF2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A02BB1D8C00021A2E8 /* FontAwesome5_Brands.ttf */; };
+		914062B02BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A02BB1D8C00021A2E8 /* FontAwesome5_Brands.ttf */; };
+		914062B12BB1D8C10021A2E8 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A12BB1D8C00021A2E8 /* Fontisto.ttf */; };
+		914062B22BB1D8C10021A2E8 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A12BB1D8C00021A2E8 /* Fontisto.ttf */; };
+		914062B32BB1D8C10021A2E8 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A12BB1D8C00021A2E8 /* Fontisto.ttf */; };
+		914062B42BB1D8C10021A2E8 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A12BB1D8C00021A2E8 /* Fontisto.ttf */; };
+		914062B52BB1D8C10021A2E8 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A12BB1D8C00021A2E8 /* Fontisto.ttf */; };
+		914062B62BB1D8C10021A2E8 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A22BB1D8C00021A2E8 /* MaterialCommunityIcons.ttf */; };
+		914062B72BB1D8C10021A2E8 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A22BB1D8C00021A2E8 /* MaterialCommunityIcons.ttf */; };
+		914062B82BB1D8C10021A2E8 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A22BB1D8C00021A2E8 /* MaterialCommunityIcons.ttf */; };
+		914062B92BB1D8C10021A2E8 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A22BB1D8C00021A2E8 /* MaterialCommunityIcons.ttf */; };
+		914062BA2BB1D8C10021A2E8 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A22BB1D8C00021A2E8 /* MaterialCommunityIcons.ttf */; };
+		914062BB2BB1D8C10021A2E8 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A32BB1D8C00021A2E8 /* Octicons.ttf */; };
+		914062BC2BB1D8C10021A2E8 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A32BB1D8C00021A2E8 /* Octicons.ttf */; };
+		914062BD2BB1D8C10021A2E8 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A32BB1D8C00021A2E8 /* Octicons.ttf */; };
+		914062BE2BB1D8C10021A2E8 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A32BB1D8C00021A2E8 /* Octicons.ttf */; };
+		914062BF2BB1D8C10021A2E8 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A32BB1D8C00021A2E8 /* Octicons.ttf */; };
+		914062C02BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A42BB1D8C00021A2E8 /* SimpleLineIcons.ttf */; };
+		914062C12BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A42BB1D8C00021A2E8 /* SimpleLineIcons.ttf */; };
+		914062C22BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A42BB1D8C00021A2E8 /* SimpleLineIcons.ttf */; };
+		914062C32BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A42BB1D8C00021A2E8 /* SimpleLineIcons.ttf */; };
+		914062C42BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A42BB1D8C00021A2E8 /* SimpleLineIcons.ttf */; };
+		914062C52BB1D8C10021A2E8 /* FontAwesome6_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A52BB1D8C00021A2E8 /* FontAwesome6_Solid.ttf */; };
+		914062C62BB1D8C10021A2E8 /* FontAwesome6_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A52BB1D8C00021A2E8 /* FontAwesome6_Solid.ttf */; };
+		914062C72BB1D8C10021A2E8 /* FontAwesome6_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A52BB1D8C00021A2E8 /* FontAwesome6_Solid.ttf */; };
+		914062C82BB1D8C10021A2E8 /* FontAwesome6_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A52BB1D8C00021A2E8 /* FontAwesome6_Solid.ttf */; };
+		914062C92BB1D8C10021A2E8 /* FontAwesome6_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A52BB1D8C00021A2E8 /* FontAwesome6_Solid.ttf */; };
+		914062CA2BB1D8C10021A2E8 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A62BB1D8C10021A2E8 /* EvilIcons.ttf */; };
+		914062CB2BB1D8C10021A2E8 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A62BB1D8C10021A2E8 /* EvilIcons.ttf */; };
+		914062CC2BB1D8C10021A2E8 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A62BB1D8C10021A2E8 /* EvilIcons.ttf */; };
+		914062CD2BB1D8C10021A2E8 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A62BB1D8C10021A2E8 /* EvilIcons.ttf */; };
+		914062CE2BB1D8C10021A2E8 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A62BB1D8C10021A2E8 /* EvilIcons.ttf */; };
+		914062CF2BB1D8C10021A2E8 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A72BB1D8C10021A2E8 /* Zocial.ttf */; };
+		914062D02BB1D8C10021A2E8 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A72BB1D8C10021A2E8 /* Zocial.ttf */; };
+		914062D12BB1D8C10021A2E8 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A72BB1D8C10021A2E8 /* Zocial.ttf */; };
+		914062D22BB1D8C10021A2E8 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A72BB1D8C10021A2E8 /* Zocial.ttf */; };
+		914062D32BB1D8C10021A2E8 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A72BB1D8C10021A2E8 /* Zocial.ttf */; };
+		914062D42BB1D8C10021A2E8 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A82BB1D8C10021A2E8 /* Feather.ttf */; };
+		914062D52BB1D8C10021A2E8 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A82BB1D8C10021A2E8 /* Feather.ttf */; };
+		914062D62BB1D8C10021A2E8 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A82BB1D8C10021A2E8 /* Feather.ttf */; };
+		914062D72BB1D8C10021A2E8 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A82BB1D8C10021A2E8 /* Feather.ttf */; };
+		914062D82BB1D8C10021A2E8 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A82BB1D8C10021A2E8 /* Feather.ttf */; };
+		914062D92BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A92BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf */; };
+		914062DA2BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A92BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf */; };
+		914062DB2BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A92BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf */; };
+		914062DC2BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A92BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf */; };
+		914062DD2BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A92BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf */; };
+		914062DE2BB1D8C10021A2E8 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AA2BB1D8C10021A2E8 /* Ionicons.ttf */; };
+		914062DF2BB1D8C10021A2E8 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AA2BB1D8C10021A2E8 /* Ionicons.ttf */; };
+		914062E02BB1D8C10021A2E8 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AA2BB1D8C10021A2E8 /* Ionicons.ttf */; };
+		914062E12BB1D8C10021A2E8 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AA2BB1D8C10021A2E8 /* Ionicons.ttf */; };
+		914062E22BB1D8C10021A2E8 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AA2BB1D8C10021A2E8 /* Ionicons.ttf */; };
+		914062E32BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */; };
+		914062E42BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */; };
+		914062E52BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */; };
+		914062E62BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */; };
+		914062E72BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */; };
+		BB2482C4BFBD881BAAFA2F38 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BED32688A6AF76C729AF0FD4 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */; };
+		C4170C70E5D3647CC1234B8D /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E07015EC4992790F8DCD2075 /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */; };
+		E3456B933927DA798688CB0B /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 748B5ECA73107AD8DF670E5B /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a */; };
+		E89CC95F3D87AEEBCABD9BFB /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1C2707DA7CE621423343FD7 /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a */; };
+		F80121702A017A2B00F31D91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F801216E2A017A2B00F31D91 /* GoogleService-Info.plist */; };
+		F80121732A017AB300F31D91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F80121712A017AB300F31D91 /* GoogleService-Info.plist */; };
+		F80121762A017B2300F31D91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F80121742A017B2300F31D91 /* GoogleService-Info.plist */; };
+		F801217A2A017BAF00F31D91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F80121792A017BAF00F31D91 /* GoogleService-Info.plist */; };
+		F83E654F29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */; };
+		F83E655029FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */; };
+		F83E655129FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */; };
+		F83E655229FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */; };
+		F83E655429FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
+		F83E655529FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
+		F83E655629FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
+		F83E655729FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
+		F87E174F29771F200021550E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
+		F87E175029771F200021550E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		F87E175429771F200021550E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
+		F87E175529771F200021550E /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5852962BE4E0032C2A8 /* FontAwesome.ttf */; };
+		F87E175629771F200021550E /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */; };
+		F87E175729771F200021550E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F87E175829771F200021550E /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */; };
+		F87E175929771F200021550E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		F87E176629771F290021550E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
+		F87E176729771F290021550E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		F87E176B29771F290021550E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
+		F87E176C29771F290021550E /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5852962BE4E0032C2A8 /* FontAwesome.ttf */; };
+		F87E176D29771F290021550E /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */; };
+		F87E176E29771F290021550E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F87E176F29771F290021550E /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */; };
+		F87E177029771F290021550E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		F87E177D29771F310021550E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
+		F87E177E29771F310021550E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		F87E178229771F310021550E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
+		F87E178329771F310021550E /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5852962BE4E0032C2A8 /* FontAwesome.ttf */; };
+		F87E178429771F310021550E /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */; };
+		F87E178529771F310021550E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F87E178629771F310021550E /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */; };
+		F87E178729771F310021550E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		F8EF454A2A975A9200EEC085 /* FlankerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2329C88A590089AB98 /* FlankerViewManager.m */; };
+		F8EF454B2A975A9200EEC085 /* ParameterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1F29C88A590089AB98 /* ParameterModel.swift */; };
+		F8EF454C2A975A9200EEC085 /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */; };
+		F8EF454D2A975A9200EEC085 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */; };
+		F8EF454E2A975A9200EEC085 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1B29C88A580089AB98 /* GameManager.swift */; };
+		F8EF454F2A975A9200EEC085 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */; };
+		F8EF45502A975A9200EEC085 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2429C88A590089AB98 /* ImageLoader.swift */; };
+		F8EF45512A975A9200EEC085 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2129C88A590089AB98 /* CustomButton.swift */; };
+		F8EF45522A975A9200EEC085 /* FlankerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1C29C88A580089AB98 /* FlankerModel.swift */; };
+		F8EF45532A975A9200EEC085 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2929C88A590089AB98 /* ResultView.swift */; };
+		F8EF45542A975A9200EEC085 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */; };
+		F8EF45552A975A9200EEC085 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
+		F8EF45562A975A9200EEC085 /* UITextFild+Extesion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */; };
+		F8EF45572A975A9200EEC085 /* ParameterGameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1929C88A580089AB98 /* ParameterGameManager.swift */; };
+		F8EF45582A975A9200EEC085 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		F8EF45592A975A9200EEC085 /* FlankerViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2629C88A590089AB98 /* FlankerViewManager.swift */; };
+		F8EF455A2A975A9200EEC085 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
+		F8EF455B2A975A9200EEC085 /* FlankerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2229C88A590089AB98 /* FlankerView.swift */; };
+		F8EF455C2A975A9200EEC085 /* ResultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1D29C88A580089AB98 /* ResultManager.swift */; };
+		F8EF455D2A975A9200EEC085 /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2029C88A590089AB98 /* CustomText.swift */; };
+		F8EF45612A975A9200EEC085 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
+		F8EF45622A975A9200EEC085 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
+		F8EF45632A975A9200EEC085 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
+		F8EF45642A975A9200EEC085 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5852962BE4E0032C2A8 /* FontAwesome.ttf */; };
+		F8EF45652A975A9200EEC085 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */; };
+		F8EF45662A975A9200EEC085 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F8EF45672A975A9200EEC085 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
+		F8EF45682A975A9200EEC085 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C2E9129A3826900BAEF10 /* Entypo.ttf */; };
+		F8EF456A2A975A9200EEC085 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */; };
+		F8EF456B2A975A9200EEC085 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		F8EF45762A97619D00EEC085 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F8EF45752A97619D00EEC085 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,20 +252,100 @@
 		00E356EE1AD99517003FC87E /* MindloggerMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MindloggerMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* MindloggerMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MindloggerMobileTests.m; sourceTree = "<group>"; };
+		01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		01D339DD29C2E672003935D9 /* MindloggerMobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MindloggerMobile-Bridging-Header.h"; sourceTree = "<group>"; };
+		01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlankerSandboxView.swift; sourceTree = "<group>"; usesTabs = 0; };
+		01D339E029C2E8B6003935D9 /* FlankerSandboxViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlankerSandboxViewManager.swift; sourceTree = "<group>"; };
+		01D339E229C2F014003935D9 /* FlankerSandboxViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlankerSandboxViewManager.m; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* MindloggerMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = MindloggerMobile/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = MindloggerMobile/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MindloggerMobile/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MindloggerMobile/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MindloggerMobile/main.m; sourceTree = "<group>"; };
-		19F6CBCC0A4E27FBF8BF4A61 /* libPods-MindloggerMobile-MindloggerMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobile-MindloggerMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B4392A12AC88292D35C810B /* Pods-MindloggerMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobile.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile.debug.xcconfig"; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-MindloggerMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobile.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile.release.xcconfig"; sourceTree = "<group>"; };
-		5B7EB9410499542E8C5724F5 /* Pods-MindloggerMobile-MindloggerMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobile-MindloggerMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5DCACB8F33CDC322A6C60F78 /* libPods-MindloggerMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E8181CBF43C62AECDEC337D /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig"; sourceTree = "<group>"; };
+		288FAB1929C88A580089AB98 /* ParameterGameManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterGameManager.swift; sourceTree = "<group>"; };
+		288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		288FAB1B29C88A580089AB98 /* GameManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
+		288FAB1C29C88A580089AB98 /* FlankerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlankerModel.swift; sourceTree = "<group>"; };
+		288FAB1D29C88A580089AB98 /* ResultManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultManager.swift; sourceTree = "<group>"; };
+		288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
+		288FAB1F29C88A590089AB98 /* ParameterModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterModel.swift; sourceTree = "<group>"; };
+		288FAB2029C88A590089AB98 /* CustomText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomText.swift; sourceTree = "<group>"; };
+		288FAB2129C88A590089AB98 /* CustomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
+		288FAB2229C88A590089AB98 /* FlankerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlankerView.swift; sourceTree = "<group>"; };
+		288FAB2329C88A590089AB98 /* FlankerViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlankerViewManager.m; sourceTree = "<group>"; };
+		288FAB2429C88A590089AB98 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextFild+Extesion.swift"; sourceTree = "<group>"; };
+		288FAB2629C88A590089AB98 /* FlankerViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlankerViewManager.swift; sourceTree = "<group>"; };
+		288FAB2729C88A590089AB98 /* MindloggerMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MindloggerMobile-Bridging-Header.h"; sourceTree = "<group>"; };
+		288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
+		288FAB2929C88A590089AB98 /* ResultView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		3C835A8674B8C88D9343D4FD /* Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig"; sourceTree = "<group>"; };
+		40932F5617DFCA1C42388086 /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig"; sourceTree = "<group>"; };
+		460AE10D47ECAF083434EC9D /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
+		495D1220FFE010B98FBD7BA5 /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig"; sourceTree = "<group>"; };
+		4C4946490D95B230F1078533 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E2C2E9129A3826900BAEF10 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
+		4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
+		4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
+		4E30A5852962BE4E0032C2A8 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
+		4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
+		4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		4EBCD5B12971514E00D3C04C /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Foundation.ttf; sourceTree = "<group>"; };
+		61D19208BA4AF09E17EA0285 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig"; sourceTree = "<group>"; };
+		67F2C3C747ACE0246F942CE6 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; sourceTree = "<group>"; };
+		68480DA878A0DE26623AD7B3 /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; sourceTree = "<group>"; };
+		748B5ECA73107AD8DF670E5B /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MindloggerMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		89C6BE57DB24E9ADA2F236DE /* Pods-MindloggerMobile-MindloggerMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobile-MindloggerMobileTests.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests.release.xcconfig"; sourceTree = "<group>"; };
+		85000AFF48FE2EAC514B3886 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig"; sourceTree = "<group>"; };
+		914062A02BB1D8C00021A2E8 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
+		914062A12BB1D8C00021A2E8 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
+		914062A22BB1D8C00021A2E8 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
+		914062A32BB1D8C00021A2E8 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
+		914062A42BB1D8C00021A2E8 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
+		914062A52BB1D8C00021A2E8 /* FontAwesome6_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Solid.ttf; sourceTree = "<group>"; };
+		914062A62BB1D8C10021A2E8 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
+		914062A72BB1D8C10021A2E8 /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zocial.ttf; sourceTree = "<group>"; };
+		914062A82BB1D8C10021A2E8 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
+		914062A92BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Brands.ttf; sourceTree = "<group>"; };
+		914062AA2BB1D8C10021A2E8 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
+		914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Regular.ttf; sourceTree = "<group>"; };
+		A909ADF56B509F79088C9DC7 /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig"; sourceTree = "<group>"; };
+		B523576F9E73DE3C9CDE92AC /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; sourceTree = "<group>"; };
+		BED32688A6AF76C729AF0FD4 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1C2707DA7CE621423343FD7 /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8EFAF02FD6EEB6D5CF3CE58 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig"; sourceTree = "<group>"; };
+		DF0E94432BCEE7020087B68D /* MindloggerMobileUATRelease.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileUATRelease.entitlements; sourceTree = "<group>"; };
+		DF0E94442BCEE7020087B68D /* MindloggerMobileUATDebug.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileUATDebug.entitlements; sourceTree = "<group>"; };
+		E07015EC4992790F8DCD2075 /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E15E9E0090BA3AD1153C67A7 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F801216E2A017A2B00F31D91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F80121712A017AB300F31D91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F80121742A017B2300F31D91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F80121792A017BAF00F31D91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F802B1972BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		F82B3DAA2A54358900426E53 /* MindloggerMobileDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MindloggerMobileDebug.entitlements; path = MindloggerMobile/MindloggerMobileDebug.entitlements; sourceTree = "<group>"; };
+		F82B3DAB2A54358E00426E53 /* MindloggerMobileDevDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileDevDebug.entitlements; sourceTree = "<group>"; };
+		F82B3DAC2A54359300426E53 /* MindloggerMobileQADebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileQADebug.entitlements; sourceTree = "<group>"; };
+		F82B3DAD2A54359600426E53 /* MindloggerMobileStagingDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileStagingDebug.entitlements; sourceTree = "<group>"; };
+		F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RNBackgroundFetch+AppDelegate.m"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; };
+		F83E655329FA845400D57006 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		F83ED9792A40549C00DD5C3F /* hermes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = hermes.xcframework; path = "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"; sourceTree = "<group>"; };
+		F86964F92A4ECEB000AD759D /* MindloggerMobileDevRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileDevRelease.entitlements; sourceTree = "<group>"; };
+		F86964FA2A4ECEBA00AD759D /* MindloggerMobileRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MindloggerMobileRelease.entitlements; path = MindloggerMobile/MindloggerMobileRelease.entitlements; sourceTree = "<group>"; };
+		F86964FB2A4ECEC000AD759D /* MindloggerMobileQARelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileQARelease.entitlements; sourceTree = "<group>"; };
+		F86964FC2A4ECEC300AD759D /* MindloggerMobileStagingRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileStagingRelease.entitlements; sourceTree = "<group>"; };
+		F87E176029771F200021550E /* MindloggerMobileDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F87E176129771F200021550E /* MindloggerMobile dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MindloggerMobile dev-Info.plist"; sourceTree = "<absolute>"; };
+		F87E177729771F290021550E /* MindloggerMobileQA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileQA.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F87E177829771F290021550E /* MindloggerMobile qa-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MindloggerMobile qa-Info.plist"; sourceTree = "<absolute>"; };
+		F87E178E29771F310021550E /* MindloggerMobileStaging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileStaging.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F87E178F29771F310021550E /* MindloggerMobile staging-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MindloggerMobile staging-Info.plist"; sourceTree = "<absolute>"; };
+		F8EF45722A975A9200EEC085 /* MindloggerMobileUAT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileUAT.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F8EF45732A975A9300EEC085 /* MindloggerMobile uat-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MindloggerMobile uat-Info.plist"; sourceTree = "<absolute>"; };
+		F8EF45752A97619D00EEC085 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,7 +353,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7699B88040F8A987B510C191 /* libPods-MindloggerMobile-MindloggerMobileTests.a in Frameworks */,
+				5281A663B4A6545E53344B26 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,7 +361,39 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C80B921A6F3F58F76C31292 /* libPods-MindloggerMobile.a in Frameworks */,
+				34BCEEC774297104C5B09BF0 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E175129771F200021550E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB2482C4BFBD881BAAFA2F38 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E176829771F290021550E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E89CC95F3D87AEEBCABD9BFB /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E177F29771F310021550E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4170C70E5D3647CC1234B8D /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F8EF455E2A975A9200EEC085 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E3456B933927DA798688CB0B /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,27 +417,102 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		01D339DC29C2E635003935D9 /* FlankerSandboxView */ = {
+			isa = PBXGroup;
+			children = (
+				01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */,
+				01D339E029C2E8B6003935D9 /* FlankerSandboxViewManager.swift */,
+				01D339DD29C2E672003935D9 /* MindloggerMobile-Bridging-Header.h */,
+				01D339E229C2F014003935D9 /* FlankerSandboxViewManager.m */,
+			);
+			path = FlankerSandboxView;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* MindloggerMobile */ = {
 			isa = PBXGroup;
 			children = (
+				F82B3DAA2A54358900426E53 /* MindloggerMobileDebug.entitlements */,
+				F86964FA2A4ECEBA00AD759D /* MindloggerMobileRelease.entitlements */,
+				F80121692A01793100F31D91 /* GoogleServices */,
+				F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */,
+				288FAB1829C88A250089AB98 /* FlankerNativeComponents */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				01D339DC29C2E635003935D9 /* FlankerSandboxView */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				F83E655329FA845400D57006 /* Settings.bundle */,
 			);
 			name = MindloggerMobile;
+			sourceTree = "<group>";
+		};
+		288FAB1829C88A250089AB98 /* FlankerNativeComponents */ = {
+			isa = PBXGroup;
+			children = (
+				288FAB2129C88A590089AB98 /* CustomButton.swift */,
+				288FAB2029C88A590089AB98 /* CustomText.swift */,
+				288FAB1C29C88A580089AB98 /* FlankerModel.swift */,
+				288FAB2229C88A590089AB98 /* FlankerView.swift */,
+				288FAB2329C88A590089AB98 /* FlankerViewManager.m */,
+				288FAB2629C88A590089AB98 /* FlankerViewManager.swift */,
+				288FAB1B29C88A580089AB98 /* GameManager.swift */,
+				288FAB2429C88A590089AB98 /* ImageLoader.swift */,
+				288FAB2729C88A590089AB98 /* MindloggerMobile-Bridging-Header.h */,
+				288FAB1929C88A580089AB98 /* ParameterGameManager.swift */,
+				288FAB1F29C88A590089AB98 /* ParameterModel.swift */,
+				288FAB1D29C88A580089AB98 /* ResultManager.swift */,
+				288FAB2929C88A590089AB98 /* ResultView.swift */,
+				288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */,
+				288FAB1A29C88A580089AB98 /* UIColor+Extension.swift */,
+				288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */,
+				288FAB2529C88A590089AB98 /* UITextFild+Extesion.swift */,
+				01325BFC2B206CFB00F4DD1F /* String+Extensions.swift */,
+			);
+			path = FlankerNativeComponents;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F83ED9792A40549C00DD5C3F /* hermes.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5DCACB8F33CDC322A6C60F78 /* libPods-MindloggerMobile.a */,
-				19F6CBCC0A4E27FBF8BF4A61 /* libPods-MindloggerMobile-MindloggerMobileTests.a */,
+				4C4946490D95B230F1078533 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */,
+				BED32688A6AF76C729AF0FD4 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */,
+				D1C2707DA7CE621423343FD7 /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a */,
+				E07015EC4992790F8DCD2075 /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */,
+				E15E9E0090BA3AD1153C67A7 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */,
+				748B5ECA73107AD8DF670E5B /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4E30A5792962BE4E0032C2A8 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */,
+				4E2C2E9129A3826900BAEF10 /* Entypo.ttf */,
+				914062A62BB1D8C10021A2E8 /* EvilIcons.ttf */,
+				914062A82BB1D8C10021A2E8 /* Feather.ttf */,
+				4E30A5852962BE4E0032C2A8 /* FontAwesome.ttf */,
+				914062A02BB1D8C00021A2E8 /* FontAwesome5_Brands.ttf */,
+				4E30A5842962BE4E0032C2A8 /* FontAwesome5_Regular.ttf */,
+				4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */,
+				914062A92BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf */,
+				914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */,
+				914062A52BB1D8C00021A2E8 /* FontAwesome6_Solid.ttf */,
+				914062A12BB1D8C00021A2E8 /* Fontisto.ttf */,
+				4EBCD5B12971514E00D3C04C /* Foundation.ttf */,
+				914062AA2BB1D8C10021A2E8 /* Ionicons.ttf */,
+				914062A22BB1D8C00021A2E8 /* MaterialCommunityIcons.ttf */,
+				4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */,
+				914062A32BB1D8C00021A2E8 /* Octicons.ttf */,
+				914062A42BB1D8C00021A2E8 /* SimpleLineIcons.ttf */,
+				914062A72BB1D8C10021A2E8 /* Zocial.ttf */,
+			);
+			name = Fonts;
+			path = "../node_modules/react-native-vector-icons/Fonts";
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -116,12 +525,26 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				DF0E94442BCEE7020087B68D /* MindloggerMobileUATDebug.entitlements */,
+				DF0E94432BCEE7020087B68D /* MindloggerMobileUATRelease.entitlements */,
+				F802B1972BBEBBB60001D9E9 /* PrivacyInfo.xcprivacy */,
+				F82B3DAD2A54359600426E53 /* MindloggerMobileStagingDebug.entitlements */,
+				F82B3DAC2A54359300426E53 /* MindloggerMobileQADebug.entitlements */,
+				F82B3DAB2A54358E00426E53 /* MindloggerMobileDevDebug.entitlements */,
+				F86964FC2A4ECEC300AD759D /* MindloggerMobileStagingRelease.entitlements */,
+				F86964FB2A4ECEC000AD759D /* MindloggerMobileQARelease.entitlements */,
+				F86964F92A4ECEB000AD759D /* MindloggerMobileDevRelease.entitlements */,
+				4E30A5792962BE4E0032C2A8 /* Fonts */,
 				13B07FAE1A68108700A75B9A /* MindloggerMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* MindloggerMobileTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				F87E176129771F200021550E /* MindloggerMobile dev-Info.plist */,
+				F87E177829771F290021550E /* MindloggerMobile qa-Info.plist */,
+				F87E178F29771F310021550E /* MindloggerMobile staging-Info.plist */,
+				F8EF45732A975A9300EEC085 /* MindloggerMobile uat-Info.plist */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -133,6 +556,10 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* MindloggerMobile.app */,
 				00E356EE1AD99517003FC87E /* MindloggerMobileTests.xctest */,
+				F87E176029771F200021550E /* MindloggerMobileDev.app */,
+				F87E177729771F290021550E /* MindloggerMobileQA.app */,
+				F87E178E29771F310021550E /* MindloggerMobileStaging.app */,
+				F8EF45722A975A9200EEC085 /* MindloggerMobileUAT.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,12 +567,64 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3B4392A12AC88292D35C810B /* Pods-MindloggerMobile.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-MindloggerMobile.release.xcconfig */,
-				5B7EB9410499542E8C5724F5 /* Pods-MindloggerMobile-MindloggerMobileTests.debug.xcconfig */,
-				89C6BE57DB24E9ADA2F236DE /* Pods-MindloggerMobile-MindloggerMobileTests.release.xcconfig */,
+				3C835A8674B8C88D9343D4FD /* Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig */,
+				460AE10D47ECAF083434EC9D /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig */,
+				40932F5617DFCA1C42388086 /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig */,
+				68480DA878A0DE26623AD7B3 /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */,
+				495D1220FFE010B98FBD7BA5 /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig */,
+				B523576F9E73DE3C9CDE92AC /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */,
+				67F2C3C747ACE0246F942CE6 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */,
+				85000AFF48FE2EAC514B3886 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig */,
+				D8EFAF02FD6EEB6D5CF3CE58 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */,
+				61D19208BA4AF09E17EA0285 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */,
+				A909ADF56B509F79088C9DC7 /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig */,
+				1E8181CBF43C62AECDEC337D /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		F80121692A01793100F31D91 /* GoogleServices */ = {
+			isa = PBXGroup;
+			children = (
+				F8EF45742A975EE600EEC085 /* uat */,
+				F80121792A017BAF00F31D91 /* GoogleService-Info.plist */,
+				F801216C2A01795A00F31D91 /* staging */,
+				F801216B2A01795000F31D91 /* qa */,
+				F801216A2A01794800F31D91 /* dev */,
+			);
+			path = GoogleServices;
+			sourceTree = "<group>";
+		};
+		F801216A2A01794800F31D91 /* dev */ = {
+			isa = PBXGroup;
+			children = (
+				F801216E2A017A2B00F31D91 /* GoogleService-Info.plist */,
+			);
+			path = dev;
+			sourceTree = "<group>";
+		};
+		F801216B2A01795000F31D91 /* qa */ = {
+			isa = PBXGroup;
+			children = (
+				F80121712A017AB300F31D91 /* GoogleService-Info.plist */,
+			);
+			path = qa;
+			sourceTree = "<group>";
+		};
+		F801216C2A01795A00F31D91 /* staging */ = {
+			isa = PBXGroup;
+			children = (
+				F80121742A017B2300F31D91 /* GoogleService-Info.plist */,
+			);
+			path = staging;
+			sourceTree = "<group>";
+		};
+		F8EF45742A975EE600EEC085 /* uat */ = {
+			isa = PBXGroup;
+			children = (
+				F8EF45752A97619D00EEC085 /* GoogleService-Info.plist */,
+			);
+			path = uat;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,12 +634,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MindloggerMobileTests" */;
 			buildPhases = (
-				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
+				D277D8A13A3117EEC4782172 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */,
-				F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */,
+				CB635A6F2B8BBC25EFE1976C /* [CP] Embed Pods Frameworks */,
+				C1F500F4FDFC934FF69908D2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -176,14 +655,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MindloggerMobile" */;
 			buildPhases = (
-				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
+				D6D108229BC111CE13F70B8B /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
-				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				340C31F6E0879580848AD4FD /* [CP] Embed Pods Frameworks */,
+				12C7DBCFD7EE2282B649A2AF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -192,6 +671,94 @@
 			name = MindloggerMobile;
 			productName = MindloggerMobile;
 			productReference = 13B07F961A680F5B00A75B9A /* MindloggerMobile.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F87E174B29771F200021550E /* MindloggerMobileDev */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F87E175D29771F200021550E /* Build configuration list for PBXNativeTarget "MindloggerMobileDev" */;
+			buildPhases = (
+				17F7789C0CE37064C5B6E659 /* [CP] Check Pods Manifest.lock */,
+				F87E174D29771F200021550E /* Start Packager */,
+				F87E174E29771F200021550E /* Sources */,
+				F87E175129771F200021550E /* Frameworks */,
+				F87E175329771F200021550E /* Resources */,
+				F87E175A29771F200021550E /* Bundle React Native code and images */,
+				8903D64D96E736DB5C62445C /* [CP] Embed Pods Frameworks */,
+				015AF6209BAED3447DC14CFB /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MindloggerMobileDev;
+			productName = MindloggerMobile;
+			productReference = F87E176029771F200021550E /* MindloggerMobileDev.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F87E176229771F290021550E /* MindloggerMobileQA */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F87E177429771F290021550E /* Build configuration list for PBXNativeTarget "MindloggerMobileQA" */;
+			buildPhases = (
+				641CC5173D31397321B72BAD /* [CP] Check Pods Manifest.lock */,
+				F87E176429771F290021550E /* Start Packager */,
+				F87E176529771F290021550E /* Sources */,
+				F87E176829771F290021550E /* Frameworks */,
+				F87E176A29771F290021550E /* Resources */,
+				F87E177129771F290021550E /* Bundle React Native code and images */,
+				D536E8BB456351DDD1F2B84F /* [CP] Embed Pods Frameworks */,
+				05829D1B79DFF82449D5BD0F /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MindloggerMobileQA;
+			productName = MindloggerMobile;
+			productReference = F87E177729771F290021550E /* MindloggerMobileQA.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F87E177929771F310021550E /* MindloggerMobileStaging */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F87E178B29771F310021550E /* Build configuration list for PBXNativeTarget "MindloggerMobileStaging" */;
+			buildPhases = (
+				95FF1E810CAA885FEF9DA0BC /* [CP] Check Pods Manifest.lock */,
+				F87E177B29771F310021550E /* Start Packager */,
+				F87E177C29771F310021550E /* Sources */,
+				F87E177F29771F310021550E /* Frameworks */,
+				F87E178129771F310021550E /* Resources */,
+				F87E178829771F310021550E /* Bundle React Native code and images */,
+				30E45BF305478F1328C051C7 /* [CP] Embed Pods Frameworks */,
+				3117D17D9A1478B4AE2528E8 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MindloggerMobileStaging;
+			productName = MindloggerMobile;
+			productReference = F87E178E29771F310021550E /* MindloggerMobileStaging.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F8EF45462A975A9200EEC085 /* MindloggerMobileUAT */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F8EF456F2A975A9200EEC085 /* Build configuration list for PBXNativeTarget "MindloggerMobileUAT" */;
+			buildPhases = (
+				EADE3754B24A6D81AE6B3FB4 /* [CP] Check Pods Manifest.lock */,
+				F8EF45482A975A9200EEC085 /* Start Packager */,
+				F8EF45492A975A9200EEC085 /* Sources */,
+				F8EF455E2A975A9200EEC085 /* Frameworks */,
+				F8EF45602A975A9200EEC085 /* Resources */,
+				F8EF456C2A975A9200EEC085 /* Bundle React Native code and images */,
+				4016D2D783B1DF1F3935F9AC /* [CP] Embed Pods Frameworks */,
+				B1745D681A70CE3A3DFB7B7E /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MindloggerMobileUAT;
+			productName = MindloggerMobile;
+			productReference = F8EF45722A975A9200EEC085 /* MindloggerMobileUAT.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -207,7 +774,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1410;
 					};
 				};
 			};
@@ -226,6 +793,10 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* MindloggerMobile */,
 				00E356ED1AD99517003FC87E /* MindloggerMobileTests */,
+				F87E174B29771F200021550E /* MindloggerMobileDev */,
+				F87E176229771F290021550E /* MindloggerMobileQA */,
+				F87E177929771F310021550E /* MindloggerMobileStaging */,
+				F8EF45462A975A9200EEC085 /* MindloggerMobileUAT */,
 			);
 		};
 /* End PBXProject section */
@@ -242,8 +813,149 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E30A59B2962C3D60032C2A8 /* AntDesign.ttf in Resources */,
+				4EBCD5B22971514E00D3C04C /* Foundation.ttf in Resources */,
+				914062DE2BB1D8C10021A2E8 /* Ionicons.ttf in Resources */,
+				914062D42BB1D8C10021A2E8 /* Feather.ttf in Resources */,
+				914062CF2BB1D8C10021A2E8 /* Zocial.ttf in Resources */,
+				F83E655429FA845400D57006 /* Settings.bundle in Resources */,
+				4E30A5952962BE4F0032C2A8 /* FontAwesome.ttf in Resources */,
+				4E30A5942962BE4F0032C2A8 /* FontAwesome5_Regular.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				4E9EC54729BA279C002F69A5 /* MaterialIcons.ttf in Resources */,
+				914062CA2BB1D8C10021A2E8 /* EvilIcons.ttf in Resources */,
+				914062D92BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf in Resources */,
+				4E2C2E9229A3826900BAEF10 /* Entypo.ttf in Resources */,
+				914062B62BB1D8C10021A2E8 /* MaterialCommunityIcons.ttf in Resources */,
+				914062C52BB1D8C10021A2E8 /* FontAwesome6_Solid.ttf in Resources */,
+				914062B12BB1D8C10021A2E8 /* Fontisto.ttf in Resources */,
+				914062BB2BB1D8C10021A2E8 /* Octicons.ttf in Resources */,
+				4E30A5932962BE4F0032C2A8 /* FontAwesome5_Solid.ttf in Resources */,
+				914062E32BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */,
+				914062AC2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
+				914062C02BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				F801217A2A017BAF00F31D91 /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E175329771F200021550E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E5906BB2987C41300A5D9E5 /* Foundation.ttf in Resources */,
+				F87E175429771F200021550E /* AntDesign.ttf in Resources */,
+				914062DF2BB1D8C10021A2E8 /* Ionicons.ttf in Resources */,
+				914062D52BB1D8C10021A2E8 /* Feather.ttf in Resources */,
+				914062D02BB1D8C10021A2E8 /* Zocial.ttf in Resources */,
+				F83E655529FA845400D57006 /* Settings.bundle in Resources */,
+				F87E175529771F200021550E /* FontAwesome.ttf in Resources */,
+				F87E175629771F200021550E /* FontAwesome5_Regular.ttf in Resources */,
+				F87E175729771F200021550E /* LaunchScreen.storyboard in Resources */,
+				4E9EC54829BA279C002F69A5 /* MaterialIcons.ttf in Resources */,
+				914062CB2BB1D8C10021A2E8 /* EvilIcons.ttf in Resources */,
+				914062DA2BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf in Resources */,
+				4E2C2E9329A3826900BAEF10 /* Entypo.ttf in Resources */,
+				914062B72BB1D8C10021A2E8 /* MaterialCommunityIcons.ttf in Resources */,
+				914062C62BB1D8C10021A2E8 /* FontAwesome6_Solid.ttf in Resources */,
+				914062B22BB1D8C10021A2E8 /* Fontisto.ttf in Resources */,
+				914062BC2BB1D8C10021A2E8 /* Octicons.ttf in Resources */,
+				F80121702A017A2B00F31D91 /* GoogleService-Info.plist in Resources */,
+				914062E42BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */,
+				914062AD2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
+				914062C12BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
+				F87E175829771F200021550E /* FontAwesome5_Solid.ttf in Resources */,
+				F87E175929771F200021550E /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E176A29771F290021550E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E5906BC2987C41700A5D9E5 /* Foundation.ttf in Resources */,
+				F87E176B29771F290021550E /* AntDesign.ttf in Resources */,
+				914062E02BB1D8C10021A2E8 /* Ionicons.ttf in Resources */,
+				914062D62BB1D8C10021A2E8 /* Feather.ttf in Resources */,
+				914062D12BB1D8C10021A2E8 /* Zocial.ttf in Resources */,
+				F83E655629FA845400D57006 /* Settings.bundle in Resources */,
+				F87E176C29771F290021550E /* FontAwesome.ttf in Resources */,
+				F87E176D29771F290021550E /* FontAwesome5_Regular.ttf in Resources */,
+				F87E176E29771F290021550E /* LaunchScreen.storyboard in Resources */,
+				4E9EC54929BA279C002F69A5 /* MaterialIcons.ttf in Resources */,
+				914062CC2BB1D8C10021A2E8 /* EvilIcons.ttf in Resources */,
+				914062DB2BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf in Resources */,
+				4E2C2E9429A3826900BAEF10 /* Entypo.ttf in Resources */,
+				914062B82BB1D8C10021A2E8 /* MaterialCommunityIcons.ttf in Resources */,
+				914062C72BB1D8C10021A2E8 /* FontAwesome6_Solid.ttf in Resources */,
+				914062B32BB1D8C10021A2E8 /* Fontisto.ttf in Resources */,
+				914062BD2BB1D8C10021A2E8 /* Octicons.ttf in Resources */,
+				F80121732A017AB300F31D91 /* GoogleService-Info.plist in Resources */,
+				914062E52BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */,
+				914062AE2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
+				914062C22BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
+				F87E176F29771F290021550E /* FontAwesome5_Solid.ttf in Resources */,
+				F87E177029771F290021550E /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E178129771F310021550E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E5906BD2987C41B00A5D9E5 /* Foundation.ttf in Resources */,
+				F87E178229771F310021550E /* AntDesign.ttf in Resources */,
+				914062E12BB1D8C10021A2E8 /* Ionicons.ttf in Resources */,
+				914062D72BB1D8C10021A2E8 /* Feather.ttf in Resources */,
+				914062D22BB1D8C10021A2E8 /* Zocial.ttf in Resources */,
+				F83E655729FA845400D57006 /* Settings.bundle in Resources */,
+				F87E178329771F310021550E /* FontAwesome.ttf in Resources */,
+				F87E178429771F310021550E /* FontAwesome5_Regular.ttf in Resources */,
+				F87E178529771F310021550E /* LaunchScreen.storyboard in Resources */,
+				4E9EC54A29BA279C002F69A5 /* MaterialIcons.ttf in Resources */,
+				914062CD2BB1D8C10021A2E8 /* EvilIcons.ttf in Resources */,
+				914062DC2BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf in Resources */,
+				4E2C2E9529A3826900BAEF10 /* Entypo.ttf in Resources */,
+				914062B92BB1D8C10021A2E8 /* MaterialCommunityIcons.ttf in Resources */,
+				914062C82BB1D8C10021A2E8 /* FontAwesome6_Solid.ttf in Resources */,
+				914062B42BB1D8C10021A2E8 /* Fontisto.ttf in Resources */,
+				914062BE2BB1D8C10021A2E8 /* Octicons.ttf in Resources */,
+				F80121762A017B2300F31D91 /* GoogleService-Info.plist in Resources */,
+				914062E62BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */,
+				914062AF2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
+				914062C32BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
+				F87E178629771F310021550E /* FontAwesome5_Solid.ttf in Resources */,
+				F87E178729771F310021550E /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F8EF45602A975A9200EEC085 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F8EF45612A975A9200EEC085 /* Foundation.ttf in Resources */,
+				F8EF45622A975A9200EEC085 /* AntDesign.ttf in Resources */,
+				914062E22BB1D8C10021A2E8 /* Ionicons.ttf in Resources */,
+				914062D82BB1D8C10021A2E8 /* Feather.ttf in Resources */,
+				914062D32BB1D8C10021A2E8 /* Zocial.ttf in Resources */,
+				F8EF45632A975A9200EEC085 /* Settings.bundle in Resources */,
+				F8EF45642A975A9200EEC085 /* FontAwesome.ttf in Resources */,
+				F8EF45652A975A9200EEC085 /* FontAwesome5_Regular.ttf in Resources */,
+				F8EF45762A97619D00EEC085 /* GoogleService-Info.plist in Resources */,
+				F8EF45662A975A9200EEC085 /* LaunchScreen.storyboard in Resources */,
+				914062CE2BB1D8C10021A2E8 /* EvilIcons.ttf in Resources */,
+				914062DD2BB1D8C10021A2E8 /* FontAwesome6_Brands.ttf in Resources */,
+				F8EF45672A975A9200EEC085 /* MaterialIcons.ttf in Resources */,
+				914062BA2BB1D8C10021A2E8 /* MaterialCommunityIcons.ttf in Resources */,
+				914062C92BB1D8C10021A2E8 /* FontAwesome6_Solid.ttf in Resources */,
+				914062B52BB1D8C10021A2E8 /* Fontisto.ttf in Resources */,
+				914062BF2BB1D8C10021A2E8 /* Octicons.ttf in Resources */,
+				F8EF45682A975A9200EEC085 /* Entypo.ttf in Resources */,
+				914062E72BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */,
+				914062B02BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
+				914062C42BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
+				F8EF456A2A975A9200EEC085 /* FontAwesome5_Solid.ttf in Resources */,
+				F8EF456B2A975A9200EEC085 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,24 +978,58 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
+		015AF6209BAED3447DC14CFB /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
+		05829D1B79DFF82449D5BD0F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		12C7DBCFD7EE2282B649A2AF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		17F7789C0CE37064C5B6E659 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -298,14 +1044,82 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobile-MindloggerMobileTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
+		30E45BF305478F1328C051C7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3117D17D9A1478B4AE2528E8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		340C31F6E0879580848AD4FD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4016D2D783B1DF1F3935F9AC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		641CC5173D31397321B72BAD /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -320,63 +1134,325 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobile-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */ = {
+		8903D64D96E736DB5C62445C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
+		95FF1E810CAA885FEF9DA0BC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile/Pods-MindloggerMobile-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
+		B1745D681A70CE3A3DFB7B7E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobile-MindloggerMobileTests/Pods-MindloggerMobile-MindloggerMobileTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		C1F500F4FDFC934FF69908D2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CB635A6F2B8BBC25EFE1976C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileTests/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D277D8A13A3117EEC4782172 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobileCommonPods-MindloggerMobileTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D536E8BB456351DDD1F2B84F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D6D108229BC111CE13F70B8B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobileCommonPods-MindloggerMobile-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EADE3754B24A6D81AE6B3FB4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E174D29771F200021550E /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E175A29771F200021550E /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		F87E176429771F290021550E /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E177129771F290021550E /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		F87E177B29771F310021550E /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F87E178829771F310021550E /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		F8EF45482A975A9200EEC085 /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F8EF456C2A975A9200EEC085 /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -412,8 +1488,141 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				288FAB3129C88A590089AB98 /* CustomText.swift in Sources */,
+				F83E654F29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */,
+				288FAB2B29C88A590089AB98 /* UIColor+Extension.swift in Sources */,
+				288FAB3029C88A590089AB98 /* ParameterModel.swift in Sources */,
+				288FAB2F29C88A590089AB98 /* TimeInterval+Extension.swift in Sources */,
+				288FAB3229C88A590089AB98 /* CustomButton.swift in Sources */,
+				288FAB3929C88A590089AB98 /* ResultView.swift in Sources */,
+				288FAB3729C88A590089AB98 /* FlankerViewManager.swift in Sources */,
+				288FAB2C29C88A590089AB98 /* GameManager.swift in Sources */,
+				01D339E329C2F014003935D9 /* FlankerSandboxViewManager.m in Sources */,
+				288FAB3329C88A590089AB98 /* FlankerView.swift in Sources */,
+				288FAB3429C88A590089AB98 /* FlankerViewManager.m in Sources */,
+				288FAB3829C88A590089AB98 /* UIImageView+Extensions.swift in Sources */,
+				288FAB2A29C88A590089AB98 /* ParameterGameManager.swift in Sources */,
+				288FAB3629C88A590089AB98 /* UITextFild+Extesion.swift in Sources */,
+				288FAB2E29C88A590089AB98 /* ResultManager.swift in Sources */,
+				288FAB3529C88A590089AB98 /* ImageLoader.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				01325BFD2B206CFB00F4DD1F /* String+Extensions.swift in Sources */,
+				288FAB2D29C88A590089AB98 /* FlankerModel.swift in Sources */,
+				01D339E129C2E8B6003935D9 /* FlankerSandboxViewManager.swift in Sources */,
+				01D339DF29C2E672003935D9 /* FlankerSandboxView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E174E29771F200021550E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				014B5A7429CAFB5400882214 /* FlankerViewManager.m in Sources */,
+				01325BFE2B206CFB00F4DD1F /* String+Extensions.swift in Sources */,
+				014B5A8329CAFB6B00882214 /* ParameterModel.swift in Sources */,
+				014B5A8C29CAFB7700882214 /* TimeInterval+Extension.swift in Sources */,
+				F83E655029FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */,
+				014B5A7A29CAFB5C00882214 /* GameManager.swift in Sources */,
+				014B5A9229CAFB7F00882214 /* UIImageView+Extensions.swift in Sources */,
+				014B5A7D29CAFB6100882214 /* ImageLoader.swift in Sources */,
+				014B5A6B29CAFAF700882214 /* CustomButton.swift in Sources */,
+				014B5A9829CAFBB200882214 /* FlankerModel.swift in Sources */,
+				014B5A8929CAFB7300882214 /* ResultView.swift in Sources */,
+				014B5A8F29CAFB7B00882214 /* UIColor+Extension.swift in Sources */,
+				F87E174F29771F200021550E /* AppDelegate.mm in Sources */,
+				014B5A9529CAFB8300882214 /* UITextFild+Extesion.swift in Sources */,
+				014B5A8029CAFB6600882214 /* ParameterGameManager.swift in Sources */,
+				F87E175029771F200021550E /* main.m in Sources */,
+				014B5A7729CAFB5800882214 /* FlankerViewManager.swift in Sources */,
+				288FAA9A29C882AB0089AB98 /* FlankerSandboxView.swift in Sources */,
+				014B5A7129CAFB4F00882214 /* FlankerView.swift in Sources */,
+				014B5A8529CAFB6F00882214 /* ResultManager.swift in Sources */,
+				014B5A6E29CAFB1100882214 /* CustomText.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E176529771F290021550E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				014B5A7329CAFB5300882214 /* FlankerViewManager.m in Sources */,
+				01325BFF2B206CFB00F4DD1F /* String+Extensions.swift in Sources */,
+				014B5A8229CAFB6A00882214 /* ParameterModel.swift in Sources */,
+				014B5A8B29CAFB7600882214 /* TimeInterval+Extension.swift in Sources */,
+				F83E655129FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */,
+				014B5A7929CAFB5B00882214 /* GameManager.swift in Sources */,
+				014B5A9129CAFB7E00882214 /* UIImageView+Extensions.swift in Sources */,
+				014B5A7C29CAFB6100882214 /* ImageLoader.swift in Sources */,
+				014B5A6A29CAFAF600882214 /* CustomButton.swift in Sources */,
+				014B5A9729CAFBB100882214 /* FlankerModel.swift in Sources */,
+				014B5A8829CAFB7200882214 /* ResultView.swift in Sources */,
+				014B5A8E29CAFB7A00882214 /* UIColor+Extension.swift in Sources */,
+				F87E176629771F290021550E /* AppDelegate.mm in Sources */,
+				014B5A9429CAFB8300882214 /* UITextFild+Extesion.swift in Sources */,
+				014B5A7F29CAFB6600882214 /* ParameterGameManager.swift in Sources */,
+				F87E176729771F290021550E /* main.m in Sources */,
+				014B5A7629CAFB5800882214 /* FlankerViewManager.swift in Sources */,
+				288FAA9B29C882AC0089AB98 /* FlankerSandboxView.swift in Sources */,
+				014B5A7029CAFB4E00882214 /* FlankerView.swift in Sources */,
+				014B5A8629CAFB6F00882214 /* ResultManager.swift in Sources */,
+				014B5A6D29CAFB1100882214 /* CustomText.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F87E177C29771F310021550E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				014B5A7229CAFB5300882214 /* FlankerViewManager.m in Sources */,
+				01325C002B206CFB00F4DD1F /* String+Extensions.swift in Sources */,
+				014B5A8129CAFB6A00882214 /* ParameterModel.swift in Sources */,
+				014B5A8A29CAFB7600882214 /* TimeInterval+Extension.swift in Sources */,
+				F83E655229FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */,
+				014B5A7829CAFB5B00882214 /* GameManager.swift in Sources */,
+				014B5A9029CAFB7E00882214 /* UIImageView+Extensions.swift in Sources */,
+				014B5A7B29CAFB6000882214 /* ImageLoader.swift in Sources */,
+				014B5A6929CAFAF600882214 /* CustomButton.swift in Sources */,
+				014B5A9629CAFBB000882214 /* FlankerModel.swift in Sources */,
+				014B5A8729CAFB7200882214 /* ResultView.swift in Sources */,
+				014B5A8D29CAFB7A00882214 /* UIColor+Extension.swift in Sources */,
+				F87E177D29771F310021550E /* AppDelegate.mm in Sources */,
+				014B5A9329CAFB8200882214 /* UITextFild+Extesion.swift in Sources */,
+				014B5A7E29CAFB6600882214 /* ParameterGameManager.swift in Sources */,
+				F87E177E29771F310021550E /* main.m in Sources */,
+				014B5A7529CAFB5700882214 /* FlankerViewManager.swift in Sources */,
+				288FAA9C29C882B00089AB98 /* FlankerSandboxView.swift in Sources */,
+				014B5A6F29CAFB4E00882214 /* FlankerView.swift in Sources */,
+				014B5A8429CAFB6D00882214 /* ResultManager.swift in Sources */,
+				014B5A6C29CAFB1000882214 /* CustomText.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F8EF45492A975A9200EEC085 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F8EF454A2A975A9200EEC085 /* FlankerViewManager.m in Sources */,
+				01325C012B206CFB00F4DD1F /* String+Extensions.swift in Sources */,
+				F8EF454B2A975A9200EEC085 /* ParameterModel.swift in Sources */,
+				F8EF454C2A975A9200EEC085 /* TimeInterval+Extension.swift in Sources */,
+				F8EF454D2A975A9200EEC085 /* RNBackgroundFetch+AppDelegate.m in Sources */,
+				F8EF454E2A975A9200EEC085 /* GameManager.swift in Sources */,
+				F8EF454F2A975A9200EEC085 /* UIImageView+Extensions.swift in Sources */,
+				F8EF45502A975A9200EEC085 /* ImageLoader.swift in Sources */,
+				F8EF45512A975A9200EEC085 /* CustomButton.swift in Sources */,
+				F8EF45522A975A9200EEC085 /* FlankerModel.swift in Sources */,
+				F8EF45532A975A9200EEC085 /* ResultView.swift in Sources */,
+				F8EF45542A975A9200EEC085 /* UIColor+Extension.swift in Sources */,
+				F8EF45552A975A9200EEC085 /* AppDelegate.mm in Sources */,
+				F8EF45562A975A9200EEC085 /* UITextFild+Extesion.swift in Sources */,
+				F8EF45572A975A9200EEC085 /* ParameterGameManager.swift in Sources */,
+				F8EF45582A975A9200EEC085 /* main.m in Sources */,
+				F8EF45592A975A9200EEC085 /* FlankerViewManager.swift in Sources */,
+				F8EF455A2A975A9200EEC085 /* FlankerSandboxView.swift in Sources */,
+				F8EF455B2A975A9200EEC085 /* FlankerView.swift in Sources */,
+				F8EF455C2A975A9200EEC085 /* ResultManager.swift in Sources */,
+				F8EF455D2A975A9200EEC085 /* CustomText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,9 +1639,11 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-MindloggerMobile-MindloggerMobileTests.debug.xcconfig */;
+			baseConfigurationReference = 460AE10D47ECAF083434EC9D /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CURRENT_PROJECT_VERSION = 1563;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -444,6 +1655,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0.1;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -457,10 +1669,12 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-MindloggerMobile-MindloggerMobileTests.release.xcconfig */;
+			baseConfigurationReference = 40932F5617DFCA1C42388086 /* Pods-MindloggerMobileCommonPods-MindloggerMobileTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1563;
 				INFOPLIST_FILE = MindloggerMobileTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -468,6 +1682,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0.1;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -481,50 +1696,81 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-MindloggerMobile.debug.xcconfig */;
+			baseConfigurationReference = 3C835A8674B8C88D9343D4FD /* Pods-MindloggerMobileCommonPods-MindloggerMobile.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_ENTITLEMENTS = MindloggerMobile/MindloggerMobileDebug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1563;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MindloggerMobile/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Mindlogger;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data;
 				PRODUCT_NAME = MindloggerMobile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MindLogger Prod [Development";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "FlankerSandboxView/MindloggerMobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-MindloggerMobile.release.xcconfig */;
+			baseConfigurationReference = 68480DA878A0DE26623AD7B3 /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_ENTITLEMENTS = MindloggerMobile/MindloggerMobileRelease.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1563;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = MindloggerMobile/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Mindlogger;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data;
 				PRODUCT_NAME = MindloggerMobile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MindLogger Prod Distribution";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "FlankerSandboxView/MindloggerMobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -534,7 +1780,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -570,6 +1816,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -578,6 +1825,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
@@ -590,14 +1848,17 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
+				OTHER_LDFLAGS = "$(inherited)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -606,7 +1867,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -637,12 +1898,27 @@
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
@@ -654,15 +1930,334 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
+				OTHER_LDFLAGS = "$(inherited)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F87E175E29771F200021550E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 495D1220FFE010B98FBD7BA5 /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MindloggerMobileDevDebug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1563;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = "MindloggerMobile dev-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger Dev";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data.dev;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MindLogger DEV [Development";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		F87E175F29771F200021550E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B523576F9E73DE3C9CDE92AC /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MindloggerMobileDevRelease.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1563;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
+				INFOPLIST_FILE = "MindloggerMobile dev-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger Dev";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data.dev;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MindLogger DEV Distribution";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		F87E177529771F290021550E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 67F2C3C747ACE0246F942CE6 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MindloggerMobileQADebug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1563;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = "MindloggerMobile qa-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger QA";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data.qa;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MindLogger QA Development Profile";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		F87E177629771F290021550E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 85000AFF48FE2EAC514B3886 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MindloggerMobileQARelease.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1563;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
+				INFOPLIST_FILE = "MindloggerMobile qa-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger QA";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data.qa;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MindLogger QA Profile";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		F87E178C29771F310021550E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D8EFAF02FD6EEB6D5CF3CE58 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MindloggerMobileStagingDebug.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1563;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = "MindloggerMobile staging-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger Staging";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data.staging;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MindLogger Staging Development Profile";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		F87E178D29771F310021550E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 61D19208BA4AF09E17EA0285 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MindloggerMobileStagingRelease.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1563;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
+				INFOPLIST_FILE = "MindloggerMobile staging-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger Staging";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data.staging;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MindLogger Staging Profile";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		F8EF45702A975A9200EEC085 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A909ADF56B509F79088C9DC7 /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MindloggerMobileUATDebug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1563;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = "MindloggerMobile uat-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger UAT";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data.uat;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MindLogger UAT [Development";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		F8EF45712A975A9200EEC085 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E8181CBF43C62AECDEC337D /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MindloggerMobileUATRelease.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1563;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
+				INFOPLIST_FILE = "MindloggerMobile uat-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger UAT";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data.uat;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MindLogger UAT Distribution";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
@@ -692,6 +2287,42 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F87E175D29771F200021550E /* Build configuration list for PBXNativeTarget "MindloggerMobileDev" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F87E175E29771F200021550E /* Debug */,
+				F87E175F29771F200021550E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F87E177429771F290021550E /* Build configuration list for PBXNativeTarget "MindloggerMobileQA" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F87E177529771F290021550E /* Debug */,
+				F87E177629771F290021550E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F87E178B29771F310021550E /* Build configuration list for PBXNativeTarget "MindloggerMobileStaging" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F87E178C29771F310021550E /* Debug */,
+				F87E178D29771F310021550E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F8EF456F2A975A9200EEC085 /* Build configuration list for PBXNativeTarget "MindloggerMobileUAT" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F8EF45702A975A9200EEC085 /* Debug */,
+				F8EF45712A975A9200EEC085 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
