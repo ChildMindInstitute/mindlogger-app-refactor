@@ -31,6 +31,7 @@ const DatePickerItem: FC<Props> = ({ value, onChange }) => {
       onChange={onChangeDate}
       value={valueAsDate}
       iconAfter={<RightArrowIcon color={colors.lightGrey2} size={15} />}
+      placeholder="MM/DD/YYYY"
     />
   );
 };

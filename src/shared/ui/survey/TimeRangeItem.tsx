@@ -67,6 +67,7 @@ const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
         value={startTimeAsDate}
         mode="time"
         iconAfter={<BedIcon color={colors.grey2} size={15} />}
+        placeholder="HH:MM AM/PM"
       />
 
       <DateTimePicker
@@ -77,6 +78,7 @@ const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
         mode="time"
         value={endTimeAsDate}
         iconAfter={<AlarmIcon color={colors.grey2} size={15} />}
+        placeholder="HH:MM AM/PM"
       />
     </YStack>
   );

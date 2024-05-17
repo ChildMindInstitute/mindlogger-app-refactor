@@ -28,7 +28,7 @@ const TimePickerItem: FC<Props> = ({ value, onChange }) => {
         ? getMidnightDateInMs(getNow()) +
           getMsFromHours(value.hours) +
           getMsFromMinutes(value.minutes)
-        : getNow(),
+        : null,
     [value],
   );
 
@@ -36,10 +36,11 @@ const TimePickerItem: FC<Props> = ({ value, onChange }) => {
     <DateTimePicker
       accessibilityLabel="time-picker"
       onChange={onChangeDate}
-      value={new Date(timeInMs)}
+      value={timeInMs ? new Date(timeInMs) : null}
       dateDisplayFormat="hh:mm aa"
       mode="time"
       iconAfter={<AlarmIcon color={colors.lightGrey} size={15} />}
+      placeholder="HH:MM AM/PM"
     />
   );
 };
