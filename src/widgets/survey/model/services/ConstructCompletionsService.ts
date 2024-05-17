@@ -107,10 +107,10 @@ export class ConstructCompletionsService {
       ? 'not set'
       : new Date(availableTo).toUTCString();
 
-    return `evaluatedEndAt = ${logEndAt}, availableTo = ${logAvailableTo}`;
+    return `evaluatedEndAt: "${logEndAt}|${evaluatedEndAt}", availableTo: ${logAvailableTo}`;
   }
 
-  private logCompletion(
+  private logFinish(
     activityName: string,
     activityId: string,
     flowId: string | undefined,
@@ -118,16 +118,17 @@ export class ConstructCompletionsService {
     appletId: string,
     evaluatedEndAt: number,
     availableTo: number | null,
+    submitId: string,
   ) {
     const logDates = this.getLogDates(evaluatedEndAt, availableTo);
 
     Logger.log(
-      `[ConstructCompletionsService]: Activity "${activityName}|${activityId}" completed, applet "${appletName}|${appletId}, ${logDates}"`,
+      `[ConstructCompletionsService.logFinish]: Activity: "${activityName}|${activityId}", applet: "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
     );
 
     if (flowId) {
       Logger.log(
-        `[ConstructCompletionsService]: Flow "${flowId}" completed, applet "${appletName}|${appletId}, ${logDates}"`,
+        `[ConstructCompletionsService.logFinish]: Flow "${flowId}", applet "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
       );
     }
   }
@@ -143,11 +144,12 @@ export class ConstructCompletionsService {
     appletName: string,
     evaluatedEndAt: number,
     availableTo: number | null,
+    submitId: string,
   ) {
     const logDates = this.getLogDates(evaluatedEndAt, availableTo);
 
     Logger.log(
-      `[ConstructCompletionsService]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" completed, applet "${appletName}|${appletId}, ${logDates}"`,
+      `[ConstructCompletionsService.logIntermediate]: Activity: "${activityName}|${activityId}", flow: "${flowName}|${flowId}", applet: "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
     );
   }
 
@@ -314,15 +316,16 @@ export class ConstructCompletionsService {
       isAutocompletion,
     );
 
+    const submitId = getExecutionGroupKey(progressRecord);
+
     this.logIntermediate(
       input,
       flowName!,
       appletName,
       evaluatedEndAt,
       progressRecord.availableTo,
+      submitId,
     );
-
-    const submitId = getExecutionGroupKey(progressRecord);
 
     this.pushToQueueService.push({
       appletId,
@@ -355,9 +358,7 @@ export class ConstructCompletionsService {
       [MixProperties.SubmitId]: submitId,
     });
 
-    Logger.log(
-      `[ConstructCompletionsService.constructForIntermediate] Done, submitId=${submitId}, evaluatedEndAt=${new Date(evaluatedEndAt).toString()}`,
-    );
+    Logger.log(`[ConstructCompletionsService.constructForIntermediate] Done`);
   }
 
   private async constructForFinish(
@@ -429,7 +430,9 @@ export class ConstructCompletionsService {
       isAutocompletion,
     );
 
-    this.logCompletion(
+    const submitId = getExecutionGroupKey(progressRecord);
+
+    this.logFinish(
       activityName,
       activityId,
       flowId,
@@ -437,11 +440,10 @@ export class ConstructCompletionsService {
       appletId,
       evaluatedEndAt,
       progressRecord.availableTo,
+      submitId,
     );
 
     const { scheduledDate } = getFlowRecord(flowId, appletId, eventId)!;
-
-    const submitId = getExecutionGroupKey(progressRecord);
 
     this.pushToQueueService.push({
       appletId,
@@ -483,21 +485,25 @@ export class ConstructCompletionsService {
       [MixProperties.SubmitId]: submitId,
     });
 
-    Logger.log(
-      `[ConstructCompletionsService.constructForFinish] Done, submitId=${submitId}, evaluatedEndAt=${new Date(evaluatedEndAt).toString()}`,
-    );
+    Logger.log(`[ConstructCompletionsService.constructForFinish] Done`);
   }
 
   public async construct(input: ConstructInput): Promise<void> {
-    if (input.completionType === 'intermediate') {
-      await this.constructForIntermediate({
-        ...input,
-        flowId: input.flowId!,
-      });
-    }
+    try {
+      if (input.completionType === 'intermediate') {
+        await this.constructForIntermediate({
+          ...input,
+          flowId: input.flowId!,
+        });
+      }
 
-    if (input.completionType === 'finish') {
-      await this.constructForFinish(input);
+      if (input.completionType === 'finish') {
+        await this.constructForFinish(input);
+      }
+    } catch (error) {
+      Logger.warn(
+        `[ConstructCompletionsService.construct] Error occurred: \n${error}`,
+      );
     }
   }
 }

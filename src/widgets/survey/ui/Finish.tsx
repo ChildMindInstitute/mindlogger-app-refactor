@@ -79,9 +79,15 @@ function FinishItem({
 
   const isCompletedAutomatically = finishReason === 'time-is-up';
 
+  const isFlow = !!flowId;
+
   async function completeInterruptedActivity(
     constructCompletionService: ConstructCompletionsService,
   ) {
+    Logger.log(
+      `[Finish.completeInterruptedActivity] interruptionStep=${interruptionStep}`,
+    );
+
     const {
       order: interruptedOrder,
       activityId: interruptedActivityId,
@@ -117,7 +123,7 @@ function FinishItem({
       dispatch,
     );
 
-    if (isCompletedAutomatically) {
+    if (isCompletedAutomatically && isFlow) {
       await completeInterruptedActivity(constructCompletionService);
     }
 
