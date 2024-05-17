@@ -5,6 +5,8 @@ import {
 } from '@app/abstract/lib';
 import { colors } from '@shared/lib/constants';
 
+import { getNow } from '../dateTime';
+
 export const invertColor = (hex: string) => {
   const RED_RATIO = 299;
   const GREEN_RATIO = 587;
@@ -51,4 +53,4 @@ export function isReadyForAutocompletion(
 }
 
 export const isEntityExpired = (availableTo: number | null | undefined) =>
-  !!availableTo && Date.now() > availableTo;
+  !!availableTo && getNow().getTime() > availableTo;

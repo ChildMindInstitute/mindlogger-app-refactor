@@ -17,6 +17,7 @@ import {
   getEntityProgress,
   getNow,
   getTimezoneOffset,
+  isEntityExpired,
   Logger,
   MixEvents,
   MixProperties,
@@ -159,6 +160,12 @@ export class ConstructCompletionsService {
       return getNow().getTime();
     }
 
+    if (!isEntityExpired(availableTo)) {
+      return completionType === 'intermediate'
+        ? getNow().getTime()
+        : addMilliseconds(getNow(), DistinguishInterimAndFinishLag).getTime();
+    }
+
     return completionType === 'intermediate'
       ? availableTo
       : addMilliseconds(availableTo, DistinguishInterimAndFinishLag).getTime();
@@ -182,23 +189,27 @@ export class ConstructCompletionsService {
     };
   }
 
-  private validate(
-    activityStorageRecord: ActivityState | null | undefined,
+  private validateEncryption(
     appletEncryption: AppletEncryptionDTO | null | undefined,
   ) {
-    if (!activityStorageRecord) {
-      const error =
-        '[ConstructCompletionsService] activityStorageRecord does not exist';
-      Logger.warn(error);
-      throw new Error(error);
-    }
-
     if (!appletEncryption) {
       const error =
         '[ConstructCompletionsService] Encryption params is undefined';
       Logger.warn(error);
       throw new Error(error);
     }
+  }
+
+  private isRecordExist(
+    activityStorageRecord: ActivityState | null | undefined,
+  ): boolean {
+    if (!activityStorageRecord) {
+      Logger.warn(
+        '[ConstructCompletionsService] activityStorageRecord does not exist',
+      );
+      return false;
+    }
+    return true;
   }
 
   private addSummaryData(
@@ -259,9 +270,13 @@ export class ConstructCompletionsService {
       order,
     )!;
 
+    if (!this.isRecordExist(activityStorageRecord)) {
+      return;
+    }
+
     const { appletEncryption, appletName } = this.getAppletProperties(appletId);
 
-    this.validate(activityStorageRecord, appletEncryption);
+    this.validateEncryption(appletEncryption);
 
     const { items, answers: recordAnswers, actions } = activityStorageRecord;
 
@@ -339,6 +354,10 @@ export class ConstructCompletionsService {
       [MixProperties.AppletId]: appletId,
       [MixProperties.SubmitId]: submitId,
     });
+
+    Logger.log(
+      `[ConstructCompletionsService.constructForIntermediate] Done, submitId=${submitId}, evaluatedEndAt=${new Date(evaluatedEndAt).toString()}`,
+    );
   }
 
   private async constructForFinish(
@@ -361,8 +380,6 @@ export class ConstructCompletionsService {
 
     const entityId = flowId ? flowId : activityId;
 
-    const { appletEncryption, appletName } = this.getAppletProperties(appletId);
-
     const activityStorageRecord = getActivityRecord(
       appletId,
       activityId,
@@ -370,7 +387,13 @@ export class ConstructCompletionsService {
       order,
     )!;
 
-    this.validate(activityStorageRecord, appletEncryption);
+    if (!this.isRecordExist(activityStorageRecord)) {
+      return;
+    }
+
+    const { appletEncryption, appletName } = this.getAppletProperties(appletId);
+
+    this.validateEncryption(appletEncryption);
 
     const { items, answers: recordAnswers, actions } = activityStorageRecord;
 
@@ -459,6 +482,10 @@ export class ConstructCompletionsService {
       [MixProperties.AppletId]: appletId,
       [MixProperties.SubmitId]: submitId,
     });
+
+    Logger.log(
+      `[ConstructCompletionsService.constructForFinish] Done, submitId=${submitId}, evaluatedEndAt=${new Date(evaluatedEndAt).toString()}`,
+    );
   }
 
   public async construct(input: ConstructInput): Promise<void> {
