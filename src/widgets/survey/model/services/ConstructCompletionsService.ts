@@ -1,5 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
-import { addMilliseconds } from 'date-fns';
+import { addMilliseconds, subSeconds } from 'date-fns';
 
 import { StoreProgress } from '@app/abstract/lib';
 import { IPushToQueue } from '@app/entities/activity';
@@ -168,9 +168,14 @@ export class ConstructCompletionsService {
         : addMilliseconds(getNow(), DistinguishInterimAndFinishLag).getTime();
     }
 
+    const aSecondBeforeAvailableTo = subSeconds(availableTo, 1);
+
     return completionType === 'intermediate'
-      ? availableTo
-      : addMilliseconds(availableTo, DistinguishInterimAndFinishLag).getTime();
+      ? aSecondBeforeAvailableTo.getTime()
+      : addMilliseconds(
+          aSecondBeforeAvailableTo,
+          DistinguishInterimAndFinishLag,
+        ).getTime();
   }
 
   private getAppletProperties(appletId: string): {

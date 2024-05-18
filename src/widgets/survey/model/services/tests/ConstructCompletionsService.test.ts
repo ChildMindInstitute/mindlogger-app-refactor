@@ -1,5 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
-import { addHours, addMilliseconds, subHours } from 'date-fns';
+import { addHours, addMilliseconds, subHours, subSeconds } from 'date-fns';
 
 import { StoreProgress } from '@app/abstract/lib';
 import { Answers, PipelineItem } from '@app/features/pass-survey';
@@ -580,8 +580,8 @@ describe('Test ConstructCompletionsService: evaluateEndAt', () => {
       availableTo: subHours(now, 1).getTime(),
       logAvailableTo: 'subHours(now, 1)',
       isAutocompletion: true,
-      expectedResult: subHours(now, 1).getTime(),
-      expectedResultLog: 'subHours(now, 1)',
+      expectedResult: subSeconds(subHours(now, 1), 1).getTime(),
+      expectedResultLog: 'subSeconds(subHours(now, 1), 1)',
     },
     {
       completionType: 'finish',
@@ -604,8 +604,11 @@ describe('Test ConstructCompletionsService: evaluateEndAt', () => {
       availableTo: subHours(now, 1).getTime(),
       logAvailableTo: 'subHours(now, 1)',
       isAutocompletion: true,
-      expectedResult: addMilliseconds(subHours(now, 1), 1).getTime(),
-      expectedResultLog: 'addMilliseconds(subHours(now, 1), 1)',
+      expectedResult: addMilliseconds(
+        subSeconds(subHours(now, 1), 1),
+        1,
+      ).getTime(),
+      expectedResultLog: 'addMilliseconds(subSeconds(subHours(now, 1), 1), 1)',
     },
     {
       completionType: 'finish',
