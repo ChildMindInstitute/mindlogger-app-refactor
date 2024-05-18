@@ -526,7 +526,7 @@ describe('Test ConstructCompletionsService: edge cases', () => {
       ? 'fullfilled'
       : String(activityStorageRecord);
 
-    it(`"validate" should throw error when activityStorageRecord is ${activityStorageRecordAsText}`, () => {
+    it(`isRecordExist should return ${expectedResult} when activityStorageRecord is ${activityStorageRecordAsText}`, () => {
       const progress: StoreProgress = getFlowProgressMock();
 
       const { saveSummaryMock } = mockConstructionServiceExternals(mockNowDate);
