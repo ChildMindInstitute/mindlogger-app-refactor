@@ -2,6 +2,7 @@ import {
   ActivityItemType,
   ActivityState,
   onIncorrectAnswerGiven,
+  TimeRangeResponse,
 } from '../../lib';
 import AnswerValidator from '../AnswerValidator';
 
@@ -20,6 +21,7 @@ function useActivityStepper(state: ActivityState | undefined) {
 
   const isTutorialStep = currentPipelineItem?.type === 'Tutorial';
   const isAbTestStep = currentPipelineItem?.type === 'AbTest';
+  const isTimeRangeStep = currentPipelineItem?.type === 'TimeRange';
   const isMessageStep = currentPipelineItem?.type === 'Message';
   const isSplashStep = currentPipelineItem?.type === 'Splash';
   const isFirstStep = step === 0;
@@ -34,14 +36,23 @@ function useActivityStepper(state: ActivityState | undefined) {
     answers[step]?.additionalAnswer != null &&
     answers[step]?.additionalAnswer !== '';
 
+  const invalidTimeRangeAnswer =
+    isTimeRangeStep &&
+    ((answers[step]?.answer as TimeRangeResponse)?.startTime === null ||
+      (answers[step]?.answer as TimeRangeResponse)?.endTime === null);
+
   const canSkip =
     !!currentPipelineItem?.isSkippable && !hasAnswer && !isSplashStep;
-  const canMoveNext =
+
+  const canContinue =
     isTutorialStep ||
     isMessageStep ||
     isAbTestStep ||
     currentPipelineItem?.isSkippable ||
     (hasAnswer && (!additionalAnswerRequired || hasAdditionalAnswer));
+
+  const canMoveNext = canContinue && !invalidTimeRangeAnswer;
+
   const canMoveBack = currentPipelineItem?.isAbleToMoveBack;
   const canReset =
     currentPipelineItem?.canBeReset && (hasAnswer || hasAdditionalAnswer);
