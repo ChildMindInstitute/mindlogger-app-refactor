@@ -1,7 +1,12 @@
 import { Item } from '@app/shared/ui';
 import { ConditionalLogicModel } from '@entities/conditional-logic';
 
-import { Answers, PipelineItem, RadioResponse } from '../lib';
+import {
+  Answers,
+  PipelineItem,
+  RadioResponse,
+  TimeRangeResponse,
+} from '../lib';
 
 type AnswerValidatorArgs = {
   items: PipelineItem[];
@@ -19,6 +24,7 @@ export interface IAnswerValidator {
   isLessThen(value: number): boolean;
   includesOption(optionValue: string): boolean;
   notIncludesOption(optionValue: string): boolean;
+  isValidAnswer(): boolean;
 }
 
 function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator {
@@ -88,6 +94,21 @@ function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator {
       );
 
       return ConditionalLogicModel.doesNotIncludeValue(answer, optionValue);
+    },
+    isValidAnswer() {
+      switch (currentPipelineItem?.type) {
+        case 'TimeRange': {
+          const answer = currentAnswer?.answer as TimeRangeResponse;
+
+          if (answer) {
+            return !!answer?.startTime && !!answer?.endTime;
+          }
+
+          return true;
+        }
+        default:
+          return true;
+      }
     },
   };
 }

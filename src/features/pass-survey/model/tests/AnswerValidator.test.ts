@@ -1,6 +1,6 @@
 import { ConditionType } from '@app/entities/activity';
 
-import { getEmptySliderItem } from './testHelpers';
+import { getEmptySliderItem, getTimeRangeItem } from './testHelpers';
 import { Answers } from '../../lib';
 import AnswerValidator, { IAnswerValidator } from '../AnswerValidator';
 
@@ -207,5 +207,136 @@ describe('AnswerValidator tests', () => {
     const result = validator.isCorrect();
 
     expect(result).toEqual(false);
+  });
+
+  it('Should return true when validationOptions is not present', () => {
+    const sliderItem1 = getEmptySliderItem('mock-slider-name-1');
+
+    const items = [sliderItem1];
+
+    const answer1 = { answer: '1' };
+
+    const answers: Answers = {
+      '0': answer1,
+    };
+
+    const validator = AnswerValidator({
+      items: items as any,
+      answers: answers as any,
+      step: 1,
+    });
+
+    const result = validator.isCorrect();
+
+    expect(result).toEqual(true);
+  });
+
+  it('Should return true if slider item has (any) answer ', () => {
+    const sliderItem = getEmptySliderItem('mock-slider-name-2');
+
+    const items = [sliderItem];
+
+    const answer = { answer: '2' };
+
+    const answers: Answers = {
+      '0': answer,
+    };
+
+    const validator = AnswerValidator({
+      items: items as any,
+      answers: answers as any,
+      step: 0,
+    });
+
+    const result = validator.isValidAnswer();
+
+    expect(result).toEqual(true);
+  });
+
+  it('Should return true when timeRange answer has both startTime and endTime set ', () => {
+    const timeRangeItem = getTimeRangeItem();
+
+    const items = [timeRangeItem];
+
+    const answer = {
+      answer: {
+        startTime: {
+          hours: 1,
+          minutes: 2,
+        },
+        endTime: {
+          hours: 1,
+          minutes: 2,
+        },
+      },
+    };
+
+    const answers: Answers = {
+      '0': answer,
+    };
+
+    const validator = AnswerValidator({
+      items: items as any,
+      answers: answers as any,
+      step: 0,
+    });
+
+    const result = validator.isValidAnswer();
+
+    expect(result).toEqual(true);
+  });
+
+  it('Should return false when timeRange answer does not have both startTime and endTime set', () => {
+    const timeRangeItem = getTimeRangeItem();
+
+    const items = [timeRangeItem];
+
+    const answer = {
+      answer: {
+        startTime: {
+          hours: 1,
+          minutes: 2,
+        },
+        endTime: null,
+      },
+    };
+
+    const answers: Answers = {
+      '0': answer,
+    };
+
+    const validator = AnswerValidator({
+      items: items as any,
+      answers: answers as any,
+      step: 0,
+    });
+
+    const result = validator.isValidAnswer();
+
+    expect(result).toEqual(false);
+  });
+
+  it('Should return true when timeRange item answer is null', () => {
+    const timeRangeItem = getTimeRangeItem();
+
+    const items = [timeRangeItem];
+
+    const answer = {
+      answer: null,
+    };
+
+    const answers: Answers = {
+      '0': answer,
+    };
+
+    const validator = AnswerValidator({
+      items: items as any,
+      answers: answers as any,
+      step: 0,
+    });
+
+    const result = validator.isValidAnswer();
+
+    expect(result).toEqual(true);
   });
 });

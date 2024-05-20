@@ -14,6 +14,7 @@ import {
   StackedRadioResponse,
   StackedSliderPipelineItem,
   TextInputPipelineItem,
+  TimeRangePipelineItem,
   TutorialPipelineItem,
 } from '../../lib';
 
@@ -529,5 +530,17 @@ export const getStackedSliderItem = (): StackedSliderPipelineItem => {
     },
     type: 'StackedSlider',
   };
+  return result;
+};
+
+export const getTimeRangeItem = (): TimeRangePipelineItem => {
+  const result: TimeRangePipelineItem = {
+    id: 'mock-timerange-id',
+    name: 'mock-timerange-name',
+    timer: null,
+    payload: null,
+    type: 'TimeRange',
+  };
+
   return result;
 };
