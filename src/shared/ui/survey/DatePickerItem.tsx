@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 
 import { format } from 'date-fns';
 
@@ -21,13 +21,7 @@ const DatePickerItem: FC<Props> = ({ value, onChange }) => {
     onChange(formattedDate);
   };
 
-  const valueAsDate = useMemo(() => {
-    if (!value) {
-      return new Date();
-    }
-
-    return getDateFromString(value);
-  }, [value]);
+  const valueAsDate = value ? getDateFromString(value) : null;
 
   return (
     <DateTimePicker
