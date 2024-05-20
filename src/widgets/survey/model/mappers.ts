@@ -211,6 +211,10 @@ function convertToDateAnswerAnswer(answer: Answer): AnswerDto {
 }
 
 function convertToTimeRangeAnswer(answer: Answer): AnswerDto {
+  const defaultDate = new Date();
+  const defaultHours = defaultDate.getHours();
+  const defaultMinutes = defaultDate.getMinutes();
+
   const timeRangeItem = answer.answer as TimeRange;
   const { startTime, endTime } = timeRangeItem ?? {};
 
@@ -218,12 +222,12 @@ function convertToTimeRangeAnswer(answer: Answer): AnswerDto {
     ...(timeRangeItem && {
       value: {
         from: {
-          hour: startTime.hours,
-          minute: startTime.minutes,
+          hour: startTime?.hours || defaultHours,
+          minute: startTime?.minutes || defaultMinutes,
         },
         to: {
-          hour: endTime.hours,
-          minute: endTime.minutes,
+          hour: endTime?.hours || defaultHours,
+          minute: endTime?.minutes || defaultMinutes,
         },
       },
     }),
