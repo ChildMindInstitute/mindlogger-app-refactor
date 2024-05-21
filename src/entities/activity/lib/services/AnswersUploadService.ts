@@ -156,6 +156,10 @@ class AnswersUploadService implements IAnswersUploadService {
           `[UploadAnswersService.processFileUpload] Uploading file ${logFileInfo}`,
         );
 
+        this.logger.log(
+          `[UploadAnswersService.processFileUpload] Received field names: ${Object.keys(getFieldsDto.fields).toString()}`,
+        );
+
         await FileService.uploadAppletFileToS3({
           fields: getFieldsDto.fields,
           fileName: mediaFile.fileName,
