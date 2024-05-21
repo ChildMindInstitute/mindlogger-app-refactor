@@ -1,5 +1,6 @@
 import {
   ActivityPipelineType,
+  ActivityProgress,
   AvailabilityType,
   FlowProgress,
 } from '@app/abstract/lib';
@@ -56,8 +57,7 @@ export class ListItemsFactory {
         progressRecord.pipelineActivityOrder + 1;
       item.activityFlowDetails.numberOfActivitiesInFlow =
         progressRecord.totalActivitiesInPipeline;
-      item.activityFlowDetails.activityFlowName =
-        progressRecord.entityName || activityFlow.name;
+      item.activityFlowDetails.activityFlowName = progressRecord.entityName;
     } else {
       activity = this.utility.activities.find(
         x => x.id === activityFlow.activityIds[0],
@@ -70,6 +70,7 @@ export class ListItemsFactory {
       item.activityFlowDetails.activityPositionInFlow = 1;
       item.activityFlowDetails.numberOfActivitiesInFlow =
         activityFlow.activityIds.length;
+      item.activityFlowDetails.activityFlowName = activityFlow.name;
     }
   }
 
@@ -82,9 +83,9 @@ export class ListItemsFactory {
     if (isInProgress) {
       const progressRecord = this.utility.getProgressRecord(
         activityEvent,
-      ) as FlowProgress;
+      ) as ActivityProgress;
 
-      item.name = progressRecord.entityName || item.name;
+      item.name = progressRecord.entityName;
     }
   }
 
@@ -106,6 +107,7 @@ export class ListItemsFactory {
       isExpired: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
+      activityFlowDetails: null,
     };
 
     if (isFlow) {

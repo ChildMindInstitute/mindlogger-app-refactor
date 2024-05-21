@@ -119,6 +119,7 @@ const getExpectedItem = (): ActivityListItem => {
     isInActivityFlow: false,
     image: undefined,
     availableTo: null,
+    activityFlowDetails: null,
   };
   return expectedItem;
 };
