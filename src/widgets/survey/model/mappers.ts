@@ -43,6 +43,7 @@ import {
   AbLogLineDto,
   AbLogPointDto,
   AnswerAlertsDto,
+  TimeRangeAnswerDto,
 } from '@shared/api';
 import {
   HourMinute,
@@ -58,8 +59,8 @@ import { canItemHaveAnswer } from './operations';
 type Answer = PipelineItemAnswer['value'];
 
 type TimeRange = {
-  endTime: HourMinute;
-  startTime: HourMinute;
+  endTime: HourMinute | null;
+  startTime: HourMinute | null;
 };
 
 type StackedRadioAnswerValue = Array<Array<Item>>;
@@ -211,26 +212,31 @@ function convertToDateAnswerAnswer(answer: Answer): AnswerDto {
 }
 
 function convertToTimeRangeAnswer(answer: Answer): AnswerDto {
-  const defaultDate = new Date();
-  const defaultHours = defaultDate.getHours();
-  const defaultMinutes = defaultDate.getMinutes();
-
   const timeRangeItem = answer.answer as TimeRange;
   const { startTime, endTime } = timeRangeItem ?? {};
 
+  const timeRangeValue = {
+    value: {
+      from: null,
+      to: null,
+    } as TimeRangeAnswerDto,
+  };
+
+  if (startTime) {
+    timeRangeValue.value.from = {
+      hour: startTime.hours,
+      minute: startTime.minutes,
+    };
+  }
+  if (endTime) {
+    timeRangeValue.value.to = {
+      hour: endTime?.hours,
+      minute: endTime?.minutes,
+    };
+  }
+
   return {
-    ...(timeRangeItem && {
-      value: {
-        from: {
-          hour: startTime?.hours || defaultHours,
-          minute: startTime?.minutes || defaultMinutes,
-        },
-        to: {
-          hour: endTime?.hours || defaultHours,
-          minute: endTime?.minutes || defaultMinutes,
-        },
-      },
-    }),
+    ...timeRangeValue,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
