@@ -47,7 +47,10 @@ const useTimer = (input: UseTimerInput) => {
     const durationLeft = durationBySettings - alreadyElapsed;
 
     const timer = new AppTimer(
-      () => postponer.tryExecute(),
+      () => {
+        postponer.tryExecute();
+        timer.stop();
+      },
       false,
       durationLeft,
     );
