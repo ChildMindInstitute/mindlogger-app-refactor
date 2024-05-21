@@ -12,6 +12,7 @@ const ConditionalLogicItems: ActivityItemType[] = [
 ];
 
 function useActivityStepper(state: ActivityState | undefined) {
+  const answerValidator = AnswerValidator(state);
   const step = state?.step ?? 0;
   const items = state?.items ?? [];
   const answers = state?.answers ?? {};
@@ -36,12 +37,16 @@ function useActivityStepper(state: ActivityState | undefined) {
 
   const canSkip =
     !!currentPipelineItem?.isSkippable && !hasAnswer && !isSplashStep;
+
   const canMoveNext =
     isTutorialStep ||
     isMessageStep ||
     isAbTestStep ||
     currentPipelineItem?.isSkippable ||
-    (hasAnswer && (!additionalAnswerRequired || hasAdditionalAnswer));
+    (hasAnswer &&
+      (!additionalAnswerRequired || hasAdditionalAnswer) &&
+      answerValidator.isValidAnswer());
+
   const canMoveBack = currentPipelineItem?.isAbleToMoveBack;
   const canReset =
     currentPipelineItem?.canBeReset && (hasAnswer || hasAdditionalAnswer);
@@ -52,8 +57,6 @@ function useActivityStepper(state: ActivityState | undefined) {
   const isConditionalLogicItem = ConditionalLogicItems.includes(
     currentPipelineItem!?.type,
   );
-
-  const answerValidator = AnswerValidator(state);
 
   function isValid() {
     const valid = answerValidator.isCorrect();
