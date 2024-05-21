@@ -4,10 +4,6 @@ export const enum ActivityPipelineType {
   Flow,
 }
 
-export type EntityName = {
-  entityName: string;
-};
-
 export type FlowProgress = {
   type: ActivityPipelineType.Flow;
   pipelineActivityOrder: number;
@@ -18,11 +14,13 @@ export type FlowProgress = {
   currentActivityImage: string | null;
   currentActivityStartAt: number | null;
   executionGroupKey: string;
-} & EntityName;
+  entityName: string;
+};
 
 export type ActivityProgress = {
   type: ActivityPipelineType.Regular;
-} & EntityName;
+  entityName: string;
+};
 
 export type EntityProgress = FlowProgress | ActivityProgress;
 
