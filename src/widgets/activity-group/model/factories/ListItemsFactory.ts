@@ -13,7 +13,7 @@ import {
 import { isEntityExpired, MIDNIGHT_DATE } from '@shared/lib';
 
 import { GroupUtility, GroupsBuildContext } from './GroupUtility';
-import { EventEntity, Activity, ActivityFlow } from '../../lib';
+import { EventEntity, Activity, ActivityFlow, Entity } from '../../lib';
 
 export class ListItemsFactory {
   private utility: GroupUtility;
@@ -77,6 +77,7 @@ export class ListItemsFactory {
   private populateActivityFields(
     item: ActivityListItem,
     activityEvent: EventEntity,
+    entity: Entity,
   ) {
     const isInProgress = this.utility.isInProgress(activityEvent);
 
@@ -86,6 +87,7 @@ export class ListItemsFactory {
       ) as ActivityProgress;
 
       item.name = progressRecord.entityName;
+      item.activityId = entity.id;
     }
   }
 
@@ -113,7 +115,7 @@ export class ListItemsFactory {
     if (isFlow) {
       this.populateActivityFlowFields(item, eventActivity);
     } else {
-      this.populateActivityFields(item, eventActivity);
+      this.populateActivityFields(item, eventActivity, entity);
     }
     return item;
   }

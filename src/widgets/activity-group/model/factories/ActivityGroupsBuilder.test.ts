@@ -46,7 +46,7 @@ const getProgress = (startAt: Date, endAt: Date | null) => {
           startAt,
           endAt,
           availableTo: null,
-          entityName: 'test-entity-name-1',
+          entityName: '',
         },
       },
     },
