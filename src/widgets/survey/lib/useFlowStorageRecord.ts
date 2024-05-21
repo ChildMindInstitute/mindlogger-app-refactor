@@ -44,6 +44,7 @@ export type FlowState = {
   scheduledDate: number | null;
   pipeline: FlowPipelineItem[];
   isCompletedDueToTimer: boolean;
+  interruptionStep: number | null;
   context: Record<string, unknown>;
 };
 

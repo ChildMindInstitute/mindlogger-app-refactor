@@ -1,7 +1,7 @@
 import {
   ChangeQueueObservable,
+  IObservable,
   createSecureStorage,
-  IChangeQueueNotify,
 } from '@app/shared/lib';
 
 import { SendAnswersInput } from '../types';
@@ -23,7 +23,7 @@ const storage = createSecureStorage('upload_queue-storage');
 const StartKey = '1';
 
 class AnswersQueueService implements IAnswersQueueService {
-  constructor(changeObservable: IChangeQueueNotify) {
+  constructor(changeObservable: IObservable) {
     storage.addOnValueChangedListener(() => {
       changeObservable.notify();
     });

@@ -41,9 +41,7 @@ const useIdleTimer = (input: UseIdleTimerInput): UseIdleTimerResult => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onIdleElapsed = () => {
-    onFinish();
-  };
+  const onIdleElapsed = () => onFinish();
 
   const restart = () => {
     timer?.restart();

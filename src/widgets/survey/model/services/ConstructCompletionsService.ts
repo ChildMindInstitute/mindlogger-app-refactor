@@ -1,5 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
-import { addMilliseconds } from 'date-fns';
+import { addMilliseconds, subSeconds } from 'date-fns';
 
 import { StoreProgress } from '@app/abstract/lib';
 import { IPushToQueue } from '@app/entities/activity';
@@ -17,6 +17,7 @@ import {
   getEntityProgress,
   getNow,
   getTimezoneOffset,
+  isEntityExpired,
   Logger,
   MixEvents,
   MixProperties,
@@ -106,10 +107,10 @@ export class ConstructCompletionsService {
       ? 'not set'
       : new Date(availableTo).toUTCString();
 
-    return `evaluatedEndAt = ${logEndAt}, availableTo = ${logAvailableTo}`;
+    return `evaluatedEndAt: "${logEndAt}|${evaluatedEndAt}", availableTo: ${logAvailableTo}`;
   }
 
-  private logCompletion(
+  private logFinish(
     activityName: string,
     activityId: string,
     flowId: string | undefined,
@@ -117,16 +118,17 @@ export class ConstructCompletionsService {
     appletId: string,
     evaluatedEndAt: number,
     availableTo: number | null,
+    submitId: string,
   ) {
     const logDates = this.getLogDates(evaluatedEndAt, availableTo);
 
     Logger.log(
-      `[ConstructCompletionsService]: Activity "${activityName}|${activityId}" completed, applet "${appletName}|${appletId}, ${logDates}"`,
+      `[ConstructCompletionsService.logFinish]: Activity: "${activityName}|${activityId}", applet: "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
     );
 
     if (flowId) {
       Logger.log(
-        `[ConstructCompletionsService]: Flow "${flowId}" completed, applet "${appletName}|${appletId}, ${logDates}"`,
+        `[ConstructCompletionsService.logFinish]: Flow "${flowId}", applet "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
       );
     }
   }
@@ -142,11 +144,12 @@ export class ConstructCompletionsService {
     appletName: string,
     evaluatedEndAt: number,
     availableTo: number | null,
+    submitId: string,
   ) {
     const logDates = this.getLogDates(evaluatedEndAt, availableTo);
 
     Logger.log(
-      `[ConstructCompletionsService]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" completed, applet "${appletName}|${appletId}, ${logDates}"`,
+      `[ConstructCompletionsService.logIntermediate]: Activity: "${activityName}|${activityId}", flow: "${flowName}|${flowId}", applet: "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
     );
   }
 
@@ -159,9 +162,20 @@ export class ConstructCompletionsService {
       return getNow().getTime();
     }
 
+    if (!isEntityExpired(availableTo)) {
+      return completionType === 'intermediate'
+        ? getNow().getTime()
+        : addMilliseconds(getNow(), DistinguishInterimAndFinishLag).getTime();
+    }
+
+    const aSecondBeforeAvailableTo = subSeconds(availableTo, 1);
+
     return completionType === 'intermediate'
-      ? availableTo
-      : addMilliseconds(availableTo, DistinguishInterimAndFinishLag).getTime();
+      ? aSecondBeforeAvailableTo.getTime()
+      : addMilliseconds(
+          aSecondBeforeAvailableTo,
+          DistinguishInterimAndFinishLag,
+        ).getTime();
   }
 
   private getAppletProperties(appletId: string): {
@@ -182,23 +196,27 @@ export class ConstructCompletionsService {
     };
   }
 
-  private validate(
-    activityStorageRecord: ActivityState | null | undefined,
+  private validateEncryption(
     appletEncryption: AppletEncryptionDTO | null | undefined,
   ) {
-    if (!activityStorageRecord) {
-      const error =
-        '[ConstructCompletionsService] activityStorageRecord does not exist';
-      Logger.warn(error);
-      throw new Error(error);
-    }
-
     if (!appletEncryption) {
       const error =
         '[ConstructCompletionsService] Encryption params is undefined';
       Logger.warn(error);
       throw new Error(error);
     }
+  }
+
+  private isRecordExist(
+    activityStorageRecord: ActivityState | null | undefined,
+  ): boolean {
+    if (!activityStorageRecord) {
+      Logger.warn(
+        '[ConstructCompletionsService] activityStorageRecord does not exist',
+      );
+      return false;
+    }
+    return true;
   }
 
   private addSummaryData(
@@ -259,9 +277,13 @@ export class ConstructCompletionsService {
       order,
     )!;
 
+    if (!this.isRecordExist(activityStorageRecord)) {
+      return;
+    }
+
     const { appletEncryption, appletName } = this.getAppletProperties(appletId);
 
-    this.validate(activityStorageRecord, appletEncryption);
+    this.validateEncryption(appletEncryption);
 
     const { items, answers: recordAnswers, actions } = activityStorageRecord;
 
@@ -299,15 +321,16 @@ export class ConstructCompletionsService {
       isAutocompletion,
     );
 
+    const submitId = getExecutionGroupKey(progressRecord);
+
     this.logIntermediate(
       input,
       flowName!,
       appletName,
       evaluatedEndAt,
       progressRecord.availableTo,
+      submitId,
     );
-
-    const submitId = getExecutionGroupKey(progressRecord);
 
     this.pushToQueueService.push({
       appletId,
@@ -339,6 +362,8 @@ export class ConstructCompletionsService {
       [MixProperties.AppletId]: appletId,
       [MixProperties.SubmitId]: submitId,
     });
+
+    Logger.log(`[ConstructCompletionsService.constructForIntermediate] Done`);
   }
 
   private async constructForFinish(
@@ -361,8 +386,6 @@ export class ConstructCompletionsService {
 
     const entityId = flowId ? flowId : activityId;
 
-    const { appletEncryption, appletName } = this.getAppletProperties(appletId);
-
     const activityStorageRecord = getActivityRecord(
       appletId,
       activityId,
@@ -370,7 +393,13 @@ export class ConstructCompletionsService {
       order,
     )!;
 
-    this.validate(activityStorageRecord, appletEncryption);
+    if (!this.isRecordExist(activityStorageRecord)) {
+      return;
+    }
+
+    const { appletEncryption, appletName } = this.getAppletProperties(appletId);
+
+    this.validateEncryption(appletEncryption);
 
     const { items, answers: recordAnswers, actions } = activityStorageRecord;
 
@@ -406,7 +435,9 @@ export class ConstructCompletionsService {
       isAutocompletion,
     );
 
-    this.logCompletion(
+    const submitId = getExecutionGroupKey(progressRecord);
+
+    this.logFinish(
       activityName,
       activityId,
       flowId,
@@ -414,11 +445,10 @@ export class ConstructCompletionsService {
       appletId,
       evaluatedEndAt,
       progressRecord.availableTo,
+      submitId,
     );
 
     const { scheduledDate } = getFlowRecord(flowId, appletId, eventId)!;
-
-    const submitId = getExecutionGroupKey(progressRecord);
 
     this.pushToQueueService.push({
       appletId,
@@ -459,18 +489,26 @@ export class ConstructCompletionsService {
       [MixProperties.AppletId]: appletId,
       [MixProperties.SubmitId]: submitId,
     });
+
+    Logger.log(`[ConstructCompletionsService.constructForFinish] Done`);
   }
 
   public async construct(input: ConstructInput): Promise<void> {
-    if (input.completionType === 'intermediate') {
-      await this.constructForIntermediate({
-        ...input,
-        flowId: input.flowId!,
-      });
-    }
+    try {
+      if (input.completionType === 'intermediate') {
+        await this.constructForIntermediate({
+          ...input,
+          flowId: input.flowId!,
+        });
+      }
 
-    if (input.completionType === 'finish') {
-      await this.constructForFinish(input);
+      if (input.completionType === 'finish') {
+        await this.constructForFinish(input);
+      }
+    } catch (error) {
+      Logger.warn(
+        `[ConstructCompletionsService.construct] Error occurred: \n${error}`,
+      );
     }
   }
 }
