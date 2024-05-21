@@ -38,14 +38,14 @@ function useActivityStepper(state: ActivityState | undefined) {
   const canSkip =
     !!currentPipelineItem?.isSkippable && !hasAnswer && !isSplashStep;
 
-  const canContinue =
+  const canMoveNext =
     isTutorialStep ||
     isMessageStep ||
     isAbTestStep ||
     currentPipelineItem?.isSkippable ||
-    (hasAnswer && (!additionalAnswerRequired || hasAdditionalAnswer));
-
-  const canMoveNext = canContinue && answerValidator.isValidAnswer();
+    (hasAnswer &&
+      (!additionalAnswerRequired || hasAdditionalAnswer) &&
+      answerValidator.isValidAnswer());
 
   const canMoveBack = currentPipelineItem?.isAbleToMoveBack;
   const canReset =
