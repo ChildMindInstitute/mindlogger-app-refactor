@@ -41,7 +41,7 @@ const DrawingTest: FC<DrawingTestProps> = props => {
   } = useImageDimensions(imageUrl);
 
   const { exampleImageHeight, canvasContainerHeight, canvasSize } =
-    getElementsDimensions(props.dimensions, exampleImageDimensions);
+    getElementsDimensions(dimensions, exampleImageDimensions);
 
   const containerHeight = exampleImageHeight + canvasSize;
 
