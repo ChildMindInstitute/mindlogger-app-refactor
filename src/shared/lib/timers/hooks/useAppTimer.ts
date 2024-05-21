@@ -1,7 +1,5 @@
 import { useEffect, useRef } from 'react';
 
-import { TimerCallbackFeedback } from '@app/abstract/lib';
-
 import { AppTimer } from '../';
 
 type AppTimerConfig = {
@@ -17,10 +15,7 @@ const useAppTimer = (appTimerConfig: AppTimerConfig) => {
   callbacksRef.current = { onFinish };
 
   useEffect(() => {
-    const onTimerEnd = (): TimerCallbackFeedback => {
-      callbacksRef.current.onFinish();
-      return 'no-feedback';
-    };
+    const onTimerEnd = () => callbacksRef.current.onFinish();
 
     const timer = new AppTimer(onTimerEnd, true, durationRef.current);
 

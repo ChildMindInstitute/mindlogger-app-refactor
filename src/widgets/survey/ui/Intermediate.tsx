@@ -11,7 +11,7 @@ import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcess
 import { AppletModel } from '@app/entities/applet';
 import { QueryDataUtils } from '@app/shared/api';
 import {
-  InterimSubmitObservable,
+  InterimSubmitMutex,
   Logger,
   UploadObservable,
   useAppDispatch,
@@ -154,7 +154,7 @@ function Intermediate({
   ]);
 
   async function completeActivity() {
-    InterimSubmitObservable.processing = true;
+    InterimSubmitMutex.setBusy();
 
     const constructCompletionService = new ConstructCompletionsService(
       saveActivitySummary,
@@ -194,7 +194,7 @@ function Intermediate({
 
   useEffect(() => {
     UploadObservable.reset();
-    InterimSubmitObservable.reset();
+    return () => InterimSubmitMutex.release();
   }, []);
 
   return (

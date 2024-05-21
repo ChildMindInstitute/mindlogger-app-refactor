@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useRef } from 'react';
 
-import { TimerCallbackFeedback } from '@app/abstract/lib';
 import { HourMinute, getMsFromHours, getMsFromMinutes } from '@app/shared/lib';
 import { AppTimer } from '@app/shared/lib';
 
@@ -42,10 +41,7 @@ const useIdleTimer = (input: UseIdleTimerInput): UseIdleTimerResult => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onIdleElapsed = (): TimerCallbackFeedback => {
-    onFinish();
-    return 'no-feedback';
-  };
+  const onIdleElapsed = () => onFinish();
 
   const restart = () => {
     timer?.restart();

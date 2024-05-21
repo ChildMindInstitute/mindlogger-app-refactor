@@ -1,16 +1,12 @@
-import { TimerCallbackFeedback } from '@app/abstract/lib';
-
 import TimerBase from './TimerBase';
-
-const PostponeDuration = 2000;
 
 class AppTimer extends TimerBase {
   private duration: number;
   private startTime?: number;
-  private onFinish: (...args: any[]) => TimerCallbackFeedback;
+  private onFinish: (...args: any[]) => unknown;
 
   constructor(
-    onFinish: (...args: any[]) => TimerCallbackFeedback,
+    onFinish: (...args: any[]) => unknown,
     startImmediately: boolean,
     duration: number,
   ) {
@@ -39,25 +35,9 @@ class AppTimer extends TimerBase {
     this.start();
   }
 
-  postpone(onSuccess?: () => void) {
-    this.timerId = setTimeout(() => {
-      const needPostpone: boolean = this.onFinish() === 'request-for-postpone';
-
-      if (needPostpone) {
-        this.postpone();
-      } else if (onSuccess) {
-        onSuccess();
-      }
-    }, PostponeDuration);
-  }
-
   setTimer(duration = this.duration) {
     this.timerId = setTimeout(() => {
-      const needPostpone: boolean = this.onFinish() === 'request-for-postpone';
-
-      if (needPostpone) {
-        this.postpone();
-      }
+      this.onFinish();
     }, duration);
   }
 
@@ -80,13 +60,8 @@ class AppTimer extends TimerBase {
     }
 
     if (this.hasTimePassed()) {
-      const needPostpone = this.onFinish() === 'request-for-postpone';
-
-      if (needPostpone) {
-        this.postpone(() => this.stop());
-      } else {
-        this.stop();
-      }
+      this.onFinish();
+      this.stop();
     } else {
       const timeLeft = this.getTimeLeftAfterBackground();
 

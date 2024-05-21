@@ -1,5 +1,4 @@
-import { TimerCallbackFeedback } from '@app/abstract/lib';
-import { InterimSubmitObservable, Logger } from '@app/shared/lib';
+import { Logger } from '@app/shared/lib';
 
 import {
   ActivitySummaryData,
@@ -49,12 +48,6 @@ export function useFlowStateActions({
     const pipeline = getPipeline(record);
     const step = getStep(record);
     return !!pipeline.length && pipeline[step].type === 'Summary';
-  };
-
-  const isInterimStep = (record?: FlowState) => {
-    const pipeline = getPipeline(record);
-    const step = getStep(record);
-    return !!pipeline.length && pipeline[step].type === 'Intermediate';
   };
 
   function next() {
@@ -137,7 +130,7 @@ export function useFlowStateActions({
     }
   }
 
-  function completeByTimer(): TimerCallbackFeedback {
+  function completeByTimer(): void {
     const record: FlowState = getCurrentFlowStorageRecord()!;
 
     Logger.log(
@@ -145,14 +138,7 @@ export function useFlowStateActions({
     );
 
     if (isLastStep(record) || isSummaryStep(record)) {
-      return 'no-feedback';
-    }
-
-    if (isInterimStep(record) && InterimSubmitObservable.processing) {
-      Logger.log(
-        `[useFlowStateActions.completeByTimer] Requested for postpone`,
-      );
-      return 'request-for-postpone';
+      return;
     }
 
     const pipeline = getPipeline(record);
@@ -163,8 +149,6 @@ export function useFlowStateActions({
       isCompletedDueToTimer: true,
       interruptionStep: record.step,
     });
-
-    return 'no-feedback';
   }
 
   return {
