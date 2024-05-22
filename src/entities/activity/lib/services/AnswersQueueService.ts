@@ -6,7 +6,7 @@ import {
 
 import { SendAnswersInput } from '../types';
 
-type UploadItem = {
+export type UploadItem = {
   input: SendAnswersInput;
 };
 
@@ -22,7 +22,7 @@ const storage = createSecureStorage('upload_queue-storage');
 
 const StartKey = '1';
 
-class AnswersQueueService implements IAnswersQueueService {
+export class AnswersQueueService implements IAnswersQueueService {
   constructor(changeObservable: IObservable) {
     storage.addOnValueChangedListener(() => {
       changeObservable.notify();
