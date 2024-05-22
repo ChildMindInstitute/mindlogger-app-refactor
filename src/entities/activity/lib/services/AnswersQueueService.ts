@@ -6,7 +6,7 @@ import {
 
 import { SendAnswersInput } from '../types';
 
-type UploadItem = {
+export type UploadItem = {
   input: SendAnswersInput;
 };
 

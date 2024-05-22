@@ -2,9 +2,9 @@ import { FileSystem } from 'react-native-file-access';
 
 import { AnswerService } from '@shared/api';
 
-import AnswersUploadService from './AnswersUploadService';
-import MediaFilesCleaner from './MediaFilesCleaner';
-import { UserPrivateKeyRecord } from '../../../identity';
+import { UserPrivateKeyRecord } from '../../../../identity';
+import AnswersUploadService from '../AnswersUploadService';
+import MediaFilesCleaner from '../MediaFilesCleaner';
 
 const MOCK_CREATED_AT = +new Date();
 
