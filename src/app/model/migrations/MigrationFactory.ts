@@ -1,7 +1,7 @@
-import { MigrationToVersion0002 } from '@app/app/model/migrations/migrations/to0002/MigrationToVersion0002';
 import { __queryClient__ } from '@app/app/ui/AppProvider/ReactQueryProvider';
 
 import { MigrationToVersion0001 } from './migrations/to0001/MigrationToVersion0001';
+import { MigrationToVersion0002 } from './migrations/to0002/MigrationToVersion0002';
 import { IMigration } from './types';
 
 type VersionFrom = number;
