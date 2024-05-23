@@ -22,7 +22,7 @@ export interface IProgressDataCollector {
   collect(): Promise<CollectRemoteCompletionsResult>;
 }
 
-class ProgressDataCollector implements IProgressDataCollector {
+export class ProgressDataCollector implements IProgressDataCollector {
   private logger: ILogger;
 
   constructor(logger: ILogger) {
@@ -39,6 +39,9 @@ class ProgressDataCollector implements IProgressDataCollector {
 
       return response;
     } catch (error) {
+      this.logger.warn(
+        `[ProgressDataCollector.collectAllCompletions]: Error occurred:\n${String(error)}`,
+      );
       return null;
     }
   }
