@@ -5,6 +5,7 @@ import { LDFlagValue } from '@launchdarkly/react-native-client-sdk';
 export const FeatureFlagsKeys = {
   enableMultiInformant: 'enable-multi-informant',
   enableMultiInformantTakeNow: 'enable-multi-informant__take-now',
+  enableLorisIntegration: 'enable-loris-integration',
 };
 
 export type FeatureFlags = Partial<

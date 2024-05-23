@@ -42,17 +42,26 @@ type InProgressFlow = {
   availableTo?: Date | null;
 };
 
+type Consents = {
+  shareToPublic: boolean;
+  shareMediaToPublic: boolean;
+};
+
+export type AppletsConsents = Record<string, Consents | undefined>;
+
 type InitialState = {
   inProgress: StoreProgress;
   // todo - change to CompletedEventEntities when migrations infrastructure is ready
   completedEntities: CompletedEntities;
   completions: CompletedEventEntities;
+  consents: AppletsConsents;
 };
 
 const initialState: InitialState = {
   inProgress: {},
   completedEntities: {},
   completions: {},
+  consents: {},
 };
 
 const slice = createSlice({
@@ -197,6 +206,62 @@ const slice = createSlice({
       const { endAt, appletId, entityId, eventId } = action.payload;
 
       state.inProgress[appletId][entityId][eventId].endAt = endAt;
+    },
+
+    applyDataSharingSettings: (
+      state,
+      action: PayloadAction<{ appletId: string }>,
+    ) => {
+      const { appletId } = action.payload;
+
+      state.consents[appletId] = {
+        shareToPublic: true,
+        shareMediaToPublic: true,
+      };
+    },
+
+    removeDataSharingSettings: (
+      state,
+      action: PayloadAction<{ appletId: string }>,
+    ) => {
+      const { appletId } = action.payload;
+
+      delete state.consents[appletId];
+    },
+
+    toggleShareConsent: (
+      state,
+      action: PayloadAction<{ appletId: string }>,
+    ) => {
+      const { appletId } = action.payload;
+
+      const appletConsents = state.consents[appletId];
+
+      if (!appletConsents) {
+        return;
+      }
+
+      const currentValue = appletConsents.shareToPublic;
+
+      appletConsents.shareToPublic = !currentValue;
+      appletConsents.shareMediaToPublic = !currentValue;
+    },
+
+    toggleMediaConsent: (
+      state,
+      action: PayloadAction<{ appletId: string }>,
+    ) => {
+      const { appletId } = action.payload;
+
+      const appletConsents = state.consents[appletId];
+
+      if (!appletConsents) {
+        return;
+      }
+
+      const currentValue = appletConsents.shareMediaToPublic;
+
+      appletConsents.shareMediaToPublic = !currentValue;
     },
   },
   extraReducers: builder =>

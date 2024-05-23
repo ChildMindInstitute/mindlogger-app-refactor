@@ -64,3 +64,6 @@ export function onActivityContainsAllItemsHidden(entityName: string) {
 export function onFlowActivityContainsAllItemsHidden(entityName: string) {
   Alert.alert('', i18n.t('activity:flow_all_items_hidden', { entityName }));
 }
+export function onDataSharingConsentDetails() {
+  Alert.alert(i18n.t('data_sharing:dialog:body'));
+}

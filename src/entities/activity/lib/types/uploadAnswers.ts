@@ -34,6 +34,10 @@ export type SendAnswersInput = {
   logCompletedAt?: string;
 };
 
+export type SendAnswersInputWithConsents = SendAnswersInput & {
+  isDataShare?: boolean;
+};
+
 export type CheckFileUploadResult = {
   fileId: string;
   uploaded: boolean;

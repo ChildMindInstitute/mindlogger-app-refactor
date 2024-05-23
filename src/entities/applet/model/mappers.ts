@@ -90,6 +90,7 @@ export function mapAppletDetailsFromDto(
     streamEnabled: detailsDto.streamEnabled,
     streamIpAddress: detailsDto.streamIpAddress,
     streamPort: detailsDto?.streamPort?.toString() ?? null,
+    integrations: detailsDto?.integrations,
   };
 }
 

@@ -4,8 +4,10 @@ import {
   ChangeQueueObservable,
   Logger,
   UploadObservable,
+  useAppSelector,
   useForceUpdate,
 } from '@app/shared/lib';
+import { AppletModel } from '@entities/applet';
 
 import { QueueProcessingService } from '../services';
 import AnswersQueueService from '../services/AnswersQueueService';
@@ -23,6 +25,10 @@ type Result = {
 
 const useQueueProcessing = (): Result => {
   const update = useForceUpdate();
+
+  const appletsConsents = useAppSelector(state =>
+    AppletModel.selectors.selectConsents(state),
+  );
 
   useEffect(() => {
     const onChangeUploadState = () => {
@@ -42,10 +48,10 @@ const useQueueProcessing = (): Result => {
 
       ChangeQueueObservable.removeObserver(onChangeQueue);
     };
-  }, [update]);
+  }, [appletsConsents, update]);
 
   const processQueueWithSendingLogs = async (): Promise<boolean> => {
-    const result = await QueueProcessingService.process();
+    const result = await QueueProcessingService.process(appletsConsents);
     Logger.send();
     return result;
   };

@@ -527,6 +527,7 @@ describe('Image URL Collection Functions', () => {
     streamEnabled: false,
     streamIpAddress: null,
     streamPort: null,
+    integrations: [],
   };
 
   it('should collect image URLs from AppletRecord', () => {
