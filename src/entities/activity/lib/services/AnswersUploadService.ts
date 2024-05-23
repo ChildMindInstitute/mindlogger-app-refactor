@@ -21,6 +21,7 @@ import {
   formatToDtoDate,
   formatToDtoTime,
   isLocalFileUrl,
+  IS_LORIS_INTEGRATION_ENABLED,
 } from '@shared/lib';
 
 import MediaFilesCleaner from './MediaFilesCleaner';
@@ -29,10 +30,11 @@ import {
   CheckFileUploadResult,
   CheckFilesUploadResults,
   SendAnswersInput,
+  SendAnswersInputWithConsents,
 } from '../types';
 
 export interface IAnswersUploadService {
-  sendAnswers(body: SendAnswersInput): void;
+  sendAnswers(body: SendAnswersInput, dataShareEnabled: boolean): void;
 }
 
 class AnswersUploadService implements IAnswersUploadService {
@@ -358,7 +360,9 @@ class AnswersUploadService implements IAnswersUploadService {
     }
   }
 
-  private encryptAnswers(data: SendAnswersInput): ActivityAnswersRequest {
+  private encryptAnswers(
+    data: SendAnswersInputWithConsents,
+  ): ActivityAnswersRequest {
     const { appletEncryption } = data;
     const userPrivateKey = UserPrivateKeyRecord.get();
 
@@ -407,6 +411,7 @@ class AnswersUploadService implements IAnswersUploadService {
       createdAt: data.createdAt,
       client: data.client,
       alerts: data.alerts,
+      isDataShare: data.isDataShare,
     };
 
     return encryptedData;
@@ -472,7 +477,7 @@ class AnswersUploadService implements IAnswersUploadService {
     }
   }
 
-  public async sendAnswers(body: SendAnswersInput) {
+  public async sendAnswers(body: SendAnswersInput, dataShareEnabled: boolean) {
     this.createdAt = body.createdAt;
 
     this.logger.log(
@@ -481,7 +486,8 @@ class AnswersUploadService implements IAnswersUploadService {
 
     this.uploadProgressObservable.currentSecondLevelStep = 'upload_files';
 
-    const modifiedBody = await this.uploadAllMediaFiles(body);
+    const modifiedBody: SendAnswersInputWithConsents =
+      await this.uploadAllMediaFiles(body);
 
     this.logger.log(
       '[UploadAnswersService.sendAnswers] executing assign urls to user actions',
@@ -493,6 +499,10 @@ class AnswersUploadService implements IAnswersUploadService {
     );
 
     modifiedBody.userActions = updatedUserActions as UserActionDto[];
+
+    if (IS_LORIS_INTEGRATION_ENABLED) {
+      modifiedBody.isDataShare = dataShareEnabled;
+    }
 
     if (modifiedBody.itemIds.length !== modifiedBody.answers.length) {
       throw new Error(

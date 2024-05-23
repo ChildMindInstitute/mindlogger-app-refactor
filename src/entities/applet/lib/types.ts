@@ -5,6 +5,8 @@ import {
   ResponseConfig,
 } from '@shared/api';
 
+type Integration = 'loris';
+
 export type AppletTheme = {
   logo: string;
   backgroundImage: string;
@@ -52,6 +54,7 @@ export type AppletDetails = {
   streamEnabled: boolean;
   streamIpAddress: string | null;
   streamPort: string | null;
+  integrations: Integration[];
 };
 
 export type AnalyticsItemValue = {

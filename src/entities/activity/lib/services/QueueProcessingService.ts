@@ -10,6 +10,7 @@ import {
   IUploadProgressObservableSetters,
   UploadProgressObservable,
 } from '@app/shared/lib';
+import { AppletsConsents } from '@entities/applet/model';
 
 import AnswersQueueService, {
   IAnswersQueueService,
@@ -55,7 +56,9 @@ class QueueProcessingService implements IPushToQueue {
     this.mutex = Mutex();
   }
 
-  private async processInternal(): Promise<boolean> {
+  private async processInternal(
+    appletsConsents: AppletsConsents,
+  ): Promise<boolean> {
     const queueLength = this.queueService.getLength();
 
     this.uploadProgressObservable.totalActivities = queueLength;
@@ -78,7 +81,14 @@ class QueueProcessingService implements IPushToQueue {
           `[QueueProcessingService:processInternal]: Processing activity ${logEntity}`,
         );
 
-        await this.uploadService.sendAnswers(uploadItem.input);
+        const currentAppletId = uploadItem.input.appletId;
+        const dataShareEnabled =
+          appletsConsents?.[currentAppletId]?.shareToPublic || false;
+
+        await this.uploadService.sendAnswers(
+          uploadItem.input,
+          dataShareEnabled,
+        );
 
         this.queueService.dequeue();
 
@@ -98,7 +108,7 @@ class QueueProcessingService implements IPushToQueue {
     return this.queueService.getLength() === 0;
   }
 
-  public async process(): Promise<boolean> {
+  public async process(appletConsents: AppletsConsents): Promise<boolean> {
     if (this.mutex.isBusy()) {
       this.logger.log('[QueueProcessingService.process]: Mutex is busy');
       return true;
@@ -126,7 +136,7 @@ class QueueProcessingService implements IPushToQueue {
         return true;
       }
 
-      const success = await this.processInternal();
+      const success = await this.processInternal(appletConsents);
 
       this.uploadStatusObservable.isError = !success;
       this.uploadStatusObservable.isCompleted = success;

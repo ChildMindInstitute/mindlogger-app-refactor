@@ -6,10 +6,11 @@ import {
   FlowStateFrom as FlowState0000,
   FlowStateTo as FlowState0001,
 } from './migrations/to0001/MigrationStorageTypes0001';
+import { RootStateTo as RootState0003 } from './migrations/to0003/MigrationToVersion0003.ts';
 
 type FlowState = FlowState0000 | FlowState0001;
 
-export type ReduxRootState = RootState0000 | RootState0001;
+export type ReduxRootState = RootState0000 | RootState0001 | RootState0003;
 
 export type MigrationInput = {
   reduxState: ReduxRootState;

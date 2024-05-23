@@ -3,7 +3,7 @@ import axios from 'axios';
 import { API_URL } from '@shared/lib';
 
 const httpService = axios.create({
-  baseURL: API_URL,
+  baseURL: API_URL, // https://api-dr.cmiml.net <- apiUrl for LORIS?
   withCredentials: true,
 });
 

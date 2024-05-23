@@ -5,6 +5,7 @@ import { useIsFocused } from '@react-navigation/core';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { EntityPath, StoreProgress } from '@app/abstract/lib';
+import { SharedContentConsent } from '@app/entities/applet';
 import { AppletModel } from '@app/entities/applet';
 import {
   AnalyticsService,
@@ -69,7 +70,8 @@ const ActivityListScreen: FC<Props> = props => {
     <Box flex={1}>
       <UploadRetryBanner accessibilityLabel="upload-banner" />
       <HorizontalCalendar mt={8} />
-      <StreamingStatusBar appletId={props.route.params.appletId} mb={20} />
+      <StreamingStatusBar appletId={appletId} mb={20} />
+      <SharedContentConsent appletId={appletId} px={14} mt={10} />
 
       {isFocused && (
         <ActivityGroups

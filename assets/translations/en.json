@@ -473,5 +473,13 @@
     "time_is_up_modal_description": "There is no more time to work on this activity. All of the work you have done will be saved and submitted.",
     "time_is_up_modal_title": "Time's up",
     "ok": "OK"
+  },
+  "data_sharing": {
+    "consent": "I consent to making my responses",
+    "media_consent": "I consent to making my media responses",
+    "public": "public",
+    "dialog": {
+      "body": "Sharing responses publicly implies that information provided by individual users, such as survey responses or feedback, will be openly available for others to view."
+    }
   }
 }

@@ -50,6 +50,10 @@ const useAutoCompletion = (): Result => {
     AppletModel.selectors.selectInProgressApplets,
   );
 
+  const appletsConsents = useAppSelector(state =>
+    AppletModel.selectors.selectConsents(state),
+  );
+
   const dispatch = useAppDispatch();
 
   const queryClient = useQueryClient();
@@ -179,7 +183,7 @@ const useAutoCompletion = (): Result => {
       let result = true;
 
       if (hasItemsInQueue()) {
-        result = await QueueProcessingService.process();
+        result = await QueueProcessingService.process(appletsConsents);
       }
 
       if (forceRefreshNotifications || completionsCollected) {
@@ -188,7 +192,13 @@ const useAutoCompletion = (): Result => {
 
       return result;
     },
-    [mutex, notCompletedEntities, createConstructService, hasItemsInQueue],
+    [
+      mutex,
+      notCompletedEntities,
+      createConstructService,
+      hasItemsInQueue,
+      appletsConsents,
+    ],
   );
 
   const hasExpiredEntity = useCallback((): boolean => {
