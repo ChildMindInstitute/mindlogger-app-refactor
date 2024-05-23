@@ -110,7 +110,7 @@ describe('Test ProgressDataCollector', () => {
     });
   });
 
-  it('Should return 0 completions when api response is fulfilled empty array', async () => {
+  it('Should return 0 completions when api response is empty array', async () => {
     const collector = new ProgressDataCollector(loggerMock);
 
     const mockedValue: MockedResponse = {
@@ -124,5 +124,40 @@ describe('Test ProgressDataCollector', () => {
     const result = await collector.collect();
 
     expect(result).toEqual({ appletEntities: {} });
+  });
+
+  const negativeTests: Array<MockedResponse | null | undefined> = [
+    null,
+    undefined,
+    {
+      data: undefined,
+    },
+    {
+      data: { result: undefined },
+    },
+  ];
+
+  negativeTests.forEach(response => {
+    it(`Should return 0 completions when response is ${JSON.stringify(response)}`, async () => {
+      const collector = new ProgressDataCollector(loggerMock);
+
+      getAllCompletedEntitiesMock.mockResolvedValue(response);
+
+      const result = await collector.collect();
+
+      expect(result).toEqual({ appletEntities: {} });
+    });
+  });
+
+  it(`Should return 0 completions when api call throws error`, async () => {
+    const collector = new ProgressDataCollector(loggerMock);
+
+    getAllCompletedEntitiesMock.mockRejectedValue('Error occurred');
+
+    const result = await collector.collect();
+
+    expect(result).toEqual({ appletEntities: {} });
+
+    expect(warnMock).toHaveBeenCalledTimes(1);
   });
 });
