@@ -10,10 +10,10 @@ import {
   ActivityListGroup,
 } from '../../../lib';
 
-let groupMocks: ActivityListGroup[] = [];
+const groupMocks: ActivityListGroup[] = [];
 
 for (let i = 0; i < 3; i++) {
-  let activities: ActivityListItem[] = [];
+  const activities: ActivityListItem[] = [];
 
   groupMocks.push({
     activities,

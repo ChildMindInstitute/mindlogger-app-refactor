@@ -30,9 +30,9 @@ describe('Test TimeRangeItem', () => {
 
     const endDateValue = endDatePicker.props.value;
 
-    expect(startDateValue).toBe(mockNowDate);
+    expect(startDateValue).toBe(null);
 
-    expect(endDateValue).toBe(mockNowDate);
+    expect(endDateValue).toBe(null);
   });
 
   it('Should render start/end date pickers if initial value specified', () => {

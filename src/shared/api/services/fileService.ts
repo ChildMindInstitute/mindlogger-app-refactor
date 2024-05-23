@@ -50,13 +50,7 @@ type GetFieldsForFileUploadRequest = {
 type FieldsForFileUploadDto = {
   uploadUrl: string;
   url: string;
-  fields: {
-    key: string;
-    AWSAccessKeyId: string;
-    'x-amz-security-token': string;
-    policy: string;
-    signature: string;
-  };
+  fields: Record<string, string>;
 };
 
 type GetFieldsForFileUploadResponse =
@@ -207,18 +201,11 @@ function fileService() {
             ? request.localUrl
             : request.localUrl.replace('file://', '');
 
-          data.append('key', request.fields.key);
-          data.append('AWSAccessKeyId', request.fields.AWSAccessKeyId);
+          const fieldKeys = Object.keys(request.fields);
 
-          if (request.fields['x-amz-security-token']?.length) {
-            data.append(
-              'x-amz-security-token',
-              request.fields['x-amz-security-token'],
-            );
+          for (const key of fieldKeys) {
+            data.append(key, request.fields[key]);
           }
-
-          data.append('policy', request.fields.policy);
-          data.append('signature', request.fields.signature);
 
           data.append('file', {
             uri: localUrl,

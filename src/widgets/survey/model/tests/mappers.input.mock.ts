@@ -1,4 +1,4 @@
-import { Answer, PipelineItem } from '@features/pass-survey';
+import { Answer, PipelineItem, UserAction } from '@features/pass-survey';
 
 export const textInput: PipelineItem = {
   type: 'TextInput',
@@ -53,12 +53,14 @@ export const radioInput: PipelineItem = {
   payload: {
     addTooltip: false,
     randomizeOptions: false,
-    setAlerts: false,
+    setAlerts: true,
     setPalette: false,
     autoAdvance: true,
     options: [
       {
-        alert: null,
+        alert: {
+          message: 'radio-alert',
+        },
         color: null,
         id: 'string',
         image: null,
@@ -66,7 +68,7 @@ export const radioInput: PipelineItem = {
         score: null,
         text: 'string',
         tooltip: 'string',
-        value: 1,
+        value: 2,
       },
     ],
   },
@@ -78,7 +80,7 @@ export const stackedRadioInput: PipelineItem = {
   payload: {
     randomizeOptions: true,
     addScores: false,
-    setAlerts: false,
+    setAlerts: true,
     addTooltip: false,
     rows: [
       {
@@ -115,7 +117,9 @@ export const stackedRadioInput: PipelineItem = {
           {
             optionId: '1',
             score: 1,
-            alert: null,
+            alert: {
+              message: 'stacked-radio-alert',
+            },
           },
         ],
       },
@@ -129,7 +133,7 @@ export const stackedCheckboxInput: PipelineItem = {
   payload: {
     randomizeOptions: true,
     addScores: false,
-    setAlerts: false,
+    setAlerts: true,
     addTooltip: false,
     rows: [
       {
@@ -166,7 +170,9 @@ export const stackedCheckboxInput: PipelineItem = {
           {
             optionId: '1',
             score: 1,
-            alert: null,
+            alert: {
+              message: 'stacked-checkbox-alert',
+            },
           },
         ],
       },
@@ -179,7 +185,7 @@ export const checkboxInput: PipelineItem = {
   timer: null,
   payload: {
     randomizeOptions: false,
-    setAlerts: false,
+    setAlerts: true,
     addTooltip: false,
     setPalette: false,
     options: [
@@ -192,7 +198,9 @@ export const checkboxInput: PipelineItem = {
         color: null,
         isHidden: false,
         value: 0,
-        alert: null,
+        alert: {
+          message: 'checkbox-alert',
+        },
         isNoneOption: false,
       },
       {
@@ -204,8 +212,10 @@ export const checkboxInput: PipelineItem = {
         color: null,
         isHidden: false,
         value: 1,
-        alert: null,
         isNoneOption: false,
+        alert: {
+          message: 'checkbox-alert',
+        },
       },
       {
         id: 'deff828c-eb2e-47dd-a7ce-86392ffa1829',
@@ -235,7 +245,14 @@ export const sliderInput: PipelineItem = {
     showTickMarks: false,
     showTickLabels: false,
     isContinuousSlider: false,
-    alerts: null,
+    alerts: [
+      {
+        value: 4,
+        message: 'slider-alert',
+        minValue: 0,
+        maxValue: 5,
+      },
+    ],
     scores: [1, 2],
   },
   timer: null,
@@ -245,7 +262,7 @@ export const stackedSliderInput: PipelineItem = {
   type: 'StackedSlider',
   payload: {
     addScores: true,
-    setAlerts: false,
+    setAlerts: true,
     rows: [
       {
         id: '1',
@@ -256,7 +273,12 @@ export const stackedSliderInput: PipelineItem = {
         rightImageUrl: null,
         minValue: 0,
         maxValue: 5,
-        alerts: null,
+        alerts: [
+          {
+            value: 1,
+            message: 'stacked-slider-alert',
+          },
+        ],
       },
       {
         id: '2',
@@ -309,7 +331,7 @@ export const textAnswer: Answer = { answer: 'kkkkk' };
 
 export const radioAnswer: Answer = {
   answer: {
-    id: 'df524cf6-4e5e-4218-ab2b-af8fd60c6cfa',
+    id: '1',
     text: 'three',
     image: null,
     score: null,
@@ -382,6 +404,7 @@ export const geoAnswer: Answer = {
 
 export const stackedRadioAnswer: Answer = {
   answer: [
+    // @ts-ignore
     {
       id: '1',
       text: 'One',
@@ -391,6 +414,8 @@ export const stackedRadioAnswer: Answer = {
       image: null,
       score: null,
       value: 1,
+      // @ts-ignore
+      rowId: '1',
     },
   ],
 };
@@ -405,15 +430,8 @@ export const stackedCheckboxAnswer: Answer = {
         tooltip: '',
       },
     ],
-    [
-      {
-        id: '2',
-        text: 'opt2',
-        image: null,
-        tooltip: '',
-      },
-    ],
-  ],
+    null,
+  ] as Answer['answer'],
 };
 
 export const stackedSliderAnswer: Answer = {
@@ -437,3 +455,52 @@ export const mediaAnswer: Answer = {
 export const audioPlayerAnswer = {
   answer: true,
 };
+
+const baseUserActionPayload = {
+  activityId: '1',
+  activityItemId: '1',
+  date: 100,
+};
+
+export const userActionsInput: UserAction[] = [
+  {
+    type: 'SET_ANSWER',
+    payload: {
+      ...baseUserActionPayload,
+      answer: {
+        type: 'TextInput',
+        value: {
+          answer: 'textAnswer',
+        },
+      },
+    },
+  },
+  {
+    type: 'PREV',
+    payload: baseUserActionPayload,
+  },
+  {
+    type: 'NEXT',
+    payload: baseUserActionPayload,
+  },
+  {
+    type: 'SKIP_POPUP_CONFIRM',
+    payload: baseUserActionPayload,
+  },
+  {
+    type: 'SKIP_POPUP_CANCEL',
+    payload: baseUserActionPayload,
+  },
+  {
+    type: 'SKIP',
+    payload: baseUserActionPayload,
+  },
+  {
+    type: 'UNDO',
+    payload: baseUserActionPayload,
+  },
+  {
+    type: 'DONE',
+    payload: baseUserActionPayload,
+  },
+];

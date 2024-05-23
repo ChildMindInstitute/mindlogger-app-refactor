@@ -31,7 +31,7 @@ export const evaluateFlankerNextStep = (
 
   let totalCount: number = 0;
 
-  for (let logRecord of gameResult.records) {
+  for (const logRecord of gameResult.records) {
     if (logRecord.tag !== 'trial') {
       continue;
     }

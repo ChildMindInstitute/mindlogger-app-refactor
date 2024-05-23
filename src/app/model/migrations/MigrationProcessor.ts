@@ -41,7 +41,7 @@ export class MigrationProcessor {
 
   private getMigrationInput(): MigrationInput {
     // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     const { _persist, ...reduxState } = this.reduxStore.getState();
 
     return {
@@ -60,12 +60,12 @@ export class MigrationProcessor {
   private updateStorages() {
     const storageNames = StoragesArray;
 
-    for (let storageName of storageNames) {
+    for (const storageName of storageNames) {
       const migrationStorage = createMigrationStorage(storageName);
       const regularStorage = createRegularStorage(storageName);
       const keys = migrationStorage.getAllKeys();
 
-      for (let key of keys) {
+      for (const key of keys) {
         const value = migrationStorage.getString(key)!;
         regularStorage.set(key, value);
       }
@@ -81,7 +81,7 @@ export class MigrationProcessor {
   private prepareStorages() {
     const storageNames = StoragesArray;
 
-    for (let storageName of storageNames) {
+    for (const storageName of storageNames) {
       const storage = createMigrationStorage(storageName);
       storage.clearAll();
     }

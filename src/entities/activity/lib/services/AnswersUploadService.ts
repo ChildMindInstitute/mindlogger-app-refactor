@@ -156,6 +156,10 @@ class AnswersUploadService implements IAnswersUploadService {
           `[UploadAnswersService.processFileUpload] Uploading file ${logFileInfo}`,
         );
 
+        this.logger.log(
+          `[UploadAnswersService.processFileUpload] Received field names: ${Object.keys(getFieldsDto.fields).toString()}`,
+        );
+
         await FileService.uploadAppletFileToS3({
           fields: getFieldsDto.fields,
           fileName: mediaFile.fileName,
@@ -180,8 +184,7 @@ class AnswersUploadService implements IAnswersUploadService {
       return remoteUrl!;
     } catch (error) {
       throw new Error(
-        `[UploadAnswersService.processFileUpload]: Error occurred while file ${logFileInfo} uploading\n\n` +
-          error!.toString(),
+        `[UploadAnswersService.processFileUpload]: Error occurred while file ${logFileInfo} uploading\n\n${error}`,
       );
     }
   }
@@ -211,8 +214,7 @@ class AnswersUploadService implements IAnswersUploadService {
       uploadChecks = await this.checkIfFilesUploaded(fileIds, body.appletId);
     } catch (error) {
       throw new Error(
-        '[UploadAnswersService.uploadAllMediaFiles]: Error occurred on 1st files upload check\n\n' +
-          error!.toString(),
+        `[UploadAnswersService.uploadAllMediaFiles]: Error occurred on 1st files upload check\n\n${error}`,
       );
     }
 
@@ -266,8 +268,7 @@ class AnswersUploadService implements IAnswersUploadService {
       uploadChecks = await this.checkIfFilesUploaded(fileIds, body.appletId);
     } catch (error) {
       throw new Error(
-        '[uploadAnswerMediaFiles.uploadAllMediaFiles]: Error occurred while 2nd files upload check\n\n' +
-          error!.toString(),
+        `[uploadAnswerMediaFiles.uploadAllMediaFiles]: Error occurred while 2nd files upload check\n\n${error}`,
       );
     }
 
@@ -298,8 +299,7 @@ class AnswersUploadService implements IAnswersUploadService {
       });
     } catch (error) {
       throw new Error(
-        '[UploadAnswersService.uploadAnswers]: Error occurred while 1st check if answers uploaded\n\n' +
-          error!.toString(),
+        `[UploadAnswersService.uploadAnswers]: Error occurred while 1st check if answers uploaded\n\n${error}`,
       );
     }
 
@@ -318,8 +318,7 @@ class AnswersUploadService implements IAnswersUploadService {
       await AnswerService.sendActivityAnswers(encryptedData);
     } catch (error) {
       throw new Error(
-        '[UploadAnswersService.uploadAnswers]: Error occurred while sending answers\n\n' +
-          error!.toString(),
+        `[UploadAnswersService.uploadAnswers]: Error occurred while sending answers\n\n${error}`,
       );
     }
 
@@ -332,14 +331,17 @@ class AnswersUploadService implements IAnswersUploadService {
       });
     } catch (error) {
       throw new Error(
-        '[UploadAnswersService.uploadAnswers]: Error occurred while 2nd check if answers uploaded\n\n' +
-          error!.toString(),
+        `[UploadAnswersService.uploadAnswers]: Error occurred while 2nd check if answers uploaded\n\n${error}`,
       );
     }
 
     if (!uploaded) {
       throw new Error(
         '[UploadAnswersService.uploadAnswers] Answers were not uploaded',
+      );
+    } else {
+      this.logger.log(
+        '[UploadAnswersService.uploadAnswers]: Check result: uploaded successfully',
       );
     }
   }
@@ -453,8 +455,7 @@ class AnswersUploadService implements IAnswersUploadService {
       return processUserActions();
     } catch (error) {
       throw new Error(
-        '[UploadAnswersService.assignRemoteUrlsToUserActions]: Error occurred while mapping user actions with media files\n\n' +
-          error!.toString(),
+        `[UploadAnswersService.assignRemoteUrlsToUserActions]: Error occurred while mapping user actions with media files\n\n${error}`,
       );
     }
   }

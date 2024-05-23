@@ -4,6 +4,8 @@ import { useRef } from 'react';
 import { HourMinute, getMsFromHours, getMsFromMinutes } from '@app/shared/lib';
 import { AppTimer } from '@app/shared/lib';
 
+import InterimInActionPostponer from '../services/InterimInActionPostponer';
+
 type UseTimerInput = {
   onFinish: () => void;
   entityStartedAt: number;
@@ -24,6 +26,10 @@ const useTimer = (input: UseTimerInput) => {
 
   finishRef.current = onFinish;
 
+  const postponer = useRef(
+    new InterimInActionPostponer(() => finishRef.current()),
+  ).current;
+
   useEffect(() => {
     if (!timerLogicIsUsed) {
       return;
@@ -40,12 +46,20 @@ const useTimer = (input: UseTimerInput) => {
 
     const durationLeft = durationBySettings - alreadyElapsed;
 
-    const timer = new AppTimer(() => finishRef.current(), false, durationLeft);
+    const timer = new AppTimer(
+      () => {
+        postponer.tryExecute();
+        timer.stop();
+      },
+      false,
+      durationLeft,
+    );
 
     timer.start();
 
     return () => {
       timer.stop();
+      postponer.reset();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -64,7 +64,7 @@ export class ScoresExtractor {
       `[ScoresExtractor.extract]: Extracting scores for activity '${logActivityName}'`,
     );
 
-    for (let scoreSettings of settings) {
+    for (const scoreSettings of settings) {
       const logScore = `'${scoreSettings.name}' for settings with index '${settingsIndex}'`;
 
       try {
@@ -83,8 +83,7 @@ export class ScoresExtractor {
         }
       } catch (error) {
         this.logger.warn(
-          `[ScoresExtractor.extract]: Error occurred during extracting score ${logScore}\n\nInternal Error:\n\n` +
-            error!.toString(),
+          `[ScoresExtractor.extract]: Error occurred during extracting score ${logScore}\n\nInternal Error:\n\n${error}`,
         );
         result.push({
           name: '[Error occurred]',

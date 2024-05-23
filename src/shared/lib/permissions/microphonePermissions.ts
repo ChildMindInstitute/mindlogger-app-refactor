@@ -57,7 +57,7 @@ const getMicrophoneAndroidPermissions = async (): Promise<boolean> => {
 };
 
 const getMicrophoneIOSPermissions = async (): Promise<boolean> => {
-  const result = await Permissions.request(PERMISSIONS.IOS.MICROPHONE!);
+  const result = await Permissions.request(PERMISSIONS.IOS.MICROPHONE);
 
   return result === RESULTS.GRANTED;
 };

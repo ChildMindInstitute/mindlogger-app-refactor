@@ -172,9 +172,10 @@ function useActivityState({
 
     upsertActivityStorageRecord({
       ...currentStorageRecord,
-      actions: userActionsPostProcessorService.postProcessUserActions(
-        currentStorageRecord!,
-      ),
+      actions:
+        userActionsPostProcessorService.postProcessUserActions(
+          currentStorageRecord,
+        ),
     });
   }
 

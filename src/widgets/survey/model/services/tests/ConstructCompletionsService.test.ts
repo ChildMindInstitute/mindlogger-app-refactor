@@ -1,6 +1,10 @@
+import { QueryClient } from '@tanstack/react-query';
+import { addHours, addMilliseconds, subHours, subSeconds } from 'date-fns';
+
 import { StoreProgress } from '@app/abstract/lib';
 import { Answers, PipelineItem } from '@app/features/pass-survey';
 import { getSliderItem } from '@app/features/pass-survey/model/tests/testHelpers';
+import { AppletEncryptionDTO } from '@app/shared/api';
 
 import {
   createGetActivityRecordMock,
@@ -12,7 +16,10 @@ import {
   mockConstructionServiceExternals,
 } from './testHelpers';
 import * as operations from '../../operations';
-import { ConstructCompletionsService } from '../ConstructCompletionsService';
+import {
+  CompletionType,
+  ConstructCompletionsService,
+} from '../ConstructCompletionsService';
 
 jest.mock('@app/shared/lib/services/Logger', () => ({
   log: jest.fn(),
@@ -427,6 +434,10 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
 });
 
 describe('Test ConstructCompletionsService: edge cases', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('"getAppletProperties" should throw error when no applet dto in the cache', () => {
     const progress: StoreProgress = getFlowProgressMock();
 
@@ -453,67 +464,203 @@ describe('Test ConstructCompletionsService: edge cases', () => {
     );
   });
 
-  const tests = [
+  const validateEncryptionTests = [
     {
-      activityStorageRecord: null,
-      appletEncryption: {},
-      expectedError:
-        '[ConstructCompletionsService] activityStorageRecord does not exist',
-    },
-    {
-      activityStorageRecord: undefined,
-      appletEncryption: {},
-      expectedError:
-        '[ConstructCompletionsService] activityStorageRecord does not exist',
-    },
-    {
-      activityStorageRecord: {},
       appletEncryption: null,
       expectedError:
         '[ConstructCompletionsService] Encryption params is undefined',
     },
     {
-      activityStorageRecord: {},
       appletEncryption: undefined,
       expectedError:
         '[ConstructCompletionsService] Encryption params is undefined',
     },
   ];
 
-  tests.forEach(
-    ({ activityStorageRecord, appletEncryption, expectedError }) => {
-      const activityStorageRecordAsText = activityStorageRecord
-        ? 'fullfilled'
-        : activityStorageRecord;
-      const appletEncryptionAsText = appletEncryption
-        ? 'fullfilled'
-        : appletEncryption;
+  validateEncryptionTests.forEach(({ appletEncryption, expectedError }) => {
+    const appletEncryptionAsText = appletEncryption
+      ? 'fullfilled'
+      : String(appletEncryption);
 
-      it(`"validate" should throw error when activityStorageRecord is ${activityStorageRecordAsText} and appletEncryption is ${appletEncryptionAsText}`, () => {
+    it(`"validateEncryption" should throw error when appletEncryption is ${appletEncryptionAsText}`, () => {
+      const progress: StoreProgress = getFlowProgressMock();
+
+      const { saveSummaryMock } = mockConstructionServiceExternals(mockNowDate);
+
+      const pushMock = jest.fn();
+
+      const pushToQueueMock = { push: pushMock };
+
+      const service = new ConstructCompletionsService(
+        saveSummaryMock,
+        {} as QueryClient,
+        progress,
+        pushToQueueMock,
+        jest.fn(),
+      );
+
+      expect(() =>
+        // @ts-expect-error
+        service.validateEncryption(appletEncryption as AppletEncryptionDTO),
+      ).toThrow(new Error(expectedError));
+    });
+  });
+
+  const checkRecordTests = [
+    {
+      activityStorageRecord: null,
+      expectedResult: false,
+    },
+    {
+      activityStorageRecord: undefined,
+      expectedResult: false,
+    },
+    {
+      activityStorageRecord: {},
+      expectedResult: true,
+    },
+  ];
+
+  checkRecordTests.forEach(({ activityStorageRecord, expectedResult }) => {
+    const activityStorageRecordAsText = activityStorageRecord
+      ? 'fullfilled'
+      : String(activityStorageRecord);
+
+    it(`isRecordExist should return ${expectedResult} when activityStorageRecord is ${activityStorageRecordAsText}`, () => {
+      const progress: StoreProgress = getFlowProgressMock();
+
+      const { saveSummaryMock } = mockConstructionServiceExternals(mockNowDate);
+
+      const pushMock = jest.fn();
+
+      const pushToQueueMock = { push: pushMock };
+
+      const service = new ConstructCompletionsService(
+        saveSummaryMock,
+        {} as QueryClient,
+        progress,
+        pushToQueueMock,
+        jest.fn(),
+      );
+
+      //@ts-expect-error
+      const result = service.isRecordExist(activityStorageRecord);
+
+      expect(result).toEqual(expectedResult);
+    });
+  });
+});
+
+describe('Test ConstructCompletionsService: evaluateEndAt', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  const now = mockNowDate.getTime();
+
+  const tests = [
+    {
+      completionType: 'intermediate',
+      availableTo: null,
+      logAvailableTo: 'null',
+      isAutocompletion: false,
+      expectedResult: now,
+      expectedResultLog: 'now',
+    },
+    {
+      completionType: 'intermediate',
+      availableTo: subHours(now, 1).getTime(),
+      logAvailableTo: 'subHours(now, 1)',
+      isAutocompletion: false,
+      expectedResult: now,
+      expectedResultLog: 'now',
+    },
+    {
+      completionType: 'intermediate',
+      availableTo: subHours(now, 1).getTime(),
+      logAvailableTo: 'subHours(now, 1)',
+      isAutocompletion: true,
+      expectedResult: subSeconds(subHours(now, 1), 1).getTime(),
+      expectedResultLog: 'subSeconds(subHours(now, 1), 1)',
+    },
+    {
+      completionType: 'finish',
+      availableTo: null,
+      logAvailableTo: 'null',
+      isAutocompletion: false,
+      expectedResult: now,
+      expectedResultLog: 'now',
+    },
+    {
+      completionType: 'finish',
+      availableTo: subHours(now, 1).getTime(),
+      logAvailableTo: 'subHours(now, 1)',
+      isAutocompletion: false,
+      expectedResult: now,
+      expectedResultLog: 'now',
+    },
+    {
+      completionType: 'finish',
+      availableTo: subHours(now, 1).getTime(),
+      logAvailableTo: 'subHours(now, 1)',
+      isAutocompletion: true,
+      expectedResult: addMilliseconds(
+        subSeconds(subHours(now, 1), 1),
+        1,
+      ).getTime(),
+      expectedResultLog: 'addMilliseconds(subSeconds(subHours(now, 1), 1), 1)',
+    },
+    {
+      completionType: 'finish',
+      availableTo: addHours(now, 1).getTime(),
+      logAvailableTo: 'addHours(now, 1)',
+      isAutocompletion: true,
+      expectedResult: addMilliseconds(now, 1).getTime(),
+      expectedResultLog: 'addMilliseconds(now, 1)',
+    },
+    {
+      completionType: 'intermediate',
+      availableTo: addHours(now, 1).getTime(),
+      logAvailableTo: 'addHours(now, 1)',
+      isAutocompletion: true,
+      expectedResult: now,
+      expectedResultLog: ' now',
+    },
+  ];
+
+  tests.forEach(
+    ({
+      completionType,
+      availableTo,
+      logAvailableTo,
+      isAutocompletion,
+      expectedResult,
+      expectedResultLog,
+    }) => {
+      it(`Should return '${expectedResultLog}' when completionType is ${completionType} and availableTo is '${logAvailableTo}' and isAutocompletion is ${isAutocompletion}`, () => {
         const progress: StoreProgress = getFlowProgressMock();
+
+        const pushToQueueMock = { push: jest.fn() };
 
         const { saveSummaryMock } =
           mockConstructionServiceExternals(mockNowDate);
 
-        const pushMock = jest.fn();
-
-        const pushToQueueMock = { push: pushMock };
-
         const service = new ConstructCompletionsService(
           saveSummaryMock,
-          {} as any,
+          {} as QueryClient,
           progress,
           pushToQueueMock,
           jest.fn(),
         );
 
-        expect(() =>
-          //@ts-expect-error
-          service.validate(
-            activityStorageRecord as any,
-            appletEncryption as any,
-          ),
-        ).toThrow(new Error(expectedError));
+        // @ts-expect-error
+        const result = service.evaluateEndAt(
+          completionType as CompletionType,
+          availableTo,
+          isAutocompletion,
+        );
+
+        expect(result).toEqual(expectedResult);
       });
     },
   );

@@ -10,11 +10,12 @@ import { XStack, Text } from '.';
 
 type Props = {
   onChange: (value: Date) => void;
-  value: Date;
+  value: Date | null;
   iconAfter: JSX.Element;
   label?: string;
   mode?: 'date' | 'time' | 'datetime';
   dateDisplayFormat?: string;
+  placeholder: string;
 };
 
 const DatePickerButton = styled(Button, {
@@ -25,11 +26,12 @@ const DatePickerButton = styled(Button, {
 });
 
 const DateTimePicker: FC<Props & AccessibilityProps> = ({
-  value = new Date(),
+  value,
   accessibilityLabel,
   onChange,
   label,
   iconAfter,
+  placeholder,
   mode = 'date',
   dateDisplayFormat = 'MMMM d, yyyy',
 }) => {
@@ -62,13 +64,13 @@ const DateTimePicker: FC<Props & AccessibilityProps> = ({
         iconAfter={iconAfter}
       >
         <XStack flex={1}>
-          <Text>{format(value, dateDisplayFormat)}</Text>
+          <Text>{value ? format(value, dateDisplayFormat) : placeholder}</Text>
         </XStack>
       </DatePickerButton>
 
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
-        date={new Date(value)}
+        date={value ? new Date(value) : new Date()}
         mode={mode}
         onConfirm={confirm}
         onCancel={hideDatePicker}

@@ -53,8 +53,7 @@ export class ScoreConditionsEvaluator implements IScoreConditionsEvaluator {
       return this.evaluateInternal(settings, score);
     } catch (error) {
       throw new Error(
-        '[ScoreConditionsEvaluator.evaluate]: Error occurred:\n\n' +
-          error!.toString(),
+        `[ScoreConditionsEvaluator.evaluate]: Error occurred:\n\n${error}`,
       );
     }
   }

@@ -230,14 +230,14 @@ function useStartEntity({
       'regular',
     );
 
-    let isActivityInProgress = await evaluateProgressWithAutocompletion(
+    const isActivityInProgress = await evaluateProgressWithAutocompletion(
       appletId,
       activityId,
       eventId,
       'regular',
     );
 
-    return new Promise<StartResult>(async resolve => {
+    return new Promise<StartResult>(resolve => {
       if (!MigrationValidator.allMigrationHaveBeenApplied()) {
         onMigrationsNotApplied();
         resolve({
@@ -355,7 +355,7 @@ function useStartEntity({
     const getFlowActivities = (): string[] => {
       const activityFlowDtos: ActivityFlowRecordDto[] =
         detailsResponse.result.activityFlows;
-      const flow = activityFlowDtos!.find(x => x.id === flowId)!;
+      const flow = activityFlowDtos.find(x => x.id === flowId)!;
 
       return flow.activityIds;
     };
@@ -378,7 +378,7 @@ function useStartEntity({
       'flow',
     );
 
-    let isFlowInProgress = await evaluateProgressWithAutocompletion(
+    const isFlowInProgress = await evaluateProgressWithAutocompletion(
       appletId,
       flowId,
       eventId,

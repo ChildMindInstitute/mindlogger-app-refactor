@@ -71,7 +71,10 @@ const useAutoCompletion = (): Result => {
     constructService: ConstructCompletionsService,
   ) => {
     try {
-      await constructService.construct(collectOutput);
+      await constructService.construct({
+        ...collectOutput,
+        isAutocompletion: true,
+      });
     } catch (error) {
       Logger.warn(
         '[useAutoCompletion.constructInternal] Error occurred:\n' + error,
@@ -112,14 +115,14 @@ const useAutoCompletion = (): Result => {
           '[useAutoCompletion.completeEntityIntoUploadToQueue] Started',
         );
 
-        let collectOutputs = collectService.collectForEntity(entityPath);
+        const collectOutputs = collectService.collectForEntity(entityPath);
 
         Logger.log(
           '[useAutoCompletion.completeEntityIntoUploadToQueue] collectOutputs: \n' +
             JSON.stringify(collectOutputs, null, 2),
         );
 
-        for (let collectOutput of collectOutputs) {
+        for (const collectOutput of collectOutputs) {
           await constructInternal(collectOutput, constructService);
         }
 
@@ -153,7 +156,7 @@ const useAutoCompletion = (): Result => {
 
         Logger.log('[useAutoCompletion.processAutocompletion] Started');
 
-        let collectOutputs = collectAllInternal(collectService, exclude);
+        const collectOutputs = collectAllInternal(collectService, exclude);
 
         completionsCollected = !!collectOutputs.length;
 
@@ -162,7 +165,7 @@ const useAutoCompletion = (): Result => {
             JSON.stringify(collectOutputs, null, 2),
         );
 
-        for (let collectOutput of collectOutputs) {
+        for (const collectOutput of collectOutputs) {
           await constructInternal(collectOutput, constructService);
         }
 

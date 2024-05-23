@@ -18,6 +18,7 @@ import {
   useAppForm,
   useAppSelector,
   useFormChanges,
+  FeatureFlagsService,
 } from '@shared/lib';
 import { encryption } from '@shared/lib';
 import { YStack, Box, BoxProps, SubmitButton, Center, Link } from '@shared/ui';
@@ -74,6 +75,8 @@ const LoginForm: FC<Props> = props => {
       AnalyticsService.login(user.id).then(() => {
         AnalyticsService.track(MixEvents.LoginSuccessful);
       });
+
+      FeatureFlagsService.login(user.id);
 
       props.onLoginSuccess();
     },

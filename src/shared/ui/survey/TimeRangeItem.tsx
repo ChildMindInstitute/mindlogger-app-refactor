@@ -6,13 +6,13 @@ import {
   getMidnightDateInMs,
   getMsFromHours,
   getMsFromMinutes,
-  getNow,
+  TIME_PICKER_FORMAT_PLACEHOLDER,
 } from '@app/shared/lib';
 import { YStack, DateTimePicker, AlarmIcon, BedIcon } from '@shared/ui';
 
 type TimeRangeValue = {
-  endTime: HourMinute;
-  startTime: HourMinute;
+  endTime: HourMinute | null;
+  startTime: HourMinute | null;
 };
 
 type Props = {
@@ -36,26 +36,30 @@ const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
   });
 
   const startTimeAsDate = useMemo(
-    () => (value?.startTime ? transformToDate(value.startTime) : getNow()),
+    () => (value?.startTime ? transformToDate(value.startTime) : null),
     [value],
   );
 
   const endTimeAsDate = useMemo(
-    () => (value?.endTime ? transformToDate(value.endTime) : getNow()),
+    () => (value?.endTime ? transformToDate(value.endTime) : null),
     [value],
   );
 
-  const onChangeStartTime = (time: Date) =>
+  const onChangeStartTime = (time: Date) => {
     onChange({
-      endTime: transformToHourMinute(endTimeAsDate),
+      endTime: endTimeAsDate ? transformToHourMinute(endTimeAsDate) : null,
       startTime: transformToHourMinute(time),
     });
+  };
 
-  const onChangeEndTime = (time: Date) =>
+  const onChangeEndTime = (time: Date) => {
     onChange({
-      startTime: transformToHourMinute(startTimeAsDate),
+      startTime: startTimeAsDate
+        ? transformToHourMinute(startTimeAsDate)
+        : null,
       endTime: transformToHourMinute(time),
     });
+  };
 
   return (
     <YStack>
@@ -67,6 +71,7 @@ const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
         value={startTimeAsDate}
         mode="time"
         iconAfter={<BedIcon color={colors.grey2} size={15} />}
+        placeholder={TIME_PICKER_FORMAT_PLACEHOLDER}
       />
 
       <DateTimePicker
@@ -77,6 +82,7 @@ const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
         mode="time"
         value={endTimeAsDate}
         iconAfter={<AlarmIcon color={colors.grey2} size={15} />}
+        placeholder={TIME_PICKER_FORMAT_PLACEHOLDER}
       />
     </YStack>
   );

@@ -1,6 +1,11 @@
 import { createContext, useCallback, useContext, useState } from 'react';
 
-export type SystemModule = 'cache' | 'state' | 'analytics' | 'storage';
+export type SystemModule =
+  | 'cache'
+  | 'state'
+  | 'analytics'
+  | 'storage'
+  | 'featureFlags';
 
 type SystemBootUpContext = {
   onModuleInitialized: (module: SystemModule) => void;

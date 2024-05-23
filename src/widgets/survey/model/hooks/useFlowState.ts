@@ -41,6 +41,7 @@ export function useFlowState({ appletId, eventId, flowId }: UseFlowStateArgs) {
   return {
     step,
     isTimerElapsed: record?.isCompletedDueToTimer ?? false,
+    interruptionStep: record?.interruptionStep ?? null,
     pipeline,
     flowSummaryData,
     remainingActivityIds,

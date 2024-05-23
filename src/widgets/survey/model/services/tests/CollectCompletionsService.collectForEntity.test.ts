@@ -34,7 +34,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
   });
 
   it('Should return empty array when entity progress exist, but availableTo is null', () => {
-    let progress = getRegularProgressRecord(pathOne);
+    const progress = getRegularProgressRecord(pathOne);
     progress.payload.availableTo = null;
 
     const service = new CollectCompletionsService([progress]);
@@ -45,7 +45,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
   });
 
   it('Should return empty array when entity progress exist, but availableTo is undefined', () => {
-    let progress = getRegularProgressRecord(pathOne);
+    const progress = getRegularProgressRecord(pathOne);
     progress.payload.availableTo = null;
 
     const service = new CollectCompletionsService([progress]);
@@ -60,7 +60,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
       .spyOn(survey, 'isEntityExpired')
       .mockReturnValue(false);
 
-    let progress = getRegularProgressRecord(pathOne);
+    const progress = getRegularProgressRecord(pathOne);
     progress.payload.availableTo = new Date(2023, 2, 5).getTime();
 
     const service = new CollectCompletionsService([progress]);

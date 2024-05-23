@@ -119,7 +119,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [
+      const expected = [
         Yesterday,
         CurrentDay,
         addDays(CurrentDay, 1),
@@ -314,7 +314,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [
+      const expected = [
         Yesterday,
         CurrentDay,
         addDays(CurrentDay, 1),
@@ -514,7 +514,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [addDays(scheduledDay, 7)];
+      const expected = [addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });
@@ -538,7 +538,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [addDays(scheduledDay, 7), addDays(scheduledDay, 14)];
+      const expected = [addDays(scheduledDay, 7), addDays(scheduledDay, 14)];
 
       expect(result).toEqual(expected);
     });
@@ -562,7 +562,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [scheduledDay, addDays(scheduledDay, 7)];
+      const expected = [scheduledDay, addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });
@@ -586,7 +586,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [addDays(scheduledDay, 7)];
+      const expected = [addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });
@@ -636,7 +636,7 @@ describe('NotificationDaysExtractor tests. Extract days for regular notification
         scheduledDay,
       );
 
-      let expected = [CurrentDay, Tomorrow, addDays(Tomorrow, 1)];
+      const expected = [CurrentDay, Tomorrow, addDays(Tomorrow, 1)];
 
       expect(result).toEqual(expected);
     });
@@ -998,7 +998,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      let expected = [
+      const expected = [
         subDays(CurrentDay, 2),
         subDays(CurrentDay, 1),
         CurrentDay,
@@ -1166,7 +1166,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      let expected = [
+      const expected = [
         subDays(CurrentDay, 2),
         subDays(CurrentDay, 1),
         CurrentDay,
@@ -1342,7 +1342,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      let expected = [addDays(scheduledDay, 7)];
+      const expected = [addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });
@@ -1365,7 +1365,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      let expected = [addDays(scheduledDay, 7), addDays(scheduledDay, 14)];
+      const expected = [addDays(scheduledDay, 7), addDays(scheduledDay, 14)];
 
       expect(result).toEqual(expected);
     });
@@ -1388,7 +1388,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      let expected = [
+      const expected = [
         subWeeks(scheduledDay, 4),
         subWeeks(scheduledDay, 3),
         subWeeks(scheduledDay, 2),
@@ -1418,7 +1418,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
         scheduledDay,
       );
 
-      let expected = [addDays(scheduledDay, 7)];
+      const expected = [addDays(scheduledDay, 7)];
 
       expect(result).toEqual(expected);
     });

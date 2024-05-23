@@ -25,6 +25,10 @@ type InProgressEntity = {
   eventId: string;
 };
 
+type CompletionFixation = {
+  endAt: number;
+};
+
 type InProgressFlow = {
   appletId: string;
   flowId: string;
@@ -131,10 +135,11 @@ const slice = createSlice({
       event.totalActivitiesInPipeline = totalActivities;
     },
 
-    entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {
-      const { appletId, entityId, eventId } = action.payload;
-
-      const now = new Date().getTime();
+    entityCompleted: (
+      state,
+      action: PayloadAction<InProgressEntity & CompletionFixation>,
+    ) => {
+      const { appletId, entityId, eventId, endAt } = action.payload;
 
       const { availableTo } = state.inProgress[appletId][entityId][eventId];
 
@@ -142,13 +147,13 @@ const slice = createSlice({
 
       state.inProgress[appletId][entityId][eventId].endAt = isExpired
         ? availableTo
-        : now;
+        : endAt;
 
       const completedEntities = state.completedEntities ?? {};
 
       const completions = state.completions ?? {};
 
-      completedEntities[entityId] = now;
+      completedEntities[entityId] = endAt;
 
       if (!completions[entityId]) {
         completions[entityId] = {};
@@ -159,7 +164,7 @@ const slice = createSlice({
       if (!entityCompletions[eventId]) {
         entityCompletions[eventId] = [];
       }
-      entityCompletions[eventId].push(now);
+      entityCompletions[eventId].push(endAt);
     },
 
     entityAnswersSent: (state, action: PayloadAction<InProgressEntity>) => {

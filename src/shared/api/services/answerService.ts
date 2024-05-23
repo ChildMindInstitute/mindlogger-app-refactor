@@ -84,8 +84,8 @@ export type AbTestAnswerDto = {
 };
 
 export type TimeRangeAnswerDto = {
-  from: { hour: number; minute: number };
-  to: { hour: number; minute: number };
+  from: { hour: number; minute: number } | null;
+  to: { hour: number; minute: number } | null;
 };
 
 export type TimeAnswerDto = HourMinute;

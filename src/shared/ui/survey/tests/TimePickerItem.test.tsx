@@ -14,8 +14,6 @@ describe('Test TimePickerItem', () => {
   it('Should be rendered with the value equal to undefined', () => {
     const mockNowDate = new Date(2024, 3, 8, 14, 15, 16);
 
-    const mockMinutes = mockNowDate.getMinutes();
-
     jest.spyOn(dateTimeUtils, 'getNow').mockReturnValue(mockNowDate);
 
     const timePicker = renderer.create(
@@ -28,11 +26,9 @@ describe('Test TimePickerItem', () => {
       accessibilityLabel: 'time-picker',
     });
 
-    const pickerValueDate = new Date(pickerButton.props.value);
+    const pickerValue = pickerButton.props.value;
 
-    const pickerValueMinutes = pickerValueDate.getMinutes();
-
-    expect(pickerValueMinutes).toBe(mockMinutes);
+    expect(pickerValue).toBe(null);
   });
 
   it('Should be rendered with the specified value', () => {

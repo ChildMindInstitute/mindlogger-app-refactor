@@ -26,7 +26,6 @@ import {
   GeolocationAnswerDto,
   NumberSelectAnswerDto,
   PhotoAnswerDto,
-  RadioAnswerDto,
   SliderAnswerDto,
   StackedCheckboxAnswerDto,
   StackedRadioAnswerDto,
@@ -44,6 +43,7 @@ import {
   AbLogLineDto,
   AbLogPointDto,
   AnswerAlertsDto,
+  TimeRangeAnswerDto,
 } from '@shared/api';
 import {
   HourMinute,
@@ -59,8 +59,8 @@ import { canItemHaveAnswer } from './operations';
 type Answer = PipelineItemAnswer['value'];
 
 type TimeRange = {
-  endTime: HourMinute;
-  startTime: HourMinute;
+  endTime: HourMinute | null;
+  startTime: HourMinute | null;
 };
 
 type StackedRadioAnswerValue = Array<Array<Item>>;
@@ -116,7 +116,7 @@ const mapFlankerAnswersToDto = (
     .filter(x => !!answers[x])
     .map(x => convertToAnswerDto('Flanker', answers[x]));
 
-  for (let practiceAnswerDto of restOfAnswerDtos) {
+  for (const practiceAnswerDto of restOfAnswerDtos) {
     const records = (practiceAnswerDto as ObjectAnswerDto)
       .value as Array<FlankerAnswerRecordDto>;
 
@@ -149,7 +149,7 @@ function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
 
   return {
     ...(radioValue && {
-      value: radioValue.value as RadioAnswerDto,
+      value: radioValue.value,
     }),
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
@@ -215,19 +215,28 @@ function convertToTimeRangeAnswer(answer: Answer): AnswerDto {
   const timeRangeItem = answer.answer as TimeRange;
   const { startTime, endTime } = timeRangeItem ?? {};
 
+  const timeRangeValue = {
+    value: {
+      from: null,
+      to: null,
+    } as TimeRangeAnswerDto,
+  };
+
+  if (startTime) {
+    timeRangeValue.value.from = {
+      hour: startTime.hours,
+      minute: startTime.minutes,
+    };
+  }
+  if (endTime) {
+    timeRangeValue.value.to = {
+      hour: endTime?.hours,
+      minute: endTime?.minutes,
+    };
+  }
+
   return {
-    ...(timeRangeItem && {
-      value: {
-        from: {
-          hour: startTime.hours,
-          minute: startTime.minutes,
-        },
-        to: {
-          hour: endTime.hours,
-          minute: endTime.minutes,
-        },
-      },
-    }),
+    ...timeRangeValue,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),
@@ -521,9 +530,7 @@ export function mapAnswersToAlerts(
 
     return alerts as AnswerAlertsDto;
   } catch (error) {
-    Logger.warn(
-      '[mapAnswersToAlerts]: Error occurred: \n\n' + error!.toString(),
-    );
+    Logger.warn(`[mapAnswersToAlerts]: Error occurred: \n\n${error}`);
     throw error;
   }
 }

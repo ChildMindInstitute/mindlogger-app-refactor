@@ -189,7 +189,7 @@ export class NotificationUtility {
       bordersType === 'both-in-current-day' ||
       bordersType === 'both-in-next-day'
     ) {
-      let diff = getDiff(from, to);
+      const diff = getDiff(from, to);
 
       const randomValueToAdd = this.getRandomInt(diff);
 
@@ -205,7 +205,7 @@ export class NotificationUtility {
     }
 
     if (bordersType === 'from-current-to-next') {
-      let diff = getDiff(from!, to!);
+      let diff = getDiff(from, to);
 
       diff = getMsFromHours(24) + diff;
 

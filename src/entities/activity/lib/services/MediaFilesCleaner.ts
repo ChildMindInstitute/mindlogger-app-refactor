@@ -30,7 +30,7 @@ const createMediaFilesCleaner = (): Result => {
 
     const urlsToProcess: string[] = [];
 
-    for (let recordId in entityRecord.answers) {
+    for (const recordId in entityRecord.answers) {
       const record = entityRecord.answers[recordId]?.answer;
 
       if (record?.uri) {
@@ -38,7 +38,7 @@ const createMediaFilesCleaner = (): Result => {
       }
     }
 
-    for (let fileUrl of urlsToProcess) {
+    for (const fileUrl of urlsToProcess) {
       try {
         const fileExists = await FileSystem.exists(fileUrl);
 

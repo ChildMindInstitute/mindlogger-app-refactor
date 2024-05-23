@@ -79,7 +79,7 @@ export const stackedRadioOutput = [
 
 export const stackedCheckboxOutput = [
   {
-    value: [['opt1'], ['opt2']],
+    value: [['opt1'], null],
   },
 ];
 export const stackedSliderOutput = [
@@ -103,5 +103,49 @@ export const mediaOutput = [
 export const audioPlayerOutput = [
   {
     value: true,
+  },
+];
+
+export const userActionsOutput = [
+  {
+    response: 'textAnswer',
+    screen: '1/1',
+    time: 100,
+    type: 'SET_ANSWER',
+  },
+  {
+    screen: '1/1',
+    time: 100,
+    type: 'PREV',
+  },
+  {
+    screen: '1/1',
+    time: 100,
+    type: 'NEXT',
+  },
+  {
+    screen: '1/1',
+    time: 100,
+    type: 'SKIP_POPUP_CONFIRM',
+  },
+  {
+    screen: '1/1',
+    time: 100,
+    type: 'SKIP_POPUP_CANCEL',
+  },
+  {
+    screen: '1/1',
+    time: 100,
+    type: 'SKIP',
+  },
+  {
+    screen: '1/1',
+    time: 100,
+    type: 'UNDO',
+  },
+  {
+    screen: '1/1',
+    time: 100,
+    type: 'DONE',
   },
 ];

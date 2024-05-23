@@ -57,6 +57,7 @@ export const getSingleActivityFlowState = (path: EntityPath): FlowState => {
     step: 0,
     scheduledDate: null,
     isCompletedDueToTimer: false,
+    interruptionStep: null,
     context: {},
     pipeline: [
       {
@@ -91,6 +92,7 @@ export const getMultipleActivityFlowState = (path: EntityPath): FlowState => {
     step: 0,
     scheduledDate: null,
     isCompletedDueToTimer: false,
+    interruptionStep: null,
     context: {},
     pipeline: [
       {
@@ -146,7 +148,7 @@ export const getMultipleActivityFlowState = (path: EntityPath): FlowState => {
 export const deleteLogAvailableTo = (
   collected: CollectCompletionOutput[],
 ): CollectCompletionOutput[] => {
-  for (let item of collected) {
+  for (const item of collected) {
     delete item.logAvailableTo;
   }
   return collected;
@@ -364,6 +366,7 @@ export const getInputsForIntermediate = (): ConstructInput => {
     eventId: 'mock-event-id-1',
     flowId: 'mock-flow-id-1',
     order: 0,
+    isAutocompletion: false,
   };
 };
 
@@ -376,6 +379,7 @@ export const getInputsForFinish = (entityType: EntityType): ConstructInput => {
     eventId: 'mock-event-id-1',
     flowId: entityType === 'flow' ? 'mock-flow-id-1' : undefined,
     order: 0,
+    isAutocompletion: false,
   };
 };
 

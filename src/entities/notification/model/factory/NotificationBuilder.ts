@@ -102,7 +102,7 @@ class NotificationBuilder implements INotificationBuilder {
 
     const isSpread = this.utility.isSpreadToNextDay(event);
 
-    for (let eventNotification of eventNotifications) {
+    for (const eventNotification of eventNotifications) {
       const { from, to, at, triggerType } = eventNotification;
 
       let triggerAt: Date;
@@ -124,7 +124,7 @@ class NotificationBuilder implements INotificationBuilder {
           day,
           from!,
           to!,
-          randomBorderType!,
+          randomBorderType,
         );
 
         if (!triggerAt) {
@@ -306,7 +306,7 @@ class NotificationBuilder implements INotificationBuilder {
         ...reminderFromPastDays.map(x => x.reminder),
       );
 
-      for (let day of eventDays) {
+      for (const day of eventDays) {
         const notifications = this.processEventDay(day, event, entity);
         eventResult.notifications.push(...notifications);
 
@@ -319,7 +319,7 @@ class NotificationBuilder implements INotificationBuilder {
     }
 
     if (this.keepDebugData) {
-      for (let notification of eventResult.notifications) {
+      for (const notification of eventResult.notifications) {
         notification.toString_Debug = JSON.stringify(notification, null, 2);
         notification.scheduledEvent_Debug = event;
         notification.scheduledEventString_Debug = JSON.stringify(
@@ -338,7 +338,7 @@ class NotificationBuilder implements INotificationBuilder {
   public build(): AppletNotificationDescribers {
     const eventNotificationsResult: Array<EventNotificationDescribers> = [];
 
-    for (let eventEntity of this.eventEntities) {
+    for (const eventEntity of this.eventEntities) {
       try {
         const eventNotifications = this.processEvent(
           eventEntity.event,
@@ -347,8 +347,7 @@ class NotificationBuilder implements INotificationBuilder {
         eventNotificationsResult.push(eventNotifications);
       } catch (error: any) {
         console.error(
-          `[NotificationBuilder.build] Error occurred during process event: "${eventEntity.event.id}", entity: "${eventEntity.entity?.name}" :\n\n` +
-            error.toString(),
+          `[NotificationBuilder.build] Error occurred during process event: "${eventEntity.event.id}", entity: "${eventEntity.entity?.name}" :\n\n${error}`,
         );
       }
     }

@@ -33,7 +33,7 @@ const useIdleTimer = (input: UseIdleTimerInput): UseIdleTimerResult => {
 
     timerRef.current = new AppTimer(onIdleElapsed, false, duration);
 
-    timerRef.current!.start();
+    timerRef.current.start();
 
     return () => {
       timerRef.current!.stop();
@@ -41,9 +41,7 @@ const useIdleTimer = (input: UseIdleTimerInput): UseIdleTimerResult => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onIdleElapsed = () => {
-    onFinish();
-  };
+  const onIdleElapsed = () => onFinish();
 
   const restart = () => {
     timer?.restart();
