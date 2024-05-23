@@ -1,8 +1,12 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 
 import { format } from 'date-fns';
 
-import { colors, getDateFromString } from '@shared/lib';
+import {
+  colors,
+  DATE_PICKER_FORMAT_PLACEHOLDER,
+  getDateFromString,
+} from '@shared/lib';
 import { RightArrowIcon, DateTimePicker } from '@shared/ui';
 
 type Props = {
@@ -17,13 +21,7 @@ const DatePickerItem: FC<Props> = ({ value, onChange }) => {
     onChange(formattedDate);
   };
 
-  const valueAsDate = useMemo(() => {
-    if (!value) {
-      return new Date();
-    }
-
-    return getDateFromString(value);
-  }, [value]);
+  const valueAsDate = value ? getDateFromString(value) : null;
 
   return (
     <DateTimePicker
@@ -31,6 +29,7 @@ const DatePickerItem: FC<Props> = ({ value, onChange }) => {
       onChange={onChangeDate}
       value={valueAsDate}
       iconAfter={<RightArrowIcon color={colors.lightGrey2} size={15} />}
+      placeholder={DATE_PICKER_FORMAT_PLACEHOLDER}
     />
   );
 };

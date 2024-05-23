@@ -339,6 +339,10 @@ class AnswersUploadService implements IAnswersUploadService {
       throw new Error(
         '[UploadAnswersService.uploadAnswers] Answers were not uploaded',
       );
+    } else {
+      this.logger.log(
+        '[UploadAnswersService.uploadAnswers]: Check result: uploaded successfully',
+      );
     }
   }
 

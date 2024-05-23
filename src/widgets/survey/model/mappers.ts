@@ -43,6 +43,7 @@ import {
   AbLogLineDto,
   AbLogPointDto,
   AnswerAlertsDto,
+  TimeRangeAnswerDto,
 } from '@shared/api';
 import {
   HourMinute,
@@ -58,8 +59,8 @@ import { canItemHaveAnswer } from './operations';
 type Answer = PipelineItemAnswer['value'];
 
 type TimeRange = {
-  endTime: HourMinute;
-  startTime: HourMinute;
+  endTime: HourMinute | null;
+  startTime: HourMinute | null;
 };
 
 type StackedRadioAnswerValue = Array<Array<Item>>;
@@ -214,19 +215,28 @@ function convertToTimeRangeAnswer(answer: Answer): AnswerDto {
   const timeRangeItem = answer.answer as TimeRange;
   const { startTime, endTime } = timeRangeItem ?? {};
 
+  const timeRangeValue = {
+    value: {
+      from: null,
+      to: null,
+    } as TimeRangeAnswerDto,
+  };
+
+  if (startTime) {
+    timeRangeValue.value.from = {
+      hour: startTime.hours,
+      minute: startTime.minutes,
+    };
+  }
+  if (endTime) {
+    timeRangeValue.value.to = {
+      hour: endTime?.hours,
+      minute: endTime?.minutes,
+    };
+  }
+
   return {
-    ...(timeRangeItem && {
-      value: {
-        from: {
-          hour: startTime.hours,
-          minute: startTime.minutes,
-        },
-        to: {
-          hour: endTime.hours,
-          minute: endTime.minutes,
-        },
-      },
-    }),
+    ...timeRangeValue,
     ...(answer.additionalAnswer && {
       text: answer.additionalAnswer,
     }),

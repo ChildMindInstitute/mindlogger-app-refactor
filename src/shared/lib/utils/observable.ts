@@ -1,8 +1,13 @@
 type ObserverFunctionBase = (...args: any[]) => void;
 
+export interface IObservable {
+  notify: () => void;
+}
+
 export class CommonObservable<
   TObserver extends ObserverFunctionBase = ObserverFunctionBase,
-> {
+> implements IObservable
+{
   protected _observers: Array<TObserver>;
 
   constructor() {

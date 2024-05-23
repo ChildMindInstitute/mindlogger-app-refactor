@@ -405,8 +405,8 @@ export type AudioResponse = MediaFile;
 export type AudioPlayerResponse = boolean;
 
 export type TimeRangeResponse = {
-  startTime: HourMinute;
-  endTime: HourMinute;
+  startTime: HourMinute | null;
+  endTime: HourMinute | null;
 };
 
 export type RadioResponse = RadioOption;

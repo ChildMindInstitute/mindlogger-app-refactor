@@ -12,3 +12,6 @@ date.setSeconds(0);
 export const MIDNIGHT_DATE = date;
 
 export const TIMEZONE = getTimeZone();
+
+export const TIME_PICKER_FORMAT_PLACEHOLDER = 'HH:MM AM/PM';
+export const DATE_PICKER_FORMAT_PLACEHOLDER = 'MM/DD/YYYY';

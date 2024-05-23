@@ -57,6 +57,7 @@ export const getSingleActivityFlowState = (path: EntityPath): FlowState => {
     step: 0,
     scheduledDate: null,
     isCompletedDueToTimer: false,
+    interruptionStep: null,
     context: {},
     pipeline: [
       {
@@ -91,6 +92,7 @@ export const getMultipleActivityFlowState = (path: EntityPath): FlowState => {
     step: 0,
     scheduledDate: null,
     isCompletedDueToTimer: false,
+    interruptionStep: null,
     context: {},
     pipeline: [
       {
