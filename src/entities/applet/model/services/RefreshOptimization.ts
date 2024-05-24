@@ -19,11 +19,12 @@ class RefreshOptimization {
     );
   }
 
+  private getData(): AppletsResponse | null {
+    return getDataFromQuery<AppletsResponse>(getAppletsKey(), this.queryClient);
+  }
+
   public keepExistingAppletVersions() {
-    const appletsResponse = getDataFromQuery<AppletsResponse>(
-      getAppletsKey(),
-      this.queryClient,
-    );
+    const appletsResponse = this.getData();
 
     if (!appletsResponse) {
       this.keptVersions = [];
