@@ -19,3 +19,7 @@ export type FlowStateFrom = {
   context: Record<string, unknown>;
   flowName: string;
 };
+
+type FlowPipelineItemTo = FlowPipelineItemFrom;
+
+export type FlowStateTo = FlowStateFrom;

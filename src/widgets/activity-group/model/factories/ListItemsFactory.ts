@@ -13,7 +13,7 @@ import {
 import { isEntityExpired, MIDNIGHT_DATE } from '@shared/lib';
 
 import { GroupUtility, GroupsBuildContext } from './GroupUtility';
-import { EventEntity, Activity, ActivityFlow, Entity } from '../../lib';
+import { EventEntity, Activity, ActivityFlow } from '../../lib';
 
 export class ListItemsFactory {
   private utility: GroupUtility;
@@ -30,7 +30,11 @@ export class ListItemsFactory {
     item: ActivityListItem,
     activityEvent: EventEntity,
   ) {
+    const { entity } = activityEvent;
     const activityFlow = activityEvent.entity as ActivityFlow;
+
+    item.flowId = entity.id;
+    item.type = ActivityType.NotDefined;
 
     item.isInActivityFlow = true;
     item.activityFlowDetails = {
@@ -77,9 +81,16 @@ export class ListItemsFactory {
   private populateActivityFields(
     item: ActivityListItem,
     activityEvent: EventEntity,
-    entity: Entity,
   ) {
+    const { entity } = activityEvent;
     const isInProgress = this.utility.isInProgress(activityEvent);
+
+    item.description = entity.description;
+    item.activityId = entity.id;
+    item.flowId = null;
+    item.type = (entity as Activity).type;
+    item.image = entity.image;
+    item.name = entity.name;
 
     if (isInProgress) {
       const progressRecord = this.utility.getProgressRecord(
@@ -92,30 +103,24 @@ export class ListItemsFactory {
   }
 
   private createListItem(eventActivity: EventEntity) {
-    const { entity, event } = eventActivity;
+    const { event } = eventActivity;
     const { pipelineType } = eventActivity.entity;
     const isFlow = pipelineType === ActivityPipelineType.Flow;
 
-    const item: ActivityListItem = {
-      activityId: isFlow ? '' : entity.id,
-      flowId: isFlow ? entity.id : null,
+    const item = {
       eventId: event.id,
-      name: isFlow ? '' : entity.name,
-      description: isFlow ? '' : entity.description,
-      type: isFlow ? ActivityType.NotDefined : (entity as Activity).type,
-      image: isFlow ? null : entity.image,
       status: ActivityStatus.NotDefined,
       isTimerSet: false,
       isExpired: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
       activityFlowDetails: null,
-    };
+    } as ActivityListItem;
 
     if (isFlow) {
       this.populateActivityFlowFields(item, eventActivity);
     } else {
-      this.populateActivityFields(item, eventActivity, entity);
+      this.populateActivityFields(item, eventActivity);
     }
     return item;
   }

@@ -1,12 +1,5 @@
-import { QueryClient } from '@tanstack/react-query';
-
 import { ActivityPipelineType } from '@app/abstract/lib';
-import { getAppletDetailsKey, getDataFromQuery } from '@app/shared/lib';
 
-import {
-  AppletDetailsDto,
-  AppletDetailsResponse,
-} from './MigrationDtoTypes0002';
 import {
   RootStateFrom,
   RootStateTo,
@@ -31,51 +24,9 @@ export type NotCompletedEntitiesFrom = {
   payload: StoreProgressPayloadFrom;
 };
 
-export const selectNotCompletedFlows = (
+export const selectNotCompletedEntities = (
   state: RootStateFrom,
-): NotCompletedEntitiesFrom[] => {
-  const inProgressApplets = state.applets.inProgress ?? {};
-  const result: NotCompletedEntitiesFrom[] = [];
-
-  const appletIds = Object.keys(inProgressApplets);
-
-  for (const appletId of appletIds) {
-    const progressEntities = inProgressApplets[appletId] ?? {};
-
-    const entityIds = Object.keys(progressEntities);
-
-    for (const entityId of entityIds) {
-      const progressEvents = progressEntities[entityId] ?? {};
-
-      const eventIds = Object.keys(progressEvents);
-
-      for (const eventId of eventIds) {
-        const payload = progressEvents[eventId] ?? {};
-
-        if (
-          !progressEvents[eventId] ||
-          payload.endAt ||
-          payload.type === ActivityPipelineType.Regular
-        ) {
-          continue;
-        }
-
-        result.push({
-          appletId,
-          entityId,
-          eventId,
-          type: payload.type,
-          payload,
-        });
-      }
-    }
-  }
-
-  return result;
-};
-
-export const selectNotCompletedActivities = (
-  state: RootStateFrom,
+  typeFilter: 'flows' | 'activities',
 ): NotCompletedEntitiesFrom[] => {
   const inProgressApplets = state.applets.inProgress ?? {};
   const result: NotCompletedEntitiesFrom[] = [];
@@ -97,7 +48,10 @@ export const selectNotCompletedActivities = (
         if (
           !progressEvents[eventId] ||
           payload.endAt ||
-          payload.type !== ActivityPipelineType.Regular
+          (typeFilter === 'flows' &&
+            payload.type === ActivityPipelineType.Regular) ||
+          (typeFilter === 'activities' &&
+            payload.type !== ActivityPipelineType.Regular)
         ) {
           continue;
         }
@@ -115,27 +69,10 @@ export const selectNotCompletedActivities = (
 
   return result;
 };
-
-export class QueryDataUtils {
-  private queryClient: QueryClient;
-
-  constructor(queryClient: QueryClient) {
-    this.queryClient = queryClient;
-  }
-
-  getAppletDto(appletId: string): AppletDetailsDto | null {
-    const result = getDataFromQuery<AppletDetailsResponse>(
-      getAppletDetailsKey(appletId),
-      this.queryClient,
-    );
-
-    return result?.result ?? null;
-  }
-}
 
 export const getUpdatedReduxState = (
   stateFrom: RootStateFrom,
-  progressFlowsTo: NotCompletedEntitiesTo[],
+  progressTo: NotCompletedEntitiesTo[],
 ): RootStateTo => {
   let result: RootStateTo = {
     ...stateFrom,
@@ -145,7 +82,7 @@ export const getUpdatedReduxState = (
     },
   };
 
-  for (const entity of progressFlowsTo) {
+  for (const entity of progressTo) {
     result = {
       ...result,
       applets: {

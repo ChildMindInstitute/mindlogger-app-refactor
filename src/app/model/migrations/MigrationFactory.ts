@@ -12,7 +12,7 @@ export class MigrationFactory {
   public createMigrations(): Migrations {
     return {
       1: new MigrationToVersion0001(__queryClient__),
-      2: new MigrationToVersion0002(__queryClient__),
+      2: new MigrationToVersion0002(),
     };
   }
 }

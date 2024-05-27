@@ -46,7 +46,7 @@ const getProgress = (startAt: Date, endAt: Date | null) => {
           startAt,
           endAt,
           availableTo: null,
-          entityName: '',
+          entityName: 'test-entity-name-1',
         },
       },
     },
@@ -73,6 +73,7 @@ const getActivity = (): Entity => {
     order: 0,
     type: ActivityType.NotDefined,
   };
+
   return result;
 };
 

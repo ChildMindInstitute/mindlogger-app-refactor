@@ -1,5 +1,3 @@
-import { QueryClient } from '@tanstack/react-query';
-
 import { Logger } from '@app/shared/lib';
 
 import {
@@ -10,10 +8,8 @@ import {
 import { FlowStateFrom } from './MigrationStorageTypes0002.ts';
 import {
   getUpdatedReduxState,
-  selectNotCompletedActivities,
-  selectNotCompletedFlows,
+  selectNotCompletedEntities,
 } from './MigrationUtils0002';
-import { QueryDataUtils } from './MigrationUtils0002.ts';
 import {
   NotCompletedEntitiesFrom,
   NotCompletedEntitiesTo,
@@ -27,12 +23,6 @@ import {
 import { getStorageRecord } from '../../utils.ts';
 
 export class MigrationToVersion0002 implements IMigration {
-  private queryDataUtils: QueryDataUtils;
-
-  constructor(queryClient: QueryClient) {
-    this.queryDataUtils = new QueryDataUtils(queryClient);
-  }
-
   private getFlowState = (key: string): FlowStateFrom | null => {
     return getStorageRecord(Storages.FlowProgress, key);
   };
@@ -81,34 +71,34 @@ export class MigrationToVersion0002 implements IMigration {
       payload: storeProgressPayloadTo,
     };
   }
+
   private getUpdatedProgressForFlows(
     reduxState: RootStateFrom,
   ): NotCompletedEntitiesTo[] {
-    const progressFlowsFrom = selectNotCompletedFlows(reduxState);
+    const progressFlowsFrom = selectNotCompletedEntities(reduxState, 'flows');
     const progressFlowsTo: NotCompletedEntitiesTo[] = [];
+    let logFlowName = '';
+    let logFlowStateFrom = '';
 
     for (const progressFlowFrom of progressFlowsFrom) {
-      const { appletId, entityId, eventId } = progressFlowFrom;
-
-      const logAppletName = '',
-        logFlowName = '';
-      const logFlowStateFrom = '';
-      const logCurrentActivityDto = '';
-      const logActivityFlowDto = '';
       const logProgressFlowFrom = JSON.stringify(progressFlowFrom, null, 2);
+
+      const { appletId, entityId, eventId } = progressFlowFrom;
 
       try {
         const key = this.getFlowRecordKey(appletId, entityId, eventId);
+        const flowState = this.getFlowState(key)!;
 
-        const flowStateFrom = this.getFlowState(key)!;
-
-        if (!flowStateFrom) {
+        if (!flowState) {
           Logger.warn(
-            `[MigrationToVersion0002.getUpdatedProgressForFlows]: Migration cannot be executed as flowState doesn't exist appletName=${logAppletName}, appletId=${appletId}, entityId=${entityId}, eventId=${eventId}`,
+            `[MigrationToVersion0002.getUpdatedProgressForFlows]: Migration cannot be executed as flowState doesn't exist appletId=${appletId}, entityId=${entityId}, eventId=${eventId}`,
           );
           continue;
         }
-        const flowName = flowStateFrom.flowName;
+
+        logFlowStateFrom = JSON.stringify(flowState, null, 2);
+        logFlowName = flowState?.flowName;
+        const flowName = flowState?.flowName ?? '[Name unknown]';
 
         const progressFlowTo = this.getUpdatedFlowProgress(
           progressFlowFrom,
@@ -118,7 +108,7 @@ export class MigrationToVersion0002 implements IMigration {
         progressFlowsTo.push(progressFlowTo);
       } catch (error) {
         Logger.warn(
-          `[MigrationToVersion0002.getUpdatedProgressForFlows]: Error occurred, appletName=${logAppletName}, flowName=${logFlowName}, progressFlowFrom=${logProgressFlowFrom}, flowStateFrom=${logFlowStateFrom}, currentActivityDto=${logCurrentActivityDto}, activityFlowDto=${logActivityFlowDto}  \nerror: \n${error}`,
+          `[MigrationToVersion0002.getUpdatedProgressForFlows]: Error occurred flowName=${logFlowName}, progressFlowFrom=${logProgressFlowFrom}, flowState=${logFlowStateFrom} \nerror: \n${error}`,
         );
       }
     }
@@ -129,55 +119,45 @@ export class MigrationToVersion0002 implements IMigration {
   private getUpdatedProgressForActivities(
     reduxState: RootStateFrom,
   ): NotCompletedEntitiesTo[] {
-    const progressActivitiesFrom = selectNotCompletedActivities(reduxState);
-    const progressActivitiesTo = [];
+    const progressActivitiesFrom = selectNotCompletedEntities(
+      reduxState,
+      'activities',
+    );
+
+    const progressActivitiesTo: NotCompletedEntitiesTo[] = [];
+    let logActivityName = '';
+    let logFlowStateFrom = '';
 
     for (const progressActivityFrom of progressActivitiesFrom) {
-      const { appletId, entityId } = progressActivityFrom;
-      let logAppletName = '',
-        logActivityName = '';
-      const logActivityStateFrom = '';
-      const logCurrentActivityDto = '';
-      const logActivityActivityDto = '';
-      const logProgressActivityFrom = JSON.stringify(
-        progressActivityFrom,
-        null,
-        2,
-      );
+      const logProgressFlowFrom = JSON.stringify(progressActivityFrom, null, 2);
+      const { appletId, entityId, eventId } = progressActivityFrom;
 
       try {
-        const appletDto = this.queryDataUtils.getAppletDto(appletId);
+        const key = this.getFlowRecordKey(appletId, null, eventId);
+        const flowState = this.getFlowState(key)!;
 
-        if (!appletDto) {
+        if (!flowState) {
           Logger.warn(
-            "[MigrationToVersion0002.getUpdatedProgressForActivities]: Migration cannot be executed as applet doesn't exist: " +
-              appletId,
-          );
-          continue;
-        }
-        logAppletName = appletDto.displayName;
-
-        const activityDto = appletDto.activities.find(f => f.id === entityId);
-
-        if (!activityDto) {
-          Logger.warn(
-            "[MigrationToVersion0002.getUpdatedProgressForActivities]: activityFlow doesn't exist: " +
-              entityId,
+            `[MigrationToVersion0002.getUpdatedProgressForActivities]: Migration cannot be executed as flowState doesn't exist appletId=${appletId}, entityId=${entityId}, eventId=${eventId}`,
           );
           continue;
         }
 
-        logActivityName = activityDto.name;
+        logFlowStateFrom = JSON.stringify(flowState, null, 2);
+        logActivityName = flowState?.pipeline?.[0]?.payload?.activityName;
+
+        const activityName =
+          flowState?.pipeline?.[0]?.payload?.activityName ?? '[Name unknown]';
 
         const progressActivityTo = this.getUpdatedActivityProgress(
           progressActivityFrom,
-          activityDto.name,
+          activityName,
         );
 
         progressActivitiesTo.push(progressActivityTo);
       } catch (error) {
         Logger.warn(
-          `[MigrationToVersion0002.getUpdatedProgressForActivities]: Error occurred, appletName=${logAppletName}, flowName=${logActivityName}, progressActivityFrom=${logProgressActivityFrom}, flowStateFrom=${logActivityStateFrom}, currentActivityDto=${logCurrentActivityDto}, activityActivityDto=${logActivityActivityDto}  \nerror: \n${error}`,
+          `[MigrationToVersion0002.getUpdatedProgressForActivities]: Error occurred activityName=${logActivityName}, progressFlowFrom=${logProgressFlowFrom}, flowState=${logFlowStateFrom} \nerror: \n${error}`,
         );
       }
     }
@@ -190,6 +170,7 @@ export class MigrationToVersion0002 implements IMigration {
   ): NotCompletedEntitiesTo[] {
     const activitiesProgressTo =
       this.getUpdatedProgressForActivities(reduxState);
+
     const flowsProgressTo = this.getUpdatedProgressForFlows(reduxState);
 
     return [...activitiesProgressTo, ...flowsProgressTo];
@@ -203,6 +184,7 @@ export class MigrationToVersion0002 implements IMigration {
     const reduxRootStateFrom: RootStateFrom = input.reduxState as RootStateFrom;
 
     const progressTo = this.getUpdatedProgress(reduxRootStateFrom);
+
     result.reduxState = getUpdatedReduxState(reduxRootStateFrom, progressTo);
 
     return result;
