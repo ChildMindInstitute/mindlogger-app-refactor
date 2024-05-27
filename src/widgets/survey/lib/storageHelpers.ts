@@ -30,6 +30,17 @@ export const getActivityRecord = (
   return !json ? null : (JSON.parse(json) as ActivityState);
 };
 
+export const activityRecordExists = (
+  appletId: string,
+  activityId: string,
+  eventId: string,
+  order: number,
+): boolean => {
+  const record = getActivityRecord(appletId, activityId, eventId, order);
+
+  return !!record;
+};
+
 export const clearActivityStorageRecord = (
   appletId: string,
   activityId: string,
