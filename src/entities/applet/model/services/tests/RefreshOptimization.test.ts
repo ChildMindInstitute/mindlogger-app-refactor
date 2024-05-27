@@ -86,22 +86,22 @@ describe('Test RefreshOptimization', () => {
     {
       input: { id: 'mock-id-1', version: 'mock-version-1' },
       expected: false,
-      test: 'Should return true when the corresponding item kept',
+      test: 'Should return false when an item with existing version and id kept',
     },
     {
       input: { id: 'mock-id-2', version: 'mock-version-2' },
       expected: false,
-      test: 'Should return true when another corresponding item kept',
+      test: 'Should return false when another item with existing version and id kept',
     },
     {
       input: { id: 'mock-id-1', version: 'mock-version-3' },
       expected: true,
-      test: 'Should return true when applet with the id kept, but no corresponding version in the cache',
+      test: 'Should return true when an applet with the input id kept, but no input version in the cache',
     },
     {
       input: { id: 'mock-id-3', version: 'mock-version-1' },
       expected: true,
-      test: 'Should return true when applet with the id is not kept',
+      test: 'Should return true when no any applet with the input id kept',
     },
   ];
 
