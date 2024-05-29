@@ -8,6 +8,7 @@ export default styled(
   ActivityIndicator,
   {
     name: 'ActivityIndicator',
+    testID: 'loader',
   },
   {
     isReactNative: true,

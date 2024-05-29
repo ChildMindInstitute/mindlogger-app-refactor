@@ -69,6 +69,7 @@ const SubmitButton: FC<Props & AccessibilityProps> = ({
       onPress={!disabled ? onPress : undefined}
       disabled={disabled || isLoading}
       accessibilityLabel={accessibilityLabel}
+      testID="submit-button"
     >
       <Button
         style={buttonStyle}
