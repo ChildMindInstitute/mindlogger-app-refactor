@@ -1,8 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 
+import { XStack } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
-import { Box, BoxProps, Text } from '@app/shared/ui';
+import { BoxProps, ClockIcon, Text } from '@app/shared/ui';
 
 import {
   HourMinute,
@@ -12,6 +13,7 @@ import {
   getMsFromHours,
   getMsFromMinutes,
   getTwoDigits,
+  colors,
 } from '../lib';
 
 type Props = {
@@ -61,12 +63,9 @@ const TimeRemaining: FC<Props> = (props: Props) => {
       (left - getMsFromHours(hours) - getMsFromMinutes(minutes)) / MS_IN_SECOND,
     );
 
-    return (
-      t('activity_time:time_remaining') +
-      `: ${getTwoDigits(hours)}:${getTwoDigits(minutes)}:${getTwoDigits(
-        seconds,
-      )}`
-    );
+    return `${getTwoDigits(hours)}:${getTwoDigits(minutes)}:${getTwoDigits(
+      seconds,
+    )}`;
   };
 
   const text = getFormattedTimeLeft();
@@ -75,12 +74,24 @@ const TimeRemaining: FC<Props> = (props: Props) => {
     return null;
   }
 
+  const timeIsRunningOut = left! <= 10000;
+
   return (
-    <Box backgroundColor="$white" opacity={0.9} {...props}>
-      <Text fontSize={14} fontWeight="500" color="$alert">
+    <XStack alignItems="center" backgroundColor="$white" {...props}>
+      <ClockIcon
+        size={20}
+        color={timeIsRunningOut ? colors.alertDark : colors.mediumGrey}
+      />
+      <Text
+        ml={5}
+        fontSize={15}
+        fontWeight="400"
+        color={timeIsRunningOut ? '$alertDark' : '$grey4'}
+        fontFamily="Atkinson Hyperlegible Regular"
+      >
         {text}
       </Text>
-    </Box>
+    </XStack>
   );
 };
 

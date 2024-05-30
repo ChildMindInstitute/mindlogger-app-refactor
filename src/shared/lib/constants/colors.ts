@@ -38,6 +38,7 @@ export const colors = {
   lightGrey2: '#00000032',
   alert: '#e63232',
   alertLight: '#FFCCCC',
+  alertDark: '#93000A',
   blue: '#005fa3',
   blue2: '#24A3FF',
   blue3: '#00639A',

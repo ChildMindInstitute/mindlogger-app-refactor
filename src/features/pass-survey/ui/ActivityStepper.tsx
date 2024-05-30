@@ -3,11 +3,11 @@ import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { useTranslation } from 'react-i18next';
+import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet';
 import { HourMinute } from '@app/shared/lib';
-import TimeRemaining from '@app/shared/ui/TimeRemaining';
 import {
   ActivityIndicator,
   Box,
@@ -18,6 +18,7 @@ import {
   StepperPayload,
   XStack,
 } from '@shared/ui';
+import TimeRemaining from '@shared/ui/TimeRemaining.tsx';
 
 import ActivityItem from './ActivityItem';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
@@ -47,8 +48,9 @@ function ActivityStepper({
   onFinish,
 }: Props) {
   const { t } = useTranslation();
+  const hasNotch = DeviceInfo.hasNotch();
 
-  const { bottom } = useSafeAreaInsets();
+  const { top, bottom } = useSafeAreaInsets();
 
   const { appletId, activityId, eventId, order } = useContext(
     ActivityIdentityContext,
@@ -292,8 +294,8 @@ function ActivityStepper({
         {showTimeLeft && (
           <TimeRemaining
             position="absolute"
-            top={10}
-            left={5}
+            top={-30}
+            left={hasNotch ? 30 : 25}
             zIndex={1}
             entityStartedAt={entityStartedAt}
             timerSettings={timer}

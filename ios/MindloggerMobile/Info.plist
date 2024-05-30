@@ -72,6 +72,9 @@
 		<string>MaterialCommunityIcons.ttf</string>
 		<string>Feather.ttf</string>
 		<string>Octicons.ttf</string>
+		<string>Roboto.ttf</string>
+		<string>Roboto_medium.ttf</string>
+		<string>Atkinson Hyperlegible Regular.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
