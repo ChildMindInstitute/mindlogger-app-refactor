@@ -98,7 +98,6 @@ export class ListItemsFactory {
       ) as ActivityProgress;
 
       item.name = progressRecord.entityName;
-      item.activityId = entity.id;
     }
   }
 

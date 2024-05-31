@@ -63,7 +63,7 @@ export const createBuilder = (eventEntity: EventEntity, completedAt?: Date) => {
       startAt: subMinutes(completedAt, 1),
       endAt: completedAt,
       availableTo: null,
-      entityName: 'mock-entity',
+      entityName: '',
     };
   }
 

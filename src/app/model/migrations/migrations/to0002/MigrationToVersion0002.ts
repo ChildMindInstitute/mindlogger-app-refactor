@@ -130,6 +130,7 @@ export class MigrationToVersion0002 implements IMigration {
 
     for (const progressActivityFrom of progressActivitiesFrom) {
       const logProgressFlowFrom = JSON.stringify(progressActivityFrom, null, 2);
+
       const { appletId, entityId, eventId } = progressActivityFrom;
 
       try {
