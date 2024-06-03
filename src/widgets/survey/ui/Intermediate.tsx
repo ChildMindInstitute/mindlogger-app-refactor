@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { styled } from '@tamagui/core';
 import { useQueryClient } from '@tanstack/react-query';
@@ -20,7 +20,7 @@ import {
 import { badge } from '@assets/images';
 import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
-import { useFlowStorageRecord } from '../lib';
+import { activityRecordExists, useFlowStorageRecord } from '../lib';
 import {
   StepperPipelineItem,
   useAutoCompletion,
@@ -115,6 +115,15 @@ function Intermediate({
   const getAppletName = useCallback(() => {
     return new QueryDataUtils(queryClient).getAppletDto(appletId)?.displayName;
   }, [appletId, queryClient]);
+
+  const activityRecordRemoved = useMemo(
+    () => !activityRecordExists(appletId, activityId, eventId, order),
+    [activityId, appletId, eventId, order],
+  );
+
+  const canNotGoBack =
+    activityRecordRemoved ||
+    (isLoading && !isCompleted && !isPostponed && !isError);
 
   const changeActivity = useCallback(() => {
     const appletName = getAppletName();
@@ -236,13 +245,13 @@ function Intermediate({
           </Button>
 
           <Text
-            color="$blue"
+            color={canNotGoBack ? '$lightGrey' : '$blue'}
             accessibilityLabel="back-button"
             textAlign="center"
             fontSize={17}
             fontWeight="bold"
             onPress={onClose}
-            disabled={isLoading && !isCompleted && !isPostponed && !isError}
+            disabled={canNotGoBack}
           >
             {t('activity_navigation:back')}
           </Text>
