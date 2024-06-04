@@ -18,6 +18,7 @@ export const colors = {
   grey2: '#a0a0a0',
   grey3: '#bbb',
   grey4: '#72777F',
+  onSurface: '#1A1C1E',
   greyTsp: 'rgba(0,0,0,0.8)',
   darkGrey: '#3b3a3a',
   darkGrey2: '#6b6a6a',

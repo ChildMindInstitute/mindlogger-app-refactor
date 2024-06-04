@@ -1,95 +1,73 @@
 import React, { FC, useEffect, useState } from 'react';
+import { ViewProps } from 'react-native';
 
 import { XStack } from '@tamagui/stacks';
-import { useTranslation } from 'react-i18next';
 
 import { BoxProps, ClockIcon, Text } from '@app/shared/ui';
 
 import {
   HourMinute,
-  MINUTES_IN_HOUR,
-  MS_IN_MINUTE,
-  MS_IN_SECOND,
   getMsFromHours,
   getMsFromMinutes,
-  getTwoDigits,
   colors,
+  ONE_SECOND,
+  getClockTime,
 } from '../lib';
 
 type Props = {
   timerSettings: HourMinute;
   entityStartedAt: number;
-} & BoxProps;
+  clockIconShown: boolean;
+} & BoxProps &
+  ViewProps;
+
+const TEN_SECONDS = ONE_SECOND * 10;
 
 const TimeRemaining: FC<Props> = (props: Props) => {
-  const { timerSettings, entityStartedAt } = props;
+  const { timerSettings, entityStartedAt, clockIconShown } = props;
 
-  const [left, setLeft] = useState<number | null>(null);
+  const [timeLeft, setTimLeft] = useState<number>(0);
 
-  const { t } = useTranslation();
+  const duration =
+    getMsFromHours(timerSettings.hours) +
+    getMsFromMinutes(timerSettings.minutes);
+
+  const formattedTimeLeft = getClockTime(timeLeft);
+
+  const textColor =
+    timeLeft > TEN_SECONDS ? colors.onSurface : colors.alertDark;
+  const iconColor = timeLeft > TEN_SECONDS ? colors.grey4 : colors.alertDark;
 
   useEffect(() => {
     const id = setInterval(() => {
-      const duration = getEntityDuration();
-
       const elapsed = Date.now() - entityStartedAt;
 
       if (elapsed > duration) {
         clearInterval(id);
-        setLeft(null);
+        setTimLeft(0);
       } else {
-        setLeft(duration - elapsed);
+        setTimLeft(duration - elapsed);
       }
-    }, 1000);
+    }, ONE_SECOND);
 
     return () => clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [duration, entityStartedAt]);
 
-  const getEntityDuration = (): number => {
-    return (
-      getMsFromHours(timerSettings.hours) +
-      getMsFromMinutes(timerSettings.minutes)
-    );
-  };
-
-  const getFormattedTimeLeft = (): string => {
-    if (!left) {
-      return '';
-    }
-    const hours = Math.floor(left / MS_IN_MINUTE / MINUTES_IN_HOUR);
-    const minutes = Math.floor((left - getMsFromHours(hours)) / MS_IN_MINUTE);
-    const seconds = Math.round(
-      (left - getMsFromHours(hours) - getMsFromMinutes(minutes)) / MS_IN_SECOND,
-    );
-
-    return `${getTwoDigits(hours)}:${getTwoDigits(minutes)}:${getTwoDigits(
-      seconds,
-    )}`;
-  };
-
-  const text = getFormattedTimeLeft();
-
-  if (!text) {
+  if (!formattedTimeLeft) {
     return null;
   }
 
-  const timeIsRunningOut = left! <= 10000;
-
   return (
     <XStack alignItems="center" backgroundColor="$white" {...props}>
-      <ClockIcon
-        size={20}
-        color={timeIsRunningOut ? colors.alertDark : colors.mediumGrey}
-      />
+      {clockIconShown && <ClockIcon size={20} color={iconColor} />}
       <Text
         ml={5}
         fontSize={15}
         fontWeight="400"
-        color={timeIsRunningOut ? '$alertDark' : '$grey4'}
+        color={textColor}
         fontFamily="Atkinson Hyperlegible Regular"
       >
-        {text}
+        {formattedTimeLeft}
       </Text>
     </XStack>
   );

@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
@@ -7,11 +7,13 @@ import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet';
-import { HourMinute } from '@app/shared/lib';
+import { colors, HourMinute, isIphoneX } from '@app/shared/lib';
 import {
   ActivityIndicator,
+  BackButton,
   Box,
   Center,
+  CrossIcon,
   OnBeforeNextResult,
   StatusBar,
   Stepper,
@@ -50,7 +52,9 @@ function ActivityStepper({
   const { t } = useTranslation();
   const hasNotch = DeviceInfo.hasNotch();
 
-  const { top, bottom } = useSafeAreaInsets();
+  const [timerHeight, setTimerHeight] = useState(0);
+
+  const { bottom } = useSafeAreaInsets();
 
   const { appletId, activityId, eventId, order } = useContext(
     ActivityIdentityContext,
@@ -123,6 +127,8 @@ function ActivityStepper({
 
   const nextButtonText = getNextButtonText();
 
+  const isNotIPhoneX = !isIphoneX();
+
   const getAccessibilityLabel = (text: string): string | null => {
     switch (text) {
       case 'activity_navigation:done':
@@ -139,6 +145,10 @@ function ActivityStepper({
   const tutorialViewerRef = useRef<TutorialViewerRef | null>(null);
 
   const showTimeLeft = !!timer;
+
+  const { top: topAreaInset } = useSafeAreaInsets();
+
+  const timerMarginTop = hasNotch ? (topAreaInset - timerHeight) / 2 : 16;
 
   const onNext = (
     nextStep: number,
@@ -283,6 +293,16 @@ function ActivityStepper({
         onEndReached={onEndReached}
         onUndo={onUndo}
       >
+        <BackButton
+          accessibilityLabel="close-button"
+          alignSelf="flex-end"
+          mr={16}
+          mt={10}
+          mb={4}
+        >
+          <CrossIcon color={colors.tertiary} size={30} />
+        </BackButton>
+
         {showWatermark && watermark && (
           <CachedImage
             source={watermark}
@@ -294,11 +314,18 @@ function ActivityStepper({
         {showTimeLeft && (
           <TimeRemaining
             position="absolute"
-            top={-30}
-            left={hasNotch ? 30 : 25}
+            top={timerMarginTop}
+            left={16}
             zIndex={1}
             entityStartedAt={entityStartedAt}
             timerSettings={timer}
+            clockIconShown={isNotIPhoneX}
+            opacity={timerHeight ? 1 : 0}
+            onLayout={e => {
+              if (!timerHeight) {
+                setTimerHeight(e.nativeEvent.layout.height);
+              }
+            }}
           />
         )}
 
@@ -403,7 +430,7 @@ const styles = StyleSheet.create({
     height: 65,
     width: 65,
     position: 'absolute',
-    top: 0,
+    top: 5,
     left: 15,
     resizeMode: 'contain',
     zIndex: 1,
