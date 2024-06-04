@@ -8,7 +8,7 @@ import {
 import { enGB, fr } from 'date-fns/locale';
 import i18n from 'i18next';
 
-import { range } from './common';
+import { getTwoDigits, range } from './common';
 import { MINUTES_IN_HOUR, MS_IN_MINUTE, MS_IN_SECOND } from '../constants';
 import { HourMinute, DayMonthYear, type Language } from '../types';
 
@@ -222,3 +222,21 @@ export const getDateFromString = (dateString: string) => {
 export const getTimezoneOffset = () => new Date().getTimezoneOffset() * -1;
 
 export const getNow = () => new Date();
+
+export function getClockTime(date: number): string {
+  if (!date) {
+    return '';
+  }
+
+  const hours = Math.floor(date / MS_IN_MINUTE / MINUTES_IN_HOUR);
+  const minutes = Math.floor((date - getMsFromHours(hours)) / MS_IN_MINUTE);
+  const seconds = Math.round(
+    (date - getMsFromHours(hours) - getMsFromMinutes(minutes)) / MS_IN_SECOND,
+  );
+
+  if (hours >= 1) {
+    return `${getTwoDigits(hours)}h ${getTwoDigits(minutes)}m`;
+  } else {
+    return `${getTwoDigits(minutes)}:${getTwoDigits(seconds)}`;
+  }
+}

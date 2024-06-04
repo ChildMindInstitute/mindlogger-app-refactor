@@ -62,6 +62,7 @@
 	<string>$(PRODUCT_NAME) would like access to your photo gallery</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Atkinson Hyperlegible Regular.ttf</string>
 		<string>FontAwesome.ttf</string>
 		<string>FontAwesome5_Regular.ttf</string>
 		<string>FontAwesome5_Solid.ttf</string>
