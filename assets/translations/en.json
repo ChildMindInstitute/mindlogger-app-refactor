@@ -373,7 +373,8 @@
     "done": "Done",
     "back": "Back",
     "return": "Return",
-    "undo": "Undo"
+    "undo": "Undo",
+    "exit": "Exit"
   },
   "network_alerts": {
     "no_internet_title": "No Internet Connection",

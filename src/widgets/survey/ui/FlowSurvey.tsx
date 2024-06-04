@@ -99,6 +99,7 @@ function FlowSurvey({
       onClose={closeFlow}
       onBack={back}
       onComplete={complete}
+      flowId={entityType === 'flow' ? entityId : undefined}
     />
   );
 }
