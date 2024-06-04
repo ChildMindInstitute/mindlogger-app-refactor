@@ -24,10 +24,14 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
   onChange,
   initialValue,
   textReplacer,
-  accessibilityLabel,
 }) => {
   const { options, randomizeOptions, addTooltip, setPalette } = config;
   const [radioValueId, setRadioValueId] = useState(initialValue?.id ?? null);
+
+  const selectedOptionIndex: number | null = useMemo(() => {
+    const index = options.findIndex(o => o.id === radioValueId);
+    return index === -1 ? null : index;
+  }, [radioValueId, options]);
 
   useOnUndo(() => setRadioValueId(null));
 
@@ -64,7 +68,7 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
         value={radioValueId ?? ''}
         onValueChange={onValueChange}
         name="radio"
-        accessibilityLabel={accessibilityLabel}
+        accessibilityLabel={`radios-group_value-${String(selectedOptionIndex)}`}
       >
         {optionsList.map(option => (
           <Box
