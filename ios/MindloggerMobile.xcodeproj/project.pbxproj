@@ -64,11 +64,9 @@
 		01D339DF29C2E672003935D9 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
 		01D339E129C2E8B6003935D9 /* FlankerSandboxViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339E029C2E8B6003935D9 /* FlankerSandboxViewManager.swift */; };
 		01D339E329C2F014003935D9 /* FlankerSandboxViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D339E229C2F014003935D9 /* FlankerSandboxViewManager.m */; };
-		063BB34D7F42474C81FBEB0E /* index.ts in Resources */ = {isa = PBXBuildFile; fileRef = B24486F0C0854B01923B7779 /* index.ts */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		1F800218CE2D4452B9665FAD /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F6A6EE8EC4C74420BCA6494F /* Roboto.ttf */; };
 		288FAA9A29C882AB0089AB98 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
 		288FAA9B29C882AC0089AB98 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
 		288FAA9C29C882B00089AB98 /* FlankerSandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D339DE29C2E672003935D9 /* FlankerSandboxView.swift */; };
@@ -107,7 +105,6 @@
 		4EBCD5B22971514E00D3C04C /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
 		5281A663B4A6545E53344B26 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E15E9E0090BA3AD1153C67A7 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		829AE2A964E74EC7BB6487D4 /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 561E13A4FA65483F9C74E7B9 /* Roboto_medium.ttf */; };
 		914062AC2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A02BB1D8C00021A2E8 /* FontAwesome5_Brands.ttf */; };
 		914062AD2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A02BB1D8C00021A2E8 /* FontAwesome5_Brands.ttf */; };
 		914062AE2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A02BB1D8C00021A2E8 /* FontAwesome5_Brands.ttf */; };
@@ -168,7 +165,6 @@
 		914062E52BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */; };
 		914062E62BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */; };
 		914062E72BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */; };
-		B544EDA5AD3B4785ADC87FDC /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F60D9AA700014E4498DD4187 /* Atkinson Hyperlegible Regular.ttf */; };
 		BB2482C4BFBD881BAAFA2F38 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BED32688A6AF76C729AF0FD4 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */; };
 		C4170C70E5D3647CC1234B8D /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E07015EC4992790F8DCD2075 /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */; };
 		E3456B933927DA798688CB0B /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 748B5ECA73107AD8DF670E5B /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a */; };
@@ -185,6 +181,11 @@
 		F83E655529FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
 		F83E655629FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
 		F83E655729FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
+		F84714D82C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */; };
+		F84714D92C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */; };
+		F84714DA2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */; };
+		F84714DB2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */; };
+		F84714DC2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */; };
 		F87E174F29771F200021550E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		F87E175029771F200021550E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		F87E175429771F200021550E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
@@ -297,7 +298,6 @@
 		4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
 		4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
 		4EBCD5B12971514E00D3C04C /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Foundation.ttf; sourceTree = "<group>"; };
-		561E13A4FA65483F9C74E7B9 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = ../assets/fonts/Roboto_medium.ttf; sourceTree = "<group>"; };
 		61D19208BA4AF09E17EA0285 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig"; sourceTree = "<group>"; };
 		67F2C3C747ACE0246F942CE6 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; sourceTree = "<group>"; };
 		68480DA878A0DE26623AD7B3 /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; sourceTree = "<group>"; };
@@ -317,7 +317,6 @@
 		914062AA2BB1D8C10021A2E8 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
 		914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Regular.ttf; sourceTree = "<group>"; };
 		A909ADF56B509F79088C9DC7 /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig"; sourceTree = "<group>"; };
-		B24486F0C0854B01923B7779 /* index.ts */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = index.ts; path = ../assets/fonts/index.ts; sourceTree = "<group>"; };
 		B523576F9E73DE3C9CDE92AC /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; sourceTree = "<group>"; };
 		BED32688A6AF76C729AF0FD4 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1C2707DA7CE621423343FD7 /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -327,8 +326,6 @@
 		E07015EC4992790F8DCD2075 /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E15E9E0090BA3AD1153C67A7 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F60D9AA700014E4498DD4187 /* Atkinson Hyperlegible Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Atkinson Hyperlegible Regular.ttf"; path = "../assets/fonts/Atkinson Hyperlegible Regular.ttf"; sourceTree = "<group>"; };
-		F6A6EE8EC4C74420BCA6494F /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = ../assets/fonts/Roboto.ttf; sourceTree = "<group>"; };
 		F801216E2A017A2B00F31D91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F80121712A017AB300F31D91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F80121742A017B2300F31D91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -341,6 +338,7 @@
 		F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RNBackgroundFetch+AppDelegate.m"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; };
 		F83E655329FA845400D57006 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		F83ED9792A40549C00DD5C3F /* hermes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = hermes.xcframework; path = "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"; sourceTree = "<group>"; };
+		F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Atkinson Hyperlegible Regular.ttf"; path = "../../../assets/fonts/Atkinson Hyperlegible Regular.ttf"; sourceTree = "<group>"; };
 		F86964F92A4ECEB000AD759D /* MindloggerMobileDevRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileDevRelease.entitlements; sourceTree = "<group>"; };
 		F86964FA2A4ECEBA00AD759D /* MindloggerMobileRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MindloggerMobileRelease.entitlements; path = MindloggerMobile/MindloggerMobileRelease.entitlements; sourceTree = "<group>"; };
 		F86964FB2A4ECEC000AD759D /* MindloggerMobileQARelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileQARelease.entitlements; sourceTree = "<group>"; };
@@ -496,18 +494,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		4A3A5698971B4865868C3300 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				F6A6EE8EC4C74420BCA6494F /* Roboto.ttf */,
-				561E13A4FA65483F9C74E7B9 /* Roboto_medium.ttf */,
-				F60D9AA700014E4498DD4187 /* Atkinson Hyperlegible Regular.ttf */,
-				B24486F0C0854B01923B7779 /* index.ts */,
-			);
-			name = Resources;
-			path = "";
-			sourceTree = "<group>";
-		};
 		4E30A5792962BE4E0032C2A8 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -524,6 +510,7 @@
 				914062A52BB1D8C00021A2E8 /* FontAwesome6_Solid.ttf */,
 				914062A12BB1D8C00021A2E8 /* Fontisto.ttf */,
 				4EBCD5B12971514E00D3C04C /* Foundation.ttf */,
+				F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */,
 				914062AA2BB1D8C10021A2E8 /* Ionicons.ttf */,
 				914062A22BB1D8C00021A2E8 /* MaterialCommunityIcons.ttf */,
 				4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */,
@@ -565,7 +552,6 @@
 				F87E177829771F290021550E /* MindloggerMobile qa-Info.plist */,
 				F87E178F29771F310021550E /* MindloggerMobile staging-Info.plist */,
 				F8EF45732A975A9300EEC085 /* MindloggerMobile uat-Info.plist */,
-				4A3A5698971B4865868C3300 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -856,11 +842,8 @@
 				914062AC2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
 				914062C02BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				F84714D82C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */,
 				F801217A2A017BAF00F31D91 /* GoogleService-Info.plist in Resources */,
-				1F800218CE2D4452B9665FAD /* Roboto.ttf in Resources */,
-				829AE2A964E74EC7BB6487D4 /* Roboto_medium.ttf in Resources */,
-				B544EDA5AD3B4785ADC87FDC /* Atkinson Hyperlegible Regular.ttf in Resources */,
-				063BB34D7F42474C81FBEB0E /* index.ts in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -890,6 +873,7 @@
 				914062AD2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
 				914062C12BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
 				F87E175829771F200021550E /* FontAwesome5_Solid.ttf in Resources */,
+				F84714D92C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */,
 				F87E175929771F200021550E /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -920,6 +904,7 @@
 				914062AE2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
 				914062C22BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
 				F87E176F29771F290021550E /* FontAwesome5_Solid.ttf in Resources */,
+				F84714DA2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */,
 				F87E177029771F290021550E /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -950,6 +935,7 @@
 				914062AF2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
 				914062C32BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
 				F87E178629771F310021550E /* FontAwesome5_Solid.ttf in Resources */,
+				F84714DB2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */,
 				F87E178729771F310021550E /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -980,6 +966,7 @@
 				914062B02BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
 				914062C42BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
 				F8EF456A2A975A9200EEC085 /* FontAwesome5_Solid.ttf in Resources */,
+				F84714DC2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */,
 				F8EF456B2A975A9200EEC085 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
