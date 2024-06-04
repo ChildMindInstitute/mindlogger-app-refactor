@@ -32,9 +32,10 @@ function Header({
   eventId,
   appletId,
   entityStartedAt,
-  timer,
+  // timer,
   ...boxProps
 }: Props) {
+  const timer = { hours: 0, minutes: 2 };
   const { t } = useTranslation();
   const { top: safeAreaTop } = useSafeAreaInsets();
   const hasNotch = DeviceInfo.hasNotch();
@@ -108,4 +109,5 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
+
 export default Header;
