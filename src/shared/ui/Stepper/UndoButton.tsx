@@ -23,7 +23,7 @@ function UndoButton({ children, isIcon }: Props) {
   }
 
   return (
-    <ActionButton accessibilityLabel="undo-button" onPress={undo}>
+    <ActionButton type="flat" accessibilityLabel="undo-button" onPress={undo}>
       {children}
     </ActionButton>
   );

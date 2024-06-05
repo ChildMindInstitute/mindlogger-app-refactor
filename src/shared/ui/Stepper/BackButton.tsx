@@ -23,7 +23,7 @@ function BackButton({ children, isIcon }: Props) {
   }
 
   return (
-    <ActionButton accessibilityLabel="back-button" onPress={back}>
+    <ActionButton type="flat" accessibilityLabel="back-button" onPress={back}>
       {children}
     </ActionButton>
   );

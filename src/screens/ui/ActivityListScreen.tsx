@@ -17,6 +17,7 @@ import { ActivityGroups } from '@app/widgets/activity-group';
 import { SurveyModel, UploadRetryBanner } from '@app/widgets/survey';
 import { StreamingStatusBar } from '@features/streaming';
 import { AppletDetailsParamList } from '@screens/config';
+import { useCurrentRoute } from '@shared/lib';
 import { Box, HorizontalCalendar } from '@shared/ui';
 
 import { checkEntityAvailability } from '../model/checkEntityAvailability';
@@ -26,8 +27,10 @@ type Props = BottomTabScreenProps<AppletDetailsParamList, 'ActivityList'>;
 const ActivityListScreen: FC<Props> = props => {
   const appletId = props.route.params.appletId;
 
+  const { getCurrentRoute } = useCurrentRoute();
   const isFocused = useIsFocused();
-
+  const curr = getCurrentRoute();
+  console.log({ curr });
   useOnFocus(() => {
     AnalyticsService.track(MixEvents.AppletView, {
       [MixProperties.AppletId]: appletId,
