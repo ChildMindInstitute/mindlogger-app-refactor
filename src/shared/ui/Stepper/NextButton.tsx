@@ -47,6 +47,7 @@ function NextButton({ children, isIcon, accessibilityLabel }: Props) {
     <ActionButton
       accessibilityLabel={`${accessibilityLabel}-bottom` ?? ''}
       onPress={onPressNextDebounced}
+      alignSelf="flex-end"
     >
       {children}
     </ActionButton>

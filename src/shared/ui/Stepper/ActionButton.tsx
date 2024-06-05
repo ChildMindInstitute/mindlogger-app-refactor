@@ -15,18 +15,24 @@ const ActionButton = ({
   type = 'submit',
   accessibilityLabel,
   children,
+  ...boxProps
 }: Props) => {
   return (
     <Button
       onPress={onPress}
       px={10}
-      w="100%"
+      py={13}
+      maxWidth={200}
       bg={type === 'submit' ? '$primary' : '$white'}
-      textColor={type === 'submit' ? '$white' : '$primary'}
+      text={{
+        textColor: type === 'submit' ? '$white' : '$primary',
+        fontWeight: type === 'submit' ? 'bold' : 'normal',
+        fontSize: 13,
+      }}
       borderWidth={type === 'submit' ? 0 : 1}
-      fontWeight={type === 'submit' ? 'bold' : 'normal'}
-      fontSize={15}
+      borderColor="$grey"
       accessibilityLabel={accessibilityLabel}
+      {...boxProps}
     >
       {children}
     </Button>
