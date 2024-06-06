@@ -19,7 +19,6 @@ import {
   formatToDtoDate,
   formatToDtoTime,
   isLocalFileUrl,
-  IS_LORIS_INTEGRATION_ENABLED,
 } from '@shared/lib';
 
 import MediaFilesCleaner from './MediaFilesCleaner';
@@ -28,11 +27,10 @@ import {
   CheckFileUploadResult,
   CheckFilesUploadResults,
   SendAnswersInput,
-  SendAnswersInputWithConsents,
 } from '../types';
 
 export interface IAnswersUploadService {
-  sendAnswers(body: SendAnswersInput, dataShareEnabled: boolean): void;
+  sendAnswers(body: SendAnswersInput): Promise<void>;
 }
 
 class AnswersUploadService implements IAnswersUploadService {
@@ -348,9 +346,7 @@ class AnswersUploadService implements IAnswersUploadService {
     }
   }
 
-  private encryptAnswers(
-    data: SendAnswersInputWithConsents,
-  ): ActivityAnswersRequest {
+  private encryptAnswers(data: SendAnswersInput): ActivityAnswersRequest {
     const { appletEncryption } = data;
     const userPrivateKey = UserPrivateKeyRecord.get();
 
@@ -465,15 +461,14 @@ class AnswersUploadService implements IAnswersUploadService {
     }
   }
 
-  public async sendAnswers(body: SendAnswersInput, dataShareEnabled: boolean) {
+  public async sendAnswers(body: SendAnswersInput) {
     this.createdAt = body.createdAt;
 
     this.logger.log(
       '[UploadAnswersService.sendAnswers] executing upload files',
     );
 
-    const modifiedBody: SendAnswersInputWithConsents =
-      await this.uploadAllMediaFiles(body);
+    const modifiedBody: SendAnswersInput = await this.uploadAllMediaFiles(body);
 
     this.logger.log(
       '[UploadAnswersService.sendAnswers] executing assign urls to user actions',
@@ -485,10 +480,6 @@ class AnswersUploadService implements IAnswersUploadService {
     );
 
     modifiedBody.userActions = updatedUserActions as UserActionDto[];
-
-    if (IS_LORIS_INTEGRATION_ENABLED) {
-      modifiedBody.isDataShare = dataShareEnabled;
-    }
 
     if (modifiedBody.itemIds.length !== modifiedBody.answers.length) {
       throw new Error(

@@ -54,14 +54,13 @@ type InitialState = {
   // todo - change to CompletedEventEntities when migrations infrastructure is ready
   completedEntities: CompletedEntities;
   completions: CompletedEventEntities;
-  consents: AppletsConsents;
+  consents?: AppletsConsents;
 };
 
 const initialState: InitialState = {
   inProgress: {},
   completedEntities: {},
   completions: {},
-  consents: {},
 };
 
 const slice = createSlice({
@@ -208,60 +207,31 @@ const slice = createSlice({
       state.inProgress[appletId][entityId][eventId].endAt = endAt;
     },
 
-    applyDataSharingSettings: (
+    shareConsentChanged: (
       state,
-      action: PayloadAction<{ appletId: string }>,
+      action: PayloadAction<{ appletId: string; value: boolean }>,
     ) => {
-      const { appletId } = action.payload;
+      const { appletId, value } = action.payload;
+
+      state.consents = state.consents ?? {};
 
       state.consents[appletId] = {
-        shareToPublic: true,
-        shareMediaToPublic: true,
+        shareToPublic: value,
+        shareMediaToPublic: value,
       };
     },
 
-    removeDataSharingSettings: (
+    mediaConsentChanged: (
       state,
-      action: PayloadAction<{ appletId: string }>,
+      action: PayloadAction<{ appletId: string; value: boolean }>,
     ) => {
-      const { appletId } = action.payload;
+      const { appletId, value } = action.payload;
 
-      delete state.consents[appletId];
-    },
+      const appletConsents = state.consents?.[appletId];
 
-    toggleShareConsent: (
-      state,
-      action: PayloadAction<{ appletId: string }>,
-    ) => {
-      const { appletId } = action.payload;
-
-      const appletConsents = state.consents[appletId];
-
-      if (!appletConsents) {
-        return;
+      if (appletConsents) {
+        appletConsents.shareMediaToPublic = value;
       }
-
-      const currentValue = appletConsents.shareToPublic;
-
-      appletConsents.shareToPublic = !currentValue;
-      appletConsents.shareMediaToPublic = !currentValue;
-    },
-
-    toggleMediaConsent: (
-      state,
-      action: PayloadAction<{ appletId: string }>,
-    ) => {
-      const { appletId } = action.payload;
-
-      const appletConsents = state.consents[appletId];
-
-      if (!appletConsents) {
-        return;
-      }
-
-      const currentValue = appletConsents.shareMediaToPublic;
-
-      appletConsents.shareMediaToPublic = !currentValue;
     },
   },
   extraReducers: builder =>

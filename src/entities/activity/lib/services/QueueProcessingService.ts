@@ -7,15 +7,17 @@ import {
   wait,
   IUploadObservableSetters,
   UploadObservable,
+  IPreprocessor,
 } from '@app/shared/lib';
-import { AppletsConsents } from '@entities/applet/model';
 
 import AnswersQueueService, {
   IAnswersQueueService,
+  UploadItem,
 } from './AnswersQueueService';
 import AnswersUploadService, {
   IAnswersUploadService,
 } from './AnswersUploadService';
+import UploadItemPreprocessor from './UploadItemPreprocessor';
 import { SendAnswersInput } from '../types';
 
 export interface IPushToQueue {
@@ -33,6 +35,8 @@ class QueueProcessingService implements IPushToQueue {
 
   private logger: ILogger;
 
+  private itemPreprocessor: IPreprocessor<UploadItem>;
+
   constructor(
     updateObservable: IUploadObservableSetters,
     queueService: IAnswersQueueService,
@@ -47,11 +51,11 @@ class QueueProcessingService implements IPushToQueue {
     this.logger = logger;
 
     this.mutex = Mutex();
+
+    this.itemPreprocessor = new UploadItemPreprocessor();
   }
 
-  private async processInternal(
-    appletsConsents: AppletsConsents,
-  ): Promise<boolean> {
+  private async processInternal(): Promise<boolean> {
     const queueLength = this.queueService.getLength();
 
     for (let i = 0; i < queueLength; i++) {
@@ -68,14 +72,9 @@ class QueueProcessingService implements IPushToQueue {
           `[QueueProcessingService:processInternal]: Processing activity ${logEntity}`,
         );
 
-        const currentAppletId = uploadItem.input.appletId;
-        const dataShareEnabled =
-          appletsConsents?.[currentAppletId]?.shareToPublic || false;
+        this.itemPreprocessor.preprocess(uploadItem);
 
-        await this.uploadService.sendAnswers(
-          uploadItem.input,
-          dataShareEnabled,
-        );
+        await this.uploadService.sendAnswers(uploadItem.input);
 
         this.queueService.dequeue();
 
@@ -95,7 +94,7 @@ class QueueProcessingService implements IPushToQueue {
     return this.queueService.getLength() === 0;
   }
 
-  public async process(appletConsents: AppletsConsents): Promise<boolean> {
+  public async process(): Promise<boolean> {
     if (this.mutex.isBusy()) {
       this.logger.log('[QueueProcessingService.process]: Mutex is busy');
       return true;
@@ -121,7 +120,7 @@ class QueueProcessingService implements IPushToQueue {
         return true;
       }
 
-      const success = await this.processInternal(appletConsents);
+      const success = await this.processInternal();
 
       this.uploadStatusObservable.isError = !success;
       this.uploadStatusObservable.isCompleted = success;

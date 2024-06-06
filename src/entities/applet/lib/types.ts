@@ -54,7 +54,7 @@ export type AppletDetails = {
   streamEnabled: boolean;
   streamIpAddress: string | null;
   streamPort: string | null;
-  integrations: Integration[];
+  consentsCapabilityEnabled: boolean;
 };
 
 export type AnalyticsItemValue = {
