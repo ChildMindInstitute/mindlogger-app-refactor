@@ -31,10 +31,10 @@ function HeaderProgress({ appletId, eventId, flowId }: Props) {
     flowId: flowId,
   });
 
-  const { step, pipeline } = flowStorageRecord!;
+  const { step: flowStep, pipeline } = flowStorageRecord!;
 
   const activitiesPassed = flowId
-    ? pipeline.slice(0, step).filter(o => o.type === 'Stepper').length
+    ? pipeline.slice(0, flowStep).filter(o => o.type === 'Stepper').length
     : 0;
 
   const totalActivities = flowId
@@ -55,7 +55,7 @@ function HeaderProgress({ appletId, eventId, flowId }: Props) {
         );
 
         return (
-          <Box flex={1}>
+          <Box flex={1} key={index}>
             <HeaderProgressBar progress={currentProgress} />
           </Box>
         );

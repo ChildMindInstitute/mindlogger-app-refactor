@@ -1,31 +1,23 @@
-import { useContext, useRef, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { useContext, useRef } from 'react';
 
-import { CachedImage } from '@georstat/react-native-image-cache';
 import { useTranslation } from 'react-i18next';
-import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet';
-import { colors, HourMinute, isIphoneX } from '@app/shared/lib';
+import { HourMinute } from '@app/shared/lib';
 import {
   ActivityIndicator,
-  BackButton,
   Box,
   Center,
-  ListSeparator,
   OnBeforeNextResult,
   StatusBar,
   Stepper,
   StepperPayload,
-  Text,
   XStack,
 } from '@shared/ui';
-import TimeRemaining from '@shared/ui/TimeRemaining.tsx';
 
 import ActivityItem from './ActivityItem';
 import Header from './Header.tsx';
-import HeaderProgress from './HeaderProgress.tsx';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
 import {
   ActivityIdentityContext,
@@ -56,10 +48,7 @@ function ActivityStepper({
 }: Props) {
   const { t } = useTranslation();
 
-  const [timerHeight, setTimerHeight] = useState(0);
-
-  const hasNotch = DeviceInfo.hasNotch();
-  const { top: safeAreaTop, bottom } = useSafeAreaInsets();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   const { appletId, activityId, eventId, order, activityName } = useContext(
     ActivityIdentityContext,
@@ -132,8 +121,6 @@ function ActivityStepper({
 
   const nextButtonText = getNextButtonText();
 
-  const isNotIPhoneX = !isIphoneX();
-
   const getAccessibilityLabel = (text: string): string | null => {
     switch (text) {
       case 'activity_navigation:done':
@@ -148,12 +135,6 @@ function ActivityStepper({
   };
 
   const tutorialViewerRef = useRef<TutorialViewerRef | null>(null);
-
-  const showTimeLeft = !!timer;
-
-  const timerMarginTop = hasNotch ? (safeAreaTop - timerHeight) / 2 : 16;
-
-  const headerMarginTop = safeAreaTop > 10 ? safeAreaTop : safeAreaTop + 32;
 
   const onNext = (
     nextStep: number,
@@ -284,26 +265,8 @@ function ActivityStepper({
   }
 
   return (
-    <Box flex={1} pb={bottom}>
-      <StatusBar hidden={showTimeLeft} />
-
-      {showTimeLeft && (
-        <TimeRemaining
-          position="absolute"
-          top={timerMarginTop}
-          left={16}
-          zIndex={1}
-          entityStartedAt={entityStartedAt}
-          timerSettings={timer}
-          clockIconShown={isNotIPhoneX}
-          opacity={timerHeight ? 1 : 0}
-          onLayout={e => {
-            if (!timerHeight) {
-              setTimerHeight(e.nativeEvent.layout.height);
-            }
-          }}
-        />
-      )}
+    <Box flex={1} pb={safeAreaBottom}>
+      <StatusBar hidden />
 
       <Stepper
         stepsCount={activityStorageRecord.items.length}
@@ -316,28 +279,17 @@ function ActivityStepper({
         onEndReached={onEndReached}
         onUndo={onUndo}
       >
-        <Header mt={showTimeLeft ? headerMarginTop : safeAreaTop} p={10}>
-          {showWatermark && watermark && (
-            <Box style={styles.watermarkContainer}>
-              <CachedImage
-                source={watermark}
-                style={styles.watermark}
-                accessibilityLabel="watermark-image"
-              />
-            </Box>
-          )}
-          <Text fontSize={16} numberOfLines={2} marginRight={100}>
-            {activityName}
-          </Text>
-          <XStack ml="auto">
-            <BackButton accessibilityLabel="close-button">
-              <Text color={colors.blue3}>{t('activity_navigation:exit')}</Text>
-            </BackButton>
-          </XStack>
-        </Header>
-
-        <HeaderProgress appletId={appletId} eventId={eventId} flowId={flowId} />
-        <ListSeparator mt={10} bg={colors.lighterGrey7} />
+        <Header
+          p={10}
+          showWatermark={showWatermark}
+          watermark={watermark}
+          activityName={activityName}
+          flowId={flowId}
+          eventId={eventId}
+          appletId={appletId}
+          entityStartedAt={entityStartedAt}
+          timer={timer}
+        />
 
         {showTopNavigation && (
           <Stepper.NavigationPanel mx={16}>
@@ -404,7 +356,11 @@ function ActivityStepper({
         <Stepper.Progress />
 
         {showBottomNavigation && (
-          <Stepper.NavigationPanel mt={18} minHeight={27} mb={bottom ? 0 : 16}>
+          <Stepper.NavigationPanel
+            mt={18}
+            minHeight={27}
+            mb={safeAreaBottom ? 0 : 16}
+          >
             {canMoveBack && (
               <Stepper.BackButton>
                 {t(
@@ -434,20 +390,5 @@ function ActivityStepper({
     </Box>
   );
 }
-
-const styles = StyleSheet.create({
-  watermark: {
-    height: 36,
-    width: 36,
-    resizeMode: 'contain',
-  },
-  watermarkContainer: {
-    width: 36,
-    height: 36,
-    borderRadius: 36 / 2,
-    overflow: 'hidden',
-    marginRight: 10,
-  },
-});
 
 export default ActivityStepper;
