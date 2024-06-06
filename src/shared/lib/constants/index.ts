@@ -115,5 +115,3 @@ export const IV_LENGTH = 16;
 export { VIEWPORT_WIDTH, VIEWPORT_HEIGHT };
 
 export const MIGRATION_PROCESSOR_VERSION = 1;
-
-export const IS_LORIS_INTEGRATION_ENABLED = true;

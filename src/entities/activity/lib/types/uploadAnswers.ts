@@ -32,9 +32,6 @@ export type SendAnswersInput = {
   tzOffset: number;
   activityName: string;
   logCompletedAt?: string;
-};
-
-export type SendAnswersInputWithConsents = SendAnswersInput & {
   isDataShare?: boolean;
 };
 

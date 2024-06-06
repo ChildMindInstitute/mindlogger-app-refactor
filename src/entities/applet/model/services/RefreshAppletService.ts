@@ -25,7 +25,6 @@ import RefreshDataCollector, {
   IRefreshDataCollector,
 } from './RefreshDataCollector';
 import RefreshOptimization from './RefreshOptimization';
-import type { AppletIntegrationsService } from '../integrations';
 
 export interface IRefreshAppletService {
   refreshApplet(
@@ -42,20 +41,17 @@ class RefreshAppletService implements IRefreshAppletService {
   private showWrongUrlLogs: boolean;
   private refreshDataCollector: IRefreshDataCollector;
   private appletProgressSyncService: IAppletProgressSyncService;
-  private appletIntegrationService: AppletIntegrationsService;
 
   constructor(
     queryClient: QueryClient,
     logger: ILogger,
     appletProgressSyncService: IAppletProgressSyncService,
-    appletIntegrationService: AppletIntegrationsService,
   ) {
     this.queryClient = queryClient;
     this.logger = logger;
     this.showWrongUrlLogs = false;
     this.refreshDataCollector = new RefreshDataCollector(logger);
     this.appletProgressSyncService = appletProgressSyncService;
-    this.appletIntegrationService = appletIntegrationService;
   }
 
   private isUrlValid = (url: string): boolean => {
@@ -167,12 +163,6 @@ class RefreshAppletService implements IRefreshAppletService {
     await this.appletProgressSyncService.sync(
       appletInternalDtos.appletDetails,
       appletCompletions,
-    );
-
-    appletInternalDtos.appletDetails.integrations = ['loris']; // @todo debug
-
-    this.appletIntegrationService.applyIntegrations(
-      appletInternalDtos.appletDetails,
     );
   }
 

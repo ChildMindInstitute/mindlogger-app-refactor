@@ -2,11 +2,7 @@ import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import {
-  useAppDispatch,
-  useAppSelector,
-  useFeatureFlags,
-} from '@app/shared/lib';
+import { useAppDispatch, useAppSelector } from '@app/shared/lib';
 import { YStack, Text, BoxProps } from '@app/shared/ui';
 
 import ConsentCheckBox from './ConsentCheckBox';
@@ -34,9 +30,6 @@ const Public = () => {
 };
 
 function SharedContentConsent({ appletId, ...boxProps }: Props) {
-  const { featureFlags } = useFeatureFlags();
-  const lorisIntegrationEnabled = !featureFlags.enableLorisIntegration;
-
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
@@ -45,22 +38,28 @@ function SharedContentConsent({ appletId, ...boxProps }: Props) {
     selectAppletConsents(state, appletId),
   );
 
-  if (!consents || !lorisIntegrationEnabled) {
-    return null;
-  }
-
   const toggleShareConsent = () => {
-    dispatch(actions.toggleShareConsent({ appletId }));
+    dispatch(
+      actions.shareConsentChanged({
+        appletId,
+        value: !consents?.shareToPublic,
+      }),
+    );
   };
 
   const toggleMediaConsent = () => {
-    dispatch(actions.toggleMediaConsent({ appletId }));
+    dispatch(
+      actions.mediaConsentChanged({
+        appletId,
+        value: !consents?.shareMediaToPublic,
+      }),
+    );
   };
 
   return (
     <YStack {...boxProps} space={10}>
       <ConsentCheckBox
-        value={consents.shareToPublic}
+        value={!!consents?.shareToPublic}
         onChange={toggleShareConsent}
         label={
           <Text ml={10}>
@@ -70,7 +69,7 @@ function SharedContentConsent({ appletId, ...boxProps }: Props) {
       />
 
       <ConsentCheckBox
-        value={consents.shareMediaToPublic}
+        value={!!consents?.shareMediaToPublic}
         onChange={toggleMediaConsent}
         label={
           <Text ml={10}>
