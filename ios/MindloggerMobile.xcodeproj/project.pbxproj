@@ -181,6 +181,11 @@
 		F83E655529FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
 		F83E655629FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
 		F83E655729FA845400D57006 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83E655329FA845400D57006 /* Settings.bundle */; };
+		F84714D82C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */; };
+		F84714D92C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */; };
+		F84714DA2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */; };
+		F84714DB2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */; };
+		F84714DC2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */; };
 		F87E174F29771F200021550E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		F87E175029771F200021550E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		F87E175429771F200021550E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
@@ -333,6 +338,7 @@
 		F83E654E29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RNBackgroundFetch+AppDelegate.m"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; };
 		F83E655329FA845400D57006 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		F83ED9792A40549C00DD5C3F /* hermes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = hermes.xcframework; path = "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"; sourceTree = "<group>"; };
+		F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Atkinson Hyperlegible Regular.ttf"; path = "../../../assets/fonts/Atkinson Hyperlegible Regular.ttf"; sourceTree = "<group>"; };
 		F86964F92A4ECEB000AD759D /* MindloggerMobileDevRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileDevRelease.entitlements; sourceTree = "<group>"; };
 		F86964FA2A4ECEBA00AD759D /* MindloggerMobileRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MindloggerMobileRelease.entitlements; path = MindloggerMobile/MindloggerMobileRelease.entitlements; sourceTree = "<group>"; };
 		F86964FB2A4ECEC000AD759D /* MindloggerMobileQARelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileQARelease.entitlements; sourceTree = "<group>"; };
@@ -504,6 +510,7 @@
 				914062A52BB1D8C00021A2E8 /* FontAwesome6_Solid.ttf */,
 				914062A12BB1D8C00021A2E8 /* Fontisto.ttf */,
 				4EBCD5B12971514E00D3C04C /* Foundation.ttf */,
+				F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */,
 				914062AA2BB1D8C10021A2E8 /* Ionicons.ttf */,
 				914062A22BB1D8C00021A2E8 /* MaterialCommunityIcons.ttf */,
 				4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */,
@@ -835,6 +842,7 @@
 				914062AC2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
 				914062C02BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				F84714D82C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */,
 				F801217A2A017BAF00F31D91 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -865,6 +873,7 @@
 				914062AD2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
 				914062C12BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
 				F87E175829771F200021550E /* FontAwesome5_Solid.ttf in Resources */,
+				F84714D92C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */,
 				F87E175929771F200021550E /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -895,6 +904,7 @@
 				914062AE2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
 				914062C22BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
 				F87E176F29771F290021550E /* FontAwesome5_Solid.ttf in Resources */,
+				F84714DA2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */,
 				F87E177029771F290021550E /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -925,6 +935,7 @@
 				914062AF2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
 				914062C32BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
 				F87E178629771F310021550E /* FontAwesome5_Solid.ttf in Resources */,
+				F84714DB2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */,
 				F87E178729771F310021550E /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -955,6 +966,7 @@
 				914062B02BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */,
 				914062C42BB1D8C10021A2E8 /* SimpleLineIcons.ttf in Resources */,
 				F8EF456A2A975A9200EEC085 /* FontAwesome5_Solid.ttf in Resources */,
+				F84714DC2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */,
 				F8EF456B2A975A9200EEC085 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1643,7 +1655,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CURRENT_PROJECT_VERSION = 1566;
+				CURRENT_PROJECT_VERSION = 1567;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1655,7 +1667,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1674,7 +1686,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1566;
+				CURRENT_PROJECT_VERSION = 1567;
 				INFOPLIST_FILE = MindloggerMobileTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1682,7 +1694,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1704,7 +1716,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1566;
+				CURRENT_PROJECT_VERSION = 1567;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				ENABLE_BITCODE = NO;
@@ -1715,7 +1727,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1745,7 +1757,7 @@
 				CODE_SIGN_ENTITLEMENTS = MindloggerMobile/MindloggerMobileRelease.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1566;
+				CURRENT_PROJECT_VERSION = 1567;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = MindloggerMobile/Info.plist;
@@ -1755,7 +1767,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1955,7 +1967,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1566;
+				CURRENT_PROJECT_VERSION = 1567;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				ENABLE_BITCODE = NO;
@@ -1966,7 +1978,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1995,7 +2007,7 @@
 				CODE_SIGN_ENTITLEMENTS = MindloggerMobileDevRelease.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1566;
+				CURRENT_PROJECT_VERSION = 1567;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = "MindloggerMobile dev-Info.plist";
@@ -2005,7 +2017,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2034,7 +2046,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1566;
+				CURRENT_PROJECT_VERSION = 1567;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				ENABLE_BITCODE = NO;
@@ -2045,7 +2057,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2075,7 +2087,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1566;
+				CURRENT_PROJECT_VERSION = 1567;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = "MindloggerMobile qa-Info.plist";
@@ -2085,7 +2097,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2112,7 +2124,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MindloggerMobileStagingDebug.entitlements;
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1566;
+				CURRENT_PROJECT_VERSION = 1567;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				ENABLE_BITCODE = NO;
@@ -2123,7 +2135,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2152,7 +2164,7 @@
 				CODE_SIGN_ENTITLEMENTS = MindloggerMobileStagingRelease.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1566;
+				CURRENT_PROJECT_VERSION = 1567;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = "MindloggerMobile staging-Info.plist";
@@ -2162,7 +2174,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2191,7 +2203,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1566;
+				CURRENT_PROJECT_VERSION = 1567;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				ENABLE_BITCODE = NO;
@@ -2202,7 +2214,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2232,7 +2244,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1566;
+				CURRENT_PROJECT_VERSION = 1567;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = "MindloggerMobile uat-Info.plist";
@@ -2242,7 +2254,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

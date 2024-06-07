@@ -158,3 +158,7 @@ export const MaterialInformation: FC<IconProps> = props => (
 export const OcticonsCircleCheckFill: FC<IconProps> = props => (
   <Octicons name="check-circle-fill" {...props} />
 );
+
+export const ClockIcon: FC<IconProps> = props => (
+  <Octicons name="clock" {...props} />
+);

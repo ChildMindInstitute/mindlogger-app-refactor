@@ -1,3 +1,5 @@
+import { Dimensions, Platform } from 'react-native';
+
 import i18n from 'i18next';
 
 import { IS_ANDROID, IS_IOS } from '../constants';
@@ -137,3 +139,29 @@ export const splitArrayToBulks = <T>(
   }
   return result;
 };
+
+/**
+ * The helper function helps determine if the current device
+ * is iPhone X series (X, XR, Xs).
+ * @author https://github.com/ptelad/react-native-iphone-x-helper
+ * @license MIT
+ */
+export function isIphoneX(): boolean {
+  const dimensions = Dimensions.get('window');
+
+  return (
+    Platform.OS === 'ios' &&
+    !Platform.isPad &&
+    !Platform.isTV &&
+    (dimensions.height === 780 ||
+      dimensions.width === 780 ||
+      dimensions.height === 812 ||
+      dimensions.width === 812 ||
+      dimensions.height === 844 ||
+      dimensions.width === 844 ||
+      dimensions.height === 896 ||
+      dimensions.width === 896 ||
+      dimensions.height === 926 ||
+      dimensions.width === 926)
+  );
+}

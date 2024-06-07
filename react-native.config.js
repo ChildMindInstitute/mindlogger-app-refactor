@@ -9,4 +9,5 @@ module.exports = {
       ? { 'react-native-flipper': { platforms: { ios: null } } }
       : {}),
   },
+  androidAssets: ['./assets/fonts/'],
 };
