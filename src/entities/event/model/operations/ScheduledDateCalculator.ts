@@ -18,9 +18,9 @@ import {
 
 type EventParseInput = Parameters<typeof Parse.schedule>[0];
 
-const cache = new Map();
-
 export class ScheduledDateCalculator {
+  private cache = new Map();
+
   constructor() {}
 
   private setTime(target: Date, availability: EventAvailability) {
@@ -32,6 +32,12 @@ export class ScheduledDateCalculator {
 
   private getNow() {
     return new Date();
+  }
+
+  private getCacheKey(event: ScheduleEvent): string {
+    const today = this.getNow().toDateString();
+
+    return `${JSON.stringify(event.availability)}${event.selectedDate?.getTime() ?? ''}${today}`;
   }
 
   private calculateForMonthly(
@@ -87,7 +93,7 @@ export class ScheduledDateCalculator {
     return result;
   }
 
-  private calculateScheduledAt(event: ScheduleEvent): Date | null {
+  private calculateInternal(event: ScheduleEvent): Date | null {
     const { availability, selectedDate } = event;
 
     const now = this.getNow();
@@ -158,22 +164,18 @@ export class ScheduledDateCalculator {
     useCache: boolean = true,
   ): Date | null {
     if (!useCache) {
-      return this.calculateScheduledAt(event);
+      return this.calculateInternal(event);
     }
 
-    const today = this.getNow().toDateString();
+    const key = this.getCacheKey(event);
 
-    const key =
-      JSON.stringify(event.availability) +
-      (event.selectedDate?.getTime() ?? '') +
-      today;
-
-    if (cache.has(key)) {
-      return cache.get(key);
+    if (this.cache.has(key)) {
+      return this.cache.get(key) as Date;
     }
 
-    const result = this.calculateScheduledAt(event);
-    cache.set(key, result);
+    const result = this.calculateInternal(event);
+
+    this.cache.set(key, result);
 
     return result;
   }
