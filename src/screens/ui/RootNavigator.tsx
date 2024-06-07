@@ -31,9 +31,9 @@ import {
   useAppSelector,
   useFirebaseSetup,
   useOnlineEstablished,
-  Logger,
-  useCurrentRoute,
   useOnceRef,
+  Emitter,
+  useOnForeground,
 } from '@shared/lib';
 import {
   UserProfileIcon,
@@ -97,7 +97,6 @@ export default () => {
   });
 
   EnterForegroundModel.useAnalyticsEventTrack();
-  EnterForegroundModel.useRestackNotifications();
 
   useBackHandler(() => {
     onBeforeAppClose();
@@ -109,8 +108,14 @@ export default () => {
     forceLogout();
   });
 
-  const { completeEntityIntoUploadToQueue, process: processAutocompletion } =
+  useBackgroundTask(() => {
+    return NotificationModel.topUpNotifications();
+  });
+
+  const { completeEntityIntoUploadToQueue, hasExpiredEntity } =
     SurveyModel.useAutoCompletion();
+
+  const { executeAutocompletion } = SurveyModel.useAutoCompletionExecute();
 
   TapOnNotificationModel.useOnNotificationTap({
     checkAvailability: (
@@ -122,6 +127,7 @@ export default () => {
         identifiers: { appletId, eventId, entityId, entityType },
         queryClient,
         storeProgress,
+        alertCallback: () => Emitter.emit('autocomplete'),
       });
     },
     hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
@@ -131,52 +137,22 @@ export default () => {
     evaluateAvailableTo:
       ActivityGroupsModel.useAvailabilityEvaluator().evaluateAvailableTo,
     completeEntityIntoUploadToQueue,
-    processAutocompletion,
   });
 
-  useBackgroundTask(() => {
-    return NotificationModel.topUpNotifications();
-  });
-
-  const { getCurrentRoute } = useCurrentRoute();
-
-  const autocomplete = useCallback(() => {
-    const executing = getCurrentRoute() === 'InProgressActivity';
-
-    Logger.log('[RootNavigator.autocomplete] Started');
-
-    if (executing) {
-      Logger.info(
-        '[RootNavigator.autocomplete]: Postponed due to entity is in progress',
-      );
-      return;
-    }
-
-    if (AppletModel.RefreshService.isBusy()) {
-      Logger.info(
-        '[RootNavigator.autocomplete]: Postponed due to RefreshService.mutex is busy',
-      );
-      return;
-    }
-
-    if (AppletModel.StartEntityMutex.isBusy()) {
-      Logger.log(
-        '[RootNavigator.startActivityOrFlow] Postponed due to StartEntityMutex is busy',
-      );
-      return;
-    }
-
-    processAutocompletion();
-  }, [getCurrentRoute, processAutocompletion]);
+  EnterForegroundModel.useRestackNotifications(hasExpiredEntity);
 
   const autocompleteWithDelay = useCallback(
-    () => setTimeout(autocomplete, AUTOCOMPLETION_DELAY_ON_APP_START),
-    [autocomplete],
+    () => setTimeout(executeAutocompletion, AUTOCOMPLETION_DELAY_ON_APP_START),
+    [executeAutocompletion],
   );
 
-  useOnlineEstablished(autocomplete);
+  useOnlineEstablished(executeAutocompletion);
 
   useOnceRef(autocompleteWithDelay);
+
+  useOnForeground(autocompleteWithDelay);
+
+  SurveyModel.useOnAutoCompletion();
 
   LoginModel.useAnalyticsAutoLogin();
 

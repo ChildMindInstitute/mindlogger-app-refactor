@@ -33,6 +33,7 @@ type Result = {
   process: ProcessAutocompletion;
   completeEntityIntoUploadToQueue: CompleteEntityIntoUploadToQueue;
   hasItemsInQueue: boolean;
+  hasExpiredEntity: () => boolean;
 };
 
 export const AutoCompletionMutex = Mutex();
@@ -189,9 +190,20 @@ const useAutoCompletion = (): Result => {
     [notCompletedEntities, mutex, createConstructService],
   );
 
+  const hasExpiredEntity = (): boolean => {
+    const result = new CollectCompletionsService(
+      notCompletedEntities,
+    ).hasExpiredEntity();
+
+    Logger.log(`[useAutoCompletion.hasExpiredEntity]: ${String(result)}`);
+
+    return result;
+  };
+
   return {
     process: processAutocompletion,
     completeEntityIntoUploadToQueue,
+    hasExpiredEntity,
     hasItemsInQueue: hasItemsInQueue(),
   };
 };

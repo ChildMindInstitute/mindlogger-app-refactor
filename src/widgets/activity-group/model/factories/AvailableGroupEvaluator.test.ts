@@ -18,8 +18,7 @@ import { EventAvailability } from '@app/entities/event';
 import { HourMinute } from '@app/shared/lib';
 
 import { AvailableGroupEvaluator } from './AvailableGroupEvaluator';
-import { GroupsBuildContext } from './GroupUtility';
-import { EventEntity, Entity } from '../../lib';
+import { EventEntity, Entity, GroupsBuildContext } from '../../lib';
 
 jest.mock('@app/shared/lib/constants', () => ({
   ...jest.requireActual('@app/shared/lib/constants'),
@@ -103,7 +102,7 @@ const getScheduledEventEntity = (settings: {
         startDate,
         endDate,
       },
-      entityId: 'test-id-1',
+      entityId: 'test-entity-id-1',
       id: 'test-event-id-1',
       notificationSettings: {
         notifications: [],
@@ -147,7 +146,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -156,7 +154,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeFrom);
     now = subMinutes(now, 1);
@@ -202,7 +203,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -211,7 +211,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     const now = buildDateTime(startAt, TimeFrom);
     mockGetNow(evaluator, now);
@@ -256,7 +259,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -265,7 +267,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeFrom);
     now = addMinutes(now, 10);
@@ -318,7 +323,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -327,7 +331,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     mockGetNow(evaluator, now);
 
@@ -378,7 +385,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -387,7 +393,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     mockGetNow(evaluator, now);
 
@@ -431,7 +440,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -440,7 +448,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(addDays(startAt, 1), TimeTo);
     now = subMinutes(now, 1);
@@ -487,7 +498,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -496,7 +506,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     mockGetNow(evaluator, now);
 
@@ -543,7 +556,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -552,7 +564,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     mockGetNow(evaluator, now);
 
@@ -590,7 +605,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -599,7 +613,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     const now = buildDateTime(addDays(startAt, 1), TimeTo);
     mockGetNow(evaluator, now);
@@ -644,7 +661,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -653,7 +669,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = addMinutes(now, 10);
@@ -704,7 +723,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -713,7 +731,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     it('Test Weekdays when now is later', () => {
       let now = buildDateTime(startAt, TimeTo);
@@ -745,7 +766,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -754,7 +774,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = subMinutes(now, 1);
@@ -804,7 +827,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -813,7 +835,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = addMinutes(now, 10);
@@ -863,7 +888,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -872,7 +896,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(addDays(startAt, 1), TimeTo);
     now = addMinutes(now, 10);
@@ -920,7 +947,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -930,7 +956,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     const now = buildDateTime(startAt, { hours: 0, minutes: 0 });
     mockGetNow(evaluator, now);
@@ -975,7 +1004,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -985,7 +1013,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeFrom);
     now = subMinutes(now, 1);
@@ -1031,7 +1062,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1041,7 +1071,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     const now = buildDateTime(startAt, TimeFrom);
     mockGetNow(evaluator, now);
@@ -1086,7 +1119,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1096,7 +1128,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeFrom);
     now = addMinutes(now, 10);
@@ -1149,7 +1184,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1159,7 +1193,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     mockGetNow(evaluator, now);
 
@@ -1207,7 +1244,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1217,7 +1253,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     mockGetNow(evaluator, now);
 
@@ -1261,7 +1300,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1271,7 +1309,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(addDays(startAt, 1), TimeTo);
     now = subMinutes(now, 1);
@@ -1318,7 +1359,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1328,7 +1368,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     mockGetNow(evaluator, now);
 
@@ -1374,7 +1417,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1384,7 +1426,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     mockGetNow(evaluator, now);
 
@@ -1429,7 +1474,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1439,7 +1483,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     mockGetNow(evaluator, now);
 
@@ -1477,7 +1524,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1487,7 +1533,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     const now = buildDateTime(addDays(startAt, 1), TimeTo);
     mockGetNow(evaluator, now);
@@ -1526,7 +1575,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1536,7 +1584,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = addMinutes(now, 10);
@@ -1586,7 +1637,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1596,7 +1646,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = subMinutes(now, 1);
@@ -1646,7 +1699,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1656,7 +1708,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = addMinutes(now, 10);
@@ -1706,7 +1761,6 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1716,7 +1770,10 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
     });
     eventEntity.event.availability.allowAccessBeforeFromTime = true;
 
-    const evaluator = new AvailableGroupEvaluator(input);
+    const evaluator = new AvailableGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(addDays(startAt, 1), TimeTo);
     now = addMinutes(now, 10);

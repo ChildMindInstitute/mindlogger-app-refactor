@@ -9,7 +9,8 @@ import {
   useFlowState,
   useFlowStateActions,
 } from '../model';
-import useTimer from '../model/hooks/useTimer';
+import useAvailabilityTimer from '../model/hooks/useAvailabilityTimer';
+import useEventTimer from '../model/hooks/useEventTimer';
 
 type Props = {
   onClose: () => void;
@@ -50,10 +51,15 @@ function FlowSurvey({
 
   const entityStartedAt = progressRecord.startAt;
 
-  useTimer({
+  useEventTimer({
     entityStartedAt,
-    onFinish: completeByTimer,
     timerHourMinute: event.timers?.timer,
+    onFinish: () => completeByTimer('event'),
+  });
+
+  useAvailabilityTimer({
+    availableTo: progressRecord.availableTo,
+    onFinish: () => completeByTimer('availability'),
   });
 
   const flowPipelineItem = pipeline[step];

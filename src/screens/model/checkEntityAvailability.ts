@@ -1,128 +1,129 @@
 import { QueryClient } from '@tanstack/react-query';
-import { isToday } from 'date-fns';
 
-import { EntityPath, StoreProgress } from '@app/abstract/lib';
-import { ActivityListItem } from '@app/entities/activity';
+import { EntityPath, StoreProgress, convertProgress } from '@app/abstract/lib';
+import { EventModel } from '@app/entities/event';
+import { mapEventFromDto } from '@app/entities/event/model';
 import {
   onActivityNotAvailable,
   onCompletedToday,
   onScheduledToday,
 } from '@app/features/tap-on-notification/lib';
+import { QueryDataUtils } from '@app/shared/api';
 import {
   getEntityProgress,
   getNow,
   ILogger,
+  isCompletedToday,
+  isEntityInProgress,
   isReadyForAutocompletion,
   Logger,
 } from '@app/shared/lib';
-import {
-  ActivityGroupType,
-  ActivityGroupsModel,
-  ActivityListGroup,
-} from '@app/widgets/activity-group';
+import { ActivityGroupsModel } from '@app/widgets/activity-group';
+import { GroupUtility } from '@app/widgets/activity-group/model';
 
 type Input = {
   entityName: string;
   identifiers: EntityPath;
   storeProgress: StoreProgress;
   queryClient: QueryClient;
+  alertCallback: () => void;
 };
 
 const logger: ILogger = Logger;
-
-/*
-In case if entity is in progress and it's ready for autocompletion - we have to decide if we
-need to start this entity again. To decide that - we pass this entity through available and scheduled group evaluators.
-applyInProgressFilter is set false is this case  so that the ActivityGroupsBuilder will include
-the entity into the inputs of the mentioned groups' evaluators.
-*/
 
 export const checkEntityAvailability = ({
   entityName,
   identifiers: { appletId, entityId, entityType, eventId },
   storeProgress,
   queryClient,
-}: Input) => {
+  alertCallback,
+}: Input): boolean => {
+  const record = getEntityProgress(appletId, entityId, eventId, storeProgress);
+
   logger.log(
     `[checkEntityAvailability]: Checking.. Entity = "${entityName}", appletId = ${appletId}, entityId = ${entityId}, entityType = ${entityType}, eventId = ${eventId} `,
   );
 
-  const record = getEntityProgress(appletId, entityId, eventId, storeProgress);
-
   Logger.log(
     `[checkEntityAvailability] Now is ${getNow().toUTCString()}, record = ${JSON.stringify(record)}`,
   );
+
+  const isInProgress = isEntityInProgress(record);
 
   const shouldBeAutocompleted = isReadyForAutocompletion(
     { appletId, entityId, eventId, entityType },
     storeProgress,
   );
 
-  const applyInProgressFilter = !shouldBeAutocompleted;
-
-  Logger.log(
-    `[checkEntityAvailability] applyInProgressFilter is set to ${applyInProgressFilter}`,
-  );
-
-  const groupsResult = ActivityGroupsModel.ActivityGroupsBuildManager.process(
-    appletId,
-    storeProgress,
-    queryClient,
-    applyInProgressFilter,
-  );
-
-  const groupInProgress: ActivityListGroup = groupsResult.groups.find(
-    x => x.type === ActivityGroupType.InProgress,
-  )!;
-
-  const groupAvailable: ActivityListGroup = groupsResult.groups.find(
-    x => x.type === ActivityGroupType.Available,
-  )!;
-
-  const groupScheduled: ActivityListGroup = groupsResult.groups.find(
-    x => x.type === ActivityGroupType.Scheduled,
-  )!;
-
-  if (
-    [...groupAvailable.activities, ...groupInProgress.activities].some(
-      x =>
-        x.eventId === eventId &&
-        ((entityType === 'flow' && entityId === x.flowId) ||
-          (entityType === 'regular' && entityId === x.activityId)),
-    )
-  ) {
-    logger.log('[checkEntityAvailability] Check done: true');
+  if (isInProgress && !shouldBeAutocompleted) {
+    logger.log('[checkEntityAvailability] Check done: true (in-progress)');
 
     return true;
   }
 
-  const scheduled: ActivityListItem | undefined =
-    groupScheduled.activities.find(
-      x =>
-        x.eventId === eventId &&
-        ((entityType === 'flow' && entityId === x.flowId) ||
-          (entityType === 'regular' && entityId === x.activityId)),
+  const progress = convertProgress(storeProgress);
+
+  const queryUtils = new QueryDataUtils(queryClient);
+
+  const event = mapEventFromDto(queryUtils.getEventDto(appletId, eventId));
+
+  event.scheduledAt = EventModel.ScheduledDateCalculator.calculate(event);
+
+  if (!event.scheduledAt) {
+    logger.log(
+      '[checkEntityAvailability] Check done: false (scheduledAt is missed)',
     );
-
-  if (scheduled) {
-    onScheduledToday(entityName, scheduled.availableFrom!);
-
-    logger.log('[checkEntityAvailability] Check done: false (scheduled today)');
 
     return false;
   }
 
-  const completedToday = record && record.endAt && isToday(record.endAt);
+  const isAvailable = new ActivityGroupsModel.AvailableGroupEvaluator(
+    progress,
+    appletId,
+  ).isInGroup(event);
 
-  if (completedToday) {
-    logger.log('[checkEntityAvailability] Check done: false (completed today)');
+  const isScheduled = new ActivityGroupsModel.ScheduledGroupEvaluator(
+    progress,
+    appletId,
+  ).isInGroup(event);
 
-    onCompletedToday(entityName);
-  } else {
-    logger.log('[checkEntityAvailability] Check done: false (not available)');
+  if (isAvailable) {
+    logger.log('[checkEntityAvailability] Check done: true (available)');
 
-    onActivityNotAvailable();
+    return true;
   }
+
+  if (isScheduled) {
+    const from = getNow();
+    const { timeFrom } = event.availability;
+
+    from.setHours(timeFrom!.hours);
+    from.setMinutes(timeFrom!.minutes);
+
+    logger.log('[checkEntityAvailability] Check done: false (scheduled today)');
+
+    onScheduledToday(entityName, from, alertCallback);
+
+    return false;
+  }
+
+  const isEntityCompletedToday = isCompletedToday(record);
+
+  const isSpread = GroupUtility.isSpreadToNextDay(event);
+
+  if (isEntityCompletedToday && !isSpread) {
+    logger.log(
+      '[checkEntityAvailability] Check done: false (completed today, not spread)',
+    );
+
+    onCompletedToday(entityName, alertCallback);
+
+    return false;
+  }
+
+  logger.log('[checkEntityAvailability] Check done: false (not available)');
+
+  onActivityNotAvailable(alertCallback);
 
   return false;
 };
