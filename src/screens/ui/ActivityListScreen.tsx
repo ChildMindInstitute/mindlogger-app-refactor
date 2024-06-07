@@ -8,6 +8,7 @@ import { EntityPath, StoreProgress } from '@app/abstract/lib';
 import { AppletModel } from '@app/entities/applet';
 import {
   AnalyticsService,
+  Emitter,
   MixEvents,
   MixProperties,
   useAppSelector,
@@ -47,13 +48,13 @@ const ActivityListScreen: FC<Props> = props => {
         identifiers: { appletId, eventId, entityId, entityType },
         queryClient,
         storeProgress,
+        alertCallback: () => Emitter.emit('autocomplete'),
       });
     },
     [appletId, queryClient, storeProgress],
   );
 
-  const { completeEntityIntoUploadToQueue, process: processAutocompletion } =
-    SurveyModel.useAutoCompletion();
+  const { completeEntityIntoUploadToQueue } = SurveyModel.useAutoCompletion();
 
   return (
     <Box flex={1}>
@@ -68,7 +69,6 @@ const ActivityListScreen: FC<Props> = props => {
           appletId={appletId}
           completeEntity={completeEntityIntoUploadToQueue}
           checkAvailability={checkAvailability}
-          processAutocompletion={processAutocompletion}
         />
       )}
     </Box>

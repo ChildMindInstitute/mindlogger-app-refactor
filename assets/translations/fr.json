@@ -555,7 +555,8 @@
     "end": "Fin"
   },
   "system": {
-    "migration_not_applied_text": "La migration des données n'a pas été appliquée avec succès. Veuillez contacter le support."
+    "migration_not_applied_text": "La migration des données n'a pas été appliquée avec succès. Veuillez contacter le support.",
+    "ok": "OK"
   },
   "activity_skip_popup" : {
     "popup_title": "Passer à l'essai suivant ?",

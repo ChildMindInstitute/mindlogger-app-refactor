@@ -1,7 +1,7 @@
 import { ActivityListItem } from '@entities/activity';
 
 import { AvailableGroupEvaluator } from './AvailableGroupEvaluator';
-import { GroupsBuildContext, GroupUtility } from './GroupUtility';
+import { GroupUtility } from './GroupUtility';
 import { ListItemsFactory } from './ListItemsFactory';
 import { ScheduledGroupEvaluator } from './ScheduledGroupEvaluator';
 import {
@@ -9,6 +9,7 @@ import {
   ActivityGroupType,
   ActivityGroupTypeNames,
   ActivityListGroup,
+  GroupsBuildContext,
 } from '../../lib';
 
 export interface IActivityGroupsBuilder {
@@ -26,24 +27,25 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
   private utility: GroupUtility;
 
-  private applyInProgressFilter: boolean;
-
   constructor(inputParams: GroupsBuildContext) {
     this.itemsFactory = new ListItemsFactory(inputParams);
-    this.scheduledEvaluator = new ScheduledGroupEvaluator(inputParams);
-    this.availableEvaluator = new AvailableGroupEvaluator(inputParams);
-    this.utility = new GroupUtility(inputParams);
-    this.applyInProgressFilter = inputParams.applyInProgressFilter;
+    this.scheduledEvaluator = new ScheduledGroupEvaluator(
+      inputParams.progress,
+      inputParams.appletId,
+    );
+    this.availableEvaluator = new AvailableGroupEvaluator(
+      inputParams.progress,
+      inputParams.appletId,
+    );
+    this.utility = new GroupUtility(inputParams.progress, inputParams.appletId);
   }
 
   public buildInProgress(
     eventsActivities: Array<EventEntity>,
   ): ActivityListGroup {
-    const considerProgressEntities = this.applyInProgressFilter;
-
-    const filtered = considerProgressEntities
-      ? eventsActivities.filter(x => this.utility.isInProgress(x))
-      : [];
+    const filtered = eventsActivities.filter(x =>
+      this.utility.isInProgress(x.event),
+    );
 
     const activityItems: Array<ActivityListItem> = [];
 
@@ -63,9 +65,9 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 
   public buildAvailable(eventsEntities: Array<EventEntity>): ActivityListGroup {
-    const inputEntities = this.applyInProgressFilter
-      ? eventsEntities.filter(x => !this.utility.isInProgress(x))
-      : eventsEntities;
+    const inputEntities = eventsEntities.filter(
+      x => !this.utility.isInProgress(x.event),
+    );
 
     const filtered = this.availableEvaluator.evaluate(inputEntities);
 
@@ -87,9 +89,9 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 
   public buildScheduled(eventsEntities: Array<EventEntity>): ActivityListGroup {
-    const inputEntities = this.applyInProgressFilter
-      ? eventsEntities.filter(x => !this.utility.isInProgress(x))
-      : eventsEntities;
+    const inputEntities = eventsEntities.filter(
+      x => !this.utility.isInProgress(x.event),
+    );
 
     const filtered = this.scheduledEvaluator.evaluate(inputEntities);
 

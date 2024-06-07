@@ -26,6 +26,7 @@ export type CollectCompletionOutput = {
 export interface ICollectCompletionsService {
   collectForEntity(path: EntityPath): CollectCompletionOutput[];
   collectAll(exclude?: EntityPathParams): CollectCompletionOutput[];
+  hasExpiredEntity(): boolean;
 }
 
 export class CollectCompletionsService implements ICollectCompletionsService {
@@ -119,14 +120,45 @@ export class CollectCompletionsService implements ICollectCompletionsService {
     return result;
   }
 
+  public hasExpiredEntity(): boolean {
+    Logger.log('[CollectCompletionsService.hasExpiredEntity] Working');
+
+    const filtered: NotCompletedEntity[] = this.notCompletedEntities.filter(
+      x => !!x.payload.availableTo,
+    );
+
+    for (const notCompletedEntity of filtered) {
+      const {
+        appletId,
+        entityId,
+        eventId,
+        type,
+        payload: progress,
+      } = notCompletedEntity;
+
+      const flowState: FlowState = getFlowRecord(
+        type === ActivityPipelineType.Flow ? entityId : undefined,
+        appletId,
+        eventId,
+      )!;
+
+      if (!flowState) {
+        continue;
+      }
+
+      if (isEntityExpired(progress.availableTo)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public collectForEntity(path: EntityPath): CollectCompletionOutput[] {
     const { entityId, appletId, eventId, entityType } = path;
 
     const notCompletedEntity = this.notCompletedEntities.find(
-      x =>
-        x.appletId === appletId &&
-        x.entityId === entityId &&
-        x.eventId === eventId,
+      x => x.appletId === appletId && x.eventId === eventId,
     );
 
     const progress = notCompletedEntity?.payload;

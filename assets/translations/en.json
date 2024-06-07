@@ -446,7 +446,8 @@
     "end": "End"
   },
   "system": {
-    "migration_not_applied_text": "Data migration was not successfully applied. Please, contact support."
+    "migration_not_applied_text": "Data migration was not successfully applied. Please, contact support.",
+    "ok": "OK"
   },
   "activity_skip_popup" : {
     "popup_title": "Skip to the next trial?",
