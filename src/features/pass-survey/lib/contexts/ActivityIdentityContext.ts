@@ -5,6 +5,7 @@ type ActivityIdentifiers = {
   activityId: string;
   eventId: string;
   order: number;
+  activityName: string;
 };
 
 const ActivityIdentityContext = createContext({} as ActivityIdentifiers);

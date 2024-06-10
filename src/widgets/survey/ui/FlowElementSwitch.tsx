@@ -13,7 +13,7 @@ import {
   MixEvents,
   MixProperties,
 } from '@app/shared/lib';
-import { BackButton, CrossIcon, Box } from '@app/shared/ui';
+import { BackButton, CrossIcon, Box } from '@shared/ui';
 
 import Finish from './Finish';
 import Intermediate from './Intermediate';
@@ -28,6 +28,7 @@ type Props = {
   isTimerElapsed: boolean;
   interruptionStep: number | null;
   entityStartedAt: number;
+  flowId?: string;
 } & FlowPipelineItem;
 
 function FlowElementSwitch({
@@ -40,6 +41,7 @@ function FlowElementSwitch({
   isTimerElapsed,
   interruptionStep,
   entityStartedAt,
+  flowId,
 }: Props) {
   const context = useMemo(
     () => ({
@@ -65,11 +67,13 @@ function FlowElementSwitch({
         <ActivityIdentityContext.Provider value={context}>
           <Box flex={1}>
             <ActivityStepper
+              {...payload}
               idleTimer={event.timers.idleTimer}
               timer={event.timers.timer}
               entityStartedAt={entityStartedAt}
               onClose={closeAssessment}
               onFinish={onComplete}
+              flowId={flowId}
             />
           </Box>
         </ActivityIdentityContext.Provider>

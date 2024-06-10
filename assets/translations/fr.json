@@ -361,7 +361,8 @@
     "done": "Fait",
     "back": "Retour",
     "return": "Retourner",
-    "undo": "Défaire"
+    "undo": "Défaire",
+    "exit": "Sortie"
   },
   "network_alerts": {
     "no_internet_title": "Pas de connexion internet",

@@ -18,19 +18,25 @@ type Props = {
   timerSettings: HourMinute;
   entityStartedAt: number;
   clockIconShown: boolean;
+  onTimeElapsed: () => void;
 } & BoxProps &
   ViewProps;
 
 const TEN_SECONDS = ONE_SECOND * 10;
 
 const TimeRemaining: FC<Props> = (props: Props) => {
-  const { timerSettings, entityStartedAt, clockIconShown } = props;
+  const { timerSettings, entityStartedAt, clockIconShown, onTimeElapsed } =
+    props;
 
-  const [timeLeft, setTimLeft] = useState<number>(0);
+  const initialTimeElapsed = Date.now() - entityStartedAt;
 
   const duration =
     getMsFromHours(timerSettings.hours) +
     getMsFromMinutes(timerSettings.minutes);
+
+  const [timeLeft, setTimeLeft] = useState<number>(
+    duration - initialTimeElapsed,
+  );
 
   const formattedTimeLeft = getClockTime(timeLeft);
 
@@ -44,14 +50,15 @@ const TimeRemaining: FC<Props> = (props: Props) => {
 
       if (elapsed > duration) {
         clearInterval(id);
-        setTimLeft(0);
+        setTimeLeft(0);
+        onTimeElapsed();
       } else {
-        setTimLeft(duration - elapsed);
+        setTimeLeft(duration - elapsed);
       }
     }, ONE_SECOND);
 
     return () => clearInterval(id);
-  }, [duration, entityStartedAt]);
+  }, [onTimeElapsed, duration, entityStartedAt]);
 
   if (!formattedTimeLeft) {
     return null;
