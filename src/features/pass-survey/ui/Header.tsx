@@ -108,4 +108,5 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
+
 export default Header;

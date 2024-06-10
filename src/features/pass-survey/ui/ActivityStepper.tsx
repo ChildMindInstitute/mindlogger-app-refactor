@@ -360,6 +360,8 @@ function ActivityStepper({
             mt={18}
             minHeight={27}
             mb={safeAreaBottom ? 0 : 16}
+            gap={10}
+            mx={10}
           >
             {canMoveBack && (
               <Stepper.BackButton>
