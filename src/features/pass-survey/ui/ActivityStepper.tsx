@@ -1,4 +1,5 @@
 import { useContext, useRef } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 import {
@@ -21,7 +22,7 @@ import {
 
 import ActivityItem from './ActivityItem';
 import Header from './Header.tsx';
-import Timer from './Timer';
+import ProgressWithTimer from './ProgressWithTimer';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
 import {
   ActivityIdentityContext,
@@ -295,7 +296,10 @@ function ActivityStepper({
           timer={timer}
         />
 
-        <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flex: 1 }}>
+        <SafeAreaView
+          edges={['left', 'right']}
+          style={styles.safeAreaContainer}
+        >
           {showTopNavigation && (
             <Stepper.NavigationPanel mx={16}>
               {canMoveBack && <Stepper.BackButton isIcon />}
@@ -358,9 +362,11 @@ function ActivityStepper({
             }}
           />
 
-          {!!currentPipelineItem?.timer && (
-            <Timer duration={currentPipelineItem.timer} />
-          )}
+          <ProgressWithTimer
+            duration={currentPipelineItem?.timer}
+            key={currentPipelineItem?.id}
+          />
+
           {showBottomNavigation && (
             <Stepper.NavigationPanel
               mt={18}
@@ -399,5 +405,11 @@ function ActivityStepper({
     </Box>
   );
 }
+
+const styles = StyleSheet.create({
+  safeAreaContainer: {
+    flex: 1,
+  },
+});
 
 export default ActivityStepper;

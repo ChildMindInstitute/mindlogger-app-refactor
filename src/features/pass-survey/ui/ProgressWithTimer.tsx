@@ -17,20 +17,33 @@ import { Box, HandlersContext, ProgressBar, Text } from '@shared/ui';
 import { ActivityIdentityContext } from '../lib';
 import { useActivityState } from '../model';
 
+type ProgressWithTimerProps = {
+  duration?: number | null;
+};
+
 type TimerProps = {
   duration: number;
 };
 
 const TimerContainer = styled(Box, {
-  // position: 'absolute',
-  // bottom: 0,
   width: '100%',
   backgroundColor: '#f00',
-  zIndex: 10,
-  // height: 10,
+  marginBottom: 7,
 });
 
 const TEN_SECONDS = ONE_SECOND * 10;
+
+const ProgressWithTimer: FC<ProgressWithTimerProps> = ({ duration }) => {
+  return (
+    <TimerContainer accessibilityLabel="timer-widget">
+      {duration ? (
+        <Timer duration={duration} />
+      ) : (
+        <ProgressBar progress={0} height={2} />
+      )}
+    </TimerContainer>
+  );
+};
 
 const Timer: FC<TimerProps> = ({ duration }) => {
   const { t } = useTranslation();
@@ -41,12 +54,9 @@ const Timer: FC<TimerProps> = ({ duration }) => {
   const { next } = useContext(HandlersContext);
 
   const onTimeIsUp = useCallback(() => {
-    console.log('aaaaaa time is up!');
-    return;
     next({ isForced: true, shouldAutoSubmit: true });
   }, [next]);
 
-  // context
   const { removeTimer, setTimer, activityStorageRecord } = useActivityState({
     appletId,
     activityId,
@@ -96,11 +106,7 @@ const Timer: FC<TimerProps> = ({ duration }) => {
   }, [startInterval, stopInterval]);
 
   if (progressDone === 0) {
-    return (
-      <TimerContainer accessibilityLabel="timer-widget">
-        <ProgressBar progress={0} height={2} />
-      </TimerContainer>
-    );
+    return <ProgressBar progress={0} height={2} />;
   }
 
   const timeLeft = duration - duration * progress.value;
@@ -112,7 +118,7 @@ const Timer: FC<TimerProps> = ({ duration }) => {
   const textColor = timeIsRunningOut ? colors.alertDark : colors.onSurface;
 
   return (
-    <TimerContainer accessibilityLabel="timer-widget">
+    <>
       <ProgressBar
         progress={progressDone === 0 ? 0 : 1 - progressDone}
         height={2}
@@ -129,8 +135,8 @@ const Timer: FC<TimerProps> = ({ duration }) => {
           {formattedTimeLeft} {t('activity_time:time_remaining')}
         </Text>
       )}
-    </TimerContainer>
+    </>
   );
 };
 
-export default memo(Timer);
+export default memo(ProgressWithTimer);
