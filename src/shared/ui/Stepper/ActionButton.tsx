@@ -24,7 +24,7 @@ const ActionButton = ({
       py={13}
       maxWidth={200}
       bg={type === 'submit' ? '$primary' : '$white'}
-      text={{
+      textStyles={{
         textColor: type === 'submit' ? '$white' : '$primary',
         fontWeight: type === 'submit' ? 'bold' : 'normal',
         fontSize: 13,

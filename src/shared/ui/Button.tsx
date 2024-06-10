@@ -9,7 +9,7 @@ type Props = PropsWithChildren<{
   onPress: () => void;
   isLoading?: boolean;
   spinnerColor?: ColorValue;
-  text?: {
+  textStyles?: {
     textColor?: ColorValue;
     fontWeight?: string;
     fontSize?: number;
@@ -21,7 +21,7 @@ function Button({
   onPress,
   isLoading,
   spinnerColor,
-  text = {
+  textStyles = {
     textColor: '$white',
     fontWeight: 'bold',
     fontSize: 17,
@@ -43,9 +43,9 @@ function Button({
         {...styledProps}
       >
         <Text
-          color={text.textColor}
-          fontWeight={text.fontWeight}
-          fontSize={text.fontSize}
+          color={textStyles.textColor}
+          fontWeight={textStyles.fontWeight}
+          fontSize={textStyles.fontSize}
           opacity={isLoading ? 0 : 1}
         >
           {children}
