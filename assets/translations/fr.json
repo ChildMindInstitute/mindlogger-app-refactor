@@ -16,7 +16,7 @@
     "flow_all_items_hidden": "\"{{entityName}}\" ne peut pas être démarré car il contient une activité dans laquelle tous les éléments sont masqués"
   },
   "activity_time": {
-    "time_remaining": "Temps restant"
+    "time_remaining": "reste pour cet article"
   },
   "timed_activity": {
     "time_to_complete": "Temps pour terminer",

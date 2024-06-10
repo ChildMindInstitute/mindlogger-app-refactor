@@ -1,71 +1,52 @@
-import { FC, memo, useContext, useEffect, useMemo } from 'react';
+import { FC, memo, useCallback, useContext, useEffect, useMemo } from 'react';
 
 import { styled } from '@tamagui/core';
+import { useTranslation } from 'react-i18next';
 import { Easing, useSharedValue, withTiming } from 'react-native-reanimated';
-import Animated, {
-  SharedValue,
-  useAnimatedProps,
-} from 'react-native-reanimated';
-import { Circle, Svg } from 'react-native-svg';
 
 import {
   ONE_SECOND,
   isObjectNotEmpty,
   useAppTimer,
   useInterval,
+  getClockTime,
+  colors,
 } from '@app/shared/lib';
-import { Box } from '@shared/ui';
+import { Box, HandlersContext, ProgressBar, Text } from '@shared/ui';
 
 import { ActivityIdentityContext } from '../lib';
 import { useActivityState } from '../model';
 
-const AnimatedSvgCircle = Animated.createAnimatedComponent(Circle);
-
-type AnimatedSvgCircleProps = {
-  duration: number;
-  progress: SharedValue<number>;
-};
-
 type TimerProps = {
-  onTimeIsUp: () => void;
   duration: number;
 };
 
 const TimerContainer = styled(Box, {
-  position: 'absolute',
-  top: 10,
-  right: 10,
+  // position: 'absolute',
+  // bottom: 0,
+  width: '100%',
+  backgroundColor: '#f00',
+  zIndex: 10,
+  // height: 10,
 });
 
-const AnimatedCircle: FC<AnimatedSvgCircleProps> = ({ progress }) => {
-  const animatedStrokeDashoffset = useAnimatedProps(() => {
-    return {
-      strokeDashoffset: Math.PI * 25 * (1 - progress.value),
-    };
-  });
+const TEN_SECONDS = ONE_SECOND * 10;
 
-  return (
-    <AnimatedSvgCircle
-      rotation={-90}
-      originX={25}
-      originY={25}
-      cx={25}
-      cy={25}
-      r={12.5}
-      fill="transparent"
-      stroke="rgba(0, 103, 160, 0.4)"
-      strokeWidth={25}
-      animatedProps={animatedStrokeDashoffset}
-      strokeDasharray={Math.PI * 25}
-    />
-  );
-};
-
-const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
+const Timer: FC<TimerProps> = ({ duration }) => {
+  const { t } = useTranslation();
   const { appletId, activityId, eventId, order } = useContext(
     ActivityIdentityContext,
   );
 
+  const { next } = useContext(HandlersContext);
+
+  const onTimeIsUp = useCallback(() => {
+    console.log('aaaaaa time is up!');
+    return;
+    next({ isForced: true, shouldAutoSubmit: true });
+  }, [next]);
+
+  // context
   const { removeTimer, setTimer, activityStorageRecord } = useActivityState({
     appletId,
     activityId,
@@ -114,20 +95,40 @@ const Timer: FC<TimerProps> = ({ onTimeIsUp, duration }) => {
     return () => stopInterval();
   }, [startInterval, stopInterval]);
 
+  if (progressDone === 0) {
+    return (
+      <TimerContainer accessibilityLabel="timer-widget">
+        <ProgressBar progress={0} height={2} />
+      </TimerContainer>
+    );
+  }
+
+  const timeLeft = duration - duration * progress.value;
+
+  const timeIsRunningOut = timeLeft <= TEN_SECONDS;
+
+  const formattedTimeLeft = getClockTime(timeLeft);
+
+  const textColor = timeIsRunningOut ? colors.alertDark : colors.onSurface;
+
   return (
     <TimerContainer accessibilityLabel="timer-widget">
-      <Svg height={50} width={50}>
-        <Circle
-          cx={25}
-          cy={25}
-          r={12.5}
-          fill="transparent"
-          stroke="rgba(0, 0, 0, 0.1)"
-          strokeWidth={25}
-        />
-
-        <AnimatedCircle progress={progress} duration={10000} />
-      </Svg>
+      <ProgressBar
+        progress={progressDone === 0 ? 0 : 1 - progressDone}
+        height={2}
+      />
+      {progressDone !== 0 && (
+        <Text
+          w="100%"
+          textAlign="center"
+          position="absolute"
+          top={4}
+          color={textColor}
+          fontFamily="Atkinson Hyperlegible Regular"
+        >
+          {formattedTimeLeft} {t('activity_time:time_remaining')}
+        </Text>
+      )}
     </TimerContainer>
   );
 };

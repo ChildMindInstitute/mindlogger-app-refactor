@@ -1,7 +1,10 @@
 import { useContext, useRef } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet';
 import { HourMinute } from '@app/shared/lib';
@@ -18,6 +21,7 @@ import {
 
 import ActivityItem from './ActivityItem';
 import Header from './Header.tsx';
+import Timer from './Timer';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
 import {
   ActivityIdentityContext,
@@ -118,6 +122,7 @@ function ActivityStepper({
   });
 
   const currentStep = activityStorageRecord?.step ?? 0;
+  const currentPipelineItem = activityStorageRecord?.items?.[currentStep];
 
   const nextButtonText = getNextButtonText();
 
@@ -280,7 +285,6 @@ function ActivityStepper({
         onUndo={onUndo}
       >
         <Header
-          p={10}
           showWatermark={showWatermark}
           watermark={watermark}
           activityName={activityName}
@@ -291,103 +295,106 @@ function ActivityStepper({
           timer={timer}
         />
 
-        {showTopNavigation && (
-          <Stepper.NavigationPanel mx={16}>
-            {canMoveBack && <Stepper.BackButton isIcon />}
-            {canReset && <Stepper.UndoButton isIcon />}
+        <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flex: 1 }}>
+          {showTopNavigation && (
+            <Stepper.NavigationPanel mx={16}>
+              {canMoveBack && <Stepper.BackButton isIcon />}
+              {canReset && <Stepper.UndoButton isIcon />}
 
-            {canMoveNext && (
-              <Stepper.NextButton
-                accessibilityLabel={getAccessibilityLabel(nextButtonText)}
-                isIcon
-              />
-            )}
-          </Stepper.NavigationPanel>
-        )}
+              {canMoveNext && (
+                <Stepper.NextButton
+                  accessibilityLabel={getAccessibilityLabel(nextButtonText)}
+                  isIcon
+                />
+              )}
+            </Stepper.NavigationPanel>
+          )}
 
-        <Stepper.ViewList
-          renderItem={({ index }) => {
-            const pipelineItem = activityStorageRecord.items[index];
-            const value = activityStorageRecord.answers[index];
+          <Stepper.ViewList
+            renderItem={({ index }) => {
+              const pipelineItem = activityStorageRecord.items[index];
+              const value = activityStorageRecord.answers[index];
 
-            return (
-              <XStack
-                flex={1}
-                key={index}
-                alignItems="center"
-                onTouchStart={() => restartIdleTimer()}
-              >
-                <>
-                  {pipelineItem.type === 'Tutorial' && (
-                    <TutorialViewerItem
-                      {...pipelineItem.payload}
-                      ref={tutorialViewerRef}
-                    />
+              return (
+                <XStack
+                  flex={1}
+                  key={index}
+                  alignItems="center"
+                  onTouchStart={() => restartIdleTimer()}
+                >
+                  <>
+                    {pipelineItem.type === 'Tutorial' && (
+                      <TutorialViewerItem
+                        {...pipelineItem.payload}
+                        ref={tutorialViewerRef}
+                      />
+                    )}
+
+                    {pipelineItem.type !== 'Tutorial' && (
+                      // @ts-ignore
+                      // TODO
+                      // pipelineItem.type cannot be accepted as a valid type for some reason.
+                      <ActivityItem
+                        type={pipelineItem.type}
+                        value={value}
+                        pipelineItem={pipelineItem}
+                        onResponse={response => {
+                          setAnswer(currentStep, response);
+                          if (shouldPostProcessUserActions) {
+                            postProcessUserActionsForCurrentItem();
+                          }
+                        }}
+                        onAdditionalResponse={response => {
+                          setAdditionalAnswer(currentStep, response);
+                        }}
+                        textVariableReplacer={replaceTextVariables}
+                        onContextChange={setContext}
+                        context={activityStorageRecord?.context}
+                      />
+                    )}
+                  </>
+                </XStack>
+              );
+            }}
+          />
+
+          {!!currentPipelineItem?.timer && (
+            <Timer duration={currentPipelineItem.timer} />
+          )}
+          {showBottomNavigation && (
+            <Stepper.NavigationPanel
+              mt={18}
+              minHeight={27}
+              mb={safeAreaBottom ? 0 : 16}
+              gap={10}
+              mx={10}
+            >
+              {canMoveBack && (
+                <Stepper.BackButton>
+                  {t(
+                    isFirstStep
+                      ? 'activity_navigation:return'
+                      : 'activity_navigation:back',
                   )}
+                </Stepper.BackButton>
+              )}
 
-                  {pipelineItem.type !== 'Tutorial' && (
-                    // @ts-ignore
-                    // TODO
-                    // pipelineItem.type cannot be accepted as a valid type for some reason.
-                    <ActivityItem
-                      type={pipelineItem.type}
-                      value={value}
-                      pipelineItem={pipelineItem}
-                      onResponse={response => {
-                        setAnswer(currentStep, response);
-                        if (shouldPostProcessUserActions) {
-                          postProcessUserActionsForCurrentItem();
-                        }
-                      }}
-                      onAdditionalResponse={response => {
-                        setAdditionalAnswer(currentStep, response);
-                      }}
-                      textVariableReplacer={replaceTextVariables}
-                      onContextChange={setContext}
-                      context={activityStorageRecord?.context}
-                    />
-                  )}
-                </>
-              </XStack>
-            );
-          }}
-        />
+              {canReset && (
+                <Stepper.UndoButton>
+                  {t('activity_navigation:undo')}
+                </Stepper.UndoButton>
+              )}
 
-        <Stepper.Progress />
-
-        {showBottomNavigation && (
-          <Stepper.NavigationPanel
-            mt={18}
-            minHeight={27}
-            mb={safeAreaBottom ? 0 : 16}
-            gap={10}
-            mx={10}
-          >
-            {canMoveBack && (
-              <Stepper.BackButton>
-                {t(
-                  isFirstStep
-                    ? 'activity_navigation:return'
-                    : 'activity_navigation:back',
-                )}
-              </Stepper.BackButton>
-            )}
-
-            {canReset && (
-              <Stepper.UndoButton>
-                {t('activity_navigation:undo')}
-              </Stepper.UndoButton>
-            )}
-
-            {canMoveNext && (
-              <Stepper.NextButton
-                accessibilityLabel={getAccessibilityLabel(nextButtonText)}
-              >
-                {t(nextButtonText)}
-              </Stepper.NextButton>
-            )}
-          </Stepper.NavigationPanel>
-        )}
+              {canMoveNext && (
+                <Stepper.NextButton
+                  accessibilityLabel={getAccessibilityLabel(nextButtonText)}
+                >
+                  {t(nextButtonText)}
+                </Stepper.NextButton>
+              )}
+            </Stepper.NavigationPanel>
+          )}
+        </SafeAreaView>
       </Stepper>
     </Box>
   );
