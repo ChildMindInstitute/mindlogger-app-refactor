@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 
 import {
   Box,
@@ -39,7 +39,6 @@ import {
 } from '@shared/ui';
 
 import AdditionalText from './AdditionalText';
-import Timer from './Timer';
 import {
   PipelineItemAnswer,
   ActivityItem as ActivityItemProps,
@@ -95,10 +94,6 @@ function ActivityItem({
   const stopScrolling = () => setScrollEnabled(false);
 
   const releaseScrolling = () => setScrollEnabled(true);
-
-  const onTimeIsUp = useCallback(() => {
-    next({ isForced: true, shouldAutoSubmit: true });
-  }, [next]);
 
   function moveToNextItem() {
     const isRadioItem = pipelineItem.type === 'Radio';
@@ -403,10 +398,6 @@ function ActivityItem({
               content={textVariableReplacer(question)}
             />
           </Box>
-        )}
-
-        {!!pipelineItem.timer && (
-          <Timer duration={pipelineItem.timer} onTimeIsUp={onTimeIsUp} />
         )}
 
         {item}

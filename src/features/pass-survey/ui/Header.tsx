@@ -8,12 +8,12 @@ import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors, HourMinute, isIphoneX } from '@shared/lib';
-import { BoxProps, ListSeparator, BackButton, Text, Box } from '@shared/ui';
+import { ListSeparator, BackButton, Text, Box } from '@shared/ui';
 import TimeRemaining from '@shared/ui/TimeRemaining.tsx';
 
 import HeaderProgress from './HeaderProgress.tsx';
 
-type Props = BoxProps & {
+type Props = {
   showWatermark: boolean;
   watermark?: string | null;
   activityName: string;
@@ -33,10 +33,9 @@ function Header({
   appletId,
   entityStartedAt,
   timer,
-  ...boxProps
 }: Props) {
-  const { t } = useTranslation();
   const { top: safeAreaTop } = useSafeAreaInsets();
+  const { t } = useTranslation();
   const hasNotch = DeviceInfo.hasNotch();
   const isNotIPhoneX = !isIphoneX();
 
@@ -47,7 +46,7 @@ function Header({
   const timerMarginTop = hasNotch ? (safeAreaTop - timerHeight) / 2 : 16;
 
   return (
-    <>
+    <Box>
       {showTimeLeft && (
         <TimeRemaining
           mt={timerMarginTop}
@@ -64,7 +63,6 @@ function Header({
         />
       )}
       <XStack
-        {...boxProps}
         w="100%"
         alignItems="center"
         p={10}
@@ -90,7 +88,7 @@ function Header({
       </XStack>
       <HeaderProgress appletId={appletId} eventId={eventId} flowId={flowId} />
       <ListSeparator mt={10} bg={colors.lighterGrey7} />
-    </>
+    </Box>
   );
 }
 
@@ -108,5 +106,4 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
-
 export default Header;
