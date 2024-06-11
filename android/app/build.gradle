@@ -152,6 +152,8 @@ android {
             manifestPlaceholders = [domainName: "web-uat.cmiml.net"]
         }
         production {
+            resValue "string", "app_name", "Mindlogger Assessments"
+            applicationIdSuffix ".production"
             manifestPlaceholders = [domainName: "web.mindlogger.org"]
         }
     }
