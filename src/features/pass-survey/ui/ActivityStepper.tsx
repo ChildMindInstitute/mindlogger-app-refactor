@@ -19,8 +19,8 @@ import {
   Stepper,
   StepperPayload,
   XStack,
+  TimeRemaining,
 } from '@shared/ui';
-import TimeRemaining from '@shared/ui/TimeRemaining.tsx';
 
 import ActivityItem from './ActivityItem';
 import Header from './Header.tsx';
