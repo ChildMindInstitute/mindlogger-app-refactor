@@ -70,7 +70,7 @@
               "client_id": "614448177385-justd3j2a3u11ufco9a96mvlsd5n3jak.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "lab.childmindinstitute.data"
+                "bundle_id": "lab.childmindinstitute.data.production"
               }
             }
           ]
