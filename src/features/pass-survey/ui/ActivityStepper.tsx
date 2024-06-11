@@ -1,14 +1,15 @@
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
+import DeviceInfo from 'react-native-device-info';
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet';
-import { HourMinute } from '@app/shared/lib';
+import { HourMinute, isIphoneX } from '@app/shared/lib';
 import {
   ActivityIndicator,
   Box,
@@ -19,6 +20,7 @@ import {
   StepperPayload,
   XStack,
 } from '@shared/ui';
+import TimeRemaining from '@shared/ui/TimeRemaining.tsx';
 
 import ActivityItem from './ActivityItem';
 import Header from './Header.tsx';
@@ -53,7 +55,15 @@ function ActivityStepper({
 }: Props) {
   const { t } = useTranslation();
 
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { bottom: safeAreaBottom, top: safeAreaTop } = useSafeAreaInsets();
+
+  const hasNotch = DeviceInfo.hasNotch();
+  const isNotIPhoneX = !isIphoneX();
+
+  const [timerHeight, setTimerHeight] = useState(0);
+  const [showTimeLeft, setShowTimeLeft] = useState(!!timer);
+
+  const timerMarginTop = hasNotch ? (safeAreaTop - timerHeight) / 2 : 16;
 
   const { appletId, activityId, eventId, order, activityName } = useContext(
     ActivityIdentityContext,
@@ -271,9 +281,25 @@ function ActivityStepper({
   }
 
   return (
-    <Box flex={1} pb={safeAreaBottom}>
+    <Box flex={1}>
       <StatusBar hidden />
 
+      {showTimeLeft && (
+        <TimeRemaining
+          {...(safeAreaTop ? { position: 'absolute' } : {})}
+          mt={timerMarginTop}
+          left={16}
+          zIndex={1}
+          entityStartedAt={entityStartedAt}
+          timerSettings={timer as HourMinute}
+          clockIconShown={isNotIPhoneX}
+          opacity={timerHeight ? 1 : 0}
+          onTimeElapsed={() => setShowTimeLeft(false)}
+          onLayout={e => {
+            setTimerHeight(e.nativeEvent.layout.height);
+          }}
+        />
+      )}
       <Stepper
         stepsCount={activityStorageRecord.items.length}
         startFrom={activityStorageRecord.step}
@@ -285,21 +311,24 @@ function ActivityStepper({
         onEndReached={onEndReached}
         onUndo={onUndo}
       >
-        <Header
-          showWatermark={showWatermark}
-          watermark={watermark}
-          activityName={activityName}
-          flowId={flowId}
-          eventId={eventId}
-          appletId={appletId}
-          entityStartedAt={entityStartedAt}
-          timer={timer}
-        />
-
         <SafeAreaView
-          edges={['left', 'right']}
           style={styles.safeAreaContainer}
+          edges={{
+            left: 'off',
+            right: 'off',
+            bottom: 'maximum',
+            top: 'maximum',
+          }}
+          mode="margin"
         >
+          <Header
+            showWatermark={showWatermark}
+            watermark={watermark}
+            activityName={activityName}
+            flowId={flowId}
+            eventId={eventId}
+            appletId={appletId}
+          />
           {showTopNavigation && (
             <Stepper.NavigationPanel mx={16}>
               {canMoveBack && <Stepper.BackButton isIcon />}
