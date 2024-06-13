@@ -563,5 +563,13 @@
     "popup_description": "Cet essai est incomplet. Si vous passez à l'essai suivant, votre progression sera sauvegardée. Vous ne pourrez pas terminer cet essai ultérieurement.",
     "keep_working": "Continuer",
     "skip": "Passer"
+  },
+  "autocompletion": {
+    "done": "Fait",
+    "time_limit_reached": "Délai atteint",
+    "time_expired": "Le temps nécessaire pour compléter {{activityNames}} a expiré. Vos réponses seront automatiquement soumises.",
+    "processing_answers": "Traitement des réponses",
+    "preparing_answers": "Nous préparons vos réponses et garantissons une soumission sûre et sécurisée.",
+    "answers_submitted": "Réponses soumises"
   }
 }

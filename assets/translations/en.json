@@ -454,5 +454,13 @@
     "popup_description": "This trial is incomplete. If you skip to the next trial, your progress will be saved. You won't be able to finish this trial later.",
     "keep_working": "Keep working",
     "skip": "Skip"
+  },
+  "autocompletion": {
+    "done": "Done",
+    "time_limit_reached": "Time limit reached",
+    "time_expired": "The time to complete {{activityNames}} has expired. Your answers will automatically be submitted.",
+    "processing_answers": "Processing Answers",
+    "preparing_answers": "We are preparing your answers and ensuring a safe and secure submission.",
+    "answers_submitted": "Answers submitted"
   }
 }
