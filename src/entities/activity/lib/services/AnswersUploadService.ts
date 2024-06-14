@@ -395,7 +395,7 @@ class AnswersUploadService implements IAnswersUploadService {
       createdAt: data.createdAt,
       client: data.client,
       alerts: data.alerts,
-      isDataShare: data.isDataShare,
+      consentToShare: data.consentToShare,
     };
 
     return encryptedData;
