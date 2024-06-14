@@ -23,11 +23,11 @@ class UploadItemPreprocessor implements IPreprocessor<UploadItem> {
         FeatureFlagsKeys.enableConsentsCapability,
       )
     ) {
-      uploadItem.input.isDataShare = true;
+      uploadItem.input.consentToShare = true;
     }
 
     Logger.log(
-      `[UploadItemPreprocessor] consents preprocessing finished. Data is ${uploadItem.input?.isDataShare ? '' : 'not '}shared to public`,
+      `[UploadItemPreprocessor] consents preprocessing finished. Data is ${uploadItem.input?.consentToShare ? '' : 'not '}shared to public`,
     );
   }
 

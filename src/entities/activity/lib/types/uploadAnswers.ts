@@ -32,7 +32,7 @@ export type SendAnswersInput = {
   tzOffset: number;
   activityName: string;
   logCompletedAt?: string;
-  isDataShare?: boolean;
+  consentToShare?: boolean;
 };
 
 export type CheckFileUploadResult = {

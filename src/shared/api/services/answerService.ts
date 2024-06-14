@@ -197,7 +197,7 @@ export type ActivityAnswersRequest = {
     height: number;
   };
   alerts: AnswerAlertsDto;
-  isDataShare?: boolean;
+  consentToShare?: boolean;
 };
 
 type ActivityAnswersResponse = SuccessfulEmptyResponse;
