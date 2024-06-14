@@ -14,7 +14,7 @@ export type ActivityListItem = {
 
   isInActivityFlow: boolean;
 
-  activityFlowDetails?: {
+  activityFlowDetails: {
     showActivityFlowBadge: boolean;
     activityFlowName: string;
     numberOfActivitiesInFlow: number;

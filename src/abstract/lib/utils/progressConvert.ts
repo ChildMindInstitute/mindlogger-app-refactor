@@ -46,6 +46,7 @@ export const convertProgress = (storeProgress: StoreProgress): Progress => {
           executionGroupKey: uuidv4(),
           pipelineActivityOrder: flowProgress.pipelineActivityOrder,
           totalActivitiesInPipeline: flowProgress.totalActivitiesInPipeline,
+          entityName: flowProgress.entityName,
         };
         result[appletId][entityId][eventId] = payload;
       }

@@ -14,10 +14,12 @@ export type FlowProgress = {
   currentActivityImage: string | null;
   currentActivityStartAt: number | null;
   executionGroupKey: string;
+  entityName: string;
 };
 
 export type ActivityProgress = {
   type: ActivityPipelineType.Regular;
+  entityName: string;
 };
 
 export type EntityProgress = FlowProgress | ActivityProgress;

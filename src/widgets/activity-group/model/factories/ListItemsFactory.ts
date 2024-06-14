@@ -1,5 +1,6 @@
 import {
   ActivityPipelineType,
+  ActivityProgress,
   AvailabilityType,
   FlowProgress,
 } from '@app/abstract/lib';
@@ -29,7 +30,11 @@ export class ListItemsFactory {
     item: ActivityListItem,
     activityEvent: EventEntity,
   ) {
+    const { entity } = activityEvent;
     const activityFlow = activityEvent.entity as ActivityFlow;
+
+    item.flowId = entity.id;
+    item.type = ActivityType.NotDefined;
 
     item.isInActivityFlow = true;
     item.activityFlowDetails = {
@@ -56,6 +61,7 @@ export class ListItemsFactory {
         progressRecord.pipelineActivityOrder + 1;
       item.activityFlowDetails.numberOfActivitiesInFlow =
         progressRecord.totalActivitiesInPipeline;
+      item.activityFlowDetails.activityFlowName = progressRecord.entityName;
     } else {
       activity = this.utility.activities.find(
         x => x.id === activityFlow.activityIds[0],
@@ -68,31 +74,52 @@ export class ListItemsFactory {
       item.activityFlowDetails.activityPositionInFlow = 1;
       item.activityFlowDetails.numberOfActivitiesInFlow =
         activityFlow.activityIds.length;
+      item.activityFlowDetails.activityFlowName = activityFlow.name;
+    }
+  }
+
+  private populateActivityFields(
+    item: ActivityListItem,
+    activityEvent: EventEntity,
+  ) {
+    const { entity } = activityEvent;
+    const isInProgress = this.utility.isInProgress(activityEvent);
+
+    item.description = entity.description;
+    item.activityId = entity.id;
+    item.flowId = null;
+    item.type = (entity as Activity).type;
+    item.image = entity.image;
+    item.name = entity.name;
+
+    if (isInProgress) {
+      const progressRecord = this.utility.getProgressRecord(
+        activityEvent,
+      ) as ActivityProgress;
+
+      item.name = progressRecord.entityName;
     }
   }
 
   private createListItem(eventActivity: EventEntity) {
-    const { entity, event } = eventActivity;
+    const { event } = eventActivity;
     const { pipelineType } = eventActivity.entity;
     const isFlow = pipelineType === ActivityPipelineType.Flow;
 
-    const item: ActivityListItem = {
-      activityId: isFlow ? '' : entity.id,
-      flowId: isFlow ? entity.id : null,
+    const item = {
       eventId: event.id,
-      name: isFlow ? '' : entity.name,
-      description: isFlow ? '' : entity.description,
-      type: isFlow ? ActivityType.NotDefined : (entity as Activity).type,
-      image: isFlow ? null : entity.image,
       status: ActivityStatus.NotDefined,
       isTimerSet: false,
       isExpired: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
-    };
+      activityFlowDetails: null,
+    } as ActivityListItem;
 
     if (isFlow) {
       this.populateActivityFlowFields(item, eventActivity);
+    } else {
+      this.populateActivityFields(item, eventActivity);
     }
     return item;
   }

@@ -89,6 +89,7 @@ describe('Test getEntityProgress', () => {
               availableTo: null,
               startAt: 123,
               endAt: null,
+              entityName: '',
             },
           },
         },
@@ -100,6 +101,7 @@ describe('Test getEntityProgress', () => {
       endAt: null,
       startAt: 123,
       type: 1,
+      entityName: '',
     });
   });
 });
@@ -117,6 +119,7 @@ describe('Test isEntityInProgress', () => {
       availableTo: null,
       startAt: 123,
       endAt: 456,
+      entityName: '',
     });
 
     expect(result).toEqual(false);
@@ -128,6 +131,7 @@ describe('Test isEntityInProgress', () => {
       availableTo: null,
       startAt: 123,
       endAt: null,
+      entityName: '',
     });
 
     expect(result).toEqual(true);
@@ -195,6 +199,7 @@ describe('Test isReadyForAutocompletion', () => {
               availableTo: null,
               startAt: 12000034,
               endAt: 1234567,
+              entityName: '',
             },
           },
         },
@@ -220,6 +225,7 @@ describe('Test isReadyForAutocompletion', () => {
               availableTo: Date.now() + 10000,
               startAt: 12000034,
               endAt: null,
+              entityName: '',
             },
           },
         },
@@ -245,6 +251,7 @@ describe('Test isReadyForAutocompletion', () => {
               availableTo: Date.now() - 10000,
               startAt: 12000034,
               endAt: null,
+              entityName: '',
             },
           },
         },

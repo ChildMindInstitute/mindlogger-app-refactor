@@ -46,6 +46,7 @@ const getProgress = (startAt: Date, endAt: Date | null) => {
           startAt,
           endAt,
           availableTo: null,
+          entityName: 'test-entity-name-1',
         },
       },
     },
@@ -72,6 +73,7 @@ const getActivity = (): Entity => {
     order: 0,
     type: ActivityType.NotDefined,
   };
+
   return result;
 };
 
@@ -118,6 +120,7 @@ const getExpectedItem = (): ActivityListItem => {
     isInActivityFlow: false,
     image: undefined,
     availableTo: null,
+    activityFlowDetails: null,
   };
   return expectedItem;
 };
@@ -1665,6 +1668,7 @@ describe('ActivityGroupsBuilder', () => {
               currentActivityDescription: 'test-description-1',
               currentActivityImage: null,
               availableTo: null,
+              entityName: 'test-flow-name-1',
             },
           },
         },
