@@ -34,6 +34,7 @@ import {
   useOnceRef,
   Emitter,
   useOnForeground,
+  Logger,
 } from '@shared/lib';
 import {
   UserProfileIcon,
@@ -67,6 +68,7 @@ import {
   InProgressActivityScreen,
   ApplicationLogsScreen,
   PasswordRecoveryScreen,
+  AutocompletionScreen,
 } from '../ui';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -146,7 +148,10 @@ export default () => {
     [executeAutocompletion],
   );
 
-  useOnlineEstablished(executeAutocompletion);
+  useOnlineEstablished(() => {
+    Logger.log('[RootNavigator.useOnlineEstablished] Execute autocompletion');
+    executeAutocompletion();
+  });
 
   useOnceRef(autocompleteWithDelay);
 
@@ -309,6 +314,14 @@ export default () => {
           <Stack.Screen
             name="InProgressActivity"
             component={InProgressActivityScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="Autocompletion"
+            component={AutocompletionScreen}
             options={{
               headerShown: false,
             }}

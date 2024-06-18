@@ -28,6 +28,7 @@ export { default as useOnceRef } from './useOnceRef';
 export { default as useUploadObservable } from './useUploadObservable';
 export { default as useToast } from './useToast';
 export { default as useFeatureFlags } from './useFeatureFlags';
+export { default as useUploadProgress } from './useUploadProgress';
 
 export * from './useImageDimensions';
 export * from './redux';

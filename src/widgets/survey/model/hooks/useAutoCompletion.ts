@@ -190,7 +190,7 @@ const useAutoCompletion = (): Result => {
     [notCompletedEntities, mutex, createConstructService],
   );
 
-  const hasExpiredEntity = (): boolean => {
+  const hasExpiredEntity = useCallback((): boolean => {
     const result = new CollectCompletionsService(
       notCompletedEntities,
     ).hasExpiredEntity();
@@ -198,7 +198,7 @@ const useAutoCompletion = (): Result => {
     Logger.log(`[useAutoCompletion.hasExpiredEntity]: ${String(result)}`);
 
     return result;
-  };
+  }, [notCompletedEntities]);
 
   return {
     process: processAutocompletion,

@@ -13,7 +13,12 @@
     "flanker_accuracy_warn": "*Les horodatages collectés pour un Android ne sont pas aussi précis que les appareils iOS.",
     "please_wait": "S'il vous plaît, attendez",
     "activity_all_items_hidden": "\"{{entityName}}\" ne peut pas être démarré car tous les éléments de l'activité sont masqués",
-    "flow_all_items_hidden": "\"{{entityName}}\" ne peut pas être démarré car il contient une activité dans laquelle tous les éléments sont masqués"
+    "flow_all_items_hidden": "\"{{entityName}}\" ne peut pas être démarré car il contient une activité dans laquelle tous les éléments sont masqués",
+    "progress": {
+      "upload_files": "Téléchargement de vos fichiers...",
+      "encrypt_answers": "Chiffrer vos réponses...",
+      "upload_answers": "Téléchargement de vos réponses..."
+    }
   },
   "activity_time": {
     "time_remaining": "reste pour cet article"
@@ -564,5 +569,13 @@
     "popup_description": "Cet essai est incomplet. Si vous passez à l'essai suivant, votre progression sera sauvegardée. Vous ne pourrez pas terminer cet essai ultérieurement.",
     "keep_working": "Continuer",
     "skip": "Passer"
+  },
+  "autocompletion": {
+    "done": "Fait",
+    "time_limit_reached": "Délai atteint",
+    "time_expired": "Le temps nécessaire pour compléter {{activityNames}} a expiré. Vos réponses seront automatiquement soumises.",
+    "processing_answers": "Traitement des réponses",
+    "preparing_answers": "Nous préparons vos réponses et garantissons une soumission sûre et sécurisée.",
+    "answers_submitted": "Réponses soumises"
   }
 }

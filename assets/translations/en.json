@@ -13,7 +13,12 @@
     "flanker_accuracy_warn": "*The timestamps collected for an android are not as accurate as iOS devices.",
     "please_wait": "Please wait",
     "activity_all_items_hidden": "\"{{entityName}}\" cannot be started because all items inside the activity are hidden",
-    "flow_all_items_hidden": "\"{{entityName}}\" cannot be started because it contains an activity in which all items are hidden"
+    "flow_all_items_hidden": "\"{{entityName}}\" cannot be started because it contains an activity in which all items are hidden",
+    "progress": {
+      "upload_files": "Uploading your files...",
+      "encrypt_answers": "Encrypting your answers...",
+      "upload_answers": "Uploading your answers..."
+    }
   },
   "activity_time": {
     "time_remaining": "remaining for this item"
@@ -455,5 +460,13 @@
     "popup_description": "This trial is incomplete. If you skip to the next trial, your progress will be saved. You won't be able to finish this trial later.",
     "keep_working": "Keep working",
     "skip": "Skip"
+  },
+  "autocompletion": {
+    "done": "Done",
+    "time_limit_reached": "Time limit reached",
+    "time_expired": "The time to complete {{activityNames}} has expired. Your answers will automatically be submitted.",
+    "processing_answers": "Processing Answers",
+    "preparing_answers": "We are preparing your answers and ensuring a safe and secure submission.",
+    "answers_submitted": "Answers submitted"
   }
 }
