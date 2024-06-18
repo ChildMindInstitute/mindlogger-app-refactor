@@ -203,7 +203,11 @@ function Intermediate({
 
   useEffect(() => {
     UploadObservable.reset();
-    return () => InterimSubmitMutex.release();
+
+    return () => {
+      InterimSubmitMutex.release();
+      UploadObservable.reset();
+    };
   }, []);
 
   return (

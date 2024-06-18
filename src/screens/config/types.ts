@@ -18,6 +18,7 @@ export type RootStackParamList = {
   InProgressActivity: EntityPath;
   ActivityPassedScreen: undefined;
   ApplicationLogs: undefined;
+  Autocompletion: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

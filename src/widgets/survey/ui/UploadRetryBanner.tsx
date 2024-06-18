@@ -4,21 +4,30 @@ import { AccessibilityProps } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Text } from '@app/shared/ui';
-import { AnalyticsService, MixEvents, useUploadObservable } from '@shared/lib';
+import {
+  AnalyticsService,
+  Emitter,
+  MixEvents,
+  useUploadObservable,
+} from '@shared/lib';
 
+import { SurveyModel } from '../';
 import { useAutoCompletion } from '../model';
 
 type Props = AccessibilityProps;
 
 const UploadRetryBanner: FC<Props> = () => {
-  const { hasItemsInQueue, process } = useAutoCompletion();
+  const { hasItemsInQueue } = useAutoCompletion();
   const { isUploading } = useUploadObservable();
 
   const { t } = useTranslation();
 
   const onRetry = () => {
     AnalyticsService.track(MixEvents.RetryButtonPressed);
-    process();
+    Emitter.emit<SurveyModel.AutocompletionExecuteOptions>('autocomplete', {
+      checksToExclude: [],
+      considerUploadQueue: true,
+    });
   };
 
   if (!hasItemsInQueue) {

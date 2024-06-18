@@ -14,7 +14,9 @@ import { MediaFile } from '@app/shared/ui';
 import { UserPrivateKeyRecord } from '@entities/identity/lib';
 import {
   ILogger,
+  IUploadProgressObservableSetters,
   Logger,
+  UploadProgressObservable,
   encryption,
   formatToDtoDate,
   formatToDtoTime,
@@ -38,7 +40,13 @@ class AnswersUploadService implements IAnswersUploadService {
 
   private logger: ILogger;
 
-  constructor(logger: ILogger) {
+  private uploadProgressObservable: IUploadProgressObservableSetters;
+
+  constructor(
+    logger: ILogger,
+    uploadProgressObservable: IUploadProgressObservableSetters,
+  ) {
+    this.uploadProgressObservable = uploadProgressObservable;
     this.createdAt = null;
     this.logger = logger;
   }
@@ -204,6 +212,8 @@ class AnswersUploadService implements IAnswersUploadService {
   ): Promise<SendAnswersInput> {
     const fileIds = this.collectFileIds(body.answers);
 
+    this.uploadProgressObservable.totalFilesInActivity = fileIds.length;
+
     if (fileIds.length === 0) {
       return body;
     }
@@ -240,6 +250,8 @@ class AnswersUploadService implements IAnswersUploadService {
         updatedAnswers.push(itemAnswer);
         continue;
       }
+
+      this.uploadProgressObservable.currentFile++;
 
       const remoteUrl = await this.processFileUpload(
         mediaAnswer,
@@ -467,6 +479,8 @@ class AnswersUploadService implements IAnswersUploadService {
       '[UploadAnswersService.sendAnswers] executing upload files',
     );
 
+    this.uploadProgressObservable.currentSecondLevelStep = 'upload_files';
+
     const modifiedBody = await this.uploadAllMediaFiles(body);
 
     this.logger.log(
@@ -490,11 +504,15 @@ class AnswersUploadService implements IAnswersUploadService {
       '[UploadAnswersService.sendAnswers] executing prepare answers',
     );
 
+    this.uploadProgressObservable.currentSecondLevelStep = 'encrypt_answers';
+
     const encryptedData = this.encryptAnswers(modifiedBody);
 
     this.logger.log(
       '[UploadAnswersService.sendAnswers] executing upload answers',
     );
+
+    this.uploadProgressObservable.currentSecondLevelStep = 'upload_answers';
 
     await this.uploadAnswers(encryptedData);
 
@@ -504,4 +522,4 @@ class AnswersUploadService implements IAnswersUploadService {
   }
 }
 
-export default new AnswersUploadService(Logger);
+export default new AnswersUploadService(Logger, UploadProgressObservable);

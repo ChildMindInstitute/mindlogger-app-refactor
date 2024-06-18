@@ -158,6 +158,8 @@ function FinishItem({
     setTimeout(() => {
       completeActivity();
     }, 50);
+
+    return () => UploadObservable.reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

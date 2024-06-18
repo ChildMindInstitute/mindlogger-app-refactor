@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { AppletModel } from '@app/entities/applet';
 import { Logger, useCurrentRoute } from '@app/shared/lib';
 
@@ -7,14 +9,19 @@ import { useAutoCompletion } from './';
 
 type SafeChecks = 'in-progress-activity' | 'refresh' | 'start-entity';
 
+const CompleteCurrentNavigationDelay = 500;
+
 export type AutocompletionExecuteOptions = {
   checksToExclude: Array<SafeChecks>;
+  considerUploadQueue?: boolean;
 };
 
 const useAutoCompletionExecute = () => {
   const { getCurrentRoute } = useCurrentRoute();
 
-  const { process: processAutocompletion } = useAutoCompletion();
+  const navigation = useNavigation();
+
+  const { hasExpiredEntity, hasItemsInQueue } = useAutoCompletion();
 
   const autocomplete = useCallback(
     async (options: AutocompletionExecuteOptions = { checksToExclude: [] }) => {
@@ -51,9 +58,23 @@ const useAutoCompletionExecute = () => {
         return;
       }
 
-      await processAutocompletion();
+      const closingInProgressEntityScreen = checksToExclude.includes(
+        'in-progress-activity',
+      );
+
+      setTimeout(
+        () => {
+          if (
+            hasExpiredEntity() ||
+            (options.considerUploadQueue && hasItemsInQueue)
+          ) {
+            navigation.navigate('Autocompletion');
+          }
+        },
+        closingInProgressEntityScreen ? CompleteCurrentNavigationDelay : 0,
+      );
     },
-    [getCurrentRoute, processAutocompletion],
+    [getCurrentRoute, hasExpiredEntity, hasItemsInQueue, navigation],
   );
 
   return {
