@@ -51,12 +51,17 @@ import {
 import { selectInProgressApplets } from '../selectors';
 import { actions } from '../slice';
 
+type FailReason =
+  | 'media-found'
+  | 'migrations-not-applied'
+  | 'all-items-hidden'
+  | 'not-available'
+  | 'mutex-busy';
+
 type StartResult = {
-  startedFromScratch?: boolean;
-  cannotBeStartedDueToMediaFound?: boolean;
-  cannotBeStartedDueToMigrationsNotApplied?: boolean;
-  cannotBeStartedDueToAllItemsHidden?: boolean;
-  cannotBeStarted?: boolean;
+  fromScratch?: boolean;
+  failReason?: FailReason;
+  failed?: boolean;
 };
 
 type UseStartEntityInput = {
@@ -240,25 +245,19 @@ function useStartEntity({
     return new Promise<StartResult>(resolve => {
       if (!MigrationValidator.allMigrationHaveBeenApplied()) {
         onMigrationsNotApplied();
-        resolve({
-          cannotBeStartedDueToMigrationsNotApplied: true,
-        });
+        resolve({ failReason: 'migrations-not-applied' });
         return;
       }
 
       if (breakDueToMediaReferences) {
         onMediaReferencesFound();
-        resolve({
-          cannotBeStartedDueToMediaFound: true,
-        });
+        resolve({ failReason: 'media-found' });
         return;
       }
 
       if (shouldBreakDueToAllItemsHidden(appletId, activityId, 'regular')) {
         onActivityContainsAllItemsHidden(entityName);
-        resolve({
-          cannotBeStartedDueToAllItemsHidden: true,
-        });
+        resolve({ failReason: 'all-items-hidden' });
         return;
       }
 
@@ -273,7 +272,7 @@ function useStartEntity({
 
       if (isActivityInProgress) {
         if (isTimerElapsed) {
-          resolve({ startedFromScratch: false });
+          resolve({ fromScratch: false });
           return;
         }
 
@@ -282,17 +281,17 @@ function useStartEntity({
             logRestartActivity(logParams);
             cleanUpMediaFiles({ activityId, appletId, eventId, order: 0 });
             activityStarted(appletId, activityId, eventId);
-            resolve({ startedFromScratch: true });
+            resolve({ fromScratch: true });
           },
           onResume: () => {
             logResumeActivity(logParams);
-            return resolve({ startedFromScratch: false });
+            return resolve({ fromScratch: false });
           },
         });
       } else {
         logStartActivity(logParams);
         activityStarted(appletId, activityId, eventId);
-        resolve({ startedFromScratch: true });
+        resolve({ fromScratch: true });
       }
     });
   }
@@ -306,9 +305,8 @@ function useStartEntity({
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
       Logger.log('[useStartEntity.startActivity] Mutex is busy');
-      return {
-        cannotBeStarted: true,
-      };
+
+      return { failed: true, failReason: 'mutex-busy' };
     }
 
     try {
@@ -322,18 +320,20 @@ function useStartEntity({
           entityType: 'regular',
         })
       ) {
-        return {
-          cannotBeStarted: true,
-        };
+        return { failed: true, failReason: 'not-available' };
       }
 
-      return await startActivityInternal(
+      const result = await startActivityInternal(
         appletId,
         activityId,
         eventId,
         entityName,
         isTimerElapsed,
       );
+
+      result.failed = !!result.failReason;
+
+      return result;
     } finally {
       mutex.release();
     }
@@ -388,23 +388,19 @@ function useStartEntity({
     return new Promise<StartResult>(resolve => {
       if (!MigrationValidator.allMigrationHaveBeenApplied()) {
         onMigrationsNotApplied();
-        resolve({
-          cannotBeStartedDueToMigrationsNotApplied: true,
-        });
+        resolve({ failReason: 'migrations-not-applied' });
         return;
       }
 
       if (breakDueToMediaReferences) {
         onMediaReferencesFound();
-        resolve({ cannotBeStartedDueToMediaFound: true });
+        resolve({ failReason: 'media-found' });
         return;
       }
 
       if (shouldBreakDueToAllItemsHidden(appletId, flowId, 'flow')) {
         onFlowActivityContainsAllItemsHidden(entityName);
-        resolve({
-          cannotBeStartedDueToAllItemsHidden: true,
-        });
+        resolve({ failReason: 'all-items-hidden' });
         return;
       }
 
@@ -419,9 +415,7 @@ function useStartEntity({
 
       if (isFlowInProgress) {
         if (isTimerElapsed) {
-          resolve({
-            startedFromScratch: false,
-          });
+          resolve({ fromScratch: false });
           return;
         }
 
@@ -449,15 +443,11 @@ function useStartEntity({
               activityName: firstActivity.name,
               totalActivities,
             });
-            resolve({
-              startedFromScratch: true,
-            });
+            resolve({ fromScratch: true });
           },
           onResume: () => {
             logResumeFlow(logParams);
-            return resolve({
-              startedFromScratch: false,
-            });
+            return resolve({ fromScratch: false });
           },
         });
       } else {
@@ -474,9 +464,7 @@ function useStartEntity({
           totalActivities,
         });
 
-        resolve({
-          startedFromScratch: true,
-        });
+        resolve({ fromScratch: true });
       }
     });
   }
@@ -490,9 +478,8 @@ function useStartEntity({
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
       Logger.log('[useStartEntity.startFlow] Mutex is busy');
-      return Promise.resolve({
-        cannotBeStarted: true,
-      });
+
+      return { failed: true, failReason: 'mutex-busy' };
     }
 
     try {
@@ -506,18 +493,20 @@ function useStartEntity({
           entityType: 'flow',
         })
       ) {
-        return {
-          cannotBeStarted: true,
-        };
+        return { failed: true, failReason: 'not-available' };
       }
 
-      return await startFlowInternal(
+      const result = await startFlowInternal(
         appletId,
         flowId,
         eventId,
         entityName,
         isTimerElapsed,
       );
+
+      result.failed = !!result.failReason;
+
+      return result;
     } finally {
       mutex.release();
     }
