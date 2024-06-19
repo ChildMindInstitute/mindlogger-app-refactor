@@ -7,7 +7,7 @@ import { createStorage } from '@app/shared/lib';
 
 import { FlowPipelineItem } from '../model';
 
-type UseFlowStorageArgs = {
+export type UseFlowStorageArgs = {
   appletId: string;
   eventId: string;
   flowId?: string;

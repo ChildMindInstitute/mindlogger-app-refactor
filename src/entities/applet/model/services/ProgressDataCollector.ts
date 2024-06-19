@@ -22,7 +22,7 @@ export interface IProgressDataCollector {
   collect(): Promise<CollectRemoteCompletionsResult>;
 }
 
-class ProgressDataCollector implements IProgressDataCollector {
+export class ProgressDataCollector implements IProgressDataCollector {
   private logger: ILogger;
 
   constructor(logger: ILogger) {
@@ -30,17 +30,11 @@ class ProgressDataCollector implements IProgressDataCollector {
   }
 
   private async collectAllCompletions(): Promise<CollectForAppletResult> {
-    try {
-      const fromDate = getMonthAgoDate();
+    const fromDate = getMonthAgoDate();
 
-      const response = await EventsService.getAllCompletedEntities({
-        fromDate,
-      });
-
-      return response;
-    } catch (error) {
-      return null;
-    }
+    return await EventsService.getAllCompletedEntities({
+      fromDate,
+    });
   }
 
   private async collectInternal(): Promise<CollectRemoteCompletionsResult> {
@@ -62,7 +56,7 @@ class ProgressDataCollector implements IProgressDataCollector {
       return await this.collectInternal();
     } catch (error) {
       this.logger.warn(
-        '[ProgressDataCollector.collect]: Error occurred during collect remotely completed entities for all applets',
+        `[ProgressDataCollector.collect]: Error occurred during collect remotely completed entities for all applets: \n${String(error)}`,
       );
       return {
         appletEntities: {},

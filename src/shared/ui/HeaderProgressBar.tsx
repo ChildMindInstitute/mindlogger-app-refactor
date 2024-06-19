@@ -4,20 +4,20 @@ import { colors } from '../lib';
 
 type Props = {
   progress: number;
-  height?: number;
 };
 
-function ProgressBar({ progress, height = 10 }: Props) {
+function HeaderProgressBar({ progress }: Props) {
   return (
     <Bar
       progress={progress}
       color={colors.blue}
-      unfilledColor={colors.grey2}
+      unfilledColor={colors.lighterGrey0}
       borderWidth={0}
-      height={height}
+      height={12}
       width={null}
+      borderRadius={30}
     />
   );
 }
 
-export default ProgressBar;
+export default HeaderProgressBar;

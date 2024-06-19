@@ -16,7 +16,7 @@
     "flow_all_items_hidden": "\"{{entityName}}\" cannot be started because it contains an activity in which all items are hidden"
   },
   "activity_time": {
-    "time_remaining": "Time Remaining"
+    "time_remaining": "remaining for this item"
   },
   "timed_activity": {
     "time_to_complete": "Time to complete",
@@ -373,7 +373,8 @@
     "done": "Done",
     "back": "Back",
     "return": "Return",
-    "undo": "Undo"
+    "undo": "Undo",
+    "exit": "Exit"
   },
   "network_alerts": {
     "no_internet_title": "No Internet Connection",

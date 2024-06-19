@@ -1,13 +1,13 @@
 {
   "name": "mindlogger-mobile",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "private": true,
   "scripts": {
     "android": "yarn android:dev",
     "ios": "yarn ios:dev",
     "clean-ios": "cd ios && xcodebuild clean -workspace MindloggerMobile.xcworkspace -scheme MindloggerMobileDev && cd ..",
     "start": "react-native start",
-    "test": "jest --noStackTrace",
+    "test": "jest --noStackTrace -- SendApplicationLogsForm.test.tsx",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:check": "yarn lint",
     "lint:fix": "yarn lint --fix",
@@ -139,6 +139,7 @@
     "@react-native/eslint-config": "0.73.2",
     "@react-native/metro-config": "0.73.5",
     "@react-native/typescript-config": "0.73.1",
+    "@testing-library/react-native": "^12.5.1",
     "@tsconfig/react-native": "^3.0.2",
     "@types/jest": "^29.5.11",
     "@types/markdown-it-container": "^2.0.9",

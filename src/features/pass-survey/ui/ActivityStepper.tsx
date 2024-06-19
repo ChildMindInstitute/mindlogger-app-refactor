@@ -1,28 +1,30 @@
 import { useContext, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { CachedImage } from '@georstat/react-native-image-cache';
 import { useTranslation } from 'react-i18next';
 import DeviceInfo from 'react-native-device-info';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet';
-import { colors, HourMinute, isIphoneX } from '@app/shared/lib';
+import { HourMinute, isIphoneX } from '@app/shared/lib';
 import {
   ActivityIndicator,
-  BackButton,
   Box,
   Center,
-  CrossIcon,
   OnBeforeNextResult,
   StatusBar,
   Stepper,
   StepperPayload,
   XStack,
+  TimeRemaining,
 } from '@shared/ui';
-import TimeRemaining from '@shared/ui/TimeRemaining.tsx';
 
 import ActivityItem from './ActivityItem';
+import Header from './Header.tsx';
+import ProgressWithTimer from './ProgressWithTimer';
 import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
 import {
   ActivityIdentityContext,
@@ -40,6 +42,7 @@ type Props = {
   timer: HourMinute | null;
   onClose: (reason: 'regular' | 'click-on-return') => void;
   onFinish: (reason: 'regular' | 'idle') => void;
+  flowId?: string;
 };
 
 function ActivityStepper({
@@ -48,15 +51,21 @@ function ActivityStepper({
   entityStartedAt,
   onClose,
   onFinish,
+  flowId,
 }: Props) {
   const { t } = useTranslation();
+
+  const { bottom: safeAreaBottom, top: safeAreaTop } = useSafeAreaInsets();
+
   const hasNotch = DeviceInfo.hasNotch();
+  const isNotIPhoneX = !isIphoneX();
 
   const [timerHeight, setTimerHeight] = useState(0);
+  const [showTimeLeft, setShowTimeLeft] = useState(!!timer);
 
-  const { bottom } = useSafeAreaInsets();
+  const timerMarginTop = hasNotch ? (safeAreaTop - timerHeight) / 2 : 16;
 
-  const { appletId, activityId, eventId, order } = useContext(
+  const { appletId, activityId, eventId, order, activityName } = useContext(
     ActivityIdentityContext,
   );
 
@@ -124,10 +133,9 @@ function ActivityStepper({
   });
 
   const currentStep = activityStorageRecord?.step ?? 0;
+  const currentPipelineItem = activityStorageRecord?.items?.[currentStep];
 
   const nextButtonText = getNextButtonText();
-
-  const isNotIPhoneX = !isIphoneX();
 
   const getAccessibilityLabel = (text: string): string | null => {
     switch (text) {
@@ -143,12 +151,6 @@ function ActivityStepper({
   };
 
   const tutorialViewerRef = useRef<TutorialViewerRef | null>(null);
-
-  const showTimeLeft = !!timer;
-
-  const { top: topAreaInset } = useSafeAreaInsets();
-
-  const timerMarginTop = hasNotch ? (topAreaInset - timerHeight) / 2 : 16;
 
   const onNext = (
     nextStep: number,
@@ -279,9 +281,25 @@ function ActivityStepper({
   }
 
   return (
-    <Box flex={1} pb={bottom}>
+    <Box flex={1}>
       <StatusBar hidden />
 
+      {showTimeLeft && (
+        <TimeRemaining
+          {...(safeAreaTop ? { position: 'absolute' } : {})}
+          mt={timerMarginTop}
+          left={16}
+          zIndex={1}
+          entityStartedAt={entityStartedAt}
+          timerSettings={timer as HourMinute}
+          clockIconShown={isNotIPhoneX}
+          opacity={timerHeight ? 1 : 0}
+          onTimeElapsed={() => setShowTimeLeft(false)}
+          onLayout={e => {
+            setTimerHeight(e.nativeEvent.layout.height);
+          }}
+        />
+      )}
       <Stepper
         stepsCount={activityStorageRecord.items.length}
         startFrom={activityStorageRecord.step}
@@ -293,147 +311,133 @@ function ActivityStepper({
         onEndReached={onEndReached}
         onUndo={onUndo}
       >
-        <BackButton
-          accessibilityLabel="close-button"
-          alignSelf="flex-end"
-          mr={16}
-          mt={10}
-          mb={4}
+        <SafeAreaView
+          style={styles.safeAreaContainer}
+          edges={{
+            left: 'off',
+            right: 'off',
+            bottom: 'maximum',
+            top: 'maximum',
+          }}
+          mode="margin"
         >
-          <CrossIcon color={colors.tertiary} size={30} />
-        </BackButton>
-
-        {showWatermark && watermark && (
-          <CachedImage
-            source={watermark}
-            style={styles.watermark}
-            accessibilityLabel="watermark-image"
+          <Header
+            showWatermark={showWatermark}
+            watermark={watermark}
+            activityName={activityName}
+            flowId={flowId}
+            eventId={eventId}
+            appletId={appletId}
           />
-        )}
+          {showTopNavigation && (
+            <Stepper.NavigationPanel mx={16}>
+              {canMoveBack && <Stepper.BackButton isIcon />}
+              {canReset && <Stepper.UndoButton isIcon />}
 
-        {showTimeLeft && (
-          <TimeRemaining
-            position="absolute"
-            top={timerMarginTop}
-            left={16}
-            zIndex={1}
-            entityStartedAt={entityStartedAt}
-            timerSettings={timer}
-            clockIconShown={isNotIPhoneX}
-            opacity={timerHeight ? 1 : 0}
-            onLayout={e => {
-              if (!timerHeight) {
-                setTimerHeight(e.nativeEvent.layout.height);
-              }
+              {canMoveNext && (
+                <Stepper.NextButton
+                  accessibilityLabel={getAccessibilityLabel(nextButtonText)}
+                  isIcon
+                />
+              )}
+            </Stepper.NavigationPanel>
+          )}
+
+          <Stepper.ViewList
+            renderItem={({ index }) => {
+              const pipelineItem = activityStorageRecord.items[index];
+              const value = activityStorageRecord.answers[index];
+
+              return (
+                <XStack
+                  flex={1}
+                  key={index}
+                  alignItems="center"
+                  onTouchStart={() => restartIdleTimer()}
+                >
+                  <>
+                    {pipelineItem.type === 'Tutorial' && (
+                      <TutorialViewerItem
+                        {...pipelineItem.payload}
+                        ref={tutorialViewerRef}
+                      />
+                    )}
+
+                    {pipelineItem.type !== 'Tutorial' && (
+                      // @ts-ignore
+                      // TODO
+                      // pipelineItem.type cannot be accepted as a valid type for some reason.
+                      <ActivityItem
+                        type={pipelineItem.type}
+                        value={value}
+                        pipelineItem={pipelineItem}
+                        onResponse={response => {
+                          setAnswer(currentStep, response);
+                          if (shouldPostProcessUserActions) {
+                            postProcessUserActionsForCurrentItem();
+                          }
+                        }}
+                        onAdditionalResponse={response => {
+                          setAdditionalAnswer(currentStep, response);
+                        }}
+                        textVariableReplacer={replaceTextVariables}
+                        onContextChange={setContext}
+                        context={activityStorageRecord?.context}
+                      />
+                    )}
+                  </>
+                </XStack>
+              );
             }}
           />
-        )}
 
-        {showTopNavigation && (
-          <Stepper.NavigationPanel mx={16}>
-            {canMoveBack && <Stepper.BackButton isIcon />}
-            {canReset && <Stepper.UndoButton isIcon />}
+          <ProgressWithTimer
+            duration={currentPipelineItem?.timer}
+            key={currentPipelineItem?.id}
+          />
 
-            {canMoveNext && (
-              <Stepper.NextButton
-                accessibilityLabel={getAccessibilityLabel(nextButtonText)}
-                isIcon
-              />
-            )}
-          </Stepper.NavigationPanel>
-        )}
-
-        <Stepper.ViewList
-          renderItem={({ index }) => {
-            const pipelineItem = activityStorageRecord.items[index];
-            const value = activityStorageRecord.answers[index];
-
-            return (
-              <XStack
-                flex={1}
-                key={index}
-                alignItems="center"
-                onTouchStart={() => restartIdleTimer()}
-              >
-                <>
-                  {pipelineItem.type === 'Tutorial' && (
-                    <TutorialViewerItem
-                      {...pipelineItem.payload}
-                      ref={tutorialViewerRef}
-                    />
+          {showBottomNavigation && (
+            <Stepper.NavigationPanel
+              mt={18}
+              minHeight={27}
+              mb={safeAreaBottom ? 0 : 16}
+              gap={10}
+              mx={10}
+            >
+              {canMoveBack && (
+                <Stepper.BackButton>
+                  {t(
+                    isFirstStep
+                      ? 'activity_navigation:return'
+                      : 'activity_navigation:back',
                   )}
+                </Stepper.BackButton>
+              )}
 
-                  {pipelineItem.type !== 'Tutorial' && (
-                    // @ts-ignore
-                    // TODO
-                    // pipelineItem.type cannot be accepted as a valid type for some reason.
-                    <ActivityItem
-                      type={pipelineItem.type}
-                      value={value}
-                      pipelineItem={pipelineItem}
-                      onResponse={response => {
-                        setAnswer(currentStep, response);
-                        if (shouldPostProcessUserActions) {
-                          postProcessUserActionsForCurrentItem();
-                        }
-                      }}
-                      onAdditionalResponse={response => {
-                        setAdditionalAnswer(currentStep, response);
-                      }}
-                      textVariableReplacer={replaceTextVariables}
-                      onContextChange={setContext}
-                      context={activityStorageRecord?.context}
-                    />
-                  )}
-                </>
-              </XStack>
-            );
-          }}
-        />
+              {canReset && (
+                <Stepper.UndoButton>
+                  {t('activity_navigation:undo')}
+                </Stepper.UndoButton>
+              )}
 
-        <Stepper.Progress />
-
-        {showBottomNavigation && (
-          <Stepper.NavigationPanel mt={18} minHeight={27} mb={bottom ? 0 : 16}>
-            {canMoveBack && (
-              <Stepper.BackButton>
-                {t(
-                  isFirstStep
-                    ? 'activity_navigation:return'
-                    : 'activity_navigation:back',
-                )}
-              </Stepper.BackButton>
-            )}
-
-            {canReset && (
-              <Stepper.UndoButton>
-                {t('activity_navigation:undo')}
-              </Stepper.UndoButton>
-            )}
-
-            {canMoveNext && (
-              <Stepper.NextButton
-                accessibilityLabel={getAccessibilityLabel(nextButtonText)}
-              >
-                {t(nextButtonText)}
-              </Stepper.NextButton>
-            )}
-          </Stepper.NavigationPanel>
-        )}
+              {canMoveNext && (
+                <Stepper.NextButton
+                  accessibilityLabel={getAccessibilityLabel(nextButtonText)}
+                >
+                  {t(nextButtonText)}
+                </Stepper.NextButton>
+              )}
+            </Stepper.NavigationPanel>
+          )}
+        </SafeAreaView>
       </Stepper>
     </Box>
   );
 }
 
 const styles = StyleSheet.create({
-  watermark: {
-    height: 65,
-    width: 65,
-    position: 'absolute',
-    top: 5,
-    left: 15,
-    resizeMode: 'contain',
-    zIndex: 1,
+  safeAreaContainer: {
+    flex: 1,
   },
 });
 
