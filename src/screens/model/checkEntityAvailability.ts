@@ -26,18 +26,25 @@ type Input = {
   identifiers: EntityPath;
   storeProgress: StoreProgress;
   queryClient: QueryClient;
-  alertCallback: () => void;
+};
+
+type InputInternal = Input & {
+  entityName: string;
+  identifiers: EntityPath;
+  storeProgress: StoreProgress;
+  queryClient: QueryClient;
+  callback: (result: boolean) => void;
 };
 
 const logger: ILogger = Logger;
 
-export const checkEntityAvailability = ({
+const checkEntityAvailabilityInternal = ({
   entityName,
   identifiers: { appletId, entityId, entityType, eventId },
   storeProgress,
   queryClient,
-  alertCallback,
-}: Input): boolean => {
+  callback,
+}: InputInternal): void => {
   const record = getEntityProgress(appletId, entityId, eventId, storeProgress);
 
   logger.log(
@@ -58,7 +65,8 @@ export const checkEntityAvailability = ({
   if (isInProgress && !shouldBeAutocompleted) {
     logger.log('[checkEntityAvailability] Check done: true (in-progress)');
 
-    return true;
+    callback(true);
+    return;
   }
 
   const progress = convertProgress(storeProgress);
@@ -74,7 +82,8 @@ export const checkEntityAvailability = ({
       '[checkEntityAvailability] Check done: false (scheduledAt is missed)',
     );
 
-    return false;
+    callback(false);
+    return;
   }
 
   const isAvailable = new ActivityGroupsModel.AvailableGroupEvaluator(
@@ -90,7 +99,8 @@ export const checkEntityAvailability = ({
   if (isAvailable) {
     logger.log('[checkEntityAvailability] Check done: true (available)');
 
-    return true;
+    callback(true);
+    return;
   }
 
   if (isScheduled) {
@@ -102,9 +112,8 @@ export const checkEntityAvailability = ({
 
     logger.log('[checkEntityAvailability] Check done: false (scheduled today)');
 
-    onScheduledToday(entityName, from, alertCallback);
-
-    return false;
+    onScheduledToday(entityName, from, () => callback(false));
+    return;
   }
 
   const isEntityCompletedToday = isCompletedToday(record);
@@ -116,14 +125,32 @@ export const checkEntityAvailability = ({
       '[checkEntityAvailability] Check done: false (completed today, not spread)',
     );
 
-    onCompletedToday(entityName, alertCallback);
-
-    return false;
+    onCompletedToday(entityName, () => callback(false));
+    return;
   }
 
   logger.log('[checkEntityAvailability] Check done: false (not available)');
 
-  onActivityNotAvailable(alertCallback);
+  onActivityNotAvailable(() => callback(false));
+};
 
-  return false;
+export const checkEntityAvailability = ({
+  entityName,
+  identifiers,
+  storeProgress,
+  queryClient,
+}: Input): Promise<boolean> => {
+  return new Promise(resolve => {
+    const onCheckDone = (result: boolean) => {
+      resolve(result);
+    };
+
+    checkEntityAvailabilityInternal({
+      entityName,
+      identifiers,
+      storeProgress,
+      queryClient,
+      callback: onCheckDone,
+    });
+  });
 };

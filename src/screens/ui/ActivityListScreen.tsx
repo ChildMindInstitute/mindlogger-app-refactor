@@ -42,14 +42,23 @@ const ActivityListScreen: FC<Props> = props => {
   const queryClient = useQueryClient();
 
   const checkAvailability = useCallback(
-    (entityName: string, { eventId, entityId, entityType }: EntityPath) => {
-      return checkEntityAvailability({
+    async (
+      entityName: string,
+      { eventId, entityId, entityType }: EntityPath,
+    ) => {
+      const isSuccess = await checkEntityAvailability({
         entityName,
         identifiers: { appletId, eventId, entityId, entityType },
         queryClient,
         storeProgress,
-        alertCallback: () => Emitter.emit('autocomplete'),
       });
+
+      if (!isSuccess) {
+        Emitter.emit<SurveyModel.AutocompletionExecuteOptions>('autocomplete', {
+          checksToExclude: ['start-entity'],
+        });
+      }
+      return isSuccess;
     },
     [appletId, queryClient, storeProgress],
   );

@@ -120,17 +120,23 @@ export default () => {
   const { executeAutocompletion } = SurveyModel.useAutoCompletionExecute();
 
   TapOnNotificationModel.useOnNotificationTap({
-    checkAvailability: (
+    checkAvailability: async (
       entityName: string,
       { appletId, eventId, entityId, entityType }: EntityPath,
     ) => {
-      return checkEntityAvailability({
+      const isSuccess = await checkEntityAvailability({
         entityName,
         identifiers: { appletId, eventId, entityId, entityType },
         queryClient,
         storeProgress,
-        alertCallback: () => Emitter.emit('autocomplete'),
       });
+
+      if (!isSuccess) {
+        Emitter.emit<SurveyModel.AutocompletionExecuteOptions>('autocomplete', {
+          checksToExclude: ['start-entity'],
+        });
+      }
+      return isSuccess;
     },
     hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
     cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
