@@ -313,12 +313,12 @@ function useStartEntity({
       mutex.setBusy();
 
       if (
-        !checkAvailability(entityName, {
+        !(await checkAvailability(entityName, {
           appletId,
           eventId,
           entityId: activityId,
           entityType: 'regular',
-        })
+        }))
       ) {
         return { failed: true, failReason: 'not-available' };
       }
@@ -486,12 +486,12 @@ function useStartEntity({
       mutex.setBusy();
 
       if (
-        !checkAvailability(entityName, {
+        !(await checkAvailability(entityName, {
           appletId,
           eventId,
           entityId: flowId,
           entityType: 'flow',
-        })
+        }))
       ) {
         return { failed: true, failReason: 'not-available' };
       }
