@@ -564,5 +564,10 @@
     "popup_description": "Cet essai est incomplet. Si vous passez à l'essai suivant, votre progression sera sauvegardée. Vous ne pourrez pas terminer cet essai ultérieurement.",
     "keep_working": "Continuer",
     "skip": "Passer"
+  },
+  "autocompletion": {
+    "time_is_up_modal_description": "Il n'y a plus de temps pour travailler sur cette activité. Tout le travail que vous avez effectué sera enregistré et soumis.",
+    "time_is_up_modal_title": "Le temps est écoulé",
+    "ok": "OK"
   }
 }
