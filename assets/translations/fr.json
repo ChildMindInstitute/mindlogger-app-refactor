@@ -576,6 +576,9 @@
     "time_expired": "Le temps nécessaire pour compléter {{activityNames}} a expiré. Vos réponses seront automatiquement soumises.",
     "processing_answers": "Traitement des réponses",
     "preparing_answers": "Nous préparons vos réponses et garantissons une soumission sûre et sécurisée.",
-    "answers_submitted": "Réponses soumises"
+    "answers_submitted": "Réponses soumises",
+    "time_is_up_modal_description": "Il n'y a plus de temps pour travailler sur cette activité. Tout le travail que vous avez effectué sera enregistré et soumis.",
+    "time_is_up_modal_title": "Le temps est écoulé",
+    "ok": "OK"
   }
 }
