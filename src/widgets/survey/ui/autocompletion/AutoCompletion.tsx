@@ -17,7 +17,6 @@ const AutoCompletion: FC = () => {
   const {
     isCompleted,
     isLoading: isUploading,
-    isPostponed,
     process: processQueue,
   } = useQueueProcessing();
 

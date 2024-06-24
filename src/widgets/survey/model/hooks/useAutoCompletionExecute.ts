@@ -24,16 +24,27 @@ const useAutoCompletionExecute = () => {
   const { hasExpiredEntity, hasItemsInQueue } = useAutoCompletion();
 
   const autocomplete = useCallback(
-    async (options: AutocompletionExecuteOptions = { checksToExclude: [] }) => {
+    (options: AutocompletionExecuteOptions = { checksToExclude: [] }) => {
       const { checksToExclude } = options;
 
-      const executing = getCurrentRoute() === 'InProgressActivity';
+      const currentRoute = getCurrentRoute();
+
+      const executing = currentRoute === 'InProgressActivity';
+
+      const alreadyOpened = currentRoute === 'Autocompletion';
 
       Logger.log('[useAutoCompletionExecute.autocomplete] Started');
 
       if (!checksToExclude.includes('in-progress-activity') && executing) {
         Logger.info(
           '[useAutoCompletionExecute.autocomplete]: Postponed due to entity is in progress',
+        );
+        return;
+      }
+
+      if (alreadyOpened) {
+        Logger.info(
+          '[useAutoCompletionExecute.autocomplete]: Postponed due to already opened',
         );
         return;
       }

@@ -34,7 +34,6 @@ import {
   useOnceRef,
   Emitter,
   useOnForeground,
-  Logger,
 } from '@shared/lib';
 import {
   UserProfileIcon,
@@ -154,10 +153,7 @@ export default () => {
     [executeAutocompletion],
   );
 
-  useOnlineEstablished(() => {
-    Logger.log('[RootNavigator.useOnlineEstablished] Execute autocompletion');
-    executeAutocompletion();
-  });
+  useOnlineEstablished(executeAutocompletion);
 
   useOnceRef(autocompleteWithDelay);
 
