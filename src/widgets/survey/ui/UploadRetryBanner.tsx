@@ -24,6 +24,7 @@ const UploadRetryBanner: FC<Props> = () => {
 
   const onRetry = () => {
     AnalyticsService.track(MixEvents.RetryButtonPressed);
+
     Emitter.emit<SurveyModel.AutocompletionExecuteOptions>('autocomplete', {
       checksToExclude: [],
       considerUploadQueue: true,

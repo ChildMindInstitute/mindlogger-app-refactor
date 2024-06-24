@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import { useCallback, useEffect, useRef } from 'react';
 
 import { Emitter } from '@shared/lib';
@@ -14,11 +13,11 @@ function useOnAutoCompletion(callback?: () => void) {
 
   const processAutocompletion = useCallback(
     (payload?: AutocompletionExecuteOptions) => {
-      executeAutocompletion(payload).then(() => {
-        if (callbackRef.current) {
-          callbackRef.current();
-        }
-      });
+      executeAutocompletion(payload);
+
+      if (callbackRef.current) {
+        callbackRef.current();
+      }
     },
     [executeAutocompletion],
   );
