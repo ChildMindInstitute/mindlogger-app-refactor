@@ -13,7 +13,7 @@ function useOnAutoCompletion(callback?: () => void) {
 
   const processAutocompletion = useCallback(
     (payload?: AutocompletionExecuteOptions) => {
-      executeAutocompletion(payload);
+      executeAutocompletion('unknown', payload);
 
       if (callbackRef.current) {
         callbackRef.current();

@@ -17,8 +17,10 @@
     "progress": {
       "upload_files": "Uploading your files...",
       "encrypt_answers": "Encrypting your answers...",
-      "upload_answers": "Uploading your answers..."
-    }
+      "upload_answers": "Uploading your answers...",
+      "completed": "Activity uploaded"
+    },
+    "step": "Step"
   },
   "activity_time": {
     "time_remaining": "remaining for this item"

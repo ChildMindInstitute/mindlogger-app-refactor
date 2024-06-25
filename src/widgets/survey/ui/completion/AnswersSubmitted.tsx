@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Box, CheckIcon, SubmitButton, Text } from '@shared/ui';
 
-import { FlexContainer, SubComponentProps } from './common';
+import { FlexContainer, SubComponentProps } from './containers';
 
 const AnswersSubmitted: FC<SubComponentProps> = ({ onPressDone }) => {
   const { t } = useTranslation();
@@ -15,14 +15,21 @@ const AnswersSubmitted: FC<SubComponentProps> = ({ onPressDone }) => {
         <Box bg="$lightGreen2" borderRadius={100} p={10}>
           <CheckIcon color="white" size={60} />
         </Box>
-        <Text fontSize={31} fontWeight="600">
+        <Text
+          accessibilityLabel="answer_submitted"
+          fontSize={31}
+          fontWeight="600"
+        >
           {t('autocompletion:answers_submitted')}
         </Text>
-        <Text fontSize={18}>{t('autocompletion:thanks')}</Text>
+        <Text accessibilityLabel="answer_saved_thanks" fontSize={18}>
+          {t('autocompletion:thanks')}
+        </Text>
       </FlexContainer>
       <FlexContainer justifyContent="flex-start">
         <Box w="100%">
           <SubmitButton
+            accessibilityLabel="close-button"
             mode="dark"
             onPress={onPressDone}
             borderRadius={20}

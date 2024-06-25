@@ -9,7 +9,7 @@ import {
   CompleteEntityIntoUploadToQueue,
   EntityType,
 } from '@app/abstract/lib';
-import { Logger, useUploadObservable } from '@app/shared/lib';
+import { Emitter, Logger, useUploadObservable } from '@app/shared/lib';
 import { AutoCompletionMutex } from '@app/widgets/survey/model';
 import {
   ActivityCard,
@@ -91,6 +91,10 @@ function ActivitySectionList({
       return;
     }
 
+    const autocomplete = () => {
+      Emitter.emit('autocomplete');
+    };
+
     const entityName = activityFlowDetails
       ? activityFlowDetails.activityFlowName
       : name;
@@ -103,6 +107,10 @@ function ActivitySectionList({
         entityName,
         isTimerElapsed,
       );
+
+      if (result.failReason === 'expired-while-alert-opened') {
+        return autocomplete();
+      }
 
       if (result.failed) {
         return;
@@ -121,6 +129,10 @@ function ActivitySectionList({
         entityName,
         isTimerElapsed,
       );
+
+      if (result.failReason === 'expired-while-alert-opened') {
+        return autocomplete();
+      }
 
       if (result.failed) {
         return;

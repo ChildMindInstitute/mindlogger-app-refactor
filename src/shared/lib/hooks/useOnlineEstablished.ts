@@ -10,6 +10,10 @@ The addEventListener is always fired on app start, so we ignore it by update the
 const useOnlineEstablished = (callback: () => void) => {
   const currentStateRef = useRef<boolean | null>(null);
 
+  const callbackRef = useRef(callback);
+
+  callbackRef.current = callback;
+
   useEffect(() => {
     return NetInfo.addEventListener(state => {
       const status =
@@ -19,12 +23,12 @@ const useOnlineEstablished = (callback: () => void) => {
 
       if (currentStateRef.current === false && status) {
         Logger.log('[useOnlineEstablished] Trigger');
-        callback();
+        callbackRef.current();
       }
 
       currentStateRef.current = status;
     });
-  }, [callback]);
+  }, []);
 };
 
 export default useOnlineEstablished;

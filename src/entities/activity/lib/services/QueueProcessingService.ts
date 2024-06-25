@@ -58,8 +58,6 @@ class QueueProcessingService implements IPushToQueue {
   private async processInternal(): Promise<boolean> {
     const queueLength = this.queueService.getLength();
 
-    this.uploadProgressObservable.totalActivities = queueLength;
-
     for (let i = 0; i < queueLength; i++) {
       const uploadItem = this.queueService.pick();
 
@@ -69,11 +67,12 @@ class QueueProcessingService implements IPushToQueue {
 
       const logEntity = `"${uploadItem.input.activityName}, which completed at ${uploadItem.input.logCompletedAt}"`;
 
-      this.uploadProgressObservable.currentActivity = i;
-      this.uploadProgressObservable.currentActivityName =
-        uploadItem.input.activityName;
-
       try {
+        this.uploadProgressObservable.totalActivities = queueLength;
+        this.uploadProgressObservable.currentActivity = i;
+        this.uploadProgressObservable.currentActivityName =
+          uploadItem.input.activityName;
+
         this.logger.info(
           `[QueueProcessingService:processInternal]: Processing activity ${logEntity}`,
         );
@@ -92,6 +91,8 @@ class QueueProcessingService implements IPushToQueue {
         );
 
         this.queueService.swap();
+      } finally {
+        this.uploadProgressObservable.reset();
       }
     }
 

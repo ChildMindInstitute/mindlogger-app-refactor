@@ -10,6 +10,7 @@ type FlexContainerProps = PropsWithChildren<BoxProps>;
 export type SubComponentProps = {
   onPressDone?: () => void;
 };
+
 const SubScreenContainer: FC<PropsWithChildren> = ({ children }) => {
   return (
     <ImageBackground>

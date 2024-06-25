@@ -1,14 +1,28 @@
-import { CommonObservable } from '../utils';
+import { CommonObservable, wait } from '../utils';
 
-type SecondLevelStep = 'upload_files' | 'encrypt_answers' | 'upload_answers';
+type SecondLevelStep =
+  | 'upload_files'
+  | 'encrypt_answers'
+  | 'upload_answers'
+  | 'completed';
+
+export type UploadProgress = {
+  totalActivities: number | null;
+  currentActivity: number | null;
+  currentActivityName: string | null;
+  totalFilesInActivity: number | null;
+  currentFile: number | null;
+  currentSecondLevelStepKey: SecondLevelStep | null;
+};
 
 export interface IUploadProgressObservableSetters {
-  set totalActivities(value: number);
-  set currentActivity(value: number);
-  set currentActivityName(value: string);
-  set totalFilesInActivity(value: number);
-  set currentFile(value: number);
-  set currentSecondLevelStep(value: SecondLevelStep | null);
+  set totalActivities(value: number | null);
+  set currentActivity(value: number | null);
+  set currentActivityName(value: string | null);
+  set totalFilesInActivity(value: number | null);
+  set currentFile(value: number | null);
+  set currentSecondLevelStepKey(value: SecondLevelStep | null);
+  delay(ms: number): Promise<void>;
   reset(): void;
 }
 
@@ -16,80 +30,79 @@ class UploadProgressObservable
   extends CommonObservable
   implements IUploadProgressObservableSetters
 {
-  private _totalActivities: number = -1;
-
-  private _currentActivity: number = -1; // zero-based
-
-  private _currentActivityName: string = '';
-
-  private _totalFilesInActivity: number = -1;
-
-  private _currentFile: number = -1; // zero-based
-
-  private _currentSecondLevelStep: SecondLevelStep | null = null;
+  private uploadProgress: UploadProgress;
 
   constructor() {
     super();
+    this.uploadProgress = {} as UploadProgress;
+    this.reset();
+  }
+  set currentSecondLevelSteKey(value: SecondLevelStep | null) {
+    throw new Error('Method not implemented.');
   }
 
-  public set totalActivities(value: number) {
-    this._totalActivities = value;
+  public set totalActivities(value: number | null) {
+    this.uploadProgress.totalActivities = value;
   }
 
-  public set currentActivity(value: number) {
-    this._currentActivity = value;
+  public set currentActivity(value: number | null) {
+    this.uploadProgress.currentActivity = value;
   }
 
-  public set currentActivityName(value: string) {
-    this._currentActivityName = value;
+  public set currentActivityName(value: string | null) {
+    this.uploadProgress.currentActivityName = value;
   }
 
-  public set totalFilesInActivity(value: number) {
-    this._totalFilesInActivity = value;
+  public set totalFilesInActivity(value: number | null) {
+    this.uploadProgress.totalFilesInActivity = value;
     this.notify();
   }
 
-  public set currentFile(value: number) {
-    this._currentFile = value;
+  public set currentFile(value: number | null) {
+    this.uploadProgress.currentFile = value;
     this.notify();
   }
 
-  public set currentSecondLevelStep(value: SecondLevelStep | null) {
-    this._currentSecondLevelStep = value;
+  public set currentSecondLevelStepKey(value: SecondLevelStep | null) {
+    this.uploadProgress.currentSecondLevelStepKey = value;
     this.notify();
   }
 
   public get totalActivities() {
-    return this._totalActivities;
+    return this.uploadProgress.totalActivities;
   }
 
   public get currentActivity() {
-    return this._currentActivity;
+    return this.uploadProgress.currentActivity;
   }
 
   public get currentActivityName() {
-    return this._currentActivityName;
+    return this.uploadProgress.currentActivityName;
   }
 
   public get totalFilesInActivity() {
-    return this._totalFilesInActivity;
+    return this.uploadProgress.totalFilesInActivity;
   }
 
   public get currentFile() {
-    return this._currentFile;
+    return this.uploadProgress.currentFile;
   }
 
-  public get currentSecondLevelStep() {
-    return this._currentSecondLevelStep;
+  public get currentSecondLevelStepKey() {
+    return this.uploadProgress.currentSecondLevelStepKey;
+  }
+
+  public async delay(ms: number) {
+    await wait(ms);
   }
 
   public reset() {
-    this._totalActivities = -1;
-    this._currentActivity = -1;
-    this._currentActivityName = '';
-    this._totalFilesInActivity = -1;
-    this._currentFile = -1;
-    this._currentSecondLevelStep = null;
+    this.uploadProgress.totalActivities = null;
+    this.uploadProgress.currentActivity = null;
+    this.uploadProgress.currentActivityName = null;
+    this.uploadProgress.totalFilesInActivity = null;
+    this.uploadProgress.currentFile = null;
+    this.uploadProgress.currentSecondLevelStepKey = null;
   }
 }
 

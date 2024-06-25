@@ -21,6 +21,7 @@ import {
   getEntityProgress,
   ILogger,
   isAppOnline,
+  isEntityExpired,
   isEntityInProgress,
   isReadyForAutocompletion,
   Logger,
@@ -56,7 +57,8 @@ type FailReason =
   | 'migrations-not-applied'
   | 'all-items-hidden'
   | 'not-available'
-  | 'mutex-busy';
+  | 'mutex-busy'
+  | 'expired-while-alert-opened';
 
 type StartResult = {
   fromScratch?: boolean;
@@ -187,12 +189,12 @@ function useStartEntity({
     });
   };
 
-  async function evaluateProgressWithAutocompletion(
+  async function evaluateProgressDataWithAddingToQueue(
     appletId: string,
     entityId: string,
     eventId: string,
     entityType: EntityType,
-  ): Promise<boolean> {
+  ): Promise<{ isEntityInProgress: boolean; availableTo: number | null }> {
     const progress = getEntityProgress(
       appletId,
       entityId,
@@ -200,7 +202,7 @@ function useStartEntity({
       allProgresses,
     );
 
-    let isActivityInProgress = isInProgress(progress);
+    let evaluatedIsInProgress = isInProgress(progress);
 
     const entityPath: EntityPath = {
       appletId,
@@ -216,10 +218,13 @@ function useStartEntity({
 
     if (readyForAutocompletion) {
       await completeEntityIntoUploadToQueue(entityPath);
-      isActivityInProgress = false;
+      evaluatedIsInProgress = false;
     }
 
-    return isActivityInProgress;
+    return {
+      isEntityInProgress: evaluatedIsInProgress,
+      availableTo: progress?.availableTo ?? null,
+    };
   }
 
   async function startActivityInternal(
@@ -235,12 +240,13 @@ function useStartEntity({
       'regular',
     );
 
-    const isActivityInProgress = await evaluateProgressWithAutocompletion(
-      appletId,
-      activityId,
-      eventId,
-      'regular',
-    );
+    const { isEntityInProgress: isActivityInProgress, availableTo } =
+      await evaluateProgressDataWithAddingToQueue(
+        appletId,
+        activityId,
+        eventId,
+        'regular',
+      );
 
     return new Promise<StartResult>(resolve => {
       if (!MigrationValidator.allMigrationHaveBeenApplied()) {
@@ -278,12 +284,18 @@ function useStartEntity({
 
         onBeforeStartingActivity({
           onRestart: () => {
+            if (isEntityExpired(availableTo)) {
+              return resolve({ failReason: 'expired-while-alert-opened' });
+            }
             logRestartActivity(logParams);
             cleanUpMediaFiles({ activityId, appletId, eventId, order: 0 });
             activityStarted(appletId, activityId, eventId);
             resolve({ fromScratch: true });
           },
           onResume: () => {
+            if (isEntityExpired(availableTo)) {
+              return resolve({ failReason: 'expired-while-alert-opened' });
+            }
             logResumeActivity(logParams);
             return resolve({ fromScratch: false });
           },
@@ -333,6 +345,10 @@ function useStartEntity({
 
       result.failed = !!result.failReason;
 
+      Logger.log(
+        `[useStartEntity.startActivity]: Result: ${JSON.stringify(result)}`,
+      );
+
       return result;
     } finally {
       mutex.release();
@@ -378,12 +394,13 @@ function useStartEntity({
       'flow',
     );
 
-    const isFlowInProgress = await evaluateProgressWithAutocompletion(
-      appletId,
-      flowId,
-      eventId,
-      'flow',
-    );
+    const { isEntityInProgress: isFlowInProgress, availableTo } =
+      await evaluateProgressDataWithAddingToQueue(
+        appletId,
+        flowId,
+        eventId,
+        'flow',
+      );
 
     return new Promise<StartResult>(resolve => {
       if (!MigrationValidator.allMigrationHaveBeenApplied()) {
@@ -421,6 +438,10 @@ function useStartEntity({
 
         onBeforeStartingActivity({
           onRestart: () => {
+            if (isEntityExpired(availableTo)) {
+              return resolve({ failReason: 'expired-while-alert-opened' });
+            }
+
             for (let i = 0; i < flowActivities.length; i++) {
               // TODO: it should be based on progress record
               cleanUpMediaFiles({
@@ -446,6 +467,10 @@ function useStartEntity({
             resolve({ fromScratch: true });
           },
           onResume: () => {
+            if (isEntityExpired(availableTo)) {
+              return resolve({ failReason: 'expired-while-alert-opened' });
+            }
+
             logResumeFlow(logParams);
             return resolve({ fromScratch: false });
           },
@@ -505,6 +530,10 @@ function useStartEntity({
       );
 
       result.failed = !!result.failReason;
+
+      Logger.log(
+        `[useStartEntity.startFlow]: Result: ${JSON.stringify(result)}`,
+      );
 
       return result;
     } finally {

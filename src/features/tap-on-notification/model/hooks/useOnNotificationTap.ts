@@ -26,6 +26,7 @@ import {
 import { LogTrigger, QueryDataUtils } from '@app/shared/api';
 import {
   AnalyticsService,
+  Emitter,
   getEntityProgress,
   HourMinute,
   isEntityInProgress,
@@ -112,12 +113,21 @@ export function useOnNotificationTap({
 
       const executing = getCurrentRoute() === 'InProgressActivity';
 
+      const isAutocompletionWorking = getCurrentRoute() === 'Autocompletion';
+
       AnalyticsService.track(MixEvents.NotificationTap, {
         [MixProperties.AppletId]: appletId,
       });
 
       if (executing) {
         navigator.goBack();
+      }
+
+      if (isAutocompletionWorking) {
+        Logger.log(
+          '[useOnNotificationTap]: Notification tap ignored as autocompletion is working (M2-7315)',
+        );
+        return;
       }
 
       setTimeout(
@@ -214,6 +224,10 @@ export function useOnNotificationTap({
         ) === null;
     }
 
+    const autocomplete = () => {
+      Emitter.emit('autocomplete');
+    };
+
     if (entityType === 'flow') {
       const result = await startFlow(
         appletId,
@@ -222,6 +236,10 @@ export function useOnNotificationTap({
         entityName,
         isTimerElapsed,
       );
+
+      if (result.failReason === 'expired-while-alert-opened') {
+        return autocomplete();
+      }
 
       if (result.failed) {
         return;
@@ -240,6 +258,10 @@ export function useOnNotificationTap({
         entityName,
         isTimerElapsed,
       );
+
+      if (result.failReason === 'expired-while-alert-opened') {
+        return autocomplete();
+      }
 
       if (result.failed) {
         return;
