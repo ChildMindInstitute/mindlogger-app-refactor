@@ -17,6 +17,7 @@ import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SystemRecord } from '@app/shared/lib/records';
 import { ActivityGroupsModel } from '@app/widgets/activity-group';
 import { SurveyModel } from '@app/widgets/survey';
+import { AutocompletionExecuteOptions } from '@app/widgets/survey/model';
 import { SessionModel } from '@entities/session';
 import { EnterForegroundModel } from '@features/enter-foreground';
 import { LogoutModel } from '@features/logout';
@@ -149,13 +150,29 @@ export default () => {
   EnterForegroundModel.useRestackNotifications(hasExpiredEntity);
 
   const autocompleteWithDelay = useCallback(
-    () => setTimeout(executeAutocompletion, AUTOCOMPLETION_DELAY_ON_APP_START),
+    (options: AutocompletionExecuteOptions = { checksToExclude: [] }) =>
+      setTimeout(
+        () => executeAutocompletion(options),
+        AUTOCOMPLETION_DELAY_ON_APP_START,
+      ),
     [executeAutocompletion],
   );
 
-  useOnlineEstablished(executeAutocompletion);
+  const executeUploadOrAutocompletion = useCallback(
+    () =>
+      executeAutocompletion({ checksToExclude: [], considerUploadQueue: true }),
+    [executeAutocompletion],
+  );
 
-  useOnceRef(autocompleteWithDelay);
+  const autocompleteOrUploadWithDelay = useCallback(
+    () =>
+      autocompleteWithDelay({ checksToExclude: [], considerUploadQueue: true }),
+    [autocompleteWithDelay],
+  );
+
+  useOnlineEstablished(executeUploadOrAutocompletion);
+
+  useOnceRef(autocompleteOrUploadWithDelay);
 
   useOnForeground(autocompleteWithDelay);
 
