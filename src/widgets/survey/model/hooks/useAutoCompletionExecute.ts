@@ -33,7 +33,9 @@ const useAutoCompletionExecute = () => {
 
       const alreadyOpened = currentRoute === 'Autocompletion';
 
-      Logger.log('[useAutoCompletionExecute.autocomplete] Started');
+      Logger.log(
+        `[useAutoCompletionExecute.autocomplete] Started, options:\n${JSON.stringify(options, null, 2)}`,
+      );
 
       if (!checksToExclude.includes('in-progress-activity') && executing) {
         Logger.info(
