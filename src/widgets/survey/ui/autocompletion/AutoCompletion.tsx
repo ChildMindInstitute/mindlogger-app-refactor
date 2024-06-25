@@ -49,10 +49,7 @@ const AutoCompletion: FC = () => {
   };
 
   useEffect(() => {
-    UploadObservable.reset();
     processAnswers();
-
-    return () => UploadObservable.reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

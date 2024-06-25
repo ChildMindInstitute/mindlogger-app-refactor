@@ -3,11 +3,16 @@ import { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { AppletModel } from '@app/entities/applet';
-import { Logger, useCurrentRoute } from '@app/shared/lib';
+import { Logger, UploadObservable, useCurrentRoute } from '@app/shared/lib';
 
 import { useAutoCompletion } from './';
 
-type SafeChecks = 'in-progress-activity' | 'refresh' | 'start-entity';
+type SafeChecks =
+  | 'in-progress-activity'
+  | 'refresh'
+  | 'start-entity'
+  | 'uploading'
+  | 'already-opened';
 
 const CompleteCurrentNavigationDelay = 500;
 
@@ -29,22 +34,34 @@ const useAutoCompletionExecute = () => {
 
       const currentRoute = getCurrentRoute();
 
-      const executing = currentRoute === 'InProgressActivity';
+      const isActivityExecuting = currentRoute === 'InProgressActivity';
 
-      const alreadyOpened = currentRoute === 'Autocompletion';
+      const isAlreadyOpened = currentRoute === 'Autocompletion';
+
+      const isUploading = UploadObservable.isLoading;
 
       Logger.log(
         `[useAutoCompletionExecute.autocomplete] Started, options:\n${JSON.stringify(options, null, 2)}`,
       );
 
-      if (!checksToExclude.includes('in-progress-activity') && executing) {
+      if (
+        !checksToExclude.includes('in-progress-activity') &&
+        isActivityExecuting
+      ) {
         Logger.info(
           '[useAutoCompletionExecute.autocomplete]: Postponed due to entity is in progress',
         );
         return;
       }
 
-      if (alreadyOpened) {
+      if (!checksToExclude.includes('uploading') && isUploading) {
+        Logger.info(
+          '[useAutoCompletionExecute.autocomplete]: Postponed due to is currently uploading',
+        );
+        return;
+      }
+
+      if (!checksToExclude.includes('already-opened') && isAlreadyOpened) {
         Logger.info(
           '[useAutoCompletionExecute.autocomplete]: Postponed due to already opened',
         );
@@ -70,6 +87,8 @@ const useAutoCompletionExecute = () => {
         );
         return;
       }
+
+      UploadObservable.reset();
 
       const closingInProgressEntityScreen = checksToExclude.includes(
         'in-progress-activity',

@@ -206,7 +206,6 @@ function Intermediate({
 
     return () => {
       InterimSubmitMutex.release();
-      UploadObservable.reset();
     };
   }, []);
 
