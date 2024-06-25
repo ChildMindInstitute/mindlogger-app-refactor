@@ -2,7 +2,8 @@ import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { Spinner, Text } from '@shared/ui';
+import { colors } from '@app/shared/lib';
+import { ActivityIndicator, Text } from '@shared/ui';
 
 import { FlexContainer } from './common';
 
@@ -12,7 +13,7 @@ const ProcessingAnswers: FC = () => {
   return (
     <>
       <FlexContainer justifyContent="flex-end">
-        <Spinner size={80} />
+        <ActivityIndicator size={'large'} color={colors.blue} />
         <Text fontSize={25}>{t('autocompletion:processing_answers')}</Text>
       </FlexContainer>
 

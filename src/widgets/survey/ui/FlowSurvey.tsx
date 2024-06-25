@@ -45,6 +45,7 @@ function FlowSurvey({
     idleTimeoutNext,
     completeByTimer,
     clearFlowStorageRecord,
+    canBeCompletedByTimer,
   } = useFlowStateActions({
     appletId,
     eventId,
@@ -53,10 +54,17 @@ function FlowSurvey({
 
   const onTimeIsUp = useCallback(
     (timerType: TimerType) => {
+      if (!canBeCompletedByTimer()) {
+        return;
+      }
       setAutocompletionTimerType(timerType);
       setTimeIsUpModalVisible(true);
     },
-    [setAutocompletionTimerType, setTimeIsUpModalVisible],
+    [
+      setAutocompletionTimerType,
+      setTimeIsUpModalVisible,
+      canBeCompletedByTimer,
+    ],
   );
 
   const onSubmitTimeUpModal = useCallback(() => {
