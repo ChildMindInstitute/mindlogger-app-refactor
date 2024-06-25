@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { styled } from '@tamagui/core';
 import { useQueryClient } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
 
 import { EntityPathParams, StoreProgress } from '@app/abstract/lib';
 import { useRetryUpload } from '@app/entities/activity';
-import { QueueProcessingService } from '@app/entities/activity/lib';
-import useQueueProcessing from '@app/entities/activity/lib/hooks/useQueueProcessing';
+import {
+  QueueProcessingService,
+  useQueueProcessing,
+} from '@app/entities/activity/lib';
 import { AppletModel } from '@app/entities/applet';
 import { QueryDataUtils } from '@app/shared/api';
 import {
@@ -17,9 +17,10 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '@app/shared/lib';
-import { badge } from '@assets/images';
-import { Center, YStack, Text, Button, Image, XStack } from '@shared/ui';
 
+import { SubScreenContainer } from './completion/containers';
+import IntermediateSubmit from './completion/IntermediateSubmit';
+import ProcessingAnswers from './completion/ProcessingAnswers';
 import { activityRecordExists, useFlowStorageRecord } from '../lib';
 import {
   StepperPipelineItem,
@@ -40,14 +41,6 @@ type Props = {
   onFinish: () => void;
 };
 
-const ActivityBox = styled(Center, {
-  padding: 25,
-  mx: 20,
-  borderRadius: 16,
-  borderWidth: 1,
-  borderColor: '$grey',
-});
-
 function Intermediate({
   flowId,
   appletId,
@@ -58,9 +51,11 @@ function Intermediate({
   onClose,
   onFinish,
 }: Props) {
-  const { t } = useTranslation();
   const dispatch = useAppDispatch();
+
   const queryClient = useQueryClient();
+
+  const [isSubmitPressed, setIsSubmitPressed] = useState(false);
 
   const { flowStorageRecord } = useFlowStorageRecord({
     appletId,
@@ -98,17 +93,18 @@ function Intermediate({
     process: processQueue,
   } = useQueueProcessing();
 
-  const { openAlert: openRetryAlert } = useRetryUpload({
-    retryUpload: processQueue,
-    onPostpone: () => {
-      changeActivity();
-      onFinish();
-    },
-    onSuccess: () => {
-      changeActivity();
-      onFinish();
-    },
-  });
+  const { openAlert: openRetryAlert, isAlertOpened: isRetryAlertOpened } =
+    useRetryUpload({
+      retryUpload: processQueue,
+      onPostpone: () => {
+        changeActivity();
+        onFinish();
+      },
+      onSuccess: () => {
+        changeActivity();
+        onFinish();
+      },
+    });
 
   const { process: processWithAutocompletion } = useAutoCompletion();
 
@@ -209,58 +205,35 @@ function Intermediate({
     };
   }, []);
 
+  const isQueueProcessing =
+    isLoading && !isCompleted && !isPostponed && !isError;
+
+  if (isRetryAlertOpened) {
+    return <SubScreenContainer />;
+  }
+
+  if (isQueueProcessing) {
+    return (
+      <SubScreenContainer>
+        <ProcessingAnswers />
+      </SubScreenContainer>
+    );
+  }
+
   return (
-    <YStack flex={1} mx={40} jc="center" bg="$white">
-      <YStack space={25}>
-        <Text textAlign="center" fontSize={16}>
-          {t('additional:submit_flow_answers')}{' '}
-          <Text fontWeight="bold">{t('additional:submit')}</Text>{' '}
-          {t('additional:submit_flow_answers_ex')}
-        </Text>
-
-        <ActivityBox>
-          <Text
-            accessibilityLabel="next_activity-name"
-            fontWeight="bold"
-            mb={10}
-            fontSize={16}
-          >
-            {nextActivityPayload.activityName}
-          </Text>
-
-          <XStack>
-            <Image src={badge} width={18} height={18} opacity={0.6} r={4} />
-
-            <Text fontSize={14} color="$grey">
-              {activitiesPassed + 1} of {totalActivities} {flowName}
-            </Text>
-          </XStack>
-        </ActivityBox>
-
-        <YStack space={10}>
-          <Button
-            bg="$blue"
-            accessibilityLabel="submit-button"
-            onPress={completeActivity}
-            isLoading={isLoading && !isCompleted && !isPostponed && !isError}
-          >
-            {t('change_study:submit')}
-          </Button>
-
-          <Text
-            color={canNotGoBack ? '$lightGrey' : '$blue'}
-            accessibilityLabel="back-button"
-            textAlign="center"
-            fontSize={17}
-            fontWeight="bold"
-            onPress={onClose}
-            disabled={canNotGoBack}
-          >
-            {t('activity_navigation:back')}
-          </Text>
-        </YStack>
-      </YStack>
-    </YStack>
+    <IntermediateSubmit
+      activityName={nextActivityPayload.activityName}
+      activitiesPassed={activitiesPassed}
+      totalActivities={totalActivities}
+      flowName={flowName!}
+      onPressSubmit={() => {
+        setIsSubmitPressed(true);
+        completeActivity();
+      }}
+      isBackDisabled={canNotGoBack}
+      onPressBack={onClose}
+      isLoading={isSubmitPressed}
+    />
   );
 }
 

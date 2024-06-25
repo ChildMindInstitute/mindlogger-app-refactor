@@ -3,12 +3,11 @@ import { FC, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { UploadObservable } from '@app/shared/lib';
-import { useRetryUpload } from '@entities/activity';
-import useQueueProcessing from '@entities/activity/lib/hooks/useQueueProcessing.ts';
+import { useQueueProcessing, useRetryUpload } from '@entities/activity';
 import { useAutoCompletion } from '@widgets/survey/model';
 
 import AnswersSubmitted from './AnswersSubmitted';
-import { SubScreenContainer } from './common';
+import { SubScreenContainer } from './containers';
 import Loading from './Loading';
 import ProcessingAnswers from './ProcessingAnswers';
 

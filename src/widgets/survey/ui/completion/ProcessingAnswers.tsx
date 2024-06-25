@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { colors } from '@app/shared/lib';
 import { ActivityIndicator, Text } from '@shared/ui';
 
-import { FlexContainer } from './common';
+import { FlexContainer } from './containers';
 
 const ProcessingAnswers: FC = () => {
   const { t } = useTranslation();

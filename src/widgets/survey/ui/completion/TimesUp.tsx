@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Box, SubmitButton, Text, TimerSandIcon } from '@shared/ui';
 
-import { FlexContainer, SubComponentProps } from './common';
+import { FlexContainer, SubComponentProps } from './containers';
 
 const TimesUp: FC<SubComponentProps> = ({ onPressDone }) => {
   const { t } = useTranslation();
