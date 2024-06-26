@@ -466,8 +466,9 @@
     "time_limit_reached": "Time limit reached",
     "time_expired": "The time to complete {{activityNames}} has expired. Your answers will automatically be submitted.",
     "processing_answers": "Processing Answers",
-    "preparing_answers": "We are preparing your answers and ensuring a safe and secure submission.",
+    "preparing_answers": "Please wait and do not close the screen.",
     "answers_submitted": "Answers submitted",
+    "thanks": "Thanks! We’ve saved everything.",
     "time_is_up_modal_description": "There is no more time to work on this activity. All of the work you have done will be saved and submitted.",
     "time_is_up_modal_title": "Time's up",
     "ok": "OK"
