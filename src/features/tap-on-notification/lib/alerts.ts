@@ -19,6 +19,19 @@ export function onActivityNotAvailable(onOk: () => void) {
   ]);
 }
 
+export function onAppWasKilledOnReduxPersist(onOk: () => void) {
+  Alert.alert(
+    `${i18n.t('firebase_messaging:app_killed_on_redux_persist')}`,
+    undefined,
+    [
+      {
+        onPress: onOk,
+        text: i18n.t('system:ok'),
+      },
+    ],
+  );
+}
+
 export function onCompletedToday(name: string, onOk: () => void) {
   Alert.alert(
     `${i18n.t('firebase_messaging:already_completed')} '${name}'`,

@@ -328,6 +328,7 @@
     "applet_not_found_2": "Il n'y a pas d'applet pour cet identifiant.",
     "activity_not_found": "L'activité n'a pas été trouvée', 'Il n'y a pas d'activité pour cet identifiant.",
     "already_completed": "Vous avez déjà terminé",
+    "app_killed_on_redux_persist": "Cette activité ne peut pas être démarrée. S'il vous plaît, contactez le support.",
     "activity_was_due_at": "Cette activité était prévue à",
     "if_progress_was_made_on_the": "Si des progrès ont été réalisés sur le",
     "it_was_saved_but_it_can_no_longer_be_taken": "cela a été sauvegardé et vous ne pouvez plus y répondre",

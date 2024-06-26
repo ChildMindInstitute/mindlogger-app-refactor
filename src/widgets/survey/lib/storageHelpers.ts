@@ -71,3 +71,32 @@ export const getFlowRecord = (
 
   return !json ? null : (JSON.parse(json) as FlowState);
 };
+
+export const isCurrentActivityRecordExist = (
+  flowId: string | undefined,
+  appletId: string,
+  eventId: string,
+) => {
+  const flowRecord = getFlowRecord(flowId, appletId, eventId);
+
+  if (!flowRecord) {
+    return false;
+  }
+
+  const pipelineItem = flowRecord.pipeline[flowRecord.step];
+
+  if (!pipelineItem) {
+    return false;
+  }
+
+  const { activityId, order } = pipelineItem.payload;
+
+  const activityRecord = getActivityRecord(
+    appletId,
+    activityId,
+    eventId,
+    order,
+  )!;
+
+  return !!activityRecord;
+};
