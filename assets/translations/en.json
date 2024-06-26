@@ -340,6 +340,7 @@
     "applet_not_found_2": "There is no applet for given id.",
     "activity_not_found": "This activity is not available now.",
     "already_completed": "You have already completed",
+    "app_killed_on_redux_persist": "This activity cannot be started. Please, contact support.",
     "activity_was_due_at": "This activity was due at",
     "if_progress_was_made_on_the": "If progress was made on the",
     "it_was_saved_but_it_can_no_longer_be_taken": "it was saved but it can no longer be taken",

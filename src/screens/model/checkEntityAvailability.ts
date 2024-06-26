@@ -5,6 +5,7 @@ import { EventModel } from '@app/entities/event';
 import { mapEventFromDto } from '@app/entities/event/model';
 import {
   onActivityNotAvailable,
+  onAppWasKilledOnReduxPersist,
   onCompletedToday,
   onScheduledToday,
 } from '@app/features/tap-on-notification/lib';
@@ -20,6 +21,7 @@ import {
 } from '@app/shared/lib';
 import { ActivityGroupsModel } from '@app/widgets/activity-group';
 import { GroupUtility } from '@app/widgets/activity-group/model';
+import { isCurrentActivityRecordExist } from '@app/widgets/survey';
 
 type Input = {
   entityName: string;
@@ -56,6 +58,20 @@ const checkEntityAvailabilityInternal = ({
   );
 
   const isInProgress = isEntityInProgress(record);
+
+  const flowId = entityType === 'flow' ? entityId : undefined;
+
+  if (
+    isInProgress &&
+    !isCurrentActivityRecordExist(flowId, appletId, eventId)
+  ) {
+    logger.log(
+      '[checkEntityAvailability] Check done: false (app killed during redux persist)',
+    );
+
+    onAppWasKilledOnReduxPersist(() => callback(false));
+    return;
+  }
 
   const shouldBeAutocompleted = isReadyForAutocompletion(
     { appletId, entityId, eventId, entityType },

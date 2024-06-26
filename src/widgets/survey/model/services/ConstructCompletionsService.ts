@@ -2,7 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { addMilliseconds, subSeconds } from 'date-fns';
 
 import { StoreProgress } from '@app/abstract/lib';
-import { IPushToQueue } from '@app/entities/activity';
+import { IPushToQueue, SendAnswersInput } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import {
   ActivityState,
@@ -21,6 +21,7 @@ import {
   Logger,
   MixEvents,
   MixProperties,
+  wait,
 } from '@app/shared/lib';
 
 import { getClientInformation } from '../../lib/metaHelpers';
@@ -450,7 +451,7 @@ export class ConstructCompletionsService {
 
     const { scheduledDate } = getFlowRecord(flowId, appletId, eventId)!;
 
-    this.pushToQueueService.push({
+    const itemToUpload: SendAnswersInput = {
       appletId,
       createdAt: evaluatedEndAt,
       version: activityStorageRecord.appletVersion,
@@ -472,7 +473,9 @@ export class ConstructCompletionsService {
       eventId,
       isFlowCompleted: !!flowId,
       tzOffset: getTimezoneOffset(),
-    });
+    };
+
+    this.pushToQueueService.push(itemToUpload);
 
     this.dispatch(
       AppletModel.actions.entityCompleted({
@@ -482,6 +485,8 @@ export class ConstructCompletionsService {
         endAt: evaluatedEndAt,
       }),
     );
+
+    await wait(500);
 
     clearActivityStorageRecord(appletId, activityId, eventId, order);
 
