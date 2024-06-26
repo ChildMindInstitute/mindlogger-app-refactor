@@ -14,11 +14,15 @@ const ProcessingAnswers: FC = () => {
     <>
       <FlexContainer justifyContent="flex-end">
         <ActivityIndicator size={'large'} color={colors.blue} />
-        <Text fontSize={25}>{t('autocompletion:processing_answers')}</Text>
+        <Text fontSize={31} fontWeight="600">
+          {t('autocompletion:processing_answers')}
+        </Text>
       </FlexContainer>
 
       <FlexContainer justifyContent="flex-start">
-        <Text textAlign="center">{t('autocompletion:preparing_answers')}</Text>
+        <Text fontSize={18} textAlign="center">
+          {t('autocompletion:preparing_answers')}
+        </Text>
       </FlexContainer>
     </>
   );
