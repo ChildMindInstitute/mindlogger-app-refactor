@@ -1,10 +1,10 @@
 import { addDays, startOfDay, subDays } from 'date-fns';
 
-import ScheduledDateCalculator from './ScheduledDateCalculator';
+import ScheduledDateCalculator from '../ScheduledDateCalculator';
 
 const now = new Date(2024, 0, 25);
 
-describe('ScheduledDateCalculator', () => {
+describe('Test ScheduledDateCalculator', () => {
   let tempGetNow;
 
   beforeAll(() => {
