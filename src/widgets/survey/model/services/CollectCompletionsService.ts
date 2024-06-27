@@ -141,11 +141,10 @@ export class CollectCompletionsService implements ICollectCompletionsService {
 
       const flowId = type === ActivityPipelineType.Flow ? entityId : undefined;
 
-      if (!isCurrentActivityRecordExist(flowId, appletId, eventId)) {
-        continue;
-      }
-
-      if (isEntityExpired(progress.availableTo)) {
+      if (
+        isEntityExpired(progress.availableTo) &&
+        isCurrentActivityRecordExist(flowId, appletId, eventId)
+      ) {
         return true;
       }
     }
@@ -216,11 +215,11 @@ export class CollectCompletionsService implements ICollectCompletionsService {
 
       const flowId = type === ActivityPipelineType.Flow ? entityId : undefined;
 
-      if (!isCurrentActivityRecordExist(flowId, appletId, eventId)) {
+      if (!isEntityExpired(progress.availableTo)) {
         continue;
       }
 
-      if (!isEntityExpired(progress.availableTo)) {
+      if (!isCurrentActivityRecordExist(flowId, appletId, eventId)) {
         continue;
       }
 

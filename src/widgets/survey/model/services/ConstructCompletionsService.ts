@@ -486,7 +486,7 @@ export class ConstructCompletionsService {
       }),
     );
 
-    await wait(500);
+    await wait(500); // M2-6153
 
     clearActivityStorageRecord(appletId, activityId, eventId, order);
 

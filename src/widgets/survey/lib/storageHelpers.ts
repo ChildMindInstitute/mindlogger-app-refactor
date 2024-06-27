@@ -77,6 +77,11 @@ export const isCurrentActivityRecordExist = (
   appletId: string,
   eventId: string,
 ) => {
+  if (flowId) {
+    // We handle only single activities: M2-6153
+    return true;
+  }
+
   const flowRecord = getFlowRecord(flowId, appletId, eventId);
 
   if (!flowRecord) {
