@@ -5,9 +5,9 @@ import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
 import { SessionModel } from '@app/entities/session';
 import { LogTrigger } from '@app/shared/api';
-import { useAppSelector, useOnForeground } from '@app/shared/lib';
+import { Logger, useAppSelector, useOnForeground } from '@app/shared/lib';
 
-function useRestackNotifications() {
+function useRestackNotifications(hasExpiredEntity: () => boolean) {
   const queryClient = useQueryClient();
   const isRestoring = useIsRestoring();
   const hasSession = SessionModel.useHasSession();
@@ -20,6 +20,13 @@ function useRestackNotifications() {
 
   useOnForeground(
     () => {
+      if (hasExpiredEntity()) {
+        Logger.log(
+          '[useRestackNotifications]: Cancelled due to hasExpiredEntity',
+        );
+        return;
+      }
+
       NotificationModel.NotificationRefreshService.refresh(
         queryClient,
         storeProgress,

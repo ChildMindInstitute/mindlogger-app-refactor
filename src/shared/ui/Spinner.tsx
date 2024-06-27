@@ -13,7 +13,7 @@ type Props = {
  */
 function Spinner({ size }: Props) {
   return (
-    <Circle size={size} color={colors.blue} borderWidth={0} indeterminate />
+    <Circle size={size} color={colors.blue} borderWidth={1} indeterminate />
   );
 }
 

@@ -162,3 +162,7 @@ export const OcticonsCircleCheckFill: FC<IconProps> = props => (
 export const ClockIcon: FC<IconProps> = props => (
   <Octicons name="clock" {...props} />
 );
+
+export const TimerSandIcon: FC<IconProps> = props => (
+  <Material name="timer-sand-complete" {...props} />
+);

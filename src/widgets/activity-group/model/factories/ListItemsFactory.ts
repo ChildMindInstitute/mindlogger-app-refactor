@@ -11,18 +11,25 @@ import {
 } from '@entities/activity';
 import { isEntityExpired, MIDNIGHT_DATE } from '@shared/lib';
 
-import { GroupUtility, GroupsBuildContext } from './GroupUtility';
-import { EventEntity, Activity, ActivityFlow } from '../../lib';
+import { GroupUtility } from './GroupUtility';
+import {
+  EventEntity,
+  Activity,
+  ActivityFlow,
+  GroupsBuildContext,
+} from '../../lib';
 
 export class ListItemsFactory {
   private utility: GroupUtility;
   private availableToEvaluator: EventModel.AvailableToEvaluator;
+  protected activities: Activity[];
 
   constructor(inputParams: GroupsBuildContext) {
-    this.utility = new GroupUtility(inputParams);
+    this.utility = new GroupUtility(inputParams.progress, inputParams.appletId);
     this.availableToEvaluator = new EventModel.AvailableToEvaluator(
       this.utility,
     );
+    this.activities = inputParams.allAppletActivities;
   }
 
   private populateActivityFlowFields(
@@ -30,6 +37,7 @@ export class ListItemsFactory {
     activityEvent: EventEntity,
   ) {
     const activityFlow = activityEvent.entity as ActivityFlow;
+    const { event } = activityEvent;
 
     item.isInActivityFlow = true;
     item.activityFlowDetails = {
@@ -39,13 +47,13 @@ export class ListItemsFactory {
       activityPositionInFlow: 0,
     };
 
-    const isInProgress = this.utility.isInProgress(activityEvent);
+    const isInProgress = this.utility.isInProgress(event);
 
     let activity: Activity;
 
     if (isInProgress) {
       const progressRecord = this.utility.getProgressRecord(
-        activityEvent,
+        event,
       ) as FlowProgress;
 
       item.activityId = progressRecord.currentActivityId;
@@ -57,7 +65,7 @@ export class ListItemsFactory {
       item.activityFlowDetails.numberOfActivitiesInFlow =
         progressRecord.totalActivitiesInPipeline;
     } else {
-      activity = this.utility.activities.find(
+      activity = this.activities.find(
         x => x.id === activityFlow.activityIds[0],
       )!;
 
@@ -156,7 +164,7 @@ export class ListItemsFactory {
     item.isTimerSet = !!event.timers?.timer;
 
     if (item.isTimerSet) {
-      const timeLeft = this.utility.getTimeToComplete(eventActivity);
+      const timeLeft = this.utility.getTimeToComplete(event);
       item.timeLeftToComplete = timeLeft;
 
       if (timeLeft === null) {
@@ -167,7 +175,7 @@ export class ListItemsFactory {
     if (
       event.availability.availabilityType === AvailabilityType.ScheduledAccess
     ) {
-      const progressRecord = this.utility.getProgressRecord(eventActivity);
+      const progressRecord = this.utility.getProgressRecord(event);
 
       const to = progressRecord?.availableTo;
 

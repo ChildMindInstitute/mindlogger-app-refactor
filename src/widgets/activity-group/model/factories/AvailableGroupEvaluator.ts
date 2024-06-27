@@ -1,22 +1,23 @@
-import { AvailabilityType, IEvaluator } from '@app/abstract/lib';
+import { AvailabilityType, IEvaluator, Progress } from '@app/abstract/lib';
+import { ScheduleEvent } from '@app/entities/event';
 import { getHourMinute, isTimeInInterval } from '@shared/lib';
 
-import { GroupUtility, GroupsBuildContext } from './GroupUtility';
+import { GroupUtility } from './GroupUtility';
 import { EventEntity } from '../../lib';
 
-export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
+export class AvailableGroupEvaluator
+  implements IEvaluator<EventEntity, ScheduleEvent>
+{
   private utility: GroupUtility;
 
-  constructor(inputParams: GroupsBuildContext) {
-    this.utility = new GroupUtility(inputParams);
+  constructor(progress: Progress, appletId: string) {
+    this.utility = new GroupUtility(progress, appletId);
   }
 
-  private isValidForAlwaysAvailable(eventEntity: EventEntity): boolean {
-    const { event } = eventEntity;
-
+  private isValidForAlwaysAvailable(event: ScheduleEvent): boolean {
     const isOneTimeCompletion = event.availability.oneTimeCompletion;
 
-    const progressRecord = this.utility.getProgressRecord(eventEntity);
+    const progressRecord = this.utility.getProgressRecord(event);
 
     const isNeverCompleted = !progressRecord;
 
@@ -24,10 +25,8 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
   }
 
   private isValidWhenNoSpreadAndNoAccessBeforeStartTime(
-    eventEntity: EventEntity,
+    event: ScheduleEvent,
   ): boolean {
-    const { event } = eventEntity;
-
     const isScheduledToday = this.utility.isToday(event.scheduledAt);
 
     const now = this.utility.getNow();
@@ -39,7 +38,7 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
       including: 'from',
     });
 
-    const progressRecord = this.utility.getProgressRecord(eventEntity);
+    const progressRecord = this.utility.getProgressRecord(event);
 
     const endAt = progressRecord?.endAt;
 
@@ -53,17 +52,13 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
     );
   }
 
-  private isValidWhenIsAccessBeforeStartTime(
-    eventEntity: EventEntity,
-  ): boolean {
-    const { event } = eventEntity;
-
+  private isValidWhenIsAccessBeforeStartTime(event: ScheduleEvent): boolean {
     const isScheduledToday = this.utility.isToday(event.scheduledAt);
 
     const isScheduledYesterday = this.utility.isScheduledYesterday(event);
 
     if (isScheduledToday) {
-      const valid = !this.utility.isCompletedToday(eventEntity);
+      const valid = !this.utility.isCompletedToday(event);
 
       if (valid) {
         return true;
@@ -72,12 +67,8 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
 
     if (isScheduledYesterday) {
       return (
-        this.utility.isInAllowedTimeInterval(eventEntity, 'yesterday', true) &&
-        !this.utility.isCompletedInAllowedTimeInterval(
-          eventEntity,
-          'yesterday',
-          true,
-        )
+        this.utility.isInAllowedTimeInterval(event, 'yesterday', true) &&
+        !this.utility.isCompletedInAllowedTimeInterval(event, 'yesterday', true)
       );
     }
 
@@ -85,18 +76,16 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
   }
 
   private isValidWhenIsSpreadAndNoAccessBeforeStartTime(
-    eventEntity: EventEntity,
+    event: ScheduleEvent,
   ): boolean {
-    const { event } = eventEntity;
-
     const isScheduledToday = this.utility.isToday(event.scheduledAt);
 
     const isScheduledYesterday = this.utility.isScheduledYesterday(event);
 
     if (isScheduledToday) {
       const isValid =
-        this.utility.isInAllowedTimeInterval(eventEntity, 'today') &&
-        !this.utility.isCompletedInAllowedTimeInterval(eventEntity, 'today');
+        this.utility.isInAllowedTimeInterval(event, 'today') &&
+        !this.utility.isCompletedInAllowedTimeInterval(event, 'today');
 
       if (isValid) {
         return true;
@@ -105,9 +94,58 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
 
     if (isScheduledYesterday) {
       return (
-        this.utility.isInAllowedTimeInterval(eventEntity, 'yesterday') &&
-        !this.utility.isCompletedInAllowedTimeInterval(eventEntity, 'yesterday')
+        this.utility.isInAllowedTimeInterval(event, 'yesterday') &&
+        !this.utility.isCompletedInAllowedTimeInterval(event, 'yesterday')
       );
+    }
+
+    return false;
+  }
+
+  public isInGroup(event: ScheduleEvent): boolean {
+    if (!this.utility.isInsideValidDatesInterval(event)) {
+      return false;
+    }
+
+    const isAlwaysAvailable =
+      event.availability.availabilityType === AvailabilityType.AlwaysAvailable;
+
+    const isScheduled =
+      event.availability.availabilityType === AvailabilityType.ScheduledAccess;
+
+    if (isAlwaysAvailable && this.isValidForAlwaysAvailable(event)) {
+      return true;
+    }
+
+    if (!isScheduled) {
+      return false;
+    }
+
+    const isSpreadToNextDay = this.utility.isSpreadToNextDay(event);
+
+    const isAccessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime;
+
+    if (
+      !isSpreadToNextDay &&
+      !isAccessBeforeTimeFrom &&
+      this.isValidWhenNoSpreadAndNoAccessBeforeStartTime(event)
+    ) {
+      return true;
+    }
+
+    if (
+      isSpreadToNextDay &&
+      !isAccessBeforeTimeFrom &&
+      this.isValidWhenIsSpreadAndNoAccessBeforeStartTime(event)
+    ) {
+      return true;
+    }
+
+    if (
+      isAccessBeforeTimeFrom &&
+      this.isValidWhenIsAccessBeforeStartTime(event)
+    ) {
+      return true;
     }
 
     return false;
@@ -117,53 +155,7 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
     const result: Array<EventEntity> = [];
 
     for (const eventEntity of eventsEntities) {
-      const { event } = eventEntity;
-
-      if (!this.utility.isInsideValidDatesInterval(event)) {
-        continue;
-      }
-
-      const isAlwaysAvailable =
-        event.availability.availabilityType ===
-        AvailabilityType.AlwaysAvailable;
-
-      const isScheduled =
-        event.availability.availabilityType ===
-        AvailabilityType.ScheduledAccess;
-
-      if (isAlwaysAvailable && this.isValidForAlwaysAvailable(eventEntity)) {
-        result.push(eventEntity);
-      }
-
-      if (!isScheduled) {
-        continue;
-      }
-
-      const isSpreadToNextDay = this.utility.isSpreadToNextDay(event);
-
-      const isAccessBeforeTimeFrom =
-        event.availability.allowAccessBeforeFromTime;
-
-      if (
-        !isSpreadToNextDay &&
-        !isAccessBeforeTimeFrom &&
-        this.isValidWhenNoSpreadAndNoAccessBeforeStartTime(eventEntity)
-      ) {
-        result.push(eventEntity);
-      }
-
-      if (
-        isSpreadToNextDay &&
-        !isAccessBeforeTimeFrom &&
-        this.isValidWhenIsSpreadAndNoAccessBeforeStartTime(eventEntity)
-      ) {
-        result.push(eventEntity);
-      }
-
-      if (
-        isAccessBeforeTimeFrom &&
-        this.isValidWhenIsAccessBeforeStartTime(eventEntity)
-      ) {
+      if (this.isInGroup(eventEntity.event)) {
         result.push(eventEntity);
       }
     }

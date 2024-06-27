@@ -1,8 +1,9 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { FlowSurvey } from '@app/widgets/survey';
+import { Emitter } from '@app/shared/lib';
+import { FlowSurvey, SurveyModel } from '@app/widgets/survey';
 import { useUpcomingNotificationsObserver } from '@entities/notification';
 import { RootStackParamList } from '@screens/config';
 import { Box } from '@shared/ui';
@@ -13,6 +14,18 @@ const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
   const { appletId, eventId, entityId, entityType } = route.params;
 
   useUpcomingNotificationsObserver(eventId, entityId);
+
+  useEffect(() => {
+    const callback = navigation.addListener('beforeRemove', () => {
+      Emitter.emit<SurveyModel.AutocompletionExecuteOptions>('autocomplete', {
+        checksToExclude: ['in-progress-activity'],
+      });
+    });
+
+    return () => {
+      navigation.removeListener('beforeRemove', callback);
+    };
+  }, [navigation]);
 
   return (
     <Box flex={1} backgroundColor="white">

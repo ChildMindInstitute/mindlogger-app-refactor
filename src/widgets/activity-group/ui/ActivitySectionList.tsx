@@ -8,7 +8,6 @@ import {
   CheckAvailability,
   CompleteEntityIntoUploadToQueue,
   EntityType,
-  ProcessAutocompletion,
 } from '@app/abstract/lib';
 import { Logger, useUploadObservable } from '@app/shared/lib';
 import { AutoCompletionMutex } from '@app/widgets/survey/model';
@@ -28,7 +27,6 @@ type Props = {
   appletId: string;
   groups: Array<ActivityListGroup>;
   completeEntity: CompleteEntityIntoUploadToQueue;
-  processAutocompletion: ProcessAutocompletion;
   checkAvailability: CheckAvailability;
 };
 
@@ -37,7 +35,6 @@ function ActivitySectionList({
   groups,
   completeEntity,
   checkAvailability,
-  processAutocompletion,
 }: Props) {
   const { t } = useTranslation();
 
@@ -79,7 +76,7 @@ function ActivitySectionList({
     });
   }
 
-  const startActivityOrFlow = ({
+  const startActivityOrFlow = async ({
     activityId,
     eventId,
     flowId,
@@ -99,49 +96,41 @@ function ActivitySectionList({
       : name;
 
     if (flowId) {
-      startFlow(appletId, flowId, eventId, entityName, isTimerElapsed).then(
-        result => {
-          if (
-            result.cannotBeStartedDueToMediaFound ||
-            result.cannotBeStartedDueToMigrationsNotApplied ||
-            result.cannotBeStartedDueToAllItemsHidden ||
-            result.cannotBeStarted
-          ) {
-            processAutocompletion();
-            return;
-          }
-
-          if (result.startedFromScratch) {
-            clearStorageRecords.byEventId(eventId);
-          }
-
-          navigateSurvey(flowId, 'flow', eventId);
-        },
+      const result = await startFlow(
+        appletId,
+        flowId,
+        eventId,
+        entityName,
+        isTimerElapsed,
       );
+
+      if (result.failed) {
+        return;
+      }
+
+      if (result.fromScratch) {
+        clearStorageRecords.byEventId(eventId);
+      }
+
+      navigateSurvey(flowId, 'flow', eventId);
     } else {
-      startActivity(
+      const result = await startActivity(
         appletId,
         activityId,
         eventId,
         entityName,
         isTimerElapsed,
-      ).then(result => {
-        if (
-          result.cannotBeStartedDueToMediaFound ||
-          result.cannotBeStartedDueToMigrationsNotApplied ||
-          result.cannotBeStartedDueToAllItemsHidden ||
-          result.cannotBeStarted
-        ) {
-          processAutocompletion();
-          return;
-        }
+      );
 
-        if (result.startedFromScratch) {
-          clearStorageRecords.byEventId(eventId);
-        }
+      if (result.failed) {
+        return;
+      }
 
-        navigateSurvey(activityId, 'regular', eventId);
-      });
+      if (result.fromScratch) {
+        clearStorageRecords.byEventId(eventId);
+      }
+
+      navigateSurvey(activityId, 'regular', eventId);
     }
   };
 
@@ -159,6 +148,7 @@ function ActivitySectionList({
             if (!isFocused()) {
               return;
             }
+
             startActivityOrFlow(item);
           }}
         />

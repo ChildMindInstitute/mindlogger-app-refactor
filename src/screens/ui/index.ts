@@ -12,6 +12,7 @@ export { default as AppletDataScreen } from './AppletDataScreen';
 export { default as InProgressActivityScreen } from './InProgressActivityScreen';
 export { default as ApplicationLogsScreen } from './ApplicationLogsScreen';
 export { default as PasswordRecoveryScreen } from './PasswordRecoveryScreen';
+export { default as AutocompletionScreen } from './AutocompletionScreen';
 
 export { default as AppletBottomTabNavigator } from './AppletBottomTabNavigator';
 export { default as RootNavigator } from './RootNavigator';

@@ -17,43 +17,23 @@ import {
 import { EventModel, ScheduleEvent } from '@app/entities/event';
 import { DatesFromTo, HourMinute, isSourceLess } from '@shared/lib';
 
-import { EventEntity, Activity } from '../../lib';
-
 const ManyYears = 100;
-
-export type GroupsBuildContext = {
-  allAppletActivities: Activity[];
-  progress: Progress;
-  appletId: string;
-  applyInProgressFilter: boolean;
-};
 
 export class GroupUtility {
   protected progress: Progress;
 
   protected appletId: string;
 
-  protected _activities: Activity[];
-
-  constructor(inputParams: GroupsBuildContext) {
-    this.progress = inputParams.progress;
-    this._activities = inputParams.allAppletActivities;
-    this.appletId = inputParams.appletId;
-  }
-
-  private getStartedAt(eventActivity: EventEntity): Date {
-    const record = this.getProgressRecord(eventActivity)!;
-
-    return record.startAt;
+  constructor(progress: Progress, appletId: string) {
+    this.progress = progress;
+    this.appletId = appletId;
   }
 
   private getAllowedTimeInterval(
-    eventActivity: EventEntity,
+    event: ScheduleEvent,
     scheduledWhen: 'today' | 'yesterday',
     isAccessBeforeStartTime: boolean = false,
   ): DatesFromTo {
-    const { event } = eventActivity;
-
     const { hours: hoursFrom, minutes: minutesFrom } =
       event.availability.timeFrom!;
     const { hours: hoursTo, minutes: minutesTo } = event.availability.timeTo!;
@@ -85,10 +65,6 @@ export class GroupUtility {
     }
   }
 
-  public get activities(): Activity[] {
-    return this._activities;
-  }
-
   public getNow = () => new Date();
 
   public getToday = () => startOfDay(this.getNow());
@@ -114,22 +90,18 @@ export class GroupUtility {
     return isEqual(this.getYesterday(), startOfDay(date));
   }
 
-  public getProgressRecord(eventActivity: EventEntity): ProgressPayload | null {
-    const record =
-      this.progress[this.appletId]?.[eventActivity.entity.id]?.[
-        eventActivity.event.id
-      ];
+  public getProgressRecord(event: ScheduleEvent): ProgressPayload | null {
+    const record = this.progress[this.appletId]?.[event.entityId]?.[event.id];
     return record ?? null;
   }
 
-  public getCompletedAt(eventActivity: EventEntity): Date | null {
-    const progressRecord = this.getProgressRecord(eventActivity);
-
+  public getCompletedAt(event: ScheduleEvent): Date | null {
+    const progressRecord = this.getProgressRecord(event);
     return progressRecord?.endAt ?? null;
   }
 
-  public isInProgress(eventActivity: EventEntity): boolean {
-    const record = this.getProgressRecord(eventActivity);
+  public isInProgress(event: ScheduleEvent): boolean {
+    const record = this.getProgressRecord(event);
     if (!record) {
       return false;
     }
@@ -217,17 +189,17 @@ export class GroupUtility {
   }
 
   public isCompletedInAllowedTimeInterval(
-    eventActivity: EventEntity,
+    event: ScheduleEvent,
     scheduledWhen: 'today' | 'yesterday',
     isAccessBeforeStartTime: boolean = false,
   ): boolean {
     const { from: allowedFrom, to: allowedTo } = this.getAllowedTimeInterval(
-      eventActivity,
+      event,
       scheduledWhen,
       isAccessBeforeStartTime,
     );
 
-    const completedAt = this.getCompletedAt(eventActivity)!;
+    const completedAt = this.getCompletedAt(event)!;
 
     if (!completedAt) {
       return false;
@@ -270,19 +242,19 @@ export class GroupUtility {
     return false;
   }
 
-  public isCompletedToday(eventActivity: EventEntity): boolean {
-    const date = this.getCompletedAt(eventActivity);
+  public isCompletedToday(event: ScheduleEvent): boolean {
+    const date = this.getCompletedAt(event);
 
     return !!date && this.isToday(date);
   }
 
   public isInAllowedTimeInterval(
-    eventActivity: EventEntity,
+    event: ScheduleEvent,
     scheduledWhen: 'today' | 'yesterday',
     isAccessBeforeStartTime: boolean = false,
   ): boolean {
     const { from: allowedFrom, to: allowedTo } = this.getAllowedTimeInterval(
-      eventActivity,
+      event,
       scheduledWhen,
       isAccessBeforeStartTime,
     );
@@ -296,16 +268,16 @@ export class GroupUtility {
     }
   }
 
-  public getTimeToComplete(eventActivity: EventEntity): HourMinute | null {
-    if (!eventActivity.event.timers.timer) {
+  public getTimeToComplete(event: ScheduleEvent): HourMinute | null {
+    if (!event.timers.timer) {
       throw new Error(
         '[GroupUtility.getTimeToComplete] Timer is not specified',
       );
     }
 
     return EventModel.getTimeToComplete(
-      eventActivity.event.timers.timer,
-      this.getProgressRecord(eventActivity)!.startAt,
+      event.timers.timer,
+      this.getProgressRecord(event)!.startAt,
       this.getNow(),
     );
   }

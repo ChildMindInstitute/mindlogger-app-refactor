@@ -44,6 +44,7 @@ describe('AnswersUploadService', () => {
     jest.clearAllMocks();
 
     AnswersUploadService.createdAt = MOCK_CREATED_AT;
+    AnswersUploadService.uploadProgressObservable = {};
   });
 
   describe('getUploadRecord function', () => {

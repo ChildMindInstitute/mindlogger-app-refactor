@@ -10,9 +10,8 @@ import { ActivityType } from '@app/entities/activity/lib';
 import { EventAvailability } from '@app/entities/event';
 import { HourMinute } from '@app/shared/lib';
 
-import { GroupsBuildContext } from './GroupUtility';
 import { ScheduledGroupEvaluator } from './ScheduledGroupEvaluator';
-import { EventEntity, Entity } from '../../lib';
+import { EventEntity, Entity, GroupsBuildContext } from '../../lib';
 
 jest.mock('@app/shared/lib/constants', () => ({
   ...jest.requireActual('@app/shared/lib/constants'),
@@ -96,7 +95,7 @@ const getScheduledEventEntity = (settings: {
         startDate,
         endDate,
       },
-      entityId: 'test-id-1',
+      entityId: 'test-entity-id-1',
       id: 'test-event-id-1',
       notificationSettings: {
         notifications: [],
@@ -140,7 +139,6 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -149,7 +147,10 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new ScheduledGroupEvaluator(input);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeFrom);
     now = subMinutes(now, 1);
@@ -206,10 +207,12 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
-    const evaluator = new ScheduledGroupEvaluator(input);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     now = subMinutes(now, 1);
     mockGetNow(evaluator, now);
@@ -254,7 +257,6 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -263,7 +265,10 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new ScheduledGroupEvaluator(input);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeFrom);
     now = addMinutes(now, 1);
@@ -309,7 +314,6 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -318,7 +322,10 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new ScheduledGroupEvaluator(input);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = addMinutes(now, 1);
@@ -364,7 +371,6 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -373,7 +379,10 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new ScheduledGroupEvaluator(input);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = subMinutes(now, 1);
@@ -411,7 +420,6 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -420,7 +428,10 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new ScheduledGroupEvaluator(input);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = subMinutes(now, 1);
@@ -453,7 +464,6 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       allAppletActivities: [],
       progress,
       appletId: 'test-applet-id-1',
-      applyInProgressFilter: true,
     };
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -462,7 +472,10 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new ScheduledGroupEvaluator(input);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.progress,
+      input.appletId,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = subMinutes(now, 1);

@@ -1,4 +1,4 @@
-import { ActivityPipelineType } from '@app/abstract/lib';
+import { ActivityPipelineType, Progress } from '@app/abstract/lib';
 import { ActivityType } from '@entities/activity';
 import { ScheduleEvent } from '@entities/event';
 
@@ -27,4 +27,10 @@ export type Entity = Activity | ActivityFlow;
 export type EventEntity = {
   entity: Entity;
   event: ScheduleEvent;
+};
+
+export type GroupsBuildContext = {
+  progress: Progress;
+  appletId: string;
+  allAppletActivities: Activity[];
 };

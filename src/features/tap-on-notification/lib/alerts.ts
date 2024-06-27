@@ -10,15 +10,46 @@ export function onAppletNotFound() {
   );
 }
 
-export function onActivityNotAvailable() {
-  Alert.alert(i18n.t('firebase_messaging:activity_not_found'));
+export function onActivityNotAvailable(onOk: () => void) {
+  Alert.alert(i18n.t('firebase_messaging:activity_not_found'), undefined, [
+    {
+      onPress: onOk,
+      text: i18n.t('system:ok'),
+    },
+  ]);
 }
 
-export function onCompletedToday(name: string) {
-  Alert.alert(`${i18n.t('firebase_messaging:already_completed')} '${name}'`);
+export function onAppWasKilledOnReduxPersist(onOk: () => void) {
+  Alert.alert(
+    `${i18n.t('firebase_messaging:app_killed_on_redux_persist')}`,
+    undefined,
+    [
+      {
+        onPress: onOk,
+        text: i18n.t('system:ok'),
+      },
+    ],
+  );
 }
 
-export function onScheduledToday(name: string, timeFrom: Date) {
+export function onCompletedToday(name: string, onOk: () => void) {
+  Alert.alert(
+    `${i18n.t('firebase_messaging:already_completed')} '${name}'`,
+    undefined,
+    [
+      {
+        onPress: onOk,
+        text: i18n.t('system:ok'),
+      },
+    ],
+  );
+}
+
+export function onScheduledToday(
+  name: string,
+  timeFrom: Date,
+  onOk: () => void,
+) {
   const from = format(timeFrom, 'HH:mm');
 
   Alert.alert(
@@ -29,5 +60,11 @@ export function onScheduledToday(name: string, timeFrom: Date) {
       `${i18n.t('firebase_messaging:scheduled_to_start_at')} ${from} ${i18n.t(
         'firebase_messaging:today',
       )}`,
+    [
+      {
+        onPress: onOk,
+        text: i18n.t('system:ok'),
+      },
+    ],
   );
 }

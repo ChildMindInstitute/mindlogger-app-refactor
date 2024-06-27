@@ -130,14 +130,17 @@ export function useFlowStateActions({
     }
   }
 
-  function completeByTimer(): void {
+  function completeByTimer(timerType: 'event' | 'availability'): void {
     const record: FlowState = getCurrentFlowStorageRecord()!;
 
     Logger.log(
-      `[useFlowStateActions.completeByTimer] Executing, current step is: ${record.step}`,
+      `[useFlowStateActions.completeByTimer] Executing, current step is: ${record.step}, timer type: ${timerType}`,
     );
 
-    if (isLastStep(record) || isSummaryStep(record)) {
+    if (!canBeCompletedByTimer()) {
+      Logger.log(
+        `[useFlowStateActions.completeByTimer] Cancelled as we're on either finish or summary step, timer type: ${timerType}`,
+      );
       return;
     }
 
@@ -151,6 +154,18 @@ export function useFlowStateActions({
     });
   }
 
+  function canBeCompletedByTimer(): boolean {
+    const record: FlowState = getCurrentFlowStorageRecord()!;
+
+    const result = !isLastStep(record) && !isSummaryStep(record);
+
+    Logger.log(
+      `[useFlowStateActions.canBeCompletedByTimer]: ${String(result)}`,
+    );
+
+    return result;
+  }
+
   return {
     next,
     idleTimeoutNext,
@@ -158,5 +173,6 @@ export function useFlowStateActions({
     completeByTimer,
     clearFlowStorageRecord,
     saveActivitySummary,
+    canBeCompletedByTimer,
   };
 }

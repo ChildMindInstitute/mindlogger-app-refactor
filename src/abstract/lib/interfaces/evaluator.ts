@@ -1,3 +1,4 @@
-export interface IEvaluator<TValue> {
-  evaluate: (valuesToEvaluate: TValue[]) => TValue[];
+export interface IEvaluator<TEvaluate, TEvent> {
+  evaluate: (valuesToEvaluate: TEvaluate[]) => TEvaluate[];
+  isInGroup(event: TEvent): boolean;
 }

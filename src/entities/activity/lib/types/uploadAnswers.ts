@@ -30,7 +30,7 @@ export type SendAnswersInput = {
   };
   alerts: AnswerAlertsDto;
   tzOffset: number;
-  logActivityName?: string;
+  activityName: string;
   logCompletedAt?: string;
 };
 

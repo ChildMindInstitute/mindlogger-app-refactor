@@ -1,3 +1,5 @@
+import { isToday } from 'date-fns';
+
 import {
   EntityPath,
   StoreProgress,
@@ -54,3 +56,7 @@ export function isReadyForAutocompletion(
 
 export const isEntityExpired = (availableTo: number | null | undefined) =>
   !!availableTo && getNow().getTime() > availableTo;
+
+export const isCompletedToday = (
+  record: StoreProgressPayload | null | undefined,
+) => record && record.endAt && isToday(record.endAt);
