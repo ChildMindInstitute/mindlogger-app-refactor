@@ -21,6 +21,7 @@ import {
   formatToDtoDate,
   formatToDtoTime,
   isLocalFileUrl,
+  wait,
 } from '@shared/lib';
 
 import MediaFilesCleaner from './MediaFilesCleaner';
@@ -505,6 +506,8 @@ class AnswersUploadService implements IAnswersUploadService {
     );
 
     this.uploadProgressObservable.currentSecondLevelStep = 'encrypt_answers';
+
+    await wait(100);
 
     const encryptedData = this.encryptAnswers(modifiedBody);
 
