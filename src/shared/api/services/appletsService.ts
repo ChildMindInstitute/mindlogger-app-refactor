@@ -50,6 +50,8 @@ export type AppletEncryptionDTO = {
   publicKey: string;
 };
 
+type Integration = 'loris';
+
 export type AppletDetailsDto = {
   id: string;
   displayName: string;
@@ -65,6 +67,7 @@ export type AppletDetailsDto = {
   streamEnabled: boolean;
   streamIpAddress: string | null;
   streamPort: number | null;
+  integrations: Integration[];
 };
 
 export type AppletRespondentMetaDto = {

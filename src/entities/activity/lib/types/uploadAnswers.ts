@@ -32,6 +32,7 @@ export type SendAnswersInput = {
   tzOffset: number;
   logActivityName?: string;
   logCompletedAt?: string;
+  consentToShare?: boolean;
 };
 
 export type CheckFileUploadResult = {

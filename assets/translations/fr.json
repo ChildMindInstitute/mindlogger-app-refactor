@@ -564,5 +564,13 @@
     "popup_description": "Cet essai est incomplet. Si vous passez à l'essai suivant, votre progression sera sauvegardée. Vous ne pourrez pas terminer cet essai ultérieurement.",
     "keep_working": "Continuer",
     "skip": "Passer"
+  },
+  "data_sharing": {
+    "consent": "Je consens à rendre mes réponses",
+    "media_consent": "Je consens à rendre mes réponses des médias",
+    "public": "publiques",
+    "dialog": {
+      "body": "Le partage public des réponses implique que les informations fournies par les utilisateurs individuels, telles que les réponses au sondage ou les commentaires, seront librement accessibles à d'autres personnes."
+    }
   }
 }

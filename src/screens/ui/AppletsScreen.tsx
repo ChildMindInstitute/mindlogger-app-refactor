@@ -103,9 +103,11 @@ const AboutAppLink = () => {
         accessibilityLabel="about-link"
         onPress={() => navigate('AboutApp')}
       >
+        {/*@todo revert after testing*/}
         <Text color="$primary" fontSize={16} fontWeight="700">
-          {t('applet_list_component:about_title')}
+          {t('applet_list_component:about_title')} LORIS
         </Text>
+        {/*@todo revert after testing*/}
       </TouchableOpacity>
     </XStack>
   );

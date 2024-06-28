@@ -72,6 +72,10 @@ export function mapActivitiesFromDto(dtos: ActivityRecordDto[]): Activity[] {
   return dtos.map(x => mapActivityFromDto(x));
 }
 
+const shouldEnableConsentsCapability = (detailsDto: AppletDetailsDto) => {
+  return detailsDto.integrations?.includes('loris');
+};
+
 export function mapAppletDetailsFromDto(
   detailsDto: AppletDetailsDto,
 ): AppletDetails {
@@ -90,6 +94,7 @@ export function mapAppletDetailsFromDto(
     streamEnabled: detailsDto.streamEnabled,
     streamIpAddress: detailsDto.streamIpAddress,
     streamPort: detailsDto?.streamPort?.toString() ?? null,
+    consentsCapabilityEnabled: shouldEnableConsentsCapability(detailsDto),
   };
 }
 

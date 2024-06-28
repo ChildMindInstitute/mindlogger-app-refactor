@@ -7,14 +7,17 @@ import {
   wait,
   IUploadObservableSetters,
   UploadObservable,
+  IPreprocessor,
 } from '@app/shared/lib';
 
 import AnswersQueueService, {
   IAnswersQueueService,
+  UploadItem,
 } from './AnswersQueueService';
 import AnswersUploadService, {
   IAnswersUploadService,
 } from './AnswersUploadService';
+import UploadItemPreprocessor from './UploadItemPreprocessor';
 import { SendAnswersInput } from '../types';
 
 export interface IPushToQueue {
@@ -32,6 +35,8 @@ class QueueProcessingService implements IPushToQueue {
 
   private logger: ILogger;
 
+  private itemPreprocessor: IPreprocessor<UploadItem>;
+
   constructor(
     updateObservable: IUploadObservableSetters,
     queueService: IAnswersQueueService,
@@ -46,6 +51,8 @@ class QueueProcessingService implements IPushToQueue {
     this.logger = logger;
 
     this.mutex = Mutex();
+
+    this.itemPreprocessor = new UploadItemPreprocessor();
   }
 
   private async processInternal(): Promise<boolean> {
@@ -64,6 +71,8 @@ class QueueProcessingService implements IPushToQueue {
         this.logger.info(
           `[QueueProcessingService:processInternal]: Processing activity ${logEntity}`,
         );
+
+        this.itemPreprocessor.preprocess(uploadItem);
 
         await this.uploadService.sendAnswers(uploadItem.input);
 

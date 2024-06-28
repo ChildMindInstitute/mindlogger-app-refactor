@@ -33,6 +33,10 @@ export const useFeatureFlags = () => {
     setFlags(features);
   };
 
+  useEffect(() => {
+    updateFeatureFlags();
+  }, []);
+
   return { featureFlags: flags };
 };
 
