@@ -12,9 +12,8 @@ function ConsentCheckBox({ value, label, onChange, ...boxProps }: Props) {
   const changeValue = () => onChange(!value);
 
   return (
-    <XStack {...boxProps} onPress={changeValue}>
+    <XStack {...boxProps} onPress={changeValue} hitSlop={4}>
       <CheckBox
-        value={value}
         lineWidth={2}
         animationDuration={0.1}
         boxType="square"
@@ -22,6 +21,10 @@ function ConsentCheckBox({ value, label, onChange, ...boxProps }: Props) {
         onTintColor="black"
         tintColor="black"
         style={styles.checkbox}
+        disabled
+        onAnimationType="fade"
+        offAnimationType="fade"
+        value={value}
       />
 
       {label}
