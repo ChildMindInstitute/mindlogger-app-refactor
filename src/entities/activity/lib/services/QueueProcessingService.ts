@@ -7,6 +7,8 @@ import {
   wait,
   IUploadObservableSetters,
   UploadObservable,
+  IUploadProgressObservableSetters,
+  UploadProgressObservable,
 } from '@app/shared/lib';
 
 import AnswersQueueService, {
@@ -28,16 +30,21 @@ class QueueProcessingService implements IPushToQueue {
 
   private uploadStatusObservable: IUploadObservableSetters;
 
+  private uploadProgressObservable: IUploadProgressObservableSetters;
+
   private mutex: IMutex;
 
   private logger: ILogger;
 
   constructor(
     updateObservable: IUploadObservableSetters,
+    uploadProgressObservable: IUploadProgressObservableSetters,
     queueService: IAnswersQueueService,
     logger: ILogger,
   ) {
     this.uploadStatusObservable = updateObservable;
+
+    this.uploadProgressObservable = uploadProgressObservable;
 
     this.queueService = queueService;
 
@@ -51,6 +58,8 @@ class QueueProcessingService implements IPushToQueue {
   private async processInternal(): Promise<boolean> {
     const queueLength = this.queueService.getLength();
 
+    this.uploadProgressObservable.totalActivities = queueLength;
+
     for (let i = 0; i < queueLength; i++) {
       const uploadItem = this.queueService.pick();
 
@@ -58,7 +67,11 @@ class QueueProcessingService implements IPushToQueue {
         return true;
       }
 
-      const logEntity = `"${uploadItem.input.logActivityName}, which completed at ${uploadItem.input.logCompletedAt}"`;
+      const logEntity = `"${uploadItem.input.activityName}, which completed at ${uploadItem.input.logCompletedAt}"`;
+
+      this.uploadProgressObservable.currentActivity = i;
+      this.uploadProgressObservable.currentActivityName =
+        uploadItem.input.activityName;
 
       try {
         this.logger.info(
@@ -99,6 +112,8 @@ class QueueProcessingService implements IPushToQueue {
       this.uploadStatusObservable.isPostponed = false;
       this.uploadStatusObservable.isError = false;
 
+      this.uploadProgressObservable.reset();
+
       await wait(100);
 
       const online = await isAppOnline();
@@ -136,6 +151,7 @@ class QueueProcessingService implements IPushToQueue {
 
 export default new QueueProcessingService(
   UploadObservable,
+  UploadProgressObservable,
   AnswersQueueService,
   Logger,
 );

@@ -13,7 +13,12 @@
     "flanker_accuracy_warn": "*The timestamps collected for an android are not as accurate as iOS devices.",
     "please_wait": "Please wait",
     "activity_all_items_hidden": "\"{{entityName}}\" cannot be started because all items inside the activity are hidden",
-    "flow_all_items_hidden": "\"{{entityName}}\" cannot be started because it contains an activity in which all items are hidden"
+    "flow_all_items_hidden": "\"{{entityName}}\" cannot be started because it contains an activity in which all items are hidden",
+    "progress": {
+      "upload_files": "Uploading your files...",
+      "encrypt_answers": "Encrypting your answers...",
+      "upload_answers": "Uploading your answers..."
+    }
   },
   "activity_time": {
     "time_remaining": "remaining for this item"
@@ -335,6 +340,7 @@
     "applet_not_found_2": "There is no applet for given id.",
     "activity_not_found": "This activity is not available now.",
     "already_completed": "You have already completed",
+    "app_killed_on_redux_persist": "This activity cannot be started. Please, contact support.",
     "activity_was_due_at": "This activity was due at",
     "if_progress_was_made_on_the": "If progress was made on the",
     "it_was_saved_but_it_can_no_longer_be_taken": "it was saved but it can no longer be taken",
@@ -455,5 +461,17 @@
     "popup_description": "This trial is incomplete. If you skip to the next trial, your progress will be saved. You won't be able to finish this trial later.",
     "keep_working": "Keep working",
     "skip": "Skip"
+  },
+  "autocompletion": {
+    "done": "Done",
+    "time_limit_reached": "Time limit reached",
+    "time_expired": "The time to complete {{activityNames}} has expired. Your answers will automatically be submitted.",
+    "processing_answers": "Processing Answers",
+    "preparing_answers": "Please wait and do not close the screen.",
+    "answers_submitted": "Answers submitted",
+    "thanks": "Thanks! We’ve saved everything.",
+    "time_is_up_modal_description": "There is no more time to work on this activity. All of the work you have done will be saved and submitted.",
+    "time_is_up_modal_title": "Time's up",
+    "ok": "OK"
   }
 }

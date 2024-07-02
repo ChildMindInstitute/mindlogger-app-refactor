@@ -128,7 +128,7 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
       eventActivity.event.scheduledAt = date;
 
       if (!date) {
-        logger.warn(
+        logger.info(
           `[ScheduledDateCalculator.calculate]: result is null, entity|event = "${eventActivity.entity.name}|${eventActivity.event.id}"`,
         );
       }

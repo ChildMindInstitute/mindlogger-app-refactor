@@ -9,7 +9,10 @@ import { NotCompletedEntity } from '@app/entities/applet/model/selectors';
 import { isEntityExpired, Logger } from '@app/shared/lib';
 
 import { FinishPipelineItem } from '..';
-import { getFlowRecord } from '../../lib/storageHelpers';
+import {
+  getFlowRecord,
+  isCurrentActivityRecordExist,
+} from '../../lib/storageHelpers';
 import { FlowState } from '../../lib/useFlowStorageRecord';
 
 export type CollectCompletionOutput = {
@@ -136,17 +139,12 @@ export class CollectCompletionsService implements ICollectCompletionsService {
         payload: progress,
       } = notCompletedEntity;
 
-      const flowState: FlowState = getFlowRecord(
-        type === ActivityPipelineType.Flow ? entityId : undefined,
-        appletId,
-        eventId,
-      )!;
+      const flowId = type === ActivityPipelineType.Flow ? entityId : undefined;
 
-      if (!flowState) {
-        continue;
-      }
-
-      if (isEntityExpired(progress.availableTo)) {
+      if (
+        isEntityExpired(progress.availableTo) &&
+        isCurrentActivityRecordExist(flowId, appletId, eventId)
+      ) {
         return true;
       }
     }
@@ -171,15 +169,17 @@ export class CollectCompletionsService implements ICollectCompletionsService {
       return [];
     }
 
+    const flowId = entityType === 'flow' ? entityId : undefined;
+
+    if (!isCurrentActivityRecordExist(flowId, appletId, eventId)) {
+      return [];
+    }
+
     const flowState = getFlowRecord(
       entityType === 'flow' ? entityId : undefined,
       appletId,
       eventId,
     )!;
-
-    if (!flowState) {
-      return [];
-    }
 
     return this.collect(progress, flowState, path);
   }
@@ -213,19 +213,17 @@ export class CollectCompletionsService implements ICollectCompletionsService {
         payload: progress,
       } = notCompletedEntity;
 
-      const flowState: FlowState = getFlowRecord(
-        type === ActivityPipelineType.Flow ? entityId : undefined,
-        appletId,
-        eventId,
-      )!;
-
-      if (!flowState) {
-        continue;
-      }
+      const flowId = type === ActivityPipelineType.Flow ? entityId : undefined;
 
       if (!isEntityExpired(progress.availableTo)) {
         continue;
       }
+
+      if (!isCurrentActivityRecordExist(flowId, appletId, eventId)) {
+        continue;
+      }
+
+      const flowState: FlowState = getFlowRecord(flowId, appletId, eventId)!;
 
       result.push(
         ...this.collect(progress, flowState, {

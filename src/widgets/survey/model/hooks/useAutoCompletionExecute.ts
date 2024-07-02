@@ -1,32 +1,69 @@
 import { useCallback } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { AppletModel } from '@app/entities/applet';
-import { Logger, useCurrentRoute } from '@app/shared/lib';
+import { Logger, UploadObservable, useCurrentRoute } from '@app/shared/lib';
 
 import { useAutoCompletion } from './';
 
-type SafeChecks = 'in-progress-activity' | 'refresh' | 'start-entity';
+type SafeChecks =
+  | 'in-progress-activity'
+  | 'refresh'
+  | 'start-entity'
+  | 'uploading'
+  | 'already-opened';
+
+const CompleteCurrentNavigationDelay = 500;
 
 export type AutocompletionExecuteOptions = {
   checksToExclude: Array<SafeChecks>;
+  considerUploadQueue?: boolean;
 };
 
 const useAutoCompletionExecute = () => {
   const { getCurrentRoute } = useCurrentRoute();
 
-  const { process: processAutocompletion } = useAutoCompletion();
+  const navigation = useNavigation();
+
+  const { hasExpiredEntity, hasItemsInQueue } = useAutoCompletion();
 
   const autocomplete = useCallback(
-    async (options: AutocompletionExecuteOptions = { checksToExclude: [] }) => {
+    (options: AutocompletionExecuteOptions = { checksToExclude: [] }) => {
       const { checksToExclude } = options;
 
-      const executing = getCurrentRoute() === 'InProgressActivity';
+      const currentRoute = getCurrentRoute();
 
-      Logger.log('[useAutoCompletionExecute.autocomplete] Started');
+      const isActivityExecuting = currentRoute === 'InProgressActivity';
 
-      if (!checksToExclude.includes('in-progress-activity') && executing) {
+      const isAlreadyOpened = currentRoute === 'Autocompletion';
+
+      const isUploading = UploadObservable.isLoading;
+
+      Logger.log(
+        `[useAutoCompletionExecute.autocomplete] Started, options:\n${JSON.stringify(options, null, 2)}`,
+      );
+
+      if (
+        !checksToExclude.includes('in-progress-activity') &&
+        isActivityExecuting
+      ) {
         Logger.info(
           '[useAutoCompletionExecute.autocomplete]: Postponed due to entity is in progress',
+        );
+        return;
+      }
+
+      if (!checksToExclude.includes('uploading') && isUploading) {
+        Logger.info(
+          '[useAutoCompletionExecute.autocomplete]: Postponed due to is currently uploading',
+        );
+        return;
+      }
+
+      if (!checksToExclude.includes('already-opened') && isAlreadyOpened) {
+        Logger.info(
+          '[useAutoCompletionExecute.autocomplete]: Postponed due to already opened',
         );
         return;
       }
@@ -51,9 +88,25 @@ const useAutoCompletionExecute = () => {
         return;
       }
 
-      await processAutocompletion();
+      UploadObservable.reset();
+
+      const closingInProgressEntityScreen = checksToExclude.includes(
+        'in-progress-activity',
+      );
+
+      setTimeout(
+        () => {
+          if (
+            hasExpiredEntity() ||
+            (options.considerUploadQueue && hasItemsInQueue)
+          ) {
+            navigation.navigate('Autocompletion');
+          }
+        },
+        closingInProgressEntityScreen ? CompleteCurrentNavigationDelay : 0,
+      );
     },
-    [getCurrentRoute, processAutocompletion],
+    [getCurrentRoute, hasExpiredEntity, hasItemsInQueue, navigation],
   );
 
   return {

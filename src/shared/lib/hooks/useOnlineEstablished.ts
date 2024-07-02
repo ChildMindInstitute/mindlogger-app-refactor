@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 
 import NetInfo from '@react-native-community/netinfo';
 
+import { Logger } from '../';
+
 /*
 The addEventListener is always fired on app start, so we ignore it by update the state from null to status.
 */
@@ -16,6 +18,7 @@ const useOnlineEstablished = (callback: () => void) => {
         Boolean(state.isInternetReachable);
 
       if (currentStateRef.current === false && status) {
+        Logger.log('[useOnlineEstablished] Trigger');
         callback();
       }
 

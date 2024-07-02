@@ -38,7 +38,7 @@ export type ProcessAutocompletion = (
 export type CheckAvailability = (
   entityName: string,
   identifiers: EntityPath,
-) => boolean;
+) => Promise<boolean>;
 
 export type EvaluateAvailableTo = (
   appletId: string,
