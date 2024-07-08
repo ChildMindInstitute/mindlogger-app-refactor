@@ -14,11 +14,17 @@ type SafeChecks =
   | 'uploading'
   | 'already-opened';
 
+export type LogAutocompletionTrigger =
+  | 'app-start'
+  | 'to-foreground'
+  | 'to-online'
+  | 'unknown';
+
 const CompleteCurrentNavigationDelay = 500;
 
 export type AutocompletionExecuteOptions = {
-  checksToExclude: Array<SafeChecks>;
-  considerUploadQueue?: boolean;
+  checksToExclude?: Array<SafeChecks>;
+  forceUpload?: boolean;
 };
 
 const useAutoCompletionExecute = () => {
@@ -29,8 +35,14 @@ const useAutoCompletionExecute = () => {
   const { hasExpiredEntity, hasItemsInQueue } = useAutoCompletion();
 
   const autocomplete = useCallback(
-    (options: AutocompletionExecuteOptions = { checksToExclude: [] }) => {
-      const { checksToExclude } = options;
+    (
+      logTrigger: LogAutocompletionTrigger,
+      options?: AutocompletionExecuteOptions,
+    ) => {
+      const { checksToExclude: checksToExcludeOptional, forceUpload } =
+        options ?? {};
+
+      const checksToExclude = checksToExcludeOptional ?? [];
 
       const currentRoute = getCurrentRoute();
 
@@ -41,7 +53,7 @@ const useAutoCompletionExecute = () => {
       const isUploading = UploadObservable.isLoading;
 
       Logger.log(
-        `[useAutoCompletionExecute.autocomplete] Started, options:\n${JSON.stringify(options, null, 2)}`,
+        `[useAutoCompletionExecute.autocomplete] Started, logTrigger="${logTrigger}", forceUpload="${forceUpload}", checksToExclude=${JSON.stringify(checksToExclude)} `,
       );
 
       if (
@@ -96,10 +108,7 @@ const useAutoCompletionExecute = () => {
 
       setTimeout(
         () => {
-          if (
-            hasExpiredEntity() ||
-            (options.considerUploadQueue && hasItemsInQueue)
-          ) {
+          if (hasExpiredEntity() || (forceUpload && hasItemsInQueue)) {
             navigation.navigate('Autocompletion');
           }
         },

@@ -17,7 +17,10 @@ import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SystemRecord } from '@app/shared/lib/records';
 import { ActivityGroupsModel } from '@app/widgets/activity-group';
 import { SurveyModel } from '@app/widgets/survey';
-import { AutocompletionExecuteOptions } from '@app/widgets/survey/model';
+import {
+  AutocompletionExecuteOptions,
+  LogAutocompletionTrigger,
+} from '@app/widgets/survey/model';
 import { SessionModel } from '@entities/session';
 import { EnterForegroundModel } from '@features/enter-foreground';
 import { LogoutModel } from '@features/logout';
@@ -34,7 +37,7 @@ import {
   useOnlineEstablished,
   useOnceRef,
   Emitter,
-  useOnForeground,
+  useOnForegroundDebounced,
 } from '@shared/lib';
 import {
   UserProfileIcon,
@@ -73,7 +76,7 @@ import {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const AUTOCOMPLETION_DELAY_ON_APP_START = 2000;
+const AUTOCOMPLETION_DELAY = 2000;
 
 export default () => {
   const { t } = useTranslation();
@@ -117,8 +120,6 @@ export default () => {
   const { completeEntityIntoUploadToQueue, hasExpiredEntity } =
     SurveyModel.useAutoCompletion();
 
-  const { executeAutocompletion } = SurveyModel.useAutoCompletionExecute();
-
   TapOnNotificationModel.useOnNotificationTap({
     checkAvailability: async (
       entityName: string,
@@ -149,32 +150,31 @@ export default () => {
 
   EnterForegroundModel.useRestackNotifications(hasExpiredEntity);
 
-  const autocompleteWithDelay = useCallback(
-    (options: AutocompletionExecuteOptions = { checksToExclude: [] }) =>
+  const { executeAutocompletion } = SurveyModel.useAutoCompletionExecute();
+
+  const executeAutocompletionWithDelay = useCallback(
+    (
+      logTrigger: LogAutocompletionTrigger,
+      options: AutocompletionExecuteOptions,
+    ) =>
       setTimeout(
-        () => executeAutocompletion(options),
-        AUTOCOMPLETION_DELAY_ON_APP_START,
+        () => executeAutocompletion(logTrigger, options),
+        AUTOCOMPLETION_DELAY,
       ),
     [executeAutocompletion],
   );
 
-  const executeUploadOrAutocompletion = useCallback(
-    () =>
-      executeAutocompletion({ checksToExclude: [], considerUploadQueue: true }),
-    [executeAutocompletion],
+  useOnlineEstablished(() =>
+    executeAutocompletion('to-online', { forceUpload: true }),
   );
 
-  const autocompleteOrUploadWithDelay = useCallback(
-    () =>
-      autocompleteWithDelay({ checksToExclude: [], considerUploadQueue: true }),
-    [autocompleteWithDelay],
+  useOnceRef(() =>
+    executeAutocompletionWithDelay('app-start', { forceUpload: true }),
   );
 
-  useOnlineEstablished(executeUploadOrAutocompletion);
-
-  useOnceRef(autocompleteOrUploadWithDelay);
-
-  useOnForeground(autocompleteWithDelay);
+  useOnForegroundDebounced(() =>
+    executeAutocompletionWithDelay('to-foreground', { forceUpload: false }),
+  );
 
   SurveyModel.useOnAutoCompletion();
 

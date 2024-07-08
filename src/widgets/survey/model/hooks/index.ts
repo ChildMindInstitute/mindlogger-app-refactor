@@ -7,4 +7,7 @@ export { default as useAutoCompletion } from './useAutoCompletion';
 export { AutoCompletionMutex } from './useAutoCompletion';
 export { default as useOnAutoCompletion } from './useOnAutoCompletion';
 export { default as useAutoCompletionExecute } from './useAutoCompletionExecute';
-export type { AutocompletionExecuteOptions } from './useAutoCompletionExecute';
+export type {
+  AutocompletionExecuteOptions,
+  LogAutocompletionTrigger,
+} from './useAutoCompletionExecute';
