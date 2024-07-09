@@ -3,29 +3,32 @@ import { AppState, AppStateStatus } from 'react-native';
 
 import { useDebouncedCallback } from 'use-debounce';
 
+import { IS_IOS, Logger } from '../';
+
 type Options = {
   enabled: boolean;
 };
 
-const DebounceInterval = 100;
+const DebounceInterval = 200;
 
 function useOnForegroundDebounced(
   callback: () => void,
   options?: Partial<Options>,
 ) {
-  const callbackRef = useRef(callback);
-
-  callbackRef.current = callback;
-
   const previousStatusRef = useRef<AppStateStatus | null>(null);
-
-  const previousStatus = previousStatusRef.current;
 
   const enabled = options?.enabled ?? true;
 
   const debouncedCallback = useDebouncedCallback((status: AppStateStatus) => {
-    if (status === 'active' && status !== previousStatus && enabled) {
-      callbackRef.current();
+    const previousStatus = previousStatusRef.current;
+
+    const isStatusChanged = IS_IOS ? status !== previousStatus : true;
+
+    if (status === 'active' && isStatusChanged && enabled) {
+      Logger.log(
+        '[useOnForegroundDebounced.useDebouncedCallback]: Call callback',
+      );
+      callback();
     }
 
     previousStatusRef.current = status;

@@ -50,11 +50,11 @@ const checkEntityAvailabilityInternal = ({
   const record = getEntityProgress(appletId, entityId, eventId, storeProgress);
 
   logger.log(
-    `[checkEntityAvailability]: Checking.. Entity = "${entityName}", appletId = ${appletId}, entityId = ${entityId}, entityType = ${entityType}, eventId = ${eventId} `,
+    `[checkEntityAvailability]: Checking.. Entity = "${entityName}", appletId = "${appletId}", entityId = "${entityId}", entityType = "${entityType}", eventId = "${eventId}"`,
   );
 
   Logger.log(
-    `[checkEntityAvailability] Now is ${getNow().toUTCString()}, record = ${JSON.stringify(record)}`,
+    `[checkEntityAvailability] record = ${JSON.stringify(record, null, 2)}`,
   );
 
   const isInProgress = isEntityInProgress(record);

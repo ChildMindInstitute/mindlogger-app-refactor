@@ -32,7 +32,7 @@ const useAutoCompletionExecute = () => {
 
   const navigation = useNavigation();
 
-  const { hasExpiredEntity, hasItemsInQueue } = useAutoCompletion();
+  const { hasExpiredEntity, evaluateIfItemsInQueueExist } = useAutoCompletion();
 
   const autocomplete = useCallback(
     (
@@ -52,8 +52,10 @@ const useAutoCompletionExecute = () => {
 
       const isUploading = UploadObservable.isLoading;
 
+      const hasItemsInQueue = evaluateIfItemsInQueueExist();
+
       Logger.log(
-        `[useAutoCompletionExecute.autocomplete] Started, logTrigger="${logTrigger}", forceUpload="${forceUpload}", checksToExclude=${JSON.stringify(checksToExclude)} `,
+        `[useAutoCompletionExecute.autocomplete] Started, logTrigger="${logTrigger}", forceUpload="${forceUpload}", checksToExclude=${JSON.stringify(checksToExclude)}, hasItemsInQueue=${hasItemsInQueue}`,
       );
 
       if (
@@ -115,7 +117,12 @@ const useAutoCompletionExecute = () => {
         closingInProgressEntityScreen ? CompleteCurrentNavigationDelay : 0,
       );
     },
-    [getCurrentRoute, hasExpiredEntity, hasItemsInQueue, navigation],
+    [
+      evaluateIfItemsInQueueExist,
+      getCurrentRoute,
+      hasExpiredEntity,
+      navigation,
+    ],
   );
 
   return {
