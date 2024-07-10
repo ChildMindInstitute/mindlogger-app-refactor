@@ -34,6 +34,7 @@ type Result = {
   completeEntityIntoUploadToQueue: CompleteEntityIntoUploadToQueue;
   hasItemsInQueue: boolean;
   hasExpiredEntity: () => boolean;
+  evaluateIfItemsInQueueExist: () => boolean;
 };
 
 export const AutoCompletionMutex = Mutex();
@@ -53,9 +54,9 @@ const useAutoCompletion = (): Result => {
 
   const queryClient = useQueryClient();
 
-  const hasItemsInQueue = (): boolean => {
+  const hasItemsInQueue = useCallback(() => {
     return AnswersQueueService.getLength() > 0;
-  };
+  }, []);
 
   const createConstructService = useCallback(() => {
     return new ConstructCompletionsService(
@@ -187,7 +188,7 @@ const useAutoCompletion = (): Result => {
 
       return result;
     },
-    [notCompletedEntities, mutex, createConstructService],
+    [mutex, notCompletedEntities, createConstructService, hasItemsInQueue],
   );
 
   const hasExpiredEntity = useCallback((): boolean => {
@@ -205,6 +206,7 @@ const useAutoCompletion = (): Result => {
     completeEntityIntoUploadToQueue,
     hasExpiredEntity,
     hasItemsInQueue: hasItemsInQueue(),
+    evaluateIfItemsInQueueExist: hasItemsInQueue,
   };
 };
 

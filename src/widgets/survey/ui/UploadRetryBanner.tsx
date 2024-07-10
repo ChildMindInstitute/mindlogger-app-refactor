@@ -27,7 +27,7 @@ const UploadRetryBanner: FC<Props> = () => {
 
     Emitter.emit<SurveyModel.AutocompletionExecuteOptions>('autocomplete', {
       checksToExclude: [],
-      considerUploadQueue: true,
+      forceUpload: true,
     });
   };
 
