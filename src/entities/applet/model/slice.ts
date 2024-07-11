@@ -17,6 +17,7 @@ type InProgressActivity = {
   activityId: string;
   eventId: string;
   availableTo?: Date | null;
+  name: string;
 };
 
 type InProgressEntity = {
@@ -40,6 +41,7 @@ type InProgressFlow = {
   eventId: string;
   pipelineActivityOrder: number;
   availableTo?: Date | null;
+  flowName?: string;
 };
 
 type InitialState = {
@@ -60,13 +62,14 @@ const slice = createSlice({
   initialState,
   reducers: {
     activityStarted: (state, action: PayloadAction<InProgressActivity>) => {
-      const { appletId, activityId, eventId } = action.payload;
+      const { appletId, activityId, eventId, name } = action.payload;
 
       const activityEvent: StoreProgressPayload = {
         type: ActivityPipelineType.Regular,
         startAt: new Date().getTime(),
         endAt: null,
         availableTo: action.payload.availableTo?.getTime() ?? null,
+        entityName: name,
       };
 
       state.inProgress[appletId] = state.inProgress[appletId] ?? {};
@@ -87,6 +90,7 @@ const slice = createSlice({
         pipelineActivityOrder,
         totalActivities,
         availableTo,
+        flowName,
       } = action.payload;
 
       const flowEvent: StoreProgressPayload = {
@@ -102,6 +106,7 @@ const slice = createSlice({
         executionGroupKey: uuidv4(),
         pipelineActivityOrder,
         totalActivitiesInPipeline: totalActivities,
+        entityName: flowName!,
       };
 
       state.inProgress[appletId] = state.inProgress[appletId] ?? {};

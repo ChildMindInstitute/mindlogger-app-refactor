@@ -78,6 +78,7 @@ type FlowStartedArgs = {
   activityImage: string | null;
   pipelineActivityOrder: number;
   totalActivities: number;
+  flowName: string;
 };
 
 export const StartEntityMutex = Mutex();
@@ -109,6 +110,7 @@ function useStartEntity({
     appletId: string,
     activityId: string,
     eventId: string,
+    name: string,
   ) {
     const availableTo = evaluateAvailableTo(appletId, eventId);
 
@@ -118,6 +120,7 @@ function useStartEntity({
         activityId,
         eventId,
         availableTo,
+        name,
       }),
     );
   }
@@ -132,6 +135,7 @@ function useStartEntity({
     activityImage,
     totalActivities,
     pipelineActivityOrder,
+    flowName,
   }: FlowStartedArgs) {
     const availableTo = evaluateAvailableTo(appletId, eventId);
 
@@ -147,6 +151,7 @@ function useStartEntity({
         pipelineActivityOrder,
         totalActivities,
         availableTo,
+        flowName,
       }),
     );
   }
@@ -281,7 +286,7 @@ function useStartEntity({
           onRestart: () => {
             logRestartActivity(logParams);
             cleanUpMediaFiles({ activityId, appletId, eventId, order: 0 });
-            activityStarted(appletId, activityId, eventId);
+            activityStarted(appletId, activityId, eventId, entityName);
             resolve({ startedFromScratch: true });
           },
           onResume: () => {
@@ -291,7 +296,7 @@ function useStartEntity({
         });
       } else {
         logStartActivity(logParams);
-        activityStarted(appletId, activityId, eventId);
+        activityStarted(appletId, activityId, eventId, entityName);
         resolve({ startedFromScratch: true });
       }
     });
@@ -448,6 +453,7 @@ function useStartEntity({
               pipelineActivityOrder: 0,
               activityName: firstActivity.name,
               totalActivities,
+              flowName: entityName,
             });
             resolve({
               startedFromScratch: true,
@@ -472,6 +478,7 @@ function useStartEntity({
           activityImage: firstActivity.image,
           pipelineActivityOrder: 0,
           totalActivities,
+          flowName: entityName,
         });
 
         resolve({
