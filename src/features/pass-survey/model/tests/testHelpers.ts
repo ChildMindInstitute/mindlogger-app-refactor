@@ -30,6 +30,7 @@ export const getEmptyRadioItem = (name: string): RadioPipelineItem => {
       setPalette: false,
       options: [],
       autoAdvance: false,
+      isGridView: false,
     },
     type: 'Radio',
   };
@@ -80,6 +81,7 @@ export const getEmptyCheckboxesItem = (name: string): CheckboxPipelineItem => {
       randomizeOptions: false,
       setAlerts: false,
       setPalette: false,
+      isGridView: false,
       options: [],
     },
     type: 'Checkbox',

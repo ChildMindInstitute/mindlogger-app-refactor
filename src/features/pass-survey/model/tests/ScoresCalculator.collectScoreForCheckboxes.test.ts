@@ -36,6 +36,7 @@ const getEmptyItem = (): CheckboxPipelineItem => {
       randomizeOptions: false,
       setAlerts: false,
       setPalette: false,
+      isGridView: false,
       options: [],
     },
     type: 'Checkbox',
