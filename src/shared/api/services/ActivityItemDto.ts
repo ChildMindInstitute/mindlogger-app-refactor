@@ -152,6 +152,7 @@ type SingleSelectionConfiguration = ButtonsConfiguration &
     addTooltip: boolean;
     autoAdvance: boolean;
     setPalette: boolean;
+    portraitLayout: boolean;
   };
 
 export type DataMatrixDto = Array<{
@@ -207,6 +208,7 @@ type MultiSelectionConfiguration = ButtonsConfiguration &
     setAlerts: boolean;
     addTooltip: boolean;
     setPalette: boolean;
+    portraitLayout: boolean;
   };
 
 type MultiSelectionAnswerSettings = {
