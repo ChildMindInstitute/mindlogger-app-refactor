@@ -9,7 +9,18 @@ import { colors } from '@shared/lib/constants';
 
 import { getNow } from '../dateTime';
 
-export const invertColor = (hex: string) => {
+type ColorModes = {
+  dark: string;
+  light: string;
+};
+
+export const invertColor = (
+  hex: string,
+  colorModes: ColorModes = {
+    dark: colors.darkerGrey,
+    light: colors.white,
+  },
+) => {
   const RED_RATIO = 299;
   const GREEN_RATIO = 587;
   const BLUE_RATIO = 114;
@@ -19,7 +30,7 @@ export const invertColor = (hex: string) => {
   const blue = parseInt(hexColor.substring(4, 6), 16);
   const yiqColorSpaceValue =
     (red * RED_RATIO + green * GREEN_RATIO + blue * BLUE_RATIO) / 1000;
-  return yiqColorSpaceValue >= 128 ? colors.darkerGrey : colors.white;
+  return yiqColorSpaceValue >= 128 ? colorModes.light : colorModes.dark;
 };
 
 export const getEntityProgress = (
