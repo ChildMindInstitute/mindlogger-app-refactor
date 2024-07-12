@@ -122,7 +122,7 @@ const ScrollableContent: FC<Props> = ({ children, scrollEnabled }: Props) => {
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             keyboardOpeningTime={0}
-            scrollEventThrottle={300}
+            scrollEventThrottle={100}
             onScroll={onScroll}
             overScrollMode="never"
             alwaysBounceVertical={false}
