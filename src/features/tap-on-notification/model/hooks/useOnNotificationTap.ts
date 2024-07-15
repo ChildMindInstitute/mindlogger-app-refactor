@@ -112,12 +112,21 @@ export function useOnNotificationTap({
 
       const executing = getCurrentRoute() === 'InProgressActivity';
 
+      const isAutocompletionWorking = getCurrentRoute() === 'Autocompletion';
+
       AnalyticsService.track(MixEvents.NotificationTap, {
         [MixProperties.AppletId]: appletId,
       });
 
       if (executing) {
         navigator.goBack();
+      }
+
+      if (isAutocompletionWorking) {
+        Logger.log(
+          '[useOnNotificationTap]: Notification tap ignored as autocompletion is working (M2-7315)',
+        );
+        return;
       }
 
       setTimeout(
