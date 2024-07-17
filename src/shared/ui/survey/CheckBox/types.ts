@@ -1,5 +1,7 @@
 import { ImageUrl } from '@app/shared/lib';
 
+import { BoxProps } from '../..';
+
 export type Item = {
   id: string;
   text: string;
@@ -11,3 +13,16 @@ export type Item = {
   value: number;
   isNoneOption?: boolean;
 };
+
+export type CheckboxItemProps = {
+  value: Array<Item>;
+  options: Array<Item>;
+
+  addTooltip: boolean;
+  setPalette: boolean;
+  hasImage: boolean;
+  hasTooltip: boolean;
+
+  onChange: (newValue: Item) => void;
+  textReplacer: (markdown: string) => string;
+} & BoxProps;

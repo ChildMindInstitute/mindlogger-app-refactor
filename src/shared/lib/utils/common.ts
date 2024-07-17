@@ -47,6 +47,31 @@ export function splitArray<TListItem>(
   return [leftArray, rightArray];
 }
 
+export function chunkArray<TItem>(
+  array: Array<TItem>,
+  size: number,
+): Array<Array<TItem>> {
+  if (array.length === 0) {
+    return [];
+  }
+
+  return array.reduce<Array<Array<TItem>>>((acc, val) => {
+    if (acc.length === 0) {
+      acc.push([]);
+    }
+
+    const lastArray = acc[acc.length - 1];
+
+    if (lastArray.length < size) {
+      lastArray.push(val);
+    } else {
+      acc.push([val]);
+    }
+
+    return acc;
+  }, []);
+}
+
 export const getFloatPartLength = (numberValue: number) => {
   const numberAsString = numberValue.toString();
 

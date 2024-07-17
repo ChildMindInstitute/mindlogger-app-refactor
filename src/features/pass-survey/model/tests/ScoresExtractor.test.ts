@@ -31,6 +31,7 @@ const getRadiosItem = (): RadioPipelineItem => {
       setPalette: false,
       setAlerts: false,
       randomizeOptions: false,
+      isGridView: false,
       options: [
         {
           alert: null,
@@ -81,6 +82,7 @@ const getCheckboxesItem = (): CheckboxPipelineItem => {
       randomizeOptions: false,
       setAlerts: false,
       setPalette: false,
+      isGridView: false,
       options: [
         {
           alert: null,

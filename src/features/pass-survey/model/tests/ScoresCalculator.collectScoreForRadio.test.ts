@@ -35,6 +35,7 @@ const getEmptyItem = (): RadioPipelineItem => {
       setPalette: false,
       options: [],
       autoAdvance: false,
+      isGridView: false,
     },
     type: 'Radio',
   };

@@ -1,9 +1,10 @@
 import { FC, useMemo } from 'react';
 
 import { shuffle } from '@shared/lib';
-import { Box, ScrollView } from '@shared/ui';
+import { ScrollView } from '@shared/ui';
 
-import CheckBoxItem from './CheckBox.item';
+import CheckBoxGrid from './CheckBoxGrid';
+import CheckBoxList from './CheckBoxList';
 import { Item } from './types';
 
 type Props = {
@@ -13,14 +14,11 @@ type Props = {
     addTooltip: boolean;
     setPalette: boolean;
     setAlerts: boolean;
+    isGridView: boolean;
   };
   onChange: (values: Item[] | null) => void;
   values: Item[];
   textReplacer: (markdown: string) => string;
-};
-
-const findById = (items: Item[], id: string): Item | undefined => {
-  return items.find(val => val.id === id);
 };
 
 const CheckBoxActivityItem: FC<Props> = ({
@@ -29,7 +27,8 @@ const CheckBoxActivityItem: FC<Props> = ({
   values,
   textReplacer,
 }) => {
-  const { options, randomizeOptions, addTooltip, setPalette } = config;
+  const { options, randomizeOptions, addTooltip, setPalette, isGridView } =
+    config;
 
   const hasImage = useMemo(
     () => options.some(option => !!option.image),
@@ -82,28 +81,21 @@ const CheckBoxActivityItem: FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [randomizeOptions]);
 
+  const CheckBoxesView = isGridView ? CheckBoxGrid : CheckBoxList;
+
   return (
     <ScrollView>
-      {mutatedItems.map((item, index) => {
-        return (
-          <Box
-            accessibilityLabel="checkbox-container"
-            key={`checkbox-${item.id}`}
-          >
-            <CheckBoxItem
-              {...item}
-              tooltipAvailable={addTooltip}
-              setPalette={setPalette}
-              imageContainerVisible={hasImage}
-              tooltipContainerVisible={hasTooltip}
-              onChange={() => onItemValueChanged(item)}
-              value={!!findById(values, item.id)}
-              textReplacer={textReplacer}
-              position={index}
-            />
-          </Box>
-        );
-      })}
+      <CheckBoxesView
+        value={values}
+        options={mutatedItems}
+        addTooltip={addTooltip}
+        setPalette={setPalette}
+        hasImage={hasImage}
+        hasTooltip={hasTooltip}
+        onChange={item => onItemValueChanged(item)}
+        textReplacer={textReplacer}
+        mb={16}
+      />
     </ScrollView>
   );
 };

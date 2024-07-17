@@ -1,6 +1,7 @@
 import {
   callWithMutex,
   callWithMutexAsync,
+  chunkArray,
   getStringHashCode,
   isObjectNotEmpty,
   Mutex,
@@ -90,5 +91,62 @@ describe('Test function getStringHashCode', () => {
     const result = getStringHashCode(str);
 
     expect(result).toBe(expectedResult);
+  });
+});
+
+describe('Test function chunkArray', () => {
+  const testCases = [
+    {
+      input: {
+        array: [],
+        chunks: 5,
+      },
+      expected: [],
+    },
+    {
+      input: {
+        array: [1, 2, 3],
+        chunks: 3,
+      },
+      expected: [[1, 2, 3]],
+    },
+    {
+      input: {
+        array: [1, 2, 3],
+        chunks: 1,
+      },
+      expected: [[1], [2], [3]],
+    },
+    {
+      input: {
+        array: [1, 2, 3, 4, 5, 6],
+        chunks: 2,
+      },
+      expected: [
+        [1, 2],
+        [3, 4],
+        [5, 6],
+      ],
+    },
+    {
+      input: {
+        array: [1, 2, 3, 4, 5, 6, 7],
+        chunks: 2,
+      },
+      expected: [[1, 2], [3, 4], [5, 6], [7]],
+    },
+  ];
+
+  const stringify = (array: number[] | Array<number[]>) =>
+    JSON.stringify(array);
+
+  testCases.forEach(testCase => {
+    const expectedResult = stringify(testCase.expected);
+
+    it(`should return ${expectedResult} when an array is ${stringify(testCase.input.array)} and chunks is ${testCase.input.chunks}`, () => {
+      const result = chunkArray(testCase.input.array, testCase.input.chunks);
+
+      expect(stringify(result)).toBe(expectedResult);
+    });
   });
 });

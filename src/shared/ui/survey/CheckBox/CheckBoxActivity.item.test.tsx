@@ -46,6 +46,7 @@ describe('Test CheckBoxActivityItem', () => {
       addTooltip: false,
       setPalette: false,
       setAlerts: false,
+      isGridView: false,
     };
 
     const checkboxItem = renderer.create(
@@ -75,6 +76,7 @@ describe('Test CheckBoxActivityItem', () => {
       addTooltip: false,
       setPalette: false,
       setAlerts: false,
+      isGridView: false,
     };
     const checkboxItem = renderer.create(
       <TamaguiProvider>
