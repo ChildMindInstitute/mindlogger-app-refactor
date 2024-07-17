@@ -17,6 +17,10 @@ import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SystemRecord } from '@app/shared/lib/records';
 import { ActivityGroupsModel } from '@app/widgets/activity-group';
 import { SurveyModel } from '@app/widgets/survey';
+import {
+  AutocompletionExecuteOptions,
+  LogAutocompletionTrigger,
+} from '@app/widgets/survey/model';
 import { SessionModel } from '@entities/session';
 import { EnterForegroundModel } from '@features/enter-foreground';
 import { LogoutModel } from '@features/logout';
@@ -31,9 +35,9 @@ import {
   useAppSelector,
   useFirebaseSetup,
   useOnlineEstablished,
-  Logger,
-  useCurrentRoute,
   useOnceRef,
+  Emitter,
+  useOnForegroundDebounced,
 } from '@shared/lib';
 import {
   UserProfileIcon,
@@ -67,11 +71,12 @@ import {
   InProgressActivityScreen,
   ApplicationLogsScreen,
   PasswordRecoveryScreen,
+  AutocompletionScreen,
 } from '../ui';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const AUTOCOMPLETION_DELAY_ON_APP_START = 2000;
+const AUTOCOMPLETION_DELAY = 2000;
 
 export default () => {
   const { t } = useTranslation();
@@ -97,7 +102,6 @@ export default () => {
   });
 
   EnterForegroundModel.useAnalyticsEventTrack();
-  EnterForegroundModel.useRestackNotifications();
 
   useBackHandler(() => {
     onBeforeAppClose();
@@ -109,20 +113,31 @@ export default () => {
     forceLogout();
   });
 
-  const { completeEntityIntoUploadToQueue, process: processAutocompletion } =
+  useBackgroundTask(() => {
+    return NotificationModel.topUpNotifications();
+  });
+
+  const { completeEntityIntoUploadToQueue, hasExpiredEntity } =
     SurveyModel.useAutoCompletion();
 
   TapOnNotificationModel.useOnNotificationTap({
-    checkAvailability: (
+    checkAvailability: async (
       entityName: string,
       { appletId, eventId, entityId, entityType }: EntityPath,
     ) => {
-      return checkEntityAvailability({
+      const isSuccess = await checkEntityAvailability({
         entityName,
         identifiers: { appletId, eventId, entityId, entityType },
         queryClient,
         storeProgress,
       });
+
+      if (!isSuccess) {
+        Emitter.emit<SurveyModel.AutocompletionExecuteOptions>('autocomplete', {
+          checksToExclude: ['start-entity'],
+        });
+      }
+      return isSuccess;
     },
     hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
     cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
@@ -131,52 +146,37 @@ export default () => {
     evaluateAvailableTo:
       ActivityGroupsModel.useAvailabilityEvaluator().evaluateAvailableTo,
     completeEntityIntoUploadToQueue,
-    processAutocompletion,
   });
 
-  useBackgroundTask(() => {
-    return NotificationModel.topUpNotifications();
-  });
+  EnterForegroundModel.useRestackNotifications(hasExpiredEntity);
 
-  const { getCurrentRoute } = useCurrentRoute();
+  const { executeAutocompletion } = SurveyModel.useAutoCompletionExecute();
 
-  const autocomplete = useCallback(() => {
-    const executing = getCurrentRoute() === 'InProgressActivity';
-
-    Logger.log('[RootNavigator.autocomplete] Started');
-
-    if (executing) {
-      Logger.info(
-        '[RootNavigator.autocomplete]: Postponed due to entity is in progress',
-      );
-      return;
-    }
-
-    if (AppletModel.RefreshService.isBusy()) {
-      Logger.info(
-        '[RootNavigator.autocomplete]: Postponed due to RefreshService.mutex is busy',
-      );
-      return;
-    }
-
-    if (AppletModel.StartEntityMutex.isBusy()) {
-      Logger.log(
-        '[RootNavigator.startActivityOrFlow] Postponed due to StartEntityMutex is busy',
-      );
-      return;
-    }
-
-    processAutocompletion();
-  }, [getCurrentRoute, processAutocompletion]);
-
-  const autocompleteWithDelay = useCallback(
-    () => setTimeout(autocomplete, AUTOCOMPLETION_DELAY_ON_APP_START),
-    [autocomplete],
+  const executeAutocompletionWithDelay = useCallback(
+    (
+      logTrigger: LogAutocompletionTrigger,
+      options: AutocompletionExecuteOptions,
+    ) =>
+      setTimeout(
+        () => executeAutocompletion(logTrigger, options),
+        AUTOCOMPLETION_DELAY,
+      ),
+    [executeAutocompletion],
   );
 
-  useOnlineEstablished(autocomplete);
+  useOnlineEstablished(() =>
+    executeAutocompletion('to-online', { forceUpload: true }),
+  );
 
-  useOnceRef(autocompleteWithDelay);
+  useOnceRef(() =>
+    executeAutocompletionWithDelay('app-start', { forceUpload: true }),
+  );
+
+  useOnForegroundDebounced(() =>
+    executeAutocompletionWithDelay('to-foreground', { forceUpload: false }),
+  );
+
+  SurveyModel.useOnAutoCompletion();
 
   LoginModel.useAnalyticsAutoLogin();
 
@@ -333,6 +333,14 @@ export default () => {
           <Stack.Screen
             name="InProgressActivity"
             component={InProgressActivityScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="Autocompletion"
+            component={AutocompletionScreen}
             options={{
               headerShown: false,
             }}

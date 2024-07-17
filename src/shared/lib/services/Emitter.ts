@@ -6,7 +6,8 @@ type Events =
   | 'on-notification-refresh'
   | 'refresh-token-fail'
   | 'stepper:reset'
-  | 'logout';
+  | 'logout'
+  | 'autocomplete';
 
 const Emitter = {
   on: <TPayload>(event: Events, fn: (payload?: TPayload) => void) =>

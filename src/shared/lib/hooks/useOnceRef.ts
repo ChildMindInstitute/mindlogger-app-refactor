@@ -1,14 +1,13 @@
 import { useEffect, useRef } from 'react';
 
 const useOnceRef = (callback: () => void) => {
-  const currentStateRef = useRef<boolean>(false);
+  const callbackRef = useRef(callback);
+
+  callbackRef.current = callback;
 
   useEffect(() => {
-    if (!currentStateRef.current) {
-      currentStateRef.current = true;
-      callback();
-    }
-  }, [callback]);
+    callbackRef.current();
+  }, []);
 };
 
 export default useOnceRef;
