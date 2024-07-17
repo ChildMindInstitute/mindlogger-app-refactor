@@ -21,6 +21,7 @@ import {
   getEntityProgress,
   ILogger,
   isAppOnline,
+  isEntityExpired,
   isEntityInProgress,
   isReadyForAutocompletion,
   Logger,
@@ -51,12 +52,18 @@ import {
 import { selectInProgressApplets } from '../selectors';
 import { actions } from '../slice';
 
+type FailReason =
+  | 'media-found'
+  | 'migrations-not-applied'
+  | 'all-items-hidden'
+  | 'not-available'
+  | 'mutex-busy'
+  | 'expired-while-alert-opened';
+
 type StartResult = {
-  startedFromScratch?: boolean;
-  cannotBeStartedDueToMediaFound?: boolean;
-  cannotBeStartedDueToMigrationsNotApplied?: boolean;
-  cannotBeStartedDueToAllItemsHidden?: boolean;
-  cannotBeStarted?: boolean;
+  fromScratch?: boolean;
+  failReason?: FailReason;
+  failed?: boolean;
 };
 
 type UseStartEntityInput = {
@@ -182,12 +189,12 @@ function useStartEntity({
     });
   };
 
-  async function evaluateProgressWithAutocompletion(
+  async function evaluateProgressDataWithAddingToQueue(
     appletId: string,
     entityId: string,
     eventId: string,
     entityType: EntityType,
-  ): Promise<boolean> {
+  ): Promise<{ isEntityInProgress: boolean; availableTo: number | null }> {
     const progress = getEntityProgress(
       appletId,
       entityId,
@@ -195,7 +202,7 @@ function useStartEntity({
       allProgresses,
     );
 
-    let isActivityInProgress = isInProgress(progress);
+    let evaluatedIsInProgress = isInProgress(progress);
 
     const entityPath: EntityPath = {
       appletId,
@@ -211,10 +218,13 @@ function useStartEntity({
 
     if (readyForAutocompletion) {
       await completeEntityIntoUploadToQueue(entityPath);
-      isActivityInProgress = false;
+      evaluatedIsInProgress = false;
     }
 
-    return isActivityInProgress;
+    return {
+      isEntityInProgress: evaluatedIsInProgress,
+      availableTo: progress?.availableTo ?? null,
+    };
   }
 
   async function startActivityInternal(
@@ -230,35 +240,30 @@ function useStartEntity({
       'regular',
     );
 
-    const isActivityInProgress = await evaluateProgressWithAutocompletion(
-      appletId,
-      activityId,
-      eventId,
-      'regular',
-    );
+    const { isEntityInProgress: isActivityInProgress, availableTo } =
+      await evaluateProgressDataWithAddingToQueue(
+        appletId,
+        activityId,
+        eventId,
+        'regular',
+      );
 
     return new Promise<StartResult>(resolve => {
       if (!MigrationValidator.allMigrationHaveBeenApplied()) {
         onMigrationsNotApplied();
-        resolve({
-          cannotBeStartedDueToMigrationsNotApplied: true,
-        });
+        resolve({ failReason: 'migrations-not-applied' });
         return;
       }
 
       if (breakDueToMediaReferences) {
         onMediaReferencesFound();
-        resolve({
-          cannotBeStartedDueToMediaFound: true,
-        });
+        resolve({ failReason: 'media-found' });
         return;
       }
 
       if (shouldBreakDueToAllItemsHidden(appletId, activityId, 'regular')) {
         onActivityContainsAllItemsHidden(entityName);
-        resolve({
-          cannotBeStartedDueToAllItemsHidden: true,
-        });
+        resolve({ failReason: 'all-items-hidden' });
         return;
       }
 
@@ -273,26 +278,32 @@ function useStartEntity({
 
       if (isActivityInProgress) {
         if (isTimerElapsed) {
-          resolve({ startedFromScratch: false });
+          resolve({ fromScratch: false });
           return;
         }
 
         onBeforeStartingActivity({
           onRestart: () => {
+            if (isEntityExpired(availableTo)) {
+              return resolve({ failReason: 'expired-while-alert-opened' });
+            }
             logRestartActivity(logParams);
             cleanUpMediaFiles({ activityId, appletId, eventId, order: 0 });
             activityStarted(appletId, activityId, eventId);
-            resolve({ startedFromScratch: true });
+            resolve({ fromScratch: true });
           },
           onResume: () => {
+            if (isEntityExpired(availableTo)) {
+              return resolve({ failReason: 'expired-while-alert-opened' });
+            }
             logResumeActivity(logParams);
-            return resolve({ startedFromScratch: false });
+            return resolve({ fromScratch: false });
           },
         });
       } else {
         logStartActivity(logParams);
         activityStarted(appletId, activityId, eventId);
-        resolve({ startedFromScratch: true });
+        resolve({ fromScratch: true });
       }
     });
   }
@@ -306,34 +317,39 @@ function useStartEntity({
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
       Logger.log('[useStartEntity.startActivity] Mutex is busy');
-      return {
-        cannotBeStarted: true,
-      };
+
+      return { failed: true, failReason: 'mutex-busy' };
     }
 
     try {
       mutex.setBusy();
 
       if (
-        !checkAvailability(entityName, {
+        !(await checkAvailability(entityName, {
           appletId,
           eventId,
           entityId: activityId,
           entityType: 'regular',
-        })
+        }))
       ) {
-        return {
-          cannotBeStarted: true,
-        };
+        return { failed: true, failReason: 'not-available' };
       }
 
-      return await startActivityInternal(
+      const result = await startActivityInternal(
         appletId,
         activityId,
         eventId,
         entityName,
         isTimerElapsed,
       );
+
+      result.failed = !!result.failReason;
+
+      Logger.log(
+        `[useStartEntity.startActivity]: Result: ${JSON.stringify(result)}`,
+      );
+
+      return result;
     } finally {
       mutex.release();
     }
@@ -378,33 +394,30 @@ function useStartEntity({
       'flow',
     );
 
-    const isFlowInProgress = await evaluateProgressWithAutocompletion(
-      appletId,
-      flowId,
-      eventId,
-      'flow',
-    );
+    const { isEntityInProgress: isFlowInProgress, availableTo } =
+      await evaluateProgressDataWithAddingToQueue(
+        appletId,
+        flowId,
+        eventId,
+        'flow',
+      );
 
     return new Promise<StartResult>(resolve => {
       if (!MigrationValidator.allMigrationHaveBeenApplied()) {
         onMigrationsNotApplied();
-        resolve({
-          cannotBeStartedDueToMigrationsNotApplied: true,
-        });
+        resolve({ failReason: 'migrations-not-applied' });
         return;
       }
 
       if (breakDueToMediaReferences) {
         onMediaReferencesFound();
-        resolve({ cannotBeStartedDueToMediaFound: true });
+        resolve({ failReason: 'media-found' });
         return;
       }
 
       if (shouldBreakDueToAllItemsHidden(appletId, flowId, 'flow')) {
         onFlowActivityContainsAllItemsHidden(entityName);
-        resolve({
-          cannotBeStartedDueToAllItemsHidden: true,
-        });
+        resolve({ failReason: 'all-items-hidden' });
         return;
       }
 
@@ -419,14 +432,16 @@ function useStartEntity({
 
       if (isFlowInProgress) {
         if (isTimerElapsed) {
-          resolve({
-            startedFromScratch: false,
-          });
+          resolve({ fromScratch: false });
           return;
         }
 
         onBeforeStartingActivity({
           onRestart: () => {
+            if (isEntityExpired(availableTo)) {
+              return resolve({ failReason: 'expired-while-alert-opened' });
+            }
+
             for (let i = 0; i < flowActivities.length; i++) {
               // TODO: it should be based on progress record
               cleanUpMediaFiles({
@@ -449,15 +464,15 @@ function useStartEntity({
               activityName: firstActivity.name,
               totalActivities,
             });
-            resolve({
-              startedFromScratch: true,
-            });
+            resolve({ fromScratch: true });
           },
           onResume: () => {
+            if (isEntityExpired(availableTo)) {
+              return resolve({ failReason: 'expired-while-alert-opened' });
+            }
+
             logResumeFlow(logParams);
-            return resolve({
-              startedFromScratch: false,
-            });
+            return resolve({ fromScratch: false });
           },
         });
       } else {
@@ -474,9 +489,7 @@ function useStartEntity({
           totalActivities,
         });
 
-        resolve({
-          startedFromScratch: true,
-        });
+        resolve({ fromScratch: true });
       }
     });
   }
@@ -490,34 +503,39 @@ function useStartEntity({
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
       Logger.log('[useStartEntity.startFlow] Mutex is busy');
-      return Promise.resolve({
-        cannotBeStarted: true,
-      });
+
+      return { failed: true, failReason: 'mutex-busy' };
     }
 
     try {
       mutex.setBusy();
 
       if (
-        !checkAvailability(entityName, {
+        !(await checkAvailability(entityName, {
           appletId,
           eventId,
           entityId: flowId,
           entityType: 'flow',
-        })
+        }))
       ) {
-        return {
-          cannotBeStarted: true,
-        };
+        return { failed: true, failReason: 'not-available' };
       }
 
-      return await startFlowInternal(
+      const result = await startFlowInternal(
         appletId,
         flowId,
         eventId,
         entityName,
         isTimerElapsed,
       );
+
+      result.failed = !!result.failReason;
+
+      Logger.log(
+        `[useStartEntity.startFlow]: Result: ${JSON.stringify(result)}`,
+      );
+
+      return result;
     } finally {
       mutex.release();
     }

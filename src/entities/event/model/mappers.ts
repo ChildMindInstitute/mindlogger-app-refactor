@@ -9,7 +9,11 @@ export function mapEventsFromDto(
 ): ScheduleEvent[] {
   return eventsDto.map<ScheduleEvent>(x => mapEventFromDto(x));
 }
-export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
+export function mapEventFromDto(dto: ScheduleEventDto | null): ScheduleEvent {
+  if (!dto) {
+    throw new Error('[mapEventFromDto]: dto must be an instance');
+  }
+
   return {
     id: dto.id,
     entityId: dto.entityId,

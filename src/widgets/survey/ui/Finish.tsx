@@ -155,6 +155,7 @@ function FinishItem({
 
   useEffect(() => {
     UploadObservable.reset();
+
     setTimeout(() => {
       completeActivity();
     }, 50);

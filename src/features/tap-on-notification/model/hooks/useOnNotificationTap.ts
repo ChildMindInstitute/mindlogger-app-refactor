@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -9,7 +10,6 @@ import {
   EntityType,
   EvaluateAvailableTo,
   LookupEntityInput,
-  ProcessAutocompletion,
   StoreProgress,
 } from '@app/abstract/lib';
 import { AppletModel, clearStorageRecords } from '@app/entities/applet';
@@ -26,6 +26,7 @@ import {
 import { LogTrigger, QueryDataUtils } from '@app/shared/api';
 import {
   AnalyticsService,
+  Emitter,
   getEntityProgress,
   HourMinute,
   isEntityInProgress,
@@ -43,7 +44,6 @@ type Input = {
   cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
   evaluateAvailableTo: EvaluateAvailableTo;
   completeEntityIntoUploadToQueue: CompleteEntityIntoUploadToQueue;
-  processAutocompletion: ProcessAutocompletion;
 };
 
 const GoBackDuration = 1000;
@@ -67,7 +67,6 @@ export function useOnNotificationTap({
   hasActivityWithHiddenAllItems,
   evaluateAvailableTo,
   completeEntityIntoUploadToQueue,
-  processAutocompletion,
 }: Input) {
   const queryClient = useQueryClient();
 
@@ -114,12 +113,21 @@ export function useOnNotificationTap({
 
       const executing = getCurrentRoute() === 'InProgressActivity';
 
+      const isAutocompletionWorking = getCurrentRoute() === 'Autocompletion';
+
       AnalyticsService.track(MixEvents.NotificationTap, {
         [MixProperties.AppletId]: appletId,
       });
 
       if (executing) {
         navigator.goBack();
+      }
+
+      if (isAutocompletionWorking) {
+        Logger.log(
+          '[useOnNotificationTap]: Notification tap ignored as autocompletion is working (M2-7315)',
+        );
+        return;
       }
 
       setTimeout(
@@ -188,7 +196,7 @@ export function useOnNotificationTap({
     });
   }
 
-  const startEntity = (
+  const startEntity = async (
     appletId: string,
     entityId: string,
     entityType: EntityType,
@@ -216,64 +224,54 @@ export function useOnNotificationTap({
         ) === null;
     }
 
+    const autocomplete = () => {
+      Emitter.emit('autocomplete');
+    };
+
     if (entityType === 'flow') {
-      startFlow(appletId, entityId, eventId, entityName, isTimerElapsed).then(
-        ({
-          startedFromScratch,
-          cannotBeStartedDueToMediaFound,
-          cannotBeStartedDueToMigrationsNotApplied,
-          cannotBeStartedDueToAllItemsHidden,
-          cannotBeStarted,
-        }) => {
-          if (
-            cannotBeStartedDueToMediaFound ||
-            cannotBeStartedDueToAllItemsHidden ||
-            cannotBeStartedDueToMigrationsNotApplied ||
-            cannotBeStarted
-          ) {
-            processAutocompletion();
-            return;
-          }
-
-          if (startedFromScratch) {
-            clearStorageRecords.byEventId(eventId);
-          }
-
-          navigateSurvey({ appletId, eventId, entityId, entityType });
-        },
-      );
-    } else {
-      startActivity(
+      const result = await startFlow(
         appletId,
         entityId,
         eventId,
         entityName,
         isTimerElapsed,
-      ).then(
-        ({
-          startedFromScratch,
-          cannotBeStartedDueToMediaFound,
-          cannotBeStartedDueToMigrationsNotApplied,
-          cannotBeStartedDueToAllItemsHidden,
-          cannotBeStarted,
-        }) => {
-          if (
-            cannotBeStartedDueToMediaFound ||
-            cannotBeStartedDueToAllItemsHidden ||
-            cannotBeStartedDueToMigrationsNotApplied ||
-            cannotBeStarted
-          ) {
-            processAutocompletion();
-            return;
-          }
-
-          if (startedFromScratch) {
-            clearStorageRecords.byEventId(eventId);
-          }
-
-          navigateSurvey({ appletId, eventId, entityId, entityType });
-        },
       );
+
+      if (result.failReason === 'expired-while-alert-opened') {
+        return autocomplete();
+      }
+
+      if (result.failed) {
+        return;
+      }
+
+      if (result.fromScratch) {
+        clearStorageRecords.byEventId(eventId);
+      }
+
+      navigateSurvey({ appletId, eventId, entityId, entityType });
+    } else {
+      const result = await startActivity(
+        appletId,
+        entityId,
+        eventId,
+        entityName,
+        isTimerElapsed,
+      );
+
+      if (result.failReason === 'expired-while-alert-opened') {
+        return autocomplete();
+      }
+
+      if (result.failed) {
+        return;
+      }
+
+      if (result.fromScratch) {
+        clearStorageRecords.byEventId(eventId);
+      }
+
+      navigateSurvey({ appletId, eventId, entityId, entityType });
     }
   };
 
