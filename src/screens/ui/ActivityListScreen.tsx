@@ -5,13 +5,19 @@ import { useIsFocused } from '@react-navigation/core';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { EntityPath, StoreProgress } from '@app/abstract/lib';
+import {
+  SharedContentConsent,
+  useAppletDetailsQuery,
+} from '@app/entities/applet';
 import { AppletModel } from '@app/entities/applet';
+import { mapAppletDetailsFromDto } from '@app/entities/applet/model';
 import {
   AnalyticsService,
   Emitter,
   MixEvents,
   MixProperties,
   useAppSelector,
+  useFeatureFlags,
   useOnFocus,
 } from '@app/shared/lib';
 import { ActivityGroups } from '@app/widgets/activity-group';
@@ -26,6 +32,14 @@ type Props = BottomTabScreenProps<AppletDetailsParamList, 'ActivityList'>;
 
 const ActivityListScreen: FC<Props> = props => {
   const appletId = props.route.params.appletId;
+
+  const { featureFlags } = useFeatureFlags();
+
+  const { data: consentsCapabilityEnabled } = useAppletDetailsQuery(appletId, {
+    select: response =>
+      mapAppletDetailsFromDto(response.data.result).consentsCapabilityEnabled &&
+      (featureFlags.enableConsentsCapability as boolean),
+  });
 
   const isFocused = useIsFocused();
 
@@ -69,7 +83,11 @@ const ActivityListScreen: FC<Props> = props => {
     <Box flex={1}>
       <UploadRetryBanner accessibilityLabel="upload-banner" />
       <HorizontalCalendar mt={8} />
-      <StreamingStatusBar appletId={props.route.params.appletId} mb={20} />
+      <StreamingStatusBar appletId={appletId} mb={20} />
+
+      {consentsCapabilityEnabled && (
+        <SharedContentConsent appletId={appletId} px={14} mt={10} />
+      )}
 
       {isFocused && (
         <ActivityGroups

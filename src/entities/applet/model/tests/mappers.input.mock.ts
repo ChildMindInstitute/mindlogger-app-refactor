@@ -119,6 +119,7 @@ export const appletDetailsDto: AppletDetailsDto = {
   streamPort: null,
   activities: activityRecordsDto,
   activityFlows: activityFlows,
+  integrations: ['loris'],
 };
 
 const activityItems: ActivityItemDto[] = [

@@ -84,6 +84,7 @@ export const appletDetails: AppletDetails = {
   },
   version: '1.1.11',
   watermark: 'https://watermark',
+  consentsCapabilityEnabled: true,
 };
 
 export const appletTheme: AppletTheme = {

@@ -42,11 +42,19 @@ type InProgressFlow = {
   availableTo?: Date | null;
 };
 
+type Consents = {
+  shareToPublic: boolean;
+  shareMediaToPublic: boolean;
+};
+
+export type AppletsConsents = Record<string, Consents | undefined>;
+
 type InitialState = {
   inProgress: StoreProgress;
   // todo - change to CompletedEventEntities when migrations infrastructure is ready
   completedEntities: CompletedEntities;
   completions: CompletedEventEntities;
+  consents?: AppletsConsents;
 };
 
 const initialState: InitialState = {
@@ -197,6 +205,33 @@ const slice = createSlice({
       const { endAt, appletId, entityId, eventId } = action.payload;
 
       state.inProgress[appletId][entityId][eventId].endAt = endAt;
+    },
+
+    shareConsentChanged: (
+      state,
+      action: PayloadAction<{ appletId: string; value: boolean }>,
+    ) => {
+      const { appletId, value } = action.payload;
+
+      state.consents = state.consents ?? {};
+
+      state.consents[appletId] = {
+        shareToPublic: value,
+        shareMediaToPublic: value,
+      };
+    },
+
+    mediaConsentChanged: (
+      state,
+      action: PayloadAction<{ appletId: string; value: boolean }>,
+    ) => {
+      const { appletId, value } = action.payload;
+
+      const appletConsents = state.consents?.[appletId];
+
+      if (appletConsents) {
+        appletConsents.shareMediaToPublic = value;
+      }
     },
   },
   extraReducers: builder =>

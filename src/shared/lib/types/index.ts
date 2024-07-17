@@ -3,3 +3,4 @@ export * from './dateTime';
 export * from './url';
 export * from './space';
 export * from './logger';
+export * from './service';
