@@ -12,7 +12,6 @@ import { Box, BoxProps, XStack, YStack, Text } from './';
 type Props = {
   imageUrl: string | null;
   textColor?: string;
-
   onPress: () => void;
   renderLeftIcon?: () => JSX.Element | null;
   renderRightIcon?: () => JSX.Element | null;
@@ -20,7 +19,6 @@ type Props = {
 
 const CardWrapper = styled(YStack, {
   minHeight: 188,
-
   borderWidth: 2,
   borderRadius: 12,
   borderColor: colors.lighterGrey7,
