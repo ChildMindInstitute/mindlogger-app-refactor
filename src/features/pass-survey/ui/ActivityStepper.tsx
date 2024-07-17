@@ -391,15 +391,17 @@ function ActivityStepper({
             }}
           />
 
-          <ProgressWithTimer
-            duration={currentPipelineItem?.timer}
-            key={currentPipelineItem?.id}
-          />
+          <Box mb={!showBottomNavigation ? 16 : 0}>
+            <ProgressWithTimer
+              duration={currentPipelineItem?.timer}
+              key={currentPipelineItem?.id}
+            />
+          </Box>
 
           {showBottomNavigation && (
             <Stepper.NavigationPanel
               mt={18}
-              minHeight={27}
+              minHeight={46}
               mb={safeAreaBottom ? 0 : 16}
               gap={10}
               mx={10}
