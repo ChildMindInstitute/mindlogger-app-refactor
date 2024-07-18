@@ -17,8 +17,10 @@
     "progress": {
       "upload_files": "Téléchargement de vos fichiers...",
       "encrypt_answers": "Chiffrer vos réponses...",
-      "upload_answers": "Téléchargement de vos réponses..."
-    }
+      "upload_answers": "Téléchargement de vos réponses...",
+      "completed": "Activité téléchargée"
+    },
+    "step": "Étape"
   },
   "activity_time": {
     "time_remaining": "reste pour cet article"

@@ -2,30 +2,21 @@ import { useCallback } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
+import {
+  AutocompletionExecuteOptions,
+  LogAutocompletionTrigger,
+} from '@app/abstract/lib';
 import { AppletModel } from '@app/entities/applet';
-import { Logger, UploadObservable, useCurrentRoute } from '@app/shared/lib';
+import {
+  Logger,
+  UploadObservable,
+  useCurrentRoute,
+  useIsOnline,
+} from '@app/shared/lib';
 
 import { useAutoCompletion } from './';
 
-type SafeChecks =
-  | 'in-progress-activity'
-  | 'refresh'
-  | 'start-entity'
-  | 'uploading'
-  | 'already-opened';
-
-export type LogAutocompletionTrigger =
-  | 'app-start'
-  | 'to-foreground'
-  | 'to-online'
-  | 'unknown';
-
 const CompleteCurrentNavigationDelay = 500;
-
-export type AutocompletionExecuteOptions = {
-  checksToExclude?: Array<SafeChecks>;
-  forceUpload?: boolean;
-};
 
 const useAutoCompletionExecute = () => {
   const { getCurrentRoute } = useCurrentRoute();
@@ -34,15 +25,22 @@ const useAutoCompletionExecute = () => {
 
   const { hasExpiredEntity, evaluateIfItemsInQueueExist } = useAutoCompletion();
 
+  const isOffline = !useIsOnline();
+
   const autocomplete = useCallback(
     (
       logTrigger: LogAutocompletionTrigger,
       options?: AutocompletionExecuteOptions,
     ) => {
-      const { checksToExclude: checksToExcludeOptional, forceUpload } =
-        options ?? {};
+      const {
+        checksToExclude: checksToExcludeOptional,
+        checksToInclude: checksToIncludeOptional,
+        forceUpload,
+      } = options ?? {};
 
       const checksToExclude = checksToExcludeOptional ?? [];
+
+      const checksToInclude = checksToIncludeOptional ?? [];
 
       const currentRoute = getCurrentRoute();
 
@@ -55,8 +53,15 @@ const useAutoCompletionExecute = () => {
       const hasItemsInQueue = evaluateIfItemsInQueueExist();
 
       Logger.log(
-        `[useAutoCompletionExecute.autocomplete] Started, logTrigger="${logTrigger}", forceUpload="${forceUpload}", checksToExclude=${JSON.stringify(checksToExclude)}, hasItemsInQueue=${hasItemsInQueue}`,
+        `[useAutoCompletionExecute.autocomplete] Started, logTrigger="${logTrigger}", forceUpload="${forceUpload}", checksToExclude=${JSON.stringify(checksToExclude)}, checksToInclude=${JSON.stringify(checksToInclude)}, hasItemsInQueue=${hasItemsInQueue}`,
       );
+
+      if (checksToInclude.includes('is-offline') && isOffline) {
+        Logger.info(
+          '[useAutoCompletionExecute.autocomplete]: Postponed due to offline',
+        );
+        return;
+      }
 
       if (
         !checksToExclude.includes('in-progress-activity') &&
@@ -121,6 +126,7 @@ const useAutoCompletionExecute = () => {
       evaluateIfItemsInQueueExist,
       getCurrentRoute,
       hasExpiredEntity,
+      isOffline,
       navigation,
     ],
   );

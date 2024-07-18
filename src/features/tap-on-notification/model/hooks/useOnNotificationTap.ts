@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import {
   ActivityRecordKeyParams,
+  AutocompletionEventOptions,
   CheckAvailability,
   CompleteEntityIntoUploadToQueue,
   EntityPath,
@@ -225,7 +226,9 @@ export function useOnNotificationTap({
     }
 
     const autocomplete = () => {
-      Emitter.emit('autocomplete');
+      Emitter.emit<AutocompletionEventOptions>('autocomplete', {
+        logTrigger: 'expired-while-alert-opened',
+      });
     };
 
     if (entityType === 'flow') {

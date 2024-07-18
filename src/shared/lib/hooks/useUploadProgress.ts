@@ -1,34 +1,51 @@
-/* eslint-disable no-nested-ternary */
 import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { UploadProgressObservable } from '../';
+import { UploadProgressObservable, wait } from '../';
+import { SecondLevelStep, UploadProgress } from '../observables/';
 
 import { useForceUpdate } from './';
 
-type UseUploadProgressResult = {
-  totalActivities: number;
-  currentActivity: number;
-  currentActivityName: string;
-  totalFilesInActivity: number;
-  currentFile: number;
-  currentSecondLevelStep: string;
-  isValid: boolean;
-  currentStep: number | null; //1-based
+type UseUploadProgressResult = UploadProgress & {
+  currentSecondLevelStep: string | null;
+  currentStep: number | null;
   totalSteps: number | null;
+  isValid: boolean;
 };
 
-const useUploadProgress = () => {
+const evaluateCurrentStep = (
+  hasFiles: boolean,
+  currentSecondLevelStepKey: SecondLevelStep,
+  currentFileStep: number | null,
+): number => {
+  const levelStep = currentSecondLevelStepKey;
+
+  let currentStep = 0;
+
+  if (hasFiles) {
+    currentStep += currentFileStep!;
+  }
+
+  if (levelStep === 'encrypt_answers') {
+    currentStep += 1;
+  }
+
+  if (levelStep === 'upload_answers') {
+    currentStep += 2;
+  }
+
+  if (levelStep === 'completed') {
+    currentStep += 3;
+  }
+
+  return currentStep;
+};
+
+const useUploadProgress = (): UseUploadProgressResult => {
   const { t } = useTranslation();
 
   const update = useForceUpdate();
-
-  const isValidReFiles =
-    (UploadProgressObservable.totalFilesInActivity === 0 &&
-      UploadProgressObservable.currentSecondLevelStep !== 'upload_files') ||
-    (UploadProgressObservable.totalFilesInActivity > 0 &&
-      UploadProgressObservable.currentFile >= 0);
 
   const {
     currentActivity,
@@ -36,56 +53,54 @@ const useUploadProgress = () => {
     currentFile,
     totalActivities,
     totalFilesInActivity,
+    currentSecondLevelStepKey,
   } = UploadProgressObservable;
+
+  const isActivityUploadStarted: boolean =
+    currentActivity !== null && currentSecondLevelStepKey !== null;
+
+  const isFileUploadStarted: boolean =
+    totalFilesInActivity !== null &&
+    currentFile !== null &&
+    totalFilesInActivity > 0 &&
+    currentFile >= 0;
 
   const progress: UseUploadProgressResult = {
     currentActivity,
     currentActivityName,
     currentFile,
+    currentSecondLevelStepKey,
     currentSecondLevelStep:
-      UploadProgressObservable.currentSecondLevelStep === null
+      currentSecondLevelStepKey === null
         ? ''
-        : t(
-            `activity:progress:${UploadProgressObservable.currentSecondLevelStep}`,
-          ),
+        : t(`activity:progress:${currentSecondLevelStepKey}`),
     totalActivities,
     totalFilesInActivity,
     isValid:
-      UploadProgressObservable.currentActivity >= 0 &&
-      isValidReFiles &&
-      UploadProgressObservable.currentSecondLevelStep !== null,
+      isActivityUploadStarted &&
+      (totalFilesInActivity === 0 || isFileUploadStarted),
     totalSteps: null,
     currentStep: null,
   };
 
   if (progress.isValid) {
-    progress.totalSteps = UploadProgressObservable.totalFilesInActivity + 2;
+    const hasFiles = totalFilesInActivity! > 0;
 
-    const isFileStepExist = UploadProgressObservable.totalFilesInActivity > 0;
+    const hasFakeFileStep = !hasFiles;
 
-    const fileStep: number = UploadProgressObservable.currentFile;
+    progress.totalSteps = hasFakeFileStep ? 3 : 2 + totalFilesInActivity!;
 
-    const levelStep = UploadProgressObservable.currentSecondLevelStep;
-
-    let twoLevelStep: number =
-      levelStep === 'upload_files'
-        ? 0
-        : levelStep === 'encrypt_answers'
-          ? 1
-          : levelStep === 'upload_answers'
-            ? 2
-            : 0;
-
-    if (!isFileStepExist) {
-      twoLevelStep--;
-    }
-
-    progress.currentStep = (isFileStepExist ? fileStep : 0) + twoLevelStep + 1;
+    progress.currentStep = evaluateCurrentStep(
+      hasFiles,
+      currentSecondLevelStepKey!,
+      currentFile,
+    );
   }
 
   useEffect(() => {
-    const onProgressChange = () => {
+    const onProgressChange = async (delay: number) => {
       update();
+      await wait(delay);
     };
 
     UploadProgressObservable.addObserver(onProgressChange);
