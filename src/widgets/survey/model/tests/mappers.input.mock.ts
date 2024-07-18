@@ -406,8 +406,8 @@ export const geoAnswer: Answer = {
 
 export const stackedRadioAnswer: Answer = {
   answer: [
+    // @ts-ignore
     {
-      // @ts-ignore
       id: '1',
       text: 'One',
       color: null,
