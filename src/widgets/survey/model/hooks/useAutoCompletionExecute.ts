@@ -2,30 +2,16 @@ import { useCallback } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
+import {
+  AutocompletionExecuteOptions,
+  LogAutocompletionTrigger,
+} from '@app/abstract/lib';
 import { AppletModel } from '@app/entities/applet';
 import { Logger, UploadObservable, useCurrentRoute } from '@app/shared/lib';
 
 import { useAutoCompletion } from './';
 
-type SafeChecks =
-  | 'in-progress-activity'
-  | 'refresh'
-  | 'start-entity'
-  | 'uploading'
-  | 'already-opened';
-
-export type LogAutocompletionTrigger =
-  | 'app-start'
-  | 'to-foreground'
-  | 'to-online'
-  | 'unknown';
-
 const CompleteCurrentNavigationDelay = 500;
-
-export type AutocompletionExecuteOptions = {
-  checksToExclude?: Array<SafeChecks>;
-  forceUpload?: boolean;
-};
 
 const useAutoCompletionExecute = () => {
   const { getCurrentRoute } = useCurrentRoute();
