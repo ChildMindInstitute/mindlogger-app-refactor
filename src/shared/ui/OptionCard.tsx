@@ -7,7 +7,8 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 import { colors } from '@app/shared/lib';
 
-import { Box, BoxProps, XStack, YStack, Text } from './';
+import { Box, BoxProps, XStack, YStack } from './base';
+import Text from './Text';
 
 type Props = {
   imageUrl: string | null;

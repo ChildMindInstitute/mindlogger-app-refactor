@@ -1,24 +1,34 @@
+import { QueryDataUtils } from '@app/shared/api';
 import {
   FeatureFlagsKeys,
   FeatureFlagsService,
   IPreprocessor,
   Logger,
+  queryClient,
 } from '@app/shared/lib';
-import { ReduxStore } from '@shared/lib/redux-state/store';
 
 import { UploadItem } from './AnswersQueueService';
+import { mapAppletDetailsFromDto } from '../../@x/applet';
 
 class UploadItemPreprocessor implements IPreprocessor<UploadItem> {
-  private reduxStore = ReduxStore;
+  queryDataUtils: QueryDataUtils = new QueryDataUtils(queryClient);
 
   private preprocessConsents(uploadItem: UploadItem) {
-    const consents = this.reduxStore.getState().applets.consents;
     const { appletId } = uploadItem.input;
-    const appletConsents = consents?.[appletId];
+
+    const appletDetailsDto = this.queryDataUtils.getAppletDto(appletId);
+
+    if (!appletDetailsDto) {
+      Logger.error(
+        `[UploadItemPreprocessor] Applet DTO not found. ID: ${appletId}`,
+      );
+      return;
+    }
+
+    const appletDetails = mapAppletDetailsFromDto(appletDetailsDto);
 
     if (
-      appletConsents &&
-      appletConsents.shareToPublic &&
+      appletDetails.consentsCapabilityEnabled &&
       FeatureFlagsService.evaluateFlag(
         FeatureFlagsKeys.enableConsentsCapability,
       )

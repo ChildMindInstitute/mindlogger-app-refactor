@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+import { API_URL } from '@app/shared/lib';
+
 const httpService = axios.create({
-  baseURL: 'https://api-dr.cmiml.net', // @todo revert after testing
+  baseURL: API_URL,
   withCredentials: true,
 });
 
