@@ -410,7 +410,7 @@ class AnswersUploadService implements IAnswersUploadService {
     };
 
     if ('consentToShare' in data) {
-      encryptedData.consentToShare = data.consentToShare ?? false;
+      encryptedData.consentToShare = data.consentToShare;
     }
 
     return encryptedData;
