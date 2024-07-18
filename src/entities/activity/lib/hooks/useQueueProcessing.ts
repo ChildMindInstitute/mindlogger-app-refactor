@@ -21,7 +21,7 @@ type Result = {
   isPostponed: boolean;
 };
 
-const useQueueProcessing = (): Result => {
+export const useQueueProcessing = (): Result => {
   const update = useForceUpdate();
 
   useEffect(() => {
@@ -60,5 +60,3 @@ const useQueueProcessing = (): Result => {
     isCompleted: UploadObservable.isCompleted,
   };
 };
-
-export default useQueueProcessing;

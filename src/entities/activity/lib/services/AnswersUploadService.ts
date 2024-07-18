@@ -215,6 +215,8 @@ class AnswersUploadService implements IAnswersUploadService {
     this.uploadProgressObservable.totalFilesInActivity = fileIds.length;
 
     if (fileIds.length === 0) {
+      await this.uploadProgressObservable.delay(1000);
+
       return body;
     }
 
@@ -234,6 +236,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
     const updatedAnswers = [];
     let logAnswerIndex = -1;
+    this.uploadProgressObservable.currentFile = -1;
 
     for (const itemAnswer of itemsAnswers) {
       logAnswerIndex++;
@@ -480,7 +483,9 @@ class AnswersUploadService implements IAnswersUploadService {
       '[UploadAnswersService.sendAnswers] executing upload files',
     );
 
-    this.uploadProgressObservable.currentSecondLevelStep = 'upload_files';
+    this.uploadProgressObservable.currentSecondLevelStepKey = 'upload_files';
+
+    await this.uploadProgressObservable.delay(100);
 
     const modifiedBody: SendAnswersInput = await this.uploadAllMediaFiles(body);
 
@@ -505,7 +510,9 @@ class AnswersUploadService implements IAnswersUploadService {
       '[UploadAnswersService.sendAnswers] executing prepare answers',
     );
 
-    this.uploadProgressObservable.currentSecondLevelStep = 'encrypt_answers';
+    this.uploadProgressObservable.currentSecondLevelStepKey = 'encrypt_answers';
+
+    await this.uploadProgressObservable.delay(100);
 
     const encryptedData = this.encryptAnswers(modifiedBody);
 
@@ -513,13 +520,17 @@ class AnswersUploadService implements IAnswersUploadService {
       '[UploadAnswersService.sendAnswers] executing upload answers',
     );
 
-    this.uploadProgressObservable.currentSecondLevelStep = 'upload_answers';
+    this.uploadProgressObservable.currentSecondLevelStepKey = 'upload_answers';
 
     await this.uploadAnswers(encryptedData);
 
     this.logger.log('[UploadAnswersService.sendAnswers] executing clean up');
 
     MediaFilesCleaner.cleanUpByAnswers(body.answers);
+
+    this.uploadProgressObservable.currentSecondLevelStepKey = 'completed';
+
+    await this.uploadProgressObservable.delay(200);
   }
 }
 
