@@ -21,3 +21,4 @@ export * from './redux-state';
 export * from './observables';
 export * from './featureFlags';
 export * from './mutexes';
+export * from './queryClient';
