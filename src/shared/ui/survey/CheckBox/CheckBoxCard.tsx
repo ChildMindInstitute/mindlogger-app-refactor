@@ -90,7 +90,6 @@ function CheckBoxCard({
             })}
             accessibilityLabel="option_checkbox"
             lineWidth={IS_ANDROID ? 0 : 2}
-            animationDuration={0.2}
             boxType="square"
             tintColors={{
               true: hasColor ? invertedCheckboxColor : colors.primary,
@@ -104,7 +103,6 @@ function CheckBoxCard({
             offAnimationType="fade"
             value={selected}
             disabled
-            onLayout={e => console.log(IS_ANDROID, e.nativeEvent.layout)}
           />
         </Box>
       )}
