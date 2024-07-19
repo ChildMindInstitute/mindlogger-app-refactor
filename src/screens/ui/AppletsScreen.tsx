@@ -105,7 +105,7 @@ const AboutAppLink = () => {
       >
         {/*@todo revert after testing*/}
         <Text color="$primary" fontSize={16} fontWeight="700">
-          {t('applet_list_component:about_title')} LORIS
+          {t('applet_list_component:about_title')}
         </Text>
         {/*@todo revert after testing*/}
       </TouchableOpacity>
