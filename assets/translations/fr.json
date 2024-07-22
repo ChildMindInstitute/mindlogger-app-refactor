@@ -328,7 +328,7 @@
     "refresh_request_text": "Vos managers lanceront bientôt la mise à jour.",
     "applet_not_found_1": "L'applet n'a pas été trouvé",
     "applet_not_found_2": "Il n'y a pas d'applet pour cet identifiant.",
-    "activity_not_found": "L'activité n'a pas été trouvée', 'Il n'y a pas d'activité pour cet identifiant.",
+    "activity_not_found": "L'activité \"{{entityName}}\" n'a pas été trouvée', 'Il n'y a pas d'activité pour cet identifiant.",
     "already_completed": "Vous avez déjà terminé",
     "app_killed_on_redux_persist": "Cette activité ne peut pas être démarrée. S'il vous plaît, contactez le support.",
     "activity_was_due_at": "Cette activité était prévue à",
@@ -339,7 +339,8 @@
     "activity_not_ready": "Activité non prête",
     "not_able_to_start": "Vous n'êtes pas encore en mesure de démarrer cette activité",
     "is": "est",
-    "scheduled_to_start_at": "devrait commencer à"
+    "scheduled_to_start_at": "devrait commencer à",
+    "postponed_notification": "Une fois les réponses téléchargées, nous tenterons d'ouvrir l'activité"
   },
   "local_notifications": {
     "complete_activity": "Veuillez effectuer cette activité."
@@ -440,6 +441,7 @@
     "enter_old_password": "Veuillez saisir votre ancien mot de passe",
     "enter_new_password": "Veuillez saisir un nouveau mot de passe",
     "data_not_sent": "Cliquez sur Envoyer pour télécharger les données collectées précédemment",
+    "data_is_sending": "Télécharger les données collectées précédemment",
     "upload_error": "Erreur de téléversement",
     "want_to_retry": "Votre Internet peut être instable. Nous n'avons pas pu envoyer vos données."
   },

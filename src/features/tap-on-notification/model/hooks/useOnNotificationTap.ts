@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
+import { useCallback, useEffect, useRef } from 'react';
+
 import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import {
   ActivityRecordKeyParams,
@@ -36,7 +39,10 @@ import {
   MixProperties,
   useAppSelector,
   useCurrentRoute,
+  useToast,
 } from '@app/shared/lib';
+
+import NotificationPostponer from '../services/NotificationPostponer';
 
 type Input = {
   checkAvailability: CheckAvailability;
@@ -71,7 +77,11 @@ export function useOnNotificationTap({
 }: Input) {
   const queryClient = useQueryClient();
 
+  const toast = useToast();
+
   const navigator = useNavigation();
+
+  const { t } = useTranslation();
 
   const storeProgress: StoreProgress = useAppSelector(
     AppletModel.selectors.selectInProgressApplets,
@@ -91,6 +101,10 @@ export function useOnNotificationTap({
   });
 
   const { getCurrentRoute } = useCurrentRoute();
+
+  const postponerRef = useRef(new NotificationPostponer());
+
+  postponerRef.current.getCurrentRoute = getCurrentRoute;
 
   const actions: Record<
     PushNotificationType,
@@ -182,6 +196,8 @@ export function useOnNotificationTap({
         .then(() => Logger.send());
     },
   };
+
+  const actionsRef = useRef(actions);
 
   function navigateSurvey({
     appletId,
@@ -278,27 +294,44 @@ export function useOnNotificationTap({
     }
   };
 
+  const handleWithPostponer = useCallback(
+    (notificationDetail: LocalEventDetail | LocalInitialNotification) => {
+      const postponer = postponerRef.current;
+
+      postponer.reset();
+      postponer.action = () => {
+        const action =
+          actionsRef.current[notificationDetail.notification.data.type];
+        action?.(notificationDetail);
+      };
+
+      if (!postponer.tryExecute()) {
+        toast.show(t('firebase_messaging:postponed_notification'));
+      }
+    },
+    [t, toast],
+  );
+
   useForegroundEvents({
     onPress: (eventDetail: LocalEventDetail) => {
-      const action = actions[eventDetail.notification.data.type];
-
-      action?.(eventDetail);
+      handleWithPostponer(eventDetail);
     },
   });
 
   useBackgroundEvents({
     onPress: (eventDetail: LocalEventDetail) => {
-      const action = actions[eventDetail.notification.data.type];
-
-      action?.(eventDetail);
+      handleWithPostponer(eventDetail);
     },
   });
 
   useOnInitialAndroidNotification(
     (initialNotification: LocalInitialNotification) => {
-      const action = actions[initialNotification.notification.data.type];
-
-      action?.(initialNotification);
+      handleWithPostponer(initialNotification);
     },
   );
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => postponerRef.current.reset();
+  }, []);
 }

@@ -10,13 +10,17 @@ export function onAppletNotFound() {
   );
 }
 
-export function onActivityNotAvailable(onOk: () => void) {
-  Alert.alert(i18n.t('firebase_messaging:activity_not_found'), undefined, [
-    {
-      onPress: onOk,
-      text: i18n.t('system:ok'),
-    },
-  ]);
+export function onActivityNotAvailable(entityName: string, onOk: () => void) {
+  Alert.alert(
+    i18n.t('firebase_messaging:activity_not_found', { entityName }),
+    undefined,
+    [
+      {
+        onPress: onOk,
+        text: i18n.t('system:ok'),
+      },
+    ],
+  );
 }
 
 export function onAppWasKilledOnReduxPersist(onOk: () => void) {
