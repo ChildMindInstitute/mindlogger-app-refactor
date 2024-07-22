@@ -17,6 +17,7 @@ import {
   StackedSlider,
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
+import TextParagraph from '@app/shared/ui/survey/TextParagraph';
 import { AbTest } from '@entities/abTrail';
 import { useAppletStreamingDetails } from '@entities/applet/lib/hooks';
 import { DrawingTest } from '@entities/drawer';
@@ -46,7 +47,6 @@ import {
   ActivityIdentityContext,
 } from '../lib';
 import { mapStreamEventToDto } from '../model';
-import TextParagraph from '@app/shared/ui/survey/TextParagraph';
 
 type Props = ActivityItemProps &
   PipelineItemAnswer & {

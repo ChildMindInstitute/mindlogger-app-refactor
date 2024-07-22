@@ -4,9 +4,9 @@ import type { StackProps, TextProps } from '@tamagui/core';
 
 import Center from './Center';
 import Input from './Input';
-import LongTextInput from './LongTextInput';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
 import Link from './Link';
+import LongTextInput from './LongTextInput';
 import RowButton from './RowButton';
 import ScrollView from './ScrollView';
 import Splash from './Splash';

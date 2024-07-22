@@ -1,6 +1,14 @@
 import React, { FC, useState } from 'react';
-import { StyleSheet, TextInputProps, View, TextInput, NativeSyntheticEvent, TextInputContentSizeChangeEventData } from 'react-native';
+import {
+  StyleSheet,
+  TextInputProps,
+  View,
+  NativeSyntheticEvent,
+  TextInputContentSizeChangeEventData,
+} from 'react-native';
+
 import { useTranslation } from 'react-i18next';
+
 import { colors } from '@shared/lib';
 import { LongTextInput } from '@shared/ui';
 
@@ -14,7 +22,7 @@ type Props = {
 } & Omit<TextInputProps, 'value' | 'onChange'>;
 
 const TextParagraph: FC<Props> = ({ value, onChange, config, ...props }) => {
-  let { maxLength = 50, isNumeric } = config;
+  const { maxLength = 50, isNumeric } = config;
   const { t } = useTranslation();
 
   const [inputHeight, setInputHeight] = useState(56);
@@ -23,19 +31,27 @@ const TextParagraph: FC<Props> = ({ value, onChange, config, ...props }) => {
     onChange(text);
   };
 
-  const handleContentSizeChange = (contentWidth: number, contentHeight: number) => {
-    setInputHeight(contentHeight); 
+  const handleContentSizeChange = (
+    contentWidth: number,
+    contentHeight: number,
+  ) => {
+    setInputHeight(contentHeight);
   };
 
-  const handleContentSizeChangeWrapper = (event: NativeSyntheticEvent<{
-    contentWidth: number;
-    contentHeight: number;
-  }| TextInputContentSizeChangeEventData>) => {
+  const handleContentSizeChangeWrapper = (
+    event: NativeSyntheticEvent<
+      | {
+          contentWidth: number;
+          contentHeight: number;
+        }
+      | TextInputContentSizeChangeEventData
+    >,
+  ) => {
     const { contentWidth, contentHeight } = event.nativeEvent as {
       contentWidth: number;
       contentHeight: number;
     };
-    handleContentSizeChange(contentWidth, contentHeight); 
+    handleContentSizeChange(contentWidth, contentHeight);
   };
 
   const styles = StyleSheet.create({
@@ -43,8 +59,8 @@ const TextParagraph: FC<Props> = ({ value, onChange, config, ...props }) => {
       flex: 1,
     },
     input: {
-      width: '100%', 
-      height: inputHeight, 
+      width: '100%',
+      height: inputHeight,
     },
   });
 
@@ -58,11 +74,11 @@ const TextParagraph: FC<Props> = ({ value, onChange, config, ...props }) => {
         maxLength={Number(maxLength)}
         value={value}
         autoCorrect={false}
-        multiline={true} 
+        multiline={true}
         mode="survey"
         keyboardType={isNumeric ? 'numeric' : 'default'}
         style={styles.input}
-        onContentSizeChange={handleContentSizeChangeWrapper} 
+        onContentSizeChange={handleContentSizeChangeWrapper}
         {...props}
       />
     </View>

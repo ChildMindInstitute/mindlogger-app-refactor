@@ -1,6 +1,8 @@
 import { StyleSheet, TextInput } from 'react-native';
+
 import { GetProps, setupReactNative, styled } from '@tamagui/core';
 import { focusableInputHOC } from '@tamagui/focusable';
+
 import { IS_IOS } from '@shared/lib';
 
 setupReactNative({
@@ -16,8 +18,8 @@ export const LongTextInputFrame = styled(
     outlineWidth: 0,
     minWidth: 0,
     minHeight: 56,
-    maxHeight: 350, 
-    maxWidth: '100%', 
+    maxHeight: 350,
+    maxWidth: '100%',
     borderWidth: StyleSheet.hairlineWidth * 2.8,
     backgroundColor: '$backgroundTransparent',
     underlineColorAndroid: 'transparent',
@@ -29,12 +31,12 @@ export const LongTextInputFrame = styled(
     fontSize: 20,
     selectionColor: 'black',
 
-    multiline: true, 
+    multiline: true,
     textAlignVertical: 'top',
 
-    scrollEnabled: true, 
-    
-    padding: 8, 
+    scrollEnabled: true,
+
+    padding: 8,
     borderColor: '$mediumGrey',
 
     variants: {

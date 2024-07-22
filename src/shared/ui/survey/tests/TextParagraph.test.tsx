@@ -1,13 +1,15 @@
 import React from 'react';
+
 import renderer from 'react-test-renderer';
-import { View } from 'react-native';
+
 import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import TextParagraph from '../TextParagraph'; 
 import { LongTextInput } from '@shared/ui';
+
+import TextParagraph from '../TextParagraph';
 
 jest.mock('react-i18next', () => ({
   useTranslation: jest.fn().mockImplementation(() => ({
-    t: jest.fn().mockImplementation((key) => key),
+    t: jest.fn().mockImplementation(key => key),
   })),
 }));
 
@@ -19,18 +21,20 @@ describe('TextParagraph Component Tests', () => {
   it('renders correctly with expected props', () => {
     const mockValue = '1234';
 
-    const tree = renderer.create(
-      <TamaguiProvider>
-        <TextParagraph
-          onChange={jest.fn()}
-          value={mockValue}
-          config={{
-            maxLength: 300,
-            isNumeric: true,
-          }}
-        />
-      </TamaguiProvider>
-    ).toJSON();
+    const tree = renderer
+      .create(
+        <TamaguiProvider>
+          <TextParagraph
+            onChange={jest.fn()}
+            value={mockValue}
+            config={{
+              maxLength: 300,
+              isNumeric: true,
+            }}
+          />
+        </TamaguiProvider>,
+      )
+      .toJSON();
 
     if (!tree || Array.isArray(tree)) {
       throw new Error('Tree is not rendered correctly or is an array');
@@ -39,7 +43,9 @@ describe('TextParagraph Component Tests', () => {
     const view = tree as any;
     const longTextInput = view.children[0];
 
-    expect(longTextInput.props.placeholder).toBe('text_entry:paragraph_placeholder');
+    expect(longTextInput.props.placeholder).toBe(
+      'text_entry:paragraph_placeholder',
+    );
     expect(longTextInput.props.value).toBe('1234');
     expect(longTextInput.props.keyboardType).toBe('numeric');
     expect(longTextInput.props.maxLength).toBe(300);
@@ -55,7 +61,7 @@ describe('TextParagraph Component Tests', () => {
           value="test"
           config={{ maxLength: 300, isNumeric: false }}
         />
-      </TamaguiProvider>
+      </TamaguiProvider>,
     );
 
     const instance = tree.root;
@@ -66,15 +72,17 @@ describe('TextParagraph Component Tests', () => {
   });
 
   it('handles maxLength and keyboardType configurations correctly', () => {
-    const tree = renderer.create(
-      <TamaguiProvider>
-        <TextParagraph
-          onChange={jest.fn()}
-          value="test"
-          config={{ maxLength: 150, isNumeric: true }}
-        />
-      </TamaguiProvider>
-    ).toJSON();
+    const tree = renderer
+      .create(
+        <TamaguiProvider>
+          <TextParagraph
+            onChange={jest.fn()}
+            value="test"
+            config={{ maxLength: 150, isNumeric: true }}
+          />
+        </TamaguiProvider>,
+      )
+      .toJSON();
 
     if (!tree || Array.isArray(tree)) {
       throw new Error('Tree is not rendered correctly or is an array');
