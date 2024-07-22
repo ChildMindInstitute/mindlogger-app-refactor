@@ -1,6 +1,7 @@
-import { CommonObservable, wait } from '../utils';
+/* eslint-disable no-nested-ternary */
+import { CommonObservable } from '../utils';
 
-type SecondLevelStep =
+export type SecondLevelStep =
   | 'upload_files'
   | 'encrypt_answers'
   | 'upload_answers'
@@ -19,12 +20,15 @@ export interface IUploadProgressObservableSetters {
   set totalActivities(value: number | null);
   set currentActivity(value: number | null);
   set currentActivityName(value: string | null);
-  set totalFilesInActivity(value: number | null);
   set currentFile(value: number | null);
-  set currentSecondLevelStepKey(value: SecondLevelStep | null);
-  delay(ms: number): Promise<void>;
+  setTotalFilesInActivity(value: number | null): Promise<void>;
+  setCurrentSecondLevelStepKey(value: SecondLevelStep | null): Promise<void>;
   reset(): void;
 }
+
+const ShortDelay = 100;
+const MiddleDelay = 200;
+const LongFakeStepDelay = 500;
 
 class UploadProgressObservable
   extends CommonObservable
@@ -36,9 +40,6 @@ class UploadProgressObservable
     super();
     this.uploadProgress = {} as UploadProgress;
     this.reset();
-  }
-  set currentSecondLevelSteKey(value: SecondLevelStep | null) {
-    throw new Error('Method not implemented.');
   }
 
   public set totalActivities(value: number | null) {
@@ -53,19 +54,26 @@ class UploadProgressObservable
     this.uploadProgress.currentActivityName = value;
   }
 
-  public set totalFilesInActivity(value: number | null) {
-    this.uploadProgress.totalFilesInActivity = value;
-    this.notify();
-  }
-
   public set currentFile(value: number | null) {
     this.uploadProgress.currentFile = value;
     this.notify();
   }
 
-  public set currentSecondLevelStepKey(value: SecondLevelStep | null) {
+  public async setTotalFilesInActivity(value: number | null) {
+    this.uploadProgress.totalFilesInActivity = value;
+    await this.notifyAsync(value === 0 ? LongFakeStepDelay : 0);
+  }
+
+  public async setCurrentSecondLevelStepKey(value: SecondLevelStep | null) {
     this.uploadProgress.currentSecondLevelStepKey = value;
-    this.notify();
+
+    await this.notifyAsync(
+      value === 'upload_files' || value === 'encrypt_answers'
+        ? ShortDelay
+        : value === 'completed'
+          ? MiddleDelay
+          : 0,
+    );
   }
 
   public get totalActivities() {
@@ -90,10 +98,6 @@ class UploadProgressObservable
 
   public get currentSecondLevelStepKey() {
     return this.uploadProgress.currentSecondLevelStepKey;
-  }
-
-  public async delay(ms: number) {
-    await wait(ms);
   }
 
   public reset() {

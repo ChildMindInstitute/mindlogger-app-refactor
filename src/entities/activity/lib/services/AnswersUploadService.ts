@@ -212,11 +212,9 @@ class AnswersUploadService implements IAnswersUploadService {
   ): Promise<SendAnswersInput> {
     const fileIds = this.collectFileIds(body.answers);
 
-    this.uploadProgressObservable.totalFilesInActivity = fileIds.length;
+    await this.uploadProgressObservable.setTotalFilesInActivity(fileIds.length);
 
     if (fileIds.length === 0) {
-      await this.uploadProgressObservable.delay(1000);
-
       return body;
     }
 
@@ -483,9 +481,9 @@ class AnswersUploadService implements IAnswersUploadService {
       '[UploadAnswersService.sendAnswers] executing upload files',
     );
 
-    this.uploadProgressObservable.currentSecondLevelStepKey = 'upload_files';
-
-    await this.uploadProgressObservable.delay(100);
+    await this.uploadProgressObservable.setCurrentSecondLevelStepKey(
+      'upload_files',
+    );
 
     const modifiedBody: SendAnswersInput = await this.uploadAllMediaFiles(body);
 
@@ -510,9 +508,9 @@ class AnswersUploadService implements IAnswersUploadService {
       '[UploadAnswersService.sendAnswers] executing prepare answers',
     );
 
-    this.uploadProgressObservable.currentSecondLevelStepKey = 'encrypt_answers';
-
-    await this.uploadProgressObservable.delay(100);
+    await this.uploadProgressObservable.setCurrentSecondLevelStepKey(
+      'encrypt_answers',
+    );
 
     const encryptedData = this.encryptAnswers(modifiedBody);
 
@@ -520,7 +518,9 @@ class AnswersUploadService implements IAnswersUploadService {
       '[UploadAnswersService.sendAnswers] executing upload answers',
     );
 
-    this.uploadProgressObservable.currentSecondLevelStepKey = 'upload_answers';
+    await this.uploadProgressObservable.setCurrentSecondLevelStepKey(
+      'upload_answers',
+    );
 
     await this.uploadAnswers(encryptedData);
 
@@ -528,9 +528,9 @@ class AnswersUploadService implements IAnswersUploadService {
 
     MediaFilesCleaner.cleanUpByAnswers(body.answers);
 
-    this.uploadProgressObservable.currentSecondLevelStepKey = 'completed';
-
-    await this.uploadProgressObservable.delay(200);
+    await this.uploadProgressObservable.setCurrentSecondLevelStepKey(
+      'completed',
+    );
   }
 }
 

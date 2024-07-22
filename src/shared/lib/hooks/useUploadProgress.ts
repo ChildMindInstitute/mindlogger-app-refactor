@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { UploadProgressObservable } from '../';
-import { UploadProgress } from '../observables/uploadProgressObservable';
+import { UploadProgressObservable, wait } from '../';
+import { SecondLevelStep, UploadProgress } from '../observables/';
 
 import { useForceUpdate } from './';
 
@@ -12,6 +12,34 @@ type UseUploadProgressResult = UploadProgress & {
   currentStep: number | null;
   totalSteps: number | null;
   isValid: boolean;
+};
+
+const evaluateCurrentStep = (
+  hasFiles: boolean,
+  currentSecondLevelStepKey: SecondLevelStep,
+  currentFileStep: number | null,
+): number => {
+  const levelStep = currentSecondLevelStepKey;
+
+  let currentStep = 0;
+
+  if (hasFiles) {
+    currentStep += currentFileStep!;
+  }
+
+  if (levelStep === 'encrypt_answers') {
+    currentStep += 1;
+  }
+
+  if (levelStep === 'upload_answers') {
+    currentStep += 2;
+  }
+
+  if (levelStep === 'completed') {
+    currentStep += 3;
+  }
+
+  return currentStep;
 };
 
 const useUploadProgress = (): UseUploadProgressResult => {
@@ -28,6 +56,15 @@ const useUploadProgress = (): UseUploadProgressResult => {
     currentSecondLevelStepKey,
   } = UploadProgressObservable;
 
+  const isActivityUploadStarted: boolean =
+    currentActivity !== null && currentSecondLevelStepKey !== null;
+
+  const isFileUploadStarted: boolean =
+    totalFilesInActivity !== null &&
+    currentFile !== null &&
+    totalFilesInActivity > 0 &&
+    currentFile >= 0;
+
   const progress: UseUploadProgressResult = {
     currentActivity,
     currentActivityName,
@@ -40,13 +77,8 @@ const useUploadProgress = (): UseUploadProgressResult => {
     totalActivities,
     totalFilesInActivity,
     isValid:
-      currentActivity !== null &&
-      currentSecondLevelStepKey !== null &&
-      (totalFilesInActivity === 0 ||
-        (totalFilesInActivity !== null &&
-          currentFile !== null &&
-          totalFilesInActivity > 0 &&
-          currentFile >= 0)),
+      isActivityUploadStarted &&
+      (totalFilesInActivity === 0 || isFileUploadStarted),
     totalSteps: null,
     currentStep: null,
   };
@@ -58,34 +90,17 @@ const useUploadProgress = (): UseUploadProgressResult => {
 
     progress.totalSteps = hasFakeFileStep ? 3 : 2 + totalFilesInActivity!;
 
-    const fileStep: number = currentFile!;
-
-    const levelStep = currentSecondLevelStepKey;
-
-    let currentStep = 0;
-
-    if (hasFiles) {
-      currentStep += fileStep;
-    }
-
-    if (levelStep === 'encrypt_answers') {
-      currentStep += 1;
-    }
-
-    if (levelStep === 'upload_answers') {
-      currentStep += 2;
-    }
-
-    if (levelStep === 'completed') {
-      currentStep += 3;
-    }
-
-    progress.currentStep = currentStep;
+    progress.currentStep = evaluateCurrentStep(
+      hasFiles,
+      currentSecondLevelStepKey!,
+      currentFile,
+    );
   }
 
   useEffect(() => {
-    const onProgressChange = () => {
+    const onProgressChange = async (delay: number) => {
       update();
+      await wait(delay);
     };
 
     UploadProgressObservable.addObserver(onProgressChange);

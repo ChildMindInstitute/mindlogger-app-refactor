@@ -3,7 +3,8 @@ export type SafeChecks =
   | 'refresh'
   | 'start-entity'
   | 'uploading'
-  | 'already-opened';
+  | 'already-opened'
+  | 'is-offline';
 
 export type LogAutocompletionTrigger =
   | 'app-start'
@@ -12,10 +13,12 @@ export type LogAutocompletionTrigger =
   | 'check-availability'
   | 'close-entity'
   | 'expired-while-alert-opened'
-  | 'retry-on-banner';
+  | 'retry-on-banner'
+  | 'app-level-timer';
 
 export type AutocompletionExecuteOptions = {
   checksToExclude?: Array<SafeChecks>;
+  checksToInclude?: Array<SafeChecks>;
   forceUpload?: boolean;
 };
 

@@ -5,4 +5,4 @@ export * from './storage';
 export * from './primitive';
 export * from './flanker';
 export * from './abTrails';
-export * from './autocompletion.ts';
+export * from './autocompletion';

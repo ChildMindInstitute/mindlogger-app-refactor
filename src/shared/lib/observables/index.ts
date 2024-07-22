@@ -5,4 +5,5 @@ export type { IUploadObservableSetters } from './uploadObservable';
 export type {
   IUploadProgressObservableSetters,
   UploadProgress,
+  SecondLevelStep,
 } from './uploadProgressObservable';

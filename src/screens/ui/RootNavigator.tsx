@@ -40,6 +40,7 @@ import {
   useOnceRef,
   Emitter,
   useOnForegroundDebounced,
+  useDelayedInterval,
 } from '@shared/lib';
 import {
   UserProfileIcon,
@@ -165,6 +166,13 @@ export default () => {
         AUTOCOMPLETION_DELAY,
       ),
     [executeAutocompletion],
+  );
+
+  useDelayedInterval(() =>
+    executeAutocompletion('app-level-timer', {
+      forceUpload: false,
+      checksToInclude: ['is-offline'],
+    }),
   );
 
   useOnlineEstablished(() =>
