@@ -73,6 +73,7 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 
 project.ext.envConfigFiles = [
     devdebug: ".env.dev",
+    devDebug: ".env.dev",
     devrelease: ".env.dev",
 
     qadebug: ".env.qa",

@@ -4,6 +4,7 @@ import type { StackProps, TextProps } from '@tamagui/core';
 
 import Center from './Center';
 import Input from './Input';
+import LongTextInput from './LongTextInput';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
 import Link from './Link';
 import RowButton from './RowButton';
@@ -50,6 +51,7 @@ export {
   Center,
   KeyboardAvoidingView,
   Input,
+  LongTextInput,
   CheckBox,
   Stack as Box,
   StackProps as BoxProps,

@@ -46,6 +46,7 @@ import {
   ActivityIdentityContext,
 } from '../lib';
 import { mapStreamEventToDto } from '../model';
+import TextParagraph from '@app/shared/ui/survey/TextParagraph';
 
 type Props = ActivityItemProps &
   PipelineItemAnswer & {
@@ -187,7 +188,17 @@ function ActivityItem({
         />
       );
       break;
-
+    case 'Paragraph':
+      item = (
+        <Box mx={16} mb={16}>
+          <TextParagraph
+            value={value?.answer ?? ''}
+            config={pipelineItem.payload}
+            onChange={onResponse}
+          />
+        </Box>
+      );
+      break;
     case 'TextInput':
       item = (
         <Box mx={16} mb={16}>
