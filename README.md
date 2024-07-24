@@ -140,11 +140,11 @@ The above scripts run the app using Debug configuration and for MindLogger's `d
 
 ### Testing
 
-- `yarn test` - Runs the test suite
+- `yarn test` - Runs the tests suite
 
 - `yarn test:single-file file-name.test.tsx` - Runs a single file test
 
-- `yarn test -t 'Test Case'` - Runs a single test Case
+- `yarn test -t 'Test single suit'` - Runs a single test suite
 
 
 ### Linting
