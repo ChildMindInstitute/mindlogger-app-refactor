@@ -92,9 +92,15 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
 
   it('Should return one collect item when getFlowRecord returns single activity pipeline', () => {
     jest.spyOn(survey, 'isEntityExpired').mockReturnValue(true);
+    // jest
+    //   .spyOn(storageHelpers, 'getFlowRecord')
+    //   .mockReturnValue(getSingleActivityFlowState(pathOne));
     jest
       .spyOn(storageHelpers, 'getFlowRecord')
       .mockReturnValue(getSingleActivityFlowState(pathOne));
+    jest
+      .spyOn(storageHelpers, 'isCurrentActivityRecordExist')
+      .mockReturnValue(true);
 
     const progress = getRegularProgressRecord(pathOne);
 

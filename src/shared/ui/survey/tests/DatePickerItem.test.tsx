@@ -23,6 +23,8 @@ describe('Test DatePickerItem', () => {
   });
 
   it('Should render new Date(0) when value is 1970-01-01', () => {
+    const getDateZero = new Date(0);
+
     const testValue = '1970-01-01';
     const datePickerComponent = renderer.create(
       <TamaguiProvider>
@@ -36,8 +38,15 @@ describe('Test DatePickerItem', () => {
 
     const resultProp = format(datePicker.props.value, 'yyyy-MM-dd');
 
-    const expectedDate = format(new Date(0), 'yyyy-MM-dd');
-
+    const expectedDate = formatDateToUTC(getDateZero);
     expect(resultProp).toBe(expectedDate);
   });
 });
+
+const formatDateToUTC = (date: Date): string => {
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+};

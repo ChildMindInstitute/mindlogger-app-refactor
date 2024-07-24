@@ -11,7 +11,7 @@ import { colors } from '../../constants';
 
 describe('Test function invertColor', () => {
   it('should return darkerGrey color', () => {
-    const hex = '#7FFFD4';
+    const hex = '#3355AA';
 
     const invertedColor = invertColor(hex);
 
@@ -19,7 +19,7 @@ describe('Test function invertColor', () => {
   });
 
   it('should return white color', () => {
-    const hex = '#3355AA';
+    const hex = '#7FFFD4';
 
     const invertedColor = invertColor(hex);
 
