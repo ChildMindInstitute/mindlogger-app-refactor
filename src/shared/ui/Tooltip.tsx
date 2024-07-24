@@ -12,11 +12,13 @@ type TooltipProps = {
   children: React.ReactNode;
   markdown?: string;
   triggerAccessibilityLabel?: string | null;
+  hitSlop?: number;
 };
 
 const Tooltip: FC<TooltipProps & AccessibilityProps> = ({
   children,
   markdown,
+  hitSlop = 40,
   accessibilityLabel,
   triggerAccessibilityLabel,
 }) => {
@@ -29,7 +31,7 @@ const Tooltip: FC<TooltipProps & AccessibilityProps> = ({
       popoverStyle={styles.popover}
       from={
         <YStack
-          hitSlop={40}
+          hitSlop={hitSlop}
           accessibilityLabel={triggerAccessibilityLabel ?? 'tooltip-button'}
         >
           {children}

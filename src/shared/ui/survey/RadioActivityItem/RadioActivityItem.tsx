@@ -1,10 +1,11 @@
 import React, { FC, useMemo, useState } from 'react';
 import { AccessibilityProps } from 'react-native';
 
-import { shuffle, colors } from '@shared/lib';
-import { YStack, RadioGroup, Box, useOnUndo } from '@shared/ui';
+import { shuffle } from '@shared/lib';
+import { useOnUndo } from '@shared/ui';
 
-import RadioItem from './RadioItem';
+import RadioGrid from './RadioGrid';
+import RadioList from './RadioList';
 import RadioOption from './types';
 
 type RadioActivityItemProps = {
@@ -13,6 +14,7 @@ type RadioActivityItemProps = {
     setPalette: boolean;
     addTooltip: boolean;
     randomizeOptions: boolean;
+    isGridView: boolean;
   };
   onChange: (value: RadioOption) => void;
   initialValue?: RadioOption;
@@ -25,7 +27,8 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
   initialValue,
   textReplacer,
 }) => {
-  const { options, randomizeOptions, addTooltip, setPalette } = config;
+  const { options, randomizeOptions, addTooltip, setPalette, isGridView } =
+    config;
   const [radioValueId, setRadioValueId] = useState(initialValue?.id ?? null);
 
   const selectedOptionIndex: number | null = useMemo(() => {
@@ -62,34 +65,21 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
     onChange(selectedOption!);
   };
 
+  const RadiosView = isGridView ? RadioGrid : RadioList;
+
   return (
-    <YStack>
-      <RadioGroup
-        value={radioValueId ?? ''}
-        onValueChange={onValueChange}
-        name="radio"
-        accessibilityLabel={`radios-group_value-${String(selectedOptionIndex)}`}
-      >
-        {optionsList.map(option => (
-          <Box
-            key={option.id}
-            bbc={colors.lighterGrey}
-            bbw={setPalette ? 0 : 1}
-            onPress={() => onValueChange(option.id)}
-          >
-            <RadioItem
-              accessibilityLabel="radio-item-option"
-              option={option}
-              imageContainerVisible={hasImage}
-              tooltipContainerVisible={hasTooltip}
-              addTooltip={addTooltip}
-              setPalette={setPalette}
-              textReplacer={textReplacer}
-            />
-          </Box>
-        ))}
-      </RadioGroup>
-    </YStack>
+    <RadiosView
+      value={radioValueId}
+      onChange={onValueChange}
+      options={optionsList}
+      addTooltip={addTooltip}
+      setPalette={setPalette}
+      hasImage={hasImage}
+      hasTooltip={hasTooltip}
+      textReplacer={textReplacer}
+      accessibilityLabel={`radios-group_value-${String(selectedOptionIndex)}`}
+      mb={16}
+    />
   );
 };
 

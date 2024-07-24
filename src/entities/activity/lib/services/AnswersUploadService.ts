@@ -32,7 +32,7 @@ import {
 } from '../types';
 
 export interface IAnswersUploadService {
-  sendAnswers(body: SendAnswersInput): void;
+  sendAnswers(body: SendAnswersInput): Promise<void>;
 }
 
 class AnswersUploadService implements IAnswersUploadService {
@@ -409,6 +409,10 @@ class AnswersUploadService implements IAnswersUploadService {
       alerts: data.alerts,
     };
 
+    if ('consentToShare' in data) {
+      encryptedData.consentToShare = data.consentToShare;
+    }
+
     return encryptedData;
   }
 
@@ -481,7 +485,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
     this.uploadProgressObservable.currentSecondLevelStep = 'upload_files';
 
-    const modifiedBody = await this.uploadAllMediaFiles(body);
+    const modifiedBody: SendAnswersInput = await this.uploadAllMediaFiles(body);
 
     this.logger.log(
       '[UploadAnswersService.sendAnswers] executing assign urls to user actions',

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { API_URL } from '@shared/lib';
+import { API_URL } from '@app/shared/lib';
 
 const httpService = axios.create({
   baseURL: API_URL,

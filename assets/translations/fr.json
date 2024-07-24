@@ -582,5 +582,13 @@
     "time_is_up_modal_description": "Il n'y a plus de temps pour travailler sur cette activité. Tout le travail que vous avez effectué sera enregistré et soumis.",
     "time_is_up_modal_title": "Le temps est écoulé",
     "ok": "OK"
+  },
+  "data_sharing": {
+    "consent": "Je consens à rendre mes réponses",
+    "media_consent": "Je consens à rendre mes réponses des médias",
+    "public": "publiques",
+    "dialog": {
+      "body": "Le partage public des réponses implique que les informations fournies par les utilisateurs individuels, telles que les réponses au sondage ou les commentaires, seront librement accessibles à d'autres personnes."
+    }
   }
 }

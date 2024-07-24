@@ -379,7 +379,7 @@ function ActivityItem({
   }
 
   return (
-    <ScrollableContent scrollEnabled={scrollEnabled}>
+    <ScrollableContent scrollEnabled={scrollEnabled} scrollEventThrottle={100}>
       <Box
         flex={1}
         justifyContent="center"

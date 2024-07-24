@@ -56,6 +56,7 @@ export const radioInput: PipelineItem = {
     setAlerts: true,
     setPalette: false,
     autoAdvance: true,
+    isGridView: false,
     options: [
       {
         alert: {
@@ -188,6 +189,7 @@ export const checkboxInput: PipelineItem = {
     setAlerts: true,
     addTooltip: false,
     setPalette: false,
+    isGridView: false,
     options: [
       {
         id: '1dd850ae-03f8-48c2-ba16-996b92d33475',

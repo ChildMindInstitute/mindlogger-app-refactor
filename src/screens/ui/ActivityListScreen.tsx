@@ -69,7 +69,7 @@ const ActivityListScreen: FC<Props> = props => {
     <Box flex={1}>
       <UploadRetryBanner accessibilityLabel="upload-banner" />
       <HorizontalCalendar mt={8} />
-      <StreamingStatusBar appletId={props.route.params.appletId} mb={20} />
+      <StreamingStatusBar appletId={appletId} mb={20} />
 
       {isFocused && (
         <ActivityGroups

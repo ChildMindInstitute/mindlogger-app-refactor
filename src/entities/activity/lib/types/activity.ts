@@ -80,6 +80,7 @@ type CheckboxConfig = {
   setAlerts: boolean;
   addTooltip: boolean;
   setPalette: boolean;
+  isGridView: boolean;
   options: Array<{
     id: string;
     text: string;
@@ -190,6 +191,7 @@ type RadioConfig = {
   addTooltip: boolean;
   setPalette: boolean;
   autoAdvance: boolean;
+  isGridView: boolean;
   options: Array<{
     id: string;
     text: string;

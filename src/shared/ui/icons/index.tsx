@@ -12,6 +12,7 @@ export { default as AboutIcon } from './About';
 export { default as DataIcon } from './Data';
 export { default as SurveyIcon } from './Survey';
 export { default as CloudLogo } from './CloudLogo';
+export { default as QuestionIcon } from './QuestionIcon';
 
 type IconProps = {
   color: string;

@@ -1,5 +1,7 @@
 import { ImageUrl } from '@app/shared/lib';
 
+import { BoxProps } from '../..';
+
 type RadioOption = {
   id: string;
   text: string;
@@ -12,3 +14,16 @@ type RadioOption = {
 };
 
 export default RadioOption;
+
+export type RadioItemProps = {
+  value: string | null;
+  options: Array<RadioOption>;
+
+  addTooltip: boolean;
+  setPalette: boolean;
+  hasImage: boolean;
+  hasTooltip: boolean;
+
+  onChange: (newValue: string) => void;
+  textReplacer: (markdown: string) => string;
+} & BoxProps;

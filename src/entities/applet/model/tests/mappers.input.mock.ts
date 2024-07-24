@@ -119,6 +119,7 @@ export const appletDetailsDto: AppletDetailsDto = {
   streamPort: null,
   activities: activityRecordsDto,
   activityFlows: activityFlows,
+  integrations: ['loris'],
 };
 
 const activityItems: ActivityItemDto[] = [
@@ -154,6 +155,7 @@ const activityItems: ActivityItemDto[] = [
       setAlerts: false,
       addTooltip: false,
       randomizeOptions: false,
+      portraitLayout: false,
     },
     name: 'Screen2',
     isHidden: false,
@@ -244,6 +246,7 @@ const activityItems: ActivityItemDto[] = [
         textInputRequired: false,
       },
       autoAdvance: true,
+      portraitLayout: false,
     },
     name: 'name',
     isHidden: false,
