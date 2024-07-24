@@ -3,13 +3,11 @@ import { FC, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { UploadObservable } from '@app/shared/lib';
-import { useRetryUpload } from '@entities/activity';
-import useQueueProcessing from '@entities/activity/lib/hooks/useQueueProcessing.ts';
+import { useQueueProcessing, useRetryUpload } from '@entities/activity';
 import { useAutoCompletion } from '@widgets/survey/model';
 
 import AnswersSubmitted from './AnswersSubmitted';
-import { SubScreenContainer } from './common';
-import Loading from './Loading';
+import { SubScreenContainer } from './containers';
 import ProcessingAnswers from './ProcessingAnswers';
 
 const AutoCompletion: FC = () => {
@@ -65,15 +63,11 @@ const AutoCompletion: FC = () => {
     );
   }
 
-  if (isUploading) {
-    return (
-      <SubScreenContainer>
-        <ProcessingAnswers />
-      </SubScreenContainer>
-    );
-  }
-
-  return <Loading />;
+  return (
+    <SubScreenContainer>
+      <ProcessingAnswers />
+    </SubScreenContainer>
+  );
 };
 
 export default AutoCompletion;

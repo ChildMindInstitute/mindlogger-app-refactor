@@ -9,10 +9,10 @@ import {
   XStack,
   RadioGroup,
   Text,
-  Box,
   QuestionTooltipIcon,
   Tooltip,
 } from '@shared/ui';
+import { Box } from '@shared/ui/base';
 
 import RadioOption from './types';
 
