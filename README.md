@@ -161,15 +161,3 @@ The above scripts run the app using Debug configuration and for MindLogger's `d
 Common Public Attribution License Version 1.0 (CPAL-1.0)
 
 Refer to [LICENSE.md](./LICENSE.md)
-
-## Patch case your enviroment doesn't work on IOS
-
-Incluse #include <functional> on xplat/Flipper/FlipperTransportTypes.h
-https://github.com/facebook/flipper/commit/b3dcdb87f930dbbc9dbacb53ad60996e0111e7d8
-
-Replace the parameter type YGNodeRef with YGNodeConstRef in Pods/YogaKit/YGLayout.m:327
-https://github.com/facebook/react-native/issues/43383#issuecomment-1986232027
-
-rm  .xcode.env.local
-rm  .xcode.env
-
