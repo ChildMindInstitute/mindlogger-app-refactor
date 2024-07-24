@@ -144,6 +144,9 @@ The above scripts run the app using Debug configuration and for MindLogger's `d
 
 - `yarn test:single-file file-name.test.tsx` - Runs a single file test
 
+- `yarn test -t 'Test Case'` - Runs a single test Case
+
+
 ### Linting
 
 - `yarn lint` - Check that source code follows eslint rules
