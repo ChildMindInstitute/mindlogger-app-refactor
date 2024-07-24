@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import {
+  AutocompletionEventOptions,
   CheckAvailability,
   CompleteEntityIntoUploadToQueue,
   EntityType,
@@ -92,7 +93,9 @@ function ActivitySectionList({
     }
 
     const autocomplete = () => {
-      Emitter.emit('autocomplete');
+      Emitter.emit<AutocompletionEventOptions>('autocomplete', {
+        logTrigger: 'expired-while-alert-opened',
+      });
     };
 
     const entityName = activityFlowDetails

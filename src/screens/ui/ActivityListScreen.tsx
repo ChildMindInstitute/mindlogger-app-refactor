@@ -4,7 +4,11 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useIsFocused } from '@react-navigation/core';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { EntityPath, StoreProgress } from '@app/abstract/lib';
+import {
+  AutocompletionEventOptions,
+  EntityPath,
+  StoreProgress,
+} from '@app/abstract/lib';
 import { AppletModel } from '@app/entities/applet';
 import {
   AnalyticsService,
@@ -54,8 +58,9 @@ const ActivityListScreen: FC<Props> = props => {
       });
 
       if (!isSuccess) {
-        Emitter.emit<SurveyModel.AutocompletionExecuteOptions>('autocomplete', {
+        Emitter.emit<AutocompletionEventOptions>('autocomplete', {
           checksToExclude: ['start-entity'],
+          logTrigger: 'check-availability',
         });
       }
       return isSuccess;

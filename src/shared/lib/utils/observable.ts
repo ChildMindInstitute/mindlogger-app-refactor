@@ -1,4 +1,4 @@
-type ObserverFunctionBase = (...args: any[]) => void;
+type ObserverFunctionBase = (...args: any[]) => void | Promise<void>;
 
 export interface IObservable {
   notify: () => void;
@@ -24,5 +24,11 @@ export class CommonObservable<
 
   public notify(...args: any[]) {
     this._observers.forEach(o => o(...args));
+  }
+
+  public async notifyAsync(...args: any[]) {
+    for (const observer of this._observers) {
+      await observer(...args);
+    }
   }
 }

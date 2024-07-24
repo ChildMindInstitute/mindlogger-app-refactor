@@ -7,7 +7,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { EntityPath, StoreProgress } from '@app/abstract/lib';
+import {
+  AutocompletionEventOptions,
+  AutocompletionExecuteOptions,
+  EntityPath,
+  LogAutocompletionTrigger,
+  StoreProgress,
+} from '@app/abstract/lib';
 import { ActivityModel } from '@app/entities/activity';
 import { MediaFilesCleaner } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
@@ -17,10 +23,6 @@ import { TapOnNotificationModel } from '@app/features/tap-on-notification';
 import { SystemRecord } from '@app/shared/lib/records';
 import { ActivityGroupsModel } from '@app/widgets/activity-group';
 import { SurveyModel } from '@app/widgets/survey';
-import {
-  AutocompletionExecuteOptions,
-  LogAutocompletionTrigger,
-} from '@app/widgets/survey/model';
 import { SessionModel } from '@entities/session';
 import { EnterForegroundModel } from '@features/enter-foreground';
 import { LogoutModel } from '@features/logout';
@@ -38,6 +40,7 @@ import {
   useOnceRef,
   Emitter,
   useOnForegroundDebounced,
+  useDelayedInterval,
 } from '@shared/lib';
 import {
   UserProfileIcon,
@@ -76,7 +79,7 @@ import {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const AUTOCOMPLETION_DELAY = 2000;
+const AUTOCOMPLETION_DELAY = 2000; // time-window to handle notification
 
 export default () => {
   const { t } = useTranslation();
@@ -133,8 +136,9 @@ export default () => {
       });
 
       if (!isSuccess) {
-        Emitter.emit<SurveyModel.AutocompletionExecuteOptions>('autocomplete', {
+        Emitter.emit<AutocompletionEventOptions>('autocomplete', {
           checksToExclude: ['start-entity'],
+          logTrigger: 'check-availability',
         });
       }
       return isSuccess;
@@ -162,6 +166,13 @@ export default () => {
         AUTOCOMPLETION_DELAY,
       ),
     [executeAutocompletion],
+  );
+
+  useDelayedInterval(() =>
+    executeAutocompletion('app-level-timer', {
+      forceUpload: false,
+      checksToInclude: ['is-offline'],
+    }),
   );
 
   useOnlineEstablished(() =>
