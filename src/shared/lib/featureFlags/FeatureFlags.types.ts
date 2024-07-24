@@ -1,7 +1,7 @@
 import { LDFlagValue } from '@launchdarkly/react-native-client-sdk';
 
 export const FeatureFlagsKeys = {
-  enableConsentsCapability: 'enableLorisIntegration',
+  enableConsentsCapability: 'enable-loris-integration',
 };
 
 export type FeatureFlags = Partial<
