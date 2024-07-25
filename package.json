@@ -7,7 +7,7 @@
     "ios": "yarn ios:dev",
     "clean-ios": "cd ios && xcodebuild clean -workspace MindloggerMobile.xcworkspace -scheme MindloggerMobileDev && cd ..",
     "start": "react-native start",
-    "test": "jest --noStackTrace -- SendApplicationLogsForm.test.tsx",
+    "test": "jest --noStackTrace",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:check": "yarn lint",
     "lint:fix": "yarn lint --fix",
