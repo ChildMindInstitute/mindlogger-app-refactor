@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import renderer from 'react-test-renderer';
 
 import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
@@ -34,10 +33,9 @@ describe('Test DatePickerItem', () => {
       accessibilityLabel: 'date-picker',
     });
 
-    const resultProp = format(datePicker.props.value, 'yyyy-MM-dd');
-
-    const expectedDate = format(new Date(0), 'yyyy-MM-dd');
-
-    expect(resultProp).toBe(expectedDate);
+    const resultDate = datePicker.props.value as Date;
+    expect(resultDate.getUTCFullYear()).toBe(new Date(0).getUTCFullYear());
+    expect(resultDate.getUTCMonth()).toBe(new Date(0).getUTCMonth());
+    expect(resultDate.getUTCDate()).toBe(new Date(0).getUTCDate());
   });
 });
