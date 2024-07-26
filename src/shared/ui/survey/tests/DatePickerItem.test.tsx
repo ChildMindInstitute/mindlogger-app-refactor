@@ -21,7 +21,7 @@ describe('Test DatePickerItem', () => {
     expect(placeholder).toBe(expected);
   });
 
-  it('Should render new Date(0) when value is 1970-01-01', () => {
+  it('Should consume new Date(1970, 0, 1) when props value is "1970-01-01"', () => {
     const testValue = '1970-01-01';
     const datePickerComponent = renderer.create(
       <TamaguiProvider>
@@ -34,8 +34,24 @@ describe('Test DatePickerItem', () => {
     });
 
     const resultDate = datePicker.props.value as Date;
-    expect(resultDate.getUTCFullYear()).toBe(new Date(0).getUTCFullYear());
-    expect(resultDate.getUTCMonth()).toBe(new Date(0).getUTCMonth());
-    expect(resultDate.getUTCDate()).toBe(new Date(0).getUTCDate());
+
+    expect(resultDate).toEqual(new Date(1970, 0, 1));
+  });
+
+  it('Should consume new Date(2010, 5, 8) when props value is "2010-06-08"', () => {
+    const testValue = '2010-06-08';
+    const datePickerComponent = renderer.create(
+      <TamaguiProvider>
+        <DatePickerItem value={testValue} onChange={jest.fn()} />
+      </TamaguiProvider>,
+    );
+
+    const datePicker = datePickerComponent.root.findByProps({
+      accessibilityLabel: 'date-picker',
+    });
+
+    const resultDate = datePicker.props.value as Date;
+
+    expect(resultDate).toEqual(new Date(2010, 5, 8));
   });
 });
