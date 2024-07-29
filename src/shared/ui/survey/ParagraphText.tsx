@@ -1,11 +1,5 @@
-import React, { FC, useState } from 'react';
-import {
-  StyleSheet,
-  TextInputProps,
-  View,
-  NativeSyntheticEvent,
-  TextInputContentSizeChangeEventData,
-} from 'react-native';
+import React, { FC } from 'react';
+import { StyleSheet, TextInputProps, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
@@ -24,41 +18,13 @@ const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
   const { maxLength = 50 } = config;
   const { t } = useTranslation();
 
-  const [inputHeight, setInputHeight] = useState(56);
-
   const onChangeText = (text: string) => {
     onChange(text);
-  };
-
-  const handleContentSizeChange = (
-    contentWidth: number,
-    contentHeight: number,
-  ) => {
-    setInputHeight(contentHeight);
-  };
-
-  const handleContentSizeChangeWrapper = (
-    event: NativeSyntheticEvent<
-      | {
-          contentWidth: number;
-          contentHeight: number;
-        }
-      | TextInputContentSizeChangeEventData
-    >,
-  ) => {
-    const { contentWidth, contentHeight } = event.nativeEvent as {
-      contentWidth: number;
-      contentHeight: number;
-    };
-    handleContentSizeChange(contentWidth, contentHeight);
   };
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-    },
-    input: {
-      height: inputHeight,
     },
   });
 
@@ -74,8 +40,6 @@ const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
         autoCorrect={false}
         multiline={true}
         keyboardType={'default'}
-        style={styles.input}
-        onContentSizeChange={handleContentSizeChangeWrapper}
         {...props}
       />
     </View>
