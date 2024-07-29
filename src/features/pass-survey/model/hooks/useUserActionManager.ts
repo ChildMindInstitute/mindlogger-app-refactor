@@ -11,7 +11,12 @@ type Args = {
   activityState: ActivityState | undefined;
 };
 
-const ITEMS_TO_UPDATE_USER_ACTION = ['TextInput', 'DrawingTest', 'AbTest'];
+const ITEMS_TO_UPDATE_USER_ACTION = [
+  'TextInput',
+  'paragraphText',
+  'DrawingTest',
+  'AbTest',
+];
 
 function useUserActionManager({ activityId, activityState }: Args) {
   const userActionCreator = useUserActionCreator({
@@ -56,7 +61,9 @@ function useUserActionManager({ activityId, activityState }: Args) {
       lastUserAction.type === 'SET_ANSWER' &&
       ITEMS_TO_UPDATE_USER_ACTION.includes(currentPipelineItem.type);
 
-    const shouldUpdateOnlyLastAction = currentPipelineItem.type === 'TextInput';
+    const shouldUpdateOnlyLastAction =
+      currentPipelineItem.type === 'TextInput' ||
+      currentPipelineItem.type === 'paragraphText';
 
     const action = userActionCreator.setAnswer({
       type: currentPipelineItem.type,
@@ -85,8 +92,9 @@ function useUserActionManager({ activityId, activityState }: Args) {
       lastUserAction.type === 'SET_ANSWER' &&
       lastUserAction?.payload?.activityItemId === currentPipelineItem.id;
 
-    const shouldUpdateOnlyLastAction = currentPipelineItem.type === 'TextInput';
-
+    const shouldUpdateOnlyLastAction =
+      currentPipelineItem.type === 'TextInput' ||
+      currentPipelineItem.type === 'paragraphText';
     const action = userActionCreator.setAnswer({
       type: currentPipelineItem.type,
       value: {

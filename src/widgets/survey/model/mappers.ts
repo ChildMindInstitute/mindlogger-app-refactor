@@ -432,6 +432,9 @@ function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
     case 'TextInput':
       return convertToTextAnswer(answer);
 
+    case 'paragraphText':
+      return convertToTextAnswer(answer);
+
     case 'Radio':
       return convertToSingleSelectAnswer(answer);
 

@@ -5,6 +5,7 @@ import { FlankerItemSettingsDto } from './FlankerSettingsDto';
 
 export type ResponseType =
   | 'text'
+  | 'paragraphText'
   | 'singleSelect'
   | 'multiSelect'
   | 'message'
@@ -477,6 +478,11 @@ export interface TextItemDto extends ActivityItemDtoBase {
   config: TextConfiguration;
   responseValues: TextAnswerSettings;
 }
+export interface paragraphTextItemDto extends ActivityItemDtoBase {
+  responseType: 'paragraphText';
+  config: TextConfiguration;
+  responseValues: TextAnswerSettings;
+}
 
 export interface SingleSelectionItemDto extends ActivityItemDtoBase {
   responseType: 'singleSelect';
@@ -600,6 +606,7 @@ export interface ABTrailsItemDto extends ActivityItemDtoBase {
 
 export type ActivityItemDto =
   | TextItemDto
+  | paragraphTextItemDto
   | SingleSelectionItemDto
   | MultiSelectionItemDto
   | MessageItemDto

@@ -19,7 +19,7 @@ import {
   SliderPipelineItem,
   SplashPipelineItem,
   TextInputPipelineItem,
-  TextParagraphPipelineItem,
+  ParagraphTextPipelineItem,
   VideoPipelineItem,
   DatePipelineItem,
   TimePipelineItem,
@@ -36,9 +36,9 @@ interface SplashActivityItem extends ActivityItemBase {
   pipelineItem: SplashPipelineItem;
 }
 
-interface TextParagraphActivityItem extends ActivityItemBase {
-  type: 'Paragraph';
-  pipelineItem: TextParagraphPipelineItem;
+interface ParagraphTextActivityItem extends ActivityItemBase {
+  type: 'paragraphText';
+  pipelineItem: ParagraphTextPipelineItem;
 }
 
 interface TextInputActivityItem extends ActivityItemBase {
@@ -145,7 +145,7 @@ interface TimeActivityItem extends ActivityItemBase {
 
 export type ActivityItem =
   | TextInputActivityItem
-  | TextParagraphActivityItem
+  | ParagraphTextActivityItem
   | AbTestActivityItem
   | StabilityTrackerActivityItem
   | DrawingTestActivityItem

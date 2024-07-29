@@ -15,9 +15,9 @@ import {
   StackedCheckBoxItem,
   StackedRadiosItem,
   StackedSlider,
+  ParagraphText,
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
-import TextParagraph from '@app/shared/ui/survey/TextParagraph';
 import { AbTest } from '@entities/abTrail';
 import { useAppletStreamingDetails } from '@entities/applet/lib/hooks';
 import { DrawingTest } from '@entities/drawer';
@@ -188,10 +188,10 @@ function ActivityItem({
         />
       );
       break;
-    case 'Paragraph':
+    case 'paragraphText':
       item = (
         <Box mx={16} mb={16}>
-          <TextParagraph
+          <ParagraphText
             value={value?.answer ?? ''}
             config={pipelineItem.payload}
             onChange={onResponse}

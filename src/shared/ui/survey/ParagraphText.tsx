@@ -17,12 +17,11 @@ type Props = {
   value: string;
   config: {
     maxLength: number;
-    isNumeric: boolean;
   };
 } & Omit<TextInputProps, 'value' | 'onChange'>;
 
-const TextParagraph: FC<Props> = ({ value, onChange, config, ...props }) => {
-  const { maxLength = 50, isNumeric } = config;
+const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
+  const { maxLength = 50 } = config;
   const { t } = useTranslation();
 
   const [inputHeight, setInputHeight] = useState(56);
@@ -59,7 +58,6 @@ const TextParagraph: FC<Props> = ({ value, onChange, config, ...props }) => {
       flex: 1,
     },
     input: {
-      width: '100%',
       height: inputHeight,
     },
   });
@@ -67,16 +65,15 @@ const TextParagraph: FC<Props> = ({ value, onChange, config, ...props }) => {
   return (
     <View style={styles.container}>
       <LongTextInput
-        accessibilityLabel="text-item"
+        accessibilityLabel="paragraph-item"
         placeholder={t('text_entry:paragraph_placeholder')}
         placeholderTextColor={colors.mediumGrey}
         onChangeText={onChangeText}
-        maxLength={Number(maxLength)}
+        maxLength={maxLength}
         value={value}
         autoCorrect={false}
         multiline={true}
-        mode="survey"
-        keyboardType={isNumeric ? 'numeric' : 'default'}
+        keyboardType={'default'}
         style={styles.input}
         onContentSizeChange={handleContentSizeChangeWrapper}
         {...props}
@@ -85,4 +82,4 @@ const TextParagraph: FC<Props> = ({ value, onChange, config, ...props }) => {
   );
 };
 
-export default TextParagraph;
+export default ParagraphText;

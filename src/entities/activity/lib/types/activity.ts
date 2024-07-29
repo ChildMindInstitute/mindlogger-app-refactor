@@ -10,7 +10,7 @@ export type ActivityItemType =
   | 'Splash'
   | 'Flanker'
   | 'TextInput'
-  | 'Paragraph'
+  | 'paragraphText'
   | 'NumberSelect'
   | 'Slider'
   | 'Radio'
@@ -48,9 +48,8 @@ type TextInputConfig = {
   shouldIdentifyResponse: boolean;
 };
 
-type TextParagraphConfig = {
+type ParagraphTextConfig = {
   maxLength: number;
-  isNumeric: boolean;
   shouldIdentifyResponse: boolean;
 };
 
@@ -227,6 +226,7 @@ export type ActivityItemConfig =
   | StabilityTrackerConfig
   | DrawingTestTestConfig
   | TextInputConfig
+  | ParagraphTextConfig
   | NumberSelectConfig
   | SliderConfig
   | CheckboxConfig
@@ -293,9 +293,9 @@ interface FlankerActivityItem extends ActivityItemBase {
   config: FlankerItemSettings;
 }
 
-interface TextParagraphActivityItem extends ActivityItemBase {
-  inputType: 'Paragraph';
-  config: TextParagraphConfig;
+interface ParagraphTextActivityItem extends ActivityItemBase {
+  inputType: 'paragraphText';
+  config: ParagraphTextConfig;
 }
 
 interface TextInputActivityItem extends ActivityItemBase {
@@ -386,7 +386,7 @@ export type ActivityItem =
   | SplashActivityItem
   | DrawingTestTestActivityItem
   | TextInputActivityItem
-  | TextParagraphActivityItem
+  | ParagraphTextActivityItem
   | FlankerActivityItem
   | NumberSelectActivityItem
   | SliderActivityItem

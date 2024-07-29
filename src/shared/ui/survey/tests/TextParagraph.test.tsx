@@ -5,7 +5,7 @@ import renderer from 'react-test-renderer';
 import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
 import { LongTextInput } from '@shared/ui';
 
-import TextParagraph from '../TextParagraph';
+import ParagraphText from '../ParagraphText';
 
 jest.mock('react-i18next', () => ({
   useTranslation: jest.fn().mockImplementation(() => ({
@@ -13,23 +13,22 @@ jest.mock('react-i18next', () => ({
   })),
 }));
 
-describe('TextParagraph Component Tests', () => {
+describe('Test Paragraph Text', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders correctly with expected props', () => {
+  it('Should renders correctly with expected props', () => {
     const mockValue = '1234';
 
     const tree = renderer
       .create(
         <TamaguiProvider>
-          <TextParagraph
+          <ParagraphText
             onChange={jest.fn()}
             value={mockValue}
             config={{
               maxLength: 300,
-              isNumeric: true,
             }}
           />
         </TamaguiProvider>,
@@ -51,15 +50,15 @@ describe('TextParagraph Component Tests', () => {
     expect(longTextInput.props.maxLength).toBe(300);
   });
 
-  it('calls onChange when text is modified', () => {
+  it('Should call onChange when text is modified', () => {
     const mockOnChange = jest.fn();
 
     const tree = renderer.create(
       <TamaguiProvider>
-        <TextParagraph
+        <ParagraphText
           onChange={mockOnChange}
           value="test"
-          config={{ maxLength: 300, isNumeric: false }}
+          config={{ maxLength: 300 }}
         />
       </TamaguiProvider>,
     );
@@ -71,14 +70,14 @@ describe('TextParagraph Component Tests', () => {
     expect(mockOnChange).toHaveBeenCalledWith('new text');
   });
 
-  it('handles maxLength and keyboardType configurations correctly', () => {
+  it('Should handle maxLength and keyboardType configurations correctly', () => {
     const tree = renderer
       .create(
         <TamaguiProvider>
-          <TextParagraph
+          <ParagraphText
             onChange={jest.fn()}
             value="test"
-            config={{ maxLength: 150, isNumeric: true }}
+            config={{ maxLength: 150 }}
           />
         </TamaguiProvider>,
       )

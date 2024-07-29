@@ -88,6 +88,22 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             conditionalLogic: item.conditionalLogic,
           } satisfies PipelineItem;
         }
+        case 'paragraphText': {
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            validationOptions: item.validationOptions,
+            timer: item.timer,
+            conditionalLogic: item.conditionalLogic,
+          } satisfies PipelineItem;
+        }
 
         case 'Slider': {
           return {

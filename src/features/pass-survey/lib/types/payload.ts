@@ -24,7 +24,7 @@ export type ActivityItemType =
   | 'Splash'
   | 'Flanker'
   | 'TextInput'
-  | 'Paragraph'
+  | 'paragraphText'
   | 'TimeRange'
   | 'Audio'
   | 'Message'
@@ -218,9 +218,8 @@ type TextInputPayload = {
   shouldIdentifyResponse: boolean;
 };
 
-type TextParagraphPayload = {
+type ParagraphTextPayload = {
   maxLength: number;
-  isNumeric: boolean;
   shouldIdentifyResponse: boolean;
 };
 
@@ -245,7 +244,7 @@ type PipelinePayload =
   | DrawingPayload
   | FlankerPayload
   | TextInputPayload
-  | TextParagraphPayload
+  | ParagraphTextPayload
   | RadioPayload
   | TimeRangePayload
   | AudioPayload
@@ -321,9 +320,9 @@ export interface TextInputPipelineItem extends PipelineItemBase {
   payload: TextInputPayload;
 }
 
-export interface TextParagraphPipelineItem extends PipelineItemBase {
-  type: 'Paragraph';
-  payload: TextParagraphPayload;
+export interface ParagraphTextPipelineItem extends PipelineItemBase {
+  type: 'paragraphText';
+  payload: ParagraphTextPayload;
 }
 
 export interface NumberSelectPipelineItem extends PipelineItemBase {
@@ -405,7 +404,7 @@ export type FlankerResponse = FlankerGameResponse;
 
 export type TextInputResponse = string;
 
-export type TextParagraphResponse = string;
+export type ParagraphTextResponse = string;
 
 export type GeolocationResponse = Coordinates;
 
@@ -456,7 +455,7 @@ export type PipelineItemResponse =
   | FlankerResponse
   | DrawingTestResponse
   | TextInputResponse
-  | TextParagraphResponse
+  | ParagraphTextResponse
   | SliderResponse
   | NumberSelectResponse
   | CheckboxResponse
@@ -480,7 +479,7 @@ export type PipelineItem =
   | DrawingTestPipelineItem
   | FlankerPipelineItem
   | TextInputPipelineItem
-  | TextParagraphPipelineItem
+  | ParagraphTextPipelineItem
   | SliderPipelineItem
   | NumberSelectPipelineItem
   | CheckboxPipelineItem
