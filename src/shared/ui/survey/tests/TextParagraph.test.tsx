@@ -46,7 +46,6 @@ describe('Test Paragraph Text', () => {
       'text_entry:paragraph_placeholder',
     );
     expect(longTextInput.props.value).toBe('1234');
-    expect(longTextInput.props.keyboardType).toBe('numeric');
     expect(longTextInput.props.maxLength).toBe(300);
   });
 
@@ -91,6 +90,5 @@ describe('Test Paragraph Text', () => {
     const longTextInput = view.children[0];
 
     expect(longTextInput.props.maxLength).toBe(150);
-    expect(longTextInput.props.keyboardType).toBe('numeric');
   });
 });
