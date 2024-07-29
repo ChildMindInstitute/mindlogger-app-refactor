@@ -22,12 +22,6 @@ const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
     onChange(text);
   };
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-  });
-
   return (
     <View style={styles.container}>
       <LongTextInput
@@ -47,3 +41,9 @@ const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
 };
 
 export default ParagraphText;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
