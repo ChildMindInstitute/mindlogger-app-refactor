@@ -236,6 +236,8 @@ type TextConfiguration = ButtonsConfiguration &
 
 type TextAnswerSettings = null;
 
+type ParagraphTextAnswerSettings = null;
+
 type SingleSelectionRowsConfiguration = ButtonsConfiguration &
   TimerConfiguration & {
     randomizeOptions: boolean;
@@ -490,7 +492,7 @@ export interface TextItemDto extends ActivityItemDtoBase {
 export interface ParagraphTextItemDto extends ActivityItemDtoBase {
   responseType: 'paragraphText';
   config: ParagraphTextConfiguration;
-  responseValues: TextAnswerSettings;
+  responseValues: ParagraphTextAnswerSettings;
 }
 
 export interface SingleSelectionItemDto extends ActivityItemDtoBase {

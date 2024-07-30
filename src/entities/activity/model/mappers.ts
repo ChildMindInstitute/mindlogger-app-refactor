@@ -619,11 +619,6 @@ function mapToParagraphText(dto: ParagraphTextItemDto): ActivityItem {
     canBeReset: true,
     hasTopNavigation: false,
     isHidden: dto.isHidden,
-    ...(dto.config.correctAnswerRequired && {
-      validationOptions: {
-        correctAnswer: dto.config.correctAnswer,
-      },
-    }),
     ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
