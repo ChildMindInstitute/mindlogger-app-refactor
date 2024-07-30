@@ -188,7 +188,7 @@ function ActivityItem({
         />
       );
       break;
-    case 'paragraphText':
+    case 'ParagraphText':
       item = (
         <Box mx={16} mb={16}>
           <ParagraphText

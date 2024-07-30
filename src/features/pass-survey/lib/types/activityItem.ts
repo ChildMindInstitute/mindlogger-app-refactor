@@ -37,7 +37,7 @@ interface SplashActivityItem extends ActivityItemBase {
 }
 
 interface ParagraphTextActivityItem extends ActivityItemBase {
-  type: 'paragraphText';
+  type: 'ParagraphText';
   pipelineItem: ParagraphTextPipelineItem;
 }
 

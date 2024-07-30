@@ -10,7 +10,7 @@ export type ActivityItemType =
   | 'Splash'
   | 'Flanker'
   | 'TextInput'
-  | 'paragraphText'
+  | 'ParagraphText'
   | 'NumberSelect'
   | 'Slider'
   | 'Radio'
@@ -294,7 +294,7 @@ interface FlankerActivityItem extends ActivityItemBase {
 }
 
 interface ParagraphTextActivityItem extends ActivityItemBase {
-  inputType: 'paragraphText';
+  inputType: 'ParagraphText';
   config: ParagraphTextConfig;
 }
 

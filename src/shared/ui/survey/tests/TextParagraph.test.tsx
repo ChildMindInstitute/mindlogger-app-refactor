@@ -69,7 +69,7 @@ describe('Test Paragraph Text', () => {
     expect(mockOnChange).toHaveBeenCalledWith('new text');
   });
 
-  it('Should handle maxLength and keyboardType configurations correctly', () => {
+  it('Should handle maxLength configurations correctly', () => {
     const tree = renderer
       .create(
         <TamaguiProvider>

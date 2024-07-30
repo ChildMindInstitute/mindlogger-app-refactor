@@ -24,7 +24,7 @@ export type ActivityItemType =
   | 'Splash'
   | 'Flanker'
   | 'TextInput'
-  | 'paragraphText'
+  | 'ParagraphText'
   | 'TimeRange'
   | 'Audio'
   | 'Message'
@@ -321,7 +321,7 @@ export interface TextInputPipelineItem extends PipelineItemBase {
 }
 
 export interface ParagraphTextPipelineItem extends PipelineItemBase {
-  type: 'paragraphText';
+  type: 'ParagraphText';
   payload: ParagraphTextPayload;
 }
 

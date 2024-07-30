@@ -42,7 +42,7 @@ interface SplashPipelineAnswer extends PipelineItemAnswerBase {
 }
 
 interface ParagraphTextPipelineAnswer extends PipelineItemAnswerBase {
-  type: 'paragraphText';
+  type: 'ParagraphText';
   value: {
     answer?: ParagraphTextResponse;
     additionalAnswer?: string;

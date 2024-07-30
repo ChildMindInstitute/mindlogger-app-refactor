@@ -13,7 +13,7 @@ type Args = {
 
 const ITEMS_TO_UPDATE_USER_ACTION = [
   'TextInput',
-  'paragraphText',
+  'ParagraphText',
   'DrawingTest',
   'AbTest',
 ];
@@ -63,7 +63,7 @@ function useUserActionManager({ activityId, activityState }: Args) {
 
     const shouldUpdateOnlyLastAction =
       currentPipelineItem.type === 'TextInput' ||
-      currentPipelineItem.type === 'paragraphText';
+      currentPipelineItem.type === 'ParagraphText';
 
     const action = userActionCreator.setAnswer({
       type: currentPipelineItem.type,
@@ -94,7 +94,7 @@ function useUserActionManager({ activityId, activityState }: Args) {
 
     const shouldUpdateOnlyLastAction =
       currentPipelineItem.type === 'TextInput' ||
-      currentPipelineItem.type === 'paragraphText';
+      currentPipelineItem.type === 'ParagraphText';
     const action = userActionCreator.setAnswer({
       type: currentPipelineItem.type,
       value: {

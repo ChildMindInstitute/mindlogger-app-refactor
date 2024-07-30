@@ -88,7 +88,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             conditionalLogic: item.conditionalLogic,
           } satisfies PipelineItem;
         }
-        case 'paragraphText': {
+        case 'ParagraphText': {
           return {
             id: item.id,
             name: item.name,

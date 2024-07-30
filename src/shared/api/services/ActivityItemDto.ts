@@ -216,6 +216,15 @@ type MultiSelectionAnswerSettings = {
   options: OptionsDto;
 };
 
+type ParagraphTextConfiguration = ButtonsConfiguration &
+  TimerConfiguration & {
+    maxResponseLength: number;
+    correctAnswerRequired: boolean;
+    correctAnswer: string;
+    numericalResponseRequired: boolean;
+    responseDataIdentifier: boolean;
+  };
+
 type TextConfiguration = ButtonsConfiguration &
   TimerConfiguration & {
     maxResponseLength: number;
@@ -478,9 +487,9 @@ export interface TextItemDto extends ActivityItemDtoBase {
   config: TextConfiguration;
   responseValues: TextAnswerSettings;
 }
-export interface paragraphTextItemDto extends ActivityItemDtoBase {
+export interface ParagraphTextItemDto extends ActivityItemDtoBase {
   responseType: 'paragraphText';
-  config: TextConfiguration;
+  config: ParagraphTextConfiguration;
   responseValues: TextAnswerSettings;
 }
 
@@ -606,7 +615,7 @@ export interface ABTrailsItemDto extends ActivityItemDtoBase {
 
 export type ActivityItemDto =
   | TextItemDto
-  | paragraphTextItemDto
+  | ParagraphTextItemDto
   | SingleSelectionItemDto
   | MultiSelectionItemDto
   | MessageItemDto

@@ -24,7 +24,7 @@ import {
   SliderSelectionItemDto,
   SliderRowsItemDto,
   TextItemDto,
-  paragraphTextItemDto,
+  ParagraphTextItemDto,
   TimeRangeItemDto,
   VideoItemDto,
   AdditionalResponseConfiguration,
@@ -599,11 +599,11 @@ function mapToTextInput(dto: TextItemDto): ActivityItem {
     ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
-function mapToParagraphText(dto: paragraphTextItemDto): ActivityItem {
+function mapToParagraphText(dto: ParagraphTextItemDto): ActivityItem {
   return {
     id: dto.id,
     name: dto.name,
-    inputType: 'paragraphText',
+    inputType: 'ParagraphText',
     config: {
       maxLength: dto.config.maxResponseLength,
       shouldIdentifyResponse: dto.config.responseDataIdentifier,
