@@ -5,3 +5,4 @@ export * from './collectImageUrls';
 export * from './BackgroundWorker';
 export { default as Logger } from './Logger';
 export * from './MigrationValidator';
+export { default as ActionPostponer } from './ActionPostponer';

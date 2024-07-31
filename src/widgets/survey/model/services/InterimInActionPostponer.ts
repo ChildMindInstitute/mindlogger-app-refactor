@@ -1,45 +1,24 @@
-import { InterimSubmitMutex, Logger } from '@app/shared/lib';
+import { ActionPostponer, InterimSubmitMutex } from '@app/shared/lib';
 
 const PostponeDuration = 2000;
 
-class InterimInActionPostponer {
+class InterimInActionPostponer extends ActionPostponer {
   private action: () => void;
 
-  private timeoutId: NodeJS.Timeout | null;
-
   constructor(actionToPostpone: () => void) {
+    super(PostponeDuration, 'InterimInActionPostponer');
     this.action = actionToPostpone;
-    this.timeoutId = null;
   }
 
-  private shouldBePostponed(): boolean {
+  protected callAction(): void {
+    this.action();
+  }
+
+  protected shouldBePostponed(): boolean {
     return InterimSubmitMutex.isBusy();
   }
 
-  private postpone() {
-    this.timeoutId = setTimeout(() => {
-      this.try();
-    }, PostponeDuration);
-  }
-
-  private try() {
-    if (this.shouldBePostponed()) {
-      Logger.log('[InterimInActionPostponer.try] Postponed');
-      this.postpone();
-    } else {
-      this.action();
-    }
-  }
-
-  public tryExecute() {
-    this.try();
-  }
-
-  public reset() {
-    if (this.timeoutId) {
-      clearTimeout(this.timeoutId);
-    }
-  }
+  protected resetAction(): void {}
 }
 
 export default InterimInActionPostponer;
