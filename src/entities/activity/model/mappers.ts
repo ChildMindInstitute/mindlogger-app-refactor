@@ -606,7 +606,6 @@ function mapToParagraphText(dto: ParagraphTextItemDto): ActivityItem {
     inputType: 'ParagraphText',
     config: {
       maxLength: dto.config.maxResponseLength,
-      shouldIdentifyResponse: dto.config.responseDataIdentifier,
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -619,6 +618,7 @@ function mapToParagraphText(dto: ParagraphTextItemDto): ActivityItem {
     canBeReset: true,
     hasTopNavigation: false,
     isHidden: dto.isHidden,
+
     ...mapConditionalLogic(dto.conditionalLogic),
   };
 }

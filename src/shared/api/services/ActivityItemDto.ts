@@ -219,10 +219,6 @@ type MultiSelectionAnswerSettings = {
 type ParagraphTextConfiguration = ButtonsConfiguration &
   TimerConfiguration & {
     maxResponseLength: number;
-    correctAnswerRequired: boolean;
-    correctAnswer: string;
-    numericalResponseRequired: boolean;
-    responseDataIdentifier: boolean;
   };
 
 type TextConfiguration = ButtonsConfiguration &

@@ -50,7 +50,6 @@ type TextInputConfig = {
 
 type ParagraphTextConfig = {
   maxLength: number;
-  shouldIdentifyResponse: boolean;
 };
 
 type SliderConfig = {
