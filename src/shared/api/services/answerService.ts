@@ -206,6 +206,7 @@ type CheckIfAnswersExistRequest = {
   appletId: string;
   createdAt: number;
   activityId: string;
+  submitId: string;
 };
 
 type CheckIfAnswersExistResponse = SuccessfulResponse<{
