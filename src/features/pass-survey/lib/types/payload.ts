@@ -220,7 +220,6 @@ type TextInputPayload = {
 
 type ParagraphTextPayload = {
   maxLength: number;
-  shouldIdentifyResponse: boolean;
 };
 
 type NumberSelectPayload = {
