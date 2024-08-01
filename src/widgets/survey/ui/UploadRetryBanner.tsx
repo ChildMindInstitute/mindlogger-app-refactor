@@ -3,6 +3,7 @@ import { AccessibilityProps } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
+import { AutocompletionEventOptions } from '@app/abstract/lib';
 import { Box, Button, Text } from '@app/shared/ui';
 import {
   AnalyticsService,
@@ -11,7 +12,6 @@ import {
   useUploadObservable,
 } from '@shared/lib';
 
-import { SurveyModel } from '../';
 import { useAutoCompletion } from '../model';
 
 type Props = AccessibilityProps;
@@ -25,9 +25,10 @@ const UploadRetryBanner: FC<Props> = () => {
   const onRetry = () => {
     AnalyticsService.track(MixEvents.RetryButtonPressed);
 
-    Emitter.emit<SurveyModel.AutocompletionExecuteOptions>('autocomplete', {
+    Emitter.emit<AutocompletionEventOptions>('autocomplete', {
       checksToExclude: [],
       forceUpload: true,
+      logTrigger: 'retry-on-banner',
     });
   };
 

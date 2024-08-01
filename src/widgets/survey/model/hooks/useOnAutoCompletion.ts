@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 
+import { AutocompletionEventOptions } from '@app/abstract/lib';
 import { Emitter } from '@shared/lib';
 
-import { AutocompletionExecuteOptions, useAutoCompletionExecute } from './';
+import { useAutoCompletionExecute } from './';
 
 function useOnAutoCompletion(callback?: () => void) {
   const callbackRef = useRef(callback);
@@ -12,8 +13,8 @@ function useOnAutoCompletion(callback?: () => void) {
   const { executeAutocompletion } = useAutoCompletionExecute();
 
   const processAutocompletion = useCallback(
-    (payload?: AutocompletionExecuteOptions) => {
-      executeAutocompletion('unknown', payload);
+    (payload?: AutocompletionEventOptions) => {
+      executeAutocompletion(payload!.logTrigger, payload);
 
       if (callbackRef.current) {
         callbackRef.current();
@@ -23,7 +24,7 @@ function useOnAutoCompletion(callback?: () => void) {
   );
 
   useEffect(() => {
-    Emitter.on<AutocompletionExecuteOptions>(
+    Emitter.on<AutocompletionEventOptions>(
       'autocomplete',
       processAutocompletion,
     );

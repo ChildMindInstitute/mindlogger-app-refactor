@@ -80,6 +80,7 @@ class AnswersUploadService implements IAnswersUploadService {
       activityId: checkInput.activityId,
       appletId: checkInput.appletId,
       createdAt: checkInput.createdAt,
+      submitId: checkInput.submitId,
     });
 
     return response.data.result.exists;
@@ -212,7 +213,7 @@ class AnswersUploadService implements IAnswersUploadService {
   ): Promise<SendAnswersInput> {
     const fileIds = this.collectFileIds(body.answers);
 
-    this.uploadProgressObservable.totalFilesInActivity = fileIds.length;
+    await this.uploadProgressObservable.setTotalFilesInActivity(fileIds.length);
 
     if (fileIds.length === 0) {
       return body;
@@ -234,6 +235,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
     const updatedAnswers = [];
     let logAnswerIndex = -1;
+    this.uploadProgressObservable.currentFile = -1;
 
     for (const itemAnswer of itemsAnswers) {
       logAnswerIndex++;
@@ -301,13 +303,15 @@ class AnswersUploadService implements IAnswersUploadService {
     let uploaded: boolean;
 
     try {
-      const { activityId, appletId, flowId, createdAt } = encryptedData;
+      const { activityId, appletId, flowId, createdAt, submitId } =
+        encryptedData;
 
       uploaded = await this.checkIfAnswersUploaded({
         activityId,
         appletId,
         flowId,
         createdAt,
+        submitId,
       });
     } catch (error) {
       throw new Error(
@@ -340,6 +344,7 @@ class AnswersUploadService implements IAnswersUploadService {
         appletId: encryptedData.appletId,
         flowId: encryptedData.flowId,
         createdAt: encryptedData.createdAt,
+        submitId: encryptedData.submitId,
       });
     } catch (error) {
       throw new Error(
@@ -483,7 +488,9 @@ class AnswersUploadService implements IAnswersUploadService {
       '[UploadAnswersService.sendAnswers] executing upload files',
     );
 
-    this.uploadProgressObservable.currentSecondLevelStep = 'upload_files';
+    await this.uploadProgressObservable.setCurrentSecondLevelStepKey(
+      'upload_files',
+    );
 
     const modifiedBody: SendAnswersInput = await this.uploadAllMediaFiles(body);
 
@@ -508,7 +515,9 @@ class AnswersUploadService implements IAnswersUploadService {
       '[UploadAnswersService.sendAnswers] executing prepare answers',
     );
 
-    this.uploadProgressObservable.currentSecondLevelStep = 'encrypt_answers';
+    await this.uploadProgressObservable.setCurrentSecondLevelStepKey(
+      'encrypt_answers',
+    );
 
     const encryptedData = this.encryptAnswers(modifiedBody);
 
@@ -516,13 +525,19 @@ class AnswersUploadService implements IAnswersUploadService {
       '[UploadAnswersService.sendAnswers] executing upload answers',
     );
 
-    this.uploadProgressObservable.currentSecondLevelStep = 'upload_answers';
+    await this.uploadProgressObservable.setCurrentSecondLevelStepKey(
+      'upload_answers',
+    );
 
     await this.uploadAnswers(encryptedData);
 
     this.logger.log('[UploadAnswersService.sendAnswers] executing clean up');
 
     MediaFilesCleaner.cleanUpByAnswers(body.answers);
+
+    await this.uploadProgressObservable.setCurrentSecondLevelStepKey(
+      'completed',
+    );
   }
 }
 

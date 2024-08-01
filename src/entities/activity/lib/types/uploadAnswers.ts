@@ -48,4 +48,5 @@ export type CheckAnswersInput = {
   createdAt: number;
   activityId: string;
   flowId: string | null;
+  submitId: string;
 };
