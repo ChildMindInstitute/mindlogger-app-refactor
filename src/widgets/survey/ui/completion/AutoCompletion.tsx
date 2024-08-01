@@ -12,11 +12,7 @@ import ProcessingAnswers from './ProcessingAnswers';
 
 const AutoCompletion: FC = () => {
   const { goBack } = useNavigation();
-  const {
-    isCompleted,
-    isLoading: isUploading,
-    process: processQueue,
-  } = useQueueProcessing();
+  const { isCompleted, process: processQueue } = useQueueProcessing();
 
   const { isAlertOpened: isRetryAlertOpen, openAlert: openRetryAlert } =
     useRetryUpload({
