@@ -80,6 +80,7 @@ class AnswersUploadService implements IAnswersUploadService {
       activityId: checkInput.activityId,
       appletId: checkInput.appletId,
       createdAt: checkInput.createdAt,
+      submitId: checkInput.submitId,
     });
 
     return response.data.result.exists;
@@ -302,13 +303,15 @@ class AnswersUploadService implements IAnswersUploadService {
     let uploaded: boolean;
 
     try {
-      const { activityId, appletId, flowId, createdAt } = encryptedData;
+      const { activityId, appletId, flowId, createdAt, submitId } =
+        encryptedData;
 
       uploaded = await this.checkIfAnswersUploaded({
         activityId,
         appletId,
         flowId,
         createdAt,
+        submitId,
       });
     } catch (error) {
       throw new Error(
@@ -341,6 +344,7 @@ class AnswersUploadService implements IAnswersUploadService {
         appletId: encryptedData.appletId,
         flowId: encryptedData.flowId,
         createdAt: encryptedData.createdAt,
+        submitId: encryptedData.submitId,
       });
     } catch (error) {
       throw new Error(
