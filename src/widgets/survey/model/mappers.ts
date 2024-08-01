@@ -31,6 +31,7 @@ import {
   StackedRadioAnswerDto,
   StackedSliderAnswerDto,
   TextAnswerDto,
+  ParagraphTextAnswerDto,
   TimeAnswerDto,
   VideoAnswerDto,
   UserActionDto,
@@ -144,7 +145,7 @@ function convertToTextAnswer(answer: Answer): AnswerDto {
   return answer.answer as TextAnswerDto;
 }
 function convertToParagraphTextAnswer(answer: Answer): AnswerDto {
-  return answer.answer as TextAnswerDto;
+  return answer.answer as ParagraphTextAnswerDto;
 }
 function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
   const radioValue = answer.answer as RadioOption;

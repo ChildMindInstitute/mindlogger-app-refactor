@@ -12,6 +12,8 @@ import { SuccessfulEmptyResponse, SuccessfulResponse } from '../types';
 
 export type TextAnswerDto = string;
 
+export type ParagraphTextAnswerDto = string;
+
 export type SliderAnswerDto = number;
 
 export type NumberSelectAnswerDto = string;
@@ -142,7 +144,11 @@ export type ObjectAnswerDto =
     }
   | StabilityTrackerAnswerDto;
 
-export type AnswerDto = TextAnswerDto | ObjectAnswerDto | null;
+export type AnswerDto =
+  | TextAnswerDto
+  | ParagraphTextAnswerDto
+  | ObjectAnswerDto
+  | null;
 
 export type AnswerAlertDto = {
   activityItemId: string;
