@@ -143,7 +143,9 @@ const mapFlankerAnswersToDto = (
 function convertToTextAnswer(answer: Answer): AnswerDto {
   return answer.answer as TextAnswerDto;
 }
-
+function convertToParagraphTextAnswer(answer: Answer): AnswerDto {
+  return answer.answer as TextAnswerDto;
+}
 function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
   const radioValue = answer.answer as RadioOption;
 
@@ -433,7 +435,7 @@ function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
       return convertToTextAnswer(answer);
 
     case 'ParagraphText':
-      return convertToTextAnswer(answer);
+      return convertToParagraphTextAnswer(answer);
 
     case 'Radio':
       return convertToSingleSelectAnswer(answer);
