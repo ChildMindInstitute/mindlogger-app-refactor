@@ -385,6 +385,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
     .reduce<PipelineItem[]>((items, item) => {
       return Array.isArray(item) ? [...items, ...item] : [...items, item];
     }, [])
+    .filter(Boolean)
     .map(item => {
       const isAbleToMoveBack =
         activity.responseIsEditable && item.isAbleToMoveBack;
