@@ -1,4 +1,5 @@
 import { ActivityDetails, ActivityItem } from '@app/entities/activity';
+import { Logger } from '@app/shared/lib';
 
 import { getAbTrailsPipeline } from './precompiled-pipelines';
 import { PipelineItem } from '../lib';
@@ -379,6 +380,14 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
           } satisfies PipelineItem;
+        }
+
+        default: {
+          Logger.warn(
+            `[buildPipeline] unknown activity item type found: ${(item as ActivityItem).inputType}`,
+          );
+
+          return null as unknown as PipelineItem;
         }
       }
     })
