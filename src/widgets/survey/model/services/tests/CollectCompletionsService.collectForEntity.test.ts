@@ -96,6 +96,10 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
       .spyOn(storageHelpers, 'getFlowRecord')
       .mockReturnValue(getSingleActivityFlowState(pathOne));
 
+    jest
+      .spyOn(storageHelpers, 'isCurrentActivityRecordExist')
+      .mockReturnValue(true);
+
     const progress = getRegularProgressRecord(pathOne);
 
     progress.payload.availableTo = new Date(2023, 2, 5).getTime();

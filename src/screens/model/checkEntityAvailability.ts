@@ -147,7 +147,7 @@ const checkEntityAvailabilityInternal = ({
 
   logger.log('[checkEntityAvailability] Check done: false (not available)');
 
-  onActivityNotAvailable(() => callback(false));
+  onActivityNotAvailable(entityName, () => callback(false));
 };
 
 export const checkEntityAvailability = ({

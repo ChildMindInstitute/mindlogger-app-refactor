@@ -1,4 +1,5 @@
 export { default as SimpleTextInput } from './SimpleTextInput';
+export { default as ParagraphText } from './ParagraphText';
 export { RadioActivityItem } from './RadioActivityItem';
 export { StackedRadiosItem } from './StackedRadioItem';
 export { StackedCheckBoxItem } from './StackedCheckboxItem';

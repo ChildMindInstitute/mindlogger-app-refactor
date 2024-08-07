@@ -31,6 +31,7 @@ import {
   StackedRadioAnswerDto,
   StackedSliderAnswerDto,
   TextAnswerDto,
+  ParagraphTextAnswerDto,
   TimeAnswerDto,
   VideoAnswerDto,
   UserActionDto,
@@ -143,7 +144,9 @@ const mapFlankerAnswersToDto = (
 function convertToTextAnswer(answer: Answer): AnswerDto {
   return answer.answer as TextAnswerDto;
 }
-
+function convertToParagraphTextAnswer(answer: Answer): AnswerDto {
+  return answer.answer as ParagraphTextAnswerDto;
+}
 function convertToSingleSelectAnswer(answer: Answer): AnswerDto {
   const radioValue = answer.answer as RadioOption;
 
@@ -431,6 +434,9 @@ function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
   switch (type) {
     case 'TextInput':
       return convertToTextAnswer(answer);
+
+    case 'ParagraphText':
+      return convertToParagraphTextAnswer(answer);
 
     case 'Radio':
       return convertToSingleSelectAnswer(answer);

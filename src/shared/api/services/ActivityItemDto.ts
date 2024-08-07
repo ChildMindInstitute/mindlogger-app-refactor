@@ -5,6 +5,7 @@ import { FlankerItemSettingsDto } from './FlankerSettingsDto';
 
 export type ResponseType =
   | 'text'
+  | 'paragraphText'
   | 'singleSelect'
   | 'multiSelect'
   | 'message'
@@ -215,6 +216,11 @@ type MultiSelectionAnswerSettings = {
   options: OptionsDto;
 };
 
+type ParagraphTextConfiguration = ButtonsConfiguration &
+  TimerConfiguration & {
+    maxResponseLength: number;
+  };
+
 type TextConfiguration = ButtonsConfiguration &
   TimerConfiguration & {
     maxResponseLength: number;
@@ -225,6 +231,8 @@ type TextConfiguration = ButtonsConfiguration &
   };
 
 type TextAnswerSettings = null;
+
+type ParagraphTextAnswerSettings = null;
 
 type SingleSelectionRowsConfiguration = ButtonsConfiguration &
   TimerConfiguration & {
@@ -477,6 +485,11 @@ export interface TextItemDto extends ActivityItemDtoBase {
   config: TextConfiguration;
   responseValues: TextAnswerSettings;
 }
+export interface ParagraphTextItemDto extends ActivityItemDtoBase {
+  responseType: 'paragraphText';
+  config: ParagraphTextConfiguration;
+  responseValues: ParagraphTextAnswerSettings;
+}
 
 export interface SingleSelectionItemDto extends ActivityItemDtoBase {
   responseType: 'singleSelect';
@@ -600,6 +613,7 @@ export interface ABTrailsItemDto extends ActivityItemDtoBase {
 
 export type ActivityItemDto =
   | TextItemDto
+  | ParagraphTextItemDto
   | SingleSelectionItemDto
   | MultiSelectionItemDto
   | MessageItemDto

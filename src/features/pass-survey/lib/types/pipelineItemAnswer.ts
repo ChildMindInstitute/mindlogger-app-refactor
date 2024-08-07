@@ -4,6 +4,7 @@ import {
   PipelineItemResponse,
   ActivityItemType,
   TextInputResponse,
+  ParagraphTextResponse,
   AbTestResponse,
   StabilityTrackerResponse,
   DrawingTestResponse,
@@ -36,6 +37,14 @@ interface SplashPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Splash';
   value: {
     answer: null;
+    additionalAnswer?: string;
+  };
+}
+
+interface ParagraphTextPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'ParagraphText';
+  value: {
+    answer?: ParagraphTextResponse;
     additionalAnswer?: string;
   };
 }
@@ -210,6 +219,7 @@ interface TimePipelineAnswer extends PipelineItemAnswerBase {
 export type PipelineItemAnswer =
   | SplashPipelineAnswer
   | TextInputPipelineAnswer
+  | ParagraphTextPipelineAnswer
   | AbTestPipelineAnswer
   | StabilityTrackerPipelineAnswer
   | DrawingTestPipelineAnswer

@@ -1,4 +1,5 @@
 import { ActivityDetails, ActivityItem } from '@app/entities/activity';
+import { Logger } from '@app/shared/lib';
 
 import { getAbTrailsPipeline } from './precompiled-pipelines';
 import { PipelineItem } from '../lib';
@@ -73,6 +74,22 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
         }
 
         case 'TextInput': {
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            validationOptions: item.validationOptions,
+            timer: item.timer,
+            conditionalLogic: item.conditionalLogic,
+          } satisfies PipelineItem;
+        }
+        case 'ParagraphText': {
           return {
             id: item.id,
             name: item.name,
@@ -364,11 +381,20 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             conditionalLogic: item.conditionalLogic,
           } satisfies PipelineItem;
         }
+
+        default: {
+          Logger.warn(
+            `[buildPipeline] unknown activity item type found: ${(item as ActivityItem).inputType}`,
+          );
+
+          return null as unknown as PipelineItem;
+        }
       }
     })
     .reduce<PipelineItem[]>((items, item) => {
       return Array.isArray(item) ? [...items, ...item] : [...items, item];
     }, [])
+    .filter(Boolean)
     .map(item => {
       const isAbleToMoveBack =
         activity.responseIsEditable && item.isAbleToMoveBack;

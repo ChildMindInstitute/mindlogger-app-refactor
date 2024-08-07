@@ -340,7 +340,7 @@
     "refresh_request_text": "Your managers will initiate the refresh shortly.",
     "applet_not_found_1": "Applet was not found",
     "applet_not_found_2": "There is no applet for given id.",
-    "activity_not_found": "This activity is not available now.",
+    "activity_not_found": "Activity \"{{entityName}}\" is not available now.",
     "already_completed": "You have already completed",
     "app_killed_on_redux_persist": "This activity cannot be started. Please, contact support.",
     "activity_was_due_at": "This activity was due at",
@@ -351,7 +351,8 @@
     "activity_not_ready": "Activity not ready",
     "not_able_to_start": "You’re not able to start activity yet",
     "is": "is",
-    "scheduled_to_start_at": "scheduled to start at"
+    "scheduled_to_start_at": "scheduled to start at",
+    "postponed_notification": "Once the responses are uploaded, we’ll attempt to open the activity"
   },
   "local_notifications": {
     "complete_activity": "Please complete this activity."
@@ -407,7 +408,8 @@
     "library": "Library"
   },
   "text_entry": {
-    "type_placeholder": "Please type text"
+    "type_placeholder": "Please type text",
+    "paragraph_placeholder": "Type in your answer here."
   },
   "additional": {
     "server-error": "Server error occurred",
@@ -439,6 +441,7 @@
     "enter_old_password": "Please enter your old password",
     "enter_new_password": "Please enter a new password",
     "data_not_sent": "Click Send to upload the data collected earlier",
+    "data_is_sending": "Uploading the data collected earlier",
     "upload_error": "Upload Error",
     "want_to_retry": "Your Internet may be unstable. We weren't able to send your data."
   },

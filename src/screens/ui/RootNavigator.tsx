@@ -354,6 +354,7 @@ export default () => {
             component={AutocompletionScreen}
             options={{
               headerShown: false,
+              gestureEnabled: false,
             }}
           />
         </>
