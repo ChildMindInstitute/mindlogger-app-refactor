@@ -408,7 +408,8 @@
     "library": "Library"
   },
   "text_entry": {
-    "type_placeholder": "Please type text"
+    "type_placeholder": "Please type text",
+    "paragraph_placeholder": "Type in your answer here."
   },
   "additional": {
     "server-error": "Server error occurred",

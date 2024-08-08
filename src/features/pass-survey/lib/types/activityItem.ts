@@ -19,6 +19,7 @@ import {
   SliderPipelineItem,
   SplashPipelineItem,
   TextInputPipelineItem,
+  ParagraphTextPipelineItem,
   VideoPipelineItem,
   DatePipelineItem,
   TimePipelineItem,
@@ -33,6 +34,11 @@ type ActivityItemBase = {
 interface SplashActivityItem extends ActivityItemBase {
   type: 'Splash';
   pipelineItem: SplashPipelineItem;
+}
+
+interface ParagraphTextActivityItem extends ActivityItemBase {
+  type: 'ParagraphText';
+  pipelineItem: ParagraphTextPipelineItem;
 }
 
 interface TextInputActivityItem extends ActivityItemBase {
@@ -139,6 +145,7 @@ interface TimeActivityItem extends ActivityItemBase {
 
 export type ActivityItem =
   | TextInputActivityItem
+  | ParagraphTextActivityItem
   | AbTestActivityItem
   | StabilityTrackerActivityItem
   | DrawingTestActivityItem

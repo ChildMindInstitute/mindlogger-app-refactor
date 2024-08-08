@@ -396,7 +396,8 @@
     "library": "Bibliothèque"
   },
   "text_entry": {
-    "type_placeholder": "Veuiller saisir du texte"
+    "type_placeholder": "Veuiller saisir du texte",
+    "paragraph_placeholder": "Tapez votre réponse ici."
   },
   "language_screen": {
     "app_language": " Langue de l'application",
