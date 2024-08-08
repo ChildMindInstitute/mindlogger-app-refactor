@@ -2,7 +2,7 @@ import { FC, useEffect, useMemo, useRef } from 'react';
 import { NativeModules, StyleSheet } from 'react-native';
 
 import { FlankerItemSettings } from '@app/abstract/lib';
-import { FlankerLiveEvent, Logger, StreamEventLoggable } from '@shared/lib';
+import { FlankerLiveEvent, StreamEventLoggable } from '@shared/lib';
 import { Box } from '@shared/ui';
 
 import SwiftFlankerWrapper from './SwiftFlankerWrapper';
@@ -18,33 +18,28 @@ type Props = {
 } & StreamEventLoggable<FlankerLiveEvent>;
 
 const NativeIosFlanker: FC<Props> = props => {
+  const initializedRef = useRef(false);
+
   const configuration = useMemo(() => {
     return ConfigurationBuilder.buildForNativeIOS(props.configuration);
   }, [props.configuration]);
 
   const responses = useRef<FlankerNativeIosLogRecord[]>([]).current;
 
+  const { isFirstPractice, isLastTest } = props.configuration;
+
   useEffect(() => {
-    if (!configuration) {
+    if (!configuration || initializedRef.current) {
       return;
     }
 
     const configString = JSON.stringify(configuration);
 
-    NativeModules.FlankerViewManager.preloadGameImages(configString)
-      .then(() => {
-        NativeModules.FlankerViewManager.setGameParameters(configString);
-        NativeModules.FlankerViewManager.startGame(
-          props.configuration.isFirstPractice,
-          props.configuration.isLastTest,
-        );
-      })
-      .catch((error: string) =>
-        Logger.log(
-          `[NativeModules.FlankerViewManager.preloadGameImages] An internal error occurred during caching images or starting the game: \n\n ${error}`,
-        ),
-      );
-  }, [configuration, props.configuration]);
+    NativeModules.FlankerViewManager.setGameParameters(configString);
+    NativeModules.FlankerViewManager.startGame(isFirstPractice, isLastTest);
+
+    initializedRef.current = true;
+  }, [configuration, isFirstPractice, isLastTest, props.configuration]);
 
   return (
     <Box flex={1}>

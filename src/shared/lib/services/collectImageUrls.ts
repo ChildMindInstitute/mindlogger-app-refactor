@@ -106,6 +106,18 @@ const collectActivityDetailsImageUrlsInternal = (activity: ActivityDto) => {
         }
         break;
       }
+
+      case 'flanker': {
+        const { config } = item;
+
+        config.fixationScreen && result.push(config.fixationScreen.image);
+        config.buttons.forEach(button => {
+          button.image && result.push(button.image);
+        });
+        config.stimulusTrials.forEach(trial => {
+          trial.image && result.push(trial.image);
+        });
+      }
     }
   }
   return result;
