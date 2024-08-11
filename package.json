@@ -40,6 +40,7 @@
     "ios:production-release": "react-native run-ios --scheme MindloggerMobile --configuration Release"
   },
   "dependencies": {
+    "@azesmway/react-native-unity": "^1.0.10",
     "@georstat/react-native-image-cache": "^3.1.0",
     "@hookform/resolvers": "^3.3.2",
     "@launchdarkly/react-native-client-sdk": "^10.1.1",

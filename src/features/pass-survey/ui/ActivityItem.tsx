@@ -23,6 +23,7 @@ import { useAppletStreamingDetails } from '@entities/applet/lib/hooks';
 import { DrawingTest } from '@entities/drawer';
 import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
 import { StabilityTracker } from '@entities/stabilityTracker';
+import { UnityView } from '@entities/unityView';
 import {
   Dimensions,
   IS_ANDROID,
@@ -47,7 +48,6 @@ import {
   ActivityIdentityContext,
 } from '../lib';
 import { mapStreamEventToDto } from '../model';
-
 type Props = ActivityItemProps &
   PipelineItemAnswer & {
     onResponse: (response: PipelineItemResponse) => void;
@@ -108,7 +108,11 @@ function ActivityItem({
       );
     }
   }
-
+  console.log(
+    '\n\n\n ***************************',
+    type,
+    '**********************\n\n\n',
+  );
   switch (type) {
     case 'Splash':
       item = (
@@ -383,7 +387,10 @@ function ActivityItem({
         </Box>
       );
       break;
-
+    case 'Unity':
+      <Box flex={1}>
+        <UnityView config={pipelineItem.payload} />
+      </Box>;
     default: {
       item = <></>;
     }
