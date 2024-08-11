@@ -5,6 +5,7 @@ import { ConditionalLogic } from '@app/entities/activity/lib/types/conditionalLo
 import { DrawResult } from '@app/entities/drawer/lib/types/draw';
 import { FlankerGameResponse } from '@app/entities/flanker/lib/types/response';
 import { StabilityTrackerResponse as StabilityTrackerBaseResponse } from '@app/entities/stabilityTracker/lib/types';
+import { UnityResult } from '@app/entities/unityView/lib/types';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import { Item } from '@app/shared/ui/survey/CheckBox/types';
 import { Coordinates } from '@app/shared/ui/survey/Geolocation/types';
@@ -19,6 +20,7 @@ import { Tutorial } from './tutorial';
 
 export type ActivityItemType =
   | 'AbTest'
+  | 'Unity'
   | 'StabilityTracker'
   | 'DrawingTest'
   | 'Tutorial'
@@ -62,6 +64,16 @@ type StabilityTrackerPayload = {
   durationMinutes: number;
   trialsNumber: number;
   userInputType: 'gyroscope' | 'touch';
+};
+
+type UnityPayload = {
+  config: UnityScreenConfig;
+  deviceType: 'mobile' | 'tablet';
+};
+type UnityScreenConfig = {
+  radius: number;
+  width: number;
+  height: number;
 };
 
 type SplashPayload = { imageUrl: string };
@@ -239,6 +251,7 @@ type VideoPayload = null;
 type PipelinePayload =
   | AbTestPayload
   | StabilityTrackerPayload
+  | UnityPayload
   | SplashPayload
   | Tutorial
   | DrawingPayload
@@ -289,7 +302,10 @@ export interface StabilityTrackerPipelineItem extends PipelineItemBase {
   type: 'StabilityTracker';
   payload: StabilityTrackerPayload;
 }
-
+export interface UnityPipelineItem extends PipelineItemBase {
+  type: 'Unity';
+  payload: UnityPayload;
+}
 export interface SplashPipelineItem extends PipelineItemBase {
   type: 'Splash';
   payload: SplashPayload;
@@ -398,6 +414,8 @@ export type StabilityTrackerResponse = StabilityTrackerBaseResponse;
 
 export type AbTestResponse = AbTestResult;
 
+export type UnityResponse = UnityResult;
+
 export type DrawingTestResponse = DrawResult;
 
 export type FlankerResponse = FlankerGameResponse;
@@ -451,6 +469,7 @@ export type VideoResponse = MediaFile & {
 
 export type PipelineItemResponse =
   | AbTestResponse
+  | UnityResponse
   | StabilityTrackerResponse
   | FlankerResponse
   | DrawingTestResponse
@@ -473,6 +492,7 @@ export type PipelineItemResponse =
 
 export type PipelineItem =
   | AbTestPipelineItem
+  | UnityPipelineItem
   | StabilityTrackerPipelineItem
   | SplashPipelineItem
   | TutorialPipelineItem

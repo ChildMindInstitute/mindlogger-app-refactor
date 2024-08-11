@@ -17,6 +17,7 @@ import { FlankerGameResponse } from '@app/entities/flanker/lib/types/response';
 import { HtmlFlanker } from '@app/entities/flanker/ui/HtmlFlanker/HtmlFlanker';
 import { NativeIosFlanker } from '@app/entities/flanker/ui/NativeIosFlanker/NativeIosFlanker';
 import { StabilityTracker } from '@app/entities/stabilityTracker/ui/StabilityTracker';
+import { UnityView } from '@app/entities/unityView';
 import { IS_ANDROID } from '@app/shared/lib/constants';
 import { LiveEvent } from '@app/shared/lib/tcp/types';
 import { useSendEvent } from '@app/shared/lib/tcp/useSendLiveEvent';
@@ -415,7 +416,10 @@ export function ActivityItem({
         </Box>
       );
       break;
-
+    case 'Unity':
+      <Box flex={1}>
+        <UnityView config={pipelineItem.payload} />
+      </Box>;
     default: {
       item = <></>;
     }

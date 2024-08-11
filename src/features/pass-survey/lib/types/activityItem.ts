@@ -1,5 +1,6 @@
 import {
   AbTestPipelineItem,
+  UnityPipelineItem,
   StabilityTrackerPipelineItem,
   ActivityItemType,
   CheckboxPipelineItem,
@@ -49,6 +50,10 @@ interface TextInputActivityItem extends ActivityItemBase {
 interface AbTestActivityItem extends ActivityItemBase {
   type: 'AbTest';
   pipelineItem: AbTestPipelineItem;
+}
+interface UnityActivityItem extends ActivityItemBase {
+  type: 'Unity';
+  pipelineItem: UnityPipelineItem;
 }
 
 interface StabilityTrackerActivityItem extends ActivityItemBase {
@@ -147,6 +152,7 @@ export type ActivityItem =
   | TextInputActivityItem
   | ParagraphTextActivityItem
   | AbTestActivityItem
+  | UnityActivityItem
   | StabilityTrackerActivityItem
   | DrawingTestActivityItem
   | FlankerActivityItem
