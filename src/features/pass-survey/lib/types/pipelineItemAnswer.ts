@@ -6,6 +6,7 @@ import {
   TextInputResponse,
   ParagraphTextResponse,
   AbTestResponse,
+  UnityResponse,
   StabilityTrackerResponse,
   DrawingTestResponse,
   FlankerResponse,
@@ -64,8 +65,14 @@ export interface AbTestPipelineAnswer extends PipelineItemAnswerBase {
     additionalAnswer?: string;
   };
 }
-
-export interface StabilityTrackerPipelineAnswer extends PipelineItemAnswerBase {
+interface UnityPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Unity';
+  value: {
+    answer?: UnityResponse;
+    additionalAnswer?: string;
+  };
+}
+interface StabilityTrackerPipelineAnswer extends PipelineItemAnswerBase {
   type: 'StabilityTracker';
   value: {
     answer?: StabilityTrackerResponse;
@@ -222,6 +229,7 @@ export type PipelineItemAnswer =
   | TextInputPipelineAnswer
   | ParagraphTextPipelineAnswer
   | AbTestPipelineAnswer
+  | UnityPipelineAnswer
   | StabilityTrackerPipelineAnswer
   | DrawingTestPipelineAnswer
   | FlankerPipelineAnswer
