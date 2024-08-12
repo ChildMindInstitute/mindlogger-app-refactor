@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import renderer from 'react-test-renderer';
 
 import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
@@ -22,7 +21,7 @@ describe('Test DatePickerItem', () => {
     expect(placeholder).toBe(expected);
   });
 
-  it('Should render new Date(0) when value is 1970-01-01', () => {
+  it('Should consume new Date(1970, 0, 1) when props value is "1970-01-01"', () => {
     const testValue = '1970-01-01';
     const datePickerComponent = renderer.create(
       <TamaguiProvider>
@@ -34,10 +33,25 @@ describe('Test DatePickerItem', () => {
       accessibilityLabel: 'date-picker',
     });
 
-    const resultProp = format(datePicker.props.value, 'yyyy-MM-dd');
+    const resultDate = datePicker.props.value as Date;
 
-    const expectedDate = format(new Date(0), 'yyyy-MM-dd');
+    expect(resultDate).toEqual(new Date(1970, 0, 1));
+  });
 
-    expect(resultProp).toBe(expectedDate);
+  it('Should consume new Date(2010, 5, 8) when props value is "2010-06-08"', () => {
+    const testValue = '2010-06-08';
+    const datePickerComponent = renderer.create(
+      <TamaguiProvider>
+        <DatePickerItem value={testValue} onChange={jest.fn()} />
+      </TamaguiProvider>,
+    );
+
+    const datePicker = datePickerComponent.root.findByProps({
+      accessibilityLabel: 'date-picker',
+    });
+
+    const resultDate = datePicker.props.value as Date;
+
+    expect(resultDate).toEqual(new Date(2010, 5, 8));
   });
 });

@@ -7,7 +7,6 @@ import {
   isEntityInProgress,
   isReadyForAutocompletion,
 } from './survey';
-import { colors } from '../../constants';
 
 describe('Test function invertColor', () => {
   it('should return darkerGrey color', () => {
@@ -15,7 +14,7 @@ describe('Test function invertColor', () => {
 
     const invertedColor = invertColor(hex);
 
-    expect(invertedColor).toBe(colors.darkerGrey);
+    expect(invertedColor).toBe('#FFFFFF');
   });
 
   it('should return white color', () => {
@@ -23,7 +22,7 @@ describe('Test function invertColor', () => {
 
     const invertedColor = invertColor(hex);
 
-    expect(invertedColor).toBe(colors.white);
+    expect(invertedColor).toBe('#333333');
   });
 });
 

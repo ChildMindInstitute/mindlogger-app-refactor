@@ -40,7 +40,9 @@ const UploadRetryBanner: FC<Props> = () => {
     <Box h={50} px={18} bw={1} boc="$grey" bc="$alertLight">
       <Box jc="space-between" ai="center" flexDirection="row" flex={1}>
         <Text flex={1} fos={14}>
-          {t('additional:data_not_sent')}
+          {isUploading
+            ? t('additional:data_is_sending')
+            : t('additional:data_not_sent')}
         </Text>
 
         <Box pl={10}>

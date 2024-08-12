@@ -24,6 +24,7 @@ import {
   SliderSelectionItemDto,
   SliderRowsItemDto,
   TextItemDto,
+  ParagraphTextItemDto,
   TimeRangeItemDto,
   VideoItemDto,
   AdditionalResponseConfiguration,
@@ -598,6 +599,29 @@ function mapToTextInput(dto: TextItemDto): ActivityItem {
     ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
+function mapToParagraphText(dto: ParagraphTextItemDto): ActivityItem {
+  return {
+    id: dto.id,
+    name: dto.name,
+    inputType: 'ParagraphText',
+    config: {
+      maxLength: dto.config.maxResponseLength,
+    },
+    timer: mapTimerValue(dto.config.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: true,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+
+    ...mapConditionalLogic(dto.conditionalLogic),
+  };
+}
 
 function mapToTimeRange(dto: TimeRangeItemDto): ActivityItem {
   return {
@@ -713,6 +737,8 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
           return mapToStackedSlider(item);
         case 'text':
           return mapToTextInput(item);
+        case 'paragraphText':
+          return mapToParagraphText(item);
         case 'timeRange':
           return mapToTimeRange(item);
         case 'video':

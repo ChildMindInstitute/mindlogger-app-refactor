@@ -44,7 +44,10 @@ describe('AnswersUploadService', () => {
     jest.clearAllMocks();
 
     AnswersUploadService.createdAt = MOCK_CREATED_AT;
-    AnswersUploadService.uploadProgressObservable = {};
+    AnswersUploadService.uploadProgressObservable = {
+      setTotalFilesInActivity: jest.fn(),
+      setCurrentSecondLevelStepKey: jest.fn(),
+    };
   });
 
   describe('getUploadRecord function', () => {

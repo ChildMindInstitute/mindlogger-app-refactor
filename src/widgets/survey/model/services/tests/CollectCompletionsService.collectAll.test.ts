@@ -140,6 +140,10 @@ describe('Test CollectCompletionsService: collectAll', () => {
   it('Should return two collect items when isEntityExpired is true', () => {
     jest.spyOn(storageHelpers, 'getFlowRecord').mockReturnValue({} as any);
 
+    jest
+      .spyOn(storageHelpers, 'isCurrentActivityRecordExist')
+      .mockReturnValue(true);
+
     jest.spyOn(survey, 'isEntityExpired').mockReturnValue(true);
 
     const firstProgress = getRegularProgressRecord(pathOne);
