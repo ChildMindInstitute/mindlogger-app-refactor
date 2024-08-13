@@ -37,8 +37,6 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
 
   const points = useSharedValue<Point[]>([]);
 
-  const lastPointTime = useSharedValue<number | null>(null);
-
   const activePath = useSharedValue<SkPath>(Skia.Path.Make());
   const tempPath = useSharedValue<SkPath>(Skia.Path.Make());
 
@@ -70,22 +68,6 @@ const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     time: number,
   ) => {
     'worklet';
-    const lastDrawnPoint = points.value[points.value.length - 1];
-
-    if (lastDrawnPoint) {
-      const dx = point.x - lastDrawnPoint.x;
-      const dy = point.y - lastDrawnPoint.y;
-
-      const isSameTime = lastPointTime.value === time;
-      const isSamePoint = dx === 0 && dy === 0;
-
-      if (isSamePoint || isSameTime) {
-        return;
-      }
-    }
-
-    lastPointTime.value = time;
-
     activePath.modify(value => {
       'worklet';
       progressLine(points, value, point, straightLine);
