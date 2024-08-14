@@ -12,7 +12,7 @@ import UIKit
 public class ImageCacheManager {
   public static let cacheDirectory = (NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first! as NSString).appendingPathComponent("images_cache")
     
-  public static func sha1Hash(url: String) -> String {
+  private static func sha1Hash(url: String) -> String {
     let data = Data(url.utf8)
     var digest = [UInt8](repeating: 0, count: Int(CC_SHA1_DIGEST_LENGTH))
     
@@ -40,11 +40,5 @@ public class ImageCacheManager {
     }
     
     return UIImage(contentsOfFile: filePath)
-  }
-     
-  public static func loadCachedImages(from urls: [String]) -> [UIImage?] {
-    return urls.compactMap { url in
-      loadCachedImage(from: url)
-    }
   }
 }
