@@ -32,6 +32,12 @@ declare module 'react-native-markdown-display' {
 }
 
 const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
+  console.log(
+    '\n\n\n **************************',
+    content,
+    '******************************\n\n\n',
+  );
+  // console.log("\n\n\n **************************",content, "******************************\n\n\n")
   return (
     <Markdown
       rules={rules}
