@@ -278,17 +278,15 @@ const markDownRules: RenderRules = {
   // },
   softbreak: (node, children, parents, styles) => {
     return (
-      <View
-        key={node.key}
-        style={{ width: '100%', flexDirection: 'row', flexWrap: 'wrap' }}
-      >
-        <Text style={{ width: '100%', backgroundColor: 'blue' }} />
+      <View key={node.key} style={{ width: '100%', flexDirection: 'row', flexWrap: 'wrap' }}>
+        <Text style={{ width: '100%', backgroundColor:"blue" }}></Text>
       </View>
     );
   },
-
+  
+  
   table: (node, children) => {
-    console.log('************************* table :', node);
+    console.log("************************* table :", node)
 
     return (
       <Box
@@ -304,7 +302,7 @@ const markDownRules: RenderRules = {
     );
   },
   td: (node, children) => {
-    console.log('************************* TD :', node);
+    console.log("************************* TD :", node)
 
     return (
       <Box
@@ -323,7 +321,7 @@ const markDownRules: RenderRules = {
     );
   },
   th: (node, children) => {
-    console.log('************************* TH :', node);
+    console.log("************************* TH :", node)
     return (
       <Box
         key={node.key}
@@ -343,16 +341,12 @@ const markDownRules: RenderRules = {
     );
   },
   tr: (node, children) => {
-    console.log('************************* TR :', node);
+    console.log("************************* TR :", node)
 
     return <XStack key={node.key}>{children}</XStack>;
   },
   code_inline: node => {
-    console.log(
-      '\n\n\n GOT IN HERE code_inline *************************************',
-      node,
-      '********************* aaaa\n\n\n',
-    );
+    console.log("\n\n\n GOT IN HERE code_inline *************************************", node, "********************* aaaa\n\n\n")
 
     return (
       <Text
@@ -427,20 +421,20 @@ const markDownRules: RenderRules = {
 
     // console.log("\n\n\n ******************", node )
     // const sizeMatch = src?.match(/(\d+x\d+)$/);
-
+ 
     const lastSlashIndex = src.lastIndexOf('/');
     const lastSegment = src.substring(lastSlashIndex + 1);
 
     console.log(`Last Segment: ${lastSegment}`);
 
     const xIndex = lastSegment?.indexOf('x');
-    let width = null;
-    let height = null;
+    let width = null
+    let height = null
     if (xIndex !== -1) {
-      width = Number(lastSegment.slice(0, xIndex).replace(/\D/g, ''));
-      height = Number(lastSegment.slice(xIndex + 1).replace(/\D/g, ''));
+        width = Number(lastSegment.slice(0, xIndex).replace(/\D/g, ''));
+        height = Number(lastSegment.slice(xIndex + 1).replace(/\D/g, ''));
     } else {
-      console.log('No size found');
+        console.log("No size found");
     }
     // console.log("****** xIndex", xIndex, "width x height",width,"X",height, "\n\n\n SRC:",src)
 
@@ -476,11 +470,7 @@ const markDownRules: RenderRules = {
         key={node.key}
         resizeMode="contain"
         // style={localStyles.image}
-        style={{
-          width:
-            width && width < viewPortWidth - 100 ? width : viewPortWidth - 100,
-          height: height,
-        }}
+        style={{width: width && width < (viewPortWidth -100) ? width: (viewPortWidth -100) , height:height}}
         source={node.attributes.src}
         sourceAnimationDuration={isCached ? 0 : 200}
       />
@@ -499,14 +489,14 @@ const markDownRules: RenderRules = {
     return defaultRenderRules.paragraph(node, children, parents, styles);
   },
   html_inline: (node, children) => {
-    console.log('************************* html_inline :', node);
+    console.log("************************* html_inline :", node)
 
     const isSafeTag = !!sanitizeHtml(node.content);
 
     return isSafeTag ? children : null;
   },
   html_block: node => {
-    console.log('************************* html_block :', node);
+    console.log("************************* html_block :", node)
 
     const htmlContent = sanitizeHtml(node.content);
 
@@ -527,11 +517,7 @@ const markDownRules: RenderRules = {
     );
   },
   list_item: (node, children, parents, styles) => {
-    console.log(
-      '\n\n\n GOT IN HERE list_item *************************************',
-      node,
-      '********************* aaaa\n\n\n',
-    );
+    console.log("\n\n\n GOT IN HERE list_item *************************************", node, "********************* aaaa\n\n\n")
 
     const customContainerTagExists = checkIfContainerTypeIsHljs(parents);
 
@@ -551,7 +537,7 @@ const markDownRules: RenderRules = {
 
 const styleVariables = (content: string) => {
   // console.log("\n\n\n GOT IN HERE styleVariables *************************************", content, "********************* aaaa\n\n\n")
-
+  
   const regex = /(\^.+?\^)|(~.+?~)|(==.+?==)|(\+\+.+?\+\+)/g;
   const highlightRegex = /[=]=.+?==/g;
   const underlineRegex = /\+\+.+?\+\+/g;
@@ -628,7 +614,7 @@ const getContainerAlignTag = (parents: ASTNode[]): AlignmentTag | undefined => {
 //   return content
 //     // .replace(/(!\[.*?\]\s*\(.*?\))(?=\s*!?\[)/g, '$1\n')
 //     .replace(/(\!\[.*?\]\(.*?\))/g, '\n\n$1\n')
-//     .replace(/\n{3,}/g, '\n')
+//     .replace(/\n{3,}/g, '\n') 
 //     .replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2');
 // };
 // export const preprocessImageLinks = (content: string) => {
@@ -643,5 +629,8 @@ const getContainerAlignTag = (parents: ASTNode[]): AlignmentTag | undefined => {
 export const preprocessImageLinks = (content: string) => {
   return content?.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2');
 };
+
+
+
 
 export default markDownRules;
