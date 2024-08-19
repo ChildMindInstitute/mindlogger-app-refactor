@@ -9,7 +9,9 @@ type Props = {
 
 const MarkdownMessage: FC<Props> = ({ content, ...styledProps }) => {
   return (
-    <Box {...styledProps}>
+    <Box {...styledProps}
+    style={{backgroundColor:"blue"}}
+    >
       <MarkdownView
         content={content}
         rules={markdownRules}

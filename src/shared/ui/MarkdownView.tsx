@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet,View } from 'react-native';
 
 import markdownContainer from 'markdown-it-container';
 import Markdown, {
