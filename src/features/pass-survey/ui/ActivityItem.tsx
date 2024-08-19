@@ -416,10 +416,15 @@ export function ActivityItem({
         </Box>
       );
       break;
+
     case 'Unity':
-      <Box flex={1}>
-        <UnityView config={pipelineItem.payload} />
-      </Box>;
+      item = (
+        <Box flex={1}>
+          <UnityView config={pipelineItem.payload} />
+        </Box>
+      );
+      break;
+
     default: {
       item = <></>;
     }

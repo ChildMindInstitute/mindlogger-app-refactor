@@ -70,6 +70,7 @@ type UnityPayload = {
   config: UnityScreenConfig;
   deviceType: 'mobile' | 'tablet';
 };
+
 type UnityScreenConfig = {
   radius: number;
   width: number;
@@ -298,14 +299,17 @@ export interface AbTestPipelineItem extends PipelineItemBase {
   type: 'AbTest';
   payload: AbTestPayload;
 }
+
 export interface StabilityTrackerPipelineItem extends PipelineItemBase {
   type: 'StabilityTracker';
   payload: StabilityTrackerPayload;
 }
+
 export interface UnityPipelineItem extends PipelineItemBase {
   type: 'Unity';
   payload: UnityPayload;
 }
+
 export interface SplashPipelineItem extends PipelineItemBase {
   type: 'Splash';
   payload: SplashPayload;
