@@ -65,6 +65,7 @@ interface AbTestPipelineAnswer extends PipelineItemAnswerBase {
     additionalAnswer?: string;
   };
 }
+
 interface UnityPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Unity';
   value: {
@@ -72,6 +73,7 @@ interface UnityPipelineAnswer extends PipelineItemAnswerBase {
     additionalAnswer?: string;
   };
 }
+
 interface StabilityTrackerPipelineAnswer extends PipelineItemAnswerBase {
   type: 'StabilityTracker';
   value: {
