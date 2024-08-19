@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { View } from 'react-native';
 
 import UnityView from '@azesmway/react-native-unity';
 
@@ -38,15 +37,13 @@ const Unity = (config: Props) => {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
-      <UnityView
-        ref={unityRef}
-        style={{ flex: 1 }}
-        onUnityMessage={(result: any) => {
-          console.log('onUnityMessage', result?.nativeEvent.message);
-        }}
-      />
-    </View>
+    <UnityView
+      ref={unityRef}
+      style={{ flex: 1 }}
+      onUnityMessage={(result: any) => {
+        console.log('onUnityMessage', result?.nativeEvent.message);
+      }}
+    />
   );
 };
 
