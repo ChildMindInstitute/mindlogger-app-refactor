@@ -42,9 +42,10 @@ const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
 
   return (
     <Markdown
+      rules={rules}
+      mergeStyle
       markdownit={markdownItInstance}
       style={markdownStyle}
-      rules={rules}
     >
       {processedContent}
     </Markdown>
