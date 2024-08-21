@@ -271,7 +271,6 @@ const markDownRules: RenderRules = {
       </Box>
     );
   },
-
   table: (node, children) => {
     return (
       <Box
@@ -392,7 +391,6 @@ const markDownRules: RenderRules = {
       </Text>
     );
   },
-
   image: node => {
     let src = node.attributes?.src;
     let imageSize = localStyles.image;
