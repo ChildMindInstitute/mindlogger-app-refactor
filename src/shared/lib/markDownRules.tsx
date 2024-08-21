@@ -123,12 +123,6 @@ export const activityMarkDownStyles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 18,
   },
-  softbreak: {
-    width: 50,
-    height: '100%',
-    backgroundColor: 'pink',
-    flex: 1,
-  },
   paragraph: {
     alignSelf: 'center',
     alignItems: 'flex-end',
