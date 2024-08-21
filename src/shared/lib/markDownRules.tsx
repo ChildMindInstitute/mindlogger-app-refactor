@@ -131,14 +131,10 @@ export const activityMarkDownStyles = StyleSheet.create({
   },
   paragraph: {
     alignSelf: 'center',
-    // alignItems:"flex-end",
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
-    // flexDirection:"row",
     fontSize: 18,
     fontWeight: '300',
-    backgroundColor: 'red',
-    flex: 1,
   },
   text: {
     flexDirection: 'row',
@@ -432,9 +428,11 @@ const markDownRules: RenderRules = {
     }
 
     const mimeType = mime.lookup(src) || '';
+
     const isAudio = mimeType.startsWith('audio/');
-    const isVideo = mimeType.startsWith('video/') || src.includes('.quicktime');
-    const isYoutubeVideo = src.includes('youtu');
+    const isVideo =
+      mimeType.startsWith('video/') || src?.includes('.quicktime');
+    const isYoutubeVideo = src?.includes('youtu');
 
     if (isAudio) {
       return <AudioPlayer uri={src} title={node.content} key={node.key} />;
@@ -461,12 +459,11 @@ const markDownRules: RenderRules = {
         key={node.key}
         resizeMode="stretch"
         style={imageSize}
-        source={src} // Updated to use the modified `src`
+        source={src}
         sourceAnimationDuration={isCached ? 0 : 200}
       />
     );
   },
-
   paragraph: (node, children, parents, styles) => {
     const customContainerTagExists = checkIfContainerTypeIsHljs(parents);
 

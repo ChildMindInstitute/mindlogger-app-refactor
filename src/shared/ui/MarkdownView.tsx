@@ -2,7 +2,10 @@ import React, { FC, useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
 import markdownContainer from 'markdown-it-container';
-import Markdown, { MarkdownIt } from 'react-native-markdown-display';
+import Markdown, {
+  RenderRules,
+  MarkdownIt,
+} from 'react-native-markdown-display';
 
 import { preprocessImageLinks } from '../lib';
 
@@ -19,8 +22,14 @@ const markdownItInstance = MarkdownIt({
 type Props = {
   content: string;
   markdownStyle?: StyleSheet.NamedStyles<any>;
-  rules?: any;
+  rules?: RenderRules;
 };
+
+declare module 'react-native-markdown-display' {
+  interface MarkdownProps {
+    children: string;
+  }
+}
 
 const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
   const [processedContent, setProcessedContent] = useState<string>('');
