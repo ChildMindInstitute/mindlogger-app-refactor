@@ -1,11 +1,8 @@
-import React, { FC } from 'react';
-import { StyleSheet,View } from 'react-native';
+import React, { FC, useState, useEffect } from 'react';
+import { StyleSheet } from 'react-native';
 
 import markdownContainer from 'markdown-it-container';
-import Markdown, {
-  RenderRules,
-  MarkdownIt,
-} from 'react-native-markdown-display';
+import Markdown, { MarkdownIt } from 'react-native-markdown-display';
 
 import { preprocessImageLinks } from '../lib';
 
@@ -22,30 +19,25 @@ const markdownItInstance = MarkdownIt({
 type Props = {
   content: string;
   markdownStyle?: StyleSheet.NamedStyles<any>;
-  rules?: RenderRules;
+  rules?: any;
 };
 
-declare module 'react-native-markdown-display' {
-  interface MarkdownProps {
-    children: string;
-  }
-}
-
 const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
-  console.log(
-    '\n\n\n **************************',
-    content,
-    '******************************\n\n\n',
-  );
-  // console.log("\n\n\n **************************",content, "******************************\n\n\n")
+  const [processedContent, setProcessedContent] = useState<string>('');
+
+  useEffect(() => {
+    preprocessImageLinks(content).then(result => {
+      setProcessedContent(result);
+    });
+  }, [content]);
+
   return (
     <Markdown
-      rules={rules}
-      mergeStyle
       markdownit={markdownItInstance}
       style={markdownStyle}
+      rules={rules}
     >
-      {preprocessImageLinks(content)}
+      {processedContent}
     </Markdown>
   );
 };

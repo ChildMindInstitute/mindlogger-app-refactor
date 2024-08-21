@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions, Linking, View,Image } from 'react-native';
+import { StyleSheet, Dimensions, Linking, Image } from 'react-native';
 
 import { CachedImage, CacheManager } from '@georstat/react-native-image-cache';
 import { format } from 'date-fns';
@@ -22,7 +22,6 @@ import {
 } from '@shared/ui';
 
 import { colors } from './constants';
-import { useEffect, useState } from 'react';
 
 const { width: viewPortWidth } = Dimensions.get('window');
 const PADDING_X = 32;
@@ -124,37 +123,23 @@ export const activityMarkDownStyles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 18,
   },
-  softbreak:{
-    width:50,
-    height:"100%",
-    backgroundColor:"pink",
-    flex:1
-
+  softbreak: {
+    width: 50,
+    height: '100%',
+    backgroundColor: 'pink',
+    flex: 1,
   },
   paragraph: {
-    // alignSelf: 'center',
+    alignSelf: 'center',
     // alignItems:"flex-end",
-    alignItems:"flex-end",
-    justifyContent:"flex-start",
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
     // flexDirection:"row",
     fontSize: 18,
     fontWeight: '300',
-    backgroundColor:"red",
-    flex:1
-
+    backgroundColor: 'red',
+    flex: 1,
   },
-  // alignSelf: 'flex-start', // This aligns the paragraph container in the center of its parent.
-  // paddingHorizontal: 5, // Equal padding on both sides
-  // paragraph: {
-  //   // alignSelf: 'center',
-  //   backgroundColor:"red",
-  //   display:"flex",
-  //   justifyContent:"flex-start",
-  //   alignItems:"flex-end",
-  //   fontSize: 18,
-  //   fontWeight: '300',
-  //   // paddingBottom:20,
-  // },
   text: {
     flexDirection: 'row',
   },
@@ -296,42 +281,8 @@ const markDownRules: RenderRules = {
       </Box>
     );
   },
-  // softbreak: (node, children, parents, styles) => {
-  //   return (
-  //     <View key={node.key} style={{ flexDirection: 'row', flexWrap: 'wrap', width: '100%' }}>
-  //       <Text style={{ width: '100%' }}>{"\n"}</Text>
-  //     </View>
-  //   );
-  // },
-  // softbreak: (node, children, parents, styles) => {
-  //   return (
-  //     <View key={node.key} style={{ width: '100%', flexDirection: 'row', flexWrap: 'wrap' }}>
-  //       <Text style={{ width: '100%', backgroundColor:"blue" }}></Text>
-  //     </View>
-  //   );
-
-  // },
-    // softbreak: (node, children, parents, styles) => {
-  //   console.log("STYLESSSSSSS ----->",styles)
-  //   return <View style={styles.softbreak}></View>
-  // },
-  softbreak: (node, children, parents, styles) => {
-    return<Box key={node.key} 
-    borderColor="$lightGrey"
-    backgroundColor="$lightGrey"
-    // flex={}
-    // style={{width:"100%"}}
-    // width={50}
-    // style={{flexBasis: '10%', flexGrow: 0, flexShrink: 10}}
-    height={2}>
-  </Box>; 
-  },
-
-
 
   table: (node, children) => {
-    // console.log("************************* table :", node)
-
     return (
       <Box
         key={node.key}
@@ -346,8 +297,6 @@ const markDownRules: RenderRules = {
     );
   },
   td: (node, children) => {
-    // console.log("************************* TD :", node)
-
     return (
       <Box
         key={node.key}
@@ -365,7 +314,6 @@ const markDownRules: RenderRules = {
     );
   },
   th: (node, children) => {
-    // console.log("************************* TH :", node)
     return (
       <Box
         key={node.key}
@@ -385,13 +333,9 @@ const markDownRules: RenderRules = {
     );
   },
   tr: (node, children) => {
-    // console.log("************************* TR :", node)
-
     return <XStack key={node.key}>{children}</XStack>;
   },
   code_inline: node => {
-    // console.log("\n\n\n GOT IN HERE code_inline *************************************", node, "********************* aaaa\n\n\n")
-
     return (
       <Text
         fontFamily="$code"
@@ -404,8 +348,6 @@ const markDownRules: RenderRules = {
     );
   },
   text: (node, children, parents, styles, inheritedStyles = {}) => {
-    // console.log("\n\n\n GOT IN HERE text *************************************", node.type, "********************* aaaa\n\n\n")
-
     const containerAlignTag = getContainerAlignTag(parents);
 
     let additionalStyles = {};
@@ -460,50 +402,39 @@ const markDownRules: RenderRules = {
       </Text>
     );
   },
+
   image: node => {
-    const src = node.attributes?.src;
-    let imageSize = localStyles.image;localStyles.image;
-    
-          // console.log("\n\n\n ******************", node )
-    // const sizeMatch = src?.match(/(\d+x\d+)$/);
+    let src = node.attributes?.src;
+    let imageSize = localStyles.image;
+    if (src) {
+      const queryParams = src.split('?')[1];
+      let width, height;
 
-    const lastSlashIndex = src.lastIndexOf('/');
-    const lastSegment = src.substring(lastSlashIndex + 1);
-    console.log(`Last Segment: ${lastSegment}`);
+      if (queryParams) {
+        queryParams.split('&').forEach((param: string) => {
+          const [key, value] = param.split('=');
+          if (key === 'width') width = Number(value);
+          if (key === 'height') height = Number(value);
+        });
 
-    const xIndex = lastSegment?.indexOf('x');
-    if (xIndex !== -1) {
-      const formatedWidth = Number(lastSegment.slice(0, xIndex).replace(/\D/g, ''))
-      const formatedHeight = Number(lastSegment.slice(xIndex + 1).replace(/\D/g, ''))
-    // console.log("\n\n\n Horiginal  ***************************** width", formatedWidth,"height:", formatedHeight, "**********************\n\n\n")
-
-      const aspectRatio = formatedHeight / formatedWidth;
-      imageSize = {
-        width: formatedWidth > (viewPortWidth - 100) ? (viewPortWidth - 100) : formatedWidth  ,
-        height: formatedWidth > (viewPortWidth - 100)? (viewPortWidth - 100) * aspectRatio: formatedHeight
-      }
-    } else {
-      Image.getSize(src, (width, height) => {
-        if (width > viewPortWidth - 100) {
+        if (width && height) {
           const aspectRatio = height / width;
           imageSize = {
-            width: viewPortWidth - 100,
-            height: (viewPortWidth - 100) * aspectRatio,
+            width: width > viewPortWidth - 100 ? viewPortWidth - 100 : width,
+            height:
+              width > viewPortWidth - 100
+                ? (viewPortWidth - 100) * aspectRatio
+                : height,
           };
-        } else {
-          imageSize = { width, height };
+          src = src.split('?')[0];
         }
-      });
+      }
     }
 
-    // console.log("\n\n\n imageSize *****************************", imageSize, "**********************\n\n\n")
-
     const mimeType = mime.lookup(src) || '';
-
     const isAudio = mimeType.startsWith('audio/');
-    const isVideo =
-      mimeType.startsWith('video/') || src?.includes('.quicktime');
-    const isYoutubeVideo = src?.includes('youtu');
+    const isVideo = mimeType.startsWith('video/') || src.includes('.quicktime');
+    const isYoutubeVideo = src.includes('youtu');
 
     if (isAudio) {
       return <AudioPlayer uri={src} title={node.content} key={node.key} />;
@@ -528,21 +459,15 @@ const markDownRules: RenderRules = {
     return (
       <CachedImage
         key={node.key}
-        resizeMode="contain"
-        // style={localStyles.image}
-        //@ts-ignore
-        // style={{maxWidth: width && width < (viewPortWidth -100) ? width: (viewPortWidth -100) , height:height && width < (viewPortWidth -100) ? height : (viewPortWidth - 100) / (16 / 9) }}
+        resizeMode="stretch"
         style={imageSize}
-
-        source={node.attributes.src}
+        source={src} // Updated to use the modified `src`
         sourceAnimationDuration={isCached ? 0 : 200}
       />
     );
   },
-  paragraph: (node, children, parents, styles) => {
-    
-    // console.log("************************* paragraph :", styles)
 
+  paragraph: (node, children, parents, styles) => {
     const customContainerTagExists = checkIfContainerTypeIsHljs(parents);
 
     if (customContainerTagExists) {
@@ -553,15 +478,11 @@ const markDownRules: RenderRules = {
     return defaultRenderRules.paragraph(node, children, parents, styles);
   },
   html_inline: (node, children) => {
-    console.log("************************* html_inline :", node)
-
     const isSafeTag = !!sanitizeHtml(node.content);
 
     return isSafeTag ? children : null;
   },
   html_block: node => {
-    console.log("************************* html_block :", node)
-
     const htmlContent = sanitizeHtml(node.content);
 
     return (
@@ -581,8 +502,6 @@ const markDownRules: RenderRules = {
     );
   },
   list_item: (node, children, parents, styles) => {
-    console.log("\n\n\n GOT IN HERE list_item *************************************", node, "********************* aaaa\n\n\n")
-
     const customContainerTagExists = checkIfContainerTypeIsHljs(parents);
 
     return (
@@ -600,8 +519,6 @@ const markDownRules: RenderRules = {
 };
 
 const styleVariables = (content: string) => {
-  // console.log("\n\n\n GOT IN HERE styleVariables *************************************", content, "********************* aaaa\n\n\n")
-
   const regex = /(\^.+?\^)|(~.+?~)|(==.+?==)|(\+\+.+?\+\+)/g;
   const highlightRegex = /[=]=.+?==/g;
   const underlineRegex = /\+\+.+?\+\+/g;
@@ -644,15 +561,12 @@ const styleVariables = (content: string) => {
 };
 
 const parseNodeContent = (content: string) => {
-  // console.log("\n\n\n GOT IN HERE parseNodeContent *************************************", content, "********************* aaaa\n\n\n")
-
   return styleVariables(content);
 };
 
 const checkIfContainerTypeIsHljs = (parents: ASTNode[]) => {
   for (const parent of parents) {
     const { type } = parent;
-    // console.log("************************* HLJS",type, "---------",parent)
     if (type.includes('container_hljs')) {
       return true;
     }
@@ -662,8 +576,6 @@ const checkIfContainerTypeIsHljs = (parents: ASTNode[]) => {
 };
 
 const getContainerAlignTag = (parents: ASTNode[]): AlignmentTag | undefined => {
-  // console.log("\n\n\n GOT IN HERE getContainerAlignTag *************************************", parents, "********************* aaaa\n\n\n")
-
   const tag = parents
     .map(parent => parent.type)
     .find((type): type is AlignmentTag =>
@@ -673,34 +585,53 @@ const getContainerAlignTag = (parents: ASTNode[]): AlignmentTag | undefined => {
   return tag;
 };
 
-// export const preprocessImageLinks = (content: string) => {
-//   // This will insert a double line break between consecutive images
-//   return content
-//     // .replace(/(!\[.*?\]\s*\(.*?\))(?=\s*!?\[)/g, '$1\n')
-//     .replace(/(\!\[.*?\]\(.*?\))/g, '\n\n$1\n')
-//     .replace(/\n{3,}/g, '\n')
-//     .replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2');
-// };
-// export const preprocessImageLinks = (content: string) => {
-//   return content
-//     // Ensure line breaks are only added where needed
-//     .replace(/(\!\[.*?\]\(.*?\))/g, '$1\n')
-//     // Clean up any excessive line breaks, leaving just one
-//     .replace(/\n{3,}/g, '\n\n')
-//     .replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2');
-// };
-
 export const preprocessImageLinks = (content: string) => {
-  return content?.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2')
+  const regexSize = /\s*=\s*(\d+)x(\d+)/g;
+  const regexImage = /!\[.*?\]\((.*?)\)/g;
 
-  // return content?.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2').replace(/(?<!\n)\n(?!<br>)/g, '\n\n');
-  // return content?.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2').replace(/\n/g, "\n\n");
-  // return content?.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2').replace(/\n/g, "<br/> \n\n");
-  // return content?.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2').replace(/\n/g, "<br/> \n\n")
-  //  return content?.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2').replace(/\n/g, "\u200B\n\n")
+  const getImageSize = (url: string) => {
+    return new Promise<{ width: number; height: number }>((resolve, reject) => {
+      Image.getSize(
+        url,
+        (width, height) => resolve({ width, height }),
+        error => reject(error),
+      );
+    });
+  };
+
+  const matches = [...content.matchAll(regexImage)];
+
+  const promises = matches.map(match => {
+    const [fullMatch, url] = match;
+
+    if (regexSize.test(fullMatch)) {
+      const updatedMatch = fullMatch
+        .replace(regexSize, (_match, width, height) => {
+          return `?width=${width}&height=${height}`;
+        })
+        .replace(/\s*\?/, '?');
+      content = content.replace(fullMatch, updatedMatch);
+      return Promise.resolve();
+    } else {
+      return getImageSize(url)
+        .then(({ width, height }) => {
+          const newUrl = `${url}?width=${width}&height=${height}`;
+          const updatedMatch = fullMatch.replace(url, newUrl);
+          content = content.replace(fullMatch, updatedMatch);
+        })
+        .catch(_error => {
+          const height = 200;
+          const width = viewPortWidth - 100;
+          const newUrl = `${url}?width=${width}&height=${height}`;
+          const updatedMatch = fullMatch.replace(url, newUrl);
+          content = content.replace(fullMatch, updatedMatch);
+        });
+    }
+  });
+
+  return Promise.all(promises).then(() => {
+    return content;
+  });
 };
-
-
-
 
 export default markDownRules;
