@@ -23,6 +23,7 @@ import {
   MixProperties,
   wait,
 } from '@app/shared/lib';
+import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 
 import { getClientInformation } from '../../lib/metaHelpers';
 import {
@@ -485,6 +486,8 @@ export class ConstructCompletionsService {
         endAt: evaluatedEndAt,
       }),
     );
+
+    await ReduxPersistor.flush();
 
     await wait(500); // M2-6153
 

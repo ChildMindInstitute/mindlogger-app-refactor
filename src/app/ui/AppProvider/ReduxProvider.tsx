@@ -56,7 +56,7 @@ export const reduxStore = configureStore({
   },
 });
 
-const persistor = persistStore(reduxStore);
+export const persistor = persistStore(reduxStore);
 
 const ReduxProvider: FC<PropsWithChildren> = ({ children }) => {
   const { onModuleInitialized, initialized } = useSystemBootUp();
