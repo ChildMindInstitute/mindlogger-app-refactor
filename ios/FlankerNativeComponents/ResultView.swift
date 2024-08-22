@@ -23,6 +23,7 @@ class ResultView: UIView {
     textView.textAlignment = .center
     textView.font = .systemFont(ofSize: 50.0, weight: .regular)
     textView.textColor = .black
+    textView.backgroundColor = .clear
     textView.sizeToFit()
     textView.isScrollEnabled = false
     textView.isEditable = false
