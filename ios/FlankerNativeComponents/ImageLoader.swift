@@ -109,6 +109,15 @@ class ImageLoader: UIView {
         fulfill(imageFromCache)
         return
       }
+      
+      if let cachedImage = ImageCacheManager.loadCachedImage(from: url.absoluteString) {
+        self.image = cachedImage
+        imageCache.setObject(cachedImage, forKey: url as AnyObject)
+        activityIndicator.stopAnimating()
+
+        fulfill(cachedImage)
+        return
+      }
 
       URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
         if error != nil {
