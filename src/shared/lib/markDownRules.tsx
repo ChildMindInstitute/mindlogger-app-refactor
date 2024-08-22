@@ -124,7 +124,7 @@ export const activityMarkDownStyles = StyleSheet.create({
     marginBottom: 18,
   },
   paragraph: {
-    alignSelf: 'center',
+    alignSelf: 'flex-start',
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
     fontSize: 18,
