@@ -403,6 +403,30 @@ export class ConstructCompletionsService {
 
     this.validateEncryption(appletEncryption);
 
+    const progressRecord = getEntityProgress(
+      appletId,
+      entityId,
+      eventId,
+      this.storeProgress,
+    )!;
+
+    const evaluatedEndAt = this.evaluateEndAt(
+      'finish',
+      progressRecord.availableTo,
+      isAutocompletion,
+    );
+
+    this.dispatch(
+      AppletModel.actions.entityCompleted({
+        appletId,
+        eventId,
+        entityId,
+        endAt: evaluatedEndAt,
+      }),
+    );
+
+    await ReduxPersistor.flush();
+
     const { items, answers: recordAnswers, actions } = activityStorageRecord;
 
     await createSvgFiles(items, recordAnswers);
@@ -423,19 +447,6 @@ export class ConstructCompletionsService {
         answers,
         activityStorageRecord.context.originalItems as InitializeHiddenItem[],
       );
-
-    const progressRecord = getEntityProgress(
-      appletId,
-      entityId,
-      eventId,
-      this.storeProgress,
-    )!;
-
-    const evaluatedEndAt = this.evaluateEndAt(
-      'finish',
-      progressRecord.availableTo,
-      isAutocompletion,
-    );
 
     const submitId = getExecutionGroupKey(progressRecord);
 
@@ -477,17 +488,6 @@ export class ConstructCompletionsService {
     };
 
     this.pushToQueueService.push(itemToUpload);
-
-    this.dispatch(
-      AppletModel.actions.entityCompleted({
-        appletId,
-        eventId,
-        entityId,
-        endAt: evaluatedEndAt,
-      }),
-    );
-
-    await ReduxPersistor.flush();
 
     await wait(500); // M2-6153
 
