@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions, Linking, Image } from 'react-native';
+import { StyleSheet, Dimensions, Linking } from 'react-native';
 
 import { CachedImage, CacheManager } from '@georstat/react-native-image-cache';
 import { format } from 'date-fns';
@@ -12,6 +12,7 @@ import {
 import * as mime from 'react-native-mime-types';
 import sanitizeHtml from 'sanitize-html';
 
+import { getSizeByURLQueryParams, getImageSize, Logger } from '@shared/lib';
 import {
   Box,
   Text,
@@ -393,38 +394,13 @@ const markDownRules: RenderRules = {
   },
   image: node => {
     let src = node.attributes?.src;
-    let imageSize = localStyles.image;
-    if (src) {
-      const queryParams = src.split('?')[1];
-      let width, height;
-
-      if (queryParams) {
-        queryParams.split('&').forEach((param: string) => {
-          const [key, value] = param.split('=');
-          if (key === 'width') width = Number(value);
-          if (key === 'height') height = Number(value);
-        });
-
-        if (width && height) {
-          const aspectRatio = height / width;
-          imageSize = {
-            width: width > viewPortWidth - 100 ? viewPortWidth - 100 : width,
-            height:
-              width > viewPortWidth - 100
-                ? (viewPortWidth - 100) * aspectRatio
-                : height,
-          };
-          src = src.split('?')[0];
-        }
-      }
-    }
-
+    const imageSize = getSizeByURLQueryParams(src);
     const mimeType = mime.lookup(src) || '';
-
     const isAudio = mimeType.startsWith('audio/');
     const isVideo =
       mimeType.startsWith('video/') || src?.includes('.quicktime');
     const isYoutubeVideo = src?.includes('youtu');
+    src = src.split('?')[0];
 
     if (isAudio) {
       return <AudioPlayer uri={src} title={node.content} key={node.key} />;
@@ -450,7 +426,7 @@ const markDownRules: RenderRules = {
       <CachedImage
         key={node.key}
         resizeMode="stretch"
-        style={imageSize}
+        style={{ ...localStyles.image, ...imageSize }}
         source={src}
         sourceAnimationDuration={isCached ? 0 : 200}
       />
@@ -574,23 +550,14 @@ const getContainerAlignTag = (parents: ASTNode[]): AlignmentTag | undefined => {
   return tag;
 };
 
-export const preprocessImageLinks = (content: string) => {
+export const preprocessImageLinks = async (
+  content: string,
+): Promise<string> => {
   const regexSize = /\s*=\s*(\d+)x(\d+)/g;
   const regexImage = /!\[.*?\]\((.*?)\)/g;
-
-  const getImageSize = (url: string) => {
-    return new Promise<{ width: number; height: number }>((resolve, reject) => {
-      Image.getSize(
-        url,
-        (width, height) => resolve({ width, height }),
-        error => reject(error),
-      );
-    });
-  };
-
   const matches = [...content.matchAll(regexImage)];
 
-  const promises = matches.map(match => {
+  for (const match of matches) {
     const [fullMatch, url] = match;
 
     if (regexSize.test(fullMatch)) {
@@ -599,28 +566,22 @@ export const preprocessImageLinks = (content: string) => {
           return `?width=${width}&height=${height}`;
         })
         .replace(/\s*\?/, '?');
+
       content = content.replace(fullMatch, updatedMatch);
-      return Promise.resolve();
     } else {
-      return getImageSize(url)
-        .then(({ width, height }) => {
-          const newUrl = `${url}?width=${width}&height=${height}`;
-          const updatedMatch = fullMatch.replace(url, newUrl);
-          content = content.replace(fullMatch, updatedMatch);
-        })
-        .catch(_error => {
-          const height = 200;
-          const width = viewPortWidth - 100;
-          const newUrl = `${url}?width=${width}&height=${height}`;
-          const updatedMatch = fullMatch.replace(url, newUrl);
-          content = content.replace(fullMatch, updatedMatch);
-        });
+      try {
+        const { width, height } = await getImageSize(url);
+        const newUrl = `${url}?width=${width}&height=${height}`;
+        const updatedMatch = fullMatch.replace(url, newUrl);
+        content = content.replace(fullMatch, updatedMatch);
+      } catch (error) {
+        Logger.error(
+          `[markDownRules.preprocessImageLinks]: Unable to extract image size ${error}`,
+        );
+      }
     }
-  });
+  }
 
-  return Promise.all(promises).then(() => {
-    return content;
-  });
+  return content;
 };
-
 export default markDownRules;

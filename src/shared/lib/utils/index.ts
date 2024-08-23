@@ -9,3 +9,5 @@ export * from './file';
 export * from './calculator';
 export * from './calculator';
 export * from './imageConverter';
+export * from './getSizeByURLQueryParams';
+export * from './getImageSize';
