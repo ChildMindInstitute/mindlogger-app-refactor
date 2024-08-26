@@ -3,12 +3,10 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-
-import CharacterCounterText from '../../CharacterCounterText';
-import CharacterCounter from '../CharacterCounter';
+import { CharacterCounterText, CharacterCounter } from '@shared/ui';
 
 describe('CharacterCounter Component', () => {
-  it('Should renders correctly with default props', () => {
+  it('Should render correctly with default props', () => {
     const tree = renderer
       .create(
         <TamaguiProvider>
@@ -28,7 +26,9 @@ describe('CharacterCounter Component', () => {
     );
 
     const textElement = tree.root.findByType(CharacterCounterText);
-    expect(textElement.props.fontSize).toBe(20);
+    expect(textElement.props.style).toEqual(
+      expect.objectContaining({ color: '#72777F', fontSize: 20 }),
+    );
   });
 
   it('Should apply the primary color when focused', () => {
@@ -39,7 +39,9 @@ describe('CharacterCounter Component', () => {
     );
 
     const textElement = tree.root.findByType(CharacterCounterText);
-    expect(textElement.props.color).toBe('primary');
+    expect(textElement.props.style).toEqual(
+      expect.objectContaining({ color: '#0067A0', fontSize: 14 }),
+    );
   });
 
   it('Should apply the grey color when not focused', () => {
@@ -50,7 +52,9 @@ describe('CharacterCounter Component', () => {
     );
 
     const textElement = tree.root.findByType(CharacterCounterText);
-    expect(textElement.props.color).toBe('grey4');
+    expect(textElement.props.style).toEqual(
+      expect.objectContaining({ color: '#72777F', fontSize: 14 }),
+    );
   });
 
   it('Should display the correct character count', () => {
@@ -66,6 +70,6 @@ describe('CharacterCounter Component', () => {
       ? textElement.props.children.join('')
       : textElement.props.children;
 
-    expect(characterCountText).toBe('150/200 characters');
+    expect(characterCountText).toBe('150/200 character_counter:characters');
   });
 });

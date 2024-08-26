@@ -1,6 +1,11 @@
 import React, { FC } from 'react';
 
-import CharacterCounterText from '../CharacterCounterText';
+import { useTranslation } from 'react-i18next';
+
+import { CharacterCounterText } from '@shared/ui';
+
+import { colors } from '../lib';
+
 type Props = {
   limit: number | string;
   numberOfCharacters: number | string;
@@ -14,12 +19,16 @@ const CharacterCounter: FC<Props> = ({
   fontSize = 14,
   focused = false,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <CharacterCounterText
-      color={focused ? 'primary' : 'grey4'}
-      fontSize={fontSize}
+      style={{
+        fontSize,
+        color: focused ? colors.primary : colors.grey4,
+      }}
     >
-      {numberOfCharacters}/{limit} characters
+      {numberOfCharacters}/{limit} {t('character_counter:characters')}
     </CharacterCounterText>
   );
 };

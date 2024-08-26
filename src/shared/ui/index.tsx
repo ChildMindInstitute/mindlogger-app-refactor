@@ -1,6 +1,8 @@
 import CheckBox from '@react-native-community/checkbox';
 
 import Center from './Center';
+import CharacterCounter from './CharacterCounter';
+import CharacterCounterText from './CharacterCounterText';
 import Input from './Input';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
 import Link from './Link';
@@ -48,6 +50,8 @@ export {
   KeyboardAvoidingView,
   Input,
   LongTextInput,
+  CharacterCounter,
+  CharacterCounterText,
   CheckBox,
   ScrollView,
   RowButton,

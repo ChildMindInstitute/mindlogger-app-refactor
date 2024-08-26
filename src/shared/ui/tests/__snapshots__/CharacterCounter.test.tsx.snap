@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CharacterCounter Component Should render correctly with default props 1`] = `
+<Text
+  focusable={true}
+  style={
+    [
+      {
+        "borderBottomWidth": 0,
+        "borderLeftWidth": 0,
+        "borderRightWidth": 0,
+        "borderStyle": "solid",
+        "borderTopWidth": 0,
+        "color": "#72777F",
+        "flex": 1,
+        "fontSize": 14,
+        "marginBottom": 2,
+        "marginLeft": 2,
+        "marginRight": 10,
+        "marginTop": 2,
+        "paddingBottom": 2,
+        "paddingLeft": 2,
+        "paddingRight": 2,
+        "paddingTop": 2,
+      },
+    ]
+  }
+>
+  50
+  /
+  100
+   
+  character_counter:characters
+</Text>
+`;
+
+exports[`CharacterCounter Component Should renders correctly with default props 1`] = `
+<Text
+  color="grey4"
+  focusable={true}
+  fontSize={14}
+  style={
+    [
+      {
+        "borderBottomWidth": 0,
+        "borderLeftWidth": 0,
+        "borderRightWidth": 0,
+        "borderStyle": "solid",
+        "borderTopWidth": 0,
+        "flex": 1,
+        "fontWeight": "400",
+        "marginBottom": 2,
+        "marginLeft": 2,
+        "marginRight": 10,
+        "marginTop": 2,
+        "paddingBottom": 2,
+        "paddingLeft": 2,
+        "paddingRight": 2,
+        "paddingTop": 2,
+      },
+    ]
+  }
+>
+  50
+  /
+  100
+   
+  character_counter:characters
+</Text>
+`;

@@ -4,9 +4,7 @@ import { StyleSheet, TextInputProps, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { colors } from '@shared/lib';
-import { LongTextInput } from '@shared/ui';
-
-import CharacterCounter from './CharacterCounter';
+import { LongTextInput, CharacterCounter } from '@shared/ui';
 
 type Props = {
   onChange: (text: string) => void;
