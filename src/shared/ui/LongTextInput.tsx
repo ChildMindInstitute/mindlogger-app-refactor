@@ -17,7 +17,7 @@ export const LongTextInput = styled(
     alignSelf: 'stretch',
     flex: 1,
 
-    minHeight: 56,
+    minHeight: 176,
     maxHeight: 350,
     width: '100%',
     borderRadius: 12,
