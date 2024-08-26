@@ -1,10 +1,12 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { StyleSheet, TextInputProps, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
 import { colors } from '@shared/lib';
 import { LongTextInput } from '@shared/ui';
+
+import CharacterCounter from './CharacterCounter';
 
 type Props = {
   onChange: (text: string) => void;
@@ -15,10 +17,13 @@ type Props = {
 } & Omit<TextInputProps, 'value' | 'onChange'>;
 
 const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
+  const [characterCounter, setCharacterCounter] = useState(0);
+  const [paragraphOnFocus, setParagraphOnFocus] = useState(false);
   const { maxLength = 50 } = config;
   const { t } = useTranslation();
 
   const onChangeText = (text: string) => {
+    setCharacterCounter(text.length);
     onChange(text);
   };
 
@@ -34,7 +39,15 @@ const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
         autoCorrect={false}
         multiline={true}
         keyboardType={'default'}
+        onFocus={() => setParagraphOnFocus(true)}
+        onBlur={() => setParagraphOnFocus(false)}
         {...props}
+      />
+      <CharacterCounter
+        focused={paragraphOnFocus}
+        fontSize={14}
+        limit={maxLength}
+        numberOfCharacters={characterCounter}
       />
     </View>
   );
@@ -45,5 +58,6 @@ export default ParagraphText;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'flex-end',
   },
 });
