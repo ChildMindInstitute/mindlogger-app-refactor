@@ -7,9 +7,10 @@ import { Text } from '@shared/ui';
 
 import { colors } from '../lib';
 
+type PositiveNumber<N extends number> = `${N}` extends 0 ? never : N;
 type Props = {
-  limit: number | string;
-  numberOfCharacters: number | string;
+  limit: PositiveNumber<number>; // number higher than 0 ;
+  numberOfCharacters: number;
   fontSize?: number;
   focused?: boolean;
 };
@@ -21,27 +22,32 @@ const CharacterCounter: FC<Props> = ({
   focused = false,
 }) => {
   const { t } = useTranslation();
+  let colorStyle = focused ? styles.focusedColor : styles.unfocusedColor;
+
+  if (limit < numberOfCharacters) colorStyle = styles.WarnColor;
 
   return (
-    <Text
-      style={[
-        styles.CharacterCounterText,
-        {
-          fontSize,
-          color: focused ? colors.primary : colors.grey4,
-        },
-      ]}
-    >
-      {numberOfCharacters}/{limit} {t('character_counter:characters')}
+    <Text style={[styles.CharacterCounterText, colorStyle, { fontSize }]}>
+      {t('character_counter:characters', { numberOfCharacters, limit })}
     </Text>
   );
 };
+
 const styles = StyleSheet.create({
   CharacterCounterText: {
     padding: 2,
     margin: 2,
     marginRight: 10,
     fontWeight: '400',
+  },
+  focusedColor: {
+    color: colors.primary,
+  },
+  unfocusedColor: {
+    color: colors.grey4,
+  },
+  WarnColor: {
+    color: colors.errorRed,
   },
 });
 

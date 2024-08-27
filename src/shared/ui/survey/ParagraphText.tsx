@@ -15,13 +15,11 @@ type Props = {
 } & Omit<TextInputProps, 'value' | 'onChange'>;
 
 const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
-  const [characterCounter, setCharacterCounter] = useState(0);
   const [paragraphOnFocus, setParagraphOnFocus] = useState(false);
   const { maxLength = 50 } = config;
   const { t } = useTranslation();
 
   const onChangeText = (text: string) => {
-    setCharacterCounter(text.length);
     onChange(text);
   };
 
@@ -43,9 +41,8 @@ const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
       />
       <CharacterCounter
         focused={paragraphOnFocus}
-        fontSize={14}
         limit={maxLength}
-        numberOfCharacters={characterCounter}
+        numberOfCharacters={value.length}
       />
     </View>
   );

@@ -412,7 +412,7 @@
     "paragraph_placeholder": "Type in your answer here."
   },
   "character_counter":{
-    "characters":"characters"
+    "characters":"{{numberOfCharacters}}/{{limit}} characters"
   },
   "additional": {
     "server-error": "Server error occurred",
