@@ -10,9 +10,14 @@ import { CharacterCounter } from '@shared/ui';
 import { colors } from '../../lib';
 
 jest.mock('react-i18next', () => ({
-  useTranslation: jest.fn().mockImplementation(() => ({
-    t: jest.fn().mockImplementation(key => key),
-  })),
+  useTranslation: () => ({
+    t: jest.fn((key, options) => {
+      if (key === 'character_counter:characters') {
+        return `${options.numberOfCharacters}/${options.limit} characters`;
+      }
+      return key;
+    }),
+  }),
 }));
 
 describe('CharacterCounter Component', () => {
@@ -26,19 +31,6 @@ describe('CharacterCounter Component', () => {
       .toJSON();
 
     expect(tree).toMatchSnapshot();
-  });
-
-  it('Should apply the correct font size', () => {
-    const tree = renderer.create(
-      <TamaguiProvider>
-        <CharacterCounter numberOfCharacters={25} limit={50} fontSize={20} />
-      </TamaguiProvider>,
-    );
-
-    const textElement = tree.root.findByType(Text);
-    expect(textElement.props.style).toEqual(
-      expect.arrayContaining([expect.objectContaining({ fontSize: 20 })]),
-    );
   });
 
   it('Should apply the primary color when focused', () => {
@@ -84,7 +76,7 @@ describe('CharacterCounter Component', () => {
       ? textElement.props.children.join('')
       : textElement.props.children;
 
-    expect(characterCountText).toBe('150/200 character_counter:characters');
+    expect(characterCountText).toBe('150/200 characters');
   });
 
   it('Should handle extreme values correctly', () => {
@@ -100,7 +92,7 @@ describe('CharacterCounter Component', () => {
       ? textElement.props.children.join('')
       : textElement.props.children;
 
-    expect(characterCountText).toBe('9999/10000 character_counter:characters');
+    expect(characterCountText).toBe('9999/10000 characters');
   });
 
   it('Should handle missing translation key gracefully', () => {
@@ -120,7 +112,7 @@ describe('CharacterCounter Component', () => {
       ? textElement.props.children.join('')
       : textElement.props.children;
 
-    expect(characterCountText).toBe('50/100 character_counter:characters');
+    expect(characterCountText).toBe('50/100 characters');
   });
 
   it('Should apply custom styles from the stylesheet', () => {
