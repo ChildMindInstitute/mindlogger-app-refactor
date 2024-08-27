@@ -23,9 +23,9 @@ const CharacterCounter: FC<Props> = ({
   const { t } = useTranslation();
   let colorStyle = focused ? styles.focusedColor : styles.unfocusedColor;
 
-  if (limit < numberOfCharacters) colorStyle = styles.WarnColor;
+  if (limit < numberOfCharacters) colorStyle = styles.warnColor;
 
-  if (!limit || limit <= 0) {
+  if (limit <= 0) {
     Logger.error('[CharacterCounter] Limit should be higher than 0');
     return null;
   }
@@ -36,14 +36,14 @@ const CharacterCounter: FC<Props> = ({
   }
 
   return (
-    <Text style={[styles.CharacterCounterText, colorStyle]}>
+    <Text style={[styles.characterCounterText, colorStyle]}>
       {t('character_counter:characters', { numberOfCharacters, limit })}
     </Text>
   );
 };
 
 const styles = StyleSheet.create({
-  CharacterCounterText: {
+  characterCounterText: {
     padding: 2,
     margin: 2,
     marginRight: 10,
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   unfocusedColor: {
     color: colors.grey4,
   },
-  WarnColor: {
+  warnColor: {
     color: colors.errorRed,
   },
 });

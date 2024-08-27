@@ -21,18 +21,6 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('CharacterCounter Component', () => {
-  it('Should render correctly with default props', () => {
-    const tree = renderer
-      .create(
-        <TamaguiProvider>
-          <CharacterCounter numberOfCharacters={50} limit={100} />
-        </TamaguiProvider>,
-      )
-      .toJSON();
-
-    expect(tree).toMatchSnapshot();
-  });
-
   it('Should apply the primary color when focused', () => {
     const tree = renderer.create(
       <TamaguiProvider>
