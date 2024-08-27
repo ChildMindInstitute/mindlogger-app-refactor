@@ -12,7 +12,7 @@ import {
 import * as mime from 'react-native-mime-types';
 import sanitizeHtml from 'sanitize-html';
 
-import { getSizeByURLQueryParams, getImageSize, Logger } from '@shared/lib';
+import { getImageSize, Logger } from '@shared/lib';
 import {
   Box,
   Text,
@@ -23,6 +23,13 @@ import {
 } from '@shared/ui';
 
 import { colors } from './constants';
+
+type ASTImageNodeAttributes = Record<string, any> & {
+  src: string;
+  alt: string;
+  width?: string;
+  height?: string;
+};
 
 const { width: viewPortWidth } = Dimensions.get('window');
 const PADDING_X = 32;
@@ -393,8 +400,8 @@ const markDownRules: RenderRules = {
     );
   },
   image: node => {
-    let src = node.attributes?.src;
-    const imageSize = getSizeByURLQueryParams(src);
+    const attributes = node.attributes as ASTImageNodeAttributes;
+    let src = attributes.src;
     const mimeType = mime.lookup(src) || '';
     const isAudio = mimeType.startsWith('audio/');
     const isVideo =
@@ -419,6 +426,16 @@ const markDownRules: RenderRules = {
     } else if (isYoutubeVideo) {
       return <YoutubeVideo key={node.key} src={src} />;
     }
+
+    const width = attributes.width
+      ? Number(attributes.width)
+      : localStyles.image.width;
+
+    const height = attributes.height
+      ? Number(attributes.height)
+      : localStyles.image.height;
+
+    const imageSize = { width, height };
 
     const isCached = !!CacheManager.entries[node.attributes.src];
 
@@ -570,9 +587,18 @@ export const preprocessImageLinks = async (
       content = content.replace(fullMatch, updatedMatch);
     } else {
       try {
-        const { width, height } = await getImageSize(url);
+        const imageDimensions = getImageSize(url);
+
+        if (!imageDimensions) {
+          throw Error(
+            `[markDownRules.preprocessImageLinks]: No image dimension found for url: ${url}`,
+          );
+        }
+
+        const { width, height } = imageDimensions;
         const newUrl = `${url}?width=${width}&height=${height}`;
         const updatedMatch = fullMatch.replace(url, newUrl);
+
         content = content.replace(fullMatch, updatedMatch);
       } catch (error) {
         Logger.error(

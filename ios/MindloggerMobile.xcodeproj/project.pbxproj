@@ -210,6 +210,11 @@
 		F87E178529771F310021550E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F87E178629771F310021550E /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A5832962BE4E0032C2A8 /* FontAwesome5_Solid.ttf */; };
 		F87E178729771F310021550E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		F8DB248D2C7DCA3600DAD04F /* ImageDimensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F8DB248C2C7DCA3600DAD04F /* ImageDimensions.m */; };
+		F8DB248E2C7DCA3600DAD04F /* ImageDimensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F8DB248C2C7DCA3600DAD04F /* ImageDimensions.m */; };
+		F8DB248F2C7DCA3600DAD04F /* ImageDimensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F8DB248C2C7DCA3600DAD04F /* ImageDimensions.m */; };
+		F8DB24902C7DCA3600DAD04F /* ImageDimensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F8DB248C2C7DCA3600DAD04F /* ImageDimensions.m */; };
+		F8DB24912C7DCA3600DAD04F /* ImageDimensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F8DB248C2C7DCA3600DAD04F /* ImageDimensions.m */; };
 		F8EF454A2A975A9200EEC085 /* FlankerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2329C88A590089AB98 /* FlankerViewManager.m */; };
 		F8EF454B2A975A9200EEC085 /* ParameterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1F29C88A590089AB98 /* ParameterModel.swift */; };
 		F8EF454C2A975A9200EEC085 /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB1E29C88A580089AB98 /* TimeInterval+Extension.swift */; };
@@ -349,6 +354,8 @@
 		F87E177829771F290021550E /* MindloggerMobile qa-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MindloggerMobile qa-Info.plist"; sourceTree = "<absolute>"; };
 		F87E178E29771F310021550E /* MindloggerMobileStaging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileStaging.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F87E178F29771F310021550E /* MindloggerMobile staging-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MindloggerMobile staging-Info.plist"; sourceTree = "<absolute>"; };
+		F8DB248B2C7DCA0B00DAD04F /* ImageDimensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageDimensions.h; sourceTree = "<group>"; };
+		F8DB248C2C7DCA3600DAD04F /* ImageDimensions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageDimensions.m; sourceTree = "<group>"; };
 		F8EF45722A975A9200EEC085 /* MindloggerMobileUAT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileUAT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8EF45732A975A9300EEC085 /* MindloggerMobile uat-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MindloggerMobile uat-Info.plist"; sourceTree = "<absolute>"; };
 		F8EF45752A97619D00EEC085 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -444,6 +451,8 @@
 				288FAB1829C88A250089AB98 /* FlankerNativeComponents */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				F8DB248B2C7DCA0B00DAD04F /* ImageDimensions.h */,
+				F8DB248C2C7DCA3600DAD04F /* ImageDimensions.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				01D339DC29C2E635003935D9 /* FlankerSandboxView */,
@@ -1504,6 +1513,7 @@
 				F83E654F29FA77C300D57006 /* RNBackgroundFetch+AppDelegate.m in Sources */,
 				288FAB2B29C88A590089AB98 /* UIColor+Extension.swift in Sources */,
 				288FAB3029C88A590089AB98 /* ParameterModel.swift in Sources */,
+				F8DB248D2C7DCA3600DAD04F /* ImageDimensions.m in Sources */,
 				288FAB2F29C88A590089AB98 /* TimeInterval+Extension.swift in Sources */,
 				288FAB3229C88A590089AB98 /* CustomButton.swift in Sources */,
 				288FAB3929C88A590089AB98 /* ResultView.swift in Sources */,
@@ -1542,6 +1552,7 @@
 				014B5A9829CAFBB200882214 /* FlankerModel.swift in Sources */,
 				014B5A8929CAFB7300882214 /* ResultView.swift in Sources */,
 				014B5A8F29CAFB7B00882214 /* UIColor+Extension.swift in Sources */,
+				F8DB248E2C7DCA3600DAD04F /* ImageDimensions.m in Sources */,
 				F87E174F29771F200021550E /* AppDelegate.mm in Sources */,
 				014B5A9529CAFB8300882214 /* UITextFild+Extesion.swift in Sources */,
 				014B5A8029CAFB6600882214 /* ParameterGameManager.swift in Sources */,
@@ -1570,6 +1581,7 @@
 				014B5A9729CAFBB100882214 /* FlankerModel.swift in Sources */,
 				014B5A8829CAFB7200882214 /* ResultView.swift in Sources */,
 				014B5A8E29CAFB7A00882214 /* UIColor+Extension.swift in Sources */,
+				F8DB248F2C7DCA3600DAD04F /* ImageDimensions.m in Sources */,
 				F87E176629771F290021550E /* AppDelegate.mm in Sources */,
 				014B5A9429CAFB8300882214 /* UITextFild+Extesion.swift in Sources */,
 				014B5A7F29CAFB6600882214 /* ParameterGameManager.swift in Sources */,
@@ -1598,6 +1610,7 @@
 				014B5A9629CAFBB000882214 /* FlankerModel.swift in Sources */,
 				014B5A8729CAFB7200882214 /* ResultView.swift in Sources */,
 				014B5A8D29CAFB7A00882214 /* UIColor+Extension.swift in Sources */,
+				F8DB24902C7DCA3600DAD04F /* ImageDimensions.m in Sources */,
 				F87E177D29771F310021550E /* AppDelegate.mm in Sources */,
 				014B5A9329CAFB8200882214 /* UITextFild+Extesion.swift in Sources */,
 				014B5A7E29CAFB6600882214 /* ParameterGameManager.swift in Sources */,
@@ -1626,6 +1639,7 @@
 				F8EF45522A975A9200EEC085 /* FlankerModel.swift in Sources */,
 				F8EF45532A975A9200EEC085 /* ResultView.swift in Sources */,
 				F8EF45542A975A9200EEC085 /* UIColor+Extension.swift in Sources */,
+				F8DB24912C7DCA3600DAD04F /* ImageDimensions.m in Sources */,
 				F8EF45552A975A9200EEC085 /* AppDelegate.mm in Sources */,
 				F8EF45562A975A9200EEC085 /* UITextFild+Extesion.swift in Sources */,
 				F8EF45572A975A9200EEC085 /* ParameterGameManager.swift in Sources */,
