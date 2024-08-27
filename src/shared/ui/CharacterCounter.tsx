@@ -7,9 +7,8 @@ import { Text } from '@shared/ui';
 
 import { colors } from '../lib';
 
-type PositiveNumber<N extends number> = `${N}` extends 0 ? never : N;
 type Props = {
-  limit: PositiveNumber<number>; // number higher than 0 ;
+  limit: number;
   numberOfCharacters: number;
   fontSize?: number;
   focused?: boolean;
