@@ -2,6 +2,7 @@ import { TextInput } from 'react-native';
 
 import { GetProps, setupReactNative, styled } from '@tamagui/core';
 import { focusableInputHOC } from '@tamagui/focusable';
+import { isTablet } from 'react-native-device-info';
 
 setupReactNative({
   TextInput,
@@ -18,7 +19,7 @@ export const LongTextInput = styled(
     flex: 1,
 
     minHeight: 176,
-    maxHeight: 350,
+    maxHeight: isTablet() ? 350 : null,
     width: '100%',
     borderRadius: 12,
     borderWidth: 2,
