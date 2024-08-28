@@ -1,4 +1,5 @@
 import { ActivityDto, AppletDetailsDto, AppletDto } from '@app/shared/api';
+import { filterDuplicates } from '@shared/lib';
 
 export const collectAppletRecordImageUrls = (
   applet: AppletDto,
@@ -45,6 +46,31 @@ export const collectAppletDetailsImageUrls = (
       `[collectAppletDetailsImageUrls]: Error occurred:\n\n${error}`,
     );
   }
+};
+
+export const collectMarkdownImageUrls = (markdown: string): Array<string> => {
+  const imageUrls: string[] = [];
+
+  const markdownImageRegex = /!\[.*?\]\((.*?)\)/g;
+  const htmlImageRegex = /<img\s+[^>]*src=["']([^"']+)["'][^>]*>/g;
+  const imageWithSizeRegex = /\[.*?\]\((.*?)(?:\s*=\d*x?\d*)?\)/g;
+  const imageSizeRegex = /\s*=\d*x?\d*$/;
+
+  let match;
+
+  while ((match = markdownImageRegex.exec(markdown)) !== null) {
+    imageUrls.push(match[1].replace(imageSizeRegex, ''));
+  }
+
+  while ((match = imageWithSizeRegex.exec(markdown)) !== null) {
+    imageUrls.push(match[1].replace(imageSizeRegex, ''));
+  }
+
+  while ((match = htmlImageRegex.exec(markdown)) !== null) {
+    imageUrls.push(match[1]);
+  }
+
+  return filterDuplicates(imageUrls);
 };
 
 const collectActivityDetailsImageUrlsInternal = (activity: ActivityDto) => {
@@ -119,7 +145,12 @@ const collectActivityDetailsImageUrlsInternal = (activity: ActivityDto) => {
         });
       }
     }
+
+    const markdownImages = collectMarkdownImageUrls(item.question);
+
+    result.push(...markdownImages);
   }
+
   return result;
 };
 
