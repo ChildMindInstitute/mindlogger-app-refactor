@@ -30,7 +30,6 @@ const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
         placeholder={t('text_entry:paragraph_placeholder')}
         placeholderTextColor={colors.mediumGrey}
         onChangeText={onChangeText}
-        maxLength={maxLength}
         value={value}
         autoCorrect={false}
         multiline={true}

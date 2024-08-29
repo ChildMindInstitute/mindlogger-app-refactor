@@ -106,6 +106,16 @@ function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator {
 
           return true;
         }
+        case 'ParagraphText': {
+          const numberOfCharacter = `${currentAnswer?.answer}`.length;
+          const limit = currentPipelineItem.payload.maxLength;
+
+          if (limit < numberOfCharacter) {
+            return false;
+          }
+
+          return true;
+        }
         default:
           return true;
       }
