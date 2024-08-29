@@ -51,16 +51,11 @@ export const collectAppletDetailsImageUrls = (
 export const collectMarkdownImageUrls = (markdown: string): Array<string> => {
   const imageUrls: string[] = [];
 
-  const markdownImageRegex = /!\[.*?\]\((.*?)\)/g;
   const htmlImageRegex = /<img\s+[^>]*src=["']([^"']+)["'][^>]*>/g;
-  const imageWithSizeRegex = /\[.*?\]\((.*?)(?:\s*=\d*x?\d*)?\)/g;
+  const imageWithSizeRegex = /!\[.*?\]\((.*?)(?:\s*=\d*x?\d*)?\)/g;
   const imageSizeRegex = /\s*=\d*x?\d*$/;
 
   let match;
-
-  while ((match = markdownImageRegex.exec(markdown)) !== null) {
-    imageUrls.push(match[1].replace(imageSizeRegex, ''));
-  }
 
   while ((match = imageWithSizeRegex.exec(markdown)) !== null) {
     imageUrls.push(match[1].replace(imageSizeRegex, ''));

@@ -582,49 +582,49 @@ describe('Image URL Collection Functions', () => {
 });
 
 describe('collectMarkdownImageUrls function', () => {
-  test('extracts URLs from Markdown image syntax', () => {
+  test('should extract URLs from Markdown image syntax', () => {
     const markdown = `![Alt text](https://example.com/image1.png)`;
     const result = collectMarkdownImageUrls(markdown);
 
     expect(result).toEqual(['https://example.com/image1.png']);
   });
 
-  test('extracts URLs from HTML <img> tags', () => {
+  test('should extract URLs from HTML <img> tags', () => {
     const markdown = `<img src="https://example.com/image2.jpg" alt="Example Image" />`;
     const result = collectMarkdownImageUrls(markdown);
 
     expect(result).toEqual(['https://example.com/image2.jpg']);
   });
 
-  test('extracts and cleans URLs with markdown-it-imsize syntax', () => {
-    const markdown = `[1F600.png](https://example.com/image3.png =1000x1000)`;
+  test('should extract and cleans URLs with markdown-it-imsize syntax', () => {
+    const markdown = `![1F600.png](https://example.com/image3.png =1000x1000)`;
     const result = collectMarkdownImageUrls(markdown);
 
     expect(result).toEqual(['https://example.com/image3.png']);
   });
 
-  test('removes size specifiers with width only (markdown-it-imsize)', () => {
-    const markdown = `[1F601.png](https://example.com/image4.png =500x)`;
+  test('should remove size specifiers with width only (markdown-it-imsize)', () => {
+    const markdown = `![1F601.png](https://example.com/image4.png =500x)`;
     const result = collectMarkdownImageUrls(markdown);
 
     expect(result).toEqual(['https://example.com/image4.png']);
   });
 
-  test('removes size specifiers with height only (markdown-it-imsize)', () => {
-    const markdown = `[1F602.png](https://example.com/image5.png =x800)`;
+  test('should remove size specifiers with height only (markdown-it-imsize)', () => {
+    const markdown = `![1F602.png](https://example.com/image5.png =x800)`;
     const result = collectMarkdownImageUrls(markdown);
 
     expect(result).toEqual(['https://example.com/image5.png']);
   });
 
-  test('extracts multiple URLs and removes duplicates', () => {
+  test('should extract multiple URLs and removes duplicates', () => {
     const markdown = `
       ![Alt text](https://example.com/image1.png)
       <img src="https://example.com/image2.jpg" alt="Example Image" />
       ![Duplicate](https://example.com/image1.png)
       <img src="https://example.com/image2.jpg" alt="Another Example Image" />
-      [1F600.png](https://example.com/image3.png =1000x1000)
-      [1F600.png](https://example.com/image3.png =1000x1000)
+      ![1F600.png](https://example.com/image3.png =1000x1000)
+      ![1F600.png](https://example.com/image3.png =1000x1000)
     `;
     const result = collectMarkdownImageUrls(markdown);
 
@@ -637,14 +637,14 @@ describe('collectMarkdownImageUrls function', () => {
     );
   });
 
-  test('handles markdown with no images gracefully', () => {
+  test('should handle markdown with no images gracefully', () => {
     const markdown = `This is a text without any images.`;
     const result = collectMarkdownImageUrls(markdown);
 
     expect(result).toEqual([]);
   });
 
-  test('handles invalid image syntax gracefully', () => {
+  test('should handle invalid image syntax gracefully', () => {
     const markdown = `![Missing parenthesis](https://example.com/image4.jpg`;
     const result = collectMarkdownImageUrls(markdown);
 
