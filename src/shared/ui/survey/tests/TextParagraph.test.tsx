@@ -1,9 +1,9 @@
 import React from 'react';
 
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 
 import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import { LongTextInput } from '@shared/ui';
+import { LongTextInput, CharacterCounter } from '@shared/ui';
 
 import ParagraphText from '../ParagraphText';
 
@@ -13,12 +13,12 @@ jest.mock('react-i18next', () => ({
   })),
 }));
 
-describe('Test Paragraph Text', () => {
+describe('ParagraphText Component', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('Should renders correctly with expected props', () => {
+  it('Should render correctly with expected props', () => {
     const mockValue = '1234';
 
     const tree = renderer
@@ -35,23 +35,30 @@ describe('Test Paragraph Text', () => {
       )
       .toJSON();
 
-    if (!tree || Array.isArray(tree)) {
-      throw new Error('Tree is not rendered correctly or is an array');
+    if (!tree || Array.isArray(tree) || !tree.children) {
+      throw new Error(
+        'Tree is not rendered correctly or is an array without children',
+      );
     }
 
-    const view = tree as any;
-    const longTextInput = view.children[0];
+    const [longTextInput] = tree.children;
+
+    if (
+      !longTextInput ||
+      typeof longTextInput !== 'object' ||
+      !('props' in longTextInput)
+    ) {
+      throw new Error('LongTextInput is not rendered correctly');
+    }
 
     expect(longTextInput.props.placeholder).toBe(
       'text_entry:paragraph_placeholder',
     );
-    expect(longTextInput.props.value).toBe('1234');
-    expect(longTextInput.props.maxLength).toBe(300);
+    expect(longTextInput.props.value).toBe(mockValue);
   });
 
   it('Should call onChange when text is modified', () => {
     const mockOnChange = jest.fn();
-
     const tree = renderer.create(
       <TamaguiProvider>
         <ParagraphText
@@ -65,30 +72,60 @@ describe('Test Paragraph Text', () => {
     const instance = tree.root;
     const longTextInput = instance.findByType(LongTextInput);
 
-    longTextInput.props.onChangeText('new text');
+    act(() => {
+      longTextInput.props.onChangeText('new text');
+    });
+
     expect(mockOnChange).toHaveBeenCalledWith('new text');
   });
 
-  it('Should handle maxLength configurations correctly', () => {
-    const tree = renderer
-      .create(
-        <TamaguiProvider>
-          <ParagraphText
-            onChange={jest.fn()}
-            value="test"
-            config={{ maxLength: 150 }}
-          />
-        </TamaguiProvider>,
-      )
-      .toJSON();
+  it('Should update focus state when input is focused or blurred', () => {
+    const tree = renderer.create(
+      <TamaguiProvider>
+        <ParagraphText
+          onChange={jest.fn()}
+          value="test"
+          config={{ maxLength: 300 }}
+        />
+      </TamaguiProvider>,
+    );
 
-    if (!tree || Array.isArray(tree)) {
-      throw new Error('Tree is not rendered correctly or is an array');
-    }
+    const instance = tree.root;
+    const longTextInput = instance.findByType(LongTextInput);
+    const characterCounter = instance.findByType(CharacterCounter);
 
-    const view = tree as any;
-    const longTextInput = view.children[0];
+    expect(characterCounter.props.focused).toBe(false);
 
-    expect(longTextInput.props.maxLength).toBe(150);
+    act(() => {
+      longTextInput.props.onFocus();
+    });
+
+    expect(characterCounter.props.focused).toBe(true);
+
+    act(() => {
+      longTextInput.props.onBlur();
+    });
+
+    expect(characterCounter.props.focused).toBe(false);
+  });
+
+  it('Should pass correct number of characters and maxLength to CharacterCounter', () => {
+    const mockValue = '123456';
+    const maxLength = 100;
+
+    const tree = renderer.create(
+      <TamaguiProvider>
+        <ParagraphText
+          onChange={jest.fn()}
+          value={mockValue}
+          config={{ maxLength }}
+        />
+      </TamaguiProvider>,
+    );
+
+    const instance = tree.root;
+    const characterCounter = instance.findByType(CharacterCounter);
+    expect(characterCounter.props.numberOfCharacters).toBe(mockValue.length);
+    expect(characterCounter.props.limit).toBe(maxLength);
   });
 });
