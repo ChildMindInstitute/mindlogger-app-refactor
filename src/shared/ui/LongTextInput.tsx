@@ -40,7 +40,7 @@ export const LongTextInput = styled(
 
     focusable: true,
     multiline: true,
-    scrollEnabled: !!isTablet(),
+    scrollEnabled: isTablet(),
   },
   {
     isInput: true,
