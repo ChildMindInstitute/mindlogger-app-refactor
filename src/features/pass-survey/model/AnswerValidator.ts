@@ -6,6 +6,7 @@ import {
   PipelineItem,
   RadioResponse,
   TimeRangeResponse,
+  ParagraphTextResponse,
 } from '../lib';
 
 type AnswerValidatorArgs = {
@@ -107,10 +108,11 @@ function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator {
           return true;
         }
         case 'ParagraphText': {
-          const numberOfCharacter = `${currentAnswer?.answer}`.length;
+          const paragraphResponse =
+            currentAnswer?.answer as ParagraphTextResponse;
           const limit = currentPipelineItem.payload.maxLength;
 
-          if (limit < numberOfCharacter) {
+          if (limit < paragraphResponse.length) {
             return false;
           }
 
