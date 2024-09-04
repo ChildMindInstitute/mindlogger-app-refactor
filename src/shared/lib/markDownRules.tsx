@@ -399,17 +399,17 @@ const markDownRules: RenderRules = {
   },
   image: node => {
     const attributes = node.attributes as ASTImageNodeAttributes;
-    let src = node.attributes?.src;
+    const src = node.attributes?.src;
     let imageSize = {
       width: Number(attributes.width),
       height: Number(attributes.width),
     };
     const mimeType = mime.lookup(src) || '';
+
     const isAudio = mimeType.startsWith('audio/');
     const isVideo =
       mimeType.startsWith('video/') || src?.includes('.quicktime');
     const isYoutubeVideo = src?.includes('youtu');
-    src = src.split('?')[0];
 
     if (isAudio) {
       return <AudioPlayer uri={src} title={node.content} key={node.key} />;
@@ -428,6 +428,7 @@ const markDownRules: RenderRules = {
     } else if (isYoutubeVideo) {
       return <YoutubeVideo key={node.key} src={src} />;
     }
+
     const isCached = !!CacheManager.entries[node.attributes.src];
 
     if (!imageSize.width || !imageSize.height) {
