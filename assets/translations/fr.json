@@ -399,6 +399,9 @@
     "type_placeholder": "Veuiller saisir du texte",
     "paragraph_placeholder": "Tapez votre réponse ici."
   },
+  "character_counter":{
+    "characters":"{{numberOfCharacters}}/{{limit}} caractères"
+  },
   "language_screen": {
     "app_language": " Langue de l'application",
     "change_app_language": "Changer la langue",
