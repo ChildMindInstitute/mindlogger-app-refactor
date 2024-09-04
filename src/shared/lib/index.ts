@@ -8,7 +8,6 @@ export * from './contexts';
 export {
   default as markdownRules,
   activityMarkDownStyles,
-  preprocessImageLinks,
 } from './markDownRules';
 export * from './alerts';
 export * from './permissions';

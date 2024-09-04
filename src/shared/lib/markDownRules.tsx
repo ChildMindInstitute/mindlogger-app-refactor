@@ -12,12 +12,7 @@ import {
 import * as mime from 'react-native-mime-types';
 import sanitizeHtml from 'sanitize-html';
 
-import {
-  getSizeByURLQueryParams,
-  getImageSize,
-  Logger,
-  colors,
-} from '@shared/lib';
+import { getImageSize, colors } from '@shared/lib';
 import {
   Box,
   Text,
@@ -405,7 +400,10 @@ const markDownRules: RenderRules = {
   image: node => {
     const attributes = node.attributes as ASTImageNodeAttributes;
     let src = node.attributes?.src;
-    const imageSize = getSizeByURLQueryParams(src);
+    let imageSize = {
+      width: Number(attributes.width),
+      height: Number(attributes.width),
+    };
     const mimeType = mime.lookup(src) || '';
     const isAudio = mimeType.startsWith('audio/');
     const isVideo =
@@ -431,6 +429,22 @@ const markDownRules: RenderRules = {
       return <YoutubeVideo key={node.key} src={src} />;
     }
     const isCached = !!CacheManager.entries[node.attributes.src];
+
+    if (!imageSize.width || !imageSize.height) {
+      const imageDimensions = getImageSize(src);
+
+      if (!imageDimensions) {
+        throw Error(
+          `[markDownRules.image]: No image dimension found for url: ${src}`,
+        );
+      }
+
+      const { width, height } = imageDimensions;
+      imageSize = {
+        width: Number(width),
+        height: Number(height),
+      };
+    }
 
     return (
       <CachedImage
@@ -560,44 +574,4 @@ const getContainerAlignTag = (parents: ASTNode[]): AlignmentTag | undefined => {
   return tag;
 };
 
-export const preprocessImageLinks = (content: string): string => {
-  const regexSize = /\s*=\s*(\d+)x(\d+)/g;
-  const regexImage = /!\[.*?\]\((.*?)\)/g;
-  const matches = [...content.matchAll(regexImage)];
-  for (const match of matches) {
-    const [fullMatch, url] = match;
-
-    if (regexSize.test(fullMatch)) {
-      const updatedMatch = fullMatch
-        .replace(regexSize, (_match, width, height) => {
-          return `?width=${width}&height=${height}`;
-        })
-        .replace(/\s*\?/, '?');
-
-      content = content.replace(fullMatch, updatedMatch);
-    } else {
-      try {
-        const imageDimensions = getImageSize(url);
-
-        if (!imageDimensions) {
-          throw Error(
-            `[markDownRules.preprocessImageLinks]: No image dimension found for url: ${url}`,
-          );
-        }
-
-        const { width, height } = imageDimensions;
-        const newUrl = `${url}?width=${width}&height=${height}`;
-        const updatedMatch = fullMatch.replace(url, newUrl);
-
-        content = content.replace(fullMatch, updatedMatch);
-      } catch (error) {
-        Logger.error(
-          `[markDownRules.preprocessImageLinks]: Unable to extract image size ${error}`,
-        );
-      }
-    }
-  }
-
-  return content;
-};
 export default markDownRules;
