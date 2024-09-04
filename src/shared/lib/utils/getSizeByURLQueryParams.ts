@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 
-import { Logger } from '../services';
+import { Logger } from '@shared/lib';
 
 export const getSizeByURLQueryParams = (src: string) => {
   const { width: viewPortWidth } = Dimensions.get('window');
