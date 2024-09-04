@@ -12,7 +12,12 @@ import {
 import * as mime from 'react-native-mime-types';
 import sanitizeHtml from 'sanitize-html';
 
-import { getSizeByURLQueryParams, getImageSize, Logger } from '@shared/lib';
+import {
+  getSizeByURLQueryParams,
+  getImageSize,
+  Logger,
+  colors,
+} from '@shared/lib';
 import {
   Box,
   Text,
@@ -21,8 +26,6 @@ import {
   YoutubeVideo,
   XStack,
 } from '@shared/ui';
-
-import { colors } from './constants';
 
 type ASTImageNodeAttributes = Record<string, any> & {
   src: string;
