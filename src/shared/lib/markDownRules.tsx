@@ -433,7 +433,6 @@ const markDownRules: RenderRules = {
 
     if (!imageSize.width || !imageSize.height) {
       const imageDimensions = getImageSize(src);
-
       imageSize = resizeByAspectRatio(imageDimensions);
     }
 
