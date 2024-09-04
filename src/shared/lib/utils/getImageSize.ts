@@ -23,10 +23,14 @@ type Dimensions = {
   height: number;
 };
 
-export const getImageSize = (url: string): Dimensions | null => {
+export const getImageSize = (url: string): Dimensions => {
   const source = getCachedImageLocalPath(url);
 
   const result = NativeModules.ImageDimensions.getImageDimensionsSync(source);
+
+  if (!source || !result) {
+    throw Error(`[getImageSize]: No image dimension found for url: ${url}`);
+  }
 
   return result;
 };

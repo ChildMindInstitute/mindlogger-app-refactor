@@ -12,7 +12,7 @@ import {
 import * as mime from 'react-native-mime-types';
 import sanitizeHtml from 'sanitize-html';
 
-import { getImageSize, colors } from '@shared/lib';
+import { getImageSize, colors, resizeByAspectRatio } from '@shared/lib';
 import {
   Box,
   Text,
@@ -434,17 +434,7 @@ const markDownRules: RenderRules = {
     if (!imageSize.width || !imageSize.height) {
       const imageDimensions = getImageSize(src);
 
-      if (!imageDimensions) {
-        throw Error(
-          `[markDownRules.image]: No image dimension found for url: ${src}`,
-        );
-      }
-
-      const { width, height } = imageDimensions;
-      imageSize = {
-        width: Number(width),
-        height: Number(height),
-      };
+      imageSize = resizeByAspectRatio(imageDimensions);
     }
 
     return (
