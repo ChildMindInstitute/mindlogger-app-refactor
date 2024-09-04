@@ -399,7 +399,7 @@ const markDownRules: RenderRules = {
   },
   image: node => {
     const attributes = node.attributes as ASTImageNodeAttributes;
-    const src = node.attributes?.src;
+    const src = attributes.src;
     let imageSize = {
       width: Number(attributes.width),
       height: Number(attributes.width),
