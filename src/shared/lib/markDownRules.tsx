@@ -12,7 +12,7 @@ import {
 import * as mime from 'react-native-mime-types';
 import sanitizeHtml from 'sanitize-html';
 
-import { getImageSize, Logger } from '@shared/lib';
+import { getSizeByURLQueryParams, getImageSize, Logger } from '@shared/lib';
 import {
   Box,
   Text,
@@ -401,7 +401,8 @@ const markDownRules: RenderRules = {
   },
   image: node => {
     const attributes = node.attributes as ASTImageNodeAttributes;
-    let src = attributes.src;
+    let src = node.attributes?.src;
+    const imageSize = getSizeByURLQueryParams(src);
     const mimeType = mime.lookup(src) || '';
     const isAudio = mimeType.startsWith('audio/');
     const isVideo =
@@ -426,17 +427,6 @@ const markDownRules: RenderRules = {
     } else if (isYoutubeVideo) {
       return <YoutubeVideo key={node.key} src={src} />;
     }
-
-    const width = attributes.width
-      ? Number(attributes.width)
-      : localStyles.image.width;
-
-    const height = attributes.height
-      ? Number(attributes.height)
-      : localStyles.image.height;
-
-    const imageSize = { width, height };
-
     const isCached = !!CacheManager.entries[node.attributes.src];
 
     return (
@@ -567,13 +557,10 @@ const getContainerAlignTag = (parents: ASTNode[]): AlignmentTag | undefined => {
   return tag;
 };
 
-export const preprocessImageLinks = async (
-  content: string,
-): Promise<string> => {
+export const preprocessImageLinks = (content: string): string => {
   const regexSize = /\s*=\s*(\d+)x(\d+)/g;
   const regexImage = /!\[.*?\]\((.*?)\)/g;
   const matches = [...content.matchAll(regexImage)];
-
   for (const match of matches) {
     const [fullMatch, url] = match;
 
