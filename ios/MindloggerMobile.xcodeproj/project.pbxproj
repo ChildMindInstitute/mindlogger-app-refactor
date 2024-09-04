@@ -186,6 +186,11 @@
 		F84714DA2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */; };
 		F84714DB2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */; };
 		F84714DC2C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84714D72C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf */; };
+		F86AD5EC2C64CACE00058D16 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86AD5EB2C64CACE00058D16 /* ImageCacheManager.swift */; };
+		F86AD5ED2C64CACE00058D16 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86AD5EB2C64CACE00058D16 /* ImageCacheManager.swift */; };
+		F86AD5EE2C64CACE00058D16 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86AD5EB2C64CACE00058D16 /* ImageCacheManager.swift */; };
+		F86AD5EF2C64CACE00058D16 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86AD5EB2C64CACE00058D16 /* ImageCacheManager.swift */; };
+		F86AD5F02C64CACE00058D16 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86AD5EB2C64CACE00058D16 /* ImageCacheManager.swift */; };
 		F87E174F29771F200021550E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		F87E175029771F200021550E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		F87E175429771F200021550E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */; };
@@ -348,6 +353,7 @@
 		F86964FA2A4ECEBA00AD759D /* MindloggerMobileRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MindloggerMobileRelease.entitlements; path = MindloggerMobile/MindloggerMobileRelease.entitlements; sourceTree = "<group>"; };
 		F86964FB2A4ECEC000AD759D /* MindloggerMobileQARelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileQARelease.entitlements; sourceTree = "<group>"; };
 		F86964FC2A4ECEC300AD759D /* MindloggerMobileStagingRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileStagingRelease.entitlements; sourceTree = "<group>"; };
+		F86AD5EB2C64CACE00058D16 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		F87E176029771F200021550E /* MindloggerMobileDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F87E176129771F200021550E /* MindloggerMobile dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MindloggerMobile dev-Info.plist"; sourceTree = "<absolute>"; };
 		F87E177729771F290021550E /* MindloggerMobileQA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindloggerMobileQA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -474,6 +480,7 @@
 				288FAB2629C88A590089AB98 /* FlankerViewManager.swift */,
 				288FAB1B29C88A580089AB98 /* GameManager.swift */,
 				288FAB2429C88A590089AB98 /* ImageLoader.swift */,
+				F86AD5EB2C64CACE00058D16 /* ImageCacheManager.swift */,
 				288FAB2729C88A590089AB98 /* MindloggerMobile-Bridging-Header.h */,
 				288FAB1929C88A580089AB98 /* ParameterGameManager.swift */,
 				288FAB1F29C88A590089AB98 /* ParameterModel.swift */,
@@ -1530,6 +1537,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				01325BFD2B206CFB00F4DD1F /* String+Extensions.swift in Sources */,
+				F86AD5EC2C64CACE00058D16 /* ImageCacheManager.swift in Sources */,
 				288FAB2D29C88A590089AB98 /* FlankerModel.swift in Sources */,
 				01D339E129C2E8B6003935D9 /* FlankerSandboxViewManager.swift in Sources */,
 				01D339DF29C2E672003935D9 /* FlankerSandboxView.swift in Sources */,
@@ -1561,6 +1569,7 @@
 				288FAA9A29C882AB0089AB98 /* FlankerSandboxView.swift in Sources */,
 				014B5A7129CAFB4F00882214 /* FlankerView.swift in Sources */,
 				014B5A8529CAFB6F00882214 /* ResultManager.swift in Sources */,
+				F86AD5ED2C64CACE00058D16 /* ImageCacheManager.swift in Sources */,
 				014B5A6E29CAFB1100882214 /* CustomText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1590,6 +1599,7 @@
 				288FAA9B29C882AC0089AB98 /* FlankerSandboxView.swift in Sources */,
 				014B5A7029CAFB4E00882214 /* FlankerView.swift in Sources */,
 				014B5A8629CAFB6F00882214 /* ResultManager.swift in Sources */,
+				F86AD5EE2C64CACE00058D16 /* ImageCacheManager.swift in Sources */,
 				014B5A6D29CAFB1100882214 /* CustomText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1619,6 +1629,7 @@
 				288FAA9C29C882B00089AB98 /* FlankerSandboxView.swift in Sources */,
 				014B5A6F29CAFB4E00882214 /* FlankerView.swift in Sources */,
 				014B5A8429CAFB6D00882214 /* ResultManager.swift in Sources */,
+				F86AD5EF2C64CACE00058D16 /* ImageCacheManager.swift in Sources */,
 				014B5A6C29CAFB1000882214 /* CustomText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1648,6 +1659,7 @@
 				F8EF455A2A975A9200EEC085 /* FlankerSandboxView.swift in Sources */,
 				F8EF455B2A975A9200EEC085 /* FlankerView.swift in Sources */,
 				F8EF455C2A975A9200EEC085 /* ResultManager.swift in Sources */,
+				F86AD5F02C64CACE00058D16 /* ImageCacheManager.swift in Sources */,
 				F8EF455D2A975A9200EEC085 /* CustomText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1669,7 +1681,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CURRENT_PROJECT_VERSION = 1582;
+				CURRENT_PROJECT_VERSION = 1583;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1681,7 +1693,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1700,7 +1712,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1582;
+				CURRENT_PROJECT_VERSION = 1583;
 				INFOPLIST_FILE = MindloggerMobileTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1708,7 +1720,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1730,7 +1742,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1582;
+				CURRENT_PROJECT_VERSION = 1583;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				ENABLE_BITCODE = NO;
@@ -1741,7 +1753,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1771,7 +1783,7 @@
 				CODE_SIGN_ENTITLEMENTS = MindloggerMobile/MindloggerMobileRelease.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1582;
+				CURRENT_PROJECT_VERSION = 1583;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = MindloggerMobile/Info.plist;
@@ -1781,7 +1793,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1981,7 +1993,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1582;
+				CURRENT_PROJECT_VERSION = 1583;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				ENABLE_BITCODE = NO;
@@ -1992,7 +2004,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2021,7 +2033,7 @@
 				CODE_SIGN_ENTITLEMENTS = MindloggerMobileDevRelease.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1582;
+				CURRENT_PROJECT_VERSION = 1583;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = "MindloggerMobile dev-Info.plist";
@@ -2031,7 +2043,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2060,7 +2072,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1582;
+				CURRENT_PROJECT_VERSION = 1583;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				ENABLE_BITCODE = NO;
@@ -2071,7 +2083,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2101,7 +2113,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1582;
+				CURRENT_PROJECT_VERSION = 1583;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = "MindloggerMobile qa-Info.plist";
@@ -2111,7 +2123,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2138,7 +2150,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MindloggerMobileStagingDebug.entitlements;
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1582;
+				CURRENT_PROJECT_VERSION = 1583;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				ENABLE_BITCODE = NO;
@@ -2149,7 +2161,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2178,7 +2190,7 @@
 				CODE_SIGN_ENTITLEMENTS = MindloggerMobileStagingRelease.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1582;
+				CURRENT_PROJECT_VERSION = 1583;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = "MindloggerMobile staging-Info.plist";
@@ -2188,7 +2200,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2217,7 +2229,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1582;
+				CURRENT_PROJECT_VERSION = 1583;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				ENABLE_BITCODE = NO;
@@ -2228,7 +2240,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2258,7 +2270,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1582;
+				CURRENT_PROJECT_VERSION = 1583;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = "MindloggerMobile uat-Info.plist";
@@ -2268,7 +2280,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
