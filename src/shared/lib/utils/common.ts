@@ -190,3 +190,6 @@ export function isIphoneX(): boolean {
       dimensions.width === 926)
   );
 }
+
+export const filterDuplicates = <TItem>(array: Array<TItem>): Array<TItem> =>
+  Array.from(new Set(array));

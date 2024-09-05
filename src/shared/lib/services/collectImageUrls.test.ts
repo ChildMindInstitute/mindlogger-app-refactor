@@ -1,4 +1,5 @@
 import {
+  collectMarkdownImageUrls,
   collectAppletRecordImageUrls,
   collectAppletDetailsImageUrls,
   collectActivityDetailsImageUrls,
@@ -577,5 +578,76 @@ describe('Image URL Collection Functions', () => {
       'https://media-dev.cmiml.net/mindlogger/content/2923f4a9-20ef-4995-a340-251d96ff3082/9be22419-980f-4486-83d8-6b728174dd93/7e0bfc92-cbc8-4f13-b204-1efbd507554c-2923f4a9-20ef-4995-a340-251d96ff3082-Item.jpg',
       'https://media-dev.cmiml.net/mindlogger/content/2923f4a9-20ef-4995-a340-251d96ff3082/299feb96-de86-412e-b907-adc8984c4f1e/7e0bfc92-cbc8-4f13-b204-1efbd507554c-2923f4a9-20ef-4995-a340-251d96ff3082-Item.jpg',
     ]);
+  });
+});
+
+describe('collectMarkdownImageUrls function', () => {
+  test('should extract URLs from Markdown image syntax', () => {
+    const markdown = `![Alt text](https://example.com/image1.png)`;
+    const result = collectMarkdownImageUrls(markdown);
+
+    expect(result).toEqual(['https://example.com/image1.png']);
+  });
+
+  test('should extract URLs from HTML <img> tags', () => {
+    const markdown = `<img src="https://example.com/image2.jpg" alt="Example Image" />`;
+    const result = collectMarkdownImageUrls(markdown);
+
+    expect(result).toEqual(['https://example.com/image2.jpg']);
+  });
+
+  test('should extract and cleans URLs with markdown-it-imsize syntax', () => {
+    const markdown = `![1F600.png](https://example.com/image3.png =1000x1000)`;
+    const result = collectMarkdownImageUrls(markdown);
+
+    expect(result).toEqual(['https://example.com/image3.png']);
+  });
+
+  test('should remove size specifiers with width only (markdown-it-imsize)', () => {
+    const markdown = `![1F601.png](https://example.com/image4.png =500x)`;
+    const result = collectMarkdownImageUrls(markdown);
+
+    expect(result).toEqual(['https://example.com/image4.png']);
+  });
+
+  test('should remove size specifiers with height only (markdown-it-imsize)', () => {
+    const markdown = `![1F602.png](https://example.com/image5.png =x800)`;
+    const result = collectMarkdownImageUrls(markdown);
+
+    expect(result).toEqual(['https://example.com/image5.png']);
+  });
+
+  test('should extract multiple URLs and removes duplicates', () => {
+    const markdown = `
+      ![Alt text](https://example.com/image1.png)
+      <img src="https://example.com/image2.jpg" alt="Example Image" />
+      ![Duplicate](https://example.com/image1.png)
+      <img src="https://example.com/image2.jpg" alt="Another Example Image" />
+      ![1F600.png](https://example.com/image3.png =1000x1000)
+      ![1F600.png](https://example.com/image3.png =1000x1000)
+    `;
+    const result = collectMarkdownImageUrls(markdown);
+
+    expect(result).toEqual(
+      expect.arrayContaining([
+        'https://example.com/image1.png',
+        'https://example.com/image2.jpg',
+        'https://example.com/image3.png',
+      ]),
+    );
+  });
+
+  test('should handle markdown with no images gracefully', () => {
+    const markdown = `This is a text without any images.`;
+    const result = collectMarkdownImageUrls(markdown);
+
+    expect(result).toEqual([]);
+  });
+
+  test('should handle invalid image syntax gracefully', () => {
+    const markdown = `![Missing parenthesis](https://example.com/image4.jpg`;
+    const result = collectMarkdownImageUrls(markdown);
+
+    expect(result).toEqual([]);
   });
 });

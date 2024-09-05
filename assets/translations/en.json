@@ -411,6 +411,9 @@
     "type_placeholder": "Please type text",
     "paragraph_placeholder": "Type in your answer here."
   },
+  "character_counter":{
+    "characters":"{{numberOfCharacters}}/{{limit}} characters"
+  },
   "additional": {
     "server-error": "Server error occurred",
     "time-end": "Time is up!",
