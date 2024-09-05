@@ -432,15 +432,16 @@ const markDownRules: RenderRules = {
     const isCached = !!CacheManager.entries[node.attributes.src];
 
     if (!imageSize.width || !imageSize.height) {
-      const imageDimensions = getImageSize(src);
-      imageSize = resizeByAspectRatio(imageDimensions);
+      imageSize = getImageSize(src);
     }
+
+    imageSize = resizeByAspectRatio(imageSize);
 
     return (
       <CachedImage
         key={node.key}
         resizeMode="stretch"
-        style={{ ...localStyles.image, ...imageSize }}
+        style={imageSize}
         source={src}
         sourceAnimationDuration={isCached ? 0 : 200}
       />

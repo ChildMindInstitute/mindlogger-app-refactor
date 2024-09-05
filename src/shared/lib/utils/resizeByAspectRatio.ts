@@ -10,7 +10,7 @@ export const resizeByAspectRatio = ({
   height,
 }: DimensionsInterface): DimensionsInterface => {
   const { width: viewPortWidth } = Dimensions.get('window');
-  const contentWidth = viewPortWidth - 100;
+  const contentWidth = viewPortWidth - 20;
   const aspectRatio = height / width;
 
   return {
