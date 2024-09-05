@@ -149,29 +149,33 @@ const slice = createSlice({
     ) => {
       const { appletId, entityId, eventId, endAt } = action.payload;
 
-      const { availableTo } = state.inProgress[appletId][entityId][eventId];
+      const entityState = state.inProgress[appletId]?.[entityId]?.[eventId];
 
+      if (!entityState) return;
+
+      const { availableTo } = entityState;
       const isExpired = isEntityExpired(availableTo);
 
-      state.inProgress[appletId][entityId][eventId].endAt = isExpired
-        ? availableTo
-        : endAt;
+      entityState.endAt = isExpired ? availableTo : endAt;
 
-      const completedEntities = state.completedEntities ?? {};
-
-      const completions = state.completions ?? {};
-
-      completedEntities[entityId] = endAt;
-
-      if (!completions[entityId]) {
-        completions[entityId] = {};
+      if (!state.completedEntities) {
+        state.completedEntities = {};
       }
 
-      const entityCompletions = completions[entityId];
+      state.completedEntities[entityId] = endAt;
+
+      if (!state.completions) {
+        state.completions = {};
+      }
+
+      const entityCompletions = state.completions[entityId] ?? {};
+
+      state.completions[entityId] = entityCompletions;
 
       if (!entityCompletions[eventId]) {
         entityCompletions[eventId] = [];
       }
+
       entityCompletions[eventId].push(endAt);
     },
 
