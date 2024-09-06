@@ -12,6 +12,7 @@ import {
 import * as mime from 'react-native-mime-types';
 import sanitizeHtml from 'sanitize-html';
 
+import { getImageSize, colors, resizeByAspectRatio } from '@shared/lib';
 import {
   Box,
   Text,
@@ -21,7 +22,12 @@ import {
   XStack,
 } from '@shared/ui';
 
-import { colors } from './constants';
+type ASTImageNodeAttributes = Record<string, any> & {
+  src: string;
+  alt: string;
+  width?: string;
+  height?: string;
+};
 
 const { width: viewPortWidth } = Dimensions.get('window');
 const PADDING_X = 32;
@@ -124,7 +130,9 @@ export const activityMarkDownStyles = StyleSheet.create({
     marginBottom: 18,
   },
   paragraph: {
-    alignSelf: 'center',
+    alignSelf: 'flex-start',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
     fontSize: 18,
     fontWeight: '300',
   },
@@ -390,7 +398,12 @@ const markDownRules: RenderRules = {
     );
   },
   image: node => {
-    const src = node.attributes?.src;
+    const attributes = node.attributes as ASTImageNodeAttributes;
+    const src = attributes.src;
+    let imageSize = {
+      width: Number(attributes.width),
+      height: Number(attributes.width),
+    };
     const mimeType = mime.lookup(src) || '';
 
     const isAudio = mimeType.startsWith('audio/');
@@ -418,12 +431,18 @@ const markDownRules: RenderRules = {
 
     const isCached = !!CacheManager.entries[node.attributes.src];
 
+    if (!imageSize.width || !imageSize.height) {
+      imageSize = getImageSize(src);
+    }
+
+    imageSize = resizeByAspectRatio(imageSize);
+
     return (
       <CachedImage
         key={node.key}
-        resizeMode="contain"
-        style={localStyles.image}
-        source={node.attributes.src}
+        resizeMode="stretch"
+        style={imageSize}
+        source={src}
         sourceAnimationDuration={isCached ? 0 : 200}
       />
     );
@@ -544,10 +563,6 @@ const getContainerAlignTag = (parents: ASTNode[]): AlignmentTag | undefined => {
     );
 
   return tag;
-};
-
-export const preprocessImageLinks = (content: string) => {
-  return content?.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2');
 };
 
 export default markDownRules;

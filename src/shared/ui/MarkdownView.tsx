@@ -2,18 +2,18 @@ import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
 import markdownContainer from 'markdown-it-container';
+import ImageSizePlugin from 'markdown-it-imsize';
 import Markdown, {
   RenderRules,
   MarkdownIt,
 } from 'react-native-markdown-display';
-
-import { preprocessImageLinks } from '../lib';
 
 const markdownItInstance = MarkdownIt({
   html: true,
   linkify: true,
   typographer: true,
 })
+  .use(ImageSizePlugin)
   .use(markdownContainer)
   .use(markdownContainer, 'hljs-left')
   .use(markdownContainer, 'hljs-center')
@@ -39,7 +39,7 @@ const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
       markdownit={markdownItInstance}
       style={markdownStyle}
     >
-      {preprocessImageLinks(content)}
+      {content}
     </Markdown>
   );
 };

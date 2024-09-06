@@ -1,0 +1,33 @@
+diff --git a/node_modules/markdown-it-imsize/lib/index.js b/node_modules/markdown-it-imsize/lib/index.js
+index ac39034..5dfa077 100644
+--- a/node_modules/markdown-it-imsize/lib/index.js
++++ b/node_modules/markdown-it-imsize/lib/index.js
+@@ -3,8 +3,6 @@
+ 
+ 'use strict';
+ 
+-var sizeOf = require('./imsize');
+-
+ var parseImageSize = require('./helpers/parse_image_size');
+ 
+ function image_with_size(md, options) {
+@@ -174,19 +172,6 @@ function image_with_size(md, options) {
+       );
+       newState.md.inline.tokenize(newState);
+ 
+-      // if 'autofill' option is specified
+-      // and width/height are both blank,
+-      // they are filled automatically
+-      if (options) {
+-        if (options.autofill && width === '' && height === '') {
+-          try {
+-            var dimensions = sizeOf(href);
+-            width = dimensions.width;
+-            height = dimensions.height;
+-          } catch (e) { }
+-        }
+-      }
+-
+       token          = state.push('image', 'img', 0);
+       token.attrs    = attrs = [ [ 'src', href ],
+                                  [ 'alt', '' ] ];
