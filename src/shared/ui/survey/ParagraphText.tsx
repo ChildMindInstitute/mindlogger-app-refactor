@@ -1,5 +1,11 @@
-import React, { FC, useState } from 'react';
-import { StyleSheet, TextInputProps, View } from 'react-native';
+import React, { FC, useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  TextInputProps,
+  View,
+  Keyboard,
+  Platform,
+} from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
@@ -16,15 +22,38 @@ type Props = {
 
 const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
   const [paragraphOnFocus, setParagraphOnFocus] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const { maxLength = 50 } = config;
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (Platform.OS != 'ios') {
+      const keyboardDidShowListener = Keyboard.addListener(
+        'keyboardDidShow',
+        event => {
+          setKeyboardHeight(event.endCoordinates.height * 0.8);
+        },
+      );
+      const keyboardDidHideListener = Keyboard.addListener(
+        'keyboardDidHide',
+        () => {
+          setKeyboardHeight(0);
+        },
+      );
+
+      return () => {
+        keyboardDidShowListener.remove();
+        keyboardDidHideListener.remove();
+      };
+    }
+  }, []);
 
   const onChangeText = (text: string) => {
     onChange(text);
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingBottom: keyboardHeight }]}>
       <LongTextInput
         accessibilityLabel="paragraph-item"
         placeholder={t('text_entry:paragraph_placeholder')}
