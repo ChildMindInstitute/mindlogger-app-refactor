@@ -14,6 +14,7 @@
     "prettier:check": "prettier '**/*.{js,jsx,ts,tsx}' --check",
     "prettier:fix": "prettier '**/*.{js,jsx,ts,tsx}' --write",
     "pods": "bundle exec pod install --project-directory=ios",
+    "pods:local": "LOCAL_DEV_PATCHES=true yarn pods",
     "prepare": "husky install",
     "postinstall": "yarn patch-package",
     "bump": "bundle exec fastlane bump_version",
