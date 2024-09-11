@@ -5,9 +5,9 @@ module.exports = {
     'eslint:recommended',
     '@react-native-community',
     'plugin:react/recommended',
-    'prettier'
+    'plugin:prettier/recommended'
   ],
-  plugins: ['import', 'react', 'react-hooks', 'unused-imports', 'jest'],
+  plugins: ['import', 'react', 'react-hooks', 'unused-imports', 'jest', 'prettier'],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/no-unstable-nested-components': 'off',
