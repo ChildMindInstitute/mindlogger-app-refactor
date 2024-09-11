@@ -27,6 +27,9 @@ const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
+    if (process.env.NODE_ENV === 'test') {
+      return;
+    }
     if (Platform.OS != 'ios') {
       const keyboardDidShowListener = Keyboard.addListener(
         'keyboardDidShow',
