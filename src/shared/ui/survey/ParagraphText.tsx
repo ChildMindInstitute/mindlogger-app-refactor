@@ -1,15 +1,9 @@
 import React, { FC, useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  TextInputProps,
-  View,
-  Keyboard,
-  Platform,
-} from 'react-native';
+import { StyleSheet, TextInputProps, View, Keyboard } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@shared/lib';
+import { colors, IS_ANDROID } from '@shared/lib';
 import { LongTextInput, CharacterCounter } from '@shared/ui';
 
 type Props = {
@@ -30,11 +24,11 @@ const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
     if (process.env.NODE_ENV === 'test') {
       return;
     }
-    if (Platform.OS != 'ios') {
+    if (IS_ANDROID) {
       const keyboardDidShowListener = Keyboard.addListener(
         'keyboardDidShow',
         event => {
-          setKeyboardHeight(event.endCoordinates.height * 0.8);
+          setKeyboardHeight(event.endCoordinates.height);
         },
       );
       const keyboardDidHideListener = Keyboard.addListener(
@@ -56,7 +50,12 @@ const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
   };
 
   return (
-    <View style={[styles.container, { paddingBottom: keyboardHeight }]}>
+    <View
+      style={[
+        styles.container,
+        IS_ANDROID ? { paddingBottom: keyboardHeight } : {},
+      ]}
+    >
       <LongTextInput
         accessibilityLabel="paragraph-item"
         placeholder={t('text_entry:paragraph_placeholder')}
