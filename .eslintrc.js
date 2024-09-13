@@ -127,7 +127,7 @@ module.exports = {
         '@typescript-eslint/unbound-method': 'warn',
         '@typescript-eslint/restrict-plus-operands': 'warn',
         '@typescript-eslint/no-unsafe-return': 'warn',
-        '@typescript-eslint/restrict-template-expressions': 'warn',
+        '@typescript-eslint/restrict-template-expressions': ['warn', { allowNever: true }],
         '@typescript-eslint/no-unused-vars': 'off',
       },
     },
