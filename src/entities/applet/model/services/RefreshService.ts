@@ -166,7 +166,9 @@ class RefreshService implements IRefreshService {
       }
     }
 
-    this.invalidateCompletedEntities();
+    this.invalidateCompletedEntities().catch(
+      this.logger.error.bind(this.logger),
+    );
 
     this.logger.info('[RefreshService.refreshInternal] Refresh is done');
 

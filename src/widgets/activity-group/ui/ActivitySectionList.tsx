@@ -160,11 +160,9 @@ function ActivitySectionList({
           activity={item}
           disabled={isUploading}
           onPress={() => {
-            if (!isFocused()) {
-              return;
+            if (isFocused()) {
+              startActivityOrFlow(item).catch(console.error);
             }
-
-            startActivityOrFlow(item);
           }}
         />
       )}

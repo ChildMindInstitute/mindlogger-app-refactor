@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { Logger } from '@app/shared/lib';
 import { AppletModel } from '@entities/applet';
 import { IS_IOS, useOnForeground } from '@shared/lib';
 
@@ -22,7 +23,9 @@ function useRefresh(onSuccess: () => void) {
   );
 
   const onRefresh = () => {
-    refresh().then(() => setIsRefreshing(false));
+    refresh()
+      .then(() => setIsRefreshing(false))
+      .catch(err => Logger.error(err as never));
     setIsRefreshing(true);
   };
 

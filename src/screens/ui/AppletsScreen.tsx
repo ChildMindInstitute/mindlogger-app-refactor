@@ -71,7 +71,7 @@ const AppletsScreen: FC = () => {
       completions,
       LogTrigger.FirstAppRun,
     );
-    Logger.send();
+    Logger.send().catch(err => Logger.error(err as never));
   });
 
   return (
