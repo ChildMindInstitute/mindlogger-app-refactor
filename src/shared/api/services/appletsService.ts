@@ -96,6 +96,10 @@ export type AppletDetailsResponse = {
   respondentMeta: AppletRespondentMetaDto;
 };
 
+type AppletAndActivitiesDetailsRequest = {
+  appletId: string;
+};
+
 export type AppletAndActivitiesDetailsResponse = {
   result: {
     appletDetail: AppletDetailsDto;
@@ -121,7 +125,7 @@ function appletsService() {
       };
       return callApiWithRetry(withDataExtraction(apiCall));
     },
-    getAppletAndActivitiesDetails(request: AppletDetailsRequest) {
+    getAppletAndActivitiesDetails(request: AppletAndActivitiesDetailsRequest) {
       const apiCall = () => {
         return httpService.get<AppletAndActivitiesDetailsResponse>(
           `/activities/applet/${request.appletId}`,
