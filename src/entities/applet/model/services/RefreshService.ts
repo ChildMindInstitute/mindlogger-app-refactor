@@ -66,8 +66,8 @@ class RefreshService implements IRefreshService {
     );
   }
 
-  private async resetEventsQuery() {
-    await this.queryClient.removeQueries(['events']);
+  private resetEventsQuery() {
+    this.queryClient.removeQueries(['events']);
   }
 
   private resetAppletListQuery() {
@@ -88,9 +88,8 @@ class RefreshService implements IRefreshService {
 
     optimization.keepExistingAppletVersions();
 
-    await this.resetEventsQuery();
-
-    await this.resetAppletListQuery();
+    this.resetEventsQuery();
+    this.resetAppletListQuery();
 
     const emptyResult = {
       success: false,
