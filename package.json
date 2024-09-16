@@ -11,8 +11,6 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:check": "yarn lint",
     "lint:fix": "yarn lint --fix",
-    "prettier:check": "prettier '**/*.{js,jsx,ts,tsx}' --check",
-    "prettier:fix": "prettier '**/*.{js,jsx,ts,tsx}' --write",
     "pods": "bundle exec pod install --project-directory=ios",
     "pods:local": "LOCAL_DEV_PATCHES=true yarn pods",
     "prepare": "husky install",
@@ -182,8 +180,7 @@
   "lint-staged": {
     "**/*.{ts,tsx}": [
       "bash -c node_modules/.bin/tsc --noEmit --skipLibCheck",
-      "eslint --fix",
-      "prettier --write"
+      "eslint --fix"
     ]
   },
   "resolutions": {
