@@ -5,7 +5,7 @@ import { useIsRestoring } from '@tanstack/react-query';
 import { useCacheHasData } from '@app/shared/lib';
 import { AppletModel } from '@entities/applet';
 
-function useAutomaticRefreshOnMount(onSuccess: () => void) {
+function useAutomaticRefreshOnMount(onSuccess: () => void | Promise<void>) {
   const isCacheRestoring = useIsRestoring();
   const { mutate: refresh } = AppletModel.useRefreshMutation(onSuccess);
   const { check: checkIfCacheHasData } = useCacheHasData();

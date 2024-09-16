@@ -4,7 +4,7 @@ import { Logger } from '@app/shared/lib';
 import { AppletModel } from '@entities/applet';
 import { IS_IOS, useOnForeground } from '@shared/lib';
 
-function useRefresh(onSuccess: () => void) {
+function useRefresh(onSuccess: () => void | Promise<void>) {
   const { mutateAsync: refresh } = AppletModel.useRefreshMutation(onSuccess);
 
   const [isRefreshing, setIsRefreshing] = useState(false);

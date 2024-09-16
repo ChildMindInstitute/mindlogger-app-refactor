@@ -7,7 +7,7 @@ import { Logger, useAppDispatch, useAppSelector } from '@app/shared/lib';
 import { selectGlobalState } from '../selectors';
 import { ProgressSyncService, RefreshService } from '../services';
 
-const useRefreshMutation = (onSuccess?: () => void) => {
+const useRefreshMutation = (onSuccess?: () => void | Promise<void>) => {
   const dispatch = useAppDispatch();
   const state = useAppSelector(selectGlobalState);
   const queryClient = useQueryClient();
