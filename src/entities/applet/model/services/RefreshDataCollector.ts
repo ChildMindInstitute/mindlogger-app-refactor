@@ -44,7 +44,7 @@ export interface IRefreshDataCollector {
     appletDto: AppletDto,
   ): Promise<CollectAppletInternalsResult>;
   collectAllAppletEvents(
-    currentApplets: string[],
+    appletIds: string[],
   ): Promise<CollectAllAppletEventsResult>;
 }
 
@@ -127,7 +127,7 @@ class RefreshDataCollector implements IRefreshDataCollector {
     }
   }
 
-  public async collectAllAppletEvents(currentApplets: string[]) {
+  public async collectAllAppletEvents(appletIds: string[]) {
     const result: CollectAllAppletEventsResult = {
       appletEvents: {},
     };
@@ -135,7 +135,7 @@ class RefreshDataCollector implements IRefreshDataCollector {
     const eventsResponse = await this.collectEvents();
 
     if (eventsResponse) {
-      const appletEvents = currentApplets.map(appletId => ({
+      const appletEvents = appletIds.map(appletId => ({
         appletId,
         events:
           eventsResponse.data.result.find(
