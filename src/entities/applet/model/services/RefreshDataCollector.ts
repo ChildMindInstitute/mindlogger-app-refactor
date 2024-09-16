@@ -93,8 +93,7 @@ class RefreshDataCollector implements IRefreshDataCollector {
       collectDetailsResult = await this.collectAppletDetails(appletDto.id);
     } catch (error) {
       throw new Error(
-        "[RefreshDataCollector.collectAppletInternals]: Error occurred during getting applet's details\n\n" +
-          error,
+        `[RefreshDataCollector.collectAppletInternals]: Error occurred during getting applet's details\n\n${error as never}`,
       );
     }
 
@@ -123,8 +122,7 @@ class RefreshDataCollector implements IRefreshDataCollector {
       return await EventsService.getAllEvents();
     } catch (error) {
       this.logger.warn(
-        '[RefreshDataCollector.collectEvents]: Error occurred while fetching events":\n\n' +
-          error,
+        `[RefreshDataCollector.collectEvents]: Error occurred while fetching events":\n\n${error as never}`,
       );
 
       return null;
