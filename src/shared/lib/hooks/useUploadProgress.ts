@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { UploadProgressObservable, wait } from '../';
+import { UploadProgressObservable } from '../';
 import { SecondLevelStep, UploadProgress } from '../observables/';
 
 import { useForceUpdate } from './';
@@ -100,7 +100,6 @@ const useUploadProgress = (): UseUploadProgressResult => {
   useEffect(() => {
     const onProgressChange = async (delay: number) => {
       update();
-      await wait(delay);
     };
 
     UploadProgressObservable.addObserver(onProgressChange);
