@@ -82,9 +82,7 @@ class RefreshDataCollector implements IRefreshDataCollector {
     });
   }
 
-  public async collectAppletInternals(
-    appletDto: AppletDto,
-  ): Promise<CollectAppletInternalsResult> {
+  public async collectAppletInternals(appletDto: AppletDto) {
     const imageUrls: string[] = collectAppletRecordImageUrls(appletDto);
 
     let collectDetailsResult: CollectAppletDetailsResult;
@@ -129,9 +127,7 @@ class RefreshDataCollector implements IRefreshDataCollector {
     }
   }
 
-  public async collectAllAppletEvents(
-    currentApplets: string[],
-  ): Promise<CollectAllAppletEventsResult> {
+  public async collectAllAppletEvents(currentApplets: string[]) {
     const result: CollectAllAppletEventsResult = {
       appletEvents: {},
     };
