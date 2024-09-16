@@ -11,6 +11,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:check": "yarn lint",
     "lint:fix": "yarn lint --fix",
+    "type:check": "tsc --noEmit --skipLibCheck",
     "pods": "bundle exec pod install --project-directory=ios",
     "pods:local": "LOCAL_DEV_PATCHES=true yarn pods",
     "prepare": "husky install",
