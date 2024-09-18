@@ -114,17 +114,14 @@ class EncryptionManager {
     const iv: Buffer = this.getRandomBytes();
     const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
 
-    const encryptedChunks: Buffer[] = [];
+    let encrypted: Buffer = Buffer.alloc(0);
 
     for (let i = 0; i < text.length; i += CHUNK_SIZE) {
       const chunk = text.slice(i, i + CHUNK_SIZE);
-      encryptedChunks.push(cipher.update(chunk));
+      encrypted = Buffer.concat([encrypted, cipher.update(chunk)]);
     }
 
-    encryptedChunks.push(cipher.final());
-
-    const encrypted = Buffer.concat(encryptedChunks);
-
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
     return `${iv.toString('hex')}:${encrypted.toString('hex')}`;
   };
 
