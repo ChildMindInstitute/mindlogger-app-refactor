@@ -68,14 +68,17 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
     const appletResponse = getDataFromQuery<AppletDetailsResponse>(
       getAppletDetailsKey(appletId),
       queryClient,
-    )!;
-
+    );
     if (!appletResponse) {
       logger.warn(
         `[ActivityGroupsBuildManager.processInternal]: appletResponse not found, appletId=${appletId}`,
       );
       return { groups: [], isCacheInsufficientError: true };
     }
+
+    logger.log(
+      `[ActivityGroupsBuildManager.processInternal]: Applet is "${appletId}|${appletResponse.result.displayName}"`,
+    );
 
     const activities: Activity[] = mapActivitiesFromDto(
       appletResponse.result.activities,
@@ -88,12 +91,7 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
     const eventsResponse = getDataFromQuery<AppletEventsResponse>(
       getEventsKey(appletId),
       queryClient,
-    )!;
-
-    logger.log(
-      `[ActivityGroupsBuildManager.processInternal]: Applet is "${appletId}|${appletResponse.result.displayName}"`,
     );
-
     if (!eventsResponse) {
       logger.warn(
         '[ActivityGroupsBuildManager.processInternal]: eventsResponse not found',
@@ -105,13 +103,13 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
       eventsResponse.result.events,
     );
 
-    const idToEntity = buildIdToEntityMap(activities, activityFlows);
-
     const builder = createActivityGroupsBuilder({
       allAppletActivities: activities,
       appletId: appletId,
       progress: convertProgress(entitiesProgress),
     });
+
+    const idToEntity = buildIdToEntityMap(activities, activityFlows);
 
     let entityEvents = events
       .map<EventEntity>(event => ({
@@ -141,17 +139,17 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
     entityEvents = sort(entityEvents);
 
     const result: BuildResult = { groups: [] };
-    let logInfo = '';
 
+    let logInfo = '';
     try {
       logInfo = 'building in-progress';
-      result.groups.push(builder.buildInProgress(entityEvents));
+      result.groups.push(builder.buildInProgress(appletId, entityEvents));
 
       logInfo = 'building available';
-      result.groups.push(builder.buildAvailable(entityEvents));
+      result.groups.push(builder.buildAvailable(appletId, entityEvents));
 
       logInfo = 'building scheduled';
-      result.groups.push(builder.buildScheduled(entityEvents));
+      result.groups.push(builder.buildScheduled(appletId, entityEvents));
     } catch (error) {
       logger.warn(
         `[ActivityGroupsBuildManager.processInternal]: Build error occurred while ${logInfo}:\n\n${error as never}`,

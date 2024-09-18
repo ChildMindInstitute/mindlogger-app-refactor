@@ -6,6 +6,7 @@ import {
   AppletDetailsDto,
   AppletEventsResponse,
   AppletRespondentMetaDto,
+  AppletAssignmentsResponse,
   toAxiosResponse,
   EventsService,
   AppletsService,
@@ -39,6 +40,13 @@ type CollectAppletDetailsResult = {
   respondentMeta: AppletRespondentMetaDto;
 };
 
+export type CollectAllAppletAssignmentsResult = {
+  appletAssignments: Record<
+    AppletId,
+    AxiosResponse<AppletAssignmentsResponse> | null
+  >;
+};
+
 export interface IRefreshDataCollector {
   collectAppletInternals(
     appletDto: AppletDto,
@@ -46,6 +54,9 @@ export interface IRefreshDataCollector {
   collectAllAppletEvents(
     appletIds: string[],
   ): Promise<CollectAllAppletEventsResult>;
+  collectAllAppletAssignments(
+    appletIds: string[],
+  ): Promise<CollectAllAppletAssignmentsResult>;
 }
 
 class RefreshDataCollector implements IRefreshDataCollector {
@@ -150,6 +161,21 @@ class RefreshDataCollector implements IRefreshDataCollector {
           },
         });
       });
+    }
+
+    return result;
+  }
+
+  public async collectAllAppletAssignments(appletIds: string[]) {
+    const result: CollectAllAppletAssignmentsResult = {
+      appletAssignments: {},
+    };
+
+    for (const appletId of appletIds) {
+      const assignmentResponse = await AppletsService.getAppletAssignments({
+        appletId,
+      });
+      result.appletAssignments[appletId] = assignmentResponse;
     }
 
     return result;

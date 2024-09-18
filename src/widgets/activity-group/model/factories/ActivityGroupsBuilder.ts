@@ -13,9 +13,18 @@ import {
 } from '../../lib';
 
 export interface IActivityGroupsBuilder {
-  buildInProgress: (eventsActivities: Array<EventEntity>) => ActivityListGroup;
-  buildAvailable: (eventsActivities: Array<EventEntity>) => ActivityListGroup;
-  buildScheduled: (eventsActivities: Array<EventEntity>) => ActivityListGroup;
+  buildInProgress: (
+    appletId: string,
+    eventsActivities: Array<EventEntity>,
+  ) => ActivityListGroup;
+  buildAvailable: (
+    appletId: string,
+    eventsActivities: Array<EventEntity>,
+  ) => ActivityListGroup;
+  buildScheduled: (
+    appletId: string,
+    eventsActivities: Array<EventEntity>,
+  ) => ActivityListGroup;
 }
 
 export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
@@ -41,6 +50,7 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 
   public buildInProgress(
+    appletId: string,
     eventsActivities: Array<EventEntity>,
   ): ActivityListGroup {
     const filtered = eventsActivities.filter(x =>
@@ -50,7 +60,10 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     const activityItems: Array<ActivityListItem> = [];
 
     for (const eventActivity of filtered) {
-      const item = this.itemsFactory.createProgressItem(eventActivity);
+      const item = this.itemsFactory.createProgressItem(
+        appletId,
+        eventActivity,
+      );
 
       activityItems.push(item);
     }
@@ -64,7 +77,10 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     return result;
   }
 
-  public buildAvailable(eventsEntities: Array<EventEntity>): ActivityListGroup {
+  public buildAvailable(
+    appletId: string,
+    eventsEntities: Array<EventEntity>,
+  ): ActivityListGroup {
     const inputEntities = eventsEntities.filter(
       x => !this.utility.isInProgress(x.event),
     );
@@ -74,7 +90,10 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     const activityItems: Array<ActivityListItem> = [];
 
     for (const eventActivity of filtered) {
-      const item = this.itemsFactory.createAvailableItem(eventActivity);
+      const item = this.itemsFactory.createAvailableItem(
+        appletId,
+        eventActivity,
+      );
 
       activityItems.push(item);
     }
@@ -88,7 +107,10 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     return result;
   }
 
-  public buildScheduled(eventsEntities: Array<EventEntity>): ActivityListGroup {
+  public buildScheduled(
+    appletId: string,
+    eventsEntities: Array<EventEntity>,
+  ): ActivityListGroup {
     const inputEntities = eventsEntities.filter(
       x => !this.utility.isInProgress(x.event),
     );
@@ -98,7 +120,10 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     const activityItems: Array<ActivityListItem> = [];
 
     for (const eventActivity of filtered) {
-      const item = this.itemsFactory.createScheduledItem(eventActivity);
+      const item = this.itemsFactory.createScheduledItem(
+        appletId,
+        eventActivity,
+      );
 
       activityItems.push(item);
     }

@@ -56,6 +56,8 @@ export const colors = {
   lightGreen: '#35FDB5',
   lightGreen2: '#57ba79',
   yellow: '#FFBD32',
+  lightYellow: '#F2E7B8',
+  dimYellow: '#D6AF35',
   aqua: '#7FF7FF',
   black: '#000',
   red: '#FF0000',

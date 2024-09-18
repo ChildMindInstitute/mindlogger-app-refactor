@@ -30,7 +30,10 @@ export const getAppletDetailsKey = (appletId: string) => [
   { appletId },
 ];
 
-export const getAllEventsKey = () => ['events'] satisfies AppQueryKey;
+export const getAssignmentsKey = (appletId: string) => [
+  'assignments',
+  { appletId },
+];
 
 export const getEventsKey = (appletId: string) => ['events', { appletId }];
 

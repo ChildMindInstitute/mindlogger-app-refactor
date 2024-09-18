@@ -9,7 +9,7 @@ import {
   ActivityStatus,
   ActivityType,
 } from '@entities/activity';
-import { isEntityExpired, MIDNIGHT_DATE } from '@shared/lib';
+import { HourMinute, isEntityExpired, MIDNIGHT_DATE } from '@shared/lib';
 
 import { GroupUtility } from './GroupUtility';
 import {
@@ -67,7 +67,7 @@ export class ListItemsFactory {
     } else {
       activity = this.activities.find(
         x => x.id === activityFlow.activityIds[0],
-      )!;
+      ) as Activity;
 
       item.activityId = activity.id;
       item.name = activity.name;
@@ -79,12 +79,13 @@ export class ListItemsFactory {
     }
   }
 
-  private createListItem(eventActivity: EventEntity) {
+  private createListItem(appletId: string, eventActivity: EventEntity) {
     const { entity, event } = eventActivity;
     const { pipelineType } = eventActivity.entity;
     const isFlow = pipelineType === ActivityPipelineType.Flow;
 
     const item: ActivityListItem = {
+      appletId,
       activityId: isFlow ? '' : entity.id,
       flowId: isFlow ? entity.id : null,
       eventId: event.id,
@@ -105,8 +106,11 @@ export class ListItemsFactory {
     return item;
   }
 
-  public createAvailableItem(eventActivity: EventEntity): ActivityListItem {
-    const item = this.createListItem(eventActivity);
+  public createAvailableItem(
+    appletId: string,
+    eventActivity: EventEntity,
+  ): ActivityListItem {
+    const item = this.createListItem(appletId, eventActivity);
 
     item.status = ActivityStatus.Available;
 
@@ -131,22 +135,25 @@ export class ListItemsFactory {
     return item;
   }
 
-  public createScheduledItem(eventActivity: EventEntity): ActivityListItem {
-    const item = this.createListItem(eventActivity);
+  public createScheduledItem(
+    appletId: string,
+    eventActivity: EventEntity,
+  ): ActivityListItem {
+    const item = this.createListItem(appletId, eventActivity);
 
     item.status = ActivityStatus.Scheduled;
 
     const { event } = eventActivity;
 
     const from = this.utility.getNow();
-    from.setHours(event.availability.timeFrom!.hours);
-    from.setMinutes(event.availability.timeFrom!.minutes);
+    from.setHours((event.availability.timeFrom as HourMinute).hours);
+    from.setMinutes((event.availability.timeFrom as HourMinute).minutes);
 
     const isSpread = this.utility.isSpreadToNextDay(event);
 
     const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday();
-    to.setHours(event.availability.timeTo!.hours);
-    to.setMinutes(event.availability.timeTo!.minutes);
+    to.setHours((event.availability.timeTo as HourMinute).hours);
+    to.setMinutes((event.availability.timeTo as HourMinute).minutes);
 
     item.availableFrom = from;
     item.availableTo = to;
@@ -154,8 +161,11 @@ export class ListItemsFactory {
     return item;
   }
 
-  public createProgressItem(eventActivity: EventEntity): ActivityListItem {
-    const item = this.createListItem(eventActivity);
+  public createProgressItem(
+    appletId: string,
+    eventActivity: EventEntity,
+  ): ActivityListItem {
+    const item = this.createListItem(appletId, eventActivity);
 
     item.status = ActivityStatus.InProgress;
 

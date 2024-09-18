@@ -22,6 +22,7 @@ import RefreshAppletService, {
   IRefreshAppletService,
 } from './RefreshAppletService';
 import RefreshDataCollector, {
+  CollectAllAppletAssignmentsResult,
   CollectAllAppletEventsResult,
   IRefreshDataCollector,
 } from './RefreshDataCollector';
@@ -97,7 +98,6 @@ class RefreshService implements IRefreshService {
     };
 
     let appletsResponse: AxiosResponse<AppletsResponse>;
-
     try {
       this.logger.log(
         '[RefreshService.refreshInternal]: Getting flat list of applets',
@@ -112,8 +112,23 @@ class RefreshService implements IRefreshService {
       return emptyResult;
     }
 
-    let allAppletEvents: CollectAllAppletEventsResult;
+    let allAppletAssignments: CollectAllAppletAssignmentsResult;
+    try {
+      this.logger.log(
+        "[RefreshService.refreshInternal]: Getting all applets' assignments",
+      );
+      allAppletAssignments =
+        await this.refreshDataCollector.collectAllAppletAssignments(
+          appletsResponse.data.result.map(x => x.id),
+        );
+    } catch (error) {
+      this.logger.log(
+        `[RefreshService.refreshInternal]: Error occurred during getting all applet events:\nInternal error:\n\n${error as never}`,
+      );
+      return emptyResult;
+    }
 
+    let allAppletEvents: CollectAllAppletEventsResult;
     try {
       this.logger.log(
         "[RefreshService.refreshInternal]: Getting all applets' events",
@@ -129,7 +144,6 @@ class RefreshService implements IRefreshService {
     }
 
     let appletRemoteCompletions: CollectRemoteCompletionsResult;
-
     try {
       this.logger.log(
         "[RefreshService.refreshInternal]: Getting all applets' remote completions",
@@ -151,6 +165,7 @@ class RefreshService implements IRefreshService {
         await this.refreshAppletService.refreshApplet(
           appletDto,
           allAppletEvents,
+          allAppletAssignments,
           appletRemoteCompletions,
           optimization,
         );

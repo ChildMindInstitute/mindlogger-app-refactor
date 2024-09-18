@@ -1,5 +1,8 @@
-import { useContext, useState } from 'react';
+import { ComponentProps, useCallback, useContext, useState } from 'react';
 
+import { useActivityAssignment } from '@app/entities/activity/lib/hooks/useActivityAssignment';
+import ActivityAssignmentBadge from '@app/entities/activity/ui/ActivityAssignmentBadge';
+import ActivityAssignmentBanner from '@app/entities/activity/ui/ActivityAssignmentBanner';
 import {
   Box,
   GeolocationItem,
@@ -16,12 +19,17 @@ import {
   StackedRadiosItem,
   StackedSlider,
   ParagraphText,
+  XStack,
 } from '@app/shared/ui';
 import { HandlersContext } from '@app/shared/ui';
 import { AbTest } from '@entities/abTrail';
 import { useAppletStreamingDetails } from '@entities/applet/lib/hooks';
 import { DrawingTest } from '@entities/drawer';
-import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
+import {
+  FlankerGameResponse,
+  HtmlFlanker,
+  NativeIosFlanker,
+} from '@entities/flanker';
 import { StabilityTracker } from '@entities/stabilityTracker';
 import {
   Dimensions,
@@ -67,7 +75,13 @@ function ActivityItem({
   onContextChange,
   context,
 }: Props) {
-  const { appletId } = useContext(ActivityIdentityContext);
+  const { appletId, activityId, flowId } = useContext(ActivityIdentityContext);
+  const { assignment } = useActivityAssignment({
+    appletId,
+    activityId,
+    activityFlowId: flowId,
+  });
+
   const streamingDetails = useAppletStreamingDetails(appletId);
 
   const initialScrollEnabled = type !== 'StabilityTracker' && type !== 'AbTest';
@@ -96,7 +110,7 @@ function ActivityItem({
 
   const releaseScrolling = () => setScrollEnabled(true);
 
-  function moveToNextItem() {
+  const moveToNextItem = useCallback(() => {
     const isRadioItem = pipelineItem.type === 'Radio';
     const autoAdvanceDisabled =
       isRadioItem && !pipelineItem.payload.autoAdvance;
@@ -107,7 +121,36 @@ function ActivityItem({
         next({ isForced: true, shouldAutoSubmit: shouldAutoSubmit }),
       );
     }
-  }
+  }, [next, pipelineItem]);
+
+  const handleStabilityTrackerComplete = useCallback<
+    ComponentProps<typeof StabilityTracker>['onComplete']
+  >(
+    response => {
+      onResponse(response);
+      moveToNextItem();
+    },
+    [moveToNextItem, onResponse],
+  );
+
+  const handleFlankerResult = useCallback<(data: FlankerGameResponse) => void>(
+    data => {
+      onResponse(data);
+      moveToNextItem();
+    },
+    [moveToNextItem, onResponse],
+  );
+
+  const handleRadioChange = useCallback<
+    ComponentProps<typeof RadioActivityItem>['onChange']
+  >(
+    async radioValue => {
+      await wait(100);
+      onResponse(radioValue);
+      moveToNextItem();
+    },
+    [moveToNextItem, onResponse],
+  );
 
   switch (type) {
     case 'Splash':
@@ -135,10 +178,7 @@ function ActivityItem({
         <Box flex={1}>
           <StabilityTracker
             config={pipelineItem.payload}
-            onComplete={response => {
-              onResponse(response);
-              moveToNextItem();
-            }}
+            onComplete={handleStabilityTrackerComplete}
             onMaxLambdaChange={onContextChange}
             maxLambda={context?.maxLambda as number}
             onLog={processLiveEvent}
@@ -171,19 +211,13 @@ function ActivityItem({
       item = IS_ANDROID ? (
         <HtmlFlanker
           configuration={pipelineItem.payload}
-          onResult={data => {
-            onResponse(data);
-            moveToNextItem();
-          }}
+          onResult={handleFlankerResult}
           onLog={processLiveEvent}
         />
       ) : (
         <NativeIosFlanker
           configuration={pipelineItem.payload}
-          onResult={data => {
-            onResponse(data);
-            moveToNextItem();
-          }}
+          onResult={handleFlankerResult}
           onLog={processLiveEvent}
         />
       );
@@ -340,11 +374,7 @@ function ActivityItem({
         <Box mx={16}>
           <RadioActivityItem
             config={pipelineItem.payload}
-            onChange={async radioValue => {
-              await wait(100);
-              onResponse(radioValue);
-              moveToNextItem();
-            }}
+            onChange={handleRadioChange}
             initialValue={value?.answer}
             textReplacer={textVariableReplacer}
           />
@@ -391,6 +421,24 @@ function ActivityItem({
 
   return (
     <ScrollableContent scrollEnabled={scrollEnabled} scrollEventThrottle={100}>
+      {assignment &&
+        assignment.respondent.id !== assignment.target.id &&
+        (() => {
+          // TODO: Move this to the "welcome" screen.
+          //       See: https://mindlogger.atlassian.net/browse/M2-7917
+          // THIS IS NOT WHERE `<ActivityAssignmentBanner />` SHOULD GO!
+          // The mobile app currently doesn't have a "welcome" screen like the
+          // web app does, so the banner is rendered here (but disabled) for
+          // demonstration purposes.
+          // If you just want to see what the banner looks like, change the
+          // line below to `return true`.
+          return false;
+        })() && (
+          <ActivityAssignmentBanner
+            assignment={assignment}
+            accessibilityLabel="item_display_assignment_banner"
+          />
+        )}
       <Box
         flex={1}
         justifyContent="center"
@@ -400,6 +448,16 @@ function ActivityItem({
           }
         }}
       >
+        {assignment && assignment.respondent.id !== assignment.target.id && (
+          <XStack mx={16} mb={12}>
+            <ActivityAssignmentBadge
+              assignment={assignment}
+              accessibilityLabel="item_display_assignment"
+            />
+            <Box flexGrow={1} flexShrink={1} />
+          </XStack>
+        )}
+
         {question && (
           <Box mx={16} mb={20}>
             <MarkdownMessage

@@ -1,6 +1,7 @@
 import { HourMinute } from '@app/shared/lib';
 
 export type ActivityListItem = {
+  appletId: string;
   activityId: string;
   flowId: string | null;
   eventId: string;

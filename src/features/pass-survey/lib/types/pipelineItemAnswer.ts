@@ -33,7 +33,7 @@ export type PipelineItemAnswerBase = {
   };
 };
 
-interface SplashPipelineAnswer extends PipelineItemAnswerBase {
+export interface SplashPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Splash';
   value: {
     answer: null;
@@ -41,7 +41,7 @@ interface SplashPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface ParagraphTextPipelineAnswer extends PipelineItemAnswerBase {
+export interface ParagraphTextPipelineAnswer extends PipelineItemAnswerBase {
   type: 'ParagraphText';
   value: {
     answer?: ParagraphTextResponse;
@@ -49,7 +49,7 @@ interface ParagraphTextPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface TextInputPipelineAnswer extends PipelineItemAnswerBase {
+export interface TextInputPipelineAnswer extends PipelineItemAnswerBase {
   type: 'TextInput';
   value: {
     answer?: TextInputResponse;
@@ -57,7 +57,7 @@ interface TextInputPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface AbTestPipelineAnswer extends PipelineItemAnswerBase {
+export interface AbTestPipelineAnswer extends PipelineItemAnswerBase {
   type: 'AbTest';
   value: {
     answer?: AbTestResponse;
@@ -65,7 +65,7 @@ interface AbTestPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface StabilityTrackerPipelineAnswer extends PipelineItemAnswerBase {
+export interface StabilityTrackerPipelineAnswer extends PipelineItemAnswerBase {
   type: 'StabilityTracker';
   value: {
     answer?: StabilityTrackerResponse;
@@ -73,7 +73,7 @@ interface StabilityTrackerPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface DrawingTestPipelineAnswer extends PipelineItemAnswerBase {
+export interface DrawingTestPipelineAnswer extends PipelineItemAnswerBase {
   type: 'DrawingTest';
   value: {
     answer?: DrawingTestResponse;
@@ -81,7 +81,7 @@ interface DrawingTestPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface FlankerPipelineAnswer extends PipelineItemAnswerBase {
+export interface FlankerPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Flanker';
   value: {
     answer?: FlankerResponse;
@@ -89,7 +89,7 @@ interface FlankerPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface SliderPipelineAnswer extends PipelineItemAnswerBase {
+export interface SliderPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Slider';
   value: {
     answer?: SliderResponse;
@@ -97,7 +97,7 @@ interface SliderPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface NumberSelectPipelineAnswer extends PipelineItemAnswerBase {
+export interface NumberSelectPipelineAnswer extends PipelineItemAnswerBase {
   type: 'NumberSelect';
   value: {
     answer?: NumberSelectResponse;
@@ -105,7 +105,7 @@ interface NumberSelectPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface CheckboxPipelineAnswer extends PipelineItemAnswerBase {
+export interface CheckboxPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Checkbox';
   value: {
     answer?: CheckboxResponse;
@@ -113,7 +113,7 @@ interface CheckboxPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface AudioPipelineAnswer extends PipelineItemAnswerBase {
+export interface AudioPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Audio';
   value: {
     answer?: AudioResponse;
@@ -121,7 +121,7 @@ interface AudioPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface MessagePipelineAnswer extends PipelineItemAnswerBase {
+export interface MessagePipelineAnswer extends PipelineItemAnswerBase {
   type: 'Message';
   value: {
     answer: null;
@@ -129,7 +129,7 @@ interface MessagePipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface StackedSliderPipelineAnswer extends PipelineItemAnswerBase {
+export interface StackedSliderPipelineAnswer extends PipelineItemAnswerBase {
   type: 'StackedSlider';
   value: {
     answer?: StackedSliderResponse;
@@ -137,7 +137,7 @@ interface StackedSliderPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface StackedCheckboxPipelineAnswer extends PipelineItemAnswerBase {
+export interface StackedCheckboxPipelineAnswer extends PipelineItemAnswerBase {
   type: 'StackedCheckbox';
   value: {
     answer?: StackedCheckboxResponse;
@@ -145,7 +145,7 @@ interface StackedCheckboxPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface StackedRadioPipelineAnswer extends PipelineItemAnswerBase {
+export interface StackedRadioPipelineAnswer extends PipelineItemAnswerBase {
   type: 'StackedRadio';
   value: {
     answer?: StackedRadioResponse; // @todo check with BE
@@ -153,7 +153,7 @@ interface StackedRadioPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface AudioPlayerPipelineAnswer extends PipelineItemAnswerBase {
+export interface AudioPlayerPipelineAnswer extends PipelineItemAnswerBase {
   type: 'AudioPlayer';
   value: {
     answer?: AudioPlayerResponse;
@@ -161,7 +161,7 @@ interface AudioPlayerPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface TimeRangePipelineAnswer extends PipelineItemAnswerBase {
+export interface TimeRangePipelineAnswer extends PipelineItemAnswerBase {
   type: 'TimeRange';
   value: {
     answer?: TimeRangeResponse;
@@ -169,7 +169,7 @@ interface TimeRangePipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface RadioPipelineAnswer extends PipelineItemAnswerBase {
+export interface RadioPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Radio';
   value: {
     answer?: RadioResponse;
@@ -177,7 +177,7 @@ interface RadioPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface GeolocationPipelineAnswer extends PipelineItemAnswerBase {
+export interface GeolocationPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Geolocation';
   value: {
     answer?: Coordinates;
@@ -185,14 +185,15 @@ interface GeolocationPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface DatePipelineAnswer extends PipelineItemAnswerBase {
+export interface DatePipelineAnswer extends PipelineItemAnswerBase {
   type: 'Date';
   value: {
     answer?: DateResponse;
     additionalAnswer?: string;
   };
 }
-interface PhotoPipelineAnswer extends PipelineItemAnswerBase {
+
+export interface PhotoPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Photo';
   value: {
     answer?: PhotoResponse;
@@ -200,7 +201,7 @@ interface PhotoPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface VideoPipelineAnswer extends PipelineItemAnswerBase {
+export interface VideoPipelineAnswer extends PipelineItemAnswerBase {
   type: 'Video';
   value: {
     answer?: VideoResponse;
@@ -208,7 +209,7 @@ interface VideoPipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-interface TimePipelineAnswer extends PipelineItemAnswerBase {
+export interface TimePipelineAnswer extends PipelineItemAnswerBase {
   type: 'Time';
   value: {
     answer?: TimeResponse;

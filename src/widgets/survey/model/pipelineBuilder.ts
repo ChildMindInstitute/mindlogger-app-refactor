@@ -17,6 +17,7 @@ export interface StepperPipelineItem extends FlowPipelineItemBase {
     activityDescription: string;
     activityImage: string | null;
     eventId: string;
+    flowId?: string;
     order: number;
   };
 }
@@ -102,6 +103,7 @@ export function buildActivityFlowPipeline({
       type: 'Stepper',
       payload: {
         ...payload,
+        flowId,
         activityDescription: activities[i].description,
         activityImage: activities[i].image,
       },

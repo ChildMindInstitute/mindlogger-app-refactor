@@ -108,6 +108,37 @@ export type AppletAndActivitiesDetailsResponse = {
   };
 };
 
+type AppletAssignmentsRequest = {
+  appletId: string;
+};
+
+export type AssignmentParticipantDto = {
+  id: string;
+  appletId: string;
+  userId: string | null;
+  secretUserId: string;
+  firstName: string;
+  lastName: string;
+  nickname: string;
+  tag: string;
+  lastSeen: string | null;
+};
+
+export type AssignmentDto = {
+  id: string;
+  activityId: string | null;
+  activityFlowId: string | null;
+  respondentSubject: AssignmentParticipantDto;
+  targetSubject: AssignmentParticipantDto;
+};
+
+export type AppletAssignmentsResponse = {
+  result: {
+    appletId: string;
+    assignments: AssignmentDto[];
+  };
+};
+
 function appletsService() {
   return {
     getApplets() {
@@ -129,6 +160,14 @@ function appletsService() {
       const apiCall = () => {
         return httpService.get<AppletAndActivitiesDetailsResponse>(
           `/activities/applet/${request.appletId}`,
+        );
+      };
+      return callApiWithRetry(withDataExtraction(apiCall));
+    },
+    getAppletAssignments(request: AppletAssignmentsRequest) {
+      const apiCall = () => {
+        return httpService.get<AppletAssignmentsResponse>(
+          `/users/me/assignments/${request.appletId}`,
         );
       };
       return callApiWithRetry(withDataExtraction(apiCall));
