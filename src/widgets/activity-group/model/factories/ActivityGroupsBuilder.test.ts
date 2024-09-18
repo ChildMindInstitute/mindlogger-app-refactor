@@ -109,6 +109,7 @@ const getScheduledSection = (): EventAvailability => {
 
 const getExpectedItem = (): ActivityListItem => {
   const expectedItem: ActivityListItem = {
+    appletId: 'test-applet-id-1',
     activityId: 'test-entity-id-1',
     flowId: null,
     eventId: 'test-event-id-1',
@@ -243,7 +244,7 @@ describe('ActivityGroupsBuilder', () => {
         scheduledAt: startAt,
       });
 
-      const result = builder.buildInProgress([eventEntity]);
+      const result = builder.buildInProgress(input.appletId, [eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedInProgressItem();
       expectedItem.availableTo = undefined;
@@ -275,7 +276,7 @@ describe('ActivityGroupsBuilder', () => {
         scheduledAt: startAt,
       });
 
-      const result = builder.buildInProgress([eventEntity]);
+      const result = builder.buildInProgress(input.appletId, [eventEntity]);
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:in_progress',
@@ -303,7 +304,7 @@ describe('ActivityGroupsBuilder', () => {
         scheduledAt: startAt,
       });
 
-      const result = builder.buildInProgress([eventEntity]);
+      const result = builder.buildInProgress(input.appletId, [eventEntity]);
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:in_progress',
@@ -335,7 +336,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, addDays(date, 10));
 
-      const result = builder.buildInProgress([eventEntity]);
+      const result = builder.buildInProgress(input.appletId, [eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedInProgressItem();
 
@@ -375,7 +376,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, mockedNowDate);
 
-      const result = builder.buildInProgress([eventEntity]);
+      const result = builder.buildInProgress(input.appletId, [eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedInProgressItem();
       expectedItem.isTimerSet = true;
@@ -418,7 +419,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, mockedNowDate);
 
-      const result = builder.buildInProgress([eventEntity]);
+      const result = builder.buildInProgress(input.appletId, [eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedInProgressItem();
       expectedItem.isTimerSet = true;
@@ -461,7 +462,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, mockedNowDate);
 
-      const result = builder.buildInProgress([eventEntity]);
+      const result = builder.buildInProgress(input.appletId, [eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedInProgressItem();
       expectedItem.isTimerSet = true;
@@ -503,7 +504,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, now);
 
-      const result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedAvailableItem();
       expectedItem.availableTo = MIDNIGHT_DATE;
@@ -541,7 +542,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, now);
 
-      const result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedAvailableItem();
       expectedItem.availableTo = MIDNIGHT_DATE;
@@ -579,7 +580,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, now);
 
-      const result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:available',
@@ -625,7 +626,7 @@ describe('ActivityGroupsBuilder', () => {
 
         mockGetNow(builder, new Date(now));
 
-        const result = builder.buildAvailable([eventEntity]);
+        const result = builder.buildAvailable(input.appletId, [eventEntity]);
 
         const expectedItem = getExpectedAvailableItem();
         expectedItem.availableTo = new Date(startOfDay(scheduledAt));
@@ -672,7 +673,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, new Date(now));
 
-      let result = builder.buildAvailable([eventEntity]);
+      let result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       const expectedItem = getExpectedAvailableItem();
       expectedItem.availableTo = new Date(startOfDay(scheduledAt));
@@ -685,7 +686,7 @@ describe('ActivityGroupsBuilder', () => {
         activities: [],
       };
 
-      result = builder.buildAvailable([eventEntity]);
+      result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       expect(result).toEqual(expectedEmptyResult);
     });
@@ -720,7 +721,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, new Date(now));
 
-      const result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       const expectedItem = getExpectedAvailableItem();
       expectedItem.availableTo = new Date(startOfDay(scheduledAt));
@@ -769,7 +770,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, new Date(now));
 
-      const result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       const expectedItem = getExpectedAvailableItem();
       expectedItem.availableTo = new Date(startOfDay(scheduledAt));
@@ -813,7 +814,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, new Date(now));
 
-      const result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:available',
@@ -858,7 +859,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, new Date(now));
 
-      const result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable(input.appletId, [eventEntity]);
       expect(result).toEqual(expectedResult);
     });
 
@@ -899,7 +900,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, new Date(now));
 
-      const result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable(input.appletId, [eventEntity]);
       expect(result).toEqual(expectedResult);
     });
 
@@ -947,7 +948,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, new Date(now));
 
-      const result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable(input.appletId, [eventEntity]);
       expect(result).toEqual(expectedResult);
     });
 
@@ -995,7 +996,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, new Date(now));
 
-      const result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable(input.appletId, [eventEntity]);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1034,7 +1035,7 @@ describe('ActivityGroupsBuilder', () => {
 
         mockGetNow(builder, new Date(now));
 
-        const result = builder.buildAvailable([eventEntity]);
+        const result = builder.buildAvailable(input.appletId, [eventEntity]);
 
         const expectedItem = getExpectedAvailableItem();
         expectedItem.availableTo = new Date(startOfDay(scheduledAt));
@@ -1081,7 +1082,7 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.startDate = addMonths(now, 2);
       eventEntity.event.availability.endDate = addMonths(now, 3);
 
-      let result = builder.buildAvailable([eventEntity]);
+      let result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       const expectedEmptyResult: ActivityListGroup = {
         name: 'additional:available',
@@ -1089,7 +1090,7 @@ describe('ActivityGroupsBuilder', () => {
         activities: [],
       };
 
-      result = builder.buildAvailable([eventEntity]);
+      result = builder.buildAvailable(input.appletId, [eventEntity]);
       expect(result).toEqual(expectedEmptyResult);
     });
 
@@ -1123,7 +1124,7 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.startDate = subMonths(now, 3);
       eventEntity.event.availability.endDate = subMonths(now, 2);
 
-      let result = builder.buildAvailable([eventEntity]);
+      let result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       const expectedItem = getExpectedAvailableItem();
       expectedItem.availableTo = new Date(startOfDay(scheduledAt));
@@ -1136,7 +1137,7 @@ describe('ActivityGroupsBuilder', () => {
         activities: [],
       };
 
-      result = builder.buildAvailable([eventEntity]);
+      result = builder.buildAvailable(input.appletId, [eventEntity]);
       expect(result).toEqual(expectedEmptyResult);
     });
 
@@ -1173,7 +1174,7 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.startDate = subMonths(now, 2);
       eventEntity.event.availability.endDate = addMonths(now, 2);
 
-      let result = builder.buildAvailable([eventEntity]);
+      let result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       const expectedItem = getExpectedAvailableItem();
       expectedItem.availableTo = new Date(startOfDay(scheduledAt));
@@ -1186,7 +1187,7 @@ describe('ActivityGroupsBuilder', () => {
         activities: [expectedItem],
       };
 
-      result = builder.buildAvailable([eventEntity]);
+      result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       expect(result).toEqual(expectedResult);
     });
@@ -1219,7 +1220,7 @@ describe('ActivityGroupsBuilder', () => {
 
       mockGetNow(builder, new Date(now));
 
-      const result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:available',
@@ -1261,7 +1262,7 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.timeFrom = { hours: 15, minutes: 0 };
       eventEntity.event.availability.timeTo = { hours: 16, minutes: 30 };
 
-      const result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:available',
@@ -1306,7 +1307,7 @@ describe('ActivityGroupsBuilder', () => {
         activities: [],
       };
 
-      const result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable(input.appletId, [eventEntity]);
 
       expect(result).toEqual(expectedResult);
     });
@@ -1348,7 +1349,7 @@ describe('ActivityGroupsBuilder', () => {
 
         mockGetNow(builder, new Date(now));
 
-        const result = builder.buildScheduled([eventEntity]);
+        const result = builder.buildScheduled(input.appletId, [eventEntity]);
 
         const expectedItem: ActivityListItem = getExpectedScheduledItem();
         expectedItem.availableFrom = startOfDay(scheduledAt);
@@ -1397,7 +1398,7 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.startDate = addMonths(now, 2);
       eventEntity.event.availability.endDate = addMonths(now, 3);
 
-      let result = builder.buildScheduled([eventEntity]);
+      let result = builder.buildScheduled(input.appletId, [eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedScheduledItem();
       expectedItem.availableFrom = startOfDay(scheduledAt);
@@ -1412,7 +1413,7 @@ describe('ActivityGroupsBuilder', () => {
         activities: [],
       };
 
-      result = builder.buildScheduled([eventEntity]);
+      result = builder.buildScheduled(input.appletId, [eventEntity]);
 
       expect(result).toEqual(expectedEmptyResult);
     });
@@ -1447,7 +1448,7 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.startDate = subMonths(now, 3);
       eventEntity.event.availability.endDate = subMonths(now, 2);
 
-      let result = builder.buildScheduled([eventEntity]);
+      let result = builder.buildScheduled(input.appletId, [eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedScheduledItem();
       expectedItem.availableFrom = startOfDay(scheduledAt);
@@ -1462,7 +1463,7 @@ describe('ActivityGroupsBuilder', () => {
         activities: [],
       };
 
-      result = builder.buildScheduled([eventEntity]);
+      result = builder.buildScheduled(input.appletId, [eventEntity]);
 
       expect(result).toEqual(expectedEmptyResult);
     });
@@ -1495,7 +1496,7 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.timeFrom = { hours: 15, minutes: 0 };
       eventEntity.event.availability.timeTo = { hours: 16, minutes: 30 };
 
-      let result = builder.buildScheduled([eventEntity]);
+      let result = builder.buildScheduled(input.appletId, [eventEntity]);
 
       const expectedItem: ActivityListItem = getExpectedScheduledItem();
       expectedItem.availableFrom = startOfDay(scheduledAt);
@@ -1528,7 +1529,7 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.startDate = subMonths(now, 2);
       eventEntity.event.availability.endDate = addMonths(now, 2);
 
-      result = builder.buildScheduled([eventEntity]);
+      result = builder.buildScheduled(input.appletId, [eventEntity]);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1560,7 +1561,7 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.timeFrom = { hours: 15, minutes: 0 };
       eventEntity.event.availability.timeTo = { hours: 16, minutes: 30 };
 
-      const result = builder.buildScheduled([eventEntity]);
+      const result = builder.buildScheduled(input.appletId, [eventEntity]);
 
       const expectedResult: ActivityListGroup = {
         name: 'additional:scheduled',
@@ -1608,7 +1609,7 @@ describe('ActivityGroupsBuilder', () => {
         activities: [],
       };
 
-      const result = builder.buildScheduled([eventEntity]);
+      const result = builder.buildScheduled(input.appletId, [eventEntity]);
 
       expect(result).toEqual(expectedResult);
     });
@@ -1695,11 +1696,12 @@ describe('ActivityGroupsBuilder', () => {
         },
       };
 
-      let result = builder.buildInProgress([eventEntity]);
+      let result = builder.buildInProgress(input.appletId, [eventEntity]);
 
       let expectedResult: ActivityListGroup = {
         activities: [
           {
+            appletId: input.appletId,
             activityId: 'test-id-1',
             flowId: 'test-flow-id-1',
             eventId: 'test-event-id-1',
@@ -1737,11 +1739,12 @@ describe('ActivityGroupsBuilder', () => {
       progressRecord.pipelineActivityOrder = 1;
       activityFlow.hideBadge = true;
 
-      result = builder.buildInProgress([eventEntity]);
+      result = builder.buildInProgress(input.appletId, [eventEntity]);
 
       expectedResult = {
         activities: [
           {
+            appletId: input.appletId,
             activityId: 'test-id-2',
             flowId: 'test-flow-id-1',
             eventId: 'test-event-id-1',

@@ -1,4 +1,20 @@
-import { Answer, PipelineItem, UserAction } from '@features/pass-survey';
+import {
+  CheckboxPipelineAnswer,
+  DatePipelineAnswer,
+  GeolocationPipelineAnswer,
+  NumberSelectPipelineAnswer,
+  PipelineItem,
+  RadioPipelineAnswer,
+  SliderPipelineAnswer,
+  StackedCheckboxPipelineAnswer,
+  StackedRadioPipelineAnswer,
+  StackedSliderPipelineAnswer,
+  TextInputPipelineAnswer,
+  TimePipelineAnswer,
+  TimeRangePipelineAnswer,
+  UserAction,
+  VideoPipelineAnswer,
+} from '@features/pass-survey';
 
 export const textInput: PipelineItem = {
   type: 'TextInput',
@@ -329,9 +345,9 @@ export const numberSelectInput: PipelineItem = {
   timer: null,
 };
 
-export const textAnswer: Answer = { answer: 'kkkkk' };
+export const textAnswer: TextInputPipelineAnswer['value'] = { answer: 'kkkkk' };
 
-export const radioAnswer: Answer = {
+export const radioAnswer: RadioPipelineAnswer['value'] = {
   answer: {
     id: '1',
     text: 'three',
@@ -344,12 +360,12 @@ export const radioAnswer: Answer = {
   },
 };
 
-export const additionalAnswer: Answer = {
+export const additionalAnswer: RadioPipelineAnswer['value'] = {
   ...radioAnswer,
   additionalAnswer: 'Additional',
 };
 
-export const checkboxAnswer: Answer = {
+export const checkboxAnswer: CheckboxPipelineAnswer['value'] = {
   answer: [
     {
       id: '93a18325-d6e3-4aea-b8c9-ff71e5f1d6c9',
@@ -376,15 +392,19 @@ export const checkboxAnswer: Answer = {
   ],
 };
 
-export const numberSelectAnswer: Answer = { answer: '2' };
+export const numberSelectAnswer: NumberSelectPipelineAnswer['value'] = {
+  answer: '2',
+};
 
-export const sliderAnswer: Answer = { answer: 4 };
+export const sliderAnswer: SliderPipelineAnswer['value'] = { answer: 4 };
 
-export const dateAnswer: Answer = { answer: '2020-12-12' };
+export const dateAnswer: DatePipelineAnswer['value'] = { answer: '2020-12-12' };
 
-export const timeAnswer: Answer = { answer: { hours: 22, minutes: 22 } };
+export const timeAnswer: TimePipelineAnswer['value'] = {
+  answer: { hours: 22, minutes: 22 },
+};
 
-export const timeRangeAnswer: Answer = {
+export const timeRangeAnswer: TimeRangePipelineAnswer['value'] = {
   answer: {
     startTime: {
       hours: 22,
@@ -397,32 +417,26 @@ export const timeRangeAnswer: Answer = {
   },
 };
 
-export const geoAnswer: Answer = {
+export const geoAnswer: GeolocationPipelineAnswer['value'] = {
   answer: {
     latitude: 1,
     longitude: 2,
   },
 };
 
-export const stackedRadioAnswer: Answer = {
+export const stackedRadioAnswer: StackedRadioPipelineAnswer['value'] = {
   answer: [
-    // @ts-ignore
     {
       id: '1',
       text: 'One',
-      color: null,
-      isHidden: false,
       tooltip: null,
       image: null,
-      score: null,
-      value: 1,
-      // @ts-ignore
       rowId: '1',
     },
   ],
 };
 
-export const stackedCheckboxAnswer: Answer = {
+export const stackedCheckboxAnswer: StackedCheckboxPipelineAnswer['value'] = {
   answer: [
     [
       {
@@ -432,11 +446,11 @@ export const stackedCheckboxAnswer: Answer = {
         tooltip: '',
       },
     ],
-    null,
-  ] as Answer['answer'],
+    null as never,
+  ],
 };
 
-export const stackedSliderAnswer: Answer = {
+export const stackedSliderAnswer: StackedSliderPipelineAnswer['value'] = {
   answer: [1, 9],
 };
 
@@ -446,7 +460,7 @@ const mediaFile = {
   fileName: 'some-name.mp4',
 };
 
-export const mediaAnswer: Answer = {
+export const mediaAnswer: VideoPipelineAnswer['value'] = {
   answer: {
     size: 100,
     fromLibrary: true,

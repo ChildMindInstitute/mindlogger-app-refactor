@@ -23,6 +23,7 @@ for (let i = 0; i < 3; i++) {
 
   for (let j = 0; j < 5; j++) {
     activities.push({
+      appletId: `applet-${(i * 100 + j).toString()}`,
       activityId: (i * 100 + j).toString(),
       eventId: '',
       flowId: '',
@@ -31,10 +32,8 @@ for (let i = 0; i < 3; i++) {
       type: ActivityType.NotDefined,
       image: null,
       //'https://raw.githubusercontent.com/mtg137/Stability_tracker_applet/master/protocols/stability/mindlogger-logo.png',
-      name: 'Activity name ' + (j + 1),
-      description:
-        'Description of item A Description of item B i i i i i i i Description of item Description of item Description of item ' +
-        j,
+      name: `Activity name ${j + 1}`,
+      description: `Description of item A Description of item B i i i i i i i Description of item Description of item Description of item ${j}`,
       isTimerSet: true,
       status: ActivityStatus.Scheduled,
       availableFrom: new Date(),
