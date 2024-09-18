@@ -98,7 +98,7 @@ const useUploadProgress = (): UseUploadProgressResult => {
   }
 
   useEffect(() => {
-    const onProgressChange = async () => {
+    const onProgressChange = () => {
       update();
     };
 
