@@ -5,14 +5,14 @@ import {
   getUnixTime,
   subMonths,
 } from 'date-fns';
-import { enGB, fr } from 'date-fns/locale';
+import { enGB, fr, el } from 'date-fns/locale';
 import i18n from 'i18next';
 
 import { getTwoDigits, range } from './common';
 import { MINUTES_IN_HOUR, MS_IN_MINUTE, MS_IN_SECOND } from '../constants';
 import { HourMinute, DayMonthYear, type Language } from '../types';
 
-const dateFnsLocales = { fr, en: enGB };
+const dateFnsLocales = { fr, en: enGB, el };
 
 export const getMsFromHours = (hours: number): number => {
   return hours * (MINUTES_IN_HOUR * MS_IN_MINUTE);

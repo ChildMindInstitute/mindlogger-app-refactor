@@ -203,9 +203,9 @@
     "password_at_least_characters": "Password must be at least 6 characters"
   },
   "login_form": {
-    "login": "Log In",
-    "email_placeholder": "Email",
-    "password": "Password"
+    "login": "Συνδεθείτε",
+    "email_placeholder": "E-mail",
+    "password": "Σύνθημα"
   },
   "logout_warning": {
     "warning": "Logout Warning",
