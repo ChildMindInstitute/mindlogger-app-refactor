@@ -420,7 +420,7 @@ export function ActivityItem({
     case 'Unity':
       item = (
         <Box flex={1}>
-          <UnityView config={pipelineItem.payload} />
+          <UnityView config={pipelineItem.payload} title={pipelineItem.id} />
         </Box>
       );
       break;
