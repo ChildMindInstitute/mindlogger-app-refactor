@@ -2,6 +2,8 @@ import { FC, useEffect, useRef } from 'react';
 
 import UnityView from '@azesmway/react-native-unity';
 
+import { useBanner } from '@app/shared/lib';
+
 import { UnityProps } from './types';
 
 interface IMessage {
@@ -12,18 +14,26 @@ interface IMessage {
 
 const Unity: FC<UnityProps> = ({ title, config }) => {
   const unityRef = useRef<UnityView>(null);
+  const banner = useBanner();
 
   useEffect(() => {
     if (unityRef.current) {
       const message: IMessage = {
-        gameObject: 'gameObject',
-        methodName: 'methodName',
-        message: 'message',
+        gameObject: 'BodyTxt - TestRecievingMessageReactLong',
+        methodName: 'DisplayReactMessage',
+        message: title || 'Hello World!',
       };
-      unityRef.current.postMessage(
-        message.gameObject,
+      setTimeout(() => {
+        unityRef.current?.postMessage(
+          message.gameObject,
+          message.methodName,
+          message.message,
+        );
+      }, 500);
+      unityRef.current?.postMessage(
+        'BodyTxt_React',
         message.methodName,
-        message.message,
+        'Hello World',
       );
     }
   }, []);
@@ -33,7 +43,10 @@ const Unity: FC<UnityProps> = ({ title, config }) => {
       ref={unityRef}
       style={{ flex: 1 }}
       onUnityMessage={(result: any) => {
-        console.log('onUnityMessage', result?.nativeEvent.message);
+        banner.show(result?.nativeEvent.message, {
+          type: 'success',
+          visibilityTime: 5000,
+        });
       }}
     />
   );
