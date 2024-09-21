@@ -15,6 +15,15 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
   const pipeline: PipelineItem[] = filterHiddenItems(activity.items)
     .map((item, index) => {
       switch (item.inputType) {
+        case 'Unity': {
+          return {
+            id: item.id,
+            payload: item.config,
+            type: item.inputType,
+            timer: null,
+          } satisfies PipelineItem;
+        }
+
         case 'AbTrails': {
           return getAbTrailsPipeline(
             item.id,
