@@ -18,7 +18,7 @@ type Result = {
 };
 
 const createMediaFilesCleaner = (): Result => {
-  const cleanUpByStorageKey = async (key: string) => {
+  const promisedCleanUpByStorageKey = async (key: string) => {
     const storageActivityState = activityStorage.getString(key);
 
     if (!storageActivityState) {
@@ -55,20 +55,22 @@ const createMediaFilesCleaner = (): Result => {
     Logger.info('[MediaFilesCleaner.cleanUp]: completed');
   };
 
-  const cleanUp = async ({
+  const promisedCleanUp = async ({
     appletId,
     activityId,
     eventId,
+    targetSubjectId,
     order,
   }: ActivityRecordKeyParams) => {
-    const key = `${appletId}-${activityId}-${eventId}-${order}`;
+    const key = `${appletId}-${activityId}-${eventId}-${targetSubjectId || 'NULL'}-${order}`;
 
-    return cleanUpByStorageKey(key);
+    return promisedCleanUpByStorageKey(key);
   };
 
-  const cleanUpByAnswers = async (answers: AnswerDto[]) => {
+  const promisedCleanUpByAnswers = async (answers: AnswerDto[]) => {
     try {
-      answers.filter(Boolean).forEach(async answer => {
+      const nonNilAnswers = answers.filter(Boolean);
+      for (const answer of nonNilAnswers) {
         const { value: answerValue } = answer as ObjectAnswerDto;
 
         const mediaValue = answerValue as MediaValue;
@@ -82,13 +84,25 @@ const createMediaFilesCleaner = (): Result => {
             console.info('[MediaFilesCleaner.cleanUp]: completed');
           }
         }
-      });
+      }
     } catch (error) {
       console.warn(
         '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',
         error,
       );
     }
+  };
+
+  const cleanUp = (param: ActivityRecordKeyParams) => {
+    promisedCleanUp(param).catch(console.error);
+  };
+
+  const cleanUpByStorageKey = (key: string) => {
+    promisedCleanUpByStorageKey(key).catch(console.error);
+  };
+
+  const cleanUpByAnswers = (answers: AnswerDto[]) => {
+    promisedCleanUpByAnswers(answers).catch(console.error);
   };
 
   return {

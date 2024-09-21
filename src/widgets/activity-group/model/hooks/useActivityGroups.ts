@@ -20,13 +20,13 @@ export const useActivityGroups = (
 
   const queryClient = useQueryClient();
 
-  const entitiesProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
+  const entityProgressions = useAppSelector(
+    AppletModel.selectors.selectAppletsEntityProgressions,
   );
 
   const groupsResult = ActivityGroupsBuildManager.process(
     appletId,
-    entitiesProgress,
+    entityProgressions,
     queryClient,
   );
 

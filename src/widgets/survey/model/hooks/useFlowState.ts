@@ -11,13 +11,20 @@ export type UseFlowStateArgs = {
   appletId: string;
   eventId: string;
   flowId?: string;
+  targetSubjectId: string | null;
 };
 
-export function useFlowState({ appletId, eventId, flowId }: UseFlowStateArgs) {
+export function useFlowState({
+  appletId,
+  eventId,
+  flowId,
+  targetSubjectId,
+}: UseFlowStateArgs) {
   const { flowStorageRecord: record } = useFlowStorageRecord({
     appletId,
     eventId,
     flowId,
+    targetSubjectId,
   });
 
   const step = record?.step ?? 0;

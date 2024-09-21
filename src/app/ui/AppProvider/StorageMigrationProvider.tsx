@@ -14,7 +14,10 @@ function StorageMigrationProvider({ children }: PropsWithChildren<unknown>) {
     const migrator = new MigrationRunner(migrations);
     const migrationProcessor = new MigrationProcessor(reduxStore, migrator);
 
-    migrationProcessor.process().then(() => onModuleInitialized('storage'));
+    migrationProcessor
+      .process()
+      .then(() => onModuleInitialized('storage'))
+      .catch(console.error);
   }, [onModuleInitialized]);
 
   return <>{initialized && children}</>;

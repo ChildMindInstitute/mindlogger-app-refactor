@@ -24,11 +24,13 @@ type ActivityRecordInitializerArgs = {
 type InitializeArgs = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   order?: number;
 };
 
 type InitializeFlowArgs = {
   eventId: string;
+  targetSubjectId: string | null;
   flowActivityIds: string[];
 };
 
@@ -52,9 +54,10 @@ export function ActivityRecordInitializer({
   const initializeActivity = ({
     activityId,
     eventId,
+    targetSubjectId,
     order = 0,
   }: InitializeArgs) => {
-    const key = `${appletId}-${activityId}-${eventId}-${order}`;
+    const key = `${appletId}-${activityId}-${eventId}-${targetSubjectId || 'NULL'}-${order}`;
 
     const storageRecordExist = storage.contains(key);
 
@@ -104,12 +107,14 @@ export function ActivityRecordInitializer({
 
   const initializeFlowActivities = ({
     eventId,
+    targetSubjectId,
     flowActivityIds,
   }: InitializeFlowArgs) => {
     flowActivityIds.forEach((activityId, order) => {
       initializeActivity({
         activityId,
         eventId,
+        targetSubjectId,
         order,
       });
     });

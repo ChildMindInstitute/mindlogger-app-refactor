@@ -1,7 +1,10 @@
 import { QueryClient } from '@tanstack/react-query';
 import { addMilliseconds, subSeconds } from 'date-fns';
 
-import { StoreProgress } from '@app/abstract/lib';
+import {
+  EntityProgression,
+  EntityProgressionInProgress,
+} from '@app/abstract/lib';
 import { IPushToQueue, SendAnswersInput } from '@app/entities/activity';
 import { AppletModel } from '@app/entities/applet';
 import {
@@ -14,7 +17,7 @@ import { InitializeHiddenItem } from '@app/features/pass-survey/model';
 import { AppletEncryptionDTO, QueryDataUtils } from '@app/shared/api';
 import {
   AnalyticsService,
-  getEntityProgress,
+  getEntityProgression,
   getNow,
   getTimezoneOffset,
   isEntityExpired,
@@ -40,8 +43,8 @@ import {
 import {
   createSvgFiles,
   fillNullsForHiddenItems,
-  getActivityStartAt,
-  getExecutionGroupKey,
+  getActivityFlowProgressionExecutionGroupKey,
+  getActivityProgressionStartAt,
   getItemIds,
   getUserIdentifier,
 } from '../operations';
@@ -53,6 +56,7 @@ type ConstructForIntermediateInput = {
   activityId: string;
   flowId: string;
   eventId: string;
+  targetSubjectId: string | null;
   order: number;
   activityName: string;
   isAutocompletion: boolean;
@@ -63,6 +67,7 @@ type ConstructForFinishInput = {
   activityId: string;
   flowId: string | undefined;
   eventId: string;
+  targetSubjectId: string | null;
   order: number;
   activityName: string;
   isAutocompletion: boolean;
@@ -82,22 +87,22 @@ const DistinguishInterimAndFinishLag = 1; // For correct sort on BE, Admin, TODO
 export class ConstructCompletionsService {
   private saveActivitySummary: SaveActivitySummary | null;
   private queryDataUtils: QueryDataUtils;
-  private storeProgress: StoreProgress;
+  private entityProgressions: EntityProgression[];
   private pushToQueueService: IPushToQueue;
   private dispatch: AppDispatch;
 
   constructor(
     saveActivitySummary: SaveActivitySummary | null,
     queryClient: QueryClient,
-    storeProgress: StoreProgress,
     pushToQueueService: IPushToQueue,
     dispatch: AppDispatch,
+    entityProgressions: EntityProgression[],
   ) {
     this.saveActivitySummary = saveActivitySummary;
     this.queryDataUtils = new QueryDataUtils(queryClient);
-    this.storeProgress = storeProgress;
     this.pushToQueueService = pushToQueueService;
     this.dispatch = dispatch;
+    this.entityProgressions = entityProgressions;
   }
 
   private getLogDates(
@@ -267,6 +272,7 @@ export class ConstructCompletionsService {
       flowId,
       activityId,
       eventId,
+      targetSubjectId,
       order,
       activityName,
       isAutocompletion,
@@ -276,6 +282,7 @@ export class ConstructCompletionsService {
       appletId,
       activityId,
       eventId,
+      targetSubjectId,
       order,
     )!;
 
@@ -304,33 +311,35 @@ export class ConstructCompletionsService {
         activityStorageRecord.context.originalItems as InitializeHiddenItem[],
       );
 
-    const progressRecord = getEntityProgress(
+    const progression = getEntityProgression(
       appletId,
       flowId,
       eventId,
-      this.storeProgress,
+      targetSubjectId,
+      this.entityProgressions,
     )!;
 
     const { flowName, scheduledDate } = getFlowRecord(
       flowId,
       appletId,
       eventId,
+      targetSubjectId,
     )!;
 
     const evaluatedEndAt = this.evaluateEndAt(
       'intermediate',
-      progressRecord.availableTo,
+      (progression as EntityProgressionInProgress).availableUntilTimestamp,
       isAutocompletion,
     );
 
-    const submitId = getExecutionGroupKey(progressRecord);
+    const submitId = getActivityFlowProgressionExecutionGroupKey(progression);
 
     this.logIntermediate(
       input,
       flowName!,
       appletName,
       evaluatedEndAt,
-      progressRecord.availableTo,
+      (progression as EntityProgressionInProgress).availableUntilTimestamp,
       submitId,
     );
 
@@ -346,7 +355,7 @@ export class ConstructCompletionsService {
       activityId: activityId,
       executionGroupKey: submitId,
       userIdentifier: getUserIdentifier(items, recordAnswers),
-      startTime: getActivityStartAt(progressRecord)!,
+      startTime: getActivityProgressionStartAt(progression)!.getTime(),
       endTime: evaluatedEndAt,
       scheduledTime: scheduledDate,
       activityName: activityName,
@@ -354,11 +363,18 @@ export class ConstructCompletionsService {
       client: getClientInformation(),
       alerts: mapAnswersToAlerts(items, recordAnswers),
       eventId,
+      targetSubjectId,
       isFlowCompleted: false,
       tzOffset: getTimezoneOffset(),
     });
 
-    clearActivityStorageRecord(appletId, activityId, eventId, order);
+    clearActivityStorageRecord(
+      appletId,
+      activityId,
+      eventId,
+      targetSubjectId,
+      order,
+    );
 
     AnalyticsService.track(MixEvents.AssessmentCompleted, {
       [MixProperties.AppletId]: appletId,
@@ -381,6 +397,7 @@ export class ConstructCompletionsService {
       flowId,
       activityId,
       eventId,
+      targetSubjectId,
       order,
       activityName,
       isAutocompletion,
@@ -392,6 +409,7 @@ export class ConstructCompletionsService {
       appletId,
       activityId,
       eventId,
+      targetSubjectId,
       order,
     )!;
 
@@ -403,24 +421,26 @@ export class ConstructCompletionsService {
 
     this.validateEncryption(appletEncryption);
 
-    const progressRecord = getEntityProgress(
+    const progression = getEntityProgression(
       appletId,
       entityId,
       eventId,
-      this.storeProgress,
+      targetSubjectId,
+      this.entityProgressions,
     )!;
 
     const evaluatedEndAt = this.evaluateEndAt(
       'finish',
-      progressRecord.availableTo,
+      (progression as EntityProgressionInProgress).availableUntilTimestamp,
       isAutocompletion,
     );
 
     this.dispatch(
-      AppletModel.actions.entityCompleted({
+      AppletModel.actions.completeEntity({
         appletId,
         eventId,
         entityId,
+        targetSubjectId,
         endAt: evaluatedEndAt,
       }),
     );
@@ -448,7 +468,7 @@ export class ConstructCompletionsService {
         activityStorageRecord.context.originalItems as InitializeHiddenItem[],
       );
 
-    const submitId = getExecutionGroupKey(progressRecord);
+    const submitId = getActivityFlowProgressionExecutionGroupKey(progression);
 
     this.logFinish(
       activityName,
@@ -457,11 +477,16 @@ export class ConstructCompletionsService {
       appletName,
       appletId,
       evaluatedEndAt,
-      progressRecord.availableTo,
+      (progression as EntityProgressionInProgress).availableUntilTimestamp,
       submitId,
     );
 
-    const { scheduledDate } = getFlowRecord(flowId, appletId, eventId)!;
+    const { scheduledDate } = getFlowRecord(
+      flowId,
+      appletId,
+      eventId,
+      targetSubjectId,
+    )!;
 
     const itemToUpload: SendAnswersInput = {
       appletId,
@@ -475,7 +500,7 @@ export class ConstructCompletionsService {
       activityId,
       executionGroupKey: submitId,
       userIdentifier,
-      startTime: getActivityStartAt(progressRecord)!,
+      startTime: getActivityProgressionStartAt(progression)!.getTime(),
       endTime: evaluatedEndAt,
       scheduledTime: scheduledDate,
       activityName: activityName,
@@ -483,6 +508,7 @@ export class ConstructCompletionsService {
       client: getClientInformation(),
       alerts,
       eventId,
+      targetSubjectId,
       isFlowCompleted: !!flowId,
       tzOffset: getTimezoneOffset(),
     };
@@ -491,7 +517,13 @@ export class ConstructCompletionsService {
 
     await wait(500); // M2-6153
 
-    clearActivityStorageRecord(appletId, activityId, eventId, order);
+    clearActivityStorageRecord(
+      appletId,
+      activityId,
+      eventId,
+      targetSubjectId,
+      order,
+    );
 
     AnalyticsService.track(MixEvents.AssessmentCompleted, {
       [MixProperties.AppletId]: appletId,

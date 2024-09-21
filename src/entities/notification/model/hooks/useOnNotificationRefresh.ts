@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { StoreProgress } from '@app/abstract/lib';
 import { AppletModel } from '@app/entities/applet';
 import { LogTrigger } from '@app/shared/api';
 import { Emitter, Logger, useAppSelector } from '@shared/lib';
@@ -16,18 +15,20 @@ function useOnNotificationRefresh(callback?: () => void) {
 
   const queryClient = useQueryClient();
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
+  const progressions = useAppSelector(
+    AppletModel.selectors.selectAppletsEntityProgressions,
   );
 
-  const completions = useAppSelector(AppletModel.selectors.selectCompletions);
+  const responseTimes = useAppSelector(
+    AppletModel.selectors.selectEntityResponseTimes,
+  );
 
   const refreshNotifications = useCallback(
     (logTrigger: LogTrigger | undefined) => {
       NotificationModel.NotificationRefreshService.refresh(
         queryClient,
-        storeProgress,
-        completions,
+        progressions,
+        responseTimes,
         logTrigger!,
       ).finally(() => {
         Logger.send();
@@ -37,7 +38,7 @@ function useOnNotificationRefresh(callback?: () => void) {
         }
       });
     },
-    [queryClient, completions, storeProgress],
+    [queryClient, progressions, responseTimes],
   );
 
   useEffect(() => {

@@ -94,27 +94,35 @@ function NotificationManager() {
 
   async function getNotificationsByEventId(
     eventId: string,
+    targetSubjectId: string | null,
   ): Promise<LocalEventTriggerNotification[]> {
     const triggerNotifications =
       await NotificationScheduler.getAllScheduledNotifications();
 
-    return triggerNotifications.filter(
-      notification => notification.notification.data?.eventId === eventId,
-    );
+    return triggerNotifications.filter(notification => {
+      return (
+        notification.notification.data?.eventId === eventId &&
+        notification.notification.data?.targetSubjectId === targetSubjectId
+      );
+    });
   }
 
   async function cancelNotificationsForEventEntityInTimeInterval(
     eventId: string,
     entityId: string,
+    targetSubjectId: string | null,
     timeInterval: { from: number; to: number },
   ) {
-    const notificationsForEventId = await getNotificationsByEventId(eventId);
+    const notificationsForEventId = await getNotificationsByEventId(
+      eventId,
+      targetSubjectId,
+    );
 
     const cancelNotificationForEventEntityInTimeInterval = (
       notification: LocalEventTriggerNotification,
     ) => {
-      const { data, id: notificationId } = notification?.notification;
-      const { scheduledAt, scheduledAtString } = data;
+      const { data, id: notificationId } = notification?.notification || {};
+      const { scheduledAt, scheduledAtString } = data || {};
       const shouldCancel =
         timeInterval.from <= scheduledAt && scheduledAt <= timeInterval.to;
 
@@ -122,7 +130,9 @@ function NotificationManager() {
         Logger.log(
           `[NotificationManager.cancelNotificationForEventEntityInTimeInterval]: Notification ${notificationId}, scheduled at ${scheduledAtString}, was canceled because entity ${entityId} is in progress`,
         );
-        NotificationScheduler.cancelNotification(notificationId);
+        NotificationScheduler.cancelNotification(notificationId).catch(
+          console.error,
+        );
       }
     };
 

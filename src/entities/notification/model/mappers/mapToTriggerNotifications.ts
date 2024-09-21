@@ -8,20 +8,6 @@ import {
   NotificationDescriber,
 } from '../../lib';
 
-function mapIdentifiers(notification: NotificationDescriber) {
-  return {
-    shortId: notification.shortId,
-    appletId: notification.appletId,
-    eventId: notification.eventId,
-    ...(notification.activityId && {
-      activityId: notification.activityId,
-    }),
-    ...(notification.activityFlowId && {
-      activityFlowId: notification.activityFlowId,
-    }),
-  };
-}
-
 export async function mapToTriggerNotifications(
   notifications: NotificationDescriber[],
 ): Promise<LocalEventTriggerNotification[]> {
@@ -40,8 +26,19 @@ export async function mapToTriggerNotifications(
         scheduledAtString: notification.scheduledAtString,
         isLocal: 'true',
         type: 'schedule-event-alert',
-        ...mapIdentifiers(notification),
+        shortId: notification.shortId,
+        appletId: notification.appletId,
+        eventId: notification.eventId,
         entityName: notification.entityName,
+        ...(notification.activityId && {
+          activityId: notification.activityId,
+        }),
+        ...(notification.activityFlowId && {
+          activityFlowId: notification.activityFlowId,
+        }),
+        ...(notification.targetSubjectId && {
+          targetSubjectId: notification.targetSubjectId,
+        }),
       },
       android: {
         channelId,

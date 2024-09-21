@@ -1,4 +1,8 @@
-import { AvailabilityType, IEvaluator, Progress } from '@app/abstract/lib';
+import {
+  AvailabilityType,
+  EntityProgressionCompleted,
+  IEvaluator,
+} from '@app/abstract/lib';
 import { ScheduleEvent } from '@app/entities/event';
 import { getHourMinute, isTimeInInterval } from '@shared/lib';
 
@@ -10,22 +14,29 @@ export class AvailableGroupEvaluator
 {
   private utility: GroupUtility;
 
-  constructor(progress: Progress, appletId: string) {
-    this.utility = new GroupUtility(progress, appletId);
+  constructor(appletId: string) {
+    this.utility = new GroupUtility(appletId, []);
   }
 
-  private isValidForAlwaysAvailable(event: ScheduleEvent): boolean {
+  private isEventValidForAlwaysAvailable(
+    event: ScheduleEvent,
+    targetSubjectId: string | null,
+  ): boolean {
     const isOneTimeCompletion = event.availability.oneTimeCompletion;
 
-    const progressRecord = this.utility.getProgressRecord(event);
+    const progressionRecord = this.utility.getProgressionRecord(
+      event,
+      targetSubjectId,
+    );
 
-    const isNeverCompleted = !progressRecord;
+    const isNeverCompleted = !progressionRecord;
 
     return (isOneTimeCompletion && isNeverCompleted) || !isOneTimeCompletion;
   }
 
-  private isValidWhenNoSpreadAndNoAccessBeforeStartTime(
+  private isEventValidWhenNoSpreadAndNoAccessBeforeStartTime(
     event: ScheduleEvent,
+    targetSubjectId: string | null,
   ): boolean {
     const isScheduledToday = this.utility.isToday(event.scheduledAt);
 
@@ -38,9 +49,16 @@ export class AvailableGroupEvaluator
       including: 'from',
     });
 
-    const progressRecord = this.utility.getProgressRecord(event);
+    const progressionRecord = this.utility.getProgressionRecord(
+      event,
+      targetSubjectId,
+    ) as EntityProgressionCompleted | null;
 
-    const endAt = progressRecord?.endAt;
+    const endAt =
+      progressionRecord?.endedAtTimestamp &&
+      progressionRecord.endedAtTimestamp > 0
+        ? new Date(progressionRecord.endedAtTimestamp)
+        : null;
 
     const isCompletedToday = !!endAt && this.utility.isToday(endAt);
 
@@ -52,13 +70,16 @@ export class AvailableGroupEvaluator
     );
   }
 
-  private isValidWhenIsAccessBeforeStartTime(event: ScheduleEvent): boolean {
+  private isEventValidWhenIsAccessBeforeStartTime(
+    event: ScheduleEvent,
+    targetSubjectId: string | null,
+  ): boolean {
     const isScheduledToday = this.utility.isToday(event.scheduledAt);
 
     const isScheduledYesterday = this.utility.isScheduledYesterday(event);
 
     if (isScheduledToday) {
-      const valid = !this.utility.isCompletedToday(event);
+      const valid = !this.utility.isEventCompletedToday(event, targetSubjectId);
 
       if (valid) {
         return true;
@@ -68,15 +89,21 @@ export class AvailableGroupEvaluator
     if (isScheduledYesterday) {
       return (
         this.utility.isInAllowedTimeInterval(event, 'yesterday', true) &&
-        !this.utility.isCompletedInAllowedTimeInterval(event, 'yesterday', true)
+        !this.utility.isEventCompletedInAllowedTimeInterval(
+          event,
+          'yesterday',
+          true,
+          targetSubjectId,
+        )
       );
     }
 
     return false;
   }
 
-  private isValidWhenIsSpreadAndNoAccessBeforeStartTime(
+  private isEventValidWhenIsSpreadAndNoAccessBeforeStartTime(
     event: ScheduleEvent,
+    targetSubjectId: string | null,
   ): boolean {
     const isScheduledToday = this.utility.isToday(event.scheduledAt);
 
@@ -85,7 +112,12 @@ export class AvailableGroupEvaluator
     if (isScheduledToday) {
       const isValid =
         this.utility.isInAllowedTimeInterval(event, 'today') &&
-        !this.utility.isCompletedInAllowedTimeInterval(event, 'today');
+        !this.utility.isEventCompletedInAllowedTimeInterval(
+          event,
+          'today',
+          false,
+          targetSubjectId,
+        );
 
       if (isValid) {
         return true;
@@ -95,14 +127,22 @@ export class AvailableGroupEvaluator
     if (isScheduledYesterday) {
       return (
         this.utility.isInAllowedTimeInterval(event, 'yesterday') &&
-        !this.utility.isCompletedInAllowedTimeInterval(event, 'yesterday')
+        !this.utility.isEventCompletedInAllowedTimeInterval(
+          event,
+          'yesterday',
+          false,
+          targetSubjectId,
+        )
       );
     }
 
     return false;
   }
 
-  public isInGroup(event: ScheduleEvent): boolean {
+  public isEventInGroup(
+    event: ScheduleEvent,
+    targetSubjectId: string | null,
+  ): boolean {
     if (!this.utility.isInsideValidDatesInterval(event)) {
       return false;
     }
@@ -113,7 +153,10 @@ export class AvailableGroupEvaluator
     const isScheduled =
       event.availability.availabilityType === AvailabilityType.ScheduledAccess;
 
-    if (isAlwaysAvailable && this.isValidForAlwaysAvailable(event)) {
+    if (
+      isAlwaysAvailable &&
+      this.isEventValidForAlwaysAvailable(event, targetSubjectId)
+    ) {
       return true;
     }
 
@@ -128,7 +171,10 @@ export class AvailableGroupEvaluator
     if (
       !isSpreadToNextDay &&
       !isAccessBeforeTimeFrom &&
-      this.isValidWhenNoSpreadAndNoAccessBeforeStartTime(event)
+      this.isEventValidWhenNoSpreadAndNoAccessBeforeStartTime(
+        event,
+        targetSubjectId,
+      )
     ) {
       return true;
     }
@@ -136,14 +182,17 @@ export class AvailableGroupEvaluator
     if (
       isSpreadToNextDay &&
       !isAccessBeforeTimeFrom &&
-      this.isValidWhenIsSpreadAndNoAccessBeforeStartTime(event)
+      this.isEventValidWhenIsSpreadAndNoAccessBeforeStartTime(
+        event,
+        targetSubjectId,
+      )
     ) {
       return true;
     }
 
     if (
       isAccessBeforeTimeFrom &&
-      this.isValidWhenIsAccessBeforeStartTime(event)
+      this.isEventValidWhenIsAccessBeforeStartTime(event, targetSubjectId)
     ) {
       return true;
     }
@@ -155,7 +204,12 @@ export class AvailableGroupEvaluator
     const result: Array<EventEntity> = [];
 
     for (const eventEntity of eventsEntities) {
-      if (this.isInGroup(eventEntity.event)) {
+      if (
+        this.isEventInGroup(
+          eventEntity.event,
+          eventEntity.assignment?.target.id || null,
+        )
+      ) {
         result.push(eventEntity);
       }
     }

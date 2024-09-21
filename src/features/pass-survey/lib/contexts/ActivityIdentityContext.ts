@@ -7,6 +7,7 @@ type ActivityIdentifiers = {
   order: number;
   activityName: string;
   flowId?: string;
+  targetSubjectId: string | null;
 };
 
 const ActivityIdentityContext = createContext({} as ActivityIdentifiers);

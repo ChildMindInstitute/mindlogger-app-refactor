@@ -7,7 +7,6 @@ import {
   EntityPath,
   EntityPathParams,
   ProcessAutocompletion,
-  StoreProgress,
 } from '@app/abstract/lib';
 import {
   AnswersQueueService,
@@ -42,12 +41,12 @@ export const AutoCompletionMutex = Mutex();
 const useAutoCompletion = (): Result => {
   const mutex = AutoCompletionMutex;
 
-  const notCompletedEntities = useAppSelector(
-    AppletModel.selectors.selectNotCompletedEntities,
+  const incompletedEntities = useAppSelector(
+    AppletModel.selectors.selectIncompletedEntities,
   );
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
+  const entityProgressions = useAppSelector(
+    AppletModel.selectors.selectAppletsEntityProgressions,
   );
 
   const dispatch = useAppDispatch();
@@ -62,11 +61,11 @@ const useAutoCompletion = (): Result => {
     return new ConstructCompletionsService(
       null,
       queryClient,
-      storeProgress,
       QueueProcessingService,
       dispatch,
+      entityProgressions,
     );
-  }, [dispatch, queryClient, storeProgress]);
+  }, [dispatch, queryClient, entityProgressions]);
 
   const constructInternal = async (
     collectOutput: CollectCompletionOutput,
@@ -105,9 +104,7 @@ const useAutoCompletion = (): Result => {
         return;
       }
 
-      const collectService = new CollectCompletionsService(
-        notCompletedEntities,
-      );
+      const collectService = new CollectCompletionsService(incompletedEntities);
       const constructService = createConstructService();
 
       try {
@@ -133,7 +130,7 @@ const useAutoCompletion = (): Result => {
         mutex.release();
       }
     },
-    [notCompletedEntities, mutex, createConstructService],
+    [incompletedEntities, mutex, createConstructService],
   );
 
   const processAutocompletion = useCallback(
@@ -146,9 +143,7 @@ const useAutoCompletion = (): Result => {
         return true;
       }
 
-      const collectService = new CollectCompletionsService(
-        notCompletedEntities,
-      );
+      const collectService = new CollectCompletionsService(incompletedEntities);
       const constructService = createConstructService();
 
       let completionsCollected: boolean;
@@ -188,18 +183,18 @@ const useAutoCompletion = (): Result => {
 
       return result;
     },
-    [mutex, notCompletedEntities, createConstructService, hasItemsInQueue],
+    [mutex, incompletedEntities, createConstructService, hasItemsInQueue],
   );
 
   const hasExpiredEntity = useCallback((): boolean => {
     const result = new CollectCompletionsService(
-      notCompletedEntities,
+      incompletedEntities,
     ).hasExpiredEntity();
 
     Logger.log(`[useAutoCompletion.hasExpiredEntity]: ${String(result)}`);
 
     return result;
-  }, [notCompletedEntities]);
+  }, [incompletedEntities]);
 
   return {
     process: processAutocompletion,

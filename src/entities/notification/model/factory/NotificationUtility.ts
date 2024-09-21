@@ -11,9 +11,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 import {
   AvailabilityType,
+  EntityProgression,
+  EntityProgressionCompleted,
   PeriodicityType,
-  Progress,
-  ProgressPayload,
 } from '@app/abstract/lib';
 import {
   DatesFromTo,
@@ -43,13 +43,13 @@ export const DaysInWeek = 7;
 export class NotificationUtility {
   private _weekDays: Date[] | null;
 
-  private progress: Progress;
+  private progressions: EntityProgression[];
 
-  constructor(progress: Progress, appletId: string) {
+  constructor(appletId: string, progressions: EntityProgression[]) {
     this.now = new Date();
     this._weekDays = null;
-    this.progress = progress;
     this.appletId = appletId;
+    this.progressions = progressions;
   }
 
   protected appletId: string;
@@ -64,21 +64,40 @@ export class NotificationUtility {
     return Math.floor(Math.random() * max);
   }
 
-  protected getProgressRecord(
+  protected getProgressionRecord(
     entityId: string,
     eventId: string,
-  ): ProgressPayload | null {
-    const record = this.progress[this.appletId]?.[entityId]?.[eventId];
-    return record ?? null;
+    targetSubjectId: string | null,
+  ): EntityProgression | null {
+    return (
+      this.progressions.find(progression => {
+        return (
+          progression.appletId === this.appletId &&
+          progression.entityId === entityId &&
+          progression.eventId === eventId &&
+          progression.targetSubjectId === targetSubjectId
+        );
+      }) || null
+    );
   }
 
-  protected getActivityCompletedAt(
+  protected getProgressionCompletedAt(
     entityId: string,
     eventId: string,
+    targetSubjectId: string | null,
   ): Date | null {
-    const progress = this.getProgressRecord(entityId, eventId);
+    const progression = this.getProgressionRecord(
+      entityId,
+      eventId,
+      targetSubjectId,
+    );
 
-    return progress ? progress.endAt : null;
+    const completedProgression = progression as EntityProgressionCompleted;
+    if (completedProgression.endedAtTimestamp) {
+      return new Date(completedProgression.endedAtTimestamp);
+    } else {
+      return null;
+    }
   }
 
   public get currentDay(): Date {
@@ -322,10 +341,15 @@ export class NotificationUtility {
   public markNotificationIfActivityCompleted(
     entityId: string,
     eventId: string,
+    targetSubjectId: string | null,
     notification: NotificationDescriber,
     currentInterval: DatesFromTo,
   ) {
-    const completedAt = this.getActivityCompletedAt(entityId, eventId);
+    const completedAt = this.getProgressionCompletedAt(
+      entityId,
+      eventId,
+      targetSubjectId,
+    );
     if (!completedAt) {
       return;
     }
@@ -389,6 +413,7 @@ export class NotificationUtility {
     activityId: string | null,
     activityFlowId: string | null,
     eventId: string,
+    targetSubjectId: string | null,
     type: NotificationType,
   ): NotificationDescriber {
     const { id, shortId } = this.getNotificationIds();
@@ -401,6 +426,7 @@ export class NotificationUtility {
       activityFlowId,
       entityName: name,
       eventId,
+      targetSubjectId,
       type: type,
       notificationHeader: name,
       notificationBody: description,
@@ -412,7 +438,11 @@ export class NotificationUtility {
     return notification;
   }
 
-  public isCompleted(entityId: string, eventId: string) {
-    return !!this.getActivityCompletedAt(entityId, eventId);
+  public isCompleted(
+    entityId: string,
+    eventId: string,
+    targetSubjectId: string | null,
+  ) {
+    return !!this.getProgressionCompletedAt(entityId, eventId, targetSubjectId);
   }
 }

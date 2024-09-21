@@ -6,3 +6,4 @@ export * from './primitive';
 export * from './flanker';
 export * from './abTrails';
 export * from './autocompletion';
+export * from './activityPipeline';

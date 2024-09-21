@@ -16,6 +16,7 @@ type Props = {
   flowId?: string;
   eventId: string;
   appletId: string;
+  targetSubjectId: string | null;
 };
 
 function Header({
@@ -25,6 +26,7 @@ function Header({
   flowId,
   eventId,
   appletId,
+  targetSubjectId,
 }: Props) {
   const { t } = useTranslation();
 
@@ -49,7 +51,12 @@ function Header({
           </BackButton>
         </XStack>
       </XStack>
-      <HeaderProgress appletId={appletId} eventId={eventId} flowId={flowId} />
+      <HeaderProgress
+        appletId={appletId}
+        eventId={eventId}
+        flowId={flowId}
+        targetSubjectId={targetSubjectId}
+      />
       <ListSeparator mt={10} bg={colors.lighterGrey7} />
     </>
   );

@@ -1,6 +1,5 @@
 import { useIsRestoring, useQueryClient } from '@tanstack/react-query';
 
-import { StoreProgress } from '@app/abstract/lib';
 import { AppletModel } from '@app/entities/applet';
 import { NotificationModel } from '@app/entities/notification';
 import { SessionModel } from '@app/entities/session';
@@ -12,11 +11,13 @@ function useRestackNotifications(hasExpiredEntity: () => boolean) {
   const isRestoring = useIsRestoring();
   const hasSession = SessionModel.useHasSession();
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
+  const progressions = useAppSelector(
+    AppletModel.selectors.selectAppletsEntityProgressions,
   );
 
-  const completions = useAppSelector(AppletModel.selectors.selectCompletions);
+  const responseTimes = useAppSelector(
+    AppletModel.selectors.selectEntityResponseTimes,
+  );
 
   useOnForeground(
     () => {
@@ -29,10 +30,10 @@ function useRestackNotifications(hasExpiredEntity: () => boolean) {
 
       NotificationModel.NotificationRefreshService.refresh(
         queryClient,
-        storeProgress,
-        completions,
+        progressions,
+        responseTimes,
         LogTrigger.GoToForeground,
-      );
+      ).catch(console.error);
     },
     { enabled: !isRestoring && hasSession },
   );

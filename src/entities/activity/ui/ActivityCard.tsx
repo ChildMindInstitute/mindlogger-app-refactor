@@ -31,6 +31,7 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
     appletId: activity.appletId,
     activityId: activity.activityId,
     activityFlowId: activity.flowId,
+    targetSubjectId: activity.targetSubjectId,
   });
 
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled;

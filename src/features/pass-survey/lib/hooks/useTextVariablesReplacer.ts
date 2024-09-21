@@ -9,34 +9,52 @@ import { Answers } from './useActivityStorageRecord';
 import { MarkdownVariableReplacer } from '../markdownVariableReplacer';
 import { PipelineItem } from '../types';
 
-const useTextVariablesReplacer = ({
-  items,
-  answers,
-  activityId,
-  appletId,
-}: {
+type UseTextVariablesReplacerOptions = {
+  appletId: string;
+  activityId: string;
+  eventId: string;
+  targetSubjectId: string | null;
   items: PipelineItem[] | undefined;
   answers: Answers | undefined;
-  activityId: string;
-  appletId: string;
-}) => {
-  const completedEntities = useSelector(
-    AppletModel.selectors.selectCompletedEntities,
+};
+
+const useTextVariablesReplacer = ({
+  appletId,
+  activityId,
+  eventId,
+  targetSubjectId,
+  items,
+  answers,
+}: UseTextVariablesReplacerOptions) => {
+  const entityResponseTimes = useSelector(
+    AppletModel.selectors.selectEntityResponseTimes,
   );
+
   const { data: respondentNickname } = useAppletDetailsQuery(appletId, {
     select: ({ data }) => mapDtoToRespondentMeta(data),
   });
 
   const userFirstName = useAppSelector(IdentityModel.selectors.selectFirstName);
 
-  const lastResponseTime = completedEntities?.[activityId];
+  const lastResponseTime = entityResponseTimes
+    ?.filter(
+      record =>
+        record.entityId === activityId &&
+        record.eventId === eventId &&
+        record.targetSubjectId === targetSubjectId,
+    )
+    .sort(
+      ({ responseTime: responseTimeA }, { responseTime: responseTimeB }) => {
+        return responseTimeB - responseTimeA;
+      },
+    )[0]?.responseTime;
 
   const replaceTextVariables = (text: string) => {
     if (items && answers) {
       const replacer = new MarkdownVariableReplacer(
         items,
         answers,
-        lastResponseTime,
+        lastResponseTime || null,
         respondentNickname || userFirstName,
       );
       return replacer.process(text);

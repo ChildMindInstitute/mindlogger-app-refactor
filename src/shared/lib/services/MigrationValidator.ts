@@ -1,4 +1,5 @@
-import { MIGRATION_PROCESSOR_VERSION } from '../constants';
+import { MIGRATION_PROCESSOR_VERSION } from '@app/app/model/migrations';
+
 import { SystemRecord } from '../records';
 
 export const MigrationValidator = {

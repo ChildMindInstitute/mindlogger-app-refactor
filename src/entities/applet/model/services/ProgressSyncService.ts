@@ -1,15 +1,14 @@
-import { ActivityPipelineType, StoreEntitiesProgress } from '@app/abstract/lib';
 import {
   AppletDetailsDto,
   AppletDto,
+  CompletedEntityDto,
   EntitiesCompletionsDto,
 } from '@app/shared/api';
-import { ILogger } from '@app/shared/lib';
+import { buildDateTimeFromDto, ILogger } from '@app/shared/lib';
 
-import { AppletDetails, CompletedEntity } from '../../lib';
-import { mapAppletDetailsFromDto, mapCompletedEntityFromDto } from '../mappers';
-import { selectInProgressEntities } from '../selectors';
-import { actions } from '../slice';
+import { AppletDetails } from '../../lib';
+import { mapAppletDetailsFromDto } from '../mappers';
+import { actions, UpsertEntityProgressionPayload } from '../slice';
 
 export interface IAppletProgressSyncService {
   sync(
@@ -29,10 +28,6 @@ class ProgressSyncService implements IAppletProgressSyncService {
     this.state = state;
   }
 
-  private getProgressState(): StoreEntitiesProgress {
-    return selectInProgressEntities(this.state);
-  }
-
   private async syncWithAppletDto(
     appletDto: AppletDetailsDto,
     appletCompletions: EntitiesCompletionsDto,
@@ -42,14 +37,9 @@ class ProgressSyncService implements IAppletProgressSyncService {
     try {
       const { activities, activityFlows } = appletCompletions;
 
-      const completedEntities: CompletedEntity[] = [
-        ...activities.map(mapCompletedEntityFromDto),
-        ...activityFlows.map(mapCompletedEntityFromDto),
-      ];
-
-      completedEntities.map(completedEntity =>
-        this.syncAppletEntityWithServer(appletDetails, completedEntity),
-      );
+      [...activities, ...activityFlows].forEach(completionDto => {
+        this.upsertEntityProgression(appletDetails, completionDto);
+      });
     } catch (error) {
       throw new Error(
         '[ProgressSyncService.syncWithAppletDto]: Error occurred during sync progress entities:\n\n' +
@@ -58,56 +48,30 @@ class ProgressSyncService implements IAppletProgressSyncService {
     }
   }
 
-  private syncAppletEntityWithServer(
+  private upsertEntityProgression(
     appletDetails: AppletDetails,
-    completedEntity: CompletedEntity,
+    completedEntityDto: CompletedEntityDto,
   ) {
-    const inProgressEntities = this.getProgressState();
-    const progressEntity =
-      inProgressEntities?.[completedEntity.entityId]?.[completedEntity.eventId];
-    const localEndAt = progressEntity?.endAt;
-    const serverEndAt = completedEntity.endAt;
-
-    const entityEventMissing = !progressEntity;
     const isFlow = appletDetails.activityFlows.find(
-      flow => flow.id === completedEntity.entityId,
+      flow => flow.id === completedEntityDto.id,
     );
 
-    if (entityEventMissing) {
-      this.dispatch(
-        actions.completedEntityMissing({
-          type: isFlow
-            ? ActivityPipelineType.Flow
-            : ActivityPipelineType.Regular,
-          startAt: 0,
-          endAt: serverEndAt,
-          appletId: appletDetails.id,
-          entityId: completedEntity.entityId,
-          eventId: completedEntity.eventId,
-        }),
-      );
+    const payload: UpsertEntityProgressionPayload = {
+      appletId: appletDetails.id,
+      entityType: isFlow ? 'activityFlow' : 'activity',
+      entityId: completedEntityDto.id,
+      eventId: completedEntityDto.scheduledEventId,
+      targetSubjectId: completedEntityDto.targetSubjectId,
+      endAt: buildDateTimeFromDto(
+        completedEntityDto.localEndDate,
+        completedEntityDto.localEndTime,
+      ),
+    };
 
-      this.logger.log(
-        `[ProgressSyncService.syncAppletEntityWithServer]: Added missing entity event [entityId: ${completedEntity.entityId}, eventId: ${completedEntity.eventId}]`,
-      );
-    }
-
-    const completedLaterThanOnServer = localEndAt && localEndAt < serverEndAt;
-
-    if (completedLaterThanOnServer) {
-      this.dispatch(
-        actions.completedEntityUpdated({
-          endAt: serverEndAt,
-          appletId: appletDetails.id,
-          entityId: completedEntity.entityId,
-          eventId: completedEntity.eventId,
-        }),
-      );
-
-      this.logger.log(
-        `[ProgressSyncService.syncAppletEntityWithServer]: Updated entity event [entityId: ${completedEntity.entityId}, eventId: ${completedEntity.eventId}] with data from the server`,
-      );
-    }
+    this.dispatch(actions.upsertEntityProgression(payload));
+    this.logger.log(
+      `[ProgressSyncService.upsertEntityProgression]: Upserted progression ${JSON.stringify(payload)}`,
+    );
   }
 
   public sync(

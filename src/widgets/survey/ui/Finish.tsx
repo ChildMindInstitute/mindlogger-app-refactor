@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { EntityPathParams, StoreProgress } from '@app/abstract/lib';
+import { EntityPathParams } from '@app/abstract/lib';
 import {
   QueueProcessingService,
   useQueueProcessing,
@@ -30,6 +30,7 @@ type Props = {
   activityName: string;
   eventId: string;
   flowId?: string;
+  targetSubjectId: string | null;
   order: number;
   isTimerElapsed: boolean;
   interruptionStep: number | null;
@@ -42,6 +43,7 @@ function FinishItem({
   activityId,
   activityName,
   eventId,
+  targetSubjectId,
   order,
   isTimerElapsed,
   interruptionStep,
@@ -51,14 +53,15 @@ function FinishItem({
 
   const queryClient = useQueryClient();
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
+  const entityProgressions = useAppSelector(
+    AppletModel.selectors.selectAppletsEntityProgressions,
   );
 
   const { flowStorageRecord: flowState } = useFlowStorageRecord({
     appletId,
     eventId,
     flowId,
+    targetSubjectId,
   });
 
   const {
@@ -107,6 +110,7 @@ function FinishItem({
         appletId,
         eventId,
         flowId,
+        targetSubjectId,
         order: interruptedOrder,
         completionType: 'intermediate',
         isAutocompletion: isCompletedAutomatically,
@@ -118,9 +122,9 @@ function FinishItem({
     const constructCompletionService = new ConstructCompletionsService(
       null,
       queryClient,
-      storeProgress,
       QueueProcessingService,
       dispatch,
+      entityProgressions,
     );
 
     if (isCompletedAutomatically && isFlow) {
@@ -133,6 +137,7 @@ function FinishItem({
       appletId,
       eventId,
       flowId,
+      targetSubjectId,
       order,
       completionType: 'finish',
       isAutocompletion: isCompletedAutomatically,
@@ -142,6 +147,7 @@ function FinishItem({
       appletId,
       entityId: flowId ?? activityId,
       eventId,
+      targetSubjectId,
     };
 
     const success = await processWithAutocompletion(exclude, true);

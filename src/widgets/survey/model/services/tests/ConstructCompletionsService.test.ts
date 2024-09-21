@@ -1,7 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 import { addHours, addMilliseconds, subHours, subSeconds } from 'date-fns';
 
-import { StoreProgress } from '@app/abstract/lib';
 import { Answers, PipelineItem } from '@app/features/pass-survey';
 import { getSliderItem } from '@app/features/pass-survey/model/tests/testHelpers';
 import { AppletEncryptionDTO } from '@app/shared/api';
@@ -9,8 +8,6 @@ import { AppletEncryptionDTO } from '@app/shared/api';
 import {
   createGetActivityRecordMock,
   expectedUserActions,
-  getActivityProgressMock,
-  getFlowProgressMock,
   getInputsForFinish,
   getInputsForIntermediate,
   mockConstructionServiceExternals,
@@ -82,14 +79,12 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
 
     const pushToQueueMock = { push: jest.fn() };
 
-    const progress: StoreProgress = getFlowProgressMock();
-
     const service = new ConstructCompletionsService(
       saveSummaryMock,
       {} as any,
-      progress,
       pushToQueueMock,
       jest.fn(),
+      [],
     );
 
     //@ts-expect-error
@@ -171,14 +166,12 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
 
     const pushToQueueMock = { push: jest.fn() };
 
-    const progress: StoreProgress = getFlowProgressMock();
-
     const service = new ConstructCompletionsService(
       saveSummaryMock,
       {} as any,
-      progress,
       pushToQueueMock,
       jest.fn(),
+      [],
     );
 
     //@ts-expect-error
@@ -243,14 +236,12 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
 
     const pushToQueueMock = { push: jest.fn() };
 
-    const progress: StoreProgress = getFlowProgressMock();
-
     const service = new ConstructCompletionsService(
       saveSummaryMock,
       {} as any,
-      progress,
       pushToQueueMock,
       jest.fn(),
+      [],
     );
 
     //@ts-expect-error
@@ -349,19 +340,17 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
     );
 
     const mockGetExecutionGroupKey = jest
-      .spyOn(operations, 'getExecutionGroupKey')
+      .spyOn(operations, 'getActivityFlowProgressionExecutionGroupKey')
       .mockReturnValue('mock-group-key-1');
 
     const pushToQueueMock = { push: jest.fn() };
 
-    const progress: StoreProgress = getActivityProgressMock();
-
     const service = new ConstructCompletionsService(
       saveSummaryMock,
       {} as any,
-      progress,
       pushToQueueMock,
       jest.fn(),
+      [],
     );
 
     //@ts-expect-error
@@ -439,8 +428,6 @@ describe('Test ConstructCompletionsService: edge cases', () => {
   });
 
   it('"getAppletProperties" should throw error when no applet dto in the cache', () => {
-    const progress: StoreProgress = getFlowProgressMock();
-
     const pushToQueueMock = { push: jest.fn() };
 
     const { saveSummaryMock } = mockConstructionServiceExternals(mockNowDate);
@@ -448,9 +435,9 @@ describe('Test ConstructCompletionsService: edge cases', () => {
     const service = new ConstructCompletionsService(
       saveSummaryMock,
       {} as any,
-      progress,
       pushToQueueMock,
       jest.fn(),
+      [],
     );
 
     //@ts-expect-error
@@ -483,8 +470,6 @@ describe('Test ConstructCompletionsService: edge cases', () => {
       : String(appletEncryption);
 
     it(`"validateEncryption" should throw error when appletEncryption is ${appletEncryptionAsText}`, () => {
-      const progress: StoreProgress = getFlowProgressMock();
-
       const { saveSummaryMock } = mockConstructionServiceExternals(mockNowDate);
 
       const pushMock = jest.fn();
@@ -494,9 +479,9 @@ describe('Test ConstructCompletionsService: edge cases', () => {
       const service = new ConstructCompletionsService(
         saveSummaryMock,
         {} as QueryClient,
-        progress,
         pushToQueueMock,
         jest.fn(),
+        [],
       );
 
       expect(() =>
@@ -527,8 +512,6 @@ describe('Test ConstructCompletionsService: edge cases', () => {
       : String(activityStorageRecord);
 
     it(`isRecordExist should return ${expectedResult} when activityStorageRecord is ${activityStorageRecordAsText}`, () => {
-      const progress: StoreProgress = getFlowProgressMock();
-
       const { saveSummaryMock } = mockConstructionServiceExternals(mockNowDate);
 
       const pushMock = jest.fn();
@@ -538,9 +521,9 @@ describe('Test ConstructCompletionsService: edge cases', () => {
       const service = new ConstructCompletionsService(
         saveSummaryMock,
         {} as QueryClient,
-        progress,
         pushToQueueMock,
         jest.fn(),
+        [],
       );
 
       //@ts-expect-error
@@ -638,8 +621,6 @@ describe('Test ConstructCompletionsService: evaluateEndAt', () => {
       expectedResultLog,
     }) => {
       it(`Should return '${expectedResultLog}' when completionType is ${completionType} and availableTo is '${logAvailableTo}' and isAutocompletion is ${isAutocompletion}`, () => {
-        const progress: StoreProgress = getFlowProgressMock();
-
         const pushToQueueMock = { push: jest.fn() };
 
         const { saveSummaryMock } =
@@ -648,9 +629,9 @@ describe('Test ConstructCompletionsService: evaluateEndAt', () => {
         const service = new ConstructCompletionsService(
           saveSummaryMock,
           {} as QueryClient,
-          progress,
           pushToQueueMock,
           jest.fn(),
+          [],
         );
 
         // @ts-expect-error

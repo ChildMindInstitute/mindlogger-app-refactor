@@ -33,7 +33,9 @@ import {
 } from '../../types';
 import { getStorageRecord, upsertStorageRecord } from '../../utils';
 
-export class MigrationToVersion0001 implements IMigration {
+export class MigrationToVersion0001
+  implements IMigration<RootStateFrom, RootStateTo>
+{
   private queryDataUtils: QueryDataUtils;
 
   constructor(queryClient: QueryClient) {
@@ -139,8 +141,10 @@ export class MigrationToVersion0001 implements IMigration {
     return flowStateTo;
   }
 
-  public migrate(input: MigrationInput): MigrationOutput {
-    const result: MigrationOutput = {
+  public migrate(
+    input: MigrationInput<RootStateFrom>,
+  ): MigrationOutput<RootStateTo> {
+    const result: MigrationOutput<RootStateTo> = {
       reduxState: { ...input.reduxState } as RootStateTo,
     };
 

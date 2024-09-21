@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { EntityPathParams, StoreProgress } from '@app/abstract/lib';
+import { EntityPathParams } from '@app/abstract/lib';
 import { useRetryUpload } from '@app/entities/activity';
 import {
   QueueProcessingService,
@@ -35,6 +35,7 @@ type Props = {
   activityName: string;
   eventId: string;
   flowId: string;
+  targetSubjectId: string | null;
   order: number;
 
   onClose: () => void;
@@ -47,6 +48,7 @@ function Intermediate({
   activityId,
   activityName,
   eventId,
+  targetSubjectId,
   order,
   onClose,
   onFinish,
@@ -61,16 +63,18 @@ function Intermediate({
     appletId,
     eventId,
     flowId,
+    targetSubjectId,
   });
 
   const { saveActivitySummary } = useFlowStateActions({
     appletId,
     eventId,
     flowId,
+    targetSubjectId,
   });
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
+  const entityProgressions = useAppSelector(
+    AppletModel.selectors.selectAppletsEntityProgressions,
   );
 
   const { step, pipeline, flowName } = flowStorageRecord!;
@@ -113,8 +117,15 @@ function Intermediate({
   }, [appletId, queryClient]);
 
   const activityRecordRemoved = useMemo(
-    () => !activityRecordExists(appletId, activityId, eventId, order),
-    [activityId, appletId, eventId, order],
+    () =>
+      !activityRecordExists(
+        appletId,
+        activityId,
+        eventId,
+        targetSubjectId,
+        order,
+      ),
+    [activityId, appletId, eventId, targetSubjectId, order],
   );
 
   const canNotGoBack =
@@ -129,9 +140,10 @@ function Intermediate({
     );
 
     dispatch(
-      AppletModel.actions.flowUpdated({
+      AppletModel.actions.updateFlow({
         appletId,
         flowId,
+        targetSubjectId,
         activityId: nextActivityPayload.activityId,
         activityName: nextActivityPayload.activityName,
         activityDescription: nextActivityPayload.activityDescription,
@@ -146,6 +158,7 @@ function Intermediate({
     dispatch,
     eventId,
     flowId,
+    targetSubjectId,
     activitiesPassed,
     nextActivityPayload.activityId,
     nextActivityPayload.activityName,
@@ -164,9 +177,9 @@ function Intermediate({
     const constructCompletionService = new ConstructCompletionsService(
       saveActivitySummary,
       queryClient,
-      storeProgress,
       QueueProcessingService,
       dispatch,
+      entityProgressions,
     );
 
     await constructCompletionService.construct({
@@ -175,6 +188,7 @@ function Intermediate({
       appletId,
       eventId,
       flowId,
+      targetSubjectId,
       order,
       completionType: 'intermediate',
       isAutocompletion: false,
@@ -184,6 +198,7 @@ function Intermediate({
       appletId,
       entityId: flowId ?? activityId,
       eventId,
+      targetSubjectId,
     };
 
     const success = await processWithAutocompletion(exclude);

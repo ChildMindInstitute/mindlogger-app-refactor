@@ -11,6 +11,7 @@ export type UseFlowStorageArgs = {
   appletId: string;
   eventId: string;
   flowId?: string;
+  targetSubjectId: string | null;
 };
 
 type ActivityId = string;
@@ -54,9 +55,10 @@ export function useFlowStorageRecord({
   appletId,
   eventId,
   flowId,
+  targetSubjectId,
 }: UseFlowStorageArgs) {
   const flowKey = flowId ?? 'default_one_step_flow';
-  const key = `${flowKey}-${appletId}-${eventId}`;
+  const key = `${flowKey}-${appletId}-${eventId}-${targetSubjectId || 'NULL'}`;
 
   const [flowStorageRecord, upsertFlowStorageRecord] = useMMKVObject<FlowState>(
     key,

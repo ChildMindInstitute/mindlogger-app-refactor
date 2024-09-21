@@ -47,7 +47,7 @@ const ProgressWithTimer: FC<ProgressWithTimerProps> = ({ duration }) => {
 
 const Timer: FC<TimerProps> = ({ duration }) => {
   const { t } = useTranslation();
-  const { appletId, activityId, eventId, order } = useContext(
+  const { appletId, activityId, eventId, targetSubjectId, order } = useContext(
     ActivityIdentityContext,
   );
 
@@ -61,6 +61,7 @@ const Timer: FC<TimerProps> = ({ duration }) => {
     appletId,
     activityId,
     eventId,
+    targetSubjectId,
     order,
   });
 

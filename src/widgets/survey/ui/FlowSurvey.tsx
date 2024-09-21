@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { EntityPath, StoreProgressPayload } from '@app/abstract/lib';
+import { EntityPath, EntityProgressionInProgress } from '@app/abstract/lib';
 import { useInProgressRecord } from '@app/entities/applet/model';
 import { EventModel } from '@app/entities/event';
 import { TimeIsUpModal } from '@widgets/survey';
@@ -26,6 +26,7 @@ function FlowSurvey({
   entityId,
   entityType,
   eventId,
+  targetSubjectId,
   onClose,
 }: Props) {
   const [timeIsUpModalVisible, setTimeIsUpModalVisible] = useState(false);
@@ -37,6 +38,7 @@ function FlowSurvey({
     appletId,
     eventId,
     flowId: entityType === 'flow' ? entityId : undefined,
+    targetSubjectId,
   });
 
   const {
@@ -50,6 +52,7 @@ function FlowSurvey({
     appletId,
     eventId,
     flowId: entityType === 'flow' ? entityId : undefined,
+    targetSubjectId,
   });
 
   const onTimeIsUp = useCallback(
@@ -74,13 +77,15 @@ function FlowSurvey({
 
   const event = EventModel.useScheduledEvent({ appletId, eventId })!;
 
-  const progressRecord: StoreProgressPayload = useInProgressRecord({
+  const progression = useInProgressRecord({
     appletId,
     entityId,
     eventId,
+    targetSubjectId,
   })!;
 
-  const entityStartedAt = progressRecord.startAt;
+  const entityStartedAt = (progression as EntityProgressionInProgress)
+    .startedAtTimestamp;
 
   useEventTimer({
     entityStartedAt,
@@ -89,7 +94,8 @@ function FlowSurvey({
   });
 
   useAvailabilityTimer({
-    availableTo: progressRecord.availableTo,
+    availableTo: (progression as EntityProgressionInProgress)
+      .availableUntilTimestamp,
     onFinish: () => onTimeIsUp('availability'),
   });
 
@@ -117,6 +123,7 @@ function FlowSurvey({
     eventId,
     entityId,
     entityType,
+    targetSubjectId,
   });
 
   useActivityRecordsInitialization({
@@ -124,6 +131,7 @@ function FlowSurvey({
     eventId,
     entityId,
     entityType,
+    targetSubjectId,
   });
 
   return (

@@ -13,12 +13,14 @@ export type UseFlowStateActionsArgs = {
   appletId: string;
   eventId: string;
   flowId?: string;
+  targetSubjectId: string | null;
 };
 
 export function useFlowStateActions({
   appletId,
   eventId,
   flowId,
+  targetSubjectId,
 }: UseFlowStateActionsArgs) {
   const {
     upsertFlowStorageRecord,
@@ -28,6 +30,7 @@ export function useFlowStateActions({
     appletId,
     eventId,
     flowId,
+    targetSubjectId,
   });
 
   const getStep = (record?: FlowState): number => {

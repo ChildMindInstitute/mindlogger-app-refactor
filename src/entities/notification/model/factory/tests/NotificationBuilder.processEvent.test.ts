@@ -76,6 +76,7 @@ const getMockNotification = (index = 1) => {
     appletId: 'mock-applet-id',
     entityName: 'mock-entity-name',
     eventId: 'mock-event-id',
+    targetSubjectId: 'mock-target-subject-id',
     isActive: true,
     notificationBody: 'mock-notification-body',
     notificationHeader: 'mock-notification-header',

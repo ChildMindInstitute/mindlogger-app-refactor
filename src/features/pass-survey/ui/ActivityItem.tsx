@@ -75,11 +75,15 @@ function ActivityItem({
   onContextChange,
   context,
 }: Props) {
-  const { appletId, activityId, flowId } = useContext(ActivityIdentityContext);
+  const { appletId, activityId, flowId, targetSubjectId } = useContext(
+    ActivityIdentityContext,
+  );
+
   const { assignment } = useActivityAssignment({
     appletId,
     activityId,
-    activityFlowId: flowId,
+    activityFlowId: flowId || null,
+    targetSubjectId,
   });
 
   const streamingDetails = useAppletStreamingDetails(appletId);

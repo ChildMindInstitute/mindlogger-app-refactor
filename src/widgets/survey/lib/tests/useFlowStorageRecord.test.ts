@@ -20,6 +20,7 @@ const initialProps = {
   appletId: 'mock-applet-id-1',
   eventId: 'mock-event-id-1',
   flowId: 'mock-flow-id-1',
+  targetSubjectId: 'mock-target-subject-id-1',
 };
 
 jest.mock('react-native-mmkv', () => ({
@@ -55,6 +56,7 @@ describe('Test useFlowStorageRecord', () => {
         initialProps: {
           appletId: 'mock-applet-id-3',
           eventId: 'mock-event-id-3',
+          targetSubjectId: 'mock-target-subject-id-3',
         },
       },
     );
@@ -74,6 +76,7 @@ describe('Test useFlowStorageRecord', () => {
       appletId: 'mock-applet-id-2',
       eventId: 'mock-event-id-2',
       flowId: 'mock-flow-id-2',
+      targetSubjectId: 'mock-target-subject-id-2',
     });
 
     expect(result.current.flowStorageRecord).toEqual({

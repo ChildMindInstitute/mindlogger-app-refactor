@@ -7,10 +7,10 @@ import {
   MigrationOutput,
 } from './types';
 
-export class MigrationRunner implements IMigrationRunner {
-  private migrations: Record<number, IMigration>;
+export class MigrationRunner implements IMigrationRunner<unknown, unknown> {
+  private migrations: Record<number, IMigration<unknown, unknown>>;
 
-  constructor(migrations: Record<number, IMigration>) {
+  constructor(migrations: Record<number, IMigration<unknown, unknown>>) {
     this.migrations = migrations;
   }
 
@@ -25,10 +25,10 @@ export class MigrationRunner implements IMigrationRunner {
   }
 
   public async migrate(
-    migrationInput: MigrationInput,
+    migrationInput: MigrationInput<unknown>,
     currentVersion: number,
     inboundVersion: number,
-  ): Promise<MigrationOutput> {
+  ): Promise<MigrationOutput<unknown>> {
     const migrationKeys = this.getMigrationKeys(currentVersion, inboundVersion);
 
     Logger.log(

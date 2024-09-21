@@ -68,12 +68,14 @@ function ActivitySectionList({
     entityId: string,
     entityType: EntityType,
     eventId: string,
+    targetSubjectId: string | null,
   ) {
     navigate('InProgressActivity', {
       appletId,
       entityId,
       entityType,
       eventId,
+      targetSubjectId,
     });
   }
 
@@ -81,6 +83,7 @@ function ActivitySectionList({
     activityId,
     eventId,
     flowId,
+    targetSubjectId,
     isExpired: isTimerElapsed,
     name,
     activityFlowDetails,
@@ -109,6 +112,7 @@ function ActivitySectionList({
         eventId,
         entityName,
         isTimerElapsed,
+        targetSubjectId,
       );
 
       if (result.failReason === 'expired-while-alert-opened') {
@@ -120,10 +124,10 @@ function ActivitySectionList({
       }
 
       if (result.fromScratch) {
-        clearStorageRecords.byEventId(eventId);
+        clearStorageRecords.byEventId(eventId, targetSubjectId);
       }
 
-      navigateSurvey(flowId, 'flow', eventId);
+      navigateSurvey(flowId, 'flow', eventId, targetSubjectId);
     } else {
       const result = await startActivity(
         appletId,
@@ -131,6 +135,7 @@ function ActivitySectionList({
         eventId,
         entityName,
         isTimerElapsed,
+        targetSubjectId,
       );
 
       if (result.failReason === 'expired-while-alert-opened') {
@@ -142,10 +147,10 @@ function ActivitySectionList({
       }
 
       if (result.fromScratch) {
-        clearStorageRecords.byEventId(eventId);
+        clearStorageRecords.byEventId(eventId, targetSubjectId);
       }
 
-      navigateSurvey(activityId, 'regular', eventId);
+      navigateSurvey(activityId, 'regular', eventId, targetSubjectId);
     }
   };
 

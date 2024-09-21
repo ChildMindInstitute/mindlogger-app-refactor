@@ -1,24 +1,33 @@
-import { StoreProgressPayload } from '@app/abstract/lib';
+import { EntityProgression } from '@app/abstract/lib';
 import { useAppSelector } from '@app/shared/lib';
 
-import { selectInProgressApplets } from '../selectors';
+import { selectAppletsEntityProgressions } from '../selectors';
 
 type UseInProgressRecordInput = {
   appletId: string;
   entityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 };
 
 const useInProgressRecord = ({
   appletId,
   entityId,
   eventId,
-}: UseInProgressRecordInput): StoreProgressPayload | null => {
-  const inProgressApplets = useAppSelector(selectInProgressApplets);
+  targetSubjectId,
+}: UseInProgressRecordInput): EntityProgression | null => {
+  const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
 
-  const record = inProgressApplets[appletId]?.[entityId]?.[eventId] ?? null;
-
-  return record;
+  return (
+    entityProgressions.find(progression => {
+      return (
+        progression.appletId === appletId &&
+        progression.entityId === entityId &&
+        progression.eventId === eventId &&
+        progression.targetSubjectId === targetSubjectId
+      );
+    }) || null
+  );
 };
 
 export default useInProgressRecord;

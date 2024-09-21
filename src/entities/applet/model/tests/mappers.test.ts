@@ -22,7 +22,6 @@ import {
 } from './mappers.output.mock.ts';
 import {
   mapDtoToRespondentMeta,
-  mapCompletedEntityFromDto,
   mapAppletDtoToAppletVersion,
   mapApplets,
   mapAppletDetailsFromDto,
@@ -46,18 +45,6 @@ describe('Applet entity mappers tests', () => {
     });
 
     expect(result).toEqual('');
-  });
-
-  it('Should return mapped result for completed entity', async () => {
-    const result = mapCompletedEntityFromDto(completedEntityDto);
-
-    expect(result).toEqual({
-      endAt: +new Date(
-        `${completedEntityDto.localEndDate} ${completedEntityDto.localEndTime}`,
-      ),
-      entityId: '0',
-      eventId: '3',
-    });
   });
 
   it('Should return applet version from Applet Dto', async () => {

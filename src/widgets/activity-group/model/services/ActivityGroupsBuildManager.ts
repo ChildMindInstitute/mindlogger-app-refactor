@@ -1,17 +1,19 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import {
-  ActivityPipelineType,
-  StoreProgress,
-  convertProgress,
-} from '@app/abstract/lib';
+import { ActivityPipelineType, EntityProgression } from '@app/abstract/lib';
+import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
 import { mapEventsFromDto } from '@app/entities/event/model/mappers';
-import { AppletDetailsResponse, AppletEventsResponse } from '@app/shared/api';
+import {
+  AppletAssignmentsResponse,
+  AppletDetailsResponse,
+  AppletEventsResponse,
+} from '@app/shared/api';
 import {
   ILogger,
   Logger,
   getAppletDetailsKey,
+  getAssignmentsKey,
   getDataFromQuery,
   getEventsKey,
 } from '@app/shared/lib';
@@ -24,7 +26,11 @@ import {
   EventEntity,
 } from '../../lib';
 import { createActivityGroupsBuilder } from '../factories/ActivityGroupsBuilder';
-import { mapActivitiesFromDto, mapActivityFlowsFromDto } from '../mappers';
+import {
+  mapActivitiesFromDto,
+  mapActivityFlowsFromDto,
+  mapAssignmentsFromDto,
+} from '../mappers';
 
 type BuildResult = {
   groups: ActivityListGroup[];
@@ -62,7 +68,7 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
 
   const processInternal = (
     appletId: string,
-    entitiesProgress: StoreProgress,
+    entityProgressions: EntityProgression[],
     queryClient: QueryClient,
   ): BuildResult => {
     const appletResponse = getDataFromQuery<AppletDetailsResponse>(
@@ -88,6 +94,14 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
       appletResponse.result.activityFlows,
     );
 
+    const assignmentsResponse = getDataFromQuery<AppletAssignmentsResponse>(
+      getAssignmentsKey(appletId),
+      queryClient,
+    );
+    const assignments: Assignment[] = assignmentsResponse
+      ? mapAssignmentsFromDto(assignmentsResponse.result.assignments)
+      : [];
+
     const eventsResponse = getDataFromQuery<AppletEventsResponse>(
       getEventsKey(appletId),
       queryClient,
@@ -103,53 +117,72 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
       eventsResponse.result.events,
     );
 
+    const idToEntity = buildIdToEntityMap(activities, activityFlows);
+    const calculator = EventModel.ScheduledDateCalculator;
+
+    const entityEvents = events
+      .reduce((acc, event) => {
+        const entity = idToEntity[event.entityId];
+
+        if (entity) {
+          let entityAssignments: Assignment[] = [];
+          if (entity.pipelineType === ActivityPipelineType.Flow) {
+            entityAssignments = assignments.filter(
+              _assignment =>
+                _assignment.__type === 'activityFlow' &&
+                _assignment.activityFlowId === entity.id,
+            );
+          } else {
+            entityAssignments = assignments.filter(
+              _assignment =>
+                _assignment.__type === 'activity' &&
+                _assignment.activityId === entity.id,
+            );
+          }
+          if (entityAssignments.length <= 0) {
+            acc.push({ entity, event, assignment: null });
+          } else {
+            for (const assignment of entityAssignments) {
+              acc.push({ entity, event, assignment });
+            }
+          }
+        }
+
+        return acc;
+      }, [] as EventEntity[])
+      .map(entityEvent => {
+        const date = calculator.calculate(entityEvent.event);
+        entityEvent.event.scheduledAt = date;
+
+        if (!date) {
+          logger.info(
+            `[ScheduledDateCalculator.calculate]: result is null, entity|event = "${entityEvent.entity.name}|${entityEvent.event.id}"`,
+          );
+        }
+
+        return entityEvent;
+      })
+      .filter(x => x.event.scheduledAt)
+      .filter(x => !x.entity.isHidden);
+
+    const result: BuildResult = { groups: [] };
     const builder = createActivityGroupsBuilder({
       allAppletActivities: activities,
       appletId: appletId,
-      progress: convertProgress(entitiesProgress),
+      entityProgressions,
     });
-
-    const idToEntity = buildIdToEntityMap(activities, activityFlows);
-
-    let entityEvents = events
-      .map<EventEntity>(event => ({
-        entity: idToEntity[event.entityId],
-        event,
-      }))
-      // @todo - remove after fix on BE
-      .filter(entityEvent => !!entityEvent.entity);
-
-    const calculator = EventModel.ScheduledDateCalculator;
-
-    for (const eventActivity of entityEvents) {
-      const date = calculator.calculate(eventActivity.event);
-      eventActivity.event.scheduledAt = date;
-
-      if (!date) {
-        logger.info(
-          `[ScheduledDateCalculator.calculate]: result is null, entity|event = "${eventActivity.entity.name}|${eventActivity.event.id}"`,
-        );
-      }
-    }
-
-    entityEvents = entityEvents.filter(x => x.event.scheduledAt);
-
-    entityEvents = entityEvents.filter(x => !x.entity.isHidden);
-
-    entityEvents = sort(entityEvents);
-
-    const result: BuildResult = { groups: [] };
+    const sortedEntityEvents = sort(entityEvents);
 
     let logInfo = '';
     try {
       logInfo = 'building in-progress';
-      result.groups.push(builder.buildInProgress(appletId, entityEvents));
+      result.groups.push(builder.buildInProgress(appletId, sortedEntityEvents));
 
       logInfo = 'building available';
-      result.groups.push(builder.buildAvailable(appletId, entityEvents));
+      result.groups.push(builder.buildAvailable(appletId, sortedEntityEvents));
 
       logInfo = 'building scheduled';
-      result.groups.push(builder.buildScheduled(appletId, entityEvents));
+      result.groups.push(builder.buildScheduled(appletId, sortedEntityEvents));
     } catch (error) {
       logger.warn(
         `[ActivityGroupsBuildManager.processInternal]: Build error occurred while ${logInfo}:\n\n${error as never}`,
@@ -162,13 +195,13 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
 
   const process = (
     appletId: string,
-    entitiesProgress: StoreProgress,
+    entityProgressions: EntityProgression[],
     queryClient: QueryClient,
   ): BuildResult => {
     try {
       logger.log('[ActivityGroupsBuildManager.process]: Building groups..');
 
-      const result = processInternal(appletId, entitiesProgress, queryClient);
+      const result = processInternal(appletId, entityProgressions, queryClient);
 
       logger.log('[ActivityGroupsBuildManager.process]: Build is done');
 

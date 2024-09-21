@@ -3,8 +3,9 @@ import { Assignment } from '../types/activityAssignment';
 
 type UseActivityAssignmentOptions = {
   appletId: string;
-  activityId?: string | null;
-  activityFlowId?: string | null;
+  activityId: string | null;
+  activityFlowId: string | null;
+  targetSubjectId: string | null;
 };
 
 type UseActivityAssignmentValue = {
@@ -15,6 +16,7 @@ export const useActivityAssignment = ({
   appletId,
   activityId,
   activityFlowId,
+  targetSubjectId,
 }: UseActivityAssignmentOptions): UseActivityAssignmentValue => {
   const { assignments } = useActivityAssignments({ appletId });
 
@@ -27,14 +29,16 @@ export const useActivityAssignment = ({
       assignments.find(
         _assignment =>
           _assignment.__type === 'activityFlow' &&
-          _assignment.activityFlowId === activityFlowId,
+          _assignment.activityFlowId === activityFlowId &&
+          _assignment.target.id === targetSubjectId,
       ) || null;
   } else if (activityId) {
     assignment =
       assignments.find(
         _assignment =>
           _assignment.__type === 'activity' &&
-          _assignment.activityId === activityId,
+          _assignment.activityId === activityId &&
+          _assignment.target.id === targetSubjectId,
       ) || null;
   } else {
     assignment = null;

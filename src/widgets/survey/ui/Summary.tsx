@@ -16,6 +16,7 @@ type Props = {
   activityId: string;
   eventId: string;
   flowId?: string;
+  targetSubjectId: string | null;
   order: number;
   onFinish: () => void;
 };
@@ -26,6 +27,7 @@ function Summary({
   flowId,
   activityId,
   eventId,
+  targetSubjectId,
   order,
 }: Props) {
   const { t } = useTranslation();
@@ -39,6 +41,7 @@ function Summary({
     appletId,
     eventId,
     order,
+    targetSubjectId,
     flowId,
   });
 

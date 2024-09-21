@@ -15,11 +15,12 @@ import {
   buildSingleActivityPipeline,
 } from '../pipelineBuilder';
 
-type UseActivityRecordCreatorArgs = {
+type UseFlowRecordCreatorArgs = {
   appletId: string;
   eventId: string;
   entityId: string;
   entityType: EntityType;
+  targetSubjectId: string | null;
 };
 
 export function useFlowRecordInitialization({
@@ -27,11 +28,13 @@ export function useFlowRecordInitialization({
   eventId,
   entityId,
   entityType,
-}: UseActivityRecordCreatorArgs) {
+  targetSubjectId,
+}: UseFlowRecordCreatorArgs) {
   const { flowStorageRecord, upsertFlowStorageRecord } = useFlowStorageRecord({
     appletId,
     eventId,
     flowId: entityType === 'flow' ? entityId : undefined,
+    targetSubjectId,
   });
 
   const queryClient = useQueryClient();
@@ -71,6 +74,7 @@ export function useFlowRecordInitialization({
       return buildSingleActivityPipeline({
         appletId,
         eventId,
+        targetSubjectId,
         activity: {
           id: activity.id,
           name: activity.name,
@@ -95,6 +99,7 @@ export function useFlowRecordInitialization({
         appletId,
         eventId,
         flowId: entityId,
+        targetSubjectId,
         startFrom: step,
         hasSummary,
       });
@@ -106,6 +111,7 @@ export function useFlowRecordInitialization({
     step,
     entityId,
     entityType,
+    targetSubjectId,
     activityQueryService,
     flow,
   ]);

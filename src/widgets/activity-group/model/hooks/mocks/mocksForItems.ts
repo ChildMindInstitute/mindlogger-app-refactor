@@ -27,6 +27,7 @@ for (let i = 0; i < 3; i++) {
       activityId: (i * 100 + j).toString(),
       eventId: '',
       flowId: '',
+      targetSubjectId: null,
       activityFlowDetails: null,
       isInActivityFlow: true,
       type: ActivityType.NotDefined,

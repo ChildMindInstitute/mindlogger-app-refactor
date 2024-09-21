@@ -10,9 +10,10 @@ import {
 
 import {
   AvailabilityType,
+  EntityProgression,
+  EntityProgressionCompleted,
+  EntityProgressionInProgress,
   PeriodicityType,
-  Progress,
-  ProgressPayload,
 } from '@app/abstract/lib';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
 import { DatesFromTo, HourMinute, isSourceLess } from '@shared/lib';
@@ -20,13 +21,13 @@ import { DatesFromTo, HourMinute, isSourceLess } from '@shared/lib';
 const ManyYears = 100;
 
 export class GroupUtility {
-  protected progress: Progress;
-
   protected appletId: string;
 
-  constructor(progress: Progress, appletId: string) {
-    this.progress = progress;
+  protected entityProgressions: EntityProgression[];
+
+  constructor(appletId: string, entityProgressions: EntityProgression[]) {
     this.appletId = appletId;
+    this.entityProgressions = entityProgressions;
   }
 
   private getAllowedTimeInterval(
@@ -90,22 +91,45 @@ export class GroupUtility {
     return isEqual(this.getYesterday(), startOfDay(date));
   }
 
-  public getProgressRecord(event: ScheduleEvent): ProgressPayload | null {
-    const record = this.progress[this.appletId]?.[event.entityId]?.[event.id];
-    return record ?? null;
+  public getProgressionRecord(
+    event: ScheduleEvent,
+    targetSubjectId: string | null,
+  ): EntityProgression | null {
+    return (
+      this.entityProgressions.find(progression => {
+        return (
+          progression.appletId === this.appletId &&
+          progression.entityId === event.entityId &&
+          progression.eventId === event.id &&
+          progression.targetSubjectId === targetSubjectId
+        );
+      }) || null
+    );
   }
 
-  public getCompletedAt(event: ScheduleEvent): Date | null {
-    const progressRecord = this.getProgressRecord(event);
-    return progressRecord?.endAt ?? null;
+  public getEventCompletedAt(
+    event: ScheduleEvent,
+    targetSubjectId: string | null,
+  ): Date | null {
+    const progressRecord = this.getProgressionRecord(
+      event,
+      targetSubjectId,
+    ) as EntityProgressionCompleted | null;
+    return progressRecord?.endedAtTimestamp &&
+      progressRecord.endedAtTimestamp > 0
+      ? new Date(progressRecord.endedAtTimestamp)
+      : null;
   }
 
-  public isInProgress(event: ScheduleEvent): boolean {
-    const record = this.getProgressRecord(event);
+  public isEventInProgress(
+    event: ScheduleEvent,
+    targetSubjectId: string | null,
+  ): boolean {
+    const record = this.getProgressionRecord(event, targetSubjectId);
     if (!record) {
       return false;
     }
-    return !!record.startAt && !record.endAt;
+    return record.status === 'in-progress';
   }
 
   public isInInterval(
@@ -188,10 +212,11 @@ export class GroupUtility {
     );
   }
 
-  public isCompletedInAllowedTimeInterval(
+  public isEventCompletedInAllowedTimeInterval(
     event: ScheduleEvent,
     scheduledWhen: 'today' | 'yesterday',
-    isAccessBeforeStartTime: boolean = false,
+    isAccessBeforeStartTime: boolean,
+    targetSubjectId: string | null,
   ): boolean {
     const { from: allowedFrom, to: allowedTo } = this.getAllowedTimeInterval(
       event,
@@ -199,8 +224,7 @@ export class GroupUtility {
       isAccessBeforeStartTime,
     );
 
-    const completedAt = this.getCompletedAt(event)!;
-
+    const completedAt = this.getEventCompletedAt(event, targetSubjectId);
     if (!completedAt) {
       return false;
     }
@@ -242,8 +266,11 @@ export class GroupUtility {
     return false;
   }
 
-  public isCompletedToday(event: ScheduleEvent): boolean {
-    const date = this.getCompletedAt(event);
+  public isEventCompletedToday(
+    event: ScheduleEvent,
+    targetSubjectId: string | null,
+  ): boolean {
+    const date = this.getEventCompletedAt(event, targetSubjectId);
 
     return !!date && this.isToday(date);
   }
@@ -268,16 +295,24 @@ export class GroupUtility {
     }
   }
 
-  public getTimeToComplete(event: ScheduleEvent): HourMinute | null {
+  public getEventTimeToComplete(
+    event: ScheduleEvent,
+    targetSubjectId: string | null,
+  ): HourMinute | null {
     if (!event.timers.timer) {
       throw new Error(
         '[GroupUtility.getTimeToComplete] Timer is not specified',
       );
     }
 
+    const progression = this.getProgressionRecord(
+      event,
+      targetSubjectId,
+    ) as EntityProgressionInProgress | null;
+
     return EventModel.getTimeToComplete(
       event.timers.timer,
-      this.getProgressRecord(event)!.startAt,
+      new Date(progression!.startedAtTimestamp),
       this.getNow(),
     );
   }

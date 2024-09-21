@@ -1,13 +1,15 @@
 import { QueryClient } from '@tanstack/react-query';
 
 import {
-  CompletedEventEntities,
-  StoreProgress,
-  convertProgress,
+  ActivityPipelineType,
+  EntityProgression,
+  EntityResponseTime,
 } from '@app/abstract/lib';
+import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
 import { AppletModel } from '@app/entities/applet';
 import { EventModel } from '@app/entities/event';
 import {
+  AppletAssignmentsResponse,
   AppletDetailsResponse,
   AppletDto,
   AppletEventsResponse,
@@ -20,9 +22,11 @@ import {
   Logger,
   getAppletDetailsKey,
   getAppletsKey,
+  getAssignmentsKey,
   getDataFromQuery,
   getEventsKey,
 } from '@app/shared/lib';
+import { mapAssignmentsFromDto } from '@app/widgets/activity-group/model/mappers';
 
 import { createNotificationBuilder } from './factory';
 import {
@@ -47,8 +51,8 @@ import NotificationsLogger from '../lib/services/NotificationsLogger';
 type NotificationRefreshService = {
   refresh: (
     queryClient: QueryClient,
-    storeProgress: StoreProgress,
-    completions: CompletedEventEntities,
+    progressions: EntityProgression[],
+    responseTimes: EntityResponseTime[],
     logTrigger: LogTrigger,
   ) => Promise<void>;
 };
@@ -65,8 +69,8 @@ const createNotificationRefreshService = (
 
   const refreshInternal = async (
     queryClient: QueryClient,
-    storeProgress: StoreProgress,
-    completions: CompletedEventEntities,
+    progressions: EntityProgression[],
+    responseTimes: EntityResponseTime[],
   ): Promise<AppletNotificationDescribers[]> => {
     const result: Array<AppletNotificationDescribers> = [];
 
@@ -82,8 +86,6 @@ const createNotificationRefreshService = (
       return result;
     }
 
-    const progress = convertProgress(storeProgress);
-
     const appletDtos: AppletDto[] = appletsResponse.result;
 
     const applets = appletDtos.map(x => ({
@@ -97,14 +99,19 @@ const createNotificationRefreshService = (
       const detailsResponse = getDataFromQuery<AppletDetailsResponse>(
         getAppletDetailsKey(applet.id),
         queryClient,
-      )!;
+      );
 
       const eventsResponse = getDataFromQuery<AppletEventsResponse>(
         getEventsKey(applet.id),
         queryClient,
-      )!;
+      );
 
-      if (!detailsResponse || !eventsResponse) {
+      const assignmentsResponse = getDataFromQuery<AppletAssignmentsResponse>(
+        getAssignmentsKey(applet.id),
+        queryClient,
+      );
+
+      if (!detailsResponse || !eventsResponse || !assignmentsResponse) {
         logger.info(
           `[NotificationRefreshService.refreshInternal] Notifications cannot be build for the applet "${applet.name}|${applet.id}" as required data is missing in the cache`,
         );
@@ -113,6 +120,10 @@ const createNotificationRefreshService = (
 
       const events: ScheduleEvent[] = mapEventsFromDto(
         eventsResponse.result.events,
+      );
+
+      const assignments = mapAssignmentsFromDto(
+        assignmentsResponse.result.assignments,
       );
 
       const activities: Activity[] = mapActivitiesFromDto(
@@ -124,19 +135,43 @@ const createNotificationRefreshService = (
       );
 
       const entities: Entity[] = [...activities, ...activityFlows];
-
       const idToEntity = buildIdToEntityMap(entities);
 
-      let entityEvents = events.map<EventEntity>(event => ({
-        entity: idToEntity[event.entityId],
-        event,
-      }));
+      let entityEvents = events.reduce((acc, event) => {
+        const entity = idToEntity[event.entityId];
 
-      if (entityEvents.some(x => x.entity == null)) {
+        if (entity) {
+          let entityAssignments: Assignment[] = [];
+          if (entity.pipelineType === ActivityPipelineType.Flow) {
+            entityAssignments = assignments.filter(
+              _assignment =>
+                _assignment.__type === 'activityFlow' &&
+                _assignment.activityFlowId === entity.id,
+            );
+          } else {
+            entityAssignments = assignments.filter(
+              _assignment =>
+                _assignment.__type === 'activity' &&
+                _assignment.activityId === entity.id,
+            );
+          }
+          if (entityAssignments.length <= 0) {
+            acc.push({ entity, event, assignment: null });
+          } else {
+            for (const assignment of entityAssignments) {
+              acc.push({ entity, event, assignment });
+            }
+          }
+        }
+
+        return acc;
+      }, [] as EventEntity[]);
+
+      if (entityEvents.some(x => x.entity === null)) {
         logger.log(
           `[NotificationRefreshService.refreshInternal] Discovered event(s) for applet "${applet.name}|${applet.id}" that referenced to a missing entity`,
         );
-        entityEvents = entityEvents.filter(x => x.entity != null);
+        entityEvents = entityEvents.filter(x => x.entity !== null);
       }
 
       const calculator = EventModel.ScheduledDateCalculator;
@@ -150,8 +185,8 @@ const createNotificationRefreshService = (
         appletId: applet.id,
         appletName: applet.name,
         eventEntities: entityEvents,
-        progress,
-        completions,
+        progressions,
+        responseTimes,
       });
 
       const appletNotifications: AppletNotificationDescribers = builder.build();
@@ -177,8 +212,8 @@ const createNotificationRefreshService = (
 
   const refresh = async (
     queryClient: QueryClient,
-    storeProgress: StoreProgress,
-    completions: CompletedEventEntities,
+    progressions: EntityProgression[],
+    responseTimes: EntityResponseTime[],
     logTrigger: LogTrigger,
   ) => {
     logger.info(
@@ -205,8 +240,8 @@ const createNotificationRefreshService = (
 
       describers = await refreshInternal(
         queryClient,
-        storeProgress,
-        completions,
+        progressions,
+        responseTimes,
       );
 
       logger.info(

@@ -4,11 +4,7 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useIsFocused } from '@react-navigation/core';
 import { useQueryClient } from '@tanstack/react-query';
 
-import {
-  AutocompletionEventOptions,
-  EntityPath,
-  StoreProgress,
-} from '@app/abstract/lib';
+import { AutocompletionEventOptions, EntityPath } from '@app/abstract/lib';
 import { AppletModel } from '@app/entities/applet';
 import {
   AnalyticsService,
@@ -39,8 +35,8 @@ const ActivityListScreen: FC<Props> = props => {
     });
   });
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
+  const entityProgressions = useAppSelector(
+    AppletModel.selectors.selectAppletsEntityProgressions,
   );
 
   const queryClient = useQueryClient();
@@ -48,13 +44,19 @@ const ActivityListScreen: FC<Props> = props => {
   const checkAvailability = useCallback(
     async (
       entityName: string,
-      { eventId, entityId, entityType }: EntityPath,
+      { eventId, entityId, entityType, targetSubjectId }: EntityPath,
     ) => {
       const isSuccess = await checkEntityAvailability({
         entityName,
-        identifiers: { appletId, eventId, entityId, entityType },
+        identifiers: {
+          appletId,
+          eventId,
+          entityId,
+          entityType,
+          targetSubjectId,
+        },
         queryClient,
-        storeProgress,
+        entityProgressions,
       });
 
       if (!isSuccess) {
@@ -65,7 +67,7 @@ const ActivityListScreen: FC<Props> = props => {
       }
       return isSuccess;
     },
-    [appletId, queryClient, storeProgress],
+    [appletId, queryClient],
   );
 
   const { completeEntityIntoUploadToQueue } = SurveyModel.useAutoCompletion();

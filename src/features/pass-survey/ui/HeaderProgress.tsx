@@ -8,6 +8,7 @@ type Props = {
   appletId: string;
   eventId: string;
   flowId?: string;
+  targetSubjectId: string | null;
 };
 
 const getCurrentItemProgress = (
@@ -24,11 +25,12 @@ const getCurrentItemProgress = (
   return 100;
 };
 
-function HeaderProgress({ appletId, eventId, flowId }: Props) {
+function HeaderProgress({ appletId, eventId, flowId, targetSubjectId }: Props) {
   const { flowStorageRecord } = useFlowStorageRecord({
     appletId,
     eventId,
     flowId: flowId,
+    targetSubjectId,
   });
 
   const { step: flowStep, pipeline } = flowStorageRecord!;

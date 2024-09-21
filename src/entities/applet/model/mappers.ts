@@ -25,7 +25,6 @@ import {
   AppletDetails,
   AppletTheme,
   AppletVersion,
-  CompletedEntity,
   ResponseAnalyticsValue,
 } from '../lib';
 
@@ -157,16 +156,6 @@ export function mapAppletDtoToAppletVersion(dto: AppletDto): AppletVersion {
   return {
     version: dto.version,
     appletId: dto.id,
-  };
-}
-
-export function mapCompletedEntityFromDto(
-  dto: CompletedEntityDto,
-): CompletedEntity {
-  return {
-    eventId: dto.scheduledEventId,
-    entityId: dto.id,
-    endAt: buildDateTimeFromDto(dto.localEndDate, dto.localEndTime).valueOf(),
   };
 }
 

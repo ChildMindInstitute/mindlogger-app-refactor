@@ -39,14 +39,14 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   constructor(inputParams: GroupsBuildContext) {
     this.itemsFactory = new ListItemsFactory(inputParams);
     this.scheduledEvaluator = new ScheduledGroupEvaluator(
-      inputParams.progress,
       inputParams.appletId,
+      inputParams.entityProgressions,
     );
-    this.availableEvaluator = new AvailableGroupEvaluator(
-      inputParams.progress,
+    this.availableEvaluator = new AvailableGroupEvaluator(inputParams.appletId);
+    this.utility = new GroupUtility(
       inputParams.appletId,
+      inputParams.entityProgressions,
     );
-    this.utility = new GroupUtility(inputParams.progress, inputParams.appletId);
   }
 
   public buildInProgress(
@@ -54,7 +54,7 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     eventsActivities: Array<EventEntity>,
   ): ActivityListGroup {
     const filtered = eventsActivities.filter(x =>
-      this.utility.isInProgress(x.event),
+      this.utility.isEventInProgress(x.event, x.assignment?.target.id || null),
     );
 
     const activityItems: Array<ActivityListItem> = [];
@@ -82,7 +82,11 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     eventsEntities: Array<EventEntity>,
   ): ActivityListGroup {
     const inputEntities = eventsEntities.filter(
-      x => !this.utility.isInProgress(x.event),
+      x =>
+        !this.utility.isEventInProgress(
+          x.event,
+          x.assignment?.target.id || null,
+        ),
     );
 
     const filtered = this.availableEvaluator.evaluate(inputEntities);
@@ -112,7 +116,11 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     eventsEntities: Array<EventEntity>,
   ): ActivityListGroup {
     const inputEntities = eventsEntities.filter(
-      x => !this.utility.isInProgress(x.event),
+      x =>
+        !this.utility.isEventInProgress(
+          x.event,
+          x.assignment?.target.id || null,
+        ),
     );
 
     const filtered = this.scheduledEvaluator.evaluate(inputEntities);

@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import {
-  ActivityPipelineType,
   AvailabilityType,
-  StoreProgressPayload,
+  EntityProgression,
+  EntityProgressionInProgressActivity,
+  EntityProgressionInProgressActivityFlow,
 } from '@app/abstract/lib';
 import { SvgFileManager } from '@app/entities/drawer';
 import { EventModel, ScheduleEvent } from '@app/entities/event';
@@ -23,16 +24,36 @@ export const getScheduledDate = (event: ScheduleEvent) => {
   }
 };
 
-export const getActivityStartAt = (progressRecord: StoreProgressPayload) => {
-  return progressRecord.type === ActivityPipelineType.Regular
-    ? progressRecord.startAt
-    : progressRecord.currentActivityStartAt;
+export const getActivityProgressionStartAt = (
+  progression: EntityProgression,
+): Date | null => {
+  if (progression.entityType === 'activity') {
+    const startedAtTimestamp = (
+      progression as EntityProgressionInProgressActivity
+    ).startedAtTimestamp;
+    return startedAtTimestamp && startedAtTimestamp > 0
+      ? new Date(startedAtTimestamp)
+      : null;
+  }
+
+  const currentActivityStartAt = (
+    progression as EntityProgressionInProgressActivityFlow
+  ).currentActivityStartAt;
+  if (currentActivityStartAt) {
+    return new Date(currentActivityStartAt);
+  }
+
+  return null;
 };
 
-export const getExecutionGroupKey = (progressRecord: StoreProgressPayload) => {
-  return progressRecord.type === ActivityPipelineType.Flow
-    ? progressRecord.executionGroupKey
-    : uuidv4();
+export const getActivityFlowProgressionExecutionGroupKey = (
+  progression: EntityProgression,
+) => {
+  if (progression.entityType === 'activityFlow') {
+    return (progression as EntityProgressionInProgressActivityFlow)
+      .executionGroupKey;
+  }
+  return uuidv4();
 };
 
 export const getUserIdentifier = (

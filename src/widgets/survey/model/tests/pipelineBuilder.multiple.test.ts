@@ -19,6 +19,7 @@ describe('Test pipelineBuilder for multiple activities', () => {
     const result = buildActivityFlowPipeline({
       appletId: 'mock-applet-id-1',
       eventId: 'mock-event-id-1',
+      targetSubjectId: 'mock-target-subject-id-1',
       hasSummary: () => false,
       startFrom: 0,
       flowId: 'mock-flow-id-1',
@@ -83,6 +84,7 @@ describe('Test pipelineBuilder for multiple activities', () => {
     const result = buildActivityFlowPipeline({
       appletId: 'mock-applet-id-1',
       eventId: 'mock-event-id-1',
+      targetSubjectId: 'mock-target-subject-id-1',
       hasSummary: () => true,
       startFrom: 0,
       flowId: 'mock-flow-id-1',
@@ -158,6 +160,7 @@ describe('Test pipelineBuilder for multiple activities', () => {
     const result = buildActivityFlowPipeline({
       appletId: 'mock-applet-id-1',
       eventId: 'mock-event-id-1',
+      targetSubjectId: 'mock-target-subject-id-1',
       hasSummary: () => false,
       startFrom: 3,
       flowId: 'mock-flow-id-1',
@@ -185,6 +188,7 @@ describe('Test pipelineBuilder for multiple activities', () => {
     const result = buildActivityFlowPipeline({
       appletId: 'mock-applet-id-1',
       eventId: 'mock-event-id-1',
+      targetSubjectId: 'mock-target-subject-id-1',
       hasSummary: () => true,
       startFrom: 3,
       flowId: 'mock-flow-id-1',
@@ -223,6 +227,7 @@ describe('Test pipelineBuilder for multiple activities', () => {
     const result = buildActivityFlowPipeline({
       appletId: 'mock-applet-id-1',
       eventId: 'mock-event-id-1',
+      targetSubjectId: 'mock-target-subject-id-1',
       hasSummary: () => false,
       startFrom: 0,
       flowId: 'mock-flow-id-1',

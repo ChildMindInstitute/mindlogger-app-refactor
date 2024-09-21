@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { StoreProgress } from '@app/abstract/lib';
 import { NotificationModel } from '@app/entities/notification';
 import { LogTrigger } from '@app/shared/api';
 import {
@@ -47,11 +46,13 @@ const AppletsScreen: FC = () => {
 
   const queryClient = useQueryClient();
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
+  const progressions = useAppSelector(
+    AppletModel.selectors.selectAppletsEntityProgressions,
   );
 
-  const completions = useAppSelector(AppletModel.selectors.selectCompletions);
+  const responseTimes = useAppSelector(
+    AppletModel.selectors.selectEntityResponseTimes,
+  );
 
   const navigateAppletDetails: (applet: SelectedApplet) => void = useCallback(
     ({ id, displayName }) => {
@@ -67,8 +68,8 @@ const AppletsScreen: FC = () => {
   AppletsRefreshModel.useAutomaticRefreshOnMount(async () => {
     await NotificationModel.NotificationRefreshService.refresh(
       queryClient,
-      storeProgress,
-      completions,
+      progressions,
+      responseTimes,
       LogTrigger.FirstAppRun,
     );
     Logger.send().catch(err => Logger.error(err as never));

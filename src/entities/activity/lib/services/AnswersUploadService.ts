@@ -392,6 +392,7 @@ class AnswersUploadService implements IAnswersUploadService {
       appletId: data.appletId,
       version: data.version,
       flowId: data.flowId,
+      targetSubjectId: data.targetSubjectId,
       submitId: data.executionGroupKey,
       activityId: data.activityId,
       isFlowCompleted: data.isFlowCompleted,

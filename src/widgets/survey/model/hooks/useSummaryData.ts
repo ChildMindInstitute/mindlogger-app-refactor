@@ -15,6 +15,7 @@ type Props = {
   activityId: string;
   eventId: string;
   flowId?: string;
+  targetSubjectId: string | null;
   order: number;
 };
 
@@ -39,6 +40,7 @@ export const useSummaryData = ({
   flowId,
   activityId,
   eventId,
+  targetSubjectId,
   order,
 }: Props): UISummaryData | null => {
   const { getName: getActivityName } = useActivityInfo();
@@ -47,10 +49,16 @@ export const useSummaryData = ({
     appletId,
     activityId,
     eventId,
+    targetSubjectId,
     order,
   });
 
-  const { flowSummaryData } = useFlowState({ appletId, eventId, flowId });
+  const { flowSummaryData } = useFlowState({
+    appletId,
+    eventId,
+    flowId,
+    targetSubjectId,
+  });
 
   const getSummaryForCurrentActivity = useCallback(
     (logActivityName: string) => {

@@ -13,7 +13,7 @@ describe('NotificationUtility: test corner cases, rest of small functions', () =
   });
 
   it('getRandomInt should return different values and they`re less than 1000 when the function called several times', () => {
-    const utility = new NotificationUtility({}, AppletId);
+    const utility = new NotificationUtility(AppletId, []);
 
     //@ts-expect-error
     const value1 = utility.getRandomInt(1000);
@@ -39,7 +39,7 @@ describe('NotificationUtility: test corner cases, rest of small functions', () =
   });
 
   it('getRandomBorderType should return null when every condition returns false', () => {
-    const utility = new NotificationUtility({}, AppletId);
+    const utility = new NotificationUtility(AppletId, []);
 
     jest.spyOn(dateTimeUtils, 'isSourceLess').mockReturnValue(false);
     jest.spyOn(dateTimeUtils, 'isSourceBigger').mockReturnValue(false);
@@ -54,7 +54,7 @@ describe('NotificationUtility: test corner cases, rest of small functions', () =
   });
 
   it('getNotificationIds should return id and shortId which is related to id', () => {
-    const utility = new NotificationUtility({}, AppletId);
+    const utility = new NotificationUtility(AppletId, []);
 
     //@ts-expect-error
     const result = utility.getNotificationIds();
@@ -72,7 +72,7 @@ describe('NotificationUtility: test corner cases, rest of small functions', () =
   });
 
   it('getNotificationIds should return different ids when call it several times', () => {
-    const utility = new NotificationUtility({}, AppletId);
+    const utility = new NotificationUtility(AppletId, []);
 
     //@ts-expect-error
     const { id: id1 } = utility.getNotificationIds();
@@ -83,15 +83,19 @@ describe('NotificationUtility: test corner cases, rest of small functions', () =
     expect(id1 === id2).toBeFalsy();
   });
 
-  it('isCompleted should call getActivityCompletedAt', () => {
-    const utility = new NotificationUtility({}, AppletId);
+  it('isCompleted should call getProgressionCompletedAt', () => {
+    const utility = new NotificationUtility(AppletId, []);
 
-    const getActivityCompletedAtMock = jest.fn();
+    const getProgressionCompletedAtMock = jest.fn();
     //@ts-expect-error
-    utility.getActivityCompletedAt = getActivityCompletedAtMock;
+    utility.getProgressionCompletedAt = getProgressionCompletedAtMock;
 
-    utility.isCompleted('mock-entity-id-1', 'mock-event-id-1');
+    utility.isCompleted(
+      'mock-entity-id-1',
+      'mock-event-id-1',
+      'mock-target-subject-1',
+    );
 
-    expect(getActivityCompletedAtMock).toHaveBeenCalledTimes(1);
+    expect(getProgressionCompletedAtMock).toHaveBeenCalledTimes(1);
   });
 });

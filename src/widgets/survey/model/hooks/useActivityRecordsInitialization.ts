@@ -12,6 +12,7 @@ type UseActivityRecordsInitializationArgs = {
   eventId: string;
   entityId: string;
   entityType: EntityType;
+  targetSubjectId: string | null;
 };
 
 export function useActivityRecordsInitialization({
@@ -19,6 +20,7 @@ export function useActivityRecordsInitialization({
   eventId,
   entityId,
   entityType,
+  targetSubjectId,
 }: UseActivityRecordsInitializationArgs) {
   const queryClient = useQueryClient();
 
@@ -26,6 +28,7 @@ export function useActivityRecordsInitialization({
     appletId,
     eventId,
     flowId: entityType === 'flow' ? entityId : undefined,
+    targetSubjectId,
   });
 
   const Initializer = useMemo(
@@ -43,14 +46,26 @@ export function useActivityRecordsInitialization({
     if (isFlow && remainingActivityIds.length) {
       Initializer.initializeFlowActivities({
         eventId,
+        targetSubjectId,
         flowActivityIds: remainingActivityIds,
       });
     }
-  }, [Initializer, eventId, isFlow, remainingActivityIds]);
+  }, [Initializer, eventId, targetSubjectId, isFlow, remainingActivityIds]);
 
   useMemo(() => {
     if (!isFlow && remainingActivityIds.length) {
-      Initializer.initializeActivity({ activityId: entityId, eventId });
+      Initializer.initializeActivity({
+        activityId: entityId,
+        eventId,
+        targetSubjectId,
+      });
     }
-  }, [Initializer, eventId, isFlow, entityId, remainingActivityIds]);
+  }, [
+    Initializer,
+    eventId,
+    isFlow,
+    entityId,
+    targetSubjectId,
+    remainingActivityIds,
+  ]);
 }

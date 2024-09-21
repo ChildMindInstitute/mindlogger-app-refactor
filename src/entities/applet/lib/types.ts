@@ -83,12 +83,6 @@ export type AppletAnalytics = {
   activitiesResponses: Array<ActivityResponses> | null;
 };
 
-export type CompletedEntity = {
-  entityId: string;
-  eventId: string;
-  endAt: number;
-};
-
 export type AppletVersion = {
   appletId: string;
   version: string;

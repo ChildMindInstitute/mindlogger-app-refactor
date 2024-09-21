@@ -11,10 +11,10 @@ import {
   CheckAvailability,
   CompleteEntityIntoUploadToQueue,
   EntityPath,
+  EntityProgressionInProgress,
   EntityType,
   EvaluateAvailableTo,
   LookupEntityInput,
-  StoreProgress,
 } from '@app/abstract/lib';
 import { AppletModel, clearStorageRecords } from '@app/entities/applet';
 import { EventModel } from '@app/entities/event';
@@ -31,9 +31,9 @@ import { LogTrigger, QueryDataUtils } from '@app/shared/api';
 import {
   AnalyticsService,
   Emitter,
-  getEntityProgress,
+  getEntityProgression,
   HourMinute,
-  isEntityInProgress,
+  isEntityProgressionInProgress,
   Logger,
   MixEvents,
   MixProperties,
@@ -83,11 +83,13 @@ export function useOnNotificationTap({
 
   const { t } = useTranslation();
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
+  const progressions = useAppSelector(
+    AppletModel.selectors.selectAppletsEntityProgressions,
   );
 
-  const completions = useAppSelector(AppletModel.selectors.selectCompletions);
+  const responseTimes = useAppSelector(
+    AppletModel.selectors.selectEntityResponseTimes,
+  );
 
   const { mutateAsync: refresh } = AppletModel.useRefreshMutation();
 
@@ -113,14 +115,20 @@ export function useOnNotificationTap({
     'request-to-reschedule-due-to-limit': () => {
       NotificationModel.NotificationRefreshService.refresh(
         queryClient,
-        storeProgress,
-        completions,
+        progressions,
+        responseTimes,
         LogTrigger.LimitReachedNotification,
       );
     },
     'schedule-event-alert': eventDetail => {
-      const { appletId, activityId, activityFlowId, eventId, entityName } =
-        eventDetail.notification.data;
+      const {
+        appletId,
+        activityId,
+        activityFlowId,
+        eventId,
+        targetSubjectId,
+        entityName,
+      } = eventDetail.notification.data;
 
       const entityId: string = (activityId ?? activityFlowId)!;
 
@@ -147,7 +155,14 @@ export function useOnNotificationTap({
 
       setTimeout(
         () => {
-          startEntity(appletId!, entityId, entityType, eventId!, entityName!);
+          startEntity(
+            appletId!,
+            entityId,
+            entityType,
+            eventId!,
+            entityName!,
+            targetSubjectId!,
+          );
         },
         executing ? GoBackDuration : WorkaroundDuration,
       );
@@ -160,8 +175,8 @@ export function useOnNotificationTap({
         .then(() => {
           NotificationModel.NotificationRefreshService.refresh(
             queryClient,
-            storeProgress,
-            completions,
+            progressions,
+            responseTimes,
             LogTrigger.ScheduleUpdated,
           );
         })
@@ -174,8 +189,8 @@ export function useOnNotificationTap({
         .then(() => {
           NotificationModel.NotificationRefreshService.refresh(
             queryClient,
-            storeProgress,
-            completions,
+            progressions,
+            responseTimes,
             LogTrigger.AppletRemoved,
           );
         })
@@ -188,8 +203,8 @@ export function useOnNotificationTap({
         .then(() => {
           NotificationModel.NotificationRefreshService.refresh(
             queryClient,
-            storeProgress,
-            completions,
+            progressions,
+            responseTimes,
             LogTrigger.AppletUpdated,
           );
         })
@@ -204,12 +219,14 @@ export function useOnNotificationTap({
     eventId,
     entityId,
     entityType,
+    targetSubjectId,
   }: EntityPath) {
     navigator.navigate('InProgressActivity', {
       appletId,
       eventId,
       entityId,
       entityType,
+      targetSubjectId,
     });
   }
 
@@ -219,12 +236,14 @@ export function useOnNotificationTap({
     entityType: EntityType,
     eventId: string,
     entityName: string,
+    targetSubjectId: string | null,
   ) => {
-    const progressRecord = getEntityProgress(
+    const progression = getEntityProgression(
       appletId,
       entityId,
       eventId,
-      storeProgress,
+      targetSubjectId,
+      progressions,
     );
 
     const timer: HourMinute | null =
@@ -233,11 +252,13 @@ export function useOnNotificationTap({
 
     let isTimerElapsed = false;
 
-    if (progressRecord && timer && isEntityInProgress(progressRecord)) {
+    if (progression && timer && isEntityProgressionInProgress(progression)) {
       isTimerElapsed =
         EventModel.getTimeToComplete(
           timer,
-          new Date(progressRecord.startAt),
+          new Date(
+            (progression as EntityProgressionInProgress).startedAtTimestamp,
+          ),
         ) === null;
     }
 
@@ -254,6 +275,7 @@ export function useOnNotificationTap({
         eventId,
         entityName,
         isTimerElapsed,
+        targetSubjectId,
       );
 
       if (result.failReason === 'expired-while-alert-opened') {
@@ -265,10 +287,16 @@ export function useOnNotificationTap({
       }
 
       if (result.fromScratch) {
-        clearStorageRecords.byEventId(eventId);
+        clearStorageRecords.byEventId(eventId, targetSubjectId);
       }
 
-      navigateSurvey({ appletId, eventId, entityId, entityType });
+      navigateSurvey({
+        appletId,
+        eventId,
+        entityId,
+        entityType,
+        targetSubjectId,
+      });
     } else {
       const result = await startActivity(
         appletId,
@@ -276,6 +304,7 @@ export function useOnNotificationTap({
         eventId,
         entityName,
         isTimerElapsed,
+        targetSubjectId,
       );
 
       if (result.failReason === 'expired-while-alert-opened') {
@@ -287,10 +316,16 @@ export function useOnNotificationTap({
       }
 
       if (result.fromScratch) {
-        clearStorageRecords.byEventId(eventId);
+        clearStorageRecords.byEventId(eventId, targetSubjectId);
       }
 
-      navigateSurvey({ appletId, eventId, entityId, entityType });
+      navigateSurvey({
+        appletId,
+        eventId,
+        entityId,
+        entityType,
+        targetSubjectId,
+      });
     }
   };
 

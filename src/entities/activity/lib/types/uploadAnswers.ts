@@ -21,6 +21,7 @@ export type SendAnswersInput = {
   endTime: number;
   userIdentifier?: string;
   eventId: string;
+  targetSubjectId: string | null;
   isFlowCompleted: boolean;
   client: {
     appId: string;

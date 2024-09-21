@@ -8,7 +8,7 @@ import {
   subWeeks,
 } from 'date-fns';
 
-import { PeriodicityType, Progress } from '@app/abstract/lib';
+import { EntityProgression, PeriodicityType } from '@app/abstract/lib';
 import { ILogger } from '@app/shared/lib';
 
 import { NotificationUtility } from './NotificationUtility';
@@ -18,8 +18,12 @@ export class NotificationDaysExtractor {
 
   private logger: ILogger;
 
-  constructor(progress: Progress, appletId: string, logger: ILogger) {
-    this.utility = new NotificationUtility(progress, appletId);
+  constructor(
+    appletId: string,
+    progressions: EntityProgression[],
+    logger: ILogger,
+  ) {
+    this.utility = new NotificationUtility(appletId, progressions);
     this.logger = logger;
   }
 

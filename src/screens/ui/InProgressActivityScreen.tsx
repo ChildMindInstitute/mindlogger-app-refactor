@@ -12,9 +12,10 @@ import { Box } from '@shared/ui';
 type Props = NativeStackScreenProps<RootStackParamList, 'InProgressActivity'>;
 
 const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
-  const { appletId, eventId, entityId, entityType } = route.params;
+  const { appletId, eventId, entityId, entityType, targetSubjectId } =
+    route.params;
 
-  useUpcomingNotificationsObserver(eventId, entityId);
+  useUpcomingNotificationsObserver(eventId, entityId, targetSubjectId);
 
   useEffect(() => {
     const callback = navigation.addListener('beforeRemove', () => {
@@ -36,6 +37,7 @@ const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
         entityId={entityId}
         entityType={entityType}
         eventId={eventId}
+        targetSubjectId={targetSubjectId}
         onClose={() => navigation.goBack()}
       />
     </Box>

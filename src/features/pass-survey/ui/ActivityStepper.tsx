@@ -43,6 +43,7 @@ type Props = {
   onClose: (reason: 'regular' | 'click-on-return') => void;
   onFinish: (reason: 'regular' | 'idle') => void;
   flowId?: string;
+  targetSubjectId: string | null;
 };
 
 function ActivityStepper({
@@ -65,9 +66,14 @@ function ActivityStepper({
 
   const timerMarginTop = hasNotch ? (safeAreaTop - timerHeight) / 2 : 16;
 
-  const { appletId, activityId, eventId, order, activityName } = useContext(
-    ActivityIdentityContext,
-  );
+  const {
+    appletId,
+    activityId,
+    eventId,
+    targetSubjectId,
+    order,
+    activityName,
+  } = useContext(ActivityIdentityContext);
 
   const {
     activityStorageRecord,
@@ -87,6 +93,7 @@ function ActivityStepper({
     appletId,
     activityId,
     eventId,
+    targetSubjectId,
     order,
   });
 
@@ -98,10 +105,12 @@ function ActivityStepper({
   });
 
   const { replaceTextVariables } = useTextVariablesReplacer({
+    appletId,
+    activityId,
+    eventId,
+    targetSubjectId,
     items: activityStorageRecord?.items,
     answers: activityStorageRecord?.answers,
-    activityId,
-    appletId,
   });
 
   const {
@@ -328,6 +337,7 @@ function ActivityStepper({
             flowId={flowId}
             eventId={eventId}
             appletId={appletId}
+            targetSubjectId={targetSubjectId}
           />
           {showTopNavigation && (
             <Stepper.NavigationPanel mx={16}>
@@ -393,8 +403,8 @@ function ActivityStepper({
 
           <Box mb={!showBottomNavigation ? 16 : 0}>
             <ProgressWithTimer
-              duration={currentPipelineItem?.timer}
               key={currentPipelineItem?.id}
+              duration={currentPipelineItem?.timer}
             />
           </Box>
 

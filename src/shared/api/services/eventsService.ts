@@ -61,14 +61,9 @@ export type CompletedEntityDto = {
   answerId: string;
   submitId: string;
   scheduledEventId: string;
+  targetSubjectId: string;
   localEndDate: string; // YYYY-MM-DD
   localEndTime: string; // hh:mm:ss
-};
-
-type AppletCompletedEntitiesRequest = {
-  appletId: string;
-  fromDate: string; // YYYY-MM-DD
-  version: string;
 };
 
 type CompletedEntitiesRequest = {
@@ -95,19 +90,6 @@ export type CompletedEntitiesResponse = SuccessfulResponse<
 
 function eventsService() {
   return {
-    getCompletedEntities(request: AppletCompletedEntitiesRequest) {
-      const apiCall = () =>
-        httpService.get<AppletCompletedEntitiesResponse>(
-          `answers/applet/${request.appletId}/completions`,
-          {
-            params: {
-              fromDate: request.fromDate,
-              version: request.version,
-            },
-          },
-        );
-      return callApiWithRetry(withDataExtraction(apiCall));
-    },
     getAllEvents() {
       const apiCall = () =>
         httpService.get<AllEventsResponse>(

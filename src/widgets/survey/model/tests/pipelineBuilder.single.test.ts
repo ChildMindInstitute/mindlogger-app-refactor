@@ -19,6 +19,7 @@ describe('Test pipelineBuilder for single activity', () => {
     const result = buildSingleActivityPipeline({
       appletId: 'mock-applet-id-1',
       eventId: 'mock-event-id-1',
+      targetSubjectId: 'mock-target-subject-id-1',
       hasSummary: () => false,
       activity: { ...mockForActivity1 },
     });
@@ -55,6 +56,7 @@ describe('Test pipelineBuilder for single activity', () => {
     const result = buildSingleActivityPipeline({
       appletId: 'mock-applet-id-2',
       eventId: 'mock-event-id-2',
+      targetSubjectId: 'mock-target-subject-id-1',
       hasSummary: () => true,
       activity: { ...mockForActivity2 },
     });

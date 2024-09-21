@@ -1,4 +1,4 @@
 export interface IEvaluator<TEvaluate, TEvent> {
   evaluate: (valuesToEvaluate: TEvaluate[]) => TEvaluate[];
-  isInGroup(event: TEvent): boolean;
+  isEventInGroup(event: TEvent, targetSubjectId: string | null): boolean;
 }

@@ -24,6 +24,7 @@ export const completedEntityDto: CompletedEntityDto = {
   answerId: '1',
   submitId: '2',
   scheduledEventId: '3',
+  targetSubjectId: '4',
   localEndDate: '2020-04-04',
   localEndTime: '20:00',
 };

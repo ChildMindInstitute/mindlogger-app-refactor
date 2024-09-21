@@ -12,7 +12,6 @@ import {
   AutocompletionExecuteOptions,
   EntityPath,
   LogAutocompletionTrigger,
-  StoreProgress,
 } from '@app/abstract/lib';
 import { ActivityModel } from '@app/entities/activity';
 import { MediaFilesCleaner } from '@app/entities/activity';
@@ -91,8 +90,8 @@ export default () => {
 
   const queryClient = useQueryClient();
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
+  const entityProgressions = useAppSelector(
+    AppletModel.selectors.selectAppletsEntityProgressions,
   );
 
   useInitialRouteNavigation();
@@ -126,13 +125,19 @@ export default () => {
   TapOnNotificationModel.useOnNotificationTap({
     checkAvailability: async (
       entityName: string,
-      { appletId, eventId, entityId, entityType }: EntityPath,
+      { appletId, eventId, entityId, entityType, targetSubjectId }: EntityPath,
     ) => {
       const isSuccess = await checkEntityAvailability({
         entityName,
-        identifiers: { appletId, eventId, entityId, entityType },
+        identifiers: {
+          appletId,
+          eventId,
+          entityId,
+          entityType,
+          targetSubjectId,
+        },
         queryClient,
-        storeProgress,
+        entityProgressions,
       });
 
       if (!isSuccess) {

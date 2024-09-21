@@ -7,10 +7,12 @@ import { createSecureStorage } from '@app/shared/lib';
 
 import { PipelineItem, PipelineItemAnswer, UserAction } from '../types';
 
+// M2-7407 update activity state
 type UseActivityStorageArgs = {
   appletId: string;
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   order: number;
 };
 
@@ -40,9 +42,10 @@ export function useActivityStorageRecord({
   appletId,
   activityId,
   eventId,
+  targetSubjectId,
   order,
 }: UseActivityStorageArgs) {
-  const key = `${appletId}-${activityId}-${eventId}-${order}`;
+  const key = `${appletId}-${activityId}-${eventId}-${targetSubjectId || 'NULL'}-${order}`;
 
   const [activityStorageRecord, upsertActivityStorageRecord] =
     useMMKVObject<ActivityState>(key, storage);

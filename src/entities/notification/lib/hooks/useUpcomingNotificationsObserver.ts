@@ -9,16 +9,18 @@ const CHECK_INTERVAL = 20000;
 export const useUpcomingNotificationsObserver = (
   eventId: string,
   entityId: string,
+  targetSubjectId: string | null,
 ) => {
   const isForeground = AppState.currentState === 'active';
 
   const { start: startInterval, stop: stopInterval } = useInterval(() => {
     if (isForeground) {
       NotificationManager.cancelNotificationsForEventEntityInTimeInterval(
-        eventId,
         entityId,
+        eventId,
+        targetSubjectId,
         { from: Date.now(), to: Date.now() + CHECK_INTERVAL },
-      );
+      ).catch(console.error);
     }
   }, CHECK_INTERVAL);
 

@@ -5,6 +5,7 @@ export type ActivityListItem = {
   activityId: string;
   flowId: string | null;
   eventId: string;
+  targetSubjectId: string | null;
 
   name: string;
   description: string;

@@ -2,9 +2,9 @@ import { addDays, addMonths } from 'date-fns';
 
 import {
   ActivityPipelineType,
-  CompletedEventEntities,
+  EntityProgression,
+  EntityResponseTime,
   PeriodicityType,
-  Progress,
 } from '@app/abstract/lib';
 import { DatesFromTo } from '@app/shared/lib';
 
@@ -18,25 +18,34 @@ import {
 } from '../../lib';
 
 export class ReminderCreator {
-  private completions: CompletedEventEntities;
+  private responseTimes: EntityResponseTime[];
 
   private utility: NotificationUtility;
 
   constructor(
-    progress: Progress,
     appletId: string,
-    completions: CompletedEventEntities,
+    progressions: EntityProgression[],
+    responseTimes: EntityResponseTime[],
   ) {
-    this.completions = completions;
-    this.utility = new NotificationUtility(progress, appletId);
+    this.responseTimes = responseTimes;
+
+    this.utility = new NotificationUtility(appletId, progressions);
   }
 
   private isCompletedInInterval(
     interval: DatesFromTo,
     entityId: string,
     eventId: string,
+    targetSubjectId: string | null,
   ): boolean {
-    const dates: number[] = this.completions[entityId]?.[eventId] ?? [];
+    const dates = this.responseTimes
+      .filter(
+        record =>
+          record.entityId === entityId &&
+          record.eventId === eventId &&
+          record.targetSubjectId === targetSubjectId,
+      )
+      .map(record => record.responseTime);
 
     return dates
       .map<Date>(x => new Date(x))
@@ -47,6 +56,7 @@ export class ReminderCreator {
     scheduledDay: Date,
     entity: Entity,
     event: ScheduleEvent,
+    targetSubjectId: string | null,
   ): NotificationDescriber {
     const reminderData = event.notificationSettings.reminder;
 
@@ -86,6 +96,7 @@ export class ReminderCreator {
       activityId,
       activityFlowId,
       event.id,
+      targetSubjectId,
       NotificationType.Reminder,
     );
 
@@ -115,6 +126,7 @@ export class ReminderCreator {
       { from: periodFrom, to: periodTo },
       (reminder.activityId ?? reminder.activityFlowId)!,
       reminder.eventId,
+      reminder.targetSubjectId,
     );
 
     if (isCompleted) {
@@ -144,6 +156,7 @@ export class ReminderCreator {
     reminderDays: Date[],
     event: ScheduleEvent,
     entity: Entity,
+    targetSubjectId: string | null,
   ): Array<{ reminder: NotificationDescriber; eventDay: Date }> {
     if (!this.utility.isReminderSet(event.notificationSettings.reminder)) {
       return [];
@@ -161,6 +174,7 @@ export class ReminderCreator {
         day,
         entity,
         event,
+        targetSubjectId,
       );
       result.push({ reminder, eventDay: day });
 

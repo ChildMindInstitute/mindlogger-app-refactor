@@ -12,6 +12,7 @@ type UseActivityPipelineArgs = {
   appletId: string;
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   order: number;
 };
 
@@ -19,6 +20,7 @@ function useActivityState({
   appletId,
   activityId,
   eventId,
+  targetSubjectId,
   order,
 }: UseActivityPipelineArgs) {
   const {
@@ -30,6 +32,7 @@ function useActivityState({
     appletId,
     activityId,
     eventId,
+    targetSubjectId,
     order,
   });
 

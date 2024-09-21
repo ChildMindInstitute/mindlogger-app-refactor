@@ -1,11 +1,12 @@
 import {
   ActivityPipelineType,
   AvailabilityType,
-  Progress,
   NotificationTriggerType,
   PeriodicityType,
-  CompletedEventEntities,
+  EntityProgression,
+  EntityResponseTime,
 } from '@app/abstract/lib';
+import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
 import { HourMinute } from '@app/shared/lib';
 
 export type ReminderSetting = {
@@ -65,6 +66,7 @@ export type Entity = Activity | ActivityFlow;
 export type EventEntity = {
   entity: Entity;
   event: ScheduleEvent;
+  assignment: Assignment | null;
 };
 
 export const enum NotificationType {
@@ -113,6 +115,7 @@ export type NotificationDescriber = {
   activityId: string | null;
   activityFlowId: string | null;
   eventId: string;
+  targetSubjectId: string | null;
   type: NotificationType;
   entityName: string;
   scheduledAt: number;
@@ -131,8 +134,8 @@ export type NotificationBuilderInput = {
   appletId: string;
   appletName: string;
   eventEntities: EventEntity[];
-  progress: Progress;
-  completions: CompletedEventEntities;
+  progressions: EntityProgression[];
+  responseTimes: EntityResponseTime[];
 };
 
 export type EventNotificationDescribers = {

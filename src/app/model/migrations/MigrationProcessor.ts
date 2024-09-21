@@ -1,36 +1,35 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import {
-  Logger,
-  MIGRATION_PROCESSOR_VERSION,
-  SystemRecord,
-} from '@app/shared/lib';
+import { Logger, SystemRecord } from '@app/shared/lib';
 
 import {
   IMigrationRunner,
   MigrationInput,
   MigrationOutput,
-  ReduxRootState,
   StoragesArray,
 } from './types';
 import { createMigrationStorage, createRegularStorage } from './utils';
+import { MIGRATION_PROCESSOR_VERSION } from './version';
 
 type IReduxStore = {
-  getState(): ReduxRootState;
+  getState(): unknown;
   dispatch: AppDispatch;
 };
 
 const DEFAULT_VERSION = -1;
 
-export const migrateReduxStore = createAction<ReduxRootState>('@@MIGRATE');
+export const migrateReduxStore = createAction<unknown>('@@MIGRATE');
 
 export class MigrationProcessor {
   private reduxStore: IReduxStore;
-  private migrationRunner: IMigrationRunner;
+  private migrationRunner: IMigrationRunner<unknown, unknown>;
 
   private static readonly version = MIGRATION_PROCESSOR_VERSION;
 
-  constructor(reduxStore: IReduxStore, migrationRunner: IMigrationRunner) {
+  constructor(
+    reduxStore: IReduxStore,
+    migrationRunner: IMigrationRunner<unknown, unknown>,
+  ) {
     this.reduxStore = reduxStore;
     this.migrationRunner = migrationRunner;
   }
@@ -39,13 +38,12 @@ export class MigrationProcessor {
     return SystemRecord.getDataVersion() ?? DEFAULT_VERSION;
   }
 
-  private getMigrationInput(): MigrationInput {
+  private getMigrationInput<TRootState>(): MigrationInput<TRootState> {
     // @ts-ignore
-
     const { _persist, ...reduxState } = this.reduxStore.getState();
 
     return {
-      reduxState,
+      reduxState: reduxState as TRootState,
     };
   }
 
@@ -53,7 +51,7 @@ export class MigrationProcessor {
     SystemRecord.setDataVersion(MigrationProcessor.version);
   }
 
-  private updateReduxStore(updatedState: ReduxRootState) {
+  private updateReduxStore<TRootState>(updatedState: TRootState) {
     this.reduxStore.dispatch(migrateReduxStore(updatedState));
   }
 
@@ -72,7 +70,9 @@ export class MigrationProcessor {
     }
   }
 
-  private commitChanges(migrationOutput: MigrationOutput) {
+  private commitChanges<TRootState>(
+    migrationOutput: MigrationOutput<TRootState>,
+  ) {
     this.updateReduxStore(migrationOutput.reduxState);
     this.updateStorages();
     this.updateVersion();
