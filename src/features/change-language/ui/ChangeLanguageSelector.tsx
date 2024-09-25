@@ -2,14 +2,16 @@ import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { changeLanguage, Language } from '@shared/lib';
-import { YStack, BoxProps, RowButton } from '@shared/ui';
+import { Language } from '@app/shared/lib/types/language';
+import { changeLanguage } from '@app/shared/lib/utils/common';
+import { BoxProps, YStack } from '@app/shared/ui/base';
+import { RowButton } from '@app/shared/ui/RowButton';
 
 type Props = {
   onLanguageChanged: () => void;
 } & BoxProps;
 
-const ChangeLanguageSelector: FC<Props> = props => {
+export const ChangeLanguageSelector: FC<Props> = props => {
   const { onLanguageChanged } = props;
   const { t, i18n } = useTranslation();
   const languagesAvailable = Object.keys(
@@ -41,5 +43,3 @@ const ChangeLanguageSelector: FC<Props> = props => {
     </YStack>
   );
 };
-
-export default ChangeLanguageSelector;

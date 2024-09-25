@@ -1,19 +1,19 @@
-import { ActivityPipelineType } from '@app/abstract/lib';
-import { ActivityType } from '@app/entities/activity';
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
   ActivityAssignment,
   ActivityFlowAssignment,
   Assignment,
   AssignmentParticipant,
 } from '@app/entities/activity/lib/types/activityAssignment';
+import { ActivityType } from '@app/entities/activity/lib/types/activityListItem';
 import {
   ActivityFlowRecordDto,
   ActivityRecordDto,
   AssignmentDto,
   AssignmentParticipantDto,
-} from '@app/shared/api';
+} from '@app/shared/api/services/IAppletService';
 
-import { Activity, ActivityFlow } from '../lib';
+import { Activity, ActivityFlow } from '../lib/types/activityGroupsBuilder';
 
 export const mapActivitiesFromDto = (dtos: ActivityRecordDto[]): Activity[] => {
   return dtos.map(dto => ({

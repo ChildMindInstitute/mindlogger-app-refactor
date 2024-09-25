@@ -3,18 +3,18 @@ import { FC } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { useApprovePasswordRecoveryMutation } from '@app/entities/identity';
-import {
-  colors,
-  executeIfOnline,
-  useAppForm,
-  useBanner,
-  useFormChanges,
-} from '@shared/lib';
-import { SubmitButton, YStack, Box, BoxProps } from '@shared/ui';
-import { ErrorMessage, InputField } from '@shared/ui/form';
+import { useApprovePasswordRecoveryMutation } from '@app/entities/identity/api/hooks/useApprovePasswordRecoveryMutation';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
+import { useBanner } from '@app/shared/lib/hooks/useBanner';
+import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
+import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
+import { Box, BoxProps, YStack } from '@app/shared/ui/base';
+import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
+import { InputField } from '@app/shared/ui/form/InputField';
+import { SubmitButton } from '@app/shared/ui/SubmitButton';
 
-import { PasswordRecoveryFormSchema } from '../model';
+import { PasswordRecoveryFormSchema } from '../model/PasswordRecoveryFormSchema';
 
 type Props = BoxProps & {
   onPasswordRecoverySuccess: () => void;
@@ -22,7 +22,7 @@ type Props = BoxProps & {
   resetKey: string;
 };
 
-const PasswordRecoveryForm: FC<Props> = props => {
+export const PasswordRecoveryForm: FC<Props> = props => {
   const { t } = useTranslation();
   const banner = useBanner();
 
@@ -112,5 +112,3 @@ const PasswordRecoveryForm: FC<Props> = props => {
     </Box>
   );
 };
-
-export default PasswordRecoveryForm;

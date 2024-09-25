@@ -1,6 +1,7 @@
-import { ILogger } from '@app/shared/lib';
+import { ILogger } from '@app/shared/lib/types/logger';
 
-import { Answer, PipelineItem } from '../../lib';
+import { Answer } from '../../lib/hooks/useActivityStorageRecord';
+import { PipelineItem } from '../../lib/types/payload';
 import { AlertsExtractor } from '../AlertsExtractor';
 
 jest.mock('@app/shared/lib/constants', () => ({

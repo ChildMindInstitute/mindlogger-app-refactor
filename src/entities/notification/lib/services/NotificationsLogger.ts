@@ -1,39 +1,29 @@
-import { UserInfoRecord } from '@app/entities/identity/lib';
-import {
-  LogAction,
-  LogTrigger,
-  NotificationLogsRequest,
-  NotificationService,
-} from '@app/shared/api';
-import {
-  SystemRecord,
-  getStringHashCode,
-  isAppOnline,
-  Logger,
-} from '@app/shared/lib';
+import { getDefaultUserInfoRecord } from '@app/entities/identity/lib/userInfoRecord';
+import { NotificationLogsRequest } from '@app/shared/api/services/INotificationService';
+import { getDefaultNotificationService } from '@app/shared/api/services/notificationServiceInstance';
+import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { getStringHashCode } from '@app/shared/lib/utils/common';
+import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
 
-import NotificationQueue from './NotificationQueue';
-import NotificationScheduler from './NotificationScheduler';
-import {
-  AppletNotificationDescribers,
-  LocalEventTriggerNotification,
-  NotificationDescriber,
-} from '../types';
+import { INotificationQueue } from './INotificationQueue';
+import { INotificationScheduler } from './INotificationScheduler';
+import { INotificationsLogger, LogPayload } from './INotificationsLogger';
+import { NotificationDescriber } from '../types/notificationBuilder';
+import { LocalEventTriggerNotification } from '../types/notifications';
 
-type LogPayload = {
-  trigger: LogTrigger;
-  action: LogAction;
-  notificationDescriptions?: Array<AppletNotificationDescribers> | null;
-};
-
-function NotificationsLogger() {
+export function NotificationsLogger(
+  logger: ILogger,
+  notificationQueue: INotificationQueue,
+  notificationScheduler: INotificationScheduler,
+): INotificationsLogger {
   const logInternal = async (payload: LogPayload) => {
-    const queued: NotificationDescriber[] = NotificationQueue.get();
+    const queued: NotificationDescriber[] = notificationQueue.get();
 
     const scheduled: LocalEventTriggerNotification[] =
-      await NotificationScheduler.getAllScheduledNotifications();
+      await notificationScheduler.getAllScheduledNotifications();
 
-    const email = UserInfoRecord.getEmail();
+    const email = getDefaultUserInfoRecord().getEmail();
 
     const notificationDescriptions = payload.notificationDescriptions || null;
 
@@ -41,7 +31,7 @@ function NotificationsLogger() {
 
     const scheduledNotifications = scheduled;
 
-    const deviceId = SystemRecord.getDeviceId();
+    const deviceId = getDefaultSystemRecord().getDeviceId();
 
     const request: NotificationLogsRequest = {
       actionType: `${payload.trigger} -> ${payload.action}`,
@@ -54,13 +44,13 @@ function NotificationsLogger() {
       scheduledNotifications,
     };
 
-    await NotificationService.sendNotificationLogs(request);
+    await getDefaultNotificationService().sendNotificationLogs(request);
   };
 
   const log = async (payload: LogPayload) => {
     const isOnline = await isAppOnline();
     if (!isOnline) {
-      Logger.info(
+      logger.info(
         '[NotificationsLogger.log]: Logs will not be added due to offline',
       );
       return;
@@ -68,9 +58,9 @@ function NotificationsLogger() {
 
     try {
       await logInternal(payload);
-      Logger.info('[NotificationsLogger.log]: Logs sent to server');
+      logger.info('[NotificationsLogger.log]: Logs sent to server');
     } catch (error) {
-      Logger.warn(
+      logger.warn(
         '[NotificationsLogger.log] Error occurred while sending notification logs:\n\n' +
           error,
       );
@@ -81,5 +71,3 @@ function NotificationsLogger() {
     log,
   };
 }
-
-export default NotificationsLogger();

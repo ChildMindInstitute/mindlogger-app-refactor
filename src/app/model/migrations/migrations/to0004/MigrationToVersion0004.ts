@@ -1,9 +1,9 @@
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
-  ActivityPipelineType,
   EntityProgression,
   EntityResponseTime,
-} from '@app/abstract/lib';
-import { Logger } from '@app/shared/lib';
+} from '@app/abstract/lib/types/entityProgress';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import {
   FlowProgress,
@@ -112,7 +112,7 @@ export class MigrationToVersion0004
             }
 
             entityProgressions.push(newEntityProgression as EntityProgression);
-            Logger.info(
+            getDefaultLogger().info(
               `[MigrationToVersion0004.migrate]: migrated entity progression record ${JSON.stringify(newEntityProgression)}`,
             );
           }
@@ -153,7 +153,7 @@ export class MigrationToVersion0004
             };
 
             entityResponseTimes.push(newEntityResponseTime);
-            Logger.info(
+            getDefaultLogger().info(
               `[MigrationToVersion0004.migrate]: migrated entity response time record ${JSON.stringify(newEntityResponseTime)}`,
             );
           }

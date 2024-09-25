@@ -1,13 +1,14 @@
-import { Report } from '@app/entities/activity';
-import { ILogger, Logger } from '@app/shared/lib';
+import { Report } from '@app/entities/activity/lib/types/activityReportSettings';
+import { ILogger } from '@app/shared/lib/types/logger';
 
-import ScoreConditionsEvaluator, {
-  IScoreConditionsEvaluator,
-} from './ScoreConditionsEvaluator';
-import ScoresCalculator, { IScoresCalculator } from './ScoresCalculator';
-import { Answers, PipelineItem, ScoreRecord } from '../lib';
+import { IScoreConditionsEvaluator } from './IScoreConditionsEvaluator';
+import { IScoresCalculator } from './IScoresCalculator';
+import { IScoresExtractor } from './IScoresExtractor';
+import { Answers } from '../lib/hooks/useActivityStorageRecord';
+import { PipelineItem } from '../lib/types/payload';
+import { ScoreRecord } from '../lib/types/summary';
 
-export class ScoresExtractor {
+export class ScoresExtractor implements IScoresExtractor {
   private conditionsEvaluator: IScoreConditionsEvaluator;
 
   private scoresCalculator: IScoresCalculator;
@@ -98,9 +99,3 @@ export class ScoresExtractor {
     return result;
   }
 }
-
-export default new ScoresExtractor(
-  ScoreConditionsEvaluator,
-  ScoresCalculator,
-  Logger,
-);

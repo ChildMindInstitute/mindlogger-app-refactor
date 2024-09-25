@@ -1,4 +1,4 @@
-import { ActivityDto } from '@app/shared/api';
+import { ActivityDto } from './IActivityService';
 
 const testMessage1 =
   'Start by placing the point of the pen at the center of the spiral (S), and trace out along the dashed blue line to the end of the sprial (E).  Try to stay on the dashed blue line while tracing. You will do this five times.';

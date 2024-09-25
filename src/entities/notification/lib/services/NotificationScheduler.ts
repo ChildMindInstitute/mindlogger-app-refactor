@@ -1,9 +1,10 @@
 import notifee, { TriggerType } from '@notifee/react-native';
 
-import { IS_ANDROID } from '@app/shared/lib';
+import { IS_ANDROID } from '@app/shared/lib/constants';
 
+import { INotificationScheduler } from './INotificationScheduler';
 import { SYSTEM_RESCHEDULING_NOTIFICATION_ID } from '../constants';
-import { LocalEventTriggerNotification } from '../types';
+import { LocalEventTriggerNotification } from '../types/notifications';
 
 function sortLocalEventTriggerNotifications(
   a: LocalEventTriggerNotification,
@@ -12,7 +13,7 @@ function sortLocalEventTriggerNotifications(
   return a.notification.data.scheduledAt - b.notification.data.scheduledAt;
 }
 
-function NotificationScheduler() {
+export function NotificationScheduler(): INotificationScheduler {
   function scheduleLocalNotification(
     triggerNotification: LocalEventTriggerNotification,
   ) {
@@ -103,5 +104,3 @@ function NotificationScheduler() {
     cancelNotDisplayedNotifications,
   };
 }
-
-export default NotificationScheduler();

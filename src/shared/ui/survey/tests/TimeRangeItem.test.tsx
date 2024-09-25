@@ -1,8 +1,10 @@
 import renderer from 'react-test-renderer';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import * as dateTimeUtils from '@shared/lib/utils/dateTime';
-import { TimeRangeItem, DateTimePicker } from '@shared/ui';
+
+import { DateTimePicker } from '../../DateTimePicker';
+import { TimeRangeItem } from '../TimeRangeItem';
 
 describe('Test TimeRangeItem', () => {
   afterEach(() => {

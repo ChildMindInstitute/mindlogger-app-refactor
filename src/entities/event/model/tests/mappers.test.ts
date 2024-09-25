@@ -2,10 +2,10 @@ import {
   AvailabilityType,
   NotificationTriggerType,
   PeriodicityType,
-} from '@app/abstract/lib';
-import { ScheduleEvent } from '@entities/event';
-import { ScheduleEventDto } from '@shared/api';
+} from '@app/abstract/lib/types/event.ts';
+import { ScheduleEventDto } from '@app/shared/api/services/IEventsService.ts';
 
+import { ScheduleEvent } from '../../lib/types/event.ts';
 import { mapEventsFromDto } from '../mappers.ts';
 
 const scheduleEventDto: ScheduleEventDto = {

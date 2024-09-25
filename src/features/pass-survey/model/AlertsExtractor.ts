@@ -1,10 +1,9 @@
-import { ILogger, Logger } from '@app/shared/lib';
-import { canItemHaveAnswer } from '@app/widgets/survey/model';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { canItemHaveAnswer } from '@app/widgets/survey/model/operations';
 
+import { IAlertsExtractor } from './IAlertsExtractor';
+import { Answer, Answers } from '../lib/hooks/useActivityStorageRecord';
 import {
-  Answer,
-  AnswerAlerts,
-  Answers,
   CheckboxPipelineItem,
   CheckboxResponse,
   PipelineItem,
@@ -18,9 +17,10 @@ import {
   StackedRadioResponse,
   StackedSliderPipelineItem,
   StackedSliderResponse,
-} from '../lib';
+} from '../lib/types/payload';
+import { AnswerAlerts } from '../lib/types/summary';
 
-export class AlertsExtractor {
+export class AlertsExtractor implements IAlertsExtractor {
   private logger: ILogger;
 
   constructor(logger: ILogger) {
@@ -272,5 +272,3 @@ export class AlertsExtractor {
     }
   }
 }
-
-export default new AlertsExtractor(Logger);

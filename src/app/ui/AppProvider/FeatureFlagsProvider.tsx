@@ -5,22 +5,26 @@ import {
   ReactNativeLDClient,
 } from '@launchdarkly/react-native-client-sdk';
 
-import { FeatureFlagsService, Logger, useSystemBootUp } from '@app/shared/lib';
+import { useSystemBootUp } from '@app/shared/lib/contexts/SplashContext';
+import { FeatureFlagsService } from '@app/shared/lib/featureFlags/FeatureFlagsService';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
-const FeatureFlagsProvider: FC<PropsWithChildren> = ({ children }) => {
+export const FeatureFlagsProvider: FC<PropsWithChildren> = ({ children }) => {
   const { onModuleInitialized } = useSystemBootUp();
   const [ldClient, setClient] = useState<ReactNativeLDClient>();
 
   useEffect(() => {
     FeatureFlagsService.init()
       .then(client => {
-        Logger.log('[FeatureFlagsProvider]: Initialized');
+        getDefaultLogger().log('[FeatureFlagsProvider]: Initialized');
 
         setClient(client);
         onModuleInitialized('featureFlags');
       })
       .catch(error => {
-        Logger.error(`[FeatureFlagsProvider]: Failed to initialize\n${error}`);
+        getDefaultLogger().error(
+          `[FeatureFlagsProvider]: Failed to initialize\n${error}`,
+        );
       });
   }, [onModuleInitialized, setClient]);
 
@@ -34,5 +38,3 @@ const FeatureFlagsProvider: FC<PropsWithChildren> = ({ children }) => {
     </>
   );
 };
-
-export default FeatureFlagsProvider;

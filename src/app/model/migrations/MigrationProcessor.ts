@@ -1,6 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import { Logger, SystemRecord } from '@app/shared/lib';
+import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import {
   IMigrationRunner,
@@ -35,7 +36,7 @@ export class MigrationProcessor {
   }
 
   private getInboundVersion(): number {
-    return SystemRecord.getDataVersion() ?? DEFAULT_VERSION;
+    return getDefaultSystemRecord().getDataVersion() ?? DEFAULT_VERSION;
   }
 
   private getMigrationInput<TRootState>(): MigrationInput<TRootState> {
@@ -48,7 +49,7 @@ export class MigrationProcessor {
   }
 
   private updateVersion() {
-    SystemRecord.setDataVersion(MigrationProcessor.version);
+    getDefaultSystemRecord().setDataVersion(MigrationProcessor.version);
   }
 
   private updateReduxStore<TRootState>(updatedState: TRootState) {
@@ -92,22 +93,28 @@ export class MigrationProcessor {
 
     const currentVersion = MigrationProcessor.version;
 
-    Logger.log(
+    getDefaultLogger().log(
       `[MigrationProcessor] inboundVersion=${inboundVersion}, currentVersion=${currentVersion}`,
     );
 
     if (inboundVersion === currentVersion) {
-      Logger.info('[MigrationRunner]: Versions match, noop migration');
+      getDefaultLogger().info(
+        '[MigrationRunner]: Versions match, noop migration',
+      );
       return;
     }
 
     if (inboundVersion > currentVersion) {
-      Logger.info('[MigrationRunner]: Downgrading version is not supported');
+      getDefaultLogger().info(
+        '[MigrationRunner]: Downgrading version is not supported',
+      );
       return;
     }
 
     try {
-      Logger.info('[MigrationProcessor] Start executing migrations');
+      getDefaultLogger().info(
+        '[MigrationProcessor] Start executing migrations',
+      );
 
       this.prepareStorages();
 
@@ -119,16 +126,18 @@ export class MigrationProcessor {
         inboundVersion,
       );
 
-      Logger.info('[MigrationProcessor] Complete');
+      getDefaultLogger().info('[MigrationProcessor] Complete');
 
       if (migrationInput !== migrationOutput) {
-        Logger.info('[MigrationProcessor] Commit changes');
+        getDefaultLogger().info('[MigrationProcessor] Commit changes');
 
         return this.commitChanges(migrationOutput);
       }
     } catch (error) {
-      Logger.warn('[MigrationProcessor] Error occurred: \n\n' + error);
+      getDefaultLogger().warn(
+        '[MigrationProcessor] Error occurred: \n\n' + error,
+      );
     }
-    await Logger.send();
+    await getDefaultLogger().send();
   }
 }

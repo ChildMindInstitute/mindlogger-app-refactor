@@ -10,20 +10,21 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 import {
-  AvailabilityType,
   EntityProgression,
   EntityProgressionCompleted,
-  PeriodicityType,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/entityProgress';
 import {
-  DatesFromTo,
-  HourMinute,
+  AvailabilityType,
+  PeriodicityType,
+} from '@app/abstract/lib/types/event';
+import { DatesFromTo, HourMinute } from '@app/shared/lib/types/dateTime';
+import {
   getDiff,
   getMsFromHours,
-  isSourceBigger,
-  isSourceBiggerOrEqual,
   isSourceLess,
-} from '@app/shared/lib';
+  isSourceBiggerOrEqual,
+  isSourceBigger,
+} from '@app/shared/lib/utils/dateTime';
 
 import {
   FallType,
@@ -34,7 +35,7 @@ import {
   RandomCrossBorderType,
   ReminderSetting,
   ScheduleEvent,
-} from '../../lib/types';
+} from '../../lib/types/notificationBuilder';
 
 export const NumberOfDaysForSchedule = 14;
 

@@ -1,13 +1,12 @@
-import { LookupEntityInput } from '@app/abstract/lib';
+import { LookupEntityInput } from '@app/abstract/lib/types/entity';
 
-import EntityActivitiesCollector from './EntityActivitiesCollector';
-import { ActivityDetails } from '../../lib';
+import { IEntityActivitiesCollector } from './IEntityActivitiesCollector';
+import { IItemsVisibilityValidator } from './IItemsVisibilityValidator';
+import { ActivityDetails } from '../../lib/types/activity';
 
-type ItemsVisibilityValidator = {
-  hasActivityWithHiddenAllItems: (lookupInput: LookupEntityInput) => boolean;
-};
-
-const createItemsVisibilityValidator = (): ItemsVisibilityValidator => {
+export const createItemsVisibilityValidator = (
+  entityActivityCollector: IEntityActivitiesCollector,
+): IItemsVisibilityValidator => {
   const check = (activity: ActivityDetails): boolean => {
     return activity.items.every(item => {
       return item.isHidden;
@@ -18,7 +17,7 @@ const createItemsVisibilityValidator = (): ItemsVisibilityValidator => {
     lookupInput: LookupEntityInput,
   ): boolean {
     const activitiesToLookup: ActivityDetails[] =
-      EntityActivitiesCollector.collect(lookupInput);
+      entityActivityCollector.collect(lookupInput);
 
     return activitiesToLookup.some(activity => {
       return check(activity);
@@ -29,5 +28,3 @@ const createItemsVisibilityValidator = (): ItemsVisibilityValidator => {
     hasActivityWithHiddenAllItems,
   };
 };
-
-export default createItemsVisibilityValidator();

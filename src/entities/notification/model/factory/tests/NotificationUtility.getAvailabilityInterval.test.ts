@@ -1,8 +1,11 @@
 import { addDays, subDays } from 'date-fns';
 
-import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
-import { ScheduleEvent } from '@app/entities/notification/lib';
-import { DatesFromTo } from '@app/shared/lib';
+import {
+  AvailabilityType,
+  PeriodicityType,
+} from '@app/abstract/lib/types/event';
+import { ScheduleEvent } from '@app/entities/notification/lib/types/notificationBuilder';
+import { DatesFromTo } from '@app/shared/lib/types/dateTime';
 
 import { addTime, getEmptyEvent } from './testHelpers';
 import { NotificationUtility } from '../NotificationUtility';

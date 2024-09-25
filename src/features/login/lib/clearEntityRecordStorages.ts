@@ -1,13 +1,15 @@
-import { createSecureStorage, createStorage } from '@app/shared/lib';
-import { MediaFilesCleaner } from '@entities/activity';
-
-const activitiesStorage = createSecureStorage('activity_progress-storage');
-
-const flowsStorage = createStorage('flow_progress-storage');
+import { getDefaultMediaFilesCleaner } from '@app/entities/activity/lib/services/mediaFilesCleanerInstance';
+import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 
 export const clearEntityRecordStorages = async () => {
+  const activitiesStorage =
+    getDefaultStorageInstanceManager().getActivityProgressStorage();
+
+  const flowsStorage =
+    getDefaultStorageInstanceManager().getFlowProgressStorage();
+
   activitiesStorage.getAllKeys().forEach(activityKey => {
-    MediaFilesCleaner.cleanUpByStorageKey(activityKey);
+    getDefaultMediaFilesCleaner().cleanUpByStorageKey(activityKey);
   });
 
   activitiesStorage.clearAll();

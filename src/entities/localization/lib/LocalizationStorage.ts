@@ -1,16 +1,18 @@
-import { Language, createStorage } from '@app/shared/lib';
+import { MMKV } from 'react-native-mmkv';
 
-function LocalizationStorage() {
-  const storage = createStorage('localization');
+import { Language } from '@app/shared/lib/types/language';
 
+import { ILocalizationStorage } from './ILocalizationStorage';
+
+export function LocalizationStorage(
+  localizationStorage: MMKV,
+): ILocalizationStorage {
   return {
     setLanguage(language: Language) {
-      storage.set('language', language);
+      localizationStorage.set('language', language);
     },
     getLanguage(): Language | undefined {
-      return storage.getString('language') as Language;
+      return localizationStorage.getString('language') as Language;
     },
   };
 }
-
-export default LocalizationStorage();

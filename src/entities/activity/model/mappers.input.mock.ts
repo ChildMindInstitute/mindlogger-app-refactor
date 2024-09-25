@@ -1,4 +1,4 @@
-import { ActivityDto } from '@shared/api';
+import { ActivityDto } from '@app/shared/api/services/IActivityService';
 
 const basicAppletDetails = {
   id: '64e31b66-22d8-1858-d681-b93200000000',

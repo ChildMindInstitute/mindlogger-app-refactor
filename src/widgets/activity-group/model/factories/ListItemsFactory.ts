@@ -1,28 +1,30 @@
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
-  ActivityPipelineType,
-  AvailabilityType,
   EntityProgressionInProgress,
   EntityProgressionInProgressActivityFlow,
-} from '@app/abstract/lib';
-import { EventModel } from '@app/entities/event';
+} from '@app/abstract/lib/types/entityProgress';
+import { AvailabilityType } from '@app/abstract/lib/types/event';
 import {
   ActivityListItem,
   ActivityStatus,
   ActivityType,
-} from '@entities/activity';
-import { HourMinute, isEntityExpired, MIDNIGHT_DATE } from '@shared/lib';
+} from '@app/entities/activity/lib/types/activityListItem';
+import { AvailableToEvaluator } from '@app/entities/event/model/AvailableToEvaluator';
+import { MIDNIGHT_DATE } from '@app/shared/lib/constants/dateTime';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
+import { isEntityExpired } from '@app/shared/lib/utils/survey/survey';
 
 import { GroupUtility } from './GroupUtility';
 import {
-  EventEntity,
   Activity,
   ActivityFlow,
+  EventEntity,
   GroupsBuildContext,
-} from '../../lib';
+} from '../../lib/types/activityGroupsBuilder';
 
 export class ListItemsFactory {
   private utility: GroupUtility;
-  private availableToEvaluator: EventModel.AvailableToEvaluator;
+  private availableToEvaluator: AvailableToEvaluator;
   protected activities: Activity[];
 
   constructor(inputParams: GroupsBuildContext) {
@@ -30,9 +32,7 @@ export class ListItemsFactory {
       inputParams.appletId,
       inputParams.entityProgressions,
     );
-    this.availableToEvaluator = new EventModel.AvailableToEvaluator(
-      this.utility,
-    );
+    this.availableToEvaluator = new AvailableToEvaluator(this.utility);
     this.activities = inputParams.allAppletActivities;
   }
 

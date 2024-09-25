@@ -1,36 +1,37 @@
 import { useQueryClient } from '@tanstack/react-query';
 
 import {
-  ActivityRecordKeyParams,
   CheckAvailability,
   CompleteEntityIntoUploadToQueue,
   EntityPath,
-  EntityProgressionInProgress,
   EntityType,
   EvaluateAvailableTo,
   LookupEntityInput,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/entity';
+import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
+import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
 import {
   ActivityFlowRecordDto,
   ActivityRecordDto,
   AppletDetailsResponse,
-} from '@app/shared/api';
+} from '@app/shared/api/services/IAppletService';
+import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useAppletInfo } from '@app/shared/lib/hooks/useAppletInfo';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { MigrationValidator } from '@app/shared/lib/services/MigrationValidator';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
+import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
 import {
-  getAppletDetailsKey,
   getDataFromQuery,
+  getAppletDetailsKey,
+} from '@app/shared/lib/utils/reactQueryHelpers';
+import {
   getEntityProgression,
-  ILogger,
-  isAppOnline,
-  isEntityExpired,
   isEntityProgressionInProgress,
   isProgressionReadyForAutocompletion,
-  Logger,
-  MigrationValidator,
-  Mutex,
-  useAppDispatch,
-  useAppletInfo,
-  useAppSelector,
-} from '@shared/lib';
+  isEntityExpired,
+} from '@app/shared/lib/utils/survey/survey';
 
 import {
   LogActivityActionParams,
@@ -44,13 +45,13 @@ import {
 } from './startEntityHelpers';
 import {
   onActivityContainsAllItemsHidden,
-  onFlowActivityContainsAllItemsHidden,
   onBeforeStartingActivity,
+  onFlowActivityContainsAllItemsHidden,
   onMediaReferencesFound,
   onMigrationsNotApplied,
-} from '../../lib';
+} from '../../lib/alerts';
 import { selectAppletsEntityProgressions } from '../selectors';
-import { actions } from '../slice';
+import { appletActions } from '../slice';
 
 type FailReason =
   | 'media-found'
@@ -88,9 +89,7 @@ type FlowStartedArgs = {
   targetSubjectId: string | null;
 };
 
-export const StartEntityMutex = Mutex();
-
-function useStartEntity({
+export function useStartEntity({
   hasMediaReferences,
   hasActivityWithHiddenAllItems,
   cleanUpMediaFiles,
@@ -98,7 +97,7 @@ function useStartEntity({
   completeEntityIntoUploadToQueue,
   checkAvailability,
 }: UseStartEntityInput) {
-  const mutex = StartEntityMutex;
+  const mutex = getMutexDefaultInstanceManager().getStartEntityMutex();
 
   const dispatch = useAppDispatch();
 
@@ -108,7 +107,7 @@ function useStartEntity({
 
   const { getName: getAppletDisplayName } = useAppletInfo();
 
-  const logger: ILogger = Logger;
+  const logger: ILogger = getDefaultLogger();
 
   function activityStart(
     appletId: string,
@@ -119,7 +118,7 @@ function useStartEntity({
     const availableTo = evaluateAvailableTo(appletId, eventId);
 
     dispatch(
-      actions.startActivity({
+      appletActions.startActivity({
         appletId,
         entityId: activityId,
         eventId,
@@ -144,7 +143,7 @@ function useStartEntity({
     const availableTo = evaluateAvailableTo(appletId, eventId);
 
     dispatch(
-      actions.startFlow({
+      appletActions.startFlow({
         appletId,
         flowId,
         eventId,
@@ -332,7 +331,7 @@ function useStartEntity({
     targetSubjectId: string | null,
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
-      Logger.log('[useStartEntity.startActivity] Mutex is busy');
+      getDefaultLogger().log('[useStartEntity.startActivity] Mutex is busy');
 
       return { failed: true, failReason: 'mutex-busy' };
     }
@@ -363,7 +362,7 @@ function useStartEntity({
 
       result.failed = !!result.failReason;
 
-      Logger.log(
+      getDefaultLogger().log(
         `[useStartEntity.startActivity]: Result: ${JSON.stringify(result)}`,
       );
 
@@ -526,7 +525,7 @@ function useStartEntity({
     targetSubjectId: string | null,
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
-      Logger.log('[useStartEntity.startFlow] Mutex is busy');
+      getDefaultLogger().log('[useStartEntity.startFlow] Mutex is busy');
 
       return { failed: true, failReason: 'mutex-busy' };
     }
@@ -557,7 +556,7 @@ function useStartEntity({
 
       result.failed = !!result.failReason;
 
-      Logger.log(
+      getDefaultLogger().log(
         `[useStartEntity.startFlow]: Result: ${JSON.stringify(result)}`,
       );
 
@@ -569,5 +568,3 @@ function useStartEntity({
 
   return { startActivity, startFlow };
 }
-
-export default useStartEntity;

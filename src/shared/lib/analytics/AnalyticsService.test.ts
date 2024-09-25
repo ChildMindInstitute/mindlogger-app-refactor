@@ -63,7 +63,7 @@ jest.mock('../storages', () => ({
   }),
 }));
 
-import AnalyticsService, { MixEvents, MixProperties } from './AnalyticsService';
+import { AnalyticsService, MixEvents, MixProperties } from './AnalyticsService';
 
 describe('Test AnalyticsService and MixpanelAnalytics', () => {
   beforeAll(() => {

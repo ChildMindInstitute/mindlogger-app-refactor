@@ -1,9 +1,9 @@
 import { render, fireEvent, screen } from '@testing-library/react-native';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import { wait } from '@app/shared/lib';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+import { wait } from '@app/shared/lib/utils/common';
 
-import { SendApplicationLogsForm } from '.';
+import { SendApplicationLogsForm } from './SendApplicationLogsForm';
 
 jest.mock('react-i18next', () => ({
   useTranslation: jest.fn().mockImplementation(() => ({

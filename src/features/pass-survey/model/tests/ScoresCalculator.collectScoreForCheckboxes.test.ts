@@ -1,5 +1,9 @@
-import { CheckboxResponse, CheckboxPipelineItem } from '../../lib';
-import { IScoresCalculator, ScoresCalculator } from '../ScoresCalculator';
+import {
+  CheckboxPipelineItem,
+  CheckboxResponse,
+} from '../../lib/types/payload';
+import { IScoresCalculator } from '../IScoresCalculator';
+import { ScoresCalculator } from '../ScoresCalculator';
 
 type WrappedAnswer = { answer: CheckboxResponse };
 

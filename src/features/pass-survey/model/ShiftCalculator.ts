@@ -2,7 +2,7 @@ export interface IStepSkipper {
   shouldSkipStep: (step: number) => boolean;
 }
 
-class ShiftCalculator {
+export class ShiftCalculator {
   private skipper: IStepSkipper;
   private arrayLength: number;
 
@@ -63,5 +63,3 @@ class ShiftCalculator {
     return result;
   }
 }
-
-export default ShiftCalculator;

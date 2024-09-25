@@ -5,20 +5,18 @@ import { useNavigation } from '@react-navigation/native';
 import {
   AutocompletionExecuteOptions,
   LogAutocompletionTrigger,
-} from '@app/abstract/lib';
-import { AppletModel } from '@app/entities/applet';
-import {
-  Logger,
-  UploadObservable,
-  useCurrentRoute,
-  useIsOnline,
-} from '@app/shared/lib';
+} from '@app/abstract/lib/types/autocompletion';
+import { useCurrentRoute } from '@app/shared/lib/hooks/useCurrentRoute';
+import { useIsOnline } from '@app/shared/lib/hooks/useIsOnline';
+import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
 
-import { useAutoCompletion } from './';
+import { useAutoCompletion } from './useAutoCompletion';
 
 const CompleteCurrentNavigationDelay = 500;
 
-const useAutoCompletionExecute = () => {
+export const useAutoCompletionExecute = () => {
   const { getCurrentRoute } = useCurrentRoute();
 
   const navigation = useNavigation();
@@ -48,16 +46,16 @@ const useAutoCompletionExecute = () => {
 
       const isAlreadyOpened = currentRoute === 'Autocompletion';
 
-      const isUploading = UploadObservable.isLoading;
+      const isUploading = getDefaultUploadObservable().isLoading;
 
       const hasItemsInQueue = evaluateIfItemsInQueueExist();
 
-      Logger.log(
+      getDefaultLogger().log(
         `[useAutoCompletionExecute.autocomplete] Started, logTrigger="${logTrigger}", forceUpload="${forceUpload}", checksToExclude=${JSON.stringify(checksToExclude)}, checksToInclude=${JSON.stringify(checksToInclude)}, hasItemsInQueue=${hasItemsInQueue}`,
       );
 
       if (checksToInclude.includes('is-offline') && isOffline) {
-        Logger.info(
+        getDefaultLogger().info(
           '[useAutoCompletionExecute.autocomplete]: Postponed due to offline',
         );
         return;
@@ -67,21 +65,21 @@ const useAutoCompletionExecute = () => {
         !checksToExclude.includes('in-progress-activity') &&
         isActivityExecuting
       ) {
-        Logger.info(
+        getDefaultLogger().info(
           '[useAutoCompletionExecute.autocomplete]: Postponed due to entity is in progress',
         );
         return;
       }
 
       if (!checksToExclude.includes('uploading') && isUploading) {
-        Logger.info(
+        getDefaultLogger().info(
           '[useAutoCompletionExecute.autocomplete]: Postponed due to is currently uploading',
         );
         return;
       }
 
       if (!checksToExclude.includes('already-opened') && isAlreadyOpened) {
-        Logger.info(
+        getDefaultLogger().info(
           '[useAutoCompletionExecute.autocomplete]: Postponed due to already opened',
         );
         return;
@@ -89,9 +87,9 @@ const useAutoCompletionExecute = () => {
 
       if (
         !checksToExclude.includes('refresh') &&
-        AppletModel.RefreshService.isBusy()
+        getMutexDefaultInstanceManager().getRefreshServiceMutex().isBusy()
       ) {
-        Logger.info(
+        getDefaultLogger().info(
           '[useAutoCompletionExecute.autocomplete]: Postponed due to RefreshService.mutex is busy',
         );
         return;
@@ -99,15 +97,15 @@ const useAutoCompletionExecute = () => {
 
       if (
         !checksToExclude.includes('start-entity') &&
-        AppletModel.StartEntityMutex.isBusy()
+        getMutexDefaultInstanceManager().getStartEntityMutex().isBusy()
       ) {
-        Logger.log(
+        getDefaultLogger().log(
           '[useAutoCompletionExecute.startActivityOrFlow] Postponed due to StartEntityMutex is busy',
         );
         return;
       }
 
-      UploadObservable.reset();
+      getDefaultUploadObservable().reset();
 
       const closingInProgressEntityScreen = checksToExclude.includes(
         'in-progress-activity',
@@ -135,5 +133,3 @@ const useAutoCompletionExecute = () => {
     executeAutocompletion: autocomplete,
   };
 };
-
-export default useAutoCompletionExecute;

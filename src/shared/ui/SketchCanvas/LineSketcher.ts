@@ -1,7 +1,7 @@
 import { PaintStyle, Skia, SkPath } from '@shopify/react-native-skia';
 import { SharedValue } from 'react-native-reanimated';
 
-import { colors } from '@app/shared/lib';
+import { colors } from '@app/shared/lib/constants/colors';
 
 export type Point = {
   x: number;

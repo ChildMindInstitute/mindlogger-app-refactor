@@ -1,14 +1,17 @@
 import { FC, useMemo } from 'react';
 
+import { colors } from '@app/shared/lib/constants/colors';
+import { TIME_PICKER_FORMAT_PLACEHOLDER } from '@app/shared/lib/constants/dateTime';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
 import {
-  HourMinute,
-  colors,
   getMidnightDateInMs,
   getMsFromHours,
   getMsFromMinutes,
-  TIME_PICKER_FORMAT_PLACEHOLDER,
-} from '@app/shared/lib';
-import { YStack, DateTimePicker, AlarmIcon, BedIcon } from '@shared/ui';
+} from '@app/shared/lib/utils/dateTime';
+
+import { YStack } from '../base';
+import { DateTimePicker } from '../DateTimePicker';
+import { AlarmIcon, BedIcon } from '../icons';
 
 type TimeRangeValue = {
   endTime: HourMinute | null;
@@ -20,7 +23,7 @@ type Props = {
   onChange: (value: TimeRangeValue) => void;
 };
 
-const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
+export const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
   const transformToDate = (hourMinute: HourMinute): Date => {
     const msTime =
       getMidnightDateInMs() +
@@ -87,5 +90,3 @@ const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
     </YStack>
   );
 };
-
-export default TimeRangeItem;

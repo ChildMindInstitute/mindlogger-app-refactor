@@ -5,44 +5,53 @@ import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
+import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import {
-  ActivityRecordKeyParams,
-  AutocompletionEventOptions,
   CheckAvailability,
   CompleteEntityIntoUploadToQueue,
   EntityPath,
-  EntityProgressionInProgress,
   EntityType,
   EvaluateAvailableTo,
   LookupEntityInput,
-} from '@app/abstract/lib';
-import { AppletModel, clearStorageRecords } from '@app/entities/applet';
-import { EventModel } from '@app/entities/event';
+} from '@app/abstract/lib/types/entity';
+import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
+import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
+import { clearStorageRecords } from '@app/entities/applet/lib/storage/helpers';
+import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
+import { useStartEntity } from '@app/entities/applet/model/hooks/useStartEntity';
+import {
+  selectAppletsEntityProgressions,
+  selectEntityResponseTimes,
+} from '@app/entities/applet/model/selectors';
+import { getTimeToComplete } from '@app/entities/event/model/timers';
+import { useBackgroundEvents } from '@app/entities/notification/lib/hooks/useBackgroundEvents';
+import { useForegroundEvents } from '@app/entities/notification/lib/hooks/useForegroundEvents';
+import { useOnInitialAndroidNotification } from '@app/entities/notification/lib/hooks/useOnInitialAndroidNotification';
 import {
   LocalEventDetail,
   LocalInitialNotification,
-  NotificationModel,
   PushNotificationType,
-  useBackgroundEvents,
-  useForegroundEvents,
-  useOnInitialAndroidNotification,
-} from '@app/entities/notification';
-import { LogTrigger, QueryDataUtils } from '@app/shared/api';
+} from '@app/entities/notification/lib/types/notifications';
+import { getDefaultNotificationRefreshService } from '@app/entities/notification/model/notificationRefreshServiceInstance';
+import { LogTrigger } from '@app/shared/api/services/INotificationService';
+import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
 import {
   AnalyticsService,
-  Emitter,
-  getEntityProgression,
-  HourMinute,
-  isEntityProgressionInProgress,
-  Logger,
   MixEvents,
   MixProperties,
-  useAppSelector,
-  useCurrentRoute,
-  useToast,
-} from '@app/shared/lib';
+} from '@app/shared/lib/analytics/AnalyticsService';
+import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useCurrentRoute } from '@app/shared/lib/hooks/useCurrentRoute';
+import { useToast } from '@app/shared/lib/hooks/useToast';
+import { Emitter } from '@app/shared/lib/services/Emitter';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
+import {
+  getEntityProgression,
+  isEntityProgressionInProgress,
+} from '@app/shared/lib/utils/survey/survey';
 
-import NotificationPostponer from '../services/NotificationPostponer';
+import { NotificationPostponer } from '../services/NotificationPostponer';
 
 type Input = {
   checkAvailability: CheckAvailability;
@@ -83,17 +92,13 @@ export function useOnNotificationTap({
 
   const { t } = useTranslation();
 
-  const progressions = useAppSelector(
-    AppletModel.selectors.selectAppletsEntityProgressions,
-  );
+  const progressions = useAppSelector(selectAppletsEntityProgressions);
 
-  const responseTimes = useAppSelector(
-    AppletModel.selectors.selectEntityResponseTimes,
-  );
+  const responseTimes = useAppSelector(selectEntityResponseTimes);
 
-  const { mutateAsync: refresh } = AppletModel.useRefreshMutation();
+  const { mutateAsync: refresh } = useRefreshMutation();
 
-  const { startFlow, startActivity } = AppletModel.useStartEntity({
+  const { startFlow, startActivity } = useStartEntity({
     hasMediaReferences,
     cleanUpMediaFiles,
     hasActivityWithHiddenAllItems,
@@ -113,7 +118,7 @@ export function useOnNotificationTap({
     (eventDetail: LocalEventDetail) => void
   > = {
     'request-to-reschedule-due-to-limit': () => {
-      NotificationModel.NotificationRefreshService.refresh(
+      getDefaultNotificationRefreshService().refresh(
         queryClient,
         progressions,
         responseTimes,
@@ -147,7 +152,7 @@ export function useOnNotificationTap({
       }
 
       if (isAutocompletionWorking) {
-        Logger.log(
+        getDefaultLogger().log(
           '[useOnNotificationTap]: Notification tap ignored as autocompletion is working (M2-7315)',
         );
         return;
@@ -173,42 +178,42 @@ export function useOnNotificationTap({
 
       refresh()
         .then(() => {
-          NotificationModel.NotificationRefreshService.refresh(
+          getDefaultNotificationRefreshService().refresh(
             queryClient,
             progressions,
             responseTimes,
             LogTrigger.ScheduleUpdated,
           );
         })
-        .then(() => Logger.send());
+        .then(() => getDefaultLogger().send());
     },
     'applet-delete-alert': () => {
       navigator.navigate('Applets');
 
       refresh()
         .then(() => {
-          NotificationModel.NotificationRefreshService.refresh(
+          getDefaultNotificationRefreshService().refresh(
             queryClient,
             progressions,
             responseTimes,
             LogTrigger.AppletRemoved,
           );
         })
-        .then(() => Logger.send());
+        .then(() => getDefaultLogger().send());
     },
     'schedule-updated': () => {
       navigator.navigate('Applets');
 
       refresh()
         .then(() => {
-          NotificationModel.NotificationRefreshService.refresh(
+          getDefaultNotificationRefreshService().refresh(
             queryClient,
             progressions,
             responseTimes,
             LogTrigger.AppletUpdated,
           );
         })
-        .then(() => Logger.send());
+        .then(() => getDefaultLogger().send());
     },
   };
 
@@ -254,7 +259,7 @@ export function useOnNotificationTap({
 
     if (progression && timer && isEntityProgressionInProgress(progression)) {
       isTimerElapsed =
-        EventModel.getTimeToComplete(
+        getTimeToComplete(
           timer,
           new Date(
             (progression as EntityProgressionInProgress).startedAtTimestamp,

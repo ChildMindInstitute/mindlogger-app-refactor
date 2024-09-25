@@ -7,8 +7,9 @@ import {
   getEmptyRadioItem,
   getEmptySliderItem,
 } from './testHelpers';
-import { PipelineItem } from '../../lib';
-import { IScoresCalculator, ScoresCalculator } from '../ScoresCalculator';
+import { PipelineItem } from '../../lib/types/payload';
+import { IScoresCalculator } from '../IScoresCalculator';
+import { ScoresCalculator } from '../ScoresCalculator';
 
 describe('ScoresCalculator: test collectMaxScores', () => {
   let calculator: IScoresCalculator;

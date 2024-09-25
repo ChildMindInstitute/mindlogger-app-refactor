@@ -8,7 +8,7 @@ setupReactNative({
   TextInput,
 });
 
-export const LongTextInput = styled(
+const LongTextInputView = styled(
   TextInput,
   {
     name: 'ParagraphText',
@@ -47,6 +47,6 @@ export const LongTextInput = styled(
   },
 );
 
-export type InputProps = GetProps<typeof LongTextInput>;
+export type InputProps = GetProps<typeof LongTextInputView>;
 
-export default focusableInputHOC(LongTextInput);
+export const LongTextInput = focusableInputHOC(LongTextInputView);

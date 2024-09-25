@@ -3,14 +3,15 @@ import { StyleSheet, ImageBackground as RNImageBackground } from 'react-native';
 
 import { XStackProps } from '@tamagui/stacks';
 
-import { useCachedImage } from '@app/shared/lib';
 import { cloudBackground } from '@assets/images';
+
+import { useCachedImage } from '../lib/hooks/useCachedImage';
 
 type Props = {
   uri?: string;
 } & XStackProps;
 
-const ImageBackground: FC<PropsWithChildren<Props>> = ({ children, uri }) => {
+const ImageBackgroundView: FC<PropsWithChildren<Props>> = ({ children, uri }) => {
   const imageSource = useCachedImage(uri);
 
   const source = useMemo(
@@ -28,4 +29,4 @@ const ImageBackground: FC<PropsWithChildren<Props>> = ({ children, uri }) => {
   );
 };
 
-export default memo(ImageBackground);
+export const ImageBackground = memo(ImageBackgroundView);

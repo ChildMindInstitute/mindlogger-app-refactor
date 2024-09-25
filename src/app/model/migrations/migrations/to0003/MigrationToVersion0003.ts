@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { Logger } from '@app/shared/lib';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import { RootStateFrom, RootStateTo } from './MigrationReduxTypes0003';
 import {
@@ -66,7 +66,8 @@ export class MigrationToVersion0003
     try {
       this.cacheAllMarkdownImages();
     } catch (error) {
-      Logger.error(`[MigrationToVersion0003.migrate]: An error ocurred during the migration:
+      getDefaultLogger()
+        .error(`[MigrationToVersion0003.migrate]: An error ocurred during the migration:
         error:
         ${(error as Error).message}
       `);

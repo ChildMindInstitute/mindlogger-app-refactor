@@ -1,19 +1,18 @@
 import { useCallback, useState } from 'react';
 
-import { EntityPath, EntityProgressionInProgress } from '@app/abstract/lib';
-import { useInProgressRecord } from '@app/entities/applet/model';
-import { EventModel } from '@app/entities/event';
-import { TimeIsUpModal } from '@widgets/survey';
+import { EntityPath } from '@app/abstract/lib/types/entity';
+import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
+import { useInProgressRecord } from '@app/entities/applet/model/hooks/useInProgressRecord';
+import { useScheduledEvent } from '@app/entities/event/model/hooks/useEvent';
 
-import FlowElementSwitch from './FlowElementSwitch';
-import {
-  useActivityRecordsInitialization,
-  useFlowRecordInitialization,
-  useFlowState,
-  useFlowStateActions,
-} from '../model';
-import useAvailabilityTimer from '../model/hooks/useAvailabilityTimer';
-import useEventTimer from '../model/hooks/useEventTimer';
+import { FlowElementSwitch } from './FlowElementSwitch';
+import { TimeIsUpModal } from './TimeIsUpModal';
+import { useActivityRecordsInitialization } from '../model/hooks/useActivityRecordsInitialization';
+import { useAvailabilityTimer } from '../model/hooks/useAvailabilityTimer';
+import { useEventTimer } from '../model/hooks/useEventTimer';
+import { useFlowRecordInitialization } from '../model/hooks/useFlowRecordInitialization';
+import { useFlowState } from '../model/hooks/useFlowState';
+import { useFlowStateActions } from '../model/hooks/useFlowStateActions';
 
 type Props = {
   onClose: () => void;
@@ -21,7 +20,7 @@ type Props = {
 
 type TimerType = 'event' | 'availability';
 
-function FlowSurvey({
+export function FlowSurvey({
   appletId,
   entityId,
   entityType,
@@ -75,7 +74,7 @@ function FlowSurvey({
     completeByTimer(autocompletionTimerType!);
   }, [autocompletionTimerType, completeByTimer]);
 
-  const event = EventModel.useScheduledEvent({ appletId, eventId })!;
+  const event = useScheduledEvent({ appletId, eventId })!;
 
   const progression = useInProgressRecord({
     appletId,
@@ -151,5 +150,3 @@ function FlowSurvey({
     </>
   );
 }
-
-export default FlowSurvey;

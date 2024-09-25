@@ -1,4 +1,4 @@
-import { DrawPoint } from '@entities/drawer';
+import { DrawPoint } from '@app/entities/drawer/lib/types/draw';
 
 export type FlankerLiveEvent = {
   trialIndex: number;

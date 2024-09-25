@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-const useOnceRef = (callback: () => void) => {
+export const useOnceRef = (callback: () => void) => {
   const callbackRef = useRef(callback);
 
   callbackRef.current = callback;
@@ -9,5 +9,3 @@ const useOnceRef = (callback: () => void) => {
     callbackRef.current();
   }, []);
 };
-
-export default useOnceRef;

@@ -1,6 +1,10 @@
 import { useState } from 'react';
 
-import { AnalyticsService, MixEvents, UploadObservable } from '@shared/lib';
+import {
+  AnalyticsService,
+  MixEvents,
+} from '@app/shared/lib/analytics/AnalyticsService';
+import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
 
 import { showUploadErrorAlert } from '../alerts';
 
@@ -45,7 +49,7 @@ export const useRetryUpload = ({
       onLater: () => {
         setIsAlertOpened(false);
 
-        UploadObservable.isPostponed = true;
+        getDefaultUploadObservable().isPostponed = true;
 
         if (postpone) {
           postpone();

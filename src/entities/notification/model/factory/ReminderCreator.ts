@@ -1,12 +1,12 @@
 import { addDays, addMonths } from 'date-fns';
 
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
-  ActivityPipelineType,
   EntityProgression,
   EntityResponseTime,
-  PeriodicityType,
-} from '@app/abstract/lib';
-import { DatesFromTo } from '@app/shared/lib';
+} from '@app/abstract/lib/types/entityProgress';
+import { PeriodicityType } from '@app/abstract/lib/types/event';
+import { DatesFromTo } from '@app/shared/lib/types/dateTime';
 
 import { NotificationUtility } from './NotificationUtility';
 import {
@@ -15,7 +15,7 @@ import {
   NotificationDescriber,
   NotificationType,
   ScheduleEvent,
-} from '../../lib';
+} from '../../lib/types/notificationBuilder';
 
 export class ReminderCreator {
   private responseTimes: EntityResponseTime[];

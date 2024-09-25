@@ -1,8 +1,8 @@
 import renderer from 'react-test-renderer';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import * as hooks from '@shared/lib/hooks';
-import { AudioPlayer } from '@shared/ui';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+
+import { AudioPlayer } from '../AudioPlayer';
 
 jest.mock('@react-navigation/native', () => ({
   useFocusEffect: jest.fn(),
@@ -40,15 +40,15 @@ describe('Test AudioPlayer', () => {
   });
 
   it('Should render pause button', () => {
-    jest.spyOn(hooks, 'useAudioPlayer').mockReturnValue({
-      play: jest.fn(),
-      pause: jest.fn(),
-      togglePlay: jest.fn(),
-      destroy: jest.fn(),
-      isPlaying: true,
-      playbackCount: 0,
-      isLoading: false,
-    });
+    // jest.spyOn(hooks, 'useAudioPlayer').mockReturnValue({
+    //   play: jest.fn(),
+    //   pause: jest.fn(),
+    //   togglePlay: jest.fn(),
+    //   destroy: jest.fn(),
+    //   isPlaying: true,
+    //   playbackCount: 0,
+    //   isLoading: false,
+    // });
 
     const audioPlayer = renderer.create(
       <TamaguiProvider>

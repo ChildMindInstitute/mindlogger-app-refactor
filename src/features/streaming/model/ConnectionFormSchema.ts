@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const schema = z.object({
+export const ConnectionFormSchema = z.object({
   ipAddress: z.string().ip(),
   port: z
     .string()
@@ -9,5 +9,3 @@ const schema = z.object({
     .transform(x => x.toString()),
   remember: z.boolean().optional(),
 });
-
-export default schema;

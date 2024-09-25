@@ -1,6 +1,9 @@
-import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
-import { ScheduleEvent } from '@app/entities/event';
-import { Answers } from '@app/features/pass-survey';
+import {
+  AvailabilityType,
+  PeriodicityType,
+} from '@app/abstract/lib/types/event';
+import { ScheduleEvent } from '@app/entities/event/lib/types/event';
+import { Answers } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import {
   getDrawerItem,
   getDrawerResponse,
@@ -8,7 +11,7 @@ import {
   getSplashItem,
   getTextInputItem,
   getTutorialItem,
-} from '@app/features/pass-survey/model/tests';
+} from '@app/features/pass-survey/model/tests/testHelpers';
 
 import { mapAnswersToDto } from '../mappers';
 import {

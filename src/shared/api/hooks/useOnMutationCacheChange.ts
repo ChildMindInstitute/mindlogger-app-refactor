@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-const useOnMutationCacheChange = () => {
+export const useOnMutationCacheChange = () => {
   const [refreshError, setRefreshError] = useState<string | null>(null);
 
   const queryClient = useQueryClient();
@@ -23,5 +23,3 @@ const useOnMutationCacheChange = () => {
 
   return refreshError;
 };
-
-export default useOnMutationCacheChange;

@@ -2,23 +2,23 @@ import { useMemo } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { ScheduleEvent } from '@app/entities/event';
-import {
-  ActivityIdentityContext,
-  ActivityStepper,
-} from '@app/features/pass-survey';
+import { ScheduleEvent } from '@app/entities/event/lib/types/event';
+import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
+import { ActivityStepper } from '@app/features/pass-survey/ui/ActivityStepper';
 import {
   AnalyticsService,
-  colors,
   MixEvents,
   MixProperties,
-} from '@app/shared/lib';
-import { BackButton, CrossIcon, Box } from '@shared/ui';
+} from '@app/shared/lib/analytics/AnalyticsService';
+import { colors } from '@app/shared/lib/constants/colors';
+import { BackButton } from '@app/shared/ui/BackButton';
+import { Box } from '@app/shared/ui/base';
+import { CrossIcon } from '@app/shared/ui/icons';
 
-import Finish from './Finish';
-import Intermediate from './Intermediate';
-import Summary from './Summary';
-import { FlowPipelineItem } from '../model';
+import { FinishItem } from './Finish';
+import { Intermediate } from './Intermediate';
+import { Summary } from './Summary';
+import { FlowPipelineItem } from '../model/pipelineBuilder';
 
 type Props = {
   onClose: () => void;
@@ -31,7 +31,7 @@ type Props = {
   flowId?: string;
 } & FlowPipelineItem;
 
-function FlowElementSwitch({
+export function FlowElementSwitch({
   type,
   payload,
   event,
@@ -104,7 +104,7 @@ function FlowElementSwitch({
 
     case 'Finish': {
       return (
-        <Finish
+        <FinishItem
           {...payload}
           isTimerElapsed={isTimerElapsed}
           interruptionStep={interruptionStep}
@@ -114,5 +114,3 @@ function FlowElementSwitch({
     }
   }
 }
-
-export default FlowElementSwitch;

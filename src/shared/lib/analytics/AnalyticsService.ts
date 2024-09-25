@@ -1,10 +1,9 @@
-import { IAnalyticsService } from './IAnalyticsService';
-import MixpanelAnalytics from './MixpanelAnalytics';
-import { MIXPANEL_TOKEN } from '../constants';
-import { Logger } from '../services';
-import { createStorage } from '../storages';
+import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 
-export const storage = createStorage('analytics-storage');
+import { IAnalyticsService } from './IAnalyticsService';
+import { MixpanelAnalytics } from './MixpanelAnalytics';
+import { MIXPANEL_TOKEN } from '../constants';
+import { getDefaultLogger } from '../services/loggerInstance';
 
 let service: IAnalyticsService;
 
@@ -35,13 +34,13 @@ export const MixEvents = {
   NotificationTap: 'Notification tap',
 };
 
-const AnalyticsService = {
+export const AnalyticsService = {
   shouldEnableMixpanel() {
     return !!MIXPANEL_TOKEN;
   },
   async init(): Promise<void> {
     if (this.shouldEnableMixpanel()) {
-      Logger.log(
+      getDefaultLogger().log(
         '[AnalyticsService]: Create and init MixpanelAnalytics object',
       );
       service = new MixpanelAnalytics(MIXPANEL_TOKEN!);
@@ -50,13 +49,13 @@ const AnalyticsService = {
   },
   track(action: string, payload?: Record<string, any>) {
     if (payload) {
-      Logger.log(
+      getDefaultLogger().log(
         `[AnalyticsService]: Action: ${action}, payload: ${JSON.stringify(
           payload,
         )}`,
       );
     } else {
-      Logger.log('[AnalyticsService]: Action: ' + action);
+      getDefaultLogger().log('[AnalyticsService]: Action: ' + action);
     }
 
     if (this.shouldEnableMixpanel()) {
@@ -64,11 +63,15 @@ const AnalyticsService = {
     }
   },
   async login(userId: string) {
-    const isLoggedIn = storage.getBoolean('IS_LOGGED_IN');
+    const isLoggedIn = getDefaultStorageInstanceManager()
+      .getAnalyticsStorage()
+      .getBoolean('IS_LOGGED_IN');
 
     if (this.shouldEnableMixpanel() && !isLoggedIn) {
       return service.login(userId).then(() => {
-        storage.set('IS_LOGGED_IN', true);
+        getDefaultStorageInstanceManager()
+          .getAnalyticsStorage()
+          .set('IS_LOGGED_IN', true);
       });
     }
   },
@@ -76,9 +79,7 @@ const AnalyticsService = {
     if (this.shouldEnableMixpanel()) {
       this.track('Logout');
       service.logout();
-      storage.clearAll();
+      getDefaultStorageInstanceManager().getAnalyticsStorage().clearAll();
     }
   },
 };
-
-export default AnalyticsService;

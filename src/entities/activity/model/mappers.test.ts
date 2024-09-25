@@ -1,4 +1,3 @@
-import { ActivityDetails } from '@entities/activity';
 import {
   abTrailsOutput,
   CSTOutput,
@@ -53,6 +52,7 @@ import {
   CSTInput,
   flankerInput,
 } from './performanceTasks.input.mock';
+import { ActivityDetails } from '../lib/types/activity';
 
 const removeUnusedProperties = (
   activityDetails: ActivityDetails,

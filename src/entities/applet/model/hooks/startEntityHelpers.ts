@@ -1,9 +1,9 @@
 import {
   AnalyticsService,
-  Logger,
   MixEvents,
   MixProperties,
-} from '@app/shared/lib';
+} from '@app/shared/lib/analytics/AnalyticsService';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 export type LogActivityActionParams = {
   entityName: string;
@@ -20,7 +20,7 @@ export type LogFlowActionParams = {
 };
 
 export const logStartActivity = (params: LogActivityActionParams) => {
-  Logger.log(
+  getDefaultLogger().log(
     `[useStartEntity.startActivity]: Activity "${params.entityName}|${params.activityId}" started, applet "${params.appletName}|${params.appletId}"`,
   );
   AnalyticsService.track(MixEvents.AssessmentStarted, {
@@ -29,7 +29,7 @@ export const logStartActivity = (params: LogActivityActionParams) => {
 };
 
 export const logRestartActivity = (params: LogActivityActionParams) => {
-  Logger.log(
+  getDefaultLogger().log(
     `[useStartEntity.startActivity]: Activity "${params.entityName}|${params.activityId}" restarted, applet "${params.appletName}|${params.appletId}"`,
   );
   AnalyticsService.track(MixEvents.ActivityRestart, {
@@ -41,7 +41,7 @@ export const logRestartActivity = (params: LogActivityActionParams) => {
 };
 
 export const logResumeActivity = (params: LogActivityActionParams) => {
-  Logger.log(
+  getDefaultLogger().log(
     `[useStartEntity.startActivity]: Activity "${params.entityName}|${params.activityId}" resumed, applet "${params.appletName}|${params.appletId}"`,
   );
   AnalyticsService.track(MixEvents.ActivityResume, {
@@ -50,7 +50,7 @@ export const logResumeActivity = (params: LogActivityActionParams) => {
 };
 
 export const logStartFlow = (params: LogFlowActionParams) => {
-  Logger.log(
+  getDefaultLogger().log(
     `[useStartEntity.startFlow]: Flow "${params.entityName}|${params.flowId}" started, applet "${params.appletName}|${params.appletId}"`,
   );
   AnalyticsService.track(MixEvents.AssessmentStarted, {
@@ -59,7 +59,7 @@ export const logStartFlow = (params: LogFlowActionParams) => {
 };
 
 export const logRestartFlow = (params: LogFlowActionParams) => {
-  Logger.log(
+  getDefaultLogger().log(
     `[useStartEntity.startFlow]: Flow "${params.entityName}|${params.flowId}" restarted, applet "${params.appletName}|${params.appletId}"`,
   );
   AnalyticsService.track(MixEvents.ActivityRestart, {
@@ -71,7 +71,7 @@ export const logRestartFlow = (params: LogFlowActionParams) => {
 };
 
 export const logResumeFlow = (params: LogFlowActionParams) => {
-  Logger.log(
+  getDefaultLogger().log(
     `[useStartEntity.startFlow]: Flow "${params.entityName}|${params.flowId}" resumed, applet "${params.appletName}|${params.appletId}"`,
   );
   AnalyticsService.track(MixEvents.ActivityResume, {

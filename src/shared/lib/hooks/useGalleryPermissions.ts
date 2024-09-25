@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 
 import { RESULTS } from 'react-native-permissions';
 
-import { checkGalleryPermissions } from '../permissions';
+import { checkGalleryPermissions } from '../permissions/galleryPermissions';
 
-const useGalleryPermissions = () => {
+export const useGalleryPermissions = () => {
   const [galleryPermission, setGalleryPermission] = useState<string>(
     RESULTS.UNAVAILABLE,
   );
@@ -19,5 +19,3 @@ const useGalleryPermissions = () => {
       galleryPermission === RESULTS.LIMITED,
   };
 };
-
-export default useGalleryPermissions;

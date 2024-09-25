@@ -1,40 +1,47 @@
 import { QueryClient } from '@tanstack/react-query';
 
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
-  ActivityPipelineType,
   EntityProgression,
   EntityResponseTime,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/entityProgress';
 import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
-import { AppletModel } from '@app/entities/applet';
-import { EventModel } from '@app/entities/event';
+import { IScheduledDateCalculator } from '@app/entities/event/model/operations/IScheduledDateCalculator';
 import {
   AppletAssignmentsResponse,
   AppletDetailsResponse,
   AppletDto,
-  AppletEventsResponse,
   AppletsResponse,
+} from '@app/shared/api/services/IAppletService';
+import { AppletEventsResponse } from '@app/shared/api/services/IEventsService';
+import {
   LogAction,
   LogTrigger,
-} from '@app/shared/api';
+} from '@app/shared/api/services/INotificationService';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { IMutexDefaultInstanceManager } from '@app/shared/lib/utils/IMutexDefaultInstanceManager';
 import {
-  ILogger,
-  Logger,
-  getAppletDetailsKey,
-  getAppletsKey,
-  getAssignmentsKey,
   getDataFromQuery,
+  getAppletsKey,
+  getAppletDetailsKey,
   getEventsKey,
-} from '@app/shared/lib';
+  getAssignmentsKey,
+} from '@app/shared/lib/utils/reactQueryHelpers';
 import { mapAssignmentsFromDto } from '@app/widgets/activity-group/model/mappers';
 
-import { createNotificationBuilder } from './factory';
+import { createNotificationBuilder } from './factory/NotificationBuilder';
+import { INotificationManager } from './INotificationManager';
+import { INotificationRefreshService } from './INotificationRefreshService';
 import {
   mapActivitiesFromDto,
   mapActivityFlowsFromDto,
-  mapEventsFromDto,
-} from './mappers';
-import NotificationManager from './NotificationManager';
+} from './mappers/entities';
+import { mapEventsFromDto } from './mappers/events';
+import {
+  filterNotifications,
+  sortNotificationDescribers,
+} from '../lib/services/filterNotifications';
+import { INotificationsLogger } from '../lib/services/INotificationsLogger';
 import {
   Activity,
   ActivityFlow,
@@ -43,23 +50,15 @@ import {
   EventEntity,
   NotificationDescriber,
   ScheduleEvent,
-  filterNotifications,
-  sortNotificationDescribers,
-} from '../lib';
-import NotificationsLogger from '../lib/services/NotificationsLogger';
+} from '../lib/types/notificationBuilder';
 
-type NotificationRefreshService = {
-  refresh: (
-    queryClient: QueryClient,
-    progressions: EntityProgression[],
-    responseTimes: EntityResponseTime[],
-    logTrigger: LogTrigger,
-  ) => Promise<void>;
-};
-
-const createNotificationRefreshService = (
+export const createNotificationRefreshService = (
   logger: ILogger,
-): NotificationRefreshService => {
+  scheduledDateCalculator: IScheduledDateCalculator,
+  notificationManager: INotificationManager,
+  notificationLogger: INotificationsLogger,
+  mutexInstanceManager: IMutexDefaultInstanceManager,
+): INotificationRefreshService => {
   const buildIdToEntityMap = (entities: Entity[]): Record<string, Entity> => {
     return entities.reduce<Record<string, Entity>>((acc, current) => {
       acc[current.id] = current;
@@ -174,10 +173,8 @@ const createNotificationRefreshService = (
         entityEvents = entityEvents.filter(x => x.entity !== null);
       }
 
-      const calculator = EventModel.ScheduledDateCalculator;
-
       for (const eventEntity of entityEvents) {
-        const date = calculator.calculate(eventEntity.event);
+        const date = scheduledDateCalculator.calculate(eventEntity.event);
         eventEntity.event.scheduledAt = date;
       }
 
@@ -203,7 +200,7 @@ const createNotificationRefreshService = (
       allNotificationDescribers,
     );
 
-    await NotificationManager.scheduleNotifications(
+    await notificationManager.scheduleNotifications(
       sortedNotificationDescribers,
     );
 
@@ -220,13 +217,13 @@ const createNotificationRefreshService = (
       '[NotificationRefreshService.refresh]: Start notifications refresh process',
     );
 
-    if (NotificationManager.mutex.isBusy()) {
+    if (notificationManager.mutex.isBusy()) {
       logger.info(
         '[NotificationRefreshService.refresh]: Break as mutex set to busy',
       );
       return;
     }
-    if (AppletModel.RefreshService.isBusy()) {
+    if (mutexInstanceManager.getRefreshServiceMutex().isBusy()) {
       logger.info(
         '[NotificationRefreshService.refresh]: RefreshService.mutex set to busy state',
       );
@@ -236,7 +233,7 @@ const createNotificationRefreshService = (
     let describers: AppletNotificationDescribers[] | null = null;
 
     try {
-      NotificationManager.mutex.setBusy();
+      notificationManager.mutex.setBusy();
 
       describers = await refreshInternal(
         queryClient,
@@ -252,11 +249,11 @@ const createNotificationRefreshService = (
         `[NotificationRefreshService.refresh]: Notifications rescheduling failed\n\n${error}`,
       );
     } finally {
-      NotificationManager.mutex.release();
+      notificationManager.mutex.release();
     }
 
     if (describers) {
-      await NotificationsLogger.log({
+      await notificationLogger.log({
         trigger: logTrigger,
         notificationDescriptions: describers,
         action: LogAction.ReSchedule,
@@ -264,11 +261,7 @@ const createNotificationRefreshService = (
     }
   };
 
-  const result: NotificationRefreshService = {
+  return {
     refresh,
   };
-
-  return result;
 };
-
-export default createNotificationRefreshService(Logger);

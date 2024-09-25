@@ -1,23 +1,25 @@
 import { AxiosResponse } from 'axios';
 
+import { ActivityDto } from '@app/shared/api/services/IActivityService';
 import {
-  ActivityDto,
-  AllEventsResponse,
-  AppletDetailsDto,
-  AppletEventsResponse,
-  AppletRespondentMetaDto,
   AppletAssignmentsResponse,
-  toAxiosResponse,
-  EventsService,
-  AppletsService,
+  AppletDetailsDto,
   AppletDto,
-} from '@app/shared/api';
+  AppletRespondentMetaDto,
+  IAppletService,
+} from '@app/shared/api/services/IAppletService';
 import {
-  ILogger,
-  collectActivityDetailsImageUrls,
+  AllEventsResponse,
+  AppletEventsResponse,
+  IEventsService,
+} from '@app/shared/api/services/IEventsService';
+import { toAxiosResponse } from '@app/shared/api/utils';
+import {
   collectAppletDetailsImageUrls,
+  collectActivityDetailsImageUrls,
   collectAppletRecordImageUrls,
-} from '@app/shared/lib';
+} from '@app/shared/lib/services/collectImageUrls';
+import { ILogger } from '@app/shared/lib/types/logger';
 
 type AppletId = string;
 
@@ -59,18 +61,28 @@ export interface IRefreshDataCollector {
   ): Promise<CollectAllAppletAssignmentsResult>;
 }
 
-class RefreshDataCollector implements IRefreshDataCollector {
+export class RefreshDataCollector implements IRefreshDataCollector {
   private logger: ILogger;
 
-  constructor(logger: ILogger) {
+  private appletService: IAppletService;
+
+  private eventsService: IEventsService;
+
+  constructor(
+    logger: ILogger,
+    appletService: IAppletService,
+    eventsService: IEventsService,
+  ) {
     this.logger = logger;
+    this.appletService = appletService;
+    this.eventsService = eventsService;
   }
 
   private async collectAppletDetails(
     appletId: string,
   ): Promise<CollectAppletDetailsResult> {
     const appletDetailsResponse =
-      await AppletsService.getAppletAndActivitiesDetails({
+      await this.appletService.getAppletAndActivitiesDetails({
         appletId,
       });
 
@@ -128,7 +140,7 @@ class RefreshDataCollector implements IRefreshDataCollector {
 
   private async collectEvents(): Promise<AxiosResponse<AllEventsResponse> | null> {
     try {
-      return await EventsService.getAllEvents();
+      return await this.eventsService.getAllEvents();
     } catch (error) {
       this.logger.warn(
         `[RefreshDataCollector.collectEvents]: Error occurred while fetching events":\n\n${error as never}`,
@@ -172,7 +184,7 @@ class RefreshDataCollector implements IRefreshDataCollector {
     };
 
     for (const appletId of appletIds) {
-      const assignmentResponse = await AppletsService.getAppletAssignments({
+      const assignmentResponse = await this.appletService.getAppletAssignments({
         appletId,
       });
       result.appletAssignments[appletId] = assignmentResponse;
@@ -181,5 +193,3 @@ class RefreshDataCollector implements IRefreshDataCollector {
     return result;
   }
 }
-
-export default RefreshDataCollector;

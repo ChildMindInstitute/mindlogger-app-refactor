@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { AppState } from 'react-native';
 
-import { NotificationManager } from '@entities/notification/model';
-import { useInterval } from '@shared/lib';
+import { useInterval } from '@app/shared/lib/timers/hooks/useInterval';
+
+import { getDefaultNotificationManager } from '../../model/notificationManagerInstance';
 
 const CHECK_INTERVAL = 20000;
 
@@ -15,12 +16,14 @@ export const useUpcomingNotificationsObserver = (
 
   const { start: startInterval, stop: stopInterval } = useInterval(() => {
     if (isForeground) {
-      NotificationManager.cancelNotificationsForEventEntityInTimeInterval(
-        entityId,
-        eventId,
-        targetSubjectId,
-        { from: Date.now(), to: Date.now() + CHECK_INTERVAL },
-      ).catch(console.error);
+      getDefaultNotificationManager()
+        .cancelNotificationsForEventEntityInTimeInterval(
+          entityId,
+          eventId,
+          targetSubjectId,
+          { from: Date.now(), to: Date.now() + CHECK_INTERVAL },
+        )
+        .catch(console.error);
     }
   }, CHECK_INTERVAL);
 

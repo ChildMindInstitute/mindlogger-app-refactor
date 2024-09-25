@@ -15,5 +15,3 @@ export const useBanner = () => {
     },
   };
 };
-
-export default useBanner;

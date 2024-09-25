@@ -1,10 +1,8 @@
-import {
-  ChangeQueueObservable,
-  IObservable,
-  createSecureStorage,
-} from '@app/shared/lib';
+import { MMKV } from 'react-native-mmkv';
 
-import { SendAnswersInput } from '../types';
+import { IObservable } from '@app/shared/lib/utils/observable';
+
+import { SendAnswersInput } from '../types/uploadAnswers';
 
 export type UploadItem = {
   input: SendAnswersInput;
@@ -18,19 +16,21 @@ export interface IAnswersQueueService {
   getLength: () => number;
 }
 
-const storage = createSecureStorage('upload_queue-storage');
-
 const StartKey = '1';
 
 export class AnswersQueueService implements IAnswersQueueService {
-  constructor(changeObservable: IObservable) {
-    storage.addOnValueChangedListener(() => {
+  private uploadQueueStorage: MMKV;
+
+  constructor(changeObservable: IObservable, uploadQueueStorage: MMKV) {
+    this.uploadQueueStorage = uploadQueueStorage;
+
+    this.uploadQueueStorage.addOnValueChangedListener(() => {
       changeObservable.notify();
     });
   }
 
   private getKeys(): number[] {
-    return storage.getAllKeys().map(x => Number(x));
+    return this.uploadQueueStorage.getAllKeys().map(x => Number(x));
   }
 
   private getMinimumKeyValue(): number | null {
@@ -57,14 +57,14 @@ export class AnswersQueueService implements IAnswersQueueService {
 
     const key = String(firstKey);
 
-    return JSON.parse(storage.getString(key)!) as UploadItem;
+    return JSON.parse(this.uploadQueueStorage.getString(key)!) as UploadItem;
   }
 
   public enqueue(item: UploadItem): void {
     const lastKey = this.getMaximumKeyValue();
     const key = lastKey !== null ? String(lastKey + 1) : StartKey;
 
-    storage.set(key, JSON.stringify(item));
+    this.uploadQueueStorage.set(key, JSON.stringify(item));
   }
 
   public dequeue(): void {
@@ -73,7 +73,7 @@ export class AnswersQueueService implements IAnswersQueueService {
       return;
     }
 
-    storage.delete(String(firstKey));
+    this.uploadQueueStorage.delete(String(firstKey));
   }
 
   public swap() {
@@ -84,17 +84,19 @@ export class AnswersQueueService implements IAnswersQueueService {
       return;
     }
 
-    const firstItem: string = storage.getString(String(firstKey))!;
+    const firstItem: string = this.uploadQueueStorage.getString(
+      String(firstKey),
+    )!;
 
-    const lastItem: string = storage.getString(String(lastKey))!;
+    const lastItem: string = this.uploadQueueStorage.getString(
+      String(lastKey),
+    )!;
 
-    storage.set(String(firstKey), lastItem);
-    storage.set(String(lastKey), firstItem);
+    this.uploadQueueStorage.set(String(firstKey), lastItem);
+    this.uploadQueueStorage.set(String(lastKey), firstItem);
   }
 
   public getLength(): number {
     return this.getKeys().length;
   }
 }
-
-export default new AnswersQueueService(ChangeQueueObservable);

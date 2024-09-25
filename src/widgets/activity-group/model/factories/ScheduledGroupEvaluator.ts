@@ -1,14 +1,14 @@
+import { IEvaluator } from '@app/abstract/lib/interfaces/evaluator';
+import { EntityProgression } from '@app/abstract/lib/types/entityProgress';
 import {
   AvailabilityType,
-  EntityProgression,
-  IEvaluator,
   PeriodicityType,
-} from '@app/abstract/lib';
-import { ScheduleEvent } from '@app/entities/event';
-import { DatesFromTo } from '@shared/lib';
+} from '@app/abstract/lib/types/event';
+import { ScheduleEvent } from '@app/entities/event/lib/types/event';
+import { DatesFromTo } from '@app/shared/lib/types/dateTime';
 
 import { GroupUtility } from './GroupUtility';
-import { EventEntity } from '../../lib';
+import { EventEntity } from '../../lib/types/activityGroupsBuilder';
 
 export class ScheduledGroupEvaluator
   implements IEvaluator<EventEntity, ScheduleEvent>

@@ -2,10 +2,12 @@ import { useCallback } from 'react';
 
 import { useMMKVObject } from 'react-native-mmkv';
 
-import { Report } from '@app/entities/activity';
-import { createSecureStorage } from '@app/shared/lib';
+import { Report } from '@app/entities/activity/lib/types/activityReportSettings';
+import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 
-import { PipelineItem, PipelineItemAnswer, UserAction } from '../types';
+import { PipelineItem } from '../types/payload';
+import { PipelineItemAnswer } from '../types/pipelineItemAnswer';
+import { UserAction } from '../types/userAction';
 
 // M2-7407 update activity state
 type UseActivityStorageArgs = {
@@ -36,8 +38,6 @@ export type ActivityState = {
   context: Record<string, unknown>;
 };
 
-const storage = createSecureStorage('activity_progress-storage');
-
 export function useActivityStorageRecord({
   appletId,
   activityId,
@@ -48,14 +48,19 @@ export function useActivityStorageRecord({
   const key = `${appletId}-${activityId}-${eventId}-${targetSubjectId || 'NULL'}-${order}`;
 
   const [activityStorageRecord, upsertActivityStorageRecord] =
-    useMMKVObject<ActivityState>(key, storage);
+    useMMKVObject<ActivityState>(
+      key,
+      getDefaultStorageInstanceManager().getActivityProgressStorage(),
+    );
 
   const clearActivityStorageRecord = useCallback(() => {
-    storage.delete(key);
+    getDefaultStorageInstanceManager().getActivityProgressStorage().delete(key);
   }, [key]);
 
   const getCurrentActivityStorageRecord = useCallback(() => {
-    const json = storage.getString(key);
+    const json = getDefaultStorageInstanceManager()
+      .getActivityProgressStorage()
+      .getString(key);
 
     if (json) {
       return JSON.parse(json) as ActivityState;

@@ -1,16 +1,16 @@
 import { FC } from 'react';
 
-import { Box, YStack } from '@app/shared/ui';
+import { Box, YStack } from '@app/shared/ui/base';
 
-import ActivityCard from './ActivityCard';
-import { ActivityListItem } from '../lib';
+import { ActivityCard } from './ActivityCard';
+import { ActivityListItem } from '../lib/types/activityListItem';
 
 type Props = {
   activities: ActivityListItem[];
   onCardPress?: (activity: ActivityListItem) => void;
 };
 
-const ActivityList: FC<Props> = ({ activities, onCardPress }) => {
+export const ActivityList: FC<Props> = ({ activities, onCardPress }) => {
   return (
     <YStack accessibilityLabel="activity-list-container" space={10}>
       {activities.map(x => (
@@ -25,5 +25,3 @@ const ActivityList: FC<Props> = ({ activities, onCardPress }) => {
     </YStack>
   );
 };
-
-export default ActivityList;

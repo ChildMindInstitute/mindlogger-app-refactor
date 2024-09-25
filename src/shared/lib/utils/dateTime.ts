@@ -9,8 +9,13 @@ import { enGB, fr } from 'date-fns/locale';
 import i18n from 'i18next';
 
 import { getTwoDigits, range } from './common';
-import { MINUTES_IN_HOUR, MS_IN_MINUTE, MS_IN_SECOND } from '../constants';
-import { HourMinute, DayMonthYear, type Language } from '../types';
+import {
+  MINUTES_IN_HOUR,
+  MS_IN_MINUTE,
+  MS_IN_SECOND,
+} from '../constants/dateTime';
+import { DayMonthYear, HourMinute } from '../types/dateTime';
+import { Language } from '../types/language';
 
 const dateFnsLocales = { fr, en: enGB };
 

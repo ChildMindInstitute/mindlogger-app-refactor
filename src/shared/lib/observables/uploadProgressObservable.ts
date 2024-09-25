@@ -1,33 +1,13 @@
-import { CommonObservable } from '../utils';
+import {
+  IUploadProgressObservable,
+  SecondLevelStep,
+  UploadProgress,
+} from './IUploadProgressObservable';
+import { CommonObservable } from '../utils/observable';
 
-export type SecondLevelStep =
-  | 'upload_files'
-  | 'encrypt_answers'
-  | 'upload_answers'
-  | 'completed';
-
-export type UploadProgress = {
-  totalActivities: number | null;
-  currentActivity: number | null;
-  currentActivityName: string | null;
-  totalFilesInActivity: number | null;
-  currentFile: number | null;
-  currentSecondLevelStepKey: SecondLevelStep | null;
-};
-
-export interface IUploadProgressObservableSetters {
-  set totalActivities(value: number | null);
-  set currentActivity(value: number | null);
-  set currentActivityName(value: string | null);
-  set currentFile(value: number | null);
-  setTotalFilesInActivity(value: number | null): Promise<void>;
-  setCurrentSecondLevelStepKey(value: SecondLevelStep | null): Promise<void>;
-  reset(): void;
-}
-
-class UploadProgressObservable
+export class UploadProgressObservable
   extends CommonObservable
-  implements IUploadProgressObservableSetters
+  implements IUploadProgressObservable
 {
   private uploadProgress: UploadProgress;
 
@@ -61,7 +41,6 @@ class UploadProgressObservable
 
   public async setCurrentSecondLevelStepKey(value: SecondLevelStep | null) {
     this.uploadProgress.currentSecondLevelStepKey = value;
-
     this.notify();
   }
 
@@ -98,5 +77,3 @@ class UploadProgressObservable
     this.uploadProgress.currentSecondLevelStepKey = null;
   }
 }
-
-export default new UploadProgressObservable();

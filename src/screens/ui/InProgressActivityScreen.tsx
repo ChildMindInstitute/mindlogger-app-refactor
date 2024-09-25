@@ -2,16 +2,17 @@ import { FC, useEffect } from 'react';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { AutocompletionEventOptions } from '@app/abstract/lib';
-import { Emitter } from '@app/shared/lib';
-import { FlowSurvey } from '@app/widgets/survey';
-import { useUpcomingNotificationsObserver } from '@entities/notification';
-import { RootStackParamList } from '@screens/config';
-import { Box } from '@shared/ui';
+import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
+import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
+import { Emitter } from '@app/shared/lib/services/Emitter';
+import { Box } from '@app/shared/ui/base';
+import { FlowSurvey } from '@app/widgets/survey/ui/FlowSurvey';
+
+import { RootStackParamList } from '../config/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'InProgressActivity'>;
 
-const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
+export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
   const { appletId, eventId, entityId, entityType, targetSubjectId } =
     route.params;
 
@@ -43,5 +44,3 @@ const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
     </Box>
   );
 };
-
-export default InProgressActivityScreen;

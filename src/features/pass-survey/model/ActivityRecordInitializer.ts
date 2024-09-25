@@ -1,20 +1,20 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { ActivityDetails, ActivityModel } from '@app/entities/activity';
-import { AppletModel } from '@app/entities/applet';
-import { ActivityItemType } from '@app/features/pass-survey';
-import { ActivityResponse, AppletDetailsResponse } from '@app/shared/api';
+import { ActivityDetails } from '@app/entities/activity/lib/types/activity';
+import { mapToActivity } from '@app/entities/activity/model/mappers';
+import { mapAppletDetailsFromDto } from '@app/entities/applet/model/mappers';
+import { ActivityResponse } from '@app/shared/api/services/IActivityService';
+import { AppletDetailsResponse } from '@app/shared/api/services/IAppletService';
+import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 import {
-  createSecureStorage,
-  getActivityDetailsKey,
-  getAppletDetailsKey,
   getDataFromQuery,
-} from '@app/shared/lib';
+  getAppletDetailsKey,
+  getActivityDetailsKey,
+} from '@app/shared/lib/utils/reactQueryHelpers';
 
 import { buildPipeline } from './pipelineBuilder';
-import { ActivityState } from '../lib';
-
-const storage = createSecureStorage('activity_progress-storage');
+import { ActivityState } from '../lib/hooks/useActivityStorageRecord';
+import { ActivityItemType } from '../lib/types/payload';
 
 type ActivityRecordInitializerArgs = {
   appletId: string;
@@ -49,7 +49,7 @@ export function ActivityRecordInitializer({
     queryClient,
   )!;
 
-  const applet = AppletModel.mapAppletDetailsFromDto(appletResponse.result);
+  const applet = mapAppletDetailsFromDto(appletResponse.result);
 
   const initializeActivity = ({
     activityId,
@@ -59,7 +59,9 @@ export function ActivityRecordInitializer({
   }: InitializeArgs) => {
     const key = `${appletId}-${activityId}-${eventId}-${targetSubjectId || 'NULL'}-${order}`;
 
-    const storageRecordExist = storage.contains(key);
+    const storageRecordExist = getDefaultStorageInstanceManager()
+      .getActivityProgressStorage()
+      .contains(key);
 
     if (storageRecordExist) {
       moveAbTrailsStepToTutorial(key);
@@ -71,9 +73,7 @@ export function ActivityRecordInitializer({
       queryClient,
     )!;
 
-    const activity: ActivityDetails = ActivityModel.mapToActivity(
-      activityResponse.result,
-    );
+    const activity: ActivityDetails = mapToActivity(activityResponse.result);
 
     const state: ActivityState = {
       step: 0,
@@ -93,15 +93,23 @@ export function ActivityRecordInitializer({
       },
     };
 
-    storage.set(key, JSON.stringify(state));
+    getDefaultStorageInstanceManager()
+      .getActivityProgressStorage()
+      .set(key, JSON.stringify(state));
   };
 
   const moveAbTrailsStepToTutorial = (key: string) => {
-    const state = JSON.parse(storage.getString(key)!) as ActivityState;
+    const state = JSON.parse(
+      getDefaultStorageInstanceManager()
+        .getActivityProgressStorage()
+        .getString(key)!,
+    ) as ActivityState;
 
     if (state.items[state.step].type === 'AbTest') {
       state.step -= 1;
-      storage.set(key, JSON.stringify(state));
+      getDefaultStorageInstanceManager()
+        .getActivityProgressStorage()
+        .set(key, JSON.stringify(state));
     }
   };
 

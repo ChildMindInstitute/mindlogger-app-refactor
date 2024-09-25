@@ -8,8 +8,9 @@ import {
   subWeeks,
 } from 'date-fns';
 
-import { EntityProgression, PeriodicityType } from '@app/abstract/lib';
-import { ILogger } from '@app/shared/lib';
+import { EntityProgression } from '@app/abstract/lib/types/entityProgress';
+import { PeriodicityType } from '@app/abstract/lib/types/event';
+import { ILogger } from '@app/shared/lib/types/logger';
 
 import { NotificationUtility } from './NotificationUtility';
 

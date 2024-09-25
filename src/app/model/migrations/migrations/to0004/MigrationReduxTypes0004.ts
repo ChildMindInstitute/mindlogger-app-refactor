@@ -1,4 +1,4 @@
-import { ActivityPipelineType } from '@app/abstract/lib';
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 
 /** @deprecated */
 export type FlowProgress = {

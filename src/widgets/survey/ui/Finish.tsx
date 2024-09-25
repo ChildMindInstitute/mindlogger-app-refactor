@@ -2,26 +2,22 @@ import { useEffect } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { EntityPathParams } from '@app/abstract/lib';
-import {
-  QueueProcessingService,
-  useQueueProcessing,
-  useRetryUpload,
-} from '@app/entities/activity/lib';
-import { AppletModel } from '@entities/applet';
-import {
-  Logger,
-  UploadObservable,
-  useAppDispatch,
-  useAppSelector,
-} from '@shared/lib';
-import { ImageBackground } from '@shared/ui';
+import { EntityPathParams } from '@app/abstract/lib/types/entity';
+import { useQueueProcessing } from '@app/entities/activity/lib/hooks/useQueueProcessing';
+import { useRetryUpload } from '@app/entities/activity/lib/hooks/useRetryUpload';
+import { getDefaultQueueProcessingService } from '@app/entities/activity/lib/services/queueProcessingServiceInstance';
+import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
+import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
+import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { ImageBackground } from '@app/shared/ui/ImageBackground';
 
-import AnswersSubmitted from './completion/AnswersSubmitted';
+import { AnswersSubmitted } from './completion/AnswersSubmitted';
 import { SubScreenContainer } from './completion/containers';
-import ProcessingAnswers from './completion/ProcessingAnswers';
-import { useFlowStorageRecord } from '../';
-import { FinishReason, useAutoCompletion } from '../model';
+import { ProcessingAnswers } from './completion/ProcessingAnswers';
+import { useFlowStorageRecord } from '../lib/useFlowStorageRecord';
+import { useAutoCompletion } from '../model/hooks/useAutoCompletion';
+import { FinishReason } from '../model/pipelineBuilder';
 import { ConstructCompletionsService } from '../model/services/ConstructCompletionsService';
 
 type Props = {
@@ -37,7 +33,7 @@ type Props = {
   onClose: () => void;
 };
 
-function FinishItem({
+export function FinishItem({
   flowId,
   appletId,
   activityId,
@@ -53,9 +49,7 @@ function FinishItem({
 
   const queryClient = useQueryClient();
 
-  const entityProgressions = useAppSelector(
-    AppletModel.selectors.selectAppletsEntityProgressions,
-  );
+  const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
 
   const { flowStorageRecord: flowState } = useFlowStorageRecord({
     appletId,
@@ -87,7 +81,7 @@ function FinishItem({
   async function completeInterruptedActivity(
     constructCompletionService: ConstructCompletionsService,
   ) {
-    Logger.log(
+    getDefaultLogger().log(
       `[Finish.completeInterruptedActivity] interruptionStep=${interruptionStep}`,
     );
 
@@ -99,7 +93,7 @@ function FinishItem({
 
     const isInterruptedActivityLast = interruptedOrder === order;
 
-    Logger.log(
+    getDefaultLogger().log(
       `[Finish.completeInterruptedActivity] Interrupted activityId=${interruptedActivityId}, name=${interruptedActivityName} order=${interruptedOrder}, isLast=${isInterruptedActivityLast}`,
     );
 
@@ -122,7 +116,7 @@ function FinishItem({
     const constructCompletionService = new ConstructCompletionsService(
       null,
       queryClient,
-      QueueProcessingService,
+      getDefaultQueueProcessingService(),
       dispatch,
       entityProgressions,
     );
@@ -160,7 +154,7 @@ function FinishItem({
   }
 
   useEffect(() => {
-    UploadObservable.reset();
+    getDefaultUploadObservable().reset();
 
     setTimeout(() => {
       completeActivity();
@@ -186,5 +180,3 @@ function FinishItem({
     </SubScreenContainer>
   );
 }
-
-export default FinishItem;

@@ -4,12 +4,14 @@ import { StyleSheet, StatusBar } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { StaticNavigationPanel } from '@app/features/pass-survey';
-import { AlertList } from '@entities/alert';
-import { ScoreList } from '@entities/score';
-import { Box, Text, ScrollView, YStack } from '@shared/ui';
+import { AlertList } from '@app/entities/alert/ui/AlertList';
+import { ScoreList } from '@app/entities/score/ui/ScoreList';
+import { StaticNavigationPanel } from '@app/features/pass-survey/ui/StaticNavigationPanel';
+import { Box, YStack } from '@app/shared/ui/base';
+import { ScrollView } from '@app/shared/ui/ScrollView';
+import { Text } from '@app/shared/ui/Text';
 
-import { useSummaryData } from '../model';
+import { useSummaryData } from '../model/hooks/useSummaryData';
 
 type Props = {
   appletId: string;
@@ -21,7 +23,7 @@ type Props = {
   onFinish: () => void;
 };
 
-function Summary({
+export function Summary({
   onFinish,
   appletId,
   flowId,
@@ -127,5 +129,3 @@ const styles = StyleSheet.create({
     marginRight: 7,
   },
 });
-
-export default Summary;

@@ -1,22 +1,25 @@
 import { FC } from 'react';
 
-import { activityMarkDownStyles, markdownRules } from '@shared/lib';
-import { MarkdownView, Box, BoxProps } from '@shared/ui';
+import {
+  activityMarkDownStyles,
+  markDownRules,
+} from '@app/shared/lib/markDownRules';
+
+import { Box, BoxProps } from '../base';
+import { MarkdownView } from '../MarkdownView';
 
 type Props = {
   content: string;
 } & BoxProps;
 
-const MarkdownMessage: FC<Props> = ({ content, ...styledProps }) => {
+export const MarkdownMessage: FC<Props> = ({ content, ...styledProps }) => {
   return (
     <Box {...styledProps}>
       <MarkdownView
         content={content}
-        rules={markdownRules}
+        rules={markDownRules}
         markdownStyle={activityMarkDownStyles}
       />
     </Box>
   );
 };
-
-export default MarkdownMessage;

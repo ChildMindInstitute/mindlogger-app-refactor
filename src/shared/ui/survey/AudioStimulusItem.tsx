@@ -3,16 +3,12 @@ import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { useAudioPlayer } from '@shared/lib';
-import {
-  PlayIcon,
-  StopIcon,
-  CheckIcon,
-  SpeakerIcon,
-  XStack,
-  Text,
-  ActivityIndicator,
-} from '@shared/ui';
+import { useAudioPlayer } from '@app/shared/lib/hooks/useAudioPlayer';
+
+import { ActivityIndicator } from '../ActivityIndicator';
+import { XStack } from '../base';
+import { CheckIcon, PlayIcon, SpeakerIcon, StopIcon } from '../icons';
+import { Text } from '../Text';
 
 type Props = {
   config: {
@@ -23,7 +19,10 @@ type Props = {
   onChange: (value: boolean) => void;
 };
 
-const AudioStimulusItem: FC<Props> = ({ config, onChange: onFinish }) => {
+export const AudioStimulusItem: FC<Props> = ({
+  config,
+  onChange: onFinish,
+}) => {
   const { file: uri, playOnce } = config;
   const replayIsAllowed = !playOnce;
 
@@ -108,5 +107,3 @@ const AudioStimulusItem: FC<Props> = ({ config, onChange: onFinish }) => {
     </>
   );
 };
-
-export default AudioStimulusItem;

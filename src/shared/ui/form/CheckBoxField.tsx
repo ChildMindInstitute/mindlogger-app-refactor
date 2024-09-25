@@ -3,9 +3,11 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { Controller, useFormContext, useController } from 'react-hook-form';
 
-import { colors } from '@app/shared/lib';
-import { Box, CheckBox, XStack } from '@shared/ui';
-import { ErrorMessage } from '@shared/ui/form';
+import { colors } from '@app/shared/lib/constants/colors';
+
+import { ErrorMessage } from './ErrorMessage';
+import { Box, XStack } from '../base';
+import { CheckBox } from '../CheckBox';
 
 type Props = {
   name: string;
@@ -16,7 +18,9 @@ type Props = {
   disabled?: boolean;
 };
 
-const CheckBoxField: FC<PropsWithChildren<Props & AccessibilityProps>> = ({
+export const CheckBoxField: FC<
+  PropsWithChildren<Props & AccessibilityProps>
+> = ({
   name,
   onFillColor = colors.white,
   onCheckColor = colors.darkBlue,
@@ -82,5 +86,3 @@ const styles = StyleSheet.create({
     height: 20,
   },
 });
-
-export default CheckBoxField;

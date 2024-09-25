@@ -1,6 +1,9 @@
 import { MMKV } from 'react-native-mmkv';
 
-import { createSecureStorage, createStorage } from '@app/shared/lib';
+import {
+  createSecureStorage,
+  createStorage,
+} from '@app/shared/lib/storages/createStorage';
 
 import { MigrationPrefix, SecureStoragesArray, Storages } from './types';
 

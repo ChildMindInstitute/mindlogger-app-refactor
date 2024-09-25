@@ -1,13 +1,15 @@
 import { isEqual, startOfDay } from 'date-fns';
 import i18next from 'i18next';
 
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
-  ActivityPipelineType,
   AvailabilityType,
   NotificationTriggerType,
   PeriodicityType,
-} from '@app/abstract/lib';
-import { DatesFromTo, ILogger, Logger } from '@app/shared/lib';
+} from '@app/abstract/lib/types/event';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { DatesFromTo } from '@app/shared/lib/types/dateTime';
+import { ILogger } from '@app/shared/lib/types/logger';
 
 import { NotificationDaysExtractor } from './NotificationDaysExtractor';
 import { NotificationUtility } from './NotificationUtility';
@@ -24,7 +26,7 @@ import {
   RandomCrossBorderType,
   ReminderSetting,
   ScheduleEvent,
-} from '../../lib/types';
+} from '../../lib/types/notificationBuilder';
 
 export interface INotificationBuilder {
   build: () => AppletNotificationDescribers;
@@ -381,7 +383,7 @@ class NotificationBuilder implements INotificationBuilder {
 
 export const createNotificationBuilder = (
   inputData: NotificationBuilderInput,
-  logger: ILogger = Logger,
+  logger: ILogger = getDefaultLogger(),
 ): INotificationBuilder => {
   return new NotificationBuilder(inputData, logger);
 };

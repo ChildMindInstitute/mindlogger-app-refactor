@@ -4,10 +4,13 @@ import { CachedImage } from '@georstat/react-native-image-cache';
 import { XStack } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@shared/lib';
-import { ListSeparator, BackButton, Text, Box } from '@shared/ui';
+import { colors } from '@app/shared/lib/constants/colors.ts';
+import { BackButton } from '@app/shared/ui/BackButton.tsx';
+import { Box } from '@app/shared/ui/base.ts';
+import { ListSeparator } from '@app/shared/ui/ListSeparator.tsx';
+import { Text } from '@app/shared/ui/Text.tsx';
 
-import HeaderProgress from './HeaderProgress.tsx';
+import { HeaderProgress } from './HeaderProgress.tsx';
 
 type Props = {
   showWatermark: boolean;
@@ -19,7 +22,7 @@ type Props = {
   targetSubjectId: string | null;
 };
 
-function Header({
+export function Header({
   showWatermark,
   watermark,
   activityName,
@@ -76,4 +79,3 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
-export default Header;

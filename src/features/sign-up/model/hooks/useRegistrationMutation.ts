@@ -1,16 +1,16 @@
+import { useLoginMutation } from '@app/entities/identity/api/hooks/useLoginMutation';
+import { useSignUpMutation } from '@app/entities/identity/api/hooks/useSignUpMutation';
+import { getDefaultUserInfoRecord } from '@app/entities/identity/lib/userInfoRecord';
+import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userPrivateKeyRecordInstance';
+import { identityActions } from '@app/entities/identity/model/slice';
+import { storeSession } from '@app/entities/session/model/operations';
 import {
-  UserInfoRecord,
-  UserPrivateKeyRecord,
-} from '@app/entities/identity/lib';
-import { SystemRecord } from '@app/shared/lib/records';
-import {
-  useLoginMutation,
-  useSignUpMutation,
-  IdentityModel,
-} from '@entities/identity';
-import { SessionModel } from '@entities/session';
-import { AnalyticsService, MixEvents, useAppDispatch } from '@shared/lib';
-import { encryption } from '@shared/lib';
+  AnalyticsService,
+  MixEvents,
+} from '@app/shared/lib/analytics/AnalyticsService';
+import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encryptionManagerInstance';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
+import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
 
 type UseRegistrationReturn = {
   isLoading: boolean;
@@ -36,17 +36,18 @@ export const useRegistrationMutation = (
         password: variables.password,
       };
 
-      const userPrivateKey = encryption.getPrivateKey(userParams);
+      const userPrivateKey =
+        getDefaultEncryptionManager().getPrivateKey(userParams);
 
-      UserPrivateKeyRecord.set(userPrivateKey);
+      getDefaultUserPrivateKeyRecord().set(userPrivateKey);
 
       const { user, token: session } = response.data.result;
 
-      dispatch(IdentityModel.actions.onAuthSuccess(user));
+      dispatch(identityActions.onAuthSuccess(user));
 
-      UserInfoRecord.setEmail(user.email);
+      getDefaultUserInfoRecord().setEmail(user.email);
 
-      SessionModel.storeSession(session);
+      storeSession(session);
 
       AnalyticsService.login(user.id).then(() => {
         AnalyticsService.track(MixEvents.SignupSuccessful);
@@ -69,7 +70,7 @@ export const useRegistrationMutation = (
       login({
         email: data.email,
         password: data.password,
-        deviceId: SystemRecord.getDeviceId(),
+        deviceId: getDefaultSystemRecord().getDeviceId(),
       });
     },
   });

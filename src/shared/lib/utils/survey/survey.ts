@@ -1,13 +1,13 @@
 import { isToday } from 'date-fns';
 
+import { EntityPath } from '@app/abstract/lib/types/entity';
 import {
-  EntityPath,
   EntityProgression,
   EntityProgressionCompleted,
   EntityProgressionInProgress,
-} from '@app/abstract/lib';
-import { colors } from '@shared/lib/constants';
+} from '@app/abstract/lib/types/entityProgress';
 
+import { colors } from '../../constants/colors';
 import { getNow } from '../dateTime';
 
 type ColorModes = {

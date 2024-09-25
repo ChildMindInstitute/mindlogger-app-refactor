@@ -2,13 +2,14 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { EntityType } from '@app/abstract/lib';
-import { ActivityModel } from '@app/entities/activity';
-import { useAppletDetailsQuery, AppletModel } from '@app/entities/applet';
-import { EventModel } from '@app/entities/event';
-import { Logger } from '@app/shared/lib';
+import { EntityType } from '@app/abstract/lib/types/entity';
+import { ActivityQueryService } from '@app/entities/activity/model/services/ActivityQueryService';
+import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
+import { mapAppletDetailsFromDto } from '@app/entities/applet/model/mappers';
+import { useScheduledEvent } from '@app/entities/event/model/hooks/useEvent';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
-import { useFlowStorageRecord } from '../../lib';
+import { useFlowStorageRecord } from '../../lib/useFlowStorageRecord';
 import { getScheduledDate } from '../operations';
 import {
   buildActivityFlowPipeline,
@@ -42,18 +43,17 @@ export function useFlowRecordInitialization({
   const initializedRef = useRef(!!flowStorageRecord);
 
   const activityQueryService = useMemo(
-    () => new ActivityModel.ActivityQueryService(queryClient),
+    () => new ActivityQueryService(queryClient),
     [queryClient],
   );
 
   const step = flowStorageRecord?.step ?? 0;
 
   const { data: applet } = useAppletDetailsQuery(appletId, {
-    select: response =>
-      AppletModel.mapAppletDetailsFromDto(response.data.result),
+    select: response => mapAppletDetailsFromDto(response.data.result),
   });
 
-  const scheduledEvent = EventModel.useScheduledEvent({ appletId, eventId });
+  const scheduledEvent = useScheduledEvent({ appletId, eventId });
 
   const flow = applet?.activityFlows.find(x => x.id === entityId);
 
@@ -145,14 +145,14 @@ export function useFlowRecordInitialization({
 
   useEffect(() => {
     if (!logIsFlowStorageRecordExist) {
-      Logger.log(
+      getDefaultLogger().log(
         "[useFlowRecordInitialization]: flowStorageRecord doesn't exist",
       );
     } else {
-      Logger.log(
+      getDefaultLogger().log(
         `[useFlowRecordInitialization]: flowStorageRecord's step changed: step = ${step}`,
       );
-      Logger.log(
+      getDefaultLogger().log(
         `[useFlowRecordInitialization]: flowStorageRecord current item: ${JSON.stringify(
           logFlowStepItem,
           null,

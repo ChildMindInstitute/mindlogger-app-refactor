@@ -2,10 +2,12 @@ import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { UploadProgressObservable } from '../';
-import { SecondLevelStep, UploadProgress } from '../observables/';
-
-import { useForceUpdate } from './';
+import { useForceUpdate } from './useForceUpdate';
+import {
+  SecondLevelStep,
+  UploadProgress,
+} from '../observables/IUploadProgressObservable';
+import { getDefaultUploadProgressObservable } from '../observables/uploadProgressObservableInstance';
 
 type UseUploadProgressResult = UploadProgress & {
   currentSecondLevelStep: string | null;
@@ -42,7 +44,7 @@ const evaluateCurrentStep = (
   return currentStep;
 };
 
-const useUploadProgress = (): UseUploadProgressResult => {
+export const useUploadProgress = (): UseUploadProgressResult => {
   const { t } = useTranslation();
 
   const update = useForceUpdate();
@@ -54,7 +56,7 @@ const useUploadProgress = (): UseUploadProgressResult => {
     totalActivities,
     totalFilesInActivity,
     currentSecondLevelStepKey,
-  } = UploadProgressObservable;
+  } = getDefaultUploadProgressObservable();
 
   const isActivityUploadStarted: boolean =
     currentActivity !== null && currentSecondLevelStepKey !== null;
@@ -102,15 +104,13 @@ const useUploadProgress = (): UseUploadProgressResult => {
       update();
     };
 
-    UploadProgressObservable.addObserver(onProgressChange);
+    getDefaultUploadProgressObservable().addObserver(onProgressChange);
 
     return () => {
-      UploadProgressObservable.removeObserver(onProgressChange);
-      UploadProgressObservable.reset();
+      getDefaultUploadProgressObservable().removeObserver(onProgressChange);
+      getDefaultUploadProgressObservable().reset();
     };
   }, [update]);
 
   return progress;
 };
-
-export default useUploadProgress;

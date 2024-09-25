@@ -5,27 +5,25 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { IdentityModel } from '@app/entities/identity';
-import { UploadRetryBanner } from '@app/widgets/survey';
-import { LogoutRowButton } from '@features/logout';
 import {
-  SystemRecord,
-  colors,
-  getStringHashCode,
-  useAppSelector,
-  Emitter,
-} from '@shared/lib';
-import {
-  YStack,
-  Box,
-  RowButton,
-  UserIcon,
-  Text,
-  Center,
-  ActivityIndicator,
-} from '@shared/ui';
+  selectEmail,
+  selectFirstName,
+} from '@app/entities/identity/model/selectors';
+import { LogoutRowButton } from '@app/features/logout/ui/LogoutRowButton';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
+import { Emitter } from '@app/shared/lib/services/Emitter';
+import { getStringHashCode } from '@app/shared/lib/utils/common';
+import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
+import { Box, YStack } from '@app/shared/ui/base';
+import { Center } from '@app/shared/ui/Center';
+import { UserIcon } from '@app/shared/ui/icons';
+import { RowButton } from '@app/shared/ui/RowButton';
+import { Text } from '@app/shared/ui/Text';
+import { UploadRetryBanner } from '@app/widgets/survey/ui/UploadRetryBanner';
 
-const SettingsScreen: FC = () => {
+export const SettingsScreen: FC = () => {
   const { navigate, setOptions } = useNavigation();
   const { t } = useTranslation();
 
@@ -33,8 +31,8 @@ const SettingsScreen: FC = () => {
 
   const { top } = useSafeAreaInsets();
 
-  const userName = useAppSelector(IdentityModel.selectors.selectFirstName);
-  const userEmail = useAppSelector(IdentityModel.selectors.selectEmail);
+  const userName = useAppSelector(selectFirstName);
+  const userEmail = useAppSelector(selectEmail);
 
   const navigateToAppLanguage = () => {
     navigate('ChangeLanguage');
@@ -49,7 +47,7 @@ const SettingsScreen: FC = () => {
   };
 
   const hashedDeviceId: string = useMemo(() => {
-    const deviceId = SystemRecord.getDeviceId()!;
+    const deviceId = getDefaultSystemRecord().getDeviceId()!;
 
     const hashed: string = !deviceId
       ? 'undefined'
@@ -129,5 +127,3 @@ const SettingsScreen: FC = () => {
     </>
   );
 };
-
-export default SettingsScreen;

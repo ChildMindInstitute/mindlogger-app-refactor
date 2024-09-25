@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { renderHook, screen } from '@testing-library/react-native';
 
-import { FlowState, UseFlowStorageArgs, useFlowStorageRecord } from '../';
+import {
+  FlowState,
+  UseFlowStorageArgs,
+  useFlowStorageRecord,
+} from '../useFlowStorageRecord';
 
 const deleteMock = jest.fn();
 

@@ -3,16 +3,17 @@ import { ViewProps } from 'react-native';
 
 import { XStack } from '@tamagui/stacks';
 
-import { BoxProps, ClockIcon, Text } from '@app/shared/ui';
-
+import { BoxProps } from './base';
+import { ClockIcon } from './icons';
+import { Text } from './Text';
+import { ONE_SECOND } from '../lib/constants';
+import { colors } from '../lib/constants/colors';
+import { HourMinute } from '../lib/types/dateTime';
 import {
-  HourMinute,
   getMsFromHours,
   getMsFromMinutes,
-  colors,
-  ONE_SECOND,
   getClockTime,
-} from '../lib';
+} from '../lib/utils/dateTime';
 
 type Props = {
   timerSettings: HourMinute;
@@ -24,7 +25,7 @@ type Props = {
 
 const TEN_SECONDS = ONE_SECOND * 10;
 
-const TimeRemaining: FC<Props> = (props: Props) => {
+export const TimeRemaining: FC<Props> = (props: Props) => {
   const { timerSettings, entityStartedAt, clockIconShown, onTimeElapsed } =
     props;
 
@@ -79,5 +80,3 @@ const TimeRemaining: FC<Props> = (props: Props) => {
     </XStack>
   );
 };
-
-export default TimeRemaining;

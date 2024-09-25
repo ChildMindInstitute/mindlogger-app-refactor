@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 
-import { IdentityModel } from '@app/entities/identity';
-import { AnalyticsService, useAppSelector } from '@shared/lib';
+import { selectUserId } from '@app/entities/identity/model/selectors';
+import { AnalyticsService } from '@app/shared/lib/analytics/AnalyticsService';
+import { useAppSelector } from '@app/shared/lib/hooks/redux';
 
-function useAnalyticsAutoLogin() {
-  const id = useAppSelector(IdentityModel.selectors.selectUserId);
+export function useAnalyticsAutoLogin() {
+  const id = useAppSelector(selectUserId);
 
   useEffect(() => {
     if (id) {
@@ -12,5 +13,3 @@ function useAnalyticsAutoLogin() {
     }
   }, [id]);
 }
-
-export default useAnalyticsAutoLogin;

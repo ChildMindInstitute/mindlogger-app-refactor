@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { EntityType } from '@app/abstract/lib';
-import { PassSurveyModel } from '@app/features/pass-survey';
+import { EntityType } from '@app/abstract/lib/types/entity';
+import { ActivityRecordInitializer } from '@app/features/pass-survey/model/ActivityRecordInitializer';
 
 import { useFlowState } from './useFlowState';
 
@@ -33,7 +33,7 @@ export function useActivityRecordsInitialization({
 
   const Initializer = useMemo(
     () =>
-      PassSurveyModel.ActivityRecordInitializer({
+      ActivityRecordInitializer({
         queryClient,
         appletId,
       }),

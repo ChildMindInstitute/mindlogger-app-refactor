@@ -1,10 +1,10 @@
-import { MIGRATION_PROCESSOR_VERSION } from '@app/app/model/migrations';
+import { MIGRATION_PROCESSOR_VERSION } from '@app/app/model/migrations/version';
 
-import { SystemRecord } from '../records';
+import { getDefaultSystemRecord } from '../records/systemRecordInstance';
 
 export const MigrationValidator = {
   allMigrationHaveBeenApplied: (): boolean => {
-    const dataVersion = SystemRecord.getDataVersion();
+    const dataVersion = getDefaultSystemRecord().getDataVersion();
 
     return !!dataVersion && dataVersion >= MIGRATION_PROCESSOR_VERSION;
   },

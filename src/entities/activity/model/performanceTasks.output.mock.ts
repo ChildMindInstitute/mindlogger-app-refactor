@@ -1,4 +1,4 @@
-import { ActivityDetails } from '@entities/activity';
+import { ActivityDetails } from '../lib/types/activity';
 
 export const abTrailsOutput: ActivityDetails = {
   description: 'A/B Trails',

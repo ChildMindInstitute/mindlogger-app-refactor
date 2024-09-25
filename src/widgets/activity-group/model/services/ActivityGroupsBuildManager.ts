@@ -1,30 +1,34 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { ActivityPipelineType, EntityProgression } from '@app/abstract/lib';
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
+import { EntityProgression } from '@app/abstract/lib/types/entityProgress';
 import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
-import { EventModel, ScheduleEvent } from '@app/entities/event';
+import { ScheduleEvent } from '@app/entities/event/lib/types/event';
 import { mapEventsFromDto } from '@app/entities/event/model/mappers';
+import { IScheduledDateCalculator } from '@app/entities/event/model/operations/IScheduledDateCalculator';
 import {
   AppletAssignmentsResponse,
   AppletDetailsResponse,
-  AppletEventsResponse,
-} from '@app/shared/api';
+} from '@app/shared/api/services/IAppletService';
+import { AppletEventsResponse } from '@app/shared/api/services/IEventsService';
+import { ILogger } from '@app/shared/lib/types/logger';
 import {
-  ILogger,
-  Logger,
+  getDataFromQuery,
   getAppletDetailsKey,
   getAssignmentsKey,
-  getDataFromQuery,
   getEventsKey,
-} from '@app/shared/lib';
+} from '@app/shared/lib/utils/reactQueryHelpers';
 
+import {
+  BuildResult,
+  IActivityGroupsBuildManager,
+} from './IActivityGroupsBuildManager';
 import {
   Activity,
   ActivityFlow,
-  ActivityListGroup,
   Entity,
   EventEntity,
-} from '../../lib';
+} from '../../lib/types/activityGroupsBuilder';
 import { createActivityGroupsBuilder } from '../factories/ActivityGroupsBuilder';
 import {
   mapActivitiesFromDto,
@@ -32,13 +36,10 @@ import {
   mapAssignmentsFromDto,
 } from '../mappers';
 
-type BuildResult = {
-  groups: ActivityListGroup[];
-  isCacheInsufficientError?: boolean;
-  otherError?: boolean;
-};
-
-const createActivityGroupsBuildManager = (logger: ILogger) => {
+export const createActivityGroupsBuildManager = (
+  logger: ILogger,
+  scheduledDateCalculator: IScheduledDateCalculator,
+): IActivityGroupsBuildManager => {
   const buildIdToEntityMap = (
     activities: Activity[],
     activityFlows: ActivityFlow[],
@@ -118,7 +119,6 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
     );
 
     const idToEntity = buildIdToEntityMap(activities, activityFlows);
-    const calculator = EventModel.ScheduledDateCalculator;
 
     const entityEvents = events
       .reduce((acc, event) => {
@@ -151,7 +151,7 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
         return acc;
       }, [] as EventEntity[])
       .map(entityEvent => {
-        const date = calculator.calculate(entityEvent.event);
+        const date = scheduledDateCalculator.calculate(entityEvent.event);
         entityEvent.event.scheduledAt = date;
 
         if (!date) {
@@ -218,5 +218,3 @@ const createActivityGroupsBuildManager = (logger: ILogger) => {
     process,
   };
 };
-
-export default createActivityGroupsBuildManager(Logger);

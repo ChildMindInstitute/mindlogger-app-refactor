@@ -4,29 +4,33 @@ import { addMilliseconds, subSeconds } from 'date-fns';
 import {
   EntityProgression,
   EntityProgressionInProgress,
-} from '@app/abstract/lib';
-import { IPushToQueue, SendAnswersInput } from '@app/entities/activity';
-import { AppletModel } from '@app/entities/applet';
+} from '@app/abstract/lib/types/entityProgress';
+import { IPushToQueue } from '@app/entities/activity/lib/services/QueueProcessingService';
+import { SendAnswersInput } from '@app/entities/activity/lib/types/uploadAnswers';
+import { appletActions } from '@app/entities/applet/model/slice';
+import { ActivityState } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import {
-  ActivityState,
   AnswerAlerts,
-  PassSurveyModel,
   ScoreRecord,
-} from '@app/features/pass-survey';
-import { InitializeHiddenItem } from '@app/features/pass-survey/model';
-import { AppletEncryptionDTO, QueryDataUtils } from '@app/shared/api';
+} from '@app/features/pass-survey/lib/types/summary';
+import { InitializeHiddenItem } from '@app/features/pass-survey/model/ActivityRecordInitializer';
+import { getDefaultAlertsExtractor } from '@app/features/pass-survey/model/alertsExtractorInstance';
+import { getDefaultScoresExtractor } from '@app/features/pass-survey/model/scoresExtractorInstance';
+import { AppletEncryptionDTO } from '@app/shared/api/services/IAppletService';
+import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
 import {
   AnalyticsService,
-  getEntityProgression,
-  getNow,
-  getTimezoneOffset,
-  isEntityExpired,
-  Logger,
   MixEvents,
   MixProperties,
-  wait,
-} from '@app/shared/lib';
+} from '@app/shared/lib/analytics/AnalyticsService';
 import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { wait } from '@app/shared/lib/utils/common';
+import { getNow, getTimezoneOffset } from '@app/shared/lib/utils/dateTime';
+import {
+  isEntityExpired,
+  getEntityProgression,
+} from '@app/shared/lib/utils/survey/survey';
 
 import { getClientInformation } from '../../lib/metaHelpers';
 import {
@@ -129,12 +133,12 @@ export class ConstructCompletionsService {
   ) {
     const logDates = this.getLogDates(evaluatedEndAt, availableTo);
 
-    Logger.log(
+    getDefaultLogger().log(
       `[ConstructCompletionsService.logFinish]: Activity: "${activityName}|${activityId}", applet: "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
     );
 
     if (flowId) {
-      Logger.log(
+      getDefaultLogger().log(
         `[ConstructCompletionsService.logFinish]: Flow "${flowId}", applet "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
       );
     }
@@ -155,7 +159,7 @@ export class ConstructCompletionsService {
   ) {
     const logDates = this.getLogDates(evaluatedEndAt, availableTo);
 
-    Logger.log(
+    getDefaultLogger().log(
       `[ConstructCompletionsService.logIntermediate]: Activity: "${activityName}|${activityId}", flow: "${flowName}|${flowId}", applet: "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
     );
   }
@@ -209,7 +213,7 @@ export class ConstructCompletionsService {
     if (!appletEncryption) {
       const error =
         '[ConstructCompletionsService] Encryption params is undefined';
-      Logger.warn(error);
+      getDefaultLogger().warn(error);
       throw new Error(error);
     }
   }
@@ -218,7 +222,7 @@ export class ConstructCompletionsService {
     activityStorageRecord: ActivityState | null | undefined,
   ): boolean {
     if (!activityStorageRecord) {
-      Logger.warn(
+      getDefaultLogger().warn(
         '[ConstructCompletionsService] activityStorageRecord does not exist',
       );
       return false;
@@ -235,13 +239,13 @@ export class ConstructCompletionsService {
     }
 
     const summaryAlerts: AnswerAlerts =
-      PassSurveyModel.AlertsExtractor.extractForSummary(
+      getDefaultAlertsExtractor().extractForSummary(
         activityStorageRecord.items,
         activityStorageRecord.answers,
         activityName,
       );
 
-    const scores: ScoreRecord[] = PassSurveyModel.ScoresExtractor.extract(
+    const scores: ScoreRecord[] = getDefaultScoresExtractor().extract(
       activityStorageRecord.items,
       activityStorageRecord.answers,
       activityStorageRecord.scoreSettings,
@@ -262,7 +266,7 @@ export class ConstructCompletionsService {
   private async constructForIntermediate(
     input: ConstructForIntermediateInput,
   ): Promise<void> {
-    Logger.log(
+    getDefaultLogger().log(
       '[ConstructCompletionsService.constructForIntermediate] input:\n' +
         JSON.stringify(input, null, 2),
     );
@@ -381,13 +385,15 @@ export class ConstructCompletionsService {
       [MixProperties.SubmitId]: submitId,
     });
 
-    Logger.log(`[ConstructCompletionsService.constructForIntermediate] Done`);
+    getDefaultLogger().log(
+      `[ConstructCompletionsService.constructForIntermediate] Done`,
+    );
   }
 
   private async constructForFinish(
     input: ConstructForFinishInput,
   ): Promise<void> {
-    Logger.log(
+    getDefaultLogger().log(
       '[ConstructCompletionsService.constructForFinish] input:\n' +
         JSON.stringify(input, null, 2),
     );
@@ -436,7 +442,7 @@ export class ConstructCompletionsService {
     );
 
     this.dispatch(
-      AppletModel.actions.completeEntity({
+      appletActions.completeEntity({
         appletId,
         eventId,
         entityId,
@@ -530,7 +536,9 @@ export class ConstructCompletionsService {
       [MixProperties.SubmitId]: submitId,
     });
 
-    Logger.log(`[ConstructCompletionsService.constructForFinish] Done`);
+    getDefaultLogger().log(
+      `[ConstructCompletionsService.constructForFinish] Done`,
+    );
   }
 
   public async construct(input: ConstructInput): Promise<void> {
@@ -546,7 +554,7 @@ export class ConstructCompletionsService {
         await this.constructForFinish(input);
       }
     } catch (error) {
-      Logger.warn(
+      getDefaultLogger().warn(
         `[ConstructCompletionsService.construct] Error occurred: \n${error}`,
       );
     }

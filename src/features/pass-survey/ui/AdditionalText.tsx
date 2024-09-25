@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib';
-import { Input } from '@app/shared/ui';
+import { colors } from '@app/shared/lib/constants/colors';
+import { Input } from '@app/shared/ui/Input';
 
 type Props = {
   value?: string;
@@ -15,7 +15,7 @@ const MIN_FIELD_HEIGHT = 40;
 const MAX_FIELD_HEIGHT = 100;
 const GROW_THRESHOLD = 15;
 
-function AdditionalText({ value, onChange, required }: Props) {
+export function AdditionalText({ value, onChange, required }: Props) {
   const { t } = useTranslation();
   const [height, setHeight] = useState(MIN_FIELD_HEIGHT);
 
@@ -48,5 +48,3 @@ function AdditionalText({ value, onChange, required }: Props) {
     />
   );
 }
-
-export default AdditionalText;

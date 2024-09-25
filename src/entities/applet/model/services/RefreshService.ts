@@ -1,33 +1,42 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 
-import { AppletsResponse } from '@app/shared/api';
-import { AppletsService, AppletDto } from '@app/shared/api';
 import {
-  ILogger,
-  IMutex,
-  Mutex,
+  AppletsResponse,
+  AppletDto,
+  IAppletService,
+} from '@app/shared/api/services/IAppletService';
+import { IEventsService } from '@app/shared/api/services/IEventsService';
+import { onNetworkUnavailable } from '@app/shared/lib/alerts/networkAlert';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { IMutexDefaultInstanceManager } from '@app/shared/lib/utils/IMutexDefaultInstanceManager';
+import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
+import {
   getAppletsKey,
   getCompletedEntitiesKey,
-  isAppOnline,
-  onNetworkUnavailable,
-} from '@app/shared/lib';
+} from '@app/shared/lib/utils/reactQueryHelpers';
 
-import ProgressDataCollector, {
+import {
+  ProgressDataCollector,
   CollectRemoteCompletionsResult,
   IProgressDataCollector,
 } from './ProgressDataCollector';
 import { IAppletProgressSyncService } from './ProgressSyncService';
-import RefreshAppletService, {
+import {
+  RefreshAppletService,
   IRefreshAppletService,
 } from './RefreshAppletService';
-import RefreshDataCollector, {
+import {
+  RefreshDataCollector,
   CollectAllAppletAssignmentsResult,
   CollectAllAppletEventsResult,
   IRefreshDataCollector,
 } from './RefreshDataCollector';
-import RefreshOptimization from './RefreshOptimization';
-import { onAppletListRefreshError, onAppletRefreshError } from '../../lib';
+import { RefreshOptimization } from './RefreshOptimization';
+import {
+  onAppletListRefreshError,
+  onAppletRefreshError,
+} from '../../lib/alerts';
 
 type UnsuccessfulApplet = {
   appletId: string;
@@ -43,27 +52,39 @@ interface IRefreshService {
   refresh(): void;
 }
 
-class RefreshService implements IRefreshService {
+export class RefreshService implements IRefreshService {
   private queryClient: QueryClient;
   private logger: ILogger;
   private refreshDataCollector: IRefreshDataCollector;
   private progressDataCollector: IProgressDataCollector;
   private refreshAppletService: IRefreshAppletService;
-  private static mutex: IMutex = Mutex();
+  private appletService: IAppletService;
+  private mutexInstanceManager: IMutexDefaultInstanceManager;
 
   constructor(
     queryClient: QueryClient,
     logger: ILogger,
     appletProgressSyncService: IAppletProgressSyncService,
+    appletService: IAppletService,
+    eventsService: IEventsService,
+    mutexInstanceManager: IMutexDefaultInstanceManager,
   ) {
     this.queryClient = queryClient;
     this.logger = logger;
-    this.refreshDataCollector = new RefreshDataCollector(logger);
+    this.appletService = appletService;
+    this.mutexInstanceManager = mutexInstanceManager;
+    this.refreshDataCollector = new RefreshDataCollector(
+      logger,
+      appletService,
+      eventsService,
+    );
     this.progressDataCollector = new ProgressDataCollector(logger);
     this.refreshAppletService = new RefreshAppletService(
       queryClient,
       logger,
       appletProgressSyncService,
+      appletService,
+      eventsService,
     );
   }
 
@@ -102,7 +123,7 @@ class RefreshService implements IRefreshService {
       this.logger.log(
         '[RefreshService.refreshInternal]: Getting flat list of applets',
       );
-      appletsResponse = await AppletsService.getApplets();
+      appletsResponse = await this.appletService.getApplets();
 
       this.queryClient.setQueryData(getAppletsKey(), appletsResponse);
     } catch (error) {
@@ -194,10 +215,6 @@ class RefreshService implements IRefreshService {
 
   // PUBLIC
 
-  public static isBusy() {
-    return RefreshService.mutex.isBusy();
-  }
-
   public async refresh() {
     this.logger.log('[RefreshService.refresh]: Started to working');
 
@@ -211,13 +228,13 @@ class RefreshService implements IRefreshService {
       return;
     }
 
-    if (RefreshService.mutex.isBusy()) {
+    if (this.mutexInstanceManager.getRefreshServiceMutex().isBusy()) {
       this.logger.log('[RefreshService.process]: Mutex is busy');
       return;
     }
 
     try {
-      RefreshService.mutex.setBusy();
+      this.mutexInstanceManager.getRefreshServiceMutex().setBusy();
 
       const refreshResult = await this.refreshInternal();
 
@@ -237,9 +254,7 @@ class RefreshService implements IRefreshService {
         `[RefreshService.process]: Error occurred:\nInternal error:\n\n${error as never}`,
       );
     } finally {
-      RefreshService.mutex.release();
+      this.mutexInstanceManager.getRefreshServiceMutex().release();
     }
   }
 }
-
-export default RefreshService;

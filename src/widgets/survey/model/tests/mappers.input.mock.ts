@@ -1,9 +1,9 @@
+import { PipelineItem } from '@app/features/pass-survey/lib/types/payload';
 import {
   CheckboxPipelineAnswer,
   DatePipelineAnswer,
   GeolocationPipelineAnswer,
   NumberSelectPipelineAnswer,
-  PipelineItem,
   RadioPipelineAnswer,
   SliderPipelineAnswer,
   StackedCheckboxPipelineAnswer,
@@ -12,9 +12,9 @@ import {
   TextInputPipelineAnswer,
   TimePipelineAnswer,
   TimeRangePipelineAnswer,
-  UserAction,
   VideoPipelineAnswer,
-} from '@features/pass-survey';
+} from '@app/features/pass-survey/lib/types/pipelineItemAnswer';
+import { UserAction } from '@app/features/pass-survey/lib/types/userAction';
 
 export const textInput: PipelineItem = {
   type: 'TextInput',

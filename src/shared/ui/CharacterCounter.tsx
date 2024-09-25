@@ -3,10 +3,9 @@ import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { Logger } from '@app/shared/lib';
-import { Text } from '@shared/ui';
-
-import { colors } from '../lib';
+import { Text } from './Text';
+import { colors } from '../lib/constants/colors';
+import { getDefaultLogger } from '../lib/services/loggerInstance';
 
 type Props = {
   limit: number;
@@ -15,7 +14,7 @@ type Props = {
   focused?: boolean;
 };
 
-const CharacterCounter: FC<Props> = ({
+export const CharacterCounter: FC<Props> = ({
   numberOfCharacters,
   limit,
   focused = false,
@@ -26,12 +25,16 @@ const CharacterCounter: FC<Props> = ({
   if (limit < numberOfCharacters) colorStyle = styles.warnColor;
 
   if (limit <= 0) {
-    Logger.error('[CharacterCounter] Limit should be higher than 0');
+    getDefaultLogger().error(
+      '[CharacterCounter] Limit should be higher than 0',
+    );
     return null;
   }
 
   if (numberOfCharacters < 0) {
-    Logger.error('[CharacterCounter] numberOfCharacters Cannot be less than 0');
+    getDefaultLogger().error(
+      '[CharacterCounter] numberOfCharacters Cannot be less than 0',
+    );
     return null;
   }
 
@@ -60,5 +63,3 @@ const styles = StyleSheet.create({
     color: colors.errorRed,
   },
 });
-
-export default CharacterCounter;

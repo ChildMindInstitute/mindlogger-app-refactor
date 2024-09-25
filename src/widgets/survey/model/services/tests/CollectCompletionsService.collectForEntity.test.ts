@@ -1,4 +1,4 @@
-import { EntityPath } from '@app/abstract/lib';
+import { EntityPath } from '@app/abstract/lib/types/entity';
 import * as survey from '@app/shared/lib/utils/survey/survey';
 
 import {

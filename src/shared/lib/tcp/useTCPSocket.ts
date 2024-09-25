@@ -2,10 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { useToast } from '@shared/lib';
-
-import { TCPSocketEmitter } from './TCPSocketEmitter';
-import TCPSocketService from './TCPSocketService';
+import { getDefaultTCPSocketEmitter } from './tcpSocketEmitterInstance';
+import { getDefaultTCPSocketService } from './tcpSocketServiceInstance';
+import { useToast } from '../hooks/useToast';
 
 type Callbacks = {
   onError?: (error: Error) => void;
@@ -18,6 +17,9 @@ export function useTCPSocket(callbacks?: Callbacks) {
 
   const { t } = useTranslation();
   const toast = useToast();
+
+  const TCPSocketService = getDefaultTCPSocketService();
+  const TCPSocketEmitter = getDefaultTCPSocketEmitter();
 
   const [connected, setConnected] = useState(() => {
     const socket = TCPSocketService.getSocket();

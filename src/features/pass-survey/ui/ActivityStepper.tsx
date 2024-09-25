@@ -8,33 +8,33 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
-import { useAppletDetailsQuery } from '@app/entities/applet';
-import { HourMinute, isIphoneX } from '@app/shared/lib';
+import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery.ts';
+import { HourMinute } from '@app/shared/lib/types/dateTime.ts';
+import { isIphoneX } from '@app/shared/lib/utils/common.ts';
+import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator.tsx';
+import { Box, XStack } from '@app/shared/ui/base.ts';
+import { Center } from '@app/shared/ui/Center.tsx';
+import { StatusBar } from '@app/shared/ui/StatusBar.tsx';
 import {
-  ActivityIndicator,
-  Box,
-  Center,
   OnBeforeNextResult,
-  StatusBar,
   Stepper,
   StepperPayload,
-  XStack,
-  TimeRemaining,
-} from '@shared/ui';
+} from '@app/shared/ui/Stepper/index.tsx';
+import { TimeRemaining } from '@app/shared/ui/TimeRemaining.tsx';
 
-import ActivityItem from './ActivityItem';
-import Header from './Header.tsx';
-import ProgressWithTimer from './ProgressWithTimer';
-import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
-import {
-  ActivityIdentityContext,
-  fetchSkipActivityUserConfirmation,
-  FlankerResponse,
-  SkipService,
-  useTextVariablesReplacer,
-} from '../lib';
-import { useActivityState, useActivityStepper, useIdleTimer } from '../model';
+import { ActivityItem } from './ActivityItem';
+import { Header } from './Header.tsx';
+import { ProgressWithTimer } from './ProgressWithTimer';
+import { TutorialViewerItem, TutorialViewerRef } from './TutorialViewerItem';
+import { fetchSkipActivityUserConfirmation } from '../lib/alerts.ts';
+import { ActivityIdentityContext } from '../lib/contexts/ActivityIdentityContext.ts';
+import { useTextVariablesReplacer } from '../lib/hooks/useTextVariablesReplacer.ts';
+import { SkipService } from '../lib/services/SkipService.ts';
+import { FlankerResponse } from '../lib/types/payload.ts';
 import { evaluateFlankerNextStep } from '../model/flankerNextStepEvaluator';
+import { useActivityState } from '../model/hooks/useActivityState.ts';
+import { useActivityStepper } from '../model/hooks/useActivityStepper.ts';
+import { useIdleTimer } from '../model/hooks/useIdleTimer.ts';
 
 type Props = {
   idleTimer: HourMinute | null;
@@ -46,7 +46,7 @@ type Props = {
   targetSubjectId: string | null;
 };
 
-function ActivityStepper({
+export function ActivityStepper({
   idleTimer,
   timer,
   entityStartedAt,
@@ -452,5 +452,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-export default ActivityStepper;

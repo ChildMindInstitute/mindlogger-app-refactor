@@ -3,21 +3,22 @@ import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors, IS_ANDROID, IS_IOS } from '@app/shared/lib';
-import {
-  RoundLogo,
-  Box,
-  Text,
-  XStack,
-  YStack,
-  ChevronRightIcon,
-} from '@app/shared/ui';
+import { IS_ANDROID, IS_IOS } from '@app/shared/lib/constants';
+import { colors } from '@app/shared/lib/constants/colors';
+import { Box, XStack, YStack } from '@app/shared/ui/base';
+import { ChevronRightIcon } from '@app/shared/ui/icons';
+import { RoundLogo } from '@app/shared/ui/RoundLogo';
+import { Text } from '@app/shared/ui/Text';
 
-import ActivityAssignmentBadge from './ActivityAssignmentBadge';
-import ActivityFlowStep from './ActivityFlowStep';
-import TimeStatusRecord from './TimeStatusRecord';
-import { ActivityListItem, ActivityStatus, ActivityType } from '../lib';
+import { ActivityAssignmentBadge } from './ActivityAssignmentBadge';
+import { ActivityFlowStep } from './ActivityFlowStep';
+import { TimeStatusRecord } from './TimeStatusRecord';
 import { useActivityAssignment } from '../lib/hooks/useActivityAssignment';
+import {
+  ActivityListItem,
+  ActivityStatus,
+  ActivityType,
+} from '../lib/types/activityListItem';
 
 type Props = {
   activity: ActivityListItem;
@@ -25,7 +26,7 @@ type Props = {
   onPress?: (...args: unknown[]) => void;
 };
 
-const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
+export const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
   const { t } = useTranslation();
   const { assignment } = useActivityAssignment({
     appletId: activity.appletId,
@@ -126,5 +127,3 @@ const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
     </TouchableOpacity>
   );
 };
-
-export default ActivityCard;

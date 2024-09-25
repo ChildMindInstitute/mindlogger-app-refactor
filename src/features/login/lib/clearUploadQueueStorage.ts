@@ -1,7 +1,5 @@
-import { createSecureStorage } from '@app/shared/lib';
-
-const storage = createSecureStorage('upload_queue-storage');
+import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 
 export const clearUploadQueueStorage = () => {
-  storage.clearAll();
+  getDefaultStorageInstanceManager().getUploadQueueStorage().clearAll();
 };

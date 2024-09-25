@@ -1,19 +1,19 @@
+import { EntityPath, EntityPathParams } from '@app/abstract/lib/types/entity';
 import {
-  EntityPath,
-  EntityPathParams,
   EntityProgressionEntityType,
   EntityProgressionInProgress,
   EntityProgressionInProgressActivityFlow,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/entityProgress';
 import { IncompleteEntity } from '@app/entities/applet/model/selectors';
-import { isEntityExpired, Logger } from '@app/shared/lib';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { isEntityExpired } from '@app/shared/lib/utils/survey/survey';
 
-import { FinishPipelineItem } from '..';
 import {
   getFlowRecord,
   isCurrentActivityRecordExist,
 } from '../../lib/storageHelpers';
 import { FlowState } from '../../lib/useFlowStorageRecord';
+import { FinishPipelineItem } from '../pipelineBuilder';
 
 export type CollectCompletionOutput = {
   appletId: string;
@@ -132,7 +132,9 @@ export class CollectCompletionsService implements ICollectCompletionsService {
   }
 
   public hasExpiredEntity(): boolean {
-    Logger.log('[CollectCompletionsService.hasExpiredEntity] Working');
+    getDefaultLogger().log(
+      '[CollectCompletionsService.hasExpiredEntity] Working',
+    );
 
     const filtered = this.incompleteEntities.filter(incompleteEntity => {
       return (
@@ -210,7 +212,7 @@ export class CollectCompletionsService implements ICollectCompletionsService {
   }
 
   public collectAll(exclude?: EntityPathParams): CollectCompletionOutput[] {
-    Logger.log('[CollectCompletionsService.collectAll] Working');
+    getDefaultLogger().log('[CollectCompletionsService.collectAll] Working');
 
     const result: CollectCompletionOutput[] = [];
 

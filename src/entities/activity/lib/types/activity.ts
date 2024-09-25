@@ -1,4 +1,5 @@
-import { AbPayload, FlankerItemSettings } from '@app/abstract/lib';
+import { AbPayload } from '@app/abstract/lib/types/abTrails';
+import { FlankerItemSettings } from '@app/abstract/lib/types/flanker';
 
 import { Report } from './activityReportSettings';
 import { ConditionalLogic } from './conditionalLogic';

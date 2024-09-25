@@ -1,13 +1,14 @@
 import { useSelector } from 'react-redux';
 
-import { mapDtoToRespondentMeta } from '@app/entities/applet/model';
-import { IdentityModel } from '@app/entities/identity';
-import { useAppSelector } from '@app/shared/lib';
-import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
+import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
+import { mapDtoToRespondentMeta } from '@app/entities/applet/model/mappers';
+import { selectEntityResponseTimes } from '@app/entities/applet/model/selectors';
+import { selectFirstName } from '@app/entities/identity/model/selectors';
+import { useAppSelector } from '@app/shared/lib/hooks/redux';
 
 import { Answers } from './useActivityStorageRecord';
 import { MarkdownVariableReplacer } from '../markdownVariableReplacer';
-import { PipelineItem } from '../types';
+import { PipelineItem } from '../types/payload';
 
 type UseTextVariablesReplacerOptions = {
   appletId: string;
@@ -26,15 +27,13 @@ const useTextVariablesReplacer = ({
   items,
   answers,
 }: UseTextVariablesReplacerOptions) => {
-  const entityResponseTimes = useSelector(
-    AppletModel.selectors.selectEntityResponseTimes,
-  );
+  const entityResponseTimes = useSelector(selectEntityResponseTimes);
 
   const { data: respondentNickname } = useAppletDetailsQuery(appletId, {
     select: ({ data }) => mapDtoToRespondentMeta(data),
   });
 
-  const userFirstName = useAppSelector(IdentityModel.selectors.selectFirstName);
+  const userFirstName = useAppSelector(selectFirstName);
 
   const lastResponseTime = entityResponseTimes
     ?.filter(

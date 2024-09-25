@@ -1,26 +1,28 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import {
-  AvailabilityType,
   EntityProgression,
   EntityProgressionInProgressActivity,
   EntityProgressionInProgressActivityFlow,
-} from '@app/abstract/lib';
-import { SvgFileManager } from '@app/entities/drawer';
-import { EventModel, ScheduleEvent } from '@app/entities/event';
+} from '@app/abstract/lib/types/entityProgress';
+import { AvailabilityType } from '@app/abstract/lib/types/event';
+import { getDefaultSvgFileManager } from '@app/entities/drawer/lib/utils/svgFileManagerInstance';
+import { ScheduleEvent } from '@app/entities/event/lib/types/event';
+import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
+import { Answers } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import {
   ActivityItemType,
   DrawingTestResponse,
-} from '@app/features/pass-survey';
-import { Answers, PipelineItem } from '@app/features/pass-survey';
-import { InitializeHiddenItem } from '@app/features/pass-survey/model';
-import { AnswerDto } from '@app/shared/api';
+  PipelineItem,
+} from '@app/features/pass-survey/lib/types/payload';
+import { InitializeHiddenItem } from '@app/features/pass-survey/model/ActivityRecordInitializer';
+import { AnswerDto } from '@app/shared/api/services/IAnswerService';
 
 export const getScheduledDate = (event: ScheduleEvent) => {
   if (
     event.availability.availabilityType !== AvailabilityType.AlwaysAvailable
   ) {
-    return EventModel.ScheduledDateCalculator.calculate(event)!.valueOf();
+    return getDefaultScheduledDateCalculator().calculate(event)!.valueOf();
   }
 };
 
@@ -128,7 +130,7 @@ export const createSvgFiles = async (
   });
 
   const promises = drawingTestItems.map(drawingTestItem => {
-    return SvgFileManager.writeFile(
+    return getDefaultSvgFileManager().writeFile(
       drawingTestItem.uri,
       drawingTestItem.svgString,
     );

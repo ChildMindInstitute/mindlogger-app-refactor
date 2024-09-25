@@ -4,8 +4,8 @@ import {
   InactiveReason,
   NotificationDescriber,
   NotificationType,
-} from '@app/entities/notification/lib';
-import { DatesFromTo } from '@app/shared/lib';
+} from '@app/entities/notification/lib/types/notificationBuilder';
+import { DatesFromTo } from '@app/shared/lib/types/dateTime';
 
 import { addTime, getEmptyEvent } from './testHelpers';
 import { NotificationUtility } from '../NotificationUtility';

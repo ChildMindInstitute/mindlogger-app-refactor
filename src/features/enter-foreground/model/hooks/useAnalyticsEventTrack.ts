@@ -1,9 +1,11 @@
-import { AnalyticsService, MixEvents, useOnForeground } from '@app/shared/lib';
+import {
+  AnalyticsService,
+  MixEvents,
+} from '@app/shared/lib/analytics/AnalyticsService';
+import { useOnForeground } from '@app/shared/lib/hooks/useOnForeground';
 
-function useAnalyticsEventTrack() {
+export function useAnalyticsEventTrack() {
   useOnForeground(() => {
     AnalyticsService.track(MixEvents.AppReOpen);
   });
 }
-
-export default useAnalyticsEventTrack;

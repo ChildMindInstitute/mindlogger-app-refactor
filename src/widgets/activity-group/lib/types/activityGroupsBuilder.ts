@@ -1,7 +1,8 @@
-import { ActivityPipelineType, EntityProgression } from '@app/abstract/lib';
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
+import { EntityProgression } from '@app/abstract/lib/types/entityProgress';
 import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
-import { ActivityType } from '@entities/activity';
-import { ScheduleEvent } from '@entities/event';
+import { ActivityType } from '@app/entities/activity/lib/types/activityListItem';
+import { ScheduleEvent } from '@app/entities/event/lib/types/event';
 
 export type EntityBase = {
   id: string;

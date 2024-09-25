@@ -52,7 +52,7 @@ jest.mock('../services', () => ({
 }));
 
 import { LD_KIND_PREFIX } from './FeatureFlags.const';
-import FeatureFlagsService from './FeatureFlagsService';
+import { FeatureFlagsService } from './FeatureFlagsService';
 
 describe('Test FeatureFlagsService', () => {
   beforeAll(() => {

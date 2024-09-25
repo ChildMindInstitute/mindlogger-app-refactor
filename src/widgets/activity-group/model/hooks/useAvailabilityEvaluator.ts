@@ -1,9 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query';
 
-import { EventModel } from '@app/entities/event';
-import { QueryDataUtils } from '@app/shared/api';
+import { AvailableToEvaluator } from '@app/entities/event/model/AvailableToEvaluator';
+import { mapEventFromDto } from '@app/entities/event/model/mappers';
+import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
 
-import { GroupUtility } from '../factories';
+import { GroupUtility } from '../factories/GroupUtility';
 
 export function useAvailabilityEvaluator() {
   const queryClient = useQueryClient();
@@ -11,9 +12,7 @@ export function useAvailabilityEvaluator() {
   function evaluateAvailableTo(appletId: string, eventId: string): Date | null {
     const queryDataUtils = new QueryDataUtils(queryClient);
 
-    const availableToEvaluator = new EventModel.AvailableToEvaluator(
-      GroupUtility,
-    );
+    const availableToEvaluator = new AvailableToEvaluator(GroupUtility);
 
     const eventDto = queryDataUtils.getEventDto(appletId, eventId);
 
@@ -21,7 +20,7 @@ export function useAvailabilityEvaluator() {
       return null;
     }
 
-    const event = EventModel.mapEventFromDto(eventDto);
+    const event = mapEventFromDto(eventDto);
 
     return availableToEvaluator.evaluate(event);
   }

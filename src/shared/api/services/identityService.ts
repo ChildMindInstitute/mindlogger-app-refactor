@@ -1,81 +1,25 @@
-import httpService from './httpService';
-import { SuccessfulEmptyResponse, SuccessfulResponse } from '../types';
+import { httpService } from './httpService';
+import {
+  ApprovePasswordRecoveryRequest,
+  ApprovePasswordRecoveryResponse,
+  ChangePasswordRequest,
+  ChangePasswordResponse,
+  IIdentityService,
+  LoginRequest,
+  LoginResponse,
+  LogoutRequest,
+  LogoutResponse,
+  PasswordRecoveryHealthCheckRequest,
+  PasswordRecoveryHealthCheckResponse,
+  PasswordRecoveryRequest,
+  PasswordRecoveryResponse,
+  RefreshTokenRequest,
+  RefreshTokenResponse,
+  SignUpRequest,
+  SignUpResponse,
+} from './IIdentityService';
 
-type LoginRequest = {
-  email: string;
-  password: string;
-  deviceId?: string;
-};
-
-type LogoutRequest = {
-  deviceId: string;
-};
-
-type SignUpRequest = {
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-};
-
-type PasswordRecoveryRequest = {
-  email: string;
-};
-
-type ApprovePasswordRecoveryRequest = {
-  email: string;
-  key: string;
-  password: string;
-};
-
-type PasswordRecoveryHealthCheckRequest = {
-  email: string;
-  key: string;
-};
-
-type ChangePasswordRequest = {
-  password: string;
-  prev_password: string;
-};
-
-export type LoginResponse = SuccessfulResponse<{
-  token: {
-    accessToken: string;
-    refreshToken: string;
-    tokenType: string;
-  };
-  user: UserDto;
-}>;
-
-type UserDto = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-};
-
-type RefreshTokenRequest = {
-  refreshToken: string;
-};
-
-type RefreshTokenResponse = SuccessfulResponse<{
-  accessToken: string;
-  refreshToken: string;
-}>;
-
-export type LogoutResponse = SuccessfulEmptyResponse;
-
-export type SignUpResponse = SuccessfulEmptyResponse;
-
-export type PasswordRecoveryResponse = SuccessfulEmptyResponse;
-
-export type ApprovePasswordRecoveryResponse = SuccessfulEmptyResponse;
-
-export type PasswordRecoveryHealthCheckResponse = SuccessfulEmptyResponse;
-
-export type ChangePasswordResponse = SuccessfulEmptyResponse;
-
-function IdentityService() {
+export function IdentityService(): IIdentityService {
   return {
     login(request: LoginRequest) {
       return httpService.post<LoginResponse>('/auth/login', request);
@@ -120,5 +64,3 @@ function IdentityService() {
     },
   };
 }
-
-export default IdentityService();

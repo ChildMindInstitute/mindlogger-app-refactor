@@ -8,18 +8,18 @@ import {
   VictoryScatter,
 } from 'victory-native';
 
-import { ResponseConfig, SliderResponseConfig } from '@app/shared/api';
 import {
-  areDatesEqual,
-  colors,
-  DAYS_OF_WEEK_NUMBERS,
-  getCurrentWeekDates,
-  range,
-} from '@shared/lib';
-import { Box } from '@shared/ui';
+  ResponseConfig,
+  SliderResponseConfig,
+} from '@app/shared/api/services/AppletAnalyticsDto';
+import { DAYS_OF_WEEK_NUMBERS } from '@app/shared/lib/constants';
+import { colors } from '@app/shared/lib/constants/colors';
+import { range, getCurrentWeekDates } from '@app/shared/lib/utils/common';
+import { areDatesEqual } from '@app/shared/lib/utils/dateTime';
 
-import { getWeekDaysWithLocale } from '../lib';
-import { ChartAxisDot, ChartItem } from '../types';
+import { Box } from '../../base';
+import { getWeekDaysWithLocale } from '../lib/getWeekDaysWithLocale';
+import { ChartAxisDot, ChartItem } from '../types/types';
 
 type LineChartDataItem = {
   date: string;
@@ -31,7 +31,7 @@ type Props = {
   config: ResponseConfig;
 };
 
-const LineChart: FC<Props> = ({ data, config }) => {
+export const LineChart: FC<Props> = ({ data, config }) => {
   const dateFormat = 'yyyy dd MM';
   const { maxValue } = config as SliderResponseConfig;
 
@@ -125,5 +125,3 @@ const LineChart: FC<Props> = ({ data, config }) => {
     </Box>
   );
 };
-
-export default LineChart;

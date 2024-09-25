@@ -4,10 +4,10 @@ import { Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import renderer from 'react-test-renderer';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import { CharacterCounter } from '@shared/ui';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+import { colors } from '@app/shared/lib/constants/colors';
 
-import { colors } from '../../lib';
+import { CharacterCounter } from '../CharacterCounter';
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({

@@ -3,7 +3,8 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 
-import { IS_ANDROID, wait } from '@shared/lib';
+import { IS_ANDROID } from '../constants';
+import { wait } from '../utils/common';
 
 const SUBSCRIPTION_DURATION = 500;
 
@@ -13,7 +14,7 @@ enum LoadingStates {
   'loaded' = 2,
 }
 
-const useAudioPlayer = () => {
+export const useAudioPlayer = () => {
   const audioRecorderPlayer = useRef(new AudioRecorderPlayer());
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState<LoadingStates>(
@@ -97,5 +98,3 @@ const useAudioPlayer = () => {
     isLoading: isLoading === LoadingStates.loading,
   };
 };
-
-export default useAudioPlayer;

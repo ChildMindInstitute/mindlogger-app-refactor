@@ -1,8 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query';
 
-import { AppletAssignmentsResponse } from '@app/shared/api';
-import { getAssignmentsKey, getDataFromQuery } from '@app/shared/lib';
-import { mapAssignmentsFromDto } from '@app/widgets/activity-group/model';
+import { AppletAssignmentsResponse } from '@app/shared/api/services/IAppletService';
+import {
+  getDataFromQuery,
+  getAssignmentsKey,
+} from '@app/shared/lib/utils/reactQueryHelpers';
+import { mapAssignmentsFromDto } from '@app/widgets/activity-group/model/mappers';
 
 import { Assignment } from '../types/activityAssignment';
 

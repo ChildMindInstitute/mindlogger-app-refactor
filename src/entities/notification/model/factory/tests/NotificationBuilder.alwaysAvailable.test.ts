@@ -4,15 +4,15 @@ import {
   AvailabilityType,
   NotificationTriggerType,
   PeriodicityType,
-} from '@app/abstract/lib';
-import { ScheduledDateCalculator } from '@app/entities/event/model';
+} from '@app/abstract/lib/types/event';
+import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
 import {
   EventNotificationDescribers,
   InactiveReason,
   NotificationDescriber,
   NotificationType,
   ScheduleEvent,
-} from '@app/entities/notification/lib';
+} from '@app/entities/notification/lib/types/notificationBuilder';
 
 import {
   createBuilder,
@@ -47,9 +47,10 @@ const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
 };
 
 const calculateScheduledAt = (event: ScheduleEvent, now: Date) => {
+  const calculator = getDefaultScheduledDateCalculator();
   //@ts-ignore
-  ScheduledDateCalculator.getNow = jest.fn().mockReturnValue(new Date(now));
-  return ScheduledDateCalculator.calculate(event, false);
+  calculator.getNow = jest.fn().mockReturnValue(new Date(now));
+  return calculator.calculate(event, false);
 };
 
 const FixedHourAt = 16;

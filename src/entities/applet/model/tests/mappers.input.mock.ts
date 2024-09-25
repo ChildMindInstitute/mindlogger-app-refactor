@@ -1,15 +1,15 @@
+import { ActivityItemDto } from '@app/shared/api/services/ActivityItemDto';
+import { ActivityDto } from '@app/shared/api/services/IActivityService';
+import { AnalyticsAnswerDto } from '@app/shared/api/services/IAppletAnalyticsService';
 import {
-  ActivityDto,
-  ActivityFlowRecordDto,
-  ActivityItemDto,
-  ActivityRecordDto,
-  AnalyticsAnswerDto,
-  AppletDetailsDto,
   AppletDetailsResponse,
-  AppletDto,
-  CompletedEntityDto,
   ThemeDto,
-} from '@shared/api';
+  AppletDto,
+  ActivityRecordDto,
+  ActivityFlowRecordDto,
+  AppletDetailsDto,
+} from '@app/shared/api/services/IAppletService';
+import { CompletedEntityDto } from '@app/shared/api/services/IEventsService';
 
 export const appletDetailsResponse: AppletDetailsResponse = {
   // @ts-ignore

@@ -1,7 +1,9 @@
 import renderer from 'react-test-renderer';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import { Dropdown, NumberSelector } from '@shared/ui';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+
+import { Dropdown } from '../../Dropdown';
+import { NumberSelector } from '../NumberSelector';
 
 jest.mock(
   'react-native-select-dropdown',

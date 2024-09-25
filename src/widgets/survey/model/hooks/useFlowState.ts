@@ -4,7 +4,7 @@ import {
   FlowSummaryData,
   SummaryDataKey,
   useFlowStorageRecord,
-} from '../../lib';
+} from '../../lib/useFlowStorageRecord';
 import { FlowPipelineItem } from '../pipelineBuilder';
 
 export type UseFlowStateArgs = {

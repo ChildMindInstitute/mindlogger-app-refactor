@@ -1,7 +1,6 @@
 import {
   appletDetailsResponse,
   firstAppletDto,
-  completedEntityDto,
   secondAppletDto,
   appletDetailsDto,
   themeDto,

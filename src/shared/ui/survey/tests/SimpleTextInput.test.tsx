@@ -2,9 +2,9 @@ import { TextInput } from 'react-native';
 
 import renderer from 'react-test-renderer';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 
-import SimpleTextInput from '../SimpleTextInput';
+import { SimpleTextInput } from '../SimpleTextInput';
 
 jest.mock('react-i18next', () => ({
   useTranslation: jest.fn().mockImplementation(() => ({

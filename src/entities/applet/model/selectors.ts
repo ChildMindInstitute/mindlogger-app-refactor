@@ -3,7 +3,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import {
   EntityProgressionEntityType,
   EntityProgressionInProgress,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/entityProgress';
 
 const selectApplets = (state: RootState) => state.applets;
 

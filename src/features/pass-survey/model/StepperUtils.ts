@@ -1,8 +1,8 @@
-import PipelineVisibilityChecker from './PipelineVisibilityChecker';
-import ShiftCalculator from './ShiftCalculator';
-import { ActivityState } from '../lib';
+import { PipelineVisibilityChecker } from './PipelineVisibilityChecker';
+import { ShiftCalculator } from './ShiftCalculator';
+import { ActivityState } from '../lib/hooks/useActivityStorageRecord';
 
-class StepperUtils {
+export class StepperUtils {
   private activityState: ActivityState;
   private shiftCalculator: ShiftCalculator;
 
@@ -36,5 +36,3 @@ class StepperUtils {
     return this.shiftCalculator.calculateShiftForBackwards(step);
   }
 }
-
-export default StepperUtils;

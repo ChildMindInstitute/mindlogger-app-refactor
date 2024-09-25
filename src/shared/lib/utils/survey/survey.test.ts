@@ -1,7 +1,7 @@
 import {
   EntityProgression,
   EntityProgressionInProgress,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/entityProgress';
 
 import {
   getEntityProgression,

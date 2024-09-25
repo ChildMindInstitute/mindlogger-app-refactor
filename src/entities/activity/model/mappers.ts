@@ -1,45 +1,44 @@
+import { TestNode, TutorialRecord } from '@app/abstract/lib/types/abTrails';
 import {
   BlockConfiguration,
   ButtonConfiguration,
   FlankerItemSettings,
   StimulusConfiguration,
-  TestNode,
-  TutorialRecord,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/flanker';
 import {
-  ActivityDto,
-  DrawingItemDto,
-  StabilityTrackerItemDto,
+  ABTrailsItemDto,
+  AdditionalResponseConfiguration,
   AudioItemDto,
   AudioPlayerItemDto,
+  ConditionalLogicDto,
+  DataMatrixDto,
   DateItemDto,
+  DrawingItemDto,
   FlankerItemDto,
   GeolocationItemDto,
   MessageItemDto,
   MultiSelectionItemDto,
   MultiSelectionRowsItemDto,
   NumberSelectionItemDto,
+  OptionsDto,
+  ParagraphTextItemDto,
   PhotoItemDto,
   SingleSelectionItemDto,
-  SliderSelectionItemDto,
+  SingleSelectionRowsItemDto,
+  SliderAlertsDto,
+  SliderRowsDto,
   SliderRowsItemDto,
+  SliderSelectionItemDto,
+  StabilityTrackerItemDto,
   TextItemDto,
-  ParagraphTextItemDto,
+  TimeItemDto,
   TimeRangeItemDto,
   VideoItemDto,
-  AdditionalResponseConfiguration,
-  TimeItemDto,
-  SingleSelectionRowsItemDto,
-  ConditionalLogicDto,
-  ABTrailsItemDto,
-  DataMatrixDto,
-  OptionsDto,
-  SliderRowsDto,
-  SliderAlertsDto,
-} from '@app/shared/api';
-import { getMsFromSeconds } from '@app/shared/lib';
+} from '@app/shared/api/services/ActivityItemDto';
+import { ActivityDto } from '@app/shared/api/services/IActivityService';
+import { getMsFromSeconds } from '@app/shared/lib/utils/dateTime';
 
-import { ActivityDetails, ActivityItem } from '../lib';
+import { ActivityDetails, ActivityItem } from '../lib/types/activity';
 
 function mapTimerValue(dtoTimer: number | null) {
   if (dtoTimer) {

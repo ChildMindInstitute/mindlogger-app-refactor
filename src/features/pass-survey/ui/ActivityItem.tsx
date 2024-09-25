@@ -1,60 +1,54 @@
-import { ComponentProps, useCallback, useContext, useState } from 'react';
+import React, {
+  ComponentProps,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 
+import { AbTest } from '@app/entities/abTrail/ui/AbTest';
 import { useActivityAssignment } from '@app/entities/activity/lib/hooks/useActivityAssignment';
-import ActivityAssignmentBadge from '@app/entities/activity/ui/ActivityAssignmentBadge';
-import ActivityAssignmentBanner from '@app/entities/activity/ui/ActivityAssignmentBanner';
-import {
-  Box,
-  GeolocationItem,
-  MarkdownMessage,
-  NumberSelector,
-  SimpleTextInput,
-  SplashItem,
-  PhotoItem,
-  VideoItem,
-  ScrollableContent,
-  DatePickerItem,
-  TimePickerItem,
-  StackedCheckBoxItem,
-  StackedRadiosItem,
-  StackedSlider,
-  ParagraphText,
-  XStack,
-} from '@app/shared/ui';
-import { HandlersContext } from '@app/shared/ui';
-import { AbTest } from '@entities/abTrail';
-import { useAppletStreamingDetails } from '@entities/applet/lib/hooks';
-import { DrawingTest } from '@entities/drawer';
-import {
-  FlankerGameResponse,
-  HtmlFlanker,
-  NativeIosFlanker,
-} from '@entities/flanker';
-import { StabilityTracker } from '@entities/stabilityTracker';
-import {
-  Dimensions,
-  IS_ANDROID,
-  LiveEvent,
-  useSendEvent,
-  wait,
-} from '@shared/lib';
-import {
-  RadioActivityItem,
-  SurveySlider,
-  CheckBoxActivityItem,
-  TimeRangeItem,
-  AudioRecorderItem,
-  AudioStimulusItem,
-} from '@shared/ui';
+import { ActivityAssignmentBadge } from '@app/entities/activity/ui/ActivityAssignmentBadge';
+import { ActivityAssignmentBanner } from '@app/entities/activity/ui/ActivityAssignmentBanner';
+import { useAppletStreamingDetails } from '@app/entities/applet/lib/hooks/useAppletStreamingDetails';
+import { DrawingTest } from '@app/entities/drawer/ui/DrawingTest/DrawingTest';
+import { FlankerGameResponse } from '@app/entities/flanker/lib/types/response';
+import { HtmlFlanker } from '@app/entities/flanker/ui/HtmlFlanker/HtmlFlanker';
+import { NativeIosFlanker } from '@app/entities/flanker/ui/NativeIosFlanker/NativeIosFlanker';
+import { StabilityTracker } from '@app/entities/stabilityTracker/ui/StabilityTracker';
+import { IS_ANDROID } from '@app/shared/lib/constants';
+import { LiveEvent } from '@app/shared/lib/tcp/types';
+import { useSendEvent } from '@app/shared/lib/tcp/useSendLiveEvent';
+import { Dimensions } from '@app/shared/lib/types/space';
+import { wait } from '@app/shared/lib/utils/common';
+import { Box, XStack } from '@app/shared/ui/base';
+import { ScrollableContent } from '@app/shared/ui/ScrollableContent';
+import { HandlersContext } from '@app/shared/ui/Stepper/contexts';
+import { AudioRecorderItem } from '@app/shared/ui/survey/AudioRecorderItem';
+import { AudioStimulusItem } from '@app/shared/ui/survey/AudioStimulusItem';
+import { CheckBoxActivityItem } from '@app/shared/ui/survey/CheckBox/CheckBoxActivity.item';
+import { DatePickerItem } from '@app/shared/ui/survey/DatePickerItem';
+import { GeolocationItem } from '@app/shared/ui/survey/Geolocation/GeolocationItem';
+import { MarkdownMessage } from '@app/shared/ui/survey/MarkdownMessage';
+import { PhotoItem } from '@app/shared/ui/survey/MediaItems/PhotoItem';
+import { VideoItem } from '@app/shared/ui/survey/MediaItems/VideoItem';
+import { NumberSelector } from '@app/shared/ui/survey/NumberSelector';
+import { ParagraphText } from '@app/shared/ui/survey/ParagraphText';
+import { RadioActivityItem } from '@app/shared/ui/survey/RadioActivityItem/RadioActivityItem';
+import { SimpleTextInput } from '@app/shared/ui/survey/SimpleTextInput';
+import { StackedSlider } from '@app/shared/ui/survey/Slider/StackedSlider';
+import { SurveySlider } from '@app/shared/ui/survey/Slider/SurveySlider';
+import { SplashItem } from '@app/shared/ui/survey/SplashItem';
+import { StackedCheckboxItem } from '@app/shared/ui/survey/StackedCheckboxItem/StackedCheckboxItem';
+import { StackedRadios } from '@app/shared/ui/survey/StackedRadioItem/StackedRadiosItem';
+import { TimePickerItem } from '@app/shared/ui/survey/TimePickerItem';
+import { TimeRangeItem } from '@app/shared/ui/survey/TimeRangeItem';
 
-import AdditionalText from './AdditionalText';
-import {
-  PipelineItemAnswer,
-  ActivityItem as ActivityItemProps,
-  PipelineItemResponse,
-  ActivityIdentityContext,
-} from '../lib';
-import { mapStreamEventToDto } from '../model';
+import { AdditionalText } from './AdditionalText';
+import { ActivityIdentityContext } from '../lib/contexts/ActivityIdentityContext';
+import { ActivityItem as ActivityItemProps } from '../lib/types/activityItem';
+import { PipelineItemResponse } from '../lib/types/payload';
+import { PipelineItemAnswer } from '../lib/types/pipelineItemAnswer';
+import { mapStreamEventToDto } from '../model/streamEventMapper';
 
 type Props = ActivityItemProps &
   PipelineItemAnswer & {
@@ -65,7 +59,7 @@ type Props = ActivityItemProps &
     context: Record<string, unknown>;
   };
 
-function ActivityItem({
+export function ActivityItem({
   type,
   value,
   pipelineItem,
@@ -289,7 +283,7 @@ function ActivityItem({
     case 'StackedCheckbox':
       item = (
         <Box mx="$6">
-          <StackedCheckBoxItem
+          <StackedCheckboxItem
             config={pipelineItem.payload}
             onChange={onResponse}
             values={value?.answer || null}
@@ -303,7 +297,7 @@ function ActivityItem({
     case 'StackedRadio':
       item = (
         <Box mx="$6">
-          <StackedRadiosItem
+          <StackedRadios
             config={pipelineItem.payload}
             onChange={onResponse}
             values={value?.answer || []}
@@ -488,5 +482,3 @@ function ActivityItem({
     </ScrollableContent>
   );
 }
-
-export default ActivityItem;

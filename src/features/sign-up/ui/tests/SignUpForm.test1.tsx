@@ -1,9 +1,9 @@
 import { Provider } from 'react-redux';
 import renderer, { act } from 'react-test-renderer';
 
-import ReactQueryProvider from '@app/app/ui/AppProvider/ReactQueryProvider';
+import { ReactQueryProvider } from '@app/app/ui/AppProvider/ReactQueryProvider';
 import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import { PasswordRequirement } from '@app/shared/ui/form/PasswordRequirements';
 
 import { SignUpForm } from '../SignUpForm';

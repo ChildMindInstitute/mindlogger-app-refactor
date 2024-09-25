@@ -1,28 +1,26 @@
-import {
-  EntityPath,
-  EntityProgressionInProgressActivityFlow,
-  EntityType,
-} from '@app/abstract/lib';
+import { EntityPath, EntityType } from '@app/abstract/lib/types/entity';
+import { EntityProgressionInProgressActivityFlow } from '@app/abstract/lib/types/entityProgress';
 import { IncompleteEntity } from '@app/entities/applet/model/selectors';
 import {
   ActivityState,
   Answer,
   Answers,
-  PipelineItem,
-  UserAction,
-} from '@app/features/pass-survey';
-import { AnswerDto, SliderAnswerDto } from '@app/shared/api';
+} from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
+import { PipelineItem } from '@app/features/pass-survey/lib/types/payload';
+import { UserAction } from '@app/features/pass-survey/lib/types/userAction';
 import {
-  CollectCompletionOutput,
-  ConstructInput,
-  FlowState,
-} from '@app/widgets/survey';
+  AnswerDto,
+  SliderAnswerDto,
+} from '@app/shared/api/services/IAnswerService';
+import { FlowState } from '@app/widgets/survey/lib/useFlowStorageRecord';
 import * as dateTimeUtils from '@shared/lib/utils/dateTime';
 
 import * as metaHelpers from '../../../lib/metaHelpers';
 import * as storageHelpers from '../../../lib/storageHelpers';
 import * as mappers from '../../mappers';
 import * as operations from '../../operations';
+import { CollectCompletionOutput } from '../CollectCompletionsService';
+import { ConstructInput } from '../ConstructCompletionsService';
 
 export const getActivityIncompleteEntity = (
   path: EntityPath,

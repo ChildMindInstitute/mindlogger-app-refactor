@@ -4,14 +4,14 @@ import {
   AvailabilityType,
   NotificationTriggerType,
   PeriodicityType,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/event';
 import {
   BreakReason,
   EventNotificationDescribers,
   NotificationDescriber,
   NotificationType,
   ScheduleEvent,
-} from '@app/entities/notification/lib';
+} from '@app/entities/notification/lib/types/notificationBuilder';
 
 import {
   addTime,

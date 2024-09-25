@@ -1,4 +1,4 @@
-import { Logger } from '@shared/lib';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import {
   IMigration,
@@ -31,7 +31,7 @@ export class MigrationRunner implements IMigrationRunner<unknown, unknown> {
   ): Promise<MigrationOutput<unknown>> {
     const migrationKeys = this.getMigrationKeys(currentVersion, inboundVersion);
 
-    Logger.log(
+    getDefaultLogger().log(
       `[MigrationRunner]: migrationKeys: [${migrationKeys}]${
         migrationKeys.length === 0 ? ', no need to run migrations' : ''
       }`,
@@ -49,7 +49,7 @@ export class MigrationRunner implements IMigrationRunner<unknown, unknown> {
         const migrationOutput = await Promise.resolve(performMigration());
         reduxState = migrationOutput.reduxState;
       } catch (error) {
-        Logger.warn(
+        getDefaultLogger().warn(
           `[MigrationRunner.performMigration] Error occurred during execution migration v${version}: \n\n${error}`,
         );
         throw error;

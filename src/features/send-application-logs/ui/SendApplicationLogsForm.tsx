@@ -2,10 +2,18 @@ import { FC, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { AnalyticsService, Logger, MixEvents } from '@shared/lib';
-import { SubmitButton, Box, Text, Center, ActivityIndicator } from '@shared/ui';
+import {
+  AnalyticsService,
+  MixEvents,
+} from '@app/shared/lib/analytics/AnalyticsService';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
+import { Box } from '@app/shared/ui/base';
+import { Center } from '@app/shared/ui/Center';
+import { SubmitButton } from '@app/shared/ui/SubmitButton';
+import { Text } from '@app/shared/ui/Text';
 
-const SendApplicationLogsForm: FC = () => {
+export const SendApplicationLogsForm: FC = () => {
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +24,7 @@ const SendApplicationLogsForm: FC = () => {
 
     AnalyticsService.track(MixEvents.UploadLogsPressed);
 
-    const result = await Logger.send();
+    const result = await getDefaultLogger().send();
 
     if (result) {
       AnalyticsService.track(MixEvents.UploadedLogsSuccessfully);
@@ -78,5 +86,3 @@ const SendApplicationLogsForm: FC = () => {
     </>
   );
 };
-
-export default SendApplicationLogsForm;

@@ -4,35 +4,38 @@ import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { NotificationModel } from '@app/entities/notification';
-import { LogTrigger } from '@app/shared/api';
+import { Applet } from '@app/entities/applet/lib/types';
+import {
+  selectAppletsEntityProgressions,
+  selectEntityResponseTimes,
+} from '@app/entities/applet/model/selectors';
+import { AppletList } from '@app/entities/applet/ui/AppletList';
+import { selectFirstName } from '@app/entities/identity/model/selectors';
+import { getDefaultNotificationRefreshService } from '@app/entities/notification/model/notificationRefreshServiceInstance';
+import { useAutomaticRefreshOnMount } from '@app/features/applets-refresh/model/hooks/useAutomaticRefreshOnMount';
+import { AppletsRefresh } from '@app/features/applets-refresh/ui/AppletsRefresh';
+import { LogTrigger } from '@app/shared/api/services/INotificationService';
 import {
   AnalyticsService,
-  Logger,
   MixEvents,
   MixProperties,
-  useAppSelector,
-  useOnFocus,
-} from '@app/shared/lib';
-import { UploadRetryBanner } from '@app/widgets/survey';
-import { Applet, AppletList, AppletModel } from '@entities/applet';
-import { IdentityModel } from '@entities/identity';
-import { AppletsRefresh, AppletsRefreshModel } from '@features/applets-refresh';
-import {
-  Box,
-  ImageBackground,
-  Text,
-  TouchableOpacity,
-  XStack,
-} from '@shared/ui';
+} from '@app/shared/lib/analytics/AnalyticsService';
+import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { Box, XStack } from '@app/shared/ui/base';
+import { ImageBackground } from '@app/shared/ui/ImageBackground';
+import { Text } from '@app/shared/ui/Text';
+import { TouchableOpacity } from '@app/shared/ui/TouchableOpacity';
+import { UploadRetryBanner } from '@app/widgets/survey/ui/UploadRetryBanner';
 
 type SelectedApplet = Pick<Applet, 'id' | 'displayName'>;
 
-const AppletsScreen: FC = () => {
+export const AppletsScreen: FC = () => {
   const { t } = useTranslation();
   const { navigate, setOptions } = useNavigation();
 
-  const userFirstName = useAppSelector(IdentityModel.selectors.selectFirstName);
+  const userFirstName = useAppSelector(selectFirstName);
 
   useLayoutEffect(() => {
     if (userFirstName) {
@@ -46,13 +49,9 @@ const AppletsScreen: FC = () => {
 
   const queryClient = useQueryClient();
 
-  const progressions = useAppSelector(
-    AppletModel.selectors.selectAppletsEntityProgressions,
-  );
+  const progressions = useAppSelector(selectAppletsEntityProgressions);
 
-  const responseTimes = useAppSelector(
-    AppletModel.selectors.selectEntityResponseTimes,
-  );
+  const responseTimes = useAppSelector(selectEntityResponseTimes);
 
   const navigateAppletDetails: (applet: SelectedApplet) => void = useCallback(
     ({ id, displayName }) => {
@@ -65,14 +64,16 @@ const AppletsScreen: FC = () => {
     [navigate],
   );
 
-  AppletsRefreshModel.useAutomaticRefreshOnMount(async () => {
-    await NotificationModel.NotificationRefreshService.refresh(
+  useAutomaticRefreshOnMount(async () => {
+    await getDefaultNotificationRefreshService().refresh(
       queryClient,
       progressions,
       responseTimes,
       LogTrigger.FirstAppRun,
     );
-    Logger.send().catch(err => Logger.error(err as never));
+    getDefaultLogger()
+      .send()
+      .catch(err => getDefaultLogger().error(err as never));
   });
 
   return (
@@ -113,5 +114,3 @@ const AboutAppLink = () => {
     </XStack>
   );
 };
-
-export default AppletsScreen;

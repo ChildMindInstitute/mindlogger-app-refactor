@@ -8,7 +8,11 @@ import { BaseError } from '../types';
 
 type QueryKey = [string, Record<string, unknown>?];
 
-const useBaseQuery = <TQueryFnData, TError = BaseError, TData = TQueryFnData>(
+export const useBaseQuery = <
+  TQueryFnData,
+  TError = BaseError,
+  TData = TQueryFnData,
+>(
   key: QueryKey,
   queryFn: QueryFunction<TQueryFnData, QueryKey>,
   options?: Omit<
@@ -35,5 +39,3 @@ const useBaseQuery = <TQueryFnData, TError = BaseError, TData = TQueryFnData>(
     },
   } as unknown as typeof options);
 };
-
-export default useBaseQuery;

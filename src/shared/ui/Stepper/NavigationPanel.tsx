@@ -1,10 +1,10 @@
 import { Children, PropsWithChildren, ReactNode, useMemo } from 'react';
 
-import { BoxProps, XStack, YStack } from '@shared/ui';
+import { BoxProps, XStack, YStack } from '../base';
 
 type Props = PropsWithChildren<BoxProps>;
 
-function NavigationPanel({ children, ...styledProps }: Props) {
+export function NavigationPanel({ children, ...styledProps }: Props) {
   const buttons = useMemo(() => {
     const allChildren: ReactNode[] = [];
 
@@ -31,5 +31,3 @@ function NavigationPanel({ children, ...styledProps }: Props) {
     </XStack>
   );
 }
-
-export default NavigationPanel;

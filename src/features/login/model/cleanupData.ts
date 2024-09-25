@@ -1,17 +1,22 @@
-import { Logger } from '@shared/lib';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
-import { clearEntityRecordStorages, clearUploadQueueStorage } from '../lib';
+import { clearEntityRecordStorages } from '../lib/clearEntityRecordStorages';
+import { clearUploadQueueStorage } from '../lib/clearUploadQueueStorage';
 
 export async function cleanupData() {
-  Logger.info('[cleanupData] Processing cleanup upon another user login');
+  getDefaultLogger().info(
+    '[cleanupData] Processing cleanup upon another user login',
+  );
 
   try {
     await clearEntityRecordStorages();
     clearUploadQueueStorage();
 
-    Logger.info('[cleanupData] Cleanup operation completed successfully');
+    getDefaultLogger().info(
+      '[cleanupData] Cleanup operation completed successfully',
+    );
   } catch (error) {
-    Logger.error(
+    getDefaultLogger().error(
       `[cleanupData] Processing cleanup failed with error: ${error}`,
     );
   }

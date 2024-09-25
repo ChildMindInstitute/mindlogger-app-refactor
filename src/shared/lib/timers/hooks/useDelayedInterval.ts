@@ -1,18 +1,16 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-import {
-  Logger,
-  useInterval,
-  useOnForegroundDebounced,
-  useOnceRef,
-} from '../../';
-import useOnBackground from '../../hooks/useOnBackground';
+import { useInterval } from './useInterval';
+import { useOnBackground } from '../../hooks/useOnBackground';
+import { useOnceRef } from '../../hooks/useOnceRef';
+import { useOnForegroundDebounced } from '../../hooks/useOnForegroundDebounced';
+import { getDefaultLogger } from '../../services/loggerInstance';
 
 const Interval = 60000;
 
 const Delay = 5000;
 
-const useDelayedInterval = (onTick: () => void) => {
+export const useDelayedInterval = (onTick: () => void) => {
   const onTickRef = useRef(onTick);
   onTickRef.current = onTick;
 
@@ -22,7 +20,7 @@ const useDelayedInterval = (onTick: () => void) => {
 
   const { start, stop } = useInterval(
     () => {
-      Logger.log('[useDelayedInterval:useInterval] Tick');
+      getDefaultLogger().log('[useDelayedInterval:useInterval] Tick');
       onIntervalPass();
     },
     Interval,
@@ -37,13 +35,15 @@ const useDelayedInterval = (onTick: () => void) => {
     }
 
     delayTimeoutRef.current = setTimeout(() => {
-      Logger.log('[useDelayedInterval:startWithDelay] Timer started');
+      getDefaultLogger().log(
+        '[useDelayedInterval:startWithDelay] Timer started',
+      );
       start();
     }, Delay);
   }, [start]);
 
   const onAppStart = useCallback(() => {
-    Logger.log('[useDelayedInterval:onAppStart] Timer stopped');
+    getDefaultLogger().log('[useDelayedInterval:onAppStart] Timer stopped');
 
     stop();
 
@@ -51,7 +51,7 @@ const useDelayedInterval = (onTick: () => void) => {
   }, [startWithDelay, stop]);
 
   const onForeground = useCallback(() => {
-    Logger.log('[useDelayedInterval:onForeground] Timer stopped');
+    getDefaultLogger().log('[useDelayedInterval:onForeground] Timer stopped');
 
     stop();
 
@@ -59,7 +59,7 @@ const useDelayedInterval = (onTick: () => void) => {
   }, [startWithDelay, stop]);
 
   const onBackground = useCallback(() => {
-    Logger.log('[useDelayedInterval:onBackground] Timer stopped');
+    getDefaultLogger().log('[useDelayedInterval:onBackground] Timer stopped');
 
     if (delayTimeoutRef.current) {
       clearTimeout(delayTimeoutRef.current);
@@ -85,5 +85,3 @@ const useDelayedInterval = (onTick: () => void) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
-
-export default useDelayedInterval;

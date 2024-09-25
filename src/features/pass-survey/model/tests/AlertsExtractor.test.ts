@@ -1,5 +1,5 @@
-import { ILogger } from '@app/shared/lib';
-import { Item } from '@app/shared/ui';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { Item } from '@app/shared/ui/survey/CheckBox/types';
 
 import {
   fillAlertsForSlider,
@@ -14,16 +14,16 @@ import {
   getStackedRadioResponse,
   getStackedSliderItem,
 } from './testHelpers';
+import { Answers } from '../../lib/hooks/useActivityStorageRecord';
 import {
-  AnswerAlerts,
-  Answers,
   PipelineItem,
   RadioResponse,
   SliderResponse,
   StackedCheckboxResponse,
   StackedRadioResponse,
   StackedSliderResponse,
-} from '../../lib';
+} from '../../lib/types/payload';
+import { AnswerAlerts } from '../../lib/types/summary';
 import { AlertsExtractor } from '../AlertsExtractor';
 
 jest.mock('@app/shared/lib/constants', () => ({

@@ -13,7 +13,7 @@ import {
   progressLine,
   Shape,
 } from './LineSketcher';
-import useDrawingGesture from './useDrawingGesture';
+import { useDrawingGesture } from './useDrawingGesture';
 
 export type SketchCanvasRef = {
   clear: () => void;
@@ -28,7 +28,7 @@ type Props = {
 
 const MAX_POINTS_PER_LINE = 50;
 
-const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
+export const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   const { initialLines, onStrokeStart, onStrokeChanged, onStrokeEnd } = props;
 
   const [paths, setPaths] = useState<Array<SkPath>>(() =>
@@ -196,5 +196,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-export default SketchCanvas;

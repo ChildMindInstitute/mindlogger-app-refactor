@@ -10,6 +10,4 @@ type ActivityIdentifiers = {
   targetSubjectId: string | null;
 };
 
-const ActivityIdentityContext = createContext({} as ActivityIdentifiers);
-
-export default ActivityIdentityContext;
+export const ActivityIdentityContext = createContext({} as ActivityIdentifiers);

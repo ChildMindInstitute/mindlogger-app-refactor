@@ -1,9 +1,9 @@
 import { MMKV } from 'react-native-mmkv';
 
-import AsyncStorage from './AsyncStorage';
-import SyncStorage from './SyncStorage';
+import { AsyncStorage } from './AsyncStorage';
+import { SyncStorage } from './SyncStorage';
 import { STORE_ENCRYPTION_KEY } from '../constants';
-import { throwError } from '../services';
+import { throwError } from '../services/errorService';
 
 export function createSecureStorage(id: string) {
   if (!STORE_ENCRYPTION_KEY) {

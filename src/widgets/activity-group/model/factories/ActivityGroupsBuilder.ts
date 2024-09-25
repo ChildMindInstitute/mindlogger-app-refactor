@@ -1,16 +1,18 @@
-import { ActivityListItem } from '@entities/activity';
+import { ActivityListItem } from '@app/entities/activity/lib/types/activityListItem';
 
 import { AvailableGroupEvaluator } from './AvailableGroupEvaluator';
 import { GroupUtility } from './GroupUtility';
 import { ListItemsFactory } from './ListItemsFactory';
 import { ScheduledGroupEvaluator } from './ScheduledGroupEvaluator';
 import {
-  EventEntity,
   ActivityGroupType,
   ActivityGroupTypeNames,
   ActivityListGroup,
+} from '../../lib/types/activityGroup';
+import {
+  EventEntity,
   GroupsBuildContext,
-} from '../../lib';
+} from '../../lib/types/activityGroupsBuilder';
 
 export interface IActivityGroupsBuilder {
   buildInProgress: (

@@ -1,4 +1,4 @@
-import { ActivityDto } from '@shared/api';
+import { ActivityDto } from '@app/shared/api/services/IActivityService';
 
 export const abTrailsInput: ActivityDto = {
   id: '64e32047-22d8-1858-d681-b9d600000000',

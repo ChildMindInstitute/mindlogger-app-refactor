@@ -1,8 +1,8 @@
 import { FileSystem } from 'react-native-file-access';
 
+import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userPrivateKeyRecord';
 import { AnswerService } from '@shared/api';
 
-import { UserPrivateKeyRecord } from '../../../../identity';
 import AnswersUploadService from '../AnswersUploadService';
 import MediaFilesCleaner from '../MediaFilesCleaner';
 
@@ -410,7 +410,7 @@ describe('AnswersUploadService', () => {
       userIdentifier: 'user123',
     };
 
-    UserPrivateKeyRecord.get = jest.fn().mockReturnValueOnce(null);
+    getDefaultUserPrivateKeyRecord().get = jest.fn().mockReturnValueOnce(null);
 
     expect(() => AnswersUploadService.encryptAnswers(data)).toThrow(
       'Error occurred while preparing answers',

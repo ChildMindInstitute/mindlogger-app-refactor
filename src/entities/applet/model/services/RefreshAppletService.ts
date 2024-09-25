@@ -6,28 +6,33 @@ import {
   AppletAssignmentsResponse,
   AppletDetailsResponse,
   AppletDto,
-  AppletEventsResponse,
-  toAxiosResponse,
-} from '@app/shared/api';
+  IAppletService,
+} from '@app/shared/api/services/IAppletService';
 import {
-  ILogger,
-  ImageUrl,
-  getActivityDetailsKey,
+  AppletEventsResponse,
+  IEventsService,
+} from '@app/shared/api/services/IEventsService';
+import { toAxiosResponse } from '@app/shared/api/utils';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { ImageUrl } from '@app/shared/lib/types/url';
+import {
   getAppletDetailsKey,
+  getActivityDetailsKey,
+  getEventsKey,
   getAssignmentsKey,
   getDataFromQuery,
-  getEventsKey,
-} from '@app/shared/lib';
+} from '@app/shared/lib/utils/reactQueryHelpers';
 
 import { CollectRemoteCompletionsResult } from './ProgressDataCollector';
 import { IAppletProgressSyncService } from './ProgressSyncService';
-import RefreshDataCollector, {
+import {
   CollectAllAppletAssignmentsResult,
   CollectAllAppletEventsResult,
   CollectAppletInternalsResult,
   IRefreshDataCollector,
+  RefreshDataCollector,
 } from './RefreshDataCollector';
-import RefreshOptimization from './RefreshOptimization';
+import { RefreshOptimization } from './RefreshOptimization';
 
 export interface IRefreshAppletService {
   refreshApplet(
@@ -39,7 +44,7 @@ export interface IRefreshAppletService {
   ): Promise<void>;
 }
 
-class RefreshAppletService implements IRefreshAppletService {
+export class RefreshAppletService implements IRefreshAppletService {
   private queryClient: QueryClient;
   private logger: ILogger;
   private showWrongUrlLogs: boolean;
@@ -50,11 +55,17 @@ class RefreshAppletService implements IRefreshAppletService {
     queryClient: QueryClient,
     logger: ILogger,
     appletProgressSyncService: IAppletProgressSyncService,
+    appletService: IAppletService,
+    eventsService: IEventsService,
   ) {
     this.queryClient = queryClient;
     this.logger = logger;
     this.showWrongUrlLogs = false;
-    this.refreshDataCollector = new RefreshDataCollector(logger);
+    this.refreshDataCollector = new RefreshDataCollector(
+      logger,
+      appletService,
+      eventsService,
+    );
     this.appletProgressSyncService = appletProgressSyncService;
   }
 
@@ -269,5 +280,3 @@ class RefreshAppletService implements IRefreshAppletService {
     }
   }
 }
-
-export default RefreshAppletService;

@@ -1,10 +1,14 @@
 import { useEffect } from 'react';
 import { useRef } from 'react';
 
-import { HourMinute, getMsFromHours, getMsFromMinutes } from '@app/shared/lib';
-import { AppTimer } from '@app/shared/lib';
+import { AppTimer } from '@app/shared/lib/timers/AppTimer';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
+import {
+  getMsFromHours,
+  getMsFromMinutes,
+} from '@app/shared/lib/utils/dateTime';
 
-import InterimInActionPostponer from '../services/InterimInActionPostponer';
+import { InterimInActionPostponer } from '../services/InterimInActionPostponer';
 
 type UseTimerInput = {
   onFinish: () => void;
@@ -12,7 +16,7 @@ type UseTimerInput = {
   timerHourMinute?: HourMinute | null;
 };
 
-const useEventTimer = (input: UseTimerInput) => {
+export const useEventTimer = (input: UseTimerInput) => {
   const { onFinish, entityStartedAt, timerHourMinute } = input;
 
   const durationBySettings = timerHourMinute
@@ -64,5 +68,3 @@ const useEventTimer = (input: UseTimerInput) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
-
-export default useEventTimer;

@@ -9,7 +9,7 @@ type Props = {
   tokenLogger?: boolean;
 } & AccessibilityProps;
 
-export default ({
+export const SurveyIcon = ({
   color,
   size = 45,
   tokenLogger = false,

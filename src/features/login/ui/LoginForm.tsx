@@ -5,38 +5,44 @@ import { useNavigation } from '@react-navigation/native';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { SystemRecord } from '@app/shared/lib/records';
-import { IdentityModel, useLoginMutation } from '@entities/identity';
-import { UserInfoRecord, UserPrivateKeyRecord } from '@entities/identity/lib';
-import { SessionModel } from '@entities/session';
+import { useLoginMutation } from '@app/entities/identity/api/hooks/useLoginMutation';
+import { getDefaultUserInfoRecord } from '@app/entities/identity/lib/userInfoRecord';
+import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userPrivateKeyRecordInstance';
+import { selectUserId } from '@app/entities/identity/model/selectors';
+import { identityActions } from '@app/entities/identity/model/slice';
+import { storeSession } from '@app/entities/session/model/operations';
 import {
   AnalyticsService,
-  cleanUpAction,
-  executeIfOnline,
   MixEvents,
-  useAppDispatch,
-  useAppForm,
-  useAppSelector,
-  useFormChanges,
-  FeatureFlagsService,
-} from '@shared/lib';
-import { encryption } from '@shared/lib';
-import { YStack, Box, BoxProps, SubmitButton, Center, Link } from '@shared/ui';
-import { ErrorMessage, InputField } from '@shared/ui/form';
+} from '@app/shared/lib/analytics/AnalyticsService';
+import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encryptionManagerInstance';
+import { FeatureFlagsService } from '@app/shared/lib/featureFlags/FeatureFlagsService';
+import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
+import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
+import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
+import { cleanUpAction } from '@app/shared/lib/redux-state/actions';
+import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
+import { Box, BoxProps, YStack } from '@app/shared/ui/base';
+import { Center } from '@app/shared/ui/Center';
+import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
+import { InputField } from '@app/shared/ui/form/InputField';
+import { Link } from '@app/shared/ui/Link';
+import { SubmitButton } from '@app/shared/ui/SubmitButton';
 
-import { LoginFormSchema } from '../model';
 import { cleanupData } from '../model/cleanupData';
+import { LoginFormSchema } from '../model/LoginFormSchema';
 
 type Props = {
   onLoginSuccess: () => void;
 } & BoxProps;
 
-const LoginForm: FC<Props> = props => {
+export const LoginForm: FC<Props> = props => {
   const { t } = useTranslation();
   const { navigate } = useNavigation();
 
   const dispatch = useAppDispatch();
-  const userId = useAppSelector(IdentityModel.selectors.selectUserId);
+  const userId = useAppSelector(selectUserId);
 
   const navigateToForgotPassword = () => {
     navigate('ForgotPassword');
@@ -60,17 +66,18 @@ const LoginForm: FC<Props> = props => {
         dispatch(cleanUpAction());
       }
 
-      const userPrivateKey = encryption.getPrivateKey(userParams);
+      const userPrivateKey =
+        getDefaultEncryptionManager().getPrivateKey(userParams);
 
-      UserPrivateKeyRecord.set(userPrivateKey);
+      getDefaultUserPrivateKeyRecord().set(userPrivateKey);
 
       const { user, token: session } = response.data.result;
 
-      dispatch(IdentityModel.actions.onAuthSuccess(user));
+      dispatch(identityActions.onAuthSuccess(user));
 
-      UserInfoRecord.setEmail(user.email);
+      getDefaultUserInfoRecord().setEmail(user.email);
 
-      SessionModel.storeSession(session);
+      storeSession(session);
 
       AnalyticsService.login(user.id).then(() => {
         AnalyticsService.track(MixEvents.LoginSuccessful);
@@ -91,7 +98,7 @@ const LoginForm: FC<Props> = props => {
       executeIfOnline(() => {
         login({
           ...data,
-          deviceId: SystemRecord.getDeviceId(),
+          deviceId: getDefaultSystemRecord().getDeviceId(),
         });
       });
     },
@@ -159,5 +166,3 @@ const LoginForm: FC<Props> = props => {
     </Box>
   );
 };
-
-export default LoginForm;

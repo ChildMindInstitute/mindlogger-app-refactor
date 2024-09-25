@@ -2,11 +2,11 @@ import { useMemo } from 'react';
 
 import { QueryKey, useQueryClient } from '@tanstack/react-query';
 
-import { AppletsResponse } from '@app/shared/api';
+import { AppletsResponse } from '@app/shared/api/services/IAppletService';
 
-import { getDataFromQuery } from '../utils';
+import { getDataFromQuery } from '../utils/reactQueryHelpers';
 
-const useCacheHasData = () => {
+export const useCacheHasData = () => {
   const queryClient = useQueryClient();
 
   return useMemo(
@@ -20,5 +20,3 @@ const useCacheHasData = () => {
     [queryClient],
   );
 };
-
-export default useCacheHasData;

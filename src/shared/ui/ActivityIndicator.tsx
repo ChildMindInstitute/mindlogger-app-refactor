@@ -1,11 +1,11 @@
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator as RNActivityIndicator } from 'react-native';
 
 import { styled, setupReactNative } from '@tamagui/core';
 
-setupReactNative(ActivityIndicator);
+setupReactNative(RNActivityIndicator);
 
-export default styled(
-  ActivityIndicator,
+export const ActivityIndicator = styled(
+  RNActivityIndicator,
   {
     name: 'ActivityIndicator',
     testID: 'loader',

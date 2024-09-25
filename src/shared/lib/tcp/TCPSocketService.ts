@@ -1,10 +1,12 @@
 import TcpSocket from 'react-native-tcp-socket';
 
-import { TCPSocketEmitter } from './TCPSocketEmitter';
+import { ITCPSocketEmitter } from './ITCPSocketEmitter';
+import { ITCPSocketService } from './ITCPSocketService';
 
-function TCPSocketService() {
+export function TCPSocketService(
+  tcpSocketEmitter: ITCPSocketEmitter,
+): ITCPSocketService {
   let socket: TcpSocket.Socket | null = null;
-
   const createConnection = (host: string, port: number) => {
     if (socket) {
       disconnect();
@@ -13,19 +15,19 @@ function TCPSocketService() {
     socket = TcpSocket.createConnection({ host, port }, () => {});
 
     socket.on('connect', () => {
-      TCPSocketEmitter.emit('tcp-socket-service:connected');
+      tcpSocketEmitter.emit('tcp-socket-service:connected');
     });
 
     socket.on('error', error => {
       socket?.removeAllListeners();
       disconnect();
-      TCPSocketEmitter.emit('tcp-socket-service:error', error);
+      tcpSocketEmitter.emit('tcp-socket-service:error', error);
     });
 
     socket.on('close', () => {
       socket?.removeAllListeners();
       disconnect();
-      TCPSocketEmitter.emit('tcp-socket-service:closed');
+      tcpSocketEmitter.emit('tcp-socket-service:closed');
     });
   };
 
@@ -55,5 +57,3 @@ function TCPSocketService() {
     getSocket,
   };
 }
-
-export default TCPSocketService();

@@ -1,14 +1,17 @@
 import {
   AppletDetailsDto,
   AppletDto,
+} from '@app/shared/api/services/IAppletService';
+import {
   CompletedEntityDto,
   EntitiesCompletionsDto,
-} from '@app/shared/api';
-import { buildDateTimeFromDto, ILogger } from '@app/shared/lib';
+} from '@app/shared/api/services/IEventsService';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { buildDateTimeFromDto } from '@app/shared/lib/utils/dateTime';
 
-import { AppletDetails } from '../../lib';
+import { AppletDetails } from '../../lib/types';
 import { mapAppletDetailsFromDto } from '../mappers';
-import { actions, UpsertEntityProgressionPayload } from '../slice';
+import { appletActions, UpsertEntityProgressionPayload } from '../slice';
 
 export interface IAppletProgressSyncService {
   sync(
@@ -17,7 +20,7 @@ export interface IAppletProgressSyncService {
   ): Promise<void>;
 }
 
-class ProgressSyncService implements IAppletProgressSyncService {
+export class ProgressSyncService implements IAppletProgressSyncService {
   private logger: ILogger;
   private dispatch: AppDispatch;
   private state: RootState;
@@ -68,7 +71,7 @@ class ProgressSyncService implements IAppletProgressSyncService {
       ),
     };
 
-    this.dispatch(actions.upsertEntityProgression(payload));
+    this.dispatch(appletActions.upsertEntityProgression(payload));
     this.logger.log(
       `[ProgressSyncService.upsertEntityProgression]: Upserted progression ${JSON.stringify(payload)}`,
     );
@@ -90,5 +93,3 @@ class ProgressSyncService implements IAppletProgressSyncService {
     }
   }
 }
-
-export default ProgressSyncService;

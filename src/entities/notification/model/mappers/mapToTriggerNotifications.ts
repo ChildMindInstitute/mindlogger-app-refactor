@@ -1,12 +1,10 @@
 import notifee, { TriggerType, AndroidImportance } from '@notifee/react-native';
 
-import { colors } from '@shared/lib';
+import { colors } from '@app/shared/lib/constants/colors';
 
-import {
-  ANDROID_DEFAULT_CHANNEL_ID,
-  LocalEventTriggerNotification,
-  NotificationDescriber,
-} from '../../lib';
+import { ANDROID_DEFAULT_CHANNEL_ID } from '../../lib/constants';
+import { NotificationDescriber } from '../../lib/types/notificationBuilder';
+import { LocalEventTriggerNotification } from '../../lib/types/notifications';
 
 export async function mapToTriggerNotifications(
   notifications: NotificationDescriber[],

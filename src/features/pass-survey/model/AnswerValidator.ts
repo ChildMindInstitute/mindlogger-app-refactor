@@ -1,13 +1,21 @@
-import { Item } from '@app/shared/ui';
-import { ConditionalLogicModel } from '@entities/conditional-logic';
-
 import {
-  Answers,
+  doesNotIncludeValue,
+  includesValue,
+  isBetweenValues,
+  isEqualToValue,
+  isGreaterThan,
+  isLessThan,
+  isOutsideOfValues,
+} from '@app/entities/conditional-logic/model/conditions';
+import { Item } from '@app/shared/ui/survey/CheckBox/types';
+
+import { Answers } from '../lib/hooks/useActivityStorageRecord';
+import {
+  ParagraphTextResponse,
   PipelineItem,
   RadioResponse,
   TimeRangeResponse,
-  ParagraphTextResponse,
-} from '../lib';
+} from '../lib/types/payload';
 
 type AnswerValidatorArgs = {
   items: PipelineItem[];
@@ -28,7 +36,9 @@ export interface IAnswerValidator {
   isValidAnswer(): boolean;
 }
 
-function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator {
+export function AnswerValidator(
+  params?: AnswerValidatorArgs,
+): IAnswerValidator {
   const { items, answers, step = 0 } = params ?? {};
   const currentPipelineItem = items?.[step];
   const currentAnswer = answers?.[step];
@@ -47,38 +57,38 @@ function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator {
     isBetweenValues(min: number, max: number) {
       const answer = currentAnswer?.answer as Maybe<number>;
 
-      return ConditionalLogicModel.isBetweenValues(answer, min, max);
+      return isBetweenValues(answer, min, max);
     },
 
     isOutsideOfValues(min: number, max: number) {
       const answer = currentAnswer?.answer as Maybe<number>;
 
-      return ConditionalLogicModel.isOutsideOfValues(answer, min, max);
+      return isOutsideOfValues(answer, min, max);
     },
 
     isEqualToValue(value: any) {
       const answer = currentAnswer?.answer as Maybe<unknown>;
 
-      return ConditionalLogicModel.isEqualToValue(answer, value);
+      return isEqualToValue(answer, value);
     },
 
     isEqualToOption(optionValue: string) {
       const answer = currentAnswer?.answer as Maybe<RadioResponse>;
       const selectedOption = answer?.value?.toString();
 
-      return ConditionalLogicModel.isEqualToValue(selectedOption, optionValue);
+      return isEqualToValue(selectedOption, optionValue);
     },
 
     isGreaterThen(value: number) {
       const answer = currentAnswer?.answer as Maybe<number>;
 
-      return ConditionalLogicModel.isGreaterThan(answer, value);
+      return isGreaterThan(answer, value);
     },
 
     isLessThen(value: number) {
       const answer = currentAnswer?.answer as Maybe<number>;
 
-      return ConditionalLogicModel.isLessThan(answer, value);
+      return isLessThan(answer, value);
     },
 
     includesOption(optionValue: string) {
@@ -86,7 +96,7 @@ function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator {
         item.value.toString(),
       );
 
-      return ConditionalLogicModel.includesValue(answer, optionValue);
+      return includesValue(answer, optionValue);
     },
 
     notIncludesOption(optionValue: string) {
@@ -94,7 +104,7 @@ function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator {
         item.value.toString(),
       );
 
-      return ConditionalLogicModel.doesNotIncludeValue(answer, optionValue);
+      return doesNotIncludeValue(answer, optionValue);
     },
     isValidAnswer() {
       switch (currentPipelineItem?.type) {
@@ -124,5 +134,3 @@ function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator {
     },
   };
 }
-
-export default AnswerValidator;

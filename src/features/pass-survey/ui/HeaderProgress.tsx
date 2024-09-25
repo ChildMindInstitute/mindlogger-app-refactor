@@ -1,8 +1,10 @@
 import { useContext } from 'react';
 
-import { range } from '@shared/lib';
-import { Box, HeaderProgressBar, ValuesContext, XStack } from '@shared/ui';
-import { useFlowStorageRecord } from '@widgets/survey';
+import { range } from '@app/shared/lib/utils/common';
+import { Box, XStack } from '@app/shared/ui/base';
+import { HeaderProgressBar } from '@app/shared/ui/HeaderProgressBar';
+import { ValuesContext } from '@app/shared/ui/Stepper/contexts';
+import { useFlowStorageRecord } from '@app/widgets/survey/lib/useFlowStorageRecord';
 
 type Props = {
   appletId: string;
@@ -25,7 +27,7 @@ const getCurrentItemProgress = (
   return 100;
 };
 
-function HeaderProgress({ appletId, eventId, flowId, targetSubjectId }: Props) {
+export function HeaderProgress({ appletId, eventId, flowId, targetSubjectId }: Props) {
   const { flowStorageRecord } = useFlowStorageRecord({
     appletId,
     eventId,
@@ -65,5 +67,3 @@ function HeaderProgress({ appletId, eventId, flowId, targetSubjectId }: Props) {
     </XStack>
   );
 }
-
-export default HeaderProgress;

@@ -1,13 +1,15 @@
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
-  ActivityPipelineType,
+  EntityProgression,
+  EntityResponseTime,
+} from '@app/abstract/lib/types/entityProgress';
+import {
   AvailabilityType,
   NotificationTriggerType,
   PeriodicityType,
-  EntityProgression,
-  EntityResponseTime,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/event';
 import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
-import { HourMinute } from '@app/shared/lib';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
 
 export type ReminderSetting = {
   activityIncomplete: number;

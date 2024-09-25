@@ -1,7 +1,8 @@
 import renderer from 'react-test-renderer';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import { DatePickerItem } from '@shared/ui';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+
+import { DatePickerItem } from '../DatePickerItem';
 
 describe('Test DatePickerItem', () => {
   it('Should render a MM/DD/YYYY placeholder when value is null', () => {

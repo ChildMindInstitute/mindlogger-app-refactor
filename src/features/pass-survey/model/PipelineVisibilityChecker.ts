@@ -1,7 +1,11 @@
-import AnswerValidator from './AnswerValidator';
-import { Answers, PipelineItem } from '../lib';
+import { AnswerValidator } from './AnswerValidator';
+import { Answers } from '../lib/hooks/useActivityStorageRecord';
+import { PipelineItem } from '../lib/types/payload';
 
-function PipelineVisibilityChecker(pipeline: PipelineItem[], answers: Answers) {
+export function PipelineVisibilityChecker(
+  pipeline: PipelineItem[],
+  answers: Answers,
+) {
   function isItemVisible(index: number) {
     if (index >= pipeline.length) {
       return false;
@@ -78,5 +82,3 @@ function PipelineVisibilityChecker(pipeline: PipelineItem[], answers: Answers) {
     isItemVisible,
   };
 }
-
-export default PipelineVisibilityChecker;

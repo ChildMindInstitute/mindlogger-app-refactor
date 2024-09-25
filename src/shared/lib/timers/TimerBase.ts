@@ -1,6 +1,6 @@
 import { AppState, NativeEventSubscription } from 'react-native';
 
-abstract class TimerBase {
+export abstract class TimerBase {
   protected listener?: NativeEventSubscription;
   protected timerId?: TimeoutId;
   hasStarted: boolean = false;
@@ -41,5 +41,3 @@ abstract class TimerBase {
     }
   }
 }
-
-export default TimerBase;

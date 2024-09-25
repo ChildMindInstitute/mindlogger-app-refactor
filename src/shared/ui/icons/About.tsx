@@ -9,7 +9,7 @@ type Props = {
   tokenLogger?: boolean;
 } & AccessibilityProps;
 
-export default ({
+export const AboutIcon = ({
   color,
   size = 45,
   tokenLogger = false,

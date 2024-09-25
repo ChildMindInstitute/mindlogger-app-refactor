@@ -1,11 +1,11 @@
 import { LogBox } from 'react-native';
 
-import { RootNavigator } from '@screens';
-
+import { RootNavigator } from '@app/screens/ui/RootNavigator';
+import { jobRunner } from '@app/shared/lib/services/jobManagement';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import localization from '@jobs/localization';
-import { Logger, jobRunner } from '@shared/lib';
 
-import { AppProvider } from './ui';
+import { AppProvider } from './ui/AppProvider';
 
 const hideIosSimulatorErrorWarningBadges = true;
 
@@ -16,7 +16,7 @@ if (hideIosSimulatorErrorWarningBadges) {
 
 jobRunner.runAll([localization]);
 
-Logger.configure();
+getDefaultLogger().configure();
 
 const App = () => {
   return (

@@ -1,27 +1,29 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { EntityPath, EntityProgression } from '@app/abstract/lib';
-import { EventModel } from '@app/entities/event';
-import { mapEventFromDto } from '@app/entities/event/model';
+import { EntityPath } from '@app/abstract/lib/types/entity';
+import { EntityProgression } from '@app/abstract/lib/types/entityProgress';
+import { mapEventFromDto } from '@app/entities/event/model/mappers';
+import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
 import {
   onActivityNotAvailable,
   onAppWasKilledOnReduxPersist,
   onCompletedToday,
   onScheduledToday,
-} from '@app/features/tap-on-notification/lib';
-import { QueryDataUtils } from '@app/shared/api';
+} from '@app/features/tap-on-notification/lib/alerts';
+import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { getNow } from '@app/shared/lib/utils/dateTime';
 import {
   getEntityProgression,
-  getNow,
-  ILogger,
   isEntityProgressionInProgress,
   isProgressionCompletedToday,
   isProgressionReadyForAutocompletion,
-  Logger,
-} from '@app/shared/lib';
-import { ActivityGroupsModel } from '@app/widgets/activity-group';
-import { GroupUtility } from '@app/widgets/activity-group/model';
-import { isCurrentActivityRecordExist } from '@app/widgets/survey';
+} from '@app/shared/lib/utils/survey/survey';
+import { AvailableGroupEvaluator } from '@app/widgets/activity-group/model/factories/AvailableGroupEvaluator';
+import { GroupUtility } from '@app/widgets/activity-group/model/factories/GroupUtility';
+import { ScheduledGroupEvaluator } from '@app/widgets/activity-group/model/factories/ScheduledGroupEvaluator';
+import { isCurrentActivityRecordExist } from '@app/widgets/survey/lib/storageHelpers';
 
 type Input = {
   entityName: string;
@@ -34,7 +36,7 @@ type InputInternal = Input & {
   callback: (result: boolean) => void;
 };
 
-const logger: ILogger = Logger;
+const logger: ILogger = getDefaultLogger();
 
 const checkEntityAvailabilityInternal = ({
   entityName,
@@ -55,7 +57,7 @@ const checkEntityAvailabilityInternal = ({
     `[checkEntityAvailability]: Checking.. Entity = "${entityName}", appletId = "${appletId}", entityId = "${entityId}", entityType = "${entityType}", eventId = "${eventId}", targetSubjectId = "${targetSubjectId || 'NULL'}"`,
   );
 
-  Logger.log(
+  logger.log(
     `[checkEntityAvailability] record = ${JSON.stringify(progression, null, 2)}`,
   );
 
@@ -94,7 +96,7 @@ const checkEntityAvailabilityInternal = ({
 
   const event = mapEventFromDto(queryUtils.getEventDto(appletId, eventId));
 
-  event.scheduledAt = EventModel.ScheduledDateCalculator.calculate(event);
+  event.scheduledAt = getDefaultScheduledDateCalculator().calculate(event);
 
   if (!event.scheduledAt) {
     logger.log(
@@ -105,11 +107,12 @@ const checkEntityAvailabilityInternal = ({
     return;
   }
 
-  const isAvailable = new ActivityGroupsModel.AvailableGroupEvaluator(
-    appletId,
-  ).isEventInGroup(event, targetSubjectId);
+  const isAvailable = new AvailableGroupEvaluator(appletId).isEventInGroup(
+    event,
+    targetSubjectId,
+  );
 
-  const isScheduled = new ActivityGroupsModel.ScheduledGroupEvaluator(
+  const isScheduled = new ScheduledGroupEvaluator(
     appletId,
     entityProgressions,
   ).isEventInGroup(event, targetSubjectId);

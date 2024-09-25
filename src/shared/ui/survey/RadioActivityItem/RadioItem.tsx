@@ -4,17 +4,14 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 
-import { colors, invertColor } from '@shared/lib';
-import {
-  XStack,
-  RadioGroup,
-  Text,
-  QuestionTooltipIcon,
-  Tooltip,
-} from '@shared/ui';
-import { Box } from '@shared/ui/base';
+import { colors } from '@app/shared/lib/constants/colors';
+import { invertColor } from '@app/shared/lib/utils/survey/survey';
 
-import RadioOption from './types';
+import { RadioOption } from './types';
+import { Box, RadioGroup, XStack } from '../../base';
+import { QuestionTooltipIcon } from '../../icons';
+import { Text } from '../../Text';
+import { Tooltip } from '../../Tooltip';
 
 type RadioLabelProps = {
   option: RadioOption;
@@ -34,7 +31,7 @@ const RadioTextContainer = styled(Box, {
   flexGrow: 1,
 });
 
-const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
+export const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
   option: { isHidden, id, text, color, image, tooltip, value },
   addTooltip,
   imageContainerVisible,
@@ -125,8 +122,6 @@ const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
     </XStack>
   );
 };
-
-export default RadioItem;
 
 const styles = StyleSheet.create({
   imageContainer: {

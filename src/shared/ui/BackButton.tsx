@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { Box, BoxProps } from '.';
+import { Box, BoxProps } from './base';
 
 type RootParamList = ReactNavigation.RootParamList;
 
@@ -17,7 +17,7 @@ type Props<RouteName extends keyof RootParamList> =
           }
     : { fallbackRoute: RouteName; fallbackParams: RootParamList[RouteName] };
 
-function BackButton<TRouteName extends keyof RootParamList>(
+export function BackButton<TRouteName extends keyof RootParamList>(
   props: PropsWithChildren<Props<TRouteName>> & BoxProps,
 ) {
   // fallbackParams is of any type here if we use object destructuring
@@ -41,5 +41,3 @@ function BackButton<TRouteName extends keyof RootParamList>(
     </Box>
   );
 }
-
-export default BackButton;

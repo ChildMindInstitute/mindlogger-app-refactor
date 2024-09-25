@@ -2,8 +2,11 @@ import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors, IS_IOS } from '@app/shared/lib';
-import { Box, Text, XStack, UserProfileIcon } from '@app/shared/ui';
+import { IS_IOS } from '@app/shared/lib/constants';
+import { colors } from '@app/shared/lib/constants/colors';
+import { Box, XStack } from '@app/shared/ui/base';
+import { UserProfileIcon } from '@app/shared/ui/icons';
+import { Text } from '@app/shared/ui/Text';
 
 import { useActivityAssignee } from '../lib/hooks/useActivityAssignee';
 import { Assignment } from '../lib/types/activityAssignment';
@@ -14,7 +17,7 @@ type Props = {
   isDisabled?: boolean;
 };
 
-const ActivityAssignmentBadge: FC<Props> = ({
+export const ActivityAssignmentBadge: FC<Props> = ({
   assignment,
   accessibilityLabel,
   isDisabled,
@@ -53,5 +56,3 @@ const ActivityAssignmentBadge: FC<Props> = ({
     </XStack>
   );
 };
-
-export default ActivityAssignmentBadge;

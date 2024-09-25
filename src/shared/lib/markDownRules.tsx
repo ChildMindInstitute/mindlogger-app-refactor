@@ -12,16 +12,12 @@ import {
 import * as mime from 'react-native-mime-types';
 import sanitizeHtml from 'sanitize-html';
 
-import {
-  Box,
-  Text,
-  AudioPlayer,
-  VideoPlayer,
-  YoutubeVideo,
-  XStack,
-} from '@shared/ui';
-
-import { colors } from './constants';
+import { colors } from './constants/colors';
+import { Box, XStack } from '../ui/base';
+import { AudioPlayer } from '../ui/survey/AudioPlayer';
+import { VideoPlayer } from '../ui/survey/VideoPlayer';
+import { YoutubeVideo } from '../ui/survey/YoutubeVideo';
+import { Text } from '../ui/Text';
 
 const { width: viewPortWidth } = Dimensions.get('window');
 const PADDING_X = 32;
@@ -247,7 +243,7 @@ const AlignmentStyles = {
   },
 } as const satisfies Record<AlignmentTag, object>;
 
-const markDownRules: RenderRules = {
+export const markDownRules: RenderRules = {
   'container_hljs-left': (node, children) => {
     return (
       <Box key={node.key} style={localStyles.alignLeftContainer} space={20}>
@@ -549,5 +545,3 @@ const getContainerAlignTag = (parents: ASTNode[]): AlignmentTag | undefined => {
 export const preprocessImageLinks = (content: string) => {
   return content?.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, '$1$2');
 };
-
-export default markDownRules;

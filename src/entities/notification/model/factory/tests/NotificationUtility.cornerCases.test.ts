@@ -1,6 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { NotificationSetting, ScheduleEvent } from '@app/entities/notification';
+import {
+  NotificationSetting,
+  ScheduleEvent,
+} from '@app/entities/notification/lib/types/notificationBuilder';
 import * as dateTimeUtils from '@shared/lib/utils/dateTime';
 
 import { NotificationUtility } from '../NotificationUtility';

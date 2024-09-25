@@ -4,7 +4,7 @@ import {
   FeatureFlagsKeys,
   FeatureFlags,
 } from '../featureFlags/FeatureFlags.types';
-import FeatureFlagsService from '../featureFlags/FeatureFlagsService';
+import { FeatureFlagsService } from '../featureFlags/FeatureFlagsService';
 
 export const useFeatureFlags = () => {
   const [flags, setFlags] = useState<Partial<FeatureFlags>>({});
@@ -39,5 +39,3 @@ export const useFeatureFlags = () => {
 
   return { featureFlags: flags };
 };
-
-export default useFeatureFlags;

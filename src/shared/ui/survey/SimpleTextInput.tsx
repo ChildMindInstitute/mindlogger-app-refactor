@@ -3,8 +3,9 @@ import { TextInputProps } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@shared/lib';
-import { Input } from '@shared/ui';
+import { colors } from '@app/shared/lib/constants/colors';
+
+import { Input } from '../Input';
 
 type Props = {
   onChange: (text: string) => void;
@@ -15,7 +16,12 @@ type Props = {
   };
 } & Omit<TextInputProps, 'value' | 'onChange'>;
 
-const SimpleTextInput: FC<Props> = ({ value, onChange, config, ...props }) => {
+export const SimpleTextInput: FC<Props> = ({
+  value,
+  onChange,
+  config,
+  ...props
+}) => {
   const { maxLength = 50, isNumeric } = config;
 
   const { t } = useTranslation();
@@ -40,5 +46,3 @@ const SimpleTextInput: FC<Props> = ({ value, onChange, config, ...props }) => {
     />
   );
 };
-
-export default SimpleTextInput;

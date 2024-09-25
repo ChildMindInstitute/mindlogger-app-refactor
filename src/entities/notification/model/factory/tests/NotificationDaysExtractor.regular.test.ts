@@ -1,6 +1,6 @@
 import { addDays, addMonths, addWeeks, subDays } from 'date-fns';
 
-import { PeriodicityType } from '@app/abstract/lib';
+import { PeriodicityType } from '@app/abstract/lib/types/event';
 
 import { addTime, getLoggerMock } from './testHelpers';
 import { NotificationDaysExtractor } from '../NotificationDaysExtractor';

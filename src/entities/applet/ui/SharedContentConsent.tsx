@@ -2,13 +2,14 @@ import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { useAppDispatch, useAppSelector } from '@app/shared/lib';
-import { YStack, Text, BoxProps } from '@app/shared/ui';
+import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
+import { BoxProps, YStack } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 
-import ConsentCheckBox from './ConsentCheckBox';
-import { onDataSharingConsentDetails } from '../lib';
-import { actions } from '../model';
+import { ConsentCheckBox } from './ConsentCheckBox';
+import { onDataSharingConsentDetails } from '../lib/alerts';
 import { selectAppletConsents } from '../model/selectors';
+import { appletActions } from '../model/slice';
 
 type Props = {
   appletId: string;
@@ -29,7 +30,7 @@ const Public = () => {
   );
 };
 
-function SharedContentConsent({ appletId, ...boxProps }: Props) {
+export function SharedContentConsent({ appletId, ...boxProps }: Props) {
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
@@ -40,7 +41,7 @@ function SharedContentConsent({ appletId, ...boxProps }: Props) {
 
   const toggleShareConsent = () => {
     dispatch(
-      actions.shareConsentChanged({
+      appletActions.shareConsentChanged({
         appletId,
         value: !consents?.shareToPublic,
       }),
@@ -49,7 +50,7 @@ function SharedContentConsent({ appletId, ...boxProps }: Props) {
 
   const toggleMediaConsent = () => {
     dispatch(
-      actions.mediaConsentChanged({
+      appletActions.mediaConsentChanged({
         appletId,
         value: !consents?.shareMediaToPublic,
       }),
@@ -81,5 +82,3 @@ function SharedContentConsent({ appletId, ...boxProps }: Props) {
     </YStack>
   );
 }
-
-export default SharedContentConsent;

@@ -1,10 +1,7 @@
-import useUserActionCreator from './useUserActionCreator';
-import {
-  ActivityState,
-  PipelineItemResponse,
-  SetAnswerAction,
-  UserAction,
-} from '../../lib';
+import { useUserActionCreator } from './useUserActionCreator';
+import { ActivityState } from '../../lib/hooks/useActivityStorageRecord';
+import { PipelineItemResponse } from '../../lib/types/payload';
+import { SetAnswerAction, UserAction } from '../../lib/types/userAction';
 
 type Args = {
   activityId: string;
@@ -18,7 +15,7 @@ const ITEMS_TO_UPDATE_USER_ACTION = [
   'AbTest',
 ];
 
-function useUserActionManager({ activityId, activityState }: Args) {
+export function useUserActionManager({ activityId, activityState }: Args) {
   const userActionCreator = useUserActionCreator({
     activityId,
     activityState,
@@ -117,5 +114,3 @@ function useUserActionManager({ activityId, activityState }: Args) {
     updateUserActionsWithAdditionalAnswer,
   };
 }
-
-export default useUserActionManager;

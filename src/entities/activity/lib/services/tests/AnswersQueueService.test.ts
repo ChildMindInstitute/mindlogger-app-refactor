@@ -1,7 +1,17 @@
 /* eslint-disable no-nested-ternary */
+import { MMKV } from 'react-native-mmkv';
+
 import { AnswersQueueService, UploadItem } from '../AnswersQueueService';
 
 const notifyMock = { notify: () => {} };
+
+const storageMock = {
+  addOnValueChangedListener: jest.fn(),
+  getAllKeys: jest.fn(),
+  getString: jest.fn(),
+  set: jest.fn(),
+  delete: jest.fn(),
+} as unknown as MMKV;
 
 const getAllKeysMock = jest.fn();
 const getStringMock = jest.fn();
@@ -38,7 +48,7 @@ describe('Test AnswersQueueService', () => {
       } as UploadItem),
     );
 
-    const uploadService = new AnswersQueueService(notifyMock);
+    const uploadService = new AnswersQueueService(notifyMock, storageMock);
 
     const result = uploadService.pick();
 
@@ -50,7 +60,7 @@ describe('Test AnswersQueueService', () => {
   it('Should pick null when no keys', () => {
     getAllKeysMock.mockReturnValue([]);
 
-    const uploadService = new AnswersQueueService(notifyMock);
+    const uploadService = new AnswersQueueService(notifyMock, storageMock);
 
     const result = uploadService.pick();
 
@@ -62,7 +72,7 @@ describe('Test AnswersQueueService', () => {
   it('Should enqueue an object when some keys exist', () => {
     getAllKeysMock.mockReturnValue(['10', '15', '7']);
 
-    const uploadService = new AnswersQueueService(notifyMock);
+    const uploadService = new AnswersQueueService(notifyMock, storageMock);
 
     uploadService.enqueue({
       input: {
@@ -81,7 +91,7 @@ describe('Test AnswersQueueService', () => {
   it('Should enqueue an object when no keys', () => {
     getAllKeysMock.mockReturnValue([]);
 
-    const uploadService = new AnswersQueueService(notifyMock);
+    const uploadService = new AnswersQueueService(notifyMock, storageMock);
 
     uploadService.enqueue({
       input: {
@@ -100,7 +110,7 @@ describe('Test AnswersQueueService', () => {
   it('Should dequeue an object when some keys exist', () => {
     getAllKeysMock.mockReturnValue(['10', '15', '7']);
 
-    const uploadService = new AnswersQueueService(notifyMock);
+    const uploadService = new AnswersQueueService(notifyMock, storageMock);
 
     uploadService.dequeue();
 
@@ -112,7 +122,7 @@ describe('Test AnswersQueueService', () => {
   it('Should not dequeue an object when no keys', () => {
     getAllKeysMock.mockReturnValue([]);
 
-    const uploadService = new AnswersQueueService(notifyMock);
+    const uploadService = new AnswersQueueService(notifyMock, storageMock);
 
     uploadService.dequeue();
 
@@ -135,7 +145,7 @@ describe('Test AnswersQueueService', () => {
       } as UploadItem),
     );
 
-    const uploadService = new AnswersQueueService(notifyMock);
+    const uploadService = new AnswersQueueService(notifyMock, storageMock);
 
     uploadService.swap();
 
@@ -150,7 +160,7 @@ describe('Test AnswersQueueService', () => {
   it('Should not swap when only one key exist', () => {
     getAllKeysMock.mockReturnValue(['10']);
 
-    const uploadService = new AnswersQueueService(notifyMock);
+    const uploadService = new AnswersQueueService(notifyMock, storageMock);
 
     uploadService.swap();
 
@@ -160,7 +170,7 @@ describe('Test AnswersQueueService', () => {
   it('Should not swap when no keys', () => {
     getAllKeysMock.mockReturnValue([]);
 
-    const uploadService = new AnswersQueueService(notifyMock);
+    const uploadService = new AnswersQueueService(notifyMock, storageMock);
 
     uploadService.swap();
 
@@ -170,7 +180,7 @@ describe('Test AnswersQueueService', () => {
   it('Should return number of keys', () => {
     getAllKeysMock.mockReturnValue(['10', '15', '7']);
 
-    const uploadService = new AnswersQueueService(notifyMock);
+    const uploadService = new AnswersQueueService(notifyMock, storageMock);
 
     const result = uploadService.getLength();
 

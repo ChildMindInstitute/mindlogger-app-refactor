@@ -2,10 +2,11 @@ import React from 'react';
 
 import renderer, { act } from 'react-test-renderer';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import { LongTextInput, CharacterCounter } from '@shared/ui';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 
-import ParagraphText from '../ParagraphText';
+import { CharacterCounter } from '../../CharacterCounter';
+import { LongTextInput } from '../../LongTextInput';
+import { ParagraphText } from '../ParagraphText';
 
 jest.mock('react-i18next', () => ({
   useTranslation: jest.fn().mockImplementation(() => ({

@@ -1,13 +1,14 @@
+import { IEvaluator } from '@app/abstract/lib/interfaces/evaluator';
+import { EntityProgressionCompleted } from '@app/abstract/lib/types/entityProgress';
+import { AvailabilityType } from '@app/abstract/lib/types/event';
+import { ScheduleEvent } from '@app/entities/event/lib/types/event';
 import {
-  AvailabilityType,
-  EntityProgressionCompleted,
-  IEvaluator,
-} from '@app/abstract/lib';
-import { ScheduleEvent } from '@app/entities/event';
-import { getHourMinute, isTimeInInterval } from '@shared/lib';
+  isTimeInInterval,
+  getHourMinute,
+} from '@app/shared/lib/utils/dateTime';
 
 import { GroupUtility } from './GroupUtility';
-import { EventEntity } from '../../lib';
+import { EventEntity } from '../../lib/types/activityGroupsBuilder';
 
 export class AvailableGroupEvaluator
   implements IEvaluator<EventEntity, ScheduleEvent>

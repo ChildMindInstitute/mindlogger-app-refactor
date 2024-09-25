@@ -8,7 +8,8 @@ import {
 import { shorthands } from '@tamagui/shorthands';
 import { themes as baseThemes, tokens as baseTokens } from '@tamagui/themes';
 
-import { colors, IS_IOS } from '@app/shared/lib';
+import { IS_IOS } from '@app/shared/lib/constants';
+import { colors } from '@app/shared/lib/constants/colors';
 
 const defaultFont = createFont({
   family: IS_IOS ? 'Avenir' : 'Roboto',

@@ -1,4 +1,4 @@
-import { ImageUrl } from '@app/shared/lib';
+import { ImageUrl } from '@app/shared/lib/types/url';
 
 import { AbTrailsItemSettingsDto } from './AbTrailsSettingsDtos';
 import { FlankerItemSettingsDto } from './FlankerSettingsDto';

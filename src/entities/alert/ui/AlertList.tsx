@@ -1,14 +1,15 @@
 import { useTranslation } from 'react-i18next';
 
-import { Box, Text, YStack } from '@shared/ui';
+import { Text } from '@app/shared/ui/Text';
+import { Box, YStack } from '@shared/ui/base';
 
-import Alert from './Alert';
+import { Alert } from './Alert';
 
 type Props = {
   alerts: string[];
 };
 
-function AlertList({ alerts }: Props) {
+export function AlertList({ alerts }: Props) {
   const { t } = useTranslation();
 
   if (!alerts.length) {
@@ -35,5 +36,3 @@ function AlertList({ alerts }: Props) {
     </Box>
   );
 }
-
-export default AlertList;

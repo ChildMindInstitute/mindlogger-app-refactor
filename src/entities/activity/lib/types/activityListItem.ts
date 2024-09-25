@@ -1,4 +1,4 @@
-import { HourMinute } from '@app/shared/lib';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
 
 export type ActivityListItem = {
   appletId: string;

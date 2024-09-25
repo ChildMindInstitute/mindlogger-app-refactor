@@ -9,9 +9,8 @@ import {
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
-import { Box, BoxProps } from '@shared/ui';
-
-import Center from '../../Center';
+import { Box, BoxProps } from '../../base';
+import { Center } from '../../Center';
 
 const styles = StyleSheet.create({
   touchable: {
@@ -39,7 +38,7 @@ const ContentWrapper: FC<BoxProps> = styled(Center, {
   borderRadius: 15,
 });
 
-const MediaInput: FC<Props> = ({
+export const MediaInput: FC<Props> = ({
   children,
   mode,
   onOpenCamera,
@@ -81,5 +80,3 @@ const MediaInput: FC<Props> = ({
     </ContentWrapper>
   );
 };
-
-export default MediaInput;

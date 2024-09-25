@@ -5,14 +5,10 @@ import { getSystemVersion, isTablet } from 'react-native-device-info';
 import { CameraOptions, ImageLibraryOptions } from 'react-native-image-picker';
 import { PERMISSIONS } from 'react-native-permissions';
 
-import { Language } from '../types';
+import { Language } from '../types/language';
 
 const { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT } =
   Dimensions.get('window');
-
-export * from './colors';
-export * from './dateTime';
-export * from './password';
 
 export const IS_IOS = Platform.OS === 'ios';
 export const IS_ANDROID = Platform.OS === 'android';

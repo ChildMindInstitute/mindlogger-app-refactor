@@ -7,26 +7,24 @@ import {
   EntityPath,
   EntityPathParams,
   ProcessAutocompletion,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/entity';
+import { getDefaultAnswersQueueService } from '@app/entities/activity/lib/services/answersQueueServiceInstance';
+import { getDefaultQueueProcessingService } from '@app/entities/activity/lib/services/queueProcessingServiceInstance';
 import {
-  AnswersQueueService,
-  QueueProcessingService,
-} from '@app/entities/activity';
-import { AppletModel } from '@app/entities/applet';
-import { LogTrigger } from '@app/shared/api';
-import {
-  Emitter,
-  Logger,
-  Mutex,
-  useAppDispatch,
-  useAppSelector,
-} from '@app/shared/lib';
+  selectAppletsEntityProgressions,
+  selectIncompletedEntities,
+} from '@app/entities/applet/model/selectors';
+import { LogTrigger } from '@app/shared/api/services/INotificationService';
+import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
+import { Emitter } from '@app/shared/lib/services/Emitter';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
 
 import {
-  CollectCompletionsService,
   CollectCompletionOutput,
-  ConstructCompletionsService,
-} from '../services';
+  CollectCompletionsService,
+} from '../services/CollectCompletionsService';
+import { ConstructCompletionsService } from '../services/ConstructCompletionsService';
 
 type Result = {
   process: ProcessAutocompletion;
@@ -36,32 +34,26 @@ type Result = {
   evaluateIfItemsInQueueExist: () => boolean;
 };
 
-export const AutoCompletionMutex = Mutex();
+export const useAutoCompletion = (): Result => {
+  const mutex = getMutexDefaultInstanceManager().getAutoCompletionMutex();
 
-const useAutoCompletion = (): Result => {
-  const mutex = AutoCompletionMutex;
+  const incompletedEntities = useAppSelector(selectIncompletedEntities);
 
-  const incompletedEntities = useAppSelector(
-    AppletModel.selectors.selectIncompletedEntities,
-  );
-
-  const entityProgressions = useAppSelector(
-    AppletModel.selectors.selectAppletsEntityProgressions,
-  );
+  const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
 
   const dispatch = useAppDispatch();
 
   const queryClient = useQueryClient();
 
   const hasItemsInQueue = useCallback(() => {
-    return AnswersQueueService.getLength() > 0;
+    return getDefaultAnswersQueueService().getLength() > 0;
   }, []);
 
   const createConstructService = useCallback(() => {
     return new ConstructCompletionsService(
       null,
       queryClient,
-      QueueProcessingService,
+      getDefaultQueueProcessingService(),
       dispatch,
       entityProgressions,
     );
@@ -77,7 +69,7 @@ const useAutoCompletion = (): Result => {
         isAutocompletion: true,
       });
     } catch (error) {
-      Logger.warn(
+      getDefaultLogger().warn(
         '[useAutoCompletion.constructInternal] Error occurred:\n' + error,
       );
     }
@@ -90,7 +82,7 @@ const useAutoCompletion = (): Result => {
     try {
       return collectService.collectAll(exclude);
     } catch (error) {
-      Logger.log('[useAutoCompletion] Error occurred:\n' + error);
+      getDefaultLogger().log('[useAutoCompletion] Error occurred:\n' + error);
     }
     return [];
   };
@@ -98,7 +90,7 @@ const useAutoCompletion = (): Result => {
   const completeEntityIntoUploadToQueue = useCallback(
     async (entityPath: EntityPath) => {
       if (mutex.isBusy()) {
-        Logger.log(
+        getDefaultLogger().log(
           '[useAutoCompletion.completeEntityIntoUploadToQueue] Mutex is busy',
         );
         return;
@@ -110,13 +102,13 @@ const useAutoCompletion = (): Result => {
       try {
         mutex.setBusy();
 
-        Logger.log(
+        getDefaultLogger().log(
           '[useAutoCompletion.completeEntityIntoUploadToQueue] Started',
         );
 
         const collectOutputs = collectService.collectForEntity(entityPath);
 
-        Logger.log(
+        getDefaultLogger().log(
           '[useAutoCompletion.completeEntityIntoUploadToQueue] collectOutputs: \n' +
             JSON.stringify(collectOutputs, null, 2),
         );
@@ -125,7 +117,9 @@ const useAutoCompletion = (): Result => {
           await constructInternal(collectOutput, constructService);
         }
 
-        Logger.log('[useAutoCompletion.completeEntityIntoUploadToQueue] Done');
+        getDefaultLogger().log(
+          '[useAutoCompletion.completeEntityIntoUploadToQueue] Done',
+        );
       } finally {
         mutex.release();
       }
@@ -139,7 +133,9 @@ const useAutoCompletion = (): Result => {
       forceRefreshNotifications: boolean = false,
     ): Promise<boolean> => {
       if (mutex.isBusy()) {
-        Logger.log('[useAutoCompletion.processAutocompletion] Mutex is busy');
+        getDefaultLogger().log(
+          '[useAutoCompletion.processAutocompletion] Mutex is busy',
+        );
         return true;
       }
 
@@ -151,13 +147,15 @@ const useAutoCompletion = (): Result => {
       try {
         mutex.setBusy();
 
-        Logger.log('[useAutoCompletion.processAutocompletion] Started');
+        getDefaultLogger().log(
+          '[useAutoCompletion.processAutocompletion] Started',
+        );
 
         const collectOutputs = collectAllInternal(collectService, exclude);
 
         completionsCollected = !!collectOutputs.length;
 
-        Logger.log(
+        getDefaultLogger().log(
           '[useAutoCompletion.processAutocompletion] collectOutputs: \n' +
             JSON.stringify(collectOutputs, null, 2),
         );
@@ -166,7 +164,9 @@ const useAutoCompletion = (): Result => {
           await constructInternal(collectOutput, constructService);
         }
 
-        Logger.log('[useAutoCompletion.processAutocompletion] Done');
+        getDefaultLogger().log(
+          '[useAutoCompletion.processAutocompletion] Done',
+        );
       } finally {
         mutex.release();
       }
@@ -174,7 +174,7 @@ const useAutoCompletion = (): Result => {
       let result = true;
 
       if (hasItemsInQueue()) {
-        result = await QueueProcessingService.process();
+        result = await getDefaultQueueProcessingService().process();
       }
 
       if (forceRefreshNotifications || completionsCollected) {
@@ -191,7 +191,9 @@ const useAutoCompletion = (): Result => {
       incompletedEntities,
     ).hasExpiredEntity();
 
-    Logger.log(`[useAutoCompletion.hasExpiredEntity]: ${String(result)}`);
+    getDefaultLogger().log(
+      `[useAutoCompletion.hasExpiredEntity]: ${String(result)}`,
+    );
 
     return result;
   }, [incompletedEntities]);
@@ -204,5 +206,3 @@ const useAutoCompletion = (): Result => {
     evaluateIfItemsInQueueExist: hasItemsInQueue,
   };
 };
-
-export default useAutoCompletion;

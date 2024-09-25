@@ -2,8 +2,8 @@ import { FC, PropsWithChildren } from 'react';
 
 import { YStack } from '@tamagui/stacks';
 
-import { ImageBackground } from '@shared/ui';
-import { BoxProps } from '@shared/ui';
+import { BoxProps } from '@app/shared/ui/base';
+import { ImageBackground } from '@app/shared/ui/ImageBackground';
 
 type FlexContainerProps = PropsWithChildren<BoxProps>;
 
@@ -11,7 +11,7 @@ export type SubComponentProps = {
   onPressDone?: () => void;
 };
 
-const SubScreenContainer: FC<PropsWithChildren> = ({ children }) => {
+export const SubScreenContainer: FC<PropsWithChildren> = ({ children }) => {
   return (
     <ImageBackground>
       <YStack flex={1} px={20} gap={20}>
@@ -21,12 +21,13 @@ const SubScreenContainer: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-const FlexContainer: FC<FlexContainerProps> = ({ children, ...boxProps }) => {
+export const FlexContainer: FC<FlexContainerProps> = ({
+  children,
+  ...boxProps
+}) => {
   return (
     <YStack flex={1} alignItems="center" gap={20} {...boxProps}>
       {children}
     </YStack>
   );
 };
-
-export { SubScreenContainer, FlexContainer };

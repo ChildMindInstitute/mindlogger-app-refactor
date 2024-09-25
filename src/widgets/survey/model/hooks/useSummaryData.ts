@@ -2,13 +2,15 @@ import { useCallback, useMemo } from 'react';
 
 import {
   AnswerAlerts,
-  PassSurveyModel,
   ScoreRecord,
-} from '@app/features/pass-survey';
-import { useActivityInfo } from '@app/shared/lib';
+} from '@app/features/pass-survey/lib/types/summary';
+import { getDefaultAlertsExtractor } from '@app/features/pass-survey/model/alertsExtractorInstance';
+import { useActivityState } from '@app/features/pass-survey/model/hooks/useActivityState';
+import { getDefaultScoresExtractor } from '@app/features/pass-survey/model/scoresExtractorInstance';
+import { useActivityInfo } from '@app/shared/lib/hooks/useActivityInfo';
 
 import { useFlowState } from './useFlowState';
-import { ActivityScores } from '../../lib';
+import { ActivityScores } from '../../lib/useFlowStorageRecord';
 
 type Props = {
   appletId: string;
@@ -45,7 +47,7 @@ export const useSummaryData = ({
 }: Props): UISummaryData | null => {
   const { getName: getActivityName } = useActivityInfo();
 
-  const { activityStorageRecord } = PassSurveyModel.useActivityState({
+  const { activityStorageRecord } = useActivityState({
     appletId,
     activityId,
     eventId,
@@ -73,14 +75,14 @@ export const useSummaryData = ({
       const reportSettings = activityRecord.scoreSettings;
 
       const extractedAlerts: AnswerAlerts =
-        PassSurveyModel.AlertsExtractor.extractForSummary(
+        getDefaultAlertsExtractor().extractForSummary(
           items,
           answers,
           logActivityName,
         );
 
       const scoreRecords: Array<ScoreRecord> =
-        PassSurveyModel.ScoresExtractor.extract(
+        getDefaultScoresExtractor().extract(
           items,
           answers,
           reportSettings,

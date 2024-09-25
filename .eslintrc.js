@@ -47,7 +47,7 @@ module.exports = {
       },
     ],
     'react-hooks/rules-of-hooks': 'warn',
-    'import/no-cycle': 'warn',
+    'import/no-cycle': 'error',
     'constructor-super': 'warn',
     'no-var': 'warn',
     'no-caller': 'warn',

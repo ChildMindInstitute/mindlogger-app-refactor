@@ -2,31 +2,26 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { EntityPathParams } from '@app/abstract/lib';
-import { useRetryUpload } from '@app/entities/activity';
-import {
-  QueueProcessingService,
-  useQueueProcessing,
-} from '@app/entities/activity/lib';
-import { AppletModel } from '@app/entities/applet';
-import { QueryDataUtils } from '@app/shared/api';
-import {
-  InterimSubmitMutex,
-  Logger,
-  UploadObservable,
-  useAppDispatch,
-  useAppSelector,
-} from '@app/shared/lib';
+import { EntityPathParams } from '@app/abstract/lib/types/entity';
+import { useQueueProcessing } from '@app/entities/activity/lib/hooks/useQueueProcessing';
+import { useRetryUpload } from '@app/entities/activity/lib/hooks/useRetryUpload';
+import { getDefaultQueueProcessingService } from '@app/entities/activity/lib/services/queueProcessingServiceInstance';
+import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
+import { appletActions } from '@app/entities/applet/model/slice';
+import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
+import { getDefaultInterimSubmitMutex } from '@app/shared/lib/mutexes/interimSubmitMutexInstance';
+import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import { SubScreenContainer } from './completion/containers';
-import IntermediateSubmit from './completion/IntermediateSubmit';
-import ProcessingAnswers from './completion/ProcessingAnswers';
-import { activityRecordExists, useFlowStorageRecord } from '../lib';
-import {
-  StepperPipelineItem,
-  useAutoCompletion,
-  useFlowStateActions,
-} from '../model';
+import { IntermediateSubmit } from './completion/IntermediateSubmit';
+import { ProcessingAnswers } from './completion/ProcessingAnswers';
+import { activityRecordExists } from '../lib/storageHelpers';
+import { useFlowStorageRecord } from '../lib/useFlowStorageRecord';
+import { useAutoCompletion } from '../model/hooks/useAutoCompletion';
+import { useFlowStateActions } from '../model/hooks/useFlowStateActions';
+import { StepperPipelineItem } from '../model/pipelineBuilder';
 import { ConstructCompletionsService } from '../model/services/ConstructCompletionsService';
 
 type Props = {
@@ -42,7 +37,7 @@ type Props = {
   onFinish: () => void;
 };
 
-function Intermediate({
+export function Intermediate({
   flowId,
   appletId,
   activityId,
@@ -73,9 +68,7 @@ function Intermediate({
     targetSubjectId,
   });
 
-  const entityProgressions = useAppSelector(
-    AppletModel.selectors.selectAppletsEntityProgressions,
-  );
+  const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
 
   const { step, pipeline, flowName } = flowStorageRecord!;
 
@@ -135,12 +128,12 @@ function Intermediate({
   const changeActivity = useCallback(() => {
     const appletName = getAppletName();
 
-    Logger.log(
+    getDefaultLogger().log(
       `[Intermediate.changeActivity]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivityPayload.activityName}|${nextActivityPayload.activityId}", applet "${appletName}|${appletId}"`,
     );
 
     dispatch(
-      AppletModel.actions.updateFlow({
+      appletActions.updateFlow({
         appletId,
         flowId,
         targetSubjectId,
@@ -172,12 +165,12 @@ function Intermediate({
   ]);
 
   async function completeActivity() {
-    InterimSubmitMutex.setBusy();
+    getDefaultInterimSubmitMutex().setBusy();
 
     const constructCompletionService = new ConstructCompletionsService(
       saveActivitySummary,
       queryClient,
-      QueueProcessingService,
+      getDefaultQueueProcessingService(),
       dispatch,
       entityProgressions,
     );
@@ -213,10 +206,10 @@ function Intermediate({
   }
 
   useEffect(() => {
-    UploadObservable.reset();
+    getDefaultUploadObservable().reset();
 
     return () => {
-      InterimSubmitMutex.release();
+      getDefaultInterimSubmitMutex().release();
     };
   }, []);
 
@@ -251,5 +244,3 @@ function Intermediate({
     />
   );
 }
-
-export default Intermediate;

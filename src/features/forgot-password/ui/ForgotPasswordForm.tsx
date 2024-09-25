@@ -4,24 +4,24 @@ import { FC } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { usePasswordRecoveryMutation } from '@app/entities/identity';
-import {
-  executeIfOnline,
-  useAppForm,
-  useBanner,
-  useFormChanges,
-} from '@shared/lib';
-import { YStack, Box, BoxProps, SubmitButton } from '@shared/ui';
-import { ErrorMessage, InputField } from '@shared/ui/form';
+import { usePasswordRecoveryMutation } from '@app/entities/identity/api/hooks/usePasswordRecoveryMutation';
+import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
+import { useBanner } from '@app/shared/lib/hooks/useBanner';
+import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
+import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
+import { Box, BoxProps, YStack } from '@app/shared/ui/base';
+import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
+import { InputField } from '@app/shared/ui/form/InputField';
+import { SubmitButton } from '@app/shared/ui/SubmitButton';
 
-import SuccessNotification from './SuccessNotification';
-import { ForgotPasswordFormSchema } from '../model';
+import { SuccessNotification } from './SuccessNotification';
+import { ForgotPasswordFormSchema } from '../model/ForgotPasswordFormSchema';
 
 type Props = BoxProps & {
   onRecoverySuccess: () => void;
 };
 
-const ForgotPasswordForm: FC<Props> = props => {
+export const ForgotPasswordForm: FC<Props> = props => {
   const { t } = useTranslation();
   const banner = useBanner();
 
@@ -88,5 +88,3 @@ const ForgotPasswordForm: FC<Props> = props => {
     </Box>
   );
 };
-
-export default ForgotPasswordForm;

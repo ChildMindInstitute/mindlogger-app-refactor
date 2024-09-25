@@ -65,7 +65,11 @@ const parseErrorSchema = (
   return errors;
 };
 
-const zodResolver: Resolver = (schema, schemaOptions, resolverOptions = {}) => {
+export const zodResolver: Resolver = (
+  schema,
+  schemaOptions,
+  resolverOptions = {},
+) => {
   return async (values, _, options) => {
     try {
       const data = await schema[
@@ -100,5 +104,3 @@ const zodResolver: Resolver = (schema, schemaOptions, resolverOptions = {}) => {
     }
   };
 };
-
-export default zodResolver;

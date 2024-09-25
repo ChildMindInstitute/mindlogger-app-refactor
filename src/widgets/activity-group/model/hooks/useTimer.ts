@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { AppClockTimer } from '@app/shared/lib';
+import { AppClockTimer } from '@app/shared/lib/timers/AppClockTimer';
 
-const useTimer = () => {
+export const useTimer = () => {
   const [, reRender] = useState(false);
 
   const onTick = useCallback(() => {
@@ -19,5 +19,3 @@ const useTimer = () => {
     };
   }, [onTick]);
 };
-
-export default useTimer;

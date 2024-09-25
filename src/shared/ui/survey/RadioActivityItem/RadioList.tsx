@@ -1,13 +1,13 @@
 import { RadioGroup } from '@tamagui/radio-group';
 import { YStack } from '@tamagui/stacks';
 
-import { colors } from '@app/shared/lib';
+import { colors } from '@app/shared/lib/constants/colors';
 
-import RadioItem from './RadioItem';
+import { RadioItem } from './RadioItem';
 import { RadioItemProps } from './types';
-import { Box } from '../..';
+import { Box } from '../../base';
 
-function RadioList({
+export function RadioList({
   value,
   options,
 
@@ -51,5 +51,3 @@ function RadioList({
     </YStack>
   );
 }
-
-export default RadioList;

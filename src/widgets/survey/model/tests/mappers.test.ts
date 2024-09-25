@@ -1,4 +1,4 @@
-import { Logger } from '@shared/lib';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import {
   textInput,
@@ -523,7 +523,7 @@ describe('Survey widget mapAnswersToDto tests', () => {
 
     //@ts-ignore
     expect(() => mapAnswersToAlerts(pipeline, answers)).toThrow();
-    expect(Logger.warn).toBeCalled();
+    expect(getDefaultLogger().warn).toBeCalled();
   });
 
   it('Should return mapped result for userActions', async () => {

@@ -1,4 +1,5 @@
-import { ActivityDetails } from '@entities/activity';
+import { ActivityDetails } from '../lib/types/activity';
+
 export const messageOutput: ActivityDetails = {
   description: 'All items',
   hasSummary: false,

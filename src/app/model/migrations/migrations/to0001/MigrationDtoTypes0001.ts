@@ -1,5 +1,7 @@
-import { SuccessfulResponse } from '@app/shared/api';
-import { HourMinute, ImageUrl } from '@app/shared/lib';
+import { SuccessfulResponse } from '@app/shared/api/types';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
+
+import { ImageUrl } from '../to0002/MigrationDtoTypes0002';
 
 export type ActivityRecordDto = {
   id: string;

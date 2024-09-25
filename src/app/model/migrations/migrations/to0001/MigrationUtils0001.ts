@@ -1,17 +1,17 @@
 import { QueryClient } from '@tanstack/react-query';
 
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
-  ActivityPipelineType,
   AvailabilityType,
   PeriodicityType,
-} from '@app/abstract/lib';
-import { ScheduleEvent } from '@app/entities/event';
+} from '@app/abstract/lib/types/event';
+import { ScheduleEvent } from '@app/entities/event/lib/types/event';
+import { buildDateFromDto } from '@app/shared/lib/utils/dateTime';
 import {
-  buildDateFromDto,
-  getAppletDetailsKey,
   getDataFromQuery,
+  getAppletDetailsKey,
   getEventsKey,
-} from '@app/shared/lib';
+} from '@app/shared/lib/utils/reactQueryHelpers';
 
 import {
   AppletDetailsDto,

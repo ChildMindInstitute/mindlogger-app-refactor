@@ -1,9 +1,7 @@
-import { ScoreConditionalLogic } from '@app/entities/activity';
+import { ScoreConditionalLogic } from '@app/entities/activity/lib/types/activityReportSettings';
 
-import {
-  ScoreConditionsEvaluator,
-  IScoreConditionsEvaluator,
-} from '../ScoreConditionsEvaluator';
+import { IScoreConditionsEvaluator } from '../IScoreConditionsEvaluator';
+import { ScoreConditionsEvaluator } from '../ScoreConditionsEvaluator';
 
 describe('ScoreConditionsEvaluator test', () => {
   let evaluator: IScoreConditionsEvaluator;

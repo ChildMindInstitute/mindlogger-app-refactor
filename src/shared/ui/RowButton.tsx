@@ -1,7 +1,9 @@
 import { FC, ElementType } from 'react';
 
-import { colors } from '@shared/lib';
-import { XStack, BoxProps, Text, ArrowRightIcon } from '@shared/ui';
+import { BoxProps, XStack } from './base';
+import { ArrowRightIcon } from './icons';
+import { Text } from './Text';
+import { colors } from '../lib/constants/colors';
 
 type Props = {
   onPress: () => void;
@@ -13,7 +15,7 @@ const pressStyle = {
   opacity: 0.5,
 };
 
-const RowButton: FC<Props> = props => {
+export const RowButton: FC<Props> = props => {
   const {
     onPress,
     title,
@@ -39,5 +41,3 @@ const RowButton: FC<Props> = props => {
     </XStack>
   );
 };
-
-export default RowButton;

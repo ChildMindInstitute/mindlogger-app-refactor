@@ -1,7 +1,9 @@
-import { Report } from '@app/entities/activity';
+import { Report } from '@app/entities/activity/lib/types/activityReportSettings';
 
-import { Answers, PipelineItem } from '../../lib';
-import { IScoresCalculator, ScoresCalculator } from '../ScoresCalculator';
+import { Answers } from '../../lib/hooks/useActivityStorageRecord';
+import { PipelineItem } from '../../lib/types/payload';
+import { IScoresCalculator } from '../IScoresCalculator';
+import { ScoresCalculator } from '../ScoresCalculator';
 
 describe('ScoresCalculator: test calculate', () => {
   const mockPipelineItems = [

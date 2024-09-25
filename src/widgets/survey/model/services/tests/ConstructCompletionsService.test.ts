@@ -1,9 +1,10 @@
 import { QueryClient } from '@tanstack/react-query';
 import { addHours, addMilliseconds, subHours, subSeconds } from 'date-fns';
 
-import { Answers, PipelineItem } from '@app/features/pass-survey';
+import { Answers } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
+import { PipelineItem } from '@app/features/pass-survey/lib/types/payload';
 import { getSliderItem } from '@app/features/pass-survey/model/tests/testHelpers';
-import { AppletEncryptionDTO } from '@app/shared/api';
+import { AppletEncryptionDTO } from '@app/shared/api/services/IAppletService';
 
 import {
   createGetActivityRecordMock,

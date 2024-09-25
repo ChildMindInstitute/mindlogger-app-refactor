@@ -1,54 +1,74 @@
 import { FileSystem } from 'react-native-file-access';
 
+import { IUserPrivateKeyRecord } from '@app/entities/identity/lib/IUserPrivateKeyRecord';
 import {
   ActivityAnswersRequest,
   AnswerDto,
-  AnswerService,
-  CheckIfFilesExistResultDto,
   DrawerAnswerDto,
-  FileService,
+  IAnswerService,
   ObjectAnswerDto,
   UserActionDto,
-} from '@app/shared/api';
-import { MediaFile } from '@app/shared/ui';
-import { UserPrivateKeyRecord } from '@entities/identity/lib';
+} from '@app/shared/api/services/IAnswerService';
 import {
-  ILogger,
-  IUploadProgressObservableSetters,
-  Logger,
-  UploadProgressObservable,
-  encryption,
+  CheckIfFilesExistResultDto,
+  IFileService,
+} from '@app/shared/api/services/IFileService';
+import { IEncryptionManager } from '@app/shared/lib/encryption/IEncryptionManager';
+import { IUploadProgressObservable } from '@app/shared/lib/observables/IUploadProgressObservable';
+import { ILogger } from '@app/shared/lib/types/logger';
+import {
   formatToDtoDate,
   formatToDtoTime,
-  isLocalFileUrl,
-} from '@shared/lib';
+} from '@app/shared/lib/utils/dateTime';
+import { isLocalFileUrl } from '@app/shared/lib/utils/file';
+import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
 
-import MediaFilesCleaner from './MediaFilesCleaner';
+import { IMediaFilesCleaner } from './IMediaFilesCleaner';
 import {
   CheckAnswersInput,
-  CheckFileUploadResult,
   CheckFilesUploadResults,
+  CheckFileUploadResult,
   SendAnswersInput,
-} from '../types';
+} from '../types/uploadAnswers';
 
 export interface IAnswersUploadService {
   sendAnswers(body: SendAnswersInput): Promise<void>;
 }
 
-class AnswersUploadService implements IAnswersUploadService {
+export class AnswersUploadService implements IAnswersUploadService {
   private createdAt: number | null;
 
   private logger: ILogger;
 
-  private uploadProgressObservable: IUploadProgressObservableSetters;
+  private uploadProgressObservable: IUploadProgressObservable;
+
+  private mediaFileCleaner: IMediaFilesCleaner;
+
+  private encryptionManager: IEncryptionManager;
+
+  private fileService: IFileService;
+
+  private userPrivateKeyRecord: IUserPrivateKeyRecord;
+
+  private answerService: IAnswerService;
 
   constructor(
     logger: ILogger,
-    uploadProgressObservable: IUploadProgressObservableSetters,
+    uploadProgressObservable: IUploadProgressObservable,
+    mediaFileCleaner: IMediaFilesCleaner,
+    encryptionManager: IEncryptionManager,
+    fileService: IFileService,
+    userPrivateKeyRecord: IUserPrivateKeyRecord,
+    answerService: IAnswerService,
   ) {
     this.uploadProgressObservable = uploadProgressObservable;
     this.createdAt = null;
     this.logger = logger;
+    this.mediaFileCleaner = mediaFileCleaner;
+    this.encryptionManager = encryptionManager;
+    this.fileService = fileService;
+    this.userPrivateKeyRecord = userPrivateKeyRecord;
+    this.answerService = answerService;
   }
 
   private mapFileExistenceDto(
@@ -65,7 +85,7 @@ class AnswersUploadService implements IAnswersUploadService {
     fileIds: string[],
     appletId: string,
   ): Promise<CheckFilesUploadResults> {
-    const response = await FileService.checkIfFilesExist({
+    const response = await this.fileService.checkIfFilesExist({
       files: fileIds,
       appletId,
     });
@@ -76,7 +96,7 @@ class AnswersUploadService implements IAnswersUploadService {
   private async checkIfAnswersUploaded(
     checkInput: CheckAnswersInput,
   ): Promise<boolean> {
-    const response = await AnswerService.checkIfAnswersExist({
+    const response = await this.answerService.checkIfAnswersExist({
       activityId: checkInput.activityId,
       appletId: checkInput.appletId,
       createdAt: checkInput.createdAt,
@@ -154,7 +174,7 @@ class AnswersUploadService implements IAnswersUploadService {
           `[UploadAnswersService.processFileUpload] Getting upload fields for file ${logFileInfo}`,
         );
 
-        const fieldsResponse = await FileService.getFieldsForFileUpload({
+        const fieldsResponse = await this.fileService.getFieldsForFileUpload({
           appletId,
           fileId: this.getFileId(mediaFile),
         });
@@ -169,7 +189,7 @@ class AnswersUploadService implements IAnswersUploadService {
           `[UploadAnswersService.processFileUpload] Received field names: ${Object.keys(getFieldsDto.fields).toString()}`,
         );
 
-        await FileService.uploadAppletFileToS3({
+        await this.fileService.uploadAppletFileToS3({
           fields: getFieldsDto.fields,
           fileName: mediaFile.fileName,
           localUrl: mediaFile.uri,
@@ -331,7 +351,7 @@ class AnswersUploadService implements IAnswersUploadService {
         '[UploadAnswersService.uploadAnswers]: Check result: not uploaded yet, so uploading answers',
       );
 
-      await AnswerService.sendActivityAnswers(encryptedData);
+      await this.answerService.sendActivityAnswers(encryptedData);
     } catch (error) {
       throw new Error(
         `[UploadAnswersService.uploadAnswers]: Error occurred while sending answers\n\n${error}`,
@@ -365,13 +385,13 @@ class AnswersUploadService implements IAnswersUploadService {
 
   private encryptAnswers(data: SendAnswersInput): ActivityAnswersRequest {
     const { appletEncryption } = data;
-    const userPrivateKey = UserPrivateKeyRecord.get();
+    const userPrivateKey = this.userPrivateKeyRecord.get();
 
     if (!userPrivateKey) {
       throw new Error('Error occurred while preparing answers');
     }
 
-    const { encrypt } = encryption.createEncryptionService({
+    const { encrypt } = this.encryptionManager.createEncryptionService({
       ...appletEncryption,
       privateKey: userPrivateKey,
     });
@@ -382,7 +402,7 @@ class AnswersUploadService implements IAnswersUploadService {
 
     const identifier = data.userIdentifier && encrypt(data.userIdentifier);
 
-    const userPublicKey = encryption.getPublicKey({
+    const userPublicKey = this.encryptionManager.getPublicKey({
       privateKey: userPrivateKey,
       appletPrime: JSON.parse(appletEncryption.prime),
       appletBase: JSON.parse(appletEncryption.base),
@@ -534,12 +554,10 @@ class AnswersUploadService implements IAnswersUploadService {
 
     this.logger.log('[UploadAnswersService.sendAnswers] executing clean up');
 
-    MediaFilesCleaner.cleanUpByAnswers(body.answers);
+    this.mediaFileCleaner.cleanUpByAnswers(body.answers);
 
     await this.uploadProgressObservable.setCurrentSecondLevelStepKey(
       'completed',
     );
   }
 }
-
-export default new AnswersUploadService(Logger, UploadProgressObservable);

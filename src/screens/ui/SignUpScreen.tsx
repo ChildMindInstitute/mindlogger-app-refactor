@@ -5,16 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
 
-import { SignUpForm } from '@features/sign-up';
-import {
-  StatusBar,
-  Box,
-  Text,
-  KeyboardAvoidingView,
-  ScrollView,
-} from '@shared/ui';
+import { SignUpForm } from '@app/features/sign-up/ui/SignUpForm';
+import { Box } from '@app/shared/ui/base';
+import { KeyboardAvoidingView } from '@app/shared/ui/KeyboardAvoidingView';
+import { ScrollView } from '@app/shared/ui/ScrollView';
+import { StatusBar } from '@app/shared/ui/StatusBar';
+import { Text } from '@app/shared/ui/Text';
 
-const SignUpScreen: FC = () => {
+export const SignUpScreen: FC = () => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
 
@@ -81,5 +79,3 @@ const SignUpScreen: FC = () => {
     </KeyboardAvoidingView>
   );
 };
-
-export default SignUpScreen;

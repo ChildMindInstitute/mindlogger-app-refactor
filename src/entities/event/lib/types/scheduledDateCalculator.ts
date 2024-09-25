@@ -1,5 +1,8 @@
-import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
-import { HourMinute } from '@app/shared/lib';
+import {
+  AvailabilityType,
+  PeriodicityType,
+} from '@app/abstract/lib/types/event';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
 
 export type EventAvailability = {
   availabilityType: AvailabilityType;

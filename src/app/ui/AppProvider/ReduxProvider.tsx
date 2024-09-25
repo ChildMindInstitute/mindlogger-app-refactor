@@ -10,12 +10,12 @@ import { Provider } from 'react-redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import { AppletModel } from '@entities/applet';
-import { IdentityModel } from '@entities/identity';
-import { StreamingModel } from '@entities/streaming';
-import { createAsyncStorage, useSystemBootUp } from '@shared/lib';
-
-import { migrateReduxStore } from '../../model';
+import { migrateReduxStore } from '@app/app/model/migrations/MigrationProcessor';
+import { appletReducer } from '@app/entities/applet/model/slice';
+import { identityReducer } from '@app/entities/identity/model/slice';
+import { streamingReducer } from '@app/entities/streaming/model/slice';
+import { useSystemBootUp } from '@app/shared/lib/contexts/SplashContext';
+import { createAsyncStorage } from '@app/shared/lib/storages/createStorage';
 
 const storage = createAsyncStorage('redux-storage');
 
@@ -31,9 +31,9 @@ const rootReducer = (state: any, action: AnyAction) => {
   }
 
   const reducer = combineReducers({
-    identity: IdentityModel.reducer,
-    applets: AppletModel.reducer,
-    streaming: StreamingModel.reducer,
+    identity: identityReducer,
+    applets: appletReducer,
+    streaming: streamingReducer,
   });
 
   return reducer(state, action);
@@ -58,7 +58,7 @@ export const reduxStore = configureStore({
 
 export const persistor = persistStore(reduxStore);
 
-const ReduxProvider: FC<PropsWithChildren> = ({ children }) => {
+export const ReduxProvider: FC<PropsWithChildren> = ({ children }) => {
   const { onModuleInitialized, initialized } = useSystemBootUp();
 
   const onBeforeLift = () => {
@@ -79,5 +79,3 @@ declare global {
   type AppDispatch = typeof reduxStore.dispatch;
   type AppThunkAction = ThunkAction<void, RootState, unknown, AnyAction>;
 }
-
-export default ReduxProvider;

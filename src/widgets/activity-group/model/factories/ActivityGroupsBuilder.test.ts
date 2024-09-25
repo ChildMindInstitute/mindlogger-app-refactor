@@ -10,32 +10,34 @@ import {
   subMonths,
 } from 'date-fns';
 
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
-  ActivityPipelineType,
-  AvailabilityType,
   EntityProgression,
   EntityProgressionCompleted,
   EntityProgressionInProgress,
+} from '@app/abstract/lib/types/entityProgress';
+import {
+  AvailabilityType,
   PeriodicityType,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/event';
 import {
   ActivityListItem,
   ActivityStatus,
   ActivityType,
-} from '@app/entities/activity/lib';
-import { EventAvailability } from '@app/entities/event';
-import { MIDNIGHT_DATE } from '@app/shared/lib';
+} from '@app/entities/activity/lib/types/activityListItem';
+import { EventAvailability } from '@app/entities/event/lib/types/event';
+import { MIDNIGHT_DATE } from '@app/shared/lib/constants/dateTime';
 
 import {
   ActivityGroupsBuilder,
   createActivityGroupsBuilder,
 } from './ActivityGroupsBuilder';
+import { ActivityListGroup } from '../../lib/types/activityGroup';
 import {
-  ActivityListGroup,
-  EventEntity,
   Entity,
+  EventEntity,
   GroupsBuildContext,
-} from '../../lib';
+} from '../../lib/types/activityGroupsBuilder';
 
 jest.mock(
   '@app/shared/lib/constants',

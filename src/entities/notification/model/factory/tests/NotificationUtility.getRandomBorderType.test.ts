@@ -1,5 +1,5 @@
-import { NotificationTriggerType } from '@app/abstract/lib';
-import { ScheduleEvent } from '@app/entities/notification/lib';
+import { NotificationTriggerType } from '@app/abstract/lib/types/event';
+import { ScheduleEvent } from '@app/entities/notification/lib/types/notificationBuilder';
 
 import { addTime } from './testHelpers';
 import { NotificationUtility } from '../NotificationUtility';

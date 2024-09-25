@@ -3,12 +3,14 @@ import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib';
-import MarkdownView from '@app/shared/ui/MarkdownView';
+import { colors } from '@app/shared/lib/constants/colors';
+import { Box, Image } from '@app/shared/ui/base';
+import { MarkdownView } from '@app/shared/ui/MarkdownView';
+import { ScrollView } from '@app/shared/ui/ScrollView';
+import { Text } from '@app/shared/ui/Text';
 import { blueLogo } from '@assets/images';
-import { Box, Text, ScrollView, Image } from '@shared/ui';
 
-const AboutScreen: FC = () => {
+export const AboutScreen: FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -67,5 +69,3 @@ export const markdownStyle: StyleSheet.NamedStyles<any> = StyleSheet.create({
     color: colors.tertiary,
   },
 });
-
-export default AboutScreen;

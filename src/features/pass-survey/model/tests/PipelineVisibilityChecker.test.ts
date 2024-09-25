@@ -1,4 +1,7 @@
-import { ConditionType, Match } from '@app/entities/activity';
+import {
+  ConditionType,
+  Match,
+} from '@app/entities/activity/lib/types/conditionalLogic';
 
 import {
   fillOptionsForCheckboxes,
@@ -9,8 +12,9 @@ import {
   getSliderItem,
   getRadioResponse,
 } from './testHelpers';
-import { Answers, PipelineItem } from '../../lib';
-import PipelineVisibilityChecker from '../PipelineVisibilityChecker';
+import { Answers } from '../../lib/hooks/useActivityStorageRecord';
+import { PipelineItem } from '../../lib/types/payload';
+import { PipelineVisibilityChecker } from '../PipelineVisibilityChecker';
 
 describe('PipelineVisibilityChecker: penetration tests', () => {
   const getRadioItems = (names: string[]) => {

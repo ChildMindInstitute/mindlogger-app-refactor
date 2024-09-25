@@ -1,4 +1,4 @@
-import { Coordinates } from '@app/shared/ui';
+import { Coordinates } from '@app/shared/ui/survey/Geolocation/types';
 
 import {
   PipelineItemResponse,

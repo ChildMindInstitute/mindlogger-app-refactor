@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 
-import { format, getLast7Dates } from '@shared/lib';
-import { Text, YStack, Box, XStack, BoxProps } from '@shared/ui';
+import { Box, BoxProps, XStack, YStack } from './base';
+import { Text } from './Text';
+import { format, getLast7Dates } from '../lib/utils/dateTime';
 
-const HorizontalCalendar: FC<BoxProps> = styledProps => {
+export const HorizontalCalendar: FC<BoxProps> = styledProps => {
   const currentDate = new Date();
   const title = format(currentDate, 'MMMM y');
   const dates = getLast7Dates();
@@ -61,5 +62,3 @@ const HorizontalCalendar: FC<BoxProps> = styledProps => {
     </Box>
   );
 };
-
-export default HorizontalCalendar;

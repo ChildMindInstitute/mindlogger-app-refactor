@@ -1,17 +1,17 @@
 import { PropsWithChildren, useContext } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { colors } from '@shared/lib';
-import { LeftArrowIcon } from '@shared/ui';
+import { colors } from '@app/shared/lib/constants/colors';
 
-import ActionButton from './ActionButton';
+import { ActionButton } from './ActionButton';
 import { HandlersContext } from './contexts';
+import { LeftArrowIcon } from '../icons';
 
 type Props = PropsWithChildren<{
   isIcon?: boolean;
 }>;
 
-function BackButton({ children, isIcon }: Props) {
+export function BackButton({ children, isIcon }: Props) {
   const { back } = useContext(HandlersContext);
 
   if (isIcon) {
@@ -33,5 +33,3 @@ function BackButton({ children, isIcon }: Props) {
     </ActionButton>
   );
 }
-
-export default BackButton;

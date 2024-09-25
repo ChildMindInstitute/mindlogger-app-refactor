@@ -1,13 +1,7 @@
-import { ActivityState } from '@app/features/pass-survey';
-import { createSecureStorage, createStorage } from '@app/shared/lib';
+import { ActivityState } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
+import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 
 import { FlowState } from './useFlowStorageRecord';
-
-const activityProgressStorage = createSecureStorage(
-  'activity_progress-storage',
-);
-
-const flowProgressStorage = createStorage('flow_progress-storage');
 
 export const getActivityRecordKey = (
   appletId: string,
@@ -33,7 +27,9 @@ export const getActivityRecord = (
     targetSubjectId,
     order,
   );
-  const json = activityProgressStorage.getString(key);
+  const json = getDefaultStorageInstanceManager()
+    .getActivityProgressStorage()
+    .getString(key);
 
   return !json ? null : (JSON.parse(json) as ActivityState);
 };
@@ -70,7 +66,7 @@ export const clearActivityStorageRecord = (
     targetSubjectId,
     order,
   );
-  activityProgressStorage.delete(key);
+  getDefaultStorageInstanceManager().getActivityProgressStorage().delete(key);
 };
 
 export const getFlowRecordKey = (
@@ -91,7 +87,9 @@ export const getFlowRecord = (
 ): FlowState | null => {
   const key = getFlowRecordKey(flowId, appletId, eventId, targetSubjectId);
 
-  const json = flowProgressStorage.getString(key);
+  const json = getDefaultStorageInstanceManager()
+    .getFlowProgressStorage()
+    .getString(key);
 
   return !json ? null : (JSON.parse(json) as FlowState);
 };

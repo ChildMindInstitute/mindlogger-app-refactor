@@ -1,4 +1,4 @@
-import { FlankerLiveEvent, IS_ANDROID, LiveEventDto } from '@shared/lib';
+import { IS_ANDROID } from '@app/shared/lib/constants';
 import {
   AbTestStreamEventDto,
   AbTestStreamEventErrorType,
@@ -8,7 +8,10 @@ import {
   StabilityTrackerEvent,
   StabilityTrackerEventDto,
   LiveEvent,
+  FlankerLiveEvent,
+  LiveEventDto,
 } from '@shared/lib/tcp/types';
+
 const mapABTestStreamEventToDto = (
   streamEvent: AbTestStreamEvent,
 ): AbTestStreamEventDto => {

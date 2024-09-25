@@ -2,13 +2,16 @@ import { Modal } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { Box, Center, SubmitButton, Text } from '@shared/ui';
+import { Box } from '@app/shared/ui/base';
+import { Center } from '@app/shared/ui/Center';
+import { SubmitButton } from '@app/shared/ui/SubmitButton';
+import { Text } from '@app/shared/ui/Text';
 
 type Props = {
   onSubmit: () => void;
 };
 
-function TimeIsUpModal({ onSubmit }: Props) {
+export function TimeIsUpModal({ onSubmit }: Props) {
   const { t } = useTranslation();
 
   return (
@@ -50,5 +53,3 @@ function TimeIsUpModal({ onSubmit }: Props) {
     </Modal>
   );
 }
-
-export default TimeIsUpModal;

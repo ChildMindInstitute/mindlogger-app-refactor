@@ -4,13 +4,16 @@ import {
   AvailabilityType,
   NotificationTriggerType,
   PeriodicityType,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/event';
 import {
   NotificationDescriber,
   NotificationType,
   ScheduleEvent,
-} from '@app/entities/notification/lib';
-import { MINUTES_IN_HOUR, MS_IN_MINUTE } from '@app/shared/lib';
+} from '@app/entities/notification/lib/types/notificationBuilder';
+import {
+  MINUTES_IN_HOUR,
+  MS_IN_MINUTE,
+} from '@app/shared/lib/constants/dateTime';
 
 import {
   addTime,

@@ -1,4 +1,4 @@
-import { IS_ANDROID, IS_IOS } from '@shared/lib';
+import { IS_ANDROID, IS_IOS } from '@app/shared/lib/constants';
 
 const ONE_MINUTE = 60000;
 

@@ -10,7 +10,7 @@ import {
 
 type Props = PropsWithChildren<TouchableOpacityProps>;
 
-function TouchableOpacity({
+export function TouchableOpacity({
   children,
   style,
   activeOpacity = 0.2,
@@ -29,5 +29,3 @@ function TouchableOpacity({
     </Pressable>
   );
 }
-
-export default TouchableOpacity;

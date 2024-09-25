@@ -3,7 +3,7 @@ import { Dimensions, Platform } from 'react-native';
 import i18n from 'i18next';
 
 import { IS_ANDROID, IS_IOS } from '../constants';
-import { type Language } from '../types';
+import { Language } from '../types/language';
 
 export const noop = () => {};
 

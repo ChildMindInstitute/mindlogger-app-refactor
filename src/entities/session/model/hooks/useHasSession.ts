@@ -1,7 +1,5 @@
-import useSession from './useSession';
+import { useSession } from './useSession';
 
-function useHasSession() {
+export function useHasSession() {
   return !!useSession()?.accessToken;
 }
-
-export default useHasSession;

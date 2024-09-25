@@ -1,11 +1,11 @@
 import { FC, useMemo } from 'react';
 
-import { shuffle } from '@shared/lib';
-import { ScrollView } from '@shared/ui';
+import { shuffle } from '@app/shared/lib/utils/common';
 
-import CheckBoxGrid from './CheckBoxGrid';
-import CheckBoxList from './CheckBoxList';
+import { CheckBoxGrid } from './CheckBoxGrid';
+import { CheckBoxList } from './CheckBoxList';
 import { Item } from './types';
+import { ScrollView } from '../../ScrollView';
 
 type Props = {
   config: {
@@ -21,7 +21,7 @@ type Props = {
   textReplacer: (markdown: string) => string;
 };
 
-const CheckBoxActivityItem: FC<Props> = ({
+export const CheckBoxActivityItem: FC<Props> = ({
   config,
   onChange,
   values,
@@ -99,5 +99,3 @@ const CheckBoxActivityItem: FC<Props> = ({
     </ScrollView>
   );
 };
-
-export default CheckBoxActivityItem;

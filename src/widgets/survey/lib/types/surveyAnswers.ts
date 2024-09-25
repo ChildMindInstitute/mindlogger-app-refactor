@@ -1,4 +1,4 @@
-import { DayMonthYear, HourMinute } from '@app/shared/lib';
+import { DayMonthYear, HourMinute } from '@app/shared/lib/types/dateTime';
 
 type AnswerWithAdditionalTextDto<T> = {
   value: T;

@@ -1,16 +1,20 @@
 import { addDays, addMinutes, subDays, subMinutes } from 'date-fns';
 
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
-  ActivityPipelineType,
   AvailabilityType,
   PeriodicityType,
-} from '@app/abstract/lib';
-import { ActivityType } from '@app/entities/activity/lib';
-import { EventAvailability } from '@app/entities/event';
-import { HourMinute } from '@app/shared/lib';
+} from '@app/abstract/lib/types/event';
+import { ActivityType } from '@app/entities/activity/lib/types/activityListItem';
+import { EventAvailability } from '@app/entities/event/lib/types/event';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
 
 import { ScheduledGroupEvaluator } from './ScheduledGroupEvaluator';
-import { EventEntity, Entity, GroupsBuildContext } from '../../lib';
+import {
+  Entity,
+  EventEntity,
+  GroupsBuildContext,
+} from '../../lib/types/activityGroupsBuilder';
 
 jest.mock('@app/shared/lib/constants', () => ({
   ...jest.requireActual('@app/shared/lib/constants'),

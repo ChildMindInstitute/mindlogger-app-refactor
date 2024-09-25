@@ -2,16 +2,16 @@ import { PropsWithChildren, useEffect } from 'react';
 
 import i18next from 'i18next';
 
-import { Language } from '@app/shared/lib';
+import { Language } from '@app/shared/lib/types/language';
 
-import { LocalizationStorage } from '../lib';
+import { getDefaultLocalizationStorage } from '../lib/localizationStorageInstance';
 
 type Props = PropsWithChildren;
 
-function LocalizationProvider({ children }: Props) {
+export function LocalizationProvider({ children }: Props) {
   useEffect(() => {
     function onLanguageChange(language: Language) {
-      LocalizationStorage.setLanguage(language);
+      getDefaultLocalizationStorage().setLanguage(language);
     }
 
     i18next.on('languageChanged', onLanguageChange);
@@ -23,5 +23,3 @@ function LocalizationProvider({ children }: Props) {
 
   return <>{children}</>;
 }
-
-export default LocalizationProvider;

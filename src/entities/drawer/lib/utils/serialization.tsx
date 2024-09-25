@@ -1,7 +1,8 @@
 import { getChunkedPointsAsStrings } from './helpers';
-import { DrawLine } from '../types';
+import { IResponseSerializer } from './IResponseSerializer';
+import { DrawLine } from '../types/draw';
 
-const ResponseSerializer = function () {
+export const ResponseSerializer = function (): IResponseSerializer {
   const getSvgStart = () => {
     return '<svg height="100" width="100" preserveAspectRatio="xMidYMid meet">';
   };
@@ -45,5 +46,3 @@ const ResponseSerializer = function () {
     process: serialize,
   };
 };
-
-export default ResponseSerializer();

@@ -9,7 +9,7 @@ import localization from './src/jobs/localization';
 import requestInterception from './src/jobs/request-interception';
 import responseInterception from './src/jobs/response-interception';
 import setBackgroundTask from './src/jobs/set-background-task';
-import { jobRunner } from './src/shared/lib';
+import { jobRunner } from './src/shared/lib/services/jobManagement';
 
 jobRunner.runAll([
   requestInterception,

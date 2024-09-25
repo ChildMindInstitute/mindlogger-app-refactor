@@ -1,11 +1,14 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { AppletDetailsResponse } from '@app/shared/api';
-import { getAppletDetailsKey, getDataFromQuery } from '@app/shared/lib';
+import { AppletDetailsResponse } from '@app/shared/api/services/IAppletService';
+import {
+  getDataFromQuery,
+  getAppletDetailsKey,
+} from '@app/shared/lib/utils/reactQueryHelpers';
 
 import { mapAppletDetailsFromDto } from '../mappers';
 
-class AppletQueryStorage {
+export class AppletQueryStorage {
   constructor(private queryClient: QueryClient) {}
 
   getAppletDetails(appletId: string) {
@@ -23,5 +26,3 @@ class AppletQueryStorage {
     return mapAppletDetailsFromDto(data.result);
   }
 }
-
-export default AppletQueryStorage;

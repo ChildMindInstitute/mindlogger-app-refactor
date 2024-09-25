@@ -3,10 +3,11 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import Popover from 'react-native-popover-view';
 
-import { activityMarkDownStyles, markdownRules } from '@shared/lib';
-
-import { colors } from '../lib';
-import { MarkdownView, ScrollView, YStack } from '../ui';
+import { YStack } from './base';
+import { MarkdownView } from './MarkdownView';
+import { ScrollView } from './ScrollView';
+import { colors } from '../lib/constants/colors';
+import { activityMarkDownStyles, markDownRules } from '../lib/markDownRules';
 
 type TooltipProps = {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ type TooltipProps = {
   hitSlop?: number;
 };
 
-const Tooltip: FC<TooltipProps & AccessibilityProps> = ({
+export const Tooltip: FC<TooltipProps & AccessibilityProps> = ({
   children,
   markdown,
   hitSlop = 40,
@@ -45,7 +46,7 @@ const Tooltip: FC<TooltipProps & AccessibilityProps> = ({
       >
         <MarkdownView
           content={markdown}
-          rules={markdownRules}
+          rules={markDownRules}
           markdownStyle={{
             ...activityMarkDownStyles,
             text: styles.markdownText,
@@ -69,5 +70,3 @@ const styles = StyleSheet.create({
     color: '#000',
   },
 });
-
-export default Tooltip;

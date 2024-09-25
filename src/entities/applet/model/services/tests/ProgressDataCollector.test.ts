@@ -1,5 +1,5 @@
-import { EntitiesCompletionsDto } from '@app/shared/api';
-import { ILogger } from '@app/shared/lib';
+import { EntitiesCompletionsDto } from '@app/shared/api/services/IEventsService';
+import { ILogger } from '@app/shared/lib/types/logger';
 
 import { ProgressDataCollector } from '../ProgressDataCollector';
 

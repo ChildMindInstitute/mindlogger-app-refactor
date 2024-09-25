@@ -4,7 +4,7 @@ import { MixProperties } from './AnalyticsService';
 import { IAnalyticsService } from './IAnalyticsService';
 import { APP_VERSION } from '../constants';
 
-class MixpanelAnalytics implements IAnalyticsService {
+export class MixpanelAnalytics implements IAnalyticsService {
   private mixpanel: Mixpanel;
 
   constructor(projectToken: string) {
@@ -31,5 +31,3 @@ class MixpanelAnalytics implements IAnalyticsService {
     this.mixpanel?.reset();
   }
 }
-
-export default MixpanelAnalytics;

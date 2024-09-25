@@ -1,15 +1,13 @@
 import { useMMKVObject } from 'react-native-mmkv';
 
-import { sessionService } from '../../lib';
+import { getDefaultSessionService } from '../../lib/sessionServiceInstance';
 import { Session } from '../../types';
 
-function useSession() {
+export function useSession() {
   const [session] = useMMKVObject<Session>(
     'sessionKeys',
-    sessionService.getStorage(),
+    getDefaultSessionService().getStorage(),
   );
 
   return session;
 }
-
-export default useSession;

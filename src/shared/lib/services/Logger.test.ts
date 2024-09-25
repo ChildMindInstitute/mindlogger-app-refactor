@@ -1,8 +1,9 @@
 import { FileSystem } from 'react-native-file-access';
 import { FileLogger } from 'react-native-file-logger';
 
-import Logger from './Logger';
-import { Logger as LoggerClass } from './Logger';
+import { getDefaultFileService } from '@app/shared/api/services/fileServiceInstance';
+
+import { Logger } from './Logger';
 
 jest.mock('@shared/api', () => ({
   FileService: {
@@ -43,7 +44,7 @@ describe('Logger: regular tests', () => {
     const input = 'Some input string';
 
     // @ts-expect-error
-    const result = Logger.withTime(input);
+    const result = getDefaultLogger().withTime(input);
 
     expect(result).toHaveLength(input.length + 10);
     expect(result).toContain(`: ${input}`);
@@ -59,7 +60,7 @@ describe('Logger: regular tests', () => {
     });
 
     // @ts-expect-error
-    const result = await Logger.checkIfFilesExist(files);
+    const result = await getDefaultLogger().checkIfFilesExist(files);
     expect(result).toEqual([]);
   });
 
@@ -80,7 +81,7 @@ describe('Logger: regular tests', () => {
     });
 
     // @ts-expect-error
-    const result = await Logger.checkIfFilesExist(files);
+    const result = await getDefaultLogger().checkIfFilesExist(files);
 
     expect(result).toEqual([
       {
@@ -115,7 +116,7 @@ describe('Logger: regular tests', () => {
     });
 
     // @ts-expect-error
-    const result = await Logger.getLogFiles();
+    const result = await getDefaultLogger().getLogFiles();
 
     expect(result).toEqual([
       {
@@ -134,7 +135,7 @@ describe('Logger: regular tests', () => {
 
 describe('Logger: test sending files', () => {
   it('Should do 5 waiting mutex attempts (or 7 check if mutex is busy) when sending logs', async () => {
-    const logger = new LoggerClass();
+    const logger = new Logger(getDefaultFileService());
 
     //@ts-expect-error
     logger.onBeforeSendLogs = jest.fn();

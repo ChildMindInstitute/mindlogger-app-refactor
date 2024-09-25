@@ -1,12 +1,10 @@
-import useUserActionManager from './useUserActionManager';
-import {
-  PipelineItemResponse,
-  UserAction,
-  useActivityStorageRecord,
-  UserActionsPostProcessorService,
-} from '../../lib';
-import PipelineVisibilityChecker from '../PipelineVisibilityChecker';
-import StepperUtils from '../StepperUtils';
+import { useUserActionManager } from './useUserActionManager';
+import { useActivityStorageRecord } from '../../lib/hooks/useActivityStorageRecord';
+import { UserActionsPostProcessorService } from '../../lib/services/UserActionsPostProcessorService';
+import { PipelineItemResponse } from '../../lib/types/payload';
+import { UserAction } from '../../lib/types/userAction';
+import { PipelineVisibilityChecker } from '../PipelineVisibilityChecker';
+import { StepperUtils } from '../StepperUtils';
 
 type UseActivityPipelineArgs = {
   appletId: string;
@@ -16,7 +14,7 @@ type UseActivityPipelineArgs = {
   order: number;
 };
 
-function useActivityState({
+export function useActivityState({
   appletId,
   activityId,
   eventId,
@@ -254,5 +252,3 @@ function useActivityState({
     postProcessUserActionsForCurrentItem,
   };
 }
-
-export default useActivityState;

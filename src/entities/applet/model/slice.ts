@@ -2,15 +2,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
-  EntityResponseTime,
   EntityProgression,
-  EntityProgressionEntityType,
   EntityProgressionCompleted,
+  EntityProgressionEntityType,
+  EntityProgressionInProgress,
   EntityProgressionInProgressActivity,
   EntityProgressionInProgressActivityFlow,
-  EntityProgressionInProgress,
-} from '@app/abstract/lib';
-import { cleanUpAction, isEntityExpired } from '@app/shared/lib';
+  EntityResponseTime,
+} from '@app/abstract/lib/types/entityProgress';
+import { cleanUpAction } from '@app/shared/lib/redux-state/actions';
+import { isEntityExpired } from '@app/shared/lib/utils/survey/survey';
 
 type InProgressEntity = {
   appletId: string;
@@ -336,6 +337,6 @@ const slice = createSlice({
     }),
 });
 
-const { actions, reducer } = slice;
+export const appletActions = slice.actions;
 
-export { actions, reducer };
+export const appletReducer = slice.reducer;

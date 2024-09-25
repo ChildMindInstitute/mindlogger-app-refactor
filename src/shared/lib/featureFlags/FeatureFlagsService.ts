@@ -6,13 +6,15 @@ import {
 
 import { LD_KIND_PREFIX } from './FeatureFlags.const';
 import { LAUNCHDARKLY_MOBILE_KEY } from '../constants';
-import { Logger } from '../services';
+import { getDefaultLogger } from '../services/loggerInstance';
 
 let ldClient: ReactNativeLDClient;
 
-const FeatureFlagsService = {
+export const FeatureFlagsService = {
   async init(): Promise<ReactNativeLDClient> {
-    Logger.log('[FeatureFlagsService]: Create and init LaunchDarkly ldClient');
+    getDefaultLogger().log(
+      '[FeatureFlagsService]: Create and init LaunchDarkly ldClient',
+    );
     ldClient = new ReactNativeLDClient(
       LAUNCHDARKLY_MOBILE_KEY,
       AutoEnvAttributes.Disabled,
@@ -64,5 +66,3 @@ const FeatureFlagsService = {
     ldClient.off('change', changeHandler);
   },
 };
-
-export default FeatureFlagsService;

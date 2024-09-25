@@ -1,28 +1,30 @@
 import { FileSystem } from 'react-native-file-access';
+import { MMKV } from 'react-native-mmkv';
 
-import { ActivityRecordKeyParams } from '@app/abstract/lib';
-import { AnswerDto, ObjectAnswerDto } from '@app/shared/api';
-import { createSecureStorage, Logger } from '@app/shared/lib';
-import { MediaFile, MediaValue } from '@app/shared/ui';
+import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
+import {
+  AnswerDto,
+  ObjectAnswerDto,
+} from '@app/shared/api/services/IAnswerService';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { MediaFile, MediaValue } from '@app/shared/ui/survey/MediaItems/types';
+
+import { IMediaFilesCleaner } from './IMediaFilesCleaner';
 
 type EntityRecord = {
   answers: Record<string, { answer: MediaFile } | undefined>;
 };
 
-export const activityStorage = createSecureStorage('activity_progress-storage');
-
-type Result = {
-  cleanUp: (keyParams: ActivityRecordKeyParams) => void;
-  cleanUpByStorageKey: (key: string) => void;
-  cleanUpByAnswers: (answers: AnswerDto[]) => void;
-};
-
-const createMediaFilesCleaner = (): Result => {
+export const createMediaFilesCleaner = (
+  activityProgressStorage: MMKV,
+): IMediaFilesCleaner => {
   const promisedCleanUpByStorageKey = async (key: string) => {
-    const storageActivityState = activityStorage.getString(key);
+    const storageActivityState = activityProgressStorage.getString(key);
 
     if (!storageActivityState) {
-      Logger.warn("[MediaFilesCleaner.cleanUp]: Activity record doesn't exist");
+      getDefaultLogger().warn(
+        "[MediaFilesCleaner.cleanUp]: Activity record doesn't exist",
+      );
       return;
     }
 
@@ -46,13 +48,13 @@ const createMediaFilesCleaner = (): Result => {
           await FileSystem.unlink(fileUrl);
         }
       } catch (error) {
-        Logger.warn(
+        getDefaultLogger().warn(
           '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',
         );
       }
     }
 
-    Logger.info('[MediaFilesCleaner.cleanUp]: completed');
+    getDefaultLogger().info('[MediaFilesCleaner.cleanUp]: completed');
   };
 
   const promisedCleanUp = async ({
@@ -111,5 +113,3 @@ const createMediaFilesCleaner = (): Result => {
     cleanUpByAnswers,
   };
 };
-
-export default createMediaFilesCleaner();

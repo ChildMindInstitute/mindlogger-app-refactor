@@ -1,9 +1,9 @@
 import {
   AnswerAlertsDto,
   AnswerDto,
-  AppletEncryptionDTO,
   UserActionDto,
-} from '@app/shared/api';
+} from '@app/shared/api/services/IAnswerService';
+import { AppletEncryptionDTO } from '@app/shared/api/services/IAppletService';
 
 export type SendAnswersInput = {
   appletId: string;

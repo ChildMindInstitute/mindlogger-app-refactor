@@ -3,20 +3,22 @@ import { AccessibilityProps } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { AutocompletionEventOptions } from '@app/abstract/lib';
-import { Box, Button, Text } from '@app/shared/ui';
+import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import {
   AnalyticsService,
-  Emitter,
   MixEvents,
-  useUploadObservable,
-} from '@shared/lib';
+} from '@app/shared/lib/analytics/AnalyticsService';
+import { useUploadObservable } from '@app/shared/lib/hooks/useUploadObservable';
+import { Emitter } from '@app/shared/lib/services/Emitter';
+import { Box } from '@app/shared/ui/base';
+import { Button } from '@app/shared/ui/Button';
+import { Text } from '@app/shared/ui/Text';
 
-import { useAutoCompletion } from '../model';
+import { useAutoCompletion } from '../model/hooks/useAutoCompletion';
 
 type Props = AccessibilityProps;
 
-const UploadRetryBanner: FC<Props> = () => {
+export const UploadRetryBanner: FC<Props> = () => {
   const { hasItemsInQueue } = useAutoCompletion();
   const { isUploading } = useUploadObservable();
 
@@ -62,5 +64,3 @@ const UploadRetryBanner: FC<Props> = () => {
     </Box>
   );
 };
-
-export default UploadRetryBanner;

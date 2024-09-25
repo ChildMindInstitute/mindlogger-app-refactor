@@ -2,15 +2,14 @@ import {
   ActivityListItem,
   ActivityStatus,
   ActivityType,
-} from '@app/entities/activity';
-
+} from '@app/entities/activity/lib/types/activityListItem';
 import {
   ActivityGroupType,
   ActivityGroupTypeNames,
   ActivityListGroup,
-} from '../../../lib';
+} from '@app/widgets/activity-group/lib/types/activityGroup';
 
-const groupMocks: ActivityListGroup[] = [];
+export const groupMocks: ActivityListGroup[] = [];
 
 for (let i = 0; i < 3; i++) {
   const activities: ActivityListItem[] = [];
@@ -44,4 +43,3 @@ for (let i = 0; i < 3; i++) {
     });
   }
 }
-export default groupMocks;

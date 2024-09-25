@@ -9,14 +9,18 @@ import {
 } from 'date-fns';
 
 import {
-  AvailabilityType,
   EntityProgression,
   EntityProgressionCompleted,
   EntityProgressionInProgress,
+} from '@app/abstract/lib/types/entityProgress';
+import {
+  AvailabilityType,
   PeriodicityType,
-} from '@app/abstract/lib';
-import { EventModel, ScheduleEvent } from '@app/entities/event';
-import { DatesFromTo, HourMinute, isSourceLess } from '@shared/lib';
+} from '@app/abstract/lib/types/event';
+import { ScheduleEvent } from '@app/entities/event/lib/types/event';
+import { getTimeToComplete } from '@app/entities/event/model/timers';
+import { DatesFromTo, HourMinute } from '@app/shared/lib/types/dateTime';
+import { isSourceLess } from '@app/shared/lib/utils/dateTime';
 
 const ManyYears = 100;
 
@@ -310,7 +314,7 @@ export class GroupUtility {
       targetSubjectId,
     ) as EntityProgressionInProgress | null;
 
-    return EventModel.getTimeToComplete(
+    return getTimeToComplete(
       event.timers.timer,
       new Date(progression!.startedAtTimestamp),
       this.getNow(),

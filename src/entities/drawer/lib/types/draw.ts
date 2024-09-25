@@ -1,4 +1,4 @@
-import { MediaFile } from '@app/shared/ui';
+import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
 
 export type Point = {
   x: number;

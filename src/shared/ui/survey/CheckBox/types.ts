@@ -1,6 +1,6 @@
-import { ImageUrl } from '@app/shared/lib';
+import { ImageUrl } from '@app/shared/lib/types/url';
 
-import { BoxProps } from '../..';
+import { BoxProps } from '../../base';
 
 export type Item = {
   id: string;

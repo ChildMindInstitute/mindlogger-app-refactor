@@ -1,4 +1,5 @@
-import { AbTestPayload, Point } from '@app/abstract/lib';
+import { AbTestPayload } from '@app/abstract/lib/types/abTrails';
+import { Point } from '@app/abstract/lib/types/primitive';
 
 export const transformCoordinates = (
   original: AbTestPayload,

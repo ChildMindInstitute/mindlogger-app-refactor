@@ -1,5 +1,5 @@
-import { EntityProgression } from '@app/abstract/lib';
-import { useAppSelector } from '@app/shared/lib';
+import { EntityProgression } from '@app/abstract/lib/types/entityProgress';
+import { useAppSelector } from '@app/shared/lib/hooks/redux';
 
 import { selectAppletsEntityProgressions } from '../selectors';
 
@@ -10,7 +10,7 @@ type UseInProgressRecordInput = {
   targetSubjectId: string | null;
 };
 
-const useInProgressRecord = ({
+export const useInProgressRecord = ({
   appletId,
   entityId,
   eventId,
@@ -29,5 +29,3 @@ const useInProgressRecord = ({
     }) || null
   );
 };
-
-export default useInProgressRecord;

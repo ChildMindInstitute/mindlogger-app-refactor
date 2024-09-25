@@ -1,9 +1,9 @@
 import { format, intervalToDuration, isSameDay, addDays } from 'date-fns';
 
-import { Item } from '@app/shared/ui';
+import { Item } from '@app/shared/ui/survey/CheckBox/types';
 
-import { Answers } from './hooks';
-import { PipelineItem, PipelineItemResponse } from './types';
+import { Answers } from './hooks/useActivityStorageRecord';
+import { PipelineItem, PipelineItemResponse } from './types/payload';
 
 type Time = {
   hours: number;
