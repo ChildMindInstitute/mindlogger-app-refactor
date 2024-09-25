@@ -35,6 +35,8 @@ type Result = {
 };
 
 export const useAutoCompletion = (): Result => {
+  const logger = getDefaultLogger();
+
   const mutex = getMutexDefaultInstanceManager().getAutoCompletionMutex();
 
   const incompletedEntities = useAppSelector(selectIncompletedEntities);
@@ -69,7 +71,7 @@ export const useAutoCompletion = (): Result => {
         isAutocompletion: true,
       });
     } catch (error) {
-      getDefaultLogger().warn(
+      logger.warn(
         '[useAutoCompletion.constructInternal] Error occurred:\n' + error,
       );
     }
@@ -82,7 +84,7 @@ export const useAutoCompletion = (): Result => {
     try {
       return collectService.collectAll(exclude);
     } catch (error) {
-      getDefaultLogger().log('[useAutoCompletion] Error occurred:\n' + error);
+      logger.log('[useAutoCompletion] Error occurred:\n' + error);
     }
     return [];
   };
@@ -90,25 +92,28 @@ export const useAutoCompletion = (): Result => {
   const completeEntityIntoUploadToQueue = useCallback(
     async (entityPath: EntityPath) => {
       if (mutex.isBusy()) {
-        getDefaultLogger().log(
+        logger.log(
           '[useAutoCompletion.completeEntityIntoUploadToQueue] Mutex is busy',
         );
         return;
       }
 
-      const collectService = new CollectCompletionsService(incompletedEntities);
+      const collectService = new CollectCompletionsService(
+        logger,
+        incompletedEntities,
+      );
       const constructService = createConstructService();
 
       try {
         mutex.setBusy();
 
-        getDefaultLogger().log(
+        logger.log(
           '[useAutoCompletion.completeEntityIntoUploadToQueue] Started',
         );
 
         const collectOutputs = collectService.collectForEntity(entityPath);
 
-        getDefaultLogger().log(
+        logger.log(
           '[useAutoCompletion.completeEntityIntoUploadToQueue] collectOutputs: \n' +
             JSON.stringify(collectOutputs, null, 2),
         );
@@ -117,9 +122,7 @@ export const useAutoCompletion = (): Result => {
           await constructInternal(collectOutput, constructService);
         }
 
-        getDefaultLogger().log(
-          '[useAutoCompletion.completeEntityIntoUploadToQueue] Done',
-        );
+        logger.log('[useAutoCompletion.completeEntityIntoUploadToQueue] Done');
       } finally {
         mutex.release();
       }
@@ -133,13 +136,14 @@ export const useAutoCompletion = (): Result => {
       forceRefreshNotifications: boolean = false,
     ): Promise<boolean> => {
       if (mutex.isBusy()) {
-        getDefaultLogger().log(
-          '[useAutoCompletion.processAutocompletion] Mutex is busy',
-        );
+        logger.log('[useAutoCompletion.processAutocompletion] Mutex is busy');
         return true;
       }
 
-      const collectService = new CollectCompletionsService(incompletedEntities);
+      const collectService = new CollectCompletionsService(
+        logger,
+        incompletedEntities,
+      );
       const constructService = createConstructService();
 
       let completionsCollected: boolean;
@@ -147,15 +151,13 @@ export const useAutoCompletion = (): Result => {
       try {
         mutex.setBusy();
 
-        getDefaultLogger().log(
-          '[useAutoCompletion.processAutocompletion] Started',
-        );
+        logger.log('[useAutoCompletion.processAutocompletion] Started');
 
         const collectOutputs = collectAllInternal(collectService, exclude);
 
         completionsCollected = !!collectOutputs.length;
 
-        getDefaultLogger().log(
+        logger.log(
           '[useAutoCompletion.processAutocompletion] collectOutputs: \n' +
             JSON.stringify(collectOutputs, null, 2),
         );
@@ -164,9 +166,7 @@ export const useAutoCompletion = (): Result => {
           await constructInternal(collectOutput, constructService);
         }
 
-        getDefaultLogger().log(
-          '[useAutoCompletion.processAutocompletion] Done',
-        );
+        logger.log('[useAutoCompletion.processAutocompletion] Done');
       } finally {
         mutex.release();
       }
@@ -188,12 +188,11 @@ export const useAutoCompletion = (): Result => {
 
   const hasExpiredEntity = useCallback((): boolean => {
     const result = new CollectCompletionsService(
+      logger,
       incompletedEntities,
     ).hasExpiredEntity();
 
-    getDefaultLogger().log(
-      `[useAutoCompletion.hasExpiredEntity]: ${String(result)}`,
-    );
+    logger.log(`[useAutoCompletion.hasExpiredEntity]: ${String(result)}`);
 
     return result;
   }, [incompletedEntities]);

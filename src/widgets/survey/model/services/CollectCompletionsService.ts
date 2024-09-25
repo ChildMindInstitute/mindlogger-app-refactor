@@ -5,7 +5,7 @@ import {
   EntityProgressionInProgressActivityFlow,
 } from '@app/abstract/lib/types/entityProgress';
 import { IncompleteEntity } from '@app/entities/applet/model/selectors';
-import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { ILogger } from '@app/shared/lib/types/logger';
 import { isEntityExpired } from '@app/shared/lib/utils/survey/survey';
 
 import {
@@ -34,9 +34,11 @@ export interface ICollectCompletionsService {
 }
 
 export class CollectCompletionsService implements ICollectCompletionsService {
+  private logger: ILogger;
   private incompleteEntities: IncompleteEntity[];
 
-  constructor(incompleteEntities: IncompleteEntity[]) {
+  constructor(logger: ILogger, incompleteEntities: IncompleteEntity[]) {
+    this.logger = logger;
     this.incompleteEntities = incompleteEntities;
   }
 
@@ -132,9 +134,7 @@ export class CollectCompletionsService implements ICollectCompletionsService {
   }
 
   public hasExpiredEntity(): boolean {
-    getDefaultLogger().log(
-      '[CollectCompletionsService.hasExpiredEntity] Working',
-    );
+    this.logger.log('[CollectCompletionsService.hasExpiredEntity] Working');
 
     const filtered = this.incompleteEntities.filter(incompleteEntity => {
       return (
@@ -212,7 +212,7 @@ export class CollectCompletionsService implements ICollectCompletionsService {
   }
 
   public collectAll(exclude?: EntityPathParams): CollectCompletionOutput[] {
-    getDefaultLogger().log('[CollectCompletionsService.collectAll] Working');
+    this.logger.log('[CollectCompletionsService.collectAll] Working');
 
     const result: CollectCompletionOutput[] = [];
 

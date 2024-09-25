@@ -1,4 +1,5 @@
 import { EntityPath } from '@app/abstract/lib/types/entity';
+import { getLoggerMock } from '@app/entities/notification/model/factory/tests/testHelpers';
 import * as survey from '@app/shared/lib/utils/survey/survey';
 
 import {
@@ -27,7 +28,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
   });
 
   it('Should return empty array when no entity progress record', () => {
-    const service = new CollectCompletionsService([]);
+    const service = new CollectCompletionsService(getLoggerMock(), []);
 
     const result = service.collectForEntity(pathOne);
 
@@ -38,7 +39,9 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
     const progression = getActivityIncompleteEntity(pathOne);
     progression.progression.availableUntilTimestamp = null;
 
-    const service = new CollectCompletionsService([progression]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(pathOne);
 
@@ -49,7 +52,9 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
     const progression = getActivityIncompleteEntity(pathOne);
     progression.progression.availableUntilTimestamp = null;
 
-    const service = new CollectCompletionsService([progression]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(pathOne);
 
@@ -68,7 +73,9 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
       5,
     ).getTime();
 
-    const service = new CollectCompletionsService([progression]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(pathOne);
 
@@ -90,7 +97,9 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
       5,
     ).getTime();
 
-    const service = new CollectCompletionsService([progression]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(pathOne);
 
@@ -116,7 +125,9 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
       5,
     ).getTime();
 
-    const service = new CollectCompletionsService([progression]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(pathOne);
 
@@ -155,7 +166,9 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
       'mock-activity-description-1';
     progression.progression.currentActivityImage = null;
 
-    const service = new CollectCompletionsService([progression]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(path);
 
@@ -203,7 +216,9 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
       'mock-activity-description-2';
     progression.progression.currentActivityImage = null;
 
-    const service = new CollectCompletionsService([progression]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(path);
 

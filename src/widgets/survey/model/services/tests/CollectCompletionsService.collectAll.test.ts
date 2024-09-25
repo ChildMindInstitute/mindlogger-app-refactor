@@ -1,4 +1,5 @@
 import { EntityPath } from '@app/abstract/lib/types/entity';
+import { getLoggerMock } from '@app/entities/notification/model/factory/tests/testHelpers';
 import * as survey from '@app/shared/lib/utils/survey/survey';
 
 import {
@@ -44,7 +45,9 @@ describe('Test CollectCompletionsService: collectAll', () => {
 
     const progression = getActivityIncompleteEntity(pathOne);
 
-    const service = new CollectCompletionsService([progression]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     expect(getFlowMock).toBeCalledTimes(0);
 
@@ -77,7 +80,9 @@ describe('Test CollectCompletionsService: collectAll', () => {
         7,
       ).getTime();
 
-      const service = new CollectCompletionsService([progression]);
+      const service = new CollectCompletionsService(getLoggerMock(), [
+        progression,
+      ]);
 
       const result = service.collectAll({
         ...pathOne,
@@ -94,7 +99,9 @@ describe('Test CollectCompletionsService: collectAll', () => {
     const progression = getActivityIncompleteEntity(pathOne);
     progression.progression.availableUntilTimestamp = null;
 
-    const service = new CollectCompletionsService([progression]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectAll(pathOne);
 
@@ -113,7 +120,9 @@ describe('Test CollectCompletionsService: collectAll', () => {
       7,
     ).getTime();
 
-    const service = new CollectCompletionsService([progression]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectAll();
 
@@ -143,7 +152,7 @@ describe('Test CollectCompletionsService: collectAll', () => {
       7,
     ).getTime();
 
-    const service = new CollectCompletionsService([
+    const service = new CollectCompletionsService(getLoggerMock(), [
       firstProgression,
       secondProgression,
     ]);
@@ -178,7 +187,7 @@ describe('Test CollectCompletionsService: collectAll', () => {
       7,
     ).getTime();
 
-    const service = new CollectCompletionsService([
+    const service = new CollectCompletionsService(getLoggerMock(), [
       firstProgression,
       secondProgression,
     ]);
@@ -246,7 +255,7 @@ describe('Test CollectCompletionsService: collectAll', () => {
       7,
     ).getTime();
 
-    const service = new CollectCompletionsService([
+    const service = new CollectCompletionsService(getLoggerMock(), [
       firstProgression,
       secondProgression,
     ]);
@@ -296,14 +305,24 @@ describe('Test CollectCompletionsService: collectAll', () => {
 
     const expected = [
       {
-        activityId: 'mock-entity-id-1',
+        activityId: 'mock-activity-id-1',
         activityName: 'mock-activity-name-1',
+        appletId: 'mock-applet-id-1',
+        completionType: 'intermediate',
+        eventId: 'mock-event-id-1',
+        flowId: 'mock-entity-id-1',
+        logAvailableTo: undefined,
+        order: 0,
+      },
+      {
+        activityId: 'mock-activity-id-2',
+        activityName: 'mock-activity-name-2',
         appletId: 'mock-applet-id-1',
         completionType: 'finish',
         eventId: 'mock-event-id-1',
-        flowId: undefined,
+        flowId: 'mock-entity-id-1',
         logAvailableTo: undefined,
-        order: 0,
+        order: 1,
       },
       {
         activityId: 'mock-activity-id-1',
