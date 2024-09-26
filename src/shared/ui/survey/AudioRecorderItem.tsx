@@ -6,7 +6,6 @@ import AudioRecorderPlayer, {
   AudioSet,
 } from 'react-native-audio-recorder-player';
 import { FileSystem, Dirs } from 'react-native-file-access';
-import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
 import { handleBlockedPermissions } from '@app/shared/lib/alerts/permissionAlerts';

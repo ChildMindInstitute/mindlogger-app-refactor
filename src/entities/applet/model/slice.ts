@@ -130,7 +130,6 @@ const slice = createSlice({
     },
 
     startFlow: (state, action: PayloadAction<InProgressFlow>) => {
-      console.log(`!!! startFlow: ${JSON.stringify(action, null, 2)}`);
       const {
         appletId,
         activityId,
