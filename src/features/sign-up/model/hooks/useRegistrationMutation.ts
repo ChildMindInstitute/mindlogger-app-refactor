@@ -4,10 +4,8 @@ import { getDefaultUserInfoRecord } from '@app/entities/identity/lib/userInfoRec
 import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userPrivateKeyRecordInstance';
 import { identityActions } from '@app/entities/identity/model/slice';
 import { storeSession } from '@app/entities/session/model/operations';
-import {
-  AnalyticsService,
-  MixEvents,
-} from '@app/shared/lib/analytics/AnalyticsService';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
+import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
 import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encryptionManagerInstance';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
@@ -49,9 +47,12 @@ export const useRegistrationMutation = (
 
       storeSession(session);
 
-      AnalyticsService.login(user.id).then(() => {
-        AnalyticsService.track(MixEvents.SignupSuccessful);
-      });
+      getDefaultAnalyticsService()
+        .login(user.id)
+        .then(() => {
+          getDefaultAnalyticsService().track(MixEvents.SignupSuccessful);
+        })
+        .catch(console.error);
 
       if (onSuccess) {
         onSuccess();

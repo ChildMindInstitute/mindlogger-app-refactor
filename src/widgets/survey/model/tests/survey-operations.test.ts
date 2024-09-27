@@ -2,7 +2,11 @@ import {
   AvailabilityType,
   PeriodicityType,
 } from '@app/abstract/lib/types/event';
+import { ISvgFileManager } from '@app/entities/drawer/lib/utils/ISvgFileManager';
+import { getDefaultSvgFileManager } from '@app/entities/drawer/lib/utils/svgFileManagerInstance';
 import { ScheduleEvent } from '@app/entities/event/lib/types/event';
+import { IScheduledDateCalculator } from '@app/entities/event/model/operations/IScheduledDateCalculator';
+import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
 import { Answers } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import {
   getDrawerItem,
@@ -21,23 +25,6 @@ import {
   getScheduledDate,
   getUserIdentifier,
 } from '../operations';
-
-const mockNow = new Date(2013, 5, 8);
-
-const calculateMock = jest.fn().mockReturnValue(new Date(2013, 5, 8));
-
-jest.mock(
-  '@app/entities/event/model/operations/ScheduledDateCalculator',
-  () => ({
-    calculate: () => calculateMock(),
-  }),
-);
-
-const writeFileMock = jest.fn().mockResolvedValue([undefined]);
-
-jest.mock('@app/entities/drawer/lib/utils/SvgFileManager', () => ({
-  writeFile: (_: string, svg: string) => writeFileMock(svg),
-}));
 
 const getMockEvent = (): ScheduleEvent => {
   return {
@@ -64,16 +51,31 @@ const getMockEvent = (): ScheduleEvent => {
 };
 
 describe('Test survey operations', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
+  let mockNow: Date;
+  let calculator: IScheduledDateCalculator;
+  let calculateSpy: jest.SpyInstance;
+
+  let svgFileManager: ISvgFileManager;
+  let writeFileSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    mockNow = new Date(2013, 5, 8, 0, 0, 0, 0);
+
+    calculator = getDefaultScheduledDateCalculator();
+    calculateSpy = jest.spyOn(calculator, 'calculate').mockReturnValue(mockNow);
+
+    svgFileManager = getDefaultSvgFileManager();
+    writeFileSpy = jest
+      .spyOn(svgFileManager, 'writeFile')
+      .mockResolvedValue(undefined);
   });
 
   it('"getScheduledDate" should return undefined when availabilityType is AlwaysAvailable', () => {
     const event = getMockEvent();
 
-    const result = getScheduledDate(event);
+    const result = getScheduledDate(calculator, event);
 
-    expect(calculateMock).toBeCalledTimes(0);
+    expect(calculateSpy).toBeCalledTimes(0);
 
     expect(result).toEqual(undefined);
   });
@@ -93,9 +95,9 @@ describe('Test survey operations', () => {
       event.availability.availabilityType = AvailabilityType.ScheduledAccess;
       event.availability.periodicityType = periodicity;
 
-      const result = getScheduledDate(event);
+      const result = getScheduledDate(calculator, event);
 
-      expect(calculateMock).toBeCalledTimes(1);
+      expect(calculateSpy).toBeCalledTimes(1);
 
       expect(result).toEqual(mockNow.getTime());
     });
@@ -227,14 +229,16 @@ describe('Test survey operations', () => {
       4: answer5,
     };
 
-    await createSvgFiles(items, answers);
+    await createSvgFiles(svgFileManager, items, answers);
 
-    expect(writeFileMock).toBeCalledTimes(2);
-    expect(writeFileMock.mock.calls).toEqual([
+    expect(writeFileSpy).toBeCalledTimes(2);
+    expect(writeFileSpy.mock.calls).toEqual([
       [
+        'mock-uri-2',
         '<svg height="202" width="102" preserveAspectRatio="xMidYMid meet"><polyline points="72.96296013726129,65.83333121405708 73.42592451307509,64.62962892320421"></polyline></svg>',
       ],
       [
+        'mock-uri-4',
         '<svg height="204" width="104" preserveAspectRatio="xMidYMid meet"><polyline points="72.96296013726129,65.83333121405708 73.42592451307509,64.62962892320421"></polyline></svg>',
       ],
     ]);

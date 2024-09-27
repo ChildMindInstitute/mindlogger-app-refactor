@@ -19,7 +19,7 @@ describe('Test pipelineBuilder for single activity', () => {
     const result = buildSingleActivityPipeline({
       appletId: 'mock-applet-id-1',
       eventId: 'mock-event-id-1',
-      targetSubjectId: 'mock-target-subject-id-1',
+      targetSubjectId: null,
       hasSummary: () => false,
       activity: { ...mockForActivity1 },
     });
@@ -33,6 +33,7 @@ describe('Test pipelineBuilder for single activity', () => {
           activityName: 'mock-activity-name-1',
           appletId: 'mock-applet-id-1',
           eventId: 'mock-event-id-1',
+          targetSubjectId: null,
           order: 0,
         },
         type: 'Stepper',
@@ -43,6 +44,7 @@ describe('Test pipelineBuilder for single activity', () => {
           activityName: 'mock-activity-name-1',
           appletId: 'mock-applet-id-1',
           eventId: 'mock-event-id-1',
+          targetSubjectId: null,
           order: 0,
         },
         type: 'Finish',
@@ -56,7 +58,7 @@ describe('Test pipelineBuilder for single activity', () => {
     const result = buildSingleActivityPipeline({
       appletId: 'mock-applet-id-2',
       eventId: 'mock-event-id-2',
-      targetSubjectId: 'mock-target-subject-id-1',
+      targetSubjectId: null,
       hasSummary: () => true,
       activity: { ...mockForActivity2 },
     });
@@ -70,6 +72,7 @@ describe('Test pipelineBuilder for single activity', () => {
           activityName: 'mock-activity-name-2',
           appletId: 'mock-applet-id-2',
           eventId: 'mock-event-id-2',
+          targetSubjectId: null,
           order: 0,
         },
         type: 'Stepper',
@@ -80,6 +83,7 @@ describe('Test pipelineBuilder for single activity', () => {
           activityName: 'mock-activity-name-2',
           appletId: 'mock-applet-id-2',
           eventId: 'mock-event-id-2',
+          targetSubjectId: null,
           order: 0,
         },
         type: 'Summary',
@@ -90,6 +94,7 @@ describe('Test pipelineBuilder for single activity', () => {
           activityName: 'mock-activity-name-2',
           appletId: 'mock-applet-id-2',
           eventId: 'mock-event-id-2',
+          targetSubjectId: null,
           order: 0,
         },
         type: 'Finish',

@@ -11,12 +11,10 @@ import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userP
 import { selectUserId } from '@app/entities/identity/model/selectors';
 import { identityActions } from '@app/entities/identity/model/slice';
 import { storeSession } from '@app/entities/session/model/operations';
-import {
-  AnalyticsService,
-  MixEvents,
-} from '@app/shared/lib/analytics/AnalyticsService';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
+import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
 import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encryptionManagerInstance';
-import { FeatureFlagsService } from '@app/shared/lib/featureFlags/FeatureFlagsService';
+import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
@@ -79,11 +77,14 @@ export const LoginForm: FC<Props> = props => {
 
       storeSession(session);
 
-      AnalyticsService.login(user.id).then(() => {
-        AnalyticsService.track(MixEvents.LoginSuccessful);
-      });
+      getDefaultAnalyticsService()
+        .login(user.id)
+        .then(() => {
+          getDefaultAnalyticsService().track(MixEvents.LoginSuccessful);
+        })
+        .catch(console.error);
 
-      FeatureFlagsService.login(user.id);
+      getDefaultFeatureFlagsService().login(user.id).catch(console.error);
 
       props.onLoginSuccess();
     },

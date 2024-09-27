@@ -133,7 +133,11 @@ export class GroupUtility {
     if (!record) {
       return false;
     }
-    return record.status === 'in-progress';
+    return (
+      record.status === 'in-progress' &&
+      !!record.startedAtTimestamp &&
+      !(record as unknown as EntityProgressionCompleted).endedAtTimestamp
+    );
   }
 
   public isInInterval(

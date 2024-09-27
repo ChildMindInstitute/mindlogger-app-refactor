@@ -35,11 +35,11 @@ import {
 import { getDefaultNotificationRefreshService } from '@app/entities/notification/model/notificationRefreshServiceInstance';
 import { LogTrigger } from '@app/shared/api/services/INotificationService';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
-  AnalyticsService,
   MixEvents,
   MixProperties,
-} from '@app/shared/lib/analytics/AnalyticsService';
+} from '@app/shared/lib/analytics/IAnalyticsService';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useCurrentRoute } from '@app/shared/lib/hooks/useCurrentRoute';
 import { useToast } from '@app/shared/lib/hooks/useToast';
@@ -143,7 +143,7 @@ export function useOnNotificationTap({
 
       const isAutocompletionWorking = getCurrentRoute() === 'Autocompletion';
 
-      AnalyticsService.track(MixEvents.NotificationTap, {
+      getDefaultAnalyticsService().track(MixEvents.NotificationTap, {
         [MixProperties.AppletId]: appletId,
       });
 

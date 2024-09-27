@@ -15,11 +15,11 @@ import { getDefaultNotificationRefreshService } from '@app/entities/notification
 import { useAutomaticRefreshOnMount } from '@app/features/applets-refresh/model/hooks/useAutomaticRefreshOnMount';
 import { AppletsRefresh } from '@app/features/applets-refresh/ui/AppletsRefresh';
 import { LogTrigger } from '@app/shared/api/services/INotificationService';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
-  AnalyticsService,
   MixEvents,
   MixProperties,
-} from '@app/shared/lib/analytics/AnalyticsService';
+} from '@app/shared/lib/analytics/IAnalyticsService';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -44,7 +44,7 @@ export const AppletsScreen: FC = () => {
   }, [t, userFirstName, setOptions]);
 
   useOnFocus(() => {
-    AnalyticsService.track(MixEvents.HomeView);
+    getDefaultAnalyticsService().track(MixEvents.HomeView);
   });
 
   const queryClient = useQueryClient();
@@ -57,7 +57,7 @@ export const AppletsScreen: FC = () => {
     ({ id, displayName }) => {
       navigate('AppletDetails', { appletId: id, title: displayName });
 
-      AnalyticsService.track(MixEvents.AppletSelected, {
+      getDefaultAnalyticsService().track(MixEvents.AppletSelected, {
         [MixProperties.AppletId]: id,
       });
     },

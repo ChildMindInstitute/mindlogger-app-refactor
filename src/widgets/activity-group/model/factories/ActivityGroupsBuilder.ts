@@ -44,7 +44,10 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       inputParams.appletId,
       inputParams.entityProgressions,
     );
-    this.availableEvaluator = new AvailableGroupEvaluator(inputParams.appletId);
+    this.availableEvaluator = new AvailableGroupEvaluator(
+      inputParams.appletId,
+      inputParams.entityProgressions,
+    );
     this.utility = new GroupUtility(
       inputParams.appletId,
       inputParams.entityProgressions,

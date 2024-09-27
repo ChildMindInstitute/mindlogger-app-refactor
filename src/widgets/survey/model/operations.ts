@@ -6,9 +6,9 @@ import {
   EntityProgressionInProgressActivityFlow,
 } from '@app/abstract/lib/types/entityProgress';
 import { AvailabilityType } from '@app/abstract/lib/types/event';
-import { getDefaultSvgFileManager } from '@app/entities/drawer/lib/utils/svgFileManagerInstance';
+import { ISvgFileManager } from '@app/entities/drawer/lib/utils/ISvgFileManager';
 import { ScheduleEvent } from '@app/entities/event/lib/types/event';
-import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
+import { IScheduledDateCalculator } from '@app/entities/event/model/operations/IScheduledDateCalculator';
 import { Answers } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import {
   ActivityItemType,
@@ -18,11 +18,14 @@ import {
 import { InitializeHiddenItem } from '@app/features/pass-survey/model/ActivityRecordInitializer';
 import { AnswerDto } from '@app/shared/api/services/IAnswerService';
 
-export const getScheduledDate = (event: ScheduleEvent) => {
+export const getScheduledDate = (
+  calculator: IScheduledDateCalculator,
+  event: ScheduleEvent,
+) => {
   if (
     event.availability.availabilityType !== AvailabilityType.AlwaysAvailable
   ) {
-    return getDefaultScheduledDateCalculator().calculate(event)!.valueOf();
+    return calculator.calculate(event)!.valueOf();
   }
 };
 
@@ -116,6 +119,7 @@ export const canItemHaveAnswer = (type: ActivityItemType): boolean => {
 };
 
 export const createSvgFiles = async (
+  svgFileManager: ISvgFileManager,
   pipelineItems: PipelineItem[],
   answers: Answers,
 ) => {
@@ -130,7 +134,7 @@ export const createSvgFiles = async (
   });
 
   const promises = drawingTestItems.map(drawingTestItem => {
-    return getDefaultSvgFileManager().writeFile(
+    return svgFileManager.writeFile(
       drawingTestItem.uri,
       drawingTestItem.svgString,
     );

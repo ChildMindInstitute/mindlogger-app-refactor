@@ -9,10 +9,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 
 import { LocalizationProvider } from '@app/entities/localization/ui/LocalizationProvider';
-import {
-  AnalyticsService,
-  MixEvents,
-} from '@app/shared/lib/analytics/AnalyticsService';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
+import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import { AnalyticsProvider } from './AnalyticsProvider';
@@ -40,7 +38,7 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
   const onLoadingFinished = () => {
     getDefaultLogger().log('[AppProvider]: App loaded');
 
-    AnalyticsService.track(MixEvents.AppOpen);
+    getDefaultAnalyticsService().track(MixEvents.AppOpen);
 
     setIsBootingUp(false);
   };

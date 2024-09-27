@@ -39,7 +39,10 @@ export type EntityProgressionInProgress =
   | EntityProgressionInProgressActivity
   | EntityProgressionInProgressActivityFlow;
 
-export type EntityProgressionCompleted = EntityProgressionBase & {
+export type EntityProgressionCompleted = Omit<
+  EntityProgressionInProgressBase,
+  'status'
+> & {
   status: 'completed';
   endedAtTimestamp: number | null;
 };

@@ -93,8 +93,9 @@ export class NotificationUtility {
       targetSubjectId,
     );
 
-    const completedProgression = progression as EntityProgressionCompleted;
-    if (completedProgression.endedAtTimestamp) {
+    const completedProgression =
+      progression as EntityProgressionCompleted | null;
+    if (completedProgression?.endedAtTimestamp) {
       return new Date(completedProgression.endedAtTimestamp);
     } else {
       return null;

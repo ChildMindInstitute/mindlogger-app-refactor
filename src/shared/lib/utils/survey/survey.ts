@@ -53,7 +53,13 @@ export const getEntityProgression = (
 
 export const isEntityProgressionInProgress = (
   progression: EntityProgression | undefined,
-) => progression?.status === 'in-progress';
+) => {
+  return (
+    progression?.status === 'in-progress' &&
+    !(progression as never as EntityProgressionCompleted | undefined)
+      ?.endedAtTimestamp
+  );
+};
 
 export function isProgressionReadyForAutocompletion(
   path: EntityPath,

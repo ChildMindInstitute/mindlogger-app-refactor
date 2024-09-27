@@ -107,10 +107,10 @@ const checkEntityAvailabilityInternal = ({
     return;
   }
 
-  const isAvailable = new AvailableGroupEvaluator(appletId).isEventInGroup(
-    event,
-    targetSubjectId,
-  );
+  const isAvailable = new AvailableGroupEvaluator(
+    appletId,
+    entityProgressions,
+  ).isEventInGroup(event, targetSubjectId);
 
   const isScheduled = new ScheduledGroupEvaluator(
     appletId,

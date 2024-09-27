@@ -18,6 +18,7 @@ import {
   LogAction,
   LogTrigger,
 } from '@app/shared/api/services/INotificationService';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { IMutexDefaultInstanceManager } from '@app/shared/lib/utils/IMutexDefaultInstanceManager';
 import {
@@ -29,7 +30,7 @@ import {
 } from '@app/shared/lib/utils/reactQueryHelpers';
 import { mapAssignmentsFromDto } from '@app/widgets/activity-group/model/mappers';
 
-import { createNotificationBuilder } from './factory/NotificationBuilder';
+import { NotificationBuilder } from './factory/NotificationBuilder';
 import { INotificationManager } from './INotificationManager';
 import { INotificationRefreshService } from './INotificationRefreshService';
 import {
@@ -178,13 +179,16 @@ export const createNotificationRefreshService = (
         eventEntity.event.scheduledAt = date;
       }
 
-      const builder = createNotificationBuilder({
-        appletId: applet.id,
-        appletName: applet.name,
-        eventEntities: entityEvents,
-        progressions,
-        responseTimes,
-      });
+      const builder = new NotificationBuilder(
+        {
+          appletId: applet.id,
+          appletName: applet.name,
+          eventEntities: entityEvents,
+          progressions,
+          responseTimes,
+        },
+        getDefaultLogger(),
+      );
 
       const appletNotifications: AppletNotificationDescribers = builder.build();
 

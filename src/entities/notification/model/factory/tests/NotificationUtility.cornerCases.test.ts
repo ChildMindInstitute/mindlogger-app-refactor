@@ -93,11 +93,7 @@ describe('NotificationUtility: test corner cases, rest of small functions', () =
     //@ts-expect-error
     utility.getProgressionCompletedAt = getProgressionCompletedAtMock;
 
-    utility.isCompleted(
-      'mock-entity-id-1',
-      'mock-event-id-1',
-      'mock-target-subject-1',
-    );
+    utility.isCompleted('mock-entity-id-1', 'mock-event-id-1', null);
 
     expect(getProgressionCompletedAtMock).toHaveBeenCalledTimes(1);
   });

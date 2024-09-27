@@ -21,7 +21,7 @@ import {
   getEmptyEvent,
   getEventEntity,
 } from './testHelpers';
-import { INotificationBuilder } from '../NotificationBuilder';
+import { INotificationBuilder } from '../INotificationBuilder';
 
 const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
   const date = new Date(now);

@@ -3,12 +3,17 @@ import { addHours, addMilliseconds, subHours, subSeconds } from 'date-fns';
 
 import { Answers } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import { PipelineItem } from '@app/features/pass-survey/lib/types/payload';
+import { IAlertsExtractor } from '@app/features/pass-survey/model/IAlertsExtractor';
+import { IScoresExtractor } from '@app/features/pass-survey/model/IScoresExtractor';
 import { getSliderItem } from '@app/features/pass-survey/model/tests/testHelpers';
-import { AppletEncryptionDTO } from '@app/shared/api/services/IAppletService';
+import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
+import { ILogger } from '@app/shared/lib/types/logger';
 
 import {
   createGetActivityRecordMock,
   expectedUserActions,
+  getActivityProgressionsMock,
+  getFlowProgressionsMock,
   getInputsForFinish,
   getInputsForIntermediate,
   mockConstructionServiceExternals,
@@ -19,28 +24,32 @@ import {
   ConstructCompletionsService,
 } from '../ConstructCompletionsService';
 
-jest.mock('@app/shared/lib/services/Logger', () => ({
+const mockLogger = {
   log: jest.fn(),
   info: jest.fn(),
   warn: jest.fn(),
-}));
+} as never as ILogger;
 
-jest.mock('@app/features/pass-survey/model/ScoresExtractor', () => ({
+const mockScoresExtractor = {
   extract: jest
     .fn()
     .mockReturnValue([
       { name: 'mock-score-name-1', value: 125, flagged: true },
     ]),
-}));
+} as never as IScoresExtractor;
 
-jest.mock('@app/features/pass-survey/model/AlertsExtractor', () => ({
+const mockAlertsExtractor = {
   extractForSummary: jest.fn().mockReturnValue([
     {
       activityItemId: 'mock-activity-item-1',
       message: 'mock-message-1',
     },
   ]),
-}));
+} as never as IAlertsExtractor;
+
+const mockPersistor = {
+  flush: jest.fn().mockResolvedValue(undefined),
+} as never as typeof ReduxPersistor;
 
 const mockNowDate = new Date(2023, 3, 8, 15, 27);
 
@@ -80,12 +89,18 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
 
     const pushToQueueMock = { push: jest.fn() };
 
+    const entityProgressions = getFlowProgressionsMock();
+
     const service = new ConstructCompletionsService(
       saveSummaryMock,
+      mockLogger,
       {} as any,
       pushToQueueMock,
+      mockAlertsExtractor,
+      mockScoresExtractor,
       jest.fn(),
-      [],
+      mockPersistor,
+      entityProgressions,
     );
 
     //@ts-expect-error
@@ -137,6 +152,7 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       eventId: 'mock-event-id-1',
       executionGroupKey: 'mock-flow-group-key-1',
       flowId: 'mock-flow-id-1',
+      targetSubjectId: null,
       isFlowCompleted: false,
       itemIds: ['mock-slider-id-1', 'mock-slider-id-2'],
       activityName: 'mock-activity-name-1',
@@ -167,12 +183,18 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
 
     const pushToQueueMock = { push: jest.fn() };
 
+    const entityProgressions = getFlowProgressionsMock();
+
     const service = new ConstructCompletionsService(
       saveSummaryMock,
+      mockLogger,
       {} as any,
       pushToQueueMock,
+      mockAlertsExtractor,
+      mockScoresExtractor,
       jest.fn(),
-      [],
+      mockPersistor,
+      entityProgressions,
     );
 
     //@ts-expect-error
@@ -237,12 +259,18 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
 
     const pushToQueueMock = { push: jest.fn() };
 
+    const entityProgressions = getFlowProgressionsMock();
+
     const service = new ConstructCompletionsService(
       saveSummaryMock,
+      mockLogger,
       {} as any,
       pushToQueueMock,
+      mockAlertsExtractor,
+      mockScoresExtractor,
       jest.fn(),
-      [],
+      mockPersistor,
+      entityProgressions,
     );
 
     //@ts-expect-error
@@ -296,6 +324,7 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
           eventId: 'mock-event-id-1',
           executionGroupKey: 'mock-flow-group-key-1',
           flowId: 'mock-flow-id-1',
+          targetSubjectId: null,
           isFlowCompleted: true,
           itemIds: ['mock-slider-id-1', 'mock-slider-id-2'],
           activityName: 'mock-activity-name-1',
@@ -346,12 +375,18 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
 
     const pushToQueueMock = { push: jest.fn() };
 
+    const entityProgressions = getActivityProgressionsMock();
+
     const service = new ConstructCompletionsService(
       saveSummaryMock,
+      mockLogger,
       {} as any,
       pushToQueueMock,
+      mockAlertsExtractor,
+      mockScoresExtractor,
       jest.fn(),
-      [],
+      mockPersistor,
+      entityProgressions,
     );
 
     //@ts-expect-error
@@ -407,6 +442,7 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
           eventId: 'mock-event-id-1',
           executionGroupKey: 'mock-group-key-1',
           flowId: null,
+          targetSubjectId: null,
           isFlowCompleted: false,
           itemIds: ['mock-slider-id-1', 'mock-slider-id-2'],
           activityName: 'mock-activity-name-1',
@@ -429,16 +465,22 @@ describe('Test ConstructCompletionsService: edge cases', () => {
   });
 
   it('"getAppletProperties" should throw error when no applet dto in the cache', () => {
+    const entityProgressions = getFlowProgressionsMock();
+
     const pushToQueueMock = { push: jest.fn() };
 
     const { saveSummaryMock } = mockConstructionServiceExternals(mockNowDate);
 
     const service = new ConstructCompletionsService(
       saveSummaryMock,
+      mockLogger,
       {} as any,
       pushToQueueMock,
+      mockAlertsExtractor,
+      mockScoresExtractor,
       jest.fn(),
-      [],
+      mockPersistor,
+      entityProgressions,
     );
 
     //@ts-expect-error
@@ -471,6 +513,8 @@ describe('Test ConstructCompletionsService: edge cases', () => {
       : String(appletEncryption);
 
     it(`"validateEncryption" should throw error when appletEncryption is ${appletEncryptionAsText}`, () => {
+      const entityProgressions = getFlowProgressionsMock();
+
       const { saveSummaryMock } = mockConstructionServiceExternals(mockNowDate);
 
       const pushMock = jest.fn();
@@ -479,10 +523,14 @@ describe('Test ConstructCompletionsService: edge cases', () => {
 
       const service = new ConstructCompletionsService(
         saveSummaryMock,
+        mockLogger,
         {} as QueryClient,
         pushToQueueMock,
+        mockAlertsExtractor,
+        mockScoresExtractor,
         jest.fn(),
-        [],
+        mockPersistor,
+        entityProgressions,
       );
 
       expect(() =>
@@ -513,6 +561,8 @@ describe('Test ConstructCompletionsService: edge cases', () => {
       : String(activityStorageRecord);
 
     it(`isRecordExist should return ${expectedResult} when activityStorageRecord is ${activityStorageRecordAsText}`, () => {
+      const entityProgressions = getFlowProgressionsMock();
+
       const { saveSummaryMock } = mockConstructionServiceExternals(mockNowDate);
 
       const pushMock = jest.fn();
@@ -521,10 +571,14 @@ describe('Test ConstructCompletionsService: edge cases', () => {
 
       const service = new ConstructCompletionsService(
         saveSummaryMock,
+        mockLogger,
         {} as QueryClient,
         pushToQueueMock,
+        mockAlertsExtractor,
+        mockScoresExtractor,
         jest.fn(),
-        [],
+        mockPersistor,
+        entityProgressions,
       );
 
       //@ts-expect-error
@@ -622,6 +676,8 @@ describe('Test ConstructCompletionsService: evaluateEndAt', () => {
       expectedResultLog,
     }) => {
       it(`Should return '${expectedResultLog}' when completionType is ${completionType} and availableTo is '${logAvailableTo}' and isAutocompletion is ${isAutocompletion}`, () => {
+        const entityProgressions = getFlowProgressionsMock();
+
         const pushToQueueMock = { push: jest.fn() };
 
         const { saveSummaryMock } =
@@ -629,10 +685,14 @@ describe('Test ConstructCompletionsService: evaluateEndAt', () => {
 
         const service = new ConstructCompletionsService(
           saveSummaryMock,
+          mockLogger,
           {} as QueryClient,
           pushToQueueMock,
+          mockAlertsExtractor,
+          mockScoresExtractor,
           jest.fn(),
-          [],
+          mockPersistor,
+          entityProgressions,
         );
 
         // @ts-expect-error

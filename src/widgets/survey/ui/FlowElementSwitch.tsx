@@ -5,11 +5,11 @@ import { useNavigation } from '@react-navigation/native';
 import { ScheduleEvent } from '@app/entities/event/lib/types/event';
 import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
 import { ActivityStepper } from '@app/features/pass-survey/ui/ActivityStepper';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
-  AnalyticsService,
   MixEvents,
   MixProperties,
-} from '@app/shared/lib/analytics/AnalyticsService';
+} from '@app/shared/lib/analytics/IAnalyticsService';
 import { colors } from '@app/shared/lib/constants/colors';
 import { BackButton } from '@app/shared/ui/BackButton';
 import { Box } from '@app/shared/ui/base';
@@ -54,7 +54,7 @@ export function FlowElementSwitch({
 
   const closeAssessment = (reason: 'regular' | 'click-on-return') => {
     if (reason === 'click-on-return') {
-      AnalyticsService.track(MixEvents.ReturnToActivitiesPressed, {
+      getDefaultAnalyticsService().track(MixEvents.ReturnToActivitiesPressed, {
         [MixProperties.AppletId]: context.appletId,
       });
     }

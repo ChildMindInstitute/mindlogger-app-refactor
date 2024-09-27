@@ -1,9 +1,4 @@
 import {
-  EntityProgression,
-  EntityProgressionInProgress,
-} from '@app/abstract/lib/types/entityProgress';
-
-import {
   getEntityProgression,
   invertColor,
   isEntityExpired,
@@ -35,7 +30,7 @@ describe('Test getEntityProgress', () => {
       'mock-applet-id-1',
       'mock-entity-id-1',
       'mock-event-id-1',
-      'mock-target-subject-id-1',
+      null,
       [],
     );
 
@@ -47,8 +42,8 @@ describe('Test getEntityProgress', () => {
       'mock-applet-id-1',
       'mock-entity-id-1',
       'mock-event-id-1',
-      'mock-target-subject-id-1',
-      [{ appletId: 'mock-applet-id-1' } as never as EntityProgression],
+      null,
+      [{ appletId: 'mock-applet-id-1' } as never],
     );
 
     expect(result).toEqual(undefined);
@@ -59,13 +54,8 @@ describe('Test getEntityProgress', () => {
       'mock-applet-id-1',
       'mock-entity-id-1',
       'mock-event-id-1',
-      'mock-target-subject-id-1',
-      [
-        {
-          appletId: 'mock-applet-id-1',
-          entityId: 'mock-entity-id-1',
-        } as never as EntityProgression,
-      ],
+      null,
+      [{ appletId: 'mock-applet-id-1', entityId: 'mock-entity-id-1' } as never],
     );
 
     expect(result).toEqual(undefined);
@@ -76,13 +66,13 @@ describe('Test getEntityProgress', () => {
       'mock-applet-id-1',
       'mock-entity-id-1',
       'mock-event-id-1',
-      'mock-target-subject-id-1',
+      null,
       [
         {
           appletId: 'mock-applet-id-1',
           entityId: 'mock-entity-id-1',
           eventId: 'mock-event-id-2',
-        } as never as EntityProgression,
+        } as never,
       ],
     );
 
@@ -94,24 +84,29 @@ describe('Test getEntityProgress', () => {
       'mock-applet-id-1',
       'mock-entity-id-1',
       'mock-event-id-1',
-      'mock-target-subject-id-1',
+      null,
       [
         {
           status: 'in-progress',
           appletId: 'mock-applet-id-1',
+          entityType: 'activity',
           entityId: 'mock-entity-id-1',
           eventId: 'mock-event-id-1',
-          targetSubjectId: 'mock-target-subject-id-1',
-        } as EntityProgression,
+          targetSubjectId: null,
+          startedAtTimestamp: 123,
+          availableUntilTimestamp: null,
+        },
       ],
     );
 
-    expect(result).toEqual({
-      availableTo: null,
-      endAt: null,
-      startAt: 123,
-      type: 1,
-    });
+    expect(result).toHaveProperty('status', 'in-progress');
+    expect(result).toHaveProperty('appletId', 'mock-applet-id-1');
+    expect(result).toHaveProperty('entityType', 'activity');
+    expect(result).toHaveProperty('entityId', 'mock-entity-id-1');
+    expect(result).toHaveProperty('eventId', 'mock-event-id-1');
+    expect(result).toHaveProperty('targetSubjectId', null);
+    expect(result).toHaveProperty('startedAtTimestamp', 123);
+    expect(result).toHaveProperty('availableUntilTimestamp', null);
   });
 });
 
@@ -124,16 +119,31 @@ describe('Test isEntityInProgress', () => {
 
   it('Should return false return when input is object with entAt equal to specified value', () => {
     const result = isEntityProgressionInProgress({
-      status: 'in-progress',
-    } as EntityProgression);
+      status: 'completed',
+      appletId: 'mock-applet-id-1',
+      entityType: 'activity',
+      entityId: 'mock-entity-id-1',
+      eventId: 'mock-event-id-1',
+      targetSubjectId: null,
+      availableUntilTimestamp: null,
+      startedAtTimestamp: 123,
+      endedAtTimestamp: 456,
+    });
 
     expect(result).toEqual(false);
   });
 
   it('Should return true return when input is object with entAt equal to null', () => {
     const result = isEntityProgressionInProgress({
-      status: 'completed',
-    } as EntityProgression);
+      status: 'in-progress',
+      appletId: 'mock-applet-id-1',
+      entityType: 'activity',
+      entityId: 'mock-entity-id-1',
+      eventId: 'mock-event-id-1',
+      targetSubjectId: null,
+      availableUntilTimestamp: null,
+      startedAtTimestamp: 123,
+    });
 
     expect(result).toEqual(true);
   });
@@ -177,7 +187,7 @@ describe('Test isReadyForAutocompletion', () => {
         entityId: 'mock-entity-id-1',
         eventId: 'mock-event-id-1',
         entityType: 'regular',
-        targetSubjectId: 'mock-target-subject-id-1',
+        targetSubjectId: null,
       },
       [],
     );
@@ -192,17 +202,20 @@ describe('Test isReadyForAutocompletion', () => {
         entityId: 'mock-entity-id-1',
         eventId: 'mock-event-id-1',
         entityType: 'regular',
-        targetSubjectId: 'mock-target-subject-id-1',
+        targetSubjectId: null,
       },
       [
         {
-          status: 'in-progress',
+          status: 'completed',
           appletId: 'mock-applet-id-1',
+          entityType: 'activity',
           entityId: 'mock-entity-id-1',
           eventId: 'mock-event-id-1',
-          targetSubjectId: 'mock-target-subject-id-1',
+          targetSubjectId: null,
           availableUntilTimestamp: null,
-        } as EntityProgressionInProgress,
+          startedAtTimestamp: 12000034,
+          endedAtTimestamp: 1234567,
+        },
       ],
     );
 
@@ -216,17 +229,19 @@ describe('Test isReadyForAutocompletion', () => {
         entityId: 'mock-entity-id-1',
         eventId: 'mock-event-id-1',
         entityType: 'regular',
-        targetSubjectId: 'mock-target-subject-id-1',
+        targetSubjectId: null,
       },
       [
         {
           status: 'in-progress',
           appletId: 'mock-applet-id-1',
+          entityType: 'activity',
           entityId: 'mock-entity-id-1',
           eventId: 'mock-event-id-1',
-          targetSubjectId: 'mock-target-subject-id-1',
-          availableUntilTimestamp: new Date(Date.now() + 10000).getTime(),
-        } as EntityProgressionInProgress,
+          targetSubjectId: null,
+          availableUntilTimestamp: Date.now() + 10000,
+          startedAtTimestamp: 12000034,
+        },
       ],
     );
 
@@ -240,17 +255,19 @@ describe('Test isReadyForAutocompletion', () => {
         entityId: 'mock-entity-id-1',
         eventId: 'mock-event-id-1',
         entityType: 'regular',
-        targetSubjectId: 'mock-target-subject-id-1',
+        targetSubjectId: null,
       },
       [
         {
           status: 'in-progress',
           appletId: 'mock-applet-id-1',
+          entityType: 'activity',
           entityId: 'mock-entity-id-1',
           eventId: 'mock-event-id-1',
-          targetSubjectId: 'mock-target-subject-id-1',
-          availableUntilTimestamp: new Date(Date.now() - 10000).getTime(),
-        } as EntityProgressionInProgress,
+          targetSubjectId: null,
+          availableUntilTimestamp: Date.now() - 10000,
+          startedAtTimestamp: 12000034,
+        },
       ],
     );
 

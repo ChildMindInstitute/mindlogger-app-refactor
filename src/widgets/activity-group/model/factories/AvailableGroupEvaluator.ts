@@ -1,5 +1,8 @@
 import { IEvaluator } from '@app/abstract/lib/interfaces/evaluator';
-import { EntityProgressionCompleted } from '@app/abstract/lib/types/entityProgress';
+import {
+  EntityProgression,
+  EntityProgressionCompleted,
+} from '@app/abstract/lib/types/entityProgress';
 import { AvailabilityType } from '@app/abstract/lib/types/event';
 import { ScheduleEvent } from '@app/entities/event/lib/types/event';
 import {
@@ -15,8 +18,8 @@ export class AvailableGroupEvaluator
 {
   private utility: GroupUtility;
 
-  constructor(appletId: string) {
-    this.utility = new GroupUtility(appletId, []);
+  constructor(appletId: string, entityProgressions: EntityProgression[]) {
+    this.utility = new GroupUtility(appletId, entityProgressions);
   }
 
   private isEventValidForAlwaysAvailable(
@@ -88,15 +91,20 @@ export class AvailableGroupEvaluator
     }
 
     if (isScheduledYesterday) {
-      return (
-        this.utility.isInAllowedTimeInterval(event, 'yesterday', true) &&
-        !this.utility.isEventCompletedInAllowedTimeInterval(
+      const inAllowedTimeInterval = this.utility.isInAllowedTimeInterval(
+        event,
+        'yesterday',
+        true,
+      );
+      const completedInAllowedTimeInterval =
+        this.utility.isEventCompletedInAllowedTimeInterval(
           event,
           'yesterday',
           true,
           targetSubjectId,
-        )
-      );
+        );
+
+      return inAllowedTimeInterval && !completedInAllowedTimeInterval;
     }
 
     return false;

@@ -1,4 +1,6 @@
+import { PipelineItem } from '@app/features/pass-survey/lib/types/payload';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { ILogger } from '@app/shared/lib/types/logger';
 
 import {
   textInput,
@@ -76,21 +78,15 @@ import {
   mapUserActionsToDto,
 } from '../mappers';
 
-jest.mock('@app/shared/lib', () => {
-  const mockedLib = jest.requireActual('@app/shared/lib');
-
-  return {
-    ...mockedLib,
-    Logger: {
-      log: jest.fn(),
-      warn: jest.fn(),
-      error: jest.fn(),
-      info: jest.fn(),
-    },
-  };
-});
-
 describe('Survey widget mapAnswersToDto tests', () => {
+  let logger: ILogger;
+
+  beforeEach(() => {
+    logger = getDefaultLogger();
+
+    jest.spyOn(logger, 'warn');
+  });
+
   it('Should return mapped result for different items pipeline', async () => {
     const pipeline = [
       textInput,
@@ -516,14 +512,13 @@ describe('Survey widget mapAnswersToDto tests', () => {
   });
 
   it('Should throw error for mapAnswersToAlerts with invalid arguments', async () => {
-    const pipeline = null;
+    const pipeline = null as never as PipelineItem[];
     const answers = {
       0: stackedSliderAnswer,
     };
 
-    //@ts-ignore
     expect(() => mapAnswersToAlerts(pipeline, answers)).toThrow();
-    expect(getDefaultLogger().warn).toBeCalled();
+    expect(logger.warn).toBeCalled();
   });
 
   it('Should return mapped result for userActions', async () => {

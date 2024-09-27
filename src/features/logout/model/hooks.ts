@@ -8,8 +8,8 @@ import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userP
 import { getDefaultNotificationManager } from '@app/entities/notification/model/notificationManagerInstance';
 import { getDefaultSessionService } from '@app/entities/session/lib/sessionServiceInstance';
 import { getDefaultIdentityService } from '@app/shared/api/services/identityServiceInstance';
-import { AnalyticsService } from '@app/shared/lib/analytics/AnalyticsService';
-import { FeatureFlagsService } from '@app/shared/lib/featureFlags/FeatureFlagsService';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
+import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -38,9 +38,9 @@ export function useLogout() {
       );
     }
 
-    AnalyticsService.logout();
+    getDefaultAnalyticsService().logout();
 
-    FeatureFlagsService.logout();
+    getDefaultFeatureFlagsService().logout();
 
     CacheManager.clearCache();
 

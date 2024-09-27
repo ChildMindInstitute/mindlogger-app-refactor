@@ -1,31 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { renderHook, screen } from '@testing-library/react-native';
+import { MMKV } from 'react-native-mmkv';
+
+import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 
 import {
   FlowState,
   UseFlowStorageArgs,
   useFlowStorageRecord,
 } from '../useFlowStorageRecord';
-
-const deleteMock = jest.fn();
-
-jest.mock('@shared/lib/storages', () => ({
-  ...jest.requireActual('@shared/lib/storages'),
-  createStorage: jest.fn().mockReturnValue({
-    getString: (id: string) => JSON.stringify({ flowName: `test-name-${id}` }),
-    delete: (key: string) => deleteMock(key) as void,
-    addOnValueChangedListener: jest.fn(),
-  }),
-}));
-
-const upsertFlowStorageRecordMock = jest.fn();
-
-const initialProps = {
-  appletId: 'mock-applet-id-1',
-  eventId: 'mock-event-id-1',
-  flowId: 'mock-flow-id-1',
-  targetSubjectId: 'mock-target-subject-id-1',
-};
 
 jest.mock('react-native-mmkv', () => ({
   ...jest.requireActual('react-native-mmkv'),
@@ -37,7 +20,31 @@ jest.mock('react-native-mmkv', () => ({
   }),
 }));
 
+const deleteMock = jest.fn();
+
+const upsertFlowStorageRecordMock = jest.fn();
+
+const storageMock = {
+  getString: (id: string) => JSON.stringify({ flowName: `test-name-${id}` }),
+  delete: (key: string) => deleteMock(key) as void,
+  addOnValueChangedListener: jest.fn(),
+} as never as MMKV;
+
+const initialProps = {
+  appletId: 'mock-applet-id-1',
+  eventId: 'mock-event-id-1',
+  flowId: 'mock-flow-id-1',
+  targetSubjectId: null as string | null,
+};
+
 describe('Test useFlowStorageRecord', () => {
+  beforeEach(() => {
+    const storageManager = getDefaultStorageInstanceManager();
+    jest
+      .spyOn(storageManager, 'getFlowProgressStorage')
+      .mockReturnValue(storageMock);
+  });
+
   afterEach(() => {
     screen.unmount();
   });
@@ -49,7 +56,7 @@ describe('Test useFlowStorageRecord', () => {
     );
 
     expect(result.current.flowStorageRecord).toEqual({
-      name: 'mock-flow-id-1-mock-applet-id-1-mock-event-id-1',
+      name: 'mock-flow-id-1-mock-applet-id-1-mock-event-id-1-NULL',
     });
   });
 
@@ -60,13 +67,13 @@ describe('Test useFlowStorageRecord', () => {
         initialProps: {
           appletId: 'mock-applet-id-3',
           eventId: 'mock-event-id-3',
-          targetSubjectId: 'mock-target-subject-id-3',
+          targetSubjectId: null,
         },
       },
     );
 
     expect(result.current.flowStorageRecord).toEqual({
-      name: 'default_one_step_flow-mock-applet-id-3-mock-event-id-3',
+      name: 'default_one_step_flow-mock-applet-id-3-mock-event-id-3-NULL',
     });
   });
 
@@ -80,11 +87,11 @@ describe('Test useFlowStorageRecord', () => {
       appletId: 'mock-applet-id-2',
       eventId: 'mock-event-id-2',
       flowId: 'mock-flow-id-2',
-      targetSubjectId: 'mock-target-subject-id-2',
+      targetSubjectId: null,
     });
 
     expect(result.current.flowStorageRecord).toEqual({
-      name: 'mock-flow-id-2-mock-applet-id-2-mock-event-id-2',
+      name: 'mock-flow-id-2-mock-applet-id-2-mock-event-id-2-NULL',
     });
   });
 
@@ -112,7 +119,7 @@ describe('Test useFlowStorageRecord', () => {
     result.current.clearFlowStorageRecord();
 
     expect(deleteMock).toHaveBeenCalledWith(
-      'mock-flow-id-1-mock-applet-id-1-mock-event-id-1',
+      'mock-flow-id-1-mock-applet-id-1-mock-event-id-1-NULL',
     );
   });
 
@@ -125,7 +132,7 @@ describe('Test useFlowStorageRecord', () => {
     const record = result.current.getCurrentFlowStorageRecord();
 
     expect(record).toEqual({
-      flowName: 'test-name-mock-flow-id-1-mock-applet-id-1-mock-event-id-1',
+      flowName: 'test-name-mock-flow-id-1-mock-applet-id-1-mock-event-id-1-NULL',
     });
   });
 });

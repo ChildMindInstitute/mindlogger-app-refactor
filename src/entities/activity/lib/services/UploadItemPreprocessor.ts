@@ -1,7 +1,7 @@
 import { mapAppletDetailsFromDto } from '@app/entities/applet/model/mappers';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
 import { FeatureFlagsKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
-import { FeatureFlagsService } from '@app/shared/lib/featureFlags/FeatureFlagsService';
+import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import { getDefaultQueryClient } from '@app/shared/lib/queryClient/queryClientInstance';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { IPreprocessor } from '@app/shared/lib/types/service';
@@ -31,7 +31,7 @@ export class UploadItemPreprocessor implements IPreprocessor<UploadItem> {
 
     if (
       appletDetails.consentsCapabilityEnabled &&
-      FeatureFlagsService.evaluateFlag(
+      getDefaultFeatureFlagsService().evaluateFlag(
         FeatureFlagsKeys.enableConsentsCapability,
       )
     ) {

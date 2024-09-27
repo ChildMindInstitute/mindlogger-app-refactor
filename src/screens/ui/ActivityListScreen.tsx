@@ -8,11 +8,11 @@ import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompleti
 import { EntityPath } from '@app/abstract/lib/types/entity';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
 import { ConnectionStatusBar } from '@app/features/streaming/ui/ConnectionStatusBar';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
-  AnalyticsService,
   MixEvents,
   MixProperties,
-} from '@app/shared/lib/analytics/AnalyticsService';
+} from '@app/shared/lib/analytics/IAnalyticsService';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Emitter } from '@app/shared/lib/services/Emitter';
@@ -33,7 +33,7 @@ export const ActivityListScreen: FC<Props> = props => {
   const isFocused = useIsFocused();
 
   useOnFocus(() => {
-    AnalyticsService.track(MixEvents.AppletView, {
+    getDefaultAnalyticsService().track(MixEvents.AppletView, {
       [MixProperties.AppletId]: appletId,
     });
   });

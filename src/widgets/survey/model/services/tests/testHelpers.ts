@@ -1,5 +1,9 @@
 import { EntityPath, EntityType } from '@app/abstract/lib/types/entity';
-import { EntityProgressionInProgressActivityFlow } from '@app/abstract/lib/types/entityProgress';
+import {
+  EntityProgression,
+  EntityProgressionCompleted,
+  EntityProgressionInProgressActivityFlow,
+} from '@app/abstract/lib/types/entityProgress';
 import { IncompleteEntity } from '@app/entities/applet/model/selectors';
 import {
   ActivityState,
@@ -230,6 +234,48 @@ export const getUserActionsMock = (answersMock: Answers): UserAction[] => {
   return userActionsMock;
 };
 
+export const getFlowProgressionsMock = (): EntityProgression[] => {
+  const progression: EntityProgression = {
+    status: 'in-progress',
+    appletId: 'mock-applet-id-1',
+    entityType: 'activityFlow',
+    entityId: 'mock-flow-id-1',
+    eventId: 'mock-event-id-1',
+    targetSubjectId: null,
+    startedAtTimestamp: 12367800000,
+    availableUntilTimestamp: null,
+    currentActivityDescription: 'mock-activity-description-1',
+    currentActivityId: 'mock-activity-id-1',
+    currentActivityImage: null,
+    currentActivityName: 'mock-activity-name-1',
+    currentActivityStartAt: 12389100000,
+    executionGroupKey: 'mock-flow-group-key-1',
+    pipelineActivityOrder: 0,
+    totalActivitiesInPipeline: 2,
+  };
+
+  (progression as never as EntityProgressionCompleted).endedAtTimestamp = null;
+
+  return [progression];
+};
+
+export const getActivityProgressionsMock = (): EntityProgression[] => {
+  const progression: EntityProgression = {
+    status: 'in-progress',
+    appletId: 'mock-applet-id-1',
+    entityType: 'activity',
+    entityId: 'mock-activity-id-1',
+    eventId: 'mock-event-id-1',
+    targetSubjectId: null,
+    startedAtTimestamp: 12367800000,
+    availableUntilTimestamp: null,
+  };
+
+  (progression as never as EntityProgressionCompleted).endedAtTimestamp = null;
+
+  return [progression];
+};
+
 export const getActivityRecordMockResult = (
   answersMock: Answers,
   userActionsMock: UserAction[],
@@ -354,7 +400,7 @@ export const getInputsForIntermediate = (): ConstructInput => {
     appletId: 'mock-applet-id-1',
     eventId: 'mock-event-id-1',
     flowId: 'mock-flow-id-1',
-    targetSubjectId: 'mock-target-subject-id-1',
+    targetSubjectId: null,
     order: 0,
     isAutocompletion: false,
   };
@@ -368,7 +414,7 @@ export const getInputsForFinish = (entityType: EntityType): ConstructInput => {
     appletId: 'mock-applet-id-1',
     eventId: 'mock-event-id-1',
     flowId: entityType === 'flow' ? 'mock-flow-id-1' : undefined,
-    targetSubjectId: 'mock-target-subject-id-1',
+    targetSubjectId: null,
     order: 0,
     isAutocompletion: false,
   };

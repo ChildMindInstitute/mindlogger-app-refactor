@@ -19,7 +19,7 @@ import {
   getEmptyEvent,
   getEventEntity,
 } from './testHelpers';
-import { INotificationBuilder } from '../NotificationBuilder';
+import { INotificationBuilder } from '../INotificationBuilder';
 
 const anyDay = new Date(2018, 1, 2);
 
@@ -76,7 +76,7 @@ const getMockNotification = (index = 1) => {
     appletId: 'mock-applet-id',
     entityName: 'mock-entity-name',
     eventId: 'mock-event-id',
-    targetSubjectId: 'mock-target-subject-id',
+    targetSubjectId: null,
     isActive: true,
     notificationBody: 'mock-notification-body',
     notificationHeader: 'mock-notification-header',

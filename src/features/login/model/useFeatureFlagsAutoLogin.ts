@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { selectUserId } from '@app/entities/identity/model/selectors';
 import { useHasSession } from '@app/entities/session/model/hooks/useHasSession';
-import { FeatureFlagsService } from '@app/shared/lib/featureFlags/FeatureFlagsService';
+import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 
 export function useFeatureFlagsAutoLogin() {
@@ -13,6 +13,6 @@ export function useFeatureFlagsAutoLogin() {
     if (!hasSession || !id) {
       return;
     }
-    FeatureFlagsService.login(id);
+    getDefaultFeatureFlagsService().login(id);
   }, [id, hasSession]);
 }

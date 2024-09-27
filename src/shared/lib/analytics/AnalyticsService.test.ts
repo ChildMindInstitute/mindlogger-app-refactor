@@ -1,181 +1,204 @@
-const constructorMock = jest.fn();
-const initMock = jest.fn();
-const trackMock = jest.fn();
-const identifyMock = jest.fn().mockResolvedValue(0);
-const resetMock = jest.fn();
+import { MMKV } from 'react-native-mmkv';
 
-export class MixpanelMockClass {
-  constructor(...args: any) {
-    constructorMock(args);
+import { AnalyticsService } from './AnalyticsService';
+import { getDefaultAnalyticsService } from './analyticsServiceInstance';
+import {
+  IAnalyticsService,
+  MixEvents,
+  MixProperties,
+} from './IAnalyticsService';
+import { MixpanelAnalytics } from './MixpanelAnalytics';
+import { ILogger } from '../types/logger';
+
+class TestMixpanelClient {
+  static constructorSpy: jest.Mock;
+  static initSpy: jest.Mock;
+  static identifySpy: jest.Mock;
+  static trackSpy: jest.Mock;
+  static resetSpy: jest.Mock;
+
+  constructor(...args: unknown[]) {
+    if (TestMixpanelClient.constructorSpy) {
+      TestMixpanelClient.constructorSpy(...args);
+    }
   }
 
-  public init(...args: any[]) {
-    initMock(args);
+  init(...args: unknown[]) {
+    if (TestMixpanelClient.initSpy) {
+      TestMixpanelClient.initSpy(...args);
+    }
   }
 
-  public track(...args: any[]) {
-    trackMock(args);
+  identify(...args: unknown[]) {
+    if (TestMixpanelClient.identifySpy) {
+      TestMixpanelClient.identifySpy(...args);
+    }
   }
 
-  public identify(...args: any[]) {
-    return identifyMock(args);
+  track(...args: unknown[]) {
+    if (TestMixpanelClient.trackSpy) {
+      TestMixpanelClient.trackSpy(...args);
+    }
   }
 
-  public getPeople() {
-    return { set: jest.fn() };
+  getPeople() {
+    return {
+      set: () => {},
+    };
   }
 
-  public reset() {
-    resetMock();
+  reset(...args: unknown[]) {
+    if (TestMixpanelClient.resetSpy) {
+      TestMixpanelClient.resetSpy(...args);
+    }
   }
 }
 
-jest.mock('mixpanel-react-native', () => ({
-  Mixpanel: MixpanelMockClass,
-}));
+type TestAnalyticsService = IAnalyticsService & {
+  logger: ILogger;
+  provider: MixpanelAnalytics | undefined;
+  analyticsStorage: MMKV;
+  shouldEnableMixpanel: AnalyticsService['shouldEnableMixpanel'];
+  getMixpanelToken: AnalyticsService['getMixpanelToken'];
+};
 
 const MOCK_MIXPANEL_TOKEN: string | undefined = 'MOCK_MIXPANEL_TOKEN_123';
-
 const MOCK_APP_VERSION = 'MOCK_APP_VERSION_456';
 
-jest.mock('../constants', () => ({
-  MIXPANEL_TOKEN: MOCK_MIXPANEL_TOKEN,
-  APP_VERSION: MOCK_APP_VERSION,
-}));
-
-jest.mock('../services', () => ({
-  Logger: {
-    log: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-    info: jest.fn(),
-  },
-}));
-
-const storageSetMock = jest.fn();
-const clearAllMock = jest.fn();
-
-jest.mock('../storages', () => ({
-  createStorage: jest.fn().mockReturnValue({
-    getBoolean: jest.fn().mockReturnValue(false),
-    set: storageSetMock,
-    clearAll: clearAllMock,
-  }),
-}));
-
-import { AnalyticsService, MixEvents, MixProperties } from './AnalyticsService';
-
 describe('Test AnalyticsService and MixpanelAnalytics', () => {
-  beforeAll(() => {
-    AnalyticsService.shouldEnableMixpanel = jest.fn().mockReturnValue(true);
-  });
+  let service: TestAnalyticsService;
 
   beforeEach(() => {
-    constructorMock.mockReset();
-    initMock.mockReset();
-    identifyMock.mockReset().mockResolvedValue(0);
-    trackMock.mockReset();
-    storageSetMock.mockReset();
-    resetMock.mockReset();
+    TestMixpanelClient.constructorSpy = jest.fn();
+    TestMixpanelClient.initSpy = jest.fn();
+    TestMixpanelClient.identifySpy = jest.fn();
+    TestMixpanelClient.trackSpy = jest.fn();
+    TestMixpanelClient.resetSpy = jest.fn();
+
+    jest
+      .spyOn(MixpanelAnalytics.prototype as never, 'getMixpanelClientClass')
+      .mockReturnValue(TestMixpanelClient as never);
+
+    jest
+      .spyOn(MixpanelAnalytics.prototype as never, 'getAppVersion')
+      .mockReturnValue(MOCK_APP_VERSION as never);
+
+    service = getDefaultAnalyticsService() as never as TestAnalyticsService;
+    service.provider = undefined;
+
+    jest.spyOn(service, 'shouldEnableMixpanel').mockReturnValue(true);
+
+    jest
+      .spyOn(service, 'getMixpanelToken')
+      .mockReturnValue(MOCK_MIXPANEL_TOKEN);
+
+    jest.spyOn(service.logger, 'log').mockReturnValue(undefined);
   });
 
   it('Should pass MIXPANEL_TOKEN into constructor of Mixpanel class', async () => {
-    await AnalyticsService.init();
+    await service.init();
 
-    expect(constructorMock).toHaveBeenCalledTimes(1);
-    expect(constructorMock).toHaveBeenCalledWith([MOCK_MIXPANEL_TOKEN, false]);
+    expect(TestMixpanelClient.constructorSpy).toHaveBeenCalledTimes(1);
+    expect(TestMixpanelClient.constructorSpy).toHaveBeenCalledWith(
+      MOCK_MIXPANEL_TOKEN,
+      false,
+    );
   });
 
   it('Should pass APP_VERSION into init of Mixpanel instance', async () => {
-    await AnalyticsService.init();
+    await service.init();
 
-    expect(initMock).toHaveBeenCalledTimes(1);
-    expect(initMock).toHaveBeenCalledWith([
-      undefined,
-      { 'MindLogger Version': `${MOCK_APP_VERSION}` },
-    ]);
+    expect(TestMixpanelClient.initSpy).toHaveBeenCalledTimes(1);
+    expect(TestMixpanelClient.initSpy).toHaveBeenCalledWith(undefined, {
+      'MindLogger Version': MOCK_APP_VERSION,
+    });
   });
 
   it('Should login', async () => {
-    await AnalyticsService.init();
+    const setSpy = jest.spyOn(service.analyticsStorage, 'set');
 
-    await AnalyticsService.login('mock-user-id');
+    await service.init();
 
-    expect(identifyMock).toHaveBeenCalledTimes(1);
-    expect(storageSetMock).toHaveBeenCalledTimes(1);
-    expect(storageSetMock).toHaveBeenCalledWith('IS_LOGGED_IN', true);
+    await service.login('mock-user-id');
+
+    expect(TestMixpanelClient.identifySpy).toHaveBeenCalledTimes(1);
+    expect(TestMixpanelClient.identifySpy).toHaveBeenCalledWith('mock-user-id');
+    expect(setSpy).toHaveBeenCalledTimes(1);
+    expect(setSpy).toHaveBeenCalledWith('IS_LOGGED_IN', true);
   });
 
   it('Should track without params', async () => {
-    await AnalyticsService.init();
+    await service.init();
 
-    await AnalyticsService.track(MixEvents.AssessmentStarted);
+    service.track(MixEvents.AssessmentStarted);
 
-    expect(trackMock).toBeCalledTimes(1);
-    expect(trackMock).toBeCalledWith([
+    expect(TestMixpanelClient.trackSpy).toHaveBeenCalledTimes(1);
+    expect(TestMixpanelClient.trackSpy).toHaveBeenCalledWith(
       '[Mobile] Assessment started',
       undefined,
-    ]);
+    );
   });
 
   it('Should track with two params', async () => {
-    await AnalyticsService.init();
+    await service.init();
 
-    await AnalyticsService.track(MixEvents.AssessmentStarted, {
+    service.track(MixEvents.AssessmentStarted, {
       [MixProperties.AppletId]: 'mock-applet-id',
       [MixProperties.MindLoggerVersion]: 'mock-version',
     });
 
-    expect(trackMock).toBeCalledTimes(1);
-    expect(trackMock).toBeCalledWith([
+    expect(TestMixpanelClient.trackSpy).toHaveBeenCalledTimes(1);
+    expect(TestMixpanelClient.trackSpy).toHaveBeenCalledWith(
       '[Mobile] Assessment started',
       { 'Applet ID': 'mock-applet-id', 'MindLogger Version': 'mock-version' },
-    ]);
+    );
   });
 
   it('Should logout', async () => {
-    await AnalyticsService.init();
+    const clearAllSpy = jest.spyOn(service.analyticsStorage, 'clearAll');
 
-    await AnalyticsService.logout();
+    await service.init();
 
-    expect(trackMock).toBeCalledTimes(1);
-    expect(trackMock).toBeCalledWith(['[Mobile] Logout', undefined]);
+    service.logout();
 
-    expect(resetMock).toBeCalledTimes(1);
-    expect(clearAllMock).toBeCalledTimes(1);
-  });
-});
+    expect(TestMixpanelClient.trackSpy).toHaveBeenCalledTimes(1);
+    expect(TestMixpanelClient.trackSpy).toHaveBeenCalledWith(
+      '[Mobile] Logout',
+      undefined,
+    );
 
-describe('Test AnalyticsService and MixpanelAnalytics when Mixpanel instance is not created', () => {
-  beforeAll(() => {
-    AnalyticsService.shouldEnableMixpanel = jest.fn().mockReturnValue(false);
-  });
-
-  beforeEach(() => {
-    constructorMock.mockReset();
-    initMock.mockReset();
-    identifyMock.mockReset().mockResolvedValue(0);
-    trackMock.mockReset();
-    storageSetMock.mockReset();
-    resetMock.mockReset();
+    expect(TestMixpanelClient.resetSpy).toHaveBeenCalledTimes(1);
+    expect(clearAllSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('Should not login', async () => {
-    await AnalyticsService.login('mock-user-id');
+  describe('when Mixpanel instance is not created', () => {
+    beforeEach(() => {
+      jest.spyOn(service, 'shouldEnableMixpanel').mockReturnValue(false);
+    });
 
-    expect(identifyMock).toHaveBeenCalledTimes(0);
-  });
+    it('Should not login', async () => {
+      await service.init();
 
-  it('Should not track', async () => {
-    await AnalyticsService.track(MixEvents.AssessmentStarted);
+      await service.login('mock-user-id');
 
-    expect(trackMock).toBeCalledTimes(0);
-  });
+      expect(TestMixpanelClient.identifySpy).toHaveBeenCalledTimes(0);
+    });
 
-  it('Should not logout', async () => {
-    await AnalyticsService.logout();
+    it('Should not track', async () => {
+      await service.init();
 
-    expect(trackMock).toBeCalledTimes(0);
-    expect(resetMock).toBeCalledTimes(0);
+      service.track(MixEvents.AssessmentStarted);
+
+      expect(TestMixpanelClient.trackSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it('Should not logout', async () => {
+      await service.init();
+
+      service.logout();
+
+      expect(TestMixpanelClient.trackSpy).toHaveBeenCalledTimes(0);
+      expect(TestMixpanelClient.trackSpy).toHaveBeenCalledTimes(0);
+    });
   });
 });

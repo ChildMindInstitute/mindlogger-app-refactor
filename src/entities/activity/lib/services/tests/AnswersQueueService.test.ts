@@ -5,38 +5,22 @@ import { AnswersQueueService, UploadItem } from '../AnswersQueueService';
 
 const notifyMock = { notify: () => {} };
 
-const storageMock = {
-  addOnValueChangedListener: jest.fn(),
-  getAllKeys: jest.fn(),
-  getString: jest.fn(),
-  set: jest.fn(),
-  delete: jest.fn(),
-} as unknown as MMKV;
-
 const getAllKeysMock = jest.fn();
 const getStringMock = jest.fn();
 const setMock = jest.fn();
 const deleteMock = jest.fn();
 
-jest.mock('@shared/lib/storages', () => ({
-  createStorage: jest.fn(),
-  createSecureStorage: jest.fn().mockReturnValue({
-    addOnValueChangedListener: jest.fn().mockImplementation((f: () => void) => {
-      f();
-    }),
-    getAllKeys: () => getAllKeysMock() as Array<string>,
-    getString: (id: string) => getStringMock(id) as string,
-    set: (key: string, item: UploadItem) => setMock(key, item) as void,
-    delete: (key: string) => deleteMock(key) as void,
+const storageMock = {
+  addOnValueChangedListener: jest.fn().mockImplementation((f: () => void) => {
+    f();
   }),
-}));
+  getAllKeys: () => getAllKeysMock() as Array<string>,
+  getString: (id: string) => getStringMock(id) as string,
+  set: (key: string, item: UploadItem) => setMock(key, item) as void,
+  delete: (key: string) => deleteMock(key) as void,
+} as unknown as MMKV;
 
 describe('Test AnswersQueueService', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-    jest.resetAllMocks();
-  });
-
   it('Should pick an object when some keys exist', () => {
     getAllKeysMock.mockReturnValue(['10', '15', '7']);
 

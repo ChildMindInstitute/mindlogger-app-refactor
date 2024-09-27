@@ -8,10 +8,13 @@ import { useRetryUpload } from '@app/entities/activity/lib/hooks/useRetryUpload'
 import { getDefaultQueueProcessingService } from '@app/entities/activity/lib/services/queueProcessingServiceInstance';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
 import { appletActions } from '@app/entities/applet/model/slice';
+import { getDefaultAlertsExtractor } from '@app/features/pass-survey/model/alertsExtractorInstance';
+import { getDefaultScoresExtractor } from '@app/features/pass-survey/model/scoresExtractorInstance';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { getDefaultInterimSubmitMutex } from '@app/shared/lib/mutexes/interimSubmitMutexInstance';
 import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
+import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import { SubScreenContainer } from './completion/containers';
@@ -169,9 +172,13 @@ export function Intermediate({
 
     const constructCompletionService = new ConstructCompletionsService(
       saveActivitySummary,
+      getDefaultLogger(),
       queryClient,
       getDefaultQueueProcessingService(),
+      getDefaultAlertsExtractor(),
+      getDefaultScoresExtractor(),
       dispatch,
+      ReduxPersistor,
       entityProgressions,
     );
 

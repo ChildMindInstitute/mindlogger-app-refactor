@@ -14,8 +14,11 @@ import {
   selectAppletsEntityProgressions,
   selectIncompletedEntities,
 } from '@app/entities/applet/model/selectors';
+import { getDefaultAlertsExtractor } from '@app/features/pass-survey/model/alertsExtractorInstance';
+import { getDefaultScoresExtractor } from '@app/features/pass-survey/model/scoresExtractorInstance';
 import { LogTrigger } from '@app/shared/api/services/INotificationService';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
+import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
@@ -54,9 +57,13 @@ export const useAutoCompletion = (): Result => {
   const createConstructService = useCallback(() => {
     return new ConstructCompletionsService(
       null,
+      getDefaultLogger(),
       queryClient,
       getDefaultQueueProcessingService(),
+      getDefaultAlertsExtractor(),
+      getDefaultScoresExtractor(),
       dispatch,
+      ReduxPersistor,
       entityProgressions,
     );
   }, [dispatch, queryClient, entityProgressions]);

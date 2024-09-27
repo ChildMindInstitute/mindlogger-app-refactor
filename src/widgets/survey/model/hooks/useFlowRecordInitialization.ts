@@ -7,6 +7,7 @@ import { ActivityQueryService } from '@app/entities/activity/model/services/Acti
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
 import { mapAppletDetailsFromDto } from '@app/entities/applet/model/mappers';
 import { useScheduledEvent } from '@app/entities/event/model/hooks/useEvent';
+import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import { useFlowStorageRecord } from '../../lib/useFlowStorageRecord';
@@ -120,7 +121,10 @@ export function useFlowRecordInitialization({
     !initializedRef.current && applet && !flowStorageRecord;
 
   const createStorageRecord = useCallback(() => {
-    const scheduledDate = getScheduledDate(scheduledEvent!);
+    const scheduledDate = getScheduledDate(
+      getDefaultScheduledDateCalculator(),
+      scheduledEvent!,
+    );
 
     return upsertFlowStorageRecord({
       step: 0,

@@ -1,5 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 import { addMilliseconds, subSeconds } from 'date-fns';
+import { Persistor } from 'redux-persist';
 
 import {
   EntityProgression,
@@ -8,23 +9,23 @@ import {
 import { IPushToQueue } from '@app/entities/activity/lib/services/QueueProcessingService';
 import { SendAnswersInput } from '@app/entities/activity/lib/types/uploadAnswers';
 import { appletActions } from '@app/entities/applet/model/slice';
+import { getDefaultSvgFileManager } from '@app/entities/drawer/lib/utils/svgFileManagerInstance';
 import { ActivityState } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import {
   AnswerAlerts,
   ScoreRecord,
 } from '@app/features/pass-survey/lib/types/summary';
 import { InitializeHiddenItem } from '@app/features/pass-survey/model/ActivityRecordInitializer';
-import { getDefaultAlertsExtractor } from '@app/features/pass-survey/model/alertsExtractorInstance';
-import { getDefaultScoresExtractor } from '@app/features/pass-survey/model/scoresExtractorInstance';
+import { IAlertsExtractor } from '@app/features/pass-survey/model/IAlertsExtractor';
+import { IScoresExtractor } from '@app/features/pass-survey/model/IScoresExtractor';
 import { AppletEncryptionDTO } from '@app/shared/api/services/IAppletService';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
-  AnalyticsService,
   MixEvents,
   MixProperties,
-} from '@app/shared/lib/analytics/AnalyticsService';
-import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
-import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+} from '@app/shared/lib/analytics/IAnalyticsService';
+import { ILogger } from '@app/shared/lib/types/logger';
 import { wait } from '@app/shared/lib/utils/common';
 import { getNow, getTimezoneOffset } from '@app/shared/lib/utils/dateTime';
 import {
@@ -89,24 +90,36 @@ export type ConstructInput = (
 const DistinguishInterimAndFinishLag = 1; // For correct sort on BE, Admin, TODO
 
 export class ConstructCompletionsService {
+  private logger: ILogger;
   private saveActivitySummary: SaveActivitySummary | null;
   private queryDataUtils: QueryDataUtils;
   private entityProgressions: EntityProgression[];
   private pushToQueueService: IPushToQueue;
+  private alertsExtractor: IAlertsExtractor;
+  private scoresExtractor: IScoresExtractor;
   private dispatch: AppDispatch;
+  private persistor: Persistor;
 
   constructor(
     saveActivitySummary: SaveActivitySummary | null,
+    logger: ILogger,
     queryClient: QueryClient,
     pushToQueueService: IPushToQueue,
+    alertsExtractor: IAlertsExtractor,
+    scoresExtractor: IScoresExtractor,
     dispatch: AppDispatch,
+    persistor: Persistor,
     entityProgressions: EntityProgression[],
   ) {
     this.saveActivitySummary = saveActivitySummary;
+    this.logger = logger;
     this.queryDataUtils = new QueryDataUtils(queryClient);
     this.pushToQueueService = pushToQueueService;
+    this.alertsExtractor = alertsExtractor;
+    this.scoresExtractor = scoresExtractor;
     this.dispatch = dispatch;
     this.entityProgressions = entityProgressions;
+    this.persistor = persistor;
   }
 
   private getLogDates(
@@ -133,12 +146,12 @@ export class ConstructCompletionsService {
   ) {
     const logDates = this.getLogDates(evaluatedEndAt, availableTo);
 
-    getDefaultLogger().log(
+    this.logger.log(
       `[ConstructCompletionsService.logFinish]: Activity: "${activityName}|${activityId}", applet: "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
     );
 
     if (flowId) {
-      getDefaultLogger().log(
+      this.logger.log(
         `[ConstructCompletionsService.logFinish]: Flow "${flowId}", applet "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
       );
     }
@@ -159,7 +172,7 @@ export class ConstructCompletionsService {
   ) {
     const logDates = this.getLogDates(evaluatedEndAt, availableTo);
 
-    getDefaultLogger().log(
+    this.logger.log(
       `[ConstructCompletionsService.logIntermediate]: Activity: "${activityName}|${activityId}", flow: "${flowName}|${flowId}", applet: "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
     );
   }
@@ -213,7 +226,7 @@ export class ConstructCompletionsService {
     if (!appletEncryption) {
       const error =
         '[ConstructCompletionsService] Encryption params is undefined';
-      getDefaultLogger().warn(error);
+      this.logger.warn(error);
       throw new Error(error);
     }
   }
@@ -222,7 +235,7 @@ export class ConstructCompletionsService {
     activityStorageRecord: ActivityState | null | undefined,
   ): boolean {
     if (!activityStorageRecord) {
-      getDefaultLogger().warn(
+      this.logger.warn(
         '[ConstructCompletionsService] activityStorageRecord does not exist',
       );
       return false;
@@ -238,14 +251,13 @@ export class ConstructCompletionsService {
       return;
     }
 
-    const summaryAlerts: AnswerAlerts =
-      getDefaultAlertsExtractor().extractForSummary(
-        activityStorageRecord.items,
-        activityStorageRecord.answers,
-        activityName,
-      );
+    const summaryAlerts: AnswerAlerts = this.alertsExtractor.extractForSummary(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+      activityName,
+    );
 
-    const scores: ScoreRecord[] = getDefaultScoresExtractor().extract(
+    const scores: ScoreRecord[] = this.scoresExtractor.extract(
       activityStorageRecord.items,
       activityStorageRecord.answers,
       activityStorageRecord.scoreSettings,
@@ -266,7 +278,7 @@ export class ConstructCompletionsService {
   private async constructForIntermediate(
     input: ConstructForIntermediateInput,
   ): Promise<void> {
-    getDefaultLogger().log(
+    this.logger.log(
       '[ConstructCompletionsService.constructForIntermediate] input:\n' +
         JSON.stringify(input, null, 2),
     );
@@ -300,7 +312,7 @@ export class ConstructCompletionsService {
 
     const { items, answers: recordAnswers, actions } = activityStorageRecord;
 
-    await createSvgFiles(items, recordAnswers);
+    await createSvgFiles(getDefaultSvgFileManager(), items, recordAnswers);
 
     if (activityStorageRecord.hasSummary) {
       this.addSummaryData(activityStorageRecord, input);
@@ -380,12 +392,12 @@ export class ConstructCompletionsService {
       order,
     );
 
-    AnalyticsService.track(MixEvents.AssessmentCompleted, {
+    getDefaultAnalyticsService().track(MixEvents.AssessmentCompleted, {
       [MixProperties.AppletId]: appletId,
       [MixProperties.SubmitId]: submitId,
     });
 
-    getDefaultLogger().log(
+    this.logger.log(
       `[ConstructCompletionsService.constructForIntermediate] Done`,
     );
   }
@@ -393,7 +405,7 @@ export class ConstructCompletionsService {
   private async constructForFinish(
     input: ConstructForFinishInput,
   ): Promise<void> {
-    getDefaultLogger().log(
+    this.logger.log(
       '[ConstructCompletionsService.constructForFinish] input:\n' +
         JSON.stringify(input, null, 2),
     );
@@ -451,11 +463,11 @@ export class ConstructCompletionsService {
       }),
     );
 
-    await ReduxPersistor.flush();
+    await this.persistor.flush();
 
     const { items, answers: recordAnswers, actions } = activityStorageRecord;
 
-    await createSvgFiles(items, recordAnswers);
+    await createSvgFiles(getDefaultSvgFileManager(), items, recordAnswers);
 
     const alerts = mapAnswersToAlerts(items, recordAnswers);
 
@@ -531,14 +543,12 @@ export class ConstructCompletionsService {
       order,
     );
 
-    AnalyticsService.track(MixEvents.AssessmentCompleted, {
+    getDefaultAnalyticsService().track(MixEvents.AssessmentCompleted, {
       [MixProperties.AppletId]: appletId,
       [MixProperties.SubmitId]: submitId,
     });
 
-    getDefaultLogger().log(
-      `[ConstructCompletionsService.constructForFinish] Done`,
-    );
+    this.logger.log(`[ConstructCompletionsService.constructForFinish] Done`);
   }
 
   public async construct(input: ConstructInput): Promise<void> {
@@ -554,7 +564,7 @@ export class ConstructCompletionsService {
         await this.constructForFinish(input);
       }
     } catch (error) {
-      getDefaultLogger().warn(
+      this.logger.warn(
         `[ConstructCompletionsService.construct] Error occurred: \n${error}`,
       );
     }

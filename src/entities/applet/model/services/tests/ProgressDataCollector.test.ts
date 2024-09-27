@@ -1,3 +1,4 @@
+import { getDefaultEventsService } from '@app/shared/api/services/eventsServiceInstance';
 import { EntitiesCompletionsDto } from '@app/shared/api/services/IEventsService';
 import { ILogger } from '@app/shared/lib/types/logger';
 
@@ -11,13 +12,6 @@ type MockedResponse = {
 
 const getAllCompletedEntitiesMock = jest.fn();
 
-jest.mock('@app/shared/api', () => ({
-  EventsService: {
-    getAllCompletedEntities: () =>
-      getAllCompletedEntitiesMock() as MockedResponse,
-  },
-}));
-
 const warnMock = jest.fn();
 
 const loggerMock = {
@@ -25,9 +19,12 @@ const loggerMock = {
 } as unknown as ILogger;
 
 describe('Test ProgressDataCollector', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-    jest.resetAllMocks();
+  beforeEach(() => {
+    jest
+      .spyOn(getDefaultEventsService(), 'getAllCompletedEntities')
+      .mockImplementation(() => {
+        return getAllCompletedEntitiesMock() as never;
+      });
   });
 
   it('Should return 2 completions when api response is fulfilled with 2 items', async () => {
@@ -86,6 +83,7 @@ describe('Test ProgressDataCollector', () => {
               localEndDate: '2021-10-07',
               localEndTime: '01:02:03',
               scheduledEventId: 'mock-scheduledEventId-10',
+              targetSubjectId: 'mock-subject-1',
               submitId: 'mock-submitId-10',
             },
           ],
@@ -102,6 +100,7 @@ describe('Test ProgressDataCollector', () => {
               localEndDate: '2021-10-08',
               localEndTime: '01:02:05',
               scheduledEventId: 'mock-scheduledEventId-11',
+              targetSubjectId: 'mock-subject-1',
               submitId: 'mock-submitId-11',
             },
           ],

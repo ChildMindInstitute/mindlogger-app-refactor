@@ -1,6 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 
 import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
+import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getScheduledDate } from '@app/widgets/survey/model/operations';
 
@@ -111,7 +112,10 @@ export class MigrationToVersion0001
 
     if (eventDto) {
       flowStateTo.scheduledDate =
-        getScheduledDate(mapEventFromDto(eventDto)) ?? null;
+        getScheduledDate(
+          getDefaultScheduledDateCalculator(),
+          mapEventFromDto(eventDto),
+        ) ?? null;
     } else {
       getDefaultLogger().warn(
         "'[MigrationToVersion0001]: Event doesn't exist: " + eventId,

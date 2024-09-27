@@ -43,6 +43,8 @@ const jestConfig: JestConfigWithTsJest = {
       '<rootDir>/assetsTransformer.js',
     '^uuid$': require.resolve('uuid'),
   },
+  restoreMocks: true,
+  clearMocks: true,
 };
 
 export default jestConfig;

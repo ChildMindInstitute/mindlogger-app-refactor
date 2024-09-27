@@ -4,11 +4,11 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 import { useAppletAnalytics } from '@app/entities/applet/lib/hooks/useAppletAnalytics';
 import { ActivityAnalyticsList } from '@app/entities/applet/ui/ActivityAnalyticsList';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
-  AnalyticsService,
   MixEvents,
   MixProperties,
-} from '@app/shared/lib/analytics/AnalyticsService';
+} from '@app/shared/lib/analytics/IAnalyticsService';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box } from '@app/shared/ui/base';
@@ -27,7 +27,7 @@ export const AppletDataScreen: FC<Props> = ({ route }) => {
   const { analytics, isLoading } = useAppletAnalytics(appletId);
 
   useOnFocus(() => {
-    AnalyticsService.track(MixEvents.DataView, {
+    getDefaultAnalyticsService().track(MixEvents.DataView, {
       [MixProperties.AppletId]: appletId,
     });
   });

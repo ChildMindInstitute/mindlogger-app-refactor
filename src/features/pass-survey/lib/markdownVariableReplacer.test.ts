@@ -1,18 +1,22 @@
+import { Answers } from './hooks/useActivityStorageRecord';
 import { MarkdownVariableReplacer } from './markdownVariableReplacer';
+import { PipelineItem } from './types/payload';
 
 describe('MarkdownVariableReplacer', () => {
   it('should return the same markdown string when no variables are present', () => {
-    const activityItems = [];
-    const answers = [];
-    const replacer = new MarkdownVariableReplacer(activityItems, answers);
+    const activityItems = [] as PipelineItem[];
+    const answers = {} as Answers;
+    const replacer = new MarkdownVariableReplacer(activityItems, answers, null);
     const markdown = 'This is some text';
     expect(replacer.process(markdown)).toEqual(markdown);
   });
 
   it('should return the markdown string with the variable replaced when only one variable is present', () => {
-    const activityItems = [{ name: 'foo', type: 'TextInput' }];
-    const answers = [{ answer: 'bar' }];
-    const replacer = new MarkdownVariableReplacer(activityItems, answers);
+    const activityItems = [
+      { name: 'foo', type: 'TextInput' },
+    ] as PipelineItem[];
+    const answers = [{ answer: 'bar' }] as Answers;
+    const replacer = new MarkdownVariableReplacer(activityItems, answers, null);
     const markdown = 'This is some text [[foo]]';
     const expected = 'This is some text bar';
     expect(replacer.process(markdown)).toEqual(expected);
@@ -32,48 +36,54 @@ describe('MarkdownVariableReplacer', () => {
           ],
         },
       },
-    ];
+    ] as PipelineItem[];
     const answers = [
       { answer: 'abc' },
       { answer: '2' },
       { answer: { id: '1', text: 'Option 1' } },
-    ];
-    const replacer = new MarkdownVariableReplacer(activityItems, answers);
+    ] as Answers;
+    const replacer = new MarkdownVariableReplacer(activityItems, answers, null);
     const markdown = 'This is some text [[foo]] and [[bar]] and [[baz]]';
     const expected = 'This is some text abc and 2 and Option 1';
     expect(replacer.process(markdown)).toEqual(expected);
   });
 
   it('should escape special characters in the answer', () => {
-    const activityItems = [{ name: 'foo', type: 'TextInput' }];
-    const answers = [{ answer: '$10' }];
-    const replacer = new MarkdownVariableReplacer(activityItems, answers);
+    const activityItems = [
+      { name: 'foo', type: 'TextInput' },
+    ] as PipelineItem[];
+    const answers = [{ answer: '$10' }] as Answers;
+    const replacer = new MarkdownVariableReplacer(activityItems, answers, null);
     const markdown = 'This is some text [[foo]]';
     const expected = 'This is some text \\$10';
     expect(replacer.process(markdown)).toEqual(expected);
   });
 
   it('should return the markdown string with the variable name when no answer is present', () => {
-    const activityItems = [{ name: 'foo', type: 'TextInput' }];
-    const answers = [];
-    const replacer = new MarkdownVariableReplacer(activityItems, answers);
+    const activityItems = [
+      { name: 'foo', type: 'TextInput' },
+    ] as PipelineItem[];
+    const answers = [] as Answers;
+    const replacer = new MarkdownVariableReplacer(activityItems, answers, null);
     const markdown = 'This is some text [[foo]]';
     const expected = 'This is some text [[foo]]';
     expect(replacer.process(markdown)).toEqual(expected);
   });
 
   it('should return the markdown string with the variable name when the activity item is not found', () => {
-    const activityItems = [{ name: 'foo', type: 'TextInput' }];
-    const answers = [{ answer: 'bar' }];
-    const replacer = new MarkdownVariableReplacer(activityItems, answers);
+    const activityItems = [
+      { name: 'foo', type: 'TextInput' },
+    ] as PipelineItem[];
+    const answers = [{ answer: 'bar' }] as Answers;
+    const replacer = new MarkdownVariableReplacer(activityItems, answers, null);
     const markdown = 'This is some text [[baz]]';
     const expected = 'This is some text [[baz]]';
     expect(replacer.process(markdown)).toEqual(expected);
   });
   describe('process', () => {
-    let activityItems;
-    let answers;
-    let replacer;
+    let activityItems: PipelineItem[];
+    let answers: Answers;
+    let replacer: MarkdownVariableReplacer;
 
     beforeEach(() => {
       activityItems = [
@@ -107,7 +117,8 @@ describe('MarkdownVariableReplacer', () => {
           type: 'TimeRange',
           payload: {},
         },
-      ];
+      ] as never as PipelineItem[];
+
       answers = {
         0: { answer: 'John Doe' },
         1: {
@@ -137,8 +148,9 @@ describe('MarkdownVariableReplacer', () => {
             },
           },
         },
-      };
-      replacer = new MarkdownVariableReplacer(activityItems, answers);
+      } as never as Answers;
+
+      replacer = new MarkdownVariableReplacer(activityItems, answers, null);
     });
 
     it('should replace checkbox variable with selected options', () => {
@@ -163,7 +175,7 @@ describe('MarkdownVariableReplacer', () => {
     });
 
     it('should leave checkbox variable as is if answer not found', () => {
-      delete answers[1];
+      delete answers[1 as never];
       const markdown = 'Hello [[name1]], you selected [[name2]].';
       const expectedOutput = 'Hello John Doe, you selected [[name2]].';
       const processedMarkdown = replacer.process(markdown);
@@ -178,7 +190,7 @@ describe('MarkdownVariableReplacer', () => {
 
     it('should leave markdown as is if no answers found', () => {
       answers = {};
-      replacer = new MarkdownVariableReplacer(activityItems, answers);
+      replacer = new MarkdownVariableReplacer(activityItems, answers, null);
       const markdown = 'Hello [[name1]], you selected [[name2]].';
       const expectedOutput = 'Hello [[name1]], you selected [[name2]].';
       const processedMarkdown = replacer.process(markdown);
@@ -249,7 +261,8 @@ describe('MarkdownVariableReplacer', () => {
           type: 'TextInput',
           payload: {},
         },
-      ];
+      ] as PipelineItem[];
+
       const nestedAnswers = {
         0: { answer: 'My name is John doe' },
         1: {
@@ -270,11 +283,12 @@ describe('MarkdownVariableReplacer', () => {
         },
         3: { answer: 3 },
         4: { answer: '1' },
-      };
+      } as never as Answers;
 
       replacer = new MarkdownVariableReplacer(
         nestedActivityItems,
         nestedAnswers,
+        null,
       );
 
       const markdown = `**ItemText content:**

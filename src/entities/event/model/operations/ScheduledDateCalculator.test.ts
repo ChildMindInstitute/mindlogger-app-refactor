@@ -1,19 +1,28 @@
 import { addDays, startOfDay, subDays } from 'date-fns';
 
-import ScheduledDateCalculator from './ScheduledDateCalculator';
+import { IScheduledDateCalculator } from './IScheduledDateCalculator';
+import { ScheduledDateCalculator } from './ScheduledDateCalculator';
+import { getDefaultScheduledDateCalculator } from './scheduledDateCalculatorInstance';
+import {
+  EventAvailability,
+  ScheduleEvent,
+} from '../../lib/types/scheduledDateCalculator';
 
-const now = new Date(2024, 0, 25);
+type TestScheduledDateCalculator = IScheduledDateCalculator & {
+  getNow: ScheduledDateCalculator['getNow'];
+};
 
 describe('ScheduledDateCalculator', () => {
-  let tempGetNow;
+  let now: Date;
+  let calculator: TestScheduledDateCalculator;
 
-  beforeAll(() => {
-    tempGetNow = ScheduledDateCalculator.getNow;
-    ScheduledDateCalculator.getNow = jest.fn().mockReturnValue(new Date(now));
-  });
+  beforeEach(() => {
+    now = new Date(2024, 0, 25, 0, 0, 0, 0);
 
-  afterAll(() => {
-    ScheduledDateCalculator.getNow = tempGetNow;
+    calculator =
+      getDefaultScheduledDateCalculator() as never as TestScheduledDateCalculator;
+
+    jest.spyOn(calculator, 'getNow').mockReturnValue(now);
   });
 
   describe('Test Always Available events', () => {
@@ -25,7 +34,7 @@ describe('ScheduledDateCalculator', () => {
         timeTo: null,
         startDate: null,
         endDate: null,
-      };
+      } as EventAvailability;
 
       const scheduleEvent = {
         id: 'eventTestId',
@@ -33,18 +42,17 @@ describe('ScheduledDateCalculator', () => {
         availability: eventAvailability,
         selectedDate: null,
         scheduledAt: null,
-      };
+      } as ScheduleEvent;
 
-      let resultDate = ScheduledDateCalculator.calculate(scheduleEvent, false);
+      let resultDate = calculator.calculate(scheduleEvent, false);
 
       let expectedDate = startOfDay(now);
 
       expect(resultDate).toEqual(expectedDate);
 
-      // sub-test 2 - with timeFrom
       eventAvailability.timeFrom = { hours: 16, minutes: 15 };
 
-      resultDate = ScheduledDateCalculator.calculate(scheduleEvent, false);
+      resultDate = calculator.calculate(scheduleEvent, false);
 
       expectedDate = startOfDay(now);
       expectedDate.setHours(16);
@@ -63,7 +71,7 @@ describe('ScheduledDateCalculator', () => {
         timeTo: { hours: 18, minutes: 30 },
         startDate: null,
         endDate: null,
-      };
+      } as EventAvailability;
 
       const scheduleEvent = {
         id: 'eventTestId',
@@ -71,7 +79,7 @@ describe('ScheduledDateCalculator', () => {
         availability: eventAvailability,
         selectedDate: null,
         scheduledAt: null,
-      };
+      } as ScheduleEvent;
 
       return scheduleEvent;
     };
@@ -80,7 +88,7 @@ describe('ScheduledDateCalculator', () => {
       const onceEvent = getOnceEvent();
       onceEvent.selectedDate = subDays(startOfDay(now), 2);
 
-      const resultDate = ScheduledDateCalculator.calculate(onceEvent, false);
+      const resultDate = calculator.calculate(onceEvent, false);
 
       expect(resultDate).toEqual(null);
     });
@@ -89,11 +97,11 @@ describe('ScheduledDateCalculator', () => {
       const onceEvent = getOnceEvent();
       onceEvent.selectedDate = subDays(startOfDay(now), 1);
 
-      const resultDate = ScheduledDateCalculator.calculate(onceEvent, false);
+      const resultDate = calculator.calculate(onceEvent, false);
 
       const expectedDate = new Date(onceEvent.selectedDate);
-      expectedDate.setHours(onceEvent.availability.timeFrom.hours);
-      expectedDate.setMinutes(onceEvent.availability.timeFrom.minutes);
+      expectedDate.setHours(onceEvent.availability.timeFrom!.hours);
+      expectedDate.setMinutes(onceEvent.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -102,11 +110,11 @@ describe('ScheduledDateCalculator', () => {
       const onceEvent = getOnceEvent();
       onceEvent.selectedDate = addDays(startOfDay(now), 1);
 
-      const resultDate = ScheduledDateCalculator.calculate(onceEvent, false);
+      const resultDate = calculator.calculate(onceEvent, false);
 
       const expectedDate = addDays(startOfDay(now), 1);
-      expectedDate.setHours(onceEvent.availability.timeFrom.hours);
-      expectedDate.setMinutes(onceEvent.availability.timeFrom.minutes);
+      expectedDate.setHours(onceEvent.availability.timeFrom!.hours);
+      expectedDate.setMinutes(onceEvent.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -116,7 +124,7 @@ describe('ScheduledDateCalculator', () => {
       onceEvent.selectedDate = startOfDay(now);
       onceEvent.availability.timeFrom = { hours: 0, minutes: 0 };
 
-      const resultDate = ScheduledDateCalculator.calculate(onceEvent, false);
+      const resultDate = calculator.calculate(onceEvent, false);
 
       const expectedDate = startOfDay(now);
 
@@ -128,7 +136,7 @@ describe('ScheduledDateCalculator', () => {
       onceEvent.selectedDate = startOfDay(now);
       onceEvent.availability.timeFrom = { hours: 16, minutes: 30 };
 
-      const resultDate = ScheduledDateCalculator.calculate(onceEvent, false);
+      const resultDate = calculator.calculate(onceEvent, false);
 
       const expectedDate = startOfDay(now);
       expectedDate.setHours(16);
@@ -147,7 +155,7 @@ describe('ScheduledDateCalculator', () => {
         timeTo: { hours: 18, minutes: 30 },
         startDate: null,
         endDate: null,
-      };
+      } as EventAvailability;
 
       const scheduleEvent = {
         id: 'eventTestId',
@@ -155,7 +163,7 @@ describe('ScheduledDateCalculator', () => {
         availability: eventAvailability,
         selectedDate: null,
         scheduledAt: null,
-      };
+      } as ScheduleEvent;
 
       return scheduleEvent;
     };
@@ -166,7 +174,7 @@ describe('ScheduledDateCalculator', () => {
       event.availability.endDate = addDays(startOfDay(now), 2);
       event.availability.timeFrom = { hours: 0, minutes: 0 };
 
-      const resultDate = ScheduledDateCalculator.calculate(event, false);
+      const resultDate = calculator.calculate(event, false);
 
       const expectedDate = startOfDay(now);
 
@@ -178,11 +186,11 @@ describe('ScheduledDateCalculator', () => {
       event.availability.startDate = subDays(startOfDay(now), 2);
       event.availability.endDate = addDays(startOfDay(now), 2);
 
-      const resultDate = ScheduledDateCalculator.calculate(event, false);
+      const resultDate = calculator.calculate(event, false);
 
       const expectedDate = startOfDay(now);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -192,11 +200,11 @@ describe('ScheduledDateCalculator', () => {
       event.availability.startDate = subDays(startOfDay(now), 2);
       event.availability.endDate = startOfDay(now);
 
-      const resultDate = ScheduledDateCalculator.calculate(event, false);
+      const resultDate = calculator.calculate(event, false);
 
       const expectedDate = startOfDay(now);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -206,11 +214,11 @@ describe('ScheduledDateCalculator', () => {
       event.availability.startDate = startOfDay(now);
       event.availability.endDate = addDays(startOfDay(now), 2);
 
-      const resultDate = ScheduledDateCalculator.calculate(event, false);
+      const resultDate = calculator.calculate(event, false);
 
       const expectedDate = startOfDay(now);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -220,11 +228,11 @@ describe('ScheduledDateCalculator', () => {
       event.availability.startDate = addDays(startOfDay(now), 2);
       event.availability.endDate = addDays(startOfDay(now), 5);
 
-      const resultDate = ScheduledDateCalculator.calculate(event, false);
+      const resultDate = calculator.calculate(event, false);
 
       const expectedDate = new Date(event.availability.startDate);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -234,11 +242,11 @@ describe('ScheduledDateCalculator', () => {
       event.availability.startDate = subDays(startOfDay(now), 5);
       event.availability.endDate = subDays(startOfDay(now), 2);
 
-      const resultDate = ScheduledDateCalculator.calculate(event, false);
+      const resultDate = calculator.calculate(event, false);
 
       const expectedDate = new Date(event.availability.endDate);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -253,7 +261,7 @@ describe('ScheduledDateCalculator', () => {
         timeTo: { hours: 18, minutes: 30 },
         startDate: null,
         endDate: null,
-      };
+      } as EventAvailability;
 
       const scheduleEvent = {
         id: 'eventTestId',
@@ -261,7 +269,7 @@ describe('ScheduledDateCalculator', () => {
         availability: eventAvailability,
         selectedDate: null,
         scheduledAt: null,
-      };
+      } as ScheduleEvent;
 
       return scheduleEvent;
     };
@@ -273,7 +281,7 @@ describe('ScheduledDateCalculator', () => {
       event.availability.timeFrom = { hours: 0, minutes: 0 };
       event.selectedDate = startOfDay(now);
 
-      const resultDate = ScheduledDateCalculator.calculate(event, false);
+      const resultDate = calculator.calculate(event, false);
 
       const expectedDate = startOfDay(now);
 
@@ -286,11 +294,11 @@ describe('ScheduledDateCalculator', () => {
       event.availability.endDate = addDays(startOfDay(now), 2);
       event.selectedDate = startOfDay(now);
 
-      const resultDate = ScheduledDateCalculator.calculate(event, false);
+      const resultDate = calculator.calculate(event, false);
 
       const expectedDate = startOfDay(now);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -301,17 +309,17 @@ describe('ScheduledDateCalculator', () => {
       event.availability.endDate = addDays(startOfDay(now), 2);
       event.selectedDate = addDays(startOfDay(now), 7);
 
-      let resultDate = ScheduledDateCalculator.calculate(event, false);
+      let resultDate = calculator.calculate(event, false);
 
       const expectedDate = startOfDay(now);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
 
       event.selectedDate = subDays(startOfDay(now), 7);
 
-      resultDate = ScheduledDateCalculator.calculate(event, false);
+      resultDate = calculator.calculate(event, false);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -322,17 +330,17 @@ describe('ScheduledDateCalculator', () => {
       event.availability.endDate = addDays(startOfDay(now), 5);
       event.selectedDate = addDays(startOfDay(now), 1);
 
-      let resultDate = ScheduledDateCalculator.calculate(event, false);
+      let resultDate = calculator.calculate(event, false);
 
       let expectedDate = addDays(startOfDay(now), 1);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
 
       event.availability.timeFrom = { hours: 0, minutes: 0 };
 
-      resultDate = ScheduledDateCalculator.calculate(event, false);
+      resultDate = calculator.calculate(event, false);
 
       expectedDate = addDays(startOfDay(now), 1);
 
@@ -345,17 +353,17 @@ describe('ScheduledDateCalculator', () => {
       event.availability.endDate = subDays(startOfDay(now), 1);
       event.selectedDate = subDays(startOfDay(now), 1);
 
-      let resultDate = ScheduledDateCalculator.calculate(event, false);
+      let resultDate = calculator.calculate(event, false);
 
       let expectedDate = subDays(startOfDay(now), 1);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
 
       event.availability.timeFrom = { hours: 0, minutes: 0 };
 
-      resultDate = ScheduledDateCalculator.calculate(event, false);
+      resultDate = calculator.calculate(event, false);
 
       expectedDate = subDays(startOfDay(now), 1);
 
@@ -368,11 +376,11 @@ describe('ScheduledDateCalculator', () => {
       event.availability.endDate = addDays(startOfDay(now), 10);
       event.selectedDate = addDays(startOfDay(now), 4);
 
-      const resultDate = ScheduledDateCalculator.calculate(event, false);
+      const resultDate = calculator.calculate(event, false);
 
       const expectedDate = subDays(startOfDay(now), 3);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -383,11 +391,11 @@ describe('ScheduledDateCalculator', () => {
       event.availability.endDate = addDays(startOfDay(now), 10);
       event.selectedDate = subDays(startOfDay(now), 4);
 
-      const resultDate = ScheduledDateCalculator.calculate(event, false);
+      const resultDate = calculator.calculate(event, false);
 
       const expectedDate = subDays(startOfDay(now), 4);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -398,18 +406,18 @@ describe('ScheduledDateCalculator', () => {
       event.availability.endDate = addDays(startOfDay(now), 10);
       event.selectedDate = subDays(startOfDay(now), 4);
 
-      let resultDate = ScheduledDateCalculator.calculate(event, false);
+      let resultDate = calculator.calculate(event, false);
 
       const expectedDate = addDays(subDays(startOfDay(now), 4), 7);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
 
       event.availability.startDate = addDays(startOfDay(now), 2);
       event.availability.endDate = addDays(startOfDay(now), 10);
 
-      resultDate = ScheduledDateCalculator.calculate(event, false);
+      resultDate = calculator.calculate(event, false);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -420,7 +428,7 @@ describe('ScheduledDateCalculator', () => {
       event.availability.endDate = subDays(startOfDay(now), 3);
       event.selectedDate = subDays(startOfDay(now), 1);
 
-      const resultDate = ScheduledDateCalculator.calculate(event, false);
+      const resultDate = calculator.calculate(event, false);
 
       expect(resultDate).toEqual(null);
     });
@@ -431,7 +439,7 @@ describe('ScheduledDateCalculator', () => {
       event.availability.endDate = addDays(startOfDay(now), 5);
       event.selectedDate = subDays(startOfDay(now), 1);
 
-      const resultDate = ScheduledDateCalculator.calculate(event, false);
+      const resultDate = calculator.calculate(event, false);
 
       expect(resultDate).toEqual(null);
     });
@@ -446,7 +454,7 @@ describe('ScheduledDateCalculator', () => {
         timeTo: { hours: 18, minutes: 30 },
         startDate: null,
         endDate: null,
-      };
+      } as EventAvailability;
 
       const scheduleEvent = {
         id: 'eventTestId',
@@ -454,21 +462,10 @@ describe('ScheduledDateCalculator', () => {
         availability: eventAvailability,
         selectedDate: null,
         scheduledAt: null,
-      };
+      } as ScheduleEvent;
 
       return scheduleEvent;
     };
-
-    let tempGetNow;
-
-    beforeEach(() => {
-      tempGetNow = ScheduledDateCalculator.getNow;
-    });
-
-    afterEach(() => {
-      jest.clearAllMocks();
-      ScheduledDateCalculator.getNow = tempGetNow;
-    });
 
     it('Should return Mon, Wed, Fri when getNow returns Mon, Wed, Fri accordingly and start-end dates are -/+ 30 days and timeFrom is reset or is set', () => {
       const event = getWeekdaysEvent();
@@ -481,25 +478,17 @@ describe('ScheduledDateCalculator', () => {
       event.availability.endDate = addDays(monday, 30);
       event.availability.timeFrom = { hours: 0, minutes: 0 };
 
-      let getNowMock = jest.fn(() => {
-        return new Date(monday);
-      });
+      jest.spyOn(calculator, 'getNow').mockReturnValue(new Date(monday));
 
-      ScheduledDateCalculator.getNow = getNowMock;
-
-      let resultDate = ScheduledDateCalculator.calculate(event, false);
+      let resultDate = calculator.calculate(event, false);
 
       expect(resultDate).toEqual(monday);
 
       event.availability.timeFrom = { hours: 15, minutes: 56 };
 
-      getNowMock = jest.fn(() => {
-        return new Date(wednesday);
-      });
+      jest.spyOn(calculator, 'getNow').mockReturnValue(new Date(wednesday));
 
-      ScheduledDateCalculator.getNow = getNowMock;
-
-      resultDate = ScheduledDateCalculator.calculate(event, false);
+      resultDate = calculator.calculate(event, false);
 
       const expected = new Date(wednesday);
       expected.setHours(15);
@@ -509,13 +498,9 @@ describe('ScheduledDateCalculator', () => {
 
       event.availability.timeFrom = { hours: 0, minutes: 0 };
 
-      getNowMock = jest.fn(() => {
-        return new Date(friday);
-      });
+      jest.spyOn(calculator, 'getNow').mockReturnValue(new Date(friday));
 
-      ScheduledDateCalculator.getNow = getNowMock;
-
-      resultDate = ScheduledDateCalculator.calculate(event, false);
+      resultDate = calculator.calculate(event, false);
 
       expect(resultDate).toEqual(friday);
     });
@@ -530,29 +515,21 @@ describe('ScheduledDateCalculator', () => {
       event.availability.startDate = subDays(saturday, 30);
       event.availability.endDate = addDays(saturday, 30);
 
-      let getNowMock = jest.fn(() => {
-        return new Date(sunday);
-      });
+      jest.spyOn(calculator, 'getNow').mockReturnValue(new Date(sunday));
 
-      ScheduledDateCalculator.getNow = getNowMock;
-
-      let resultDate = ScheduledDateCalculator.calculate(event, false);
+      let resultDate = calculator.calculate(event, false);
 
       const expectedDate = new Date(friday);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
 
       event.availability.timeFrom = { hours: 0, minutes: 0 };
 
-      getNowMock = jest.fn(() => {
-        return new Date(saturday);
-      });
+      jest.spyOn(calculator, 'getNow').mockReturnValue(new Date(saturday));
 
-      ScheduledDateCalculator.getNow = getNowMock;
-
-      resultDate = ScheduledDateCalculator.calculate(event, false);
+      resultDate = calculator.calculate(event, false);
 
       expect(resultDate).toEqual(friday);
     });
@@ -569,18 +546,18 @@ describe('ScheduledDateCalculator', () => {
         return new Date(wednesday);
       });
 
-      ScheduledDateCalculator.getNow = getNowMock;
+      jest.spyOn(calculator, 'getNow').mockReturnValue(new Date(wednesday));
 
-      let resultDate = ScheduledDateCalculator.calculate(event, false);
+      let resultDate = calculator.calculate(event, false);
 
       const expectedDate = new Date(wednesday);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
 
       event.availability.timeFrom = { hours: 0, minutes: 0 };
-      resultDate = ScheduledDateCalculator.calculate(event, false);
+      resultDate = calculator.calculate(event, false);
 
       expect(resultDate).toEqual(wednesday);
     });
@@ -590,25 +567,21 @@ describe('ScheduledDateCalculator', () => {
 
       const wednesday = startOfDay(new Date(2023, 8, 27));
 
-      event.availability.startDate = new subDays(new Date(wednesday), 30);
+      event.availability.startDate = subDays(wednesday, 30);
       event.availability.endDate = new Date(wednesday);
 
-      const getNowMock = jest.fn(() => {
-        return new Date(wednesday);
-      });
+      jest.spyOn(calculator, 'getNow').mockReturnValue(new Date(wednesday));
 
-      ScheduledDateCalculator.getNow = getNowMock;
-
-      let resultDate = ScheduledDateCalculator.calculate(event, false);
+      let resultDate = calculator.calculate(event, false);
 
       const expectedDate = new Date(wednesday);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
 
       event.availability.timeFrom = { hours: 0, minutes: 0 };
-      resultDate = ScheduledDateCalculator.calculate(event, false);
+      resultDate = calculator.calculate(event, false);
 
       expect(resultDate).toEqual(wednesday);
     });
@@ -618,25 +591,21 @@ describe('ScheduledDateCalculator', () => {
 
       const wednesday = startOfDay(new Date(2023, 8, 27));
 
-      event.availability.startDate = new addDays(new Date(wednesday), 10);
+      event.availability.startDate = addDays(wednesday, 10);
       event.availability.endDate = addDays(wednesday, 30);
 
-      const getNowMock = jest.fn(() => {
-        return new Date(wednesday);
-      });
+      jest.spyOn(calculator, 'getNow').mockReturnValue(new Date(wednesday));
 
-      ScheduledDateCalculator.getNow = getNowMock;
-
-      let resultDate = ScheduledDateCalculator.calculate(event, false);
+      let resultDate = calculator.calculate(event, false);
 
       let expectedDate = new Date(2023, 9, 9);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
 
       event.availability.timeFrom = { hours: 0, minutes: 0 };
-      resultDate = ScheduledDateCalculator.calculate(event, false);
+      resultDate = calculator.calculate(event, false);
 
       expectedDate = new Date(2023, 9, 9);
       expect(resultDate).toEqual(expectedDate);
@@ -647,25 +616,21 @@ describe('ScheduledDateCalculator', () => {
 
       const wednesday = startOfDay(new Date(2023, 8, 27));
 
-      event.availability.startDate = new subDays(new Date(wednesday), 30);
+      event.availability.startDate = subDays(wednesday, 30);
       event.availability.endDate = subDays(wednesday, 10);
 
-      const getNowMock = jest.fn(() => {
-        return new Date(wednesday);
-      });
+      jest.spyOn(calculator, 'getNow').mockReturnValue(new Date(wednesday));
 
-      ScheduledDateCalculator.getNow = getNowMock;
-
-      let resultDate = ScheduledDateCalculator.calculate(event, false);
+      let resultDate = calculator.calculate(event, false);
 
       let expectedDate = new Date(2023, 8, 15);
-      expectedDate.setHours(event.availability.timeFrom.hours);
-      expectedDate.setMinutes(event.availability.timeFrom.minutes);
+      expectedDate.setHours(event.availability.timeFrom!.hours);
+      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
 
       expect(resultDate).toEqual(expectedDate);
 
       event.availability.timeFrom = { hours: 0, minutes: 0 };
-      resultDate = ScheduledDateCalculator.calculate(event, false);
+      resultDate = calculator.calculate(event, false);
 
       expectedDate = new Date(2023, 8, 15);
 

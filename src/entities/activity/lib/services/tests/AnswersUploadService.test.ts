@@ -1,53 +1,62 @@
 import { FileSystem } from 'react-native-file-access';
 
-import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userPrivateKeyRecord';
-import { AnswerService } from '@shared/api';
+import { IUserPrivateKeyRecord } from '@app/entities/identity/lib/IUserPrivateKeyRecord';
+import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userPrivateKeyRecordInstance';
+import { getDefaultAnswerService } from '@app/shared/api/services/answerServiceInstance';
+import {
+  ActivityAnswersRequest,
+  AnswerDto,
+  IAnswerService,
+  UserActionDto,
+} from '@app/shared/api/services/IAnswerService';
+import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encryptionManagerInstance';
+import { IEncryptionManager } from '@app/shared/lib/encryption/IEncryptionManager';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
 
-import AnswersUploadService from '../AnswersUploadService';
-import MediaFilesCleaner from '../MediaFilesCleaner';
+import { SendAnswersInput } from '../../types/uploadAnswers';
+import {
+  AnswersUploadService,
+  IAnswersUploadService,
+} from '../AnswersUploadService';
+import { getDefaultAnswersUploadService } from '../answersUploadServiceInstance';
+import { IMediaFilesCleaner } from '../IMediaFilesCleaner';
+import { getDefaultMediaFilesCleaner } from '../mediaFilesCleanerInstance';
 
-const MOCK_CREATED_AT = +new Date();
-
-jest.mock('@app/shared/lib', () => ({
-  createSecureStorage: jest.fn(() => ({
-    getString: jest.fn(data => '{}'),
-  })),
-  encryption: {
-    createEncryptionService: jest.fn(() => ({
-      encrypt: jest.fn(data => `encrypted_${data}`),
-    })),
-    getPublicKey: jest.fn(() => 'mocked_public_key'),
-  },
-  Logger: {
-    log: jest.fn(),
-  },
-  isLocalFileUrl: jest.fn(),
-}));
-
-jest.mock('@app/shared/api', () => ({
-  AnswerService: {
-    sendActivityAnswers: jest.fn(),
-  },
-  FileService: {
-    upload: jest.fn(() => ({
-      data: {
-        result: {
-          url: 'mocked_remote_url',
-        },
-      },
-    })),
-  },
-}));
+type ITestAnswersUploadService = IAnswersUploadService & {
+  createdAt: number | null;
+  getUploadRecord: AnswersUploadService['getUploadRecord'];
+  collectFileIds: AnswersUploadService['collectFileIds'];
+  processFileUpload: AnswersUploadService['processFileUpload'];
+  uploadAllMediaFiles: AnswersUploadService['uploadAllMediaFiles'];
+  uploadAnswers: AnswersUploadService['uploadAnswers'];
+  encryptAnswers: AnswersUploadService['encryptAnswers'];
+  assignRemoteUrlsToUserActions: AnswersUploadService['assignRemoteUrlsToUserActions'];
+};
 
 describe('AnswersUploadService', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
+  const MOCK_CREATED_AT = +new Date();
 
-    AnswersUploadService.createdAt = MOCK_CREATED_AT;
-    AnswersUploadService.uploadProgressObservable = {
-      setTotalFilesInActivity: jest.fn(),
-      setCurrentSecondLevelStepKey: jest.fn(),
-    };
+  let logger: ILogger;
+  let userPrivateKeyRecord: IUserPrivateKeyRecord;
+  let answerService: IAnswerService;
+  let answersUploadService: ITestAnswersUploadService;
+  let mediaFileCleaner: IMediaFilesCleaner;
+
+  beforeEach(() => {
+    logger = getDefaultLogger();
+    jest.spyOn(logger, 'log').mockImplementation(() => {});
+
+    userPrivateKeyRecord = getDefaultUserPrivateKeyRecord();
+
+    answerService = getDefaultAnswerService();
+
+    answersUploadService =
+      getDefaultAnswersUploadService() as never as ITestAnswersUploadService;
+    answersUploadService.createdAt = MOCK_CREATED_AT;
+
+    mediaFileCleaner = getDefaultMediaFilesCleaner();
   });
 
   describe('getUploadRecord function', () => {
@@ -60,7 +69,7 @@ describe('AnswersUploadService', () => {
 
       const fileId = 'fileId2';
 
-      const result = AnswersUploadService.getUploadRecord(
+      const result = answersUploadService.getUploadRecord(
         uploadResults,
         fileId,
       );
@@ -80,7 +89,7 @@ describe('AnswersUploadService', () => {
 
       const fileId = 'fileId3';
 
-      const result = AnswersUploadService.getUploadRecord(
+      const result = answersUploadService.getUploadRecord(
         uploadResults,
         fileId,
       );
@@ -112,7 +121,7 @@ describe('AnswersUploadService', () => {
             fileName: 'audio.m4a',
           },
         },
-      ];
+      ] as AnswerDto[];
 
       const mockIsFileUrl = jest.fn(url => {
         if (
@@ -125,9 +134,11 @@ describe('AnswersUploadService', () => {
           return false;
         }
       });
-      AnswersUploadService.isFileUrl = mockIsFileUrl;
+      jest
+        .spyOn(answersUploadService as never, 'isFileUrl')
+        .mockImplementation(mockIsFileUrl as never);
 
-      const result = AnswersUploadService.collectFileIds(answers);
+      const result = answersUploadService.collectFileIds(answers);
 
       expect(result).toEqual([
         `${MOCK_CREATED_AT}/image.jpg`,
@@ -141,9 +152,9 @@ describe('AnswersUploadService', () => {
         { value: 'text answer' },
         { value: { uri: 'http://example.com/image.jpg' } },
         { value: 'another text answer' },
-      ];
+      ] as AnswerDto[];
 
-      const result = AnswersUploadService.collectFileIds(answers);
+      const result = answersUploadService.collectFileIds(answers);
 
       expect(result).toEqual([]);
     });
@@ -155,34 +166,44 @@ describe('AnswersUploadService', () => {
 
   describe('processFileUpload function', () => {
     it('should throw an error for non-existing local file', async () => {
-      FileSystem.exists.mockResolvedValueOnce(false);
+      jest.spyOn(FileSystem, 'exists').mockResolvedValue(false);
 
-      const mediaAnswer = { uri: 'file:///non/existing/file.jpg' };
+      const mediaAnswer = { uri: 'file:///non/existing/file.jpg' } as MediaFile;
       const uploadResults = [
         { fileId: 'fileId1', uploaded: false, remoteUrl: null },
       ];
 
       await expect(
-        AnswersUploadService.processFileUpload(mediaAnswer, uploadResults),
+        answersUploadService.processFileUpload(
+          mediaAnswer,
+          uploadResults,
+          0,
+          'mock-applet-id',
+        ),
       ).rejects.toThrow(/does not exist/);
     });
 
     it('should throw an error for missing upload record', async () => {
-      FileSystem.exists.mockResolvedValueOnce(true);
+      jest.spyOn(FileSystem, 'exists').mockResolvedValue(true);
 
-      const mediaAnswer = { uri: 'file:///path/to/image.jpg' };
+      const mediaAnswer = { uri: 'file:///path/to/image.jpg' } as MediaFile;
       const uploadResults = [
         { fileId: 'fileId1', uploaded: false, remoteUrl: null },
       ];
 
       await expect(
-        AnswersUploadService.processFileUpload(mediaAnswer, uploadResults),
+        answersUploadService.processFileUpload(
+          mediaAnswer,
+          uploadResults,
+          0,
+          'mock-applet-id',
+        ),
       ).rejects.toThrow(/uploadRecord does not exist/);
     });
   });
 
   it('should upload media files and update answers', async () => {
-    FileSystem.exists.mockResolvedValue(true);
+    jest.spyOn(FileSystem, 'exists').mockResolvedValue(true);
 
     const answers = [
       {
@@ -200,7 +221,7 @@ describe('AnswersUploadService', () => {
           type: 'video/mp4',
         },
       },
-    ];
+    ] as AnswerDto[];
 
     const fakeUploadResults = [
       {
@@ -218,12 +239,16 @@ describe('AnswersUploadService', () => {
     const mockCheckIfFilesUploaded = jest
       .fn()
       .mockResolvedValue(fakeUploadResults);
-    AnswersUploadService.checkIfFilesUploaded = mockCheckIfFilesUploaded;
+    jest
+      .spyOn(answersUploadService as never, 'checkIfFilesUploaded')
+      .mockImplementation(mockCheckIfFilesUploaded as never);
 
     const mockProcessFileUpload = jest
       .fn()
       .mockResolvedValue('https://example.com/modified-answer.jpg');
-    AnswersUploadService.processFileUpload = mockProcessFileUpload;
+    jest
+      .spyOn(answersUploadService as never, 'processFileUpload')
+      .mockImplementation(mockProcessFileUpload as never);
 
     const mockIsFileUrl = jest.fn(url => {
       if (
@@ -235,14 +260,16 @@ describe('AnswersUploadService', () => {
         return false;
       }
     });
-    AnswersUploadService.isFileUrl = mockIsFileUrl;
+    jest
+      .spyOn(answersUploadService as never, 'isFileUrl')
+      .mockImplementation(mockIsFileUrl as never);
 
     const modifiedBody = {
       answers,
       appletId: '1e631d7f-2ce8-4ec0-be52-c77092bd203e',
-    };
+    } as SendAnswersInput;
 
-    const result = await AnswersUploadService.uploadAllMediaFiles(modifiedBody);
+    const result = await answersUploadService.uploadAllMediaFiles(modifiedBody);
 
     expect(mockCheckIfFilesUploaded).toHaveBeenCalledWith(
       [`${MOCK_CREATED_AT}/image.jpg`, `${MOCK_CREATED_AT}/video.mp4`],
@@ -260,18 +287,18 @@ describe('AnswersUploadService', () => {
     const answers = [
       { value: 'text answer' },
       { value: 'another text answer' },
-    ];
+    ] as AnswerDto[];
 
     const modifiedBody = {
       answers,
-    };
+    } as SendAnswersInput;
 
-    const result = await AnswersUploadService.uploadAllMediaFiles(modifiedBody);
+    const result = await answersUploadService.uploadAllMediaFiles(modifiedBody);
 
     expect(result.answers).toEqual(answers); // Answers should remain unchanged
   });
   it('should handle file upload errors', async () => {
-    FileSystem.exists.mockResolvedValueOnce(true);
+    jest.spyOn(FileSystem, 'exists').mockResolvedValue(true);
 
     const answers = [
       {
@@ -293,8 +320,9 @@ describe('AnswersUploadService', () => {
     const mockCheckIfFilesUploaded = jest
       .fn()
       .mockResolvedValue(fakeUploadResults);
-
-    AnswersUploadService.checkIfFilesUploaded = mockCheckIfFilesUploaded;
+    jest
+      .spyOn(answersUploadService as never, 'checkIfFilesUploaded')
+      .mockImplementation(mockCheckIfFilesUploaded as never);
 
     const mockProcessFileUpload = jest
       .fn()
@@ -303,14 +331,16 @@ describe('AnswersUploadService', () => {
           '[UploadAnswersService.mockProcessFileUpload]: Error occurred while file uploading',
         ),
       );
-    AnswersUploadService.processFileUpload = mockProcessFileUpload;
+    jest
+      .spyOn(answersUploadService as never, 'processFileUpload')
+      .mockImplementation(mockProcessFileUpload as never);
 
     const modifiedBody = {
       answers,
-    };
+    } as SendAnswersInput;
 
     await expect(
-      AnswersUploadService.uploadAllMediaFiles(modifiedBody),
+      answersUploadService.uploadAllMediaFiles(modifiedBody),
     ).rejects.toThrow(
       '[UploadAnswersService.mockProcessFileUpload]: Error occurred while file uploading',
     );
@@ -322,19 +352,23 @@ describe('AnswersUploadService', () => {
       appletId: 'applet123',
       flowId: 'flow123',
       createdAt: 1234567890,
-    };
+    } as ActivityAnswersRequest;
 
     const mockCheckIfAnswersUploaded = jest.fn().mockResolvedValueOnce(false);
-    AnswersUploadService.checkIfAnswersUploaded = mockCheckIfAnswersUploaded;
+    jest
+      .spyOn(answersUploadService as never, 'checkIfAnswersUploaded')
+      .mockImplementation(mockCheckIfAnswersUploaded as never);
 
     const mockSendActivityAnswers = jest.fn(() => {
-      AnswersUploadService.checkIfAnswersUploaded = jest
-        .fn()
-        .mockResolvedValueOnce(true);
+      jest
+        .spyOn(answersUploadService as never, 'checkIfAnswersUploaded')
+        .mockResolvedValueOnce(true as never);
     });
-    AnswerService.sendActivityAnswers = mockSendActivityAnswers;
+    jest
+      .spyOn(answerService, 'sendActivityAnswers')
+      .mockImplementation(mockSendActivityAnswers as never);
 
-    await AnswersUploadService.uploadAnswers(encryptedData);
+    await answersUploadService.uploadAnswers(encryptedData);
 
     expect(mockCheckIfAnswersUploaded).toHaveBeenCalledWith({
       activityId: 'activity123',
@@ -351,17 +385,21 @@ describe('AnswersUploadService', () => {
       appletId: 'applet123',
       flowId: 'flow123',
       createdAt: 1234567890,
-    };
+    } as ActivityAnswersRequest;
 
     const mockCheckIfAnswersUploaded = jest.fn().mockResolvedValueOnce(false);
-    AnswersUploadService.checkIfAnswersUploaded = mockCheckIfAnswersUploaded;
+    jest
+      .spyOn(answersUploadService as never, 'checkIfAnswersUploaded')
+      .mockImplementation(mockCheckIfAnswersUploaded as never);
 
     const sendError = new Error('Any network layer error');
     const mockSendActivityAnswers = jest.fn().mockRejectedValue(sendError);
-    AnswerService.sendActivityAnswers = mockSendActivityAnswers;
+    jest
+      .spyOn(answerService, 'sendActivityAnswers')
+      .mockImplementation(mockSendActivityAnswers as never);
 
     await expect(
-      AnswersUploadService.uploadAnswers(encryptedData),
+      answersUploadService.uploadAnswers(encryptedData),
     ).rejects.toThrow(/Error occurred while sending answers/);
 
     expect(mockCheckIfAnswersUploaded).toHaveBeenCalledWith({
@@ -380,15 +418,19 @@ describe('AnswersUploadService', () => {
       appletId: 'applet123',
       flowId: 'flow123',
       createdAt: 1234567890,
-    };
+    } as ActivityAnswersRequest;
 
     const mockCheckIfAnswersUploaded = jest.fn().mockResolvedValueOnce(true);
-    AnswersUploadService.checkIfAnswersUploaded = mockCheckIfAnswersUploaded;
+    jest
+      .spyOn(answersUploadService as never, 'checkIfAnswersUploaded')
+      .mockImplementation(mockCheckIfAnswersUploaded as never);
 
     const mockSendActivityAnswers = jest.fn();
-    AnswerService.sendActivityAnswers = mockSendActivityAnswers;
+    jest
+      .spyOn(answerService, 'sendActivityAnswers')
+      .mockImplementation(mockSendActivityAnswers as never);
 
-    await AnswersUploadService.uploadAnswers(encryptedData);
+    await answersUploadService.uploadAnswers(encryptedData);
 
     expect(mockCheckIfAnswersUploaded).toHaveBeenCalledWith({
       activityId: 'activity123',
@@ -406,13 +448,13 @@ describe('AnswersUploadService', () => {
         base: 'base123',
       },
       answers: [{ value: 'answer1' }],
-      userActions: [],
+      userActions: [] as UserActionDto[],
       userIdentifier: 'user123',
-    };
+    } as SendAnswersInput;
 
-    getDefaultUserPrivateKeyRecord().get = jest.fn().mockReturnValueOnce(null);
+    jest.spyOn(userPrivateKeyRecord, 'get').mockReturnValue(undefined);
 
-    expect(() => AnswersUploadService.encryptAnswers(data)).toThrow(
+    expect(() => answersUploadService.encryptAnswers(data)).toThrow(
       'Error occurred while preparing answers',
     );
   });
@@ -428,7 +470,7 @@ describe('AnswersUploadService', () => {
           },
         },
         { value: 'text answer' },
-      ];
+      ] as AnswerDto[];
 
       const modifiedBody = {
         answers: [
@@ -442,18 +484,22 @@ describe('AnswersUploadService', () => {
           },
           { type: 'SET_ANSWER', response: { value: 'text answer' } },
         ],
-      };
+      } as SendAnswersInput;
 
       const updatedUserActions =
-        AnswersUploadService.assignRemoteUrlsToUserActions(
+        answersUploadService.assignRemoteUrlsToUserActions(
           originalAnswers,
           modifiedBody,
         );
 
-      expect(updatedUserActions[0].response.value).toBe(
+      expect(updatedUserActions[0]?.response).toHaveProperty(
+        'value',
         'https://example.com/modified-answer.jpg',
       );
-      expect(updatedUserActions[1].response.value).toBe('text answer');
+      expect(updatedUserActions[1]?.response).toHaveProperty(
+        'value',
+        'text answer',
+      );
     });
 
     it('should handle SVG files', () => {
@@ -465,7 +511,7 @@ describe('AnswersUploadService', () => {
             type: 'image/svg',
           },
         },
-      ];
+      ] as AnswerDto[];
 
       const modifiedBody = {
         answers: [{ value: 'https://example.com/modified-answer.svg' }],
@@ -475,15 +521,16 @@ describe('AnswersUploadService', () => {
             response: { value: { uri: 'file:///path/to/image.svg' } },
           },
         ],
-      };
+      } as SendAnswersInput;
 
       const updatedUserActions =
-        AnswersUploadService.assignRemoteUrlsToUserActions(
+        answersUploadService.assignRemoteUrlsToUserActions(
           originalAnswers,
           modifiedBody,
         );
 
-      expect(updatedUserActions[0].response.value).toBe(
+      expect(updatedUserActions[0]?.response).toHaveProperty(
+        'value',
         'https://example.com/modified-answer.svg',
       );
     });
@@ -504,7 +551,7 @@ describe('AnswersUploadService', () => {
             type: 'image/svg',
           },
         },
-      ];
+      ] as AnswerDto[];
 
       const modifiedBody = {
         answers: [
@@ -521,18 +568,20 @@ describe('AnswersUploadService', () => {
             response: { value: { uri: 'file:///path/to/image.svg' } },
           },
         ],
-      };
+      } as SendAnswersInput;
 
       const updatedUserActions =
-        AnswersUploadService.assignRemoteUrlsToUserActions(
+        answersUploadService.assignRemoteUrlsToUserActions(
           originalAnswers,
           modifiedBody,
         );
 
-      expect(updatedUserActions[0].response.value).toBe(
+      expect(updatedUserActions[0]?.response).toHaveProperty(
+        'value',
         'https://example.com/modified-answer.jpg',
       );
-      expect(updatedUserActions[1].response.value).toBe(
+      expect(updatedUserActions[1]?.response).toHaveProperty(
+        'value',
         'https://example.com/modified-answer.svg',
       );
     });
@@ -553,7 +602,7 @@ describe('AnswersUploadService', () => {
             type: 'image/svg',
           },
         },
-      ];
+      ] as AnswerDto[];
 
       const modifiedBody = {
         answers: [
@@ -575,18 +624,20 @@ describe('AnswersUploadService', () => {
             },
           },
         ],
-      };
+      } as SendAnswersInput;
 
       const updatedUserActions =
-        AnswersUploadService.assignRemoteUrlsToUserActions(
+        answersUploadService.assignRemoteUrlsToUserActions(
           originalAnswers,
           modifiedBody,
         );
 
-      expect(updatedUserActions[0].response.value).toBe(
+      expect(updatedUserActions[0]?.response).toHaveProperty(
+        'value',
         'https://example.com/modified-answer.jpg',
       );
-      expect(updatedUserActions[1].response.uri).toBe(
+      expect(updatedUserActions[1]?.response).toHaveProperty(
+        'uri',
         'file:///path/to/image.svg',
       );
     });
@@ -600,15 +651,15 @@ describe('AnswersUploadService', () => {
             type: 'image/jpeg',
           },
         },
-      ];
+      ] as AnswerDto[];
 
       const modifiedBody = {
         answers: [{ value: 'https://example.com/modified-answer.jpg' }],
         userActions: [],
-      };
+      } as never as SendAnswersInput;
 
       const updatedUserActions =
-        AnswersUploadService.assignRemoteUrlsToUserActions(
+        answersUploadService.assignRemoteUrlsToUserActions(
           originalAnswers,
           modifiedBody,
         );
@@ -623,7 +674,7 @@ describe('AnswersUploadService', () => {
       answers: [{ value: 'answer1' }, { value: 'answer2' }],
       userActions: [],
       itemIds: ['item1', 'item2'],
-    };
+    } as never as SendAnswersInput;
 
     const modifiedBody = {
       createdAt: 1234567890,
@@ -641,28 +692,35 @@ describe('AnswersUploadService', () => {
       itemIds: ['item1', 'item2'],
     };
 
-    AnswersUploadService.uploadAllMediaFiles = jest
-      .fn()
-      .mockResolvedValue(modifiedBody);
+    jest
+      .spyOn(answersUploadService as never, 'uploadAllMediaFiles')
+      .mockResolvedValue(modifiedBody as never);
 
     const mockAssignRemoteUrlsToUserActions = jest
       .fn()
       .mockReturnValue(modifiedBody.userActions);
-    AnswersUploadService.assignRemoteUrlsToUserActions =
-      mockAssignRemoteUrlsToUserActions;
+    jest
+      .spyOn(answersUploadService as never, 'assignRemoteUrlsToUserActions')
+      .mockImplementation(mockAssignRemoteUrlsToUserActions as never);
 
     const mockEncryptAnswers = jest.fn().mockReturnValue('encrypted-data');
-    AnswersUploadService.encryptAnswers = mockEncryptAnswers;
+    jest
+      .spyOn(answersUploadService as never, 'encryptAnswers')
+      .mockImplementation(mockEncryptAnswers as never);
 
     const mockUploadAnswers = jest.fn();
-    AnswersUploadService.uploadAnswers = mockUploadAnswers;
+    jest
+      .spyOn(answersUploadService as never, 'uploadAnswers')
+      .mockImplementation(mockUploadAnswers as never);
 
     const mockCleanUpByAnswers = jest.fn();
-    MediaFilesCleaner.cleanUpByAnswers = mockCleanUpByAnswers;
+    jest
+      .spyOn(mediaFileCleaner, 'cleanUpByAnswers')
+      .mockImplementation(mockCleanUpByAnswers);
 
-    await AnswersUploadService.sendAnswers(body);
+    await answersUploadService.sendAnswers(body);
 
-    expect(AnswersUploadService.uploadAllMediaFiles).toHaveBeenCalledWith(body);
+    expect(answersUploadService.uploadAllMediaFiles).toHaveBeenCalledWith(body);
     expect(mockAssignRemoteUrlsToUserActions).toHaveBeenCalledWith(
       body.answers,
       modifiedBody,
@@ -678,21 +736,48 @@ describe('AnswersUploadService', () => {
       answers: [{ value: 'answer1' }, { value: 'answer2' }],
       userActions: [],
       itemIds: ['item1', 'item2'],
-    };
+    } as never as SendAnswersInput;
 
     const uploadError = new Error('Uploading media files failed');
-    AnswersUploadService.uploadAllMediaFiles = jest
-      .fn()
-      .mockRejectedValue(uploadError);
+    jest
+      .spyOn(answersUploadService as never, 'uploadAllMediaFiles')
+      .mockImplementation((() => {
+        throw uploadError;
+      }) as never);
 
-    await expect(AnswersUploadService.sendAnswers(body)).rejects.toThrow(
+    await expect(answersUploadService.sendAnswers(body)).rejects.toThrow(
       uploadError,
     );
   });
 });
 
 describe('AnswersUploadService real example', () => {
-  AnswersUploadService.createdAt = MOCK_CREATED_AT;
+  const MOCK_CREATED_AT = +new Date();
+
+  let logger: ILogger;
+  let userPrivateKeyRecord: IUserPrivateKeyRecord;
+  let encryptionManager: IEncryptionManager;
+  let answerService: IAnswerService;
+  let answersUploadService: ITestAnswersUploadService;
+  let mediaFileCleaner: IMediaFilesCleaner;
+
+  beforeEach(() => {
+    logger = getDefaultLogger();
+    jest.spyOn(logger, 'log').mockImplementation(() => {});
+
+    userPrivateKeyRecord = getDefaultUserPrivateKeyRecord();
+
+    encryptionManager = getDefaultEncryptionManager();
+
+    answerService = getDefaultAnswerService();
+
+    answersUploadService =
+      getDefaultAnswersUploadService() as never as ITestAnswersUploadService;
+    answersUploadService.createdAt = MOCK_CREATED_AT;
+
+    mediaFileCleaner = getDefaultMediaFilesCleaner();
+  });
+
   describe('sendAnswers function', () => {
     it('should successfully upload answers with media files', async () => {
       const body = {
@@ -811,32 +896,56 @@ describe('AnswersUploadService real example', () => {
           height: 844,
         },
         alerts: [],
-      };
+      } as never as SendAnswersInput;
 
-      AnswersUploadService.uploadAllMediaFiles = jest
-        .fn()
-        .mockResolvedValue(body);
+      jest
+        .spyOn(answersUploadService as never, 'uploadAllMediaFiles')
+        .mockResolvedValue(body as never);
 
-      AnswersUploadService.assignRemoteUrlsToUserActions = jest
-        .fn()
-        .mockResolvedValue(body.userActions);
+      jest
+        .spyOn(answersUploadService as never, 'assignRemoteUrlsToUserActions')
+        .mockResolvedValue(body.userActions as never);
 
-      AnswersUploadService.createEncryptionService = jest
-        .fn()
-        .mockResolvedValue(() => {});
+      jest.spyOn(userPrivateKeyRecord, 'get').mockReturnValue({} as never);
 
-      MediaFilesCleaner.cleanUpByAnswers = jest
-        .fn()
-        .mockResolvedValue(() => {});
+      jest
+        .spyOn(encryptionManager as never, 'createEncryptionService')
+        .mockReturnValue({
+          encrypt: jest.fn((data: never) => `encrypted_${data}`),
+        } as never);
 
-      await AnswersUploadService.sendAnswers(body);
-      expect(AnswersUploadService.uploadAllMediaFiles).toHaveBeenCalledWith(
+      jest
+        .spyOn(encryptionManager as never, 'getPublicKey')
+        .mockReturnValue('mocked_public_key' as never);
+
+      jest
+        .spyOn(mediaFileCleaner, 'cleanUpByAnswers')
+        .mockImplementation(() => {});
+
+      jest
+        .spyOn(answerService, 'sendActivityAnswers')
+        .mockResolvedValue({} as never);
+
+      let checkIfAnswersUploadedCallCount = 0;
+      jest
+        .spyOn(answersUploadService as never, 'checkIfAnswersUploaded')
+        .mockImplementation((() => {
+          checkIfAnswersUploadedCallCount += 1;
+          if (checkIfAnswersUploadedCallCount <= 1) {
+            return false;
+          }
+          return true;
+        }) as never);
+
+      await answersUploadService.sendAnswers(body);
+
+      expect(answersUploadService.uploadAllMediaFiles).toHaveBeenCalledWith(
         body,
       );
       expect(
-        AnswersUploadService.assignRemoteUrlsToUserActions,
+        answersUploadService.assignRemoteUrlsToUserActions,
       ).toHaveBeenCalledWith(body.answers, body);
-      expect(MediaFilesCleaner.cleanUpByAnswers).toHaveBeenCalledWith(
+      expect(mediaFileCleaner.cleanUpByAnswers).toHaveBeenCalledWith(
         body.answers,
       );
     });

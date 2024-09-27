@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { selectUserId } from '@app/entities/identity/model/selectors';
-import { AnalyticsService } from '@app/shared/lib/analytics/AnalyticsService';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 
 export function useAnalyticsAutoLogin() {
@@ -9,7 +9,7 @@ export function useAnalyticsAutoLogin() {
 
   useEffect(() => {
     if (id) {
-      AnalyticsService.login(id);
+      getDefaultAnalyticsService().login(id).catch(console.error);
     }
   }, [id]);
 }

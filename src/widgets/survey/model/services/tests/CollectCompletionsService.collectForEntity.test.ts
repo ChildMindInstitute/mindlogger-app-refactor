@@ -139,6 +139,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
         completionType: 'finish',
         eventId: 'mock-event-id-1',
         flowId: undefined,
+        targetSubjectId: null,
         order: 0,
       },
     ]);
@@ -180,6 +181,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
         completionType: 'intermediate',
         eventId: 'mock-event-id-1',
         flowId: 'mock-entity-id-1',
+        targetSubjectId: null,
         order: 0,
       },
       {
@@ -189,6 +191,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
         completionType: 'finish',
         eventId: 'mock-event-id-1',
         flowId: 'mock-entity-id-1',
+        targetSubjectId: null,
         order: 1,
       },
     ]);
@@ -230,6 +233,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
         completionType: 'finish',
         eventId: 'mock-event-id-1',
         flowId: 'mock-entity-id-1',
+        targetSubjectId: null,
         order: 1,
       },
     ]);

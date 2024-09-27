@@ -1,15 +1,13 @@
-import { FileSystem } from 'react-native-file-access';
+import { FileStat, FileSystem } from 'react-native-file-access';
 import { FileLogger } from 'react-native-file-logger';
 
 import { getDefaultFileService } from '@app/shared/api/services/fileServiceInstance';
+import { IFileService } from '@app/shared/api/services/IFileService';
 
 import { Logger } from './Logger';
-
-jest.mock('@shared/api', () => ({
-  FileService: {
-    checkIfLogsExist: jest.fn(),
-  },
-}));
+import { getDefaultLogger } from './loggerInstance';
+import { ILogger, NamePath } from '../types/logger';
+import { IMutex } from '../utils/common';
 
 jest.mock('react-native-file-access', () => ({
   FileSystem: {
@@ -18,10 +16,6 @@ jest.mock('react-native-file-access', () => ({
   Dirs: {
     DocumentDir: 'documentDir',
   },
-}));
-
-jest.mock('@shared/lib', () => ({
-  isAppOnline: jest.fn(),
 }));
 
 jest.mock('react-native-file-logger', () => ({
@@ -39,28 +33,45 @@ jest.mock('react-native-file-logger', () => ({
   },
 }));
 
+type TestLogger = ILogger & {
+  mutex: IMutex;
+  withTime: Logger['withTime'];
+  checkIfFilesExist: Logger['checkIfFilesExist'];
+  getLogFiles: Logger['getLogFiles'];
+  onBeforeSendLogs: Logger['onBeforeSendLogs'];
+  sendInternal: Logger['sendInternal'];
+  isAppOnline: Logger['isAppOnline'];
+};
+
 describe('Logger: regular tests', () => {
+  let logger: TestLogger;
+  let fileService: IFileService;
+
+  beforeEach(() => {
+    logger = getDefaultLogger() as never as TestLogger;
+    fileService = getDefaultFileService();
+  });
+
   it('should add a timestamp to the message', async () => {
     const input = 'Some input string';
 
-    // @ts-expect-error
-    const result = getDefaultLogger().withTime(input);
+    const result = logger.withTime(input);
 
     expect(result).toHaveLength(input.length + 10);
     expect(result).toContain(`: ${input}`);
   });
 
   it('should return empty array for no files', async () => {
-    const files: string[] = [];
+    const files: NamePath[] = [];
 
-    require('@shared/api').FileService.checkIfLogsExist.mockResolvedValue({
+    jest.spyOn(fileService, 'checkIfLogsExist').mockResolvedValue({
       data: {
         result: [],
       },
-    });
+    } as never);
 
-    // @ts-expect-error
-    const result = await getDefaultLogger().checkIfFilesExist(files);
+    const result = await logger.checkIfFilesExist(files);
+
     expect(result).toEqual([]);
   });
 
@@ -74,14 +85,13 @@ describe('Logger: regular tests', () => {
       { fileId: 'file2.log', uploaded: false, fileSize: 512 },
     ];
 
-    require('@shared/api').FileService.checkIfLogsExist.mockResolvedValue({
+    jest.spyOn(fileService, 'checkIfLogsExist').mockResolvedValue({
       data: {
         result: response,
       },
-    });
+    } as never);
 
-    // @ts-expect-error
-    const result = await getDefaultLogger().checkIfFilesExist(files);
+    const result = await logger.checkIfFilesExist(files);
 
     expect(result).toEqual([
       {
@@ -100,23 +110,24 @@ describe('Logger: regular tests', () => {
   });
 
   it('should return file information for existing log files', async () => {
-    (FileLogger.getLogFilePaths as jest.Mock).mockReturnValue([
-      '/path/to/file1.log',
-      '/path/to/file2.log',
-    ]);
+    jest
+      .spyOn(FileLogger, 'getLogFilePaths')
+      .mockResolvedValue(['/path/to/file1.log', '/path/to/file2.log']);
 
-    (FileSystem.stat as jest.Mock).mockImplementation(async (path: string) => {
-      if (path === '/path/to/file1.log') {
-        return { filename: 'file1.log', size: 1024 };
-      } else if (path === '/path/to/file2.log') {
-        return { filename: 'file2.log', size: 512 };
-      }
+    jest.spyOn(FileSystem, 'stat').mockImplementation(
+      (path: string) =>
+        new Promise((resolve, reject) => {
+          if (path === '/path/to/file1.log') {
+            resolve({ filename: 'file1.log', size: 1024 } as FileStat);
+          } else if (path === '/path/to/file2.log') {
+            resolve({ filename: 'file2.log', size: 512 } as FileStat);
+          } else {
+            reject(new Error('File not found'));
+          }
+        }),
+    );
 
-      throw new Error('File not found');
-    });
-
-    // @ts-expect-error
-    const result = await getDefaultLogger().getLogFiles();
+    const result = await logger.getLogFiles();
 
     expect(result).toEqual([
       {
@@ -134,26 +145,23 @@ describe('Logger: regular tests', () => {
 });
 
 describe('Logger: test sending files', () => {
+  let logger: TestLogger;
+
+  beforeEach(() => {
+    logger = getDefaultLogger() as never as TestLogger;
+  });
+
   it('Should do 5 waiting mutex attempts (or 7 check if mutex is busy) when sending logs', async () => {
-    const logger = new Logger(getDefaultFileService());
+    jest.spyOn(logger, 'onBeforeSendLogs').mockResolvedValue(undefined);
+    jest.spyOn(logger, 'sendInternal').mockResolvedValue(true);
+    jest.spyOn(logger, 'isAppOnline').mockResolvedValue(true);
 
-    //@ts-expect-error
-    logger.onBeforeSendLogs = jest.fn();
-    //@ts-expect-error
-    logger.sendInternal = jest.fn();
-    //@ts-expect-error
-    logger.isAppOnline = jest.fn().mockResolvedValue(true);
-
-    const isBusyMock = jest.fn(() => true);
-    //@ts-expect-error
-    logger.mutex.isBusy = isBusyMock;
-
-    //@ts-expect-error
+    jest.spyOn(logger.mutex, 'isBusy').mockReturnValue(true);
     logger.mutex.setBusy();
 
     const result = await logger.send();
 
     expect(result).toEqual(false);
-    expect(isBusyMock).toBeCalledTimes(7);
+    expect(logger.mutex.isBusy).toHaveBeenCalledTimes(7);
   });
 });

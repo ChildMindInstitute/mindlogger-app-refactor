@@ -7,8 +7,11 @@ import { useQueueProcessing } from '@app/entities/activity/lib/hooks/useQueuePro
 import { useRetryUpload } from '@app/entities/activity/lib/hooks/useRetryUpload';
 import { getDefaultQueueProcessingService } from '@app/entities/activity/lib/services/queueProcessingServiceInstance';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
+import { getDefaultAlertsExtractor } from '@app/features/pass-survey/model/alertsExtractorInstance';
+import { getDefaultScoresExtractor } from '@app/features/pass-survey/model/scoresExtractorInstance';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
+import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ImageBackground } from '@app/shared/ui/ImageBackground';
 
@@ -115,9 +118,13 @@ export function FinishItem({
   async function completeActivity() {
     const constructCompletionService = new ConstructCompletionsService(
       null,
+      getDefaultLogger(),
       queryClient,
       getDefaultQueueProcessingService(),
+      getDefaultAlertsExtractor(),
+      getDefaultScoresExtractor(),
       dispatch,
+      ReduxPersistor,
       entityProgressions,
     );
 

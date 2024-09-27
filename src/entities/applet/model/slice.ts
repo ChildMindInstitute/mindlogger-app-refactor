@@ -296,6 +296,8 @@ const slice = createSlice({
           entityId: action.payload.entityId,
           eventId: action.payload.eventId,
           targetSubjectId: action.payload.targetSubjectId,
+          availableUntilTimestamp: null,
+          startedAtTimestamp: 0,
           endedAtTimestamp: action.payload.endAt.getTime(),
         };
         state.entityProgressions = state.entityProgressions ?? [];

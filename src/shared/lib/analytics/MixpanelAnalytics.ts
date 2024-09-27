@@ -1,33 +1,40 @@
 import { Mixpanel } from 'mixpanel-react-native';
 
-import { MixProperties } from './AnalyticsService';
-import { IAnalyticsService } from './IAnalyticsService';
+import { IAnalyticsService, MixProperties } from './IAnalyticsService';
 import { APP_VERSION } from '../constants';
 
 export class MixpanelAnalytics implements IAnalyticsService {
   private mixpanel: Mixpanel;
 
   constructor(projectToken: string) {
-    this.mixpanel = new Mixpanel(projectToken, false);
+    const MixpanelClient = this.getMixpanelClientClass();
+    this.mixpanel = new MixpanelClient(projectToken, false);
   }
 
-  init(): Promise<void> {
-    return this.mixpanel.init(undefined, {
-      [MixProperties.MindLoggerVersion]: APP_VERSION,
+  async init(): Promise<void> {
+    await this.mixpanel.init(undefined, {
+      [MixProperties.MindLoggerVersion]: this.getAppVersion(),
     });
   }
 
-  track(action: string, payload?: Record<string, any> | undefined): void {
-    this.mixpanel?.track(action, payload);
+  track(action: string, payload?: Record<string, unknown> | undefined): void {
+    this.mixpanel.track(action, payload);
   }
 
-  login(id: string): Promise<void> {
-    return this.mixpanel?.identify(id).then(() => {
-      this.mixpanel?.getPeople()?.set('User ID', id);
-    });
+  async login(id: string): Promise<void> {
+    await this.mixpanel.identify(id);
+    this.mixpanel.getPeople().set('User ID', id);
   }
 
   logout(): void {
-    this.mixpanel?.reset();
+    this.mixpanel.reset();
+  }
+
+  private getMixpanelClientClass() {
+    return Mixpanel;
+  }
+
+  private getAppVersion() {
+    return APP_VERSION;
   }
 }

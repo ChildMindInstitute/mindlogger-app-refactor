@@ -18,7 +18,7 @@ import {
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import { ILogger } from '@app/shared/lib/types/logger';
 
-import { createNotificationBuilder } from '../NotificationBuilder';
+import { NotificationBuilder } from '../NotificationBuilder';
 
 export const getEmptyEvent = (): ScheduleEvent => {
   return {
@@ -53,11 +53,7 @@ export const getEventEntity = (event: ScheduleEvent): EventEntity => {
       isVisible: true,
       pipelineType: ActivityPipelineType.Regular,
     },
-    assignment: {
-      target: {
-        id: 'mock-target-subject-id',
-      } as never,
-    } as never,
+    assignment: null,
   };
 };
 
@@ -71,7 +67,9 @@ export const createBuilder = (eventEntity: EventEntity, completedAt?: Date) => {
       entityType: 'activity',
       entityId: 'mock-entity-id',
       eventId: 'mock-event-id',
-      targetSubjectId: 'mock-target-subject-id',
+      targetSubjectId: null,
+      availableUntilTimestamp: null,
+      startedAtTimestamp: subMinutes(completedAt, 1).getTime(),
       endedAtTimestamp: completedAt.getTime(),
     };
 
@@ -81,13 +79,16 @@ export const createBuilder = (eventEntity: EventEntity, completedAt?: Date) => {
     progressions.push(progression);
   }
 
-  return createNotificationBuilder({
-    appletId: 'mock-applet-id',
-    appletName: 'mock-applet-name',
-    progressions,
-    responseTimes: [],
-    eventEntities: [eventEntity],
-  });
+  return new NotificationBuilder(
+    {
+      appletId: 'mock-applet-id',
+      appletName: 'mock-applet-name',
+      progressions,
+      responseTimes: [],
+      eventEntities: [eventEntity],
+    },
+    getLoggerMock(),
+  );
 };
 
 export const getMockNotificationPattern = () => {
@@ -98,6 +99,7 @@ export const getMockNotificationPattern = () => {
     entityName: 'mock-entity-name',
     eventDayString: undefined,
     eventId: 'mock-event-id',
+    targetSubjectId: null,
     fallType: undefined,
     isActive: true,
     isSpreadInEventSet: false,

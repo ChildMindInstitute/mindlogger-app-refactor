@@ -1,122 +1,112 @@
-const constructorMock = jest.fn();
-const initMock = jest.fn();
-const identifyMock = jest.fn().mockResolvedValue(0);
-const boolVariationMock = jest.fn().mockResolvedValue(true);
-const onMock = jest.fn();
-
-class LaunchDarklyMockClass {
-  constructor(...args: unknown[]) {
-    constructorMock(args);
-  }
-
-  public init(...args: unknown[]) {
-    initMock(args);
-  }
-
-  public identify(...args: unknown[]) {
-    return identifyMock(args);
-  }
-
-  public boolVariation(...args: unknown[]) {
-    return boolVariationMock(args);
-  }
-
-  public on(...args: unknown[]) {
-    onMock(args);
-  }
-}
-
-enum AutoEnvAttributesMock {
-  Disabled = 0,
-  Enabled = 1,
-}
-
-jest.mock('@launchdarkly/react-native-client-sdk', () => ({
-  ReactNativeLDClient: LaunchDarklyMockClass,
-  AutoEnvAttributes: AutoEnvAttributesMock,
-}));
-
-const MOCK_LD_CLIENT_ID: string | undefined = 'MOCK_LD_CLIENT_ID_123';
-
-jest.mock('../constants', () => ({
-  LAUNCHDARKLY_MOBILE_KEY: MOCK_LD_CLIENT_ID,
-}));
-
-jest.mock('../services', () => ({
-  Logger: {
-    log: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-    info: jest.fn(),
-  },
-}));
+import { ReactNativeLDClient } from '@launchdarkly/react-native-client-sdk';
 
 import { LD_KIND_PREFIX } from './FeatureFlags.const';
 import { FeatureFlagsService } from './FeatureFlagsService';
+import { getDefaultFeatureFlagsService } from './featureFlagsServiceInstance';
+import { IFeatureFlagsService } from './IFeatureFlagsService';
+import { ILogger } from '../types/logger';
+
+class TestLaunchDarklyClient {
+  static constructorSpy: jest.Mock;
+
+  constructor(...args: unknown[]) {
+    if (TestLaunchDarklyClient.constructorSpy) {
+      TestLaunchDarklyClient.constructorSpy(...args);
+    }
+  }
+
+  init() {}
+  identify() {}
+  boolVariation() {}
+  on() {}
+}
+
+type TestFeatureFlagsService = IFeatureFlagsService & {
+  logger: ILogger;
+  client: ReactNativeLDClient;
+  getLaunchDarklyClientClass: FeatureFlagsService['getLaunchDarklyClientClass'];
+  getLaunchDarklyMobileKey: FeatureFlagsService['getLaunchDarklyMobileKey'];
+};
+
+const MOCK_LD_CLIENT_ID: string | undefined = 'MOCK_LD_CLIENT_ID_123';
 
 describe('Test FeatureFlagsService', () => {
-  beforeAll(() => {
-    FeatureFlagsService.init();
-  });
+  let service: TestFeatureFlagsService;
 
   beforeEach(() => {
-    constructorMock.mockReset();
-    initMock.mockReset();
-    identifyMock.mockReset().mockResolvedValue(0);
-    boolVariationMock.mockReset().mockResolvedValue(true);
-    onMock.mockReset();
+    TestLaunchDarklyClient.constructorSpy = jest.fn();
+
+    service =
+      getDefaultFeatureFlagsService() as never as TestFeatureFlagsService;
+
+    jest.spyOn(service.logger, 'log').mockReturnValue(undefined);
+
+    jest
+      .spyOn(service, 'getLaunchDarklyClientClass')
+      .mockReturnValue(TestLaunchDarklyClient as never);
+
+    jest
+      .spyOn(service, 'getLaunchDarklyMobileKey')
+      .mockReturnValue(MOCK_LD_CLIENT_ID);
   });
 
   it('Should pass LAUNCHDARKLY_MOBILE_KEY into constructor of LaunchDarkly class', async () => {
-    FeatureFlagsService.init();
+    service.init();
 
-    expect(constructorMock).toHaveBeenCalledTimes(1);
-    expect(constructorMock).toHaveBeenCalledWith([
+    expect(TestLaunchDarklyClient.constructorSpy).toHaveBeenCalledTimes(1);
+
+    expect(TestLaunchDarklyClient.constructorSpy).toHaveBeenCalledWith(
       MOCK_LD_CLIENT_ID,
-      AutoEnvAttributesMock.Disabled,
+      0,
       {},
-    ]);
+    );
   });
 
   it('Should login', async () => {
-    await FeatureFlagsService.login('mock-user-id');
+    const identifySpy = jest.spyOn(service.client, 'identify');
 
-    expect(identifyMock).toHaveBeenCalledTimes(1);
-    expect(identifyMock).toHaveBeenCalledWith([
-      {
-        kind: LD_KIND_PREFIX,
-        key: `${LD_KIND_PREFIX}-mock-user-id`,
-      },
-    ]);
+    await service.login('mock-user-id');
+
+    expect(identifySpy).toHaveBeenCalledTimes(1);
+    expect(identifySpy).toHaveBeenCalledWith({
+      kind: LD_KIND_PREFIX,
+      key: `${LD_KIND_PREFIX}-mock-user-id`,
+    });
   });
 
   it('Should logout', async () => {
-    FeatureFlagsService.logout();
+    const identifySpy = jest.spyOn(service.client, 'identify');
 
-    expect(identifyMock).toHaveBeenCalledTimes(1);
-    expect(identifyMock).toHaveBeenCalledWith([
-      {
-        anonymous: true,
-        key: '',
-        kind: 'user',
-      },
-    ]);
+    await service.logout();
+
+    expect(identifySpy).toHaveBeenCalledTimes(1);
+    expect(identifySpy).toHaveBeenCalledWith({
+      anonymous: true,
+      key: '',
+      kind: 'user',
+    });
   });
 
-  it('Should resolve boolean', async () => {
-    // await required for mockResolvedValue Promise
-    const flagValue = await FeatureFlagsService.evaluateFlag('my-flag');
+  it('Should resolve boolean', () => {
+    const boolVariationSpy = jest
+      .spyOn(service.client, 'boolVariation')
+      .mockReturnValue(true);
 
-    expect(boolVariationMock).toHaveBeenCalledTimes(1);
-    expect(boolVariationMock).toHaveBeenCalledWith(['my-flag', false]);
+    const flagValue = service.evaluateFlag('my-flag');
+
     expect(flagValue).toBe(true);
+
+    expect(boolVariationSpy).toHaveBeenCalledTimes(1);
+    expect(boolVariationSpy).toHaveBeenCalledWith('my-flag', false);
   });
 
-  it('Should set onChange handler', async () => {
+  it('Should set onChange handler', () => {
+    const onSpy = jest.spyOn(service.client, 'on');
     const changeHandler = jest.fn();
-    FeatureFlagsService.setChangeHandler(changeHandler);
 
-    expect(onMock).toHaveBeenCalledTimes(1);
-    expect(onMock).toHaveBeenCalledWith(['change', changeHandler]);
+    service.setChangeHandler(changeHandler);
+
+    expect(onSpy).toHaveBeenCalledTimes(1);
+    expect(onSpy).toHaveBeenCalledWith('change', changeHandler);
   });
 });

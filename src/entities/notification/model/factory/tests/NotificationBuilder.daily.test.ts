@@ -21,7 +21,7 @@ import {
   getEventEntity,
   getMockNotificationPattern,
 } from './testHelpers';
-import { INotificationBuilder } from '../NotificationBuilder';
+import { INotificationBuilder } from '../INotificationBuilder';
 
 const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
   //@ts-ignore

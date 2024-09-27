@@ -2,10 +2,8 @@ import { FC, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import {
-  AnalyticsService,
-  MixEvents,
-} from '@app/shared/lib/analytics/AnalyticsService';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
+import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box } from '@app/shared/ui/base';
@@ -22,14 +20,14 @@ export const SendApplicationLogsForm: FC = () => {
   const onSendLogs = async () => {
     setIsLoading(true);
 
-    AnalyticsService.track(MixEvents.UploadLogsPressed);
+    getDefaultAnalyticsService().track(MixEvents.UploadLogsPressed);
 
     const result = await getDefaultLogger().send();
 
     if (result) {
-      AnalyticsService.track(MixEvents.UploadedLogsSuccessfully);
+      getDefaultAnalyticsService().track(MixEvents.UploadedLogsSuccessfully);
     } else {
-      AnalyticsService.track(MixEvents.UploadLogsError);
+      getDefaultAnalyticsService().track(MixEvents.UploadLogsError);
     }
 
     setUploadStatus(result);

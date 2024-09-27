@@ -6,8 +6,8 @@ export type GetPrivateKeyProps = {
 
 export type GetPublicKeyProps = {
   privateKey: number[];
-  appletPrime: string;
-  appletBase: string;
+  appletPrime: string | number[] | Uint8Array;
+  appletBase: string | number[] | Uint8Array;
 };
 
 export type GetAESKeyProps = {

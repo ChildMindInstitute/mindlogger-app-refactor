@@ -7,7 +7,13 @@ import { IFileService } from '@app/shared/api/services/IFileService';
 
 import { IS_ANDROID, IS_IOS } from '../constants';
 import { getNotificationSettingsData } from '../permissions/notificationPermissions';
-import { ILogger } from '../types/logger';
+import {
+  DeviceInfoLogObject,
+  FileExists,
+  ILogger,
+  NamePath,
+  NamePathSize,
+} from '../types/logger';
 import {
   IMutex,
   Mutex,
@@ -16,28 +22,6 @@ import {
   wait,
 } from '../utils/common';
 import { isAppOnline } from '../utils/networkHelpers';
-
-type NamePath = {
-  fileName: string;
-  filePath: string;
-};
-
-type NamePathSize = {
-  size: number;
-} & NamePath;
-
-type FileExists = {
-  exists: boolean;
-} & NamePathSize;
-
-type DeviceInfoLogObject = {
-  brand: string;
-  readableVersion: string;
-  buildNumber: string;
-  firstInstallTime: number;
-  freeDiskStorage: number;
-  lastUpdateTime: number;
-};
 
 export class Logger implements ILogger {
   private mutex: IMutex;

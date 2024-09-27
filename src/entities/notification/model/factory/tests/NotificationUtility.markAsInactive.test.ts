@@ -26,7 +26,7 @@ const getTestNotification = (): NotificationDescriber => {
     appletId: AppletId,
     entityName: 'mock-entity-name',
     eventId: 'mock-event-id',
-    targetSubjectId: 'mock-target-subject-id',
+    targetSubjectId: null,
     isActive: true,
     notificationBody: 'mock-n-body',
     notificationHeader: 'mock-n-header',
@@ -61,7 +61,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markNotificationIfActivityCompleted(
         'mock-entity-id',
         'mock-event-id',
-        'mock-target-subject-1',
+        null,
         notification,
         interval,
       );
@@ -99,7 +99,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markNotificationIfActivityCompleted(
         'mock-entity-id',
         'mock-event-id',
-        'mock-target-subject-1',
+        null,
         notification,
         interval,
       );
@@ -141,7 +141,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markNotificationIfActivityCompleted(
         'mock-entity-id',
         'mock-event-id',
-        'mock-target-subject-1',
+        null,
         notification,
         interval,
       );
@@ -183,7 +183,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markNotificationIfActivityCompleted(
         'mock-entity-id',
         'mock-event-id',
-        'mock-target-subject-1',
+        null,
         notification,
         interval,
       );
@@ -221,7 +221,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markNotificationIfActivityCompleted(
         'mock-entity-id',
         'mock-event-id',
-        'mock-target-subject-1',
+        null,
         notification,
         interval,
       );
@@ -260,7 +260,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markNotificationIfActivityCompleted(
         'mock-entity-id',
         'mock-event-id',
-        'mock-target-subject-1',
+        null,
         notification,
         interval,
       );

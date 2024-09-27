@@ -67,9 +67,9 @@ export const AudioStimulusItem: FC<Props> = ({
     const canPlay = replayIsAllowed || playbackCount === 0;
 
     if (canPause) {
-      pause();
+      pause().catch(console.error);
     } else if (canPlay) {
-      play(uri, () => onFinish(true));
+      play(uri, () => onFinish(true)).catch(console.error);
     }
   };
 

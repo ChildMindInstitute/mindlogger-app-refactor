@@ -2,6 +2,10 @@ import { addDays, addMinutes, subDays, subMinutes } from 'date-fns';
 
 import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
+  EntityProgression,
+  EntityProgressionCompleted,
+} from '@app/abstract/lib/types/entityProgress';
+import {
   AvailabilityType,
   PeriodicityType,
 } from '@app/abstract/lib/types/event';
@@ -16,10 +20,29 @@ import {
   GroupsBuildContext,
 } from '../../lib/types/activityGroupsBuilder';
 
-jest.mock('@app/shared/lib/constants', () => ({
-  ...jest.requireActual('@app/shared/lib/constants'),
-  STORE_ENCRYPTION_KEY: '12345',
-}));
+const getProgressions = (startAt: Date, endAt: Date | null) => {
+  const result: EntityProgression = {
+    status: 'in-progress',
+    appletId: 'test-applet-id-1',
+    entityType: 'activity',
+    entityId: 'test-entity-id-1',
+    eventId: 'test-event-id-1',
+    targetSubjectId: null,
+    startedAtTimestamp: startAt.getTime(),
+    availableUntilTimestamp: null,
+  };
+
+  if (endAt) {
+    (result as never as EntityProgressionCompleted).endedAtTimestamp =
+      endAt.getTime();
+  }
+
+  return [result];
+};
+
+const getEmptyProgressions = () => {
+  return [] as EntityProgression[];
+};
 
 const getActivity = (): Entity => {
   const result: Entity = {
@@ -112,9 +135,11 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
   describe('Should return item when now is 1 minute earlier than TimeFrom', () => {
     const startAt = getFridayInSeptember();
 
+    const entityProgressions = getEmptyProgressions();
+
     const input: GroupsBuildContext = {
       allAppletActivities: [],
-      entityProgressions: [],
+      entityProgressions,
       appletId: 'test-applet-id-1',
     };
 
@@ -124,7 +149,10 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new ScheduledGroupEvaluator(input.appletId, []);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.appletId,
+      input.entityProgressions,
+    );
 
     let now = buildDateTime(startAt, TimeFrom);
     now = subMinutes(now, 1);
@@ -172,13 +200,21 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
 
     let now = buildDateTime(startAt, TimeFrom);
 
+    const entityProgressions = getProgressions(
+      subMinutes(now, 10),
+      subMinutes(now, 5),
+    );
+
     const input: GroupsBuildContext = {
       allAppletActivities: [],
-      entityProgressions: [],
+      entityProgressions,
       appletId: 'test-applet-id-1',
     };
 
-    const evaluator = new ScheduledGroupEvaluator(input.appletId, []);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.appletId,
+      input.entityProgressions,
+    );
 
     now = subMinutes(now, 1);
     mockGetNow(evaluator, now);
@@ -217,9 +253,11 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
   describe('Should not return item when now is 1 minute later than TimeFrom', () => {
     const startAt = getFridayInSeptember();
 
+    const entityProgressions = getEmptyProgressions();
+
     const input: GroupsBuildContext = {
       allAppletActivities: [],
-      entityProgressions: [],
+      entityProgressions,
       appletId: 'test-applet-id-1',
     };
 
@@ -229,7 +267,10 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new ScheduledGroupEvaluator(input.appletId, []);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.appletId,
+      input.entityProgressions,
+    );
 
     let now = buildDateTime(startAt, TimeFrom);
     now = addMinutes(now, 1);
@@ -269,9 +310,11 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
   describe('Should return item when Daily and now is 1 minute later than TimeTo', () => {
     const startAt = getFridayInSeptember();
 
+    const entityProgressions = getEmptyProgressions();
+
     const input: GroupsBuildContext = {
       allAppletActivities: [],
-      entityProgressions: [],
+      entityProgressions,
       appletId: 'test-applet-id-1',
     };
 
@@ -281,7 +324,10 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new ScheduledGroupEvaluator(input.appletId, []);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.appletId,
+      input.entityProgressions,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = addMinutes(now, 1);
@@ -321,9 +367,11 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
   describe('Should return item when Weekly, Monthly, Once and now is 1 minute earlier than TimeTo and today is Fri', () => {
     const startAt = getFridayInSeptember();
 
+    const entityProgressions = getEmptyProgressions();
+
     const input: GroupsBuildContext = {
       allAppletActivities: [],
-      entityProgressions: [],
+      entityProgressions,
       appletId: 'test-applet-id-1',
     };
 
@@ -333,7 +381,10 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new ScheduledGroupEvaluator(input.appletId, []);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.appletId,
+      input.entityProgressions,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = subMinutes(now, 1);
@@ -365,9 +416,11 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
   describe('Should not return item when Daily, Weekdays and now is 1 minute earlier than TimeTo and today is Fri', () => {
     const startAt = getFridayInSeptember();
 
+    const entityProgressions = getEmptyProgressions();
+
     const input: GroupsBuildContext = {
       allAppletActivities: [],
-      entityProgressions: [],
+      entityProgressions,
       appletId: 'test-applet-id-1',
     };
 
@@ -377,7 +430,10 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new ScheduledGroupEvaluator(input.appletId, []);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.appletId,
+      input.entityProgressions,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = subMinutes(now, 1);
@@ -404,9 +460,11 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
     let startAt = getFridayInSeptember();
     startAt = subDays(startAt, 4);
 
+    const entityProgressions = getEmptyProgressions();
+
     const input: GroupsBuildContext = {
       allAppletActivities: [],
-      entityProgressions: [],
+      entityProgressions,
       appletId: 'test-applet-id-1',
     };
 
@@ -416,7 +474,10 @@ describe('ScheduledGroupEvaluator cross-day tests', () => {
       endDate: addDays(startAt, 2),
     });
 
-    const evaluator = new ScheduledGroupEvaluator(input.appletId, []);
+    const evaluator = new ScheduledGroupEvaluator(
+      input.appletId,
+      input.entityProgressions,
+    );
 
     let now = buildDateTime(startAt, TimeTo);
     now = subMinutes(now, 1);

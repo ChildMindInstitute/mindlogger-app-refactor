@@ -2,8 +2,13 @@ import { format, intervalToDuration, isSameDay, addDays } from 'date-fns';
 
 import { Item } from '@app/shared/ui/survey/CheckBox/types';
 
-import { Answers } from './hooks/useActivityStorageRecord';
-import { PipelineItem, PipelineItemResponse } from './types/payload';
+import { Answer, Answers } from './hooks/useActivityStorageRecord';
+import {
+  PipelineItem,
+  PipelineItemResponse,
+  RadioResponse,
+  TimeRangeResponse,
+} from './types/payload';
 
 type Time = {
   hours: number;
@@ -153,8 +158,10 @@ export class MarkdownVariableReplacer {
     const foundIndex = this.activityItems.findIndex(
       item => item.name === variableName,
     );
-    const answerNotFound = foundIndex < 0 || !this.answers[foundIndex];
+    const foundAnswerItem = this.answers[foundIndex as never] as Answer;
+    const foundAnswer = foundAnswerItem?.answer;
 
+    const answerNotFound = foundIndex < 0 || !foundAnswerItem || !foundAnswer;
     if (answerNotFound) {
       return `[[${variableName}]]`;
     }
@@ -162,42 +169,38 @@ export class MarkdownVariableReplacer {
     const activityItem = this.activityItems[foundIndex];
     let updated = '';
 
-    const answer = // @ts-ignore
-      this.answers[foundIndex].answer as PipelineItemResponse['answer'];
+    if (
+      activityItem.type === 'Slider' ||
+      activityItem.type === 'NumberSelect' ||
+      activityItem.type === 'TextInput'
+    ) {
+      updated = this.escapeSpecialChars(foundAnswer);
+    } else if (activityItem.type === 'Radio') {
+      const filteredItem = activityItem.payload.options.find(
+        ({ id }) => id === (foundAnswer as RadioResponse).id,
+      );
+      if (filteredItem) {
+        updated = filteredItem.text;
+      }
+    } else if (activityItem.type === 'Checkbox') {
+      const selectedIds = (foundAnswer as Item[]).map((o: Item) => o.id);
+      const filteredItems = activityItem.payload.options
+        .filter(({ id }) => selectedIds.includes(id))
+        .map(({ text }) => text);
 
-    switch (activityItem.type) {
-      case 'Slider':
-      case 'NumberSelect':
-      case 'TextInput':
-        updated = this.escapeSpecialChars(answer);
-        break;
-      case 'Radio':
-        const filteredItem = activityItem.payload.options.find(
-          ({ id }) => id === answer.id,
-        );
-        if (filteredItem) {
-          updated = filteredItem.text;
-        }
-        break;
-      case 'Checkbox':
-        const selectedIds = answer.map((o: Item) => o.id);
-        const filteredItems = activityItem.payload.options
-          .filter(({ id }) => selectedIds.includes(id))
-          .map(({ text }) => text);
+      if (filteredItems) {
+        updated = filteredItems.join(', ');
+      }
+    } else if (activityItem.type === 'TimeRange') {
+      const startTime =
+        (foundAnswer as TimeRangeResponse).startTime || undefined;
+      const endTime = (foundAnswer as TimeRangeResponse).endTime || undefined;
 
-        if (filteredItems) {
-          updated = filteredItems.join(', ');
-        }
-        break;
-      case 'TimeRange':
-        updated = `${this.formatTime(answer?.startTime)} - ${this.formatTime(
-          answer?.endTime,
-        )}`;
-        break;
-      case 'Date':
-        updated = answer;
-        break;
+      updated = `${this.formatTime(startTime)} - ${this.formatTime(endTime)}`;
+    } else if (activityItem.type === 'Date') {
+      updated = foundAnswer as string;
     }
+
     const variablesLeftToProcess = this.extractVariables(updated);
 
     if (variablesLeftToProcess?.length) {

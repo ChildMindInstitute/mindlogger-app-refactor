@@ -7,10 +7,10 @@ import {
   NotificationTriggerType,
   PeriodicityType,
 } from '@app/abstract/lib/types/event';
-import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { DatesFromTo } from '@app/shared/lib/types/dateTime';
 import { ILogger } from '@app/shared/lib/types/logger';
 
+import { INotificationBuilder } from './INotificationBuilder';
 import { NotificationDaysExtractor } from './NotificationDaysExtractor';
 import { NotificationUtility } from './NotificationUtility';
 import { ReminderCreator } from './ReminderCreator';
@@ -28,11 +28,7 @@ import {
   ScheduleEvent,
 } from '../../lib/types/notificationBuilder';
 
-export interface INotificationBuilder {
-  build: () => AppletNotificationDescribers;
-}
-
-class NotificationBuilder implements INotificationBuilder {
+export class NotificationBuilder implements INotificationBuilder {
   private appletName: string;
 
   private eventEntities: EventEntity[];
@@ -380,10 +376,3 @@ class NotificationBuilder implements INotificationBuilder {
     return result;
   }
 }
-
-export const createNotificationBuilder = (
-  inputData: NotificationBuilderInput,
-  logger: ILogger = getDefaultLogger(),
-): INotificationBuilder => {
-  return new NotificationBuilder(inputData, logger);
-};

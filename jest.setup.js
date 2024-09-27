@@ -52,8 +52,6 @@ jest.mock('@react-native-community/geolocation', () =>
 
 jest.mock('react-native-sensors', () => jest.mock('react-native-sensors'));
 
-jest.mock('mixpanel-react-native', () => jest.mock('mixpanel-react-native'));
-
 jest.mock('react-native-tcp-socket', () => {
   return {
     createConnection: () => {
@@ -210,11 +208,6 @@ jest.mock('react-native-webview', () => {
   };
 });
 
-jest.mock('@app/shared/lib/constants', () => ({
-  ...jest.requireActual('@app/shared/lib/constants'),
-  STORE_ENCRYPTION_KEY: '12345',
-}));
-
 jest.mock('react-i18next', () => ({
   useTranslation: jest.fn().mockImplementation(() => ({
     t: jest.fn().mockImplementation(key => key),
@@ -241,6 +234,39 @@ jest.mock('@react-navigation/native', () => ({
   useFocusEffect: jest.fn(),
 }));
 
+class MockMixpanel {
+  constructor() {}
+  init() {}
+  track() {}
+  identify() {}
+  getPeople() {}
+  reset() {}
+}
+
+jest.mock('mixpanel-react-native', () => jest.mock('mixpanel-react-native'));
+
+jest.mock('mixpanel-react-native', () => ({
+  Mixpanel: MockMixpanel,
+}));
+
+class MockReactNativeLDClient {
+  constructor() {}
+  init() {}
+  identify() {}
+  boolVariation() {}
+  on() {}
+}
+
+const MockAutoEnvAttributes = {
+  Disabled: 0,
+  Enabled: 1,
+};
+
 jest.mock('@launchdarkly/react-native-client-sdk', () =>
   jest.mock('@launchdarkly/react-native-client-sdk'),
 );
+
+jest.mock('@launchdarkly/react-native-client-sdk', () => ({
+  ReactNativeLDClient: MockReactNativeLDClient,
+  AutoEnvAttributes: MockAutoEnvAttributes,
+}));
