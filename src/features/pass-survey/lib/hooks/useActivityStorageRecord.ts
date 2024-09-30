@@ -4,6 +4,7 @@ import { useMMKVObject } from 'react-native-mmkv';
 
 import { Report } from '@app/entities/activity/lib/types/activityReportSettings';
 import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
+import { getActivityRecordKey } from '@app/widgets/survey/lib/storageHelpers';
 
 import { PipelineItem } from '../types/payload';
 import { PipelineItemAnswer } from '../types/pipelineItemAnswer';
@@ -45,7 +46,13 @@ export function useActivityStorageRecord({
   targetSubjectId,
   order,
 }: UseActivityStorageArgs) {
-  const key = `${appletId}-${activityId}-${eventId}-${targetSubjectId || 'NULL'}-${order}`;
+  const key = getActivityRecordKey(
+    appletId,
+    activityId,
+    eventId,
+    targetSubjectId,
+    order,
+  );
 
   const [activityStorageRecord, upsertActivityStorageRecord] =
     useMMKVObject<ActivityState>(

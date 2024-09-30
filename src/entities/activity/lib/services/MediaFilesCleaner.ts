@@ -8,6 +8,7 @@ import {
 } from '@app/shared/api/services/IAnswerService';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { MediaFile, MediaValue } from '@app/shared/ui/survey/MediaItems/types';
+import { getActivityRecordKey } from '@app/widgets/survey/lib/storageHelpers';
 
 import { IMediaFilesCleaner } from './IMediaFilesCleaner';
 
@@ -64,7 +65,13 @@ export const createMediaFilesCleaner = (
     targetSubjectId,
     order,
   }: ActivityRecordKeyParams) => {
-    const key = `${appletId}-${activityId}-${eventId}-${targetSubjectId || 'NULL'}-${order}`;
+    const key = getActivityRecordKey(
+      appletId,
+      activityId,
+      eventId,
+      targetSubjectId,
+      order,
+    );
 
     return promisedCleanUpByStorageKey(key);
   };

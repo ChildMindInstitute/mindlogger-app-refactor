@@ -22,6 +22,7 @@ export const mapActivitiesFromDto = (dtos: ActivityRecordDto[]): Activity[] => {
     image: dto.image,
     name: dto.name,
     isHidden: dto.isHidden,
+    autoAssign: dto.autoAssign,
     order: dto.order,
     pipelineType: ActivityPipelineType.Regular,
     type: ActivityType.NotDefined,
@@ -39,6 +40,7 @@ export const mapActivityFlowsFromDto = (
     id: dto.id,
     name: dto.name,
     isHidden: dto.isHidden,
+    autoAssign: dto.autoAssign,
     pipelineType: ActivityPipelineType.Flow,
   }));
 };

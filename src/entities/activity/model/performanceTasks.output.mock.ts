@@ -8,6 +8,7 @@ export const abTrailsOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: false,
@@ -564,6 +565,7 @@ export const CSTOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: false,
@@ -682,6 +684,7 @@ export const flankerOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: false,

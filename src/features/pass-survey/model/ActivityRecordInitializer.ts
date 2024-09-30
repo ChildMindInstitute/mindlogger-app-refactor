@@ -11,6 +11,7 @@ import {
   getAppletDetailsKey,
   getActivityDetailsKey,
 } from '@app/shared/lib/utils/reactQueryHelpers';
+import { getActivityRecordKey } from '@app/widgets/survey/lib/storageHelpers';
 
 import { buildPipeline } from './pipelineBuilder';
 import { ActivityState } from '../lib/hooks/useActivityStorageRecord';
@@ -57,7 +58,13 @@ export function ActivityRecordInitializer({
     targetSubjectId,
     order = 0,
   }: InitializeArgs) => {
-    const key = `${appletId}-${activityId}-${eventId}-${targetSubjectId || 'NULL'}-${order}`;
+    const key = getActivityRecordKey(
+      appletId,
+      activityId,
+      eventId,
+      targetSubjectId,
+      order,
+    );
 
     const storageRecordExist = getDefaultStorageInstanceManager()
       .getActivityProgressStorage()

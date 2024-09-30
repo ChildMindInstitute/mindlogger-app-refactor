@@ -7,11 +7,6 @@ import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import { radiosConfig, radiosValues } from './mockData';
 import { StackedRadios } from '../StackedRadiosItem';
 
-jest.mock('@app/shared/lib/constants', () => ({
-  ...jest.requireActual('@app/shared/lib/constants'),
-  STORE_ENCRYPTION_KEY: '12345',
-}));
-
 describe('StackedRadiosItem', () => {
   it('should render correct radios count', () => {
     const changeHandler = jest.fn();

@@ -26,11 +26,6 @@ import {
 import { AnswerAlerts } from '../../lib/types/summary';
 import { AlertsExtractor } from '../AlertsExtractor';
 
-jest.mock('@app/shared/lib/constants', () => ({
-  ...jest.requireActual('@app/shared/lib/constants'),
-  STORE_ENCRYPTION_KEY: '12345',
-}));
-
 describe('AlertsExtractor: penetration tests', () => {
   const extractor: AlertsExtractor = new AlertsExtractor({
     log: jest.fn(),

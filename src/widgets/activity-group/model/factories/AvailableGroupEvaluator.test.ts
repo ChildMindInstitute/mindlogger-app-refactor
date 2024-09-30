@@ -58,6 +58,7 @@ const getActivity = (): Entity => {
     name: 'test-entity-name-1',
     pipelineType: ActivityPipelineType.Regular,
     isHidden: false,
+    autoAssign: false,
     order: 0,
     type: ActivityType.NotDefined,
   };

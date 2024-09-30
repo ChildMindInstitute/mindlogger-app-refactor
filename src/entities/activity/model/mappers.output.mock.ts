@@ -8,6 +8,7 @@ export const messageOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: false,
@@ -43,6 +44,7 @@ export const stackedRadioOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -186,6 +188,7 @@ export const stackedSliderOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -269,6 +272,7 @@ export const stackedCheckboxOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -412,6 +416,7 @@ export const photoOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -448,6 +453,7 @@ export const videoOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -484,6 +490,7 @@ export const timeRangeOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -520,6 +527,7 @@ export const dateOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -556,6 +564,7 @@ export const drawingOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -596,6 +605,7 @@ export const audioOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -634,6 +644,7 @@ export const geolocationOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -670,6 +681,7 @@ export const audioPlayerOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: false,
@@ -709,6 +721,7 @@ export const audioPlayerWithAdditionalTextOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       additionalText: {
@@ -751,6 +764,7 @@ export const conditionalOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -1187,6 +1201,7 @@ export const timeOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -1222,6 +1237,7 @@ export const checkboxOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -1277,6 +1293,7 @@ export const numberSelectOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -1315,6 +1332,7 @@ export const sliderOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,
@@ -1375,6 +1393,7 @@ export const textOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: false,
   items: [
     {
       canBeReset: true,

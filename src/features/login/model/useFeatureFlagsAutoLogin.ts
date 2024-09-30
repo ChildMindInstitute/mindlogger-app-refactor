@@ -13,6 +13,6 @@ export function useFeatureFlagsAutoLogin() {
     if (!hasSession || !id) {
       return;
     }
-    getDefaultFeatureFlagsService().login(id);
+    getDefaultFeatureFlagsService().login(id).catch(console.error);
   }, [id, hasSession]);
 }

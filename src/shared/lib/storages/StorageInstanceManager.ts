@@ -2,6 +2,8 @@ import { MMKV } from 'react-native-mmkv';
 
 import { createStorage, createSecureStorage } from './createStorage';
 import { IStorageInstanceManager } from './IStorageInstanceManager';
+import { STORE_ENCRYPTION_KEY } from '../constants';
+import { throwError } from '../services/errorService';
 
 export class StorageInstanceManager implements IStorageInstanceManager {
   private instances: Record<string, MMKV | null | undefined>;
@@ -52,13 +54,28 @@ export class StorageInstanceManager implements IStorageInstanceManager {
   }
 
   private securedGetter(storageName: string) {
+    const storeEncryptionKey = this.getStoreEncryptionKey();
+
+    if (!storeEncryptionKey) {
+      throwError(
+        '[createSecureStorage]: STORE_ENCRYPTION_KEY has not been provided',
+      );
+    }
+
     const getter = (): MMKV => {
       if (!this.securedInstances[storageName]) {
-        this.securedInstances[storageName] = createSecureStorage(storageName);
+        this.securedInstances[storageName] = createSecureStorage(
+          storageName,
+          storeEncryptionKey as string,
+        );
       }
       return this.securedInstances[storageName] as MMKV;
     };
 
     return getter.bind(this);
+  }
+
+  private getStoreEncryptionKey(): string | undefined {
+    return STORE_ENCRYPTION_KEY;
   }
 }

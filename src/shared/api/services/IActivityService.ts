@@ -21,6 +21,7 @@ export type ActivityDto = {
     showScoreSummary: boolean;
     reports: Array<ReportDto>;
   };
+  autoAssign: boolean;
 };
 
 export type ActivityResponse = SuccessfulResponse<ActivityDto>;

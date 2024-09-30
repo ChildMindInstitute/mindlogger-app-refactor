@@ -417,6 +417,7 @@ export type ActivityDetails = {
   responseIsEditable: boolean;
   order: number;
   isHidden: boolean;
+  autoAssign: boolean;
   items: ActivityItem[];
   hasSummary: boolean;
   scoreSettings: Array<Report>;

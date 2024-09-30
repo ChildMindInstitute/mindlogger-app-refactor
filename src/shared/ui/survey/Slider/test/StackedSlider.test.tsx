@@ -7,11 +7,6 @@ import { sliderConfig, sliderValues } from './mockData';
 import { StackedSlider } from '../StackedSlider';
 import { SurveySlider } from '../SurveySlider';
 
-jest.mock('@app/shared/lib/constants', () => ({
-  ...jest.requireActual('@app/shared/lib/constants'),
-  STORE_ENCRYPTION_KEY: '12345',
-}));
-
 describe('StackedSlider', () => {
   it('should render correct slider count', () => {
     const changeHandler = jest.fn();

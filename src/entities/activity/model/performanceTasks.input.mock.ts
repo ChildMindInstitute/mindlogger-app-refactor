@@ -10,6 +10,7 @@ export const abTrailsInput: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   isHidden: false,
+  autoAssign: false,
   responseIsEditable: true,
   order: 2,
   items: [
@@ -261,6 +262,7 @@ export const CSTInput: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   isHidden: false,
+  autoAssign: false,
   responseIsEditable: true,
   order: 6,
   items: [
@@ -356,6 +358,7 @@ export const flankerInput: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   isHidden: false,
+  autoAssign: false,
   responseIsEditable: true,
   order: 3,
   items: [

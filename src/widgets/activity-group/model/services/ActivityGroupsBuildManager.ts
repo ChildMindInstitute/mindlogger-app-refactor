@@ -11,6 +11,8 @@ import {
   AppletDetailsResponse,
 } from '@app/shared/api/services/IAppletService';
 import { AppletEventsResponse } from '@app/shared/api/services/IEventsService';
+import { FeatureFlagsKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
+import { IFeatureFlagsService } from '@app/shared/lib/featureFlags/IFeatureFlagsService';
 import { ILogger } from '@app/shared/lib/types/logger';
 import {
   getDataFromQuery,
@@ -39,6 +41,7 @@ import {
 export const createActivityGroupsBuildManager = (
   logger: ILogger,
   scheduledDateCalculator: IScheduledDateCalculator,
+  featureFlagsService: IFeatureFlagsService,
 ): IActivityGroupsBuildManager => {
   const buildIdToEntityMap = (
     activities: Activity[],
@@ -120,31 +123,48 @@ export const createActivityGroupsBuildManager = (
 
     const idToEntity = buildIdToEntityMap(activities, activityFlows);
 
+    const enableActivityAssign = featureFlagsService.evaluateFlag(
+      FeatureFlagsKeys.enableActivityAssign,
+    );
+
     const entityEvents = events
       .reduce((acc, event) => {
         const entity = idToEntity[event.entityId];
 
         if (entity) {
-          let entityAssignments: Assignment[] = [];
-          if (entity.pipelineType === ActivityPipelineType.Flow) {
-            entityAssignments = assignments.filter(
-              _assignment =>
-                _assignment.__type === 'activityFlow' &&
-                _assignment.activityFlowId === entity.id,
-            );
-          } else {
-            entityAssignments = assignments.filter(
-              _assignment =>
-                _assignment.__type === 'activity' &&
-                _assignment.activityId === entity.id,
-            );
-          }
-          if (entityAssignments.length <= 0) {
-            acc.push({ entity, event, assignment: null });
-          } else {
-            for (const assignment of entityAssignments) {
-              acc.push({ entity, event, assignment });
+          if (enableActivityAssign) {
+            let entityAssignments: Assignment[] = [];
+            if (entity.pipelineType === ActivityPipelineType.Flow) {
+              entityAssignments = assignments.filter(
+                _assignment =>
+                  _assignment.__type === 'activityFlow' &&
+                  _assignment.activityFlowId === entity.id,
+              );
+            } else {
+              entityAssignments = assignments.filter(
+                _assignment =>
+                  _assignment.__type === 'activity' &&
+                  _assignment.activityId === entity.id,
+              );
             }
+            if (entityAssignments.length <= 0) {
+              if (entity.autoAssign) {
+                // If there is no manual assignment for this entity,
+                // and if the entity has "auto assign: ON",
+                // then include the entity in the list.
+                acc.push({ entity, event, assignment: null });
+              } else {
+                // If there is no manual assignment for this entity,
+                // and if the entity has "auto assign: OFF",
+                // then exclude the entity from the list.
+              }
+            } else {
+              for (const assignment of entityAssignments) {
+                acc.push({ entity, event, assignment });
+              }
+            }
+          } else {
+            acc.push({ entity, event, assignment: null });
           }
         }
 
@@ -165,15 +185,16 @@ export const createActivityGroupsBuildManager = (
       .filter(x => x.event.scheduledAt)
       .filter(x => !x.entity.isHidden);
 
+    const sortedEntityEvents = sort(entityEvents);
+
+    let logInfo = '';
     const result: BuildResult = { groups: [] };
     const builder = createActivityGroupsBuilder({
       allAppletActivities: activities,
       appletId: appletId,
       entityProgressions,
     });
-    const sortedEntityEvents = sort(entityEvents);
 
-    let logInfo = '';
     try {
       logInfo = 'building in-progress';
       result.groups.push(builder.buildInProgress(appletId, sortedEntityEvents));

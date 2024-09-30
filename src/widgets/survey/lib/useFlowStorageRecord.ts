@@ -8,6 +8,7 @@ import {
 } from '@app/features/pass-survey/lib/types/summary';
 import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 
+import { getFlowRecordKey } from './storageHelpers';
 import { FlowPipelineItem } from '../model/pipelineBuilder';
 
 export type UseFlowStorageArgs = {
@@ -58,8 +59,7 @@ export function useFlowStorageRecord({
   flowId,
   targetSubjectId,
 }: UseFlowStorageArgs) {
-  const flowKey = flowId ?? 'default_one_step_flow';
-  const key = `${flowKey}-${appletId}-${eventId}-${targetSubjectId || 'NULL'}`;
+  const key = getFlowRecordKey(flowId, appletId, eventId, targetSubjectId);
   const storage = getDefaultStorageInstanceManager().getFlowProgressStorage();
 
   const [flowStorageRecord, upsertFlowStorageRecord] = useMMKVObject<FlowState>(
@@ -69,7 +69,7 @@ export function useFlowStorageRecord({
 
   const clearFlowStorageRecord = useCallback(() => {
     storage.delete(key);
-  }, [key]);
+  }, [key, storage]);
 
   const getCurrentFlowStorageRecord = useCallback(() => {
     const json = storage.getString(key);
@@ -77,7 +77,7 @@ export function useFlowStorageRecord({
     if (json) {
       return JSON.parse(json) as FlowState;
     }
-  }, [key]);
+  }, [key, storage]);
 
   return {
     flowStorageRecord,

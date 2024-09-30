@@ -16,6 +16,7 @@ export type ActivityRecordDto = {
   isHidden: boolean;
   responseIsEditable: boolean;
   order: number;
+  autoAssign: boolean;
   splashScreen: ImageUrl | null;
 };
 
@@ -26,6 +27,7 @@ export type ActivityFlowRecordDto = {
   hideBadge: boolean;
   isSingleReport: boolean;
   order: number;
+  autoAssign: boolean;
   isHidden: boolean;
   activityIds: Array<string>;
 };

@@ -10,7 +10,11 @@ export const getActivityRecordKey = (
   targetSubjectId: string | null,
   order: number,
 ) => {
-  return `${appletId}-${activityId}-${eventId}-${targetSubjectId || 'NULL'}-${order}`;
+  if (targetSubjectId) {
+    return `${appletId}-${activityId}-${eventId}-${targetSubjectId}-${order}`;
+  } else {
+    return `${appletId}-${activityId}-${eventId}-${order}`;
+  }
 };
 
 export const getActivityRecord = (
@@ -76,7 +80,12 @@ export const getFlowRecordKey = (
   targetSubjectId: string | null,
 ) => {
   const flowKey = flowId ?? 'default_one_step_flow';
-  return `${flowKey}-${appletId}-${eventId}-${targetSubjectId || 'NULL'}`;
+
+  if (targetSubjectId) {
+    return `${flowKey}-${appletId}-${eventId}-${targetSubjectId}`;
+  } else {
+    return `${flowKey}-${appletId}-${eventId}`;
+  }
 };
 
 export const getFlowRecord = (

@@ -68,6 +68,7 @@ const getActivity = (): Entity => {
     name: 'test-entity-name-1',
     pipelineType: ActivityPipelineType.Regular,
     isHidden: false,
+    autoAssign: false,
     order: 0,
     type: ActivityType.NotDefined,
   };
@@ -1653,6 +1654,7 @@ describe('ActivityGroupsBuilder', () => {
             description: 'test-description-1',
             id: 'test-id-1',
             isHidden: false,
+            autoAssign: false,
             name: 'test-activity-name-1',
             pipelineType: ActivityPipelineType.Regular,
             type: ActivityType.NotDefined,
@@ -1662,6 +1664,7 @@ describe('ActivityGroupsBuilder', () => {
             description: 'test-description-2',
             id: 'test-id-2',
             isHidden: false,
+            autoAssign: false,
             name: 'test-activity-name-2',
             pipelineType: ActivityPipelineType.Regular,
             type: ActivityType.NotDefined,
@@ -1682,6 +1685,7 @@ describe('ActivityGroupsBuilder', () => {
         activityIds: ['test-activity-id-1', 'test-activity-id-2'],
         hideBadge: false,
         isHidden: false,
+        autoAssign: false,
         order: 0,
       };
 

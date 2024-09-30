@@ -10,6 +10,7 @@ export type EntityBase = {
   description: string;
   image?: string | null;
   isHidden: boolean;
+  autoAssign: boolean;
   order: number;
 };
 

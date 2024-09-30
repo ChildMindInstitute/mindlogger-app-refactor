@@ -9,11 +9,6 @@ import {
 import * as storageHelpers from '../../../lib/storageHelpers';
 import { CollectCompletionsService } from '../CollectCompletionsService';
 
-jest.mock('@app/shared/lib/services/Logger', () => ({
-  log: jest.fn(),
-  info: jest.fn(),
-}));
-
 describe('Test CollectCompletionsService: collectAll', () => {
   let pathOne: EntityPath;
   let pathTwo: EntityPath;

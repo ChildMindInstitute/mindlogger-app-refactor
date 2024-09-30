@@ -512,6 +512,7 @@ describe('Image URL Collection Functions', () => {
         isSkippable: false,
         showAllAtOnce: false,
         isHidden: false,
+        autoAssign: false,
         responseIsEditable: true,
         order: 1,
         splashScreen:
