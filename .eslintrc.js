@@ -47,7 +47,6 @@ module.exports = {
       },
     ],
     'react-hooks/rules-of-hooks': 'warn',
-    'import/no-cycle': 'error',
     'constructor-super': 'warn',
     'no-var': 'warn',
     'no-caller': 'warn',
@@ -95,6 +94,12 @@ module.exports = {
     'react/no-unsafe': 'warn',
     'react/require-render-return': 'warn',
     'react/display-name': 'off',
+
+    // This option generate warning messages from parsing packages inside
+    // node_modules, which we technically don't care about. Plus, this option
+    // also just don't seem to work. So, disable it for now.
+    // 'import/no-cycle': 'error',
+    'import/no-cycle': 'off',
   },
   overrides: [
     {

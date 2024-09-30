@@ -11,7 +11,10 @@ type Props = {
   uri?: string;
 } & XStackProps;
 
-const ImageBackgroundView: FC<PropsWithChildren<Props>> = ({ children, uri }) => {
+const ImageBackgroundView: FC<PropsWithChildren<Props>> = ({
+  children,
+  uri,
+}) => {
   const imageSource = useCachedImage(uri);
 
   const source = useMemo(

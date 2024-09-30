@@ -2,7 +2,7 @@ import { format, intervalToDuration, isSameDay, addDays } from 'date-fns';
 
 import { Item } from '@app/shared/ui/survey/CheckBox/types';
 
-import { Answer, Answers } from './hooks/useActivityStorageRecord';
+import { Answers } from './hooks/useActivityStorageRecord';
 import {
   PipelineItem,
   PipelineItemResponse,
@@ -158,7 +158,7 @@ export class MarkdownVariableReplacer {
     const foundIndex = this.activityItems.findIndex(
       item => item.name === variableName,
     );
-    const foundAnswerItem = this.answers[foundIndex as never] as Answer;
+    const foundAnswerItem = this.answers[foundIndex as never];
     const foundAnswer = foundAnswerItem?.answer;
 
     const answerNotFound = foundIndex < 0 || !foundAnswerItem || !foundAnswer;

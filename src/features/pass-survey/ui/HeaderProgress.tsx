@@ -27,7 +27,12 @@ const getCurrentItemProgress = (
   return 100;
 };
 
-export function HeaderProgress({ appletId, eventId, flowId, targetSubjectId }: Props) {
+export function HeaderProgress({
+  appletId,
+  eventId,
+  flowId,
+  targetSubjectId,
+}: Props) {
   const { flowStorageRecord } = useFlowStorageRecord({
     appletId,
     eventId,

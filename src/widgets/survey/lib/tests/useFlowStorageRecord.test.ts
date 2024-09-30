@@ -132,7 +132,8 @@ describe('Test useFlowStorageRecord', () => {
     const record = result.current.getCurrentFlowStorageRecord();
 
     expect(record).toEqual({
-      flowName: 'test-name-mock-flow-id-1-mock-applet-id-1-mock-event-id-1-NULL',
+      flowName:
+        'test-name-mock-flow-id-1-mock-applet-id-1-mock-event-id-1-NULL',
     });
   });
 });

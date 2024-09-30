@@ -84,7 +84,7 @@ describe('Survey widget mapAnswersToDto tests', () => {
   beforeEach(() => {
     logger = getDefaultLogger();
 
-    jest.spyOn(logger, 'warn');
+    jest.spyOn(logger, 'warn').mockReturnValue(undefined);
   });
 
   it('Should return mapped result for different items pipeline', async () => {
