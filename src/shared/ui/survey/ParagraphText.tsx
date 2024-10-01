@@ -1,9 +1,9 @@
-import React, { FC, useState } from 'react';
-import { StyleSheet, TextInputProps, View } from 'react-native';
+import React, { FC, useState, useEffect } from 'react';
+import { StyleSheet, TextInputProps, View, Keyboard } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@shared/lib';
+import { colors, IS_ANDROID } from '@shared/lib';
 import { LongTextInput, CharacterCounter } from '@shared/ui';
 
 type Props = {
@@ -16,15 +16,46 @@ type Props = {
 
 const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
   const [paragraphOnFocus, setParagraphOnFocus] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const { maxLength = 50 } = config;
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'test') {
+      return;
+    }
+    if (IS_ANDROID) {
+      const keyboardDidShowListener = Keyboard.addListener(
+        'keyboardDidShow',
+        event => {
+          setKeyboardHeight(event.endCoordinates.height);
+        },
+      );
+      const keyboardDidHideListener = Keyboard.addListener(
+        'keyboardDidHide',
+        () => {
+          setKeyboardHeight(0);
+        },
+      );
+
+      return () => {
+        keyboardDidShowListener.remove();
+        keyboardDidHideListener.remove();
+      };
+    }
+  }, []);
 
   const onChangeText = (text: string) => {
     onChange(text);
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        IS_ANDROID ? { paddingBottom: keyboardHeight } : {},
+      ]}
+    >
       <LongTextInput
         accessibilityLabel="paragraph-item"
         placeholder={t('text_entry:paragraph_placeholder')}
