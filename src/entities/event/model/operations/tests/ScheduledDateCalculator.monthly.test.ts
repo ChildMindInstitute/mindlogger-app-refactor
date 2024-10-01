@@ -2,10 +2,10 @@ import { addDays, addMonths, startOfDay, subDays, subMonths } from 'date-fns';
 
 import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
 
-import { ScheduledDateCalculator } from './ScheduledDateCalculator';
-import { ScheduleEvent } from '../../lib/types/scheduledDateCalculator';
+import { ScheduleEvent } from '../../../lib/types/scheduledDateCalculator';
+import { ScheduledDateCalculator } from '../ScheduledDateCalculator';
 
-describe('ScheduledDateCalculator: test monthly events', () => {
+describe('Test ScheduledDateCalculator: monthly events', () => {
   const getScheduledDateCalculator = (now: Date) => {
     const instance = new ScheduledDateCalculator();
     //@ts-expect-error
