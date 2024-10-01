@@ -349,6 +349,7 @@ function mapToMessage(dto: MessageItemDto): ActivityItem {
     canBeReset: false,
     hasTopNavigation: false,
     isHidden: dto.isHidden,
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
