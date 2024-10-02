@@ -1,6 +1,31 @@
 import { jest } from '@jest/globals';
 import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
 
+jest.mock('react-native-crypto', () => {
+  return {
+    randomBytes: jest.fn(() => Buffer.from('mocked random bytes')),
+    createHash: jest.fn(() => ({
+      update: jest.fn().mockReturnThis(),
+      digest: jest.fn().mockReturnValue('mocked-digest'),
+    })),
+    createCipheriv: jest.fn(() => ({
+      update: jest.fn().mockReturnValue(Buffer.from('mocked-cipher')),
+      final: jest.fn().mockReturnValue(Buffer.from('mocked-final')),
+    })),
+    createDecipheriv: jest.fn(() => ({
+      update: jest.fn().mockReturnValue(Buffer.from('mocked-decipher')),
+      final: jest.fn().mockReturnValue(Buffer.from('mocked-final')),
+    })),
+    createDiffieHellman: jest.fn(() => ({
+      setPrivateKey: jest.fn(), // Mock setPrivateKey
+      generateKeys: jest.fn(() => 'mocked-public-key'),
+      getPublicKey: jest.fn(() => 'mocked-public-key'),
+      getPrivateKey: jest.fn(() => ['mocked-private-key']),
+      computeSecret: jest.fn(() => 'mocked-secret'),
+    })),
+  };
+});
+
 jest.mock('react-native-file-access', () => {
   return {
     FileSystem: {

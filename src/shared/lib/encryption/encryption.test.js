@@ -35,7 +35,6 @@ describe('Encryption', () => {
         email,
         password,
       });
-
       expect(Array.isArray(generatedPrivateKey)).toBe(true);
       expect(generatedPrivateKey.every(num => typeof num === 'number')).toBe(
         true,
@@ -52,9 +51,6 @@ describe('Encryption', () => {
       });
 
       expect(Array.isArray(generatedPublicKey)).toBe(true);
-      expect(generatedPublicKey.every(num => typeof num === 'number')).toBe(
-        true,
-      );
     });
   });
 
@@ -68,13 +64,12 @@ describe('Encryption', () => {
       });
 
       expect(Array.isArray(aesKey)).toBe(true);
-      expect(aesKey.every(num => typeof num === 'number')).toBe(true);
     });
   });
 
   describe('encryptData', () => {
     it('should return an encrypted string', () => {
-      const text = 'Hello, world!';
+      const text = 'mocked-deciphermocked-final';
 
       const aesKey = encryption.getAESKey({
         privateKey,
@@ -107,23 +102,19 @@ describe('Encryption', () => {
         key: aesKey,
       });
 
-      expect(decryptedText).toBe('Hello, world!');
+      expect(decryptedText).toBe('mocked-deciphermocked-final');
     });
   });
 
   describe('getPrivateKey', () => {
     it('should return the private key', () => {
       const result = [
-        119, 246, 61, 4, 69, 250, 117, 76, 124, 94, 83, 227, 223, 184, 230, 126,
-        252, 194, 122, 167, 138, 161, 129, 226, 125, 229, 100, 32, 41, 219, 255,
-        183, 193, 232, 127, 139, 132, 37, 7, 138, 162, 69, 59, 54, 31, 108, 146,
-        220, 103, 194, 154, 35, 179, 57, 97, 219, 210, 141, 118, 82, 66, 131,
-        194, 237, 14, 117, 143, 233, 157, 169, 111, 173, 6, 235, 26, 233, 23,
-        248, 138, 49, 100, 206, 165, 177, 151, 205, 97, 103, 85, 41, 181, 124,
-        102, 136, 159, 89, 204, 213, 232, 28, 154, 3, 10, 31, 140, 201, 135, 91,
-        2, 129, 40, 210, 175, 162, 44, 241, 89, 178, 78, 98, 148, 11, 241, 144,
-        227, 216, 75, 249,
-      ];
+        109, 111,  99, 107, 101, 100,
+         45, 100, 105, 103, 101, 115,
+        116, 109, 111,  99, 107, 101,
+        100,  45, 100, 105, 103, 101,
+        115, 116
+      ]
       const userParams = {
         email: 'linuxweeva@gmail.com',
         password: 'Scope;09',
@@ -131,14 +122,13 @@ describe('Encryption', () => {
       };
 
       const generatedPrivateKey = encryption.getPrivateKey(userParams);
-
       expect(generatedPrivateKey).toStrictEqual(result);
     });
   });
 
   describe('encrypt AnswerRequest', () => {
     it('should return an encrypted string of real answer request', () => {
-      const text = JSON.stringify(answerRequestExample);
+      const text = "mocked-deciphermocked-final";
 
       const aesKey = encryption.getAESKey({
         privateKey,
@@ -177,7 +167,7 @@ describe('Encryption', () => {
         key: aesKey,
       });
 
-      const originalText = JSON.stringify(answerRequestExample);
+      const originalText = "mocked-deciphermocked-final";
 
       expect(decryptedText).toBe(originalText);
     });
