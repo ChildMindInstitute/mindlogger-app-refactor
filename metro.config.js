@@ -7,7 +7,7 @@ const config = {
       stream: require.resolve('stream-browserify'),
       assert: require.resolve('assert/'),
       buffer: require.resolve('buffer/'),
-      events: require.resolve('events/'), 
+      events: require.resolve('events/'),
       process: require.resolve('process/browser'),
       util: require.resolve('util/'),
     },
