@@ -1,5 +1,5 @@
-import { getDefaultMediaFilesCleaner } from '@app/entities/activity/lib/services/mediaFilesCleanerInstance';
-import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
+import { getDefaultMediaFilesCleaner } from '@entities/activity/lib/services/mediaFilesCleanerInstance.ts';
+import { getDefaultStorageInstanceManager } from '@shared/lib/storages/storageInstanceManagerInstance.ts';
 
 export const clearEntityRecordStorages = async () => {
   const activitiesStorage =

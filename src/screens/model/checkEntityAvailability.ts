@@ -38,6 +38,8 @@ type InputInternal = Input & {
 
 const logger: ILogger = getDefaultLogger();
 
+const FORCE_RECREATE_RECORD = true;
+
 const checkEntityAvailabilityInternal = ({
   entityName,
   identifiers: { appletId, entityId, entityType, eventId, targetSubjectId },
@@ -62,22 +64,28 @@ const checkEntityAvailabilityInternal = ({
   );
 
   const isInProgress = isEntityProgressionInProgress(progression);
-  const flowId = entityType === 'flow' ? entityId : undefined;
 
-  // TODO: M2-7407 - Maybe make this part idempotent? If the activity record
-  //                 does exist, maybe we should just restart the activity and
-  //                 recreate the record (instead of just not letting people
-  //                 pass)?
   if (
     isInProgress &&
-    !isCurrentActivityRecordExist(flowId, appletId, eventId, targetSubjectId)
+    !isCurrentActivityRecordExist(
+      entityType === 'flow' ? entityId : undefined,
+      appletId,
+      eventId,
+      targetSubjectId,
+    )
   ) {
-    logger.log(
+    logger.warn(
       '[checkEntityAvailability] Check done: false (app killed during redux persist)',
     );
 
-    onAppWasKilledOnReduxPersist(() => callback(false));
-    return;
+    // TODO: M2-7407 - Maybe make this part idempotent? If the activity record
+    //                 does exist, maybe we should just restart the activity and
+    //                 recreate the record (instead of just not letting people
+    //                 pass)?
+    if (!FORCE_RECREATE_RECORD) {
+      onAppWasKilledOnReduxPersist(() => callback(false));
+      return;
+    }
   }
 
   const shouldBeAutocompleted = isProgressionReadyForAutocompletion(

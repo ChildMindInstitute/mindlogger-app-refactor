@@ -28,7 +28,7 @@ import { InputField } from '@app/shared/ui/form/InputField';
 import { Link } from '@app/shared/ui/Link';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
 
-import { cleanupData } from '../model/cleanupData';
+import { cleanupData } from '../../auth/model/cleanupData.ts';
 import { LoginFormSchema } from '../model/LoginFormSchema';
 
 type Props = {

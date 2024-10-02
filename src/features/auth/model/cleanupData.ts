@@ -1,7 +1,6 @@
-import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
-
-import { clearEntityRecordStorages } from '../lib/clearEntityRecordStorages';
-import { clearUploadQueueStorage } from '../lib/clearUploadQueueStorage';
+import { clearEntityRecordStorages } from '@features/auth/lib/clearEntityRecordStorages.ts';
+import { clearUploadQueueStorage } from '@features/auth/lib/clearUploadQueueStorage.ts';
+import { getDefaultLogger } from '@shared/lib/services/loggerInstance.ts';
 
 export async function cleanupData() {
   getDefaultLogger().info(
