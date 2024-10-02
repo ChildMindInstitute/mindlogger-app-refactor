@@ -2,19 +2,20 @@ import { IUploadObservable } from '@app/shared/lib/observables/IUploadObservable
 import { IUploadProgressObservable } from '@app/shared/lib/observables/IUploadProgressObservable';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { IPreprocessor } from '@app/shared/lib/types/service';
-import { IMutex, Mutex, wait } from '@app/shared/lib/utils/common';
+import { Mutex, wait } from '@app/shared/lib/utils/common';
 import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
+import {
+  IAnswersQueueService,
+  UploadItem,
+} from '@entities/activity/lib/services/IAnswersQueueService.ts';
+import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService.ts';
+import { IQueueProcessingService } from '@entities/activity/lib/services/IQueueProcessingService.ts';
+import { IMutex } from '@shared/lib/utils/IMutex.ts';
 
-import { IAnswersQueueService, UploadItem } from './AnswersQueueService';
-import { IAnswersUploadService } from './AnswersUploadService';
 import { UploadItemPreprocessor } from './UploadItemPreprocessor';
 import { SendAnswersInput } from '../types/uploadAnswers';
 
-export interface IPushToQueue {
-  push(input: SendAnswersInput): void;
-}
-
-export class QueueProcessingService implements IPushToQueue {
+export class QueueProcessingService implements IQueueProcessingService {
   private queueService: IAnswersQueueService;
 
   private uploadService: IAnswersUploadService;

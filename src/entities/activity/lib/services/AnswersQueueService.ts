@@ -1,20 +1,10 @@
 import { MMKV } from 'react-native-mmkv';
 
-import { IObservable } from '@app/shared/lib/utils/observable';
-
-import { SendAnswersInput } from '../types/uploadAnswers';
-
-export type UploadItem = {
-  input: SendAnswersInput;
-};
-
-export interface IAnswersQueueService {
-  pick: () => UploadItem | null;
-  enqueue: (item: UploadItem) => void;
-  dequeue: () => void;
-  swap: () => void;
-  getLength: () => number;
-}
+import {
+  IAnswersQueueService,
+  UploadItem,
+} from '@entities/activity/lib/services/IAnswersQueueService.ts';
+import { IObservable } from '@shared/lib/utils/IObservable.ts';
 
 const StartKey = '1';
 

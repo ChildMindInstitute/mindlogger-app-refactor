@@ -1,24 +1,15 @@
-import {
-  AppletDetailsDto,
-  AppletDto,
-} from '@app/shared/api/services/IAppletService';
+import { AppletDetailsDto } from '@app/shared/api/services/IAppletService';
 import {
   CompletedEntityDto,
   EntitiesCompletionsDto,
 } from '@app/shared/api/services/IEventsService';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { buildDateTimeFromDto } from '@app/shared/lib/utils/dateTime';
+import { IAppletProgressSyncService } from '@entities/applet/model/services/IAppletProgressSyncService.ts';
 
 import { AppletDetails } from '../../lib/types';
 import { mapAppletDetailsFromDto } from '../mappers';
 import { appletActions, UpsertEntityProgressionPayload } from '../slice';
-
-export interface IAppletProgressSyncService {
-  sync(
-    appletDto: AppletDto,
-    appletCompletions: EntitiesCompletionsDto,
-  ): Promise<void>;
-}
 
 export class ProgressSyncService implements IAppletProgressSyncService {
   private logger: ILogger;

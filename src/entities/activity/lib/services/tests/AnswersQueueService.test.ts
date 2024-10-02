@@ -1,7 +1,9 @@
 /* eslint-disable no-nested-ternary */
 import { MMKV } from 'react-native-mmkv';
 
-import { AnswersQueueService, UploadItem } from '../AnswersQueueService';
+import { UploadItem } from '@entities/activity/lib/services/IAnswersQueueService.ts';
+
+import { AnswersQueueService } from '../AnswersQueueService';
 
 const notifyMock = { notify: () => {} };
 

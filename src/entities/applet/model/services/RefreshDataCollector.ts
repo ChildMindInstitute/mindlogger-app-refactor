@@ -2,64 +2,27 @@ import { AxiosResponse } from 'axios';
 
 import { ActivityDto } from '@app/shared/api/services/IActivityService';
 import {
-  AppletAssignmentsResponse,
-  AppletDetailsDto,
   AppletDto,
-  AppletRespondentMetaDto,
   IAppletService,
 } from '@app/shared/api/services/IAppletService';
 import {
   AllEventsResponse,
-  AppletEventsResponse,
   IEventsService,
 } from '@app/shared/api/services/IEventsService';
 import { toAxiosResponse } from '@app/shared/api/utils';
 import {
-  collectAppletDetailsImageUrls,
   collectActivityDetailsImageUrls,
+  collectAppletDetailsImageUrls,
   collectAppletRecordImageUrls,
 } from '@app/shared/lib/services/collectImageUrls';
 import { ILogger } from '@app/shared/lib/types/logger';
-
-type AppletId = string;
-
-export type CollectAppletInternalsResult = {
-  appletId: AppletId;
-  appletDetails: AppletDetailsDto;
-  activities: Array<ActivityDto>;
-  imageUrls: string[];
-  respondentMeta: AppletRespondentMetaDto;
-};
-
-export type CollectAllAppletEventsResult = {
-  appletEvents: Record<AppletId, AxiosResponse<AppletEventsResponse> | null>;
-};
-
-type CollectAppletDetailsResult = {
-  appletDetailsDto: AppletDetailsDto;
-  activityDetailsDtos: Array<ActivityDto>;
-  imageUrls: string[];
-  respondentMeta: AppletRespondentMetaDto;
-};
-
-export type CollectAllAppletAssignmentsResult = {
-  appletAssignments: Record<
-    AppletId,
-    AxiosResponse<AppletAssignmentsResponse> | null
-  >;
-};
-
-export interface IRefreshDataCollector {
-  collectAppletInternals(
-    appletDto: AppletDto,
-  ): Promise<CollectAppletInternalsResult>;
-  collectAllAppletEvents(
-    appletIds: string[],
-  ): Promise<CollectAllAppletEventsResult>;
-  collectAllAppletAssignments(
-    appletIds: string[],
-  ): Promise<CollectAllAppletAssignmentsResult>;
-}
+import {
+  CollectAllAppletAssignmentsResult,
+  CollectAllAppletEventsResult,
+  CollectAppletDetailsResult,
+  CollectAppletInternalsResult,
+  IRefreshDataCollector,
+} from '@entities/applet/model/services/IRefreshDataCollector.ts';
 
 export class RefreshDataCollector implements IRefreshDataCollector {
   private logger: ILogger;

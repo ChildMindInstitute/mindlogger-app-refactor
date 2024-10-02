@@ -14,11 +14,11 @@ import { colors } from '@app/shared/lib/constants/colors';
 import { BackButton } from '@app/shared/ui/BackButton';
 import { Box } from '@app/shared/ui/base';
 import { CrossIcon } from '@app/shared/ui/icons';
+import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder.ts';
 
 import { FinishItem } from './Finish';
 import { Intermediate } from './Intermediate';
 import { Summary } from './Summary';
-import { FlowPipelineItem } from '../model/pipelineBuilder';
 
 type Props = {
   onClose: () => void;

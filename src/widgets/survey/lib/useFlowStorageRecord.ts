@@ -7,9 +7,9 @@ import {
   ScoreRecord,
 } from '@app/features/pass-survey/lib/types/summary';
 import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
+import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder.ts';
 
 import { getFlowRecordKey } from './storageHelpers';
-import { FlowPipelineItem } from '../model/pipelineBuilder';
 
 export type UseFlowStorageArgs = {
   appletId: string;

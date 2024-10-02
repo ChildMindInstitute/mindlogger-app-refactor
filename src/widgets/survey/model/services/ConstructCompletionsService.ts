@@ -6,7 +6,6 @@ import {
   EntityProgression,
   EntityProgressionInProgress,
 } from '@app/abstract/lib/types/entityProgress';
-import { IPushToQueue } from '@app/entities/activity/lib/services/QueueProcessingService';
 import { SendAnswersInput } from '@app/entities/activity/lib/types/uploadAnswers';
 import { appletActions } from '@app/entities/applet/model/slice';
 import { getDefaultSvgFileManager } from '@app/entities/drawer/lib/utils/svgFileManagerInstance';
@@ -32,6 +31,7 @@ import {
   isEntityExpired,
   getEntityProgression,
 } from '@app/shared/lib/utils/survey/survey';
+import { IQueueProcessingService } from '@entities/activity/lib/services/IQueueProcessingService.ts';
 
 import { getClientInformation } from '../../lib/metaHelpers';
 import {
@@ -94,7 +94,7 @@ export class ConstructCompletionsService {
   private saveActivitySummary: SaveActivitySummary | null;
   private queryDataUtils: QueryDataUtils;
   private entityProgressions: EntityProgression[];
-  private pushToQueueService: IPushToQueue;
+  private pushToQueueService: IQueueProcessingService;
   private alertsExtractor: IAlertsExtractor;
   private scoresExtractor: IScoresExtractor;
   private dispatch: AppDispatch;
@@ -104,7 +104,7 @@ export class ConstructCompletionsService {
     saveActivitySummary: SaveActivitySummary | null,
     logger: ILogger,
     queryClient: QueryClient,
-    pushToQueueService: IPushToQueue,
+    pushToQueueService: IQueueProcessingService,
     alertsExtractor: IAlertsExtractor,
     scoresExtractor: IScoresExtractor,
     dispatch: AppDispatch,

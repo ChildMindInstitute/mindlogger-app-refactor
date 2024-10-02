@@ -1,27 +1,11 @@
-import { AxiosResponse } from 'axios';
-
 import { getDefaultEventsService } from '@app/shared/api/services/eventsServiceInstance';
-import {
-  CompletedEntitiesResponse,
-  EntitiesCompletionsDto,
-} from '@app/shared/api/services/IEventsService';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { getMonthAgoDate } from '@app/shared/lib/utils/dateTime';
-
-type AppletId = string;
-
-type CollectForAppletResult = AxiosResponse<
-  CompletedEntitiesResponse,
-  any
-> | null;
-
-export type CollectRemoteCompletionsResult = {
-  appletEntities: Record<AppletId, EntitiesCompletionsDto>;
-};
-
-export interface IProgressDataCollector {
-  collect(): Promise<CollectRemoteCompletionsResult>;
-}
+import {
+  CollectForAppletResult,
+  CollectRemoteCompletionsResult,
+  IProgressDataCollector,
+} from '@entities/applet/model/services/IProgressDataCollector.ts';
 
 export class ProgressDataCollector implements IProgressDataCollector {
   private logger: ILogger;

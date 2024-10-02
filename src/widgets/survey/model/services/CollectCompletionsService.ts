@@ -7,31 +7,17 @@ import {
 import { IncompleteEntity } from '@app/entities/applet/model/selectors';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { isEntityExpired } from '@app/shared/lib/utils/survey/survey';
+import { FinishPipelineItem } from '@widgets/survey/model/IPipelineBuilder.ts';
+import {
+  CollectCompletionOutput,
+  ICollectCompletionsService,
+} from '@widgets/survey/model/services/ICollectCompletionsService.ts';
 
 import {
   getFlowRecord,
   isCurrentActivityRecordExist,
 } from '../../lib/storageHelpers';
 import { FlowState } from '../../lib/useFlowStorageRecord';
-import { FinishPipelineItem } from '../pipelineBuilder';
-
-export type CollectCompletionOutput = {
-  appletId: string;
-  activityId: string;
-  flowId: string | undefined;
-  eventId: string;
-  targetSubjectId: string | null;
-  order: number;
-  activityName: string;
-  completionType: 'intermediate' | 'finish';
-  logAvailableTo?: string;
-};
-
-export interface ICollectCompletionsService {
-  collectForEntity(path: EntityPath): CollectCompletionOutput[];
-  collectAll(exclude?: EntityPathParams): CollectCompletionOutput[];
-  hasExpiredEntity(): boolean;
-}
 
 export class CollectCompletionsService implements ICollectCompletionsService {
   private logger: ILogger;

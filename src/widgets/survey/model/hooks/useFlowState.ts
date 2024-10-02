@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 
+import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder.ts';
+
 import {
   FlowSummaryData,
   SummaryDataKey,
   useFlowStorageRecord,
 } from '../../lib/useFlowStorageRecord';
-import { FlowPipelineItem } from '../pipelineBuilder';
 
 export type UseFlowStateArgs = {
   appletId: string;

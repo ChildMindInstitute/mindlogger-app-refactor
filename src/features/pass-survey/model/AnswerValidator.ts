@@ -8,33 +8,16 @@ import {
   isOutsideOfValues,
 } from '@app/entities/conditional-logic/model/conditions';
 import { Item } from '@app/shared/ui/survey/CheckBox/types';
+import {
+  AnswerValidatorArgs,
+  IAnswerValidator,
+} from '@features/pass-survey/model/IAnswerValidator.ts';
 
-import { Answers } from '../lib/hooks/useActivityStorageRecord';
 import {
   ParagraphTextResponse,
-  PipelineItem,
   RadioResponse,
   TimeRangeResponse,
 } from '../lib/types/payload';
-
-type AnswerValidatorArgs = {
-  items: PipelineItem[];
-  answers: Answers;
-  step: number;
-};
-
-export interface IAnswerValidator {
-  isCorrect(): boolean;
-  isBetweenValues(min: number, max: number): boolean;
-  isOutsideOfValues(min: number, max: number): boolean;
-  isEqualToValue(value: any): boolean;
-  isEqualToOption(optionValue: string): boolean;
-  isGreaterThen(value: number): boolean;
-  isLessThen(value: number): boolean;
-  includesOption(optionValue: string): boolean;
-  notIncludesOption(optionValue: string): boolean;
-  isValidAnswer(): boolean;
-}
 
 export function AnswerValidator(
   params?: AnswerValidatorArgs,

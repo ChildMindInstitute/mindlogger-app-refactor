@@ -1,4 +1,5 @@
 import { ActivityListItem } from '@app/entities/activity/lib/types/activityListItem';
+import { IActivityGroupsBuilder } from '@widgets/activity-group/model/factories/IActivityGroupsBuilder.ts';
 
 import { AvailableGroupEvaluator } from './AvailableGroupEvaluator';
 import { GroupUtility } from './GroupUtility';
@@ -13,21 +14,6 @@ import {
   EventEntity,
   GroupsBuildContext,
 } from '../../lib/types/activityGroupsBuilder';
-
-export interface IActivityGroupsBuilder {
-  buildInProgress: (
-    appletId: string,
-    eventsActivities: Array<EventEntity>,
-  ) => ActivityListGroup;
-  buildAvailable: (
-    appletId: string,
-    eventsActivities: Array<EventEntity>,
-  ) => ActivityListGroup;
-  buildScheduled: (
-    appletId: string,
-    eventsActivities: Array<EventEntity>,
-  ) => ActivityListGroup;
-}
 
 export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   private itemsFactory: ListItemsFactory;

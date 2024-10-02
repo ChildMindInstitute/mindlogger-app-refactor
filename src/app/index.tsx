@@ -14,7 +14,7 @@ if (hideIosSimulatorErrorWarningBadges) {
   LogBox.ignoreAllLogs();
 }
 
-jobRunner.runAll([localization]);
+jobRunner.runAll([localization]).catch(console.error);
 
 getDefaultLogger().configure();
 

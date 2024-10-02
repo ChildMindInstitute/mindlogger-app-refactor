@@ -14,12 +14,10 @@ import { IEncryptionManager } from '@app/shared/lib/encryption/IEncryptionManage
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
+import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService.ts';
 
 import { SendAnswersInput } from '../../types/uploadAnswers';
-import {
-  AnswersUploadService,
-  IAnswersUploadService,
-} from '../AnswersUploadService';
+import { AnswersUploadService } from '../AnswersUploadService';
 import { getDefaultAnswersUploadService } from '../answersUploadServiceInstance';
 import { IMediaFilesCleaner } from '../IMediaFilesCleaner';
 import { getDefaultMediaFilesCleaner } from '../mediaFilesCleanerInstance';

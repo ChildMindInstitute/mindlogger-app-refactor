@@ -1,4 +1,6 @@
-import { IMutex, Mutex } from './common';
+import { IMutex } from '@shared/lib/utils/IMutex.ts';
+
+import { Mutex } from './common';
 import { IMutexDefaultInstanceManager } from './IMutexDefaultInstanceManager';
 
 export class MutexDefaultInstanceManager

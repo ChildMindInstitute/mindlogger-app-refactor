@@ -14,13 +14,13 @@ import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadOb
 import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ImageBackground } from '@app/shared/ui/ImageBackground';
+import { FinishReason } from '@widgets/survey/model/IPipelineBuilder.ts';
 
 import { AnswersSubmitted } from './completion/AnswersSubmitted';
 import { SubScreenContainer } from './completion/containers';
 import { ProcessingAnswers } from './completion/ProcessingAnswers';
 import { useFlowStorageRecord } from '../lib/useFlowStorageRecord';
 import { useAutoCompletion } from '../model/hooks/useAutoCompletion';
-import { FinishReason } from '../model/pipelineBuilder';
 import { ConstructCompletionsService } from '../model/services/ConstructCompletionsService';
 
 type Props = {

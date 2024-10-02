@@ -1,3 +1,3 @@
-import { IMutex } from '../utils/common';
+import { IMutex } from '@shared/lib/utils/IMutex.ts';
 
 export interface IInterimSubmitMutex extends IMutex {}

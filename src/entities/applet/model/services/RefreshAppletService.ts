@@ -16,33 +16,24 @@ import { toAxiosResponse } from '@app/shared/api/utils';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { ImageUrl } from '@app/shared/lib/types/url';
 import {
-  getAppletDetailsKey,
   getActivityDetailsKey,
-  getEventsKey,
+  getAppletDetailsKey,
   getAssignmentsKey,
   getDataFromQuery,
+  getEventsKey,
 } from '@app/shared/lib/utils/reactQueryHelpers';
-
-import { CollectRemoteCompletionsResult } from './ProgressDataCollector';
-import { IAppletProgressSyncService } from './ProgressSyncService';
+import { IAppletProgressSyncService } from '@entities/applet/model/services/IAppletProgressSyncService.ts';
+import { CollectRemoteCompletionsResult } from '@entities/applet/model/services/IProgressDataCollector.ts';
+import { IRefreshAppletService } from '@entities/applet/model/services/IRefreshAppletService.ts';
 import {
   CollectAllAppletAssignmentsResult,
   CollectAllAppletEventsResult,
   CollectAppletInternalsResult,
   IRefreshDataCollector,
-  RefreshDataCollector,
-} from './RefreshDataCollector';
-import { RefreshOptimization } from './RefreshOptimization';
+} from '@entities/applet/model/services/IRefreshDataCollector.ts';
 
-export interface IRefreshAppletService {
-  refreshApplet(
-    appletDto: AppletDto,
-    allAppletEvents: CollectAllAppletEventsResult,
-    allAppletAssignments: CollectAllAppletAssignmentsResult,
-    appletRemoteCompletions: CollectRemoteCompletionsResult,
-    optimization: RefreshOptimization,
-  ): Promise<void>;
-}
+import { RefreshDataCollector } from './RefreshDataCollector';
+import { RefreshOptimization } from './RefreshOptimization';
 
 export class RefreshAppletService implements IRefreshAppletService {
   private queryClient: QueryClient;

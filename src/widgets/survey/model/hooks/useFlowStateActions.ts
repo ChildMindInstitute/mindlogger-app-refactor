@@ -1,4 +1,5 @@
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder.ts';
 
 import {
   ActivitySummaryData,
@@ -7,7 +8,6 @@ import {
   SummaryDataKey,
   useFlowStorageRecord,
 } from '../../lib/useFlowStorageRecord';
-import { FlowPipelineItem } from '../pipelineBuilder';
 
 export type UseFlowStateActionsArgs = {
   appletId: string;

@@ -1,10 +1,12 @@
+import { IShiftCalculator } from '@features/pass-survey/model/IShiftCalculator.ts';
+
 import { PipelineVisibilityChecker } from './PipelineVisibilityChecker';
 import { ShiftCalculator } from './ShiftCalculator';
 import { ActivityState } from '../lib/hooks/useActivityStorageRecord';
 
 export class StepperUtils {
   private activityState: ActivityState;
-  private shiftCalculator: ShiftCalculator;
+  private shiftCalculator: IShiftCalculator;
 
   constructor(activityState: ActivityState) {
     this.activityState = activityState;

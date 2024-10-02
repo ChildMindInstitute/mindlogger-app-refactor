@@ -1,4 +1,4 @@
-import { IMutex } from '@app/shared/lib/utils/common';
+import { IMutex } from '@shared/lib/utils/IMutex.ts';
 
 import { NotificationDescriber } from '../lib/types/notificationBuilder';
 

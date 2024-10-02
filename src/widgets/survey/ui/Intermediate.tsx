@@ -16,6 +16,7 @@ import { getDefaultInterimSubmitMutex } from '@app/shared/lib/mutexes/interimSub
 import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
 import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { StepperPipelineItem } from '@widgets/survey/model/IPipelineBuilder.ts';
 
 import { SubScreenContainer } from './completion/containers';
 import { IntermediateSubmit } from './completion/IntermediateSubmit';
@@ -24,7 +25,6 @@ import { activityRecordExists } from '../lib/storageHelpers';
 import { useFlowStorageRecord } from '../lib/useFlowStorageRecord';
 import { useAutoCompletion } from '../model/hooks/useAutoCompletion';
 import { useFlowStateActions } from '../model/hooks/useFlowStateActions';
-import { StepperPipelineItem } from '../model/pipelineBuilder';
 import { ConstructCompletionsService } from '../model/services/ConstructCompletionsService';
 
 type Props = {

@@ -4,6 +4,7 @@ import { Dirs, FileSystem } from 'react-native-file-access';
 import { FileLogger, LogLevel } from 'react-native-file-logger';
 
 import { IFileService } from '@app/shared/api/services/IFileService';
+import { IMutex } from '@shared/lib/utils/IMutex.ts';
 
 import { IS_ANDROID, IS_IOS } from '../constants';
 import { getNotificationSettingsData } from '../permissions/notificationPermissions';
@@ -15,7 +16,6 @@ import {
   NamePathSize,
 } from '../types/logger';
 import {
-  IMutex,
   Mutex,
   callWithMutexAsync,
   callWithMutex,

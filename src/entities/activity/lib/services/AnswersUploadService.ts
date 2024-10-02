@@ -22,6 +22,7 @@ import {
 } from '@app/shared/lib/utils/dateTime';
 import { isLocalFileUrl } from '@app/shared/lib/utils/file';
 import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
+import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService.ts';
 
 import { IMediaFilesCleaner } from './IMediaFilesCleaner';
 import {
@@ -30,10 +31,6 @@ import {
   CheckFileUploadResult,
   SendAnswersInput,
 } from '../types/uploadAnswers';
-
-export interface IAnswersUploadService {
-  sendAnswers(body: SendAnswersInput): Promise<void>;
-}
 
 export class AnswersUploadService implements IAnswersUploadService {
   private createdAt: number | null;
