@@ -1,12 +1,17 @@
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
-/**
- * Metro configuration
- * https://facebook.github.io/metro/docs/configuration
- *
- * @type {import('metro-config').MetroConfig}
- */
 const config = {
+  resolver: {
+    extraNodeModules: {
+      crypto: require.resolve('react-native-crypto'),
+      stream: require.resolve('stream-browserify'),
+      assert: require.resolve('assert/'),
+      buffer: require.resolve('buffer/'),
+      events: require.resolve('events/'), 
+      process: require.resolve('process/browser'),
+      util: require.resolve('util/'),
+    },
+  },
   transformer: {
     getTransformOptions: async () => ({
       transform: {

@@ -25,8 +25,8 @@ type InputProps = {
   privateKey: number[];
 };
 
-type EncryptDataProps = { text: string; key: number[] };
-type DecryptDataProps = { text: string; key: number[] };
+type EncryptDataProps = { text: string; key: (string | number)[] };
+type DecryptDataProps = { text: string; key: (string | number)[] };
 
 class EncryptionManager {
   private getRandomBytes(): Buffer {
@@ -97,7 +97,7 @@ class EncryptionManager {
     publicKey,
     appletPrime,
     appletBase,
-  }: GetAESKeyProps): number[] => {
+  }: GetAESKeyProps) => {
     const key = crypto.createDiffieHellman(
       Buffer.from(appletPrime),
       Buffer.from(appletBase),
@@ -106,13 +106,20 @@ class EncryptionManager {
 
     const secretKey = key.computeSecret(Buffer.from(publicKey));
 
-    return Array.from(crypto.createHash('sha256').update(secretKey).digest());
+    return [...crypto.createHash('sha256').update(secretKey).digest()];
   };
 
   public encryptData = ({ text, key }: EncryptDataProps): string => {
     const CHUNK_SIZE = 10240;
     const iv: Buffer = this.getRandomBytes();
-    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
+
+    const keyBuffer = Buffer.isBuffer(key)
+      ? key
+      : Buffer.from(
+          key.map(k => (typeof k === 'number' ? k : k.charCodeAt(0))),
+        );
+
+    const cipher = crypto.createCipheriv('aes-256-cbc', keyBuffer, iv);
 
     let encrypted: Buffer = Buffer.alloc(0);
 
@@ -129,11 +136,14 @@ class EncryptionManager {
     const textParts = text.split(':');
     const iv = Buffer.from(textParts.shift()!, 'hex');
     const encryptedText = Buffer.from(textParts.join(':'), 'hex');
-    const decipher = crypto.createDecipheriv(
-      'aes-256-cbc',
-      Buffer.from(key),
-      iv,
-    );
+
+    const keyBuffer = Buffer.isBuffer(key)
+      ? key
+      : Buffer.from(
+          key.map(k => (typeof k === 'number' ? k : k.charCodeAt(0))),
+        );
+
+    const decipher = crypto.createDecipheriv('aes-256-cbc', keyBuffer, iv);
     const decrypted = decipher.update(encryptedText);
 
     try {
