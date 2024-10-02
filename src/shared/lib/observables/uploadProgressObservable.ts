@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { CommonObservable } from '../utils';
 
 export type SecondLevelStep =
@@ -25,10 +24,6 @@ export interface IUploadProgressObservableSetters {
   setCurrentSecondLevelStepKey(value: SecondLevelStep | null): Promise<void>;
   reset(): void;
 }
-
-const ShortDelay = 100;
-const MiddleDelay = 200;
-const LongFakeStepDelay = 500;
 
 class UploadProgressObservable
   extends CommonObservable
@@ -61,19 +56,13 @@ class UploadProgressObservable
 
   public async setTotalFilesInActivity(value: number | null) {
     this.uploadProgress.totalFilesInActivity = value;
-    await this.notifyAsync(value === 0 ? LongFakeStepDelay : 0);
+    this.notify();
   }
 
   public async setCurrentSecondLevelStepKey(value: SecondLevelStep | null) {
     this.uploadProgress.currentSecondLevelStepKey = value;
 
-    await this.notifyAsync(
-      value === 'upload_files' || value === 'encrypt_answers'
-        ? ShortDelay
-        : value === 'completed'
-          ? MiddleDelay
-          : 0,
-    );
+    this.notify();
   }
 
   public get totalActivities() {
