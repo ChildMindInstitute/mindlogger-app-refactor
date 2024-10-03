@@ -206,7 +206,7 @@ export const createActivityGroupsBuildManager = (
       result.groups.push(builder.buildScheduled(appletId, sortedEntityEvents));
     } catch (error) {
       logger.warn(
-        `[ActivityGroupsBuildManager.processInternal]: Build error occurred while ${logInfo}:\n\n${error as never}`,
+        `[ActivityGroupsBuildManager.processInternal]: Build error occurred while ${logInfo}:\n\n${error}`,
       );
       result.otherError = true;
     }
@@ -229,7 +229,7 @@ export const createActivityGroupsBuildManager = (
       return result;
     } catch (error) {
       logger.warn(
-        `[ActivityGroupsBuildManager.process] Error occurred\nInternal error:\n${error as never}`,
+        `[ActivityGroupsBuildManager.process] Error occurred\nInternal error:\n${error}`,
       );
       return { groups: [], otherError: true };
     }

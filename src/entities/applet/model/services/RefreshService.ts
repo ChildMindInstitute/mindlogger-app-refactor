@@ -126,7 +126,7 @@ export class RefreshService implements IRefreshService {
       this.queryClient.setQueryData(getAppletsKey(), appletsResponse);
     } catch (error) {
       this.logger.warn(
-        `[RefreshService.refreshInternal]: Error occurred during refresh flat list of applets:\nInternal error:\n\n${error as never}`,
+        `[RefreshService.refreshInternal]: Error occurred during refresh flat list of applets:\nInternal error:\n\n${error}`,
       );
       return emptyResult;
     }
@@ -142,7 +142,7 @@ export class RefreshService implements IRefreshService {
         );
     } catch (error) {
       this.logger.log(
-        `[RefreshService.refreshInternal]: Error occurred during getting all applet events:\nInternal error:\n\n${error as never}`,
+        `[RefreshService.refreshInternal]: Error occurred during getting all applet events:\nInternal error:\n\n${error}`,
       );
       return emptyResult;
     }
@@ -157,7 +157,7 @@ export class RefreshService implements IRefreshService {
       );
     } catch (error) {
       this.logger.log(
-        `[RefreshService.refreshInternal]: Error occurred during getting all applet events:\nInternal error:\n\n${error as never}`,
+        `[RefreshService.refreshInternal]: Error occurred during getting all applet events:\nInternal error:\n\n${error}`,
       );
       return emptyResult;
     }
@@ -170,7 +170,7 @@ export class RefreshService implements IRefreshService {
       appletRemoteCompletions = await this.progressDataCollector.collect();
     } catch (error) {
       this.logger.log(
-        `[RefreshService.refreshInternal]: Error occurred during getting all applets' remote completions:\nInternal error:\n\n${error as never}`,
+        `[RefreshService.refreshInternal]: Error occurred during getting all applets' remote completions:\nInternal error:\n\n${error}`,
       );
       return emptyResult;
     }
@@ -190,7 +190,7 @@ export class RefreshService implements IRefreshService {
         );
       } catch (error) {
         this.logger.warn(
-          `[RefreshService.refreshInternal]: Error occurred during refresh the applet "${appletDto.displayName}|${appletDto.id}".\nInternal error:\n\n${error as never}`,
+          `[RefreshService.refreshInternal]: Error occurred during refresh the applet "${appletDto.displayName}|${appletDto.id}".\nInternal error:\n\n${error}`,
         );
         unsuccessfulApplets.push({
           appletId: appletDto.id,
@@ -249,7 +249,7 @@ export class RefreshService implements IRefreshService {
       this.logger.log('[RefreshService.refresh]: Completed');
     } catch (error) {
       this.logger.warn(
-        `[RefreshService.process]: Error occurred:\nInternal error:\n\n${error as never}`,
+        `[RefreshService.process]: Error occurred:\nInternal error:\n\n${error}`,
       );
     } finally {
       this.mutexInstanceManager.getRefreshServiceMutex().release();

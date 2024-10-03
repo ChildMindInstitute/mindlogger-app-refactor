@@ -19,7 +19,7 @@ export const FeatureFlagsProvider: FC<PropsWithChildren> = ({ children }) => {
       client = getDefaultFeatureFlagsService().init();
     } catch (err) {
       getDefaultLogger().error(
-        `[FeatureFlagsProvider]: Failed to initialize\n${err as never}`,
+        `[FeatureFlagsProvider]: Failed to initialize\n${err}`,
       );
     }
     if (client) {
