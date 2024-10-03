@@ -1,3 +1,3 @@
-const crypto = require('../../../../crypto/crypto');
+import crypto from 'crypto-browserify';
 
 export { crypto };

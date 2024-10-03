@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+import './global'
 
 import { AppRegistry } from 'react-native';
 
