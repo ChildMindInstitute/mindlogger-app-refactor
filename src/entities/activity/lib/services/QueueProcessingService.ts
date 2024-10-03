@@ -7,10 +7,10 @@ import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
 import {
   IAnswersQueueService,
   UploadItem,
-} from '@entities/activity/lib/services/IAnswersQueueService.ts';
-import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService.ts';
-import { IQueueProcessingService } from '@entities/activity/lib/services/IQueueProcessingService.ts';
-import { IMutex } from '@shared/lib/utils/IMutex.ts';
+} from '@entities/activity/lib/services/IAnswersQueueService';
+import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService';
+import { IQueueProcessingService } from '@entities/activity/lib/services/IQueueProcessingService';
+import { IMutex } from '@shared/lib/utils/IMutex';
 
 import { UploadItemPreprocessor } from './UploadItemPreprocessor';
 import { SendAnswersInput } from '../types/uploadAnswers';

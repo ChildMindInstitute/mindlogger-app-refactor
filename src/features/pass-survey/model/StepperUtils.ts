@@ -1,4 +1,4 @@
-import { IShiftCalculator } from '@features/pass-survey/model/IShiftCalculator.ts';
+import { IShiftCalculator } from '@features/pass-survey/model/IShiftCalculator';
 
 import { PipelineVisibilityChecker } from './PipelineVisibilityChecker';
 import { ShiftCalculator } from './ShiftCalculator';

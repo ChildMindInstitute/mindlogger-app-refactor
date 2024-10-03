@@ -2,7 +2,7 @@ import { Dimensions, Platform } from 'react-native';
 
 import i18n from 'i18next';
 
-import { IMutex } from '@shared/lib/utils/IMutex.ts';
+import { IMutex } from '@shared/lib/utils/IMutex';
 
 import { IS_ANDROID, IS_IOS } from '../constants';
 import { Language } from '../types/language';

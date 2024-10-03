@@ -5,7 +5,7 @@ import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/feat
 import { getDefaultQueryClient } from '@app/shared/lib/queryClient/queryClientInstance';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { IPreprocessor } from '@app/shared/lib/types/service';
-import { UploadItem } from '@entities/activity/lib/services/IAnswersQueueService.ts';
+import { UploadItem } from '@entities/activity/lib/services/IAnswersQueueService';
 
 export class UploadItemPreprocessor implements IPreprocessor<UploadItem> {
   private queryDataUtils: QueryDataUtils;

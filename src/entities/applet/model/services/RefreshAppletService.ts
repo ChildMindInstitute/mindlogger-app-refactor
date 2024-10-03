@@ -22,15 +22,15 @@ import {
   getDataFromQuery,
   getEventsKey,
 } from '@app/shared/lib/utils/reactQueryHelpers';
-import { IAppletProgressSyncService } from '@entities/applet/model/services/IAppletProgressSyncService.ts';
-import { CollectRemoteCompletionsResult } from '@entities/applet/model/services/IProgressDataCollector.ts';
-import { IRefreshAppletService } from '@entities/applet/model/services/IRefreshAppletService.ts';
+import { IAppletProgressSyncService } from '@entities/applet/model/services/IAppletProgressSyncService';
+import { CollectRemoteCompletionsResult } from '@entities/applet/model/services/IProgressDataCollector';
+import { IRefreshAppletService } from '@entities/applet/model/services/IRefreshAppletService';
 import {
   CollectAllAppletAssignmentsResult,
   CollectAllAppletEventsResult,
   CollectAppletInternalsResult,
   IRefreshDataCollector,
-} from '@entities/applet/model/services/IRefreshDataCollector.ts';
+} from '@entities/applet/model/services/IRefreshDataCollector';
 
 import { RefreshDataCollector } from './RefreshDataCollector';
 import { RefreshOptimization } from './RefreshOptimization';

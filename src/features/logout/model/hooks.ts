@@ -16,7 +16,7 @@ import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { useTCPSocket } from '@app/shared/lib/tcp/useTCPSocket';
 import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
 import { hasPendingMutations } from '@app/shared/lib/utils/reactQueryHelpers';
-import { cleanupData } from '@features/auth/model/cleanupData.ts';
+import { cleanupData } from '@features/auth/model/cleanupData';
 
 export function useLogout() {
   const queryClient = useQueryClient();

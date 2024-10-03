@@ -3,7 +3,7 @@ import { FileLogger } from 'react-native-file-logger';
 
 import { getDefaultFileService } from '@app/shared/api/services/fileServiceInstance';
 import { IFileService } from '@app/shared/api/services/IFileService';
-import { IMutex } from '@shared/lib/utils/IMutex.ts';
+import { IMutex } from '@shared/lib/utils/IMutex';
 
 import { Logger } from './Logger';
 import { getDefaultLogger } from './loggerInstance';

@@ -11,7 +11,7 @@ import { Item } from '@app/shared/ui/survey/CheckBox/types';
 import {
   AnswerValidatorArgs,
   IAnswerValidator,
-} from '@features/pass-survey/model/IAnswerValidator.ts';
+} from '@features/pass-survey/model/IAnswerValidator';
 
 import {
   ParagraphTextResponse,

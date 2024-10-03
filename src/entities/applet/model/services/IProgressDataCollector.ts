@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 import {
   CompletedEntitiesResponse,
   EntitiesCompletionsDto,
-} from '@shared/api/services/IEventsService.ts';
+} from '@shared/api/services/IEventsService';
 
 type AppletId = string;
 

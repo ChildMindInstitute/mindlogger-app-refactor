@@ -1,5 +1,5 @@
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
-import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder.ts';
+import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
 
 import {
   ActivitySummaryData,

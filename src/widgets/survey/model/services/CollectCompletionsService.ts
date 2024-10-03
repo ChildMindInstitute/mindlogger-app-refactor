@@ -7,11 +7,11 @@ import {
 import { IncompleteEntity } from '@app/entities/applet/model/selectors';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { isEntityExpired } from '@app/shared/lib/utils/survey/survey';
-import { FinishPipelineItem } from '@widgets/survey/model/IPipelineBuilder.ts';
+import { FinishPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
 import {
   CollectCompletionOutput,
   ICollectCompletionsService,
-} from '@widgets/survey/model/services/ICollectCompletionsService.ts';
+} from '@widgets/survey/model/services/ICollectCompletionsService';
 
 import {
   getFlowRecord,

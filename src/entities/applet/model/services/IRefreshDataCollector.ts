@@ -1,13 +1,13 @@
 import { AxiosResponse } from 'axios';
 
-import { ActivityDto } from '@shared/api/services/IActivityService.ts';
+import { ActivityDto } from '@shared/api/services/IActivityService';
 import {
   AppletAssignmentsResponse,
   AppletDetailsDto,
   AppletDto,
   AppletRespondentMetaDto,
-} from '@shared/api/services/IAppletService.ts';
-import { AppletEventsResponse } from '@shared/api/services/IEventsService.ts';
+} from '@shared/api/services/IAppletService';
+import { AppletEventsResponse } from '@shared/api/services/IEventsService';
 
 type AppletId = string;
 

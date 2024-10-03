@@ -1,7 +1,7 @@
 import {
   IObservable,
   ObserverFunctionBase,
-} from '@shared/lib/utils/IObservable.ts';
+} from '@shared/lib/utils/IObservable';
 
 export class CommonObservable<
   TObserver extends ObserverFunctionBase = ObserverFunctionBase,

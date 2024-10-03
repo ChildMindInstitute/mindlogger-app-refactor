@@ -1,4 +1,4 @@
-import { SendAnswersInput } from '@entities/activity/lib/types/uploadAnswers.ts';
+import { SendAnswersInput } from '@entities/activity/lib/types/uploadAnswers';
 
 export type UploadItem = {
   input: SendAnswersInput;

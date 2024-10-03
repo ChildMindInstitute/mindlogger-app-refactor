@@ -1,10 +1,10 @@
-import { CollectRemoteCompletionsResult } from '@entities/applet/model/services/IProgressDataCollector.ts';
+import { CollectRemoteCompletionsResult } from '@entities/applet/model/services/IProgressDataCollector';
 import {
   CollectAllAppletAssignmentsResult,
   CollectAllAppletEventsResult,
-} from '@entities/applet/model/services/IRefreshDataCollector.ts';
-import { RefreshOptimization } from '@entities/applet/model/services/RefreshOptimization.ts';
-import { AppletDto } from '@shared/api/services/IAppletService.ts';
+} from '@entities/applet/model/services/IRefreshDataCollector';
+import { RefreshOptimization } from '@entities/applet/model/services/RefreshOptimization';
+import { AppletDto } from '@shared/api/services/IAppletService';
 
 export interface IRefreshAppletService {
   refreshApplet(

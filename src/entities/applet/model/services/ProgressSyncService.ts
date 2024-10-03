@@ -5,7 +5,7 @@ import {
 } from '@app/shared/api/services/IEventsService';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { buildDateTimeFromDto } from '@app/shared/lib/utils/dateTime';
-import { IAppletProgressSyncService } from '@entities/applet/model/services/IAppletProgressSyncService.ts';
+import { IAppletProgressSyncService } from '@entities/applet/model/services/IAppletProgressSyncService';
 
 import { AppletDetails } from '../../lib/types';
 import { mapAppletDetailsFromDto } from '../mappers';

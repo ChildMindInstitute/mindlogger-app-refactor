@@ -15,17 +15,17 @@ import {
   getAppletsKey,
   getCompletedEntitiesKey,
 } from '@app/shared/lib/utils/reactQueryHelpers';
-import { IAppletProgressSyncService } from '@entities/applet/model/services/IAppletProgressSyncService.ts';
+import { IAppletProgressSyncService } from '@entities/applet/model/services/IAppletProgressSyncService';
 import {
   CollectRemoteCompletionsResult,
   IProgressDataCollector,
-} from '@entities/applet/model/services/IProgressDataCollector.ts';
-import { IRefreshAppletService } from '@entities/applet/model/services/IRefreshAppletService.ts';
+} from '@entities/applet/model/services/IProgressDataCollector';
+import { IRefreshAppletService } from '@entities/applet/model/services/IRefreshAppletService';
 import {
   CollectAllAppletAssignmentsResult,
   CollectAllAppletEventsResult,
   IRefreshDataCollector,
-} from '@entities/applet/model/services/IRefreshDataCollector.ts';
+} from '@entities/applet/model/services/IRefreshDataCollector';
 
 import { ProgressDataCollector } from './ProgressDataCollector';
 import { RefreshAppletService } from './RefreshAppletService';

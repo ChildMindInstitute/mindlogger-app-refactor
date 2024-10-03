@@ -1,7 +1,7 @@
 import {
   IShiftCalculator,
   IStepSkipper,
-} from '@features/pass-survey/model/IShiftCalculator.ts';
+} from '@features/pass-survey/model/IShiftCalculator';
 
 export class ShiftCalculator implements IShiftCalculator {
   private skipper: IStepSkipper;

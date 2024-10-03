@@ -22,7 +22,7 @@ import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
-import { CollectCompletionOutput } from '@widgets/survey/model/services/ICollectCompletionsService.ts';
+import { CollectCompletionOutput } from '@widgets/survey/model/services/ICollectCompletionsService';
 
 import { CollectCompletionsService } from '../services/CollectCompletionsService';
 import { ConstructCompletionsService } from '../services/ConstructCompletionsService';

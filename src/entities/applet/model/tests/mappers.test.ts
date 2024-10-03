@@ -18,7 +18,7 @@ import {
   mappedAnalyticsWithEmptyAnswers,
   mappedApplets,
   appletThemeWithEmptyImages,
-} from './mappers.output.mock.ts';
+} from './mappers.output.mock';
 import {
   mapDtoToRespondentMeta,
   mapAppletDtoToAppletVersion,
@@ -27,7 +27,7 @@ import {
   mapThemeFromDto,
   mapActivitiesFromDto,
   mapAppletAnalytics,
-} from '../mappers.ts';
+} from '../mappers';
 
 describe('Applet entity mappers tests', () => {
   it('Should return mapped result for respondent meta', async () => {

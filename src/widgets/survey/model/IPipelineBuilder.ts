@@ -1,4 +1,4 @@
-import { FlowProgressActivity } from '@app/abstract/lib/types/entity.ts';
+import { FlowProgressActivity } from '@app/abstract/lib/types/entity';
 
 type FlowPipelineType = 'Stepper' | 'Intermediate' | 'Summary' | 'Finish';
 

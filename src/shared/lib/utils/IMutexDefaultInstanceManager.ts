@@ -1,4 +1,4 @@
-import { IMutex } from '@shared/lib/utils/IMutex.ts';
+import { IMutex } from '@shared/lib/utils/IMutex';
 
 export interface IMutexDefaultInstanceManager {
   getRefreshServiceMutex: () => IMutex;

@@ -4,13 +4,13 @@ import { CachedImage } from '@georstat/react-native-image-cache';
 import { XStack } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib/constants/colors.ts';
-import { BackButton } from '@app/shared/ui/BackButton.tsx';
-import { Box } from '@app/shared/ui/base.ts';
-import { ListSeparator } from '@app/shared/ui/ListSeparator.tsx';
-import { Text } from '@app/shared/ui/Text.tsx';
+import { colors } from '@app/shared/lib/constants/colors';
+import { BackButton } from '@app/shared/ui/BackButton';
+import { Box } from '@app/shared/ui/base';
+import { ListSeparator } from '@app/shared/ui/ListSeparator';
+import { Text } from '@app/shared/ui/Text';
 
-import { HeaderProgress } from './HeaderProgress.tsx';
+import { HeaderProgress } from './HeaderProgress';
 
 type Props = {
   showWatermark: boolean;

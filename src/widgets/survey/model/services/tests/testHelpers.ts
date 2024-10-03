@@ -18,7 +18,7 @@ import {
 } from '@app/shared/api/services/IAnswerService';
 import { FlowState } from '@app/widgets/survey/lib/useFlowStorageRecord';
 import * as dateTimeUtils from '@shared/lib/utils/dateTime';
-import { CollectCompletionOutput } from '@widgets/survey/model/services/ICollectCompletionsService.ts';
+import { CollectCompletionOutput } from '@widgets/survey/model/services/ICollectCompletionsService';
 
 import * as metaHelpers from '../../../lib/metaHelpers';
 import * as storageHelpers from '../../../lib/storageHelpers';

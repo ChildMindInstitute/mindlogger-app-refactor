@@ -14,7 +14,7 @@ import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadOb
 import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ImageBackground } from '@app/shared/ui/ImageBackground';
-import { FinishReason } from '@widgets/survey/model/IPipelineBuilder.ts';
+import { FinishReason } from '@widgets/survey/model/IPipelineBuilder';
 
 import { AnswersSubmitted } from './completion/AnswersSubmitted';
 import { SubScreenContainer } from './completion/containers';

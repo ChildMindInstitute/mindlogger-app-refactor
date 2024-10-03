@@ -14,7 +14,7 @@ import { IEncryptionManager } from '@app/shared/lib/encryption/IEncryptionManage
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
-import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService.ts';
+import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService';
 
 import { SendAnswersInput } from '../../types/uploadAnswers';
 import { AnswersUploadService } from '../AnswersUploadService';

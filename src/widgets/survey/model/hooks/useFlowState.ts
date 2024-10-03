@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder.ts';
+import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
 
 import {
   FlowSummaryData,

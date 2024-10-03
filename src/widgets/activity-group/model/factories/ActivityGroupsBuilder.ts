@@ -1,5 +1,5 @@
 import { ActivityListItem } from '@app/entities/activity/lib/types/activityListItem';
-import { IActivityGroupsBuilder } from '@widgets/activity-group/model/factories/IActivityGroupsBuilder.ts';
+import { IActivityGroupsBuilder } from '@widgets/activity-group/model/factories/IActivityGroupsBuilder';
 
 import { AvailableGroupEvaluator } from './AvailableGroupEvaluator';
 import { GroupUtility } from './GroupUtility';

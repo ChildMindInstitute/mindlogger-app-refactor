@@ -31,7 +31,7 @@ import {
   isEntityExpired,
   getEntityProgression,
 } from '@app/shared/lib/utils/survey/survey';
-import { IQueueProcessingService } from '@entities/activity/lib/services/IQueueProcessingService.ts';
+import { IQueueProcessingService } from '@entities/activity/lib/services/IQueueProcessingService';
 
 import { getClientInformation } from '../../lib/metaHelpers';
 import {

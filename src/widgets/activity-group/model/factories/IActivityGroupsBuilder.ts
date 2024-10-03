@@ -1,5 +1,5 @@
-import { ActivityListGroup } from '@widgets/activity-group/lib/types/activityGroup.ts';
-import { EventEntity } from '@widgets/activity-group/lib/types/activityGroupsBuilder.ts';
+import { ActivityListGroup } from '@widgets/activity-group/lib/types/activityGroup';
+import { EventEntity } from '@widgets/activity-group/lib/types/activityGroupsBuilder';
 
 export interface IActivityGroupsBuilder {
   buildInProgress: (

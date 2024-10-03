@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import { MMKV } from 'react-native-mmkv';
 
-import { UploadItem } from '@entities/activity/lib/services/IAnswersQueueService.ts';
+import { UploadItem } from '@entities/activity/lib/services/IAnswersQueueService';
 
 import { AnswersQueueService } from '../AnswersQueueService';
 

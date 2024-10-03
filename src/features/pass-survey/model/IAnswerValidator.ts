@@ -1,5 +1,5 @@
-import { Answers } from '@features/pass-survey/lib/hooks/useActivityStorageRecord.ts';
-import { PipelineItem } from '@features/pass-survey/lib/types/payload.ts';
+import { Answers } from '@features/pass-survey/lib/hooks/useActivityStorageRecord';
+import { PipelineItem } from '@features/pass-survey/lib/types/payload';
 
 export type AnswerValidatorArgs = {
   items: PipelineItem[];

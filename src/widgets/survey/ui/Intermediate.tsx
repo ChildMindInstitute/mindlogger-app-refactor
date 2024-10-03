@@ -16,7 +16,7 @@ import { getDefaultInterimSubmitMutex } from '@app/shared/lib/mutexes/interimSub
 import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
 import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
-import { StepperPipelineItem } from '@widgets/survey/model/IPipelineBuilder.ts';
+import { StepperPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
 
 import { SubScreenContainer } from './completion/containers';
 import { IntermediateSubmit } from './completion/IntermediateSubmit';

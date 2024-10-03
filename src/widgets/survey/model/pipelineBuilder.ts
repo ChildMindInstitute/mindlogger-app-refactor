@@ -3,7 +3,7 @@ import {
   BuildPipelineArgs,
   FlowPipelineItem,
   HasSummary,
-} from '@widgets/survey/model/IPipelineBuilder.ts';
+} from '@widgets/survey/model/IPipelineBuilder';
 
 export function buildActivityFlowPipeline({
   appletId,

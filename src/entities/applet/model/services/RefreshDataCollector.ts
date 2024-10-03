@@ -22,7 +22,7 @@ import {
   CollectAppletDetailsResult,
   CollectAppletInternalsResult,
   IRefreshDataCollector,
-} from '@entities/applet/model/services/IRefreshDataCollector.ts';
+} from '@entities/applet/model/services/IRefreshDataCollector';
 
 export class RefreshDataCollector implements IRefreshDataCollector {
   private logger: ILogger;

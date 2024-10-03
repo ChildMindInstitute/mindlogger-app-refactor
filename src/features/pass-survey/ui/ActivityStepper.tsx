@@ -8,33 +8,33 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
-import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery.ts';
-import { HourMinute } from '@app/shared/lib/types/dateTime.ts';
-import { isIphoneX } from '@app/shared/lib/utils/common.ts';
-import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator.tsx';
-import { Box, XStack } from '@app/shared/ui/base.ts';
-import { Center } from '@app/shared/ui/Center.tsx';
-import { StatusBar } from '@app/shared/ui/StatusBar.tsx';
+import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
+import { isIphoneX } from '@app/shared/lib/utils/common';
+import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
+import { Box, XStack } from '@app/shared/ui/base';
+import { Center } from '@app/shared/ui/Center';
+import { StatusBar } from '@app/shared/ui/StatusBar';
 import {
   OnBeforeNextResult,
   Stepper,
   StepperPayload,
-} from '@app/shared/ui/Stepper/index.tsx';
-import { TimeRemaining } from '@app/shared/ui/TimeRemaining.tsx';
+} from '@app/shared/ui/Stepper';
+import { TimeRemaining } from '@app/shared/ui/TimeRemaining';
 
 import { ActivityItem } from './ActivityItem';
-import { Header } from './Header.tsx';
+import { Header } from './Header';
 import { ProgressWithTimer } from './ProgressWithTimer';
 import { TutorialViewerItem, TutorialViewerRef } from './TutorialViewerItem';
-import { fetchSkipActivityUserConfirmation } from '../lib/alerts.ts';
-import { ActivityIdentityContext } from '../lib/contexts/ActivityIdentityContext.ts';
-import { useTextVariablesReplacer } from '../lib/hooks/useTextVariablesReplacer.ts';
-import { SkipService } from '../lib/services/SkipService.ts';
-import { FlankerResponse } from '../lib/types/payload.ts';
+import { fetchSkipActivityUserConfirmation } from '../lib/alerts';
+import { ActivityIdentityContext } from '../lib/contexts/ActivityIdentityContext';
+import { useTextVariablesReplacer } from '../lib/hooks/useTextVariablesReplacer';
+import { SkipService } from '../lib/services/SkipService';
+import { FlankerResponse } from '../lib/types/payload';
 import { evaluateFlankerNextStep } from '../model/flankerNextStepEvaluator';
-import { useActivityState } from '../model/hooks/useActivityState.ts';
-import { useActivityStepper } from '../model/hooks/useActivityStepper.ts';
-import { useIdleTimer } from '../model/hooks/useIdleTimer.ts';
+import { useActivityState } from '../model/hooks/useActivityState';
+import { useActivityStepper } from '../model/hooks/useActivityStepper';
+import { useIdleTimer } from '../model/hooks/useIdleTimer';
 
 type Props = {
   idleTimer: HourMinute | null;

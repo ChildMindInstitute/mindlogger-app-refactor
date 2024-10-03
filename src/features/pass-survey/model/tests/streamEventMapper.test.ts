@@ -13,8 +13,8 @@ import {
   FlankerAndroidOutput,
   FlankerIOSInput,
   FlankerIOSOutput,
-} from './streamEventMapper.input.mock.ts';
-import { mapStreamEventToDto } from '../streamEventMapper.ts';
+} from './streamEventMapper.input.mock';
+import { mapStreamEventToDto } from '../streamEventMapper';
 
 describe('Pass survey mapStreamEventToDto', () => {
   let isAndroid: boolean;

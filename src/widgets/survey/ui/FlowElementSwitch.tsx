@@ -14,7 +14,7 @@ import { colors } from '@app/shared/lib/constants/colors';
 import { BackButton } from '@app/shared/ui/BackButton';
 import { Box } from '@app/shared/ui/base';
 import { CrossIcon } from '@app/shared/ui/icons';
-import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder.ts';
+import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
 
 import { FinishItem } from './Finish';
 import { Intermediate } from './Intermediate';

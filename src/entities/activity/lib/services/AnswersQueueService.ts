@@ -3,8 +3,8 @@ import { MMKV } from 'react-native-mmkv';
 import {
   IAnswersQueueService,
   UploadItem,
-} from '@entities/activity/lib/services/IAnswersQueueService.ts';
-import { IObservable } from '@shared/lib/utils/IObservable.ts';
+} from '@entities/activity/lib/services/IAnswersQueueService';
+import { IObservable } from '@shared/lib/utils/IObservable';
 
 const StartKey = '1';
 

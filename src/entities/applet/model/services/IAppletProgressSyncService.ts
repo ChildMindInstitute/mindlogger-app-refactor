@@ -1,5 +1,5 @@
-import { AppletDto } from '@shared/api/services/IAppletService.ts';
-import { EntitiesCompletionsDto } from '@shared/api/services/IEventsService.ts';
+import { AppletDto } from '@shared/api/services/IAppletService';
+import { EntitiesCompletionsDto } from '@shared/api/services/IEventsService';
 
 export interface IAppletProgressSyncService {
   sync(

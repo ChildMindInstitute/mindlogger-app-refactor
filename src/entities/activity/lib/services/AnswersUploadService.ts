@@ -22,7 +22,7 @@ import {
 } from '@app/shared/lib/utils/dateTime';
 import { isLocalFileUrl } from '@app/shared/lib/utils/file';
 import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
-import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService.ts';
+import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService';
 
 import { IMediaFilesCleaner } from './IMediaFilesCleaner';
 import {

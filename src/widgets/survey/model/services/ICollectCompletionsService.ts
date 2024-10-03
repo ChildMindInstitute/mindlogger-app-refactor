@@ -1,7 +1,4 @@
-import {
-  EntityPath,
-  EntityPathParams,
-} from '@app/abstract/lib/types/entity.ts';
+import { EntityPath, EntityPathParams } from '@app/abstract/lib/types/entity';
 
 export type CollectCompletionOutput = {
   appletId: string;

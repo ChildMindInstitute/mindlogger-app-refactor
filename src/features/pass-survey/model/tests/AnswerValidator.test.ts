@@ -1,5 +1,5 @@
 import { ConditionType } from '@app/entities/activity/lib/types/conditionalLogic';
-import { IAnswerValidator } from '@features/pass-survey/model/IAnswerValidator.ts';
+import { IAnswerValidator } from '@features/pass-survey/model/IAnswerValidator';
 
 import { getEmptySliderItem, getTimeRangeItem } from './testHelpers';
 import { Answers } from '../../lib/hooks/useActivityStorageRecord';

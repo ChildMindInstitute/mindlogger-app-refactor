@@ -5,7 +5,7 @@ import {
   CollectForAppletResult,
   CollectRemoteCompletionsResult,
   IProgressDataCollector,
-} from '@entities/applet/model/services/IProgressDataCollector.ts';
+} from '@entities/applet/model/services/IProgressDataCollector';
 
 export class ProgressDataCollector implements IProgressDataCollector {
   private logger: ILogger;
