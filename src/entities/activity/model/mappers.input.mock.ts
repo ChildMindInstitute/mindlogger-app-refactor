@@ -10,7 +10,7 @@ const basicAppletDetails = {
   isSkippable: false,
   isReviewable: false,
   isHidden: false,
-  autoAssign: false,
+  autoAssign: true,
   responseIsEditable: true,
   order: 2,
   scoresAndReports: {
@@ -640,7 +640,7 @@ export const conditionalInput: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   isHidden: false,
-  autoAssign: false,
+  autoAssign: true,
   responseIsEditable: true,
   order: 2,
   items: [
