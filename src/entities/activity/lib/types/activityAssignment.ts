@@ -9,19 +9,19 @@ export type AssignmentParticipant = {
   lastSeen: string | null;
 };
 
-type AssginmentBase = {
+type AssignmentBase = {
   id: string;
   __type: 'activity' | 'activityFlow';
   respondent: AssignmentParticipant;
   target: AssignmentParticipant;
 };
 
-export type ActivityAssignment = AssginmentBase & {
+export type ActivityAssignment = AssignmentBase & {
   __type: 'activity';
   activityId: string;
 };
 
-export type ActivityFlowAssignment = AssginmentBase & {
+export type ActivityFlowAssignment = AssignmentBase & {
   __type: 'activityFlow';
   activityFlowId: string;
 };
