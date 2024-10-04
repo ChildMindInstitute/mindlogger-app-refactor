@@ -141,7 +141,7 @@ export const createNotificationRefreshService = (
         const entity = idToEntity[event.entityId];
 
         if (entity) {
-          let entityAssignments: Assignment[] = [];
+          let entityAssignments: Assignment[];
           if (entity.pipelineType === ActivityPipelineType.Flow) {
             entityAssignments = assignments.filter(
               _assignment =>

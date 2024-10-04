@@ -127,76 +127,69 @@ export const createActivityGroupsBuildManager = (
       FeatureFlagsKeys.enableActivityAssign,
     );
 
-    const entityEvents = events
-      .reduce((acc, event) => {
-        const entity = idToEntity[event.entityId];
+    const entityEvents: EventEntity[] = [];
+    for (const event of events) {
+      const entity = idToEntity[event.entityId];
+      if (!entity || entity.isHidden) {
+        continue;
+      }
 
-        if (entity) {
-          if (enableActivityAssign) {
-            let entityAssignments: Assignment[] = [];
-            if (entity.pipelineType === ActivityPipelineType.Flow) {
-              entityAssignments = assignments.filter(
-                _assignment =>
-                  _assignment.__type === 'activityFlow' &&
-                  _assignment.activityFlowId === entity.id,
-              );
-            } else {
-              entityAssignments = assignments.filter(
-                _assignment =>
-                  _assignment.__type === 'activity' &&
-                  _assignment.activityId === entity.id,
-              );
-            }
+      event.scheduledAt = scheduledDateCalculator.calculate(event);
+      if (!event.scheduledAt) {
+        logger.info(
+          `[ScheduledDateCalculator.calculate]: result is null, entity|event = "${entity.name}|${event.id}"`,
+        );
+        continue;
+      }
 
-            // If the entity is auto-assigned, always include an entry for it.
-            if (entity.autoAssign) {
-              acc.push({ entity, event, assignment: null });
-            }
-
-            for (const assignment of entityAssignments) {
-              const isSelfAssign =
-                assignment.target.id === assignment.respondent.id;
-
-              if (entity.autoAssign) {
-                if (isSelfAssign) {
-                  // Skip entities that are both auto-assign and self-assigned
-                  // to avoid duplicating the auto-assign entry above.
-                } else {
-                  // Include entities that are auto-assign and have manual
-                  // assignment for someone else.
-                  acc.push({ entity, event, assignment });
-                }
-              } else {
-                if (isSelfAssign) {
-                  // Include entities that are manual-assign and self-assigned.
-                  acc.push({ entity, event, assignment: null });
-                } else {
-                  // Include entities that are manual-assigned to someone else.
-                  acc.push({ entity, event, assignment });
-                }
-              }
-            }
-          } else {
-            acc.push({ entity, event, assignment: null });
-          }
-        }
-
-        return acc;
-      }, [] as EventEntity[])
-      .map(entityEvent => {
-        const date = scheduledDateCalculator.calculate(entityEvent.event);
-        entityEvent.event.scheduledAt = date;
-
-        if (!date) {
-          logger.info(
-            `[ScheduledDateCalculator.calculate]: result is null, entity|event = "${entityEvent.entity.name}|${entityEvent.event.id}"`,
+      if (enableActivityAssign) {
+        let entityAssignments: Assignment[];
+        if (entity.pipelineType === ActivityPipelineType.Flow) {
+          entityAssignments = assignments.filter(
+            _assignment =>
+              _assignment.__type === 'activityFlow' &&
+              _assignment.activityFlowId === entity.id,
+          );
+        } else {
+          entityAssignments = assignments.filter(
+            _assignment =>
+              _assignment.__type === 'activity' &&
+              _assignment.activityId === entity.id,
           );
         }
 
-        return entityEvent;
-      })
-      .filter(x => x.event.scheduledAt)
-      .filter(x => !x.entity.isHidden);
+        // If the entity is auto-assigned, always include an entry for it.
+        if (entity.autoAssign) {
+          entityEvents.push({ entity, event, assignment: null });
+        }
+
+        for (const assignment of entityAssignments) {
+          const isSelfAssign =
+            assignment.target.id === assignment.respondent.id;
+
+          if (entity.autoAssign) {
+            if (isSelfAssign) {
+              // Skip entities that are both auto-assign and self-assigned
+              // to avoid duplicating the auto-assign entry above.
+            } else {
+              // Include entities that are auto-assign and have manual
+              // assignment for someone else.
+              entityEvents.push({ entity, event, assignment });
+            }
+          } else {
+            if (isSelfAssign) {
+              // Include entities that are manual-assign and self-assigned.
+              entityEvents.push({ entity, event, assignment: null });
+            } else {
+              // Include entities that are manual-assigned to someone else.
+              entityEvents.push({ entity, event, assignment });
+            }
+          }
+        }
+      } else {
+        entityEvents.push({ entity, event, assignment: null });
+      }
+    }
 
     const sortedEntityEvents = sort(entityEvents);
 
