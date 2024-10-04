@@ -147,20 +147,33 @@ export const createActivityGroupsBuildManager = (
                   _assignment.activityId === entity.id,
               );
             }
-            if (entityAssignments.length <= 0) {
+
+            // If the entity is auto-assigned, always include an entry for it.
+            if (entity.autoAssign) {
+              acc.push({ entity, event, assignment: null });
+            }
+
+            for (const assignment of entityAssignments) {
+              const isSelfAssign =
+                assignment.target.id === assignment.respondent.id;
+
               if (entity.autoAssign) {
-                // If there is no manual assignment for this entity,
-                // and if the entity has "auto assign: ON",
-                // then include the entity in the list.
-                acc.push({ entity, event, assignment: null });
+                if (isSelfAssign) {
+                  // Skip entities that are both auto-assign and self-assigned
+                  // to avoid duplicating the auto-assign entry above.
+                } else {
+                  // Include entities that are auto-assign and have manual
+                  // assignment for someone else.
+                  acc.push({ entity, event, assignment });
+                }
               } else {
-                // If there is no manual assignment for this entity,
-                // and if the entity has "auto assign: OFF",
-                // then exclude the entity from the list.
-              }
-            } else {
-              for (const assignment of entityAssignments) {
-                acc.push({ entity, event, assignment });
+                if (isSelfAssign) {
+                  // Include entities that are manual-assign and self-assigned.
+                  acc.push({ entity, event, assignment: null });
+                } else {
+                  // Include entities that are manual-assigned to someone else.
+                  acc.push({ entity, event, assignment });
+                }
               }
             }
           } else {
