@@ -123,9 +123,9 @@ export const createActivityGroupsBuildManager = (
 
     const idToEntity = buildIdToEntityMap(activities, activityFlows);
 
-    const enableActivityAssign = featureFlagsService.evaluateFlag(
-      FeatureFlagsKeys.enableActivityAssign,
-    );
+    const enableActivityAssign =
+      featureFlagsService.evaluateFlag(FeatureFlagsKeys.enableActivityAssign) ||
+      parseInt('1', 10) === 1;
 
     const entityEvents: EventEntity[] = [];
     for (const event of events) {

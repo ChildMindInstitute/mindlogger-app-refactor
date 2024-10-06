@@ -7,7 +7,7 @@ import { YStack } from './base';
 import { MarkdownView } from './MarkdownView';
 import { ScrollView } from './ScrollView';
 import { colors } from '../lib/constants/colors';
-import { activityMarkDownStyles, markDownRules } from '../lib/markDownRules';
+import { activityMarkDownStyles, markDownRules } from '../lib/markdown/rules';
 
 type TooltipProps = {
   children: React.ReactNode;

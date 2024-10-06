@@ -7,7 +7,7 @@ import Markdown, {
   MarkdownIt,
 } from 'react-native-markdown-display';
 
-import { preprocessImageLinks } from '../lib/markDownRules';
+import { preprocessImageLinks } from '../lib/markdown/rules';
 
 const markdownItInstance = MarkdownIt({
   html: true,

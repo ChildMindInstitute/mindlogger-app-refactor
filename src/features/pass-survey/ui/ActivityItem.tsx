@@ -5,6 +5,8 @@ import React, {
   useState,
 } from 'react';
 
+import { RenderFunction } from 'react-native-markdown-display';
+
 import { AbTest } from '@app/entities/abTrail/ui/AbTest';
 import { useActivityAssignment } from '@app/entities/activity/lib/hooks/useActivityAssignment';
 import { ActivityAssignmentBadge } from '@app/entities/activity/ui/ActivityAssignmentBadge';
@@ -42,6 +44,8 @@ import { StackedCheckboxItem } from '@app/shared/ui/survey/StackedCheckboxItem/S
 import { StackedRadios } from '@app/shared/ui/survey/StackedRadioItem/StackedRadiosItem';
 import { TimePickerItem } from '@app/shared/ui/survey/TimePickerItem';
 import { TimeRangeItem } from '@app/shared/ui/survey/TimeRangeItem';
+import { markDownRules } from '@shared/lib/markdown/rules';
+import { insertAfterMedia } from '@shared/lib/markdown/utils';
 
 import { AdditionalText } from './AdditionalText';
 import { ActivityIdentityContext } from '../lib/contexts/ActivityIdentityContext';
@@ -446,23 +450,45 @@ export function ActivityItem({
           }
         }}
       >
-        {assignment && assignment.respondent.id !== assignment.target.id && (
-          <XStack mx={16} mb={12}>
-            <ActivityAssignmentBadge
-              assignment={assignment}
-              accessibilityLabel="item_display_assignment"
-            />
-            <Box flexGrow={1} flexShrink={1} />
-          </XStack>
-        )}
-
         {question && (
           <Box mx={16} mb={20}>
             <MarkdownMessage
               accessibilityLabel="item_display_content"
               flex={1}
               alignItems={alignMessageToLeft ? undefined : 'center'}
-              content={textVariableReplacer(question)}
+              content={
+                assignment && assignment.respondent.id !== assignment.target.id
+                  ? insertAfterMedia(
+                      textVariableReplacer(question),
+                      `<div data-is-assignment-badge />`,
+                    )
+                  : textVariableReplacer(question)
+              }
+              rules={{
+                html_block: (...args: Parameters<RenderFunction>) => {
+                  const [node] = args;
+
+                  if (
+                    assignment &&
+                    node.content.match(/ata-is-assignment-badge/)
+                  ) {
+                    return (
+                      <XStack mb={12}>
+                        {alignMessageToLeft ? null : (
+                          <Box flexGrow={1} flexShrink={1} />
+                        )}
+                        <ActivityAssignmentBadge
+                          assignment={assignment}
+                          accessibilityLabel="item_display_assignment"
+                        />
+                        <Box flexGrow={1} flexShrink={1} />
+                      </XStack>
+                    );
+                  }
+
+                  return (markDownRules.html_block as RenderFunction)(...args);
+                },
+              }}
             />
           </Box>
         )}

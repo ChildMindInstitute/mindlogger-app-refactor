@@ -12,12 +12,12 @@ import {
 import * as mime from 'react-native-mime-types';
 import sanitizeHtml from 'sanitize-html';
 
-import { colors } from './constants/colors';
-import { Box, XStack } from '../ui/base';
-import { AudioPlayer } from '../ui/survey/AudioPlayer';
-import { VideoPlayer } from '../ui/survey/VideoPlayer';
-import { YoutubeVideo } from '../ui/survey/YoutubeVideo';
-import { Text } from '../ui/Text';
+import { Box, XStack } from '../../ui/base';
+import { AudioPlayer } from '../../ui/survey/AudioPlayer';
+import { VideoPlayer } from '../../ui/survey/VideoPlayer';
+import { YoutubeVideo } from '../../ui/survey/YoutubeVideo';
+import { Text } from '../../ui/Text';
+import { colors } from '../constants/colors';
 
 const { width: viewPortWidth } = Dimensions.get('window');
 const PADDING_X = 32;
