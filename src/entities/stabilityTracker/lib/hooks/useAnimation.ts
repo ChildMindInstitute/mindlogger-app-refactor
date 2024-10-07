@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import { TASK_LOOP_RATE } from '../constants';
 
-const useAnimation = (
+export const useAnimation = (
   callback: (a: number, b: number, c: number) => void,
   running = false,
 ) => {
@@ -44,5 +44,3 @@ const useAnimation = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [running]);
 };
-
-export default useAnimation;

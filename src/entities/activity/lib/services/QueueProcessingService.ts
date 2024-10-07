@@ -1,39 +1,28 @@
+import { IUploadObservable } from '@app/shared/lib/observables/IUploadObservable';
+import { IUploadProgressObservable } from '@app/shared/lib/observables/IUploadProgressObservable';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { IPreprocessor } from '@app/shared/lib/types/service';
+import { Mutex, wait } from '@app/shared/lib/utils/common';
+import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
 import {
-  ILogger,
-  IMutex,
-  Logger,
-  Mutex,
-  isAppOnline,
-  wait,
-  IUploadObservableSetters,
-  UploadObservable,
-  IUploadProgressObservableSetters,
-  UploadProgressObservable,
-  IPreprocessor,
-} from '@app/shared/lib';
-
-import AnswersQueueService, {
   IAnswersQueueService,
   UploadItem,
-} from './AnswersQueueService';
-import AnswersUploadService, {
-  IAnswersUploadService,
-} from './AnswersUploadService';
-import UploadItemPreprocessor from './UploadItemPreprocessor';
-import { SendAnswersInput } from '../types';
+} from '@entities/activity/lib/services/IAnswersQueueService';
+import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService';
+import { IQueueProcessingService } from '@entities/activity/lib/services/IQueueProcessingService';
+import { IMutex } from '@shared/lib/utils/IMutex';
 
-export interface IPushToQueue {
-  push(input: SendAnswersInput): void;
-}
+import { UploadItemPreprocessor } from './UploadItemPreprocessor';
+import { SendAnswersInput } from '../types/uploadAnswers';
 
-class QueueProcessingService implements IPushToQueue {
+export class QueueProcessingService implements IQueueProcessingService {
   private queueService: IAnswersQueueService;
 
   private uploadService: IAnswersUploadService;
 
-  private uploadStatusObservable: IUploadObservableSetters;
+  private uploadStatusObservable: IUploadObservable;
 
-  private uploadProgressObservable: IUploadProgressObservableSetters;
+  private uploadProgressObservable: IUploadProgressObservable;
 
   private mutex: IMutex;
 
@@ -42,9 +31,10 @@ class QueueProcessingService implements IPushToQueue {
   private itemPreprocessor: IPreprocessor<UploadItem>;
 
   constructor(
-    updateObservable: IUploadObservableSetters,
-    uploadProgressObservable: IUploadProgressObservableSetters,
+    updateObservable: IUploadObservable,
+    uploadProgressObservable: IUploadProgressObservable,
     queueService: IAnswersQueueService,
+    uploadService: IAnswersUploadService,
     logger: ILogger,
   ) {
     this.uploadStatusObservable = updateObservable;
@@ -53,7 +43,7 @@ class QueueProcessingService implements IPushToQueue {
 
     this.queueService = queueService;
 
-    this.uploadService = AnswersUploadService;
+    this.uploadService = uploadService;
 
     this.logger = logger;
 
@@ -158,10 +148,3 @@ class QueueProcessingService implements IPushToQueue {
     this.queueService.enqueue({ input });
   }
 }
-
-export default new QueueProcessingService(
-  UploadObservable,
-  UploadProgressObservable,
-  AnswersQueueService,
-  Logger,
-);

@@ -1,11 +1,9 @@
-import { Answer } from '@app/features/pass-survey';
+import { Answer } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import {
   AnalyticsResponseType,
-  AppletEncryptionDTO,
   ResponseConfig,
-} from '@shared/api';
-
-type Integration = 'loris';
+} from '@app/shared/api/services/AppletAnalyticsDto';
+import { AppletEncryptionDTO } from '@app/shared/api/services/IAppletService';
 
 export type AppletTheme = {
   logo: string;
@@ -81,12 +79,6 @@ export type ActivityResponses = {
 export type AppletAnalytics = {
   id: string;
   activitiesResponses: Array<ActivityResponses> | null;
-};
-
-export type CompletedEntity = {
-  entityId: string;
-  eventId: string;
-  endAt: number;
 };
 
 export type AppletVersion = {

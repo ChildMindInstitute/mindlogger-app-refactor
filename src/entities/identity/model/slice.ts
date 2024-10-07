@@ -25,8 +25,8 @@ const identitySlice = createSlice({
   },
 });
 
-export const actions = {
+export const identityActions = {
   ...identitySlice.actions,
 };
 
-export const reducer = identitySlice.reducer;
+export const identityReducer = identitySlice.reducer;

@@ -1,14 +1,14 @@
-import { createSecureStorage } from '@shared/lib';
+import { MMKV } from 'react-native-mmkv';
 
-const storage = createSecureStorage('user-private-key');
+import { IUserPrivateKeyRecord, PrivateKey } from './IUserPrivateKeyRecord';
 
 const storeKey = 'private-key';
 
-type PrivateKey = number[];
-
-function UserPrivateKeyRecord() {
+export function UserPrivateKeyRecord(
+  userPrivateKeyStorage: MMKV,
+): IUserPrivateKeyRecord {
   function get(): PrivateKey | undefined {
-    const value = storage.getString(storeKey);
+    const value = userPrivateKeyStorage.getString(storeKey);
 
     if (value) {
       return JSON.parse(value);
@@ -16,11 +16,11 @@ function UserPrivateKeyRecord() {
   }
 
   function set(privateKey: PrivateKey) {
-    storage.set(storeKey, JSON.stringify(privateKey));
+    userPrivateKeyStorage.set(storeKey, JSON.stringify(privateKey));
   }
 
   function clear() {
-    return storage.delete(storeKey);
+    return userPrivateKeyStorage.delete(storeKey);
   }
 
   return {
@@ -29,5 +29,3 @@ function UserPrivateKeyRecord() {
     clear,
   };
 }
-
-export default UserPrivateKeyRecord();

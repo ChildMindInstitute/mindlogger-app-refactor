@@ -1,13 +1,14 @@
-import { Box, Text, YStack } from '@shared/ui';
+import { Box, YStack } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 
-import Score, { Props as ScoreProps } from './Score';
+import { Score, Props as ScoreProps } from './Score';
 
 type Props = {
   label: string;
   scores: ScoreProps[];
 };
 
-function ScoreList({ label, scores }: Props) {
+export function ScoreList({ label, scores }: Props) {
   return (
     <Box btw={1} btc="$lighterGrey0" px={20} accessibilityLabel="scores-group">
       <Text
@@ -33,5 +34,3 @@ function ScoreList({ label, scores }: Props) {
     </Box>
   );
 }
-
-export default ScoreList;

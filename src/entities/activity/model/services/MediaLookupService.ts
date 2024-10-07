@@ -1,9 +1,12 @@
-import { LookupEntityInput } from '@app/abstract/lib';
-import { ActivityDetails } from '@app/entities/activity';
+import { LookupEntityInput } from '@app/abstract/lib/types/entity';
 
-import EntityActivitiesCollector from './EntityActivitiesCollector';
+import { IEntityActivitiesCollector } from './IEntityActivitiesCollector';
+import { IMediaLookupService } from './IMediaLookupService';
+import { ActivityDetails } from '../../lib/types/activity';
 
-const createMediaLookupService = () => {
+export const createMediaLookupService = (
+  entityActivitiesCollector: IEntityActivitiesCollector,
+): IMediaLookupService => {
   const lookupInMarkdown = (message: string): boolean => {
     const videoFound = message.includes('<video');
     const audioFound = message.includes('<audio');
@@ -22,7 +25,7 @@ const createMediaLookupService = () => {
 
   const lookup = (lookupInput: LookupEntityInput): boolean => {
     const activitiesToLookup: ActivityDetails[] =
-      EntityActivitiesCollector.collect(lookupInput);
+      entityActivitiesCollector.collect(lookupInput);
 
     return activitiesToLookup.some(activity => {
       return lookupInActivity(activity);
@@ -33,5 +36,3 @@ const createMediaLookupService = () => {
     hasMediaReferences: lookup,
   };
 };
-
-export default createMediaLookupService();

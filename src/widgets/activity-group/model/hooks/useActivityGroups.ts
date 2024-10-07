@@ -1,11 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query';
 
-import { AppletModel } from '@app/entities/applet';
-import { useAppSelector } from '@app/shared/lib';
+import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
+import { useAppSelector } from '@app/shared/lib/hooks/redux';
 
-import useTimer from './useTimer';
-import { ActivityListGroup } from '../../lib';
-import { ActivityGroupsBuildManager } from '../services';
+import { useTimer } from './useTimer';
+import { ActivityListGroup } from '../../lib/types/activityGroup';
+import { getDefaultActivityGroupsBuildManager } from '../services/activityGroupsBuildManagerInstance';
 
 type UseActivityGroupsReturn = {
   isSuccess: boolean;
@@ -20,13 +20,11 @@ export const useActivityGroups = (
 
   const queryClient = useQueryClient();
 
-  const entitiesProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
-  );
+  const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
 
-  const groupsResult = ActivityGroupsBuildManager.process(
+  const groupsResult = getDefaultActivityGroupsBuildManager().process(
     appletId,
-    entitiesProgress,
+    entityProgressions,
     queryClient,
   );
 

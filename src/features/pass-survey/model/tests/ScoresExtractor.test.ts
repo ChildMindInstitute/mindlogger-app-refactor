@@ -1,17 +1,20 @@
-import { CalculationType, Report } from '@app/entities/activity';
-import { ILogger } from '@app/shared/lib';
-import { Item } from '@app/shared/ui';
-
 import {
-  Answers,
+  CalculationType,
+  Report,
+} from '@app/entities/activity/lib/types/activityReportSettings';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { Item } from '@app/shared/ui/survey/CheckBox/types';
+
+import { Answers } from '../../lib/hooks/useActivityStorageRecord';
+import {
   CheckboxPipelineItem,
   PipelineItem,
   RadioPipelineItem,
   RadioResponse,
-  ScoreRecord,
   SliderPipelineItem,
   SliderResponse,
-} from '../../lib';
+} from '../../lib/types/payload';
+import { ScoreRecord } from '../../lib/types/summary';
 import { ScoreConditionsEvaluator } from '../ScoreConditionsEvaluator';
 import { ScoresCalculator } from '../ScoresCalculator';
 import { ScoresExtractor } from '../ScoresExtractor';

@@ -4,16 +4,18 @@ import {
   AvailabilityType,
   NotificationTriggerType,
   PeriodicityType,
-} from '@app/abstract/lib';
-import { ScheduledDateCalculator } from '@app/entities/event/model';
+} from '@app/abstract/lib/types/event';
+import { IScheduledDateCalculator } from '@app/entities/event/model/operations/IScheduledDateCalculator';
+import { ScheduledDateCalculator } from '@app/entities/event/model/operations/ScheduledDateCalculator';
+import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
 import {
   EventNotificationDescribers,
   InactiveReason,
   NotificationDescriber,
   NotificationType,
   ScheduleEvent,
-} from '@app/entities/notification/lib';
-import { HourMinute } from '@app/shared/lib';
+} from '@app/entities/notification/lib/types/notificationBuilder';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
 
 import {
   addTime,
@@ -22,7 +24,7 @@ import {
   getEventEntity,
   getMockNotificationPattern,
 } from './testHelpers';
-import { INotificationBuilder } from '../NotificationBuilder';
+import { INotificationBuilder } from '../INotificationBuilder';
 
 const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
   //@ts-ignore
@@ -47,12 +49,6 @@ const mockUtilityProps = (builder: INotificationBuilder, now: Date) => {
 
   //@ts-ignore
   builder.notificationDaysExtractor.utility.now = new Date(now);
-};
-
-const calculateScheduledAt = (event: ScheduleEvent, now: Date) => {
-  //@ts-ignore
-  ScheduledDateCalculator.getNow = jest.fn().mockReturnValue(new Date(now));
-  return ScheduledDateCalculator.calculate(event, false);
 };
 
 const FixedHourAt = 16;
@@ -245,7 +241,24 @@ const addCrossDayNotification = (
   result.push(itemToAdd);
 };
 
+type TestScheduledDateCalculator = IScheduledDateCalculator & {
+  getNow: ScheduledDateCalculator['getNow'];
+};
+
 describe('NotificationBuilder: monthly event penetrating tests', () => {
+  let calculator: TestScheduledDateCalculator;
+  let calculateScheduledAt: (event: ScheduleEvent, now: Date) => Date | null;
+
+  beforeEach(() => {
+    calculator =
+      getDefaultScheduledDateCalculator() as never as TestScheduledDateCalculator;
+
+    calculateScheduledAt = (event: ScheduleEvent, now: Date) => {
+      jest.spyOn(calculator, 'getNow').mockReturnValue(now as never);
+      return calculator.calculate(event, false);
+    };
+  });
+
   describe('Test non cross-day', () => {
     it('Should return 1 notification when reminder is unset and selectedDate is today', () => {
       const today = new Date(2024, 0, 3);

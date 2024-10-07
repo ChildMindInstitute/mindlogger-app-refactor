@@ -2,21 +2,24 @@ import { FC } from 'react';
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
-import { ActivityAnalyticsList } from '@app/entities/applet';
-import { useAppletAnalytics } from '@app/entities/applet/lib/hooks';
+import { useAppletAnalytics } from '@app/entities/applet/lib/hooks/useAppletAnalytics';
+import { ActivityAnalyticsList } from '@app/entities/applet/ui/ActivityAnalyticsList';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
-  AnalyticsService,
   MixEvents,
   MixProperties,
-  useOnFocus,
-} from '@app/shared/lib';
-import { ActivityIndicator, Box, HorizontalCalendar } from '@app/shared/ui';
-import { UploadRetryBanner } from '@app/widgets/survey';
-import { AppletDetailsParamList } from '@screens/config';
+} from '@app/shared/lib/analytics/IAnalyticsService';
+import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
+import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
+import { Box } from '@app/shared/ui/base';
+import { HorizontalCalendar } from '@app/shared/ui/HorizontalCalendar';
+import { UploadRetryBanner } from '@app/widgets/survey/ui/UploadRetryBanner';
+
+import { AppletDetailsParamList } from '../config/types';
 
 type Props = BottomTabScreenProps<AppletDetailsParamList, 'Data'>;
 
-const AppletDataScreen: FC<Props> = ({ route }) => {
+export const AppletDataScreen: FC<Props> = ({ route }) => {
   const {
     params: { appletId },
   } = route;
@@ -24,7 +27,7 @@ const AppletDataScreen: FC<Props> = ({ route }) => {
   const { analytics, isLoading } = useAppletAnalytics(appletId);
 
   useOnFocus(() => {
-    AnalyticsService.track(MixEvents.DataView, {
+    getDefaultAnalyticsService().track(MixEvents.DataView, {
       [MixProperties.AppletId]: appletId,
     });
   });
@@ -45,5 +48,3 @@ const AppletDataScreen: FC<Props> = ({ route }) => {
     </Box>
   );
 };
-
-export default AppletDataScreen;

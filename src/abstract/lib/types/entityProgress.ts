@@ -1,65 +1,59 @@
-export const enum ActivityPipelineType {
-  NotDefined = 0,
-  Regular,
-  Flow,
-}
+export type EntityProgressionEntityType = 'activity' | 'activityFlow';
 
-export type FlowProgress = {
-  type: ActivityPipelineType.Flow;
-  pipelineActivityOrder: number;
-  totalActivitiesInPipeline: number;
-  currentActivityId: string;
-  currentActivityName: string;
-  currentActivityDescription: string;
-  currentActivityImage: string | null;
-  currentActivityStartAt: number | null;
-  executionGroupKey: string;
+export type EntityProgressionStatus = 'in-progress' | 'completed';
+
+type EntityProgressionBase = {
+  status: EntityProgressionStatus;
+  appletId: string;
+  entityType: EntityProgressionEntityType;
+  entityId: string;
+  eventId: string | null;
+  targetSubjectId: string | null;
 };
 
-export type ActivityProgress = {
-  type: ActivityPipelineType.Regular;
+type EntityProgressionInProgressBase = EntityProgressionBase & {
+  status: 'in-progress';
+  startedAtTimestamp: number;
+  availableUntilTimestamp: number | null;
 };
 
-export type EntityProgress = FlowProgress | ActivityProgress;
+export type EntityProgressionInProgressActivity =
+  EntityProgressionInProgressBase & {
+    entityType: 'activity';
+  };
 
-export type StoreProgressPayload = EntityProgress & {
-  startAt: number;
-  endAt: number | null;
-  availableTo: number | null;
+export type EntityProgressionInProgressActivityFlow =
+  EntityProgressionInProgressBase & {
+    entityType: 'activityFlow';
+    pipelineActivityOrder: number;
+    totalActivitiesInPipeline: number;
+    currentActivityId: string;
+    currentActivityName: string;
+    currentActivityDescription: string;
+    currentActivityImage: string | null;
+    currentActivityStartAt: number | null;
+    executionGroupKey: string;
+  };
+
+export type EntityProgressionInProgress =
+  | EntityProgressionInProgressActivity
+  | EntityProgressionInProgressActivityFlow;
+
+export type EntityProgressionCompleted = Omit<
+  EntityProgressionInProgressBase,
+  'status'
+> & {
+  status: 'completed';
+  endedAtTimestamp: number | null;
 };
 
-export interface IStoreProgressPayload {
-  type: ActivityPipelineType;
-  startAt: number;
-  endAt: number | null;
-}
+export type EntityProgression =
+  | EntityProgressionInProgress
+  | EntityProgressionCompleted;
 
-type EventId = string;
-
-type EntityId = string;
-
-type AppletId = string;
-
-export type StoreEventsProgress = Record<EventId, StoreProgressPayload>;
-
-export type StoreEntitiesProgress = Record<EntityId, StoreEventsProgress>;
-
-export type StoreProgress = Record<AppletId, StoreEntitiesProgress>;
-
-export type ProgressPayload = EntityProgress & {
-  startAt: Date;
-  endAt: Date | null;
-  availableTo: Date | null;
+export type EntityResponseTime = {
+  entityId: string;
+  eventId: string;
+  targetSubjectId: string | null;
+  responseTime: number;
 };
-
-export type CompletedEntities = Record<EntityId, number>;
-
-export type EventCompletions = Record<EventId, number[]>;
-
-export type CompletedEventEntities = Record<EntityId, EventCompletions>;
-
-type EventsProgress = Record<EventId, ProgressPayload>;
-
-type EntitiesProgress = Record<EntityId, EventsProgress>;
-
-export type Progress = Record<AppletId, EntitiesProgress>;

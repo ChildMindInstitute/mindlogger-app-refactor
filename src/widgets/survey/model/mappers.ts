@@ -1,59 +1,59 @@
+import { Answers } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import {
   AbTestResponse,
   ActivityItemType,
-  Answers,
+  CheckboxPipelineItem,
   DrawingTestResponse,
   FlankerResponse,
   PipelineItem,
-  PipelineItemAnswer,
-  StackedRadioResponse,
-  UserAction,
-  StabilityTrackerResponse,
   RadioPipelineItem,
-  CheckboxPipelineItem,
-  StackedRadioPipelineItem,
-  StackedCheckboxPipelineItem,
   SliderPipelineItem,
+  StabilityTrackerResponse,
+  StackedCheckboxPipelineItem,
+  StackedRadioPipelineItem,
+  StackedRadioResponse,
   StackedSliderPipelineItem,
-  PassSurveyModel,
-  AnswerAlerts,
-} from '@app/features/pass-survey';
+} from '@app/features/pass-survey/lib/types/payload';
+import { PipelineItemAnswer } from '@app/features/pass-survey/lib/types/pipelineItemAnswer';
+import { AnswerAlerts } from '@app/features/pass-survey/lib/types/summary';
+import { UserAction } from '@app/features/pass-survey/lib/types/userAction';
+import { getDefaultAlertsExtractor } from '@app/features/pass-survey/model/alertsExtractorInstance';
 import {
+  AbLogLineDto,
+  AbLogPointDto,
+  AbTestAnswerDto,
+  AnswerAlertsDto,
   AnswerDto,
   AudioAnswerDto,
   AudioPlayerAnswerDto,
   CheckboxAnswerDto,
+  DrawerAnswerDto,
+  DrawerLineDto,
+  FlankerAnswerRecordDto,
   GeolocationAnswerDto,
   NumberSelectAnswerDto,
+  ObjectAnswerDto,
+  ParagraphTextAnswerDto,
   PhotoAnswerDto,
   SliderAnswerDto,
+  StabilityTrackerAnswerDto,
   StackedCheckboxAnswerDto,
   StackedRadioAnswerDto,
   StackedSliderAnswerDto,
   TextAnswerDto,
-  ParagraphTextAnswerDto,
   TimeAnswerDto,
-  VideoAnswerDto,
-  UserActionDto,
-  FlankerAnswerRecordDto,
-  ObjectAnswerDto,
-  DrawerAnswerDto,
-  DrawerLineDto,
-  StabilityTrackerAnswerDto,
-  AbTestAnswerDto,
-  AbLogLineDto,
-  AbLogPointDto,
-  AnswerAlertsDto,
   TimeRangeAnswerDto,
-} from '@shared/api';
+  UserActionDto,
+  VideoAnswerDto,
+} from '@app/shared/api/services/IAnswerService';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
 import {
-  HourMinute,
-  Logger,
   convertToDayMonthYear,
   getDateFromString,
-} from '@shared/lib';
-import { Item } from '@shared/ui';
-import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
+} from '@app/shared/lib/utils/dateTime';
+import { Item } from '@app/shared/ui/survey/CheckBox/types';
+import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem/types';
 
 import { canItemHaveAnswer } from './operations';
 
@@ -536,7 +536,9 @@ export function mapAnswersToAlerts(
 
     return alerts as AnswerAlertsDto;
   } catch (error) {
-    Logger.warn(`[mapAnswersToAlerts]: Error occurred: \n\n${error}`);
+    getDefaultLogger().warn(
+      `[mapAnswersToAlerts]: Error occurred: \n\n${error}`,
+    );
     throw error;
   }
 }
@@ -570,7 +572,7 @@ export function convertAnswersToAlerts(
 }
 
 function convertRadioAlerts(radioItem: RadioPipelineItem, answer: Answer) {
-  const alerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractFromRadio(
+  const alerts: AnswerAlerts = getDefaultAlertsExtractor().extractFromRadio(
     radioItem,
     answer,
   );
@@ -584,8 +586,10 @@ function convertCheckboxAlerts(
   checkboxItem: CheckboxPipelineItem,
   answer: Answer,
 ) {
-  const alerts: AnswerAlerts =
-    PassSurveyModel.AlertsExtractor.extractFromCheckbox(checkboxItem, answer);
+  const alerts: AnswerAlerts = getDefaultAlertsExtractor().extractFromCheckbox(
+    checkboxItem,
+    answer,
+  );
 
   const alertDtos: AnswerAlertsDto = alerts;
 
@@ -597,7 +601,7 @@ function convertStackedRadioAlerts(
   answer: Answer,
 ) {
   const alerts: AnswerAlerts =
-    PassSurveyModel.AlertsExtractor.extractFromStackedRadio(
+    getDefaultAlertsExtractor().extractFromStackedRadio(
       stackedRadioItem,
       answer,
     );
@@ -612,7 +616,7 @@ function convertStackedCheckboxAlerts(
   answer: Answer,
 ) {
   const alerts: AnswerAlerts =
-    PassSurveyModel.AlertsExtractor.extractFromStackedCheckbox(
+    getDefaultAlertsExtractor().extractFromStackedCheckbox(
       stackedCheckboxItem,
       answer,
     );
@@ -623,8 +627,10 @@ function convertStackedCheckboxAlerts(
 }
 
 function convertSliderAlerts(sliderItem: SliderPipelineItem, answer: Answer) {
-  const alerts: AnswerAlerts =
-    PassSurveyModel.AlertsExtractor.extractFromSlider(sliderItem, answer);
+  const alerts: AnswerAlerts = getDefaultAlertsExtractor().extractFromSlider(
+    sliderItem,
+    answer,
+  );
 
   const alertDtos: AnswerAlertsDto = alerts;
 
@@ -636,10 +642,7 @@ function convertStackedSliderAlerts(
   answer: Answer,
 ) {
   const alerts: AnswerAlerts =
-    PassSurveyModel.AlertsExtractor.extractFromStackedSlider(
-      sliderItem,
-      answer,
-    );
+    getDefaultAlertsExtractor().extractFromStackedSlider(sliderItem, answer);
 
   const alertDtos: AnswerAlertsDto = alerts;
 

@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-import { Emitter } from '@app/shared/lib';
+import { Emitter } from '@app/shared/lib/services/Emitter';
 
 const EVENT_NAME = 'stepper:reset';
 
-function useOnUndo(callback: () => void) {
+export function useOnUndo(callback: () => void) {
   const callbackRef = useRef(callback);
 
   callbackRef.current = callback;
@@ -23,5 +23,3 @@ function useOnUndo(callback: () => void) {
 }
 
 export const undoPressed = () => Emitter.emit(EVENT_NAME);
-
-export default useOnUndo;

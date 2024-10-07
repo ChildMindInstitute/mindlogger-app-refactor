@@ -1,9 +1,9 @@
 import { t } from 'i18next';
 import { z } from 'zod';
 
-import { PASSWORD_MIN_LENGTH } from '@app/shared/lib';
+import { PASSWORD_MIN_LENGTH } from '@app/shared/lib/constants/password';
 
-const schema = z.object({
+export const ChangePasswordFormSchema = z.object({
   prev_password: z
     .string()
     .min(1, 'form_item:required')
@@ -24,5 +24,3 @@ const schema = z.object({
     )
     .refine(value => !value.includes(' '), 'sign_up_form:password_no_spaces'),
 });
-
-export default schema;

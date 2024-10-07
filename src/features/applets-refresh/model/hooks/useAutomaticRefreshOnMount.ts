@@ -2,12 +2,14 @@ import { useEffect } from 'react';
 
 import { useIsRestoring } from '@tanstack/react-query';
 
-import { useCacheHasData } from '@app/shared/lib';
-import { AppletModel } from '@entities/applet';
+import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
+import { useCacheHasData } from '@app/shared/lib/hooks/useCacheHasData';
 
-function useAutomaticRefreshOnMount(onSuccess: () => void) {
+export function useAutomaticRefreshOnMount(
+  onSuccess: () => void | Promise<void>,
+) {
   const isCacheRestoring = useIsRestoring();
-  const { mutate: refresh } = AppletModel.useRefreshMutation(onSuccess);
+  const { mutate: refresh } = useRefreshMutation(onSuccess);
   const { check: checkIfCacheHasData } = useCacheHasData();
 
   useEffect(() => {
@@ -22,5 +24,3 @@ function useAutomaticRefreshOnMount(onSuccess: () => void) {
     }
   }, [checkIfCacheHasData, isCacheRestoring, refresh]);
 }
-
-export default useAutomaticRefreshOnMount;

@@ -2,7 +2,7 @@ import {
   AppletNotificationDescribers,
   EventNotificationDescribers,
   NotificationDescriber,
-} from '../types';
+} from '../types/notificationBuilder';
 
 export const filterNotifications = (
   appletNotifications: AppletNotificationDescribers,

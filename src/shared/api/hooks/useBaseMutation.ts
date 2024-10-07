@@ -7,7 +7,7 @@ import { AxiosResponse } from 'axios';
 
 import { BaseError } from '../types';
 
-const useBaseMutation = <TRequest, TResponse>(
+export const useBaseMutation = <TRequest, TResponse>(
   mutationFn: MutationFunction<AxiosResponse<TResponse, BaseError>, TRequest>,
   options?: Omit<
     UseMutationOptions<
@@ -37,5 +37,3 @@ const useBaseMutation = <TRequest, TResponse>(
     },
   });
 };
-
-export default useBaseMutation;

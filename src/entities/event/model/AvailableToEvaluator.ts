@@ -1,8 +1,9 @@
 import { addDays, startOfDay } from 'date-fns';
 
-import { AvailabilityType } from '@app/abstract/lib';
-import { ScheduleEvent } from '@app/entities/event';
-import { isSourceLessOrEqual } from '@app/shared/lib';
+import { AvailabilityType } from '@app/abstract/lib/types/event';
+import { isSourceLessOrEqual } from '@app/shared/lib/utils/dateTime';
+
+import { ScheduleEvent } from '../lib/types/event';
 
 interface IDayOverlapDetector {
   isSpreadToNextDay(event: ScheduleEvent): boolean;

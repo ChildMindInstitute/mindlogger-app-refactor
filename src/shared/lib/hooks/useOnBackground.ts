@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
 
-function useOnBackground(callback: () => void) {
+export function useOnBackground(callback: () => void) {
   const callbackRef = useRef(callback);
 
   callbackRef.current = callback;
@@ -18,5 +18,3 @@ function useOnBackground(callback: () => void) {
     };
   }, []);
 }
-
-export default useOnBackground;

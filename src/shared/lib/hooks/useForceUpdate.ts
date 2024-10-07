@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 
 const MaxValue = 1000;
 
-const useForceUpdate = () => {
+export const useForceUpdate = () => {
   const [, setValue] = useState<number>(0);
 
   const forceRender = useCallback(() => {
@@ -11,5 +11,3 @@ const useForceUpdate = () => {
 
   return forceRender;
 };
-
-export default useForceUpdate;

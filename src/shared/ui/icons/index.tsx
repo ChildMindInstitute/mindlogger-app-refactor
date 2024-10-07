@@ -8,12 +8,6 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 
-export { default as AboutIcon } from './About';
-export { default as DataIcon } from './Data';
-export { default as SurveyIcon } from './Survey';
-export { default as CloudLogo } from './CloudLogo';
-export { default as QuestionIcon } from './QuestionIcon';
-
 type IconProps = {
   color: string;
   size: number;

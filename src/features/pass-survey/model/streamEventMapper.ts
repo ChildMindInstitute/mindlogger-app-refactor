@@ -1,4 +1,4 @@
-import { FlankerLiveEvent, IS_ANDROID, LiveEventDto } from '@shared/lib';
+import { IS_ANDROID } from '@app/shared/lib/constants';
 import {
   AbTestStreamEventDto,
   AbTestStreamEventErrorType,
@@ -8,7 +8,10 @@ import {
   StabilityTrackerEvent,
   StabilityTrackerEventDto,
   LiveEvent,
+  FlankerLiveEvent,
+  LiveEventDto,
 } from '@shared/lib/tcp/types';
+
 const mapABTestStreamEventToDto = (
   streamEvent: AbTestStreamEvent,
 ): AbTestStreamEventDto => {
@@ -65,8 +68,15 @@ const mapStabilityTrackerStreamEventToDto = (
   return dto;
 };
 
-const mapFlankerStreamEventToDto = (streamEvent: FlankerLiveEvent) => {
-  if (IS_ANDROID) {
+type MappingFlankerStreamEventToDtoOptions = {
+  isAndroid: boolean;
+};
+
+const mapFlankerStreamEventToDto = (
+  streamEvent: FlankerLiveEvent,
+  options: MappingFlankerStreamEventToDtoOptions,
+) => {
+  if (options.isAndroid) {
     let screenCountPerTrial = 1;
 
     if (streamEvent.showFeedback) {
@@ -112,8 +122,19 @@ const mapFlankerStreamEventToDto = (streamEvent: FlankerLiveEvent) => {
   return dto;
 };
 
-export const mapStreamEventToDto = (streamEvent: LiveEvent): LiveEventDto => {
+type MapStreamEventToDtoOptions = {
+  isAndroid?: boolean;
+};
+
+export const mapStreamEventToDto = (
+  streamEvent: LiveEvent,
+  options?: MapStreamEventToDtoOptions,
+): LiveEventDto => {
   const type = streamEvent.type;
+  let isAndroid = options?.isAndroid;
+  if (isAndroid === null || isAndroid === undefined) {
+    isAndroid = IS_ANDROID;
+  }
 
   switch (type) {
     case 'AbTest':
@@ -121,7 +142,7 @@ export const mapStreamEventToDto = (streamEvent: LiveEvent): LiveEventDto => {
     case 'DrawingTest':
       return mapDrawingStreamEventToDto(streamEvent);
     case 'Flanker':
-      return mapFlankerStreamEventToDto(streamEvent);
+      return mapFlankerStreamEventToDto(streamEvent, { isAndroid });
     case 'StabilityTracker':
       return mapStabilityTrackerStreamEventToDto(streamEvent);
     default:

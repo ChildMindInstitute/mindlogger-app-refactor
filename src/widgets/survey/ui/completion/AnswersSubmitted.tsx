@@ -2,11 +2,14 @@ import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { Box, CheckIcon, SubmitButton, Text } from '@shared/ui';
+import { Box } from '@app/shared/ui/base';
+import { CheckIcon } from '@app/shared/ui/icons';
+import { SubmitButton } from '@app/shared/ui/SubmitButton';
+import { Text } from '@app/shared/ui/Text';
 
 import { FlexContainer, SubComponentProps } from './containers';
 
-const AnswersSubmitted: FC<SubComponentProps> = ({ onPressDone }) => {
+export const AnswersSubmitted: FC<SubComponentProps> = ({ onPressDone }) => {
   const { t } = useTranslation();
 
   return (
@@ -43,5 +46,3 @@ const AnswersSubmitted: FC<SubComponentProps> = ({ onPressDone }) => {
     </>
   );
 };
-
-export default AnswersSubmitted;

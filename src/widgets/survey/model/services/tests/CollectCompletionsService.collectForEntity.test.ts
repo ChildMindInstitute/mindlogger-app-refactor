@@ -1,11 +1,12 @@
-import { EntityPath } from '@app/abstract/lib';
+import { EntityPath } from '@app/abstract/lib/types/entity';
+import { getLoggerMock } from '@app/entities/notification/model/factory/tests/testHelpers';
 import * as survey from '@app/shared/lib/utils/survey/survey';
 
 import {
   deleteLogAvailableTo,
-  getFlowProgressRecord,
+  getActivityIncompleteEntity,
+  getActivityFlowIncompleteEntity,
   getMultipleActivityFlowState,
-  getRegularProgressRecord,
   getSingleActivityFlowState,
 } from './testHelpers';
 import * as storageHelpers from '../../../lib/storageHelpers';
@@ -22,11 +23,12 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
       entityId: 'mock-entity-id-1',
       eventId: 'mock-event-id-1',
       entityType: 'regular',
+      targetSubjectId: null,
     };
   });
 
   it('Should return empty array when no entity progress record', () => {
-    const service = new CollectCompletionsService([]);
+    const service = new CollectCompletionsService(getLoggerMock(), []);
 
     const result = service.collectForEntity(pathOne);
 
@@ -34,10 +36,12 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
   });
 
   it('Should return empty array when entity progress exist, but availableTo is null', () => {
-    const progress = getRegularProgressRecord(pathOne);
-    progress.payload.availableTo = null;
+    const progression = getActivityIncompleteEntity(pathOne);
+    progression.progression.availableUntilTimestamp = null;
 
-    const service = new CollectCompletionsService([progress]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(pathOne);
 
@@ -45,10 +49,12 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
   });
 
   it('Should return empty array when entity progress exist, but availableTo is undefined', () => {
-    const progress = getRegularProgressRecord(pathOne);
-    progress.payload.availableTo = null;
+    const progression = getActivityIncompleteEntity(pathOne);
+    progression.progression.availableUntilTimestamp = null;
 
-    const service = new CollectCompletionsService([progress]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(pathOne);
 
@@ -60,10 +66,16 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
       .spyOn(survey, 'isEntityExpired')
       .mockReturnValue(false);
 
-    const progress = getRegularProgressRecord(pathOne);
-    progress.payload.availableTo = new Date(2023, 2, 5).getTime();
+    const progression = getActivityIncompleteEntity(pathOne);
+    progression.progression.availableUntilTimestamp = new Date(
+      2023,
+      2,
+      5,
+    ).getTime();
 
-    const service = new CollectCompletionsService([progress]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(pathOne);
 
@@ -78,10 +90,16 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
       .spyOn(storageHelpers, 'getFlowRecord')
       .mockReturnValue(null);
 
-    const progress = getRegularProgressRecord(pathOne);
-    progress.payload.availableTo = new Date(2023, 2, 5).getTime();
+    const progression = getActivityIncompleteEntity(pathOne);
+    progression.progression.availableUntilTimestamp = new Date(
+      2023,
+      2,
+      5,
+    ).getTime();
 
-    const service = new CollectCompletionsService([progress]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(pathOne);
 
@@ -100,11 +118,16 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
       .spyOn(storageHelpers, 'isCurrentActivityRecordExist')
       .mockReturnValue(true);
 
-    const progress = getRegularProgressRecord(pathOne);
+    const progression = getActivityIncompleteEntity(pathOne);
+    progression.progression.availableUntilTimestamp = new Date(
+      2023,
+      2,
+      5,
+    ).getTime();
 
-    progress.payload.availableTo = new Date(2023, 2, 5).getTime();
-
-    const service = new CollectCompletionsService([progress]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(pathOne);
 
@@ -116,6 +139,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
         completionType: 'finish',
         eventId: 'mock-event-id-1',
         flowId: undefined,
+        targetSubjectId: null,
         order: 0,
       },
     ]);
@@ -129,19 +153,23 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
       .spyOn(storageHelpers, 'getFlowRecord')
       .mockReturnValue(getMultipleActivityFlowState(path));
 
-    const progress = getFlowProgressRecord(path);
+    const progression = getActivityFlowIncompleteEntity(pathOne);
+    progression.progression.availableUntilTimestamp = new Date(
+      2023,
+      2,
+      5,
+    ).getTime();
+    progression.progression.pipelineActivityOrder = 0;
+    progression.progression.totalActivitiesInPipeline = 2;
+    progression.progression.currentActivityId = 'mock-activity-id-1';
+    progression.progression.currentActivityName = 'mock-activity-name-1';
+    progression.progression.currentActivityDescription =
+      'mock-activity-description-1';
+    progression.progression.currentActivityImage = null;
 
-    progress.payload = {
-      availableTo: new Date(2023, 2, 5).getTime(),
-      pipelineActivityOrder: 0,
-      totalActivitiesInPipeline: 2,
-      currentActivityId: 'mock-activity-id-1',
-      currentActivityName: 'mock-activity-name-1',
-      currentActivityDescription: 'mock-activity-description-1',
-      currentActivityImage: null,
-    } as any;
-
-    const service = new CollectCompletionsService([progress]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(path);
 
@@ -153,6 +181,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
         completionType: 'intermediate',
         eventId: 'mock-event-id-1',
         flowId: 'mock-entity-id-1',
+        targetSubjectId: null,
         order: 0,
       },
       {
@@ -162,6 +191,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
         completionType: 'finish',
         eventId: 'mock-event-id-1',
         flowId: 'mock-entity-id-1',
+        targetSubjectId: null,
         order: 1,
       },
     ]);
@@ -175,19 +205,23 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
       .spyOn(storageHelpers, 'getFlowRecord')
       .mockReturnValue(getMultipleActivityFlowState(path));
 
-    const progress = getFlowProgressRecord(path);
+    const progression = getActivityFlowIncompleteEntity(pathOne);
+    progression.progression.availableUntilTimestamp = new Date(
+      2023,
+      2,
+      5,
+    ).getTime();
+    progression.progression.pipelineActivityOrder = 1;
+    progression.progression.totalActivitiesInPipeline = 2;
+    progression.progression.currentActivityId = 'mock-activity-id-2';
+    progression.progression.currentActivityName = 'mock-activity-name-2';
+    progression.progression.currentActivityDescription =
+      'mock-activity-description-2';
+    progression.progression.currentActivityImage = null;
 
-    progress.payload = {
-      availableTo: new Date(2023, 2, 5).getTime(),
-      pipelineActivityOrder: 1,
-      totalActivitiesInPipeline: 2,
-      currentActivityId: 'mock-activity-id-2',
-      currentActivityName: 'mock-activity-name-2',
-      currentActivityDescription: 'mock-activity-description-2',
-      currentActivityImage: null,
-    } as any;
-
-    const service = new CollectCompletionsService([progress]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectForEntity(path);
 
@@ -199,6 +233,7 @@ describe('Test CollectCompletionsService: collectForEntity', () => {
         completionType: 'finish',
         eventId: 'mock-event-id-1',
         flowId: 'mock-entity-id-1',
+        targetSubjectId: null,
         order: 1,
       },
     ]);

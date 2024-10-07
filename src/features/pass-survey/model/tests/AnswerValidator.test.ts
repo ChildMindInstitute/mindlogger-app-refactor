@@ -1,8 +1,9 @@
-import { ConditionType } from '@app/entities/activity';
+import { ConditionType } from '@app/entities/activity/lib/types/conditionalLogic';
+import { IAnswerValidator } from '@features/pass-survey/model/IAnswerValidator';
 
 import { getEmptySliderItem, getTimeRangeItem } from './testHelpers';
-import { Answers } from '../../lib';
-import AnswerValidator, { IAnswerValidator } from '../AnswerValidator';
+import { Answers } from '../../lib/hooks/useActivityStorageRecord';
+import { AnswerValidator } from '../AnswerValidator';
 
 const imitateValidate = (validator: IAnswerValidator, type: ConditionType) => {
   let result;

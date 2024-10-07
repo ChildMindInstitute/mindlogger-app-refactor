@@ -4,11 +4,12 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled, TextProps } from '@tamagui/core';
 
-import { ListSeparator, YStack, XStack, Tooltip, RadioGroup } from '@shared/ui';
-
 import { AxisItem, type StackedRowItemValue } from './types';
-import Center from '../../Center';
-import Text from '../../Text';
+import { RadioGroup, XStack, YStack } from '../../base';
+import { Center } from '../../Center';
+import { ListSeparator } from '../../ListSeparator';
+import { Text } from '../../Text';
+import { Tooltip } from '../../Tooltip';
 
 const AxisListItemContainer = styled(Center, {
   minHeight: 80,
@@ -16,20 +17,17 @@ const AxisListItemContainer = styled(Center, {
   padding: 5,
 });
 
-const AxisListItemText: FC<TextProps & { hasTooltip?: boolean }> = styled(
-  Text,
-  {
-    name: 'SingleSelectionPerRowAxisListItemText',
-    fontSize: 12,
-    variants: {
-      hasTooltip: {
-        true: { color: '$blue', textDecorationLine: 'underline' },
-        false: { color: '$black' },
-      },
-    } as const,
-    defaultVariants: { hasTooltip: false },
-  },
-);
+const AxisListItemText = styled(Text, {
+  name: 'SingleSelectionPerRowAxisListItemText',
+  fontSize: 12,
+  variants: {
+    hasTooltip: {
+      true: { color: '$blue', textDecorationLine: 'underline' },
+      false: { color: '$black' },
+    },
+  } as const,
+  defaultVariants: { hasTooltip: false },
+}) as FC<TextProps & { hasTooltip?: boolean }>;
 
 const AxisListItem: FC<{
   item: AxisItem | null;
@@ -155,7 +153,7 @@ type StackedItemsGridProps = {
   ) => ReactElement;
 } & AccessibilityProps;
 
-const StackedItemsGrid: FC<StackedItemsGridProps> = ({
+export const StackedItemsGrid: FC<StackedItemsGridProps> = ({
   items = [],
   renderCell,
   options,
@@ -197,5 +195,3 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 });
-
-export default StackedItemsGrid;

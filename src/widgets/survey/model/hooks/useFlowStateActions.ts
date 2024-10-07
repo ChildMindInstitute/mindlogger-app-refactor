@@ -1,4 +1,5 @@
-import { Logger } from '@app/shared/lib';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
 
 import {
   ActivitySummaryData,
@@ -6,19 +7,20 @@ import {
   FlowSummaryData,
   SummaryDataKey,
   useFlowStorageRecord,
-} from '../../lib';
-import { FlowPipelineItem } from '../pipelineBuilder';
+} from '../../lib/useFlowStorageRecord';
 
 export type UseFlowStateActionsArgs = {
   appletId: string;
   eventId: string;
   flowId?: string;
+  targetSubjectId: string | null;
 };
 
 export function useFlowStateActions({
   appletId,
   eventId,
   flowId,
+  targetSubjectId,
 }: UseFlowStateActionsArgs) {
   const {
     upsertFlowStorageRecord,
@@ -28,6 +30,7 @@ export function useFlowStateActions({
     appletId,
     eventId,
     flowId,
+    targetSubjectId,
   });
 
   const getStep = (record?: FlowState): number => {
@@ -133,12 +136,12 @@ export function useFlowStateActions({
   function completeByTimer(timerType: 'event' | 'availability'): void {
     const record: FlowState = getCurrentFlowStorageRecord()!;
 
-    Logger.log(
+    getDefaultLogger().log(
       `[useFlowStateActions.completeByTimer] Executing, current step is: ${record.step}, timer type: ${timerType}`,
     );
 
     if (!canBeCompletedByTimer()) {
-      Logger.log(
+      getDefaultLogger().log(
         `[useFlowStateActions.completeByTimer] Cancelled as we're on either finish or summary step, timer type: ${timerType}`,
       );
       return;
@@ -159,7 +162,7 @@ export function useFlowStateActions({
 
     const result = !isLastStep(record) && !isSummaryStep(record);
 
-    Logger.log(
+    getDefaultLogger().log(
       `[useFlowStateActions.canBeCompletedByTimer]: ${String(result)}`,
     );
 

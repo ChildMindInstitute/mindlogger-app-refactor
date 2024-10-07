@@ -1,10 +1,10 @@
 import { RadioGroup } from '@tamagui/radio-group';
 
-import RadioCard from './RadioCard';
+import { RadioCard } from './RadioCard';
 import { RadioItemProps } from './types';
-import { SimpleGrid } from '../../SimpleGrid';
+import { SimpleGrid } from '../../SimpleGrid/SimpleGrid';
 
-function RadioGrid({
+export function RadioGrid({
   value,
   options,
 
@@ -48,5 +48,3 @@ function RadioGrid({
     </RadioGroup>
   );
 }
-
-export default RadioGrid;

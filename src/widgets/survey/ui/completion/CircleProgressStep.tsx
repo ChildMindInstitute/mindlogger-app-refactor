@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
-import { Box, Text } from '@shared/ui';
+import { Box } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 
-import CircleProgress from './CircleProgress';
+import { CircleProgress } from './CircleProgress';
 
 type Props = {
   circleSize: number;
@@ -10,7 +11,11 @@ type Props = {
   totalSteps: number;
 };
 
-export default ({ circleSize, currentStep, totalSteps }: Props) => {
+export const CircleProgressStep = ({
+  circleSize,
+  currentStep,
+  totalSteps,
+}: Props) => {
   const { t } = useTranslation();
 
   return (

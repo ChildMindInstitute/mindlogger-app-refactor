@@ -5,20 +5,15 @@ import { useIsFetching } from '@tanstack/react-query';
 import {
   CheckAvailability,
   CompleteEntityIntoUploadToQueue,
-} from '@app/abstract/lib';
-import { getAppletCompletedEntitiesKey } from '@app/shared/lib';
-import {
-  Box,
-  BoxProps,
-  YStack,
-  ActivityIndicator,
-  XStack,
-  NoListItemsYet,
-  LoadListError,
-} from '@app/shared/ui';
+} from '@app/abstract/lib/types/entity';
+import { getAppletCompletedEntitiesKey } from '@app/shared/lib/utils/reactQueryHelpers';
+import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
+import { Box, BoxProps, XStack, YStack } from '@app/shared/ui/base';
+import { LoadListError } from '@app/shared/ui/LoadListError';
+import { NoListItemsYet } from '@app/shared/ui/NoListItemsYet';
 
-import ActivitySectionList from './ActivitySectionList';
-import { useActivityGroups } from '../model';
+import { ActivitySectionList } from './ActivitySectionList';
+import { useActivityGroups } from '../model/hooks/useActivityGroups';
 
 type Props = {
   appletId: string;
@@ -26,7 +21,7 @@ type Props = {
   checkAvailability: CheckAvailability;
 } & BoxProps;
 
-const ActivityGroups: FC<Props> = props => {
+export const ActivityGroups: FC<Props> = props => {
   const isLoadingCompletedEntities =
     useIsFetching({
       exact: true,
@@ -92,5 +87,3 @@ const ActivityGroups: FC<Props> = props => {
     </Box>
   );
 };
-
-export default ActivityGroups;

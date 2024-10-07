@@ -1,83 +1,15 @@
-import { FlowProgressActivity } from '@app/abstract/lib';
-
-type FlowPipelineType = 'Stepper' | 'Intermediate' | 'Summary' | 'Finish';
-
-type FlowPipelineItemBase = {
-  type: FlowPipelineType;
-};
-
-type HasSummary = (activityId: string) => boolean;
-
-export interface StepperPipelineItem extends FlowPipelineItemBase {
-  type: 'Stepper';
-  payload: {
-    appletId: string;
-    activityId: string;
-    activityName: string;
-    activityDescription: string;
-    activityImage: string | null;
-    eventId: string;
-    order: number;
-  };
-}
-
-interface IntermediatePipelineItem extends FlowPipelineItemBase {
-  type: 'Intermediate';
-  payload: {
-    appletId: string;
-    activityId: string;
-    activityName: string;
-    eventId: string;
-    flowId: string;
-    order: number;
-  };
-}
-
-export type FinishReason = 'time-is-up' | 'regular';
-
-interface SummaryPipelineItem extends FlowPipelineItemBase {
-  type: 'Summary';
-  payload: {
-    appletId: string;
-    activityId: string;
-    activityName: string;
-    eventId: string;
-    flowId?: string;
-    order: number;
-  };
-}
-
-export interface FinishPipelineItem extends FlowPipelineItemBase {
-  type: 'Finish';
-  payload: {
-    appletId: string;
-    activityId: string;
-    activityName: string;
-    eventId: string;
-    flowId?: string;
-    order: number;
-  };
-}
-
-export type FlowPipelineItem =
-  | StepperPipelineItem
-  | IntermediatePipelineItem
-  | SummaryPipelineItem
-  | FinishPipelineItem;
-
-type BuildPipelineArgs = {
-  appletId: string;
-  eventId: string;
-  activities: FlowProgressActivity[];
-  flowId: string;
-  startFrom: number;
-  hasSummary: HasSummary;
-};
+import { FlowProgressActivity } from '@app/abstract/lib/types/entity';
+import {
+  BuildPipelineArgs,
+  FlowPipelineItem,
+  HasSummary,
+} from '@widgets/survey/model/IPipelineBuilder';
 
 export function buildActivityFlowPipeline({
   appletId,
   eventId,
   flowId,
+  targetSubjectId,
   activities,
   startFrom,
   hasSummary,
@@ -102,6 +34,8 @@ export function buildActivityFlowPipeline({
       type: 'Stepper',
       payload: {
         ...payload,
+        flowId,
+        targetSubjectId,
         activityDescription: activities[i].description,
         activityImage: activities[i].image,
       },
@@ -113,6 +47,7 @@ export function buildActivityFlowPipeline({
         payload: {
           ...payload,
           flowId,
+          targetSubjectId,
         },
       });
     } else {
@@ -122,6 +57,7 @@ export function buildActivityFlowPipeline({
           payload: {
             ...payload,
             flowId,
+            targetSubjectId,
           },
         });
       }
@@ -131,6 +67,7 @@ export function buildActivityFlowPipeline({
         payload: {
           ...payload,
           flowId,
+          targetSubjectId,
         },
       });
     }
@@ -142,6 +79,7 @@ export function buildActivityFlowPipeline({
 type BuildSinglePipelineArgs = {
   appletId: string;
   eventId: string;
+  targetSubjectId: string | null;
   activity: FlowProgressActivity;
   hasSummary: HasSummary;
 };
@@ -149,6 +87,7 @@ type BuildSinglePipelineArgs = {
 export function buildSingleActivityPipeline({
   appletId,
   eventId,
+  targetSubjectId,
   activity,
   hasSummary,
 }: BuildSinglePipelineArgs): FlowPipelineItem[] {
@@ -163,6 +102,7 @@ export function buildSingleActivityPipeline({
       activityName: activity.name,
       activityDescription: activity.description,
       activityImage: activity.image,
+      targetSubjectId,
       order: 0,
     },
   });
@@ -175,6 +115,7 @@ export function buildSingleActivityPipeline({
         eventId,
         activityId: activity.id,
         activityName: activity.name,
+        targetSubjectId,
         order: 0,
       },
     });
@@ -187,6 +128,7 @@ export function buildSingleActivityPipeline({
       eventId,
       activityId: activity.id,
       activityName: activity.name,
+      targetSubjectId,
       order: 0,
     },
   });

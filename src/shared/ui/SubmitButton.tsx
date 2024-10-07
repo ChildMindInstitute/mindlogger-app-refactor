@@ -4,7 +4,7 @@ import { StyleProp, ViewStyle } from 'react-native';
 
 import { Text, Stack, styled, StackStyleProps, TextProps } from '@tamagui/core';
 
-import ActivityIndicator from './ActivityIndicator';
+import { ActivityIndicator } from './ActivityIndicator';
 
 const ButtonText = styled(Text, {
   fontSize: 20,
@@ -53,7 +53,7 @@ type Props = PropsWithChildren<
   } & StackStyleProps
 >;
 
-const SubmitButton: FC<Props & AccessibilityProps> = ({
+export const SubmitButton: FC<Props & AccessibilityProps> = ({
   children,
   onPress,
   disabled,
@@ -98,5 +98,3 @@ const spinnerStyle = StyleSheet.create({
     left: 0,
   },
 });
-
-export default SubmitButton;

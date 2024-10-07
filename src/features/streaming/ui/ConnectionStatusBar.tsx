@@ -3,9 +3,12 @@ import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { useAppletStreamingDetails } from '@entities/applet/lib/hooks';
-import { colors, useTCPSocket } from '@shared/lib';
-import { XStack, Text, EditIcon, BoxProps } from '@shared/ui';
+import { useAppletStreamingDetails } from '@app/entities/applet/lib/hooks/useAppletStreamingDetails';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useTCPSocket } from '@app/shared/lib/tcp/useTCPSocket';
+import { BoxProps, XStack } from '@app/shared/ui/base';
+import { EditIcon } from '@app/shared/ui/icons';
+import { Text } from '@app/shared/ui/Text';
 
 import { ConnectionModal } from './ConnectionModal';
 
@@ -13,7 +16,7 @@ type Props = {
   appletId: string;
 } & BoxProps;
 
-const ConnectionStatusBar: FC<Props> = ({ appletId, ...styleProps }) => {
+export const ConnectionStatusBar: FC<Props> = ({ appletId, ...styleProps }) => {
   const { t } = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
   const closeModal = () => setModalVisible(false);
@@ -64,5 +67,3 @@ const ConnectionStatusBar: FC<Props> = ({ appletId, ...styleProps }) => {
     </>
   );
 };
-
-export default ConnectionStatusBar;

@@ -5,11 +5,14 @@ import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 import { XStack } from '@tamagui/stacks';
 
-import { colors } from '@shared/lib';
-import { invertColor } from '@shared/lib/utils';
-import { Text, Tooltip, CheckBox, QuestionTooltipIcon } from '@shared/ui';
+import { colors } from '@app/shared/lib/constants/colors';
+import { invertColor } from '@app/shared/lib/utils/survey/survey';
 
 import { Item } from './types';
+import { CheckBox } from '../../CheckBox';
+import { QuestionTooltipIcon } from '../../icons';
+import { Text } from '../../Text';
+import { Tooltip } from '../../Tooltip';
 
 const CheckboxTooltipContainer = styled(XStack, {
   marginRight: 10,
@@ -27,7 +30,7 @@ type Props = {
   position: number;
 } & Omit<Item, 'value'>;
 
-const CheckBoxItem: FC<Props> = ({
+export const CheckBoxItem: FC<Props> = ({
   value,
   setPalette,
   imageContainerVisible,
@@ -143,5 +146,3 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
-
-export default CheckBoxItem;

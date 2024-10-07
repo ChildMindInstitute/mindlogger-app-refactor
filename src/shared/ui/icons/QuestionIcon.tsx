@@ -1,6 +1,6 @@
 import Svg, { Path, SvgProps } from 'react-native-svg';
 
-export default ({ color, ...props }: SvgProps) => (
+export const QuestionIcon = ({ color, ...props }: SvgProps) => (
   <Svg width={25} height={24} fill="none" {...props}>
     <Path
       fill={color}

@@ -1,25 +1,28 @@
+import { IEvaluator } from '@app/abstract/lib/interfaces/evaluator';
+import { EntityProgression } from '@app/abstract/lib/types/entityProgress';
 import {
   AvailabilityType,
-  IEvaluator,
   PeriodicityType,
-  Progress,
-} from '@app/abstract/lib';
-import { ScheduleEvent } from '@app/entities/event';
-import { DatesFromTo } from '@shared/lib';
+} from '@app/abstract/lib/types/event';
+import { ScheduleEvent } from '@app/entities/event/lib/types/event';
+import { DatesFromTo } from '@app/shared/lib/types/dateTime';
 
 import { GroupUtility } from './GroupUtility';
-import { EventEntity } from '../../lib';
+import { EventEntity } from '../../lib/types/activityGroupsBuilder';
 
 export class ScheduledGroupEvaluator
   implements IEvaluator<EventEntity, ScheduleEvent>
 {
   private utility: GroupUtility;
 
-  constructor(progress: Progress, appletId: string) {
-    this.utility = new GroupUtility(progress, appletId);
+  constructor(appletId: string, entityProgressions: EntityProgression[]) {
+    this.utility = new GroupUtility(appletId, entityProgressions);
   }
 
-  public isInGroup(event: ScheduleEvent): boolean {
+  public isEventInGroup(
+    event: ScheduleEvent,
+    targetSubjectId: string | null,
+  ): boolean {
     const now = this.utility.getNow();
 
     if (!this.utility.isInsideValidDatesInterval(event)) {
@@ -31,7 +34,10 @@ export class ScheduledGroupEvaluator
 
     const isAccessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime;
 
-    const isCompletedToday = this.utility.isCompletedToday(event);
+    const isCompletedToday = this.utility.isEventCompletedToday(
+      event,
+      targetSubjectId,
+    );
 
     const isScheduledToday = this.utility.isToday(event.scheduledAt);
 
@@ -86,7 +92,7 @@ export class ScheduledGroupEvaluator
 
     const isCompletedInVoidInterval = this.utility.isInInterval(
       voidInterval,
-      this.utility.getCompletedAt(event),
+      this.utility.getEventCompletedAt(event, targetSubjectId),
       'from',
     );
 
@@ -105,7 +111,12 @@ export class ScheduledGroupEvaluator
     const result: Array<EventEntity> = [];
 
     for (const eventEntity of eventsEntities) {
-      if (this.isInGroup(eventEntity.event)) {
+      if (
+        this.isEventInGroup(
+          eventEntity.event,
+          eventEntity.assignment?.target.id || null,
+        )
+      ) {
         result.push(eventEntity);
       }
     }

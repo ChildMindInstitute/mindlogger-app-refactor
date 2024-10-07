@@ -6,8 +6,8 @@ type ActivityIdentifiers = {
   eventId: string;
   order: number;
   activityName: string;
+  flowId?: string;
+  targetSubjectId: string | null;
 };
 
-const ActivityIdentityContext = createContext({} as ActivityIdentifiers);
-
-export default ActivityIdentityContext;
+export const ActivityIdentityContext = createContext({} as ActivityIdentifiers);

@@ -1,11 +1,8 @@
-import { SessionModel } from '@entities/session';
+import { useHasSession } from '@app/entities/session/model/hooks/useHasSession';
+import { ScreenRoute } from '@app/screens/config/types';
 
-import { ScreenRoute } from '../../config';
-
-function useDefaultRoute(): ScreenRoute {
-  const hasSession = SessionModel.useHasSession();
+export function useDefaultRoute(): ScreenRoute {
+  const hasSession = useHasSession();
 
   return hasSession ? 'Applets' : 'Login';
 }
-
-export default useDefaultRoute;

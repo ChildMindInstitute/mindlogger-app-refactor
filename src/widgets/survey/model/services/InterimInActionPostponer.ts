@@ -1,8 +1,9 @@
-import { ActionPostponer, InterimSubmitMutex } from '@app/shared/lib';
+import { getDefaultInterimSubmitMutex } from '@app/shared/lib/mutexes/interimSubmitMutexInstance';
+import { ActionPostponer } from '@app/shared/lib/services/ActionPostponer';
 
 const PostponeDuration = 2000;
 
-class InterimInActionPostponer extends ActionPostponer {
+export class InterimInActionPostponer extends ActionPostponer {
   private action: () => void;
 
   constructor(actionToPostpone: () => void) {
@@ -15,10 +16,8 @@ class InterimInActionPostponer extends ActionPostponer {
   }
 
   protected shouldBePostponed(): boolean {
-    return InterimSubmitMutex.isBusy();
+    return getDefaultInterimSubmitMutex().isBusy();
   }
 
   protected resetAction(): void {}
 }
-
-export default InterimInActionPostponer;

@@ -2,13 +2,14 @@ import { FC, PropsWithChildren } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { Text, TextProps } from '@shared/ui';
+import { TextProps } from './base';
+import { Text } from './Text';
 
 type Props = {
   translationKey: string;
 } & TextProps;
 
-const NoListItemsYet: FC<PropsWithChildren<Props>> = ({
+export const NoListItemsYet: FC<PropsWithChildren<Props>> = ({
   translationKey,
   ...props
 }) => {
@@ -26,5 +27,3 @@ const NoListItemsYet: FC<PropsWithChildren<Props>> = ({
     </Text>
   );
 };
-
-export default NoListItemsYet;

@@ -1,11 +1,10 @@
-import {
-  IdentityService,
-  QueryOptions,
-  ReturnAwaited,
-  useBaseQuery,
-} from '@app/shared/api';
+import { useBaseQuery } from '@app/shared/api/hooks/useBaseQuery';
+import { getDefaultIdentityService } from '@app/shared/api/services/identityServiceInstance';
+import { QueryOptions, ReturnAwaited } from '@app/shared/api/types';
 
-type FetchFn = typeof IdentityService.passwordRecoveryHealthCheck;
+const identityService = getDefaultIdentityService();
+
+type FetchFn = typeof identityService.passwordRecoveryHealthCheck;
 type Options<TData> = QueryOptions<FetchFn, TData>;
 
 export const usePasswordRecoveryHealthCheckQuery = <
@@ -17,7 +16,7 @@ export const usePasswordRecoveryHealthCheckQuery = <
 ) => {
   return useBaseQuery(
     ['password-recovery-health', { email, key }],
-    () => IdentityService.passwordRecoveryHealthCheck({ email, key }),
+    () => identityService.passwordRecoveryHealthCheck({ email, key }),
     {
       ...options,
       cacheTime: 0,

@@ -1,6 +1,7 @@
-import { ActivityState, UserAction } from '@features/pass-survey';
+import { ActivityState } from '../hooks/useActivityStorageRecord';
+import { UserAction } from '../types/userAction';
 
-class UserActionsPostProcessorService {
+export class UserActionsPostProcessorService {
   public postProcessUserActions(activityStorageRecord: ActivityState) {
     const currentStep = activityStorageRecord.step;
     const currentItem = activityStorageRecord.items[currentStep];
@@ -46,5 +47,3 @@ class UserActionsPostProcessorService {
     });
   }
 }
-
-export default UserActionsPostProcessorService;

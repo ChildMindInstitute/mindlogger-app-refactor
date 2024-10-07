@@ -1,8 +1,11 @@
-import { ActivityDetails, ActivityItem } from '@app/entities/activity';
-import { Logger } from '@app/shared/lib';
+import {
+  ActivityDetails,
+  ActivityItem,
+} from '@app/entities/activity/lib/types/activity';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import { getAbTrailsPipeline } from './precompiled-pipelines';
-import { PipelineItem } from '../lib';
+import { PipelineItem } from '../lib/types/payload';
 
 export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
   const alignMessagesToLeft = activity.items.some(
@@ -383,7 +386,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
         }
 
         default: {
-          Logger.warn(
+          getDefaultLogger().warn(
             `[buildPipeline] unknown activity item type found: ${(item as ActivityItem).inputType}`,
           );
 

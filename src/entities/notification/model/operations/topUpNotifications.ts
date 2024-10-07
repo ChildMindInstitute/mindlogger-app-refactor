@@ -1,9 +1,12 @@
 import { AppState } from 'react-native';
 
-import { LogAction, LogTrigger } from '@app/shared/api';
+import {
+  LogAction,
+  LogTrigger,
+} from '@app/shared/api/services/INotificationService';
 
-import NotificationsLogger from '../../lib/services/NotificationsLogger';
-import NotificationManager from '../NotificationManager';
+import { getDefaultNotificationsLogger } from '../../lib/services/notificationsLoggerInstance';
+import { getDefaultNotificationManager } from '../notificationManagerInstance';
 
 export async function topUpNotifications() {
   const isForeground = AppState.currentState === 'active';
@@ -12,7 +15,7 @@ export async function topUpNotifications() {
     return;
   }
 
-  if (NotificationManager.mutex.isBusy()) {
+  if (getDefaultNotificationManager().mutex.isBusy()) {
     console.warn(
       '[AppService.componentDidMount:BackgroundWorker.setTask]: NotificationManagerMutex is busy. Operation rejected',
     );
@@ -20,15 +23,15 @@ export async function topUpNotifications() {
   }
 
   try {
-    NotificationManager.mutex.setBusy();
+    getDefaultNotificationManager().mutex.setBusy();
 
-    await NotificationManager.topUpNotificationsFromQueue();
+    await getDefaultNotificationManager().topUpNotificationsFromQueue();
 
-    NotificationsLogger.log({
+    getDefaultNotificationsLogger().log({
       trigger: LogTrigger.RunBackgroundProcess,
       action: LogAction.ReStack,
     });
   } finally {
-    NotificationManager.mutex.release();
+    getDefaultNotificationManager().mutex.release();
   }
 }

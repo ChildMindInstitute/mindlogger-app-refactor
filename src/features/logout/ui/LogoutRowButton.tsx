@@ -2,11 +2,12 @@ import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { RowButton, KeyIcon } from '@shared/ui';
+import { KeyIcon } from '@app/shared/ui/icons';
+import { RowButton } from '@app/shared/ui/RowButton';
 
-import { useLogout } from '../model';
+import { useLogout } from '../model/hooks';
 
-const LogoutRowButton: FC = () => {
+export const LogoutRowButton: FC = () => {
   const { t } = useTranslation();
   const { logout } = useLogout();
 
@@ -23,5 +24,3 @@ const LogoutRowButton: FC = () => {
     />
   );
 };
-
-export default LogoutRowButton;

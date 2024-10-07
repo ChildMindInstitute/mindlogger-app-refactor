@@ -1,14 +1,13 @@
-import { EntityPath } from '@app/abstract/lib';
+import { EntityPath } from '@app/abstract/lib/types/entity';
+import { getLoggerMock } from '@app/entities/notification/model/factory/tests/testHelpers';
 import * as survey from '@app/shared/lib/utils/survey/survey';
 
-import { getFlowProgressRecord, getRegularProgressRecord } from './testHelpers';
+import {
+  getActivityIncompleteEntity,
+  getActivityFlowIncompleteEntity,
+} from './testHelpers';
 import * as storageHelpers from '../../../lib/storageHelpers';
 import { CollectCompletionsService } from '../CollectCompletionsService';
-
-jest.mock('@app/shared/lib/services/Logger', () => ({
-  log: jest.fn(),
-  info: jest.fn(),
-}));
 
 describe('Test CollectCompletionsService: collectAll', () => {
   let pathOne: EntityPath;
@@ -22,6 +21,7 @@ describe('Test CollectCompletionsService: collectAll', () => {
       entityId: 'mock-entity-id-1',
       eventId: 'mock-event-id-1',
       entityType: 'regular',
+      targetSubjectId: null,
     };
 
     pathTwo = {
@@ -29,6 +29,7 @@ describe('Test CollectCompletionsService: collectAll', () => {
       entityId: 'mock-entity-id-2',
       eventId: 'mock-event-id-2',
       entityType: 'regular',
+      targetSubjectId: null,
     };
   });
 
@@ -37,9 +38,11 @@ describe('Test CollectCompletionsService: collectAll', () => {
       .spyOn(storageHelpers, 'getFlowRecord')
       .mockReturnValue(null);
 
-    const progress = getRegularProgressRecord(pathOne);
+    const progression = getActivityIncompleteEntity(pathOne);
 
-    const service = new CollectCompletionsService([progress]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     expect(getFlowMock).toBeCalledTimes(0);
 
@@ -65,11 +68,16 @@ describe('Test CollectCompletionsService: collectAll', () => {
         .spyOn(storageHelpers, 'getFlowRecord')
         .mockReturnValue(null);
 
-      const progress = getRegularProgressRecord(pathOne);
+      const progression = getActivityIncompleteEntity(pathOne);
+      progression.progression.availableUntilTimestamp = new Date(
+        2023,
+        3,
+        7,
+      ).getTime();
 
-      progress.payload.availableTo = new Date(2023, 3, 7).getTime();
-
-      const service = new CollectCompletionsService([progress]);
+      const service = new CollectCompletionsService(getLoggerMock(), [
+        progression,
+      ]);
 
       const result = service.collectAll({
         ...pathOne,
@@ -83,11 +91,12 @@ describe('Test CollectCompletionsService: collectAll', () => {
   });
 
   it('Should return empty array when "exclude" is not set and availableTo is not set', () => {
-    const progress = getRegularProgressRecord(pathOne);
+    const progression = getActivityIncompleteEntity(pathOne);
+    progression.progression.availableUntilTimestamp = null;
 
-    progress.payload.availableTo = null;
-
-    const service = new CollectCompletionsService([progress]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectAll(pathOne);
 
@@ -99,11 +108,16 @@ describe('Test CollectCompletionsService: collectAll', () => {
       .spyOn(storageHelpers, 'getFlowRecord')
       .mockReturnValue(null);
 
-    const progress = getRegularProgressRecord(pathOne);
+    const progression = getActivityIncompleteEntity(pathOne);
+    progression.progression.availableUntilTimestamp = new Date(
+      2023,
+      3,
+      7,
+    ).getTime();
 
-    progress.payload.availableTo = new Date(2023, 3, 7).getTime();
-
-    const service = new CollectCompletionsService([progress]);
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      progression,
+    ]);
 
     const result = service.collectAll();
 
@@ -119,15 +133,23 @@ describe('Test CollectCompletionsService: collectAll', () => {
       .spyOn(survey, 'isEntityExpired')
       .mockReturnValue(false);
 
-    const firstProgress = getRegularProgressRecord(pathOne);
-    const secondProgress = getRegularProgressRecord(pathTwo);
+    const firstProgression = getActivityIncompleteEntity(pathOne);
+    const secondProgression = getActivityIncompleteEntity(pathTwo);
 
-    firstProgress.payload.availableTo = new Date(2023, 3, 7).getTime();
-    secondProgress.payload.availableTo = new Date(2023, 3, 7).getTime();
+    firstProgression.progression.availableUntilTimestamp = new Date(
+      2023,
+      3,
+      7,
+    ).getTime();
+    secondProgression.progression.availableUntilTimestamp = new Date(
+      2023,
+      3,
+      7,
+    ).getTime();
 
-    const service = new CollectCompletionsService([
-      firstProgress,
-      secondProgress,
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      firstProgression,
+      secondProgression,
     ]);
 
     const result = service.collectAll();
@@ -146,15 +168,23 @@ describe('Test CollectCompletionsService: collectAll', () => {
 
     jest.spyOn(survey, 'isEntityExpired').mockReturnValue(true);
 
-    const firstProgress = getRegularProgressRecord(pathOne);
-    const secondProgress = getRegularProgressRecord(pathTwo);
+    const firstProgression = getActivityIncompleteEntity(pathOne);
+    const secondProgression = getActivityIncompleteEntity(pathTwo);
 
-    firstProgress.payload.availableTo = new Date(2023, 3, 7).getTime();
-    secondProgress.payload.availableTo = new Date(2023, 3, 7).getTime();
+    firstProgression.progression.availableUntilTimestamp = new Date(
+      2023,
+      3,
+      7,
+    ).getTime();
+    secondProgression.progression.availableUntilTimestamp = new Date(
+      2023,
+      3,
+      7,
+    ).getTime();
 
-    const service = new CollectCompletionsService([
-      firstProgress,
-      secondProgress,
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      firstProgression,
+      secondProgression,
     ]);
 
     //@ts-expect-error
@@ -206,15 +236,23 @@ describe('Test CollectCompletionsService: collectAll', () => {
 
     jest.spyOn(survey, 'isEntityExpired').mockReturnValue(true);
 
-    const firstProgress = getRegularProgressRecord(pathOne);
-    const secondProgress = getFlowProgressRecord(pathTwo);
+    const firstProgression = getActivityFlowIncompleteEntity(pathOne);
+    const secondProgression = getActivityFlowIncompleteEntity(pathTwo);
 
-    firstProgress.payload.availableTo = new Date(2023, 3, 7).getTime();
-    secondProgress.payload.availableTo = new Date(2023, 3, 7).getTime();
+    firstProgression.progression.availableUntilTimestamp = new Date(
+      2023,
+      3,
+      7,
+    ).getTime();
+    secondProgression.progression.availableUntilTimestamp = new Date(
+      2023,
+      3,
+      7,
+    ).getTime();
 
-    const service = new CollectCompletionsService([
-      firstProgress,
-      secondProgress,
+    const service = new CollectCompletionsService(getLoggerMock(), [
+      firstProgression,
+      secondProgression,
     ]);
 
     //@ts-expect-error
@@ -262,14 +300,24 @@ describe('Test CollectCompletionsService: collectAll', () => {
 
     const expected = [
       {
-        activityId: 'mock-entity-id-1',
+        activityId: 'mock-activity-id-1',
         activityName: 'mock-activity-name-1',
+        appletId: 'mock-applet-id-1',
+        completionType: 'intermediate',
+        eventId: 'mock-event-id-1',
+        flowId: 'mock-entity-id-1',
+        logAvailableTo: undefined,
+        order: 0,
+      },
+      {
+        activityId: 'mock-activity-id-2',
+        activityName: 'mock-activity-name-2',
         appletId: 'mock-applet-id-1',
         completionType: 'finish',
         eventId: 'mock-event-id-1',
-        flowId: undefined,
+        flowId: 'mock-entity-id-1',
         logAvailableTo: undefined,
-        order: 0,
+        order: 1,
       },
       {
         activityId: 'mock-activity-id-1',

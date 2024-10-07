@@ -3,15 +3,16 @@ import { FC } from 'react';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
-import { Box, XStack } from '@app/shared/ui';
+import { Box, XStack } from '@app/shared/ui/base';
 
 import { DrawingTestProps } from './DrawingTest';
-import { DrawResult, SvgFileManager } from '../../lib';
-import DrawingBoard from '../DrawingBoard';
+import { DrawResult } from '../../lib/types/draw';
+import { getDefaultSvgFileManager } from '../../lib/utils/svgFileManagerInstance';
+import { DrawingBoard } from '../DrawingBoard';
 
 const RectPadding = 15;
 
-const DrawingTest: FC<DrawingTestProps> = props => {
+export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
   const width = props.dimensions.width - RectPadding * 2;
 
   const { value, backgroundImageUrl, imageUrl, onLog } = props;
@@ -19,7 +20,7 @@ const DrawingTest: FC<DrawingTestProps> = props => {
   const onResult = async (result: DrawResult) => {
     const fileName = value.fileName;
 
-    const fileMeta = SvgFileManager.getFileMeta(fileName);
+    const fileMeta = getDefaultSvgFileManager().getFileMeta(fileName);
 
     result.fileName = fileMeta.fileName;
     result.type = fileMeta.type;
@@ -69,5 +70,3 @@ const DrawingTest: FC<DrawingTestProps> = props => {
     </Box>
   );
 };
-
-export default DrawingTest;

@@ -1,9 +1,9 @@
-import { Report } from '@app/entities/activity';
-import { Calculator } from '@app/shared/lib';
+import { Report } from '@app/entities/activity/lib/types/activityReportSettings';
+import { Calculator } from '@app/shared/lib/utils/calculator';
 
+import { IScoresCalculator } from './IScoresCalculator';
+import { Answer, Answers } from '../lib/hooks/useActivityStorageRecord';
 import {
-  Answer,
-  Answers,
   CheckboxPipelineItem,
   CheckboxResponse,
   PipelineItem,
@@ -11,15 +11,7 @@ import {
   RadioResponse,
   SliderPipelineItem,
   SliderResponse,
-} from '../lib';
-
-export interface IScoresCalculator {
-  calculate(
-    pipelineItems: PipelineItem[],
-    answers: Answers,
-    settings: Report,
-  ): number | null;
-}
+} from '../lib/types/payload';
 
 export class ScoresCalculator implements IScoresCalculator {
   constructor() {}
@@ -245,5 +237,3 @@ export class ScoresCalculator implements IScoresCalculator {
     }
   }
 }
-
-export default new ScoresCalculator();

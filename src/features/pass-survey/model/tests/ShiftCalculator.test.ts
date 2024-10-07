@@ -1,4 +1,4 @@
-import ShiftCalculator from '../ShiftCalculator';
+import { ShiftCalculator } from '../ShiftCalculator';
 
 describe('[ShiftCalculator]', () => {
   describe('When the next step is calculated', () => {

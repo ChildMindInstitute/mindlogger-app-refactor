@@ -1,16 +1,14 @@
-import { NoParamVoidFunction } from '@app/abstract/lib';
-import {
-  AbTestResponse,
-  Answer,
-  PipelineItemType,
-} from '@features/pass-survey';
+import { NoParamVoidFunction } from '@app/abstract/lib/types/primitive';
+
+import { Answer } from '../hooks/useActivityStorageRecord';
+import { AbTestResponse, PipelineItemType } from '../types/payload';
 
 type Params = {
   onSkip: NoParamVoidFunction;
   onProceed: NoParamVoidFunction;
 };
 
-class SkipService {
+export class SkipService {
   private readonly onSkip: NoParamVoidFunction;
   private readonly onProceed: NoParamVoidFunction;
 
@@ -43,5 +41,3 @@ class SkipService {
     }
   }
 }
-
-export default SkipService;

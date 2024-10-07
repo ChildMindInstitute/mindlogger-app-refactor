@@ -1,6 +1,6 @@
-import TimerBase from './TimerBase';
+import { TimerBase } from './TimerBase';
 
-class AppTimer extends TimerBase {
+export class AppTimer extends TimerBase {
   private duration: number;
   private startTime?: number;
   private onFinish: (...args: any[]) => unknown;
@@ -69,5 +69,3 @@ class AppTimer extends TimerBase {
     }
   }
 }
-
-export default AppTimer;

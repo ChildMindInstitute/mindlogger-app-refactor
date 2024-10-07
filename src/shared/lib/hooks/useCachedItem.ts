@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 
 import { QueryKey, useQueryClient } from '@tanstack/react-query';
 
-import { getDataFromQuery } from '../utils';
+import { getDataFromQuery } from '../utils/reactQueryHelpers';
 
-const useCachedItem = <TResponse>(key: QueryKey) => {
+export const useCachedItem = <TResponse>(key: QueryKey) => {
   const queryClient = useQueryClient();
 
   const response = useMemo(() => {
@@ -13,5 +13,3 @@ const useCachedItem = <TResponse>(key: QueryKey) => {
 
   return response;
 };
-
-export default useCachedItem;

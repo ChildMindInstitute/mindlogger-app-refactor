@@ -12,7 +12,7 @@ type NativeFlankerProps = Props & {
 
 const RNFlankerView = requireNativeComponent<NativeFlankerProps>('FlankerView');
 
-const FlankerViewWrapper: React.FC<Props> = props => {
+export const SwiftFlankerWrapper: React.FC<Props> = props => {
   const _onEndGame = (event: any) => {
     if (!props.onLogResult) {
       return;
@@ -23,5 +23,3 @@ const FlankerViewWrapper: React.FC<Props> = props => {
 
   return <RNFlankerView {...props} onEndGame={_onEndGame} />;
 };
-
-export default FlankerViewWrapper;

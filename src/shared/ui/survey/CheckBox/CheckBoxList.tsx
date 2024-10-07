@@ -1,9 +1,9 @@
-import CheckBoxItem from './CheckBox.item';
+import { CheckBoxItem } from './CheckBox.item';
 import { CheckboxItemProps } from './types';
 import { findById } from './utils';
-import { Box } from '../..';
+import { Box } from '../../base';
 
-function CheckBoxList({
+export function CheckBoxList({
   value,
   options,
 
@@ -42,5 +42,3 @@ function CheckBoxList({
     </Box>
   );
 }
-
-export default CheckBoxList;

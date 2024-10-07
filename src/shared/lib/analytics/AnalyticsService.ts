@@ -1,84 +1,75 @@
+import { MMKV } from 'react-native-mmkv';
+
 import { IAnalyticsService } from './IAnalyticsService';
-import MixpanelAnalytics from './MixpanelAnalytics';
+import { MixpanelAnalytics } from './MixpanelAnalytics';
 import { MIXPANEL_TOKEN } from '../constants';
-import { Logger } from '../services';
-import { createStorage } from '../storages';
+import { ILogger } from '../types/logger';
 
-export const storage = createStorage('analytics-storage');
+export class AnalyticsService implements IAnalyticsService {
+  private logger: ILogger;
+  private analyticsStorage: MMKV;
+  private provider: MixpanelAnalytics | undefined;
 
-let service: IAnalyticsService;
+  constructor(logger: ILogger, analyticsStorage: MMKV) {
+    this.logger = logger;
+    this.analyticsStorage = analyticsStorage;
+    this.provider = undefined;
+  }
 
-export const MixProperties = {
-  AppletId: 'Applet ID',
-  MindLoggerVersion: 'MindLogger Version',
-  SubmitId: 'Submit ID',
-};
-
-export const MixEvents = {
-  DataView: 'Data View',
-  AppletView: 'Applet View',
-  HomeView: 'Home Page View',
-  AssessmentStarted: 'Assessment started',
-  AssessmentCompleted: 'Assessment completed',
-  RetryButtonPressed: 'Retry button pressed',
-  LoginSuccessful: 'Login Successful',
-  SignupSuccessful: 'Signup Successful',
-  AppOpen: 'App Open',
-  AppReOpen: 'App Re-Open',
-  ActivityRestart: 'Activity Restart Button Pressed',
-  ActivityResume: 'Activity Resume Button Pressed',
-  AppletSelected: 'Applet Selected',
-  ReturnToActivitiesPressed: 'Return to Activities pressed',
-  UploadLogsPressed: 'Upload Logs Pressed',
-  UploadedLogsSuccessfully: 'Uploaded Logs Successfully',
-  UploadLogsError: 'Upload Logs Error Occurred',
-  NotificationTap: 'Notification tap',
-};
-
-const AnalyticsService = {
-  shouldEnableMixpanel() {
-    return !!MIXPANEL_TOKEN;
-  },
   async init(): Promise<void> {
     if (this.shouldEnableMixpanel()) {
-      Logger.log(
-        '[AnalyticsService]: Create and init MixpanelAnalytics object',
-      );
-      service = new MixpanelAnalytics(MIXPANEL_TOKEN!);
-      return service.init();
+      if (!this.provider) {
+        this.logger.log('[AnalyticsService]: Create MixpanelAnalytics object');
+        this.provider = new MixpanelAnalytics(this.getMixpanelToken());
+      }
+      await this.provider.init();
     }
-  },
-  track(action: string, payload?: Record<string, any>) {
+  }
+
+  track(action: string, payload?: Record<string, unknown>) {
+    if (!this.provider) {
+      return;
+    }
+
     if (payload) {
-      Logger.log(
+      this.logger.log(
         `[AnalyticsService]: Action: ${action}, payload: ${JSON.stringify(
           payload,
         )}`,
       );
     } else {
-      Logger.log('[AnalyticsService]: Action: ' + action);
+      this.logger.log('[AnalyticsService]: Action: ' + action);
     }
 
-    if (this.shouldEnableMixpanel()) {
-      service.track(`[Mobile] ${action}`, payload);
-    }
-  },
+    this.provider.track(`[Mobile] ${action}`, payload);
+  }
+
   async login(userId: string) {
-    const isLoggedIn = storage.getBoolean('IS_LOGGED_IN');
-
-    if (this.shouldEnableMixpanel() && !isLoggedIn) {
-      return service.login(userId).then(() => {
-        storage.set('IS_LOGGED_IN', true);
-      });
+    if (!this.provider) {
+      return;
     }
-  },
+
+    if (!this.analyticsStorage.getBoolean('IS_LOGGED_IN')) {
+      await this.provider.login(userId);
+      this.analyticsStorage.set('IS_LOGGED_IN', true);
+    }
+  }
+
   logout() {
-    if (this.shouldEnableMixpanel()) {
-      this.track('Logout');
-      service.logout();
-      storage.clearAll();
+    if (!this.provider) {
+      return;
     }
-  },
-};
 
-export default AnalyticsService;
+    this.track('Logout');
+    this.provider.logout();
+    this.analyticsStorage.clearAll();
+  }
+
+  private shouldEnableMixpanel() {
+    return !!MIXPANEL_TOKEN;
+  }
+
+  private getMixpanelToken(): string {
+    return MIXPANEL_TOKEN as string;
+  }
+}

@@ -1,13 +1,9 @@
-import { ILogger } from '@app/shared/lib';
+import { ILogger } from '@app/shared/lib/types/logger';
 
 import { fillOptionsForRadio, getEmptyRadioItem } from './testHelpers';
-import { AnswerAlerts, RadioResponse } from '../../lib';
+import { RadioResponse } from '../../lib/types/payload';
+import { AnswerAlerts } from '../../lib/types/summary';
 import { AlertsExtractor } from '../AlertsExtractor';
-
-jest.mock('@app/shared/lib/constants', () => ({
-  ...jest.requireActual('@app/shared/lib/constants'),
-  STORE_ENCRYPTION_KEY: '12345',
-}));
 
 describe('AlertsExtractor: test extractFromRadio', () => {
   let extractor: AlertsExtractor;

@@ -1,11 +1,12 @@
 import { PropsWithChildren } from 'react';
 
+import { Image, XStack } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 import { bellAlertIcon } from '@assets/images';
-import { XStack, Text, Image } from '@shared/ui';
 
 type Props = PropsWithChildren;
 
-function Alert({ children }: Props) {
+export function Alert({ children }: Props) {
   return (
     <XStack alignItems="center" mr={25}>
       <Image mt={2} mr={10} width={13} height={16} src={bellAlertIcon} />
@@ -16,5 +17,3 @@ function Alert({ children }: Props) {
     </XStack>
   );
 }
-
-export default Alert;

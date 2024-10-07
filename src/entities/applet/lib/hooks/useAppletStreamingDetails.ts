@@ -1,5 +1,5 @@
-import { useAppletDetailsQuery } from '../../api';
-import { mapAppletDetailsFromDto } from '../../model';
+import { useAppletDetailsQuery } from '../../api/hooks/useAppletDetailsQuery';
+import { mapAppletDetailsFromDto } from '../../model/mappers';
 
 export const useAppletStreamingDetails = (appletId: string) => {
   const { data: streamingData } = useAppletDetailsQuery(appletId, {

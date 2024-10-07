@@ -1,17 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
 import { InteractionManager } from 'react-native';
 
-import { IdentityModel, UserPrivateKeyRecord } from '@app/entities/identity';
-import {
-  encryption,
-  formatToISODateMidnight,
-  getCurrentWeekDates,
-  useAppSelector,
-  wait,
-} from '@app/shared/lib';
+import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userPrivateKeyRecordInstance';
+import { selectUserId } from '@app/entities/identity/model/selectors';
+import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encryptionManagerInstance';
+import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { getCurrentWeekDates, wait } from '@app/shared/lib/utils/common';
+import { formatToISODateMidnight } from '@app/shared/lib/utils/dateTime';
 
-import { useAppletAnalyticsQuery, useAppletDetailsQuery } from '../../api';
-import { mapAppletAnalytics, mapAppletDetailsFromDto } from '../../model';
+import { useAppletAnalyticsQuery } from '../../api/hooks/useAppletAnalyticsQuery';
+import { useAppletDetailsQuery } from '../../api/hooks/useAppletDetailsQuery';
+import {
+  mapAppletAnalytics,
+  mapAppletDetailsFromDto,
+} from '../../model/mappers';
 import { ActivityResponses } from '../types';
 
 type AppletActivitiesResponses = {
@@ -22,7 +24,7 @@ type AppletActivitiesResponses = {
 export const useAppletAnalytics = (appletId: string) => {
   const currentWeekDates = getCurrentWeekDates();
   const firstDateOfCurrentWeek = currentWeekDates[0];
-  const respondentId = useAppSelector(IdentityModel.selectors.selectUserId);
+  const respondentId = useAppSelector(selectUserId);
 
   const { data: appletEncryption, isLoading: isDetailsLoading } =
     useAppletDetailsQuery(appletId, {
@@ -30,7 +32,10 @@ export const useAppletAnalytics = (appletId: string) => {
         mapAppletDetailsFromDto(response.data.result).encryption,
     });
 
-  const userPrivateKey = useMemo(() => UserPrivateKeyRecord.get(), []);
+  const userPrivateKey = useMemo(
+    () => getDefaultUserPrivateKeyRecord().get(),
+    [],
+  );
 
   const [appletAnalytics, setAppletAnalytics] =
     useState<AppletActivitiesResponses>();
@@ -52,12 +57,13 @@ export const useAppletAnalytics = (appletId: string) => {
       // Add delay as the encryption blocks the JS thread causing a long loading.
       await wait(100);
 
-      const encryptionService = encryption.createEncryptionService({
-        prime: appletEncryption.prime,
-        publicKey: appletEncryption.publicKey,
-        base: appletEncryption.base,
-        privateKey: userPrivateKey,
-      });
+      const encryptionService =
+        getDefaultEncryptionManager().createEncryptionService({
+          prime: appletEncryption.prime,
+          publicKey: appletEncryption.publicKey,
+          base: appletEncryption.base,
+          privateKey: userPrivateKey,
+        });
 
       const analytics = mapAppletAnalytics({
         appletId,

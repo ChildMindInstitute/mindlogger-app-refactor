@@ -1,11 +1,11 @@
 import NetInfo from '@react-native-community/netinfo';
 import { AxiosError, AxiosResponse } from 'axios';
 
-import { httpService } from '@app/shared/api';
+import { httpService } from '@app/shared/api/services/httpService';
 
 import { wait } from './common';
-import { onNetworkUnavailable } from '../alerts';
-import { Logger } from '../services';
+import { onNetworkUnavailable } from '../alerts/networkAlert';
+import { getDefaultLogger } from '../services/loggerInstance';
 
 export const isAppOnline = async (): Promise<boolean> => {
   const networkState = await NetInfo.fetch();
@@ -64,7 +64,9 @@ export const watchForConnectionLoss = (
       if (!checkResult) {
         abortController.abort();
         clearInterval(intervalId);
-        Logger.warn('[watchForConnectionWithAbort]: Connection aborted');
+        getDefaultLogger().warn(
+          '[watchForConnectionWithAbort]: Connection aborted',
+        );
       }
     };
 
@@ -128,12 +130,12 @@ export const callApiWithRetry = async <TResponse>(
       const result = await apiFunction();
 
       if (attempt > 0) {
-        Logger.info('[callApiWithRetry]: Retried successfully');
+        getDefaultLogger().info('[callApiWithRetry]: Retried successfully');
       }
 
       return result;
     } catch (error) {
-      Logger.warn(
+      getDefaultLogger().warn(
         '[callApiWithRetry]: Error occurred:\nInternal error:\n\n' + error,
       );
       if (!isRetryErrorCode(error) || isLast) {
@@ -142,7 +144,7 @@ export const callApiWithRetry = async <TResponse>(
     }
     await wait(RetryWaitInterval);
 
-    Logger.info('[callApiWithRetry]: Retry api call');
+    getDefaultLogger().info('[callApiWithRetry]: Retry api call');
   }
 
   throw new Error('[callApiWithRetry]: Number of attempts exceed');

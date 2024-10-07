@@ -3,8 +3,11 @@ import { FC } from 'react';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
+import { Image, XStack, YStack } from '@app/shared/ui/base';
+import { Button } from '@app/shared/ui/Button';
+import { Center } from '@app/shared/ui/Center';
+import { Text } from '@app/shared/ui/Text';
 import { badge } from '@assets/images';
-import { YStack, Text, Button, Image, XStack, Center } from '@shared/ui';
 
 const ActivityBox = styled(Center, {
   padding: 25,
@@ -25,7 +28,7 @@ type Props = {
   onPressSubmit: () => void;
 };
 
-const IntermediateSubmit: FC<Props> = ({
+export const IntermediateSubmit: FC<Props> = ({
   activityName,
   activitiesPassed,
   totalActivities,
@@ -92,5 +95,3 @@ const IntermediateSubmit: FC<Props> = ({
     </YStack>
   );
 };
-
-export default IntermediateSubmit;

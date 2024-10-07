@@ -3,24 +3,24 @@ import { FC } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { useChangePasswordMutation } from '@app/entities/identity';
-import {
-  colors,
-  executeIfOnline,
-  useAppForm,
-  useFormChanges,
-  useToast,
-} from '@shared/lib';
-import { SubmitButton, YStack, Box, BoxProps } from '@shared/ui';
-import { ErrorMessage, InputField } from '@shared/ui/form';
+import { useChangePasswordMutation } from '@app/entities/identity/api/hooks/useChangePasswordMutation';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
+import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
+import { useToast } from '@app/shared/lib/hooks/useToast';
+import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
+import { Box, BoxProps, YStack } from '@app/shared/ui/base';
+import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
+import { InputField } from '@app/shared/ui/form/InputField';
+import { SubmitButton } from '@app/shared/ui/SubmitButton';
 
-import { ChangePasswordFormSchema } from '../model';
+import { ChangePasswordFormSchema } from '../model/ChangePasswordFormSchema';
 
 type Props = BoxProps & {
   onChangePasswordSuccess: () => void;
 };
 
-const ChangePasswordForm: FC<Props> = props => {
+export const ChangePasswordForm: FC<Props> = props => {
   const { t } = useTranslation();
   const toast = useToast();
 
@@ -93,5 +93,3 @@ const ChangePasswordForm: FC<Props> = props => {
     </Box>
   );
 };
-
-export default ChangePasswordForm;

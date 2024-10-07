@@ -1,6 +1,6 @@
-import { AbPayload, AbTestPayload } from '@app/abstract/lib';
+import { AbPayload, AbTestPayload } from '@app/abstract/lib/types/abTrails';
 
-import { PipelineItem } from '../lib';
+import { PipelineItem } from '../lib/types/payload';
 
 export const getAbTrailsPipeline = (
   id: string,

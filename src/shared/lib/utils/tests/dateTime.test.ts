@@ -1,4 +1,4 @@
-import { HourMinute } from '../../types';
+import { HourMinute } from '../../types/dateTime';
 import {
   areDatesEqual,
   buildDateFromDto,

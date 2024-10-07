@@ -6,7 +6,7 @@ import {
 } from 'react-native-gesture-handler';
 import { SharedValue, useSharedValue } from 'react-native-reanimated';
 
-import { IS_IOS } from '@app/shared/lib';
+import { IS_IOS } from '@app/shared/lib/constants';
 
 import { Point } from './LineSketcher';
 
@@ -29,7 +29,7 @@ const findTouchById = (event: GestureTouchEvent, id?: number) => {
   return event.changedTouches.find(touchData => touchData.id === id);
 };
 
-function useDrawingGesture(
+export function useDrawingGesture(
   { areaSize }: Options,
   { onTouchStart, onTouchProgress, onTouchEnd }: Callbacks,
 ) {
@@ -255,5 +255,3 @@ function useDrawingGesture(
 
   return gesture;
 }
-
-export default useDrawingGesture;

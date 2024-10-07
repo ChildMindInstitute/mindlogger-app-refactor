@@ -1,7 +1,7 @@
-import TimerBase from './TimerBase';
+import { TimerBase } from './TimerBase';
 import { ONE_MINUTE } from '../constants';
 
-class AppClockTimer extends TimerBase {
+export class AppClockTimer extends TimerBase {
   onMinutePass: (...args: any[]) => unknown;
 
   constructor(
@@ -43,5 +43,3 @@ class AppClockTimer extends TimerBase {
     }
   }
 }
-
-export default AppClockTimer;

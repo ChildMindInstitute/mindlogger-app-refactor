@@ -1,21 +1,20 @@
-import { createSecureStorage } from '@shared/lib';
+import { MMKV } from 'react-native-mmkv';
 
+import { INavigationService } from './INavigationService';
 import { InitialRoute } from './types';
 
-const storage = createSecureStorage('navigation-storage');
-
-function NavigationService() {
+export function NavigationService(navigationStorage: MMKV): INavigationService {
   return {
     setInitialRoute(route: InitialRoute) {
-      storage.set('initialRoute', JSON.stringify(route));
+      navigationStorage.set('initialRoute', JSON.stringify(route));
     },
 
     clearInitialRoute() {
-      storage.delete('initialRoute');
+      navigationStorage.delete('initialRoute');
     },
 
     getInitialRoute() {
-      const value = storage.getString('initialRoute');
+      const value = navigationStorage.getString('initialRoute');
 
       if (value) {
         return JSON.parse(value) as InitialRoute;
@@ -23,9 +22,7 @@ function NavigationService() {
     },
 
     getStorage() {
-      return storage;
+      return navigationStorage;
     },
   };
 }
-
-export default NavigationService();

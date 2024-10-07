@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { navigationService } from '../../lib';
+import { getDefaultNavigationService } from '@app/screens/lib/navigationServiceInstance';
 
-function useInitialRouteNavigation() {
+export function useInitialRouteNavigation() {
   const { navigate } = useNavigation();
 
   useEffect(() => {
-    const initialRoute = navigationService.getInitialRoute();
+    const initialRoute = getDefaultNavigationService().getInitialRoute();
 
     if (initialRoute) {
       // @react-navigation's poor type inference
@@ -17,5 +17,3 @@ function useInitialRouteNavigation() {
     }
   }, [navigate]);
 }
-
-export default useInitialRouteNavigation;

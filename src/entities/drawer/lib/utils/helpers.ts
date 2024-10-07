@@ -1,4 +1,5 @@
-import { Dimensions, ImageDimensions } from '@app/shared/lib';
+import { ImageDimensions } from '@app/shared/lib/hooks/useImageDimensions';
+import { Dimensions } from '@app/shared/lib/types/space';
 
 import {
   CANVAS_HEIGHT_FACTOR,
@@ -6,7 +7,7 @@ import {
   EXAMPLE_HEIGHT_FACTOR,
   RECT_PADDING,
 } from './constants';
-import { DrawLine } from '../types';
+import { DrawLine } from '../types/draw';
 
 export const getChunkedPointsAsStrings = (lines: DrawLine[]) => {
   const results: string[] = [];

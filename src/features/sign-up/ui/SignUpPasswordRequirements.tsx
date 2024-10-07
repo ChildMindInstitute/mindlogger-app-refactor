@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 
 import { useFormContext } from 'react-hook-form';
 
-import { useFormChanges } from '@app/shared/lib';
-import { PasswordRequirements } from '@app/shared/ui/form';
+import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
+import { PasswordRequirements } from '@app/shared/ui/form/PasswordRequirements';
 
 export const SignUpPasswordRequirements = () => {
   const form = useFormContext();
@@ -31,5 +31,3 @@ export const SignUpPasswordRequirements = () => {
 
   return <PasswordRequirements requirements={passwordRequirements} />;
 };
-
-export default SignUpPasswordRequirements;

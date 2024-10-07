@@ -2,8 +2,8 @@ import {
   AvailabilityType,
   NotificationTriggerType,
   PeriodicityType,
-} from '@app/abstract/lib';
-import { HourMinute } from '@app/shared/lib';
+} from '@app/abstract/lib/types/event';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
 
 type NotificationSettings = {
   notifications: EventNotification[];

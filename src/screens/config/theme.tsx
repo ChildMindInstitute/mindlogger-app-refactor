@@ -6,9 +6,14 @@ import {
 } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { AppletTheme } from '@app/entities/applet';
-import { colors, IS_ANDROID, IS_TABLET } from '@shared/lib';
-import { DataIcon, SurveyIcon, AboutIcon, Text, CloseIcon } from '@shared/ui';
+import { AppletTheme } from '@app/entities/applet/lib/types';
+import { IS_ANDROID, IS_TABLET } from '@app/shared/lib/constants';
+import { colors } from '@app/shared/lib/constants/colors';
+import { CloseIcon } from '@app/shared/ui/icons';
+import { AboutIcon } from '@app/shared/ui/icons/About';
+import { DataIcon } from '@app/shared/ui/icons/Data';
+import { SurveyIcon } from '@app/shared/ui/icons/Survey';
+import { Text } from '@app/shared/ui/Text';
 
 import { RootStackParamList, AppletDetailsParamList } from './types';
 

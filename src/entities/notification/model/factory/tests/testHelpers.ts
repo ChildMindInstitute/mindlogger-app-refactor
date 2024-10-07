@@ -1,20 +1,24 @@
 import { subMinutes } from 'date-fns';
 
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
-  ActivityPipelineType,
+  EntityProgression,
+  EntityProgressionInProgress,
+} from '@app/abstract/lib/types/entityProgress';
+import {
   AvailabilityType,
-  Progress,
   PeriodicityType,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/event';
 import {
   EventEntity,
   NotificationDescriber,
   NotificationType,
   ScheduleEvent,
-} from '@app/entities/notification/lib';
-import { HourMinute, ILogger } from '@app/shared/lib';
+} from '@app/entities/notification/lib/types/notificationBuilder';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
+import { ILogger } from '@app/shared/lib/types/logger';
 
-import { createNotificationBuilder } from '../NotificationBuilder';
+import { NotificationBuilder } from '../NotificationBuilder';
 
 export const getEmptyEvent = (): ScheduleEvent => {
   return {
@@ -49,30 +53,42 @@ export const getEventEntity = (event: ScheduleEvent): EventEntity => {
       isVisible: true,
       pipelineType: ActivityPipelineType.Regular,
     },
+    assignment: null,
   };
 };
 
 export const createBuilder = (eventEntity: EventEntity, completedAt?: Date) => {
-  const progress: Progress = {};
+  const progressions: EntityProgression[] = [];
 
   if (completedAt) {
-    progress['mock-applet-id'] = {};
-    progress['mock-applet-id']['mock-entity-id'] = {};
-    progress['mock-applet-id']['mock-entity-id']['mock-event-id'] = {
-      type: ActivityPipelineType.Regular,
-      startAt: subMinutes(completedAt, 1),
-      endAt: completedAt,
-      availableTo: null,
+    const progression: EntityProgression = {
+      status: 'completed',
+      appletId: 'mock-applet-id',
+      entityType: 'activity',
+      entityId: 'mock-entity-id',
+      eventId: 'mock-event-id',
+      targetSubjectId: null,
+      availableUntilTimestamp: null,
+      startedAtTimestamp: subMinutes(completedAt, 1).getTime(),
+      endedAtTimestamp: completedAt.getTime(),
     };
+
+    (progression as never as EntityProgressionInProgress).startedAtTimestamp =
+      subMinutes(completedAt, 1).getTime();
+
+    progressions.push(progression);
   }
 
-  return createNotificationBuilder({
-    appletId: 'mock-applet-id',
-    appletName: 'mock-applet-name',
-    completions: {},
-    eventEntities: [eventEntity],
-    progress,
-  });
+  return new NotificationBuilder(
+    {
+      appletId: 'mock-applet-id',
+      appletName: 'mock-applet-name',
+      progressions,
+      responseTimes: [],
+      eventEntities: [eventEntity],
+    },
+    getLoggerMock(),
+  );
 };
 
 export const getMockNotificationPattern = () => {
@@ -83,6 +99,7 @@ export const getMockNotificationPattern = () => {
     entityName: 'mock-entity-name',
     eventDayString: undefined,
     eventId: 'mock-event-id',
+    targetSubjectId: null,
     fallType: undefined,
     isActive: true,
     isSpreadInEventSet: false,

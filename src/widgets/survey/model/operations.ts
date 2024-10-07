@@ -1,38 +1,64 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import {
-  ActivityPipelineType,
-  AvailabilityType,
-  StoreProgressPayload,
-} from '@app/abstract/lib';
-import { SvgFileManager } from '@app/entities/drawer';
-import { EventModel, ScheduleEvent } from '@app/entities/event';
+  EntityProgression,
+  EntityProgressionInProgressActivity,
+  EntityProgressionInProgressActivityFlow,
+} from '@app/abstract/lib/types/entityProgress';
+import { AvailabilityType } from '@app/abstract/lib/types/event';
+import { ISvgFileManager } from '@app/entities/drawer/lib/utils/ISvgFileManager';
+import { ScheduleEvent } from '@app/entities/event/lib/types/event';
+import { IScheduledDateCalculator } from '@app/entities/event/model/operations/IScheduledDateCalculator';
+import { Answers } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import {
   ActivityItemType,
   DrawingTestResponse,
-} from '@app/features/pass-survey';
-import { Answers, PipelineItem } from '@app/features/pass-survey';
-import { InitializeHiddenItem } from '@app/features/pass-survey/model';
-import { AnswerDto } from '@app/shared/api';
+  PipelineItem,
+} from '@app/features/pass-survey/lib/types/payload';
+import { InitializeHiddenItem } from '@app/features/pass-survey/model/ActivityRecordInitializer';
+import { AnswerDto } from '@app/shared/api/services/IAnswerService';
 
-export const getScheduledDate = (event: ScheduleEvent) => {
+export const getScheduledDate = (
+  calculator: IScheduledDateCalculator,
+  event: ScheduleEvent,
+) => {
   if (
     event.availability.availabilityType !== AvailabilityType.AlwaysAvailable
   ) {
-    return EventModel.ScheduledDateCalculator.calculate(event)!.valueOf();
+    return calculator.calculate(event)!.valueOf();
   }
 };
 
-export const getActivityStartAt = (progressRecord: StoreProgressPayload) => {
-  return progressRecord.type === ActivityPipelineType.Regular
-    ? progressRecord.startAt
-    : progressRecord.currentActivityStartAt;
+export const getActivityProgressionStartAt = (
+  progression: EntityProgression,
+): Date | null => {
+  if (progression.entityType === 'activity') {
+    const startedAtTimestamp = (
+      progression as EntityProgressionInProgressActivity
+    ).startedAtTimestamp;
+    return startedAtTimestamp && startedAtTimestamp > 0
+      ? new Date(startedAtTimestamp)
+      : null;
+  }
+
+  const currentActivityStartAt = (
+    progression as EntityProgressionInProgressActivityFlow
+  ).currentActivityStartAt;
+  if (currentActivityStartAt) {
+    return new Date(currentActivityStartAt);
+  }
+
+  return null;
 };
 
-export const getExecutionGroupKey = (progressRecord: StoreProgressPayload) => {
-  return progressRecord.type === ActivityPipelineType.Flow
-    ? progressRecord.executionGroupKey
-    : uuidv4();
+export const getActivityFlowProgressionExecutionGroupKey = (
+  progression: EntityProgression,
+) => {
+  if (progression.entityType === 'activityFlow') {
+    return (progression as EntityProgressionInProgressActivityFlow)
+      .executionGroupKey;
+  }
+  return uuidv4();
 };
 
 export const getUserIdentifier = (
@@ -93,6 +119,7 @@ export const canItemHaveAnswer = (type: ActivityItemType): boolean => {
 };
 
 export const createSvgFiles = async (
+  svgFileManager: ISvgFileManager,
   pipelineItems: PipelineItem[],
   answers: Answers,
 ) => {
@@ -107,7 +134,7 @@ export const createSvgFiles = async (
   });
 
   const promises = drawingTestItems.map(drawingTestItem => {
-    return SvgFileManager.writeFile(
+    return svgFileManager.writeFile(
       drawingTestItem.uri,
       drawingTestItem.svgString,
     );

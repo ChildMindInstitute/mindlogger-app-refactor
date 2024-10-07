@@ -1,4 +1,4 @@
-import { AbTutorialPayload } from '@app/abstract/lib';
+import { AbTutorialPayload } from '@app/abstract/lib/types/abTrails';
 
 export type TutorialType = 'AbTrails' | 'Gyroscope';
 

@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { StatusBar } from 'react-native';
 
-import { SendApplicationLogsForm } from '@features/send-application-logs';
-import { Box } from '@shared/ui';
+import { SendApplicationLogsForm } from '@app/features/send-application-logs/ui/SendApplicationLogsForm';
+import { Box } from '@app/shared/ui/base';
 
-const ApplicationLogsScreen: FC = () => {
+export const ApplicationLogsScreen: FC = () => {
   return (
     <Box flex={1} bg="$white">
       <StatusBar />
@@ -12,5 +12,3 @@ const ApplicationLogsScreen: FC = () => {
     </Box>
   );
 };
-
-export default ApplicationLogsScreen;

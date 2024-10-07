@@ -1,15 +1,15 @@
+import { ActivityItemDto } from '@app/shared/api/services/ActivityItemDto';
+import { ActivityDto } from '@app/shared/api/services/IActivityService';
+import { AnalyticsAnswerDto } from '@app/shared/api/services/IAppletAnalyticsService';
 import {
-  ActivityDto,
-  ActivityFlowRecordDto,
-  ActivityItemDto,
-  ActivityRecordDto,
-  AnalyticsAnswerDto,
-  AppletDetailsDto,
   AppletDetailsResponse,
-  AppletDto,
-  CompletedEntityDto,
   ThemeDto,
-} from '@shared/api';
+  AppletDto,
+  ActivityRecordDto,
+  ActivityFlowRecordDto,
+  AppletDetailsDto,
+} from '@app/shared/api/services/IAppletService';
+import { CompletedEntityDto } from '@app/shared/api/services/IEventsService';
 
 export const appletDetailsResponse: AppletDetailsResponse = {
   // @ts-ignore
@@ -24,6 +24,7 @@ export const completedEntityDto: CompletedEntityDto = {
   answerId: '1',
   submitId: '2',
   scheduledEventId: '3',
+  targetSubjectId: '4',
   localEndDate: '2020-04-04',
   localEndTime: '20:00',
 };
@@ -75,6 +76,7 @@ export const activityRecordsDto: ActivityRecordDto[] = [
     isSkippable: false,
     showAllAtOnce: false,
     isHidden: false,
+    autoAssign: false,
     responseIsEditable: false,
     order: 2,
     splashScreen: 'https://splash',
@@ -88,6 +90,7 @@ export const activityRecordsDto: ActivityRecordDto[] = [
     isSkippable: false,
     showAllAtOnce: false,
     isHidden: false,
+    autoAssign: false,
     responseIsEditable: false,
     order: 1,
     splashScreen: 'https://splash',
@@ -103,6 +106,7 @@ const activityFlows: ActivityFlowRecordDto[] = [
     isSingleReport: false,
     order: 0,
     isHidden: false,
+    autoAssign: false,
     activityIds: ['1', '2'],
   },
 ];
@@ -266,6 +270,7 @@ const activitiesDto: ActivityDto[] = [
     isSkippable: true,
     isReviewable: false,
     isHidden: false,
+    autoAssign: false,
     responseIsEditable: true,
     order: 0,
     items: activityItems,

@@ -1,4 +1,4 @@
-import { ActivityDto } from '@shared/api';
+import { ActivityDto } from '@app/shared/api/services/IActivityService';
 
 const basicAppletDetails = {
   id: '64e31b66-22d8-1858-d681-b93200000000',
@@ -10,6 +10,7 @@ const basicAppletDetails = {
   isSkippable: false,
   isReviewable: false,
   isHidden: false,
+  autoAssign: true,
   responseIsEditable: true,
   order: 2,
   scoresAndReports: {
@@ -639,6 +640,7 @@ export const conditionalInput: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   isHidden: false,
+  autoAssign: true,
   responseIsEditable: true,
   order: 2,
   items: [

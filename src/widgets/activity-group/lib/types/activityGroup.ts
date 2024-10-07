@@ -1,4 +1,4 @@
-import { ActivityListItem } from '@app/entities/activity';
+import { ActivityListItem } from '@app/entities/activity/lib/types/activityListItem';
 
 export type ActivityListGroup = {
   activities: Array<ActivityListItem>;

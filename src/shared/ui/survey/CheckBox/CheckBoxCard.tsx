@@ -1,12 +1,16 @@
 import { useMemo } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 
-import { IS_ANDROID, colors, invertColor } from '@app/shared/lib';
+import { IS_ANDROID } from '@app/shared/lib/constants';
+import { colors } from '@app/shared/lib/constants/colors';
+import { invertColor } from '@app/shared/lib/utils/survey/survey';
 
-import { Box, BoxProps, CheckBox, QuestionIcon, Tooltip } from '../..';
-import OptionCard from '../../OptionCard';
-
-import { Item } from './';
+import { Item } from './types';
+import { Box, BoxProps } from '../../base';
+import { CheckBox } from '../../CheckBox';
+import { QuestionIcon } from '../../icons/QuestionIcon';
+import { OptionCard } from '../../OptionCard';
+import { Tooltip } from '../../Tooltip';
 
 type CheckBoxProps = {
   setPalette: boolean;
@@ -21,7 +25,7 @@ type CheckBoxProps = {
 
 type Props = CheckBoxProps & Omit<BoxProps, keyof CheckBoxProps>;
 
-function CheckBoxCard({
+export function CheckBoxCard({
   selected,
 
   imageContainerVisible,
@@ -141,5 +145,3 @@ const styles = StyleSheet.create({
     transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }],
   },
 });
-
-export default CheckBoxCard;

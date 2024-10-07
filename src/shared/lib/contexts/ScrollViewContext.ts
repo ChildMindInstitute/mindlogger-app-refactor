@@ -6,6 +6,4 @@ type ScrollViewContext = {
   setScrollEnabled: (value: boolean) => void;
 };
 
-const ScrollViewContext = createContext({} as ScrollViewContext);
-
-export default ScrollViewContext;
+export const ScrollViewContext = createContext({} as ScrollViewContext);

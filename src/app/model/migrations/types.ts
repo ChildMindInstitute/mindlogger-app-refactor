@@ -1,30 +1,3 @@
-import {
-  RootStateFrom as RootState0000,
-  RootStateTo as RootState0001,
-} from './migrations/to0001/MigrationReduxTypes0001';
-import {
-  FlowStateFrom as FlowState0000,
-  FlowStateTo as FlowState0001,
-} from './migrations/to0001/MigrationStorageTypes0001';
-import { RootStateTo as RootState0002 } from './migrations/to0002/MigrationReduxTypes0002';
-import { RootStateTo as RootState0003 } from './migrations/to0003/MigrationReduxTypes0003';
-
-type FlowState = FlowState0000 | FlowState0001;
-
-export type ReduxRootState =
-  | RootState0000
-  | RootState0001
-  | RootState0002
-  | RootState0003;
-
-export type MigrationInput = {
-  reduxState: ReduxRootState;
-};
-
-type StorageKey = string;
-
-export type FlowProgressStates = Record<StorageKey, FlowState>;
-
 export const MigrationPrefix = 'migration--';
 
 export enum Storages {
@@ -47,18 +20,24 @@ export const StoragesArray = [
 
 export const SecureStoragesArray = [Storages.ActivityProgress];
 
-export type MigrationOutput = {
-  reduxState: ReduxRootState;
+export type MigrationInput<TReduxRootState> = {
+  reduxState: TReduxRootState;
 };
 
-export interface IMigration {
-  migrate(input: MigrationInput): MigrationOutput;
+export type MigrationOutput<TReduxRootState> = {
+  reduxState: TReduxRootState;
+};
+
+export interface IMigration<TInputReduxRootState, TOutputReduxRootState> {
+  migrate(
+    input: MigrationInput<TInputReduxRootState>,
+  ): MigrationOutput<TOutputReduxRootState>;
 }
 
-export interface IMigrationRunner {
+export interface IMigrationRunner<TInputReduxRootState, TOutputReduxRootState> {
   migrate(
-    migrationInput: MigrationInput,
+    migrationInput: MigrationInput<TInputReduxRootState>,
     currentVersion: number,
     inboundVersion: number,
-  ): Promise<MigrationOutput>;
+  ): Promise<MigrationOutput<TOutputReduxRootState>>;
 }

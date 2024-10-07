@@ -1,7 +1,8 @@
 import { Modal } from 'react-native';
 
-import { IS_IOS } from '@shared/lib';
-import { Box, KeyboardAvoidingView } from '@shared/ui';
+import { IS_IOS } from '@app/shared/lib/constants';
+import { Box } from '@app/shared/ui/base';
+import { KeyboardAvoidingView } from '@app/shared/ui/KeyboardAvoidingView';
 
 import { ConnectionForm } from './ConnectionForm';
 

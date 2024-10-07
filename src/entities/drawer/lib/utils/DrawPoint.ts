@@ -1,6 +1,6 @@
-import { Point } from '../types';
+import { Point } from '../types/draw';
 
-class DrawPoint implements Point {
+export class DrawPoint implements Point {
   x: number;
   y: number;
   time: number;
@@ -15,5 +15,3 @@ class DrawPoint implements Point {
     return new DrawPoint(this.x / sx, this.y / sx, this.time);
   }
 }
-
-export default DrawPoint;

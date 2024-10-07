@@ -5,10 +5,9 @@ import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
-import { colors } from '@app/shared/lib';
-
 import { Box, BoxProps, XStack, YStack } from './base';
-import Text from './Text';
+import { Text } from './Text';
+import { colors } from '../lib/constants/colors';
 
 type Props = {
   imageUrl: string | null;
@@ -31,7 +30,7 @@ const Backdrop = styled(Box, {
   backgroundColor: 'rgba(26, 28, 30, 0.12))',
 });
 
-function OptionCard({
+export function OptionCard({
   children,
 
   imageUrl,
@@ -103,5 +102,3 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
-
-export default OptionCard;

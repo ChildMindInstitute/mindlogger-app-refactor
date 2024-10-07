@@ -10,101 +10,97 @@ import { useTranslation } from 'react-i18next';
 import {
   AutocompletionEventOptions,
   AutocompletionExecuteOptions,
-  EntityPath,
   LogAutocompletionTrigger,
-  StoreProgress,
-} from '@app/abstract/lib';
-import { ActivityModel } from '@app/entities/activity';
-import { MediaFilesCleaner } from '@app/entities/activity';
-import { AppletModel } from '@app/entities/applet';
-import { NotificationModel } from '@app/entities/notification';
-import { LoginModel } from '@app/features/login';
-import { TapOnNotificationModel } from '@app/features/tap-on-notification';
-import { SystemRecord } from '@app/shared/lib/records';
-import { ActivityGroupsModel } from '@app/widgets/activity-group';
-import { SurveyModel } from '@app/widgets/survey';
-import { SessionModel } from '@entities/session';
-import { EnterForegroundModel } from '@features/enter-foreground';
-import { LogoutModel } from '@features/logout';
+} from '@app/abstract/lib/types/autocompletion';
+import { EntityPath } from '@app/abstract/lib/types/entity';
+import { getDefaultMediaFilesCleaner } from '@app/entities/activity/lib/services/mediaFilesCleanerInstance';
+import { getDefaultItemsVisibilityValidator } from '@app/entities/activity/model/services/itemsVisibilityValidatorInstsance';
+import { getDefaultMediaLookupService } from '@app/entities/activity/model/services/mediaLookupServiceInstance';
+import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
+import { useOnNotificationRefresh } from '@app/entities/notification/model/hooks/useOnNotificationRefresh';
+import { topUpNotifications } from '@app/entities/notification/model/operations/topUpNotifications';
+import { useHasSession } from '@app/entities/session/model/hooks/useHasSession';
+import { useOnRefreshTokenFail } from '@app/entities/session/model/hooks/useOnRefreshTokenFail';
+import { useAnalyticsEventTrack } from '@app/features/enter-foreground/model/hooks/useAnalyticsEventTrack';
+import { useRestackNotifications } from '@app/features/enter-foreground/model/hooks/useRestackNotifications';
+import { useAnalyticsAutoLogin } from '@app/features/login/model/useAnalyticsAutoLogin';
+import { useFeatureFlagsAutoLogin } from '@app/features/login/model/useFeatureFlagsAutoLogin';
+import { useLogout } from '@app/features/logout/model/hooks';
+import { useOnNotificationTap } from '@app/features/tap-on-notification/model/hooks/useOnNotificationTap';
+import { APP_VERSION, ENV, IS_ANDROID } from '@app/shared/lib/constants';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useAlarmPermissions } from '@app/shared/lib/hooks/useAlarmPermissions';
+import { useBackgroundTask } from '@app/shared/lib/hooks/useBackgroundTask';
+import { useFirebaseSetup } from '@app/shared/lib/hooks/useFirebaseSetup';
+import { useNotificationPermissions } from '@app/shared/lib/hooks/useNotificationPermissions';
+import { useOnceRef } from '@app/shared/lib/hooks/useOnceRef';
+import { useOnForegroundDebounced } from '@app/shared/lib/hooks/useOnForegroundDebounced';
+import { useOnlineEstablished } from '@app/shared/lib/hooks/useOnlineEstablished';
+import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
+import { Emitter } from '@app/shared/lib/services/Emitter';
+import { useDelayedInterval } from '@app/shared/lib/timers/hooks/useDelayedInterval';
+import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
+import { BackButton } from '@app/shared/ui/BackButton';
+import { Box, XStack } from '@app/shared/ui/base';
 import {
-  APP_VERSION,
-  colors,
-  ENV,
-  useNotificationPermissions,
-  IS_ANDROID,
-  useAlarmPermissions,
-  useBackgroundTask,
-  useAppSelector,
-  useFirebaseSetup,
-  useOnlineEstablished,
-  useOnceRef,
-  Emitter,
-  useOnForegroundDebounced,
-  useDelayedInterval,
-} from '@shared/lib';
-import {
-  UserProfileIcon,
-  HomeIcon,
-  BackButton,
-  Text,
-  Box,
   ChevronLeft,
-  XStack,
   CloseIcon,
-} from '@shared/ui';
+  HomeIcon,
+  UserProfileIcon,
+} from '@app/shared/ui/icons';
+import { Text } from '@app/shared/ui/Text';
+import { useAvailabilityEvaluator } from '@app/widgets/activity-group/model/hooks/useAvailabilityEvaluator';
+import { useAutoCompletion } from '@app/widgets/survey/model/hooks/useAutoCompletion';
+import { useAutoCompletionExecute } from '@app/widgets/survey/model/hooks/useAutoCompletionExecute';
+import { useOnAutoCompletion } from '@app/widgets/survey/model/hooks/useOnAutoCompletion';
 
-import {
-  appletScreenHeaderStyles,
-  getScreenOptions,
-  RootStackParamList,
-} from '../config';
-import { onBeforeAppClose } from '../lib';
-import { useDefaultRoute, useInitialRouteNavigation } from '../model';
+import { AboutScreen } from './AboutScreen';
+import { AppletBottomTabNavigator } from './AppletBottomTabNavigator';
+import { AppletsScreen } from './AppletsScreen';
+import { ApplicationLogsScreen } from './ApplicationLogsScreen';
+import { AutocompletionScreen } from './AutocompletionScreen';
+import { ChangeLanguageScreen } from './ChangeLanguageScreen';
+import { ChangePasswordScreen } from './ChangePasswordScreen';
+import { ForgotPasswordScreen } from './ForgotPasswordScreen';
+import { InProgressActivityScreen } from './InProgressActivityScreen';
+import { LoginScreen } from './LoginScreen';
+import { PasswordRecoveryScreen } from './PasswordRecoveryScreen';
+import { SettingsScreen } from './SettingsScreen';
+import { SignUpScreen } from './SignUpScreen';
+import { appletScreenHeaderStyles, getScreenOptions } from '../config/theme';
+import { RootStackParamList } from '../config/types';
+import { onBeforeAppClose } from '../lib/alerts';
 import { checkEntityAvailability } from '../model/checkEntityAvailability';
-import {
-  AppletsScreen,
-  ChangeLanguageScreen,
-  ForgotPasswordScreen,
-  LoginScreen,
-  SignUpScreen,
-  AboutScreen,
-  ChangePasswordScreen,
-  SettingsScreen,
-  AppletBottomTabNavigator,
-  InProgressActivityScreen,
-  ApplicationLogsScreen,
-  PasswordRecoveryScreen,
-  AutocompletionScreen,
-} from '../ui';
+import { useDefaultRoute } from '../model/hooks/useDefaultRoute';
+import { useInitialRouteNavigation } from '../model/hooks/useInitialRouteNavigation';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AUTOCOMPLETION_DELAY = 2000; // time-window to handle notification
 
-export default () => {
+export const RootNavigator = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
-  const hasSession = SessionModel.useHasSession();
+  const hasSession = useHasSession();
   const defaultRoute = useDefaultRoute();
-  const { forceLogout } = LogoutModel.useLogout();
+  const { forceLogout } = useLogout();
 
   const queryClient = useQueryClient();
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
-  );
+  const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
 
   useInitialRouteNavigation();
   useNotificationPermissions();
   useAlarmPermissions();
   useFirebaseSetup({
     onFCMTokenCreated: fcmToken => {
-      SystemRecord.setDeviceId(fcmToken);
+      getDefaultSystemRecord().setDeviceId(fcmToken);
     },
   });
 
-  EnterForegroundModel.useAnalyticsEventTrack();
+  useAnalyticsEventTrack();
 
   useBackHandler(() => {
     onBeforeAppClose();
@@ -112,27 +108,33 @@ export default () => {
     return true;
   });
 
-  SessionModel.useOnRefreshTokenFail(() => {
+  useOnRefreshTokenFail(() => {
     forceLogout();
   });
 
   useBackgroundTask(() => {
-    return NotificationModel.topUpNotifications();
+    return topUpNotifications();
   });
 
   const { completeEntityIntoUploadToQueue, hasExpiredEntity } =
-    SurveyModel.useAutoCompletion();
+    useAutoCompletion();
 
-  TapOnNotificationModel.useOnNotificationTap({
+  useOnNotificationTap({
     checkAvailability: async (
       entityName: string,
-      { appletId, eventId, entityId, entityType }: EntityPath,
+      { appletId, eventId, entityId, entityType, targetSubjectId }: EntityPath,
     ) => {
       const isSuccess = await checkEntityAvailability({
         entityName,
-        identifiers: { appletId, eventId, entityId, entityType },
+        identifiers: {
+          appletId,
+          eventId,
+          entityId,
+          entityType,
+          targetSubjectId,
+        },
         queryClient,
-        storeProgress,
+        entityProgressions,
       });
 
       if (!isSuccess) {
@@ -143,18 +145,17 @@ export default () => {
       }
       return isSuccess;
     },
-    hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
-    cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
+    hasMediaReferences: getDefaultMediaLookupService().hasMediaReferences,
+    cleanUpMediaFiles: getDefaultMediaFilesCleaner().cleanUp,
     hasActivityWithHiddenAllItems:
-      ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
-    evaluateAvailableTo:
-      ActivityGroupsModel.useAvailabilityEvaluator().evaluateAvailableTo,
+      getDefaultItemsVisibilityValidator().hasActivityWithHiddenAllItems,
+    evaluateAvailableTo: useAvailabilityEvaluator().evaluateAvailableTo,
     completeEntityIntoUploadToQueue,
   });
 
-  EnterForegroundModel.useRestackNotifications(hasExpiredEntity);
+  useRestackNotifications(hasExpiredEntity);
 
-  const { executeAutocompletion } = SurveyModel.useAutoCompletionExecute();
+  const { executeAutocompletion } = useAutoCompletionExecute();
 
   const executeAutocompletionWithDelay = useCallback(
     (
@@ -187,13 +188,13 @@ export default () => {
     executeAutocompletionWithDelay('to-foreground', { forceUpload: false }),
   );
 
-  SurveyModel.useOnAutoCompletion();
+  useOnAutoCompletion();
 
-  LoginModel.useAnalyticsAutoLogin();
+  useAnalyticsAutoLogin();
 
-  LoginModel.useFeatureFlagsAutoLogin();
+  useFeatureFlagsAutoLogin();
 
-  NotificationModel.useOnNotificationRefresh();
+  useOnNotificationRefresh();
 
   return (
     <Stack.Navigator
@@ -272,7 +273,11 @@ export default () => {
                 <TouchableOpacity
                   accessibilityLabel="user_settings-button"
                   onPress={() => {
-                    if (AppletModel.RefreshService.isBusy()) {
+                    if (
+                      getMutexDefaultInstanceManager()
+                        .getRefreshServiceMutex()
+                        .isBusy()
+                    ) {
                       return;
                     }
                     navigation.navigate('Settings');

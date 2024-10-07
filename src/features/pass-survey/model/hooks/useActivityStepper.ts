@@ -1,9 +1,7 @@
-import {
-  ActivityItemType,
-  ActivityState,
-  onIncorrectAnswerGiven,
-} from '../../lib';
-import AnswerValidator from '../AnswerValidator';
+import { onIncorrectAnswerGiven } from '../../lib/alerts';
+import { ActivityState } from '../../lib/hooks/useActivityStorageRecord';
+import { ActivityItemType } from '../../lib/types/payload';
+import { AnswerValidator } from '../AnswerValidator';
 
 const ConditionalLogicItems: ActivityItemType[] = [
   'Radio',
@@ -11,7 +9,7 @@ const ConditionalLogicItems: ActivityItemType[] = [
   'Slider',
 ];
 
-function useActivityStepper(state: ActivityState | undefined) {
+export function useActivityStepper(state: ActivityState | undefined) {
   const answerValidator = AnswerValidator(state);
   const step = state?.step ?? 0;
   const items = state?.items ?? [];
@@ -94,5 +92,3 @@ function useActivityStepper(state: ActivityState | undefined) {
     getNextButtonText,
   };
 }
-
-export default useActivityStepper;

@@ -1,7 +1,10 @@
-import { ActivityPipelineType } from '@app/abstract/lib';
-import { ActivityFlowRecordDto, ActivityRecordDto } from '@app/shared/api';
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
+import {
+  ActivityFlowRecordDto,
+  ActivityRecordDto,
+} from '@app/shared/api/services/IAppletService';
 
-import { Activity, ActivityFlow } from '../../lib';
+import { Activity, ActivityFlow } from '../../lib/types/notificationBuilder';
 
 export const mapActivitiesFromDto = (
   activityDtos: ActivityRecordDto[],

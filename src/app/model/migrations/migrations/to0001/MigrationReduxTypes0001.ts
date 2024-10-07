@@ -1,4 +1,4 @@
-import { ActivityPipelineType } from '@app/abstract/lib';
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 
 export type FlowProgressFrom = {
   type: ActivityPipelineType.Flow;

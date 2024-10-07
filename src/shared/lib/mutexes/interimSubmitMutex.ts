@@ -1,6 +1,6 @@
-import { IMutex } from '../utils';
+import { IInterimSubmitMutex } from './IInterimSubmitMutex';
 
-class InterimSubmitMutex implements IMutex {
+export class InterimSubmitMutex implements IInterimSubmitMutex {
   private _processing: boolean = false;
 
   public setBusy() {
@@ -15,5 +15,3 @@ class InterimSubmitMutex implements IMutex {
     return this._processing;
   }
 }
-
-export default new InterimSubmitMutex();

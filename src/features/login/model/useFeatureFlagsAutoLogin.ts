@@ -1,19 +1,18 @@
 import { useEffect } from 'react';
 
-import { IdentityModel } from '@app/entities/identity';
-import { SessionModel } from '@app/entities/session';
-import { useAppSelector, FeatureFlagsService } from '@shared/lib';
+import { selectUserId } from '@app/entities/identity/model/selectors';
+import { useHasSession } from '@app/entities/session/model/hooks/useHasSession';
+import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
+import { useAppSelector } from '@app/shared/lib/hooks/redux';
 
-function useFeatureFlagsAutoLogin() {
-  const id = useAppSelector(IdentityModel.selectors.selectUserId);
-  const hasSession = SessionModel.useHasSession();
+export function useFeatureFlagsAutoLogin() {
+  const id = useAppSelector(selectUserId);
+  const hasSession = useHasSession();
 
   useEffect(() => {
     if (!hasSession || !id) {
       return;
     }
-    FeatureFlagsService.login(id);
+    getDefaultFeatureFlagsService().login(id).catch(console.error);
   }, [id, hasSession]);
 }
-
-export default useFeatureFlagsAutoLogin;

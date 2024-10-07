@@ -1,39 +1,13 @@
-import { callApiWithRetry } from '@app/shared/lib';
+import { callApiWithRetry } from '@app/shared/lib/utils/networkHelpers';
 
-import httpService from './httpService';
-import { SuccessfulEmptyResponse } from '../types';
+import { httpService } from './httpService';
+import {
+  INotificationService,
+  NotificationLogsRequest,
+  NotificationLogsResponse,
+} from './INotificationService';
 
-export const enum LogTrigger {
-  AppMount = 'AppMount',
-  FirstAppRun = 'FirstAppRun',
-  RunBackgroundProcess = 'RunBackgroundProcess',
-  EntityCompleted = 'ActivityOrFlowCompleted',
-  PullToRefresh = 'PullToRefresh',
-  GoToForeground = 'GoToForeground',
-  LimitReachedNotification = 'LimitReachedNotification',
-  ScheduleUpdated = 'ScheduleUpdated',
-  AppletRemoved = 'AppletRemoved',
-  AppletUpdated = 'AppletUpdated',
-  EntitiesSyncedUp = 'EntitiesSyncedUp',
-}
-
-export const enum LogAction {
-  ReSchedule = 'ReSchedule',
-  ReStack = 'ReStack',
-}
-
-export type NotificationLogsRequest = {
-  userId: string;
-  deviceId: string;
-  actionType: string;
-  notificationDescriptions: Array<any> | null;
-  notificationInQueue: Array<any> | null;
-  scheduledNotifications: Array<any> | null;
-};
-
-export type NotificationLogsResponse = SuccessfulEmptyResponse;
-
-function notificationService() {
+export function notificationService(): INotificationService {
   return {
     sendNotificationLogs(request: NotificationLogsRequest) {
       const apiCall = async () => {
@@ -46,5 +20,3 @@ function notificationService() {
     },
   };
 }
-
-export const NotificationService = notificationService();

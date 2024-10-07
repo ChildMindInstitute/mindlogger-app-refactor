@@ -10,10 +10,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
 
-import { LoginForm } from '@features/login';
-import { Link, XStack, Box, SubmitButton, CloudLogo } from '@shared/ui';
+import { LoginForm } from '@app/features/login/ui/LoginForm';
+import { Box, XStack } from '@app/shared/ui/base';
+import { CloudLogo } from '@app/shared/ui/icons/CloudLogo';
+import { Link } from '@app/shared/ui/Link';
+import { SubmitButton } from '@app/shared/ui/SubmitButton';
 
-const LoginScreen: FC = () => {
+export const LoginScreen: FC = () => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
 
@@ -94,5 +97,3 @@ const LoginScreen: FC = () => {
     </TouchableWithoutFeedback>
   );
 };
-
-export default LoginScreen;

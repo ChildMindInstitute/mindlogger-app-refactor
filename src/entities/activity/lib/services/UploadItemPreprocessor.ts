@@ -1,17 +1,18 @@
-import { QueryDataUtils } from '@app/shared/api';
-import {
-  FeatureFlagsKeys,
-  FeatureFlagsService,
-  IPreprocessor,
-  Logger,
-  queryClient,
-} from '@app/shared/lib';
+import { mapAppletDetailsFromDto } from '@app/entities/applet/model/mappers';
+import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { FeatureFlagsKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
+import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
+import { getDefaultQueryClient } from '@app/shared/lib/queryClient/queryClientInstance';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { IPreprocessor } from '@app/shared/lib/types/service';
+import { UploadItem } from '@entities/activity/lib/services/IAnswersQueueService';
 
-import { UploadItem } from './AnswersQueueService';
-import { mapAppletDetailsFromDto } from '../../@x/applet';
+export class UploadItemPreprocessor implements IPreprocessor<UploadItem> {
+  private queryDataUtils: QueryDataUtils;
 
-class UploadItemPreprocessor implements IPreprocessor<UploadItem> {
-  queryDataUtils: QueryDataUtils = new QueryDataUtils(queryClient);
+  constructor() {
+    this.queryDataUtils = new QueryDataUtils(getDefaultQueryClient());
+  }
 
   private preprocessConsents(uploadItem: UploadItem) {
     const { appletId } = uploadItem.input;
@@ -19,7 +20,7 @@ class UploadItemPreprocessor implements IPreprocessor<UploadItem> {
     const appletDetailsDto = this.queryDataUtils.getAppletDto(appletId);
 
     if (!appletDetailsDto) {
-      Logger.error(
+      getDefaultLogger().error(
         `[UploadItemPreprocessor] Applet DTO not found. ID: ${appletId}`,
       );
       return;
@@ -29,36 +30,40 @@ class UploadItemPreprocessor implements IPreprocessor<UploadItem> {
 
     if (
       appletDetails.consentsCapabilityEnabled &&
-      FeatureFlagsService.evaluateFlag(
+      getDefaultFeatureFlagsService().evaluateFlag(
         FeatureFlagsKeys.enableConsentsCapability,
       )
     ) {
       uploadItem.input.consentToShare = true;
     }
 
-    Logger.log(
+    getDefaultLogger().log(
       `[UploadItemPreprocessor] consents preprocessing finished. Data is ${uploadItem.input?.consentToShare ? '' : 'not '}shared to public`,
     );
   }
 
   public preprocess(uploadItem: UploadItem) {
-    Logger.log('[UploadItemPreprocessor] started preprocessing upload item');
+    getDefaultLogger().log(
+      '[UploadItemPreprocessor] started preprocessing upload item',
+    );
 
     try {
       this.preprocessConsents(uploadItem);
 
-      Logger.log('[UploadItemPreprocessor] successfully preprocessed');
+      getDefaultLogger().log(
+        '[UploadItemPreprocessor] successfully preprocessed',
+      );
     } catch (error) {
       if (error instanceof Error) {
-        Logger.error(
+        getDefaultLogger().error(
           `[UploadItemPreprocessor] Error occurred during the preprocessing:
           ${error.message}`,
         );
       } else {
-        Logger.error('[UploadItemPreprocessor] Unknown error occurred');
+        getDefaultLogger().error(
+          '[UploadItemPreprocessor] Unknown error occurred',
+        );
       }
     }
   }
 }
-
-export default UploadItemPreprocessor;

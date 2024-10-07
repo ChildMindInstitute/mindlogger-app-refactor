@@ -3,18 +3,14 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
-import { IS_IOS } from '@app/shared/lib';
-import {
-  RoundLogo,
-  Box,
-  RoundTextNotification,
-  Text,
-  XStack,
-  YStack,
-  TouchableOpacity,
-} from '@app/shared/ui';
+import { IS_IOS } from '@app/shared/lib/constants';
+import { Box, XStack, YStack } from '@app/shared/ui/base';
+import { RoundLogo } from '@app/shared/ui/RoundLogo';
+import { RoundTextNotification } from '@app/shared/ui/RoundTextNotification';
+import { Text } from '@app/shared/ui/Text';
+import { TouchableOpacity } from '@app/shared/ui/TouchableOpacity';
 
-import { Applet } from '../lib';
+import { Applet } from '../lib/types';
 
 type Props = {
   applet: Applet;
@@ -22,7 +18,7 @@ type Props = {
   onPress?: (...args: any[]) => void;
 };
 
-const AppletCard: FC<Props & AccessibilityProps> = ({
+export const AppletCard: FC<Props & AccessibilityProps> = ({
   applet,
   disabled,
   onPress,
@@ -115,5 +111,3 @@ const styles = StyleSheet.create({
     borderRadius: 32 / 2,
   },
 });
-
-export default AppletCard;

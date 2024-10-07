@@ -9,7 +9,7 @@ type Events =
   | 'logout'
   | 'autocomplete';
 
-const Emitter = {
+export const Emitter = {
   on: <TPayload>(event: Events, fn: (payload?: TPayload) => void) =>
     eventEmitter.on(event, fn),
   once: (event: Events, fn: () => void) => eventEmitter.once(event, fn),
@@ -20,5 +20,3 @@ const Emitter = {
 };
 
 Object.freeze(Emitter);
-
-export default Emitter;

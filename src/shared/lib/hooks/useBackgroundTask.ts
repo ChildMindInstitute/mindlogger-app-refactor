@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 
-import { BackgroundWorker, BackgroundTaskOptions } from '../services';
+import { getDefaultBackgroundWorker } from '../services/backgroundWorkerBuilderInstance';
+import { BackgroundTaskOptions } from '../services/IBackgroundWorkerBuilder';
 
-function useBackgroundTask(
+export function useBackgroundTask(
   callback: () => Promise<unknown>,
   options?: BackgroundTaskOptions,
 ) {
@@ -16,8 +17,6 @@ function useBackgroundTask(
       return callbackRef.current();
     };
 
-    BackgroundWorker.setTask(task, optionsRef.current);
+    getDefaultBackgroundWorker().setTask(task, optionsRef.current);
   }, []);
 }
-
-export default useBackgroundTask;

@@ -8,16 +8,13 @@ import {
   VictoryScatter,
 } from 'victory-native';
 
-import {
-  areDatesEqual,
-  colors,
-  DAYS_OF_WEEK_NUMBERS,
-  getCurrentWeekDates,
-  range,
-} from '@shared/lib';
+import { DAYS_OF_WEEK_NUMBERS } from '@app/shared/lib/constants';
+import { colors } from '@app/shared/lib/constants/colors';
+import { getCurrentWeekDates, range } from '@app/shared/lib/utils/common';
+import { areDatesEqual } from '@app/shared/lib/utils/dateTime';
 
-import { getWeekDaysWithLocale } from '../lib';
-import { ChartAxisDot, ChartItem } from '../types';
+import { getWeekDaysWithLocale } from '../lib/getWeekDaysWithLocale';
+import { ChartAxisDot, ChartItem } from '../types/types';
 
 type BarChartDataItem = {
   date: string;
@@ -28,7 +25,7 @@ type Props = {
   data: Array<ChartItem>;
 };
 
-const BarChart: FC<Props> = ({ data }) => {
+export const BarChart: FC<Props> = ({ data }) => {
   const dateFormat = 'yyyy dd MM';
   const getXAxisDots = (): Array<ChartAxisDot> =>
     range(8).map(item => ({ dot: item + 1, value: 0 }));
@@ -84,5 +81,3 @@ const BarChart: FC<Props> = ({ data }) => {
     </VictoryChart>
   );
 };
-
-export default BarChart;

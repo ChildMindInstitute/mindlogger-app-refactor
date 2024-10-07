@@ -1,9 +1,11 @@
-import { CommonObservable } from '../utils';
+import { IChangeQueueObservable } from './IChangeQueueObservable';
+import { CommonObservable } from '../utils/observable';
 
-class ChangeQueueObservable extends CommonObservable {
+export class ChangeQueueObservable
+  extends CommonObservable
+  implements IChangeQueueObservable
+{
   constructor() {
     super();
   }
 }
-
-export default new ChangeQueueObservable();

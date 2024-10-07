@@ -4,33 +4,20 @@ import {
   FlankerItemSettings,
   SamplingMethod,
   StimulusConfiguration,
-  StringOrNull,
-} from '@app/abstract/lib';
-import { shuffle } from '@app/shared/lib';
+} from '@app/abstract/lib/types/flanker';
+import { StringOrNull } from '@app/abstract/lib/types/primitive';
+import { shuffle } from '@app/shared/lib/utils/common';
 
+import { IConfigurationBuilder } from './IConfigurationBuilder';
 import {
-  FlankerWebViewConfiguration,
-  TestChoice,
-  StimulusScreen,
-  TestTrial,
   FlankerNativeIOSConfiguration,
-} from '../types';
+  FlankerWebViewConfiguration,
+  StimulusScreen,
+  TestChoice,
+  TestTrial,
+} from '../types/configuration';
 
-type ConfigurationBuilder = {
-  buildForWebView: (
-    configuration: FlankerItemSettings,
-  ) => FlankerWebViewConfiguration;
-
-  buildForNativeIOS: (
-    configuration: FlankerItemSettings,
-  ) => FlankerNativeIOSConfiguration;
-
-  parseToWebViewConfigString: (
-    testConfiguration: FlankerWebViewConfiguration,
-  ) => string;
-};
-
-const createConfigurationBuilder = (): ConfigurationBuilder => {
+export const createConfigurationBuilder = (): IConfigurationBuilder => {
   const getImageForIOSNative = (image: StringOrNull, alt: string): string => {
     if (image) {
       return image;
@@ -216,5 +203,3 @@ const createConfigurationBuilder = (): ConfigurationBuilder => {
     parseToWebViewConfigString: parseToWebViewString,
   };
 };
-
-export default createConfigurationBuilder();

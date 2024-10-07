@@ -1,15 +1,18 @@
 import { FC } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { useAudioPlayer } from '@shared/lib';
-import { PlayIcon, PauseIcon, XStack, Text, Box } from '@shared/ui';
+import { useAudioPlayer } from '@app/shared/lib/hooks/useAudioPlayer';
+
+import { Box, XStack } from '../base';
+import { PauseIcon, PlayIcon } from '../icons';
+import { Text } from '../Text';
 
 type Props = {
   uri: string;
   title?: string;
 };
 
-const AudioPlayer: FC<Props> = ({ uri, title }) => {
+export const AudioPlayer: FC<Props> = ({ uri, title }) => {
   const { isPlaying, togglePlay } = useAudioPlayer();
 
   return (
@@ -48,5 +51,3 @@ const AudioPlayer: FC<Props> = ({ uri, title }) => {
     </XStack>
   );
 };
-
-export default AudioPlayer;

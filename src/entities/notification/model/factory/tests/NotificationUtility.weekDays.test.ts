@@ -13,7 +13,7 @@ describe('NotificationUtility: weekdays property tests.', () => {
     const today = new Date(2024, 0, 6);
     const now = addTime({ hours: 15, minutes: 30 }, today);
 
-    const utility = new NotificationUtility({}, AppletId);
+    const utility = new NotificationUtility(AppletId, []);
 
     mockUtilityProps(utility, now);
 
@@ -30,7 +30,7 @@ describe('NotificationUtility: weekdays property tests.', () => {
     const today = new Date(2024, 0, 6);
     const now = addTime({ hours: 15, minutes: 30 }, today);
 
-    const utility = new NotificationUtility({}, AppletId);
+    const utility = new NotificationUtility(AppletId, []);
 
     mockUtilityProps(utility, now);
 
@@ -47,7 +47,7 @@ describe('NotificationUtility: weekdays property tests.', () => {
     const today = new Date(2024, 0, 3);
     const now = addTime({ hours: 15, minutes: 30 }, today);
 
-    const utility = new NotificationUtility({}, AppletId);
+    const utility = new NotificationUtility(AppletId, []);
 
     mockUtilityProps(utility, now);
 
@@ -64,7 +64,7 @@ describe('NotificationUtility: weekdays property tests.', () => {
     const today = new Date(2024, 0, 3);
     const now = addTime({ hours: 15, minutes: 30 }, today);
 
-    const utility = new NotificationUtility({}, AppletId);
+    const utility = new NotificationUtility(AppletId, []);
 
     mockUtilityProps(utility, now);
 

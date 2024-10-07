@@ -1,46 +1,35 @@
+import { EntityPath, EntityPathParams } from '@app/abstract/lib/types/entity';
 import {
-  ActivityPipelineType,
-  EntityPath,
-  EntityPathParams,
-  FlowProgress,
-  StoreProgressPayload,
-} from '@app/abstract/lib';
-import { NotCompletedEntity } from '@app/entities/applet/model/selectors';
-import { isEntityExpired, Logger } from '@app/shared/lib';
+  EntityProgressionEntityType,
+  EntityProgressionInProgress,
+  EntityProgressionInProgressActivityFlow,
+} from '@app/abstract/lib/types/entityProgress';
+import { IncompleteEntity } from '@app/entities/applet/model/selectors';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { isEntityExpired } from '@app/shared/lib/utils/survey/survey';
+import { FinishPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
+import {
+  CollectCompletionOutput,
+  ICollectCompletionsService,
+} from '@widgets/survey/model/services/ICollectCompletionsService';
 
-import { FinishPipelineItem } from '..';
 import {
   getFlowRecord,
   isCurrentActivityRecordExist,
 } from '../../lib/storageHelpers';
 import { FlowState } from '../../lib/useFlowStorageRecord';
 
-export type CollectCompletionOutput = {
-  appletId: string;
-  activityId: string;
-  flowId: string | undefined;
-  eventId: string;
-  order: number;
-  activityName: string;
-  completionType: 'intermediate' | 'finish';
-  logAvailableTo?: string;
-};
-
-export interface ICollectCompletionsService {
-  collectForEntity(path: EntityPath): CollectCompletionOutput[];
-  collectAll(exclude?: EntityPathParams): CollectCompletionOutput[];
-  hasExpiredEntity(): boolean;
-}
-
 export class CollectCompletionsService implements ICollectCompletionsService {
-  private notCompletedEntities: NotCompletedEntity[];
+  private logger: ILogger;
+  private incompleteEntities: IncompleteEntity[];
 
-  constructor(notCompletedEntities: NotCompletedEntity[]) {
-    this.notCompletedEntities = notCompletedEntities;
+  constructor(logger: ILogger, incompleteEntities: IncompleteEntity[]) {
+    this.logger = logger;
+    this.incompleteEntities = incompleteEntities;
   }
 
   private collectForFlow(
-    flowProgress: FlowProgress,
+    flowEntityProgression: EntityProgressionInProgressActivityFlow,
     flowState: FlowState,
     path: EntityPath,
   ): CollectCompletionOutput[] {
@@ -50,15 +39,16 @@ export class CollectCompletionsService implements ICollectCompletionsService {
       flowId: path.entityId,
       appletId: path.appletId,
       eventId: path.eventId,
+      targetSubjectId: path.targetSubjectId,
     };
 
     const finishItem = flowState.pipeline.slice(-1)[0] as FinishPipelineItem;
 
     const isCurrentActivityLast =
-      flowProgress.pipelineActivityOrder === finishItem.payload.order;
+      flowEntityProgression.pipelineActivityOrder === finishItem.payload.order;
 
     const { currentActivityId, currentActivityName, pipelineActivityOrder } =
-      flowProgress;
+      flowEntityProgression;
 
     result.push({
       ...pathParams,
@@ -84,7 +74,7 @@ export class CollectCompletionsService implements ICollectCompletionsService {
   }
 
   private collect(
-    progress: StoreProgressPayload,
+    progression: EntityProgressionInProgress,
     flowState: FlowState,
     path: EntityPath,
   ) {
@@ -92,13 +82,16 @@ export class CollectCompletionsService implements ICollectCompletionsService {
 
     if (path.entityType === 'flow') {
       const collected = this.collectForFlow(
-        progress as FlowProgress,
+        progression as EntityProgressionInProgressActivityFlow,
         flowState,
         path,
       );
 
       collected.forEach(
-        x => (x.logAvailableTo = new Date(progress.availableTo!).toString()),
+        x =>
+          (x.logAvailableTo = new Date(
+            progression.availableUntilTimestamp!,
+          ).toString()),
       );
 
       result.push(...collected);
@@ -114,9 +107,12 @@ export class CollectCompletionsService implements ICollectCompletionsService {
         eventId: path.eventId,
         activityId,
         activityName,
+        targetSubjectId: path.targetSubjectId,
         order,
         completionType: 'finish',
-        logAvailableTo: new Date(progress.availableTo!).toString(),
+        logAvailableTo: new Date(
+          progression.availableUntilTimestamp!,
+        ).toString(),
       });
     }
 
@@ -124,26 +120,30 @@ export class CollectCompletionsService implements ICollectCompletionsService {
   }
 
   public hasExpiredEntity(): boolean {
-    Logger.log('[CollectCompletionsService.hasExpiredEntity] Working');
+    this.logger.log('[CollectCompletionsService.hasExpiredEntity] Working');
 
-    const filtered: NotCompletedEntity[] = this.notCompletedEntities.filter(
-      x => !!x.payload.availableTo,
-    );
+    const filtered = this.incompleteEntities.filter(incompleteEntity => {
+      return (
+        !!incompleteEntity.progression.availableUntilTimestamp &&
+        incompleteEntity.progression.availableUntilTimestamp > 0
+      );
+    });
 
-    for (const notCompletedEntity of filtered) {
+    for (const incompleteEntity of filtered) {
       const {
+        entityType,
         appletId,
         entityId,
         eventId,
-        type,
-        payload: progress,
-      } = notCompletedEntity;
+        targetSubjectId,
+        progression,
+      } = incompleteEntity;
 
-      const flowId = type === ActivityPipelineType.Flow ? entityId : undefined;
+      const flowId = entityType === 'activityFlow' ? entityId : undefined;
 
       if (
-        isEntityExpired(progress.availableTo) &&
-        isCurrentActivityRecordExist(flowId, appletId, eventId)
+        isEntityExpired(progression.availableUntilTimestamp) &&
+        isCurrentActivityRecordExist(flowId, appletId, eventId, targetSubjectId)
       ) {
         return true;
       }
@@ -153,25 +153,37 @@ export class CollectCompletionsService implements ICollectCompletionsService {
   }
 
   public collectForEntity(path: EntityPath): CollectCompletionOutput[] {
-    const { entityId, appletId, eventId, entityType } = path;
+    const { entityId, appletId, eventId, entityType, targetSubjectId } = path;
 
-    const notCompletedEntity = this.notCompletedEntities.find(
-      x => x.appletId === appletId && x.eventId === eventId,
-    );
+    const entity = this.incompleteEntities.find(incompleteEntity => {
+      return (
+        incompleteEntity.appletId === appletId &&
+          incompleteEntity.entityType ===
+            ((entityType === 'flow'
+              ? 'activityFlow'
+              : 'activity') as EntityProgressionEntityType),
+        incompleteEntity.entityId === entityId &&
+          incompleteEntity.eventId === eventId &&
+          incompleteEntity.targetSubjectId === targetSubjectId
+      );
+    });
 
-    const progress = notCompletedEntity?.payload;
+    const entityProgression = entity?.progression;
 
     if (
-      !progress ||
-      !progress.availableTo ||
-      !isEntityExpired(progress.availableTo)
+      !entityProgression ||
+      !entityProgression.availableUntilTimestamp ||
+      entityProgression.availableUntilTimestamp <= 0 ||
+      !isEntityExpired(entityProgression.availableUntilTimestamp)
     ) {
       return [];
     }
 
     const flowId = entityType === 'flow' ? entityId : undefined;
 
-    if (!isCurrentActivityRecordExist(flowId, appletId, eventId)) {
+    if (
+      !isCurrentActivityRecordExist(flowId, appletId, eventId, targetSubjectId)
+    ) {
       return [];
     }
 
@@ -179,19 +191,23 @@ export class CollectCompletionsService implements ICollectCompletionsService {
       entityType === 'flow' ? entityId : undefined,
       appletId,
       eventId,
+      targetSubjectId,
     )!;
 
-    return this.collect(progress, flowState, path);
+    return this.collect(entityProgression, flowState, path);
   }
 
   public collectAll(exclude?: EntityPathParams): CollectCompletionOutput[] {
-    Logger.log('[CollectCompletionsService.collectAll] Working');
+    this.logger.log('[CollectCompletionsService.collectAll] Working');
 
     const result: CollectCompletionOutput[] = [];
 
-    let filtered: NotCompletedEntity[] = this.notCompletedEntities.filter(
-      x => !!x.payload.availableTo,
-    );
+    let filtered = this.incompleteEntities.filter(incompleteEntity => {
+      return (
+        !!incompleteEntity.progression.availableUntilTimestamp &&
+        incompleteEntity.progression.availableUntilTimestamp > 0
+      );
+    });
 
     if (exclude) {
       filtered = filtered.filter(
@@ -199,41 +215,53 @@ export class CollectCompletionsService implements ICollectCompletionsService {
           !(
             x.appletId === exclude.appletId &&
             x.entityId === exclude.entityId &&
-            x.eventId === exclude.eventId
+            x.eventId === exclude.eventId &&
+            x.targetSubjectId === exclude.targetSubjectId
           ),
       );
     }
 
     for (const notCompletedEntity of filtered) {
       const {
+        entityType,
         appletId,
         entityId,
         eventId,
-        type,
-        payload: progress,
+        targetSubjectId,
+        progression,
       } = notCompletedEntity;
 
-      const flowId = type === ActivityPipelineType.Flow ? entityId : undefined;
+      const flowId = entityType === 'activityFlow' ? entityId : undefined;
 
-      if (!isEntityExpired(progress.availableTo)) {
+      if (!isEntityExpired(progression.availableUntilTimestamp)) {
         continue;
       }
 
-      if (!isCurrentActivityRecordExist(flowId, appletId, eventId)) {
+      if (
+        !isCurrentActivityRecordExist(
+          flowId,
+          appletId,
+          eventId,
+          targetSubjectId,
+        )
+      ) {
         continue;
       }
 
-      const flowState: FlowState = getFlowRecord(flowId, appletId, eventId)!;
+      const flowState: FlowState = getFlowRecord(
+        flowId,
+        appletId,
+        eventId,
+        targetSubjectId,
+      )!;
 
       result.push(
-        ...this.collect(progress, flowState, {
+        ...this.collect(progression, flowState, {
           appletId,
           entityId,
           eventId,
-          entityType:
-            notCompletedEntity.type === ActivityPipelineType.Flow
-              ? 'flow'
-              : 'regular',
+          entityType: entityType === 'activityFlow' ? 'flow' : 'regular',
+          targetSubjectId,
         }),
       );
     }

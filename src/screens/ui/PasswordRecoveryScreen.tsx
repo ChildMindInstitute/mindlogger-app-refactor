@@ -9,17 +9,23 @@ import {
 import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
 
-import { usePasswordRecoveryHealthCheckQuery } from '@app/entities/identity';
-import { PasswordRecoveryForm } from '@features/password-recovery';
-import { Box, Button, Center, Spinner, Text } from '@shared/ui';
+import { usePasswordRecoveryHealthCheckQuery } from '@app/entities/identity/api/hooks/usePasswordRecoveryHealthCheckQuery';
+import { PasswordRecoveryForm } from '@app/features/password-recovery/ui/PasswordRecoveryForm';
+import { Box } from '@app/shared/ui/base';
+import { Button } from '@app/shared/ui/Button';
+import { Center } from '@app/shared/ui/Center';
+import { Spinner } from '@app/shared/ui/Spinner';
+import { Text } from '@app/shared/ui/Text';
 
-import { RootStackParamList } from '../config';
+import { RootStackParamList } from '../config/types';
 
 type PasswordRecoveryScreenProps = {
   route: RouteProp<RootStackParamList, 'PasswordRecovery'>;
 };
 
-const PasswordRecoveryScreen: FC<PasswordRecoveryScreenProps> = ({ route }) => {
+export const PasswordRecoveryScreen: FC<PasswordRecoveryScreenProps> = ({
+  route,
+}) => {
   const { dispatch } = useNavigation();
   const { t } = useTranslation();
   const { email, key } = route.params;
@@ -80,5 +86,3 @@ const PasswordRecoveryScreen: FC<PasswordRecoveryScreenProps> = ({ route }) => {
     </TouchableWithoutFeedback>
   );
 };
-
-export default PasswordRecoveryScreen;

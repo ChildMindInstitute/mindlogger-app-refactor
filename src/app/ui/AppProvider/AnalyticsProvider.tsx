@@ -1,19 +1,22 @@
 import { FC, PropsWithChildren, useEffect } from 'react';
 
-import { AnalyticsService, Logger, useSystemBootUp } from '@app/shared/lib';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
+import { useSystemBootUp } from '@app/shared/lib/contexts/SplashContext';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
-const AnalyticsProvider: FC<PropsWithChildren> = ({ children }) => {
+export const AnalyticsProvider: FC<PropsWithChildren> = ({ children }) => {
   const { onModuleInitialized } = useSystemBootUp();
 
   useEffect(() => {
-    AnalyticsService.init().then(() => {
-      Logger.log('[AnalyticsProvider]: Initialized');
+    getDefaultAnalyticsService()
+      .init()
+      .then(() => {
+        getDefaultLogger().log('[AnalyticsProvider]: Initialized');
 
-      onModuleInitialized('analytics');
-    });
+        onModuleInitialized('analytics');
+      })
+      .catch(console.error);
   }, [onModuleInitialized]);
 
   return <>{children}</>;
 };
-
-export default AnalyticsProvider;

@@ -1,21 +1,21 @@
 import { QueryClient } from '@tanstack/react-query';
 
 import {
+  getDataFromQuery,
   getAppletDetailsKey,
   getAppletsKey,
-  getDataFromQuery,
   getEventsKey,
-} from '@app/shared/lib';
+} from '@app/shared/lib/utils/reactQueryHelpers';
 
 import {
   AppletDetailsDto,
   AppletDetailsResponse,
   AppletDto,
   AppletsResponse,
-} from './appletsService';
-import { AppletEventsResponse, ScheduleEventDto } from './eventsService';
+} from './IAppletService';
+import { AppletEventsResponse, ScheduleEventDto } from './IEventsService';
 
-class QueryDataUtils {
+export class QueryDataUtils {
   private queryClient: QueryClient;
 
   constructor(queryClient: QueryClient) {
@@ -63,5 +63,3 @@ class QueryDataUtils {
     return eventDto ?? null;
   }
 }
-
-export default QueryDataUtils;

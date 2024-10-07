@@ -1,135 +1,89 @@
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import {
-  ImageUrl,
   callApiWithRetry,
   withDataExtraction,
-} from '@app/shared/lib';
+} from '@app/shared/lib/utils/networkHelpers';
 
-import { ActivityDto } from './activityService';
-import httpService from './httpService';
-import { SuccessfulResponse } from '../types';
+import { httpService } from './httpService';
+import {
+  AppletAndActivitiesDetailsRequest,
+  AppletAndActivitiesDetailsResponse,
+  AppletAssignmentsRequest,
+  AppletAssignmentsResponse,
+  AppletDetailsRequest,
+  AppletDetailsResponse,
+  AppletsResponse,
+  IAppletService,
+} from './IAppletService';
 
-export type ActivityRecordDto = {
-  id: string;
-  name: string;
-  description: string;
-  image: ImageUrl | null;
-  isReviewable: boolean;
-  isSkippable: boolean;
-  showAllAtOnce: boolean;
-  isHidden: boolean;
-  responseIsEditable: boolean;
-  order: number;
-  splashScreen: ImageUrl | null;
-};
-
-export type ActivityFlowRecordDto = {
-  id: string;
-  name: string;
-  description: string;
-  hideBadge: boolean;
-  isSingleReport: boolean;
-  order: number;
-  isHidden: boolean;
-  activityIds: Array<string>;
-};
-
-export type ThemeDto = {
-  id: string;
-  name: string;
-  logo: ImageUrl;
-  backgroundImage: ImageUrl;
-  primaryColor: string;
-  secondaryColor: string;
-  tertiaryColor: string;
-};
-
-export type AppletEncryptionDTO = {
-  accountId: string;
-  base: string;
-  prime: string;
-  publicKey: string;
-};
-
-type Integration = 'loris';
-
-export type AppletDetailsDto = {
-  id: string;
-  displayName: string;
-  version: string;
-  description: string;
-  about: string;
-  image: ImageUrl | null;
-  watermark: ImageUrl | null;
-  theme: ThemeDto | null;
-  activities: ActivityRecordDto[];
-  activityFlows: ActivityFlowRecordDto[];
-  encryption: AppletEncryptionDTO | null;
-  streamEnabled: boolean;
-  streamIpAddress: string | null;
-  streamPort: number | null;
-  integrations: Integration[];
-};
-
-export type AppletRespondentMetaDto = {
-  nickname?: string;
-};
-
-export type AppletDto = {
-  id: string;
-  image: ImageUrl | null;
-  displayName: string;
-  description: string;
-  theme: ThemeDto | null;
-  version: string;
-  about: string;
-  watermark: ImageUrl | null;
-};
-
-export type AppletsResponse = SuccessfulResponse<AppletDto[]>;
-
-type AppletDetailsRequest = {
-  appletId: string;
-};
-
-export type AppletDetailsResponse = {
-  result: AppletDetailsDto;
-  respondentMeta: AppletRespondentMetaDto;
-};
-
-export type AppletAndActivitiesDetailsResponse = {
-  result: {
-    appletDetail: AppletDetailsDto;
-    activitiesDetails: Array<ActivityDto>;
-    respondentMeta: AppletRespondentMetaDto;
-  };
-};
-
-function appletsService() {
+export function appletsService(): IAppletService {
   return {
-    getApplets() {
+    async getApplets() {
       const apiCall = () =>
         httpService.get<AppletsResponse>('/applets', {
           params: { roles: 'respondent' },
         });
-      return callApiWithRetry(withDataExtraction(apiCall));
+      return await callApiWithRetry(withDataExtraction(apiCall));
     },
-    getAppletDetails(request: AppletDetailsRequest) {
+    async getAppletDetails(request: AppletDetailsRequest) {
       const apiCall = () => {
         return httpService.get<AppletDetailsResponse>(
           `/applets/${request.appletId}`,
         );
       };
-      return callApiWithRetry(withDataExtraction(apiCall));
+      return await callApiWithRetry(withDataExtraction(apiCall));
     },
-    getAppletAndActivitiesDetails(request: AppletDetailsRequest) {
+    async getAppletAndActivitiesDetails(
+      request: AppletAndActivitiesDetailsRequest,
+    ) {
       const apiCall = () => {
         return httpService.get<AppletAndActivitiesDetailsResponse>(
           `/activities/applet/${request.appletId}`,
         );
       };
-      return callApiWithRetry(withDataExtraction(apiCall));
+      const apiResponse = await callApiWithRetry(withDataExtraction(apiCall));
+
+      // Currently, the activity items in `apiResponse.data.result.appletDetail.activities`
+      // do not include the `autoAssign` attribute. So we have to patch the
+      // value from items in `apiResponse.data.result.activitiesDetails`.
+      // TODO: Remove this patch after API is updated.
+      (apiResponse?.data?.result?.appletDetail?.activities || []).map(
+        appletDetailActivity => {
+          if (
+            appletDetailActivity.autoAssign === null ||
+            appletDetailActivity.autoAssign === undefined
+          ) {
+            const activityId = appletDetailActivity.id;
+
+            const activityDetail =
+              (apiResponse?.data?.result?.activitiesDetails || []).find(
+                ({ id }) => id === activityId,
+              ) || null;
+
+            if (activityDetail) {
+              appletDetailActivity.autoAssign = activityDetail.autoAssign;
+              getDefaultLogger().warn(
+                `Patched 'autoAssign' in getAppletAndActivitiesDetails response appletDetail.activities id: ${activityId}`,
+              );
+            } else {
+              getDefaultLogger().error(
+                `Unable to patch 'autoAssign' in getAppletAndActivitiesDetails response appletDetail.activities id: ${activityId}`,
+              );
+            }
+          }
+          return appletDetailActivity;
+        },
+      );
+
+      return apiResponse;
+    },
+    async getAppletAssignments(request: AppletAssignmentsRequest) {
+      const apiCall = () => {
+        return httpService.get<AppletAssignmentsResponse>(
+          `/users/me/assignments/${request.appletId}`,
+        );
+      };
+      return await callApiWithRetry(withDataExtraction(apiCall));
     },
   };
 }
-
-export const AppletsService = appletsService();

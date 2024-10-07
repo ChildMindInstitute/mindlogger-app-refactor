@@ -2,18 +2,23 @@ import { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import { PaintStyle, Skia, SkPath } from '@shopify/react-native-skia';
 
-import { AbTestPayload, Point, TestNode } from '@app/abstract/lib';
+import { AbTestPayload, TestNode } from '@app/abstract/lib/types/abTrails';
+import { Point } from '@app/abstract/lib/types/primitive';
 import {
+  StreamEventLoggable,
   AbTestStreamEvent,
   AbTestStreamEventErrorType,
-  StreamEventLoggable,
-} from '@shared/lib';
-import { Box, BoxProps, SketchCanvas, SketchCanvasRef } from '@shared/ui';
+} from '@app/shared/lib/tcp/types';
+import { Box, BoxProps } from '@app/shared/ui/base';
+import {
+  SketchCanvas,
+  SketchCanvasRef,
+} from '@app/shared/ui/SketchCanvas/SketchCanvas';
 
-import AbShapes from './AbShapes';
-import { LogLine, LogPoint, MessageType, OnResultLog } from '../lib';
-import { useSketchCanvasTimedVisibility } from '../lib/hooks';
-import { getDistance, transformCoordinates } from '../lib/utils';
+import { AbShapes } from './AbShapes';
+import { useSketchCanvasTimedVisibility } from '../lib/hooks/useSketchCanvasTimedVisibility';
+import { LogLine, LogPoint, MessageType, OnResultLog } from '../lib/types/test';
+import { getDistance, transformCoordinates } from '../lib/utils/calculation';
 
 const paint = Skia.Paint();
 paint.setColor(Skia.Color('black'));
@@ -33,7 +38,7 @@ type Props = {
 } & StreamEventLoggable<AbTestStreamEvent> &
   BoxProps;
 
-const AbCanvas: FC<Props> = props => {
+export const AbCanvas: FC<Props> = props => {
   const [errorPath, setErrorPath] = useState<SkPath | null>(null);
 
   const [paths, setPaths] = useState<Array<SkPath>>([]);
@@ -419,5 +424,3 @@ const AbCanvas: FC<Props> = props => {
     </Box>
   );
 };
-
-export default AbCanvas;

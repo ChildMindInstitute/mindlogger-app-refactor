@@ -1,29 +1,37 @@
 import { QueryClient } from '@tanstack/react-query';
 import { addMilliseconds, subSeconds } from 'date-fns';
+import { Persistor } from 'redux-persist';
 
-import { StoreProgress } from '@app/abstract/lib';
-import { IPushToQueue, SendAnswersInput } from '@app/entities/activity';
-import { AppletModel } from '@app/entities/applet';
 import {
-  ActivityState,
+  EntityProgression,
+  EntityProgressionInProgress,
+} from '@app/abstract/lib/types/entityProgress';
+import { SendAnswersInput } from '@app/entities/activity/lib/types/uploadAnswers';
+import { appletActions } from '@app/entities/applet/model/slice';
+import { getDefaultSvgFileManager } from '@app/entities/drawer/lib/utils/svgFileManagerInstance';
+import { ActivityState } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
+import {
   AnswerAlerts,
-  PassSurveyModel,
   ScoreRecord,
-} from '@app/features/pass-survey';
-import { InitializeHiddenItem } from '@app/features/pass-survey/model';
-import { AppletEncryptionDTO, QueryDataUtils } from '@app/shared/api';
+} from '@app/features/pass-survey/lib/types/summary';
+import { InitializeHiddenItem } from '@app/features/pass-survey/model/ActivityRecordInitializer';
+import { IAlertsExtractor } from '@app/features/pass-survey/model/IAlertsExtractor';
+import { IScoresExtractor } from '@app/features/pass-survey/model/IScoresExtractor';
+import { AppletEncryptionDTO } from '@app/shared/api/services/IAppletService';
+import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
-  AnalyticsService,
-  getEntityProgress,
-  getNow,
-  getTimezoneOffset,
-  isEntityExpired,
-  Logger,
   MixEvents,
   MixProperties,
-  wait,
-} from '@app/shared/lib';
-import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
+} from '@app/shared/lib/analytics/IAnalyticsService';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { wait } from '@app/shared/lib/utils/common';
+import { getNow, getTimezoneOffset } from '@app/shared/lib/utils/dateTime';
+import {
+  isEntityExpired,
+  getEntityProgression,
+} from '@app/shared/lib/utils/survey/survey';
+import { IQueueProcessingService } from '@entities/activity/lib/services/IQueueProcessingService';
 
 import { getClientInformation } from '../../lib/metaHelpers';
 import {
@@ -40,8 +48,8 @@ import {
 import {
   createSvgFiles,
   fillNullsForHiddenItems,
-  getActivityStartAt,
-  getExecutionGroupKey,
+  getActivityFlowProgressionExecutionGroupKey,
+  getActivityProgressionStartAt,
   getItemIds,
   getUserIdentifier,
 } from '../operations';
@@ -53,6 +61,7 @@ type ConstructForIntermediateInput = {
   activityId: string;
   flowId: string;
   eventId: string;
+  targetSubjectId: string | null;
   order: number;
   activityName: string;
   isAutocompletion: boolean;
@@ -63,6 +72,7 @@ type ConstructForFinishInput = {
   activityId: string;
   flowId: string | undefined;
   eventId: string;
+  targetSubjectId: string | null;
   order: number;
   activityName: string;
   isAutocompletion: boolean;
@@ -80,24 +90,36 @@ export type ConstructInput = (
 const DistinguishInterimAndFinishLag = 1; // For correct sort on BE, Admin, TODO
 
 export class ConstructCompletionsService {
+  private logger: ILogger;
   private saveActivitySummary: SaveActivitySummary | null;
   private queryDataUtils: QueryDataUtils;
-  private storeProgress: StoreProgress;
-  private pushToQueueService: IPushToQueue;
+  private entityProgressions: EntityProgression[];
+  private pushToQueueService: IQueueProcessingService;
+  private alertsExtractor: IAlertsExtractor;
+  private scoresExtractor: IScoresExtractor;
   private dispatch: AppDispatch;
+  private persistor: Persistor;
 
   constructor(
     saveActivitySummary: SaveActivitySummary | null,
+    logger: ILogger,
     queryClient: QueryClient,
-    storeProgress: StoreProgress,
-    pushToQueueService: IPushToQueue,
+    pushToQueueService: IQueueProcessingService,
+    alertsExtractor: IAlertsExtractor,
+    scoresExtractor: IScoresExtractor,
     dispatch: AppDispatch,
+    persistor: Persistor,
+    entityProgressions: EntityProgression[],
   ) {
     this.saveActivitySummary = saveActivitySummary;
+    this.logger = logger;
     this.queryDataUtils = new QueryDataUtils(queryClient);
-    this.storeProgress = storeProgress;
     this.pushToQueueService = pushToQueueService;
+    this.alertsExtractor = alertsExtractor;
+    this.scoresExtractor = scoresExtractor;
     this.dispatch = dispatch;
+    this.entityProgressions = entityProgressions;
+    this.persistor = persistor;
   }
 
   private getLogDates(
@@ -124,12 +146,12 @@ export class ConstructCompletionsService {
   ) {
     const logDates = this.getLogDates(evaluatedEndAt, availableTo);
 
-    Logger.log(
+    this.logger.log(
       `[ConstructCompletionsService.logFinish]: Activity: "${activityName}|${activityId}", applet: "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
     );
 
     if (flowId) {
-      Logger.log(
+      this.logger.log(
         `[ConstructCompletionsService.logFinish]: Flow "${flowId}", applet "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
       );
     }
@@ -150,7 +172,7 @@ export class ConstructCompletionsService {
   ) {
     const logDates = this.getLogDates(evaluatedEndAt, availableTo);
 
-    Logger.log(
+    this.logger.log(
       `[ConstructCompletionsService.logIntermediate]: Activity: "${activityName}|${activityId}", flow: "${flowName}|${flowId}", applet: "${appletName}|${appletId}", submitId: ${submitId}, ${logDates}`,
     );
   }
@@ -204,7 +226,7 @@ export class ConstructCompletionsService {
     if (!appletEncryption) {
       const error =
         '[ConstructCompletionsService] Encryption params is undefined';
-      Logger.warn(error);
+      this.logger.warn(error);
       throw new Error(error);
     }
   }
@@ -213,7 +235,7 @@ export class ConstructCompletionsService {
     activityStorageRecord: ActivityState | null | undefined,
   ): boolean {
     if (!activityStorageRecord) {
-      Logger.warn(
+      this.logger.warn(
         '[ConstructCompletionsService] activityStorageRecord does not exist',
       );
       return false;
@@ -229,14 +251,13 @@ export class ConstructCompletionsService {
       return;
     }
 
-    const summaryAlerts: AnswerAlerts =
-      PassSurveyModel.AlertsExtractor.extractForSummary(
-        activityStorageRecord.items,
-        activityStorageRecord.answers,
-        activityName,
-      );
+    const summaryAlerts: AnswerAlerts = this.alertsExtractor.extractForSummary(
+      activityStorageRecord.items,
+      activityStorageRecord.answers,
+      activityName,
+    );
 
-    const scores: ScoreRecord[] = PassSurveyModel.ScoresExtractor.extract(
+    const scores: ScoreRecord[] = this.scoresExtractor.extract(
       activityStorageRecord.items,
       activityStorageRecord.answers,
       activityStorageRecord.scoreSettings,
@@ -257,7 +278,7 @@ export class ConstructCompletionsService {
   private async constructForIntermediate(
     input: ConstructForIntermediateInput,
   ): Promise<void> {
-    Logger.log(
+    this.logger.log(
       '[ConstructCompletionsService.constructForIntermediate] input:\n' +
         JSON.stringify(input, null, 2),
     );
@@ -267,6 +288,7 @@ export class ConstructCompletionsService {
       flowId,
       activityId,
       eventId,
+      targetSubjectId,
       order,
       activityName,
       isAutocompletion,
@@ -276,6 +298,7 @@ export class ConstructCompletionsService {
       appletId,
       activityId,
       eventId,
+      targetSubjectId,
       order,
     )!;
 
@@ -289,7 +312,7 @@ export class ConstructCompletionsService {
 
     const { items, answers: recordAnswers, actions } = activityStorageRecord;
 
-    await createSvgFiles(items, recordAnswers);
+    await createSvgFiles(getDefaultSvgFileManager(), items, recordAnswers);
 
     if (activityStorageRecord.hasSummary) {
       this.addSummaryData(activityStorageRecord, input);
@@ -304,33 +327,35 @@ export class ConstructCompletionsService {
         activityStorageRecord.context.originalItems as InitializeHiddenItem[],
       );
 
-    const progressRecord = getEntityProgress(
+    const progression = getEntityProgression(
       appletId,
       flowId,
       eventId,
-      this.storeProgress,
+      targetSubjectId,
+      this.entityProgressions,
     )!;
 
     const { flowName, scheduledDate } = getFlowRecord(
       flowId,
       appletId,
       eventId,
+      targetSubjectId,
     )!;
 
     const evaluatedEndAt = this.evaluateEndAt(
       'intermediate',
-      progressRecord.availableTo,
+      (progression as EntityProgressionInProgress).availableUntilTimestamp,
       isAutocompletion,
     );
 
-    const submitId = getExecutionGroupKey(progressRecord);
+    const submitId = getActivityFlowProgressionExecutionGroupKey(progression);
 
     this.logIntermediate(
       input,
       flowName!,
       appletName,
       evaluatedEndAt,
-      progressRecord.availableTo,
+      (progression as EntityProgressionInProgress).availableUntilTimestamp,
       submitId,
     );
 
@@ -346,7 +371,7 @@ export class ConstructCompletionsService {
       activityId: activityId,
       executionGroupKey: submitId,
       userIdentifier: getUserIdentifier(items, recordAnswers),
-      startTime: getActivityStartAt(progressRecord)!,
+      startTime: getActivityProgressionStartAt(progression)!.getTime(),
       endTime: evaluatedEndAt,
       scheduledTime: scheduledDate,
       activityName: activityName,
@@ -354,24 +379,33 @@ export class ConstructCompletionsService {
       client: getClientInformation(),
       alerts: mapAnswersToAlerts(items, recordAnswers),
       eventId,
+      targetSubjectId,
       isFlowCompleted: false,
       tzOffset: getTimezoneOffset(),
     });
 
-    clearActivityStorageRecord(appletId, activityId, eventId, order);
+    clearActivityStorageRecord(
+      appletId,
+      activityId,
+      eventId,
+      targetSubjectId,
+      order,
+    );
 
-    AnalyticsService.track(MixEvents.AssessmentCompleted, {
+    getDefaultAnalyticsService().track(MixEvents.AssessmentCompleted, {
       [MixProperties.AppletId]: appletId,
       [MixProperties.SubmitId]: submitId,
     });
 
-    Logger.log(`[ConstructCompletionsService.constructForIntermediate] Done`);
+    this.logger.log(
+      `[ConstructCompletionsService.constructForIntermediate] Done`,
+    );
   }
 
   private async constructForFinish(
     input: ConstructForFinishInput,
   ): Promise<void> {
-    Logger.log(
+    this.logger.log(
       '[ConstructCompletionsService.constructForFinish] input:\n' +
         JSON.stringify(input, null, 2),
     );
@@ -381,6 +415,7 @@ export class ConstructCompletionsService {
       flowId,
       activityId,
       eventId,
+      targetSubjectId,
       order,
       activityName,
       isAutocompletion,
@@ -392,6 +427,7 @@ export class ConstructCompletionsService {
       appletId,
       activityId,
       eventId,
+      targetSubjectId,
       order,
     )!;
 
@@ -403,33 +439,35 @@ export class ConstructCompletionsService {
 
     this.validateEncryption(appletEncryption);
 
-    const progressRecord = getEntityProgress(
+    const progression = getEntityProgression(
       appletId,
       entityId,
       eventId,
-      this.storeProgress,
+      targetSubjectId,
+      this.entityProgressions,
     )!;
 
     const evaluatedEndAt = this.evaluateEndAt(
       'finish',
-      progressRecord.availableTo,
+      (progression as EntityProgressionInProgress).availableUntilTimestamp,
       isAutocompletion,
     );
 
     this.dispatch(
-      AppletModel.actions.entityCompleted({
+      appletActions.completeEntity({
         appletId,
         eventId,
         entityId,
+        targetSubjectId,
         endAt: evaluatedEndAt,
       }),
     );
 
-    await ReduxPersistor.flush();
+    await this.persistor.flush();
 
     const { items, answers: recordAnswers, actions } = activityStorageRecord;
 
-    await createSvgFiles(items, recordAnswers);
+    await createSvgFiles(getDefaultSvgFileManager(), items, recordAnswers);
 
     const alerts = mapAnswersToAlerts(items, recordAnswers);
 
@@ -448,7 +486,7 @@ export class ConstructCompletionsService {
         activityStorageRecord.context.originalItems as InitializeHiddenItem[],
       );
 
-    const submitId = getExecutionGroupKey(progressRecord);
+    const submitId = getActivityFlowProgressionExecutionGroupKey(progression);
 
     this.logFinish(
       activityName,
@@ -457,11 +495,16 @@ export class ConstructCompletionsService {
       appletName,
       appletId,
       evaluatedEndAt,
-      progressRecord.availableTo,
+      (progression as EntityProgressionInProgress).availableUntilTimestamp,
       submitId,
     );
 
-    const { scheduledDate } = getFlowRecord(flowId, appletId, eventId)!;
+    const { scheduledDate } = getFlowRecord(
+      flowId,
+      appletId,
+      eventId,
+      targetSubjectId,
+    )!;
 
     const itemToUpload: SendAnswersInput = {
       appletId,
@@ -475,7 +518,7 @@ export class ConstructCompletionsService {
       activityId,
       executionGroupKey: submitId,
       userIdentifier,
-      startTime: getActivityStartAt(progressRecord)!,
+      startTime: getActivityProgressionStartAt(progression)!.getTime(),
       endTime: evaluatedEndAt,
       scheduledTime: scheduledDate,
       activityName: activityName,
@@ -483,6 +526,7 @@ export class ConstructCompletionsService {
       client: getClientInformation(),
       alerts,
       eventId,
+      targetSubjectId,
       isFlowCompleted: !!flowId,
       tzOffset: getTimezoneOffset(),
     };
@@ -491,14 +535,20 @@ export class ConstructCompletionsService {
 
     await wait(500); // M2-6153
 
-    clearActivityStorageRecord(appletId, activityId, eventId, order);
+    clearActivityStorageRecord(
+      appletId,
+      activityId,
+      eventId,
+      targetSubjectId,
+      order,
+    );
 
-    AnalyticsService.track(MixEvents.AssessmentCompleted, {
+    getDefaultAnalyticsService().track(MixEvents.AssessmentCompleted, {
       [MixProperties.AppletId]: appletId,
       [MixProperties.SubmitId]: submitId,
     });
 
-    Logger.log(`[ConstructCompletionsService.constructForFinish] Done`);
+    this.logger.log(`[ConstructCompletionsService.constructForFinish] Done`);
   }
 
   public async construct(input: ConstructInput): Promise<void> {
@@ -514,7 +564,7 @@ export class ConstructCompletionsService {
         await this.constructForFinish(input);
       }
     } catch (error) {
-      Logger.warn(
+      this.logger.warn(
         `[ConstructCompletionsService.construct] Error occurred: \n${error}`,
       );
     }

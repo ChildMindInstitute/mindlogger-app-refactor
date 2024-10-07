@@ -1,8 +1,9 @@
-export interface IStepSkipper {
-  shouldSkipStep: (step: number) => boolean;
-}
+import {
+  IShiftCalculator,
+  IStepSkipper,
+} from '@features/pass-survey/model/IShiftCalculator';
 
-class ShiftCalculator {
+export class ShiftCalculator implements IShiftCalculator {
   private skipper: IStepSkipper;
   private arrayLength: number;
 
@@ -63,5 +64,3 @@ class ShiftCalculator {
     return result;
   }
 }
-
-export default ShiftCalculator;

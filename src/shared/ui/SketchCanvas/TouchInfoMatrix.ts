@@ -1,6 +1,6 @@
 import { TouchInfo } from '@shopify/react-native-skia';
 
-class TouchInfoMatrix {
+export class TouchInfoMatrix {
   private rawMatrix: Array<Array<TouchInfo>>;
 
   constructor(rawMatrix: Array<Array<TouchInfo>>) {
@@ -19,5 +19,3 @@ class TouchInfoMatrix {
     return this.rawMatrix;
   }
 }
-
-export default TouchInfoMatrix;

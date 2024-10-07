@@ -1,10 +1,15 @@
 import React, { FC } from 'react';
 import { GestureResponderEvent } from 'react-native';
 
-import { YStack, Text } from '@shared/ui';
+import { YStack } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 
-import styles from './StabilityTrackerItem.styles';
-import { PLAYGROUND_WIDTH, OUTER_CIRCLE_RADIUS, BLOCK_HEIGHT } from '../lib';
+import { styles } from './StabilityTracker.styles';
+import {
+  BLOCK_HEIGHT,
+  OUTER_CIRCLE_RADIUS,
+  PLAYGROUND_WIDTH,
+} from '../lib/constants';
 
 type Props = {
   isTestRunning: boolean;
@@ -14,7 +19,7 @@ type Props = {
   onMove: (event: GestureResponderEvent) => void;
 };
 
-const ControlBar: FC<Props> = props => {
+export const ControlBar: FC<Props> = props => {
   const {
     isTestRunning,
     onStartTouch,
@@ -61,5 +66,3 @@ const ControlBar: FC<Props> = props => {
     </YStack>
   );
 };
-
-export default ControlBar;

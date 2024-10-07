@@ -1,52 +1,58 @@
-import { useContext, useState } from 'react';
+import React, {
+  ComponentProps,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 
-import {
-  Box,
-  GeolocationItem,
-  MarkdownMessage,
-  NumberSelector,
-  SimpleTextInput,
-  SplashItem,
-  PhotoItem,
-  VideoItem,
-  ScrollableContent,
-  DatePickerItem,
-  TimePickerItem,
-  StackedCheckBoxItem,
-  StackedRadiosItem,
-  StackedSlider,
-  ParagraphText,
-} from '@app/shared/ui';
-import { HandlersContext } from '@app/shared/ui';
-import { AbTest } from '@entities/abTrail';
-import { useAppletStreamingDetails } from '@entities/applet/lib/hooks';
-import { DrawingTest } from '@entities/drawer';
-import { HtmlFlanker, NativeIosFlanker } from '@entities/flanker';
-import { StabilityTracker } from '@entities/stabilityTracker';
-import {
-  Dimensions,
-  IS_ANDROID,
-  LiveEvent,
-  useSendEvent,
-  wait,
-} from '@shared/lib';
-import {
-  RadioActivityItem,
-  SurveySlider,
-  CheckBoxActivityItem,
-  TimeRangeItem,
-  AudioRecorderItem,
-  AudioStimulusItem,
-} from '@shared/ui';
+import { RenderFunction } from 'react-native-markdown-display';
 
-import AdditionalText from './AdditionalText';
-import {
-  PipelineItemAnswer,
-  ActivityItem as ActivityItemProps,
-  PipelineItemResponse,
-  ActivityIdentityContext,
-} from '../lib';
-import { mapStreamEventToDto } from '../model';
+import { AbTest } from '@app/entities/abTrail/ui/AbTest';
+import { useActivityAssignment } from '@app/entities/activity/lib/hooks/useActivityAssignment';
+import { ActivityAssignmentBadge } from '@app/entities/activity/ui/ActivityAssignmentBadge';
+import { ActivityAssignmentBanner } from '@app/entities/activity/ui/ActivityAssignmentBanner';
+import { useAppletStreamingDetails } from '@app/entities/applet/lib/hooks/useAppletStreamingDetails';
+import { DrawingTest } from '@app/entities/drawer/ui/DrawingTest/DrawingTest';
+import { FlankerGameResponse } from '@app/entities/flanker/lib/types/response';
+import { HtmlFlanker } from '@app/entities/flanker/ui/HtmlFlanker/HtmlFlanker';
+import { NativeIosFlanker } from '@app/entities/flanker/ui/NativeIosFlanker/NativeIosFlanker';
+import { StabilityTracker } from '@app/entities/stabilityTracker/ui/StabilityTracker';
+import { IS_ANDROID } from '@app/shared/lib/constants';
+import { LiveEvent } from '@app/shared/lib/tcp/types';
+import { useSendEvent } from '@app/shared/lib/tcp/useSendLiveEvent';
+import { Dimensions } from '@app/shared/lib/types/space';
+import { wait } from '@app/shared/lib/utils/common';
+import { Box, XStack } from '@app/shared/ui/base';
+import { ScrollableContent } from '@app/shared/ui/ScrollableContent';
+import { HandlersContext } from '@app/shared/ui/Stepper/contexts';
+import { AudioRecorderItem } from '@app/shared/ui/survey/AudioRecorderItem';
+import { AudioStimulusItem } from '@app/shared/ui/survey/AudioStimulusItem';
+import { CheckBoxActivityItem } from '@app/shared/ui/survey/CheckBox/CheckBoxActivity.item';
+import { DatePickerItem } from '@app/shared/ui/survey/DatePickerItem';
+import { GeolocationItem } from '@app/shared/ui/survey/Geolocation/GeolocationItem';
+import { MarkdownMessage } from '@app/shared/ui/survey/MarkdownMessage';
+import { PhotoItem } from '@app/shared/ui/survey/MediaItems/PhotoItem';
+import { VideoItem } from '@app/shared/ui/survey/MediaItems/VideoItem';
+import { NumberSelector } from '@app/shared/ui/survey/NumberSelector';
+import { ParagraphText } from '@app/shared/ui/survey/ParagraphText';
+import { RadioActivityItem } from '@app/shared/ui/survey/RadioActivityItem/RadioActivityItem';
+import { SimpleTextInput } from '@app/shared/ui/survey/SimpleTextInput';
+import { StackedSlider } from '@app/shared/ui/survey/Slider/StackedSlider';
+import { SurveySlider } from '@app/shared/ui/survey/Slider/SurveySlider';
+import { SplashItem } from '@app/shared/ui/survey/SplashItem';
+import { StackedCheckboxItem } from '@app/shared/ui/survey/StackedCheckboxItem/StackedCheckboxItem';
+import { StackedRadios } from '@app/shared/ui/survey/StackedRadioItem/StackedRadiosItem';
+import { TimePickerItem } from '@app/shared/ui/survey/TimePickerItem';
+import { TimeRangeItem } from '@app/shared/ui/survey/TimeRangeItem';
+import { markDownRules } from '@shared/lib/markdown/rules';
+import { insertAfterMedia } from '@shared/lib/markdown/utils';
+
+import { AdditionalText } from './AdditionalText';
+import { ActivityIdentityContext } from '../lib/contexts/ActivityIdentityContext';
+import { ActivityItem as ActivityItemProps } from '../lib/types/activityItem';
+import { PipelineItemResponse } from '../lib/types/payload';
+import { PipelineItemAnswer } from '../lib/types/pipelineItemAnswer';
+import { mapStreamEventToDto } from '../model/streamEventMapper';
 
 type Props = ActivityItemProps &
   PipelineItemAnswer & {
@@ -57,7 +63,7 @@ type Props = ActivityItemProps &
     context: Record<string, unknown>;
   };
 
-function ActivityItem({
+export function ActivityItem({
   type,
   value,
   pipelineItem,
@@ -67,7 +73,17 @@ function ActivityItem({
   onContextChange,
   context,
 }: Props) {
-  const { appletId } = useContext(ActivityIdentityContext);
+  const { appletId, activityId, flowId, targetSubjectId } = useContext(
+    ActivityIdentityContext,
+  );
+
+  const { assignment } = useActivityAssignment({
+    appletId,
+    activityId,
+    activityFlowId: flowId || null,
+    targetSubjectId,
+  });
+
   const streamingDetails = useAppletStreamingDetails(appletId);
 
   const initialScrollEnabled = type !== 'StabilityTracker' && type !== 'AbTest';
@@ -96,7 +112,7 @@ function ActivityItem({
 
   const releaseScrolling = () => setScrollEnabled(true);
 
-  function moveToNextItem() {
+  const moveToNextItem = useCallback(() => {
     const isRadioItem = pipelineItem.type === 'Radio';
     const autoAdvanceDisabled =
       isRadioItem && !pipelineItem.payload.autoAdvance;
@@ -107,7 +123,36 @@ function ActivityItem({
         next({ isForced: true, shouldAutoSubmit: shouldAutoSubmit }),
       );
     }
-  }
+  }, [next, pipelineItem]);
+
+  const handleStabilityTrackerComplete = useCallback<
+    ComponentProps<typeof StabilityTracker>['onComplete']
+  >(
+    response => {
+      onResponse(response);
+      moveToNextItem();
+    },
+    [moveToNextItem, onResponse],
+  );
+
+  const handleFlankerResult = useCallback<(data: FlankerGameResponse) => void>(
+    data => {
+      onResponse(data);
+      moveToNextItem();
+    },
+    [moveToNextItem, onResponse],
+  );
+
+  const handleRadioChange = useCallback<
+    ComponentProps<typeof RadioActivityItem>['onChange']
+  >(
+    async radioValue => {
+      await wait(100);
+      onResponse(radioValue);
+      moveToNextItem();
+    },
+    [moveToNextItem, onResponse],
+  );
 
   switch (type) {
     case 'Splash':
@@ -135,10 +180,7 @@ function ActivityItem({
         <Box flex={1}>
           <StabilityTracker
             config={pipelineItem.payload}
-            onComplete={response => {
-              onResponse(response);
-              moveToNextItem();
-            }}
+            onComplete={handleStabilityTrackerComplete}
             onMaxLambdaChange={onContextChange}
             maxLambda={context?.maxLambda as number}
             onLog={processLiveEvent}
@@ -171,19 +213,13 @@ function ActivityItem({
       item = IS_ANDROID ? (
         <HtmlFlanker
           configuration={pipelineItem.payload}
-          onResult={data => {
-            onResponse(data);
-            moveToNextItem();
-          }}
+          onResult={handleFlankerResult}
           onLog={processLiveEvent}
         />
       ) : (
         <NativeIosFlanker
           configuration={pipelineItem.payload}
-          onResult={data => {
-            onResponse(data);
-            moveToNextItem();
-          }}
+          onResult={handleFlankerResult}
           onLog={processLiveEvent}
         />
       );
@@ -251,7 +287,7 @@ function ActivityItem({
     case 'StackedCheckbox':
       item = (
         <Box mx="$6">
-          <StackedCheckBoxItem
+          <StackedCheckboxItem
             config={pipelineItem.payload}
             onChange={onResponse}
             values={value?.answer || null}
@@ -265,7 +301,7 @@ function ActivityItem({
     case 'StackedRadio':
       item = (
         <Box mx="$6">
-          <StackedRadiosItem
+          <StackedRadios
             config={pipelineItem.payload}
             onChange={onResponse}
             values={value?.answer || []}
@@ -340,11 +376,7 @@ function ActivityItem({
         <Box mx={16}>
           <RadioActivityItem
             config={pipelineItem.payload}
-            onChange={async radioValue => {
-              await wait(100);
-              onResponse(radioValue);
-              moveToNextItem();
-            }}
+            onChange={handleRadioChange}
             initialValue={value?.answer}
             textReplacer={textVariableReplacer}
           />
@@ -391,6 +423,24 @@ function ActivityItem({
 
   return (
     <ScrollableContent scrollEnabled={scrollEnabled} scrollEventThrottle={100}>
+      {assignment &&
+        assignment.respondent.id !== assignment.target.id &&
+        (() => {
+          // TODO: Move this to the "welcome" screen.
+          //       See: https://mindlogger.atlassian.net/browse/M2-7917
+          // THIS IS NOT WHERE `<ActivityAssignmentBanner />` SHOULD GO!
+          // The mobile app currently doesn't have a "welcome" screen like the
+          // web app does, so the banner is rendered here (but disabled) for
+          // demonstration purposes.
+          // If you just want to see what the banner looks like, change the
+          // line below to `return true`.
+          return false;
+        })() && (
+          <ActivityAssignmentBanner
+            assignment={assignment}
+            accessibilityLabel="item_display_assignment_banner"
+          />
+        )}
       <Box
         flex={1}
         justifyContent="center"
@@ -406,7 +456,39 @@ function ActivityItem({
               accessibilityLabel="item_display_content"
               flex={1}
               alignItems={alignMessageToLeft ? undefined : 'center'}
-              content={textVariableReplacer(question)}
+              content={
+                assignment && assignment.respondent.id !== assignment.target.id
+                  ? insertAfterMedia(
+                      textVariableReplacer(question),
+                      `<div data-is-assignment-badge />`,
+                    )
+                  : textVariableReplacer(question)
+              }
+              rules={{
+                html_block: (...args: Parameters<RenderFunction>) => {
+                  const [node] = args;
+
+                  if (
+                    assignment &&
+                    node.content.match(/ata-is-assignment-badge/)
+                  ) {
+                    return (
+                      <XStack mb={12}>
+                        {alignMessageToLeft ? null : (
+                          <Box flexGrow={1} flexShrink={1} />
+                        )}
+                        <ActivityAssignmentBadge
+                          assignment={assignment}
+                          accessibilityLabel="item_display_assignment"
+                        />
+                        <Box flexGrow={1} flexShrink={1} />
+                      </XStack>
+                    );
+                  }
+
+                  return (markDownRules.html_block as RenderFunction)(...args);
+                },
+              }}
             />
           </Box>
         )}
@@ -426,5 +508,3 @@ function ActivityItem({
     </ScrollableContent>
   );
 }
-
-export default ActivityItem;

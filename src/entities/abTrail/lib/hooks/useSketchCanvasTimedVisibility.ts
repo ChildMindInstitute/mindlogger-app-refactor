@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 const FreezeTimeout = 50;
 
-const useSketchCanvasTimedVisibility = () => {
+export const useSketchCanvasTimedVisibility = () => {
   const [isSketchCanvasShown, setIsSketchCanvasShown] = useState(true);
 
   useEffect(() => {
@@ -29,5 +29,3 @@ const useSketchCanvasTimedVisibility = () => {
     showSketchCanvas,
   };
 };
-
-export default useSketchCanvasTimedVisibility;

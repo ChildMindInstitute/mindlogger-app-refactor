@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 
-import { IS_IOS } from '@shared/lib';
+import { IS_IOS } from '@app/shared/lib/constants';
 
 import { type Coordinate } from '../types';
 

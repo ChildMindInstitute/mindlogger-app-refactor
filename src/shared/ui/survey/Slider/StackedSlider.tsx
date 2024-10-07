@@ -1,10 +1,11 @@
 import { FC } from 'react';
 
-import { YStack, Text, SurveySlider } from '@shared/ui';
-
+import { SurveySlider } from './SurveySlider';
 import { StackedSliderProps } from './types';
+import { YStack } from '../../base';
+import { Text } from '../../Text';
 
-const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
+export const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
   const { rows } = config;
   const { onChange, onRelease, onPress, values } = props;
 
@@ -61,5 +62,3 @@ const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
     </YStack>
   );
 };
-
-export default StackedSlider;
