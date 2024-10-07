@@ -56,18 +56,53 @@ export const createActivityGroupsBuildManager = (
     );
   };
 
-  const sort = (eventEntities: EventEntity[]) => {
-    let flows = eventEntities.filter(
-      x => x.entity.pipelineType === ActivityPipelineType.Flow,
-    );
-    let activities = eventEntities.filter(
-      x => x.entity.pipelineType === ActivityPipelineType.Regular,
-    );
+  const sortEntityEvents = (eventEntities: EventEntity[]): EventEntity[] => {
+    // Array.prototype.sort both sorts the array in-place, and returning
+    // a reference to that array itself.
+    return eventEntities.sort((a, b) => {
+      const aIsFlow = a.entity.pipelineType === ActivityPipelineType.Flow;
+      const bIsFlow = b.entity.pipelineType === ActivityPipelineType.Flow;
 
-    flows = flows.sort((a, b) => a.entity.order - b.entity.order);
-    activities = activities.sort((a, b) => a.entity.order - b.entity.order);
+      // 1. Sort activity flows above activities
+      if (aIsFlow && !bIsFlow) {
+        return -1;
+      } else if (!aIsFlow && bIsFlow) {
+        return 1;
+      }
 
-    return [...flows, ...activities];
+      // 2. Sort by entity order
+      const orderDiff = a.entity.order - b.entity.order;
+      if (orderDiff !== 0) {
+        return orderDiff;
+      }
+
+      // 3. Sort self-report above assigned entities
+      if (!a.assignment) {
+        return -1;
+      } else if (!b.assignment) {
+        return 1;
+      }
+
+      // 4. Sort by assignment target subject's first name
+      const firstNameDiff =
+        `${a.assignment.target.firstName || ''}`.localeCompare(
+          `${b.assignment.target.firstName || ''}`,
+        );
+      if (firstNameDiff !== 0) {
+        return firstNameDiff;
+      }
+
+      // 5. Sort by assignment target subject's last name
+      const lastnameDiff =
+        `${a.assignment.target.lastName || ''}`.localeCompare(
+          `${b.assignment.target.lastName || ''}`,
+        );
+      if (lastnameDiff !== 0) {
+        return lastnameDiff;
+      }
+
+      return 0;
+    });
   };
 
   const processInternal = (
@@ -121,15 +156,15 @@ export const createActivityGroupsBuildManager = (
       eventsResponse.result.events,
     );
 
-    const idToEntity = buildIdToEntityMap(activities, activityFlows);
+    const entitiesById = buildIdToEntityMap(activities, activityFlows);
 
-    const enableActivityAssign =
-      featureFlagsService.evaluateFlag(FeatureFlagsKeys.enableActivityAssign) ||
-      parseInt('1', 10) === 1;
+    const enableActivityAssign = featureFlagsService.evaluateFlag(
+      FeatureFlagsKeys.enableActivityAssign,
+    );
 
     const entityEvents: EventEntity[] = [];
     for (const event of events) {
-      const entity = idToEntity[event.entityId];
+      const entity = entitiesById[event.entityId];
       if (!entity || entity.isHidden) {
         continue;
       }
@@ -191,7 +226,7 @@ export const createActivityGroupsBuildManager = (
       }
     }
 
-    const sortedEntityEvents = sort(entityEvents);
+    const sortedEntityEvents = sortEntityEvents(entityEvents);
 
     let logInfo = '';
     const result: BuildResult = { groups: [] };
