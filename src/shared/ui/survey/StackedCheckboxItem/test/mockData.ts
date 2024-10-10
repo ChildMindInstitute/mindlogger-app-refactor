@@ -1,6 +1,6 @@
-import { StackedItem } from '../../StackedItemsGrid';
+import { StackedItem } from '../../StackedItemsGrid/types';
 
-const stackedCheckboxConfig = {
+export const stackedCheckboxConfig = {
   setAlerts: false,
   addTooltip: false,
   addScores: false,
@@ -47,7 +47,7 @@ const stackedCheckboxConfig = {
   dataMatrix: [],
 };
 
-const selectedValues: Array<Array<StackedItem>> = [
+export const selectedValues: Array<Array<StackedItem>> = [
   [
     {
       id: '37269e0e-9220-4c53-b3e6-86ec70c6a1d2',
@@ -66,5 +66,3 @@ const selectedValues: Array<Array<StackedItem>> = [
     },
   ],
 ];
-
-export default { stackedCheckboxConfig, selectedValues };

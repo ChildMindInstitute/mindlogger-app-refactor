@@ -1,12 +1,16 @@
-import NotificationsLogger from '@app/entities/notification/lib/services/NotificationsLogger';
-import { LogAction, LogTrigger } from '@app/shared/api';
-import { NotificationModel } from '@entities/notification';
-import { BackgroundWorker, createJob } from '@shared/lib';
-
-const { NotificationManager } = NotificationModel;
+import { getDefaultNotificationsLogger } from '@app/entities/notification/lib/services/notificationsLoggerInstance';
+import { getDefaultNotificationManager } from '@app/entities/notification/model/notificationManagerInstance';
+import {
+  LogAction,
+  LogTrigger,
+} from '@app/shared/api/services/INotificationService';
+import { getDefaultBackgroundWorker } from '@app/shared/lib/services/backgroundWorkerBuilderInstance';
+import { createJob } from '@app/shared/lib/services/jobManagement';
 
 export default createJob(() => {
-  return BackgroundWorker.setAndroidHeadlessTask(async () => {
+  const NotificationManager = getDefaultNotificationManager();
+
+  const handleAndroidHeadlessTask = async () => {
     if (NotificationManager.mutex.isBusy()) {
       console.warn(
         '[BackgroundWorker.setAndroidHeadlessTask]: NotificationManagerMutex is busy. Operation rejected',
@@ -18,10 +22,12 @@ export default createJob(() => {
 
       await NotificationManager.topUpNotificationsFromQueue();
 
-      NotificationsLogger.log({
-        trigger: LogTrigger.RunBackgroundProcess,
-        action: LogAction.ReStack,
-      });
+      getDefaultNotificationsLogger()
+        .log({
+          trigger: LogTrigger.RunBackgroundProcess,
+          action: LogAction.ReStack,
+        })
+        .catch(console.error);
     } catch (err) {
       console.warn(
         '[BackgroundWorker.setAndroidHeadlessTask]: Error occurred. ',
@@ -30,5 +36,9 @@ export default createJob(() => {
     } finally {
       NotificationManager.mutex.release();
     }
+  };
+
+  return getDefaultBackgroundWorker().setAndroidHeadlessTask(() => {
+    handleAndroidHeadlessTask().catch(console.error);
   });
 });

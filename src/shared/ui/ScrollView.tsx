@@ -1,11 +1,11 @@
-import { ScrollView } from 'react-native';
+import { ScrollView as RNScrollView } from 'react-native';
 
 import { styled, setupReactNative } from '@tamagui/core';
 
-setupReactNative(ScrollView);
+setupReactNative(RNScrollView);
 
-export default styled(
-  ScrollView,
+export const ScrollView = styled(
+  RNScrollView,
   {
     name: 'ScrollView',
     scrollEnabled: true,

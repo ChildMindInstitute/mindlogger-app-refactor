@@ -1,6 +1,6 @@
 import { MMKV } from 'react-native-mmkv';
 
-class SyncStorage {
+export class SyncStorage {
   constructor(private storage: MMKV) {}
 
   get __originalStorage__() {
@@ -28,5 +28,3 @@ class SyncStorage {
     this.storage.clearAll();
   }
 }
-
-export default SyncStorage;

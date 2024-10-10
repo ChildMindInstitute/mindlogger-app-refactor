@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react';
 
-import { Button, BoxProps } from '@shared/ui';
+import { BoxProps } from '../base';
+import { Button } from '../Button';
 
 type Props = PropsWithChildren<{
   onPress: () => void;
@@ -10,7 +11,7 @@ type Props = PropsWithChildren<{
 }> &
   BoxProps;
 
-const ActionButton = ({
+export const ActionButton = ({
   onPress,
   type = 'submit',
   accessibilityLabel,
@@ -38,5 +39,3 @@ const ActionButton = ({
     </Button>
   );
 };
-
-export default ActionButton;

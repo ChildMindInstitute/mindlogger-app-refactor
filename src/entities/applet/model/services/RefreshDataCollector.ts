@@ -1,65 +1,51 @@
 import { AxiosResponse } from 'axios';
 
+import { ActivityDto } from '@app/shared/api/services/IActivityService';
 import {
-  ActivityDto,
-  AllEventsResponse,
-  AppletDetailsDto,
-  AppletEventsResponse,
-  AppletRespondentMetaDto,
-  toAxiosResponse,
-  EventsService,
-  AppletsService,
   AppletDto,
-} from '@app/shared/api';
+  IAppletService,
+} from '@app/shared/api/services/IAppletService';
 import {
-  ILogger,
+  AllEventsResponse,
+  IEventsService,
+} from '@app/shared/api/services/IEventsService';
+import { toAxiosResponse } from '@app/shared/api/utils';
+import {
   collectActivityDetailsImageUrls,
   collectAppletDetailsImageUrls,
   collectAppletRecordImageUrls,
-} from '@app/shared/lib';
+} from '@app/shared/lib/services/collectImageUrls';
+import { ILogger } from '@app/shared/lib/types/logger';
+import {
+  CollectAllAppletAssignmentsResult,
+  CollectAllAppletEventsResult,
+  CollectAppletDetailsResult,
+  CollectAppletInternalsResult,
+  IRefreshDataCollector,
+} from '@entities/applet/model/services/IRefreshDataCollector';
 
-type AppletId = string;
-
-export type CollectAppletInternalsResult = {
-  appletId: AppletId;
-  appletDetails: AppletDetailsDto;
-  activities: Array<ActivityDto>;
-  imageUrls: string[];
-  respondentMeta: AppletRespondentMetaDto;
-};
-
-export type CollectAllAppletEventsResult = {
-  appletEvents: Record<AppletId, AxiosResponse<AppletEventsResponse> | null>;
-};
-
-type CollectAppletDetailsResult = {
-  appletDetailsDto: AppletDetailsDto;
-  activityDetailsDtos: Array<ActivityDto>;
-  imageUrls: string[];
-  respondentMeta: AppletRespondentMetaDto;
-};
-
-export interface IRefreshDataCollector {
-  collectAppletInternals(
-    appletDto: AppletDto,
-  ): Promise<CollectAppletInternalsResult>;
-  collectAllAppletEvents(
-    currentApplets: string[],
-  ): Promise<CollectAllAppletEventsResult>;
-}
-
-class RefreshDataCollector implements IRefreshDataCollector {
+export class RefreshDataCollector implements IRefreshDataCollector {
   private logger: ILogger;
 
-  constructor(logger: ILogger) {
+  private appletService: IAppletService;
+
+  private eventsService: IEventsService;
+
+  constructor(
+    logger: ILogger,
+    appletService: IAppletService,
+    eventsService: IEventsService,
+  ) {
     this.logger = logger;
+    this.appletService = appletService;
+    this.eventsService = eventsService;
   }
 
   private async collectAppletDetails(
     appletId: string,
   ): Promise<CollectAppletDetailsResult> {
     const appletDetailsResponse =
-      await AppletsService.getAppletAndActivitiesDetails({
+      await this.appletService.getAppletAndActivitiesDetails({
         appletId,
       });
 
@@ -82,9 +68,7 @@ class RefreshDataCollector implements IRefreshDataCollector {
     });
   }
 
-  public async collectAppletInternals(
-    appletDto: AppletDto,
-  ): Promise<CollectAppletInternalsResult> {
+  public async collectAppletInternals(appletDto: AppletDto) {
     const imageUrls: string[] = collectAppletRecordImageUrls(appletDto);
 
     let collectDetailsResult: CollectAppletDetailsResult;
@@ -93,8 +77,7 @@ class RefreshDataCollector implements IRefreshDataCollector {
       collectDetailsResult = await this.collectAppletDetails(appletDto.id);
     } catch (error) {
       throw new Error(
-        "[RefreshDataCollector.collectAppletInternals]: Error occurred during getting applet's details\n\n" +
-          error,
+        `[RefreshDataCollector.collectAppletInternals]: Error occurred during getting applet's details\n\n${error}`,
       );
     }
 
@@ -120,20 +103,17 @@ class RefreshDataCollector implements IRefreshDataCollector {
 
   private async collectEvents(): Promise<AxiosResponse<AllEventsResponse> | null> {
     try {
-      return await EventsService.getAllEvents();
+      return await this.eventsService.getAllEvents();
     } catch (error) {
       this.logger.warn(
-        '[RefreshDataCollector.collectEvents]: Error occurred while fetching events":\n\n' +
-          error,
+        `[RefreshDataCollector.collectEvents]: Error occurred while fetching events":\n\n${error}`,
       );
 
       return null;
     }
   }
 
-  public async collectAllAppletEvents(
-    currentApplets: string[],
-  ): Promise<CollectAllAppletEventsResult> {
+  public async collectAllAppletEvents(appletIds: string[]) {
     const result: CollectAllAppletEventsResult = {
       appletEvents: {},
     };
@@ -141,7 +121,7 @@ class RefreshDataCollector implements IRefreshDataCollector {
     const eventsResponse = await this.collectEvents();
 
     if (eventsResponse) {
-      const appletEvents = currentApplets.map(appletId => ({
+      const appletEvents = appletIds.map(appletId => ({
         appletId,
         events:
           eventsResponse.data.result.find(
@@ -160,6 +140,19 @@ class RefreshDataCollector implements IRefreshDataCollector {
 
     return result;
   }
-}
 
-export default RefreshDataCollector;
+  public async collectAllAppletAssignments(appletIds: string[]) {
+    const result: CollectAllAppletAssignmentsResult = {
+      appletAssignments: {},
+    };
+
+    for (const appletId of appletIds) {
+      const assignmentResponse = await this.appletService.getAppletAssignments({
+        appletId,
+      });
+      result.appletAssignments[appletId] = assignmentResponse;
+    }
+
+    return result;
+  }
+}

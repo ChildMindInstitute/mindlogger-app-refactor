@@ -9,8 +9,12 @@ import {
 } from 'date-fns';
 import { Parse, Day } from 'dayspan';
 
-import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
+import {
+  AvailabilityType,
+  PeriodicityType,
+} from '@app/abstract/lib/types/event';
 
+import { IScheduledDateCalculator } from './IScheduledDateCalculator';
 import {
   EventAvailability,
   ScheduleEvent,
@@ -20,7 +24,7 @@ type EventParseInput = Parameters<typeof Parse.schedule>[0];
 
 const cache = new Map();
 
-export class ScheduledDateCalculator {
+export class ScheduledDateCalculator implements IScheduledDateCalculator {
   constructor() {}
 
   private setTime(target: Date, availability: EventAvailability) {
@@ -178,5 +182,3 @@ export class ScheduledDateCalculator {
     return result;
   }
 }
-
-export default new ScheduledDateCalculator();

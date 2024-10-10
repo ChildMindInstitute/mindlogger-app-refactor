@@ -1,12 +1,15 @@
 import { PropsWithChildren, useEffect } from 'react';
 
-import { MigrationProcessor } from '@app/app/model';
-import { useSystemBootUp } from '@app/shared/lib';
+import { MigrationFactory } from '@app/app/model/migrations/MigrationFactory';
+import { MigrationProcessor } from '@app/app/model/migrations/MigrationProcessor';
+import { MigrationRunner } from '@app/app/model/migrations/MigrationRunner';
+import { useSystemBootUp } from '@app/shared/lib/contexts/SplashContext';
 
 import { reduxStore } from './ReduxProvider';
-import { MigrationRunner, MigrationFactory } from '../../model';
 
-function StorageMigrationProvider({ children }: PropsWithChildren<unknown>) {
+export function StorageMigrationProvider({
+  children,
+}: PropsWithChildren<unknown>) {
   const { onModuleInitialized, initialized } = useSystemBootUp();
 
   useEffect(() => {
@@ -14,10 +17,11 @@ function StorageMigrationProvider({ children }: PropsWithChildren<unknown>) {
     const migrator = new MigrationRunner(migrations);
     const migrationProcessor = new MigrationProcessor(reduxStore, migrator);
 
-    migrationProcessor.process().then(() => onModuleInitialized('storage'));
+    migrationProcessor
+      .process()
+      .then(() => onModuleInitialized('storage'))
+      .catch(console.error);
   }, [onModuleInitialized]);
 
   return <>{initialized && children}</>;
 }
-
-export default StorageMigrationProvider;

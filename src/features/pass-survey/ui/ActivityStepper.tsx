@@ -8,33 +8,33 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
-import { useAppletDetailsQuery } from '@app/entities/applet';
-import { HourMinute, isIphoneX } from '@app/shared/lib';
+import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
+import { isIphoneX } from '@app/shared/lib/utils/common';
+import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
+import { Box, XStack } from '@app/shared/ui/base';
+import { Center } from '@app/shared/ui/Center';
+import { StatusBar } from '@app/shared/ui/StatusBar';
 import {
-  ActivityIndicator,
-  Box,
-  Center,
   OnBeforeNextResult,
-  StatusBar,
   Stepper,
   StepperPayload,
-  XStack,
-  TimeRemaining,
-} from '@shared/ui';
+} from '@app/shared/ui/Stepper';
+import { TimeRemaining } from '@app/shared/ui/TimeRemaining';
 
-import ActivityItem from './ActivityItem';
-import Header from './Header.tsx';
-import ProgressWithTimer from './ProgressWithTimer';
-import TutorialViewerItem, { TutorialViewerRef } from './TutorialViewerItem';
-import {
-  ActivityIdentityContext,
-  fetchSkipActivityUserConfirmation,
-  FlankerResponse,
-  SkipService,
-  useTextVariablesReplacer,
-} from '../lib';
-import { useActivityState, useActivityStepper, useIdleTimer } from '../model';
+import { ActivityItem } from './ActivityItem';
+import { Header } from './Header';
+import { ProgressWithTimer } from './ProgressWithTimer';
+import { TutorialViewerItem, TutorialViewerRef } from './TutorialViewerItem';
+import { fetchSkipActivityUserConfirmation } from '../lib/alerts';
+import { ActivityIdentityContext } from '../lib/contexts/ActivityIdentityContext';
+import { useTextVariablesReplacer } from '../lib/hooks/useTextVariablesReplacer';
+import { SkipService } from '../lib/services/SkipService';
+import { FlankerResponse } from '../lib/types/payload';
 import { evaluateFlankerNextStep } from '../model/flankerNextStepEvaluator';
+import { useActivityState } from '../model/hooks/useActivityState';
+import { useActivityStepper } from '../model/hooks/useActivityStepper';
+import { useIdleTimer } from '../model/hooks/useIdleTimer';
 
 type Props = {
   idleTimer: HourMinute | null;
@@ -43,9 +43,10 @@ type Props = {
   onClose: (reason: 'regular' | 'click-on-return') => void;
   onFinish: (reason: 'regular' | 'idle') => void;
   flowId?: string;
+  targetSubjectId: string | null;
 };
 
-function ActivityStepper({
+export function ActivityStepper({
   idleTimer,
   timer,
   entityStartedAt,
@@ -65,9 +66,14 @@ function ActivityStepper({
 
   const timerMarginTop = hasNotch ? (safeAreaTop - timerHeight) / 2 : 16;
 
-  const { appletId, activityId, eventId, order, activityName } = useContext(
-    ActivityIdentityContext,
-  );
+  const {
+    appletId,
+    activityId,
+    eventId,
+    targetSubjectId,
+    order,
+    activityName,
+  } = useContext(ActivityIdentityContext);
 
   const {
     activityStorageRecord,
@@ -87,6 +93,7 @@ function ActivityStepper({
     appletId,
     activityId,
     eventId,
+    targetSubjectId,
     order,
   });
 
@@ -98,10 +105,12 @@ function ActivityStepper({
   });
 
   const { replaceTextVariables } = useTextVariablesReplacer({
+    appletId,
+    activityId,
+    eventId,
+    targetSubjectId,
     items: activityStorageRecord?.items,
     answers: activityStorageRecord?.answers,
-    activityId,
-    appletId,
   });
 
   const {
@@ -328,6 +337,7 @@ function ActivityStepper({
             flowId={flowId}
             eventId={eventId}
             appletId={appletId}
+            targetSubjectId={targetSubjectId}
           />
           {showTopNavigation && (
             <Stepper.NavigationPanel mx={16}>
@@ -393,8 +403,8 @@ function ActivityStepper({
 
           <Box mb={!showBottomNavigation ? 16 : 0}>
             <ProgressWithTimer
-              duration={currentPipelineItem?.timer}
               key={currentPipelineItem?.id}
+              duration={currentPipelineItem?.timer}
             />
           </Box>
 
@@ -442,5 +452,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-export default ActivityStepper;

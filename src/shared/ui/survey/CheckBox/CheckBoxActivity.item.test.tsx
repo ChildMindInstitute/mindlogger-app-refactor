@@ -1,9 +1,11 @@
 import renderer from 'react-test-renderer';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import { CheckBox, CheckBoxActivityItem, Item } from '@shared/ui';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 
-import CheckBoxItem from './CheckBox.item';
+import { CheckBoxItem } from './CheckBox.item';
+import { CheckBoxActivityItem } from './CheckBoxActivity.item';
+import { Item } from './types';
+import { CheckBox } from '../../CheckBox';
 
 const options: Item[] = [
   {

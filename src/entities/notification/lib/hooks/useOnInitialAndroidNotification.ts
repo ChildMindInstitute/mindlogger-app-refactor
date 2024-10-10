@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react';
 
 import notifee from '@notifee/react-native';
 
-import { IS_ANDROID } from '@app/shared/lib';
+import { IS_ANDROID } from '@app/shared/lib/constants';
 
-import { LocalInitialNotification } from '../types';
+import { LocalInitialNotification } from '../types/notifications';
 
 export function useOnInitialAndroidNotification(
   callback: (initialNotification: LocalInitialNotification) => void,

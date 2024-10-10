@@ -1,41 +1,43 @@
 import { useIsRestoring, useQueryClient } from '@tanstack/react-query';
 
-import { StoreProgress } from '@app/abstract/lib';
-import { AppletModel } from '@app/entities/applet';
-import { NotificationModel } from '@app/entities/notification';
-import { SessionModel } from '@app/entities/session';
-import { LogTrigger } from '@app/shared/api';
-import { Logger, useAppSelector, useOnForeground } from '@app/shared/lib';
+import {
+  selectAppletsEntityProgressions,
+  selectEntityResponseTimes,
+} from '@app/entities/applet/model/selectors';
+import { getDefaultNotificationRefreshService } from '@app/entities/notification/model/notificationRefreshServiceInstance';
+import { useHasSession } from '@app/entities/session/model/hooks/useHasSession';
+import { LogTrigger } from '@app/shared/api/services/INotificationService';
+import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useOnForeground } from '@app/shared/lib/hooks/useOnForeground';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
-function useRestackNotifications(hasExpiredEntity: () => boolean) {
+export function useRestackNotifications(hasExpiredEntity: () => boolean) {
   const queryClient = useQueryClient();
   const isRestoring = useIsRestoring();
-  const hasSession = SessionModel.useHasSession();
+  const hasSession = useHasSession();
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
-  );
+  const progressions = useAppSelector(selectAppletsEntityProgressions);
 
-  const completions = useAppSelector(AppletModel.selectors.selectCompletions);
+  const responseTimes = useAppSelector(selectEntityResponseTimes);
 
   useOnForeground(
     () => {
       if (hasExpiredEntity()) {
-        Logger.log(
+        getDefaultLogger().log(
           '[useRestackNotifications]: Cancelled due to hasExpiredEntity',
         );
         return;
       }
 
-      NotificationModel.NotificationRefreshService.refresh(
-        queryClient,
-        storeProgress,
-        completions,
-        LogTrigger.GoToForeground,
-      );
+      getDefaultNotificationRefreshService()
+        .refresh(
+          queryClient,
+          progressions,
+          responseTimes,
+          LogTrigger.GoToForeground,
+        )
+        .catch(console.error);
     },
     { enabled: !isRestoring && hasSession },
   );
 }
-
-export default useRestackNotifications;

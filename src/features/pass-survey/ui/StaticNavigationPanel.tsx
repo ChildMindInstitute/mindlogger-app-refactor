@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next';
 
-import { BoxProps, Stepper, StepperProps } from '@shared/ui';
+import { BoxProps } from '@app/shared/ui/base';
+import { Stepper, StepperProps } from '@app/shared/ui/Stepper';
 
 type Props = BoxProps & {
   stepper: Omit<StepperProps, 'startFrom' | 'stepsCount'>;
 };
 
-function StaticNavigationPanel(props: Props) {
+export function StaticNavigationPanel(props: Props) {
   const { t } = useTranslation();
 
   return (
@@ -23,5 +24,3 @@ function StaticNavigationPanel(props: Props) {
     </Stepper>
   );
 }
-
-export default StaticNavigationPanel;

@@ -3,14 +3,15 @@ import { FC, PropsWithChildren } from 'react';
 import type { FieldError } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Text, TextProps } from '@shared/ui';
+import { TextProps } from '../base';
+import { Text } from '../Text';
 
 type Props = {
   error?: Partial<FieldError>;
   mode?: 'dark' | 'light';
 } & TextProps;
 
-const ErrorMessage: FC<PropsWithChildren<Props>> = ({
+export const ErrorMessage: FC<PropsWithChildren<Props>> = ({
   error,
   mode,
   ...props
@@ -31,5 +32,3 @@ const ErrorMessage: FC<PropsWithChildren<Props>> = ({
     </>
   );
 };
-
-export default ErrorMessage;

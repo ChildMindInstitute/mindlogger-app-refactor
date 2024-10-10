@@ -6,7 +6,7 @@ import { zodI18nMap } from 'zod-i18n-map';
 import en from '@assets/translations/en.json';
 import fr from '@assets/translations/fr.json';
 
-import LocalizationStorage from './LocalizationStorage';
+import { getDefaultLocalizationStorage } from './localizationStorageInstance';
 
 declare module 'i18next' {
   interface CustomTypeOptions {
@@ -16,8 +16,8 @@ declare module 'i18next' {
 
 z.setErrorMap(zodI18nMap);
 
-function setupLocalization() {
-  const language = LocalizationStorage.getLanguage() ?? 'en';
+export function setupLocalization() {
+  const language = getDefaultLocalizationStorage().getLanguage() ?? 'en';
 
   return i18n.use(initReactI18next).init({
     compatibilityJSON: 'v3',
@@ -32,5 +32,3 @@ function setupLocalization() {
 
   // @todo - automatically detect language of the device
 }
-
-export default setupLocalization;

@@ -1,18 +1,19 @@
-import { AbTestPayload, FlankerItemSettings } from '@app/abstract/lib';
-import { ConditionalLogic } from '@app/entities/activity';
-import { DrawResult } from '@app/entities/drawer';
-import { FlankerGameResponse } from '@app/entities/flanker';
-import { HourMinute } from '@app/shared/lib';
+import { AbTestPayload } from '@app/abstract/lib/types/abTrails';
+import { FlankerItemSettings } from '@app/abstract/lib/types/flanker';
+import { AbTestResult } from '@app/entities/abTrail/lib/types/test';
+import { ConditionalLogic } from '@app/entities/activity/lib/types/conditionalLogic';
+import { DrawResult } from '@app/entities/drawer/lib/types/draw';
+import { FlankerGameResponse } from '@app/entities/flanker/lib/types/response';
+import { StabilityTrackerResponse as StabilityTrackerBaseResponse } from '@app/entities/stabilityTracker/lib/types';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
+import { Item } from '@app/shared/ui/survey/CheckBox/types';
+import { Coordinates } from '@app/shared/ui/survey/Geolocation/types';
+import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
+import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem/types';
 import {
-  Coordinates,
-  Item,
   StackedItem,
   StackedRowItemValue,
-} from '@app/shared/ui';
-import { AbTestResult } from '@entities/abTrail';
-import { StabilityTrackerResponse as StabilityTrackerBaseResponse } from '@entities/stabilityTracker';
-import { MediaFile } from '@shared/ui';
-import { RadioOption } from '@shared/ui/survey/RadioActivityItem';
+} from '@app/shared/ui/survey/StackedItemsGrid/types';
 
 import { Tutorial } from './tutorial';
 

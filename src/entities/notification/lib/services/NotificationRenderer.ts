@@ -5,11 +5,13 @@ import notifee, {
   Notification,
 } from '@notifee/react-native';
 
-import { IS_IOS, Logger } from '@app/shared/lib';
+import { IS_IOS } from '@app/shared/lib/constants';
+import { ILogger } from '@app/shared/lib/types/logger';
 
+import { INotificationRenderer } from './INotificationRenderer';
 import { ANDROID_DEFAULT_CHANNEL_ID } from '../constants';
 
-function NotificationRenderer() {
+export function NotificationRenderer(logger: ILogger): INotificationRenderer {
   async function displayNotification(notification: Notification) {
     try {
       if (IS_IOS) {
@@ -32,7 +34,7 @@ function NotificationRenderer() {
         },
       });
     } catch (error) {
-      Logger.warn(
+      logger.warn(
         `[NotificationRenderer:displayNotification] OS[${Platform.OS}]: error ${error}`,
       );
     }
@@ -42,5 +44,3 @@ function NotificationRenderer() {
     displayNotification,
   };
 }
-
-export default NotificationRenderer();

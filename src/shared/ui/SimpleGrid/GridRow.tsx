@@ -3,9 +3,9 @@ import { LayoutChangeEvent } from 'react-native';
 
 import { GridProps } from './types';
 import { calculateMaxHeight } from './utils';
-import { Box, XStack } from '../';
+import { Box, XStack } from '../base';
 
-function GridRow<TItem extends { id: string }>({
+export function GridRow<TItem extends { id: string }>({
   data,
   space,
   cellWidth,
@@ -44,5 +44,3 @@ function GridRow<TItem extends { id: string }>({
     </XStack>
   );
 }
-
-export default GridRow;

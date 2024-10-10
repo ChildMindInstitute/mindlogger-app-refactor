@@ -23,21 +23,19 @@ export const hasPendingMutations = (queryClient: QueryClient): boolean => {
     .some(x => x.state.status === 'loading' || x.state.status === 'idle');
 };
 
-export const getAppletsKey = () => ['applets'];
+export const getAppletsKey = () => ['applets'] as AppQueryKey;
 
-export const getAppletDetailsKey = (appletId: string) => [
-  'applets',
-  { appletId },
-];
+export const getAppletDetailsKey = (appletId: string) =>
+  ['applets', { appletId }] as AppQueryKey;
 
-export const getAllEventsKey = () => ['events'] satisfies AppQueryKey;
+export const getAssignmentsKey = (appletId: string) =>
+  ['assignments', { appletId }] as AppQueryKey;
 
-export const getEventsKey = (appletId: string) => ['events', { appletId }];
+export const getEventsKey = (appletId: string) =>
+  ['events', { appletId }] as AppQueryKey;
 
-export const getActivityDetailsKey = (activityId: string) => [
-  'activities',
-  { activityId },
-];
+export const getActivityDetailsKey = (activityId: string) =>
+  ['activities', { activityId }] as AppQueryKey;
 
 export const getCompletedEntitiesKey = () =>
   ['completed-entities'] satisfies AppQueryKey;

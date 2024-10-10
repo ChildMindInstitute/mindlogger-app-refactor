@@ -1,10 +1,12 @@
 import { useState } from 'react';
 
-import { AppletModel } from '@entities/applet';
-import { IS_IOS, useOnForeground } from '@shared/lib';
+import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
+import { IS_IOS } from '@app/shared/lib/constants';
+import { useOnForeground } from '@app/shared/lib/hooks/useOnForeground';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
-function useRefresh(onSuccess: () => void) {
-  const { mutateAsync: refresh } = AppletModel.useRefreshMutation(onSuccess);
+export function useRefresh(onSuccess: () => void | Promise<void>) {
+  const { mutateAsync: refresh } = useRefreshMutation(onSuccess);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -22,7 +24,9 @@ function useRefresh(onSuccess: () => void) {
   );
 
   const onRefresh = () => {
-    refresh().then(() => setIsRefreshing(false));
+    refresh()
+      .then(() => setIsRefreshing(false))
+      .catch(err => getDefaultLogger().error(err as never));
     setIsRefreshing(true);
   };
 
@@ -31,5 +35,3 @@ function useRefresh(onSuccess: () => void) {
     isRefreshing,
   };
 }
-
-export default useRefresh;

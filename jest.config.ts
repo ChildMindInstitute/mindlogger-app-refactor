@@ -20,11 +20,11 @@ const jestConfig: JestConfigWithTsJest = {
     'node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation|@react-native-device-info|@notifee|@miblanchard/react-native-slider|victory-*|@shopify/react-native-skia|react-native-reanimated|react-redux)',
   ],
   setupFiles: [
-    '<rootDir>/jest.setup.js',
-    '<rootDir>/jest.components.jsx',
+    '<rootDir>/jest.vendor-mocks.js',
     '<rootDir>/node_modules/react-native-gesture-handler/jestSetup.js',
     '<rootDir>/node_modules/react-native-reanimated/src/reanimated2/jestUtils.ts',
   ],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleDirectories: ['node_modules', '<rootDir>'],
   moduleNameMapper: {
     ...pathsToModuleNameMapper({
@@ -43,6 +43,8 @@ const jestConfig: JestConfigWithTsJest = {
       '<rootDir>/assetsTransformer.js',
     '^uuid$': require.resolve('uuid'),
   },
+  restoreMocks: true,
+  clearMocks: true,
 };
 
 export default jestConfig;

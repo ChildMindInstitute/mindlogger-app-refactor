@@ -1,16 +1,12 @@
-import { ILogger } from '@app/shared/lib';
+import { ILogger } from '@app/shared/lib/types/logger';
 
 import {
   getStackedCheckboxItem,
   getStackedCheckboxResponse,
 } from './testHelpers';
-import { AnswerAlerts, StackedCheckboxResponse } from '../../lib';
+import { StackedCheckboxResponse } from '../../lib/types/payload';
+import { AnswerAlerts } from '../../lib/types/summary';
 import { AlertsExtractor } from '../AlertsExtractor';
-
-jest.mock('@app/shared/lib/constants', () => ({
-  ...jest.requireActual('@app/shared/lib/constants'),
-  STORE_ENCRYPTION_KEY: '12345',
-}));
 
 describe('AlertsExtractor: test extractFromStackedCheckbox', () => {
   let extractor: AlertsExtractor;

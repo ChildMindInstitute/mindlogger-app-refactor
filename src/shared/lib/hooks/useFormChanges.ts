@@ -8,7 +8,7 @@ type UseFormChangesConfig = {
   watchInputs?: string[];
 };
 
-const useFormChanges = (config: UseFormChangesConfig) => {
+export const useFormChanges = (config: UseFormChangesConfig) => {
   useEffect(() => {
     const { onInputChange, form, watchInputs } = config;
     const inputChangeListener = form.watch((_, { name }) => {
@@ -20,5 +20,3 @@ const useFormChanges = (config: UseFormChangesConfig) => {
     return () => inputChangeListener.unsubscribe();
   }, [config]);
 };
-
-export default useFormChanges;

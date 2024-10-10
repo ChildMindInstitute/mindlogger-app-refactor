@@ -1,22 +1,24 @@
 import { FC, useMemo } from 'react';
 
+import { colors } from '@app/shared/lib/constants/colors';
+import { TIME_PICKER_FORMAT_PLACEHOLDER } from '@app/shared/lib/constants/dateTime';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
 import {
-  HourMinute,
-  colors,
-  getMsFromHours,
   getMidnightDateInMs,
-  getMsFromMinutes,
   getNow,
-  TIME_PICKER_FORMAT_PLACEHOLDER,
-} from '@shared/lib';
-import { AlarmIcon, DateTimePicker } from '@shared/ui';
+  getMsFromHours,
+  getMsFromMinutes,
+} from '@app/shared/lib/utils/dateTime';
+
+import { DateTimePicker } from '../DateTimePicker';
+import { AlarmIcon } from '../icons';
 
 type Props = {
   onChange: (value: HourMinute) => void;
   value?: HourMinute;
 };
 
-const TimePickerItem: FC<Props> = ({ value, onChange }) => {
+export const TimePickerItem: FC<Props> = ({ value, onChange }) => {
   const onChangeDate = (date: Date) =>
     onChange({
       minutes: date.getMinutes(),
@@ -45,5 +47,3 @@ const TimePickerItem: FC<Props> = ({ value, onChange }) => {
     />
   );
 };
-
-export default TimePickerItem;

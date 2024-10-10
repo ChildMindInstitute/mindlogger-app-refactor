@@ -3,10 +3,10 @@ import { StatusBar, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { ForgotPasswordForm } from '@features/forgot-password';
-import { YStack, Box } from '@shared/ui';
+import { ForgotPasswordForm } from '@app/features/forgot-password/ui/ForgotPasswordForm';
+import { Box, YStack } from '@app/shared/ui/base';
 
-const ForgotPasswordScreen: FC = () => {
+export const ForgotPasswordScreen: FC = () => {
   const { navigate } = useNavigation();
 
   return (
@@ -26,5 +26,3 @@ const ForgotPasswordScreen: FC = () => {
     </TouchableWithoutFeedback>
   );
 };
-
-export default ForgotPasswordScreen;

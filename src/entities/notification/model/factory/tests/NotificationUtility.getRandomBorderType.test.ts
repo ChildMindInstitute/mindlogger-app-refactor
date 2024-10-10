@@ -1,5 +1,5 @@
-import { NotificationTriggerType } from '@app/abstract/lib';
-import { ScheduleEvent } from '@app/entities/notification/lib';
+import { NotificationTriggerType } from '@app/abstract/lib/types/event';
+import { ScheduleEvent } from '@app/entities/notification/lib/types/notificationBuilder';
 
 import { addTime } from './testHelpers';
 import { NotificationUtility } from '../NotificationUtility';
@@ -17,7 +17,7 @@ describe('NotificationUtility: test getRandomBorderType', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -52,7 +52,7 @@ describe('NotificationUtility: test getRandomBorderType', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -89,7 +89,7 @@ describe('NotificationUtility: test getRandomBorderType', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -124,7 +124,7 @@ describe('NotificationUtility: test getRandomBorderType', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -159,7 +159,7 @@ describe('NotificationUtility: test getRandomBorderType', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -194,7 +194,7 @@ describe('NotificationUtility: test getRandomBorderType', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -229,7 +229,7 @@ describe('NotificationUtility: test getRandomBorderType', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -264,7 +264,7 @@ describe('NotificationUtility: test getRandomBorderType', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -299,7 +299,7 @@ describe('NotificationUtility: test getRandomBorderType', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -334,7 +334,7 @@ describe('NotificationUtility: test getRandomBorderType', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 

@@ -1,8 +1,7 @@
-type ObserverFunctionBase = (...args: any[]) => void | Promise<void>;
-
-export interface IObservable {
-  notify: () => void;
-}
+import {
+  IObservable,
+  ObserverFunctionBase,
+} from '@shared/lib/utils/IObservable';
 
 export class CommonObservable<
   TObserver extends ObserverFunctionBase = ObserverFunctionBase,

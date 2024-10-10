@@ -598,5 +598,9 @@
     "dialog": {
       "body": "Le partage public des réponses implique que les informations fournies par les utilisateurs individuels, telles que les réponses au sondage ou les commentaires, seront librement accessibles à d'autres personnes."
     }
+  },
+  "assignment": {
+    "badge": "À propos de {{name}}",
+    "banner": "Veuillez vous assurer que toutes vos réponses concernent <strong>{{name}}</strong>"
   }
 }

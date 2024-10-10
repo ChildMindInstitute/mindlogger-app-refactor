@@ -3,10 +3,10 @@ import { StatusBar } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { ChangeLanguageSelector } from '@features/change-language';
-import { Box } from '@shared/ui';
+import { ChangeLanguageSelector } from '@app/features/change-language/ui/ChangeLanguageSelector';
+import { Box } from '@app/shared/ui/base';
 
-const ChangeLanguageScreen: FC = () => {
+export const ChangeLanguageScreen: FC = () => {
   const navigation = useNavigation();
 
   const onLanguageChanged = () => {
@@ -23,5 +23,3 @@ const ChangeLanguageScreen: FC = () => {
     </Box>
   );
 };
-
-export default ChangeLanguageScreen;

@@ -2,11 +2,14 @@ import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { Box, SubmitButton, Text, TimerSandIcon } from '@shared/ui';
+import { Box } from '@app/shared/ui/base';
+import { TimerSandIcon } from '@app/shared/ui/icons';
+import { SubmitButton } from '@app/shared/ui/SubmitButton';
+import { Text } from '@app/shared/ui/Text';
 
 import { FlexContainer, SubComponentProps } from './containers';
 
-const TimesUp: FC<SubComponentProps> = ({ onPressDone }) => {
+export const TimesUp: FC<SubComponentProps> = ({ onPressDone }) => {
   const { t } = useTranslation();
 
   return (
@@ -31,5 +34,3 @@ const TimesUp: FC<SubComponentProps> = ({ onPressDone }) => {
     </>
   );
 };
-
-export default TimesUp;

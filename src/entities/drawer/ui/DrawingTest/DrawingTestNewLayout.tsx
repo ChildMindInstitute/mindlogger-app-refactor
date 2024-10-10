@@ -2,26 +2,27 @@ import { FC } from 'react';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
-import { Dimensions, useImageDimensions } from '@app/shared/lib';
-import { XStack, YStack } from '@app/shared/ui';
+import { useImageDimensions } from '@app/shared/lib/hooks/useImageDimensions';
+import { Dimensions } from '@app/shared/lib/types/space';
+import { XStack, YStack } from '@app/shared/ui/base';
 
 import { DrawingTestProps } from './DrawingTest';
+import { DrawResult } from '../../lib/types/draw';
 import {
-  DrawResult,
-  getElementsDimensions,
-  SvgFileManager,
   ELEMENTS_GAP,
   HEIGHT_REDUCTION_FACTOR,
-} from '../../lib';
-import DrawingBoard from '../DrawingBoard';
+} from '../../lib/utils/constants';
+import { getElementsDimensions } from '../../lib/utils/helpers';
+import { getDefaultSvgFileManager } from '../../lib/utils/svgFileManagerInstance';
+import { DrawingBoard } from '../DrawingBoard';
 
-const DrawingTest: FC<DrawingTestProps> = props => {
+export const DrawingTestNewLayout: FC<DrawingTestProps> = props => {
   const { value, backgroundImageUrl, imageUrl, onLog } = props;
 
   const onResult = async (result: DrawResult) => {
     const fileName = value.fileName;
 
-    const fileMeta = SvgFileManager.getFileMeta(fileName);
+    const fileMeta = getDefaultSvgFileManager().getFileMeta(fileName);
 
     result.fileName = fileMeta.fileName;
     result.type = fileMeta.type;
@@ -92,5 +93,3 @@ const canvasStyles = (canvasSize: number) =>
     width: canvasSize,
     height: canvasSize,
   }) as const;
-
-export default DrawingTest;

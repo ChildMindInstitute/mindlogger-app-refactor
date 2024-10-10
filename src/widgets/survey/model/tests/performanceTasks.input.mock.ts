@@ -1,4 +1,8 @@
-import { Answer, Answers, PipelineItem } from '@features/pass-survey';
+import {
+  Answer,
+  Answers,
+} from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
+import { PipelineItem } from '@app/features/pass-survey/lib/types/payload';
 
 export const drawingInput: PipelineItem = {
   type: 'DrawingTest',

@@ -4,10 +4,13 @@ import { CachedImage } from '@georstat/react-native-image-cache';
 import { XStack } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@shared/lib';
-import { ListSeparator, BackButton, Text, Box } from '@shared/ui';
+import { colors } from '@app/shared/lib/constants/colors';
+import { BackButton } from '@app/shared/ui/BackButton';
+import { Box } from '@app/shared/ui/base';
+import { ListSeparator } from '@app/shared/ui/ListSeparator';
+import { Text } from '@app/shared/ui/Text';
 
-import HeaderProgress from './HeaderProgress.tsx';
+import { HeaderProgress } from './HeaderProgress';
 
 type Props = {
   showWatermark: boolean;
@@ -16,15 +19,17 @@ type Props = {
   flowId?: string;
   eventId: string;
   appletId: string;
+  targetSubjectId: string | null;
 };
 
-function Header({
+export function Header({
   showWatermark,
   watermark,
   activityName,
   flowId,
   eventId,
   appletId,
+  targetSubjectId,
 }: Props) {
   const { t } = useTranslation();
 
@@ -49,7 +54,12 @@ function Header({
           </BackButton>
         </XStack>
       </XStack>
-      <HeaderProgress appletId={appletId} eventId={eventId} flowId={flowId} />
+      <HeaderProgress
+        appletId={appletId}
+        eventId={eventId}
+        flowId={flowId}
+        targetSubjectId={targetSubjectId}
+      />
       <ListSeparator mt={10} bg={colors.lighterGrey7} />
     </>
   );
@@ -69,4 +79,3 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
-export default Header;

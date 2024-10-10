@@ -4,7 +4,7 @@ import Permissions from 'react-native-permissions';
 
 import { LOCATION_PERMISSIONS } from '../constants';
 
-const useLocationPermissions = () => {
+export const useLocationPermissions = () => {
   const [locationPermission, setLocationPermission] =
     useState<string>('undetermined');
 
@@ -14,5 +14,3 @@ const useLocationPermissions = () => {
 
   return locationPermission;
 };
-
-export default useLocationPermissions;

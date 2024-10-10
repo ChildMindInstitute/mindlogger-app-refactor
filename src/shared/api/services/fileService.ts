@@ -1,78 +1,28 @@
+import { IS_ANDROID } from '@app/shared/lib/constants';
+import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { getStringHashCode } from '@app/shared/lib/utils/common';
 import {
-  IS_ANDROID,
-  Logger,
-  callApiWithRetry,
-  getStringHashCode,
   watchForConnectionLoss,
-} from '@shared/lib';
-import { SystemRecord } from '@shared/lib/records';
+  callApiWithRetry,
+} from '@app/shared/lib/utils/networkHelpers';
 
-import httpService, { getAxiosInstance } from './httpService';
-import { SuccessfulResponse, SuccessfulEmptyResponse } from '../types';
+import { getAxiosInstance, httpService } from './httpService';
+import {
+  AppletFileUploadToS3Request,
+  AppletFileUploadToS3Response,
+  CheckIfFilesExistRequest,
+  CheckIfFilesExistResponse,
+  CheckIfLogsExistRequest,
+  CheckIfLogsExistResponse,
+  FileUploadRequest,
+  FileUploadResponse,
+  GetFieldsForFileUploadRequest,
+  GetFieldsForFileUploadResponse,
+  IFileService,
+} from './IFileService';
 
-type FileUploadRequest = {
-  uri: string;
-  fileName: string;
-  type: string;
-  fileId: string;
-};
-
-type UploadResultDto = {
-  key: string;
-  url: string;
-  fileId: string;
-};
-
-type FileUploadResponse = SuccessfulResponse<UploadResultDto>;
-
-type FileId = string;
-
-type CheckIfFilesExistRequest = {
-  files: FileId[];
-  appletId: string;
-};
-
-export type CheckIfFilesExistResultDto = Array<{
-  key: string;
-  fileId: string;
-  uploaded: boolean;
-  url: string | null;
-  fileSize?: number | null;
-}>;
-
-type CheckIfFilesExistResponse = SuccessfulResponse<CheckIfFilesExistResultDto>;
-
-type GetFieldsForFileUploadRequest = {
-  appletId: string;
-  fileId: string;
-};
-
-type FieldsForFileUploadDto = {
-  uploadUrl: string;
-  url: string;
-  fields: Record<string, string>;
-};
-
-type GetFieldsForFileUploadResponse =
-  SuccessfulResponse<FieldsForFileUploadDto>;
-
-type AppletFileUploadToS3Request = Omit<FieldsForFileUploadDto, 'url'> & {
-  localUrl: string;
-  fileName: string;
-  type: string;
-};
-
-type AppletFileUploadToS3Response = SuccessfulEmptyResponse;
-
-type CheckIfLogsExistRequest = {
-  files: FileId[];
-};
-
-type CheckIfLogsExistResultDto = CheckIfFilesExistResultDto;
-
-type CheckIfLogsExistResponse = SuccessfulResponse<CheckIfLogsExistResultDto>;
-
-function fileService() {
+export function fileService(): IFileService {
   return {
     async uploadLogFile(request: FileUploadRequest) {
       const apiCall = async () => {
@@ -90,7 +40,7 @@ function fileService() {
             type: request.type,
           } as unknown as Blob);
 
-          const deviceId = SystemRecord.getDeviceId()!;
+          const deviceId = getDefaultSystemRecord().getDeviceId()!;
 
           const hashedDeviceId: string = !deviceId
             ? 'undefined'
@@ -120,7 +70,7 @@ function fileService() {
 
     async checkIfLogsExist(request: CheckIfLogsExistRequest) {
       const apiCall = async () => {
-        const deviceId = SystemRecord.getDeviceId()!;
+        const deviceId = getDefaultSystemRecord().getDeviceId()!;
 
         const hashedDeviceId: string = !deviceId
           ? 'undefined'
@@ -226,7 +176,7 @@ function fileService() {
             );
           return response;
         } catch (error) {
-          Logger.error(
+          getDefaultLogger().error(
             '[fileService.uploadAppletFileToS3]: Error occurred: \n\n' + error,
           );
           throw error;
@@ -239,5 +189,3 @@ function fileService() {
     },
   };
 }
-
-export const FileService = fileService();

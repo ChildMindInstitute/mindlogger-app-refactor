@@ -3,7 +3,7 @@ type CommonFields = {
   tooltip: string | null;
 };
 
-export type Item = CommonFields &
+export type StackedItem = CommonFields &
   Partial<{
     rowName: string;
     text: string;
@@ -11,7 +11,7 @@ export type Item = CommonFields &
     image: string | null;
   }>;
 
-export type StackedRowItemValue = Item;
+export type StackedRowItemValue = StackedItem;
 
 export type AxisItem = {
   id: string;

@@ -1,14 +1,16 @@
 import { isEqual, startOfDay } from 'date-fns';
 import i18next from 'i18next';
 
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
-  ActivityPipelineType,
   AvailabilityType,
   NotificationTriggerType,
   PeriodicityType,
-} from '@app/abstract/lib';
-import { DatesFromTo, ILogger, Logger } from '@app/shared/lib';
+} from '@app/abstract/lib/types/event';
+import { DatesFromTo } from '@app/shared/lib/types/dateTime';
+import { ILogger } from '@app/shared/lib/types/logger';
 
+import { INotificationBuilder } from './INotificationBuilder';
 import { NotificationDaysExtractor } from './NotificationDaysExtractor';
 import { NotificationUtility } from './NotificationUtility';
 import { ReminderCreator } from './ReminderCreator';
@@ -24,13 +26,9 @@ import {
   RandomCrossBorderType,
   ReminderSetting,
   ScheduleEvent,
-} from '../../lib/types';
+} from '../../lib/types/notificationBuilder';
 
-export interface INotificationBuilder {
-  build: () => AppletNotificationDescribers;
-}
-
-class NotificationBuilder implements INotificationBuilder {
+export class NotificationBuilder implements INotificationBuilder {
   private appletName: string;
 
   private eventEntities: EventEntity[];
@@ -54,20 +52,20 @@ class NotificationBuilder implements INotificationBuilder {
     this.keepDebugData = false;
 
     this.notificationDaysExtractor = new NotificationDaysExtractor(
-      inputData.progress,
       inputData.appletId,
+      inputData.progressions,
       logger,
     );
 
     this.reminderCreator = new ReminderCreator(
-      inputData.progress,
       inputData.appletId,
-      inputData.completions,
+      inputData.progressions,
+      inputData.responseTimes,
     );
 
     this.utility = new NotificationUtility(
-      inputData.progress,
       inputData.appletId,
+      inputData.progressions,
     );
 
     this.appletId = inputData.appletId;
@@ -78,6 +76,7 @@ class NotificationBuilder implements INotificationBuilder {
     day: Date,
     event: ScheduleEvent,
     entity: Entity,
+    targetSubjectId: string | null,
   ): NotificationDescriber[] {
     const activityId: string | null =
       entity.pipelineType === ActivityPipelineType.Regular ? entity.id : null;
@@ -143,6 +142,7 @@ class NotificationBuilder implements INotificationBuilder {
           activityId,
           activityFlowId,
           event.id,
+          targetSubjectId,
           NotificationType.Regular,
         );
 
@@ -158,6 +158,7 @@ class NotificationBuilder implements INotificationBuilder {
         this.utility.markNotificationIfActivityCompleted(
           (activityId ?? activityFlowId)!,
           event.id,
+          targetSubjectId,
           notification,
           currentInterval,
         );
@@ -174,6 +175,7 @@ class NotificationBuilder implements INotificationBuilder {
   private processEvent(
     event: ScheduleEvent,
     entity: Entity,
+    targetSubjectId: string | null,
   ): EventNotificationDescribers {
     const eventResult: EventNotificationDescribers = {
       eventId: event.id,
@@ -253,14 +255,19 @@ class NotificationBuilder implements INotificationBuilder {
       event.availability.availabilityType ===
         AvailabilityType.AlwaysAvailable &&
       event.availability.oneTimeCompletion &&
-      this.utility.isCompleted(entity.id, event.id)
+      this.utility.isCompleted(entity.id, event.id, targetSubjectId)
     ) {
       eventResult.breakReason = BreakReason.OneTimeCompletion;
       return eventResult;
     }
 
     if (isOnceEvent) {
-      const notifications = this.processEventDay(scheduledDay, event, entity);
+      const notifications = this.processEventDay(
+        scheduledDay,
+        event,
+        entity,
+        targetSubjectId,
+      );
 
       eventResult.notifications.push(...notifications);
 
@@ -269,6 +276,7 @@ class NotificationBuilder implements INotificationBuilder {
         [scheduledDay],
         event,
         entity,
+        targetSubjectId,
       );
       if (reminders.length) {
         eventResult.notifications.push(reminders[0].reminder);
@@ -296,6 +304,7 @@ class NotificationBuilder implements INotificationBuilder {
         reminderDays,
         event,
         entity,
+        targetSubjectId,
       );
 
       const reminderFromPastDays = reminders.filter(
@@ -307,7 +316,12 @@ class NotificationBuilder implements INotificationBuilder {
       );
 
       for (const day of eventDays) {
-        const notifications = this.processEventDay(day, event, entity);
+        const notifications = this.processEventDay(
+          day,
+          event,
+          entity,
+          targetSubjectId,
+        );
         eventResult.notifications.push(...notifications);
 
         const currentReminder = reminders.find(x => isEqual(x.eventDay, day));
@@ -343,9 +357,10 @@ class NotificationBuilder implements INotificationBuilder {
         const eventNotifications = this.processEvent(
           eventEntity.event,
           eventEntity.entity,
+          eventEntity.assignment?.target.id || null,
         );
         eventNotificationsResult.push(eventNotifications);
-      } catch (error: any) {
+      } catch (error) {
         console.error(
           `[NotificationBuilder.build] Error occurred during process event: "${eventEntity.event.id}", entity: "${eventEntity.entity?.name}" :\n\n${error}`,
         );
@@ -361,10 +376,3 @@ class NotificationBuilder implements INotificationBuilder {
     return result;
   }
 }
-
-export const createNotificationBuilder = (
-  inputData: NotificationBuilderInput,
-  logger: ILogger = Logger,
-): INotificationBuilder => {
-  return new NotificationBuilder(inputData, logger);
-};

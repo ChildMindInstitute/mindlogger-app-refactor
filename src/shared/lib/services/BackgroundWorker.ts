@@ -1,12 +1,13 @@
 import BackgroundFetch, { HeadlessEvent } from 'react-native-background-fetch';
 
+import {
+  BackgroundTaskOptions,
+  IBackgroundWorkerBuilder,
+} from './IBackgroundWorkerBuilder';
+
 const MINIMUM_ALLOWED_BG_TASK_INTERVAL_MINUTES = 15;
 
-export type BackgroundTaskOptions = {
-  intervalInMinutes?: number;
-};
-
-function BackgroundWorkerBuilder() {
+export function BackgroundWorkerBuilder(): IBackgroundWorkerBuilder {
   function setTask(
     callback: () => Promise<unknown>,
     options: BackgroundTaskOptions = {},
@@ -31,7 +32,7 @@ function BackgroundWorkerBuilder() {
         BackgroundFetch.finish(taskId);
       },
       onTimeout,
-    );
+    ).catch(console.error);
   }
 
   function setAndroidHeadlessTask(callback: () => void) {
@@ -56,5 +57,3 @@ function BackgroundWorkerBuilder() {
     setAndroidHeadlessTask,
   };
 }
-
-export const BackgroundWorker = BackgroundWorkerBuilder();

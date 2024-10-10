@@ -1,10 +1,12 @@
-import PipelineVisibilityChecker from './PipelineVisibilityChecker';
-import ShiftCalculator from './ShiftCalculator';
-import { ActivityState } from '../lib';
+import { IShiftCalculator } from '@features/pass-survey/model/IShiftCalculator';
 
-class StepperUtils {
+import { PipelineVisibilityChecker } from './PipelineVisibilityChecker';
+import { ShiftCalculator } from './ShiftCalculator';
+import { ActivityState } from '../lib/hooks/useActivityStorageRecord';
+
+export class StepperUtils {
   private activityState: ActivityState;
-  private shiftCalculator: ShiftCalculator;
+  private shiftCalculator: IShiftCalculator;
 
   constructor(activityState: ActivityState) {
     this.activityState = activityState;
@@ -36,5 +38,3 @@ class StepperUtils {
     return this.shiftCalculator.calculateShiftForBackwards(step);
   }
 }
-
-export default StepperUtils;

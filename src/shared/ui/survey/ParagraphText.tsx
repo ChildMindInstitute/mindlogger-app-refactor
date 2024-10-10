@@ -3,8 +3,10 @@ import { StyleSheet, TextInputProps, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@shared/lib';
-import { LongTextInput, CharacterCounter } from '@shared/ui';
+import { colors } from '@app/shared/lib/constants/colors';
+
+import { CharacterCounter } from '../CharacterCounter';
+import { LongTextInput } from '../LongTextInput';
 
 type Props = {
   onChange: (text: string) => void;
@@ -14,7 +16,12 @@ type Props = {
   };
 } & Omit<TextInputProps, 'value' | 'onChange'>;
 
-const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
+export const ParagraphText: FC<Props> = ({
+  value,
+  onChange,
+  config,
+  ...props
+}) => {
   const [paragraphOnFocus, setParagraphOnFocus] = useState(false);
   const { maxLength = 50 } = config;
   const { t } = useTranslation();
@@ -46,8 +53,6 @@ const ParagraphText: FC<Props> = ({ value, onChange, config, ...props }) => {
     </View>
   );
 };
-
-export default ParagraphText;
 
 const styles = StyleSheet.create({
   container: {

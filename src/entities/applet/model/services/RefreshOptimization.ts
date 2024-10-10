@@ -1,10 +1,16 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { AppletWithVersion } from '@app/abstract/lib';
-import { AppletDto, AppletsResponse } from '@app/shared/api';
-import { getAppletsKey, getDataFromQuery } from '@app/shared/lib';
+import { AppletWithVersion } from '@app/abstract/lib/types/primitive';
+import {
+  AppletsResponse,
+  AppletDto,
+} from '@app/shared/api/services/IAppletService';
+import {
+  getDataFromQuery,
+  getAppletsKey,
+} from '@app/shared/lib/utils/reactQueryHelpers';
 
-class RefreshOptimization {
+export class RefreshOptimization {
   private keptVersions: Array<AppletWithVersion>;
   private queryClient: QueryClient;
 
@@ -42,5 +48,3 @@ class RefreshOptimization {
     return keptVersion === null || keptVersion !== applet.version;
   }
 }
-
-export default RefreshOptimization;

@@ -1,26 +1,10 @@
 import notifee, { TriggerType, AndroidImportance } from '@notifee/react-native';
 
-import { colors } from '@shared/lib';
+import { colors } from '@app/shared/lib/constants/colors';
 
-import {
-  ANDROID_DEFAULT_CHANNEL_ID,
-  LocalEventTriggerNotification,
-  NotificationDescriber,
-} from '../../lib';
-
-function mapIdentifiers(notification: NotificationDescriber) {
-  return {
-    shortId: notification.shortId,
-    appletId: notification.appletId,
-    eventId: notification.eventId,
-    ...(notification.activityId && {
-      activityId: notification.activityId,
-    }),
-    ...(notification.activityFlowId && {
-      activityFlowId: notification.activityFlowId,
-    }),
-  };
-}
+import { ANDROID_DEFAULT_CHANNEL_ID } from '../../lib/constants';
+import { NotificationDescriber } from '../../lib/types/notificationBuilder';
+import { LocalEventTriggerNotification } from '../../lib/types/notifications';
 
 export async function mapToTriggerNotifications(
   notifications: NotificationDescriber[],
@@ -40,8 +24,19 @@ export async function mapToTriggerNotifications(
         scheduledAtString: notification.scheduledAtString,
         isLocal: 'true',
         type: 'schedule-event-alert',
-        ...mapIdentifiers(notification),
+        shortId: notification.shortId,
+        appletId: notification.appletId,
+        eventId: notification.eventId,
         entityName: notification.entityName,
+        ...(notification.activityId && {
+          activityId: notification.activityId,
+        }),
+        ...(notification.activityFlowId && {
+          activityFlowId: notification.activityFlowId,
+        }),
+        ...(notification.targetSubjectId && {
+          targetSubjectId: notification.targetSubjectId,
+        }),
       },
       android: {
         channelId,

@@ -5,9 +5,9 @@ module.exports = {
     'eslint:recommended',
     '@react-native-community',
     'plugin:react/recommended',
-    'prettier'
+    'plugin:prettier/recommended'
   ],
-  plugins: ['import', 'react', 'react-hooks', 'unused-imports', 'jest'],
+  plugins: ['import', 'react', 'react-hooks', 'unused-imports', 'jest', 'prettier'],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/no-unstable-nested-components': 'off',
@@ -47,7 +47,6 @@ module.exports = {
       },
     ],
     'react-hooks/rules-of-hooks': 'warn',
-    'import/no-cycle': 'warn',
     'constructor-super': 'warn',
     'no-var': 'warn',
     'no-caller': 'warn',
@@ -95,6 +94,12 @@ module.exports = {
     'react/no-unsafe': 'warn',
     'react/require-render-return': 'warn',
     'react/display-name': 'off',
+
+    // This option generate warning messages from parsing packages inside
+    // node_modules, which we technically don't care about. Plus, this option
+    // also just don't seem to work. So, disable it for now.
+    // 'import/no-cycle': 'error',
+    'import/no-cycle': 'off',
   },
   overrides: [
     {
@@ -127,7 +132,7 @@ module.exports = {
         '@typescript-eslint/unbound-method': 'warn',
         '@typescript-eslint/restrict-plus-operands': 'warn',
         '@typescript-eslint/no-unsafe-return': 'warn',
-        '@typescript-eslint/restrict-template-expressions': 'warn',
+        '@typescript-eslint/restrict-template-expressions': 'off',
         '@typescript-eslint/no-unused-vars': 'off',
       },
     },

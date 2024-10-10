@@ -1,9 +1,12 @@
-import { DrawingStreamEvent, StreamEventLoggable } from '@app/shared/lib';
-import { BoxProps } from '@app/shared/ui';
+import {
+  DrawingStreamEvent,
+  StreamEventLoggable,
+} from '@app/shared/lib/tcp/types';
+import { BoxProps } from '@app/shared/ui/base';
 
-import DrawingTestLegacyLayout from './DrawingTestLegacyLayout';
-import DrawingTestNewLayout from './DrawingTestNewLayout';
-import { DrawLine, DrawResult } from '../../lib';
+import { DrawingTestLegacyLayout } from './DrawingTestLegacyLayout';
+import { DrawingTestNewLayout } from './DrawingTestNewLayout';
+import { DrawLine, DrawResult } from '../../lib/types/draw';
 
 type LegacySupportProps = {
   legacyLayoutSupport: boolean;
@@ -22,7 +25,7 @@ export type DrawingTestProps = {
 } & StreamEventLoggable<DrawingStreamEvent> &
   BoxProps;
 
-const DrawingTest = ({
+export const DrawingTest = ({
   legacyLayoutSupport,
   ...props
 }: DrawingTestProps & LegacySupportProps) => {
@@ -32,5 +35,3 @@ const DrawingTest = ({
     <DrawingTestNewLayout {...props} />
   );
 };
-
-export default DrawingTest;

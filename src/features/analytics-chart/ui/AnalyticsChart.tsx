@@ -2,10 +2,15 @@ import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { ResponseAnalyticsValue } from '@app/entities/applet';
-import { Box, Text } from '@app/shared/ui';
-import { LineChart, TimelineChart } from '@app/shared/ui/charts';
-import { AnalyticsResponseType, ResponseConfig } from '@shared/api';
+import { ResponseAnalyticsValue } from '@app/entities/applet/lib/types';
+import {
+  AnalyticsResponseType,
+  ResponseConfig,
+} from '@app/shared/api/services/AppletAnalyticsDto';
+import { Box } from '@app/shared/ui/base';
+import { LineChart } from '@app/shared/ui/charts/LineChart/LineChart';
+import { TimelineChart } from '@app/shared/ui/charts/TimelineChart/TimelineChart';
+import { Text } from '@app/shared/ui/Text';
 
 type Props = {
   responseType: AnalyticsResponseType;
@@ -14,7 +19,7 @@ type Props = {
   title: string;
 };
 
-const AnalyticsChart: FC<Props> = ({
+export const AnalyticsChart: FC<Props> = ({
   responseType,
   data,
   title,
@@ -65,5 +70,3 @@ const AnalyticsChart: FC<Props> = ({
     </Box>
   );
 };
-
-export default AnalyticsChart;

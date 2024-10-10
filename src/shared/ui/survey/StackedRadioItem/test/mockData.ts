@@ -1,4 +1,4 @@
-const radiosConfig = {
+export const radiosConfig = {
   setAlerts: false,
   addTooltip: false,
   addScores: false,
@@ -45,7 +45,7 @@ const radiosConfig = {
   dataMatrix: [],
 };
 
-const radiosValues = [
+export const radiosValues = [
   {
     id: '77808741-125d-45d2-9f09-d1cd4355c724',
     image: null,
@@ -68,5 +68,3 @@ const radiosValues = [
     tooltip: null,
   },
 ];
-
-export default { radiosConfig, radiosValues };

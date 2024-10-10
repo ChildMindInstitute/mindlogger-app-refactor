@@ -2,31 +2,29 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { EntityPathParams, StoreProgress } from '@app/abstract/lib';
-import { useRetryUpload } from '@app/entities/activity';
-import {
-  QueueProcessingService,
-  useQueueProcessing,
-} from '@app/entities/activity/lib';
-import { AppletModel } from '@app/entities/applet';
-import { QueryDataUtils } from '@app/shared/api';
-import {
-  InterimSubmitMutex,
-  Logger,
-  UploadObservable,
-  useAppDispatch,
-  useAppSelector,
-} from '@app/shared/lib';
+import { EntityPathParams } from '@app/abstract/lib/types/entity';
+import { useQueueProcessing } from '@app/entities/activity/lib/hooks/useQueueProcessing';
+import { useRetryUpload } from '@app/entities/activity/lib/hooks/useRetryUpload';
+import { getDefaultQueueProcessingService } from '@app/entities/activity/lib/services/queueProcessingServiceInstance';
+import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
+import { appletActions } from '@app/entities/applet/model/slice';
+import { getDefaultAlertsExtractor } from '@app/features/pass-survey/model/alertsExtractorInstance';
+import { getDefaultScoresExtractor } from '@app/features/pass-survey/model/scoresExtractorInstance';
+import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
+import { getDefaultInterimSubmitMutex } from '@app/shared/lib/mutexes/interimSubmitMutexInstance';
+import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
+import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { StepperPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
 
 import { SubScreenContainer } from './completion/containers';
-import IntermediateSubmit from './completion/IntermediateSubmit';
-import ProcessingAnswers from './completion/ProcessingAnswers';
-import { activityRecordExists, useFlowStorageRecord } from '../lib';
-import {
-  StepperPipelineItem,
-  useAutoCompletion,
-  useFlowStateActions,
-} from '../model';
+import { IntermediateSubmit } from './completion/IntermediateSubmit';
+import { ProcessingAnswers } from './completion/ProcessingAnswers';
+import { activityRecordExists } from '../lib/storageHelpers';
+import { useFlowStorageRecord } from '../lib/useFlowStorageRecord';
+import { useAutoCompletion } from '../model/hooks/useAutoCompletion';
+import { useFlowStateActions } from '../model/hooks/useFlowStateActions';
 import { ConstructCompletionsService } from '../model/services/ConstructCompletionsService';
 
 type Props = {
@@ -35,18 +33,20 @@ type Props = {
   activityName: string;
   eventId: string;
   flowId: string;
+  targetSubjectId: string | null;
   order: number;
 
   onClose: () => void;
   onFinish: () => void;
 };
 
-function Intermediate({
+export function Intermediate({
   flowId,
   appletId,
   activityId,
   activityName,
   eventId,
+  targetSubjectId,
   order,
   onClose,
   onFinish,
@@ -61,17 +61,17 @@ function Intermediate({
     appletId,
     eventId,
     flowId,
+    targetSubjectId,
   });
 
   const { saveActivitySummary } = useFlowStateActions({
     appletId,
     eventId,
     flowId,
+    targetSubjectId,
   });
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
-  );
+  const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
 
   const { step, pipeline, flowName } = flowStorageRecord!;
 
@@ -113,8 +113,15 @@ function Intermediate({
   }, [appletId, queryClient]);
 
   const activityRecordRemoved = useMemo(
-    () => !activityRecordExists(appletId, activityId, eventId, order),
-    [activityId, appletId, eventId, order],
+    () =>
+      !activityRecordExists(
+        appletId,
+        activityId,
+        eventId,
+        targetSubjectId,
+        order,
+      ),
+    [activityId, appletId, eventId, targetSubjectId, order],
   );
 
   const canNotGoBack =
@@ -124,14 +131,15 @@ function Intermediate({
   const changeActivity = useCallback(() => {
     const appletName = getAppletName();
 
-    Logger.log(
+    getDefaultLogger().log(
       `[Intermediate.changeActivity]: Activity "${activityName}|${activityId}" within flow "${flowName}|${flowId}" changed to next activity "${nextActivityPayload.activityName}|${nextActivityPayload.activityId}", applet "${appletName}|${appletId}"`,
     );
 
     dispatch(
-      AppletModel.actions.flowUpdated({
+      appletActions.updateFlow({
         appletId,
         flowId,
+        targetSubjectId,
         activityId: nextActivityPayload.activityId,
         activityName: nextActivityPayload.activityName,
         activityDescription: nextActivityPayload.activityDescription,
@@ -146,6 +154,7 @@ function Intermediate({
     dispatch,
     eventId,
     flowId,
+    targetSubjectId,
     activitiesPassed,
     nextActivityPayload.activityId,
     nextActivityPayload.activityName,
@@ -159,14 +168,18 @@ function Intermediate({
   ]);
 
   async function completeActivity() {
-    InterimSubmitMutex.setBusy();
+    getDefaultInterimSubmitMutex().setBusy();
 
     const constructCompletionService = new ConstructCompletionsService(
       saveActivitySummary,
+      getDefaultLogger(),
       queryClient,
-      storeProgress,
-      QueueProcessingService,
+      getDefaultQueueProcessingService(),
+      getDefaultAlertsExtractor(),
+      getDefaultScoresExtractor(),
       dispatch,
+      ReduxPersistor,
+      entityProgressions,
     );
 
     await constructCompletionService.construct({
@@ -175,6 +188,7 @@ function Intermediate({
       appletId,
       eventId,
       flowId,
+      targetSubjectId,
       order,
       completionType: 'intermediate',
       isAutocompletion: false,
@@ -184,6 +198,7 @@ function Intermediate({
       appletId,
       entityId: flowId ?? activityId,
       eventId,
+      targetSubjectId,
     };
 
     const success = await processWithAutocompletion(exclude);
@@ -198,10 +213,10 @@ function Intermediate({
   }
 
   useEffect(() => {
-    UploadObservable.reset();
+    getDefaultUploadObservable().reset();
 
     return () => {
-      InterimSubmitMutex.release();
+      getDefaultInterimSubmitMutex().release();
     };
   }, []);
 
@@ -236,5 +251,3 @@ function Intermediate({
     />
   );
 }
-
-export default Intermediate;

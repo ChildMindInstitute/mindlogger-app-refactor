@@ -1,4 +1,4 @@
-import { ActivityDto } from '@app/shared/api';
+import { ActivityDto } from './IActivityService';
 
 const testMessage1 =
   'Start by placing the point of the pen at the center of the spiral (S), and trace out along the dashed blue line to the end of the sprial (E).  Try to stay on the dashed blue line while tracing. You will do this five times.';
@@ -20,6 +20,7 @@ const grid: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -69,6 +70,7 @@ const vortex: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -118,6 +120,7 @@ const allDrawing: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -179,6 +182,7 @@ export const TextActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -219,6 +223,7 @@ export const GeolocationActivity: ActivityDto = {
   showAllAtOnce: false,
   isSkippable: false,
   isHidden: false,
+  autoAssign: false,
   isReviewable: false,
   responseIsEditable: false,
   order: 0,
@@ -262,6 +267,7 @@ export const SliderTestActivity: ActivityDto = {
   isReviewable: false,
   responseIsEditable: false,
   isHidden: false,
+  autoAssign: false,
   order: 0,
   scoresAndReports: {
     showScoreSummary: false,
@@ -320,6 +326,7 @@ export const StabilityTrackerActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],

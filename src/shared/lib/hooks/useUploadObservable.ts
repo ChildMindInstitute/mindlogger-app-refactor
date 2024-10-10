@@ -1,10 +1,8 @@
 import { useEffect } from 'react';
 
-import {
-  ChangeQueueObservable,
-  UploadObservable,
-  useForceUpdate,
-} from '@app/shared/lib';
+import { useForceUpdate } from './useForceUpdate';
+import { getDefaultChangeQueueObservable } from '../observables/changeQueueObservableInstance';
+import { getDefaultUploadObservable } from '../observables/uploadObservableInstance';
 
 type Result = {
   isUploading: boolean;
@@ -13,7 +11,7 @@ type Result = {
   isCompleted: boolean;
 };
 
-const useUploadObservable = (): Result => {
+export const useUploadObservable = (): Result => {
   const update = useForceUpdate();
 
   useEffect(() => {
@@ -25,23 +23,21 @@ const useUploadObservable = (): Result => {
       update();
     };
 
-    UploadObservable.addObserver(onChangeUploadState);
+    getDefaultUploadObservable().addObserver(onChangeUploadState);
 
-    ChangeQueueObservable.addObserver(onChangeQueue);
+    getDefaultChangeQueueObservable().addObserver(onChangeQueue);
 
     return () => {
-      UploadObservable.removeObserver(onChangeUploadState);
+      getDefaultUploadObservable().removeObserver(onChangeUploadState);
 
-      ChangeQueueObservable.removeObserver(onChangeQueue);
+      getDefaultChangeQueueObservable().removeObserver(onChangeQueue);
     };
   }, [update]);
 
   return {
-    isUploading: UploadObservable.isLoading,
-    isError: UploadObservable.isError,
-    isPostponed: UploadObservable.isPostponed,
-    isCompleted: UploadObservable.isCompleted,
+    isUploading: getDefaultUploadObservable().isLoading,
+    isError: getDefaultUploadObservable().isError,
+    isPostponed: getDefaultUploadObservable().isPostponed,
+    isCompleted: getDefaultUploadObservable().isCompleted,
   };
 };
-
-export default useUploadObservable;

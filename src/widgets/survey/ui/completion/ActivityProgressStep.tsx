@@ -1,5 +1,6 @@
-import { colors } from '@app/shared/lib';
-import { Text, YStack } from '@shared/ui';
+import { colors } from '@app/shared/lib/constants/colors';
+import { YStack } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 
 type Props = {
   currentActivity: number;
@@ -8,7 +9,7 @@ type Props = {
   currentSecondLevelStep: string;
 };
 
-export default ({
+export const ActivityProgressStep = ({
   currentActivity,
   totalActivities,
   currentActivityName,

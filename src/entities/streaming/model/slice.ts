@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { cleanUpAction } from '@app/shared/lib';
+import { cleanUpAction } from '@app/shared/lib/redux-state/actions';
 
 const DEFAULT_HOST = '';
 const DEFAULT_PORT = '';
@@ -40,8 +40,8 @@ const streamingSlice = createSlice({
     }),
 });
 
-export const actions = {
+export const streamingAction = {
   ...streamingSlice.actions,
 };
 
-export const reducer = streamingSlice.reducer;
+export const streamingReducer = streamingSlice.reducer;

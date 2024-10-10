@@ -1,8 +1,7 @@
 import { useContext } from 'react';
 
-import { ViewSlider } from '@shared/ui';
-
 import { ValuesContext, RefContext } from './contexts';
+import { ViewSlider } from '../ViewSlider';
 
 type Item = {
   index: number;
@@ -12,7 +11,7 @@ type Props = {
   renderItem: (item: Item) => JSX.Element;
 };
 
-function ViewList({ renderItem }: Props) {
+export function ViewList({ renderItem }: Props) {
   const { getCurrentStep, stepsCount } = useContext(ValuesContext);
   const ref = useContext(RefContext);
 
@@ -25,5 +24,3 @@ function ViewList({ renderItem }: Props) {
     />
   );
 }
-
-export default ViewList;

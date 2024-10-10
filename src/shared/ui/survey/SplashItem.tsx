@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   image: { height: '100%', width: '100%' },
 });
 
-const SplashItem: FC<Props> = ({ config }) => {
+export const SplashItem: FC<Props> = ({ config }) => {
   const { imageUrl } = config;
 
   return (
@@ -25,5 +25,3 @@ const SplashItem: FC<Props> = ({ config }) => {
     />
   );
 };
-
-export default SplashItem;

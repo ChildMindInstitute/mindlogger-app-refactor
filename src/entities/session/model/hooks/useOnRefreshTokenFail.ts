@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 
-import { Emitter } from '@shared/lib';
+import { Emitter } from '@app/shared/lib/services/Emitter';
 
-function useOnRefreshTokenFail(callback: () => void) {
+export function useOnRefreshTokenFail(callback: () => void) {
   const callbackRef = useRef(callback);
 
   callbackRef.current = callback;
@@ -19,5 +19,3 @@ function useOnRefreshTokenFail(callback: () => void) {
     };
   }, []);
 }
-
-export default useOnRefreshTokenFail;

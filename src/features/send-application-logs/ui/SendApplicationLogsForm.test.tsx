@@ -1,9 +1,11 @@
 import { render, fireEvent, screen } from '@testing-library/react-native';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import { wait } from '@app/shared/lib';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { wait } from '@app/shared/lib/utils/common';
 
-import { SendApplicationLogsForm } from '.';
+import { SendApplicationLogsForm } from './SendApplicationLogsForm';
 
 jest.mock('react-i18next', () => ({
   useTranslation: jest.fn().mockImplementation(() => ({
@@ -11,24 +13,23 @@ jest.mock('react-i18next', () => ({
   })),
 }));
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-jest.mock('@shared/lib/analytics', () => ({
-  ...jest.requireActual('@shared/lib/analytics'),
-  AnalyticsService: {
-    track: jest.fn(),
-  },
-}));
+describe('Test SendApplicationLogsForm (basic positive tests)', () => {
+  let logger: ILogger;
 
-jest.mock('@shared/lib/services', () => ({
-  Logger: {
-    send: jest.fn().mockImplementation(async () => {
+  beforeEach(() => {
+    logger = getDefaultLogger();
+
+    jest.spyOn(logger, 'send').mockImplementation(async () => {
       await wait(100);
       return true;
-    }),
-  },
-}));
+    });
 
-describe('Test SendApplicationLogsForm (basic positive tests)', () => {
+    jest.spyOn(logger, 'log').mockReturnValue(undefined);
+    jest.spyOn(logger, 'info').mockReturnValue(undefined);
+    jest.spyOn(logger, 'warn').mockReturnValue(undefined);
+    jest.spyOn(logger, 'error').mockReturnValue(undefined);
+  });
+
   afterEach(() => {
     screen.unmount();
   });

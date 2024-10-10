@@ -1,5 +1,6 @@
-import { RadioResponse, RadioPipelineItem } from '../../lib';
-import { IScoresCalculator, ScoresCalculator } from '../ScoresCalculator';
+import { RadioPipelineItem, RadioResponse } from '../../lib/types/payload';
+import { IScoresCalculator } from '../IScoresCalculator';
+import { ScoresCalculator } from '../ScoresCalculator';
 
 type WrappedAnswer = { answer: RadioResponse };
 

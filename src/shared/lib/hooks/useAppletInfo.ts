@@ -2,11 +2,14 @@ import { useCallback } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { AppletDetailsResponse } from '@app/shared/api';
+import { AppletDetailsResponse } from '@app/shared/api/services/IAppletService';
 
-import { getDataFromQuery, getAppletDetailsKey } from '../utils';
+import {
+  getDataFromQuery,
+  getAppletDetailsKey,
+} from '../utils/reactQueryHelpers';
 
-const useAppletInfo = () => {
+export const useAppletInfo = () => {
   const queryClient = useQueryClient();
 
   const getName = useCallback(
@@ -24,5 +27,3 @@ const useAppletInfo = () => {
     getName,
   };
 };
-
-export default useAppletInfo;

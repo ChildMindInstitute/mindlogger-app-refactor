@@ -1,8 +1,8 @@
 import {
   SamplingMethod,
   StimulusConfigId,
-  StringOrNull,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/flanker';
+import { StringOrNull } from '@app/abstract/lib/types/primitive';
 
 export type FlankerWebViewConfiguration = {
   trials: Array<TestTrial>;

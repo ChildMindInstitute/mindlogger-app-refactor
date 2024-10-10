@@ -1,28 +1,31 @@
 import { FileSystem } from 'react-native-file-access';
+import { MMKV } from 'react-native-mmkv';
 
-import { ActivityRecordKeyParams } from '@app/abstract/lib';
-import { AnswerDto, ObjectAnswerDto } from '@app/shared/api';
-import { createSecureStorage, Logger } from '@app/shared/lib';
-import { MediaFile, MediaValue } from '@app/shared/ui';
+import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
+import {
+  AnswerDto,
+  ObjectAnswerDto,
+} from '@app/shared/api/services/IAnswerService';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { MediaFile, MediaValue } from '@app/shared/ui/survey/MediaItems/types';
+import { getActivityRecordKey } from '@app/widgets/survey/lib/storageHelpers';
+
+import { IMediaFilesCleaner } from './IMediaFilesCleaner';
 
 type EntityRecord = {
   answers: Record<string, { answer: MediaFile } | undefined>;
 };
 
-export const activityStorage = createSecureStorage('activity_progress-storage');
-
-type Result = {
-  cleanUp: (keyParams: ActivityRecordKeyParams) => void;
-  cleanUpByStorageKey: (key: string) => void;
-  cleanUpByAnswers: (answers: AnswerDto[]) => void;
-};
-
-const createMediaFilesCleaner = (): Result => {
-  const cleanUpByStorageKey = async (key: string) => {
-    const storageActivityState = activityStorage.getString(key);
+export const createMediaFilesCleaner = (
+  activityProgressStorage: MMKV,
+): IMediaFilesCleaner => {
+  const promisedCleanUpByStorageKey = async (key: string) => {
+    const storageActivityState = activityProgressStorage.getString(key);
 
     if (!storageActivityState) {
-      Logger.warn("[MediaFilesCleaner.cleanUp]: Activity record doesn't exist");
+      getDefaultLogger().warn(
+        "[MediaFilesCleaner.cleanUp]: Activity record doesn't exist",
+      );
       return;
     }
 
@@ -46,29 +49,37 @@ const createMediaFilesCleaner = (): Result => {
           await FileSystem.unlink(fileUrl);
         }
       } catch (error) {
-        Logger.warn(
+        getDefaultLogger().warn(
           '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',
         );
       }
     }
 
-    Logger.info('[MediaFilesCleaner.cleanUp]: completed');
+    getDefaultLogger().info('[MediaFilesCleaner.cleanUp]: completed');
   };
 
-  const cleanUp = async ({
+  const promisedCleanUp = async ({
     appletId,
     activityId,
     eventId,
+    targetSubjectId,
     order,
   }: ActivityRecordKeyParams) => {
-    const key = `${appletId}-${activityId}-${eventId}-${order}`;
+    const key = getActivityRecordKey(
+      appletId,
+      activityId,
+      eventId,
+      targetSubjectId,
+      order,
+    );
 
-    return cleanUpByStorageKey(key);
+    return promisedCleanUpByStorageKey(key);
   };
 
-  const cleanUpByAnswers = async (answers: AnswerDto[]) => {
+  const promisedCleanUpByAnswers = async (answers: AnswerDto[]) => {
     try {
-      answers.filter(Boolean).forEach(async answer => {
+      const nonNilAnswers = answers.filter(Boolean);
+      for (const answer of nonNilAnswers) {
         const { value: answerValue } = answer as ObjectAnswerDto;
 
         const mediaValue = answerValue as MediaValue;
@@ -82,7 +93,7 @@ const createMediaFilesCleaner = (): Result => {
             console.info('[MediaFilesCleaner.cleanUp]: completed');
           }
         }
-      });
+      }
     } catch (error) {
       console.warn(
         '[MediaFilesCleaner.cleanUp]: Error occurred while deleting file',
@@ -91,11 +102,21 @@ const createMediaFilesCleaner = (): Result => {
     }
   };
 
+  const cleanUp = (param: ActivityRecordKeyParams) => {
+    promisedCleanUp(param).catch(console.error);
+  };
+
+  const cleanUpByStorageKey = (key: string) => {
+    promisedCleanUpByStorageKey(key).catch(console.error);
+  };
+
+  const cleanUpByAnswers = (answers: AnswerDto[]) => {
+    promisedCleanUpByAnswers(answers).catch(console.error);
+  };
+
   return {
     cleanUp,
     cleanUpByStorageKey,
     cleanUpByAnswers,
   };
 };
-
-export default createMediaFilesCleaner();

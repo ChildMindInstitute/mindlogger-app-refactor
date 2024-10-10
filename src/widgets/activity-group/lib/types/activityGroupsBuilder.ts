@@ -1,6 +1,8 @@
-import { ActivityPipelineType, Progress } from '@app/abstract/lib';
-import { ActivityType } from '@entities/activity';
-import { ScheduleEvent } from '@entities/event';
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
+import { EntityProgression } from '@app/abstract/lib/types/entityProgress';
+import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
+import { ActivityType } from '@app/entities/activity/lib/types/activityListItem';
+import { ScheduleEvent } from '@app/entities/event/lib/types/event';
 
 export type EntityBase = {
   id: string;
@@ -8,6 +10,7 @@ export type EntityBase = {
   description: string;
   image?: string | null;
   isHidden: boolean;
+  autoAssign: boolean;
   order: number;
 };
 
@@ -27,10 +30,11 @@ export type Entity = Activity | ActivityFlow;
 export type EventEntity = {
   entity: Entity;
   event: ScheduleEvent;
+  assignment: Assignment | null;
 };
 
 export type GroupsBuildContext = {
-  progress: Progress;
   appletId: string;
   allAppletActivities: Activity[];
+  entityProgressions: EntityProgression[];
 };

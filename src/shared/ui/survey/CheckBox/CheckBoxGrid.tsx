@@ -1,10 +1,10 @@
-import CheckBoxCard from './CheckBoxCard';
+import { CheckBoxCard } from './CheckBoxCard';
 import { CheckboxItemProps } from './types';
 import { findById } from './utils';
-import { Box } from '../..';
-import { SimpleGrid } from '../../SimpleGrid';
+import { Box } from '../../base';
+import { SimpleGrid } from '../../SimpleGrid/SimpleGrid';
 
-function CheckBoxGrid({
+export function CheckBoxGrid({
   value,
   options,
 
@@ -48,5 +48,3 @@ function CheckBoxGrid({
     </Box>
   );
 }
-
-export default CheckBoxGrid;

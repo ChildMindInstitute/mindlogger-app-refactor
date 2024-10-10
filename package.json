@@ -7,15 +7,13 @@
     "ios": "yarn ios:dev",
     "clean-ios": "cd ios && xcodebuild clean -workspace MindloggerMobile.xcworkspace -scheme MindloggerMobileDev && cd ..",
     "start": "react-native start",
-    "test": "jest --noStackTrace",
+    "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:check": "yarn lint",
     "lint:fix": "yarn lint --fix",
-    "prettier:check": "prettier '**/*.{js,jsx,ts,tsx}' --check",
-    "prettier:fix": "prettier '**/*.{js,jsx,ts,tsx}' --write",
+    "type:check": "tsc --noEmit --skipLibCheck",
     "pods": "bundle exec pod install --project-directory=ios",
     "pods:local": "LOCAL_DEV_PATCHES=true yarn pods",
-    "prepare": "husky install",
     "postinstall": "yarn patch-package",
     "bump": "bundle exec fastlane bump_version",
     "start:reset-cache": "watchman watch-del-all && react-native start --reset-cache",
@@ -78,6 +76,7 @@
     "@types/react-native-vector-icons": "^6.4.18",
     "axios": "^1.6.2",
     "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
     "date-fns": "^3.0.5",
     "dayspan": "^1.1.0",
     "eventemitter3": "^5.0.1",
@@ -87,6 +86,7 @@
     "node-libs-browser": "^2.2.1",
     "patch-package": "^8.0.0",
     "process": "^0.11.10",
+    "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-hook-form": "^7.49.2",
     "react-i18next": "^13.5.0",
@@ -126,6 +126,7 @@
     "react-redux": "^9.0.4",
     "redux-persist": "^6.0.0",
     "sanitize-html": "^2.11.0",
+    "stream-browserify": "^3.0.0",
     "use-debounce": "^10.0.0",
     "uuid": "^9.0.1",
     "victory-native": "^36.7.0",
@@ -167,7 +168,6 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-unused-imports": "^3.0.0",
-    "husky": "^8.0.3",
     "jest": "^29.6.3",
     "lint-staged": "^15.2.0",
     "prettier": "^3.2.5",
@@ -185,8 +185,7 @@
   "lint-staged": {
     "**/*.{ts,tsx}": [
       "bash -c node_modules/.bin/tsc --noEmit --skipLibCheck",
-      "eslint --fix",
-      "prettier --write"
+      "eslint --fix"
     ]
   },
   "resolutions": {

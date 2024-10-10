@@ -2,18 +2,18 @@ import { FC, useCallback, useMemo } from 'react';
 
 import { VictoryAxis, VictoryChart, VictoryScatter } from 'victory-native';
 
-import { ResponseConfig, SelectionsResponseConfig } from '@shared/api';
 import {
-  areDatesEqual,
-  colors,
-  DAYS_OF_WEEK_NUMBERS,
-  getCurrentWeekDates,
-  range,
-} from '@shared/lib';
+  ResponseConfig,
+  SelectionsResponseConfig,
+} from '@app/shared/api/services/AppletAnalyticsDto';
+import { DAYS_OF_WEEK_NUMBERS } from '@app/shared/lib/constants';
+import { colors } from '@app/shared/lib/constants/colors';
+import { range, getCurrentWeekDates } from '@app/shared/lib/utils/common';
+import { areDatesEqual } from '@app/shared/lib/utils/dateTime';
 
-import { Box } from '../..';
-import { getWeekDaysWithLocale } from '../lib';
-import { ChartAxisDot, ChartItem } from '../types';
+import { Box } from '../../base';
+import { getWeekDaysWithLocale } from '../lib/getWeekDaysWithLocale';
+import { ChartAxisDot, ChartItem } from '../types/types';
 
 type TimelineChartOption = {
   name: string;
@@ -41,7 +41,7 @@ const getScatterDots = (chartDataItem: TimelineChartData) => {
   });
 };
 
-const TimelineChart: FC<Props> = ({ data, config }) => {
+export const TimelineChart: FC<Props> = ({ data, config }) => {
   const { options } = config as SelectionsResponseConfig;
 
   const getXAxisDots = (): Array<ChartAxisDot> =>
@@ -128,5 +128,3 @@ const TimelineChart: FC<Props> = ({ data, config }) => {
     </Box>
   );
 };
-
-export default TimelineChart;

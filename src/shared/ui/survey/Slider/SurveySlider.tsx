@@ -3,13 +3,14 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
-import { Box, XStack, YStack, Text, Slider } from '@shared/ui';
-
 import { SliderProps } from './types';
+import { Box, XStack, YStack } from '../../base';
+import { Slider } from '../../Slider';
+import { Text } from '../../Text';
 
 const THUMB_SIZE = 22;
 
-const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
+export const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
   config,
   accessibilityLabel,
   sliderLabel,
@@ -137,8 +138,6 @@ const SurveySlider: FC<SliderProps & AccessibilityProps> = ({
     </YStack>
   );
 };
-
-export default SurveySlider;
 
 const styles = StyleSheet.create({
   image: {

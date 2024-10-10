@@ -4,18 +4,19 @@ import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 import { Easing, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import {
-  ONE_SECOND,
-  isObjectNotEmpty,
-  useAppTimer,
-  useInterval,
-  getClockTime,
-  colors,
-} from '@app/shared/lib';
-import { Box, HandlersContext, ProgressBar, Text } from '@shared/ui';
+import { ONE_SECOND } from '@app/shared/lib/constants';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useAppTimer } from '@app/shared/lib/timers/hooks/useAppTimer';
+import { useInterval } from '@app/shared/lib/timers/hooks/useInterval';
+import { isObjectNotEmpty } from '@app/shared/lib/utils/common';
+import { getClockTime } from '@app/shared/lib/utils/dateTime';
+import { Box } from '@app/shared/ui/base';
+import { ProgressBar } from '@app/shared/ui/ProgressBar';
+import { HandlersContext } from '@app/shared/ui/Stepper/contexts';
+import { Text } from '@app/shared/ui/Text';
 
-import { ActivityIdentityContext } from '../lib';
-import { useActivityState } from '../model';
+import { ActivityIdentityContext } from '../lib/contexts/ActivityIdentityContext';
+import { useActivityState } from '../model/hooks/useActivityState';
 
 type ProgressWithTimerProps = {
   duration?: number | null;
@@ -33,7 +34,7 @@ const TimerContainer = styled(Box, {
 
 const TEN_SECONDS = ONE_SECOND * 10;
 
-const ProgressWithTimer: FC<ProgressWithTimerProps> = ({ duration }) => {
+const ProgressWithTimerView: FC<ProgressWithTimerProps> = ({ duration }) => {
   return (
     <TimerContainer accessibilityLabel="timer-widget">
       {duration ? (
@@ -47,7 +48,7 @@ const ProgressWithTimer: FC<ProgressWithTimerProps> = ({ duration }) => {
 
 const Timer: FC<TimerProps> = ({ duration }) => {
   const { t } = useTranslation();
-  const { appletId, activityId, eventId, order } = useContext(
+  const { appletId, activityId, eventId, targetSubjectId, order } = useContext(
     ActivityIdentityContext,
   );
 
@@ -61,6 +62,7 @@ const Timer: FC<TimerProps> = ({ duration }) => {
     appletId,
     activityId,
     eventId,
+    targetSubjectId,
     order,
   });
 
@@ -139,4 +141,4 @@ const Timer: FC<TimerProps> = ({ duration }) => {
   );
 };
 
-export default memo(ProgressWithTimer);
+export const ProgressWithTimer = memo(ProgressWithTimerView);

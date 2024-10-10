@@ -1,6 +1,6 @@
 import { Trans } from 'react-i18next';
 
-import { Text } from '@shared/ui';
+import { Text } from '@app/shared/ui/Text';
 
 type Props = {
   email: string;
@@ -19,5 +19,3 @@ export const SuccessNotification = (props: Props) => {
     </Text>
   );
 };
-
-export default SuccessNotification;

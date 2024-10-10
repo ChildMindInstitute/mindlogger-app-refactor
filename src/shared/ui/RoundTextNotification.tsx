@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
 import { AccessibilityProps } from 'react-native';
 
-import { Box, Text } from '@app/shared/ui';
+import { Box } from './base';
+import { Text } from './Text';
 
 type Props = {
   text: string;
 } & AccessibilityProps;
 
-const RoundTextNotification: FC<Props> = ({
+export const RoundTextNotification: FC<Props> = ({
   text,
   accessibilityLabel,
 }: Props) => (
@@ -25,5 +26,3 @@ const RoundTextNotification: FC<Props> = ({
     </Text>
   </Box>
 );
-
-export default RoundTextNotification;

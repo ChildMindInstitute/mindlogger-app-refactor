@@ -1,10 +1,10 @@
 import { PropsWithChildren, useMemo, useRef } from 'react';
 
 import {
-  SystemBootUpContext as SystemBootUpContext,
   SystemModule,
-  wait,
-} from '@shared/lib';
+  SystemBootUpContext,
+} from '@app/shared/lib/contexts/SplashContext';
+import { wait } from '@app/shared/lib/utils/common';
 
 type Props = PropsWithChildren<{
   onLoadingFinished: () => void;
@@ -12,7 +12,7 @@ type Props = PropsWithChildren<{
 
 const SYSTEM_BOOT_UP_DELAY = 300;
 
-function SystemBootUpProvider({ children, onLoadingFinished }: Props) {
+export function SystemBootUpProvider({ children, onLoadingFinished }: Props) {
   const moduleWaitList = useRef<Array<SystemModule>>([
     'cache',
     'state',
@@ -49,5 +49,3 @@ function SystemBootUpProvider({ children, onLoadingFinished }: Props) {
     </>
   );
 }
-
-export default SystemBootUpProvider;

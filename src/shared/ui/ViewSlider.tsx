@@ -19,7 +19,7 @@ import Animated, {
   FadeOut,
 } from 'react-native-reanimated';
 
-import { range } from '../lib';
+import { range } from '../lib/utils/common';
 
 type Props = PropsWithChildren<{
   viewCount: number;

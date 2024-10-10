@@ -1,16 +1,15 @@
 import { useEffect } from 'react';
 
-import { IdentityModel } from '@app/entities/identity';
-import { AnalyticsService, useAppSelector } from '@shared/lib';
+import { selectUserId } from '@app/entities/identity/model/selectors';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
+import { useAppSelector } from '@app/shared/lib/hooks/redux';
 
-function useAnalyticsAutoLogin() {
-  const id = useAppSelector(IdentityModel.selectors.selectUserId);
+export function useAnalyticsAutoLogin() {
+  const id = useAppSelector(selectUserId);
 
   useEffect(() => {
     if (id) {
-      AnalyticsService.login(id);
+      getDefaultAnalyticsService().login(id).catch(console.error);
     }
   }, [id]);
 }
-
-export default useAnalyticsAutoLogin;

@@ -5,12 +5,10 @@ import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persist
 import { onlineManager } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
-import {
-  createSyncStorage,
-  isAppOnline,
-  queryClient,
-  useSystemBootUp,
-} from '@shared/lib';
+import { useSystemBootUp } from '@app/shared/lib/contexts/SplashContext';
+import { getDefaultQueryClient } from '@app/shared/lib/queryClient/queryClientInstance';
+import { createSyncStorage } from '@app/shared/lib/storages/createStorage';
+import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
 
 const storage = createSyncStorage('cache-storage');
 
@@ -27,12 +25,12 @@ onlineManager.setEventListener(setOnline => {
       state.isConnected &&
       Boolean(state.isInternetReachable);
 
-    const mutations = queryClient.getMutationCache().getAll();
+    const mutations = getDefaultQueryClient().getMutationCache().getAll();
 
     setOnline(status);
 
     if (mutations.length && status) {
-      queryClient.resumePausedMutations();
+      getDefaultQueryClient().resumePausedMutations();
     }
   });
 });
@@ -40,17 +38,17 @@ onlineManager.setEventListener(setOnline => {
 if (__DEV__) {
   const { addPlugin } = require('react-query-native-devtools');
 
-  addPlugin({ queryClient });
+  addPlugin({ queryClient: getDefaultQueryClient() });
 }
 
-const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
+export const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
   const { onModuleInitialized, initialized } = useSystemBootUp();
 
   const onCacheRestored = () => {
     isAppOnline().then(isOnline => {
       if (isOnline) {
         onlineManager.setOnline(true);
-        queryClient.resumePausedMutations();
+        getDefaultQueryClient().resumePausedMutations();
       }
     });
 
@@ -59,7 +57,7 @@ const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <PersistQueryClientProvider
-      client={queryClient}
+      client={getDefaultQueryClient()}
       persistOptions={{
         maxAge: Infinity,
         persister: syncPersist,
@@ -71,5 +69,3 @@ const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
     </PersistQueryClientProvider>
   );
 };
-
-export default ReactQueryProvider;

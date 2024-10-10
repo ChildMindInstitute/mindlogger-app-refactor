@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 
 import { RESULTS } from 'react-native-permissions';
 
-import { checkCameraPermissions } from '../permissions';
+import { checkCameraPermissions } from '../permissions/cameraPermissions';
 
-const useCameraPermissions = () => {
+export const useCameraPermissions = () => {
   const [cameraPermission, setCameraPermission] = useState<string>(
     RESULTS.UNAVAILABLE,
   );
@@ -14,5 +14,3 @@ const useCameraPermissions = () => {
   }, []);
   return { isCameraAccessGranted: cameraPermission === RESULTS.GRANTED };
 };
-
-export default useCameraPermissions;

@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 
-import { CheckBox, XStack, BoxProps } from '@app/shared/ui';
+import { BoxProps, XStack } from '@app/shared/ui/base';
+import { CheckBox } from '@app/shared/ui/CheckBox';
 
 type Props = {
   value: boolean;
@@ -8,7 +9,12 @@ type Props = {
   onChange: (value: boolean) => void;
 } & BoxProps;
 
-function ConsentCheckBox({ value, label, onChange, ...boxProps }: Props) {
+export function ConsentCheckBox({
+  value,
+  label,
+  onChange,
+  ...boxProps
+}: Props) {
   const changeValue = () => onChange(!value);
 
   return (
@@ -38,5 +44,3 @@ const styles = StyleSheet.create({
     height: 20,
   },
 });
-
-export default ConsentCheckBox;

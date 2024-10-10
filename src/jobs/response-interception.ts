@@ -1,8 +1,14 @@
 import { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
-import { SessionModel } from '@entities/session';
-import { httpService, IdentityService } from '@shared/api';
-import { createJob } from '@shared/lib';
+import { getDefaultSessionService } from '@app/entities/session/lib/sessionServiceInstance';
+import {
+  refreshTokenFailed,
+  storeAccessToken,
+  storeRefreshToken,
+} from '@app/entities/session/model/operations';
+import { httpService } from '@app/shared/api/services/httpService';
+import { getDefaultIdentityService } from '@app/shared/api/services/identityServiceInstance';
+import { createJob } from '@app/shared/lib/services/jobManagement';
 
 type RequestConfig = InternalAxiosRequestConfig<any> & {
   retry?: boolean;
@@ -17,22 +23,25 @@ export default createJob(() => {
       if (error.response?.status === 401 && !config?.retry) {
         config.retry = true;
 
-        const { refreshToken, tokenType } = SessionModel.getSession();
+        const { refreshToken, tokenType } =
+          getDefaultSessionService().getSession();
 
         if (!refreshToken || !tokenType) {
           return Promise.reject(error);
         }
 
         try {
-          const { data } = await IdentityService.refreshToken({ refreshToken });
+          const { data } = await getDefaultIdentityService().refreshToken({
+            refreshToken,
+          });
 
-          SessionModel.storeAccessToken(data.result.accessToken);
-          SessionModel.storeRefreshToken(data.result.refreshToken);
+          storeAccessToken(data.result.accessToken);
+          storeRefreshToken(data.result.refreshToken);
 
           // @ts-ignore
           config.headers.Authorization = `${tokenType} ${data.result.accessToken}`;
         } catch (e) {
-          SessionModel.refreshTokenFailed();
+          refreshTokenFailed();
           Promise.reject(e);
         }
 

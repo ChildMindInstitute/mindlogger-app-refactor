@@ -1,14 +1,12 @@
 import { FC, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { colors } from '@shared/lib';
+import { colors } from '@app/shared/lib/constants/colors';
 
-import { CheckBox, YStack } from '../..';
-import {
-  StackedItemsGrid,
-  type StackedRowItemValue,
-  type StackedItem,
-} from '../StackedItemsGrid';
+import { YStack } from '../../base';
+import { CheckBox } from '../../CheckBox';
+import { StackedItemsGrid } from '../StackedItemsGrid/StackedItemsGrid';
+import { StackedItem, StackedRowItemValue } from '../StackedItemsGrid/types';
 
 type StackedCheckboxConfig = {
   rows: Array<StackedItem>;
@@ -25,7 +23,7 @@ type Props = {
   textReplacer: (markdown: string) => string;
 };
 
-const StackedCheckboxItem: FC<Props> = ({
+export const StackedCheckboxItem: FC<Props> = ({
   values,
   onChange,
   config,
@@ -122,4 +120,3 @@ const styles = StyleSheet.create({
     width: 20,
   },
 });
-export default StackedCheckboxItem;

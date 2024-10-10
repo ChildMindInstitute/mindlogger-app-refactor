@@ -17,9 +17,10 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDebounce } from 'use-debounce';
 
-import { Box, ScrollButton } from '@app/shared/ui';
-
-import { IS_SMALL_SIZE_SCREEN, ScrollViewContext } from '../lib';
+import { Box } from './base';
+import { ScrollButton } from './ScrollButton';
+import { IS_SMALL_SIZE_SCREEN } from '../lib/constants';
+import { ScrollViewContext } from '../lib/contexts/ScrollViewContext';
 
 type Props = {
   scrollEnabled: boolean;
@@ -28,7 +29,7 @@ type Props = {
 
 const PaddingToBottom = IS_SMALL_SIZE_SCREEN ? 30 : 40;
 
-const ScrollableContent: FC<Props> = ({
+export const ScrollableContent: FC<Props> = ({
   children,
   scrollEnabled,
   scrollEventThrottle = 300,
@@ -156,5 +157,3 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
 });
-
-export default ScrollableContent;

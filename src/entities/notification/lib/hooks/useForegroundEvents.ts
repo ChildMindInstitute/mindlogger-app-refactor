@@ -6,7 +6,7 @@ import {
   LocalEventDetail,
   NotificationEventCallbacks,
   NotificationEventHandlersFunctions,
-} from '../types';
+} from '../types/notifications';
 
 export type UseForegroundEventArgs = Partial<NotificationEventCallbacks>;
 

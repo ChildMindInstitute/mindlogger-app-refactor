@@ -1,6 +1,8 @@
-import { colors, getFloatPartLength } from '@app/shared/lib';
+import { colors } from '@app/shared/lib/constants/colors';
+import { getFloatPartLength } from '@app/shared/lib/utils/common';
+import { Box, Image, XStack } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 import { roundAlertIcon } from '@assets/images';
-import { XStack, Image, Text, Box } from '@shared/ui';
 
 export type Props = {
   label: string;
@@ -8,7 +10,7 @@ export type Props = {
   highlighted: boolean;
 };
 
-function Score({ label, value, highlighted }: Props) {
+export function Score({ label, value, highlighted }: Props) {
   return (
     <XStack alignItems="center">
       {highlighted && (
@@ -39,5 +41,3 @@ function Score({ label, value, highlighted }: Props) {
     </XStack>
   );
 }
-
-export default Score;

@@ -1,12 +1,12 @@
 import React, { FC, useMemo, useState } from 'react';
 import { AccessibilityProps } from 'react-native';
 
-import { shuffle } from '@shared/lib';
-import { useOnUndo } from '@shared/ui';
+import { shuffle } from '@app/shared/lib/utils/common';
 
-import RadioGrid from './RadioGrid';
-import RadioList from './RadioList';
-import RadioOption from './types';
+import { RadioGrid } from './RadioGrid';
+import { RadioList } from './RadioList';
+import { RadioOption } from './types';
+import { useOnUndo } from '../../Stepper/useOnUndo';
 
 type RadioActivityItemProps = {
   config: {
@@ -21,12 +21,9 @@ type RadioActivityItemProps = {
   textReplacer: (markdown: string) => string;
 };
 
-const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
-  config,
-  onChange,
-  initialValue,
-  textReplacer,
-}) => {
+export const RadioActivityItem: FC<
+  RadioActivityItemProps & AccessibilityProps
+> = ({ config, onChange, initialValue, textReplacer }) => {
   const { options, randomizeOptions, addTooltip, setPalette, isGridView } =
     config;
   const [radioValueId, setRadioValueId] = useState(initialValue?.id ?? null);
@@ -82,5 +79,3 @@ const RadioActivityItem: FC<RadioActivityItemProps & AccessibilityProps> = ({
     />
   );
 };
-
-export default RadioActivityItem;

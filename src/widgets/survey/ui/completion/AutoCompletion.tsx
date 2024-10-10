@@ -2,15 +2,16 @@ import { FC, useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { UploadObservable } from '@app/shared/lib';
-import { useQueueProcessing, useRetryUpload } from '@entities/activity';
-import { useAutoCompletion } from '@widgets/survey/model';
+import { useQueueProcessing } from '@app/entities/activity/lib/hooks/useQueueProcessing';
+import { useRetryUpload } from '@app/entities/activity/lib/hooks/useRetryUpload';
+import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
 
-import AnswersSubmitted from './AnswersSubmitted';
+import { AnswersSubmitted } from './AnswersSubmitted';
 import { SubScreenContainer } from './containers';
-import ProcessingAnswers from './ProcessingAnswers';
+import { ProcessingAnswers } from './ProcessingAnswers';
+import { useAutoCompletion } from '../../model/hooks/useAutoCompletion';
 
-const AutoCompletion: FC = () => {
+export const AutoCompletion: FC = () => {
   const { goBack } = useNavigation();
   const { isCompleted, process: processQueue } = useQueueProcessing();
 
@@ -19,7 +20,7 @@ const AutoCompletion: FC = () => {
       retryUpload: async () => {
         const retryResult = await processQueue();
 
-        if (UploadObservable.isPostponed) {
+        if (getDefaultUploadObservable().isPostponed) {
           goBack();
         }
 
@@ -33,7 +34,7 @@ const AutoCompletion: FC = () => {
   const processAnswers = async () => {
     const success = await processWithAutocompletion();
 
-    if (UploadObservable.isPostponed) {
+    if (getDefaultUploadObservable().isPostponed) {
       goBack();
     }
 
@@ -65,5 +66,3 @@ const AutoCompletion: FC = () => {
     </SubScreenContainer>
   );
 };
-
-export default AutoCompletion;

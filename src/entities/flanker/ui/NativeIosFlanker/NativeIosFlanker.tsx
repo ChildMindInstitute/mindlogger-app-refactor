@@ -1,27 +1,33 @@
 import { FC, useEffect, useMemo, useRef } from 'react';
 import { NativeModules, StyleSheet } from 'react-native';
 
-import { FlankerItemSettings } from '@app/abstract/lib';
-import { FlankerLiveEvent, StreamEventLoggable } from '@shared/lib';
-import { Box } from '@shared/ui';
+import { FlankerItemSettings } from '@app/abstract/lib/types/flanker';
+import {
+  FlankerLiveEvent,
+  StreamEventLoggable,
+} from '@app/shared/lib/tcp/types';
+import { Box } from '@app/shared/ui/base';
 
-import SwiftFlankerWrapper from './SwiftFlankerWrapper';
+import { SwiftFlankerWrapper } from './SwiftFlankerWrapper';
 import {
   FlankerGameResponse,
   FlankerNativeIosLogRecord,
-} from '../../lib/types';
-import { ConfigurationBuilder, parseResponse } from '../../lib/utils';
+} from '../../lib/types/response';
+import { getDefaultConfigurationBuilder } from '../../lib/utils/configurationBuilderInstance';
+import { parseResponse } from '../../lib/utils/helpers';
 
 type Props = {
   configuration: FlankerItemSettings;
   onResult: (data: FlankerGameResponse) => void;
 } & StreamEventLoggable<FlankerLiveEvent>;
 
-const NativeIosFlanker: FC<Props> = props => {
+export const NativeIosFlanker: FC<Props> = props => {
   const initializedRef = useRef(false);
 
   const configuration = useMemo(() => {
-    return ConfigurationBuilder.buildForNativeIOS(props.configuration);
+    return getDefaultConfigurationBuilder().buildForNativeIOS(
+      props.configuration,
+    );
   }, [props.configuration]);
 
   const responses = useRef<FlankerNativeIosLogRecord[]>([]).current;
@@ -91,8 +97,6 @@ const NativeIosFlanker: FC<Props> = props => {
     </Box>
   );
 };
-
-export default NativeIosFlanker;
 
 const styles = StyleSheet.create({
   wrapper: {

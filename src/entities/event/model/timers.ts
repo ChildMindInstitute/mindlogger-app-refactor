@@ -1,11 +1,13 @@
 import {
-  getMsFromHours,
-  getMsFromMinutes,
-  getNow,
-  HourMinute,
   MINUTES_IN_HOUR,
   MS_IN_MINUTE,
-} from '@app/shared/lib';
+} from '@app/shared/lib/constants/dateTime';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
+import {
+  getNow,
+  getMsFromHours,
+  getMsFromMinutes,
+} from '@app/shared/lib/utils/dateTime';
 
 export const getTimeToComplete = (
   timer: HourMinute,

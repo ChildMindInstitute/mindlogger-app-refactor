@@ -1,17 +1,17 @@
 import { PropsWithChildren, useContext } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { colors } from '@shared/lib';
-import { RestartIcon } from '@shared/ui';
+import { colors } from '@app/shared/lib/constants/colors';
 
-import ActionButton from './ActionButton';
+import { ActionButton } from './ActionButton';
 import { HandlersContext } from './contexts';
+import { RestartIcon } from '../icons';
 
 type Props = PropsWithChildren<{
   isIcon?: boolean;
 }>;
 
-function UndoButton({ children, isIcon }: Props) {
+export function UndoButton({ children, isIcon }: Props) {
   const { undo } = useContext(HandlersContext);
 
   if (isIcon) {
@@ -33,5 +33,3 @@ function UndoButton({ children, isIcon }: Props) {
     </ActionButton>
   );
 }
-
-export default UndoButton;

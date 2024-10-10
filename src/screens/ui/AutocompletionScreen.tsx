@@ -1,9 +1,10 @@
 import { FC } from 'react';
 
-import { AutoCompletion } from '@app/widgets/survey';
-import { Box, ImageBackground } from '@shared/ui';
+import { Box } from '@app/shared/ui/base';
+import { ImageBackground } from '@app/shared/ui/ImageBackground';
+import { AutoCompletion } from '@app/widgets/survey/ui/completion/AutoCompletion';
 
-const AutocompletionScreen: FC = () => {
+export const AutocompletionScreen: FC = () => {
   return (
     <Box bg="$secondary" flex={1}>
       <ImageBackground>
@@ -14,5 +15,3 @@ const AutocompletionScreen: FC = () => {
     </Box>
   );
 };
-
-export default AutocompletionScreen;

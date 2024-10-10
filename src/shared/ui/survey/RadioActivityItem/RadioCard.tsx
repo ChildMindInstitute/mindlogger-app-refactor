@@ -1,11 +1,14 @@
 import { useMemo } from 'react';
 import { AccessibilityProps } from 'react-native';
 
-import { colors, invertColor } from '@app/shared/lib';
+import { colors } from '@app/shared/lib/constants/colors';
+import { invertColor } from '@app/shared/lib/utils/survey/survey';
 
-import RadioOption from './types';
-import { Box, BoxProps, QuestionIcon, RadioGroup, Tooltip } from '../..';
-import OptionCard from '../../OptionCard';
+import { RadioOption } from './types';
+import { Box, BoxProps, RadioGroup } from '../../base';
+import { QuestionIcon } from '../../icons/QuestionIcon';
+import { OptionCard } from '../../OptionCard';
+import { Tooltip } from '../../Tooltip';
 
 type RadioLabelProps = {
   option: RadioOption;
@@ -23,7 +26,7 @@ type HandlerProps = {
 
 type Props = RadioLabelProps & AccessibilityProps & HandlerProps & BoxProps;
 
-function RadioCard({
+export function RadioCard({
   selected,
   option: { isHidden, id, text, color, image, tooltip, value },
   addTooltip,
@@ -118,5 +121,3 @@ function RadioCard({
     </OptionCard>
   );
 }
-
-export default RadioCard;

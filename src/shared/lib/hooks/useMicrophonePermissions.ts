@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 
 import { RESULTS } from 'react-native-permissions';
 
-import { checkMicrophonePermissions } from '../permissions';
+import { checkMicrophonePermissions } from '../permissions/microphonePermissions';
 
-const useMicrophonePermissions = () => {
+export const useMicrophonePermissions = () => {
   const [microphonePermission, setMicrophonePermission] = useState<string>(
     RESULTS.UNAVAILABLE,
   );
@@ -17,5 +17,3 @@ const useMicrophonePermissions = () => {
     isMicrophoneAccessGranted: microphonePermission === RESULTS.GRANTED,
   };
 };
-
-export default useMicrophonePermissions;

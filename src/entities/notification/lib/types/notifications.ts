@@ -56,6 +56,7 @@ export type EventPushNotification = Notification & {
     activityFlowId?: string;
     eventId?: string;
     entityName?: string;
+    targetSubjectId?: string | null;
     isLocal: 'true' | 'false';
     type: PushNotificationType;
   };

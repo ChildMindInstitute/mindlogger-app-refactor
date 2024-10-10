@@ -5,7 +5,10 @@ type Options = {
   enabled: boolean;
 };
 
-function useOnForeground(callback: () => void, options?: Partial<Options>) {
+export function useOnForeground(
+  callback: () => void,
+  options?: Partial<Options>,
+) {
   const callbackRef = useRef(callback);
 
   callbackRef.current = callback;
@@ -24,5 +27,3 @@ function useOnForeground(callback: () => void, options?: Partial<Options>) {
     };
   }, [enabled]);
 }
-
-export default useOnForeground;

@@ -1,7 +1,6 @@
 import {
   appletDetailsResponse,
   firstAppletDto,
-  completedEntityDto,
   secondAppletDto,
   appletDetailsDto,
   themeDto,
@@ -19,17 +18,16 @@ import {
   mappedAnalyticsWithEmptyAnswers,
   mappedApplets,
   appletThemeWithEmptyImages,
-} from './mappers.output.mock.ts';
+} from './mappers.output.mock';
 import {
   mapDtoToRespondentMeta,
-  mapCompletedEntityFromDto,
   mapAppletDtoToAppletVersion,
   mapApplets,
   mapAppletDetailsFromDto,
   mapThemeFromDto,
   mapActivitiesFromDto,
   mapAppletAnalytics,
-} from '../mappers.ts';
+} from '../mappers';
 
 describe('Applet entity mappers tests', () => {
   it('Should return mapped result for respondent meta', async () => {
@@ -46,18 +44,6 @@ describe('Applet entity mappers tests', () => {
     });
 
     expect(result).toEqual('');
-  });
-
-  it('Should return mapped result for completed entity', async () => {
-    const result = mapCompletedEntityFromDto(completedEntityDto);
-
-    expect(result).toEqual({
-      endAt: +new Date(
-        `${completedEntityDto.localEndDate} ${completedEntityDto.localEndTime}`,
-      ),
-      entityId: '0',
-      eventId: '3',
-    });
   });
 
   it('Should return applet version from Applet Dto', async () => {

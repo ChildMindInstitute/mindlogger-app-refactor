@@ -1,4 +1,5 @@
-import { ActivityDto, FlankerConfiguration } from '@app/shared/api';
+import { FlankerConfiguration } from '@app/shared/api/services/ActivityItemDto';
+import { ActivityDto } from '@app/shared/api/services/IActivityService';
 
 const testMessage1 =
   'Start by placing the point of the pen at the center of the spiral (S), and trace out along the dashed blue line to the end of the sprial (E).  Try to stay on the dashed blue line while tracing. You will do this five times.';
@@ -20,6 +21,7 @@ const grid: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -69,6 +71,7 @@ const vortex: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -118,6 +121,7 @@ const allDrawing: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -179,6 +183,7 @@ const FlankerWithImageActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -213,6 +218,7 @@ const FlankerWithStSFxActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -247,6 +253,7 @@ const FlankerWithTextSignsActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -281,6 +288,7 @@ const FlankerAllTypesActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -306,6 +314,7 @@ export const TextActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -390,6 +399,7 @@ export const SliderTestActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -446,6 +456,7 @@ export const NumberSelectActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -489,6 +500,7 @@ export const CheckboxTestActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -572,6 +584,7 @@ export const RadioTestActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -714,6 +727,7 @@ export const AllTextsActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -800,6 +814,7 @@ export const AllCheckboxesActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -1009,6 +1024,7 @@ export const AllRadioActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -1273,6 +1289,7 @@ export const AllSliderActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -1398,6 +1415,7 @@ export const PhotoActivityDto: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -1440,6 +1458,7 @@ export const VideoActivityDto: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -1482,6 +1501,7 @@ export const DateActivityDto: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -1524,6 +1544,7 @@ export const TimeActivityDto: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -1566,6 +1587,7 @@ export const AllMediaActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],
@@ -1587,6 +1609,7 @@ export const DemoActivity: ActivityDto = {
   responseIsEditable: false,
   order: 0,
   isHidden: false,
+  autoAssign: false,
   scoresAndReports: {
     showScoreSummary: false,
     reports: [],

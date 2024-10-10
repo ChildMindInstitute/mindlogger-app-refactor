@@ -1,8 +1,8 @@
-import { ImageUrl } from '@app/shared/lib';
+import { ImageUrl } from '@app/shared/lib/types/url';
 
-import { BoxProps } from '../..';
+import { BoxProps } from '../../base';
 
-type RadioOption = {
+export type RadioOption = {
   id: string;
   text: string;
   image: ImageUrl | null;
@@ -12,8 +12,6 @@ type RadioOption = {
   isHidden: boolean;
   value: number;
 };
-
-export default RadioOption;
 
 export type RadioItemProps = {
   value: string | null;

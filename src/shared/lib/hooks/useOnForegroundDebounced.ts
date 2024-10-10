@@ -3,7 +3,8 @@ import { AppState, AppStateStatus } from 'react-native';
 
 import { useDebouncedCallback } from 'use-debounce';
 
-import { IS_IOS, Logger } from '../';
+import { IS_IOS } from '../constants';
+import { getDefaultLogger } from '../services/loggerInstance';
 
 type Options = {
   enabled: boolean;
@@ -11,7 +12,7 @@ type Options = {
 
 const DebounceInterval = 200;
 
-function useOnForegroundDebounced(
+export function useOnForegroundDebounced(
   callback: () => void,
   options?: Partial<Options>,
 ) {
@@ -25,7 +26,7 @@ function useOnForegroundDebounced(
     const isStatusChanged = IS_IOS ? status !== previousStatus : true;
 
     if (status === 'active' && isStatusChanged && enabled) {
-      Logger.log(
+      getDefaultLogger().log(
         '[useOnForegroundDebounced.useDebouncedCallback]: Call callback',
       );
       callback();
@@ -42,5 +43,3 @@ function useOnForegroundDebounced(
     };
   }, [debouncedCallback]);
 }
-
-export default useOnForegroundDebounced;

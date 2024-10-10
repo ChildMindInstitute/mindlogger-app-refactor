@@ -1,6 +1,6 @@
 import { useNetInfo } from '@react-native-community/netinfo';
 
-const useIsOnline = (): boolean => {
+export const useIsOnline = (): boolean => {
   const networkState = useNetInfo();
 
   const result =
@@ -10,5 +10,3 @@ const useIsOnline = (): boolean => {
 
   return result;
 };
-
-export default useIsOnline;

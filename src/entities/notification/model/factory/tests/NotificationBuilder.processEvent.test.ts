@@ -4,14 +4,14 @@ import {
   AvailabilityType,
   NotificationTriggerType,
   PeriodicityType,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/event';
 import {
   BreakReason,
   EventNotificationDescribers,
   NotificationDescriber,
   NotificationType,
   ScheduleEvent,
-} from '@app/entities/notification/lib';
+} from '@app/entities/notification/lib/types/notificationBuilder';
 
 import {
   addTime,
@@ -19,7 +19,7 @@ import {
   getEmptyEvent,
   getEventEntity,
 } from './testHelpers';
-import { INotificationBuilder } from '../NotificationBuilder';
+import { INotificationBuilder } from '../INotificationBuilder';
 
 const anyDay = new Date(2018, 1, 2);
 
@@ -76,6 +76,7 @@ const getMockNotification = (index = 1) => {
     appletId: 'mock-applet-id',
     entityName: 'mock-entity-name',
     eventId: 'mock-event-id',
+    targetSubjectId: null,
     isActive: true,
     notificationBody: 'mock-notification-body',
     notificationHeader: 'mock-notification-header',

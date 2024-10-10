@@ -1,11 +1,14 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { ActivityResponse } from '@app/shared/api';
-import { getActivityDetailsKey, getDataFromQuery } from '@app/shared/lib';
+import { ActivityResponse } from '@app/shared/api/services/IActivityService';
+import {
+  getDataFromQuery,
+  getActivityDetailsKey,
+} from '@app/shared/lib/utils/reactQueryHelpers';
 
 import { mapToActivity } from '../mappers';
 
-class ActivityQueryService {
+export class ActivityQueryService {
   constructor(private queryClient: QueryClient) {}
 
   getActivityDetails(activityId: string) {
@@ -23,5 +26,3 @@ class ActivityQueryService {
     return mapToActivity(data.result);
   }
 }
-
-export default ActivityQueryService;

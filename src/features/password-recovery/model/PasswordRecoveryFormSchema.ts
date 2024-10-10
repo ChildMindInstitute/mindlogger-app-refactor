@@ -1,9 +1,9 @@
 import { t } from 'i18next';
 import { z } from 'zod';
 
-import { PASSWORD_MIN_LENGTH } from '@app/shared/lib';
+import { PASSWORD_MIN_LENGTH } from '@app/shared/lib/constants/password';
 
-const schema = z
+export const PasswordRecoveryFormSchema = z
   .object({
     newPassword: z
       .string()
@@ -26,5 +26,3 @@ const schema = z
     message: 'password_recovery_form:passwords_do_not_match',
     path: ['confirmPassword'],
   });
-
-export default schema;

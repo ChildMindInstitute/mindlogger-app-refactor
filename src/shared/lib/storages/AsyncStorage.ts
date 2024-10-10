@@ -1,6 +1,6 @@
 import { MMKV } from 'react-native-mmkv';
 
-class AsyncStorage {
+export class AsyncStorage {
   constructor(private storage: MMKV) {}
 
   getItem(key: string): Promise<string | null> {
@@ -28,5 +28,3 @@ class AsyncStorage {
     this.storage.clearAll();
   }
 }
-
-export default AsyncStorage;

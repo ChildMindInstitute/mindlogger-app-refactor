@@ -9,10 +9,10 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const config = {
   resolver: {
     extraNodeModules: {
-      stream: require.resolve('stream-browserify'),
-      crypto: require.resolve('crypto-browserify'),
-      buffer: require.resolve('buffer'),
-      events: require.resolve('events'),
+      stream: require.resolve('stream-browserify'), 
+      // crypto: require.resolve('crypto-browserify'),
+      // buffer: require.resolve('buffer'),
+      // events: require.resolve('events'),
     },
   },
   transformer: {

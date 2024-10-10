@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 
 import { CacheManager } from '@georstat/react-native-image-cache';
 
-import { getFilePath, Logger } from '@app/shared/lib';
+import { getDefaultLogger } from '../services/loggerInstance';
+import { getFilePath } from '../utils/file';
 
-function useCachedImage(uri?: string) {
+export function useCachedImage(uri?: string) {
   const [source, setSource] = useState<string | null>(uri ?? null);
 
   useEffect(() => {
@@ -19,12 +20,12 @@ function useCachedImage(uri?: string) {
         if (path) {
           setSource(getFilePath(path));
         } else {
-          Logger.warn(
+          getDefaultLogger().warn(
             `[useCachedImage] No cache entry was found for uri:${uri}`,
           );
         }
       } catch (error) {
-        Logger.error(
+        getDefaultLogger().error(
           `[useCachedImage] Fetching of the path for ${uri} failed: \n\n: ${error}`,
         );
       }
@@ -35,5 +36,3 @@ function useCachedImage(uri?: string) {
 
   return source;
 }
-
-export default useCachedImage;

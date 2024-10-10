@@ -1,5 +1,5 @@
-import { setupLocalization } from '@app/entities/localization';
-import { createJob } from '@shared/lib';
+import { setupLocalization } from '@app/entities/localization/lib/setupLocalization';
+import { createJob } from '@app/shared/lib/services/jobManagement';
 
 export default createJob(() => {
   return setupLocalization();

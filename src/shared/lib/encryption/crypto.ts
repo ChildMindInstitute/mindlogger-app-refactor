@@ -1,3 +1,3 @@
-import crypto from 'crypto-browserify';
+import crypto from 'crypto-browserify'
 
 export { crypto };

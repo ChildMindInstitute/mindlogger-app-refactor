@@ -3,10 +3,12 @@ import { AccessibilityProps } from 'react-native';
 
 import { styled } from '@tamagui/core';
 
-import { AnalyticsChart } from '@app/features/analytics-chart';
-import { Box, Center, Text } from '@shared/ui';
+import { AnalyticsChart } from '@app/features/analytics-chart/ui/AnalyticsChart';
+import { Box } from '@app/shared/ui/base';
+import { Center } from '@app/shared/ui/Center';
+import { Text } from '@app/shared/ui/Text';
 
-import { ActivityResponses } from '../lib';
+import { ActivityResponses } from '../lib/types';
 
 type Props = {
   responseData: ActivityResponses;
@@ -18,7 +20,7 @@ const ActivityCardContainer = styled(Center, {
   backgroundColor: '$white',
 });
 
-const ActivityAnalyticsCard: FC<Props & AccessibilityProps> = ({
+export const ActivityAnalyticsCard: FC<Props & AccessibilityProps> = ({
   responseData,
   accessibilityLabel,
 }) => {
@@ -49,5 +51,3 @@ const ActivityAnalyticsCard: FC<Props & AccessibilityProps> = ({
     </ActivityCardContainer>
   );
 };
-
-export default ActivityAnalyticsCard;

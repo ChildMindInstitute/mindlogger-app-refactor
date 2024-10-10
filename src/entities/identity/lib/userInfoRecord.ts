@@ -1,10 +1,10 @@
-import { createSecureStorage } from '@app/shared/lib';
-
-const storage = createSecureStorage('user-info');
+import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 
 const EMAIL_KEY = 'email';
 
 function UserInfoRecord() {
+  const storage = getDefaultStorageInstanceManager().getUserInfoStorage();
+
   function clear() {
     return storage.clearAll();
   }
@@ -25,4 +25,10 @@ function UserInfoRecord() {
   };
 }
 
-export default UserInfoRecord();
+let defaultRecord: ReturnType<typeof UserInfoRecord>;
+export const getDefaultUserInfoRecord = () => {
+  if (!defaultRecord) {
+    defaultRecord = UserInfoRecord();
+  }
+  return defaultRecord;
+};

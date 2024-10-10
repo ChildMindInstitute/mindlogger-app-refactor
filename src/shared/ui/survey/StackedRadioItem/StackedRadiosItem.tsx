@@ -1,13 +1,10 @@
 import { FC, useMemo } from 'react';
 
-import { colors } from '@app/shared/lib';
+import { colors } from '@app/shared/lib/constants/colors';
 
-import { RadioGroup } from '../..';
-import {
-  StackedItem,
-  StackedItemsGrid,
-  StackedRowItemValue,
-} from '../StackedItemsGrid';
+import { RadioGroup } from '../../base';
+import { StackedItemsGrid } from '../StackedItemsGrid/StackedItemsGrid';
+import { StackedItem, StackedRowItemValue } from '../StackedItemsGrid/types';
 
 type StackedRadioConfig = {
   rows: Array<StackedItem>;
@@ -26,7 +23,7 @@ type Props = {
   textReplacer: (markdown: string) => string;
 };
 
-const StackedRadios: FC<Props> = ({
+export const StackedRadios: FC<Props> = ({
   values,
   onChange,
   config,
@@ -100,5 +97,3 @@ const StackedRadios: FC<Props> = ({
     />
   );
 };
-
-export default StackedRadios;

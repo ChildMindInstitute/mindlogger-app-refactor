@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const schema = z.object({
+export const SignUpFormSchema = z.object({
   email: z
     .string()
     .trim()
@@ -18,6 +18,4 @@ const schema = z.object({
   lastName: z.string().trim().min(1, 'form_item:required'),
 });
 
-export default schema;
-
-export type TSignUpForm = z.infer<typeof schema>;
+export type TSignUpForm = z.infer<typeof SignUpFormSchema>;

@@ -2,7 +2,7 @@ import {
   AbTestStreamEventErrorType,
   LiveEvent,
   LiveEventDto,
-} from '@shared/lib';
+} from '@app/shared/lib/tcp/types';
 
 export const abTrailsInput: LiveEvent = {
   x: 1,

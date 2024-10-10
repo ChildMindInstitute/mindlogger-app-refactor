@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react';
 
 import { useFocusEffect } from '@react-navigation/native';
 
-const useOnFocus = (callback: () => void) => {
+export const useOnFocus = (callback: () => void) => {
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
 
@@ -10,5 +10,3 @@ const useOnFocus = (callback: () => void) => {
 
   useFocusEffect(focusHandler);
 };
-
-export default useOnFocus;

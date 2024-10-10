@@ -2,13 +2,17 @@ import { FC, useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors, useForceUpdate, useUploadProgress } from '@app/shared/lib';
-import { ActivityIndicator, Box, Text, YStack } from '@shared/ui';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useForceUpdate } from '@app/shared/lib/hooks/useForceUpdate';
+import { useUploadProgress } from '@app/shared/lib/hooks/useUploadProgress';
+import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
+import { Box, YStack } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 
-import ActivityProgressStep from './ActivityProgressStep';
-import CircleProgressStep from './CircleProgressStep';
+import { ActivityProgressStep } from './ActivityProgressStep';
+import { CircleProgressStep } from './CircleProgressStep';
 
-const ProcessingAnswers: FC = () => {
+export const ProcessingAnswers: FC = () => {
   const { t } = useTranslation();
 
   const {
@@ -75,5 +79,3 @@ const ProcessingAnswers: FC = () => {
     </Box>
   );
 };
-
-export default ProcessingAnswers;

@@ -4,7 +4,7 @@ import {
   LocalEventDetail,
   NotificationEventCallbacks,
   NotificationEventHandlers,
-} from './types';
+} from './types/notifications';
 
 export type WatchBackgroundEventArgs = Partial<NotificationEventCallbacks>;
 

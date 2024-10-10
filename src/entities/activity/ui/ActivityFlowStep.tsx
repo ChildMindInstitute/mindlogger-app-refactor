@@ -1,17 +1,18 @@
 import { FC } from 'react';
 
-import { IS_ANDROID } from '@app/shared/lib';
-import { Text, XStack, Image, BoxProps } from '@app/shared/ui';
+import { IS_ANDROID } from '@app/shared/lib/constants';
+import { BoxProps, Image, XStack } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 import { badge } from '@assets/images';
 
-import { ActivityListItem } from '../lib';
+import { ActivityListItem } from '../lib/types/activityListItem';
 
 type Props = BoxProps & {
   activity: ActivityListItem;
   hasOpacity: boolean;
 };
 
-const ActivityFlowStep: FC<Props> = props => {
+export const ActivityFlowStep: FC<Props> = props => {
   const { activity, hasOpacity } = props;
 
   const { activityPositionInFlow, numberOfActivitiesInFlow, activityFlowName } =
@@ -38,5 +39,3 @@ const ActivityFlowStep: FC<Props> = props => {
     </XStack>
   );
 };
-
-export default ActivityFlowStep;

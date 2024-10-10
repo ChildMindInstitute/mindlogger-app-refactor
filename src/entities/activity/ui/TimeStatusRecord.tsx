@@ -4,10 +4,14 @@ import { styled } from '@tamagui/core';
 import { addDays, startOfDay } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-import { convertToTimeOnNoun } from '@app/shared/lib';
-import { Box, BoxProps, Text } from '@app/shared/ui';
+import { convertToTimeOnNoun } from '@app/shared/lib/utils/dateTime';
+import { Box, BoxProps } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 
-import { ActivityListItem, ActivityStatus } from '../lib';
+import {
+  ActivityListItem,
+  ActivityStatus,
+} from '../lib/types/activityListItem';
 
 type Props = BoxProps & {
   activity: ActivityListItem;
@@ -20,7 +24,7 @@ const StatusLine = styled(Text, {
   fontWeight: '400',
 });
 
-const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
+export const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
   const { t } = useTranslation();
 
   const isStatusScheduled = activity.status === ActivityStatus.Scheduled;
@@ -86,5 +90,3 @@ const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
     </Box>
   );
 };
-
-export default TimeStatusRecord;
