@@ -1,6 +1,4 @@
-const extraNodeModules = require('node-libs-browser');
 module.exports = {
-  extraNodeModules,
   dependencies: {
     'react-native-vector-icons': {
       platforms: {
