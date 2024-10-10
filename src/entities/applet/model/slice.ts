@@ -239,6 +239,7 @@ const slice = createSlice({
 
       const completedProgression =
         existingProgression as EntityProgressionCompleted;
+      completedProgression.status = 'completed';
       if (isExpired) {
         if (availableUntilTimestamp && availableUntilTimestamp > 0) {
           completedProgression.endedAtTimestamp = availableUntilTimestamp;
