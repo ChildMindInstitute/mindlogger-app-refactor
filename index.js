@@ -3,11 +3,9 @@ import 'react-native-get-random-values';
 
 import { AppRegistry } from 'react-native';
 
-import PropTypes from 'prop-types';
-
 import { Buffer } from 'buffer';
-
 import process from 'process';
+import PropTypes from 'prop-types';
 
 import { jobRunner } from '@shared/lib/services/jobManagement';
 
