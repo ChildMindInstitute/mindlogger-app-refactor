@@ -1,43 +1,43 @@
-{
+﻿{
   "auth": {
     "email": "Email",
-    "email_address": "Email address",
-    "password": "Password",
-    "i_agree": "I agree to the",
-    "terms_of_service": "Terms of Service",
-    "password_updated": "Password updated"
+    "email_address": "Διεύθυνση email",
+    "password": "Κωδικός πρόσβασης",
+    "i_agree": "Συμφωνώ με τους",
+    "terms_of_service": "Όρους χρήσης υπηρεσιών του MindLogger",
+    "password_updated": "Ο κωδικός πρόσβασης ενημερώθηκε"
   },
   "activity": {
-    "incorrect_answer": "Incorrect answer. Please try again",
-    "failed": "Failed",
-    "flanker_accuracy_warn": "*The timestamps collected for an android are not as accurate as iOS devices.",
-    "please_wait": "Please wait",
-    "activity_all_items_hidden": "\"{{entityName}}\" cannot be started because all items inside the activity are hidden",
-    "flow_all_items_hidden": "\"{{entityName}}\" cannot be started because it contains an activity in which all items are hidden",
+    "incorrect_answer": "Λανθασμένη απάντηση. Προσπαθήστε ξανά",
+    "failed": "Αποτυχία",
+    "flanker_accuracy_warn": "*Οι χρονικές σημάνσεις που συλλέγονται για μια συσκευή Android δεν είναι τόσο ακριβείς όσο για συσκευές iOS.",
+    "please_wait": "Περιμένετε",
+    "activity_all_items_hidden": "Το «{{entityName}}» δεν μπορεί να αρχίσει επειδή όλα τα στοιχεία εντός της δραστηριότητας είναι κρυμμένα",
+    "flow_all_items_hidden": "Το «{{entityName}}» δεν μπορεί να αρχίσει επειδή περιέχει μια δραστηριότητα στην οποία όλα τα στοιχεία είναι κρυμμένα",
     "progress": {
-      "upload_files": "Uploading your files...",
-      "encrypt_answers": "Encrypting your answers...",
-      "upload_answers": "Uploading your answers...",
-      "completed": "Activity uploaded"
+      "upload_files": "Μεταφόρτωση των αρχείων σας...",
+      "encrypt_answers": "Κρυπτογράφηση των απαντήσεών σας...",
+      "upload_answers": "Μεταφόρτωση των απαντήσεών σας...",
+      "completed": "Η δραστηριότητα μεταφορτώθηκε"
     },
-    "step": "Step"
+    "step": "Βήμα"
   },
   "activity_time": {
-    "time_remaining": "remaining for this item"
+    "time_remaining": "απομένει(-ουν) για το στοιχείο αυτό"
   },
   "timed_activity": {
-    "time_to_complete": "Time to complete",
-    "time_to_complete_hm": "Time to complete: {{hours}} hours and {{minutes}} minutes",
-    "hours": "hours"
+    "time_to_complete": "Χρόνος για ολοκλήρωση",
+    "time_to_complete_hm": "Χρόνος για ολοκλήρωση: {{hours}} ώρες και {{minutes}} λεπτά",
+    "hours": "ώρες"
   },
   "activity_summary": {
-    "terms_text": "I understand that the information provided by this questionnaire is not intended to replace the advice, diagnosis, or treatment offered by a medical or mental health professional, and that my anonymous responses may be used and shared for general research on children’s mental health.",
-    "footer_text": "CHILD MIND INSTITUTE, INC. AND CHILD MIND MEDICAL PRACTICE, PLLC (TOGETHER, “CMI”) DOES NOT DIRECTLY OR INDIRECTLY PRACTICE MEDICINE OR DISPENSE MEDICAL ADVICE AS PART OF THIS QUESTIONNAIRE. CMI ASSUMES NO LIABILITY FOR ANY DIAGNOSIS, TREATMENT, DECISION MADE, OR ACTION TAKEN IN RELIANCE UPON INFORMATION PROVIDED BY THIS QUESTIONNAIRE, AND ASSUMES NO RESPONSIBILITY FOR YOUR USE OF THIS QUESTIONNAIRE.",
+    "terms_text": "Κατανοώ ότι οι πληροφορίες που παρέχονται από το ερωτηματολόγιο αυτό δεν αποσκοπούν σε αντικατάσταση των συμβουλών, της διάγνωσης ή της θεραπείας που παρέχονται από έναν ιατρό ή επαγγελματία ψυχικής υγείας, καθώς επίσης ότι οι ανώνυμες απαντήσεις μου ενδέχεται να χρησιμοποιηθούν και να κοινοποιηθούν για σκοπούς γενικής έρευνας σχετικά με την ψυχική υγεία των παιδιών.",
+    "footer_text": "ΟΙ CHILD MIND INSTITUTE, INC. ΚΑΙ CHILD MIND MEDICAL PRACTICE, PLLC (ΣΥΛΛΟΓΙΚΑ «CMI») ΔΕΝ ΑΣΚΟΥΝ ΙΑΤΡΙΚΗ ΚΑΙ ΔΕΝ ΧΟΡΗΓΟΥΝ ΙΑΤΡΙΚΕΣ ΣΥΜΒΟΥΛΕΣ ΑΜΕΣΑ Ή ΕΜΜΕΣΑ ΣΤΟ ΠΛΑΙΣΙΟ ΤΟΥ ΕΡΩΤΗΜΑΤΟΛΟΓΙΟΥ ΑΥΤΟΥ. Η CMI ΔΕΝ ΑΝΑΛΑΜΒΑΝΕΙ ΚΑΜΙΑ ΕΥΘΥΝΗ ΓΙΑ ΟΠΟΙΑΔΗΠΟΤΕ ΔΙΑΓΝΩΣΗ, ΘΕΡΑΠΕΙΑ, ΑΠΟΦΑΣΗ ΠΟΥ ΛΗΦΘΗΚΕ Ή ΕΝΕΡΓΕΙΑ ΠΟΥ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ Η ΟΠΟΙΑ ΒΑΣΙΣΤΗΚΕ ΣΕ ΠΛΗΡΟΦΟΡΙΕΣ ΠΟΥ ΠΑΡΕΧΟΝΤΑΙ ΑΠΟ ΑΥΤΟ ΤΟ ΕΡΩΤΗΜΑΤΟΛΟΓΙΟ, ΚΑΙ ΔΕΝ ΑΝΑΛΑΜΒΑΝΕΙ ΚΑΜΙΑ ΕΥΘΥΝΗ ΩΣ ΠΡΟΣ ΤΗΝ ΑΠΟ ΜΕΡΟΥΣ ΣΑΣ ΧΡΗΣΗ ΤΟΥ ΕΡΩΤΗΜΑΤΟΛΟΓΙΟΥ.",
     "score_on_subscale": "The score on the {{name}} subscale was",
-    "save": "Save",
-    "summary": "Summary",
-    "alerts": "Alerts",
-    "report_summary": "Report Summary",
+    "save": "Αποθήκευση",
+    "summary": "Σύνοψη",
+    "alerts": "Ειδοποιήσεις",
+    "report_summary": "Σύνοψη αναφοράς",
     "not_yet_completed": "Not yet completed",
     "last_completed": "Last completed",
     "unscheduled": "Unscheduled",
@@ -53,121 +53,121 @@
     "share_all_reports": "Share All Reports"
   },
   "activity_chart": {
-    "title": "Please take the assessment for data to be displayed.",
-    "monday": "M",
-    "tuesday": "T",
-    "wednesday": "W",
-    "thursday": "T",
-    "friday": "F",
-    "saturday": "S",
-    "sunday": "S"
+    "title": "Κάντε την αξιολόγηση για να εμφανιστούν τα δεδομένα.",
+    "monday": "Δ",
+    "tuesday": "Τ",
+    "wednesday": "Τ",
+    "thursday": "Π",
+    "friday": "Π",
+    "saturday": "Σ",
+    "sunday": "Κ"
   },
   "calendar": {
-    "months": "January_February_March_April_May_June_July_August_September_October_November_December",
-    "weekdays": "Sun_Mon_Tue_Wed_Thu_Fri_Sat",
-    "x_days": "M_T_W_T_F_S_S"
+    "months": "Ιανουάριος_Φεβρουάριος_Μάρτιος_Απρίλιος_Μάιος_Ιούνιος_Ιούλιος_Αύγουστος_Σεπτέμβριος_Οκτώβριος_Νοέμβριος_Δεκέμβριος",
+    "weekdays": "Κυρ_Δευ_Τρί_Τετ_Πέμ_Παρ_Σάβ",
+    "x_days": "Δ_Τ_Τ_Π_Π_Σ_Κ"
   },
   "applet_data": {
-    "title": "Please take the assessment for data to be displayed."
+    "title": "Κάντε την αξιολόγηση για να εμφανιστούν τα δεδομένα."
   },
   "widget_error": {
-    "error_text": "There was a problem loading this screen.",
-    "error_description": "Please ensure you have the latest version of MindLogger installed, then contact your activity administrator if the problem still occurs."
+    "error_text": "Υπήρξε πρόβλημα κατά τη φόρτωση αυτής της οθόνης.",
+    "error_description": "Βεβαιωθείτε ότι έχετε εγκαταστήσει την πιο πρόσφατη έκδοση του MindLogger και, στη συνέχεια, επικοινωνήστε με τον διαχειριστή της δραστηριότητάς σας εάν το πρόβλημα συνεχίζεται."
   },
   "about": {
-    "about": "About",
-    "applets_title": "Find out more about each of your applets and about the MindLogger platform.",
-    "data_title": "Find out more about the MindLogger data collection platform by tapping 'About\nMindLogger' below.",
-    "about_mindLogger": "About MindLogger",
-    "icons_title": "NounProject icons were created by Alina Oleynik (survey), beth bolton (book), and\nShakeel (chart)",
-    "device_id": "Device ID"
+    "about": "Σχετικά",
+    "applets_title": "Μάθετε περισσότερα για καθεμία από τις βοηθητικές εφαρμογές σας και για την πλατφόρμα MindLogger.",
+    "data_title": "Μάθετε περισσότερα για την πλατφόρμα συλλογής δεδομένων MindLogger πατώντας στο «Σχετικά με το MindLogger» παρακάτω.",
+    "about_mindLogger": "Σχετικά με το MindLogger",
+    "icons_title": "Τα εικονίδια NounProject δημιουργήθηκαν από τους Alina Oleynik (έρευνα), Beth Bolton (βιβλίο) και Shakeel (διάγραμμα)",
+    "device_id": "Αναγνωριστικό συσκευής"
   },
   "about_app": {
-    "title_with_version": "What is MindLogger? v.{{version}}",
-    "title": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
-    "subtitle": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
-    "mindlogger_about": "## \n ### What is MindLogger? \n\n This app is part of the open source MindLogger data collection and analysis platform designed by the MATTER Lab at the Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### What can MindLogger do? \n\n MindLogger's feature set is growing, and currently supports a wide variety of input types. Each screen in a MindLogger activity can include any of the following: \n  - Text, picture, and audio \n  - Question followed by image and/or text response options \n  - Slider bar \n  - Text entry \n  - Table entry \n  - Audio record \n  - Photo/video capture \n  - Drawing or tapping \n  - Current geolocation \n  - Simple cognitive task \n  - Delay before response \n  - Timer \n  - Conditional logic to determine where to go next \n\n #### Where can I learn more? \n Please visit [https://mindlogger.org](https://mindlogger.org) for more information.  \n ## [Support]({{credits_link}}) \n\n ##### Cheers, \n\n ##### MindLogger Team \n\n ##### Child Mind Institute"
+    "title_with_version": "Τι είναι το MindLogger; έκδ.{{version}}",
+    "title": "Εκτός εάν αναφέρεται αλλού, τα εικονίδια προέρχονται από τα OpenMoji και NounProject.",
+    "subtitle": "Εκτός εάν αναφέρεται αλλού, τα εικονίδια προέρχονται από τα OpenMoji και NounProject.",
+    "mindlogger_about": "## ### Τι είναι το MindLogger; Η εφαρμογή αυτή αποτελεί μέρος της πλατφόρμας συλλογής και ανάλυσης δεδομένων ανοιχτού κώδικα MindLogger, η οποία σχεδιάστηκε από το MATTER Lab στο Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). # ### Τι μπορεί να κάνει το MindLogger; Το σύνολο λειτουργιών του MindLogger αυξάνεται συνεχώς και επί του παρόντος υποστηρίζει μια μεγάλη γκάμα τύπων εισαγωγής δεδομένων. Κάθε οθόνη σε μια δραστηριότητα MindLogger μπορεί να περιλαμβάνει οποιοδήποτε από τα ακόλουθα: - Κείμενο, εικόνα και ήχο - Ερώτηση ακολουθούμενη από επιλογές απάντησης εικόνας ή/και κειμένου - Ρυθμιστικό ολίσθησης - Εισαγωγή κειμένου - Εισαγωγή πίνακα - Ηχογράφηση - Λήψη φωτογραφίας/βίντεο - Σχεδίαση ή χρήση αφής για επιλογή - Τρέχουσα γεωγραφική θέση - Απλή γνωστική εργασία - Καθυστέρηση πριν από την απάντηση - Χρονόμετρο - Υποθετική λογική, για να προσδιοριστεί η επόμενη ερώτηση #### Πού μπορώ να μάθω περισσότερες πληροφορίες; Επισκεφτείτε το [https://mindlogger.org](https://mindlogger.org) για περισσότερες πληροφορίες. ## [Υποστήριξη]({{credits_link}}) ##### Με φιλικούς χαιρετισμούς, ##### Η Ομάδα MindLogger ##### Child Mind Institute"
   },
   "applet_footer": {
-    "surveys": "Surveys",
-    "data": "Data",
-    "about": "About",
-    "activities": "Activities",
-    "activity": "Activity"
+    "surveys": "Έρευνες",
+    "data": "Δεδομένα",
+    "about": "Σχετικά",
+    "activities": "Δραστηριότητες",
+    "activity": "Δραστηριότητα"
   },
   "applet_invite_flow": {
-    "back": "Back",
-    "next": "Next"
+    "back": "Πίσω",
+    "next": "Επόμενο"
   },
   "live_connection": {
-    "disconnect": "DISCONNECT",
-    "connect": "SUBMIT",
-    "connect_to_server": "Connect To Server",
-    "remember": "Remember",
-    "ip": "IP Address",
-    "port": "Port",
-    "connection_closed": "TCP Connection was closed",
-    "connection_error": "Connection failed. Please double check ip and port",
-    "connection_set_error": "Cannot set connection",
-    "live_connection": "Live Connection",
-    "not_available": "not available"
+    "disconnect": "ΑΠΟΣΥΝΔΕΣΗ",
+    "connect": "ΥΠΟΒΟΛΗ",
+    "connect_to_server": "Σύνδεση σε διακομιστή",
+    "remember": "Απομνημόνευση",
+    "ip": "Διεύθυνση IP",
+    "port": "Θύρα",
+    "connection_closed": "Η σύνδεση TCP έκλεισε",
+    "connection_error": "Η σύνδεση απέτυχε. Ελέγξτε ξανά τη διεύθυνση IP και τη θύρα",
+    "connection_set_error": "Δεν είναι δυνατή η ρύθμιση της σύνδεσης",
+    "live_connection": "Ζωντανή σύνδεση",
+    "not_available": "μη διαθέσιμη"
   },
   "join_invite": {
-    "click_below": "Click below if you are ready to join this study. You can remove yourself from this study and/or delete your data at any time with no consequences.",
-    "decline": "If you do not feel comfortable with sharing your data from this study, you may decline this invitation. ",
-    "decline_title": "Decline"
+    "click_below": "Κάντε κλικ παρακάτω εάν είστε έτοιμοι να συμμετάσχετε στην έρευνα αυτή. Μπορείτε να αφαιρέσετε τον εαυτό σας από αυτήν τη μελέτη ή/και να διαγράψετε τα δεδομένα σας οποιαδήποτε στιγμή χωρίς συνέπειες.",
+    "decline": "Εάν δεν αισθάνεστε άνετα με την κοινή χρήση των δεδομένων σας από τη συγκεκριμένη έρευνα, μπορείτε να απορρίψετε την πρόσκληση αυτή. ",
+    "decline_title": "Απόρριψη"
   },
   "applet_list_component": {
-    "about_title": "About MindLogger",
-    "no_applets_yet": "You have no applets.",
-    "noon": "Noon",
-    "midnight": "Midnight",
-    "refresh_error_header": "Refresh error",
-    "applets_not_refreshed": "The following applets were not refreshed:",
-    "common_refresh_error": "The applets list was not refreshed. Please try again."
+    "about_title": "Σχετικά με το MindLogger",
+    "no_applets_yet": "Δεν έχετε βοηθητικές εφαρμογές.",
+    "noon": "Μεσημέρι",
+    "midnight": "Μεσάνυχτα",
+    "refresh_error_header": "Σφάλμα ανανέωσης",
+    "applets_not_refreshed": "Οι παρακάτω βοηθητικές εφαρμογές δεν ανανεώθηκαν:",
+    "common_refresh_error": "Η λίστα βοηθητικών εφαρμογών δεν ανανεώθηκε. Προσπαθήστε ξανά."
   },
   "activity_list_component": {
-    "no_activities_yet": "No activities specified yet",
-    "insufficient_data_error": "This applet was not refreshed. Please try to refresh again.",
-    "other_error": "Undefined error occurred"
+    "no_activities_yet": "Δεν έχουν καθοριστεί ακόμη δραστηριότητες",
+    "insufficient_data_error": "Αυτή η βοηθητική εφαρμογή δεν ανανεώθηκε. Προσπαθήστε να ανανεώσετε ξανά.",
+    "other_error": "Προέκυψε απροσδιόριστο σφάλμα"
   },
   "applet_settings": {
-    "applet_not_defined": "There isn't an applet defined.",
-    "want_remove": "If you want to remove this applet, but keep your data, click below",
-    "remove": "Remove",
-    "want_delete": "If you want to delete your data from this applet and remove it, click below.",
-    "remove_delete": "Remove and Delete Data",
-    "alert_title": "Are you sure you want to delete your data?",
-    "alert_message": "You won't be able to recover it",
-    "cancel_text": "No, cancel",
-    "confirm_text": "Yes, delete it"
+    "applet_not_defined": "Δεν έχει οριστεί κάποια βοηθητική εφαρμογή.",
+    "want_remove": "Εάν θέλετε να αφαιρέσετε αυτήν τη βοηθητική εφαρμογή, αλλά να διατηρήσετε τα δεδομένα σας, κάντε κλικ παρακάτω",
+    "remove": "Αφαίρεση",
+    "want_delete": "Εάν θέλετε να διαγράψετε τα δεδομένα σας από αυτήν τη βοηθητική εφαρμογή και να την αφαιρέσετε, κάντε κλικ παρακάτω.",
+    "remove_delete": "Αφαίρεση και διαγραφή δεδομένων",
+    "alert_title": "Θέλετε σίγουρα να διαγράψετε τα δεδομένα σας;",
+    "alert_message": "Δεν θα μπορείτε να τα ανακτήσετε",
+    "cancel_text": "Όχι, ακύρωση",
+    "confirm_text": "Ναι, να διαγραφούν"
   },
   "change_pass_form": {
-    "update": "Update",
-    "cur_pass_placeholder": "Current password",
-    "new_pass_placeholder": "New password",
-    "error": "Unable to update user details.",
-    "submission_error": "The current password you entered was incorrect.",
-    "change_pass": "Change Password",
-    "password_at_least_characters": "Password must be at least {{min}} characters"
+    "update": "Ενημέρωση",
+    "cur_pass_placeholder": "Τρέχων κωδικός πρόσβασης",
+    "new_pass_placeholder": "Νέος κωδικός πρόσβασης",
+    "error": "Δεν είναι δυνατή η ενημέρωση των στοιχείων χρήστη.",
+    "submission_error": "Ο τρέχων κωδικός πρόσβασης που εισαγάγατε ήταν εσφαλμένος.",
+    "change_pass": "Αλλαγή κωδικού πρόσβασης",
+    "password_at_least_characters": "Ο κωδικός πρόσβασης πρέπει να αποτελείται από τουλάχιστον {{min}} χαρακτήρες"
   },
   "password_recovery_form": {
-    "password_at_least_characters": "Password must be at least {{min}} characters",
-    "password_no_spaces": "Password must not contain spaces",
-    "passwords_do_not_match": "Passwords do not match",
-    "password_confirmation_required": "Please confirm your password",
-    "new_password_placeholder": "New password",
-    "confirm_password_placeholder": "Confirm password",
-    "submit": "Submit",
-    "invalid_password_reset_link": "This link is invalid or expired.",
-    "click_to_reset_password": "Please click below to reset your password.",
-    "forgot_password": "Forgot Password",
-    "success": "Your password has been reset successfully. Please log in with your new password.",
-    "error": "Error resetting your password"
+    "password_at_least_characters": "Ο κωδικός πρόσβασης πρέπει να αποτελείται από τουλάχιστον {{min}} χαρακτήρες",
+    "password_no_spaces": "Ο κωδικός πρόσβασης δεν πρέπει να περιέχει κενά",
+    "passwords_do_not_match": "Οι κωδικοί πρόσβασης δεν ταιριάζουν",
+    "password_confirmation_required": "Επιβεβαιώστε τον κωδικό πρόσβασής σας",
+    "new_password_placeholder": "Νέος κωδικός πρόσβασης",
+    "confirm_password_placeholder": "Επιβεβαίωση κωδικού πρόσβασης",
+    "submit": "Υποβολή",
+    "invalid_password_reset_link": "Ο σύνδεσμος αυτός δεν είναι έγκυρος ή έχει λήξει.",
+    "click_to_reset_password": "Κάντε κλικ παρακάτω για επαναφορά του κωδικού πρόσβασής σας.",
+    "forgot_password": "Ξέχασα τον κωδικό πρόσβασης",
+    "success": "Έγινε επαναφορά του κωδικού πρόσβασής σας με επιτυχία. Συνδεθείτε με τον νέο κωδικό πρόσβασής σας.",
+    "error": "Σφάλμα κατά την επαναφορά του κωδικού πρόσβασής σας"
   },
   "change_study": {
     "reset": "Reset",
-    "submit": "Submit",
+    "submit": "Υποβολή",
     "enter_url_manually": "Enter URL Manually",
     "scan_qr": "Scan QR",
     "successfully_changed": "Server Url was changed successfully.",
@@ -179,221 +179,221 @@
     "no": "No"
   },
   "consent": {
-    "this_app_provides": "This app provides a easy way to collect survey, voice, drawing activities.",
-    "i_understand": "I understand that viewing certain images can be uncomfortable while using this app",
-    "i_will_allow": "I will allow the Child Mind Institute to store data from use of this app on a secure\ncloud server, and to access this information for clinical and research purposes",
-    "i_premit": "I permit the Child Mind Institute to contact me regarding information gathered from\nthis app for clinical or research purposes.",
-    "next": "Next"
+    "this_app_provides": "Αυτή η εφαρμογή παρέχει έναν εύκολο τρόπο συλλογής δραστηριοτήτων έρευνας, φωνής και σχεδίασης.",
+    "i_understand": "Κατανοώ ότι η προβολή ορισμένων εικόνων μπορεί να με κάνει να νιώσω άβολα κατά τη χρήση αυτής της εφαρμογής",
+    "i_will_allow": "Θα επιτρέψω στο Child Mind Institute να αποθηκεύει δεδομένα από τη χρήση αυτής της εφαρμογής σε έναν ασφαλή διακομιστή cloud, καθώς επίσης να έχει πρόσβαση στις πληροφορίες αυτές για κλινικούς και ερευνητικούς σκοπούς",
+    "i_premit": "Επιτρέπω στο Child Mind Institute να επικοινωνήσει μαζί μου σχετικά με πληροφορίες που συλλέχθηκαν από την εφαρμογή αυτή για κλινικούς ή ερευνητικούς σκοπούς.",
+    "next": "Επόμενο"
   },
   "forgot_pass_form": {
-    "reset_pass": "Reset Password",
-    "enter_email_mess": "Please enter your email address",
-    "invalid_email": "Invalid email address",
-    "email_address": "Email address",
-    "email_send_success": "Reset email has been sent to <strong>{{email}}</strong> if the account exists.",
-    "email_send_error": "Unable to send reset email at this time.",
-    "forgot_password": "Forgot password?"
+    "reset_pass": "Επαναφορά κωδικού πρόσβασης",
+    "enter_email_mess": "Εισαγάγετε τη διεύθυνση email σας",
+    "invalid_email": "Μη έγκυρη διεύθυνση email",
+    "email_address": "Διεύθυνση email",
+    "email_send_success": "Το email επαναφοράς έχει σταλεί στο <strong>{{email}}</strong>, εάν υπάρχει ο λογαριασμός.",
+    "email_send_error": "Δεν είναι δυνατή η αποστολή email επαναφοράς αυτήν τη στιγμή.",
+    "forgot_password": "Ξεχάσατε τον κωδικό πρόσβασης;"
   },
   "login": {
-    "new_user": "New User",
-    "account_create": "Create an account",
-    "forgot_password": "Forgot Password?",
+    "new_user": "Νέος χρήστης",
+    "account_create": "Δημιουργήστε λογαριασμό",
+    "forgot_password": "Ξεχάσατε τον κωδικό πρόσβασης;",
     "what_is": "What is",
-    "login_error": "Login failed.",
-    "password_at_least_characters": "Password must be at least 6 characters"
+    "login_error": "Η σύνδεση απέτυχε.",
+    "password_at_least_characters": "Ο κωδικός πρόσβασης πρέπει να αποτελείται από τουλάχιστον 6 χαρακτήρες"
   },
   "login_form": {
-    "login": "Συνδεθείτε",
-    "email_placeholder": "E-mail",
-    "password": "Σύνθημα"
+    "login": "Σύνδεση",
+    "email_placeholder": "Email",
+    "password": "Κωδικός πρόσβασης"
   },
   "logout_warning": {
-    "warning": "Logout Warning",
-    "uploads_in_progress": "Uploads in progress",
-    "currently_uploading": "You have responses that are currently uploading. If you log out now and then log in as a different user, your responses will be lost.",
-    "not_uploaded": "You have not uploaded responses. If you log out now and then log in as a different user, your responses will be lost.",
-    "sure_logout": "Are you sure that you want to log out?",
-    "cancel": "Cancel",
-    "logout": "Logout"
+    "warning": "Προειδοποίηση αποσύνδεσης",
+    "uploads_in_progress": "Μεταφορτώσεις σε εξέλιξη",
+    "currently_uploading": "Έχετε απαντήσεις που μεταφορτώνονται αυτήν τη στιγμή. Εάν αποσυνδεθείτε τώρα και κατόπιν συνδεθείτε ως διαφορετικός χρήστης, οι απαντήσεις σας θα χαθούν.",
+    "not_uploaded": "Δεν έχετε μεταφορτώσει απαντήσεις. Εάν αποσυνδεθείτε τώρα και κατόπιν συνδεθείτε ως διαφορετικός χρήστης, οι απαντήσεις σας θα χαθούν.",
+    "sure_logout": "Θέλετε σίγουρα να αποσυνδεθείτε;",
+    "cancel": "Άκυρο",
+    "logout": "Αποσύνδεση"
   },
   "settings": {
-    "logged_out": "You've logged out.",
-    "change_pass": "Change Password",
-    "use_cellular_data": "Use Cellular Data",
-    "logout": "Logout",
-    "permanently_delete_account": "Permanently Delete Account",
-    "user_settings": "User Settings",
-    "upload_logs": "Upload Logs",
-    "create_new_password": "Create a new password"
+    "logged_out": "Έχετε αποσυνδεθεί.",
+    "change_pass": "Αλλαγή κωδικού πρόσβασης",
+    "use_cellular_data": "Χρήση δεδομένων κινητής τηλεφωνίας",
+    "logout": "Αποσύνδεση",
+    "permanently_delete_account": "Οριστική διαγραφή λογαριασμού",
+    "user_settings": "Ρυθμίσεις χρήστη",
+    "upload_logs": "Μεταφόρτωση αρχείων καταγραφής",
+    "create_new_password": "Δημιουργήστε νέο κωδικό πρόσβασης"
   },
   "language_screen": {
-    "app_language": "Application language",
-    "change_app_language": "Change Language",
+    "app_language": "Γλώσσα εφαρμογής",
+    "change_app_language": "Αλλαγή γλώσσας",
     "en": "English",
     "fr": "Français",
-    "el": "ελληνικά"
+    "el": "Ελληνικά"
   },
   "application_logs_screen": {
-    "upload_button": "Upload logs",
-    "title": "Having technical issues? Your log files will help our team troubleshoot.",
-    "subTitle": "Please upload them using the button below.",
-    "success": "Success - we received your logs.",
-    "error": "Error - logs not sent. Please try again."
+    "upload_button": "Μεταφόρτωση αρχείων καταγραφής",
+    "title": "Αντιμετωπίζετε τεχνικά προβλήματα; Τα αρχεία καταγραφής σας θα βοηθήσουν την ομάδα μας να επιλύσει τα προβλήματα.",
+    "subTitle": "Μεταφορτώστε τα χρησιμοποιώντας το παρακάτω κουμπί.",
+    "success": "Επιτυχία - λάβαμε τα αρχεία καταγραφής σας.",
+    "error": "Σφάλμα - τα αρχεία καταγραφής δεν στάλθηκαν. Προσπαθήστε ξανά."
   },
   "sign_up_form": {
-    "sign_up": "Sign Up",
-    "error": "Sign up failed: username may already be in use.",
-    "new_user": "New User",
-    "username_validation_error": "Username must be at least 4 characters, start with a letter, and may only contain letters, numbers, dashes, and dots.",
-    "email_validation_error": "Looks like this email is incomplete",
+    "sign_up": "Εγγραφή",
+    "error": "Η εγγραφή απέτυχε: το όνομα χρήστη ενδέχεται να χρησιμοποιείται ήδη.",
+    "new_user": "Νέος χρήστης",
+    "username_validation_error": "Το όνομα χρήστη πρέπει να αποτελείται από τουλάχιστον 4 χαρακτήρες, να αρχίζει με γράμμα και να περιέχει μόνο γράμματα, αριθμούς, παύλες και τελείες.",
+    "email_validation_error": "Φαίνεται ότι το email αυτό δεν είναι πλήρες",
     "email_placeholder": "Email",
-    "first_name": "First Name",
-    "last_name": "Last Name",
-    "password_placeholder": "Password",
-    "please_accept_terms": "Please accept terms of service.",
-    "email_looks_incomplete": "Looks like this email is incomplete",
-    "sign_up_agree": "By signing up, you agree to MindLogger’s"
+    "first_name": "Όνομα",
+    "last_name": "Επώνυμο",
+    "password_placeholder": "Κωδικός πρόσβασης",
+    "please_accept_terms": "Αποδεχτείτε τους όρους χρήσης υπηρεσιών.",
+    "email_looks_incomplete": "Φαίνεται ότι το email αυτό δεν είναι πλήρες",
+    "sign_up_agree": "Με την εγγραφή σας, συμφωνείτε με τους"
   },
   "password_requirements": {
-    "at_least_characters": "6 characters",
-    "no_blank_spaces": "no blank spaces",
-    "must_include": "Password must include:"
+    "at_least_characters": "να έχει 6 χαρακτήρες",
+    "no_blank_spaces": "να μην περιέχει κενά",
+    "must_include": "Ο κωδικός πρόσβασης πρέπει:"
   },
   "geolocation": {
-    "get_location": "GET LOCATION",
-    "must_enable_location": "You must enable Location services to complete this task. Please grant MindLogger permission in your iOS Settings and press the button again.",
-    "must_enable_location_subtitle": "You must enable Location services to complete this task. Please press the button again and grant MindLogger permission to use your location.",
-    "location_saved": "Location saved.",
-    "service_not_available": "Location service is not available."
+    "get_location": "ΛΗΨΗ ΤΟΠΟΘΕΣΙΑΣ",
+    "must_enable_location": "Πρέπει να ενεργοποιήσετε τις Υπηρεσίες τοποθεσίας για να ολοκληρώσετε την εργασία αυτή. Παραχωρήστε άδεια στο MindLogger από τις Ρυθμίσεις iOS και πατήστε ξανά το κουμπί.",
+    "must_enable_location_subtitle": "Πρέπει να ενεργοποιήσετε τις Υπηρεσίες τοποθεσίας για να ολοκληρώσετε την εργασία αυτή. Πατήστε ξανά το κουμπί και παραχωρήστε στο MindLogger άδεια να χρησιμοποιεί την τοποθεσία σας.",
+    "location_saved": "Η τοποθεσία αποθηκεύτηκε.",
+    "service_not_available": "Η υπηρεσία τοποθεσίας δεν είναι διαθέσιμη."
   },
   "select": {
-    "select_one": "Select one",
+    "select_one": "Επιλέξτε έναν",
     "no_items": "No items"
   },
   "permissions": {
-    "alert_button_cancel": "Dismiss",
-    "alert_button_ok": "Open Settings",
-    "alarm_permission_warning": "Alarm permissions request",
-    "alarm_permission_disabled": "Please turn on the alarm permissions on your device to receive the MindLogger reminders on schedule. Please be aware that the application will be closed automatically once you turn on the alarm permissions.",
-    "gallery": "\"MindLogger\" would like to use your gallery to complete this task",
-    "camera": "\"MindLogger\" would like to use your camera to complete this task"
+    "alert_button_cancel": "Απόρριψη",
+    "alert_button_ok": "Άνοιγμα Ρυθμίσεων",
+    "alarm_permission_warning": "Αίτημα αδειών ειδοποιήσεων",
+    "alarm_permission_disabled": "Ενεργοποιήστε τις άδειες ειδοποιήσεων στη συσκευή σας για να λαμβάνετε τις υπενθυμίσεις του MindLogger βάσει χρονοδιαγράμματος. Λάβετε υπόψη ότι η εφαρμογή θα κλείσει αυτόματα μόλις ενεργοποιήσετε τις άδειες ειδοποιήσεων.",
+    "gallery": "Το MindLogger θα ήθελε να χρησιμοποιήσει τη συλλογή φωτογραφιών σας για να ολοκληρώσει αυτήν την εργασία",
+    "camera": "Το MindLogger θα ήθελε να χρησιμοποιήσει την κάμερά σας για να ολοκληρώσει αυτήν την εργασία"
   },
   "media": {
-    "alert_message": "These can be configured in Settings",
-    "media_found_title": "You are offline",
-    "media_found_body": "This activity contains items that require internet connection. Please turn on internet to proceed."
+    "alert_message": "Αυτά μπορούν να διαμορφωθούν από τις Ρυθμίσεις",
+    "media_found_title": "Δεν είστε συνδεδεμένοι",
+    "media_found_body": "Η δραστηριότητα αυτή περιέχει στοιχεία τα οποία απαιτούν σύνδεση στο διαδίκτυο. Ενεργοποιήστε τη σύνδεση στο διαδίκτυο για να συνεχίσετε."
   },
   "audio_recorder": {
-    "permission": "You must grant permission to use your microphone to complete this task.",
-    "alert_title": "\"MindLogger\" would like to use your microphone to complete this task.",
-    "alert_message": "These can be configured in Settings.",
-    "record_error": "There was an error initiating recorder.",
-    "stop": "STOP",
-    "record": "RECORD",
-    "recording": "Recording...",
-    "seconds": "seconds",
-    "file_saved": "File saved."
+    "permission": "Πρέπει να παραχωρήσετε άδεια χρήσης του μικροφώνου σας για να ολοκληρώσετε αυτήν την εργασία.",
+    "alert_title": "Το MindLogger θα ήθελε να χρησιμοποιήσει το μικρόφωνό σας για να ολοκληρώσει αυτήν την εργασία.",
+    "alert_message": "Αυτά μπορούν να διαμορφωθούν από τις Ρυθμίσεις.",
+    "record_error": "Προέκυψε σφάλμα κατά την έναρξη της εγγραφής.",
+    "stop": "ΔΙΑΚΟΠΗ",
+    "record": "ΕΓΓΡΑΦΗ",
+    "recording": "Εγγραφή...",
+    "seconds": "δευτερόλεπτα",
+    "file_saved": "Το αρχείο αποθηκεύτηκε."
   },
   "audio_player": {
-    "stop": "STOP",
-    "playing": "PLAYING...",
-    "play": "PLAY",
-    "done": "DONE",
-    "loading": "LOADING"
+    "stop": "ΔΙΑΚΟΠΗ",
+    "playing": "ΑΝΑΠΑΡΑΓΩΓΗ...",
+    "play": "ΑΝΑΠΑΡΑΓΩΓΗ",
+    "done": "ΟΛΟΚΛΗΡΩΘΗΚΕ",
+    "loading": "ΦΟΡΤΩΣΗ"
   },
   "optional_text": {
-    "required": "This is a required field.",
-    "enter_text": "Please enter the text."
+    "required": "Το πεδίο αυτό είναι υποχρεωτικό.",
+    "enter_text": "Εισαγάγετε το κείμενο."
   },
   "date_picker": {
-    "ok": "OK"
+    "ok": "ΕΝΤΑΞΕΙ"
   },
   "table_input": {
-    "short_press_detail": "* A short-press increases the counter",
-    "long_press_detail": "* A long-press decreases the counter"
+    "short_press_detail": "* Ένα στιγμιαίο πάτημα αυξάνει τον μετρητή",
+    "long_press_detail": "* Ένα παρατεταμένο πάτημα μειώνει τον μετρητή"
   },
   "activity_due_date": {
-    "available_all_day": "Available: All day",
+    "available_all_day": "Διαθέσιμο: Όλη την ημέρα",
     "scheduled_at": "Scheduled At",
-    "available": "Available From",
-    "to": "To",
+    "available": "Διαθέσιμο από",
+    "to": "έως",
     "day": "day",
     "days": "days",
-    "am": "AM",
-    "the_following_day": "the following day"
+    "am": "ΠΜ",
+    "the_following_day": "την επόμενη ημέρα"
   },
   "form_item": {
-    "required": "Required",
+    "required": "Απαιτείται",
     "must_be": "Must be",
     "characters_or_less": "characters or less",
     "must_be_a_number": "Must be a number"
   },
   "applet_about": {
-    "loading": "loading",
-    "no_info": "The authors of this applet have not provided any information!"
+    "loading": "φόρτωση",
+    "no_info": "Οι συντάκτες αυτής της βοηθητικής εφαρμογής δεν έχουν δώσει καμία πληροφορία!"
   },
   "firebase_messaging": {
-    "alert_title": "\"MindLogger\" would like to send you notifications",
-    "alert_message": "These can be configured in Settings",
-    "alert_text": "Open Settings",
-    "response_refresh_request": "Response Refresh Request",
-    "refresh_request_details": "Since your password has been reset, your past responses need to be refreshed. Do you want to request this?",
-    "refresh_request_text": "Your managers will initiate the refresh shortly.",
-    "applet_not_found_1": "Applet was not found",
-    "applet_not_found_2": "There is no applet for given id.",
-    "activity_not_found": "Activity \"{{entityName}}\" is not available now.",
-    "already_completed": "You have already completed",
-    "app_killed_on_redux_persist": "This activity cannot be started. Please, contact support.",
+    "alert_title": "Το MindLogger θα ήθελε να σας στέλνει ειδοποιήσεις",
+    "alert_message": "Αυτές μπορούν να διαμορφωθούν από τις Ρυθμίσεις",
+    "alert_text": "Άνοιγμα Ρυθμίσεων",
+    "response_refresh_request": "Αίτημα ανανέωσης απάντησης",
+    "refresh_request_details": "Καθώς έχει γίνει επαναφορά του κωδικού πρόσβασής σας, οι προηγούμενες απαντήσεις σας πρέπει να ανανεωθούν. Επιθυμείτε να υποβάλετε σχετικό αίτημα;",
+    "refresh_request_text": "Οι διαχειριστές σας θα αρχίσουν την ανανέωση σύντομα.",
+    "applet_not_found_1": "Η βοηθητική εφαρμογή δεν βρέθηκε",
+    "applet_not_found_2": "Δεν υπάρχει βοηθητική εφαρμογή για το συγκεκριμένο αναγνωριστικό.",
+    "activity_not_found": "Η δραστηριότητα «{{entityName}}» δεν είναι διαθέσιμη τώρα.",
+    "already_completed": "Έχετε ήδη ολοκληρώσει το",
+    "app_killed_on_redux_persist": "Αυτή η δραστηριότητα δεν μπορεί να αρχίσει. Επικοινωνήστε με την υποστήριξη.",
     "activity_was_due_at": "This activity was due at",
     "if_progress_was_made_on_the": "If progress was made on the",
     "it_was_saved_but_it_can_no_longer_be_taken": "it was saved but it can no longer be taken",
-    "today": "today.",
-    "today2": "Scheduled today",
-    "activity_not_ready": "Activity not ready",
-    "not_able_to_start": "You’re not able to start activity yet",
-    "is": "is",
-    "scheduled_to_start_at": "scheduled to start at",
-    "postponed_notification": "Once the responses are uploaded, we’ll attempt to open the activity"
+    "today": "σήμερα.",
+    "today2": "Προγραμματίστηκε σήμερα",
+    "activity_not_ready": "Η δραστηριότητα δεν είναι έτοιμη",
+    "not_able_to_start": "Δεν μπορείτε ακόμα να αρχίσετε τη δραστηριότητα, το",
+    "is": "έχει",
+    "scheduled_to_start_at": "προγραμματιστεί να αρχίσει:",
+    "postponed_notification": "Μόλις μεταφορτωθούν οι απαντήσεις, θα προσπαθήσουμε να ανοίξουμε τη δραστηριότητα"
   },
   "local_notifications": {
-    "complete_activity": "Please complete this activity."
+    "complete_activity": "Ολοκληρώστε τη δραστηριότητα αυτή."
   },
   "join_demo_applets": {
     "healthy_brain_network": "Healthy Brain Network: EMA",
-    "cognitive_tasks": "Cognitive Tasks",
-    "mind_logger_demos": "MindLogger Demos"
+    "cognitive_tasks": "Γνωστικές εργασίες",
+    "mind_logger_demos": "Παρουσιάσεις MindLogger"
   },
   "data_invite": {
-    "message": "We think its important for you to know who has access to your data if you accept this invitation.\n\nThe following people will have acccess to your data if you accept this invitation:"
+    "message": "Θεωρούμε ότι είναι σημαντικό να γνωρίζετε ποιος έχει πρόσβαση στα δεδομένα σας εάν αποδεχτείτε αυτήν την πρόσκληση. Τα ακόλουθα άτομα θα έχουν πρόσβαση στα δεδομένα σας εάν αποδεχτείτε αυτήν την πρόσκληση:"
   },
   "sidebar": {
-    "home": "Home",
-    "settings": "Settings",
-    "about": "About",
-    "logout": "Logout"
+    "home": "Αρχική σελίδα",
+    "settings": "Ρυθμίσεις",
+    "about": "Σχετικά",
+    "logout": "Αποσύνδεση"
   },
   "navigator": {
-    "exit_title": "Exit App",
-    "exit_subtitle": "Exiting the application?",
-    "cancel": "Cancel"
+    "exit_title": "Έξοδος από την εφαρμογή",
+    "exit_subtitle": "Θέλετε να εξέλθετε από την εφαρμογή;",
+    "cancel": "Άκυρο"
   },
   "activity_navigation": {
-    "next": "Next",
-    "skip": "Skip",
-    "done": "Done",
-    "back": "Back",
-    "return": "Return",
-    "undo": "Undo",
-    "exit": "Exit"
+    "next": "Επόμενο",
+    "skip": "Παράλειψη",
+    "done": "Ολοκληρώθηκε",
+    "back": "Πίσω",
+    "return": "Επιστροφή",
+    "undo": "Αναίρεση",
+    "exit": "Έξοδος"
   },
   "network_alerts": {
-    "no_internet_title": "No Internet Connection",
-    "no_internet_subtitle": "Please connect to the internet",
-    "no_internet_text": "Dismiss",
-    "cellular_data_title": "Cellular Data is Disabled",
-    "cellular_data_subtitle": "Please connect to wi-fi or allow cellular data",
-    "cellular_data_text": "Dismiss",
-    "use_cellular_data": "Use Cellular Data"
+    "no_internet_title": "Δεν υπάρχει σύνδεση στο διαδίκτυο",
+    "no_internet_subtitle": "Συνδεθείτε στο διαδίκτυο",
+    "no_internet_text": "Απόρριψη",
+    "cellular_data_title": "Τα δεδομένα κινητής τηλεφωνίας είναι απενεργοποιημένα",
+    "cellular_data_subtitle": "Συνδεθείτε σε Wi-Fi ή επιτρέψτε δεδομένα κινητής τηλεφωνίας",
+    "cellular_data_text": "Απόρριψη",
+    "use_cellular_data": "Χρήση δεδομένων κινητής τηλεφωνίας"
   },
   "timing": {
     "provide_option": "You must provide the \"after\" or \"every\" option",
@@ -401,94 +401,94 @@
     "every_number": "Expected options.every to be a number"
   },
   "camera": {
-    "choose_photo": "Choose photo",
-    "choose_video": "Choose video",
-    "take_a_photo": "Take a new photo or choose one from your library",
-    "take_a_video": "Take a new video or choose one from your library",
-    "camera": "Camera",
-    "library": "Library"
+    "choose_photo": "Επιλέξτε φωτογραφία",
+    "choose_video": "Επιλέξτε βίντεο",
+    "take_a_photo": "Τραβήξτε νέα φωτογραφία ή επιλέξτε από τη βιβλιοθήκη σας",
+    "take_a_video": "Τραβήξτε νέο βίντεο ή επιλέξτε από τη βιβλιοθήκη σας",
+    "camera": "Κάμερα",
+    "library": "Βιβλιοθήκη"
   },
   "text_entry": {
-    "type_placeholder": "Please type text",
-    "paragraph_placeholder": "Type in your answer here."
+    "type_placeholder": "Πληκτρολογήστε κείμενο",
+    "paragraph_placeholder": "Πληκτρολογήστε την απάντησή σας εδώ."
   },
   "character_counter":{
-    "characters":"{{numberOfCharacters}}/{{limit}} characters"
+    "characters":"{{numberOfCharacters}}/{{limit}} χαρακτήρες"
   },
   "additional": {
-    "server-error": "Server error occurred",
-    "time-end": "Time is up!",
-    "time-end-tap": "Time is up. Tap to complete",
-    "thanks": "Thanks!",
-    "sorry": "Sorry",
-    "saved_answers": "We've saved your answers!",
-    "submit_flow_answers": "Tap the",
-    "submit": "Submit",
-    "submit_flow_answers_ex": "button to save your responses and continue to:",
-    "close": "Close",
-    "resume_activity": "Resume activity",
-    "activity_resume_restart": "Would you like to resume this activity in progress or restart?",
-    "restart": "Restart",
-    "resume": "Resume",
-    "retry": "Retry",
-    "send": "Send",
-    "later": "Later",
-    "in_progress": "In Progress",
-    "unscheduled": "Unscheduled",
-    "scheduled": "Scheduled",
-    "past_due": "Past Due",
-    "available": "Available",
-    "sure_delete_account_data": "Are you sure you want to delete your account and data?",
-    "no_cancel": "No, cancel",
-    "yes_delete": "Yes, delete it",
-    "hi": "Hi",
-    "enter_old_password": "Please enter your old password",
-    "enter_new_password": "Please enter a new password",
-    "data_not_sent": "Click Send to upload the data collected earlier",
-    "data_is_sending": "Uploading the data collected earlier",
-    "upload_error": "Upload Error",
-    "want_to_retry": "Your Internet may be unstable. We weren't able to send your data."
+    "server-error": "Προέκυψε σφάλμα διακομιστή",
+    "time-end": "Τέλος χρόνου!",
+    "time-end-tap": "Τέλος χρόνου. Πατήστε για ολοκλήρωση",
+    "thanks": "Ευχαριστούμε!",
+    "sorry": "Λυπούμαστε",
+    "saved_answers": "Έχουμε αποθηκεύσει τις απαντήσεις σας!",
+    "submit_flow_answers": "Πατήστε το κουμπί",
+    "submit": "Υποβολή",
+    "submit_flow_answers_ex": "για να αποθηκεύσετε τις απαντήσεις σας και να προχωρήσετε στη δραστηριότητα:",
+    "close": "Κλείσιμο",
+    "resume_activity": "Συνέχιση δραστηριότητας",
+    "activity_resume_restart": "Θα θέλατε να συνεχίσετε αυτήν τη δραστηριότητα που βρίσκεται σε εξέλιξη ή να κάνετε επανέναρξη;",
+    "restart": "Επανέναρξη",
+    "resume": "Συνέχιση",
+    "retry": "Νέα προσπάθεια",
+    "send": "Αποστολή",
+    "later": "Αργότερα",
+    "in_progress": "Σε εξέλιξη",
+    "unscheduled": "Μη προγραμματισμένη",
+    "scheduled": "Προγραμματισμένη",
+    "past_due": "Παρελθούσα",
+    "available": "Διαθέσιμη",
+    "sure_delete_account_data": "Θέλετε σίγουρα να διαγράψετε τον λογαριασμό και τα δεδομένα σας;",
+    "no_cancel": "Όχι, ακύρωση",
+    "yes_delete": "Ναι, να διαγραφούν",
+    "hi": "Γεια σας",
+    "enter_old_password": "Εισαγάγετε τον παλιό κωδικό πρόσβασής σας",
+    "enter_new_password": "Εισαγάγετε νέο κωδικό πρόσβασης",
+    "data_not_sent": "Κάντε κλικ στο κουμπί «Αποστολή» για να μεταφορτώσετε τα δεδομένα που συλλέχθηκαν νωρίτερα",
+    "data_is_sending": "Μεταφόρτωση των δεδομένων που συλλέχθηκαν νωρίτερα",
+    "upload_error": "Σφάλμα μεταφόρτωσης",
+    "want_to_retry": "Η σύνδεσή σας στο διαδίκτυο μπορεί να είναι ασταθής. Δεν μπορέσαμε να στείλουμε τα δεδομένα σας."
   },
   "prize": {
-    "lack_tokens_title": "Try again",
-    "lack_tokens_subtitle": "You don't have enough tokens.\nPlease select another prize"
+    "lack_tokens_title": "Προσπαθήστε ξανά",
+    "lack_tokens_subtitle": "You don't have enough tokens. Επιλέξτε άλλο βραβείο"
   },
   "cognitive": {
-    "incorrect_start_point": "Incorrect start point!",
-    "incorrect_line": "Incorrect line!",
-    "finished_continue": "Finished. Click next to continue.",
-    "finished_complete": "Finished. Click Done to complete.",
-    "begin": "Begin",
-    "end": "End"
+    "incorrect_start_point": "Λάθος σημείο αφετηρίας!",
+    "incorrect_line": "Λάθος γραμμή!",
+    "finished_continue": "Τελείωσε. Κάντε κλικ στο «Επόμενο» για να συνεχίσετε.",
+    "finished_complete": "Τελείωσε. Κάντε κλικ στο «Ολοκληρώθηκε» για να ολοκληρώσετε.",
+    "begin": "Έναρξη",
+    "end": "Τέλος"
   },
   "system": {
-    "migration_not_applied_text": "Data migration was not successfully applied. Please, contact support.",
-    "ok": "OK"
+    "migration_not_applied_text": "Η μετεγκατάσταση δεδομένων δεν εφαρμόστηκε επιτυχώς. Επικοινωνήστε με την υποστήριξη.",
+    "ok": "ΕΝΤΑΞΕΙ"
   },
   "activity_skip_popup" : {
-    "popup_title": "Skip to the next trial?",
-    "popup_description": "This trial is incomplete. If you skip to the next trial, your progress will be saved. You won't be able to finish this trial later.",
-    "keep_working": "Keep working",
-    "skip": "Skip"
+    "popup_title": "Μετάβαση στην επόμενη δοκιμή;",
+    "popup_description": "Η δοκιμή αυτή είναι ημιτελής. Εάν μεταβείτε στην επόμενη δοκιμή, η πρόοδός σας θα αποθηκευτεί. Δεν θα μπορείτε να ολοκληρώσετε αυτήν τη δοκιμή αργότερα.",
+    "keep_working": "Συνέχιση της εργασίας",
+    "skip": "Παράλειψη"
   },
   "autocompletion": {
-    "done": "Done",
-    "time_limit_reached": "Time limit reached",
-    "time_expired": "The time to complete {{activityNames}} has expired. Your answers will automatically be submitted.",
-    "processing_answers": "Processing Answers",
-    "preparing_answers": "Please wait and do not close the screen.",
-    "answers_submitted": "Answers submitted",
-    "thanks": "Thanks! We’ve saved everything.",
-    "time_is_up_modal_description": "There is no more time to work on this activity. All of the work you have done will be saved and submitted.",
-    "time_is_up_modal_title": "Time's up",
-    "ok": "OK"
+    "done": "Ολοκληρώθηκε",
+    "time_limit_reached": "Το χρονικό όριο συμπληρώθηκε",
+    "time_expired": "Ο χρόνος για την ολοκλήρωση της δραστηριότητας «{{activityNames}}» έχει λήξει. Οι απαντήσεις σας θα υποβληθούν αυτόματα.",
+    "processing_answers": "Επεξεργασία απαντήσεων",
+    "preparing_answers": "Περιμένετε και μην κλείσετε την οθόνη.",
+    "answers_submitted": "Οι απαντήσεις υποβλήθηκαν",
+    "thanks": "Ευχαριστούμε! Αποθηκεύσαμε τα πάντα.",
+    "time_is_up_modal_description": "Δεν υπάρχει άλλος χρόνος για να εργαστείτε στη δραστηριότητα αυτή. Όλη η εργασία που έχετε κάνει θα αποθηκευτεί και θα υποβληθεί.",
+    "time_is_up_modal_title": "Τέλος χρόνου",
+    "ok": "ΕΝΤΑΞΕΙ"
   },
   "data_sharing": {
-    "consent": "I consent to making my responses",
-    "media_consent": "I consent to making my media responses",
-    "public": "public",
+    "consent": "Συμφωνώ να γίνουν οι απαντήσεις μου",
+    "media_consent": "Συμφωνώ να γίνουν οι απαντήσεις μου με μέσα",
+    "public": "δημόσιες",
     "dialog": {
-      "body": "Sharing responses publicly implies that information provided by individual users, such as survey responses or feedback, will be openly available for others to view."
+      "body": "Η δημόσια κοινοποίηση απαντήσεων υποδηλώνει ότι οι πληροφορίες που παρέχονται από κάθε χρήστη, όπως για παράδειγμα απαντήσεις ή σχόλια σε έρευνες, θα είναι δημόσια διαθέσιμες για εμφάνιση σε άλλους."
     }
   }
 }
