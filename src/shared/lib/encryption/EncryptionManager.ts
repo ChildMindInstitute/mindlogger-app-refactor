@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
+import crypto from 'crypto-browserify';
 
-import { crypto } from './crypto';
 import {
   DecryptDataProps,
   EncryptDataProps,
