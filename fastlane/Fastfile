@@ -6,6 +6,7 @@ private_lane :increment_version_android do |options|
 
   increment_version_code(
     gradle_file_path: gradle_file,
+    version_code: options[:build_number]
   )
 
   increment_version_name(
@@ -22,6 +23,7 @@ package = load_json(json_path: "./package.json")
 
   increment_build_number_in_xcodeproj(
     xcodeproj: xcodeproj_path,
+    build_number: options[:build_number]
   )
 
   increment_version_number_in_xcodeproj(
@@ -46,7 +48,17 @@ end
 
 desc 'Bump build numbers, and set the version to match the package.json version.'
 lane :bump_version do |options|
-  increment_version_android
-  increment_version_ios
-  commit_version
+  package = load_json(json_path: "./package.json")
+  xcodeproj_path = 'ios/MindloggerMobile.xcodeproj'
+  build_number = get_build_number(xcodeproj: xcodeproj_path)
+
+  build_increment = [1, options[:increment].to_i].max
+  new_build_number = build_number.to_i + build_increment
+
+  increment_version_android(build_number: new_build_number.to_s)
+  increment_version_ios(build_number: new_build_number.to_s)
+
+  unless options[:skipCommit] == true
+    commit_version
+  end
 end
