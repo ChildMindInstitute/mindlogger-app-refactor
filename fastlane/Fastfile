@@ -44,7 +44,7 @@ private_lane :commit_version do |options|
   )
 end
 
-desc 'Bump build numbers, and set the version to match the pacakage.json version.'
+desc 'Bump build numbers, and set the version to match the package.json version.'
 lane :bump_version do |options|
   increment_version_android
   increment_version_ios
