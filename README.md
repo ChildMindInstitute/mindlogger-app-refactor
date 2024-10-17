@@ -107,9 +107,16 @@ Alternatively, you may manually edit the value of a flag by modifying it in the 
 
 Install Fastlane via Homebrew: `brew install fastlane`.
 
-Update the version in the `package.json` file and run: `yarn bump`.
+Update the version in the `package.json` file and run: `yarn bump`. The default behavior will increment the build version by 1 and generate a commit message automatically.
 
-To update only the build version of the Application, just run `yarn bump` without updating the `package.json` file.
+If you only want to update the build version without modifying the `package.json` file, simply run: `yarn bump`.
+
+You can also customize the bump behavior by passing options:
+- To skip the commit message, use `skipCommit:true`.
+- To increment the build version by a specific number, use `increment:x`.
+
+Example: `yarn bump skipCommit:true increment:5`
+This command will skip generating a commit and increment the build version by 5.
 
 #### Alternative Build Configurations
 
