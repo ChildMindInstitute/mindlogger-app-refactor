@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import { z } from 'zod';
 import { zodI18nMap } from 'zod-i18n-map';
 
+import el from '@assets/translations/el.json';
 import en from '@assets/translations/en.json';
 import fr from '@assets/translations/fr.json';
 
@@ -26,6 +27,7 @@ export function setupLocalization() {
     resources: {
       en,
       fr,
+      el,
     },
     returnNull: false,
   });
