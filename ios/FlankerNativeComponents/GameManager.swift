@@ -308,7 +308,7 @@ class GameManager {
     if !isFirst {
       countTest += 1
     }
-    
+
 
     if gameParameters.showFixation {
       if let image = URL(string: gameParameters.fixation), gameParameters.fixation.contains("https") {
@@ -406,7 +406,6 @@ private extension GameManager {
 
   func isEndGame() -> Bool {
     guard let gameParameters = gameParameters else { return false }
-
     if countTest == gameParameters.trials.count {
       let sumArray = arrayTimes.reduce(0, +)
       var avrgArray: Int = 0
