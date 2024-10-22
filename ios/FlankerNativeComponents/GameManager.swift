@@ -192,9 +192,7 @@ class GameManager {
   func checkedAnswer(button: SelectedButton) {
     invalidateTimers()
 
-    DispatchQueue.main.async {
-      self.delegate?.setEnableButton(isEnable: false)
-    }
+    delegate?.setEnableButton(isEnable: false)
 
     guard let gameParameters = gameParameters else { return }
     guard
@@ -223,9 +221,7 @@ class GameManager {
         resultManager.addStepData(data: model)
         delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: gameParameters.showResults, minAccuracy: gameParameters.minimumAccuracy)
         if gameParameters.showFeedback {
-          DispatchQueue.main.async {
-            self.delegate?.updateText(text: Constants.correctText, color: Constants.greenColor, font: Constants.smallFont, isStart: false, typeTime: .feedback)
-          }
+          delegate?.updateText(text: Constants.correctText, color: Constants.greenColor, font: Constants.smallFont, isStart: false, typeTime: .feedback)
         }
         responseText = Constants.correctText
       } else {
@@ -243,9 +239,7 @@ class GameManager {
         resultManager.addStepData(data: model)
         delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: gameParameters.showResults, minAccuracy: gameParameters.minimumAccuracy)
         if gameParameters.showFeedback {
-          DispatchQueue.main.async {
-            self.delegate?.updateText(text: Constants.inCorrectText, color: Constants.redColor, font: Constants.smallFont, isStart: false, typeTime: .feedback)
-          }
+          delegate?.updateText(text: Constants.inCorrectText, color: Constants.redColor, font: Constants.smallFont, isStart: false, typeTime: .feedback)
         }
         responseText = Constants.inCorrectText
       }
@@ -266,9 +260,7 @@ class GameManager {
         resultManager.addStepData(data: model)
         delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: gameParameters.showResults, minAccuracy: gameParameters.minimumAccuracy)
         if gameParameters.showFeedback {
-          DispatchQueue.main.async {
-            self.delegate?.updateText(text: Constants.correctText, color: Constants.greenColor, font: Constants.smallFont, isStart: false, typeTime: .feedback)
-          }
+          delegate?.updateText(text: Constants.correctText, color: Constants.greenColor, font: Constants.smallFont, isStart: false, typeTime: .feedback)
         }
         responseText = Constants.correctText
       } else {
@@ -286,9 +278,7 @@ class GameManager {
         resultManager.addStepData(data: model)
         delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: gameParameters.showResults, minAccuracy: gameParameters.minimumAccuracy)
         if gameParameters.showFeedback {
-          DispatchQueue.main.async {
-            self.delegate?.updateText(text: Constants.inCorrectText, color: Constants.redColor, font: Constants.smallFont, isStart: false, typeTime: .feedback)
-          }
+          delegate?.updateText(text: Constants.inCorrectText, color: Constants.redColor, font: Constants.smallFont, isStart: false, typeTime: .feedback)
         }
         responseText = Constants.inCorrectText
       }
@@ -333,9 +323,7 @@ class GameManager {
   @objc func setText() {
     guard let gameParameters = gameParameters else { return }
 
-    DispatchQueue.main.async {
-      self.delegate?.setEnableButton(isEnable: true)
-    }
+    delegate?.setEnableButton(isEnable: true)
 
     text = gameParameters.trials[countTest].stimulus.en
 
@@ -346,17 +334,15 @@ class GameManager {
     }
 
     timeResponse = Timer(timeInterval: gameParameters.trialDuration / 1000, target: self, selector: #selector(self.timeResponseFailed), userInfo: nil, repeats: false)
-    RunLoop.main.add(timeResponse!, forMode: .common) 
+    RunLoop.main.add(timeResponse!, forMode: .common)
   }
 
   @objc func timeResponseFailed() {
     guard let gameParameters = gameParameters else { return }
 
-    DispatchQueue.main.async {
-      self.delegate?.setEnableButton(isEnable: false)
-      if gameParameters.showFeedback {
-        self.delegate?.updateText(text: Constants.timeRespondText, color: .black, font: Constants.smallFont, isStart: false, typeTime: .feedback)
-      }
+    delegate?.setEnableButton(isEnable: false)
+    if gameParameters.showFeedback {
+      delegate?.updateText(text: Constants.timeRespondText, color: .black, font: Constants.smallFont, isStart: false, typeTime: .feedback)
     }
 
     guard

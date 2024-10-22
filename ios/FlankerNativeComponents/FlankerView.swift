@@ -318,28 +318,32 @@ class FlankerView: UIView {
 }
 
 extension FlankerView: GameManagerProtocol {
-  func setEnableButton(isEnable: Bool) {
-    leftButton.isEnabled = isEnable
-    rightButton.isEnabled = isEnable
-  }
+    func setEnableButton(isEnable: Bool) {
+        DispatchQueue.main.async {
+            self.leftButton.isEnabled = isEnable
+            self.rightButton.isEnabled = isEnable
+        }
+    }
 
   func updateTime(time: String) {
     timeLabel.text = time
   }
 
   func updateText(text: String, color: UIColor, font: UIFont, isStart: Bool, typeTime: TypeTimeStamps) {
-    typeTimeStamp = typeTime
-    textLabel.font = font
-    textLabel.text = text
-    textLabel.textColor = color
-    textLabel.setNeedsDisplay()
-    textLabel.layoutSubviews()
-    startDisplayLink()
-    let time = CACurrentMediaTime()
-    print("Marker: self.displayLink?.isPaused = false: \(time)")
-    textLabel.isHidden = false
-    fixationImage.isHidden = true
-    drawPixel()
+    DispatchQueue.main.async {
+      typeTimeStamp = typeTime
+      textLabel.font = font
+      textLabel.text = text
+      textLabel.textColor = color
+      textLabel.setNeedsDisplay()
+      textLabel.layoutSubviews()
+      startDisplayLink()
+      let time = CACurrentMediaTime()
+      print("Marker: self.displayLink?.isPaused = false: \(time)")
+      textLabel.isHidden = false
+      fixationImage.isHidden = true
+      drawPixel()
+    }
   }
 
   func updateTitleButton(left: String?, right: String?, leftImage: URL?, rightImage: URL?, countButton: Int) {
