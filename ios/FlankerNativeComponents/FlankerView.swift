@@ -331,18 +331,18 @@ extension FlankerView: GameManagerProtocol {
 
   func updateText(text: String, color: UIColor, font: UIFont, isStart: Bool, typeTime: TypeTimeStamps) {
     DispatchQueue.main.async {
-      typeTimeStamp = typeTime
-      textLabel.font = font
-      textLabel.text = text
-      textLabel.textColor = color
-      textLabel.setNeedsDisplay()
-      textLabel.layoutSubviews()
-      startDisplayLink()
-      let time = CACurrentMediaTime()
-      print("Marker: self.displayLink?.isPaused = false: \(time)")
-      textLabel.isHidden = false
-      fixationImage.isHidden = true
-      drawPixel()
+          self.typeTimeStamp = typeTime
+          self.textLabel.font = font
+          self.textLabel.text = text
+          self.textLabel.textColor = color
+          self.textLabel.setNeedsDisplay()
+          self.textLabel.layoutSubviews()
+          self.startDisplayLink()
+          let time = CACurrentMediaTime()
+          print("Marker: self.displayLink?.isPaused = false: \(time)")
+          self.textLabel.isHidden = false
+          self.fixationImage.isHidden = true
+          self.drawPixel()
     }
   }
 
