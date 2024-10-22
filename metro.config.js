@@ -7,6 +7,11 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
  * @type {import('metro-config').MetroConfig}
  */
 const config = {
+  resolver: {
+    extraNodeModules: {
+      stream: require.resolve('stream-browserify'),
+    },
+  },
   transformer: {
     getTransformOptions: async () => ({
       transform: {
