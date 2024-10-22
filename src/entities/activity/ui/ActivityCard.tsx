@@ -6,7 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { IS_ANDROID, IS_IOS } from '@app/shared/lib/constants';
 import { colors } from '@app/shared/lib/constants/colors';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
+import { Chip } from '@app/shared/ui/Chip';
 import { ChevronRightIcon } from '@app/shared/ui/icons';
+import { ExclamationIcon } from '@app/shared/ui/icons/ExclamationIcon';
 import { RoundLogo } from '@app/shared/ui/RoundLogo';
 import { Text } from '@app/shared/ui/Text';
 
@@ -24,9 +26,15 @@ type Props = {
   activity: ActivityListItem;
   disabled: boolean;
   onPress?: (...args: unknown[]) => void;
+  isWebOnly?: boolean;
 };
 
-export const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
+export const ActivityCard: FC<Props> = ({
+  activity,
+  disabled,
+  isWebOnly = false,
+  onPress,
+}) => {
   const { t } = useTranslation();
   const { assignment } = useActivityAssignment({
     appletId: activity.appletId,
@@ -49,36 +57,28 @@ export const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
       disabled={isDisabled}
     >
       <XStack
-        mx={3}
-        p={14}
-        borderWidth={3}
+        backgroundColor={colors.white}
         borderColor={colors.lighterGrey}
         borderRadius={9}
+        borderWidth={3}
+        gap={14}
+        mx={3}
         opacity={disabled ? 0.5 : 1}
-        backgroundColor={colors.white}
+        p={14}
       >
         {!!activity.image && (
-          <Box
-            mr={14}
-            alignSelf="center"
-            accessibilityLabel="activity_card-image"
-          >
+          <Box alignSelf="center" accessibilityLabel="activity_card-image">
             <RoundLogo imageUri={activity.image} />
           </Box>
         )}
 
-        <YStack flexGrow={1} flexShrink={1}>
+        <YStack flexGrow={1} flexShrink={1} gap={8}>
           {activity.isInActivityFlow &&
             activity.activityFlowDetails?.showActivityFlowBadge && (
-              <ActivityFlowStep
-                hasOpacity={isDisabled}
-                activity={activity}
-                mb={7}
-              />
+              <ActivityFlowStep hasOpacity={isDisabled} activity={activity} />
             )}
 
           <Text
-            mb={8}
             fontWeight={IS_IOS ? '600' : '700'}
             fontSize={16}
             accessibilityLabel="activity_card_name-text"
@@ -89,7 +89,7 @@ export const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
           </Text>
 
           {assignment && assignment.respondent.id !== assignment.target.id && (
-            <XStack mb={8}>
+            <XStack>
               <ActivityAssignmentBadge
                 assignment={assignment}
                 accessibilityLabel="activity_card_assignment-text"
@@ -111,6 +111,12 @@ export const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
             </Text>
           )}
 
+          {isWebOnly && (
+            <Chip icon={ExclamationIcon} variant="warning">
+              Please complete on the MindLogger web app
+            </Chip>
+          )}
+
           <TimeStatusRecord activity={activity} />
 
           {IS_ANDROID && activity.type === ActivityType.Flanker && (
@@ -120,7 +126,7 @@ export const ActivityCard: FC<Props> = ({ activity, disabled, onPress }) => {
           )}
         </YStack>
 
-        <Box alignSelf="center" ml={6}>
+        <Box alignSelf="center">
           <ChevronRightIcon color={colors.grey2} size={16} />
         </Box>
       </XStack>

@@ -1,5 +1,5 @@
 import { useMemo, PropsWithChildren } from 'react';
-import { SectionList, StyleSheet } from 'react-native';
+import { Linking, SectionList, StyleSheet } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -17,10 +17,16 @@ import { getDefaultMediaLookupService } from '@app/entities/activity/model/servi
 import { ActivityCard } from '@app/entities/activity/ui/ActivityCard';
 import { clearStorageRecords } from '@app/entities/applet/lib/storage/helpers';
 import { useStartEntity } from '@app/entities/applet/model/hooks/useStartEntity';
+import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
+import { DEEP_LINK_PREFIX } from '@app/shared/lib/constants';
 import { useUploadObservable } from '@app/shared/lib/hooks/useUploadObservable';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
+import {
+  getIsWebOnly,
+  getSupportsApp,
+} from '@app/shared/lib/utils/responseTypes';
 import { Box, YStack } from '@app/shared/ui/base';
 import { Text } from '@app/shared/ui/Text';
 
@@ -29,16 +35,18 @@ import { useAvailabilityEvaluator } from '../model/hooks/useAvailabilityEvaluato
 
 type Props = {
   appletId: string;
+  activityResponseTypes?: Record<string, ResponseType[]>;
   groups: Array<ActivityListGroup>;
   completeEntity: CompleteEntityIntoUploadToQueue;
   checkAvailability: CheckAvailability;
 };
 
 export function ActivitySectionList({
+  activityResponseTypes = {},
   appletId,
-  groups,
-  completeEntity,
   checkAvailability,
+  completeEntity,
+  groups,
 }: Props) {
   const { t } = useTranslation();
 
@@ -94,6 +102,16 @@ export function ActivitySectionList({
     if (getMutexDefaultInstanceManager().getAutoCompletionMutex().isBusy()) {
       getDefaultLogger().log(
         '[ActivitySectionList.startActivityOrFlow] Postponed due to AutoCompletionMutex is busy',
+      );
+      return;
+    }
+
+    const responseTypes = activityResponseTypes[flowId || activityId];
+    const isWebOnly = responseTypes.some(getIsWebOnly);
+
+    if (isWebOnly) {
+      await Linking.openURL(
+        `${DEEP_LINK_PREFIX}/protected/applets/${appletId}` || '',
       );
       return;
     }
@@ -163,17 +181,25 @@ export function ActivitySectionList({
       renderSectionHeader={({ section }) => (
         <SectionHeader>{section.key}</SectionHeader>
       )}
-      renderItem={({ item }) => (
-        <ActivityCard
-          activity={item}
-          disabled={isUploading}
-          onPress={() => {
-            if (isFocused()) {
-              startActivityOrFlow(item).catch(console.error);
-            }
-          }}
-        />
-      )}
+      renderItem={({ item }) => {
+        const entityId = item.flowId || item.activityId;
+        const responseTypes = activityResponseTypes[entityId];
+        const supportsApp = responseTypes.every(getSupportsApp);
+        const isWebOnly = responseTypes.some(getIsWebOnly);
+
+        return (
+          <ActivityCard
+            activity={item}
+            disabled={isUploading || (!isWebOnly && !supportsApp)}
+            isWebOnly={isWebOnly}
+            onPress={() => {
+              if (isFocused()) {
+                startActivityOrFlow(item).catch(console.error);
+              }
+            }}
+          />
+        );
+      }}
       ItemSeparatorComponent={ItemSeparator}
       stickySectionHeadersEnabled={false}
       contentContainerStyle={styles.sectionList}
