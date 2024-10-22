@@ -191,7 +191,9 @@ class GameManager {
 
   func checkedAnswer(button: SelectedButton) {
     invalidateTimers()
+
     delegate?.setEnableButton(isEnable: false)
+
     guard let gameParameters = gameParameters else { return }
     guard
       let startTrialTimestamp = startTrialTimestamp,
@@ -281,10 +283,10 @@ class GameManager {
         responseText = Constants.inCorrectText
       }
     }
-    
 
     if gameParameters.showFeedback {
-      Timer.scheduledTimer(timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(self.setDefaultText), userInfo: nil, repeats: false)
+      let timer = Timer(timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(self.setDefaultText), userInfo: nil, repeats: false)
+      RunLoop.main.add(timer, forMode: .common)
     } else {
       setDefaultText(isFirst: false)
     }
@@ -311,7 +313,8 @@ class GameManager {
     updateButtonTitle()
 
     if gameParameters.showFixation {
-      timerSetText = Timer.scheduledTimer(timeInterval: gameParameters.fixationDuration / 1000, target: self, selector: #selector(setText), userInfo: nil, repeats: false)
+      timerSetText = Timer(timeInterval: gameParameters.fixationDuration / 1000, target: self, selector: #selector(setText), userInfo: nil, repeats: false)
+      RunLoop.main.add(timerSetText!, forMode: .common)
     } else {
       setText()
     }
@@ -321,6 +324,7 @@ class GameManager {
     guard let gameParameters = gameParameters else { return }
 
     delegate?.setEnableButton(isEnable: true)
+
     text = gameParameters.trials[countTest].stimulus.en
 
     if let image = URL(string: text), text.contains("https") {
@@ -329,7 +333,8 @@ class GameManager {
       delegate?.updateText(text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
     }
 
-    timeResponse = Timer.scheduledTimer(timeInterval: gameParameters.trialDuration / 1000, target: self, selector: #selector(self.timeResponseFailed), userInfo: nil, repeats: false)
+    timeResponse = Timer(timeInterval: gameParameters.trialDuration / 1000, target: self, selector: #selector(self.timeResponseFailed), userInfo: nil, repeats: false)
+    RunLoop.main.add(timeResponse!, forMode: .common)
   }
 
   @objc func timeResponseFailed() {
@@ -360,7 +365,8 @@ class GameManager {
     delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: gameParameters.showResults, minAccuracy: gameParameters.minimumAccuracy)
     responseText = Constants.timeRespondText
 
-    Timer.scheduledTimer(timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(self.setDefaultText), userInfo: nil, repeats: false)
+    let timer = Timer(timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(self.setDefaultText), userInfo: nil, repeats: false)
+    RunLoop.main.add(timer, forMode: .common)
   }
 
   func clearData() {
@@ -386,7 +392,6 @@ private extension GameManager {
 
   func isEndGame() -> Bool {
     guard let gameParameters = gameParameters else { return false }
-    
     if countTest == gameParameters.trials.count {
       let sumArray = arrayTimes.reduce(0, +)
       var avrgArray: Int = 0
