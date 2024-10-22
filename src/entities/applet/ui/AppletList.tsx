@@ -9,15 +9,16 @@ import {
 import { XStack, YStack } from '@tamagui/stacks';
 import { useIsMutating } from '@tanstack/react-query';
 
-import { useOnMutationCacheChange } from '@app/shared/api';
-import { useUploadObservable } from '@app/shared/lib';
-import { Box, BoxProps, NoListItemsYet } from '@app/shared/ui';
-import { LoadListError } from '@app/shared/ui';
+import { useOnMutationCacheChange } from '@app/shared/api/hooks/useOnMutationCacheChange';
+import { useUploadObservable } from '@app/shared/lib/hooks/useUploadObservable';
+import { Box, BoxProps } from '@app/shared/ui/base';
+import { LoadListError } from '@app/shared/ui/LoadListError';
+import { NoListItemsYet } from '@app/shared/ui/NoListItemsYet';
 
-import AppletCard from './AppletCard';
-import { useAppletsQuery } from '../api';
-import { Applet } from '../lib';
-import { mapApplets } from '../model';
+import { AppletCard } from './AppletCard';
+import { useAppletsQuery } from '../api/hooks/useAppletsQuery';
+import { Applet } from '../lib/types';
+import { mapApplets } from '../model/mappers';
 
 type SelectedApplet = {
   id: string;
@@ -30,7 +31,7 @@ type Props = {
   ListFooterComponent: JSX.Element;
 } & BoxProps;
 
-const AppletList: FC<Props> = ({
+const AppletListView: FC<Props> = ({
   onAppletPress,
   refreshControl,
   ListFooterComponent,
@@ -117,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(AppletList);
+export const AppletList = memo(AppletListView);

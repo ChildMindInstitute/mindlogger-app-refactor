@@ -11,7 +11,7 @@ type Props = {
 const RCTFlankerSandboxView =
   requireNativeComponent<Props>('FlankerSandboxView');
 
-const MyNativeCustomView: React.FC<Props> = props => {
+export const MyNativeCustomView: React.FC<Props> = props => {
   const { message, onClick, style, imageUrl } = props;
   const _onClick = (event: any) => {
     if (!onClick) {
@@ -30,5 +30,3 @@ const MyNativeCustomView: React.FC<Props> = props => {
     />
   );
 };
-
-export default MyNativeCustomView;

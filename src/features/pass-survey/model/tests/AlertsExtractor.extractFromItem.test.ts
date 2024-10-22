@@ -1,12 +1,8 @@
-import { ILogger } from '@app/shared/lib';
+import { ILogger } from '@app/shared/lib/types/logger';
 
-import { Answer, PipelineItem } from '../../lib';
+import { Answer } from '../../lib/hooks/useActivityStorageRecord';
+import { PipelineItem } from '../../lib/types/payload';
 import { AlertsExtractor } from '../AlertsExtractor';
-
-jest.mock('@app/shared/lib/constants', () => ({
-  ...jest.requireActual('@app/shared/lib/constants'),
-  STORE_ENCRYPTION_KEY: '12345',
-}));
 
 const mockExtractFunctions = (extractor: AlertsExtractor) => {
   const extractFromRadioMock = jest.fn();

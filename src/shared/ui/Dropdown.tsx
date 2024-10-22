@@ -2,9 +2,8 @@ import { StyleSheet } from 'react-native';
 
 import SelectDropdown from 'react-native-select-dropdown';
 
-import { colors } from '../lib';
-
-import { Box } from '.';
+import { Box } from './base';
+import { colors } from '../lib/constants/colors';
 
 export type LabeledValue = {
   label: string;
@@ -18,7 +17,12 @@ type DropdownProps = {
   onValueChange: (value: string) => void;
 };
 
-function Dropdown({ placeholder, value, onValueChange, items }: DropdownProps) {
+export function Dropdown({
+  placeholder,
+  value,
+  onValueChange,
+  items,
+}: DropdownProps) {
   const onChange = (item: LabeledValue) => {
     onValueChange(item.value);
   };
@@ -59,5 +63,3 @@ const styles = StyleSheet.create({
     color: colors.grey,
   },
 });
-
-export default Dropdown;

@@ -2,30 +2,22 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
-  ActivityPipelineType,
-  StoreProgress,
-  FlowProgress,
-  StoreProgressPayload,
-  CompletedEntities,
-  IStoreProgressPayload,
-  CompletedEventEntities,
-} from '@app/abstract/lib';
-import { cleanUpAction, isEntityExpired } from '@app/shared/lib';
-
-type InProgressActivity = {
-  appletId: string;
-  activityId: string;
-  eventId: string;
-  availableTo?: Date | null;
-};
+  EntityProgression,
+  EntityProgressionCompleted,
+  EntityProgressionEntityType,
+  EntityProgressionInProgress,
+  EntityProgressionInProgressActivity,
+  EntityProgressionInProgressActivityFlow,
+  EntityResponseTime,
+} from '@app/abstract/lib/types/entityProgress';
+import { cleanUpAction } from '@app/shared/lib/redux-state/actions';
+import { isEntityExpired } from '@app/shared/lib/utils/survey/survey';
 
 type InProgressEntity = {
   appletId: string;
   entityId: string;
   eventId: string;
-};
-
-type CompletionFixation = {
+  targetSubjectId: string | null;
   endAt: number;
 };
 
@@ -38,8 +30,26 @@ type InProgressFlow = {
   activityImage: string | null;
   totalActivities: number;
   eventId: string;
+  targetSubjectId: string | null;
   pipelineActivityOrder: number;
   availableTo?: Date | null;
+};
+
+export type StartActivityPayload = {
+  appletId: string;
+  entityId: string;
+  eventId: string | null;
+  targetSubjectId: string | null;
+  availableUntil: Date | null;
+};
+
+export type UpsertEntityProgressionPayload = {
+  appletId: string;
+  entityType: EntityProgressionEntityType;
+  entityId: string;
+  eventId: string | null;
+  targetSubjectId: string | null;
+  endAt: Date;
 };
 
 type Consents = {
@@ -50,40 +60,76 @@ type Consents = {
 export type AppletsConsents = Record<string, Consents | undefined>;
 
 type InitialState = {
-  inProgress: StoreProgress;
-  // todo - change to CompletedEventEntities when migrations infrastructure is ready
-  completedEntities: CompletedEntities;
-  completions: CompletedEventEntities;
+  entityProgressions?: EntityProgression[];
+  entityResponseTimes?: EntityResponseTime[];
   consents?: AppletsConsents;
 };
 
 const initialState: InitialState = {
-  inProgress: {},
-  completedEntities: {},
-  completions: {},
+  entityProgressions: undefined,
+  entityResponseTimes: undefined,
+  consents: undefined,
 };
+
+type EntityProgressionFinderOptions = {
+  appletId: string;
+  entityType: EntityProgressionEntityType;
+  entityId: string;
+  eventId: string | null;
+  targetSubjectId: string | null;
+};
+
+const entityProgressionFinder =
+  (options: EntityProgressionFinderOptions) =>
+  (progression: EntityProgression): boolean => {
+    return (
+      progression.appletId === options.appletId &&
+      progression.entityType === options.entityType &&
+      progression.entityId === options.entityId &&
+      progression.eventId === options.eventId &&
+      progression.targetSubjectId === options.targetSubjectId
+    );
+  };
+
+const negate =
+  <TArgs extends unknown[]>(predicate: (...args: TArgs) => boolean) =>
+  (...args: TArgs): boolean =>
+    !predicate(...args);
 
 const slice = createSlice({
   name: 'applets',
   initialState,
   reducers: {
-    activityStarted: (state, action: PayloadAction<InProgressActivity>) => {
-      const { appletId, activityId, eventId } = action.payload;
+    startActivity: (state, action: PayloadAction<StartActivityPayload>) => {
+      const updatedProgressions = (state.entityProgressions || []).filter(
+        negate(
+          entityProgressionFinder({
+            appletId: action.payload.appletId,
+            entityType: 'activity',
+            entityId: action.payload.entityId,
+            eventId: action.payload.eventId,
+            targetSubjectId: action.payload.targetSubjectId,
+          }),
+        ),
+      );
 
-      const activityEvent: StoreProgressPayload = {
-        type: ActivityPipelineType.Regular,
-        startAt: new Date().getTime(),
-        endAt: null,
-        availableTo: action.payload.availableTo?.getTime() ?? null,
+      const progression: EntityProgressionInProgressActivity = {
+        status: 'in-progress',
+        appletId: action.payload.appletId,
+        entityType: 'activity',
+        entityId: action.payload.entityId,
+        eventId: action.payload.eventId,
+        targetSubjectId: action.payload.targetSubjectId,
+        startedAtTimestamp: new Date().getTime(),
+        availableUntilTimestamp:
+          action.payload.availableUntil?.getTime() || null,
       };
+      updatedProgressions.push(progression);
 
-      state.inProgress[appletId] = state.inProgress[appletId] ?? {};
-      state.inProgress[appletId][activityId] =
-        state.inProgress[appletId][activityId] ?? {};
-      state.inProgress[appletId][activityId][eventId] = activityEvent;
+      state.entityProgressions = updatedProgressions;
     },
 
-    flowStarted: (state, action: PayloadAction<InProgressFlow>) => {
+    startFlow: (state, action: PayloadAction<InProgressFlow>) => {
       const {
         appletId,
         activityId,
@@ -92,34 +138,48 @@ const slice = createSlice({
         activityImage,
         flowId,
         eventId,
+        targetSubjectId,
         pipelineActivityOrder,
         totalActivities,
         availableTo,
       } = action.payload;
 
-      const flowEvent: StoreProgressPayload = {
-        type: ActivityPipelineType.Flow,
+      const updatedProgressions = (state.entityProgressions || []).filter(
+        negate(
+          entityProgressionFinder({
+            appletId: appletId,
+            entityType: 'activityFlow',
+            entityId: flowId,
+            eventId: eventId,
+            targetSubjectId: targetSubjectId,
+          }),
+        ),
+      );
+
+      const progression: EntityProgressionInProgressActivityFlow = {
+        status: 'in-progress',
+        appletId: appletId,
+        entityType: 'activityFlow',
+        entityId: flowId,
+        eventId: eventId,
+        targetSubjectId: targetSubjectId,
+        startedAtTimestamp: new Date().getTime(),
+        availableUntilTimestamp: availableTo?.getTime() || null,
+        pipelineActivityOrder,
+        totalActivitiesInPipeline: totalActivities,
         currentActivityId: activityId,
         currentActivityName: activityName,
         currentActivityDescription: activityDescription,
         currentActivityImage: activityImage,
-        startAt: new Date().getTime(),
         currentActivityStartAt: new Date().getTime(),
-        endAt: null,
-        availableTo: availableTo?.getTime() ?? null,
         executionGroupKey: uuidv4(),
-        pipelineActivityOrder,
-        totalActivitiesInPipeline: totalActivities,
       };
+      updatedProgressions.push(progression);
 
-      state.inProgress[appletId] = state.inProgress[appletId] ?? {};
-      state.inProgress[appletId][flowId] =
-        state.inProgress[appletId][flowId] ?? {};
-
-      state.inProgress[appletId][flowId][eventId] = flowEvent;
+      state.entityProgressions = updatedProgressions;
     },
 
-    flowUpdated: (state, action: PayloadAction<InProgressFlow>) => {
+    updateFlow: (state, action: PayloadAction<InProgressFlow>) => {
       const {
         appletId,
         activityId,
@@ -128,87 +188,122 @@ const slice = createSlice({
         activityImage,
         flowId,
         eventId,
+        targetSubjectId,
         pipelineActivityOrder,
         totalActivities,
       } = action.payload;
 
-      const event = state.inProgress[appletId][flowId][eventId] as FlowProgress;
+      const existingProgression = (state.entityProgressions || []).find(
+        entityProgressionFinder({
+          appletId: appletId,
+          entityType: 'activityFlow',
+          entityId: flowId,
+          eventId: eventId,
+          targetSubjectId: targetSubjectId,
+        }),
+      ) as EntityProgressionInProgressActivityFlow | undefined;
 
-      event.currentActivityId = activityId;
-      event.currentActivityName = activityName;
-      event.currentActivityDescription = activityDescription;
-      event.currentActivityImage = activityImage;
-      event.pipelineActivityOrder = pipelineActivityOrder;
-      event.currentActivityStartAt = new Date().getTime();
-      event.totalActivitiesInPipeline = totalActivities;
+      if (existingProgression) {
+        existingProgression.currentActivityId = activityId;
+        existingProgression.currentActivityName = activityName;
+        existingProgression.currentActivityDescription = activityDescription;
+        existingProgression.currentActivityImage = activityImage;
+        existingProgression.pipelineActivityOrder = pipelineActivityOrder;
+        existingProgression.currentActivityStartAt = new Date().getTime();
+        existingProgression.totalActivitiesInPipeline = totalActivities;
+      }
     },
 
-    entityCompleted: (
-      state,
-      action: PayloadAction<InProgressEntity & CompletionFixation>,
-    ) => {
-      const { appletId, entityId, eventId, endAt } = action.payload;
-
-      const entityState = state.inProgress[appletId]?.[entityId]?.[eventId];
-
-      if (!entityState) return;
-
-      const { availableTo } = entityState;
-      const isExpired = isEntityExpired(availableTo);
-
-      entityState.endAt = isExpired ? availableTo : endAt;
-
-      if (!state.completedEntities) {
-        state.completedEntities = {};
-      }
-
-      state.completedEntities[entityId] = endAt;
-
-      if (!state.completions) {
-        state.completions = {};
-      }
-
-      const entityCompletions = state.completions[entityId] ?? {};
-
-      state.completions[entityId] = entityCompletions;
-
-      if (!entityCompletions[eventId]) {
-        entityCompletions[eventId] = [];
-      }
-
-      entityCompletions[eventId].push(endAt);
-    },
-
-    entityAnswersSent: (state, action: PayloadAction<InProgressEntity>) => {
-      const { appletId, entityId, eventId } = action.payload;
-
-      delete state.inProgress[appletId][entityId][eventId];
-    },
-
-    completedEntityMissing: (
-      state,
-      action: PayloadAction<IStoreProgressPayload & InProgressEntity>,
-    ) => {
-      const { startAt, endAt, type, appletId, entityId, eventId } =
+    completeEntity: (state, action: PayloadAction<InProgressEntity>) => {
+      const { appletId, entityId, eventId, targetSubjectId, endAt } =
         action.payload;
 
-      state.inProgress[appletId] = state.inProgress[appletId] ?? {};
-      state.inProgress[appletId][entityId] =
-        state.inProgress[appletId][entityId] ?? {};
-      state.inProgress[appletId][entityId][eventId] = {
-        type,
-        startAt,
-        endAt,
-      } as StoreProgressPayload;
+      const existingProgression = (state.entityProgressions || []).find(
+        progression => {
+          return (
+            progression.appletId === appletId &&
+            progression.entityId === entityId &&
+            progression.eventId === eventId &&
+            progression.targetSubjectId === targetSubjectId
+          );
+        },
+      );
+
+      if (!existingProgression) {
+        return;
+      }
+
+      const { availableUntilTimestamp } =
+        existingProgression as EntityProgressionInProgress;
+      const isExpired = isEntityExpired(availableUntilTimestamp);
+
+      const completedProgression =
+        existingProgression as EntityProgressionCompleted;
+      completedProgression.status = 'completed';
+      if (isExpired) {
+        if (availableUntilTimestamp && availableUntilTimestamp > 0) {
+          completedProgression.endedAtTimestamp = availableUntilTimestamp;
+        } else {
+          completedProgression.endedAtTimestamp = null;
+        }
+      } else {
+        completedProgression.endedAtTimestamp = endAt;
+      }
+
+      if (!state.entityResponseTimes) {
+        state.entityResponseTimes = [];
+      }
+
+      state.entityResponseTimes.push({
+        entityId,
+        eventId,
+        targetSubjectId,
+        responseTime: endAt,
+      });
     },
 
-    completedEntityUpdated: (
+    upsertEntityProgression: (
       state,
-      action: PayloadAction<InProgressEntity & { endAt: number }>,
+      action: PayloadAction<UpsertEntityProgressionPayload>,
     ) => {
-      const { endAt, appletId, entityId, eventId } = action.payload;
+      const existingProgression = (state.entityProgressions || []).find(
+        entityProgressionFinder({
+          appletId: action.payload.appletId,
+          entityType: action.payload.entityType,
+          entityId: action.payload.entityId,
+          eventId: action.payload.eventId,
+          targetSubjectId: action.payload.targetSubjectId,
+        }),
+      );
 
-      state.inProgress[appletId][entityId][eventId].endAt = endAt;
+      if (existingProgression) {
+        const existingCompletion =
+          existingProgression as EntityProgressionCompleted;
+        if (existingCompletion.status !== 'completed') {
+          existingCompletion.status = 'completed';
+        }
+
+        if (
+          !existingCompletion.endedAtTimestamp ||
+          action.payload.endAt.getTime() > existingCompletion.endedAtTimestamp
+        ) {
+          existingCompletion.endedAtTimestamp = action.payload.endAt.getTime();
+        }
+      } else {
+        const newCompletion: EntityProgressionCompleted = {
+          status: 'completed',
+          appletId: action.payload.appletId,
+          entityType: action.payload.entityType,
+          entityId: action.payload.entityId,
+          eventId: action.payload.eventId,
+          targetSubjectId: action.payload.targetSubjectId,
+          availableUntilTimestamp: null,
+          startedAtTimestamp: 0,
+          endedAtTimestamp: action.payload.endAt.getTime(),
+        };
+        state.entityProgressions = state.entityProgressions ?? [];
+        state.entityProgressions.push(newCompletion);
+      }
     },
 
     shareConsentChanged: (
@@ -244,6 +339,6 @@ const slice = createSlice({
     }),
 });
 
-const { actions, reducer } = slice;
+export const appletActions = slice.actions;
 
-export { actions, reducer };
+export const appletReducer = slice.reducer;

@@ -1,8 +1,8 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { AppletDto } from '@app/shared/api';
+import { AppletDto } from '@app/shared/api/services/IAppletService';
 
-import RefreshOptimization from '../RefreshOptimization';
+import { RefreshOptimization } from '../RefreshOptimization';
 
 type MockAppletsResponse = {
   result: Array<AppletDto>;

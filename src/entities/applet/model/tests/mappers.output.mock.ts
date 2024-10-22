@@ -1,6 +1,5 @@
-import { Activity, Applet, AppletDetails, AppletTheme } from '@entities/applet';
-
-import { createdAtDate } from './mappers.input.mock.ts';
+import { createdAtDate } from './mappers.input.mock';
+import { Activity, Applet, AppletDetails, AppletTheme } from '../../lib/types';
 
 export const mappedApplets: Applet[] = [
   {

@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 
-const useInterval = (
+export const useInterval = (
   onIntervalPass: (...args: any) => unknown,
   interval: number,
   startImmediately: boolean | undefined = true,
@@ -29,5 +29,3 @@ const useInterval = (
     stop,
   };
 };
-
-export default useInterval;

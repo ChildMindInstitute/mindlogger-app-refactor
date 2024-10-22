@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { styled, Text } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@shared/lib';
+import { colors } from '@app/shared/lib/constants/colors';
 
 import { FeatherCrossIcon, FeatherCheckIcon } from '../icons';
 
@@ -99,5 +99,3 @@ export const PasswordRequirements = ({
     </>
   );
 };
-
-export default PasswordRequirements;

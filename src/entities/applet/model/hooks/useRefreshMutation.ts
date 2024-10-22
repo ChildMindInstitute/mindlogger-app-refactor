@@ -2,23 +2,36 @@ import { useMemo } from 'react';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { Logger, useAppDispatch, useAppSelector } from '@app/shared/lib';
+import { getDefaultAppletsService } from '@app/shared/api/services/appletsServiceInstance';
+import { getDefaultEventsService } from '@app/shared/api/services/eventsServiceInstance';
+import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
 
 import { selectGlobalState } from '../selectors';
-import { ProgressSyncService, RefreshService } from '../services';
+import { ProgressSyncService } from '../services/ProgressSyncService';
+import { RefreshService } from '../services/RefreshService';
 
-const useRefreshMutation = (onSuccess?: () => void) => {
+export const useRefreshMutation = (onSuccess?: () => void | Promise<void>) => {
   const dispatch = useAppDispatch();
   const state = useAppSelector(selectGlobalState);
   const queryClient = useQueryClient();
 
   const progressSyncService = useMemo(
-    () => new ProgressSyncService(state, dispatch, Logger),
+    () => new ProgressSyncService(state, dispatch, getDefaultLogger()),
     [dispatch, state],
   );
 
   const refreshService = useMemo(
-    () => new RefreshService(queryClient, Logger, progressSyncService),
+    () =>
+      new RefreshService(
+        queryClient,
+        getDefaultLogger(),
+        progressSyncService,
+        getDefaultAppletsService(),
+        getDefaultEventsService(),
+        getMutexDefaultInstanceManager(),
+      ),
     [queryClient, progressSyncService],
   );
 
@@ -32,5 +45,3 @@ const useRefreshMutation = (onSuccess?: () => void) => {
     onSuccess,
   });
 };
-
-export default useRefreshMutation;

@@ -4,16 +4,17 @@ import { type FlexAlignType } from 'react-native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 
-import { useAppletDetailsQuery } from '@app/entities/applet';
-import { UploadRetryBanner } from '@app/widgets/survey';
-import { MarkdownMessage } from '@shared/ui';
-import { YStack, ScrollView } from '@shared/ui';
+import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
+import { YStack } from '@app/shared/ui/base';
+import { ScrollView } from '@app/shared/ui/ScrollView';
+import { MarkdownMessage } from '@app/shared/ui/survey/MarkdownMessage';
+import { UploadRetryBanner } from '@app/widgets/survey/ui/UploadRetryBanner';
 
-import { AppletDetailsParamList } from '../config';
+import { AppletDetailsParamList } from '../config/types';
 
 type Props = BottomTabScreenProps<AppletDetailsParamList, 'About'>;
 
-const AboutAppletScreen: FC<Props> = ({ route }) => {
+export const AboutAppletScreen: FC<Props> = ({ route }) => {
   const { t } = useTranslation();
   let content;
   let alignItems: FlexAlignType;
@@ -50,5 +51,3 @@ const AboutAppletScreen: FC<Props> = ({ route }) => {
     </YStack>
   );
 };
-
-export default AboutAppletScreen;

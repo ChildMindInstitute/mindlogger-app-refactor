@@ -1,6 +1,6 @@
-import { Logger } from '@app/shared/lib';
+import { getDefaultLogger } from './loggerInstance';
 
-class ActionPostponer {
+export class ActionPostponer {
   private timeoutId: NodeJS.Timeout | null;
 
   private postponeDuration: number;
@@ -14,20 +14,20 @@ class ActionPostponer {
   }
 
   protected shouldBePostponed(): boolean {
-    Logger.warn(
+    getDefaultLogger().warn(
       `[ActionPostponer.shouldBePostponed] The method should be called in the subclass' "${this.logPostponerType}" scope`,
     );
     return false;
   }
 
   protected callAction() {
-    Logger.warn(
+    getDefaultLogger().warn(
       `[ActionPostponer.callAction] The method should be called in the subclass' "${this.logPostponerType}" scope`,
     );
   }
 
   protected resetAction() {
-    Logger.warn(
+    getDefaultLogger().warn(
       `[ActionPostponer.resetAction] The method should be called in the subclass' "${this.logPostponerType}" scope`,
     );
   }
@@ -54,9 +54,9 @@ class ActionPostponer {
     const success = this.try();
 
     if (!success) {
-      Logger.log(`[${this.logPostponerType}.tryExecute] Postponed`);
+      getDefaultLogger().log(`[${this.logPostponerType}.tryExecute] Postponed`);
     } else {
-      Logger.log(
+      getDefaultLogger().log(
         `[${this.logPostponerType}.tryExecute] Success on the 1st try`,
       );
     }
@@ -72,5 +72,3 @@ class ActionPostponer {
     }
   }
 }
-
-export default ActionPostponer;

@@ -1,4 +1,4 @@
-import { DrawLine, DrawPoint } from '../lib';
+import { DrawLine, DrawPoint } from '../lib/types/draw';
 import {
   getChunkedPointsAsStrings,
   getElementsDimensions,

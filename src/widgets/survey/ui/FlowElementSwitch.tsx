@@ -2,23 +2,23 @@ import { useMemo } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { ScheduleEvent } from '@app/entities/event';
+import { ScheduleEvent } from '@app/entities/event/lib/types/event';
+import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
+import { ActivityStepper } from '@app/features/pass-survey/ui/ActivityStepper';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
-  ActivityIdentityContext,
-  ActivityStepper,
-} from '@app/features/pass-survey';
-import {
-  AnalyticsService,
-  colors,
   MixEvents,
   MixProperties,
-} from '@app/shared/lib';
-import { BackButton, CrossIcon, Box } from '@shared/ui';
+} from '@app/shared/lib/analytics/IAnalyticsService';
+import { colors } from '@app/shared/lib/constants/colors';
+import { BackButton } from '@app/shared/ui/BackButton';
+import { Box } from '@app/shared/ui/base';
+import { CrossIcon } from '@app/shared/ui/icons';
+import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
 
-import Finish from './Finish';
-import Intermediate from './Intermediate';
-import Summary from './Summary';
-import { FlowPipelineItem } from '../model';
+import { FinishItem } from './Finish';
+import { Intermediate } from './Intermediate';
+import { Summary } from './Summary';
 
 type Props = {
   onClose: () => void;
@@ -31,7 +31,7 @@ type Props = {
   flowId?: string;
 } & FlowPipelineItem;
 
-function FlowElementSwitch({
+export function FlowElementSwitch({
   type,
   payload,
   event,
@@ -54,7 +54,7 @@ function FlowElementSwitch({
 
   const closeAssessment = (reason: 'regular' | 'click-on-return') => {
     if (reason === 'click-on-return') {
-      AnalyticsService.track(MixEvents.ReturnToActivitiesPressed, {
+      getDefaultAnalyticsService().track(MixEvents.ReturnToActivitiesPressed, {
         [MixProperties.AppletId]: context.appletId,
       });
     }
@@ -104,7 +104,7 @@ function FlowElementSwitch({
 
     case 'Finish': {
       return (
-        <Finish
+        <FinishItem
           {...payload}
           isTimerElapsed={isTimerElapsed}
           interruptionStep={interruptionStep}
@@ -114,5 +114,3 @@ function FlowElementSwitch({
     }
   }
 }
-
-export default FlowElementSwitch;

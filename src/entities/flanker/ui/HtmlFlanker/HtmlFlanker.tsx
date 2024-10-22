@@ -3,16 +3,22 @@ import { Platform, StyleSheet } from 'react-native';
 
 import WebView from 'react-native-webview';
 
-import { FlankerItemSettings } from '@app/abstract/lib';
-import { Box } from '@app/shared/ui';
-import { FlankerLiveEvent, StreamEventLoggable } from '@shared/lib';
-
-import { FlankerGameResponse, FlankerWebViewLogRecord } from '../../lib/types';
+import { FlankerItemSettings } from '@app/abstract/lib/types/flanker';
 import {
-  ConfigurationBuilder,
+  FlankerLiveEvent,
+  StreamEventLoggable,
+} from '@app/shared/lib/tcp/types';
+import { Box } from '@app/shared/ui/base';
+
+import {
+  FlankerGameResponse,
+  FlankerWebViewLogRecord,
+} from '../../lib/types/response';
+import { getDefaultConfigurationBuilder } from '../../lib/utils/configurationBuilderInstance';
+import {
   getScreensNumberPerTrial,
   parseResponse,
-} from '../../lib/utils';
+} from '../../lib/utils/helpers';
 
 const htmlAsset = require('./visual-stimulus-response.html');
 
@@ -21,18 +27,22 @@ type Props = {
   onResult: (data: FlankerGameResponse) => void;
 } & StreamEventLoggable<FlankerLiveEvent>;
 
-const HtmlFlanker: FC<Props> = props => {
-  const webView = useRef<any>();
+export const HtmlFlanker: FC<Props> = props => {
+  const webView = useRef<unknown>();
 
   const configuration = useMemo(() => {
-    return ConfigurationBuilder.buildForWebView(props.configuration);
+    return getDefaultConfigurationBuilder().buildForWebView(
+      props.configuration,
+    );
   }, [props.configuration]);
 
   const parsedConfiguration = useMemo(() => {
     if (!configuration) {
       return null;
     }
-    return ConfigurationBuilder.parseToWebViewConfigString(configuration);
+    return getDefaultConfigurationBuilder().parseToWebViewConfigString(
+      configuration,
+    );
   }, [configuration]);
 
   const source = Platform.select({
@@ -49,7 +59,7 @@ const HtmlFlanker: FC<Props> = props => {
   return (
     <Box flex={1}>
       <WebView
-        ref={ref => (webView.current = ref)}
+        ref={(ref: unknown) => (webView.current = ref)}
         style={styles.webView}
         source={source}
         originWhitelist={['*']}
@@ -108,8 +118,6 @@ const HtmlFlanker: FC<Props> = props => {
     </Box>
   );
 };
-
-export default HtmlFlanker;
 
 const styles = StyleSheet.create({
   webView: {

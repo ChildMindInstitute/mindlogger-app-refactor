@@ -1,24 +1,25 @@
-import { createStorage } from '@app/shared/lib';
+import { MMKV } from 'react-native-mmkv';
 
-import { NotificationDescriber } from '../types';
-
-const storage = createStorage('notification-queue');
+import { INotificationQueue } from './INotificationQueue';
+import { NotificationDescriber } from '../types/notificationBuilder';
 
 const storageKey = 'queue';
 
-function NotificationQueue() {
+export function NotificationQueue(
+  notificationQueueStorage: MMKV,
+): INotificationQueue {
   function get(): NotificationDescriber[] {
-    const queue = storage.getString(storageKey);
+    const queue = notificationQueueStorage.getString(storageKey);
 
     return queue ? (JSON.parse(queue) as NotificationDescriber[]) : [];
   }
 
   function set(value: NotificationDescriber[]) {
-    storage.set(storageKey, JSON.stringify(value));
+    notificationQueueStorage.set(storageKey, JSON.stringify(value));
   }
 
   function clear() {
-    return storage.delete(storageKey);
+    return notificationQueueStorage.delete(storageKey);
   }
 
   return {
@@ -27,5 +28,3 @@ function NotificationQueue() {
     clear,
   };
 }
-
-export default NotificationQueue();

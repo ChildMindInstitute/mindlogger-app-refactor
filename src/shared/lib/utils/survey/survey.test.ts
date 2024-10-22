@@ -1,11 +1,9 @@
-import { ActivityPipelineType } from '@app/abstract/lib';
-
 import {
-  getEntityProgress,
+  getEntityProgression,
   invertColor,
   isEntityExpired,
-  isEntityInProgress,
-  isReadyForAutocompletion,
+  isEntityProgressionInProgress,
+  isProgressionReadyForAutocompletion,
 } from './survey';
 
 describe('Test function invertColor', () => {
@@ -28,105 +26,123 @@ describe('Test function invertColor', () => {
 
 describe('Test getEntityProgress', () => {
   it('Should return undefined when progress is empty object', () => {
-    const result = getEntityProgress(
+    const result = getEntityProgression(
       'mock-applet-id-1',
       'mock-entity-id-1',
       'mock-event-id-1',
-      {},
+      null,
+      [],
     );
 
     expect(result).toEqual(undefined);
   });
 
   it('Should return undefined when progress contains only appletId', () => {
-    const result = getEntityProgress(
+    const result = getEntityProgression(
       'mock-applet-id-1',
       'mock-entity-id-1',
       'mock-event-id-1',
-      { 'mock-applet-id-1': {} },
+      null,
+      [{ appletId: 'mock-applet-id-1' } as never],
     );
 
     expect(result).toEqual(undefined);
   });
 
   it('Should return undefined when progress contains appletId and entityId', () => {
-    const result = getEntityProgress(
+    const result = getEntityProgression(
       'mock-applet-id-1',
       'mock-entity-id-1',
       'mock-event-id-1',
-      { 'mock-applet-id-1': { 'mock-entity-id-1': {} } },
+      null,
+      [{ appletId: 'mock-applet-id-1', entityId: 'mock-entity-id-1' } as never],
     );
 
     expect(result).toEqual(undefined);
   });
 
   it('Should return undefined when progress contains appletId and entityId and other eventId ', () => {
-    const result = getEntityProgress(
+    const result = getEntityProgression(
       'mock-applet-id-1',
       'mock-entity-id-1',
       'mock-event-id-1',
-      {
-        'mock-applet-id-1': {
-          'mock-entity-id-1': { 'mock-event-id-2': {} as any },
-        },
-      },
+      null,
+      [
+        {
+          appletId: 'mock-applet-id-1',
+          entityId: 'mock-entity-id-1',
+          eventId: 'mock-event-id-2',
+        } as never,
+      ],
     );
 
     expect(result).toEqual(undefined);
   });
 
   it('Should return payload when progress contains appletId and entityId and eventId with payload ', () => {
-    const result = getEntityProgress(
+    const result = getEntityProgression(
       'mock-applet-id-1',
       'mock-entity-id-1',
       'mock-event-id-1',
-      {
-        'mock-applet-id-1': {
-          'mock-entity-id-1': {
-            'mock-event-id-1': {
-              type: ActivityPipelineType.Regular,
-              availableTo: null,
-              startAt: 123,
-              endAt: null,
-            },
-          },
+      null,
+      [
+        {
+          status: 'in-progress',
+          appletId: 'mock-applet-id-1',
+          entityType: 'activity',
+          entityId: 'mock-entity-id-1',
+          eventId: 'mock-event-id-1',
+          targetSubjectId: null,
+          startedAtTimestamp: 123,
+          availableUntilTimestamp: null,
         },
-      },
+      ],
     );
 
-    expect(result).toEqual({
-      availableTo: null,
-      endAt: null,
-      startAt: 123,
-      type: 1,
-    });
+    expect(result).toHaveProperty('status', 'in-progress');
+    expect(result).toHaveProperty('appletId', 'mock-applet-id-1');
+    expect(result).toHaveProperty('entityType', 'activity');
+    expect(result).toHaveProperty('entityId', 'mock-entity-id-1');
+    expect(result).toHaveProperty('eventId', 'mock-event-id-1');
+    expect(result).toHaveProperty('targetSubjectId', null);
+    expect(result).toHaveProperty('startedAtTimestamp', 123);
+    expect(result).toHaveProperty('availableUntilTimestamp', null);
   });
 });
 
 describe('Test isEntityInProgress', () => {
   it('Should return false return when input is undefined', () => {
-    const result = isEntityInProgress(undefined);
+    const result = isEntityProgressionInProgress(undefined);
 
     expect(result).toEqual(false);
   });
 
   it('Should return false return when input is object with entAt equal to specified value', () => {
-    const result = isEntityInProgress({
-      type: ActivityPipelineType.Regular,
-      availableTo: null,
-      startAt: 123,
-      endAt: 456,
+    const result = isEntityProgressionInProgress({
+      status: 'completed',
+      appletId: 'mock-applet-id-1',
+      entityType: 'activity',
+      entityId: 'mock-entity-id-1',
+      eventId: 'mock-event-id-1',
+      targetSubjectId: null,
+      availableUntilTimestamp: null,
+      startedAtTimestamp: 123,
+      endedAtTimestamp: 456,
     });
 
     expect(result).toEqual(false);
   });
 
   it('Should return true return when input is object with entAt equal to null', () => {
-    const result = isEntityInProgress({
-      type: ActivityPipelineType.Regular,
-      availableTo: null,
-      startAt: 123,
-      endAt: null,
+    const result = isEntityProgressionInProgress({
+      status: 'in-progress',
+      appletId: 'mock-applet-id-1',
+      entityType: 'activity',
+      entityId: 'mock-entity-id-1',
+      eventId: 'mock-event-id-1',
+      targetSubjectId: null,
+      availableUntilTimestamp: null,
+      startedAtTimestamp: 123,
     });
 
     expect(result).toEqual(true);
@@ -165,89 +181,94 @@ describe('Test isEntityExpired', () => {
 
 describe('Test isReadyForAutocompletion', () => {
   it('Should return false when no progress record', () => {
-    const result = isReadyForAutocompletion(
+    const result = isProgressionReadyForAutocompletion(
       {
         appletId: 'mock-applet-id-1',
         entityId: 'mock-entity-id-1',
         eventId: 'mock-event-id-1',
         entityType: 'regular',
+        targetSubjectId: null,
       },
-      {},
+      [],
     );
 
     expect(result).toEqual(false);
   });
 
   it('Should return false when progress record exists and entity is completed', () => {
-    const result = isReadyForAutocompletion(
+    const result = isProgressionReadyForAutocompletion(
       {
         appletId: 'mock-applet-id-1',
         entityId: 'mock-entity-id-1',
         eventId: 'mock-event-id-1',
         entityType: 'regular',
+        targetSubjectId: null,
       },
-      {
-        'mock-applet-id-1': {
-          'mock-entity-id-1': {
-            'mock-event-id-1': {
-              type: ActivityPipelineType.Regular,
-              availableTo: null,
-              startAt: 12000034,
-              endAt: 1234567,
-            },
-          },
+      [
+        {
+          status: 'completed',
+          appletId: 'mock-applet-id-1',
+          entityType: 'activity',
+          entityId: 'mock-entity-id-1',
+          eventId: 'mock-event-id-1',
+          targetSubjectId: null,
+          availableUntilTimestamp: null,
+          startedAtTimestamp: 12000034,
+          endedAtTimestamp: 1234567,
         },
-      },
+      ],
     );
 
     expect(result).toEqual(false);
   });
 
   it('Should return false when entity is in progress and availableTo is is greater than now date', () => {
-    const result = isReadyForAutocompletion(
+    const result = isProgressionReadyForAutocompletion(
       {
         appletId: 'mock-applet-id-1',
         entityId: 'mock-entity-id-1',
         eventId: 'mock-event-id-1',
         entityType: 'regular',
+        targetSubjectId: null,
       },
-      {
-        'mock-applet-id-1': {
-          'mock-entity-id-1': {
-            'mock-event-id-1': {
-              type: ActivityPipelineType.Regular,
-              availableTo: Date.now() + 10000,
-              startAt: 12000034,
-              endAt: null,
-            },
-          },
+      [
+        {
+          status: 'in-progress',
+          appletId: 'mock-applet-id-1',
+          entityType: 'activity',
+          entityId: 'mock-entity-id-1',
+          eventId: 'mock-event-id-1',
+          targetSubjectId: null,
+          availableUntilTimestamp: Date.now() + 10000,
+          startedAtTimestamp: 12000034,
         },
-      },
+      ],
     );
 
     expect(result).toEqual(false);
   });
 
   it('Should return true when entity is in progress and availableTo is is less than now date', () => {
-    const result = isReadyForAutocompletion(
+    const result = isProgressionReadyForAutocompletion(
       {
         appletId: 'mock-applet-id-1',
         entityId: 'mock-entity-id-1',
         eventId: 'mock-event-id-1',
         entityType: 'regular',
+        targetSubjectId: null,
       },
-      {
-        'mock-applet-id-1': {
-          'mock-entity-id-1': {
-            'mock-event-id-1': {
-              type: ActivityPipelineType.Regular,
-              availableTo: Date.now() - 10000,
-              startAt: 12000034,
-              endAt: null,
-            },
-          },
+      [
+        {
+          status: 'in-progress',
+          appletId: 'mock-applet-id-1',
+          entityType: 'activity',
+          entityId: 'mock-entity-id-1',
+          eventId: 'mock-event-id-1',
+          targetSubjectId: null,
+          availableUntilTimestamp: Date.now() - 10000,
+          startedAtTimestamp: 12000034,
         },
-      },
+      ],
     );
 
     expect(result).toEqual(true);

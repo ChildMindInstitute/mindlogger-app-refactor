@@ -1,4 +1,5 @@
-import { AbPayload, FlankerItemSettings } from '@app/abstract/lib';
+import { AbPayload } from '@app/abstract/lib/types/abTrails';
+import { FlankerItemSettings } from '@app/abstract/lib/types/flanker';
 
 import { Report } from './activityReportSettings';
 import { ConditionalLogic } from './conditionalLogic';
@@ -416,6 +417,7 @@ export type ActivityDetails = {
   responseIsEditable: boolean;
   order: number;
   isHidden: boolean;
+  autoAssign: boolean;
   items: ActivityItem[];
   hasSummary: boolean;
   scoreSettings: Array<Report>;

@@ -6,7 +6,7 @@ type Props = {
   src: string;
 };
 
-const YoutubeVideo: FC<Props> = ({ src }) => {
+export const YoutubeVideo: FC<Props> = ({ src }) => {
   const videoId = src.split('.be/')?.[1];
   const uri = src?.includes('watch?')
     ? src
@@ -25,5 +25,3 @@ const YoutubeVideo: FC<Props> = ({ src }) => {
     />
   );
 };
-
-export default YoutubeVideo;

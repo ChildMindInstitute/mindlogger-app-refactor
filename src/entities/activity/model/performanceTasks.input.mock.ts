@@ -1,4 +1,4 @@
-import { ActivityDto } from '@shared/api';
+import { ActivityDto } from '@app/shared/api/services/IActivityService';
 
 export const abTrailsInput: ActivityDto = {
   id: '64e32047-22d8-1858-d681-b9d600000000',
@@ -10,6 +10,7 @@ export const abTrailsInput: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   isHidden: false,
+  autoAssign: true,
   responseIsEditable: true,
   order: 2,
   items: [
@@ -251,7 +252,7 @@ export const abTrailsInput: ActivityDto = {
   },
 };
 
-export const CSTInput: ActivityDto = {
+export const cstInput: ActivityDto = {
   id: '64e32047-22d8-1858-d681-b9da00000000',
   name: 'Stability_Task_gyro (custom)',
   description: 'This activity contains Stability tracker item.',
@@ -261,6 +262,7 @@ export const CSTInput: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   isHidden: false,
+  autoAssign: true,
   responseIsEditable: true,
   order: 6,
   items: [
@@ -356,6 +358,7 @@ export const flankerInput: ActivityDto = {
   isSkippable: false,
   isReviewable: false,
   isHidden: false,
+  autoAssign: true,
   responseIsEditable: true,
   order: 3,
   items: [

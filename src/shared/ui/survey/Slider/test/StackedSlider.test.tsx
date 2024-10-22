@@ -1,16 +1,11 @@
 import renderer from 'react-test-renderer';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import Text from '@app/shared/ui/Text';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+import { Text } from '@app/shared/ui/Text';
 
-import mock from './mockData';
-import StackedSlider from '../StackedSlider';
-import SurveySlider from '../SurveySlider';
-
-jest.mock('@app/shared/lib/constants', () => ({
-  ...jest.requireActual('@app/shared/lib/constants'),
-  STORE_ENCRYPTION_KEY: '12345',
-}));
+import { sliderConfig, sliderValues } from './mockData';
+import { StackedSlider } from '../StackedSlider';
+import { SurveySlider } from '../SurveySlider';
 
 describe('StackedSlider', () => {
   it('should render correct slider count', () => {
@@ -18,7 +13,7 @@ describe('StackedSlider', () => {
     const stackedSlider = renderer.create(
       <TamaguiProvider>
         <StackedSlider
-          config={mock.sliderConfig}
+          config={sliderConfig}
           values={null}
           onChange={changeHandler}
         />
@@ -35,8 +30,8 @@ describe('StackedSlider', () => {
     const stackedSlider = renderer.create(
       <TamaguiProvider>
         <StackedSlider
-          config={mock.sliderConfig}
-          values={mock.sliderValues}
+          config={sliderConfig}
+          values={sliderValues}
           onChange={changeHandler}
         />
       </TamaguiProvider>,
@@ -58,8 +53,8 @@ describe('StackedSlider', () => {
     const stackedSlider = renderer.create(
       <TamaguiProvider>
         <StackedSlider
-          config={mock.sliderConfig}
-          values={mock.sliderValues}
+          config={sliderConfig}
+          values={sliderValues}
           onChange={changeHandler}
         />
       </TamaguiProvider>,
@@ -82,8 +77,8 @@ describe('StackedSlider', () => {
     const stackedSlider = renderer.create(
       <TamaguiProvider>
         <StackedSlider
-          config={mock.sliderConfig}
-          values={mock.sliderValues}
+          config={sliderConfig}
+          values={sliderValues}
           onChange={changeHandler}
         />
       </TamaguiProvider>,

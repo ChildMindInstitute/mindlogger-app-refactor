@@ -4,7 +4,7 @@ import { StyleProp, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { default as VideoPlayerBase } from 'react-native-video-player';
 
-import { Center } from '@shared/ui';
+import { Center } from '../Center';
 
 const styles = StyleSheet.create({
   base: { width: '100%', height: '100%', backgroundColor: '#000' },
@@ -21,7 +21,7 @@ type Props = {
 
 const emptyStyles = StyleSheet.create({});
 
-const VideoPlayer: FC<Props> = ({
+export const VideoPlayer: FC<Props> = ({
   uri,
   autoPlay = false,
   resizeMode = 'cover',
@@ -77,5 +77,3 @@ const VideoPlayer: FC<Props> = ({
     </Center>
   );
 };
-
-export default VideoPlayer;

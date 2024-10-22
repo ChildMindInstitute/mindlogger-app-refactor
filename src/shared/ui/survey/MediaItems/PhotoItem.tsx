@@ -9,22 +9,23 @@ import {
   launchImageLibrary,
 } from 'react-native-image-picker';
 
+import { handleBlockedPermissions } from '@app/shared/lib/alerts/permissionAlerts';
 import {
-  colors,
   GALLERY_PHOTO_OPTIONS,
-  handleBlockedPermissions,
-  ImageConverter,
-  Logger,
   PHOTO_TAKE_OPTIONS,
-  requestCameraPermissions,
-  requestGalleryPermissions,
-  useCameraPermissions,
-  useGalleryPermissions,
-} from '@shared/lib';
-import { PhotoIcon, Image } from '@shared/ui';
+} from '@app/shared/lib/constants';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useCameraPermissions } from '@app/shared/lib/hooks/useCameraPermissions';
+import { useGalleryPermissions } from '@app/shared/lib/hooks/useGalleryPermissions';
+import { requestCameraPermissions } from '@app/shared/lib/permissions/cameraPermissions';
+import { requestGalleryPermissions } from '@app/shared/lib/permissions/galleryPermissions';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { ImageConverter } from '@app/shared/lib/utils/imageConverter';
 
-import MediaInput from './MediaInput';
+import { MediaInput } from './MediaInput';
 import { MediaValue } from './types';
+import { Image } from '../../base';
+import { PhotoIcon } from '../../icons';
 
 type Props = {
   onChange: (value: MediaValue) => void;
@@ -44,7 +45,7 @@ const preparePhotoFile = async (image: Asset, isFromLibrary: boolean) => {
 
       await FileSystem.unlink(originalUri);
     } catch (error) {
-      Logger.error(error as string);
+      getDefaultLogger().error(error as string);
     }
   }
 
@@ -59,7 +60,7 @@ const preparePhotoFile = async (image: Asset, isFromLibrary: boolean) => {
   return photoFile;
 };
 
-const PhotoItem: FC<Props> = ({ onChange, value }) => {
+export const PhotoItem: FC<Props> = ({ onChange, value }) => {
   const { t } = useTranslation();
   const { isCameraAccessGranted } = useCameraPermissions();
   const { isGalleryAccessGranted } = useGalleryPermissions();
@@ -138,5 +139,3 @@ const PhotoItem: FC<Props> = ({ onChange, value }) => {
     </MediaInput>
   );
 };
-
-export default PhotoItem;

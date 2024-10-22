@@ -489,5 +489,9 @@
     "dialog": {
       "body": "Sharing responses publicly implies that information provided by individual users, such as survey responses or feedback, will be openly available for others to view."
     }
+  },
+  "assignment": {
+    "badge": "About {{name}}",
+    "banner": "Please ensure all your responses are about <strong>{{name}}</strong>"
   }
 }

@@ -1,6 +1,6 @@
 import { createContext, Ref } from 'react';
 
-import { ViewSliderRef } from '@shared/ui';
+import { ViewSliderRef } from '../ViewSlider';
 
 type Handlers = {
   next: ({

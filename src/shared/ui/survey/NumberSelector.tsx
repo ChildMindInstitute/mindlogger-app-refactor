@@ -2,7 +2,7 @@ import { FC, useMemo } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import Dropdown from '../Dropdown';
+import { Dropdown } from '../Dropdown';
 
 type NumberSelectorConfig = {
   max: number;
@@ -15,7 +15,7 @@ type Props = {
   onChange: (value: string) => void;
 };
 
-const NumberSelector: FC<Props> = ({ config, value, onChange }) => {
+export const NumberSelector: FC<Props> = ({ config, value, onChange }) => {
   const { t } = useTranslation();
 
   const numberRange = useMemo(
@@ -41,5 +41,3 @@ const NumberSelector: FC<Props> = ({ config, value, onChange }) => {
     />
   );
 };
-
-export default NumberSelector;

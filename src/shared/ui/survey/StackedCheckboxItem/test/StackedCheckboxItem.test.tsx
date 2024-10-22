@@ -1,11 +1,11 @@
 import { CachedImage } from '@georstat/react-native-image-cache';
 import renderer from 'react-test-renderer';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import { CheckBox } from '@app/shared/ui';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+import { CheckBox } from '@app/shared/ui/CheckBox';
 
-import mock from './mockData';
-import StackedCheckboxItem from '../StackedCheckboxItem';
+import { selectedValues, stackedCheckboxConfig } from './mockData';
+import { StackedCheckboxItem } from '../StackedCheckboxItem';
 
 describe('StackedCheckboxItem', () => {
   it('should render correct checkbox count', () => {
@@ -16,7 +16,7 @@ describe('StackedCheckboxItem', () => {
         <StackedCheckboxItem
           values={null}
           onChange={changeHandler}
-          config={mock.stackedCheckboxConfig}
+          config={stackedCheckboxConfig}
           textReplacer={textReplacer}
           tooltipsShown={false}
         />
@@ -34,9 +34,9 @@ describe('StackedCheckboxItem', () => {
     const stackedCheckbox = renderer.create(
       <TamaguiProvider>
         <StackedCheckboxItem
-          values={mock.selectedValues}
+          values={selectedValues}
           onChange={changeHandler}
-          config={mock.stackedCheckboxConfig}
+          config={stackedCheckboxConfig}
           textReplacer={textReplacer}
           tooltipsShown={false}
         />
@@ -58,9 +58,9 @@ describe('StackedCheckboxItem', () => {
     const stackedCheckbox = renderer.create(
       <TamaguiProvider>
         <StackedCheckboxItem
-          values={mock.selectedValues}
+          values={selectedValues}
           onChange={changeHandler}
-          config={mock.stackedCheckboxConfig}
+          config={stackedCheckboxConfig}
           textReplacer={textReplacer}
           tooltipsShown={false}
         />

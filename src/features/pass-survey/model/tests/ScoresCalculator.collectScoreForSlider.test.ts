@@ -1,5 +1,6 @@
-import { SliderPipelineItem, SliderResponse } from '../../lib';
-import { IScoresCalculator, ScoresCalculator } from '../ScoresCalculator';
+import { SliderPipelineItem, SliderResponse } from '../../lib/types/payload';
+import { IScoresCalculator } from '../IScoresCalculator';
+import { ScoresCalculator } from '../ScoresCalculator';
 
 type WrappedAnswer = { answer: SliderResponse };
 

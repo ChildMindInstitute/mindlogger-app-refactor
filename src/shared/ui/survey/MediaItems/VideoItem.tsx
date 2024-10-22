@@ -8,20 +8,21 @@ import {
   launchImageLibrary,
 } from 'react-native-image-picker';
 
+import { handleBlockedPermissions } from '@app/shared/lib/alerts/permissionAlerts';
 import {
-  colors,
   GALLERY_VIDEO_OPTIONS,
-  handleBlockedPermissions,
-  requestCameraPermissions,
-  requestGalleryPermissions,
-  useCameraPermissions,
-  useGalleryPermissions,
   VIDEO_RECORD_OPTIONS,
-} from '@app/shared/lib';
-import { VideoIcon, VideoPlayer } from '@shared/ui';
+} from '@app/shared/lib/constants';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useCameraPermissions } from '@app/shared/lib/hooks/useCameraPermissions';
+import { useGalleryPermissions } from '@app/shared/lib/hooks/useGalleryPermissions';
+import { requestCameraPermissions } from '@app/shared/lib/permissions/cameraPermissions';
+import { requestGalleryPermissions } from '@app/shared/lib/permissions/galleryPermissions';
 
-import MediaInput from './MediaInput';
+import { MediaInput } from './MediaInput';
 import { MediaValue } from './types';
+import { VideoIcon } from '../../icons';
+import { VideoPlayer } from '../VideoPlayer';
 
 type Props = {
   onChange: (value: MediaValue) => void;
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const VideoItem: FC<Props> = ({ value, onChange }) => {
+export const VideoItem: FC<Props> = ({ value, onChange }) => {
   const { isCameraAccessGranted } = useCameraPermissions();
   const { isGalleryAccessGranted } = useGalleryPermissions();
   const { t } = useTranslation();
@@ -123,5 +124,3 @@ const VideoItem: FC<Props> = ({ value, onChange }) => {
     </MediaInput>
   );
 };
-
-export default VideoItem;

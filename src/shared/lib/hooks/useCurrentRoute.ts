@@ -2,7 +2,9 @@ import { useCallback } from 'react';
 
 import { useNavigation, NavigationState } from '@react-navigation/native';
 
-const peekCurrentRoute = (navigationState: NavigationState | undefined) => {
+export const peekCurrentRoute = (
+  navigationState: NavigationState | undefined,
+) => {
   if (!navigationState) {
     return undefined;
   }
@@ -11,7 +13,7 @@ const peekCurrentRoute = (navigationState: NavigationState | undefined) => {
   return lastRoute.name;
 };
 
-const useCurrentRoute = () => {
+export const useCurrentRoute = () => {
   const navigation = useNavigation();
 
   const getCurrentRoute = useCallback(
@@ -23,5 +25,3 @@ const useCurrentRoute = () => {
     getCurrentRoute,
   };
 };
-
-export default useCurrentRoute;

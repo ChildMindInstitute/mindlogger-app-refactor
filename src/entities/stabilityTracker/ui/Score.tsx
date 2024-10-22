@@ -1,14 +1,15 @@
 import React, { FC } from 'react';
 
-import { YStack, Text } from '@shared/ui';
+import { YStack } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 
-import styles from './StabilityTrackerItem.styles';
+import { styles } from './StabilityTracker.styles';
 
 type Props = {
   score: number;
 };
 
-const Score: FC<Props> = ({ score }) => {
+export const Score: FC<Props> = ({ score }) => {
   return (
     <YStack style={styles.header}>
       <Text style={styles.score}>
@@ -17,5 +18,3 @@ const Score: FC<Props> = ({ score }) => {
     </YStack>
   );
 };
-
-export default Score;

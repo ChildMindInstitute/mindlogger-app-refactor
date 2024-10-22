@@ -1,8 +1,11 @@
-import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
-import { ScheduleEventDto } from '@app/shared/api';
-import { buildDateFromDto } from '@app/shared/lib';
+import {
+  AvailabilityType,
+  PeriodicityType,
+} from '@app/abstract/lib/types/event';
+import { ScheduleEventDto } from '@app/shared/api/services/IEventsService';
+import { buildDateFromDto } from '@app/shared/lib/utils/dateTime';
 
-import { ScheduleEvent } from '../../lib';
+import { ScheduleEvent } from '../../lib/types/notificationBuilder';
 
 export function mapEventsFromDto(
   eventsDto: ScheduleEventDto[],

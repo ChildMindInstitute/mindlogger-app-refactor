@@ -1,9 +1,11 @@
 import { PropsWithChildren } from 'react';
 import { TouchableOpacity, StyleSheet, ColorValue } from 'react-native';
 
-import { colors } from '../lib';
-
-import { ActivityIndicator, BoxProps, Center, Text } from '.';
+import { ActivityIndicator } from './ActivityIndicator';
+import { BoxProps } from './base';
+import { Center } from './Center';
+import { Text } from './Text';
+import { colors } from '../lib/constants/colors';
 
 type Props = PropsWithChildren<{
   onPress: () => void;
@@ -17,7 +19,7 @@ type Props = PropsWithChildren<{
 }> &
   BoxProps;
 
-function Button({
+export function Button({
   onPress,
   isLoading,
   spinnerColor,
@@ -71,5 +73,3 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
-
-export default Button;

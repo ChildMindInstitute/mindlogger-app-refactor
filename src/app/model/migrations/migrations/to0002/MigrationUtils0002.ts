@@ -1,13 +1,13 @@
 import { CacheManager } from '@georstat/react-native-image-cache';
 import { QueryClient } from '@tanstack/react-query';
 
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import {
-  Logger,
-  getActivityDetailsKey,
-  getAppletDetailsKey,
-  getAppletsKey,
   getDataFromQuery,
-} from '@app/shared/lib';
+  getAppletsKey,
+  getAppletDetailsKey,
+  getActivityDetailsKey,
+} from '@app/shared/lib/utils/reactQueryHelpers';
 
 import {
   ActivityDto,
@@ -83,13 +83,13 @@ export const isUrlValid = (url: string): boolean => {
 export const cacheImage = (url: ImageUrl) => {
   try {
     if (!isUrlValid(url)) {
-      Logger.warn(`[cacheImages] URL "${url}" is not valid`);
+      getDefaultLogger().warn(`[cacheImages] URL "${url}" is not valid`);
       return;
     }
 
     CacheManager.prefetch(url);
   } catch (err) {
-    Logger.warn(
+    getDefaultLogger().warn(
       `[cacheImages] Ignored due to error:
       url: ${url}
       error: ${(err as Error).message}`,

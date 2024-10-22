@@ -3,11 +3,11 @@ import { TouchableOpacity } from 'react-native';
 
 import { useThrottledCallback } from 'use-debounce';
 
-import { colors } from '@shared/lib';
-import { RightArrowIcon } from '@shared/ui';
+import { colors } from '@app/shared/lib/constants/colors';
 
-import ActionButton from './ActionButton';
+import { ActionButton } from './ActionButton';
 import { HandlersContext } from './contexts';
+import { RightArrowIcon } from '../icons';
 
 type Props = PropsWithChildren<{
   isIcon?: boolean;
@@ -16,7 +16,7 @@ type Props = PropsWithChildren<{
 
 const THROTTLE_DELAY = 300;
 
-function NextButton({ children, isIcon, accessibilityLabel }: Props) {
+export function NextButton({ children, isIcon, accessibilityLabel }: Props) {
   const { next } = useContext(HandlersContext);
 
   const onPressNext = useCallback(() => {
@@ -53,5 +53,3 @@ function NextButton({ children, isIcon, accessibilityLabel }: Props) {
     </ActionButton>
   );
 }
-
-export default NextButton;

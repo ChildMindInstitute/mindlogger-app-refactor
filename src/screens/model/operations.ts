@@ -1,7 +1,7 @@
 import type { NavigationState } from '@react-navigation/native';
 
-import { RootStackParamList, ScreenRoute } from '../config';
-import { navigationService } from '../lib';
+import { RootStackParamList, ScreenRoute } from '../config/types';
+import { getDefaultNavigationService } from '../lib/navigationServiceInstance';
 
 const ROUTES_TO_PERSIST: ScreenRoute[] = ['AppletDetails'];
 
@@ -12,13 +12,14 @@ export function onScreenChanged(
   const currentScreen = history[history.length - 1];
 
   if (ROUTES_TO_PERSIST.includes(currentScreen.name)) {
-    navigationService.setInitialRoute({
+    getDefaultNavigationService().setInitialRoute({
       route: currentScreen.name,
       params: currentScreen.params,
     });
   } else {
-    navigationService.clearInitialRoute();
+    getDefaultNavigationService().clearInitialRoute();
   }
 }
 
-export const clearInitialRoute = navigationService.clearInitialRoute;
+export const clearInitialRoute =
+  getDefaultNavigationService().clearInitialRoute;

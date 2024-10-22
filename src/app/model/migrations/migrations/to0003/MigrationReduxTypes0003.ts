@@ -1,1 +1,4 @@
-export type { RootStateTo } from '../to0002/MigrationReduxTypes0002';
+export type {
+  RootStateFrom,
+  RootStateTo,
+} from '../to0002/MigrationReduxTypes0002';

@@ -1,36 +1,37 @@
 import { useQueryClient } from '@tanstack/react-query';
 
 import {
-  ActivityRecordKeyParams,
   CheckAvailability,
   CompleteEntityIntoUploadToQueue,
   EntityPath,
   EntityType,
   EvaluateAvailableTo,
   LookupEntityInput,
-  StoreProgressPayload,
-} from '@app/abstract/lib';
+} from '@app/abstract/lib/types/entity';
+import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
+import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
 import {
   ActivityFlowRecordDto,
   ActivityRecordDto,
   AppletDetailsResponse,
-} from '@app/shared/api';
+} from '@app/shared/api/services/IAppletService';
+import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useAppletInfo } from '@app/shared/lib/hooks/useAppletInfo';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { MigrationValidator } from '@app/shared/lib/services/MigrationValidator';
+import { ILogger } from '@app/shared/lib/types/logger';
+import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
+import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
 import {
-  getAppletDetailsKey,
   getDataFromQuery,
-  getEntityProgress,
-  ILogger,
-  isAppOnline,
+  getAppletDetailsKey,
+} from '@app/shared/lib/utils/reactQueryHelpers';
+import {
+  getEntityProgression,
+  isEntityProgressionInProgress,
+  isProgressionReadyForAutocompletion,
   isEntityExpired,
-  isEntityInProgress,
-  isReadyForAutocompletion,
-  Logger,
-  MigrationValidator,
-  Mutex,
-  useAppDispatch,
-  useAppletInfo,
-  useAppSelector,
-} from '@shared/lib';
+} from '@app/shared/lib/utils/survey/survey';
 
 import {
   LogActivityActionParams,
@@ -44,13 +45,13 @@ import {
 } from './startEntityHelpers';
 import {
   onActivityContainsAllItemsHidden,
-  onFlowActivityContainsAllItemsHidden,
   onBeforeStartingActivity,
+  onFlowActivityContainsAllItemsHidden,
   onMediaReferencesFound,
   onMigrationsNotApplied,
-} from '../../lib';
-import { selectInProgressApplets } from '../selectors';
-import { actions } from '../slice';
+} from '../../lib/alerts';
+import { selectAppletsEntityProgressions } from '../selectors';
+import { appletActions } from '../slice';
 
 type FailReason =
   | 'media-found'
@@ -85,11 +86,10 @@ type FlowStartedArgs = {
   activityImage: string | null;
   pipelineActivityOrder: number;
   totalActivities: number;
+  targetSubjectId: string | null;
 };
 
-export const StartEntityMutex = Mutex();
-
-function useStartEntity({
+export function useStartEntity({
   hasMediaReferences,
   hasActivityWithHiddenAllItems,
   cleanUpMediaFiles,
@@ -97,34 +97,33 @@ function useStartEntity({
   completeEntityIntoUploadToQueue,
   checkAvailability,
 }: UseStartEntityInput) {
-  const mutex = StartEntityMutex;
+  const mutex = getMutexDefaultInstanceManager().getStartEntityMutex();
 
   const dispatch = useAppDispatch();
 
-  const allProgresses = useAppSelector(selectInProgressApplets);
+  const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
 
   const queryClient = useQueryClient();
 
   const { getName: getAppletDisplayName } = useAppletInfo();
 
-  const logger: ILogger = Logger;
+  const logger: ILogger = getDefaultLogger();
 
-  const isInProgress = (payload: StoreProgressPayload | undefined): boolean =>
-    isEntityInProgress(payload);
-
-  function activityStarted(
+  function activityStart(
     appletId: string,
     activityId: string,
     eventId: string,
+    targetSubjectId: string | null,
   ) {
     const availableTo = evaluateAvailableTo(appletId, eventId);
 
     dispatch(
-      actions.activityStarted({
+      appletActions.startActivity({
         appletId,
-        activityId,
+        entityId: activityId,
         eventId,
-        availableTo,
+        availableUntil: availableTo,
+        targetSubjectId,
       }),
     );
   }
@@ -139,14 +138,16 @@ function useStartEntity({
     activityImage,
     totalActivities,
     pipelineActivityOrder,
+    targetSubjectId,
   }: FlowStartedArgs) {
     const availableTo = evaluateAvailableTo(appletId, eventId);
 
     dispatch(
-      actions.flowStarted({
+      appletActions.startFlow({
         appletId,
         flowId,
         eventId,
+        targetSubjectId,
         activityId,
         activityName,
         activityDescription,
@@ -194,26 +195,29 @@ function useStartEntity({
     entityId: string,
     eventId: string,
     entityType: EntityType,
+    targetSubjectId: string | null,
   ): Promise<{ isEntityInProgress: boolean; availableTo: number | null }> {
-    const progress = getEntityProgress(
+    const progression = getEntityProgression(
       appletId,
       entityId,
       eventId,
-      allProgresses,
+      targetSubjectId,
+      entityProgressions,
     );
 
-    let evaluatedIsInProgress = isInProgress(progress);
+    let evaluatedIsInProgress = isEntityProgressionInProgress(progression);
 
     const entityPath: EntityPath = {
       appletId,
       entityId,
       eventId,
       entityType,
+      targetSubjectId,
     };
 
-    const readyForAutocompletion = isReadyForAutocompletion(
+    const readyForAutocompletion = isProgressionReadyForAutocompletion(
       entityPath,
-      allProgresses,
+      entityProgressions,
     );
 
     if (readyForAutocompletion) {
@@ -223,7 +227,9 @@ function useStartEntity({
 
     return {
       isEntityInProgress: evaluatedIsInProgress,
-      availableTo: progress?.availableTo ?? null,
+      availableTo:
+        (progression as EntityProgressionInProgress | null)
+          ?.availableUntilTimestamp || null,
     };
   }
 
@@ -233,6 +239,7 @@ function useStartEntity({
     eventId: string,
     entityName: string,
     isTimerElapsed: boolean,
+    targetSubjectId: string | null,
   ): Promise<StartResult> {
     const breakDueToMediaReferences = await shouldBreakDueToMediaReferences(
       appletId,
@@ -246,6 +253,7 @@ function useStartEntity({
         activityId,
         eventId,
         'regular',
+        targetSubjectId,
       );
 
     return new Promise<StartResult>(resolve => {
@@ -288,8 +296,14 @@ function useStartEntity({
               return resolve({ failReason: 'expired-while-alert-opened' });
             }
             logRestartActivity(logParams);
-            cleanUpMediaFiles({ activityId, appletId, eventId, order: 0 });
-            activityStarted(appletId, activityId, eventId);
+            cleanUpMediaFiles({
+              activityId,
+              appletId,
+              eventId,
+              targetSubjectId,
+              order: 0,
+            });
+            activityStart(appletId, activityId, eventId, targetSubjectId);
             resolve({ fromScratch: true });
           },
           onResume: () => {
@@ -302,7 +316,7 @@ function useStartEntity({
         });
       } else {
         logStartActivity(logParams);
-        activityStarted(appletId, activityId, eventId);
+        activityStart(appletId, activityId, eventId, targetSubjectId);
         resolve({ fromScratch: true });
       }
     });
@@ -314,9 +328,10 @@ function useStartEntity({
     eventId: string,
     entityName: string,
     isTimerElapsed: boolean,
+    targetSubjectId: string | null,
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
-      Logger.log('[useStartEntity.startActivity] Mutex is busy');
+      getDefaultLogger().log('[useStartEntity.startActivity] Mutex is busy');
 
       return { failed: true, failReason: 'mutex-busy' };
     }
@@ -330,6 +345,7 @@ function useStartEntity({
           eventId,
           entityId: activityId,
           entityType: 'regular',
+          targetSubjectId,
         }))
       ) {
         return { failed: true, failReason: 'not-available' };
@@ -341,11 +357,12 @@ function useStartEntity({
         eventId,
         entityName,
         isTimerElapsed,
+        targetSubjectId,
       );
 
       result.failed = !!result.failReason;
 
-      Logger.log(
+      getDefaultLogger().log(
         `[useStartEntity.startActivity]: Result: ${JSON.stringify(result)}`,
       );
 
@@ -361,6 +378,7 @@ function useStartEntity({
     eventId: string,
     entityName: string,
     isTimerElapsed: boolean = false,
+    targetSubjectId: string | null,
   ): Promise<StartResult> {
     const detailsResponse: AppletDetailsResponse =
       getDataFromQuery<AppletDetailsResponse>(
@@ -400,6 +418,7 @@ function useStartEntity({
         flowId,
         eventId,
         'flow',
+        targetSubjectId,
       );
 
     return new Promise<StartResult>(resolve => {
@@ -448,6 +467,7 @@ function useStartEntity({
                 activityId: flowActivities[i],
                 appletId,
                 eventId,
+                targetSubjectId,
                 order: i,
               });
             }
@@ -456,6 +476,7 @@ function useStartEntity({
             flowStarted({
               appletId,
               flowId,
+              targetSubjectId,
               activityId: firstActivity.id,
               activityDescription: firstActivity.description,
               activityImage: firstActivity.image,
@@ -481,6 +502,7 @@ function useStartEntity({
           appletId,
           flowId,
           eventId,
+          targetSubjectId,
           activityId: firstActivity.id,
           activityName: firstActivity.name,
           activityDescription: firstActivity.description,
@@ -500,9 +522,10 @@ function useStartEntity({
     eventId: string,
     entityName: string,
     isTimerElapsed: boolean,
+    targetSubjectId: string | null,
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
-      Logger.log('[useStartEntity.startFlow] Mutex is busy');
+      getDefaultLogger().log('[useStartEntity.startFlow] Mutex is busy');
 
       return { failed: true, failReason: 'mutex-busy' };
     }
@@ -516,6 +539,7 @@ function useStartEntity({
           eventId,
           entityId: flowId,
           entityType: 'flow',
+          targetSubjectId,
         }))
       ) {
         return { failed: true, failReason: 'not-available' };
@@ -527,11 +551,12 @@ function useStartEntity({
         eventId,
         entityName,
         isTimerElapsed,
+        targetSubjectId,
       );
 
       result.failed = !!result.failReason;
 
-      Logger.log(
+      getDefaultLogger().log(
         `[useStartEntity.startFlow]: Result: ${JSON.stringify(result)}`,
       );
 
@@ -543,5 +568,3 @@ function useStartEntity({
 
   return { startActivity, startFlow };
 }
-
-export default useStartEntity;

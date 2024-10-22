@@ -1,8 +1,12 @@
 import { useEffect } from 'react';
 import { useRef } from 'react';
 
-import { HourMinute, getMsFromHours, getMsFromMinutes } from '@app/shared/lib';
-import { AppTimer } from '@app/shared/lib';
+import { AppTimer } from '@app/shared/lib/timers/AppTimer';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
+import {
+  getMsFromHours,
+  getMsFromMinutes,
+} from '@app/shared/lib/utils/dateTime';
 
 type UseIdleTimerInput = {
   onFinish: () => void;
@@ -13,7 +17,7 @@ type UseIdleTimerResult = {
   restart: () => void;
 };
 
-const useIdleTimer = (input: UseIdleTimerInput): UseIdleTimerResult => {
+export const useIdleTimer = (input: UseIdleTimerInput): UseIdleTimerResult => {
   const { onFinish, hourMinute } = input;
 
   const duration = hourMinute
@@ -51,5 +55,3 @@ const useIdleTimer = (input: UseIdleTimerInput): UseIdleTimerResult => {
     restart,
   };
 };
-
-export default useIdleTimer;

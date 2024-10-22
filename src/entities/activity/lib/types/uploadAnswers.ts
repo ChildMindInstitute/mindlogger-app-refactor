@@ -1,9 +1,9 @@
 import {
   AnswerAlertsDto,
   AnswerDto,
-  AppletEncryptionDTO,
   UserActionDto,
-} from '@app/shared/api';
+} from '@app/shared/api/services/IAnswerService';
+import { AppletEncryptionDTO } from '@app/shared/api/services/IAppletService';
 
 export type SendAnswersInput = {
   appletId: string;
@@ -21,6 +21,7 @@ export type SendAnswersInput = {
   endTime: number;
   userIdentifier?: string;
   eventId: string;
+  targetSubjectId: string | null;
   isFlowCompleted: boolean;
   client: {
     appId: string;

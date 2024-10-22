@@ -1,8 +1,8 @@
 import { forwardRef, useImperativeHandle, useState } from 'react';
 
-import { AbTutorialPayload } from '@app/abstract/lib';
+import { AbTutorialPayload } from '@app/abstract/lib/types/abTrails';
 
-import AbTutorial from './AbTutorial';
+import { AbTutorial } from './AbTutorial';
 
 export type AbTutorialViewerProps = AbTutorialPayload;
 

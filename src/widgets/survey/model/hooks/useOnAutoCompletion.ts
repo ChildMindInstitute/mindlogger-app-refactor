@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-import { AutocompletionEventOptions } from '@app/abstract/lib';
-import { Emitter } from '@shared/lib';
+import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
+import { Emitter } from '@app/shared/lib/services/Emitter';
 
-import { useAutoCompletionExecute } from './';
+import { useAutoCompletionExecute } from './useAutoCompletionExecute';
 
-function useOnAutoCompletion(callback?: () => void) {
+export function useOnAutoCompletion(callback?: () => void) {
   const callbackRef = useRef(callback);
 
   callbackRef.current = callback;
@@ -34,5 +34,3 @@ function useOnAutoCompletion(callback?: () => void) {
     };
   }, [processAutocompletion]);
 }
-
-export default useOnAutoCompletion;

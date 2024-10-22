@@ -1,53 +1,80 @@
+import { EntityPath, EntityType } from '@app/abstract/lib/types/entity';
 import {
-  ActivityPipelineType,
-  EntityPath,
-  EntityType,
-  StoreProgress,
-} from '@app/abstract/lib';
-import { NotCompletedEntity } from '@app/entities/applet/model/selectors';
+  EntityProgression,
+  EntityProgressionCompleted,
+  EntityProgressionInProgressActivityFlow,
+} from '@app/abstract/lib/types/entityProgress';
+import { IncompleteEntity } from '@app/entities/applet/model/selectors';
 import {
   ActivityState,
   Answer,
   Answers,
-  PipelineItem,
-  UserAction,
-} from '@app/features/pass-survey';
-import { AnswerDto, SliderAnswerDto } from '@app/shared/api';
+} from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
+import { PipelineItem } from '@app/features/pass-survey/lib/types/payload';
+import { UserAction } from '@app/features/pass-survey/lib/types/userAction';
 import {
-  CollectCompletionOutput,
-  ConstructInput,
-  FlowState,
-} from '@app/widgets/survey';
+  AnswerDto,
+  SliderAnswerDto,
+} from '@app/shared/api/services/IAnswerService';
+import { FlowState } from '@app/widgets/survey/lib/useFlowStorageRecord';
 import * as dateTimeUtils from '@shared/lib/utils/dateTime';
+import { CollectCompletionOutput } from '@widgets/survey/model/services/ICollectCompletionsService';
 
 import * as metaHelpers from '../../../lib/metaHelpers';
 import * as storageHelpers from '../../../lib/storageHelpers';
 import * as mappers from '../../mappers';
 import * as operations from '../../operations';
+import { ConstructInput } from '../ConstructCompletionsService';
 
-export const getRegularProgressRecord = (
+export const getActivityIncompleteEntity = (
   path: EntityPath,
-): NotCompletedEntity => {
+): IncompleteEntity => {
   return {
     appletId: path.appletId,
+    entityType: 'activity',
     entityId: path.entityId,
     eventId: path.eventId,
-    type: ActivityPipelineType.Regular,
-    payload: {
-      availableTo: null,
-    } as any,
+    targetSubjectId: path.targetSubjectId,
+    progression: {
+      status: 'in-progress',
+      appletId: path.appletId,
+      entityType: 'activity',
+      entityId: path.entityId,
+      eventId: path.eventId,
+      targetSubjectId: path.targetSubjectId,
+      startedAtTimestamp: new Date().getTime(),
+      availableUntilTimestamp: null,
+    },
   };
 };
 
-export const getFlowProgressRecord = (path: EntityPath): NotCompletedEntity => {
+export const getActivityFlowIncompleteEntity = (
+  path: EntityPath,
+): IncompleteEntity<EntityProgressionInProgressActivityFlow> => {
   return {
     appletId: path.appletId,
+    entityType: 'activityFlow',
     entityId: path.entityId,
     eventId: path.eventId,
-    type: ActivityPipelineType.Flow,
-    payload: {
-      availableTo: null,
-    } as any,
+    targetSubjectId: path.targetSubjectId,
+    progression: {
+      status: 'in-progress',
+      appletId: path.appletId,
+      entityType: 'activityFlow',
+      entityId: path.entityId,
+      eventId: path.eventId,
+      targetSubjectId: path.targetSubjectId,
+      startedAtTimestamp: new Date().getTime(),
+      availableUntilTimestamp: null,
+      pipelineActivityOrder: 0,
+      totalActivitiesInPipeline: 1,
+      currentActivityId: 'activity-1',
+      currentActivityName: 'activity-name',
+      currentActivityDescription: 'activity-desc',
+      currentActivityImage: null,
+      currentActivityStartAt: null,
+      executionGroupKey: 'group-key',
+    },
   };
 };
 
@@ -69,6 +96,7 @@ export const getSingleActivityFlowState = (path: EntityPath): FlowState => {
           activityName: 'mock-activity-name',
           appletId: path.appletId,
           eventId: path.eventId,
+          targetSubjectId: path.targetSubjectId,
           order: 0,
         },
       },
@@ -79,6 +107,7 @@ export const getSingleActivityFlowState = (path: EntityPath): FlowState => {
           activityName: 'mock-activity-name',
           appletId: path.appletId,
           eventId: path.eventId,
+          targetSubjectId: path.targetSubjectId,
           order: 0,
         },
       },
@@ -104,6 +133,7 @@ export const getMultipleActivityFlowState = (path: EntityPath): FlowState => {
           activityName: 'mock-activity-name-1',
           appletId: path.appletId,
           eventId: path.eventId,
+          targetSubjectId: path.targetSubjectId,
           order: 0,
         },
       },
@@ -115,6 +145,7 @@ export const getMultipleActivityFlowState = (path: EntityPath): FlowState => {
           activityName: 'mock-activity-name-1',
           appletId: path.appletId,
           eventId: path.eventId,
+          targetSubjectId: path.targetSubjectId,
           order: 0,
         },
       },
@@ -127,6 +158,7 @@ export const getMultipleActivityFlowState = (path: EntityPath): FlowState => {
           activityName: 'mock-activity-name-2',
           appletId: path.appletId,
           eventId: path.eventId,
+          targetSubjectId: path.targetSubjectId,
           order: 1,
         },
       },
@@ -138,6 +170,7 @@ export const getMultipleActivityFlowState = (path: EntityPath): FlowState => {
           activityName: 'mock-activity-name-2',
           appletId: path.appletId,
           eventId: path.eventId,
+          targetSubjectId: path.targetSubjectId,
           order: 1,
         },
       },
@@ -201,44 +234,46 @@ export const getUserActionsMock = (answersMock: Answers): UserAction[] => {
   return userActionsMock;
 };
 
-export const getFlowProgressMock = (): StoreProgress => {
-  const progress: StoreProgress = {
-    'mock-applet-id-1': {
-      'mock-flow-id-1': {
-        'mock-event-id-1': {
-          type: ActivityPipelineType.Flow,
-          availableTo: null,
-          startAt: 12367800000,
-          endAt: null,
-          currentActivityDescription: 'mock-activity-description-1',
-          currentActivityId: 'mock-activity-id-1',
-          currentActivityImage: null,
-          currentActivityName: 'mock-activity-name-1',
-          currentActivityStartAt: 12389100000,
-          executionGroupKey: 'mock-flow-group-key-1',
-          pipelineActivityOrder: 0,
-          totalActivitiesInPipeline: 2,
-        },
-      },
-    },
+export const getFlowProgressionsMock = (): EntityProgression[] => {
+  const progression: EntityProgression = {
+    status: 'in-progress',
+    appletId: 'mock-applet-id-1',
+    entityType: 'activityFlow',
+    entityId: 'mock-flow-id-1',
+    eventId: 'mock-event-id-1',
+    targetSubjectId: null,
+    startedAtTimestamp: 12367800000,
+    availableUntilTimestamp: null,
+    currentActivityDescription: 'mock-activity-description-1',
+    currentActivityId: 'mock-activity-id-1',
+    currentActivityImage: null,
+    currentActivityName: 'mock-activity-name-1',
+    currentActivityStartAt: 12389100000,
+    executionGroupKey: 'mock-flow-group-key-1',
+    pipelineActivityOrder: 0,
+    totalActivitiesInPipeline: 2,
   };
-  return progress;
+
+  (progression as never as EntityProgressionCompleted).endedAtTimestamp = null;
+
+  return [progression];
 };
 
-export const getActivityProgressMock = (): StoreProgress => {
-  const progress: StoreProgress = {
-    'mock-applet-id-1': {
-      'mock-activity-id-1': {
-        'mock-event-id-1': {
-          type: ActivityPipelineType.Regular,
-          availableTo: null,
-          startAt: 12367800000,
-          endAt: null,
-        },
-      },
-    },
+export const getActivityProgressionsMock = (): EntityProgression[] => {
+  const progression: EntityProgression = {
+    status: 'in-progress',
+    appletId: 'mock-applet-id-1',
+    entityType: 'activity',
+    entityId: 'mock-activity-id-1',
+    eventId: 'mock-event-id-1',
+    targetSubjectId: null,
+    startedAtTimestamp: 12367800000,
+    availableUntilTimestamp: null,
   };
-  return progress;
+
+  (progression as never as EntityProgressionCompleted).endedAtTimestamp = null;
+
+  return [progression];
 };
 
 export const getActivityRecordMockResult = (
@@ -365,6 +400,7 @@ export const getInputsForIntermediate = (): ConstructInput => {
     appletId: 'mock-applet-id-1',
     eventId: 'mock-event-id-1',
     flowId: 'mock-flow-id-1',
+    targetSubjectId: null,
     order: 0,
     isAutocompletion: false,
   };
@@ -378,6 +414,7 @@ export const getInputsForFinish = (entityType: EntityType): ConstructInput => {
     appletId: 'mock-applet-id-1',
     eventId: 'mock-event-id-1',
     flowId: entityType === 'flow' ? 'mock-flow-id-1' : undefined,
+    targetSubjectId: null,
     order: 0,
     isAutocompletion: false,
   };

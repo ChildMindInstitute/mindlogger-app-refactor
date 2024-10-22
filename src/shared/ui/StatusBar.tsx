@@ -1,11 +1,11 @@
-import { StatusBar } from 'react-native';
+import { StatusBar as RNStatusBar } from 'react-native';
 
 import { styled, setupReactNative } from '@tamagui/core';
 
 import { IS_IOS } from '../lib/constants';
 
-setupReactNative(StatusBar);
+setupReactNative(RNStatusBar);
 
-export default styled(StatusBar, {
+export const StatusBar = styled(RNStatusBar, {
   barStyle: IS_IOS ? 'dark-content' : 'light-content',
 });

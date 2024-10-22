@@ -6,8 +6,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Svg, Circle } from 'react-native-svg';
 
-import { colors } from '@app/shared/lib';
-import { Box } from '@app/shared/ui';
+import { colors } from '@app/shared/lib/constants/colors';
+import { Box } from '@app/shared/ui/base';
 
 type Props = {
   size?: number;
@@ -18,7 +18,7 @@ const PI = Math.PI;
 
 const AnimatedSvgCircle = Animated.createAnimatedComponent(Circle);
 
-export default ({ size = 86, progress }: Props) => {
+export const CircleProgress = ({ size = 86, progress }: Props) => {
   const strokeWidth = 12;
   const circleSize = size - strokeWidth;
   const r = circleSize / 2;

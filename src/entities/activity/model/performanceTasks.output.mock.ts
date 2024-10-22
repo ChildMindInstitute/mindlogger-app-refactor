@@ -1,4 +1,4 @@
-import { ActivityDetails } from '@entities/activity';
+import { ActivityDetails } from '../lib/types/activity';
 
 export const abTrailsOutput: ActivityDetails = {
   description: 'A/B Trails',
@@ -8,6 +8,7 @@ export const abTrailsOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: true,
   items: [
     {
       canBeReset: false,
@@ -556,7 +557,7 @@ export const abTrailsOutput: ActivityDetails = {
   splashScreen: 'splash',
 };
 
-export const CSTOutput: ActivityDetails = {
+export const cstOutput: ActivityDetails = {
   description: 'This activity contains Stability tracker item.',
   hasSummary: false,
   id: '64e32047-22d8-1858-d681-b9da00000000',
@@ -564,6 +565,7 @@ export const CSTOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: true,
   items: [
     {
       canBeReset: false,
@@ -682,6 +684,7 @@ export const flankerOutput: ActivityDetails = {
   isHidden: false,
   isReviewable: false,
   isSkippable: false,
+  autoAssign: true,
   items: [
     {
       canBeReset: false,

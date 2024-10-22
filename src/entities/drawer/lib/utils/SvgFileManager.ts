@@ -1,33 +1,29 @@
 import { FileSystem, Dirs } from 'react-native-file-access';
 import { v4 as uuidv4 } from 'uuid';
 
-import { ILogger, Logger } from '@app/shared/lib';
+import { ILogger } from '@app/shared/lib/types/logger';
+
+import { ISvgFileManager, SvgFileMeta } from './ISvgFileManager';
 
 const filesCacheDir = Dirs.CacheDir;
 
-type SvgFileMeta = {
-  fileName: string;
-  type: 'image/svg';
-  uri: string;
+const getFilePath = (fileName: string) => {
+  return `file://${filesCacheDir}/${fileName}`;
 };
 
-class SvgFileManager {
+export class SvgFileManager implements ISvgFileManager {
   private logger: ILogger;
 
   constructor(logger: ILogger) {
     this.logger = logger;
   }
 
-  public static getFilePath = (fileName: string) => {
-    return `file://${filesCacheDir}/${fileName}`;
-  };
-
   public getFileMeta(fileName: string | null): SvgFileMeta {
     if (!fileName?.length) {
       fileName = `${uuidv4()}.svg`;
     }
 
-    const filePath = SvgFileManager.getFilePath(fileName);
+    const filePath = getFilePath(fileName);
 
     return {
       fileName,
@@ -46,12 +42,10 @@ class SvgFileManager {
 
       await FileSystem.writeFile(filePath, svg);
     } catch (error) {
-      Logger.warn(
+      this.logger.warn(
         '[SvgFileManager.writeFile]: Error occurred while deleting or writing a file\n\n' +
           error,
       );
     }
   }
 }
-
-export default new SvgFileManager(Logger);

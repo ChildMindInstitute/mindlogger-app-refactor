@@ -1,6 +1,6 @@
 import { StackedSliderConfig } from '../types';
 
-const sliderConfig: StackedSliderConfig = {
+export const sliderConfig: StackedSliderConfig = {
   rows: [
     {
       label: 'test 1',
@@ -27,6 +27,4 @@ const sliderConfig: StackedSliderConfig = {
   setAlerts: false,
 };
 
-const sliderValues = [2, 1];
-
-export default { sliderConfig, sliderValues };
+export const sliderValues = [2, 1];

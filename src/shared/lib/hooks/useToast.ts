@@ -9,7 +9,7 @@ const showToastMessage = (message: string) =>
     position: 'bottom',
   });
 
-function useToast() {
+export function useToast() {
   const toast = useMemo(
     () => ({
       show: showToastMessage,
@@ -19,5 +19,3 @@ function useToast() {
 
   return toast;
 }
-
-export default useToast;

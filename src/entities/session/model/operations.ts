@@ -1,13 +1,14 @@
-import { Emitter, throwError } from '@app/shared/lib';
+import { Emitter } from '@app/shared/lib/services/Emitter';
+import { throwError } from '@app/shared/lib/services/errorService';
 
-import { sessionService } from '../lib';
+import { getDefaultSessionService } from '../lib/sessionServiceInstance';
 import { Session } from '../types';
-import { SessionScheme } from '../validation';
+import { SessionScheme } from '../validation/SessionScheme';
 
 export function storeSession(session: Session) {
   try {
     SessionScheme.parse(session);
-    sessionService.setSession(session);
+    getDefaultSessionService().setSession(session);
   } catch (e: any) {
     throwError('[storeSession]: Invalid session object has been provided');
     throwError(e);
@@ -19,7 +20,7 @@ export function storeAccessToken(accessToken: string) {
     throwError('[storeAccessToken]: No access token has been provided');
   }
 
-  sessionService.setSession({ accessToken });
+  getDefaultSessionService().setSession({ accessToken });
 }
 
 export function storeRefreshToken(refreshToken: string) {
@@ -27,12 +28,9 @@ export function storeRefreshToken(refreshToken: string) {
     throwError('[storeRefreshToken]: No refresh token has been provided');
   }
 
-  sessionService.setSession({ refreshToken });
+  getDefaultSessionService().setSession({ refreshToken });
 }
 
 export function refreshTokenFailed() {
   Emitter.emit('refresh-token-fail');
 }
-
-export const getSession = sessionService.getSession;
-export const clearSession = sessionService.clearSession;

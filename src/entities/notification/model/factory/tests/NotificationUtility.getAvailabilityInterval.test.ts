@@ -1,8 +1,11 @@
 import { addDays, subDays } from 'date-fns';
 
-import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
-import { ScheduleEvent } from '@app/entities/notification/lib';
-import { DatesFromTo } from '@app/shared/lib';
+import {
+  AvailabilityType,
+  PeriodicityType,
+} from '@app/abstract/lib/types/event';
+import { ScheduleEvent } from '@app/entities/notification/lib/types/notificationBuilder';
+import { DatesFromTo } from '@app/shared/lib/types/dateTime';
 
 import { addTime, getEmptyEvent } from './testHelpers';
 import { NotificationUtility } from '../NotificationUtility';
@@ -25,7 +28,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -59,7 +62,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -92,7 +95,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -128,7 +131,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -161,7 +164,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -196,7 +199,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -232,7 +235,7 @@ describe('NotificationUtility: getAvailabilityInterval tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 

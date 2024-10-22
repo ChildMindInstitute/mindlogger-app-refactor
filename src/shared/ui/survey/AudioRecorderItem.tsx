@@ -6,17 +6,17 @@ import AudioRecorderPlayer, {
   AudioSet,
 } from 'react-native-audio-recorder-player';
 import { FileSystem, Dirs } from 'react-native-file-access';
-import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
-import {
-  useMicrophonePermissions,
-  handleBlockedPermissions,
-  isLocalFileUrl,
-  IS_ANDROID,
-  requestMicrophonePermissions,
-} from '@shared/lib';
-import { StopIcon, MicrophoneIcon, XStack, Text, YStack } from '@shared/ui';
+import { handleBlockedPermissions } from '@app/shared/lib/alerts/permissionAlerts';
+import { IS_ANDROID } from '@app/shared/lib/constants';
+import { useMicrophonePermissions } from '@app/shared/lib/hooks/useMicrophonePermissions';
+import { requestMicrophonePermissions } from '@app/shared/lib/permissions/microphonePermissions';
+import { isLocalFileUrl } from '@app/shared/lib/utils/file';
+
+import { XStack, YStack } from '../base';
+import { MicrophoneIcon, StopIcon } from '../icons';
+import { Text } from '../Text';
 
 const audioSetConfig: AudioSet = {
   AVNumberOfChannelsKeyIOS: 1,
@@ -37,7 +37,7 @@ type Props = {
   onChange: (response: Response) => void;
 };
 
-const AudioRecorderItem: FC<Props> = ({
+export const AudioRecorderItem: FC<Props> = ({
   config,
   onChange: onFinish,
   value: initialValue,
@@ -228,5 +228,3 @@ const AudioRecorderItem: FC<Props> = ({
     </>
   );
 };
-
-export default AudioRecorderItem;

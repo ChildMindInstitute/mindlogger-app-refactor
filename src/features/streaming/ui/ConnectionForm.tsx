@@ -4,21 +4,21 @@ import { StyleSheet } from 'react-native';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { colors, useAppDispatch, useAppSelector } from '@app/shared/lib';
-import { useAppForm, useTCPSocket } from '@app/shared/lib';
-import {
-  Box,
-  BoxProps,
-  Text,
-  XStack,
-  Button,
-  ActivityIndicator,
-} from '@app/shared/ui';
-import { CheckBoxField, InputField } from '@app/shared/ui/form';
-import { useAppletStreamingDetails } from '@entities/applet/lib/hooks';
-import { StreamingModel } from '@entities/streaming';
+import { useAppletStreamingDetails } from '@app/entities/applet/lib/hooks/useAppletStreamingDetails';
+import { selectStreamingSettings } from '@app/entities/streaming/model/selectors';
+import { streamingAction } from '@app/entities/streaming/model/slice';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
+import { useTCPSocket } from '@app/shared/lib/tcp/useTCPSocket';
+import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
+import { Box, BoxProps, XStack } from '@app/shared/ui/base';
+import { Button } from '@app/shared/ui/Button';
+import { CheckBoxField } from '@app/shared/ui/form/CheckBoxField';
+import { InputField } from '@app/shared/ui/form/InputField';
+import { Text } from '@app/shared/ui/Text';
 
-import { ConnectionFormSchema } from '../model';
+import { ConnectionFormSchema } from '../model/ConnectionFormSchema';
 
 type Props = {
   onSubmitSuccess: () => void;
@@ -49,9 +49,7 @@ export const ConnectionForm: FC<Props> = ({
   const dispatch = useAppDispatch();
   const streamingDetails = useAppletStreamingDetails(appletId);
 
-  const connection = useAppSelector(
-    StreamingModel.selectors.selectStreamingSettings,
-  );
+  const connection = useAppSelector(selectStreamingSettings);
 
   const [error, setError] = useState('');
 
@@ -72,7 +70,7 @@ export const ConnectionForm: FC<Props> = ({
       connect(ipAddress, +port);
 
       dispatch(
-        StreamingModel.actions.connectionEstabilished({
+        streamingAction.connectionEstabilished({
           ipAddress,
           port,
           remember: Boolean(remember),
@@ -94,7 +92,7 @@ export const ConnectionForm: FC<Props> = ({
     const remember = form.getValues('remember');
 
     if (!remember) {
-      dispatch(StreamingModel.actions.reset());
+      dispatch(streamingAction.reset());
     }
 
     closeConnection();

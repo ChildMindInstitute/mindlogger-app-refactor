@@ -6,7 +6,7 @@ type Callbacks = {
   onFCMTokenCreated: (token: string) => void;
 };
 
-async function useFirebaseSetup(callbacks: Callbacks) {
+export async function useFirebaseSetup(callbacks: Callbacks) {
   const callbacksRef = useRef(callbacks);
 
   callbacksRef.current = callbacks;
@@ -31,5 +31,3 @@ async function useFirebaseSetup(callbacks: Callbacks) {
     );
   }, []);
 }
-
-export default useFirebaseSetup;

@@ -1,11 +1,13 @@
-import { ActivityState, PipelineItemAnswerBase, UserAction } from '../../lib';
+import { ActivityState } from '../../lib/hooks/useActivityStorageRecord';
+import { PipelineItemAnswerBase } from '../../lib/types/pipelineItemAnswer';
+import { UserAction } from '../../lib/types/userAction';
 
 type Args = {
   activityId: string;
   activityState: ActivityState | undefined;
 };
 
-function useUserActionCreator({ activityId, activityState }: Args) {
+export function useUserActionCreator({ activityId, activityState }: Args) {
   const getDefaultUserEventPayload = () => ({
     date: Date.now(),
     activityId,
@@ -54,5 +56,3 @@ function useUserActionCreator({ activityId, activityState }: Args) {
 
   return actionCreator;
 }
-
-export default useUserActionCreator;

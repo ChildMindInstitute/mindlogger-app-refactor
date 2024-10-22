@@ -1,21 +1,22 @@
 import { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { Box, ScrollView } from '@app/shared/ui';
+import { Box } from '@app/shared/ui/base';
+import { ScrollView } from '@app/shared/ui/ScrollView';
 
-import ActivityDataCard from './ActivityAnalyticsCard';
-import { AppletAnalytics } from '../lib';
+import { ActivityAnalyticsCard } from './ActivityAnalyticsCard';
+import { AppletAnalytics } from '../lib/types';
 
 type Props = {
   analytics: AppletAnalytics | null;
 };
 
-const ActivityAnalyticsList: FC<Props> = ({ analytics }) => {
+export const ActivityAnalyticsList: FC<Props> = ({ analytics }) => {
   return (
     <Box flex={1}>
       <ScrollView contentContainerStyle={styles.scrollView}>
         {analytics?.activitiesResponses?.map(response => (
-          <ActivityDataCard
+          <ActivityAnalyticsCard
             accessibilityLabel={`activity-data-card-${response.id}`}
             key={response.id}
             responseData={response}
@@ -31,5 +32,3 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
 });
-
-export default ActivityAnalyticsList;

@@ -1,8 +1,9 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { ActivityPipelineType } from '@app/abstract/lib';
-import { Logger } from '@app/shared/lib';
-import { getScheduledDate } from '@app/widgets/survey/model';
+import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
+import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { getScheduledDate } from '@app/widgets/survey/model/operations';
 
 import {
   ActivityFlowRecordDto,
@@ -33,7 +34,9 @@ import {
 } from '../../types';
 import { getStorageRecord, upsertStorageRecord } from '../../utils';
 
-export class MigrationToVersion0001 implements IMigration {
+export class MigrationToVersion0001
+  implements IMigration<RootStateFrom, RootStateTo>
+{
   private queryDataUtils: QueryDataUtils;
 
   constructor(queryClient: QueryClient) {
@@ -109,9 +112,14 @@ export class MigrationToVersion0001 implements IMigration {
 
     if (eventDto) {
       flowStateTo.scheduledDate =
-        getScheduledDate(mapEventFromDto(eventDto)) ?? null;
+        getScheduledDate(
+          getDefaultScheduledDateCalculator(),
+          mapEventFromDto(eventDto),
+        ) ?? null;
     } else {
-      Logger.warn("'[MigrationToVersion0001]: Event doesn't exist: " + eventId);
+      getDefaultLogger().warn(
+        "'[MigrationToVersion0001]: Event doesn't exist: " + eventId,
+      );
     }
 
     for (const pipelineItem of flowStateTo.pipeline) {
@@ -139,8 +147,10 @@ export class MigrationToVersion0001 implements IMigration {
     return flowStateTo;
   }
 
-  public migrate(input: MigrationInput): MigrationOutput {
-    const result: MigrationOutput = {
+  public migrate(
+    input: MigrationInput<RootStateFrom>,
+  ): MigrationOutput<RootStateTo> {
+    const result: MigrationOutput<RootStateTo> = {
       reduxState: { ...input.reduxState } as RootStateTo,
     };
 
@@ -164,7 +174,7 @@ export class MigrationToVersion0001 implements IMigration {
         const appletDto = this.queryDataUtils.getAppletDto(appletId);
 
         if (!appletDto) {
-          Logger.warn(
+          getDefaultLogger().warn(
             "[MigrationToVersion0001]: Migration cannot be executed as applet doesn't exist: " +
               appletId,
           );
@@ -177,7 +187,7 @@ export class MigrationToVersion0001 implements IMigration {
         );
 
         if (!activityFlowDto) {
-          Logger.warn(
+          getDefaultLogger().warn(
             "[MigrationToVersion0001]: activityFlow doesn't exist: " + entityId,
           );
           continue;
@@ -198,7 +208,7 @@ export class MigrationToVersion0001 implements IMigration {
         );
 
         if (!currentActivityDto) {
-          Logger.warn(
+          getDefaultLogger().warn(
             "[MigrationToVersion0001]: currentActivity doesn't exist in react-query cache: " +
               flowProgressPayloadFrom.currentActivityId,
           );
@@ -223,7 +233,7 @@ export class MigrationToVersion0001 implements IMigration {
 
         this.updateFlowState(key, flowStateTo);
       } catch (error) {
-        Logger.warn(
+        getDefaultLogger().warn(
           `[MigrationToVersion0001.iterate]: Error occurred, appletName=${logAppletName}, flowName=${logFlowName}, progressFlowFrom=${logProgressFlowFrom}, flowStateFrom=${logFlowStateFrom}, currentActivityDto=${logCurrentActivityDto}, activityFlowDto=${logActivityFlowDto}  \nerror: \n${error}`,
         );
       }

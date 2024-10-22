@@ -4,12 +4,12 @@ import { FileSystem } from 'react-native-file-access';
 import { Asset } from 'react-native-image-picker';
 
 import { IS_IOS } from '../constants';
-import { Logger } from '../services';
+import { getDefaultLogger } from '../services/loggerInstance';
 
 export const ImageConverter = {
   async convertHeicToJpg(heicImage: Asset): Promise<Asset> {
     if (IS_IOS) {
-      Logger.info(
+      getDefaultLogger().info(
         '[ImageConverter] Unexpected attempt to convert HEIC image on iOS',
       );
       return Promise.resolve(heicImage);

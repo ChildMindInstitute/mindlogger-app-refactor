@@ -1,12 +1,13 @@
 import { isToday } from 'date-fns';
 
+import { EntityPath } from '@app/abstract/lib/types/entity';
 import {
-  EntityPath,
-  StoreProgress,
-  StoreProgressPayload,
-} from '@app/abstract/lib';
-import { colors } from '@shared/lib/constants';
+  EntityProgression,
+  EntityProgressionCompleted,
+  EntityProgressionInProgress,
+} from '@app/abstract/lib/types/entityProgress';
 
+import { colors } from '../../constants/colors';
 import { getNow } from '../dateTime';
 
 type ColorModes = {
@@ -33,41 +34,73 @@ export const invertColor = (
   return yiqColorSpaceValue >= 128 ? colorModes.light : colorModes.dark;
 };
 
-export const getEntityProgress = (
+export const getEntityProgression = (
   appletId: string,
   entityId: string,
   eventId: string,
-  allProgresses: StoreProgress,
-): StoreProgressPayload | undefined =>
-  allProgresses[appletId]?.[entityId]?.[eventId];
+  targetSubjectId: string | null,
+  entityProgressions: EntityProgression[],
+): EntityProgression | undefined => {
+  return entityProgressions.find(progression => {
+    return (
+      progression.appletId === appletId &&
+      progression.entityId === entityId &&
+      progression.eventId === eventId &&
+      progression.targetSubjectId === targetSubjectId
+    );
+  });
+};
 
-export const isEntityInProgress = (
-  payload: StoreProgressPayload | undefined,
-): boolean => !!payload && !payload.endAt;
+export const isEntityProgressionInProgress = (
+  progression: EntityProgression | undefined,
+) => {
+  return (
+    progression?.status === 'in-progress' &&
+    !(progression as never as EntityProgressionCompleted | undefined)
+      ?.endedAtTimestamp
+  );
+};
 
-export function isReadyForAutocompletion(
+export function isProgressionReadyForAutocompletion(
   path: EntityPath,
-  allProgresses: StoreProgress,
+  entityProgressions: EntityProgression[],
 ) {
-  const progress = getEntityProgress(
+  const progression = getEntityProgression(
     path.appletId,
     path.entityId,
     path.eventId,
-    allProgresses,
+    path.targetSubjectId,
+    entityProgressions,
   );
 
-  if (!progress) {
+  if (!progression) {
     return false;
   }
 
-  const inProgress = isEntityInProgress(progress);
+  const inProgress = isEntityProgressionInProgress(progression);
 
-  return inProgress && isEntityExpired(progress.availableTo);
+  return (
+    inProgress &&
+    isEntityExpired(
+      (progression as EntityProgressionInProgress).availableUntilTimestamp,
+    )
+  );
 }
 
 export const isEntityExpired = (availableTo: number | null | undefined) =>
   !!availableTo && getNow().getTime() > availableTo;
 
-export const isCompletedToday = (
-  record: StoreProgressPayload | null | undefined,
-) => record && record.endAt && isToday(record.endAt);
+export const isProgressionCompletedToday = (
+  progression: EntityProgression | null | undefined,
+): boolean => {
+  if (progression) {
+    const completedProgression = progression as EntityProgressionCompleted;
+    if (completedProgression.endedAtTimestamp) {
+      const endAt = new Date(completedProgression.endedAtTimestamp);
+      return isToday(endAt);
+    } else {
+      return false;
+    }
+  }
+  return false;
+};

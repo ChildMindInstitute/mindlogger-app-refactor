@@ -1,11 +1,11 @@
-import { KeyboardAvoidingView } from 'react-native';
+import { KeyboardAvoidingView as RNKeyboardAvoidingView } from 'react-native';
 
 import { styled, setupReactNative } from '@tamagui/core';
 
-setupReactNative(KeyboardAvoidingView);
+setupReactNative(RNKeyboardAvoidingView);
 
-export default styled(
-  KeyboardAvoidingView,
+export const KeyboardAvoidingView = styled(
+  RNKeyboardAvoidingView,
   {
     name: 'KeyboardAvoidingView',
   },

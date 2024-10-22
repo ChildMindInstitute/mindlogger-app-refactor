@@ -1,10 +1,19 @@
 import React, { useRef, FC, useMemo } from 'react';
 
-import { DrawingStreamEvent, StreamEventLoggable } from '@shared/lib';
-import { Box, SketchCanvas, SketchCanvasRef, useOnUndo } from '@shared/ui';
+import {
+  DrawingStreamEvent,
+  StreamEventLoggable,
+} from '@app/shared/lib/tcp/types';
+import { Box } from '@app/shared/ui/base';
+import {
+  SketchCanvas,
+  SketchCanvasRef,
+} from '@app/shared/ui/SketchCanvas/SketchCanvas';
+import { useOnUndo } from '@app/shared/ui/Stepper/useOnUndo';
 
-import { DrawLine, ResponseSerializer, DrawResult } from '../lib';
-import DrawPoint from '../lib/utils/DrawPoint';
+import { DrawLine, DrawResult } from '../lib/types/draw';
+import { DrawPoint } from '../lib/utils/DrawPoint';
+import { getDefaultResponseSerializer } from '../lib/utils/responseSerializerInstance';
 
 type Props = {
   value: Array<DrawLine>;
@@ -12,7 +21,7 @@ type Props = {
   width: number;
 } & StreamEventLoggable<DrawingStreamEvent>;
 
-const DrawingBoard: FC<Props> = props => {
+export const DrawingBoard: FC<Props> = props => {
   const { value, onResult, width, onLog } = props;
 
   const vector = width / 100;
@@ -68,7 +77,7 @@ const DrawingBoard: FC<Props> = props => {
 
     const lines = [...value, newLine];
 
-    const svgString = ResponseSerializer.process(lines, width);
+    const svgString = getDefaultResponseSerializer().process(lines, width);
 
     const result: DrawResult = {
       lines,
@@ -102,5 +111,3 @@ const DrawingBoard: FC<Props> = props => {
     </Box>
   );
 };
-
-export default DrawingBoard;

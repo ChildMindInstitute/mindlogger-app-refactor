@@ -2,19 +2,21 @@ import { FC, useEffect } from 'react';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { AutocompletionEventOptions } from '@app/abstract/lib';
-import { Emitter } from '@app/shared/lib';
-import { FlowSurvey } from '@app/widgets/survey';
-import { useUpcomingNotificationsObserver } from '@entities/notification';
-import { RootStackParamList } from '@screens/config';
-import { Box } from '@shared/ui';
+import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
+import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
+import { Emitter } from '@app/shared/lib/services/Emitter';
+import { Box } from '@app/shared/ui/base';
+import { FlowSurvey } from '@app/widgets/survey/ui/FlowSurvey';
+
+import { RootStackParamList } from '../config/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'InProgressActivity'>;
 
-const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
-  const { appletId, eventId, entityId, entityType } = route.params;
+export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
+  const { appletId, eventId, entityId, entityType, targetSubjectId } =
+    route.params;
 
-  useUpcomingNotificationsObserver(eventId, entityId);
+  useUpcomingNotificationsObserver(eventId, entityId, targetSubjectId);
 
   useEffect(() => {
     const callback = navigation.addListener('beforeRemove', () => {
@@ -36,10 +38,9 @@ const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
         entityId={entityId}
         entityType={entityType}
         eventId={eventId}
+        targetSubjectId={targetSubjectId}
         onClose={() => navigation.goBack()}
       />
     </Box>
   );
 };
-
-export default InProgressActivityScreen;

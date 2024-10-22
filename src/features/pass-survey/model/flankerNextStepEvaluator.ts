@@ -1,6 +1,10 @@
-import { FlankerItemSettings } from '@app/abstract/lib';
+import { FlankerItemSettings } from '@app/abstract/lib/types/flanker';
 
-import { FlankerPayload, FlankerResponse, PipelineItem } from '../lib';
+import {
+  FlankerPayload,
+  FlankerResponse,
+  PipelineItem,
+} from '../lib/types/payload';
 
 export const evaluateFlankerNextStep = (
   gameResult: FlankerResponse | null,

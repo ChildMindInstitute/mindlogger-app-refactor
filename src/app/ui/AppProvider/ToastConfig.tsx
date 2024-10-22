@@ -4,15 +4,16 @@ import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ToastConfigParams } from 'react-native-toast-message';
 
-import { colors, IS_IOS } from '@app/shared/lib';
+import { IS_IOS } from '@app/shared/lib/constants';
+import { colors } from '@app/shared/lib/constants/colors';
+import { Box } from '@app/shared/ui/base';
 import {
-  Box,
-  Text,
   MaterialAlertCircle,
-  MaterialInformation,
   MaterialAlertOctagon,
+  MaterialInformation,
   OcticonsCircleCheckFill,
-} from '@app/shared/ui';
+} from '@app/shared/ui/icons';
+import { Text } from '@app/shared/ui/Text';
 
 type ToastUIProps = {
   toastStyle: { backgroundColor: string };
@@ -54,7 +55,7 @@ type ToastConfigProps = {
   content: string | JSX.Element;
 };
 
-const ToastConfig = {
+export const ToastConfig = {
   success: (props: ToastConfigParams<ToastConfigProps>) => (
     <ToastUI
       toastStyle={styles.successToast}
@@ -147,5 +148,3 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-export default ToastConfig;

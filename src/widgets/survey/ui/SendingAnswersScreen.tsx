@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
-import { Center, ImageBackground, Text } from '@shared/ui';
+import { Center } from '@app/shared/ui/Center';
+import { ImageBackground } from '@app/shared/ui/ImageBackground';
+import { Text } from '@app/shared/ui/Text';
 
-function SendingAnswersScreen() {
+export function SendingAnswersScreen() {
   const { t } = useTranslation();
 
   return (
@@ -13,5 +15,3 @@ function SendingAnswersScreen() {
     </ImageBackground>
   );
 }
-
-export default SendingAnswersScreen;

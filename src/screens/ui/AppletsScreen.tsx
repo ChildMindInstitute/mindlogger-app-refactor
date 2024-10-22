@@ -4,36 +4,38 @@ import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { StoreProgress } from '@app/abstract/lib';
-import { NotificationModel } from '@app/entities/notification';
-import { LogTrigger } from '@app/shared/api';
+import { Applet } from '@app/entities/applet/lib/types';
 import {
-  AnalyticsService,
-  Logger,
+  selectAppletsEntityProgressions,
+  selectEntityResponseTimes,
+} from '@app/entities/applet/model/selectors';
+import { AppletList } from '@app/entities/applet/ui/AppletList';
+import { selectFirstName } from '@app/entities/identity/model/selectors';
+import { getDefaultNotificationRefreshService } from '@app/entities/notification/model/notificationRefreshServiceInstance';
+import { useAutomaticRefreshOnMount } from '@app/features/applets-refresh/model/hooks/useAutomaticRefreshOnMount';
+import { AppletsRefresh } from '@app/features/applets-refresh/ui/AppletsRefresh';
+import { LogTrigger } from '@app/shared/api/services/INotificationService';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
+import {
   MixEvents,
   MixProperties,
-  useAppSelector,
-  useOnFocus,
-} from '@app/shared/lib';
-import { UploadRetryBanner } from '@app/widgets/survey';
-import { Applet, AppletList, AppletModel } from '@entities/applet';
-import { IdentityModel } from '@entities/identity';
-import { AppletsRefresh, AppletsRefreshModel } from '@features/applets-refresh';
-import {
-  Box,
-  ImageBackground,
-  Text,
-  TouchableOpacity,
-  XStack,
-} from '@shared/ui';
+} from '@app/shared/lib/analytics/IAnalyticsService';
+import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { Box, XStack } from '@app/shared/ui/base';
+import { ImageBackground } from '@app/shared/ui/ImageBackground';
+import { Text } from '@app/shared/ui/Text';
+import { TouchableOpacity } from '@app/shared/ui/TouchableOpacity';
+import { UploadRetryBanner } from '@app/widgets/survey/ui/UploadRetryBanner';
 
 type SelectedApplet = Pick<Applet, 'id' | 'displayName'>;
 
-const AppletsScreen: FC = () => {
+export const AppletsScreen: FC = () => {
   const { t } = useTranslation();
   const { navigate, setOptions } = useNavigation();
 
-  const userFirstName = useAppSelector(IdentityModel.selectors.selectFirstName);
+  const userFirstName = useAppSelector(selectFirstName);
 
   useLayoutEffect(() => {
     if (userFirstName) {
@@ -42,36 +44,36 @@ const AppletsScreen: FC = () => {
   }, [t, userFirstName, setOptions]);
 
   useOnFocus(() => {
-    AnalyticsService.track(MixEvents.HomeView);
+    getDefaultAnalyticsService().track(MixEvents.HomeView);
   });
 
   const queryClient = useQueryClient();
 
-  const storeProgress: StoreProgress = useAppSelector(
-    AppletModel.selectors.selectInProgressApplets,
-  );
+  const progressions = useAppSelector(selectAppletsEntityProgressions);
 
-  const completions = useAppSelector(AppletModel.selectors.selectCompletions);
+  const responseTimes = useAppSelector(selectEntityResponseTimes);
 
   const navigateAppletDetails: (applet: SelectedApplet) => void = useCallback(
     ({ id, displayName }) => {
       navigate('AppletDetails', { appletId: id, title: displayName });
 
-      AnalyticsService.track(MixEvents.AppletSelected, {
+      getDefaultAnalyticsService().track(MixEvents.AppletSelected, {
         [MixProperties.AppletId]: id,
       });
     },
     [navigate],
   );
 
-  AppletsRefreshModel.useAutomaticRefreshOnMount(async () => {
-    await NotificationModel.NotificationRefreshService.refresh(
+  useAutomaticRefreshOnMount(async () => {
+    await getDefaultNotificationRefreshService().refresh(
       queryClient,
-      storeProgress,
-      completions,
+      progressions,
+      responseTimes,
       LogTrigger.FirstAppRun,
     );
-    Logger.send();
+    getDefaultLogger()
+      .send()
+      .catch(err => getDefaultLogger().error(err as never));
   });
 
   return (
@@ -112,5 +114,3 @@ const AboutAppLink = () => {
     </XStack>
   );
 };
-
-export default AppletsScreen;

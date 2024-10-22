@@ -1,10 +1,10 @@
 import renderer from 'react-test-renderer';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import { HourMinute } from '@app/shared/lib';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
 import * as dateTimeUtils from '@shared/lib/utils/dateTime';
 
-import TimePickerItem from '../TimePickerItem';
+import { TimePickerItem } from '../TimePickerItem';
 
 describe('Test TimePickerItem', () => {
   afterEach(() => {

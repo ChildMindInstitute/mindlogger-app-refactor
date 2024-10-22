@@ -1,10 +1,11 @@
 import { FC, useMemo, useState } from 'react';
 
-import { AbTutorialPayload } from '@app/abstract/lib';
-import { Box, BoxProps, Text, XStack } from '@app/shared/ui';
+import { AbTutorialPayload } from '@app/abstract/lib/types/abTrails';
+import { Box, BoxProps, XStack } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 
-import AbShapes from './AbShapes';
-import { transformCoordinates } from '../lib/utils';
+import { AbShapes } from './AbShapes';
+import { transformCoordinates } from '../lib/utils/calculation';
 
 type Props = {
   tutorialPayload: AbTutorialPayload;
@@ -14,7 +15,7 @@ type Props = {
 const ShapesRectPadding = 15;
 const ContentPadding = 5;
 
-const AbTutorial: FC<Props> = props => {
+export const AbTutorial: FC<Props> = props => {
   const { tutorialStepIndex, tutorialPayload } = props;
 
   const [width, setWidth] = useState<number | null>(null);
@@ -79,5 +80,3 @@ const AbTutorial: FC<Props> = props => {
     </Box>
   );
 };
-
-export default AbTutorial;

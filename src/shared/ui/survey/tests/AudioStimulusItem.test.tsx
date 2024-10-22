@@ -1,26 +1,12 @@
 import renderer from 'react-test-renderer';
 
-import TamaguiProvider from '@app/app/ui/AppProvider/TamaguiProvider';
-import * as hooks from '@shared/lib/hooks';
-import { ActivityIndicator, AudioStimulusItem } from '@shared/ui';
+import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+import * as useAudioPlayerHooks from '@app/shared/lib/hooks/useAudioPlayer';
 
-jest.mock('@app/shared/lib/hooks/useAudioPlayer', () =>
-  jest.fn().mockImplementation(() => ({
-    play: jest.fn(),
-    pause: jest.fn(),
-    togglePlay: jest.fn(),
-    destroy: jest.fn(),
-    isPlaying: false,
-    playbackCount: 1,
-    isLoading: false,
-  })),
-);
+import { ActivityIndicator } from '../../ActivityIndicator';
+import { AudioStimulusItem } from '../AudioStimulusItem';
 
 describe('Test AudioStimulusItem', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('Should render play button', () => {
     const audioPlayer = renderer.create(
       <TamaguiProvider>
@@ -43,7 +29,7 @@ describe('Test AudioStimulusItem', () => {
   });
 
   it('Should render pause button', () => {
-    jest.spyOn(hooks, 'useAudioPlayer').mockReturnValue({
+    jest.spyOn(useAudioPlayerHooks, 'useAudioPlayer').mockReturnValue({
       play: jest.fn(),
       pause: jest.fn(),
       togglePlay: jest.fn(),
@@ -74,7 +60,7 @@ describe('Test AudioStimulusItem', () => {
   });
 
   it('Should render activity indicator while loading', () => {
-    jest.spyOn(hooks, 'useAudioPlayer').mockReturnValue({
+    jest.spyOn(useAudioPlayerHooks, 'useAudioPlayer').mockReturnValue({
       play: jest.fn(),
       pause: jest.fn(),
       togglePlay: jest.fn(),
@@ -109,7 +95,7 @@ describe('Test AudioStimulusItem', () => {
   });
 
   it('Should render correct button text if replay is not allowed', () => {
-    jest.spyOn(hooks, 'useAudioPlayer').mockReturnValue({
+    jest.spyOn(useAudioPlayerHooks, 'useAudioPlayer').mockReturnValue({
       play: jest.fn(),
       pause: jest.fn(),
       togglePlay: jest.fn(),

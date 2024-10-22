@@ -1,5 +1,6 @@
-import { ActivityItemType, PipelineItem } from '../../lib';
-import { IScoresCalculator, ScoresCalculator } from '../ScoresCalculator';
+import { ActivityItemType, PipelineItem } from '../../lib/types/payload';
+import { IScoresCalculator } from '../IScoresCalculator';
+import { ScoresCalculator } from '../ScoresCalculator';
 
 type WrappedAnswer = { answer: any };
 

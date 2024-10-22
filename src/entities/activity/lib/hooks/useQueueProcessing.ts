@@ -1,15 +1,13 @@
 import { useEffect } from 'react';
 
-import {
-  ChangeQueueObservable,
-  Logger,
-  UploadObservable,
-  useForceUpdate,
-} from '@app/shared/lib';
+import { useForceUpdate } from '@app/shared/lib/hooks/useForceUpdate';
+import { getDefaultChangeQueueObservable } from '@app/shared/lib/observables/changeQueueObservableInstance';
+import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
-import { QueueProcessingService } from '../services';
-import AnswersQueueService from '../services/AnswersQueueService';
-import { SendAnswersInput } from '../types';
+import { getDefaultAnswersQueueService } from '../services/answersQueueServiceInstance';
+import { getDefaultQueueProcessingService } from '../services/queueProcessingServiceInstance';
+import { SendAnswersInput } from '../types/uploadAnswers';
 
 type Result = {
   process(): Promise<boolean>;
@@ -33,30 +31,32 @@ export const useQueueProcessing = (): Result => {
       update();
     };
 
-    UploadObservable.addObserver(onChangeUploadState);
+    getDefaultUploadObservable().addObserver(onChangeUploadState);
 
-    ChangeQueueObservable.addObserver(onChangeQueue);
+    getDefaultChangeQueueObservable().addObserver(onChangeQueue);
 
     return () => {
-      UploadObservable.removeObserver(onChangeUploadState);
+      getDefaultUploadObservable().removeObserver(onChangeUploadState);
 
-      ChangeQueueObservable.removeObserver(onChangeQueue);
+      getDefaultChangeQueueObservable().removeObserver(onChangeQueue);
     };
   }, [update]);
 
+  const queueProcessingService = getDefaultQueueProcessingService();
+
   const processQueueWithSendingLogs = async (): Promise<boolean> => {
-    const result = await QueueProcessingService.process();
-    Logger.send();
+    const result = await queueProcessingService.process();
+    getDefaultLogger().send();
     return result;
   };
 
   return {
     process: processQueueWithSendingLogs,
-    push: QueueProcessingService.push.bind(QueueProcessingService),
-    hasItemsInQueue: AnswersQueueService.getLength() > 0,
-    isLoading: UploadObservable.isLoading,
-    isError: UploadObservable.isError,
-    isPostponed: UploadObservable.isPostponed,
-    isCompleted: UploadObservable.isCompleted,
+    push: queueProcessingService.push.bind(queueProcessingService),
+    hasItemsInQueue: getDefaultAnswersQueueService().getLength() > 0,
+    isLoading: getDefaultUploadObservable().isLoading,
+    isError: getDefaultUploadObservable().isError,
+    isPostponed: getDefaultUploadObservable().isPostponed,
+    isCompleted: getDefaultUploadObservable().isCompleted,
   };
 };

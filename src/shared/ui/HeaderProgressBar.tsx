@@ -1,12 +1,12 @@
 import { Bar } from 'react-native-progress';
 
-import { colors } from '../lib';
+import { colors } from '../lib/constants/colors';
 
 type Props = {
   progress: number;
 };
 
-function HeaderProgressBar({ progress }: Props) {
+export function HeaderProgressBar({ progress }: Props) {
   return (
     <Bar
       progress={progress}
@@ -19,5 +19,3 @@ function HeaderProgressBar({ progress }: Props) {
     />
   );
 }
-
-export default HeaderProgressBar;

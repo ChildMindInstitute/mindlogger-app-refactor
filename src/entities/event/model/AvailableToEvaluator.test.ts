@@ -1,9 +1,12 @@
 import { addDays } from 'date-fns';
 
-import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
-import { ScheduleEvent } from '@app/entities/event';
+import {
+  AvailabilityType,
+  PeriodicityType,
+} from '@app/abstract/lib/types/event';
 
 import { AvailableToEvaluator } from './AvailableToEvaluator';
+import { ScheduleEvent } from '../lib/types/event';
 
 const getEmptyEvent = (): ScheduleEvent => {
   const event = {

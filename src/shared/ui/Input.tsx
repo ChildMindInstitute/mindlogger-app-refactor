@@ -3,7 +3,7 @@ import { StyleSheet, TextInput } from 'react-native';
 import { GetProps, setupReactNative, styled } from '@tamagui/core';
 import { focusableInputHOC } from '@tamagui/focusable';
 
-import { IS_IOS } from '@shared/lib';
+import { IS_IOS } from '../lib/constants';
 
 setupReactNative({
   TextInput,
@@ -69,4 +69,4 @@ export const InputFrame = styled(
 
 export type InputProps = GetProps<typeof InputFrame>;
 
-export default focusableInputHOC(InputFrame);
+export const Input = focusableInputHOC(InputFrame);

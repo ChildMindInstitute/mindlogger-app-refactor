@@ -4,7 +4,7 @@ import {
   FeatureFlagsKeys,
   FeatureFlags,
 } from '../featureFlags/FeatureFlags.types';
-import FeatureFlagsService from '../featureFlags/FeatureFlagsService';
+import { getDefaultFeatureFlagsService } from '../featureFlags/featureFlagsServiceInstance';
 
 export const useFeatureFlags = () => {
   const [flags, setFlags] = useState<Partial<FeatureFlags>>({});
@@ -12,9 +12,9 @@ export const useFeatureFlags = () => {
   const onChangeHandler = useCallback(() => updateFeatureFlags(), []);
 
   useEffect(() => {
-    FeatureFlagsService.setChangeHandler(onChangeHandler);
+    getDefaultFeatureFlagsService().setChangeHandler(onChangeHandler);
     return () => {
-      FeatureFlagsService.removeChangeHandler(onChangeHandler);
+      getDefaultFeatureFlagsService().removeChangeHandler(onChangeHandler);
     };
   }, [onChangeHandler]);
 
@@ -26,7 +26,7 @@ export const useFeatureFlags = () => {
     const features: FeatureFlags = {};
     keys.forEach(
       key =>
-        (features[key] = FeatureFlagsService.evaluateFlag(
+        (features[key] = getDefaultFeatureFlagsService().evaluateFlag(
           FeatureFlagsKeys[key],
         )),
     );
@@ -39,5 +39,3 @@ export const useFeatureFlags = () => {
 
   return { featureFlags: flags };
 };
-
-export default useFeatureFlags;

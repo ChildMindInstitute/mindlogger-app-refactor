@@ -4,8 +4,8 @@ import {
   InactiveReason,
   NotificationDescriber,
   NotificationType,
-} from '@app/entities/notification/lib';
-import { DatesFromTo } from '@app/shared/lib';
+} from '@app/entities/notification/lib/types/notificationBuilder';
+import { DatesFromTo } from '@app/shared/lib/types/dateTime';
 
 import { addTime, getEmptyEvent } from './testHelpers';
 import { NotificationUtility } from '../NotificationUtility';
@@ -26,6 +26,7 @@ const getTestNotification = (): NotificationDescriber => {
     appletId: AppletId,
     entityName: 'mock-entity-name',
     eventId: 'mock-event-id',
+    targetSubjectId: null,
     isActive: true,
     notificationBody: 'mock-n-body',
     notificationHeader: 'mock-n-header',
@@ -43,12 +44,12 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
       //@ts-ignore
-      utility.getActivityCompletedAt = jest.fn().mockReturnValue(null);
+      utility.getProgressionCompletedAt = jest.fn().mockReturnValue(null);
 
       const notification = getTestNotification();
 
@@ -60,6 +61,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markNotificationIfActivityCompleted(
         'mock-entity-id',
         'mock-event-id',
+        null,
         notification,
         interval,
       );
@@ -71,7 +73,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -79,7 +81,9 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       completedAt.setHours(16);
 
       //@ts-ignore
-      utility.getActivityCompletedAt = jest.fn().mockReturnValue(completedAt);
+      utility.getProgressionCompletedAt = jest
+        .fn()
+        .mockReturnValue(completedAt);
 
       const notification = getTestNotification();
 
@@ -95,6 +99,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markNotificationIfActivityCompleted(
         'mock-entity-id',
         'mock-event-id',
+        null,
         notification,
         interval,
       );
@@ -109,7 +114,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -118,7 +123,9 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       completedAt.setMinutes(30);
 
       //@ts-ignore
-      utility.getActivityCompletedAt = jest.fn().mockReturnValue(completedAt);
+      utility.getProgressionCompletedAt = jest
+        .fn()
+        .mockReturnValue(completedAt);
 
       const notification = getTestNotification();
 
@@ -134,6 +141,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markNotificationIfActivityCompleted(
         'mock-entity-id',
         'mock-event-id',
+        null,
         notification,
         interval,
       );
@@ -148,7 +156,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -157,7 +165,9 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       completedAt.setMinutes(15);
 
       //@ts-ignore
-      utility.getActivityCompletedAt = jest.fn().mockReturnValue(completedAt);
+      utility.getProgressionCompletedAt = jest
+        .fn()
+        .mockReturnValue(completedAt);
 
       const notification = getTestNotification();
 
@@ -173,6 +183,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markNotificationIfActivityCompleted(
         'mock-entity-id',
         'mock-event-id',
+        null,
         notification,
         interval,
       );
@@ -184,7 +195,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -192,7 +203,9 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       completedAt.setHours(12);
 
       //@ts-ignore
-      utility.getActivityCompletedAt = jest.fn().mockReturnValue(completedAt);
+      utility.getProgressionCompletedAt = jest
+        .fn()
+        .mockReturnValue(completedAt);
 
       const notification = getTestNotification();
 
@@ -208,6 +221,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markNotificationIfActivityCompleted(
         'mock-entity-id',
         'mock-event-id',
+        null,
         notification,
         interval,
       );
@@ -219,7 +233,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 15, minutes: 30 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -228,7 +242,9 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       completedAt.setMinutes(48);
 
       //@ts-ignore
-      utility.getActivityCompletedAt = jest.fn().mockReturnValue(completedAt);
+      utility.getProgressionCompletedAt = jest
+        .fn()
+        .mockReturnValue(completedAt);
 
       const notification = getTestNotification();
 
@@ -244,6 +260,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       utility.markNotificationIfActivityCompleted(
         'mock-entity-id',
         'mock-event-id',
+        null,
         notification,
         interval,
       );
@@ -257,7 +274,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 18, minutes: 10 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -277,7 +294,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 18, minutes: 10 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -297,7 +314,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 18, minutes: 10 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -317,7 +334,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 18, minutes: 10 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -337,7 +354,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 18, minutes: 10 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -358,7 +375,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 18, minutes: 10 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -383,7 +400,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 18, minutes: 10 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -404,7 +421,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 18, minutes: 10 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -425,7 +442,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 18, minutes: 10 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -446,7 +463,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 18, minutes: 10 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -467,7 +484,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 18, minutes: 10 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 
@@ -491,7 +508,7 @@ describe('NotificationUtility: mark-as-inactive methods tests', () => {
       const today = new Date(2024, 0, 3);
       const now = addTime({ hours: 18, minutes: 10 }, today);
 
-      const utility = new NotificationUtility({}, AppletId);
+      const utility = new NotificationUtility(AppletId, []);
 
       mockUtilityProps(utility, now);
 

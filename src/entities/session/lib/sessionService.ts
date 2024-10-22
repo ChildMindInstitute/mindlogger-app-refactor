@@ -1,12 +1,11 @@
-import { createSecureStorage } from '@shared/lib';
+import { MMKV } from 'react-native-mmkv';
 
+import { ISessionService } from './ISessionService';
 import { Session } from '../types';
 
-const storage = createSecureStorage('session-storage');
-
-function SessionService() {
+export function SessionService(sessinoStorage: MMKV): ISessionService {
   function getSession() {
-    const sessionKeys = storage.getString('sessionKeys');
+    const sessionKeys = sessinoStorage.getString('sessionKeys');
 
     return (sessionKeys ? JSON.parse(sessionKeys) : {}) as Partial<Session>;
   }
@@ -14,7 +13,7 @@ function SessionService() {
   function setSession(value: Partial<Session>) {
     const sessionKeys = getSession();
 
-    storage.set(
+    sessinoStorage.set(
       'sessionKeys',
       JSON.stringify({
         ...sessionKeys,
@@ -28,13 +27,11 @@ function SessionService() {
     setSession,
 
     clearSession() {
-      storage.clearAll();
+      sessinoStorage.clearAll();
     },
 
     getStorage() {
-      return storage;
+      return sessinoStorage;
     },
   };
 }
-
-export default SessionService();

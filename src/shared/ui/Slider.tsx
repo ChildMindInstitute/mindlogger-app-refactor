@@ -7,7 +7,7 @@ import {
 } from '@miblanchard/react-native-slider';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { colors } from '@shared/lib/constants';
+import { colors } from '../lib/constants/colors';
 
 type Props = SliderProps & { size: number; initialValue: number | null } & {
   onValueChange: NonNullable<SliderProps['onValueChange']>;
@@ -15,7 +15,7 @@ type Props = SliderProps & { size: number; initialValue: number | null } & {
 
 const CHANGE_VALUE_DELAY = 100;
 
-const Slider: FC<Props & AccessibilityProps> = props => {
+export const Slider: FC<Props & AccessibilityProps> = props => {
   const { size, initialValue = null } = props;
   const opacity = initialValue !== null ? 1 : 0;
 
@@ -52,5 +52,3 @@ const styles = StyleSheet.create({
     opacity: 0,
   },
 });
-
-export default Slider;

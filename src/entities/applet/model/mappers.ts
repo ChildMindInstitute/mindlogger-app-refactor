@@ -1,20 +1,22 @@
 import {
-  ActivityDto,
-  ActivityFlowRecordDto,
   ActivityItemDto,
-  ActivityRecordDto,
-  AnalyticsAnswerDto,
+  OptionsDto,
+} from '@app/shared/api/services/ActivityItemDto';
+import {
   AnalyticsResponseType,
+  ResponseConfig,
+  SliderResponseConfig,
+} from '@app/shared/api/services/AppletAnalyticsDto';
+import { ActivityDto } from '@app/shared/api/services/IActivityService';
+import { AnalyticsAnswerDto } from '@app/shared/api/services/IAppletAnalyticsService';
+import {
+  ActivityFlowRecordDto,
+  ActivityRecordDto,
   AppletDetailsDto,
   AppletDetailsResponse,
   AppletDto,
-  CompletedEntityDto,
-  OptionsDto,
-  ResponseConfig,
-  SliderResponseConfig,
   ThemeDto,
-} from '@app/shared/api';
-import { buildDateTimeFromDto } from '@app/shared/lib';
+} from '@app/shared/api/services/IAppletService';
 
 import {
   Activity,
@@ -25,9 +27,8 @@ import {
   AppletDetails,
   AppletTheme,
   AppletVersion,
-  CompletedEntity,
   ResponseAnalyticsValue,
-} from '../lib';
+} from '../lib/types';
 
 export function mapThemeFromDto(dto: ThemeDto | null): AppletTheme | null {
   return dto === null
@@ -157,16 +158,6 @@ export function mapAppletDtoToAppletVersion(dto: AppletDto): AppletVersion {
   return {
     version: dto.version,
     appletId: dto.id,
-  };
-}
-
-export function mapCompletedEntityFromDto(
-  dto: CompletedEntityDto,
-): CompletedEntity {
-  return {
-    eventId: dto.scheduledEventId,
-    entityId: dto.id,
-    endAt: buildDateTimeFromDto(dto.localEndDate, dto.localEndTime).valueOf(),
   };
 }
 

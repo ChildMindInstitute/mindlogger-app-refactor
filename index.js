@@ -1,6 +1,11 @@
 import 'react-native-gesture-handler';
+import 'react-native-get-random-values';
 
 import { AppRegistry } from 'react-native';
+
+import PropTypes from 'prop-types';
+
+import { jobRunner } from '@shared/lib/services/jobManagement';
 
 import { name as appName } from './app.json';
 import App from './src/app';
@@ -9,15 +14,14 @@ import localization from './src/jobs/localization';
 import requestInterception from './src/jobs/request-interception';
 import responseInterception from './src/jobs/response-interception';
 import setBackgroundTask from './src/jobs/set-background-task';
-import { jobRunner } from './src/shared/lib';
 
-jobRunner.runAll([
-  requestInterception,
-  responseInterception,
-  setBackgroundTask,
-]);
+jobRunner
+  .runAll([requestInterception, responseInterception, setBackgroundTask])
+  .catch(console.error);
 
-jobRunner.runAllSync([localization, displayRemoteNotifications]);
+jobRunner
+  .runAllSync([localization, displayRemoteNotifications])
+  .catch(console.error);
 
 function HeadlessCheck({ isHeadless }) {
   if (isHeadless) {
@@ -25,5 +29,9 @@ function HeadlessCheck({ isHeadless }) {
   }
   return <App />;
 }
+
+HeadlessCheck.propTypes = {
+  isHeadless: PropTypes.bool,
+};
 
 AppRegistry.registerComponent(appName, () => HeadlessCheck);

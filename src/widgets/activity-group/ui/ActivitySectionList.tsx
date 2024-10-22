@@ -4,25 +4,28 @@ import { SectionList, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
+import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import {
-  AutocompletionEventOptions,
   CheckAvailability,
   CompleteEntityIntoUploadToQueue,
   EntityType,
-} from '@app/abstract/lib';
-import { Emitter, Logger, useUploadObservable } from '@app/shared/lib';
-import { AutoCompletionMutex } from '@app/widgets/survey/model';
-import {
-  ActivityCard,
-  ActivityModel,
-  ActivityListItem,
-  MediaFilesCleaner,
-} from '@entities/activity';
-import { AppletModel, clearStorageRecords } from '@entities/applet';
-import { Box, Text, YStack } from '@shared/ui';
+} from '@app/abstract/lib/types/entity';
+import { getDefaultMediaFilesCleaner } from '@app/entities/activity/lib/services/mediaFilesCleanerInstance';
+import { ActivityListItem } from '@app/entities/activity/lib/types/activityListItem';
+import { getDefaultItemsVisibilityValidator } from '@app/entities/activity/model/services/itemsVisibilityValidatorInstsance';
+import { getDefaultMediaLookupService } from '@app/entities/activity/model/services/mediaLookupServiceInstance';
+import { ActivityCard } from '@app/entities/activity/ui/ActivityCard';
+import { clearStorageRecords } from '@app/entities/applet/lib/storage/helpers';
+import { useStartEntity } from '@app/entities/applet/model/hooks/useStartEntity';
+import { useUploadObservable } from '@app/shared/lib/hooks/useUploadObservable';
+import { Emitter } from '@app/shared/lib/services/Emitter';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
+import { Box, YStack } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 
-import { ActivityListGroup } from '../lib';
-import { useAvailabilityEvaluator } from '../model';
+import { ActivityListGroup } from '../lib/types/activityGroup';
+import { useAvailabilityEvaluator } from '../model/hooks/useAvailabilityEvaluator';
 
 type Props = {
   appletId: string;
@@ -31,7 +34,7 @@ type Props = {
   checkAvailability: CheckAvailability;
 };
 
-function ActivitySectionList({
+export function ActivitySectionList({
   appletId,
   groups,
   completeEntity,
@@ -54,11 +57,11 @@ function ActivitySectionList({
       });
   }, [t, groups]);
 
-  const { startFlow, startActivity } = AppletModel.useStartEntity({
-    hasMediaReferences: ActivityModel.MediaLookupService.hasMediaReferences,
-    cleanUpMediaFiles: MediaFilesCleaner.cleanUp,
+  const { startFlow, startActivity } = useStartEntity({
+    hasMediaReferences: getDefaultMediaLookupService().hasMediaReferences,
+    cleanUpMediaFiles: getDefaultMediaFilesCleaner().cleanUp,
     hasActivityWithHiddenAllItems:
-      ActivityModel.ItemsVisibilityValidator.hasActivityWithHiddenAllItems,
+      getDefaultItemsVisibilityValidator().hasActivityWithHiddenAllItems,
     evaluateAvailableTo: useAvailabilityEvaluator().evaluateAvailableTo,
     completeEntityIntoUploadToQueue: completeEntity,
     checkAvailability,
@@ -68,12 +71,14 @@ function ActivitySectionList({
     entityId: string,
     entityType: EntityType,
     eventId: string,
+    targetSubjectId: string | null,
   ) {
     navigate('InProgressActivity', {
       appletId,
       entityId,
       entityType,
       eventId,
+      targetSubjectId,
     });
   }
 
@@ -81,12 +86,13 @@ function ActivitySectionList({
     activityId,
     eventId,
     flowId,
+    targetSubjectId,
     isExpired: isTimerElapsed,
     name,
     activityFlowDetails,
   }: ActivityListItem) => {
-    if (AutoCompletionMutex.isBusy()) {
-      Logger.log(
+    if (getMutexDefaultInstanceManager().getAutoCompletionMutex().isBusy()) {
+      getDefaultLogger().log(
         '[ActivitySectionList.startActivityOrFlow] Postponed due to AutoCompletionMutex is busy',
       );
       return;
@@ -109,6 +115,7 @@ function ActivitySectionList({
         eventId,
         entityName,
         isTimerElapsed,
+        targetSubjectId,
       );
 
       if (result.failReason === 'expired-while-alert-opened') {
@@ -120,10 +127,10 @@ function ActivitySectionList({
       }
 
       if (result.fromScratch) {
-        clearStorageRecords.byEventId(eventId);
+        clearStorageRecords.byEventId(eventId, targetSubjectId);
       }
 
-      navigateSurvey(flowId, 'flow', eventId);
+      navigateSurvey(flowId, 'flow', eventId, targetSubjectId);
     } else {
       const result = await startActivity(
         appletId,
@@ -131,6 +138,7 @@ function ActivitySectionList({
         eventId,
         entityName,
         isTimerElapsed,
+        targetSubjectId,
       );
 
       if (result.failReason === 'expired-while-alert-opened') {
@@ -142,10 +150,10 @@ function ActivitySectionList({
       }
 
       if (result.fromScratch) {
-        clearStorageRecords.byEventId(eventId);
+        clearStorageRecords.byEventId(eventId, targetSubjectId);
       }
 
-      navigateSurvey(activityId, 'regular', eventId);
+      navigateSurvey(activityId, 'regular', eventId, targetSubjectId);
     }
   };
 
@@ -160,11 +168,9 @@ function ActivitySectionList({
           activity={item}
           disabled={isUploading}
           onPress={() => {
-            if (!isFocused()) {
-              return;
+            if (isFocused()) {
+              startActivityOrFlow(item).catch(console.error);
             }
-
-            startActivityOrFlow(item);
           }}
         />
       )}
@@ -200,5 +206,3 @@ const styles = StyleSheet.create({
     paddingBottom: 42,
   },
 });
-
-export default ActivitySectionList;

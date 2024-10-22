@@ -7,7 +7,7 @@ import {
   subWeeks,
 } from 'date-fns';
 
-import { PeriodicityType } from '@app/abstract/lib';
+import { PeriodicityType } from '@app/abstract/lib/types/event';
 
 import { addTime, getLoggerMock } from './testHelpers';
 import { NotificationDaysExtractor } from '../NotificationDaysExtractor';
@@ -79,7 +79,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = CurrentDay;
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
@@ -99,7 +99,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = CurrentDay;
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 2);
@@ -131,7 +131,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const eventDayFrom = null;
       const eventDayTo = new Date(CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
@@ -151,7 +151,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = CurrentDay;
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 5);
@@ -174,7 +174,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = CurrentDay;
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(CurrentDay);
@@ -197,7 +197,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = CurrentDay;
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
@@ -220,7 +220,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = CurrentDay;
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
@@ -247,7 +247,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = CurrentDay;
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
@@ -267,7 +267,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = subMonths(CurrentDay, 3);
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
@@ -285,7 +285,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = CurrentDay;
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 2);
@@ -317,7 +317,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const eventDayFrom = null;
       const eventDayTo = new Date(CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
@@ -337,7 +337,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = CurrentDay;
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 5);
@@ -360,7 +360,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = CurrentDay;
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(CurrentDay);
@@ -383,7 +383,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = CurrentDay;
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
@@ -406,7 +406,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = CurrentDay;
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = new Date(Tomorrow);
@@ -433,7 +433,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = subDays(CurrentDay, 3);
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
@@ -461,7 +461,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = subDays(CurrentDay, 3);
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 2);
@@ -484,7 +484,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = subDays(CurrentDay, 3);
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = subDays(CurrentDay, 2);
@@ -507,7 +507,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = subDays(CurrentDay, 3);
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = null;
@@ -537,7 +537,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = subDays(CurrentDay, 3);
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const eventDayFrom = addDays(CurrentDay, 1);
@@ -562,7 +562,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = new Date(CurrentDay);
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
@@ -602,7 +602,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = subDays(CurrentDay, 35);
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
@@ -627,7 +627,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = subDays(CurrentDay, 25);
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
@@ -652,7 +652,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = CurrentDay;
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
@@ -676,7 +676,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = addDays(CurrentDay, 10);
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
@@ -700,7 +700,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = addDays(CurrentDay, 20);
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const result = extractor.extractForReminders(
@@ -720,7 +720,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = subDays(CurrentDay, 25);
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const startDate = subDays(CurrentDay, 15);
@@ -742,7 +742,7 @@ describe('NotificationDaysExtractor tests. Extract days for reminder notificatio
       const scheduledDay = subDays(CurrentDay, 25);
       const now = addTime({ hours: 15, minutes: 30 }, CurrentDay);
 
-      const extractor = new NotificationDaysExtractor({}, AppletId, loggerMock);
+      const extractor = new NotificationDaysExtractor(AppletId, [], loggerMock);
       mockUtilityProps(extractor, now);
 
       const endDate = new Date(CurrentDay);

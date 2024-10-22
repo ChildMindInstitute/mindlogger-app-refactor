@@ -2,8 +2,10 @@ import { Dimensions, Platform } from 'react-native';
 
 import i18n from 'i18next';
 
+import { IMutex } from '@shared/lib/utils/IMutex';
+
 import { IS_ANDROID, IS_IOS } from '../constants';
-import { type Language } from '../types';
+import { Language } from '../types/language';
 
 export const noop = () => {};
 
@@ -81,12 +83,6 @@ export const getFloatPartLength = (numberValue: number) => {
   );
   return pointPosition === -1 ? 0 : numberAsString.length - pointPosition - 1;
 };
-
-export interface IMutex {
-  setBusy: () => void;
-  release: () => void;
-  isBusy: () => boolean;
-}
 
 export const Mutex = (): IMutex => {
   let busy = false;

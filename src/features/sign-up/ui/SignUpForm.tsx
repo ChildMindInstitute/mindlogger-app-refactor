@@ -6,14 +6,18 @@ import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
 
-import { executeIfOnline, useAppForm, colors } from '@app/shared/lib';
-import { Box, BoxProps, YStack, SubmitButton } from '@shared/ui';
-import { InputField, ErrorMessage } from '@shared/ui/form';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
+import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
+import { Box, BoxProps, YStack } from '@app/shared/ui/base';
+import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
+import { InputField } from '@app/shared/ui/form/InputField';
+import { SubmitButton } from '@app/shared/ui/SubmitButton';
 import { EyeIcon, EyeSlashIcon } from '@shared/ui/icons';
 
-import SignUpPasswordRequirements from './SignUpPasswordRequirements';
-import { SignUpModel } from '../';
-import { SignUpFormSchema } from '../validation';
+import { SignUpPasswordRequirements } from './SignUpPasswordRequirements';
+import { useRegistrationMutation } from '../model/hooks/useRegistrationMutation';
+import { SignUpFormSchema } from '../validation/SignUpFormSchema';
 
 type Props = BoxProps & {
   onLoginSuccess: () => void;
@@ -28,7 +32,7 @@ const SignUpForm: FC<Props> = props => {
     isLoading,
     error,
     mutate: signUp,
-  } = SignUpModel.useRegistrationMutation(props.onLoginSuccess);
+  } = useRegistrationMutation(props.onLoginSuccess);
 
   const { form, submit } = useAppForm(SignUpFormSchema, {
     defaultValues: {

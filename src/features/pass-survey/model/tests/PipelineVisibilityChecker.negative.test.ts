@@ -3,8 +3,8 @@ import {
   getEmptyRadioItem,
   getRadioResponse,
 } from './testHelpers';
-import { Answers } from '../../lib';
-import PipelineVisibilityChecker from '../PipelineVisibilityChecker';
+import { Answers } from '../../lib/hooks/useActivityStorageRecord';
+import { PipelineVisibilityChecker } from '../PipelineVisibilityChecker';
 
 describe('PipelineVisibilityChecker: negative tests', () => {
   it('Should return false when index is out of range', () => {

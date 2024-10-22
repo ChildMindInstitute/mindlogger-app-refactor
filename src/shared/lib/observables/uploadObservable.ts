@@ -1,16 +1,9 @@
-import { CommonObservable } from '../utils';
+import { IUploadObservable } from './IUploadObservable';
+import { CommonObservable } from '../utils/observable';
 
-export interface IUploadObservableSetters {
-  set isLoading(value: boolean);
-  set isError(value: boolean);
-  set isPostponed(value: boolean);
-  set isCompleted(value: boolean);
-  reset(): void;
-}
-
-class UploadObservable
+export class UploadObservable
   extends CommonObservable
-  implements IUploadObservableSetters
+  implements IUploadObservable
 {
   private _isLoading: boolean;
 
@@ -72,5 +65,3 @@ class UploadObservable
     this.isLoading = false;
   }
 }
-
-export default new UploadObservable();

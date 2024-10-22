@@ -1,19 +1,14 @@
 import { PropsWithChildren, useMemo, useRef, useCallback } from 'react';
 
-import { ViewSliderRef } from '@app/shared/ui';
-
-import BackButton from './BackButton';
+import { BackButton } from './BackButton';
 import { RefContext, HandlersContext, ValuesContext } from './contexts';
-import NavigationPanel from './NavigationPanel';
-import NextButton from './NextButton';
-import Progress from './Progress';
-import UndoButton from './UndoButton';
+import { NavigationPanel } from './NavigationPanel';
+import { NextButton } from './NextButton';
+import { Progress } from './Progress';
+import { UndoButton } from './UndoButton';
 import { undoPressed } from './useOnUndo';
-import ViewList from './ViewList';
-
-export * from './contexts';
-
-export { default as useOnUndo } from './useOnUndo';
+import { ViewList } from './ViewList';
+import { ViewSliderRef } from '../ViewSlider';
 
 export type StepperPayload = {
   shouldIgnoreUserActionTrack: boolean;

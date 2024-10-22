@@ -1,4 +1,4 @@
-import { BlockType, SamplingMethod } from '@app/abstract/lib';
+import { BlockType, SamplingMethod } from '@app/abstract/lib/types/flanker';
 
 export type StringOrNull = string | null;
 

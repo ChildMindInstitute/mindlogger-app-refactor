@@ -6,7 +6,8 @@ import { styled } from '@tamagui/core';
 import { format } from 'date-fns';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-import { XStack, Text } from '.';
+import { XStack } from './base';
+import { Text } from './Text';
 
 type Props = {
   onChange: (value: Date) => void;
@@ -25,7 +26,7 @@ const DatePickerButton = styled(Button, {
   backgroundColor: '$white',
 });
 
-const DateTimePicker: FC<Props & AccessibilityProps> = ({
+export const DateTimePicker: FC<Props & AccessibilityProps> = ({
   value,
   accessibilityLabel,
   onChange,
@@ -78,5 +79,3 @@ const DateTimePicker: FC<Props & AccessibilityProps> = ({
     </>
   );
 };
-
-export default DateTimePicker;

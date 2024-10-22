@@ -1,11 +1,9 @@
 import { styled, Stack } from '@tamagui/core';
 
-import { colors } from '../lib';
+import { colors } from '../lib/constants/colors';
 
-const ListSeparator = styled(Stack, {
+export const ListSeparator = styled(Stack, {
   width: '100%',
   height: 1,
   backgroundColor: colors.lightGrey,
 });
-
-export default ListSeparator;

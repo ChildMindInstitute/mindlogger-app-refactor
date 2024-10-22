@@ -3,15 +3,16 @@ import { LayoutChangeEvent } from 'react-native';
 
 import { isTablet } from 'react-native-device-info';
 
-import GridRow from './GridRow';
+import { chunkArray } from '@app/shared/lib/utils/common';
+
+import { GridRow } from './GridRow';
 import { GridProps } from './types';
 import { calculateItemsPerRow } from './utils';
-import { Box } from '../';
-import { chunkArray } from '../../lib';
+import { Box } from '../base';
 
 const TABLET_VIEW_EXTRA_MARGIN = 40;
 
-function SimpleGrid<TItem extends { id: string }>({
+export function SimpleGrid<TItem extends { id: string }>({
   data,
   cellWidth,
   space,
@@ -51,5 +52,3 @@ function SimpleGrid<TItem extends { id: string }>({
     </Box>
   );
 }
-
-export default SimpleGrid;

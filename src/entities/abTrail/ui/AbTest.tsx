@@ -2,12 +2,21 @@ import { FC, useEffect, useMemo, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { AbTestPayload } from '@app/abstract/lib';
-import { AbTestStreamEvent, colors, StreamEventLoggable } from '@shared/lib';
-import { Box, BoxProps, Text, XStack } from '@shared/ui';
+import { AbTestPayload } from '@app/abstract/lib/types/abTrails';
+import { colors } from '@app/shared/lib/constants/colors';
+import {
+  StreamEventLoggable,
+  AbTestStreamEvent,
+} from '@app/shared/lib/tcp/types';
+import { Box, BoxProps, XStack } from '@app/shared/ui/base';
+import { Text } from '@app/shared/ui/Text';
 
-import AbCanvas from './AbCanvas';
-import { AbTestResult, MessageType, MessageTypeStrings } from '../lib';
+import { AbCanvas } from './AbCanvas';
+import {
+  AbTestResult,
+  MessageType,
+  MessageTypeStrings,
+} from '../lib/types/test';
 
 type Props = {
   testData: AbTestPayload;
@@ -19,7 +28,7 @@ const ShapesRectPadding = 15;
 
 const MessageTimeout = 2000;
 
-const AbTest: FC<Props> = props => {
+export const AbTest: FC<Props> = props => {
   const { t } = useTranslation();
 
   const { testData, onResponse, onLog } = props;
@@ -109,5 +118,3 @@ const AbTest: FC<Props> = props => {
     </Box>
   );
 };
-
-export default AbTest;

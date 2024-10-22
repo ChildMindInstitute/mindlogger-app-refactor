@@ -16,7 +16,7 @@ import {
   TextInputPipelineItem,
   TimeRangePipelineItem,
   TutorialPipelineItem,
-} from '../../lib';
+} from '../../lib/types/payload';
 
 export const getEmptyRadioItem = (name: string): RadioPipelineItem => {
   const result: RadioPipelineItem = {

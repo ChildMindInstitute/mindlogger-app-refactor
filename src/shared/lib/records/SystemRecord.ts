@@ -1,25 +1,25 @@
-import { createStorage } from '@shared/lib/storages';
+import { MMKV } from 'react-native-mmkv';
 
-const storage = createStorage('system');
+import { ISystemRecord } from './ISystemRecord';
 
 const DEVICE_ID_KEY = 'deviceId';
 const DATA_VERSION_KEY = 'dataVersion';
 
-function SystemRecord() {
+export function SystemRecord(systemStorage: MMKV): ISystemRecord {
   function getDeviceId() {
-    return storage.getString(DEVICE_ID_KEY);
+    return systemStorage.getString(DEVICE_ID_KEY) as string;
   }
 
   function setDeviceId(deviceId: string) {
-    storage.set(DEVICE_ID_KEY, deviceId);
+    systemStorage.set(DEVICE_ID_KEY, deviceId);
   }
 
   function getDataVersion() {
-    return storage.getNumber(DATA_VERSION_KEY);
+    return systemStorage.getNumber(DATA_VERSION_KEY) as number;
   }
 
   function setDataVersion(version: number) {
-    storage.set(DATA_VERSION_KEY, version);
+    systemStorage.set(DATA_VERSION_KEY, version);
   }
 
   return {
@@ -30,5 +30,3 @@ function SystemRecord() {
     setDataVersion,
   };
 }
-
-export default SystemRecord();

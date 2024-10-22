@@ -12,12 +12,13 @@ import {
 } from '@shopify/react-native-skia';
 import { useTranslation } from 'react-i18next';
 
-import { AbTestPayload, Point } from '@app/abstract/lib';
+import { AbTestPayload } from '@app/abstract/lib/types/abTrails';
+import { Point } from '@app/abstract/lib/types/primitive';
+import { colors } from '@app/shared/lib/constants/colors';
 import { robotoMediumFont } from '@assets/fonts';
 import { robotoFont } from '@assets/fonts';
-import { colors } from '@shared/lib';
 
-import { getEquidistantPoint } from '../lib/utils';
+import { getEquidistantPoint } from '../lib/utils/calculation';
 
 const FontCrossSize = 20;
 
@@ -31,7 +32,7 @@ type Props = {
   greenRoundOrder?: number | string | null;
 };
 
-const AbShapes: FC<Props> = props => {
+export const AbShapes: FC<Props> = props => {
   const { nodes, config, deviceType } = props.testData;
   const { paths, greenRoundOrder, errorPath } = props;
   const fontBeginEndSize =
@@ -181,5 +182,3 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
-
-export default AbShapes;

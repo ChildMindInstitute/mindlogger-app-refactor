@@ -3,8 +3,9 @@ import { ColorValue, TextInputProps } from 'react-native';
 
 import { Controller, useFormContext, useController } from 'react-hook-form';
 
-import { Box, Input, XStack } from '@shared/ui';
-import { ErrorMessage } from '@shared/ui/form';
+import { ErrorMessage } from './ErrorMessage';
+import { Box, XStack } from '../base';
+import { Input } from '../Input';
 
 type Props = {
   name: string;
@@ -19,7 +20,7 @@ type Props = {
   hideError?: boolean;
 } & TextInputProps;
 
-const InputField: FC<Props> = ({
+export const InputField: FC<Props> = ({
   name,
   defaultValue = '',
   placeholder,
@@ -94,5 +95,3 @@ const InputField: FC<Props> = ({
     </>
   );
 };
-
-export default InputField;

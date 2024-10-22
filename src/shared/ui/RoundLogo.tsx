@@ -6,9 +6,8 @@ import { CachedImage } from '@georstat/react-native-image-cache';
 import { Text } from '@tamagui/core';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 
-import { colors } from '../lib';
-
-import { Box } from '.';
+import { Box } from './base';
+import { colors } from '../lib/constants/colors';
 
 type Props = {
   letter?: string;
@@ -25,7 +24,7 @@ const getImageUrl = (url: string): string => {
   return url;
 };
 
-const RoundLogo: FC<Props & AccessibilityProps> = ({
+export const RoundLogo: FC<Props & AccessibilityProps> = ({
   accessibilityLabel,
   imageUri,
   imageStyle,
@@ -91,5 +90,3 @@ const getStyles = (size: number) =>
       overflow: 'hidden',
     },
   });
-
-export default RoundLogo;

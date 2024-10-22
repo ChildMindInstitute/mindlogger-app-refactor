@@ -1,5 +1,10 @@
-import { ActivityDto, AppletDetailsDto, AppletDto } from '@app/shared/api';
-import { filterDuplicates } from '@shared/lib';
+import { ActivityDto } from '@app/shared/api/services/IActivityService';
+import {
+  AppletDetailsDto,
+  AppletDto,
+} from '@app/shared/api/services/IAppletService';
+
+import { filterDuplicates } from '../utils/common';
 
 export const collectAppletRecordImageUrls = (
   applet: AppletDto,

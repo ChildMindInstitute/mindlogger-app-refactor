@@ -8,6 +8,7 @@ export type EntityPathParams = {
   appletId: string;
   eventId: string;
   entityId: string;
+  targetSubjectId: string | null;
 };
 
 export type EntityPath = EntityPathParams & {

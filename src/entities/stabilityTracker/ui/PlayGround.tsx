@@ -2,22 +2,22 @@ import React, { FC } from 'react';
 
 import { Rect } from 'react-native-svg';
 
-import { colors } from './StabilityTrackerItem.styles';
+import { colors } from './StabilityTracker.styles';
 import {
+  BLOCK_HEIGHT,
+  BLOCK_WIDTH,
   BOUND_HIT_ANIMATION_DURATION,
-  PLAYGROUND_WIDTH,
   CENTER,
   OUTER_CIRCLE_RADIUS,
-  BLOCK_WIDTH,
-  BLOCK_HEIGHT,
-} from '../lib';
+  PLAYGROUND_WIDTH,
+} from '../lib/constants';
 
 type Props = {
   boundWasHit: boolean;
   boundHitAnimationDuration: number;
 };
 
-const PlayGround: FC<Props> = props => {
+export const PlayGround: FC<Props> = props => {
   const { boundWasHit, boundHitAnimationDuration } = props;
 
   const getBackgroundColorBasedOnTimeline = (defaultColor: string) => {
@@ -93,5 +93,3 @@ const PlayGround: FC<Props> = props => {
     </>
   );
 };
-
-export default PlayGround;

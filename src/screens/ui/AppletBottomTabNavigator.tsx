@@ -7,27 +7,28 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Box, ImageBackground } from '@app/shared/ui';
-import { AppletModel, useAppletDetailsQuery } from '@entities/applet';
+import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
+import { mapAppletDetailsFromDto } from '@app/entities/applet/model/mappers';
+import { Box } from '@app/shared/ui/base';
+import { ImageBackground } from '@app/shared/ui/ImageBackground';
 
-import {
-  AppletDetailsParamList,
-  getAppletDetailsScreenOptions,
-  RootStackParamList,
-} from '../config';
-import { ActivityListScreen, AboutAppletScreen, AppletDataScreen } from '../ui';
+import { AboutAppletScreen } from './AboutAppletScreen';
+import { ActivityListScreen } from './ActivityListScreen';
+import { AppletDataScreen } from './AppletDataScreen';
+import { getAppletDetailsScreenOptions } from '../config/theme';
+import { AppletDetailsParamList, RootStackParamList } from '../config/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AppletDetails'>;
 
 const Tab = createBottomTabNavigator<AppletDetailsParamList>();
 
-const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
+export const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
   const { t } = useTranslation();
 
   const { title, appletId } = route.params;
 
   const { data: applet } = useAppletDetailsQuery(appletId, {
-    select: o => AppletModel.mapAppletDetailsFromDto(o.data.result),
+    select: o => mapAppletDetailsFromDto(o.data.result),
   });
 
   const appletTheme = applet?.theme;
@@ -116,5 +117,3 @@ const style = StyleSheet.create({
     height: '100%',
   },
 });
-
-export default AppletBottomTabNavigator;

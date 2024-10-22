@@ -1,7 +1,8 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import { Logger } from '@app/shared/lib';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
+import { RootStateFrom, RootStateTo } from './MigrationReduxTypes0002';
 import {
   QueryDataUtils,
   cacheImage,
@@ -9,7 +10,9 @@ import {
 } from './MigrationUtils0002';
 import { IMigration, MigrationInput, MigrationOutput } from '../../types';
 
-export class MigrationToVersion0002 implements IMigration {
+export class MigrationToVersion0002
+  implements IMigration<RootStateFrom, RootStateTo>
+{
   private queryDataUtils: QueryDataUtils;
 
   constructor(queryClient: QueryClient) {
@@ -59,16 +62,17 @@ export class MigrationToVersion0002 implements IMigration {
     urlsToCache.forEach(cacheImage);
   }
 
-  migrate(input: MigrationInput): MigrationOutput {
+  migrate(input: MigrationInput<RootStateFrom>): MigrationOutput<RootStateTo> {
     try {
       this.cacheAllFlankerImages();
     } catch (error) {
-      Logger.error(`[MigrationToVersion0002.migrate]: An error ocurred during the migration:
+      getDefaultLogger()
+        .error(`[MigrationToVersion0002.migrate]: An error ocurred during the migration:
         error:
         ${(error as Error).message}
       `);
     }
 
-    return input;
+    return input as MigrationOutput<RootStateTo>;
   }
 }

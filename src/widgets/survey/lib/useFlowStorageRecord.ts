@@ -2,15 +2,20 @@ import { useCallback } from 'react';
 
 import { useMMKVObject } from 'react-native-mmkv';
 
-import { AnswerAlerts, ScoreRecord } from '@app/features/pass-survey';
-import { createStorage } from '@app/shared/lib';
+import {
+  AnswerAlerts,
+  ScoreRecord,
+} from '@app/features/pass-survey/lib/types/summary';
+import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
+import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
 
-import { FlowPipelineItem } from '../model';
+import { getFlowRecordKey } from './storageHelpers';
 
 export type UseFlowStorageArgs = {
   appletId: string;
   eventId: string;
   flowId?: string;
+  targetSubjectId: string | null;
 };
 
 type ActivityId = string;
@@ -48,15 +53,14 @@ export type FlowState = {
   context: Record<string, unknown>;
 };
 
-const storage = createStorage('flow_progress-storage');
-
 export function useFlowStorageRecord({
   appletId,
   eventId,
   flowId,
+  targetSubjectId,
 }: UseFlowStorageArgs) {
-  const flowKey = flowId ?? 'default_one_step_flow';
-  const key = `${flowKey}-${appletId}-${eventId}`;
+  const key = getFlowRecordKey(flowId, appletId, eventId, targetSubjectId);
+  const storage = getDefaultStorageInstanceManager().getFlowProgressStorage();
 
   const [flowStorageRecord, upsertFlowStorageRecord] = useMMKVObject<FlowState>(
     key,
@@ -65,7 +69,7 @@ export function useFlowStorageRecord({
 
   const clearFlowStorageRecord = useCallback(() => {
     storage.delete(key);
-  }, [key]);
+  }, [key, storage]);
 
   const getCurrentFlowStorageRecord = useCallback(() => {
     const json = storage.getString(key);
@@ -73,7 +77,7 @@ export function useFlowStorageRecord({
     if (json) {
       return JSON.parse(json) as FlowState;
     }
-  }, [key]);
+  }, [key, storage]);
 
   return {
     flowStorageRecord,

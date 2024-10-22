@@ -2,7 +2,8 @@ import { FC, PropsWithChildren } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { Text, TextProps } from '@shared/ui';
+import { TextProps } from './base';
+import { Text } from './Text';
 
 type LoadError = {
   key: string;
@@ -14,7 +15,7 @@ type Props = {
   mode?: 'dark' | 'light';
 } & TextProps;
 
-const LoadListError: FC<PropsWithChildren<Props>> = ({
+export const LoadListError: FC<PropsWithChildren<Props>> = ({
   error,
   mode,
   ...props
@@ -36,5 +37,3 @@ const LoadListError: FC<PropsWithChildren<Props>> = ({
     </>
   );
 };
-
-export default LoadListError;

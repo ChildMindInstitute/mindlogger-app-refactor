@@ -1,6 +1,6 @@
-import { FlankerItemSettings } from '@app/abstract/lib';
+import { FlankerItemSettings } from '@app/abstract/lib/types/flanker';
 
-import { FlankerLogRecord, FlankerWebViewLogRecord } from '../types';
+import { FlankerLogRecord, FlankerWebViewLogRecord } from '../types/response';
 
 export const parseResponse = (data: {
   record: FlankerWebViewLogRecord;

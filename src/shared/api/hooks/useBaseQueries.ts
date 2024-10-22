@@ -4,12 +4,14 @@ import { BaseError } from '../types';
 
 type QueryKey = [string, Record<string, unknown>?];
 
-const useBaseQueries = <TQueryFnData, TError = BaseError, TData = TQueryFnData>(
+export const useBaseQueries = <
+  TQueryFnData,
+  TError = BaseError,
+  TData = TQueryFnData,
+>(
   queries: Array<UseQueryOptions<TQueryFnData, TError, TData, QueryKey>>,
 ) => {
   return useQueries({
     queries,
   });
 };
-
-export default useBaseQueries;

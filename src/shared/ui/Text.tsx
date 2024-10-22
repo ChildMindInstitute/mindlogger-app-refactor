@@ -1,6 +1,6 @@
-import { Text, styled } from '@tamagui/core';
+import { Text as RNText, styled } from '@tamagui/core';
 
-export default styled(Text, {
+export const Text = styled(RNText, {
   name: 'Text',
   color: '$black',
   fontFamily: '$body',

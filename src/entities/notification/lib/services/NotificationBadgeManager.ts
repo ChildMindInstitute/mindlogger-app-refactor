@@ -1,7 +1,9 @@
 import notifee from '@notifee/react-native';
 
-class NotificationBadgeManager {
-  get count() {
+import { INotificationBadgeManager } from './INotificationBadgeManager';
+
+export class NotificationBadgeManager implements INotificationBadgeManager {
+  getCount() {
     return notifee.getBadgeCount();
   }
 
@@ -21,5 +23,3 @@ class NotificationBadgeManager {
     return this.setCount(0);
   }
 }
-
-export default new NotificationBadgeManager();

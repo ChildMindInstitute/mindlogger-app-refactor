@@ -1,6 +1,9 @@
 import { addDays, addMonths, startOfDay, subDays, subMonths } from 'date-fns';
 
-import { AvailabilityType, PeriodicityType } from '@app/abstract/lib';
+import {
+  AvailabilityType,
+  PeriodicityType,
+} from '@app/abstract/lib/types/event';
 
 import { ScheduledDateCalculator } from './ScheduledDateCalculator';
 import { ScheduleEvent } from '../../lib/types/scheduledDateCalculator';

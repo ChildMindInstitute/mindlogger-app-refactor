@@ -6,15 +6,15 @@ import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 import { RESULTS } from 'react-native-permissions';
 
-import {
-  useIsOnline,
-  useLocationPermissions,
-  getLocationPermissions,
-  IS_ANDROID,
-} from '@shared/lib';
-import { Center, GeolocationIcon, Text } from '@shared/ui';
+import { IS_ANDROID } from '@app/shared/lib/constants';
+import { useIsOnline } from '@app/shared/lib/hooks/useIsOnline';
+import { useLocationPermissions } from '@app/shared/lib/hooks/useLocationPermissions';
+import { getLocationPermissions } from '@app/shared/lib/permissions/geolocationPermissions';
 
 import { Coordinates } from './types';
+import { Center } from '../../Center';
+import { GeolocationIcon } from '../../icons';
+import { Text } from '../../Text';
 
 const GeolocationButton = styled(Button, {
   backgroundColor: '$blue',
@@ -36,7 +36,7 @@ type CurrentPositionSuccessResult = {
   };
 };
 
-const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
+export const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
   const { t } = useTranslation();
   const [errorMessage, setErrorMessage] = useState('');
   const isOnline = useIsOnline();
@@ -123,5 +123,3 @@ const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
     </Center>
   );
 };
-
-export default GeolocationItem;

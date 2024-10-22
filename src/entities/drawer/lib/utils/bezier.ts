@@ -1,4 +1,4 @@
-import { CachedBezierItem, Point } from '../types';
+import { CachedBezierItem, Point } from '../types/draw';
 
 function getBezierPoint(
   startPoint: Point,

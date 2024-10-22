@@ -1,9 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
 
-import { AppletEventsResponse } from '@app/shared/api';
-import { getDataFromQuery, getEventsKey } from '@app/shared/lib';
+import { AppletEventsResponse } from '@app/shared/api/services/IEventsService';
+import {
+  getDataFromQuery,
+  getEventsKey,
+} from '@app/shared/lib/utils/reactQueryHelpers';
 
-import { ScheduleEvent } from '../../lib';
+import { ScheduleEvent } from '../../lib/types/event';
 import { mapEventsFromDto } from '../mappers';
 
 type UseScheduledEventArgs = {

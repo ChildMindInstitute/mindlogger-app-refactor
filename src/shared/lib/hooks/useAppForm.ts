@@ -6,9 +6,9 @@ import {
 } from 'react-hook-form';
 import { z } from 'zod';
 
-import { zodResolver } from '../validation';
+import { zodResolver } from '../validation/zodResolver';
 
-const useAppForm = <Schema extends z.ZodTypeAny>(
+export const useAppForm = <Schema extends z.ZodTypeAny>(
   schema: Schema,
   props: UseFormProps<z.input<Schema>> & {
     onSubmitSuccess: SubmitHandler<z.output<Schema>>;
@@ -24,5 +24,3 @@ const useAppForm = <Schema extends z.ZodTypeAny>(
 
   return { form, submit };
 };
-
-export default useAppForm;

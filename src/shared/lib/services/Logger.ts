@@ -3,41 +3,25 @@ import DeviceInfo from 'react-native-device-info';
 import { Dirs, FileSystem } from 'react-native-file-access';
 import { FileLogger, LogLevel } from 'react-native-file-logger';
 
-import { FileService } from '@shared/api';
-import { getNotificationSettingsData } from '@shared/lib';
+import { IFileService } from '@app/shared/api/services/IFileService';
+import { IMutex } from '@shared/lib/utils/IMutex';
 
 import { IS_ANDROID, IS_IOS } from '../constants';
-import { ILogger } from '../types';
+import { getNotificationSettingsData } from '../permissions/notificationPermissions';
 import {
-  IMutex,
+  DeviceInfoLogObject,
+  FileExists,
+  ILogger,
+  NamePath,
+  NamePathSize,
+} from '../types/logger';
+import {
   Mutex,
-  callWithMutex,
   callWithMutexAsync,
-  isAppOnline,
+  callWithMutex,
   wait,
-} from '../utils';
-
-type NamePath = {
-  fileName: string;
-  filePath: string;
-};
-
-type NamePathSize = {
-  size: number;
-} & NamePath;
-
-type FileExists = {
-  exists: boolean;
-} & NamePathSize;
-
-type DeviceInfoLogObject = {
-  brand: string;
-  readableVersion: string;
-  buildNumber: string;
-  firstInstallTime: number;
-  freeDiskStorage: number;
-  lastUpdateTime: number;
-};
+} from '../utils/common';
+import { isAppOnline } from '../utils/networkHelpers';
 
 export class Logger implements ILogger {
   private mutex: IMutex;
@@ -46,10 +30,13 @@ export class Logger implements ILogger {
 
   private consoleLogLevel: LogLevel;
 
-  constructor() {
+  private fileService: IFileService;
+
+  constructor(fileService: IFileService) {
     this.mutex = Mutex();
     this.abortController = new AbortController();
     this.consoleLogLevel = LogLevel.Debug; // for developers
+    this.fileService = fileService;
   }
 
   private withTime(message: string) {
@@ -94,7 +81,7 @@ export class Logger implements ILogger {
   private async checkIfFilesExist(
     files: Array<NamePath>,
   ): Promise<FileExists[]> {
-    const checkResult = await FileService.checkIfLogsExist({
+    const checkResult = await this.fileService.checkIfLogsExist({
       files: files.map(x => x.fileName),
     });
 
@@ -222,7 +209,7 @@ export class Logger implements ILogger {
           `[Logger.sendInternal] Sending log file "${checkRecord.fileName}"`,
         );
 
-        await FileService.uploadLogFile({
+        await this.fileService.uploadLogFile({
           fileName: checkRecord.fileName,
           uri: checkRecord.filePath,
           type: 'text/x-log',
@@ -339,5 +326,3 @@ export class Logger implements ILogger {
     this.abortController.abort();
   }
 }
-
-export default new Logger();

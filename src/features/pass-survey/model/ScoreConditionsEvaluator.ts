@@ -1,8 +1,6 @@
-import { ScoreConditionalLogic } from '@app/entities/activity';
+import { ScoreConditionalLogic } from '@app/entities/activity/lib/types/activityReportSettings';
 
-export interface IScoreConditionsEvaluator {
-  evaluate(settings: ScoreConditionalLogic, score: number): boolean;
-}
+import { IScoreConditionsEvaluator } from './IScoreConditionsEvaluator';
 
 export class ScoreConditionsEvaluator implements IScoreConditionsEvaluator {
   constructor() {}
@@ -58,5 +56,3 @@ export class ScoreConditionsEvaluator implements IScoreConditionsEvaluator {
     }
   }
 }
-
-export default new ScoreConditionsEvaluator();
