@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import {
-  Linking,
   StatusBar,
   Keyboard,
   TouchableWithoutFeedback,
@@ -15,6 +14,7 @@ import { Box, XStack } from '@app/shared/ui/base';
 import { CloudLogo } from '@app/shared/ui/icons/CloudLogo';
 import { Link } from '@app/shared/ui/Link';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
+import { openUrl } from '@app/screens/lib/utils/helpers';
 
 export const LoginScreen: FC = () => {
   const { navigate } = useNavigation();
@@ -26,10 +26,6 @@ export const LoginScreen: FC = () => {
 
   const navigateToAppLanguage = () => {
     navigate('ChangeLanguage');
-  };
-
-  const navigateToTerms = () => {
-    Linking.openURL('https://mindlogger.org/terms');
   };
 
   const onLoginSuccess = () => {
@@ -73,8 +69,9 @@ export const LoginScreen: FC = () => {
           </Box>
 
           <XStack
-            jc={isTablet() ? 'space-around' : 'space-between'}
+            jc={isTablet() ? 'space-around' : 'center'}
             mb={isTablet() ? 50 : 40}
+            gap={isTablet()? 0: 20}
           >
             <Link
               textDecorationLine="underline"
@@ -86,7 +83,15 @@ export const LoginScreen: FC = () => {
 
             <Link
               textDecorationLine="underline"
-              onPress={navigateToTerms}
+              onPress={()=>openUrl('https://mindlogger.org/privacy-policy')}
+              accessibilityLabel="privacy_policy_link"
+            >
+              {t('auth:privacy_policy')}
+            </Link>
+
+            <Link
+              textDecorationLine="underline"
+              onPress={()=>openUrl('https://mindlogger.org/terms-of-service')}
               accessibilityLabel="terms_of_service_link"
             >
               {t('auth:terms_of_service')}

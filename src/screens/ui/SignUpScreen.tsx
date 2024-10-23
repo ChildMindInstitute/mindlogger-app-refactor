@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Keyboard, TouchableWithoutFeedback, Linking } from 'react-native';
+import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -11,14 +11,11 @@ import { KeyboardAvoidingView } from '@app/shared/ui/KeyboardAvoidingView';
 import { ScrollView } from '@app/shared/ui/ScrollView';
 import { StatusBar } from '@app/shared/ui/StatusBar';
 import { Text } from '@app/shared/ui/Text';
+import { openUrl } from '@app/screens/lib/utils/helpers';
 
 export const SignUpScreen: FC = () => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
-
-  const navigateToTerms = () => {
-    Linking.openURL('https://mindlogger.org/terms');
-  };
 
   return (
     <KeyboardAvoidingView
@@ -60,17 +57,31 @@ export const SignUpScreen: FC = () => {
                 >
                   {t('sign_up_form:sign_up_agree')}
                 </Text>
-
-                <Text
-                  fontSize={16}
-                  color="$white"
-                  ta="center"
-                  textDecorationLine="underline"
-                  accessibilityLabel="terms_of_service_link"
-                  onPress={navigateToTerms}
+                <Box
+                flexDirection={'row'}
+                jc={isTablet() ? 'space-around' : 'space-between'}
                 >
-                  {t('auth:terms_of_service')}
-                </Text>
+                  <Text
+                    fontSize={16}
+                    color="$white"
+                    ta="center"
+                    textDecorationLine="underline"
+                    onPress={()=>openUrl('https://mindlogger.org/privacy-policy')}
+                    accessibilityLabel="privacy_policy_link"
+                    >
+                    {t('auth:privacy_policy')}
+                  </Text>
+                  <Text
+                    fontSize={16}
+                    color="$white"
+                    ta="center"
+                    textDecorationLine="underline"
+                    accessibilityLabel="terms_of_service_link"
+                    onPress={()=>openUrl('https://mindlogger.org/terms-of-service')}
+                  >
+                    {t('auth:terms_of_service')}
+                  </Text>
+                </Box>
               </Box>
             </Box>
           </Box>
