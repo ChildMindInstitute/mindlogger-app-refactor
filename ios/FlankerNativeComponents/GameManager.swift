@@ -102,6 +102,7 @@ class GameManager {
 
   func startLogicTimer() {
     invalidateTimers()
+    delegate?.setEnableButton(isEnable: true)
     setDefaultText(isFirst: true)
   }
 
@@ -311,7 +312,10 @@ class GameManager {
       }
     }
 
-    if isEndGame() { return }
+    if isEndGame() { 
+      delegate?.setEnableButton(isEnable: true)
+      return
+      }
     invalidateTimers()
     updateButtonTitle()
 
@@ -406,6 +410,7 @@ private extension GameManager {
         setEndTimeViewingImage(time: CACurrentMediaTime(), isStart: true, type: .fixations)
       }
       delegate?.resultTest(avrgTime: avrgArray, procentCorrect: Int(procentsCorrect), data: nil, dataArray: resultManager.oneGameDataResult, isShowResults: gameParameters.showResults, minAccuracy: gameParameters.minimumAccuracy)
+      delegate?.setEnableButton(isEnable: true)
       clearData()
       return true
     } else {
