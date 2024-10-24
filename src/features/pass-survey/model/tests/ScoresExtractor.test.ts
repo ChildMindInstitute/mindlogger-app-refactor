@@ -218,6 +218,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
           includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
           name: 'mock-report-name-1',
           type: 'score',
+          scoringType: 'raw_score',
         },
       ];
 
@@ -247,6 +248,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
         includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
         name: 'mock-report-name-1',
         type: 'score',
+        scoringType: 'raw_score',
       },
       {
         calculationType: 'average',
@@ -255,6 +257,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
         includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
         name: 'mock-report-name-2',
         type: 'score',
+        scoringType: 'raw_score',
       },
       {
         calculationType: 'percentage',
@@ -263,6 +266,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
         includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
         name: 'mock-report-name-3',
         type: 'score',
+        scoringType: 'raw_score',
       },
     ];
 
@@ -328,6 +332,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
             includedItems: selectedItems,
             name: 'mock-report-name-1',
             type: 'score',
+            scoringType: 'raw_score',
           },
         ];
 
@@ -372,6 +377,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
         includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
         name: 'mock-report-name-1',
         type: 'score',
+        scoringType: 'raw_score',
       },
     ];
 
