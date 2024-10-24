@@ -192,7 +192,9 @@ class GameManager {
   func checkedAnswer(button: SelectedButton) {
     invalidateTimers()
 
-    delegate?.setEnableButton(isEnable: false)
+    if let gameParameters = gameParameters, gameParameters.showFeedback {
+      delegate?.setEnableButton(isEnable: false)
+    }
 
     guard let gameParameters = gameParameters else { return }
     guard
@@ -301,6 +303,7 @@ class GameManager {
 
 
     if gameParameters.showFixation {
+      delegate?.setEnableButton(isEnable: false)
       if let image = URL(string: gameParameters.fixation), gameParameters.fixation.contains("https") {
         delegate?.updateFixations(image: image, isStart: false, typeTime: .fixations)
       } else {
