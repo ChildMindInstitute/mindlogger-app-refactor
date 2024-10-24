@@ -6,14 +6,14 @@ import {
   webSupportedResponseTypes,
 } from '../../constants/responseTypes';
 
-export const getIsAppOnly = (responseType: ResponseType) =>
+export const getIsMobileOnly = (responseType: ResponseType) =>
   appSupportedResponseTypes.includes(responseType);
 
 export const getIsWebOnly = (responseType: ResponseType) =>
   webSupportedResponseTypes.includes(responseType);
 
-export const getSupportsApp = (responseType: ResponseType) =>
-  getIsAppOnly(responseType) ||
+export const getSupportsMobile = (responseType: ResponseType) =>
+  getIsMobileOnly(responseType) ||
   universalSupportedResponseTypes.includes(responseType);
 
 export const getSupportsWeb = (responseType: ResponseType) =>

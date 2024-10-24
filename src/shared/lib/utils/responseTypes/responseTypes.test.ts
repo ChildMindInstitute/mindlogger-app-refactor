@@ -1,4 +1,9 @@
-import { getIsAppOnly, getIsWebOnly, getSupportsApp, getSupportsWeb } from '.';
+import {
+  getIsMobileOnly,
+  getIsWebOnly,
+  getSupportsMobile,
+  getSupportsWeb,
+} from '.';
 
 describe('getSupportsWeb', () => {
   test.each`
@@ -34,7 +39,7 @@ describe('getSupportsWeb', () => {
     expect(getSupportsWeb(responseType)).toEqual(expected);
   });
 
-  describe('getSupportsApp', () => {
+  describe('getSupportsMobile', () => {
     test.each`
       responseType          | expected | description
       ${'ABTrails'}         | ${true}  | ${'Returns true for ABTrails'}
@@ -65,7 +70,7 @@ describe('getSupportsWeb', () => {
       ${1}                  | ${false} | ${'Returns false for other response types'}
       ${false}              | ${false} | ${'Returns false for other response types'}
     `('$description', ({ responseType, expected }) => {
-      expect(getSupportsApp(responseType)).toEqual(expected);
+      expect(getSupportsMobile(responseType)).toEqual(expected);
     });
   });
 
@@ -103,7 +108,7 @@ describe('getSupportsWeb', () => {
       expect(getIsWebOnly(responseType)).toEqual(expected);
     });
 
-    describe('getIsAppOnly', () => {
+    describe('getIsMobileOnly', () => {
       test.each`
         responseType            | expected | description
         ${'ABTrails'}           | ${true}  | ${'Returns true for ABTrails'}
@@ -134,7 +139,7 @@ describe('getSupportsWeb', () => {
         ${1}                    | ${false} | ${'Returns false for other response types'}
         ${false}                | ${false} | ${'Returns false for other response types'}
       `('$description', ({ responseType, expected }) => {
-        expect(getIsAppOnly(responseType)).toEqual(expected);
+        expect(getIsMobileOnly(responseType)).toEqual(expected);
       });
     });
   });

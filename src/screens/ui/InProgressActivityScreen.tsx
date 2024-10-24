@@ -5,7 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
 import { Emitter } from '@app/shared/lib/services/Emitter';
-import { getSupportsApp } from '@app/shared/lib/utils/responseTypes';
+import { getSupportsMobile } from '@app/shared/lib/utils/responseTypes';
 import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box } from '@app/shared/ui/base';
 import { useBaseInfo } from '@app/widgets/activity-group/model/hooks/useBaseInfo';
@@ -24,7 +24,7 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
   const { data, isLoading } = useBaseInfo(appletId);
   const { responseTypes, title } = data || {};
   const entityResponseTypes = responseTypes?.[entityId];
-  const isAppSupportedEntity = entityResponseTypes?.every(getSupportsApp);
+  const isAppSupportedEntity = entityResponseTypes?.every(getSupportsMobile);
 
   useEffect(() => {
     if (!isAppSupportedEntity && !isLoading) {

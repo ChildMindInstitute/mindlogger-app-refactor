@@ -25,7 +25,7 @@ import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
 import {
   getIsWebOnly,
-  getSupportsApp,
+  getSupportsMobile,
 } from '@app/shared/lib/utils/responseTypes';
 import { Box, YStack } from '@app/shared/ui/base';
 import { Text } from '@app/shared/ui/Text';
@@ -184,7 +184,7 @@ export function ActivitySectionList({
       renderItem={({ item }) => {
         const entityId = item.flowId || item.activityId;
         const responseTypes = activityResponseTypes[entityId];
-        const supportsApp = responseTypes.every(getSupportsApp);
+        const supportsApp = responseTypes.every(getSupportsMobile);
         const isWebOnly = responseTypes.some(getIsWebOnly);
 
         return (
