@@ -14,6 +14,7 @@ import { NoListItemsYet } from '@app/shared/ui/NoListItemsYet';
 
 import { ActivitySectionList } from './ActivitySectionList';
 import { useActivityGroups } from '../model/hooks/useActivityGroups';
+import { useBaseInfo } from '../model/hooks/useBaseInfo';
 
 type Props = {
   appletId: string;
@@ -29,10 +30,11 @@ export const ActivityGroups: FC<Props> = props => {
     }) > 0;
 
   const { groups, isSuccess, error } = useActivityGroups(props.appletId);
+  const { data, isLoading, error: baseInfoError } = useBaseInfo(props.appletId);
+  const { responseTypes } = data || {};
+  const hasError = !isSuccess || !!baseInfoError;
 
-  const hasError = !isSuccess;
-
-  if (isLoadingCompletedEntities) {
+  if (isLoadingCompletedEntities || isLoading) {
     return (
       <Box
         accessibilityLabel="activity-group-loader"
@@ -78,6 +80,7 @@ export const ActivityGroups: FC<Props> = props => {
     <Box {...props}>
       <YStack accessibilityLabel="activity-group-list" flex={1}>
         <ActivitySectionList
+          activityResponseTypes={responseTypes}
           appletId={props.appletId}
           groups={groups}
           completeEntity={props.completeEntity}

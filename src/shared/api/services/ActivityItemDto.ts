@@ -4,28 +4,29 @@ import { AbTrailsItemSettingsDto } from './AbTrailsSettingsDtos';
 import { FlankerItemSettingsDto } from './FlankerSettingsDto';
 
 export type ResponseType =
-  | 'text'
-  | 'paragraphText'
-  | 'singleSelect'
-  | 'multiSelect'
-  | 'message'
-  | 'slider'
-  | 'numberSelect'
-  | 'timeRange'
-  | 'geolocation'
-  | 'drawing'
-  | 'photo'
-  | 'video'
-  | 'date'
-  | 'sliderRows'
-  | 'singleSelectRows'
-  | 'multiSelectRows'
+  | 'ABTrails'
   | 'audio'
   | 'audioPlayer'
+  | 'date'
+  | 'drawing'
   | 'flanker'
+  | 'geolocation'
+  | 'message'
+  | 'multiSelect'
+  | 'multiSelectRows'
+  | 'numberSelect'
+  | 'paragraphText'
+  | 'photo'
+  | 'phrasalTemplate'
+  | 'singleSelect'
+  | 'singleSelectRows'
+  | 'slider'
+  | 'sliderRows'
   | 'stabilityTracker'
+  | 'text'
   | 'time'
-  | 'ABTrails';
+  | 'timeRange'
+  | 'video';
 
 type Match = 'any' | 'all';
 

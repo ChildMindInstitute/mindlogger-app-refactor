@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import { ImageUrl } from '@app/shared/lib/types/url';
 
+import { ResponseType } from './ActivityItemDto';
 import { ActivityDto } from './IActivityService';
 import { SuccessfulResponse } from '../types';
 
@@ -86,6 +87,46 @@ export type AppletDto = {
 
 export type AppletsResponse = SuccessfulResponse<AppletDto[]>;
 
+export interface AppletBaseInfoRequest {
+  appletId: string;
+}
+
+export interface AppletBaseInfoResponse {
+  result: {
+    about: string;
+    activities: {
+      autoAssign: boolean;
+      containsResponseTypes: ResponseType[];
+      description: string;
+      id: string;
+      image?: string;
+      isHidden?: boolean;
+      itemCount: number;
+      name: string;
+      order: number;
+    }[];
+    activityFlows: {
+      activityIds?: string[];
+      autoAssign: boolean;
+      description: string;
+      hideBadge?: boolean;
+      id: string;
+      isHidden?: boolean;
+      name: string;
+      order: number;
+    }[];
+    createdAt: string;
+    description: string;
+    displayName: string;
+    id: string;
+    image?: string;
+    title: string;
+    updatedAt: string;
+    version: string;
+    watermark?: string;
+  };
+}
+
 export type AppletDetailsRequest = {
   appletId: string;
 };
@@ -139,6 +180,9 @@ export type AppletAssignmentsResponse = {
 };
 
 export type IAppletService = {
+  getAppletBaseInfo: (
+    request: AppletBaseInfoRequest,
+  ) => Promise<AxiosResponse<AppletBaseInfoResponse>>;
   getApplets: () => Promise<AxiosResponse<AppletsResponse>>;
   getAppletDetails: (
     request: AppletDetailsRequest,

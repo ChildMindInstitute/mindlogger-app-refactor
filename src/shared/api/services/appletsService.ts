@@ -18,6 +18,14 @@ import {
 
 export function appletsService(): IAppletService {
   return {
+    async getAppletBaseInfo(request: AppletBaseInfoRequest) {
+      const apiCall = () => {
+        return httpService.get<AppletAndActivitiesDetailsResponse>(
+          `/applets/${request.appletId}/base_info`,
+        );
+      };
+      return await callApiWithRetry(withDataExtraction(apiCall));
+    },
     async getApplets() {
       const apiCall = () =>
         httpService.get<AppletsResponse>('/applets', {
