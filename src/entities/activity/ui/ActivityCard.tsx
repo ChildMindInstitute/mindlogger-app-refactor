@@ -113,7 +113,7 @@ export const ActivityCard: FC<Props> = ({
 
           {isWebOnly && (
             <Chip icon={ExclamationIcon} variant="warning">
-              Please complete on the MindLogger web app
+              {t('activity:completeOnWeb')}
             </Chip>
           )}
 

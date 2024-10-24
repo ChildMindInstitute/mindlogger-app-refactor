@@ -20,12 +20,12 @@ const getFillForVariant = (
 
 const StyledChip = styled(View, {
   alignItems: 'center',
-  borderRadius: 4,
+  borderRadius: 8,
   flexDirection: 'row',
-  gap: 4,
+  gap: 8,
   name: 'Chip',
   px: 8,
-  py: 4,
+  py: 6,
 
   variants: {
     variant: {
@@ -52,8 +52,9 @@ export const Chip = ({
 }) => (
   <StyledChip variant={variant} {...otherProps}>
     {Icon && <Icon aria-hidden fill={getFillForVariant(variant)} />}
+
     {children && (
-      <Text fontSize={12} fontWeight="300" lineHeight={20}>
+      <Text fontSize={12} fontWeight="400" lineHeight={17} flex={1}>
         {children}
       </Text>
     )}
