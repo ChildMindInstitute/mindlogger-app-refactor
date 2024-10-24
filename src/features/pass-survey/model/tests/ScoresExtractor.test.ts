@@ -218,6 +218,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
           includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
           name: 'mock-report-name-1',
           type: 'score',
+          scoringType: 'raw_score',
         },
       ];
 
@@ -247,6 +248,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
         includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
         name: 'mock-report-name-1',
         type: 'score',
+        scoringType: 'raw_score',
       },
       {
         calculationType: 'average',
@@ -255,6 +257,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
         includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
         name: 'mock-report-name-2',
         type: 'score',
+        scoringType: 'raw_score',
       },
       {
         calculationType: 'percentage',
@@ -263,6 +266,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
         includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
         name: 'mock-report-name-3',
         type: 'score',
+        scoringType: 'raw_score',
       },
     ];
 
@@ -328,6 +332,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
             includedItems: selectedItems,
             name: 'mock-report-name-1',
             type: 'score',
+            scoringType: 'raw_score',
           },
         ];
 
@@ -346,6 +351,32 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
       });
     },
   );
+
+  it('Should exclude report items with scoringType "score"', () => {
+    const { pipelineItems, answers } = getItemsAndAnswers();
+
+    const reportSettings: Report[] = [
+      {
+        calculationType: 'sum',
+        conditionalLogic: [],
+        id: 'mock-report-id-1',
+        includedItems: ['item-radio', 'item-checkboxes'],
+        name: 'mock-report-name-1',
+        type: 'score',
+        scoringType: 'score',
+        subscaleName: 'mock-subscale-name-1',
+      },
+    ];
+
+    const result: ScoreRecord[] = extractor.extract(
+      pipelineItems,
+      answers,
+      reportSettings,
+      'mock-log-activity-name-1',
+    );
+
+    expect(result).toHaveLength(0);
+  });
 
   it("Should return 517 and flagged set to true when calculationType is 'sum' and one condition is set: equal to 517", () => {
     const { pipelineItems, answers } = getItemsAndAnswers();
@@ -372,6 +403,7 @@ describe('ScoresCalculator: test collectScoreForRadio', () => {
         includedItems: [RadioItemName, CheckboxesItemName, SliderItemName],
         name: 'mock-report-name-1',
         type: 'score',
+        scoringType: 'raw_score',
       },
     ];
 

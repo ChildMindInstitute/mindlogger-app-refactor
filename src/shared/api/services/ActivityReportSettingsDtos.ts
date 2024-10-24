@@ -4,6 +4,10 @@ type CalculationType = 'average' | 'percentage' | 'sum';
 
 type MatchType = 'all' | 'any';
 
+const ScoreReportScoringType = ['score', 'raw_score'] as const;
+
+type ScoreReportScoringType = (typeof ScoreReportScoringType)[number];
+
 type ConditionDto =
   | GreaterThanCondition
   | LessThanCondition
@@ -77,4 +81,8 @@ export type ReportDto = {
   name: string;
   type: ReportType;
   conditionalLogic: Array<ScoreConditionalLogicDto>;
+  /** Whether to show raw score or T scores in the report */
+  scoringType: ScoreReportScoringType;
+  /** The name of a subscale to use for a lookup table, if `scoringType` is set to "score" */
+  subscaleName?: string;
 };

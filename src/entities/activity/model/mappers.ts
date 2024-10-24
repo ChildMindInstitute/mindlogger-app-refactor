@@ -762,6 +762,8 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
               calculationType: x.calculationType,
               conditionalLogic: x.conditionalLogic,
               includedItems: x.itemsScore,
+              scoringType: x.scoringType,
+              subscaleName: x.subscaleName,
             })),
   };
 

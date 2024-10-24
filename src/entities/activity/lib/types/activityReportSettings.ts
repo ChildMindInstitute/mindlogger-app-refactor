@@ -70,6 +70,10 @@ export type ScoreConditionalLogic = {
   conditions: Array<Condition>;
 };
 
+export const ScoreReportScoringType = ['score', 'raw_score'] as const;
+
+export type ScoreReportScoringType = (typeof ScoreReportScoringType)[number];
+
 export type Report = {
   id: string;
   calculationType: CalculationType;
@@ -77,4 +81,9 @@ export type Report = {
   name: string;
   type: ReportType;
   conditionalLogic: Array<ScoreConditionalLogic>;
+
+  /** Whether to show raw score or T scores in the report */
+  scoringType: ScoreReportScoringType;
+  /** The name of a subscale to use for a lookup table, if `scoringType` is set to "score" */
+  subscaleName?: string;
 };
