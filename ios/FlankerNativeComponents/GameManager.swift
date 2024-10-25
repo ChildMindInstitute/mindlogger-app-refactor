@@ -102,6 +102,7 @@ class GameManager {
 
   func startLogicTimer() {
     invalidateTimers()
+    delegate?.setEnableButton(isEnable: true)
     setDefaultText(isFirst: true)
   }
 
@@ -192,7 +193,9 @@ class GameManager {
   func checkedAnswer(button: SelectedButton) {
     invalidateTimers()
 
-    delegate?.setEnableButton(isEnable: false)
+//    if let gameParameters = gameParameters, gameParameters.showFeedback {
+//      delegate?.setEnableButton(isEnable: false)
+//    }
 
     guard let gameParameters = gameParameters else { return }
     guard
@@ -293,6 +296,7 @@ class GameManager {
   }
 
   @objc func setDefaultText(isFirst: Bool) {
+    invalidateTimers()
     guard let gameParameters = gameParameters else { return }
 
     if !isFirst {
@@ -308,11 +312,14 @@ class GameManager {
       }
     }
 
-    if isEndGame() { return }
-    invalidateTimers()
+    if isEndGame() { 
+      delegate?.setEnableButton(isEnable: true)
+      return
+    }
     updateButtonTitle()
 
     if gameParameters.showFixation {
+      delegate?.setEnableButton(isEnable: false)
       timerSetText = Timer(timeInterval: gameParameters.fixationDuration / 1000, target: self, selector: #selector(setText), userInfo: nil, repeats: false)
       RunLoop.main.add(timerSetText!, forMode: .common)
     } else {
@@ -338,10 +345,11 @@ class GameManager {
   }
 
   @objc func timeResponseFailed() {
+    invalidateTimers()
     guard let gameParameters = gameParameters else { return }
 
-    delegate?.setEnableButton(isEnable: false)
     if gameParameters.showFeedback {
+      delegate?.setEnableButton(isEnable: false)
       delegate?.updateText(text: Constants.timeRespondText, color: .black, font: Constants.smallFont, isStart: false, typeTime: .feedback)
     }
 
@@ -403,6 +411,7 @@ private extension GameManager {
         setEndTimeViewingImage(time: CACurrentMediaTime(), isStart: true, type: .fixations)
       }
       delegate?.resultTest(avrgTime: avrgArray, procentCorrect: Int(procentsCorrect), data: nil, dataArray: resultManager.oneGameDataResult, isShowResults: gameParameters.showResults, minAccuracy: gameParameters.minimumAccuracy)
+      delegate?.setEnableButton(isEnable: true)
       clearData()
       return true
     } else {
