@@ -9,6 +9,7 @@
     "password_updated": "Password updated"
   },
   "activity": {
+    "completeOnWeb": "Please complete on the MindLogger web app",
     "incorrect_answer": "Incorrect answer. Please try again",
     "failed": "Failed",
     "flanker_accuracy_warn": "*The timestamps collected for an android are not as accurate as iOS devices.",
