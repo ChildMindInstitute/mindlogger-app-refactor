@@ -15,7 +15,7 @@ Running the app:
 
 ### 1. Prerequisites
 
-- NodeJS `18` or higher, recommend using `asdf` or `nvm` to manage local node version
+- NodeJS `20.10.0` or higher, recommend using `asdf` or `nvm` to manage local node version
 - Yarn 1.x
 - Follow steps in [React Native CLI Environment Setup](https://reactnative.dev/docs/environment-setup?guide=native), including:
   - Watchman
