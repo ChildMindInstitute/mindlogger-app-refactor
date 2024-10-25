@@ -65,8 +65,9 @@ export const LoginScreen: FC = () => {
           </Box>
 
           <XStack
-            jc={isTablet() ? 'space-around' : 'space-between'}
+            jc={isTablet() ? 'space-around' : 'center'}
             mb={isTablet() ? 50 : 40}
+            gap={isTablet() ? 0 : 20}
           >
             <Link
               textDecorationLine="underline"

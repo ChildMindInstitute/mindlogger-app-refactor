@@ -11,6 +11,7 @@
     "password_updated": "Mot de passe mis à jour"
   },
   "activity": {
+    "completeOnWeb": "Veuillez compléter sur l'application Web MindLogger",
     "incorrect_answer": "Réponse incorrecte. Veuillez réessayer",
     "failed": "Échoué",
     "flanker_accuracy_warn": "*Les horodatages collectés pour un Android ne sont pas aussi précis que les appareils iOS.",

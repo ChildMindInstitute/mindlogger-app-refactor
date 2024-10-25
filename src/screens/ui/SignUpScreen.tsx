@@ -12,7 +12,6 @@ import { KeyboardAvoidingView } from '@app/shared/ui/KeyboardAvoidingView';
 import { ScrollView } from '@app/shared/ui/ScrollView';
 import { StatusBar } from '@app/shared/ui/StatusBar';
 import { Text } from '@app/shared/ui/Text';
-import { center } from '@shopify/react-native-skia';
 
 export const SignUpScreen: FC = () => {
   const { navigate } = useNavigation();
@@ -58,11 +57,7 @@ export const SignUpScreen: FC = () => {
                 >
                   {t('sign_up_form:sign_up_agree')}
                 </Text>
-                <Box
-                  flexDirection={'row'}
-                  jc={"center"}
-                  gap={8}
-                >
+                <Box flexDirection={'row'} jc={'center'} gap={8}>
                   <Text
                     fontSize={16}
                     color="$white"
@@ -75,11 +70,9 @@ export const SignUpScreen: FC = () => {
                   >
                     {t('auth:terms_of_service')}
                   </Text>
-                  <Text
-                    fontSize={16}
-                    color="$white"
-                    ta="center"
-                  >and</Text>
+                  <Text fontSize={16} color="$white" ta="center">
+                    and
+                  </Text>
                   <Text
                     fontSize={16}
                     color="$white"
