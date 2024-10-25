@@ -5,6 +5,7 @@
     "password": "Mot de passe",
     "i_agree": "J'accepte les",
     "terms_of_service": "Conditions d'utilisation",
+    "privacy_policy": "Politique de confidentialité",
     "password_updated": "Mot de passe mis à jour"
   },
   "activity": {
@@ -86,7 +87,7 @@
     "title_with_version": "Qu'est-ce que MindLogger? v.{{version}}",
     "title": "Sauf indication contraire, les icônes sont tirées de OpenMoji et Nounproject.",
     "subtitle": "Sauf indication contraire, les icônes sont tirées de OpenMoji et Nounproject.",
-    "mindlogger_about": "## \n ### Qu'est-ce que MindLogger ? \n\n Cette application fait partie de la plateforme open source de collecte et d'analyse de données MindLogger conçue par le MATTER Lab du Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### Que peut faire MindLogger ? \n\n  L'ensemble des fonctionnalités de MindLogger se développe, et prend actuellement en charge une grande variété de types d'entrées. Chaque écran d'une activité de MindLogger peut comprendre l'un des éléments suivants : \n - Texte, image et audio \n - Question suivie d'une option de répose en image et/ou textuelle \n -Curseur \n - Entrée textuelle \n - Saisie sous forme de tableau \n - Enregistrement audio \n - Capture photo/vidéo \n - Dessin ou tapotement \n - Géolocalisation \n - Tâche cognitive simple \n - Délai avant réponse \n - Minuterie \n - Logique conditionnelle pour déterminer la suite \n\n #### Où puis-je en apprendre davantage ? \n Veuillez consulter le site [https://mindlogger.org](https://mindlogger.org) pour plus d'informations. \n ## [Support]({{credits_link}})  \n\n ##### Santé, \n\n ##### MindLogger Team, \n\n ##### Child Mind Institute"
+    "mindlogger_about": "## \n ### Qu'est-ce que MindLogger ? \n\n Cette application fait partie de la plateforme open source de collecte et d'analyse de données MindLogger conçue par le MATTER Lab du Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### Que peut faire MindLogger ? \n\n  L'ensemble des fonctionnalités de MindLogger se développe, et prend actuellement en charge une grande variété de types d'entrées. Chaque écran d'une activité de MindLogger peut comprendre l'un des éléments suivants : \n - Texte, image et audio \n - Question suivie d'une option de répose en image et/ou textuelle \n -Curseur \n - Entrée textuelle \n - Saisie sous forme de tableau \n - Enregistrement audio \n - Capture photo/vidéo \n - Dessin ou tapotement \n - Géolocalisation \n - Tâche cognitive simple \n - Délai avant réponse \n - Minuterie \n - Logique conditionnelle pour déterminer la suite \n\n #### Où puis-je en apprendre davantage ? \n Veuillez consulter le site [https://mindlogger.org](https://mindlogger.org) pour plus d'informations. \n ## [Support]({{credits_link}}) \n ## [Conditions d'utilisation](https://mindlogger.org/terms-of-service) \n ## [Politique de confidentialité](https://mindlogger.org/privacy-policy) \n\n ##### Santé, \n\n ##### MindLogger Team, \n\n ##### Child Mind Institute"
   },
   "applet_footer": {
     "surveys": "Enquêtes",
