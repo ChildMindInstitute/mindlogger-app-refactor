@@ -256,7 +256,8 @@
     "password_placeholder": "Password",
     "please_accept_terms": "Please accept terms of service.",
     "email_looks_incomplete": "Looks like this email is incomplete",
-    "sign_up_agree": "By signing up, you agree to MindLogger’s"
+    "sign_up_agree": "By signing up, you agree to MindLogger’s",
+    "and": "and"
   },
   "password_requirements": {
     "at_least_characters": "6 characters",

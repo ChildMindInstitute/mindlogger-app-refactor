@@ -256,7 +256,8 @@
     "password_placeholder": "Κωδικός πρόσβασης",
     "please_accept_terms": "Αποδεχτείτε τους όρους χρήσης υπηρεσιών.",
     "email_looks_incomplete": "Φαίνεται ότι το email αυτό δεν είναι πλήρες",
-    "sign_up_agree": "Με την εγγραφή σας, συμφωνείτε με τους"
+    "sign_up_agree": "Με την εγγραφή σας, συμφωνείτε με τους",
+    "and": "και"
   },
   "password_requirements": {
     "at_least_characters": "να έχει 6 χαρακτήρες",

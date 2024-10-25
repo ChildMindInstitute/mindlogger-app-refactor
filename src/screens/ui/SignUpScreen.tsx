@@ -68,10 +68,10 @@ export const SignUpScreen: FC = () => {
                       openUrl('https://mindlogger.org/terms-of-service')
                     }
                   >
-                    {t('auth:terms_of_service')}
+                    {t('auth:terms')}
                   </Text>
                   <Text fontSize={16} color="$white" ta="center">
-                    and
+                    {t('sign_up_form:and')}
                   </Text>
                   <Text
                     fontSize={16}
@@ -83,7 +83,7 @@ export const SignUpScreen: FC = () => {
                     }
                     accessibilityLabel="privacy_policy_link"
                   >
-                    {t('auth:privacy_policy')}.
+                    {t('auth:privacy')}.
                   </Text>
                 </Box>
               </Box>
