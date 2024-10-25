@@ -1187,6 +1187,7 @@ export const conditionalOutput: ActivityDetails = {
       includedItems: ['one'],
       name: 'name',
       type: 'score',
+      scoringType: 'raw_score',
     },
   ],
   showAllAtOnce: false,
