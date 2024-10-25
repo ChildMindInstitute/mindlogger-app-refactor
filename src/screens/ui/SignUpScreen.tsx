@@ -83,7 +83,7 @@ export const SignUpScreen: FC = () => {
                     }
                     accessibilityLabel="privacy_policy_link"
                   >
-                    {t('auth:privacy_policy')}
+                    {t('auth:privacy_policy')}.
                   </Text>
                 </Box>
               </Box>
