@@ -71,11 +71,13 @@ class GameManager {
   private var startFeedbackTimestamp: Double?
   private var endFeedbackTimestamp: Double?
   private var respondTouchButton: Double?
-
+  
 
   private var isFirst = true
 
   private var gameParameters: ParameterModel?
+  // **** I used this var to avoit multiple responses while button is enabled and incrementing the countTest
+  private var hasResponded = false
 
   weak var delegate: GameManagerProtocol?
 
@@ -191,18 +193,38 @@ class GameManager {
   }
 
   func checkedAnswer(button: SelectedButton) {
+    // Prevent and block multiple responses per trial
+    guard !hasResponded else {
+      print("[GameManager.swift] User has already responded in this trial.") // <---- if is a better tracer handling let me know.
+      return
+    }
+    hasResponded = true  // Mark that the user has responded
+
     invalidateTimers()
 
-//    if let gameParameters = gameParameters, gameParameters.showFeedback {
-//      delegate?.setEnableButton(isEnable: false)
-//    }
-
     guard let gameParameters = gameParameters else { return }
-    guard
-      let startTrialTimestamp = startTrialTimestamp,
-      let endTrialTimestamp = endTrialTimestamp,
-      let respondTouchButton = respondTouchButton
-    else { return }
+
+    guard countTest < gameParameters.trials.count else { // Added guard to prevent user pick wrong element in array 
+      print("Error: countTest \(countTest) doesn't exists in checkedAnswer")
+      return
+    }
+
+    //  ****** Ensure startTrialTimestamp is set ******
+    guard let startTrialTimestamp = startTrialTimestamp else {
+      print("**************** Error: startTrialTimestamp is nil in checkedAnswer ****************") 
+      return
+    }
+
+    if respondTouchButton == nil {
+      respondTouchButton = CACurrentMediaTime()
+    }
+
+    guard let respondTouchButton = respondTouchButton else { return }
+
+    if endTrialTimestamp == nil {
+      endTrialTimestamp = respondTouchButton
+    }
+
     let resultTime = (respondTouchButton - startTrialTimestamp) * 1000
     arrayTimes.append(resultTime.convertToInt())
     delegate?.updateTime(time: String(format: "%.3f", resultTime))
@@ -213,7 +235,7 @@ class GameManager {
         let model = FlankerModel(rt: resultTime,
                                  stimulus: text,
                                  button_pressed: "0",
-                                 image_time: endTrialTimestamp * 1000,
+                                 image_time: endTrialTimestamp! * 1000, // < ------ making it unwrap, I've been reading that this is  used to force unwrap the optional value, this is recommended when we are performing arithmetic operations  that require non-optional values example: https://www.hackingwithswift.com/sixty/10/4/force-unwrapping
                                  correct: true,
                                  start_timestamp: 0,
                                  tag: Constants.tag,
@@ -231,7 +253,7 @@ class GameManager {
         let model = FlankerModel(rt: resultTime,
                                  stimulus: text,
                                  button_pressed: "0",
-                                 image_time: endTrialTimestamp * 1000,
+                                 image_time: endTrialTimestamp! * 1000,
                                  correct: false,
                                  start_timestamp: 0,
                                  tag: Constants.tag,
@@ -252,7 +274,7 @@ class GameManager {
         let model = FlankerModel(rt: resultTime,
                                  stimulus: text,
                                  button_pressed: "1",
-                                 image_time: endTrialTimestamp * 1000,
+                                 image_time: endTrialTimestamp! * 1000,
                                  correct: true,
                                  start_timestamp: 0,
                                  tag: Constants.tag,
@@ -270,7 +292,7 @@ class GameManager {
         let model = FlankerModel(rt: resultTime,
                                  stimulus: text,
                                  button_pressed: "1",
-                                 image_time: endTrialTimestamp * 1000,
+                                 image_time: endTrialTimestamp! * 1000,
                                  correct: false,
                                  start_timestamp: 0,
                                  tag: Constants.tag,
@@ -299,10 +321,22 @@ class GameManager {
     invalidateTimers()
     guard let gameParameters = gameParameters else { return }
 
+    //Reset hasResponded at the start of each trial
+    hasResponded = false
+    
     if !isFirst {
       countTest += 1
     }
+    // I moved it to the top to be checked before enter in condition because I was getting error.
+    if isEndGame() {
+      delegate?.setEnableButton(isEnable: true)
+      return
+    }
 
+    //here I am  re-creating the timestamps for the new trial
+    startTrialTimestamp = nil
+    endTrialTimestamp = nil
+    respondTouchButton = nil
 
     if gameParameters.showFixation {
       if let image = URL(string: gameParameters.fixation), gameParameters.fixation.contains("https") {
@@ -312,10 +346,6 @@ class GameManager {
       }
     }
 
-    if isEndGame() { 
-      delegate?.setEnableButton(isEnable: true)
-      return
-    }
     updateButtonTitle()
 
     if gameParameters.showFixation {
@@ -330,6 +360,12 @@ class GameManager {
   @objc func setText() {
     guard let gameParameters = gameParameters else { return }
 
+    // Ensure countTest is within bounds before accessing trials
+    guard countTest < gameParameters.trials.count else {
+      print(" \n\n ************** Error: countTest \(countTest) doesn't exists in setText ********************* ") // <--- we can discuss a better error handling, I left this log like this to be visible on xcode.
+      return
+    }
+
     delegate?.setEnableButton(isEnable: true)
 
     text = gameParameters.trials[countTest].stimulus.en
@@ -339,6 +375,9 @@ class GameManager {
     } else {
       delegate?.updateText(text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
     }
+
+    // Set startTrialTimestamp when the trial starts
+    setEndTimeViewingImage(time: CACurrentMediaTime(), isStart: true, type: .trial)
 
     timeResponse = Timer(timeInterval: gameParameters.trialDuration / 1000, target: self, selector: #selector(self.timeResponseFailed), userInfo: nil, repeats: false)
     RunLoop.main.add(timeResponse!, forMode: .common)
@@ -354,14 +393,18 @@ class GameManager {
     }
 
     guard
-      let startTrialTimestamp = startTrialTimestamp,
-      let endTrialTimestamp = endTrialTimestamp
+      let startTrialTimestamp = startTrialTimestamp
     else { return }
+
+    // Set endTrialTimestamp if not set
+    if endTrialTimestamp == nil {
+      endTrialTimestamp = CACurrentMediaTime()
+    }
 
     let model = FlankerModel(rt: 0.0,
                              stimulus: text,
                              button_pressed: nil,
-                             image_time: endTrialTimestamp * 1000, // має намалювати
+                             image_time: endTrialTimestamp! * 1000, * 1000, // має намалювати
                              correct: false,
                              start_timestamp: 0, // вже намальовано
                              tag: Constants.tag,
@@ -400,7 +443,8 @@ private extension GameManager {
 
   func isEndGame() -> Bool {
     guard let gameParameters = gameParameters else { return false }
-    if countTest == gameParameters.trials.count {
+    //preventing user get element of an array or collection using an index that is wrong
+    if countTest >= gameParameters.trials.count {
       let sumArray = arrayTimes.reduce(0, +)
       var avrgArray: Int = 0
       if arrayTimes.count != 0 {
@@ -426,6 +470,12 @@ private extension GameManager {
 
   func updateButtonTitle() {
     guard let gameParameters = gameParameters else { return }
+
+    // Ensure countTest is within bounds before accessing trials
+    guard countTest < gameParameters.trials.count else {
+      print("********************** Error: countTest \(countTest) doesn't exists in updateButtonTitle **********************")
+      return
+    }
 
     if gameParameters.trials[countTest].choices.count == 2 {
       if
