@@ -57,22 +57,7 @@ export const SignUpScreen: FC = () => {
                 >
                   {t('sign_up_form:sign_up_agree')}
                 </Text>
-                <Box
-                  flexDirection={'row'}
-                  jc={isTablet() ? 'space-around' : 'space-between'}
-                >
-                  <Text
-                    fontSize={16}
-                    color="$white"
-                    ta="center"
-                    textDecorationLine="underline"
-                    onPress={() =>
-                      openUrl('https://mindlogger.org/privacy-policy')
-                    }
-                    accessibilityLabel="privacy_policy_link"
-                  >
-                    {t('auth:privacy_policy')}
-                  </Text>
+                <Box flexDirection={'row'} jc={'center'} gap={8}>
                   <Text
                     fontSize={16}
                     color="$white"
@@ -83,7 +68,22 @@ export const SignUpScreen: FC = () => {
                       openUrl('https://mindlogger.org/terms-of-service')
                     }
                   >
-                    {t('auth:terms_of_service')}
+                    {t('auth:terms')}
+                  </Text>
+                  <Text fontSize={16} color="$white" ta="center">
+                    {t('sign_up_form:and')}
+                  </Text>
+                  <Text
+                    fontSize={16}
+                    color="$white"
+                    ta="center"
+                    textDecorationLine="underline"
+                    onPress={() =>
+                      openUrl('https://mindlogger.org/privacy-policy')
+                    }
+                    accessibilityLabel="privacy_policy_link"
+                  >
+                    {t('auth:privacy')}.
                   </Text>
                 </Box>
               </Box>

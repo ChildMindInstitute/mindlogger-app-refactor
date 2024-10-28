@@ -5,6 +5,8 @@
     "password": "Κωδικός πρόσβασης",
     "i_agree": "Συμφωνώ με τους",
     "terms_of_service": "Όρους χρήσης υπηρεσιών του MindLogger",
+    "terms": "Οροι",
+    "privacy": "μυστικότητα",
     "privacy_policy": "Πολιτική Απορρήτου",
     "password_updated": "Ο κωδικός πρόσβασης ενημερώθηκε"
   },
@@ -254,7 +256,8 @@
     "password_placeholder": "Κωδικός πρόσβασης",
     "please_accept_terms": "Αποδεχτείτε τους όρους χρήσης υπηρεσιών.",
     "email_looks_incomplete": "Φαίνεται ότι το email αυτό δεν είναι πλήρες",
-    "sign_up_agree": "Με την εγγραφή σας, συμφωνείτε με τους"
+    "sign_up_agree": "Με την εγγραφή σας, συμφωνείτε με τους",
+    "and": "και"
   },
   "password_requirements": {
     "at_least_characters": "να έχει 6 χαρακτήρες",

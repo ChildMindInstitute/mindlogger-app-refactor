@@ -79,18 +79,18 @@ export const LoginScreen: FC = () => {
 
             <Link
               textDecorationLine="underline"
-              onPress={() => openUrl('https://mindlogger.org/privacy-policy')}
-              accessibilityLabel="privacy_policy_link"
+              onPress={() => openUrl('https://mindlogger.org/terms-of-service')}
+              accessibilityLabel="terms_of_service_link"
             >
-              {t('auth:privacy_policy')}
+              {t('auth:terms')}
             </Link>
 
             <Link
               textDecorationLine="underline"
-              onPress={() => openUrl('https://mindlogger.org/terms-of-service')}
-              accessibilityLabel="terms_of_service_link"
+              onPress={() => openUrl('https://mindlogger.org/privacy-policy')}
+              accessibilityLabel="privacy_policy_link"
             >
-              {t('auth:terms_of_service')}
+              {t('auth:privacy')}
             </Link>
           </XStack>
         </Box>

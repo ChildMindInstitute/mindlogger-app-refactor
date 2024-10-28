@@ -5,6 +5,8 @@
     "password": "Mot de passe",
     "i_agree": "J'accepte les",
     "terms_of_service": "Conditions d'utilisation",
+    "terms": "Termes",
+    "privacy": "Confidentialité",
     "privacy_policy": "Politique de confidentialité",
     "password_updated": "Mot de passe mis à jour"
   },
@@ -240,7 +242,8 @@
     "password_placeholder": "Mot de passe",
     "please_accept_terms": "Veuillez accepter les conditions d'utilisation.",
     "email_looks_incomplete": "Il semble que cet e-mail soit incomplet",
-    "sign_up_agree": "By signing up, you agree to MindLogger’s"
+    "sign_up_agree": "By signing up, you agree to MindLogger’s",
+    "and": "et"
   },
   "password_requirements": {
     "at_least_characters": "6 caractères",
