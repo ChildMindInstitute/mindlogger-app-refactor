@@ -1,7 +1,7 @@
 import {
   ConditionType,
   Match,
-  Condition
+  Condition,
 } from '@app/entities/activity/lib/types/conditionalLogic';
 
 import {
@@ -12,7 +12,7 @@ import {
   getEmptyRadioItem as getRadioItem,
   getSliderItem,
   getRadioResponse,
-  getStackedSliderItem, 
+  getStackedSliderItem,
 } from './testHelpers';
 import { Answers } from '../../lib/hooks/useActivityStorageRecord';
 import { PipelineItem } from '../../lib/types/payload';

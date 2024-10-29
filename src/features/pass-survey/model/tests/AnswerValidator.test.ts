@@ -28,7 +28,7 @@ const imitateValidate = (validator: IAnswerValidator, type: ConditionType) => {
       break;
     }
     case 'LESS_THAN': {
-      result = validator.isLessThan(10); 
+      result = validator.isLessThan(10);
       break;
     }
     case 'INCLUDES_OPTION': {
