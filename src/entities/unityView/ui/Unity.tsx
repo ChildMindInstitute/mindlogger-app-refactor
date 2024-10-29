@@ -1,6 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 
 import UnityView from '@azesmway/react-native-unity';
+
+import { UnityProps } from './types';
 
 interface IMessage {
   gameObject: string;
@@ -8,21 +10,11 @@ interface IMessage {
   message: string;
 }
 
-interface Props {
-  config: {
-    config: {
-      radius: number;
-      width: number;
-      height: number;
-    };
-    deviceType: 'mobile' | 'tablet';
-  };
-}
-const Unity = (config: Props) => {
+const Unity: FC<UnityProps> = ({ title, config }) => {
   const unityRef = useRef<UnityView>(null);
 
   useEffect(() => {
-    if (unityRef?.current) {
+    if (unityRef.current) {
       const message: IMessage = {
         gameObject: 'gameObject',
         methodName: 'methodName',
