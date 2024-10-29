@@ -45,7 +45,127 @@ type ConditionDto =
   | EqualConditionDto
   | NotEqualConditionDto
   | BetweenConditionDto
-  | OutsideOfConditionDto;
+  | OutsideOfConditionDto
+  | GreaterThanDateConditionDto
+  | LessThanDateConditionDto
+  | EqualToDateConditionDto
+  | NotEqualToDateConditionDto
+  | BetweenDatesConditionDto
+  | OutsideOfDatesConditionDto
+  | GreaterThanTimeConditionDto
+  | LessThanTimeConditionDto
+  | EqualToTimeConditionDto
+  | NotEqualToTimeConditionDto
+  | BetweenTimesConditionDto
+  | OutsideOfTimesConditionDto
+  | GreaterThanTimeRangeConditionDto
+  | LessThanTimeRangeConditionDto
+  | EqualToTimeRangeConditionDto
+  | NotEqualToTimeRangeConditionDto
+  | BetweenTimesRangeConditionDto
+  | OutsideOfTimesRangeConditionDto
+  | EqualToRowOptionConditionDto
+  | NotEqualToRowOptionConditionDto
+  | IncludesRowOptionConditionDto
+  | NotIncludesRowOptionConditionDto
+  | EqualToSliderRowConditionDto
+  | NotEqualToSliderRowConditionDto
+  | GreaterThanSliderRowConditionDto
+  | LessThanSliderRowConditionDto
+  | BetweenSliderRowConditionDto
+  | OutsideOfSliderRowConditionDto;
+  
+  type EqualToRowOptionConditionDto = {
+    itemName: string;
+    type: 'EQUAL_TO_ROW_OPTION';
+    payload: {
+      optionValue: string;
+      rowIndex: number;
+    };
+  };
+
+  type NotEqualToRowOptionConditionDto = {
+    itemName: string;
+    type: 'NOT_EQUAL_TO_ROW_OPTION';
+    payload: {
+      optionValue: string;
+      rowIndex: number;
+    };
+  };
+
+  type EqualToSliderRowConditionDto = {
+    itemName: string;
+    type: 'EQUAL_TO_SLIDER_ROWS';
+    payload: {
+      value: number;
+      rowIndex: number;
+    };
+  };
+  
+  type NotEqualToSliderRowConditionDto = {
+    itemName: string;
+    type: 'NOT_EQUAL_TO_SLIDER_ROWS';
+    payload: {
+      value: number;
+      rowIndex: number;
+    };
+  };
+  
+  type GreaterThanSliderRowConditionDto = {
+    itemName: string;
+    type: 'GREATER_THAN_SLIDER_ROWS';
+    payload: {
+      value: number;
+      rowIndex: number;
+    };
+  };
+  
+  type LessThanSliderRowConditionDto = {
+    itemName: string;
+    type: 'LESS_THAN_SLIDER_ROWS';
+    payload: {
+      value: number;
+      rowIndex: number;
+    };
+  };
+  
+  type BetweenSliderRowConditionDto = {
+    itemName: string;
+    type: 'BETWEEN_SLIDER_ROWS';
+    payload: {
+      minValue: number;
+      maxValue: number;
+      rowIndex: number;
+    };
+  };
+  
+  type OutsideOfSliderRowConditionDto = {
+    itemName: string;
+    type: 'OUTSIDE_OF_SLIDER_ROWS';
+    payload: {
+      minValue: number;
+      maxValue: number;
+      rowIndex: number;
+    };
+  };
+  
+  type IncludesRowOptionConditionDto = {
+    itemName: string;
+    type: 'INCLUDES_ROW_OPTION';
+    payload: {
+      optionValue: string;
+      rowIndex: number;
+    };
+  };
+  
+  type NotIncludesRowOptionConditionDto = {
+    itemName: string;
+    type: 'NOT_INCLUDES_ROW_OPTION';
+    payload: {
+      optionValue: string;
+      rowIndex: number;
+    };
+  };
 
 type IncludesOptionConditionDto = {
   itemName: string;
@@ -126,6 +246,203 @@ type OutsideOfConditionDto = {
   payload: {
     minValue: number;
     maxValue: number;
+  };
+};
+type GreaterThanDateConditionDto = {
+  itemName: string;
+  type: 'GREATER_THAN_DATE';
+  payload: {
+    date: string; 
+  };
+};
+
+type LessThanDateConditionDto = {
+  itemName: string;
+  type: 'LESS_THAN_DATE';
+  payload: {
+    date: string;
+  };
+};
+
+type EqualToDateConditionDto = {
+  itemName: string;
+  type: 'EQUAL_TO_DATE';
+  payload: {
+    date: string; 
+  };
+};
+
+type NotEqualToDateConditionDto = {
+  itemName: string;
+  type: 'NOT_EQUAL_TO_DATE';
+  payload: {
+    date: string; 
+  };
+};
+
+type BetweenDatesConditionDto = {
+  itemName: string;
+  type: 'BETWEEN_DATES';
+  payload: {
+    minDate: string; 
+    maxDate: string; 
+  };
+};
+
+type OutsideOfDatesConditionDto = {
+  itemName: string;
+  type: 'OUTSIDE_OF_DATES';
+  payload: {
+    minDate: string; 
+    maxDate: string; 
+  };
+};
+
+type GreaterThanTimeConditionDto = {
+  itemName: string;
+  type: 'GREATER_THAN_TIME';
+  payload: {
+    time: {
+      hours: number;
+      minutes: number;
+    };
+  };
+};
+
+type LessThanTimeConditionDto = {
+  itemName: string;
+  type: 'LESS_THAN_TIME';
+  payload: {
+    time: {
+      hours: number;
+      minutes: number;
+    };
+  };
+};
+
+type EqualToTimeConditionDto = {
+  itemName: string;
+  type: 'EQUAL_TO_TIME';
+  payload: {
+    time: {
+      hours: number;
+      minutes: number;
+    };
+  };
+};
+
+type NotEqualToTimeConditionDto = {
+  itemName: string;
+  type: 'NOT_EQUAL_TO_TIME';
+  payload: {
+    time: {
+      hours: number;
+      minutes: number;
+    };
+  };
+};
+
+type BetweenTimesConditionDto = {
+  itemName: string;
+  type: 'BETWEEN_TIMES';
+  payload: {
+    minTime: {
+      hours: number;
+      minutes: number;
+    };
+    maxTime: {
+      hours: number;
+      minutes: number;
+    };
+  };
+};
+
+type OutsideOfTimesConditionDto = {
+  itemName: string;
+  type: 'OUTSIDE_OF_TIMES';
+  payload: {
+    minTime: {
+      hours: number;
+      minutes: number;
+    };
+    maxTime: {
+      hours: number;
+      minutes: number;
+    };
+  };
+};
+
+type GreaterThanTimeRangeConditionDto = {
+  itemName: string;
+  type: 'GREATER_THAN_TIME_RANGE';
+  payload: {
+    time: {
+      hours: number;
+      minutes: number;
+    };
+  };
+};
+
+type LessThanTimeRangeConditionDto = {
+  itemName: string;
+  type: 'LESS_THAN_TIME_RANGE';
+  payload: {
+    time: {
+      hours: number;
+      minutes: number;
+    };
+  };
+};
+
+type EqualToTimeRangeConditionDto = {
+  itemName: string;
+  type: 'EQUAL_TO_TIME_RANGE';
+  payload: {
+    time: {
+      hours: number;
+      minutes: number;
+    };
+  };
+};
+
+type NotEqualToTimeRangeConditionDto = {
+  itemName: string;
+  type: 'NOT_EQUAL_TO_TIME_RANGE';
+  payload: {
+    time: {
+      hours: number;
+      minutes: number;
+    };
+  };
+};
+
+type BetweenTimesRangeConditionDto = {
+  itemName: string;
+  type: 'BETWEEN_TIMES_RANGE';
+  payload: {
+    minTime: {
+      hours: number;
+      minutes: number;
+    };
+    maxTime: {
+      hours: number;
+      minutes: number;
+    };
+  };
+};
+
+type OutsideOfTimesRangeConditionDto = {
+  itemName: string;
+  type: 'OUTSIDE_OF_TIMES_RANGE';
+  payload: {
+    minTime: {
+      hours: number;
+      minutes: number;
+    };
+    maxTime: {
+      hours: number;
+      minutes: number;
+    };
   };
 };
 

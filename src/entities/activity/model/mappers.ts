@@ -44,7 +44,6 @@ function mapTimerValue(dtoTimer: number | null) {
   if (dtoTimer) {
     return getMsFromSeconds(dtoTimer);
   }
-
   return null;
 }
 
@@ -69,8 +68,62 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
               activityItemName: condition.itemName,
             };
 
-            // @ts-expect-error
-            delete updatedCondition.itemName;
+            switch (condition.type) {
+              case 'INCLUDES_OPTION':
+              case 'NOT_INCLUDES_OPTION':
+              case 'EQUAL_TO_OPTION':
+              case 'NOT_EQUAL_TO_OPTION':
+                updatedCondition.payload = { optionValue: condition.payload.optionValue };
+                break;
+
+              case 'GREATER_THAN_DATE':
+              case 'LESS_THAN_DATE':
+              case 'EQUAL_TO_DATE':
+              case 'NOT_EQUAL_TO_DATE':
+                updatedCondition.payload = { date: condition.payload.date };
+                break;
+
+              case 'BETWEEN_DATES':
+              case 'OUTSIDE_OF_DATES':
+                updatedCondition.payload = {
+                  minDate: condition.payload.minDate,
+                  maxDate: condition.payload.maxDate,
+                };
+                break;
+
+              case 'GREATER_THAN_TIME':
+              case 'LESS_THAN_TIME':
+              case 'EQUAL_TO_TIME':
+              case 'NOT_EQUAL_TO_TIME':
+                updatedCondition.payload = { time: condition.payload.time };
+                break;
+
+              case 'BETWEEN_TIMES':
+              case 'OUTSIDE_OF_TIMES':
+                updatedCondition.payload = {
+                  minTime: condition.payload.minTime,
+                  maxTime: condition.payload.maxTime,
+                };
+                break;
+
+              case 'GREATER_THAN_TIME_RANGE':
+              case 'LESS_THAN_TIME_RANGE':
+              case 'EQUAL_TO_TIME_RANGE':
+              case 'NOT_EQUAL_TO_TIME_RANGE':
+                updatedCondition.payload = { time: condition.payload.time };
+                break;
+
+              case 'BETWEEN_TIMES_RANGE':
+              case 'OUTSIDE_OF_TIMES_RANGE':
+                updatedCondition.payload = {
+                  minTime: condition.payload.minTime,
+                  maxTime: condition.payload.maxTime,
+                };
+                break;
+
+              default:
+                updatedCondition.payload = condition.payload;
+            }
 
             return updatedCondition;
           }),
@@ -126,7 +179,7 @@ function mapToAbTest(dto: ABTrailsItemDto): ActivityItem {
         fontSizeBeginEnd: nodesSettingsDto.fontSizeBeginEnd,
       },
       deviceType: config.deviceType,
-      nodes: nodes.map<TestNode>(x => ({
+            nodes: nodes.map<TestNode>(x => ({
         ...x,
       })),
       tutorials: tutorials.tutorials.map<TutorialRecord>(x => ({
@@ -240,6 +293,7 @@ function mapToAudio(dto: AudioItemDto): ActivityItem {
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -264,6 +318,7 @@ function mapToAudioPlayer(dto: AudioPlayerItemDto): ActivityItem {
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -285,6 +340,7 @@ function mapToDate(dto: DateItemDto): ActivityItem {
     canBeReset: true,
     hasTopNavigation: false,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -328,6 +384,7 @@ function mapToGeolocation(dto: GeolocationItemDto): ActivityItem {
     canBeReset: true,
     hasTopNavigation: false,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -406,6 +463,7 @@ function mapToStackedCheckboxes(dto: MultiSelectionRowsItemDto): ActivityItem {
     canBeReset: true,
     hasTopNavigation: false,
     isHidden: dto.isHidden,
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -430,6 +488,7 @@ function mapToNumberSelect(dto: NumberSelectionItemDto): ActivityItem {
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -451,6 +510,7 @@ function mapToPhoto(dto: PhotoItemDto): ActivityItem {
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -509,6 +569,7 @@ function mapToStackedRadio(dto: SingleSelectionRowsItemDto): ActivityItem {
     canBeReset: true,
     hasTopNavigation: false,
     isHidden: dto.isHidden,
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -567,6 +628,7 @@ function mapToStackedSlider(dto: SliderRowsItemDto): ActivityItem {
     canBeReset: true,
     hasTopNavigation: false,
     isHidden: dto.isHidden,
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
@@ -618,7 +680,6 @@ function mapToParagraphText(dto: ParagraphTextItemDto): ActivityItem {
     canBeReset: true,
     hasTopNavigation: false,
     isHidden: dto.isHidden,
-
     ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
@@ -663,6 +724,7 @@ function mapToVideo(dto: VideoItemDto): ActivityItem {
     hasTopNavigation: false,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
