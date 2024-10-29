@@ -76,7 +76,6 @@ class GameManager {
   private var isFirst = true
 
   private var gameParameters: ParameterModel?
-  // **** I used this var to avoit multiple responses while button is enabled and incrementing the countTest
   private var hasResponded = false
 
   weak var delegate: GameManagerProtocol?
@@ -193,25 +192,23 @@ class GameManager {
   }
 
   func checkedAnswer(button: SelectedButton) {
-    // Prevent and block multiple responses per trial
     guard !hasResponded else {
-      print("[GameManager.swift] User has already responded in this trial.") // <---- if is a better tracer handling let me know.
+      print("[GameManager.swift]: User has already responded in this trial.")
       return
     }
-    hasResponded = true  // Mark that the user has responded
+    hasResponded = true 
 
     invalidateTimers()
 
     guard let gameParameters = gameParameters else { return }
 
-    guard countTest < gameParameters.trials.count else { // Added guard to prevent user pick wrong element in array 
+    guard countTest < gameParameters.trials.count else { 
       print("Error: countTest \(countTest) doesn't exists in checkedAnswer")
       return
     }
 
-    //  ****** Ensure startTrialTimestamp is set ******
     guard let startTrialTimestamp = startTrialTimestamp else {
-      print("**************** Error: startTrialTimestamp is nil in checkedAnswer ****************") 
+      print("[GameManager.swift]: startTrialTimestamp is nil in checkedAnswer") 
       return
     }
 
@@ -235,7 +232,7 @@ class GameManager {
         let model = FlankerModel(rt: resultTime,
                                  stimulus: text,
                                  button_pressed: "0",
-                                 image_time: endTrialTimestamp! * 1000, // < ------ making it unwrap, I've been reading that this is  used to force unwrap the optional value, this is recommended when we are performing arithmetic operations  that require non-optional values example: https://www.hackingwithswift.com/sixty/10/4/force-unwrapping
+                                 image_time: endTrialTimestamp! * 1000,
                                  correct: true,
                                  start_timestamp: 0,
                                  tag: Constants.tag,
@@ -321,19 +318,17 @@ class GameManager {
     invalidateTimers()
     guard let gameParameters = gameParameters else { return }
 
-    //Reset hasResponded at the start of each trial
     hasResponded = false
     
     if !isFirst {
       countTest += 1
     }
-    // I moved it to the top to be checked before enter in condition because I was getting error.
+
     if isEndGame() {
       delegate?.setEnableButton(isEnable: true)
       return
     }
 
-    //here I am  re-creating the timestamps for the new trial
     startTrialTimestamp = nil
     endTrialTimestamp = nil
     respondTouchButton = nil
@@ -360,9 +355,8 @@ class GameManager {
   @objc func setText() {
     guard let gameParameters = gameParameters else { return }
 
-    // Ensure countTest is within bounds before accessing trials
     guard countTest < gameParameters.trials.count else {
-      print(" \n\n ************** Error: countTest \(countTest) doesn't exists in setText ********************* ") // <--- we can discuss a better error handling, I left this log like this to be visible on xcode.
+      print("[GameManager.swift]: countTest \(countTest) doesn't exists in setText")
       return
     }
 
@@ -376,7 +370,6 @@ class GameManager {
       delegate?.updateText(text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
     }
 
-    // Set startTrialTimestamp when the trial starts
     setEndTimeViewingImage(time: CACurrentMediaTime(), isStart: true, type: .trial)
 
     timeResponse = Timer(timeInterval: gameParameters.trialDuration / 1000, target: self, selector: #selector(self.timeResponseFailed), userInfo: nil, repeats: false)
@@ -396,7 +389,6 @@ class GameManager {
       let startTrialTimestamp = startTrialTimestamp
     else { return }
 
-    // Set endTrialTimestamp if not set
     if endTrialTimestamp == nil {
       endTrialTimestamp = CACurrentMediaTime()
     }
@@ -443,7 +435,6 @@ private extension GameManager {
 
   func isEndGame() -> Bool {
     guard let gameParameters = gameParameters else { return false }
-    //preventing user get element of an array or collection using an index that is wrong
     if countTest >= gameParameters.trials.count {
       let sumArray = arrayTimes.reduce(0, +)
       var avrgArray: Int = 0
@@ -471,9 +462,8 @@ private extension GameManager {
   func updateButtonTitle() {
     guard let gameParameters = gameParameters else { return }
 
-    // Ensure countTest is within bounds before accessing trials
     guard countTest < gameParameters.trials.count else {
-      print("********************** Error: countTest \(countTest) doesn't exists in updateButtonTitle **********************")
+      print("[GameManager.swift]: countTest \(countTest) doesn't exists in updateButtonTitle")
       return
     }
 
