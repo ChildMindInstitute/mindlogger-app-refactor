@@ -5,7 +5,7 @@ export type ConditionalLogic = {
   conditions: Array<Condition>;
 };
 
-type Condition =
+export type Condition =
   | IncludesOptionCondition
   | NotIncludesOptionCondition
   | EqualToOptionCondition

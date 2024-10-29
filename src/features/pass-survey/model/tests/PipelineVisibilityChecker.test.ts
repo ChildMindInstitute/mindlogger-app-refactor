@@ -1,6 +1,7 @@
 import {
   ConditionType,
   Match,
+  Condition
 } from '@app/entities/activity/lib/types/conditionalLogic';
 
 import {
@@ -11,6 +12,7 @@ import {
   getEmptyRadioItem as getRadioItem,
   getSliderItem,
   getRadioResponse,
+  getStackedSliderItem, 
 } from './testHelpers';
 import { Answers } from '../../lib/hooks/useActivityStorageRecord';
 import { PipelineItem } from '../../lib/types/payload';
@@ -36,9 +38,15 @@ describe('PipelineVisibilityChecker: penetration tests', () => {
     type: ConditionType,
     payload: any,
   ) => {
+    const condition: Condition = {
+      activityItemName: itemPointedTo.name!,
+      type,
+      payload,
+    } as Condition;
+
     itemSetTo.conditionalLogic = {
       match: match,
-      conditions: [{ activityItemName: itemPointedTo.name!, type, payload }],
+      conditions: [condition],
     };
   };
 
@@ -219,7 +227,7 @@ describe('PipelineVisibilityChecker: penetration tests', () => {
       maxValue: 4,
     });
 
-    const answers: Answers = { '0': { answer: 1 }, '1': { answer: 2 } };
+    const answers: Answers = { '0': { answer: 1 }, '1': { answer: 4 } };
 
     const { isItemVisible } = PipelineVisibilityChecker(items, answers);
 
@@ -479,7 +487,7 @@ describe('PipelineVisibilityChecker: penetration tests', () => {
       payload: {
         optionValue: '3',
       },
-    });
+    } as Condition);
 
     const answers: Answers = {
       '0': { answer: getCheckboxResponse([1, 2]) },
@@ -506,7 +514,7 @@ describe('PipelineVisibilityChecker: penetration tests', () => {
       payload: {
         optionValue: '3',
       },
-    });
+    } as Condition);
 
     const answers: Answers = {
       '0': { answer: getCheckboxResponse([1, 2]) },
@@ -518,5 +526,45 @@ describe('PipelineVisibilityChecker: penetration tests', () => {
     const result = isItemVisible(1);
 
     expect(result).toEqual(true);
+  });
+
+  it('Should return true when slider row value equals specified value and type is EQUAL_TO_SLIDER_ROWS', () => {
+    const items = [getRadioItem('mock-radio-1'), getStackedSliderItem()];
+    items[1].name = 'mock-slider-1';
+
+    setCondition(items[0], items[1], 'any', 'EQUAL_TO_SLIDER_ROWS', {
+      rowIndex: 0,
+      value: 5,
+    });
+
+    const answers: Answers = {
+      '1': { answer: [5] },
+    };
+
+    const { isItemVisible } = PipelineVisibilityChecker(items, answers);
+
+    const result = isItemVisible(0);
+
+    expect(result).toEqual(true);
+  });
+
+  it('Should return false when slider row value does not equal specified value and type is EQUAL_TO_SLIDER_ROWS', () => {
+    const items = [getRadioItem('mock-radio-1'), getStackedSliderItem()];
+    items[1].name = 'mock-slider-1';
+
+    setCondition(items[0], items[1], 'any', 'EQUAL_TO_SLIDER_ROWS', {
+      rowIndex: 0,
+      value: 5,
+    });
+
+    const answers: Answers = {
+      '1': { answer: [3] },
+    };
+
+    const { isItemVisible } = PipelineVisibilityChecker(items, answers);
+
+    const result = isItemVisible(0);
+
+    expect(result).toEqual(false);
   });
 });

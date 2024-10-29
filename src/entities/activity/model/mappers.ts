@@ -63,9 +63,10 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
         conditionalLogic: {
           match: dto.match,
           conditions: dto.conditions.map(condition => {
+            const { itemName, ...rest } = condition;
             const updatedCondition = {
-              ...condition,
-              activityItemName: condition.itemName,
+              ...rest,
+              activityItemName: itemName,
             };
 
             switch (condition.type) {
