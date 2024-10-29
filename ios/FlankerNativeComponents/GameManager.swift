@@ -71,7 +71,6 @@ class GameManager {
   private var startFeedbackTimestamp: Double?
   private var endFeedbackTimestamp: Double?
   private var respondTouchButton: Double?
-  
 
   private var isFirst = true
 
