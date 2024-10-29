@@ -159,9 +159,7 @@ export const isBetweenTimes = (
   maxTime: { hours: number; minutes: number },
 ) => {
   if (!input) return false;
-  return (
-    isGreaterThanTime(input, minTime) && isLessThanTime(input, maxTime)
-  );
+  return isGreaterThanTime(input, minTime) && isLessThanTime(input, maxTime);
 };
 
 export const isOutsideOfTimes = (
@@ -170,8 +168,5 @@ export const isOutsideOfTimes = (
   maxTime: { hours: number; minutes: number },
 ) => {
   if (!input) return false;
-  return (
-    isLessThanTime(input, minTime) || isGreaterThanTime(input, maxTime)
-  );
+  return isLessThanTime(input, minTime) || isGreaterThanTime(input, maxTime);
 };
-

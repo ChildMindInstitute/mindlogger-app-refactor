@@ -142,7 +142,7 @@ export function PipelineVisibilityChecker(
             condition.payload.minTime,
             condition.payload.maxTime,
           );
-          
+
         case 'EQUAL_TO_SLIDER_ROWS':
           return answerValidator.isEqualToSliderRow(
             condition.payload.rowIndex,

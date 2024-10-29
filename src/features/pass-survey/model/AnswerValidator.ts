@@ -1,3 +1,6 @@
+import { isBefore, isAfter, isEqual } from 'date-fns';
+import { parseISO } from 'date-fns';
+
 import {
   doesNotIncludeValue,
   includesValue,
@@ -19,10 +22,9 @@ import {
   TimeRangeResponse,
 } from '../lib/types/payload';
 
-import { isBefore, isAfter, isEqual } from 'date-fns';
-import { parseISO } from 'date-fns';
-
-export function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator {
+export function AnswerValidator(
+  params?: AnswerValidatorArgs,
+): IAnswerValidator {
   const { items, answers, step = 0 } = params ?? {};
   const currentPipelineItem = items?.[step];
   const currentAnswer = answers?.[step];
@@ -31,9 +33,12 @@ export function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator 
     const answer = currentAnswer?.answer as Maybe<string>;
     return answer ?? null;
   };
-  
+
   const getAnswerTime = (): { hours: number; minutes: number } | null => {
-    const answer = currentAnswer?.answer as Maybe<{ hours: number; minutes: number }>;
+    const answer = currentAnswer?.answer as Maybe<{
+      hours: number;
+      minutes: number;
+    }>;
     return answer ?? null;
   };
 
@@ -88,12 +93,20 @@ export function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator 
       return rowValue !== null && rowValue < value;
     },
 
-    isBetweenSliderRowValues(rowIndex: number, minValue: number, maxValue: number) {
+    isBetweenSliderRowValues(
+      rowIndex: number,
+      minValue: number,
+      maxValue: number,
+    ) {
       const rowValue = getSliderRowValue(rowIndex);
       return rowValue !== null && rowValue >= minValue && rowValue <= maxValue;
     },
 
-    isOutsideOfSliderRowValues(rowIndex: number, minValue: number, maxValue: number) {
+    isOutsideOfSliderRowValues(
+      rowIndex: number,
+      minValue: number,
+      maxValue: number,
+    ) {
       const rowValue = getSliderRowValue(rowIndex);
       return rowValue !== null && (rowValue < minValue || rowValue > maxValue);
     },
@@ -111,13 +124,18 @@ export function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator 
 
     includesRowOption(rowIndex: number, optionValue: string) {
       const selectedOption = getRowOptionValue(rowIndex);
-      return selectedOption !== null && includesValue([selectedOption], optionValue);
+      return (
+        selectedOption !== null && includesValue([selectedOption], optionValue)
+      );
     },
 
     notIncludesRowOption(rowIndex: number, optionValue: string) {
       const selectedOption = getRowOptionValue(rowIndex);
-      return selectedOption !== null && doesNotIncludeValue([selectedOption], optionValue);
-    },  
+      return (
+        selectedOption !== null &&
+        doesNotIncludeValue([selectedOption], optionValue)
+      );
+    },
 
     isBetweenValues(min: number, max: number) {
       const answer = currentAnswer?.answer as Maybe<number>;
@@ -171,7 +189,9 @@ export function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator 
 
     isLessThanDate(date: string) {
       const answerDate = getAnswerDate();
-      return answerDate ? isBefore(parseISO(answerDate), parseISO(date)) : false;
+      return answerDate
+        ? isBefore(parseISO(answerDate), parseISO(date))
+        : false;
     },
 
     isEqualToDate(date: string) {
@@ -181,14 +201,16 @@ export function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator 
 
     isNotEqualToDate(date: string) {
       const answerDate = getAnswerDate();
-      return answerDate ? !isEqual(parseISO(answerDate), parseISO(date)) : false;
+      return answerDate
+        ? !isEqual(parseISO(answerDate), parseISO(date))
+        : false;
     },
 
     isBetweenDates(minDate: string, maxDate: string) {
       const answerDate = getAnswerDate();
       return answerDate
         ? !isBefore(parseISO(answerDate), parseISO(minDate)) &&
-          !isAfter(parseISO(answerDate), parseISO(maxDate))
+            !isAfter(parseISO(answerDate), parseISO(maxDate))
         : false;
     },
 
@@ -196,7 +218,7 @@ export function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator 
       const answerDate = getAnswerDate();
       return answerDate
         ? isBefore(parseISO(answerDate), parseISO(minDate)) ||
-          isAfter(parseISO(answerDate), parseISO(maxDate))
+            isAfter(parseISO(answerDate), parseISO(maxDate))
         : false;
     },
 
@@ -235,7 +257,7 @@ export function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator 
       const answerTime = getAnswerTime();
       return answerTime
         ? timeToMinutes(answerTime) >= timeToMinutes(minTime) &&
-          timeToMinutes(answerTime) <= timeToMinutes(maxTime)
+            timeToMinutes(answerTime) <= timeToMinutes(maxTime)
         : false;
     },
 
@@ -246,7 +268,7 @@ export function AnswerValidator(params?: AnswerValidatorArgs): IAnswerValidator 
       const answerTime = getAnswerTime();
       return answerTime
         ? timeToMinutes(answerTime) < timeToMinutes(minTime) ||
-          timeToMinutes(answerTime) > timeToMinutes(maxTime)
+            timeToMinutes(answerTime) > timeToMinutes(maxTime)
         : false;
     },
 

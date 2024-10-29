@@ -73,7 +73,9 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
               case 'NOT_INCLUDES_OPTION':
               case 'EQUAL_TO_OPTION':
               case 'NOT_EQUAL_TO_OPTION':
-                updatedCondition.payload = { optionValue: condition.payload.optionValue };
+                updatedCondition.payload = {
+                  optionValue: condition.payload.optionValue,
+                };
                 break;
 
               case 'GREATER_THAN_DATE':
@@ -179,7 +181,7 @@ function mapToAbTest(dto: ABTrailsItemDto): ActivityItem {
         fontSizeBeginEnd: nodesSettingsDto.fontSizeBeginEnd,
       },
       deviceType: config.deviceType,
-            nodes: nodes.map<TestNode>(x => ({
+      nodes: nodes.map<TestNode>(x => ({
         ...x,
       })),
       tutorials: tutorials.tutorials.map<TutorialRecord>(x => ({

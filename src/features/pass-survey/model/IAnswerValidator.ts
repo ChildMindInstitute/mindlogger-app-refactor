@@ -92,7 +92,7 @@ export interface IAnswerValidator {
     minValue: number,
     maxValue: number,
   ): boolean;
-  
+
   isEqualToRowOption(rowIndex: number, optionValue: string): boolean;
 
   isNotEqualToRowOption(rowIndex: number, optionValue: string): boolean;

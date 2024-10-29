@@ -74,98 +74,98 @@ type ConditionDto =
   | LessThanSliderRowConditionDto
   | BetweenSliderRowConditionDto
   | OutsideOfSliderRowConditionDto;
-  
-  type EqualToRowOptionConditionDto = {
-    itemName: string;
-    type: 'EQUAL_TO_ROW_OPTION';
-    payload: {
-      optionValue: string;
-      rowIndex: number;
-    };
-  };
 
-  type NotEqualToRowOptionConditionDto = {
-    itemName: string;
-    type: 'NOT_EQUAL_TO_ROW_OPTION';
-    payload: {
-      optionValue: string;
-      rowIndex: number;
-    };
+type EqualToRowOptionConditionDto = {
+  itemName: string;
+  type: 'EQUAL_TO_ROW_OPTION';
+  payload: {
+    optionValue: string;
+    rowIndex: number;
   };
+};
 
-  type EqualToSliderRowConditionDto = {
-    itemName: string;
-    type: 'EQUAL_TO_SLIDER_ROWS';
-    payload: {
-      value: number;
-      rowIndex: number;
-    };
+type NotEqualToRowOptionConditionDto = {
+  itemName: string;
+  type: 'NOT_EQUAL_TO_ROW_OPTION';
+  payload: {
+    optionValue: string;
+    rowIndex: number;
   };
-  
-  type NotEqualToSliderRowConditionDto = {
-    itemName: string;
-    type: 'NOT_EQUAL_TO_SLIDER_ROWS';
-    payload: {
-      value: number;
-      rowIndex: number;
-    };
+};
+
+type EqualToSliderRowConditionDto = {
+  itemName: string;
+  type: 'EQUAL_TO_SLIDER_ROWS';
+  payload: {
+    value: number;
+    rowIndex: number;
   };
-  
-  type GreaterThanSliderRowConditionDto = {
-    itemName: string;
-    type: 'GREATER_THAN_SLIDER_ROWS';
-    payload: {
-      value: number;
-      rowIndex: number;
-    };
+};
+
+type NotEqualToSliderRowConditionDto = {
+  itemName: string;
+  type: 'NOT_EQUAL_TO_SLIDER_ROWS';
+  payload: {
+    value: number;
+    rowIndex: number;
   };
-  
-  type LessThanSliderRowConditionDto = {
-    itemName: string;
-    type: 'LESS_THAN_SLIDER_ROWS';
-    payload: {
-      value: number;
-      rowIndex: number;
-    };
+};
+
+type GreaterThanSliderRowConditionDto = {
+  itemName: string;
+  type: 'GREATER_THAN_SLIDER_ROWS';
+  payload: {
+    value: number;
+    rowIndex: number;
   };
-  
-  type BetweenSliderRowConditionDto = {
-    itemName: string;
-    type: 'BETWEEN_SLIDER_ROWS';
-    payload: {
-      minValue: number;
-      maxValue: number;
-      rowIndex: number;
-    };
+};
+
+type LessThanSliderRowConditionDto = {
+  itemName: string;
+  type: 'LESS_THAN_SLIDER_ROWS';
+  payload: {
+    value: number;
+    rowIndex: number;
   };
-  
-  type OutsideOfSliderRowConditionDto = {
-    itemName: string;
-    type: 'OUTSIDE_OF_SLIDER_ROWS';
-    payload: {
-      minValue: number;
-      maxValue: number;
-      rowIndex: number;
-    };
+};
+
+type BetweenSliderRowConditionDto = {
+  itemName: string;
+  type: 'BETWEEN_SLIDER_ROWS';
+  payload: {
+    minValue: number;
+    maxValue: number;
+    rowIndex: number;
   };
-  
-  type IncludesRowOptionConditionDto = {
-    itemName: string;
-    type: 'INCLUDES_ROW_OPTION';
-    payload: {
-      optionValue: string;
-      rowIndex: number;
-    };
+};
+
+type OutsideOfSliderRowConditionDto = {
+  itemName: string;
+  type: 'OUTSIDE_OF_SLIDER_ROWS';
+  payload: {
+    minValue: number;
+    maxValue: number;
+    rowIndex: number;
   };
-  
-  type NotIncludesRowOptionConditionDto = {
-    itemName: string;
-    type: 'NOT_INCLUDES_ROW_OPTION';
-    payload: {
-      optionValue: string;
-      rowIndex: number;
-    };
+};
+
+type IncludesRowOptionConditionDto = {
+  itemName: string;
+  type: 'INCLUDES_ROW_OPTION';
+  payload: {
+    optionValue: string;
+    rowIndex: number;
   };
+};
+
+type NotIncludesRowOptionConditionDto = {
+  itemName: string;
+  type: 'NOT_INCLUDES_ROW_OPTION';
+  payload: {
+    optionValue: string;
+    rowIndex: number;
+  };
+};
 
 type IncludesOptionConditionDto = {
   itemName: string;
@@ -252,7 +252,7 @@ type GreaterThanDateConditionDto = {
   itemName: string;
   type: 'GREATER_THAN_DATE';
   payload: {
-    date: string; 
+    date: string;
   };
 };
 
@@ -268,7 +268,7 @@ type EqualToDateConditionDto = {
   itemName: string;
   type: 'EQUAL_TO_DATE';
   payload: {
-    date: string; 
+    date: string;
   };
 };
 
@@ -276,7 +276,7 @@ type NotEqualToDateConditionDto = {
   itemName: string;
   type: 'NOT_EQUAL_TO_DATE';
   payload: {
-    date: string; 
+    date: string;
   };
 };
 
@@ -284,8 +284,8 @@ type BetweenDatesConditionDto = {
   itemName: string;
   type: 'BETWEEN_DATES';
   payload: {
-    minDate: string; 
-    maxDate: string; 
+    minDate: string;
+    maxDate: string;
   };
 };
 
@@ -293,8 +293,8 @@ type OutsideOfDatesConditionDto = {
   itemName: string;
   type: 'OUTSIDE_OF_DATES';
   payload: {
-    minDate: string; 
-    maxDate: string; 
+    minDate: string;
+    maxDate: string;
   };
 };
 
