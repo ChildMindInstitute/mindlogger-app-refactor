@@ -26,7 +26,8 @@ export type ResponseType =
   | 'text'
   | 'time'
   | 'timeRange'
-  | 'video';
+  | 'video'
+  | 'unity';
 
 type Match = 'any' | 'all';
 
@@ -720,6 +721,12 @@ export type AbTrailsConfiguration = AbTrailsItemSettingsDto;
 
 export type AbTrailsAnswerSettings = null;
 
+type UnityAnswerSettings = null;
+
+type UnityConfiguration = {
+  file: string;
+};
+
 type Configuration =
   | TextConfiguration
   | SingleSelectionRowsConfiguration
@@ -742,7 +749,8 @@ type Configuration =
   | AbTestConfiguration
   | StabilityTrackerConfiguration
   | FlankerConfiguration
-  | AbTrailsConfiguration;
+  | AbTrailsConfiguration
+  | UnityConfiguration;
 
 type AnswerSettings =
   | TextAnswerSettings
@@ -765,7 +773,8 @@ type AnswerSettings =
   | AbTestAnswerSettings
   | StabilityTrackerAnswerSettings
   | FlankerAnswerSettings
-  | AbTrailsAnswerSettings;
+  | AbTrailsAnswerSettings
+  | UnityAnswerSettings;
 
 type ActivityItemDtoBase = {
   id: string;
@@ -911,6 +920,12 @@ export interface ABTrailsItemDto extends ActivityItemDtoBase {
   responseValues: AbTrailsAnswerSettings;
 }
 
+export interface UnityItemDto extends ActivityItemDtoBase {
+  responseType: 'unity';
+  config: UnityConfiguration;
+  responseValues: UnityAnswerSettings;
+}
+
 export type ActivityItemDto =
   | TextItemDto
   | ParagraphTextItemDto
@@ -933,4 +948,5 @@ export type ActivityItemDto =
   | ABTrailsItemDto
   | StabilityTrackerItemDto
   | FlankerItemDto
-  | TimeItemDto;
+  | TimeItemDto
+  | UnityItemDto;

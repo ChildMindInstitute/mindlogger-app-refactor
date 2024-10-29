@@ -67,14 +67,7 @@ type StabilityTrackerPayload = {
 };
 
 type UnityPayload = {
-  config: UnityScreenConfig;
-  deviceType: 'mobile' | 'tablet';
-};
-
-type UnityScreenConfig = {
-  radius: number;
-  width: number;
-  height: number;
+  file: string | null;
 };
 
 type SplashPayload = { imageUrl: string };
