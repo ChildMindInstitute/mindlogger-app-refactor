@@ -3,6 +3,8 @@ import 'react-native-get-random-values';
 
 import { AppRegistry } from 'react-native';
 
+import { Buffer } from 'buffer';
+import process from 'process';
 import PropTypes from 'prop-types';
 
 import { jobRunner } from '@shared/lib/services/jobManagement';
@@ -14,6 +16,9 @@ import localization from './src/jobs/localization';
 import requestInterception from './src/jobs/request-interception';
 import responseInterception from './src/jobs/response-interception';
 import setBackgroundTask from './src/jobs/set-background-task';
+
+global.Buffer = Buffer;
+global.process = process;
 
 jobRunner
   .runAll([requestInterception, responseInterception, setBackgroundTask])

@@ -19,7 +19,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane bump_version
 ```
 
-Bump build numbers, and set the version to match the pacakage.json version.
+Bump build numbers, and set the version to match the package.json version.
 
 ----
 
