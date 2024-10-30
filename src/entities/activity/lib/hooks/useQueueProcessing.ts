@@ -4,6 +4,7 @@ import { useForceUpdate } from '@app/shared/lib/hooks/useForceUpdate';
 import { getDefaultChangeQueueObservable } from '@app/shared/lib/observables/changeQueueObservableInstance';
 import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { useRefreshMutation } from '@entities/applet/model/hooks/useRefreshMutation.ts';
 
 import { getDefaultAnswersQueueService } from '../services/answersQueueServiceInstance';
 import { getDefaultQueueProcessingService } from '../services/queueProcessingServiceInstance';
@@ -21,6 +22,7 @@ type Result = {
 
 export const useQueueProcessing = (): Result => {
   const update = useForceUpdate();
+  const { mutateAsync: refreshApplets } = useRefreshMutation();
 
   useEffect(() => {
     const onChangeUploadState = () => {
@@ -46,7 +48,8 @@ export const useQueueProcessing = (): Result => {
 
   const processQueueWithSendingLogs = async (): Promise<boolean> => {
     const result = await queueProcessingService.process();
-    getDefaultLogger().send();
+    await refreshApplets();
+    getDefaultLogger().send().catch(console.error);
     return result;
   };
 
