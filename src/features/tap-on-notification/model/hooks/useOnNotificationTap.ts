@@ -166,7 +166,7 @@ export function useOnNotificationTap({
             entityType,
             eventId!,
             entityName!,
-            targetSubjectId!,
+            targetSubjectId ?? null,
           );
         },
         executing ? GoBackDuration : WorkaroundDuration,
