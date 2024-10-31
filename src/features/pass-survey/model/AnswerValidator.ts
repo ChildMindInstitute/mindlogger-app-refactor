@@ -90,7 +90,7 @@ export function AnswerValidator(
     const [hoursStr, minutesStr] = time.split(':');
     const hours = parseInt(hoursStr, 10);
     const minutes = parseInt(minutesStr, 10);
-    
+
     let adjustedHours = hours;
     if (modifier.toLowerCase() === 'pm' && hours < 12) {
       adjustedHours += 12;
@@ -98,7 +98,7 @@ export function AnswerValidator(
     if (modifier.toLowerCase() === 'am' && hours === 12) {
       adjustedHours = 0;
     }
-    
+
     return { hours: adjustedHours, minutes };
   };
 
