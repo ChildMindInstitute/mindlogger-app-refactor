@@ -5,9 +5,13 @@
     "password": "Password",
     "i_agree": "I agree to the",
     "terms_of_service": "Terms of Service",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "privacy_policy": "Privacy Policy",
     "password_updated": "Password updated"
   },
   "activity": {
+    "completeOnWeb": "Please complete on the MindLogger web app",
     "incorrect_answer": "Incorrect answer. Please try again",
     "failed": "Failed",
     "flanker_accuracy_warn": "*The timestamps collected for an android are not as accurate as iOS devices.",
@@ -86,7 +90,7 @@
     "title_with_version": "What is MindLogger? v.{{version}}",
     "title": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
     "subtitle": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
-    "mindlogger_about": "## \n ### What is MindLogger? \n\n This app is part of the open source MindLogger data collection and analysis platform designed by the MATTER Lab at the Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### What can MindLogger do? \n\n MindLogger's feature set is growing, and currently supports a wide variety of input types. Each screen in a MindLogger activity can include any of the following: \n  - Text, picture, and audio \n  - Question followed by image and/or text response options \n  - Slider bar \n  - Text entry \n  - Table entry \n  - Audio record \n  - Photo/video capture \n  - Drawing or tapping \n  - Current geolocation \n  - Simple cognitive task \n  - Delay before response \n  - Timer \n  - Conditional logic to determine where to go next \n\n #### Where can I learn more? \n Please visit [https://mindlogger.org](https://mindlogger.org) for more information.  \n ## [Support]({{credits_link}}) \n\n ##### Cheers, \n\n ##### MindLogger Team \n\n ##### Child Mind Institute"
+    "mindlogger_about": "## \n ### What is MindLogger? \n\n This app is part of the open source MindLogger data collection and analysis platform designed by the MATTER Lab at the Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### What can MindLogger do? \n\n MindLogger's feature set is growing, and currently supports a wide variety of input types. Each screen in a MindLogger activity can include any of the following: \n  - Text, picture, and audio \n  - Question followed by image and/or text response options \n  - Slider bar \n  - Text entry \n  - Table entry \n  - Audio record \n  - Photo/video capture \n  - Drawing or tapping \n  - Current geolocation \n  - Simple cognitive task \n  - Delay before response \n  - Timer \n  - Conditional logic to determine where to go next \n\n #### Where can I learn more? \n Please visit [https://mindlogger.org](https://mindlogger.org) for more information.  \n ## [Support]({{credits_link}}) \n ## [Terms of service](https://mindlogger.org/terms-of-service) \n ## [Privacy policy](https://mindlogger.org/privacy-policy) \n\n ##### Cheers, \n\n ##### MindLogger Team \n\n ##### Child Mind Institute"
   },
   "applet_footer": {
     "surveys": "Surveys",
@@ -252,7 +256,8 @@
     "password_placeholder": "Password",
     "please_accept_terms": "Please accept terms of service.",
     "email_looks_incomplete": "Looks like this email is incomplete",
-    "sign_up_agree": "By signing up, you agree to MindLogger’s"
+    "sign_up_agree": "By signing up, you agree to MindLogger’s",
+    "and": "and"
   },
   "password_requirements": {
     "at_least_characters": "6 characters",

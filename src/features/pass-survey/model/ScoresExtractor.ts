@@ -66,6 +66,14 @@ export class ScoresExtractor implements IScoresExtractor {
     );
 
     for (const scoreSettings of settings) {
+      if (
+        scoreSettings.type === 'score' &&
+        scoreSettings.scoringType === 'score'
+      ) {
+        // Skip report scores that are not configured as raw scores
+        continue;
+      }
+
       const logScore = `'${scoreSettings.name}' for settings with index '${settingsIndex}'`;
 
       try {

@@ -1051,6 +1051,7 @@ export const conditionalInput: ActivityDto = {
       {
         itemsScore: ['one'],
         type: 'score',
+        scoringType: 'raw_score',
         id: '1',
         name: 'name',
         calculationType: 'sum',
