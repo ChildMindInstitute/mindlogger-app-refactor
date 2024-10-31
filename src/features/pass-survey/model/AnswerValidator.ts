@@ -87,18 +87,19 @@ export function AnswerValidator(
     timeStr: string,
   ): { hours: number; minutes: number } => {
     const [time, modifier] = timeStr.split(' ');
-    let [hours, tempMinutes] = time.split(':').map(Number);
-
-    const minutes = tempMinutes;
-
+    const [hoursStr, minutesStr] = time.split(':');
+    const hours = parseInt(hoursStr, 10);
+    const minutes = parseInt(minutesStr, 10);
+    
+    let adjustedHours = hours;
     if (modifier.toLowerCase() === 'pm' && hours < 12) {
-      hours += 12;
+      adjustedHours += 12;
     }
     if (modifier.toLowerCase() === 'am' && hours === 12) {
-      hours = 0;
+      adjustedHours = 0;
     }
-
-    return { hours, minutes };
+    
+    return { hours: adjustedHours, minutes };
   };
 
   const getSliderRowValue = (rowIndex: number): number | null => {
