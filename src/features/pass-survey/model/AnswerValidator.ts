@@ -35,30 +35,42 @@ export function AnswerValidator(
   };
 
   function isValidTimeFormat(time: any): boolean {
-    return time && typeof time.hours === 'number' && typeof time.minutes === 'number';
+    return (
+      time && typeof time.hours === 'number' && typeof time.minutes === 'number'
+    );
   }
   const getAnswerTime = (): { hours: number; minutes: number } | null => {
-    let answer = currentAnswer?.answer as Maybe<{ hours: number; minutes: number }>;
-  
+    let answer = currentAnswer?.answer as Maybe<{
+      hours: number;
+      minutes: number;
+    }>;
+
     if (typeof answer === 'string') {
       answer = convertTo24HourFormat(answer);
     }
-  
+
     return answer ?? null;
   };
 
-  function convert24HourTo12Hour(hours: number, minutes: number): { hours: number, minutes: number, period: 'AM' | 'PM' } {
+  function convert24HourTo12Hour(
+    hours: number,
+    minutes: number,
+  ): { hours: number; minutes: number; period: 'AM' | 'PM' } {
     const period = hours >= 12 ? 'PM' : 'AM';
     const adjustedHours = hours % 12 || 12; // Converts 0 to 12 for midnight and uses 12-hour format
     return { hours: adjustedHours, minutes, period };
   }
 
-  function convertToMinutes(time: { hours: number, minutes: number, period?: 'AM' | 'PM' }): number {
+  function convertToMinutes(time: {
+    hours: number;
+    minutes: number;
+    period?: 'AM' | 'PM';
+  }): number {
     let totalMinutes = time.hours * 60 + time.minutes;
     if (time.period === 'PM' && time.hours !== 12) {
-      totalMinutes += 12 * 60; 
+      totalMinutes += 12 * 60;
     } else if (time.period === 'AM' && time.hours === 12) {
-      totalMinutes -= 12 * 60; 
+      totalMinutes -= 12 * 60;
     }
     return totalMinutes;
   }
@@ -71,17 +83,19 @@ export function AnswerValidator(
     return answer ?? null;
   };
 
-  const convertTo24HourFormat = (timeStr: string): { hours: number; minutes: number } => {
+  const convertTo24HourFormat = (
+    timeStr: string,
+  ): { hours: number; minutes: number } => {
     const [time, modifier] = timeStr.split(' ');
     let [hours, minutes] = time.split(':').map(Number);
-  
+
     if (modifier.toLowerCase() === 'pm' && hours < 12) {
       hours += 12;
     }
     if (modifier.toLowerCase() === 'am' && hours === 12) {
       hours = 0;
     }
-  
+
     return { hours, minutes };
   };
   const getSliderRowValue = (rowIndex: number): number | null => {
@@ -259,96 +273,134 @@ export function AnswerValidator(
 
     isGreaterThanTime(time: { hours: number; minutes: number }) {
       const answerTime = getAnswerTime();
-    
+
       if (!isValidTimeFormat(time)) {
         return false;
       }
-    
+
       const normalizedTime = timeToMinutes(time);
-      const normalizedAnswerTime = answerTime ? timeToMinutes(answerTime) : null;
-    
-      return normalizedAnswerTime !== null && normalizedAnswerTime > normalizedTime;
+      const normalizedAnswerTime = answerTime
+        ? timeToMinutes(answerTime)
+        : null;
+
+      return (
+        normalizedAnswerTime !== null && normalizedAnswerTime > normalizedTime
+      );
     },
 
     isLessThanTime(time: { hours: number; minutes: number }) {
       const answerTime = getAnswerTime();
       if (!answerTime) return false;
-    
-      const backendTimeInMinutes = convertToMinutes(convert24HourTo12Hour(time.hours, time.minutes));
+
+      const backendTimeInMinutes = convertToMinutes(
+        convert24HourTo12Hour(time.hours, time.minutes),
+      );
       const answerTimeInMinutes = convertToMinutes(answerTime);
-    
+
       return answerTimeInMinutes < backendTimeInMinutes;
     },
 
     isEqualToTime(time: { hours: number; minutes: number }) {
       const answerTime = getAnswerTime();
       if (!answerTime) return false;
-    
-      const backendTimeInMinutes = convertToMinutes(convert24HourTo12Hour(time.hours, time.minutes));
+
+      const backendTimeInMinutes = convertToMinutes(
+        convert24HourTo12Hour(time.hours, time.minutes),
+      );
       const answerTimeInMinutes = convertToMinutes(answerTime);
-    
+
       return answerTimeInMinutes === backendTimeInMinutes;
     },
 
     isNotEqualToTime(time: { hours: number; minutes: number }) {
       const answerTime = getAnswerTime();
       if (!answerTime) return false;
-    
-      const backendTimeInMinutes = convertToMinutes(convert24HourTo12Hour(time.hours, time.minutes));
+
+      const backendTimeInMinutes = convertToMinutes(
+        convert24HourTo12Hour(time.hours, time.minutes),
+      );
       const answerTimeInMinutes = convertToMinutes(answerTime);
-    
+
       return answerTimeInMinutes !== backendTimeInMinutes;
     },
 
     isBetweenTimes(
       minTime: { hours: number; minutes: number },
-      maxTime: { hours: number; minutes: number }
+      maxTime: { hours: number; minutes: number },
     ) {
       const answerTime = getAnswerTime();
       if (!answerTime) return false;
-    
-      const minTimeInMinutes = convertToMinutes(convert24HourTo12Hour(minTime.hours, minTime.minutes));
-      const maxTimeInMinutes = convertToMinutes(convert24HourTo12Hour(maxTime.hours, maxTime.minutes));
+
+      const minTimeInMinutes = convertToMinutes(
+        convert24HourTo12Hour(minTime.hours, minTime.minutes),
+      );
+      const maxTimeInMinutes = convertToMinutes(
+        convert24HourTo12Hour(maxTime.hours, maxTime.minutes),
+      );
       const answerTimeInMinutes = convertToMinutes(answerTime);
-    
-      return answerTimeInMinutes >= minTimeInMinutes && answerTimeInMinutes <= maxTimeInMinutes;
+
+      return (
+        answerTimeInMinutes >= minTimeInMinutes &&
+        answerTimeInMinutes <= maxTimeInMinutes
+      );
     },
 
     isOutsideOfTimes(
       minTime: { hours: number; minutes: number },
-      maxTime: { hours: number; minutes: number }
+      maxTime: { hours: number; minutes: number },
     ) {
       const answerTime = getAnswerTime();
       if (!answerTime) return false;
-    
-      const minTimeInMinutes = convertToMinutes(convert24HourTo12Hour(minTime.hours, minTime.minutes));
-      const maxTimeInMinutes = convertToMinutes(convert24HourTo12Hour(maxTime.hours, maxTime.minutes));
+
+      const minTimeInMinutes = convertToMinutes(
+        convert24HourTo12Hour(minTime.hours, minTime.minutes),
+      );
+      const maxTimeInMinutes = convertToMinutes(
+        convert24HourTo12Hour(maxTime.hours, maxTime.minutes),
+      );
       const answerTimeInMinutes = convertToMinutes(answerTime);
-    
-      return answerTimeInMinutes < minTimeInMinutes || answerTimeInMinutes > maxTimeInMinutes;
+
+      return (
+        answerTimeInMinutes < minTimeInMinutes ||
+        answerTimeInMinutes > maxTimeInMinutes
+      );
     },
 
-    isGreaterThanTimeRange(time: { hours: number; minutes: number, fieldName?: 'from' | 'to' }) {
-      if (!time || typeof time.hours !== 'number' || typeof time.minutes !== 'number') {
+    isGreaterThanTimeRange(time: {
+      hours: number;
+      minutes: number;
+      fieldName?: 'from' | 'to';
+    }) {
+      if (
+        !time ||
+        typeof time.hours !== 'number' ||
+        typeof time.minutes !== 'number'
+      ) {
         return false;
       }
-    
+
       const answerTimeRange = getAnswerTimeRange();
-    
-      if (!answerTimeRange || (!answerTimeRange.startTime && !answerTimeRange.endTime)) {
+
+      if (
+        !answerTimeRange ||
+        (!answerTimeRange.startTime && !answerTimeRange.endTime)
+      ) {
         return false;
       }
-    
+
       const fieldName = time.fieldName || 'from';
-      const answerTime = fieldName === 'from' ? answerTimeRange.startTime : answerTimeRange.endTime;
-    
+      const answerTime =
+        fieldName === 'from'
+          ? answerTimeRange.startTime
+          : answerTimeRange.endTime;
+
       if (!answerTime) {
         return false;
       }
-    
+
       const normalizedConditionTime = timeToMinutes(time);
       const normalizedAnswerTime = timeToMinutes(answerTime);
-    
+
       return normalizedAnswerTime > normalizedConditionTime;
     },
 

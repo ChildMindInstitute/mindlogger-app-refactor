@@ -6,14 +6,15 @@ export function PipelineVisibilityChecker(
   pipeline: PipelineItem[],
   answers: Answers,
 ) {
-
   function parseTimeString(timeStr: string) {
     const [hours, minutes] = timeStr.split(':').map(Number);
     return { hours, minutes };
   }
 
   function isValidTimeFormat(time: any): boolean {
-    return time && typeof time.hours === 'number' && typeof time.minutes === 'number';
+    return (
+      time && typeof time.hours === 'number' && typeof time.minutes === 'number'
+    );
   }
   function isItemVisible(index: number) {
     if (index >= pipeline.length) {
@@ -104,21 +105,21 @@ export function PipelineVisibilityChecker(
             condition.payload.maxDate,
           );
 
-          case 'GREATER_THAN_TIME': {
-            let conditionTime = condition.payload?.time;
-            
-            if (typeof conditionTime === 'string') {
-              conditionTime = parseTimeString(conditionTime);
-            }
-            
-            if (!isValidTimeFormat(conditionTime)) {
-              return false;
-            }
-          
-            const isGreater = answerValidator.isGreaterThanTime(conditionTime);
-          
-            return isGreater;
+        case 'GREATER_THAN_TIME': {
+          let conditionTime = condition.payload?.time;
+
+          if (typeof conditionTime === 'string') {
+            conditionTime = parseTimeString(conditionTime);
           }
+
+          if (!isValidTimeFormat(conditionTime)) {
+            return false;
+          }
+
+          const isGreater = answerValidator.isGreaterThanTime(conditionTime);
+
+          return isGreater;
+        }
 
         case 'LESS_THAN_TIME':
           return answerValidator.isLessThanTime(condition.payload.time);

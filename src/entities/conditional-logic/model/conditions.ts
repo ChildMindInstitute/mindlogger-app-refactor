@@ -1,4 +1,4 @@
-import { timeToMinutes } from "@app/entities/activity/lib/services/timeToMinutes";
+import { timeToMinutes } from '@app/entities/activity/lib/services/timeToMinutes';
 
 export const isBetweenValues = (
   input: Maybe<number>,
@@ -119,7 +119,7 @@ export const isOutsideOfDates = (
 
 export const isGreaterThanTime = (
   input: Maybe<{ hours: number; minutes: number }>,
-  time: { hours: number; minutes: number }
+  time: { hours: number; minutes: number },
 ): boolean => {
   if (!input) {
     return false;
@@ -129,7 +129,7 @@ export const isGreaterThanTime = (
   const conditionMinutes = timeToMinutes(time);
 
   const result = inputMinutes > conditionMinutes;
-  
+
   return result;
 };
 
