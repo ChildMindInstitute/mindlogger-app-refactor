@@ -354,10 +354,18 @@ export class NotificationBuilder implements INotificationBuilder {
 
     for (const eventEntity of this.eventEntities) {
       try {
+        const { assignment } = eventEntity;
+
+        // Normalize target subject ID to null for self-reports
+        const targetSubjectId =
+          assignment && assignment.target.id !== assignment.respondent.id
+            ? assignment.target.id
+            : null;
+
         const eventNotifications = this.processEvent(
           eventEntity.event,
           eventEntity.entity,
-          eventEntity.assignment?.target.id || null,
+          targetSubjectId,
         );
         eventNotificationsResult.push(eventNotifications);
       } catch (error) {
