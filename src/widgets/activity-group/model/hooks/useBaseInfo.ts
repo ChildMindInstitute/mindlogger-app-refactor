@@ -1,6 +1,7 @@
 import { useBaseQuery } from '@app/shared/api/hooks/useBaseQuery';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import { getDefaultAppletsService } from '@app/shared/api/services/appletsServiceInstance';
+import { getAppletBaseInfoKey } from '@shared/lib/utils/reactQueryHelpers.ts';
 
 import { useTimer } from './useTimer';
 
@@ -8,7 +9,7 @@ export const useBaseInfo = (appletId: string) => {
   useTimer();
 
   return useBaseQuery(
-    ['base-info', { appletId }],
+    getAppletBaseInfoKey(appletId),
     () => getDefaultAppletsService().getAppletBaseInfo({ appletId }),
     {
       select: data => {

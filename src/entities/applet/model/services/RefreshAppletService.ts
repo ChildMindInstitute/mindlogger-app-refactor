@@ -17,6 +17,7 @@ import { ILogger } from '@app/shared/lib/types/logger';
 import { ImageUrl } from '@app/shared/lib/types/url';
 import {
   getActivityDetailsKey,
+  getAppletBaseInfoKey,
   getAppletDetailsKey,
   getAssignmentsKey,
   getDataFromQuery,
@@ -80,6 +81,13 @@ export class RefreshAppletService implements IRefreshAppletService {
     }
   }
 
+  private resetAppletBaseInfoQuery(appletId: string) {
+    this.queryClient.removeQueries({
+      exact: true,
+      queryKey: getAppletBaseInfoKey(appletId),
+    });
+  }
+
   private resetAppletDetailsQuery(appletId: string) {
     this.queryClient.removeQueries({
       exact: true,
@@ -113,6 +121,7 @@ export class RefreshAppletService implements IRefreshAppletService {
   private refreshAppletCaches(
     appletInternalDtos: CollectAppletInternalsResult,
   ) {
+    this.resetAppletBaseInfoQuery(appletInternalDtos.appletId);
     this.resetAppletDetailsQuery(appletInternalDtos.appletId);
 
     for (const activityDto of appletInternalDtos.activities) {
@@ -194,6 +203,8 @@ export class RefreshAppletService implements IRefreshAppletService {
     this.logger.log(
       `[RefreshAppletService.partialRefresh]: Skip refresh for Applet "${appletDto.displayName}|${appletDto.id}" as to versions are the same`,
     );
+
+    this.resetAppletBaseInfoQuery(appletDto.id);
 
     const assignmentsResponse =
       allAppletAssignments.appletAssignments[appletDto.id];

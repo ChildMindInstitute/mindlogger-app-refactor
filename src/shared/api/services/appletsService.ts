@@ -10,6 +10,8 @@ import {
   AppletAndActivitiesDetailsResponse,
   AppletAssignmentsRequest,
   AppletAssignmentsResponse,
+  AppletBaseInfoRequest,
+  AppletBaseInfoResponse,
   AppletDetailsRequest,
   AppletDetailsResponse,
   AppletsResponse,
@@ -20,7 +22,7 @@ export function appletsService(): IAppletService {
   return {
     async getAppletBaseInfo(request: AppletBaseInfoRequest) {
       const apiCall = () => {
-        return httpService.get<AppletAndActivitiesDetailsResponse>(
+        return httpService.get<AppletBaseInfoResponse>(
           `/applets/${request.appletId}/base_info`,
         );
       };
