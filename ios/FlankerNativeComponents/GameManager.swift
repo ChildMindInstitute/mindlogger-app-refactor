@@ -104,29 +104,29 @@ class GameManager {
   }
 
   func setEndTimeViewingImage(time: Double, isStart: Bool, type: TypeTimeStamps) {
-      if isStart {
-          switch type {
-          case .fixations:
-              startFixationsTimestamp = time
-          case .trial:
-              break
-          case .feedback:
-              startFeedbackTimestamp = time
-          case .response:
-              break
-          }
-      } else {
-          switch type {
-          case .fixations:
-              endFixationsTimestamp = time
-          case .trial:
-              endTrialTimestamp = time
-          case .feedback:
-              endFeedbackTimestamp = time
-          case .response:
-              break
-          }
+    if isStart {
+      switch type {
+      case .fixations:
+          startFixationsTimestamp = time
+      case .trial:
+          break
+      case .feedback:
+          startFeedbackTimestamp = time
+      case .response:
+          break
       }
+    } else {
+      switch type {
+      case .fixations:
+          endFixationsTimestamp = time
+      case .trial:
+          endTrialTimestamp = time
+      case .feedback:
+          endFeedbackTimestamp = time
+      case .response:
+          break
+      }
+    }
   }
 
   func checkedAnswer(button: SelectedButton) {
