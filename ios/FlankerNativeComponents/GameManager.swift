@@ -10,8 +10,8 @@ import Foundation
 import UIKit
 
 enum SelectedButton {
-    case left
-    case right
+  case left
+  case right
 }
 
 enum Constants {
@@ -46,6 +46,7 @@ protocol GameManagerProtocol: AnyObject {
 
 class GameManager {
   private let resultManager = ResultManager.shared
+
   private var text: String = ""
   private var responseText: String = ""
 
@@ -77,29 +78,29 @@ class GameManager {
   weak var delegate: GameManagerProtocol?
 
   func startGame(timeSpeed: Float, isShowAnswers: Bool, countGame: Int) {
-      countAllGame = countGame
-      timeSpeedGame = TimeInterval(timeSpeed)
-      isShowFeedback = isShowAnswers
-      startLogicTimer()
+    countAllGame = countGame
+    timeSpeedGame = TimeInterval(timeSpeed)
+    isShowFeedback = isShowAnswers
+    startLogicTimer()
   }
 
   func parameterGame() {
-      guard let parameters = ParameterGameManager.shared.getParameters() else { return }
-      gameParameters = parameters
-      isShowFeedback = parameters.showFeedback
-      isShowFixations = parameters.showFixation
-      isShowResults = parameters.showResults
-      countAllGame = parameters.trials.count
-      resultManager.cleanData()
-      countTest = -1
-      correctAnswers = 0
-      arrayTimes = []
-      startLogicTimer()
+    guard let parameters = ParameterGameManager.shared.getParameters() else { return }
+    gameParameters = parameters
+    isShowFeedback = parameters.showFeedback
+    isShowFixations = parameters.showFixation
+    isShowResults = parameters.showResults
+    countAllGame = parameters.trials.count
+    resultManager.cleanData()
+    countTest = -1
+    correctAnswers = 0
+    arrayTimes = []
+    startLogicTimer()
   }
 
   func startLogicTimer() {
-      invalidateTimers()
-      setDefaultText(isFirst: true)
+    invalidateTimers()
+    setDefaultText(isFirst: true)
   }
 
   func setEndTimeViewingImage(time: Double, isStart: Bool, type: TypeTimeStamps) {
