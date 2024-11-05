@@ -276,18 +276,16 @@ const slice = createSlice({
         }),
       );
 
-      if (existingProgression) {
-        const existingCompletion =
-          existingProgression as EntityProgressionCompleted;
-        if (existingCompletion.status !== 'completed') {
-          existingCompletion.status = 'completed';
-        }
+      const endedAtTimestamp = action.payload.endAt.getTime();
 
-        if (
-          !existingCompletion.endedAtTimestamp ||
-          action.payload.endAt.getTime() > existingCompletion.endedAtTimestamp
-        ) {
-          existingCompletion.endedAtTimestamp = action.payload.endAt.getTime();
+      if (existingProgression) {
+        if (existingProgression.status === 'completed') {
+          const existingCompletion =
+            existingProgression as EntityProgressionCompleted;
+
+          if (endedAtTimestamp > (existingCompletion.endedAtTimestamp ?? 0)) {
+            existingCompletion.endedAtTimestamp = endedAtTimestamp;
+          }
         }
       } else {
         const newCompletion: EntityProgressionCompleted = {
@@ -299,7 +297,7 @@ const slice = createSlice({
           targetSubjectId: action.payload.targetSubjectId,
           availableUntilTimestamp: null,
           startedAtTimestamp: 0,
-          endedAtTimestamp: action.payload.endAt.getTime(),
+          endedAtTimestamp,
         };
         state.entityProgressions = state.entityProgressions ?? [];
         state.entityProgressions.push(newCompletion);
