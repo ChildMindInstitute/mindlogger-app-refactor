@@ -294,47 +294,47 @@ class GameManager {
   }
 
   func handleEndOfGame() {
-      guard let gameParameters = gameParameters else { return }
+    guard let gameParameters = gameParameters else { return }
 
-      endFeedbackTimestamp = CACurrentMediaTime()
-      setEndTimeViewingImage(time: endFeedbackTimestamp!, isStart: false, type: .feedback)
+    endFeedbackTimestamp = CACurrentMediaTime()
+    setEndTimeViewingImage(time: endFeedbackTimestamp!, isStart: false, type: .feedback)
 
-      let sumArray = arrayTimes.reduce(0, +)
-      let avrgArray = arrayTimes.count > 0 ? sumArray / arrayTimes.count : 0
-      let procentsCorrect = Float(correctAnswers) / Float(countAllGame) * 100
+    let sumArray = arrayTimes.reduce(0, +)
+    let avrgArray = arrayTimes.count > 0 ? sumArray / arrayTimes.count : 0
+    let procentsCorrect = Float(correctAnswers) / Float(countAllGame) * 100
 
-      clearData()
+    clearData()
 
-      delegate?.updateText(text: "Game Over", color: .black, font: Constants.bigFont, isStart: false, typeTime: .feedback)
+    delegate?.updateText(text: "Game Over", color: .black, font: Constants.bigFont, isStart: false, typeTime: .feedback)
 
-      delegate?.setEnableButton(isEnable: false)
+    delegate?.setEnableButton(isEnable: false)
 
-      delegate?.resultTest(
-          avrgTime: avrgArray,
-          procentCorrect: Int(procentsCorrect),
-          data: nil,
-          dataArray: resultManager.oneGameDataResult,
-          isShowResults: gameParameters.showResults,
-          minAccuracy: gameParameters.minimumAccuracy
-      )
+    delegate?.resultTest(
+      avrgTime: avrgArray,
+      procentCorrect: Int(procentsCorrect),
+      data: nil,
+      dataArray: resultManager.oneGameDataResult,
+      isShowResults: gameParameters.showResults,
+      minAccuracy: gameParameters.minimumAccuracy
+    )
   }
 
   func isEndGame() -> Bool {
-      guard let gameParameters = gameParameters else { return false }
-      return countTest >= gameParameters.trials.count
+    guard let gameParameters = gameParameters else { return false }
+    return countTest >= gameParameters.trials.count
   }
 
   func clearData() {
-      resultManager.cleanData()
-      countTest = -1
-      correctAnswers = 0
-      arrayTimes = []
-      invalidateTimers()
+    resultManager.cleanData()
+    countTest = -1
+    correctAnswers = 0
+    arrayTimes = []
+    invalidateTimers()
   }
 
   func invalidateTimers() {
-      timeResponse?.invalidate()
-      timerSetText?.invalidate()
+    timeResponse?.invalidate()
+    timerSetText?.invalidate()
   }
 }
 
