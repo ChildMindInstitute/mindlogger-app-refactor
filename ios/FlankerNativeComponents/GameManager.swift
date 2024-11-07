@@ -196,16 +196,16 @@ class GameManager {
       delegate?.setEnableButton(isEnable: false)
 
       if !isFirst {
-          endFeedbackTimestamp = CACurrentMediaTime()
-          setEndTimeViewingImage(time: endFeedbackTimestamp!, isStart: false, type: .feedback)
-          countTest += 1
+        endFeedbackTimestamp = CACurrentMediaTime()
+        setEndTimeViewingImage(time: endFeedbackTimestamp!, isStart: false, type: .feedback)
+        countTest += 1
       } else {
-          countTest = 0
+        countTest = 0
       }
 
       if isEndGame() {
-          handleEndOfGame()
-          return
+        handleEndOfGame()
+        return
       }
 
       updateButtonTitle()
@@ -214,14 +214,14 @@ class GameManager {
           setEndTimeViewingImage(time: CACurrentMediaTime(), isStart: true, type: .fixations)
 
           if let image = URL(string: gameParameters.fixation), gameParameters.fixation.contains("https") {
-              delegate?.updateFixations(image: image, isStart: true, typeTime: .fixations)
+            delegate?.updateFixations(image: image, isStart: true, typeTime: .fixations)
           } else {
-              delegate?.updateText(text: gameParameters.fixation, color: .black, font: Constants.bigFont, isStart: true, typeTime: .fixations)
+            delegate?.updateText(text: gameParameters.fixation, color: .black, font: Constants.bigFont, isStart: true, typeTime: .fixations)
           }
           timerSetText = Timer(timeInterval: gameParameters.fixationDuration / 1000, target: self, selector: #selector(setText), userInfo: nil, repeats: false)
           RunLoop.main.add(timerSetText!, forMode: .common)
       } else {
-          setText()
+        setText()
       }
   }
 
