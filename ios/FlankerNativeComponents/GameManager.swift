@@ -118,13 +118,13 @@ class GameManager {
     } else {
       switch type {
       case .fixations:
-          endFixationsTimestamp = time
+        endFixationsTimestamp = time
       case .trial:
-          endTrialTimestamp = time
+        endTrialTimestamp = time
       case .feedback:
-          endFeedbackTimestamp = time
+        endFeedbackTimestamp = time
       case .response:
-          break
+        break
       }
     }
   }
