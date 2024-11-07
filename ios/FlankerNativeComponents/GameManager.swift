@@ -107,13 +107,13 @@ class GameManager {
     if isStart {
       switch type {
       case .fixations:
-          startFixationsTimestamp = time
+        startFixationsTimestamp = time
       case .trial:
           break
       case .feedback:
-          startFeedbackTimestamp = time
+        startFeedbackTimestamp = time
       case .response:
-          break
+        break
       }
     } else {
       switch type {
@@ -130,60 +130,60 @@ class GameManager {
   }
 
   func checkedAnswer(button: SelectedButton) {
-      guard !hasRespondedInCurrentTrial else { return }
-      hasRespondedInCurrentTrial = true
-      respondTouchButton = CACurrentMediaTime()
-      setEndTimeViewingImage(time: respondTouchButton!, isStart: false, type: .response)
-      invalidateTimers()
+    guard !hasRespondedInCurrentTrial else { return }
+    hasRespondedInCurrentTrial = true
+    respondTouchButton = CACurrentMediaTime()
+    setEndTimeViewingImage(time: respondTouchButton!, isStart: false, type: .response)
+    invalidateTimers()
 
-      delegate?.setEnableButton(isEnable: false)
+    delegate?.setEnableButton(isEnable: false)
 
-      guard let gameParameters = gameParameters else { return }
-      guard let startTrialTimestamp = startTrialTimestamp else { return }
-      var resultTime = (respondTouchButton! - startTrialTimestamp) * 1000
+    guard let gameParameters = gameParameters else { return }
+    guard let startTrialTimestamp = startTrialTimestamp else { return }
+    var resultTime = (respondTouchButton! - startTrialTimestamp) * 1000
 
-      if resultTime < 0 {
-          resultTime = 0
-      }
+    if resultTime < 0 {
+        resultTime = 0
+    }
 
-      arrayTimes.append(Int(resultTime))
-      delegate?.updateTime(time: String(format: "%.3f", resultTime))
+    arrayTimes.append(Int(resultTime))
+    delegate?.updateTime(time: String(format: "%.3f", resultTime))
 
-      endTrialTimestamp = respondTouchButton
-      setEndTimeViewingImage(time: endTrialTimestamp!, isStart: false, type: .trial)
+    endTrialTimestamp = respondTouchButton
+    setEndTimeViewingImage(time: endTrialTimestamp!, isStart: false, type: .trial)
 
-      startFeedbackTimestamp = CACurrentMediaTime()
-      setEndTimeViewingImage(time: startFeedbackTimestamp!, isStart: true, type: .feedback)
+    startFeedbackTimestamp = CACurrentMediaTime()
+    setEndTimeViewingImage(time: startFeedbackTimestamp!, isStart: true, type: .feedback)
 
-      let correctChoice = gameParameters.trials[countTest].correctChoice
-      let isCorrect = (button == .left && correctChoice == 0) || (button == .right && correctChoice == 1)
-      if isCorrect {
-          correctAnswers += 1
-      }
+    let correctChoice = gameParameters.trials[countTest].correctChoice
+    let isCorrect = (button == .left && correctChoice == 0) || (button == .right && correctChoice == 1)
+    if isCorrect {
+        correctAnswers += 1
+    }
 
-      let buttonPressed = (button == .left) ? "0" : "1"
-      let model = FlankerModel(
-          rt: resultTime,
-          stimulus: text,
-          button_pressed: buttonPressed,
-          image_time: endTrialTimestamp! * 1000,
-          correct: isCorrect,
-          start_timestamp: 0,
-          tag: Constants.tag,
-          trial_index: countTest + 1,
-          start_time: startTrialTimestamp * 1000,
-          response_touch_timestamp: respondTouchButton! * 1000
-      )
+    let buttonPressed = (button == .left) ? "0" : "1"
+    let model = FlankerModel(
+        rt: resultTime,
+        stimulus: text,
+        button_pressed: buttonPressed,
+        image_time: endTrialTimestamp! * 1000,
+        correct: isCorrect,
+        start_timestamp: 0,
+        tag: Constants.tag,
+        trial_index: countTest + 1,
+        start_time: startTrialTimestamp * 1000,
+        response_touch_timestamp: respondTouchButton! * 1000
+    )
 
-      resultManager.addStepData(data: model)
-      delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: false, minAccuracy: gameParameters.minimumAccuracy)
+    resultManager.addStepData(data: model)
+    delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: false, minAccuracy: gameParameters.minimumAccuracy)
 
-      if gameParameters.showFeedback {
-          let feedbackText = isCorrect ? Constants.correctText : Constants.inCorrectText
-          let feedbackColor = isCorrect ? Constants.greenColor : Constants.redColor
-          delegate?.updateText(text: feedbackText, color: feedbackColor, font: Constants.smallFont, isStart: false, typeTime: .feedback)
-          let timer = Timer(timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(setDefaultText), userInfo: nil, repeats: false)
-          RunLoop.main.add(timer, forMode: .common)
+    if gameParameters.showFeedback {
+        let feedbackText = isCorrect ? Constants.correctText : Constants.inCorrectText
+        let feedbackColor = isCorrect ? Constants.greenColor : Constants.redColor
+        delegate?.updateText(text: feedbackText, color: feedbackColor, font: Constants.smallFont, isStart: false, typeTime: .feedback)
+        let timer = Timer(timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(setDefaultText), userInfo: nil, repeats: false)
+        RunLoop.main.add(timer, forMode: .common)
       } else {
           setDefaultText(isFirst: false)
       }
