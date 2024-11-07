@@ -253,44 +253,44 @@ class GameManager {
   }
 
   @objc func timeResponseFailed() {
-      guard let gameParameters = gameParameters else { return }
+    guard let gameParameters = gameParameters else { return }
 
-      delegate?.setEnableButton(isEnable: false)
+    delegate?.setEnableButton(isEnable: false)
 
-      endTrialTimestamp = CACurrentMediaTime()
-      setEndTimeViewingImage(time: endTrialTimestamp!, isStart: false, type: .trial)
+    endTrialTimestamp = CACurrentMediaTime()
+    setEndTimeViewingImage(time: endTrialTimestamp!, isStart: false, type: .trial)
 
-      startFeedbackTimestamp = CACurrentMediaTime()
-      setEndTimeViewingImage(time: startFeedbackTimestamp!, isStart: true, type: .feedback)
+    startFeedbackTimestamp = CACurrentMediaTime()
+    setEndTimeViewingImage(time: startFeedbackTimestamp!, isStart: true, type: .feedback)
 
-      if gameParameters.showFeedback {
-          delegate?.updateText(text: Constants.timeRespondText, color: .black, font: Constants.smallFont, isStart: false, typeTime: .feedback)
-      }
+    if gameParameters.showFeedback {
+        delegate?.updateText(text: Constants.timeRespondText, color: .black, font: Constants.smallFont, isStart: false, typeTime: .feedback)
+    }
 
-      guard let startTrialTimestamp = startTrialTimestamp else { return }
+    guard let startTrialTimestamp = startTrialTimestamp else { return }
 
-      let model = FlankerModel(
-          rt: 0.0,
-          stimulus: text,
-          button_pressed: nil,
-          image_time: endTrialTimestamp! * 1000, // має намалювати
-          correct: false,
-          start_timestamp: 0, // вже намальовано
-          tag: Constants.tag,
-          trial_index: countTest + 1,
-          start_time: startTrialTimestamp * 1000,
-          response_touch_timestamp: 0
-      )
+    let model = FlankerModel(
+        rt: 0.0,
+        stimulus: text,
+        button_pressed: nil,
+        image_time: endTrialTimestamp! * 1000, // має намалювати
+        correct: false,
+        start_timestamp: 0, // вже намальовано
+        tag: Constants.tag,
+        trial_index: countTest + 1,
+        start_time: startTrialTimestamp * 1000,
+        response_touch_timestamp: 0
+    )
 
-      resultManager.addStepData(data: model)
-      delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: false, minAccuracy: gameParameters.minimumAccuracy)
+    resultManager.addStepData(data: model)
+    delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: false, minAccuracy: gameParameters.minimumAccuracy)
 
-      if gameParameters.showFeedback {
-          let timer = Timer(timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(setDefaultText), userInfo: nil, repeats: false)
-          RunLoop.main.add(timer, forMode: .common)
-      } else {
-          setDefaultText(isFirst: false)
-      }
+    if gameParameters.showFeedback {
+      let timer = Timer(timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(setDefaultText), userInfo: nil, repeats: false)
+      RunLoop.main.add(timer, forMode: .common)
+    } else {
+      setDefaultText(isFirst: false)
+    }
   }
 
   func handleEndOfGame() {
