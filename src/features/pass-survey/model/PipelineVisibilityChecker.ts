@@ -217,16 +217,10 @@ export function PipelineVisibilityChecker(
           );
 
         case 'INCLUDES_ROW_OPTION':
-          return answerValidator.includesRowOption(
-            condition.payload.rowIndex,
-            condition.payload.optionValue,
-          );
+          return answerValidator.includesRowOption(condition.payload.rowIndex, condition.payload.optionValue);
 
         case 'NOT_INCLUDES_ROW_OPTION':
-          return answerValidator.notIncludesRowOption(
-            condition.payload.rowIndex,
-            condition.payload.optionValue,
-          );
+          return answerValidator.notIncludesRowOption(condition.payload.rowIndex, condition.payload.optionValue);
 
         default:
           return true;

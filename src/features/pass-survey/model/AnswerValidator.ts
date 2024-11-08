@@ -57,7 +57,7 @@ export function AnswerValidator(
     minutes: number,
   ): { hours: number; minutes: number; period: 'AM' | 'PM' } {
     const period = hours >= 12 ? 'PM' : 'AM';
-    const adjustedHours = hours % 12 || 12; // Converts 0 to 12 for midnight and uses 12-hour format
+    const adjustedHours = hours % 12 || 12;
     return { hours: adjustedHours, minutes, period };
   }
 
@@ -107,9 +107,13 @@ export function AnswerValidator(
     return answer && answer[rowIndex] !== undefined ? answer[rowIndex] : null;
   };
 
-  const getRowOptionValue = (rowIndex: number): string | null => {
-    const answer = currentAnswer?.answer as Maybe<string[]>;
-    return answer && answer[rowIndex] !== undefined ? answer[rowIndex] : null;
+  const getRowOptionValues = (rowIndex: number): string[] | null => {
+    const answer = currentAnswer?.answer as Maybe<{ id: string; text: string }[][]>;
+    if (answer && answer[rowIndex]) {
+      const optionIds = answer[rowIndex].map(option => option.id);
+      return optionIds;
+    }
+    return null;
   };
 
   const timeToMinutes = (time: { hours: number; minutes: number }): number => {
@@ -164,30 +168,24 @@ export function AnswerValidator(
       return rowValue !== null && (rowValue < minValue || rowValue > maxValue);
     },
 
-    // Methods for options per row
     isEqualToRowOption(rowIndex: number, optionValue: string) {
-      const selectedOption = getRowOptionValue(rowIndex);
-      return selectedOption !== null && selectedOption === optionValue;
+      const selectedOption = getRowOptionValues(rowIndex);
+      return selectedOption !== null && selectedOption.includes(optionValue);
     },
 
     isNotEqualToRowOption(rowIndex: number, optionValue: string) {
-      const selectedOption = getRowOptionValue(rowIndex);
-      return selectedOption !== null && selectedOption !== optionValue;
+      const selectedOption = getRowOptionValues(rowIndex);
+      return selectedOption !== null && !selectedOption.includes(optionValue);
     },
 
     includesRowOption(rowIndex: number, optionValue: string) {
-      const selectedOption = getRowOptionValue(rowIndex);
-      return (
-        selectedOption !== null && includesValue([selectedOption], optionValue)
-      );
+      const selectedOptions = getRowOptionValues(Number(rowIndex));
+      return selectedOptions !== null && includesValue(selectedOptions, optionValue);
     },
 
     notIncludesRowOption(rowIndex: number, optionValue: string) {
-      const selectedOption = getRowOptionValue(rowIndex);
-      return (
-        selectedOption !== null &&
-        doesNotIncludeValue([selectedOption], optionValue)
-      );
+      const selectedOptions = getRowOptionValues(Number(rowIndex));
+      return selectedOptions !== null && doesNotIncludeValue(selectedOptions, optionValue);
     },
 
     isBetweenValues(min: number, max: number) {

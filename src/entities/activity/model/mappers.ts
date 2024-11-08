@@ -79,6 +79,14 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
                 };
                 break;
 
+              case 'INCLUDES_ROW_OPTION':
+              case 'NOT_INCLUDES_ROW_OPTION':
+                  updatedCondition.payload = {
+                      optionValue: condition.payload.optionValue,
+                      rowIndex: condition.payload.rowIndex,
+                  };
+                break;
+
               case 'GREATER_THAN_DATE':
               case 'LESS_THAN_DATE':
               case 'EQUAL_TO_DATE':
