@@ -143,27 +143,41 @@ export function PipelineVisibilityChecker(
           );
 
         case 'GREATER_THAN_TIME_RANGE':
-          return answerValidator.isGreaterThanTimeRange(condition.payload.time);
+          return answerValidator.isGreaterThanTimeRange(
+            condition.payload.time,
+            condition.payload.fieldName,
+          );
 
         case 'LESS_THAN_TIME_RANGE':
-          return answerValidator.isLessThanTimeRange(condition.payload.time);
+          return answerValidator.isLessThanTimeRange(
+            condition.payload.time,
+            condition.payload.fieldName,
+          );
 
         case 'EQUAL_TO_TIME_RANGE':
-          return answerValidator.isEqualToTimeRange(condition.payload.time);
+          return answerValidator.isEqualToTimeRange(
+            condition.payload.time,
+            condition.payload.fieldName,
+          );
 
         case 'NOT_EQUAL_TO_TIME_RANGE':
-          return answerValidator.isNotEqualToTimeRange(condition.payload.time);
+          return answerValidator.isNotEqualToTimeRange(
+            condition.payload.time,
+            condition.payload.fieldName,
+          );
 
         case 'BETWEEN_TIMES_RANGE':
           return answerValidator.isBetweenTimesRange(
             condition.payload.minTime,
             condition.payload.maxTime,
+            condition.payload.fieldName,
           );
 
         case 'OUTSIDE_OF_TIMES_RANGE':
           return answerValidator.isOutsideOfTimesRange(
             condition.payload.minTime,
             condition.payload.maxTime,
+            condition.payload.fieldName,
           );
 
         case 'EQUAL_TO_SLIDER_ROWS':
@@ -217,10 +231,16 @@ export function PipelineVisibilityChecker(
           );
 
         case 'INCLUDES_ROW_OPTION':
-          return answerValidator.includesRowOption(condition.payload.rowIndex, condition.payload.optionValue);
+          return answerValidator.includesRowOption(
+            condition.payload.rowIndex,
+            condition.payload.optionValue,
+          );
 
         case 'NOT_INCLUDES_ROW_OPTION':
-          return answerValidator.notIncludesRowOption(condition.payload.rowIndex, condition.payload.optionValue);
+          return answerValidator.notIncludesRowOption(
+            condition.payload.rowIndex,
+            condition.payload.optionValue,
+          );
 
         default:
           return true;

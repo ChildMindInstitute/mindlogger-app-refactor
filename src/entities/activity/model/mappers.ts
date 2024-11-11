@@ -81,10 +81,10 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
 
               case 'INCLUDES_ROW_OPTION':
               case 'NOT_INCLUDES_ROW_OPTION':
-                  updatedCondition.payload = {
-                      optionValue: condition.payload.optionValue,
-                      rowIndex: condition.payload.rowIndex,
-                  };
+                updatedCondition.payload = {
+                  optionValue: condition.payload.optionValue,
+                  rowIndex: condition.payload.rowIndex,
+                };
                 break;
 
               case 'GREATER_THAN_DATE':
@@ -121,7 +121,10 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
               case 'LESS_THAN_TIME_RANGE':
               case 'EQUAL_TO_TIME_RANGE':
               case 'NOT_EQUAL_TO_TIME_RANGE':
-                updatedCondition.payload = { time: condition.payload.time };
+                updatedCondition.payload = {
+                  time: condition.payload.time,
+                  fieldName: condition.payload.fieldName,
+                };
                 break;
 
               case 'BETWEEN_TIMES_RANGE':

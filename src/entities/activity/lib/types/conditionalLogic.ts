@@ -353,6 +353,7 @@ type GreaterThanTimeRangeCondition = {
       hours: number;
       minutes: number;
     };
+    fieldName: string;
   };
 };
 
@@ -364,6 +365,7 @@ type LessThanTimeRangeCondition = {
       hours: number;
       minutes: number;
     };
+    fieldName: string;
   };
 };
 
@@ -375,6 +377,7 @@ type EqualToTimeRangeCondition = {
       hours: number;
       minutes: number;
     };
+    fieldName: string;
   };
 };
 
@@ -386,6 +389,7 @@ type NotEqualToTimeRangeCondition = {
       hours: number;
       minutes: number;
     };
+    fieldName: string;
   };
 };
 
@@ -401,6 +405,7 @@ type BetweenTimesRangeCondition = {
       hours: number;
       minutes: number;
     };
+    fieldName: string;
   };
 };
 
@@ -416,5 +421,6 @@ type OutsideOfTimesRangeCondition = {
       hours: number;
       minutes: number;
     };
+    fieldName: string;
   };
 };

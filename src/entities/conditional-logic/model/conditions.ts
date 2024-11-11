@@ -1,4 +1,7 @@
+import { isAfter, isBefore, isEqual, parseISO } from 'date-fns';
+
 import { timeToMinutes } from '@app/entities/activity/lib/services/timeToMinutes';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
 
 export const isBetweenValues = (
   input: Maybe<number>,
@@ -24,7 +27,6 @@ export const isOutsideOfValues = (
   return input < min || input > max;
 };
 
-// and isEqualToOption
 export const isEqualToValue = (
   input: unknown,
   valueToCompareWith: NonNullable<unknown>,
@@ -77,24 +79,17 @@ export const doesNotIncludeValue = <TItem>(
   return !input.includes(value);
 };
 
-export const isGreaterThanDate = (input: Maybe<string>, date: string) => {
-  if (!input) return false;
-  return new Date(input) > new Date(date);
+export const isGreaterThanDate = (input: string, date: string) => {
+  return input ? isAfter(parseISO(input), parseISO(date)) : false;
 };
 
-export const isLessThanDate = (input: Maybe<string>, date: string) => {
-  if (!input) return false;
-  return new Date(input) < new Date(date);
+export const isLessThanDate = (input: string, date: string) => {
+  return input ? isBefore(parseISO(input), parseISO(date)) : false;
 };
 
 export const isEqualToDate = (input: Maybe<string>, date: string) => {
   if (!input) return false;
-  return new Date(input).getTime() === new Date(date).getTime();
-};
-
-export const isNotEqualToDate = (input: Maybe<string>, date: string) => {
-  if (!input) return false;
-  return new Date(input).getTime() !== new Date(date).getTime();
+  return input ? isEqual(parseISO(input), parseISO(date)) : false;
 };
 
 export const isBetweenDates = (
@@ -102,9 +97,14 @@ export const isBetweenDates = (
   minDate: string,
   maxDate: string,
 ) => {
-  if (!input) return false;
-  const inputDate = new Date(input);
-  return inputDate > new Date(minDate) && inputDate < new Date(maxDate);
+  return input
+    ? !isBefore(parseISO(input), parseISO(minDate)) &&
+        !isAfter(parseISO(input), parseISO(maxDate))
+    : false;
+};
+
+export const isNotEqualToDate = (input: Maybe<string>, date: string) => {
+  return input ? !isEqual(parseISO(input), parseISO(date)) : false;
 };
 
 export const isOutsideOfDates = (
@@ -112,19 +112,103 @@ export const isOutsideOfDates = (
   minDate: string,
   maxDate: string,
 ) => {
-  if (!input) return false;
-  const inputDate = new Date(input);
-  return inputDate < new Date(minDate) || inputDate > new Date(maxDate);
+  return input
+    ? isBefore(parseISO(input), parseISO(minDate)) ||
+        isAfter(parseISO(input), parseISO(maxDate))
+    : false;
+};
+
+const getTimeBasedOnFieldName = (
+  fieldName: string,
+  timeRange: { startTime: HourMinute | null; endTime: HourMinute | null },
+): HourMinute | null => {
+  return fieldName === 'from' ? timeRange.startTime : timeRange.endTime;
+};
+
+export const isGreaterThanTimeRange = (
+  timeRange: { startTime: HourMinute | null; endTime: HourMinute | null },
+  { time, fieldName }: { time: HourMinute; fieldName: string },
+): boolean => {
+  const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
+  return selectedTime
+    ? timeToMinutes(selectedTime) > timeToMinutes(time)
+    : false;
+};
+
+export const isLessThanTimeRange = (
+  timeRange: { startTime: HourMinute | null; endTime: HourMinute | null },
+  { time, fieldName }: { time: HourMinute; fieldName: string },
+): boolean => {
+  const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
+  return selectedTime
+    ? timeToMinutes(selectedTime) < timeToMinutes(time)
+    : false;
+};
+
+export const isEqualToTimeRange = (
+  timeRange: { startTime: HourMinute | null; endTime: HourMinute | null },
+  { time, fieldName }: { time: HourMinute; fieldName: string },
+): boolean => {
+  const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
+  return selectedTime
+    ? timeToMinutes(selectedTime) == timeToMinutes(time)
+    : false;
+};
+
+export const isNotEqualToTimeRange = (
+  timeRange: { startTime: HourMinute | null; endTime: HourMinute | null },
+  { time, fieldName }: { time: HourMinute; fieldName: string },
+): boolean => {
+  const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
+  return selectedTime
+    ? timeToMinutes(selectedTime) !== timeToMinutes(time)
+    : false;
+};
+
+export const isBetweenTimesRange = (
+  timeRange: { startTime: HourMinute | null; endTime: HourMinute | null },
+  {
+    minTime,
+    maxTime,
+    fieldName,
+  }: { minTime: HourMinute; maxTime: HourMinute; fieldName: string },
+): boolean => {
+  const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
+  const selectedTimeInMinutes = selectedTime
+    ? timeToMinutes(selectedTime)
+    : null;
+
+  return (
+    selectedTimeInMinutes !== null &&
+    selectedTimeInMinutes >= timeToMinutes(minTime) &&
+    selectedTimeInMinutes <= timeToMinutes(maxTime)
+  );
+};
+
+export const isOutsideOfTimesRange = (
+  timeRange: { startTime: HourMinute | null; endTime: HourMinute | null },
+  {
+    minTime,
+    maxTime,
+    fieldName,
+  }: { minTime: HourMinute; maxTime: HourMinute; fieldName: string },
+): boolean => {
+  const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
+  const selectedTimeInMinutes = selectedTime
+    ? timeToMinutes(selectedTime)
+    : null;
+
+  return (
+    selectedTimeInMinutes !== null &&
+    (selectedTimeInMinutes < timeToMinutes(minTime) ||
+      selectedTimeInMinutes > timeToMinutes(maxTime))
+  );
 };
 
 export const isGreaterThanTime = (
-  input: Maybe<{ hours: number; minutes: number }>,
+  input: { hours: number; minutes: number },
   time: { hours: number; minutes: number },
 ): boolean => {
-  if (!input) {
-    return false;
-  }
-
   const inputMinutes = timeToMinutes(input);
   const conditionMinutes = timeToMinutes(time);
 
@@ -134,30 +218,39 @@ export const isGreaterThanTime = (
 };
 
 export const isLessThanTime = (
-  input: Maybe<{ hours: number; minutes: number }>,
+  input: { hours: number; minutes: number },
   time: { hours: number; minutes: number },
 ) => {
-  if (!input) return false;
-  return (
-    input.hours < time.hours ||
-    (input.hours === time.hours && input.minutes < time.minutes)
-  );
+  const inputMinutes = timeToMinutes(input);
+  const conditionMinutes = timeToMinutes(time);
+
+  const result = inputMinutes < conditionMinutes;
+
+  return result;
 };
 
 export const isEqualToTime = (
-  input: Maybe<{ hours: number; minutes: number }>,
+  input: { hours: number; minutes: number },
   time: { hours: number; minutes: number },
 ) => {
-  if (!input) return false;
-  return input.hours === time.hours && input.minutes === time.minutes;
+  const inputMinutes = timeToMinutes(input);
+  const conditionMinutes = timeToMinutes(time);
+
+  const result = inputMinutes == conditionMinutes;
+
+  return result;
 };
 
 export const isNotEqualToTime = (
-  input: Maybe<{ hours: number; minutes: number }>,
+  input: { hours: number; minutes: number },
   time: { hours: number; minutes: number },
 ) => {
-  if (!input) return false;
-  return input.hours !== time.hours || input.minutes !== time.minutes;
+  const inputMinutes = timeToMinutes(input);
+  const conditionMinutes = timeToMinutes(time);
+
+  const result = inputMinutes !== conditionMinutes;
+
+  return result;
 };
 
 export const isBetweenTimes = (
@@ -176,4 +269,35 @@ export const isOutsideOfTimes = (
 ) => {
   if (!input) return false;
   return isLessThanTime(input, minTime) || isGreaterThanTime(input, maxTime);
+};
+
+export const isOutsideOfSliderRowValues = (
+  rowValue: number,
+  minValue: number,
+  maxValue: number,
+) => {
+  return rowValue !== null && (rowValue < minValue || rowValue > maxValue);
+};
+
+export const isBetweenSliderRowValues = (
+  rowValue: number,
+  minValue: number,
+  maxValue: number,
+) => {
+  return rowValue !== null && rowValue >= minValue && rowValue <= maxValue;
+};
+
+export const isLessThanSliderRow = (rowValue: number, value: number) => {
+  return rowValue !== null && rowValue < value;
+};
+
+export const isGreaterThanSliderRow = (rowValue: number, value: number) => {
+  return rowValue !== null && rowValue > value;
+};
+export const isNotEqualToSliderRow = (rowValue: number, value: number) => {
+  return rowValue !== null && rowValue !== value;
+};
+
+export const isEqualToSliderRow = (rowValue: number, value: number) => {
+  return rowValue !== null && rowValue === value;
 };

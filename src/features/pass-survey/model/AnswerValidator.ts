@@ -1,6 +1,3 @@
-import { isBefore, isAfter, isEqual } from 'date-fns';
-import { parseISO } from 'date-fns';
-
 import {
   doesNotIncludeValue,
   includesValue,
@@ -9,7 +6,32 @@ import {
   isGreaterThan,
   isLessThan,
   isOutsideOfValues,
+  isGreaterThanTime,
+  isLessThanTime,
+  isEqualToTime,
+  isNotEqualToTime,
+  isNotEqualToDate,
+  isBetweenDates,
+  isBetweenTimes,
+  isGreaterThanTimeRange,
+  isLessThanTimeRange,
+  isEqualToTimeRange,
+  isNotEqualToTimeRange,
+  isBetweenTimesRange,
+  isOutsideOfTimesRange,
+  isOutsideOfTimes,
+  isOutsideOfSliderRowValues,
+  isBetweenSliderRowValues,
+  isLessThanSliderRow,
+  isGreaterThanSliderRow,
+  isNotEqualToSliderRow,
+  isEqualToSliderRow,
+  isGreaterThanDate,
+  isLessThanDate,
+  isEqualToDate,
+  isOutsideOfDates,
 } from '@app/entities/conditional-logic/model/conditions';
+import { HourMinute } from '@app/shared/lib/types/dateTime';
 import { Item } from '@app/shared/ui/survey/CheckBox/types';
 import {
   AnswerValidatorArgs,
@@ -28,6 +50,13 @@ export function AnswerValidator(
   const { items, answers, step = 0 } = params ?? {};
   const currentPipelineItem = items?.[step];
   const currentAnswer = answers?.[step];
+
+  const getTimeBasedOnFieldName = (
+    fieldName: string,
+    timeRange: { startTime: HourMinute | null; endTime: HourMinute | null },
+  ): HourMinute | null => {
+    return fieldName === 'from' ? timeRange.startTime : timeRange.endTime;
+  };
 
   const getAnswerDate = (): string | null => {
     const answer = currentAnswer?.answer as Maybe<string>;
@@ -51,15 +80,6 @@ export function AnswerValidator(
 
     return answer ?? null;
   };
-
-  function convert24HourTo12Hour(
-    hours: number,
-    minutes: number,
-  ): { hours: number; minutes: number; period: 'AM' | 'PM' } {
-    const period = hours >= 12 ? 'PM' : 'AM';
-    const adjustedHours = hours % 12 || 12;
-    return { hours: adjustedHours, minutes, period };
-  }
 
   function convertToMinutes(time: {
     hours: number;
@@ -108,7 +128,9 @@ export function AnswerValidator(
   };
 
   const getRowOptionValues = (rowIndex: number): string[] | null => {
-    const answer = currentAnswer?.answer as Maybe<{ id: string; text: string }[][]>;
+    const answer = currentAnswer?.answer as Maybe<
+      { id: string; text: string }[][]
+    >;
     if (answer && answer[rowIndex]) {
       const optionIds = answer[rowIndex].map(option => option.id);
       return optionIds;
@@ -132,22 +154,28 @@ export function AnswerValidator(
 
     isEqualToSliderRow(rowIndex: number, value: number) {
       const rowValue = getSliderRowValue(rowIndex);
-      return rowValue !== null && rowValue === value;
+      if (!rowValue) return false;
+      return isEqualToSliderRow(rowValue, value);
     },
 
     isNotEqualToSliderRow(rowIndex: number, value: number) {
       const rowValue = getSliderRowValue(rowIndex);
-      return rowValue !== null && rowValue !== value;
+      if (!rowValue) return false;
+
+      return isNotEqualToSliderRow(rowValue, value);
     },
 
     isGreaterThanSliderRow(rowIndex: number, value: number) {
       const rowValue = getSliderRowValue(rowIndex);
-      return rowValue !== null && rowValue > value;
+      if (!rowValue) return false;
+
+      return isGreaterThanSliderRow(rowValue, value);
     },
 
     isLessThanSliderRow(rowIndex: number, value: number) {
       const rowValue = getSliderRowValue(rowIndex);
-      return rowValue !== null && rowValue < value;
+      if (!rowValue) return false;
+      return isLessThanSliderRow(rowValue, value);
     },
 
     isBetweenSliderRowValues(
@@ -156,7 +184,9 @@ export function AnswerValidator(
       maxValue: number,
     ) {
       const rowValue = getSliderRowValue(rowIndex);
-      return rowValue !== null && rowValue >= minValue && rowValue <= maxValue;
+      if (!rowValue) return false;
+
+      return isBetweenSliderRowValues(rowValue, minValue, maxValue);
     },
 
     isOutsideOfSliderRowValues(
@@ -165,7 +195,10 @@ export function AnswerValidator(
       maxValue: number,
     ) {
       const rowValue = getSliderRowValue(rowIndex);
-      return rowValue !== null && (rowValue < minValue || rowValue > maxValue);
+
+      if (!rowValue) return false;
+
+      return isOutsideOfSliderRowValues(rowValue, minValue, maxValue);
     },
 
     isEqualToRowOption(rowIndex: number, optionValue: string) {
@@ -180,12 +213,17 @@ export function AnswerValidator(
 
     includesRowOption(rowIndex: number, optionValue: string) {
       const selectedOptions = getRowOptionValues(Number(rowIndex));
-      return selectedOptions !== null && includesValue(selectedOptions, optionValue);
+      return (
+        selectedOptions !== null && includesValue(selectedOptions, optionValue)
+      );
     },
 
     notIncludesRowOption(rowIndex: number, optionValue: string) {
       const selectedOptions = getRowOptionValues(Number(rowIndex));
-      return selectedOptions !== null && doesNotIncludeValue(selectedOptions, optionValue);
+      return (
+        selectedOptions !== null &&
+        doesNotIncludeValue(selectedOptions, optionValue)
+      );
     },
 
     isBetweenValues(min: number, max: number) {
@@ -235,95 +273,73 @@ export function AnswerValidator(
 
     isGreaterThanDate(date: string) {
       const answerDate = getAnswerDate();
-      return answerDate ? isAfter(parseISO(answerDate), parseISO(date)) : false;
+      if (!answerDate) return false;
+      return isGreaterThanDate(answerDate, date);
     },
 
     isLessThanDate(date: string) {
       const answerDate = getAnswerDate();
-      return answerDate
-        ? isBefore(parseISO(answerDate), parseISO(date))
-        : false;
+      if (!answerDate) return false;
+      return isLessThanDate(answerDate, date);
     },
 
     isEqualToDate(date: string) {
       const answerDate = getAnswerDate();
-      return answerDate ? isEqual(parseISO(answerDate), parseISO(date)) : false;
+      if (!answerDate) return false;
+      return isEqualToDate(answerDate, date);
     },
 
     isNotEqualToDate(date: string) {
       const answerDate = getAnswerDate();
-      return answerDate
-        ? !isEqual(parseISO(answerDate), parseISO(date))
-        : false;
+      if (!answerDate) return false;
+      return isNotEqualToDate(answerDate, date);
     },
 
     isBetweenDates(minDate: string, maxDate: string) {
       const answerDate = getAnswerDate();
-      return answerDate
-        ? !isBefore(parseISO(answerDate), parseISO(minDate)) &&
-            !isAfter(parseISO(answerDate), parseISO(maxDate))
-        : false;
+      if (!answerDate) return false;
+      return isBetweenDates(answerDate, minDate, maxDate);
     },
 
     isOutsideOfDates(minDate: string, maxDate: string) {
       const answerDate = getAnswerDate();
-      return answerDate
-        ? isBefore(parseISO(answerDate), parseISO(minDate)) ||
-            isAfter(parseISO(answerDate), parseISO(maxDate))
-        : false;
+      return isOutsideOfDates(answerDate, minDate, maxDate);
     },
 
     isGreaterThanTime(time: { hours: number; minutes: number }) {
       const answerTime = getAnswerTime();
 
-      if (!isValidTimeFormat(time)) {
+      if (!isValidTimeFormat(time) || !answerTime) {
         return false;
       }
-
-      const normalizedTime = timeToMinutes(time);
-      const normalizedAnswerTime = answerTime
-        ? timeToMinutes(answerTime)
-        : null;
-
-      return (
-        normalizedAnswerTime !== null && normalizedAnswerTime > normalizedTime
-      );
+      return isGreaterThanTime(answerTime, time);
     },
 
     isLessThanTime(time: { hours: number; minutes: number }) {
       const answerTime = getAnswerTime();
-      if (!answerTime) return false;
 
-      const backendTimeInMinutes = convertToMinutes(
-        convert24HourTo12Hour(time.hours, time.minutes),
-      );
-      const answerTimeInMinutes = convertToMinutes(answerTime);
-
-      return answerTimeInMinutes < backendTimeInMinutes;
+      if (!isValidTimeFormat(time) || !answerTime) {
+        return false;
+      }
+      return isLessThanTime(answerTime, time);
     },
 
     isEqualToTime(time: { hours: number; minutes: number }) {
       const answerTime = getAnswerTime();
-      if (!answerTime) return false;
 
-      const backendTimeInMinutes = convertToMinutes(
-        convert24HourTo12Hour(time.hours, time.minutes),
-      );
-      const answerTimeInMinutes = convertToMinutes(answerTime);
-
-      return answerTimeInMinutes === backendTimeInMinutes;
+      if (!isValidTimeFormat(time) || !answerTime) {
+        return false;
+      }
+      return isEqualToTime(answerTime, time);
     },
 
     isNotEqualToTime(time: { hours: number; minutes: number }) {
       const answerTime = getAnswerTime();
-      if (!answerTime) return false;
 
-      const backendTimeInMinutes = convertToMinutes(
-        convert24HourTo12Hour(time.hours, time.minutes),
-      );
-      const answerTimeInMinutes = convertToMinutes(answerTime);
-
-      return answerTimeInMinutes !== backendTimeInMinutes;
+      if (!isValidTimeFormat(time) || !answerTime) {
+        return false;
+      }
+      return isNotEqualToTime(answerTime, time);
     },
 
     isBetweenTimes(
@@ -332,19 +348,7 @@ export function AnswerValidator(
     ) {
       const answerTime = getAnswerTime();
       if (!answerTime) return false;
-
-      const minTimeInMinutes = convertToMinutes(
-        convert24HourTo12Hour(minTime.hours, minTime.minutes),
-      );
-      const maxTimeInMinutes = convertToMinutes(
-        convert24HourTo12Hour(maxTime.hours, maxTime.minutes),
-      );
-      const answerTimeInMinutes = convertToMinutes(answerTime);
-
-      return (
-        answerTimeInMinutes >= minTimeInMinutes &&
-        answerTimeInMinutes <= maxTimeInMinutes
-      );
+      return isBetweenTimes(answerTime, minTime, maxTime);
     },
 
     isOutsideOfTimes(
@@ -353,111 +357,74 @@ export function AnswerValidator(
     ) {
       const answerTime = getAnswerTime();
       if (!answerTime) return false;
-
-      const minTimeInMinutes = convertToMinutes(
-        convert24HourTo12Hour(minTime.hours, minTime.minutes),
-      );
-      const maxTimeInMinutes = convertToMinutes(
-        convert24HourTo12Hour(maxTime.hours, maxTime.minutes),
-      );
-      const answerTimeInMinutes = convertToMinutes(answerTime);
-
-      return (
-        answerTimeInMinutes < minTimeInMinutes ||
-        answerTimeInMinutes > maxTimeInMinutes
-      );
+      return isOutsideOfTimes(answerTime, minTime, maxTime);
     },
 
-    isGreaterThanTimeRange(time: {
-      hours: number;
-      minutes: number;
-      fieldName?: 'from' | 'to';
-    }) {
-      if (
-        !time ||
-        typeof time.hours !== 'number' ||
-        typeof time.minutes !== 'number'
-      ) {
-        return false;
-      }
-
+    isGreaterThanTimeRange(time: HourMinute, fieldName: string) {
       const answerTimeRange = getAnswerTimeRange();
 
-      if (
-        !answerTimeRange ||
-        (!answerTimeRange.startTime && !answerTimeRange.endTime)
-      ) {
+      if (!answerTimeRange) {
         return false;
       }
-
-      const fieldName = time.fieldName || 'from';
-      const answerTime =
-        fieldName === 'from'
-          ? answerTimeRange.startTime
-          : answerTimeRange.endTime;
-
-      if (!answerTime) {
-        return false;
-      }
-
-      const normalizedConditionTime = timeToMinutes(time);
-      const normalizedAnswerTime = timeToMinutes(answerTime);
-
-      return normalizedAnswerTime > normalizedConditionTime;
+      return isGreaterThanTimeRange(answerTimeRange, { time, fieldName });
     },
 
-    isLessThanTimeRange(time: { hours: number; minutes: number }) {
+    isEqualToTimeRange(time: HourMinute, fieldName: string) {
       const answerTimeRange = getAnswerTimeRange();
-      if (!answerTimeRange || !answerTimeRange.startTime) {
+
+      if (!answerTimeRange) {
         return false;
       }
-      return timeToMinutes(answerTimeRange.startTime) < timeToMinutes(time);
+      return isEqualToTimeRange(answerTimeRange, { time, fieldName });
     },
 
-    isEqualToTimeRange(time: { hours: number; minutes: number }) {
+    isLessThanTimeRange(time: HourMinute, fieldName: string) {
       const answerTimeRange = getAnswerTimeRange();
-      if (!answerTimeRange || !answerTimeRange.startTime) {
+      if (!answerTimeRange) {
         return false;
       }
-      return timeToMinutes(answerTimeRange.startTime) === timeToMinutes(time);
+      return isLessThanTimeRange(answerTimeRange, { time, fieldName });
     },
 
-    isNotEqualToTimeRange(time: { hours: number; minutes: number }) {
+    isNotEqualToTimeRange(time: HourMinute, fieldName: string) {
       const answerTimeRange = getAnswerTimeRange();
-      if (!answerTimeRange || !answerTimeRange.startTime) {
+      if (!answerTimeRange) {
         return false;
       }
-      return timeToMinutes(answerTimeRange.startTime) !== timeToMinutes(time);
+      return isNotEqualToTimeRange(answerTimeRange, { time, fieldName });
     },
-
     isBetweenTimesRange(
-      minTime: { hours: number; minutes: number },
-      maxTime: { hours: number; minutes: number },
+      minTime: HourMinute,
+      maxTime: HourMinute,
+      fieldName: string,
     ) {
       const answerTimeRange = getAnswerTimeRange();
-      if (!answerTimeRange || !answerTimeRange.startTime) {
+      if (!answerTimeRange) {
         return false;
       }
-      const answerMinutes = timeToMinutes(answerTimeRange.startTime);
-      return (
-        answerMinutes >= timeToMinutes(minTime) &&
-        answerMinutes <= timeToMinutes(maxTime)
-      );
+      return isBetweenTimesRange(answerTimeRange, {
+        minTime,
+        maxTime,
+        fieldName,
+      });
     },
 
     isOutsideOfTimesRange(
-      minTime: { hours: number; minutes: number },
-      maxTime: { hours: number; minutes: number },
+      minTime: HourMinute,
+      maxTime: HourMinute,
+      fieldName: string,
     ) {
       const answerTimeRange = getAnswerTimeRange();
-      if (!answerTimeRange || !answerTimeRange.startTime) {
+
+      if (!answerTimeRange) {
         return false;
       }
-      const answerMinutes = timeToMinutes(answerTimeRange.startTime);
-      return (
-        answerMinutes < timeToMinutes(minTime) ||
-        answerMinutes > timeToMinutes(maxTime)
-      );
+
+      return isOutsideOfTimesRange(answerTimeRange, {
+        minTime,
+        maxTime,
+        fieldName,
+      });
     },
 
     isValidAnswer() {

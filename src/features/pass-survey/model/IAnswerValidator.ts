@@ -56,22 +56,36 @@ export interface IAnswerValidator {
     maxTime: { hours: number; minutes: number },
   ): boolean;
 
-  isGreaterThanTimeRange(time: { hours: number; minutes: number }): boolean;
+  isGreaterThanTimeRange(
+    time: { hours: number; minutes: number },
+    fieldName: string,
+  ): boolean;
 
-  isLessThanTimeRange(time: { hours: number; minutes: number }): boolean;
+  isLessThanTimeRange(
+    time: { hours: number; minutes: number },
+    fieldName: string,
+  ): boolean;
 
-  isEqualToTimeRange(time: { hours: number; minutes: number }): boolean;
+  isEqualToTimeRange(
+    time: { hours: number; minutes: number },
+    fieldName: string,
+  ): boolean;
 
-  isNotEqualToTimeRange(time: { hours: number; minutes: number }): boolean;
+  isNotEqualToTimeRange(
+    time: { hours: number; minutes: number },
+    fieldName: string,
+  ): boolean;
 
   isBetweenTimesRange(
     minTime: { hours: number; minutes: number },
     maxTime: { hours: number; minutes: number },
+    fieldName: string,
   ): boolean;
 
   isOutsideOfTimesRange(
     minTime: { hours: number; minutes: number },
     maxTime: { hours: number; minutes: number },
+    fieldName: string,
   ): boolean;
   isEqualToSliderRow(rowIndex: number, value: number): boolean;
 
