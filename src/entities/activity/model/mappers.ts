@@ -68,7 +68,8 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
               ...rest,
               activityItemName: itemName,
             };
-
+            // @ts-expect-error
+            delete updatedCondition.itemName;
             switch (condition.type) {
               case 'INCLUDES_OPTION':
               case 'NOT_INCLUDES_OPTION':
