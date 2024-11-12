@@ -22,7 +22,6 @@ import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
-import { useRefreshMutation } from '@entities/applet/model/hooks/useRefreshMutation.ts';
 import { CollectCompletionOutput } from '@widgets/survey/model/services/ICollectCompletionsService';
 
 import { CollectCompletionsService } from '../services/CollectCompletionsService';
@@ -48,8 +47,6 @@ export const useAutoCompletion = (): Result => {
   const dispatch = useAppDispatch();
 
   const queryClient = useQueryClient();
-
-  const { mutateAsync: refreshApplets } = useRefreshMutation();
 
   const hasItemsInQueue = useCallback(() => {
     return getDefaultAnswersQueueService().getLength() > 0;
@@ -183,7 +180,6 @@ export const useAutoCompletion = (): Result => {
 
       if (hasItemsInQueue()) {
         result = await getDefaultQueueProcessingService().process();
-        await refreshApplets();
       }
 
       if (forceRefreshNotifications || completionsCollected) {
@@ -192,13 +188,7 @@ export const useAutoCompletion = (): Result => {
 
       return result;
     },
-    [
-      mutex,
-      incompletedEntities,
-      createConstructService,
-      hasItemsInQueue,
-      refreshApplets,
-    ],
+    [mutex, incompletedEntities, createConstructService, hasItemsInQueue],
   );
 
   const hasExpiredEntity = useCallback((): boolean => {
