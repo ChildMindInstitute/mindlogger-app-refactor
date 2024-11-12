@@ -109,7 +109,7 @@ class GameManager {
       case .fixations:
         startFixationsTimestamp = time
       case .trial:
-          break
+        break
       case .feedback:
         startFeedbackTimestamp = time
       case .response:
@@ -143,7 +143,7 @@ class GameManager {
     var resultTime = (respondTouchButton! - startTrialTimestamp) * 1000
 
     if resultTime < 0 {
-        resultTime = 0
+      resultTime = 0
     }
 
     arrayTimes.append(Int(resultTime))
@@ -158,98 +158,98 @@ class GameManager {
     let correctChoice = gameParameters.trials[countTest].correctChoice
     let isCorrect = (button == .left && correctChoice == 0) || (button == .right && correctChoice == 1)
     if isCorrect {
-        correctAnswers += 1
+      correctAnswers += 1
     }
 
     let buttonPressed = (button == .left) ? "0" : "1"
     let model = FlankerModel(
-        rt: resultTime,
-        stimulus: text,
-        button_pressed: buttonPressed,
-        image_time: endTrialTimestamp! * 1000,
-        correct: isCorrect,
-        start_timestamp: 0,
-        tag: Constants.tag,
-        trial_index: countTest + 1,
-        start_time: startTrialTimestamp * 1000,
-        response_touch_timestamp: respondTouchButton! * 1000
+      rt: resultTime,
+      stimulus: text,
+      button_pressed: buttonPressed,
+      image_time: endTrialTimestamp! * 1000,
+      correct: isCorrect,
+      start_timestamp: 0,
+      tag: Constants.tag,
+      trial_index: countTest + 1,
+      start_time: startTrialTimestamp * 1000,
+      response_touch_timestamp: respondTouchButton! * 1000
     )
 
     resultManager.addStepData(data: model)
     delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: false, minAccuracy: gameParameters.minimumAccuracy)
 
     if gameParameters.showFeedback {
-        let feedbackText = isCorrect ? Constants.correctText : Constants.inCorrectText
-        let feedbackColor = isCorrect ? Constants.greenColor : Constants.redColor
-        delegate?.updateText(text: feedbackText, color: feedbackColor, font: Constants.smallFont, isStart: false, typeTime: .feedback)
-        let timer = Timer(timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(setDefaultText), userInfo: nil, repeats: false)
-        RunLoop.main.add(timer, forMode: .common)
-      } else {
-          setDefaultText(isFirst: false)
-      }
+      let feedbackText = isCorrect ? Constants.correctText : Constants.inCorrectText
+      let feedbackColor = isCorrect ? Constants.greenColor : Constants.redColor
+      delegate?.updateText(text: feedbackText, color: feedbackColor, font: Constants.smallFont, isStart: false, typeTime: .feedback)
+      let timer = Timer(timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(setDefaultText), userInfo: nil, repeats: false)
+      RunLoop.main.add(timer, forMode: .common)
+    } else {
+      setDefaultText(isFirst: false)
+    }
   }
 
   @objc func setDefaultText(isFirst: Bool) {
-      guard let gameParameters = gameParameters else { return }
+    guard let gameParameters = gameParameters else { return }
 
-      hasRespondedInCurrentTrial = false
-      delegate?.setEnableButton(isEnable: false)
+    hasRespondedInCurrentTrial = false
+    delegate?.setEnableButton(isEnable: false)
 
-      if !isFirst {
-        endFeedbackTimestamp = CACurrentMediaTime()
-        setEndTimeViewingImage(time: endFeedbackTimestamp!, isStart: false, type: .feedback)
-        countTest += 1
+    if !isFirst {
+      endFeedbackTimestamp = CACurrentMediaTime()
+      setEndTimeViewingImage(time: endFeedbackTimestamp!, isStart: false, type: .feedback)
+      countTest += 1
+    } else {
+      countTest = 0
+    }
+
+    if isEndGame() {
+      handleEndOfGame()
+      return
+    }
+
+    updateButtonTitle()
+
+    if gameParameters.showFixation {
+      setEndTimeViewingImage(time: CACurrentMediaTime(), isStart: true, type: .fixations)
+
+      if let image = URL(string: gameParameters.fixation), gameParameters.fixation.contains("https") {
+        delegate?.updateFixations(image: image, isStart: true, typeTime: .fixations)
       } else {
-        countTest = 0
+        delegate?.updateText(text: gameParameters.fixation, color: .black, font: Constants.bigFont, isStart: true, typeTime: .fixations)
       }
-
-      if isEndGame() {
-        handleEndOfGame()
-        return
-      }
-
-      updateButtonTitle()
-
-      if gameParameters.showFixation {
-          setEndTimeViewingImage(time: CACurrentMediaTime(), isStart: true, type: .fixations)
-
-          if let image = URL(string: gameParameters.fixation), gameParameters.fixation.contains("https") {
-            delegate?.updateFixations(image: image, isStart: true, typeTime: .fixations)
-          } else {
-            delegate?.updateText(text: gameParameters.fixation, color: .black, font: Constants.bigFont, isStart: true, typeTime: .fixations)
-          }
-          timerSetText = Timer(timeInterval: gameParameters.fixationDuration / 1000, target: self, selector: #selector(setText), userInfo: nil, repeats: false)
-          RunLoop.main.add(timerSetText!, forMode: .common)
-      } else {
-        setText()
-      }
+      timerSetText = Timer(timeInterval: gameParameters.fixationDuration / 1000, target: self, selector: #selector(setText), userInfo: nil, repeats: false)
+      RunLoop.main.add(timerSetText!, forMode: .common)
+    } else {
+      setText()
+    }
   }
 
   @objc func setText() {
-      guard let gameParameters = gameParameters else { return }
-      guard countTest < gameParameters.trials.count else {
-          handleEndOfGame()
-          return
-      }
+    guard let gameParameters = gameParameters else { return }
+    guard countTest < gameParameters.trials.count else {
+      handleEndOfGame()
+      return
+    }
 
-      setEndTimeViewingImage(time: CACurrentMediaTime(), isStart: false, type: .fixations)
+    setEndTimeViewingImage(time: CACurrentMediaTime(), isStart: false, type: .fixations)
+    startTrialTimestamp = CACurrentMediaTime()
+    setEndTimeViewingImage(time: startTrialTimestamp!, isStart: true, type: .trial)
 
-      startTrialTimestamp = CACurrentMediaTime()
-      setEndTimeViewingImage(time: startTrialTimestamp!, isStart: true, type: .trial)
+    text = gameParameters.trials[countTest].stimulus.en
 
-      text = gameParameters.trials[countTest].stimulus.en
+    if let image = URL(string: text), text.contains("https") {
+      delegate?.updateFixations(image: image, isStart: true, typeTime: .trial)
+    } else {
+      delegate?.updateText(text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
+    }
 
-      if let image = URL(string: text), text.contains("https") {
-          delegate?.updateFixations(image: image, isStart: true, typeTime: .trial)
-      } else {
-          delegate?.updateText(text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
-      }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+      self.delegate?.setEnableButton(isEnable: true)
+      self.timeResponse = Timer(timeInterval: gameParameters.trialDuration / 1000, target: self, selector: #selector(self.timeResponseFailed), userInfo: nil, repeats: false)
+      RunLoop.main.add(self.timeResponse!, forMode: .common)
+    }
 
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-          self.delegate?.setEnableButton(isEnable: true)
-          self.timeResponse = Timer(timeInterval: gameParameters.trialDuration / 1000, target: self, selector: #selector(self.timeResponseFailed), userInfo: nil, repeats: false)
-          RunLoop.main.add(self.timeResponse!, forMode: .common)
-      }
   }
 
   @objc func timeResponseFailed() {
@@ -264,22 +264,22 @@ class GameManager {
     setEndTimeViewingImage(time: startFeedbackTimestamp!, isStart: true, type: .feedback)
 
     if gameParameters.showFeedback {
-        delegate?.updateText(text: Constants.timeRespondText, color: .black, font: Constants.smallFont, isStart: false, typeTime: .feedback)
+      delegate?.updateText(text: Constants.timeRespondText, color: .black, font: Constants.smallFont, isStart: false, typeTime: .feedback)
     }
 
     guard let startTrialTimestamp = startTrialTimestamp else { return }
 
     let model = FlankerModel(
-        rt: 0.0,
-        stimulus: text,
-        button_pressed: nil,
-        image_time: endTrialTimestamp! * 1000, // має намалювати
-        correct: false,
-        start_timestamp: 0, // вже намальовано
-        tag: Constants.tag,
-        trial_index: countTest + 1,
-        start_time: startTrialTimestamp * 1000,
-        response_touch_timestamp: 0
+      rt: 0.0,
+      stimulus: text,
+      button_pressed: nil,
+      image_time: endTrialTimestamp! * 1000,  // має намалювати
+      correct: false,
+      start_timestamp: 0,  // вже намальовано
+      tag: Constants.tag,
+      trial_index: countTest + 1,
+      start_time: startTrialTimestamp * 1000,
+      response_touch_timestamp: 0
     )
 
     resultManager.addStepData(data: model)
@@ -340,41 +340,41 @@ class GameManager {
 
 private extension GameManager {
   func updateButtonTitle() {
-      guard let gameParameters = gameParameters else { return }
-      guard countTest < gameParameters.trials.count else { return }
+    guard let gameParameters = gameParameters else { return }
+    guard countTest < gameParameters.trials.count else { return }
 
-      let choices = gameParameters.trials[countTest].choices
-      let countButton = choices.count
+    let choices = gameParameters.trials[countTest].choices
+    let countButton = choices.count
 
-      var leftTitle: String? = nil
-      var rightTitle: String? = nil
-      var leftImage: URL? = nil
-      var rightImage: URL? = nil
+    var leftTitle: String? = nil
+    var rightTitle: String? = nil
+    var leftImage: URL? = nil
+    var rightImage: URL? = nil
 
-      if countButton >= 1 {
-          let leftChoice = choices[0].name.en
-          if let url = URL(string: leftChoice), leftChoice.contains("https") {
-              leftImage = url
-          } else {
-              leftTitle = leftChoice
-          }
+    if countButton >= 1 {
+      let leftChoice = choices[0].name.en
+      if let url = URL(string: leftChoice), leftChoice.contains("https") {
+        leftImage = url
+      } else {
+        leftTitle = leftChoice
       }
+    }
 
-      if countButton == 2 {
-          let rightChoice = choices[1].name.en
-          if let url = URL(string: rightChoice), rightChoice.contains("https") {
-              rightImage = url
-          } else {
-              rightTitle = rightChoice
-          }
+    if countButton == 2 {
+      let rightChoice = choices[1].name.en
+      if let url = URL(string: rightChoice), rightChoice.contains("https") {
+        rightImage = url
+      } else {
+        rightTitle = rightChoice
       }
+    }
 
-      delegate?.updateTitleButton(
-          left: leftTitle,
-          right: rightTitle,
-          leftImage: leftImage,
-          rightImage: rightImage,
-          countButton: countButton
-      )
+    delegate?.updateTitleButton(
+      left: leftTitle,
+      right: rightTitle,
+      leftImage: leftImage,
+      rightImage: rightImage,
+      countButton: countButton
+    )
   }
 }
