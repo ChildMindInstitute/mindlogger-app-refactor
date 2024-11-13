@@ -264,9 +264,9 @@ class GameManager {
     let model = FlankerModel(rt: 0.0,
                              stimulus: text,
                              button_pressed: nil,
-                             image_time: endTrialTimestamp! * 1000,// має намалювати
+                             image_time: endTrialTimestamp! * 1000, // має намалювати
                              correct: false,
-                             start_timestamp: 0,// вже намальовано
+                             start_timestamp: 0, // вже намальовано
                              tag: Constants.tag,
                              trial_index: countTest + 1,
                              start_time: startTrialTimestamp * 1000,
