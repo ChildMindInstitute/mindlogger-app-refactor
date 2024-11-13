@@ -68,6 +68,9 @@ export const LoginScreen: FC = () => {
             jc={isTablet() ? 'space-around' : 'center'}
             mb={isTablet() ? 50 : 40}
             gap={isTablet() ? 0 : 20}
+            width="100%"
+            flexWrap="wrap"
+            ai="center"
           >
             <Link
               textDecorationLine="underline"
