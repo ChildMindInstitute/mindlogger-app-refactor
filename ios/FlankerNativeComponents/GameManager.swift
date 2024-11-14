@@ -157,18 +157,16 @@ class GameManager {
     }
 
     let buttonPressed = (button == .left) ? "0" : "1"
-    let model = FlankerModel(
-        rt: resultTime,
-        stimulus: text,
-        button_pressed: buttonPressed,
-        image_time: endTrialTimestamp! * 1000,
-        correct: isCorrect,
-        start_timestamp: 0,
-        tag: Constants.tag,
-        trial_index: countTest + 1,
-        start_time: startTrialTimestamp * 1000,
-        response_touch_timestamp: respondTouchButton! * 1000
-    )
+    let model = FlankerModel(rt: resultTime,
+                             stimulus: text,
+                             button_pressed: buttonPressed,
+                             image_time: endTrialTimestamp! * 1000,
+                             correct: isCorrect,
+                             start_timestamp: 0,
+                             tag: Constants.tag,
+                             trial_index: countTest + 1,
+                             start_time: startTrialTimestamp * 1000,
+                             response_touch_timestamp: respondTouchButton! * 1000)
 
     resultManager.addStepData(data: model)
     delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: false, minAccuracy: gameParameters.minimumAccuracy)
@@ -270,8 +268,7 @@ class GameManager {
                              tag: Constants.tag,
                              trial_index: countTest + 1,
                              start_time: startTrialTimestamp * 1000,
-                             response_touch_timestamp: 0
-                            )
+                             response_touch_timestamp: 0)
 
     resultManager.addStepData(data: model)
     delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil,isShowResults: gameParameters.showResults, minAccuracy: gameParameters.minimumAccuracy)
