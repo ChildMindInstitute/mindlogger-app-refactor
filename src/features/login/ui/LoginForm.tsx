@@ -59,6 +59,11 @@ export const LoginForm: FC<Props> = props => {
         password: variables.password,
       };
 
+      // If the previously logged-in user's ID is not the same as the just
+      // logged-in user's ID, then clear previously stored data.
+      // We are able to make this determination because previously stored data
+      // is not cleared on log out (only session info is cleared on log out),
+      // and this is an intended behaviour.
       if (userParams.userId !== userId) {
         await cleanupData();
         dispatch(cleanUpAction());

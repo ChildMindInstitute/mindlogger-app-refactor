@@ -25,6 +25,9 @@ export const hasPendingMutations = (queryClient: QueryClient): boolean => {
 
 export const getAppletsKey = () => ['applets'] as AppQueryKey;
 
+export const getAppletBaseInfoKey = (appletId: string) =>
+  ['base-info', { appletId }] as AppQueryKey;
+
 export const getAppletDetailsKey = (appletId: string) =>
   ['applets', { appletId }] as AppQueryKey;
 
