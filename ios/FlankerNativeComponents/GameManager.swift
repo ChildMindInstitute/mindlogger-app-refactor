@@ -145,10 +145,8 @@ class GameManager {
     delegate?.updateTime(time: String(format: "%.3f", resultTime))
 
     endTrialTimestamp = respondTouchButton
-    setEndTimeViewingImage(time: endTrialTimestamp!, isStart: false, type: .trial)
 
     startFeedbackTimestamp = CACurrentMediaTime()
-    setEndTimeViewingImage(time: startFeedbackTimestamp!, isStart: true, type: .feedback)
 
     let correctChoice = gameParameters.trials[countTest].correctChoice
     let isCorrect = (button == .left && correctChoice == 0) || (button == .right && correctChoice == 1)
@@ -190,7 +188,6 @@ class GameManager {
 
     if !isFirst {
       endFeedbackTimestamp = CACurrentMediaTime()
-      setEndTimeViewingImage(time: endFeedbackTimestamp!, isStart: false, type: .feedback)
       countTest += 1
     } else {
       countTest = 0
@@ -204,8 +201,7 @@ class GameManager {
     updateButtonTitle()
 
     if gameParameters.showFixation {
-      setEndTimeViewingImage(time: CACurrentMediaTime(), isStart: true, type: .fixations)
-
+      startFixationsTimestamp = CACurrentMediaTime()
       if let image = URL(string: gameParameters.fixation), gameParameters.fixation.contains("https") {
         delegate?.updateFixations(image: image, isStart: true, typeTime: .fixations)
       } else {
@@ -225,7 +221,7 @@ class GameManager {
         return
     }
 
-    setEndTimeViewingImage(time: CACurrentMediaTime(), isStart: false, type: .fixations)
+    endFixationsTimestamp = CACurrentMediaTime()
 
     startTrialTimestamp = CACurrentMediaTime()
 
