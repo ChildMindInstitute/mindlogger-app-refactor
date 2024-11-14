@@ -204,15 +204,15 @@ class GameManager {
     updateButtonTitle()
 
     if gameParameters.showFixation {
-        setEndTimeViewingImage(time: CACurrentMediaTime(), isStart: true, type: .fixations)
+      setEndTimeViewingImage(time: CACurrentMediaTime(), isStart: true, type: .fixations)
 
-        if let image = URL(string: gameParameters.fixation), gameParameters.fixation.contains("https") {
-          delegate?.updateFixations(image: image, isStart: true, typeTime: .fixations)
-        } else {
-          delegate?.updateText(text: gameParameters.fixation, color: .black, font: Constants.bigFont, isStart: true, typeTime: .fixations)
-        }
-        timerSetText = Timer(timeInterval: gameParameters.fixationDuration / 1000, target: self, selector: #selector(setText), userInfo: nil, repeats: false)
-        RunLoop.main.add(timerSetText!, forMode: .common)
+      if let image = URL(string: gameParameters.fixation), gameParameters.fixation.contains("https") {
+        delegate?.updateFixations(image: image, isStart: true, typeTime: .fixations)
+      } else {
+        delegate?.updateText(text: gameParameters.fixation, color: .black, font: Constants.bigFont, isStart: true, typeTime: .fixations)
+      }
+      timerSetText = Timer(timeInterval: gameParameters.fixationDuration / 1000, target: self, selector: #selector(setText), userInfo: nil, repeats: false)
+      RunLoop.main.add(timerSetText!, forMode: .common)
     } else {
       setText()
     }
