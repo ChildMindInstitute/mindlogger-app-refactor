@@ -178,7 +178,7 @@ class GameManager {
       let timer = Timer(timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(setDefaultText), userInfo: nil, repeats: false)
       RunLoop.main.add(timer, forMode: .common)
     } else {
-        setDefaultText(isFirst: false)
+      setDefaultText(isFirst: false)
     }
   }
 
