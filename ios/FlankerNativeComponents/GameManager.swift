@@ -232,15 +232,15 @@ class GameManager {
     text = gameParameters.trials[countTest].stimulus.en
 
     if let image = URL(string: text), text.contains("https") {
-        delegate?.updateFixations(image: image, isStart: true, typeTime: .trial)
+      delegate?.updateFixations(image: image, isStart: true, typeTime: .trial)
     } else {
-        delegate?.updateText(text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
+      delegate?.updateText(text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
     }
 
     DispatchQueue.main.asyncAfter(deadline: .now()) {
-        self.delegate?.setEnableButton(isEnable: true)
-        self.timeResponse = Timer(timeInterval: gameParameters.trialDuration / 1000, target: self, selector: #selector(self.timeResponseFailed), userInfo: nil, repeats: false)
-        RunLoop.main.add(self.timeResponse!, forMode: .common)
+      self.delegate?.setEnableButton(isEnable: true)
+      self.timeResponse = Timer(timeInterval: gameParameters.trialDuration / 1000, target: self, selector: #selector(self.timeResponseFailed), userInfo: nil, repeats: false)
+      RunLoop.main.add(self.timeResponse!, forMode: .common)
     }
   }
 
