@@ -153,7 +153,7 @@ class GameManager {
     let correctChoice = gameParameters.trials[countTest].correctChoice
     let isCorrect = (button == .left && correctChoice == 0) || (button == .right && correctChoice == 1)
     if isCorrect {
-        correctAnswers += 1
+      correctAnswers += 1
     }
 
     let buttonPressed = (button == .left) ? "0" : "1"
@@ -335,29 +335,29 @@ private extension GameManager {
     var rightImage: URL? = nil
 
     if countButton >= 1 {
-        let leftChoice = choices[0].name.en
-        if let url = URL(string: leftChoice), leftChoice.contains("https") {
-            leftImage = url
-        } else {
-            leftTitle = leftChoice
-        }
+      let leftChoice = choices[0].name.en
+      if let url = URL(string: leftChoice), leftChoice.contains("https") {
+        leftImage = url
+      } else {
+        leftTitle = leftChoice
+      }
     }
 
     if countButton == 2 {
-        let rightChoice = choices[1].name.en
-        if let url = URL(string: rightChoice), rightChoice.contains("https") {
-            rightImage = url
-        } else {
-            rightTitle = rightChoice
-        }
+      let rightChoice = choices[1].name.en
+      if let url = URL(string: rightChoice), rightChoice.contains("https") {
+        rightImage = url
+      } else {
+        rightTitle = rightChoice
+      }
     }
 
     delegate?.updateTitleButton(
-        left: leftTitle,
-        right: rightTitle,
-        leftImage: leftImage,
-        rightImage: rightImage,
-        countButton: countButton
+      left: leftTitle,
+      right: rightTitle,
+      leftImage: leftImage,
+      rightImage: rightImage,
+      countButton: countButton
     )
   }
 }
