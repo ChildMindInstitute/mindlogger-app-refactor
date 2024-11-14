@@ -256,7 +256,7 @@ class GameManager {
     startFeedbackTimestamp = CACurrentMediaTime()
 
     if gameParameters.showFeedback {
-        delegate?.updateText(text: Constants.timeRespondText, color: .black, font: Constants.smallFont, isStart: false, typeTime: .feedback)
+      delegate?.updateText(text: Constants.timeRespondText, color: .black, font: Constants.smallFont, isStart: false, typeTime: .feedback)
     }
 
     guard let startTrialTimestamp = startTrialTimestamp else { return }
