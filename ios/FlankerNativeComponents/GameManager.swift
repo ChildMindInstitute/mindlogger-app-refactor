@@ -77,6 +77,12 @@ class GameManager {
 
   weak var delegate: GameManagerProtocol?
 
+  private let bootTime: Double = {
+        let uptime = CACurrentMediaTime()
+        let nowTime = Date().timeIntervalSince1970
+        return nowTime - uptime
+    }()
+    
   func startGame(timeSpeed: Float, isShowAnswers: Bool, countGame: Int) {
     countAllGame = countGame
     timeSpeedGame = TimeInterval(timeSpeed)
@@ -132,7 +138,7 @@ class GameManager {
   func checkedAnswer(button: SelectedButton) {
     guard !hasRespondedInCurrentTrial else { return }
     hasRespondedInCurrentTrial = true
-    respondTouchButton = Date().timeIntervalSince1970
+    respondTouchButton = bootTime + CACurrentMediaTime()
     invalidateTimers()
 
     delegate?.setEnableButton(isEnable: false)
@@ -144,9 +150,9 @@ class GameManager {
     arrayTimes.append(Int(resultTime))
     delegate?.updateTime(time: String(format: "%.3f", resultTime))
 
-    endTrialTimestamp = Date().timeIntervalSince1970
+    endTrialTimestamp = respondTouchButton
 
-    startFeedbackTimestamp = Date().timeIntervalSince1970
+    startFeedbackTimestamp = bootTime + CACurrentMediaTime()
 
     let correctChoice = gameParameters.trials[countTest].correctChoice
     let isCorrect = (button == .left && correctChoice == 0) || (button == .right && correctChoice == 1)
@@ -187,7 +193,7 @@ class GameManager {
     delegate?.setEnableButton(isEnable: false)
 
     if !isFirst {
-      endFeedbackTimestamp = Date().timeIntervalSince1970
+      endFeedbackTimestamp = bootTime + CACurrentMediaTime()
       countTest += 1
     } else {
       countTest = 0
@@ -201,7 +207,7 @@ class GameManager {
     updateButtonTitle()
 
     if gameParameters.showFixation {
-      startFixationsTimestamp = Date().timeIntervalSince1970
+      startFixationsTimestamp = bootTime + CACurrentMediaTime()
       if let image = URL(string: gameParameters.fixation), gameParameters.fixation.contains("https") {
         delegate?.updateFixations(image: image, isStart: true, typeTime: .fixations)
       } else {
@@ -221,9 +227,9 @@ class GameManager {
         return
     }
 
-    endFixationsTimestamp = Date().timeIntervalSince1970
+    endFixationsTimestamp = bootTime + CACurrentMediaTime()
 
-    startTrialTimestamp = Date().timeIntervalSince1970
+    startTrialTimestamp = bootTime + CACurrentMediaTime()
 
     text = gameParameters.trials[countTest].stimulus.en
 
@@ -245,9 +251,9 @@ class GameManager {
 
     delegate?.setEnableButton(isEnable: false)
 
-    endTrialTimestamp = Date().timeIntervalSince1970
+    endTrialTimestamp = bootTime + CACurrentMediaTime()
 
-    startFeedbackTimestamp = Date().timeIntervalSince1970
+    startFeedbackTimestamp = bootTime + CACurrentMediaTime()
 
     if gameParameters.showFeedback {
       delegate?.updateText(text: Constants.timeRespondText, color: .black, font: Constants.smallFont, isStart: false, typeTime: .feedback)
