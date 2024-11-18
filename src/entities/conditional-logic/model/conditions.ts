@@ -89,7 +89,7 @@ export const isLessThanDate = (input: string, date: string) => {
 
 export const isEqualToDate = (input: Maybe<string>, date: string) => {
   if (!input) return false;
-  return input ? isEqual(parseISO(input), parseISO(date)) : false;
+  return isEqual(parseISO(input), parseISO(date));
 };
 
 export const isBetweenDates = (
