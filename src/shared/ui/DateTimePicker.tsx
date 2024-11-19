@@ -73,7 +73,10 @@ export const DateTimePicker: FC<Props & AccessibilityProps> = ({
         isVisible={isDatePickerVisible}
         date={value ? new Date(value) : new Date()}
         mode={mode}
-        onConfirm={confirm}
+        onConfirm={date => {
+          const utcDate = new Date(date.toISOString());
+          confirm(utcDate);
+        }}
         onCancel={hideDatePicker}
       />
     </>
