@@ -56,16 +56,6 @@ export function AnswerValidator(
     return answer ?? null;
   };
 
-  function isValidTimeFormat(
-    time: { hours: number; minutes: number } | null | undefined,
-  ): boolean {
-    return (
-      !!time &&
-      typeof time.hours === 'number' &&
-      typeof time.minutes === 'number'
-    );
-  }
-
   const getAnswerTime = (): { hours: number; minutes: number } | null => {
     let answer = currentAnswer?.answer as Maybe<{
       hours: number;
@@ -134,27 +124,22 @@ export function AnswerValidator(
 
     isEqualToSliderRow(rowIndex: number, value: number) {
       const rowValue = getSliderRowValue(rowIndex);
-      if (!rowValue) return false;
       return isEqualToSliderRow(rowValue, value);
     },
 
     isNotEqualToSliderRow(rowIndex: number, value: number) {
       const rowValue = getSliderRowValue(rowIndex);
-      if (!rowValue) return false;
-
       return isNotEqualToSliderRow(rowValue, value);
     },
 
     isGreaterThanSliderRow(rowIndex: number, value: number) {
       const rowValue = getSliderRowValue(rowIndex);
-      if (!rowValue) return false;
 
       return isGreaterThanSliderRow(rowValue, value);
     },
 
     isLessThanSliderRow(rowIndex: number, value: number) {
       const rowValue = getSliderRowValue(rowIndex);
-      if (!rowValue) return false;
       return isLessThanSliderRow(rowValue, value);
     },
 
@@ -164,7 +149,6 @@ export function AnswerValidator(
       maxValue: number,
     ) {
       const rowValue = getSliderRowValue(rowIndex);
-      if (!rowValue) return false;
 
       return isBetweenSliderRowValues(rowValue, minValue, maxValue);
     },
@@ -175,8 +159,6 @@ export function AnswerValidator(
       maxValue: number,
     ) {
       const rowValue = getSliderRowValue(rowIndex);
-
-      if (!rowValue) return false;
 
       return isOutsideOfSliderRowValues(rowValue, minValue, maxValue);
     },
@@ -253,31 +235,26 @@ export function AnswerValidator(
 
     isGreaterThanDate(date: string) {
       const answerDate = getAnswerDate();
-      if (!answerDate) return false;
       return isGreaterThanDate(answerDate, date);
     },
 
     isLessThanDate(date: string) {
       const answerDate = getAnswerDate();
-      if (!answerDate) return false;
       return isLessThanDate(answerDate, date);
     },
 
     isEqualToDate(date: string) {
       const answerDate = getAnswerDate();
-      if (!answerDate) return false;
       return isEqualToDate(answerDate, date);
     },
 
     isNotEqualToDate(date: string) {
       const answerDate = getAnswerDate();
-      if (!answerDate) return false;
       return isNotEqualToDate(answerDate, date);
     },
 
     isBetweenDates(minDate: string, maxDate: string) {
       const answerDate = getAnswerDate();
-      if (!answerDate) return false;
       return isBetweenDates(answerDate, minDate, maxDate);
     },
 
@@ -288,37 +265,24 @@ export function AnswerValidator(
 
     isGreaterThanTime(time: { hours: number; minutes: number }) {
       const answerTime = getAnswerTime();
-
-      if (!isValidTimeFormat(time) || !answerTime) {
-        return false;
-      }
       return isGreaterThanTime(answerTime, time);
     },
 
     isLessThanTime(time: { hours: number; minutes: number }) {
       const answerTime = getAnswerTime();
 
-      if (!isValidTimeFormat(time) || !answerTime) {
-        return false;
-      }
       return isLessThanTime(answerTime, time);
     },
 
     isEqualToTime(time: { hours: number; minutes: number }) {
       const answerTime = getAnswerTime();
 
-      if (!isValidTimeFormat(time) || !answerTime) {
-        return false;
-      }
       return isEqualToTime(answerTime, time);
     },
 
     isNotEqualToTime(time: { hours: number; minutes: number }) {
       const answerTime = getAnswerTime();
 
-      if (!isValidTimeFormat(time) || !answerTime) {
-        return false;
-      }
       return isNotEqualToTime(answerTime, time);
     },
 
@@ -327,7 +291,6 @@ export function AnswerValidator(
       maxTime: { hours: number; minutes: number },
     ) {
       const answerTime = getAnswerTime();
-      if (!answerTime) return false;
       return isBetweenTimes(answerTime, minTime, maxTime);
     },
 
@@ -336,41 +299,28 @@ export function AnswerValidator(
       maxTime: { hours: number; minutes: number },
     ) {
       const answerTime = getAnswerTime();
-      if (!answerTime) return false;
       return isOutsideOfTimes(answerTime, minTime, maxTime);
     },
 
     isGreaterThanTimeRange(time: HourMinute, fieldName: string) {
       const answerTimeRange = getAnswerTimeRange();
 
-      if (!answerTimeRange) {
-        return false;
-      }
       return isGreaterThanTimeRange(answerTimeRange, { time, fieldName });
     },
 
     isEqualToTimeRange(time: HourMinute, fieldName: string) {
       const answerTimeRange = getAnswerTimeRange();
 
-      if (!answerTimeRange) {
-        return false;
-      }
       return isEqualToTimeRange(answerTimeRange, { time, fieldName });
     },
 
     isLessThanTimeRange(time: HourMinute, fieldName: string) {
       const answerTimeRange = getAnswerTimeRange();
-      if (!answerTimeRange) {
-        return false;
-      }
       return isLessThanTimeRange(answerTimeRange, { time, fieldName });
     },
 
     isNotEqualToTimeRange(time: HourMinute, fieldName: string) {
       const answerTimeRange = getAnswerTimeRange();
-      if (!answerTimeRange) {
-        return false;
-      }
       return isNotEqualToTimeRange(answerTimeRange, { time, fieldName });
     },
     isBetweenTimesRange(
@@ -379,9 +329,6 @@ export function AnswerValidator(
       fieldName: string,
     ) {
       const answerTimeRange = getAnswerTimeRange();
-      if (!answerTimeRange) {
-        return false;
-      }
       return isBetweenTimesRange(answerTimeRange, {
         minTime,
         maxTime,
@@ -395,10 +342,6 @@ export function AnswerValidator(
       fieldName: string,
     ) {
       const answerTimeRange = getAnswerTimeRange();
-
-      if (!answerTimeRange) {
-        return false;
-      }
 
       return isOutsideOfTimesRange(answerTimeRange, {
         minTime,
