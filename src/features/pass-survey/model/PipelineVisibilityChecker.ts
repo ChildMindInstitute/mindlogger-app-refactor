@@ -11,9 +11,13 @@ export function PipelineVisibilityChecker(
     return { hours, minutes };
   }
 
-  function isValidTimeFormat(time: any): boolean {
+  function isValidTimeFormat(
+    time: { hours: number; minutes: number } | null | undefined,
+  ): boolean {
     return (
-      time && typeof time.hours === 'number' && typeof time.minutes === 'number'
+      !!time &&
+      typeof time.hours === 'number' &&
+      typeof time.minutes === 'number'
     );
   }
   function isItemVisible(index: number) {

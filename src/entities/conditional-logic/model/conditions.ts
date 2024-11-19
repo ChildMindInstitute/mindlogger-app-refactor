@@ -124,14 +124,20 @@ const getTimeBasedOnFieldName = (
 ): HourMinute | null => {
   return fieldName === 'from' ? timeRange.startTime : timeRange.endTime;
 };
-
+const parseTimeString = (time: string): HourMinute => {
+  const [hours, minutes] = time.split(':').map(Number);
+  return { hours, minutes };
+};
 export const isGreaterThanTimeRange = (
   timeRange: { startTime: HourMinute | null; endTime: HourMinute | null },
   { time, fieldName }: { time: HourMinute; fieldName: string },
 ): boolean => {
   const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
+  const normalizedTime =
+    typeof time === 'string' ? parseTimeString(time) : time;
+
   return selectedTime
-    ? timeToMinutes(selectedTime) > timeToMinutes(time)
+    ? timeToMinutes(selectedTime) > timeToMinutes(normalizedTime)
     : false;
 };
 
@@ -140,8 +146,11 @@ export const isLessThanTimeRange = (
   { time, fieldName }: { time: HourMinute; fieldName: string },
 ): boolean => {
   const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
+  const normalizedTime =
+    typeof time === 'string' ? parseTimeString(time) : time;
+
   return selectedTime
-    ? timeToMinutes(selectedTime) < timeToMinutes(time)
+    ? timeToMinutes(selectedTime) < timeToMinutes(normalizedTime)
     : false;
 };
 
@@ -150,8 +159,11 @@ export const isEqualToTimeRange = (
   { time, fieldName }: { time: HourMinute; fieldName: string },
 ): boolean => {
   const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
+  const normalizedTime =
+    typeof time === 'string' ? parseTimeString(time) : time;
+
   return selectedTime
-    ? timeToMinutes(selectedTime) == timeToMinutes(time)
+    ? timeToMinutes(selectedTime) == timeToMinutes(normalizedTime)
     : false;
 };
 
@@ -160,8 +172,11 @@ export const isNotEqualToTimeRange = (
   { time, fieldName }: { time: HourMinute; fieldName: string },
 ): boolean => {
   const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
+  const normalizedTime =
+    typeof time === 'string' ? parseTimeString(time) : time;
+
   return selectedTime
-    ? timeToMinutes(selectedTime) !== timeToMinutes(time)
+    ? timeToMinutes(selectedTime) !== timeToMinutes(normalizedTime)
     : false;
 };
 

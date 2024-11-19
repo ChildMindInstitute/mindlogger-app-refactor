@@ -51,23 +51,21 @@ export function AnswerValidator(
   const currentPipelineItem = items?.[step];
   const currentAnswer = answers?.[step];
 
-  const getTimeBasedOnFieldName = (
-    fieldName: string,
-    timeRange: { startTime: HourMinute | null; endTime: HourMinute | null },
-  ): HourMinute | null => {
-    return fieldName === 'from' ? timeRange.startTime : timeRange.endTime;
-  };
-
   const getAnswerDate = (): string | null => {
     const answer = currentAnswer?.answer as Maybe<string>;
     return answer ?? null;
   };
 
-  function isValidTimeFormat(time: any): boolean {
+  function isValidTimeFormat(
+    time: { hours: number; minutes: number } | null | undefined,
+  ): boolean {
     return (
-      time && typeof time.hours === 'number' && typeof time.minutes === 'number'
+      !!time &&
+      typeof time.hours === 'number' &&
+      typeof time.minutes === 'number'
     );
   }
+
   const getAnswerTime = (): { hours: number; minutes: number } | null => {
     let answer = currentAnswer?.answer as Maybe<{
       hours: number;
@@ -80,20 +78,6 @@ export function AnswerValidator(
 
     return answer ?? null;
   };
-
-  function convertToMinutes(time: {
-    hours: number;
-    minutes: number;
-    period?: 'AM' | 'PM';
-  }): number {
-    let totalMinutes = time.hours * 60 + time.minutes;
-    if (time.period === 'PM' && time.hours !== 12) {
-      totalMinutes += 12 * 60;
-    } else if (time.period === 'AM' && time.hours === 12) {
-      totalMinutes -= 12 * 60;
-    }
-    return totalMinutes;
-  }
 
   const getAnswerTimeRange = (): {
     startTime: { hours: number; minutes: number } | null;
@@ -136,10 +120,6 @@ export function AnswerValidator(
       return optionIds;
     }
     return null;
-  };
-
-  const timeToMinutes = (time: { hours: number; minutes: number }): number => {
-    return time.hours * 60 + time.minutes;
   };
 
   return {

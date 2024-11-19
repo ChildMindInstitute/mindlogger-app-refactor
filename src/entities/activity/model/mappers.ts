@@ -68,8 +68,6 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
               ...rest,
               activityItemName: itemName,
             };
-            // @ts-expect-error
-            delete updatedCondition.itemName;
             switch (condition.type) {
               case 'INCLUDES_OPTION':
               case 'NOT_INCLUDES_OPTION':
@@ -80,10 +78,31 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
                 };
                 break;
 
+              case 'NOT_EQUAL_TO_ROW_OPTION':
+              case 'EQUAL_TO_ROW_OPTION':
               case 'INCLUDES_ROW_OPTION':
               case 'NOT_INCLUDES_ROW_OPTION':
                 updatedCondition.payload = {
                   optionValue: condition.payload.optionValue,
+                  rowIndex: condition.payload.rowIndex,
+                };
+                break;
+
+              case 'GREATER_THAN_SLIDER_ROWS':
+              case 'LESS_THAN_SLIDER_ROWS':
+              case 'NOT_EQUAL_TO_SLIDER_ROWS':
+              case 'EQUAL_TO_SLIDER_ROWS':
+                updatedCondition.payload = {
+                  value: condition.payload.value,
+                  rowIndex: condition.payload.rowIndex,
+                };
+                break;
+
+              case 'BETWEEN_SLIDER_ROWS':
+              case 'OUTSIDE_OF_SLIDER_ROWS':
+                updatedCondition.payload = {
+                  maxValue: condition.payload.maxValue,
+                  minValue: condition.payload.minValue,
                   rowIndex: condition.payload.rowIndex,
                 };
                 break;
@@ -110,6 +129,8 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
                 updatedCondition.payload = { time: condition.payload.time };
                 break;
 
+              case 'OUTSIDE_OF_TIMES_RANGE':
+              case 'BETWEEN_TIMES_RANGE':
               case 'BETWEEN_TIMES':
               case 'OUTSIDE_OF_TIMES':
                 updatedCondition.payload = {
@@ -125,14 +146,6 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
                 updatedCondition.payload = {
                   time: condition.payload.time,
                   fieldName: condition.payload.fieldName,
-                };
-                break;
-
-              case 'BETWEEN_TIMES_RANGE':
-              case 'OUTSIDE_OF_TIMES_RANGE':
-                updatedCondition.payload = {
-                  minTime: condition.payload.minTime,
-                  maxTime: condition.payload.maxTime,
                 };
                 break;
 

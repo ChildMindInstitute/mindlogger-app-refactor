@@ -34,16 +34,16 @@ export type Condition =
   | NotEqualToTimeRangeCondition
   | BetweenTimesRangeCondition
   | OutsideOfTimesRangeCondition
-  | GreaterThanSliderRowCondition
-  | LessThanSliderRowCondition
-  | EqualToSliderRowCondition
-  | NotEqualToSliderRowCondition
-  | BetweenSliderRowCondition
-  | OutsideOfSliderRowCondition
   | EqualToRowOptionCondition
   | NotEqualToRowOptionCondition
   | IncludesRowOptionCondition
-  | NotIncludesRowOptionCondition;
+  | NotIncludesRowOptionCondition
+  | EqualToSliderRowCondition
+  | NotEqualToSliderRowCondition
+  | GreaterThanSliderRowCondition
+  | LessThanSliderRowCondition
+  | BetweenSliderRowCondition
+  | OutsideOfSliderRowCondition;
 
 export type ConditionType = Condition['type'];
 
