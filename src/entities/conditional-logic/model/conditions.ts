@@ -80,16 +80,16 @@ export const doesNotIncludeValue = <TItem>(
 };
 
 export const isGreaterThanDate = (input: string, date: string) => {
-  return input ? isAfter(parseISO(input), parseISO(date)) : false;
+  return isAfter(parseISO(input), parseISO(date));
 };
 
 export const isLessThanDate = (input: string, date: string) => {
-  return input ? isBefore(parseISO(input), parseISO(date)) : false;
+  return isBefore(parseISO(input), parseISO(date));
 };
 
 export const isEqualToDate = (input: Maybe<string>, date: string) => {
   if (!input) return false;
-  return input ? isEqual(parseISO(input), parseISO(date)) : false;
+  return isEqual(parseISO(input), parseISO(date));
 };
 
 export const isBetweenDates = (
@@ -104,7 +104,7 @@ export const isBetweenDates = (
 };
 
 export const isNotEqualToDate = (input: Maybe<string>, date: string) => {
-  return input ? !isEqual(parseISO(input), parseISO(date)) : false;
+  return !isEqual(parseISO(input), parseISO(date));
 };
 
 export const isOutsideOfDates = (
