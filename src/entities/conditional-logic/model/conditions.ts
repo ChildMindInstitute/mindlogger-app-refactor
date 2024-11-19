@@ -188,7 +188,7 @@ export const isEqualToTimeRange = (
     typeof time === 'string' ? parseTimeString(time) : time;
 
   return selectedTime
-    ? timeToMinutes(selectedTime) == timeToMinutes(normalizedTime)
+    ? timeToMinutes(selectedTime) === timeToMinutes(normalizedTime)
     : false;
 };
 
@@ -293,7 +293,7 @@ export const isEqualToTime = (
   const inputMinutes = timeToMinutes(input);
   const conditionMinutes = timeToMinutes(time);
 
-  const result = inputMinutes == conditionMinutes;
+  const result = inputMinutes === conditionMinutes;
 
   return result;
 };
