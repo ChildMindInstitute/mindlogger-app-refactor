@@ -137,6 +137,7 @@ class GameManager {
 
   func checkedAnswer(button: SelectedButton) {
     guard !hasRespondedInCurrentTrial else { return }
+    guard let startTrialTimestamp = startTrialTimestamp else { return }
     hasRespondedInCurrentTrial = true
     respondTouchButton = bootTime + CACurrentMediaTime()
     invalidateTimers()
@@ -144,7 +145,6 @@ class GameManager {
     delegate?.setEnableButton(isEnable: false)
 
     guard let gameParameters = gameParameters else { return }
-    guard let startTrialTimestamp = startTrialTimestamp else { return }
     var resultTime = (respondTouchButton! - startTrialTimestamp) * 1000
 
     arrayTimes.append(Int(resultTime))
@@ -189,6 +189,8 @@ class GameManager {
   @objc func setDefaultText(isFirst: Bool) {
     guard let gameParameters = gameParameters else { return }
 
+    delegate?.setEnableButton(isEnable: false)
+
     hasRespondedInCurrentTrial = false
     delegate?.setEnableButton(isEnable: false)
 
@@ -220,7 +222,7 @@ class GameManager {
     }
   }
 
-  @objc func setText() {
+@objc func setText() {
     guard let gameParameters = gameParameters else { return }
     guard countTest < gameParameters.trials.count else {
         handleEndOfGame()
@@ -228,23 +230,28 @@ class GameManager {
     }
 
     endFixationsTimestamp = bootTime + CACurrentMediaTime()
-
     startTrialTimestamp = bootTime + CACurrentMediaTime()
+
+    hasRespondedInCurrentTrial = false
 
     text = gameParameters.trials[countTest].stimulus.en
 
     if let image = URL(string: text), text.contains("https") {
-      delegate?.updateFixations(image: image, isStart: true, typeTime: .trial)
+        delegate?.updateFixations(image: image, isStart: true, typeTime: .trial)
     } else {
-      delegate?.updateText(text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
+        delegate?.updateText(text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
     }
 
-    DispatchQueue.main.asyncAfter(deadline: .now()) {
-      self.delegate?.setEnableButton(isEnable: true)
-      self.timeResponse = Timer(timeInterval: gameParameters.trialDuration / 1000, target: self, selector: #selector(self.timeResponseFailed), userInfo: nil, repeats: false)
-      RunLoop.main.add(self.timeResponse!, forMode: .common)
-    }
-  }
+    delegate?.setEnableButton(isEnable: true)
+
+    timeResponse = Timer(timeInterval: gameParameters.trialDuration / 1000,
+    target: self,
+    selector: #selector(timeResponseFailed),
+    userInfo: nil,
+    repeats: false)
+    RunLoop.main.add(timeResponse!, forMode: .common)
+}
+
 
   @objc func timeResponseFailed() {
     guard let gameParameters = gameParameters else { return }
@@ -314,6 +321,7 @@ class GameManager {
     countTest = -1
     correctAnswers = 0
     arrayTimes = []
+    hasRespondedInCurrentTrial = false
     invalidateTimers()
   }
 

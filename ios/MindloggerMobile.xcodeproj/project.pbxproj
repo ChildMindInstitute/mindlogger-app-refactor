@@ -1726,11 +1726,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MindloggerMobile/MindloggerMobileDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1599;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
+				DEVELOPMENT_TEAM = 33C6V45RZB;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MindloggerMobile/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Mindlogger;
@@ -1745,10 +1743,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data;
+				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data.felipe;
 				PRODUCT_NAME = MindloggerMobile;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MindLogger Prod [Development";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
@@ -1767,11 +1764,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MindloggerMobile/MindloggerMobileRelease.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1599;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
+				DEVELOPMENT_TEAM = 33C6V45RZB;
 				INFOPLIST_FILE = MindloggerMobile/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Mindlogger;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
@@ -1785,10 +1781,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data;
+				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data.felipe;
 				PRODUCT_NAME = MindloggerMobile;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MindLogger Prod Distribution";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
