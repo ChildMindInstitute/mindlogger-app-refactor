@@ -222,7 +222,7 @@ class GameManager {
     }
   }
 
-@objc func setText() {
+  @objc func setText() {
     guard let gameParameters = gameParameters else { return }
     guard countTest < gameParameters.trials.count else {
         handleEndOfGame()
@@ -237,9 +237,9 @@ class GameManager {
     text = gameParameters.trials[countTest].stimulus.en
 
     if let image = URL(string: text), text.contains("https") {
-        delegate?.updateFixations(image: image, isStart: true, typeTime: .trial)
+      delegate?.updateFixations(image: image, isStart: true, typeTime: .trial)
     } else {
-        delegate?.updateText(text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
+      delegate?.updateText(text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
     }
 
     delegate?.setEnableButton(isEnable: true)
