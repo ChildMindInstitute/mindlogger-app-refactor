@@ -192,7 +192,6 @@ class GameManager {
     delegate?.setEnableButton(isEnable: false)
 
     hasRespondedInCurrentTrial = false
-    delegate?.setEnableButton(isEnable: false)
 
     if !isFirst {
       endFeedbackTimestamp = bootTime + CACurrentMediaTime()
@@ -250,7 +249,7 @@ class GameManager {
     userInfo: nil,
     repeats: false)
     RunLoop.main.add(timeResponse!, forMode: .common)
-}
+  }
 
 
   @objc func timeResponseFailed() {
