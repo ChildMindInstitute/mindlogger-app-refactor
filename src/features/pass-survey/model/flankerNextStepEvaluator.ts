@@ -47,11 +47,7 @@ export const evaluateFlankerNextStep = (
     }
   }
 
-  const minimumAccuracy = itemConfiguration.minimumAccuracy;
-
-  if (!minimumAccuracy && minimumAccuracy !== 0) {
-    return currentIndex + 1;
-  }
+  const minimumAccuracy = itemConfiguration.minimumAccuracy ?? 0;
 
   if (correctCount * 100 >= totalCount * minimumAccuracy) {
     const lastPracticeIndex = items.findIndex(
