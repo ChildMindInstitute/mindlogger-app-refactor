@@ -48,8 +48,7 @@ export const evaluateFlankerNextStep = (
   }
 
   const minimumAccuracy = itemConfiguration.minimumAccuracy;
-
-  if (!minimumAccuracy) {
+  if (!minimumAccuracy && minimumAccuracy !== 0 ) {
     return currentIndex + 1;
   }
 
