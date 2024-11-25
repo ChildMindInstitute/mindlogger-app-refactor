@@ -36,12 +36,16 @@ enum TypeTimeStamps {
 }
 
 protocol GameManagerProtocol: AnyObject {
-  func updateText(text: String, color: UIColor, font: UIFont, isStart: Bool, typeTime: TypeTimeStamps)
+  func updateText(
+    text: String, color: UIColor, font: UIFont, isStart: Bool, typeTime: TypeTimeStamps)
   func updateFixations(image: URL?, isStart: Bool, typeTime: TypeTimeStamps)
   func updateTime(time: String)
   func setEnableButton(isEnable: Bool)
-  func updateTitleButton(left: String?, right: String?, leftImage: URL?, rightImage: URL?, countButton: Int)
-  func resultTest(avrgTime: Int?, procentCorrect: Int?, data: FlankerModel?, dataArray: [FlankerModel]?, isShowResults: Bool, minAccuracy: Int)
+  func updateTitleButton(
+    left: String?, right: String?, leftImage: URL?, rightImage: URL?, countButton: Int)
+  func resultTest(
+    avrgTime: Int?, procentCorrect: Int?, data: FlankerModel?, dataArray: [FlankerModel]?,
+    isShowResults: Bool, minAccuracy: Int)
 }
 
 class GameManager {
@@ -78,11 +82,11 @@ class GameManager {
   weak var delegate: GameManagerProtocol?
 
   private let bootTime: Double = {
-        let uptime = CACurrentMediaTime()
-        let nowTime = Date().timeIntervalSince1970
-        return nowTime - uptime
-    }()
-    
+    let uptime = CACurrentMediaTime()
+    let nowTime = Date().timeIntervalSince1970
+    return nowTime - uptime
+  }()
+
   func startGame(timeSpeed: Float, isShowAnswers: Bool, countGame: Int) {
     countAllGame = countGame
     timeSpeedGame = TimeInterval(timeSpeed)
@@ -115,7 +119,7 @@ class GameManager {
       case .fixations:
         startFixationsTimestamp = time
       case .trial:
-          break
+        break
       case .feedback:
         startFeedbackTimestamp = time
       case .response:
@@ -145,6 +149,7 @@ class GameManager {
     delegate?.setEnableButton(isEnable: false)
 
     guard let gameParameters = gameParameters else { return }
+    guard countTest >= 0 && countTest < gameParameters.trials.count else { return }
     var resultTime = (respondTouchButton! - startTrialTimestamp) * 1000
 
     arrayTimes.append(Int(resultTime))
@@ -155,31 +160,39 @@ class GameManager {
     startFeedbackTimestamp = bootTime + CACurrentMediaTime()
 
     let correctChoice = gameParameters.trials[countTest].correctChoice
-    let isCorrect = (button == .left && correctChoice == 0) || (button == .right && correctChoice == 1)
+    let isCorrect =
+      (button == .left && correctChoice == 0) || (button == .right && correctChoice == 1)
     if isCorrect {
       correctAnswers += 1
     }
 
     let buttonPressed = (button == .left) ? "0" : "1"
-    let model = FlankerModel(rt: resultTime,
-                             stimulus: text,
-                             button_pressed: buttonPressed,
-                             image_time: endTrialTimestamp! * 1000,
-                             correct: isCorrect,
-                             start_timestamp: 0,
-                             tag: Constants.tag,
-                             trial_index: countTest + 1,
-                             start_time: startTrialTimestamp * 1000,
-                             response_touch_timestamp: respondTouchButton! * 1000)
+    let model = FlankerModel(
+      rt: resultTime,
+      stimulus: text,
+      button_pressed: buttonPressed,
+      image_time: endTrialTimestamp! * 1000,
+      correct: isCorrect,
+      start_timestamp: 0,
+      tag: Constants.tag,
+      trial_index: countTest + 1,
+      start_time: startTrialTimestamp * 1000,
+      response_touch_timestamp: respondTouchButton! * 1000)
 
     resultManager.addStepData(data: model)
-    delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: false, minAccuracy: gameParameters.minimumAccuracy)
+    delegate?.resultTest(
+      avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: false,
+      minAccuracy: gameParameters.minimumAccuracy)
 
     if gameParameters.showFeedback {
       let feedbackText = isCorrect ? Constants.correctText : Constants.inCorrectText
       let feedbackColor = isCorrect ? Constants.greenColor : Constants.redColor
-      delegate?.updateText(text: feedbackText, color: feedbackColor, font: Constants.smallFont, isStart: false, typeTime: .feedback)
-      let timer = Timer(timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(setDefaultText), userInfo: nil, repeats: false)
+      delegate?.updateText(
+        text: feedbackText, color: feedbackColor, font: Constants.smallFont, isStart: false,
+        typeTime: .feedback)
+      let timer = Timer(
+        timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(setDefaultText),
+        userInfo: nil, repeats: false)
       RunLoop.main.add(timer, forMode: .common)
     } else {
       setDefaultText(isFirst: false)
@@ -209,12 +222,17 @@ class GameManager {
 
     if gameParameters.showFixation {
       startFixationsTimestamp = bootTime + CACurrentMediaTime()
-      if let image = URL(string: gameParameters.fixation), gameParameters.fixation.contains("https") {
+      if let image = URL(string: gameParameters.fixation), gameParameters.fixation.contains("https")
+      {
         delegate?.updateFixations(image: image, isStart: true, typeTime: .fixations)
       } else {
-        delegate?.updateText(text: gameParameters.fixation, color: .black, font: Constants.bigFont, isStart: true, typeTime: .fixations)
+        delegate?.updateText(
+          text: gameParameters.fixation, color: .black, font: Constants.bigFont, isStart: true,
+          typeTime: .fixations)
       }
-      timerSetText = Timer(timeInterval: gameParameters.fixationDuration / 1000, target: self, selector: #selector(setText), userInfo: nil, repeats: false)
+      timerSetText = Timer(
+        timeInterval: gameParameters.fixationDuration / 1000, target: self,
+        selector: #selector(setText), userInfo: nil, repeats: false)
       RunLoop.main.add(timerSetText!, forMode: .common)
     } else {
       setText()
@@ -224,8 +242,8 @@ class GameManager {
   @objc func setText() {
     guard let gameParameters = gameParameters else { return }
     guard countTest < gameParameters.trials.count else {
-        handleEndOfGame()
-        return
+      handleEndOfGame()
+      return
     }
 
     endFixationsTimestamp = bootTime + CACurrentMediaTime()
@@ -238,19 +256,20 @@ class GameManager {
     if let image = URL(string: text), text.contains("https") {
       delegate?.updateFixations(image: image, isStart: true, typeTime: .trial)
     } else {
-      delegate?.updateText(text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
+      delegate?.updateText(
+        text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
     }
 
     delegate?.setEnableButton(isEnable: true)
 
-    timeResponse = Timer(timeInterval: gameParameters.trialDuration / 1000,
-    target: self,
-    selector: #selector(timeResponseFailed),
-    userInfo: nil,
-    repeats: false)
+    timeResponse = Timer(
+      timeInterval: gameParameters.trialDuration / 1000,
+      target: self,
+      selector: #selector(timeResponseFailed),
+      userInfo: nil,
+      repeats: false)
     RunLoop.main.add(timeResponse!, forMode: .common)
   }
-
 
   @objc func timeResponseFailed() {
     guard let gameParameters = gameParameters else { return }
@@ -262,27 +281,34 @@ class GameManager {
     startFeedbackTimestamp = bootTime + CACurrentMediaTime()
 
     if gameParameters.showFeedback {
-      delegate?.updateText(text: Constants.timeRespondText, color: .black, font: Constants.smallFont, isStart: false, typeTime: .feedback)
+      delegate?.updateText(
+        text: Constants.timeRespondText, color: .black, font: Constants.smallFont, isStart: false,
+        typeTime: .feedback)
     }
 
     guard let startTrialTimestamp = startTrialTimestamp else { return }
 
-    let model = FlankerModel(rt: 0.0,
-                             stimulus: text,
-                             button_pressed: nil,
-                             image_time: endTrialTimestamp! * 1000, // має намалювати
-                             correct: false,
-                             start_timestamp: 0, // вже намальовано
-                             tag: Constants.tag,
-                             trial_index: countTest + 1,
-                             start_time: startTrialTimestamp * 1000,
-                             response_touch_timestamp: 0)
+    let model = FlankerModel(
+      rt: 0.0,
+      stimulus: text,
+      button_pressed: nil,
+      image_time: endTrialTimestamp! * 1000, // має намалювати
+      correct: false,
+      start_timestamp: 0, // вже намальовано
+      tag: Constants.tag,
+      trial_index: countTest + 1,
+      start_time: startTrialTimestamp * 1000,
+      response_touch_timestamp: 0)
 
     resultManager.addStepData(data: model)
-    delegate?.resultTest(avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil,isShowResults: gameParameters.showResults, minAccuracy: gameParameters.minimumAccuracy)
+    delegate?.resultTest(
+      avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil,
+      isShowResults: gameParameters.showResults, minAccuracy: gameParameters.minimumAccuracy)
 
     if gameParameters.showFeedback {
-      let timer = Timer(timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(setDefaultText), userInfo: nil, repeats: false)
+      let timer = Timer(
+        timeInterval: Constants.lowTimeInterval, target: self, selector: #selector(setDefaultText),
+        userInfo: nil, repeats: false)
       RunLoop.main.add(timer, forMode: .common)
     } else {
       setDefaultText(isFirst: false)
@@ -330,8 +356,8 @@ class GameManager {
   }
 }
 
-private extension GameManager {
-  func updateButtonTitle() {
+extension GameManager {
+  fileprivate func updateButtonTitle() {
     guard let gameParameters = gameParameters else { return }
     guard countTest < gameParameters.trials.count else { return }
 
