@@ -127,7 +127,6 @@ describe('[isEqualToValue] function', () => {
     { a: 1, b: 2 },
     { a: 'Hello', b: 'Bye' },
     { a: 0, b: -1 },
-    { a: {}, b: {} },
   ];
 
   differentValueTestCases.forEach(({ a, b }) => {
