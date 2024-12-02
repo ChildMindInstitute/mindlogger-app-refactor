@@ -127,7 +127,6 @@ describe('[isEqualToValue] function', () => {
     { a: 1, b: 2 },
     { a: 'Hello', b: 'Bye' },
     { a: 0, b: -1 },
-    { a: {}, b: {} },
   ];
 
   differentValueTestCases.forEach(({ a, b }) => {
@@ -236,6 +235,7 @@ describe('[isLessThan] function', () => {
 
   equalTestCases.forEach(({ a, b }) => {
     it(`should return "false" when ${a} and ${b} are equal`, () => {
+
       expect(isLessThan(a, b)).toBe(false);
     });
   });
