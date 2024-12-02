@@ -182,6 +182,7 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
     hasTopNavigation: dto.config.navigationToTop,
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
+    ...mapConditionalLogic(dto.conditionalLogic),
   };
 }
 
