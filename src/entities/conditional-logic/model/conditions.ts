@@ -41,8 +41,7 @@ export const isEqualToValue = (
   if (input == null) {
     return false;
   }
-
-  return input === valueToCompareWith;
+  return input.toString() === valueToCompareWith.toString();
 };
 
 export const isGreaterThan = (
