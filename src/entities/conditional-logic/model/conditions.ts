@@ -146,9 +146,10 @@ export const isGreaterThanTimeRange = (
   { time, fieldName }: { time: HourMinute; fieldName: string },
 ): boolean => {
   if (!time || !timeRange) return false;
+
   const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
 
-  if(!isValidTimeFormat(selectedTime)) return false
+  if (!isValidTimeFormat(selectedTime)) return false;
 
   const normalizedTime =
     typeof time === 'string' ? parseTimeString(time) : time;
@@ -165,9 +166,12 @@ export const isLessThanTimeRange = (
   }>,
   { time, fieldName }: { time: HourMinute; fieldName: string },
 ): boolean => {
-  if (!isValidTimeFormat(time) || !timeRange) return false;
+  if (!time || !timeRange) return false;
 
   const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
+
+  if (!isValidTimeFormat(selectedTime)) return false;
+
   const normalizedTime =
     typeof time === 'string' ? parseTimeString(time) : time;
 
@@ -183,9 +187,12 @@ export const isEqualToTimeRange = (
   }>,
   { time, fieldName }: { time: HourMinute; fieldName: string },
 ): boolean => {
-  if (!isValidTimeFormat(time) || !timeRange) return false;
+  if (!time || !timeRange) return false;
 
   const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
+
+  if (!isValidTimeFormat(selectedTime)) return false;
+
   const normalizedTime =
     typeof time === 'string' ? parseTimeString(time) : time;
 
@@ -201,8 +208,12 @@ export const isNotEqualToTimeRange = (
   }>,
   { time, fieldName }: { time: HourMinute; fieldName: string },
 ): boolean => {
-  if (!isValidTimeFormat(time) || !timeRange) return false;
+  if (!time || !timeRange) return false;
+
   const selectedTime = getTimeBasedOnFieldName(fieldName, timeRange);
+
+  if (!isValidTimeFormat(selectedTime)) return false;
+
   const normalizedTime =
     typeof time === 'string' ? parseTimeString(time) : time;
 
