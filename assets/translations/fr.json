@@ -131,7 +131,7 @@
     "common_refresh_error": "La liste des applets n'a pas été actualisée. Veuillez réessayer."
   },
   "activity_list_component": {
-    "no_activities_yet": "Aucune activité spécifiée pour le moment",
+    "no_activities": "Aucune activité n'est disponible pour le moment",
     "insufficient_data_error": "Cette applet n'a pas été actualisée. Veuillez réessayer d'actualiser.",
     "other_error": "Une erreur non définie s'est produite"
   },
