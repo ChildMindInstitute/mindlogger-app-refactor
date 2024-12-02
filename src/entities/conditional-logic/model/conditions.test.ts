@@ -235,7 +235,6 @@ describe('[isLessThan] function', () => {
 
   equalTestCases.forEach(({ a, b }) => {
     it(`should return "false" when ${a} and ${b} are equal`, () => {
-
       expect(isLessThan(a, b)).toBe(false);
     });
   });
