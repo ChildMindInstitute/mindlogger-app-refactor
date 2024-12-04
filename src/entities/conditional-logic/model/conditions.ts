@@ -357,7 +357,7 @@ export const isBetweenSliderRowValues = (
   minValue: number,
   maxValue: number,
 ) => {
-  return rowValue !== null && rowValue >= minValue && rowValue <= maxValue;
+  return rowValue !== null && rowValue > minValue && rowValue < maxValue;
 };
 
 export const isLessThanSliderRow = (rowValue: number | null, value: number) => {
