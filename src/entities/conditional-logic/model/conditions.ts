@@ -104,7 +104,13 @@ export const isBetweenDates = (
   minDate: string,
   maxDate: string,
 ) => {
-  if (!input) return false;
+  if (
+    !input ||
+    parseISO(input).toString() === parseISO(minDate).toString() ||
+    parseISO(input).toString() === parseISO(maxDate).toString()
+  )
+    return false;
+
   return input
     ? !isBefore(parseISO(input), parseISO(minDate)) &&
         !isAfter(parseISO(input), parseISO(maxDate))
@@ -121,7 +127,13 @@ export const isOutsideOfDates = (
   minDate: string,
   maxDate: string,
 ) => {
-  if (!input) return false;
+  if (
+    !input ||
+    parseISO(input).toString() === parseISO(minDate).toString() ||
+    parseISO(input).toString() === parseISO(maxDate).toString()
+  )
+    return false;
+
   return input
     ? isBefore(parseISO(input), parseISO(minDate)) ||
         isAfter(parseISO(input), parseISO(maxDate))
