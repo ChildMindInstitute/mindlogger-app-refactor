@@ -100,7 +100,7 @@ android {
         applicationId "lab.childmindinstitute.data"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1602
+        versionCode 1603
         versionName "2.7.0"
         resValue "string", "app_name", "Mindlogger"
         resValue "string", "build_config_package", "lab.childmindinstitute.data"
