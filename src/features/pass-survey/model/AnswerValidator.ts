@@ -112,6 +112,19 @@ export function AnswerValidator(
     return null;
   };
 
+  const getSelectionRowOptionValue = (rowIndex: number): string | null => {
+    const answer = currentAnswer?.answer as Maybe<
+      { id: string; text: string }[]
+    >;
+
+    if (answer && answer[rowIndex]) {
+      const optionIds = answer[rowIndex].id;
+
+      return optionIds;
+    }
+    return null;
+  };
+
   return {
     isCorrect() {
       if (!currentPipelineItem?.validationOptions) {
@@ -164,12 +177,12 @@ export function AnswerValidator(
     },
 
     isEqualToRowOption(rowIndex: number, optionValue: string) {
-      const selectedOption = getRowOptionValues(rowIndex);
+      const selectedOption = getSelectionRowOptionValue(rowIndex);
       return selectedOption !== null && selectedOption.includes(optionValue);
     },
 
     isNotEqualToRowOption(rowIndex: number, optionValue: string) {
-      const selectedOption = getRowOptionValues(rowIndex);
+      const selectedOption = getSelectionRowOptionValue(rowIndex);
       return selectedOption !== null && !selectedOption.includes(optionValue);
     },
 
