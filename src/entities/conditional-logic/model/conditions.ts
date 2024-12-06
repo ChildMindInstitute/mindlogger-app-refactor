@@ -241,8 +241,8 @@ export const isBetweenTimesRange = (
 
   return (
     selectedTimeInMinutes !== null &&
-    selectedTimeInMinutes >= timeToMinutes(minTime) &&
-    selectedTimeInMinutes <= timeToMinutes(maxTime)
+    selectedTimeInMinutes > timeToMinutes(minTime) &&
+    selectedTimeInMinutes < timeToMinutes(maxTime)
   );
 };
 
