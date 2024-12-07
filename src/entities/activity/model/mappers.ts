@@ -129,13 +129,20 @@ function mapConditionalLogic(dto: ConditionalLogicDto | null) {
                 updatedCondition.payload = { time: condition.payload.time };
                 break;
 
-              case 'OUTSIDE_OF_TIMES_RANGE':
-              case 'BETWEEN_TIMES_RANGE':
               case 'BETWEEN_TIMES':
               case 'OUTSIDE_OF_TIMES':
                 updatedCondition.payload = {
                   minTime: condition.payload.minTime,
                   maxTime: condition.payload.maxTime,
+                };
+                break;
+
+              case 'OUTSIDE_OF_TIMES_RANGE':
+              case 'BETWEEN_TIMES_RANGE':
+                updatedCondition.payload = {
+                  minTime: condition.payload.minTime,
+                  maxTime: condition.payload.maxTime,
+                  fieldName: condition.payload.fieldName,
                 };
                 break;
 
