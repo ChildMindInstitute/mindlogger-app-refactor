@@ -1082,6 +1082,10 @@ PODS:
   - react-native-tcp-socket (6.0.6):
     - CocoaAsyncSocket
     - React-Core
+  - react-native-unity (1.0.10):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - react-native-video (5.2.1):
     - React-Core
     - react-native-video/Video (= 5.2.1)
@@ -1392,6 +1396,7 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
   - react-native-tcp-socket (from `../node_modules/react-native-tcp-socket`)
+  - "react-native-unity (from `../node_modules/@azesmway/react-native-unity`)"
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -1549,6 +1554,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@shopify/react-native-skia"
   react-native-tcp-socket:
     :path: "../node_modules/react-native-tcp-socket"
+  react-native-unity:
+    :path: "../node_modules/@azesmway/react-native-unity"
   react-native-video:
     :path: "../node_modules/react-native-video"
   react-native-webview:
@@ -1703,6 +1710,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-skia: 8c3c1016dfb86ae82d61e08a16c7197ac2b58eed
   react-native-tcp-socket: e724380c910c2e704816ec817ed28f1342246ff7
+  react-native-unity: 1a01286041cff06399765db822dcdf9e1ff71af3
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
   react-native-webview: a9454e7b9a99dc4c3fc865fd92de3e95d2eb79d2
   React-nativeconfig: d7af5bae6da70fa15ce44f045621cf99ed24087c
