@@ -131,7 +131,7 @@
     "common_refresh_error": "The applets list was not refreshed. Please try again."
   },
   "activity_list_component": {
-    "no_activities_yet": "No activities specified yet",
+    "no_activities": "No activities are available for you to complete right now",
     "insufficient_data_error": "This applet was not refreshed. Please try to refresh again.",
     "other_error": "Undefined error occurred"
   },

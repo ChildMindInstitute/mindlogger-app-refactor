@@ -28,8 +28,10 @@ import {
   getSupportsMobile,
 } from '@app/shared/lib/utils/responseTypes';
 import { Box, YStack } from '@app/shared/ui/base';
+import { ChecklistIcon } from '@app/shared/ui/icons/ChecklistIcon';
 import { Text } from '@app/shared/ui/Text';
 
+import { EmptyState } from './EmptyState';
 import { ActivityListGroup } from '../lib/types/activityGroup';
 import { useAvailabilityEvaluator } from '../model/hooks/useAvailabilityEvaluator';
 
@@ -54,16 +56,10 @@ export function ActivitySectionList({
 
   const { isUploading } = useUploadObservable();
 
-  const sections = useMemo(() => {
-    return groups
-      .filter(g => g.activities.length)
-      .map(group => {
-        return {
-          data: group.activities,
-          key: t(group.name),
-        };
-      });
-  }, [t, groups]);
+  const sections = useMemo(
+    () => groups.map(group => ({ data: group.activities, key: t(group.name) })),
+    [t, groups],
+  );
 
   const { startFlow, startActivity } = useStartEntity({
     hasMediaReferences: getDefaultMediaLookupService().hasMediaReferences,
@@ -200,6 +196,16 @@ export function ActivitySectionList({
           />
         );
       }}
+      // SectionList doesn't provide a prop for section empty components, so we use
+      // renderSectionFooter to conditionally render any empty sections.
+      renderSectionFooter={({ section }) =>
+        section.data.length ? null : (
+          <EmptyState
+            icon={<ChecklistIcon />}
+            description={t('activity_list_component:no_activities')}
+          />
+        )
+      }
       ItemSeparatorComponent={ItemSeparator}
       stickySectionHeadersEnabled={false}
       contentContainerStyle={styles.sectionList}

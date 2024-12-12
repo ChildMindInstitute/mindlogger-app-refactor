@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 import { useIsFetching } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import {
   CheckAvailability,
@@ -9,10 +10,12 @@ import {
 import { getAppletCompletedEntitiesKey } from '@app/shared/lib/utils/reactQueryHelpers';
 import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box, BoxProps, XStack, YStack } from '@app/shared/ui/base';
+import { ChecklistIcon } from '@app/shared/ui/icons/ChecklistIcon';
 import { LoadListError } from '@app/shared/ui/LoadListError';
-import { NoListItemsYet } from '@app/shared/ui/NoListItemsYet';
 
 import { ActivitySectionList } from './ActivitySectionList';
+import { EmptyState } from './EmptyState';
+import { ActivityGroupType } from '../lib/types/activityGroup';
 import { useActivityGroups } from '../model/hooks/useActivityGroups';
 import { useBaseInfo } from '../model/hooks/useBaseInfo';
 
@@ -23,6 +26,8 @@ type Props = {
 } & BoxProps;
 
 export const ActivityGroups: FC<Props> = props => {
+  const { t } = useTranslation();
+
   const isLoadingCompletedEntities =
     useIsFetching({
       exact: true,
@@ -33,6 +38,26 @@ export const ActivityGroups: FC<Props> = props => {
   const { data, isLoading, error: baseInfoError } = useBaseInfo(props.appletId);
   const { responseTypes } = data || {};
   const hasError = !isSuccess || !!baseInfoError;
+
+  const renderedGroups = useMemo(() => {
+    const hasActivities = groups.some(g => g.activities.length);
+
+    if (hasActivities) {
+      // Only show empty available group if there are no in-progress activities
+      const showAvailableGroup = !groups.some(
+        g => g.type === ActivityGroupType.InProgress && g.activities.length,
+      );
+
+      // Filter out empty groups, but show the available group based on above logic
+      return groups.filter(
+        g =>
+          g.activities.length ||
+          (g.type === ActivityGroupType.Available && showAvailableGroup),
+      );
+    } else {
+      return null;
+    }
+  }, [groups]);
 
   if (isLoadingCompletedEntities || isLoading) {
     return (
@@ -63,29 +88,25 @@ export const ActivityGroups: FC<Props> = props => {
     );
   }
 
-  if (isSuccess && !groups?.length) {
-    return (
-      <XStack
-        accessibilityLabel="activity-group-empty"
-        flex={1}
-        jc="center"
-        ai="center"
-      >
-        <NoListItemsYet translationKey="activity_list_component:no_activities_yet" />
-      </XStack>
-    );
-  }
-
   return (
     <Box {...props}>
       <YStack accessibilityLabel="activity-group-list" flex={1}>
-        <ActivitySectionList
-          activityResponseTypes={responseTypes}
-          appletId={props.appletId}
-          groups={groups}
-          completeEntity={props.completeEntity}
-          checkAvailability={props.checkAvailability}
-        />
+        {renderedGroups ? (
+          <ActivitySectionList
+            activityResponseTypes={responseTypes}
+            appletId={props.appletId}
+            groups={renderedGroups}
+            completeEntity={props.completeEntity}
+            checkAvailability={props.checkAvailability}
+          />
+        ) : (
+          <EmptyState
+            accessibilityLabel="activity-group-empty"
+            flex={1}
+            icon={<ChecklistIcon />}
+            description={t('activity_list_component:no_activities')}
+          />
+        )}
       </YStack>
     </Box>
   );

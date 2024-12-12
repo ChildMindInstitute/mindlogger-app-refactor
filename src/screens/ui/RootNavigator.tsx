@@ -242,7 +242,7 @@ export const RootNavigator = () => {
                     <ChevronLeft color="white" size={16} />
 
                     <Text ml={2} color="$white" fontSize={16}>
-                      Back
+                      {t('applet_invite_flow:back')}
                     </Text>
                   </XStack>
                 </BackButton>
