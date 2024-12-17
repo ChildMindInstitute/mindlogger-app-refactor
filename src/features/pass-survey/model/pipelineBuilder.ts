@@ -244,6 +244,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             validationOptions: item.validationOptions,
             additionalText: item.additionalText,
             timer: item.timer,
+            conditionalLogic: item.conditionalLogic,
           };
         }
 
