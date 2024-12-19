@@ -24,11 +24,11 @@ const imitateValidate = (validator: IAnswerValidator, type: ConditionType) => {
       break;
     }
     case 'GREATER_THAN': {
-      result = validator.isGreaterThen(0);
+      result = validator.isGreaterThan(0);
       break;
     }
     case 'LESS_THAN': {
-      result = validator.isLessThen(10);
+      result = validator.isLessThan(10);
       break;
     }
     case 'INCLUDES_OPTION': {
