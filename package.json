@@ -74,7 +74,7 @@
     "@tanstack/react-query": "^4.36.1",
     "@tanstack/react-query-persist-client": "^4.36.1",
     "@types/react-native-vector-icons": "^6.4.18",
-    "axios": "^1.6.2",
+    "axios": "^1.7.4",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
     "date-fns": "^3.0.5",
@@ -189,6 +189,10 @@
     ]
   },
   "resolutions": {
-    "react": "18.2.0"
+    "react": "18.2.0",
+    "braces": ">=3.0.3",
+    "ws": ">=7.5.10",
+    "fast-xml-parser": ">=4.4.1",
+    "ip": ">=1.1.10"
   }
 }
