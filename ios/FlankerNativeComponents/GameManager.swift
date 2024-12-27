@@ -110,7 +110,10 @@ class GameManager {
 
   func startLogicTimer() {
     invalidateTimers()
-    setDefaultText(isFirst: true)
+    let transitionDelay: TimeInterval = 0.3
+    DispatchQueue.main.asyncAfter(deadline: .now() + transitionDelay) {
+      self.setDefaultText(isFirst: true)
+      }
   }
 
   func setEndTimeViewingImage(time: Double, isStart: Bool, type: TypeTimeStamps) {
@@ -150,7 +153,7 @@ class GameManager {
 
     guard let gameParameters = gameParameters else { return }
     guard countTest >= 0 && countTest < gameParameters.trials.count else { return }
-    var resultTime = (respondTouchButton! - startTrialTimestamp) * 1000
+    let resultTime = (respondTouchButton! - startTrialTimestamp) * 1000
 
     arrayTimes.append(Int(resultTime))
     delegate?.updateTime(time: String(format: "%.3f", resultTime))
@@ -247,8 +250,6 @@ class GameManager {
     }
 
     endFixationsTimestamp = bootTime + CACurrentMediaTime()
-    startTrialTimestamp = bootTime + CACurrentMediaTime()
-
     hasRespondedInCurrentTrial = false
 
     text = gameParameters.trials[countTest].stimulus.en
@@ -260,15 +261,20 @@ class GameManager {
         text: text, color: .black, font: Constants.bigFont, isStart: true, typeTime: .trial)
     }
 
-    delegate?.setEnableButton(isEnable: true)
+    let slightDelay = 0.016 
+    DispatchQueue.main.asyncAfter(deadline: .now() + slightDelay) { [weak self] in
+      guard let self = self else { return }
+      self.startTrialTimestamp = self.bootTime + CACurrentMediaTime()
+      self.delegate?.setEnableButton(isEnable: true)
 
-    timeResponse = Timer(
-      timeInterval: gameParameters.trialDuration / 1000,
-      target: self,
-      selector: #selector(timeResponseFailed),
-      userInfo: nil,
-      repeats: false)
-    RunLoop.main.add(timeResponse!, forMode: .common)
+      self.timeResponse = Timer(
+        timeInterval: gameParameters.trialDuration / 1000,
+        target: self,
+        selector: #selector(self.timeResponseFailed),
+        userInfo: nil,
+        repeats: false)
+      RunLoop.main.add(self.timeResponse!, forMode: .common)
+    }
   }
 
   @objc func timeResponseFailed() {
