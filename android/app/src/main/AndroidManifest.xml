@@ -11,7 +11,8 @@
     <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
     <uses-permission
       android:name="android.permission.SCHEDULE_EXACT_ALARM"
-      tools:ignore="UnusedPermission" />
+      android:maxSdkVersion="35"
+      tools:replace="android:maxSdkVersion" />
     <uses-permission
       android:name="android.permission.USE_FULL_SCREEN_INTENT"
       tools:node="remove" />
