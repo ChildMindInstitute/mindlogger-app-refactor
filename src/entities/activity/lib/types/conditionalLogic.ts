@@ -275,10 +275,7 @@ type GreaterThanTimeCondition = {
   activityItemName: string;
   type: 'GREATER_THAN_TIME';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
   };
 };
 
@@ -286,10 +283,7 @@ type LessThanTimeCondition = {
   activityItemName: string;
   type: 'LESS_THAN_TIME';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
   };
 };
 
@@ -297,10 +291,7 @@ type EqualToTimeCondition = {
   activityItemName: string;
   type: 'EQUAL_TO_TIME';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
   };
 };
 
@@ -308,10 +299,7 @@ type NotEqualToTimeCondition = {
   activityItemName: string;
   type: 'NOT_EQUAL_TO_TIME';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
   };
 };
 
@@ -349,10 +337,7 @@ type GreaterThanTimeRangeCondition = {
   activityItemName: string;
   type: 'GREATER_THAN_TIME_RANGE';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
     fieldName: string;
   };
 };
@@ -361,10 +346,7 @@ type LessThanTimeRangeCondition = {
   activityItemName: string;
   type: 'LESS_THAN_TIME_RANGE';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
     fieldName: string;
   };
 };
@@ -373,10 +355,7 @@ type EqualToTimeRangeCondition = {
   activityItemName: string;
   type: 'EQUAL_TO_TIME_RANGE';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
     fieldName: string;
   };
 };
@@ -385,10 +364,7 @@ type NotEqualToTimeRangeCondition = {
   activityItemName: string;
   type: 'NOT_EQUAL_TO_TIME_RANGE';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
     fieldName: string;
   };
 };
