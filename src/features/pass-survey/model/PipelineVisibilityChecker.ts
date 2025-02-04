@@ -111,22 +111,22 @@ export function PipelineVisibilityChecker(
 
         case 'GREATER_THAN_TIME':
           return answerValidator.isGreaterThanTime(
-            parseTimeString(condition.payload?.time),
+            parseTimeString(condition.payload.time),
           );
 
         case 'LESS_THAN_TIME':
           return answerValidator.isLessThanTime(
-            parseTimeString(condition.payload?.time),
+            parseTimeString(condition.payload.time),
           );
 
         case 'EQUAL_TO_TIME':
           return answerValidator.isEqualToTime(
-            parseTimeString(condition.payload?.time),
+            parseTimeString(condition.payload.time),
           );
 
         case 'NOT_EQUAL_TO_TIME':
           return answerValidator.isNotEqualToTime(
-            parseTimeString(condition.payload?.time),
+            parseTimeString(condition.payload.time),
           );
 
         case 'BETWEEN_TIMES':
@@ -155,13 +155,13 @@ export function PipelineVisibilityChecker(
 
         case 'EQUAL_TO_TIME_RANGE':
           return answerValidator.isEqualToTimeRange(
-            parseTimeString(condition.payload?.time),
+            parseTimeString(condition.payload.time),
             condition.payload.fieldName,
           );
 
         case 'NOT_EQUAL_TO_TIME_RANGE':
           return answerValidator.isNotEqualToTimeRange(
-            parseTimeString(condition.payload?.time),
+            parseTimeString(condition.payload.time),
             condition.payload.fieldName,
           );
 
