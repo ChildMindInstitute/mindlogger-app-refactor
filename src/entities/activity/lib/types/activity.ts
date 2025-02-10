@@ -27,7 +27,8 @@ export type ActivityItemType =
   | 'Video'
   | 'Checkbox'
   | 'Date'
-  | 'Time';
+  | 'Time'
+  | 'Unity';
 
 export type StabilityTrackerConfig = {
   lambdaSlope: number;
@@ -213,6 +214,10 @@ type RadioConfig = {
   }>;
 };
 
+type UnityConfig = {
+  file: string;
+};
+
 type PhotoConfig = null;
 
 type VideoConfig = null;
@@ -241,6 +246,7 @@ export type ActivityItemConfig =
   | VideoConfig
   | TimeConfig
   | FlankerItemSettings
+  | UnityConfig
   | null;
 
 type ActivityItemBase = {
@@ -271,6 +277,11 @@ type ActivityItemBase = {
 interface AbTestActivityItem extends ActivityItemBase {
   inputType: 'AbTrails';
   config: AbTrailsConfig;
+}
+
+interface UnityActivityItem extends ActivityItemBase {
+  inputType: 'Unity';
+  config: UnityConfig;
 }
 
 interface StabilityTrackerActivityItem extends ActivityItemBase {
@@ -403,7 +414,8 @@ export type ActivityItem =
   | DateActivityItem
   | PhotoActivityItem
   | TimeActivityItem
-  | VideoActivityItem;
+  | VideoActivityItem
+  | UnityActivityItem;
 
 export type ActivityDetails = {
   id: string;
