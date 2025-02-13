@@ -11,15 +11,6 @@ export function PipelineVisibilityChecker(
     return { hours, minutes };
   }
 
-  function isValidTimeFormat(
-    time: { hours: number; minutes: number } | null | undefined,
-  ): boolean {
-    return (
-      !!time &&
-      typeof time.hours === 'number' &&
-      typeof time.minutes === 'number'
-    );
-  }
   function isItemVisible(index: number) {
     if (index >= pipeline.length) {
       return false;
@@ -109,30 +100,25 @@ export function PipelineVisibilityChecker(
             condition.payload.maxDate,
           );
 
-        case 'GREATER_THAN_TIME': {
-          let conditionTime = condition.payload?.time;
-
-          if (typeof conditionTime === 'string') {
-            conditionTime = parseTimeString(conditionTime);
-          }
-
-          if (!isValidTimeFormat(conditionTime)) {
-            return false;
-          }
-
-          const isGreater = answerValidator.isGreaterThanTime(conditionTime);
-
-          return isGreater;
-        }
+        case 'GREATER_THAN_TIME':
+          return answerValidator.isGreaterThanTime(
+            parseTimeString(condition.payload.time),
+          );
 
         case 'LESS_THAN_TIME':
-          return answerValidator.isLessThanTime(condition.payload.time);
+          return answerValidator.isLessThanTime(
+            parseTimeString(condition.payload.time),
+          );
 
         case 'EQUAL_TO_TIME':
-          return answerValidator.isEqualToTime(condition.payload.time);
+          return answerValidator.isEqualToTime(
+            parseTimeString(condition.payload.time),
+          );
 
         case 'NOT_EQUAL_TO_TIME':
-          return answerValidator.isNotEqualToTime(condition.payload.time);
+          return answerValidator.isNotEqualToTime(
+            parseTimeString(condition.payload.time),
+          );
 
         case 'BETWEEN_TIMES':
           return answerValidator.isBetweenTimes(
@@ -148,25 +134,25 @@ export function PipelineVisibilityChecker(
 
         case 'GREATER_THAN_TIME_RANGE':
           return answerValidator.isGreaterThanTimeRange(
-            condition.payload.time,
+            parseTimeString(condition.payload.time),
             condition.payload.fieldName,
           );
 
         case 'LESS_THAN_TIME_RANGE':
           return answerValidator.isLessThanTimeRange(
-            condition.payload.time,
+            parseTimeString(condition.payload.time),
             condition.payload.fieldName,
           );
 
         case 'EQUAL_TO_TIME_RANGE':
           return answerValidator.isEqualToTimeRange(
-            condition.payload.time,
+            parseTimeString(condition.payload.time),
             condition.payload.fieldName,
           );
 
         case 'NOT_EQUAL_TO_TIME_RANGE':
           return answerValidator.isNotEqualToTimeRange(
-            condition.payload.time,
+            parseTimeString(condition.payload.time),
             condition.payload.fieldName,
           );
 

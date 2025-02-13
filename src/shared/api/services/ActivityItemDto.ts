@@ -302,10 +302,7 @@ type GreaterThanTimeConditionDto = {
   itemName: string;
   type: 'GREATER_THAN_TIME';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
   };
 };
 
@@ -313,10 +310,7 @@ type LessThanTimeConditionDto = {
   itemName: string;
   type: 'LESS_THAN_TIME';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
   };
 };
 
@@ -324,10 +318,7 @@ type EqualToTimeConditionDto = {
   itemName: string;
   type: 'EQUAL_TO_TIME';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
   };
 };
 
@@ -335,10 +326,7 @@ type NotEqualToTimeConditionDto = {
   itemName: string;
   type: 'NOT_EQUAL_TO_TIME';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
   };
 };
 
@@ -376,10 +364,7 @@ type GreaterThanTimeRangeConditionDto = {
   itemName: string;
   type: 'GREATER_THAN_TIME_RANGE';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
     fieldName: string;
   };
 };
@@ -388,10 +373,7 @@ type LessThanTimeRangeConditionDto = {
   itemName: string;
   type: 'LESS_THAN_TIME_RANGE';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
     fieldName: string;
   };
 };
@@ -400,10 +382,7 @@ type EqualToTimeRangeConditionDto = {
   itemName: string;
   type: 'EQUAL_TO_TIME_RANGE';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
     fieldName: string;
   };
 };
@@ -412,10 +391,7 @@ type NotEqualToTimeRangeConditionDto = {
   itemName: string;
   type: 'NOT_EQUAL_TO_TIME_RANGE';
   payload: {
-    time: {
-      hours: number;
-      minutes: number;
-    };
+    time: string;
     fieldName: string;
   };
 };
