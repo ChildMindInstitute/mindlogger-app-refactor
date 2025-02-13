@@ -31,6 +31,7 @@ export const getEmptyRadioItem = (name: string): RadioPipelineItem => {
       options: [],
       autoAdvance: false,
       isGridView: false,
+      shouldIdentifyResponse: true,
     },
     type: 'Radio',
   };

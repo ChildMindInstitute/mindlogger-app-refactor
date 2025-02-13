@@ -454,6 +454,7 @@ type SingleSelectionConfiguration = ButtonsConfiguration &
     autoAdvance: boolean;
     setPalette: boolean;
     portraitLayout: boolean;
+    responseDataIdentifier: boolean;
   };
 
 export type DataMatrixDto = Array<{

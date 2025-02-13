@@ -563,6 +563,7 @@ function mapToRadio(dto: SingleSelectionItemDto): ActivityItem {
       setPalette: dto.config.setPalette,
       options: mapToRadioAlerts(dto.responseValues.options),
       isGridView: dto.config.portraitLayout,
+      shouldIdentifyResponse: dto.config.responseDataIdentifier,
     },
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,

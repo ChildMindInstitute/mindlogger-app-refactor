@@ -9,8 +9,10 @@ import { IScheduledDateCalculator } from '@app/entities/event/model/operations/I
 import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
 import { Answers } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import {
+  fillOptionsForRadio,
   getDrawerItem,
   getDrawerResponse,
+  getEmptyRadioItem,
   getSliderItem,
   getSplashItem,
   getTextInputItem,
@@ -103,16 +105,54 @@ describe('Test survey operations', () => {
     });
   });
 
-  it('"getUserIdentifier" should return user identifier from answer', () => {
+  it('"getUserIdentifier" should return first user identifier (text response)', () => {
     const items = [
       getSliderItem('item-name-1', 'item-id-1'),
       getSliderItem('item-name-2', 'item-id-2'),
       getTextInputItem('item-id-3'),
+      getTextInputItem('item-id-4'),
     ];
 
     const answer1 = { answer: '1' };
     const answer2 = { answer: '5' };
     const answer3 = { answer: 'mock-identity' };
+    const answer4 = { answer: 'mock-identity-2' };
+
+    const answers: Answers = {
+      '0': answer1,
+      '1': answer2,
+      '2': answer3,
+      '3': answer4,
+    };
+
+    const result = getUserIdentifier(items, answers);
+
+    expect(result).toEqual('mock-identity');
+  });
+
+  it('"getUserIdentifier" should return first user identifier (radio response)', () => {
+    const items = [
+      getSliderItem('item-name-1', 'item-id-1'),
+      getSliderItem('item-name-2', 'item-id-2'),
+      fillOptionsForRadio(getEmptyRadioItem('item-id-3')),
+      getTextInputItem('item-id-4'),
+    ];
+
+    const answer1 = { answer: '1' };
+    const answer2 = { answer: '5' };
+    const answer3 = {
+      answer: {
+        id: 'mock-id-3',
+        alert: { message: 'mock-alert-3' },
+        text: 'mock-text-3',
+        score: 30,
+        value: 3,
+        color: null,
+        image: null,
+        isHidden: false,
+        tooltip: null,
+      },
+    };
 
     const answers: Answers = {
       '0': answer1,
@@ -122,10 +162,10 @@ describe('Test survey operations', () => {
 
     const result = getUserIdentifier(items, answers);
 
-    expect(result).toEqual('mock-identity');
+    expect(result).toEqual('mock-text-3');
   });
 
-  it('"getUserIdentifier" should return undefined when no any item with type TextInputPipelineItem', () => {
+  it('"getUserIdentifier" should return undefined if no items with response idenfier flag', () => {
     const items = [
       getSliderItem('item-name-1', 'item-id-1'),
       getSliderItem('item-name-2', 'item-id-2'),
