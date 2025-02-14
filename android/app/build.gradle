@@ -100,8 +100,8 @@ android {
         applicationId "lab.childmindinstitute.data"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1608
-        versionName "2025.01.1"
+        versionCode 1610
+        versionName "2025.02.2"
         resValue "string", "app_name", "Mindlogger"
         resValue "string", "build_config_package", "lab.childmindinstitute.data"
         manifestPlaceholders = [
