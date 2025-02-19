@@ -198,6 +198,7 @@ type RadioConfig = {
   setPalette: boolean;
   autoAdvance: boolean;
   isGridView: boolean;
+  shouldIdentifyResponse: boolean;
   options: Array<{
     id: string;
     text: string;
