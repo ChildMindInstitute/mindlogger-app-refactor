@@ -73,6 +73,7 @@ export const radioInput: PipelineItem = {
     setPalette: false,
     autoAdvance: true,
     isGridView: false,
+    shouldIdentifyResponse: false,
     options: [
       {
         alert: {

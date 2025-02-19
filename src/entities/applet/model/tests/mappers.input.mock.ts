@@ -251,6 +251,7 @@ const activityItems: ActivityItemDto[] = [
       },
       autoAdvance: true,
       portraitLayout: false,
+      responseDataIdentifier: false,
     },
     name: 'name',
     isHidden: false,
