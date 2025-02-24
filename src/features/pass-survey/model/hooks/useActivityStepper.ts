@@ -7,6 +7,10 @@ const ConditionalLogicItems: ActivityItemType[] = [
   'Radio',
   'Checkbox',
   'Slider',
+  'NumberSelect',
+  'Date',
+  'Time',
+  'TimeRange',
 ];
 
 export function useActivityStepper(state: ActivityState | undefined) {
@@ -28,9 +32,9 @@ export function useActivityStepper(state: ActivityState | undefined) {
     currentPipelineItem?.additionalText?.required;
 
   const hasAnswer =
-    answers[step]?.answer != null && answers[step]?.answer !== '';
+    answers[step]?.answer !== null && answers[step]?.answer !== '';
   const hasAdditionalAnswer =
-    answers[step]?.additionalAnswer != null &&
+    answers[step]?.additionalAnswer !== null &&
     answers[step]?.additionalAnswer !== '';
 
   const canSkip =
