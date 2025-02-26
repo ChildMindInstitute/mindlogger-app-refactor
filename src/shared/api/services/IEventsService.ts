@@ -43,6 +43,7 @@ export type ScheduleEventDto = {
     timer: HourMinute | null;
     idleTimer: HourMinute | null;
   };
+  version?: string;
 };
 
 export type AppletEventsResponse = SuccessfulResponse<{

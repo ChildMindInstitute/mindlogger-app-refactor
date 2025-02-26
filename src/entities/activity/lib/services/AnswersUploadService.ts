@@ -399,6 +399,10 @@ export class AnswersUploadService implements IAnswersUploadService {
 
     const identifier = data.userIdentifier && encrypt(data.userIdentifier);
 
+    const eventHistoryId =
+      data.eventVersion && data.eventId
+        ? `${data.eventId}_${data.eventVersion}`
+        : undefined;
     const userPublicKey = this.encryptionManager.getPublicKey({
       privateKey: userPrivateKey,
       appletPrime: JSON.parse(appletEncryption.prime),
@@ -430,6 +434,7 @@ export class AnswersUploadService implements IAnswersUploadService {
       createdAt: data.createdAt,
       client: data.client,
       alerts: data.alerts,
+      eventHistoryId,
     };
 
     if ('consentToShare' in data) {
