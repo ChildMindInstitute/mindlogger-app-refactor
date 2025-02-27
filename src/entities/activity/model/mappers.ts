@@ -33,6 +33,7 @@ import {
   TextItemDto,
   TimeItemDto,
   TimeRangeItemDto,
+  UnityItemDto,
   VideoItemDto,
 } from '@app/shared/api/services/ActivityItemDto';
 import { ActivityDto } from '@app/shared/api/services/IActivityService';
@@ -190,6 +191,28 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
     ...mapConditionalLogic(dto.conditionalLogic),
+  };
+}
+
+function mapToUnity(dto: UnityItemDto): ActivityItem {
+  return {
+    id: dto.id,
+    name: dto.name,
+    inputType: 'Unity',
+    config: {
+      file: dto.config.file,
+    },
+    timer: null,
+    order: dto.order,
+    question: dto.question,
+    isSkippable: false,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: false,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
   };
 }
 
@@ -846,6 +869,8 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
           return mapToDrawing(item);
         case 'time':
           return mapToTime(item);
+        case 'unity':
+          return mapToUnity(item);
       }
     }),
     hasSummary: dto.scoresAndReports?.showScoreSummary ?? false,
