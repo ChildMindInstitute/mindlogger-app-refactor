@@ -399,10 +399,10 @@ export class AnswersUploadService implements IAnswersUploadService {
 
     const identifier = data.userIdentifier && encrypt(data.userIdentifier);
 
-    const eventHistoryId =
-      data.eventVersion && data.eventId
-        ? `${data.eventId}_${data.eventVersion}`
-        : undefined;
+    const eventHistoryId = data.eventVersion
+      ? `${data.eventId}_${data.eventVersion}`
+      : undefined;
+
     const userPublicKey = this.encryptionManager.getPublicKey({
       privateKey: userPrivateKey,
       appletPrime: JSON.parse(appletEncryption.prime),
