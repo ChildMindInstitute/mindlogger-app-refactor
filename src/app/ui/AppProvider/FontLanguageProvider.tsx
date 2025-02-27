@@ -7,5 +7,5 @@ import { useFontLanguage } from '@app/shared/hooks/useFontLanguage';
 export const FontLanguageProvider: FC<PropsWithChildren> = ({ children }) => {
   const fontLanguage = useFontLanguage();
 
-  return <FontLanguage body={fontLanguage}> {children}</FontLanguage>;
+  return <FontLanguage body={fontLanguage}>{children}</FontLanguage>;
 };
