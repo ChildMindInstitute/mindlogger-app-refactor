@@ -1,17 +1,9 @@
-import { useEffect, useState } from 'react';
-
-import { FontLanguages } from '@tamagui/core';
-import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 export const useFontLanguage = () => {
-  const [fontLanguage, setFontLanguage] = useState<FontLanguages | 'default'>(
-    'default',
-  );
-  const appLanguage = i18next.language;
+  const { i18n } = useTranslation();
 
-  useEffect(() => {
-    setFontLanguage(appLanguage !== 'el' ? 'default' : 'el');
-  }, [appLanguage]);
+  const fontLanguage = i18n.language === 'el' ? 'el' : 'default';
 
   return fontLanguage;
 };
