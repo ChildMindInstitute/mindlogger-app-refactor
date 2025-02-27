@@ -1,9 +1,9 @@
 import { createAnimations } from '@tamagui/animations-react-native';
 import {
   createFont,
-  createTokens,
   createTamagui,
   createTheme,
+  createTokens,
 } from '@tamagui/core';
 import { shorthands } from '@tamagui/shorthands';
 import { themes as baseThemes, tokens as baseTokens } from '@tamagui/themes';
@@ -13,6 +13,14 @@ import { colors } from '@app/shared/lib/constants/colors';
 
 const defaultFont = createFont({
   family: IS_IOS ? 'Avenir' : 'Roboto',
+  size: {},
+  lineHeight: {},
+  letterSpacing: {},
+  weight: {},
+});
+
+const elFont = createFont({
+  family: 'Lato-Regular',
   size: {},
   lineHeight: {},
   letterSpacing: {},
@@ -63,6 +71,7 @@ export const uiConfig = createTamagui({
   shorthands,
   fonts: {
     body: defaultFont,
+    body_el: elFont,
     title: defaultFont,
     code: codeFont,
   },
