@@ -10,9 +10,7 @@ export const useFontLanguage = () => {
   const appLanguage = i18next.language;
 
   useEffect(() => {
-    setFontLanguage(() => {
-      appLanguage !== 'el' ? 'default' : 'el';
-    });
+    setFontLanguage(appLanguage !== 'el' ? 'default' : 'el');
   }, [appLanguage]);
 
   return fontLanguage;
