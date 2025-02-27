@@ -72,7 +72,6 @@ export const uiConfig = createTamagui({
   fonts: {
     body: defaultFont,
     body_el: elFont,
-    title: defaultFont,
     code: codeFont,
   },
   animations,
