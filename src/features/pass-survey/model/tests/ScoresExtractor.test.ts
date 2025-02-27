@@ -35,6 +35,7 @@ const getRadiosItem = (): RadioPipelineItem => {
       setAlerts: false,
       randomizeOptions: false,
       isGridView: false,
+      shouldIdentifyResponse: false,
       options: [
         {
           alert: null,

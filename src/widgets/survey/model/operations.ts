@@ -14,6 +14,8 @@ import {
   ActivityItemType,
   DrawingTestResponse,
   PipelineItem,
+  RadioResponse,
+  TextInputResponse,
 } from '@app/features/pass-survey/lib/types/payload';
 import { InitializeHiddenItem } from '@app/features/pass-survey/model/ActivityRecordInitializer';
 import { AnswerDto } from '@app/shared/api/services/IAnswerService';
@@ -62,16 +64,32 @@ export const getActivityFlowProgressionExecutionGroupKey = (
 };
 
 export const getUserIdentifier = (
-  pipeline: PipelineItem[],
+  items: PipelineItem[],
   answers: Answers,
-) => {
-  const itemWithIdentifierStep = pipeline.findIndex(item => {
-    return item.type === 'TextInput' && item.payload.shouldIdentifyResponse;
+): string | undefined => {
+  const itemIndex = items.findIndex(item => {
+    if (
+      (item.type === 'TextInput' || item.type === 'Radio') &&
+      item.payload.shouldIdentifyResponse
+    ) {
+      return item;
+    }
+    return undefined;
   });
 
-  if (itemWithIdentifierStep > -1) {
-    return answers[itemWithIdentifierStep]?.answer as string;
+  if (itemIndex === -1) {
+    return undefined;
   }
+
+  let identifier: string | undefined;
+
+  if (items[itemIndex].type === 'TextInput') {
+    identifier = answers[itemIndex]?.answer as TextInputResponse;
+  } else if (items[itemIndex].type === 'Radio') {
+    identifier = (answers[itemIndex]?.answer as RadioResponse).text;
+  }
+
+  return identifier;
 };
 
 export const getItemIds = (pipeline: PipelineItem[]): string[] => {
