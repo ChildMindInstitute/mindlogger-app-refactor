@@ -87,6 +87,8 @@
 		288FAB3829C88A590089AB98 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2829C88A590089AB98 /* UIImageView+Extensions.swift */; };
 		288FAB3929C88A590089AB98 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FAB2929C88A590089AB98 /* ResultView.swift */; };
 		34BCEEC774297104C5B09BF0 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4946490D95B230F1078533 /* libPods-MindloggerMobileCommonPods-MindloggerMobile.a */; };
+		3F1FED9EAB584A6D9D3096D9 /* index.ts in Resources */ = {isa = PBXBuildFile; fileRef = 81BFE15F10B04AC1A6DD67DD /* index.ts */; };
+		449EDD5BAA5040989B0BBC80 /* Atkinson Hyperlegible Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DB5FCB1F8D4E4EB796B303D3 /* Atkinson Hyperlegible Regular.ttf */; };
 		4E2C2E9229A3826900BAEF10 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C2E9129A3826900BAEF10 /* Entypo.ttf */; };
 		4E2C2E9329A3826900BAEF10 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C2E9129A3826900BAEF10 /* Entypo.ttf */; };
 		4E2C2E9429A3826900BAEF10 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C2E9129A3826900BAEF10 /* Entypo.ttf */; };
@@ -104,6 +106,7 @@
 		4E9EC54A29BA279C002F69A5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */; };
 		4EBCD5B22971514E00D3C04C /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EBCD5B12971514E00D3C04C /* Foundation.ttf */; };
 		5281A663B4A6545E53344B26 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E15E9E0090BA3AD1153C67A7 /* libPods-MindloggerMobileCommonPods-MindloggerMobileTests.a */; };
+		73A9B0FE3EDB400BA36BB3A6 /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B41DC838272A45F1996A1E65 /* Lato-Regular.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		914062AC2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A02BB1D8C00021A2E8 /* FontAwesome5_Brands.ttf */; };
 		914062AD2BB1D8C10021A2E8 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062A02BB1D8C00021A2E8 /* FontAwesome5_Brands.ttf */; };
@@ -165,6 +168,8 @@
 		914062E52BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */; };
 		914062E62BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */; };
 		914062E72BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */; };
+		A89B1BAB37F747488EC4B1CB /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D5EC251157D4FAB8FE0D47F /* Roboto.ttf */; };
+		AA50742723824B918770D4B0 /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B6F85C8BB2474C06BA3B0BF4 /* Roboto_medium.ttf */; };
 		BB2482C4BFBD881BAAFA2F38 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BED32688A6AF76C729AF0FD4 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */; };
 		C4170C70E5D3647CC1234B8D /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E07015EC4992790F8DCD2075 /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */; };
 		E3456B933927DA798688CB0B /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 748B5ECA73107AD8DF670E5B /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a */; };
@@ -303,11 +308,13 @@
 		4E30A59A2962C3D60032C2A8 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
 		4E9EC54629BA279C002F69A5 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
 		4EBCD5B12971514E00D3C04C /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Foundation.ttf; sourceTree = "<group>"; };
+		5D5EC251157D4FAB8FE0D47F /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = ../assets/fonts/Roboto.ttf; sourceTree = "<group>"; };
 		61D19208BA4AF09E17EA0285 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.release.xcconfig"; sourceTree = "<group>"; };
 		67F2C3C747ACE0246F942CE6 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA.debug.xcconfig"; sourceTree = "<group>"; };
 		68480DA878A0DE26623AD7B3 /* Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile.release.xcconfig"; sourceTree = "<group>"; };
 		748B5ECA73107AD8DF670E5B /* libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileUAT.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MindloggerMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		81BFE15F10B04AC1A6DD67DD /* index.ts */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = index.ts; path = ../assets/fonts/index.ts; sourceTree = "<group>"; };
 		85000AFF48FE2EAC514B3886 /* Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA.release.xcconfig"; sourceTree = "<group>"; };
 		914062A02BB1D8C00021A2E8 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
 		914062A12BB1D8C00021A2E8 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
@@ -322,10 +329,13 @@
 		914062AA2BB1D8C10021A2E8 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
 		914062AB2BB1D8C10021A2E8 /* FontAwesome6_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Regular.ttf; sourceTree = "<group>"; };
 		A909ADF56B509F79088C9DC7 /* Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT.debug.xcconfig"; sourceTree = "<group>"; };
+		B41DC838272A45F1996A1E65 /* Lato-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Regular.ttf"; path = "../assets/fonts/Lato-Regular.ttf"; sourceTree = "<group>"; };
 		B523576F9E73DE3C9CDE92AC /* Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev.release.xcconfig"; sourceTree = "<group>"; };
+		B6F85C8BB2474C06BA3B0BF4 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = ../assets/fonts/Roboto_medium.ttf; sourceTree = "<group>"; };
 		BED32688A6AF76C729AF0FD4 /* libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileDev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1C2707DA7CE621423343FD7 /* libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileQA.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EFAF02FD6EEB6D5CF3CE58 /* Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig"; path = "Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging.debug.xcconfig"; sourceTree = "<group>"; };
+		DB5FCB1F8D4E4EB796B303D3 /* Atkinson Hyperlegible Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Atkinson Hyperlegible Regular.ttf"; path = "../assets/fonts/Atkinson Hyperlegible Regular.ttf"; sourceTree = "<group>"; };
 		DF0E94432BCEE7020087B68D /* MindloggerMobileUATRelease.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileUATRelease.entitlements; sourceTree = "<group>"; };
 		DF0E94442BCEE7020087B68D /* MindloggerMobileUATDebug.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = MindloggerMobileUATDebug.entitlements; sourceTree = "<group>"; };
 		E07015EC4992790F8DCD2075 /* libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MindloggerMobileCommonPods-MindloggerMobileStaging.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -529,6 +539,19 @@
 			path = "../node_modules/react-native-vector-icons/Fonts";
 			sourceTree = "<group>";
 		};
+		5F71E9262DC84AEFB37B3CD6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DB5FCB1F8D4E4EB796B303D3 /* Atkinson Hyperlegible Regular.ttf */,
+				B41DC838272A45F1996A1E65 /* Lato-Regular.ttf */,
+				5D5EC251157D4FAB8FE0D47F /* Roboto.ttf */,
+				B6F85C8BB2474C06BA3B0BF4 /* Roboto_medium.ttf */,
+				81BFE15F10B04AC1A6DD67DD /* index.ts */,
+			);
+			name = Resources;
+			path = "";
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -559,6 +582,7 @@
 				F87E177829771F290021550E /* MindloggerMobile qa-Info.plist */,
 				F87E178F29771F310021550E /* MindloggerMobile staging-Info.plist */,
 				F8EF45732A975A9300EEC085 /* MindloggerMobile uat-Info.plist */,
+				5F71E9262DC84AEFB37B3CD6 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -851,6 +875,11 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				F84714D82C0F248B001957A0 /* Atkinson Hyperlegible Regular.ttf in Resources */,
 				F801217A2A017BAF00F31D91 /* GoogleService-Info.plist in Resources */,
+				449EDD5BAA5040989B0BBC80 /* Atkinson Hyperlegible Regular.ttf in Resources */,
+				73A9B0FE3EDB400BA36BB3A6 /* Lato-Regular.ttf in Resources */,
+				A89B1BAB37F747488EC4B1CB /* Roboto.ttf in Resources */,
+				AA50742723824B918770D4B0 /* Roboto_medium.ttf in Resources */,
+				3F1FED9EAB584A6D9D3096D9 /* index.ts in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
