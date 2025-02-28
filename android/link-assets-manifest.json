@@ -6,20 +6,28 @@
       "sha1": "5c451bde7a172a410beaf08ef81fd55f01af8500"
     },
     {
+      "path": "assets/fonts/Lato-Bold.ttf",
+      "sha1": "542498221d97bee5bdbccf86ee8890bf8e8005c9"
+    },
+    {
       "path": "assets/fonts/Lato-Regular.ttf",
-      "sha1": "5f996143c684c93882400062b5564b99426d4a43"
+      "sha1": "e923c72eda5e50a87e18ff5c71e9ef4b3b6455a3"
     },
     {
-      "path": "assets/fonts/Roboto.ttf",
-      "sha1": "1d1d41fcadc571decb6444211b7993b99ce926e2"
+      "path": "assets/fonts/Roboto-Bold.ttf",
+      "sha1": "6cbb57ba2355cf442e06899898ff5af55867103e"
     },
     {
-      "path": "assets/fonts/Roboto_medium.ttf",
+      "path": "assets/fonts/Roboto-Medium.ttf",
       "sha1": "adbc3bde424bcf7dbc38f148005c8319825891f2"
     },
     {
+      "path": "assets/fonts/Roboto-Regular.ttf",
+      "sha1": "1d1d41fcadc571decb6444211b7993b99ce926e2"
+    },
+    {
       "path": "assets/fonts/index.ts",
-      "sha1": "65ffdc6b48509edb63534e2a3eae603c411ff37b"
+      "sha1": "c960f7d9a36f4aae50ba78b610a78d662f19c421"
     }
   ]
 }

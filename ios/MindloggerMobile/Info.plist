@@ -74,8 +74,10 @@
 		<string>Feather.ttf</string>
 		<string>Octicons.ttf</string>
 		<string>Lato-Regular.ttf</string>
-		<string>Roboto.ttf</string>
-		<string>Roboto_medium.ttf</string>
+		<string>Lato-Bold.ttf</string>
+		<string>Roboto-Bold.ttf</string>
+		<string>Roboto-Medium.ttf</string>
+		<string>Roboto-Regular.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

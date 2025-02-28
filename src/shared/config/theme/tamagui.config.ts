@@ -11,20 +11,32 @@ import { themes as baseThemes, tokens as baseTokens } from '@tamagui/themes';
 import { IS_IOS } from '@app/shared/lib/constants';
 import { colors } from '@app/shared/lib/constants/colors';
 
-const defaultFont = createFont({
-  family: IS_IOS ? 'Avenir' : 'Roboto',
+export const defaultFont = createFont({
+  family: IS_IOS ? 'Avenir' : 'Roboto-Regular',
   size: {},
   lineHeight: {},
   letterSpacing: {},
   weight: {},
+  face: {
+    400: { normal: IS_IOS ? 'Avenir' : 'Roboto-Regular' },
+    500: { normal: IS_IOS ? 'Avenir-Medium' : 'Roboto-Medium' },
+    600: { normal: IS_IOS ? 'Avenir-Medium' : 'Roboto-Medium' },
+    700: { normal: IS_IOS ? 'Avenir-Heavy' : 'Roboto-Bold' },
+  },
 });
 
-const elFont = createFont({
+export const elFont = createFont({
   family: 'Lato-Regular',
   size: {},
   lineHeight: {},
   letterSpacing: {},
   weight: {},
+  face: {
+    400: { normal: 'Lato-Regular' },
+    500: { normal: 'Lato-Regular' },
+    600: { normal: 'Lato-Bold' },
+    700: { normal: 'Lato-Bold' },
+  },
 });
 
 const codeFont = createFont({
