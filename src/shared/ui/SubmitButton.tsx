@@ -2,9 +2,10 @@ import { PropsWithChildren, FC } from 'react';
 import { AccessibilityProps, StyleSheet, TouchableOpacity } from 'react-native';
 import { StyleProp, ViewStyle } from 'react-native';
 
-import { Text, Stack, styled, StackStyleProps, TextProps } from '@tamagui/core';
+import { Stack, styled, StackStyleProps, TextProps } from '@tamagui/core';
 
 import { ActivityIndicator } from './ActivityIndicator';
+import { Text } from './Text';
 
 const ButtonText = styled(Text, {
   fontSize: 20,
