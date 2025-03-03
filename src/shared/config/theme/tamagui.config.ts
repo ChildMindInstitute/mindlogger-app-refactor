@@ -1,9 +1,9 @@
 import { createAnimations } from '@tamagui/animations-react-native';
 import {
   createFont,
-  createTokens,
   createTamagui,
   createTheme,
+  createTokens,
 } from '@tamagui/core';
 import { shorthands } from '@tamagui/shorthands';
 import { themes as baseThemes, tokens as baseTokens } from '@tamagui/themes';
@@ -11,12 +11,32 @@ import { themes as baseThemes, tokens as baseTokens } from '@tamagui/themes';
 import { IS_IOS } from '@app/shared/lib/constants';
 import { colors } from '@app/shared/lib/constants/colors';
 
-const defaultFont = createFont({
-  family: IS_IOS ? 'Avenir' : 'Roboto',
+export const defaultFont = createFont({
+  family: IS_IOS ? 'Avenir' : 'Roboto-Regular',
   size: {},
   lineHeight: {},
   letterSpacing: {},
   weight: {},
+  face: {
+    400: { normal: IS_IOS ? 'Avenir' : 'Roboto-Regular' },
+    500: { normal: IS_IOS ? 'Avenir-Medium' : 'Roboto-Medium' },
+    600: { normal: IS_IOS ? 'Avenir-Medium' : 'Roboto-Medium' },
+    700: { normal: IS_IOS ? 'Avenir-Heavy' : 'Roboto-Bold' },
+  },
+});
+
+export const elFont = createFont({
+  family: 'Lato-Regular',
+  size: {},
+  lineHeight: {},
+  letterSpacing: {},
+  weight: {},
+  face: {
+    400: { normal: 'Lato-Regular' },
+    500: { normal: 'Lato-Regular' },
+    600: { normal: 'Lato-Bold' },
+    700: { normal: 'Lato-Bold' },
+  },
 });
 
 const codeFont = createFont({
@@ -63,7 +83,7 @@ export const uiConfig = createTamagui({
   shorthands,
   fonts: {
     body: defaultFont,
-    title: defaultFont,
+    body_el: elFont,
     code: codeFont,
   },
   animations,

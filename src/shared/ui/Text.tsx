@@ -1,7 +1,7 @@
-import { Text as RNText, styled } from '@tamagui/core';
+import { Text as TGUIText, TextProps } from '@tamagui/core';
 
-export const Text = styled(RNText, {
-  name: 'Text',
-  color: '$black',
-  fontFamily: '$body',
-});
+type Props = TextProps;
+
+export const Text = (props: Props) => (
+  <TGUIText color="$black" fontFamily="$body" fontWeight="400" {...props} />
+);
