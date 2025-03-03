@@ -6,8 +6,8 @@
       "sha1": "5c451bde7a172a410beaf08ef81fd55f01af8500"
     },
     {
-      "path": "assets/fonts/Lato-Bold.ttf",
-      "sha1": "542498221d97bee5bdbccf86ee8890bf8e8005c9"
+      "path": "assets/fonts/Lato-Black.ttf",
+      "sha1": "a001eb827743636e04f8efa7d4aeedf0541c46ac"
     },
     {
       "path": "assets/fonts/Lato-Regular.ttf",
@@ -27,7 +27,7 @@
     },
     {
       "path": "assets/fonts/index.ts",
-      "sha1": "c960f7d9a36f4aae50ba78b610a78d662f19c421"
+      "sha1": "c5e527bb79fed1a500f04d34020cfa1442af9474"
     }
   ]
 }
