@@ -1,13 +1,17 @@
-import { StyleSheet, ActivityIndicator, Text, View } from 'react-native';
+import { StyleSheet, ActivityIndicator, View } from 'react-native';
 
+import { useTranslation } from 'react-i18next';
 import DeviceInfo from 'react-native-device-info';
 import Animated, { FadeOut } from 'react-native-reanimated';
 
-import { APP_VERSION, ENV, IS_IOS } from '../lib/constants';
+import { Text } from '@app/shared/ui/Text';
+
+import { APP_VERSION, ENV } from '../lib/constants';
 import { colors } from '../lib/constants/colors';
 
 export const SplashScreen = () => {
   const buildNumber = DeviceInfo.getBuildNumber();
+  const { t } = useTranslation();
 
   const appVersion = ENV
     ? `${APP_VERSION} (${buildNumber}) ${ENV}`
@@ -22,7 +26,9 @@ export const SplashScreen = () => {
       <ActivityIndicator size="large" color={colors.secondary} />
 
       <View style={style.versionContainer}>
-        <Text style={style.versionText}>Version: {appVersion}</Text>
+        <Text style={style.versionText}>
+          {t('splash:version')} {appVersion}
+        </Text>
       </View>
     </Animated.View>
   );
@@ -42,6 +48,5 @@ const style = StyleSheet.create({
   },
   versionText: {
     color: 'white',
-    fontFamily: IS_IOS ? 'Avenir' : 'Roboto',
   },
 });
