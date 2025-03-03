@@ -34,8 +34,8 @@ export const elFont = createFont({
   face: {
     400: { normal: 'Lato-Regular' },
     500: { normal: 'Lato-Regular' },
-    600: { normal: 'Lato-Bold' },
-    700: { normal: 'Lato-Bold' },
+    600: { normal: 'Lato-Black' },
+    700: { normal: 'Lato-Black' },
   },
 });
 
