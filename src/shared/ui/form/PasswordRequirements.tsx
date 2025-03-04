@@ -1,11 +1,12 @@
 import { View } from 'react-native';
 
-import { styled, Text } from '@tamagui/core';
+import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
 import { colors } from '@app/shared/lib/constants/colors';
 
 import { FeatherCrossIcon, FeatherCheckIcon } from '../icons';
+import { Text } from '../Text';
 
 const themeColors = {
   valid: {

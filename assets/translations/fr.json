@@ -608,5 +608,8 @@
   "assignment": {
     "badge": "À propos de {{name}}",
     "banner": "Veuillez vous assurer que toutes vos réponses concernent <strong>{{name}}</strong>"
+  },
+  "splash": {
+    "version": "Version"
   }
 }

@@ -15,6 +15,7 @@ import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import { AnalyticsProvider } from './AnalyticsProvider';
 import { FeatureFlagsProvider } from './FeatureFlagsProvider';
+import { FontLanguageProvider } from './FontLanguageProvider';
 import { NavigationProvider } from './NavigationProvider';
 import { ReactQueryProvider } from './ReactQueryProvider';
 import { ReduxProvider } from './ReduxProvider';
@@ -53,17 +54,19 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
                 <StorageMigrationProvider>
                   <LocalizationProvider>
                     <TamaguiProvider>
-                      <NavigationProvider>
-                        <PortalProvider>
-                          <SafeAreaProvider>
-                            <SplashProvider isLoading={isBootingUp}>
-                              {children}
-                            </SplashProvider>
+                      <FontLanguageProvider>
+                        <NavigationProvider>
+                          <PortalProvider>
+                            <SafeAreaProvider>
+                              <SplashProvider isLoading={isBootingUp}>
+                                {children}
+                              </SplashProvider>
 
-                            <Toast config={ToastConfig} topOffset={0} />
-                          </SafeAreaProvider>
-                        </PortalProvider>
-                      </NavigationProvider>
+                              <Toast config={ToastConfig} topOffset={0} />
+                            </SafeAreaProvider>
+                          </PortalProvider>
+                        </NavigationProvider>
+                      </FontLanguageProvider>
                     </TamaguiProvider>
                   </LocalizationProvider>
                 </StorageMigrationProvider>

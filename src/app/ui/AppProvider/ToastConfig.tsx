@@ -4,7 +4,6 @@ import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ToastConfigParams } from 'react-native-toast-message';
 
-import { IS_IOS } from '@app/shared/lib/constants';
 import { colors } from '@app/shared/lib/constants/colors';
 import { Box } from '@app/shared/ui/base';
 import {
@@ -140,7 +139,6 @@ export const styles = StyleSheet.create({
   toastText: {
     justifyContent: 'center',
     fontSize: 18,
-    fontFamily: IS_IOS ? 'Avenir' : 'Roboto',
     fontWeight: '500',
   },
   toastTextCenter: {

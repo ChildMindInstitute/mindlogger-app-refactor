@@ -7,6 +7,8 @@ import Markdown, {
   MarkdownIt,
 } from 'react-native-markdown-display';
 
+import { defaultFont, elFont } from '../config/theme/tamagui.config';
+import { useFontLanguage } from '../hooks/useFontLanguage';
 import { preprocessImageLinks } from '../lib/markdown/rules';
 
 const markdownItInstance = MarkdownIt({
@@ -21,7 +23,7 @@ const markdownItInstance = MarkdownIt({
 
 type Props = {
   content: string;
-  markdownStyle?: StyleSheet.NamedStyles<any>;
+  markdownStyle: StyleSheet.NamedStyles<any>;
   rules?: RenderRules;
 };
 
@@ -32,12 +34,22 @@ declare module 'react-native-markdown-display' {
 }
 
 export const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
+  const fontLanguage = useFontLanguage();
+
+  const style: StyleSheet.NamedStyles<any> = {
+    ...markdownStyle,
+    text: {
+      ...markdownStyle.text,
+      fontFamily: fontLanguage === 'el' ? elFont.family : defaultFont.family,
+    },
+  };
+
   return (
     <Markdown
       rules={rules}
       mergeStyle
       markdownit={markdownItInstance}
-      style={markdownStyle}
+      style={style}
     >
       {preprocessImageLinks(content)}
     </Markdown>

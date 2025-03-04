@@ -499,5 +499,8 @@
   "assignment": {
     "badge": "About {{name}}",
     "banner": "Please ensure all your responses are about <strong>{{name}}</strong>"
+  },
+  "splash": {
+    "version": "Version"
   }
 }

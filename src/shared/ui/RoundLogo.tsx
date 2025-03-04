@@ -3,10 +3,10 @@ import React, { FC } from 'react';
 import { StyleSheet, ImageStyle, AccessibilityProps } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
-import { Text } from '@tamagui/core';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 
 import { Box } from './base';
+import { Text } from './Text';
 import { colors } from '../lib/constants/colors';
 
 type Props = {
