@@ -17,13 +17,25 @@ export const ActivityProgressStep = ({
 }: Props) => {
   return (
     <YStack>
-      <Text fos={12} fow="700" lh={27} color={colors.blue3}>
+      <Text fontSize={12} fontWeight="700" lineHeight={27} color={colors.blue3}>
         {`Activity ${currentActivity + 1} of ${totalActivities}`}
       </Text>
-      <Text fos={16} fow="700" lh={27} numberOfLines={1} col={colors.onSurface}>
+      <Text
+        fontSize={16}
+        fontWeight="700"
+        lineHeight={27}
+        numberOfLines={1}
+        color={colors.onSurface}
+      >
         {currentActivityName}
       </Text>
-      <Text fos={12} fow="400" lh={27} ls={0.1} col={colors.onSurface}>
+      <Text
+        fontSize={12}
+        fontWeight="400"
+        lineHeight={27}
+        letterSpacing={0.1}
+        color={colors.onSurface}
+      >
         {currentSecondLevelStep}
       </Text>
     </YStack>

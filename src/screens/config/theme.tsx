@@ -34,6 +34,7 @@ export const getScreenOptions = ({
     },
     headerShadowVisible: false,
     headerTitle: HeaderTitle,
+    headerBackVisible: false,
     headerLeft: () => (
       <Text
         accessibilityLabel="close-button"

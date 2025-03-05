@@ -38,11 +38,11 @@ export const ProcessingAnswers: FC = () => {
           <ActivityIndicator mb={24} size={'large'} color={colors.blue} />
         )}
 
-        <Text mb={24} als="center" fos={31} fow="600">
+        <Text mb={24} als="center" fontSize={31} fontWeight="600">
           {t('autocompletion:processing_answers')}
         </Text>
 
-        <Text mb={16} als="center" ta="center" fos={18}>
+        <Text mb={16} als="center" ta="center" fontSize={18}>
           {t('autocompletion:preparing_answers')}
         </Text>
 
