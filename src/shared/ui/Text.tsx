@@ -1,6 +1,6 @@
 import { Text as TGUIText, TextProps } from '@tamagui/core';
 
-type Props = TextProps;
+type Props = Omit<TextProps, 'fos' | 'fow' | 'lh'>;
 
 export const Text = ({
   fontSize = 16,
