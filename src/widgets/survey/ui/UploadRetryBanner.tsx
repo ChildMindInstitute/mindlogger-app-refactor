@@ -39,7 +39,7 @@ export const UploadRetryBanner: FC<Props> = () => {
   return (
     <Box h={50} px={18} bw={1} boc="$grey" bc="$alertLight">
       <Box jc="space-between" ai="center" flexDirection="row" flex={1}>
-        <Text flex={1} fos={14}>
+        <Text flex={1} fontSize={14}>
           {isUploading
             ? t('additional:data_is_sending')
             : t('additional:data_not_sent')}
@@ -53,7 +53,7 @@ export const UploadRetryBanner: FC<Props> = () => {
             isLoading={isUploading}
             onPress={onRetry}
           >
-            <Text fos={16} fontWeight="700">
+            <Text fontSize={16} fontWeight="700">
               {t('additional:send')}
             </Text>
           </Button>
