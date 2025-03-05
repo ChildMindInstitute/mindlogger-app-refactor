@@ -109,6 +109,11 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       displayName: 'mock-applet-name-1',
     });
 
+    //@ts-expect-error
+    service.queryDataUtils.getEventDto = jest.fn().mockReturnValue({
+      version: 'mock-event-version-1',
+    });
+
     await service.construct(getInputsForIntermediate());
 
     expect(getActivityRecordMock).toBeCalledTimes(1);
@@ -163,6 +168,7 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       userActions: expectedUserActions,
       userIdentifier: 'mock-user-id-1',
       version: 'applet-version-mock-1',
+      eventVersion: 'mock-event-version-1',
     });
   });
 
@@ -202,6 +208,9 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       encryption: 'applet-encryption-mock-1',
       displayName: 'mock-applet-name-1',
     });
+
+    //@ts-expect-error
+    service.queryDataUtils.getEventDto = jest.fn().mockReturnValue({});
 
     await service.construct(getInputsForIntermediate());
 
@@ -279,6 +288,11 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
       displayName: 'mock-applet-name-1',
     });
 
+    //@ts-expect-error
+    service.queryDataUtils.getEventDto = jest.fn().mockReturnValue({
+      version: 'mock-event-version-1',
+    });
+
     await service.construct(getInputsForFinish('flow'));
 
     expect(getActivityRecordMock).toBeCalledTimes(1);
@@ -335,6 +349,7 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
           userActions: expectedUserActions,
           userIdentifier: 'mock-user-id-1',
           version: 'applet-version-mock-1',
+          eventVersion: 'mock-event-version-1',
         },
       ],
     ]);
@@ -395,6 +410,11 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
       displayName: 'mock-applet-name-1',
     });
 
+    //@ts-expect-error
+    service.queryDataUtils.getEventDto = jest.fn().mockReturnValue({
+      version: 'mock-event-version-1',
+    });
+
     await service.construct(getInputsForFinish('regular'));
 
     expect(getActivityRecordMock).toBeCalledTimes(1);
@@ -453,6 +473,7 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
           userActions: expectedUserActions,
           userIdentifier: 'mock-user-id-1',
           version: 'applet-version-mock-1',
+          eventVersion: 'mock-event-version-1',
         },
       ],
     ]);

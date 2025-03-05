@@ -342,6 +342,8 @@ export class ConstructCompletionsService {
       targetSubjectId,
     )!;
 
+    const scheduledEvent = this.queryDataUtils.getEventDto(appletId, eventId);
+
     const evaluatedEndAt = this.evaluateEndAt(
       'intermediate',
       (progression as EntityProgressionInProgress).availableUntilTimestamp,
@@ -382,6 +384,7 @@ export class ConstructCompletionsService {
       targetSubjectId,
       isFlowCompleted: false,
       tzOffset: getTimezoneOffset(),
+      eventVersion: scheduledEvent?.version,
     });
 
     clearActivityStorageRecord(
@@ -506,6 +509,8 @@ export class ConstructCompletionsService {
       targetSubjectId,
     )!;
 
+    const scheduledEvent = this.queryDataUtils.getEventDto(appletId, eventId);
+
     const itemToUpload: SendAnswersInput = {
       appletId,
       createdAt: evaluatedEndAt,
@@ -529,6 +534,7 @@ export class ConstructCompletionsService {
       targetSubjectId,
       isFlowCompleted: !!flowId,
       tzOffset: getTimezoneOffset(),
+      eventVersion: scheduledEvent?.version,
     };
 
     this.pushToQueueService.push(itemToUpload);
