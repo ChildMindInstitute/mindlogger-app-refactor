@@ -10,6 +10,14 @@
       "sha1": "ce5261438188fc48cf7cc38934ec7c6bbf94b27c"
     },
     {
+      "path": "assets/fonts/Lato-BlackItalic.ttf",
+      "sha1": "c2290759682ea42e25db37a896867abf0e3487fe"
+    },
+    {
+      "path": "assets/fonts/Lato-Italic.ttf",
+      "sha1": "ec2af5318f54cad6b364ecf8737b58ac1cd496f1"
+    },
+    {
       "path": "assets/fonts/Lato-Regular.ttf",
       "sha1": "5f996143c684c93882400062b5564b99426d4a43"
     },
@@ -18,8 +26,20 @@
       "sha1": "6cbb57ba2355cf442e06899898ff5af55867103e"
     },
     {
+      "path": "assets/fonts/Roboto-BoldItalic.ttf",
+      "sha1": "03440bfa71172aaa6b8ba6da86ac60d667b55c1e"
+    },
+    {
+      "path": "assets/fonts/Roboto-Italic.ttf",
+      "sha1": "55534e771bbbb6b649746802cabfdeb922b9eb3a"
+    },
+    {
       "path": "assets/fonts/Roboto-Medium.ttf",
       "sha1": "adbc3bde424bcf7dbc38f148005c8319825891f2"
+    },
+    {
+      "path": "assets/fonts/Roboto-MediumItalic.ttf",
+      "sha1": "debc1546314dd5655403df6965878d3f8dc41897"
     },
     {
       "path": "assets/fonts/Roboto-Regular.ttf",
@@ -27,7 +47,7 @@
     },
     {
       "path": "assets/fonts/index.ts",
-      "sha1": "68acd5a45535f6790b59d34e15ff1e78eb182384"
+      "sha1": "ab3b8428846699e46198e8409256cca25b4a4f3f"
     }
   ]
 }

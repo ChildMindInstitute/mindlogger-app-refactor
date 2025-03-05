@@ -9,6 +9,7 @@ import Markdown, {
 
 import { defaultFont, elFont } from '../config/theme/tamagui.config';
 import { useFontLanguage } from '../hooks/useFontLanguage';
+import { IS_ANDROID } from '../lib/constants';
 import { preprocessImageLinks } from '../lib/markdown/rules';
 
 const markdownItInstance = MarkdownIt({
@@ -44,6 +45,22 @@ export const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
       lineHeight: 20,
       ...markdownStyle.text,
     },
+    ...(fontLanguage === 'el'
+      ? {
+          strong: {
+            fontFamily: elFont.face[700].normal,
+            // Android will not use the correct asset if fontWeight is set to "bold", unclear why
+            ...(IS_ANDROID ? { fontWeight: 'normal' } : {}),
+            ...markdownStyle.strong,
+          },
+          em: {
+            fontFamily: elFont.face[400].italic,
+            // Android will not use the correct asset if fontStyle is set to "italic", unclear why
+            ...(IS_ANDROID ? { fontStyle: 'normal' } : {}),
+            ...markdownStyle.em,
+          },
+        }
+      : {}),
   };
 
   return (

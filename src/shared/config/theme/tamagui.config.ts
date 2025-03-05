@@ -17,12 +17,19 @@ export const defaultFont = createFont({
   lineHeight: {},
   letterSpacing: {},
   weight: {},
-  face: {
-    400: { normal: IS_IOS ? 'Avenir' : 'Roboto-Regular' },
-    500: { normal: IS_IOS ? 'Avenir-Medium' : 'Roboto-Medium' },
-    600: { normal: IS_IOS ? 'Avenir-Medium' : 'Roboto-Medium' },
-    700: { normal: IS_IOS ? 'Avenir-Heavy' : 'Roboto-Bold' },
-  },
+  face: IS_IOS
+    ? {
+        400: { normal: 'Avenir', italic: 'Avenir-Oblique' },
+        500: { normal: 'Avenir-Medium', italic: 'Avenir-MediumOblique' },
+        600: { normal: 'Avenir-Medium', italic: 'Avenir-MediumOblique' },
+        700: { normal: 'Avenir-Heavy', italic: 'Avenir-HeavyOblique' },
+      }
+    : {
+        400: { normal: 'Roboto-Regular', italic: 'Roboto-Italic' },
+        500: { normal: 'Roboto-Medium', italic: 'Roboto-MediumItalic' },
+        600: { normal: 'Roboto-Medium', italic: 'Roboto-MediumItalic' },
+        700: { normal: 'Roboto-Bold', italic: 'Roboto-BoldItalic' },
+      },
 });
 
 export const elFont = createFont({
@@ -32,10 +39,10 @@ export const elFont = createFont({
   letterSpacing: {},
   weight: {},
   face: {
-    400: { normal: 'Lato-Regular' },
-    500: { normal: 'Lato-Regular' },
-    600: { normal: 'Lato-Black' },
-    700: { normal: 'Lato-Black' },
+    400: { normal: 'Lato-Regular', italic: 'Lato-Italic' },
+    500: { normal: 'Lato-Regular', italic: 'Lato-Italic' },
+    600: { normal: 'Lato-Black', italic: 'Lato-BlackItalic' },
+    700: { normal: 'Lato-Black', italic: 'Lato-BlackItalic' },
   },
 });
 
