@@ -40,5 +40,6 @@ export function mapEventFromDto(dto: ScheduleEventDto | null): ScheduleEvent {
       notifications: [],
       reminder: null,
     },
+    version: dto.version,
   };
 }

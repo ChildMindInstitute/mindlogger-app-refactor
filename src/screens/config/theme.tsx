@@ -1,10 +1,11 @@
-import { StyleSheet } from 'react-native';
-
 import {
   BottomTabScreenProps,
   BottomTabNavigationOptions,
 } from '@react-navigation/bottom-tabs';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationOptions,
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 
 import { AppletTheme } from '@app/entities/applet/lib/types';
 import { IS_ANDROID, IS_TABLET } from '@app/shared/lib/constants';
@@ -16,6 +17,7 @@ import { SurveyIcon } from '@app/shared/ui/icons/Survey';
 import { Text } from '@app/shared/ui/Text';
 
 import { RootStackParamList, AppletDetailsParamList } from './types';
+import { HeaderTitle } from '../ui/HeaderTitle';
 
 type ScreenOptions = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
@@ -23,15 +25,16 @@ type ScreenOptions = {
 
 type BottomScreenOptions = BottomTabScreenProps<AppletDetailsParamList>;
 
-export const getScreenOptions = ({ navigation }: ScreenOptions) => {
+export const getScreenOptions = ({
+  navigation,
+}: ScreenOptions): NativeStackNavigationOptions => {
   return {
     headerStyle: {
       backgroundColor: colors.primary,
     },
-    headerTitleStyle: {
-      color: colors.white,
-    },
     headerShadowVisible: false,
+    headerTitle: HeaderTitle,
+    headerBackVisible: false,
     headerLeft: () => (
       <Text
         accessibilityLabel="close-button"
@@ -112,11 +115,3 @@ export const getAppletDetailsScreenOptions = (
     };
   };
 };
-
-export const appletScreenHeaderStyles = StyleSheet.create({
-  title: {
-    fontSize: 16,
-    color: colors.tertiary,
-    fontWeight: '600',
-  },
-});

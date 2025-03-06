@@ -82,6 +82,16 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Lato-Regular.ttf</string>
+		<string>Lato-Black.ttf</string>
+		<string>Roboto-Bold.ttf</string>
+		<string>Roboto-Medium.ttf</string>
+		<string>Roboto-Regular.ttf</string>
+		<string>Lato-BlackItalic.ttf</string>
+		<string>Lato-Italic.ttf</string>
+		<string>Roboto-BoldItalic.ttf</string>
+		<string>Roboto-Italic.ttf</string>
+		<string>Roboto-MediumItalic.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

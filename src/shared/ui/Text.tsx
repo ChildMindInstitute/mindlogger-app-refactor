@@ -1,7 +1,24 @@
-import { Text as RNText, styled } from '@tamagui/core';
+import { Text as TGUIText, TextProps } from '@tamagui/core';
 
-export const Text = styled(RNText, {
-  name: 'Text',
-  color: '$black',
-  fontFamily: '$body',
-});
+type Props = Omit<TextProps, 'fos' | 'fow' | 'lh'>;
+
+export const Text = ({
+  fontSize = 16,
+  lineHeight: lineHeightProp,
+  ...props
+}: Props) => {
+  const lineHeight =
+    lineHeightProp ??
+    (typeof fontSize === 'number' ? fontSize * 1.25 : undefined);
+
+  return (
+    <TGUIText
+      color="$black"
+      fontFamily="$body"
+      fontWeight="400"
+      fontSize={fontSize}
+      lineHeight={lineHeight}
+      {...props}
+    />
+  );
+};

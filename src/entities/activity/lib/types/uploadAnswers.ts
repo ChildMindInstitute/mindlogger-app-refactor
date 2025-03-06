@@ -34,6 +34,7 @@ export type SendAnswersInput = {
   activityName: string;
   logCompletedAt?: string;
   consentToShare?: boolean;
+  eventVersion?: string;
 };
 
 export type CheckFileUploadResult = {
