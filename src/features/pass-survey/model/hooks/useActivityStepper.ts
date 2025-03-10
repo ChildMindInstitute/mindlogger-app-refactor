@@ -31,8 +31,14 @@ export function useActivityStepper(state: ActivityState | undefined) {
   const additionalAnswerRequired =
     currentPipelineItem?.additionalText?.required;
 
-  const hasAnswer = !!answers[step]?.answer;
-  const hasAdditionalAnswer = !!answers[step]?.additionalAnswer;
+  const hasAnswer =
+    answers[step]?.answer !== undefined &&
+    answers[step]?.answer !== null &&
+    answers[step]?.answer !== '';
+  const hasAdditionalAnswer =
+    answers[step]?.additionalAnswer !== undefined &&
+    answers[step]?.additionalAnswer !== null &&
+    answers[step]?.additionalAnswer !== '';
 
   const canSkip =
     !!currentPipelineItem?.isSkippable && !hasAnswer && !isSplashStep;
