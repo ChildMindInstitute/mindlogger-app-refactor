@@ -41,7 +41,7 @@ export default createJob(() => {
       config.headers['OS-Name'] = Platform.OS;
       config.headers['OS-Version'] = Platform.select({
         android: (Platform as PlatformAndroidStatic).constants.Release,
-        ios: (Platform as PlatformIOSStatic).constants.systemName,
+        ios: (Platform as PlatformIOSStatic).constants.osVersion,
         default: Platform.Version.toString(),
       });
       config.headers['App-Version'] = APP_VERSION;
