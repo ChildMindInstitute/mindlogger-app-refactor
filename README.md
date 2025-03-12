@@ -62,9 +62,12 @@ In the project directory, you can run the following commands from the project ro
 
      Applies any preconfigured package patches & sets up iOS permissions.
 
-- `yarn pods`
+- `yarn pods:local`
 
     Installs any native dependencies required by the iOS app via **CocoaPods**, a dependency management system used for iOS.
+
+> [!NOTE]
+> When using `yarn pods` in local development, the ios build can sometimes fail with errors from the YogaKit and Flipper packages. We use `yarn pods:local` to avoid these errors by patching the packages. Take a look at the `ios/patches` directory for more details
 
 ### Starting the Metro Server
 
