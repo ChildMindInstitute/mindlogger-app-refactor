@@ -13,7 +13,6 @@
     "lint:fix": "yarn lint --fix",
     "type:check": "tsc --noEmit --skipLibCheck",
     "pods": "bundle exec pod install --project-directory=ios",
-    "pods:local": "LOCAL_DEV_PATCHES=true yarn pods",
     "postinstall": "yarn patch-package",
     "bump": "bundle exec fastlane bump_version",
     "start:reset-cache": "watchman watch-del-all && react-native start --reset-cache",

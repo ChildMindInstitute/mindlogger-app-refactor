@@ -88,15 +88,13 @@ abstract_target 'MindloggerMobileCommonPods' do
       :mac_catalyst_enabled => false
     )
 
-    if ENV['LOCAL_DEV_PATCHES'] == 'true'
-      puts '[Local Dev] Removing .xcode.env.local'
-      %x(rm -f #{Pod::Config.instance.installation_root}/.xcode.env.local)
+    puts '[Local Dev] Removing .xcode.env.local'
+    %x(rm -f #{Pod::Config.instance.installation_root}/.xcode.env.local)
 
-      puts '[Local Dev] Patching YogaKit to fix YGMeasureView call signature'
-      %x(patch #{Pod::Config.instance.installation_root}/Pods/YogaKit/YogaKit/Source/YGLayout.m -N < #{Pod::Config.instance.installation_root}/patches/YGLayout.patch)
+    puts '[Local Dev] Patching YogaKit to fix YGMeasureView call signature'
+    %x(patch #{Pod::Config.instance.installation_root}/Pods/YogaKit/YogaKit/Source/YGLayout.m -N < #{Pod::Config.instance.installation_root}/patches/YGLayout.patch)
 
-      puts '[Local Dev] Patching Flipper to fix FlipperTransportTypes'
-      %x(patch #{Pod::Config.instance.installation_root}/Pods/Flipper/xplat/Flipper/FlipperTransportTypes.h -N < #{Pod::Config.instance.installation_root}/patches/FlipperTransportTypes.patch)
-    end
+    puts '[Local Dev] Patching Flipper to fix FlipperTransportTypes'
+    %x(patch #{Pod::Config.instance.installation_root}/Pods/Flipper/xplat/Flipper/FlipperTransportTypes.h -N < #{Pod::Config.instance.installation_root}/patches/FlipperTransportTypes.patch)
   end
 end
