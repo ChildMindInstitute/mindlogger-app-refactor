@@ -7933,10 +7933,10 @@ react-native-file-access@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-native-file-access/-/react-native-file-access-3.0.7.tgz#7d2530dc474678849d569bea3284e7579ec9b7e2"
   integrity sha512-6uqq5om5NNI+g2QAmM5uQqSt3QQgcfkEYbBB9HNNHxOxKtPysNINR+CoYlgeDyFfWQDtTUEBKS0AKy5rup7IEQ==
 
-react-native-file-logger@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/react-native-file-logger/-/react-native-file-logger-0.4.1.tgz#6d4cdfd333489a32b20242f898cff0b196444707"
-  integrity sha512-UpdMtpQvSgOB4ohid2QxwWFkI92gqKEl2woFbcPEWRbmfrwpTZuNPzNEooMTjmIhFBQPfaOcymCL9gK1naE01g==
+react-native-file-logger@^0.5.6:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/react-native-file-logger/-/react-native-file-logger-0.5.6.tgz#b6439717a943b4677b99a6c43ffba43991ea08e9"
+  integrity sha512-npp0IB94QDhy6JjsA9jipuNmbHwcFGGSf8xPXquVbU7z2zM9GQk/JTtXm4IVidQxbDiy0Mzk48eUGkxhry0Ofg==
 
 react-native-fit-image@^1.5.5:
   version "1.5.5"
