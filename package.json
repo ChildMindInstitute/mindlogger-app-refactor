@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-mobile",
-  "version": "2025.03.1",
+  "version": "2025.03.2",
   "private": true,
   "scripts": {
     "android": "yarn android:dev",
@@ -12,7 +12,7 @@
     "lint:check": "yarn lint",
     "lint:fix": "yarn lint --fix",
     "type:check": "tsc --noEmit --skipLibCheck",
-    "pods": "bundle exec pod install --project-directory=ios",
+    "pods": "cd ios && bundle exec pod install",
     "postinstall": "yarn patch-package",
     "bump": "bundle exec fastlane bump_version",
     "start:reset-cache": "watchman watch-del-all && react-native start --reset-cache",
