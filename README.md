@@ -19,7 +19,7 @@ Running the app:
 - Yarn 1.x
 - Follow steps in [React Native CLI Environment Setup](https://reactnative.dev/docs/environment-setup?guide=native), including:
   - Watchman
-  - Xcode (incl. Command Line Tools)
+  - Xcode 16 (incl. Command Line Tools)
   - Java Development Kit
   - Android Studio
   - Android SDK
@@ -62,12 +62,11 @@ In the project directory, you can run the following commands from the project ro
 
      Applies any preconfigured package patches & sets up iOS permissions.
 
-- `yarn pods:local`
+- `yarn pods`
 
     Installs any native dependencies required by the iOS app via **CocoaPods**, a dependency management system used for iOS.
-
-> [!NOTE]
-> When using `yarn pods` in local development, the ios build can sometimes fail with errors from the YogaKit and Flipper packages. We use `yarn pods:local` to avoid these errors by patching the packages. Take a look at the `ios/patches` directory for more details
+    This also applies `YogaKit` and `Flipper` patches located in `ios/patches` required while this is on React Native 0.73. The [need](https://github.com/facebook/react-native/issues/43383)
+    for these patches will be re-evaluated as part of a planned React Native upgrade. 
 
 ### Starting the Metro Server
 
