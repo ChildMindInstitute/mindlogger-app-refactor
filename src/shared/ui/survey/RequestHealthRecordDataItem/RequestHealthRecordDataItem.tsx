@@ -70,12 +70,8 @@ export const RequestHealthRecordDataItem: FC<
 
   const handleValueChange = (value: string) => {
     const selectedOptionValue = value as RequestHealthRecordDataResponse;
-    const selectedOption = options.find(option => option.id === value);
-
-    // Should never happen, but adding it for safety
-    if (!selectedOption) {
-      return;
-    }
+    const selectedOption =
+      selectedOptionValue === 'opt_in' ? options[0] : options[1];
 
     setSelectedOptionId(selectedOptionValue);
 
