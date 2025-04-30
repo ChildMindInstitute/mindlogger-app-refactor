@@ -1,28 +1,29 @@
 import { Coordinates } from '@app/shared/ui/survey/Geolocation/types';
 
 import {
-  PipelineItemResponse,
-  ActivityItemType,
-  TextInputResponse,
-  ParagraphTextResponse,
   AbTestResponse,
-  StabilityTrackerResponse,
+  ActivityItemType,
+  AudioPlayerResponse,
+  AudioResponse,
+  CheckboxResponse,
+  DateResponse,
   DrawingTestResponse,
   FlankerResponse,
-  SliderResponse,
   NumberSelectResponse,
-  CheckboxResponse,
-  AudioResponse,
-  StackedSliderResponse,
-  StackedCheckboxResponse,
-  AudioPlayerResponse,
-  TimeRangeResponse,
-  RadioResponse,
+  ParagraphTextResponse,
   PhotoResponse,
-  VideoResponse,
-  DateResponse,
-  TimeResponse,
+  PipelineItemResponse,
+  RadioResponse,
+  RequestHealthRecordDataResponse,
+  SliderResponse,
+  StabilityTrackerResponse,
+  StackedCheckboxResponse,
   StackedRadioResponse,
+  StackedSliderResponse,
+  TextInputResponse,
+  TimeRangeResponse,
+  TimeResponse,
+  VideoResponse,
 } from './payload';
 
 export type PipelineItemAnswerBase = {
@@ -217,6 +218,15 @@ export interface TimePipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
+export interface RequestHealthRecordDataPipelineAnswer
+  extends PipelineItemAnswerBase {
+  type: 'RequestHealthRecordData';
+  value: {
+    answer?: RequestHealthRecordDataResponse;
+    additionalAnswer?: string;
+  };
+}
+
 export type PipelineItemAnswer =
   | SplashPipelineAnswer
   | TextInputPipelineAnswer
@@ -240,4 +250,5 @@ export type PipelineItemAnswer =
   | VideoPipelineAnswer
   | DatePipelineAnswer
   | TimePipelineAnswer
-  | CheckboxPipelineAnswer;
+  | CheckboxPipelineAnswer
+  | RequestHealthRecordDataPipelineAnswer;

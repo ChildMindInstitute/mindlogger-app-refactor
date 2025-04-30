@@ -718,6 +718,23 @@ type StabilityTrackerConfiguration = {
 
 export type FlankerAnswerSettings = null;
 
+type RequestHealthRecordDataConfiguration = ButtonsConfiguration & {
+  skippableItem?: boolean;
+};
+
+type RequestHealthRecordDataAnswerSettings = {
+  optInOutOptions: [
+    {
+      id: 'opt_in';
+      label: string;
+    },
+    {
+      id: 'opt_out';
+      label: string;
+    },
+  ];
+};
+
 export type AbTrailsConfiguration = AbTrailsItemSettingsDto;
 
 export type AbTrailsAnswerSettings = null;
@@ -744,6 +761,7 @@ type Configuration =
   | AbTestConfiguration
   | StabilityTrackerConfiguration
   | FlankerConfiguration
+  | RequestHealthRecordDataConfiguration
   | AbTrailsConfiguration;
 
 type AnswerSettings =
@@ -767,6 +785,7 @@ type AnswerSettings =
   | AbTestAnswerSettings
   | StabilityTrackerAnswerSettings
   | FlankerAnswerSettings
+  | RequestHealthRecordDataAnswerSettings
   | AbTrailsAnswerSettings;
 
 type ActivityItemDtoBase = {
@@ -907,6 +926,12 @@ export interface FlankerItemDto extends ActivityItemDtoBase {
   responseValues: FlankerAnswerSettings;
 }
 
+export interface RequestHealthRecordDataItemDto extends ActivityItemDtoBase {
+  responseType: 'requestHealthRecordData';
+  config: RequestHealthRecordDataConfiguration;
+  responseValues: RequestHealthRecordDataAnswerSettings;
+}
+
 export interface ABTrailsItemDto extends ActivityItemDtoBase {
   responseType: 'ABTrails';
   config: AbTrailsConfiguration;
@@ -935,4 +960,5 @@ export type ActivityItemDto =
   | ABTrailsItemDto
   | StabilityTrackerItemDto
   | FlankerItemDto
+  | RequestHealthRecordDataItemDto
   | TimeItemDto;

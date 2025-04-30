@@ -1,5 +1,6 @@
 import { AbPayload } from '@app/abstract/lib/types/abTrails';
 import { FlankerItemSettings } from '@app/abstract/lib/types/flanker';
+import { RequestHealthRecordDataConfig } from '@app/shared/ui/survey/RequestHealthRecordDataItem/RequestHealthRecordDataItem';
 
 import { Report } from './activityReportSettings';
 import { ConditionalLogic } from './conditionalLogic';
@@ -27,7 +28,8 @@ export type ActivityItemType =
   | 'Video'
   | 'Checkbox'
   | 'Date'
-  | 'Time';
+  | 'Time'
+  | 'RequestHealthRecordData';
 
 export type StabilityTrackerConfig = {
   lambdaSlope: number;
@@ -242,6 +244,7 @@ export type ActivityItemConfig =
   | VideoConfig
   | TimeConfig
   | FlankerItemSettings
+  | RequestHealthRecordDataConfig
   | null;
 
 type ActivityItemBase = {
@@ -381,6 +384,11 @@ interface TimeActivityItem extends ActivityItemBase {
   config: TimeConfig;
 }
 
+interface RequestHealthRecordDataActivityItem extends ActivityItemBase {
+  inputType: 'RequestHealthRecordData';
+  config: RequestHealthRecordDataConfig;
+}
+
 export type ActivityItem =
   | AbTestActivityItem
   | StabilityTrackerActivityItem
@@ -404,7 +412,8 @@ export type ActivityItem =
   | DateActivityItem
   | PhotoActivityItem
   | TimeActivityItem
-  | VideoActivityItem;
+  | VideoActivityItem
+  | RequestHealthRecordDataActivityItem;
 
 export type ActivityDetails = {
   id: string;
