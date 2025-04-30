@@ -36,6 +36,7 @@ import { VideoItem } from '@app/shared/ui/survey/MediaItems/VideoItem';
 import { NumberSelector } from '@app/shared/ui/survey/NumberSelector';
 import { ParagraphText } from '@app/shared/ui/survey/ParagraphText';
 import { RadioActivityItem } from '@app/shared/ui/survey/RadioActivityItem/RadioActivityItem';
+import { RequestHealthRecordDataItem } from '@app/shared/ui/survey/RequestHealthRecordDataItem/RequestHealthRecordDataItem';
 import { SimpleTextInput } from '@app/shared/ui/survey/SimpleTextInput';
 import { StackedSlider } from '@app/shared/ui/survey/Slider/StackedSlider';
 import { SurveySlider } from '@app/shared/ui/survey/Slider/SurveySlider';
@@ -416,6 +417,18 @@ export function ActivityItem({
       );
       break;
 
+    case 'RequestHealthRecordData':
+      item = (
+        <RequestHealthRecordDataItem
+          config={pipelineItem.payload}
+          onChange={onResponse}
+          initialValue={value?.answer}
+          question={pipelineItem.question}
+          textReplacer={textVariableReplacer}
+        />
+      );
+      break;
+
     default: {
       item = <></>;
     }
@@ -450,7 +463,7 @@ export function ActivityItem({
           }
         }}
       >
-        {question && (
+        {question && type !== 'RequestHealthRecordData' && (
           <Box mx={16} mb={20}>
             <MarkdownMessage
               accessibilityLabel="item_display_content"

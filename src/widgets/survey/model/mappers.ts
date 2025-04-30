@@ -7,6 +7,7 @@ import {
   FlankerResponse,
   PipelineItem,
   RadioPipelineItem,
+  RequestHealthRecordDataResponse,
   SliderPipelineItem,
   StabilityTrackerResponse,
   StackedCheckboxPipelineItem,
@@ -408,6 +409,12 @@ function convertToStabilityTrackerAnswer(answer: Answer): AnswerDto {
   return dto;
 }
 
+function convertToRequestHealthRecordDataAnswer(answer: Answer): AnswerDto {
+  return {
+    value: answer.answer as RequestHealthRecordDataResponse,
+  };
+}
+
 function convertToAbTestAnswer(answer: Answer): AnswerDto {
   const abResponse = answer.answer as AbTestResponse;
 
@@ -491,6 +498,10 @@ function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
 
     case 'StabilityTracker':
       return convertToStabilityTrackerAnswer(answer);
+
+    case 'RequestHealthRecordData': {
+      return convertToRequestHealthRecordDataAnswer(answer);
+    }
 
     case 'AbTest': {
       return convertToAbTestAnswer(answer);
