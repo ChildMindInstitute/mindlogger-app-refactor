@@ -795,8 +795,6 @@ function mapToRequestHealthRecordData(
     name: dto.name,
     inputType: 'RequestHealthRecordData',
     config: {
-      removeBackButton: dto.config.removeBackButton,
-      skippableItem: dto.config.skippableItem,
       optInOutOptions: dto.responseValues.optInOutOptions,
     },
     timer: mapTimerValue(dto.timer),

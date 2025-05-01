@@ -240,8 +240,6 @@ type PhotoPayload = null;
 type VideoPayload = null;
 
 type RequestHealthRecordDataPayload = {
-  removeBackButton: boolean;
-  skippableItem?: boolean;
   optInOutOptions: RequestHealthRecordDataConfig['optInOutOptions'];
 };
 
