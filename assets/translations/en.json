@@ -502,5 +502,9 @@
   },
   "splash": {
     "version": "Version"
-  }
+  },
+	"requestHealthRecordData": {
+		"title": "Request Health Record Data",
+		"linkText": "Learn more about how MindLogger securely accesses healthcare data."
+	}
 }
