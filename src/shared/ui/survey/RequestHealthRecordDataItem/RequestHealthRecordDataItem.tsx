@@ -12,8 +12,6 @@ import { Text } from '@app/shared/ui/Text';
 const REQUEST_HEALTH_RECORD_DATA_LINK = 'https://mindlogger.org/';
 
 export type RequestHealthRecordDataConfig = {
-  removeBackButton: boolean;
-  skippableItem?: boolean;
   optInOutOptions: [
     {
       id: 'opt_in';
