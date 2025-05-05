@@ -5,6 +5,7 @@ import { ConditionalLogic } from '@app/entities/activity/lib/types/conditionalLo
 import { DrawResult } from '@app/entities/drawer/lib/types/draw';
 import { FlankerGameResponse } from '@app/entities/flanker/lib/types/response';
 import { StabilityTrackerResponse as StabilityTrackerBaseResponse } from '@app/entities/stabilityTracker/lib/types';
+import { RequestHealthRecordDataAnswerSettings } from '@app/shared/api/services/ActivityItemDto';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import { Item } from '@app/shared/ui/survey/CheckBox/types';
 import { Coordinates } from '@app/shared/ui/survey/Geolocation/types';
@@ -464,7 +465,7 @@ export type VideoResponse = MediaFile & {
 };
 
 export type RequestHealthRecordDataResponse =
-  RequestHealthRecordDataConfig['optInOutOptions'][number]['id'];
+  RequestHealthRecordDataAnswerSettings['optInOutOptions'][number]['id'];
 
 export type PipelineItemResponse =
   | AbTestResponse

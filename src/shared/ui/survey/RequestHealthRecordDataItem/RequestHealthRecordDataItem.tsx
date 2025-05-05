@@ -2,6 +2,7 @@ import React, { FC, useMemo, useState } from 'react';
 import { Linking } from 'react-native';
 
 import { RequestHealthRecordDataResponse } from '@app/features/pass-survey/lib/types/payload';
+import { RequestHealthRecordDataAnswerSettings } from '@app/shared/api/services/ActivityItemDto';
 import { colors } from '@app/shared/lib/constants/colors';
 import { Box, RadioGroup, YStack } from '@app/shared/ui/base';
 import { HealthRecordIcon } from '@app/shared/ui/icons/HealthRecord';
@@ -14,21 +15,8 @@ import { Text } from '@app/shared/ui/Text';
 // https://mindlogger.atlassian.net/browse/M2-9101
 const REQUEST_HEALTH_RECORD_DATA_LINK = 'https://mindlogger.org/';
 
-export type RequestHealthRecordDataConfig = {
-  optInOutOptions: [
-    {
-      id: 'opt_in';
-      label: string;
-    },
-    {
-      id: 'opt_out';
-      label: string;
-    },
-  ];
-};
-
 type RequestHealthRecordDataItemProps = {
-  config: RequestHealthRecordDataConfig;
+  config: RequestHealthRecordDataAnswerSettings;
   question: string;
   onChange: (value: RadioOption) => void;
   initialValue?: RequestHealthRecordDataResponse;
