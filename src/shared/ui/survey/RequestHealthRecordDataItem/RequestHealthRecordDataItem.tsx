@@ -1,6 +1,8 @@
 import React, { FC, useMemo, useState } from 'react';
 import { Linking } from 'react-native';
 
+import { useTranslation } from 'react-i18next';
+
 import { RequestHealthRecordDataResponse } from '@app/features/pass-survey/lib/types/payload';
 import { RequestHealthRecordDataAnswerSettings } from '@app/shared/api/services/ActivityItemDto';
 import { colors } from '@app/shared/lib/constants/colors';
@@ -26,6 +28,7 @@ type RequestHealthRecordDataItemProps = {
 export const RequestHealthRecordDataItem: FC<
   RequestHealthRecordDataItemProps
 > = ({ config, question, onChange, initialValue, textReplacer }) => {
+  const { t } = useTranslation();
   const [selectedOptionId, setSelectedOptionId] = useState(
     initialValue ?? null,
   );
@@ -73,14 +76,14 @@ export const RequestHealthRecordDataItem: FC<
 
       <Box mb="$4">
         <Link
-          onPress={handleExternalLinkPress}
-          accessibilityLabel="external-link-button"
-        >
-          <Text color={colors.blue} textDecorationLine="none">
-            Learn more about how MindLogger securely accesses healthcare data.
-          </Text>
-        </Link>
-      </Box>
+      <Link
+        onPress={handleExternalLinkPress}
+        accessibilityLabel="external-link-button"
+      >
+        <Text color={colors.blue} textDecorationLine="none" fontSize={18}>
+          {t('requestHealthRecordData:linkText')}
+        </Text>
+      </Link>
 
       <RadioGroup
         value={selectedOptionId ?? ''}
