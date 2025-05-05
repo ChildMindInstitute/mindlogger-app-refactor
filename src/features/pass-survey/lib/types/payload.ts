@@ -11,7 +11,6 @@ import { Item } from '@app/shared/ui/survey/CheckBox/types';
 import { Coordinates } from '@app/shared/ui/survey/Geolocation/types';
 import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
 import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem/types';
-import { RequestHealthRecordDataConfig } from '@app/shared/ui/survey/RequestHealthRecordDataItem/RequestHealthRecordDataItem';
 import {
   StackedItem,
   StackedRowItemValue,
@@ -240,9 +239,7 @@ type PhotoPayload = null;
 
 type VideoPayload = null;
 
-type RequestHealthRecordDataPayload = {
-  optInOutOptions: RequestHealthRecordDataConfig['optInOutOptions'];
-};
+type RequestHealthRecordDataPayload = RequestHealthRecordDataAnswerSettings;
 
 type PipelinePayload =
   | AbTestPayload

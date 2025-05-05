@@ -1,6 +1,6 @@
 import { AbPayload } from '@app/abstract/lib/types/abTrails';
 import { FlankerItemSettings } from '@app/abstract/lib/types/flanker';
-import { RequestHealthRecordDataConfig } from '@app/shared/ui/survey/RequestHealthRecordDataItem/RequestHealthRecordDataItem';
+import { RequestHealthRecordDataAnswerSettings } from '@app/shared/api/services/ActivityItemDto';
 
 import { Report } from './activityReportSettings';
 import { ConditionalLogic } from './conditionalLogic';
@@ -221,6 +221,8 @@ type PhotoConfig = null;
 type VideoConfig = null;
 
 type TimeConfig = null;
+
+type RequestHealthRecordDataConfig = RequestHealthRecordDataAnswerSettings;
 
 type AbTrailsConfig = AbPayload;
 
