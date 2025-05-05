@@ -3,21 +3,22 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+import {
+  EHRConsent,
+  RequestHealthRecordDataAnswerSettings,
+} from '@app/shared/api/services/ActivityItemDto';
 import { RadioGroup } from '@app/shared/ui/base';
 
-import {
-  RequestHealthRecordDataConfig,
-  RequestHealthRecordDataItem,
-} from './RequestHealthRecordDataItem';
+import { RequestHealthRecordDataItem } from './RequestHealthRecordDataItem';
 
-const mockConfig: RequestHealthRecordDataConfig = {
+const mockConfig: RequestHealthRecordDataAnswerSettings = {
   optInOutOptions: [
     {
-      id: 'opt_in',
+      id: EHRConsent.OptIn,
       label: 'I agree to share my data',
     },
     {
-      id: 'opt_out',
+      id: EHRConsent.OptOut,
       label: "I don't want to share my data",
     },
   ],
@@ -79,7 +80,7 @@ describe('RequestHealthRecordDataItem', () => {
     expect(onChangeMock).toHaveBeenCalledTimes(1);
     expect(onChangeMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        id: 'opt_in',
+        id: EHRConsent.OptIn,
         text: 'I agree to share my data',
       }),
     );
@@ -91,7 +92,7 @@ describe('RequestHealthRecordDataItem', () => {
         <RequestHealthRecordDataItem
           config={mockConfig}
           onChange={onChangeMock}
-          initialValue="opt_in"
+          initialValue={EHRConsent.OptIn}
           question="Would you like to share your health record data?"
           textReplacer={textReplacerMock}
         />
@@ -99,6 +100,6 @@ describe('RequestHealthRecordDataItem', () => {
     );
 
     const radioGroup = component.root.findByType(RadioGroup);
-    expect(radioGroup.props.value).toBe('opt_in');
+    expect(radioGroup.props.value).toBe(EHRConsent.OptIn);
   });
 });
