@@ -44,12 +44,12 @@ import { StackedRadios } from '@app/shared/ui/survey/StackedRadioItem/StackedRad
 import { TimePickerItem } from '@app/shared/ui/survey/TimePickerItem';
 import { TimeRangeItem } from '@app/shared/ui/survey/TimeRangeItem';
 
-import { AdditionalText } from './AdditionalText';
 import { ActivityIdentityContext } from '../lib/contexts/ActivityIdentityContext';
 import { ActivityItem as ActivityItemProps } from '../lib/types/activityItem';
 import { PipelineItemResponse } from '../lib/types/payload';
 import { PipelineItemAnswer } from '../lib/types/pipelineItemAnswer';
 import { mapStreamEventToDto } from '../model/streamEventMapper';
+import { AdditionalText } from './AdditionalText';
 
 type Props = ActivityItemProps &
   PipelineItemAnswer & {
@@ -512,47 +512,15 @@ export function ActivityItem({
           }
         }}
       >
-        {question && type !== 'RequestHealthRecordData' && (
-          <Box mx={16} mb={20}>
-            <MarkdownMessage
-              accessibilityLabel="item_display_content"
-              flex={1}
-              alignItems={alignMessageToLeft ? undefined : 'center'}
-              content={
-                assignment && assignment.respondent.id !== assignment.target.id
-                  ? insertAfterMedia(
-                      textVariableReplacer(question),
-                      `<div data-is-assignment-badge />`,
-                    )
-                  : textVariableReplacer(question)
-              }
-              rules={{
-                html_block: (...args: Parameters<RenderFunction>) => {
-                  const [node] = args;
-
-                  if (
-                    assignment &&
-                    node.content.match(/ata-is-assignment-badge/)
-                  ) {
-                    return (
-                      <XStack mb={12}>
-                        {alignMessageToLeft ? null : (
-                          <Box flexGrow={1} flexShrink={1} />
-                        )}
-                        <ActivityAssignmentBadge
-                          assignment={assignment}
-                          accessibilityLabel="item_display_assignment"
-                        />
-                        <Box flexGrow={1} flexShrink={1} />
-                      </XStack>
-                    );
-                  }
-
-                  return (markDownRules.html_block as RenderFunction)(...args);
-                },
-              }}
-            />
-          </Box>
+        {question && (
+          <ItemMarkdown
+            content={question}
+            assignment={assignment}
+            alignToLeft={alignMessageToLeft}
+            textVariableReplacer={textVariableReplacer}
+            mx={16}
+            mb={20}
+          />
         )}
 
         {item}

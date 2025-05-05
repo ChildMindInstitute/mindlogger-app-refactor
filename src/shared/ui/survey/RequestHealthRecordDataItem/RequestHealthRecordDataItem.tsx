@@ -12,6 +12,7 @@ import { Link } from '@app/shared/ui/Link';
 import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem/types';
 import { Text } from '@app/shared/ui/Text';
 
+import { ItemMarkdown } from '../ItemMarkdown';
 
 // TODO: Update to the correct URL when available
 // https://mindlogger.atlassian.net/browse/M2-9101
@@ -66,16 +67,16 @@ export const RequestHealthRecordDataItem: FC<
 
   return (
     <YStack space="$4" p="$4">
-      <Box alignItems="center" mb="$4">
+      <Box alignItems="center">
         <HealthRecordIcon />
       </Box>
 
-      <Box mb="$4">
-        <Text fontSize={17}>{questionText}</Text>
-      </Box>
+      <ItemMarkdown
+        content={questionText}
+        textVariableReplacer={textReplacer}
+        alignToLeft
+      />
 
-      <Box mb="$4">
-        <Link
       <Link
         onPress={handleExternalLinkPress}
         accessibilityLabel="external-link-button"
