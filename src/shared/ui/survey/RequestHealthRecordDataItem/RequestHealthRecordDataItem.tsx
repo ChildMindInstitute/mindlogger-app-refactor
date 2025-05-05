@@ -21,19 +21,11 @@ type RequestHealthRecordDataItemProps = {
   onChange: (value: RadioOption) => void;
   initialValue?: RequestHealthRecordDataResponse;
   textReplacer: (markdown: string) => string;
-  onValidationError?: (hasError: boolean) => void;
 };
 
 export const RequestHealthRecordDataItem: FC<
   RequestHealthRecordDataItemProps
-> = ({
-  config,
-  question,
-  onChange,
-  initialValue,
-  textReplacer,
-  onValidationError,
-}) => {
+> = ({ config, question, onChange, initialValue, textReplacer }) => {
   const [selectedOptionId, setSelectedOptionId] = useState(
     initialValue ?? null,
   );
