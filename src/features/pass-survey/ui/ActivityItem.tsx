@@ -44,12 +44,12 @@ import { StackedRadios } from '@app/shared/ui/survey/StackedRadioItem/StackedRad
 import { TimePickerItem } from '@app/shared/ui/survey/TimePickerItem';
 import { TimeRangeItem } from '@app/shared/ui/survey/TimeRangeItem';
 
+import { AdditionalText } from './AdditionalText';
 import { ActivityIdentityContext } from '../lib/contexts/ActivityIdentityContext';
 import { ActivityItem as ActivityItemProps } from '../lib/types/activityItem';
 import { PipelineItemResponse } from '../lib/types/payload';
 import { PipelineItemAnswer } from '../lib/types/pipelineItemAnswer';
 import { mapStreamEventToDto } from '../model/streamEventMapper';
-import { AdditionalText } from './AdditionalText';
 
 type Props = ActivityItemProps &
   PipelineItemAnswer & {
