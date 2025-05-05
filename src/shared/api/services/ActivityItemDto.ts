@@ -718,7 +718,8 @@ type StabilityTrackerConfiguration = {
 
 export type FlankerAnswerSettings = null;
 
-type RequestHealthRecordDataConfiguration = ButtonsConfiguration & {
+type RequestHealthRecordDataConfiguration = {
+  removeBackButton: boolean;
   skippableItem?: boolean;
 };
 
