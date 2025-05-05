@@ -9,6 +9,9 @@ import { Link } from '@app/shared/ui/Link';
 import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem/types';
 import { Text } from '@app/shared/ui/Text';
 
+
+// TODO: Update to the correct URL when available
+// https://mindlogger.atlassian.net/browse/M2-9101
 const REQUEST_HEALTH_RECORD_DATA_LINK = 'https://mindlogger.org/';
 
 export type RequestHealthRecordDataConfig = {
