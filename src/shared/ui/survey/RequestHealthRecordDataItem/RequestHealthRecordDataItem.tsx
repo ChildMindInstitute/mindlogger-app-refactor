@@ -18,7 +18,7 @@ const REQUEST_HEALTH_RECORD_DATA_LINK = 'https://mindlogger.org/';
 type RequestHealthRecordDataItemProps = {
   config: RequestHealthRecordDataAnswerSettings;
   question: string;
-  onChange: (value: RadioOption) => void;
+  onChange: (value: RequestHealthRecordDataResponse) => void;
   initialValue?: RequestHealthRecordDataResponse;
   textReplacer: (markdown: string) => string;
 };
@@ -51,16 +51,8 @@ export const RequestHealthRecordDataItem: FC<
 
   const handleValueChange = (value: string) => {
     const selectedOptionValue = value as RequestHealthRecordDataResponse;
-    const selectedOption =
-      selectedOptionValue === 'opt_in' ? options[0] : options[1];
-
     setSelectedOptionId(selectedOptionValue);
-
-    if (onValidationError) {
-      onValidationError(false);
-    }
-
-    onChange(selectedOption);
+    onChange(selectedOptionValue);
   };
 
   const handleExternalLinkPress = () => {
