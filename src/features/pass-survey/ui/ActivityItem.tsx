@@ -149,21 +149,18 @@ export function ActivityItem({
     [moveToNextItem, onResponse],
   );
 
-  const { question, item, alignMessageToLeft } = useMemo((): {
+  const {
+    question = pipelineItem.question,
+    item,
+    alignMessageToLeft = false,
+  } = useMemo((): {
     question?: string | null;
     item: JSX.Element | null;
-    alignMessageToLeft: boolean;
+    alignMessageToLeft?: boolean;
   } => {
-    const defaultValues = {
-      question: pipelineItem.question,
-      item: <></>,
-      alignMessageToLeft: false,
-    };
-
     switch (type) {
       case 'Splash':
         return {
-          ...defaultValues,
           item: (
             <Box
               flex={1}
@@ -176,7 +173,6 @@ export function ActivityItem({
         };
       case 'AbTest':
         return {
-          ...defaultValues,
           item: (
             <Box flex={1}>
               <AbTest
@@ -189,7 +185,6 @@ export function ActivityItem({
         };
       case 'StabilityTracker':
         return {
-          ...defaultValues,
           item: (
             <Box flex={1}>
               <StabilityTracker
@@ -204,7 +199,6 @@ export function ActivityItem({
         };
       case 'DrawingTest':
         return {
-          ...defaultValues,
           item: dimensions ? (
             <Box flex={1} mb="$6">
               <DrawingTest
@@ -225,7 +219,6 @@ export function ActivityItem({
         };
       case 'Flanker':
         return {
-          ...defaultValues,
           item: IS_ANDROID ? (
             <HtmlFlanker
               configuration={pipelineItem.payload}
@@ -242,7 +235,6 @@ export function ActivityItem({
         };
       case 'ParagraphText':
         return {
-          ...defaultValues,
           item: (
             <Box mx={16} mb={16}>
               <ParagraphText
@@ -255,7 +247,6 @@ export function ActivityItem({
         };
       case 'TextInput':
         return {
-          ...defaultValues,
           item: (
             <Box mx={16} mb={16}>
               <SimpleTextInput
@@ -268,7 +259,6 @@ export function ActivityItem({
         };
       case 'Slider':
         return {
-          ...defaultValues,
           item: (
             <Box mx={16} mb="$6">
               <SurveySlider
@@ -282,7 +272,6 @@ export function ActivityItem({
         };
       case 'NumberSelect':
         return {
-          ...defaultValues,
           item: (
             <Box justifyContent="center" mb="$6" mx={16}>
               <NumberSelector
@@ -295,7 +284,6 @@ export function ActivityItem({
         };
       case 'StackedSlider':
         return {
-          ...defaultValues,
           item: (
             <Box mx="$6" mb="$6">
               <StackedSlider
@@ -308,7 +296,6 @@ export function ActivityItem({
         };
       case 'StackedCheckbox':
         return {
-          ...defaultValues,
           item: (
             <Box mx="$6">
               <StackedCheckboxItem
@@ -323,7 +310,6 @@ export function ActivityItem({
         };
       case 'StackedRadio':
         return {
-          ...defaultValues,
           item: (
             <Box mx="$6">
               <StackedRadios
@@ -338,7 +324,6 @@ export function ActivityItem({
         };
       case 'Checkbox':
         return {
-          ...defaultValues,
           item: (
             <Box mx={16}>
               <CheckBoxActivityItem
@@ -352,7 +337,6 @@ export function ActivityItem({
         };
       case 'Audio':
         return {
-          ...defaultValues,
           item: (
             <Box mx="$6" mb="$6">
               <AudioRecorderItem
@@ -365,13 +349,11 @@ export function ActivityItem({
         };
       case 'Message':
         return {
-          ...defaultValues,
           item: null,
           alignMessageToLeft: pipelineItem.payload.alignToLeft,
         };
       case 'AudioPlayer':
         return {
-          ...defaultValues,
           item: (
             <Box mx="$6" mb="$6">
               <AudioStimulusItem
@@ -384,7 +366,6 @@ export function ActivityItem({
         };
       case 'TimeRange':
         return {
-          ...defaultValues,
           item: (
             <Box mx="$6" mb="$6">
               <TimeRangeItem onChange={onResponse} value={value?.answer} />
@@ -393,7 +374,6 @@ export function ActivityItem({
         };
       case 'Date':
         return {
-          ...defaultValues,
           item: (
             <Box mx="$6" mb="$6">
               <DatePickerItem onChange={onResponse} value={value?.answer} />
@@ -402,7 +382,6 @@ export function ActivityItem({
         };
       case 'Radio':
         return {
-          ...defaultValues,
           item: (
             <Box mx={16}>
               <RadioActivityItem
@@ -416,7 +395,6 @@ export function ActivityItem({
         };
       case 'Geolocation':
         return {
-          ...defaultValues,
           item: (
             <Box mx="$6" mb="$6">
               <GeolocationItem onChange={onResponse} value={value?.answer} />
@@ -425,7 +403,6 @@ export function ActivityItem({
         };
       case 'Photo':
         return {
-          ...defaultValues,
           item: (
             <Box mx="$6">
               <PhotoItem onChange={onResponse} value={value?.answer} />
@@ -434,7 +411,6 @@ export function ActivityItem({
         };
       case 'Video':
         return {
-          ...defaultValues,
           item: (
             <Box mx="$6">
               <VideoItem onChange={onResponse} value={value?.answer} />
@@ -443,7 +419,6 @@ export function ActivityItem({
         };
       case 'Time':
         return {
-          ...defaultValues,
           item: (
             <Box mx="$6" mb="$6">
               <TimePickerItem onChange={onResponse} value={value?.answer} />
@@ -452,7 +427,6 @@ export function ActivityItem({
         };
       case 'RequestHealthRecordData':
         return {
-          ...defaultValues,
           item: (
             <RequestHealthRecordDataItem
               config={pipelineItem.payload}
@@ -465,7 +439,9 @@ export function ActivityItem({
           question: null,
         };
       default:
-        return defaultValues;
+        return {
+          item: <></>,
+        };
     }
   }, [
     context?.maxLambda,
