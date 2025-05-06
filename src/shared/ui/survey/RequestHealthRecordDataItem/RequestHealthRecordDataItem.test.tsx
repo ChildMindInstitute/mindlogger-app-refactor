@@ -50,6 +50,7 @@ describe('RequestHealthRecordDataItem', () => {
           question={mockQuestion}
           onChange={onChangeMock}
           textReplacer={textReplacerMock}
+          assignment={null}
         />
       </TamaguiProvider>,
     );
@@ -76,6 +77,7 @@ describe('RequestHealthRecordDataItem', () => {
           onChange={onChangeMock}
           initialValue={EHRConsent.OptIn}
           textReplacer={textReplacerMock}
+          assignment={null}
         />
       </TamaguiProvider>,
     );
