@@ -3,14 +3,13 @@ import { Linking } from 'react-native';
 
 import {
   NavigationContainer,
-  NavigationState,
   DefaultTheme,
   LinkingOptions,
   getStateFromPath,
+  NavigationState,
 } from '@react-navigation/native';
 
-import { RootStackParamList } from '@app/screens/config/types';
-import { onScreenChanged } from '@app/screens/model/operations';
+import { useInitialNavigationState } from '@app/screens/model/hooks/useInitialNavigationState';
 import { DEEP_LINK_PREFIX } from '@app/shared/lib/constants';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
@@ -62,16 +61,21 @@ const getLinking = ():
 };
 
 export const NavigationProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { isReady, initialNavigationState, onNavigationStateChanged } =
+    useInitialNavigationState();
+
+  if (!isReady) {
+    return null;
+  }
+
   return (
     <NavigationContainer
       theme={theme}
       linking={getLinking()}
-      onStateChange={state =>
-        onScreenChanged(
-          // @react-navigation's poor type inference
-          state as NavigationState<RootStackParamList>,
-        )
+      onStateChange={
+        onNavigationStateChanged as (state?: NavigationState) => void
       }
+      initialState={initialNavigationState}
     >
       {children}
     </NavigationContainer>

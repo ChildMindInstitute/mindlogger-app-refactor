@@ -10,6 +10,8 @@ import {
   EntityProgressionInProgressActivityFlow,
   EntityResponseTime,
 } from '@app/abstract/lib/types/entityProgress';
+import { NavigationServiceScopes } from '@app/screens/lib/INavigationService';
+import { getDefaultNavigationService } from '@app/screens/lib/navigationServiceInstance';
 import { cleanUpAction } from '@app/shared/lib/redux-state/actions';
 import { isEntityExpired } from '@app/shared/lib/utils/survey/survey';
 
@@ -260,6 +262,11 @@ const slice = createSlice({
         targetSubjectId,
         responseTime: endAt,
       });
+
+      // Clear saved navigation state for active assessment when entity is completed
+      getDefaultNavigationService().clearInitialNavigationState(
+        NavigationServiceScopes.ActiveAssessment,
+      );
     },
 
     upsertEntityProgression: (
