@@ -434,6 +434,7 @@ export function ActivityItem({
               initialValue={value?.answer}
               question={pipelineItem.question}
               textReplacer={textVariableReplacer}
+              assignment={assignment}
             />
           ),
           question: null,
@@ -444,6 +445,7 @@ export function ActivityItem({
         };
     }
   }, [
+    assignment,
     context?.maxLambda,
     dimensions,
     handleFlankerResult,

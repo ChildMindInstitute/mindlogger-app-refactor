@@ -3,6 +3,7 @@ import { Linking } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
+import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
 import { RequestHealthRecordDataResponse } from '@app/features/pass-survey/lib/types/payload';
 import { RequestHealthRecordDataAnswerSettings } from '@app/shared/api/services/ActivityItemDto';
 import { colors } from '@app/shared/lib/constants/colors';
@@ -24,11 +25,19 @@ type RequestHealthRecordDataItemProps = {
   onChange: (value: RequestHealthRecordDataResponse) => void;
   initialValue?: RequestHealthRecordDataResponse;
   textReplacer: (markdown: string) => string;
+  assignment: Assignment | null;
 };
 
 export const RequestHealthRecordDataItem: FC<
   RequestHealthRecordDataItemProps
-> = ({ config, question, onChange, initialValue, textReplacer }) => {
+> = ({
+  config,
+  question,
+  onChange,
+  initialValue,
+  textReplacer,
+  assignment,
+}) => {
   const { t } = useTranslation();
   const [selectedOptionId, setSelectedOptionId] = useState(
     initialValue ?? null,
@@ -74,6 +83,7 @@ export const RequestHealthRecordDataItem: FC<
       <ItemMarkdown
         content={questionText}
         textVariableReplacer={textReplacer}
+        assignment={assignment}
         alignToLeft
       />
 
