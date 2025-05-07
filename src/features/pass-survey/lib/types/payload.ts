@@ -413,6 +413,7 @@ export interface RequestHealthRecordDataPipelineItem extends PipelineItemBase {
   payload: RequestHealthRecordDataPayload;
   question: string;
   subStep: RequestHealthRecordDataItemStep;
+  additionalEHRs: 'requested' | 'done' | null;
 }
 
 export type StabilityTrackerResponse = StabilityTrackerBaseResponse;
