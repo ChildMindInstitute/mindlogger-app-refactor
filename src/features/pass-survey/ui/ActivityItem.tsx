@@ -429,10 +429,9 @@ export function ActivityItem({
         return {
           item: (
             <RequestHealthRecordDataItem
-              config={pipelineItem.payload}
+              item={pipelineItem}
               onChange={onResponse}
-              initialValue={value?.answer}
-              question={pipelineItem.question}
+              responseValue={value?.answer}
               textReplacer={textVariableReplacer}
               assignment={assignment}
             />
@@ -453,8 +452,7 @@ export function ActivityItem({
     handleStabilityTrackerComplete,
     onContextChange,
     onResponse,
-    pipelineItem.payload,
-    pipelineItem.question,
+    pipelineItem,
     processLiveEvent,
     textVariableReplacer,
     type,

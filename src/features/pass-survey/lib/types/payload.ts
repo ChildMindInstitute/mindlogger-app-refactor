@@ -285,6 +285,7 @@ type PipelineItemBase = {
     required: boolean;
   };
   conditionalLogic?: ConditionalLogic;
+  subStep?: number;
 };
 
 export interface AbTestPipelineItem extends PipelineItemBase {
@@ -400,10 +401,18 @@ export interface TimePipelineItem extends PipelineItemBase {
   payload: TimePayload;
 }
 
+export enum RequestHealthRecordDataItemStep {
+  ConsentPrompt = 0,
+  Partnership = 1,
+  OneUpHealth = 2,
+  AdditionalPrompt = 3,
+}
+
 export interface RequestHealthRecordDataPipelineItem extends PipelineItemBase {
   type: 'RequestHealthRecordData';
   payload: RequestHealthRecordDataPayload;
   question: string;
+  subStep: RequestHealthRecordDataItemStep;
 }
 
 export type StabilityTrackerResponse = StabilityTrackerBaseResponse;
