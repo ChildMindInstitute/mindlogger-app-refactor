@@ -2,14 +2,12 @@ import React, {
   ComponentProps,
   useCallback,
   useContext,
+  useMemo,
   useState,
 } from 'react';
 
-import { RenderFunction } from 'react-native-markdown-display';
-
 import { AbTest } from '@app/entities/abTrail/ui/AbTest';
 import { useActivityAssignment } from '@app/entities/activity/lib/hooks/useActivityAssignment';
-import { ActivityAssignmentBadge } from '@app/entities/activity/ui/ActivityAssignmentBadge';
 import { ActivityAssignmentBanner } from '@app/entities/activity/ui/ActivityAssignmentBanner';
 import { useAppletStreamingDetails } from '@app/entities/applet/lib/hooks/useAppletStreamingDetails';
 import { DrawingTest } from '@app/entities/drawer/ui/DrawingTest/DrawingTest';
@@ -22,7 +20,7 @@ import { LiveEvent } from '@app/shared/lib/tcp/types';
 import { useSendEvent } from '@app/shared/lib/tcp/useSendLiveEvent';
 import { Dimensions } from '@app/shared/lib/types/space';
 import { wait } from '@app/shared/lib/utils/common';
-import { Box, XStack } from '@app/shared/ui/base';
+import { Box } from '@app/shared/ui/base';
 import { ScrollableContent } from '@app/shared/ui/ScrollableContent';
 import { HandlersContext } from '@app/shared/ui/Stepper/contexts';
 import { AudioRecorderItem } from '@app/shared/ui/survey/AudioRecorderItem';
@@ -30,12 +28,13 @@ import { AudioStimulusItem } from '@app/shared/ui/survey/AudioStimulusItem';
 import { CheckBoxActivityItem } from '@app/shared/ui/survey/CheckBox/CheckBoxActivity.item';
 import { DatePickerItem } from '@app/shared/ui/survey/DatePickerItem';
 import { GeolocationItem } from '@app/shared/ui/survey/Geolocation/GeolocationItem';
-import { MarkdownMessage } from '@app/shared/ui/survey/MarkdownMessage';
+import { ItemMarkdown } from '@app/shared/ui/survey/ItemMarkdown';
 import { PhotoItem } from '@app/shared/ui/survey/MediaItems/PhotoItem';
 import { VideoItem } from '@app/shared/ui/survey/MediaItems/VideoItem';
 import { NumberSelector } from '@app/shared/ui/survey/NumberSelector';
 import { ParagraphText } from '@app/shared/ui/survey/ParagraphText';
 import { RadioActivityItem } from '@app/shared/ui/survey/RadioActivityItem/RadioActivityItem';
+import { RequestHealthRecordDataItem } from '@app/shared/ui/survey/RequestHealthRecordDataItem/RequestHealthRecordDataItem';
 import { SimpleTextInput } from '@app/shared/ui/survey/SimpleTextInput';
 import { StackedSlider } from '@app/shared/ui/survey/Slider/StackedSlider';
 import { SurveySlider } from '@app/shared/ui/survey/Slider/SurveySlider';
@@ -44,8 +43,6 @@ import { StackedCheckboxItem } from '@app/shared/ui/survey/StackedCheckboxItem/S
 import { StackedRadios } from '@app/shared/ui/survey/StackedRadioItem/StackedRadiosItem';
 import { TimePickerItem } from '@app/shared/ui/survey/TimePickerItem';
 import { TimeRangeItem } from '@app/shared/ui/survey/TimeRangeItem';
-import { markDownRules } from '@shared/lib/markdown/rules';
-import { insertAfterMedia } from '@shared/lib/markdown/utils';
 
 import { AdditionalText } from './AdditionalText';
 import { ActivityIdentityContext } from '../lib/contexts/ActivityIdentityContext';
@@ -95,18 +92,16 @@ export function ActivityItem({
     streamingDetails?.streamEnabled || false,
   );
 
-  const processLiveEvent = (streamEvent: LiveEvent) => {
-    const liveEventDto = mapStreamEventToDto(streamEvent);
+  const processLiveEvent = useCallback(
+    (streamEvent: LiveEvent) => {
+      const liveEventDto = mapStreamEventToDto(streamEvent);
 
-    sendLiveEvent(liveEventDto);
-  };
+      sendLiveEvent(liveEventDto);
+    },
+    [sendLiveEvent],
+  );
 
   const { next } = useContext(HandlersContext);
-
-  let item: JSX.Element | null;
-  const question = pipelineItem.question;
-
-  let alignMessageToLeft = false;
 
   const stopScrolling = () => setScrollEnabled(false);
 
@@ -154,272 +149,317 @@ export function ActivityItem({
     [moveToNextItem, onResponse],
   );
 
-  switch (type) {
-    case 'Splash':
-      item = (
-        <Box flex={1} onPressIn={stopScrolling} onPressOut={releaseScrolling}>
-          <SplashItem config={pipelineItem.payload} />
-        </Box>
-      );
-      break;
-
-    case 'AbTest':
-      item = (
-        <Box flex={1}>
-          <AbTest
-            testData={pipelineItem.payload}
-            onResponse={onResponse}
-            onLog={processLiveEvent}
-          />
-        </Box>
-      );
-      break;
-
-    case 'StabilityTracker':
-      item = (
-        <Box flex={1}>
-          <StabilityTracker
-            config={pipelineItem.payload}
-            onComplete={handleStabilityTrackerComplete}
-            onMaxLambdaChange={onContextChange}
-            maxLambda={context?.maxLambda as number}
-            onLog={processLiveEvent}
-          />
-        </Box>
-      );
-      break;
-
-    case 'DrawingTest':
-      item = dimensions ? (
-        <Box flex={1} mb="$6">
-          <DrawingTest
-            flex={1}
-            dimensions={dimensions}
-            {...pipelineItem.payload}
-            toggleScroll={setScrollEnabled}
-            value={{
-              fileName: value?.answer?.fileName ?? null,
-              lines: value?.answer?.lines ?? [],
-            }}
-            legacyLayoutSupport={!pipelineItem.payload.proportionEnabled}
-            onResult={onResponse}
-            onLog={processLiveEvent}
-          />
-        </Box>
-      ) : null;
-      break;
-
-    case 'Flanker':
-      item = IS_ANDROID ? (
-        <HtmlFlanker
-          configuration={pipelineItem.payload}
-          onResult={handleFlankerResult}
-          onLog={processLiveEvent}
-        />
-      ) : (
-        <NativeIosFlanker
-          configuration={pipelineItem.payload}
-          onResult={handleFlankerResult}
-          onLog={processLiveEvent}
-        />
-      );
-      break;
-    case 'ParagraphText':
-      item = (
-        <Box mx={16} mb={16}>
-          <ParagraphText
-            value={value?.answer ?? ''}
-            config={pipelineItem.payload}
-            onChange={onResponse}
-          />
-        </Box>
-      );
-      break;
-    case 'TextInput':
-      item = (
-        <Box mx={16} mb={16}>
-          <SimpleTextInput
-            value={value?.answer ?? ''}
-            config={pipelineItem.payload}
-            onChange={onResponse}
-          />
-        </Box>
-      );
-      break;
-
-    case 'Slider':
-      item = (
-        <Box mx={16} mb="$6">
-          <SurveySlider
-            config={pipelineItem.payload}
-            onChange={onResponse}
-            accessibilityLabel="slider"
-            initialValue={value?.answer ?? null}
-          />
-        </Box>
-      );
-      break;
-
-    case 'NumberSelect':
-      item = (
-        <Box justifyContent="center" mb="$6" mx={16}>
-          <NumberSelector
-            value={value?.answer ?? ''}
-            config={pipelineItem.payload}
-            onChange={onResponse}
-          />
-        </Box>
-      );
-      break;
-
-    case 'StackedSlider':
-      item = (
-        <Box mx="$6" mb="$6">
-          <StackedSlider
-            config={pipelineItem.payload}
-            onChange={onResponse}
-            values={value?.answer || null}
-          />
-        </Box>
-      );
-      break;
-
-    case 'StackedCheckbox':
-      item = (
-        <Box mx="$6">
-          <StackedCheckboxItem
-            config={pipelineItem.payload}
-            onChange={onResponse}
-            values={value?.answer || null}
-            textReplacer={textVariableReplacer}
-            tooltipsShown={pipelineItem.payload.addTooltip}
-          />
-        </Box>
-      );
-      break;
-
-    case 'StackedRadio':
-      item = (
-        <Box mx="$6">
-          <StackedRadios
-            config={pipelineItem.payload}
-            onChange={onResponse}
-            values={value?.answer || []}
-            textReplacer={textVariableReplacer}
-            tooltipsShown={pipelineItem.payload.addTooltip}
-          />
-        </Box>
-      );
-      break;
-
-    case 'Checkbox':
-      item = (
-        <Box mx={16}>
-          <CheckBoxActivityItem
-            config={pipelineItem.payload}
-            onChange={onResponse}
-            values={value?.answer || []}
-            textReplacer={textVariableReplacer}
-          />
-        </Box>
-      );
-      break;
-
-    case 'Audio':
-      item = (
-        <Box mx="$6" mb="$6">
-          <AudioRecorderItem
-            onChange={onResponse}
-            value={value?.answer}
-            config={pipelineItem.payload}
-          />
-        </Box>
-      );
-      break;
-
-    case 'Message': {
-      item = null;
-      alignMessageToLeft = pipelineItem.payload.alignToLeft;
-      break;
+  const {
+    question = pipelineItem.question,
+    item,
+    alignMessageToLeft = false,
+  } = useMemo((): {
+    question?: string | null;
+    item: JSX.Element | null;
+    alignMessageToLeft?: boolean;
+  } => {
+    switch (type) {
+      case 'Splash':
+        return {
+          item: (
+            <Box
+              flex={1}
+              onPressIn={stopScrolling}
+              onPressOut={releaseScrolling}
+            >
+              <SplashItem config={pipelineItem.payload} />
+            </Box>
+          ),
+        };
+      case 'AbTest':
+        return {
+          item: (
+            <Box flex={1}>
+              <AbTest
+                testData={pipelineItem.payload}
+                onResponse={onResponse}
+                onLog={processLiveEvent}
+              />
+            </Box>
+          ),
+        };
+      case 'StabilityTracker':
+        return {
+          item: (
+            <Box flex={1}>
+              <StabilityTracker
+                config={pipelineItem.payload}
+                onComplete={handleStabilityTrackerComplete}
+                onMaxLambdaChange={onContextChange}
+                maxLambda={context?.maxLambda as number}
+                onLog={processLiveEvent}
+              />
+            </Box>
+          ),
+        };
+      case 'DrawingTest':
+        return {
+          item: dimensions ? (
+            <Box flex={1} mb="$6">
+              <DrawingTest
+                flex={1}
+                dimensions={dimensions}
+                {...pipelineItem.payload}
+                toggleScroll={setScrollEnabled}
+                value={{
+                  fileName: value?.answer?.fileName ?? null,
+                  lines: value?.answer?.lines ?? [],
+                }}
+                legacyLayoutSupport={!pipelineItem.payload.proportionEnabled}
+                onResult={onResponse}
+                onLog={processLiveEvent}
+              />
+            </Box>
+          ) : null,
+        };
+      case 'Flanker':
+        return {
+          item: IS_ANDROID ? (
+            <HtmlFlanker
+              configuration={pipelineItem.payload}
+              onResult={handleFlankerResult}
+              onLog={processLiveEvent}
+            />
+          ) : (
+            <NativeIosFlanker
+              configuration={pipelineItem.payload}
+              onResult={handleFlankerResult}
+              onLog={processLiveEvent}
+            />
+          ),
+        };
+      case 'ParagraphText':
+        return {
+          item: (
+            <Box mx={16} mb={16}>
+              <ParagraphText
+                value={value?.answer ?? ''}
+                config={pipelineItem.payload}
+                onChange={onResponse}
+              />
+            </Box>
+          ),
+        };
+      case 'TextInput':
+        return {
+          item: (
+            <Box mx={16} mb={16}>
+              <SimpleTextInput
+                value={value?.answer ?? ''}
+                config={pipelineItem.payload}
+                onChange={onResponse}
+              />
+            </Box>
+          ),
+        };
+      case 'Slider':
+        return {
+          item: (
+            <Box mx={16} mb="$6">
+              <SurveySlider
+                config={pipelineItem.payload}
+                onChange={onResponse}
+                accessibilityLabel="slider"
+                initialValue={value?.answer ?? null}
+              />
+            </Box>
+          ),
+        };
+      case 'NumberSelect':
+        return {
+          item: (
+            <Box justifyContent="center" mb="$6" mx={16}>
+              <NumberSelector
+                value={value?.answer ?? ''}
+                config={pipelineItem.payload}
+                onChange={onResponse}
+              />
+            </Box>
+          ),
+        };
+      case 'StackedSlider':
+        return {
+          item: (
+            <Box mx="$6" mb="$6">
+              <StackedSlider
+                config={pipelineItem.payload}
+                onChange={onResponse}
+                values={value?.answer || null}
+              />
+            </Box>
+          ),
+        };
+      case 'StackedCheckbox':
+        return {
+          item: (
+            <Box mx="$6">
+              <StackedCheckboxItem
+                config={pipelineItem.payload}
+                onChange={onResponse}
+                values={value?.answer || null}
+                textReplacer={textVariableReplacer}
+                tooltipsShown={pipelineItem.payload.addTooltip}
+              />
+            </Box>
+          ),
+        };
+      case 'StackedRadio':
+        return {
+          item: (
+            <Box mx="$6">
+              <StackedRadios
+                config={pipelineItem.payload}
+                onChange={onResponse}
+                values={value?.answer || []}
+                textReplacer={textVariableReplacer}
+                tooltipsShown={pipelineItem.payload.addTooltip}
+              />
+            </Box>
+          ),
+        };
+      case 'Checkbox':
+        return {
+          item: (
+            <Box mx={16}>
+              <CheckBoxActivityItem
+                config={pipelineItem.payload}
+                onChange={onResponse}
+                values={value?.answer || []}
+                textReplacer={textVariableReplacer}
+              />
+            </Box>
+          ),
+        };
+      case 'Audio':
+        return {
+          item: (
+            <Box mx="$6" mb="$6">
+              <AudioRecorderItem
+                onChange={onResponse}
+                value={value?.answer}
+                config={pipelineItem.payload}
+              />
+            </Box>
+          ),
+        };
+      case 'Message':
+        return {
+          item: null,
+          alignMessageToLeft: pipelineItem.payload.alignToLeft,
+        };
+      case 'AudioPlayer':
+        return {
+          item: (
+            <Box mx="$6" mb="$6">
+              <AudioStimulusItem
+                onChange={onResponse}
+                value={value?.answer || false}
+                config={pipelineItem.payload}
+              />
+            </Box>
+          ),
+        };
+      case 'TimeRange':
+        return {
+          item: (
+            <Box mx="$6" mb="$6">
+              <TimeRangeItem onChange={onResponse} value={value?.answer} />
+            </Box>
+          ),
+        };
+      case 'Date':
+        return {
+          item: (
+            <Box mx="$6" mb="$6">
+              <DatePickerItem onChange={onResponse} value={value?.answer} />
+            </Box>
+          ),
+        };
+      case 'Radio':
+        return {
+          item: (
+            <Box mx={16}>
+              <RadioActivityItem
+                config={pipelineItem.payload}
+                onChange={handleRadioChange}
+                initialValue={value?.answer}
+                textReplacer={textVariableReplacer}
+              />
+            </Box>
+          ),
+        };
+      case 'Geolocation':
+        return {
+          item: (
+            <Box mx="$6" mb="$6">
+              <GeolocationItem onChange={onResponse} value={value?.answer} />
+            </Box>
+          ),
+        };
+      case 'Photo':
+        return {
+          item: (
+            <Box mx="$6">
+              <PhotoItem onChange={onResponse} value={value?.answer} />
+            </Box>
+          ),
+        };
+      case 'Video':
+        return {
+          item: (
+            <Box mx="$6">
+              <VideoItem onChange={onResponse} value={value?.answer} />
+            </Box>
+          ),
+        };
+      case 'Time':
+        return {
+          item: (
+            <Box mx="$6" mb="$6">
+              <TimePickerItem onChange={onResponse} value={value?.answer} />
+            </Box>
+          ),
+        };
+      case 'RequestHealthRecordData':
+        return {
+          item: (
+            <RequestHealthRecordDataItem
+              config={pipelineItem.payload}
+              onChange={onResponse}
+              initialValue={value?.answer}
+              question={pipelineItem.question}
+              textReplacer={textVariableReplacer}
+              assignment={assignment}
+            />
+          ),
+          question: null,
+        };
+      default:
+        return {
+          item: <></>,
+        };
     }
-
-    case 'AudioPlayer':
-      item = (
-        <Box mx="$6" mb="$6">
-          <AudioStimulusItem
-            onChange={onResponse}
-            value={value?.answer || false}
-            config={pipelineItem.payload}
-          />
-        </Box>
-      );
-      break;
-
-    case 'TimeRange':
-      item = (
-        <Box mx="$6" mb="$6">
-          <TimeRangeItem onChange={onResponse} value={value?.answer} />
-        </Box>
-      );
-      break;
-
-    case 'Date':
-      item = (
-        <Box mx="$6" mb="$6">
-          <DatePickerItem onChange={onResponse} value={value?.answer} />
-        </Box>
-      );
-      break;
-
-    case 'Radio':
-      item = (
-        <Box mx={16}>
-          <RadioActivityItem
-            config={pipelineItem.payload}
-            onChange={handleRadioChange}
-            initialValue={value?.answer}
-            textReplacer={textVariableReplacer}
-          />
-        </Box>
-      );
-      break;
-
-    case 'Geolocation':
-      item = (
-        <Box mx="$6" mb="$6">
-          <GeolocationItem onChange={onResponse} value={value?.answer} />
-        </Box>
-      );
-      break;
-
-    case 'Photo':
-      item = (
-        <Box mx="$6">
-          <PhotoItem onChange={onResponse} value={value?.answer} />
-        </Box>
-      );
-      break;
-
-    case 'Video':
-      item = (
-        <Box mx="$6">
-          <VideoItem onChange={onResponse} value={value?.answer} />
-        </Box>
-      );
-      break;
-
-    case 'Time':
-      item = (
-        <Box mx="$6" mb="$6">
-          <TimePickerItem onChange={onResponse} value={value?.answer} />
-        </Box>
-      );
-      break;
-
-    default: {
-      item = <></>;
-    }
-  }
+  }, [
+    assignment,
+    context?.maxLambda,
+    dimensions,
+    handleFlankerResult,
+    handleRadioChange,
+    handleStabilityTrackerComplete,
+    onContextChange,
+    onResponse,
+    pipelineItem.payload,
+    pipelineItem.question,
+    processLiveEvent,
+    textVariableReplacer,
+    type,
+    value?.answer,
+  ]);
 
   return (
     <ScrollableContent scrollEnabled={scrollEnabled} scrollEventThrottle={100}>
@@ -451,46 +491,14 @@ export function ActivityItem({
         }}
       >
         {question && (
-          <Box mx={16} mb={20}>
-            <MarkdownMessage
-              accessibilityLabel="item_display_content"
-              flex={1}
-              alignItems={alignMessageToLeft ? undefined : 'center'}
-              content={
-                assignment && assignment.respondent.id !== assignment.target.id
-                  ? insertAfterMedia(
-                      textVariableReplacer(question),
-                      `<div data-is-assignment-badge />`,
-                    )
-                  : textVariableReplacer(question)
-              }
-              rules={{
-                html_block: (...args: Parameters<RenderFunction>) => {
-                  const [node] = args;
-
-                  if (
-                    assignment &&
-                    node.content.match(/ata-is-assignment-badge/)
-                  ) {
-                    return (
-                      <XStack mb={12}>
-                        {alignMessageToLeft ? null : (
-                          <Box flexGrow={1} flexShrink={1} />
-                        )}
-                        <ActivityAssignmentBadge
-                          assignment={assignment}
-                          accessibilityLabel="item_display_assignment"
-                        />
-                        <Box flexGrow={1} flexShrink={1} />
-                      </XStack>
-                    );
-                  }
-
-                  return (markDownRules.html_block as RenderFunction)(...args);
-                },
-              }}
-            />
-          </Box>
+          <ItemMarkdown
+            content={question}
+            assignment={assignment}
+            alignToLeft={alignMessageToLeft}
+            textVariableReplacer={textVariableReplacer}
+            mx={16}
+            mb={20}
+          />
         )}
 
         {item}

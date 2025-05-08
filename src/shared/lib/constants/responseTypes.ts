@@ -14,6 +14,7 @@ export const universalSupportedResponseTypes: ResponseType[] = [
   'multiSelectRows',
   'numberSelect',
   'paragraphText',
+  'requestHealthRecordData',
   'singleSelect',
   'singleSelectRows',
   'slider',

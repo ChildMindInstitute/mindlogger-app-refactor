@@ -18,6 +18,7 @@ export type ResponseType =
   | 'paragraphText'
   | 'photo'
   | 'phrasalTemplate'
+  | 'requestHealthRecordData'
   | 'singleSelect'
   | 'singleSelectRows'
   | 'slider'
@@ -717,6 +718,29 @@ type StabilityTrackerConfiguration = {
 
 export type FlankerAnswerSettings = null;
 
+type RequestHealthRecordDataConfiguration = {
+  removeBackButton: boolean;
+  skippableItem?: boolean;
+};
+
+export enum EHRConsent {
+  OptIn = 'opt_in',
+  OptOut = 'opt_out',
+}
+
+export type RequestHealthRecordDataAnswerSettings = {
+  optInOutOptions: [
+    {
+      id: EHRConsent.OptIn;
+      label: string;
+    },
+    {
+      id: EHRConsent.OptOut;
+      label: string;
+    },
+  ];
+};
+
 export type AbTrailsConfiguration = AbTrailsItemSettingsDto;
 
 export type AbTrailsAnswerSettings = null;
@@ -743,6 +767,7 @@ type Configuration =
   | AbTestConfiguration
   | StabilityTrackerConfiguration
   | FlankerConfiguration
+  | RequestHealthRecordDataConfiguration
   | AbTrailsConfiguration;
 
 type AnswerSettings =
@@ -766,6 +791,7 @@ type AnswerSettings =
   | AbTestAnswerSettings
   | StabilityTrackerAnswerSettings
   | FlankerAnswerSettings
+  | RequestHealthRecordDataAnswerSettings
   | AbTrailsAnswerSettings;
 
 type ActivityItemDtoBase = {
@@ -906,6 +932,12 @@ export interface FlankerItemDto extends ActivityItemDtoBase {
   responseValues: FlankerAnswerSettings;
 }
 
+export interface RequestHealthRecordDataItemDto extends ActivityItemDtoBase {
+  responseType: 'requestHealthRecordData';
+  config: RequestHealthRecordDataConfiguration;
+  responseValues: RequestHealthRecordDataAnswerSettings;
+}
+
 export interface ABTrailsItemDto extends ActivityItemDtoBase {
   responseType: 'ABTrails';
   config: AbTrailsConfiguration;
@@ -934,4 +966,5 @@ export type ActivityItemDto =
   | ABTrailsItemDto
   | StabilityTrackerItemDto
   | FlankerItemDto
+  | RequestHealthRecordDataItemDto
   | TimeItemDto;

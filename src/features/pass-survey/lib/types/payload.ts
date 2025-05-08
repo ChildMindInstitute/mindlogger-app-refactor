@@ -5,6 +5,7 @@ import { ConditionalLogic } from '@app/entities/activity/lib/types/conditionalLo
 import { DrawResult } from '@app/entities/drawer/lib/types/draw';
 import { FlankerGameResponse } from '@app/entities/flanker/lib/types/response';
 import { StabilityTrackerResponse as StabilityTrackerBaseResponse } from '@app/entities/stabilityTracker/lib/types';
+import { RequestHealthRecordDataAnswerSettings } from '@app/shared/api/services/ActivityItemDto';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import { Item } from '@app/shared/ui/survey/CheckBox/types';
 import { Coordinates } from '@app/shared/ui/survey/Geolocation/types';
@@ -41,7 +42,8 @@ export type ActivityItemType =
   | 'Photo'
   | 'Video'
   | 'Date'
-  | 'Time';
+  | 'Time'
+  | 'RequestHealthRecordData';
 
 export type DataMatrix = Array<{
   rowId: string;
@@ -237,6 +239,8 @@ type PhotoPayload = null;
 
 type VideoPayload = null;
 
+type RequestHealthRecordDataPayload = RequestHealthRecordDataAnswerSettings;
+
 type PipelinePayload =
   | AbTestPayload
   | StabilityTrackerPayload
@@ -260,7 +264,8 @@ type PipelinePayload =
   | GeolocationPayload
   | PhotoPayload
   | DatePayload
-  | TimePayload;
+  | TimePayload
+  | RequestHealthRecordDataPayload;
 
 type PipelineItemBase = {
   id?: string;
@@ -395,6 +400,12 @@ export interface TimePipelineItem extends PipelineItemBase {
   payload: TimePayload;
 }
 
+export interface RequestHealthRecordDataPipelineItem extends PipelineItemBase {
+  type: 'RequestHealthRecordData';
+  payload: RequestHealthRecordDataPayload;
+  question: string;
+}
+
 export type StabilityTrackerResponse = StabilityTrackerBaseResponse;
 
 export type AbTestResponse = AbTestResult;
@@ -450,6 +461,9 @@ export type VideoResponse = MediaFile & {
   fromLibrary: boolean;
 };
 
+export type RequestHealthRecordDataResponse =
+  RequestHealthRecordDataAnswerSettings['optInOutOptions'][number]['id'];
+
 export type PipelineItemResponse =
   | AbTestResponse
   | StabilityTrackerResponse
@@ -470,7 +484,8 @@ export type PipelineItemResponse =
   | PhotoResponse
   | DateResponse
   | RadioResponse
-  | TimeResponse;
+  | TimeResponse
+  | RequestHealthRecordDataResponse;
 
 export type PipelineItem =
   | AbTestPipelineItem
@@ -496,6 +511,7 @@ export type PipelineItem =
   | VideoPipelineItem
   | RadioPipelineItem
   | DatePipelineItem
-  | TimePipelineItem;
+  | TimePipelineItem
+  | RequestHealthRecordDataPipelineItem;
 
 export type PipelineItemType = PipelineItem['type'];

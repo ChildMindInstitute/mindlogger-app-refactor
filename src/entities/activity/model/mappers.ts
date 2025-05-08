@@ -23,6 +23,7 @@ import {
   OptionsDto,
   ParagraphTextItemDto,
   PhotoItemDto,
+  RequestHealthRecordDataItemDto,
   SingleSelectionItemDto,
   SingleSelectionRowsItemDto,
   SliderAlertsDto,
@@ -786,6 +787,31 @@ function mapToSplash(splashScreen: string): ActivityItem {
   };
 }
 
+function mapToRequestHealthRecordData(
+  dto: RequestHealthRecordDataItemDto,
+): ActivityItem {
+  return {
+    id: dto.id,
+    name: dto.name,
+    inputType: 'RequestHealthRecordData',
+    config: {
+      optInOutOptions: dto.responseValues.optInOutOptions,
+    },
+    timer: mapTimerValue(dto.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: dto.config.skippableItem ?? false,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+    ...mapConditionalLogic(dto.conditionalLogic),
+  };
+}
+
 export function mapToActivity(dto: ActivityDto): ActivityDetails {
   const activity: ActivityDetails = {
     ...dto,
@@ -846,6 +872,8 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
           return mapToDrawing(item);
         case 'time':
           return mapToTime(item);
+        case 'requestHealthRecordData':
+          return mapToRequestHealthRecordData(item);
       }
     }),
     hasSummary: dto.scoresAndReports?.showScoreSummary ?? false,
