@@ -52,12 +52,14 @@ export const useInitialNavigationState = () => {
     const restoreState = async () => {
       const initialUrl = await Linking.getInitialURL();
 
-      const state = getDefaultNavigationService().getInitialNavigationState(
-        initialUrl === 'active-assessment'
-          ? NavigationServiceScopes.ActiveAssessment
-          : NavigationServiceScopes.Default,
-      );
-      setInitialNavigationState(state);
+      if (!initialUrl) {
+        // If no deep link, restore default saved navigation state
+        const state = getDefaultNavigationService().getInitialNavigationState(
+          NavigationServiceScopes.Default,
+        );
+
+        setInitialNavigationState(state);
+      }
     };
 
     if (!isReady) {

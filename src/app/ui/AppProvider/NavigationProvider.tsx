@@ -7,8 +7,12 @@ import {
   LinkingOptions,
   getStateFromPath,
   NavigationState,
+  PartialState,
 } from '@react-navigation/native';
 
+import { EntityPath } from '@app/abstract/lib/types/entity';
+import { NavigationServiceScopes } from '@app/screens/lib/INavigationService';
+import { getDefaultNavigationService } from '@app/screens/lib/navigationServiceInstance';
 import { useInitialNavigationState } from '@app/screens/model/hooks/useInitialNavigationState';
 import { DEEP_LINK_PREFIX } from '@app/shared/lib/constants';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -37,6 +41,31 @@ const getLinking = ():
   return {
     prefixes: [DEEP_LINK_PREFIX],
     getStateFromPath: (path, options) => {
+      if (path === '/active-assessment') {
+        getDefaultLogger().info(
+          `[${LOGGER_MODULE_NAME}] Found active assessment deep link, opening in app`,
+        );
+
+        const state = getDefaultNavigationService().getInitialNavigationState(
+          NavigationServiceScopes.ActiveAssessment,
+        );
+
+        if (state) {
+          // Flag the last route as coming from a deep link
+          const lastRoute = state.routes[state.routes.length - 1];
+
+          state.routes[state.routes.length - 1] = {
+            ...lastRoute,
+            params: {
+              ...(lastRoute.params as EntityPath),
+              fromActiveAssessmentLink: true,
+            },
+          };
+
+          return state as unknown as PartialState<NavigationState>;
+        }
+      }
+
       const state = getStateFromPath(path, options);
       if (!state) {
         getDefaultLogger().warn(

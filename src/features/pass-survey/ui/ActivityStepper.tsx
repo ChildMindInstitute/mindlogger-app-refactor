@@ -9,6 +9,7 @@ import {
 } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
+import { useActiveAssessmentLink } from '@app/screens/model/hooks/useActiveAssessmentLink';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import { isIphoneX } from '@app/shared/lib/utils/common';
 import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
@@ -67,6 +68,11 @@ export function ActivityStepper({
   const [showTimeLeft, setShowTimeLeft] = useState(!!timer);
 
   const timerMarginTop = hasNotch ? (safeAreaTop - timerHeight) / 2 : 16;
+
+  // This hook handles specific logic for resuming an active assessment when called via the
+  // `active-assessment` deep link. It must be called here, within the context of both the
+  // `InProgressActivity` screen and the `ActivityIdentityContext`.
+  useActiveAssessmentLink();
 
   const {
     appletId,
