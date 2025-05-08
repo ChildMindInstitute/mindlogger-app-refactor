@@ -9,12 +9,11 @@ import { RequestHealthRecordDataPipelineItem } from '@app/features/pass-survey/l
 import { colors } from '@app/shared/lib/constants/colors';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { Box, RadioGroup, YStack } from '@app/shared/ui/base';
+import { RequestHealthRecordDataIcon } from '@app/shared/ui/icons/RequestHealthRecordDataIcon';
 import { Link } from '@app/shared/ui/Link';
+import { ItemMarkdown } from '@app/shared/ui/survey/ItemMarkdown';
 import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem/types';
 import { Text } from '@app/shared/ui/Text';
-
-import { HealthRecordIcon } from '../../icons/HealthRecord';
-import { ItemMarkdown } from '../ItemMarkdown';
 
 // TODO: Update to the correct URL when available
 // https://mindlogger.atlassian.net/browse/M2-9101
@@ -67,9 +66,9 @@ export const ConsentPromptStep: FC<ConsentPromptStepProps> = ({
   };
 
   return (
-    <YStack space="$4" p="$4">
+    <YStack space="$4" px="$4" py="$6">
       <Box alignItems="center">
-        <HealthRecordIcon />
+        <RequestHealthRecordDataIcon />
       </Box>
 
       <ItemMarkdown

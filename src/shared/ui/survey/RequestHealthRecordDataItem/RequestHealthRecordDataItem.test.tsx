@@ -45,6 +45,7 @@ const mockItem: RequestHealthRecordDataPipelineItem = {
   timer: 0,
   subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
   payload: mockConfig,
+  additionalEHRs: null,
 };
 
 const onChangeMock = jest.fn();

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useRef } from 'react';
+import React, { FC, useCallback, useRef } from 'react';
 
 import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
 import {
@@ -42,14 +42,23 @@ export const RequestHealthRecordDataItem: FC<
           );
 
         case RequestHealthRecordDataItemStep.Partnership:
-          return <PartnershipStep />;
+          return (
+            <PartnershipStep
+              textReplacer={textReplacer}
+              assignment={assignment}
+            />
+          );
 
         case RequestHealthRecordDataItemStep.OneUpHealth:
           return <OneUpHealthStep />;
 
         case RequestHealthRecordDataItemStep.AdditionalPrompt:
           return (
-            <AdditionalPromptStep item={item} textReplacer={textReplacer} />
+            <AdditionalPromptStep
+              item={item}
+              textReplacer={textReplacer}
+              assignment={assignment}
+            />
           );
 
         default:
@@ -62,9 +71,7 @@ export const RequestHealthRecordDataItem: FC<
   const prevSubStep = usePreviousValue(item.subStep);
 
   // Custom animation direction logic
-  useEffect(() => {
-    if (prevSubStep === null) return;
-
+  if (prevSubStep !== null) {
     // If additional EHRs have been requested:
     if (item.additionalEHRs === 'requested') {
       // and if we're moving between OneUpHealth and AdditionalPrompt steps:
@@ -75,9 +82,8 @@ export const RequestHealthRecordDataItem: FC<
         // animate as if we're moving backward
         ref.current?.back(1);
       }
-
       // or if we're moving from AdditionalPrompt back to OneUpHealth:
-      if (
+      else if (
         item.subStep === RequestHealthRecordDataItemStep.OneUpHealth &&
         prevSubStep === RequestHealthRecordDataItemStep.AdditionalPrompt
       ) {
@@ -85,14 +91,13 @@ export const RequestHealthRecordDataItem: FC<
         ref.current?.next(1);
       }
     }
-
     // Default animation behavior for all other cases
-    if (prevSubStep < item.subStep) {
+    else if (prevSubStep < item.subStep) {
       ref.current?.next(1);
     } else if (prevSubStep > item.subStep) {
       ref.current?.back(1);
     }
-  }, [item.subStep, item.additionalEHRs, prevSubStep]);
+  }
 
   return (
     <ViewSlider

@@ -614,6 +614,10 @@
   },
 	"requestHealthRecordData": {
 		"title": "Demande de données de santé",
-		"linkText": "Apprenez plus sur la façon dont MindLogger accède de manière sécurisée aux données de santé."
+		"linkText": "Apprenez plus sur la façon dont MindLogger accède de manière sécurisée aux données de santé.",
+    "partnershipText": "MindLogger utilise le service d'information médicale de 1upHealth pour permettre à votre chercheur d'accéder aux informations de vos dossiers de santé.\n\nDans les écrans suivants, vous serez invité à vous connecter à vos systèmes de soins de santé et à partager vos données de santé avec cette étude. Vous reviendrez à l'activité MindLogger lorsque vous aurez terminé.",
+    "additionalPromptText": "Vous avez terminé la connexion à votre compte de soins de santé.\n\nVoulez-vous vous connecter à d'autres comptes de soins de santé?",
+    "yes": "Oui",
+    "no": "Non"
 	}
 }

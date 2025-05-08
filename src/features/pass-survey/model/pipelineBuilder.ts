@@ -404,6 +404,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
             subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
+            additionalEHRs: null,
           } satisfies PipelineItem;
         }
 
