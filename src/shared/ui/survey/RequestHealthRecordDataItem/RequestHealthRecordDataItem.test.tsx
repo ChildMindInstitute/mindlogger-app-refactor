@@ -12,6 +12,7 @@ import {
   RequestHealthRecordDataAnswerSettings,
 } from '@app/shared/api/services/ActivityItemDto';
 import { RadioGroup } from '@app/shared/ui/base';
+import { ViewSliderProps } from '@app/shared/ui/ViewSlider';
 
 import { RequestHealthRecordDataItem } from './RequestHealthRecordDataItem';
 
@@ -22,6 +23,12 @@ jest.mock('react-i18next', () => ({
       language: 'en',
     },
   })),
+}));
+
+jest.mock('@app/shared/ui/ViewSlider', () => ({
+  ViewSlider: jest.fn(({ renderView, step }: ViewSliderProps) =>
+    renderView({ index: step }),
+  ),
 }));
 
 const mockConfig: RequestHealthRecordDataAnswerSettings = {
