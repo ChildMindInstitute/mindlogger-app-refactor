@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import {
   EntityProgression,
   EntityProgressionInProgressActivity,
@@ -51,16 +49,6 @@ export const getActivityProgressionStartAt = (
   }
 
   return null;
-};
-
-export const getActivityFlowProgressionExecutionGroupKey = (
-  progression: EntityProgression,
-) => {
-  if (progression.entityType === 'activityFlow') {
-    return (progression as EntityProgressionInProgressActivityFlow)
-      .executionGroupKey;
-  }
-  return uuidv4();
 };
 
 export const getUserIdentifier = (

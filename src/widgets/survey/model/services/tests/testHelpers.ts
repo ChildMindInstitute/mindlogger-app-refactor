@@ -44,6 +44,7 @@ export const getActivityIncompleteEntity = (
       targetSubjectId: path.targetSubjectId,
       startedAtTimestamp: new Date().getTime(),
       availableUntilTimestamp: null,
+      submitId: 'test-submit-id',
     },
   };
 };
@@ -73,7 +74,7 @@ export const getActivityFlowIncompleteEntity = (
       currentActivityDescription: 'activity-desc',
       currentActivityImage: null,
       currentActivityStartAt: null,
-      executionGroupKey: 'group-key',
+      submitId: 'group-key',
     },
   };
 };
@@ -249,7 +250,7 @@ export const getFlowProgressionsMock = (): EntityProgression[] => {
     currentActivityImage: null,
     currentActivityName: 'mock-activity-name-1',
     currentActivityStartAt: 12389100000,
-    executionGroupKey: 'mock-flow-group-key-1',
+    submitId: 'mock-flow-group-key-1',
     pipelineActivityOrder: 0,
     totalActivitiesInPipeline: 2,
   };
@@ -269,6 +270,7 @@ export const getActivityProgressionsMock = (): EntityProgression[] => {
     targetSubjectId: null,
     startedAtTimestamp: 12367800000,
     availableUntilTimestamp: null,
+    submitId: 'mock-activity-group-key-1',
   };
 
   (progression as never as EntityProgressionCompleted).endedAtTimestamp = null;

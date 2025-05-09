@@ -414,7 +414,7 @@ export class AnswersUploadService implements IAnswersUploadService {
       version: data.version,
       flowId: data.flowId,
       targetSubjectId: data.targetSubjectId,
-      submitId: data.executionGroupKey,
+      submitId: data.submitId,
       activityId: data.activityId,
       isFlowCompleted: data.isFlowCompleted,
       answer: {

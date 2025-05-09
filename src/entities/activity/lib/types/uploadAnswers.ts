@@ -14,7 +14,7 @@ export type SendAnswersInput = {
   itemIds: string[];
   flowId: string | null;
   activityId: string;
-  executionGroupKey: string;
+  submitId: string;
   userActions: UserActionDto[];
   scheduledTime: number | null;
   startTime: number;

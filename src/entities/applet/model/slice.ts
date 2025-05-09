@@ -52,6 +52,7 @@ export type UpsertEntityProgressionPayload = {
   eventId: string | null;
   targetSubjectId: string | null;
   endAt: Date;
+  submitId: string;
 };
 
 type Consents = {
@@ -125,6 +126,7 @@ const slice = createSlice({
         startedAtTimestamp: new Date().getTime(),
         availableUntilTimestamp:
           action.payload.availableUntil?.getTime() || null,
+        submitId: uuidv4(),
       };
       updatedProgressions.push(progression);
 
@@ -174,7 +176,7 @@ const slice = createSlice({
         currentActivityDescription: activityDescription,
         currentActivityImage: activityImage,
         currentActivityStartAt: new Date().getTime(),
-        executionGroupKey: uuidv4(),
+        submitId: uuidv4(),
       };
       updatedProgressions.push(progression);
 
@@ -305,6 +307,7 @@ const slice = createSlice({
           availableUntilTimestamp: null,
           startedAtTimestamp: 0,
           endedAtTimestamp,
+          submitId: action.payload.submitId,
         };
         state.entityProgressions = state.entityProgressions ?? [];
         state.entityProgressions.push(newCompletion);
