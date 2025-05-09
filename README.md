@@ -66,7 +66,7 @@ In the project directory, you can run the following commands from the project ro
 
     Installs any native dependencies required by the iOS app via **CocoaPods**, a dependency management system used for iOS.
     This also applies `YogaKit` and `Flipper` patches located in `ios/patches` required while this is on React Native 0.73. The [need](https://github.com/facebook/react-native/issues/43383)
-    for these patches will be re-evaluated as part of a planned React Native upgrade. 
+    for these patches will be re-evaluated as part of a planned React Native upgrade.
 
 ### Starting the Metro Server
 
@@ -157,13 +157,14 @@ The above scripts run the app using Debug configuration and for MindLogger's `d
 
 ## Environment Variables
 
-| Key                    | Required | Default value           | Description                          |
-| ---------------------- | -------- | ----------------------- | ------------------------------------ |
-| `ENV`                  | no       | `dev`                   | App build label (informational only) |
-| `API_URL`              | yes      | `http://localhost:8000` | MindLogger Backend API base URL      |
-| `MIXPANEL_TOKEN`       | no       | null                    | Mixpanel analytics token             |
-| `STORE_ENCRYPTION_KEY` | yes      | `my-encryption-key`     | Secure storage encryption key        |
-| `LAUNCHDARKLY_MOBILE_KEY` | yes      | `my-env-mobile-key`     | LaunchDarkly mobile key, refer to Confluence for correct environment key         |
+| Key                                  | Required | Default value                          | Description                                                              |
+| ------------------------------------ | -------- | -------------------------------------- | ------------------------------------------------------------------------ |
+| `ENV`                                | no       | `dev`                                  | App build label (informational only)                                     |
+| `API_URL`                            | yes      | `http://localhost:8000`                | MindLogger Backend API base URL                                          |
+| `MIXPANEL_TOKEN`                     | no       | null                                   | Mixpanel analytics token                                                 |
+| `STORE_ENCRYPTION_KEY`               | yes      | `my-encryption-key`                    | Secure storage encryption key                                            |
+| `LAUNCHDARKLY_MOBILE_KEY`            | yes      | `my-env-mobile-key`                    | LaunchDarkly mobile key, refer to Confluence for correct environment key |
+| `ONEUP_HEALTH_SYSTEM_SEARCH_API_URL` | yes      | `https://system-search.1up.health/api` | 1UpHealth System Search API URL                                          |
 
 ## License
 
