@@ -507,6 +507,9 @@
 		"title": "Request Health Record Data",
 		"linkText": "Learn more about how MindLogger securely accesses healthcare data.",
 		"partnershipText": "MindLogger uses 1UpHealth’s Medical Information Service to enable your researcher to access information in your health care records.\n\nIn the following screens, you’ll be asked to sign into your Health Care Provider systems and share your health care data with this study. You will return to the MindLogger activity when you are done.",
+    "enterYourHealthSystem": "Enter your Health System:",
+    "healthSystemName": "Health System Name",
+    "search": "Search",
     "additionalPromptText": "You have finished signing into your health care account.\n\nWould you like to sign into any additional health care accounts?",
     "yes": "Yes",
     "no": "No"
