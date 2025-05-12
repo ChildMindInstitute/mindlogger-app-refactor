@@ -1,8 +1,10 @@
+import { ONEUP_HEALTH_CLIENT_ID } from '@app/shared/lib/constants';
 import { callApiWithRetry } from '@app/shared/lib/utils/networkHelpers';
 
 import { httpService } from './httpService';
 import {
   IOneUpHealthService,
+  OneUpHealthHealthSystemUrlResponse,
   OneUpHealthRetrieveTokenRequest,
   OneUpHealthRetrieveTokenResponse,
   OneUpHealthSystemSearchRequest,
@@ -41,6 +43,20 @@ export function oneUpHealthService(): IOneUpHealthService {
             query,
             offset,
             system_type: systemType,
+          },
+        },
+      );
+    },
+
+    getHealthSystemUrl: async (id, axiosInstance) => {
+      return axiosInstance.get<OneUpHealthHealthSystemUrlResponse>(
+        `/clinical/${id}`,
+        {
+          params: {
+            sendRedirectUrlAsResponse: 'true',
+          },
+          headers: {
+            'X-Client-Id': ONEUP_HEALTH_CLIENT_ID,
           },
         },
       );

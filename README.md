@@ -164,7 +164,10 @@ The above scripts run the app using Debug configuration and for MindLogger's `d
 | `MIXPANEL_TOKEN`                     | no       | null                                   | Mixpanel analytics token                                                 |
 | `STORE_ENCRYPTION_KEY`               | yes      | `my-encryption-key`                    | Secure storage encryption key                                            |
 | `LAUNCHDARKLY_MOBILE_KEY`            | yes      | `my-env-mobile-key`                    | LaunchDarkly mobile key, refer to Confluence for correct environment key |
-| `ONEUP_HEALTH_SYSTEM_SEARCH_API_URL` | yes      | `https://system-search.1up.health/api` | 1UpHealth System Search API URL                                          |
+| `ONEUP_HEALTH_CLIENT_ID`             | yes*     | null                                   | 1UpHealth client ID                                                      |
+| `ONEUP_HEALTH_SYSTEM_SEARCH_API_URL` | yes*     | `https://system-search.1up.health/api` | 1UpHealth System Search API URL                                          |
+
+\* Required to use 1UpHealth integration
 
 ## License
 

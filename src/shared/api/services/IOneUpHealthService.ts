@@ -22,17 +22,23 @@ export type OneUpHealthSystemSearchRequest = {
   systemType?: string;
 };
 
-export type OneUpHealthSystemSearchResponse = [
-  {
-    id: number;
-    name: string;
-    address: string;
-    fhirVersion: string;
-    ehr: string;
-    resourceUrl: string;
-    logo: string;
-  },
-];
+export type OneUpHealthSystemItem = {
+  id: number;
+  name: string;
+  address: string;
+  fhirVersion: string;
+  ehr: string;
+  resourceUrl: string;
+  logo: string;
+};
+
+export type OneUpHealthSystemSearchResponse = OneUpHealthSystemItem[];
+
+export type OneUpHealthHealthSystemUrlResponse = {
+  system_id: string;
+  system_name: string;
+  authorization_url: string;
+};
 
 export type IOneUpHealthService = {
   retrieveOneUpHealthToken: (
@@ -43,4 +49,9 @@ export type IOneUpHealthService = {
     request: OneUpHealthSystemSearchRequest,
     axiosInstance: AxiosInstance,
   ) => Promise<AxiosResponse<OneUpHealthSystemSearchResponse>>;
+
+  getHealthSystemUrl: (
+    id: number,
+    axiosInstance: AxiosInstance,
+  ) => Promise<AxiosResponse<OneUpHealthHealthSystemUrlResponse>>;
 };
