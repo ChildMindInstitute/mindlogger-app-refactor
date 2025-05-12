@@ -12,6 +12,7 @@ import { AdditionalPromptStep } from './AdditionalPromptStep';
 import { ConsentPromptStep } from './ConsentPromptStep';
 import { OneUpHealthStep } from './OneUpHealthStep';
 import { PartnershipStep } from './PartnershipStep';
+import { ScrollableContent } from '../../ScrollableContent';
 import { ViewSlider, ViewSliderRef } from '../../ViewSlider';
 
 type RequestHealthRecordDataItemProps = {
@@ -32,21 +33,25 @@ export const RequestHealthRecordDataItem: FC<
       switch (index) {
         case RequestHealthRecordDataItemStep.ConsentPrompt:
           return (
-            <ConsentPromptStep
-              item={item}
-              onChange={onChange}
-              responseValue={responseValue}
-              textReplacer={textReplacer}
-              assignment={assignment}
-            />
+            <ScrollableContent>
+              <ConsentPromptStep
+                item={item}
+                onChange={onChange}
+                responseValue={responseValue}
+                textReplacer={textReplacer}
+                assignment={assignment}
+              />
+            </ScrollableContent>
           );
 
         case RequestHealthRecordDataItemStep.Partnership:
           return (
-            <PartnershipStep
-              textReplacer={textReplacer}
-              assignment={assignment}
-            />
+            <ScrollableContent>
+              <PartnershipStep
+                textReplacer={textReplacer}
+                assignment={assignment}
+              />
+            </ScrollableContent>
           );
 
         case RequestHealthRecordDataItemStep.OneUpHealth:
@@ -54,11 +59,13 @@ export const RequestHealthRecordDataItem: FC<
 
         case RequestHealthRecordDataItemStep.AdditionalPrompt:
           return (
-            <AdditionalPromptStep
-              item={item}
-              textReplacer={textReplacer}
-              assignment={assignment}
-            />
+            <ScrollableContent>
+              <AdditionalPromptStep
+                item={item}
+                textReplacer={textReplacer}
+                assignment={assignment}
+              />
+            </ScrollableContent>
           );
 
         default:
