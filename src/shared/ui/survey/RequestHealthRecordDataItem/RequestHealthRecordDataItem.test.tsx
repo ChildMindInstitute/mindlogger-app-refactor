@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import renderer from 'react-test-renderer';
 
@@ -29,6 +29,10 @@ jest.mock('@app/shared/ui/ViewSlider', () => ({
   ViewSlider: jest.fn(({ renderView, step }: ViewSliderProps) =>
     renderView({ index: step }),
   ),
+}));
+
+jest.mock('@app/shared/ui/ScrollableContent', () => ({
+  ScrollableContent: jest.fn(({ children }: PropsWithChildren) => children),
 }));
 
 const mockConfig: RequestHealthRecordDataAnswerSettings = {

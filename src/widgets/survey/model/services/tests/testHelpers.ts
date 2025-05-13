@@ -287,7 +287,9 @@ export const getActivityRecordMockResult = (
     answers: answersMock,
     actions: userActionsMock,
     appletVersion: 'applet-version-mock-1',
-    context: {},
+    context: {
+      originalItems: itemsMock,
+    },
     hasSummary: false,
     scoreSettings: [],
     timers: {},
