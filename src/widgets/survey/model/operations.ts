@@ -96,7 +96,11 @@ export const fillNullsForHiddenItems = (
   itemIds: string[],
   answers: AnswerDto[],
   originalItems: InitializeHiddenItem[],
-): { answers: AnswerDto[]; itemIds: string[] } => {
+): {
+  answers: AnswerDto[];
+  itemIds: string[];
+  itemTypes: ActivityItemType[];
+} => {
   const modifiedAnswers: Array<AnswerDto> = [];
   const filteredOriginalItems = originalItems.filter(originalItem =>
     canItemHaveAnswer(originalItem.type),
@@ -116,6 +120,7 @@ export const fillNullsForHiddenItems = (
 
   return {
     itemIds: filteredOriginalItems.map(c => c.itemId),
+    itemTypes: filteredOriginalItems.map(c => c.type),
     answers: modifiedAnswers,
   };
 };

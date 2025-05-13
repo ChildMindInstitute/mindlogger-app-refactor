@@ -309,9 +309,11 @@ export const mockConstructionServiceExternals = (mockNowDate: Date) => {
 
   const mockFillNullsForHiddenItems = jest
     .spyOn(operations, 'fillNullsForHiddenItems')
-    .mockImplementation((itemIds: string[], answers: AnswerDto[], _: any) => {
-      return { answers, itemIds };
-    });
+    .mockImplementation((itemIds, answers, originalItems) => ({
+      answers,
+      itemIds,
+      itemTypes: originalItems.map(c => c.type),
+    }));
 
   const getFlowRecordMock = jest
     .spyOn(storageHelpers, 'getFlowRecord')

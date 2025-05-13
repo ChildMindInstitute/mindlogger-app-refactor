@@ -1,6 +1,7 @@
 import { FileSystem } from 'react-native-file-access';
 
 import { IUserPrivateKeyRecord } from '@app/entities/identity/lib/IUserPrivateKeyRecord';
+import { EHRConsent } from '@app/shared/api/services/ActivityItemDto';
 import {
   ActivityAnswersRequest,
   AnswerDto,
@@ -403,6 +404,14 @@ export class AnswersUploadService implements IAnswersUploadService {
       ? `${data.eventId}_${data.eventVersion}`
       : undefined;
 
+    // Determine if consent was given to share health record data
+    const allowedEhrIngest = data.itemTypes?.some(
+      (itemType, index) =>
+        itemType === 'RequestHealthRecordData' &&
+        typeof data.answers[index] === 'object' &&
+        (data.answers[index] as ObjectAnswerDto)?.value === EHRConsent.OptIn,
+    );
+
     const userPublicKey = this.encryptionManager.getPublicKey({
       privateKey: userPrivateKey,
       appletPrime: JSON.parse(appletEncryption.prime),
@@ -435,6 +444,7 @@ export class AnswersUploadService implements IAnswersUploadService {
       client: data.client,
       alerts: data.alerts,
       eventHistoryId,
+      allowedEhrIngest,
     };
 
     if ('consentToShare' in data) {

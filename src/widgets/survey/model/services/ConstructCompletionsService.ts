@@ -319,12 +319,15 @@ export class ConstructCompletionsService {
 
     const answers = mapAnswersToDto(items, recordAnswers);
 
-    const { itemIds: modifiedItemIds, answers: modifiedAnswers } =
-      fillNullsForHiddenItems(
-        getItemIds(items),
-        answers,
-        activityStorageRecord.context.originalItems as InitializeHiddenItem[],
-      );
+    const {
+      itemIds,
+      itemTypes,
+      answers: modifiedAnswers,
+    } = fillNullsForHiddenItems(
+      getItemIds(items),
+      answers,
+      activityStorageRecord.context.originalItems as InitializeHiddenItem[],
+    );
 
     const progression = getEntityProgression(
       appletId,
@@ -366,7 +369,8 @@ export class ConstructCompletionsService {
       version: activityStorageRecord.appletVersion,
       answers: modifiedAnswers,
       userActions: mapUserActionsToDto(actions),
-      itemIds: modifiedItemIds,
+      itemIds,
+      itemTypes,
       appletEncryption: appletEncryption!,
       flowId,
       activityId,
@@ -479,14 +483,15 @@ export class ConstructCompletionsService {
 
     const userActions = mapUserActionsToDto(actions);
 
-    const itemIds = getItemIds(items);
-
-    const { itemIds: modifiedItemIds, answers: modifiedAnswers } =
-      fillNullsForHiddenItems(
-        itemIds,
-        answers,
-        activityStorageRecord.context.originalItems as InitializeHiddenItem[],
-      );
+    const {
+      itemIds,
+      itemTypes,
+      answers: modifiedAnswers,
+    } = fillNullsForHiddenItems(
+      getItemIds(items),
+      answers,
+      activityStorageRecord.context.originalItems as InitializeHiddenItem[],
+    );
 
     const submitId = progression.submitId;
 
@@ -516,7 +521,8 @@ export class ConstructCompletionsService {
       version: activityStorageRecord.appletVersion,
       answers: modifiedAnswers,
       userActions,
-      itemIds: modifiedItemIds,
+      itemIds,
+      itemTypes,
       appletEncryption: appletEncryption!,
       flowId: flowId ?? null,
       activityId,

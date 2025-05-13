@@ -1,3 +1,4 @@
+import { PipelineItem } from '@app/features/pass-survey/lib/types/payload';
 import {
   AnswerAlertsDto,
   AnswerDto,
@@ -12,6 +13,7 @@ export type SendAnswersInput = {
   answers: AnswerDto[];
   appletEncryption: AppletEncryptionDTO;
   itemIds: string[];
+  itemTypes?: PipelineItem['type'][];
   flowId: string | null;
   activityId: string;
   submitId: string;
