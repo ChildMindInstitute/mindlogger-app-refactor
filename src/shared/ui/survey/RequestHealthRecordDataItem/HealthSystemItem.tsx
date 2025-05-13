@@ -9,10 +9,9 @@ import { OneUpHealthSystemItem } from '@app/shared/api/services/IOneUpHealthServ
 import { colors } from '@app/shared/lib/constants/colors';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Center } from '@app/shared/ui/Center';
+import { ChevronRightIcon } from '@app/shared/ui/icons';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
-
-import { ChevronRightIcon } from '../../icons';
 
 type HealthSystemItemProps = OneUpHealthSystemItem & {
   onPress: () => void;
@@ -73,6 +72,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 2,
+    elevation: 3,
     backgroundColor: colors.white,
   },
   image: {

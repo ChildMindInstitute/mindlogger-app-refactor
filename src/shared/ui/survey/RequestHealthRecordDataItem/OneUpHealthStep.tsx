@@ -9,6 +9,7 @@ import { selectAppletsEntityProgressions } from '@app/entities/applet/model/sele
 import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
 import { useOneUpHealthSystemSearchApi } from '@app/shared/api/hooks/useOneUpHealthSystemSearchApi';
 import { OneUpHealthSystemItem } from '@app/shared/api/services/IOneUpHealthService';
+import { colors } from '@app/shared/lib/constants/colors';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getEntityProgression } from '@app/shared/lib/utils/survey/survey';
@@ -129,7 +130,7 @@ export const OneUpHealthStep: FC = () => {
                     justifyContent="center"
                     alignItems="center"
                   >
-                    <CloseIcon size={16} color="$darkGrey" />
+                    <CloseIcon size={16} color={colors.darkGrey} />
                   </Box>
                 )}
               </Box>
