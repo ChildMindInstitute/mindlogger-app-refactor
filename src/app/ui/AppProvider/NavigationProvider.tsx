@@ -41,7 +41,7 @@ const getLinking = ():
   return {
     prefixes: [DEEP_LINK_PREFIX],
     getStateFromPath: (path, options) => {
-      if (path === '/active-assessment') {
+      if (path.startsWith('/active-assessment')) {
         getDefaultLogger().info(
           `[${LOGGER_MODULE_NAME}] Found active assessment deep link, opening in app`,
         );
@@ -69,13 +69,13 @@ const getLinking = ():
       const state = getStateFromPath(path, options);
       if (!state) {
         getDefaultLogger().warn(
-          `[${LOGGER_MODULE_NAME}] No matching route found, open URL in browser: ${DEEP_LINK_PREFIX}/${path}`,
+          `[${LOGGER_MODULE_NAME}] No matching route found, open URL in browser: ${DEEP_LINK_PREFIX}${path}`,
         );
 
         // No matching route found, open URL in browser
-        Linking.openURL(`${DEEP_LINK_PREFIX}/${path}`).catch(err =>
+        Linking.openURL(`${DEEP_LINK_PREFIX}${path}`).catch(err =>
           getDefaultLogger().error(
-            `[${LOGGER_MODULE_NAME}] An error occurred opening deep link ${DEEP_LINK_PREFIX}/${path} in the browser:\n\n ${err}`,
+            `[${LOGGER_MODULE_NAME}] An error occurred opening deep link ${DEEP_LINK_PREFIX}${path} in the browser:\n\n ${err}`,
           ),
         );
       }
