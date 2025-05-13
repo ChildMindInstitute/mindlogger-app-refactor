@@ -12,13 +12,13 @@ import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getEntityProgression } from '@app/shared/lib/utils/survey/survey';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Button } from '@app/shared/ui/Button';
+import { Center } from '@app/shared/ui/Center';
 import { CloseIcon } from '@app/shared/ui/icons';
 import { Input } from '@app/shared/ui/Input';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
 
 import { HealthSystemItem } from './HealthSystemItem';
-import { Center } from '../../Center';
 
 export const OneUpHealthStep: FC = () => {
   const { t } = useTranslation();
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer: {
-    gap: 8,
+    gap: 12,
     paddingHorizontal: 16,
     paddingBottom: 20,
   },

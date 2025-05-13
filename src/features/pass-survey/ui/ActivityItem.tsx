@@ -467,7 +467,7 @@ export function ActivityItem({
   const Wrapper: FC<PropsWithChildren> = useCallback(
     ({ children }) => {
       return noScrollContainer ? (
-        children
+        <>{children}</>
       ) : (
         <ScrollableContent scrollEnabled={scrollEnabled}>
           {children}

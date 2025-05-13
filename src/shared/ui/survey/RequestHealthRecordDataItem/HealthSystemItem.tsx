@@ -5,6 +5,7 @@ import { Image } from '@tamagui/image';
 import { Paragraph } from '@tamagui/text';
 
 import { OneUpHealthSystemItem } from '@app/shared/api/services/IOneUpHealthService';
+import { colors } from '@app/shared/lib/constants/colors';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Center } from '@app/shared/ui/Center';
 import { Spinner } from '@app/shared/ui/Spinner';
@@ -34,6 +35,8 @@ export const HealthSystemItem: FC<HealthSystemItemProps> = ({
       gap="$4"
       bg="$lighterGrey2"
       borderRadius="$4"
+      borderWidth={1}
+      borderColor={colors.outlineGrey}
       onPress={onPress}
       disabled={isDisabled}
       opacity={isDisabled ? 0.6 : 1}
@@ -43,7 +46,7 @@ export const HealthSystemItem: FC<HealthSystemItemProps> = ({
         width={60}
         height={60}
       >
-        {logo && (
+        {!!logo && (
           <Image src={logo} width={60} height={60} style={styles.image} />
         )}
       </Box>
@@ -55,7 +58,7 @@ export const HealthSystemItem: FC<HealthSystemItemProps> = ({
         {isLoading ? (
           <Spinner size={24} />
         ) : (
-          <ChevronRightIcon color="$onSurface" size={14} />
+          <ChevronRightIcon color={colors.grey2} size={16} />
         )}
       </Center>
     </XStack>
@@ -67,6 +70,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 2,
+    backgroundColor: colors.white,
   },
   image: {
     height: '100%',
