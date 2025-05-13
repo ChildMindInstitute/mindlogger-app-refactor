@@ -166,6 +166,11 @@ export const OneUpHealthStep: FC = () => {
                 </Center>
               ) : null
             }
+            ListEmptyComponent={
+              isResultsLoading ? null : (
+                <Text>{t('requestHealthRecordData:noResults')}</Text>
+              )
+            }
           />
         </>
       )}

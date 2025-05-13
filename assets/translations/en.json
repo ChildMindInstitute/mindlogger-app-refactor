@@ -512,6 +512,7 @@
     "search": "Search",
     "additionalPromptText": "You have finished signing into your health care account.\n\nWould you like to sign into any additional health care accounts?",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "noResults": "No Health Care Providers were found matching your search."
 	}
 }

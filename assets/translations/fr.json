@@ -621,6 +621,7 @@
     "search": "Rechercher",
     "additionalPromptText": "Vous avez terminé la connexion à votre compte de soins de santé.\n\nVoulez-vous vous connecter à d'autres comptes de soins de santé?",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "noResults": "Aucun prestataire de soins de santé ne correspond à votre recherche."
 	}
 }
