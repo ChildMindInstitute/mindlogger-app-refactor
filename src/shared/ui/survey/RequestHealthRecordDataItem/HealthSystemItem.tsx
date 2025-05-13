@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
+import { StackStyleProps } from '@tamagui/core';
 import { Image } from '@tamagui/image';
 import { Paragraph } from '@tamagui/text';
 
@@ -40,6 +41,8 @@ export const HealthSystemItem: FC<HealthSystemItemProps> = ({
       onPress={onPress}
       disabled={isDisabled}
       opacity={isDisabled ? 0.6 : 1}
+      animation="fast"
+      pressStyle={pressStyle}
     >
       <Box
         style={logo ? styles.imageContainer : undefined}
@@ -78,3 +81,8 @@ const styles = StyleSheet.create({
     objectFit: 'contain',
   },
 });
+
+const pressStyle: StackStyleProps = {
+  opacity: 0.7,
+  scale: 0.98,
+};

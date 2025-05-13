@@ -1,12 +1,14 @@
-import { FC, useContext, useEffect, useMemo, useState } from 'react';
-import { FlatList, Linking, StyleSheet, TouchableOpacity } from 'react-native';
+import { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { FlatList, Linking, StyleSheet } from 'react-native';
 
+import { StackStyleProps } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
 import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
 import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
 import { useOneUpHealthSystemSearchApi } from '@app/shared/api/hooks/useOneUpHealthSystemSearchApi';
+import { OneUpHealthSystemItem } from '@app/shared/api/services/IOneUpHealthService';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getEntityProgression } from '@app/shared/lib/utils/survey/survey';
@@ -23,6 +25,7 @@ import { HealthSystemItem } from './HealthSystemItem';
 export const OneUpHealthStep: FC = () => {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const flatListRef = useRef<FlatList>(null);
 
   const { appletId, activityId, flowId, eventId, targetSubjectId } = useContext(
     ActivityIdentityContext,
@@ -61,6 +64,10 @@ export const OneUpHealthStep: FC = () => {
   const handleSearch = (query = searchQuery) => {
     setSearchQuery(query);
     search(query);
+    flatListRef.current?.scrollToOffset({
+      animated: false,
+      offset: 0,
+    });
   };
 
   const handleItemPress = (id: number) => {
@@ -114,14 +121,15 @@ export const OneUpHealthStep: FC = () => {
                     right="$1"
                     top="50%"
                     style={styles.clearButtonContainer}
+                    onPress={() => handleSearch('')}
+                    animation="fast"
+                    pressStyle={pressStyle}
+                    hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
+                    p={4}
+                    justifyContent="center"
+                    alignItems="center"
                   >
-                    <TouchableOpacity
-                      onPress={() => handleSearch('')}
-                      hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
-                      style={styles.clearButton}
-                    >
-                      <CloseIcon size={16} color="$darkGrey" />
-                    </TouchableOpacity>
+                    <CloseIcon size={16} color="$darkGrey" />
                   </Box>
                 )}
               </Box>
@@ -141,7 +149,8 @@ export const OneUpHealthStep: FC = () => {
             </XStack>
           </YStack>
 
-          <FlatList
+          <FlatList<OneUpHealthSystemItem>
+            ref={flatListRef}
             data={results}
             renderItem={({ item }) => (
               <HealthSystemItem
@@ -194,11 +203,6 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -12 }],
     zIndex: 1,
   },
-  clearButton: {
-    padding: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 });
 
 // This isn't technically a ViewStyle object, but serves the same purpose
@@ -206,4 +210,8 @@ const buttonTextStyle = {
   textColor: '$darkGrey',
   fontWeight: '500',
   fontSize: 16,
+};
+
+const pressStyle: StackStyleProps = {
+  opacity: 0.5,
 };
