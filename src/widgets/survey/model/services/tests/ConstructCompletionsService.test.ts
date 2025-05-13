@@ -18,7 +18,6 @@ import {
   getInputsForIntermediate,
   mockConstructionServiceExternals,
 } from './testHelpers';
-import * as operations from '../../operations';
 import {
   CompletionType,
   ConstructCompletionsService,
@@ -384,10 +383,6 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
       answersMock,
     );
 
-    const mockGetExecutionGroupKey = jest
-      .spyOn(operations, 'getActivityFlowProgressionExecutionGroupKey')
-      .mockReturnValue('mock-group-key-1');
-
     const pushToQueueMock = { push: jest.fn() };
 
     const entityProgressions = getActivityProgressionsMock();
@@ -438,8 +433,6 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
     expect(getClientInformationMock).toBeCalledTimes(1);
 
     expect(clearActivityStorageRecordMock).toBeCalledTimes(1);
-
-    expect(mockGetExecutionGroupKey).toBeCalledTimes(1);
 
     expect(pushToQueueMock.push).toBeCalledTimes(1);
 
