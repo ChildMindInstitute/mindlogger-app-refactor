@@ -1,10 +1,9 @@
 import { useCallback, useMemo } from 'react';
 
+import { RequestHealthRecordDataItemStep } from '@app/features/pass-survey/lib/types/payload';
+import { PipelineItem } from '@app/features/pass-survey/lib/types/payload';
+import { PipelineItemAnswer } from '@app/features/pass-survey/lib/types/pipelineItemAnswer';
 import { EHRConsent } from '@app/shared/api/services/ActivityItemDto';
-
-import { RequestHealthRecordDataItemStep } from '../../lib/types/payload';
-import { PipelineItem } from '../../lib/types/payload';
-import { PipelineItemAnswer } from '../../lib/types/pipelineItemAnswer';
 
 type UseSubStepsProps = {
   item?: PipelineItem;
