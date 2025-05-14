@@ -51,7 +51,7 @@ export const useActiveAssessmentLink = () => {
   });
 
   if (fromActiveAssessmentLink) {
-    // Flag that we've handled the deep link for this session
+    // Flag that we've handled the deep link until the next time the deep link is called
     navigation.setParams({ fromActiveAssessmentLink: false });
 
     getDefaultLogger().info(
