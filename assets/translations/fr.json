@@ -611,5 +611,9 @@
   },
   "splash": {
     "version": "Version"
-  }
+  },
+	"requestHealthRecordData": {
+		"title": "Demande de données de santé",
+		"linkText": "Apprenez plus sur la façon dont MindLogger accède de manière sécurisée aux données de santé."
+	}
 }

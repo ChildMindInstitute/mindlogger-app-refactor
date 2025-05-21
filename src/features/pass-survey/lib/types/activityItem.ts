@@ -1,29 +1,30 @@
 import {
   AbTestPipelineItem,
-  StabilityTrackerPipelineItem,
   ActivityItemType,
+  AudioPipelineItem,
+  AudioPlayerPipelineItem,
   CheckboxPipelineItem,
+  DatePipelineItem,
   DrawingTestPipelineItem,
   FlankerPipelineItem,
   GeolocationPipelineItem,
+  MessagePipelineItem,
   NumberSelectPipelineItem,
+  ParagraphTextPipelineItem,
   PhotoPipelineItem,
   PipelineItem,
-  AudioPipelineItem,
-  MessagePipelineItem,
-  StackedCheckboxPipelineItem,
-  StackedSliderPipelineItem,
-  AudioPlayerPipelineItem,
-  TimeRangePipelineItem,
   RadioPipelineItem,
+  RequestHealthRecordDataPipelineItem,
   SliderPipelineItem,
   SplashPipelineItem,
-  TextInputPipelineItem,
-  ParagraphTextPipelineItem,
-  VideoPipelineItem,
-  DatePipelineItem,
-  TimePipelineItem,
+  StabilityTrackerPipelineItem,
+  StackedCheckboxPipelineItem,
   StackedRadioPipelineItem,
+  StackedSliderPipelineItem,
+  TextInputPipelineItem,
+  TimePipelineItem,
+  TimeRangePipelineItem,
+  VideoPipelineItem,
 } from './payload';
 
 type ActivityItemBase = {
@@ -143,6 +144,11 @@ interface TimeActivityItem extends ActivityItemBase {
   pipelineItem: TimePipelineItem;
 }
 
+interface RequestHealthRecordDataActivityItem extends ActivityItemBase {
+  type: 'RequestHealthRecordData';
+  pipelineItem: RequestHealthRecordDataPipelineItem;
+}
+
 export type ActivityItem =
   | TextInputActivityItem
   | ParagraphTextActivityItem
@@ -166,4 +172,5 @@ export type ActivityItem =
   | VideoActivityItem
   | SplashActivityItem
   | DateActivityItem
-  | TimeActivityItem;
+  | TimeActivityItem
+  | RequestHealthRecordDataActivityItem;

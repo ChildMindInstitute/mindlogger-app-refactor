@@ -386,6 +386,23 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
           } satisfies PipelineItem;
         }
 
+        case 'RequestHealthRecordData': {
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            additionalText: item.additionalText,
+            timer: item.timer,
+            conditionalLogic: item.conditionalLogic,
+          } satisfies PipelineItem;
+        }
+
         default: {
           getDefaultLogger().warn(
             `[buildPipeline] unknown activity item type found: ${(item as ActivityItem).inputType}`,
