@@ -185,7 +185,7 @@ describe('useSubSteps', () => {
 
   test('should handle next sub step correctly with additional EHRs explicitly not requested', () => {
     const mockItem: RequestHealthRecordDataPipelineItem = createMockEhrItem({
-      subStep: RequestHealthRecordDataItemStep.OneUpHealth,
+      subStep: RequestHealthRecordDataItemStep.AdditionalPrompt,
       additionalEHRs: 'done',
     });
 
