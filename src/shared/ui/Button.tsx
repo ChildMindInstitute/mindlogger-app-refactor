@@ -1,5 +1,11 @@
 import { PropsWithChildren } from 'react';
-import { TouchableOpacity, StyleSheet, ColorValue } from 'react-native';
+import {
+  TouchableOpacity,
+  StyleSheet,
+  ColorValue,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 
 import { ActivityIndicator } from './ActivityIndicator';
 import { BoxProps } from './base';
@@ -16,6 +22,7 @@ type Props = PropsWithChildren<{
     fontWeight?: string;
     fontSize?: number;
   };
+  touchableStyles?: StyleProp<ViewStyle>;
 }> &
   BoxProps;
 
@@ -28,13 +35,14 @@ export function Button({
     fontWeight: 'bold',
     fontSize: 17,
   },
+  touchableStyles,
   children,
   ...styledProps
 }: Props) {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={styles.touchable}
+      style={[styles.touchable, touchableStyles]}
       disabled={isLoading}
     >
       <Center

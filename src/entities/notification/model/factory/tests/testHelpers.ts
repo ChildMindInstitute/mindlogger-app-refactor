@@ -71,6 +71,7 @@ export const createBuilder = (eventEntity: EventEntity, completedAt?: Date) => {
       availableUntilTimestamp: null,
       startedAtTimestamp: subMinutes(completedAt, 1).getTime(),
       endedAtTimestamp: completedAt.getTime(),
+      submitId: 'mock-submit-id',
     };
 
     (progression as never as EntityProgressionInProgress).startedAtTimestamp =

@@ -1,10 +1,23 @@
+import { NavigationState } from '@react-navigation/routers';
 import { MMKV } from 'react-native-mmkv';
 
-import { InitialRoute } from './types';
+import { RootStackParamList } from '../config/types';
+
+export const NavigationServiceScopes = {
+  Default: 'default',
+  ActiveAssessment: 'activeAssessment',
+} as const;
+export type NavigationServiceScope =
+  (typeof NavigationServiceScopes)[keyof typeof NavigationServiceScopes];
 
 export type INavigationService = {
-  setInitialRoute: (route: InitialRoute) => void;
-  clearInitialRoute: () => void;
-  getInitialRoute: () => InitialRoute | undefined;
+  setInitialNavigationState: (
+    state: NavigationState<RootStackParamList>,
+    scope: NavigationServiceScope,
+  ) => void;
+  clearInitialNavigationState: (scope: NavigationServiceScope) => void;
+  getInitialNavigationState: (
+    scope: NavigationServiceScope,
+  ) => NavigationState<RootStackParamList> | undefined;
   getStorage: () => MMKV;
 };

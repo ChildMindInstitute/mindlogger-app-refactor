@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import {
   EntityProgression,
   EntityProgressionInProgressActivity,
@@ -53,16 +51,6 @@ export const getActivityProgressionStartAt = (
   return null;
 };
 
-export const getActivityFlowProgressionExecutionGroupKey = (
-  progression: EntityProgression,
-) => {
-  if (progression.entityType === 'activityFlow') {
-    return (progression as EntityProgressionInProgressActivityFlow)
-      .executionGroupKey;
-  }
-  return uuidv4();
-};
-
 export const getUserIdentifier = (
   items: PipelineItem[],
   answers: Answers,
@@ -108,7 +96,11 @@ export const fillNullsForHiddenItems = (
   itemIds: string[],
   answers: AnswerDto[],
   originalItems: InitializeHiddenItem[],
-): { answers: AnswerDto[]; itemIds: string[] } => {
+): {
+  answers: AnswerDto[];
+  itemIds: string[];
+  itemTypes: ActivityItemType[];
+} => {
   const modifiedAnswers: Array<AnswerDto> = [];
   const filteredOriginalItems = originalItems.filter(originalItem =>
     canItemHaveAnswer(originalItem.type),
@@ -128,6 +120,7 @@ export const fillNullsForHiddenItems = (
 
   return {
     itemIds: filteredOriginalItems.map(c => c.itemId),
+    itemTypes: filteredOriginalItems.map(c => c.type),
     answers: modifiedAnswers,
   };
 };

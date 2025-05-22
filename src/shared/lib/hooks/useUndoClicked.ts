@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
 import { useForceUpdate } from './useForceUpdate';
-import { usePrevious } from './usePrevious';
+import { usePreviousRenderedValue } from './usePreviousRenderedValue';
 
 type Result = {
   undoClicked: () => boolean;
@@ -9,7 +9,7 @@ type Result = {
 };
 
 export const useUndoClicked = (isCurrentValueEmpty: boolean): Result => {
-  const isPreviousValueEmpty = usePrevious(isCurrentValueEmpty);
+  const isPreviousValueEmpty = usePreviousRenderedValue(isCurrentValueEmpty);
 
   const undoClickedRef = useRef(false);
 

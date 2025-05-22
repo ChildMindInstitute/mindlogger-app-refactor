@@ -23,7 +23,7 @@ import { IS_SMALL_SIZE_SCREEN } from '../lib/constants';
 import { ScrollViewContext } from '../lib/contexts/ScrollViewContext';
 
 type Props = {
-  scrollEnabled: boolean;
+  scrollEnabled?: boolean;
   scrollEventThrottle?: number;
 } & PropsWithChildren;
 
@@ -31,8 +31,8 @@ const PaddingToBottom = IS_SMALL_SIZE_SCREEN ? 30 : 40;
 
 export const ScrollableContent: FC<Props> = ({
   children,
-  scrollEnabled,
-  scrollEventThrottle = 300,
+  scrollEnabled = true,
+  scrollEventThrottle = 100,
 }: Props) => {
   const [containerHeight, setContainerHeight] = useState<number | null>(null);
   const [isAreaScrollable, setAreaScrollable] = useState<boolean>(false);

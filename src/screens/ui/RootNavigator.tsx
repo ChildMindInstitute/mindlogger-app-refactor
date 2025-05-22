@@ -74,7 +74,6 @@ import { RootStackParamList } from '../config/types';
 import { onBeforeAppClose } from '../lib/alerts';
 import { checkEntityAvailability } from '../model/checkEntityAvailability';
 import { useDefaultRoute } from '../model/hooks/useDefaultRoute';
-import { useInitialRouteNavigation } from '../model/hooks/useInitialRouteNavigation';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -92,7 +91,6 @@ export const RootNavigator = () => {
 
   const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
 
-  useInitialRouteNavigation();
   useNotificationPermissions();
   useAlarmPermissions();
   useFirebaseSetup({

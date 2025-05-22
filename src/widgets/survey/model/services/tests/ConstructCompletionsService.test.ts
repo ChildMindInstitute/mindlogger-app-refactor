@@ -18,7 +18,6 @@ import {
   getInputsForIntermediate,
   mockConstructionServiceExternals,
 } from './testHelpers';
-import * as operations from '../../operations';
 import {
   CompletionType,
   ConstructCompletionsService,
@@ -155,11 +154,12 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       createdAt: mockNowDate.getTime(),
       endTime: mockNowDate.getTime(),
       eventId: 'mock-event-id-1',
-      executionGroupKey: 'mock-flow-group-key-1',
+      submitId: 'mock-flow-group-key-1',
       flowId: 'mock-flow-id-1',
       targetSubjectId: null,
       isFlowCompleted: false,
       itemIds: ['mock-slider-id-1', 'mock-slider-id-2'],
+      itemTypes: ['Slider', 'Slider'],
       activityName: 'mock-activity-name-1',
       logCompletedAt: mockNowDate.toUTCString(),
       scheduledTime: 1245800000,
@@ -336,11 +336,12 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
           createdAt: mockNowDate.getTime(),
           endTime: mockNowDate.getTime(),
           eventId: 'mock-event-id-1',
-          executionGroupKey: 'mock-flow-group-key-1',
+          submitId: 'mock-flow-group-key-1',
           flowId: 'mock-flow-id-1',
           targetSubjectId: null,
           isFlowCompleted: true,
           itemIds: ['mock-slider-id-1', 'mock-slider-id-2'],
+          itemTypes: ['Slider', 'Slider'],
           activityName: 'mock-activity-name-1',
           logCompletedAt: mockNowDate.toUTCString(),
           scheduledTime: 1245800000,
@@ -383,10 +384,6 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
       itemsMock,
       answersMock,
     );
-
-    const mockGetExecutionGroupKey = jest
-      .spyOn(operations, 'getActivityFlowProgressionExecutionGroupKey')
-      .mockReturnValue('mock-group-key-1');
 
     const pushToQueueMock = { push: jest.fn() };
 
@@ -439,8 +436,6 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
 
     expect(clearActivityStorageRecordMock).toBeCalledTimes(1);
 
-    expect(mockGetExecutionGroupKey).toBeCalledTimes(1);
-
     expect(pushToQueueMock.push).toBeCalledTimes(1);
 
     expect(pushToQueueMock.push.mock.calls).toEqual([
@@ -460,11 +455,12 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
           createdAt: mockNowDate.getTime(),
           endTime: mockNowDate.getTime(),
           eventId: 'mock-event-id-1',
-          executionGroupKey: 'mock-group-key-1',
+          submitId: 'mock-activity-group-key-1',
           flowId: null,
           targetSubjectId: null,
           isFlowCompleted: false,
           itemIds: ['mock-slider-id-1', 'mock-slider-id-2'],
+          itemTypes: ['Slider', 'Slider'],
           activityName: 'mock-activity-name-1',
           logCompletedAt: mockNowDate.toUTCString(),
           scheduledTime: 1245800000,

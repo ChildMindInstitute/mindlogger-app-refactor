@@ -1,7 +1,7 @@
 import { useUserActionManager } from './useUserActionManager';
 import { useActivityStorageRecord } from '../../lib/hooks/useActivityStorageRecord';
 import { UserActionsPostProcessorService } from '../../lib/services/UserActionsPostProcessorService';
-import { PipelineItemResponse } from '../../lib/types/payload';
+import { PipelineItem, PipelineItemResponse } from '../../lib/types/payload';
 import { UserAction } from '../../lib/types/userAction';
 import { PipelineVisibilityChecker } from '../PipelineVisibilityChecker';
 import { StepperUtils } from '../StepperUtils';
@@ -233,6 +233,52 @@ export function useActivityState({
     return stepperUtils.getPreviousStepShift();
   }
 
+  function setSubStep(step: number, subStep: number) {
+    const currentStorageRecord = getCurrentActivityStorageRecord();
+
+    if (!currentStorageRecord) {
+      return;
+    }
+
+    const items = [...currentStorageRecord.items];
+    if (items[step]) {
+      items[step] = {
+        ...items[step],
+        subStep,
+      };
+
+      upsertActivityStorageRecord({
+        ...currentStorageRecord,
+        items,
+      });
+    }
+  }
+
+  function setItemCustomProperty<T extends PipelineItem>(
+    step: number,
+    property: keyof T,
+    value: T[keyof T],
+  ) {
+    const currentStorageRecord = getCurrentActivityStorageRecord();
+
+    if (!currentStorageRecord) {
+      return;
+    }
+
+    const items = [...currentStorageRecord.items];
+    if (items[step]) {
+      items[step] = {
+        ...items[step],
+        [property]: value,
+      };
+
+      upsertActivityStorageRecord({
+        ...currentStorageRecord,
+        items,
+      });
+    }
+  }
+
   return {
     activityStorageRecord,
     userActionCreator,
@@ -246,6 +292,8 @@ export function useActivityState({
     trackUserAction,
     setContext,
     iterateWithConditionalLogic,
+    setSubStep,
+    setItemCustomProperty,
 
     getNextStepShift,
     getPreviousStepShift,
