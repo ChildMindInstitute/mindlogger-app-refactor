@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-mobile",
-  "version": "2025.05.3",
+  "version": "2025.05.4",
   "private": true,
   "scripts": {
     "android": "yarn android:dev",
@@ -192,7 +192,7 @@
     "braces": ">=3.0.3",
     "ws": ">=7.5.10",
     "fast-xml-parser": ">=4.4.1",
-    "ip": ">=1.1.10", 
-    "cross-spawn": "^7.0.5" 
+    "ip": ">=1.1.10",
+    "cross-spawn": "^7.0.5"
   }
 }
