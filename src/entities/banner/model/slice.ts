@@ -1,0 +1,44 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { BANNERS } from '../lib/constants';
+import { BannerProps } from '../ui/Banner';
+
+export type BannerType = (typeof BANNERS)[number];
+
+type Banner = {
+  key: BannerType;
+  bannerProps: BannerProps;
+};
+
+type InitialState = {
+  banners: Banner[];
+};
+
+const initialState: InitialState = {
+  banners: [],
+};
+
+const bannerSlice = createSlice({
+  name: 'banners',
+  initialState,
+  reducers: {
+    addBanner: (state, action: PayloadAction<Banner>) => {
+      // @ts-expect-error Ignore TS error related to complex typing of Tamagui XStack
+      state.banners.push(action.payload);
+    },
+    removeBanner: (state, action: PayloadAction<BannerType>) => {
+      state.banners = state.banners.filter(
+        banner => banner.key !== action.payload,
+      );
+    },
+    removeAllBanners: state => {
+      state.banners = [];
+    },
+  },
+});
+
+export const bannerActions = {
+  ...bannerSlice.actions,
+};
+
+export const bannerReducer = bannerSlice.reducer;

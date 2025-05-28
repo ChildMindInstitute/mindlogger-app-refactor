@@ -12,6 +12,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { migrateReduxStore } from '@app/app/model/migrations/MigrationProcessor';
 import { appletReducer } from '@app/entities/applet/model/slice';
+import { bannerReducer } from '@app/entities/banner/model/slice';
 import { identityReducer } from '@app/entities/identity/model/slice';
 import { streamingReducer } from '@app/entities/streaming/model/slice';
 import { useSystemBootUp } from '@app/shared/lib/contexts/SplashContext';
@@ -22,7 +23,9 @@ const storage = createAsyncStorage('redux-storage');
 export const persistConfig = {
   key: 'root',
   throttle: 1000,
-  storage: storage,
+  storage,
+  // Exclude banners from persistence
+  blacklist: ['banners'],
 };
 
 const rootReducer = (state: any, action: AnyAction) => {
@@ -34,6 +37,7 @@ const rootReducer = (state: any, action: AnyAction) => {
     identity: identityReducer,
     applets: appletReducer,
     streaming: streamingReducer,
+    banners: bannerReducer,
   });
 
   return reducer(state, action);
