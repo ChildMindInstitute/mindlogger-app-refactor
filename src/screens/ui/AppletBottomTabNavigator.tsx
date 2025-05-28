@@ -9,6 +9,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
 import { mapAppletDetailsFromDto } from '@app/entities/applet/model/mappers';
+import { bannerActions } from '@app/entities/banner/model/slice';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
+import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Box } from '@app/shared/ui/base';
 import { ImageBackground } from '@app/shared/ui/ImageBackground';
 
@@ -24,6 +27,7 @@ const Tab = createBottomTabNavigator<AppletDetailsParamList>();
 
 export const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
   const { title, appletId } = route.params;
 
@@ -59,7 +63,14 @@ export const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
         },
       });
     }
-  }, [appletTheme, navigation]);
+  }, [appletTheme, navigation, dispatch]);
+
+  useOnFocus(() => {
+    if (appletTheme) {
+      // Color must match the headerStyle.backgroundColor defined above
+      dispatch(bannerActions.setBannersBg(appletTheme.primaryColor));
+    }
+  });
 
   const { bottom } = useSafeAreaInsets();
 

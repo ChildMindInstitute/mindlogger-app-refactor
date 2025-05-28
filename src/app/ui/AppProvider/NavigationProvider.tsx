@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren, useCallback } from 'react';
 import { Linking } from 'react-native';
 
 import {
@@ -8,16 +8,22 @@ import {
   getStateFromPath,
   NavigationState,
   PartialState,
+  NavigationContainerProps,
 } from '@react-navigation/native';
 
 import { EntityPath } from '@app/abstract/lib/types/entity';
+import { bannerActions } from '@app/entities/banner/model/slice';
+import { RootStackParamList, ScreenRoute } from '@app/screens/config/types';
 import { NavigationServiceScopes } from '@app/screens/lib/INavigationService';
 import { getDefaultNavigationService } from '@app/screens/lib/navigationServiceInstance';
 import { useInitialNavigationState } from '@app/screens/model/hooks/useInitialNavigationState';
 import { DEEP_LINK_PREFIX } from '@app/shared/lib/constants';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 const LOGGER_MODULE_NAME = 'NavigationProvider';
+
+const SCREEN_BG_COLOR_OVERRIDES: ScreenRoute[] = ['Applets', 'AppletDetails'];
 
 const theme = {
   ...DefaultTheme,
@@ -90,8 +96,27 @@ const getLinking = ():
 };
 
 export const NavigationProvider: FC<PropsWithChildren> = ({ children }) => {
+  const dispatch = useAppDispatch();
   const { isReady, initialNavigationState, onNavigationStateChanged } =
     useInitialNavigationState();
+
+  const handleStateChange = useCallback(
+    (state?: NavigationState<RootStackParamList>) => {
+      if (!state) return;
+
+      onNavigationStateChanged(state);
+
+      // Set default screen background colour for Banners safe area container styling
+      const currentScreen = state.routes[state.routes.length - 1];
+      const hasDefaultBg = !SCREEN_BG_COLOR_OVERRIDES.includes(
+        currentScreen.name,
+      );
+      if (hasDefaultBg) {
+        dispatch(bannerActions.setBannersBg(undefined));
+      }
+    },
+    [onNavigationStateChanged, dispatch],
+  ) as NavigationContainerProps['onStateChange'];
 
   if (!isReady) {
     return null;
@@ -101,9 +126,7 @@ export const NavigationProvider: FC<PropsWithChildren> = ({ children }) => {
     <NavigationContainer
       theme={theme}
       linking={getLinking()}
-      onStateChange={
-        onNavigationStateChanged as (state?: NavigationState) => void
-      }
+      onStateChange={handleStateChange}
       initialState={initialNavigationState}
     >
       {children}

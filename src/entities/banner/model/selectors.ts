@@ -6,3 +6,8 @@ export const bannersSelector = createSelector(
   selectBanners,
   banners => banners.banners,
 );
+
+export const bannersBgSelector = createSelector(
+  selectBanners,
+  banners => banners.bannersBg,
+);

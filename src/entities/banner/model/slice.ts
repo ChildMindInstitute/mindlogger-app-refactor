@@ -12,10 +12,12 @@ type Banner = {
 
 type InitialState = {
   banners: Banner[];
+  bannersBg?: string;
 };
 
 const initialState: InitialState = {
   banners: [],
+  bannersBg: undefined,
 };
 
 const bannerSlice = createSlice({
@@ -33,6 +35,9 @@ const bannerSlice = createSlice({
     },
     removeAllBanners: state => {
       state.banners = [];
+    },
+    setBannersBg: (state, action: PayloadAction<string | undefined>) => {
+      state.bannersBg = action.payload;
     },
   },
 });
