@@ -13,6 +13,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { migrateReduxStore } from '@app/app/model/migrations/MigrationProcessor';
 import { appletReducer } from '@app/entities/applet/model/slice';
 import { bannerReducer } from '@app/entities/banner/model/slice';
+import { defaultBannersReducer } from '@app/entities/defaultBanners/model/slice';
 import { identityReducer } from '@app/entities/identity/model/slice';
 import { streamingReducer } from '@app/entities/streaming/model/slice';
 import { useSystemBootUp } from '@app/shared/lib/contexts/SplashContext';
@@ -38,6 +39,7 @@ const rootReducer = (state: any, action: AnyAction) => {
     applets: appletReducer,
     streaming: streamingReducer,
     banners: bannerReducer,
+    defaultBanners: defaultBannersReducer,
   });
 
   return reducer(state, action);

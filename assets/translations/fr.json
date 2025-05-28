@@ -623,5 +623,8 @@
     "yes": "Oui",
     "no": "Non",
     "noResults": "Aucun prestataire de soins de santé ne correspond à votre recherche."
-	}
+	},
+  "rebrandBanner": {
+    "content": "<0>Des mises à jour importantes arrivent !</0> <1>Nouveau look, nouveau nom, même excellent produit.</1>"
+  }
 }
