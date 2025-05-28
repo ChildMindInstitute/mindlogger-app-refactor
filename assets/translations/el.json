@@ -235,7 +235,8 @@
     "change_app_language": "Αλλαγή γλώσσας",
     "en": "English",
     "fr": "Français",
-    "el": "Ελληνικά"
+    "el": "Ελληνικά",
+    "es": "Español"
   },
   "application_logs_screen": {
     "upload_button": "Μεταφόρτωση αρχείων καταγραφής",
