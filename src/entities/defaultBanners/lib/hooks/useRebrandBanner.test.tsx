@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react-native';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
+import { RootStackParamList } from '@app/screens/config/types';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 
 import { useRebrandBanner } from './useRebrandBanner';
@@ -48,10 +49,11 @@ describe('useRebrandBanner', () => {
   test('should add banner when not previously dismissed', () => {
     // Setup
     const dismissed = {};
+    const currentRouteName: keyof RootStackParamList = 'Login';
 
     // Execute
     const { unmount } = renderHook(() =>
-      useRebrandBanner(dismissed, mockBannerKey),
+      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
     );
 
     // Verify
@@ -78,9 +80,12 @@ describe('useRebrandBanner', () => {
     const dismissed = {
       [mockBannerKey]: ['BrandUpdateBanner'],
     };
+    const currentRouteName: keyof RootStackParamList = 'Login';
 
     // Execute
-    renderHook(() => useRebrandBanner(dismissed, mockBannerKey));
+    renderHook(() =>
+      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
+    );
 
     // Verify
     expect(mockAddBanner).not.toHaveBeenCalled();
@@ -89,9 +94,12 @@ describe('useRebrandBanner', () => {
   test('should dispatch dismiss action when banner is manually closed', () => {
     // Setup
     const dismissed = {};
+    const currentRouteName: keyof RootStackParamList = 'Applets';
 
     // Execute
-    renderHook(() => useRebrandBanner(dismissed, mockBannerKey));
+    renderHook(() =>
+      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
+    );
 
     // Get the onClose callback from the addBanner call
     const onCloseCallback = mockAddBanner.mock.calls[0][1].onClose;
@@ -113,9 +121,12 @@ describe('useRebrandBanner', () => {
   test('should not dispatch dismiss action when banner is closed automatically', () => {
     // Setup
     const dismissed = {};
+    const currentRouteName: keyof RootStackParamList = 'Applets';
 
     // Execute
-    renderHook(() => useRebrandBanner(dismissed, mockBannerKey));
+    renderHook(() =>
+      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
+    );
 
     // Get the onClose callback from the addBanner call
     const onCloseCallback = mockAddBanner.mock.calls[0][1].onClose;
@@ -132,11 +143,42 @@ describe('useRebrandBanner', () => {
     // Setup - Use an empty object instead of undefined
     // This is a more realistic scenario as the hook expects an object
     const dismissed = {} as Record<string, string[]>;
+    const currentRouteName: keyof RootStackParamList = 'Login';
 
     // Execute
-    renderHook(() => useRebrandBanner(dismissed, mockBannerKey));
+    renderHook(() =>
+      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
+    );
 
     // Verify
+    expect(mockAddBanner).toHaveBeenCalledTimes(1);
+  });
+
+  test('should not add banner when on an excluded route', () => {
+    // Setup
+    const dismissed = {};
+    const currentRouteName: keyof RootStackParamList = 'InProgressActivity';
+
+    // Execute
+    renderHook(() =>
+      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
+    );
+
+    // Verify
+    expect(mockAddBanner).not.toHaveBeenCalled();
+  });
+
+  test('should handle undefined route name', () => {
+    // Setup
+    const dismissed = {};
+    const currentRouteName = undefined;
+
+    // Execute
+    renderHook(() =>
+      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
+    );
+
+    // Verify - should still add banner when route is undefined
     expect(mockAddBanner).toHaveBeenCalledTimes(1);
   });
 });

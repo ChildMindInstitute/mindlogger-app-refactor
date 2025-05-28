@@ -1,7 +1,10 @@
 import { useEffect, useRef } from 'react';
 
+import { useNavigationState } from '@react-navigation/native';
+
 import { selectUserId } from '@app/entities/identity/model/selectors';
 import { useHasSession } from '@app/entities/session/model/hooks/useHasSession';
+import { RootStackParamList } from '@app/screens/config/types';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 
 import { useRebrandBanner } from './useRebrandBanner';
@@ -10,6 +13,15 @@ import { dismissedBannersSelector } from '../../model/selectors';
 export const useDefaultBanners = () => {
   const hasSession = useHasSession();
   const userId = useAppSelector(selectUserId);
+
+  // Get the current route name using useNavigationState
+  const currentRouteName = useNavigationState(state => {
+    if (!state || !state.routes || state.routes.length === 0) {
+      return undefined; // No active route yet
+    }
+    const route = state.routes[state.index];
+    return route.name as keyof RootStackParamList;
+  });
 
   const bannerKey = hasSession ? `user-${userId}` : 'global';
 
@@ -21,5 +33,5 @@ export const useDefaultBanners = () => {
     dismissedRef.current = dismissed;
   }, [dismissed]);
 
-  useRebrandBanner(dismissedRef.current, bannerKey);
+  useRebrandBanner(dismissedRef.current, bannerKey, currentRouteName);
 };

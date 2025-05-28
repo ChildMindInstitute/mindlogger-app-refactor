@@ -4,16 +4,19 @@ import { Image } from '@tamagui/image';
 import { Trans } from 'react-i18next';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
+import { RootStackParamList } from '@app/screens/config/types';
 import { colors } from '@app/shared/lib/constants/colors';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Text } from '@app/shared/ui/Text';
 import { curiousLogomark } from '@assets/images';
 
 import { defaultBannersActions } from '../../model/slice';
+import { REBRAND_BANNER_EXCLUDED_ROUTES } from '../constants';
 
 export const useRebrandBanner = (
   dismissed: Record<string, string[]>,
   bannerKey: string,
+  currentRouteName?: keyof RootStackParamList,
 ) => {
   const dispatch = useAppDispatch();
   const { addBanner, removeBanner } = useBanners();
@@ -21,6 +24,14 @@ export const useRebrandBanner = (
   useEffect(() => {
     // Do not add banner if previously dismissed
     if (dismissed[bannerKey]?.includes('BrandUpdateBanner')) {
+      return;
+    }
+
+    // Only show the banner if not performing an assessment and we have a route name
+    if (
+      currentRouteName &&
+      REBRAND_BANNER_EXCLUDED_ROUTES.includes(currentRouteName)
+    ) {
       return;
     }
 
@@ -63,5 +74,12 @@ export const useRebrandBanner = (
     return () => {
       removeBanner('BrandUpdateBanner');
     };
-  }, [dismissed, bannerKey, dispatch, addBanner, removeBanner]);
+  }, [
+    dismissed,
+    bannerKey,
+    dispatch,
+    addBanner,
+    removeBanner,
+    currentRouteName,
+  ]);
 };
