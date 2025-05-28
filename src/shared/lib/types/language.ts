@@ -1,1 +1,1 @@
-export type Language = 'en' | 'fr' | 'el';
+export type Language = 'en' | 'fr' | 'el' | 'es';

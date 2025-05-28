@@ -1,0 +1,519 @@
+﻿{
+  "auth": {
+    "email": "Correo electrónico",
+    "email_address": "Dirección de correo electrónico",
+    "password": "Contraseña",
+    "i_agree": "Acepto los",
+    "terms_of_service": "Términos de servicio de MindLogger",
+    "terms": "Términos",
+    "privacy": "Privacidad",
+    "privacy_policy": "Política de privacidad",
+    "password_updated": "Contraseña actualizada"
+  },
+  "activity": {
+    "completeOnWeb": "Se debe completar en la app web de MindLogger",
+    "incorrect_answer": "Respuesta incorrecta. Inténtalo de nuevo",
+    "failed": "Incorrecta",
+    "flanker_accuracy_warn": "* Las marcas de tiempo recopiladas en un dispositivo Android no son tan precisas como en los dispositivos iOS.",
+    "please_wait": "Te pedimos que aguardes un momento",
+    "activity_all_items_hidden": "“{{entityName}}” no se puede iniciar porque todos los elementos dentro de la actividad están ocultos",
+    "flow_all_items_hidden": "“{{entityName}}” no se puede iniciar porque contiene una actividad en la que todos los elementos están ocultos",
+    "progress": {
+      "upload_files": "Estamos cargando tus archivos...",
+      "encrypt_answers": "Estamos encriptando tus respuestas...",
+      "upload_answers": "Estamos cargando tus respuestas...",
+      "completed": "Actividad cargada"
+    },
+    "step": "Paso"
+  },
+  "activity_time": {
+    "time_remaining": "es el tiempo restante para este elemento"
+  },
+  "timed_activity": {
+    "time_to_complete": "Tiempo para completar",
+    "time_to_complete_hm": "Tiempo para completar: {{hours}} horas y {{minutes}} minutos",
+    "hours": "horas"
+  },
+  "activity_summary": {
+    "terms_text": "Entiendo que la información proporcionada por este cuestionario no está destinada a reemplazar el asesoramiento, diagnóstico o tratamiento ofrecido por un profesional médico o de salud mental, y que mis respuestas anónimas pueden ser utilizadas y compartidas para llevar a cabo investigaciones generales sobre la salud mental de los niños.",
+    "footer_text": "CHILD MIND INSTITUTE, INC. Y CHILD MIND MEDICAL PRACTICE, PLLC (EN CONJUNTO, “CMI”) NO EJERCEN DIRECTA NI INDIRECTAMENTE LA MEDICINA NI OFRECEN ASESORAMIENTO MÉDICO COMO PARTE DE ESTE CUESTIONARIO. CMI NO ASUME NINGUNA RESPONSABILIDAD POR CUALQUIER DIAGNÓSTICO, TRATAMIENTO, DECISIÓN TOMADA O ACCIÓN REALIZADA BASÁNDOSE EN LA INFORMACIÓN PROPORCIONADA POR ESTE CUESTIONARIO, NI ASUME NINGUNA RESPONSABILIDAD POR EL USO QUE HAGAS DE ESTE CUESTIONARIO.",
+    "score_on_subscale": "The score on the {{name}} subscale was",
+    "save": "Guardar",
+    "summary": "Resumen",
+    "alerts": "Alertas",
+    "report_summary": "Resumen del informe",
+    "not_yet_completed": "Aún no se ha completado",
+    "last_completed": "Last completed",
+    "unscheduled": "Unscheduled",
+    "due": "Due",
+    "scheduled_for": "Scheduled for",
+    "category_suicide": "Suicide",
+    "category_suicide_message": "Critical Level: Parent indicated possible bullying. Bring to immediate attention of clinician due to potential emergency situation.",
+    "category_emotional": "Emotional",
+    "category_emotional_message": "Within normal limits: No further screening or assessment required.",
+    "category_sport": "Sport",
+    "category_sport_message": "Clinical Range: Make clinician aware; Perform follow up assessment (Recommended); Generate referral.",
+    "share_report": "Share Report",
+    "share_all_reports": "Share All Reports"
+  },
+  "activity_chart": {
+    "title": "Deberás completar la evaluación para que los datos se muestren aquí.",
+    "monday": "L",
+    "tuesday": "M",
+    "wednesday": "M",
+    "thursday": "J",
+    "friday": "V",
+    "saturday": "S",
+    "sunday": "D"
+  },
+  "calendar": {
+    "months": "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre",
+    "weekdays": "Dom._Lun._Mar._Mié._Jue._Vie._Sáb.",
+    "x_days": "L_M_M_J_V_S_D"
+  },
+  "applet_data": {
+    "title": "Deberás completar la evaluación para que los datos se muestren aquí."
+  },
+  "widget_error": {
+    "error_text": "Hubo un problema al cargar esta pantalla.",
+    "error_description": "Asegúrate de tener la última versión de MindLogger instalada. Si el problema persiste, contacta al administrador de la actividad."
+  },
+  "about": {
+    "about": "Acerca de nosotros",
+    "applets_title": "Descubre más sobre cada uno de tus applets y sobre la plataforma MindLogger.",
+    "data_title": "Toca \"Acerca de MindLogger\" a continuación para conocer más sobre esta plataforma de recolección de datos.",
+    "about_mindLogger": "Acerca de MindLogger",
+    "icons_title": "Los íconos de NounProject fueron creados por Alina Oleynik (encuesta), Beth Bolton (libro) y Shakeel (gráfico)",
+    "device_id": "ID del dispositivo"
+  },
+  "about_app": {
+    "title_with_version": "¿Qué es MindLogger? Versión{{version}}",
+    "title": "A menos que se indique lo contrario, los íconos se extraen de OpenMoji y NounProject.",
+    "subtitle": "A menos que se indique lo contrario, los íconos se extraen de OpenMoji y NounProject.",
+    "mindlogger_about": "## ### ¿Qué es MindLogger? Esta app es parte de la plataforma de recolección y análisis de datos de código abierto MindLogger, diseñada por MATTER Lab en el Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). # ### ¿Qué puede hacer MindLogger? El conjunto de funciones de MindLogger está en constante crecimiento y actualmente admite una amplia variedad de tipos de datos. Cada pantalla en una actividad de MindLogger puede incluir cualquiera de las siguientes opciones: - Texto, imagen y audio - Pregunta seguida de opciones de respuesta con imagen y/o texto - Barra deslizante - Entrada de texto - Entrada de tabla - Grabación de audio - Captura de foto o video - Dibujo o toques de pantalla - Geolocalización actual del usuario - Tarea cognitiva simple - Retraso antes de la siguiente respuesta - Temporizador - Lógica condicional para determinar el siguiente paso #### ¿Dónde puedo conocer más al respecto? Visita [https://mindlogger.org](https://mindlogger.org) para más información. ## [Servicios de Asistencia]({{credits_link}}) ## [Términos de servicio](https://mindlogger.org/terms-of-service) ## [Política de privacidad](https://mindlogger.org/privacy-policy) ##### Saludos, ##### El equipo de MindLogger ##### Child Mind Institute"
+  },
+  "applet_footer": {
+    "surveys": "Encuestas",
+    "data": "Datos",
+    "about": "Acerca de nosotros",
+    "activities": "Actividades",
+    "activity": "Actividad"
+  },
+  "applet_invite_flow": {
+    "back": "Atrás",
+    "next": "Siguiente"
+  },
+  "live_connection": {
+    "disconnect": "DESCONECTAR",
+    "connect": "ENVIAR",
+    "connect_to_server": "Conectar al servidor",
+    "remember": "Recordar",
+    "ip": "Dirección IP",
+    "port": "Puerto",
+    "connection_closed": "Se cerró la conexión TCP",
+    "connection_error": "Error en la conexión. Verifica la IP y el puerto",
+    "connection_set_error": "No se puede establecer la conexión",
+    "live_connection": "Conexión en vivo",
+    "not_available": "No disponible"
+  },
+  "join_invite": {
+    "click_below": "Haz clic a continuación si ya puedes unirte a este estudio. Puedes dejar de participar en este estudio o borrar tus datos en cualquier momento, sin consecuencias.",
+    "decline": "Si prefieres no compartir tus datos de este estudio, puedes rechazar esta invitación. ",
+    "decline_title": "Rechazar"
+  },
+  "applet_list_component": {
+    "about_title": "Acerca de MindLogger",
+    "no_applets_yet": "No tienes applets.",
+    "noon": "el mediodía",
+    "midnight": "la medianoche",
+    "refresh_error_header": "Error de actualización",
+    "applets_not_refreshed": "Los siguientes applets no se actualizaron:",
+    "common_refresh_error": "La lista de applets no se actualizó. Inténtalo de nuevo."
+  },
+  "activity_list_component": {
+    "no_activities": "No hay actividades disponibles para que completes en este momento",
+    "insufficient_data_error": "Este applet no se actualizó. Intenta actualizar de nuevo.",
+    "other_error": "Ocurrió un error no definido"
+  },
+  "applet_settings": {
+    "applet_not_defined": "No hay un applet definido.",
+    "want_remove": "Si deseas eliminar este applet, pero conservar tus datos, haz clic a continuación",
+    "remove": "Eliminar",
+    "want_delete": "Si deseas borrar tus datos de este applet y eliminarlos, haz clic a continuación.",
+    "remove_delete": "Eliminar y borrar datos",
+    "alert_title": "¿Confirmas que deseas eliminar tus datos?",
+    "alert_message": "No podrás recuperarlos",
+    "cancel_text": "No, cancelar",
+    "confirm_text": "Sí, eliminarlos"
+  },
+  "change_pass_form": {
+    "update": "Actualizar",
+    "cur_pass_placeholder": "Contraseña actual",
+    "new_pass_placeholder": "Contraseña nueva",
+    "error": "No se pueden actualizar los detalles del usuario.",
+    "submission_error": "La contraseña actual que ingresaste era incorrecta.",
+    "change_pass": "Cambiar contraseña",
+    "password_at_least_characters": "La contraseña debe tener al menos {{min}} caracteres"
+  },
+  "password_recovery_form": {
+    "password_at_least_characters": "La contraseña debe tener al menos {{min}} caracteres",
+    "password_no_spaces": "La contraseña no debe contener espacios",
+    "passwords_do_not_match": "Las contraseñas no coinciden",
+    "password_confirmation_required": "Confirma tu contraseña",
+    "new_password_placeholder": "Contraseña nueva",
+    "confirm_password_placeholder": "Confirmar contraseña",
+    "submit": "Enviar",
+    "invalid_password_reset_link": "Este enlace no es válido o ha expirado.",
+    "click_to_reset_password": "Haz clic a continuación para restablecer tu contraseña.",
+    "forgot_password": "Olvidé mi contraseña",
+    "success": "Restablecimos tu contraseña correctamente. Inicia sesión con tu contraseña nueva.",
+    "error": "Error al restablecer tu contraseña"
+  },
+  "change_study": {
+    "reset": "Reset",
+    "submit": "Enviar",
+    "enter_url_manually": "Enter URL Manually",
+    "scan_qr": "Scan QR",
+    "successfully_changed": "Server Url was changed successfully.",
+    "successfully_reset": "Server Url was reset successfully.",
+    "change_server": "Change Server",
+    "http_confirm": "Are you sure you want to connect to server which doesn't support ssl?",
+    "set_by_qr": "Study has been set by QR.",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "consent": {
+    "this_app_provides": "Esta app proporciona una forma fácil de recopilar encuestas, voces y actividades de dibujo.",
+    "i_understand": "Comprendo que algunas imágenes pueden generar malestar mientras uso esta app",
+    "i_will_allow": "Permitiré que el Child Mind Institute almacene los datos del uso de esta app en un servidor seguro en la nube, y que acceda a esta información con fines clínicos y de investigación",
+    "i_premit": "Autorizo a que el Child Mind Institute se comunique conmigo sobre la información recopilada en esta app para fines clínicos o de investigación.",
+    "next": "Siguiente"
+  },
+  "forgot_pass_form": {
+    "reset_pass": "Restablecer contraseña",
+    "enter_email_mess": "Ingresa tu dirección de correo electrónico",
+    "invalid_email": "Dirección de correo electrónico no válida",
+    "email_address": "Dirección de correo electrónico",
+    "email_send_success": "Se ha enviado un correo electrónico de restablecimiento a <strong>{{email}}</strong> si la cuenta existe.",
+    "email_send_error": "No se puede enviar el correo electrónico de restablecimiento en este momento.",
+    "forgot_password": "¿Olvidaste tu contraseña?"
+  },
+  "login": {
+    "new_user": "Usuario nuevo",
+    "account_create": "Crear una cuenta",
+    "forgot_password": "¿Olvidaste tu contraseña?",
+    "what_is": "What is",
+    "login_error": "Error en el inicio de sesión.",
+    "password_at_least_characters": "La contraseña debe tener al menos 6 caracteres"
+  },
+  "login_form": {
+    "login": "Iniciar sesión",
+    "email_placeholder": "Correo electrónico",
+    "password": "Contraseña"
+  },
+  "logout_warning": {
+    "warning": "Advertencia de cierre de sesión",
+    "uploads_in_progress": "Cargas en curso",
+    "currently_uploading": "Tienes respuestas que se están cargando. Si cierras sesión ahora y luego inicias sesión con un usuario diferente, perderás tus respuestas.",
+    "not_uploaded": "No has cargado tus respuestas. Si cierras sesión ahora y luego inicias sesión con un usuario diferente, perderás tus respuestas.",
+    "sure_logout": "¿Confirmas que quieres cerrar sesión?",
+    "cancel": "Cancelar",
+    "logout": "Cerrar sesión"
+  },
+  "settings": {
+    "logged_out": "Has cerrado sesión.",
+    "change_pass": "Cambiar contraseña",
+    "use_cellular_data": "Usar datos móviles",
+    "logout": "Cerrar sesión",
+    "permanently_delete_account": "Eliminar cuenta de manera permanente",
+    "user_settings": "Configuración del usuario",
+    "upload_logs": "Cargar registros",
+    "create_new_password": "Crear una contraseña nueva"
+  },
+  "language_screen": {
+    "app_language": "Idioma de la app",
+    "change_app_language": "Cambiar idioma",
+    "en": "English",
+    "fr": "Français",
+    "el": "Ελληνικά",
+    "es": "Español"
+  },
+  "application_logs_screen": {
+    "upload_button": "Cargar registros",
+    "title": "¿Tienes problemas técnicos? Tus archivos de registro ayudarán a nuestro equipo a solucionar los problemas que surjan.",
+    "subTitle": "Cárgalos usando el botón que aparece a continuación.",
+    "success": "¡Excelente! Hemos recibido tus registros.",
+    "error": "Ocurrió un error. No se enviaron los registros. Inténtalo de nuevo."
+  },
+  "sign_up_form": {
+    "sign_up": "Regístrate",
+    "error": "Error al registrarte. Es posible que el nombre de usuario ya esté en uso.",
+    "new_user": "Usuario nuevo",
+    "username_validation_error": "El nombre de usuario debe tener al menos 4 caracteres, comenzar con una letra y solo puede contener letras, números, guiones y puntos.",
+    "email_validation_error": "Parece que este correo electrónico está incompleto",
+    "email_placeholder": "Correo electrónico",
+    "first_name": "Nombre",
+    "last_name": "Apellido",
+    "password_placeholder": "Contraseña",
+    "please_accept_terms": "Debes aceptar los Términos de servicio.",
+    "email_looks_incomplete": "Parece que este correo electrónico está incompleto",
+    "sign_up_agree": "Al registrarte, aceptas los",
+    "and": "y"
+  },
+  "password_requirements": {
+    "at_least_characters": "6 caracteres",
+    "no_blank_spaces": "Ningún espacio en blanco",
+    "must_include": "La contraseña debe incluir:"
+  },
+  "geolocation": {
+    "get_location": "OBTENER UBICACIÓN",
+    "must_enable_location": "Debes habilitar los servicios de ubicación para completar esta tarea. Concede permiso a MindLogger en la configuración de tu dispositivo iOS y presiona el botón nuevamente.",
+    "must_enable_location_subtitle": "Debes habilitar los servicios de ubicación para completar esta tarea. Presiona el botón nuevamente y concede permiso a MindLogger para usar tu ubicación.",
+    "location_saved": "Ubicación guardada.",
+    "service_not_available": "El servicio de ubicación no está disponible."
+  },
+  "select": {
+    "select_one": "Selecciona uno",
+    "no_items": "No items"
+  },
+  "permissions": {
+    "alert_button_cancel": "Descartar",
+    "alert_button_ok": "Abrir Configuración",
+    "alarm_permission_warning": "Solicitud de permisos de notificación",
+    "alarm_permission_disabled": "Activa los permisos de notificación en tu dispositivo para recibir los recordatorios de MindLogger a tiempo. Ten en cuenta que la app se cerrará automáticamente una vez que actives los permisos de notificación.",
+    "gallery": "MindLogger quiere acceder a tu galería para completar esta tarea",
+    "camera": "MindLogger quiere acceder a tu cámara para completar esta tarea"
+  },
+  "media": {
+    "alert_message": "Se pueden establecer en Configuración",
+    "media_found_title": "Estás fuera de línea",
+    "media_found_body": "Esta actividad contiene elementos que requieren conexión a internet. Activa tu conexión a internet para continuar."
+  },
+  "audio_recorder": {
+    "permission": "Concede permiso para usar tu micrófono para completar esta tarea.",
+    "alert_title": "MindLogger quiere acceder a tu micrófono para completar esta tarea.",
+    "alert_message": "Se pueden establecer en Configuración.",
+    "record_error": "Hubo un error al iniciar el grabador.",
+    "stop": "DETENER",
+    "record": "GRABAR",
+    "recording": "Grabando...",
+    "seconds": "s",
+    "file_saved": "Archivo guardado."
+  },
+  "audio_player": {
+    "stop": "DETENER",
+    "playing": "REPRODUCIENDO...",
+    "play": "REPRODUCIR",
+    "done": "LISTO",
+    "loading": "CARGANDO"
+  },
+  "optional_text": {
+    "required": "Este es un campo obligatorio.",
+    "enter_text": "Ingresa el texto."
+  },
+  "date_picker": {
+    "ok": "ACEPTAR"
+  },
+  "table_input": {
+    "short_press_detail": "* Al presionar brevemente, el contador aumenta",
+    "long_press_detail": "* Al presionar de manera prolongada, el contador disminuye"
+  },
+  "activity_due_date": {
+    "available_all_day": "Disponible: Todo el día",
+    "scheduled_at": "Scheduled At",
+    "available": "Disponible desde",
+    "to": "Hasta",
+    "day": "day",
+    "days": "days",
+    "am": "A.M.",
+    "the_following_day": "el día siguiente"
+  },
+  "form_item": {
+    "required": "Obligatorio",
+    "must_be": "Must be",
+    "characters_or_less": "characters or less",
+    "must_be_a_number": "Must be a number"
+  },
+  "applet_about": {
+    "loading": "cargando",
+    "no_info": "¡Los autores de este applet no han proporcionado ninguna información!"
+  },
+  "firebase_messaging": {
+    "alert_title": "MindLogger quiere enviarte notificaciones",
+    "alert_message": "Se pueden establecer en Configuración",
+    "alert_text": "Abrir Configuración",
+    "response_refresh_request": "Solicitud de actualización de respuestas",
+    "refresh_request_details": "Como restablecimos tu contraseña, se deben actualizar tus respuestas anteriores. ¿Quieres solicitar esto?",
+    "refresh_request_text": "Tus gerentes iniciarán la actualización en breve.",
+    "applet_not_found_1": "Applet no encontrado",
+    "applet_not_found_2": "No existe un applet para el código de identificación proporcionado.",
+    "activity_not_found": "La actividad “{{entityName}}” no está disponible ahora.",
+    "already_completed": "Ya has completado",
+    "app_killed_on_redux_persist": "No puedes iniciar esta actividad. Contacta al Servicio de Asistencia.",
+    "activity_was_due_at": "This activity was due at",
+    "if_progress_was_made_on_the": "If progress was made on the",
+    "it_was_saved_but_it_can_no_longer_be_taken": "it was saved but it can no longer be taken",
+    "today": "hoy.",
+    "today2": "Programada para hoy",
+    "activity_not_ready": "La actividad no está lista",
+    "not_able_to_start": "Aún no puedes iniciar la actividad",
+    "is": "está",
+    "scheduled_to_start_at": "programada para comenzar a las",
+    "postponed_notification": "Una vez que se hayan cargado las respuestas, intentaremos abrir la actividad"
+  },
+  "local_notifications": {
+    "complete_activity": "Completa esta actividad."
+  },
+  "join_demo_applets": {
+    "healthy_brain_network": "Red cerebral saludable: EMA",
+    "cognitive_tasks": "Tareas cognitivas",
+    "mind_logger_demos": "Demostraciones de MindLogger"
+  },
+  "data_invite": {
+    "message": "Creemos que es importante que sepas quién tendrá acceso a tus datos si aceptas esta invitación. Las siguientes personas tendrán acceso a tus datos si aceptas esta invitación:"
+  },
+  "sidebar": {
+    "home": "Inicio",
+    "settings": "Configuración",
+    "about": "Acerca de nosotros",
+    "logout": "Cerrar sesión"
+  },
+  "navigator": {
+    "exit_title": "Salir de la app",
+    "exit_subtitle": "¿Deseas salir de la app?",
+    "cancel": "Cancelar"
+  },
+  "activity_navigation": {
+    "next": "Siguiente",
+    "skip": "Pasar al siguiente",
+    "done": "Listo",
+    "back": "Atrás",
+    "return": "Volver",
+    "undo": "Deshacer",
+    "exit": "Salir"
+  },
+  "network_alerts": {
+    "no_internet_title": "Sin conexión a internet",
+    "no_internet_subtitle": "Conéctate a internet",
+    "no_internet_text": "Descartar",
+    "cellular_data_title": "Los datos móviles están desactivados",
+    "cellular_data_subtitle": "Conéctate al wifi o activa los datos móviles",
+    "cellular_data_text": "Descartar",
+    "use_cellular_data": "Usar datos móviles"
+  },
+  "timing": {
+    "provide_option": "You must provide the \"after\" or \"every\" option",
+    "to_be_number": "Expected options.after to be a number",
+    "every_number": "Expected options.every to be a number"
+  },
+  "camera": {
+    "choose_photo": "Elegir foto",
+    "choose_video": "Elegir video",
+    "take_a_photo": "Toma una foto nueva o elige una de tu biblioteca",
+    "take_a_video": "Graba un video nuevo o elige uno de tu biblioteca",
+    "camera": "Cámara",
+    "library": "Biblioteca"
+  },
+  "text_entry": {
+    "type_placeholder": "Escribe el texto",
+    "paragraph_placeholder": "Escribe tu respuesta aquí."
+  },
+  "character_counter":{
+    "characters":"{{numberOfCharacters}}/{{limit}} caracteres"
+  },
+  "additional": {
+    "server-error": "Ocurrió un error en el servidor",
+    "time-end": "¡Se acabó el tiempo!",
+    "time-end-tap": "Se acabó el tiempo. Toca para completar",
+    "thanks": "¡Gracias!",
+    "sorry": "Lo siento",
+    "saved_answers": "¡Hemos guardado tus respuestas!",
+    "submit_flow_answers": "Toca el botón",
+    "submit": "Enviar",
+    "submit_flow_answers_ex": "para guardar tus respuestas y pasar a la actividad:",
+    "close": "Cerrar",
+    "resume_activity": "Reanudar actividad",
+    "activity_resume_restart": "¿Te gustaría reanudar esta actividad en curso o reiniciarla?",
+    "restart": "Reiniciar",
+    "resume": "Reanudar",
+    "retry": "Reintentar",
+    "send": "Enviar",
+    "later": "Más tarde",
+    "in_progress": "En curso",
+    "unscheduled": "No programada",
+    "scheduled": "Programada",
+    "past_due": "Vencida",
+    "available": "Disponible",
+    "sure_delete_account_data": "¿Confirmas que deseas eliminar tu cuenta y tus datos?",
+    "no_cancel": "No, cancelar",
+    "yes_delete": "Sí, eliminar",
+    "hi": "Hola",
+    "enter_old_password": "Ingresa tu contraseña anterior",
+    "enter_new_password": "Ingresa una contraseña nueva",
+    "data_not_sent": "Haz clic en Enviar para cargar los datos recopilados anteriormente",
+    "data_is_sending": "Cargando los datos recopilados anteriormente",
+    "upload_error": "Error al cargar",
+    "want_to_retry": "Es posible que tu conexión a internet no sea estable. No pudimos enviar tus datos."
+  },
+  "prize": {
+    "lack_tokens_title": "Inténtalo de nuevo",
+    "lack_tokens_subtitle": "You don't have enough tokens. Selecciona otro premio"
+  },
+  "cognitive": {
+    "incorrect_start_point": "¡Punto de inicio incorrecto!",
+    "incorrect_line": "¡Línea incorrecta!",
+    "finished_continue": "Terminado. Haz clic en Siguiente para continuar.",
+    "finished_complete": "Terminado. Haz clic en Listo para completar.",
+    "begin": "Comenzar",
+    "end": "Fin"
+  },
+  "system": {
+    "migration_not_applied_text": "La migración de datos no se aplicó correctamente. Contacta al Servicio de Asistencia.",
+    "ok": "ACEPTAR"
+  },
+  "activity_skip_popup" : {
+    "popup_title": "¿Deseas pasar al siguiente ensayo?",
+    "popup_description": "Este ensayo está incompleto. Si pasas al siguiente ensayo, guardaremos tu progreso. No podrás terminar este ensayo más tarde.",
+    "keep_working": "Seguir trabajando",
+    "skip": "Pasar al siguiente"
+  },
+  "autocompletion": {
+    "done": "Listo",
+    "time_limit_reached": "Límite de tiempo alcanzado",
+    "time_expired": "El tiempo para completar {{activityNames}} ha expirado. Tus respuestas se enviarán automáticamente.",
+    "processing_answers": "Procesando las respuestas",
+    "preparing_answers": "Te pedimos que esperes y que no cierres la pantalla.",
+    "answers_submitted": "Respuestas enviadas",
+    "thanks": "¡Gracias! Hemos guardado todo.",
+    "time_is_up_modal_description": "No hay más tiempo para trabajar en esta actividad. Todo el trabajo que has hecho se guardará y se enviará.",
+    "time_is_up_modal_title": "Se acabó el tiempo",
+    "ok": "ACEPTAR"
+  },
+  "data_sharing": {
+    "consent": "Doy mi consentimiento para que mis respuestas sean",
+    "media_consent": "Doy mi consentimiento para que mis respuestas multimedia sean",
+    "public": "públicas",
+    "dialog": {
+      "body": "Compartir las respuestas públicamente implica que la información proporcionada por los usuarios, como las respuestas a encuestas o comentarios, estará disponible para que otros la vean abiertamente."
+    }
+  },
+  "assignment": {
+    "badge": "Acerca de {{name}}",
+    "banner": "Asegúrate de que todas tus respuestas sean sobre <strong>{{name}}</strong>"
+  },
+  "splash": {
+    "version": "Versión"
+  },
+  "requestHealthRecordData": {
+    "title": "Solicitar datos del historial médico",
+    "linkText": "Obtén más información sobre cómo MindLogger accede de forma segura a los datos de atención médica.",
+    "partnershipText": "MindLogger utiliza el Servicio de Información Médica de 1UpHealth para permitir que tu investigador acceda a la información de tus registros médicos.\n\nEn las siguientes pantallas, se te pedirá que inicies sesión en los sistemas de tu proveedor de atención médica y compartas tus datos médicos con este estudio. Volverás a la actividad de MindLogger cuando hayas terminado.",
+    "enterYourHealthSystem": "Ingresa tu sistema de salud:",
+    "healthSystemName": "Nombre del sistema de salud",
+    "search": "Buscar",
+    "additionalPromptText": "Has terminado de iniciar sesión en tu cuenta de atención médica.\n\n¿Te gustaría iniciar sesión en alguna otra cuenta de atención médica?",
+    "yes": "Sí",
+    "no": "No",
+    "noResults": "No se encontraron proveedores de atención médica que coincidan con tu búsqueda."
+  }
+}
