@@ -4,9 +4,9 @@ import { FC } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
 import { usePasswordRecoveryMutation } from '@app/entities/identity/api/hooks/usePasswordRecoveryMutation';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
-import { useBanner } from '@app/shared/lib/hooks/useBanner';
 import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
@@ -23,7 +23,7 @@ type Props = BoxProps & {
 
 export const ForgotPasswordForm: FC<Props> = props => {
   const { t } = useTranslation();
-  const banner = useBanner();
+  const { addSuccessBanner, addErrorBanner } = useBanners();
 
   const { form, submit } = useAppForm(ForgotPasswordFormSchema, {
     defaultValues: {
@@ -42,16 +42,12 @@ export const ForgotPasswordForm: FC<Props> = props => {
   } = usePasswordRecoveryMutation({
     onSuccess: () => {
       props.onRecoverySuccess();
-      banner.show(<SuccessNotification email={form.getValues().email} />, {
-        type: 'success',
-        visibilityTime: 5000,
+      addSuccessBanner({
+        children: <SuccessNotification email={form.getValues().email} />,
       });
     },
     onError: () => {
-      banner.show(t('forgot_pass_form:email_send_error'), {
-        type: 'error',
-        visibilityTime: 5000,
-      });
+      addErrorBanner(t('forgot_pass_form:email_send_error'));
     },
   });
 
