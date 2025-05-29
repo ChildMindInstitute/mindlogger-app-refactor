@@ -23,7 +23,7 @@ export const useDefaultBanners = () => {
     return route.name as keyof RootStackParamList;
   });
 
-  const bannerKey = hasSession ? `user-${userId}` : 'global';
+  const bannerScope = hasSession ? `user-${userId}` : 'global';
 
   const dismissed = useAppSelector(dismissedBannersSelector);
   // Save in ref to exclude from useEffect dependencies
@@ -33,5 +33,5 @@ export const useDefaultBanners = () => {
     dismissedRef.current = dismissed;
   }, [dismissed]);
 
-  useRebrandBanner(dismissedRef.current, bannerKey, currentRouteName);
+  useRebrandBanner(dismissedRef.current, bannerScope, currentRouteName);
 };

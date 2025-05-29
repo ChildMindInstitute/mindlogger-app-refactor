@@ -15,7 +15,7 @@ import { REBRAND_BANNER_EXCLUDED_ROUTES } from '../constants';
 
 export const useRebrandBanner = (
   dismissed: Record<string, string[]>,
-  bannerKey: string,
+  bannerScope: string,
   currentRouteName?: ScreenRoute,
 ) => {
   const dispatch = useAppDispatch();
@@ -23,7 +23,7 @@ export const useRebrandBanner = (
 
   useEffect(() => {
     // Do not add banner if previously dismissed
-    if (dismissed[bannerKey]?.includes('BrandUpdateBanner')) {
+    if (dismissed[bannerScope]?.includes('BrandUpdateBanner')) {
       return;
     }
 
@@ -63,7 +63,7 @@ export const useRebrandBanner = (
         if (reason === 'manual') {
           dispatch(
             defaultBannersActions.dismissBanner({
-              key: bannerKey,
+              key: bannerScope,
               bannerType: 'BrandUpdateBanner',
             }),
           );
@@ -76,7 +76,7 @@ export const useRebrandBanner = (
     };
   }, [
     dismissed,
-    bannerKey,
+    bannerScope,
     dispatch,
     addBanner,
     removeBanner,
