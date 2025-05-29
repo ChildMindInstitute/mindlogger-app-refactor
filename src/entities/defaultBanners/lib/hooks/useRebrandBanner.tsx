@@ -5,7 +5,6 @@ import { Trans } from 'react-i18next';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
 import { ScreenRoute } from '@app/screens/config/types';
-import { colors } from '@app/shared/lib/constants/colors';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Text } from '@app/shared/ui/Text';
 import { curiousIcon } from '@assets/images';
@@ -38,7 +37,7 @@ export const useRebrandBanner = (
     addBanner('BrandUpdateBanner', {
       children: (
         <Trans i18nKey="rebrandBanner:content">
-          <Text color={colors.white} fontWeight="bold">
+          <Text color="#FDFCFC" fontWeight="bold">
             Big updates are coming!
           </Text>
           <>New look, new name, same great product.</>
@@ -56,7 +55,7 @@ export const useRebrandBanner = (
         </Trans>
       ),
       icon: <Image src={curiousIcon} width={32} height={30} />,
-      color: colors.white,
+      color: '#FDFCFC',
       backgroundColor: '#0B0907',
       duration: null,
       onClose: reason => {

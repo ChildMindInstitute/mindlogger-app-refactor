@@ -33,6 +33,9 @@ export const Banners = () => {
   // Animate top safe area background color to match native header background color transition
   const animatedStyles = useAnimatedStyle(() => ({
     backgroundColor: withTiming(bannersBg ?? 'transparent', {
+      // Duration is based on native header transition duration for each OS
+      // iOS: 350ms, Android: 300ms
+      // Subtract 30ms to account for animation delay
       duration: IS_IOS ? 320 : 270,
       easing: Easing.out(Easing.ease),
     }),
