@@ -5,10 +5,10 @@ const blueLogo = require('./blue_logo.png');
 const cloudLogo = require('./cloud_logo.png');
 const roundAlertIcon = require('./score-alert.png');
 const whiteLogo = require('./white_logo.png');
-const curiousLogomark = require('./curious-logomark.png');
+const curiousIcon = require('./curious-icon.png');
 
 export {
-  curiousLogomark,
+  curiousIcon,
   whiteLogo,
   blueLogo,
   badge,

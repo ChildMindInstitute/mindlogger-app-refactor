@@ -8,7 +8,7 @@ import { ScreenRoute } from '@app/screens/config/types';
 import { colors } from '@app/shared/lib/constants/colors';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Text } from '@app/shared/ui/Text';
-import { curiousLogomark } from '@assets/images';
+import { curiousIcon } from '@assets/images';
 
 import { defaultBannersActions } from '../../model/slice';
 import { REBRAND_BANNER_EXCLUDED_ROUTES } from '../constants';
@@ -55,7 +55,7 @@ export const useRebrandBanner = (
           </Link>*/}
         </Trans>
       ),
-      icon: <Image src={curiousLogomark} width={32} height={30} />,
+      icon: <Image src={curiousIcon} width={32} height={30} />,
       color: colors.white,
       backgroundColor: '#0B0907',
       duration: null,
