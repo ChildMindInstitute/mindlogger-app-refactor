@@ -4,7 +4,7 @@ import { Image } from '@tamagui/image';
 import { Trans } from 'react-i18next';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
-import { RootStackParamList } from '@app/screens/config/types';
+import { ScreenRoute } from '@app/screens/config/types';
 import { colors } from '@app/shared/lib/constants/colors';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Text } from '@app/shared/ui/Text';
@@ -16,7 +16,7 @@ import { REBRAND_BANNER_EXCLUDED_ROUTES } from '../constants';
 export const useRebrandBanner = (
   dismissed: Record<string, string[]>,
   bannerKey: string,
-  currentRouteName?: keyof RootStackParamList,
+  currentRouteName?: ScreenRoute,
 ) => {
   const dispatch = useAppDispatch();
   const { addBanner, removeBanner } = useBanners();
