@@ -5,9 +5,16 @@ import { BannerProps } from '../ui/Banner';
 
 export type BannerType = (typeof BANNERS)[number];
 
+export enum BannerOrder {
+  Top = 0,
+  Default = 1,
+  Bottom = 2,
+}
+
 type Banner = {
   key: BannerType;
   bannerProps: BannerProps;
+  order: BannerOrder;
 };
 
 type InitialState = {

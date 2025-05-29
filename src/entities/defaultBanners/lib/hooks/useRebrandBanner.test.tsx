@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react-native';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
+import { BannerOrder } from '@app/entities/banner/model/slice';
 import { ScreenRoute } from '@app/screens/config/types';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 
@@ -68,6 +69,7 @@ describe('useRebrandBanner', () => {
         children: expect.anything(),
         onClose: expect.any(Function),
       }),
+      BannerOrder.Top,
     );
 
     // Cleanup

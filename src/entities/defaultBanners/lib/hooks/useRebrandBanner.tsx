@@ -4,6 +4,7 @@ import { Image } from '@tamagui/image';
 import { Trans } from 'react-i18next';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
+import { BannerOrder } from '@app/entities/banner/model/slice';
 import { ScreenRoute } from '@app/screens/config/types';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Text } from '@app/shared/ui/Text';
@@ -34,16 +35,18 @@ export const useRebrandBanner = (
       return;
     }
 
-    addBanner('BrandUpdateBanner', {
-      children: (
-        <Trans i18nKey="rebrandBanner:content">
-          <Text color="#FDFCFC" fontWeight="bold">
-            Big updates are coming!
-          </Text>
-          <>New look, new name, same great product.</>
-          {/* TODO: Add link when available
+    addBanner(
+      'BrandUpdateBanner',
+      {
+        children: (
+          <Trans i18nKey="rebrandBanner:content">
+            <Text color="#FDFCFC" fontWeight="bold">
+              Big updates are coming!
+            </Text>
+            <>New look, new name, same great product.</>
+            {/* TODO: Add link when available
           https://mindlogger.atlassian.net/browse/M2-9276 */}
-          {/* Curious?{' '}
+            {/* Curious?{' '}
           <Link
             textDecorationLine="underline"
             color="#B6DFFE"
@@ -52,23 +55,25 @@ export const useRebrandBanner = (
           >
             Tap to learn more.
           </Link>*/}
-        </Trans>
-      ),
-      icon: <Image src={curiousIcon} width={32} height={30} />,
-      color: '#FDFCFC',
-      backgroundColor: '#0B0907',
-      duration: null,
-      onClose: reason => {
-        if (reason === 'manual') {
-          dispatch(
-            defaultBannersActions.dismissBanner({
-              key: bannerScope,
-              bannerType: 'BrandUpdateBanner',
-            }),
-          );
-        }
+          </Trans>
+        ),
+        icon: <Image src={curiousIcon} width={32} height={30} />,
+        color: '#FDFCFC',
+        backgroundColor: '#0B0907',
+        duration: null,
+        onClose: reason => {
+          if (reason === 'manual') {
+            dispatch(
+              defaultBannersActions.dismissBanner({
+                key: bannerScope,
+                bannerType: 'BrandUpdateBanner',
+              }),
+            );
+          }
+        },
       },
-    });
+      BannerOrder.Top,
+    );
 
     return () => {
       removeBanner('BrandUpdateBanner');

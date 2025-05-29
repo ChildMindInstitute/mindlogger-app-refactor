@@ -3,7 +3,7 @@ import { renderHook } from '@testing-library/react-native';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 
 import { useBanners } from './useBanners';
-import { bannerActions } from '../../model/slice';
+import { BannerOrder, bannerActions } from '../../model/slice';
 
 // Mock dependencies
 jest.mock('@app/shared/lib/hooks/redux', () => ({
@@ -12,6 +12,7 @@ jest.mock('@app/shared/lib/hooks/redux', () => ({
 
 // Mock banner actions
 jest.mock('../../model/slice', () => ({
+  ...jest.requireActual('../../model/slice'),
   bannerActions: {
     addBanner: jest.fn(payload => ({ type: 'banners/addBanner', payload })),
     removeBanner: jest.fn(payload => ({
@@ -46,12 +47,14 @@ describe('useBanners', () => {
     expect(bannerActions.addBanner).toHaveBeenCalledWith({
       key: 'SuccessBanner',
       bannerProps: { children: bannerMessage },
+      order: BannerOrder.Default,
     });
     expect(mockDispatch).toHaveBeenCalledWith({
       type: 'banners/addBanner',
       payload: {
         key: 'SuccessBanner',
         bannerProps: { children: bannerMessage },
+        order: BannerOrder.Default,
       },
     });
   });
@@ -67,6 +70,7 @@ describe('useBanners', () => {
     expect(bannerActions.addBanner).toHaveBeenCalledWith({
       key: 'ErrorBanner',
       bannerProps: { children: null },
+      order: BannerOrder.Default,
     });
     expect(mockDispatch).toHaveBeenCalled();
   });
@@ -81,12 +85,13 @@ describe('useBanners', () => {
     };
 
     // Execute
-    result.current.addBanner('WarningBanner', bannerProps);
+    result.current.addBanner('WarningBanner', bannerProps, BannerOrder.Top);
 
     // Verify
     expect(bannerActions.addBanner).toHaveBeenCalledWith({
       key: 'WarningBanner',
       bannerProps,
+      order: BannerOrder.Top,
     });
     expect(mockDispatch).toHaveBeenCalled();
   });
@@ -103,6 +108,7 @@ describe('useBanners', () => {
     expect(bannerActions.addBanner).toHaveBeenCalledWith({
       key: 'SuccessBanner',
       bannerProps: { children: bannerMessage },
+      order: BannerOrder.Default,
     });
   });
 
@@ -118,6 +124,7 @@ describe('useBanners', () => {
     expect(bannerActions.addBanner).toHaveBeenCalledWith({
       key: 'ErrorBanner',
       bannerProps: { children: bannerMessage },
+      order: BannerOrder.Default,
     });
   });
 
@@ -133,6 +140,7 @@ describe('useBanners', () => {
     expect(bannerActions.addBanner).toHaveBeenCalledWith({
       key: 'WarningBanner',
       bannerProps: { children: bannerMessage },
+      order: BannerOrder.Default,
     });
   });
 
@@ -148,6 +156,7 @@ describe('useBanners', () => {
     expect(bannerActions.addBanner).toHaveBeenCalledWith({
       key: 'InfoBanner',
       bannerProps: { children: bannerMessage },
+      order: BannerOrder.Default,
     });
   });
 
