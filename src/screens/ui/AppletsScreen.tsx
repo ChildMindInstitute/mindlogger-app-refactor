@@ -10,6 +10,7 @@ import {
   selectEntityResponseTimes,
 } from '@app/entities/applet/model/selectors';
 import { AppletList } from '@app/entities/applet/ui/AppletList';
+import { bannerActions } from '@app/entities/banner/model/slice';
 import { selectFirstName } from '@app/entities/identity/model/selectors';
 import { getDefaultNotificationRefreshService } from '@app/entities/notification/model/notificationRefreshServiceInstance';
 import { useAutomaticRefreshOnMount } from '@app/features/applets-refresh/model/hooks/useAutomaticRefreshOnMount';
@@ -20,7 +21,9 @@ import {
   MixEvents,
   MixProperties,
 } from '@app/shared/lib/analytics/IAnalyticsService';
+import { colors } from '@app/shared/lib/constants/colors';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { Box, XStack } from '@app/shared/ui/base';
@@ -34,6 +37,7 @@ type SelectedApplet = Pick<Applet, 'id' | 'displayName'>;
 export const AppletsScreen: FC = () => {
   const { t } = useTranslation();
   const { navigate, setOptions } = useNavigation();
+  const dispatch = useAppDispatch();
 
   const userFirstName = useAppSelector(selectFirstName);
 
@@ -45,6 +49,9 @@ export const AppletsScreen: FC = () => {
 
   useOnFocus(() => {
     getDefaultAnalyticsService().track(MixEvents.HomeView);
+
+    // Color must match the AppletsScreen's headerStyle.backgroundColor in RootNavigator
+    dispatch(bannerActions.setBannersBg(colors.lighterGrey2));
   });
 
   const queryClient = useQueryClient();

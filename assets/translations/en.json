@@ -515,5 +515,8 @@
     "yes": "Yes",
     "no": "No",
     "noResults": "No Health Care Providers were found matching your search."
-	}
+	},
+  "rebrandBanner": {
+    "content": "<0>Big updates are coming!</0> <1>New look, new name, same great product.</1>"
+  }
 }

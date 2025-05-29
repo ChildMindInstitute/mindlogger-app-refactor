@@ -3,11 +3,11 @@ import { FC } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
 import { useChangePasswordMutation } from '@app/entities/identity/api/hooks/useChangePasswordMutation';
 import { colors } from '@app/shared/lib/constants/colors';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
-import { useToast } from '@app/shared/lib/hooks/useToast';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
 import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
@@ -22,7 +22,7 @@ type Props = BoxProps & {
 
 export const ChangePasswordForm: FC<Props> = props => {
   const { t } = useTranslation();
-  const toast = useToast();
+  const { addSuccessBanner } = useBanners();
 
   const {
     mutate: changePassword,
@@ -32,7 +32,7 @@ export const ChangePasswordForm: FC<Props> = props => {
   } = useChangePasswordMutation({
     onSuccess: () => {
       props.onChangePasswordSuccess();
-      toast.show(t('auth:password_updated'));
+      addSuccessBanner(t('auth:password_updated'));
     },
   });
 
