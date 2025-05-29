@@ -15,9 +15,13 @@ export type StepperPayload = {
 };
 
 export type OnBeforeNextResult = Promise<{
-  stepShift: number;
+  stepShift: number | null;
   payload?: StepperPayload;
 }>;
+
+export type OnBeforeBackResult = {
+  stepShift: number | null;
+};
 
 type Props = PropsWithChildren<{
   startFrom: number;
@@ -28,7 +32,7 @@ type Props = PropsWithChildren<{
   onUndo?: (step: number) => void;
 
   onBeforeNext?: (step: number) => OnBeforeNextResult;
-  onBeforeBack?: (step: number) => number;
+  onBeforeBack?: (step: number) => OnBeforeBackResult;
 
   onStartReached?: () => void;
   onEndReached?: (isForced: boolean, payload?: StepperPayload) => void;
@@ -84,9 +88,15 @@ export function Stepper({
       shouldAutoSubmit: boolean;
     }) => {
       const step = stepRef.current;
-      const { stepShift = 1, payload } =
+      const { stepShift, payload } =
         (await onBeforeNextRef.current?.(step)) ?? {};
-      const nextStep = step + stepShift;
+
+      // If stepShift is null, no step shift was requested
+      if (stepShift === null) {
+        return;
+      }
+
+      const nextStep = step + (stepShift ?? 1);
 
       const moved = viewSliderRef.current?.next(stepShift);
 
@@ -106,8 +116,14 @@ export function Stepper({
 
   const back = useCallback(() => {
     const step = stepRef.current;
-    const stepShift = onBeforeBackRef.current?.(step) ?? 1;
-    const nextStep = step - stepShift;
+    const { stepShift } = onBeforeBackRef.current?.(step) ?? {};
+
+    // If stepShift is null, no step shift was requested
+    if (stepShift === null) {
+      return;
+    }
+
+    const nextStep = step - (stepShift ?? 1);
 
     const moved = viewSliderRef.current?.back(stepShift);
 

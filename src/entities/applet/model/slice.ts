@@ -10,6 +10,8 @@ import {
   EntityProgressionInProgressActivityFlow,
   EntityResponseTime,
 } from '@app/abstract/lib/types/entityProgress';
+import { NavigationServiceScopes } from '@app/screens/lib/INavigationService';
+import { getDefaultNavigationService } from '@app/screens/lib/navigationServiceInstance';
 import { cleanUpAction } from '@app/shared/lib/redux-state/actions';
 import { isEntityExpired } from '@app/shared/lib/utils/survey/survey';
 
@@ -50,6 +52,7 @@ export type UpsertEntityProgressionPayload = {
   eventId: string | null;
   targetSubjectId: string | null;
   endAt: Date;
+  submitId: string;
 };
 
 type Consents = {
@@ -123,6 +126,7 @@ const slice = createSlice({
         startedAtTimestamp: new Date().getTime(),
         availableUntilTimestamp:
           action.payload.availableUntil?.getTime() || null,
+        submitId: uuidv4(),
       };
       updatedProgressions.push(progression);
 
@@ -172,7 +176,7 @@ const slice = createSlice({
         currentActivityDescription: activityDescription,
         currentActivityImage: activityImage,
         currentActivityStartAt: new Date().getTime(),
-        executionGroupKey: uuidv4(),
+        submitId: uuidv4(),
       };
       updatedProgressions.push(progression);
 
@@ -260,6 +264,11 @@ const slice = createSlice({
         targetSubjectId,
         responseTime: endAt,
       });
+
+      // Clear saved navigation state for active assessment when entity is completed
+      getDefaultNavigationService().clearInitialNavigationState(
+        NavigationServiceScopes.ActiveAssessment,
+      );
     },
 
     upsertEntityProgression: (
@@ -298,6 +307,7 @@ const slice = createSlice({
           availableUntilTimestamp: null,
           startedAtTimestamp: 0,
           endedAtTimestamp,
+          submitId: action.payload.submitId,
         };
         state.entityProgressions = state.entityProgressions ?? [];
         state.entityProgressions.push(newCompletion);

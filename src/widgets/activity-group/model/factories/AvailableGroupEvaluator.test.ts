@@ -37,6 +37,7 @@ const getProgressions = (startAt: Date, endAt: Date | null) => {
     targetSubjectId: null,
     startedAtTimestamp: startAt.getTime(),
     availableUntilTimestamp: null,
+    submitId: 'test-submit-id',
   };
 
   if (endAt) {

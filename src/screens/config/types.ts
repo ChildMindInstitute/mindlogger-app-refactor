@@ -15,7 +15,7 @@ export type RootStackParamList = {
   AppletDetails: { appletId: string; title: string };
   Settings: undefined;
   ChangePassword: undefined;
-  InProgressActivity: EntityPath;
+  InProgressActivity: EntityPath & { fromActiveAssessmentLink?: boolean };
   ActivityPassedScreen: undefined;
   ApplicationLogs: undefined;
   Autocompletion: undefined;

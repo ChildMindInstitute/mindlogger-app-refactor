@@ -1,23 +1,35 @@
+import { NavigationState } from '@react-navigation/routers';
 import { MMKV } from 'react-native-mmkv';
 
-import { INavigationService } from './INavigationService';
-import { InitialRoute } from './types';
+import {
+  INavigationService,
+  NavigationServiceScope,
+} from './INavigationService';
+import { RootStackParamList } from '../config/types';
 
 export function NavigationService(navigationStorage: MMKV): INavigationService {
   return {
-    setInitialRoute(route: InitialRoute) {
-      navigationStorage.set('initialRoute', JSON.stringify(route));
+    setInitialNavigationState(
+      state: NavigationState<RootStackParamList>,
+      scope: NavigationServiceScope,
+    ) {
+      navigationStorage.set(
+        `initialNavigationState-${scope}`,
+        JSON.stringify(state),
+      );
     },
 
-    clearInitialRoute() {
-      navigationStorage.delete('initialRoute');
+    clearInitialNavigationState(scope: NavigationServiceScope) {
+      navigationStorage.delete(`initialNavigationState-${scope}`);
     },
 
-    getInitialRoute() {
-      const value = navigationStorage.getString('initialRoute');
+    getInitialNavigationState(scope: NavigationServiceScope) {
+      const value = navigationStorage.getString(
+        `initialNavigationState-${scope}`,
+      );
 
       if (value) {
-        return JSON.parse(value) as InitialRoute;
+        return JSON.parse(value) as NavigationState<RootStackParamList>;
       }
     },
 

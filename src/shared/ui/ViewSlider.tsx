@@ -21,7 +21,7 @@ import Animated, {
 
 import { range } from '../lib/utils/common';
 
-type Props = PropsWithChildren<{
+export type ViewSliderProps = PropsWithChildren<{
   viewCount: number;
   step: number;
   renderView: (item: { index: number }) => JSX.Element;
@@ -41,7 +41,7 @@ const SlideOutRightAnimation = new SlideOutRight().duration(300).build();
 const FadeInAnimation = new FadeIn().build();
 const FadeOutAnimation = new FadeOut().build();
 
-export const ViewSlider = forwardRef<ViewSliderRef, Props>(
+export const ViewSlider = forwardRef<ViewSliderRef, ViewSliderProps>(
   ({ viewCount, step = 0, renderView }, ref) => {
     const views = useMemo(() => range(viewCount), [viewCount]);
 

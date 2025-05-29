@@ -202,6 +202,7 @@ export type ActivityAnswersRequest = {
   alerts: AnswerAlertsDto;
   consentToShare?: boolean;
   eventHistoryId?: string;
+  allowedEhrIngest?: boolean;
 };
 
 export type ActivityAnswersResponse = SuccessfulEmptyResponse;

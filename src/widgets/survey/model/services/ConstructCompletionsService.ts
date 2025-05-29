@@ -48,7 +48,6 @@ import {
 import {
   createSvgFiles,
   fillNullsForHiddenItems,
-  getActivityFlowProgressionExecutionGroupKey,
   getActivityProgressionStartAt,
   getItemIds,
   getUserIdentifier,
@@ -320,12 +319,15 @@ export class ConstructCompletionsService {
 
     const answers = mapAnswersToDto(items, recordAnswers);
 
-    const { itemIds: modifiedItemIds, answers: modifiedAnswers } =
-      fillNullsForHiddenItems(
-        getItemIds(items),
-        answers,
-        activityStorageRecord.context.originalItems as InitializeHiddenItem[],
-      );
+    const {
+      itemIds,
+      itemTypes,
+      answers: modifiedAnswers,
+    } = fillNullsForHiddenItems(
+      getItemIds(items),
+      answers,
+      activityStorageRecord.context.originalItems as InitializeHiddenItem[],
+    );
 
     const progression = getEntityProgression(
       appletId,
@@ -333,7 +335,7 @@ export class ConstructCompletionsService {
       eventId,
       targetSubjectId,
       this.entityProgressions,
-    )!;
+    ) as EntityProgressionInProgress;
 
     const { flowName, scheduledDate } = getFlowRecord(
       flowId,
@@ -346,18 +348,18 @@ export class ConstructCompletionsService {
 
     const evaluatedEndAt = this.evaluateEndAt(
       'intermediate',
-      (progression as EntityProgressionInProgress).availableUntilTimestamp,
+      progression.availableUntilTimestamp,
       isAutocompletion,
     );
 
-    const submitId = getActivityFlowProgressionExecutionGroupKey(progression);
+    const submitId = progression.submitId;
 
     this.logIntermediate(
       input,
       flowName!,
       appletName,
       evaluatedEndAt,
-      (progression as EntityProgressionInProgress).availableUntilTimestamp,
+      progression.availableUntilTimestamp,
       submitId,
     );
 
@@ -367,16 +369,17 @@ export class ConstructCompletionsService {
       version: activityStorageRecord.appletVersion,
       answers: modifiedAnswers,
       userActions: mapUserActionsToDto(actions),
-      itemIds: modifiedItemIds,
+      itemIds,
+      itemTypes,
       appletEncryption: appletEncryption!,
-      flowId: flowId,
-      activityId: activityId,
-      executionGroupKey: submitId,
+      flowId,
+      activityId,
+      submitId,
       userIdentifier: getUserIdentifier(items, recordAnswers),
       startTime: getActivityProgressionStartAt(progression)!.getTime(),
       endTime: evaluatedEndAt,
       scheduledTime: scheduledDate,
-      activityName: activityName,
+      activityName,
       logCompletedAt: getNow().toUTCString(),
       client: getClientInformation(),
       alerts: mapAnswersToAlerts(items, recordAnswers),
@@ -448,11 +451,11 @@ export class ConstructCompletionsService {
       eventId,
       targetSubjectId,
       this.entityProgressions,
-    )!;
+    ) as EntityProgressionInProgress;
 
     const evaluatedEndAt = this.evaluateEndAt(
       'finish',
-      (progression as EntityProgressionInProgress).availableUntilTimestamp,
+      progression.availableUntilTimestamp,
       isAutocompletion,
     );
 
@@ -480,16 +483,17 @@ export class ConstructCompletionsService {
 
     const userActions = mapUserActionsToDto(actions);
 
-    const itemIds = getItemIds(items);
+    const {
+      itemIds,
+      itemTypes,
+      answers: modifiedAnswers,
+    } = fillNullsForHiddenItems(
+      getItemIds(items),
+      answers,
+      activityStorageRecord.context.originalItems as InitializeHiddenItem[],
+    );
 
-    const { itemIds: modifiedItemIds, answers: modifiedAnswers } =
-      fillNullsForHiddenItems(
-        itemIds,
-        answers,
-        activityStorageRecord.context.originalItems as InitializeHiddenItem[],
-      );
-
-    const submitId = getActivityFlowProgressionExecutionGroupKey(progression);
+    const submitId = progression.submitId;
 
     this.logFinish(
       activityName,
@@ -498,7 +502,7 @@ export class ConstructCompletionsService {
       appletName,
       appletId,
       evaluatedEndAt,
-      (progression as EntityProgressionInProgress).availableUntilTimestamp,
+      progression.availableUntilTimestamp,
       submitId,
     );
 
@@ -517,16 +521,17 @@ export class ConstructCompletionsService {
       version: activityStorageRecord.appletVersion,
       answers: modifiedAnswers,
       userActions,
-      itemIds: modifiedItemIds,
+      itemIds,
+      itemTypes,
       appletEncryption: appletEncryption!,
       flowId: flowId ?? null,
       activityId,
-      executionGroupKey: submitId,
+      submitId,
       userIdentifier,
       startTime: getActivityProgressionStartAt(progression)!.getTime(),
       endTime: evaluatedEndAt,
       scheduledTime: scheduledDate,
-      activityName: activityName,
+      activityName,
       logCompletedAt: getNow().toUTCString(),
       client: getClientInformation(),
       alerts,

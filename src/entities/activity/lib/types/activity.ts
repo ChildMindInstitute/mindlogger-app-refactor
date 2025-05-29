@@ -249,7 +249,7 @@ export type ActivityItemConfig =
   | RequestHealthRecordDataConfig
   | null;
 
-type ActivityItemBase = {
+export type ActivityItemBase = {
   id: string;
   name?: string;
   inputType: ActivityItemType;
@@ -274,7 +274,7 @@ type ActivityItemBase = {
   conditionalLogic?: ConditionalLogic;
 };
 
-interface AbTestActivityItem extends ActivityItemBase {
+export interface AbTestActivityItem extends ActivityItemBase {
   inputType: 'AbTrails';
   config: AbTrailsConfig;
 }

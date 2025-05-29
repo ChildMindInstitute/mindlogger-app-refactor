@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import renderer from 'react-test-renderer';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import {
+  RequestHealthRecordDataItemStep,
+  RequestHealthRecordDataPipelineItem,
+} from '@app/features/pass-survey/lib/types/payload';
+import {
   EHRConsent,
   RequestHealthRecordDataAnswerSettings,
 } from '@app/shared/api/services/ActivityItemDto';
 import { RadioGroup } from '@app/shared/ui/base';
+import { ViewSliderProps } from '@app/shared/ui/ViewSlider';
 
 import { RequestHealthRecordDataItem } from './RequestHealthRecordDataItem';
 
@@ -18,6 +23,16 @@ jest.mock('react-i18next', () => ({
       language: 'en',
     },
   })),
+}));
+
+jest.mock('@app/shared/ui/ViewSlider', () => ({
+  ViewSlider: jest.fn(({ renderView, step }: ViewSliderProps) =>
+    renderView({ index: step }),
+  ),
+}));
+
+jest.mock('@app/shared/ui/ScrollableContent', () => ({
+  ScrollableContent: jest.fn(({ children }: PropsWithChildren) => children),
 }));
 
 const mockConfig: RequestHealthRecordDataAnswerSettings = {
@@ -34,6 +49,16 @@ const mockConfig: RequestHealthRecordDataAnswerSettings = {
 };
 
 const mockQuestion = 'Would you like to share your health record data?';
+
+const mockItem: RequestHealthRecordDataPipelineItem = {
+  type: 'RequestHealthRecordData',
+  question: mockQuestion,
+  timer: 0,
+  subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
+  payload: mockConfig,
+  additionalEHRs: null,
+};
+
 const onChangeMock = jest.fn();
 const textReplacerMock = jest.fn((text: string) => text);
 
@@ -46,8 +71,7 @@ describe('RequestHealthRecordDataItem', () => {
     const component = renderer.create(
       <TamaguiProvider>
         <RequestHealthRecordDataItem
-          config={mockConfig}
-          question={mockQuestion}
+          item={mockItem}
           onChange={onChangeMock}
           textReplacer={textReplacerMock}
           assignment={null}
@@ -72,10 +96,9 @@ describe('RequestHealthRecordDataItem', () => {
     const component = renderer.create(
       <TamaguiProvider>
         <RequestHealthRecordDataItem
-          config={mockConfig}
-          question={mockQuestion}
+          item={mockItem}
           onChange={onChangeMock}
-          initialValue={EHRConsent.OptIn}
+          responseValue={EHRConsent.OptIn}
           textReplacer={textReplacerMock}
           assignment={null}
         />

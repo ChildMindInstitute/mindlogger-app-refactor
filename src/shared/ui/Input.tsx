@@ -4,6 +4,7 @@ import { GetProps, setupReactNative, styled } from '@tamagui/core';
 import { focusableInputHOC } from '@tamagui/focusable';
 
 import { IS_IOS } from '../lib/constants';
+import { colors } from '../lib/constants/colors';
 
 setupReactNative({
   TextInput,
@@ -37,7 +38,7 @@ export const InputFrame = styled(
         },
         dark: {
           color: '$darkGrey',
-          placeholderTextColor: IS_IOS ? '$lightGrey' : '$grey',
+          placeholderTextColor: IS_IOS ? colors.lightGrey : colors.grey,
           borderBottomColor: '#1e1d1d',
         },
         survey: {

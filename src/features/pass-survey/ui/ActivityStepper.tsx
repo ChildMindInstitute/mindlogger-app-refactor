@@ -9,6 +9,7 @@ import {
 } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
+import { useActiveAssessmentLink } from '@app/screens/model/hooks/useActiveAssessmentLink';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import { isIphoneX } from '@app/shared/lib/utils/common';
 import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
@@ -16,6 +17,7 @@ import { Box, XStack } from '@app/shared/ui/base';
 import { Center } from '@app/shared/ui/Center';
 import { StatusBar } from '@app/shared/ui/StatusBar';
 import {
+  OnBeforeBackResult,
   OnBeforeNextResult,
   Stepper,
   StepperPayload,
@@ -35,6 +37,7 @@ import { evaluateFlankerNextStep } from '../model/flankerNextStepEvaluator';
 import { useActivityState } from '../model/hooks/useActivityState';
 import { useActivityStepper } from '../model/hooks/useActivityStepper';
 import { useIdleTimer } from '../model/hooks/useIdleTimer';
+import { useSubSteps } from '../model/hooks/useSubSteps';
 
 type Props = {
   idleTimer: HourMinute | null;
@@ -66,6 +69,11 @@ export function ActivityStepper({
 
   const timerMarginTop = hasNotch ? (safeAreaTop - timerHeight) / 2 : 16;
 
+  // This hook handles specific logic for resuming an active assessment when called via the
+  // `active-assessment` deep link. It must be called here, within the context of both the
+  // `InProgressActivity` screen and the `ActivityIdentityContext`.
+  useActiveAssessmentLink();
+
   const {
     appletId,
     activityId,
@@ -89,6 +97,7 @@ export function ActivityStepper({
     getNextStepShift,
     getPreviousStepShift,
     postProcessUserActionsForCurrentItem,
+    setSubStep,
   } = useActivityState({
     appletId,
     activityId,
@@ -144,7 +153,21 @@ export function ActivityStepper({
   const currentStep = activityStorageRecord?.step ?? 0;
   const currentPipelineItem = activityStorageRecord?.items?.[currentStep];
 
-  const nextButtonText = getNextButtonText();
+  const {
+    hasNextSubStep,
+    hasPrevSubStep,
+    handleNextSubStep,
+    handlePrevSubStep,
+    nextButtonText: subStepNextButtonText,
+  } = useSubSteps({
+    item: currentPipelineItem,
+    answer: activityStorageRecord?.answers?.[currentStep],
+    setSubStep: (subStep: number) => {
+      setSubStep(currentStep, subStep);
+    },
+  });
+
+  const nextButtonText = subStepNextButtonText ?? getNextButtonText();
 
   const getAccessibilityLabel = (text: string): string | null => {
     switch (text) {
@@ -194,6 +217,17 @@ export function ActivityStepper({
     if (!isValid()) {
       return { stepShift: 0 };
     }
+
+    // If subSteps is supported and there are more subSteps to go through, go to the next subStep
+    if (hasNextSubStep) {
+      handleNextSubStep();
+      restartIdleTimer();
+      trackUserAction(userActionCreator.next());
+
+      return { stepShift: null };
+    }
+
+    // Otherwise, proceed to the next step as normal
 
     if (isTutorialStep) {
       const moved = tutorialViewerRef.current?.next();
@@ -251,16 +285,27 @@ export function ActivityStepper({
     return { stepShift: getNextStepShift() };
   };
 
-  const onBeforeBack = (): number => {
+  const onBeforeBack = (): OnBeforeBackResult => {
+    // If subSteps is supported and we're not at the first subStep, go to the previous subStep
+    if (hasPrevSubStep) {
+      handlePrevSubStep();
+      restartIdleTimer();
+      trackUserAction(userActionCreator.back());
+
+      return { stepShift: null };
+    }
+
+    // Otherwise, go to the previous step as normal
+
     if (isTutorialStep) {
       const moved = tutorialViewerRef.current?.back();
 
       !moved && restartIdleTimer();
 
-      return moved ? 0 : 1;
+      return { stepShift: moved ? 0 : 1 };
     }
 
-    return getPreviousStepShift();
+    return { stepShift: getPreviousStepShift() };
   };
 
   const onUndo = () => {

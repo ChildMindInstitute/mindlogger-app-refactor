@@ -60,6 +60,7 @@ export class ProgressSyncService implements IAppletProgressSyncService {
         completedEntityDto.localEndDate,
         completedEntityDto.localEndTime,
       ),
+      submitId: completedEntityDto.submitId,
     };
 
     this.dispatch(appletActions.upsertEntityProgression(payload));

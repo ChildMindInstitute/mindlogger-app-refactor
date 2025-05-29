@@ -49,6 +49,7 @@ const getProgressions = (startAt: Date, endAt: Date | null) => {
     targetSubjectId: null,
     startedAtTimestamp: startAt.getTime(),
     availableUntilTimestamp: null,
+    submitId: 'test-submit-id',
   };
 
   (progression as never as EntityProgressionCompleted).endedAtTimestamp =
@@ -1638,7 +1639,7 @@ describe('ActivityGroupsBuilder', () => {
         availableUntilTimestamp: null,
         currentActivityId: 'test-id-1',
         currentActivityStartAt: addMinutes(scheduledAt, 5).getTime(),
-        executionGroupKey: 'group-key-1',
+        submitId: 'group-key-1',
         pipelineActivityOrder: 0,
         totalActivitiesInPipeline: 2,
         currentActivityName: 'test-activity-name-1',

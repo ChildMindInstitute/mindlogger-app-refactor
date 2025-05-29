@@ -15,6 +15,7 @@ type EntityProgressionInProgressBase = EntityProgressionBase & {
   status: 'in-progress';
   startedAtTimestamp: number;
   availableUntilTimestamp: number | null;
+  submitId: string;
 };
 
 export type EntityProgressionInProgressActivity =
@@ -32,7 +33,6 @@ export type EntityProgressionInProgressActivityFlow =
     currentActivityDescription: string;
     currentActivityImage: string | null;
     currentActivityStartAt: number | null;
-    executionGroupKey: string;
   };
 
 export type EntityProgressionInProgress =
