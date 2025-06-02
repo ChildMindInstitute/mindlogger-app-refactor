@@ -2,6 +2,7 @@ import { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, Linking, StyleSheet } from 'react-native';
 
 import { StackStyleProps } from '@tamagui/core';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
@@ -11,6 +12,7 @@ import { useOneUpHealthSystemSearchApi } from '@app/shared/api/hooks/useOneUpHea
 import { OneUpHealthSystemItem } from '@app/shared/api/services/IOneUpHealthService';
 import { colors } from '@app/shared/lib/constants/colors';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getEntityProgression } from '@app/shared/lib/utils/survey/survey';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
@@ -25,7 +27,9 @@ import { HealthSystemItem } from './HealthSystemItem';
 
 export const OneUpHealthStep: FC = () => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState<string>('');
+  // const [healthSystemUrl, setHealthSystemUrl] = useState<string | null>(null);
   const flatListRef = useRef<FlatList>(null);
 
   const { appletId, activityId, flowId, eventId, targetSubjectId } = useContext(
@@ -85,6 +89,18 @@ export const OneUpHealthStep: FC = () => {
       setSelectedHealthSystemId(null);
     }
   }, [healthSystemUrl, setSelectedHealthSystemId]);
+
+  // Clear 1UpHealth API cache for each new session
+  useOnFocus(() => {
+    queryClient.invalidateQueries({
+      queryKey: ['oneup-health-system-search'],
+      exact: false,
+    });
+    queryClient.invalidateQueries({
+      queryKey: ['oneup-health-health-system-url'],
+      exact: false,
+    });
+  });
 
   return (
     <YStack gap="$5" pt="$5" flex={1}>
@@ -157,6 +173,11 @@ export const OneUpHealthStep: FC = () => {
               <HealthSystemItem
                 {...item}
                 onPress={() => handleItemPress(item.id)}
+                // onPress={() => {
+                //   setHealthSystemUrl(
+                //     'https://authorization.cerner.com/session-api/realm/ec2458f2-1e24-41c8-b71b-0e701af7583d-ch?to=https%3A%2F%2Fauthorization.cerner.com%2Ftenants%2Fec2458f2-1e24-41c8-b71b-0e701af7583d%2Fprotocols%2Foauth2%2Fprofiles%2Fsmart-v1%2Fpersonas%2Fpatient%2Fauthorize%3FinitialRequestId%3Dee36c165-14fe-4bbd-96e6-0666f176f3ea%26isForceAuthn%3Dtrue&forceAuthn=true',
+                //   );
+                // }}
                 isDisabled={isHealthSystemUrlLoading}
                 isLoading={
                   selectedHealthSystemId === item.id && isHealthSystemUrlLoading

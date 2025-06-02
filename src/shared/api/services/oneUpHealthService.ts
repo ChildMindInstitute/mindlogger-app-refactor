@@ -1,5 +1,4 @@
 import { ONEUP_HEALTH_CLIENT_ID } from '@app/shared/lib/constants';
-import { callApiWithRetry } from '@app/shared/lib/utils/networkHelpers';
 
 import { httpService } from './httpService';
 import {
@@ -18,13 +17,9 @@ export function oneUpHealthService(): IOneUpHealthService {
       submitId,
       activityId,
     }: OneUpHealthRetrieveTokenRequest) => {
-      const apiCall = async () => {
-        return httpService.get<OneUpHealthRetrieveTokenResponse>(
-          `/integrations/oneup_health/applet/${appletId}/submission/${submitId}/activity/${activityId}/token`,
-        );
-      };
-
-      return await callApiWithRetry(apiCall);
+      return httpService.get<OneUpHealthRetrieveTokenResponse>(
+        `/integrations/oneup_health/applet/${appletId}/submission/${submitId}/activity/${activityId}/token`,
+      );
     },
 
     systemSearch: async (
