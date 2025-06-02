@@ -27,15 +27,15 @@
     "android:production": "react-native run-android --mode=productiondebug",
     "android:production-release": "react-native run-android --mode=productionrelease",
     "ios:dev": "react-native run-ios --scheme MindloggerMobileDev",
-    "ios:dev-release": "react-native run-ios --scheme MindloggerMobileDev --configuration Release",
+    "ios:dev-release": "react-native run-ios --scheme MindloggerMobileDev --mode Release",
     "ios:qa": "react-native run-ios --scheme MindloggerMobileQA",
-    "ios:qa-release": "react-native run-ios --scheme MindloggerMobileQA --configuration Release",
+    "ios:qa-release": "react-native run-ios --scheme MindloggerMobileQA --mode Release",
     "ios:staging": "react-native run-ios --scheme MindloggerMobileStaging",
-    "ios:staging-release": "react-native run-ios --scheme MindloggerMobileStaging --configuration Release",
+    "ios:staging-release": "react-native run-ios --scheme MindloggerMobileStaging --mode Release",
     "ios:uat": "react-native run-ios --scheme MindloggerMobileUAT",
-    "ios:uat-release": "react-native run-ios --scheme MindloggerMobileUAT --configuration Release",
+    "ios:uat-release": "react-native run-ios --scheme MindloggerMobileUAT --mode Release",
     "ios:production": "react-native run-ios --scheme MindloggerMobile",
-    "ios:production-release": "react-native run-ios --scheme MindloggerMobile --configuration Release"
+    "ios:production-release": "react-native run-ios --scheme MindloggerMobile --mode Release"
   },
   "dependencies": {
     "@georstat/react-native-image-cache": "^3.1.0",
@@ -192,7 +192,7 @@
     "braces": ">=3.0.3",
     "ws": ">=7.5.10",
     "fast-xml-parser": ">=4.4.1",
-    "ip": ">=1.1.10", 
-    "cross-spawn": "^7.0.5" 
+    "ip": ">=1.1.10",
+    "cross-spawn": "^7.0.5"
   }
 }
