@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
+import { Image, StyleSheet } from 'react-native';
 
-import { Image } from '@tamagui/image';
 import { Trans } from 'react-i18next';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
@@ -45,19 +45,22 @@ export const useRebrandBanner = (
             </Text>
             <>New look, new name, same great product.</>
             {/* TODO: Add link when available
-          https://mindlogger.atlassian.net/browse/M2-9276 */}
+            https://mindlogger.atlassian.net/browse/M2-9276 */}
             {/* Curious?{' '}
-          <Link
-            textDecorationLine="underline"
-            color="#B6DFFE"
-            whiteSpace="nowrap"
-            onPress={() => openUrl('https://mindlogger.org/brand-update')}
-          >
-            Tap to learn more.
-          </Link>*/}
+            <Link
+              textDecorationLine="underline"
+              color="#B6DFFE"
+              whiteSpace="nowrap"
+              onPress={() => openUrl('https://mindlogger.org/brand-update')}
+            >
+              Tap to learn more.
+            </Link>*/}
           </Trans>
         ),
-        icon: <Image src={curiousIcon} width={32} height={30} />,
+        // NOTE: For an unknown reason, we cannot use Tamagui's <Image> here as it causes the app
+        // to display a blank screen and become inoperable, only on release builds. It works fine
+        // in debug builds. So we resort to RN's native <Image>.
+        icon: <Image source={curiousIcon} style={styles.icon} />,
         color: '#FDFCFC',
         backgroundColor: '#0B0907',
         duration: null,
@@ -87,3 +90,10 @@ export const useRebrandBanner = (
     currentRouteName,
   ]);
 };
+
+const styles = StyleSheet.create({
+  icon: {
+    width: 32,
+    height: 30,
+  },
+});
