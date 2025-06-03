@@ -3,7 +3,11 @@ import { FC, useEffect } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
+import { bannerActions } from '@app/entities/banner/model/slice';
 import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
+import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getSupportsMobile } from '@app/shared/lib/utils/responseTypes';
 import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
@@ -16,6 +20,7 @@ import { RootStackParamList } from '../config/types';
 type Props = NativeStackScreenProps<RootStackParamList, 'InProgressActivity'>;
 
 export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
+  const dispatch = useAppDispatch();
   const { appletId, eventId, entityId, entityType, targetSubjectId } =
     route.params;
 
@@ -45,8 +50,13 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
     };
   }, [navigation]);
 
+  useOnFocus(() => {
+    // Match topmost container background color
+    dispatch(bannerActions.setBannersBg(colors.white));
+  });
+
   return (
-    <Box flex={1} backgroundColor="white">
+    <Box flex={1} backgroundColor="$white">
       {isLoading || !isAppSupportedEntity ? (
         <ActivityIndicator />
       ) : (

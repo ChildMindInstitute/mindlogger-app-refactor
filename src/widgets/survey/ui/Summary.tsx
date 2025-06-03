@@ -5,8 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AlertList } from '@app/entities/alert/ui/AlertList';
+import { bannerActions } from '@app/entities/banner/model/slice';
 import { ScoreList } from '@app/entities/score/ui/ScoreList';
 import { StaticNavigationPanel } from '@app/features/pass-survey/ui/StaticNavigationPanel';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
+import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Box, YStack } from '@app/shared/ui/base';
 import { ScrollView } from '@app/shared/ui/ScrollView';
 import { Text } from '@app/shared/ui/Text';
@@ -32,6 +36,7 @@ export function Summary({
   targetSubjectId,
   order,
 }: Props) {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
 
@@ -63,6 +68,11 @@ export function Summary({
       onFinishRef.current();
     }
   }, [initialized, summaryData]);
+
+  useOnFocus(() => {
+    // Match topmost container background color
+    dispatch(bannerActions.setBannersBg(colors.white));
+  });
 
   if (!initialized) {
     return (
