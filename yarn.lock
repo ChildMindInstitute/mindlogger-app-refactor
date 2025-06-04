@@ -4938,11 +4938,6 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.3.tgz#d80ff294d114fb0e6ac500fbf85b60137d7eff81"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
 
-cycle@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/cycle/-/cycle-1.0.3.tgz#21e80b2be8580f98b468f379430662b046c34ad2"
-  integrity sha512-TVF6svNzeQCOpjCqsy0/CSy8VgObG3wXusJ73xW2GbG5rGx7lC8zxDSURicsXI2UsGdi2L0QNRCi745/wUDvsA==
-
 "d3-array@2 - 3", "d3-array@2.10.0 - 3", d3-array@^3.1.6:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-3.2.4.tgz#15fec33b237f97ac5d7c986dc77da273a8ed0bb5"
@@ -5051,7 +5046,7 @@ date-fns@^3.0.5:
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-3.6.0.tgz#f20ca4fe94f8b754951b24240676e8618c0206bf"
   integrity sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==
 
-dayjs@^1.8.15, dayjs@^1.8.29:
+dayjs@^1.8.15:
   version "1.11.10"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.10.tgz#68acea85317a6e164457d6d6947564029a6a16a0"
   integrity sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==
@@ -9126,11 +9121,6 @@ react-native-fit-image@^1.5.5:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-flipper@0.182.0:
-  version "0.182.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.182.0.tgz#7a2a5569715a9e571019e84ee2de4f72f4c5a4db"
-  integrity sha512-AoLVduVWluY99XDPznn05sXRyrE1OeEkc4aQCxDKgQYfCdf82aNOH+hwGO/CKcGEiC3T9oBzeOofqwo+Og4eWA==
-
 react-native-gesture-handler@^2.14.1:
   version "2.16.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.16.0.tgz#45a00b5988e74ebc58f130c8d1443319c8e678db"
@@ -9188,11 +9178,6 @@ react-native-mime-types@^2.4.0:
   integrity sha512-l1NIGxa0MBFPGBFDd3yeGe2f8+Qb+U4M1FEK7l3Fob0R7kOecwgRau2CCCmu6W5QzyhKdBxRC8SOTuTIEKKAUw==
   dependencies:
     mime-db "~1.52.0"
-
-react-native-mmkv-flipper-plugin@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-mmkv-flipper-plugin/-/react-native-mmkv-flipper-plugin-1.0.0.tgz#f87f747d8cea51d2b12a1e711287feff5f212788"
-  integrity sha512-e3owMIBzXez45Wz8Ac84Vf1FmfwMXFVUpf/gCDWDLq19w7iCipVezQjlZo8ISVza8aQf1G4ggaK/r+qqtGmRlg==
 
 react-native-mmkv@2.11.0:
   version "2.11.0"
@@ -9505,14 +9490,6 @@ redent@^3.0.0:
   dependencies:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
-
-redux-flipper@^2.0.2:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/redux-flipper/-/redux-flipper-2.0.3.tgz#5373af20bd0efd91b5a1f9efa92c3338780f5732"
-  integrity sha512-JpNEZnBnBE9kGiZZrmzi23cFD9gjRUFoJE6nX0MPfmMVeIqfvkJWMATnbqRsTn8xwBXvWtOk+7Qbs8u4RZZcVw==
-  dependencies:
-    cycle "^1.0.3"
-    dayjs "^1.8.29"
 
 redux-persist@^6.0.0:
   version "6.0.0"
