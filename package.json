@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-mobile",
-  "version": "2025.05.3",
+  "version": "2025.06.0",
   "private": true,
   "scripts": {
     "android": "yarn android:dev",
