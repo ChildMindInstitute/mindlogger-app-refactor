@@ -118,7 +118,7 @@
     "react-native-svg": "^14.1.0",
     "react-native-tcp-socket": "^6.0.6",
     "react-native-toast-message": "^2.2.0",
-    "react-native-vector-icons": "^10.0.3",
+    "react-native-vector-icons": "^10.2.0",
     "react-native-video": "^5.2.1",
     "react-native-video-player": "^0.14.0",
     "react-native-webview": "^13.6.3",
