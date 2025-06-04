@@ -17,6 +17,7 @@ import { getDefaultMediaFilesCleaner } from '@app/entities/activity/lib/services
 import { getDefaultItemsVisibilityValidator } from '@app/entities/activity/model/services/itemsVisibilityValidatorInstsance';
 import { getDefaultMediaLookupService } from '@app/entities/activity/model/services/mediaLookupServiceInstance';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
+import { useDefaultBanners } from '@app/entities/defaultBanners/lib/hooks/useDefaultBanners';
 import { useOnNotificationRefresh } from '@app/entities/notification/model/hooks/useOnNotificationRefresh';
 import { topUpNotifications } from '@app/entities/notification/model/operations/topUpNotifications';
 import { useHasSession } from '@app/entities/session/model/hooks/useHasSession';
@@ -74,7 +75,6 @@ import { RootStackParamList } from '../config/types';
 import { onBeforeAppClose } from '../lib/alerts';
 import { checkEntityAvailability } from '../model/checkEntityAvailability';
 import { useDefaultRoute } from '../model/hooks/useDefaultRoute';
-import { useInitialRouteNavigation } from '../model/hooks/useInitialRouteNavigation';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -92,7 +92,6 @@ export const RootNavigator = () => {
 
   const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
 
-  useInitialRouteNavigation();
   useNotificationPermissions();
   useAlarmPermissions();
   useFirebaseSetup({
@@ -196,6 +195,8 @@ export const RootNavigator = () => {
   useFeatureFlagsAutoLogin();
 
   useOnNotificationRefresh();
+
+  useDefaultBanners();
 
   return (
     <Stack.Navigator

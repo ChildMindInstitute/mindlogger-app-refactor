@@ -1,5 +1,7 @@
 import React, {
   ComponentProps,
+  FC,
+  PropsWithChildren,
   useCallback,
   useContext,
   useMemo,
@@ -153,10 +155,12 @@ export function ActivityItem({
     question = pipelineItem.question,
     item,
     alignMessageToLeft = false,
+    noScrollContainer = false,
   } = useMemo((): {
     question?: string | null;
     item: JSX.Element | null;
     alignMessageToLeft?: boolean;
+    noScrollContainer?: boolean;
   } => {
     switch (type) {
       case 'Splash':
@@ -429,15 +433,15 @@ export function ActivityItem({
         return {
           item: (
             <RequestHealthRecordDataItem
-              config={pipelineItem.payload}
+              item={pipelineItem}
               onChange={onResponse}
-              initialValue={value?.answer}
-              question={pipelineItem.question}
+              responseValue={value?.answer}
               textReplacer={textVariableReplacer}
               assignment={assignment}
             />
           ),
           question: null,
+          noScrollContainer: true,
         };
       default:
         return {
@@ -453,16 +457,28 @@ export function ActivityItem({
     handleStabilityTrackerComplete,
     onContextChange,
     onResponse,
-    pipelineItem.payload,
-    pipelineItem.question,
+    pipelineItem,
     processLiveEvent,
     textVariableReplacer,
     type,
     value?.answer,
   ]);
 
+  const Wrapper: FC<PropsWithChildren> = useCallback(
+    ({ children }) => {
+      return noScrollContainer ? (
+        <>{children}</>
+      ) : (
+        <ScrollableContent scrollEnabled={scrollEnabled}>
+          {children}
+        </ScrollableContent>
+      );
+    },
+    [noScrollContainer, scrollEnabled],
+  );
+
   return (
-    <ScrollableContent scrollEnabled={scrollEnabled} scrollEventThrottle={100}>
+    <Wrapper>
       {assignment &&
         assignment.respondent.id !== assignment.target.id &&
         (() => {
@@ -513,6 +529,6 @@ export function ActivityItem({
           </Box>
         )}
       </Box>
-    </ScrollableContent>
+    </Wrapper>
   );
 }

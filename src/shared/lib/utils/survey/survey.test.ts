@@ -95,6 +95,7 @@ describe('Test getEntityProgress', () => {
           targetSubjectId: null,
           startedAtTimestamp: 123,
           availableUntilTimestamp: null,
+          submitId: 'mock-submit-id',
         },
       ],
     );
@@ -128,6 +129,7 @@ describe('Test isEntityInProgress', () => {
       availableUntilTimestamp: null,
       startedAtTimestamp: 123,
       endedAtTimestamp: 456,
+      submitId: 'mock-submit-id',
     });
 
     expect(result).toEqual(false);
@@ -143,6 +145,7 @@ describe('Test isEntityInProgress', () => {
       targetSubjectId: null,
       availableUntilTimestamp: null,
       startedAtTimestamp: 123,
+      submitId: 'mock-submit-id',
     });
 
     expect(result).toEqual(true);
@@ -215,6 +218,7 @@ describe('Test isReadyForAutocompletion', () => {
           availableUntilTimestamp: null,
           startedAtTimestamp: 12000034,
           endedAtTimestamp: 1234567,
+          submitId: 'mock-submit-id',
         },
       ],
     );
@@ -241,6 +245,7 @@ describe('Test isReadyForAutocompletion', () => {
           targetSubjectId: null,
           availableUntilTimestamp: Date.now() + 10000,
           startedAtTimestamp: 12000034,
+          submitId: 'mock-submit-id',
         },
       ],
     );
@@ -267,6 +272,7 @@ describe('Test isReadyForAutocompletion', () => {
           targetSubjectId: null,
           availableUntilTimestamp: Date.now() - 10000,
           startedAtTimestamp: 12000034,
+          submitId: 'mock-submit-id',
         },
       ],
     );

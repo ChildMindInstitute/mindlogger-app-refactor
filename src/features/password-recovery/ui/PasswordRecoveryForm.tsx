@@ -3,10 +3,10 @@ import { FC } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
 import { useApprovePasswordRecoveryMutation } from '@app/entities/identity/api/hooks/useApprovePasswordRecoveryMutation';
 import { colors } from '@app/shared/lib/constants/colors';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
-import { useBanner } from '@app/shared/lib/hooks/useBanner';
 import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
@@ -24,7 +24,7 @@ type Props = BoxProps & {
 
 export const PasswordRecoveryForm: FC<Props> = props => {
   const { t } = useTranslation();
-  const banner = useBanner();
+  const { addSuccessBanner, addErrorBanner } = useBanners();
 
   const {
     mutate: recoverPassword,
@@ -34,16 +34,10 @@ export const PasswordRecoveryForm: FC<Props> = props => {
   } = useApprovePasswordRecoveryMutation({
     onSuccess: () => {
       props.onPasswordRecoverySuccess();
-      banner.show(t('password_recovery_form:success'), {
-        type: 'success',
-        visibilityTime: 5000,
-      });
+      addSuccessBanner(t('password_recovery_form:success'));
     },
     onError: () => {
-      banner.show(t('password_recovery_form:error'), {
-        type: 'danger',
-        visibilityTime: 5000,
-      });
+      addErrorBanner(t('password_recovery_form:error'));
     },
   });
 

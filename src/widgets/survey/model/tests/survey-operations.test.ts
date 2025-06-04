@@ -243,6 +243,7 @@ describe('Test survey operations', () => {
     expect(result).toEqual({
       answers: [null, { value: '5' }, 'mock-identity'],
       itemIds: ['item-id-1', 'item-id-2', 'item-id-3'],
+      itemTypes: ['Slider', 'Slider', 'TextInput'],
     });
   });
 

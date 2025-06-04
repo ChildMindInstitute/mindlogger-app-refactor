@@ -5,6 +5,7 @@ import { zodI18nMap } from 'zod-i18n-map';
 
 import el from '@assets/translations/el.json';
 import en from '@assets/translations/en.json';
+import es from '@assets/translations/es.json';
 import fr from '@assets/translations/fr.json';
 
 import { getDefaultLocalizationStorage } from './localizationStorageInstance';
@@ -28,6 +29,7 @@ export function setupLocalization() {
       en,
       fr,
       el,
+      es,
     },
     returnNull: false,
   });

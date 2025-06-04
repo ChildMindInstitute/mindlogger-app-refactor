@@ -1,20 +1,29 @@
-import { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren, useCallback } from 'react';
 import { Linking } from 'react-native';
 
 import {
   NavigationContainer,
-  NavigationState,
   DefaultTheme,
   LinkingOptions,
   getStateFromPath,
+  NavigationState,
+  PartialState,
+  NavigationContainerProps,
 } from '@react-navigation/native';
 
-import { RootStackParamList } from '@app/screens/config/types';
-import { onScreenChanged } from '@app/screens/model/operations';
+import { EntityPath } from '@app/abstract/lib/types/entity';
+import { bannerActions } from '@app/entities/banner/model/slice';
+import { RootStackParamList, ScreenRoute } from '@app/screens/config/types';
+import { NavigationServiceScopes } from '@app/screens/lib/INavigationService';
+import { getDefaultNavigationService } from '@app/screens/lib/navigationServiceInstance';
+import { useInitialNavigationState } from '@app/screens/model/hooks/useInitialNavigationState';
 import { DEEP_LINK_PREFIX } from '@app/shared/lib/constants';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 const LOGGER_MODULE_NAME = 'NavigationProvider';
+
+const SCREEN_BG_COLOR_OVERRIDES: ScreenRoute[] = ['Applets', 'AppletDetails'];
 
 const theme = {
   ...DefaultTheme,
@@ -38,16 +47,41 @@ const getLinking = ():
   return {
     prefixes: [DEEP_LINK_PREFIX],
     getStateFromPath: (path, options) => {
+      if (path.startsWith('/active-assessment')) {
+        getDefaultLogger().info(
+          `[${LOGGER_MODULE_NAME}] Found active assessment deep link, opening in app`,
+        );
+
+        const state = getDefaultNavigationService().getInitialNavigationState(
+          NavigationServiceScopes.ActiveAssessment,
+        );
+
+        if (state) {
+          // Flag the last route as coming from a deep link
+          const lastRoute = state.routes[state.routes.length - 1];
+
+          state.routes[state.routes.length - 1] = {
+            ...lastRoute,
+            params: {
+              ...(lastRoute.params as EntityPath),
+              fromActiveAssessmentLink: true,
+            },
+          };
+
+          return state as unknown as PartialState<NavigationState>;
+        }
+      }
+
       const state = getStateFromPath(path, options);
       if (!state) {
         getDefaultLogger().warn(
-          `[${LOGGER_MODULE_NAME}] No matching route found, open URL in browser: ${DEEP_LINK_PREFIX}/${path}`,
+          `[${LOGGER_MODULE_NAME}] No matching route found, open URL in browser: ${DEEP_LINK_PREFIX}${path}`,
         );
 
         // No matching route found, open URL in browser
-        Linking.openURL(`${DEEP_LINK_PREFIX}/${path}`).catch(err =>
+        Linking.openURL(`${DEEP_LINK_PREFIX}${path}`).catch(err =>
           getDefaultLogger().error(
-            `[${LOGGER_MODULE_NAME}] An error occurred opening deep link ${DEEP_LINK_PREFIX}/${path} in the browser:\n\n ${err}`,
+            `[${LOGGER_MODULE_NAME}] An error occurred opening deep link ${DEEP_LINK_PREFIX}${path} in the browser:\n\n ${err}`,
           ),
         );
       }
@@ -62,16 +96,38 @@ const getLinking = ():
 };
 
 export const NavigationProvider: FC<PropsWithChildren> = ({ children }) => {
+  const dispatch = useAppDispatch();
+  const { isReady, initialNavigationState, onNavigationStateChanged } =
+    useInitialNavigationState();
+
+  const handleStateChange = useCallback(
+    (state?: NavigationState<RootStackParamList>) => {
+      if (!state) return;
+
+      onNavigationStateChanged(state);
+
+      // Set default screen background colour for Banners safe area container styling
+      const currentScreen = state.routes[state.routes.length - 1];
+      const hasDefaultBg = !SCREEN_BG_COLOR_OVERRIDES.includes(
+        currentScreen.name,
+      );
+      if (hasDefaultBg) {
+        dispatch(bannerActions.setBannersBg(undefined));
+      }
+    },
+    [onNavigationStateChanged, dispatch],
+  ) as NavigationContainerProps['onStateChange'];
+
+  if (!isReady) {
+    return null;
+  }
+
   return (
     <NavigationContainer
       theme={theme}
       linking={getLinking()}
-      onStateChange={state =>
-        onScreenChanged(
-          // @react-navigation's poor type inference
-          state as NavigationState<RootStackParamList>,
-        )
-      }
+      onStateChange={handleStateChange}
+      initialState={initialNavigationState}
     >
       {children}
     </NavigationContainer>

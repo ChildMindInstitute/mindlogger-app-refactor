@@ -34,15 +34,11 @@ export const LoginScreen: FC = () => {
         <StatusBar />
 
         <Box f={1} px={isTablet() ? '$17' : '$8'}>
-          <Box
-            mb={isTablet() ? 30 : 50}
-            pt={isTablet() ? 220 : 110}
-            jc="flex-end"
-          >
-            <CloudLogo width="100%" height={70} />
-          </Box>
+          <Box f={1} jc="center">
+            <Box mb={isTablet() ? 30 : 50} jc="flex-end">
+              <CloudLogo width="100%" height={70} />
+            </Box>
 
-          <Box f={1}>
             <LoginForm onLoginSuccess={onLoginSuccess} />
 
             <SubmitButton

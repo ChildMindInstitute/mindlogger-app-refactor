@@ -5,7 +5,10 @@ import {
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import { getAbTrailsPipeline } from './precompiled-pipelines';
-import { PipelineItem } from '../lib/types/payload';
+import {
+  PipelineItem,
+  RequestHealthRecordDataItemStep,
+} from '../lib/types/payload';
 
 export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
   const alignMessagesToLeft = activity.items.some(
@@ -400,6 +403,8 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             additionalText: item.additionalText,
             timer: item.timer,
             conditionalLogic: item.conditionalLogic,
+            subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
+            additionalEHRs: null,
           } satisfies PipelineItem;
         }
 
