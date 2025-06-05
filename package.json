@@ -57,7 +57,7 @@
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.9.26",
     "@reduxjs/toolkit": "^2.0.1",
-    "@shopify/react-native-skia": "1.0.4",
+    "@shopify/react-native-skia": "2.0.2",
     "@tamagui/animations-react-native": "1.11.1",
     "@tamagui/button": "1.11.1",
     "@tamagui/core": "1.11.1",
