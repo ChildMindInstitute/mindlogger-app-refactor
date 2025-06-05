@@ -186,7 +186,7 @@
     ]
   },
   "resolutions": {
-    "react": "18.2.0",
+    "react": "19.0.0",
     "braces": ">=3.0.3",
     "ws": ">=7.5.10",
     "fast-xml-parser": ">=4.4.1",
