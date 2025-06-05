@@ -4,7 +4,8 @@ import { StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { colors } from '@app/shared/lib/constants/colors';
-import { Box, Image } from '@app/shared/ui/base';
+import { Box } from '@app/shared/ui/base';
+import { Image } from 'react-native';
 import { MarkdownView } from '@app/shared/ui/MarkdownView';
 import { ScrollView } from '@app/shared/ui/ScrollView';
 import { Text } from '@app/shared/ui/Text';
@@ -28,7 +29,14 @@ export const AboutScreen: FC = () => {
         </Text>
 
         <Box mt={20} mb={30}>
-          <Image alignSelf="center" src={blueLogo} width={70} height={70} />
+          <Image
+            source={blueLogo}
+            width={70}
+            height={70}
+            style={{
+              alignSelf: 'center',
+            }}
+          />
         </Box>
       </ScrollView>
     </Box>

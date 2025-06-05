@@ -3119,13 +3119,6 @@
   dependencies:
     "@tamagui/simple-hash" "1.11.1"
 
-"@tamagui/image@1.11.1":
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/@tamagui/image/-/image-1.11.1.tgz#46c07cf37c424f682da329daf467fda8375071cc"
-  integrity sha512-992XktwMcWkJ+AGzIRNrfh+c8vIvJW3WKpYnxjb2una6dZ0TH3UvOKCJm3YcNicEg3rzSI74SZOXFvb6c8v7SQ==
-  dependencies:
-    "@tamagui/core" "1.11.1"
-
 "@tamagui/label@1.11.1":
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/@tamagui/label/-/label-1.11.1.tgz#c6f51245927ce45b51d5efbfa12055e10b6e3cbb"
