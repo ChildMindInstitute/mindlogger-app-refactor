@@ -134,6 +134,7 @@ export const NavigationProvider: FC<PropsWithChildren> = ({ children }) => {
       linking={getLinking()}
       onStateChange={handleStateChange}
       initialState={initialNavigationState}
+      navigationInChildEnabled={true}
     >
       {children}
     </NavigationContainer>
