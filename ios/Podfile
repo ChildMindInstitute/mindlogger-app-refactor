@@ -43,6 +43,8 @@ abstract_target 'MindloggerMobileCommonPods' do
   end
 
   config = use_native_modules!
+  config[:codegen_disabled] = false
+  config[:fabric_enabled] = true
 
   pod 'FirebaseCore', :modular_headers => true
   pod 'FirebaseCoreExtension', :modular_headers => true
