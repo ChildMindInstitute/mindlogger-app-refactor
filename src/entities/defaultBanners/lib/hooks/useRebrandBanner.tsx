@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import React from 'react';
+import { Linking, useEffect } from 'react-native';
 import { Image, StyleSheet } from 'react-native';
 
 import { Trans } from 'react-i18next';
@@ -9,6 +10,7 @@ import { ScreenRoute } from '@app/screens/config/types';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Text } from '@app/shared/ui/Text';
 import { curiousIcon } from '@assets/images';
+import { Link } from '@app/shared/ui/Link';
 
 import { defaultBannersActions } from '../../model/slice';
 import { REBRAND_BANNER_EXCLUDED_ROUTES } from '../constants';
@@ -39,23 +41,20 @@ export const useRebrandBanner = (
       'BrandUpdateBanner',
       {
         children: (
-          <Trans i18nKey="rebrandBanner:content">
+          <>
             <Text color="#FDFCFC" fontWeight="bold">
-              Big updates are coming!
+              We are rebranding! Design updates are on the way—same great app, fresh new look. Curious?
             </Text>
-            <>New look, new name, same great product.</>
-            {/* TODO: Add link when available
-            https://mindlogger.atlassian.net/browse/M2-9276 */}
-            {/* Curious?{' '}
+            {' '}
             <Link
               textDecorationLine="underline"
               color="#B6DFFE"
               whiteSpace="nowrap"
-              onPress={() => openUrl('https://mindlogger.org/brand-update')}
+              onPress={() => Linking.openURL('https://www.gettingcurious.com/rebrand')}
             >
-              Tap to learn more.
-            </Link>*/}
-          </Trans>
+              Click here to learn more.
+            </Link>
+          </>
         ),
         // NOTE: For an unknown reason, we cannot use Tamagui's <Image> here as it causes the app
         // to display a blank screen and become inoperable, only on release builds. It works fine
