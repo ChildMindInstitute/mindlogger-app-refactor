@@ -9,6 +9,7 @@ import { useSystemBootUp } from '@app/shared/lib/contexts/SplashContext';
 import { getDefaultQueryClient } from '@app/shared/lib/queryClient/queryClientInstance';
 import { createSyncStorage } from '@app/shared/lib/storages/createStorage';
 import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const storage = createSyncStorage('cache-storage');
 
@@ -35,12 +36,6 @@ onlineManager.setEventListener(setOnline => {
   });
 });
 
-if (__DEV__) {
-  const { addPlugin } = require('react-query-native-devtools');
-
-  addPlugin({ queryClient: getDefaultQueryClient() });
-}
-
 export const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
   const { onModuleInitialized, initialized } = useSystemBootUp();
 
@@ -66,6 +61,7 @@ export const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
       onSuccess={onCacheRestored}
     >
       {initialized && children}
+      <ReactQueryDevtools initialIsOpen={false} />
     </PersistQueryClientProvider>
   );
 };

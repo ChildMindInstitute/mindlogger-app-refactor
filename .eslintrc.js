@@ -3,7 +3,7 @@ module.exports = {
   parser: '@babel/eslint-parser',
   extends: [
     'eslint:recommended',
-    '@react-native-community',
+    '@react-native',
     'plugin:react/recommended',
     'plugin:prettier/recommended'
   ],

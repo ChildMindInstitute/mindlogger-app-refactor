@@ -3,7 +3,8 @@ import { FC } from 'react';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
-import { Image, XStack, YStack } from '@app/shared/ui/base';
+import { XStack, YStack } from '@app/shared/ui/base';
+import { Image } from 'react-native';
 import { Button } from '@app/shared/ui/Button';
 import { Center } from '@app/shared/ui/Center';
 import { Text } from '@app/shared/ui/Text';
@@ -60,7 +61,15 @@ export const IntermediateSubmit: FC<Props> = ({
           </Text>
 
           <XStack>
-            <Image src={badge} width={18} height={18} opacity={0.6} r={4} />
+            <Image
+              source={badge}
+              width={18}
+              height={18}
+              style={{
+                opacity: 0.6,
+                right: 4,
+              }}
+            />
 
             <Text fontSize={14} color="$grey">
               {activitiesPassed + 1} of {totalActivities} {flowName}

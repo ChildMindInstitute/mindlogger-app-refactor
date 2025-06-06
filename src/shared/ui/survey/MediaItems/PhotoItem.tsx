@@ -24,7 +24,7 @@ import { ImageConverter } from '@app/shared/lib/utils/imageConverter';
 
 import { MediaInput } from './MediaInput';
 import { MediaValue } from './types';
-import { Image } from '../../base';
+import { Image } from 'react-native';
 import { PhotoIcon } from '../../icons';
 
 type Props = {
@@ -135,7 +135,12 @@ export const PhotoItem: FC<Props> = ({ onChange, value }) => {
       accessibilityLabel="photo-item"
       uploadIcon={<PhotoIcon color={colors.red} size={50} />}
     >
-      {value && <Image height="100%" width="100%" src={value.uri} />}
+      {value && (
+        <Image
+          source={{ uri: value.uri }}
+          style={{ height: '100%', width: '100%' }}
+        />
+      )}
     </MediaInput>
   );
 };
