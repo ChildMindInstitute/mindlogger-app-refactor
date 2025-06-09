@@ -41,20 +41,22 @@ export const useRebrandBanner = (
         children: (
           <Trans i18nKey="rebrandBanner:content">
             <Text color="#FDFCFC" fontWeight="bold">
-              Big updates are coming!
+              We are rebranding!
             </Text>
-            <>New look, new name, same great product.</>
-            {/* TODO: Add link when available
-            https://mindlogger.atlassian.net/browse/M2-9276 */}
-            {/* Curious?{' '}
+            <Text color="#FDFCFC">
+              Design updates are on the way—same great app, fresh new look.
+              Curious?{' '}
+            </Text>
             <Link
               textDecorationLine="underline"
               color="#B6DFFE"
               whiteSpace="nowrap"
-              onPress={() => openUrl('https://mindlogger.org/brand-update')}
+              onPress={() =>
+                Linking.openURL('https://www.gettingcurious.com/rebrand')
+              }
             >
-              Tap to learn more.
-            </Link>*/}
+              Click here to learn more.
+            </Link>
           </Trans>
         ),
         // NOTE: For an unknown reason, we cannot use Tamagui's <Image> here as it causes the app
