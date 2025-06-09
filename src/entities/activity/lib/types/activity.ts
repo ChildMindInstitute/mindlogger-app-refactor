@@ -29,6 +29,7 @@ export type ActivityItemType =
   | 'Checkbox'
   | 'Date'
   | 'Time'
+  | 'Unity'
   | 'RequestHealthRecordData';
 
 export type StabilityTrackerConfig = {
@@ -216,6 +217,10 @@ type RadioConfig = {
   }>;
 };
 
+type UnityConfig = {
+  file: string;
+};
+
 type PhotoConfig = null;
 
 type VideoConfig = null;
@@ -247,6 +252,7 @@ export type ActivityItemConfig =
   | TimeConfig
   | FlankerItemSettings
   | RequestHealthRecordDataConfig
+  | UnityConfig
   | null;
 
 export type ActivityItemBase = {
@@ -277,6 +283,11 @@ export type ActivityItemBase = {
 export interface AbTestActivityItem extends ActivityItemBase {
   inputType: 'AbTrails';
   config: AbTrailsConfig;
+}
+
+interface UnityActivityItem extends ActivityItemBase {
+  inputType: 'Unity';
+  config: UnityConfig;
 }
 
 interface StabilityTrackerActivityItem extends ActivityItemBase {
@@ -415,7 +426,8 @@ export type ActivityItem =
   | PhotoActivityItem
   | TimeActivityItem
   | VideoActivityItem
-  | RequestHealthRecordDataActivityItem;
+  | RequestHealthRecordDataActivityItem
+  | UnityActivityItem;
 
 export type ActivityDetails = {
   id: string;
