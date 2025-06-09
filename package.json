@@ -12,8 +12,12 @@
     "lint:check": "yarn lint",
     "lint:fix": "yarn lint --fix",
     "type:check": "tsc --noEmit --skipLibCheck",
-    "pods": "cd ios && bundle exec pod install",
+    "pods": "yarn pods:install",
+    "pods:reinstall": "yarn unity:clean-framework && yarn pods:clean && yarn pods:install",
+    "pods:clean": "rm -fr ios/Pods",
+    "pods:install": "cd ios && bundle exec pod install",
     "postinstall": "yarn patch-package",
+    "unity:clean-framework": "rm -fr node_modules/@azesmway/react-native-unity/ios/UnityFramework.framework",
     "bump": "bundle exec fastlane bump_version",
     "start:reset-cache": "watchman watch-del-all && react-native start --reset-cache",
     "android:dev": "react-native run-android --mode=devdebug --appIdSuffix=dev",
@@ -38,6 +42,7 @@
     "ios:production-release": "react-native run-ios --scheme MindloggerMobile --mode Release"
   },
   "dependencies": {
+    "@azesmway/react-native-unity": "^1.0.11",
     "@georstat/react-native-image-cache": "^3.1.0",
     "@hookform/resolvers": "^3.3.2",
     "@launchdarkly/react-native-client-sdk": "^10.1.1",

@@ -67,6 +67,9 @@ yarn-error.log
 **/Pods/
 /vendor/bundle/
 
+# Unity
+/unity/builds/ios/UnityFramework.framework
+
 .env*
 !.env.example
 /.jest/
