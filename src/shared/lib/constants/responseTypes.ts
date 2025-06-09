@@ -31,6 +31,7 @@ export const appSupportedResponseTypes: ResponseType[] = [
   'flanker',
   'geolocation',
   'photo',
+  'unity',
   'stabilityTracker',
   'video',
 ];
