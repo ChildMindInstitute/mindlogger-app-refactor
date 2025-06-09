@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Image, Linking, StyleSheet } from 'react-native';
 
 import { Trans } from 'react-i18next';
 
@@ -12,6 +12,7 @@ import { curiousIcon } from '@assets/images';
 
 import { defaultBannersActions } from '../../model/slice';
 import { REBRAND_BANNER_EXCLUDED_ROUTES } from '../constants';
+import { Link } from '@app/shared/ui/Link';
 
 export const useRebrandBanner = (
   dismissed: Record<string, string[]>,
