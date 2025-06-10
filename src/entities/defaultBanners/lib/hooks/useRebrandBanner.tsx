@@ -14,7 +14,6 @@ import { curiousIcon } from '@assets/images';
 import { defaultBannersActions } from '../../model/slice';
 import { REBRAND_BANNER_EXCLUDED_ROUTES } from '../constants';
 
-
 export const useRebrandBanner = (
   dismissed: Record<string, string[]>,
   bannerScope: string,
