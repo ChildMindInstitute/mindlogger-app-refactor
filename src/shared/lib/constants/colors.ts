@@ -11,6 +11,9 @@ export const colors = {
   whiteTsp: 'rgba(255, 255, 255, 0.8)',
   whiteTsp2: 'rgba(255, 255, 255, 0.6)',
   primary: '#0067A0',
+  // TODO: Replace `primary` with this value, and remove `primary_curious`, during rebrand task
+  // https://mindlogger.atlassian.net/browse/M2-9054
+  primary_curious: '#0B0907',
   secondary: '#FFFFFF',
   secondary_50: '#ffffff',
   tertiary: '#404040',

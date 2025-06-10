@@ -44,7 +44,9 @@ export async function mapToTriggerNotifications(
           id: 'default',
         },
         smallIcon: 'ic_notification',
-        color: colors.primary,
+        // TODO: Switch to `colors.primary` during rebrand task
+        // https://mindlogger.atlassian.net/browse/M2-9054
+        color: colors.primary_curious,
         importance: AndroidImportance.HIGH,
       },
     },
