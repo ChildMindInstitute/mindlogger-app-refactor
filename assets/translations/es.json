@@ -514,7 +514,7 @@
     "additionalPromptText": "Has terminado de iniciar sesión en tu cuenta de atención médica.\n\n¿Te gustaría iniciar sesión en alguna otra cuenta de atención médica?",
     "yes": "Sí",
     "no": "No",
-    "noResults": "No Health Care Providers were found matching your search."
+    "noResults": "No se encontraron proveedores de atención médica que coincidan con tu búsqueda."
   },
   "rebrandBanner": {
     "content": "<0>¡Estamos renovando nuestra marca!</0> <1>Pronto habrá actualizaciones de diseño: la misma gran aplicación, con una nueva apariencia. ¿Tienes curiosidad?</1> <2>Toca para saber más.</2>"
