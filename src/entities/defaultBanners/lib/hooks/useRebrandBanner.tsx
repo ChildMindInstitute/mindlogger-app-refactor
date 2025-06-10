@@ -7,13 +7,13 @@ import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
 import { BannerOrder } from '@app/entities/banner/model/slice';
 import { ScreenRoute } from '@app/screens/config/types';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
+import { Link } from '@app/shared/ui/Link';
 import { Text } from '@app/shared/ui/Text';
 import { curiousIcon } from '@assets/images';
 
 import { defaultBannersActions } from '../../model/slice';
 import { REBRAND_BANNER_EXCLUDED_ROUTES } from '../constants';
 
-import { Link } from '@app/shared/ui/Link';
 
 export const useRebrandBanner = (
   dismissed: Record<string, string[]>,
