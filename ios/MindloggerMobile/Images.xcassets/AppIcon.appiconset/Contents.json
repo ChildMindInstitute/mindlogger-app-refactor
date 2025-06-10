@@ -109,18 +109,6 @@
       "size": "29x29"
     },
     {
-      "filename": "AppIcon-60@2x~car.png",
-      "idiom": "car",
-      "scale": "2x",
-      "size": "60x60"
-    },
-    {
-      "filename": "AppIcon-60@3x~car.png",
-      "idiom": "car",
-      "scale": "3x",
-      "size": "60x60"
-    },
-    {
       "filename": "AppIcon~ios-marketing.png",
       "idiom": "ios-marketing",
       "scale": "1x",
