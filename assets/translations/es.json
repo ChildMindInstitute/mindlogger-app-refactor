@@ -505,14 +505,14 @@
     "version": "Versión"
   },
   "requestHealthRecordData": {
-    "title": "Request Health Record Data",
-    "linkText": "Learn more about how MindLogger securely accesses healthcare data.",
-    "partnershipText": "MindLogger uses 1UpHealth’s Medical Information Service to enable your researcher to access information in your health care records.\n\nIn the following screens, you’ll be asked to sign into your Health Care Provider systems and share your health care data with this study. You will return to the MindLogger activity when you are done.",
-    "enterYourHealthSystem": "Enter your Health System:",
-    "healthSystemName": "Health System Name",
-    "search": "Search",
-    "additionalPromptText": "You have finished signing into your health care account.\n\nWould you like to sign into any additional health care accounts?",
-    "yes": "Yes",
+    "title": "Solicitar datos del historial médico",
+    "linkText": "Obtén más información sobre cómo MindLogger accede de forma segura a los datos de atención médica.",
+    "partnershipText": "MindLogger utiliza el Servicio de Información Médica de 1UpHealth para permitir que tu investigador acceda a la información de tus registros médicos.\n\nEn las siguientes pantallas, se te pedirá que inicies sesión en los sistemas de tu proveedor de atención médica y compartas tus datos médicos con este estudio. Volverás a la actividad de MindLogger cuando hayas terminado.",
+    "enterYourHealthSystem": "Ingresa tu sistema de salud:",
+    "healthSystemName": "Nombre del sistema de salud",
+    "search": "Buscar",
+    "additionalPromptText": "Has terminado de iniciar sesión en tu cuenta de atención médica.\n\n¿Te gustaría iniciar sesión en alguna otra cuenta de atención médica?",
+    "yes": "Sí",
     "no": "No",
     "noResults": "No Health Care Providers were found matching your search."
   },
