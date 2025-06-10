@@ -242,7 +242,7 @@
     "password_placeholder": "Mot de passe",
     "please_accept_terms": "Veuillez accepter les conditions d'utilisation.",
     "email_looks_incomplete": "Il semble que cet e-mail soit incomplet",
-    "sign_up_agree": "By signing up, you agree to Curious’s",
+    "sign_up_agree": "En vous inscrivant, vous acceptez les",
     "and": "et"
   },
   "password_requirements": {
