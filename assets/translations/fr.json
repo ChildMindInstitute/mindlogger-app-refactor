@@ -626,6 +626,6 @@
     "noResults": "Aucun prestataire de soins de santé ne correspond à votre recherche."
 	},
   "rebrandBanner": {
-    "content": "<0>Nous changeons de marque ! Des mises à jour de design arrivent—même excellente application, nouveau look rafraîchi. Curieux ?</0> <1><0>Cliquez ici pour en savoir plus.</0></1>"
+    "content": "<0>Nous changeons de marque!</0> <1>Des mises à jour de design arrivent—même excellente application, nouveau look rafraîchi. Curieux ?</1> <2>Tapez ici pour en savoir plus.</2>"
   }
 }
