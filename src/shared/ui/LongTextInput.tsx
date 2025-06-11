@@ -1,12 +1,9 @@
 import { TextInput } from 'react-native';
 
-import { GetProps, setupReactNative, styled } from '@tamagui/core';
-import { focusableInputHOC } from '@tamagui/focusable';
+import { GetProps, styled } from '@tamagui/core';
 import { isTablet } from 'react-native-device-info';
-
-setupReactNative({
-  TextInput,
-});
+import { useFocusable } from '@tamagui/focusable';
+import { InputFrame } from '@shared/ui/Input.tsx';
 
 const LongTextInputView = styled(
   TextInput,
@@ -49,4 +46,22 @@ const LongTextInputView = styled(
 
 export type InputProps = GetProps<typeof LongTextInputView>;
 
-export const LongTextInput = focusableInputHOC(LongTextInputView);
+export const LongTextInput = LongTextInputView.styleable(
+  // @ts-ignore
+  (props: InputProps, ref) => {
+    const isInput = LongTextInputView.staticConfig?.isInput;
+    const { ref: combinedRef, onChangeText } = useFocusable({
+      ref,
+      props,
+      isInput,
+    });
+    const finalProps = isInput
+      ? {
+          ...props,
+          onChangeText,
+        }
+      : props;
+
+    return <LongTextInputView ref={combinedRef} {...finalProps} />;
+  },
+);

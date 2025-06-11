@@ -1,14 +1,10 @@
 import { StyleSheet, TextInput } from 'react-native';
 
-import { GetProps, setupReactNative, styled } from '@tamagui/core';
-import { focusableInputHOC } from '@tamagui/focusable';
+import { GetProps, styled } from '@tamagui/core';
 
 import { IS_IOS } from '../lib/constants';
 import { colors } from '../lib/constants/colors';
-
-setupReactNative({
-  TextInput,
-});
+import { useFocusable } from '@tamagui/focusable';
 
 export const InputFrame = styled(
   TextInput,
@@ -70,4 +66,20 @@ export const InputFrame = styled(
 
 export type InputProps = GetProps<typeof InputFrame>;
 
-export const Input = focusableInputHOC(InputFrame);
+// @ts-ignore
+export const Input = InputFrame.styleable((props: InputProps, ref) => {
+  const isInput = InputFrame.staticConfig?.isInput;
+  const { ref: combinedRef, onChangeText } = useFocusable({
+    ref,
+    props,
+    isInput,
+  });
+  const finalProps = isInput
+    ? {
+        ...props,
+        onChangeText,
+      }
+    : props;
+
+  return <InputFrame ref={combinedRef} {...finalProps} />;
+});

@@ -2,7 +2,6 @@ import { createAnimations } from '@tamagui/animations-react-native';
 import {
   createFont,
   createTamagui,
-  createTheme,
   createTokens,
 } from '@tamagui/core';
 import { shorthands } from '@tamagui/shorthands';
@@ -59,11 +58,6 @@ const tokens = createTokens({
   color: colors,
 });
 
-const main = createTheme({
-  background: tokens.color.primary,
-  color: tokens.color.secondary,
-});
-
 const animations = createAnimations({
   fast: {
     damping: 20,
@@ -84,7 +78,10 @@ const animations = createAnimations({
 export const uiConfig = createTamagui({
   themes: {
     ...baseThemes,
-    main,
+    main: {
+      background: tokens.color.primary,
+      color: tokens.color.secondary,
+    },
   },
   tokens,
   shorthands,
