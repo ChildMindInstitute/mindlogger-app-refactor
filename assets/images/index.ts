@@ -7,6 +7,7 @@ const curiousLogoBlack = require('./curious-logo--black.png');
 const roundAlertIcon = require('./score-alert.png');
 const whiteLogo = require('./white_logo.png');
 const curiousIcon = require('./curious-icon.png');
+const requestHealthRecordDataIconPartnership = require('./request-health-record-data-partnership.png');
 
 export {
   curiousIcon,
@@ -18,4 +19,5 @@ export {
   curiousLogoBlack,
   bellAlertIcon,
   roundAlertIcon,
+  requestHealthRecordDataIconPartnership,
 };
