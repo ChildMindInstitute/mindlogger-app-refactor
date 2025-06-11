@@ -1,13 +1,13 @@
-# Child Mind Institute - MindLogger Mobile App
+# Child Mind Institute - Curious Mobile App
 
-This repository is used for the respondent mobile app of the [MindLogger](https://mindlogger.org/) application stack.
+This repository is used for the respondent mobile app of the [Curious](https://mindlogger.org/) application stack.
 
 ## Application Stack
 
-* MindLogger Admin - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-admin)
-* MindLogger Backend - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-backend-refactor)
-* MindLogger Mobile App - **This Repo**
-* MindLogger Web App - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-web-refactor)
+* Curious Admin - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-admin)
+* Curious Backend - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-backend-refactor)
+* Curious Mobile App - **This Repo**
+* Curious Web App - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-web-refactor)
 
 ## Getting Started
 
@@ -38,7 +38,7 @@ Running the app:
 
 ## Features
 
-See MindLogger's [Knowledge Base article](https://mindlogger.atlassian.net/servicedesk/customer/portal/3/topic/4d9a9ad4-c663-443b-b7fc-be9faf5d9383/article/337444910) to discover the MindLogger application stack's features.
+See Curious's [Knowledge Base article](https://mindlogger.atlassian.net/servicedesk/customer/portal/3/topic/4d9a9ad4-c663-443b-b7fc-be9faf5d9383/article/337444910) to discover the Curious application stack's features.
 
 ## Technologies
 
@@ -120,7 +120,7 @@ This command will skip generating a commit and increment the build version by 5.
 
 #### Alternative Build Configurations
 
-The above scripts run the app using Debug configuration and for MindLogger's `dev` server environment. You can also run the app using the optimized Release configuration (which disables debugger integration) or for other MindLogger server environments, including `qa`, `staging`, `uat`, and `production`.
+The above scripts run the app using Debug configuration and for Curious's `dev` server environment. You can also run the app using the optimized Release configuration (which disables debugger integration) or for other Curious server environments, including `qa`, `staging`, `uat`, and `production`.
 
 | Command                           | OS      | Build configuration | Server environment |
 | --------------------------------- | ------- | ------------------- | ------------------ |
@@ -158,7 +158,7 @@ The above scripts run the app using Debug configuration and for MindLogger's `d
 | Key                                  | Required | Default value                          | Description                                                              |
 | ------------------------------------ | -------- | -------------------------------------- | ------------------------------------------------------------------------ |
 | `ENV`                                | no       | `dev`                                  | App build label (informational only)                                     |
-| `API_URL`                            | yes      | `http://localhost:8000`                | MindLogger Backend API base URL                                          |
+| `API_URL`                            | yes      | `http://localhost:8000`                | Curious Backend API base URL                                             |
 | `MIXPANEL_TOKEN`                     | no       | null                                   | Mixpanel analytics token                                                 |
 | `STORE_ENCRYPTION_KEY`               | yes      | `my-encryption-key`                    | Secure storage encryption key                                            |
 | `LAUNCHDARKLY_MOBILE_KEY`            | yes      | `my-env-mobile-key`                    | LaunchDarkly mobile key, refer to Confluence for correct environment key |

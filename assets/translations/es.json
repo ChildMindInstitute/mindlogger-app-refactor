@@ -4,14 +4,14 @@
     "email_address": "Dirección de correo electrónico",
     "password": "Contraseña",
     "i_agree": "Acepto los",
-    "terms_of_service": "Términos de servicio de MindLogger",
+    "terms_of_service": "Términos de servicio de Curious",
     "terms": "Términos",
     "privacy": "Privacidad",
     "privacy_policy": "Política de privacidad",
     "password_updated": "Contraseña actualizada"
   },
   "activity": {
-    "completeOnWeb": "Se debe completar en la app web de MindLogger",
+    "completeOnWeb": "Se debe completar en la app web de Curious",
     "incorrect_answer": "Respuesta incorrecta. Inténtalo de nuevo",
     "failed": "Incorrecta",
     "flanker_accuracy_warn": "* Las marcas de tiempo recopiladas en un dispositivo Android no son tan precisas como en los dispositivos iOS.",
@@ -76,21 +76,21 @@
   },
   "widget_error": {
     "error_text": "Hubo un problema al cargar esta pantalla.",
-    "error_description": "Asegúrate de tener la última versión de MindLogger instalada. Si el problema persiste, contacta al administrador de la actividad."
+    "error_description": "Asegúrate de tener la última versión de Curious instalada. Si el problema persiste, contacta al administrador de la actividad."
   },
   "about": {
     "about": "Acerca de nosotros",
-    "applets_title": "Descubre más sobre cada uno de tus applets y sobre la plataforma MindLogger.",
-    "data_title": "Toca \"Acerca de MindLogger\" a continuación para conocer más sobre esta plataforma de recolección de datos.",
-    "about_mindLogger": "Acerca de MindLogger",
+    "applets_title": "Descubre más sobre cada uno de tus applets y sobre la plataforma Curious.",
+    "data_title": "Toca \"Acerca de Curious\" a continuación para conocer más sobre esta plataforma de recolección de datos.",
+    "about_curious": "Acerca de Curious",
     "icons_title": "Los íconos de NounProject fueron creados por Alina Oleynik (encuesta), Beth Bolton (libro) y Shakeel (gráfico)",
     "device_id": "ID del dispositivo"
   },
   "about_app": {
-    "title_with_version": "¿Qué es MindLogger? Versión{{version}}",
+    "title_with_version": "¿Qué es Curious? Versión{{version}}",
     "title": "A menos que se indique lo contrario, los íconos se extraen de OpenMoji y NounProject.",
     "subtitle": "A menos que se indique lo contrario, los íconos se extraen de OpenMoji y NounProject.",
-    "mindlogger_about": "## ### ¿Qué es MindLogger? Esta app es parte de la plataforma de recolección y análisis de datos de código abierto MindLogger, diseñada por MATTER Lab en el Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). # ### ¿Qué puede hacer MindLogger? El conjunto de funciones de MindLogger está en constante crecimiento y actualmente admite una amplia variedad de tipos de datos. Cada pantalla en una actividad de MindLogger puede incluir cualquiera de las siguientes opciones: - Texto, imagen y audio - Pregunta seguida de opciones de respuesta con imagen y/o texto - Barra deslizante - Entrada de texto - Entrada de tabla - Grabación de audio - Captura de foto o video - Dibujo o toques de pantalla - Geolocalización actual del usuario - Tarea cognitiva simple - Retraso antes de la siguiente respuesta - Temporizador - Lógica condicional para determinar el siguiente paso #### ¿Dónde puedo conocer más al respecto? Visita [https://mindlogger.org](https://mindlogger.org) para más información. ## [Servicios de Asistencia]({{credits_link}}) ## [Términos de servicio](https://mindlogger.org/terms-of-service) ## [Política de privacidad](https://mindlogger.org/privacy-policy) ##### Saludos, ##### El equipo de MindLogger ##### Child Mind Institute"
+    "curious_about": "## ### ¿Qué es Curious? Esta app es parte de la plataforma de recolección y análisis de datos de código abierto Curious, diseñada por MATTER Lab en el Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). # ### ¿Qué puede hacer Curious? El conjunto de funciones de Curious está en constante crecimiento y actualmente admite una amplia variedad de tipos de datos. Cada pantalla en una actividad de Curious puede incluir cualquiera de las siguientes opciones: - Texto, imagen y audio - Pregunta seguida de opciones de respuesta con imagen y/o texto - Barra deslizante - Entrada de texto - Entrada de tabla - Grabación de audio - Captura de foto o video - Dibujo o toques de pantalla - Geolocalización actual del usuario - Tarea cognitiva simple - Retraso antes de la siguiente respuesta - Temporizador - Lógica condicional para determinar el siguiente paso #### ¿Dónde puedo conocer más al respecto? Visita [https://mindlogger.org](https://mindlogger.org) para más información. ## [Servicios de Asistencia]({{credits_link}}) ## [Términos de servicio](https://mindlogger.org/terms-of-service) ## [Política de privacidad](https://mindlogger.org/privacy-policy) ##### Saludos, ##### El equipo de Curious ##### Child Mind Institute"
   },
   "applet_footer": {
     "surveys": "Encuestas",
@@ -122,7 +122,7 @@
     "decline_title": "Rechazar"
   },
   "applet_list_component": {
-    "about_title": "Acerca de MindLogger",
+    "about_title": "Acerca de Curious",
     "no_applets_yet": "No tienes applets.",
     "noon": "el mediodía",
     "midnight": "la medianoche",
@@ -267,8 +267,8 @@
   },
   "geolocation": {
     "get_location": "OBTENER UBICACIÓN",
-    "must_enable_location": "Debes habilitar los servicios de ubicación para completar esta tarea. Concede permiso a MindLogger en la configuración de tu dispositivo iOS y presiona el botón nuevamente.",
-    "must_enable_location_subtitle": "Debes habilitar los servicios de ubicación para completar esta tarea. Presiona el botón nuevamente y concede permiso a MindLogger para usar tu ubicación.",
+    "must_enable_location": "Debes habilitar los servicios de ubicación para completar esta tarea. Concede permiso a Curious en la configuración de tu dispositivo iOS y presiona el botón nuevamente.",
+    "must_enable_location_subtitle": "Debes habilitar los servicios de ubicación para completar esta tarea. Presiona el botón nuevamente y concede permiso a Curious para usar tu ubicación.",
     "location_saved": "Ubicación guardada.",
     "service_not_available": "El servicio de ubicación no está disponible."
   },
@@ -280,9 +280,9 @@
     "alert_button_cancel": "Descartar",
     "alert_button_ok": "Abrir Configuración",
     "alarm_permission_warning": "Solicitud de permisos de notificación",
-    "alarm_permission_disabled": "Activa los permisos de notificación en tu dispositivo para recibir los recordatorios de MindLogger a tiempo. Ten en cuenta que la app se cerrará automáticamente una vez que actives los permisos de notificación.",
-    "gallery": "MindLogger quiere acceder a tu galería para completar esta tarea",
-    "camera": "MindLogger quiere acceder a tu cámara para completar esta tarea"
+    "alarm_permission_disabled": "Activa los permisos de notificación en tu dispositivo para recibir los recordatorios de Curious a tiempo. Ten en cuenta que la app se cerrará automáticamente una vez que actives los permisos de notificación.",
+    "gallery": "Curious quiere acceder a tu galería para completar esta tarea",
+    "camera": "Curious quiere acceder a tu cámara para completar esta tarea"
   },
   "media": {
     "alert_message": "Se pueden establecer en Configuración",
@@ -291,7 +291,7 @@
   },
   "audio_recorder": {
     "permission": "Concede permiso para usar tu micrófono para completar esta tarea.",
-    "alert_title": "MindLogger quiere acceder a tu micrófono para completar esta tarea.",
+    "alert_title": "Curious quiere acceder a tu micrófono para completar esta tarea.",
     "alert_message": "Se pueden establecer en Configuración.",
     "record_error": "Hubo un error al iniciar el grabador.",
     "stop": "DETENER",
@@ -339,7 +339,7 @@
     "no_info": "¡Los autores de este applet no han proporcionado ninguna información!"
   },
   "firebase_messaging": {
-    "alert_title": "MindLogger quiere enviarte notificaciones",
+    "alert_title": "Curious quiere enviarte notificaciones",
     "alert_message": "Se pueden establecer en Configuración",
     "alert_text": "Abrir Configuración",
     "response_refresh_request": "Solicitud de actualización de respuestas",
@@ -367,7 +367,7 @@
   "join_demo_applets": {
     "healthy_brain_network": "Red cerebral saludable: EMA",
     "cognitive_tasks": "Tareas cognitivas",
-    "mind_logger_demos": "Demostraciones de MindLogger"
+    "mind_logger_demos": "Demostraciones de Curious"
   },
   "data_invite": {
     "message": "Creemos que es importante que sepas quién tendrá acceso a tus datos si aceptas esta invitación. Las siguientes personas tendrán acceso a tus datos si aceptas esta invitación:"
@@ -506,8 +506,8 @@
   },
   "requestHealthRecordData": {
     "title": "Solicitar datos del historial médico",
-    "linkText": "Obtén más información sobre cómo MindLogger accede de forma segura a los datos de atención médica.",
-    "partnershipText": "MindLogger utiliza el Servicio de Información Médica de 1UpHealth para permitir que tu investigador acceda a la información de tus registros médicos.\n\nEn las siguientes pantallas, se te pedirá que inicies sesión en los sistemas de tu proveedor de atención médica y compartas tus datos médicos con este estudio. Volverás a la actividad de MindLogger cuando hayas terminado.",
+    "linkText": "Obtén más información sobre cómo Curious accede de forma segura a los datos de atención médica.",
+    "partnershipText": "Curious utiliza el Servicio de Información Médica de 1UpHealth para permitir que tu investigador acceda a la información de tus registros médicos.\n\nEn las siguientes pantallas, se te pedirá que inicies sesión en los sistemas de tu proveedor de atención médica y compartas tus datos médicos con este estudio. Volverás a la actividad de Curious cuando hayas terminado.",
     "enterYourHealthSystem": "Ingresa tu sistema de salud:",
     "healthSystemName": "Nombre del sistema de salud",
     "search": "Buscar",

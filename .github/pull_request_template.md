@@ -6,7 +6,7 @@
 
 - [ ] Tests for the changes have been added
 - [ ] Related documentation has been added / updated
-- [ ] OSS packages added to MindLogger [open source credit page](https://mindlogger.atlassian.net/jira/servicedesk/projects/MLA/knowledge/articles/340623543?spaceKey=MLA)
+- [ ] OSS packages added to Curious [open source credit page](https://mindlogger.atlassian.net/jira/servicedesk/projects/MLA/knowledge/articles/340623543?spaceKey=MLA)
 
 ### 📝 Description
 

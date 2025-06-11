@@ -105,7 +105,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1629
         versionName "2025.06.2"
-        resValue "string", "app_name", "Mindlogger"
+        resValue "string", "app_name", "Curious"
         resValue "string", "build_config_package", "lab.childmindinstitute.data"
         manifestPlaceholders = [
             max_sdk_version: rootProject.ext.targetSdkVersion
