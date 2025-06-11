@@ -49,7 +49,7 @@ export function NotificationScheduler(): INotificationScheduler {
 
     const localNotification: LocalEventTriggerNotification = {
       notification: {
-        title: 'MindLogger',
+        title: 'Curious',
         body: 'Tap to update the schedule',
         id: SYSTEM_RESCHEDULING_NOTIFICATION_ID,
         data: {

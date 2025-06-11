@@ -11,7 +11,7 @@
     "password_updated": "Password updated"
   },
   "activity": {
-    "completeOnWeb": "Please complete on the MindLogger web app",
+    "completeOnWeb": "Please complete on the Curious web app",
     "incorrect_answer": "Incorrect answer. Please try again",
     "failed": "Failed",
     "flanker_accuracy_warn": "*The timestamps collected for an android are not as accurate as iOS devices.",
@@ -76,21 +76,21 @@
   },
   "widget_error": {
     "error_text": "There was a problem loading this screen.",
-    "error_description": "Please ensure you have the latest version of MindLogger installed, then contact your activity administrator if the problem still occurs."
+    "error_description": "Please ensure you have the latest version of Curious installed, then contact your activity administrator if the problem still occurs."
   },
   "about": {
     "about": "About",
-    "applets_title": "Find out more about each of your applets and about the MindLogger platform.",
-    "data_title": "Find out more about the MindLogger data collection platform by tapping 'About\nMindLogger' below.",
-    "about_mindLogger": "About MindLogger",
+    "applets_title": "Find out more about each of your applets and about the Curious platform.",
+    "data_title": "Find out more about the Curious data collection platform by tapping 'About\nCurious' below.",
+    "about_curious": "About Curious",
     "icons_title": "NounProject icons were created by Alina Oleynik (survey), beth bolton (book), and\nShakeel (chart)",
     "device_id": "Device ID"
   },
   "about_app": {
-    "title_with_version": "What is MindLogger? v.{{version}}",
+    "title_with_version": "What is Curious? v.{{version}}",
     "title": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
     "subtitle": "Unless stated elsewhere, icons are drawn from OpenMoji and NounProject.",
-    "mindlogger_about": "## \n ### What is MindLogger? \n\n This app is part of the open source MindLogger data collection and analysis platform designed by the MATTER Lab at the Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### What can MindLogger do? \n\n MindLogger's feature set is growing, and currently supports a wide variety of input types. Each screen in a MindLogger activity can include any of the following: \n  - Text, picture, and audio \n  - Question followed by image and/or text response options \n  - Slider bar \n  - Text entry \n  - Table entry \n  - Audio record \n  - Photo/video capture \n  - Drawing or tapping \n  - Current geolocation \n  - Simple cognitive task \n  - Delay before response \n  - Timer \n  - Conditional logic to determine where to go next \n\n #### Where can I learn more? \n Please visit [https://mindlogger.org](https://mindlogger.org) for more information.  \n ## [Support]({{credits_link}}) \n ## [Terms of service](https://mindlogger.org/terms-of-service) \n ## [Privacy policy](https://mindlogger.org/privacy-policy) \n\n ##### Cheers, \n\n ##### MindLogger Team \n\n ##### Child Mind Institute"
+    "curious_about": "## \n ### What is Curious? \n\n This app is part of the open source Curious data collection and analysis platform designed by the MATTER Lab at the Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### What can Curious do? \n\n Curious's feature set is growing, and currently supports a wide variety of input types. Each screen in a Curious activity can include any of the following: \n  - Text, picture, and audio \n  - Question followed by image and/or text response options \n  - Slider bar \n  - Text entry \n  - Table entry \n  - Audio record \n  - Photo/video capture \n  - Drawing or tapping \n  - Current geolocation \n  - Simple cognitive task \n  - Delay before response \n  - Timer \n  - Conditional logic to determine where to go next \n\n #### Where can I learn more? \n Please visit [https://mindlogger.org](https://mindlogger.org) for more information.  \n ## [Support]({{credits_link}}) \n ## [Terms of service](https://mindlogger.org/terms-of-service) \n ## [Privacy policy](https://mindlogger.org/privacy-policy) \n\n ##### Cheers, \n\n ##### Curious Team \n\n ##### Child Mind Institute"
   },
   "applet_footer": {
     "surveys": "Surveys",
@@ -122,7 +122,7 @@
     "decline_title": "Decline"
   },
   "applet_list_component": {
-    "about_title": "About MindLogger",
+    "about_title": "About Curious",
     "no_applets_yet": "You have no applets.",
     "noon": "Noon",
     "midnight": "Midnight",
@@ -257,7 +257,7 @@
     "password_placeholder": "Password",
     "please_accept_terms": "Please accept terms of service.",
     "email_looks_incomplete": "Looks like this email is incomplete",
-    "sign_up_agree": "By signing up, you agree to MindLogger’s",
+    "sign_up_agree": "By signing up, you agree to Curious’s",
     "and": "and"
   },
   "password_requirements": {
@@ -267,8 +267,8 @@
   },
   "geolocation": {
     "get_location": "GET LOCATION",
-    "must_enable_location": "You must enable Location services to complete this task. Please grant MindLogger permission in your iOS Settings and press the button again.",
-    "must_enable_location_subtitle": "You must enable Location services to complete this task. Please press the button again and grant MindLogger permission to use your location.",
+    "must_enable_location": "You must enable Location services to complete this task. Please grant Curious permission in your iOS Settings and press the button again.",
+    "must_enable_location_subtitle": "You must enable Location services to complete this task. Please press the button again and grant Curious permission to use your location.",
     "location_saved": "Location saved.",
     "service_not_available": "Location service is not available."
   },
@@ -280,9 +280,9 @@
     "alert_button_cancel": "Dismiss",
     "alert_button_ok": "Open Settings",
     "alarm_permission_warning": "Alarm permissions request",
-    "alarm_permission_disabled": "Please turn on the alarm permissions on your device to receive the MindLogger reminders on schedule. Please be aware that the application will be closed automatically once you turn on the alarm permissions.",
-    "gallery": "\"MindLogger\" would like to use your gallery to complete this task",
-    "camera": "\"MindLogger\" would like to use your camera to complete this task"
+    "alarm_permission_disabled": "Please turn on the alarm permissions on your device to receive the Curious reminders on schedule. Please be aware that the application will be closed automatically once you turn on the alarm permissions.",
+    "gallery": "\"Curious\" would like to use your gallery to complete this task",
+    "camera": "\"Curious\" would like to use your camera to complete this task"
   },
   "media": {
     "alert_message": "These can be configured in Settings",
@@ -291,7 +291,7 @@
   },
   "audio_recorder": {
     "permission": "You must grant permission to use your microphone to complete this task.",
-    "alert_title": "\"MindLogger\" would like to use your microphone to complete this task.",
+    "alert_title": "\"Curious\" would like to use your microphone to complete this task.",
     "alert_message": "These can be configured in Settings.",
     "record_error": "There was an error initiating recorder.",
     "stop": "STOP",
@@ -339,7 +339,7 @@
     "no_info": "The authors of this applet have not provided any information!"
   },
   "firebase_messaging": {
-    "alert_title": "\"MindLogger\" would like to send you notifications",
+    "alert_title": "\"Curious\" would like to send you notifications",
     "alert_message": "These can be configured in Settings",
     "alert_text": "Open Settings",
     "response_refresh_request": "Response Refresh Request",
@@ -367,7 +367,7 @@
   "join_demo_applets": {
     "healthy_brain_network": "Healthy Brain Network: EMA",
     "cognitive_tasks": "Cognitive Tasks",
-    "mind_logger_demos": "MindLogger Demos"
+    "mind_logger_demos": "Curious Demos"
   },
   "data_invite": {
     "message": "We think its important for you to know who has access to your data if you accept this invitation.\n\nThe following people will have acccess to your data if you accept this invitation:"
@@ -506,8 +506,8 @@
   },
 	"requestHealthRecordData": {
 		"title": "Request Health Record Data",
-		"linkText": "Learn more about how MindLogger securely accesses healthcare data.",
-		"partnershipText": "MindLogger uses 1UpHealth’s Medical Information Service to enable your researcher to access information in your health care records.\n\nIn the following screens, you’ll be asked to sign into your Health Care Provider systems and share your health care data with this study. You will return to the MindLogger activity when you are done.",
+		"linkText": "Learn more about how Curious securely accesses healthcare data.",
+		"partnershipText": "Curious uses 1UpHealth’s Medical Information Service to enable your researcher to access information in your health care records.\n\nIn the following screens, you’ll be asked to sign into your Health Care Provider systems and share your health care data with this study. You will return to the Curious activity when you are done.",
     "enterYourHealthSystem": "Enter your Health System:",
     "healthSystemName": "Health System Name",
     "search": "Search",
