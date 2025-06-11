@@ -33,9 +33,12 @@ export const LAUNCHDARKLY_MOBILE_KEY = Config.LAUNCHDARKLY_MOBILE_KEY as string;
 
 /**
  * The scheme and host of the respondent web app in this environment.
- * Format `https://example.com`
+ * Format: `https://example.com,https://another-example.com`
  */
-export const DEEP_LINK_PREFIX = Config.DEEP_LINK_PREFIX;
+export const DEEP_LINK_PREFIXES = (Config.DEEP_LINK_PREFIXES || '')
+  .split(',')
+  .map(url => url.trim())
+  .filter(Boolean);
 
 // @ts-ignore
 export const APP_VERSION = process.env.VERSION;

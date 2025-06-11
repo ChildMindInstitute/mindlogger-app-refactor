@@ -17,7 +17,7 @@ import { RootStackParamList, ScreenRoute } from '@app/screens/config/types';
 import { NavigationServiceScopes } from '@app/screens/lib/INavigationService';
 import { getDefaultNavigationService } from '@app/screens/lib/navigationServiceInstance';
 import { useInitialNavigationState } from '@app/screens/model/hooks/useInitialNavigationState';
-import { DEEP_LINK_PREFIX } from '@app/shared/lib/constants';
+import { DEEP_LINK_PREFIXES } from '@app/shared/lib/constants';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
@@ -42,16 +42,16 @@ const theme = {
 const getLinking = ():
   | LinkingOptions<ReactNavigation.RootParamList>
   | undefined => {
-  if (!DEEP_LINK_PREFIX) {
+  if (!DEEP_LINK_PREFIXES.length) {
     getDefaultLogger()[__DEV__ ? 'info' : 'error'](
-      `[${LOGGER_MODULE_NAME}] No deep link prefix found, deep linking will not work.`,
+      `[${LOGGER_MODULE_NAME}] No deep link prefixes found, deep linking will not work.`,
     );
 
     return undefined;
   }
 
   return {
-    prefixes: [DEEP_LINK_PREFIX],
+    prefixes: DEEP_LINK_PREFIXES,
     getStateFromPath: (path, options) => {
       if (path.startsWith('/active-assessment')) {
         getDefaultLogger().info(
@@ -81,13 +81,13 @@ const getLinking = ():
       const state = getStateFromPath(path, options);
       if (!state) {
         getDefaultLogger().warn(
-          `[${LOGGER_MODULE_NAME}] No matching route found, open URL in browser: ${DEEP_LINK_PREFIX}${path}`,
+          `[${LOGGER_MODULE_NAME}] No matching route found, open URL in browser: ${DEEP_LINK_PREFIXES[0]}${path}`,
         );
 
         // No matching route found, open URL in browser
-        Linking.openURL(`${DEEP_LINK_PREFIX}${path}`).catch(err =>
+        Linking.openURL(`${DEEP_LINK_PREFIXES[0]}${path}`).catch(err =>
           getDefaultLogger().error(
-            `[${LOGGER_MODULE_NAME}] An error occurred opening deep link ${DEEP_LINK_PREFIX}${path} in the browser:\n\n ${err}`,
+            `[${LOGGER_MODULE_NAME}] An error occurred opening deep link ${DEEP_LINK_PREFIXES[0]}${path} in the browser:\n\n ${err}`,
           ),
         );
       }

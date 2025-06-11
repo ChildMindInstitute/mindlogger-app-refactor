@@ -18,7 +18,7 @@ import { ActivityCard } from '@app/entities/activity/ui/ActivityCard';
 import { clearStorageRecords } from '@app/entities/applet/lib/storage/helpers';
 import { useStartEntity } from '@app/entities/applet/model/hooks/useStartEntity';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
-import { DEEP_LINK_PREFIX } from '@app/shared/lib/constants';
+import { DEEP_LINK_PREFIXES } from '@app/shared/lib/constants';
 import { useUploadObservable } from '@app/shared/lib/hooks/useUploadObservable';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -107,7 +107,7 @@ export function ActivitySectionList({
 
     if (isWebOnly) {
       await Linking.openURL(
-        `${DEEP_LINK_PREFIX}/protected/applets/${appletId}` || '',
+        `${DEEP_LINK_PREFIXES[0]}/protected/applets/${appletId}` || '',
       );
       return;
     }
