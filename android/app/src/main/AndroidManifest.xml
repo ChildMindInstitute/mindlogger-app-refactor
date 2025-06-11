@@ -42,6 +42,8 @@
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="https" android:host="${domainName}" android:pathPrefix="/password-recovery" />
             <data android:scheme="https" android:host="${domainName}" android:pathPrefix="/active-assessment" />
+            <data android:scheme="https" android:host="${secondaryDomain}" android:pathPrefix="/password-recovery" />
+            <data android:scheme="https" android:host="${secondaryDomain}" android:pathPrefix="/active-assessment" />
         </intent-filter>
       </activity>
     </application>
