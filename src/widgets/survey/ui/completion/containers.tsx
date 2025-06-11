@@ -2,6 +2,10 @@ import { FC, PropsWithChildren } from 'react';
 
 import { YStack } from '@tamagui/stacks';
 
+import { bannerActions } from '@app/entities/banner/model/slice';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
+import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { BoxProps } from '@app/shared/ui/base';
 import { ImageBackground } from '@app/shared/ui/ImageBackground';
 
@@ -12,6 +16,13 @@ export type SubComponentProps = {
 };
 
 export const SubScreenContainer: FC<PropsWithChildren> = ({ children }) => {
+  const dispatch = useAppDispatch();
+
+  useOnFocus(() => {
+    // Match <ImageBackground> raster image top pixel color
+    dispatch(bannerActions.setBannersBg(colors.lightGrey4));
+  });
+
   return (
     <ImageBackground>
       <YStack flex={1} px={20} gap={20}>

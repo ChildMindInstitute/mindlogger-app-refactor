@@ -2,16 +2,18 @@ import { useContext, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
-import DeviceInfo from 'react-native-device-info';
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
+import { bannerActions } from '@app/entities/banner/model/slice';
 import { useActiveAssessmentLink } from '@app/screens/model/hooks/useActiveAssessmentLink';
+import { colors } from '@app/shared/lib/constants/colors';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
+import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
-import { isIphoneX } from '@app/shared/lib/utils/common';
 import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box, XStack } from '@app/shared/ui/base';
 import { Center } from '@app/shared/ui/Center';
@@ -57,17 +59,13 @@ export function ActivityStepper({
   onFinish,
   flowId,
 }: Props) {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
-  const { bottom: safeAreaBottom, top: safeAreaTop } = useSafeAreaInsets();
-
-  const hasNotch = DeviceInfo.hasNotch();
-  const isNotIPhoneX = !isIphoneX();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   const [timerHeight, setTimerHeight] = useState(0);
   const [showTimeLeft, setShowTimeLeft] = useState(!!timer);
-
-  const timerMarginTop = hasNotch ? (safeAreaTop - timerHeight) / 2 : 16;
 
   // This hook handles specific logic for resuming an active assessment when called via the
   // `active-assessment` deep link. It must be called here, within the context of both the
@@ -326,6 +324,11 @@ export function ActivityStepper({
     onFinish('regular');
   };
 
+  useOnFocus(() => {
+    // Match in-progress activity background color
+    dispatch(bannerActions.setBannersBg(colors.white));
+  });
+
   if (!activityStorageRecord) {
     return (
       <Center flex={1}>
@@ -340,13 +343,11 @@ export function ActivityStepper({
 
       {showTimeLeft && (
         <TimeRemaining
-          {...(safeAreaTop ? { position: 'absolute' } : {})}
-          mt={timerMarginTop}
-          left={16}
+          ml={10}
           zIndex={1}
           entityStartedAt={entityStartedAt}
           timerSettings={timer as HourMinute}
-          clockIconShown={isNotIPhoneX}
+          clockIconShown
           opacity={timerHeight ? 1 : 0}
           onTimeElapsed={() => setShowTimeLeft(false)}
           onLayout={e => {
@@ -371,7 +372,7 @@ export function ActivityStepper({
             left: 'off',
             right: 'off',
             bottom: 'maximum',
-            top: 'maximum',
+            top: 'off',
           }}
           mode="margin"
         >
