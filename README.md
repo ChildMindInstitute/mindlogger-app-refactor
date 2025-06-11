@@ -162,7 +162,7 @@ The above scripts run the app using Debug configuration and for Curious's `dev`
 | ------------------------------------ | -------- | ----------------------------------------------------------- | ------------------------------------------------------------------------ |
 | `ENV`                                | no       | `dev`                                                       | App build label (informational only)                                     |
 | `API_URL`                            | yes      | `http://localhost:8000`                                     | Curious Backend API base URL                                             |
-| `DEEP_LINK_PREFIXES`                 | yes      | `https://web.gettingcurious.org,https://web.mindlogger.org` | Deep link prefixes for the app, comma-delimited if multiple              |
+| `DEEP_LINK_PREFIXES`                 | yes      | `https://web-dev.cmiml.net`                                 | Deep link prefixes for the app, comma-delimited if multiple              |
 | `MIXPANEL_TOKEN`                     | no       | null                                                        | Mixpanel analytics token                                                 |
 | `STORE_ENCRYPTION_KEY`               | yes      | `my-encryption-key`                                         | Secure storage encryption key                                            |
 | `LAUNCHDARKLY_MOBILE_KEY`            | yes      | `my-env-mobile-key`                                         | LaunchDarkly mobile key, refer to Confluence for correct environment key |
