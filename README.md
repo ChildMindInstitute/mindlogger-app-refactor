@@ -65,8 +65,6 @@ In the project directory, you can run the following commands from the project ro
 - `yarn pods`
 
     Installs any native dependencies required by the iOS app via **CocoaPods**, a dependency management system used for iOS.
-    This also applies `YogaKit` and `Flipper` patches located in `ios/patches` required while this is on React Native 0.73. The [need](https://github.com/facebook/react-native/issues/43383)
-    for these patches will be re-evaluated as part of a planned React Native upgrade.
 
 ### Starting the Metro Server
 
