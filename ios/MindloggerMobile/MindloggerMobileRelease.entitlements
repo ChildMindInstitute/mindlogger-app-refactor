@@ -8,6 +8,8 @@
 	<array>
 		<string>webcredentials:web.mindlogger.org</string>
 		<string>applinks:web.mindlogger.org</string>
+		<string>webcredentials:web.gettingcurious.com</string>
+		<string>applinks:web.gettingcurious.com</string>
 	</array>
 </dict>
 </plist>

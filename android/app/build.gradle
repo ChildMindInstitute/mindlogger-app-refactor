@@ -134,25 +134,25 @@ android {
         dev {
             resValue "string", "app_name", "Mindlogger Dev"
             applicationIdSuffix ".dev"
-            manifestPlaceholders = [domainName: "web-dev.cmiml.net"]
+            manifestPlaceholders = [domainName: "web-dev.cmiml.net", secondaryDomain: "web-dev.cmiml.net"]
         }
         qa {
             resValue "string", "app_name", "Mindlogger QA"
             applicationIdSuffix ".qa"
-            manifestPlaceholders = [domainName: "web-test.cmiml.net"]
+            manifestPlaceholders = [domainName: "web-test.cmiml.net", secondaryDomain: "web-test.cmiml.net"]
         }
         staging {
             resValue "string", "app_name", "Mindlogger Staging"
             applicationIdSuffix ".staging"
-            manifestPlaceholders = [domainName: "web-stage.cmiml.net"]
+            manifestPlaceholders = [domainName: "web-stage.cmiml.net", secondaryDomain: "web-stage.cmiml.net"]
         }
         uat {
             resValue "string", "app_name", "Mindlogger UAT"
             applicationIdSuffix ".uat"
-            manifestPlaceholders = [domainName: "web-uat.cmiml.net"]
+            manifestPlaceholders = [domainName: "web-uat.cmiml.net", secondaryDomain: "web-uat.cmiml.net"]
         }
         production {
-            manifestPlaceholders = [domainName: "web.mindlogger.org"]
+            manifestPlaceholders = [domainName: "web.gettingcurious.com", secondaryDomain: "web.mindlogger.org"]
         }
     }
 }

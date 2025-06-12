@@ -4,10 +4,10 @@ This repository is used for the respondent mobile app of the [Curious](https://m
 
 ## Application Stack
 
-* Curious Admin - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-admin)
-* Curious Backend - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-backend-refactor)
-* Curious Mobile App - **This Repo**
-* Curious Web App - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-web-refactor)
+- Curious Admin - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-admin)
+- Curious Backend - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-backend-refactor)
+- Curious Mobile App - **This Repo**
+- Curious Web App - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-web-refactor)
 
 ## Getting Started
 
@@ -60,36 +60,36 @@ In the project directory, you can run the following commands from the project ro
 
 - `yarn postinstall`
 
-     Applies any preconfigured package patches & sets up iOS permissions.
+  Applies any preconfigured package patches & sets up iOS permissions.
 
 - `yarn pods`
 
-    Installs any native dependencies required by the iOS app via **CocoaPods**, a dependency management system used for iOS.
-    This also applies `YogaKit` and `Flipper` patches located in `ios/patches` required while this is on React Native 0.73. The [need](https://github.com/facebook/react-native/issues/43383)
-    for these patches will be re-evaluated as part of a planned React Native upgrade.
+  Installs any native dependencies required by the iOS app via **CocoaPods**, a dependency management system used for iOS.
+  This also applies `YogaKit` and `Flipper` patches located in `ios/patches` required while this is on React Native 0.73. The [need](https://github.com/facebook/react-native/issues/43383)
+  for these patches will be re-evaluated as part of a planned React Native upgrade.
 
 ### Starting the Metro Server
 
 - `yarn start`
 
-    Runs **Metro**, the JavaScript bundler that ships with React Native.\
-    Keep this process running in a separate terminal before running the application.
+  Runs **Metro**, the JavaScript bundler that ships with React Native.\
+   Keep this process running in a separate terminal before running the application.
 
 - `yarn start:reset-cache`
 
-    Clears the cache related to the development environment before running Metro. This can help resolve certain npm errors, inconsistencies, and free up disk space by removing redundant packages that have accumulated.
+  Clears the cache related to the development environment before running Metro. This can help resolve certain npm errors, inconsistencies, and free up disk space by removing redundant packages that have accumulated.
 
 ### Running the Application
 
 Make sure Metro is running, then run:
 
-  - `yarn android`
+- `yarn android`
 
-    Builds and runs the Android version of the app in the default Android emulator.
+  Builds and runs the Android version of the app in the default Android emulator.
 
-  - `yarn ios`
+- `yarn ios`
 
-    Builds and runs the iOS version of the app in the iOS Simulator.
+  Builds and runs the iOS version of the app in the iOS Simulator.
 
 #### Feature Flags considerations
 
@@ -114,6 +114,7 @@ Update the version in the `package.json` file and run: `yarn bump`. The default 
 If you only want to update the build version without modifying the `package.json` file, simply run: `yarn bump`.
 
 You can also customize the bump behavior by passing options:
+
 - To skip the commit message, use `skipCommit:true`.
 - To increment the build version by a specific number, use `increment:x`.
 
@@ -157,15 +158,16 @@ The above scripts run the app using Debug configuration and for Curious's `dev`
 
 ## Environment Variables
 
-| Key                                  | Required | Default value                          | Description                                                              |
-| ------------------------------------ | -------- | -------------------------------------- | ------------------------------------------------------------------------ |
-| `ENV`                                | no       | `dev`                                  | App build label (informational only)                                     |
-| `API_URL`                            | yes      | `http://localhost:8000`                | Curious Backend API base URL                                             |
-| `MIXPANEL_TOKEN`                     | no       | null                                   | Mixpanel analytics token                                                 |
-| `STORE_ENCRYPTION_KEY`               | yes      | `my-encryption-key`                    | Secure storage encryption key                                            |
-| `LAUNCHDARKLY_MOBILE_KEY`            | yes      | `my-env-mobile-key`                    | LaunchDarkly mobile key, refer to Confluence for correct environment key |
-| `ONEUP_HEALTH_CLIENT_ID`             | yes*     | null                                   | 1UpHealth client ID                                                      |
-| `ONEUP_HEALTH_SYSTEM_SEARCH_API_URL` | yes*     | `https://system-search.1up.health/api` | 1UpHealth System Search API URL                                          |
+| Key                                  | Required | Default value                                               | Description                                                              |
+| ------------------------------------ | -------- | ----------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `ENV`                                | no       | `dev`                                                       | App build label (informational only)                                     |
+| `API_URL`                            | yes      | `http://localhost:8000`                                     | Curious Backend API base URL                                             |
+| `DEEP_LINK_PREFIXES`                 | yes      | `https://web-dev.cmiml.net`                                 | Deep link prefixes for the app, comma-delimited if multiple              |
+| `MIXPANEL_TOKEN`                     | no       | null                                                        | Mixpanel analytics token                                                 |
+| `STORE_ENCRYPTION_KEY`               | yes      | `my-encryption-key`                                         | Secure storage encryption key                                            |
+| `LAUNCHDARKLY_MOBILE_KEY`            | yes      | `my-env-mobile-key`                                         | LaunchDarkly mobile key, refer to Confluence for correct environment key |
+| `ONEUP_HEALTH_CLIENT_ID`             | yes\*    | null                                                        | 1UpHealth client ID                                                      |
+| `ONEUP_HEALTH_SYSTEM_SEARCH_API_URL` | yes\*    | `https://system-search.1up.health/api`                      | 1UpHealth System Search API URL                                          |
 
 \* Required to use 1UpHealth integration
 
