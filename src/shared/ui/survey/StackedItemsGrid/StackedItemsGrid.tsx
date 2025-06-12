@@ -50,7 +50,7 @@ const AxisListItem: FC<{
               <AxisListItemText hasTooltip>{title}</AxisListItemText>
             </Tooltip>
           ) : (
-            <AxisListItemText accessibilityLabel={accessibilityLabel ?? ''}>
+            <AxisListItemText aria-label={accessibilityLabel ?? ''}>
               {title}
             </AxisListItemText>
           )}

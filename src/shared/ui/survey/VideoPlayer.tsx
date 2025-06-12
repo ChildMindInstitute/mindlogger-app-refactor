@@ -2,9 +2,13 @@ import { FC, useCallback, useRef, useEffect } from 'react';
 import { StyleProp, StyleSheet } from 'react-native';
 
 import { useFocusEffect } from '@react-navigation/native';
-import { default as VideoPlayerBase } from 'react-native-video-player';
+import {
+  default as VideoPlayerBase,
+  VideoPlayerRef,
+} from 'react-native-video-player';
 
 import { Center } from '../Center';
+import { ResizeMode } from 'react-native-video';
 
 const styles = StyleSheet.create({
   base: { width: '100%', height: '100%', backgroundColor: '#000' },
@@ -12,7 +16,7 @@ const styles = StyleSheet.create({
 
 type Props = {
   uri: string;
-  resizeMode?: 'cover' | 'contain';
+  resizeMode?: ResizeMode.COVER | ResizeMode.CONTAIN;
   autoPlay?: boolean;
   videoStyle?: StyleProp<any>;
   wrapperStyle?: StyleProp<any>;
@@ -24,12 +28,12 @@ const emptyStyles = StyleSheet.create({});
 export const VideoPlayer: FC<Props> = ({
   uri,
   autoPlay = false,
-  resizeMode = 'cover',
+  resizeMode = ResizeMode.COVER,
   videoStyle = emptyStyles,
   wrapperStyle = emptyStyles,
   thumbnailStyle = emptyStyles,
 }) => {
-  const playerRef = useRef<VideoPlayerBase>(null);
+  const playerRef = useRef<VideoPlayerRef>(null);
 
   const mergeStyles = (styleProp: StyleProp<any>): StyleProp<any> => {
     return StyleSheet.compose(styles.base, styleProp);
@@ -60,7 +64,7 @@ export const VideoPlayer: FC<Props> = ({
       <VideoPlayerBase
         accessibilityLabel="video-player"
         ref={playerRef}
-        video={{
+        source={{
           uri,
         }}
         autoplay

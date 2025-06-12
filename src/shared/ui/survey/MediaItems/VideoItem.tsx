@@ -23,6 +23,7 @@ import { MediaInput } from './MediaInput';
 import { MediaValue } from './types';
 import { VideoIcon } from '../../icons';
 import { VideoPlayer } from '../VideoPlayer';
+import { ResizeMode } from 'react-native-video';
 
 type Props = {
   onChange: (value: MediaValue) => void;
@@ -109,7 +110,7 @@ export const VideoItem: FC<Props> = ({ value, onChange }) => {
       onOpenCamera={onOpenVideoCamera}
       onShowMediaLibrary={onShowVideoGallery}
       mode="video"
-      accessibilityLabel="video-item"
+      aria-label="video-item"
       uploadIcon={<VideoIcon color={colors.red} size={50} />}
     >
       {value && (
@@ -118,7 +119,7 @@ export const VideoItem: FC<Props> = ({ value, onChange }) => {
           videoStyle={styles.mediaContainer}
           thumbnailStyle={styles.mediaContainer}
           uri={value.uri}
-          resizeMode="contain"
+          resizeMode={ResizeMode.CONTAIN}
         />
       )}
     </MediaInput>

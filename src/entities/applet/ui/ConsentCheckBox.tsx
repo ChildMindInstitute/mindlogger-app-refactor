@@ -1,13 +1,14 @@
 import { StyleSheet } from 'react-native';
 
-import { BoxProps, XStack } from '@app/shared/ui/base';
+import { XStack } from '@app/shared/ui/base';
 import { CheckBox } from '@app/shared/ui/CheckBox';
+import { XStackProps } from '@tamagui/stacks';
 
 type Props = {
   value: boolean;
   label: JSX.Element;
   onChange: (value: boolean) => void;
-} & BoxProps;
+} & XStackProps;
 
 export function ConsentCheckBox({
   value,

@@ -49,7 +49,7 @@ export const AbCanvas: FC<Props> = props => {
     index: number;
   } | null>(null);
 
-  const currentPathRef = useRef<SkPath | null>();
+  const currentPathRef = useRef<SkPath | null>(null);
 
   const currentIndexRef = useRef(1);
 

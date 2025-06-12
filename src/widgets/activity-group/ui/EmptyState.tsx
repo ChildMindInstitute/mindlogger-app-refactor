@@ -1,9 +1,10 @@
 import { ReactNode } from 'react';
 
-import { BoxProps, YStack } from '@app/shared/ui/base';
+import { YStack } from '@app/shared/ui/base';
 import { Text } from '@app/shared/ui/Text';
+import { YStackProps } from '@tamagui/stacks';
 
-type Props = BoxProps & {
+type Props = YStackProps & {
   icon: ReactNode;
   description: string;
 };

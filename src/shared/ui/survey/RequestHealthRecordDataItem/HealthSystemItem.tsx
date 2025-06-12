@@ -1,8 +1,5 @@
 import { FC } from 'react';
-import { StyleSheet } from 'react-native';
-
-import { StackStyleProps } from '@tamagui/core';
-import { Image } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import { Paragraph } from '@tamagui/text';
 
 import { OneUpHealthSystemItem } from '@app/shared/api/services/IOneUpHealthService';
@@ -12,6 +9,7 @@ import { Center } from '@app/shared/ui/Center';
 import { ChevronRightIcon } from '@app/shared/ui/icons';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
+import { XStackProps } from '@tamagui/stacks';
 
 type HealthSystemItemProps = OneUpHealthSystemItem & {
   onPress: () => void;
@@ -89,7 +87,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const pressStyle: StackStyleProps = {
+const pressStyle: XStackProps['pressStyle'] = {
   opacity: 0.7,
   scale: 0.98,
 };

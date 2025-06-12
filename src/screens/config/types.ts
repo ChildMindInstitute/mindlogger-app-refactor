@@ -1,6 +1,6 @@
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { CompositeScreenProps } from '@react-navigation/native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { EntityPath } from '@app/abstract/lib/types/entity';
 
@@ -20,6 +20,22 @@ export type RootStackParamList = {
   ApplicationLogs: undefined;
   Autocompletion: undefined;
 };
+
+export type RootStackNavigationProps = |
+  NativeStackNavigationProp<RootStackParamList, 'Login'> |
+  NativeStackNavigationProp<RootStackParamList, 'PasswordRecovery'> |
+  NativeStackNavigationProp<RootStackParamList, 'SignUp'> |
+  NativeStackNavigationProp<RootStackParamList, 'AboutApp'> |
+  NativeStackNavigationProp<RootStackParamList, 'ChangeLanguage'> |
+  NativeStackNavigationProp<RootStackParamList, 'ForgotPassword'> |
+  NativeStackNavigationProp<RootStackParamList, 'Applets'> |
+  NativeStackNavigationProp<RootStackParamList, 'AppletDetails'> |
+  NativeStackNavigationProp<RootStackParamList, 'Settings'> |
+  NativeStackNavigationProp<RootStackParamList, 'ChangePassword'> |
+  NativeStackNavigationProp<RootStackParamList, 'InProgressActivity'> |
+  NativeStackNavigationProp<RootStackParamList, 'ActivityPassedScreen'> |
+  NativeStackNavigationProp<RootStackParamList, 'ApplicationLogs'> |
+  NativeStackNavigationProp<RootStackParamList, 'Autocompletion'>;
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, T>;
