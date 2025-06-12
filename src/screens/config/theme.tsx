@@ -15,6 +15,7 @@ import { Text } from '@app/shared/ui/Text';
 
 import { AppletDetailsParamList, RootStackNavigationProps } from './types';
 import { HeaderTitle } from '../ui/HeaderTitle';
+import { BANNERS_DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
 
 type ScreenOptions = {
   navigation: RootStackNavigationProps;
@@ -27,7 +28,7 @@ export const getScreenOptions = ({
 }: ScreenOptions): NativeStackNavigationOptions => {
   return {
     headerStyle: {
-      backgroundColor: colors.primary,
+      backgroundColor: BANNERS_DEFAULT_BG,
     },
     headerShadowVisible: false,
     headerTitle: HeaderTitle,

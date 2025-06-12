@@ -14,6 +14,7 @@ import { Banner, BannerProps } from './Banner';
 import { useBanners } from '../lib/hooks/useBanners';
 import { bannersBgSelector, bannersSelector } from '../model/selectors';
 import { BannerType } from '../model/slice';
+import { BANNERS_DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
 
 const handleClose = (
   removeBanner: (key: BannerType) => void,
@@ -32,7 +33,7 @@ export const Banners = () => {
 
   // Animate top safe area background color to match native header background color transition
   const animatedStyles = useAnimatedStyle(() => ({
-    backgroundColor: withTiming(bannersBg ?? 'transparent', {
+    backgroundColor: withTiming(bannersBg ?? BANNERS_DEFAULT_BG, {
       // Duration is based on native header transition duration for each OS
       // iOS: 350ms, Android: 300ms
       // Subtract 30ms to account for animation delay
