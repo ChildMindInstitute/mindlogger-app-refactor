@@ -1,9 +1,11 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { UIManager } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
 import { v4 as uuidv4 } from 'uuid';
 
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
+import { Text } from '@app/shared/ui/Text';
 
 type Props = {
   payload: UnityPipelineItem['payload'];
@@ -16,6 +18,10 @@ type MessageFromUnity = {
 };
 
 export const UnityView: FC<Props> = props => {
+  const compiledWithRNUnityView = !!(
+    UIManager as never as Record<string, unknown>
+  ).RNUnityView;
+
   const unityRef = useRef<RNUnityView>(null);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
 
@@ -63,17 +69,26 @@ export const UnityView: FC<Props> = props => {
     [handleUnityStarted],
   );
 
-  if (!unityViewKey) {
-    return null;
-  } else {
+  if (!compiledWithRNUnityView) {
+    // TODO: Render some dummy/placeholder UI to bypass the activity
     return (
-      <RNUnityView
-        ref={unityRef}
-        style={{ flex: 1 }}
-        onUnityMessage={result =>
-          handleUnityMessage(result.nativeEvent.message)
-        }
-      />
+      <Text fontSize={16} lineHeight={24}>
+        RNUnityView missing from compiled binary!
+      </Text>
     );
+  } else {
+    if (!unityViewKey) {
+      return null;
+    } else {
+      return (
+        <RNUnityView
+          ref={unityRef}
+          style={{ flex: 1 }}
+          onUnityMessage={result =>
+            handleUnityMessage(result.nativeEvent.message)
+          }
+        />
+      );
+    }
   }
 };
