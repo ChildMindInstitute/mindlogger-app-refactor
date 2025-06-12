@@ -1,4 +1,5 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { UIManager } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
 import { v4 as uuidv4 } from 'uuid';
@@ -16,6 +17,10 @@ type MessageFromUnity = {
 };
 
 export const UnityView: FC<Props> = props => {
+  const compiledWithRNUnityView = !!(
+    UIManager as never as Record<string, unknown>
+  ).RNUnityView;
+
   const unityRef = useRef<RNUnityView>(null);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
 
@@ -63,17 +68,22 @@ export const UnityView: FC<Props> = props => {
     [handleUnityStarted],
   );
 
-  if (!unityViewKey) {
+  if (!compiledWithRNUnityView) {
+    // TODO: Render some dummy/placeholder UI to bypass the activity
     return null;
   } else {
-    return (
-      <RNUnityView
-        ref={unityRef}
-        style={{ flex: 1 }}
-        onUnityMessage={result =>
-          handleUnityMessage(result.nativeEvent.message)
-        }
-      />
-    );
+    if (!unityViewKey) {
+      return null;
+    } else {
+      return (
+        <RNUnityView
+          ref={unityRef}
+          style={{ flex: 1 }}
+          onUnityMessage={result =>
+            handleUnityMessage(result.nativeEvent.message)
+          }
+        />
+      );
+    }
   }
 };
