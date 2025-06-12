@@ -113,8 +113,8 @@ export const StabilityTracker = (props: Props) => {
   const lambdaValue = useRef(INITIAL_LAMBDA);
   const startPosition = useRef(0);
   const responses = useRef<Response[]>([]);
-  const orientationSubscription = useRef<OrientationSubscription>();
-  const initialOrientation = useRef<number>();
+  const orientationSubscription = useRef<OrientationSubscription>(undefined);
+  const initialOrientation = useRef<number>(undefined);
   const toast = useToast();
 
   const lambdaLimit = IS_TRIAL ? 0 : 0.3 * maxLambda;

@@ -338,8 +338,8 @@ export const RootNavigator = () => {
                 : HeaderTitle,
               headerLeft: () => (
                 <BackButton
-                  accessibilityLabel="home-button"
-                  mr={IS_ANDROID && 15}
+                  aria-label="home-button"
+                  {...(IS_ANDROID && { mr: 15 })}
                   fallbackRoute="Applets"
                 >
                   <HomeIcon color={colors.white} size={32} />

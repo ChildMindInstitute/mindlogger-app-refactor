@@ -6,15 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { useAppletStreamingDetails } from '@app/entities/applet/lib/hooks/useAppletStreamingDetails';
 import { colors } from '@app/shared/lib/constants/colors';
 import { useTCPSocket } from '@app/shared/lib/tcp/useTCPSocket';
-import { BoxProps, XStack } from '@app/shared/ui/base';
+import { XStack } from '@app/shared/ui/base';
 import { EditIcon } from '@app/shared/ui/icons';
 import { Text } from '@app/shared/ui/Text';
 
 import { ConnectionModal } from './ConnectionModal';
+import { XStackProps } from '@tamagui/stacks';
 
 type Props = {
   appletId: string;
-} & BoxProps;
+} & XStackProps;
 
 export const ConnectionStatusBar: FC<Props> = ({ appletId, ...styleProps }) => {
   const { t } = useTranslation();

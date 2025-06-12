@@ -1,6 +1,5 @@
 import { ImageUrl } from '@app/shared/lib/types/url';
-
-import { BoxProps } from '../../base';
+import { RadioGroupProps } from '@tamagui/radio-group';
 
 export type RadioOption = {
   id: string;
@@ -24,4 +23,4 @@ export type RadioItemProps = {
 
   onChange: (newValue: string) => void;
   textReplacer: (markdown: string) => string;
-} & BoxProps;
+} & Omit<RadioGroupProps, 'value'>;

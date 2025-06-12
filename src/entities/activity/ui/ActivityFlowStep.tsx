@@ -1,13 +1,15 @@
 import { FC } from 'react';
 
 import { IS_ANDROID } from '@app/shared/lib/constants';
-import { BoxProps, Image, XStack } from '@app/shared/ui/base';
+import { XStack } from '@app/shared/ui/base';
+import { Image } from 'react-native';
 import { Text } from '@app/shared/ui/Text';
 import { badge } from '@assets/images';
 
 import { ActivityListItem } from '../lib/types/activityListItem';
+import { XStackProps } from '@tamagui/stacks';
 
-type Props = BoxProps & {
+type Props = XStackProps & {
   activity: ActivityListItem;
   hasOpacity: boolean;
 };
@@ -21,17 +23,19 @@ export const ActivityFlowStep: FC<Props> = props => {
   return (
     <XStack {...props}>
       <Image
-        src={badge}
+        source={badge}
         width={18}
         height={18}
-        mr={3}
-        mt={IS_ANDROID ? 2 : 0}
-        opacity={0.6}
+        style={{
+          marginRight: 3,
+          marginTop: IS_ANDROID ? 2 : 0,
+          opacity: 0.6,
+        }}
       />
 
       <Text
         color="$darkGrey"
-        accessibilityLabel="activity-card-flow"
+        aria-label="activity-card-flow"
         opacity={hasOpacity ? 0.5 : 1}
       >
         {`(${activityPositionInFlow} of ${numberOfActivitiesInFlow}) ${activityFlowName}`}

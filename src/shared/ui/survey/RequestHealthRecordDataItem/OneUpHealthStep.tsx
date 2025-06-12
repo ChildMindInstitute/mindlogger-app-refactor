@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, Linking, StyleSheet } from 'react-native';
 
-import { StackStyleProps } from '@tamagui/core';
+import { StackStyle } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
 import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
@@ -211,8 +211,8 @@ const buttonTextStyle = {
   textColor: '$darkGrey',
   fontWeight: '500',
   fontSize: 16,
-};
+} as const;
 
-const pressStyle: StackStyleProps = {
+const pressStyle: StackStyle = {
   opacity: 0.5,
 };

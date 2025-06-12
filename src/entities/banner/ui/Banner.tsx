@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 
 import { useAppState } from '@react-native-community/hooks';
-import { StackProps, StackStyleProps } from '@tamagui/core';
+import { StackStyle } from '@tamagui/core';
 
 import { colors } from '@app/shared/lib/constants/colors';
 import { Box, XStack } from '@app/shared/ui/base';
@@ -9,6 +9,7 @@ import { CloseIcon } from '@app/shared/ui/icons';
 import { Text } from '@app/shared/ui/Text';
 
 import { BANNER_ICONS, BANNER_BG_COLORS } from '../lib/constants';
+import { XStackProps } from '@tamagui/stacks';
 
 export type BannerProps = {
   /**
@@ -24,7 +25,7 @@ export type BannerProps = {
   severity?: 'success' | 'error' | 'warning' | 'info';
   icon?: ReactNode;
   color?: string;
-} & StackProps &
+} & XStackProps &
   Record<string, unknown>; // Custom banner props
 
 export const Banner = ({
@@ -62,9 +63,7 @@ export const Banner = ({
       backgroundColor={backgroundColor}
       onPressIn={() => setIsPressing(true)}
       onPressOut={() => setIsPressing(false)}
-      onClose={hasCloseButton ? onClose : undefined}
-      severity={severity}
-      accessibilityLabel={`${severity}-banner`}
+      aria-label={`${severity}-banner`}
       {...rest}
     >
       {icon}
@@ -78,7 +77,7 @@ export const Banner = ({
           onPress={() => onClose?.('manual')}
           borderRadius={100}
           pressStyle={pressStyle}
-          accessibilityLabel="banner-close"
+          aria-label="banner-close"
         >
           <CloseIcon color={color} size={20} />
         </Box>
@@ -87,6 +86,6 @@ export const Banner = ({
   );
 };
 
-const pressStyle: StackStyleProps = {
+const pressStyle: StackStyle = {
   backgroundColor: colors.onSurfaceVariantTsp,
 };

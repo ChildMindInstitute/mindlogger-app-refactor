@@ -74,7 +74,7 @@ export const RadioActivityItem: FC<
       hasImage={hasImage}
       hasTooltip={hasTooltip}
       textReplacer={textReplacer}
-      accessibilityLabel={`radios-group_value-${String(selectedOptionIndex)}`}
+      aria-label={`radios-group_value-${String(selectedOptionIndex)}`}
       mb={16}
     />
   );

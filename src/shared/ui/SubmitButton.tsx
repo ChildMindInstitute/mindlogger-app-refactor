@@ -2,7 +2,7 @@ import { PropsWithChildren, FC } from 'react';
 import { AccessibilityProps, StyleSheet, TouchableOpacity } from 'react-native';
 import { StyleProp, ViewStyle } from 'react-native';
 
-import { Stack, styled, StackStyleProps, TextProps } from '@tamagui/core';
+import { Stack, styled, StackStyle, TextProps } from '@tamagui/core';
 
 import { ActivityIndicator } from './ActivityIndicator';
 import { Text } from './Text';
@@ -51,7 +51,7 @@ type Props = PropsWithChildren<
     buttonStyle?: StyleProp<ViewStyle>;
   } & {
     textProps?: TextProps;
-  } & StackStyleProps
+  } & StackStyle
 >;
 
 export const SubmitButton: FC<Props & AccessibilityProps> = ({

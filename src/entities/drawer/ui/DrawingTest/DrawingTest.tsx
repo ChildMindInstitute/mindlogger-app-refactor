@@ -2,11 +2,11 @@ import {
   DrawingStreamEvent,
   StreamEventLoggable,
 } from '@app/shared/lib/tcp/types';
-import { BoxProps } from '@app/shared/ui/base';
 
 import { DrawingTestLegacyLayout } from './DrawingTestLegacyLayout';
 import { DrawingTestNewLayout } from './DrawingTestNewLayout';
 import { DrawLine, DrawResult } from '../../lib/types/draw';
+import { YStackProps } from '@tamagui/stacks';
 
 type LegacySupportProps = {
   legacyLayoutSupport: boolean;
@@ -23,7 +23,7 @@ export type DrawingTestProps = {
   onResult: (result: DrawResult) => void;
   toggleScroll: (isScrollEnabled: boolean) => void;
 } & StreamEventLoggable<DrawingStreamEvent> &
-  BoxProps;
+  YStackProps;
 
 export const DrawingTest = ({
   legacyLayoutSupport,
