@@ -37,7 +37,10 @@ export const LoginScreen: FC = () => {
         <Box f={1} px={isTablet() ? '$17' : '$8'}>
           <Box f={1} jc="center">
             <YStack mb={50} jc="flex-end" alignItems="center">
-              <Image source={curiousLogoWhite} width={251} height={54} />
+              <Image source={curiousLogoWhite} width={251} height={54} style={{
+                width: 251,
+                height: 54,
+              }} />
             </YStack>
 
             <LoginForm onLoginSuccess={onLoginSuccess} />
