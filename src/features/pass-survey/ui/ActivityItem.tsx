@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useContext,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -75,6 +76,7 @@ export function ActivityItem({
   const { appletId, activityId, flowId, targetSubjectId } = useContext(
     ActivityIdentityContext,
   );
+  const textVariableReplacerRef = useRef(textVariableReplacer);
 
   const { assignment } = useActivityAssignment({
     appletId,
@@ -306,7 +308,7 @@ export function ActivityItem({
                 config={pipelineItem.payload}
                 onChange={onResponse}
                 values={value?.answer || null}
-                textReplacer={textVariableReplacer}
+                textReplacer={textVariableReplacerRef.current}
                 tooltipsShown={pipelineItem.payload.addTooltip}
               />
             </Box>
@@ -320,7 +322,7 @@ export function ActivityItem({
                 config={pipelineItem.payload}
                 onChange={onResponse}
                 values={value?.answer || []}
-                textReplacer={textVariableReplacer}
+                textReplacer={textVariableReplacerRef.current}
                 tooltipsShown={pipelineItem.payload.addTooltip}
               />
             </Box>
@@ -334,7 +336,7 @@ export function ActivityItem({
                 config={pipelineItem.payload}
                 onChange={onResponse}
                 values={value?.answer || []}
-                textReplacer={textVariableReplacer}
+                textReplacer={textVariableReplacerRef.current}
               />
             </Box>
           ),
@@ -392,7 +394,7 @@ export function ActivityItem({
                 config={pipelineItem.payload}
                 onChange={handleRadioChange}
                 initialValue={value?.answer}
-                textReplacer={textVariableReplacer}
+                textReplacer={textVariableReplacerRef.current}
               />
             </Box>
           ),
@@ -436,7 +438,7 @@ export function ActivityItem({
               item={pipelineItem}
               onChange={onResponse}
               responseValue={value?.answer}
-              textReplacer={textVariableReplacer}
+              textReplacer={textVariableReplacerRef.current}
               assignment={assignment}
             />
           ),
@@ -459,7 +461,6 @@ export function ActivityItem({
     onResponse,
     pipelineItem,
     processLiveEvent,
-    textVariableReplacer,
     type,
     value?.answer,
   ]);
@@ -475,6 +476,21 @@ export function ActivityItem({
       );
     },
     [noScrollContainer, scrollEnabled],
+  );
+
+  const itemMarkdown = useMemo(
+    () =>
+      !!question && (
+        <ItemMarkdown
+          content={question}
+          assignment={assignment}
+          alignToLeft={alignMessageToLeft}
+          textVariableReplacer={textVariableReplacerRef.current}
+          mx={16}
+          mb={20}
+        />
+      ),
+    [alignMessageToLeft, assignment, question],
   );
 
   return (
@@ -506,16 +522,7 @@ export function ActivityItem({
           }
         }}
       >
-        {question && (
-          <ItemMarkdown
-            content={question}
-            assignment={assignment}
-            alignToLeft={alignMessageToLeft}
-            textVariableReplacer={textVariableReplacer}
-            mx={16}
-            mb={20}
-          />
-        )}
+        {itemMarkdown}
 
         {item}
 
