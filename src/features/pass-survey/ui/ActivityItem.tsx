@@ -168,11 +168,7 @@ export function ActivityItem({
       case 'Splash':
         return {
           item: (
-            <Box
-              flex={1}
-              onPressIn={stopScrolling}
-              onPressOut={releaseScrolling}
-            >
+            <Box flex={1}>
               <SplashItem config={pipelineItem.payload} />
             </Box>
           ),
