@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { UIManager } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
@@ -6,14 +6,88 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
 
-type Props = {
-  payload: UnityPipelineItem['payload'];
+import {
+  RN2UMessage,
+  U2RNMessage,
+  UnityEvent,
+  UnityEventUnityStarted,
+} from '../lib/types/unityMessage';
+
+type RNUnityCommBridgeOptions = {
+  rnUnityViewRef: RefObject<RNUnityView>;
 };
 
-type MessageFromUnity = {
-  m_sId: string;
-  m_sKey: string;
-  [key: string]: unknown;
+type RNUnityCommBridgeUnityEventHandler = (message: U2RNMessage) => void;
+
+const useRNUnityCommBridge = ({ rnUnityViewRef }: RNUnityCommBridgeOptions) => {
+  const eventHandlersRef = useRef<
+    Partial<Record<UnityEvent, RNUnityCommBridgeUnityEventHandler[]>>
+  >({});
+  const inFlightMessagesRef = useRef<Record<string, RN2UMessage>>({});
+
+  const sendMessageToUnity = useCallback(
+    (message: RN2UMessage) => {
+      if (rnUnityViewRef.current) {
+        const messagePayload = [
+          'ReactCommunicationBridge',
+          'ReceiveReactMessage',
+          JSON.stringify(message),
+        ] as [string, string, string];
+        console.log(
+          '[RNUnityCommBridge] Sending message to Unity:',
+          JSON.stringify(messagePayload, null, 2),
+        );
+        rnUnityViewRef.current.postMessage(...messagePayload);
+      } else {
+        console.warn(
+          '[RNUnityCommBridge] RNUnityView not ready. Not sending message:',
+          JSON.stringify(message, null, 2),
+        );
+      }
+    },
+    [rnUnityViewRef],
+  );
+
+  const registerEventHandler = useCallback(
+    (evtType: UnityEvent, handler: RNUnityCommBridgeUnityEventHandler) => {
+      eventHandlersRef.current[evtType] =
+        eventHandlersRef.current[evtType] || [];
+      eventHandlersRef.current[evtType].push(handler);
+    },
+    [],
+  );
+
+  const handleMessageFromUnity = useCallback((messageString: string) => {
+    console.info(
+      '[RNUnityCommBridge] Received message string from Unity:',
+      messageString,
+    );
+
+    let message: U2RNMessage | null;
+    try {
+      message = JSON.parse(messageString) as U2RNMessage;
+    } catch (err) {
+      console.error(
+        `[RNUnityCommBridge] Error parsing message from Unity:`,
+        err,
+      );
+      message = null;
+    }
+    if (message) {
+      setTimeout(() => {
+        const handlers = eventHandlersRef.current[message.m_sKey] || [];
+        for (const handler of handlers) {
+          handler(message);
+        }
+      }, 100);
+    }
+  }, []);
+
+  return { sendMessageToUnity, registerEventHandler, handleMessageFromUnity };
+};
+
+type Props = {
+  payload: UnityPipelineItem['payload'];
 };
 
 export const UnityView: FC<Props> = props => {
@@ -21,52 +95,36 @@ export const UnityView: FC<Props> = props => {
     UIManager as never as Record<string, unknown>
   ).RNUnityView;
 
-  const unityRef = useRef<RNUnityView>(null);
+  const rnUnityViewRef = useRef<RNUnityView>(null);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
+  const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
+    useRNUnityCommBridge({ rnUnityViewRef });
+
+  const handleUnityStarted =
+    useCallback<RNUnityCommBridgeUnityEventHandler>(() => {
+      console.log(
+        '!!! TODO: Load activity config:',
+        JSON.stringify(props.payload.file),
+      );
+
+      sendMessageToUnity({
+        m_sId: 'abc-123',
+        m_sKey: 'Echo',
+        m_sAdditionalInfo: JSON.stringify({
+          test: 'this',
+          and: { that: 42 },
+        }),
+      });
+    }, [props.payload.file, sendMessageToUnity]);
 
   useEffect(() => {
     // (Re)generate a new react key for the RN Unity view so it gets
     // reinitialized when this container view is rendered for the first time.
     // This ensure we can consistently get a Unity startup message.
     setUnityViewKey(uuidv4());
-  }, []);
 
-  const handleUnityStarted = useCallback(() => {
-    console.log('!!! handleUnityStarted');
-    console.log(
-      '!!! TODO: Load activity config:',
-      JSON.stringify(props.payload.file),
-    );
-  }, [props.payload.file]);
-
-  const handleUnityMessage = useCallback(
-    (messageString: string) => {
-      console.log('!!! handleUnityMessage:', messageString);
-
-      // TODO: Deprecate this message. In general, all messages from Unity
-      //       should be in JSON format.
-      if (messageString === 'Unity Has Started') {
-        handleUnityStarted();
-        return;
-      }
-
-      let message: MessageFromUnity | null;
-      try {
-        message = JSON.parse(messageString) as MessageFromUnity;
-      } catch (err) {
-        console.error(`Error parsing message from Unity:`, err);
-        message = null;
-      }
-      if (message) {
-        console.log('!!! parsed Unity message:', JSON.stringify(message));
-
-        if (message.m_sKey === 'UnityStarted') {
-          handleUnityStarted();
-        }
-      }
-    },
-    [handleUnityStarted],
-  );
+    registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
+  }, [handleUnityStarted, registerEventHandler]);
 
   if (!compiledWithRNUnityView) {
     // TODO: Render some dummy/placeholder UI to bypass the activity
@@ -77,10 +135,10 @@ export const UnityView: FC<Props> = props => {
     } else {
       return (
         <RNUnityView
-          ref={unityRef}
+          ref={rnUnityViewRef}
           style={{ flex: 1 }}
           onUnityMessage={result =>
-            handleUnityMessage(result.nativeEvent.message)
+            handleMessageFromUnity(result.nativeEvent.message)
           }
         />
       );
