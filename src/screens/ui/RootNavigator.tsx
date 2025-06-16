@@ -221,7 +221,7 @@ export const RootNavigator = () => {
               },
               headerLeft: () => (
                 <Text
-                  accessibilityLabel="close-button"
+                  aria-label="close-button"
                   onPress={navigation.goBack}
                   mr={24}
                 >
@@ -239,7 +239,7 @@ export const RootNavigator = () => {
               headerBackTitle: 'Back',
               title: '',
               headerLeft: () => (
-                <BackButton accessibilityLabel="back_button">
+                <BackButton aria-label="back_button">
                   <XStack ai="center">
                     <ChevronLeft color="white" size={16} />
 
@@ -265,7 +265,7 @@ export const RootNavigator = () => {
 
               headerTitle: ({ children }) => (
                 <HeaderTitle
-                  accessibilityLabel="welcome_name-text"
+                  aria-label="welcome_name-text"
                   color={colors.tertiary}
                 >
                   {children}

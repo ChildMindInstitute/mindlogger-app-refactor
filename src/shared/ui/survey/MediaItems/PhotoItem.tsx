@@ -132,7 +132,7 @@ export const PhotoItem: FC<Props> = ({ onChange, value }) => {
       onOpenCamera={onOpenPhotoCamera}
       onShowMediaLibrary={onShowImageGallery}
       mode="photo"
-      accessibilityLabel="photo-item"
+      aria-label="photo-item"
       uploadIcon={<PhotoIcon color={colors.red} size={50} />}
     >
       {value && (
