@@ -263,6 +263,8 @@ export const RootNavigator = () => {
                 backgroundColor: colors.lighterGrey2,
               },
 
+              headerTitleAlign: 'center',
+
               headerTitle: ({ children }) => (
                 <HeaderTitle
                   aria-label="welcome_name-text"
