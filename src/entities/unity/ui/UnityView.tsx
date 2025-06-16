@@ -7,14 +7,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
 import { Text } from '@app/shared/ui/Text';
 
+import {
+  useRNUnityCommBridge,
+  RNUnityCommBridgeUnityEventHandler,
+} from '../lib/hook/useRNUnityCommBridge';
+import { UnityEventUnityStarted } from '../lib/types/unityMessage';
+
 type Props = {
   payload: UnityPipelineItem['payload'];
-};
-
-type MessageFromUnity = {
-  m_sId: string;
-  m_sKey: string;
-  [key: string]: unknown;
 };
 
 export const UnityView: FC<Props> = props => {
@@ -22,52 +22,37 @@ export const UnityView: FC<Props> = props => {
     UIManager as never as Record<string, unknown>
   ).RNUnityView;
 
-  const unityRef = useRef<RNUnityView>(null);
+  const rnUnityViewRef = useRef<RNUnityView | null>(null);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
+  const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
+    useRNUnityCommBridge({ rnUnityViewRef });
+
+  const handleUnityStarted =
+    useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
+      console.log(
+        '!!! TODO: Load activity config:',
+        JSON.stringify(props.payload.file),
+      );
+
+      const echoResponse = await sendMessageToUnity({
+        m_sId: 'abc-123',
+        m_sKey: 'Echo',
+        m_sAdditionalInfo: JSON.stringify({
+          test: 'this',
+          and: { that: 42 },
+        }),
+      });
+      console.log('!!! echoResponse:', JSON.stringify(echoResponse));
+    }, [props.payload.file, sendMessageToUnity]);
 
   useEffect(() => {
     // (Re)generate a new react key for the RN Unity view so it gets
     // reinitialized when this container view is rendered for the first time.
     // This ensure we can consistently get a Unity startup message.
     setUnityViewKey(uuidv4());
-  }, []);
 
-  const handleUnityStarted = useCallback(() => {
-    console.log('!!! handleUnityStarted');
-    console.log(
-      '!!! TODO: Load activity config:',
-      JSON.stringify(props.payload.file),
-    );
-  }, [props.payload.file]);
-
-  const handleUnityMessage = useCallback(
-    (messageString: string) => {
-      console.log('!!! handleUnityMessage:', messageString);
-
-      // TODO: Deprecate this message. In general, all messages from Unity
-      //       should be in JSON format.
-      if (messageString === 'Unity Has Started') {
-        handleUnityStarted();
-        return;
-      }
-
-      let message: MessageFromUnity | null;
-      try {
-        message = JSON.parse(messageString) as MessageFromUnity;
-      } catch (err) {
-        console.error(`Error parsing message from Unity:`, err);
-        message = null;
-      }
-      if (message) {
-        console.log('!!! parsed Unity message:', JSON.stringify(message));
-
-        if (message.m_sKey === 'UnityStarted') {
-          handleUnityStarted();
-        }
-      }
-    },
-    [handleUnityStarted],
-  );
+    registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
+  }, [handleUnityStarted, registerEventHandler]);
 
   if (!compiledWithRNUnityView) {
     // TODO: Render some dummy/placeholder UI to bypass the activity
@@ -82,10 +67,11 @@ export const UnityView: FC<Props> = props => {
     } else {
       return (
         <RNUnityView
-          ref={unityRef}
+          ref={rnUnityViewRef}
+          // eslint-disable-next-line react-native/no-inline-styles
           style={{ flex: 1 }}
           onUnityMessage={result =>
-            handleUnityMessage(result.nativeEvent.message)
+            handleMessageFromUnity(result.nativeEvent.message)
           }
         />
       );
