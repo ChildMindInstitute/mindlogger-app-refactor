@@ -1,6 +1,7 @@
-import { useTranslation } from 'react-i18next';
-import { Stepper, StepperProps } from '@app/shared/ui/Stepper';
 import { XStackProps } from '@tamagui/stacks';
+import { useTranslation } from 'react-i18next';
+
+import { Stepper, StepperProps } from '@app/shared/ui/Stepper';
 
 type Props = XStackProps & {
   stepper: Omit<StepperProps, 'startFrom' | 'stepsCount'>;

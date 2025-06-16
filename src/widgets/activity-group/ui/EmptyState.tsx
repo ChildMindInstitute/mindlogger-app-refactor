@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 
+import { YStackProps } from '@tamagui/stacks';
+
 import { YStack } from '@app/shared/ui/base';
 import { Text } from '@app/shared/ui/Text';
-import { YStackProps } from '@tamagui/stacks';
 
 type Props = YStackProps & {
   icon: ReactNode;

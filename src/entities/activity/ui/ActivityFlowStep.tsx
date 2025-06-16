@@ -1,13 +1,14 @@
 import { FC } from 'react';
+import { Image } from 'react-native';
+
+import { XStackProps } from '@tamagui/stacks';
 
 import { IS_ANDROID } from '@app/shared/lib/constants';
 import { XStack } from '@app/shared/ui/base';
-import { Image } from 'react-native';
 import { Text } from '@app/shared/ui/Text';
 import { badge } from '@assets/images';
 
 import { ActivityListItem } from '../lib/types/activityListItem';
-import { XStackProps } from '@tamagui/stacks';
 
 type Props = XStackProps & {
   activity: ActivityListItem;

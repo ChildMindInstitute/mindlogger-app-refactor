@@ -11,7 +11,7 @@ describe('Test DatePickerItem', () => {
         <DatePickerItem value={null} onChange={jest.fn()} />
       </TamaguiProvider>,
     );
-    
+
     const placeholder = getByText('MM/DD/YYYY');
     expect(placeholder).toBeTruthy();
   });
@@ -23,7 +23,7 @@ describe('Test DatePickerItem', () => {
         <DatePickerItem value={testValue} onChange={jest.fn()} />
       </TamaguiProvider>,
     );
-    
+
     const dateText = queryByText('January 1, 1970');
     expect(dateText).not.toBeNull();
   });

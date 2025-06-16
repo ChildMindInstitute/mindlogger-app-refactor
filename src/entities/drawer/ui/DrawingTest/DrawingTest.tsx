@@ -1,3 +1,5 @@
+import { YStackProps } from '@tamagui/stacks';
+
 import {
   DrawingStreamEvent,
   StreamEventLoggable,
@@ -6,7 +8,6 @@ import {
 import { DrawingTestLegacyLayout } from './DrawingTestLegacyLayout';
 import { DrawingTestNewLayout } from './DrawingTestNewLayout';
 import { DrawLine, DrawResult } from '../../lib/types/draw';
-import { YStackProps } from '@tamagui/stacks';
 
 type LegacySupportProps = {
   legacyLayoutSupport: boolean;

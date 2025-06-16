@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+
 import { CheckBoxActivityItem } from './CheckBoxActivity.item';
 import { Item } from './types';
 

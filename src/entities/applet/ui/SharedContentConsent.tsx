@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 
+import { YStackProps } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
@@ -10,7 +11,6 @@ import { ConsentCheckBox } from './ConsentCheckBox';
 import { onDataSharingConsentDetails } from '../lib/alerts';
 import { selectAppletConsents } from '../model/selectors';
 import { appletActions } from '../model/slice';
-import { YStackProps } from '@tamagui/stacks';
 
 type Props = {
   appletId: string;

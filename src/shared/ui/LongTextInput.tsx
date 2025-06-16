@@ -1,9 +1,8 @@
 import { TextInput } from 'react-native';
 
 import { GetProps, styled } from '@tamagui/core';
-import { isTablet } from 'react-native-device-info';
 import { useFocusable } from '@tamagui/focusable';
-import { InputFrame } from '@shared/ui/Input.tsx';
+import { isTablet } from 'react-native-device-info';
 
 const LongTextInputView = styled(
   TextInput,

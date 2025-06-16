@@ -12,10 +12,10 @@ import { AboutIcon } from '@app/shared/ui/icons/About';
 import { DataIcon } from '@app/shared/ui/icons/Data';
 import { SurveyIcon } from '@app/shared/ui/icons/Survey';
 import { Text } from '@app/shared/ui/Text';
+import { BANNERS_DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
 
 import { AppletDetailsParamList, RootStackNavigationProps } from './types';
 import { HeaderTitle } from '../ui/HeaderTitle';
-import { BANNERS_DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
 
 type ScreenOptions = {
   navigation: RootStackNavigationProps;

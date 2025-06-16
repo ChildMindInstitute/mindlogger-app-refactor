@@ -3,13 +3,13 @@ import React, { FC, PropsWithChildren } from 'react';
 import NetInfo from '@react-native-community/netinfo';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { onlineManager } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
 import { useSystemBootUp } from '@app/shared/lib/contexts/SplashContext';
 import { getDefaultQueryClient } from '@app/shared/lib/queryClient/queryClientInstance';
 import { createSyncStorage } from '@app/shared/lib/storages/createStorage';
 import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const storage = createSyncStorage('cache-storage');
 

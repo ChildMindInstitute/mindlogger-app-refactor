@@ -7,6 +7,7 @@ import {
   launchCamera,
   launchImageLibrary,
 } from 'react-native-image-picker';
+import { ResizeMode } from 'react-native-video';
 
 import { handleBlockedPermissions } from '@app/shared/lib/alerts/permissionAlerts';
 import {
@@ -23,7 +24,6 @@ import { MediaInput } from './MediaInput';
 import { MediaValue } from './types';
 import { VideoIcon } from '../../icons';
 import { VideoPlayer } from '../VideoPlayer';
-import { ResizeMode } from 'react-native-video';
 
 type Props = {
   onChange: (value: MediaValue) => void;

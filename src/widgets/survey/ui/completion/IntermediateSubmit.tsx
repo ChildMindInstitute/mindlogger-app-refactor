@@ -1,10 +1,10 @@
 import { FC } from 'react';
+import { Image } from 'react-native';
 
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
 import { XStack, YStack } from '@app/shared/ui/base';
-import { Image } from 'react-native';
 import { Button } from '@app/shared/ui/Button';
 import { Center } from '@app/shared/ui/Center';
 import { Text } from '@app/shared/ui/Text';

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useTranslation } from 'react-i18next';
 import { render } from '@testing-library/react-native';
+import { useTranslation } from 'react-i18next';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import { colors } from '@app/shared/lib/constants/colors';

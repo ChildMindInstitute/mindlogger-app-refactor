@@ -1,7 +1,8 @@
 import { Children, PropsWithChildren, ReactNode, useMemo } from 'react';
 
-import { XStack, YStack } from '../base';
 import { XStackProps } from '@tamagui/stacks';
+
+import { XStack, YStack } from '../base';
 
 type Props = PropsWithChildren<XStackProps>;
 

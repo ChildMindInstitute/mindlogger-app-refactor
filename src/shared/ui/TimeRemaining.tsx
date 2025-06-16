@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { ViewProps } from 'react-native';
 
 import { XStack, XStackProps } from '@tamagui/stacks';
+
 import { ClockIcon } from './icons';
 import { Text } from './Text';
 import { ONE_SECOND } from '../lib/constants';

@@ -1,10 +1,11 @@
 import { ElementType, FC } from 'react';
 
+import { XStackProps } from '@tamagui/stacks';
+
 import { XStack } from './base';
 import { ArrowRightIcon } from './icons';
 import { Text } from './Text';
 import { colors } from '../lib/constants/colors';
-import { XStackProps } from '@tamagui/stacks';
 
 type Props = {
   onPress: () => void;

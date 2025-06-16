@@ -2,13 +2,13 @@ import { FC, useCallback, useRef, useEffect } from 'react';
 import { StyleProp, StyleSheet } from 'react-native';
 
 import { useFocusEffect } from '@react-navigation/native';
+import { ResizeMode } from 'react-native-video';
 import {
   default as VideoPlayerBase,
   VideoPlayerRef,
 } from 'react-native-video-player';
 
 import { Center } from '../Center';
-import { ResizeMode } from 'react-native-video';
 
 const styles = StyleSheet.create({
   base: { width: '100%', height: '100%', backgroundColor: '#000' },

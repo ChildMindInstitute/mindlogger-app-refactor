@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from 'react';
 
 import { useAppState } from '@react-native-community/hooks';
 import { StackStyle } from '@tamagui/core';
+import { XStackProps } from '@tamagui/stacks';
 
 import { colors } from '@app/shared/lib/constants/colors';
 import { Box, XStack } from '@app/shared/ui/base';
@@ -9,7 +10,6 @@ import { CloseIcon } from '@app/shared/ui/icons';
 import { Text } from '@app/shared/ui/Text';
 
 import { BANNER_ICONS, BANNER_BG_COLORS } from '../lib/constants';
-import { XStackProps } from '@tamagui/stacks';
 
 export type BannerProps = {
   /**

@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { AccessibilityProps } from 'react-native';
 
+import { YStackProps } from '@tamagui/stacks';
+
 import { colors } from '@app/shared/lib/constants/colors';
 import { invertColor } from '@app/shared/lib/utils/survey/survey';
 
@@ -9,7 +11,6 @@ import { Box, RadioGroup } from '../../base';
 import { QuestionIcon } from '../../icons/QuestionIcon';
 import { OptionCard } from '../../OptionCard';
 import { Tooltip } from '../../Tooltip';
-import { YStackProps } from '@tamagui/stacks';
 
 type RadioLabelProps = {
   option: RadioOption;

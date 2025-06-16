@@ -9,12 +9,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { IS_IOS } from '@app/shared/lib/constants';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { BANNERS_DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
 
 import { Banner, BannerProps } from './Banner';
 import { useBanners } from '../lib/hooks/useBanners';
 import { bannersBgSelector, bannersSelector } from '../model/selectors';
 import { BannerType } from '../model/slice';
-import { BANNERS_DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
 
 const handleClose = (
   removeBanner: (key: BannerType) => void,

@@ -2,10 +2,10 @@ import { render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
+import { TIME_PICKER_FORMAT_PLACEHOLDER } from '@shared/lib/constants/dateTime.ts';
 import * as dateTimeUtils from '@shared/lib/utils/dateTime';
 
 import { TimePickerItem } from '../TimePickerItem';
-import { TIME_PICKER_FORMAT_PLACEHOLDER } from '@shared/lib/constants/dateTime.ts';
 
 describe('Test TimePickerItem', () => {
   afterEach(() => {

@@ -1,10 +1,10 @@
 import { StyleSheet, TextInput } from 'react-native';
 
 import { GetProps, styled } from '@tamagui/core';
+import { useFocusable } from '@tamagui/focusable';
 
 import { IS_IOS } from '../lib/constants';
 import { colors } from '../lib/constants/colors';
-import { useFocusable } from '@tamagui/focusable';
 
 export const InputFrame = styled(
   TextInput,

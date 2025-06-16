@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { ImageStyle } from 'react-native';
+import { Image } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
 import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
 import { Box, YStack } from '@app/shared/ui/base';
-import { Image } from 'react-native';
 import { ItemMarkdown } from '@app/shared/ui/survey/ItemMarkdown';
 import { requestHealthRecordDataIconPartnership } from '@assets/images';
 

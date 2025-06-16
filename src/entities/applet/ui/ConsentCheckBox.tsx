@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
 
+import { XStackProps } from '@tamagui/stacks';
+
 import { XStack } from '@app/shared/ui/base';
 import { CheckBox } from '@app/shared/ui/CheckBox';
-import { XStackProps } from '@tamagui/stacks';
 
 type Props = {
   value: boolean;

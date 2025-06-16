@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Image } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 import { FileSystem } from 'react-native-file-access';
@@ -24,7 +25,6 @@ import { ImageConverter } from '@app/shared/lib/utils/imageConverter';
 
 import { MediaInput } from './MediaInput';
 import { MediaValue } from './types';
-import { Image } from 'react-native';
 import { PhotoIcon } from '../../icons';
 
 type Props = {

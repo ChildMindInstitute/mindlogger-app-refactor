@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 
+import { YStackProps } from '@tamagui/stacks';
+
 import { IS_ANDROID } from '@app/shared/lib/constants';
 import { colors } from '@app/shared/lib/constants/colors';
 import { invertColor } from '@app/shared/lib/utils/survey/survey';
@@ -11,7 +13,6 @@ import { CheckBox } from '../../CheckBox';
 import { QuestionIcon } from '../../icons/QuestionIcon';
 import { OptionCard } from '../../OptionCard';
 import { Tooltip } from '../../Tooltip';
-import { YStackProps } from '@tamagui/stacks';
 
 type CheckBoxProps = {
   setPalette: boolean;

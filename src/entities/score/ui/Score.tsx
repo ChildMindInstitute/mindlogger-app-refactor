@@ -1,7 +1,8 @@
+import { Image } from 'react-native';
+
 import { colors } from '@app/shared/lib/constants/colors';
 import { getFloatPartLength } from '@app/shared/lib/utils/common';
 import { Box, XStack } from '@app/shared/ui/base';
-import { Image } from 'react-native';
 import { Text } from '@app/shared/ui/Text';
 import { roundAlertIcon } from '@assets/images';
 

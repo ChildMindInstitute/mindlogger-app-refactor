@@ -1,10 +1,11 @@
 import { render } from '@testing-library/react-native';
+import { ReactTestInstance } from 'react-test-renderer';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+
 import { NumberSelector } from '../NumberSelector';
 
 // This type may be deprecated, but it is still used by react native testing library
-import { ReactTestInstance } from 'react-test-renderer';
 
 jest.mock(
   'react-native-select-dropdown',

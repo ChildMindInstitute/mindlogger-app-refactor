@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { StyleSheet } from 'react-native';
+import { Image } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
 import { colors } from '@app/shared/lib/constants/colors';
 import { Box } from '@app/shared/ui/base';
-import { Image } from 'react-native';
 import { MarkdownView } from '@app/shared/ui/MarkdownView';
 import { ScrollView } from '@app/shared/ui/ScrollView';
 import { Text } from '@app/shared/ui/Text';

@@ -3,12 +3,12 @@ import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
+import { YStackProps } from '@tamagui/stacks';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 import { Box, XStack, YStack } from './base';
 import { Text } from './Text';
 import { colors } from '../lib/constants/colors';
-import { YStackProps } from '@tamagui/stacks';
 
 type Props = {
   imageUrl: string | null;
@@ -82,7 +82,7 @@ export function OptionCard({
         <Text
           aria-label="radio-option-text"
           fontSize={18}
-          // These values are not supported for the fontFamily prop, but I'm not 
+          // These values are not supported for the fontFamily prop, but I'm not
           // sure what they should be
           // fontFamily="Atkinson Hyperlegible Regular"
           color={textColor}

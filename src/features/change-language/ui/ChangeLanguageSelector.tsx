@@ -1,12 +1,12 @@
 import { FC } from 'react';
 
+import { YStackProps } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
 import { Language } from '@app/shared/lib/types/language';
 import { changeLanguage } from '@app/shared/lib/utils/common';
 import { YStack } from '@app/shared/ui/base';
 import { RowButton } from '@app/shared/ui/RowButton';
-import { YStackProps } from '@tamagui/stacks';
 
 type Props = {
   onLanguageChanged: () => void;

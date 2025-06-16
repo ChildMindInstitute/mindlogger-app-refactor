@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
+import { Image } from 'react-native';
 
 import { XStack } from '@app/shared/ui/base';
-import { Image } from 'react-native';
 import { Text } from '@app/shared/ui/Text';
 import { bellAlertIcon } from '@assets/images';
 

@@ -1,8 +1,10 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react-native';
 import { Text } from 'react-native';
 
+import { fireEvent, render } from '@testing-library/react-native';
+
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+
 import { ParagraphText } from '../ParagraphText';
 
 jest.mock('../../CharacterCounter', () => ({
@@ -105,7 +107,9 @@ describe('ParagraphText Component', () => {
     );
 
     const characterCounter = getByTestId('character-counter');
-    expect(characterCounter.props['data-numberOfCharacters']).toBe(mockValue.length);
+    expect(characterCounter.props['data-numberOfCharacters']).toBe(
+      mockValue.length,
+    );
     expect(characterCounter.props['data-limit']).toBe(maxLength);
   });
 });

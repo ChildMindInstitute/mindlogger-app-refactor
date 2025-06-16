@@ -1,5 +1,7 @@
 import { FC } from 'react';
 import { Image, StyleSheet } from 'react-native';
+
+import { XStackProps } from '@tamagui/stacks';
 import { Paragraph } from '@tamagui/text';
 
 import { OneUpHealthSystemItem } from '@app/shared/api/services/IOneUpHealthService';
@@ -9,7 +11,6 @@ import { Center } from '@app/shared/ui/Center';
 import { ChevronRightIcon } from '@app/shared/ui/icons';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
-import { XStackProps } from '@tamagui/stacks';
 
 type HealthSystemItemProps = OneUpHealthSystemItem & {
   onPress: () => void;

@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 
+import { XStackProps } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
 import { useAppletStreamingDetails } from '@app/entities/applet/lib/hooks/useAppletStreamingDetails';
@@ -11,7 +12,6 @@ import { EditIcon } from '@app/shared/ui/icons';
 import { Text } from '@app/shared/ui/Text';
 
 import { ConnectionModal } from './ConnectionModal';
-import { XStackProps } from '@tamagui/stacks';
 
 type Props = {
   appletId: string;
