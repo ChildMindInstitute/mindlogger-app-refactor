@@ -26,7 +26,7 @@ export function CheckBoxGrid({
         cellWidth={148}
         renderItem={item => (
           <Box
-            accessibilityLabel="checkbox-container"
+            aria-label="checkbox-container"
             key={`checkbox-${item.id}`}
             flex={1}
           >

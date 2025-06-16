@@ -1,9 +1,10 @@
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
-
-import { Dropdown } from '../../Dropdown';
 import { NumberSelector } from '../NumberSelector';
+
+// This type may be deprecated, but it is still used by react native testing library
+import { ReactTestInstance } from 'react-test-renderer';
 
 jest.mock(
   'react-native-select-dropdown',
@@ -21,7 +22,7 @@ jest.mock('react-i18next', () => ({
 
 describe('Test NumberSelector', () => {
   it('Should render 4 dropdown items', () => {
-    const selector = renderer.create(
+    const selector = render(
       <TamaguiProvider>
         <NumberSelector
           config={{ min: 1, max: 4 }}
@@ -31,8 +32,11 @@ describe('Test NumberSelector', () => {
       </TamaguiProvider>,
     );
 
-    const dropdown = selector.root.findByType(Dropdown);
-    const dropdownItemsLength = dropdown.props.items.length;
+    const children = selector.root.children;
+    expect(children.length).toBe(1);
+
+    const dropdown = children[0] as ReactTestInstance;
+    const dropdownItemsLength = dropdown.props.data.length;
 
     expect(dropdownItemsLength).toBe(4);
   });

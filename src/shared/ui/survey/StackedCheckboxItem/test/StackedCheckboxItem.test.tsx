@@ -1,8 +1,7 @@
 import { CachedImage } from '@georstat/react-native-image-cache';
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
-import { CheckBox } from '@app/shared/ui/CheckBox';
 
 import { selectedValues, stackedCheckboxConfig } from './mockData';
 import { StackedCheckboxItem } from '../StackedCheckboxItem';
@@ -11,7 +10,7 @@ describe('StackedCheckboxItem', () => {
   it('should render correct checkbox count', () => {
     const changeHandler = jest.fn();
     const textReplacer = jest.fn();
-    const stackedCheckbox = renderer.create(
+    const { getAllByRole } = render(
       <TamaguiProvider>
         <StackedCheckboxItem
           values={null}
@@ -23,7 +22,7 @@ describe('StackedCheckboxItem', () => {
       </TamaguiProvider>,
     );
 
-    const checkboxes = stackedCheckbox.root.findAllByType(CheckBox);
+    const checkboxes = getAllByRole('checkbox');
 
     expect(checkboxes.length).toBe(9);
   });
@@ -31,7 +30,7 @@ describe('StackedCheckboxItem', () => {
   it('should render correct selected checkboxes', () => {
     const changeHandler = jest.fn();
     const textReplacer = jest.fn();
-    const stackedCheckbox = renderer.create(
+    const { getAllByRole } = render(
       <TamaguiProvider>
         <StackedCheckboxItem
           values={selectedValues}
@@ -43,10 +42,10 @@ describe('StackedCheckboxItem', () => {
       </TamaguiProvider>,
     );
 
-    const checkboxes = stackedCheckbox.root.findAllByType(CheckBox);
+    const checkboxes = getAllByRole('checkbox');
 
     const selectedCheckboxes = checkboxes.filter(
-      checkbox => checkbox.props.value,
+      checkbox => checkbox.props.accessibilityState.checked,
     );
 
     expect(selectedCheckboxes.length).toBe(2);
@@ -55,7 +54,7 @@ describe('StackedCheckboxItem', () => {
   it('should render option images', () => {
     const changeHandler = jest.fn();
     const textReplacer = jest.fn();
-    const stackedCheckbox = renderer.create(
+    const stackedCheckbox = render(
       <TamaguiProvider>
         <StackedCheckboxItem
           values={selectedValues}

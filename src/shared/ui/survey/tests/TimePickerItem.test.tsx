@@ -1,10 +1,11 @@
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import * as dateTimeUtils from '@shared/lib/utils/dateTime';
 
 import { TimePickerItem } from '../TimePickerItem';
+import { TIME_PICKER_FORMAT_PLACEHOLDER } from '@shared/lib/constants/dateTime.ts';
 
 describe('Test TimePickerItem', () => {
   afterEach(() => {
@@ -16,19 +17,15 @@ describe('Test TimePickerItem', () => {
 
     jest.spyOn(dateTimeUtils, 'getNow').mockReturnValue(mockNowDate);
 
-    const timePicker = renderer.create(
+    const { queryByText } = render(
       <TamaguiProvider>
         <TimePickerItem onChange={jest.fn()} />
       </TamaguiProvider>,
     );
 
-    const pickerButton = timePicker.root.findByProps({
-      accessibilityLabel: 'time-picker',
-    });
+    const pickerValue = queryByText(TIME_PICKER_FORMAT_PLACEHOLDER);
 
-    const pickerValue = pickerButton.props.value;
-
-    expect(pickerValue).toBe(null);
+    expect(pickerValue).not.toBeNull();
   });
 
   it('Should be rendered with the specified value', () => {
@@ -41,23 +38,13 @@ describe('Test TimePickerItem', () => {
       hours: 2,
     };
 
-    const timePicker = renderer.create(
+    const { queryByText } = render(
       <TamaguiProvider>
         <TimePickerItem value={mockValue} onChange={jest.fn()} />
       </TamaguiProvider>,
     );
 
-    const pickerButton = timePicker.root.findByProps({
-      accessibilityLabel: 'time-picker',
-    });
-
-    const pickerValue: Date = pickerButton.props.value;
-
-    const expected = new Date(mockNowDate);
-    expected.setHours(2);
-    expected.setMinutes(3);
-    expected.setSeconds(0);
-
-    expect(pickerValue).toEqual(expected);
+    const pickerValue = queryByText('02:03 AM');
+    expect(pickerValue).not.toBeNull();
   });
 });

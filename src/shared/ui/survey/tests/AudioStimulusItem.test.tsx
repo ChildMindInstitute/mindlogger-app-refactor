@@ -1,4 +1,4 @@
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import * as useAudioPlayerHooks from '@app/shared/lib/hooks/useAudioPlayer';
@@ -8,7 +8,7 @@ import { AudioStimulusItem } from '../AudioStimulusItem';
 
 describe('Test AudioStimulusItem', () => {
   it('Should render play button', () => {
-    const audioPlayer = renderer.create(
+    const audioPlayer = render(
       <TamaguiProvider>
         <AudioStimulusItem
           config={{
@@ -39,7 +39,7 @@ describe('Test AudioStimulusItem', () => {
       isLoading: false,
     });
 
-    const audioPlayer = renderer.create(
+    const audioPlayer = render(
       <TamaguiProvider>
         <AudioStimulusItem
           config={{
@@ -70,7 +70,7 @@ describe('Test AudioStimulusItem', () => {
       isLoading: true,
     });
 
-    const audioPlayer = renderer.create(
+    const audioPlayer = render(
       <TamaguiProvider>
         <AudioStimulusItem
           config={{
@@ -105,7 +105,7 @@ describe('Test AudioStimulusItem', () => {
       isLoading: false,
     });
 
-    const audioPlayer = renderer.create(
+    const audioPlayer = render(
       <TamaguiProvider>
         <AudioStimulusItem
           config={{

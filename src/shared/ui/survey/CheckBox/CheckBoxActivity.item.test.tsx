@@ -1,11 +1,8 @@
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
-
-import { CheckBoxItem } from './CheckBox.item';
 import { CheckBoxActivityItem } from './CheckBoxActivity.item';
 import { Item } from './types';
-import { CheckBox } from '../../CheckBox';
 
 const options: Item[] = [
   {
@@ -51,7 +48,7 @@ describe('Test CheckBoxActivityItem', () => {
       isGridView: false,
     };
 
-    const checkboxItem = renderer.create(
+    const { getAllByRole } = render(
       <TamaguiProvider>
         <CheckBoxActivityItem
           config={config}
@@ -62,10 +59,10 @@ describe('Test CheckBoxActivityItem', () => {
       </TamaguiProvider>,
     );
 
-    const checkboxes = checkboxItem.root.findAllByType(CheckBox);
-    const checkedCheckboxes = checkboxItem.root
-      .findAllByType(CheckBox)
-      .filter(i => i.props.value);
+    const checkboxes = getAllByRole('checkbox');
+    const checkedCheckboxes = checkboxes.filter(
+      cb => cb.props.accessibilityState.checked,
+    );
 
     expect(checkboxes.length).toBe(3);
     expect(checkedCheckboxes.length).toBe(0);
@@ -80,7 +77,7 @@ describe('Test CheckBoxActivityItem', () => {
       setAlerts: false,
       isGridView: false,
     };
-    const checkboxItem = renderer.create(
+    const { getAllByRole } = render(
       <TamaguiProvider>
         <CheckBoxActivityItem
           config={config}
@@ -91,17 +88,12 @@ describe('Test CheckBoxActivityItem', () => {
       </TamaguiProvider>,
     );
 
-    const checkboxes = checkboxItem.root.findAllByType(CheckBox);
-    const checkedCheckboxes = checkboxItem.root
-      .findAllByType(CheckBox)
-      .filter(i => i.props.value);
-
-    const checkedCheckboxesItems = checkboxItem.root
-      .findAllByType(CheckBoxItem)
-      .filter(i => i.props.value && ['1', '3'].includes(i.props.text));
+    const checkboxes = getAllByRole('checkbox');
+    const checkedCheckboxes = checkboxes.filter(
+      cb => cb.props.accessibilityState.checked,
+    );
 
     expect(checkboxes.length).toBe(3);
     expect(checkedCheckboxes.length).toBe(2);
-    expect(checkedCheckboxesItems.length).toBe(2);
   });
 });

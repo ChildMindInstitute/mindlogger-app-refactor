@@ -1,6 +1,6 @@
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { RadioGroup } from '@tamagui/radio-group';
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 
@@ -10,7 +10,7 @@ import { StackedRadios } from '../StackedRadiosItem';
 describe('StackedRadiosItem', () => {
   it('should render correct radios count', () => {
     const changeHandler = jest.fn();
-    const stackedRadios = renderer.create(
+    const stackedRadios = render(
       <TamaguiProvider>
         <StackedRadios
           config={radiosConfig}
@@ -29,7 +29,7 @@ describe('StackedRadiosItem', () => {
 
   it('should render correct radios values', () => {
     const changeHandler = jest.fn();
-    const stackedRadios = renderer.create(
+    const stackedRadios = render(
       <TamaguiProvider>
         <StackedRadios
           config={radiosConfig}
@@ -58,7 +58,7 @@ describe('StackedRadiosItem', () => {
 
   it('should render row images', () => {
     const changeHandler = jest.fn();
-    const stackedRadios = renderer.create(
+    const stackedRadios = render(
       <TamaguiProvider>
         <StackedRadios
           config={radiosConfig}

@@ -40,7 +40,7 @@ export const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
         return (
           <YStack key={`slider-${currentRowId}`}>
             <Text
-              accessibilityLabel={`stacked-slider-label-${label}`}
+              aria-label={`stacked-slider-label-${label}`}
               fontSize={12}
               my="$3"
             >
