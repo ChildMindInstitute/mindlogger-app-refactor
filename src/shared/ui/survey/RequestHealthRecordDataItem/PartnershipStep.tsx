@@ -44,4 +44,6 @@ export const PartnershipStep: FC<PartnershipStepProps> = ({
 const imageStyle: ImageStyle = {
   maxWidth: '100%',
   resizeMode: 'contain',
+  width: 343,
+  height: 75,
 };

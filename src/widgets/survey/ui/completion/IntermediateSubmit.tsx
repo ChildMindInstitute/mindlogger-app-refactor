@@ -68,6 +68,8 @@ export const IntermediateSubmit: FC<Props> = ({
               style={{
                 opacity: 0.6,
                 right: 4,
+                width: 18,
+                height: 18,
               }}
             />
 

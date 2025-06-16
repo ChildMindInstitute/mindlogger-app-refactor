@@ -30,6 +30,8 @@ export const ActivityFlowStep: FC<Props> = props => {
           marginRight: 3,
           marginTop: IS_ANDROID ? 2 : 0,
           opacity: 0.6,
+          width: 18,
+          height: 18,
         }}
       />
 

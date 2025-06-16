@@ -21,6 +21,8 @@ export function Score({ label, value, highlighted }: Props) {
           height={16}
           style={{
             marginRight: 7,
+            width: 17,
+            height: 16,
           }}
         />
       )}

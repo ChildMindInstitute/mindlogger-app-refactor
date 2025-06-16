@@ -17,6 +17,8 @@ export function Alert({ children }: Props) {
         style={{
           marginTop: 2,
           marginRight: 10,
+          width: 13,
+          height: 16,
         }}
       />
 
