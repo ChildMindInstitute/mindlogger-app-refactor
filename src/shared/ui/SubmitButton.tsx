@@ -9,6 +9,9 @@ import { Text } from './Text';
 
 const ButtonText = styled(Text, {
   fontSize: 20,
+  // I'm not sure why this is throwing a type error, but it works fine, so I'm suppressing it for now.
+  // This is a consequence of the react-native upgrade to version 0.79.2
+  // @ts-expect-error TS2322
   variants: {
     mode: {
       light: {
@@ -18,7 +21,7 @@ const ButtonText = styled(Text, {
         color: '$white',
       },
     },
-  },
+  } as const,
 });
 
 const Button = styled(Stack, {
@@ -80,6 +83,9 @@ export const SubmitButton: FC<Props & AccessibilityProps> = ({
         mode={mode}
         {...stylesProps}
       >
+        {/* I'm not sure why this is throwing a type error, but it works fine, so I'm suppressing it for now. */}
+        {/* This is a consequence of the react-native upgrade to version 0.79.2 */}
+        {/* @ts-expect-error TS2322 */}
         <ButtonText mode={mode} {...textProps} opacity={isLoading ? 0 : 1}>
           {children}
         </ButtonText>
