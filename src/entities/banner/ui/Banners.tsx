@@ -45,7 +45,16 @@ export const Banners = () => {
   const sortedBanners = [...banners].sort((a, b) => a.order - b.order);
 
   return (
-    <Animated.View style={[animatedStyles, { paddingTop: top }]}>
+    <Animated.View
+      style={[
+        animatedStyles,
+        {
+          paddingTop: top,
+          marginBottom: -top,
+          zIndex: 1000,
+        },
+      ]}
+    >
       {sortedBanners.map(({ key, bannerProps }) => (
         <Animated.View key={key} entering={FadeInUp} exiting={FadeOutUp}>
           <Banner
