@@ -16,6 +16,8 @@ export const IS_ANDROID_12_OR_HIGHER =
   IS_ANDROID && (Platform.Version as number) >= 31;
 export const IS_ANDROID_13_OR_HIGHER = IS_ANDROID && +getSystemVersion() >= 13;
 
+export const OS_MAJOR_VERSION = parseInt(getSystemVersion(), 10);
+
 export const IS_SMALL_SIZE_SCREEN = VIEWPORT_WIDTH <= 375;
 
 export const IS_TABLET = isTablet();
