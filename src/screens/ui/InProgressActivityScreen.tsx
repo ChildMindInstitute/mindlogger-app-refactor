@@ -1,6 +1,7 @@
 import { FC, useEffect } from 'react';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import { bannerActions } from '@app/entities/banner/model/slice';
@@ -17,7 +18,6 @@ import { FlowSurvey } from '@app/widgets/survey/ui/FlowSurvey';
 import { IS_ANDROID, OS_MAJOR_VERSION } from '@shared/lib/constants';
 
 import { RootStackParamList } from '../config/types';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'InProgressActivity'>;
 
