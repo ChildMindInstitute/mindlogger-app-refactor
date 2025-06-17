@@ -1,3 +1,5 @@
+import { StatusBar } from 'react-native';
+
 import Animated, {
   FadeInUp,
   FadeOutUp,
@@ -7,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { IS_IOS } from '@app/shared/lib/constants';
+import { IS_ANDROID, IS_IOS } from '@app/shared/lib/constants';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { BANNERS_DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
 
@@ -50,11 +52,13 @@ export const Banners = () => {
         animatedStyles,
         {
           paddingTop: top,
-          marginBottom: -top,
+          marginBottom: IS_ANDROID ? -top : 0,
           zIndex: 1000,
         },
       ]}
     >
+      <StatusBar translucent />
+
       {sortedBanners.map(({ key, bannerProps }) => (
         <Animated.View key={key} entering={FadeInUp} exiting={FadeOutUp}>
           <Banner
