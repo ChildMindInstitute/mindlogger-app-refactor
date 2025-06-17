@@ -262,7 +262,6 @@ export const RootNavigator = () => {
               headerStyle: {
                 backgroundColor: colors.lighterGrey2,
               },
-
               headerTitleAlign: 'center',
 
               headerTitle: ({ children }) => (
@@ -326,7 +325,12 @@ export const RootNavigator = () => {
               headerBackVisible: false,
               headerTitle: IS_ANDROID
                 ? () => (
-                    <Box flex={1} mr={20}>
+                    <Box
+                      flex={1}
+                      mr={20}
+                      justifyContent="center"
+                      alignItems="center"
+                    >
                       <Text
                         color={colors.white}
                         fontSize={18}
