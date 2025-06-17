@@ -13,3 +13,6 @@ echo "[Unlink react-native-unity] Commenting out vendored_frameworks from podspe
 sed '/^[[:space:]]*[^#][[:space:]]*s\.vendored_frameworks/ s/^\([[:space:]]*\)/\1#/' \
   $1/react-native-unity.podspec > $1/react-native-unity.podspec.tmp \
   && mv $1/react-native-unity.podspec.tmp $1/react-native-unity.podspec
+
+echo "[Unlink react-native-unity] Disabling android build support ..."
+[ -d $1/android ] && mv $1/android $1/android.disabled

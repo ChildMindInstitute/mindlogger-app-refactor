@@ -68,6 +68,7 @@ yarn-error.log
 /vendor/bundle/
 
 # Unity
+/unity/builds/android
 /unity/builds/ios/UnityFramework.framework
 
 .env*
