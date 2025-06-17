@@ -1,11 +1,8 @@
 import {
-  BottomTabScreenProps,
   BottomTabNavigationOptions,
+  BottomTabScreenProps,
 } from '@react-navigation/bottom-tabs';
-import {
-  NativeStackNavigationOptions,
-  NativeStackNavigationProp,
-} from '@react-navigation/native-stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
 import { AppletTheme } from '@app/entities/applet/lib/types';
 import { IS_ANDROID, IS_TABLET } from '@app/shared/lib/constants';
@@ -15,12 +12,13 @@ import { AboutIcon } from '@app/shared/ui/icons/About';
 import { DataIcon } from '@app/shared/ui/icons/Data';
 import { SurveyIcon } from '@app/shared/ui/icons/Survey';
 import { Text } from '@app/shared/ui/Text';
+import { BANNERS_DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
 
-import { RootStackParamList, AppletDetailsParamList } from './types';
+import { AppletDetailsParamList, RootStackNavigationProps } from './types';
 import { HeaderTitle } from '../ui/HeaderTitle';
 
 type ScreenOptions = {
-  navigation: NativeStackNavigationProp<RootStackParamList>;
+  navigation: RootStackNavigationProps;
 };
 
 type BottomScreenOptions = BottomTabScreenProps<AppletDetailsParamList>;
@@ -30,17 +28,13 @@ export const getScreenOptions = ({
 }: ScreenOptions): NativeStackNavigationOptions => {
   return {
     headerStyle: {
-      backgroundColor: colors.primary,
+      backgroundColor: BANNERS_DEFAULT_BG,
     },
     headerShadowVisible: false,
     headerTitle: HeaderTitle,
     headerBackVisible: false,
     headerLeft: () => (
-      <Text
-        accessibilityLabel="close-button"
-        onPress={navigation.goBack}
-        mr={24}
-      >
+      <Text aria-label="close-button" onPress={navigation.goBack} mr={24}>
         <CloseIcon color={colors.white} size={22} />
       </Text>
     ),

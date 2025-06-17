@@ -221,7 +221,7 @@ export const RootNavigator = () => {
               },
               headerLeft: () => (
                 <Text
-                  accessibilityLabel="close-button"
+                  aria-label="close-button"
                   onPress={navigation.goBack}
                   mr={24}
                 >
@@ -239,7 +239,7 @@ export const RootNavigator = () => {
               headerBackTitle: 'Back',
               title: '',
               headerLeft: () => (
-                <BackButton accessibilityLabel="back_button">
+                <BackButton aria-label="back_button">
                   <XStack ai="center">
                     <ChevronLeft color="white" size={16} />
 
@@ -262,10 +262,11 @@ export const RootNavigator = () => {
               headerStyle: {
                 backgroundColor: colors.lighterGrey2,
               },
+              headerTitleAlign: 'center',
 
               headerTitle: ({ children }) => (
                 <HeaderTitle
-                  accessibilityLabel="welcome_name-text"
+                  aria-label="welcome_name-text"
                   color={colors.tertiary}
                 >
                   {children}
@@ -324,7 +325,12 @@ export const RootNavigator = () => {
               headerBackVisible: false,
               headerTitle: IS_ANDROID
                 ? () => (
-                    <Box flex={1} mr={20}>
+                    <Box
+                      flex={1}
+                      mr={20}
+                      justifyContent="center"
+                      alignItems="center"
+                    >
                       <Text
                         color={colors.white}
                         fontSize={18}
@@ -338,8 +344,8 @@ export const RootNavigator = () => {
                 : HeaderTitle,
               headerLeft: () => (
                 <BackButton
-                  accessibilityLabel="home-button"
-                  mr={IS_ANDROID && 15}
+                  aria-label="home-button"
+                  {...(IS_ANDROID && { mr: 15 })}
                   fallbackRoute="Applets"
                 >
                   <HomeIcon color={colors.white} size={32} />

@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import {
@@ -68,7 +68,7 @@ describe('RequestHealthRecordDataItem', () => {
   });
 
   it('renders correctly with no selection initially', () => {
-    const component = renderer.create(
+    const component = render(
       <TamaguiProvider>
         <RequestHealthRecordDataItem
           item={mockItem}
@@ -93,7 +93,7 @@ describe('RequestHealthRecordDataItem', () => {
   });
 
   it('renders with initial value selected', () => {
-    const component = renderer.create(
+    const component = render(
       <TamaguiProvider>
         <RequestHealthRecordDataItem
           item={mockItem}

@@ -28,7 +28,7 @@ export function Dropdown({
   };
 
   return (
-    <Box accessibilityLabel="select-dropdown">
+    <Box aria-label="select-dropdown">
       <SelectDropdown
         data={items}
         dropdownStyle={styles.dropdown}

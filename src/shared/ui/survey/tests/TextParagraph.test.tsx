@@ -1,12 +1,24 @@
 import React from 'react';
+import { Text } from 'react-native';
 
-import renderer, { act } from 'react-test-renderer';
+import { fireEvent, render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 
-import { CharacterCounter } from '../../CharacterCounter';
-import { LongTextInput } from '../../LongTextInput';
 import { ParagraphText } from '../ParagraphText';
+
+jest.mock('../../CharacterCounter', () => ({
+  CharacterCounter: ({ focused, numberOfCharacters, limit }: any) => (
+    <Text
+      testID="character-counter"
+      data-focused={focused}
+      data-numberOfCharacters={numberOfCharacters}
+      data-limit={limit}
+    >
+      Mocked CharacterCounter
+    </Text>
+  ),
+}));
 
 jest.mock('react-i18next', () => ({
   useTranslation: jest.fn().mockImplementation(() => ({
@@ -22,45 +34,27 @@ describe('ParagraphText Component', () => {
   it('Should render correctly with expected props', () => {
     const mockValue = '1234';
 
-    const tree = renderer
-      .create(
-        <TamaguiProvider>
-          <ParagraphText
-            onChange={jest.fn()}
-            value={mockValue}
-            config={{
-              maxLength: 300,
-            }}
-          />
-        </TamaguiProvider>,
-      )
-      .toJSON();
-
-    if (!tree || Array.isArray(tree) || !tree.children) {
-      throw new Error(
-        'Tree is not rendered correctly or is an array without children',
-      );
-    }
-
-    const [longTextInput] = tree.children;
-
-    if (
-      !longTextInput ||
-      typeof longTextInput !== 'object' ||
-      !('props' in longTextInput)
-    ) {
-      throw new Error('LongTextInput is not rendered correctly');
-    }
-
-    expect(longTextInput.props.placeholder).toBe(
-      'text_entry:paragraph_placeholder',
+    const { getByPlaceholderText } = render(
+      <TamaguiProvider>
+        <ParagraphText
+          onChange={jest.fn()}
+          value={mockValue}
+          config={{
+            maxLength: 300,
+          }}
+        />
+      </TamaguiProvider>,
     );
-    expect(longTextInput.props.value).toBe(mockValue);
+
+    const input = getByPlaceholderText('text_entry:paragraph_placeholder');
+
+    expect(input.props.value).toBe(mockValue);
   });
 
   it('Should call onChange when text is modified', () => {
     const mockOnChange = jest.fn();
-    const tree = renderer.create(
+
+    const { getByPlaceholderText } = render(
       <TamaguiProvider>
         <ParagraphText
           onChange={mockOnChange}
@@ -70,18 +64,13 @@ describe('ParagraphText Component', () => {
       </TamaguiProvider>,
     );
 
-    const instance = tree.root;
-    const longTextInput = instance.findByType(LongTextInput);
-
-    act(() => {
-      longTextInput.props.onChangeText('new text');
-    });
-
+    const input = getByPlaceholderText('text_entry:paragraph_placeholder');
+    fireEvent.changeText(input, 'new text');
     expect(mockOnChange).toHaveBeenCalledWith('new text');
   });
 
   it('Should update focus state when input is focused or blurred', () => {
-    const tree = renderer.create(
+    const { getByPlaceholderText, getByTestId } = render(
       <TamaguiProvider>
         <ParagraphText
           onChange={jest.fn()}
@@ -91,30 +80,23 @@ describe('ParagraphText Component', () => {
       </TamaguiProvider>,
     );
 
-    const instance = tree.root;
-    const longTextInput = instance.findByType(LongTextInput);
-    const characterCounter = instance.findByType(CharacterCounter);
+    const input = getByPlaceholderText('text_entry:paragraph_placeholder');
+    const characterCounter = getByTestId('character-counter');
 
-    expect(characterCounter.props.focused).toBe(false);
+    expect(characterCounter.props['data-focused']).toBe(false);
 
-    act(() => {
-      longTextInput.props.onFocus();
-    });
+    fireEvent(input, 'focus');
+    expect(characterCounter.props['data-focused']).toBe(true);
 
-    expect(characterCounter.props.focused).toBe(true);
-
-    act(() => {
-      longTextInput.props.onBlur();
-    });
-
-    expect(characterCounter.props.focused).toBe(false);
+    fireEvent(input, 'blur');
+    expect(characterCounter.props['data-focused']).toBe(false);
   });
 
   it('Should pass correct number of characters and maxLength to CharacterCounter', () => {
     const mockValue = '123456';
     const maxLength = 100;
 
-    const tree = renderer.create(
+    const { getByTestId } = render(
       <TamaguiProvider>
         <ParagraphText
           onChange={jest.fn()}
@@ -124,9 +106,10 @@ describe('ParagraphText Component', () => {
       </TamaguiProvider>,
     );
 
-    const instance = tree.root;
-    const characterCounter = instance.findByType(CharacterCounter);
-    expect(characterCounter.props.numberOfCharacters).toBe(mockValue.length);
-    expect(characterCounter.props.limit).toBe(maxLength);
+    const characterCounter = getByTestId('character-counter');
+    expect(characterCounter.props['data-numberOfCharacters']).toBe(
+      mockValue.length,
+    );
+    expect(characterCounter.props['data-limit']).toBe(maxLength);
   });
 });
