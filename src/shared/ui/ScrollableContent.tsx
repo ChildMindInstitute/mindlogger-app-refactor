@@ -47,7 +47,7 @@ export const ScrollableContent: FC<Props> = ({
 
   const [showScrollButton, setShowScrollButton] = useState(false);
 
-  const scrollViewRef = useRef<ScrollView>();
+  const scrollViewRef = useRef<ScrollView>(undefined);
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (endOfContentReachedOnce) {

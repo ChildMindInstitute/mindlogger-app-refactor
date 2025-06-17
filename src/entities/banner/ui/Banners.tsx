@@ -1,3 +1,5 @@
+import { StatusBar } from 'react-native';
+
 import Animated, {
   FadeInUp,
   FadeOutUp,
@@ -7,8 +9,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { IS_IOS } from '@app/shared/lib/constants';
+import { IS_ANDROID, IS_IOS } from '@app/shared/lib/constants';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { BANNERS_DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
 
 import { Banner, BannerProps } from './Banner';
 import { useBanners } from '../lib/hooks/useBanners';
@@ -32,7 +35,7 @@ export const Banners = () => {
 
   // Animate top safe area background color to match native header background color transition
   const animatedStyles = useAnimatedStyle(() => ({
-    backgroundColor: withTiming(bannersBg ?? 'transparent', {
+    backgroundColor: withTiming(bannersBg ?? BANNERS_DEFAULT_BG, {
       // Duration is based on native header transition duration for each OS
       // iOS: 350ms, Android: 300ms
       // Subtract 30ms to account for animation delay
@@ -44,7 +47,18 @@ export const Banners = () => {
   const sortedBanners = [...banners].sort((a, b) => a.order - b.order);
 
   return (
-    <Animated.View style={[animatedStyles, { paddingTop: top }]}>
+    <Animated.View
+      style={[
+        animatedStyles,
+        {
+          paddingTop: top,
+          marginBottom: IS_ANDROID ? -top : 0,
+          zIndex: 1000,
+        },
+      ]}
+    >
+      <StatusBar translucent />
+
       {sortedBanners.map(({ key, bannerProps }) => (
         <Animated.View key={key} entering={FadeInUp} exiting={FadeOutUp}>
           <Banner

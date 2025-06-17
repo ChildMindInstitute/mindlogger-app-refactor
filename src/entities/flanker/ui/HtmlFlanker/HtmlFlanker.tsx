@@ -28,7 +28,7 @@ type Props = {
 } & StreamEventLoggable<FlankerLiveEvent>;
 
 export const HtmlFlanker: FC<Props> = props => {
-  const webView = useRef<unknown>();
+  const webView = useRef<unknown>(undefined);
 
   const configuration = useMemo(() => {
     return getDefaultConfigurationBuilder().buildForWebView(
@@ -59,7 +59,9 @@ export const HtmlFlanker: FC<Props> = props => {
   return (
     <Box flex={1}>
       <WebView
-        ref={(ref: unknown) => (webView.current = ref)}
+        ref={ref => {
+          webView.current = ref;
+        }}
         style={styles.webView}
         source={source}
         originWhitelist={['*']}

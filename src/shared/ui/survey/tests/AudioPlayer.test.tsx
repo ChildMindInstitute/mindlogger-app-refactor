@@ -1,4 +1,4 @@
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import * as useAudioPlayerHooks from '@app/shared/lib/hooks/useAudioPlayer';
@@ -11,7 +11,7 @@ describe('Test AudioPlayer', () => {
   });
 
   it('Should render play button', () => {
-    const audioPlayer = renderer.create(
+    const audioPlayer = render(
       <TamaguiProvider>
         <AudioPlayer uri="http://dummyUrl.com/audio" />
       </TamaguiProvider>,
@@ -35,7 +35,7 @@ describe('Test AudioPlayer', () => {
       isLoading: false,
     });
 
-    const audioPlayer = renderer.create(
+    const audioPlayer = render(
       <TamaguiProvider>
         <AudioPlayer uri="http://dummyUrl.com/audio" />
       </TamaguiProvider>,

@@ -1,15 +1,16 @@
 import { FC } from 'react';
 
+import { YStackProps } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
 import { Language } from '@app/shared/lib/types/language';
 import { changeLanguage } from '@app/shared/lib/utils/common';
-import { BoxProps, YStack } from '@app/shared/ui/base';
+import { YStack } from '@app/shared/ui/base';
 import { RowButton } from '@app/shared/ui/RowButton';
 
 type Props = {
   onLanguageChanged: () => void;
-} & BoxProps;
+} & YStackProps;
 
 export const ChangeLanguageSelector: FC<Props> = props => {
   const { onLanguageChanged } = props;
@@ -28,11 +29,11 @@ export const ChangeLanguageSelector: FC<Props> = props => {
   };
 
   return (
-    <YStack accessibilityLabel="change-language-list" {...props}>
+    <YStack aria-label="change-language-list" {...props}>
       {languagesAvailable.map(locale => {
         return (
           <RowButton
-            accessibilityLabel={`change-language-button-${locale}`}
+            aria-label={`change-language-button-${locale}`}
             onPress={() => onLanguagePress(locale)}
             key={`${locale}`}
             bg={resolvedLanguage === locale ? '$aqua' : 'transparent'}

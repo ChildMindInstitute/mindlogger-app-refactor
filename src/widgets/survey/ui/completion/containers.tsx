@@ -1,15 +1,14 @@
 import { FC, PropsWithChildren } from 'react';
 
-import { YStack } from '@tamagui/stacks';
+import { YStack, YStackProps } from '@tamagui/stacks';
 
 import { bannerActions } from '@app/entities/banner/model/slice';
 import { colors } from '@app/shared/lib/constants/colors';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
-import { BoxProps } from '@app/shared/ui/base';
 import { ImageBackground } from '@app/shared/ui/ImageBackground';
 
-type FlexContainerProps = PropsWithChildren<BoxProps>;
+type FlexContainerProps = PropsWithChildren<YStackProps>;
 
 export type SubComponentProps = {
   onPressDone?: () => void;

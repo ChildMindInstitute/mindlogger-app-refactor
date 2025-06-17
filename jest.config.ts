@@ -22,7 +22,7 @@ const jestConfig: JestConfigWithTsJest = {
   setupFiles: [
     '<rootDir>/jest.vendor-mocks.js',
     '<rootDir>/node_modules/react-native-gesture-handler/jestSetup.js',
-    '<rootDir>/node_modules/react-native-reanimated/src/reanimated2/jestUtils.ts',
+    '<rootDir>/node_modules/react-native-reanimated/src/jestUtils.ts',
   ],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleDirectories: ['node_modules', '<rootDir>'],
