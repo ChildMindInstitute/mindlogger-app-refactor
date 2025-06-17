@@ -1,6 +1,7 @@
 import { FC, useEffect } from 'react';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import { bannerActions } from '@app/entities/banner/model/slice';
@@ -14,7 +15,7 @@ import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box } from '@app/shared/ui/base';
 import { useBaseInfo } from '@app/widgets/activity-group/model/hooks/useBaseInfo';
 import { FlowSurvey } from '@app/widgets/survey/ui/FlowSurvey';
-import { IS_ANDROID } from '@shared/lib/constants';
+import { IS_ANDROID, OS_MAJOR_VERSION } from '@shared/lib/constants';
 
 import { RootStackParamList } from '../config/types';
 
@@ -56,11 +57,17 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
     dispatch(bannerActions.setBannersBg(colors.white));
   });
 
+  const { top } = useSafeAreaInsets();
+
   return (
     // There's weird white space on Android because of the safe area insets
     // We can remove this top margin when this issue is resolved:
     // https://github.com/react-navigation/react-navigation/issues/12608
-    <Box flex={1} backgroundColor="$white" marginTop={IS_ANDROID ? 52 : 0}>
+    <Box
+      flex={1}
+      backgroundColor="$white"
+      marginTop={IS_ANDROID && OS_MAJOR_VERSION >= 15 ? top : 0}
+    >
       {isLoading || !isAppSupportedEntity ? (
         <ActivityIndicator />
       ) : (
