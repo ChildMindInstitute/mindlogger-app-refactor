@@ -5,9 +5,11 @@ import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LoginForm } from '@app/features/login/ui/LoginForm';
 import { openUrl } from '@app/screens/lib/utils/helpers';
+import { IS_SMALL_HEIGHT_SCREEN } from '@app/shared/lib/constants';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Link } from '@app/shared/ui/Link';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
@@ -16,6 +18,7 @@ import { curiousLogoBlack } from '@assets/images';
 export const LoginScreen: FC = () => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
+  const { bottom } = useSafeAreaInsets();
 
   const navigateToSignUp = () => {
     navigate('SignUp');
@@ -31,10 +34,14 @@ export const LoginScreen: FC = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Box flex={1} px={isTablet() ? '$12' : 0}>
-        <Box f={1} px={isTablet() ? '$17' : '$8'}>
+      <Box flex={1} px={isTablet() ? '$20' : 0}>
+        <Box f={1} px="$8" gap={48}>
           <Box f={1} jc="center">
-            <YStack mb={50} jc="flex-end" alignItems="center">
+            <YStack
+              mb={bottom + (IS_SMALL_HEIGHT_SCREEN ? 12 : 52)}
+              jc="flex-end"
+              alignItems="center"
+            >
               <Image
                 source={curiousLogoBlack}
                 width={251}
@@ -49,18 +56,10 @@ export const LoginScreen: FC = () => {
             <LoginForm onLoginSuccess={onLoginSuccess} />
 
             <SubmitButton
-              borderRadius={30}
               accessibilityLabel="create_an_account-button"
-              mt={22}
+              mt={24}
               width="100%"
-              backgroundColor="$primary"
-              borderColor="$lighterGrey4"
-              borderWidth={1}
-              buttonStyle={{ paddingVertical: 16 }}
-              textProps={{
-                fontSize: 14,
-                color: '$white',
-              }}
+              mode="secondary"
               onPress={navigateToSignUp}
             >
               {t('login:account_create')}
@@ -68,10 +67,8 @@ export const LoginScreen: FC = () => {
           </Box>
 
           <XStack
-            jc={isTablet() ? 'space-around' : 'center'}
-            mb={isTablet() ? 50 : 40}
-            gap={isTablet() ? 0 : 20}
-            width="100%"
+            jc="space-around"
+            mb={IS_SMALL_HEIGHT_SCREEN ? 32 : 72}
             flexWrap="wrap"
             ai="center"
           >

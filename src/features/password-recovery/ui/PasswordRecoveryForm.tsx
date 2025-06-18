@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
 import { useApprovePasswordRecoveryMutation } from '@app/entities/identity/api/hooks/useApprovePasswordRecoveryMutation';
-import { palette } from '@app/shared/lib/constants/palette';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
@@ -64,20 +63,14 @@ export const PasswordRecoveryForm: FC<Props> = props => {
       <FormProvider {...form}>
         <YStack space={8} mb={40}>
           <InputField
-            mode="dark"
-            accessibilityLabel="password-recovery-new-password-input"
-            backgroundColor="transparent"
-            placeholderTextColor={palette.grey3}
+            aria-label="password-recovery-new-password-input"
             secureTextEntry
             name="newPassword"
             placeholder={t('password_recovery_form:new_password_placeholder')}
           />
 
           <InputField
-            mode="dark"
-            backgroundColor="transparent"
-            accessibilityLabel="password-recovery-confirm-password-input"
-            placeholderTextColor={palette.grey3}
+            aria-label="password-recovery-confirm-password-input"
             secureTextEntry
             name="confirmPassword"
             placeholder={t(
@@ -87,7 +80,7 @@ export const PasswordRecoveryForm: FC<Props> = props => {
 
           {error && (
             <ErrorMessage
-              accessibilityLabel="password-recovery-error-message"
+              aria-label="password-recovery-error-message"
               error={{ message: error.evaluatedMessage! }}
               mt={8}
             />
@@ -95,8 +88,8 @@ export const PasswordRecoveryForm: FC<Props> = props => {
         </YStack>
 
         <SubmitButton
-          accessibilityLabel="password-recovery-submit-button"
-          mode="dark"
+          aria-label="password-recovery-submit-button"
+          mode="primary"
           onPress={submit}
           isLoading={isLoading}
         >

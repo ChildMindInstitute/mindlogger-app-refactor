@@ -22,8 +22,8 @@ export const CloseIcon: FC<IconProps> = props => (
   <AntDesign name="close" {...props} />
 );
 
-export const ChevronLeft: FC<IconProps> = props => (
-  <AntDesign name="left" {...props} />
+export const ChevronLeftIcon: FC<IconProps> = props => (
+  <FontAwesome name="chevron-left" {...props} />
 );
 
 export const CrossIcon: FC<IconProps> = props => (

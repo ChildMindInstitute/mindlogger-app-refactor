@@ -20,27 +20,29 @@ export const InputFrame = styled(
 
     m: 0,
     px: 12,
-    py: 8,
+    py: 12,
 
-    fontSize: 20,
-    selectionColor: 'black',
+    fontSize: 16,
+    lineHeight: 20,
+    height: 48,
+    selectionColor: IS_IOS ? palette.on_surface : palette.on_surface_alpha20,
+    placeholderTextColor: palette.outline,
 
     variants: {
       mode: {
         light: {
           color: '$on_surface',
-          placeholderTextColor: palette.on_surface_variant,
           borderBottomColor: '$outline_variant',
         },
         dark: {
-          color: '$darkGrey',
-          placeholderTextColor: IS_IOS ? palette.lightGrey : palette.grey,
+          color: '$on_primary',
           borderBottomColor: '#1e1d1d',
         },
         survey: {
+          px: 0,
           borderBottomWidth: 1,
-          borderBottomColor: '$mediumGrey',
-          color: '$black',
+          borderBottomColor: '$outline_variant',
+          color: '$on_surface',
           fontSize: 18,
           focusStyle: {
             borderBottomColor: '$darkGrey',

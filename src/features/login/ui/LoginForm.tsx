@@ -122,6 +122,7 @@ export const LoginForm: FC<Props> = props => {
         <YStack space={16}>
           <InputField
             name="email"
+            keyboardType="email-address"
             accessibilityLabel="login-email-input"
             placeholder={t('login_form:email_placeholder')}
           />
@@ -142,7 +143,7 @@ export const LoginForm: FC<Props> = props => {
           )}
         </YStack>
 
-        <Center mt={42}>
+        <Center mt={40}>
           <Link
             textDecorationLine="underline"
             accessibilityLabel="forgot_password-link"
@@ -153,16 +154,10 @@ export const LoginForm: FC<Props> = props => {
         </Center>
 
         <SubmitButton
-          mt={32}
+          mt={34}
           isLoading={isLoading}
           accessibilityLabel="login-button"
-          borderRadius={30}
           width="100%"
-          bg="$lighterGrey6"
-          textProps={{
-            fontSize: 14,
-            color: 'black',
-          }}
           onPress={submit}
           buttonStyle={{ alignSelf: 'center', paddingVertical: 16 }}
         >

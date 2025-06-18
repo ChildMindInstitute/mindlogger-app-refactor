@@ -18,7 +18,8 @@ export const IS_ANDROID_13_OR_HIGHER = IS_ANDROID && +getSystemVersion() >= 13;
 
 export const OS_MAJOR_VERSION = parseInt(getSystemVersion(), 10);
 
-export const IS_SMALL_SIZE_SCREEN = VIEWPORT_WIDTH <= 375;
+export const IS_SMALL_WIDTH_SCREEN = VIEWPORT_WIDTH <= 375;
+export const IS_SMALL_HEIGHT_SCREEN = VIEWPORT_HEIGHT <= 720;
 
 export const IS_TABLET = isTablet();
 

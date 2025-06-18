@@ -45,7 +45,7 @@ import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefau
 import { BackButton } from '@app/shared/ui/BackButton';
 import { Box, XStack } from '@app/shared/ui/base';
 import {
-  ChevronLeft,
+  ChevronLeftIcon,
   CloseIcon,
   HomeIcon,
   UserProfileIcon,
@@ -215,10 +215,6 @@ export const RootNavigator = () => {
             name="ForgotPassword"
             options={{
               title: t('login:forgot_password'),
-              contentStyle: {
-                borderTopColor: palette.grey,
-                borderTopWidth: 1,
-              },
               headerLeft: () => (
                 <Text
                   aria-label="close-button"
@@ -228,6 +224,8 @@ export const RootNavigator = () => {
                   <CloseIcon color="$on_surface" size={22} />
                 </Text>
               ),
+              // For proper centering on Android
+              headerRight: () => <Box ml={44} />,
             }}
             component={ForgotPasswordScreen}
           />
@@ -241,14 +239,14 @@ export const RootNavigator = () => {
               headerLeft: () => (
                 <BackButton aria-label="back_button">
                   <XStack ai="center">
-                    <ChevronLeft color="$on_surface" size={16} />
+                    <ChevronLeftIcon color={palette.on_surface} size={12} />
 
-                    <Text ml={2} fontSize={16}>
-                      {t('applet_invite_flow:back')}
-                    </Text>
+                    <Text ml="$2">{t('applet_invite_flow:back')}</Text>
                   </XStack>
                 </BackButton>
               ),
+              // For proper centering on Android
+              headerRight: () => <Box ml={44} />,
             }}
           />
         </>
@@ -395,6 +393,13 @@ export const RootNavigator = () => {
         component={PasswordRecoveryScreen}
         options={{
           title: t('settings:create_new_password'),
+          headerLeft: () => (
+            <Text aria-label="close-button" onPress={navigation.goBack} mr={24}>
+              <CloseIcon color="$on_surface" size={22} />
+            </Text>
+          ),
+          // For proper centering on Android
+          headerRight: () => <Box ml={44} />,
         }}
       />
     </Stack.Navigator>

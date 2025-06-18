@@ -8,26 +8,29 @@ import { ActivityIndicator } from './ActivityIndicator';
 import { Text } from './Text';
 
 const ButtonText = styled(Text, {
-  fontSize: 20,
+  fontSize: 16,
+  lineHeight: 20,
   // I'm not sure why this is throwing a type error, but it works fine, so I'm suppressing it for now.
   // This is a consequence of the react-native upgrade to version 0.79.2
   // @ts-expect-error TS2322
   variants: {
     mode: {
-      light: {
-        color: '$primary',
+      primary: {
+        color: '$on_primary',
+        fontWeight: '700',
       },
-      dark: {
-        color: '$white',
+      secondary: {
+        color: '$on_secondary',
+        fontWeight: '400',
       },
     },
   } as const,
 });
 
 const Button = styled(Stack, {
-  borderRadius: 4,
-  px: 50,
-  py: 10,
+  borderRadius: 100,
+  px: 24,
+  py: 14,
   variants: {
     disabled: {
       true: {
@@ -35,11 +38,13 @@ const Button = styled(Stack, {
       },
     },
     mode: {
-      light: {
-        backgroundColor: '$secondary',
-      },
-      dark: {
+      primary: {
         backgroundColor: '$primary',
+      },
+      secondary: {
+        backgroundColor: 'transparent',
+        borderColor: '$outline_variant',
+        borderWidth: 1,
       },
     },
   },
@@ -50,7 +55,7 @@ type Props = PropsWithChildren<
     onPress?: () => void;
     isLoading?: boolean;
     disabled?: boolean;
-    mode?: 'dark' | 'light';
+    mode?: 'primary' | 'secondary';
     buttonStyle?: StyleProp<ViewStyle>;
   } & {
     textProps?: TextProps;
@@ -61,8 +66,8 @@ export const SubmitButton: FC<Props & AccessibilityProps> = ({
   children,
   onPress,
   disabled,
+  mode = 'primary',
   textProps,
-  mode = 'light',
   buttonStyle,
   isLoading = false,
   accessibilityLabel,

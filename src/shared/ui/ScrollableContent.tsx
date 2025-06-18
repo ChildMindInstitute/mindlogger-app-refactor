@@ -19,7 +19,7 @@ import { useDebounce } from 'use-debounce';
 
 import { Box } from './base';
 import { ScrollButton } from './ScrollButton';
-import { IS_SMALL_SIZE_SCREEN } from '../lib/constants';
+import { IS_SMALL_WIDTH_SCREEN } from '../lib/constants';
 import { ScrollViewContext } from '../lib/contexts/ScrollViewContext';
 
 type Props = {
@@ -27,7 +27,7 @@ type Props = {
   scrollEventThrottle?: number;
 } & PropsWithChildren;
 
-const PaddingToBottom = IS_SMALL_SIZE_SCREEN ? 30 : 40;
+const PaddingToBottom = IS_SMALL_WIDTH_SCREEN ? 30 : 40;
 
 export const ScrollableContent: FC<Props> = ({
   children,

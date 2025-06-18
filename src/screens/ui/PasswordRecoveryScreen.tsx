@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { StatusBar, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import {
   RouteProp,
@@ -11,10 +11,10 @@ import { isTablet } from 'react-native-device-info';
 
 import { usePasswordRecoveryHealthCheckQuery } from '@app/entities/identity/api/hooks/usePasswordRecoveryHealthCheckQuery';
 import { PasswordRecoveryForm } from '@app/features/password-recovery/ui/PasswordRecoveryForm';
-import { Box } from '@app/shared/ui/base';
-import { Button } from '@app/shared/ui/Button';
+import { Box, YStack } from '@app/shared/ui/base';
 import { Center } from '@app/shared/ui/Center';
 import { Spinner } from '@app/shared/ui/Spinner';
+import { SubmitButton } from '@app/shared/ui/SubmitButton';
 import { Text } from '@app/shared/ui/Text';
 
 import { RootStackParamList } from '../config/types';
@@ -31,13 +31,13 @@ export const PasswordRecoveryScreen: FC<PasswordRecoveryScreenProps> = ({
   const { email, key } = route.params;
 
   const { isError, isLoading } = usePasswordRecoveryHealthCheckQuery(
-    email,
+    'paul.hh@metalab.com',
     key,
   );
 
   if (isLoading) {
     return (
-      <Center flex={1} bg="$secondary">
+      <Center flex={1}>
         <Spinner size={100} />
       </Center>
     );
@@ -45,43 +45,37 @@ export const PasswordRecoveryScreen: FC<PasswordRecoveryScreenProps> = ({
 
   if (isError) {
     return (
-      <Center flex={1} bg="$secondary" px={isTablet() ? '$17' : '$8'}>
-        <Text textAlign="center" fontSize={15} width="100%">
+      <YStack jc="center" flex={1} px={isTablet() ? '$28' : '$8'}>
+        <Text textAlign="center">
           {t('password_recovery_form:invalid_password_reset_link')}
         </Text>
 
-        <Text textAlign="center" fontSize={15} width="100%">
+        <Text textAlign="center">
           {t('password_recovery_form:click_to_reset_password')}
         </Text>
 
-        <Button
+        <SubmitButton
           accessibilityLabel="link-to-forgot-password"
           onPress={() => dispatch(StackActions.replace('ForgotPassword'))}
-          py={16}
-          mt={16}
+          mt={32}
         >
           {t('password_recovery_form:forgot_password')}
-        </Button>
-      </Center>
+        </SubmitButton>
+      </YStack>
     );
   }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Box flex={1} bg="$secondary" pt="$5">
-        <StatusBar />
-
-        <Box flex={1} jc="flex-start">
-          <PasswordRecoveryForm
-            px="$8"
-            mt="$2"
-            onPasswordRecoverySuccess={() =>
-              dispatch(StackActions.replace('Login'))
-            }
-            email={route.params.email}
-            resetKey={route.params.key}
-          />
-        </Box>
+      <Box flex={1} pt="$5" px={isTablet() ? '$20' : 0} mt="$2" jc="flex-start">
+        <PasswordRecoveryForm
+          px="$8"
+          onPasswordRecoverySuccess={() =>
+            dispatch(StackActions.replace('Login'))
+          }
+          email={route.params.email}
+          resetKey={route.params.key}
+        />
       </Box>
     </TouchableWithoutFeedback>
   );

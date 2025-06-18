@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import { FC } from 'react';
 
 import { FormProvider } from 'react-hook-form';
@@ -60,6 +59,7 @@ export const ForgotPasswordForm: FC<Props> = props => {
           <InputField
             accessibilityLabel="forgot-password-email-input"
             name="email"
+            keyboardType="email-address"
             placeholder={t('auth:email_address')}
           />
 
@@ -76,7 +76,6 @@ export const ForgotPasswordForm: FC<Props> = props => {
           isLoading={isLoading}
           accessibilityLabel="reset_password-button"
           onPress={submit}
-          buttonStyle={{ alignSelf: 'center', paddingHorizontal: 24 }}
         >
           {t('forgot_pass_form:reset_pass')}
         </SubmitButton>

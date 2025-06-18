@@ -1,10 +1,8 @@
-/* eslint-disable react-native/no-inline-styles */
 import { FC, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { isTablet } from 'react-native-device-info';
 
 import { palette } from '@app/shared/lib/constants/palette';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
@@ -51,7 +49,7 @@ const SignUpForm: FC<Props> = props => {
   return (
     <Box {...props}>
       <FormProvider {...form}>
-        <YStack space={isTablet() ? 10 : 22}>
+        <YStack space={12}>
           <InputField
             name="email"
             accessibilityLabel="signup-email-input"
@@ -104,16 +102,8 @@ const SignUpForm: FC<Props> = props => {
             accessibilityLabel="sign_up-button"
             borderRadius={30}
             width="100%"
-            bg="$outline_variant"
-            mt={isTablet() ? 110 : 50}
-            textProps={{
-              fontSize: 14,
-              color: 'black',
-            }}
-            buttonStyle={{
-              alignSelf: 'center',
-              paddingVertical: isTablet() ? 13 : 16,
-            }}
+            mt="$9"
+            mb="$4"
           >
             {t('sign_up_form:sign_up')}
           </SubmitButton>
