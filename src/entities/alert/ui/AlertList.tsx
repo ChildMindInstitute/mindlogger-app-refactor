@@ -18,7 +18,7 @@ export function AlertList({ alerts }: Props) {
 
   return (
     <Box
-      bg="$lighterGrey4"
+      bg="$outline_variant"
       br={10}
       p={20}
       mb={20}

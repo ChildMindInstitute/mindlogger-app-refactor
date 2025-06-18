@@ -225,7 +225,7 @@ export const RootNavigator = () => {
                   onPress={navigation.goBack}
                   mr={24}
                 >
-                  <CloseIcon color={palette.white} size={22} />
+                  <CloseIcon color="$on_surface" size={22} />
                 </Text>
               ),
             }}
@@ -241,9 +241,9 @@ export const RootNavigator = () => {
               headerLeft: () => (
                 <BackButton aria-label="back_button">
                   <XStack ai="center">
-                    <ChevronLeft color="white" size={16} />
+                    <ChevronLeft color="$on_surface" size={16} />
 
-                    <Text ml={2} color="$white" fontSize={16}>
+                    <Text ml={2} fontSize={16}>
                       {t('applet_invite_flow:back')}
                     </Text>
                   </XStack>
@@ -259,9 +259,6 @@ export const RootNavigator = () => {
           <Stack.Screen
             name="Applets"
             options={{
-              headerStyle: {
-                backgroundColor: palette.lighterGrey2,
-              },
               headerTitleAlign: 'center',
 
               headerTitle: ({ children }) => (

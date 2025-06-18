@@ -118,24 +118,24 @@ const basePalette = {
   purple_light: '#D3CAE1',
   red: '#B83236',
   red_light: '#EAC1C3',
-} as const satisfies Palette;
+  white: '#FFFFFF',
+} as const;
 
 /**
  * This contains all flattened palette colors with its tonal variants,
  * as well as all semantic colors (on_container, container, etc).
  */
 export const semanticPalette = {
-  alertSuccessBg: '#B5D5D3',
-  alertSuccessIcon: '#0F7B6C',
-  alertErrorBg: '#FFDAD6',
-  alertErrorIcon: '#BA1A1A',
-  alertWarnBg: '#F3E4B3',
-  alertWarnIcon: '#DFAC03',
-  alertInfoBg: '#B4D1E0',
-  alertInfoIcon: '#0B6E99',
-  white: '#FFFFFF',
-  whiteTsp: 'rgba(255, 255, 255, 0.8)',
-  whiteTsp2: 'rgba(255, 255, 255, 0.6)',
+  success: basePalette.green,
+  warning: basePalette.yellow,
+  info: basePalette.blue,
+  on_surface: basePalette.neutral10,
+  surface_variant: basePalette.neutral90,
+  on_surface_variant: basePalette.neutral_variant30,
+  on_primary: basePalette.primary100,
+  outline_variant: basePalette.neutral80,
+
+  // TODO: Use proper semantic names for remaining colors
   secondary: '#FFFFFF',
   secondary_50: '#ffffff',
   tertiary: '#404040',
@@ -143,10 +143,7 @@ export const semanticPalette = {
   grey2: '#a0a0a0',
   grey3: '#bbb',
   grey4: '#72777F',
-  on_surface: basePalette.neutral10,
-  on_surface_alpha12: hexToRgba(basePalette.neutral10, 0.12),
   darkon_surface: '#E2E2E5',
-  greyTsp: 'rgba(0,0,0,0.8)',
   darkGrey: '#3b3a3a',
   darkGrey2: '#6b6a6a',
   darkerGrey3: '#7E7E7E',
@@ -156,10 +153,8 @@ export const semanticPalette = {
   darkerGrey2: '#101010',
   mediumGrey: '#B6B6B6',
   lighterGrey0: '#E0E0E0',
-  lighterGrey: '#e8e8e8',
   lighterGrey2: '#f7f7f7',
   lighterGrey3: '#e2f0fe',
-  lighterGrey4: '#ECDFDF',
   lighterGrey5: '#FFE2E2',
   lighterGrey6: '#D5E4F7',
   lighterGrey7: '#DEE3EB',
@@ -168,7 +163,6 @@ export const semanticPalette = {
   lightGrey2: '#00000032',
   lightGrey3: '#D2E2EC4D',
   lightGrey4: '#F3F5F4',
-  outlineGrey: '#C2C7CF',
   alert: '#e63232',
   alertLight: '#FFCCCC',
   alertDark: '#93000A',
@@ -192,17 +186,26 @@ export const semanticPalette = {
   lightRed: '#ffdddd',
   codePink: '#d63384',
   errorRed: '#800000',
-} as const satisfies Palette;
+} as const;
 
 /**
  * These are alpha variants of the semantic colors.
  * They exist separately from the semantic palette for
  * better maintainability.
  */
-const alphaVariantsPalette = {} as const satisfies Palette;
+const alphaVariantsPalette = {
+  success_container: hexToRgba(semanticPalette.success, 0.3),
+  error_container: hexToRgba(basePalette.error, 0.3),
+  warning_container: hexToRgba(semanticPalette.warning, 0.3),
+  info_container: hexToRgba(semanticPalette.info, 0.3),
+  white_alpha80: hexToRgba(basePalette.white, 0.8),
+  white_alpha60: hexToRgba(basePalette.white, 0.6),
+  on_surface_alpha12: hexToRgba(basePalette.neutral10, 0.12),
+  toast_container: hexToRgba(basePalette.primary, 0.8),
+} as const;
 
 export const palette = {
   ...basePalette,
   ...semanticPalette,
   ...alphaVariantsPalette,
-};
+} as const satisfies Palette;

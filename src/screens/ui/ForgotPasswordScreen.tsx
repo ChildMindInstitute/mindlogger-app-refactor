@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { StatusBar, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -11,9 +11,7 @@ export const ForgotPasswordScreen: FC = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Box flex={1} bg="$primary">
-        <StatusBar />
-
+      <Box flex={1}>
         <Box flex={1} mt="$6">
           <YStack>
             <ForgotPasswordForm

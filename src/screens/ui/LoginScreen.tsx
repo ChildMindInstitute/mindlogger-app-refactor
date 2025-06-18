@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { StatusBar, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Image } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -31,9 +31,7 @@ export const LoginScreen: FC = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Box flex={1} bg="$surface" px={isTablet() ? '$12' : 0}>
-        <StatusBar />
-
+      <Box flex={1} px={isTablet() ? '$12' : 0}>
         <Box f={1} px={isTablet() ? '$17' : '$8'}>
           <Box f={1} jc="center">
             <YStack mb={50} jc="flex-end" alignItems="center">

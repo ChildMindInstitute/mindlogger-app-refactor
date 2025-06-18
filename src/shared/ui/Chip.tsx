@@ -14,7 +14,7 @@ const getFillForVariant = (
       return '#D9730D';
     case 'primary':
     default:
-      return palette.alertInfoIcon;
+      return palette.info;
   }
 };
 

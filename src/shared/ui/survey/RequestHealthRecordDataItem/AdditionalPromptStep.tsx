@@ -123,13 +123,15 @@ export const AdditionalPromptStep: FC<AdditionalPromptStepProps> = ({
               >
                 <RadioGroup.Item
                   accessibilityLabel={`ehr-additional-option-${option.id}`}
-                  borderColor={isSelected ? palette.blue : palette.outlineGrey}
+                  borderColor={
+                    isSelected ? palette.blue : palette.surface_variant
+                  }
                   borderWidth={3}
                   backgroundColor="transparent"
                   value={option.id}
                 >
                   <RadioGroup.Indicator
-                    bg={isSelected ? palette.blue : palette.outlineGrey}
+                    bg={isSelected ? palette.blue : palette.surface_variant}
                   />
                 </RadioGroup.Item>
                 <Text fontSize={18} color={palette.on_surface}>

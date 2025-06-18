@@ -73,7 +73,7 @@ export function RadioCard({
       })
     : palette.lighterGrey6;
 
-  const defaultRadioColor = selected ? palette.blue3 : palette.outlineGrey;
+  const defaultRadioColor = selected ? palette.blue3 : palette.surface_variant;
   const radioColor = hasColor ? invertedRadioColor : defaultRadioColor;
   const borderColor = selected ? palette.blue3 : palette.lighterGrey7;
 

@@ -104,7 +104,7 @@ const SignUpForm: FC<Props> = props => {
             accessibilityLabel="sign_up-button"
             borderRadius={30}
             width="100%"
-            bg="$lighterGrey4"
+            bg="$outline_variant"
             mt={isTablet() ? 110 : 50}
             textProps={{
               fontSize: 14,

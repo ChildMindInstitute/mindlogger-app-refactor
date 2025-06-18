@@ -68,7 +68,7 @@ export const RoundLogo: FC<Props & AccessibilityProps> = ({
         <Circle cx={size / 2} cy={size / 2} r={size / 2} fill="url(#grad)" />
       </Svg>
 
-      <Text fontSize={size / 2} color="$whiteTsp" fontWeight="700">
+      <Text fontSize={size / 2} color="$white_alpha80" fontWeight="700">
         {letter}
       </Text>
     </Box>

@@ -5,6 +5,11 @@ import { Text } from '@app/shared/ui/Text';
 
 export const HeaderTitle = (props: TextProps) => {
   return (
-    <Text fontSize={16} fontWeight="700" color={palette.white} {...props} />
+    <Text
+      fontSize={16}
+      fontWeight="700"
+      color={palette.on_surface}
+      {...props}
+    />
   );
 };

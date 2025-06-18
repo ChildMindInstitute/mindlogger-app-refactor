@@ -14,7 +14,7 @@ export const InputFrame = styled(
 
     outlineWidth: 0,
     minWidth: 0,
-    backgroundColor: '$backgroundTransparent',
+    backgroundColor: 'transparent',
     borderBottomWidth: StyleSheet.hairlineWidth * 1.5,
     underlineColorAndroid: 'transparent',
 
@@ -28,9 +28,9 @@ export const InputFrame = styled(
     variants: {
       mode: {
         light: {
-          color: '$secondary',
-          placeholderTextColor: '#ffffff99',
-          borderBottomColor: '#ffffff99',
+          color: '$on_surface',
+          placeholderTextColor: palette.on_surface_variant,
+          borderBottomColor: '$outline_variant',
         },
         dark: {
           color: '$darkGrey',

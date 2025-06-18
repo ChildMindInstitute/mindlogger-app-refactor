@@ -24,7 +24,7 @@ const LongTextInputView = styled(
     padding: 8,
     gap: 10,
 
-    backgroundColor: '$backgroundTransparent',
+    backgroundColor: 'transparent',
     underlineColorAndroid: 'transparent',
     selectionColor: 'black',
     borderColor: '$lighterGrey7',

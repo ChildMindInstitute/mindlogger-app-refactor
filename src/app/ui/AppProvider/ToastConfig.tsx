@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     width: 340,
     flexDirection: 'row',
     minHeight: 50,
-    backgroundColor: palette.greyTsp,
+    backgroundColor: palette.toast_container,
     padding: 12,
     borderRadius: 5,
   },

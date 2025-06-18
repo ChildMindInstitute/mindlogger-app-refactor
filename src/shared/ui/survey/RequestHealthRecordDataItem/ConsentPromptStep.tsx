@@ -116,13 +116,17 @@ export const ConsentPromptStep: FC<ConsentPromptStepProps> = ({
               >
                 <RadioGroup.Item
                   accessibilityLabel={`ehr-option-${option.id}`}
-                  borderColor={isSelected ? palette.blue : palette.outlineGrey}
+                  borderColor={
+                    isSelected ? palette.blue : palette.surface_variant
+                  }
                   borderWidth={3}
                   backgroundColor="transparent"
                   value={option.id}
                 >
                   <RadioGroup.Indicator
-                    background={isSelected ? palette.blue : palette.outlineGrey}
+                    background={
+                      isSelected ? palette.blue : palette.surface_variant
+                    }
                   />
                 </RadioGroup.Item>
                 <Text fontSize={18} color={palette.on_surface}>

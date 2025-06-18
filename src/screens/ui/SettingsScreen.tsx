@@ -1,5 +1,4 @@
 import { FC, useEffect, useMemo, useState } from 'react';
-import { StatusBar } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -72,8 +71,7 @@ export const SettingsScreen: FC = () => {
 
   return (
     <>
-      <Box flex={1} bg="$secondary">
-        <StatusBar />
+      <Box flex={1}>
         <UploadRetryBanner />
 
         <Box flex={1} px="$2" jc="flex-start" mt={isLoading ? top : 0}>

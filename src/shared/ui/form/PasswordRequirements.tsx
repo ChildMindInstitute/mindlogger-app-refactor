@@ -14,8 +14,8 @@ const themeColors = {
     textColor: palette.white,
   },
   invalid: {
-    iconColor: palette.whiteTsp2,
-    textColor: palette.whiteTsp2,
+    iconColor: palette.white_alpha60,
+    textColor: palette.white_alpha60,
   },
 };
 

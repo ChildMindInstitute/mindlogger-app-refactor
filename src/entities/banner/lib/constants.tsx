@@ -15,19 +15,17 @@ export const BANNERS = [
 ] as const;
 
 export const BANNER_ICONS = {
-  success: (
-    <OcticonsCircleCheckFill color={palette.alertSuccessIcon} size={26} />
-  ),
-  error: <MaterialAlertOctagon color={palette.alertErrorIcon} size={26} />,
-  warning: <MaterialAlertCircle color={palette.alertWarnIcon} size={26} />,
-  info: <MaterialInformation color={palette.alertInfoIcon} size={26} />,
+  success: <OcticonsCircleCheckFill color={palette.success} size={26} />,
+  error: <MaterialAlertOctagon color={palette.error} size={26} />,
+  warning: <MaterialAlertCircle color={palette.warning} size={26} />,
+  info: <MaterialInformation color={palette.info} size={26} />,
 };
 
 export const BANNER_BG_COLORS = {
-  success: palette.alertSuccessBg,
-  error: palette.alertErrorBg,
-  warning: palette.alertWarnBg,
-  info: palette.alertInfoBg,
+  success: palette.success_container,
+  error: palette.error_container,
+  warning: palette.warning_container,
+  info: palette.info_container,
 };
 
-export const BANNERS_DEFAULT_BG = palette.surface;
+export const DEFAULT_BG = palette.surface;

@@ -99,12 +99,14 @@ export function CheckBoxCard({
             boxType="square"
             tintColors={{
               true: hasColor ? invertedCheckboxColor : palette.primary,
-              false: hasColor ? invertedCheckboxColor : palette.outlineGrey,
+              false: hasColor ? invertedCheckboxColor : palette.surface_variant,
             }}
             onCheckColor={hasColor ? color : palette.white}
             onFillColor={hasColor ? invertedCheckboxColor : palette.primary}
             onTintColor={hasColor ? invertedCheckboxColor : palette.primary}
-            tintColor={hasColor ? invertedCheckboxColor : palette.outlineGrey}
+            tintColor={
+              hasColor ? invertedCheckboxColor : palette.surface_variant
+            }
             onAnimationType="fade"
             offAnimationType="fade"
             value={selected}

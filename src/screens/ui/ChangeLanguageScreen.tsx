@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { StatusBar } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -14,9 +13,7 @@ export const ChangeLanguageScreen: FC = () => {
   };
 
   return (
-    <Box flex={1} bg="$white">
-      <StatusBar />
-
+    <Box flex={1}>
       <Box flex={1}>
         <ChangeLanguageSelector onLanguageChanged={onLanguageChanged} px="$2" />
       </Box>

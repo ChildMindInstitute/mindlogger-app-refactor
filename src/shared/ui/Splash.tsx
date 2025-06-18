@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import DeviceInfo from 'react-native-device-info';
 import Animated, { FadeOut } from 'react-native-reanimated';
 
+import { DEFAULT_BG } from '@app/entities/banner/lib/constants';
 import { Text } from '@app/shared/ui/Text';
 
 import { APP_VERSION, ENV } from '../lib/constants';
@@ -37,7 +38,7 @@ export const SplashScreen = () => {
 const style = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: palette.primary,
+    backgroundColor: DEFAULT_BG,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,

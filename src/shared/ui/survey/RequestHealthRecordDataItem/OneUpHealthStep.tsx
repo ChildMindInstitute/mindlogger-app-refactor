@@ -141,7 +141,7 @@ export const OneUpHealthStep: FC = () => {
                 bg="$lighterGrey2"
                 px="$5"
                 py="$3"
-                borderColor="$outlineGrey"
+                borderColor="$surface_variant"
                 borderWidth={1}
                 textStyles={buttonTextStyle}
               >

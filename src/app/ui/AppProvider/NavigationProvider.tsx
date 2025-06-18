@@ -12,6 +12,7 @@ import {
 } from '@react-navigation/native';
 
 import { EntityPath } from '@app/abstract/lib/types/entity';
+import { DEFAULT_BG } from '@app/entities/banner/lib/constants';
 import { bannerActions } from '@app/entities/banner/model/slice';
 import { RootStackParamList, ScreenRoute } from '@app/screens/config/types';
 import { NavigationServiceScopes } from '@app/screens/lib/INavigationService';
@@ -35,7 +36,7 @@ const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: 'transparent',
+    background: DEFAULT_BG,
   },
 };
 
