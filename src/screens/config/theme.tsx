@@ -32,6 +32,7 @@ export const getScreenOptions = ({
     },
     headerShadowVisible: false,
     headerTitle: HeaderTitle,
+    headerTitleAlign: 'center',
     headerBackVisible: false,
     headerLeft: () => (
       <Text aria-label="close-button" onPress={navigation.goBack} mr={24}>

@@ -5,12 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AlertList } from '@app/entities/alert/ui/AlertList';
-import { bannerActions } from '@app/entities/banner/model/slice';
 import { ScoreList } from '@app/entities/score/ui/ScoreList';
 import { StaticNavigationPanel } from '@app/features/pass-survey/ui/StaticNavigationPanel';
-import { palette } from '@app/shared/lib/constants/palette';
-import { useAppDispatch } from '@app/shared/lib/hooks/redux';
-import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Box, YStack } from '@app/shared/ui/base';
 import { ScrollView } from '@app/shared/ui/ScrollView';
 import { Text } from '@app/shared/ui/Text';
@@ -36,7 +32,6 @@ export function Summary({
   targetSubjectId,
   order,
 }: Props) {
-  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
 
@@ -69,14 +64,9 @@ export function Summary({
     }
   }, [initialized, summaryData]);
 
-  useOnFocus(() => {
-    // Match topmost container background color
-    dispatch(bannerActions.setBannersBg(palette.white));
-  });
-
   if (!initialized) {
     return (
-      <Box flex={1} mb={bottom} bg="$white">
+      <Box flex={1} mb={bottom}>
         <Box style={styles.scrollView} mx={20} />
 
         <StaticNavigationPanel
@@ -90,7 +80,7 @@ export function Summary({
   }
 
   return (
-    <Box flex={1} mb={bottom} bg="$white">
+    <Box flex={1} mb={bottom}>
       <StatusBar hidden />
 
       <Text

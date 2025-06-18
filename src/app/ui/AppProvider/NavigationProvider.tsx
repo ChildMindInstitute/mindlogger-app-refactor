@@ -24,13 +24,7 @@ import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 const LOGGER_MODULE_NAME = 'NavigationProvider';
 
-const SCREEN_BG_COLOR_OVERRIDES: ScreenRoute[] = [
-  'Applets',
-  'AppletDetails',
-  'InProgressActivity',
-  'ActivityPassedScreen',
-  'Autocompletion',
-];
+const SCREEN_BG_COLOR_OVERRIDES: ScreenRoute[] = ['Applets', 'AppletDetails'];
 
 const theme = {
   ...DefaultTheme,

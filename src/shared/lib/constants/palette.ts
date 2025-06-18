@@ -135,6 +135,7 @@ export const semanticPalette = {
   on_primary: basePalette.primary100,
   outline: basePalette.neutral_variant50,
   outline_variant: basePalette.neutral_variant80,
+  secondary_container: basePalette.secondary90,
 
   // TODO: Use proper semantic names for remaining colors
   secondary: '#FFFFFF',
@@ -202,7 +203,7 @@ const alphaVariantsPalette = {
   white_alpha80: hexToRgba(basePalette.white, 0.8),
   white_alpha60: hexToRgba(basePalette.white, 0.6),
   on_surface_alpha12: hexToRgba(basePalette.neutral10, 0.12),
-  on_surface_alpha20: hexToRgba(basePalette.neutral10, 0.2),
+  on_surface_alpha30: hexToRgba(basePalette.neutral10, 0.3),
   toast_container: hexToRgba(basePalette.primary, 0.8),
 } as const;
 

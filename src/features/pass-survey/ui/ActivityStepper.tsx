@@ -8,11 +8,7 @@ import {
 } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
-import { bannerActions } from '@app/entities/banner/model/slice';
 import { useActiveAssessmentLink } from '@app/screens/model/hooks/useActiveAssessmentLink';
-import { palette } from '@app/shared/lib/constants/palette';
-import { useAppDispatch } from '@app/shared/lib/hooks/redux';
-import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box, XStack } from '@app/shared/ui/base';
@@ -59,7 +55,6 @@ export function ActivityStepper({
   onFinish,
   flowId,
 }: Props) {
-  const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
@@ -323,11 +318,6 @@ export function ActivityStepper({
     }
     onFinish('regular');
   };
-
-  useOnFocus(() => {
-    // Match in-progress activity background color
-    dispatch(bannerActions.setBannersBg(palette.white));
-  });
 
   if (!activityStorageRecord) {
     return (

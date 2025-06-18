@@ -9,7 +9,7 @@ import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Chip } from '@app/shared/ui/Chip';
 import { ChevronRightIcon } from '@app/shared/ui/icons';
 import { ExclamationIcon } from '@app/shared/ui/icons/ExclamationIcon';
-import { RoundLogo } from '@app/shared/ui/RoundLogo';
+import { CardThumbnail } from '@app/shared/ui/CardThumbnail';
 import { Text } from '@app/shared/ui/Text';
 
 import { ActivityAssignmentBadge } from './ActivityAssignmentBadge';
@@ -68,7 +68,7 @@ export const ActivityCard: FC<Props> = ({
       >
         {!!activity.image && (
           <Box alignSelf="center" accessibilityLabel="activity_card-image">
-            <RoundLogo imageUri={activity.image} />
+            <CardThumbnail imageUri={activity.image} />
           </Box>
         )}
 

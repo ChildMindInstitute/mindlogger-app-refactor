@@ -42,7 +42,7 @@ export const IntermediateSubmit: FC<Props> = ({
   const { t } = useTranslation();
 
   return (
-    <YStack flex={1} mx={40} jc="center" bg="$white">
+    <YStack flex={1} mx={40} jc="center">
       <YStack space={25}>
         <Text textAlign="center" fontSize={16}>
           {t('additional:submit_flow_answers')}{' '}

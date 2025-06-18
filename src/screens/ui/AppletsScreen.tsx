@@ -27,7 +27,6 @@ import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { Box, XStack } from '@app/shared/ui/base';
-import { ImageBackground } from '@app/shared/ui/ImageBackground';
 import { Text } from '@app/shared/ui/Text';
 import { TouchableOpacity } from '@app/shared/ui/TouchableOpacity';
 import { UploadRetryBanner } from '@app/widgets/survey/ui/UploadRetryBanner';
@@ -51,7 +50,7 @@ export const AppletsScreen: FC = () => {
     getDefaultAnalyticsService().track(MixEvents.HomeView);
 
     // Color must match the AppletsScreen's headerStyle.backgroundColor in RootNavigator
-    dispatch(bannerActions.setBannersBg(palette.lighterGrey2));
+    dispatch(bannerActions.setBannersBg(palette.surface1));
   });
 
   const queryClient = useQueryClient();
@@ -84,20 +83,17 @@ export const AppletsScreen: FC = () => {
   });
 
   return (
-    <Box bg="$secondary" flex={1}>
-      <ImageBackground>
-        <UploadRetryBanner />
+    <Box flex={1} bg="$surface1">
+      <UploadRetryBanner />
 
-        <Box flex={1} pt={12} pb={34}>
-          <AppletList
-            flex={1}
-            px={14}
-            refreshControl={<AppletsRefresh />}
-            ListFooterComponent={<AboutAppLink />}
-            onAppletPress={navigateAppletDetails}
-          />
-        </Box>
-      </ImageBackground>
+      <Box flex={1}>
+        <AppletList
+          flex={1}
+          refreshControl={<AppletsRefresh />}
+          ListFooterComponent={<AboutAppLink />}
+          onAppletPress={navigateAppletDetails}
+        />
+      </Box>
     </Box>
   );
 };

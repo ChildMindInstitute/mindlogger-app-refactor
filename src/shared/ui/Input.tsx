@@ -23,9 +23,8 @@ export const InputFrame = styled(
     py: 12,
 
     fontSize: 16,
-    lineHeight: 20,
     height: 48,
-    selectionColor: IS_IOS ? palette.on_surface : palette.on_surface_alpha20,
+    selectionColor: IS_IOS ? palette.on_surface : palette.on_surface_alpha30,
     placeholderTextColor: palette.outline,
 
     variants: {

@@ -28,7 +28,7 @@ import { useAnalyticsAutoLogin } from '@app/features/login/model/useAnalyticsAut
 import { useFeatureFlagsAutoLogin } from '@app/features/login/model/useFeatureFlagsAutoLogin';
 import { useLogout } from '@app/features/logout/model/hooks';
 import { useOnNotificationTap } from '@app/features/tap-on-notification/model/hooks/useOnNotificationTap';
-import { APP_VERSION, ENV, IS_ANDROID } from '@app/shared/lib/constants';
+import { APP_VERSION, ENV } from '@app/shared/lib/constants';
 import { palette } from '@app/shared/lib/constants/palette';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAlarmPermissions } from '@app/shared/lib/hooks/useAlarmPermissions';
@@ -215,17 +215,6 @@ export const RootNavigator = () => {
             name="ForgotPassword"
             options={{
               title: t('login:forgot_password'),
-              headerLeft: () => (
-                <Text
-                  aria-label="close-button"
-                  onPress={navigation.goBack}
-                  mr={24}
-                >
-                  <CloseIcon color="$on_surface" size={22} />
-                </Text>
-              ),
-              // For proper centering on Android
-              headerRight: () => <Box ml={44} />,
             }}
             component={ForgotPasswordScreen}
           />
@@ -245,8 +234,6 @@ export const RootNavigator = () => {
                   </XStack>
                 </BackButton>
               ),
-              // For proper centering on Android
-              headerRight: () => <Box ml={44} />,
             }}
           />
         </>
@@ -258,13 +245,11 @@ export const RootNavigator = () => {
             name="Applets"
             options={{
               headerTitleAlign: 'center',
-
+              headerStyle: {
+                backgroundColor: palette.surface1,
+              },
               headerTitle: ({ children }) => (
-                <HeaderTitle
-                  aria-label="welcome_name-text"
-                  color={palette.on_surface}
-                  fontWeight="400"
-                >
+                <HeaderTitle aria-label="welcome_name-text" fontWeight="400">
                   {children}
                 </HeaderTitle>
               ),
@@ -319,32 +304,10 @@ export const RootNavigator = () => {
             component={AppletBottomTabNavigator}
             options={({ route }) => ({
               headerBackVisible: false,
-              headerTitle: IS_ANDROID
-                ? () => (
-                    <Box
-                      flex={1}
-                      mr={20}
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <Text
-                        color={palette.white}
-                        fontSize={18}
-                        fontWeight="700"
-                        numberOfLines={1}
-                      >
-                        {route.params.title}
-                      </Text>
-                    </Box>
-                  )
-                : HeaderTitle,
+              title: route.params.title,
               headerLeft: () => (
-                <BackButton
-                  aria-label="home-button"
-                  {...(IS_ANDROID && { mr: 15 })}
-                  fallbackRoute="Applets"
-                >
-                  <HomeIcon color={palette.white} size={32} />
+                <BackButton aria-label="home-button" fallbackRoute="Applets">
+                  <HomeIcon color={palette.on_surface} size={24} />
                 </BackButton>
               ),
             })}

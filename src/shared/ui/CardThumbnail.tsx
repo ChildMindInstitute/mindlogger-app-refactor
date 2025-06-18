@@ -24,7 +24,7 @@ const getImageUrl = (url: string): string => {
   return url;
 };
 
-export const RoundLogo: FC<Props & AccessibilityProps> = ({
+export const CardThumbnail: FC<Props & AccessibilityProps> = ({
   accessibilityLabel,
   imageUri,
   imageStyle,
@@ -32,13 +32,12 @@ export const RoundLogo: FC<Props & AccessibilityProps> = ({
   size = 64,
 }) => {
   if (imageUri) {
+    const styles = getStyles(size);
+
     return (
-      <Box
-        accessibilityLabel={accessibilityLabel}
-        style={[getStyles(size).container]}
-      >
+      <Box accessibilityLabel={accessibilityLabel} style={[styles.container]}>
         <CachedImage
-          style={[getStyles(size).image, imageStyle]}
+          style={[styles.image, imageStyle]}
           source={getImageUrl(imageUri)}
         />
       </Box>
@@ -46,7 +45,7 @@ export const RoundLogo: FC<Props & AccessibilityProps> = ({
   }
 
   if (!letter) {
-    return <Box />;
+    return null;
   }
 
   return (
@@ -80,13 +79,13 @@ const getStyles = (size: number) =>
     image: {
       width: size,
       height: size,
+      borderRadius: 8,
       resizeMode: 'cover',
-      borderRadius: size / 2,
     },
     container: {
       width: size,
       height: size,
-      borderRadius: size / 2,
+      borderRadius: 8,
       overflow: 'hidden',
     },
   });

@@ -114,7 +114,7 @@ export const SettingsScreen: FC = () => {
           <Box
             w="100%"
             h="100%"
-            bg="$white"
+            bg="$surface"
             position="absolute"
             opacity={0.7}
           />

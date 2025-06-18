@@ -3200,14 +3200,6 @@
     "@tamagui/text" "1.126.14"
     "@tamagui/web" "1.126.14"
 
-"@tamagui/linear-gradient@^1.126.14":
-  version "1.126.14"
-  resolved "https://registry.yarnpkg.com/@tamagui/linear-gradient/-/linear-gradient-1.126.14.tgz#3d81b85b3ae08415de0b1a4c788c6214589bec14"
-  integrity sha512-yTfK2ReieqeZMBvoM08lPUzUppw7BRa9/Svm/SlO8qUFCuTJFiV7EKwsowLE1FI4ehrG8f1fk+aHcCHSt0i+ng==
-  dependencies:
-    "@tamagui/core" "1.126.14"
-    "@tamagui/stacks" "1.126.14"
-
 "@tamagui/normalize-css-color@1.126.14":
   version "1.126.14"
   resolved "https://registry.yarnpkg.com/@tamagui/normalize-css-color/-/normalize-css-color-1.126.14.tgz#f5889264ea7ecfb1c84418e4c64fc1e0fcf5fb68"
@@ -9772,6 +9764,11 @@ react-native-keyboard-aware-scroll-view@^0.9.5:
   dependencies:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
+
+react-native-linear-gradient@^2.8.3:
+  version "2.8.3"
+  resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.8.3.tgz#9a116649f86d74747304ee13db325e20b21e564f"
+  integrity sha512-KflAXZcEg54PXkLyflaSZQ3PJp4uC4whM7nT/Uot9m0e/qxFV3p6uor1983D1YOBJbJN7rrWdqIjq0T42jOJyA==
 
 react-native-localize@^3.0.6:
   version "3.1.0"

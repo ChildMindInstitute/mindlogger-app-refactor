@@ -9,7 +9,7 @@ export const HeaderTitle = (props: TextProps) => {
       fontSize={16}
       fontWeight="700"
       color={palette.on_surface}
-      textAlign="center"
+      numberOfLines={1}
       {...props}
     />
   );
