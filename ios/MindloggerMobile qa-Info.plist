@@ -64,7 +64,6 @@
 	<array>
 		<string>Lato-BlackItalic.ttf</string>
 		<string>Lato-Italic.ttf</string>
-		<string>Atkinson Hyperlegible Regular.ttf</string>
 		<string>AntDesign.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>
@@ -86,12 +85,10 @@
 		<string>Zocial.ttf</string>
 		<string>Lato-Regular.ttf</string>
 		<string>Lato-Black.ttf</string>
-		<string>Roboto-Bold.ttf</string>
-		<string>Roboto-BoldItalic.ttf</string>
-		<string>Roboto-Medium.ttf</string>
-		<string>Roboto-MediumItalic.ttf</string>
-		<string>Roboto-Regular.ttf</string>
-		<string>Roboto-Italic.ttf</string>
+		<string>Moderat-Regular.otf</string>
+		<string>Moderat-Bold.otf</string>
+		<string>Moderat-RegularItalic.otf</string>
+		<string>Moderat-BoldItalic.otf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
