@@ -22,7 +22,7 @@ type Props = BoxProps & {
 
 export const ForgotPasswordForm: FC<Props> = props => {
   const { t } = useTranslation();
-  const { addSuccessBanner, addErrorBanner } = useBanners();
+  const { addBanner, addErrorBanner } = useBanners();
 
   const { form, submit } = useAppForm(ForgotPasswordFormSchema, {
     defaultValues: {
@@ -41,7 +41,7 @@ export const ForgotPasswordForm: FC<Props> = props => {
   } = usePasswordRecoveryMutation({
     onSuccess: () => {
       props.onRecoverySuccess();
-      addSuccessBanner({
+      addBanner('SuccessBanner', {
         children: <SuccessNotification email={form.getValues().email} />,
       });
     },
