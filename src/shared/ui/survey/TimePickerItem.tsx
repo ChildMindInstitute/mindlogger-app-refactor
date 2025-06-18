@@ -11,7 +11,7 @@ import {
 } from '@app/shared/lib/utils/dateTime';
 
 import { DateTimePicker } from '../DateTimePicker';
-import { AlarmIcon } from '../icons';
+import { ClockIcon } from '../icons';
 
 type Props = {
   onChange: (value: HourMinute) => void;
@@ -42,7 +42,7 @@ export const TimePickerItem: FC<Props> = ({ value, onChange }) => {
       value={timeInMs ? new Date(timeInMs) : null}
       dateDisplayFormat="hh:mm aa"
       mode="time"
-      iconAfter={<AlarmIcon color={palette.lightGrey} size={15} />}
+      iconAfter={<ClockIcon color={palette.lightGrey} size={15} />}
       placeholder={TIME_PICKER_FORMAT_PLACEHOLDER}
     />
   );

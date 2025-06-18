@@ -3,7 +3,7 @@ import { ElementType, FC } from 'react';
 import { XStackProps } from '@tamagui/stacks';
 
 import { XStack } from './base';
-import { ArrowRightIcon } from './icons';
+import { ChevronRightIcon } from './icons';
 import { Text } from './Text';
 import { palette } from '../lib/constants/palette';
 
@@ -21,7 +21,7 @@ export const RowButton: FC<Props> = props => {
   const {
     onPress,
     title,
-    rightIcon: RightIcon = ArrowRightIcon,
+    rightIcon: RightIcon = ChevronRightIcon,
     ...boxProps
   } = props;
 
@@ -39,7 +39,7 @@ export const RowButton: FC<Props> = props => {
       {...boxProps}
     >
       <Text>{title}</Text>
-      <RightIcon color={palette.mediumGrey} size={15} />
+      <RightIcon color={palette.on_surface} size={14} />
     </XStack>
   );
 };

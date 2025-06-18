@@ -13,7 +13,7 @@ import {
 import { palette } from '@app/shared/lib/constants/palette';
 import { BackButton } from '@app/shared/ui/BackButton';
 import { Box } from '@app/shared/ui/base';
-import { CrossIcon } from '@app/shared/ui/icons';
+import { CloseIcon } from '@app/shared/ui/icons';
 import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
 
 import { FinishItem } from './Finish';
@@ -94,7 +94,7 @@ export function FlowElementSwitch({
       return (
         <Box flex={1}>
           <BackButton alignSelf="flex-end" mr={16} mt={10} mb={4}>
-            <CrossIcon color={palette.tertiary} size={30} />
+            <CloseIcon color={palette.tertiary} size={30} />
           </BackButton>
 
           <Summary {...payload} onFinish={() => onComplete('regular')} />

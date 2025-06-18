@@ -3,7 +3,7 @@ import {
   MaterialAlertCircle,
   MaterialAlertOctagon,
   MaterialInformation,
-  OcticonsCircleCheckFill,
+  CircleCheckIcon,
 } from '@app/shared/ui/icons';
 
 export const BANNERS = [
@@ -15,7 +15,7 @@ export const BANNERS = [
 ] as const;
 
 export const BANNER_ICONS = {
-  success: <OcticonsCircleCheckFill color={palette.success} size={26} />,
+  success: <CircleCheckIcon color={palette.success} size={26} />,
   error: <MaterialAlertOctagon color={palette.error} size={26} />,
   warning: <MaterialAlertCircle color={palette.warning} size={26} />,
   info: <MaterialInformation color={palette.info} size={26} />,

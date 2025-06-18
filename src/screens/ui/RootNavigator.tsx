@@ -238,8 +238,8 @@ export const RootNavigator = () => {
               title: '',
               headerLeft: () => (
                 <BackButton aria-label="back_button">
-                  <XStack ai="center">
-                    <ChevronLeftIcon color={palette.on_surface} size={12} />
+                  <XStack ai="baseline">
+                    <ChevronLeftIcon color={palette.on_surface} size={14} />
 
                     <Text ml="$2">{t('applet_invite_flow:back')}</Text>
                   </XStack>
@@ -262,7 +262,8 @@ export const RootNavigator = () => {
               headerTitle: ({ children }) => (
                 <HeaderTitle
                   aria-label="welcome_name-text"
-                  color={palette.tertiary}
+                  color={palette.on_surface}
+                  fontWeight="400"
                 >
                   {children}
                 </HeaderTitle>
@@ -281,7 +282,7 @@ export const RootNavigator = () => {
                     navigation.navigate('Settings');
                   }}
                 >
-                  <UserProfileIcon color={palette.tertiary} size={22} />
+                  <UserProfileIcon color={palette.on_surface} size={20} />
                 </TouchableOpacity>
               ),
               headerLeft: () => null,

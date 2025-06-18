@@ -79,7 +79,7 @@ export const Banner = ({
           pressStyle={pressStyle}
           aria-label="banner-close"
         >
-          <CloseIcon color={color} size={20} />
+          <CloseIcon color={color} size={18} />
         </Box>
       )}
     </XStack>

@@ -11,7 +11,7 @@ import {
 
 import { YStack } from '../base';
 import { DateTimePicker } from '../DateTimePicker';
-import { AlarmIcon, BedIcon } from '../icons';
+import { ClockIcon, BedIcon } from '../icons';
 
 type TimeRangeValue = {
   endTime: HourMinute | null;
@@ -84,7 +84,7 @@ export const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
         dateDisplayFormat="h:mm a"
         mode="time"
         value={endTimeAsDate}
-        iconAfter={<AlarmIcon color={palette.grey2} size={15} />}
+        iconAfter={<ClockIcon color={palette.grey2} size={15} />}
         placeholder={TIME_PICKER_FORMAT_PLACEHOLDER}
       />
     </YStack>
