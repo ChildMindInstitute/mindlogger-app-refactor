@@ -67,15 +67,7 @@ export const TimeRemaining: FC<Props> = (props: Props) => {
   return (
     <XStack alignItems="center" backgroundColor="$white" {...props}>
       {clockIconShown && <ClockIcon size={20} color={iconColor} />}
-      <Text
-        ml={5}
-        fontSize={15}
-        fontWeight="400"
-        color={textColor}
-        // These values are not supported for the fontFamily prop, but I'm not
-        // sure what they should be
-        // fontFamily="Atkinson Hyperlegible Regular"
-      >
+      <Text ml={5} fontSize={15} fontWeight="400" color={textColor}>
         {formattedTimeLeft}
       </Text>
     </XStack>

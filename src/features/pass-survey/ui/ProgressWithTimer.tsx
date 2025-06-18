@@ -132,9 +132,6 @@ const Timer: FC<TimerProps> = ({ duration }) => {
           position="absolute"
           top={4}
           color={textColor}
-          // These values are not supported for the fontFamily prop, but I'm not
-          // sure what they should be
-          // fontFamily="Atkinson Hyperlegible Regular"
         >
           {formattedTimeLeft} {t('activity_time:time_remaining')}
         </Text>

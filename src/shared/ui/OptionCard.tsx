@@ -82,9 +82,6 @@ export function OptionCard({
         <Text
           aria-label="radio-option-text"
           fontSize={18}
-          // These values are not supported for the fontFamily prop, but I'm not
-          // sure what they should be
-          // fontFamily="Atkinson Hyperlegible Regular"
           color={textColor}
           numberOfLines={3}
           flex={1}

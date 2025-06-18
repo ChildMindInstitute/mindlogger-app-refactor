@@ -15,8 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { AbTestPayload } from '@app/abstract/lib/types/abTrails';
 import { Point } from '@app/abstract/lib/types/primitive';
 import { colors } from '@app/shared/lib/constants/colors';
-import { robotoMediumFont } from '@assets/fonts';
-import { robotoFont } from '@assets/fonts';
+import { moderatFont } from '@assets/fonts';
 
 import { getEquidistantPoint } from '../lib/utils/calculation';
 
@@ -42,11 +41,11 @@ export const AbShapes: FC<Props> = props => {
 
   const last = nodes[nodes.length - 1];
 
-  const fontDigits = useFont(robotoMediumFont, config.fontSize / 1.2);
+  const fontDigits = useFont(moderatFont, config.fontSize / 1.2);
 
-  const fontBeginEnd = useFont(robotoMediumFont, fontBeginEndSize);
+  const fontBeginEnd = useFont(moderatFont, fontBeginEndSize);
 
-  const fontCross = useFont(robotoFont, FontCrossSize);
+  const fontCross = useFont(moderatFont, FontCrossSize);
 
   const { t } = useTranslation();
 
