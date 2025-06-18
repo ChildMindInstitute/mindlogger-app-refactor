@@ -3,6 +3,7 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
+import { AnimatedTouchable } from '@app/shared/ui/AnimatedTouchable';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { CardThumbnail } from '@app/shared/ui/CardThumbnail';
 import { RoundTextNotification } from '@app/shared/ui/RoundTextNotification';
@@ -25,62 +26,60 @@ export const AppletCard: FC<Props & AccessibilityProps> = ({
   const theme = applet.theme;
 
   return (
-    <YStack
+    <AnimatedTouchable
       aria-label={accessibilityLabel}
       onPress={onPress}
       disabled={disabled}
-      position="relative"
-      p={16}
-      gap={16}
-      borderRadius={16}
-      opacity={disabled ? 0.5 : 1}
-      bg="$surface"
-      animation="fast"
-      pressStyle={{ bg: '$secondary_container' }}
+      style={{
+        borderRadius: 16,
+        opacity: disabled ? 0.5 : 1,
+      }}
     >
-      <CardThumbnail
-        accessibilityLabel="applet_logo-image"
-        imageUri={applet.image}
-      />
+      <YStack position="relative" p={16} gap={16}>
+        <CardThumbnail
+          accessibilityLabel="applet_logo-image"
+          imageUri={applet.image}
+        />
 
-      <YStack flex={1} gap={8}>
-        <XStack jc="space-between">
-          <Text
-            flex={1}
-            fontWeight="700"
-            fontSize={22}
-            lineHeight={28}
-            accessibilityLabel="applet_name-text"
-          >
-            {applet.displayName}
-          </Text>
+        <YStack flex={1} gap={8}>
+          <XStack jc="space-between">
+            <Text
+              flex={1}
+              fontWeight="700"
+              fontSize={22}
+              lineHeight={28}
+              accessibilityLabel="applet_name-text"
+            >
+              {applet.displayName}
+            </Text>
 
-          {!!theme?.logo && (
-            <CachedImage style={styles.smallLogo} source={theme.logo} />
+            {!!theme?.logo && (
+              <CachedImage style={styles.smallLogo} source={theme.logo} />
+            )}
+          </XStack>
+
+          {!!applet.description && (
+            <Text
+              accessibilityLabel="applet_description-text"
+              fontSize={16}
+              fontWeight="400"
+              lineHeight={24}
+            >
+              {applet.description}
+            </Text>
           )}
-        </XStack>
+        </YStack>
 
-        {!!applet.description && (
-          <Text
-            accessibilityLabel="applet_description-text"
-            fontSize={16}
-            fontWeight="400"
-            lineHeight={24}
-          >
-            {applet.description}
-          </Text>
+        {!!applet.numberOverdue && (
+          <Box position="absolute" top={-14} right={-14}>
+            <RoundTextNotification
+              accessibilityLabel="applet_number_overdue-text"
+              text={applet.numberOverdue.toString()}
+            />
+          </Box>
         )}
       </YStack>
-
-      {!!applet.numberOverdue && (
-        <Box position="absolute" top={-14} right={-14}>
-          <RoundTextNotification
-            accessibilityLabel="applet_number_overdue-text"
-            text={applet.numberOverdue.toString()}
-          />
-        </Box>
-      )}
-    </YStack>
+    </AnimatedTouchable>
   );
 };
 

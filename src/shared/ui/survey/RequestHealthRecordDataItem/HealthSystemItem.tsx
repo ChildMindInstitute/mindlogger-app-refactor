@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { Image, StyleSheet } from 'react-native';
 
-import { XStackProps } from '@tamagui/stacks';
 import { Paragraph } from '@tamagui/text';
 
 import { OneUpHealthSystemItem } from '@app/shared/api/services/IOneUpHealthService';
@@ -11,6 +10,8 @@ import { Center } from '@app/shared/ui/Center';
 import { ChevronRightIcon } from '@app/shared/ui/icons';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
+
+import { AnimatedTouchable } from '../../AnimatedTouchable';
 
 type HealthSystemItemProps = OneUpHealthSystemItem & {
   onPress: () => void;
@@ -27,49 +28,50 @@ export const HealthSystemItem: FC<HealthSystemItemProps> = ({
   isLoading,
 }) => {
   return (
-    <XStack
-      alignItems="flex-start"
-      justifyContent="space-between"
-      p="$4"
-      gap="$4"
-      bg="$lighterGrey2"
-      borderRadius="$4"
-      borderWidth={1}
-      borderColor={palette.surface_variant}
+    <AnimatedTouchable
+      aria-label={`health-system-item-${name}`}
       onPress={onPress}
       disabled={isDisabled}
-      opacity={isDisabled ? 0.6 : 1}
-      animation="fast"
-      pressStyle={pressStyle}
+      style={{
+        borderRadius: 16,
+        opacity: isDisabled ? 0.6 : 1,
+      }}
     >
-      <Box
-        style={logo ? styles.imageContainer : undefined}
-        width={60}
-        height={60}
+      <XStack
+        alignItems="flex-start"
+        justifyContent="space-between"
+        p="$4"
+        gap="$4"
       >
-        {!!logo && (
-          <Image
-            source={{
-              uri: logo,
-            }}
-            width={60}
-            height={60}
-            style={styles.image}
-          />
-        )}
-      </Box>
-      <YStack flex={1} gap="$2">
-        <Text fontWeight="700">{name}</Text>
-        {!!address && <Paragraph>{address}</Paragraph>}
-      </YStack>
-      <Center alignSelf="center" width="$2">
-        {isLoading ? (
-          <Spinner size={24} />
-        ) : (
-          <ChevronRightIcon color={palette.grey2} size={16} />
-        )}
-      </Center>
-    </XStack>
+        <Box
+          style={logo ? styles.imageContainer : undefined}
+          width={60}
+          height={60}
+        >
+          {!!logo && (
+            <Image
+              source={{
+                uri: logo,
+              }}
+              width={60}
+              height={60}
+              style={styles.image}
+            />
+          )}
+        </Box>
+        <YStack flex={1} gap="$2">
+          <Text fontWeight="700">{name}</Text>
+          {!!address && <Paragraph>{address}</Paragraph>}
+        </YStack>
+        <Center alignSelf="center" width="$2">
+          {isLoading ? (
+            <Spinner size={24} />
+          ) : (
+            <ChevronRightIcon color={palette.grey2} size={16} />
+          )}
+        </Center>
+      </XStack>
+    </AnimatedTouchable>
   );
 };
 
@@ -87,8 +89,3 @@ const styles = StyleSheet.create({
     objectFit: 'contain',
   },
 });
-
-const pressStyle: XStackProps['pressStyle'] = {
-  opacity: 0.7,
-  scale: 0.98,
-};
