@@ -32,7 +32,7 @@ export const SignUpScreen: FC = () => {
             <ScrollView flex={1}>
               <Box f={1} px={isTablet() ? 210 : '$7'}>
                 <Box mt={isTablet() ? 170 : 52} mb={isTablet() ? 0 : 12}>
-                  <Text fontSize={36} color="$white" fontWeight="600">
+                  <Text fontSize={36} color="$white" fontWeight="700">
                     {t('login:account_create')}
                   </Text>
                 </Box>

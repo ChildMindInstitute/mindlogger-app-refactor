@@ -21,7 +21,7 @@ export const AnswersSubmitted: FC<SubComponentProps> = ({ onPressDone }) => {
         <Text
           accessibilityLabel="answer_submitted"
           fontSize={31}
-          fontWeight="600"
+          fontWeight="700"
         >
           {t('autocompletion:answers_submitted')}
         </Text>
@@ -36,7 +36,7 @@ export const AnswersSubmitted: FC<SubComponentProps> = ({ onPressDone }) => {
             mode="dark"
             onPress={onPressDone}
             borderRadius={20}
-            textProps={{ fontWeight: 'bold', fontSize: 15 }}
+            textProps={{ fontWeight: '700', fontSize: 15 }}
             py={16}
           >
             {t('autocompletion:done')}

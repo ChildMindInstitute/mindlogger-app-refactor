@@ -71,6 +71,7 @@ export const InputField: FC<Props> = ({
                 isInvalid={!!error}
                 pl={leftIcon ? 40 : 0}
                 pr={rightIcon ? 40 : 0}
+                fontFamily="$body"
               />
 
               {rightIcon && (

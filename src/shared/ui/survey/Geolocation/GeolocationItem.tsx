@@ -20,7 +20,7 @@ const GeolocationButton = styled(Button, {
   backgroundColor: '$blue',
   borderRadius: 0,
   color: '$white',
-  fontWeight: '900',
+  fontWeight: '700',
   minWidth: '10%',
 });
 

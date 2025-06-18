@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { IS_ANDROID, IS_IOS } from '@app/shared/lib/constants';
+import { IS_ANDROID } from '@app/shared/lib/constants';
 import { colors } from '@app/shared/lib/constants/colors';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Chip } from '@app/shared/ui/Chip';
@@ -79,7 +79,7 @@ export const ActivityCard: FC<Props> = ({
             )}
 
           <Text
-            fontWeight={IS_IOS ? '600' : '700'}
+            fontWeight="400"
             fontSize={16}
             accessibilityLabel="activity_card_name-text"
             lineHeight={20}
@@ -102,7 +102,7 @@ export const ActivityCard: FC<Props> = ({
           {hasDescription && (
             <Text
               fontSize={14}
-              fontWeight="300"
+              fontWeight="400"
               lineHeight={20}
               opacity={isDisabled ? 0.5 : 1}
               accessibilityLabel="activity_card_desc-text"

@@ -38,7 +38,7 @@ export const ConnectionStatusBar: FC<Props> = ({ appletId, ...styleProps }) => {
   return (
     <>
       <XStack px={14} mt={8} {...styleProps}>
-        <Text color="$black" fontWeight="bold" fontSize={17}>
+        <Text color="$black" fontWeight="700" fontSize={17}>
           {t('live_connection:live_connection')}:
         </Text>
 

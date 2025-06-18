@@ -46,14 +46,14 @@ export const IntermediateSubmit: FC<Props> = ({
       <YStack space={25}>
         <Text textAlign="center" fontSize={16}>
           {t('additional:submit_flow_answers')}{' '}
-          <Text fontWeight="bold">{t('additional:submit')}</Text>{' '}
+          <Text fontWeight="700">{t('additional:submit')}</Text>{' '}
           {t('additional:submit_flow_answers_ex')}
         </Text>
 
         <ActivityBox>
           <Text
             accessibilityLabel="next_activity-name"
-            fontWeight="bold"
+            fontWeight="700"
             mb={10}
             fontSize={16}
           >
@@ -95,7 +95,7 @@ export const IntermediateSubmit: FC<Props> = ({
             accessibilityLabel="back-button"
             textAlign="center"
             fontSize={17}
-            fontWeight="bold"
+            fontWeight="700"
             onPress={onPressBack}
             disabled={isBackDisabled}
           >

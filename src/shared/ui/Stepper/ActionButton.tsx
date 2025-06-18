@@ -27,7 +27,7 @@ export const ActionButton = ({
       bg={type === 'submit' ? '$primary' : '$white'}
       textStyles={{
         textColor: type === 'submit' ? '$white' : '$primary',
-        fontWeight: type === 'submit' ? 'bold' : 'normal',
+        fontWeight: type === 'submit' ? '700' : '400',
         fontSize: 13,
       }}
       borderWidth={type === 'submit' ? 0 : 1}

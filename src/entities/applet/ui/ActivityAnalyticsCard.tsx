@@ -28,15 +28,9 @@ export const ActivityAnalyticsCard: FC<Props & AccessibilityProps> = ({
 
   return (
     <ActivityCardContainer accessibilityLabel={accessibilityLabel}>
-      <Text fontSize={30} fontWeight="100">
-        {name}
-      </Text>
+      <Text fontSize={30}>{name}</Text>
 
-      {description && (
-        <Text fontSize={15} fontWeight="200">
-          {description}
-        </Text>
-      )}
+      {description && <Text fontSize={15}>{description}</Text>}
 
       {responseData.responses?.map((response, index) => (
         <Box pb={5} key={index}>

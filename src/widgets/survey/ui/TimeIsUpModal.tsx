@@ -41,7 +41,7 @@ export function TimeIsUpModal({ onSubmit }: Props) {
                 }}
                 textProps={{
                   fontSize: 14,
-                  fontWeight: 'bold',
+                  fontWeight: '700',
                   width: 70,
                   paddingHorizontal: 3,
                   textAlign: 'center',

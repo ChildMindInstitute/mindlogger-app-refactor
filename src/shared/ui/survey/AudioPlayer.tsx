@@ -43,7 +43,7 @@ export const AudioPlayer: FC<Props> = ({ uri, title }) => {
           accessibilityLabel="audio-player-title"
           maxWidth="90%"
           fontSize={20}
-          fontWeight="500"
+          fontWeight="400"
         >
           {title}
         </Text>

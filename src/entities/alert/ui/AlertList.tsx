@@ -24,7 +24,7 @@ export function AlertList({ alerts }: Props) {
       mb={20}
       accessibilityLabel="alerts-group"
     >
-      <Text fontWeight="600" fontSize={23} mb={10}>
+      <Text fontWeight="700" fontSize={23} mb={10}>
         {t('activity_summary:alerts')}
       </Text>
 

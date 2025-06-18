@@ -12,7 +12,7 @@ export function ScoreList({ label, scores }: Props) {
   return (
     <Box btw={1} btc="$lighterGrey0" px={20} accessibilityLabel="scores-group">
       <Text
-        fontWeight="600"
+        fontWeight="700"
         fontSize={25}
         mt={10}
         mb={15}

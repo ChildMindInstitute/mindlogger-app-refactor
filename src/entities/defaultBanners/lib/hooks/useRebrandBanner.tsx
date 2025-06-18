@@ -41,7 +41,7 @@ export const useRebrandBanner = (
       {
         children: (
           <Trans i18nKey="rebrandBanner:content">
-            <Text color="#FDFCFC" fontWeight="bold">
+            <Text color="#FDFCFC" fontWeight="700">
               We are rebranding!
             </Text>
             <Text color="#FDFCFC">

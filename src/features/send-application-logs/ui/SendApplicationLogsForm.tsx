@@ -68,7 +68,7 @@ export const SendApplicationLogsForm: FC = () => {
 
       {uploadStatus && (
         <Box position="absolute" bg="$lightGreen" w="100%" p="$3" px="$4">
-          <Text fontWeight="500" fontSize={16}>
+          <Text fontWeight="400" fontSize={16}>
             {t('application_logs_screen:success')}
           </Text>
         </Box>
@@ -76,7 +76,7 @@ export const SendApplicationLogsForm: FC = () => {
 
       {uploadStatus === false && (
         <Box position="absolute" bg="$lightRed" w="100%" p="$3" px="$4">
-          <Text fontWeight="500" fontSize={16} color="$errorRed">
+          <Text fontWeight="400" fontSize={16} color="$errorRed">
             {t('application_logs_screen:error')}
           </Text>
         </Box>

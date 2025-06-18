@@ -94,7 +94,7 @@ export function Summary({
       <StatusBar hidden />
 
       <Text
-        fontWeight="500"
+        fontWeight="400"
         fontSize={32}
         mx={20}
         mb={20}

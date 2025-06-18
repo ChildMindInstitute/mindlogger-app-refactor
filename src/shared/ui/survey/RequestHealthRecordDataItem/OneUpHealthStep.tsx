@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
 // This isn't technically a ViewStyle object, but serves the same purpose
 const buttonTextStyle = {
   textColor: '$darkGrey',
-  fontWeight: '500',
+  fontWeight: '400',
   fontSize: 16,
 } as const;
 

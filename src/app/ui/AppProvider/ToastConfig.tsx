@@ -40,6 +40,6 @@ export const styles = StyleSheet.create({
   toastText: {
     justifyContent: 'center',
     fontSize: 18,
-    fontWeight: '500',
+    fontWeight: '400',
   },
 });

@@ -32,7 +32,7 @@ export function Score({ label, value, highlighted }: Props) {
         mr={8}
         flex={1}
         fontSize={18}
-        fontWeight={highlighted ? 'bold' : 'normal'}
+        fontWeight={highlighted ? '700' : '400'}
         color={highlighted ? colors.red2 : 'black'}
         accessibilityLabel="score-name"
       >
@@ -42,7 +42,7 @@ export function Score({ label, value, highlighted }: Props) {
       <Box br={10} bg={highlighted ? '$lighterGrey5' : 'white'} px={40} py={2}>
         <Text
           color={highlighted ? colors.red2 : 'black'}
-          fontWeight={highlighted ? 'bold' : 'normal'}
+          fontWeight={highlighted ? '700' : '400'}
           fontSize={22}
           accessibilityLabel="score-value"
         >

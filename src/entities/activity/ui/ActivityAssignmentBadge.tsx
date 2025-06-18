@@ -2,7 +2,6 @@ import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { IS_IOS } from '@app/shared/lib/constants';
 import { colors } from '@app/shared/lib/constants/colors';
 import { Box, XStack } from '@app/shared/ui/base';
 import { UserProfileIcon } from '@app/shared/ui/icons';
@@ -45,7 +44,7 @@ export const ActivityAssignmentBadge: FC<Props> = ({
         <UserProfileIcon color={colors.lightYellow} size={12} />
       </Box>
       <Text
-        fontWeight={IS_IOS ? '300' : '400'}
+        fontWeight="400"
         fontSize={14}
         accessibilityLabel={accessibilityLabel}
         lineHeight={20}

@@ -220,7 +220,7 @@ const SectionHeader = ({ children }: PropsWithChildren) => (
       mt={16}
       mb={4}
       fontSize={14}
-      fontWeight="600"
+      fontWeight="700"
       color="$darkGrey2"
     >
       {children}

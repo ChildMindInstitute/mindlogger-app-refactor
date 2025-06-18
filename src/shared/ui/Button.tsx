@@ -43,7 +43,7 @@ export function Button({
   spinnerColor,
   textStyles = {
     textColor: '$white',
-    fontWeight: 'bold',
+    fontWeight: '700',
     fontSize: 17,
   },
   touchableStyles,

@@ -2,7 +2,6 @@ import { FC } from 'react';
 
 import { Trans } from 'react-i18next';
 
-import { IS_IOS } from '@app/shared/lib/constants';
 import { colors } from '@app/shared/lib/constants/colors';
 import { Box, XStack } from '@app/shared/ui/base';
 import { UserProfileIcon } from '@app/shared/ui/icons';
@@ -38,7 +37,7 @@ export const ActivityAssignmentBanner: FC<Props> = ({
       </Box>
       <Box flex={1}>
         <Text
-          fontWeight={IS_IOS ? '300' : '400'}
+          fontWeight="400"
           fontSize={16}
           accessibilityLabel={accessibilityLabel}
           lineHeight={24}
@@ -46,7 +45,7 @@ export const ActivityAssignmentBanner: FC<Props> = ({
           <Trans
             i18nKey="assignment:banner"
             components={{
-              strong: <Text fontWeight={IS_IOS ? '600' : '700'} />,
+              strong: <Text fontWeight="700" />,
             }}
             values={{ name: shortName }}
           />

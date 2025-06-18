@@ -3,7 +3,6 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
-import { IS_IOS } from '@app/shared/lib/constants';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { RoundLogo } from '@app/shared/ui/RoundLogo';
 import { RoundTextNotification } from '@app/shared/ui/RoundTextNotification';
@@ -63,7 +62,7 @@ export const AppletCard: FC<Props & AccessibilityProps> = ({
             <Text
               mb={8}
               flex={1}
-              fontWeight={IS_IOS ? '600' : '700'}
+              fontWeight="700"
               fontSize={16}
               accessibilityLabel="applet_name-text"
               lineHeight={20}
@@ -77,7 +76,7 @@ export const AppletCard: FC<Props & AccessibilityProps> = ({
           <Text
             accessibilityLabel="applet_description-text"
             fontSize={14}
-            fontWeight="300"
+            fontWeight="400"
             lineHeight={20}
           >
             {applet.description}

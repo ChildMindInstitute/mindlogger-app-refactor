@@ -96,7 +96,7 @@ export const getAppletDetailsScreenOptions = (
         return (
           <Text
             color={color}
-            fontWeight={focused ? 'bold' : 'normal'}
+            fontWeight={focused ? '700' : '400'}
             fontSize={11}
             accessibilityLabel={`bottom_nav_button-${children}`}
           >

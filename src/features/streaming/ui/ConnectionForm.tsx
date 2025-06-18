@@ -112,7 +112,7 @@ export const ConnectionForm: FC<Props> = ({
             mb={20}
             color="$darkerGrey3"
             fontSize={20}
-            fontWeight="900"
+            fontWeight="700"
             mr={6}
           >
             {t('live_connection:connect_to_server')}
@@ -185,7 +185,7 @@ export const ConnectionForm: FC<Props> = ({
             disabled={connected}
           >
             <Text
-              fontWeight="900"
+              fontWeight="700"
               ml={12}
               color={connected ? colors.grey2 : colors.darkerGrey2}
               accessibilityLabel="connection-form-remember-status"

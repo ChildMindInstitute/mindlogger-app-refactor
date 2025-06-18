@@ -62,7 +62,7 @@ const localStyles = StyleSheet.create({
   },
   listItemText: {
     fontSize: 18,
-    fontWeight: '500',
+    fontWeight: '400',
   },
 });
 
@@ -92,44 +92,44 @@ export const activityMarkDownStyles = StyleSheet.create({
   heading1: {
     fontSize: 36,
     lineHeight: 45,
-    fontWeight: 'bold',
+    fontWeight: '700',
     marginBottom: 18,
   },
   heading2: {
     fontSize: 30,
     lineHeight: 37.5,
-    fontWeight: 'bold',
+    fontWeight: '700',
     marginBottom: 18,
   },
   heading3: {
     fontSize: 24,
     lineHeight: 30,
-    fontWeight: 'bold',
+    fontWeight: '700',
     marginBottom: 18,
   },
   heading4: {
     fontSize: 20,
     lineHeight: 25,
-    fontWeight: 'bold',
+    fontWeight: '700',
     marginBottom: 18,
   },
   heading5: {
     fontSize: 18,
     lineHeight: 22.5,
-    fontWeight: 'bold',
+    fontWeight: '700',
     marginBottom: 18,
   },
   heading6: {
     fontSize: 16,
     lineHeight: 20,
-    fontWeight: 'bold',
+    fontWeight: '700',
     marginBottom: 18,
   },
   paragraph: {
     alignSelf: 'center',
     fontSize: 18,
     lineHeight: 22.5,
-    fontWeight: '300',
+    fontWeight: '400',
   },
   text: {
     flexDirection: 'row',
@@ -161,7 +161,7 @@ const htmlBlockStyles = `
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-weight: bold;
+    font-weight: 700;
     margin-bottom: 18px;
     text-align: left;
   }
