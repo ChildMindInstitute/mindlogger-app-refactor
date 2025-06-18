@@ -41,9 +41,11 @@ export const MarkdownView: FC<Props> = ({ content, markdownStyle, rules }) => {
     ...markdownStyle,
     text: {
       fontFamily: fontLanguage === 'el' ? elFont.family : defaultFont.family,
+      ...markdownStyle.text,
+    },
+    body: {
       fontSize: 16,
       lineHeight: 20,
-      ...markdownStyle.text,
     },
     ...(fontLanguage === 'el'
       ? {
