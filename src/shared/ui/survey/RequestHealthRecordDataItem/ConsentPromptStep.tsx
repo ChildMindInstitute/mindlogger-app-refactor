@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
 import { RequestHealthRecordDataResponse } from '@app/features/pass-survey/lib/types/payload';
 import { RequestHealthRecordDataPipelineItem } from '@app/features/pass-survey/lib/types/payload';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { Box, RadioGroup, YStack } from '@app/shared/ui/base';
 import { RequestHealthRecordDataIcon } from '@app/shared/ui/icons/RequestHealthRecordDataIcon';
@@ -82,7 +82,7 @@ export const ConsentPromptStep: FC<ConsentPromptStepProps> = ({
         onPress={handleExternalLinkPress}
         accessibilityLabel="external-link-button"
       >
-        <Text color={colors.blue} textDecorationLine="none" fontSize={18}>
+        <Text color={palette.blue} textDecorationLine="none" fontSize={18}>
           {t('requestHealthRecordData:linkText')}
         </Text>
       </Link>
@@ -100,9 +100,9 @@ export const ConsentPromptStep: FC<ConsentPromptStepProps> = ({
           return (
             <Box
               key={option.id}
-              borderColor={isSelected ? colors.blue : colors.lighterGrey7}
+              borderColor={isSelected ? palette.blue : palette.lighterGrey7}
               borderWidth={2}
-              backgroundColor={isSelected ? colors.lightBlue : undefined}
+              backgroundColor={isSelected ? palette.lightBlue : undefined}
               px={18}
               py={20}
               borderRadius={12}
@@ -116,16 +116,16 @@ export const ConsentPromptStep: FC<ConsentPromptStepProps> = ({
               >
                 <RadioGroup.Item
                   accessibilityLabel={`ehr-option-${option.id}`}
-                  borderColor={isSelected ? colors.blue : colors.outlineGrey}
+                  borderColor={isSelected ? palette.blue : palette.outlineGrey}
                   borderWidth={3}
                   backgroundColor="transparent"
                   value={option.id}
                 >
                   <RadioGroup.Indicator
-                    background={isSelected ? colors.blue : colors.outlineGrey}
+                    background={isSelected ? palette.blue : palette.outlineGrey}
                   />
                 </RadioGroup.Item>
-                <Text fontSize={18} color={colors.onSurface}>
+                <Text fontSize={18} color={palette.on_surface}>
                   {option.text}
                 </Text>
               </Box>

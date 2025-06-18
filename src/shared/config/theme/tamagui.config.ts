@@ -3,7 +3,7 @@ import { createFont, createTamagui, createTokens } from '@tamagui/core';
 import { shorthands } from '@tamagui/shorthands';
 import { themes as baseThemes, tokens as baseTokens } from '@tamagui/themes';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 export const defaultFont = createFont({
   family: 'Moderat-Regular',
@@ -45,7 +45,7 @@ const codeFont = createFont({
 
 const tokens = createTokens({
   ...baseTokens,
-  color: colors,
+  color: palette,
 });
 
 const animations = createAnimations({

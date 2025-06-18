@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { TIME_PICKER_FORMAT_PLACEHOLDER } from '@app/shared/lib/constants/dateTime';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import {
@@ -42,7 +42,7 @@ export const TimePickerItem: FC<Props> = ({ value, onChange }) => {
       value={timeInMs ? new Date(timeInMs) : null}
       dateDisplayFormat="hh:mm aa"
       mode="time"
-      iconAfter={<AlarmIcon color={colors.lightGrey} size={15} />}
+      iconAfter={<AlarmIcon color={palette.lightGrey} size={15} />}
       placeholder={TIME_PICKER_FORMAT_PLACEHOLDER}
     />
   );

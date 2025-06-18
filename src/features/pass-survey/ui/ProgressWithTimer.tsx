@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Easing, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { ONE_SECOND } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppTimer } from '@app/shared/lib/timers/hooks/useAppTimer';
 import { useInterval } from '@app/shared/lib/timers/hooks/useInterval';
 import { isObjectNotEmpty } from '@app/shared/lib/utils/common';
@@ -117,7 +117,7 @@ const Timer: FC<TimerProps> = ({ duration }) => {
 
   const formattedTimeLeft = getClockTime(timeLeft);
 
-  const textColor = timeIsRunningOut ? colors.alertDark : colors.onSurface;
+  const textColor = timeIsRunningOut ? palette.alertDark : palette.on_surface;
 
   return (
     <>

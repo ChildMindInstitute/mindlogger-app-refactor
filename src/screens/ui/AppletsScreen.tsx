@@ -21,7 +21,7 @@ import {
   MixEvents,
   MixProperties,
 } from '@app/shared/lib/analytics/IAnalyticsService';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
@@ -51,7 +51,7 @@ export const AppletsScreen: FC = () => {
     getDefaultAnalyticsService().track(MixEvents.HomeView);
 
     // Color must match the AppletsScreen's headerStyle.backgroundColor in RootNavigator
-    dispatch(bannerActions.setBannersBg(colors.lighterGrey2));
+    dispatch(bannerActions.setBannersBg(palette.lighterGrey2));
   });
 
   const queryClient = useQueryClient();

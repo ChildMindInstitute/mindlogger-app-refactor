@@ -1,6 +1,6 @@
 import { Circle } from 'react-native-progress';
 
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 type Props = {
   size?: number;
@@ -13,6 +13,6 @@ type Props = {
  */
 export function Spinner({ size }: Props) {
   return (
-    <Circle size={size} color={colors.blue} borderWidth={1} indeterminate />
+    <Circle size={size} color={palette.blue} borderWidth={1} indeterminate />
   );
 }

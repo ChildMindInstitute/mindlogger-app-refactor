@@ -5,7 +5,7 @@ import { XStackProps } from '@tamagui/stacks';
 import { XStack } from './base';
 import { ArrowRightIcon } from './icons';
 import { Text } from './Text';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 type Props = {
   onPress: () => void;
@@ -39,7 +39,7 @@ export const RowButton: FC<Props> = props => {
       {...boxProps}
     >
       <Text>{title}</Text>
-      <RightIcon color={colors.mediumGrey} size={15} />
+      <RightIcon color={palette.mediumGrey} size={15} />
     </XStack>
   );
 };

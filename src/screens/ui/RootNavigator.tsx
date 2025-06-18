@@ -29,7 +29,7 @@ import { useFeatureFlagsAutoLogin } from '@app/features/login/model/useFeatureFl
 import { useLogout } from '@app/features/logout/model/hooks';
 import { useOnNotificationTap } from '@app/features/tap-on-notification/model/hooks/useOnNotificationTap';
 import { APP_VERSION, ENV, IS_ANDROID } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAlarmPermissions } from '@app/shared/lib/hooks/useAlarmPermissions';
 import { useBackgroundTask } from '@app/shared/lib/hooks/useBackgroundTask';
@@ -216,7 +216,7 @@ export const RootNavigator = () => {
             options={{
               title: t('login:forgot_password'),
               contentStyle: {
-                borderTopColor: colors.grey,
+                borderTopColor: palette.grey,
                 borderTopWidth: 1,
               },
               headerLeft: () => (
@@ -225,7 +225,7 @@ export const RootNavigator = () => {
                   onPress={navigation.goBack}
                   mr={24}
                 >
-                  <CloseIcon color={colors.white} size={22} />
+                  <CloseIcon color={palette.white} size={22} />
                 </Text>
               ),
             }}
@@ -260,14 +260,14 @@ export const RootNavigator = () => {
             name="Applets"
             options={{
               headerStyle: {
-                backgroundColor: colors.lighterGrey2,
+                backgroundColor: palette.lighterGrey2,
               },
               headerTitleAlign: 'center',
 
               headerTitle: ({ children }) => (
                 <HeaderTitle
                   aria-label="welcome_name-text"
-                  color={colors.tertiary}
+                  color={palette.tertiary}
                 >
                   {children}
                 </HeaderTitle>
@@ -286,7 +286,7 @@ export const RootNavigator = () => {
                     navigation.navigate('Settings');
                   }}
                 >
-                  <UserProfileIcon color={colors.tertiary} size={22} />
+                  <UserProfileIcon color={palette.tertiary} size={22} />
                 </TouchableOpacity>
               ),
               headerLeft: () => null,
@@ -332,7 +332,7 @@ export const RootNavigator = () => {
                       alignItems="center"
                     >
                       <Text
-                        color={colors.white}
+                        color={palette.white}
                         fontSize={18}
                         fontWeight="700"
                         numberOfLines={1}
@@ -348,7 +348,7 @@ export const RootNavigator = () => {
                   {...(IS_ANDROID && { mr: 15 })}
                   fallbackRoute="Applets"
                 >
-                  <HomeIcon color={colors.white} size={32} />
+                  <HomeIcon color={palette.white} size={32} />
                 </BackButton>
               ),
             })}

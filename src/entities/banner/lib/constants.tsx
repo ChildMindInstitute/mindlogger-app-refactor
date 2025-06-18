@@ -1,4 +1,4 @@
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import {
   MaterialAlertCircle,
   MaterialAlertOctagon,
@@ -16,18 +16,18 @@ export const BANNERS = [
 
 export const BANNER_ICONS = {
   success: (
-    <OcticonsCircleCheckFill color={colors.alertSuccessIcon} size={26} />
+    <OcticonsCircleCheckFill color={palette.alertSuccessIcon} size={26} />
   ),
-  error: <MaterialAlertOctagon color={colors.alertErrorIcon} size={26} />,
-  warning: <MaterialAlertCircle color={colors.alertWarnIcon} size={26} />,
-  info: <MaterialInformation color={colors.alertInfoIcon} size={26} />,
+  error: <MaterialAlertOctagon color={palette.alertErrorIcon} size={26} />,
+  warning: <MaterialAlertCircle color={palette.alertWarnIcon} size={26} />,
+  info: <MaterialInformation color={palette.alertInfoIcon} size={26} />,
 };
 
 export const BANNER_BG_COLORS = {
-  success: colors.alertSuccessBg,
-  error: colors.alertErrorBg,
-  warning: colors.alertWarnBg,
-  info: colors.alertInfoBg,
+  success: palette.alertSuccessBg,
+  error: palette.alertErrorBg,
+  warning: palette.alertWarnBg,
+  info: palette.alertInfoBg,
 };
 
-export const BANNERS_DEFAULT_BG = colors.primary;
+export const BANNERS_DEFAULT_BG = palette.surface;

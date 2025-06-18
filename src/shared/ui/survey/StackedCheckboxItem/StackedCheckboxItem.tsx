@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 import { YStack } from '../../base';
 import { CheckBox } from '../../CheckBox';
@@ -96,11 +96,11 @@ export const StackedCheckboxItem: FC<Props> = ({
                 lineWidth={2}
                 animationDuration={0.2}
                 boxType="square"
-                tintColors={{ true: colors.primary, false: colors.primary }}
-                onCheckColor={colors.white}
-                onFillColor={colors.primary}
-                onTintColor={colors.primary}
-                tintColor={colors.primary}
+                tintColors={{ true: palette.primary, false: palette.primary }}
+                onCheckColor={palette.white}
+                onFillColor={palette.primary}
+                onTintColor={palette.primary}
+                tintColor={palette.primary}
                 onAnimationType="bounce"
                 offAnimationType="bounce"
                 value={isValueSelected(option, rowIndex)}

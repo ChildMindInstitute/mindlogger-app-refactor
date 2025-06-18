@@ -28,7 +28,7 @@ const LongTextInputView = styled(
     underlineColorAndroid: 'transparent',
     selectionColor: 'black',
     borderColor: '$lighterGrey7',
-    color: '$onSurface',
+    color: '$on_surface',
     focusStyle: {
       borderColor: '$primary',
     },

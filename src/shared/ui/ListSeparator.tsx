@@ -1,9 +1,9 @@
 import { styled, Stack } from '@tamagui/core';
 
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 export const ListSeparator = styled(Stack, {
   width: '100%',
   height: 1,
-  backgroundColor: colors.lightGrey,
+  backgroundColor: palette.lightGrey,
 });

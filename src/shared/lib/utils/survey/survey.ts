@@ -7,7 +7,7 @@ import {
   EntityProgressionInProgress,
 } from '@app/abstract/lib/types/entityProgress';
 
-import { colors } from '../../constants/colors';
+import { palette } from '../../constants/palette';
 import { getNow } from '../dateTime';
 
 type ColorModes = {
@@ -18,8 +18,8 @@ type ColorModes = {
 export const invertColor = (
   hex: string,
   colorModes: ColorModes = {
-    dark: colors.darkerGrey,
-    light: colors.white,
+    dark: palette.darkerGrey,
+    light: palette.white,
   },
 ) => {
   const RED_RATIO = 299;

@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { ToastConfigParams } from 'react-native-toast-message';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { Box } from '@app/shared/ui/base';
 import { Text } from '@app/shared/ui/Text';
 
@@ -16,7 +16,7 @@ export const ToastConfig = {
     <Box style={styles.defaultToast}>
       <View style={styles.row}>
         <View style={styles.toastText}>
-          <Text numberOfLines={3} style={{ color: colors.white }}>
+          <Text numberOfLines={3} style={{ color: palette.white }}>
             {props.text1}
           </Text>
         </View>
@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     width: 340,
     flexDirection: 'row',
     minHeight: 50,
-    backgroundColor: colors.greyTsp,
+    backgroundColor: palette.greyTsp,
     padding: 12,
     borderRadius: 5,
   },

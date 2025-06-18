@@ -11,7 +11,7 @@ import { openUrl } from '@app/screens/lib/utils/helpers';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Link } from '@app/shared/ui/Link';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
-import { curiousLogoWhite } from '@assets/images';
+import { curiousLogoBlack } from '@assets/images';
 
 export const LoginScreen: FC = () => {
   const { navigate } = useNavigation();
@@ -31,14 +31,14 @@ export const LoginScreen: FC = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Box flex={1} bg="$primary" px={isTablet() ? '$12' : 0}>
+      <Box flex={1} bg="$surface" px={isTablet() ? '$12' : 0}>
         <StatusBar />
 
         <Box f={1} px={isTablet() ? '$17' : '$8'}>
           <Box f={1} jc="center">
             <YStack mb={50} jc="flex-end" alignItems="center">
               <Image
-                source={curiousLogoWhite}
+                source={curiousLogoBlack}
                 width={251}
                 height={54}
                 style={{

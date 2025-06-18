@@ -3,7 +3,7 @@ import { FC, PropsWithChildren } from 'react';
 import { YStack, YStackProps } from '@tamagui/stacks';
 
 import { bannerActions } from '@app/entities/banner/model/slice';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { ImageBackground } from '@app/shared/ui/ImageBackground';
@@ -19,7 +19,7 @@ export const SubScreenContainer: FC<PropsWithChildren> = ({ children }) => {
 
   useOnFocus(() => {
     // Match <ImageBackground> raster image top pixel color
-    dispatch(bannerActions.setBannersBg(colors.lightGrey4));
+    dispatch(bannerActions.setBannersBg(palette.lightGrey4));
   });
 
   return (

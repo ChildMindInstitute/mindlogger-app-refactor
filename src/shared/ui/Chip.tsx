@@ -4,7 +4,7 @@ import { styled } from '@tamagui/core';
 import { SvgProps } from 'react-native-svg';
 
 import { Text } from './Text';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 const getFillForVariant = (
   variant: React.ComponentProps<typeof StyledChip>['variant'],
@@ -14,7 +14,7 @@ const getFillForVariant = (
       return '#D9730D';
     case 'primary':
     default:
-      return colors.alertInfoIcon;
+      return palette.alertInfoIcon;
   }
 };
 

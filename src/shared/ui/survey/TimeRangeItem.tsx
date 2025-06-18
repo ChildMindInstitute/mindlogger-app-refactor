@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { TIME_PICKER_FORMAT_PLACEHOLDER } from '@app/shared/lib/constants/dateTime';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import {
@@ -73,7 +73,7 @@ export const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
         dateDisplayFormat="h:mm a"
         value={startTimeAsDate}
         mode="time"
-        iconAfter={<BedIcon color={colors.grey2} size={15} />}
+        iconAfter={<BedIcon color={palette.grey2} size={15} />}
         placeholder={TIME_PICKER_FORMAT_PLACEHOLDER}
       />
 
@@ -84,7 +84,7 @@ export const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
         dateDisplayFormat="h:mm a"
         mode="time"
         value={endTimeAsDate}
-        iconAfter={<AlarmIcon color={colors.grey2} size={15} />}
+        iconAfter={<AlarmIcon color={palette.grey2} size={15} />}
         placeholder={TIME_PICKER_FORMAT_PLACEHOLDER}
       />
     </YStack>

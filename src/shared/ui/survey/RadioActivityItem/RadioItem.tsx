@@ -4,7 +4,7 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { invertColor } from '@app/shared/lib/utils/survey/survey';
 
 import { RadioOption } from './types';
@@ -51,8 +51,8 @@ export const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
   }
 
   const hasColor = color && setPalette;
-  const invertedColor = hasColor ? invertColor(color) : colors.primary;
-  const invertedTextColor = hasColor ? invertColor(color) : colors.darkerGrey;
+  const invertedColor = hasColor ? invertColor(color) : palette.primary;
+  const invertedTextColor = hasColor ? invertColor(color) : palette.darkerGrey;
 
   return (
     <XStack
@@ -75,7 +75,7 @@ export const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
               markdown={tooltipText}
             >
               <QuestionTooltipIcon
-                color={hasColor ? invertedColor : colors.grey}
+                color={hasColor ? invertedColor : palette.grey}
                 size={22}
               />
             </Tooltip>

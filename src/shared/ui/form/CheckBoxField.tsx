@@ -3,7 +3,7 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { Controller, useFormContext, useController } from 'react-hook-form';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 import { ErrorMessage } from './ErrorMessage';
 import { Box, XStack } from '../base';
@@ -22,10 +22,10 @@ export const CheckBoxField: FC<
   PropsWithChildren<Props & AccessibilityProps>
 > = ({
   name,
-  onFillColor = colors.white,
-  onCheckColor = colors.darkBlue,
-  onTintColor = colors.white,
-  tintColor = colors.white,
+  onFillColor = palette.white,
+  onCheckColor = palette.darkBlue,
+  onTintColor = palette.white,
+  tintColor = palette.white,
   disabled = false,
   accessibilityLabel,
   children,
@@ -53,13 +53,13 @@ export const CheckBoxField: FC<
                 style={styles.checkbox}
                 tintColors={{
                   true: onTintColor,
-                  false: isError ? colors.alert : onTintColor,
+                  false: isError ? palette.alert : onTintColor,
                 }}
                 onCheckColor={onCheckColor}
                 disabled={disabled}
                 onFillColor={onFillColor}
                 onTintColor={onTintColor}
-                tintColor={isError ? colors.alert : tintColor}
+                tintColor={isError ? palette.alert : tintColor}
                 boxType="square"
                 lineWidth={2}
                 onAnimationType="fade"

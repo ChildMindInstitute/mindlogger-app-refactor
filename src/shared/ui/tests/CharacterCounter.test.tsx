@@ -4,7 +4,7 @@ import { render } from '@testing-library/react-native';
 import { useTranslation } from 'react-i18next';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 import { CharacterCounter } from '../CharacterCounter';
 
@@ -30,7 +30,7 @@ describe('CharacterCounter Component', () => {
     const element = getByText('10/20 characters');
     expect(element).toBeTruthy();
     expect(element.props.style).toEqual(
-      expect.objectContaining({ color: colors.primary }),
+      expect.objectContaining({ color: palette.primary }),
     );
   });
 
@@ -43,7 +43,7 @@ describe('CharacterCounter Component', () => {
 
     const element = getByText('10/20 characters');
     expect(element.props.style).toEqual(
-      expect.objectContaining({ color: colors.grey4 }),
+      expect.objectContaining({ color: palette.grey4 }),
     );
   });
 

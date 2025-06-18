@@ -4,7 +4,7 @@ import { GetProps, styled } from '@tamagui/core';
 import { useFocusable } from '@tamagui/focusable';
 
 import { IS_IOS } from '../lib/constants';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 export const InputFrame = styled(
   TextInput,
@@ -34,7 +34,7 @@ export const InputFrame = styled(
         },
         dark: {
           color: '$darkGrey',
-          placeholderTextColor: IS_IOS ? colors.lightGrey : colors.grey,
+          placeholderTextColor: IS_IOS ? palette.lightGrey : palette.grey,
           borderBottomColor: '#1e1d1d',
         },
         survey: {

@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 
 import { AbTestPayload } from '@app/abstract/lib/types/abTrails';
 import { Point } from '@app/abstract/lib/types/primitive';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { moderatFont } from '@assets/fonts';
 
 import { getEquidistantPoint } from '../lib/utils/calculation';
@@ -120,7 +120,7 @@ export const AbShapes: FC<Props> = props => {
               y={errorMiddlePoint.y}
               text={'x'}
               font={fontCross}
-              color={colors.red}
+              color={palette.red}
             />
           </Group>
         )}
@@ -133,7 +133,9 @@ export const AbShapes: FC<Props> = props => {
                 cy={x.cy}
                 r={config.radius}
                 color={
-                  greenRoundOrder === x.orderIndex ? colors.green : colors.black
+                  greenRoundOrder === x.orderIndex
+                    ? palette.green
+                    : palette.black
                 }
               />
 
@@ -142,7 +144,7 @@ export const AbShapes: FC<Props> = props => {
                 y={x.cy + labelOffset.y}
                 text={x.label}
                 font={fontDigits}
-                color={colors.white}
+                color={palette.white}
               />
             </Group>
           ))}
@@ -154,7 +156,7 @@ export const AbShapes: FC<Props> = props => {
             y={first.cy - config.radius + beginOffset.y}
             text={t('cognitive:begin')}
             font={fontBeginEnd}
-            color={colors.black}
+            color={palette.black}
           />
 
           <Text
@@ -162,7 +164,7 @@ export const AbShapes: FC<Props> = props => {
             y={last.cy - config.radius + endOffset.y}
             text={t('cognitive:end')}
             font={fontBeginEnd}
-            color={colors.black}
+            color={palette.black}
           />
         </Group>
       </Canvas>

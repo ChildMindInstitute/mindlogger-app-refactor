@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { bannerActions } from '@app/entities/banner/model/slice';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Box } from '@app/shared/ui/base';
@@ -13,7 +13,7 @@ export const AutocompletionScreen: FC = () => {
 
   useOnFocus(() => {
     // Match <ImageBackground> raster image top pixel color
-    dispatch(bannerActions.setBannersBg(colors.lightGrey4));
+    dispatch(bannerActions.setBannersBg(palette.lightGrey4));
   });
 
   return (

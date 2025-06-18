@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
 import { Box } from './base';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 export type LabeledValue = {
   label: string;
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   dropdown: {
     backgroundColor: 'white',
     borderBottomWidth: 1.5,
-    borderBottomColor: colors.lightGrey,
+    borderBottomColor: palette.lightGrey,
     color: 'white',
   },
   button: {
@@ -55,11 +55,11 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'transparent',
     borderBottomWidth: 1.5,
-    borderBottomColor: colors.grey,
-    color: colors.grey,
+    borderBottomColor: palette.grey,
+    color: palette.grey,
   },
   label: {
     fontSize: 13,
-    color: colors.grey,
+    color: palette.grey,
   },
 });

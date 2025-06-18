@@ -5,7 +5,7 @@ import { XStackProps } from '@tamagui/stacks';
 import { Paragraph } from '@tamagui/text';
 
 import { OneUpHealthSystemItem } from '@app/shared/api/services/IOneUpHealthService';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Center } from '@app/shared/ui/Center';
 import { ChevronRightIcon } from '@app/shared/ui/icons';
@@ -35,7 +35,7 @@ export const HealthSystemItem: FC<HealthSystemItemProps> = ({
       bg="$lighterGrey2"
       borderRadius="$4"
       borderWidth={1}
-      borderColor={colors.outlineGrey}
+      borderColor={palette.outlineGrey}
       onPress={onPress}
       disabled={isDisabled}
       opacity={isDisabled ? 0.6 : 1}
@@ -66,7 +66,7 @@ export const HealthSystemItem: FC<HealthSystemItemProps> = ({
         {isLoading ? (
           <Spinner size={24} />
         ) : (
-          <ChevronRightIcon color={colors.grey2} size={16} />
+          <ChevronRightIcon color={palette.grey2} size={16} />
         )}
       </Center>
     </XStack>
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 2,
     elevation: 3,
-    backgroundColor: colors.white,
+    backgroundColor: palette.white,
   },
   image: {
     height: '100%',

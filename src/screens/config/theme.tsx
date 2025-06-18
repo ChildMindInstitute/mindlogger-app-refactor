@@ -6,7 +6,7 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
 import { AppletTheme } from '@app/entities/applet/lib/types';
 import { IS_ANDROID, IS_TABLET } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { CloseIcon } from '@app/shared/ui/icons';
 import { AboutIcon } from '@app/shared/ui/icons/About';
 import { DataIcon } from '@app/shared/ui/icons/Data';
@@ -35,7 +35,7 @@ export const getScreenOptions = ({
     headerBackVisible: false,
     headerLeft: () => (
       <Text aria-label="close-button" onPress={navigation.goBack} mr={24}>
-        <CloseIcon color={colors.white} size={22} />
+        <CloseIcon color={palette.white} size={22} />
       </Text>
     ),
   };
@@ -69,8 +69,8 @@ export const getAppletDetailsScreenOptions = (
       }
     };
 
-    const tabBarActiveTintColor = appletTheme?.primaryColor || colors.primary;
-    const tabBarInactiveTintColor = colors.darkerGrey3;
+    const tabBarActiveTintColor = appletTheme?.primaryColor || palette.primary;
+    const tabBarInactiveTintColor = palette.darkerGrey3;
 
     return {
       headerShown: false,
@@ -85,7 +85,7 @@ export const getAppletDetailsScreenOptions = (
         : {}),
       tabBarIcon: ({ color }: { color: string }) => tabBarIcon(color),
       tabBarStyle: {
-        backgroundColor: colors.lightBlue,
+        backgroundColor: palette.lightBlue,
         paddingTop: 3,
         ...(IS_ANDROID ? { paddingBottom: 5 } : {}),
         ...(hasBottomInset

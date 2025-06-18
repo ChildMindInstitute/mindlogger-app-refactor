@@ -10,7 +10,7 @@ import {
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
 import { bannerActions } from '@app/entities/banner/model/slice';
 import { useActiveAssessmentLink } from '@app/screens/model/hooks/useActiveAssessmentLink';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
@@ -326,7 +326,7 @@ export function ActivityStepper({
 
   useOnFocus(() => {
     // Match in-progress activity background color
-    dispatch(bannerActions.setBannersBg(colors.white));
+    dispatch(bannerActions.setBannersBg(palette.white));
   });
 
   if (!activityStorageRecord) {

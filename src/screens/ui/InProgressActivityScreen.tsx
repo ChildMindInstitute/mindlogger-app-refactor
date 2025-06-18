@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import { bannerActions } from '@app/entities/banner/model/slice';
 import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Emitter } from '@app/shared/lib/services/Emitter';
@@ -54,7 +54,7 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
 
   useOnFocus(() => {
     // Match topmost container background color
-    dispatch(bannerActions.setBannersBg(colors.white));
+    dispatch(bannerActions.setBannersBg(palette.white));
   });
 
   const { top } = useSafeAreaInsets();

@@ -9,7 +9,7 @@ import {
 } from 'victory-native';
 
 import { DAYS_OF_WEEK_NUMBERS } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { getCurrentWeekDates, range } from '@app/shared/lib/utils/common';
 import { areDatesEqual } from '@app/shared/lib/utils/dateTime';
 
@@ -48,7 +48,7 @@ export const BarChart: FC<Props> = ({ data }) => {
   return (
     <VictoryChart>
       <VictoryScatter
-        style={{ data: { fill: colors.lighterGrey } }}
+        style={{ data: { fill: palette.lighterGrey } }}
         data={getXAxisDots()}
         x="dot"
         y="value"
@@ -58,9 +58,9 @@ export const BarChart: FC<Props> = ({ data }) => {
       <VictoryAxis
         tickValues={DAYS_OF_WEEK_NUMBERS}
         style={{
-          axis: { stroke: colors.lighterGrey, fill: colors.lightGrey2 },
-          axisLabel: { fill: colors.lighterGrey },
-          tickLabels: { fill: colors.grey },
+          axis: { stroke: palette.lighterGrey, fill: palette.lightGrey2 },
+          axisLabel: { fill: palette.lighterGrey },
+          tickLabels: { fill: palette.grey },
         }}
         tickCount={6}
         tickFormat={(_, index) => {
@@ -70,8 +70,8 @@ export const BarChart: FC<Props> = ({ data }) => {
 
       <VictoryBar
         style={{
-          data: { fill: colors.primary },
-          labels: { padding: -20, fill: colors.white },
+          data: { fill: palette.primary },
+          labels: { padding: -20, fill: palette.white },
         }}
         labels={({ datum }) => datum.value}
         data={barChartData}

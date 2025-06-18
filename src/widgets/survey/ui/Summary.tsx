@@ -8,7 +8,7 @@ import { AlertList } from '@app/entities/alert/ui/AlertList';
 import { bannerActions } from '@app/entities/banner/model/slice';
 import { ScoreList } from '@app/entities/score/ui/ScoreList';
 import { StaticNavigationPanel } from '@app/features/pass-survey/ui/StaticNavigationPanel';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Box, YStack } from '@app/shared/ui/base';
@@ -71,7 +71,7 @@ export function Summary({
 
   useOnFocus(() => {
     // Match topmost container background color
-    dispatch(bannerActions.setBannersBg(colors.white));
+    dispatch(bannerActions.setBannersBg(palette.white));
   });
 
   if (!initialized) {

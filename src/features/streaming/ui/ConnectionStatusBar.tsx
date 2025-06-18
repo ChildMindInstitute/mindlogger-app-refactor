@@ -5,7 +5,7 @@ import { XStackProps } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
 import { useAppletStreamingDetails } from '@app/entities/applet/lib/hooks/useAppletStreamingDetails';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useTCPSocket } from '@app/shared/lib/tcp/useTCPSocket';
 import { XStack } from '@app/shared/ui/base';
 import { EditIcon } from '@app/shared/ui/icons';
@@ -56,7 +56,7 @@ export const ConnectionStatusBar: FC<Props> = ({ appletId, ...styleProps }) => {
           accessibilityLabel="streaming-modal-open-btn"
           onPress={onEdit}
         >
-          <EditIcon color={colors.black} size={22} />
+          <EditIcon color={palette.black} size={22} />
         </TouchableOpacity>
       </XStack>
 

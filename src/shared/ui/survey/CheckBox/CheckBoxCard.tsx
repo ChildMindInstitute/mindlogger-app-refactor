@@ -4,7 +4,7 @@ import { Platform, StyleSheet } from 'react-native';
 import { YStackProps } from '@tamagui/stacks';
 
 import { IS_ANDROID } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { invertColor } from '@app/shared/lib/utils/survey/survey';
 
 import { Item } from './types';
@@ -56,28 +56,28 @@ export function CheckBoxCard({
 
   const hasColor = color && setPalette;
 
-  const defaultBGColor = selected ? colors.lighterGrey6 : colors.white;
+  const defaultBGColor = selected ? palette.lighterGrey6 : palette.white;
   const bgColor = hasColor ? color : defaultBGColor;
 
   const textColor = color
-    ? invertColor(color, { dark: colors.white, light: colors.black })
-    : colors.onSurface;
+    ? invertColor(color, { dark: palette.white, light: palette.black })
+    : palette.on_surface;
 
   const tooltipColor = color
     ? invertColor(color, {
-        dark: colors.darkOnSurface,
-        light: colors.onSurface,
+        dark: palette.darkon_surface,
+        light: palette.on_surface,
       })
-    : colors.darkerGrey4;
+    : palette.darkerGrey4;
 
   const invertedCheckboxColor = color
     ? invertColor(color, {
-        dark: colors.darkOnSurface,
-        light: colors.onSurface,
+        dark: palette.darkon_surface,
+        light: palette.on_surface,
       })
-    : colors.lighterGrey6;
+    : palette.lighterGrey6;
 
-  const borderColor = selected ? colors.blue3 : colors.lighterGrey7;
+  const borderColor = selected ? palette.blue3 : palette.lighterGrey7;
 
   return (
     <OptionCard
@@ -98,13 +98,13 @@ export function CheckBoxCard({
             lineWidth={IS_ANDROID ? 0 : 2}
             boxType="square"
             tintColors={{
-              true: hasColor ? invertedCheckboxColor : colors.primary,
-              false: hasColor ? invertedCheckboxColor : colors.outlineGrey,
+              true: hasColor ? invertedCheckboxColor : palette.primary,
+              false: hasColor ? invertedCheckboxColor : palette.outlineGrey,
             }}
-            onCheckColor={hasColor ? color : colors.white}
-            onFillColor={hasColor ? invertedCheckboxColor : colors.primary}
-            onTintColor={hasColor ? invertedCheckboxColor : colors.primary}
-            tintColor={hasColor ? invertedCheckboxColor : colors.outlineGrey}
+            onCheckColor={hasColor ? color : palette.white}
+            onFillColor={hasColor ? invertedCheckboxColor : palette.primary}
+            onTintColor={hasColor ? invertedCheckboxColor : palette.primary}
+            tintColor={hasColor ? invertedCheckboxColor : palette.outlineGrey}
             onAnimationType="fade"
             offAnimationType="fade"
             value={selected}

@@ -4,7 +4,7 @@ import { CachedImage } from '@georstat/react-native-image-cache';
 import { XStack } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { BackButton } from '@app/shared/ui/BackButton';
 import { Box } from '@app/shared/ui/base';
 import { ListSeparator } from '@app/shared/ui/ListSeparator';
@@ -49,7 +49,7 @@ export function Header({
           {activityName}
         </Text>
         <BackButton aria-label="close-button">
-          <Text color={colors.blue3}>{t('activity_navigation:exit')}</Text>
+          <Text color={palette.blue3}>{t('activity_navigation:exit')}</Text>
         </BackButton>
       </XStack>
       <HeaderProgress
@@ -58,7 +58,7 @@ export function Header({
         flowId={flowId}
         targetSubjectId={targetSubjectId}
       />
-      <ListSeparator mt={10} bg={colors.lighterGrey7} />
+      <ListSeparator mt={10} bg={palette.lighterGrey7} />
     </>
   );
 }

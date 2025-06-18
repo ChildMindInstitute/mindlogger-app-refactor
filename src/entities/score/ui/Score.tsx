@@ -1,6 +1,6 @@
 import { Image } from 'react-native';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { getFloatPartLength } from '@app/shared/lib/utils/common';
 import { Box, XStack } from '@app/shared/ui/base';
 import { Text } from '@app/shared/ui/Text';
@@ -33,7 +33,7 @@ export function Score({ label, value, highlighted }: Props) {
         flex={1}
         fontSize={18}
         fontWeight={highlighted ? '700' : '400'}
-        color={highlighted ? colors.red2 : 'black'}
+        color={highlighted ? palette.red2 : 'black'}
         accessibilityLabel="score-name"
       >
         {label}
@@ -41,7 +41,7 @@ export function Score({ label, value, highlighted }: Props) {
 
       <Box br={10} bg={highlighted ? '$lighterGrey5' : 'white'} px={40} py={2}>
         <Text
-          color={highlighted ? colors.red2 : 'black'}
+          color={highlighted ? palette.red2 : 'black'}
           fontWeight={highlighted ? '700' : '400'}
           fontSize={22}
           accessibilityLabel="score-value"

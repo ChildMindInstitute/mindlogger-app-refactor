@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { format } from 'date-fns';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { DATE_PICKER_FORMAT_PLACEHOLDER } from '@app/shared/lib/constants/dateTime';
 import { getDateFromString } from '@app/shared/lib/utils/dateTime';
 
@@ -28,7 +28,7 @@ export const DatePickerItem: FC<Props> = ({ value, onChange }) => {
       accessibilityLabel="date-picker"
       onChange={onChangeDate}
       value={valueAsDate}
-      iconAfter={<RightArrowIcon color={colors.lightGrey2} size={15} />}
+      iconAfter={<RightArrowIcon color={palette.lightGrey2} size={15} />}
       placeholder={DATE_PICKER_FORMAT_PLACEHOLDER}
     />
   );

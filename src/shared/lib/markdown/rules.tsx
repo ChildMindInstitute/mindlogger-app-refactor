@@ -17,7 +17,7 @@ import { AudioPlayer } from '../../ui/survey/AudioPlayer';
 import { VideoPlayer } from '../../ui/survey/VideoPlayer';
 import { YoutubeVideo } from '../../ui/survey/YoutubeVideo';
 import { Text } from '../../ui/Text';
-import { colors } from '../constants/colors';
+import { palette } from '../constants/palette';
 
 const { width: viewPortWidth } = Dimensions.get('window');
 const PADDING_X = 32;
@@ -51,7 +51,7 @@ const localStyles = StyleSheet.create({
     backgroundColor: 'yellow',
   },
   primaryText: {
-    color: colors.primary,
+    color: palette.primary,
   },
   image: {
     height: 200,
@@ -135,9 +135,9 @@ export const activityMarkDownStyles = StyleSheet.create({
     flexDirection: 'row',
   },
   blockquote: {
-    backgroundColor: colors.lighterGrey2,
+    backgroundColor: palette.lighterGrey2,
     borderLeftWidth: 4,
-    borderLeftColor: colors.mediumGrey,
+    borderLeftColor: palette.mediumGrey,
     paddingVertical: 0,
     paddingHorizontal: 5,
     marginLeft: 3,

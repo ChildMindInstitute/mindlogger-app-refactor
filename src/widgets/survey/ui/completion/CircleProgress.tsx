@@ -6,7 +6,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Svg, Circle } from 'react-native-svg';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { Box } from '@app/shared/ui/base';
 
 type Props = {
@@ -45,11 +45,15 @@ export const CircleProgress = ({ size = 86, progress }: Props) => {
   return (
     <Box w={size} h={size} transform={'rotate(90deg)'}>
       <Svg width={size} height={size} fill="none">
-        <Circle fill="none" stroke={colors.lightBlue2} {...staticCircleProps} />
+        <Circle
+          fill="none"
+          stroke={palette.lightBlue2}
+          {...staticCircleProps}
+        />
 
         <AnimatedSvgCircle
           fill="none"
-          stroke={colors.blue3}
+          stroke={palette.blue3}
           strokeDasharray={strokeDasharray}
           animatedProps={animatedStrokeDashoffset}
           {...staticCircleProps}

@@ -4,7 +4,7 @@ import { TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { IS_ANDROID } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Chip } from '@app/shared/ui/Chip';
 import { ChevronRightIcon } from '@app/shared/ui/icons';
@@ -57,8 +57,8 @@ export const ActivityCard: FC<Props> = ({
       disabled={isDisabled}
     >
       <XStack
-        backgroundColor={colors.white}
-        borderColor={colors.lighterGrey}
+        backgroundColor={palette.white}
+        borderColor={palette.lighterGrey}
         borderRadius={9}
         borderWidth={3}
         gap={14}
@@ -120,14 +120,14 @@ export const ActivityCard: FC<Props> = ({
           <TimeStatusRecord activity={activity} />
 
           {IS_ANDROID && activity.type === ActivityType.Flanker && (
-            <Text mt={12} color={colors.alert}>
+            <Text mt={12} color={palette.alert}>
               {t('activity:flanker_accuracy_warn')}
             </Text>
           )}
         </YStack>
 
         <Box alignSelf="center">
-          <ChevronRightIcon color={colors.grey2} size={16} />
+          <ChevronRightIcon color={palette.grey2} size={16} />
         </Box>
       </XStack>
     </TouchableOpacity>

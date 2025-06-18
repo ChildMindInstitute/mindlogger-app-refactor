@@ -7,7 +7,7 @@ import Animated, { FadeOut } from 'react-native-reanimated';
 import { Text } from '@app/shared/ui/Text';
 
 import { APP_VERSION, ENV } from '../lib/constants';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 export const SplashScreen = () => {
   const buildNumber = DeviceInfo.getBuildNumber();
@@ -23,7 +23,7 @@ export const SplashScreen = () => {
       exiting={FadeOut.duration(500)}
       style={style.container}
     >
-      <ActivityIndicator size="large" color={colors.secondary} />
+      <ActivityIndicator size="large" color={palette.secondary} />
 
       <View style={style.versionContainer}>
         <Text style={style.versionText}>
@@ -37,7 +37,7 @@ export const SplashScreen = () => {
 const style = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: colors.primary,
+    backgroundColor: palette.primary,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,

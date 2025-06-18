@@ -7,7 +7,7 @@ import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/
 import { useActivityStorageRecord } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import { RequestHealthRecordDataPipelineItem } from '@app/features/pass-survey/lib/types/payload';
 import { useActivityState } from '@app/features/pass-survey/model/hooks/useActivityState';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { Box, RadioGroup, YStack } from '@app/shared/ui/base';
 import { RequestHealthRecordDataIconSuccess } from '@app/shared/ui/icons/RequestHealthRecordDataIconSuccess';
 import { ItemMarkdown } from '@app/shared/ui/survey/ItemMarkdown';
@@ -107,9 +107,9 @@ export const AdditionalPromptStep: FC<AdditionalPromptStepProps> = ({
           return (
             <Box
               key={option.id}
-              borderColor={isSelected ? colors.blue : colors.lighterGrey7}
+              borderColor={isSelected ? palette.blue : palette.lighterGrey7}
               borderWidth={2}
-              backgroundColor={isSelected ? colors.lightBlue : undefined}
+              backgroundColor={isSelected ? palette.lightBlue : undefined}
               px={18}
               py={20}
               borderRadius={12}
@@ -123,16 +123,16 @@ export const AdditionalPromptStep: FC<AdditionalPromptStepProps> = ({
               >
                 <RadioGroup.Item
                   accessibilityLabel={`ehr-additional-option-${option.id}`}
-                  borderColor={isSelected ? colors.blue : colors.outlineGrey}
+                  borderColor={isSelected ? palette.blue : palette.outlineGrey}
                   borderWidth={3}
                   backgroundColor="transparent"
                   value={option.id}
                 >
                   <RadioGroup.Indicator
-                    bg={isSelected ? colors.blue : colors.outlineGrey}
+                    bg={isSelected ? palette.blue : palette.outlineGrey}
                   />
                 </RadioGroup.Item>
-                <Text fontSize={18} color={colors.onSurface}>
+                <Text fontSize={18} color={palette.on_surface}>
                   {option.text}
                 </Text>
               </Box>

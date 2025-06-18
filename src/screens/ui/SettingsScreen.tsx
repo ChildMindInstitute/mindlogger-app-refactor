@@ -10,7 +10,7 @@ import {
   selectFirstName,
 } from '@app/entities/identity/model/selectors';
 import { LogoutRowButton } from '@app/features/logout/ui/LogoutRowButton';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
 import { Emitter } from '@app/shared/lib/services/Emitter';
@@ -79,7 +79,7 @@ export const SettingsScreen: FC = () => {
         <Box flex={1} px="$2" jc="flex-start" mt={isLoading ? top : 0}>
           <YStack>
             <YStack space="$2" my="$4" ai="center">
-              <UserIcon color={colors.darkGrey} size={45} />
+              <UserIcon color={palette.darkGrey} size={45} />
               <Text accessibilityLabel="account_name">{userName}</Text>
               <Text accessibilityLabel="account_email">{userEmail}</Text>
 

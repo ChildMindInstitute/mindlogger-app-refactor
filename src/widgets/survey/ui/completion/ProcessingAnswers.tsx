@@ -2,7 +2,7 @@ import { FC, useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useForceUpdate } from '@app/shared/lib/hooks/useForceUpdate';
 import { useUploadProgress } from '@app/shared/lib/hooks/useUploadProgress';
 import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
@@ -35,7 +35,7 @@ export const ProcessingAnswers: FC = () => {
     <Box flex={1} justifyContent="center">
       <YStack>
         {!isValid && (
-          <ActivityIndicator mb={24} size={'large'} color={colors.blue} />
+          <ActivityIndicator mb={24} size={'large'} color={palette.blue} />
         )}
 
         <Text mb={24} als="center" fontSize={31} fontWeight="700">
@@ -47,14 +47,14 @@ export const ProcessingAnswers: FC = () => {
         </Text>
 
         {isValid && (
-          <Box bc={colors.white} br={10} minWidth={349} als={'center'}>
+          <Box bc={palette.white} br={10} minWidth={349} als={'center'}>
             <Box
               h={107}
               jc="center"
               fd="row"
               ai="center"
               br={10}
-              bc={colors.lightGrey3}
+              bc={palette.lightGrey3}
             >
               <Box w={90} mx={8}>
                 <CircleProgressStep

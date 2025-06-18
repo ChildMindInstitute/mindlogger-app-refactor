@@ -6,7 +6,7 @@ import { XStack, XStackProps } from '@tamagui/stacks';
 import { ClockIcon } from './icons';
 import { Text } from './Text';
 import { ONE_SECOND } from '../lib/constants';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 import { HourMinute } from '../lib/types/dateTime';
 import {
   getClockTime,
@@ -41,8 +41,8 @@ export const TimeRemaining: FC<Props> = (props: Props) => {
   const formattedTimeLeft = getClockTime(timeLeft);
 
   const textColor =
-    timeLeft > TEN_SECONDS ? colors.onSurface : colors.alertDark;
-  const iconColor = timeLeft > TEN_SECONDS ? colors.grey4 : colors.alertDark;
+    timeLeft > TEN_SECONDS ? palette.on_surface : palette.alertDark;
+  const iconColor = timeLeft > TEN_SECONDS ? palette.grey4 : palette.alertDark;
 
   useEffect(() => {
     const id = setInterval(() => {

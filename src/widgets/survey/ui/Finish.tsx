@@ -10,7 +10,7 @@ import { selectAppletsEntityProgressions } from '@app/entities/applet/model/sele
 import { bannerActions } from '@app/entities/banner/model/slice';
 import { getDefaultAlertsExtractor } from '@app/features/pass-survey/model/alertsExtractorInstance';
 import { getDefaultScoresExtractor } from '@app/features/pass-survey/model/scoresExtractorInstance';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
@@ -174,7 +174,7 @@ export function FinishItem({
 
   useOnFocus(() => {
     // Match <ImageBackground> raster image top pixel color
-    dispatch(bannerActions.setBannersBg(colors.lightGrey4));
+    dispatch(bannerActions.setBannersBg(palette.lightGrey4));
   });
 
   if (isRetryAlertOpened) {

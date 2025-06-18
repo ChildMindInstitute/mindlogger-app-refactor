@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { Box, XStack } from '@app/shared/ui/base';
 import { UserProfileIcon } from '@app/shared/ui/icons';
 import { Text } from '@app/shared/ui/Text';
@@ -30,7 +30,7 @@ export const ActivityAssignmentBadge: FC<Props> = ({
       py={6}
       px={9}
       borderRadius={8}
-      bg={colors.lightYellow}
+      bg={palette.lightYellow}
     >
       <Box
         alignItems="center"
@@ -38,10 +38,10 @@ export const ActivityAssignmentBadge: FC<Props> = ({
         width={16}
         height={16}
         mr={9}
-        bg={colors.dimYellow}
+        bg={palette.dimYellow}
         borderRadius={3}
       >
-        <UserProfileIcon color={colors.lightYellow} size={12} />
+        <UserProfileIcon color={palette.lightYellow} size={12} />
       </Box>
       <Text
         fontWeight="400"

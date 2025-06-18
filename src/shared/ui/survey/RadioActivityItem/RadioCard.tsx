@@ -3,7 +3,7 @@ import { AccessibilityProps } from 'react-native';
 
 import { YStackProps } from '@tamagui/stacks';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { invertColor } from '@app/shared/lib/utils/survey/survey';
 
 import { RadioOption } from './types';
@@ -52,30 +52,30 @@ export function RadioCard({
 
   const hasColor = color && setPalette;
 
-  const defaultBGColor = selected ? colors.lighterGrey6 : colors.white;
+  const defaultBGColor = selected ? palette.lighterGrey6 : palette.white;
   const bgColor = hasColor ? color : defaultBGColor;
 
   const textColor = color
-    ? invertColor(color, { dark: colors.white, light: colors.black })
-    : colors.onSurface;
+    ? invertColor(color, { dark: palette.white, light: palette.black })
+    : palette.on_surface;
 
   const tooltipColor = color
     ? invertColor(color, {
-        dark: colors.darkOnSurface,
-        light: colors.onSurface,
+        dark: palette.darkon_surface,
+        light: palette.on_surface,
       })
-    : colors.darkerGrey4;
+    : palette.darkerGrey4;
 
   const invertedRadioColor = color
     ? invertColor(color, {
-        dark: colors.darkOnSurface,
-        light: colors.onSurface,
+        dark: palette.darkon_surface,
+        light: palette.on_surface,
       })
-    : colors.lighterGrey6;
+    : palette.lighterGrey6;
 
-  const defaultRadioColor = selected ? colors.blue3 : colors.outlineGrey;
+  const defaultRadioColor = selected ? palette.blue3 : palette.outlineGrey;
   const radioColor = hasColor ? invertedRadioColor : defaultRadioColor;
-  const borderColor = selected ? colors.blue3 : colors.lighterGrey7;
+  const borderColor = selected ? palette.blue3 : palette.lighterGrey7;
 
   if (isHidden) {
     return null;

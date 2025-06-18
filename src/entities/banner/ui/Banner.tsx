@@ -4,7 +4,7 @@ import { useAppState } from '@react-native-community/hooks';
 import { StackStyle } from '@tamagui/core';
 import { XStackProps } from '@tamagui/stacks';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { Box, XStack } from '@app/shared/ui/base';
 import { CloseIcon } from '@app/shared/ui/icons';
 import { Text } from '@app/shared/ui/Text';
@@ -34,7 +34,7 @@ export const Banner = ({
   onClose,
   hasCloseButton = !!onClose,
   severity = 'success',
-  color = colors.onSurface,
+  color = palette.on_surface,
   backgroundColor = BANNER_BG_COLORS[severity],
   icon = BANNER_ICONS[severity],
   ...rest
@@ -87,5 +87,5 @@ export const Banner = ({
 };
 
 const pressStyle: StackStyle = {
-  backgroundColor: colors.onSurfaceVariantTsp,
+  backgroundColor: palette.on_surface_alpha12,
 };

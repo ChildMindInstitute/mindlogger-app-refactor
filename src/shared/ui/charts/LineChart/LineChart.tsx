@@ -13,7 +13,7 @@ import {
   SliderResponseConfig,
 } from '@app/shared/api/services/AppletAnalyticsDto';
 import { DAYS_OF_WEEK_NUMBERS } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { range, getCurrentWeekDates } from '@app/shared/lib/utils/common';
 import { areDatesEqual } from '@app/shared/lib/utils/dateTime';
 
@@ -73,7 +73,7 @@ export const LineChart: FC<Props> = ({ data, config }) => {
     <Box>
       <VictoryChart>
         <VictoryScatter
-          style={{ data: { fill: colors.lightGrey2 } }}
+          style={{ data: { fill: palette.lightGrey2 } }}
           data={getXAxisDots()}
           x="dot"
           y="value"
@@ -81,7 +81,7 @@ export const LineChart: FC<Props> = ({ data, config }) => {
         />
 
         <VictoryScatter
-          style={{ data: { fill: colors.lightGrey2 } }}
+          style={{ data: { fill: palette.lightGrey2 } }}
           data={getYAxisDots()}
           x="dot"
           y="value"
@@ -89,7 +89,7 @@ export const LineChart: FC<Props> = ({ data, config }) => {
         />
 
         <VictoryAxis
-          style={{ axis: { stroke: colors.lightGrey } }}
+          style={{ axis: { stroke: palette.lightGrey } }}
           dependentAxis
           tickFormat={() => ''}
         />
@@ -97,9 +97,9 @@ export const LineChart: FC<Props> = ({ data, config }) => {
         <VictoryAxis
           tickValues={DAYS_OF_WEEK_NUMBERS}
           style={{
-            axis: { stroke: colors.lighterGrey, fill: colors.lightGrey2 },
-            axisLabel: { fill: colors.lighterGrey },
-            tickLabels: { fill: colors.grey },
+            axis: { stroke: palette.lighterGrey, fill: palette.lightGrey2 },
+            axisLabel: { fill: palette.lighterGrey },
+            tickLabels: { fill: palette.grey },
           }}
           tickCount={7}
           tickFormat={(_, index) => {
@@ -108,14 +108,14 @@ export const LineChart: FC<Props> = ({ data, config }) => {
         />
 
         <VictoryLine
-          style={{ data: { stroke: colors.primary } }}
+          style={{ data: { stroke: palette.primary } }}
           data={lineChartData}
           x="date"
           y="value"
         />
 
         <VictoryScatter
-          style={{ data: { fill: colors.primary } }}
+          style={{ data: { fill: palette.primary } }}
           data={lineChartData}
           x="date"
           y="value"

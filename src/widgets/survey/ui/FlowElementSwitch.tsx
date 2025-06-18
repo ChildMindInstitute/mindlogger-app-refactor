@@ -10,7 +10,7 @@ import {
   MixEvents,
   MixProperties,
 } from '@app/shared/lib/analytics/IAnalyticsService';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { BackButton } from '@app/shared/ui/BackButton';
 import { Box } from '@app/shared/ui/base';
 import { CrossIcon } from '@app/shared/ui/icons';
@@ -94,7 +94,7 @@ export function FlowElementSwitch({
       return (
         <Box flex={1}>
           <BackButton alignSelf="flex-end" mr={16} mt={10} mb={4}>
-            <CrossIcon color={colors.tertiary} size={30} />
+            <CrossIcon color={palette.tertiary} size={30} />
           </BackButton>
 
           <Summary {...payload} onFinish={() => onComplete('regular')} />

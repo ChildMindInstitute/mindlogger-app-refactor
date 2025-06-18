@@ -15,7 +15,7 @@ import {
   GALLERY_PHOTO_OPTIONS,
   PHOTO_TAKE_OPTIONS,
 } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useCameraPermissions } from '@app/shared/lib/hooks/useCameraPermissions';
 import { useGalleryPermissions } from '@app/shared/lib/hooks/useGalleryPermissions';
 import { requestCameraPermissions } from '@app/shared/lib/permissions/cameraPermissions';
@@ -133,7 +133,7 @@ export const PhotoItem: FC<Props> = ({ onChange, value }) => {
       onShowMediaLibrary={onShowImageGallery}
       mode="photo"
       aria-label="photo-item"
-      uploadIcon={<PhotoIcon color={colors.red} size={50} />}
+      uploadIcon={<PhotoIcon color={palette.red} size={50} />}
     >
       {value && (
         <Image

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppletStreamingDetails } from '@app/entities/applet/lib/hooks/useAppletStreamingDetails';
 import { selectStreamingSettings } from '@app/entities/streaming/model/selectors';
 import { streamingAction } from '@app/entities/streaming/model/slice';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { useTCPSocket } from '@app/shared/lib/tcp/useTCPSocket';
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   error: {
-    color: colors.errorRed,
+    color: palette.errorRed,
     fontSize: 18,
   },
 });
@@ -140,10 +140,10 @@ export const ConnectionForm: FC<Props> = ({
             style={[
               styles.input,
               {
-                color: connected ? colors.grey2 : colors.darkerGrey2,
+                color: connected ? palette.grey2 : palette.darkerGrey2,
                 borderBottomColor: connected
-                  ? colors.grey2
-                  : colors.darkerGrey2,
+                  ? palette.grey2
+                  : palette.darkerGrey2,
               },
             ]}
             placeholder=""
@@ -163,10 +163,10 @@ export const ConnectionForm: FC<Props> = ({
             style={[
               styles.input,
               {
-                color: connected ? colors.grey2 : colors.darkerGrey2,
+                color: connected ? palette.grey2 : palette.darkerGrey2,
                 borderBottomColor: connected
-                  ? colors.grey2
-                  : colors.darkerGrey2,
+                  ? palette.grey2
+                  : palette.darkerGrey2,
               },
             ]}
             keyboardType="number-pad"
@@ -178,16 +178,16 @@ export const ConnectionForm: FC<Props> = ({
           <CheckBoxField
             name="remember"
             accessibilityLabel="connection-form-remember"
-            onCheckColor={colors.white}
-            onFillColor={colors.grey}
-            onTintColor={colors.grey}
-            tintColor={colors.grey}
+            onCheckColor={palette.white}
+            onFillColor={palette.grey}
+            onTintColor={palette.grey}
+            tintColor={palette.grey}
             disabled={connected}
           >
             <Text
               fontWeight="700"
               ml={12}
-              color={connected ? colors.grey2 : colors.darkerGrey2}
+              color={connected ? palette.grey2 : palette.darkerGrey2}
               accessibilityLabel="connection-form-remember-status"
               fontSize={16}
             >

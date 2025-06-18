@@ -5,7 +5,7 @@ import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 import { XStack } from '@tamagui/stacks';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { invertColor } from '@app/shared/lib/utils/survey/survey';
 
 import { Item } from './types';
@@ -45,7 +45,7 @@ export const CheckBoxItem: FC<Props> = ({
   position,
 }) => {
   const invertedColor =
-    setPalette && color ? invertColor(color) : colors.primary;
+    setPalette && color ? invertColor(color) : palette.primary;
 
   const tooltipText = useMemo(
     () => textReplacer(tooltip || ''),
@@ -65,7 +65,7 @@ export const CheckBoxItem: FC<Props> = ({
       bg={setPalette ? color : 'none'}
       br={7}
       bbw={setPalette ? 0 : 1}
-      bbc={colors.lighterGrey}
+      bbc={palette.lighterGrey}
       onPress={onChange}
     >
       <XStack flex={1} ai="center">
@@ -99,7 +99,7 @@ export const CheckBoxItem: FC<Props> = ({
           maxWidth="70%"
           accessibilityLabel="option_text"
           ml="$4"
-          color={setPalette && color ? invertedColor : colors.darkerGrey}
+          color={setPalette && color ? invertedColor : palette.darkerGrey}
           fontSize={17}
         >
           {name}
@@ -116,7 +116,7 @@ export const CheckBoxItem: FC<Props> = ({
           true: invertedColor,
           false: invertedColor,
         }}
-        onCheckColor={setPalette && color ? color : colors.white}
+        onCheckColor={setPalette && color ? color : palette.white}
         onFillColor={invertedColor}
         onTintColor={invertedColor}
         tintColor={invertedColor}

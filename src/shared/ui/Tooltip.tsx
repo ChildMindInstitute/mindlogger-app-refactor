@@ -6,7 +6,7 @@ import Popover from 'react-native-popover-view';
 import { YStack } from './base';
 import { MarkdownView } from './MarkdownView';
 import { ScrollView } from './ScrollView';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 import { activityMarkDownStyles, markDownRules } from '../lib/markdown/rules';
 
 type TooltipProps = {
@@ -60,7 +60,7 @@ export const Tooltip: FC<TooltipProps & AccessibilityProps> = ({
 const styles = StyleSheet.create({
   popover: {
     borderRadius: 10,
-    backgroundColor: colors.lighterGrey3,
+    backgroundColor: palette.lighterGrey3,
     width: 250,
     alignItems: 'center',
     paddingVertical: 10,

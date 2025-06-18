@@ -1,4 +1,4 @@
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { YStack } from '@app/shared/ui/base';
 import { Text } from '@app/shared/ui/Text';
 
@@ -17,7 +17,12 @@ export const ActivityProgressStep = ({
 }: Props) => {
   return (
     <YStack>
-      <Text fontSize={12} fontWeight="700" lineHeight={27} color={colors.blue3}>
+      <Text
+        fontSize={12}
+        fontWeight="700"
+        lineHeight={27}
+        color={palette.blue3}
+      >
         {`Activity ${currentActivity + 1} of ${totalActivities}`}
       </Text>
       <Text
@@ -25,7 +30,7 @@ export const ActivityProgressStep = ({
         fontWeight="700"
         lineHeight={27}
         numberOfLines={1}
-        color={colors.onSurface}
+        color={palette.on_surface}
       >
         {currentActivityName}
       </Text>
@@ -34,7 +39,7 @@ export const ActivityProgressStep = ({
         fontWeight="400"
         lineHeight={27}
         letterSpacing={0.1}
-        color={colors.onSurface}
+        color={palette.on_surface}
       >
         {currentSecondLevelStep}
       </Text>

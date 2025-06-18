@@ -3,7 +3,7 @@ import { StyleSheet, TextInputProps, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 import { CharacterCounter } from '../CharacterCounter';
 import { LongTextInput } from '../LongTextInput';
@@ -35,7 +35,7 @@ export const ParagraphText: FC<Props> = ({
       <LongTextInput
         accessibilityLabel="paragraph-item"
         placeholder={t('text_entry:paragraph_placeholder')}
-        placeholderTextColor={colors.mediumGrey}
+        placeholderTextColor={palette.mediumGrey}
         onChangeText={onChangeText}
         value={value}
         autoCorrect={false}

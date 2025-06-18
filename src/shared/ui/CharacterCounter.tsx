@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { Text } from './Text';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 import { getDefaultLogger } from '../lib/services/loggerInstance';
 
 type Props = {
@@ -20,7 +20,9 @@ export const CharacterCounter: FC<Props> = ({
   focused = false,
 }) => {
   const { t } = useTranslation();
-  let colorStyle = focused ? styles.focusedColor : styles.unfocusedColor;
+  let colorStyle: { color: string } = focused
+    ? styles.focusedColor
+    : styles.unfocusedColor;
 
   if (limit < numberOfCharacters) colorStyle = styles.warnColor;
 
@@ -54,12 +56,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   focusedColor: {
-    color: colors.primary,
+    color: palette.primary,
   },
   unfocusedColor: {
-    color: colors.grey4,
+    color: palette.grey4,
   },
   warnColor: {
-    color: colors.errorRed,
+    color: palette.errorRed,
   },
 });

@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 
 import { useThrottledCallback } from 'use-debounce';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 import { ActionButton } from './ActionButton';
 import { HandlersContext } from './contexts';
@@ -38,7 +38,7 @@ export function NextButton({ children, isIcon, accessibilityLabel }: Props) {
         accessibilityLabel={`${accessibilityLabel}-top` ?? ''}
         onPress={onPressNextDebounced}
       >
-        <RightArrowIcon color={colors.tertiary} size={30} />
+        <RightArrowIcon color={palette.tertiary} size={30} />
       </TouchableOpacity>
     );
   }

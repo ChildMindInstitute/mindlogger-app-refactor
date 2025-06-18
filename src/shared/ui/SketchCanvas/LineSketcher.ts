@@ -1,7 +1,7 @@
 import { PaintStyle, Skia, SkPath } from '@shopify/react-native-skia';
 import { SharedValue } from 'react-native-reanimated';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 export type Point = {
   x: number;
@@ -14,7 +14,7 @@ export const enum Shape {
 }
 const paint = Skia.Paint();
 
-paint.setColor(Skia.Color(colors.black));
+paint.setColor(Skia.Color(palette.black));
 paint.setStrokeWidth(1.5);
 paint.setStyle(PaintStyle.Stroke);
 

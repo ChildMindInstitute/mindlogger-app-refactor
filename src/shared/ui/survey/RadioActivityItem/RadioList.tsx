@@ -1,7 +1,7 @@
 import { RadioGroup } from '@tamagui/radio-group';
 import { YStack } from '@tamagui/stacks';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 import { RadioItem } from './RadioItem';
 import { RadioItemProps } from './types';
@@ -32,7 +32,7 @@ export function RadioList({
         {options.map(option => (
           <Box
             key={option.id}
-            bbc={colors.lighterGrey}
+            bbc={palette.lighterGrey}
             bbw={setPalette ? 0 : 1}
             onPress={() => onChange(option.id)}
           >

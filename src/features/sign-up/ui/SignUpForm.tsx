@@ -6,7 +6,7 @@ import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
@@ -79,7 +79,7 @@ const SignUpForm: FC<Props> = props => {
               <TouchableWithoutFeedback
                 onPress={() => setPasswordHidden(!isPasswordHidden)}
               >
-                <ShowPasswordIcon size={24} color={colors.white} />
+                <ShowPasswordIcon size={24} color={palette.white} />
               </TouchableWithoutFeedback>
             }
             hideError={isPasswordFocus}

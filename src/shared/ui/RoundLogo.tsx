@@ -7,7 +7,7 @@ import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 
 import { Box } from './base';
 import { Text } from './Text';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 type Props = {
   letter?: string;
@@ -60,8 +60,8 @@ export const RoundLogo: FC<Props & AccessibilityProps> = ({
       <Svg height={size} width={size} style={{ position: 'absolute' }}>
         <Defs>
           <LinearGradient id="grad" x1="0" y1="0" x2={size} y2={size}>
-            <Stop offset="0" stopColor={colors.blue2} stopOpacity="1" />
-            <Stop offset="1" stopColor={colors.lightGreen} stopOpacity="1" />
+            <Stop offset="0" stopColor={palette.blue2} stopOpacity="1" />
+            <Stop offset="1" stopColor={palette.lightGreen} stopOpacity="1" />
           </LinearGradient>
         </Defs>
 

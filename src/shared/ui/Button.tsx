@@ -11,7 +11,7 @@ import { ActivityIndicator } from './ActivityIndicator';
 import { BoxProps } from './base';
 import { Center } from './Center';
 import { Text } from './Text';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 type Props = PropsWithChildren<{
   onPress: () => void;
@@ -58,7 +58,7 @@ export function Button({
     >
       <Center
         py={8}
-        bg={colors.blue2}
+        bg={palette.blue2}
         borderRadius="$10"
         w="100%"
         {...styledProps}

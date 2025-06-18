@@ -14,7 +14,7 @@ import {
   GALLERY_VIDEO_OPTIONS,
   VIDEO_RECORD_OPTIONS,
 } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useCameraPermissions } from '@app/shared/lib/hooks/useCameraPermissions';
 import { useGalleryPermissions } from '@app/shared/lib/hooks/useGalleryPermissions';
 import { requestCameraPermissions } from '@app/shared/lib/permissions/cameraPermissions';
@@ -111,7 +111,7 @@ export const VideoItem: FC<Props> = ({ value, onChange }) => {
       onShowMediaLibrary={onShowVideoGallery}
       mode="video"
       aria-label="video-item"
-      uploadIcon={<VideoIcon color={colors.red} size={50} />}
+      uploadIcon={<VideoIcon color={palette.red} size={50} />}
     >
       {value && (
         <VideoPlayer

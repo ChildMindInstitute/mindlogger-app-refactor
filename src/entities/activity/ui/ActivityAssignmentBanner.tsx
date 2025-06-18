@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { Trans } from 'react-i18next';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { Box, XStack } from '@app/shared/ui/base';
 import { UserProfileIcon } from '@app/shared/ui/icons';
 import { Text } from '@app/shared/ui/Text';
@@ -22,7 +22,7 @@ export const ActivityAssignmentBanner: FC<Props> = ({
   const { shortName } = useActivityAssignee({ assignment });
 
   return (
-    <XStack alignItems="center" py={12} px={18} bg={colors.lightYellow}>
+    <XStack alignItems="center" py={12} px={18} bg={palette.lightYellow}>
       <Box
         flex={0}
         alignItems="center"
@@ -30,10 +30,10 @@ export const ActivityAssignmentBanner: FC<Props> = ({
         width={26}
         height={26}
         mr={14}
-        bg={colors.dimYellow}
+        bg={palette.dimYellow}
         borderRadius={3}
       >
-        <UserProfileIcon color={colors.lightYellow} size={16} />
+        <UserProfileIcon color={palette.lightYellow} size={16} />
       </Box>
       <Box flex={1}>
         <Text

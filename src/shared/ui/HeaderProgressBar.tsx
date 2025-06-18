@@ -1,6 +1,6 @@
 import { Bar } from 'react-native-progress';
 
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 type Props = {
   progress: number;
@@ -10,8 +10,8 @@ export function HeaderProgressBar({ progress }: Props) {
   return (
     <Bar
       progress={progress}
-      color={colors.blue}
-      unfilledColor={colors.lighterGrey0}
+      color={palette.blue}
+      unfilledColor={palette.lighterGrey0}
       borderWidth={0}
       height={12}
       width={null}

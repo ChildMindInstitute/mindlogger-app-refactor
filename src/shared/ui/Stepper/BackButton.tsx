@@ -1,7 +1,7 @@
 import { PropsWithChildren, useContext } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 import { ActionButton } from './ActionButton';
 import { HandlersContext } from './contexts';
@@ -17,7 +17,7 @@ export function BackButton({ children, isIcon }: Props) {
   if (isIcon) {
     return (
       <TouchableOpacity accessibilityLabel="back-button" onPress={back}>
-        <LeftArrowIcon color={colors.tertiary} size={30} />
+        <LeftArrowIcon color={palette.tertiary} size={30} />
       </TouchableOpacity>
     );
   }

@@ -4,7 +4,7 @@ import { Image } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { Box } from '@app/shared/ui/base';
 import { MarkdownView } from '@app/shared/ui/MarkdownView';
 import { ScrollView } from '@app/shared/ui/ScrollView';
@@ -52,22 +52,22 @@ export const markdownStyle: StyleSheet.NamedStyles<any> = StyleSheet.create({
   heading3: {
     marginBottom: 16,
     marginLeft: 45,
-    color: colors.tertiary,
+    color: palette.tertiary,
   },
   heading4: {
     marginBottom: 18,
     marginLeft: 45,
-    color: colors.tertiary,
+    color: palette.tertiary,
   },
   heading5: {
     marginLeft: 55,
-    color: colors.tertiary,
+    color: palette.tertiary,
   },
   paragraph: {
-    color: colors.tertiary,
+    color: palette.tertiary,
   },
   link: {
-    color: colors.blue,
+    color: palette.blue,
   },
   text: {
     fontSize: 20,
@@ -76,6 +76,6 @@ export const markdownStyle: StyleSheet.NamedStyles<any> = StyleSheet.create({
   },
   bullet_list: {
     marginBottom: 20,
-    color: colors.tertiary,
+    color: palette.tertiary,
   },
 });
