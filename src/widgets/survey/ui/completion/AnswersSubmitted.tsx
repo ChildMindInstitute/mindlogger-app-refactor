@@ -30,14 +30,11 @@ export const AnswersSubmitted: FC<SubComponentProps> = ({ onPressDone }) => {
         </Text>
       </FlexContainer>
       <FlexContainer justifyContent="flex-start">
-        <Box w="100%">
+        <Box w="100%" maxWidth={356}>
           <SubmitButton
             accessibilityLabel="close-button"
-            mode="dark"
+            mode="primary"
             onPress={onPressDone}
-            borderRadius={20}
-            textProps={{ fontWeight: '700', fontSize: 15 }}
-            py={16}
           >
             {t('autocompletion:done')}
           </SubmitButton>

@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
 import { useChangePasswordMutation } from '@app/entities/identity/api/hooks/useChangePasswordMutation';
-import { palette } from '@app/shared/lib/constants/palette';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
@@ -53,20 +52,14 @@ export const ChangePasswordForm: FC<Props> = props => {
       <FormProvider {...form}>
         <YStack space={8} mb={40}>
           <InputField
-            mode="dark"
-            accessibilityLabel="change-password-prev-password-input"
-            backgroundColor="transparent"
-            placeholderTextColor={palette.grey3}
+            aria-label="change-password-prev-password-input"
             secureTextEntry
             name="prev_password"
             placeholder={t('change_pass_form:cur_pass_placeholder')}
           />
 
           <InputField
-            mode="dark"
-            backgroundColor="transparent"
-            accessibilityLabel="change-password-password-input"
-            placeholderTextColor={palette.grey3}
+            aria-label="change-password-password-input"
             secureTextEntry
             name="password"
             placeholder={t('change_pass_form:new_pass_placeholder')}
@@ -74,7 +67,7 @@ export const ChangePasswordForm: FC<Props> = props => {
 
           {error && (
             <ErrorMessage
-              accessibilityLabel="change-password-error-message"
+              aria-label="change-password-error-message"
               error={{ message: error.evaluatedMessage! }}
               mt={8}
             />
@@ -83,7 +76,7 @@ export const ChangePasswordForm: FC<Props> = props => {
 
         <SubmitButton
           accessibilityLabel="change-password-submit-button"
-          mode="dark"
+          mode="primary"
           onPress={submit}
           isLoading={isLoading}
         >
