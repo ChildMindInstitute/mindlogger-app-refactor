@@ -13,6 +13,12 @@ type Props = {
  */
 export function Spinner({ size }: Props) {
   return (
-    <Circle size={size} color={palette.blue} borderWidth={1} indeterminate />
+    <Circle
+      size={size}
+      color={palette.primary}
+      borderWidth={4}
+      indeterminate
+      endAngle={0.75}
+    />
   );
 }

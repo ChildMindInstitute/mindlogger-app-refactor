@@ -198,6 +198,7 @@ const alphaVariantsPalette = {
   on_surface_alpha12: hexToRgba(basePalette.neutral10, 0.12),
   on_surface_alpha30: hexToRgba(basePalette.neutral10, 0.3),
   toast_container: hexToRgba(basePalette.primary, 0.8),
+  spinner_container: hexToRgba(basePalette.surface1, 0.5),
 } as const;
 
 export const palette = {

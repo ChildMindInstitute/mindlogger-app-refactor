@@ -1,8 +1,11 @@
-import { FC, useCallback, useLayoutEffect } from 'react';
+import { FC, useCallback, useLayoutEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
+import { MotiView } from 'moti';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Applet } from '@app/entities/applet/lib/types';
 import {
@@ -27,6 +30,7 @@ import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { Box, XStack } from '@app/shared/ui/base';
+import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
 import { TouchableOpacity } from '@app/shared/ui/TouchableOpacity';
 import { UploadRetryBanner } from '@app/widgets/survey/ui/UploadRetryBanner';
@@ -37,6 +41,7 @@ export const AppletsScreen: FC = () => {
   const { t } = useTranslation();
   const { navigate, setOptions } = useNavigation();
   const dispatch = useAppDispatch();
+  const { bottom } = useSafeAreaInsets();
 
   const userFirstName = useAppSelector(selectFirstName);
 
@@ -46,11 +51,17 @@ export const AppletsScreen: FC = () => {
     }
   }, [t, userFirstName, setOptions]);
 
+  const [, setForceUpdate] = useState({});
   useOnFocus(() => {
     getDefaultAnalyticsService().track(MixEvents.HomeView);
 
     // Color must match the AppletsScreen's headerStyle.backgroundColor in RootNavigator
     dispatch(bannerActions.setBannersBg(palette.surface1));
+
+    // This forces a re-render to the screen to ensure the FlatList (inside AppletList)
+    // does an initial render upon navigation from the login screen on iOS only.
+    // Without this, the FlatList looks empty, even if there's data.
+    setTimeout(() => setForceUpdate({}));
   });
 
   const queryClient = useQueryClient();
@@ -70,17 +81,19 @@ export const AppletsScreen: FC = () => {
     [navigate],
   );
 
-  useAutomaticRefreshOnMount(async () => {
-    await getDefaultNotificationRefreshService().refresh(
-      queryClient,
-      progressions,
-      responseTimes,
-      LogTrigger.FirstAppRun,
-    );
-    getDefaultLogger()
-      .send()
-      .catch(err => getDefaultLogger().error(err as never));
-  });
+  const { isRefreshing: isHydratingCache } = useAutomaticRefreshOnMount(
+    async () => {
+      await getDefaultNotificationRefreshService().refresh(
+        queryClient,
+        progressions,
+        responseTimes,
+        LogTrigger.FirstAppRun,
+      );
+      getDefaultLogger()
+        .send()
+        .catch(err => getDefaultLogger().error(err as never));
+    },
+  );
 
   return (
     <Box flex={1} bg="$surface1">
@@ -94,6 +107,19 @@ export const AppletsScreen: FC = () => {
           onAppletPress={navigateAppletDetails}
         />
       </Box>
+
+      <MotiView
+        style={[
+          StyleSheet.absoluteFill,
+          styles.spinnerContainer,
+          { paddingBottom: bottom },
+        ]}
+        animate={{
+          opacity: isHydratingCache ? 1 : 0,
+        }}
+      >
+        <Spinner />
+      </MotiView>
     </Box>
   );
 };
@@ -115,3 +141,13 @@ const AboutAppLink = () => {
     </XStack>
   );
 };
+
+const styles = StyleSheet.create({
+  spinnerContainer: {
+    zIndex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: palette.spinner_container,
+    pointerEvents: 'none',
+  },
+});
