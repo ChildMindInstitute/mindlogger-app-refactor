@@ -29,7 +29,8 @@ export type ActivityItemType =
   | 'Checkbox'
   | 'Date'
   | 'Time'
-  | 'RequestHealthRecordData';
+  | 'RequestHealthRecordData'
+  | 'PhrasalTemplate';
 
 export type StabilityTrackerConfig = {
   lambdaSlope: number;
@@ -391,6 +392,11 @@ interface RequestHealthRecordDataActivityItem extends ActivityItemBase {
   config: RequestHealthRecordDataConfig;
 }
 
+interface PhrasalTemplateActivityItem extends ActivityItemBase {
+  inputType: 'PhrasalTemplate';
+  config: MessageConfig;
+}
+
 export type ActivityItem =
   | AbTestActivityItem
   | StabilityTrackerActivityItem
@@ -415,7 +421,8 @@ export type ActivityItem =
   | PhotoActivityItem
   | TimeActivityItem
   | VideoActivityItem
-  | RequestHealthRecordDataActivityItem;
+  | RequestHealthRecordDataActivityItem
+  | PhrasalTemplateActivityItem;
 
 export type ActivityDetails = {
   id: string;
