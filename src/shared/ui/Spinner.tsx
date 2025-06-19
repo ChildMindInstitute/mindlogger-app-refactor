@@ -1,4 +1,4 @@
-import { StyleSheet, ViewStyle } from 'react-native';
+import { AccessibilityProps, StyleSheet, ViewStyle } from 'react-native';
 
 import { MotiView } from 'moti';
 import { Circle } from 'react-native-progress';
@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { palette } from '../lib/constants/palette';
 
-type Props = {
+type Props = AccessibilityProps & {
   size?: number;
   color?: string;
   isVisible?: boolean;
@@ -29,6 +29,7 @@ export function Spinner({
   isVisible = true,
   withOverlay = false,
   overlayColor = palette.spinner_container,
+  ...props
 }: Props) {
   const { bottom } = useSafeAreaInsets();
 
@@ -56,6 +57,7 @@ export function Spinner({
             }
           : undefined
       }
+      {...props}
     >
       {spinner}
     </MotiView>

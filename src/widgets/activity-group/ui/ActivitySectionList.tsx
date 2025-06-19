@@ -38,7 +38,7 @@ import { useAvailabilityEvaluator } from '../model/hooks/useAvailabilityEvaluato
 
 type Props = {
   appletId: string;
-  activityResponseTypes?: Record<string, ResponseType[]>;
+  activityResponseTypes: Record<string, ResponseType[]>;
   groups: Array<ActivityListGroup>;
   completeEntity: CompleteEntityIntoUploadToQueue;
   checkAvailability: CheckAvailability;
