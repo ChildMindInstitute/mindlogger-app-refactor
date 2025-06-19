@@ -14,11 +14,10 @@ import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getStringHashCode } from '@app/shared/lib/utils/common';
-import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box, YStack } from '@app/shared/ui/base';
-import { Center } from '@app/shared/ui/Center';
 import { UserIcon } from '@app/shared/ui/icons';
 import { RowButton } from '@app/shared/ui/RowButton';
+import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
 import { UploadRetryBanner } from '@app/widgets/survey/ui/UploadRetryBanner';
 
@@ -109,19 +108,7 @@ export const SettingsScreen: FC = () => {
         </Box>
       </Box>
 
-      {isLoading && (
-        <Center w="100%" h="100%" position="absolute">
-          <Box
-            w="100%"
-            h="100%"
-            bg="$surface"
-            position="absolute"
-            opacity={0.7}
-          />
-
-          <ActivityIndicator size="large" color="#0067A0" />
-        </Center>
-      )}
+      {isLoading && <Spinner withOverlay />}
     </>
   );
 };

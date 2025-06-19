@@ -143,7 +143,7 @@ export const OneUpHealthStep: FC = () => {
                 py="$3"
                 borderColor="$surface_variant"
                 borderWidth={1}
-                textStyles={buttonTextStyle}
+                textProps={buttonTextStyle}
               >
                 {t('requestHealthRecordData:search')}
               </Button>
@@ -170,11 +170,9 @@ export const OneUpHealthStep: FC = () => {
             onEndReached={loadMore}
             onEndReachedThreshold={0.5}
             ListFooterComponent={
-              isResultsLoading ? (
-                <Center py="$2">
-                  <Spinner size={24} />
-                </Center>
-              ) : null
+              <Center py="$2">
+                <Spinner size={24} isVisible={isResultsLoading} />
+              </Center>
             }
             ListEmptyComponent={
               isResultsLoading ? null : (

@@ -1,9 +1,7 @@
 import { FC, useCallback, useLayoutEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
-import { MotiView } from 'moti';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -108,18 +106,7 @@ export const AppletsScreen: FC = () => {
         />
       </Box>
 
-      <MotiView
-        style={[
-          StyleSheet.absoluteFill,
-          styles.spinnerContainer,
-          { paddingBottom: bottom },
-        ]}
-        animate={{
-          opacity: isHydratingCache ? 1 : 0,
-        }}
-      >
-        <Spinner />
-      </MotiView>
+      <Spinner withOverlay isVisible={isHydratingCache} />
     </Box>
   );
 };
@@ -141,13 +128,3 @@ const AboutAppLink = () => {
     </XStack>
   );
 };
-
-const styles = StyleSheet.create({
-  spinnerContainer: {
-    zIndex: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: palette.spinner_container,
-    pointerEvents: 'none',
-  },
-});

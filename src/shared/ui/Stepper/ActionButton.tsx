@@ -21,18 +21,17 @@ export const ActionButton = ({
   return (
     <Button
       onPress={onPress}
-      px={10}
-      py={13}
+      px={24}
+      py={12}
       maxWidth={200}
-      bg={type === 'submit' ? '$primary' : '$white'}
-      textStyles={{
-        textColor: type === 'submit' ? '$white' : '$primary',
+      bg={type === 'submit' ? '$primary' : '$surface'}
+      textProps={{
+        color: type === 'submit' ? '$on_primary' : '$on_surface',
         fontWeight: type === 'submit' ? '700' : '400',
-        fontSize: 13,
       }}
       borderWidth={type === 'submit' ? 0 : 1}
-      borderColor="$grey"
-      accessibilityLabel={accessibilityLabel}
+      borderColor="$outline"
+      aria-label={accessibilityLabel}
       {...boxProps}
     >
       {children}

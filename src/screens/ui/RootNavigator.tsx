@@ -211,14 +211,6 @@ export const RootNavigator = () => {
           />
 
           <Stack.Screen
-            name="ForgotPassword"
-            options={{
-              title: t('login:forgot_password'),
-            }}
-            component={ForgotPasswordScreen}
-          />
-
-          <Stack.Screen
             name="SignUp"
             component={SignUpScreen}
             options={{
@@ -265,8 +257,9 @@ export const RootNavigator = () => {
                     }
                     navigation.navigate('Settings');
                   }}
+                  style={{ padding: 12 }}
                 >
-                  <UserProfileIcon color={palette.on_surface} size={20} />
+                  <UserProfileIcon color={palette.on_surface} size={22} />
                 </TouchableOpacity>
               ),
               headerLeft: () => null,
@@ -345,6 +338,16 @@ export const RootNavigator = () => {
             title: t('language_screen:app_language'),
           }}
           component={ChangeLanguageScreen}
+        />
+
+        {/* This screen needs to be available for both guests and users since the
+        deep link can be accessed regardless of active session */}
+        <Stack.Screen
+          name="ForgotPassword"
+          options={{
+            title: t('login:forgot_password'),
+          }}
+          component={ForgotPasswordScreen}
         />
 
         <Stack.Screen

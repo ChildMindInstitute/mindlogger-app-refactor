@@ -4,8 +4,10 @@ import { StyleProp, ViewStyle } from 'react-native';
 
 import { Stack, styled, StackStyle, TextProps } from '@tamagui/core';
 
-import { ActivityIndicator } from './ActivityIndicator';
+import { Box } from './base';
+import { Spinner } from './Spinner';
 import { Text } from './Text';
+import { palette } from '../lib/constants/palette';
 
 const ButtonText = styled(Text, {
   fontSize: 16,
@@ -95,18 +97,17 @@ export const SubmitButton: FC<Props & AccessibilityProps> = ({
           {children}
         </ButtonText>
 
-        {isLoading && <ActivityIndicator style={spinnerStyle.spinner} />}
+        {isLoading && (
+          <Box style={StyleSheet.absoluteFill} ai="center" jc="center">
+            <Spinner
+              size={28}
+              color={
+                mode === 'primary' ? palette.on_primary : palette.on_surface
+              }
+            />
+          </Box>
+        )}
       </Button>
     </TouchableOpacity>
   );
 };
-
-const spinnerStyle = StyleSheet.create({
-  spinner: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-  },
-});

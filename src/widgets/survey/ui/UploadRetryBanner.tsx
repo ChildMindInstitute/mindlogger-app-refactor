@@ -48,14 +48,12 @@ export const UploadRetryBanner: FC<Props> = () => {
         <Box pl={10}>
           <Button
             bg="transparent"
-            accessibilityLabel="upload-banner-btn"
-            spinnerColor="black"
+            aria-label="upload-banner-btn"
+            spinnerColor="$on_surface"
             isLoading={isUploading}
             onPress={onRetry}
           >
-            <Text fontSize={16} fontWeight="700">
-              {t('additional:send')}
-            </Text>
+            {t('additional:send')}
           </Button>
         </Box>
       </Box>

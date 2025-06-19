@@ -19,8 +19,14 @@ export const useDefaultBanners = () => {
     if (!state || !state.routes || state.routes.length === 0) {
       return undefined; // No active route yet
     }
-    const route = state.routes[state.index];
-    return route.name as keyof RootStackParamList;
+
+    if (state.index === undefined || !state.routes[state.index]) {
+      // If no route index or route not found but routes exist, use final route
+      return state.routes[state.routes.length - 1]
+        ?.name as keyof RootStackParamList;
+    }
+
+    return state.routes[state.index].name as keyof RootStackParamList;
   });
 
   const bannerScope = hasSession ? `user-${userId}` : 'global';
