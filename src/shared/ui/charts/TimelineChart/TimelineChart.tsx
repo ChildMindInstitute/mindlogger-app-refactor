@@ -95,7 +95,7 @@ export const TimelineChart: FC<Props> = ({ data, config }) => {
       {timelineChartData.map(option => (
         <VictoryChart key={option.optionName} height={60}>
           <VictoryScatter
-            style={{ data: { fill: palette.lighterGrey } }}
+            style={{ data: { fill: palette.surface_variant } }}
             data={getXAxisDots()}
             x="dot"
             y="value"
@@ -106,9 +106,12 @@ export const TimelineChart: FC<Props> = ({ data, config }) => {
           <VictoryAxis
             tickValues={DAYS_OF_WEEK_NUMBERS}
             style={{
-              axis: { stroke: palette.lighterGrey, fill: palette.lightGrey2 },
-              axisLabel: { fill: palette.lighterGrey },
-              tickLabels: { fill: palette.grey },
+              axis: {
+                stroke: palette.surface_variant,
+                fill: palette.surface_variant,
+              },
+              axisLabel: { fill: palette.surface_variant },
+              tickLabels: { fill: palette.outline },
             }}
             tickCount={7}
             tickFormat={(_, index) => {
