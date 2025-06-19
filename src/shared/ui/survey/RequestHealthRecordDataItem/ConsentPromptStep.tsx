@@ -15,9 +15,8 @@ import { ItemMarkdown } from '@app/shared/ui/survey/ItemMarkdown';
 import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem/types';
 import { Text } from '@app/shared/ui/Text';
 
-// TODO: Update to the correct URL when available
-// https://mindlogger.atlassian.net/browse/M2-9101
-const REQUEST_HEALTH_RECORD_DATA_LINK = 'https://mindlogger.org/';
+const REQUEST_HEALTH_RECORD_DATA_LINK =
+  'https://mindlogger.atlassian.net/servicedesk/customer/portal/1/article/1238630401';
 
 type ConsentPromptStepProps = {
   item: RequestHealthRecordDataPipelineItem;
