@@ -9,7 +9,6 @@ import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
-import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
 import { InputField } from '@app/shared/ui/form/InputField';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
 
@@ -21,17 +20,19 @@ type Props = BoxProps & {
 
 export const ChangePasswordForm: FC<Props> = props => {
   const { t } = useTranslation();
-  const { addSuccessBanner } = useBanners();
+  const { addSuccessBanner, addErrorBanner } = useBanners();
 
   const {
     mutate: changePassword,
-    error,
     isLoading,
     reset,
   } = useChangePasswordMutation({
     onSuccess: () => {
       props.onChangePasswordSuccess();
       addSuccessBanner(t('auth:password_updated'));
+    },
+    onError: error => {
+      addErrorBanner(error.evaluatedMessage ?? '');
     },
   });
 
@@ -64,14 +65,6 @@ export const ChangePasswordForm: FC<Props> = props => {
             name="password"
             placeholder={t('change_pass_form:new_pass_placeholder')}
           />
-
-          {error && (
-            <ErrorMessage
-              aria-label="change-password-error-message"
-              error={{ message: error.evaluatedMessage! }}
-              mt={8}
-            />
-          )}
         </YStack>
 
         <SubmitButton

@@ -24,7 +24,8 @@
       "upload_answers": "Estamos cargando tus respuestas...",
       "completed": "Actividad cargada"
     },
-    "step": "Paso"
+    "step": "Paso",
+    "flowStep": "({{activityPositionInFlow}} de {{numberOfActivitiesInFlow}}) {{activityFlowName}}"
   },
   "activity_time": {
     "time_remaining": "es el tiempo restante para este elemento"

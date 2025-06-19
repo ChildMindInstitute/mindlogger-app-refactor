@@ -32,7 +32,7 @@ export function AnimatedTouchable({
     backgroundColor: palette.surface,
   },
   pressStyle = {
-    backgroundColor: palette.secondary_container,
+    backgroundColor: palette.neutral99_and_neutral10_012,
   },
   duration = 200,
   ...props

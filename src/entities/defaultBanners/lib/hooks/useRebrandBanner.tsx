@@ -41,16 +41,16 @@ export const useRebrandBanner = (
       {
         children: (
           <Trans i18nKey="rebrandBanner:content">
-            <Text color="#FDFCFC" fontWeight="700">
+            <Text color="$on_primary" lineHeight={20} fontWeight="700">
               We are rebranding!
             </Text>
-            <Text color="#FDFCFC">
+            <Text color="$on_primary" lineHeight={20}>
               Design updates are on the way—same great app, fresh new look.
               Curious?{' '}
             </Text>
             <Link
               textDecorationLine="underline"
-              color="#B6DFFE"
+              color="$secondary90"
               whiteSpace="nowrap"
               onPress={() =>
                 Linking.openURL('https://www.gettingcurious.com/rebrand')

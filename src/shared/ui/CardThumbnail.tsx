@@ -1,18 +1,14 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, { FC } from 'react';
-import { StyleSheet, ImageStyle, AccessibilityProps } from 'react-native';
+import { StyleSheet, AccessibilityProps } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
-import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 
-import { Box } from './base';
+import { Box, BoxProps } from './base';
 import { Text } from './Text';
-import { palette } from '../lib/constants/palette';
 
-type Props = {
+type Props = BoxProps & {
   letter?: string;
   imageUri?: string | null;
-  imageStyle?: ImageStyle;
   size?: number;
 };
 
@@ -25,53 +21,45 @@ const getImageUrl = (url: string): string => {
 };
 
 export const CardThumbnail: FC<Props & AccessibilityProps> = ({
-  accessibilityLabel,
   imageUri,
-  imageStyle,
   letter,
-  size = 64,
+  size = 72,
+  ...props
 }) => {
-  if (imageUri) {
-    const styles = getStyles(size);
+  if (imageUri || letter) {
+    let content: React.ReactNode;
+
+    if (imageUri) {
+      const styles = getStyles(size);
+
+      content = (
+        <CachedImage style={styles.image} source={getImageUrl(imageUri)} />
+      );
+    } else if (letter) {
+      content = (
+        <Box aria-label="round-logo-default" flex={1} jc="center" ai="center">
+          <Text fontSize={(size * 32) / 72} color="$on_primary">
+            {letter}
+          </Text>
+        </Box>
+      );
+    }
 
     return (
-      <Box accessibilityLabel={accessibilityLabel} style={[styles.container]}>
-        <CachedImage
-          style={[styles.image, imageStyle]}
-          source={getImageUrl(imageUri)}
-        />
+      <Box
+        w={size}
+        h={size}
+        br={8}
+        overflow="hidden"
+        {...props}
+        style={imageUri ? { backgroundColor: 'transparent' } : undefined}
+      >
+        {content}
       </Box>
     );
   }
 
-  if (!letter) {
-    return null;
-  }
-
-  return (
-    <Box
-      accessibilityLabel="round-logo-default"
-      w={size}
-      h={size}
-      jc="center"
-      ai="center"
-    >
-      <Svg height={size} width={size} style={{ position: 'absolute' }}>
-        <Defs>
-          <LinearGradient id="grad" x1="0" y1="0" x2={size} y2={size}>
-            <Stop offset="0" stopColor={palette.blue2} stopOpacity="1" />
-            <Stop offset="1" stopColor={palette.lightGreen} stopOpacity="1" />
-          </LinearGradient>
-        </Defs>
-
-        <Circle cx={size / 2} cy={size / 2} r={size / 2} fill="url(#grad)" />
-      </Svg>
-
-      <Text fontSize={size / 2} color="$white_alpha80" fontWeight="700">
-        {letter}
-      </Text>
-    </Box>
-  );
+  return null;
 };
 
 const getStyles = (size: number) =>
@@ -79,13 +67,6 @@ const getStyles = (size: number) =>
     image: {
       width: size,
       height: size,
-      borderRadius: 8,
       resizeMode: 'cover',
-    },
-    container: {
-      width: size,
-      height: size,
-      borderRadius: 8,
-      overflow: 'hidden',
     },
   });

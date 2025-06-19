@@ -67,7 +67,7 @@ export const Banner = ({
       {...rest}
     >
       {icon}
-      <Text color={color} fontSize={16} lineHeight={24} flex={1}>
+      <Text color={color} fontSize={16} lineHeight={20} flex={1}>
         {children}
       </Text>
       {hasCloseButton && !!onClose && (

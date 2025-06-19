@@ -58,8 +58,8 @@ export function Button({
     >
       <Center
         py={8}
-        bg={palette.blue2}
-        borderRadius="$10"
+        bg={palette.primary}
+        borderRadius={100}
         w="100%"
         {...styledProps}
       >

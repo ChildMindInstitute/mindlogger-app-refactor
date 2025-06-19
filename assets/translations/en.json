@@ -24,7 +24,8 @@
       "upload_answers": "Uploading your answers...",
       "completed": "Activity uploaded"
     },
-    "step": "Step"
+    "step": "Step",
+    "flowStep": "({{activityPositionInFlow}} of {{numberOfActivitiesInFlow}}) {{activityFlowName}}"
   },
   "activity_time": {
     "time_remaining": "remaining for this item"

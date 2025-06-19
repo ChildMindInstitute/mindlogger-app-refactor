@@ -36,7 +36,7 @@ export const AboutAppletScreen: FC<Props> = ({ route }) => {
   }
 
   return (
-    <YStack jc="flex-start" flex={1}>
+    <YStack jc="flex-start" flex={1} bg="$surface1">
       <UploadRetryBanner />
 
       <ScrollView px="$5" pt="$2">

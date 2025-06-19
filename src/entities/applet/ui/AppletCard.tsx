@@ -15,12 +15,14 @@ type Props = {
   applet: Applet;
   disabled: boolean;
   onPress?: (...args: any[]) => void;
+  thumbnailColor?: string;
 };
 
 export const AppletCard: FC<Props & AccessibilityProps> = ({
   applet,
   disabled,
   onPress,
+  thumbnailColor,
   accessibilityLabel,
 }) => {
   const theme = applet.theme;
@@ -35,40 +37,40 @@ export const AppletCard: FC<Props & AccessibilityProps> = ({
         opacity: disabled ? 0.5 : 1,
       }}
     >
-      <YStack position="relative" p={16} gap={16}>
-        <CardThumbnail
-          accessibilityLabel="applet_logo-image"
-          imageUri={applet.image}
-        />
+      <YStack position="relative" p={16} gap={8}>
+        <XStack jc="space-between" ai="flex-start" mb={8}>
+          <CardThumbnail
+            accessibilityLabel="applet_logo-image"
+            imageUri={applet.image}
+            letter={applet.displayName[0].toUpperCase()}
+            bg={thumbnailColor}
+          />
 
-        <YStack flex={1} gap={8}>
-          <XStack jc="space-between">
-            <Text
-              flex={1}
-              fontWeight="700"
-              fontSize={22}
-              lineHeight={28}
-              accessibilityLabel="applet_name-text"
-            >
-              {applet.displayName}
-            </Text>
-
-            {!!theme?.logo && (
-              <CachedImage style={styles.smallLogo} source={theme.logo} />
-            )}
-          </XStack>
-
-          {!!applet.description && (
-            <Text
-              accessibilityLabel="applet_description-text"
-              fontSize={16}
-              fontWeight="400"
-              lineHeight={24}
-            >
-              {applet.description}
-            </Text>
+          {!!theme?.logo && (
+            <CachedImage style={styles.smallLogo} source={theme.logo} />
           )}
-        </YStack>
+        </XStack>
+
+        <Text
+          flex={1}
+          fontWeight="700"
+          fontSize={22}
+          lineHeight={28}
+          accessibilityLabel="applet_name-text"
+        >
+          {applet.displayName}
+        </Text>
+
+        {!!applet.description && (
+          <Text
+            accessibilityLabel="applet_description-text"
+            fontSize={16}
+            fontWeight="400"
+            lineHeight={24}
+          >
+            {applet.description}
+          </Text>
+        )}
 
         {!!applet.numberOverdue && (
           <Box position="absolute" top={-14} right={-14}>
@@ -85,8 +87,8 @@ export const AppletCard: FC<Props & AccessibilityProps> = ({
 
 const styles = StyleSheet.create({
   smallLogo: {
-    width: 60,
-    height: 30,
+    width: 48,
+    height: 48,
     resizeMode: 'contain',
   },
 });

@@ -13,8 +13,6 @@ import { bannerActions } from '@app/entities/banner/model/slice';
 import { palette } from '@app/shared/lib/constants/palette';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
-import { Box } from '@app/shared/ui/base';
-import { ImageBackground } from '@app/shared/ui/ImageBackground';
 
 import { AboutAppletScreen } from './AboutAppletScreen';
 import { ActivityListScreen } from './ActivityListScreen';
@@ -36,89 +34,68 @@ export const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
     select: o => mapAppletDetailsFromDto(o.data.result),
   });
 
-  const appletTheme = applet?.theme;
-  const primaryColor = appletTheme?.primaryColor ?? palette.surface1;
-
   useLayoutEffect(() => {
     if (title) {
       navigation.setOptions({
         title,
         headerRight: () =>
           applet?.theme?.logo && (
-            <Box backgroundColor="$white" style={style.themeLogoContainer}>
-              <CachedImage
-                source={applet.theme.logo}
-                style={style.themeLogo}
-                resizeMode="contain"
-              />
-            </Box>
+            <CachedImage
+              source={applet.theme.logo}
+              style={style.themeLogo}
+              resizeMode="contain"
+            />
           ),
       });
     }
   }, [title, navigation, applet?.theme?.logo]);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerStyle: {
-        backgroundColor: primaryColor,
-      },
-    });
-  }, [primaryColor, navigation]);
-
   useOnFocus(() => {
-    dispatch(bannerActions.setBannersBg(primaryColor));
+    dispatch(bannerActions.setBannersBg(palette.surface1));
   });
 
   const { bottom } = useSafeAreaInsets();
 
   return (
-    <ImageBackground uri={appletTheme?.backgroundImage} bg={primaryColor}>
-      <Tab.Navigator
-        screenOptions={getAppletDetailsScreenOptions(
-          appletTheme ?? null,
-          Boolean(bottom),
-        )}
-        initialRouteName="ActivityList"
-      >
-        <Tab.Screen
-          name="ActivityList"
-          options={{
-            title: t('applet_footer:activities'),
-          }}
-          component={ActivityListScreen}
-          initialParams={route.params}
-        />
+    <Tab.Navigator
+      screenOptions={getAppletDetailsScreenOptions(bottom)}
+      initialRouteName="ActivityList"
+    >
+      <Tab.Screen
+        name="ActivityList"
+        options={{
+          title: t('applet_footer:activities'),
+        }}
+        component={ActivityListScreen}
+        initialParams={route.params}
+      />
 
-        <Tab.Screen
-          name="Data"
-          options={{
-            title: t('applet_footer:data'),
-          }}
-          component={AppletDataScreen}
-          initialParams={route.params}
-        />
+      <Tab.Screen
+        name="Data"
+        options={{
+          title: t('applet_footer:data'),
+        }}
+        component={AppletDataScreen}
+        initialParams={route.params}
+      />
 
-        <Tab.Screen
-          name="About"
-          options={{
-            title: t('applet_footer:about'),
-          }}
-          component={AboutAppletScreen}
-          initialParams={route.params}
-        />
-      </Tab.Navigator>
-    </ImageBackground>
+      <Tab.Screen
+        name="About"
+        options={{
+          title: t('applet_footer:about'),
+        }}
+        component={AboutAppletScreen}
+        initialParams={route.params}
+      />
+    </Tab.Navigator>
   );
 };
 
 const style = StyleSheet.create({
-  themeLogoContainer: {
-    width: 30,
-    height: 30,
-    paddingBottom: 0,
-  },
   themeLogo: {
-    width: '100%',
-    height: '100%',
+    width: 48,
+    height: 48,
+    marginBottom: 4,
+    resizeMode: 'contain',
   },
 });

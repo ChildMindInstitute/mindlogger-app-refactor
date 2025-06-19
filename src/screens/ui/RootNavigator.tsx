@@ -43,10 +43,9 @@ import { Emitter } from '@app/shared/lib/services/Emitter';
 import { useDelayedInterval } from '@app/shared/lib/timers/hooks/useDelayedInterval';
 import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
 import { BackButton } from '@app/shared/ui/BackButton';
-import { Box, XStack } from '@app/shared/ui/base';
+import { XStack } from '@app/shared/ui/base';
 import {
   ChevronLeftIcon,
-  CloseIcon,
   HomeIcon,
   UserProfileIcon,
 } from '@app/shared/ui/icons';
@@ -304,9 +303,16 @@ export const RootNavigator = () => {
             component={AppletBottomTabNavigator}
             options={({ route }) => ({
               headerBackVisible: false,
+              headerStyle: {
+                backgroundColor: palette.surface1,
+              },
               title: route.params.title,
               headerLeft: () => (
-                <BackButton aria-label="home-button" fallbackRoute="Applets">
+                <BackButton
+                  aria-label="home-button"
+                  fallbackRoute="Applets"
+                  p={12}
+                >
                   <HomeIcon color={palette.on_surface} size={24} />
                 </BackButton>
               ),
@@ -357,13 +363,6 @@ export const RootNavigator = () => {
         component={PasswordRecoveryScreen}
         options={{
           title: t('settings:create_new_password'),
-          headerLeft: () => (
-            <Text aria-label="close-button" onPress={navigation.goBack} mr={24}>
-              <CloseIcon color="$on_surface" size={22} />
-            </Text>
-          ),
-          // For proper centering on Android
-          headerRight: () => <Box ml={44} />,
         }}
       />
     </Stack.Navigator>

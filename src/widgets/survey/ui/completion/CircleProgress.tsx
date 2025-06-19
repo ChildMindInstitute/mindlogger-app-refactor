@@ -53,7 +53,7 @@ export const CircleProgress = ({ size = 86, progress }: Props) => {
 
         <AnimatedSvgCircle
           fill="none"
-          stroke={palette.blue3}
+          stroke={palette.blue}
           strokeDasharray={strokeDasharray}
           animatedProps={animatedStrokeDashoffset}
           {...staticCircleProps}

@@ -41,9 +41,9 @@ export const AppletDataScreen: FC<Props> = ({ route }) => {
   }
 
   return (
-    <Box flexGrow={1}>
+    <Box flex={1} bg="$surface1">
       <UploadRetryBanner />
-      <HorizontalCalendar mt={8} />
+      <HorizontalCalendar />
       <ActivityAnalyticsList analytics={analytics} />
     </Box>
   );

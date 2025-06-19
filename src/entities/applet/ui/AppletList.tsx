@@ -33,6 +33,16 @@ type Props = {
   ListFooterComponent: JSX.Element;
 } & BoxProps;
 
+const THUMBNAIL_BG_COLORS = [
+  '$pink',
+  '$blue',
+  '$green',
+  '$yellow',
+  '$brown',
+  '$purple',
+  '$orange',
+];
+
 const AppletListView: FC<Props> = ({
   onAppletPress,
   refreshControl,
@@ -53,7 +63,7 @@ const AppletListView: FC<Props> = ({
   const hasError = !!refreshError || !!getAppletsError;
 
   const renderItem: ListRenderItem<Applet> = useCallback(
-    ({ item }) => (
+    ({ item, index }) => (
       <AppletCard
         accessibilityLabel={`applet-${item.displayName}`}
         applet={item}
@@ -61,6 +71,7 @@ const AppletListView: FC<Props> = ({
         onPress={() =>
           onAppletPress({ id: item.id, displayName: item.displayName })
         }
+        thumbnailColor={THUMBNAIL_BG_COLORS[index % THUMBNAIL_BG_COLORS.length]}
       />
     ),
     [isRefreshing, isUploading, onAppletPress],

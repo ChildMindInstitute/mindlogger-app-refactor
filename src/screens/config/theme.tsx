@@ -4,8 +4,7 @@ import {
 } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
-import { AppletTheme } from '@app/entities/applet/lib/types';
-import { IS_ANDROID, IS_TABLET } from '@app/shared/lib/constants';
+import { IS_TABLET } from '@app/shared/lib/constants';
 import { palette } from '@app/shared/lib/constants/palette';
 import { CloseIcon } from '@app/shared/ui/icons';
 import { AboutIcon } from '@app/shared/ui/icons/About';
@@ -35,78 +34,70 @@ export const getScreenOptions = ({
     headerTitleAlign: 'center',
     headerBackVisible: false,
     headerLeft: () => (
-      <Text aria-label="close-button" onPress={navigation.goBack} mr={24}>
+      <Text aria-label="close-button" onPress={navigation.goBack}>
         <CloseIcon color={palette.on_surface} size={18} />
       </Text>
     ),
   };
 };
 
-export const getAppletDetailsScreenOptions = (
-  appletTheme: AppletTheme | null,
-  hasBottomInset: boolean,
-) => {
+export const getAppletDetailsScreenOptions = (paddingBottom: number) => {
   return ({ route }: BottomScreenOptions): BottomTabNavigationOptions => {
     const tabBarIcon = (color: string) => {
       switch (route.name) {
         case 'ActivityList':
           return (
-            <SurveyIcon
-              accessibilityLabel="activities-tab"
-              color={color}
-              size={40}
-            />
+            <SurveyIcon aria-label="activities-tab" color={color} size={24} />
           );
         case 'Data':
-          return (
-            <DataIcon accessibilityLabel="data-tab" color={color} size={40} />
-          );
+          return <DataIcon aria-label="data-tab" color={color} size={24} />;
         case 'About':
-          return (
-            <AboutIcon accessibilityLabel="about-tab" color={color} size={40} />
-          );
+          return <AboutIcon aria-label="about-tab" color={color} size={24} />;
         default:
           break;
       }
     };
 
-    const tabBarActiveTintColor = appletTheme?.primaryColor || palette.primary;
-    const tabBarInactiveTintColor = palette.darkerGrey3;
-
     return {
       headerShown: false,
-      ...(IS_TABLET
-        ? {
-            tabBarItemStyle: {
+      tabBarItemStyle: {
+        ...(IS_TABLET
+          ? {
               flexDirection: 'column',
               alignItems: 'center',
-              paddingVertical: IS_ANDROID ? 10 : 5,
-            },
-          }
-        : {}),
+            }
+          : {}),
+      },
       tabBarIcon: ({ color }: { color: string }) => tabBarIcon(color),
+      tabBarIconStyle: {
+        margin: 4,
+      },
       tabBarStyle: {
-        backgroundColor: palette.lightBlue,
-        paddingTop: 3,
-        ...(IS_ANDROID ? { paddingBottom: 5 } : {}),
-        ...(hasBottomInset
-          ? { height: 85, paddingBottom: 20 }
-          : { height: 70, paddingBottom: 5 }),
+        backgroundColor: palette.surface1,
+        borderTopWidth: 0,
+        paddingTop: 0,
+        paddingHorizontal: 16,
+        paddingBottom,
+        height: 61 + paddingBottom,
+        justifyContent: 'space-between',
+        elevation: 0,
       },
       tabBarLabel: ({ color, focused, children }) => {
         return (
           <Text
             color={color}
             fontWeight={focused ? '700' : '400'}
-            fontSize={11}
-            accessibilityLabel={`bottom_nav_button-${children}`}
+            fontSize={12}
+            lineHeight={16}
+            letterSpacing={0.5}
+            aria-label={`bottom_nav_button-${children}`}
           >
             {children}
           </Text>
         );
       },
-      tabBarActiveTintColor,
-      tabBarInactiveTintColor,
+      tabBarActiveTintColor: palette.primary,
+      tabBarInactiveTintColor: palette.outline,
     };
   };
 };

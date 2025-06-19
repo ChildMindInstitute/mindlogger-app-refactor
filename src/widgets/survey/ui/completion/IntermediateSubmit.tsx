@@ -1,14 +1,13 @@
 import { FC } from 'react';
-import { Image } from 'react-native';
 
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
-import { XStack, YStack } from '@app/shared/ui/base';
+import { ActivityFlowStep } from '@app/entities/activity/ui/ActivityFlowStep';
+import { YStack } from '@app/shared/ui/base';
 import { Button } from '@app/shared/ui/Button';
 import { Center } from '@app/shared/ui/Center';
 import { Text } from '@app/shared/ui/Text';
-import { badge } from '@assets/images';
 
 const ActivityBox = styled(Center, {
   padding: 25,
@@ -52,7 +51,7 @@ export const IntermediateSubmit: FC<Props> = ({
 
         <ActivityBox>
           <Text
-            accessibilityLabel="next_activity-name"
+            aria-label="next_activity-name"
             fontWeight="700"
             mb={10}
             fontSize={16}
@@ -60,29 +59,17 @@ export const IntermediateSubmit: FC<Props> = ({
             {activityName}
           </Text>
 
-          <XStack>
-            <Image
-              source={badge}
-              width={18}
-              height={18}
-              style={{
-                opacity: 0.6,
-                right: 4,
-                width: 18,
-                height: 18,
-              }}
-            />
-
-            <Text fontSize={14} color="$grey">
-              {activitiesPassed + 1} of {totalActivities} {flowName}
-            </Text>
-          </XStack>
+          <ActivityFlowStep
+            activityPositionInFlow={activitiesPassed + 1}
+            numberOfActivitiesInFlow={totalActivities}
+            activityFlowName={flowName}
+          />
         </ActivityBox>
 
         <YStack space={10}>
           <Button
             bg="$blue"
-            accessibilityLabel="submit-button"
+            aria-label="submit-button"
             onPress={onPressSubmit}
             disabled={isLoading}
             isLoading={isLoading}
@@ -92,7 +79,7 @@ export const IntermediateSubmit: FC<Props> = ({
 
           <Text
             color={isBackDisabled ? '$lightGrey' : '$blue'}
-            accessibilityLabel="back-button"
+            aria-label="back-button"
             textAlign="center"
             fontSize={17}
             fontWeight="700"
