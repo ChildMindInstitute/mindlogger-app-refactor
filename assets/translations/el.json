@@ -25,7 +25,9 @@
       "completed": "Η δραστηριότητα μεταφορτώθηκε"
     },
     "step": "Βήμα",
-    "flowStep": "({{activityPositionInFlow}} στο {{numberOfActivitiesInFlow}}) {{activityFlowName}}"
+    "flowStep": "({{activityPositionInFlow}} στο {{numberOfActivitiesInFlow}}) {{activityFlowName}}",
+    "stepCounter": "{{currentStep}} στο {{totalSteps}}",
+    "activityCounter": "{{currentStep}} στο {{totalSteps}}"
   },
   "activity_time": {
     "time_remaining": "απομένει(-ουν) για το στοιχείο αυτό"

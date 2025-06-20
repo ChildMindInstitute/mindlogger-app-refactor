@@ -45,15 +45,11 @@ export const CircleProgress = ({ size = 86, progress }: Props) => {
   return (
     <Box w={size} h={size} transform={'rotate(90deg)'}>
       <Svg width={size} height={size} fill="none">
-        <Circle
-          fill="none"
-          stroke={palette.lightBlue2}
-          {...staticCircleProps}
-        />
+        <Circle fill="none" stroke={palette.neutral90} {...staticCircleProps} />
 
         <AnimatedSvgCircle
           fill="none"
-          stroke={palette.blue}
+          stroke={palette.green}
           strokeDasharray={strokeDasharray}
           animatedProps={animatedStrokeDashoffset}
           {...staticCircleProps}

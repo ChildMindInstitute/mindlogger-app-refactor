@@ -25,7 +25,9 @@
       "completed": "Activity uploaded"
     },
     "step": "Step",
-    "flowStep": "({{activityPositionInFlow}} of {{numberOfActivitiesInFlow}}) {{activityFlowName}}"
+    "flowStep": "({{activityPositionInFlow}} of {{numberOfActivitiesInFlow}}) {{activityFlowName}}",
+    "stepCounter": "{{currentStep}} of {{totalSteps}}",
+    "activityCounter": "Activity {{currentStep}} of {{totalSteps}}"
   },
   "activity_time": {
     "time_remaining": "remaining for this item"

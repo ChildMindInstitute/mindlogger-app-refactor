@@ -25,7 +25,9 @@
       "completed": "Activité téléchargée"
     },
     "step": "Étape",
-    "flowStep": "({{activityPositionInFlow}} sur {{numberOfActivitiesInFlow}}) {{activityFlowName}}"
+    "flowStep": "({{activityPositionInFlow}} de {{numberOfActivitiesInFlow}}) {{activityFlowName}}",
+    "stepCounter": "{{currentStep}} de {{totalSteps}}",
+    "activityCounter": "Activité {{currentStep}} de {{totalSteps}}"
   },
   "activity_time": {
     "time_remaining": "reste pour cet article"

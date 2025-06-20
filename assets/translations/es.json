@@ -25,7 +25,9 @@
       "completed": "Actividad cargada"
     },
     "step": "Paso",
-    "flowStep": "({{activityPositionInFlow}} de {{numberOfActivitiesInFlow}}) {{activityFlowName}}"
+    "flowStep": "({{activityPositionInFlow}} de {{numberOfActivitiesInFlow}}) {{activityFlowName}}",
+    "stepCounter": "{{currentStep}} de {{totalSteps}}",
+    "activityCounter": "Actividad {{currentStep}} de {{totalSteps}}"
   },
   "activity_time": {
     "time_remaining": "es el tiempo restante para este elemento"
