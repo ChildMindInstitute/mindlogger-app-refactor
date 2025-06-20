@@ -43,16 +43,35 @@ export const getScreenOptions = ({
 
 export const getAppletDetailsScreenOptions = (paddingBottom: number) => {
   return ({ route }: BottomScreenOptions): BottomTabNavigationOptions => {
-    const tabBarIcon = (color: string) => {
+    const tabBarIcon = (color: string, isSelected: boolean) => {
       switch (route.name) {
         case 'ActivityList':
           return (
-            <SurveyIcon aria-label="activities-tab" color={color} size={24} />
+            <SurveyIcon
+              aria-label="activities-tab"
+              color={color}
+              size={24}
+              isSelected={isSelected}
+            />
           );
         case 'Data':
-          return <DataIcon aria-label="data-tab" color={color} size={24} />;
+          return (
+            <DataIcon
+              aria-label="data-tab"
+              color={color}
+              size={24}
+              isSelected={isSelected}
+            />
+          );
         case 'About':
-          return <AboutIcon aria-label="about-tab" color={color} size={24} />;
+          return (
+            <AboutIcon
+              aria-label="about-tab"
+              color={color}
+              size={24}
+              isSelected={isSelected}
+            />
+          );
         default:
           break;
       }
@@ -68,7 +87,7 @@ export const getAppletDetailsScreenOptions = (paddingBottom: number) => {
             }
           : {}),
       },
-      tabBarIcon: ({ color }: { color: string }) => tabBarIcon(color),
+      tabBarIcon: ({ color, focused }) => tabBarIcon(color, focused),
       tabBarIconStyle: {
         margin: 4,
       },
