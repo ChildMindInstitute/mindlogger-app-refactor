@@ -3,9 +3,9 @@ import { TouchableOpacity } from 'react-native';
 
 import { palette } from '@app/shared/lib/constants/palette';
 
-import { ActionButton } from './ActionButton';
 import { HandlersContext } from './contexts';
 import { RestartIcon } from '../icons';
+import { SubmitButton } from '../SubmitButton';
 
 type Props = PropsWithChildren<{
   isIcon?: boolean;
@@ -23,13 +23,13 @@ export function UndoButton({ children, isIcon }: Props) {
   }
 
   return (
-    <ActionButton
-      type="flat"
-      alignSelf="center"
-      accessibilityLabel="undo-button"
+    <SubmitButton
+      mode="secondary"
+      aria-label="undo-button"
       onPress={undo}
+      minWidth={120}
     >
       {children}
-    </ActionButton>
+    </SubmitButton>
   );
 }

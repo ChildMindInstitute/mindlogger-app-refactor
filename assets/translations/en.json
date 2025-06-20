@@ -391,7 +391,7 @@
     "back": "Back",
     "return": "Return",
     "undo": "Undo",
-    "exit": "Exit"
+    "exit": "Save & Exit"
   },
   "network_alerts": {
     "no_internet_title": "No Internet Connection",

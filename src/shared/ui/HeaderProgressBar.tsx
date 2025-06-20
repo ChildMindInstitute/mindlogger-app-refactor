@@ -10,10 +10,10 @@ export function HeaderProgressBar({ progress }: Props) {
   return (
     <Bar
       progress={progress}
-      color={palette.blue}
-      unfilledColor={palette.lighterGrey0}
+      color={palette.green}
+      unfilledColor={palette.surface_variant}
       borderWidth={0}
-      height={12}
+      height={16}
       width={null}
       borderRadius={30}
     />

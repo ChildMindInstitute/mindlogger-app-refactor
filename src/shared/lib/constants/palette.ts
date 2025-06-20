@@ -141,6 +141,7 @@ export const semanticPalette = {
   outline: basePalette.neutral_variant50,
   outline_variant: basePalette.neutral_variant80,
   secondary_container: basePalette.secondary90,
+  on_secondary_container: basePalette.secondary0,
 
   // TODO: Use proper semantic names for remaining colors
   secondary: '#FFFFFF',
@@ -176,9 +177,6 @@ export const semanticPalette = {
   lightBlue: '#dbf2ff',
   lightBlue2: '#D8E4ED',
   darkBlue: 'darkblue',
-  green: '#008800',
-  lightGreen: '#35FDB5',
-  lightGreen2: '#57ba79',
   aqua: '#7FF7FF',
   black: '#000',
   red: '#FF0000',

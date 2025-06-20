@@ -37,11 +37,7 @@ const TEN_SECONDS = ONE_SECOND * 10;
 const ProgressWithTimerView: FC<ProgressWithTimerProps> = ({ duration }) => {
   return (
     <TimerContainer accessibilityLabel="timer-widget">
-      {duration ? (
-        <Timer duration={duration} />
-      ) : (
-        <ProgressBar progress={0} height={2} />
-      )}
+      {!!duration && <Timer duration={duration} />}
     </TimerContainer>
   );
 };
@@ -117,10 +113,10 @@ const Timer: FC<TimerProps> = ({ duration }) => {
 
   const formattedTimeLeft = getClockTime(timeLeft);
 
-  const textColor = timeIsRunningOut ? palette.alertDark : palette.on_surface;
+  const textColor = timeIsRunningOut ? palette.error : palette.on_surface;
 
   return (
-    <>
+    <Box mt={-1}>
       <ProgressBar
         progress={progressDone === 0 ? 0 : 1 - progressDone}
         height={2}
@@ -130,13 +126,13 @@ const Timer: FC<TimerProps> = ({ duration }) => {
           w="100%"
           textAlign="center"
           position="absolute"
-          top={4}
+          top={6}
           color={textColor}
         >
           {formattedTimeLeft} {t('activity_time:time_remaining')}
         </Text>
       )}
-    </>
+    </Box>
   );
 };
 

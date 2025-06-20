@@ -391,7 +391,7 @@
     "back": "Atrás",
     "return": "Volver",
     "undo": "Deshacer",
-    "exit": "Salir"
+    "exit": "Guardar y salir"
   },
   "network_alerts": {
     "no_internet_title": "Sin conexión a internet",

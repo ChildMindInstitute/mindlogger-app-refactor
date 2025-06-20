@@ -3,9 +3,9 @@ import { TouchableOpacity } from 'react-native';
 
 import { palette } from '@app/shared/lib/constants/palette';
 
-import { ActionButton } from './ActionButton';
 import { HandlersContext } from './contexts';
 import { LeftArrowIcon } from '../icons';
+import { SubmitButton } from '../SubmitButton';
 
 type Props = PropsWithChildren<{
   isIcon?: boolean;
@@ -23,13 +23,13 @@ export function BackButton({ children, isIcon }: Props) {
   }
 
   return (
-    <ActionButton
-      alignSelf="flex-start"
-      type="flat"
-      accessibilityLabel="back-button"
+    <SubmitButton
+      mode="secondary"
+      aria-label="back-button"
       onPress={back}
+      minWidth={120}
     >
       {children}
-    </ActionButton>
+    </SubmitButton>
   );
 }

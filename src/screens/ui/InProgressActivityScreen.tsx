@@ -7,8 +7,9 @@ import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompleti
 import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getSupportsMobile } from '@app/shared/lib/utils/responseTypes';
-import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box } from '@app/shared/ui/base';
+import { Spinner } from '@app/shared/ui/Spinner';
+import { StatusBar } from '@app/shared/ui/StatusBar';
 import { useBaseInfo } from '@app/widgets/activity-group/model/hooks/useBaseInfo';
 import { FlowSurvey } from '@app/widgets/survey/ui/FlowSurvey';
 import { IS_ANDROID, OS_MAJOR_VERSION } from '@shared/lib/constants';
@@ -54,8 +55,10 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
     // We can remove this top margin when this issue is resolved:
     // https://github.com/react-navigation/react-navigation/issues/12608
     <Box flex={1} marginTop={IS_ANDROID && OS_MAJOR_VERSION >= 15 ? top : 0}>
+      <StatusBar hidden />
+
       {isLoading || !isAppSupportedEntity ? (
-        <ActivityIndicator />
+        <Spinner />
       ) : (
         <FlowSurvey
           appletId={appletId}

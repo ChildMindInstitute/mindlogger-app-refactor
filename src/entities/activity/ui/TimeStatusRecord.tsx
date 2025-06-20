@@ -57,6 +57,15 @@ export const TimeStatusRecord: FC<Props> = ({ activity, ...props }) => {
     }
   };
 
+  if (
+    !hasAvailableFromTo &&
+    !hasAvailableToOnly &&
+    !hasTimeToComplete &&
+    !activity.isExpired
+  ) {
+    return null;
+  }
+
   return (
     <Box {...props}>
       {hasAvailableFromTo && (

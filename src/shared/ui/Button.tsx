@@ -27,6 +27,7 @@ export function Button({
   textProps = {
     color: '$on_primary',
     fontWeight: '700',
+    textAlign: 'center',
   },
   touchableStyles,
   children,
@@ -35,7 +36,7 @@ export function Button({
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.touchable, touchableStyles]}
+      style={touchableStyles}
       disabled={isLoading}
     >
       <Center
@@ -59,9 +60,3 @@ export function Button({
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  touchable: {
-    width: '100%',
-  },
-});

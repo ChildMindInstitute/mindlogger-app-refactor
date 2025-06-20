@@ -11,9 +11,8 @@ import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletD
 import { useActiveAssessmentLink } from '@app/screens/model/hooks/useActiveAssessmentLink';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
-import { Box, XStack } from '@app/shared/ui/base';
+import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Center } from '@app/shared/ui/Center';
-import { StatusBar } from '@app/shared/ui/StatusBar';
 import {
   OnBeforeBackResult,
   OnBeforeNextResult,
@@ -329,8 +328,6 @@ export function ActivityStepper({
 
   return (
     <Box flex={1}>
-      <StatusBar hidden />
-
       {showTimeLeft && (
         <TimeRemaining
           ml={10}
@@ -376,7 +373,7 @@ export function ActivityStepper({
             targetSubjectId={targetSubjectId}
           />
           {showTopNavigation && (
-            <Stepper.NavigationPanel mx={16}>
+            <Stepper.NavigationPanel px={16}>
               {canMoveBack && <Stepper.BackButton isIcon />}
               {canReset && <Stepper.UndoButton isIcon />}
 
@@ -437,46 +434,40 @@ export function ActivityStepper({
             }}
           />
 
-          <Box mb={!showBottomNavigation ? 16 : 0}>
+          <YStack borderTopColor="$surface_variant" borderTopWidth={1} gap={8}>
             <ProgressWithTimer
               key={currentPipelineItem?.id}
               duration={currentPipelineItem?.timer}
             />
-          </Box>
 
-          {showBottomNavigation && (
-            <Stepper.NavigationPanel
-              mt={18}
-              minHeight={46}
-              mb={safeAreaBottom ? 0 : 16}
-              gap={10}
-              mx={10}
-            >
-              {canMoveBack && (
-                <Stepper.BackButton>
-                  {t(
-                    isFirstStep
-                      ? 'activity_navigation:return'
-                      : 'activity_navigation:back',
-                  )}
-                </Stepper.BackButton>
-              )}
+            {showBottomNavigation && (
+              <Stepper.NavigationPanel pt={20} px={16} pb={20} gap={8}>
+                {canMoveBack && (
+                  <Stepper.BackButton>
+                    {t(
+                      isFirstStep
+                        ? 'activity_navigation:return'
+                        : 'activity_navigation:back',
+                    )}
+                  </Stepper.BackButton>
+                )}
 
-              {canReset && (
-                <Stepper.UndoButton>
-                  {t('activity_navigation:undo')}
-                </Stepper.UndoButton>
-              )}
+                {canReset && (
+                  <Stepper.UndoButton>
+                    {t('activity_navigation:undo')}
+                  </Stepper.UndoButton>
+                )}
 
-              {canMoveNext && (
-                <Stepper.NextButton
-                  accessibilityLabel={getAccessibilityLabel(nextButtonText)}
-                >
-                  {t(nextButtonText)}
-                </Stepper.NextButton>
-              )}
-            </Stepper.NavigationPanel>
-          )}
+                {canMoveNext && (
+                  <Stepper.NextButton
+                    accessibilityLabel={getAccessibilityLabel(nextButtonText)}
+                  >
+                    {t(nextButtonText)}
+                  </Stepper.NextButton>
+                )}
+              </Stepper.NavigationPanel>
+            )}
+          </YStack>
         </SafeAreaView>
       </Stepper>
     </Box>

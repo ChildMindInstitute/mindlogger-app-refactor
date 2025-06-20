@@ -12,7 +12,7 @@ export function ProgressBar({ progress, height = 10 }: Props) {
     <Bar
       progress={progress}
       color={palette.blue}
-      unfilledColor={palette.grey2}
+      unfilledColor={palette.surface_variant}
       borderWidth={0}
       height={height}
       width={null}

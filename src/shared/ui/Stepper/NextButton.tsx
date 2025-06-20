@@ -5,9 +5,9 @@ import { useThrottledCallback } from 'use-debounce';
 
 import { palette } from '@app/shared/lib/constants/palette';
 
-import { ActionButton } from './ActionButton';
 import { HandlersContext } from './contexts';
 import { RightArrowIcon } from '../icons';
+import { SubmitButton } from '../SubmitButton';
 
 type Props = PropsWithChildren<{
   isIcon?: boolean;
@@ -44,12 +44,12 @@ export function NextButton({ children, isIcon, accessibilityLabel }: Props) {
   }
 
   return (
-    <ActionButton
-      accessibilityLabel={`${accessibilityLabel}-bottom` ?? ''}
+    <SubmitButton
+      aria-label={`${accessibilityLabel}-bottom` ?? ''}
       onPress={onPressNextDebounced}
-      alignSelf="flex-end"
+      minWidth={120}
     >
       {children}
-    </ActionButton>
+    </SubmitButton>
   );
 }

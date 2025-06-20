@@ -116,20 +116,18 @@ export const activityMarkDownStyles = StyleSheet.create({
     marginBottom: 24,
   },
   heading6: {
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: 18,
+    lineHeight: 28,
     fontWeight: '700',
-    letterSpacing: 0.15,
     marginBottom: 24,
   },
   paragraph: {
     alignSelf: 'center',
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: 18,
+    lineHeight: 28,
     marginBottom: 24,
   },
   text: {
-    letterSpacing: 0.5,
     flexDirection: 'row',
   },
   blockquote: {
