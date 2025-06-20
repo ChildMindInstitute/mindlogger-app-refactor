@@ -53,7 +53,11 @@ const getLinking = ():
   return {
     prefixes: DEEP_LINK_PREFIXES,
     getStateFromPath: (path, options) => {
-      if (path.startsWith('/active-assessment')) {
+      // `/ehr-complete` is intentionally excluded from the AndroidManifest.xml, as it is meant to be handled on iOS only
+      if (
+        path.startsWith('/active-assessment') ||
+        path.startsWith('/ehr-complete')
+      ) {
         getDefaultLogger().info(
           `[${LOGGER_MODULE_NAME}] Found active assessment deep link, opening in app`,
         );
