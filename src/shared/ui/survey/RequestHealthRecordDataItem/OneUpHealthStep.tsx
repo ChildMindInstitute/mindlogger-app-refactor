@@ -14,7 +14,6 @@ import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getEntityProgression } from '@app/shared/lib/utils/survey/survey';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
-import { Button } from '@app/shared/ui/Button';
 import { Center } from '@app/shared/ui/Center';
 import { CloseIcon } from '@app/shared/ui/icons';
 import { Input } from '@app/shared/ui/Input';
@@ -22,6 +21,8 @@ import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
 
 import { HealthSystemItem } from './HealthSystemItem';
+import { GradientOverlay } from '../../GradientOverlay';
+import { SubmitButton } from '../../SubmitButton';
 
 export const OneUpHealthStep: FC = () => {
   const { t } = useTranslation();
@@ -87,14 +88,10 @@ export const OneUpHealthStep: FC = () => {
   }, [healthSystemUrl, setSelectedHealthSystemId]);
 
   return (
-    <YStack gap="$5" pt="$5" flex={1}>
-      {isTokenLoading ? (
-        <Center flex={1}>
-          <Spinner />
-        </Center>
-      ) : (
+    <YStack gap={8} pt="$5" flex={1} bg="$surface1">
+      {!isTokenLoading && (
         <>
-          <YStack px="$4" gap="$2">
+          <YStack px={16} gap="$2">
             <Text fontWeight="700">
               {t('requestHealthRecordData:enterYourHealthSystem')}
             </Text>
@@ -111,7 +108,7 @@ export const OneUpHealthStep: FC = () => {
                   blurOnSubmit={false}
                   returnKeyType="search"
                   placeholder={t('requestHealthRecordData:healthSystemName')}
-                  mode="dark"
+                  mode="light"
                   px={0}
                   pr={searchQuery ? '$8' : 0}
                   flex={1}
@@ -134,69 +131,61 @@ export const OneUpHealthStep: FC = () => {
                   </Box>
                 )}
               </Box>
-              <Button
+              <SubmitButton
                 onPress={() => handleSearch()}
-                isLoading={isResultsLoading}
-                touchableStyles={styles.touchable}
-                bg="$lighterGrey2"
-                px="$5"
-                py="$3"
-                borderColor="$surface_variant"
-                borderWidth={1}
+                mode="tonal"
                 textProps={buttonTextStyle}
               >
                 {t('requestHealthRecordData:search')}
-              </Button>
+              </SubmitButton>
             </XStack>
           </YStack>
 
-          <FlatList<OneUpHealthSystemItem>
-            ref={flatListRef}
-            data={results}
-            renderItem={({ item }) => (
-              <HealthSystemItem
-                {...item}
-                onPress={() => handleItemPress(item.id)}
-                isDisabled={isHealthSystemUrlLoading}
-                isLoading={
-                  selectedHealthSystemId === item.id && isHealthSystemUrlLoading
-                }
-              />
-            )}
-            keyExtractor={item => String(item.id)}
-            refreshing={isResultsLoading}
-            contentContainerStyle={styles.contentContainer}
-            style={styles.flatList}
-            onEndReached={loadMore}
-            onEndReachedThreshold={0.5}
-            ListFooterComponent={
-              <Center py="$2">
-                <Spinner size={24} isVisible={isResultsLoading} />
-              </Center>
-            }
-            ListEmptyComponent={
-              isResultsLoading ? null : (
-                <Text>{t('requestHealthRecordData:noResults')}</Text>
-              )
-            }
-          />
+          <Box flex={1}>
+            <FlatList<OneUpHealthSystemItem>
+              ref={flatListRef}
+              data={results}
+              renderItem={({ item }) => (
+                <HealthSystemItem
+                  {...item}
+                  onPress={() => handleItemPress(item.id)}
+                  isDisabled={isHealthSystemUrlLoading}
+                  isLoading={
+                    selectedHealthSystemId === item.id &&
+                    isHealthSystemUrlLoading
+                  }
+                />
+              )}
+              keyExtractor={item => String(item.id)}
+              refreshing={isResultsLoading}
+              contentContainerStyle={styles.contentContainer}
+              onEndReached={loadMore}
+              onEndReachedThreshold={0.5}
+              ListFooterComponent={
+                <Center py="$2">
+                  <Spinner size={24} isVisible={isResultsLoading} />
+                </Center>
+              }
+              ListEmptyComponent={
+                isResultsLoading ? null : (
+                  <Text>{t('requestHealthRecordData:noResults')}</Text>
+                )
+              }
+            />
+            <GradientOverlay />
+          </Box>
         </>
       )}
+
+      <Spinner withOverlay isVisible={isTokenLoading} />
     </YStack>
   );
 };
 
 const styles = StyleSheet.create({
-  touchable: {
-    width: 'auto',
-  },
-  flatList: {
-    flex: 1,
-  },
   contentContainer: {
     gap: 12,
-    paddingHorizontal: 16,
-    paddingBottom: 20,
+    padding: 16,
   },
   clearButtonContainer: {
     transform: [{ translateY: -12 }],

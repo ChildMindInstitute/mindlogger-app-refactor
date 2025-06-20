@@ -63,9 +63,11 @@ export const HealthSystemItem: FC<HealthSystemItemProps> = ({
           <Text fontWeight="700">{name}</Text>
           {!!address && <Paragraph>{address}</Paragraph>}
         </YStack>
-        <Center alignSelf="center" width="$2">
-          {!isLoading && <ChevronRightIcon color={palette.grey2} size={16} />}
-          <Spinner size={24} isVisible={isLoading} />
+        <Center alignSelf="center">
+          {!isLoading && <ChevronRightIcon color={palette.outline} size={18} />}
+          <Box style={StyleSheet.absoluteFill}>
+            <Spinner size={24} isVisible={isLoading} />
+          </Box>
         </Center>
       </XStack>
     </AnimatedTouchable>

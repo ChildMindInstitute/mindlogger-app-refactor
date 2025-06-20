@@ -58,7 +58,7 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
       <StatusBar hidden />
 
       {isLoading || !isAppSupportedEntity ? (
-        <Spinner />
+        <Spinner withOverlay />
       ) : (
         <FlowSurvey
           appletId={appletId}
