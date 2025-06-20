@@ -73,9 +73,9 @@ export const SettingsScreen: FC = () => {
       <Box flex={1}>
         <UploadRetryBanner />
 
-        <Box flex={1} px="$2" jc="flex-start" mt={isLoading ? top : 0}>
+        <Box flex={1} px={16} jc="flex-start" mt={isLoading ? top : 0}>
           <YStack>
-            <YStack space="$2" my="$4" ai="center">
+            <YStack space="$2" my="$8" ai="center">
               <UserIcon color={palette.on_surface} size={45} />
               <Text accessibilityLabel="account_name">{userName}</Text>
               <Text accessibilityLabel="account_email">{userEmail}</Text>

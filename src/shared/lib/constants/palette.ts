@@ -179,7 +179,6 @@ export const semanticPalette = {
   lightBlue: '#dbf2ff',
   lightBlue2: '#D8E4ED',
   darkBlue: 'darkblue',
-  aqua: '#7FF7FF',
   black: '#000',
   red: '#FF0000',
   red2: '#D33134',

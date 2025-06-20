@@ -11,6 +11,7 @@ type Props = {
   onPress: () => void;
   title: string;
   rightIcon?: ElementType;
+  isSelected?: boolean;
 } & XStackProps;
 
 const pressStyle = {
@@ -22,24 +23,31 @@ export const RowButton: FC<Props> = props => {
     onPress,
     title,
     rightIcon: RightIcon = ChevronRightIcon,
+    isSelected,
     ...boxProps
   } = props;
 
   return (
     <XStack
       onPress={onPress}
-      bg="transparent"
-      py="$2.5"
-      px="$2"
+      bg={isSelected ? '$secondary_container' : 'transparent'}
+      p={12}
       jc="space-between"
       ai="center"
-      bbc="$lightGrey"
+      bbc="$surface_variant"
       bbw={1}
       pressStyle={pressStyle}
       {...boxProps}
     >
-      <Text>{title}</Text>
-      <RightIcon color={palette.on_surface} size={14} />
+      <Text
+        color={isSelected ? palette.on_secondary_container : palette.on_surface}
+      >
+        {title}
+      </Text>
+      <RightIcon
+        color={isSelected ? palette.on_secondary_container : palette.on_surface}
+        size={16}
+      />
     </XStack>
   );
 };

@@ -34,8 +34,8 @@ export const getScreenOptions = ({
     headerTitleAlign: 'center',
     headerBackVisible: false,
     headerLeft: () => (
-      <Text aria-label="close-button" onPress={navigation.goBack}>
-        <CloseIcon color={palette.on_surface} size={18} />
+      <Text aria-label="close-button" onPress={navigation.goBack} p={12}>
+        <CloseIcon color={palette.on_surface} size={20} />
       </Text>
     ),
   };
