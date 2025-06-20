@@ -122,7 +122,7 @@ export const ConsentPromptStep: FC<ConsentPromptStepProps> = ({
                   value={option.id}
                 >
                   <RadioGroup.Indicator
-                    bg={isSelected ? colors.blue : colors.outlineGrey}
+                    background={isSelected ? colors.blue : colors.outlineGrey}
                   />
                 </RadioGroup.Item>
                 <Text fontSize={18} color={colors.onSurface}>

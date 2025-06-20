@@ -60,7 +60,7 @@ export const DateTimePicker: FC<Props & AccessibilityProps> = ({
       )}
 
       <DatePickerButton
-        accessibilityLabel={accessibilityLabel}
+        aria-label={accessibilityLabel}
         onPress={showDatePicker}
         iconAfter={iconAfter}
       >

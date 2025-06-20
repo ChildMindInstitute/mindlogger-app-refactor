@@ -1,11 +1,13 @@
 import { useMemo } from 'react';
 import { AccessibilityProps } from 'react-native';
 
+import { YStackProps } from '@tamagui/stacks';
+
 import { colors } from '@app/shared/lib/constants/colors';
 import { invertColor } from '@app/shared/lib/utils/survey/survey';
 
 import { RadioOption } from './types';
-import { Box, BoxProps, RadioGroup } from '../../base';
+import { Box, RadioGroup } from '../../base';
 import { QuestionIcon } from '../../icons/QuestionIcon';
 import { OptionCard } from '../../OptionCard';
 import { Tooltip } from '../../Tooltip';
@@ -24,7 +26,7 @@ type HandlerProps = {
   onPress: () => void;
 };
 
-type Props = RadioLabelProps & AccessibilityProps & HandlerProps & BoxProps;
+type Props = RadioLabelProps & AccessibilityProps & HandlerProps & YStackProps;
 
 export function RadioCard({
   selected,
@@ -86,7 +88,7 @@ export function RadioCard({
       borderColor={borderColor}
       imageUrl={imageContainerVisible ? image : null}
       onPress={onPress}
-      accessibilityLabel={accessibilityLabel}
+      aria-label={accessibilityLabel}
       renderLeftIcon={() => (
         <Box mr={10}>
           <RadioGroup.Item

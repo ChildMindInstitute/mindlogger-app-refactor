@@ -1,8 +1,10 @@
 import { Children, PropsWithChildren, ReactNode, useMemo } from 'react';
 
-import { BoxProps, XStack, YStack } from '../base';
+import { XStackProps } from '@tamagui/stacks';
 
-type Props = PropsWithChildren<BoxProps>;
+import { XStack, YStack } from '../base';
+
+type Props = PropsWithChildren<XStackProps>;
 
 export function NavigationPanel({ children, ...styledProps }: Props) {
   const buttons = useMemo(() => {

@@ -1,18 +1,17 @@
 import React, { FC, useEffect, useState } from 'react';
 import { ViewProps } from 'react-native';
 
-import { XStack } from '@tamagui/stacks';
+import { XStack, XStackProps } from '@tamagui/stacks';
 
-import { BoxProps } from './base';
 import { ClockIcon } from './icons';
 import { Text } from './Text';
 import { ONE_SECOND } from '../lib/constants';
 import { colors } from '../lib/constants/colors';
 import { HourMinute } from '../lib/types/dateTime';
 import {
+  getClockTime,
   getMsFromHours,
   getMsFromMinutes,
-  getClockTime,
 } from '../lib/utils/dateTime';
 
 type Props = {
@@ -20,7 +19,7 @@ type Props = {
   entityStartedAt: number;
   clockIconShown: boolean;
   onTimeElapsed: () => void;
-} & BoxProps &
+} & XStackProps &
   ViewProps;
 
 const TEN_SECONDS = ONE_SECOND * 10;
@@ -73,7 +72,9 @@ export const TimeRemaining: FC<Props> = (props: Props) => {
         fontSize={15}
         fontWeight="400"
         color={textColor}
-        fontFamily="Atkinson Hyperlegible Regular"
+        // These values are not supported for the fontFamily prop, but I'm not
+        // sure what they should be
+        // fontFamily="Atkinson Hyperlegible Regular"
       >
         {formattedTimeLeft}
       </Text>

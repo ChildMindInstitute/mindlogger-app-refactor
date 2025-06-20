@@ -1,12 +1,14 @@
 import { useMemo } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 
+import { YStackProps } from '@tamagui/stacks';
+
 import { IS_ANDROID } from '@app/shared/lib/constants';
 import { colors } from '@app/shared/lib/constants/colors';
 import { invertColor } from '@app/shared/lib/utils/survey/survey';
 
 import { Item } from './types';
-import { Box, BoxProps } from '../../base';
+import { Box } from '../../base';
 import { CheckBox } from '../../CheckBox';
 import { QuestionIcon } from '../../icons/QuestionIcon';
 import { OptionCard } from '../../OptionCard';
@@ -23,7 +25,7 @@ type CheckBoxProps = {
   textReplacer: (markdown: string) => string;
 } & Omit<Item, 'value'>;
 
-type Props = CheckBoxProps & Omit<BoxProps, keyof CheckBoxProps>;
+type Props = CheckBoxProps & Omit<YStackProps, keyof CheckBoxProps>;
 
 export function CheckBoxCard({
   selected,
@@ -84,7 +86,7 @@ export function CheckBoxCard({
       borderColor={borderColor}
       imageUrl={imageContainerVisible ? image : null}
       onPress={onPress}
-      accessibilityLabel={accessibilityLabel}
+      aria-label={accessibilityLabel}
       renderLeftIcon={() => (
         <Box mr={10} w={20} h={20}>
           <CheckBox

@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/primary_500</item>
+        <item name="android:windowBackground">@color/surface</item>
     </style>
 
 </resources>

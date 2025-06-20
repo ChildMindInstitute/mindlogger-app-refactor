@@ -1,6 +1,8 @@
-import { FC, ElementType } from 'react';
+import { ElementType, FC } from 'react';
 
-import { BoxProps, XStack } from './base';
+import { XStackProps } from '@tamagui/stacks';
+
+import { XStack } from './base';
 import { ArrowRightIcon } from './icons';
 import { Text } from './Text';
 import { colors } from '../lib/constants/colors';
@@ -9,7 +11,7 @@ type Props = {
   onPress: () => void;
   title: string;
   rightIcon?: ElementType;
-} & BoxProps;
+} & XStackProps;
 
 const pressStyle = {
   opacity: 0.5,

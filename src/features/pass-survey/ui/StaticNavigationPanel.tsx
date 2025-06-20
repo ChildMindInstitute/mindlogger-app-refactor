@@ -1,9 +1,9 @@
+import { XStackProps } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
-import { BoxProps } from '@app/shared/ui/base';
 import { Stepper, StepperProps } from '@app/shared/ui/Stepper';
 
-type Props = BoxProps & {
+type Props = XStackProps & {
   stepper: Omit<StepperProps, 'startFrom' | 'stepsCount'>;
 };
 

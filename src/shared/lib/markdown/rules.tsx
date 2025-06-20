@@ -253,21 +253,21 @@ const AlignmentStyles = {
 export const markDownRules: RenderRules = {
   'container_hljs-left': (node, children) => {
     return (
-      <Box key={node.key} style={localStyles.alignLeftContainer} space={20}>
+      <Box key={node.key} style={localStyles.alignLeftContainer} gap={20}>
         {children}
       </Box>
     );
   },
   'container_hljs-center': (node, children) => {
     return (
-      <Box key={node.key} style={localStyles.alignCenterContainer} space={20}>
+      <Box key={node.key} style={localStyles.alignCenterContainer} gap={20}>
         {children}
       </Box>
     );
   },
   'container_hljs-right': (node, children) => {
     return (
-      <Box key={node.key} style={localStyles.alignRightContainer} space={20}>
+      <Box key={node.key} style={localStyles.alignRightContainer} gap={20}>
         {children}
       </Box>
     );

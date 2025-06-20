@@ -3,9 +3,10 @@ import { StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
+import { YStackProps } from '@tamagui/stacks';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
-import { Box, BoxProps, XStack, YStack } from './base';
+import { Box, XStack, YStack } from './base';
 import { Text } from './Text';
 import { colors } from '../lib/constants/colors';
 
@@ -15,7 +16,7 @@ type Props = {
   onPress: () => void;
   renderLeftIcon?: () => JSX.Element | null;
   renderRightIcon?: () => JSX.Element | null;
-} & BoxProps;
+} & YStackProps;
 
 const CardWrapper = styled(YStack, {
   minHeight: 188,
@@ -79,9 +80,11 @@ export function OptionCard({
         {renderLeftIcon?.()}
 
         <Text
-          accessibilityLabel="radio-option-text"
+          aria-label="radio-option-text"
           fontSize={18}
-          fontFamily="Atkinson Hyperlegible Regular"
+          // These values are not supported for the fontFamily prop, but I'm not
+          // sure what they should be
+          // fontFamily="Atkinson Hyperlegible Regular"
           color={textColor}
           numberOfLines={3}
           flex={1}

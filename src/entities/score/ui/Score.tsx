@@ -1,6 +1,8 @@
+import { Image } from 'react-native';
+
 import { colors } from '@app/shared/lib/constants/colors';
 import { getFloatPartLength } from '@app/shared/lib/utils/common';
-import { Box, Image, XStack } from '@app/shared/ui/base';
+import { Box, XStack } from '@app/shared/ui/base';
 import { Text } from '@app/shared/ui/Text';
 import { roundAlertIcon } from '@assets/images';
 
@@ -14,7 +16,16 @@ export function Score({ label, value, highlighted }: Props) {
   return (
     <XStack alignItems="center">
       {highlighted && (
-        <Image mr={7} src={roundAlertIcon} width={17} height={16} />
+        <Image
+          source={roundAlertIcon}
+          width={17}
+          height={16}
+          style={{
+            marginRight: 7,
+            width: 17,
+            height: 16,
+          }}
+        />
       )}
 
       <Text

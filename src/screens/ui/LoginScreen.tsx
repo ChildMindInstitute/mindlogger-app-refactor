@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { StatusBar, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Image } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -7,10 +8,10 @@ import { isTablet } from 'react-native-device-info';
 
 import { LoginForm } from '@app/features/login/ui/LoginForm';
 import { openUrl } from '@app/screens/lib/utils/helpers';
-import { Box, XStack } from '@app/shared/ui/base';
-import { CloudLogo } from '@app/shared/ui/icons/CloudLogo';
+import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Link } from '@app/shared/ui/Link';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
+import { curiousLogoWhite } from '@assets/images';
 
 export const LoginScreen: FC = () => {
   const { navigate } = useNavigation();
@@ -35,9 +36,17 @@ export const LoginScreen: FC = () => {
 
         <Box f={1} px={isTablet() ? '$17' : '$8'}>
           <Box f={1} jc="center">
-            <Box mb={isTablet() ? 30 : 50} jc="flex-end">
-              <CloudLogo width="100%" height={70} />
-            </Box>
+            <YStack mb={50} jc="flex-end" alignItems="center">
+              <Image
+                source={curiousLogoWhite}
+                width={251}
+                height={54}
+                style={{
+                  width: 251,
+                  height: 54,
+                }}
+              />
+            </YStack>
 
             <LoginForm onLoginSuccess={onLoginSuccess} />
 
