@@ -18,7 +18,7 @@ describe('Test AudioPlayer', () => {
     );
 
     const playButton = audioPlayer.root.findByProps({
-      accessibilityLabel: 'audio-player-play',
+      'aria-label': 'audio-player-play',
     });
 
     expect(!!playButton).toBe(true);
@@ -42,7 +42,7 @@ describe('Test AudioPlayer', () => {
     );
 
     const pauseButton = audioPlayer.root.findByProps({
-      accessibilityLabel: 'audio-player-pause',
+      'aria-label': 'audio-player-pause',
     });
 
     expect(!!pauseButton).toBe(true);
