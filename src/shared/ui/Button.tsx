@@ -28,6 +28,7 @@ export function Button({
     color: '$on_primary',
     fontWeight: '700',
     textAlign: 'center',
+    letterSpacing: 0.15,
   },
   touchableStyles,
   children,

@@ -59,9 +59,9 @@ const styles = StyleSheet.create({
     color: palette.primary,
   },
   unfocusedColor: {
-    color: palette.grey4,
+    color: palette.outline_variant,
   },
   warnColor: {
-    color: palette.errorRed,
+    color: palette.error,
   },
 });

@@ -4,6 +4,9 @@ import { GetProps, styled } from '@tamagui/core';
 import { useFocusable } from '@tamagui/focusable';
 import { isTablet } from 'react-native-device-info';
 
+import { IS_IOS } from '../lib/constants';
+import { palette } from '../lib/constants/palette';
+
 const LongTextInputView = styled(
   TextInput,
   {
@@ -21,18 +24,20 @@ const LongTextInputView = styled(
     borderRadius: 12,
     borderWidth: 2,
     outlineWidth: 0,
-    padding: 8,
+    p: 12,
     gap: 10,
 
     backgroundColor: 'transparent',
     underlineColorAndroid: 'transparent',
-    selectionColor: 'black',
-    borderColor: '$lighterGrey7',
+    selectionColor: IS_IOS ? palette.on_surface : palette.on_surface_alpha30,
+    placeholderTextColor: palette.outline,
+    borderColor: '$outline_variant',
     color: '$on_surface',
     focusStyle: {
       borderColor: '$primary',
     },
 
+    fontFamily: '$body',
     fontSize: 20,
 
     focusable: true,

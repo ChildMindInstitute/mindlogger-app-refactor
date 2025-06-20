@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, FC } from 'react';
-import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 import AudioRecorderPlayer, {
@@ -10,12 +9,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { handleBlockedPermissions } from '@app/shared/lib/alerts/permissionAlerts';
 import { IS_ANDROID } from '@app/shared/lib/constants';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useMicrophonePermissions } from '@app/shared/lib/hooks/useMicrophonePermissions';
 import { requestMicrophonePermissions } from '@app/shared/lib/permissions/microphonePermissions';
 import { isLocalFileUrl } from '@app/shared/lib/utils/file';
 
 import { XStack, YStack } from '../base';
 import { MicrophoneIcon, StopIcon } from '../icons';
+import { SubmitButton } from '../SubmitButton';
 import { Text } from '../Text';
 
 const audioSetConfig: AudioSet = {
@@ -154,9 +155,11 @@ export const AudioRecorderItem: FC<Props> = ({
 
   const renderIcon = () => {
     if (isRecording) {
-      return <StopIcon size={17} color="white" />;
+      return <StopIcon size={18} color={palette.on_primary} />;
     } else {
-      return <MicrophoneIcon size={20} color="white" />;
+      return (
+        <MicrophoneIcon size={18} color={palette.on_secondary_container} />
+      );
     }
   };
 
@@ -184,38 +187,21 @@ export const AudioRecorderItem: FC<Props> = ({
     <>
       {errorDescription.length ? <Text mb={7}>{errorDescription}</Text> : null}
 
-      <XStack ai="center">
-        <TouchableOpacity
+      <YStack ai="center" gap={16}>
+        <SubmitButton
           accessibilityLabel="audio-record-btn"
           onPress={isRecording ? stop : startRecord}
+          bg={isRecording ? '$alert' : undefined}
+          minWidth={150}
+          mode={isRecording ? 'primary' : 'tonal'}
+          rightIcon={renderIcon()}
         >
-          <XStack
-            h={50}
-            minWidth={150}
-            maxWidth={250}
-            ai="center"
-            jc="center"
-            bg={isRecording ? '$alert' : '$primary'}
-            p="$3"
-            mr="$3"
-          >
-            <Text
-              accessibilityLabel="audio-record-btn-text"
-              mr="$2"
-              color="$white"
-              fontWeight="700"
-              fontSize={16}
-            >
-              {getButtonText()}
-            </Text>
+          {getButtonText()}
+        </SubmitButton>
 
-            {renderIcon()}
-          </XStack>
-        </TouchableOpacity>
-
-        <YStack>
+        <XStack>
           <Text accessibilityLabel="audio-record-info-text">
-            {getInfoText()}
+            {getInfoText()}{' '}
           </Text>
 
           {isRecording && (
@@ -223,8 +209,8 @@ export const AudioRecorderItem: FC<Props> = ({
               'audio_recorder:seconds',
             )}`}</Text>
           )}
-        </YStack>
-      </XStack>
+        </XStack>
+      </YStack>
     </>
   );
 };
