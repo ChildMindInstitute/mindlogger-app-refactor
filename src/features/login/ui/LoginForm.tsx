@@ -125,6 +125,9 @@ export const LoginForm: FC<Props> = props => {
             keyboardType="email-address"
             accessibilityLabel="login-email-input"
             placeholder={t('login_form:email_placeholder')}
+            submitBehavior="submit"
+            onSubmitEditing={submit}
+            returnKeyType="go"
           />
 
           <InputField
@@ -132,6 +135,9 @@ export const LoginForm: FC<Props> = props => {
             name="password"
             accessibilityLabel="login-password-input"
             placeholder={t('auth:password')}
+            submitBehavior="submit"
+            onSubmitEditing={submit}
+            returnKeyType="go"
           />
 
           {error && (
