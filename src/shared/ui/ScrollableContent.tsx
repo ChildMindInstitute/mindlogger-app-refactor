@@ -14,6 +14,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import { MotiView } from 'moti';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDebounce } from 'use-debounce';
 
@@ -139,14 +140,17 @@ export const ScrollableContent: FC<Props> = ({
           </KeyboardAwareScrollView>
         </Box>
 
-        {showScrollButton && (
+        <MotiView
+          animate={{ opacity: showScrollButton ? 1 : 0 }}
+          pointerEvents={showScrollButton ? 'auto' : 'none'}
+        >
           <ScrollButton
             onPress={scrollToEnd}
             position="absolute"
             bottom={7}
             alignSelf="center"
           />
-        )}
+        </MotiView>
       </Box>
     </ScrollViewContext.Provider>
   );

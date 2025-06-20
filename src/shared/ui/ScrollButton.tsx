@@ -11,10 +11,10 @@ const Button = styled(XStack, {
   height: 60,
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: '$secondary',
+  backgroundColor: '$surface',
   borderWidth: 1.5,
   borderRadius: 35,
-  borderColor: '$primary',
+  borderColor: '$outline',
 });
 
 type Props = {
@@ -36,9 +36,9 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.1,
     shadowRadius: 7.5,
     elevation: 4,
   },
