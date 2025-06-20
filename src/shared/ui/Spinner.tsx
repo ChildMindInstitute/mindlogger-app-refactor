@@ -2,7 +2,6 @@ import { AccessibilityProps, StyleSheet, ViewStyle } from 'react-native';
 
 import { MotiView } from 'moti';
 import { Circle } from 'react-native-progress';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { palette } from '../lib/constants/palette';
 
@@ -31,8 +30,6 @@ export function Spinner({
   overlayColor = palette.spinner_container,
   ...props
 }: Props) {
-  const { bottom } = useSafeAreaInsets();
-
   const spinner = (
     <Circle
       size={size}
@@ -46,13 +43,14 @@ export function Spinner({
 
   return (
     <MotiView
+      testID="loader"
       animate={{ opacity: isVisible ? 1 : 0 }}
       pointerEvents={isVisible ? 'auto' : 'none'}
       style={
         withOverlay
           ? {
               ...overlayStyle,
-              paddingBottom: bottom,
+              paddingBottom: 20,
               backgroundColor: overlayColor,
             }
           : undefined
