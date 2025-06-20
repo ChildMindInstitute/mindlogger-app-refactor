@@ -2,10 +2,7 @@ import { useContext, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
 import { useActiveAssessmentLink } from '@app/screens/model/hooks/useActiveAssessmentLink';
@@ -55,8 +52,6 @@ export function ActivityStepper({
   flowId,
 }: Props) {
   const { t } = useTranslation();
-
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   const [timerHeight, setTimerHeight] = useState(0);
   const [showTimeLeft, setShowTimeLeft] = useState(!!timer);
@@ -441,7 +436,7 @@ export function ActivityStepper({
             />
 
             {showBottomNavigation && (
-              <Stepper.NavigationPanel pt={20} px={16} pb={20} gap={8}>
+              <Stepper.NavigationPanel pt={20} px={16} pb={16} gap={8}>
                 {canMoveBack && (
                   <Stepper.BackButton>
                     {t(

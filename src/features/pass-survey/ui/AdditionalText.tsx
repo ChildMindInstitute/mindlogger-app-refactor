@@ -40,7 +40,6 @@ export function AdditionalText({ value, onChange, required }: Props) {
       autoCorrect={false}
       multiline
       mode="survey"
-      fontSize={14}
       textAlignVertical="top"
       height={height}
       minHeight={MIN_FIELD_HEIGHT}

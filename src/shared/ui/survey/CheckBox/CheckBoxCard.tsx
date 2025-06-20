@@ -4,8 +4,7 @@ import { Platform, StyleSheet } from 'react-native';
 import { YStackProps } from '@tamagui/stacks';
 
 import { IS_ANDROID } from '@app/shared/lib/constants';
-import { palette } from '@app/shared/lib/constants/palette';
-import { invertColor } from '@app/shared/lib/utils/survey/survey';
+import { getSelectorColors } from '@app/shared/lib/utils/survey/survey';
 
 import { Item } from './types';
 import { Box } from '../../base';
@@ -54,30 +53,12 @@ export function CheckBoxCard({
     [textReplacer, tooltip],
   );
 
-  const hasColor = color && setPalette;
-
-  const defaultBGColor = selected ? palette.lighterGrey6 : palette.white;
-  const bgColor = hasColor ? color : defaultBGColor;
-
-  const textColor = color
-    ? invertColor(color, { dark: palette.white, light: palette.black })
-    : palette.on_surface;
-
-  const tooltipColor = color
-    ? invertColor(color, {
-        dark: palette.darkon_surface,
-        light: palette.on_surface,
-      })
-    : palette.darkerGrey4;
-
-  const invertedCheckboxColor = color
-    ? invertColor(color, {
-        dark: palette.darkon_surface,
-        light: palette.on_surface,
-      })
-    : palette.lighterGrey6;
-
-  const borderColor = selected ? palette.blue3 : palette.lighterGrey7;
+  const { textColor, tooltipColor, bgColor, widgetColor, borderColor } =
+    getSelectorColors({
+      setPalette,
+      color,
+      selected,
+    });
 
   return (
     <OptionCard
@@ -88,7 +69,7 @@ export function CheckBoxCard({
       onPress={onPress}
       aria-label={accessibilityLabel}
       renderLeftIcon={() => (
-        <Box mr={10} w={20} h={20}>
+        <Box mr={12} w={20} h={20}>
           <CheckBox
             style={Platform.select({
               ios: styles.checkboxIOS,
@@ -98,15 +79,13 @@ export function CheckBoxCard({
             lineWidth={IS_ANDROID ? 0 : 2}
             boxType="square"
             tintColors={{
-              true: hasColor ? invertedCheckboxColor : palette.primary,
-              false: hasColor ? invertedCheckboxColor : palette.surface_variant,
+              true: widgetColor,
+              false: widgetColor,
             }}
-            onCheckColor={hasColor ? color : palette.white}
-            onFillColor={hasColor ? invertedCheckboxColor : palette.primary}
-            onTintColor={hasColor ? invertedCheckboxColor : palette.primary}
-            tintColor={
-              hasColor ? invertedCheckboxColor : palette.surface_variant
-            }
+            onCheckColor={bgColor}
+            onFillColor={widgetColor}
+            onTintColor={widgetColor}
+            tintColor={widgetColor}
             onAnimationType="fade"
             offAnimationType="fade"
             value={selected}

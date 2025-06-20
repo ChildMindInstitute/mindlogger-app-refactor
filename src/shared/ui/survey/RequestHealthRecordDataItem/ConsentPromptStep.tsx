@@ -15,6 +15,8 @@ import { ItemMarkdown } from '@app/shared/ui/survey/ItemMarkdown';
 import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem/types';
 import { Text } from '@app/shared/ui/Text';
 
+import { RadioItem } from '../RadioActivityItem/RadioItem';
+
 const REQUEST_HEALTH_RECORD_DATA_LINK =
   'https://mindlogger.atlassian.net/servicedesk/customer/portal/1/article/1238630401';
 
@@ -91,47 +93,22 @@ export const ConsentPromptStep: FC<ConsentPromptStepProps> = ({
         onValueChange={handleValueChange}
         name="ehr-consent"
         accessibilityLabel="ehr-consent-options"
-        gap={16}
       >
         {options.map(option => {
           const isSelected = option.id === responseValue;
 
           return (
-            <Box
-              key={option.id}
-              borderColor={isSelected ? palette.blue : palette.lighterGrey7}
-              borderWidth={2}
-              backgroundColor={isSelected ? palette.lightBlue : undefined}
-              px={18}
-              py={20}
-              borderRadius={12}
-              onPress={() => handleValueChange(option.id)}
-            >
-              <Box
-                flexDirection="row"
-                alignItems="center"
-                justifyContent="flex-start"
-                gap="$3"
-              >
-                <RadioGroup.Item
-                  accessibilityLabel={`ehr-option-${option.id}`}
-                  borderColor={
-                    isSelected ? palette.blue : palette.surface_variant
-                  }
-                  borderWidth={3}
-                  backgroundColor="transparent"
-                  value={option.id}
-                >
-                  <RadioGroup.Indicator
-                    background={
-                      isSelected ? palette.blue : palette.surface_variant
-                    }
-                  />
-                </RadioGroup.Item>
-                <Text fontSize={18} color={palette.on_surface}>
-                  {option.text}
-                </Text>
-              </Box>
+            <Box key={option.id} onPress={() => handleValueChange(option.id)}>
+              <RadioItem
+                aria-label={`ehr-option-${option.id}`}
+                option={option}
+                selected={isSelected}
+                imageContainerVisible={false}
+                tooltipContainerVisible={false}
+                addTooltip={false}
+                setPalette={false}
+                textReplacer={textReplacer}
+              />
             </Box>
           );
         })}

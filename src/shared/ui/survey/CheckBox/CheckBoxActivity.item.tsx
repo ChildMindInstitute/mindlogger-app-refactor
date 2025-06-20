@@ -94,7 +94,7 @@ export const CheckBoxActivityItem: FC<Props> = ({
         hasTooltip={hasTooltip}
         onChange={item => onItemValueChanged(item)}
         textReplacer={textReplacer}
-        mb={16}
+        mb={32}
       />
     </ScrollView>
   );

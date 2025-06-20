@@ -22,8 +22,8 @@ const CardWrapper = styled(YStack, {
   minHeight: 188,
   borderWidth: 2,
   borderRadius: 12,
-  borderColor: palette.lighterGrey7,
-  backgroundColor: palette.white,
+  borderColor: palette.surface_variant,
+  backgroundColor: palette.surface,
 });
 
 const Backdrop = styled(Box, {

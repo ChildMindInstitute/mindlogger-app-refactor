@@ -7,12 +7,12 @@ import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/
 import { useActivityStorageRecord } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import { RequestHealthRecordDataPipelineItem } from '@app/features/pass-survey/lib/types/payload';
 import { useActivityState } from '@app/features/pass-survey/model/hooks/useActivityState';
-import { palette } from '@app/shared/lib/constants/palette';
 import { Box, RadioGroup, YStack } from '@app/shared/ui/base';
 import { RequestHealthRecordDataIconSuccess } from '@app/shared/ui/icons/RequestHealthRecordDataIconSuccess';
 import { ItemMarkdown } from '@app/shared/ui/survey/ItemMarkdown';
 import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem/types';
-import { Text } from '@app/shared/ui/Text';
+
+import { RadioItem } from '../RadioActivityItem/RadioItem';
 
 type AdditionalPromptStepProps = {
   item: RequestHealthRecordDataPipelineItem;
@@ -99,45 +99,22 @@ export const AdditionalPromptStep: FC<AdditionalPromptStepProps> = ({
         onValueChange={handleValueChange}
         name="ehr-consent"
         accessibilityLabel="ehr-consent-options"
-        gap={16}
       >
         {additionalOptions.map(option => {
           const isSelected = option.id === item.additionalEHRs;
 
           return (
-            <Box
-              key={option.id}
-              borderColor={isSelected ? palette.blue : palette.lighterGrey7}
-              borderWidth={2}
-              backgroundColor={isSelected ? palette.lightBlue : undefined}
-              px={18}
-              py={20}
-              borderRadius={12}
-              onPress={() => handleValueChange(option.id)}
-            >
-              <Box
-                flexDirection="row"
-                alignItems="center"
-                justifyContent="flex-start"
-                gap="$3"
-              >
-                <RadioGroup.Item
-                  accessibilityLabel={`ehr-additional-option-${option.id}`}
-                  borderColor={
-                    isSelected ? palette.blue : palette.surface_variant
-                  }
-                  borderWidth={3}
-                  backgroundColor="transparent"
-                  value={option.id}
-                >
-                  <RadioGroup.Indicator
-                    bg={isSelected ? palette.blue : palette.surface_variant}
-                  />
-                </RadioGroup.Item>
-                <Text fontSize={18} color={palette.on_surface}>
-                  {option.text}
-                </Text>
-              </Box>
+            <Box key={option.id} onPress={() => handleValueChange(option.id)}>
+              <RadioItem
+                aria-label={`ehr-additional-option-${option.id}`}
+                option={option}
+                selected={isSelected}
+                imageContainerVisible={false}
+                tooltipContainerVisible={false}
+                addTooltip={false}
+                setPalette={false}
+                textReplacer={textReplacer}
+              />
             </Box>
           );
         })}
