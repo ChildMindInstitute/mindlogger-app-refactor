@@ -42,6 +42,9 @@ export function TimeIsUpModal({ onSubmit }: Props) {
                 textProps={{
                   fontSize: 14,
                   fontWeight: 'bold',
+                  width: 70,
+                  paddingHorizontal: 3,
+                  textAlign: 'center',
                 }}
               >
                 {t('autocompletion:ok')}

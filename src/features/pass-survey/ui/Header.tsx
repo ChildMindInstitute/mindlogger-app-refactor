@@ -45,14 +45,12 @@ export function Header({
             />
           </Box>
         )}
-        <Text fontSize={16} numberOfLines={2} marginRight={100}>
+        <Text fontSize={16} numberOfLines={2} flex={1} mr={10}>
           {activityName}
         </Text>
-        <XStack ml="auto">
-          <BackButton accessibilityLabel="close-button">
-            <Text color={colors.blue3}>{t('activity_navigation:exit')}</Text>
-          </BackButton>
-        </XStack>
+        <BackButton aria-label="close-button">
+          <Text color={colors.blue3}>{t('activity_navigation:exit')}</Text>
+        </BackButton>
       </XStack>
       <HeaderProgress
         appletId={appletId}

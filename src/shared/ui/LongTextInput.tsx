@@ -13,6 +13,7 @@ const LongTextInputView = styled(
     alignItems: 'flex-start',
     alignSelf: 'stretch',
     flex: 1,
+    textAlignVertical: 'top',
 
     minHeight: 176,
     maxHeight: isTablet() ? 350 : null,

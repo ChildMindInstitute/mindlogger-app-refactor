@@ -9,7 +9,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { IS_ANDROID, IS_IOS } from '@app/shared/lib/constants';
+import {
+  IS_ANDROID,
+  IS_IOS,
+  OS_MAJOR_VERSION,
+} from '@app/shared/lib/constants';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { BANNERS_DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
 
@@ -52,7 +56,10 @@ export const Banners = () => {
         animatedStyles,
         {
           paddingTop: top,
-          marginBottom: IS_ANDROID ? -top : 0,
+          // There's weird white space on Android 15 and above because of the safe area insets
+          // We can remove this negative bottom margin when this issue is resolved:
+          // https://github.com/react-navigation/react-navigation/issues/12608
+          marginBottom: IS_ANDROID && OS_MAJOR_VERSION >= 15 ? -top : 0,
           zIndex: 1000,
         },
       ]}
