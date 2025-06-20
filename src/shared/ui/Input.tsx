@@ -3,7 +3,7 @@ import { StyleSheet, TextInput } from 'react-native';
 import { GetProps, styled } from '@tamagui/core';
 import { useFocusable } from '@tamagui/focusable';
 
-import { IS_IOS } from '../lib/constants';
+import { IS_ANDROID, IS_IOS } from '../lib/constants';
 import { palette } from '../lib/constants/palette';
 
 export const InputFrame = styled(
@@ -22,6 +22,7 @@ export const InputFrame = styled(
     px: 12,
     py: 12,
 
+    fontFamily: '$body',
     fontSize: 16,
     height: 48,
     selectionColor: IS_IOS ? palette.on_surface : palette.on_surface_alpha30,
@@ -35,7 +36,7 @@ export const InputFrame = styled(
         },
         dark: {
           color: '$on_primary',
-          borderBottomColor: '#1e1d1d',
+          borderBottomColor: '$outline',
         },
         survey: {
           px: 0,
@@ -43,6 +44,7 @@ export const InputFrame = styled(
           borderBottomColor: '$outline_variant',
           color: '$on_surface',
           fontSize: 18,
+          lineHeight: IS_ANDROID ? 28 : undefined,
           focusStyle: {
             borderBottomColor: '$darkGrey',
             maxHeight: 100,
@@ -51,7 +53,7 @@ export const InputFrame = styled(
       },
       isInvalid: {
         true: {
-          borderBottomColor: '$alert',
+          borderBottomColor: '$error',
         },
       },
     },

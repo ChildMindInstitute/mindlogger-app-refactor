@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
+import { IS_IOS } from '@app/shared/lib/constants';
 import { palette } from '@app/shared/lib/constants/palette';
 import { Input } from '@app/shared/ui/Input';
 
@@ -11,9 +12,9 @@ type Props = {
   required: boolean;
 };
 
-const MIN_FIELD_HEIGHT = 40;
+const MIN_FIELD_HEIGHT = 48;
 const MAX_FIELD_HEIGHT = 100;
-const GROW_THRESHOLD = 15;
+const GROW_THRESHOLD = IS_IOS ? 15 : 0;
 
 export function AdditionalText({ value, onChange, required }: Props) {
   const { t } = useTranslation();

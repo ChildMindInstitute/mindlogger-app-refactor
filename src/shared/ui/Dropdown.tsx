@@ -33,6 +33,7 @@ export function Dropdown({
         data={items}
         dropdownStyle={styles.dropdown}
         buttonStyle={styles.button}
+        buttonTextStyle={styles.label}
         defaultButtonText={value ? value.value : placeholder}
         defaultValue={value ? value.value : placeholder}
         onSelect={onChange}
@@ -45,21 +46,15 @@ export function Dropdown({
 
 const styles = StyleSheet.create({
   dropdown: {
-    backgroundColor: 'white',
-    borderBottomWidth: 1.5,
-    borderBottomColor: palette.lightGrey,
-    color: 'white',
+    backgroundColor: palette.surface,
   },
   button: {
-    fontSize: 13,
     width: '100%',
     backgroundColor: 'transparent',
-    borderBottomWidth: 1.5,
-    borderBottomColor: palette.grey,
-    color: palette.grey,
+    borderBottomWidth: 1,
+    borderBottomColor: palette.outline,
   },
   label: {
-    fontSize: 13,
-    color: palette.grey,
+    color: palette.primary,
   },
 });

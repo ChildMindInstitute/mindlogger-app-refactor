@@ -520,7 +520,7 @@ export function ActivityItem({
         {item}
 
         {pipelineItem.additionalText && (
-          <Box justifyContent="center" m={16}>
+          <Box justifyContent="center" m={16} mb={32}>
             <AdditionalText
               value={value?.additionalAnswer}
               onChange={onAdditionalResponse}

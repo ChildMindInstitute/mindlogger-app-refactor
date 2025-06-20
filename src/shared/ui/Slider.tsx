@@ -34,8 +34,8 @@ export const Slider: FC<Props & AccessibilityProps> = props => {
         opacity: opacity,
       }}
       minimumTrackStyle={styles.minimumTrackStyle}
-      maximumTrackTintColor={palette.lightGrey}
-      minimumTrackTintColor={palette.lightGrey}
+      maximumTrackTintColor={palette.surface_variant}
+      minimumTrackTintColor={palette.surface_variant}
       thumbTouchSize={{
         width: size,
         height: size,
