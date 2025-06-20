@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { StyleSheet, StatusBar } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -71,21 +71,19 @@ export function Summary({
 
         <StaticNavigationPanel
           stepper={{ onEndReached: onFinish }}
-          mt={16}
+          p={16}
+          pb={16 + bottom}
           minHeight={24}
-          mb={bottom ? 0 : 16}
         />
       </Box>
     );
   }
 
   return (
-    <Box flex={1} mb={bottom}>
-      <StatusBar hidden />
-
+    <Box flex={1}>
       <Text
-        fontWeight="400"
-        fontSize={32}
+        fontSize={28}
+        lineHeight={36}
         mx={20}
         mb={20}
         accessibilityLabel="report_summary-text"
@@ -109,9 +107,9 @@ export function Summary({
 
       <StaticNavigationPanel
         stepper={{ onEndReached: onFinish }}
-        mt={16}
+        p={16}
+        pb={16 + bottom}
         minHeight={24}
-        mb={bottom ? 0 : 16}
       />
     </Box>
   );

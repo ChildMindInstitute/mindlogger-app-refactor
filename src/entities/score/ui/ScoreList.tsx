@@ -10,13 +10,14 @@ type Props = {
 
 export function ScoreList({ label, scores }: Props) {
   return (
-    <Box btw={1} btc="$lighterGrey0" px={20} accessibilityLabel="scores-group">
+    <Box btw={1} btc="$outline" px={20} aria-label="scores-group">
       <Text
         fontWeight="700"
-        fontSize={25}
+        fontSize={24}
+        lineHeight={32}
         mt={10}
-        mb={15}
-        accessibilityLabel="scores-group-name"
+        mb={16}
+        aria-label="scores-group-name"
       >
         {label}
       </Text>

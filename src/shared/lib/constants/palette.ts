@@ -130,6 +130,7 @@ export const semanticPalette = {
   success: basePalette.green,
   success_container: basePalette.green_light,
   error_container: basePalette.error90,
+  on_error_container: basePalette.error10,
   warning: basePalette.yellow,
   warning_container: basePalette.yellow_light,
   info: basePalette.blue,

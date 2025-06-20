@@ -37,9 +37,9 @@ export const UploadRetryBanner: FC<Props> = () => {
   }
 
   return (
-    <Box h={50} px={18} bw={1} boc="$grey" bc="$alertLight">
-      <Box jc="space-between" ai="center" flexDirection="row" flex={1}>
-        <Text flex={1} fontSize={14}>
+    <Box px={16} py={8} boc="$on_error_container" bc="$error_container">
+      <Box jc="space-between" ai="center" flexDirection="row">
+        <Text flex={1} fontSize={14} color="$on_error_container">
           {isUploading
             ? t('additional:data_is_sending')
             : t('additional:data_not_sent')}
@@ -47,9 +47,15 @@ export const UploadRetryBanner: FC<Props> = () => {
 
         <Box pl={10}>
           <Button
-            bg="transparent"
+            py={6}
+            bg="$on_surface_alpha12"
+            boc="$on_error_container"
+            bw={1}
+            textProps={{
+              fontSize: 14,
+              fontWeight: '700',
+            }}
             aria-label="upload-banner-btn"
-            spinnerColor="$on_surface"
             isLoading={isUploading}
             onPress={onRetry}
           >

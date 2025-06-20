@@ -10,7 +10,7 @@ export type SubComponentProps = {
 
 export const SubScreenContainer: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <YStack flex={1} px={16}>
+    <YStack flex={1} px={16} bg="$surface">
       {children}
     </YStack>
   );

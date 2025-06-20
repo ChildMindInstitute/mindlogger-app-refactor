@@ -325,8 +325,8 @@ export function ActivityStepper({
     <Box flex={1}>
       {showTimeLeft && (
         <TimeRemaining
-          ml={10}
-          zIndex={1}
+          ml={16}
+          zIndex={2}
           entityStartedAt={entityStartedAt}
           timerSettings={timer as HourMinute}
           clockIconShown
