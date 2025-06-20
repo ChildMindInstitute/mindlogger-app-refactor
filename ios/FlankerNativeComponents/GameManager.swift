@@ -180,6 +180,21 @@ class GameManager {
       response_touch_timestamp: respondTouchButton! * 1000)
 
     resultManager.addStepData(data: model)
+    if isShowFeedback, let startFeedback = startFeedbackTimestamp, let endFeedback = endFeedbackTimestamp {
+      let feedbackModel = FlankerModel(
+          rt: 0,
+          stimulus: "Feedback",
+          button_pressed: nil,
+          image_time: endFeedback * 1000,
+          correct: nil,
+          start_timestamp: startFeedback * 1000,
+          tag: "feedback",
+          trial_index: countTest + 1,
+          start_time: startFeedback * 1000,
+          response_touch_timestamp: 0
+      )
+      resultManager.addStepData(data: feedbackModel)
+    }
     delegate?.resultTest(
       avrgTime: nil, procentCorrect: nil, data: model, dataArray: nil, isShowResults: false,
       minAccuracy: gameParameters.minimumAccuracy)
@@ -208,6 +223,21 @@ class GameManager {
 
     if !isFirst {
       endFeedbackTimestamp = bootTime + CACurrentMediaTime()
+      if let startFixations = startFixationsTimestamp, let endFixations = endFixationsTimestamp {
+        let fixationModel = FlankerModel(
+            rt: 0,
+            stimulus: "Fixation",
+            button_pressed: nil,
+            image_time: endFixations * 1000,
+            correct: nil,
+            start_timestamp: startFixations * 1000,
+            tag: "fixation",
+            trial_index: countTest + 1,
+            start_time: startFixations * 1000,
+            response_touch_timestamp: 0
+        )
+        resultManager.addStepData(data: fixationModel)
+    }
       countTest += 1
     } else {
       countTest = 0
@@ -247,6 +277,21 @@ class GameManager {
     }
 
     endFixationsTimestamp = bootTime + CACurrentMediaTime()
+    if let startFixations = startFixationsTimestamp, let endFixations = endFixationsTimestamp {
+      let fixationModel = FlankerModel(
+          rt: 0,
+          stimulus: "Fixation",
+          button_pressed: nil,
+          image_time: endFixations * 1000,
+          correct: nil,
+          start_timestamp: startFixations * 1000,
+          tag: "fixation",
+          trial_index: countTest + 1,
+          start_time: startFixations * 1000,
+          response_touch_timestamp: 0
+      )
+      resultManager.addStepData(data: fixationModel)
+    }
     startTrialTimestamp = bootTime + CACurrentMediaTime()
 
     hasRespondedInCurrentTrial = false
