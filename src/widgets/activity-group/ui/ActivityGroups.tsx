@@ -63,7 +63,7 @@ export const ActivityGroups: FC<Props> = props => {
     <>
       {hasError ? (
         <XStack
-          accessibilityLabel="activity-group-error"
+          aria-label="activity-group-error"
           flex={1}
           jc="center"
           ai="center"
@@ -76,7 +76,7 @@ export const ActivityGroups: FC<Props> = props => {
         </XStack>
       ) : (
         <Box {...props}>
-          <YStack accessibilityLabel="activity-group-list" flex={1}>
+          <YStack aria-label="activity-group-list" flex={1}>
             {renderedGroups && responseTypes ? (
               <ActivitySectionList
                 activityResponseTypes={responseTypes}
@@ -88,7 +88,7 @@ export const ActivityGroups: FC<Props> = props => {
             ) : (
               !isLoading && (
                 <EmptyState
-                  accessibilityLabel="activity-group-empty"
+                  aria-label="activity-group-empty"
                   flex={1}
                   icon={<ChecklistIcon />}
                   description={t('activity_list_component:no_activities')}

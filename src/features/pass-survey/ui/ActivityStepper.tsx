@@ -7,9 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
 import { useActiveAssessmentLink } from '@app/screens/model/hooks/useActiveAssessmentLink';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
-import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
-import { Center } from '@app/shared/ui/Center';
+import { Spinner } from '@app/shared/ui/Spinner';
 import {
   OnBeforeBackResult,
   OnBeforeNextResult,
@@ -314,11 +313,7 @@ export function ActivityStepper({
   };
 
   if (!activityStorageRecord) {
-    return (
-      <Center flex={1}>
-        <ActivityIndicator size="large" color="$secondary" />
-      </Center>
-    );
+    return <Spinner withOverlay />;
   }
 
   return (

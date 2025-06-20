@@ -114,7 +114,7 @@ export const ActivityCard: FC<Props> = ({
           <TimeStatusRecord activity={activity} />
 
           {IS_ANDROID && activity.type === ActivityType.Flanker && (
-            <Text mt={12} color={palette.alert}>
+            <Text mt={12} color={palette.error}>
               {t('activity:flanker_accuracy_warn')}
             </Text>
           )}

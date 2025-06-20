@@ -135,7 +135,7 @@ export const AbShapes: FC<Props> = props => {
                 color={
                   greenRoundOrder === x.orderIndex
                     ? palette.green
-                    : palette.black
+                    : palette.neutral0
                 }
               />
 
@@ -156,7 +156,7 @@ export const AbShapes: FC<Props> = props => {
             y={first.cy - config.radius + beginOffset.y}
             text={t('cognitive:begin')}
             font={fontBeginEnd}
-            color={palette.black}
+            color={palette.neutral0}
           />
 
           <Text
@@ -164,7 +164,7 @@ export const AbShapes: FC<Props> = props => {
             y={last.cy - config.radius + endOffset.y}
             text={t('cognitive:end')}
             font={fontBeginEnd}
-            color={palette.black}
+            color={palette.neutral0}
           />
         </Group>
       </Canvas>

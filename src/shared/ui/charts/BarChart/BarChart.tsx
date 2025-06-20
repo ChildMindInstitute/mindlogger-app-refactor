@@ -48,7 +48,7 @@ export const BarChart: FC<Props> = ({ data }) => {
   return (
     <VictoryChart>
       <VictoryScatter
-        style={{ data: { fill: palette.lighterGrey } }}
+        style={{ data: { fill: palette.surface_variant } }}
         data={getXAxisDots()}
         x="dot"
         y="value"
@@ -58,9 +58,12 @@ export const BarChart: FC<Props> = ({ data }) => {
       <VictoryAxis
         tickValues={DAYS_OF_WEEK_NUMBERS}
         style={{
-          axis: { stroke: palette.lighterGrey, fill: palette.lightGrey2 },
-          axisLabel: { fill: palette.lighterGrey },
-          tickLabels: { fill: palette.grey },
+          axis: {
+            stroke: palette.surface_variant,
+            fill: palette.surface_variant,
+          },
+          axisLabel: { fill: palette.surface_variant },
+          tickLabels: { fill: palette.outline },
         }}
         tickCount={6}
         tickFormat={(_, index) => {

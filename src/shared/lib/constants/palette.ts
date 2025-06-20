@@ -129,6 +129,7 @@ const basePalette = {
 export const semanticPalette = {
   success: basePalette.green,
   success_container: basePalette.green_light,
+  on_error: basePalette.error40,
   error_container: basePalette.error90,
   on_error_container: basePalette.error10,
   warning: basePalette.yellow,
@@ -147,45 +148,14 @@ export const semanticPalette = {
   on_secondary_container: basePalette.secondary0,
   secondary_fixed_dim: basePalette.secondary80,
 
-  // TODO: Use proper semantic names for remaining colors
-  secondary: '#FFFFFF',
-  secondary_50: '#ffffff',
-  tertiary: '#404040',
+  // TODO:
+  // Figure out how to test the components that still reference these
+  // legacy tokens and replace them with semantic tokens.
   grey: '#808080',
   grey2: '#a0a0a0',
-  grey3: '#bbb',
-  grey4: '#72777F',
-  darkGrey: '#3b3a3a',
-  darkGrey2: '#6b6a6a',
   darkerGrey3: '#7E7E7E',
-  darkerGrey4: '#42474E',
   darkerGreyBackground: '#7E7E7E80',
-  darkerGrey: '#333333',
   darkerGrey2: '#101010',
-  mediumGrey: '#B6B6B6',
-  lighterGrey0: '#E0E0E0',
-  lighterGrey2: '#f7f7f7',
-  lighterGrey3: '#e2f0fe',
-  lighterGrey5: '#FFE2E2',
-  lighterGrey6: '#D5E4F7',
-  lighterGrey7: '#DEE3EB',
-  lighterGrey8: '#e0ebf4',
-  lightGrey: '#00000026',
-  lightGrey2: '#00000032',
-  lightGrey3: '#D2E2EC4D',
-  lightGrey4: '#F3F5F4',
-  alert: '#e63232',
-  alertLight: '#FFCCCC',
-  alertDark: '#93000A',
-  lightBlue: '#dbf2ff',
-  lightBlue2: '#D8E4ED',
-  darkBlue: 'darkblue',
-  black: '#000',
-  red: '#FF0000',
-  red2: '#D33134',
-  lightRed: '#ffdddd',
-  codePink: '#d63384',
-  errorRed: '#800000',
 } as const;
 
 /**

@@ -127,15 +127,11 @@ export const OneUpHealthStep: FC = () => {
                     justifyContent="center"
                     alignItems="center"
                   >
-                    <CloseIcon size={16} color={palette.darkGrey} />
+                    <CloseIcon size={16} color={palette.on_surface} />
                   </Box>
                 )}
               </Box>
-              <SubmitButton
-                onPress={() => handleSearch()}
-                mode="tonal"
-                textProps={buttonTextStyle}
-              >
+              <SubmitButton onPress={() => handleSearch()} mode="tonal">
                 {t('requestHealthRecordData:search')}
               </SubmitButton>
             </XStack>
@@ -192,13 +188,6 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
 });
-
-// This isn't technically a ViewStyle object, but serves the same purpose
-const buttonTextStyle = {
-  textColor: '$darkGrey',
-  fontWeight: '400',
-  fontSize: 16,
-} as const;
 
 const pressStyle: StackStyle = {
   opacity: 0.5,

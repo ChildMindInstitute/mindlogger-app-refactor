@@ -98,7 +98,7 @@ export const DrawingBoard: FC<Props> = props => {
       zIndex={1}
       maxWidth={width}
       borderWidth={borderWidth}
-      borderColor="$lightGrey2"
+      borderColor="$outline"
       accessibilityLabel="drawing-area"
     >
       <SketchCanvas

@@ -40,7 +40,7 @@ export const AppletCard: FC<Props & AccessibilityProps> = ({
       <YStack position="relative" p={16} gap={8}>
         <XStack jc="space-between" ai="flex-start" mb={8}>
           <CardThumbnail
-            accessibilityLabel="applet_logo-image"
+            aria-label="applet_logo-image"
             imageUri={applet.image}
             letter={applet.displayName[0].toUpperCase()}
             bg={thumbnailColor}
@@ -56,14 +56,14 @@ export const AppletCard: FC<Props & AccessibilityProps> = ({
           fontWeight="700"
           fontSize={22}
           lineHeight={28}
-          accessibilityLabel="applet_name-text"
+          aria-label="applet_name-text"
         >
           {applet.displayName}
         </Text>
 
         {!!applet.description && (
           <Text
-            accessibilityLabel="applet_description-text"
+            aria-label="applet_description-text"
             fontSize={16}
             fontWeight="400"
             lineHeight={24}
@@ -73,9 +73,9 @@ export const AppletCard: FC<Props & AccessibilityProps> = ({
         )}
 
         {!!applet.numberOverdue && (
-          <Box position="absolute" top={-14} right={-14}>
+          <Box position="absolute" top={-4} right={-4}>
             <RoundTextNotification
-              accessibilityLabel="applet_number_overdue-text"
+              aria-label="applet_number_overdue-text"
               text={applet.numberOverdue.toString()}
             />
           </Box>

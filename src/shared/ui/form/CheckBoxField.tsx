@@ -22,10 +22,10 @@ export const CheckBoxField: FC<
   PropsWithChildren<Props & AccessibilityProps>
 > = ({
   name,
-  onFillColor = palette.white,
-  onCheckColor = palette.darkBlue,
-  onTintColor = palette.white,
-  tintColor = palette.white,
+  onFillColor = palette.surface,
+  onCheckColor = palette.on_surface,
+  onTintColor = palette.surface,
+  tintColor = palette.surface,
   disabled = false,
   accessibilityLabel,
   children,
@@ -46,20 +46,20 @@ export const CheckBoxField: FC<
       <Controller
         control={control}
         render={() => (
-          <Box accessibilityLabel={accessibilityLabel}>
+          <Box aria-label={accessibilityLabel}>
             <XStack minHeight={24}>
               <CheckBox
                 onValueChange={onFormChange}
                 style={styles.checkbox}
                 tintColors={{
                   true: onTintColor,
-                  false: isError ? palette.alert : onTintColor,
+                  false: isError ? palette.error : onTintColor,
                 }}
                 onCheckColor={onCheckColor}
                 disabled={disabled}
                 onFillColor={onFillColor}
                 onTintColor={onTintColor}
-                tintColor={isError ? palette.alert : tintColor}
+                tintColor={isError ? palette.error : tintColor}
                 boxType="square"
                 lineWidth={2}
                 onAnimationType="fade"

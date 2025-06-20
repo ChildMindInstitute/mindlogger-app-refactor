@@ -22,7 +22,7 @@ export const ActivityAssignmentBanner: FC<Props> = ({
   const { shortName } = useActivityAssignee({ assignment });
 
   return (
-    <XStack alignItems="center" py={12} px={18} bg={palette.lightYellow}>
+    <XStack alignItems="center" py={12} px={18} bg={palette.warning_container}>
       <Box
         flex={0}
         alignItems="center"
@@ -30,10 +30,9 @@ export const ActivityAssignmentBanner: FC<Props> = ({
         width={26}
         height={26}
         mr={14}
-        bg={palette.dimYellow}
         borderRadius={3}
       >
-        <UserProfileIcon color={palette.lightYellow} size={16} />
+        <UserProfileIcon color={palette.warning} size={16} />
       </Box>
       <Box flex={1}>
         <Text

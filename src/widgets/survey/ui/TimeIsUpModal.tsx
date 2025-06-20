@@ -20,7 +20,7 @@ export function TimeIsUpModal({ onSubmit }: Props) {
         <Center>
           <Box
             gap="$5"
-            bg="$lighterGrey8"
+            bg="$surface_variant"
             px="$6"
             py="$5"
             borderRadius={30}

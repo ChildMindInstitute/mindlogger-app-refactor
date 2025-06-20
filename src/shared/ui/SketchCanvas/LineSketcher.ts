@@ -14,7 +14,7 @@ export const enum Shape {
 }
 const paint = Skia.Paint();
 
-paint.setColor(Skia.Color(palette.black));
+paint.setColor(Skia.Color(palette.neutral0));
 paint.setStrokeWidth(1.5);
 paint.setStyle(PaintStyle.Stroke);
 

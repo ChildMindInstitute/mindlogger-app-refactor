@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { IS_IOS } from '@app/shared/lib/constants';
-import { palette } from '@app/shared/lib/constants/palette';
 import { Input } from '@app/shared/ui/Input';
 
 type Props = {
@@ -27,8 +26,7 @@ export function AdditionalText({ value, onChange, required }: Props) {
   return (
     <Input
       placeholder={placeholder}
-      accessibilityLabel="additional_text-input"
-      placeholderTextColor={palette.mediumGrey}
+      aria-label="additional_text-input"
       value={value}
       onChangeText={onChange}
       onContentSizeChange={e => {

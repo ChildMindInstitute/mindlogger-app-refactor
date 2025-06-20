@@ -17,7 +17,7 @@ const jestConfig: JestConfigWithTsJest = {
   testPathIgnorePatterns: ['\\.snap$', '<rootDir>/node_modules/'],
   cacheDirectory: '.jest/cache',
   transformIgnorePatterns: [
-    'node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation|@react-native-device-info|@notifee|@miblanchard/react-native-slider|victory-*|@shopify/react-native-skia|react-native-reanimated|react-redux)',
+    'node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation|@react-native-device-info|@notifee|@miblanchard/react-native-slider|victory-*|@shopify/react-native-skia|react-native-reanimated|react-redux|moti/.*|@tamagui/animations-moti)',
   ],
   setupFiles: [
     '<rootDir>/jest.vendor-mocks.js',

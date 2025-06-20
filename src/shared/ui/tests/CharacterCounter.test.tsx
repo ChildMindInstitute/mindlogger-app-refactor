@@ -43,7 +43,7 @@ describe('CharacterCounter Component', () => {
 
     const element = getByText('10/20 characters');
     expect(element.props.style).toEqual(
-      expect.objectContaining({ color: palette.grey4 }),
+      expect.objectContaining({ color: palette.outline_variant }),
     );
   });
 

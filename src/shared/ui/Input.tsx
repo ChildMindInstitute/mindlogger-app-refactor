@@ -46,7 +46,7 @@ export const InputFrame = styled(
           fontSize: 18,
           lineHeight: IS_ANDROID ? 28 : undefined,
           focusStyle: {
-            borderBottomColor: '$darkGrey',
+            borderBottomColor: '$on_surface',
             maxHeight: 100,
           },
         },

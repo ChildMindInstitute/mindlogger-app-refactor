@@ -54,7 +54,7 @@ export const getSelectorColors = ({
       })
     : palette.primary;
 
-  const textColor = contrastingColor || palette.darkerGrey;
+  const textColor = contrastingColor || palette.on_surface;
   const tooltipColor = contrastingColor || palette.on_surface_variant;
   const widgetColor = contrastingColor || palette.outline_variant;
 

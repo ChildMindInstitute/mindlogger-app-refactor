@@ -94,7 +94,7 @@ export const AbTest: FC<Props> = props => {
         mx={ShapesRectPadding}
         mb={38}
         fontSize={15}
-        color={isMessageError() ? palette.red : palette.black}
+        color={isMessageError() ? palette.red : palette.neutral0}
       >
         {getDisplayMessage()}
       </Text>

@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   error: {
-    color: palette.errorRed,
+    color: palette.error,
     fontSize: 18,
   },
 });

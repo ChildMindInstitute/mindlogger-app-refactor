@@ -131,9 +131,9 @@ export const activityMarkDownStyles = StyleSheet.create({
     flexDirection: 'row',
   },
   blockquote: {
-    backgroundColor: palette.lighterGrey2,
+    backgroundColor: palette.surface_variant,
     borderLeftWidth: 4,
-    borderLeftColor: palette.mediumGrey,
+    borderLeftColor: palette.outline,
     paddingVertical: 0,
     paddingHorizontal: 5,
     marginLeft: 3,
@@ -272,7 +272,7 @@ export const markDownRules: RenderRules = {
     return (
       <Box
         key={node.key}
-        borderColor="$lightGrey"
+        borderColor="$outline"
         borderTopWidth={0.5}
         borderLeftWidth={0.5}
         flex={1}
@@ -288,7 +288,7 @@ export const markDownRules: RenderRules = {
         key={node.key}
         borderBottomWidth={0.5}
         borderRightWidth={0.5}
-        borderColor="$lightGrey"
+        borderColor="$outline"
         px={8}
         py={14}
         flex={1}
@@ -305,7 +305,7 @@ export const markDownRules: RenderRules = {
         key={node.key}
         px={8}
         py={14}
-        borderColor="$lightGrey"
+        borderColor="$outline"
         borderBottomWidth={0.5}
         borderRightWidth={0.5}
         flex={1}
@@ -326,8 +326,8 @@ export const markDownRules: RenderRules = {
       <Text
         fontFamily="$code"
         fontSize={15}
-        backgroundColor="$lighterGrey3"
-        color="$codePink"
+        backgroundColor="$surface_variant"
+        color="$pink"
       >
         {node.content}
       </Text>

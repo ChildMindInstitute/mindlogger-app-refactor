@@ -191,7 +191,7 @@ export const AudioRecorderItem: FC<Props> = ({
         <SubmitButton
           accessibilityLabel="audio-record-btn"
           onPress={isRecording ? stop : startRecord}
-          bg={isRecording ? '$alert' : undefined}
+          bg={isRecording ? '$error' : undefined}
           minWidth={150}
           mode={isRecording ? 'primary' : 'tonal'}
           rightIcon={renderIcon()}
