@@ -1539,6 +1539,30 @@ PODS:
   - react-native-tcp-socket (6.0.6):
     - CocoaAsyncSocket
     - React-Core
+  - react-native-unity (1.0.11):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-video (6.14.1):
     - DoubleConversion
     - glog
@@ -2213,6 +2237,7 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
   - react-native-tcp-socket (from `../node_modules/react-native-tcp-socket`)
+  - "react-native-unity (from `../node_modules/@azesmway/react-native-unity`)"
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -2389,6 +2414,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@shopify/react-native-skia"
   react-native-tcp-socket:
     :path: "../node_modules/react-native-tcp-socket"
+  react-native-unity:
+    :path: "../node_modules/@azesmway/react-native-unity"
   react-native-video:
     :path: "../node_modules/react-native-video"
   react-native-webview:
@@ -2564,6 +2591,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 583e6d44b8500e4d4738119118d1fc01d754bfc0
   react-native-skia: c80f1d06c9133aa084c979fa2c77ae3c11e45401
   react-native-tcp-socket: e724380c910c2e704816ec817ed28f1342246ff7
+  react-native-unity: ac42fbcf438c845877ff88eea234b68631d4e58a
   react-native-video: f689996049135c6cb89513c496ddcf58b5ad57fb
   react-native-webview: adfa3302212e6afc1cc755e650f0a7d60a5409e0
   React-NativeModulesApple: 452b86b29fae99ed0a4015dca3ad9cd222f88abf
@@ -2617,7 +2645,7 @@ SPEC CHECKSUMS:
   RNSensors: 117ba71c7eeeea0407ea0c0bb79e3495d602049b
   RNSVG: 769d0a2e79162d08639e1fbb43031adac58ed24c
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  Yoga: c758bfb934100bb4bf9cbaccb52557cee35e8bdf
+  Yoga: 9f110fc4b7aa538663cba3c14cbb1c335f43c13f
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
 PODFILE CHECKSUM: e5e9c13af102c13d7eec5a297c6580ee7be1911a
