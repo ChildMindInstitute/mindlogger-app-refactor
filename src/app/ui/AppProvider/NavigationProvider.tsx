@@ -79,6 +79,12 @@ const getLinking = ():
           };
 
           return state as unknown as PartialState<NavigationState>;
+        } else {
+          // Do nothing to prevent an infinite loop between the web browser and app
+          getDefaultLogger().warn(
+            `[${LOGGER_MODULE_NAME}] No initial navigation state found for active assessment deep link, refusing to handle deep link.`,
+          );
+          return undefined;
         }
       }
 
