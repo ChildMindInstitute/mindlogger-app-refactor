@@ -21,6 +21,7 @@ import { Banner, BannerProps } from './Banner';
 import { useBanners } from '../lib/hooks/useBanners';
 import { bannersBgSelector, bannersSelector } from '../model/selectors';
 import { BannerType } from '../model/slice';
+import { palette } from '@shared/lib/constants/palette.ts';
 
 const handleClose = (
   removeBanner: (key: BannerType) => void,
@@ -64,7 +65,11 @@ export const Banners = () => {
         },
       ]}
     >
-      <StatusBar barStyle="dark-content" translucent />
+      <StatusBar
+        barStyle="dark-content"
+        translucent
+        backgroundColor={palette.surface1}
+      />
 
       {sortedBanners.map(({ key, bannerProps }) => (
         <Animated.View key={key} entering={FadeInUp} exiting={FadeOutUp}>
