@@ -74,15 +74,14 @@ export const ActivityListScreen: FC<Props> = props => {
   const { completeEntityIntoUploadToQueue } = useAutoCompletion();
 
   return (
-    <Box flex={1}>
+    <Box flex={1} bg="$surface1">
       <UploadRetryBanner accessibilityLabel="upload-banner" />
-      <HorizontalCalendar mt={8} />
+      <HorizontalCalendar />
       <ConnectionStatusBar appletId={appletId} mb={20} />
 
       {isFocused && (
         <ActivityGroups
           flex={1}
-          px={14}
           appletId={appletId}
           completeEntity={completeEntityIntoUploadToQueue}
           checkAvailability={checkAvailability}

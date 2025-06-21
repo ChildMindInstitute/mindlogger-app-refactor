@@ -4,17 +4,17 @@ import { styled } from '@tamagui/core';
 import { XStackProps, XStack } from '@tamagui/stacks';
 
 import { ChevronDownIcon } from './icons';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 const Button = styled(XStack, {
   width: 60,
   height: 60,
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: '$secondary',
+  backgroundColor: '$surface',
   borderWidth: 1.5,
   borderRadius: 35,
-  borderColor: '$primary',
+  borderColor: '$outline',
 });
 
 type Props = {
@@ -25,7 +25,7 @@ export function ScrollButton({ onPress, ...styledProps }: Props) {
   return (
     <XStack flex={1} style={styles.shadow} onPress={onPress} {...styledProps}>
       <Button>
-        <ChevronDownIcon color={colors.primary} size={17} />
+        <ChevronDownIcon color={palette.primary} size={17} />
       </Button>
     </XStack>
   );
@@ -36,9 +36,9 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.1,
     shadowRadius: 7.5,
     elevation: 4,
   },

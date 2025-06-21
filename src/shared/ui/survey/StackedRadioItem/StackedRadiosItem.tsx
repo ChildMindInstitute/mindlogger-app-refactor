@@ -1,6 +1,7 @@
 import { FC, useMemo } from 'react';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
+import { getSelectorColors } from '@app/shared/lib/utils/survey/survey';
 
 import { RadioGroup } from '../../base';
 import { StackedItemsGrid } from '../StackedItemsGrid/StackedItemsGrid';
@@ -73,6 +74,13 @@ export const StackedRadios: FC<Props> = ({
 
         const optionIndex = config.options.findIndex(o => o.id === option.id);
 
+        const selected = currentValue?.id === option.id;
+        const { bgColor, widgetColor } = getSelectorColors({
+          setPalette: false,
+          color: null,
+          selected,
+        });
+
         return (
           <RadioGroup
             key={option.id + currentRowId}
@@ -83,12 +91,14 @@ export const StackedRadios: FC<Props> = ({
               accessibilityLabel={`stacked-radio-item-${optionIndex}-${rowIndex}`}
               data-test={`stack-radio-item-${option.id}-${currentRowId}`}
               onPress={() => onRowValueChange(option, rowIndex)}
-              borderColor={colors.blue}
               value={option.id}
+              borderColor={widgetColor}
+              borderWidth={selected ? 0 : 3}
+              bg={selected ? widgetColor : bgColor}
             >
               <RadioGroup.Indicator
                 accessibilityLabel="stack-radio-indicator"
-                backgroundColor={colors.blue}
+                bg={selected ? palette.surface : widgetColor}
               />
             </RadioGroup.Item>
           </RadioGroup>

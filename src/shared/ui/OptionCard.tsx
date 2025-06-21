@@ -8,7 +8,7 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 import { Box, XStack, YStack } from './base';
 import { Text } from './Text';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 type Props = {
   imageUrl: string | null;
@@ -22,8 +22,8 @@ const CardWrapper = styled(YStack, {
   minHeight: 188,
   borderWidth: 2,
   borderRadius: 12,
-  borderColor: colors.lighterGrey7,
-  backgroundColor: colors.white,
+  borderColor: palette.surface_variant,
+  backgroundColor: palette.surface,
 });
 
 const Backdrop = styled(Box, {
@@ -35,7 +35,7 @@ export function OptionCard({
   children,
 
   imageUrl,
-  textColor = colors.onSurface,
+  textColor = palette.on_surface,
 
   onPress,
   renderLeftIcon,
@@ -82,9 +82,6 @@ export function OptionCard({
         <Text
           aria-label="radio-option-text"
           fontSize={18}
-          // These values are not supported for the fontFamily prop, but I'm not
-          // sure what they should be
-          // fontFamily="Atkinson Hyperlegible Regular"
           color={textColor}
           numberOfLines={3}
           flex={1}

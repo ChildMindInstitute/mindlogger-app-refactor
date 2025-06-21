@@ -7,7 +7,7 @@ import {
   SelectionsResponseConfig,
 } from '@app/shared/api/services/AppletAnalyticsDto';
 import { DAYS_OF_WEEK_NUMBERS } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { range, getCurrentWeekDates } from '@app/shared/lib/utils/common';
 import { areDatesEqual } from '@app/shared/lib/utils/dateTime';
 
@@ -95,7 +95,7 @@ export const TimelineChart: FC<Props> = ({ data, config }) => {
       {timelineChartData.map(option => (
         <VictoryChart key={option.optionName} height={60}>
           <VictoryScatter
-            style={{ data: { fill: colors.lighterGrey } }}
+            style={{ data: { fill: palette.surface_variant } }}
             data={getXAxisDots()}
             x="dot"
             y="value"
@@ -106,9 +106,12 @@ export const TimelineChart: FC<Props> = ({ data, config }) => {
           <VictoryAxis
             tickValues={DAYS_OF_WEEK_NUMBERS}
             style={{
-              axis: { stroke: colors.lighterGrey, fill: colors.lightGrey2 },
-              axisLabel: { fill: colors.lighterGrey },
-              tickLabels: { fill: colors.grey },
+              axis: {
+                stroke: palette.surface_variant,
+                fill: palette.surface_variant,
+              },
+              axisLabel: { fill: palette.surface_variant },
+              tickLabels: { fill: palette.outline },
             }}
             tickCount={7}
             tickFormat={(_, index) => {
@@ -121,7 +124,7 @@ export const TimelineChart: FC<Props> = ({ data, config }) => {
             x="x"
             y="y"
             size={5}
-            style={{ data: { fill: colors.primary } }}
+            style={{ data: { fill: palette.primary } }}
           />
         </VictoryChart>
       ))}

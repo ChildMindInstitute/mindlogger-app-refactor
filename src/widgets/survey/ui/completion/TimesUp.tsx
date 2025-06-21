@@ -25,8 +25,8 @@ export const TimesUp: FC<SubComponentProps> = ({ onPressDone }) => {
           })}
         </Text>
 
-        <Box w="100%">
-          <SubmitButton mode="dark" onPress={onPressDone} borderRadius={20}>
+        <Box w="100%" maxWidth={356}>
+          <SubmitButton mode="primary" onPress={onPressDone}>
             {t('autocompletion:done')}
           </SubmitButton>
         </Box>

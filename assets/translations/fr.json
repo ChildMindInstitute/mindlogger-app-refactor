@@ -24,7 +24,10 @@
       "upload_answers": "Téléchargement de vos réponses...",
       "completed": "Activité téléchargée"
     },
-    "step": "Étape"
+    "step": "Étape",
+    "flowStep": "({{activityPositionInFlow}} de {{numberOfActivitiesInFlow}}) {{activityFlowName}}",
+    "stepCounter": "{{currentStep}} de {{totalSteps}}",
+    "activityCounter": "Activité {{currentStep}} de {{totalSteps}}"
   },
   "activity_time": {
     "time_remaining": "reste pour cet article"

@@ -1,12 +1,11 @@
 import { FC, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled } from '@tamagui/core';
 import { XStack } from '@tamagui/stacks';
 
-import { colors } from '@app/shared/lib/constants/colors';
-import { invertColor } from '@app/shared/lib/utils/survey/survey';
+import { getSelectorColors } from '@app/shared/lib/utils/survey/survey';
 
 import { Item } from './types';
 import { CheckBox } from '../../CheckBox';
@@ -44,8 +43,12 @@ export const CheckBoxItem: FC<Props> = ({
   textReplacer,
   position,
 }) => {
-  const invertedColor =
-    setPalette && color ? invertColor(color) : colors.primary;
+  const { textColor, tooltipColor, bgColor, widgetColor, borderColor } =
+    getSelectorColors({
+      setPalette,
+      color,
+      selected: value,
+    });
 
   const tooltipText = useMemo(
     () => textReplacer(tooltip || ''),
@@ -56,90 +59,91 @@ export const CheckBoxItem: FC<Props> = ({
 
   return (
     <XStack
-      minHeight="$7"
-      py="$4"
-      px={10}
-      my="$1"
+      minHeight={60}
+      bg={bgColor}
+      p={16}
+      my={8}
+      gap={10}
       ai="center"
-      jc="space-between"
-      bg={setPalette ? color : 'none'}
-      br={7}
-      bbw={setPalette ? 0 : 1}
-      bbc={colors.lighterGrey}
+      jc="center"
+      br={12}
+      borderWidth={2}
+      borderColor={borderColor}
       onPress={onChange}
     >
-      <XStack flex={1} ai="center">
-        {tooltipAvailable && tooltipContainerVisible && (
-          <CheckboxTooltipContainer>
-            {!!tooltip && (
-              <Tooltip
-                markdown={tooltipText}
-                accessibilityLabel={`checkbox-tooltip-view-${tooltipText}`}
-              >
-                <QuestionTooltipIcon color={invertedColor} size={25} />
-              </Tooltip>
-            )}
-          </CheckboxTooltipContainer>
-        )}
-
-        {imageContainerVisible ? (
-          <XStack style={styles.imageContainer}>
-            {image && (
-              <CachedImage
-                style={styles.image}
-                source={image}
-                resizeMode="contain"
-                accessibilityLabel={`checkbox_option_index-${position}`}
-              />
-            )}
-          </XStack>
-        ) : null}
-
-        <Text
-          maxWidth="70%"
-          accessibilityLabel="option_text"
-          ml="$4"
-          color={setPalette && color ? invertedColor : colors.darkerGrey}
-          fontSize={17}
-        >
-          {name}
-        </Text>
-      </XStack>
-
       <CheckBox
-        style={styles.checkbox}
-        accessibilityLabel="option_checkbox"
+        style={Platform.select({
+          ios: styles.checkboxIOS,
+          android: styles.checkboxAndroid,
+        })}
+        aria-label="option_checkbox"
         lineWidth={2}
         animationDuration={0.2}
         boxType="square"
         tintColors={{
-          true: invertedColor,
-          false: invertedColor,
+          true: widgetColor,
+          false: widgetColor,
         }}
-        onCheckColor={setPalette && color ? color : colors.white}
-        onFillColor={invertedColor}
-        onTintColor={invertedColor}
-        tintColor={invertedColor}
+        onCheckColor={bgColor}
+        onFillColor={widgetColor}
+        onTintColor={widgetColor}
+        tintColor={widgetColor}
         onAnimationType="fade"
         offAnimationType="fade"
         value={value}
         disabled={true}
       />
+
+      {imageContainerVisible && !!image && (
+        <XStack style={styles.imageContainer}>
+          <CachedImage
+            style={styles.image}
+            source={image}
+            resizeMode="contain"
+            aria-label={`checkbox_option_index-${position}`}
+          />
+        </XStack>
+      )}
+
+      <Text
+        aria-label="option_text"
+        color={textColor}
+        fontSize={18}
+        flexGrow={1}
+      >
+        {name}
+      </Text>
+
+      {tooltipAvailable && tooltipContainerVisible && !!tooltip && (
+        <CheckboxTooltipContainer>
+          <Tooltip
+            markdown={tooltipText}
+            aria-label={`checkbox-tooltip-view-${tooltipText}`}
+          >
+            <QuestionTooltipIcon color={tooltipColor} size={25} />
+          </Tooltip>
+        </CheckboxTooltipContainer>
+      )}
     </XStack>
   );
 };
 
 const styles = StyleSheet.create({
-  checkbox: {
-    width: 20,
-    height: 20,
+  checkboxIOS: {
+    width: 21,
+    height: 21,
+  },
+  checkboxAndroid: {
+    width: 21,
+    height: 21,
+    left: -6,
+    transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }],
   },
   imageContainer: {
     width: 56,
     height: 56,
     overflow: 'hidden',
     borderRadius: 4,
-    marginLeft: 4,
   },
   image: {
     height: '100%',

@@ -3,8 +3,6 @@ import { TextInputProps } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib/constants/colors';
-
 import { Input } from '../Input';
 
 type Props = {
@@ -32,9 +30,8 @@ export const SimpleTextInput: FC<Props> = ({
 
   return (
     <Input
-      accessibilityLabel="text-item"
+      aria-label="text-item"
       placeholder={t('text_entry:type_placeholder')}
-      placeholderTextColor={colors.mediumGrey}
       onChangeText={onChangeText}
       maxLength={Number(maxLength)}
       value={value}

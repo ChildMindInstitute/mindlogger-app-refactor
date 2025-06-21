@@ -1,13 +1,13 @@
 import { FC, useEffect } from 'react';
+import { Image } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib/constants/colors';
 import { useForceUpdate } from '@app/shared/lib/hooks/useForceUpdate';
 import { useUploadProgress } from '@app/shared/lib/hooks/useUploadProgress';
-import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
-import { Box, YStack } from '@app/shared/ui/base';
+import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Text } from '@app/shared/ui/Text';
+import { curiousIconAnimated } from '@assets/images';
 
 import { ActivityProgressStep } from './ActivityProgressStep';
 import { CircleProgressStep } from './CircleProgressStep';
@@ -32,50 +32,54 @@ export const ProcessingAnswers: FC = () => {
   }, [currentSecondLevelStep, update]);
 
   return (
-    <Box flex={1} justifyContent="center">
-      <YStack>
-        {!isValid && (
-          <ActivityIndicator mb={24} size={'large'} color={colors.blue} />
-        )}
+    <YStack flex={1} maxWidth={400} jc="center" ai="center" mx="auto">
+      {!isValid && (
+        <Image
+          source={curiousIconAnimated}
+          style={{ width: 128, height: 128, marginBottom: 48 }}
+        />
+      )}
 
-        <Text mb={24} als="center" fontSize={31} fontWeight="600">
-          {t('autocompletion:processing_answers')}
-        </Text>
+      <Text
+        mb={14}
+        als="center"
+        textAlign="center"
+        fontSize={32}
+        lineHeight={40}
+      >
+        {t('autocompletion:processing_answers')}
+      </Text>
 
-        <Text mb={16} als="center" ta="center" fontSize={18}>
-          {t('autocompletion:preparing_answers')}
-        </Text>
+      <Text
+        mb={32}
+        als="center"
+        textAlign="center"
+        fontSize={18}
+        lineHeight={28}
+      >
+        {t('autocompletion:preparing_answers')}
+      </Text>
 
-        {isValid && (
-          <Box bc={colors.white} br={10} minWidth={349} als={'center'}>
-            <Box
-              h={107}
-              jc="center"
-              fd="row"
-              ai="center"
-              br={10}
-              bc={colors.lightGrey3}
-            >
-              <Box w={90} mx={8}>
-                <CircleProgressStep
-                  circleSize={76}
-                  currentStep={currentStep!}
-                  totalSteps={totalSteps!}
-                />
-              </Box>
-
-              <Box f={1}>
-                <ActivityProgressStep
-                  currentActivity={currentActivity!}
-                  currentActivityName={currentActivityName!}
-                  currentSecondLevelStep={currentSecondLevelStep!}
-                  totalActivities={totalActivities!}
-                />
-              </Box>
-            </Box>
+      {isValid && (
+        <XStack ai="center" bc="$surface1" br={12} px={16} py={20} gap={12}>
+          <Box w={90}>
+            <CircleProgressStep
+              circleSize={88}
+              currentStep={currentStep!}
+              totalSteps={totalSteps!}
+            />
           </Box>
-        )}
-      </YStack>
-    </Box>
+
+          <Box flex={1}>
+            <ActivityProgressStep
+              currentActivity={currentActivity!}
+              currentActivityName={currentActivityName!}
+              currentSecondLevelStep={currentSecondLevelStep!}
+              totalActivities={totalActivities!}
+            />
+          </Box>
+        </XStack>
+      )}
+    </YStack>
   );
 };

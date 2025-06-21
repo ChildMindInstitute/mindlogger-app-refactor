@@ -1,5 +1,12 @@
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 
+export type ActivityFlowDetails = {
+  showActivityFlowBadge: boolean;
+  activityFlowName: string;
+  numberOfActivitiesInFlow: number;
+  activityPositionInFlow: number;
+};
+
 export type ActivityListItem = {
   appletId: string;
   activityId: string;
@@ -16,12 +23,7 @@ export type ActivityListItem = {
 
   isInActivityFlow: boolean;
 
-  activityFlowDetails?: {
-    showActivityFlowBadge: boolean;
-    activityFlowName: string;
-    numberOfActivitiesInFlow: number;
-    activityPositionInFlow: number;
-  } | null;
+  activityFlowDetails?: ActivityFlowDetails | null;
 
   availableFrom?: Date | null;
   availableTo?: Date | null;

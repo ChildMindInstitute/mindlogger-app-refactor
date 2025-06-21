@@ -1,6 +1,8 @@
 PODS:
   - BEMCheckBox (1.4.1)
   - boost (1.84.0)
+  - BVLinearGradient (2.8.3):
+    - React-Core
   - CocoaAsyncSocket (7.6.5)
   - CocoaLumberjack (3.8.5):
     - CocoaLumberjack/Core (= 3.8.5)
@@ -1539,6 +1541,11 @@ PODS:
   - react-native-tcp-socket (6.0.6):
     - CocoaAsyncSocket
     - React-Core
+  - react-native-vector-icons-entypo (12.0.1)
+  - react-native-vector-icons-feather (12.0.1)
+  - react-native-vector-icons-fontawesome6 (12.0.1)
+  - react-native-vector-icons-foundation (12.0.1)
+  - react-native-vector-icons-material-design-icons (12.0.1)
   - react-native-video (6.14.1):
     - DoubleConversion
     - glog
@@ -2158,6 +2165,7 @@ PODS:
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
+  - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -2213,6 +2221,11 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
   - react-native-tcp-socket (from `../node_modules/react-native-tcp-socket`)
+  - "react-native-vector-icons-entypo (from `../node_modules/@react-native-vector-icons/entypo`)"
+  - "react-native-vector-icons-feather (from `../node_modules/@react-native-vector-icons/feather`)"
+  - "react-native-vector-icons-fontawesome6 (from `../node_modules/@react-native-vector-icons/fontawesome6`)"
+  - "react-native-vector-icons-foundation (from `../node_modules/@react-native-vector-icons/foundation`)"
+  - "react-native-vector-icons-material-design-icons (from `../node_modules/@react-native-vector-icons/material-design-icons`)"
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -2294,6 +2307,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
+  BVLinearGradient:
+    :path: "../node_modules/react-native-linear-gradient"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   fast_float:
@@ -2389,6 +2404,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@shopify/react-native-skia"
   react-native-tcp-socket:
     :path: "../node_modules/react-native-tcp-socket"
+  react-native-vector-icons-entypo:
+    :path: "../node_modules/@react-native-vector-icons/entypo"
+  react-native-vector-icons-feather:
+    :path: "../node_modules/@react-native-vector-icons/feather"
+  react-native-vector-icons-fontawesome6:
+    :path: "../node_modules/@react-native-vector-icons/fontawesome6"
+  react-native-vector-icons-foundation:
+    :path: "../node_modules/@react-native-vector-icons/foundation"
+  react-native-vector-icons-material-design-icons:
+    :path: "../node_modules/@react-native-vector-icons/material-design-icons"
   react-native-video:
     :path: "../node_modules/react-native-video"
   react-native-webview:
@@ -2499,6 +2524,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   BEMCheckBox: 5ba6e37ade3d3657b36caecc35c8b75c6c2b1a4e
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
+  BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CocoaLumberjack: 6a459bc897d6d80bd1b8c78482ec7ad05dffc3f0
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
@@ -2564,6 +2590,11 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 583e6d44b8500e4d4738119118d1fc01d754bfc0
   react-native-skia: c80f1d06c9133aa084c979fa2c77ae3c11e45401
   react-native-tcp-socket: e724380c910c2e704816ec817ed28f1342246ff7
+  react-native-vector-icons-entypo: 1f4268fbf87eced3075f6d543e2b15fc622f7bfb
+  react-native-vector-icons-feather: bf1b6a4a4db7c7eb84abbecf385b0ceca931ee40
+  react-native-vector-icons-fontawesome6: 624a5578d701e52b18fb7f35b56556395a4249c0
+  react-native-vector-icons-foundation: 675d9be6c1fc1452e44bb4b784949de77effb0fb
+  react-native-vector-icons-material-design-icons: fa35dd305942c95e838767cea9ef1934bf0aafc2
   react-native-video: f689996049135c6cb89513c496ddcf58b5ad57fb
   react-native-webview: adfa3302212e6afc1cc755e650f0a7d60a5409e0
   React-NativeModulesApple: 452b86b29fae99ed0a4015dca3ad9cd222f88abf

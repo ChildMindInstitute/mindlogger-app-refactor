@@ -2,10 +2,6 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "assets/fonts/Atkinson Hyperlegible Regular.ttf",
-      "sha1": "5c451bde7a172a410beaf08ef81fd55f01af8500"
-    },
-    {
       "path": "assets/fonts/Lato-Black.ttf",
       "sha1": "ce5261438188fc48cf7cc38934ec7c6bbf94b27c"
     },
@@ -22,32 +18,24 @@
       "sha1": "5f996143c684c93882400062b5564b99426d4a43"
     },
     {
-      "path": "assets/fonts/Roboto-Bold.ttf",
-      "sha1": "6cbb57ba2355cf442e06899898ff5af55867103e"
+      "path": "assets/fonts/Moderat-Bold.otf",
+      "sha1": "81de7f6ad533511f8bebe194e0d6ce41b19695a1"
     },
     {
-      "path": "assets/fonts/Roboto-BoldItalic.ttf",
-      "sha1": "03440bfa71172aaa6b8ba6da86ac60d667b55c1e"
+      "path": "assets/fonts/Moderat-BoldItalic.otf",
+      "sha1": "c13cbaaf176a130c29c143fbd015d15b739bbab1"
     },
     {
-      "path": "assets/fonts/Roboto-Italic.ttf",
-      "sha1": "55534e771bbbb6b649746802cabfdeb922b9eb3a"
+      "path": "assets/fonts/Moderat-Regular.otf",
+      "sha1": "2101e771e0cc539b51a9ab41438d824f1d9d13bd"
     },
     {
-      "path": "assets/fonts/Roboto-Medium.ttf",
-      "sha1": "adbc3bde424bcf7dbc38f148005c8319825891f2"
-    },
-    {
-      "path": "assets/fonts/Roboto-MediumItalic.ttf",
-      "sha1": "debc1546314dd5655403df6965878d3f8dc41897"
-    },
-    {
-      "path": "assets/fonts/Roboto-Regular.ttf",
-      "sha1": "1d1d41fcadc571decb6444211b7993b99ce926e2"
+      "path": "assets/fonts/Moderat-RegularItalic.otf",
+      "sha1": "277f1c93b71c422700660604fda1bd8c5158a26b"
     },
     {
       "path": "assets/fonts/index.ts",
-      "sha1": "ab3b8428846699e46198e8409256cca25b4a4f3f"
+      "sha1": "fb7907ad3757f94622ad97c096fabd137194dd3b"
     }
   ]
 }

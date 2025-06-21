@@ -21,7 +21,7 @@ const Public = () => {
 
   return (
     <Text
-      fontWeight="bold"
+      fontWeight="700"
       color="$primary"
       pressStyle={StyleSheet.flatten({ opacity: 0.2 })}
       onPress={onDataSharingConsentDetails}

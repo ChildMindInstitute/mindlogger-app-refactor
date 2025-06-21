@@ -65,7 +65,7 @@ export const AbTutorial: FC<Props> = props => {
             w={width}
             h={width}
             borderWidth={1}
-            borderColor="$lightGrey2"
+            borderColor="$outline"
             p={ContentPadding}
           >
             {shapesData && (

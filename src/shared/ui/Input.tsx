@@ -3,8 +3,8 @@ import { StyleSheet, TextInput } from 'react-native';
 import { GetProps, styled } from '@tamagui/core';
 import { useFocusable } from '@tamagui/focusable';
 
-import { IS_IOS } from '../lib/constants';
-import { colors } from '../lib/constants/colors';
+import { IS_ANDROID, IS_IOS } from '../lib/constants';
+import { palette } from '../lib/constants/palette';
 
 export const InputFrame = styled(
   TextInput,
@@ -14,43 +14,46 @@ export const InputFrame = styled(
 
     outlineWidth: 0,
     minWidth: 0,
-    backgroundColor: '$backgroundTransparent',
+    backgroundColor: 'transparent',
     borderBottomWidth: StyleSheet.hairlineWidth * 1.5,
     underlineColorAndroid: 'transparent',
 
     m: 0,
     px: 12,
-    py: 8,
+    py: 12,
 
-    fontSize: 20,
-    selectionColor: 'black',
+    fontFamily: '$body',
+    fontSize: 16,
+    height: 48,
+    selectionColor: IS_IOS ? palette.on_surface : palette.on_surface_alpha30,
+    placeholderTextColor: palette.outline,
 
     variants: {
       mode: {
         light: {
-          color: '$secondary',
-          placeholderTextColor: '#ffffff99',
-          borderBottomColor: '#ffffff99',
+          color: '$on_surface',
+          borderBottomColor: '$outline_variant',
         },
         dark: {
-          color: '$darkGrey',
-          placeholderTextColor: IS_IOS ? colors.lightGrey : colors.grey,
-          borderBottomColor: '#1e1d1d',
+          color: '$on_primary',
+          borderBottomColor: '$outline',
         },
         survey: {
+          px: 0,
           borderBottomWidth: 1,
-          borderBottomColor: '$mediumGrey',
-          color: '$black',
+          borderBottomColor: '$outline_variant',
+          color: '$on_surface',
           fontSize: 18,
+          lineHeight: IS_ANDROID ? 28 : undefined,
           focusStyle: {
-            borderBottomColor: '$darkGrey',
+            borderBottomColor: '$on_surface',
             maxHeight: 100,
           },
         },
       },
       isInvalid: {
         true: {
-          borderBottomColor: '$alert',
+          borderBottomColor: '$error',
         },
       },
     },

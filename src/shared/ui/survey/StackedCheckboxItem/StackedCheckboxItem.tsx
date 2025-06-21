@@ -1,7 +1,8 @@
 import { FC, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
+import { getSelectorColors } from '@app/shared/lib/utils/survey/survey';
 
 import { YStack } from '../../base';
 import { CheckBox } from '../../CheckBox';
@@ -85,22 +86,35 @@ export const StackedCheckboxItem: FC<Props> = ({
         renderCell={(rowIndex, option) => {
           const optionIndex = memoizedOptions.indexOf(option);
 
+          const selected = isValueSelected(option, rowIndex);
+          const { widgetColor } = getSelectorColors({
+            setPalette: false,
+            color: null,
+            selected,
+          });
+
           return (
             <YStack
               hitSlop={15}
               onPress={() => onValueChange(option, rowIndex)}
             >
               <CheckBox
-                style={styles.checkbox}
+                style={Platform.select({
+                  ios: styles.checkboxIOS,
+                  android: styles.checkboxAndroid,
+                })}
                 accessibilityLabel={`stacked-checkbox-option-${optionIndex}-${rowIndex}`}
                 lineWidth={2}
                 animationDuration={0.2}
                 boxType="square"
-                tintColors={{ true: colors.primary, false: colors.primary }}
-                onCheckColor={colors.white}
-                onFillColor={colors.primary}
-                onTintColor={colors.primary}
-                tintColor={colors.primary}
+                tintColors={{
+                  true: widgetColor,
+                  false: widgetColor,
+                }}
+                onCheckColor={palette.surface}
+                onFillColor={widgetColor}
+                onTintColor={widgetColor}
+                tintColor={widgetColor}
                 onAnimationType="bounce"
                 offAnimationType="bounce"
                 value={isValueSelected(option, rowIndex)}
@@ -115,8 +129,14 @@ export const StackedCheckboxItem: FC<Props> = ({
 };
 
 const styles = StyleSheet.create({
-  checkbox: {
-    height: 20,
-    width: 20,
+  checkboxIOS: {
+    width: 21,
+    height: 21,
+  },
+  checkboxAndroid: {
+    width: 21,
+    height: 21,
+    left: -6,
+    transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }],
   },
 });

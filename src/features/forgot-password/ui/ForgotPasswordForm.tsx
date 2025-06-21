@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import { FC } from 'react';
 
 import { FormProvider } from 'react-hook-form';
@@ -23,7 +22,7 @@ type Props = BoxProps & {
 
 export const ForgotPasswordForm: FC<Props> = props => {
   const { t } = useTranslation();
-  const { addSuccessBanner, addErrorBanner } = useBanners();
+  const { addBanner, addErrorBanner } = useBanners();
 
   const { form, submit } = useAppForm(ForgotPasswordFormSchema, {
     defaultValues: {
@@ -42,7 +41,7 @@ export const ForgotPasswordForm: FC<Props> = props => {
   } = usePasswordRecoveryMutation({
     onSuccess: () => {
       props.onRecoverySuccess();
-      addSuccessBanner({
+      addBanner('SuccessBanner', {
         children: <SuccessNotification email={form.getValues().email} />,
       });
     },
@@ -60,6 +59,7 @@ export const ForgotPasswordForm: FC<Props> = props => {
           <InputField
             accessibilityLabel="forgot-password-email-input"
             name="email"
+            keyboardType="email-address"
             placeholder={t('auth:email_address')}
           />
 
@@ -76,7 +76,6 @@ export const ForgotPasswordForm: FC<Props> = props => {
           isLoading={isLoading}
           accessibilityLabel="reset_password-button"
           onPress={submit}
-          buttonStyle={{ alignSelf: 'center', paddingHorizontal: 24 }}
         >
           {t('forgot_pass_form:reset_pass')}
         </SubmitButton>

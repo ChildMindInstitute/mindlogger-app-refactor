@@ -12,7 +12,7 @@ export const SuccessNotification = (props: Props) => {
       <Trans
         i18nKey="forgot_pass_form:email_send_success"
         components={{
-          strong: <Text fontSize={16} fontWeight="800" />,
+          strong: <Text fontSize={16} fontWeight="700" />,
         }}
         values={{ email: props.email }}
       />

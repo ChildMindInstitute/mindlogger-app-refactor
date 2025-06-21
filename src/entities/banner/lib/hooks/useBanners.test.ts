@@ -107,7 +107,7 @@ describe('useBanners', () => {
     // Verify
     expect(bannerActions.addBanner).toHaveBeenCalledWith({
       key: 'SuccessBanner',
-      bannerProps: { children: bannerMessage },
+      bannerProps: { children: bannerMessage, severity: 'success' },
       order: BannerOrder.Default,
     });
   });
@@ -123,7 +123,7 @@ describe('useBanners', () => {
     // Verify
     expect(bannerActions.addBanner).toHaveBeenCalledWith({
       key: 'ErrorBanner',
-      bannerProps: { children: bannerMessage },
+      bannerProps: { children: bannerMessage, severity: 'error' },
       order: BannerOrder.Default,
     });
   });
@@ -139,7 +139,7 @@ describe('useBanners', () => {
     // Verify
     expect(bannerActions.addBanner).toHaveBeenCalledWith({
       key: 'WarningBanner',
-      bannerProps: { children: bannerMessage },
+      bannerProps: { children: bannerMessage, severity: 'warning' },
       order: BannerOrder.Default,
     });
   });
@@ -155,7 +155,7 @@ describe('useBanners', () => {
     // Verify
     expect(bannerActions.addBanner).toHaveBeenCalledWith({
       key: 'InfoBanner',
-      bannerProps: { children: bannerMessage },
+      bannerProps: { children: bannerMessage, severity: 'info' },
       order: BannerOrder.Default,
     });
   });

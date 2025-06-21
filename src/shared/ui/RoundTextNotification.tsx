@@ -17,11 +17,11 @@ export const RoundTextNotification: FC<Props> = ({
     height={20}
     ai="center"
     jc="center"
-    backgroundColor="$alert"
+    backgroundColor="$error"
     br={10}
-    accessibilityLabel={accessibilityLabel}
+    aria-label={accessibilityLabel}
   >
-    <Text fontSize={11} fontWeight="700" color="$secondary">
+    <Text fontSize={11} fontWeight="700" color="$on_error">
       {text}
     </Text>
   </Box>

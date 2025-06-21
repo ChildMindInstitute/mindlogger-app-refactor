@@ -17,14 +17,8 @@ export function AlertList({ alerts }: Props) {
   }
 
   return (
-    <Box
-      bg="$lighterGrey4"
-      br={10}
-      p={20}
-      mb={20}
-      accessibilityLabel="alerts-group"
-    >
-      <Text fontWeight="600" fontSize={23} mb={10}>
+    <Box bg="$surface_variant" br={10} p={20} mb={20} aria-label="alerts-group">
+      <Text fontWeight="700" fontSize={22} lineHeight={28} mb={10}>
         {t('activity_summary:alerts')}
       </Text>
 

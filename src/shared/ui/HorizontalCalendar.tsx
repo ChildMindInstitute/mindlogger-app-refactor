@@ -10,48 +10,45 @@ export const HorizontalCalendar: FC<BoxProps> = styledProps => {
   const dates = getLast7Dates();
 
   return (
-    <Box alignItems="center" {...styledProps}>
-      <Text accessibilityLabel="calendar-title" fontSize={15} mb={20}>
+    <Box gap={8} pt={16} px={16} {...styledProps}>
+      <Text aria-label="calendar-title" fontSize={22} lineHeight={28} px={8}>
         {title}
       </Text>
 
-      <XStack
-        accessibilityLabel="calendar-dates-container"
-        px={6}
-        jc="space-around"
-        width="100%"
-      >
+      <XStack aria-label="calendar-dates-container" jc="space-around">
         {dates.map(date => {
           const dateOfMonth = date.getDate();
           const weekDayName = format(date, 'EE').toUpperCase();
 
           const isToday = currentDate.getDate() === dateOfMonth;
-          const textColor = isToday ? '$black' : '$grey';
+          const textColor = isToday ? '$primary' : '$outline';
 
           return (
             <YStack
               key={dateOfMonth}
-              accessibilityLabel="calendar-item"
-              px={14}
-              py={6}
-              br={50}
+              aria-label="calendar-item"
+              width={50}
+              height={50}
               ai="center"
               jc="center"
-              bg={isToday ? '$lightBlue' : 'transparent'}
+              br={999}
+              bg={isToday ? '$secondary_container' : 'transparent'}
             >
               <Text
-                accessibilityLabel="calendar-week-name"
-                mb="$1"
-                fontSize={10}
+                aria-label="calendar-week-name"
+                fontSize={11}
+                lineHeight={16}
+                letterSpacing={0.5}
                 color={textColor}
               >
                 {weekDayName}
               </Text>
 
               <Text
-                accessibilityLabel="calendar-day-of-month"
+                aria-label="calendar-day-of-month"
+                fontSize={20}
+                lineHeight={18}
                 color={textColor}
-                fontWeight="700"
               >
                 {dateOfMonth}
               </Text>

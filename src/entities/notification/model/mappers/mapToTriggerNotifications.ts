@@ -1,6 +1,6 @@
 import notifee, { TriggerType, AndroidImportance } from '@notifee/react-native';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 import { ANDROID_DEFAULT_CHANNEL_ID } from '../../lib/constants';
 import { NotificationDescriber } from '../../lib/types/notificationBuilder';
@@ -44,9 +44,7 @@ export async function mapToTriggerNotifications(
           id: 'default',
         },
         smallIcon: 'ic_notification',
-        // TODO: Switch to `colors.primary` during rebrand task
-        // https://mindlogger.atlassian.net/browse/M2-9054
-        color: colors.primary_curious,
+        color: palette.primary,
         importance: AndroidImportance.HIGH,
       },
     },

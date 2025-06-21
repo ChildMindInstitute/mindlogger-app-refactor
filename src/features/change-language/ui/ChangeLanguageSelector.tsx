@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Language } from '@app/shared/lib/types/language';
 import { changeLanguage } from '@app/shared/lib/utils/common';
 import { YStack } from '@app/shared/ui/base';
+import { CheckIcon } from '@app/shared/ui/icons';
 import { RowButton } from '@app/shared/ui/RowButton';
 
 type Props = {
@@ -36,7 +37,8 @@ export const ChangeLanguageSelector: FC<Props> = props => {
             aria-label={`change-language-button-${locale}`}
             onPress={() => onLanguagePress(locale)}
             key={`${locale}`}
-            bg={resolvedLanguage === locale ? '$aqua' : 'transparent'}
+            isSelected={resolvedLanguage === locale}
+            rightIcon={resolvedLanguage === locale ? CheckIcon : undefined}
             title={t(`language_screen:${locale}`)}
           />
         );

@@ -7,7 +7,7 @@ import {
   EntityProgressionInProgress,
 } from '@app/abstract/lib/types/entityProgress';
 
-import { colors } from '../../constants/colors';
+import { palette } from '../../constants/palette';
 import { getNow } from '../dateTime';
 
 type ColorModes = {
@@ -18,8 +18,8 @@ type ColorModes = {
 export const invertColor = (
   hex: string,
   colorModes: ColorModes = {
-    dark: colors.darkerGrey,
-    light: colors.white,
+    dark: palette.inverse_on_surface,
+    light: palette.on_primary_container,
   },
 ) => {
   const RED_RATIO = 299;
@@ -32,6 +32,49 @@ export const invertColor = (
   const yiqColorSpaceValue =
     (red * RED_RATIO + green * GREEN_RATIO + blue * BLUE_RATIO) / 1000;
   return yiqColorSpaceValue >= 128 ? colorModes.light : colorModes.dark;
+};
+
+export const getSelectorColors = ({
+  setPalette,
+  color,
+  selected,
+}: {
+  setPalette: boolean;
+  color: string | null;
+  selected: boolean;
+}) => {
+  const hasColor = setPalette && color;
+
+  const bgColor = hasColor ? color : 'transparent';
+  const contrastingColor = hasColor && invertColor(color);
+  const contrastingSelectedColor = hasColor
+    ? invertColor(color, {
+        dark: palette.secondary_fixed_dim,
+        light: palette.primary,
+      })
+    : palette.primary;
+
+  const textColor = contrastingColor || palette.on_surface;
+  const tooltipColor = contrastingColor || palette.on_surface_variant;
+  const widgetColor = contrastingColor || palette.outline_variant;
+
+  const selectedDefaultBgColor = selected
+    ? palette.secondary_container
+    : 'transparent';
+  const selectedBgColor = hasColor ? bgColor : selectedDefaultBgColor;
+  const selectedWidgetColor = selected ? contrastingSelectedColor : widgetColor;
+  const selectedBorderColor = selected
+    ? selectedWidgetColor
+    : palette.surface_variant;
+
+  return {
+    hasColor,
+    textColor,
+    tooltipColor,
+    bgColor: selectedBgColor,
+    widgetColor: selectedWidgetColor,
+    borderColor: selectedBorderColor,
+  };
 };
 
 export const getEntityProgression = (

@@ -4,10 +4,11 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 import { CachedImage } from '@georstat/react-native-image-cache';
 import { styled, TextProps } from '@tamagui/core';
 
+import { palette } from '@app/shared/lib/constants/palette';
+
 import { AxisItem, type StackedRowItemValue } from './types';
 import { RadioGroup, XStack, YStack } from '../../base';
 import { Center } from '../../Center';
-import { ListSeparator } from '../../ListSeparator';
 import { Text } from '../../Text';
 import { Tooltip } from '../../Tooltip';
 
@@ -26,7 +27,7 @@ const AxisListItemText = styled(Text, {
   variants: {
     hasTooltip: {
       true: { color: '$blue', textDecorationLine: 'underline' },
-      false: { color: '$black' },
+      false: { color: '$primary' },
     },
   } as const,
   // I'm not sure why this is throwing a type error, but it works fine, so I'm suppressing it for now.
@@ -49,7 +50,7 @@ const AxisListItem: FC<{
         <Center>
           {tooltip ? (
             <Tooltip
-              accessibilityLabel={'tooltip_view-' + tooltip}
+              aria-label={'tooltip_view-' + tooltip}
               triggerAccessibilityLabel={`tooltip_trigger_${axisHeaderFor}-${title}`}
               markdown={tooltip}
             >
@@ -63,7 +64,7 @@ const AxisListItem: FC<{
 
           {imageUrl && (
             <CachedImage
-              accessibilityLabel={`${axisHeaderFor}_header_image-${title}`}
+              aria-label={`${axisHeaderFor}_header_image-${title}`}
               data-test="row-list-item-image"
               style={styles.image}
               resizeMode="contain"
@@ -80,34 +81,30 @@ type ColumnHeadersProps = { options: StackedRowItemValue[] };
 
 const ColumnHeaders: FC<ColumnHeadersProps> = ({ options }) => {
   return (
-    <YStack>
-      <XStack>
-        <AxisListItem
-          accessibilityLabel={null}
-          item={null}
-          axisHeaderFor="column"
-          maxWidth="25%"
-        />
+    <XStack borderBottomWidth={1} borderBottomColor={palette.outline_variant}>
+      <AxisListItem
+        accessibilityLabel={null}
+        item={null}
+        axisHeaderFor="column"
+        maxWidth="25%"
+      />
 
-        {options.map((option, optionIndex) => (
-          <YStack key={option.id} flex={1}>
-            <AxisListItem
-              accessibilityLabel="option_text"
-              axisHeaderFor="column"
-              key={optionIndex + optionIndex}
-              item={{
-                id: option.id,
-                tooltip: option.tooltip,
-                title: option.text!,
-                imageUrl: option.image ?? null,
-              }}
-            />
-          </YStack>
-        ))}
-      </XStack>
-
-      <ListSeparator />
-    </YStack>
+      {options.map((option, optionIndex) => (
+        <YStack key={option.id} flex={1}>
+          <AxisListItem
+            accessibilityLabel="option_text"
+            axisHeaderFor="column"
+            key={optionIndex + optionIndex}
+            item={{
+              id: option.id,
+              tooltip: option.tooltip,
+              title: option.text!,
+              imageUrl: option.image ?? null,
+            }}
+          />
+        </YStack>
+      ))}
+    </XStack>
   );
 };
 
@@ -123,29 +120,25 @@ const RowListItem: FC<RowListItemProps & AccessibilityProps> = ({
   renderCell,
 }) => {
   return (
-    <YStack>
-      <XStack>
-        <AxisListItem
-          accessibilityLabel="row_text"
-          axisHeaderFor="row"
-          maxWidth="25%"
-          item={{
-            id: item.id,
-            tooltip: item.tooltip,
-            title: item.rowName!,
-            imageUrl: item.rowImage ?? null,
-          }}
-        />
+    <XStack borderBottomWidth={1} borderBottomColor={palette.outline_variant}>
+      <AxisListItem
+        accessibilityLabel="row_text"
+        axisHeaderFor="row"
+        maxWidth="25%"
+        item={{
+          id: item.id,
+          tooltip: item.tooltip,
+          title: item.rowName!,
+          imageUrl: item.rowImage ?? null,
+        }}
+      />
 
-        {options.map(option => (
-          <AxisListItemContainer key={option.id}>
-            {renderCell(option)}
-          </AxisListItemContainer>
-        ))}
-      </XStack>
-
-      <ListSeparator />
-    </YStack>
+      {options.map(option => (
+        <AxisListItemContainer key={option.id}>
+          {renderCell(option)}
+        </AxisListItemContainer>
+      ))}
+    </XStack>
   );
 };
 
@@ -177,13 +170,13 @@ export const StackedItemsGrid: FC<StackedItemsGridProps> = ({
   };
 
   return (
-    <YStack accessibilityLabel={accessibilityLabel}>
+    <YStack aria-label={accessibilityLabel}>
       <ColumnHeaders options={options} />
 
       {items.map((item, index) => (
         <RadioGroup key={`StackGrid_${item.id}`} value={getRadioValue(item)}>
           <RowListItem
-            accessibilityLabel={`row-list-item-${item.id}`}
+            aria-label={`row-list-item-${item.id}`}
             options={options}
             item={item}
             renderCell={renderCell.bind(null, index)}

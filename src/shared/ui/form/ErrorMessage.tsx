@@ -13,7 +13,7 @@ type Props = {
 
 export const ErrorMessage: FC<PropsWithChildren<Props>> = ({
   error,
-  mode,
+  mode = 'light',
   ...props
 }) => {
   const { t } = useTranslation();
@@ -21,7 +21,7 @@ export const ErrorMessage: FC<PropsWithChildren<Props>> = ({
     <>
       {!!error?.message && (
         <Text
-          color={mode === 'light' ? '$secondary' : '$tertiary'}
+          color={mode === 'light' ? '$error' : '$error80'}
           fontSize={12}
           {...props}
         >

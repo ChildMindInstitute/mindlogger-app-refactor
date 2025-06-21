@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 
-import { colors } from '@app/shared/lib/constants/colors';
 import { TIME_PICKER_FORMAT_PLACEHOLDER } from '@app/shared/lib/constants/dateTime';
+import { palette } from '@app/shared/lib/constants/palette';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import {
   getMidnightDateInMs,
@@ -11,7 +11,7 @@ import {
 
 import { YStack } from '../base';
 import { DateTimePicker } from '../DateTimePicker';
-import { AlarmIcon, BedIcon } from '../icons';
+import { ClockIcon, BedIcon } from '../icons';
 
 type TimeRangeValue = {
   endTime: HourMinute | null;
@@ -65,7 +65,7 @@ export const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
   };
 
   return (
-    <YStack>
+    <YStack gap={20}>
       <DateTimePicker
         label="From"
         accessibilityLabel="time-picker-from-date"
@@ -73,7 +73,7 @@ export const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
         dateDisplayFormat="h:mm a"
         value={startTimeAsDate}
         mode="time"
-        iconAfter={<BedIcon color={colors.grey2} size={15} />}
+        iconAfter={<BedIcon color={palette.outline} size={16} />}
         placeholder={TIME_PICKER_FORMAT_PLACEHOLDER}
       />
 
@@ -84,7 +84,7 @@ export const TimeRangeItem: FC<Props> = ({ value, onChange }) => {
         dateDisplayFormat="h:mm a"
         mode="time"
         value={endTimeAsDate}
-        iconAfter={<AlarmIcon color={colors.grey2} size={15} />}
+        iconAfter={<ClockIcon color={palette.outline} size={16} />}
         placeholder={TIME_PICKER_FORMAT_PLACEHOLDER}
       />
     </YStack>

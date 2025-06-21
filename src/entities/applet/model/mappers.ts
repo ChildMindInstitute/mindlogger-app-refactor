@@ -31,7 +31,8 @@ import {
 } from '../lib/types';
 
 export function mapThemeFromDto(dto: ThemeDto | null): AppletTheme | null {
-  return dto === null
+  // If Default theme is selected, style the applet as if there is no theme
+  return dto === null || dto.name === 'Default'
     ? null
     : {
         backgroundImage: dto.backgroundImage ?? undefined,

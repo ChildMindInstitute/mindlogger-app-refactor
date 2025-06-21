@@ -55,7 +55,7 @@ export function HeaderProgress({
   const activeItemProgress = (getCurrentStep() + 1) / stepsCount;
 
   return (
-    <XStack gap={10} px={10} pt={10}>
+    <XStack gap={8}>
       {range(totalActivities).map(index => {
         const currentProgress = getCurrentItemProgress(
           index,

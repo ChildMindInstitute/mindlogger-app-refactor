@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { ColorValue, TextInputProps } from 'react-native';
+import { ColorValue } from 'react-native';
 
 import { Controller, useFormContext, useController } from 'react-hook-form';
 
 import { ErrorMessage } from './ErrorMessage';
 import { Box, XStack } from '../base';
-import { Input } from '../Input';
+import { Input, InputProps } from '../Input';
 
 type Props = {
   name: string;
@@ -14,11 +14,10 @@ type Props = {
   size?: string;
   secureTextEntry?: boolean;
   backgroundColor?: ColorValue | undefined;
-  mode?: 'dark' | 'light';
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   hideError?: boolean;
-} & TextInputProps;
+} & InputProps;
 
 export const InputField: FC<Props> = ({
   name,
@@ -69,8 +68,9 @@ export const InputField: FC<Props> = ({
                 backgroundColor={backgroundColor}
                 {...props}
                 isInvalid={!!error}
-                pl={leftIcon ? 40 : 0}
-                pr={rightIcon ? 40 : 0}
+                pl={leftIcon ? 40 : undefined}
+                pr={rightIcon ? 40 : undefined}
+                fontFamily="$body"
               />
 
               {rightIcon && (
@@ -86,7 +86,7 @@ export const InputField: FC<Props> = ({
 
       {!hideError && (
         <ErrorMessage
-          mode={mode}
+          mode={mode === 'dark' ? 'dark' : 'light'}
           mt={8}
           error={error}
           accessibilityLabel={`${name}-error-text`}

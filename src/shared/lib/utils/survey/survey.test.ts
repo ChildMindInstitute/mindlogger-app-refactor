@@ -7,20 +7,20 @@ import {
 } from './survey';
 
 describe('Test function invertColor', () => {
-  it('should return darkerGrey color', () => {
+  it('should return dark color', () => {
     const hex = '#7FFFD4';
 
     const invertedColor = invertColor(hex);
 
-    expect(invertedColor).toBe('#FFFFFF');
+    expect(invertedColor).toBe('#1D1B19');
   });
 
-  it('should return white color', () => {
+  it('should return light color', () => {
     const hex = '#3355AA';
 
     const invertedColor = invertColor(hex);
 
-    expect(invertedColor).toBe('#333333');
+    expect(invertedColor).toBe('#F1F0EF');
   });
 });
 

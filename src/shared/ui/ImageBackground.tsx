@@ -1,9 +1,11 @@
 import { FC, memo, PropsWithChildren, useMemo } from 'react';
-import { StyleSheet, ImageBackground as RNImageBackground } from 'react-native';
+import {
+  StyleSheet,
+  ImageBackground as RNImageBackground,
+  ImageSourcePropType,
+} from 'react-native';
 
 import { XStackProps } from '@tamagui/stacks';
-
-import { cloudBackground } from '@assets/images';
 
 import { useCachedImage } from '../lib/hooks/useCachedImage';
 
@@ -17,11 +19,9 @@ const ImageBackgroundView: FC<PropsWithChildren<Props>> = ({
 }) => {
   const imageSource = useCachedImage(uri);
 
-  const source = useMemo(
+  const source: ImageSourcePropType | undefined = useMemo(
     () =>
-      imageSource
-        ? { uri: imageSource, cache: 'force-cache' }
-        : cloudBackground,
+      imageSource ? { uri: imageSource, cache: 'force-cache' } : undefined,
     [imageSource],
   );
 

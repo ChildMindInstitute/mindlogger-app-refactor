@@ -18,10 +18,12 @@ type Props = BoxProps & {
 };
 
 const StatusLine = styled(Text, {
-  marginTop: 6,
-  color: '$grey',
-  fontSize: 12,
-  fontWeight: '400',
+  mt: 4,
+  p: 4,
+  color: '$outline',
+  fontSize: 14,
+  lineHeight: 20,
+  textAlign: 'center',
 });
 
 export const TimeStatusRecord: FC<Props> = ({ activity, ...props }) => {
@@ -54,6 +56,15 @@ export const TimeStatusRecord: FC<Props> = ({ activity, ...props }) => {
       return convertResult.formattedDate!;
     }
   };
+
+  if (
+    !hasAvailableFromTo &&
+    !hasAvailableToOnly &&
+    !hasTimeToComplete &&
+    !activity.isExpired
+  ) {
+    return null;
+  }
 
   return (
     <Box {...props}>

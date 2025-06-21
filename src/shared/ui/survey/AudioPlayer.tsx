@@ -1,10 +1,11 @@
 import { FC } from 'react';
-import { TouchableOpacity } from 'react-native';
 
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAudioPlayer } from '@app/shared/lib/hooks/useAudioPlayer';
 
-import { Box, XStack } from '../base';
+import { XStack } from '../base';
 import { PauseIcon, PlayIcon } from '../icons';
+import { SubmitButton } from '../SubmitButton';
 import { Text } from '../Text';
 
 type Props = {
@@ -16,34 +17,37 @@ export const AudioPlayer: FC<Props> = ({ uri, title }) => {
   const { isPlaying, togglePlay } = useAudioPlayer();
 
   return (
-    <XStack ai="center">
-      <TouchableOpacity
-        accessibilityLabel="audio-player-btn"
+    <XStack ai="center" gap={12}>
+      <SubmitButton
+        aria-label="audio-player-btn"
         onPress={() => togglePlay(uri)}
+        p={0}
+        height={48}
+        width={48}
+        textProps={{ lineHeight: 30 }}
+        mode="tonal"
       >
-        <Box w={40} ai="center">
-          {isPlaying ? (
-            <PauseIcon
-              accessibilityLabel="audio-player-pause"
-              size={30}
-              color="black"
-            />
-          ) : (
-            <PlayIcon
-              accessibilityLabel="audio-player-play"
-              size={30}
-              color="black"
-            />
-          )}
-        </Box>
-      </TouchableOpacity>
+        {isPlaying ? (
+          <PauseIcon
+            aria-label="audio-player-pause"
+            size={30}
+            color={palette.on_secondary_container}
+          />
+        ) : (
+          <PlayIcon
+            aria-label="audio-player-play"
+            size={30}
+            color={palette.on_secondary_container}
+          />
+        )}
+      </SubmitButton>
 
       {title && (
         <Text
-          accessibilityLabel="audio-player-title"
+          aria-label="audio-player-title"
           maxWidth="90%"
           fontSize={20}
-          fontWeight="500"
+          fontWeight="400"
         >
           {title}
         </Text>

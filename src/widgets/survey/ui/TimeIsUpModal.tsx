@@ -20,7 +20,7 @@ export function TimeIsUpModal({ onSubmit }: Props) {
         <Center>
           <Box
             gap="$5"
-            bg="$lighterGrey8"
+            bg="$surface_variant"
             px="$6"
             py="$5"
             borderRadius={30}
@@ -32,19 +32,10 @@ export function TimeIsUpModal({ onSubmit }: Props) {
             <Text>{t('autocompletion:time_is_up_modal_description')}</Text>
             <Box alignItems="flex-end">
               <SubmitButton
-                mode="dark"
+                mode="primary"
                 onPress={onSubmit}
-                borderRadius={20}
                 buttonStyle={{
                   width: 70,
-                  paddingHorizontal: 3,
-                }}
-                textProps={{
-                  fontSize: 14,
-                  fontWeight: 'bold',
-                  width: 70,
-                  paddingHorizontal: 3,
-                  textAlign: 'center',
                 }}
               >
                 {t('autocompletion:ok')}

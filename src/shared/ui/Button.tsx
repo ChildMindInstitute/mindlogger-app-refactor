@@ -2,37 +2,20 @@ import { PropsWithChildren } from 'react';
 import {
   TouchableOpacity,
   StyleSheet,
-  ColorValue,
   StyleProp,
   ViewStyle,
 } from 'react-native';
 
-import { ActivityIndicator } from './ActivityIndicator';
-import { BoxProps } from './base';
+import { Box, BoxProps, TextProps } from './base';
 import { Center } from './Center';
+import { Spinner } from './Spinner';
 import { Text } from './Text';
-import { colors } from '../lib/constants/colors';
 
 type Props = PropsWithChildren<{
   onPress: () => void;
   isLoading?: boolean;
-  spinnerColor?: ColorValue;
-  textStyles?: {
-    textColor?: ColorValue;
-    fontWeight?:
-      | 'normal'
-      | 'bold'
-      | '100'
-      | '200'
-      | '300'
-      | '400'
-      | '500'
-      | '600'
-      | '700'
-      | '800'
-      | '900';
-    fontSize?: number;
-  };
+  spinnerColor?: string;
+  textProps?: TextProps;
   touchableStyles?: StyleProp<ViewStyle>;
 }> &
   BoxProps;
@@ -40,11 +23,12 @@ type Props = PropsWithChildren<{
 export function Button({
   onPress,
   isLoading,
-  spinnerColor,
-  textStyles = {
-    textColor: '$white',
-    fontWeight: 'bold',
-    fontSize: 17,
+  spinnerColor = '$on_primary',
+  textProps = {
+    color: '$on_primary',
+    fontWeight: '700',
+    textAlign: 'center',
+    letterSpacing: 0.15,
   },
   touchableStyles,
   children,
@@ -53,42 +37,27 @@ export function Button({
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.touchable, touchableStyles]}
+      style={touchableStyles}
       disabled={isLoading}
     >
       <Center
-        py={8}
-        bg={colors.blue2}
-        borderRadius="$10"
+        px={24}
+        py={12}
+        bg="$primary"
+        borderRadius={100}
         w="100%"
         {...styledProps}
       >
-        <Text
-          color={textStyles.textColor}
-          fontWeight={textStyles.fontWeight}
-          fontSize={textStyles.fontSize}
-          opacity={isLoading ? 0 : 1}
-        >
+        <Text {...textProps} opacity={isLoading ? 0 : 1}>
           {children}
         </Text>
 
         {isLoading && (
-          <ActivityIndicator
-            position="absolute"
-            t={0}
-            b={0}
-            l={0}
-            r={0}
-            color={spinnerColor}
-          />
+          <Box style={StyleSheet.absoluteFill} ai="center" jc="center">
+            <Spinner size={28} color={spinnerColor} />
+          </Box>
         )}
       </Center>
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  touchable: {
-    width: '100%',
-  },
-});

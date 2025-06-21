@@ -1,8 +1,9 @@
-import { FC, useCallback, useLayoutEffect } from 'react';
+import { FC, useCallback, useLayoutEffect, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Applet } from '@app/entities/applet/lib/types';
 import {
@@ -21,13 +22,13 @@ import {
   MixEvents,
   MixProperties,
 } from '@app/shared/lib/analytics/IAnalyticsService';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { Box, XStack } from '@app/shared/ui/base';
-import { ImageBackground } from '@app/shared/ui/ImageBackground';
+import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
 import { TouchableOpacity } from '@app/shared/ui/TouchableOpacity';
 import { UploadRetryBanner } from '@app/widgets/survey/ui/UploadRetryBanner';
@@ -38,6 +39,7 @@ export const AppletsScreen: FC = () => {
   const { t } = useTranslation();
   const { navigate, setOptions } = useNavigation();
   const dispatch = useAppDispatch();
+  const { bottom } = useSafeAreaInsets();
 
   const userFirstName = useAppSelector(selectFirstName);
 
@@ -47,11 +49,17 @@ export const AppletsScreen: FC = () => {
     }
   }, [t, userFirstName, setOptions]);
 
+  const [, setForceUpdate] = useState({});
   useOnFocus(() => {
     getDefaultAnalyticsService().track(MixEvents.HomeView);
 
     // Color must match the AppletsScreen's headerStyle.backgroundColor in RootNavigator
-    dispatch(bannerActions.setBannersBg(colors.lighterGrey2));
+    dispatch(bannerActions.setBannersBg(palette.surface1));
+
+    // This forces a re-render to the screen to ensure the FlatList (inside AppletList)
+    // does an initial render upon navigation from the login screen on iOS only.
+    // Without this, the FlatList looks empty, even if there's data.
+    setTimeout(() => setForceUpdate({}));
   });
 
   const queryClient = useQueryClient();
@@ -71,33 +79,34 @@ export const AppletsScreen: FC = () => {
     [navigate],
   );
 
-  useAutomaticRefreshOnMount(async () => {
-    await getDefaultNotificationRefreshService().refresh(
-      queryClient,
-      progressions,
-      responseTimes,
-      LogTrigger.FirstAppRun,
-    );
-    getDefaultLogger()
-      .send()
-      .catch(err => getDefaultLogger().error(err as never));
-  });
+  const { isRefreshing: isHydratingCache } = useAutomaticRefreshOnMount(
+    async () => {
+      await getDefaultNotificationRefreshService().refresh(
+        queryClient,
+        progressions,
+        responseTimes,
+        LogTrigger.FirstAppRun,
+      );
+      getDefaultLogger()
+        .send()
+        .catch(err => getDefaultLogger().error(err as never));
+    },
+  );
 
   return (
-    <Box bg="$secondary" flex={1}>
-      <ImageBackground>
-        <UploadRetryBanner />
+    <Box flex={1} bg="$surface1">
+      <UploadRetryBanner />
 
-        <Box flex={1} pt={12} pb={34}>
-          <AppletList
-            flex={1}
-            px={14}
-            refreshControl={<AppletsRefresh />}
-            ListFooterComponent={<AboutAppLink />}
-            onAppletPress={navigateAppletDetails}
-          />
-        </Box>
-      </ImageBackground>
+      <Box flex={1}>
+        <AppletList
+          flex={1}
+          refreshControl={<AppletsRefresh />}
+          ListFooterComponent={<AboutAppLink />}
+          onAppletPress={navigateAppletDetails}
+        />
+      </Box>
+
+      <Spinner withOverlay isVisible={isHydratingCache} />
     </Box>
   );
 };
@@ -109,14 +118,12 @@ const AboutAppLink = () => {
   return (
     <XStack jc="center">
       <TouchableOpacity
-        accessibilityLabel="about-link"
+        aria-label="about-link"
         onPress={() => navigate('AboutApp')}
       >
-        {/*@todo revert after testing*/}
         <Text color="$primary" fontSize={16} fontWeight="700">
           {t('applet_list_component:about_title')}
         </Text>
-        {/*@todo revert after testing*/}
       </TouchableOpacity>
     </XStack>
   );

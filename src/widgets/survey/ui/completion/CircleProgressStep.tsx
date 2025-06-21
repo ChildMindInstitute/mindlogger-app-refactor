@@ -23,20 +23,12 @@ export const CircleProgressStep = ({
       <CircleProgress progress={currentStep / totalSteps} size={circleSize} />
 
       <Box pos="absolute">
-        <Text
-          ta="center"
-          tt="uppercase"
-          fontWeight="400"
-          fontSize={10}
-          ls={0.1}
-        >
+        <Text ta="center" tt="uppercase" fontSize={12} lineHeight={16} ls={0.5}>
           {t('activity:step')}
         </Text>
-        <Text
-          fontWeight="700"
-          fontSize={12}
-          ls={0.1}
-        >{`${currentStep} of ${totalSteps}`}</Text>
+        <Text fontWeight="700" fontSize={12} lineHeight={16} ls={0.5}>
+          {t('activity:stepCounter', { currentStep, totalSteps })}
+        </Text>
       </Box>
     </Box>
   );

@@ -25,29 +25,29 @@ export const useBanners = () => {
   );
 
   const addSuccessBanner = useCallback(
-    (banner: BannerContent, order = BannerOrder.Default) => {
-      addBanner('SuccessBanner', banner, order);
+    (children: string, order = BannerOrder.Default) => {
+      addBanner('SuccessBanner', { children, severity: 'success' }, order);
     },
     [addBanner],
   );
 
   const addErrorBanner = useCallback(
-    (banner: BannerContent, order = BannerOrder.Default) => {
-      addBanner('ErrorBanner', banner, order);
+    (children: string, order = BannerOrder.Default) => {
+      addBanner('ErrorBanner', { children, severity: 'error' }, order);
     },
     [addBanner],
   );
 
   const addWarningBanner = useCallback(
-    (banner: BannerContent, order = BannerOrder.Default) => {
-      addBanner('WarningBanner', banner, order);
+    (children: string, order = BannerOrder.Default) => {
+      addBanner('WarningBanner', { children, severity: 'warning' }, order);
     },
     [addBanner],
   );
 
   const addInfoBanner = useCallback(
-    (banner: BannerContent, order = BannerOrder.Default) => {
-      addBanner('InfoBanner', banner, order);
+    (children: string, order = BannerOrder.Default) => {
+      addBanner('InfoBanner', { children, severity: 'info' }, order);
     },
     [addBanner],
   );

@@ -1,37 +1,26 @@
 import { FC } from 'react';
 
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Foundation from 'react-native-vector-icons/Foundation';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import Octicons from 'react-native-vector-icons/Octicons';
+import Entypo from '@react-native-vector-icons/entypo';
+import Feather from '@react-native-vector-icons/feather';
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
+import Foundation from '@react-native-vector-icons/foundation';
+import Material from '@react-native-vector-icons/material-design-icons';
 
 type IconProps = {
   color: string;
   size: number;
-  solid?: boolean;
 };
 
 type AccessibilityProps = {
   accessibilityLabel?: string | undefined;
 };
 
+export const ChevronLeftIcon: FC<IconProps> = props => (
+  <FontAwesome6 name="angle-left" iconStyle="solid" {...props} />
+);
+
 export const CloseIcon: FC<IconProps> = props => (
-  <AntDesign name="close" {...props} />
-);
-
-export const ChevronLeft: FC<IconProps> = props => (
-  <AntDesign name="left" {...props} />
-);
-
-export const CrossIcon: FC<IconProps> = props => (
-  <FontAwesome name="close" {...props} />
-);
-
-export const ArrowRightIcon: FC<IconProps> = props => (
-  <AntDesign name="right" {...props} />
+  <FontAwesome6 name="xmark" iconStyle="solid" {...props} />
 );
 
 export const KeyIcon: FC<IconProps> = props => (
@@ -39,11 +28,11 @@ export const KeyIcon: FC<IconProps> = props => (
 );
 
 export const UserIcon: FC<IconProps> = props => (
-  <FontAwesome name="user-circle" {...props} />
+  <FontAwesome6 name="circle-user" iconStyle="solid" {...props} />
 );
 
 export const UserProfileIcon: FC<IconProps> = props => (
-  <FontAwesome name="user" {...props} />
+  <FontAwesome6 name="user" iconStyle="solid" {...props} />
 );
 
 export const HomeIcon: FC<IconProps> = props => (
@@ -51,23 +40,23 @@ export const HomeIcon: FC<IconProps> = props => (
 );
 
 export const ChevronRightIcon: FC<IconProps> = props => (
-  <FontAwesome name="chevron-right" {...props} />
+  <FontAwesome6 name="angle-right" iconStyle="solid" {...props} />
 );
 
 export const QuestionTooltipIcon: FC<IconProps> = props => (
-  <FontAwesome name="question-circle-o" {...props} />
+  <FontAwesome6 name="circle-question" iconStyle="solid" {...props} />
 );
 
 export const LeftArrowIcon: FC<IconProps> = props => (
-  <FontAwesome name="arrow-left" {...props} />
+  <FontAwesome6 name="arrow-left" iconStyle="solid" {...props} />
 );
 
 export const RightArrowIcon: FC<IconProps> = props => (
-  <FontAwesome name="arrow-right" {...props} />
+  <FontAwesome6 name="arrow-right" iconStyle="solid" {...props} />
 );
 
 export const RestartIcon: FC<IconProps> = props => (
-  <FontAwesome name="refresh" {...props} />
+  <FontAwesome6 name="arrows-rotate" iconStyle="solid" {...props} />
 );
 
 export const PlayIcon: FC<IconProps & AccessibilityProps> = props => (
@@ -79,27 +68,27 @@ export const PauseIcon: FC<IconProps & AccessibilityProps> = props => (
 );
 
 export const StopIcon: FC<IconProps> = props => (
-  <FontAwesome name="stop" {...props} />
+  <FontAwesome6 name="stop" iconStyle="solid" {...props} />
 );
 
 export const SpeakerIcon: FC<IconProps> = props => (
-  <FontAwesome name="volume-up" {...props} />
+  <FontAwesome6 name="volume-high" iconStyle="solid" {...props} />
 );
 
 export const CheckIcon: FC<IconProps> = props => (
-  <FontAwesome name="check" {...props} />
+  <FontAwesome6 name="check" iconStyle="solid" {...props} />
 );
 
 export const BedIcon: FC<IconProps> = props => (
-  <FontAwesome name="bed" {...props} />
+  <FontAwesome6 name="bed" iconStyle="solid" {...props} />
 );
 
-export const AlarmIcon: FC<IconProps> = props => (
-  <FontAwesome name="clock-o" {...props} />
+export const ClockIcon: FC<IconProps> = props => (
+  <FontAwesome6 name="clock" {...props} />
 );
 
 export const GeolocationIcon: FC<IconProps> = props => (
-  <FontAwesome name="map-marker" {...props} />
+  <FontAwesome6 name="location-dot" iconStyle="solid" {...props} />
 );
 
 export const PhotoIcon: FC<IconProps> = props => (
@@ -111,23 +100,23 @@ export const VideoIcon: FC<IconProps> = props => (
 );
 
 export const MicrophoneIcon: FC<IconProps> = props => (
-  <FontAwesome name="microphone" {...props} />
+  <FontAwesome6 name="microphone" iconStyle="solid" {...props} />
 );
 
 export const ChevronDownIcon: FC<IconProps> = props => (
-  <FontAwesome name="chevron-down" {...props} />
+  <FontAwesome6 name="angle-down" iconStyle="solid" {...props} />
 );
 
 export const EditIcon: FC<IconProps> = props => (
-  <FontAwesome name="edit" {...props} />
+  <FontAwesome6 name="pencil" iconStyle="solid" {...props} />
 );
 
 export const EyeIcon: FC<IconProps> = props => (
-  <FontAwesome name="eye" {...props} />
+  <FontAwesome6 name="eye" {...props} />
 );
 
 export const EyeSlashIcon: FC<IconProps> = props => (
-  <FontAwesome name="eye-slash" {...props} />
+  <FontAwesome6 name="eye-slash" {...props} />
 );
 
 export const FeatherCrossIcon: FC<IconProps> = props => (
@@ -150,12 +139,8 @@ export const MaterialInformation: FC<IconProps> = props => (
   <Material name="information" {...props} />
 );
 
-export const OcticonsCircleCheckFill: FC<IconProps> = props => (
-  <Octicons name="check-circle-fill" {...props} />
-);
-
-export const ClockIcon: FC<IconProps> = props => (
-  <Octicons name="clock" {...props} />
+export const CircleCheckIcon: FC<IconProps> = props => (
+  <FontAwesome6 name="circle-check" iconStyle="solid" {...props} />
 );
 
 export const TimerSandIcon: FC<IconProps> = props => (

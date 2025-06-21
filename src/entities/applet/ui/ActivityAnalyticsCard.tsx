@@ -1,11 +1,8 @@
 import { FC } from 'react';
 import { AccessibilityProps } from 'react-native';
 
-import { styled } from '@tamagui/core';
-
 import { AnalyticsChart } from '@app/features/analytics-chart/ui/AnalyticsChart';
-import { Box } from '@app/shared/ui/base';
-import { Center } from '@app/shared/ui/Center';
+import { Box, YStack } from '@app/shared/ui/base';
 import { Text } from '@app/shared/ui/Text';
 
 import { ActivityResponses } from '../lib/types';
@@ -14,12 +11,6 @@ type Props = {
   responseData: ActivityResponses;
 };
 
-const ActivityCardContainer = styled(Center, {
-  mt: 10,
-  pt: 10,
-  backgroundColor: '$white',
-});
-
 export const ActivityAnalyticsCard: FC<Props & AccessibilityProps> = ({
   responseData,
   accessibilityLabel,
@@ -27,19 +18,23 @@ export const ActivityAnalyticsCard: FC<Props & AccessibilityProps> = ({
   const { description, name } = responseData;
 
   return (
-    <ActivityCardContainer accessibilityLabel={accessibilityLabel}>
-      <Text fontSize={30} fontWeight="100">
+    <YStack
+      mb={16}
+      p={16}
+      bg="$surface"
+      br={16}
+      gap={16}
+      ai="center"
+      aria-label={accessibilityLabel}
+    >
+      <Text fontSize={22} lineHeight={28} textAlign="center">
         {name}
       </Text>
 
-      {description && (
-        <Text fontSize={15} fontWeight="200">
-          {description}
-        </Text>
-      )}
+      {description && <Text>{description}</Text>}
 
       {responseData.responses?.map((response, index) => (
-        <Box pb={5} key={index}>
+        <Box key={index}>
           <AnalyticsChart
             title={response.name}
             responseType={response.type}
@@ -48,6 +43,6 @@ export const ActivityAnalyticsCard: FC<Props & AccessibilityProps> = ({
           />
         </Box>
       ))}
-    </ActivityCardContainer>
+    </YStack>
   );
 };

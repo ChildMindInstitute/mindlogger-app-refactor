@@ -24,7 +24,10 @@
       "upload_answers": "Uploading your answers...",
       "completed": "Activity uploaded"
     },
-    "step": "Step"
+    "step": "Step",
+    "flowStep": "({{activityPositionInFlow}} of {{numberOfActivitiesInFlow}}) {{activityFlowName}}",
+    "stepCounter": "{{currentStep}} of {{totalSteps}}",
+    "activityCounter": "Activity {{currentStep}} of {{totalSteps}}"
   },
   "activity_time": {
     "time_remaining": "remaining for this item"
@@ -390,7 +393,7 @@
     "back": "Back",
     "return": "Return",
     "undo": "Undo",
-    "exit": "Exit"
+    "exit": "Save & Exit"
   },
   "network_alerts": {
     "no_internet_title": "No Internet Connection",
