@@ -48,7 +48,11 @@ const getLinking = ():
   return {
     prefixes: DEEP_LINK_PREFIXES,
     getStateFromPath: (path, options) => {
-      if (path.startsWith('/active-assessment')) {
+      // `/ehr-complete` is intentionally excluded from the AndroidManifest.xml, as it is meant to be handled on iOS only
+      if (
+        path.startsWith('/active-assessment') ||
+        path.startsWith('/ehr-complete')
+      ) {
         getDefaultLogger().info(
           `[${LOGGER_MODULE_NAME}] Found active assessment deep link, opening in app`,
         );
@@ -70,6 +74,12 @@ const getLinking = ():
           };
 
           return state as unknown as PartialState<NavigationState>;
+        } else {
+          // Do nothing to prevent an infinite loop between the web browser and app
+          getDefaultLogger().warn(
+            `[${LOGGER_MODULE_NAME}] No initial navigation state found for active assessment deep link, refusing to handle deep link.`,
+          );
+          return undefined;
         }
       }
 
