@@ -85,7 +85,7 @@ export const markdownStyle: StyleSheet.NamedStyles<any> = StyleSheet.create({
     color: palette.on_surface,
   },
   link: {
-    color: palette.blue,
+    color: palette.secondary,
   },
   bullet_list: {
     fontSize: 18,

@@ -11,7 +11,7 @@ export function ProgressBar({ progress, height = 10 }: Props) {
   return (
     <Bar
       progress={progress}
-      color={palette.blue}
+      color={palette.secondary}
       unfilledColor={palette.surface_variant}
       borderWidth={0}
       height={height}

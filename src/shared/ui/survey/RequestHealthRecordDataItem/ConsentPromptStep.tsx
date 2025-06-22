@@ -83,7 +83,7 @@ export const ConsentPromptStep: FC<ConsentPromptStepProps> = ({
         onPress={handleExternalLinkPress}
         accessibilityLabel="external-link-button"
       >
-        <Text color={palette.blue} textDecorationLine="none" fontSize={18}>
+        <Text color={palette.secondary} textDecorationLine="none" fontSize={18}>
           {t('requestHealthRecordData:linkText')}
         </Text>
       </Link>

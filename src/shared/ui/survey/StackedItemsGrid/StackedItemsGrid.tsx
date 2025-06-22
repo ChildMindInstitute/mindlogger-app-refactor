@@ -26,7 +26,7 @@ const AxisListItemText = styled(Text, {
   // @ts-expect-error TS2322
   variants: {
     hasTooltip: {
-      true: { color: '$blue', textDecorationLine: 'underline' },
+      true: { color: '$secondary', textDecorationLine: 'underline' },
       false: { color: '$primary' },
     },
   } as const,
