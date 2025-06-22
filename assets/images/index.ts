@@ -1,5 +1,4 @@
 const bellAlertIcon = require('./alert-message.png');
-const cloudBackground = require('./background.png');
 const blueLogo = require('./blue_logo.png');
 const curiousLogoWhite = require('./curious-logo--white.png');
 const curiousLogoBlack = require('./curious-logo--black.png');
@@ -14,7 +13,6 @@ export {
   curiousIconAnimated,
   whiteLogo,
   blueLogo,
-  cloudBackground,
   curiousLogoWhite,
   curiousLogoBlack,
   bellAlertIcon,
