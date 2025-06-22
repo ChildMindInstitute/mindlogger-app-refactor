@@ -93,8 +93,8 @@ export const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
 
 const style = StyleSheet.create({
   themeLogo: {
-    width: 48,
-    height: 48,
+    width: 44,
+    height: 44,
     marginBottom: 4,
     resizeMode: 'contain',
   },

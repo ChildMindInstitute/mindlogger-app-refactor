@@ -3,7 +3,6 @@ import { FC, useCallback, useLayoutEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Applet } from '@app/entities/applet/lib/types';
 import {
@@ -39,7 +38,6 @@ export const AppletsScreen: FC = () => {
   const { t } = useTranslation();
   const { navigate, setOptions } = useNavigation();
   const dispatch = useAppDispatch();
-  const { bottom } = useSafeAreaInsets();
 
   const userFirstName = useAppSelector(selectFirstName);
 

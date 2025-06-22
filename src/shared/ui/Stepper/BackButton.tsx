@@ -16,8 +16,8 @@ export function BackButton({ children, isIcon }: Props) {
 
   if (isIcon) {
     return (
-      <TouchableOpacity accessibilityLabel="back-button" onPress={back}>
-        <LeftArrowIcon color={palette.tertiary} size={30} />
+      <TouchableOpacity aria-label="back-button" onPress={back}>
+        <LeftArrowIcon color={palette.on_surface} size={30} />
       </TouchableOpacity>
     );
   }
@@ -27,7 +27,7 @@ export function BackButton({ children, isIcon }: Props) {
       mode="secondary"
       aria-label="back-button"
       onPress={back}
-      minWidth={120}
+      width="100%"
     >
       {children}
     </SubmitButton>

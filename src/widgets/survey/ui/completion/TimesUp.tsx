@@ -15,7 +15,7 @@ export const TimesUp: FC<SubComponentProps> = ({ onPressDone }) => {
   return (
     <>
       <FlexContainer justifyContent="flex-end">
-        <TimerSandIcon color="#000" size={80} />
+        <TimerSandIcon color="$on_surface" size={80} />
         <Text fontSize={25}>{t('autocompletion:time_limit_reached')}</Text>
       </FlexContainer>
       <FlexContainer justifyContent="flex-start">

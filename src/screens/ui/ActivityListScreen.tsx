@@ -75,7 +75,7 @@ export const ActivityListScreen: FC<Props> = props => {
 
   return (
     <Box flex={1} bg="$surface1">
-      <UploadRetryBanner accessibilityLabel="upload-banner" />
+      <UploadRetryBanner aria-label="upload-banner" />
       <HorizontalCalendar />
       <ConnectionStatusBar appletId={appletId} mb={20} />
 

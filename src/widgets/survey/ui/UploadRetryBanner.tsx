@@ -16,7 +16,7 @@ import { useAutoCompletion } from '../model/hooks/useAutoCompletion';
 
 type Props = AccessibilityProps;
 
-export const UploadRetryBanner: FC<Props> = () => {
+export const UploadRetryBanner: FC<Props> = ({ ...props }) => {
   const { hasItemsInQueue } = useAutoCompletion();
   const { isUploading } = useUploadObservable();
 
@@ -37,7 +37,13 @@ export const UploadRetryBanner: FC<Props> = () => {
   }
 
   return (
-    <Box px={16} py={8} boc="$on_error_container" bc="$error_container">
+    <Box
+      px={16}
+      py={8}
+      boc="$on_error_container"
+      bc="$error_container"
+      {...props}
+    >
       <Box jc="space-between" ai="center" flexDirection="row">
         <Text flex={1} fontSize={14} color="$on_error_container">
           {isUploading

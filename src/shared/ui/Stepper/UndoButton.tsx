@@ -16,8 +16,8 @@ export function UndoButton({ children, isIcon }: Props) {
 
   if (isIcon) {
     return (
-      <TouchableOpacity accessibilityLabel="undo-button" onPress={undo}>
-        <RestartIcon color={palette.tertiary} size={30} />
+      <TouchableOpacity aria-label="undo-button" onPress={undo}>
+        <RestartIcon color={palette.on_surface} size={30} />
       </TouchableOpacity>
     );
   }
@@ -27,7 +27,7 @@ export function UndoButton({ children, isIcon }: Props) {
       mode="secondary"
       aria-label="undo-button"
       onPress={undo}
-      minWidth={120}
+      width="100%"
     >
       {children}
     </SubmitButton>

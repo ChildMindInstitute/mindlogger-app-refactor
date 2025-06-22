@@ -35,10 +35,10 @@ export function NextButton({ children, isIcon, accessibilityLabel }: Props) {
   if (isIcon) {
     return (
       <TouchableOpacity
-        accessibilityLabel={`${accessibilityLabel}-top` ?? ''}
+        aria-label={`${accessibilityLabel}-top` ?? ''}
         onPress={onPressNextDebounced}
       >
-        <RightArrowIcon color={palette.tertiary} size={30} />
+        <RightArrowIcon color={palette.on_surface} size={30} />
       </TouchableOpacity>
     );
   }
@@ -47,7 +47,7 @@ export function NextButton({ children, isIcon, accessibilityLabel }: Props) {
     <SubmitButton
       aria-label={`${accessibilityLabel}-bottom` ?? ''}
       onPress={onPressNextDebounced}
-      minWidth={120}
+      width="100%"
     >
       {children}
     </SubmitButton>
