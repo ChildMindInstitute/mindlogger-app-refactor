@@ -116,7 +116,7 @@ const AboutAppLink = () => {
   const { navigate } = useNavigation();
 
   return (
-    <XStack jc="center">
+    <XStack jc="center" mb={16}>
       <TouchableOpacity
         aria-label="about-link"
         onPress={() => navigate('AboutApp')}

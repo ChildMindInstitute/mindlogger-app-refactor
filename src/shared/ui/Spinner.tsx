@@ -46,6 +46,9 @@ export function Spinner({
       testID="loader"
       animate={{ opacity: isVisible ? 1 : 0 }}
       pointerEvents={isVisible ? 'auto' : 'none'}
+      aria-role="progressbar"
+      aria-busy={isVisible}
+      aria-live={isVisible ? 'polite' : 'off'}
       style={
         withOverlay
           ? {
