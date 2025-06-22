@@ -3,7 +3,7 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { Controller, useFormContext, useController } from 'react-hook-form';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 import { ErrorMessage } from './ErrorMessage';
 import { Box, XStack } from '../base';
@@ -22,10 +22,10 @@ export const CheckBoxField: FC<
   PropsWithChildren<Props & AccessibilityProps>
 > = ({
   name,
-  onFillColor = colors.white,
-  onCheckColor = colors.darkBlue,
-  onTintColor = colors.white,
-  tintColor = colors.white,
+  onFillColor = palette.surface,
+  onCheckColor = palette.on_surface,
+  onTintColor = palette.surface,
+  tintColor = palette.surface,
   disabled = false,
   accessibilityLabel,
   children,
@@ -46,20 +46,20 @@ export const CheckBoxField: FC<
       <Controller
         control={control}
         render={() => (
-          <Box accessibilityLabel={accessibilityLabel}>
+          <Box aria-label={accessibilityLabel}>
             <XStack minHeight={24}>
               <CheckBox
                 onValueChange={onFormChange}
                 style={styles.checkbox}
                 tintColors={{
                   true: onTintColor,
-                  false: isError ? colors.alert : onTintColor,
+                  false: isError ? palette.error : onTintColor,
                 }}
                 onCheckColor={onCheckColor}
                 disabled={disabled}
                 onFillColor={onFillColor}
                 onTintColor={onTintColor}
-                tintColor={isError ? colors.alert : tintColor}
+                tintColor={isError ? palette.error : tintColor}
                 boxType="square"
                 lineWidth={2}
                 onAnimationType="fade"

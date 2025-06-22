@@ -2,10 +2,8 @@ import { FC, useMemo } from 'react';
 import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
-import { styled } from '@tamagui/core';
 
-import { colors } from '@app/shared/lib/constants/colors';
-import { invertColor } from '@app/shared/lib/utils/survey/survey';
+import { getSelectorColors } from '@app/shared/lib/utils/survey/survey';
 
 import { RadioOption } from './types';
 import { Box, RadioGroup, XStack } from '../../base';
@@ -15,6 +13,7 @@ import { Tooltip } from '../../Tooltip';
 
 type RadioLabelProps = {
   option: RadioOption;
+  selected: boolean;
   addTooltip: boolean;
   setPalette: boolean;
   imageContainerVisible: boolean;
@@ -22,17 +21,9 @@ type RadioLabelProps = {
   textReplacer: (markdown: string) => string;
 };
 
-const RadioTooltipContainer = styled(Box, {
-  marginRight: 10,
-  width: '8%',
-});
-
-const RadioTextContainer = styled(Box, {
-  flexGrow: 1,
-});
-
 export const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
   option: { isHidden, id, text, color, image, tooltip, value },
+  selected,
   addTooltip,
   imageContainerVisible,
   tooltipContainerVisible,
@@ -50,75 +41,67 @@ export const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
     return null;
   }
 
-  const hasColor = color && setPalette;
-  const invertedColor = hasColor ? invertColor(color) : colors.primary;
-  const invertedTextColor = hasColor ? invertColor(color) : colors.darkerGrey;
+  const { textColor, tooltipColor, bgColor, widgetColor, borderColor } =
+    getSelectorColors({
+      setPalette,
+      color,
+      selected,
+    });
 
   return (
     <XStack
-      minHeight="$7"
-      bg={setPalette ? color : 'none'}
-      py="$4"
-      px={10}
-      my="$1"
+      minHeight={60}
+      bg={bgColor}
+      p={16}
+      my={8}
+      gap={10}
       jc="center"
       ai="center"
       ac="center"
-      borderRadius={7}
-      accessibilityLabel={accessibilityLabel}
+      borderRadius={12}
+      borderWidth={2}
+      borderColor={borderColor}
+      aria-label={accessibilityLabel}
     >
-      {addTooltip && tooltipContainerVisible && (
-        <RadioTooltipContainer>
-          {tooltip && (
-            <Tooltip
-              accessibilityLabel={'tooltip_view-' + tooltipText}
-              markdown={tooltipText}
-            >
-              <QuestionTooltipIcon
-                color={hasColor ? invertedColor : colors.grey}
-                size={22}
-              />
-            </Tooltip>
-          )}
-        </RadioTooltipContainer>
-      )}
+      <RadioGroup.Item
+        aria-label={`radio-option-${value}`}
+        borderColor={widgetColor}
+        borderWidth={selected ? 0 : 3}
+        bg={selected ? widgetColor : bgColor}
+        id={text}
+        value={id}
+      >
+        <RadioGroup.Indicator bg={selected ? bgColor : widgetColor} />
+      </RadioGroup.Item>
 
-      {imageContainerVisible && (
+      {imageContainerVisible && !!image && (
         <Box style={styles.imageContainer}>
-          {image && (
-            <CachedImage
-              resizeMode="contain"
-              accessibilityLabel={`radio-option-image-${value}`}
-              style={styles.image}
-              source={image}
-            />
-          )}
+          <CachedImage
+            resizeMode="contain"
+            aria-label={`radio-option-image-${value}`}
+            style={styles.image}
+            source={image}
+          />
         </Box>
       )}
 
-      <RadioTextContainer w="50%">
-        <Text
-          accessibilityLabel={'radio-option-text'}
-          fontSize={17}
-          ml="$4"
-          color={invertedTextColor}
-        >
-          {name}
-        </Text>
-      </RadioTextContainer>
+      <Text
+        aria-label={'radio-option-text'}
+        fontSize={18}
+        color={textColor}
+        flexGrow={1}
+      >
+        {name}
+      </Text>
 
-      <Box>
-        <RadioGroup.Item
-          accessibilityLabel={`radio-option-${value}`}
-          borderColor={invertedColor}
-          borderWidth={3}
-          bg={setPalette && color ? color : '#fff'}
-          id={text}
-          value={id}
+      {addTooltip && tooltipContainerVisible && !!tooltip && (
+        <Tooltip
+          aria-label={'tooltip_view-' + tooltipText}
+          markdown={tooltipText}
         >
-          <RadioGroup.Indicator bg={invertedColor} />
-        </RadioGroup.Item>
-      </Box>
+          <QuestionTooltipIcon color={tooltipColor} size={22} />
+        </Tooltip>
+      )}
     </XStack>
   );
 };

@@ -1,11 +1,11 @@
 import { PropsWithChildren, useContext } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
-import { ActionButton } from './ActionButton';
 import { HandlersContext } from './contexts';
 import { RestartIcon } from '../icons';
+import { SubmitButton } from '../SubmitButton';
 
 type Props = PropsWithChildren<{
   isIcon?: boolean;
@@ -16,20 +16,20 @@ export function UndoButton({ children, isIcon }: Props) {
 
   if (isIcon) {
     return (
-      <TouchableOpacity accessibilityLabel="undo-button" onPress={undo}>
-        <RestartIcon color={colors.tertiary} size={30} />
+      <TouchableOpacity aria-label="undo-button" onPress={undo}>
+        <RestartIcon color={palette.on_surface} size={30} />
       </TouchableOpacity>
     );
   }
 
   return (
-    <ActionButton
-      type="flat"
-      alignSelf="center"
-      accessibilityLabel="undo-button"
+    <SubmitButton
+      mode="secondary"
+      aria-label="undo-button"
       onPress={undo}
+      width="100%"
     >
       {children}
-    </ActionButton>
+    </SubmitButton>
   );
 }

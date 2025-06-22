@@ -38,11 +38,18 @@ export const StackedSlider: FC<StackedSliderProps> = ({ config, ...props }) => {
         const rowValue = values ? values[rowIndex] : null;
 
         return (
-          <YStack key={`slider-${currentRowId}`}>
+          <YStack
+            key={`slider-${currentRowId}`}
+            bg={rowIndex % 2 === 0 ? '$surface1' : '$surface'}
+            p={16}
+            mx={-16}
+          >
             <Text
               aria-label={`stacked-slider-label-${label}`}
-              fontSize={12}
               my="$3"
+              fontSize={18}
+              lineHeight={28}
+              textAlign="center"
             >
               {label}
             </Text>

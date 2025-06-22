@@ -20,7 +20,7 @@ export const EmptyState = ({ icon, description, ...rest }: Props) => {
       {...rest}
     >
       {icon}
-      <Text fontSize={24} lineHeight={32} color="$grey4" textAlign="center">
+      <Text fontSize={24} lineHeight={32} color="$outline" textAlign="center">
         {description}
       </Text>
     </YStack>

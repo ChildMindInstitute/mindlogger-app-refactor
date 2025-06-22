@@ -3,11 +3,11 @@ import { TouchableOpacity } from 'react-native';
 
 import { useThrottledCallback } from 'use-debounce';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
-import { ActionButton } from './ActionButton';
 import { HandlersContext } from './contexts';
 import { RightArrowIcon } from '../icons';
+import { SubmitButton } from '../SubmitButton';
 
 type Props = PropsWithChildren<{
   isIcon?: boolean;
@@ -35,21 +35,21 @@ export function NextButton({ children, isIcon, accessibilityLabel }: Props) {
   if (isIcon) {
     return (
       <TouchableOpacity
-        accessibilityLabel={`${accessibilityLabel}-top` ?? ''}
+        aria-label={`${accessibilityLabel}-top` ?? ''}
         onPress={onPressNextDebounced}
       >
-        <RightArrowIcon color={colors.tertiary} size={30} />
+        <RightArrowIcon color={palette.on_surface} size={30} />
       </TouchableOpacity>
     );
   }
 
   return (
-    <ActionButton
-      accessibilityLabel={`${accessibilityLabel}-bottom` ?? ''}
+    <SubmitButton
+      aria-label={`${accessibilityLabel}-bottom` ?? ''}
       onPress={onPressNextDebounced}
-      alignSelf="flex-end"
+      width="100%"
     >
       {children}
-    </ActionButton>
+    </SubmitButton>
   );
 }

@@ -2,7 +2,7 @@ import { Children, PropsWithChildren, ReactNode, useMemo } from 'react';
 
 import { XStackProps } from '@tamagui/stacks';
 
-import { XStack, YStack } from '../base';
+import { XStack } from '../base';
 
 type Props = PropsWithChildren<XStackProps>;
 
@@ -19,17 +19,17 @@ export function NavigationPanel({ children, ...styledProps }: Props) {
 
   return (
     <XStack justifyContent="space-between" {...styledProps}>
-      <YStack flex={1} alignItems="flex-start">
+      <XStack flex={1} width={120} justifyContent="flex-start">
         {buttons[0]}
-      </YStack>
+      </XStack>
 
-      <YStack flex={1} alignItems="center">
+      <XStack flex={1} width={120} justifyContent="center">
         {buttons[1]}
-      </YStack>
+      </XStack>
 
-      <YStack flex={1} alignItems="flex-end">
+      <XStack flex={1} width={120} justifyContent="flex-end">
         {buttons[2]}
-      </YStack>
+      </XStack>
     </XStack>
   );
 }

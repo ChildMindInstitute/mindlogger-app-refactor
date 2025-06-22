@@ -1,12 +1,11 @@
 import { FC, useState } from 'react';
 
 import NativeGeolocation from '@react-native-community/geolocation';
-import { Button } from '@tamagui/button';
-import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 import { RESULTS } from 'react-native-permissions';
 
 import { IS_ANDROID } from '@app/shared/lib/constants';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useIsOnline } from '@app/shared/lib/hooks/useIsOnline';
 import { useLocationPermissions } from '@app/shared/lib/hooks/useLocationPermissions';
 import { getLocationPermissions } from '@app/shared/lib/permissions/geolocationPermissions';
@@ -14,15 +13,8 @@ import { getLocationPermissions } from '@app/shared/lib/permissions/geolocationP
 import { Coordinates } from './types';
 import { Center } from '../../Center';
 import { GeolocationIcon } from '../../icons';
+import { SubmitButton } from '../../SubmitButton';
 import { Text } from '../../Text';
-
-const GeolocationButton = styled(Button, {
-  backgroundColor: '$blue',
-  borderRadius: 0,
-  color: '$white',
-  fontWeight: '900',
-  minWidth: '10%',
-});
 
 type Props = {
   onChange: (value: Coordinates) => void;
@@ -87,13 +79,16 @@ export const GeolocationItem: FC<Props> = ({ onChange, value = null }) => {
 
   return (
     <Center>
-      <GeolocationButton
+      <SubmitButton
         accessibilityLabel="geolocation-submit-btn"
         onPress={handleGetGeolocation}
-        iconAfter={<GeolocationIcon color="white" size={20} />}
+        mode="tonal"
+        rightIcon={
+          <GeolocationIcon color={palette.on_secondary_container} size={18} />
+        }
       >
         {t('geolocation:get_location')}
-      </GeolocationButton>
+      </SubmitButton>
 
       {value && (
         <Text

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
 import { RequestHealthRecordDataResponse } from '@app/features/pass-survey/lib/types/payload';
 import { RequestHealthRecordDataPipelineItem } from '@app/features/pass-survey/lib/types/payload';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { Box, RadioGroup, YStack } from '@app/shared/ui/base';
 import { RequestHealthRecordDataIcon } from '@app/shared/ui/icons/RequestHealthRecordDataIcon';
@@ -15,9 +15,10 @@ import { ItemMarkdown } from '@app/shared/ui/survey/ItemMarkdown';
 import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem/types';
 import { Text } from '@app/shared/ui/Text';
 
-// TODO: Update to the correct URL when available
-// https://mindlogger.atlassian.net/browse/M2-9101
-const REQUEST_HEALTH_RECORD_DATA_LINK = 'https://mindlogger.org/';
+import { RadioItem } from '../RadioActivityItem/RadioItem';
+
+const REQUEST_HEALTH_RECORD_DATA_LINK =
+  'https://mindlogger.atlassian.net/servicedesk/customer/portal/1/article/1238630401';
 
 type ConsentPromptStepProps = {
   item: RequestHealthRecordDataPipelineItem;
@@ -82,7 +83,7 @@ export const ConsentPromptStep: FC<ConsentPromptStepProps> = ({
         onPress={handleExternalLinkPress}
         accessibilityLabel="external-link-button"
       >
-        <Text color={colors.blue} textDecorationLine="none" fontSize={18}>
+        <Text color={palette.secondary} textDecorationLine="none" fontSize={18}>
           {t('requestHealthRecordData:linkText')}
         </Text>
       </Link>
@@ -92,43 +93,22 @@ export const ConsentPromptStep: FC<ConsentPromptStepProps> = ({
         onValueChange={handleValueChange}
         name="ehr-consent"
         accessibilityLabel="ehr-consent-options"
-        gap={16}
       >
         {options.map(option => {
           const isSelected = option.id === responseValue;
 
           return (
-            <Box
-              key={option.id}
-              borderColor={isSelected ? colors.blue : colors.lighterGrey7}
-              borderWidth={2}
-              backgroundColor={isSelected ? colors.lightBlue : undefined}
-              px={18}
-              py={20}
-              borderRadius={12}
-              onPress={() => handleValueChange(option.id)}
-            >
-              <Box
-                flexDirection="row"
-                alignItems="center"
-                justifyContent="flex-start"
-                gap="$3"
-              >
-                <RadioGroup.Item
-                  accessibilityLabel={`ehr-option-${option.id}`}
-                  borderColor={isSelected ? colors.blue : colors.outlineGrey}
-                  borderWidth={3}
-                  backgroundColor="transparent"
-                  value={option.id}
-                >
-                  <RadioGroup.Indicator
-                    background={isSelected ? colors.blue : colors.outlineGrey}
-                  />
-                </RadioGroup.Item>
-                <Text fontSize={18} color={colors.onSurface}>
-                  {option.text}
-                </Text>
-              </Box>
+            <Box key={option.id} onPress={() => handleValueChange(option.id)}>
+              <RadioItem
+                aria-label={`ehr-option-${option.id}`}
+                option={option}
+                selected={isSelected}
+                imageContainerVisible={false}
+                tooltipContainerVisible={false}
+                addTooltip={false}
+                setPalette={false}
+                textReplacer={textReplacer}
+              />
             </Box>
           );
         })}

@@ -1,9 +1,9 @@
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import {
   MaterialAlertCircle,
   MaterialAlertOctagon,
   MaterialInformation,
-  OcticonsCircleCheckFill,
+  CircleCheckIcon,
 } from '@app/shared/ui/icons';
 
 export const BANNERS = [
@@ -15,19 +15,17 @@ export const BANNERS = [
 ] as const;
 
 export const BANNER_ICONS = {
-  success: (
-    <OcticonsCircleCheckFill color={colors.alertSuccessIcon} size={26} />
-  ),
-  error: <MaterialAlertOctagon color={colors.alertErrorIcon} size={26} />,
-  warning: <MaterialAlertCircle color={colors.alertWarnIcon} size={26} />,
-  info: <MaterialInformation color={colors.alertInfoIcon} size={26} />,
+  success: <CircleCheckIcon color={palette.success} size={26} />,
+  error: <MaterialAlertOctagon color={palette.error} size={26} />,
+  warning: <MaterialAlertCircle color={palette.warning} size={26} />,
+  info: <MaterialInformation color={palette.info} size={26} />,
 };
 
 export const BANNER_BG_COLORS = {
-  success: colors.alertSuccessBg,
-  error: colors.alertErrorBg,
-  warning: colors.alertWarnBg,
-  info: colors.alertInfoBg,
+  success: palette.success_container,
+  error: palette.error_container,
+  warning: palette.warning_container,
+  info: palette.info_container,
 };
 
-export const BANNERS_DEFAULT_BG = colors.primary;
+export const DEFAULT_BG = palette.surface;

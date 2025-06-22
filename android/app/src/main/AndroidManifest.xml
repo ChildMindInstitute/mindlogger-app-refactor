@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
     <uses-permission
       android:name="android.permission.SCHEDULE_EXACT_ALARM"
-      android:maxSdkVersion="35"
+      android:maxSdkVersion="36"
       tools:replace="android:maxSdkVersion" />
     <uses-permission
       android:name="android.permission.USE_FULL_SCREEN_INTENT"

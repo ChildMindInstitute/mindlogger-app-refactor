@@ -1,13 +1,17 @@
-import { StyleSheet, ActivityIndicator, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 import DeviceInfo from 'react-native-device-info';
 import Animated, { FadeOut } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { DEFAULT_BG } from '@app/entities/banner/lib/constants';
 import { Text } from '@app/shared/ui/Text';
 
+import { Spinner } from './Spinner';
 import { APP_VERSION, ENV } from '../lib/constants';
-import { colors } from '../lib/constants/colors';
+
+const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
 export const SplashScreen = () => {
   const buildNumber = DeviceInfo.getBuildNumber();
@@ -18,35 +22,26 @@ export const SplashScreen = () => {
     : APP_VERSION;
 
   return (
-    <Animated.View
+    <AnimatedSafeAreaView
       collapsable={false}
       exiting={FadeOut.duration(500)}
       style={style.container}
     >
-      <ActivityIndicator size="large" color={colors.secondary} />
+      <Spinner />
 
-      <View style={style.versionContainer}>
-        <Text style={style.versionText}>
-          {t('splash:version')} {appVersion}
-        </Text>
-      </View>
-    </Animated.View>
+      <Text position="absolute" bottom={30} color="$outline">
+        {t('splash:version')} {appVersion}
+      </Text>
+    </AnimatedSafeAreaView>
   );
 };
 
 const style = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: colors.primary,
+    backgroundColor: DEFAULT_BG,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
-  },
-  versionContainer: {
-    position: 'absolute',
-    bottom: 30,
-  },
-  versionText: {
-    color: 'white',
   },
 });

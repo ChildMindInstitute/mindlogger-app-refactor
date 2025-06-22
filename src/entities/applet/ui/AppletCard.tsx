@@ -3,12 +3,11 @@ import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
 
-import { IS_IOS } from '@app/shared/lib/constants';
+import { AnimatedTouchable } from '@app/shared/ui/AnimatedTouchable';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
-import { RoundLogo } from '@app/shared/ui/RoundLogo';
+import { CardThumbnail } from '@app/shared/ui/CardThumbnail';
 import { RoundTextNotification } from '@app/shared/ui/RoundTextNotification';
 import { Text } from '@app/shared/ui/Text';
-import { TouchableOpacity } from '@app/shared/ui/TouchableOpacity';
 
 import { Applet } from '../lib/types';
 
@@ -16,98 +15,80 @@ type Props = {
   applet: Applet;
   disabled: boolean;
   onPress?: (...args: any[]) => void;
+  thumbnailColor?: string;
 };
 
 export const AppletCard: FC<Props & AccessibilityProps> = ({
   applet,
   disabled,
   onPress,
+  thumbnailColor,
   accessibilityLabel,
 }) => {
   const theme = applet.theme;
 
-  const renderThemeLogo = () => {
-    if (theme?.logo) {
-      return <CachedImage style={styles.smallLogo} source={theme.logo} />;
-    }
-
-    return null;
-  };
-
   return (
-    <TouchableOpacity
-      accessibilityLabel={accessibilityLabel}
+    <AnimatedTouchable
+      aria-label={accessibilityLabel}
       onPress={onPress}
       disabled={disabled}
+      style={{
+        borderRadius: 16,
+        opacity: disabled ? 0.5 : 1,
+      }}
     >
-      <XStack
-        position="relative"
-        mx={3}
-        p={12}
-        borderWidth={3}
-        borderColor="$lighterGrey"
-        borderRadius={9}
-        opacity={disabled ? 0.5 : 1}
-        backgroundColor="$white"
-      >
-        <Box mr={14}>
-          <RoundLogo
-            accessibilityLabel="applet_logo-image"
+      <YStack position="relative" p={16} gap={8}>
+        <XStack jc="space-between" ai="flex-start" mb={8}>
+          <CardThumbnail
+            aria-label="applet_logo-image"
             imageUri={applet.image}
             letter={applet.displayName[0].toUpperCase()}
+            bg={thumbnailColor}
           />
-        </Box>
 
-        <YStack flexGrow={1} flexShrink={1}>
-          <XStack jc="space-between">
-            <Text
-              mb={8}
-              flex={1}
-              fontWeight={IS_IOS ? '600' : '700'}
-              fontSize={16}
-              accessibilityLabel="applet_name-text"
-              lineHeight={20}
-            >
-              {applet.displayName}
-            </Text>
+          {!!theme?.logo && (
+            <CachedImage style={styles.smallLogo} source={theme.logo} />
+          )}
+        </XStack>
 
-            {renderThemeLogo()}
-          </XStack>
+        <Text
+          flex={1}
+          fontWeight="700"
+          fontSize={22}
+          lineHeight={28}
+          aria-label="applet_name-text"
+        >
+          {applet.displayName}
+        </Text>
 
+        {!!applet.description && (
           <Text
-            accessibilityLabel="applet_description-text"
-            fontSize={14}
-            fontWeight="300"
-            lineHeight={20}
+            aria-label="applet_description-text"
+            fontSize={16}
+            fontWeight="400"
+            lineHeight={24}
           >
             {applet.description}
           </Text>
-        </YStack>
+        )}
 
         {!!applet.numberOverdue && (
-          <Box position="absolute" top={-14} right={-14}>
+          <Box position="absolute" top={-4} right={-4}>
             <RoundTextNotification
-              accessibilityLabel="applet_number_overdue-text"
+              aria-label="applet_number_overdue-text"
               text={applet.numberOverdue.toString()}
             />
           </Box>
         )}
-      </XStack>
-    </TouchableOpacity>
+      </YStack>
+    </AnimatedTouchable>
   );
 };
 
 const styles = StyleSheet.create({
   smallLogo: {
-    width: 60,
-    height: 30,
+    width: 48,
+    height: 48,
     resizeMode: 'contain',
-    marginTop: -5,
-  },
-  logo: {
-    width: 32,
-    height: 32,
-    resizeMode: 'cover',
-    borderRadius: 32 / 2,
   },
 });

@@ -15,7 +15,7 @@ import {
   OS_MAJOR_VERSION,
 } from '@app/shared/lib/constants';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
-import { BANNERS_DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
+import { DEFAULT_BG } from '@entities/banner/lib/constants';
 
 import { Banner, BannerProps } from './Banner';
 import { useBanners } from '../lib/hooks/useBanners';
@@ -34,12 +34,12 @@ const handleClose = (
 export const Banners = () => {
   const { removeBanner } = useBanners();
   const banners = useAppSelector(bannersSelector);
-  const bannersBg = useAppSelector(bannersBgSelector);
+  const bannersBg = useAppSelector(bannersBgSelector) ?? DEFAULT_BG;
   const { top } = useSafeAreaInsets();
 
   // Animate top safe area background color to match native header background color transition
   const animatedStyles = useAnimatedStyle(() => ({
-    backgroundColor: withTiming(bannersBg ?? BANNERS_DEFAULT_BG, {
+    backgroundColor: withTiming(bannersBg, {
       // Duration is based on native header transition duration for each OS
       // iOS: 350ms, Android: 300ms
       // Subtract 30ms to account for animation delay
@@ -64,7 +64,11 @@ export const Banners = () => {
         },
       ]}
     >
-      <StatusBar translucent />
+      <StatusBar
+        barStyle="dark-content"
+        translucent
+        backgroundColor={bannersBg}
+      />
 
       {sortedBanners.map(({ key, bannerProps }) => (
         <Animated.View key={key} entering={FadeInUp} exiting={FadeOutUp}>

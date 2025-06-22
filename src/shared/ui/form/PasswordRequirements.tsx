@@ -3,19 +3,19 @@ import { View } from 'react-native';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 import { FeatherCrossIcon, FeatherCheckIcon } from '../icons';
 import { Text } from '../Text';
 
 const themeColors = {
   valid: {
-    iconColor: colors.white,
-    textColor: colors.white,
+    iconColor: palette.white,
+    textColor: palette.white,
   },
   invalid: {
-    iconColor: colors.whiteTsp2,
-    textColor: colors.whiteTsp2,
+    iconColor: palette.white_alpha60,
+    textColor: palette.white_alpha60,
   },
 };
 

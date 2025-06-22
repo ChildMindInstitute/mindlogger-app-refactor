@@ -1,30 +1,23 @@
-import { createAnimations } from '@tamagui/animations-react-native';
+import { createAnimations } from '@tamagui/animations-moti';
 import { createFont, createTamagui, createTokens } from '@tamagui/core';
 import { shorthands } from '@tamagui/shorthands';
 import { themes as baseThemes, tokens as baseTokens } from '@tamagui/themes';
 
-import { IS_IOS } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 export const defaultFont = createFont({
-  family: IS_IOS ? 'Avenir' : 'Roboto-Regular',
+  family: 'Moderat-Regular',
   size: {},
   lineHeight: {},
   letterSpacing: {},
-  weight: {},
-  face: IS_IOS
-    ? {
-        400: { normal: 'Avenir', italic: 'Avenir-Oblique' },
-        500: { normal: 'Avenir-Medium', italic: 'Avenir-MediumOblique' },
-        600: { normal: 'Avenir-Medium', italic: 'Avenir-MediumOblique' },
-        700: { normal: 'Avenir-Heavy', italic: 'Avenir-HeavyOblique' },
-      }
-    : {
-        400: { normal: 'Roboto-Regular', italic: 'Roboto-Italic' },
-        500: { normal: 'Roboto-Medium', italic: 'Roboto-MediumItalic' },
-        600: { normal: 'Roboto-Medium', italic: 'Roboto-MediumItalic' },
-        700: { normal: 'Roboto-Bold', italic: 'Roboto-BoldItalic' },
-      },
+  weight: {
+    1: '400',
+    2: '700',
+  },
+  face: {
+    400: { normal: 'Moderat-Regular', italic: 'Moderat-RegularItalic' },
+    700: { normal: 'Moderat-Bold', italic: 'Moderat-BoldItalic' },
+  },
 });
 
 export const elFont = createFont({
@@ -32,11 +25,12 @@ export const elFont = createFont({
   size: {},
   lineHeight: {},
   letterSpacing: {},
-  weight: {},
+  weight: {
+    1: '400',
+    2: '700',
+  },
   face: {
     400: { normal: 'Lato-Regular', italic: 'Lato-Italic' },
-    500: { normal: 'Lato-Regular', italic: 'Lato-Italic' },
-    600: { normal: 'Lato-Black', italic: 'Lato-BlackItalic' },
     700: { normal: 'Lato-Black', italic: 'Lato-BlackItalic' },
   },
 });
@@ -51,7 +45,7 @@ const codeFont = createFont({
 
 const tokens = createTokens({
   ...baseTokens,
-  color: colors,
+  color: palette,
 });
 
 const animations = createAnimations({

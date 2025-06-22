@@ -15,7 +15,7 @@ export const TimesUp: FC<SubComponentProps> = ({ onPressDone }) => {
   return (
     <>
       <FlexContainer justifyContent="flex-end">
-        <TimerSandIcon color="#000" size={80} />
+        <TimerSandIcon color="$on_surface" size={80} />
         <Text fontSize={25}>{t('autocompletion:time_limit_reached')}</Text>
       </FlexContainer>
       <FlexContainer justifyContent="flex-start">
@@ -25,8 +25,8 @@ export const TimesUp: FC<SubComponentProps> = ({ onPressDone }) => {
           })}
         </Text>
 
-        <Box w="100%">
-          <SubmitButton mode="dark" onPress={onPressDone} borderRadius={20}>
+        <Box w="100%" maxWidth={356}>
+          <SubmitButton mode="primary" onPress={onPressDone}>
             {t('autocompletion:done')}
           </SubmitButton>
         </Box>

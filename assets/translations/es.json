@@ -24,7 +24,10 @@
       "upload_answers": "Estamos cargando tus respuestas...",
       "completed": "Actividad cargada"
     },
-    "step": "Paso"
+    "step": "Paso",
+    "flowStep": "({{activityPositionInFlow}} de {{numberOfActivitiesInFlow}}) {{activityFlowName}}",
+    "stepCounter": "{{currentStep}} de {{totalSteps}}",
+    "activityCounter": "Actividad {{currentStep}} de {{totalSteps}}"
   },
   "activity_time": {
     "time_remaining": "es el tiempo restante para este elemento"
@@ -390,7 +393,7 @@
     "back": "Atrás",
     "return": "Volver",
     "undo": "Deshacer",
-    "exit": "Salir"
+    "exit": "Guardar y salir"
   },
   "network_alerts": {
     "no_internet_title": "Sin conexión a internet",

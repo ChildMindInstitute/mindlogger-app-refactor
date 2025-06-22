@@ -1,12 +1,10 @@
-/* eslint-disable react-native/no-inline-styles */
 import { FC, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { isTablet } from 'react-native-device-info';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
@@ -51,7 +49,7 @@ const SignUpForm: FC<Props> = props => {
   return (
     <Box {...props}>
       <FormProvider {...form}>
-        <YStack space={isTablet() ? 10 : 22}>
+        <YStack space={12}>
           <InputField
             name="email"
             accessibilityLabel="signup-email-input"
@@ -79,7 +77,7 @@ const SignUpForm: FC<Props> = props => {
               <TouchableWithoutFeedback
                 onPress={() => setPasswordHidden(!isPasswordHidden)}
               >
-                <ShowPasswordIcon size={24} color={colors.white} />
+                <ShowPasswordIcon size={24} color={palette.white} />
               </TouchableWithoutFeedback>
             }
             hideError={isPasswordFocus}
@@ -104,16 +102,8 @@ const SignUpForm: FC<Props> = props => {
             accessibilityLabel="sign_up-button"
             borderRadius={30}
             width="100%"
-            bg="$lighterGrey4"
-            mt={isTablet() ? 110 : 50}
-            textProps={{
-              fontSize: 14,
-              color: 'black',
-            }}
-            buttonStyle={{
-              alignSelf: 'center',
-              paddingVertical: isTablet() ? 13 : 16,
-            }}
+            mt="$9"
+            mb="$4"
           >
             {t('sign_up_form:sign_up')}
           </SubmitButton>

@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 
-import { colors } from '@app/shared/lib/constants/colors';
 import { TIME_PICKER_FORMAT_PLACEHOLDER } from '@app/shared/lib/constants/dateTime';
+import { palette } from '@app/shared/lib/constants/palette';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import {
   getMidnightDateInMs,
@@ -11,7 +11,7 @@ import {
 } from '@app/shared/lib/utils/dateTime';
 
 import { DateTimePicker } from '../DateTimePicker';
-import { AlarmIcon } from '../icons';
+import { ClockIcon } from '../icons';
 
 type Props = {
   onChange: (value: HourMinute) => void;
@@ -42,7 +42,7 @@ export const TimePickerItem: FC<Props> = ({ value, onChange }) => {
       value={timeInMs ? new Date(timeInMs) : null}
       dateDisplayFormat="hh:mm aa"
       mode="time"
-      iconAfter={<AlarmIcon color={colors.lightGrey} size={15} />}
+      iconAfter={<ClockIcon color={palette.outline} size={16} />}
       placeholder={TIME_PICKER_FORMAT_PLACEHOLDER}
     />
   );

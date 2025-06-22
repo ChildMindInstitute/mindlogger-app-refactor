@@ -836,6 +836,12 @@ export interface MessageItemDto extends ActivityItemDtoBase {
   responseValues: MessageAnswerSettings;
 }
 
+export interface PhrasalTemplateItemDto extends ActivityItemDtoBase {
+  responseType: 'phrasalTemplate';
+  config: MessageConfiguration;
+  responseValues: MessageAnswerSettings;
+}
+
 export interface SliderSelectionItemDto extends ActivityItemDtoBase {
   responseType: 'slider';
   config: SliderConfiguration;
@@ -967,4 +973,5 @@ export type ActivityItemDto =
   | StabilityTrackerItemDto
   | FlankerItemDto
   | RequestHealthRecordDataItemDto
-  | TimeItemDto;
+  | TimeItemDto
+  | PhrasalTemplateItemDto;
