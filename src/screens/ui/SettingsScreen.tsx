@@ -108,7 +108,7 @@ export const SettingsScreen: FC = () => {
         </Box>
       </Box>
 
-      {isLoading && <Spinner withOverlay />}
+      {isLoading && <Spinner withOverlay overlayColor={palette.surface} />}
     </>
   );
 };

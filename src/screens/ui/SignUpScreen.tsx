@@ -9,7 +9,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SignUpForm } from '@app/features/sign-up/ui/SignUpForm';
 import { openUrl } from '@app/screens/lib/utils/helpers';
 import { IS_SMALL_HEIGHT_SCREEN } from '@app/shared/lib/constants';
+import { palette } from '@app/shared/lib/constants/palette';
 import { Box } from '@app/shared/ui/base';
+import { GradientOverlay } from '@app/shared/ui/GradientOverlay';
 import { KeyboardAvoidingView } from '@app/shared/ui/KeyboardAvoidingView';
 import { ScrollView } from '@app/shared/ui/ScrollView';
 import { Text } from '@app/shared/ui/Text';
@@ -21,7 +23,7 @@ export const SignUpScreen: FC = () => {
 
   let marginTop: string | number = '$8';
   if (IS_SMALL_HEIGHT_SCREEN) marginTop = '$5';
-  else if (isTablet()) marginTop = 170;
+  else if (isTablet()) marginTop = 200;
 
   return (
     <KeyboardAvoidingView
@@ -33,20 +35,25 @@ export const SignUpScreen: FC = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Box flex={1} px={isTablet() ? '$20' : 0}>
           <Box flex={1} px="$8">
-            <ScrollView flex={1}>
-              <Box mt={marginTop} mb={isTablet() ? 0 : 12}>
-                <Text
-                  fontSize={IS_SMALL_HEIGHT_SCREEN ? 28 : 32}
-                  lineHeight={40}
-                >
-                  {t('login:account_create')}
-                </Text>
-              </Box>
+            <Box flex={1}>
+              <ScrollView flex={1}>
+                <Box mt={marginTop} mb={isTablet() ? 0 : 12}>
+                  <Text
+                    fontSize={IS_SMALL_HEIGHT_SCREEN ? 28 : 32}
+                    lineHeight={40}
+                  >
+                    {t('login:account_create')}
+                  </Text>
+                </Box>
 
-              <Box mt={30}>
-                <SignUpForm onLoginSuccess={() => navigate('Applets')} />
-              </Box>
-            </ScrollView>
+                <Box mt={30}>
+                  <SignUpForm onLoginSuccess={() => navigate('Applets')} />
+                </Box>
+              </ScrollView>
+
+              <GradientOverlay position="top" color={palette.surface} />
+              <GradientOverlay position="bottom" color={palette.surface} />
+            </Box>
 
             <Box justifyContent="center" alignItems="center">
               <Box

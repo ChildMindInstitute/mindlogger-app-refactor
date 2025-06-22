@@ -28,7 +28,7 @@ import { useAnalyticsAutoLogin } from '@app/features/login/model/useAnalyticsAut
 import { useFeatureFlagsAutoLogin } from '@app/features/login/model/useFeatureFlagsAutoLogin';
 import { useLogout } from '@app/features/logout/model/hooks';
 import { useOnNotificationTap } from '@app/features/tap-on-notification/model/hooks/useOnNotificationTap';
-import { APP_VERSION, ENV } from '@app/shared/lib/constants';
+import { APP_VERSION, ENV, IS_ANDROID } from '@app/shared/lib/constants';
 import { palette } from '@app/shared/lib/constants/palette';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAlarmPermissions } from '@app/shared/lib/hooks/useAlarmPermissions';
@@ -218,10 +218,12 @@ export const RootNavigator = () => {
               title: '',
               headerLeft: () => (
                 <BackButton aria-label="back_button">
-                  <XStack ai="baseline">
+                  <XStack ai="center">
                     <ChevronLeftIcon color={palette.on_surface} size={14} />
 
-                    <Text ml="$2">{t('applet_invite_flow:back')}</Text>
+                    <Text ml="$2" mb={IS_ANDROID ? -2 : 0}>
+                      {t('applet_invite_flow:back')}
+                    </Text>
                   </XStack>
                 </BackButton>
               ),
@@ -246,7 +248,7 @@ export const RootNavigator = () => {
               ),
               headerRight: () => (
                 <TouchableOpacity
-                  accessibilityLabel="user_settings-button"
+                  aria-label="user_settings-button"
                   onPress={() => {
                     if (
                       getMutexDefaultInstanceManager()
