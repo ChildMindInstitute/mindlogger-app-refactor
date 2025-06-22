@@ -91,6 +91,6 @@ export const markdownStyle: StyleSheet.NamedStyles<any> = StyleSheet.create({
     fontSize: 18,
     lineHeight: 28,
     marginBottom: 24,
-    color: palette.tertiary,
+    color: palette.on_surface,
   },
 });
