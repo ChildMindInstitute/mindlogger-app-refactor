@@ -1,6 +1,7 @@
 import { RefObject, useCallback, useRef } from 'react';
 
 import RNUnityView from '@azesmway/react-native-unity';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   RN2UMessage,
@@ -8,11 +9,19 @@ import {
   UnityEvent,
 } from '../../lib/types/unityMessage';
 
-type RNUnityCommBridgeOptions = {
-  rnUnityViewRef: RefObject<RNUnityView | null>;
+export const newEchoMessage = (payload: string): RN2UMessage => {
+  return {
+    m_sId: uuidv4(),
+    m_sKey: 'Echo',
+    m_sAdditionalInfo: payload,
+  };
 };
 
 export type RNUnityCommBridgeUnityEventHandler = (message: U2RNMessage) => void;
+
+type RNUnityCommBridgeOptions = {
+  rnUnityViewRef: RefObject<RNUnityView | null>;
+};
 
 export const useRNUnityCommBridge = ({
   rnUnityViewRef,
