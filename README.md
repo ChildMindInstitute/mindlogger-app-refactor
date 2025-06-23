@@ -30,7 +30,7 @@ Running the app:
 ### 2. Run the app
 
 - Install Node dependencies using `yarn`
-- Install CocoaPod dependencies using `yarn pods`
+- Install CocoaPod dependencies using `RCT_NEW_ARCH_ENABLED=0 yarn pods`
 - Start Metro using `yarn start` (see [scripts](#available-scripts))
 - Build and run either the iOS or Android app:
   - `yarn android` builds the Android app and runs in an Android emulator
