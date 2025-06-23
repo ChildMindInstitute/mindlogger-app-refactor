@@ -24,6 +24,8 @@
     "pods:install": "cd ios && bundle exec pod install",
     "postinstall": "script/postinstall.sh",
     "unity:prebuild": "script/unity/prebuild.sh",
+    "unity:unlink": "script/unity/unlink-react-native-unity.sh ./node_modules/@azesmway/react-native-unity",
+    "unity:relink": "script/unity/relink-react-native-unity.sh ./node_modules/@azesmway/react-native-unity",
     "bump": "bundle exec fastlane bump_version",
     "start:reset-cache": "watchman watch-del-all && react-native start --reset-cache",
     "android:dev": "react-native run-android --mode=devdebug --appIdSuffix=dev",
