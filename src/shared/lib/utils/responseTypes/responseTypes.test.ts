@@ -64,7 +64,7 @@ describe('getSupportsWeb', () => {
       ${'text'}             | ${true}  | ${'Returns true for Text'}
       ${'time'}             | ${true}  | ${'Returns true for time'}
       ${'timeRange'}        | ${true}  | ${'Returns true for timeRange'}
-      ${'unity'}            | ${false} | ${'Returns false for unity'}
+      ${'unity'}            | ${true}  | ${'Returns true for unity'}
       ${'video'}            | ${true}  | ${'Returns true for video'}
       ${'test'}             | ${false} | ${'Returns false for other response types'}
       ${1}                  | ${false} | ${'Returns false for other response types'}
@@ -133,7 +133,7 @@ describe('getSupportsWeb', () => {
         ${'text'}               | ${false} | ${'Returns false for Text'}
         ${'time'}               | ${false} | ${'Returns false for time'}
         ${'timeRange'}          | ${false} | ${'Returns false for timeRange'}
-        ${'unity'}              | ${false} | ${'Returns false for unity'}
+        ${'unity'}              | ${true}  | ${'Returns true for unity'}
         ${'video'}              | ${true}  | ${'Returns true for video'}
         ${'test'}               | ${false} | ${'Returns false for other response types'}
         ${1}                    | ${false} | ${'Returns false for other response types'}

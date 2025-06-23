@@ -86,7 +86,11 @@ export const useRNUnityCommBridge = ({
     (evtType: UnityEvent, handler: RNUnityCommBridgeUnityEventHandler) => {
       eventHandlersRef.current[evtType] =
         eventHandlersRef.current[evtType] || [];
-      eventHandlersRef.current[evtType].push(handler);
+      (
+        eventHandlersRef.current[
+          evtType
+        ] as RNUnityCommBridgeUnityEventHandler[]
+      ).push(handler);
     },
     [],
   );
