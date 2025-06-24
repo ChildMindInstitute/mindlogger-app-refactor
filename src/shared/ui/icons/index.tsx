@@ -43,10 +43,6 @@ export const ChevronRightIcon: FC<IconProps> = props => (
   <FontAwesome6 name="angle-right" iconStyle="solid" {...props} />
 );
 
-export const QuestionTooltipIcon: FC<IconProps> = props => (
-  <FontAwesome6 name="circle-question" iconStyle="solid" {...props} />
-);
-
 export const LeftArrowIcon: FC<IconProps> = props => (
   <FontAwesome6 name="arrow-left" iconStyle="solid" {...props} />
 );
