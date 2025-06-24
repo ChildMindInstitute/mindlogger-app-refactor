@@ -6,6 +6,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
 import { usePreviousValue } from '@app/shared/lib/hooks/usePreviousValue';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { ILogger } from '@app/shared/lib/types/logger';
 import { Text } from '@app/shared/ui/Text';
 
 import {
@@ -24,6 +26,8 @@ export const UnityView: FC<Props> = props => {
     UIManager as never as Record<string, unknown>
   ).RNUnityView;
 
+  const logger: ILogger = getDefaultLogger();
+
   const rnUnityViewRef = useRef<RNUnityView | null>(null);
   const unityReadyHandled = useRef<boolean>(false);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
@@ -32,39 +36,38 @@ export const UnityView: FC<Props> = props => {
     useRNUnityCommBridge({ rnUnityViewRef });
 
   const handleUnityReady = useCallback(() => {
-    console.log(
-      '!!! TODO: Load activity config:',
-      JSON.stringify(props.payload.file),
+    logger.log(
+      `!!! TODO: Load activity config: ${JSON.stringify(props.payload.file)}`,
     );
 
     // const echoResponse = await sendMessageToUnity(
     //   newEchoMessage(JSON.stringify({ test: 'this', and: { that: 42 } })),
     // );
-    // console.log('!!! echoResponse:', JSON.stringify(echoResponse));
+    // logger.log(`!!! echoResponse: ${JSON.stringify(echoResponse)}`);
 
-    console.log('!!! Waiting before sending message ...');
+    logger.log('!!! Waiting before sending message ...');
     setTimeout(() => {
       sendMessageToUnity(
         newEchoMessage(JSON.stringify({ test: 'this', and: { that: 42 } })),
       )
         .then(resp => {
-          console.log('!!! Echo resp:', JSON.stringify(resp));
+          logger.log(`!!! Echo resp: ${JSON.stringify(resp)}`);
         })
-        .catch(console.error);
+        .catch(logger.error);
     }, 5000);
-  }, [props.payload.file, sendMessageToUnity]);
+  }, [props.payload.file, logger, sendMessageToUnity]);
 
   // Register Unity ready handler via the `UnityStarted` event.
   const handleUnityStarted =
     useCallback<RNUnityCommBridgeUnityEventHandler>(() => {
       if (!unityReadyHandled.current) {
         unityReadyHandled.current = true;
-        console.log('[UnityView] Handling Unity ready event');
+        logger.log('[UnityView] Handling Unity ready event');
         handleUnityReady();
       } else {
-        console.log('[UnityView] Ignoring Unity ready event');
+        logger.log('[UnityView] Ignoring Unity ready event');
       }
-    }, [handleUnityReady]);
+    }, [logger, handleUnityReady]);
   useEffect(() => {
     registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
   }, [handleUnityStarted, registerEventHandler]);
@@ -78,16 +81,22 @@ export const UnityView: FC<Props> = props => {
           if (resp?.m_sAdditionalInfo === backupCheckPayload) {
             if (!unityReadyHandled.current) {
               unityReadyHandled.current = true;
-              console.log('[UnityView] Handling Unity ready backup check');
+              logger.log('[UnityView] Handling Unity ready backup check');
               handleUnityReady();
             } else {
-              console.log('[UnityView] Ignoring Unity ready backup check');
+              logger.log('[UnityView] Ignoring Unity ready backup check');
             }
           }
         })
-        .catch(console.error);
+        .catch(logger.error);
     }
-  }, [sendMessageToUnity, handleUnityReady, unityViewKey, unityViewKeyWas]);
+  }, [
+    sendMessageToUnity,
+    handleUnityReady,
+    logger,
+    unityViewKey,
+    unityViewKeyWas,
+  ]);
 
   // IMPORTANT: DO NOT use this effect for anything else!
   useEffect(() => {
