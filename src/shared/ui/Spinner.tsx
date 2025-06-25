@@ -11,6 +11,7 @@ type Props = AccessibilityProps & {
   isVisible?: boolean;
   overlayColor?: string;
   withOverlay?: boolean;
+  overlayStyle?: ViewStyle;
 };
 
 /**
@@ -28,6 +29,7 @@ export function Spinner({
   isVisible = true,
   withOverlay = false,
   overlayColor = palette.spinner_container,
+  overlayStyle: overlayStyleProp,
   ...props
 }: Props) {
   const spinner = (
@@ -52,9 +54,9 @@ export function Spinner({
       style={
         withOverlay
           ? {
-              ...overlayStyle,
-              paddingBottom: 20,
               backgroundColor: overlayColor,
+              ...overlayStyle,
+              ...overlayStyleProp,
             }
           : undefined
       }
@@ -69,4 +71,5 @@ const overlayStyle: ViewStyle = {
   ...StyleSheet.absoluteFillObject,
   alignItems: 'center',
   justifyContent: 'center',
+  paddingBottom: 20,
 };

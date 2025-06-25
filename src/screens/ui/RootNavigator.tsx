@@ -44,11 +44,8 @@ import { useDelayedInterval } from '@app/shared/lib/timers/hooks/useDelayedInter
 import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
 import { BackButton } from '@app/shared/ui/BackButton';
 import { XStack } from '@app/shared/ui/base';
-import {
-  ChevronLeftIcon,
-  HomeIcon,
-  UserProfileIcon,
-} from '@app/shared/ui/icons';
+import { ChevronLeftIcon, UserProfileIcon } from '@app/shared/ui/icons';
+import { HomeIcon } from '@app/shared/ui/icons/HomeIcon';
 import { Text } from '@app/shared/ui/Text';
 import { useAvailabilityEvaluator } from '@app/widgets/activity-group/model/hooks/useAvailabilityEvaluator';
 import { useAutoCompletion } from '@app/widgets/survey/model/hooks/useAutoCompletion';
@@ -308,7 +305,7 @@ export const RootNavigator = () => {
                   fallbackRoute="Applets"
                   p={12}
                 >
-                  <HomeIcon color={palette.on_surface} size={24} />
+                  <HomeIcon color={palette.on_surface} />
                 </BackButton>
               ),
             })}

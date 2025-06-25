@@ -92,40 +92,40 @@ export const activityMarkDownStyles = StyleSheet.create({
   heading1: {
     fontSize: 32,
     lineHeight: 40,
-    marginBottom: 24,
+    marginBottom: 18,
   },
   heading2: {
     fontSize: 28,
     lineHeight: 36,
-    marginBottom: 24,
+    marginBottom: 18,
   },
   heading3: {
     fontSize: 24,
     lineHeight: 32,
-    marginBottom: 24,
+    marginBottom: 18,
   },
   heading4: {
     fontSize: 22,
     lineHeight: 28,
-    marginBottom: 24,
+    marginBottom: 18,
   },
   heading5: {
     fontSize: 20,
     lineHeight: 28,
     fontWeight: '700',
-    marginBottom: 24,
+    marginBottom: 18,
   },
   heading6: {
     fontSize: 18,
     lineHeight: 28,
     fontWeight: '700',
-    marginBottom: 24,
+    marginBottom: 18,
   },
   paragraph: {
     alignSelf: 'center',
     fontSize: 18,
     lineHeight: 28,
-    marginBottom: 24,
+    marginBottom: 18,
   },
   text: {
     flexDirection: 'row',

@@ -20,7 +20,7 @@ export function Score({ label, value, highlighted }: Props) {
           width={17}
           height={16}
           style={{
-            marginRight: 7,
+            marginRight: 8,
             width: 17,
             height: 16,
           }}
@@ -41,8 +41,9 @@ export function Score({ label, value, highlighted }: Props) {
 
       <Box
         br={10}
-        bg={highlighted ? '$surface_variant' : '$surface'}
-        px={40}
+        bg={highlighted ? '$error_container' : '$surface1'}
+        px={16}
+        minWidth={80}
         py={2}
       >
         <Text
@@ -50,6 +51,7 @@ export function Score({ label, value, highlighted }: Props) {
           fontWeight={highlighted ? '700' : '400'}
           fontSize={22}
           lineHeight={28}
+          textAlign="center"
           aria-label="score-value"
         >
           {getFloatPartLength(value) > 2 ? value.toFixed(2) : value}

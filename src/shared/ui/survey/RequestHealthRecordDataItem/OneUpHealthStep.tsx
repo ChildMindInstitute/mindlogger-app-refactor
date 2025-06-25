@@ -158,7 +158,7 @@ export const OneUpHealthStep: FC = () => {
               onEndReached={loadMore}
               onEndReachedThreshold={0.5}
               ListFooterComponent={
-                <Center py="$2">
+                <Center py={12}>
                   <Spinner size={24} isVisible={isResultsLoading} />
                 </Center>
               }

@@ -58,8 +58,12 @@ export function ActivitySectionList({
   const { isUploading } = useUploadObservable();
 
   const sections = useMemo(
-    () => groups.map(group => ({ data: group.activities, key: t(group.name) })),
-    [t, groups],
+    () =>
+      groups.map(group => ({
+        data: group.activities,
+        name: group.name,
+      })),
+    [groups],
   );
 
   const { startFlow, startActivity } = useStartEntity({
@@ -177,9 +181,9 @@ export function ActivitySectionList({
       <SectionList
         sections={sections}
         renderSectionHeader={({ section }) => (
-          <SectionHeader>{section.key}</SectionHeader>
+          <SectionHeader>{t(section.name)}</SectionHeader>
         )}
-        renderItem={({ item }) => {
+        renderItem={({ item, section }) => {
           const entityId = item.flowId || item.activityId;
           const responseTypes = activityResponseTypes[entityId];
           const supportsApp = responseTypes.every(getSupportsMobile);
@@ -195,6 +199,7 @@ export function ActivitySectionList({
                   startActivityOrFlow(item).catch(console.error);
                 }
               }}
+              sectionName={section.name}
             />
           );
         }}
