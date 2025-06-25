@@ -95,7 +95,14 @@ export function FlowElementSwitch({
     case 'Summary': {
       return (
         <Box flex={1}>
-          <BackButton alignSelf="flex-end" mr={16} mt={10} mb={4}>
+          <BackButton
+            aria-label="close-button"
+            alignSelf="flex-end"
+            mr={16}
+            mt={10}
+            mb={4}
+            p={12}
+          >
             <CloseIcon color={palette.on_surface} size={18} />
           </BackButton>
 

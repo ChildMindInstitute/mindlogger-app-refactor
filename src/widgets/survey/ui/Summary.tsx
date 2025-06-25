@@ -85,6 +85,7 @@ export function Summary({
         fontSize={28}
         lineHeight={36}
         mx={16}
+        mb={24}
         accessibilityLabel="report_summary-text"
       >
         {t('activity_summary:report_summary')}
