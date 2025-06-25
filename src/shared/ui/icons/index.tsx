@@ -35,10 +35,6 @@ export const UserProfileIcon: FC<IconProps> = props => (
   <FontAwesome6 name="user" iconStyle="solid" {...props} />
 );
 
-export const HomeIcon: FC<IconProps> = props => (
-  <Entypo name="home" {...props} />
-);
-
 export const ChevronRightIcon: FC<IconProps> = props => (
   <FontAwesome6 name="angle-right" iconStyle="solid" {...props} />
 );
