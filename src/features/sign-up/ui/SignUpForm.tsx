@@ -3,11 +3,12 @@ import { TouchableWithoutFeedback } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import Animated, { LinearTransition } from 'react-native-reanimated';
 
 import { palette } from '@app/shared/lib/constants/palette';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
-import { Box, BoxProps, YStack } from '@app/shared/ui/base';
+import { Box, BoxProps } from '@app/shared/ui/base';
 import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
 import { InputField } from '@app/shared/ui/form/InputField';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
@@ -49,9 +50,10 @@ const SignUpForm: FC<Props> = props => {
   return (
     <Box {...props}>
       <FormProvider {...form}>
-        <YStack space={12}>
+        <Animated.View layout={LinearTransition} style={{ gap: 12 }}>
           <InputField
             name="email"
+            keyboardType="email-address"
             accessibilityLabel="signup-email-input"
             placeholder={t('auth:email')}
           />
@@ -77,7 +79,7 @@ const SignUpForm: FC<Props> = props => {
               <TouchableWithoutFeedback
                 onPress={() => setPasswordHidden(!isPasswordHidden)}
               >
-                <ShowPasswordIcon size={24} color={palette.white} />
+                <ShowPasswordIcon size={18} color={palette.on_surface} />
               </TouchableWithoutFeedback>
             }
             hideError={isPasswordFocus}
@@ -107,7 +109,7 @@ const SignUpForm: FC<Props> = props => {
           >
             {t('sign_up_form:sign_up')}
           </SubmitButton>
-        </YStack>
+        </Animated.View>
       </FormProvider>
     </Box>
   );
