@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 import { ScheduleEvent } from '@app/entities/event/lib/types/event';
 import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
@@ -43,6 +44,7 @@ export function FlowElementSwitch({
   entityStartedAt,
   flowId,
 }: Props) {
+  const { t } = useTranslation();
   const context = useMemo(
     () => ({
       ...payload,
@@ -93,8 +95,15 @@ export function FlowElementSwitch({
     case 'Summary': {
       return (
         <Box flex={1}>
-          <BackButton alignSelf="flex-end" mr={16} mt={10} mb={4}>
-            <CloseIcon color={palette.tertiary} size={30} />
+          <BackButton
+            aria-label="close-button"
+            alignSelf="flex-end"
+            mr={16}
+            mt={10}
+            mb={4}
+            p={12}
+          >
+            <CloseIcon color={palette.on_surface} size={18} />
           </BackButton>
 
           <Summary {...payload} onFinish={() => onComplete('regular')} />

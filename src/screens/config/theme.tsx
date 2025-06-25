@@ -6,6 +6,7 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
 import { IS_TABLET } from '@app/shared/lib/constants';
 import { palette } from '@app/shared/lib/constants/palette';
+import { BackButton } from '@app/shared/ui/BackButton';
 import { CloseIcon } from '@app/shared/ui/icons';
 import { AboutIcon } from '@app/shared/ui/icons/About';
 import { DataIcon } from '@app/shared/ui/icons/Data';
@@ -13,18 +14,12 @@ import { SurveyIcon } from '@app/shared/ui/icons/Survey';
 import { Text } from '@app/shared/ui/Text';
 import { DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
 
-import { AppletDetailsParamList, RootStackNavigationProps } from './types';
+import { AppletDetailsParamList } from './types';
 import { HeaderTitle } from '../ui/HeaderTitle';
-
-type ScreenOptions = {
-  navigation: RootStackNavigationProps;
-};
 
 type BottomScreenOptions = BottomTabScreenProps<AppletDetailsParamList>;
 
-export const getScreenOptions = ({
-  navigation,
-}: ScreenOptions): NativeStackNavigationOptions => {
+export const getScreenOptions = (): NativeStackNavigationOptions => {
   return {
     headerStyle: {
       backgroundColor: DEFAULT_BG,
@@ -34,9 +29,9 @@ export const getScreenOptions = ({
     headerTitleAlign: 'center',
     headerBackVisible: false,
     headerLeft: () => (
-      <Text aria-label="close-button" onPress={navigation.goBack} p={12}>
+      <BackButton aria-label="close-button" p={12}>
         <CloseIcon color={palette.on_surface} size={20} />
-      </Text>
+      </BackButton>
     ),
   };
 };

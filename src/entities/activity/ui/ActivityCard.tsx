@@ -27,6 +27,7 @@ type Props = {
   disabled: boolean;
   onPress?: (...args: unknown[]) => void;
   isWebOnly?: boolean;
+  sectionName?: string;
 };
 
 export const ActivityCard: FC<Props> = ({
@@ -34,6 +35,7 @@ export const ActivityCard: FC<Props> = ({
   disabled,
   isWebOnly = false,
   onPress,
+  sectionName,
 }) => {
   const { t } = useTranslation();
   const { assignment } = useActivityAssignment({
@@ -111,7 +113,12 @@ export const ActivityCard: FC<Props> = ({
             )}
           </YStack>
 
-          <TimeStatusRecord activity={activity} />
+          <TimeStatusRecord
+            activity={activity}
+            color={
+              sectionName === 'additional:available' ? '$green' : undefined
+            }
+          />
 
           {IS_ANDROID && activity.type === ActivityType.Flanker && (
             <Text mt={12} color={palette.error}>

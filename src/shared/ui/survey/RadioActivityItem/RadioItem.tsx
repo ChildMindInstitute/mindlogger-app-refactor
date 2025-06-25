@@ -7,7 +7,7 @@ import { getSelectorColors } from '@app/shared/lib/utils/survey/survey';
 
 import { RadioOption } from './types';
 import { Box, RadioGroup, XStack } from '../../base';
-import { QuestionTooltipIcon } from '../../icons';
+import { QuestionIcon } from '../../icons/QuestionIcon';
 import { Text } from '../../Text';
 import { Tooltip } from '../../Tooltip';
 
@@ -55,9 +55,8 @@ export const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
       p={16}
       my={8}
       gap={10}
-      jc="center"
+      jc="space-between"
       ai="center"
-      ac="center"
       borderRadius={12}
       borderWidth={2}
       borderColor={borderColor}
@@ -89,7 +88,7 @@ export const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
         aria-label={'radio-option-text'}
         fontSize={18}
         color={textColor}
-        flexGrow={1}
+        flex={1}
       >
         {name}
       </Text>
@@ -99,7 +98,7 @@ export const RadioItem: FC<RadioLabelProps & AccessibilityProps> = ({
           aria-label={'tooltip_view-' + tooltipText}
           markdown={tooltipText}
         >
-          <QuestionTooltipIcon color={tooltipColor} size={22} />
+          <QuestionIcon color={tooltipColor} />
         </Tooltip>
       )}
     </XStack>

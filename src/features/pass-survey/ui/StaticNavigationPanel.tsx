@@ -5,6 +5,7 @@ import { Stepper, StepperProps } from '@app/shared/ui/Stepper';
 
 type Props = XStackProps & {
   stepper: Omit<StepperProps, 'startFrom' | 'stepsCount'>;
+  hideProgress?: boolean;
 };
 
 export function StaticNavigationPanel(props: Props) {
@@ -12,7 +13,7 @@ export function StaticNavigationPanel(props: Props) {
 
   return (
     <Stepper startFrom={0} stepsCount={0} {...props.stepper}>
-      <Stepper.Progress />
+      {!props.hideProgress && <Stepper.Progress />}
 
       <Stepper.NavigationPanel {...props}>
         <></>
