@@ -2,12 +2,15 @@ import React, { FC } from 'react';
 
 import { Box, BoxProps, XStack, YStack } from './base';
 import { Text } from './Text';
+import { IS_SMALL_WIDTH_SCREEN } from '../lib/constants';
 import { format, getLast7Dates } from '../lib/utils/dateTime';
 
 export const HorizontalCalendar: FC<BoxProps> = styledProps => {
   const currentDate = new Date();
   const title = format(currentDate, 'MMMM y');
   const dates = getLast7Dates();
+
+  const daySize = IS_SMALL_WIDTH_SCREEN ? 44 : 50;
 
   return (
     <Box gap={8} pt={16} px={16} {...styledProps}>
@@ -27,8 +30,8 @@ export const HorizontalCalendar: FC<BoxProps> = styledProps => {
             <YStack
               key={dateOfMonth}
               aria-label="calendar-item"
-              width={50}
-              height={50}
+              width={daySize}
+              height={daySize}
               ai="center"
               jc="center"
               br={999}
