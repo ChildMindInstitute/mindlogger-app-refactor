@@ -1,11 +1,5 @@
 import { ActivityListItem } from '@app/entities/activity/lib/types/activityListItem';
 
-export type ActivityListGroup = {
-  activities: Array<ActivityListItem>;
-  name: string;
-  type: ActivityGroupType;
-};
-
 export const enum ActivityGroupType {
   NotDefined = 0,
   InProgress = 1,
@@ -18,4 +12,10 @@ export const ActivityGroupTypeNames = {
   [ActivityGroupType.InProgress]: 'additional:in_progress',
   [ActivityGroupType.Scheduled]: 'additional:scheduled',
   [ActivityGroupType.Available]: 'additional:available',
+} as const;
+
+export type ActivityListGroup = {
+  activities: Array<ActivityListItem>;
+  name: (typeof ActivityGroupTypeNames)[keyof typeof ActivityGroupTypeNames];
+  type: ActivityGroupType;
 };
