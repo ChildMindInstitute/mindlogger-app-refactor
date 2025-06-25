@@ -66,7 +66,7 @@ export function Summary({
 
   if (!initialized) {
     return (
-      <Box flex={1} mb={bottom}>
+      <Box flex={1}>
         <Box style={styles.scrollView} mx={20} />
 
         <StaticNavigationPanel
@@ -84,8 +84,7 @@ export function Summary({
       <Text
         fontSize={28}
         lineHeight={36}
-        mx={20}
-        mb={20}
+        mx={16}
         accessibilityLabel="report_summary-text"
       >
         {t('activity_summary:report_summary')}
@@ -107,9 +106,11 @@ export function Summary({
 
       <StaticNavigationPanel
         stepper={{ onEndReached: onFinish }}
+        hideProgress
         p={16}
         pb={16 + bottom}
-        minHeight={24}
+        btc="$surface_variant"
+        btw={1}
       />
     </Box>
   );
