@@ -17,7 +17,7 @@ export function AlertList({ alerts }: Props) {
   }
 
   return (
-    <Box bg="$surface1" br={10} p={20} mb={20} aria-label="alerts-group">
+    <Box bg="$error_container" br={10} p={20} mb={20} aria-label="alerts-group">
       <Text fontWeight="700" fontSize={22} lineHeight={28} mb={10}>
         {t('activity_summary:alerts')}
       </Text>
