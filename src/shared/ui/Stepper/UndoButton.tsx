@@ -27,7 +27,9 @@ export function UndoButton({ children, isIcon }: Props) {
       mode="secondary"
       aria-label="undo-button"
       onPress={undo}
-      width="100%"
+      maxWidth="100%"
+      width={120}
+      px={10}
     >
       {children}
     </SubmitButton>
