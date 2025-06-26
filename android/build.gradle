@@ -26,6 +26,9 @@ allprojects {
            // react-native-background-fetch
            url("${project(':react-native-background-fetch').projectDir}/libs")
        }
+       flatDir {
+         dirs "${project(':unityLibrary').projectDir}/libs"
+       }
     }
 }
 

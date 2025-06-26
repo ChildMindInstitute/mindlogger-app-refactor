@@ -2,6 +2,7 @@ import { Coordinates } from '@app/shared/ui/survey/Geolocation/types';
 
 import {
   AbTestResponse,
+  UnityResponse,
   ActivityItemType,
   AudioPlayerResponse,
   AudioResponse,
@@ -62,6 +63,14 @@ export interface AbTestPipelineAnswer extends PipelineItemAnswerBase {
   type: 'AbTest';
   value: {
     answer?: AbTestResponse;
+    additionalAnswer?: string;
+  };
+}
+
+interface UnityPipelineAnswer extends PipelineItemAnswerBase {
+  type: 'Unity';
+  value: {
+    answer?: UnityResponse;
     additionalAnswer?: string;
   };
 }
@@ -232,6 +241,7 @@ export type PipelineItemAnswer =
   | TextInputPipelineAnswer
   | ParagraphTextPipelineAnswer
   | AbTestPipelineAnswer
+  | UnityPipelineAnswer
   | StabilityTrackerPipelineAnswer
   | DrawingTestPipelineAnswer
   | FlankerPipelineAnswer

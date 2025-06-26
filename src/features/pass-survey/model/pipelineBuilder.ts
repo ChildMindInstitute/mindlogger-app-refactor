@@ -26,6 +26,23 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
           ) satisfies PipelineItem[];
         }
 
+        case 'Unity': {
+          return {
+            id: item.id,
+            name: item.name,
+            type: item.inputType,
+            payload: item.config,
+            question: item.question,
+            isSkippable: item.isSkippable,
+            isAbleToMoveBack: item.isAbleToMoveBack,
+            canBeReset: item.canBeReset,
+            hasTopNavigation: item.hasTopNavigation,
+            validationOptions: item.validationOptions,
+            timer: null,
+            conditionalLogic: item.conditionalLogic,
+          } satisfies PipelineItem;
+        }
+
         case 'StabilityTracker': {
           return {
             id: item.id,

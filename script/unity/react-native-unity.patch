@@ -1,0 +1,17 @@
+--- UPlayer.java	2025-06-19 14:39:56
++++ UPlayer.java	2025-06-19 14:39:56
+@@ -97,7 +97,13 @@
+ 
+             return (FrameLayout) getFrameLayout.invoke(unityPlayer);
+         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+-            return unityPlayer;
++            // Patch taken from: https://github.com/azesmway/react-native-unity/issues/123#issuecomment-2508887728
++            // If it is old UnityPlayer, use isInstance() and cast() to bypass incompatible type checks when compiling using newer versions of UnityPlayer
++            if (FrameLayout.class.isInstance(unityPlayer)) {
++                return FrameLayout.class.cast(unityPlayer);
++            } else {
++                return null;
++            }
+         }
+     }
+ 
