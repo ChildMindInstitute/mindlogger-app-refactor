@@ -47,7 +47,9 @@ export function NextButton({ children, isIcon, accessibilityLabel }: Props) {
     <SubmitButton
       aria-label={`${accessibilityLabel}-bottom` ?? ''}
       onPress={onPressNextDebounced}
-      width="100%"
+      maxWidth="100%"
+      width={120}
+      px={10}
     >
       {children}
     </SubmitButton>
