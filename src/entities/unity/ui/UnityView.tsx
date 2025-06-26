@@ -10,12 +10,16 @@ import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { Text } from '@app/shared/ui/Text';
 
+import { testJson } from './tmp-fixture';
 import {
   useRNUnityCommBridge,
   RNUnityCommBridgeUnityEventHandler,
   newEchoMessage,
 } from '../lib/hook/useRNUnityCommBridge';
-import { UnityEventUnityStarted } from '../lib/types/unityMessage';
+import {
+  UnityEventEndUnity,
+  UnityEventUnityStarted,
+} from '../lib/types/unityMessage';
 
 type Props = {
   payload: UnityPipelineItem['payload'];
@@ -35,23 +39,33 @@ export const UnityView: FC<Props> = props => {
   const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
     useRNUnityCommBridge({ rnUnityViewRef });
 
-  const handleUnityReady = useCallback(() => {
+  const handleUnityReady = useCallback(async () => {
     logger.log(
       `!!! TODO: Load activity config: ${JSON.stringify(props.payload.file)}`,
     );
 
-    // const echoResponse = await sendMessageToUnity(
-    //   newEchoMessage(JSON.stringify({ test: 'this', and: { that: 42 } })),
-    // );
-    // logger.log(`!!! echoResponse: ${JSON.stringify(echoResponse)}`);
+    // logger.log('!!! Sending LoadConfigFile message ...');
+    // const loadConfigFileResp = await sendMessageToUnity({
+    //   m_sId: uuidv4(),
+    //   m_sKey: 'LoadConfigFile',
+    //   m_sAdditionalInfo: JSON.stringify(testJson),
+    // });
+    // logger.log(`!!! loadConfigFileResp: ${JSON.stringify(loadConfigFileResp)}`);
 
-    logger.log('!!! Waiting before sending message ...');
+    // TODO: Look into why this is happening.
+    // We ave to wait until the loading screen appears before sending in the
+    // config JSON. But for some reasons the `UnityStart` message never arrives
+    // and the "backup" check below resolves too soon. So for now, to continue
+    // testing we have to wait like 5 seconds for the loading screen to show.
+    logger.log('!!! Waiting before sending LoadConfigFile message ...');
     setTimeout(() => {
-      sendMessageToUnity(
-        newEchoMessage(JSON.stringify({ test: 'this', and: { that: 42 } })),
-      )
+      sendMessageToUnity({
+        m_sId: uuidv4(),
+        m_sKey: 'LoadConfigFile',
+        m_sAdditionalInfo: JSON.stringify(testJson),
+      })
         .then(resp => {
-          logger.log(`!!! Echo resp: ${JSON.stringify(resp)}`);
+          logger.log(`!!! LoadConfigFile resp: ${JSON.stringify(resp)}`);
         })
         .catch(logger.error);
     }, 5000);
@@ -59,11 +73,11 @@ export const UnityView: FC<Props> = props => {
 
   // Register Unity ready handler via the `UnityStarted` event.
   const handleUnityStarted =
-    useCallback<RNUnityCommBridgeUnityEventHandler>(() => {
+    useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
       if (!unityReadyHandled.current) {
         unityReadyHandled.current = true;
         logger.log('[UnityView] Handling Unity ready event');
-        handleUnityReady();
+        await handleUnityReady();
       } else {
         logger.log('[UnityView] Ignoring Unity ready event');
       }
@@ -71,6 +85,13 @@ export const UnityView: FC<Props> = props => {
   useEffect(() => {
     registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
   }, [handleUnityStarted, registerEventHandler]);
+
+  const handleEndUnity = useCallback<RNUnityCommBridgeUnityEventHandler>(() => {
+    logger.log(`!!! TODO: Handle EndUnity event`);
+  }, [logger]);
+  useEffect(() => {
+    registerEventHandler(UnityEventEndUnity, handleEndUnity);
+  }, [handleEndUnity, registerEventHandler]);
 
   // Register a backup Unity ready handler via a `Echo` message.
   useEffect(() => {
@@ -82,7 +103,7 @@ export const UnityView: FC<Props> = props => {
             if (!unityReadyHandled.current) {
               unityReadyHandled.current = true;
               logger.log('[UnityView] Handling Unity ready backup check');
-              handleUnityReady();
+              handleUnityReady().catch(logger.error);
             } else {
               logger.log('[UnityView] Ignoring Unity ready backup check');
             }
