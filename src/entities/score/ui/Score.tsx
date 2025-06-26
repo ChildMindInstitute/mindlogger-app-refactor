@@ -1,6 +1,5 @@
 import { Image } from 'react-native';
 
-import { colors } from '@app/shared/lib/constants/colors';
 import { getFloatPartLength } from '@app/shared/lib/utils/common';
 import { Box, XStack } from '@app/shared/ui/base';
 import { Text } from '@app/shared/ui/Text';
@@ -21,7 +20,7 @@ export function Score({ label, value, highlighted }: Props) {
           width={17}
           height={16}
           style={{
-            marginRight: 7,
+            marginRight: 8,
             width: 17,
             height: 16,
           }}
@@ -32,19 +31,28 @@ export function Score({ label, value, highlighted }: Props) {
         mr={8}
         flex={1}
         fontSize={18}
-        fontWeight={highlighted ? 'bold' : 'normal'}
-        color={highlighted ? colors.red2 : 'black'}
-        accessibilityLabel="score-name"
+        lineHeight={24}
+        fontWeight={highlighted ? '700' : '400'}
+        color={highlighted ? '$error' : '$on_surface'}
+        aria-label="score-name"
       >
         {label}
       </Text>
 
-      <Box br={10} bg={highlighted ? '$lighterGrey5' : 'white'} px={40} py={2}>
+      <Box
+        br={10}
+        bg={highlighted ? '$error_container' : '$surface1'}
+        px={16}
+        minWidth={80}
+        py={2}
+      >
         <Text
-          color={highlighted ? colors.red2 : 'black'}
-          fontWeight={highlighted ? 'bold' : 'normal'}
+          color={highlighted ? '$error' : '$on_surface'}
+          fontWeight={highlighted ? '700' : '400'}
           fontSize={22}
-          accessibilityLabel="score-value"
+          lineHeight={28}
+          textAlign="center"
+          aria-label="score-value"
         >
           {getFloatPartLength(value) > 2 ? value.toFixed(2) : value}
         </Text>

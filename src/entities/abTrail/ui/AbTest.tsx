@@ -3,7 +3,7 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AbTestPayload } from '@app/abstract/lib/types/abTrails';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import {
   StreamEventLoggable,
   AbTestStreamEvent,
@@ -94,7 +94,7 @@ export const AbTest: FC<Props> = props => {
         mx={ShapesRectPadding}
         mb={38}
         fontSize={15}
-        color={isMessageError() ? colors.red : colors.black}
+        color={isMessageError() ? palette.red : palette.neutral0}
       >
         {getDisplayMessage()}
       </Text>

@@ -8,10 +8,12 @@ import {
 
 import { XStack, YStack } from '@tamagui/stacks';
 import { useIsMutating } from '@tanstack/react-query';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useOnMutationCacheChange } from '@app/shared/api/hooks/useOnMutationCacheChange';
 import { useUploadObservable } from '@app/shared/lib/hooks/useUploadObservable';
 import { Box, BoxProps } from '@app/shared/ui/base';
+import { GradientOverlay } from '@app/shared/ui/GradientOverlay';
 import { LoadListError } from '@app/shared/ui/LoadListError';
 import { NoListItemsYet } from '@app/shared/ui/NoListItemsYet';
 
@@ -31,6 +33,16 @@ type Props = {
   ListFooterComponent: JSX.Element;
 } & BoxProps;
 
+const THUMBNAIL_BG_COLORS = [
+  '$pink',
+  '$blue',
+  '$green',
+  '$yellow',
+  '$brown',
+  '$purple',
+  '$orange',
+];
+
 const AppletListView: FC<Props> = ({
   onAppletPress,
   refreshControl,
@@ -40,6 +52,7 @@ const AppletListView: FC<Props> = ({
   const { error: getAppletsError, data: applets } = useAppletsQuery({
     select: response => mapApplets(response.data.result),
   });
+  const { bottom } = useSafeAreaInsets();
 
   const isRefreshing = useIsMutating(['refresh']);
 
@@ -50,7 +63,7 @@ const AppletListView: FC<Props> = ({
   const hasError = !!refreshError || !!getAppletsError;
 
   const renderItem: ListRenderItem<Applet> = useCallback(
-    ({ item }) => (
+    ({ item, index }) => (
       <AppletCard
         accessibilityLabel={`applet-${item.displayName}`}
         applet={item}
@@ -58,6 +71,7 @@ const AppletListView: FC<Props> = ({
         onPress={() =>
           onAppletPress({ id: item.id, displayName: item.displayName })
         }
+        thumbnailColor={THUMBNAIL_BG_COLORS[index % THUMBNAIL_BG_COLORS.length]}
       />
     ),
     [isRefreshing, isUploading, onAppletPress],
@@ -74,7 +88,7 @@ const AppletListView: FC<Props> = ({
   return (
     <Box {...styledProps}>
       <FlatList
-        contentContainerStyle={styles.flatList}
+        contentContainerStyle={[styles.flatList, { paddingBottom: bottom }]}
         accessibilityLabel="applet-list"
         data={applets ?? []}
         keyExtractor={getId}
@@ -95,11 +109,12 @@ const AppletListView: FC<Props> = ({
           )
         }
       />
+      <GradientOverlay />
     </Box>
   );
 };
 
-const Separator = () => <YStack my={9} />;
+const Separator = () => <YStack my={8} />;
 
 type IdentifiedObject = {
   id: string;
@@ -110,6 +125,8 @@ const getId = (item: IdentifiedObject) => item.id;
 const styles = StyleSheet.create({
   flatList: {
     flexGrow: 1,
+    paddingTop: 16,
+    paddingHorizontal: 16,
   },
   listFooterComponent: {
     flex: 1,

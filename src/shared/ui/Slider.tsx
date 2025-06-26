@@ -7,7 +7,7 @@ import {
 } from '@miblanchard/react-native-slider';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 type Props = SliderProps & { size: number; initialValue: number | null } & {
   onValueChange: NonNullable<SliderProps['onValueChange']>;
@@ -26,7 +26,7 @@ export const Slider: FC<Props & AccessibilityProps> = props => {
 
   return (
     <SliderBase
-      thumbTintColor={colors.primary}
+      thumbTintColor={palette.primary}
       thumbStyle={{
         height: size,
         width: size,
@@ -34,8 +34,8 @@ export const Slider: FC<Props & AccessibilityProps> = props => {
         opacity: opacity,
       }}
       minimumTrackStyle={styles.minimumTrackStyle}
-      maximumTrackTintColor={colors.lightGrey}
-      minimumTrackTintColor={colors.lightGrey}
+      maximumTrackTintColor={palette.surface_variant}
+      minimumTrackTintColor={palette.surface_variant}
       thumbTouchSize={{
         width: size,
         height: size,

@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
   score: {
     flex: 1,
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontWeight: '700',
     fontSize: 20,
     transform: [{ rotate: '90deg' }, { translateX: 15 }],
   },

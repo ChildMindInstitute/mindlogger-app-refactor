@@ -3,7 +3,8 @@ import { render } from '@testing-library/react-native';
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import * as useAudioPlayerHooks from '@app/shared/lib/hooks/useAudioPlayer';
 
-import { ActivityIndicator } from '../../ActivityIndicator';
+import { Spinner } from '../../Spinner';
+import { Text } from '../../Text';
 import { AudioStimulusItem } from '../AudioStimulusItem';
 
 describe('Test AudioStimulusItem', () => {
@@ -22,10 +23,12 @@ describe('Test AudioStimulusItem', () => {
     );
 
     const playButton = audioPlayer.root.findByProps({
-      accessibilityLabel: 'audio-record-btn-text',
+      accessibilityLabel: 'audio-stimulus-btn',
     });
 
-    expect(playButton.props.children).toBe('audio_player:play');
+    expect(playButton.findByType(Text).props.children).toBe(
+      'audio_player:play',
+    );
   });
 
   it('Should render pause button', () => {
@@ -53,10 +56,12 @@ describe('Test AudioStimulusItem', () => {
     );
 
     const playButton = audioPlayer.root.findByProps({
-      accessibilityLabel: 'audio-record-btn-text',
+      accessibilityLabel: 'audio-stimulus-btn',
     });
 
-    expect(playButton.props.children).toBe('audio_player:stop');
+    expect(playButton.findByType(Text).props.children).toBe(
+      'audio_player:stop',
+    );
   });
 
   it('Should render activity indicator while loading', () => {
@@ -83,15 +88,17 @@ describe('Test AudioStimulusItem', () => {
       </TamaguiProvider>,
     );
 
-    const activityIndicator = audioPlayer.root.findByType(ActivityIndicator);
+    const activityIndicator = audioPlayer.root.findByType(Spinner);
 
     const playButton = audioPlayer.root.findByProps({
-      accessibilityLabel: 'audio-record-btn-text',
+      accessibilityLabel: 'audio-stimulus-btn',
     });
 
     expect(Boolean(activityIndicator)).toBe(true);
 
-    expect(playButton.props.children).toBe('audio_player:loading');
+    expect(playButton.findByType(Text).props.children).toBe(
+      'audio_player:loading',
+    );
   });
 
   it('Should render correct button text if replay is not allowed', () => {
@@ -119,9 +126,11 @@ describe('Test AudioStimulusItem', () => {
     );
 
     const playButton = audioPlayer.root.findByProps({
-      accessibilityLabel: 'audio-record-btn-text',
+      accessibilityLabel: 'audio-stimulus-btn',
     });
 
-    expect(playButton.props.children).toBe('audio_player:playing');
+    expect(playButton.findByType(Text).props.children).toBe(
+      'audio_player:playing',
+    );
   });
 });

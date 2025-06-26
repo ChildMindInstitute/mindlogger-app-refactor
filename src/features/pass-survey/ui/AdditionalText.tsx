@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { IS_IOS } from '@app/shared/lib/constants';
 import { Input } from '@app/shared/ui/Input';
 
 type Props = {
@@ -11,9 +11,9 @@ type Props = {
   required: boolean;
 };
 
-const MIN_FIELD_HEIGHT = 40;
+const MIN_FIELD_HEIGHT = 48;
 const MAX_FIELD_HEIGHT = 100;
-const GROW_THRESHOLD = 15;
+const GROW_THRESHOLD = IS_IOS ? 15 : 0;
 
 export function AdditionalText({ value, onChange, required }: Props) {
   const { t } = useTranslation();
@@ -26,8 +26,7 @@ export function AdditionalText({ value, onChange, required }: Props) {
   return (
     <Input
       placeholder={placeholder}
-      accessibilityLabel="additional_text-input"
-      placeholderTextColor={colors.mediumGrey}
+      aria-label="additional_text-input"
       value={value}
       onChangeText={onChange}
       onContentSizeChange={e => {
@@ -40,7 +39,6 @@ export function AdditionalText({ value, onChange, required }: Props) {
       autoCorrect={false}
       multiline
       mode="survey"
-      fontSize={14}
       textAlignVertical="top"
       height={height}
       minHeight={MIN_FIELD_HEIGHT}

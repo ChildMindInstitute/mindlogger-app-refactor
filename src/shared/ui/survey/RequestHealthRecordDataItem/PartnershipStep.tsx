@@ -21,7 +21,7 @@ export const PartnershipStep: FC<PartnershipStepProps> = ({
   const { t } = useTranslation();
 
   return (
-    <YStack gap="$4" px="$4" py="$8">
+    <YStack gap={12} px={16} pt={32} pb={24}>
       <Box alignItems="center" mb="$2">
         <Image
           source={requestHealthRecordDataIconPartnership}

@@ -1,21 +1,22 @@
 import { View } from 'react-native';
 
 import { styled } from '@tamagui/core';
+import { YStack } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 
 import { FeatherCrossIcon, FeatherCheckIcon } from '../icons';
 import { Text } from '../Text';
 
 const themeColors = {
   valid: {
-    iconColor: colors.white,
-    textColor: colors.white,
+    iconColor: palette.on_surface,
+    textColor: palette.on_surface,
   },
   invalid: {
-    iconColor: colors.whiteTsp2,
-    textColor: colors.whiteTsp2,
+    iconColor: palette.error,
+    textColor: palette.error,
   },
 };
 
@@ -85,7 +86,7 @@ export const PasswordRequirements = ({
   const { t } = useTranslation();
   const { textColor } = themeColors.valid;
   return (
-    <>
+    <YStack mt={12}>
       <Text color={textColor}>{t('password_requirements:must_include')}</Text>
 
       <StyledPasswordRequirementContainer>
@@ -97,6 +98,6 @@ export const PasswordRequirements = ({
           />
         ))}
       </StyledPasswordRequirementContainer>
-    </>
+    </YStack>
   );
 };

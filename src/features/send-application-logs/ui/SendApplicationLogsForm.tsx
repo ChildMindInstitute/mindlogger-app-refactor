@@ -2,20 +2,19 @@ import { FC, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
+import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
-import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
-import { Box } from '@app/shared/ui/base';
-import { Center } from '@app/shared/ui/Center';
+import { YStack } from '@app/shared/ui/base';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
 import { Text } from '@app/shared/ui/Text';
 
 export const SendApplicationLogsForm: FC = () => {
   const { t } = useTranslation();
+  const { addSuccessBanner, addErrorBanner } = useBanners();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState<boolean>();
 
   const onSendLogs = async () => {
     setIsLoading(true);
@@ -30,57 +29,37 @@ export const SendApplicationLogsForm: FC = () => {
       getDefaultAnalyticsService().track(MixEvents.UploadLogsError);
     }
 
-    setUploadStatus(result);
+    if (result === false) {
+      addErrorBanner(t('application_logs_screen:error'));
+    } else {
+      addSuccessBanner(t('application_logs_screen:success'));
+    }
+
     setIsLoading(false);
   };
 
   return (
-    <>
-      {isLoading && (
-        <Box position="absolute" bg="$grey2" w="100%" h="100%">
-          <Center flex={1}>
-            <ActivityIndicator size="large" color="$secondary" />
-          </Center>
-        </Box>
-      )}
+    <YStack flex={1} px={16} ai="center" jc="center" gap={32}>
+      <YStack gap={16}>
+        <Text fontSize={18} lineHeight={28} textAlign="center">
+          {t('application_logs_screen:title')}
+        </Text>
 
-      <Box flex={1} p="$5" justifyContent="space-between">
-        <Box>
-          <Text fontSize={18}>{t('application_logs_screen:title')}</Text>
+        <Text fontSize={18} lineHeight={28} textAlign="center">
+          {t('application_logs_screen:subTitle')}
+        </Text>
+      </YStack>
 
-          <Text fontSize={18} mt="$3">
-            {t('application_logs_screen:subTitle')}
-          </Text>
-        </Box>
-
-        <Box>
-          <Box>
-            <SubmitButton
-              mode="dark"
-              onPress={onSendLogs}
-              isLoading={isLoading}
-            >
-              {t('application_logs_screen:upload_button')}
-            </SubmitButton>
-          </Box>
-        </Box>
-      </Box>
-
-      {uploadStatus && (
-        <Box position="absolute" bg="$lightGreen" w="100%" p="$3" px="$4">
-          <Text fontWeight="500" fontSize={16}>
-            {t('application_logs_screen:success')}
-          </Text>
-        </Box>
-      )}
-
-      {uploadStatus === false && (
-        <Box position="absolute" bg="$lightRed" w="100%" p="$3" px="$4">
-          <Text fontWeight="500" fontSize={16} color="$errorRed">
-            {t('application_logs_screen:error')}
-          </Text>
-        </Box>
-      )}
-    </>
+      <SubmitButton
+        mode="primary"
+        onPress={onSendLogs}
+        isLoading={isLoading}
+        disabled={isLoading}
+        width={356}
+        maxWidth="100%"
+      >
+        {t('application_logs_screen:upload_button')}
+      </SubmitButton>
+    </YStack>
   );
 };

@@ -27,7 +27,8 @@ import {
   getIsWebOnly,
   getSupportsMobile,
 } from '@app/shared/lib/utils/responseTypes';
-import { Box, YStack } from '@app/shared/ui/base';
+import { Box, XStack, YStack } from '@app/shared/ui/base';
+import { GradientOverlay } from '@app/shared/ui/GradientOverlay';
 import { ChecklistIcon } from '@app/shared/ui/icons/ChecklistIcon';
 import { Text } from '@app/shared/ui/Text';
 
@@ -37,7 +38,7 @@ import { useAvailabilityEvaluator } from '../model/hooks/useAvailabilityEvaluato
 
 type Props = {
   appletId: string;
-  activityResponseTypes?: Record<string, ResponseType[]>;
+  activityResponseTypes: Record<string, ResponseType[]>;
   groups: Array<ActivityListGroup>;
   completeEntity: CompleteEntityIntoUploadToQueue;
   checkAvailability: CheckAvailability;
@@ -57,8 +58,12 @@ export function ActivitySectionList({
   const { isUploading } = useUploadObservable();
 
   const sections = useMemo(
-    () => groups.map(group => ({ data: group.activities, key: t(group.name) })),
-    [t, groups],
+    () =>
+      groups.map(group => ({
+        data: group.activities,
+        name: group.name,
+      })),
+    [groups],
   );
 
   const { startFlow, startActivity } = useStartEntity({
@@ -172,69 +177,68 @@ export function ActivitySectionList({
   };
 
   return (
-    <SectionList
-      sections={sections}
-      renderSectionHeader={({ section }) => (
-        <SectionHeader>{section.key}</SectionHeader>
-      )}
-      renderItem={({ item }) => {
-        const entityId = item.flowId || item.activityId;
-        const responseTypes = activityResponseTypes[entityId];
-        const supportsApp = responseTypes.every(getSupportsMobile);
-        const isWebOnly = responseTypes.some(getIsWebOnly);
+    <>
+      <SectionList
+        sections={sections}
+        renderSectionHeader={({ section }) => (
+          <SectionHeader>{t(section.name)}</SectionHeader>
+        )}
+        renderItem={({ item, section }) => {
+          const entityId = item.flowId || item.activityId;
+          const responseTypes = activityResponseTypes[entityId];
+          const supportsApp = responseTypes.every(getSupportsMobile);
+          const isWebOnly = responseTypes.some(getIsWebOnly);
 
-        return (
-          <ActivityCard
-            activity={item}
-            disabled={isUploading || (!isWebOnly && !supportsApp)}
-            isWebOnly={isWebOnly}
-            onPress={() => {
-              if (isFocused()) {
-                startActivityOrFlow(item).catch(console.error);
-              }
-            }}
-          />
-        );
-      }}
-      // SectionList doesn't provide a prop for section empty components, so we use
-      // renderSectionFooter to conditionally render any empty sections.
-      renderSectionFooter={({ section }) =>
-        section.data.length ? null : (
-          <EmptyState
-            icon={<ChecklistIcon />}
-            description={t('activity_list_component:no_activities')}
-          />
-        )
-      }
-      ItemSeparatorComponent={ItemSeparator}
-      stickySectionHeadersEnabled={false}
-      contentContainerStyle={styles.sectionList}
-    />
+          return (
+            <ActivityCard
+              activity={item}
+              disabled={isUploading || (!isWebOnly && !supportsApp)}
+              isWebOnly={isWebOnly}
+              onPress={() => {
+                if (isFocused()) {
+                  startActivityOrFlow(item).catch(console.error);
+                }
+              }}
+              sectionName={section.name}
+            />
+          );
+        }}
+        // SectionList doesn't provide a prop for section empty components, so we use
+        // renderSectionFooter to conditionally render any empty sections.
+        renderSectionFooter={({ section }) =>
+          section.data.length ? null : (
+            <EmptyState
+              icon={<ChecklistIcon />}
+              description={t('activity_list_component:no_activities')}
+            />
+          )
+        }
+        ItemSeparatorComponent={ItemSeparator}
+        stickySectionHeadersEnabled={false}
+        contentContainerStyle={styles.sectionList}
+      />
+      <GradientOverlay position="top" />
+      <GradientOverlay position="bottom" />
+    </>
   );
 }
 
 const SectionHeader = ({ children }: PropsWithChildren) => (
-  <Box mb={10}>
-    <Text
-      accessibilityLabel="activity-group-name-text"
-      mt={16}
-      mb={4}
-      fontSize={14}
-      fontWeight="600"
-      color="$darkGrey2"
-    >
+  <XStack ai="center" my={16}>
+    <Text accessibilityLabel="activity-group-name-text" color="$outline" mx={8}>
       {children}
     </Text>
 
-    <Box width="100%" height={1} bc="$darkGrey2" />
-  </Box>
+    <Box flex={1} height={1} bc="$surface_variant" />
+  </XStack>
 );
 
-const ItemSeparator = () => <YStack my={6} />;
+const ItemSeparator = () => <YStack my={8} />;
 
 const styles = StyleSheet.create({
   sectionList: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
     flexGrow: 1,
-    paddingBottom: 42,
   },
 });

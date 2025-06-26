@@ -6,7 +6,9 @@ import { AppRegistry } from 'react-native';
 import { Buffer } from 'buffer';
 import process from 'process';
 import PropTypes from 'prop-types';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
 
+import { palette } from '@shared/lib/constants/palette';
 import { jobRunner } from '@shared/lib/services/jobManagement';
 
 import { name as appName } from './app.json';
@@ -38,5 +40,7 @@ function HeadlessCheck({ isHeadless }) {
 HeadlessCheck.propTypes = {
   isHeadless: PropTypes.bool,
 };
+
+SystemNavigationBar.setNavigationColor(palette.surface1, 'dark', 'navigation');
 
 AppRegistry.registerComponent(appName, () => HeadlessCheck);

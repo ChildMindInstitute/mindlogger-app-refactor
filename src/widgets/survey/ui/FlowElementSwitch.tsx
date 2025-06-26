@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 import { ScheduleEvent } from '@app/entities/event/lib/types/event';
 import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
@@ -10,10 +11,10 @@ import {
   MixEvents,
   MixProperties,
 } from '@app/shared/lib/analytics/IAnalyticsService';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { BackButton } from '@app/shared/ui/BackButton';
 import { Box } from '@app/shared/ui/base';
-import { CrossIcon } from '@app/shared/ui/icons';
+import { CloseIcon } from '@app/shared/ui/icons';
 import { FlowPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
 
 import { FinishItem } from './Finish';
@@ -43,6 +44,7 @@ export function FlowElementSwitch({
   entityStartedAt,
   flowId,
 }: Props) {
+  const { t } = useTranslation();
   const context = useMemo(
     () => ({
       ...payload,
@@ -93,8 +95,15 @@ export function FlowElementSwitch({
     case 'Summary': {
       return (
         <Box flex={1}>
-          <BackButton alignSelf="flex-end" mr={16} mt={10} mb={4}>
-            <CrossIcon color={colors.tertiary} size={30} />
+          <BackButton
+            aria-label="close-button"
+            alignSelf="flex-end"
+            mr={16}
+            mt={10}
+            mb={4}
+            p={12}
+          >
+            <CloseIcon color={palette.on_surface} size={18} />
           </BackButton>
 
           <Summary {...payload} onFinish={() => onComplete('regular')} />

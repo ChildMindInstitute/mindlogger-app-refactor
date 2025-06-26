@@ -12,6 +12,7 @@ import {
 } from '@react-navigation/native';
 
 import { EntityPath } from '@app/abstract/lib/types/entity';
+import { DEFAULT_BG } from '@app/entities/banner/lib/constants';
 import { bannerActions } from '@app/entities/banner/model/slice';
 import { RootStackParamList, ScreenRoute } from '@app/screens/config/types';
 import { NavigationServiceScopes } from '@app/screens/lib/INavigationService';
@@ -23,19 +24,13 @@ import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 const LOGGER_MODULE_NAME = 'NavigationProvider';
 
-const SCREEN_BG_COLOR_OVERRIDES: ScreenRoute[] = [
-  'Applets',
-  'AppletDetails',
-  'InProgressActivity',
-  'ActivityPassedScreen',
-  'Autocompletion',
-];
+const SCREEN_BG_COLOR_OVERRIDES: ScreenRoute[] = ['Applets', 'AppletDetails'];
 
 const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: 'transparent',
+    background: DEFAULT_BG,
   },
 };
 
@@ -53,7 +48,11 @@ const getLinking = ():
   return {
     prefixes: DEEP_LINK_PREFIXES,
     getStateFromPath: (path, options) => {
-      if (path.startsWith('/active-assessment')) {
+      // `/ehr-complete` is intentionally excluded from the AndroidManifest.xml, as it is meant to be handled on iOS only
+      if (
+        path.startsWith('/active-assessment') ||
+        path.startsWith('/ehr-complete')
+      ) {
         getDefaultLogger().info(
           `[${LOGGER_MODULE_NAME}] Found active assessment deep link, opening in app`,
         );
@@ -75,6 +74,12 @@ const getLinking = ():
           };
 
           return state as unknown as PartialState<NavigationState>;
+        } else {
+          // Do nothing to prevent an infinite loop between the web browser and app
+          getDefaultLogger().warn(
+            `[${LOGGER_MODULE_NAME}] No initial navigation state found for active assessment deep link, refusing to handle deep link.`,
+          );
+          return undefined;
         }
       }
 

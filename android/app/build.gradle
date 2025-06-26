@@ -103,8 +103,8 @@ android {
         applicationId "lab.childmindinstitute.data"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1633
-        versionName "2025.06.3"
+        versionCode 1636
+        versionName "2025.06.4"
         resValue "string", "app_name", "Curious"
         resValue "string", "build_config_package", "lab.childmindinstitute.data"
         manifestPlaceholders = [
@@ -161,6 +161,9 @@ android {
 }
 
 dependencies {
+    // Animated GIF support
+    implementation 'com.facebook.fresco:animated-gif:3.6.0'
+
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
@@ -170,20 +173,3 @@ dependencies {
         implementation jscFlavor
     }
 }
-
-project.ext.vectoricons = [
-    iconFontNames: [
-        'FontAwesome.ttf',
-        'FontAwesome5_Regular.ttf',
-        'FontAwesome5_Solid.ttf',
-        'AntDesign.ttf',
-        'Foundation.ttf',
-        'Entypo.ttf',
-        'MaterialIcons.ttf',
-        'MaterialCommunityIcons.ttf',
-        'Feather.ttf',
-        'Octicons.ttf'
-    ]
-]
-
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"

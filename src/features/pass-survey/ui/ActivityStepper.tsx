@@ -8,16 +8,10 @@ import {
 } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
-import { bannerActions } from '@app/entities/banner/model/slice';
 import { useActiveAssessmentLink } from '@app/screens/model/hooks/useActiveAssessmentLink';
-import { colors } from '@app/shared/lib/constants/colors';
-import { useAppDispatch } from '@app/shared/lib/hooks/redux';
-import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
-import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
-import { Box, XStack } from '@app/shared/ui/base';
-import { Center } from '@app/shared/ui/Center';
-import { StatusBar } from '@app/shared/ui/StatusBar';
+import { Box, XStack, YStack } from '@app/shared/ui/base';
+import { Spinner } from '@app/shared/ui/Spinner';
 import {
   OnBeforeBackResult,
   OnBeforeNextResult,
@@ -59,10 +53,8 @@ export function ActivityStepper({
   onFinish,
   flowId,
 }: Props) {
-  const dispatch = useAppDispatch();
   const { t } = useTranslation();
-
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { top } = useSafeAreaInsets();
 
   const [timerHeight, setTimerHeight] = useState(0);
   const [showTimeLeft, setShowTimeLeft] = useState(!!timer);
@@ -324,27 +316,17 @@ export function ActivityStepper({
     onFinish('regular');
   };
 
-  useOnFocus(() => {
-    // Match in-progress activity background color
-    dispatch(bannerActions.setBannersBg(colors.white));
-  });
-
   if (!activityStorageRecord) {
-    return (
-      <Center flex={1}>
-        <ActivityIndicator size="large" color="$secondary" />
-      </Center>
-    );
+    return <Spinner withOverlay />;
   }
 
   return (
     <Box flex={1}>
-      <StatusBar hidden />
-
       {showTimeLeft && (
         <TimeRemaining
-          ml={10}
-          zIndex={1}
+          ml={16}
+          mt={top === 0 ? 12 : 0}
+          zIndex={2}
           entityStartedAt={entityStartedAt}
           timerSettings={timer as HourMinute}
           clockIconShown
@@ -386,7 +368,7 @@ export function ActivityStepper({
             targetSubjectId={targetSubjectId}
           />
           {showTopNavigation && (
-            <Stepper.NavigationPanel mx={16}>
+            <Stepper.NavigationPanel px={16}>
               {canMoveBack && <Stepper.BackButton isIcon />}
               {canReset && <Stepper.UndoButton isIcon />}
 
@@ -447,46 +429,40 @@ export function ActivityStepper({
             }}
           />
 
-          <Box mb={!showBottomNavigation ? 16 : 0}>
+          <YStack borderTopColor="$surface_variant" borderTopWidth={1} gap={8}>
             <ProgressWithTimer
               key={currentPipelineItem?.id}
               duration={currentPipelineItem?.timer}
             />
-          </Box>
 
-          {showBottomNavigation && (
-            <Stepper.NavigationPanel
-              mt={18}
-              minHeight={46}
-              mb={safeAreaBottom ? 0 : 16}
-              gap={10}
-              mx={10}
-            >
-              {canMoveBack && (
-                <Stepper.BackButton>
-                  {t(
-                    isFirstStep
-                      ? 'activity_navigation:return'
-                      : 'activity_navigation:back',
-                  )}
-                </Stepper.BackButton>
-              )}
+            {showBottomNavigation && (
+              <Stepper.NavigationPanel pt={20} px={16} pb={16} gap={8}>
+                {canMoveBack && (
+                  <Stepper.BackButton>
+                    {t(
+                      isFirstStep
+                        ? 'activity_navigation:return'
+                        : 'activity_navigation:back',
+                    )}
+                  </Stepper.BackButton>
+                )}
 
-              {canReset && (
-                <Stepper.UndoButton>
-                  {t('activity_navigation:undo')}
-                </Stepper.UndoButton>
-              )}
+                {canReset && (
+                  <Stepper.UndoButton>
+                    {t('activity_navigation:undo')}
+                  </Stepper.UndoButton>
+                )}
 
-              {canMoveNext && (
-                <Stepper.NextButton
-                  accessibilityLabel={getAccessibilityLabel(nextButtonText)}
-                >
-                  {t(nextButtonText)}
-                </Stepper.NextButton>
-              )}
-            </Stepper.NavigationPanel>
-          )}
+                {canMoveNext && (
+                  <Stepper.NextButton
+                    accessibilityLabel={getAccessibilityLabel(nextButtonText)}
+                  >
+                    {t(nextButtonText)}
+                  </Stepper.NextButton>
+                )}
+              </Stepper.NavigationPanel>
+            )}
+          </YStack>
         </SafeAreaView>
       </Stepper>
     </Box>

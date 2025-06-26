@@ -47,11 +47,11 @@ export const ItemMarkdown: FC<ItemMarkdownProps> = ({
 
             if (assignment && node.content.match(/ata-is-assignment-badge/)) {
               return (
-                <XStack mb={12}>
+                <XStack mt={16} mb={12}>
                   {alignToLeft ? null : <Box flexGrow={1} flexShrink={1} />}
                   <ActivityAssignmentBadge
                     assignment={assignment}
-                    accessibilityLabel="item_display_assignment"
+                    aria-label="item_display_assignment"
                   />
                   <Box flexGrow={1} flexShrink={1} />
                 </XStack>
