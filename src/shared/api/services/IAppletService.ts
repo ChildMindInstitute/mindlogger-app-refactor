@@ -91,30 +91,34 @@ export interface AppletBaseInfoRequest {
   appletId: string;
 }
 
+export type AppletBaseInfoActivity = {
+  autoAssign: boolean;
+  containsResponseTypes: ResponseType[];
+  description: string;
+  id: string;
+  image?: string;
+  isHidden?: boolean;
+  itemCount: number;
+  name: string;
+  order: number;
+};
+
+export type AppletBaseInfoActivityFlow = {
+  activityIds?: string[];
+  autoAssign: boolean;
+  description: string;
+  hideBadge?: boolean;
+  id: string;
+  isHidden?: boolean;
+  name: string;
+  order: number;
+};
+
 export interface AppletBaseInfoResponse {
   result: {
     about: string;
-    activities: {
-      autoAssign: boolean;
-      containsResponseTypes: ResponseType[];
-      description: string;
-      id: string;
-      image?: string;
-      isHidden?: boolean;
-      itemCount: number;
-      name: string;
-      order: number;
-    }[];
-    activityFlows: {
-      activityIds?: string[];
-      autoAssign: boolean;
-      description: string;
-      hideBadge?: boolean;
-      id: string;
-      isHidden?: boolean;
-      name: string;
-      order: number;
-    }[];
+    activities: AppletBaseInfoActivity[];
+    activityFlows: AppletBaseInfoActivityFlow[];
     createdAt: string;
     description: string;
     displayName: string;

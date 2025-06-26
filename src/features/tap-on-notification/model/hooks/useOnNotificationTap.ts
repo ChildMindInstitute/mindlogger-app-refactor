@@ -33,6 +33,7 @@ import {
   PushNotificationType,
 } from '@app/entities/notification/lib/types/notifications';
 import { getDefaultNotificationRefreshService } from '@app/entities/notification/model/notificationRefreshServiceInstance';
+import { getDefaultAppletsService } from '@app/shared/api/services/appletsServiceInstance';
 import { LogTrigger } from '@app/shared/api/services/INotificationService';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
@@ -46,6 +47,7 @@ import { useToast } from '@app/shared/lib/hooks/useToast';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
+import { getResponseTypesMap } from '@app/shared/lib/utils/responseTypes';
 import {
   getEntityProgression,
   isEntityProgressionInProgress,
@@ -273,6 +275,15 @@ export function useOnNotificationTap({
       });
     };
 
+    const { data } = await getDefaultAppletsService().getAppletBaseInfo({
+      appletId,
+    });
+
+    const responseTypes = getResponseTypesMap({
+      activities: data.result.activities,
+      activityFlows: data.result.activityFlows,
+    });
+
     if (entityType === 'flow') {
       const result = await startFlow(
         appletId,
@@ -281,6 +292,7 @@ export function useOnNotificationTap({
         entityName,
         isTimerElapsed,
         targetSubjectId,
+        responseTypes[entityId],
       );
 
       if (result.failReason === 'expired-while-alert-opened') {
@@ -310,6 +322,7 @@ export function useOnNotificationTap({
         entityName,
         isTimerElapsed,
         targetSubjectId,
+        responseTypes[entityId],
       );
 
       if (result.failReason === 'expired-while-alert-opened') {

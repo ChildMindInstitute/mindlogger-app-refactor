@@ -1,8 +1,23 @@
 export const MixProperties = {
   AppletId: 'Applet ID',
+  ActivityId: 'Activity ID',
+  ActivityFlowId: 'Activity Flow ID',
   MindLoggerVersion: 'MindLogger Version',
   SubmitId: 'Submit ID',
+  Feature: 'Feature',
+  ItemTypes: 'Item Types',
+  EHRStatus: 'EHR Status',
 };
+
+export enum MixpanelFeature {
+  EHR = 'EHR',
+}
+
+export enum EHRStatus {
+  ParticipantDeclined = 'Participant Declined',
+  ParticipantSkipped = 'Participant Skipped',
+  ParticipantConsented = 'Participant Consented',
+}
 
 export const MixEvents = {
   DataView: 'Data View',

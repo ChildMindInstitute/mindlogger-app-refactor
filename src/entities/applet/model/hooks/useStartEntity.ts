@@ -10,6 +10,7 @@ import {
 } from '@app/abstract/lib/types/entity';
 import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
 import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
+import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import {
   ActivityFlowRecordDto,
   ActivityRecordDto,
@@ -240,6 +241,7 @@ export function useStartEntity({
     entityName: string,
     isTimerElapsed: boolean,
     targetSubjectId: string | null,
+    itemTypes: ResponseType[],
   ): Promise<StartResult> {
     const breakDueToMediaReferences = await shouldBreakDueToMediaReferences(
       appletId,
@@ -282,6 +284,7 @@ export function useStartEntity({
         appletId,
         appletName: getAppletDisplayName(appletId)!,
         entityName,
+        itemTypes,
       };
 
       if (isActivityInProgress) {
@@ -329,6 +332,7 @@ export function useStartEntity({
     entityName: string,
     isTimerElapsed: boolean,
     targetSubjectId: string | null,
+    itemTypes: ResponseType[],
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
       getDefaultLogger().log('[useStartEntity.startActivity] Mutex is busy');
@@ -358,6 +362,7 @@ export function useStartEntity({
         entityName,
         isTimerElapsed,
         targetSubjectId,
+        itemTypes,
       );
 
       result.failed = !!result.failReason;
@@ -379,6 +384,7 @@ export function useStartEntity({
     entityName: string,
     isTimerElapsed: boolean = false,
     targetSubjectId: string | null,
+    itemTypes: ResponseType[],
   ): Promise<StartResult> {
     const detailsResponse: AppletDetailsResponse =
       getDataFromQuery<AppletDetailsResponse>(
@@ -447,6 +453,7 @@ export function useStartEntity({
         appletId,
         appletName: getAppletDisplayName(appletId)!,
         entityName,
+        itemTypes,
       };
 
       if (isFlowInProgress) {
@@ -523,6 +530,7 @@ export function useStartEntity({
     entityName: string,
     isTimerElapsed: boolean,
     targetSubjectId: string | null,
+    itemTypes: ResponseType[],
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
       getDefaultLogger().log('[useStartEntity.startFlow] Mutex is busy');
@@ -552,6 +560,7 @@ export function useStartEntity({
         entityName,
         isTimerElapsed,
         targetSubjectId,
+        itemTypes,
       );
 
       result.failed = !!result.failReason;
