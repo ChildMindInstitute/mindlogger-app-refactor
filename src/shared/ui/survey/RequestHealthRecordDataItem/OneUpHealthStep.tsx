@@ -2,6 +2,7 @@ import { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, Linking, StyleSheet } from 'react-native';
 
 import { StackStyle } from '@tamagui/core';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
@@ -9,9 +10,12 @@ import { selectAppletsEntityProgressions } from '@app/entities/applet/model/sele
 import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
 import { useOneUpHealthSystemSearchApi } from '@app/shared/api/hooks/useOneUpHealthSystemSearchApi';
 import { OneUpHealthSystemItem } from '@app/shared/api/services/IOneUpHealthService';
+import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
 import { palette } from '@app/shared/lib/constants/palette';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { getResponseTypesMap } from '@app/shared/lib/utils/responseTypes';
 import { getEntityProgression } from '@app/shared/lib/utils/survey/survey';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Center } from '@app/shared/ui/Center';
@@ -19,12 +23,14 @@ import { CloseIcon } from '@app/shared/ui/icons';
 import { Input } from '@app/shared/ui/Input';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
+import { trackEHRProviderSearch } from '@app/widgets/survey/lib/surveyStateAnalytics';
 
 import { HealthSystemItem } from './HealthSystemItem';
 import { GradientOverlay } from '../../GradientOverlay';
 import { SubmitButton } from '../../SubmitButton';
 
 export const OneUpHealthStep: FC = () => {
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const flatListRef = useRef<FlatList>(null);
@@ -32,6 +38,18 @@ export const OneUpHealthStep: FC = () => {
   const { appletId, activityId, flowId, eventId, targetSubjectId } = useContext(
     ActivityIdentityContext,
   );
+
+  useOnFocus(() => {
+    const baseInfo = new QueryDataUtils(queryClient).getBaseInfo(appletId);
+    const itemTypesMap = baseInfo ? getResponseTypesMap(baseInfo) : {};
+
+    trackEHRProviderSearch({
+      appletId,
+      activityId,
+      flowId,
+      itemTypes: itemTypesMap[activityId],
+    });
+  });
 
   const progressions = useAppSelector(selectAppletsEntityProgressions);
   const progression = useMemo(

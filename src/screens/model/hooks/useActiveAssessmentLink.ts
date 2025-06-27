@@ -92,6 +92,11 @@ export const useActiveAssessmentLink = () => {
         'ehrSearchSkipped',
         false,
       );
+      setItemCustomProperty<RequestHealthRecordDataPipelineItem>(
+        ehrItemIndex,
+        'ehrShareSuccess',
+        true,
+      );
     }
   }
 };

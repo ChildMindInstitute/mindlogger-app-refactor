@@ -151,7 +151,7 @@ export function ActivityStepper({
     handlePrevSubStep,
     nextButtonText: subStepNextButtonText,
   } = useSubSteps({
-    currentStep,
+    itemStep: currentStep,
     item: currentPipelineItem,
     answer: activityStorageRecord?.answers?.[currentStep],
     setSubStep: (subStep: number) => {

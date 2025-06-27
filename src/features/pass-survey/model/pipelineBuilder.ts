@@ -423,6 +423,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
             additionalEHRs: null,
             ehrSearchSkipped: false,
+            ehrShareSuccess: false,
           } satisfies PipelineItem;
         }
 

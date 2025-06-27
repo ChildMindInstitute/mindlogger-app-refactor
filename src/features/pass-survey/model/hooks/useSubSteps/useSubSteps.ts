@@ -17,14 +17,15 @@ import { trackEHRProviderSearchSkipped } from '@app/widgets/survey/lib/surveySta
 import { useActivityState } from '../useActivityState';
 
 type UseSubStepsProps = {
-  currentStep: number;
+  /** Current step of the item in the activity */
+  itemStep: number;
   item?: PipelineItem;
   answer?: PipelineItemAnswer['value'];
   setSubStep: (subStep: number) => void;
 };
 
 export function useSubSteps({
-  currentStep,
+  itemStep,
   item,
   answer,
   setSubStep,
@@ -104,7 +105,7 @@ export function useSubSteps({
           // Only track a skipped status (used for Mixpanel tracking) and Mixpanel event if no
           // additional EHRs have been requested yet
           setItemCustomProperty<RequestHealthRecordDataPipelineItem>(
-            currentStep,
+            itemStep,
             'ehrSearchSkipped',
             true,
           );
@@ -127,7 +128,7 @@ export function useSubSteps({
     item,
     subStep,
     setItemCustomProperty,
-    currentStep,
+    itemStep,
     queryClient,
     appletId,
     activityId,

@@ -58,6 +58,7 @@ const mockItem: RequestHealthRecordDataPipelineItem = {
   payload: mockConfig,
   additionalEHRs: null,
   ehrSearchSkipped: false,
+  ehrShareSuccess: false,
 };
 
 const onChangeMock = jest.fn();

@@ -36,8 +36,8 @@ import {
 } from '@app/shared/lib/utils/survey/survey';
 import { getFlowRecordKey } from '@app/widgets/survey/lib/storageHelpers';
 import {
-  LogActivityActionParams,
-  LogFlowActionParams,
+  TrackActivityActionParams,
+  TrackFlowActionParams,
   trackRestartActivity,
   trackRestartFlow,
   trackResumeActivity,
@@ -282,7 +282,7 @@ export function useStartEntity({
 
       logger.cancelSending();
 
-      const logParams: LogActivityActionParams = {
+      const logParams: TrackActivityActionParams = {
         activityId,
         appletId,
         appletName: getAppletDisplayName(appletId)!,
@@ -451,7 +451,7 @@ export function useStartEntity({
 
       logger.cancelSending();
 
-      const logParams: Omit<LogFlowActionParams, 'activityId'> = {
+      const logParams: Omit<TrackFlowActionParams, 'activityId'> = {
         flowId,
         appletId,
         appletName: getAppletDisplayName(appletId)!,

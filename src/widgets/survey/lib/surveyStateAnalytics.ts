@@ -2,14 +2,7 @@ import {
   PipelineItem,
   RequestHealthRecordDataPipelineItem,
 } from '@app/features/pass-survey/lib/types/payload';
-import {
-  EHRConsent,
-  ResponseType,
-} from '@app/shared/api/services/ActivityItemDto';
-import {
-  AnswerDto,
-  ObjectAnswerDto,
-} from '@app/shared/api/services/IAnswerService';
+import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
   EHRStatus,
@@ -19,29 +12,28 @@ import {
 } from '@app/shared/lib/analytics/IAnalyticsService';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
-export type LogBaseParams = {
+export type TrackBaseParams = {
   appletId: string;
   activityId: string;
   itemTypes: ResponseType[];
 };
 
-export type LogActivityActionParams = LogBaseParams & {
+export type TrackActivityActionParams = TrackBaseParams & {
   entityName: string;
   appletName: string;
 };
 
-export type LogFlowActionParams = LogActivityActionParams & {
+export type TrackFlowActionParams = TrackActivityActionParams & {
   flowId: string;
 };
 
-export type LogCompleteSurveyParams = LogBaseParams & {
+export type TrackCompleteSurveyParams = TrackBaseParams & {
   flowId?: string;
   submitId: string;
   pipelineItems: PipelineItem[];
-  answers: AnswerDto[];
 };
 
-export type LogEHRProviderSearchSkippedParams = LogBaseParams & {
+export type TrackEHREventParams = TrackBaseParams & {
   flowId?: string;
 };
 
@@ -80,7 +72,7 @@ const getAnalyticsProps = ({
   return event;
 };
 
-export const trackStartActivity = (params: LogActivityActionParams) => {
+export const trackStartActivity = (params: TrackActivityActionParams) => {
   getDefaultLogger().log(
     `[useStartEntity.startActivity]: Activity "${params.entityName}|${params.activityId}" started, applet "${params.appletName}|${params.appletId}"`,
   );
@@ -90,7 +82,7 @@ export const trackStartActivity = (params: LogActivityActionParams) => {
   );
 };
 
-export const trackRestartActivity = (params: LogActivityActionParams) => {
+export const trackRestartActivity = (params: TrackActivityActionParams) => {
   getDefaultLogger().log(
     `[useStartEntity.startActivity]: Activity "${params.entityName}|${params.activityId}" restarted, applet "${params.appletName}|${params.appletId}"`,
   );
@@ -104,7 +96,7 @@ export const trackRestartActivity = (params: LogActivityActionParams) => {
   );
 };
 
-export const trackResumeActivity = (params: LogActivityActionParams) => {
+export const trackResumeActivity = (params: TrackActivityActionParams) => {
   getDefaultLogger().log(
     `[useStartEntity.startActivity]: Activity "${params.entityName}|${params.activityId}" resumed, applet "${params.appletName}|${params.appletId}"`,
   );
@@ -114,7 +106,7 @@ export const trackResumeActivity = (params: LogActivityActionParams) => {
   );
 };
 
-export const trackStartFlow = (params: LogFlowActionParams) => {
+export const trackStartFlow = (params: TrackFlowActionParams) => {
   getDefaultLogger().log(
     `[useStartEntity.startFlow]: Flow "${params.entityName}|${params.flowId}" started, applet "${params.appletName}|${params.appletId}"`,
   );
@@ -124,7 +116,7 @@ export const trackStartFlow = (params: LogFlowActionParams) => {
   );
 };
 
-export const trackRestartFlow = (params: LogFlowActionParams) => {
+export const trackRestartFlow = (params: TrackFlowActionParams) => {
   getDefaultLogger().log(
     `[useStartEntity.startFlow]: Flow "${params.entityName}|${params.flowId}" restarted, applet "${params.appletName}|${params.appletId}"`,
   );
@@ -138,7 +130,7 @@ export const trackRestartFlow = (params: LogFlowActionParams) => {
   );
 };
 
-export const trackResumeFlow = (params: LogFlowActionParams) => {
+export const trackResumeFlow = (params: TrackFlowActionParams) => {
   getDefaultLogger().log(
     `[useStartEntity.startFlow]: Flow "${params.entityName}|${params.flowId}" resumed, applet "${params.appletName}|${params.appletId}"`,
   );
@@ -148,27 +140,21 @@ export const trackResumeFlow = (params: LogFlowActionParams) => {
   );
 };
 
-export const trackCompleteSurvey = (params: LogCompleteSurveyParams) => {
+export const trackCompleteSurvey = (params: TrackCompleteSurveyParams) => {
   const event = {
     ...getAnalyticsProps(params),
     [MixProperties.SubmitId]: params.submitId,
   };
 
-  const ehrItemIndex = params.pipelineItems.findIndex(
+  const ehrItem = params.pipelineItems.find(
     item => item.type === 'RequestHealthRecordData',
-  );
-  const ehrItem = params.pipelineItems[ehrItemIndex] as
-    | RequestHealthRecordDataPipelineItem
-    | undefined;
+  ) as RequestHealthRecordDataPipelineItem | undefined;
 
   if (ehrItem) {
-    const answer = (params.answers[ehrItemIndex] as ObjectAnswerDto)
-      .value as EHRConsent;
-
-    if (ehrItem.ehrSearchSkipped) {
-      event[MixProperties.EHRStatus] = EHRStatus.ParticipantSkipped;
-    } else if (answer === EHRConsent.OptIn) {
+    if (ehrItem.ehrShareSuccess) {
       event[MixProperties.EHRStatus] = EHRStatus.ParticipantConsented;
+    } else if (ehrItem.ehrSearchSkipped) {
+      event[MixProperties.EHRStatus] = EHRStatus.ParticipantSkipped;
     } else {
       event[MixProperties.EHRStatus] = EHRStatus.ParticipantDeclined;
     }
@@ -177,10 +163,20 @@ export const trackCompleteSurvey = (params: LogCompleteSurveyParams) => {
   getDefaultAnalyticsService().track(MixEvents.AssessmentCompleted, event);
 };
 
-export const trackEHRProviderSearchSkipped = (
-  params: LogEHRProviderSearchSkippedParams,
-) => {
+export const trackEHRProviderSearchSkipped = (params: TrackEHREventParams) => {
   getDefaultAnalyticsService().track(MixEvents.EHRProviderSearchSkipped, {
+    ...getAnalyticsProps(params),
+  });
+};
+
+export const trackEHRProviderSearch = (params: TrackEHREventParams) => {
+  getDefaultAnalyticsService().track(MixEvents.EHRProviderSearch, {
+    ...getAnalyticsProps(params),
+  });
+};
+
+export const trackEHRProviderShareSuccess = (params: TrackEHREventParams) => {
+  getDefaultAnalyticsService().track(MixEvents.EHRProviderShareSuccess, {
     ...getAnalyticsProps(params),
   });
 };

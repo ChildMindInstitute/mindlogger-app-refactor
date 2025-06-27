@@ -33,6 +33,7 @@ describe('useSubSteps', () => {
     },
     additionalEHRs: null,
     ehrSearchSkipped: false,
+    ehrShareSuccess: false,
     ...props,
   });
 
@@ -61,7 +62,7 @@ describe('useSubSteps', () => {
     };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, setSubStep: mockSetSubStep }),
+      useSubSteps({ item: mockItem, setSubStep: mockSetSubStep, itemStep: 0 }),
     );
 
     expect(result.current.subStep).toBeNull();
@@ -79,7 +80,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     expect(result.current.subStep).toBe(
@@ -99,7 +105,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     expect(result.current.subStep).toBe(
@@ -119,7 +130,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     expect(result.current.subStep).toBe(
@@ -139,7 +155,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptOut };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     expect(result.current.hasNextSubStep).toBe(false);
@@ -155,7 +176,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     result.current.handleNextSubStep();
@@ -174,7 +200,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     result.current.handlePrevSubStep();
@@ -193,7 +224,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     // When additionalEHRs is 'done', we should not have a next step
@@ -213,7 +249,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     // When additionalEHRs is 'requested', we should have a next step from AdditionalPrompt
@@ -235,7 +276,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     result.current.handlePrevSubStep();
@@ -254,7 +300,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     mockSetSubStep(RequestHealthRecordDataItemStep.OneUpHealth);
