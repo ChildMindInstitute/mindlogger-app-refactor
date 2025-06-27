@@ -17,20 +17,18 @@ import {
 import { InitializeHiddenItem } from '@app/features/pass-survey/model/ActivityRecordInitializer';
 import { IAlertsExtractor } from '@app/features/pass-survey/model/IAlertsExtractor';
 import { IScoresExtractor } from '@app/features/pass-survey/model/IScoresExtractor';
+import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import { AppletEncryptionDTO } from '@app/shared/api/services/IAppletService';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
-import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
-import {
-  MixEvents,
-  MixProperties,
-} from '@app/shared/lib/analytics/IAnalyticsService';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { wait } from '@app/shared/lib/utils/common';
 import { getNow, getTimezoneOffset } from '@app/shared/lib/utils/dateTime';
+import { getResponseTypesMap } from '@app/shared/lib/utils/responseTypes';
 import {
   isEntityExpired,
   getEntityProgression,
 } from '@app/shared/lib/utils/survey/survey';
+import { trackCompleteSurvey } from '@app/widgets/survey/lib/surveyStateAnalytics';
 import { IQueueProcessingService } from '@entities/activity/lib/services/IQueueProcessingService';
 
 import { getClientInformation } from '../../lib/metaHelpers';
@@ -98,6 +96,7 @@ export class ConstructCompletionsService {
   private scoresExtractor: IScoresExtractor;
   private dispatch: AppDispatch;
   private persistor: Persistor;
+  private itemTypesMap: Record<string, ResponseType[]>;
 
   constructor(
     saveActivitySummary: SaveActivitySummary | null,
@@ -119,6 +118,7 @@ export class ConstructCompletionsService {
     this.dispatch = dispatch;
     this.entityProgressions = entityProgressions;
     this.persistor = persistor;
+    this.itemTypesMap = {};
   }
 
   private getLogDates(
@@ -398,9 +398,12 @@ export class ConstructCompletionsService {
       order,
     );
 
-    getDefaultAnalyticsService().track(MixEvents.AssessmentCompleted, {
-      [MixProperties.AppletId]: appletId,
-      [MixProperties.SubmitId]: submitId,
+    trackCompleteSurvey({
+      appletId,
+      activityId,
+      flowId,
+      itemTypes: this.itemTypesMap[activityId],
+      submitId,
     });
 
     this.logger.log(
@@ -554,15 +557,23 @@ export class ConstructCompletionsService {
       order,
     );
 
-    getDefaultAnalyticsService().track(MixEvents.AssessmentCompleted, {
-      [MixProperties.AppletId]: appletId,
-      [MixProperties.SubmitId]: submitId,
+    trackCompleteSurvey({
+      appletId,
+      flowId,
+      activityId,
+      itemTypes: this.itemTypesMap[activityId],
+      submitId,
     });
 
     this.logger.log(`[ConstructCompletionsService.constructForFinish] Done`);
   }
 
   public async construct(input: ConstructInput): Promise<void> {
+    const baseInfo = this.queryDataUtils.getBaseInfo(input.appletId);
+    if (baseInfo) {
+      this.itemTypesMap = getResponseTypesMap(baseInfo);
+    }
+
     try {
       if (input.completionType === 'intermediate') {
         await this.constructForIntermediate({

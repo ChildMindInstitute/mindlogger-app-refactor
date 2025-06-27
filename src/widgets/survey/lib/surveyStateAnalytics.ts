@@ -7,34 +7,37 @@ import {
 } from '@app/shared/lib/analytics/IAnalyticsService';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
-export type LogActivityActionParams = {
-  entityName: string;
-  activityId: string;
-  appletName: string;
+export type LogBaseParams = {
   appletId: string;
+  activityId: string;
   itemTypes: ResponseType[];
 };
 
-export type LogFlowActionParams = {
+export type LogActivityActionParams = LogBaseParams & {
   entityName: string;
-  activityId: string;
-  flowId: string;
   appletName: string;
-  appletId: string;
-  itemTypes: ResponseType[];
+};
+
+export type LogFlowActionParams = LogActivityActionParams & {
+  flowId: string;
+};
+
+export type LogCompleteSurveyParams = LogBaseParams & {
+  flowId?: string;
+  submitId: string;
 };
 
 /**
  * Helper function to build analytics properties with Feature and ItemTypes
  */
-const getSurveyProps = ({
+const getAnalyticsProps = ({
   appletId,
   activityId,
   flowId,
   itemTypes,
 }: {
   appletId: string;
-  activityId?: string;
+  activityId: string;
   flowId?: string;
   itemTypes: ResponseType[];
 }) => {
@@ -59,70 +62,77 @@ const getSurveyProps = ({
   return event;
 };
 
-export const logStartActivity = (params: LogActivityActionParams) => {
+export const trackStartActivity = (params: LogActivityActionParams) => {
   getDefaultLogger().log(
     `[useStartEntity.startActivity]: Activity "${params.entityName}|${params.activityId}" started, applet "${params.appletName}|${params.appletId}"`,
   );
   getDefaultAnalyticsService().track(
     MixEvents.AssessmentStarted,
-    getSurveyProps(params),
+    getAnalyticsProps(params),
   );
 };
 
-export const logRestartActivity = (params: LogActivityActionParams) => {
+export const trackRestartActivity = (params: LogActivityActionParams) => {
   getDefaultLogger().log(
     `[useStartEntity.startActivity]: Activity "${params.entityName}|${params.activityId}" restarted, applet "${params.appletName}|${params.appletId}"`,
   );
   getDefaultAnalyticsService().track(
     MixEvents.ActivityRestart,
-    getSurveyProps(params),
+    getAnalyticsProps(params),
   );
   getDefaultAnalyticsService().track(
     MixEvents.AssessmentStarted,
-    getSurveyProps(params),
+    getAnalyticsProps(params),
   );
 };
 
-export const logResumeActivity = (params: LogActivityActionParams) => {
+export const trackResumeActivity = (params: LogActivityActionParams) => {
   getDefaultLogger().log(
     `[useStartEntity.startActivity]: Activity "${params.entityName}|${params.activityId}" resumed, applet "${params.appletName}|${params.appletId}"`,
   );
   getDefaultAnalyticsService().track(
     MixEvents.ActivityResume,
-    getSurveyProps(params),
+    getAnalyticsProps(params),
   );
 };
 
-export const logStartFlow = (params: LogFlowActionParams) => {
+export const trackStartFlow = (params: LogFlowActionParams) => {
   getDefaultLogger().log(
     `[useStartEntity.startFlow]: Flow "${params.entityName}|${params.flowId}" started, applet "${params.appletName}|${params.appletId}"`,
   );
   getDefaultAnalyticsService().track(
     MixEvents.AssessmentStarted,
-    getSurveyProps(params),
+    getAnalyticsProps(params),
   );
 };
 
-export const logRestartFlow = (params: LogFlowActionParams) => {
+export const trackRestartFlow = (params: LogFlowActionParams) => {
   getDefaultLogger().log(
     `[useStartEntity.startFlow]: Flow "${params.entityName}|${params.flowId}" restarted, applet "${params.appletName}|${params.appletId}"`,
   );
   getDefaultAnalyticsService().track(
     MixEvents.ActivityRestart,
-    getSurveyProps(params),
+    getAnalyticsProps(params),
   );
   getDefaultAnalyticsService().track(
     MixEvents.AssessmentStarted,
-    getSurveyProps(params),
+    getAnalyticsProps(params),
   );
 };
 
-export const logResumeFlow = (params: LogFlowActionParams) => {
+export const trackResumeFlow = (params: LogFlowActionParams) => {
   getDefaultLogger().log(
     `[useStartEntity.startFlow]: Flow "${params.entityName}|${params.flowId}" resumed, applet "${params.appletName}|${params.appletId}"`,
   );
   getDefaultAnalyticsService().track(
     MixEvents.ActivityResume,
-    getSurveyProps(params),
+    getAnalyticsProps(params),
   );
+};
+
+export const trackCompleteSurvey = (params: LogCompleteSurveyParams) => {
+  getDefaultAnalyticsService().track(MixEvents.AssessmentCompleted, {
+    ...getAnalyticsProps(params),
+    [MixProperties.SubmitId]: params.submitId,
+  });
 };

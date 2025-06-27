@@ -35,18 +35,18 @@ import {
   isEntityExpired,
 } from '@app/shared/lib/utils/survey/survey';
 import { getFlowRecordKey } from '@app/widgets/survey/lib/storageHelpers';
-import { FlowState } from '@app/widgets/survey/lib/useFlowStorageRecord';
-
 import {
   LogActivityActionParams,
   LogFlowActionParams,
-  logRestartActivity,
-  logRestartFlow,
-  logResumeActivity,
-  logResumeFlow,
-  logStartActivity,
-  logStartFlow,
-} from './startEntityHelpers';
+  trackRestartActivity,
+  trackRestartFlow,
+  trackResumeActivity,
+  trackResumeFlow,
+  trackStartActivity,
+  trackStartFlow,
+} from '@app/widgets/survey/lib/surveyStateAnalytics';
+import { FlowState } from '@app/widgets/survey/lib/useFlowStorageRecord';
+
 import {
   onActivityContainsAllItemsHidden,
   onBeforeStartingActivity,
@@ -301,7 +301,7 @@ export function useStartEntity({
             if (isEntityExpired(availableTo)) {
               return resolve({ failReason: 'expired-while-alert-opened' });
             }
-            logRestartActivity(logParams);
+            trackRestartActivity(logParams);
             cleanUpMediaFiles({
               activityId,
               appletId,
@@ -316,12 +316,12 @@ export function useStartEntity({
             if (isEntityExpired(availableTo)) {
               return resolve({ failReason: 'expired-while-alert-opened' });
             }
-            logResumeActivity(logParams);
+            trackResumeActivity(logParams);
             return resolve({ fromScratch: false });
           },
         });
       } else {
-        logStartActivity(logParams);
+        trackStartActivity(logParams);
         activityStart(appletId, activityId, eventId, targetSubjectId);
         resolve({ fromScratch: true });
       }
@@ -481,7 +481,7 @@ export function useStartEntity({
                 order: i,
               });
             }
-            logRestartFlow({
+            trackRestartFlow({
               ...logParams,
               activityId: firstActivityId,
             });
@@ -517,7 +517,7 @@ export function useStartEntity({
             const flowState =
               (JSON.parse(storage.getString(key) || '') as FlowState) || {};
 
-            logResumeFlow({
+            trackResumeFlow({
               ...logParams,
               activityId: flowState.pipeline[flowState.step].payload.activityId,
             });
@@ -526,7 +526,7 @@ export function useStartEntity({
           },
         });
       } else {
-        logStartFlow({
+        trackStartFlow({
           ...logParams,
           activityId: firstActivityId,
         });

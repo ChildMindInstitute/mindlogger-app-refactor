@@ -275,14 +275,12 @@ export function useOnNotificationTap({
       });
     };
 
-    const { data } = await getDefaultAppletsService().getAppletBaseInfo({
-      appletId,
-    });
+    const { data: baseInfo } =
+      await getDefaultAppletsService().getAppletBaseInfo({
+        appletId,
+      });
 
-    const responseTypes = getResponseTypesMap({
-      activities: data.result.activities,
-      activityFlows: data.result.activityFlows,
-    });
+    const responseTypes = getResponseTypesMap(baseInfo);
 
     if (entityType === 'flow') {
       const result = await startFlow(

@@ -1,8 +1,5 @@
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
-import {
-  AppletBaseInfoActivity,
-  AppletBaseInfoActivityFlow,
-} from '@app/shared/api/services/IAppletService';
+import { AppletBaseInfoResponse } from '@app/shared/api/services/IAppletService';
 
 import {
   appSupportedResponseTypes,
@@ -24,22 +21,16 @@ export const getSupportsWeb = (responseType: ResponseType) =>
   getIsWebOnly(responseType) ||
   universalSupportedResponseTypes.includes(responseType);
 
-export const getResponseTypesMap = ({
-  activities,
-  activityFlows,
-}: {
-  activities: AppletBaseInfoActivity[];
-  activityFlows: AppletBaseInfoActivityFlow[];
-}) => {
+export const getResponseTypesMap = ({ result }: AppletBaseInfoResponse) => {
   const activityResponseTypes =
-    activities?.reduce(
+    result.activities?.reduce(
       (curr, activity) => ({
         ...curr,
         [activity.id]: activity.containsResponseTypes,
       }),
       {} as Record<string, ResponseType[]>,
     ) || {};
-  const flowResponseTypes = activityFlows?.reduce(
+  const flowResponseTypes = result.activityFlows?.reduce(
     (curr, activityFlow) => ({
       ...curr,
       [activityFlow.id]: (activityFlow?.activityIds || [])
