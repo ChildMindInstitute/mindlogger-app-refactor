@@ -87,6 +87,11 @@ export const useActiveAssessmentLink = () => {
         'additionalEHRs',
         null,
       );
+      setItemCustomProperty<RequestHealthRecordDataPipelineItem>(
+        ehrItemIndex,
+        'ehrSearchSkipped',
+        false,
+      );
     }
   }
 };

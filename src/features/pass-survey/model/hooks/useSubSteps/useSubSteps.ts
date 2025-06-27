@@ -1,17 +1,46 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 
-import { RequestHealthRecordDataItemStep } from '@app/features/pass-survey/lib/types/payload';
+import { useQueryClient } from '@tanstack/react-query';
+
+import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
+import {
+  RequestHealthRecordDataItemStep,
+  RequestHealthRecordDataPipelineItem,
+} from '@app/features/pass-survey/lib/types/payload';
 import { PipelineItem } from '@app/features/pass-survey/lib/types/payload';
 import { PipelineItemAnswer } from '@app/features/pass-survey/lib/types/pipelineItemAnswer';
 import { EHRConsent } from '@app/shared/api/services/ActivityItemDto';
+import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { getResponseTypesMap } from '@app/shared/lib/utils/responseTypes';
+import { trackEHRProviderSearchSkipped } from '@app/widgets/survey/lib/surveyStateAnalytics';
+
+import { useActivityState } from '../useActivityState';
 
 type UseSubStepsProps = {
+  currentStep: number;
   item?: PipelineItem;
   answer?: PipelineItemAnswer['value'];
   setSubStep: (subStep: number) => void;
 };
 
-export function useSubSteps({ item, answer, setSubStep }: UseSubStepsProps) {
+export function useSubSteps({
+  currentStep,
+  item,
+  answer,
+  setSubStep,
+}: UseSubStepsProps) {
+  const queryClient = useQueryClient();
+  const { appletId, activityId, flowId, eventId, targetSubjectId, order } =
+    useContext(ActivityIdentityContext);
+
+  const { setItemCustomProperty } = useActivityState({
+    appletId,
+    activityId,
+    eventId,
+    targetSubjectId,
+    order,
+  });
+
   const subStep = useMemo(() => {
     if (item?.type === 'RequestHealthRecordData') {
       return item.subStep;
@@ -20,6 +49,10 @@ export function useSubSteps({ item, answer, setSubStep }: UseSubStepsProps) {
     return null;
   }, [item]);
 
+  /**
+   * Returns true if there is a next sub-step (and handleNextSubStep should be called when the
+   * Next button is pressed), false otherwise.
+   */
   const hasNextSubStep = useMemo(() => {
     if (!item || subStep === null) return false;
 
@@ -38,6 +71,10 @@ export function useSubSteps({ item, answer, setSubStep }: UseSubStepsProps) {
     return false;
   }, [subStep, item, answer]);
 
+  /**
+   * Returns true if there is a previous sub-step (and handlePrevSubStep should be called when the
+   * Back button is pressed), false otherwise.
+   */
   const hasPrevSubStep = useMemo(() => {
     if (!item || subStep === null) return false;
 
@@ -53,6 +90,54 @@ export function useSubSteps({ item, answer, setSubStep }: UseSubStepsProps) {
     return false;
   }, [subStep, item]);
 
+  /**
+   * Handle any submission logic for a sub-step, called before navigating to the next sub-step (or
+   * submitting the activity, if the item is the last step).
+   */
+  const handleSubmitSubStep = useCallback(() => {
+    if (!item || subStep === null) return;
+
+    if (item.type === 'RequestHealthRecordData') {
+      if (subStep === RequestHealthRecordDataItemStep.OneUpHealth) {
+        // When clicking next on this step, it means the user has skipped the EHR search
+        if (item.additionalEHRs === null) {
+          // Only track a skipped status (used for Mixpanel tracking) and Mixpanel event if no
+          // additional EHRs have been requested yet
+          setItemCustomProperty<RequestHealthRecordDataPipelineItem>(
+            currentStep,
+            'ehrSearchSkipped',
+            true,
+          );
+
+          const baseInfo = new QueryDataUtils(queryClient).getBaseInfo(
+            appletId,
+          );
+          const itemTypesMap = baseInfo ? getResponseTypesMap(baseInfo) : {};
+
+          trackEHRProviderSearchSkipped({
+            appletId,
+            activityId,
+            flowId,
+            itemTypes: itemTypesMap[activityId],
+          });
+        }
+      }
+    }
+  }, [
+    item,
+    subStep,
+    setItemCustomProperty,
+    currentStep,
+    queryClient,
+    appletId,
+    activityId,
+    flowId,
+  ]);
+
+  /**
+   * Handles the logic for controlling navigation to the next sub-step when the Next button is
+   * pressed.
+   */
   const handleNextSubStep = useCallback(() => {
     if (!item || !hasNextSubStep || subStep === null) {
       return;
@@ -71,6 +156,10 @@ export function useSubSteps({ item, answer, setSubStep }: UseSubStepsProps) {
     }
   }, [hasNextSubStep, subStep, item, setSubStep]);
 
+  /**
+   * Handles the logic for controlling navigation to the previous sub-step when the Back button is
+   * pressed.
+   */
   const handlePrevSubStep = useCallback(() => {
     if (!item || !hasPrevSubStep || subStep === null) {
       return;
@@ -91,6 +180,9 @@ export function useSubSteps({ item, answer, setSubStep }: UseSubStepsProps) {
     }
   }, [hasPrevSubStep, subStep, item, setSubStep]);
 
+  /**
+   * Returns the text to be displayed on the "Next" button.
+   */
   const nextButtonText = useMemo(() => {
     if (item?.type === 'RequestHealthRecordData') {
       if (subStep === RequestHealthRecordDataItemStep.OneUpHealth) {
@@ -105,6 +197,7 @@ export function useSubSteps({ item, answer, setSubStep }: UseSubStepsProps) {
     subStep,
     hasNextSubStep,
     hasPrevSubStep,
+    handleSubmitSubStep,
     handleNextSubStep,
     handlePrevSubStep,
     nextButtonText,

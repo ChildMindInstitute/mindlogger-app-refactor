@@ -32,6 +32,7 @@ describe('useSubSteps', () => {
       ],
     },
     additionalEHRs: null,
+    ehrSearchSkipped: false,
     ...props,
   });
 

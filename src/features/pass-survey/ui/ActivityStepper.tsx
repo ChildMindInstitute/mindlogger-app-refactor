@@ -146,10 +146,12 @@ export function ActivityStepper({
   const {
     hasNextSubStep,
     hasPrevSubStep,
+    handleSubmitSubStep,
     handleNextSubStep,
     handlePrevSubStep,
     nextButtonText: subStepNextButtonText,
   } = useSubSteps({
+    currentStep,
     item: currentPipelineItem,
     answer: activityStorageRecord?.answers?.[currentStep],
     setSubStep: (subStep: number) => {
@@ -207,6 +209,8 @@ export function ActivityStepper({
     if (!isValid()) {
       return { stepShift: 0 };
     }
+
+    handleSubmitSubStep();
 
     // If subSteps is supported and there are more subSteps to go through, go to the next subStep
     if (hasNextSubStep) {

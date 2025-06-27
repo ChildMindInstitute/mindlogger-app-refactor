@@ -1,6 +1,18 @@
-import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
+import {
+  PipelineItem,
+  RequestHealthRecordDataPipelineItem,
+} from '@app/features/pass-survey/lib/types/payload';
+import {
+  EHRConsent,
+  ResponseType,
+} from '@app/shared/api/services/ActivityItemDto';
+import {
+  AnswerDto,
+  ObjectAnswerDto,
+} from '@app/shared/api/services/IAnswerService';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
+  EHRStatus,
   MixEvents,
   MixProperties,
   MixpanelFeature,
@@ -25,6 +37,12 @@ export type LogFlowActionParams = LogActivityActionParams & {
 export type LogCompleteSurveyParams = LogBaseParams & {
   flowId?: string;
   submitId: string;
+  pipelineItems: PipelineItem[];
+  answers: AnswerDto[];
+};
+
+export type LogEHRProviderSearchSkippedParams = LogBaseParams & {
+  flowId?: string;
 };
 
 /**
@@ -131,8 +149,38 @@ export const trackResumeFlow = (params: LogFlowActionParams) => {
 };
 
 export const trackCompleteSurvey = (params: LogCompleteSurveyParams) => {
-  getDefaultAnalyticsService().track(MixEvents.AssessmentCompleted, {
+  const event = {
     ...getAnalyticsProps(params),
     [MixProperties.SubmitId]: params.submitId,
+  };
+
+  const ehrItemIndex = params.pipelineItems.findIndex(
+    item => item.type === 'RequestHealthRecordData',
+  );
+  const ehrItem = params.pipelineItems[ehrItemIndex] as
+    | RequestHealthRecordDataPipelineItem
+    | undefined;
+
+  if (ehrItem) {
+    const answer = (params.answers[ehrItemIndex] as ObjectAnswerDto)
+      .value as EHRConsent;
+
+    if (ehrItem.ehrSearchSkipped) {
+      event[MixProperties.EHRStatus] = EHRStatus.ParticipantSkipped;
+    } else if (answer === EHRConsent.OptIn) {
+      event[MixProperties.EHRStatus] = EHRStatus.ParticipantConsented;
+    } else {
+      event[MixProperties.EHRStatus] = EHRStatus.ParticipantDeclined;
+    }
+  }
+
+  getDefaultAnalyticsService().track(MixEvents.AssessmentCompleted, event);
+};
+
+export const trackEHRProviderSearchSkipped = (
+  params: LogEHRProviderSearchSkippedParams,
+) => {
+  getDefaultAnalyticsService().track(MixEvents.EHRProviderSearchSkipped, {
+    ...getAnalyticsProps(params),
   });
 };

@@ -404,6 +404,8 @@ export class ConstructCompletionsService {
       flowId,
       itemTypes: this.itemTypesMap[activityId],
       submitId,
+      pipelineItems: items,
+      answers: modifiedAnswers,
     });
 
     this.logger.log(
@@ -563,6 +565,8 @@ export class ConstructCompletionsService {
       activityId,
       itemTypes: this.itemTypesMap[activityId],
       submitId,
+      pipelineItems: items,
+      answers: modifiedAnswers,
     });
 
     this.logger.log(`[ConstructCompletionsService.constructForFinish] Done`);
