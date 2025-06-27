@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAppletInfo } from '@app/shared/lib/hooks/useAppletInfo';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { MigrationValidator } from '@app/shared/lib/services/MigrationValidator';
+import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
 import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
@@ -33,6 +34,8 @@ import {
   isProgressionReadyForAutocompletion,
   isEntityExpired,
 } from '@app/shared/lib/utils/survey/survey';
+import { getFlowRecordKey } from '@app/widgets/survey/lib/storageHelpers';
+import { FlowState } from '@app/widgets/survey/lib/useFlowStorageRecord';
 
 import {
   LogActivityActionParams,
@@ -448,7 +451,7 @@ export function useStartEntity({
 
       logger.cancelSending();
 
-      const logParams: LogFlowActionParams = {
+      const logParams: Omit<LogFlowActionParams, 'activityId'> = {
         flowId,
         appletId,
         appletName: getAppletDisplayName(appletId)!,
@@ -478,7 +481,10 @@ export function useStartEntity({
                 order: i,
               });
             }
-            logRestartFlow(logParams);
+            logRestartFlow({
+              ...logParams,
+              activityId: firstActivityId,
+            });
 
             flowStarted({
               appletId,
@@ -499,12 +505,31 @@ export function useStartEntity({
               return resolve({ failReason: 'expired-while-alert-opened' });
             }
 
-            logResumeFlow(logParams);
+            const key = getFlowRecordKey(
+              flowId,
+              appletId,
+              eventId,
+              targetSubjectId,
+            );
+            const storage =
+              getDefaultStorageInstanceManager().getFlowProgressStorage();
+
+            const flowState =
+              (JSON.parse(storage.getString(key) || '') as FlowState) || {};
+
+            logResumeFlow({
+              ...logParams,
+              activityId: flowState.pipeline[flowState.step].payload.activityId,
+            });
+
             return resolve({ fromScratch: false });
           },
         });
       } else {
-        logStartFlow(logParams);
+        logStartFlow({
+          ...logParams,
+          activityId: firstActivityId,
+        });
         flowStarted({
           appletId,
           flowId,

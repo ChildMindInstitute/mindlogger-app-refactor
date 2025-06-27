@@ -17,6 +17,7 @@ export type LogActivityActionParams = {
 
 export type LogFlowActionParams = {
   entityName: string;
+  activityId: string;
   flowId: string;
   appletName: string;
   appletId: string;
