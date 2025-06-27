@@ -1,5 +1,6 @@
 import { FC, useContext } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
@@ -7,10 +8,14 @@ import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/
 import { useActivityStorageRecord } from '@app/features/pass-survey/lib/hooks/useActivityStorageRecord';
 import { RequestHealthRecordDataPipelineItem } from '@app/features/pass-survey/lib/types/payload';
 import { useActivityState } from '@app/features/pass-survey/model/hooks/useActivityState';
+import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
+import { getResponseTypesMap } from '@app/shared/lib/utils/responseTypes';
 import { Box, RadioGroup, YStack } from '@app/shared/ui/base';
 import { RequestHealthRecordDataIconSuccess } from '@app/shared/ui/icons/RequestHealthRecordDataIconSuccess';
 import { ItemMarkdown } from '@app/shared/ui/survey/ItemMarkdown';
 import { RadioOption } from '@app/shared/ui/survey/RadioActivityItem/types';
+import { trackEHRProviderShareSuccess } from '@app/widgets/survey/lib/surveyStateAnalytics';
 
 import { RadioItem } from '../RadioActivityItem/RadioItem';
 
@@ -25,11 +30,11 @@ export const AdditionalPromptStep: FC<AdditionalPromptStepProps> = ({
   textReplacer,
   assignment,
 }) => {
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
 
-  const { appletId, activityId, eventId, targetSubjectId, order } = useContext(
-    ActivityIdentityContext,
-  );
+  const { appletId, activityId, flowId, eventId, targetSubjectId, order } =
+    useContext(ActivityIdentityContext);
 
   const { getCurrentActivityStorageRecord } = useActivityStorageRecord({
     appletId,
@@ -45,6 +50,20 @@ export const AdditionalPromptStep: FC<AdditionalPromptStepProps> = ({
     eventId,
     targetSubjectId,
     order,
+  });
+
+  useOnFocus(() => {
+    if (item.ehrShareSuccess) {
+      const baseInfo = new QueryDataUtils(queryClient).getBaseInfo(appletId);
+      const itemTypesMap = baseInfo ? getResponseTypesMap(baseInfo) : {};
+
+      trackEHRProviderShareSuccess({
+        appletId,
+        activityId,
+        flowId,
+        itemTypes: itemTypesMap[activityId],
+      });
+    }
   });
 
   const baseOption = {
