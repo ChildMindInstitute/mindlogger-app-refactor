@@ -1,12 +1,13 @@
 import { useMemo } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 
+import { YStackProps } from '@tamagui/stacks';
+
 import { IS_ANDROID } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
-import { invertColor } from '@app/shared/lib/utils/survey/survey';
+import { getSelectorColors } from '@app/shared/lib/utils/survey/survey';
 
 import { Item } from './types';
-import { Box, BoxProps } from '../../base';
+import { Box } from '../../base';
 import { CheckBox } from '../../CheckBox';
 import { QuestionIcon } from '../../icons/QuestionIcon';
 import { OptionCard } from '../../OptionCard';
@@ -23,7 +24,7 @@ type CheckBoxProps = {
   textReplacer: (markdown: string) => string;
 } & Omit<Item, 'value'>;
 
-type Props = CheckBoxProps & Omit<BoxProps, keyof CheckBoxProps>;
+type Props = CheckBoxProps & Omit<YStackProps, keyof CheckBoxProps>;
 
 export function CheckBoxCard({
   selected,
@@ -52,30 +53,12 @@ export function CheckBoxCard({
     [textReplacer, tooltip],
   );
 
-  const hasColor = color && setPalette;
-
-  const defaultBGColor = selected ? colors.lighterGrey6 : colors.white;
-  const bgColor = hasColor ? color : defaultBGColor;
-
-  const textColor = color
-    ? invertColor(color, { dark: colors.white, light: colors.black })
-    : colors.onSurface;
-
-  const tooltipColor = color
-    ? invertColor(color, {
-        dark: colors.darkOnSurface,
-        light: colors.onSurface,
-      })
-    : colors.darkerGrey4;
-
-  const invertedCheckboxColor = color
-    ? invertColor(color, {
-        dark: colors.darkOnSurface,
-        light: colors.onSurface,
-      })
-    : colors.lighterGrey6;
-
-  const borderColor = selected ? colors.blue3 : colors.lighterGrey7;
+  const { textColor, tooltipColor, bgColor, widgetColor, borderColor } =
+    getSelectorColors({
+      setPalette,
+      color,
+      selected,
+    });
 
   return (
     <OptionCard
@@ -84,9 +67,9 @@ export function CheckBoxCard({
       borderColor={borderColor}
       imageUrl={imageContainerVisible ? image : null}
       onPress={onPress}
-      accessibilityLabel={accessibilityLabel}
+      aria-label={accessibilityLabel}
       renderLeftIcon={() => (
-        <Box mr={10} w={20} h={20}>
+        <Box mr={12} w={20} h={20}>
           <CheckBox
             style={Platform.select({
               ios: styles.checkboxIOS,
@@ -96,13 +79,13 @@ export function CheckBoxCard({
             lineWidth={IS_ANDROID ? 0 : 2}
             boxType="square"
             tintColors={{
-              true: hasColor ? invertedCheckboxColor : colors.primary,
-              false: hasColor ? invertedCheckboxColor : colors.outlineGrey,
+              true: widgetColor,
+              false: widgetColor,
             }}
-            onCheckColor={hasColor ? color : colors.white}
-            onFillColor={hasColor ? invertedCheckboxColor : colors.primary}
-            onTintColor={hasColor ? invertedCheckboxColor : colors.primary}
-            tintColor={hasColor ? invertedCheckboxColor : colors.outlineGrey}
+            onCheckColor={bgColor}
+            onFillColor={widgetColor}
+            onTintColor={widgetColor}
+            tintColor={widgetColor}
             onAnimationType="fade"
             offAnimationType="fade"
             value={selected}

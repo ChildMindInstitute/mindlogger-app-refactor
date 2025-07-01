@@ -7,13 +7,14 @@ import {
   launchCamera,
   launchImageLibrary,
 } from 'react-native-image-picker';
+import { ResizeMode } from 'react-native-video';
 
 import { handleBlockedPermissions } from '@app/shared/lib/alerts/permissionAlerts';
 import {
   GALLERY_VIDEO_OPTIONS,
   VIDEO_RECORD_OPTIONS,
 } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useCameraPermissions } from '@app/shared/lib/hooks/useCameraPermissions';
 import { useGalleryPermissions } from '@app/shared/lib/hooks/useGalleryPermissions';
 import { requestCameraPermissions } from '@app/shared/lib/permissions/cameraPermissions';
@@ -109,8 +110,8 @@ export const VideoItem: FC<Props> = ({ value, onChange }) => {
       onOpenCamera={onOpenVideoCamera}
       onShowMediaLibrary={onShowVideoGallery}
       mode="video"
-      accessibilityLabel="video-item"
-      uploadIcon={<VideoIcon color={colors.red} size={50} />}
+      aria-label="video-item"
+      uploadIcon={<VideoIcon color={palette.red} size={50} />}
     >
       {value && (
         <VideoPlayer
@@ -118,7 +119,7 @@ export const VideoItem: FC<Props> = ({ value, onChange }) => {
           videoStyle={styles.mediaContainer}
           thumbnailStyle={styles.mediaContainer}
           uri={value.uri}
-          resizeMode="contain"
+          resizeMode={ResizeMode.CONTAIN}
         />
       )}
     </MediaInput>

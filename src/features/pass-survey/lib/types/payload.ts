@@ -15,11 +15,13 @@ import {
   StackedItem,
   StackedRowItemValue,
 } from '@app/shared/ui/survey/StackedItemsGrid/types';
+import { UnityResult } from '@entities/unity/lib/types/unityType';
 
 import { Tutorial } from './tutorial';
 
 export type ActivityItemType =
   | 'AbTest'
+  | 'Unity'
   | 'StabilityTracker'
   | 'DrawingTest'
   | 'Tutorial'
@@ -64,6 +66,10 @@ type StabilityTrackerPayload = {
   durationMinutes: number;
   trialsNumber: number;
   userInputType: 'gyroscope' | 'touch';
+};
+
+type UnityPayload = {
+  file: string | null;
 };
 
 type SplashPayload = { imageUrl: string };
@@ -244,6 +250,7 @@ type RequestHealthRecordDataPayload = RequestHealthRecordDataAnswerSettings;
 type PipelinePayload =
   | AbTestPayload
   | StabilityTrackerPayload
+  | UnityPayload
   | SplashPayload
   | Tutorial
   | DrawingPayload
@@ -292,9 +299,15 @@ export interface AbTestPipelineItem extends PipelineItemBase {
   type: 'AbTest';
   payload: AbTestPayload;
 }
+
 export interface StabilityTrackerPipelineItem extends PipelineItemBase {
   type: 'StabilityTracker';
   payload: StabilityTrackerPayload;
+}
+
+export interface UnityPipelineItem extends PipelineItemBase {
+  type: 'Unity';
+  payload: UnityPayload;
 }
 
 export interface SplashPipelineItem extends PipelineItemBase {
@@ -351,18 +364,22 @@ export interface GeolocationPipelineItem extends PipelineItemBase {
   type: 'Geolocation';
   payload: GeolocationPayload;
 }
+
 export interface AudioPipelineItem extends PipelineItemBase {
   type: 'Audio';
   payload: AudioPayload;
 }
+
 export interface MessagePipelineItem extends PipelineItemBase {
   type: 'Message';
   payload: MessagePayload;
 }
+
 export interface AudioPlayerPipelineItem extends PipelineItemBase {
   type: 'AudioPlayer';
   payload: AudioPlayerPayload;
 }
+
 export interface StackedCheckboxPipelineItem extends PipelineItemBase {
   type: 'StackedCheckbox';
   payload: StackedCheckboxPayload;
@@ -382,6 +399,7 @@ export interface TimeRangePipelineItem extends PipelineItemBase {
   type: 'TimeRange';
   payload: TimeRangePayload;
 }
+
 export interface PhotoPipelineItem extends PipelineItemBase {
   type: 'Photo';
   payload: PhotoPayload;
@@ -396,6 +414,7 @@ export interface DatePipelineItem extends PipelineItemBase {
   type: 'Date';
   payload: DatePayload;
 }
+
 export interface TimePipelineItem extends PipelineItemBase {
   type: 'Time';
   payload: TimePayload;
@@ -419,6 +438,8 @@ export interface RequestHealthRecordDataPipelineItem extends PipelineItemBase {
 export type StabilityTrackerResponse = StabilityTrackerBaseResponse;
 
 export type AbTestResponse = AbTestResult;
+
+export type UnityResponse = UnityResult;
 
 export type DrawingTestResponse = DrawResult;
 
@@ -476,6 +497,7 @@ export type RequestHealthRecordDataResponse =
 
 export type PipelineItemResponse =
   | AbTestResponse
+  | UnityResponse
   | StabilityTrackerResponse
   | FlankerResponse
   | DrawingTestResponse
@@ -499,6 +521,7 @@ export type PipelineItemResponse =
 
 export type PipelineItem =
   | AbTestPipelineItem
+  | UnityPipelineItem
   | StabilityTrackerPipelineItem
   | SplashPipelineItem
   | TutorialPipelineItem

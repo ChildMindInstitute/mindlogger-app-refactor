@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { Box } from '@app/shared/ui/base';
+import { GradientOverlay } from '@app/shared/ui/GradientOverlay';
 import { ScrollView } from '@app/shared/ui/ScrollView';
 
 import { ActivityAnalyticsCard } from './ActivityAnalyticsCard';
@@ -23,6 +24,8 @@ export const ActivityAnalyticsList: FC<Props> = ({ analytics }) => {
           />
         ))}
       </ScrollView>
+      <GradientOverlay position="top" />
+      <GradientOverlay position="bottom" />
     </Box>
   );
 };
@@ -30,5 +33,6 @@ export const ActivityAnalyticsList: FC<Props> = ({ analytics }) => {
 const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 1,
+    padding: 16,
   },
 });

@@ -3,18 +3,16 @@ import { FC } from 'react';
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
 
-import { Image, XStack, YStack } from '@app/shared/ui/base';
-import { Button } from '@app/shared/ui/Button';
+import { ActivityFlowStep } from '@app/entities/activity/ui/ActivityFlowStep';
+import { YStack } from '@app/shared/ui/base';
 import { Center } from '@app/shared/ui/Center';
+import { SubmitButton } from '@app/shared/ui/SubmitButton';
 import { Text } from '@app/shared/ui/Text';
-import { badge } from '@assets/images';
 
 const ActivityBox = styled(Center, {
-  padding: 25,
-  mx: 20,
+  padding: 24,
   borderRadius: 16,
-  borderWidth: 1,
-  borderColor: '$grey',
+  bg: '$surface1',
 });
 
 type Props = {
@@ -41,55 +39,49 @@ export const IntermediateSubmit: FC<Props> = ({
   const { t } = useTranslation();
 
   return (
-    <YStack flex={1} mx={40} jc="center" bg="$white">
+    <YStack flex={1} maxWidth={400} jc="center" mx="auto">
       <YStack space={25}>
         <Text textAlign="center" fontSize={16}>
           {t('additional:submit_flow_answers')}{' '}
-          <Text fontWeight="bold">{t('additional:submit')}</Text>{' '}
+          <Text fontWeight="700">{t('additional:submit')}</Text>{' '}
           {t('additional:submit_flow_answers_ex')}
         </Text>
 
         <ActivityBox>
           <Text
-            accessibilityLabel="next_activity-name"
-            fontWeight="bold"
+            aria-label="next_activity-name"
+            fontWeight="700"
             mb={10}
             fontSize={16}
           >
             {activityName}
           </Text>
 
-          <XStack>
-            <Image src={badge} width={18} height={18} opacity={0.6} r={4} />
-
-            <Text fontSize={14} color="$grey">
-              {activitiesPassed + 1} of {totalActivities} {flowName}
-            </Text>
-          </XStack>
+          <ActivityFlowStep
+            activityPositionInFlow={activitiesPassed + 1}
+            numberOfActivitiesInFlow={totalActivities}
+            activityFlowName={flowName}
+          />
         </ActivityBox>
 
-        <YStack space={10}>
-          <Button
-            bg="$blue"
-            accessibilityLabel="submit-button"
+        <YStack gap={16}>
+          <SubmitButton
+            aria-label="submit-button"
             onPress={onPressSubmit}
             disabled={isLoading}
             isLoading={isLoading}
           >
             {t('change_study:submit')}
-          </Button>
+          </SubmitButton>
 
-          <Text
-            color={isBackDisabled ? '$lightGrey' : '$blue'}
-            accessibilityLabel="back-button"
-            textAlign="center"
-            fontSize={17}
-            fontWeight="bold"
+          <SubmitButton
+            mode="secondary"
+            aria-label="back-button"
             onPress={onPressBack}
             disabled={isBackDisabled}
           >
             {t('activity_navigation:back')}
-          </Text>
+          </SubmitButton>
         </YStack>
       </YStack>
     </YStack>

@@ -9,7 +9,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>MindLogger</string>
+	<string>Curious</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -62,27 +62,21 @@
 	<string>$(PRODUCT_NAME) would like access to your photo gallery</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Atkinson Hyperlegible Regular.ttf</string>
-		<string>FontAwesome.ttf</string>
-		<string>FontAwesome5_Regular.ttf</string>
-		<string>FontAwesome5_Solid.ttf</string>
-		<string>AntDesign.ttf</string>
+		<string>FontAwesome6_Regular.ttf</string>
 		<string>Foundation.ttf</string>
 		<string>Entypo.ttf</string>
-		<string>MaterialIcons.ttf</string>
-		<string>MaterialCommunityIcons.ttf</string>
 		<string>Feather.ttf</string>
-		<string>Octicons.ttf</string>
-		<string>Roboto-Bold.ttf</string>
-		<string>Roboto-Medium.ttf</string>
-		<string>Roboto-Regular.ttf</string>
 		<string>Lato-Black.ttf</string>
 		<string>Lato-Regular.ttf</string>
 		<string>Lato-BlackItalic.ttf</string>
 		<string>Lato-Italic.ttf</string>
-		<string>Roboto-BoldItalic.ttf</string>
-		<string>Roboto-Italic.ttf</string>
-		<string>Roboto-MediumItalic.ttf</string>
+		<string>Moderat-Regular.otf</string>
+		<string>Moderat-Bold.otf</string>
+		<string>Moderat-RegularItalic.otf</string>
+		<string>Moderat-BoldItalic.otf</string>
+		<string>MaterialDesignIcons.ttf</string>
+		<string>FontAwesome6_Brands.ttf</string>
+		<string>FontAwesome6_Solid.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
@@ -94,7 +88,7 @@
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
-		<string>armv7</string>
+		<string>arm64</string>
 	</array>
 	<key>UIRequiresFullScreen</key>
 	<true/>

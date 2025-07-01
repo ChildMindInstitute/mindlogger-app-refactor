@@ -1,9 +1,10 @@
 import { ReactNode, useEffect, useState } from 'react';
 
 import { useAppState } from '@react-native-community/hooks';
-import { StackProps, StackStyleProps } from '@tamagui/core';
+import { StackStyle } from '@tamagui/core';
+import { XStackProps } from '@tamagui/stacks';
 
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { Box, XStack } from '@app/shared/ui/base';
 import { CloseIcon } from '@app/shared/ui/icons';
 import { Text } from '@app/shared/ui/Text';
@@ -24,7 +25,7 @@ export type BannerProps = {
   severity?: 'success' | 'error' | 'warning' | 'info';
   icon?: ReactNode;
   color?: string;
-} & StackProps &
+} & XStackProps &
   Record<string, unknown>; // Custom banner props
 
 export const Banner = ({
@@ -33,7 +34,7 @@ export const Banner = ({
   onClose,
   hasCloseButton = !!onClose,
   severity = 'success',
-  color = colors.onSurface,
+  color = palette.on_surface,
   backgroundColor = BANNER_BG_COLORS[severity],
   icon = BANNER_ICONS[severity],
   ...rest
@@ -62,13 +63,11 @@ export const Banner = ({
       backgroundColor={backgroundColor}
       onPressIn={() => setIsPressing(true)}
       onPressOut={() => setIsPressing(false)}
-      onClose={hasCloseButton ? onClose : undefined}
-      severity={severity}
-      accessibilityLabel={`${severity}-banner`}
+      aria-label={`${severity}-banner`}
       {...rest}
     >
       {icon}
-      <Text color={color} fontSize={16} lineHeight={24} flex={1}>
+      <Text color={color} fontSize={16} lineHeight={20} flex={1}>
         {children}
       </Text>
       {hasCloseButton && !!onClose && (
@@ -78,15 +77,15 @@ export const Banner = ({
           onPress={() => onClose?.('manual')}
           borderRadius={100}
           pressStyle={pressStyle}
-          accessibilityLabel="banner-close"
+          aria-label="banner-close"
         >
-          <CloseIcon color={color} size={20} />
+          <CloseIcon color={color} size={18} />
         </Box>
       )}
     </XStack>
   );
 };
 
-const pressStyle: StackStyleProps = {
-  backgroundColor: colors.onSurfaceVariantTsp,
+const pressStyle: StackStyle = {
+  backgroundColor: palette.on_surface_alpha12,
 };

@@ -23,6 +23,7 @@ import {
   OptionsDto,
   ParagraphTextItemDto,
   PhotoItemDto,
+  PhrasalTemplateItemDto,
   RequestHealthRecordDataItemDto,
   SingleSelectionItemDto,
   SingleSelectionRowsItemDto,
@@ -35,6 +36,7 @@ import {
   TimeItemDto,
   TimeRangeItemDto,
   VideoItemDto,
+  UnityItemDto,
 } from '@app/shared/api/services/ActivityItemDto';
 import { ActivityDto } from '@app/shared/api/services/IActivityService';
 import { getMsFromSeconds } from '@app/shared/lib/utils/dateTime';
@@ -191,6 +193,28 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
     ...mapConditionalLogic(dto.conditionalLogic),
+  };
+}
+
+function mapToUnity(dto: UnityItemDto): ActivityItem {
+  return {
+    id: dto.id,
+    name: dto.name,
+    inputType: 'Unity',
+    config: {
+      file: dto.config.file,
+    },
+    timer: null,
+    order: dto.order,
+    question: dto.question,
+    isSkippable: false,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: true,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
   };
 }
 
@@ -430,6 +454,27 @@ function mapToMessage(dto: MessageItemDto): ActivityItem {
     id: dto.id,
     name: dto.name,
     inputType: 'Message',
+    config: null,
+    timer: mapTimerValue(dto.config.timer),
+    order: dto.order,
+    question: dto.question,
+    isSkippable: false,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: !dto.config.removeBackButton,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
+    ...mapConditionalLogic(dto.conditionalLogic),
+  };
+}
+
+function mapToPhrasalTemplate(dto: PhrasalTemplateItemDto): ActivityItem {
+  return {
+    id: dto.id,
+    name: dto.name,
+    inputType: 'PhrasalTemplate',
     config: null,
     timer: mapTimerValue(dto.config.timer),
     order: dto.order,
@@ -874,6 +919,12 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
           return mapToTime(item);
         case 'requestHealthRecordData':
           return mapToRequestHealthRecordData(item);
+        case 'phrasalTemplate':
+          // Even though mobile does not support PhrasalTemplate yet, we need to map it
+          // in case the item present but hidden
+          return mapToPhrasalTemplate(item);
+        case 'unity':
+          return mapToUnity(item);
       }
     }),
     hasSummary: dto.scoresAndReports?.showScoreSummary ?? false,

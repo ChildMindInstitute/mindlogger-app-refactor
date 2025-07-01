@@ -9,11 +9,11 @@ export const Text = ({
 }: Props) => {
   const lineHeight =
     lineHeightProp ??
-    (typeof fontSize === 'number' ? fontSize * 1.25 : undefined);
+    (typeof fontSize === 'number' ? fontSize * 1.5 : undefined);
 
   return (
     <TGUIText
-      color="$black"
+      color="$on_surface"
       fontFamily="$body"
       fontWeight="400"
       fontSize={fontSize}

@@ -1,26 +1,24 @@
 import { FC, useEffect } from 'react';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
-import { bannerActions } from '@app/entities/banner/model/slice';
 import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
-import { colors } from '@app/shared/lib/constants/colors';
-import { useAppDispatch } from '@app/shared/lib/hooks/redux';
-import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getSupportsMobile } from '@app/shared/lib/utils/responseTypes';
-import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box } from '@app/shared/ui/base';
+import { Spinner } from '@app/shared/ui/Spinner';
+import { StatusBar } from '@app/shared/ui/StatusBar';
 import { useBaseInfo } from '@app/widgets/activity-group/model/hooks/useBaseInfo';
 import { FlowSurvey } from '@app/widgets/survey/ui/FlowSurvey';
+import { IS_ANDROID, OS_MAJOR_VERSION } from '@shared/lib/constants';
 
 import { RootStackParamList } from '../config/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'InProgressActivity'>;
 
 export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
-  const dispatch = useAppDispatch();
   const { appletId, eventId, entityId, entityType, targetSubjectId } =
     route.params;
 
@@ -50,15 +48,17 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
     };
   }, [navigation]);
 
-  useOnFocus(() => {
-    // Match topmost container background color
-    dispatch(bannerActions.setBannersBg(colors.white));
-  });
+  const { top } = useSafeAreaInsets();
 
   return (
-    <Box flex={1} backgroundColor="$white">
+    // There's weird white space on Android because of the safe area insets
+    // We can remove this top margin when this issue is resolved:
+    // https://github.com/react-navigation/react-navigation/issues/12608
+    <Box flex={1} marginTop={IS_ANDROID && OS_MAJOR_VERSION >= 15 ? top : 0}>
+      <StatusBar hidden />
+
       {isLoading || !isAppSupportedEntity ? (
-        <ActivityIndicator />
+        <Spinner withOverlay />
       ) : (
         <FlowSurvey
           appletId={appletId}

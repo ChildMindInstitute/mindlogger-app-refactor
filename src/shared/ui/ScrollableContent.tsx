@@ -14,12 +14,13 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import { MotiView } from 'moti';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDebounce } from 'use-debounce';
 
 import { Box } from './base';
 import { ScrollButton } from './ScrollButton';
-import { IS_SMALL_SIZE_SCREEN } from '../lib/constants';
+import { IS_SMALL_WIDTH_SCREEN } from '../lib/constants';
 import { ScrollViewContext } from '../lib/contexts/ScrollViewContext';
 
 type Props = {
@@ -27,7 +28,7 @@ type Props = {
   scrollEventThrottle?: number;
 } & PropsWithChildren;
 
-const PaddingToBottom = IS_SMALL_SIZE_SCREEN ? 30 : 40;
+const PaddingToBottom = IS_SMALL_WIDTH_SCREEN ? 30 : 40;
 
 export const ScrollableContent: FC<Props> = ({
   children,
@@ -47,7 +48,7 @@ export const ScrollableContent: FC<Props> = ({
 
   const [showScrollButton, setShowScrollButton] = useState(false);
 
-  const scrollViewRef = useRef<ScrollView>();
+  const scrollViewRef = useRef<ScrollView>(undefined);
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (endOfContentReachedOnce) {
@@ -139,14 +140,17 @@ export const ScrollableContent: FC<Props> = ({
           </KeyboardAwareScrollView>
         </Box>
 
-        {showScrollButton && (
+        <MotiView
+          animate={{ opacity: showScrollButton ? 1 : 0 }}
+          pointerEvents={showScrollButton ? 'auto' : 'none'}
+        >
           <ScrollButton
             onPress={scrollToEnd}
             position="absolute"
             bottom={7}
             alignSelf="center"
           />
-        )}
+        </MotiView>
       </Box>
     </ScrollViewContext.Provider>
   );

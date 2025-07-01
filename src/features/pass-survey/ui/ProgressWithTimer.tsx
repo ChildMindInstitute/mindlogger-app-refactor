@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Easing, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { ONE_SECOND } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppTimer } from '@app/shared/lib/timers/hooks/useAppTimer';
 import { useInterval } from '@app/shared/lib/timers/hooks/useInterval';
 import { isObjectNotEmpty } from '@app/shared/lib/utils/common';
@@ -37,11 +37,7 @@ const TEN_SECONDS = ONE_SECOND * 10;
 const ProgressWithTimerView: FC<ProgressWithTimerProps> = ({ duration }) => {
   return (
     <TimerContainer accessibilityLabel="timer-widget">
-      {duration ? (
-        <Timer duration={duration} />
-      ) : (
-        <ProgressBar progress={0} height={2} />
-      )}
+      {!!duration && <Timer duration={duration} />}
     </TimerContainer>
   );
 };
@@ -117,10 +113,10 @@ const Timer: FC<TimerProps> = ({ duration }) => {
 
   const formattedTimeLeft = getClockTime(timeLeft);
 
-  const textColor = timeIsRunningOut ? colors.alertDark : colors.onSurface;
+  const textColor = timeIsRunningOut ? palette.error : palette.on_surface;
 
   return (
-    <>
+    <Box mt={-1}>
       <ProgressBar
         progress={progressDone === 0 ? 0 : 1 - progressDone}
         height={2}
@@ -130,14 +126,13 @@ const Timer: FC<TimerProps> = ({ duration }) => {
           w="100%"
           textAlign="center"
           position="absolute"
-          top={4}
+          top={6}
           color={textColor}
-          fontFamily="Atkinson Hyperlegible Regular"
         >
           {formattedTimeLeft} {t('activity_time:time_remaining')}
         </Text>
       )}
-    </>
+    </Box>
   );
 };
 

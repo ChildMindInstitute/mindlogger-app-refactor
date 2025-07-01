@@ -1,4 +1,4 @@
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import * as useAudioPlayerHooks from '@app/shared/lib/hooks/useAudioPlayer';
@@ -11,14 +11,14 @@ describe('Test AudioPlayer', () => {
   });
 
   it('Should render play button', () => {
-    const audioPlayer = renderer.create(
+    const audioPlayer = render(
       <TamaguiProvider>
         <AudioPlayer uri="http://dummyUrl.com/audio" />
       </TamaguiProvider>,
     );
 
     const playButton = audioPlayer.root.findByProps({
-      accessibilityLabel: 'audio-player-play',
+      'aria-label': 'audio-player-play',
     });
 
     expect(!!playButton).toBe(true);
@@ -35,14 +35,14 @@ describe('Test AudioPlayer', () => {
       isLoading: false,
     });
 
-    const audioPlayer = renderer.create(
+    const audioPlayer = render(
       <TamaguiProvider>
         <AudioPlayer uri="http://dummyUrl.com/audio" />
       </TamaguiProvider>,
     );
 
     const pauseButton = audioPlayer.root.findByProps({
-      accessibilityLabel: 'audio-player-pause',
+      'aria-label': 'audio-player-pause',
     });
 
     expect(!!pauseButton).toBe(true);

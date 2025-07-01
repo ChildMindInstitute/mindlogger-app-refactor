@@ -6,7 +6,7 @@ export const useInterval = (
   startImmediately: boolean | undefined = true,
 ) => {
   const callbacksRef = useRef({ onIntervalPass });
-  const intervalRef = useRef<IntervalId>();
+  const intervalRef = useRef<IntervalId>(undefined);
 
   callbacksRef.current = { onIntervalPass };
 

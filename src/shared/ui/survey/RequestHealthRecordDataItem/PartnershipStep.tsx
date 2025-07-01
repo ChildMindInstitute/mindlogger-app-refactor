@@ -1,11 +1,13 @@
 import { FC } from 'react';
+import { ImageStyle } from 'react-native';
+import { Image } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
 import { Assignment } from '@app/entities/activity/lib/types/activityAssignment';
 import { Box, YStack } from '@app/shared/ui/base';
-import { RequestHealthRecordDataIconPartnership } from '@app/shared/ui/icons/RequestHealthRecordDataIconPartnership';
 import { ItemMarkdown } from '@app/shared/ui/survey/ItemMarkdown';
+import { requestHealthRecordDataIconPartnership } from '@assets/images';
 
 type PartnershipStepProps = {
   textReplacer: (markdown: string) => string;
@@ -17,12 +19,16 @@ export const PartnershipStep: FC<PartnershipStepProps> = ({
   assignment,
 }) => {
   const { t } = useTranslation();
-  const maxWidth = '100%';
 
   return (
-    <YStack space="$4" px="$4" py="$8">
+    <YStack gap={12} px={16} pt={32} pb={24}>
       <Box alignItems="center" mb="$2">
-        <RequestHealthRecordDataIconPartnership style={{ maxWidth }} />
+        <Image
+          source={requestHealthRecordDataIconPartnership}
+          width={343}
+          height={75}
+          style={imageStyle}
+        />
       </Box>
 
       <ItemMarkdown
@@ -33,4 +39,11 @@ export const PartnershipStep: FC<PartnershipStepProps> = ({
       />
     </YStack>
   );
+};
+
+const imageStyle: ImageStyle = {
+  maxWidth: '100%',
+  resizeMode: 'contain',
+  width: 343,
+  height: 75,
 };

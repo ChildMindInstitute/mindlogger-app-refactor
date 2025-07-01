@@ -3,18 +3,21 @@ import { View } from 'react-native';
 import { styled } from '@tamagui/core';
 import { SvgProps } from 'react-native-svg';
 
+import { XStack } from './base';
 import { Text } from './Text';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 const getFillForVariant = (
   variant: React.ComponentProps<typeof StyledChip>['variant'],
 ) => {
   switch (variant) {
     case 'warning':
-      return '#D9730D';
+      return palette.warning;
+    case 'error':
+      return palette.error;
     case 'primary':
     default:
-      return colors.alertInfoIcon;
+      return palette.info;
   }
 };
 
@@ -22,18 +25,20 @@ const StyledChip = styled(View, {
   alignItems: 'center',
   borderRadius: 8,
   flexDirection: 'row',
-  gap: 8,
   name: 'Chip',
-  px: 8,
+  px: 12,
   py: 6,
 
   variants: {
     variant: {
       primary: {
-        backgroundColor: '$alertInfoBg',
+        backgroundColor: '$secondary_container',
+      },
+      error: {
+        backgroundColor: '$error_container',
       },
       warning: {
-        backgroundColor: 'rgba(217, 115, 13, 0.30)',
+        backgroundColor: '$warning_container',
       },
     },
   },
@@ -51,10 +56,14 @@ export const Chip = ({
   icon?: React.ComponentType<SvgProps>;
 }) => (
   <StyledChip variant={variant} {...otherProps}>
-    {Icon && <Icon aria-hidden fill={getFillForVariant(variant)} />}
+    {Icon && (
+      <XStack jc="center" w={18} ml={-4} mr={8}>
+        <Icon aria-hidden fill={getFillForVariant(variant)} />
+      </XStack>
+    )}
 
-    {children && (
-      <Text fontSize={12} fontWeight="400" lineHeight={17} flex={1}>
+    {!!children && (
+      <Text fontSize={14} lineHeight={20} letterSpacing={0.1}>
         {children}
       </Text>
     )}

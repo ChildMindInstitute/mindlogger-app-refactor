@@ -1,6 +1,6 @@
 import { Bar } from 'react-native-progress';
 
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 type Props = {
   progress: number;
@@ -11,8 +11,8 @@ export function ProgressBar({ progress, height = 10 }: Props) {
   return (
     <Bar
       progress={progress}
-      color={colors.blue}
-      unfilledColor={colors.grey2}
+      color={palette.secondary}
+      unfilledColor={palette.surface_variant}
       borderWidth={0}
       height={height}
       width={null}

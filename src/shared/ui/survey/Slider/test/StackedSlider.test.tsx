@@ -1,4 +1,4 @@
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import { Text } from '@app/shared/ui/Text';
@@ -10,7 +10,7 @@ import { SurveySlider } from '../SurveySlider';
 describe('StackedSlider', () => {
   it('should render correct slider count', () => {
     const changeHandler = jest.fn();
-    const stackedSlider = renderer.create(
+    const stackedSlider = render(
       <TamaguiProvider>
         <StackedSlider
           config={sliderConfig}
@@ -27,7 +27,7 @@ describe('StackedSlider', () => {
 
   it('should render correct slider values', () => {
     const changeHandler = jest.fn();
-    const stackedSlider = renderer.create(
+    const stackedSlider = render(
       <TamaguiProvider>
         <StackedSlider
           config={sliderConfig}
@@ -50,7 +50,7 @@ describe('StackedSlider', () => {
 
   it('should render right and left images', () => {
     const changeHandler = jest.fn();
-    const stackedSlider = renderer.create(
+    const stackedSlider = render(
       <TamaguiProvider>
         <StackedSlider
           config={sliderConfig}
@@ -74,7 +74,7 @@ describe('StackedSlider', () => {
 
   it('should render right and left titles', () => {
     const changeHandler = jest.fn();
-    const stackedSlider = renderer.create(
+    const stackedSlider = render(
       <TamaguiProvider>
         <StackedSlider
           config={sliderConfig}

@@ -1,7 +1,7 @@
-import { forwardRef, memo, useImperativeHandle, useState } from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { Canvas, Group, Path, Skia, SkPath } from '@shopify/react-native-skia';
+import { Canvas, Path, Skia, SkPath } from '@shopify/react-native-skia';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { runOnJS, useSharedValue } from 'react-native-reanimated';
 
@@ -26,41 +26,31 @@ type Props = {
   onStrokeEnd: (x: number, y: number, time: number) => void;
 };
 
-const MAX_POINTS_PER_LINE = 50;
-
 export const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   const { initialLines, onStrokeStart, onStrokeChanged, onStrokeEnd } = props;
 
-  const [paths, setPaths] = useState<Array<SkPath>>(() =>
-    initialLines.map(points => createPathFromPoints(points)),
+  const fullPath = useSharedValue<SkPath>(
+    initialLines
+      .map(points => createPathFromPoints(points))
+      .reduce((path, curr) => path.addPath(curr), Skia.Path.Make()),
   );
 
   const points = useSharedValue<Point[]>([]);
 
   const lastPointTime = useSharedValue<number | null>(null);
-
-  const activePath = useSharedValue<SkPath>(Skia.Path.Make());
-  const tempPath = useSharedValue<SkPath>(Skia.Path.Make());
-
   const width = useSharedValue(0);
 
   useImperativeHandle(ref, () => {
     return {
       clear() {
-        activePath.value = Skia.Path.Make();
-        setPaths([]);
+        fullPath.value = Skia.Path.Make();
       },
     };
   });
 
-  function updatePaths(path: SkPath) {
-    setPaths(prevPaths => [...prevPaths, path]);
-    tempPath.value = Skia.Path.Make();
-  }
-
   const onTouchStart = (point: Point, time: number) => {
     'worklet';
-    activePath.value = createLine(points, point);
+    fullPath.value.addPath(createLine(points, point));
     runOnJS(onStrokeStart)(point.x, point.y, time);
   };
 
@@ -86,23 +76,12 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
 
     lastPointTime.value = time;
 
-    activePath.modify(value => {
+    fullPath.modify(value => {
       'worklet';
       progressLine(points, value, point, straightLine);
 
       return value;
     });
-
-    if (points.value.length % MAX_POINTS_PER_LINE === 0) {
-      runOnJS(updatePaths)(activePath.value);
-
-      tempPath.value = activePath.value;
-
-      const lastPoint = activePath.value.getLastPt();
-      const newPath = createLine(points, lastPoint);
-
-      activePath.value = newPath;
-    }
 
     runOnJS(onStrokeChanged)(point.x, point.y, time);
   };
@@ -111,7 +90,7 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
     'worklet';
     runOnJS(onStrokeChanged)(point.x, point.y, time);
 
-    activePath.modify(value => {
+    fullPath.modify(value => {
       'worklet';
       progressLine(points, value, point);
 
@@ -133,7 +112,6 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
       );
     }
 
-    runOnJS(updatePaths)(activePath.value);
     runOnJS(onStrokeEnd)(point.x, point.y, time);
   };
 
@@ -148,48 +126,11 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
         style={styles.canvas}
         onLayout={e => (width.value = e.nativeEvent.layout.width)}
       >
-        <Group>
-          <DrawnPaths paths={paths} />
-
-          <Path
-            path={activePath}
-            strokeWidth={1.5}
-            color="black"
-            style="stroke"
-          />
-
-          <Path
-            path={tempPath}
-            strokeWidth={1.5}
-            color="black"
-            style="stroke"
-          />
-        </Group>
+        <Path path={fullPath} strokeWidth={1.5} color="black" style="stroke" />
       </Canvas>
     </GestureDetector>
   );
 });
-
-type DrawnPathsProps = {
-  paths: Array<SkPath>;
-};
-
-const DrawnPaths = memo(
-  ({ paths }: DrawnPathsProps) => (
-    <>
-      {paths.map((path, i) => (
-        <Path
-          key={i}
-          path={path}
-          strokeWidth={1.5}
-          color="black"
-          style="stroke"
-        />
-      ))}
-    </>
-  ),
-  (prevProps, nextProps) => prevProps.paths.length === nextProps.paths.length,
-);
 
 const styles = StyleSheet.create({
   canvas: {

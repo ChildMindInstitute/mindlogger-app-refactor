@@ -37,7 +37,9 @@ export function BackButton<TRouteName extends keyof RootParamList>(
 
   return (
     <Box {...styledProps}>
-      <TouchableOpacity onPress={back}>{children}</TouchableOpacity>
+      <TouchableOpacity onPress={back} hitSlop={40}>
+        {children}
+      </TouchableOpacity>
     </Box>
   );
 }

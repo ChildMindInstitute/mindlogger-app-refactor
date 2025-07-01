@@ -1,13 +1,13 @@
-# Child Mind Institute - MindLogger Mobile App
+# Child Mind Institute - Curious Mobile App
 
-This repository is used for the respondent mobile app of the [MindLogger](https://mindlogger.org/) application stack.
+This repository is used for the respondent mobile app of the [Curious](https://mindlogger.org/) application stack.
 
 ## Application Stack
 
-* MindLogger Admin - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-admin)
-* MindLogger Backend - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-backend-refactor)
-* MindLogger Mobile App - **This Repo**
-* MindLogger Web App - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-web-refactor)
+- Curious Admin - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-admin)
+- Curious Backend - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-backend-refactor)
+- Curious Mobile App - **This Repo**
+- Curious Web App - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-web-refactor)
 
 ## Getting Started
 
@@ -38,7 +38,7 @@ Running the app:
 
 ## Features
 
-See MindLogger's [Knowledge Base article](https://mindlogger.atlassian.net/servicedesk/customer/portal/3/topic/4d9a9ad4-c663-443b-b7fc-be9faf5d9383/article/337444910) to discover the MindLogger application stack's features.
+See Curious's [Knowledge Base article](https://mindlogger.atlassian.net/servicedesk/customer/portal/3/topic/4d9a9ad4-c663-443b-b7fc-be9faf5d9383/article/337444910) to discover the Curious application stack's features.
 
 ## Technologies
 
@@ -60,36 +60,34 @@ In the project directory, you can run the following commands from the project ro
 
 - `yarn postinstall`
 
-     Applies any preconfigured package patches & sets up iOS permissions.
+  Applies any preconfigured package patches & sets up iOS permissions.
 
 - `yarn pods`
 
     Installs any native dependencies required by the iOS app via **CocoaPods**, a dependency management system used for iOS.
-    This also applies `YogaKit` and `Flipper` patches located in `ios/patches` required while this is on React Native 0.73. The [need](https://github.com/facebook/react-native/issues/43383)
-    for these patches will be re-evaluated as part of a planned React Native upgrade.
 
 ### Starting the Metro Server
 
 - `yarn start`
 
-    Runs **Metro**, the JavaScript bundler that ships with React Native.\
-    Keep this process running in a separate terminal before running the application.
+  Runs **Metro**, the JavaScript bundler that ships with React Native.\
+   Keep this process running in a separate terminal before running the application.
 
 - `yarn start:reset-cache`
 
-    Clears the cache related to the development environment before running Metro. This can help resolve certain npm errors, inconsistencies, and free up disk space by removing redundant packages that have accumulated.
+  Clears the cache related to the development environment before running Metro. This can help resolve certain npm errors, inconsistencies, and free up disk space by removing redundant packages that have accumulated.
 
 ### Running the Application
 
 Make sure Metro is running, then run:
 
-  - `yarn android`
+- `yarn android`
 
-    Builds and runs the Android version of the app in the default Android emulator.
+  Builds and runs the Android version of the app in the default Android emulator.
 
-  - `yarn ios`
+- `yarn ios`
 
-    Builds and runs the iOS version of the app in the iOS Simulator.
+  Builds and runs the iOS version of the app in the iOS Simulator.
 
 #### Feature Flags considerations
 
@@ -114,6 +112,7 @@ Update the version in the `package.json` file and run: `yarn bump`. The default 
 If you only want to update the build version without modifying the `package.json` file, simply run: `yarn bump`.
 
 You can also customize the bump behavior by passing options:
+
 - To skip the commit message, use `skipCommit:true`.
 - To increment the build version by a specific number, use `increment:x`.
 
@@ -122,7 +121,7 @@ This command will skip generating a commit and increment the build version by 5.
 
 #### Alternative Build Configurations
 
-The above scripts run the app using Debug configuration and for MindLogger's `dev` server environment. You can also run the app using the optimized Release configuration (which disables debugger integration) or for other MindLogger server environments, including `qa`, `staging`, `uat`, and `production`.
+The above scripts run the app using Debug configuration and for Curious's `dev` server environment. You can also run the app using the optimized Release configuration (which disables debugger integration) or for other Curious server environments, including `qa`, `staging`, `uat`, and `production`.
 
 | Command                           | OS      | Build configuration | Server environment |
 | --------------------------------- | ------- | ------------------- | ------------------ |
@@ -157,17 +156,22 @@ The above scripts run the app using Debug configuration and for MindLogger's `d
 
 ## Environment Variables
 
-| Key                                  | Required | Default value                          | Description                                                              |
-| ------------------------------------ | -------- | -------------------------------------- | ------------------------------------------------------------------------ |
-| `ENV`                                | no       | `dev`                                  | App build label (informational only)                                     |
-| `API_URL`                            | yes      | `http://localhost:8000`                | MindLogger Backend API base URL                                          |
-| `MIXPANEL_TOKEN`                     | no       | null                                   | Mixpanel analytics token                                                 |
-| `STORE_ENCRYPTION_KEY`               | yes      | `my-encryption-key`                    | Secure storage encryption key                                            |
-| `LAUNCHDARKLY_MOBILE_KEY`            | yes      | `my-env-mobile-key`                    | LaunchDarkly mobile key, refer to Confluence for correct environment key |
-| `ONEUP_HEALTH_CLIENT_ID`             | yes*     | null                                   | 1UpHealth client ID                                                      |
-| `ONEUP_HEALTH_SYSTEM_SEARCH_API_URL` | yes*     | `https://system-search.1up.health/api` | 1UpHealth System Search API URL                                          |
+| Key                                  | Required | Default value                                               | Description                                                              |
+| ------------------------------------ | -------- | ----------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `ENV`                                | no       | `dev`                                                       | App build label (informational only)                                     |
+| `API_URL`                            | yes      | `http://localhost:8000`                                     | Curious Backend API base URL                                             |
+| `DEEP_LINK_PREFIXES`                 | yes      | `https://web-dev.cmiml.net`                                 | Deep link prefixes for the app, comma-delimited if multiple              |
+| `MIXPANEL_TOKEN`                     | no       | null                                                        | Mixpanel analytics token                                                 |
+| `STORE_ENCRYPTION_KEY`               | yes      | `my-encryption-key`                                         | Secure storage encryption key                                            |
+| `LAUNCHDARKLY_MOBILE_KEY`            | yes      | `my-env-mobile-key`                                         | LaunchDarkly mobile key, refer to Confluence for correct environment key |
+| `ONEUP_HEALTH_CLIENT_ID`             | yes\*    | null                                                        | 1UpHealth client ID                                                      |
+| `ONEUP_HEALTH_SYSTEM_SEARCH_API_URL` | yes\*    | `https://system-search.1up.health/api`                      | 1UpHealth System Search API URL                                          |
 
 \* Required to use 1UpHealth integration
+
+## Unity
+
+For concerns related to Unity integration, see [unity/README.md](unity/README.md)
 
 ## License
 

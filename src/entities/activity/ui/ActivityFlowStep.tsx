@@ -1,40 +1,37 @@
 import { FC } from 'react';
 
-import { IS_ANDROID } from '@app/shared/lib/constants';
-import { BoxProps, Image, XStack } from '@app/shared/ui/base';
+import { XStackProps } from '@tamagui/stacks';
+import { useTranslation } from 'react-i18next';
+
+import { palette } from '@app/shared/lib/constants/palette';
+import { XStack } from '@app/shared/ui/base';
+import { MultipleActivitiesIcon } from '@app/shared/ui/icons/MultipleActivities';
 import { Text } from '@app/shared/ui/Text';
-import { badge } from '@assets/images';
 
-import { ActivityListItem } from '../lib/types/activityListItem';
+import { ActivityFlowDetails } from '../lib/types/activityListItem';
 
-type Props = BoxProps & {
-  activity: ActivityListItem;
-  hasOpacity: boolean;
-};
+type Props = XStackProps & Omit<ActivityFlowDetails, 'showActivityFlowBadge'>;
 
 export const ActivityFlowStep: FC<Props> = props => {
-  const { activity, hasOpacity } = props;
-
+  const { t } = useTranslation();
   const { activityPositionInFlow, numberOfActivitiesInFlow, activityFlowName } =
-    activity.activityFlowDetails!;
+    props;
 
   return (
-    <XStack {...props}>
-      <Image
-        src={badge}
-        width={18}
-        height={18}
-        mr={3}
-        mt={IS_ANDROID ? 2 : 0}
-        opacity={0.6}
-      />
+    <XStack gap={5} padding={4} ai="center" {...props}>
+      <MultipleActivitiesIcon color={palette.on_surface_variant} />
 
       <Text
-        color="$darkGrey"
-        accessibilityLabel="activity-card-flow"
-        opacity={hasOpacity ? 0.5 : 1}
+        fontSize={14}
+        letterSpacing={0.25}
+        color="$on_surface_variant"
+        aria-label="activity-card-flow"
       >
-        {`(${activityPositionInFlow} of ${numberOfActivitiesInFlow}) ${activityFlowName}`}
+        {t('activity:flowStep', {
+          activityPositionInFlow,
+          numberOfActivitiesInFlow,
+          activityFlowName,
+        })}
       </Text>
     </XStack>
   );

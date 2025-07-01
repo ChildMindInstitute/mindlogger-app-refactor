@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
 import { Box } from './base';
-import { colors } from '../lib/constants/colors';
+import { palette } from '../lib/constants/palette';
 
 export type LabeledValue = {
   label: string;
@@ -28,11 +28,12 @@ export function Dropdown({
   };
 
   return (
-    <Box accessibilityLabel="select-dropdown">
+    <Box aria-label="select-dropdown">
       <SelectDropdown
         data={items}
         dropdownStyle={styles.dropdown}
         buttonStyle={styles.button}
+        buttonTextStyle={styles.label}
         defaultButtonText={value ? value.value : placeholder}
         defaultValue={value ? value.value : placeholder}
         onSelect={onChange}
@@ -45,21 +46,15 @@ export function Dropdown({
 
 const styles = StyleSheet.create({
   dropdown: {
-    backgroundColor: 'white',
-    borderBottomWidth: 1.5,
-    borderBottomColor: colors.lightGrey,
-    color: 'white',
+    backgroundColor: palette.surface,
   },
   button: {
-    fontSize: 13,
     width: '100%',
     backgroundColor: 'transparent',
-    borderBottomWidth: 1.5,
-    borderBottomColor: colors.grey,
-    color: colors.grey,
+    borderBottomWidth: 1,
+    borderBottomColor: palette.outline,
   },
   label: {
-    fontSize: 13,
-    color: colors.grey,
+    color: palette.primary,
   },
 });

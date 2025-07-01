@@ -8,10 +8,10 @@ import {
   CompleteEntityIntoUploadToQueue,
 } from '@app/abstract/lib/types/entity';
 import { getAppletCompletedEntitiesKey } from '@app/shared/lib/utils/reactQueryHelpers';
-import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box, BoxProps, XStack, YStack } from '@app/shared/ui/base';
 import { ChecklistIcon } from '@app/shared/ui/icons/ChecklistIcon';
 import { LoadListError } from '@app/shared/ui/LoadListError';
+import { Spinner } from '@app/shared/ui/Spinner';
 
 import { ActivitySectionList } from './ActivitySectionList';
 import { EmptyState } from './EmptyState';
@@ -59,55 +59,50 @@ export const ActivityGroups: FC<Props> = props => {
     }
   }, [groups]);
 
-  if (isLoadingCompletedEntities || isLoading) {
-    return (
-      <Box
-        accessibilityLabel="activity-group-loader"
-        flex={1}
-        justifyContent="center"
-      >
-        <ActivityIndicator size="large" />
-      </Box>
-    );
-  }
-
-  if (hasError) {
-    return (
-      <XStack
-        accessibilityLabel="activity-group-error"
-        flex={1}
-        jc="center"
-        ai="center"
-      >
-        <LoadListError
-          paddingHorizontal="10%"
-          textAlign="center"
-          error={!error ? 'widget_error:error_text' : error}
-        />
-      </XStack>
-    );
-  }
-
   return (
-    <Box {...props}>
-      <YStack accessibilityLabel="activity-group-list" flex={1}>
-        {renderedGroups ? (
-          <ActivitySectionList
-            activityResponseTypes={responseTypes}
-            appletId={props.appletId}
-            groups={renderedGroups}
-            completeEntity={props.completeEntity}
-            checkAvailability={props.checkAvailability}
+    <>
+      {hasError ? (
+        <XStack
+          aria-label="activity-group-error"
+          flex={1}
+          jc="center"
+          ai="center"
+        >
+          <LoadListError
+            paddingHorizontal="10%"
+            textAlign="center"
+            error={!error ? 'widget_error:error_text' : error}
           />
-        ) : (
-          <EmptyState
-            accessibilityLabel="activity-group-empty"
-            flex={1}
-            icon={<ChecklistIcon />}
-            description={t('activity_list_component:no_activities')}
-          />
-        )}
-      </YStack>
-    </Box>
+        </XStack>
+      ) : (
+        <Box {...props}>
+          <YStack aria-label="activity-group-list" flex={1}>
+            {renderedGroups && responseTypes ? (
+              <ActivitySectionList
+                activityResponseTypes={responseTypes}
+                appletId={props.appletId}
+                groups={renderedGroups}
+                completeEntity={props.completeEntity}
+                checkAvailability={props.checkAvailability}
+              />
+            ) : (
+              !isLoading && (
+                <EmptyState
+                  aria-label="activity-group-empty"
+                  flex={1}
+                  icon={<ChecklistIcon />}
+                  description={t('activity_list_component:no_activities')}
+                />
+              )
+            )}
+          </YStack>
+        </Box>
+      )}
+
+      <Spinner
+        withOverlay
+        isVisible={isLoadingCompletedEntities || isLoading}
+      />
+    </>
   );
 };

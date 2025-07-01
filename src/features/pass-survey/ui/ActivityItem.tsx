@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useContext,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -45,6 +46,7 @@ import { StackedCheckboxItem } from '@app/shared/ui/survey/StackedCheckboxItem/S
 import { StackedRadios } from '@app/shared/ui/survey/StackedRadioItem/StackedRadiosItem';
 import { TimePickerItem } from '@app/shared/ui/survey/TimePickerItem';
 import { TimeRangeItem } from '@app/shared/ui/survey/TimeRangeItem';
+import { UnityView } from '@entities/unity/ui/UnityView';
 
 import { AdditionalText } from './AdditionalText';
 import { ActivityIdentityContext } from '../lib/contexts/ActivityIdentityContext';
@@ -75,6 +77,7 @@ export function ActivityItem({
   const { appletId, activityId, flowId, targetSubjectId } = useContext(
     ActivityIdentityContext,
   );
+  const textVariableReplacerRef = useRef(textVariableReplacer);
 
   const { assignment } = useActivityAssignment({
     appletId,
@@ -166,11 +169,7 @@ export function ActivityItem({
       case 'Splash':
         return {
           item: (
-            <Box
-              flex={1}
-              onPressIn={stopScrolling}
-              onPressOut={releaseScrolling}
-            >
+            <Box flex={1}>
               <SplashItem config={pipelineItem.payload} />
             </Box>
           ),
@@ -306,7 +305,7 @@ export function ActivityItem({
                 config={pipelineItem.payload}
                 onChange={onResponse}
                 values={value?.answer || null}
-                textReplacer={textVariableReplacer}
+                textReplacer={textVariableReplacerRef.current}
                 tooltipsShown={pipelineItem.payload.addTooltip}
               />
             </Box>
@@ -320,7 +319,7 @@ export function ActivityItem({
                 config={pipelineItem.payload}
                 onChange={onResponse}
                 values={value?.answer || []}
-                textReplacer={textVariableReplacer}
+                textReplacer={textVariableReplacerRef.current}
                 tooltipsShown={pipelineItem.payload.addTooltip}
               />
             </Box>
@@ -334,7 +333,7 @@ export function ActivityItem({
                 config={pipelineItem.payload}
                 onChange={onResponse}
                 values={value?.answer || []}
-                textReplacer={textVariableReplacer}
+                textReplacer={textVariableReplacerRef.current}
               />
             </Box>
           ),
@@ -392,7 +391,7 @@ export function ActivityItem({
                 config={pipelineItem.payload}
                 onChange={handleRadioChange}
                 initialValue={value?.answer}
-                textReplacer={textVariableReplacer}
+                textReplacer={textVariableReplacerRef.current}
               />
             </Box>
           ),
@@ -436,12 +435,20 @@ export function ActivityItem({
               item={pipelineItem}
               onChange={onResponse}
               responseValue={value?.answer}
-              textReplacer={textVariableReplacer}
+              textReplacer={textVariableReplacerRef.current}
               assignment={assignment}
             />
           ),
           question: null,
           noScrollContainer: true,
+        };
+      case 'Unity':
+        return {
+          item: (
+            <Box flex={1}>
+              <UnityView payload={pipelineItem.payload} />
+            </Box>
+          ),
         };
       default:
         return {
@@ -459,7 +466,6 @@ export function ActivityItem({
     onResponse,
     pipelineItem,
     processLiveEvent,
-    textVariableReplacer,
     type,
     value?.answer,
   ]);
@@ -475,6 +481,21 @@ export function ActivityItem({
       );
     },
     [noScrollContainer, scrollEnabled],
+  );
+
+  const itemMarkdown = useMemo(
+    () =>
+      !!question && (
+        <ItemMarkdown
+          content={question}
+          assignment={assignment}
+          alignToLeft={alignMessageToLeft}
+          textVariableReplacer={textVariableReplacerRef.current}
+          mx={16}
+          mb={20}
+        />
+      ),
+    [alignMessageToLeft, assignment, question],
   );
 
   return (
@@ -506,21 +527,12 @@ export function ActivityItem({
           }
         }}
       >
-        {question && (
-          <ItemMarkdown
-            content={question}
-            assignment={assignment}
-            alignToLeft={alignMessageToLeft}
-            textVariableReplacer={textVariableReplacer}
-            mx={16}
-            mb={20}
-          />
-        )}
+        {itemMarkdown}
 
         {item}
 
         {pipelineItem.additionalText && (
-          <Box justifyContent="center" mt={30} mb={16} mx={16}>
+          <Box justifyContent="center" m={16} mb={32}>
             <AdditionalText
               value={value?.additionalAnswer}
               onChange={onAdditionalResponse}

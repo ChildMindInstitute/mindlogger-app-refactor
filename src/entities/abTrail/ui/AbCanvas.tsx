@@ -49,7 +49,7 @@ export const AbCanvas: FC<Props> = props => {
     index: number;
   } | null>(null);
 
-  const currentPathRef = useRef<SkPath | null>();
+  const currentPathRef = useRef<SkPath | null>(null);
 
   const currentIndexRef = useRef(1);
 
@@ -400,7 +400,7 @@ export const AbCanvas: FC<Props> = props => {
   };
 
   return (
-    <Box {...props} borderWidth={1} borderColor="$lightGrey2">
+    <Box {...props} borderWidth={1} borderColor="$outline">
       <Box width={width} height={width}>
         {isSketchCanvasShown && !readonly && (
           <SketchCanvas

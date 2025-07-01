@@ -24,6 +24,7 @@ export type ResponseType =
   | 'slider'
   | 'sliderRows'
   | 'stabilityTracker'
+  | 'unity'
   | 'text'
   | 'time'
   | 'timeRange'
@@ -745,6 +746,12 @@ export type AbTrailsConfiguration = AbTrailsItemSettingsDto;
 
 export type AbTrailsAnswerSettings = null;
 
+type UnityAnswerSettings = null;
+
+type UnityConfiguration = {
+  file: string;
+};
+
 type Configuration =
   | TextConfiguration
   | SingleSelectionRowsConfiguration
@@ -768,7 +775,8 @@ type Configuration =
   | StabilityTrackerConfiguration
   | FlankerConfiguration
   | RequestHealthRecordDataConfiguration
-  | AbTrailsConfiguration;
+  | AbTrailsConfiguration
+  | UnityConfiguration;
 
 type AnswerSettings =
   | TextAnswerSettings
@@ -792,7 +800,8 @@ type AnswerSettings =
   | StabilityTrackerAnswerSettings
   | FlankerAnswerSettings
   | RequestHealthRecordDataAnswerSettings
-  | AbTrailsAnswerSettings;
+  | AbTrailsAnswerSettings
+  | UnityAnswerSettings;
 
 type ActivityItemDtoBase = {
   id: string;
@@ -832,6 +841,12 @@ export interface MultiSelectionItemDto extends ActivityItemDtoBase {
 
 export interface MessageItemDto extends ActivityItemDtoBase {
   responseType: 'message';
+  config: MessageConfiguration;
+  responseValues: MessageAnswerSettings;
+}
+
+export interface PhrasalTemplateItemDto extends ActivityItemDtoBase {
+  responseType: 'phrasalTemplate';
   config: MessageConfiguration;
   responseValues: MessageAnswerSettings;
 }
@@ -944,6 +959,12 @@ export interface ABTrailsItemDto extends ActivityItemDtoBase {
   responseValues: AbTrailsAnswerSettings;
 }
 
+export interface UnityItemDto extends ActivityItemDtoBase {
+  responseType: 'unity';
+  config: UnityConfiguration;
+  responseValues: UnityAnswerSettings;
+}
+
 export type ActivityItemDto =
   | TextItemDto
   | ParagraphTextItemDto
@@ -967,4 +988,6 @@ export type ActivityItemDto =
   | StabilityTrackerItemDto
   | FlankerItemDto
   | RequestHealthRecordDataItemDto
-  | TimeItemDto;
+  | TimeItemDto
+  | UnityItemDto
+  | PhrasalTemplateItemDto;

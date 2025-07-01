@@ -10,9 +10,9 @@ import {
   MixProperties,
 } from '@app/shared/lib/analytics/IAnalyticsService';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
-import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box } from '@app/shared/ui/base';
 import { HorizontalCalendar } from '@app/shared/ui/HorizontalCalendar';
+import { Spinner } from '@app/shared/ui/Spinner';
 import { UploadRetryBanner } from '@app/widgets/survey/ui/UploadRetryBanner';
 
 import { AppletDetailsParamList } from '../config/types';
@@ -32,19 +32,15 @@ export const AppletDataScreen: FC<Props> = ({ route }) => {
     });
   });
 
-  if (isLoading) {
-    return (
-      <Box flex={1} justifyContent="center">
-        <ActivityIndicator size="large" />
-      </Box>
-    );
-  }
-
   return (
-    <Box flexGrow={1}>
-      <UploadRetryBanner />
-      <HorizontalCalendar mt={8} />
-      <ActivityAnalyticsList analytics={analytics} />
-    </Box>
+    <>
+      <Box flex={1} bg="$surface1">
+        <UploadRetryBanner />
+        <HorizontalCalendar />
+        <ActivityAnalyticsList analytics={analytics} />
+      </Box>
+
+      <Spinner withOverlay isVisible={isLoading} />
+    </>
   );
 };

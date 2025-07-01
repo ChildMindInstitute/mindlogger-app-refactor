@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 import { AccessibilityProps } from 'react-native';
 
-import { colors } from '@app/shared/lib/constants/colors';
-import { invertColor } from '@app/shared/lib/utils/survey/survey';
+import { YStackProps } from '@tamagui/stacks';
+
+import { getSelectorColors } from '@app/shared/lib/utils/survey/survey';
 
 import { RadioOption } from './types';
-import { Box, BoxProps, RadioGroup } from '../../base';
+import { Box, RadioGroup } from '../../base';
 import { QuestionIcon } from '../../icons/QuestionIcon';
 import { OptionCard } from '../../OptionCard';
 import { Tooltip } from '../../Tooltip';
@@ -24,7 +25,7 @@ type HandlerProps = {
   onPress: () => void;
 };
 
-type Props = RadioLabelProps & AccessibilityProps & HandlerProps & BoxProps;
+type Props = RadioLabelProps & AccessibilityProps & HandlerProps & YStackProps;
 
 export function RadioCard({
   selected,
@@ -48,32 +49,12 @@ export function RadioCard({
     [textReplacer, tooltip],
   );
 
-  const hasColor = color && setPalette;
-
-  const defaultBGColor = selected ? colors.lighterGrey6 : colors.white;
-  const bgColor = hasColor ? color : defaultBGColor;
-
-  const textColor = color
-    ? invertColor(color, { dark: colors.white, light: colors.black })
-    : colors.onSurface;
-
-  const tooltipColor = color
-    ? invertColor(color, {
-        dark: colors.darkOnSurface,
-        light: colors.onSurface,
-      })
-    : colors.darkerGrey4;
-
-  const invertedRadioColor = color
-    ? invertColor(color, {
-        dark: colors.darkOnSurface,
-        light: colors.onSurface,
-      })
-    : colors.lighterGrey6;
-
-  const defaultRadioColor = selected ? colors.blue3 : colors.outlineGrey;
-  const radioColor = hasColor ? invertedRadioColor : defaultRadioColor;
-  const borderColor = selected ? colors.blue3 : colors.lighterGrey7;
+  const { textColor, tooltipColor, bgColor, widgetColor, borderColor } =
+    getSelectorColors({
+      setPalette,
+      color,
+      selected,
+    });
 
   if (isHidden) {
     return null;
@@ -86,19 +67,19 @@ export function RadioCard({
       borderColor={borderColor}
       imageUrl={imageContainerVisible ? image : null}
       onPress={onPress}
-      accessibilityLabel={accessibilityLabel}
+      aria-label={accessibilityLabel}
       renderLeftIcon={() => (
         <Box mr={10}>
           <RadioGroup.Item
-            accessibilityLabel={`radio-option-${value}}`}
-            borderColor={radioColor}
-            borderWidth={selected ? 8 : 2}
-            bg="transparent"
+            aria-label={`radio-option-${value}}`}
+            borderColor={widgetColor}
+            borderWidth={selected ? 0 : 3}
+            bg={selected ? widgetColor : bgColor}
             id={text}
             value={id}
             disabled
           >
-            <RadioGroup.Indicator bg="transparent" />
+            <RadioGroup.Indicator bg={selected ? bgColor : widgetColor} />
           </RadioGroup.Item>
         </Box>
       )}

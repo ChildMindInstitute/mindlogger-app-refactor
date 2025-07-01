@@ -1,9 +1,11 @@
 import { ReactNode } from 'react';
 
-import { BoxProps, YStack } from '@app/shared/ui/base';
+import { YStackProps } from '@tamagui/stacks';
+
+import { YStack } from '@app/shared/ui/base';
 import { Text } from '@app/shared/ui/Text';
 
-type Props = BoxProps & {
+type Props = YStackProps & {
   icon: ReactNode;
   description: string;
 };
@@ -18,7 +20,7 @@ export const EmptyState = ({ icon, description, ...rest }: Props) => {
       {...rest}
     >
       {icon}
-      <Text fontSize={24} lineHeight={32} color="$grey4" textAlign="center">
+      <Text fontSize={24} lineHeight={32} color="$outline" textAlign="center">
         {description}
       </Text>
     </YStack>

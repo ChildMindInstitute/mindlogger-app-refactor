@@ -7,16 +7,13 @@ import { useQueueProcessing } from '@app/entities/activity/lib/hooks/useQueuePro
 import { useRetryUpload } from '@app/entities/activity/lib/hooks/useRetryUpload';
 import { getDefaultQueueProcessingService } from '@app/entities/activity/lib/services/queueProcessingServiceInstance';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
-import { bannerActions } from '@app/entities/banner/model/slice';
 import { getDefaultAlertsExtractor } from '@app/features/pass-survey/model/alertsExtractorInstance';
 import { getDefaultScoresExtractor } from '@app/features/pass-survey/model/scoresExtractorInstance';
-import { colors } from '@app/shared/lib/constants/colors';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
-import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
 import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
-import { ImageBackground } from '@app/shared/ui/ImageBackground';
+import { Box } from '@app/shared/ui/base';
 import { FinishReason } from '@widgets/survey/model/IPipelineBuilder';
 
 import { AnswersSubmitted } from './completion/AnswersSubmitted';
@@ -172,13 +169,8 @@ export function FinishItem({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useOnFocus(() => {
-    // Match <ImageBackground> raster image top pixel color
-    dispatch(bannerActions.setBannersBg(colors.lightGrey4));
-  });
-
   if (isRetryAlertOpened) {
-    return <ImageBackground />;
+    return <Box flex={1} />;
   }
 
   if (!isCompleted && !isPostponed && !isError) {

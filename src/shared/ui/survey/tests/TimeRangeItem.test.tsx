@@ -1,4 +1,4 @@
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import * as dateTimeUtils from '@shared/lib/utils/dateTime';
@@ -16,7 +16,7 @@ describe('Test TimeRangeItem', () => {
 
     jest.spyOn(dateTimeUtils, 'getNow').mockReturnValue(mockNowDate);
 
-    const rangeItem = renderer.create(
+    const rangeItem = render(
       <TamaguiProvider>
         <TimeRangeItem onChange={jest.fn()} />
       </TamaguiProvider>,
@@ -50,7 +50,7 @@ describe('Test TimeRangeItem', () => {
       startTime: { minutes: 4, hours: 4 },
     };
 
-    const rangeItem = renderer.create(
+    const rangeItem = render(
       <TamaguiProvider>
         <TimeRangeItem value={mockValue} onChange={jest.fn()} />
       </TamaguiProvider>,

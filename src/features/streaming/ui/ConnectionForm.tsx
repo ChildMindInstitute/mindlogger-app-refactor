@@ -7,15 +7,15 @@ import { useTranslation } from 'react-i18next';
 import { useAppletStreamingDetails } from '@app/entities/applet/lib/hooks/useAppletStreamingDetails';
 import { selectStreamingSettings } from '@app/entities/streaming/model/selectors';
 import { streamingAction } from '@app/entities/streaming/model/slice';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { useTCPSocket } from '@app/shared/lib/tcp/useTCPSocket';
-import { ActivityIndicator } from '@app/shared/ui/ActivityIndicator';
 import { Box, BoxProps, XStack } from '@app/shared/ui/base';
 import { Button } from '@app/shared/ui/Button';
 import { CheckBoxField } from '@app/shared/ui/form/CheckBoxField';
 import { InputField } from '@app/shared/ui/form/InputField';
+import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
 
 import { ConnectionFormSchema } from '../model/ConnectionFormSchema';
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   error: {
-    color: colors.errorRed,
+    color: palette.error,
     fontSize: 18,
   },
 });
@@ -101,7 +101,7 @@ export const ConnectionForm: FC<Props> = ({
 
   return (
     <Box
-      accessibilityLabel="connection-form"
+      aria-label="connection-form"
       {...props}
       onPress={e => e.stopPropagation()}
     >
@@ -112,19 +112,17 @@ export const ConnectionForm: FC<Props> = ({
             mb={20}
             color="$darkerGrey3"
             fontSize={20}
-            fontWeight="900"
+            fontWeight="700"
             mr={6}
           >
             {t('live_connection:connect_to_server')}
           </Text>
 
-          {connecting && (
-            <ActivityIndicator
-              accessibilityLabel="connection-form-loader"
-              size="small"
-              mb={18}
-            />
-          )}
+          <Spinner
+            aria-label="connection-form-loader"
+            withOverlay
+            isVisible={connecting}
+          />
         </XStack>
 
         <Text color="$darkerGrey3" fontSize={18} fontWeight="700">
@@ -135,15 +133,15 @@ export const ConnectionForm: FC<Props> = ({
           <InputField
             editable={!connected}
             name="ipAddress"
-            accessibilityLabel="connection-form-ip"
+            aria-label="connection-form-ip"
             mode="dark"
             style={[
               styles.input,
               {
-                color: connected ? colors.grey2 : colors.darkerGrey2,
+                color: connected ? palette.grey2 : palette.darkerGrey2,
                 borderBottomColor: connected
-                  ? colors.grey2
-                  : colors.darkerGrey2,
+                  ? palette.grey2
+                  : palette.darkerGrey2,
               },
             ]}
             placeholder=""
@@ -158,15 +156,15 @@ export const ConnectionForm: FC<Props> = ({
           <InputField
             mode="dark"
             editable={!connected}
-            accessibilityLabel="connection-form-port"
+            aria-label="connection-form-port"
             name="port"
             style={[
               styles.input,
               {
-                color: connected ? colors.grey2 : colors.darkerGrey2,
+                color: connected ? palette.grey2 : palette.darkerGrey2,
                 borderBottomColor: connected
-                  ? colors.grey2
-                  : colors.darkerGrey2,
+                  ? palette.grey2
+                  : palette.darkerGrey2,
               },
             ]}
             keyboardType="number-pad"
@@ -177,18 +175,18 @@ export const ConnectionForm: FC<Props> = ({
         <XStack ai="center" my={8}>
           <CheckBoxField
             name="remember"
-            accessibilityLabel="connection-form-remember"
-            onCheckColor={colors.white}
-            onFillColor={colors.grey}
-            onTintColor={colors.grey}
-            tintColor={colors.grey}
+            aria-label="connection-form-remember"
+            onCheckColor={palette.white}
+            onFillColor={palette.grey}
+            onTintColor={palette.grey}
+            tintColor={palette.grey}
             disabled={connected}
           >
             <Text
-              fontWeight="900"
+              fontWeight="700"
               ml={12}
-              color={connected ? colors.grey2 : colors.darkerGrey2}
-              accessibilityLabel="connection-form-remember-status"
+              color={connected ? palette.grey2 : palette.darkerGrey2}
+              aria-label="connection-form-remember-status"
               fontSize={16}
             >
               {t('live_connection:remember')}
@@ -197,14 +195,14 @@ export const ConnectionForm: FC<Props> = ({
         </XStack>
 
         {(error && (
-          <Text accessibilityLabel="connection-form-error" style={styles.error}>
+          <Text aria-label="connection-form-error" style={styles.error}>
             {error}
           </Text>
         )) || <></>}
 
         {connected ? (
           <Button
-            accessibilityLabel="connection-form-disconnect-btn"
+            aria-label="connection-form-disconnect-btn"
             br={4}
             mt={10}
             onPress={disconnect}
@@ -213,7 +211,7 @@ export const ConnectionForm: FC<Props> = ({
           </Button>
         ) : (
           <Button
-            accessibilityLabel="connection-form-connect-btn"
+            aria-label="connection-form-connect-btn"
             br={4}
             mt={10}
             isLoading={connecting}

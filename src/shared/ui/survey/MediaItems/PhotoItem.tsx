@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Image } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 import { FileSystem } from 'react-native-file-access';
@@ -14,7 +15,7 @@ import {
   GALLERY_PHOTO_OPTIONS,
   PHOTO_TAKE_OPTIONS,
 } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useCameraPermissions } from '@app/shared/lib/hooks/useCameraPermissions';
 import { useGalleryPermissions } from '@app/shared/lib/hooks/useGalleryPermissions';
 import { requestCameraPermissions } from '@app/shared/lib/permissions/cameraPermissions';
@@ -24,7 +25,6 @@ import { ImageConverter } from '@app/shared/lib/utils/imageConverter';
 
 import { MediaInput } from './MediaInput';
 import { MediaValue } from './types';
-import { Image } from '../../base';
 import { PhotoIcon } from '../../icons';
 
 type Props = {
@@ -132,10 +132,15 @@ export const PhotoItem: FC<Props> = ({ onChange, value }) => {
       onOpenCamera={onOpenPhotoCamera}
       onShowMediaLibrary={onShowImageGallery}
       mode="photo"
-      accessibilityLabel="photo-item"
-      uploadIcon={<PhotoIcon color={colors.red} size={50} />}
+      aria-label="photo-item"
+      uploadIcon={<PhotoIcon color={palette.red} size={50} />}
     >
-      {value && <Image height="100%" width="100%" src={value.uri} />}
+      {value && (
+        <Image
+          source={{ uri: value.uri }}
+          style={{ height: '100%', width: '100%' }}
+        />
+      )}
     </MediaInput>
   );
 };

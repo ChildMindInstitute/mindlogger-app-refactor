@@ -16,7 +16,10 @@ export const IS_ANDROID_12_OR_HIGHER =
   IS_ANDROID && (Platform.Version as number) >= 31;
 export const IS_ANDROID_13_OR_HIGHER = IS_ANDROID && +getSystemVersion() >= 13;
 
-export const IS_SMALL_SIZE_SCREEN = VIEWPORT_WIDTH <= 375;
+export const OS_MAJOR_VERSION = parseInt(getSystemVersion(), 10);
+
+export const IS_SMALL_WIDTH_SCREEN = VIEWPORT_WIDTH <= 375;
+export const IS_SMALL_HEIGHT_SCREEN = VIEWPORT_HEIGHT <= 720;
 
 export const IS_TABLET = isTablet();
 
@@ -33,9 +36,12 @@ export const LAUNCHDARKLY_MOBILE_KEY = Config.LAUNCHDARKLY_MOBILE_KEY as string;
 
 /**
  * The scheme and host of the respondent web app in this environment.
- * Format `https://example.com`
+ * Format: `https://example.com,https://another-example.com`
  */
-export const DEEP_LINK_PREFIX = Config.DEEP_LINK_PREFIX;
+export const DEEP_LINK_PREFIXES = (Config.DEEP_LINK_PREFIXES || '')
+  .split(',')
+  .map(url => url.trim())
+  .filter(Boolean);
 
 // @ts-ignore
 export const APP_VERSION = process.env.VERSION;

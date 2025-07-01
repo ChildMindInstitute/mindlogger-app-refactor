@@ -20,10 +20,10 @@ type Props = {
 };
 
 const DatePickerButton = styled(Button, {
-  borderBottomColor: '$lightGrey',
+  borderBottomColor: '$outline',
   borderBottomWidth: 1,
   borderRadius: 0,
-  backgroundColor: '$white',
+  backgroundColor: 'transparent',
 });
 
 export const DateTimePicker: FC<Props & AccessibilityProps> = ({
@@ -53,14 +53,10 @@ export const DateTimePicker: FC<Props & AccessibilityProps> = ({
 
   return (
     <>
-      {label && (
-        <Text color="$lightGrey" mb={8}>
-          {label}
-        </Text>
-      )}
+      {!!label && <Text color="$outline">{label}</Text>}
 
       <DatePickerButton
-        accessibilityLabel={accessibilityLabel}
+        aria-label={accessibilityLabel}
         onPress={showDatePicker}
         iconAfter={iconAfter}
       >

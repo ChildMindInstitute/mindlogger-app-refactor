@@ -1,14 +1,12 @@
 import { FC } from 'react';
-import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAudioPlayer } from '@app/shared/lib/hooks/useAudioPlayer';
 
-import { ActivityIndicator } from '../ActivityIndicator';
-import { XStack } from '../base';
 import { CheckIcon, PlayIcon, SpeakerIcon, StopIcon } from '../icons';
-import { Text } from '../Text';
+import { SubmitButton } from '../SubmitButton';
 
 type Props = {
   config: {
@@ -31,19 +29,16 @@ export const AudioStimulusItem: FC<Props> = ({
   const { isPlaying, playbackCount, play, pause, isLoading } = useAudioPlayer();
 
   const renderIcon = () => {
-    if (isLoading) {
-      return <ActivityIndicator size={22} color="white" />;
-    }
     if (isPlaying) {
       if (replayIsAllowed) {
-        return <StopIcon size={17} color="white" />;
+        return <StopIcon size={18} color={palette.on_secondary_container} />;
       } else {
-        return <SpeakerIcon size={20} color="white" />;
+        return <SpeakerIcon size={18} color={palette.on_secondary_container} />;
       }
     } else if (replayIsAllowed || playbackCount === 0) {
-      return <PlayIcon size={25} color="white" />;
+      return <PlayIcon size={26} color={palette.on_secondary_container} />;
     } else {
-      return <CheckIcon size={20} color="white" />;
+      return <CheckIcon size={18} color={palette.on_secondary_container} />;
     }
   };
 
@@ -73,37 +68,22 @@ export const AudioStimulusItem: FC<Props> = ({
     }
   };
 
-  const isInActive = !replayIsAllowed && (isPlaying || playbackCount > 0);
+  const isInactive = !replayIsAllowed && (isPlaying || playbackCount > 0);
 
   return (
     <>
-      <TouchableOpacity
+      <SubmitButton
         accessibilityLabel="audio-stimulus-btn"
-        disabled={isLoading || isInActive}
+        disabled={isLoading || isInactive}
+        isLoading={isLoading}
         onPress={onPress}
+        minWidth={150}
+        mode="tonal"
+        alignSelf="center"
+        rightIcon={renderIcon()}
       >
-        <XStack
-          h={50}
-          w={150}
-          ai="center"
-          jc="center"
-          bg="$primary"
-          p="$3"
-          opacity={isInActive ? 0.5 : 1}
-        >
-          <Text
-            accessibilityLabel="audio-record-btn-text"
-            mr="$2"
-            color="$white"
-            fontWeight="700"
-            fontSize={16}
-          >
-            {getButtonText()}
-          </Text>
-
-          {renderIcon()}
-        </XStack>
-      </TouchableOpacity>
+        {getButtonText()}
+      </SubmitButton>
     </>
   );
 };

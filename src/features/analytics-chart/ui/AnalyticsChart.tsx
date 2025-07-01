@@ -53,17 +53,15 @@ export const AnalyticsChart: FC<Props> = ({
       <Text
         textAlign="center"
         mb={10}
-        color="$tertiary"
-        fontWeight="800"
-        fontSize={15}
+        fontWeight="700"
+        fontSize={14}
+        lineHeight={20}
       >
         {title}
       </Text>
 
       {!data.length ? (
-        <Text p={20} fontWeight="400">
-          {t('applet_data:title')}
-        </Text>
+        <Text textAlign="center">{t('applet_data:title')}</Text>
       ) : (
         chart
       )}

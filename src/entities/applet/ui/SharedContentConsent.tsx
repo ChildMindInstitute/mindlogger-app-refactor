@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
 
+import { YStackProps } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
-import { BoxProps, YStack } from '@app/shared/ui/base';
+import { YStack } from '@app/shared/ui/base';
 import { Text } from '@app/shared/ui/Text';
 
 import { ConsentCheckBox } from './ConsentCheckBox';
@@ -13,14 +14,14 @@ import { appletActions } from '../model/slice';
 
 type Props = {
   appletId: string;
-} & BoxProps;
+} & YStackProps;
 
 const Public = () => {
   const { t } = useTranslation();
 
   return (
     <Text
-      fontWeight="bold"
+      fontWeight="700"
       color="$primary"
       pressStyle={StyleSheet.flatten({ opacity: 0.2 })}
       onPress={onDataSharingConsentDetails}
@@ -58,7 +59,7 @@ export function SharedContentConsent({ appletId, ...boxProps }: Props) {
   };
 
   return (
-    <YStack {...boxProps} space={10}>
+    <YStack {...boxProps} gap={10}>
       <ConsentCheckBox
         value={!!consents?.shareToPublic}
         onChange={toggleShareConsent}

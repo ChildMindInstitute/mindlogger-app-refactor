@@ -34,7 +34,7 @@ const ContentWrapper: FC<BoxProps> = styled(Center, {
   marginBottom: 15,
   overflow: 'hidden',
   borderWidth: 4,
-  backgroundColor: '$lightRed',
+  backgroundColor: '$red_light',
   borderRadius: 15,
 });
 

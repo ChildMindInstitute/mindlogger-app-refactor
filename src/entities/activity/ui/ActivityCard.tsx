@@ -1,15 +1,15 @@
 import { FC } from 'react';
-import { TouchableOpacity } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import { IS_ANDROID, IS_IOS } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { IS_ANDROID } from '@app/shared/lib/constants';
+import { palette } from '@app/shared/lib/constants/palette';
+import { AnimatedTouchable } from '@app/shared/ui/AnimatedTouchable';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
+import { CardThumbnail } from '@app/shared/ui/CardThumbnail';
 import { Chip } from '@app/shared/ui/Chip';
 import { ChevronRightIcon } from '@app/shared/ui/icons';
 import { ExclamationIcon } from '@app/shared/ui/icons/ExclamationIcon';
-import { RoundLogo } from '@app/shared/ui/RoundLogo';
 import { Text } from '@app/shared/ui/Text';
 
 import { ActivityAssignmentBadge } from './ActivityAssignmentBadge';
@@ -27,6 +27,7 @@ type Props = {
   disabled: boolean;
   onPress?: (...args: unknown[]) => void;
   isWebOnly?: boolean;
+  sectionName?: string;
 };
 
 export const ActivityCard: FC<Props> = ({
@@ -34,6 +35,7 @@ export const ActivityCard: FC<Props> = ({
   disabled,
   isWebOnly = false,
   onPress,
+  sectionName,
 }) => {
   const { t } = useTranslation();
   const { assignment } = useActivityAssignment({
@@ -51,85 +53,84 @@ export const ActivityCard: FC<Props> = ({
     : `activity-${activity.name}`;
 
   return (
-    <TouchableOpacity
-      accessibilityLabel={accessibilityLabel}
+    <AnimatedTouchable
+      aria-label={accessibilityLabel}
       onPress={onPress}
       disabled={isDisabled}
+      style={{ borderRadius: 16 }}
     >
-      <XStack
-        backgroundColor={colors.white}
-        borderColor={colors.lighterGrey}
-        borderRadius={9}
-        borderWidth={3}
-        gap={14}
-        mx={3}
-        opacity={disabled ? 0.5 : 1}
-        p={14}
-      >
-        {!!activity.image && (
-          <Box alignSelf="center" accessibilityLabel="activity_card-image">
-            <RoundLogo imageUri={activity.image} />
-          </Box>
-        )}
+      <XStack p={16} gap={8} ai="center">
+        <YStack gap={8} flex={1}>
+          <YStack gap={8} flex={1} opacity={isDisabled ? 0.5 : 1}>
+            {activity.isInActivityFlow &&
+              activity.activityFlowDetails?.showActivityFlowBadge && (
+                <ActivityFlowStep {...activity.activityFlowDetails} />
+              )}
 
-        <YStack flexGrow={1} flexShrink={1} gap={8}>
-          {activity.isInActivityFlow &&
-            activity.activityFlowDetails?.showActivityFlowBadge && (
-              <ActivityFlowStep hasOpacity={isDisabled} activity={activity} />
+            {!!activity.image && (
+              <CardThumbnail
+                imageUri={activity.image}
+                aria-label="activity_card-image"
+                mb={8}
+              />
             )}
 
-          <Text
-            fontWeight={IS_IOS ? '600' : '700'}
-            fontSize={16}
-            accessibilityLabel="activity_card_name-text"
-            lineHeight={20}
-            opacity={isDisabled ? 0.5 : 1}
-          >
-            {activity.name}
-          </Text>
-
-          {assignment && assignment.respondent.id !== assignment.target.id && (
-            <XStack>
-              <ActivityAssignmentBadge
-                assignment={assignment}
-                accessibilityLabel="activity_card_assignment-text"
-                isDisabled={isDisabled}
-              />
-              <Box flexGrow={1} flexShrink={1} />
-            </XStack>
-          )}
-
-          {hasDescription && (
             <Text
-              fontSize={14}
-              fontWeight="300"
-              lineHeight={20}
-              opacity={isDisabled ? 0.5 : 1}
-              accessibilityLabel="activity_card_desc-text"
+              fontSize={22}
+              lineHeight={28}
+              fontWeight="700"
+              aria-label="activity_card_name-text"
             >
-              {activity.description}
+              {activity.name}
             </Text>
-          )}
 
-          {isWebOnly && (
-            <Chip icon={ExclamationIcon} variant="warning">
-              {t('activity:completeOnWeb')}
-            </Chip>
-          )}
+            {assignment &&
+              assignment.respondent.id !== assignment.target.id && (
+                <XStack>
+                  <ActivityAssignmentBadge
+                    assignment={assignment}
+                    aria-label="activity_card_assignment-text"
+                  />
+                </XStack>
+              )}
 
-          <TimeStatusRecord activity={activity} />
+            {hasDescription && (
+              <Text
+                fontSize={16}
+                lineHeight={24}
+                aria-label="activity_card_desc-text"
+              >
+                {activity.description}
+              </Text>
+            )}
+
+            {isWebOnly && (
+              <XStack>
+                <Chip icon={ExclamationIcon} variant="error">
+                  {t('activity:completeOnWeb')}
+                </Chip>
+              </XStack>
+            )}
+          </YStack>
+
+          <TimeStatusRecord
+            activity={activity}
+            color={
+              sectionName === 'additional:available' ? '$green' : undefined
+            }
+          />
 
           {IS_ANDROID && activity.type === ActivityType.Flanker && (
-            <Text mt={12} color={colors.alert}>
+            <Text mt={12} color={palette.error}>
               {t('activity:flanker_accuracy_warn')}
             </Text>
           )}
         </YStack>
 
-        <Box alignSelf="center">
-          <ChevronRightIcon color={colors.grey2} size={16} />
+        <Box p={2}>
+          <ChevronRightIcon color={palette.on_surface} size={18} />
         </Box>
       </XStack>
-    </TouchableOpacity>
+    </AnimatedTouchable>
   );
 };

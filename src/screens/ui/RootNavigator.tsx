@@ -29,7 +29,7 @@ import { useFeatureFlagsAutoLogin } from '@app/features/login/model/useFeatureFl
 import { useLogout } from '@app/features/logout/model/hooks';
 import { useOnNotificationTap } from '@app/features/tap-on-notification/model/hooks/useOnNotificationTap';
 import { APP_VERSION, ENV, IS_ANDROID } from '@app/shared/lib/constants';
-import { colors } from '@app/shared/lib/constants/colors';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAlarmPermissions } from '@app/shared/lib/hooks/useAlarmPermissions';
 import { useBackgroundTask } from '@app/shared/lib/hooks/useBackgroundTask';
@@ -43,13 +43,9 @@ import { Emitter } from '@app/shared/lib/services/Emitter';
 import { useDelayedInterval } from '@app/shared/lib/timers/hooks/useDelayedInterval';
 import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
 import { BackButton } from '@app/shared/ui/BackButton';
-import { Box, XStack } from '@app/shared/ui/base';
-import {
-  ChevronLeft,
-  CloseIcon,
-  HomeIcon,
-  UserProfileIcon,
-} from '@app/shared/ui/icons';
+import { XStack } from '@app/shared/ui/base';
+import { ChevronLeftIcon, UserProfileIcon } from '@app/shared/ui/icons';
+import { HomeIcon } from '@app/shared/ui/icons/HomeIcon';
 import { Text } from '@app/shared/ui/Text';
 import { useAvailabilityEvaluator } from '@app/widgets/activity-group/model/hooks/useAvailabilityEvaluator';
 import { useAutoCompletion } from '@app/widgets/survey/model/hooks/useAutoCompletion';
@@ -212,38 +208,17 @@ export const RootNavigator = () => {
           />
 
           <Stack.Screen
-            name="ForgotPassword"
-            options={{
-              title: t('login:forgot_password'),
-              contentStyle: {
-                borderTopColor: colors.grey,
-                borderTopWidth: 1,
-              },
-              headerLeft: () => (
-                <Text
-                  accessibilityLabel="close-button"
-                  onPress={navigation.goBack}
-                  mr={24}
-                >
-                  <CloseIcon color={colors.white} size={22} />
-                </Text>
-              ),
-            }}
-            component={ForgotPasswordScreen}
-          />
-
-          <Stack.Screen
             name="SignUp"
             component={SignUpScreen}
             options={{
               headerBackTitle: 'Back',
               title: '',
               headerLeft: () => (
-                <BackButton accessibilityLabel="back_button">
+                <BackButton aria-label="back_button">
                   <XStack ai="center">
-                    <ChevronLeft color="white" size={16} />
+                    <ChevronLeftIcon color={palette.on_surface} size={14} />
 
-                    <Text ml={2} color="$white" fontSize={16}>
+                    <Text ml="$2" mb={IS_ANDROID ? -2 : 0}>
                       {t('applet_invite_flow:back')}
                     </Text>
                   </XStack>
@@ -259,21 +234,18 @@ export const RootNavigator = () => {
           <Stack.Screen
             name="Applets"
             options={{
+              headerTitleAlign: 'center',
               headerStyle: {
-                backgroundColor: colors.lighterGrey2,
+                backgroundColor: palette.surface1,
               },
-
               headerTitle: ({ children }) => (
-                <HeaderTitle
-                  accessibilityLabel="welcome_name-text"
-                  color={colors.tertiary}
-                >
+                <HeaderTitle aria-label="welcome_name-text" fontWeight="400">
                   {children}
                 </HeaderTitle>
               ),
               headerRight: () => (
                 <TouchableOpacity
-                  accessibilityLabel="user_settings-button"
+                  aria-label="user_settings-button"
                   onPress={() => {
                     if (
                       getMutexDefaultInstanceManager()
@@ -284,8 +256,9 @@ export const RootNavigator = () => {
                     }
                     navigation.navigate('Settings');
                   }}
+                  style={{ padding: 12 }}
                 >
-                  <UserProfileIcon color={colors.tertiary} size={22} />
+                  <UserProfileIcon color={palette.on_surface} size={22} />
                 </TouchableOpacity>
               ),
               headerLeft: () => null,
@@ -322,27 +295,17 @@ export const RootNavigator = () => {
             component={AppletBottomTabNavigator}
             options={({ route }) => ({
               headerBackVisible: false,
-              headerTitle: IS_ANDROID
-                ? () => (
-                    <Box flex={1} mr={20}>
-                      <Text
-                        color={colors.white}
-                        fontSize={18}
-                        fontWeight="700"
-                        numberOfLines={1}
-                      >
-                        {route.params.title}
-                      </Text>
-                    </Box>
-                  )
-                : HeaderTitle,
+              headerStyle: {
+                backgroundColor: palette.surface1,
+              },
+              title: route.params.title,
               headerLeft: () => (
                 <BackButton
-                  accessibilityLabel="home-button"
-                  mr={IS_ANDROID && 15}
+                  aria-label="home-button"
                   fallbackRoute="Applets"
+                  p={12}
                 >
-                  <HomeIcon color={colors.white} size={32} />
+                  <HomeIcon color={palette.on_surface} />
                 </BackButton>
               ),
             })}
@@ -374,6 +337,16 @@ export const RootNavigator = () => {
             title: t('language_screen:app_language'),
           }}
           component={ChangeLanguageScreen}
+        />
+
+        {/* This screen needs to be available for both guests and users since the
+        deep link can be accessed regardless of active session */}
+        <Stack.Screen
+          name="ForgotPassword"
+          options={{
+            title: t('login:forgot_password'),
+          }}
+          component={ForgotPasswordScreen}
         />
 
         <Stack.Screen

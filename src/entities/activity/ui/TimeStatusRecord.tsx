@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { styled } from '@tamagui/core';
+import { styled, TextProps } from '@tamagui/core';
 import { addDays, startOfDay } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -15,16 +15,22 @@ import {
 
 type Props = BoxProps & {
   activity: ActivityListItem;
+  color?: TextProps['color'];
 };
 
 const StatusLine = styled(Text, {
-  marginTop: 6,
-  color: '$grey',
-  fontSize: 12,
-  fontWeight: '400',
+  mt: 4,
+  p: 4,
+  fontSize: 14,
+  lineHeight: 20,
+  textAlign: 'center',
 });
 
-export const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
+export const TimeStatusRecord: FC<Props> = ({
+  activity,
+  color = '$outline',
+  ...props
+}) => {
   const { t } = useTranslation();
 
   const isStatusScheduled = activity.status === ActivityStatus.Scheduled;
@@ -55,10 +61,19 @@ export const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
     }
   };
 
+  if (
+    !hasAvailableFromTo &&
+    !hasAvailableToOnly &&
+    !hasTimeToComplete &&
+    !activity.isExpired
+  ) {
+    return null;
+  }
+
   return (
     <Box {...props}>
       {hasAvailableFromTo && (
-        <StatusLine>
+        <StatusLine color={color}>
           {`${t('activity_due_date:available')} ${convert(
             activity.availableFrom!,
           )} ${t('activity_due_date:to')} ${convert(activity.availableTo!)} ${
@@ -68,7 +83,7 @@ export const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
       )}
 
       {hasAvailableToOnly && (
-        <StatusLine>{`${t('activity_due_date:to')} ${convert(
+        <StatusLine color={color}>{`${t('activity_due_date:to')} ${convert(
           activity.availableTo!,
         )} ${
           isSpreadToNextDay ? t('activity_due_date:the_following_day') : ''
@@ -76,7 +91,7 @@ export const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
       )}
 
       {hasTimeToComplete && (
-        <StatusLine>
+        <StatusLine color={color}>
           {`${t(
             'timed_activity:time_to_complete_hm',
             activity.timeLeftToComplete!,
@@ -85,7 +100,7 @@ export const TimeStatusRecord: FC<Props> = ({ activity }, ...props) => {
       )}
 
       {activity.isExpired && (
-        <StatusLine>{t('additional:time-end-tap')}</StatusLine>
+        <StatusLine color={color}>{t('additional:time-end-tap')}</StatusLine>
       )}
     </Box>
   );
