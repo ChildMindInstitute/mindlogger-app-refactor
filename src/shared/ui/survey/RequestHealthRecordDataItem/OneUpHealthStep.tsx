@@ -63,6 +63,13 @@ export const OneUpHealthStep: FC = () => {
     error: _error,
   } = useOneUpHealthSystemSearchApi({ appletId, submitId, activityId });
 
+  const handleChangeText = (text: string) => {
+    // Filter out symbols, as the 1UpHealth API fails to handle them properly.
+    // This mimics the 1UpHealth proprietary iframe behaviour.
+    const filteredText = text.replace(/[^a-zA-Z0-9 ]/g, '');
+    setSearchQuery(filteredText);
+  };
+
   const handleSearch = (query = searchQuery) => {
     setSearchQuery(query);
     search(query);
@@ -102,8 +109,9 @@ export const OneUpHealthStep: FC = () => {
             >
               <Box position="relative" flex={1}>
                 <Input
+                  aria-label="health-system-search-input"
                   value={searchQuery}
-                  onChangeText={setSearchQuery}
+                  onChangeText={handleChangeText}
                   onSubmitEditing={() => handleSearch()}
                   blurOnSubmit={false}
                   returnKeyType="search"
@@ -115,6 +123,7 @@ export const OneUpHealthStep: FC = () => {
                 />
                 {searchQuery && (
                   <Box
+                    aria-label="health-system-search-clear-button"
                     position="absolute"
                     right="$1"
                     top="50%"
@@ -131,7 +140,11 @@ export const OneUpHealthStep: FC = () => {
                   </Box>
                 )}
               </Box>
-              <SubmitButton onPress={() => handleSearch()} mode="tonal">
+              <SubmitButton
+                aria-label="health-system-search-button"
+                onPress={() => handleSearch()}
+                mode="tonal"
+              >
                 {t('requestHealthRecordData:search')}
               </SubmitButton>
             </XStack>

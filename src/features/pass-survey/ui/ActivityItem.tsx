@@ -46,6 +46,7 @@ import { StackedCheckboxItem } from '@app/shared/ui/survey/StackedCheckboxItem/S
 import { StackedRadios } from '@app/shared/ui/survey/StackedRadioItem/StackedRadiosItem';
 import { TimePickerItem } from '@app/shared/ui/survey/TimePickerItem';
 import { TimeRangeItem } from '@app/shared/ui/survey/TimeRangeItem';
+import { UnityView } from '@entities/unity/ui/UnityView';
 
 import { AdditionalText } from './AdditionalText';
 import { ActivityIdentityContext } from '../lib/contexts/ActivityIdentityContext';
@@ -440,6 +441,14 @@ export function ActivityItem({
           ),
           question: null,
           noScrollContainer: true,
+        };
+      case 'Unity':
+        return {
+          item: (
+            <Box flex={1}>
+              <UnityView payload={pipelineItem.payload} />
+            </Box>
+          ),
         };
       default:
         return {

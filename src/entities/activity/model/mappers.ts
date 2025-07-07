@@ -36,6 +36,7 @@ import {
   TimeItemDto,
   TimeRangeItemDto,
   VideoItemDto,
+  UnityItemDto,
 } from '@app/shared/api/services/ActivityItemDto';
 import { ActivityDto } from '@app/shared/api/services/IActivityService';
 import { getMsFromSeconds } from '@app/shared/lib/utils/dateTime';
@@ -192,6 +193,28 @@ function mapToDrawing(dto: DrawingItemDto): ActivityItem {
     isHidden: dto.isHidden,
     ...mapAdditionalText(dto.config),
     ...mapConditionalLogic(dto.conditionalLogic),
+  };
+}
+
+function mapToUnity(dto: UnityItemDto): ActivityItem {
+  return {
+    id: dto.id,
+    name: dto.name,
+    inputType: 'Unity',
+    config: {
+      file: dto.config.file,
+    },
+    timer: null,
+    order: dto.order,
+    question: dto.question,
+    isSkippable: false,
+    hasAlert: false,
+    hasScore: false,
+    isAbleToMoveBack: true,
+    hasTextResponse: false,
+    canBeReset: false,
+    hasTopNavigation: false,
+    isHidden: dto.isHidden,
   };
 }
 
@@ -900,6 +923,8 @@ export function mapToActivity(dto: ActivityDto): ActivityDetails {
           // Even though mobile does not support PhrasalTemplate yet, we need to map it
           // in case the item present but hidden
           return mapToPhrasalTemplate(item);
+        case 'unity':
+          return mapToUnity(item);
       }
     }),
     hasSummary: dto.scoresAndReports?.showScoreSummary ?? false,
