@@ -1,15 +1,90 @@
 import { renderHook } from '@testing-library/react-native';
 
+// Define mock context values that will be used throughout the tests
+const mockContextValues = {
+  appletId: 'test-applet-id',
+  activityId: 'test-activity-id',
+  flowId: 'test-flow-id',
+  eventId: 'test-event-id',
+  targetSubjectId: 'test-subject-id',
+  order: 0,
+};
+
+// Mock ActivityIdentityContext
+jest.mock(
+  '@app/features/pass-survey/lib/contexts/ActivityIdentityContext',
+  () => ({
+    ActivityIdentityContext: {
+      displayName: 'ActivityIdentityContext',
+      Provider: ({ children }: { children: React.ReactNode }) => children,
+    },
+  }),
+);
+
+// Mock React's useContext
+jest.mock('react', () => {
+  const originalReact = jest.requireActual('react');
+  return {
+    ...originalReact,
+    useContext: jest.fn().mockImplementation(context => {
+      if (context?.displayName === 'ActivityIdentityContext') {
+        return mockContextValues;
+      }
+      return originalReact.useContext(context);
+    }),
+  };
+});
+
+// Mock useQueryClient
+jest.mock('@tanstack/react-query', () => ({
+  useQueryClient: jest.fn().mockReturnValue({
+    // Add any queryClient methods you need to mock here
+  }),
+}));
+
+// Mock useActivityState
+jest.mock('../useActivityState', () => ({
+  useActivityState: jest.fn().mockReturnValue({
+    setItemCustomProperty: jest.fn(),
+  }),
+}));
+
+// Mock QueryDataUtils
+jest.mock('@app/shared/api/services/QueryDataUtils', () => ({
+  QueryDataUtils: jest.fn().mockImplementation(() => ({
+    getBaseInfo: jest.fn().mockReturnValue({
+      // Mock the baseInfo object structure that getResponseTypesMap expects
+      result: {
+        activities: [
+          {
+            id: 'test-activity-id',
+            containsResponseTypes: ['test-response-type'],
+          },
+        ],
+        items: {},
+      },
+    }),
+  })),
+}));
+
+// Mock analytics function
+jest.mock('@app/widgets/survey/lib/surveyStateAnalytics', () => ({
+  trackEHRProviderSearchSkipped: jest.fn(),
+}));
+
 import {
   RequestHealthRecordDataItemStep,
   RequestHealthRecordDataPipelineItem,
   SliderPipelineItem,
 } from '@app/features/pass-survey/lib/types/payload';
 import { EHRConsent } from '@app/shared/api/services/ActivityItemDto';
+import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { trackEHRProviderSearchSkipped } from '@app/widgets/survey/lib/surveyStateAnalytics';
 
 import { useSubSteps } from './useSubSteps';
 
 const mockSetSubStep = jest.fn();
+const mockSetItemCustomProperty = jest.fn();
 
 describe('useSubSteps', () => {
   const createMockEhrItem = (
@@ -32,11 +107,37 @@ describe('useSubSteps', () => {
       ],
     },
     additionalEHRs: null,
+    ehrSearchSkipped: false,
+    ehrShareSuccess: false,
     ...props,
   });
 
   beforeEach(() => {
     jest.clearAllMocks();
+
+    // Reset all mocks for each test
+    (trackEHRProviderSearchSkipped as jest.Mock).mockClear();
+    mockSetItemCustomProperty.mockClear();
+
+    // Reset QueryDataUtils mock implementation for each test
+    (QueryDataUtils as jest.Mock).mockImplementation(() => ({
+      getBaseInfo: jest.fn().mockReturnValue({
+        result: {
+          activities: [
+            {
+              id: 'test-activity-id',
+              containsResponseTypes: ['test-response-type'],
+            },
+          ],
+          items: {},
+        },
+      }),
+    }));
+
+    // Reset useActivityState mock for each test
+    jest.requireMock('../useActivityState').useActivityState.mockReturnValue({
+      setItemCustomProperty: mockSetItemCustomProperty,
+    });
   });
 
   test('should return null subStep for non-requestHealthRecordData items', () => {
@@ -60,7 +161,7 @@ describe('useSubSteps', () => {
     };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, setSubStep: mockSetSubStep }),
+      useSubSteps({ item: mockItem, setSubStep: mockSetSubStep, itemStep: 0 }),
     );
 
     expect(result.current.subStep).toBeNull();
@@ -78,7 +179,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     expect(result.current.subStep).toBe(
@@ -98,7 +204,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     expect(result.current.subStep).toBe(
@@ -107,6 +218,26 @@ describe('useSubSteps', () => {
     expect(result.current.hasNextSubStep).toBe(false);
     expect(result.current.hasPrevSubStep).toBe(true);
     expect(result.current.nextButtonText).toBe('activity_navigation:skip');
+
+    // Test handleSubmitSubStep
+    result.current.handleSubmitSubStep();
+
+    // Verify that setItemCustomProperty was called with the right parameters
+    expect(mockSetItemCustomProperty).toHaveBeenCalledWith(
+      0,
+      'ehrSearchSkipped',
+      true,
+    );
+
+    // Verify that trackEHRProviderSearchSkipped was called with the right parameters
+    expect(trackEHRProviderSearchSkipped).toHaveBeenCalledWith(
+      expect.objectContaining({
+        appletId: 'test-applet-id',
+        activityId: 'test-activity-id',
+        flowId: 'test-flow-id',
+        itemTypes: expect.any(Object),
+      }),
+    );
   });
 
   test('should handle AdditionalPrompt sub step with additional EHRs requested', () => {
@@ -118,7 +249,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     expect(result.current.subStep).toBe(
@@ -138,7 +274,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptOut };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     expect(result.current.hasNextSubStep).toBe(false);
@@ -154,7 +295,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     result.current.handleNextSubStep();
@@ -173,7 +319,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     result.current.handlePrevSubStep();
@@ -192,7 +343,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     // When additionalEHRs is 'done', we should not have a next step
@@ -212,7 +368,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     // When additionalEHRs is 'requested', we should have a next step from AdditionalPrompt
@@ -234,7 +395,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     const { result } = renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     result.current.handlePrevSubStep();
@@ -253,7 +419,12 @@ describe('useSubSteps', () => {
     const answer = { answer: EHRConsent.OptIn };
 
     renderHook(() =>
-      useSubSteps({ item: mockItem, answer, setSubStep: mockSetSubStep }),
+      useSubSteps({
+        item: mockItem,
+        answer,
+        setSubStep: mockSetSubStep,
+        itemStep: 0,
+      }),
     );
 
     mockSetSubStep(RequestHealthRecordDataItemStep.OneUpHealth);
