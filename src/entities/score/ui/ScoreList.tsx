@@ -10,19 +10,17 @@ type Props = {
 
 export function ScoreList({ label, scores }: Props) {
   return (
-    <Box btw={1} btc="$outline" px={20} aria-label="scores-group">
+    <Box btw={1} btc="$surface_variant" aria-label="scores-group">
       <Text
-        fontWeight="700"
-        fontSize={24}
-        lineHeight={32}
-        mt={10}
-        mb={16}
+        fontSize={22}
+        lineHeight={28}
+        my={16}
         aria-label="scores-group-name"
       >
         {label}
       </Text>
 
-      <YStack space={20}>
+      <YStack space={16}>
         {scores.map((score, index) => (
           <Score
             key={index}

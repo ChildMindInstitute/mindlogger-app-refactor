@@ -67,7 +67,7 @@ export const ConsentPromptStep: FC<ConsentPromptStepProps> = ({
   };
 
   return (
-    <YStack space="$4" px="$4" py="$6">
+    <YStack gap={12} px={16} py={24}>
       <Box alignItems="center">
         <RequestHealthRecordDataIcon />
       </Box>
@@ -83,7 +83,12 @@ export const ConsentPromptStep: FC<ConsentPromptStepProps> = ({
         onPress={handleExternalLinkPress}
         accessibilityLabel="external-link-button"
       >
-        <Text color={palette.secondary} textDecorationLine="none" fontSize={18}>
+        <Text
+          color={palette.secondary}
+          textDecorationLine="none"
+          fontSize={18}
+          lineHeight={28}
+        >
           {t('requestHealthRecordData:linkText')}
         </Text>
       </Link>

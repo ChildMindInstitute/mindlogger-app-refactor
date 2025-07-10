@@ -1541,6 +1541,30 @@ PODS:
   - react-native-tcp-socket (6.0.6):
     - CocoaAsyncSocket
     - React-Core
+  - react-native-unity (1.0.11):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-vector-icons-entypo (12.0.1)
   - react-native-vector-icons-feather (12.0.1)
   - react-native-vector-icons-fontawesome6 (12.0.1)
@@ -2221,6 +2245,7 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
   - react-native-tcp-socket (from `../node_modules/react-native-tcp-socket`)
+  - "react-native-unity (from `../node_modules/@azesmway/react-native-unity`)"
   - "react-native-vector-icons-entypo (from `../node_modules/@react-native-vector-icons/entypo`)"
   - "react-native-vector-icons-feather (from `../node_modules/@react-native-vector-icons/feather`)"
   - "react-native-vector-icons-fontawesome6 (from `../node_modules/@react-native-vector-icons/fontawesome6`)"
@@ -2404,6 +2429,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@shopify/react-native-skia"
   react-native-tcp-socket:
     :path: "../node_modules/react-native-tcp-socket"
+  react-native-unity:
+    :path: "../node_modules/@azesmway/react-native-unity"
   react-native-vector-icons-entypo:
     :path: "../node_modules/@react-native-vector-icons/entypo"
   react-native-vector-icons-feather:
@@ -2590,6 +2617,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 583e6d44b8500e4d4738119118d1fc01d754bfc0
   react-native-skia: c80f1d06c9133aa084c979fa2c77ae3c11e45401
   react-native-tcp-socket: e724380c910c2e704816ec817ed28f1342246ff7
+  react-native-unity: 91a74c36d654fb7a7b8eff818435c28bdfdfcb24
   react-native-vector-icons-entypo: 1f4268fbf87eced3075f6d543e2b15fc622f7bfb
   react-native-vector-icons-feather: bf1b6a4a4db7c7eb84abbecf385b0ceca931ee40
   react-native-vector-icons-fontawesome6: 624a5578d701e52b18fb7f35b56556395a4249c0
@@ -2648,7 +2676,7 @@ SPEC CHECKSUMS:
   RNSensors: 117ba71c7eeeea0407ea0c0bb79e3495d602049b
   RNSVG: 769d0a2e79162d08639e1fbb43031adac58ed24c
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  Yoga: c758bfb934100bb4bf9cbaccb52557cee35e8bdf
+  Yoga: 9f110fc4b7aa538663cba3c14cbb1c335f43c13f
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
 PODFILE CHECKSUM: e5e9c13af102c13d7eec5a297c6580ee7be1911a

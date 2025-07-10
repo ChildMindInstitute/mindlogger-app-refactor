@@ -169,6 +169,10 @@ The above scripts run the app using Debug configuration and for Curious's `dev`
 
 \* Required to use 1UpHealth integration
 
+## Unity
+
+For concerns related to Unity integration, see [unity/README.md](unity/README.md)
+
 ## License
 
 Common Public Attribution License Version 1.0 (CPAL-1.0)

@@ -64,12 +64,16 @@ export const HealthSystemItem: FC<HealthSystemItemProps> = ({
           {!!address && <Paragraph>{address}</Paragraph>}
         </YStack>
         <Center alignSelf="center">
-          {!isLoading && <ChevronRightIcon color={palette.outline} size={18} />}
-          <Box style={StyleSheet.absoluteFill}>
-            <Spinner size={24} isVisible={isLoading} />
-          </Box>
+          <ChevronRightIcon color={palette.outline} size={18} />
         </Center>
       </XStack>
+
+      <Spinner
+        size={24}
+        withOverlay
+        isVisible={isLoading}
+        overlayStyle={{ paddingBottom: 0 }}
+      />
     </AnimatedTouchable>
   );
 };

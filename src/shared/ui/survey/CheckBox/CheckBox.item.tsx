@@ -2,21 +2,15 @@ import { FC, useMemo } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 
 import { CachedImage } from '@georstat/react-native-image-cache';
-import { styled } from '@tamagui/core';
 import { XStack } from '@tamagui/stacks';
 
 import { getSelectorColors } from '@app/shared/lib/utils/survey/survey';
 
 import { Item } from './types';
 import { CheckBox } from '../../CheckBox';
-import { QuestionTooltipIcon } from '../../icons';
+import { QuestionIcon } from '../../icons/QuestionIcon';
 import { Text } from '../../Text';
 import { Tooltip } from '../../Tooltip';
-
-const CheckboxTooltipContainer = styled(XStack, {
-  marginRight: 10,
-  width: '8%',
-});
 
 type Props = {
   setPalette: boolean;
@@ -65,7 +59,7 @@ export const CheckBoxItem: FC<Props> = ({
       my={8}
       gap={10}
       ai="center"
-      jc="center"
+      jc="space-between"
       br={12}
       borderWidth={2}
       borderColor={borderColor}
@@ -105,24 +99,17 @@ export const CheckBoxItem: FC<Props> = ({
         </XStack>
       )}
 
-      <Text
-        aria-label="option_text"
-        color={textColor}
-        fontSize={18}
-        flexGrow={1}
-      >
+      <Text aria-label="option_text" color={textColor} fontSize={18} flex={1}>
         {name}
       </Text>
 
       {tooltipAvailable && tooltipContainerVisible && !!tooltip && (
-        <CheckboxTooltipContainer>
-          <Tooltip
-            markdown={tooltipText}
-            aria-label={`checkbox-tooltip-view-${tooltipText}`}
-          >
-            <QuestionTooltipIcon color={tooltipColor} size={25} />
-          </Tooltip>
-        </CheckboxTooltipContainer>
+        <Tooltip
+          markdown={tooltipText}
+          aria-label={`checkbox-tooltip-view-${tooltipText}`}
+        >
+          <QuestionIcon color={tooltipColor} />
+        </Tooltip>
       )}
     </XStack>
   );
