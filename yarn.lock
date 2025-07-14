@@ -10180,10 +10180,10 @@ react-native-video-player@^0.16.3:
   resolved "https://registry.yarnpkg.com/react-native-video-player/-/react-native-video-player-0.16.3.tgz#7ac6057f4ff4db32b08f3b12422be983e7006d04"
   integrity sha512-7FMPl2uO9HRkklAaAGqtuAx+8qphbluacWTxyOhV19AOLc0GC4hkD0FrQoj6ksmgrwFJEXIkBlWkkfu1GS1YyA==
 
-react-native-video@^6.14.1:
-  version "6.14.1"
-  resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-6.14.1.tgz#1b62acb8f3e1821b08f1ff20271ab427329f544c"
-  integrity sha512-nTPHqg+GKu6UV6Hr5Ph48Hn2jod963bHCt0wWtlK9jv9lE1FDGyDdX0Jl15lky8v7VhNdqjqb9DX0EUhMontWg==
+react-native-video@^6.16.1:
+  version "6.16.1"
+  resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-6.16.1.tgz#c4f5f71eac930a4ae4e2faadb22fc05d78b9b7fe"
+  integrity sha512-+G6tVVGbwFqNTyPivqb+PhQzWr5OudDQ1dgvBNyBRAgcS8rOcbwuS6oX+m8cxOsXHn1UT9ofQnjQEwkGOsvomg==
 
 react-native-webview@^13.13.1:
   version "13.14.1"
