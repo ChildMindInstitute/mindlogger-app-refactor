@@ -10,6 +10,7 @@ import {
 } from '@app/abstract/lib/types/entity';
 import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
 import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
+import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import {
   ActivityFlowRecordDto,
   ActivityRecordDto,
@@ -19,6 +20,7 @@ import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAppletInfo } from '@app/shared/lib/hooks/useAppletInfo';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { MigrationValidator } from '@app/shared/lib/services/MigrationValidator';
+import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
 import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
@@ -32,17 +34,19 @@ import {
   isProgressionReadyForAutocompletion,
   isEntityExpired,
 } from '@app/shared/lib/utils/survey/survey';
-
+import { getFlowRecordKey } from '@app/widgets/survey/lib/storageHelpers';
 import {
-  LogActivityActionParams,
-  LogFlowActionParams,
-  logRestartActivity,
-  logRestartFlow,
-  logResumeActivity,
-  logResumeFlow,
-  logStartActivity,
-  logStartFlow,
-} from './startEntityHelpers';
+  TrackActivityActionParams,
+  TrackFlowActionParams,
+  trackRestartActivity,
+  trackRestartFlow,
+  trackResumeActivity,
+  trackResumeFlow,
+  trackStartActivity,
+  trackStartFlow,
+} from '@app/widgets/survey/lib/surveyStateAnalytics';
+import { FlowState } from '@app/widgets/survey/lib/useFlowStorageRecord';
+
 import {
   onActivityContainsAllItemsHidden,
   onBeforeStartingActivity,
@@ -240,6 +244,7 @@ export function useStartEntity({
     entityName: string,
     isTimerElapsed: boolean,
     targetSubjectId: string | null,
+    itemTypes: ResponseType[],
   ): Promise<StartResult> {
     const breakDueToMediaReferences = await shouldBreakDueToMediaReferences(
       appletId,
@@ -277,11 +282,12 @@ export function useStartEntity({
 
       logger.cancelSending();
 
-      const logParams: LogActivityActionParams = {
+      const logParams: TrackActivityActionParams = {
         activityId,
         appletId,
         appletName: getAppletDisplayName(appletId)!,
         entityName,
+        itemTypes,
       };
 
       if (isActivityInProgress) {
@@ -295,7 +301,7 @@ export function useStartEntity({
             if (isEntityExpired(availableTo)) {
               return resolve({ failReason: 'expired-while-alert-opened' });
             }
-            logRestartActivity(logParams);
+            trackRestartActivity(logParams);
             cleanUpMediaFiles({
               activityId,
               appletId,
@@ -310,12 +316,12 @@ export function useStartEntity({
             if (isEntityExpired(availableTo)) {
               return resolve({ failReason: 'expired-while-alert-opened' });
             }
-            logResumeActivity(logParams);
+            trackResumeActivity(logParams);
             return resolve({ fromScratch: false });
           },
         });
       } else {
-        logStartActivity(logParams);
+        trackStartActivity(logParams);
         activityStart(appletId, activityId, eventId, targetSubjectId);
         resolve({ fromScratch: true });
       }
@@ -329,6 +335,7 @@ export function useStartEntity({
     entityName: string,
     isTimerElapsed: boolean,
     targetSubjectId: string | null,
+    itemTypes: ResponseType[],
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
       getDefaultLogger().log('[useStartEntity.startActivity] Mutex is busy');
@@ -358,6 +365,7 @@ export function useStartEntity({
         entityName,
         isTimerElapsed,
         targetSubjectId,
+        itemTypes,
       );
 
       result.failed = !!result.failReason;
@@ -379,6 +387,7 @@ export function useStartEntity({
     entityName: string,
     isTimerElapsed: boolean = false,
     targetSubjectId: string | null,
+    itemTypes: ResponseType[],
   ): Promise<StartResult> {
     const detailsResponse: AppletDetailsResponse =
       getDataFromQuery<AppletDetailsResponse>(
@@ -442,11 +451,12 @@ export function useStartEntity({
 
       logger.cancelSending();
 
-      const logParams: LogFlowActionParams = {
+      const logParams: Omit<TrackFlowActionParams, 'activityId'> = {
         flowId,
         appletId,
         appletName: getAppletDisplayName(appletId)!,
         entityName,
+        itemTypes,
       };
 
       if (isFlowInProgress) {
@@ -471,7 +481,10 @@ export function useStartEntity({
                 order: i,
               });
             }
-            logRestartFlow(logParams);
+            trackRestartFlow({
+              ...logParams,
+              activityId: firstActivityId,
+            });
 
             flowStarted({
               appletId,
@@ -492,12 +505,31 @@ export function useStartEntity({
               return resolve({ failReason: 'expired-while-alert-opened' });
             }
 
-            logResumeFlow(logParams);
+            const key = getFlowRecordKey(
+              flowId,
+              appletId,
+              eventId,
+              targetSubjectId,
+            );
+            const storage =
+              getDefaultStorageInstanceManager().getFlowProgressStorage();
+
+            const flowState =
+              (JSON.parse(storage.getString(key) || '') as FlowState) || {};
+
+            trackResumeFlow({
+              ...logParams,
+              activityId: flowState.pipeline[flowState.step].payload.activityId,
+            });
+
             return resolve({ fromScratch: false });
           },
         });
       } else {
-        logStartFlow(logParams);
+        trackStartFlow({
+          ...logParams,
+          activityId: firstActivityId,
+        });
         flowStarted({
           appletId,
           flowId,
@@ -523,6 +555,7 @@ export function useStartEntity({
     entityName: string,
     isTimerElapsed: boolean,
     targetSubjectId: string | null,
+    itemTypes: ResponseType[],
   ): Promise<StartResult> {
     if (mutex.isBusy()) {
       getDefaultLogger().log('[useStartEntity.startFlow] Mutex is busy');
@@ -552,6 +585,7 @@ export function useStartEntity({
         entityName,
         isTimerElapsed,
         targetSubjectId,
+        itemTypes,
       );
 
       result.failed = !!result.failReason;

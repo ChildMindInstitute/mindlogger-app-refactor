@@ -135,6 +135,7 @@ export function ActivitySectionList({
         entityName,
         isTimerElapsed,
         targetSubjectId,
+        responseTypes,
       );
 
       if (result.failReason === 'expired-while-alert-opened') {
@@ -158,6 +159,7 @@ export function ActivitySectionList({
         entityName,
         isTimerElapsed,
         targetSubjectId,
+        responseTypes,
       );
 
       if (result.failReason === 'expired-while-alert-opened') {

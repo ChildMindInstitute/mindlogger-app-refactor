@@ -422,6 +422,8 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             conditionalLogic: item.conditionalLogic,
             subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
             additionalEHRs: null,
+            ehrSearchSkipped: false,
+            ehrShareSuccess: false,
           } satisfies PipelineItem;
         }
 

@@ -9,6 +9,44 @@ import { getSliderItem } from '@app/features/pass-survey/model/tests/testHelpers
 import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { ILogger } from '@app/shared/lib/types/logger';
 
+// Mock QueryDataUtils
+jest.mock('@app/shared/api/services/QueryDataUtils', () => {
+  return {
+    QueryDataUtils: jest.fn().mockImplementation(() => ({
+      getBaseInfo: jest.fn().mockReturnValue({
+        result: {
+          activities: [
+            {
+              id: 'mock-activity-id-1',
+              containsResponseTypes: ['Slider'],
+            },
+          ],
+          items: {},
+        },
+      }),
+      getAppletDto: jest.fn().mockReturnValue({
+        encryption: 'applet-encryption-mock-1',
+        displayName: 'mock-applet-name-1',
+      }),
+      getEventDto: jest.fn().mockReturnValue({
+        version: 'mock-event-version-1',
+      }),
+    })),
+  };
+});
+
+// Mock QueryClient
+jest.mock('@tanstack/react-query', () => {
+  return {
+    QueryClient: jest.fn().mockImplementation(() => ({
+      getQueriesData: jest.fn().mockReturnValue([]),
+      getMutationCache: jest.fn().mockReturnValue({
+        getAll: jest.fn().mockReturnValue([]),
+      }),
+    })),
+  };
+});
+
 import {
   createGetActivityRecordMock,
   expectedUserActions,
