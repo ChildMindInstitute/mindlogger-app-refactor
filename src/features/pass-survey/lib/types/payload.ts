@@ -432,6 +432,8 @@ export interface RequestHealthRecordDataPipelineItem extends PipelineItemBase {
   payload: RequestHealthRecordDataPayload;
   question: string;
   subStep: RequestHealthRecordDataItemStep;
+  ehrSearchSkipped: boolean;
+  ehrShareSuccess: boolean;
   additionalEHRs: 'requested' | 'done' | null;
 }
 

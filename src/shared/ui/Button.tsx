@@ -10,6 +10,7 @@ import { Box, BoxProps, TextProps } from './base';
 import { Center } from './Center';
 import { Spinner } from './Spinner';
 import { Text } from './Text';
+import { palette } from '../lib/constants/palette';
 
 type Props = PropsWithChildren<{
   onPress: () => void;
@@ -23,7 +24,7 @@ type Props = PropsWithChildren<{
 export function Button({
   onPress,
   isLoading,
-  spinnerColor = '$on_primary',
+  spinnerColor = palette.on_primary,
   textProps = {
     color: '$on_primary',
     fontWeight: '700',

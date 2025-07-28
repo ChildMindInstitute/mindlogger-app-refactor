@@ -5,9 +5,11 @@ import {
   getAppletDetailsKey,
   getAppletsKey,
   getEventsKey,
+  getAppletBaseInfoKey,
 } from '@app/shared/lib/utils/reactQueryHelpers';
 
 import {
+  AppletBaseInfoResponse,
   AppletDetailsDto,
   AppletDetailsResponse,
   AppletDto,
@@ -29,6 +31,13 @@ export class QueryDataUtils {
     );
 
     return result?.result ?? null;
+  }
+
+  getBaseInfo(appletId: string): AppletBaseInfoResponse | null {
+    return getDataFromQuery<AppletBaseInfoResponse>(
+      getAppletBaseInfoKey(appletId),
+      this.queryClient,
+    );
   }
 
   getAppletListDto(): AppletDto[] | null {
