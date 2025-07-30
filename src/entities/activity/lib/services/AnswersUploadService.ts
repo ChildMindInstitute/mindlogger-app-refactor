@@ -8,6 +8,7 @@ import {
   DrawerAnswerDto,
   IAnswerService,
   ObjectAnswerDto,
+  UnityAnswerDto,
   UserActionDto,
 } from '@app/shared/api/services/IAnswerService';
 import {
@@ -124,12 +125,27 @@ export class AnswersUploadService implements IAnswersUploadService {
     for (const itemAnswer of answers) {
       const answerValue = (itemAnswer as ObjectAnswerDto)?.value;
 
+      if (!answerValue) {
+        continue;
+      }
+
+      const unityAnswer = answerValue as UnityAnswerDto;
+
+      const isUnityItem = unityAnswer.type === 'unity';
+
       const mediaAnswer = answerValue as MediaFile;
 
-      const isMediaItem = mediaAnswer?.uri && this.isFileUrl(mediaAnswer.uri);
+      const isMediaItem = mediaAnswer.uri && this.isFileUrl(mediaAnswer.uri);
 
       if (isMediaItem) {
         result.push(this.getFileId(mediaAnswer));
+      } else if (isUnityItem) {
+        const mediaFiles = unityAnswer.taskData;
+        const fileIds = mediaFiles.map((file: MediaFile) =>
+          this.getFileId(file),
+        );
+
+        result.push(...fileIds);
       }
     }
 
@@ -265,30 +281,53 @@ export class AnswersUploadService implements IAnswersUploadService {
 
       const isMediaItem = mediaAnswer?.uri && this.isFileUrl(mediaAnswer.uri);
 
-      if (!isMediaItem) {
+      const isUnityItem =
+        answerValue &&
+        typeof answerValue === 'object' &&
+        'type' in answerValue &&
+        answerValue?.type === 'unity';
+
+      if (!isMediaItem && !isUnityItem) {
         updatedAnswers.push(itemAnswer);
         continue;
       }
 
       this.uploadProgressObservable.currentFile++;
 
-      const remoteUrl = await this.processFileUpload(
-        mediaAnswer,
-        uploadChecks,
-        logAnswerIndex,
-        body.appletId,
-      );
+      const remoteUrls: string[] = [];
+
+      if (isUnityItem) {
+        const unityAnswer = answerValue as UnityAnswerDto;
+        const mediaFiles = unityAnswer.taskData;
+        for (const file of mediaFiles) {
+          const remoteUrl = await this.processFileUpload(
+            file,
+            uploadChecks,
+            logAnswerIndex,
+            body.appletId,
+          );
+          remoteUrls.push(remoteUrl);
+        }
+      } else {
+        const remoteUrl = await this.processFileUpload(
+          mediaAnswer,
+          uploadChecks,
+          logAnswerIndex,
+          body.appletId,
+        );
+        remoteUrls.push(remoteUrl);
+      }
 
       const isSvg = mediaAnswer.type === 'image/svg';
 
-      if (remoteUrl && !isSvg) {
-        updatedAnswers.push({ value: remoteUrl, text });
-      } else if (remoteUrl) {
+      if (remoteUrls.length && !isSvg) {
+        updatedAnswers.push({ value: remoteUrls, text });
+      } else if (remoteUrls.length) {
         const svgValue = itemAnswer.value as DrawerAnswerDto;
 
         const copy: ObjectAnswerDto = {
           text,
-          value: { ...svgValue, uri: remoteUrl },
+          value: { ...svgValue, uri: remoteUrls[0] },
         };
 
         updatedAnswers.push(copy);

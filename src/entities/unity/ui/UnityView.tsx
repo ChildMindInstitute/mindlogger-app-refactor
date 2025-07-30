@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { UIManager } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
+import * as mime from 'react-native-mime-types';
 import { v4 as uuidv4 } from 'uuid';
 
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
@@ -9,6 +10,8 @@ import { usePreviousValue } from '@app/shared/lib/hooks/usePreviousValue';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { Text } from '@app/shared/ui/Text';
+import { UnityResult } from '@entities/unity/lib/types/unityType.ts';
+import { MediaFile } from '@shared/ui/survey/MediaItems/types.ts';
 
 import {
   useRNUnityCommBridge,
@@ -22,6 +25,7 @@ import {
 
 type Props = {
   payload: UnityPipelineItem['payload'];
+  onResponse?: (response: UnityResult) => void;
 };
 
 export const UnityView: FC<Props> = props => {
@@ -75,8 +79,25 @@ export const UnityView: FC<Props> = props => {
   }, [handleUnityStarted, registerEventHandler]);
 
   const handleEndUnity = useCallback<RNUnityCommBridgeUnityEventHandler>(() => {
-    logger.log(`!!! TODO: Handle EndUnity event`);
-  }, [logger]);
+    // TODO: Submit the data and send the reset unity event
+
+    const mediaFiles: MediaFile[] = unityPaths.map(path => {
+      const fileName = path.split('/').pop() ?? '';
+
+      return {
+        uri: path,
+        type: mime.lookup(fileName) || '',
+        fileName,
+      };
+    });
+
+    props.onResponse?.({
+      responseType: 'unity',
+      // TODO: Figure out what this should be
+      startTime: 0,
+      taskData: mediaFiles,
+    });
+  }, [props, unityPaths]);
   useEffect(() => {
     registerEventHandler(UnityEventEndUnity, handleEndUnity);
   }, [handleEndUnity, registerEventHandler]);
