@@ -5,11 +5,13 @@
 export const UnityEventUnityStarted = 'UnityStarted';
 export const UnityEventEndUnity = 'EndUnity';
 export const UnityEventActivityCompleted = 'ActivityCompleted';
+export const UnityEventDataExport = 'DataExport';
 
 export type UnityEvent =
   | typeof UnityEventUnityStarted
   | typeof UnityEventEndUnity
-  | typeof UnityEventActivityCompleted;
+  | typeof UnityEventActivityCompleted
+  | typeof UnityEventDataExport;
 
 type U2RNMessageBase<TUnityEvent extends UnityEvent> = {
   m_sId: string;
@@ -27,10 +29,17 @@ export type U2RNMessageActivityCompleted = U2RNMessageBase<
   typeof UnityEventActivityCompleted
 >;
 
+export type U2RNMessageDataExport = U2RNMessageBase<
+  typeof UnityEventDataExport
+> & {
+  m_listDataPaths: Array<string>;
+};
+
 export type U2RNMessage =
   | U2RNMessageUnityStarted
   | U2RNMessageEndUnity
-  | U2RNMessageActivityCompleted;
+  | U2RNMessageActivityCompleted
+  | U2RNMessageDataExport;
 
 // ============================================================================
 // Message from ReactNative to Unity
